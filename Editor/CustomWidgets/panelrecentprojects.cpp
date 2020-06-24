@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -19,7 +19,6 @@ const int PanelRecentProjects::RECT_Y = 100;
 const int PanelRecentProjects::RECT_Y_TITLE = 30;
 const int PanelRecentProjects::RECT_OFFSET_Y_NAME = 23;
 const int PanelRecentProjects::RECT_OFFSET_Y_LINK = 43;
-const QString PanelRecentProjects::MESSAGE_EMPTY = "No recent projects opened";
 
 // -------------------------------------------------------
 //
@@ -33,7 +32,9 @@ PanelRecentProjects::PanelRecentProjects(QWidget *parent) :
 {
     this->setMouseTracking(true);
 
-    initialize();
+    this->initialize();
+
+    this->translate();
 }
 
 PanelRecentProjects::~PanelRecentProjects() {
@@ -43,9 +44,7 @@ PanelRecentProjects::~PanelRecentProjects() {
 // -------------------------------------------------------
 
 void PanelRecentProjects::initialize() {
-    // Title content
     m_staticTitle.setTextFormat(Qt::RichText);
-    m_staticTitle.setText("<h2>Recent projects:</h2>");
 }
 
 // -------------------------------------------------------
@@ -60,6 +59,14 @@ bool PanelRecentProjects::isMouseSelecting(const QPoint &pos) {
         RECT_HEIGHT : -1;
 
     return isContaining;
+}
+
+//-------------------------------------------------
+
+void PanelRecentProjects::translate()
+{
+    m_staticTitle.setText("<h2>" + RPM::translate(Translations::RECENT_PROJECTS)
+        + ":</h2>");
 }
 
 // -------------------------------------------------------
@@ -136,6 +143,7 @@ void PanelRecentProjects::paintEvent(QPaintEvent *) {
     if (RPM::get()->engineSettings()->projectNumber() == 0) {
         painter.setPen(themeKind == ThemeKind::Dark ? RPM::COLOR_GREY : RPM
             ::COLOR_ALMOST_BLACK);
-        painter.drawText(x * 2, RECT_Y + RECT_OFFSET_Y_NAME, MESSAGE_EMPTY);
+        painter.drawText(x * 2, RECT_Y + RECT_OFFSET_Y_NAME, RPM::translate(
+            Translations::NO_RECENT_PROJECTS_OPENED));
     }
 }

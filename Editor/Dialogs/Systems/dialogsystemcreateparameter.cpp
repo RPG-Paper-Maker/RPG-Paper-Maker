@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogsystemcreateparameter.h"
 #include "ui_dialogsystemcreateparameter.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -29,6 +30,8 @@ DialogSystemCreateParameter::DialogSystemCreateParameter(
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemCreateParameter::~DialogSystemCreateParameter()
@@ -46,6 +49,18 @@ void DialogSystemCreateParameter::initialize(){
     ui->lineEditName->setText(m_param.name());
     ui->widgetDefaultValue->initializeModel(m_param.defaultValue());
     ui->widgetDefaultValue->initializePrimitives();
+}
+
+//-------------------------------------------------
+
+void DialogSystemCreateParameter::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_PARAMETER) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelDefaultValue->setText(RPM::translate(Translations::DEFAULT_VALUE) +
+        RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

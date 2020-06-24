@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -66,7 +66,7 @@ public:
     bool deleteSprite(QSet<Portion>& portionsOverflow, Position& p,
                       QList<QJsonObject> &previous,
                       QList<MapEditorSubSelectionKind> &previousType,
-                      QList<Position>& positions);
+                      QList<Position>& positions, bool deletePtr = true);
     bool addSpriteWall(Position& position, SpriteWallDatas *sprite,
                        QJsonObject &previous,
                        MapEditorSubSelectionKind &previousType);
@@ -77,7 +77,7 @@ public:
         &previousType);
     bool deleteObject3D(QSet<Portion> &portionsOverflow, Position &p, QList<
         QJsonObject> &previous, QList<MapEditorSubSelectionKind> &previousType,
-        QList<Position> &positions);
+        QList<Position> &positions, bool deletePtr = true);
     bool addMountain(QSet<Portion> &portionsOverflow, Position &p, MountainDatas
         *mountain, QJsonObject &previous, MapEditorSubSelectionKind
         &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save,
@@ -131,11 +131,11 @@ public:
                                                float &finalDistance,
                                                Position &finalPosition,
                                                QRay3D& ray,
-                                               double cameraHAngle);
+                                               double cameraHAngle, bool &remove);
     MapElement * updateRaycastingOverflowObject3D(Position &position, float
-        &finalDistance, Position &finalPosition, QRay3D &ray);
+        &finalDistance, Position &finalPosition, QRay3D &ray, bool &remove);
     MapElement * updateRaycastingOverflowMountain(Position &position, float
-        &finalDistance, Position &finalPosition, QRay3D &ray);
+        &finalDistance, Position &finalPosition, QRay3D &ray, bool &remove);
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSelectionKind kind,
                                 MapEditorSubSelectionKind subKind);

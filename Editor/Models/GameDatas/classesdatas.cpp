@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -56,7 +56,13 @@ void ClassesDatas::setDefault(QStandardItem *modelSkills,
     QList<QStandardItem *> row;
     QStandardItemModel* skills;
     QStandardItemModel* statisticsProgression;
-    QString names[] = {"Knight", "Witch", "Mage", "Ninja", "Animal"};
+    QString names[] = {
+        RPM::translate(Translations::KNIGHT),
+        RPM::translate(Translations::WITCH),
+        RPM::translate(Translations::MAGE),
+        RPM::translate(Translations::NINJA),
+        RPM::translate(Translations::ANIMAL)
+    };
     int initialLevels[] = {1, 1, 1, 1, 1};
     int maxLevels[] = {100, 100, 100, 100, 100};
     int expBases[] = {5, 5, 5, 5, 5};

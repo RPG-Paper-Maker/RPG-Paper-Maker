@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -27,6 +27,8 @@ DialogGeneralOptions::DialogGeneralOptions(QWidget *parent) :
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogGeneralOptions::~DialogGeneralOptions()
@@ -42,13 +44,25 @@ DialogGeneralOptions::~DialogGeneralOptions()
 
 void DialogGeneralOptions::initialize() {
     QStringList themes;
-    themes << "Dark" << "White";
+    themes << RPM::translate(Translations::DARK) << RPM::translate(Translations
+        ::WHITE);
     ui->comboBoxTheme->addItems(themes);
 
     connect(ui->comboBoxTheme, SIGNAL(currentIndexChanged(int)), this,
         SLOT(on_comboBoxThemeCurrentIndexChanged(int)));
     ui->comboBoxTheme->setCurrentIndex(static_cast<int>(RPM::get()
         ->engineSettings()->theme()));
+}
+
+// -------------------------------------------------------
+
+void DialogGeneralOptions::translate() {
+    this->setWindowTitle(RPM::translate(Translations::GENERAL_OPTIONS) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelTheme->setText(RPM::translate(Translations::THEME) + RPM
+        ::PARENTHESIS_LEFT + RPM::translate(Translations::NEED_RESTART) + RPM
+        ::PARENTHESIS_RIGHT);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

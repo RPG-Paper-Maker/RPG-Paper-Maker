@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -26,6 +26,8 @@ PanelSubTransformation::PanelSubTransformation(QWidget *parent) :
     m_axisKind(AxisKind::X)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 PanelSubTransformation::~PanelSubTransformation() {
@@ -68,10 +70,14 @@ void PanelSubTransformation::initializeRotation(AxisKind ak) {
         (ak));
     ui->checkBoxApplyLeftRightClick->setChecked(RPM::get()->engineSettings()
         ->rotationLeftRightClick(ak));
-    ui->pushButtonDefineDefault->setText("Define as default " + RPM
-        ::ENUM_TO_STRING_AXIS_KIND.at(static_cast<int>(ak)) + " rotation");
-    ui->pushButtonResetDefault->setText("Reset to default " + RPM
-        ::ENUM_TO_STRING_AXIS_KIND.at(static_cast<int>(ak)) + " rotation");
+    ui->pushButtonDefineDefault->setText(RPM::translate(Translations
+        ::DEFINE_AS_DEFAULT) + RPM::SPACE + RPM::ENUM_TO_STRING_AXIS_KIND.at(
+        static_cast<int>(ak)) + RPM::SPACE + RPM::translate(Translations
+        ::ROTATION).toLower());
+    ui->pushButtonResetDefault->setText(RPM::translate(Translations
+        ::RESET_TO_DEFAULT) + RPM::SPACE + RPM::ENUM_TO_STRING_AXIS_KIND.at(
+        static_cast<int>(ak)) + RPM::SPACE + RPM::translate(Translations
+        ::ROTATION).toLower());
 }
 
 // -------------------------------------------------------
@@ -109,6 +115,15 @@ void PanelSubTransformation::updatePositionClick(bool positive) {
             emit positionChanged(previousPosition);
         }
     }
+}
+
+//-------------------------------------------------
+
+void PanelSubTransformation::translate()
+{
+    ui->labelAngle->setText(RPM::translate(Translations::ANGLE) + RPM::COLON);
+    ui->checkBoxApplyLeftRightClick->setText(RPM::translate(Translations
+        ::APPLY_ON_LEFT_RIGHT_CLICK));
 }
 
 // -------------------------------------------------------

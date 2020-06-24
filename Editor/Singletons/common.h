@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -43,6 +43,7 @@ public:
         value);
     static QString pathCombine(const QString &p1, const QString &p2);
     static bool copyPath(QString src, QString dst);
+    static bool copyPathSym(QList<QPair<QString, QString>> &list, QString src, QString dst);
     static QString getDirectoryPath(QString &file);
     static bool isDirEmpty(QString path);
     static void copyAllFiles(QString pathSource, QString pathTarget);
@@ -54,6 +55,7 @@ public:
     static QString keyToString(int keyInt);
     static bool isPressingEnter(QKeyEvent *event);
     static bool getMinDistance(float &finalDistance, float newDistance);
+    static QPoint rotatePoint(int x, int y, int cx, int cy, double angle);
 };
 
 #endif // COMMON_H

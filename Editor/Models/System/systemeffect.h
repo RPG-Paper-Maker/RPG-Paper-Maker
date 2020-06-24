@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -48,15 +48,19 @@ public:
     static const QString JSON_DAMAGE_CRITICAL_FORMULA;
     static const QString JSON_IS_DAMAGE_PRECISION;
     static const QString JSON_DAMAGE_PRECISION_FORMULA;
+    static const QString JSON_IS_DAMAGE_STOCK_VARIABLE;
+    static const QString JSON_DAMAGE_STOCK_VARIABLE;
     static const QString JSON_IS_ADD_STATUS;
     static const QString JSON_STATUS_ID;
     static const QString JSON_STATUS_PRECISION_FORMULA;
     static const QString JSON_IS_ADD_SKILL;
     static const QString JSON_ADD_SKILL_ID;
     static const QString JSON_PERFORM_SKILL_ID;
-    static const QString JSON_COMMON_REACTION_ID;
+    static const QString JSON_COMMON_REACTION;
     static const QString JSON_SPECIAL_ACTION_KIND;
     static const QString JSON_SCRIPT_FORMULA;
+    static const QString JSON_IS_TEMPORARILY_CHANGE_TARGET;
+    static const QString JSON_TEMPORARILY_CHANGE_TARGET_FORMULA;
 
     SystemEffect();
     SystemEffect(EffectKind kind, DamagesKind damageKind, PrimitiveValue
@@ -66,11 +70,12 @@ public:
         isDamageElement, PrimitiveValue *damagesElementID, bool isDamageVariance
         , PrimitiveValue *damagesVarianceFormula, bool isDamageCritical,
         PrimitiveValue *damagesCriticalFormula, bool isDamagePrecision,
-        PrimitiveValue *damagesPrecisionFormula, bool isAddStatus,
-        PrimitiveValue *statusID, PrimitiveValue *statusPrecisionFormula, bool
-        isAddSkill, PrimitiveValue *addSkillID, PrimitiveValue *performSkillID,
-        PrimitiveValue *commonReactionID, EffectSpecialActionKind
-        specialActionKind, PrimitiveValue *scriptFormula);
+        PrimitiveValue *damagesPrecisionFormula, bool idsv, SuperListItem *dsv,
+        bool isAddStatus, PrimitiveValue *statusID, PrimitiveValue
+        *statusPrecisionFormula, bool isAddSkill, PrimitiveValue *addSkillID,
+        PrimitiveValue *performSkillID, EventCommand *commonReaction,
+        EffectSpecialActionKind specialActionKind, PrimitiveValue
+        *scriptFormula, bool itct, PrimitiveValue *tctf);
     virtual ~SystemEffect();
     EffectKind kind() const;
     void setKind(EffectKind k);
@@ -97,6 +102,9 @@ public:
     bool isDamagePrecision() const;
     void setIsDamagePrecision(bool b);
     PrimitiveValue * damagesPrecisionFormula() const;
+    bool isDamageStockVariable() const;
+    void setIsDamageStockVariable(bool idsv);
+    SuperListItem * damagesStockVariable() const;
     bool isAddStatus() const;
     void setIsAddStatus(bool b);
     PrimitiveValue * statusID() const;
@@ -105,10 +113,14 @@ public:
     void setIsAddSkill(bool b);
     PrimitiveValue * addSkillID() const;
     PrimitiveValue * performSkillID() const;
-    PrimitiveValue * commonReactionID() const;
+    EventCommand * commonReaction() const;
+    void setCommonReaction(EventCommand *cr);
     EffectSpecialActionKind specialActionKind() const;
     void setSpecialActionKind(EffectSpecialActionKind k);
     PrimitiveValue * scriptFormula() const;
+    bool isTemporarilyChangeTarget() const;
+    void setIsTemporarilyChangeTarget(bool itct);
+    PrimitiveValue * temporarilyChangeTargetFormula() const;
 
     static SystemEffect * createSpecialAction(EffectSpecialActionKind action);
     static SystemEffect * createStat(int stat, QString formula, QString min, int element,
@@ -127,7 +139,7 @@ public:
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemEffect &effect);
+    virtual void setCopy(const SuperListItem &super);
     virtual QString toString() const;
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -151,15 +163,19 @@ protected:
     PrimitiveValue *m_damagesCriticalFormula;
     bool m_isDamagePrecision;
     PrimitiveValue *m_damagesPrecisionFormula;
+    bool m_isDamageStockVariable;
+    SuperListItem *m_damagesStockVariable;
     bool m_isAddStatus;
     PrimitiveValue *m_statusID;
     PrimitiveValue *m_statusPrecisionFormula;
     bool m_isAddSkill;
     PrimitiveValue *m_addSkillID;
     PrimitiveValue *m_performSkillID;
-    PrimitiveValue *m_commonReactionID;
+    EventCommand * m_commonReaction;
     EffectSpecialActionKind m_specialActionKind;
     PrimitiveValue *m_scriptFormula;
+    bool m_isTemporarilyChangeTarget;
+    PrimitiveValue *m_temporarilyChangeTargetFormula;
 };
 
 Q_DECLARE_METATYPE(SystemEffect)

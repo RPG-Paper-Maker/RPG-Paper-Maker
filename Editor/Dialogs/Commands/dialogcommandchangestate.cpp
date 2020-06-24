@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogcommandchangestate.h"
 #include "ui_dialogcommandchangestate.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -32,6 +33,8 @@ DialogCommandChangeState::DialogCommandChangeState(
 
     initializeStateId();
     if(command != nullptr) initialize(command);
+
+    this->translate();
 }
 
 DialogCommandChangeState::~DialogCommandChangeState()
@@ -54,6 +57,22 @@ void DialogCommandChangeState::initializeStateId(){
     }
     ui->widgetStateId->initializeDataBaseCommandId(dataBase, m_parameters,
                                                    properties);
+}
+
+//-------------------------------------------------
+
+void DialogCommandChangeState::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::CHANGE_STATE) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelStateID->setText(RPM::translate(Translations::STATE_ID) + RPM
+        ::COLON);
+    ui->radioButtonAdd->setText(RPM::translate(Translations::ADD));
+    ui->radioButtonRemove->setText(RPM::translate(Translations::REMOVE));
+    ui->radioButtonReplace->setText(RPM::translate(Translations::REPLACE));
+    ui->groupBoxOperation->setTitle(RPM::translate(Translations::OPERATION));
+    ui->groupBoxSelection->setTitle(RPM::translate(Translations::SELECTION));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

@@ -27,56 +27,12 @@
     <number>10</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
      <property name="spacing">
       <number>15</number>
      </property>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Camera properties ID:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveCameraPropertiesID" native="true">
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="PanelSelectPositionMaps" name="panelSelectPositionMaps" native="true"/>
-       </item>
-      </layout>
+      <widget class="PanelSelectPositionMaps" name="panelSelectPositionMaps" native="true"/>
      </item>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
@@ -97,12 +53,6 @@
    <class>PanelSelectPositionMaps</class>
    <extends>QWidget</extends>
    <header>panelselectpositionmaps.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PanelPrimitiveValue</class>
-   <extends>QWidget</extends>
-   <header>panelprimitivevalue.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

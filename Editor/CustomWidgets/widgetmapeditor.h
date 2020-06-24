@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -51,6 +51,8 @@ public:
         int cameraDistance, double cameraHorizontalAngle, double
         cameraVerticalAngle);
     void deleteMap();
+    void loadSkyBoxTexture();
+    QImage createSkyBoxImage(int id);
     void initializeSpinBoxesCoords(QSpinBox *x, QSpinBox *y, QSpinBox *yPlus,
         QSpinBox *z);
     void resizeGL(int width, int height);
@@ -118,6 +120,10 @@ private:
     QImage m_imageLayerOn;
     QImage m_imageHeight;
     QImage m_imageHeightPlus;
+    QImage m_imageBackground;
+    QOpenGLTexture *m_textureSkyBox;
+    QOpenGLShaderProgram m_programSkyBox;
+    QOpenGLBuffer m_vertexBufSkyBox;
 
 public slots:
     void update();

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -26,7 +26,8 @@ const QString SystemCustomShape::PARSE_FACE = "f ";
 // -------------------------------------------------------
 
 SystemCustomShape::SystemCustomShape() :
-    SystemCustomShape(-1, "<None>", false)
+    SystemCustomShape(-1, "<" + RPM::translate(Translations::NONE).toUpper() +
+        ">", false)
 {
 
 }
@@ -90,7 +91,7 @@ SystemCustomShape * SystemCustomShape::getByID(int id, CustomShapeKind kind) {
 
 QString SystemCustomShape::getFolder(CustomShapeKind kind, bool isBR) {
     QString folder = isBR ? RPM::get()->project()->gameDatas()->systemDatas()
-        ->pathBR() : RPM::get()->project()->pathCurrentProject();
+        ->pathBR() : RPM::get()->project()->pathCurrentProjectApp();
 
     return Common::pathCombine(folder, getLocalFolder(kind));
 }
@@ -119,7 +120,7 @@ QString SystemCustomShape::getShapeTitle(CustomShapeKind kind) {
     case CustomShapeKind::MTL:
         return "MTL";
     case CustomShapeKind::Collisions:
-        return "Collisions";
+        return RPM::translate(Translations::COLLISIONS);
     default:
         return "";
     }
@@ -288,10 +289,13 @@ SuperListItem* SystemCustomShape::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemCustomShape::setCopy(const SystemCustomShape& super){
+void SystemCustomShape::setCopy(const SuperListItem &super) {
+    const SystemCustomShape *shape;
+
     SuperListItem::setCopy(super);
 
-    m_isBR = super.m_isBR;
+    shape = reinterpret_cast<const SystemCustomShape *>(&super);
+    m_isBR = shape->m_isBR;
 }
 
 // -------------------------------------------------------

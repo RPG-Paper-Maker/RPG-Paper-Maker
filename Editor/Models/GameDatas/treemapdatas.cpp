@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -50,7 +50,7 @@ QStandardItem* TreeMapDatas::root() const { return m_model->item(0); }
 void TreeMapDatas::setDefault() {
     clearModel();
     QStandardItem* itemPlains = addDir(root(), 0, TreeMapTag::createDir(
-        "Plains"));
+        RPM::translate(Translations::PLAINS)));
     addMap(itemPlains, 0, TreeMapTag::createMap("MAP0001", 1));
     addDefaultBattleMap(2);
 }
@@ -59,14 +59,16 @@ void TreeMapDatas::setDefault() {
 
 void TreeMapDatas::addDefaultBattleMap(int mapID) {
     QStandardItem* itemBattles = addDir(root(), root()->rowCount(), TreeMapTag
-        ::createDir("Battle maps"));
-    addMap(itemBattles, 0, TreeMapTag::createMap("Default", mapID));
+        ::createDir(RPM::translate(Translations::BATTLE_MAPS)));
+    addMap(itemBattles, 0, TreeMapTag::createMap(RPM::translate(Translations
+        ::DEFAULT), mapID));
 }
 
 // -------------------------------------------------------
 
 void TreeMapDatas::addMapSelectorDir(){
-    addDir(m_model->invisibleRootItem(), 0, TreeMapTag::createDir("Maps"));
+    addDir(m_model->invisibleRootItem(), 0, TreeMapTag::createDir(RPM::translate
+        (Translations::MAPS)));
 }
 
 // -------------------------------------------------------
@@ -113,6 +115,13 @@ void TreeMapDatas::setName(QStandardItem *item, QString name){
     TreeMapTag* tag = (TreeMapTag*) item->data().value<quintptr>();
     tag->setName(name);
     item->setText(name);
+}
+
+// -------------------------------------------------------
+
+void TreeMapDatas::translate()
+{
+    m_model->item(0)->setText(RPM::translate(Translations::MAPS));
 }
 
 // -------------------------------------------------------

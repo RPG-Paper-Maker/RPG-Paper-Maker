@@ -124,7 +124,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBoxMoves">
          <property name="title">
           <string>Moves</string>
          </property>
@@ -134,7 +134,7 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_3">
               <item>
-               <widget class="QLabel" name="label_2">
+               <widget class="QLabel" name="labelStepSquareMoves">
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -153,18 +153,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBoxStepSquare">
-                <item>
-                 <property name="text">
-                  <string>Square</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Step</string>
-                 </property>
-                </item>
-               </widget>
+               <widget class="QComboBox" name="comboBoxStepSquare"/>
               </item>
               <item>
                <widget class="QPushButton" name="pushButtonStepSquareNorth">
@@ -289,7 +278,7 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0,0,0,0,0,0,0,1,0,0,0,0">
               <item>
-               <widget class="QLabel" name="label_3">
+               <widget class="QLabel" name="labelChangeDirection">
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -309,8 +298,11 @@
               </item>
               <item>
                <widget class="QPushButton" name="pushButtonEmpty">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
-                 <string>PushButton</string>
+                 <string>...</string>
                 </property>
                </widget>
               </item>
@@ -449,7 +441,7 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
               <item>
-               <widget class="QLabel" name="label_4">
+               <widget class="QLabel" name="labelChangeObjectProperties">
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -636,15 +628,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

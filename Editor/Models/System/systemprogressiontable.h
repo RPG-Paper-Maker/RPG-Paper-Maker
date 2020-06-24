@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -42,10 +42,34 @@ public:
     void setEquation(int i);
     QHash<int, int> * table();
 
+    static int easing(int e, double x, double start, double change, double
+        duration);
+    static double easingDouble(int e, double x, double start, double change,
+        double duration);
+    static double easingLinear(double x, double start, double change, double
+        duration);
+    static double easingQuadraticIn(double x, double start, double change,
+        double duration);
+    static double easingQuadraticOut(double x, double start, double change,
+        double duration);
+    static double easingCubicIn(double x, double start, double change, double
+        duration);
+    static double easingCubicOut(double x, double start, double change, double
+        duration);
+    static double easingQuarticIn(double x, double start, double change, double
+        duration);
+    static double easingQuarticOut(double x, double start, double change, double
+        duration);
+    static double easingQuinticIn(double x, double start, double change,
+        double duration);
+    static double easingQuinticOut(double x, double start, double change,
+        double duration);
+
     void reset();
     bool isDefault() const;
 
-    void setCopy(const SystemProgressionTable& progression);
+    virtual SuperListItem * createCopy() const;
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

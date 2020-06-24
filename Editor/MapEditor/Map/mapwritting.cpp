@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -39,7 +39,7 @@ void Map::writeDefaultMap(QString path){
     QJsonObject json;
 
     Position position(7, 0, 0, 7, 0);
-    SystemMapObject super(1, "Hero", position);
+    SystemMapObject super(1, RPM::translate(Translations::HERO), position);
     super.write(json);
     jsonObject.append(json);
     properties.skyColorID()->setNumberValue(3);
@@ -49,8 +49,9 @@ void Map::writeDefaultMap(QString path){
     Portion globalPortion(0, 0, 0);
     MapPortion mapPortion(globalPortion);
     mapPortion.fillWithFloor(&properties);
-    SystemCommonObject* o = new SystemCommonObject(1, "Hero", false, 2, new
-        QStandardItemModel, new QStandardItemModel, new QStandardItemModel);
+    SystemCommonObject* o = new SystemCommonObject(1, RPM::translate(
+        Translations::HERO), false, 2, new QStandardItemModel, new
+        QStandardItemModel, new QStandardItemModel);
     QJsonObject previous;
     MapEditorSubSelectionKind previousType;
     mapPortion.addObject(position, o, previous, previousType);
@@ -63,6 +64,7 @@ void Map::writeDefaultMap(QString path){
 int Map::writeDefaultBattleMap(QString path) {
     MapProperties properties;
     properties.setId(Map::generateMapId());
+    properties.cameraProperties()->setNumberValue(2);
     QJsonArray jsonObject;
     properties.skyColorID()->setNumberValue(3);
     QString pathMap = writeMap(path, properties, jsonObject);
@@ -90,10 +92,8 @@ QString Map::writeMap(QString path, MapProperties& properties,
                      properties);
 
     // Portions
-    int lx = (properties.length() - 1) / RPM::PORTION_SIZE;
-    int ld = (properties.depth() - 1) / RPM::PORTION_SIZE;
-    int lh = (properties.height() - 1) / RPM::PORTION_SIZE;
-    int lz = (properties.width() - 1) / RPM::PORTION_SIZE;
+    int lx, ld, lh, lz;
+    properties.getPortionsNumber(lx, ld, lh, lz);
     for (int i = 0; i <= lx; i++){
         for (int j = -ld; j <= lh; j++){
             for (int k = 0; k <= lz; k++){
@@ -369,9 +369,9 @@ void Map::readJSONArray(QStandardItemModel *model, const QJsonArray & tab) {
         objects.insert(super->id(), super);
     }
     for (i = 1; i <= max; i++) {
-        item = new QStandardItem;
         super = objects.value(i);
         if (super != nullptr) {
+            item = new QStandardItem;
             item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
             item->setText(super->toString());
             model->appendRow(item);

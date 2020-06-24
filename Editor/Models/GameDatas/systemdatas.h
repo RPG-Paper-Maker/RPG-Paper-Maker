@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -39,7 +39,8 @@ public:
     static const QString JSON_WINDOW_SKINS;
     static const QString JSON_CAMERA_PROPERTIES;
     static const QString JSON_DETECTIONS;
-    static const QString JSON_SPEED_FREQUENCIES;
+    static const QString JSON_SPEED;
+    static const QString JSON_FREQUENCIES;
     static const QString JSON_FONT_SIZES;
     static const QString JSON_FONT_NAMES;
     static const QString JSON_LAST_MAJOR_VERSION;
@@ -51,6 +52,9 @@ public:
     static const QString JSON_SOUND_CANCEL;
     static const QString JSON_SOUND_IMPOSSIBLE;
     static const QString JSON_DIALOG_BOX_OPTIONS;
+    static const QString JSON_SKY_BOXES;
+    static const QString JSON_ANTIALIASING;
+    static const bool DEFAULT_ANTIALIASING;
 
     SystemDatas();
     virtual ~SystemDatas();
@@ -80,15 +84,19 @@ public:
     void setFramesAnimation(int f);
     bool showBB() const;
     void setShowBB(bool b);
+    bool antialiasing() const;
+    void setAntialiasing(bool aa);
     QStandardItemModel * modelColors() const;
     QStandardItemModel * modelCurrencies() const;
     QStandardItemModel * modelItemsTypes() const;
     QStandardItemModel * modelWindowSkins() const;
     QStandardItemModel * modelcameraProperties() const;
     QStandardItemModel * modelDetections() const;
-    QStandardItemModel * modelSpeedFrequencies() const;
+    QStandardItemModel * modelSpeed() const;
+    QStandardItemModel * modelFrequencies() const;
     QStandardItemModel * modelFontSizes() const;
     QStandardItemModel * modelFontNames() const;
+    QStandardItemModel * modelSkyBoxes() const;
     int lastMajorVersion() const;
     void setLastMajorVersion(int v);
     int lastMinorVersion() const;
@@ -107,11 +115,13 @@ public:
     void setDefaultWindowSkins();
     void setDefaultCameraProperties();
     void setDefaultDetections();
-    void setDefaultSpeedFrequencies();
+    void setDefaultSpeed();
+    void setDefaultFrequencies();
     void setDefaultFontSizes();
     void setDefaultFontNames();
     void setDefaultSounds();
     void setDefaultDialogBoxOptions();
+    void setDefaultSkyBoxes();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -130,15 +140,18 @@ private:
     QString m_pathBR;
     int m_framesAnimation;
     bool m_showBB;
+    bool m_antialiasing;
     QStandardItemModel *m_modelColors;
     QStandardItemModel *m_modelCurrencies;
     QStandardItemModel *m_modelItemsTypes;
     QStandardItemModel *m_modelWindowSkins;
     QStandardItemModel *m_modelCameraProperties;
     QStandardItemModel *m_modelDetections;
-    QStandardItemModel *m_modelSpeedFrequencies;
+    QStandardItemModel *m_modelSpeed;
+    QStandardItemModel *m_modelFrequencies;
     QStandardItemModel *m_modelFontSizes;
     QStandardItemModel *m_modelFontNames;
+    QStandardItemModel *m_modelSkyBoxes;
     int m_lastMajorVersion;
     int m_lastMinorVersion;
     SystemPlaySong *m_soundCursor;

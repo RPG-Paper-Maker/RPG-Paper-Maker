@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -29,13 +29,14 @@ PanelDatasCommonSkillItem::PanelDatasCommonSkillItem(QWidget *parent) :
     m_model(nullptr)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 PanelDatasCommonSkillItem::~PanelDatasCommonSkillItem()
 {
     delete ui;
 }
-
 
 // -------------------------------------------------------
 //
@@ -63,6 +64,8 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
     ui->treeViewCost->initializeNewItemInstance(new SystemCost);
     ui->treeViewEffects->initializeNewItemInstance(new SystemEffect);
     ui->treeViewCharacteristics->initializeNewItemInstance(new SystemCharacteristic);
+    ui->comboBoxTarget->addItems(RPM::ENUM_TO_STRING_TARGET_KIND);
+    ui->comboBoxAvailable->addItems(RPM::ENUM_TO_STRING_AVAILABLE_KIND);
 
     switch (m_kind) {
     case CommonSkillItemKind::Skill:
@@ -117,7 +120,6 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
         ui->labelSound->hide();
         ui->widgetSongSound->hide();
         ui->panelPrimitiveValuePrice->initializeNumberVariable();
-        ui->groupBoxCosts->hide();
         break;
     }
 }
@@ -221,6 +223,36 @@ void PanelDatasCommonSkillItem::updateCommonSkill() {
     ui->panelPrimitiveValueAnimationTarget->initializeModel(m_model
         ->animationTargetID());
     ui->panelPrimitiveValueAnimationTarget->updateModel();
+}
+
+//-------------------------------------------------
+
+void PanelDatasCommonSkillItem::translate()
+{
+    ui->labelType->setText(RPM::translate(Translations::TYPE) + RPM::COLON);
+    ui->labelPrice->setText(RPM::translate(Translations::PRICE) + RPM::COLON);
+    ui->labelSound->setText(RPM::translate(Translations::SOUND_EFFECT) + RPM
+        ::SPACE + RPM::PARENTHESIS_LEFT + RPM::translate(Translations::MAIN_MENU) +
+        RPM::PARENTHESIS_RIGHT + RPM::COLON);
+    ui->labelTarget->setText(RPM::translate(Translations::TARGET) + RPM::COLON);
+    ui->labelAvailable->setText(RPM::translate(Translations::AVAILABLE) + RPM
+        ::COLON);
+    ui->labelConditions->setText(RPM::translate(Translations::CONDITION_FORMULA)
+        + RPM::COLON);
+    ui->labelDescription->setText(RPM::translate(Translations::DESCRIPTION) +
+        RPM::COLON);
+    ui->labelUserAnimation->setText(RPM::translate(Translations
+        ::USER_ANIMATION_ID) + RPM::COLON);
+    ui->labelTargetAnimation->setText(RPM::translate(Translations
+        ::TARGET_ANIMATION_ID) + RPM::COLON);
+    ui->labelTargetConditions->setText(RPM::translate(Translations
+        ::TARGET_CONDITIONS_FORMULA) + RPM::COLON);
+    ui->checkBoxConsumable->setText(RPM::translate(Translations::CONSOMABLE));
+    ui->checkBoxOneHand->setText(RPM::translate(Translations::ONE_HAND));
+    ui->groupBoxCosts->setTitle(RPM::translate(Translations::COSTS));
+    ui->groupBoxEffects->setTitle(RPM::translate(Translations::EFFECTS));
+    ui->groupBoxCharacteristics->setTitle(RPM::translate(Translations
+        ::CHARACTERISTICS));
 }
 
 // -------------------------------------------------------

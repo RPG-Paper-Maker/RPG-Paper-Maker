@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -31,15 +31,20 @@ class DialogLocation : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogLocation(QString location, QWidget *parent = 0);
+    explicit DialogLocation(QString location, QString autov = QString(), QWidget
+        *parent = nullptr);
     ~DialogLocation();
     QString location() const;
 
 private:
     Ui::DialogLocation *ui;
+    QString m_auto;
+
+    void translate();
 
 private slots:
     void on_pushButton_clicked();
+    void on_pushButtonAuto_clicked();
 };
 
 #endif // DIALOGLOCATION_H

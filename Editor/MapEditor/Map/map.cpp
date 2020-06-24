@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -53,7 +53,7 @@ Map::Map(int id) :
 {
     QString realName = Map::generateMapName(id);
     QString pathMaps = Common::pathCombine(RPM::get()->project()
-                                          ->pathCurrentProject(),
+                                          ->pathCurrentProjectApp(),
                                           RPM::PATH_MAPS);
     m_pathMap = Common::pathCombine(pathMaps, realName);
 
@@ -276,12 +276,13 @@ void Map::setModelObjects(QStandardItemModel* model){
 
     item = new QStandardItem;
     Position3D position;
-    super = new SystemMapObject(-1, "This object", position);
+    super = new SystemMapObject(-1, RPM::translate(Translations::THIS_OBJECT),
+        position);
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
     item->setText(super->name());
     model->appendRow(item);
     item = new QStandardItem;
-    super = new SystemMapObject(0, "Hero", position);
+    super = new SystemMapObject(0, RPM::translate(Translations::HERO), position);
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
     item->setText(super->name());
     model->appendRow(item);
@@ -695,7 +696,7 @@ QString Map::generateObjectName(int id) {
 
 bool Map::isMapIdExisting(int id){
     QDirIterator directories(Common::pathCombine(RPM::get()->project()
-                                                ->pathCurrentProject(),
+                                                ->pathCurrentProjectApp(),
                                                 RPM::PATH_MAPS),
                              QDir::Dirs | QDir::NoDotAndDotDot);
 
@@ -714,7 +715,7 @@ bool Map::isMapIdExisting(int id){
 
 int Map::generateMapId(){
     int id;
-    QDir dir(Common::pathCombine(RPM::get()->project()->pathCurrentProject(),
+    QDir dir(Common::pathCombine(RPM::get()->project()->pathCurrentProjectApp(),
                                 RPM::PATH_MAPS));
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     int nbMaps = static_cast<int>(dir.count());

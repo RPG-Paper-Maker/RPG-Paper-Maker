@@ -62,7 +62,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_18">
+            <widget class="QGroupBox" name="groupBoxClasses">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -113,7 +113,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_16">
+            <widget class="QGroupBox" name="groupBoxHeroes">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -183,7 +183,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_17">
+            <widget class="QGroupBox" name="groupBoxMonsters">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -259,7 +259,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_19">
+            <widget class="QGroupBox" name="groupBoxTroops">
              <property name="enabled">
               <bool>true</bool>
              </property>
@@ -319,7 +319,7 @@
                 </spacer>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton">
+                <widget class="QPushButton" name="pushButtonTroopTest">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -333,7 +333,7 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1">
                <item>
-                <widget class="QGroupBox" name="groupBox_3">
+                <widget class="QGroupBox" name="groupBoxMonstersList">
                  <property name="enabled">
                   <bool>true</bool>
                  </property>
@@ -373,7 +373,7 @@
               </layout>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupBox_2">
+              <widget class="QGroupBox" name="groupBoxStates">
                <property name="enabled">
                 <bool>false</bool>
                </property>
@@ -396,7 +396,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_12">
+            <widget class="QGroupBox" name="groupBoxItems">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -459,7 +459,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_14">
+            <widget class="QGroupBox" name="groupBoxWeapons">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -510,7 +510,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_12" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_15">
+            <widget class="QGroupBox" name="groupBoxArmors">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -561,7 +561,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_13" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_13">
+            <widget class="QGroupBox" name="groupBoxSkills">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -612,7 +612,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_14" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_20">
+            <widget class="QGroupBox" name="groupBoxAnimations">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -650,16 +650,365 @@
            </item>
            <item>
             <widget class="QWidget" name="widget" native="true">
-             <layout class="QGridLayout" name="gridLayout_30">
+             <layout class="QGridLayout" name="gridLayout_12">
               <item row="0" column="0">
-               <widget class="QLabel" name="label_3">
-                <property name="text">
-                 <string>This option is not available yet</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
+               <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,1">
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,0,0,0,1">
+                  <item>
+                   <widget class="QLabel" name="labelAnimationPicture">
+                    <property name="text">
+                     <string>Picture:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="WidgetPicture" name="widgetPictureAnimation" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>200</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>200</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="labelPosition">
+                    <property name="text">
+                     <string>Position:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="comboBoxAnimationPosition"/>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_3">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_16" stretch="0,1">
+                  <item>
+                   <widget class="QGroupBox" name="groupBoxAnimationFrames">
+                    <property name="minimumSize">
+                     <size>
+                      <width>150</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>150</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="title">
+                     <string>Frames</string>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout_13">
+                     <item row="0" column="0">
+                      <widget class="PanelSuperList" name="panelSuperListAnimationFrames" native="true">
+                       <property name="enabled">
+                        <bool>true</bool>
+                       </property>
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>250</height>
+                        </size>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QTabWidget" name="tabWidgetAnimation">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="currentIndex">
+                     <number>0</number>
+                    </property>
+                    <widget class="QWidget" name="tab_12">
+                     <attribute name="title">
+                      <string>Graphics</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_35">
+                      <item row="0" column="0">
+                       <layout class="QVBoxLayout" name="verticalLayout_13" stretch="1,0">
+                        <item>
+                         <layout class="QHBoxLayout" name="horizontalLayout_17">
+                          <item>
+                           <widget class="QScrollArea" name="scrollAreaAnimation">
+                            <property name="widgetResizable">
+                             <bool>true</bool>
+                            </property>
+                            <widget class="QWidget" name="scrollAreaWidgetContents_4">
+                             <property name="geometry">
+                              <rect>
+                               <x>0</x>
+                               <y>0</y>
+                               <width>640</width>
+                               <height>480</height>
+                              </rect>
+                             </property>
+                             <layout class="QGridLayout" name="gridLayout_11">
+                              <property name="leftMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="topMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="rightMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="bottomMargin">
+                               <number>0</number>
+                              </property>
+                              <item row="0" column="0">
+                               <widget class="WidgetAnimation" name="widgetAnimation" native="true">
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>640</width>
+                                  <height>480</height>
+                                 </size>
+                                </property>
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>640</width>
+                                  <height>480</height>
+                                 </size>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </widget>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QGroupBox" name="groupBox_4">
+                            <property name="title">
+                             <string>Options</string>
+                            </property>
+                            <layout class="QGridLayout" name="gridLayout_34">
+                             <item row="0" column="0">
+                              <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+                               <item>
+                                <widget class="QPushButton" name="pushButtonChangeBattler">
+                                 <property name="text">
+                                  <string>Change battler...</string>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="Line" name="line">
+                                 <property name="orientation">
+                                  <enum>Qt::Horizontal</enum>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="QPushButton" name="pushButtonCopyFrames">
+                                 <property name="text">
+                                  <string>Copy frames...</string>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="QPushButton" name="pushButtonClearFrames">
+                                 <property name="text">
+                                  <string>Clear frames...</string>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="QPushButton" name="pushButtonCreateTransition">
+                                 <property name="text">
+                                  <string>Create transition...</string>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="QPushButton" name="pushButtonApplyTexture">
+                                 <property name="text">
+                                  <string>Apply texture</string>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="Line" name="line_2">
+                                 <property name="orientation">
+                                  <enum>Qt::Horizontal</enum>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="QPushButton" name="pushButtonPlayHit">
+                                 <property name="text">
+                                  <string>Play hit</string>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="QPushButton" name="pushButtonPlayMiss">
+                                 <property name="text">
+                                  <string>Play miss</string>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="QPushButton" name="pushButtonPlayCrit">
+                                 <property name="text">
+                                  <string>Play crit</string>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="Line" name="line_3">
+                                 <property name="orientation">
+                                  <enum>Qt::Horizontal</enum>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <layout class="QHBoxLayout" name="horizontalLayout_18">
+                                 <item>
+                                  <widget class="QLabel" name="labelRows">
+                                   <property name="text">
+                                    <string>Rows:</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QSpinBox" name="spinBoxAnimationRows">
+                                   <property name="minimum">
+                                    <number>1</number>
+                                   </property>
+                                   <property name="maximum">
+                                    <number>999</number>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                </layout>
+                               </item>
+                               <item>
+                                <layout class="QHBoxLayout" name="horizontalLayout_19">
+                                 <item>
+                                  <widget class="QLabel" name="labelColumns">
+                                   <property name="text">
+                                    <string>Columns:</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QSpinBox" name="spinBoxAnimationColumns">
+                                   <property name="minimum">
+                                    <number>1</number>
+                                   </property>
+                                   <property name="maximum">
+                                    <number>999</number>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                </layout>
+                               </item>
+                               <item>
+                                <spacer name="verticalSpacer">
+                                 <property name="orientation">
+                                  <enum>Qt::Vertical</enum>
+                                 </property>
+                                 <property name="sizeHint" stdset="0">
+                                  <size>
+                                   <width>20</width>
+                                   <height>40</height>
+                                  </size>
+                                 </property>
+                                </spacer>
+                               </item>
+                              </layout>
+                             </item>
+                            </layout>
+                           </widget>
+                          </item>
+                         </layout>
+                        </item>
+                        <item>
+                         <widget class="QScrollArea" name="scrollArea_4">
+                          <property name="minimumSize">
+                           <size>
+                            <width>0</width>
+                            <height>112</height>
+                           </size>
+                          </property>
+                          <property name="widgetResizable">
+                           <bool>true</bool>
+                          </property>
+                          <widget class="QWidget" name="scrollAreaWidgetContents_6">
+                           <property name="geometry">
+                            <rect>
+                             <x>0</x>
+                             <y>0</y>
+                             <width>635</width>
+                             <height>110</height>
+                            </rect>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_15">
+                            <property name="leftMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="topMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="rightMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="bottomMargin">
+                             <number>0</number>
+                            </property>
+                            <item row="0" column="0">
+                             <widget class="WidgetAnimationTexture" name="widgetAnimationTexture" native="true"/>
+                            </item>
+                           </layout>
+                          </widget>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </widget>
+                    <widget class="QWidget" name="tab_13">
+                     <attribute name="title">
+                      <string>Sound effects / flashs</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_30">
+                      <item row="0" column="0">
+                       <widget class="WidgetSuperTree" name="treeViewEffects"/>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
               </item>
              </layout>
             </widget>
@@ -676,7 +1025,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_15" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_21">
+            <widget class="QGroupBox" name="groupBoxStatus">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -713,7 +1062,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_5">
+            <widget class="QLabel" name="labelStatusAvailable">
              <property name="text">
               <string>This option is not available yet</string>
              </property>
@@ -734,7 +1083,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_22">
+            <widget class="QGroupBox" name="groupBoxTilesets">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -775,7 +1124,7 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_4">
                <item>
-                <widget class="QLabel" name="label_4">
+                <widget class="QLabel" name="labelTilesetPicture">
                  <property name="text">
                   <string>Picture:</string>
                  </property>
@@ -823,7 +1172,7 @@
                  <item row="0" column="0">
                   <layout class="QVBoxLayout" name="verticalLayout_2">
                    <item>
-                    <widget class="QLabel" name="label">
+                    <widget class="QLabel" name="labelAutotiles">
                      <property name="text">
                       <string>Autotiles:</string>
                      </property>
@@ -863,7 +1212,7 @@
                     </layout>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_2">
+                    <widget class="QLabel" name="labelAnimatedAutotiles">
                      <property name="enabled">
                       <bool>false</bool>
                      </property>
@@ -906,7 +1255,7 @@
                     </layout>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_6">
+                    <widget class="QLabel" name="labelWalls">
                      <property name="text">
                       <string>Sprite walls:</string>
                      </property>
@@ -940,7 +1289,7 @@
                     </layout>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_7">
+                    <widget class="QLabel" name="label3DObjects">
                      <property name="text">
                       <string>3D objects:</string>
                      </property>
@@ -974,7 +1323,7 @@
                     </layout>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_8">
+                    <widget class="QLabel" name="labelMountains">
                      <property name="enabled">
                       <bool>true</bool>
                      </property>
@@ -1017,7 +1366,7 @@
                     </layout>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_9">
+                    <widget class="QLabel" name="labelSlopes">
                      <property name="enabled">
                       <bool>false</bool>
                      </property>
@@ -1092,6 +1441,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>WidgetPicture</class>
+   <extends>QWidget</extends>
+   <header>widgetpicture.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>WidgetSuperTree</class>
    <extends>QTreeView</extends>
    <header>widgetsupertree.h</header>
@@ -1103,15 +1458,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WidgetPicture</class>
+   <class>PanelDatasClass</class>
    <extends>QWidget</extends>
-   <header>widgetpicture.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetTilesetSettings</class>
-   <extends>QWidget</extends>
-   <header>widgettilesetsettings.h</header>
+   <header>paneldatasclass.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -1121,9 +1470,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>PanelDatasClass</class>
+   <class>WidgetTilesetSettings</class>
    <extends>QWidget</extends>
-   <header>paneldatasclass.h</header>
+   <header>widgettilesetsettings.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -1136,6 +1485,18 @@
    <class>PanelDatasCommonSkillItem</class>
    <extends>QWidget</extends>
    <header>paneldatascommonskillitem.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetAnimation</class>
+   <extends>QWidget</extends>
+   <header>widgetanimation.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetAnimationTexture</class>
+   <extends>QWidget</extends>
+   <header>widgetanimationtexture.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

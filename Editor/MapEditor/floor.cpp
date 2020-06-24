@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "floor.h"
 #include "lands.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -56,7 +57,7 @@ MapEditorSubSelectionKind FloorDatas::getSubKind() const{
 }
 
 QString FloorDatas::toString() const {
-    return "FLOOR";
+    return RPM::translate(Translations::FLOOR).toUpper();
 }
 
 // -------------------------------------------------------

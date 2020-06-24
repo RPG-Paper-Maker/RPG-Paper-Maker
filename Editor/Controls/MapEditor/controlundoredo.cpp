@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -139,7 +139,7 @@ int ControlUndoRedo::updateMapCurrentState(int idMap) {
 
 QString ControlUndoRedo::getTempDir(int idMap) const {
     return Common::pathCombine(Common::pathCombine(Common::pathCombine(
-        RPM::get()->project()->pathCurrentProject(),
+        RPM::get()->project()->pathCurrentProjectApp(),
         RPM::PATH_MAPS),
         Map::generateMapName(idMap)),
         RPM::FOLDER_UNDO_REDO_TEMP_MAP);

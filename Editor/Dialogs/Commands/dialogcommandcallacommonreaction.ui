@@ -33,7 +33,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="labelCommonReaction">
            <property name="text">
             <string>Common reaction:</string>
            </property>
@@ -71,7 +71,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBoxParameterValues">
          <property name="title">
           <string>Parameter values</string>
          </property>

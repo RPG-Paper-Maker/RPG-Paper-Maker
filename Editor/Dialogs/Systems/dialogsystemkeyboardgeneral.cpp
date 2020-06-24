@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogsystemkeyboardgeneral.h"
 #include "ui_dialogsystemkeyboardgeneral.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -28,6 +29,8 @@ DialogSystemKeyBoardGeneral::DialogSystemKeyBoardGeneral(SystemKeyBoard& key,
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemKeyBoardGeneral::~DialogSystemKeyBoardGeneral()
@@ -47,6 +50,23 @@ void DialogSystemKeyBoardGeneral::initialize(){
     ui->lineEditAbbreviation->setText(m_key.abbreviation());
     ui->lineEditDescription->setText(m_key.name());
     ui->labelShortcut->setText(m_key.shortCutString());
+}
+
+//-------------------------------------------------
+
+void DialogSystemKeyBoardGeneral::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_KEYBOARD) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelShortcutLabel->setText(RPM::translate(Translations::SHORTCUT) + RPM
+        ::COLON);
+    ui->labelDescription->setText(RPM::translate(Translations::DESCRIPTION) +
+        RPM::COLON);
+    ui->labelAbbreviation->setText(RPM::translate(Translations::ABBREVIATION_JS)
+        + RPM::COLON);
+    ui->pushButtonChange->setText(RPM::translate(Translations::CHANGE) + RPM
+        ::DOT_DOT_DOT);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

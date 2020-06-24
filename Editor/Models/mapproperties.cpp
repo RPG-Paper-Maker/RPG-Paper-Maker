@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -23,6 +23,9 @@ const QString MapProperties::JSON_BACKGROUND_SOUND = "bgs";
 const QString MapProperties::JSON_CAMERA_PROPERTIES = "cp";
 const QString MapProperties::JSON_IS_SKY_COLOR = "isky";
 const QString MapProperties::JSON_SKY_COLOR_ID = "sky";
+const QString MapProperties::JSON_IS_SKY_IMAGE = "isi";
+const QString MapProperties::JSON_SKY_PICTURE_ID = "ipid";
+const QString MapProperties::JSON_SKY_BOX_ID = "sbid";
 const QString MapProperties::JSON_STARTUP_OBJECT = "so";
 const QString MapProperties::JSON_OVERFLOW_SPRITES = "ofsprites";
 const QString MapProperties::JSON_OVERFLOW_OBJECTS3D = "of3d";
@@ -56,14 +59,19 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w, int h
     m_music(new SystemPlaySong(-1, SongKind::Music)),
     m_backgroundSound(new SystemPlaySong(-1, SongKind::BackgroundSound)),
     m_cameraProperties(new PrimitiveValue(PrimitiveValueKind::DataBase, 1)),
-    m_skyColorID(new PrimitiveValue(PrimitiveValueKind::DataBase, 1)),
     m_isSkyColor(true),
+    m_skyColorID(new PrimitiveValue(PrimitiveValueKind::DataBase, 1)),
+    m_isSkyImage(false),
+    m_skyPictureID(new SuperListItem(-1)),
+    m_skyboxID(new PrimitiveValue(PrimitiveValueKind::DataBase, 1)),
     m_startupObject(new SystemCommonObject)
 {
     m_cameraProperties->setModelDataBase(RPM::get()->project()->gameDatas()
         ->systemDatas()->modelcameraProperties());
     m_skyColorID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->systemDatas()->modelColors());
+    m_skyboxID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->systemDatas()->modelSkyBoxes());
     m_startupObject->setDefaultStartupObject();
 }
 
@@ -75,6 +83,8 @@ MapProperties::~MapProperties() {
     delete m_backgroundSound;
     delete m_cameraProperties;
     delete m_skyColorID;
+    delete m_skyPictureID;
+    delete m_skyboxID;
     delete m_startupObject;
 }
 
@@ -140,12 +150,42 @@ PrimitiveValue * MapProperties::cameraProperties() const {
     return m_cameraProperties;
 }
 
+bool MapProperties::isSkyColor() const
+{
+    return m_isSkyColor;
+}
+
+void MapProperties::setIsSkyColor(bool isc)
+{
+    m_isSkyColor = isc;
+}
+
 PrimitiveValue * MapProperties::skyColorID() const {
     return m_skyColorID;
 }
 
 void MapProperties::setSkyColorID(PrimitiveValue *skyColorID) {
     m_skyColorID = skyColorID;
+}
+
+bool MapProperties::isSkyImage() const
+{
+    return m_isSkyImage;
+}
+
+void MapProperties::setIsSkyImage(bool isi)
+{
+    m_isSkyImage = isi;
+}
+
+SuperListItem * MapProperties::skyPictureID() const
+{
+    return m_skyPictureID;
+}
+
+PrimitiveValue * MapProperties::skyboxID() const
+{
+    return m_skyboxID;
 }
 
 SystemCommonObject * MapProperties::startupObject() const {
@@ -310,8 +350,11 @@ void MapProperties::setCopy(const SuperListItem &super) {
     m_depth = properties->m_depth;
     m_music->setId(properties->m_music->id());
     m_backgroundSound->setId(properties->m_backgroundSound->id());
-    m_skyColorID->setCopy(*properties->m_skyColorID);
     m_isSkyColor = properties->m_isSkyColor;
+    m_skyColorID->setCopy(*properties->m_skyColorID);
+    m_isSkyImage = properties->m_isSkyImage;
+    m_skyPictureID->setId(properties->m_skyPictureID->id());
+    m_skyboxID->setCopy(*properties->m_skyboxID);
     this->clearOverflowSprites();
     for (i = properties->m_outOverflowSprites.begin(); i != properties
          ->m_outOverflowSprites.end(); i++)
@@ -383,14 +426,15 @@ void MapProperties::adjustPosition(QVector3D *position) {
 
 MapElement * MapProperties::updateRaycastingOverflowSprites(Portion &portion,
     float &finalDistance, Position &finalPosition, QRay3D &ray, double
-    cameraHAngle)
+    cameraHAngle, bool &save)
 {
-    QSet<Position> *positions;
+    QSet<Position> *positions, positionsRemove;
     MapElement *element;
     QSet<Position>::iterator i;
     Map *map;
     Position position;
     MapPortion *mapPortion;
+    bool remove;
 
     map = RPM::get()->project()->currentMap();
     positions = m_outOverflowSprites.value(portion);
@@ -401,13 +445,29 @@ MapElement * MapProperties::updateRaycastingOverflowSprites(Portion &portion,
             map->getLocalPortion(position, portion);
             mapPortion = map->mapPortion(portion);
             if (mapPortion != nullptr) {
+                remove = false;
                 element = mapPortion->updateRaycastingOverflowSprite(map
                     ->squareSize(), position, finalDistance, finalPosition, ray,
-                    cameraHAngle);
-                if (element != nullptr) {
-                    return element;
+                    cameraHAngle, remove);
+                if (remove)
+                {
+                    positionsRemove.insert(position);
+                } else
+                {
+                    if (element != nullptr) {
+                        return element;
+                    }
                 }
             }
+        }
+        if (!positionsRemove.isEmpty())
+        {
+            for (i = positionsRemove.begin(); i != positionsRemove.end(); i++)
+            {
+                positions->remove(*i);
+            }
+            positionsRemove.clear();
+            save = true;
         }
     }
 
@@ -417,14 +477,15 @@ MapElement * MapProperties::updateRaycastingOverflowSprites(Portion &portion,
 // -------------------------------------------------------
 
 MapElement * MapProperties::updateRaycastingOverflowObjects3D(Portion& portion,
-    float &finalDistance, Position &finalPosition, QRay3D &ray)
+    float &finalDistance, Position &finalPosition, QRay3D &ray, bool &save)
 {
-    QSet<Position> *positions;
+    QSet<Position> *positions, positionsRemove;
     MapElement *element;
     QSet<Position>::iterator i;
     Map *map;
     Position position;
     MapPortion *mapPortion;
+    bool remove;
 
     map = RPM::get()->project()->currentMap();
     positions = m_outOverflowObjects3D.value(portion);
@@ -435,12 +496,28 @@ MapElement * MapProperties::updateRaycastingOverflowObjects3D(Portion& portion,
             map->getLocalPortion(position, portion);
             mapPortion = map->mapPortion(portion);
             if (mapPortion != nullptr) {
+                remove = false;
                 element = mapPortion->updateRaycastingOverflowObject3D(position,
-                    finalDistance, finalPosition, ray);
-                if (element != nullptr) {
-                    return element;
+                    finalDistance, finalPosition, ray, remove);
+                if (remove)
+                {
+                    positionsRemove.insert(position);
+                } else
+                {
+                    if (element != nullptr) {
+                        return element;
+                    }
                 }
             }
+        }
+        if (!positionsRemove.isEmpty())
+        {
+            for (i = positionsRemove.begin(); i != positionsRemove.end(); i++)
+            {
+                positions->remove(*i);
+            }
+            positionsRemove.clear();
+            save = true;
         }
     }
 
@@ -450,14 +527,15 @@ MapElement * MapProperties::updateRaycastingOverflowObjects3D(Portion& portion,
 // -------------------------------------------------------
 
 MapElement * MapProperties::updateRaycastingOverflowMountains(Portion& portion,
-    float &finalDistance, Position &finalPosition, QRay3D &ray)
+    float &finalDistance, Position &finalPosition, QRay3D &ray, bool &save)
 {
-    QSet<Position> *positions;
+    QSet<Position> *positions, positionsRemove;
     MapElement *element;
     QSet<Position>::iterator i;
     Map *map;
     Position position;
     MapPortion *mapPortion;
+    bool remove;
 
     map = RPM::get()->project()->currentMap();
     positions = m_outOverflowMountains.value(portion);
@@ -468,12 +546,28 @@ MapElement * MapProperties::updateRaycastingOverflowMountains(Portion& portion,
             map->getLocalPortion(position, portion);
             mapPortion = map->mapPortion(portion);
             if (mapPortion != nullptr) {
+                remove = false;
                 element = mapPortion->updateRaycastingOverflowMountain(position
-                    , finalDistance, finalPosition, ray);
-                if (element != nullptr) {
-                    return element;
+                    , finalDistance, finalPosition, ray, remove);
+                if (remove)
+                {
+                    positionsRemove.insert(position);
+                } else
+                {
+                    if (element != nullptr) {
+                        return element;
+                    }
                 }
             }
+        }
+        if (!positionsRemove.isEmpty())
+        {
+            for (i = positionsRemove.begin(); i != positionsRemove.end(); i++)
+            {
+                positions->remove(*i);
+            }
+            positionsRemove.clear();
+            save = true;
         }
     }
 
@@ -574,14 +668,27 @@ void MapProperties::read(const QJsonObject &json){
         ->systemDatas()->modelcameraProperties());
 
     // Sky
-    m_skyColorID = new PrimitiveValue(PrimitiveValueKind::DataBase, 1);
     m_isSkyColor = json.contains(JSON_IS_SKY_COLOR) ? json[JSON_IS_SKY_COLOR]
         .toBool() : true;
+    m_skyColorID = new PrimitiveValue(PrimitiveValueKind::DataBase, 1);
     if (m_isSkyColor) {
         m_skyColorID->read(json[JSON_SKY_COLOR_ID].toObject());
     }
     m_skyColorID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->systemDatas()->modelColors());
+    m_isSkyImage = json.contains(JSON_IS_SKY_IMAGE) ? json[JSON_IS_SKY_IMAGE]
+        .toBool() : false;
+    m_skyPictureID = new SuperListItem(-1);
+    if (m_isSkyImage) {
+        m_skyPictureID->setId(json[JSON_SKY_PICTURE_ID].toInt());
+    }
+    m_skyboxID = new PrimitiveValue(PrimitiveValueKind::DataBase, 1);
+    if (!m_isSkyColor && !m_isSkyImage)
+    {
+        m_skyboxID->read(json[JSON_SKY_BOX_ID].toObject());
+    }
+    m_skyboxID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->systemDatas()->modelSkyBoxes());
 
     // Invisible object
     m_startupObject = new SystemCommonObject;
@@ -629,6 +736,15 @@ void MapProperties::write(QJsonObject &json) const {
         obj = QJsonObject();
         m_skyColorID->write(obj);
         json[JSON_SKY_COLOR_ID] = obj;
+    }
+    json[JSON_IS_SKY_IMAGE] = m_isSkyImage;
+    if (m_isSkyImage) {
+        json[JSON_SKY_PICTURE_ID] = m_skyPictureID->id();
+    }
+    if (!m_isSkyColor & !m_isSkyImage) {
+        obj = QJsonObject();
+        m_skyboxID->write(obj);
+        json[JSON_SKY_BOX_ID] = obj;
     }
 
     // Invisible object

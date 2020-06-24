@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -19,11 +19,11 @@
 #include "titlesettingkind.h"
 #include "systemcommonreaction.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 11;
+const int ProjectUpdater::incompatibleVersionsCount = 13;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
-     "1.3.0", "1.4.0", "1.4.1"};
+     "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3"};
 
 // -------------------------------------------------------
 //
@@ -79,7 +79,7 @@ void ProjectUpdater::copyPreviousProject() {
 
 void ProjectUpdater::getAllPathsMapsPortions()
 {
-    QString pathMaps = Common::pathCombine(m_project->pathCurrentProject(),
+    QString pathMaps = Common::pathCombine(m_project->pathCurrentProjectApp(),
                                           RPM::PATH_MAPS);
     QDirIterator directories(pathMaps, QDir::Dirs | QDir::NoDotAndDotDot);
 
@@ -157,7 +157,7 @@ void ProjectUpdater::copySystemScripts() {
     QString pathScripts = Common::pathCombine(pathBasic,
                                              RPM::PATH_SCRIPTS_SYSTEM_DIR);
     QString pathProjectScripts =
-            Common::pathCombine(m_project->pathCurrentProject(),
+            Common::pathCombine(m_project->pathCurrentProjectApp(),
                                RPM::PATH_SCRIPTS_SYSTEM_DIR);
     QDir dir(pathProjectScripts);
     dir.removeRecursively();
@@ -225,9 +225,11 @@ void ProjectUpdater::updateCommands() {
 // -------------------------------------------------------
 
 void ProjectUpdater::check() {
-    emit progress(10, "Copying the previous project...");
+    emit progress(10, RPM::translate(Translations::COPYING_PREVIOUS_PROJECT) +
+        RPM::DOT_DOT_DOT);
     copyPreviousProject();
-    emit progress(80, "Checking incompatible versions...");
+    emit progress(80, RPM::translate(Translations
+        ::CHECKING_INCOMPATIBLE_VERSIONS) + RPM::DOT_DOT_DOT);
 
     // Updating for incompatible versions
     int index = incompatibleVersionsCount;
@@ -244,16 +246,17 @@ void ProjectUpdater::check() {
     // Updating for each version
     m_project->readAll();
     for (int i = index; i < incompatibleVersionsCount; i++) {
-        emit progress(80, "Checking version " + incompatibleVersions[i] +
-                      "...");
+        emit progress(80, RPM::translate(Translations::CHECKING_VERSION) + RPM
+            ::SPACE + incompatibleVersions[i] + RPM::DOT_DOT_DOT);
         updateVersion(incompatibleVersions[i]);
     }
 
     // Copy recent executable and scripts
-    emit progress(95, "Copying recent executable and scripts");
+    emit progress(95, RPM::translate(Translations
+        ::COPYING_RECENT_EXECUTABLE_SCRIPTS));
     copyExecutable();
     copySystemScripts();
-    emit progress(99, "Correcting the BR path");
+    emit progress(99, RPM::translate(Translations::CORRECTING_BR_PATH));
     QThread::sleep(1);
     m_project->gameDatas()->systemDatas()->setPathBR(
                 Common::pathCombine(QDir::currentPath(), RPM::PATH_BR));
@@ -590,17 +593,6 @@ void ProjectUpdater::updateVersion_1_3_0() {
 
     // Camera properties + battle map default camera properties
     m_project->gameDatas()->systemDatas()->setDefaultCameraProperties();
-    QStandardItemModel *modelBattleMaps = m_project->gameDatas()
-        ->battleSystemDatas()->modelBattleMaps();
-    SystemBattleMap *battleMap;
-    for (i = 0, l = modelBattleMaps->invisibleRootItem()->rowCount(); i < l; i++)
-    {
-        battleMap = reinterpret_cast<SystemBattleMap *>(modelBattleMaps->item(i)
-            ->data().value<quintptr>());
-        if (battleMap != nullptr) {
-            battleMap->cameraPropertiesID()->setNumberValue(2);
-        }
-    }
     m_project->writeBattleSystemDatas();
 
     // Detections
@@ -638,7 +630,7 @@ void ProjectUpdater::updateVersion_1_3_0() {
     m_project->writeTitleScreenGameOver();
 
     // Speed frequency
-    m_project->gameDatas()->systemDatas()->setDefaultSpeedFrequencies();
+    m_project->gameDatas()->systemDatas()->setDefaultSpeed();
     m_project->writeSystemDatas();
 }
 
@@ -785,4 +777,51 @@ void ProjectUpdater::updateVersion_1_4_1_commands(QStandardItem *commands) {
             command->setCommands(list);
         }
     }
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_5_0() {
+    QDir dir(m_project->pathCurrentProject());
+    QList<QString> names;
+
+    m_project->gameDatas()->systemDatas()->setDefaultFrequencies();
+    m_project->picturesDatas()->setDefaultAnimations(names);
+    SuperListItem::deleteModel(m_project->gameDatas()->animationsDatas()
+        ->model(), false);
+    QFile::remove(Common::pathCombine(m_project->pathCurrentProject(), RPM
+        ::PATH_ANIMATIONS));
+    QFile::copy(Common::pathCombine(Common::pathCombine(QDir::currentPath(), RPM
+        ::PATH_BASIC), RPM::PATH_ANIMATIONS), Common::pathCombine(m_project
+        ->pathCurrentProject(), RPM::PATH_ANIMATIONS));
+    m_project->gameDatas()->readAnimations(m_project->pathCurrentProject());
+    m_project->gameDatas()->animationsDatas()->setDefault();
+    dir.mkpath(RPM::PATH_HUD_ANIMATIONS);
+    dir.mkpath(RPM::PATH_SKY_BOXES);
+    m_project->picturesDatas()->setDefaultSkyBoxes(names);
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_5_3() {
+    QDir dir(m_project->pathCurrentProject());
+    QList<QString> names;
+    QString path = m_project->pathCurrentProject();
+
+    // Change Content folder location
+    #ifdef Q_OS_MACOS
+        path = Common::pathCombine(path, "Game.app");
+        QDir(path).removeRecursively();
+        dir.mkdir("Game.app");
+        path = Common::pathCombine(path, "Contents");
+    #endif
+    QDir(path).mkdir(RPM::FOLDER_RESOURCES);
+    path = Common::pathCombine(path, RPM::FOLDER_RESOURCES);
+    QDir(path).mkdir(RPM::FOLDER_APP);
+    path = Common::pathCombine(path, RPM::FOLDER_APP);
+    Common::copyPath(Common::pathCombine(m_project->pathCurrentProject(), RPM
+        ::FOLDER_CONTENT), Common::pathCombine(path, RPM::FOLDER_CONTENT));
+
+    // Read content again
+    m_project->readAll();
 }

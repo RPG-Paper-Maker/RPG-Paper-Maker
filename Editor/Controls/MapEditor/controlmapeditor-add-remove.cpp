@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -609,7 +609,7 @@ void ControlMapEditor::removeSpriteWall(DrawKind drawKind) {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseSprite(Position &p, bool undoRedo) {
+void ControlMapEditor::eraseSprite(Position &p, bool undoRedo, bool deletePtr) {
     if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
         m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
         .yPlus(), p.yPlus()))))
@@ -623,7 +623,7 @@ void ControlMapEditor::eraseSprite(Position &p, bool undoRedo) {
             QList<MapEditorSubSelectionKind> previousType;
             QList<Position> positions;
             bool changed = mapPortion->deleteSprite(portionsOverflow, p, previous,
-                previousType, positions);
+                previousType, positions, deletePtr);
             if (changed && m_map->saved())
                 setToNotSaved();
             if (changed) {
@@ -780,7 +780,7 @@ void ControlMapEditor::removeObject3D(Position &p) {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseObject3D(Position &p, bool undoRedo) {
+void ControlMapEditor::eraseObject3D(Position &p, bool undoRedo, bool deletePtr) {
     if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
         m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
         .yPlus(), p.yPlus()))))
@@ -794,7 +794,7 @@ void ControlMapEditor::eraseObject3D(Position &p, bool undoRedo) {
             QList<MapEditorSubSelectionKind> previousType;
             QList<Position> positions;
             bool changed = mapPortion->deleteObject3D(portionsOverflow, p,
-                previous, previousType, positions);
+                previous, previousType, positions, deletePtr);
             if (m_detection != nullptr) {
                 m_detection->deleteObject(p);
             }

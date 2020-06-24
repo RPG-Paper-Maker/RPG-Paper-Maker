@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -33,6 +33,8 @@ DialogTilesetTexture::DialogTilesetTexture(int pictureID, QRect &rect, QWidget
         ::Tilesets)->invisibleRootItem(), pictureID))->getPath(PictureKind
         ::Tilesets));
     ui->widget->setCurrentTexture(rect);
+
+    this->translate();
 }
 
 DialogTilesetTexture::~DialogTilesetTexture()
@@ -51,4 +53,13 @@ QRect DialogTilesetTexture::getRect() const {
     ui->widget->currentTexture(rect);
 
     return rect;
+}
+
+//-------------------------------------------------
+
+void DialogTilesetTexture::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SELECT_TILESET_RECT) + RPM
+        ::DOT_DOT_DOT);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

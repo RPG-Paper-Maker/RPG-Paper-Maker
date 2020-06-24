@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogkeyboardcontrols.h"
 #include "ui_dialogkeyboardcontrols.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -49,6 +50,8 @@ DialogKeyBoardControls::DialogKeyBoardControls(Project* project,
 
     // Menu controls
     updateMenuControls();
+
+    this->translate();
 }
 
 DialogKeyBoardControls::~DialogKeyBoardControls()
@@ -112,6 +115,26 @@ void DialogKeyBoardControls::updateMenuControls(){
                                             m_gameKeyBoardDatas->keyRight()));
 
     m_canUpdateKey = true;
+}
+
+// -------------------------------------------------------
+
+void DialogKeyBoardControls::translate() {
+    this->setWindowTitle(RPM::translate(Translations::KEYBOARD_CONTROLS) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelUp->setText(RPM::translate(Translations::UP) + RPM::COLON);
+    ui->labelDown->setText(RPM::translate(Translations::DOWN) + RPM::COLON);
+    ui->labelLeft->setText(RPM::translate(Translations::LEFT) + RPM::COLON);
+    ui->labelRight->setText(RPM::translate(Translations::RIGHT) + RPM::COLON);
+    ui->labelAction->setText(RPM::translate(Translations::ACTION) + RPM::COLON);
+    ui->labelCancel->setText(RPM::translate(Translations::CANCEL) + RPM::COLON);
+    ui->groupBoxGameControls->setTitle(RPM::translate(Translations
+        ::GAME_CONTROLS));
+    ui->groupBoxMenuControls->setTitle(RPM::translate(Translations
+        ::MENU_CONTROLS));
+    ui->groupBoxEngineControls->setTitle(RPM::translate(Translations
+        ::ENGINE_CONTROLS));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

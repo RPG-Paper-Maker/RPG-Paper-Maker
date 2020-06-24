@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -35,6 +35,8 @@ DialogCommandSetMoveTurnAPicture::DialogCommandSetMoveTurnAPicture(EventCommand
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandSetMoveTurnAPicture::~DialogCommandSetMoveTurnAPicture() {
@@ -66,6 +68,33 @@ void DialogCommandSetMoveTurnAPicture::initializePrimitives() {
     ui->panelPrimitiveY->initializeNumber(m_parameters, properties, false);
     ui->panelPrimitiveAngle->initializeNumber(m_parameters, properties, false);
     ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
+}
+
+//-------------------------------------------------
+
+void DialogCommandSetMoveTurnAPicture::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_MOVE_TURN_A_PICTURE) +
+        RPM::DOT_DOT_DOT);
+    ui->labelTime->setText(RPM::translate(Translations::TIME) + RPM::COLON);
+    ui->labelSeconds->setText(RPM::translate(Translations::SECONDS));
+    ui->labelImageIndex->setText(RPM::translate(Translations::IMAGE_INDEX) + RPM
+        ::COLON);
+    ui->checkBoxX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->checkBoxY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->checkBoxSet->setText(RPM::translate(Translations::SET) + RPM::COLON);
+    ui->checkBoxMove->setText(RPM::translate(Translations::MOVE) + RPM::COLON);
+    ui->checkBoxTurn->setText(RPM::translate(Translations::TURN_VERB) + RPM
+        ::COLON);
+    ui->checkBoxZoom->setText(RPM::translate(Translations::ZOOM) + RPM::COLON);
+    ui->checkBoxAngle->setText(RPM::translate(Translations::ANGLE) + RPM::COLON);
+    ui->checkBoxImageID->setText(RPM::translate(Translations::IMAGE_ID) + RPM
+        ::COLON);
+    ui->checkBoxOpacity->setText(RPM::translate(Translations::OPACITY) + RPM
+        ::COLON);
+    ui->checkBoxWaitEnd->setText(RPM::translate(Translations
+        ::WAIT_END_ACTIONS_BEFORE_NEXT_COMMAND));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

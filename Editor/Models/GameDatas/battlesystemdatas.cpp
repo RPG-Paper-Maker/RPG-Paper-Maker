@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -227,8 +227,15 @@ void BattleSystemDatas::setDefaultOptions() {
 void BattleSystemDatas::setDefaultWeaponsKind() {
     SystemWeaponArmorKind* sysWeaponArmorKind;
     QStandardItem* item;
-    QString names[] = {"Sword", "Axe", "Spear", "Tome", "Staff", "Bow",
-                       "Firearm"};
+    QString names[] = {
+        RPM::translate(Translations::SWORD),
+        RPM::translate(Translations::AXE),
+        RPM::translate(Translations::SPEAR),
+        RPM::translate(Translations::TOME),
+        RPM::translate(Translations::STAFF),
+        RPM::translate(Translations::BOW),
+        RPM::translate(Translations::FIREARM)
+    };
     QList<bool> equipmentsAssigment =
             QList<bool>({true,true,false,false,false,false,false});
     int length = (sizeof(names)/sizeof(*names));
@@ -251,8 +258,18 @@ void BattleSystemDatas::setDefaultWeaponsKind() {
 void BattleSystemDatas::setDefaultArmorsKind(){
     SystemWeaponArmorKind* sysWeaponArmorKind;
     QStandardItem* item;
-    QString names[] = {"Helmet", "Cap", "Mail", "Vest", "Vambraces",
-                       "Guards", "Greaves", "Leggings", "Ring", "Necklace"};
+    QString names[] = {
+        RPM::translate(Translations::SWORD),
+        RPM::translate(Translations::CAP),
+        RPM::translate(Translations::MAIL),
+        RPM::translate(Translations::VEST),
+        RPM::translate(Translations::VAMBRACES),
+        RPM::translate(Translations::GUARDS),
+        RPM::translate(Translations::GREAVES),
+        RPM::translate(Translations::LEGGINGS),
+        RPM::translate(Translations::RING),
+        RPM::translate(Translations::NECKLACE)
+    };
     QList<bool> equipmentsAssigment[] = {
         QList<bool>({false,false,true,false,false,false,false}),
         QList<bool>({false,false,true,false,false,false,false}),
@@ -285,9 +302,8 @@ void BattleSystemDatas::setDefaultArmorsKind(){
 
 void BattleSystemDatas::setDefaultBattleMaps(){
     SuperListItem::deleteModel(m_modelBattleMaps, false);
-    SystemBattleMap* sysBattleMap = new SystemBattleMap(1, "Default", new
-        PrimitiveValue(PrimitiveValueKind::DataBase, 2), 2, Position3D(8, 0, 0,
-        7));
+    SystemBattleMap* sysBattleMap = new SystemBattleMap(1, RPM::translate(
+        Translations::DEFAULT), 2, Position3D(8, 0, 0, 7));
     QStandardItem* item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sysBattleMap)));
     item->setText(sysBattleMap->toString());
@@ -299,52 +315,31 @@ void BattleSystemDatas::setDefaultBattleMaps(){
 
 // -------------------------------------------------------
 
-void BattleSystemDatas::setDefaultElements(){
-    SystemElement* sysElement;
-    QStandardItem* itemElement;
-    QStandardItem* itemEfficiency;
-    QStandardItem* item;
-    SuperListItem* element;
-    QList<QStandardItem*> row;
-    QStandardItemModel* efficiency;
-    QString names[] = {"Fire", "Water", "Grass"};
-    QVector<int> efficiencies[] = {QVector<int>({100, 50, 200}), // Fire
-                                   QVector<int>({200, 100, 50}), // Water
-                                   QVector<int>({50, 200, 100})}; // Grass
+void BattleSystemDatas::setDefaultElements() {
+    QString names[] = {
+        RPM::translate(Translations::FIRE),
+        RPM::translate(Translations::WATER),
+        RPM::translate(Translations::PLANT)
+    };
+    int icons[] = { 11, 12, 34 };
+    QVector<double> efficiencies[] = {
+        QVector<double>({ 1.0, 0.5, 2.0 }), // Fire
+        QVector<double>({ 2.0, 1.0, 0.5 }), // Water
+        QVector<double>({ 0.5, 2.0, 1.0 }) // Grass
+    };
+    SystemElement *sysElement;
     int length = (sizeof(names)/sizeof(*names));
+    int i, j;
 
-    // First create all the elements
-    for (int i = 0; i < length; i++){
-        item = new QStandardItem();
-        sysElement = new SystemElement(i+1, new LangsTranslation(names[i]));
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(sysElement)));
-        item->setText(sysElement->toString());
-        m_modelElements->appendRow(item);
-    }
-
-    // Fill the efficiencies
-    for (int i = 0; i < length; i++){
-        sysElement =
-                (SystemElement*) SuperListItem::getById(m_modelElements
-                                                        ->invisibleRootItem(),
-                                                        i+1);
-        efficiency = sysElement->efficiency();
-        for (int j = 0; j < efficiencies[i].size(); j++){
-            row = QList<QStandardItem*>();
-            element = SuperListItem::getById(m_modelElements
-                                             ->invisibleRootItem(), j+1);
-            itemElement = new QStandardItem;
-            itemElement->setData(QVariant::fromValue(
-                                     reinterpret_cast<quintptr>(element)));
-            itemElement->setText(element->toString());
-            itemEfficiency = new QStandardItem;
-            itemEfficiency->setData(QVariant::fromValue(efficiencies[i][j]));
-            itemEfficiency->setText(QString::number(efficiencies[i][j]) + "%");
-            row.append(itemElement);
-            row.append(itemEfficiency);
-            efficiency->appendRow(row);
+    // Create all the elements and add efficiencies
+    for (i = 0; i < length; i++){
+        sysElement = new SystemElement(i+1, new LangsTranslation(names[i]),
+            icons[i]);
+        for (j = 0; j < length; j++) {
+            sysElement->addEfficiencyDouble(j + 1, efficiencies[i][j]);
         }
+
+        m_modelElements->appendRow(sysElement->getModelRow());
     }
 }
 
@@ -353,13 +348,20 @@ void BattleSystemDatas::setDefaultElements(){
 void BattleSystemDatas::setDefaultCommonEquipment(){
     int i = 1;
     SystemLang* items[] = {
-        new SystemLang(i++, new LangsTranslation("Left hand")),
-        new SystemLang(i++, new LangsTranslation("Right hand")),
-        new SystemLang(i++, new LangsTranslation("Head")),
-        new SystemLang(i++, new LangsTranslation("Chest")),
-        new SystemLang(i++, new LangsTranslation("Arms")),
-        new SystemLang(i++, new LangsTranslation("Legs")),
-        new SystemLang(i++, new LangsTranslation("Accessory"))
+        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
+            ::LEFT_HAND))),
+        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
+            ::RIGHT_HAND))),
+        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
+            ::HEAD))),
+        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
+            ::CHEST))),
+        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
+            ::ARMS))),
+        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
+            ::LEGS))),
+        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
+            ::ACCESSORY)))
     };
     int length = (sizeof(items)/sizeof(*items));
     QStandardItem* item;
@@ -379,21 +381,30 @@ void BattleSystemDatas::setDefaultCommonEquipment(){
 void BattleSystemDatas::setDefaultCommonStatistics(){
     int i = 1;
     SystemStatistic* items[] = {
-        new SystemStatistic(i++, new LangsTranslation("Lv."), "lv", true),
-        new SystemStatistic(i++, new LangsTranslation("Exp."), "xp", false),
-        new SystemStatistic(i++, new LangsTranslation("HP"), "hp", false),
-        new SystemStatistic(i++, new LangsTranslation("MP"), "mp", false),
-        new SystemStatistic(i++, new LangsTranslation("TP"), "tp", false),
-        new SystemStatistic(i++, new LangsTranslation("Attack"), "atk", true),
-        new SystemStatistic(i++, new LangsTranslation("Magic"), "mag", true),
-        new SystemStatistic(i++, new LangsTranslation("Strength"), "str", true),
-        new SystemStatistic(i++, new LangsTranslation("Intelligence"), "int",
-        true),
-        new SystemStatistic(i++, new LangsTranslation("P. Defense"), "pdef",
-        true),
-        new SystemStatistic(i++, new LangsTranslation("M. defense"), "mdef",
-        true),
-        new SystemStatistic(i++, new LangsTranslation("Agility"), "agi", true)
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::LV)), "lv", true),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::EXP)), "xp", false),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::HP)), "hp", false),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::MP)), "mp", false),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::TP)), "tp", false),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::ATTACK)), "atk", true),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::MAGIC)), "mag", true),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::STRENGTH)), "str", true),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::INTELLIGENCE)), "int", true),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::P_DEFENSE)), "pdef", true),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::M_DEFENSE)), "mdef", true),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::AGILITY)), "agi", true)
     };
 
     int length = (sizeof(items)/sizeof(*items));
@@ -414,11 +425,11 @@ void BattleSystemDatas::setDefaultCommonStatistics(){
 void BattleSystemDatas::setDefaultCommonBattleCommand(){
     int i = 1;
     SystemBattleCommand* items[] = {
-        new SystemBattleCommand(i++, new LangsTranslation("Attack"), 1),
-        new SystemBattleCommand(i++, new LangsTranslation("Skill"), 2),
-        new SystemBattleCommand(i++, new LangsTranslation("Item"), 3),
-        new SystemBattleCommand(i++, new LangsTranslation("Escape"), 4),
-        new SystemBattleCommand(i++, new LangsTranslation("End turn"), 5),
+        new SystemBattleCommand(i++, RPM::translate(Translations::ATTACK), 1),
+        new SystemBattleCommand(i++, RPM::translate(Translations::SKILL), 2),
+        new SystemBattleCommand(i++, RPM::translate(Translations::ITEM), 3),
+        new SystemBattleCommand(i++, RPM::translate(Translations::ESCAPE), 4),
+        new SystemBattleCommand(i++, RPM::translate(Translations::END_TURN), 5),
     };
 
     int length = (sizeof(items)/sizeof(*items));
@@ -445,6 +456,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     QStandardItem* item;
     QJsonObject obj;
     QJsonArray jsonList;
+    SystemElement *sysElement;
 
     // Clear
     SuperListItem::deleteModel(m_modelCommonEquipment, false);
@@ -537,19 +549,9 @@ void BattleSystemDatas::read(const QJsonObject &json){
     // Elements
     jsonList = json[jsonElements].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        item = new QStandardItem;
-        SystemElement* sysElement = new SystemElement;
+        sysElement = new SystemElement;
         sysElement->read(jsonList[i].toObject());
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(sysElement)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(sysElement->toString());
-        m_modelElements->appendRow(item);
-    }
-    for (int i = 0; i < jsonList.size(); i++){
-        SystemElement* sysElement = reinterpret_cast<SystemElement*>(
-            m_modelElements->item(i)->data().value<quintptr>());
-        sysElement->readEfficiency(m_modelElements, jsonList[i].toObject());
+        m_modelElements->appendRow(sysElement->getModelRow());
     }
 
     // Statistics
@@ -566,17 +568,8 @@ void BattleSystemDatas::read(const QJsonObject &json){
     }
 
     // Battle commands
-    jsonList = json[jsonCommonBattleCommand].toArray();
-    for (int i = 0; i < jsonList.size(); i++){
-        item = new QStandardItem;
-        SystemBattleCommand* sysBattleCommand = new SystemBattleCommand;
-        sysBattleCommand->read(jsonList[i].toObject());
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(sysBattleCommand)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(sysBattleCommand->toString());
-        m_modelCommonBattleCommand->appendRow(item);
-    }
+    SuperListItem::readTree(m_modelCommonBattleCommand, new SystemBattleCommand,
+        json, jsonCommonBattleCommand);
 }
 
 // -------------------------------------------------------
@@ -684,15 +677,6 @@ void BattleSystemDatas::write(QJsonObject &json) const{
     json[jsonCommonStatistics] = jsonArray;
 
     // Battle commands
-    l = m_modelCommonBattleCommand->invisibleRootItem()->rowCount();
-    jsonArray = QJsonArray();
-    for (int i = 0; i < l; i++){
-        QJsonObject jsonCommon;
-        SystemBattleCommand* sysBattleCommand = reinterpret_cast
-            <SystemBattleCommand*>(m_modelCommonBattleCommand->item(i)->data()
-            .value<quintptr>());
-        sysBattleCommand->write(jsonCommon);
-        jsonArray.append(jsonCommon);
-    }
-    json[jsonCommonBattleCommand] = jsonArray;
+    SuperListItem::writeTree(m_modelCommonBattleCommand, json,
+        jsonCommonBattleCommand);
 }

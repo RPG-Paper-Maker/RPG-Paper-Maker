@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -191,7 +191,7 @@ int SuperListItem::getIdByIndex(QStandardItemModel* model, int index){
 
 // -------------------------------------------------------
 
-SuperListItem* SuperListItem::getById(QStandardItem* item, int id, bool first){
+SuperListItem* SuperListItem::getById(QStandardItem* item, int id, bool first) {
     int l;
 
     l = item->rowCount();
@@ -209,6 +209,34 @@ SuperListItem* SuperListItem::getById(QStandardItem* item, int id, bool first){
         if (first) {
             return reinterpret_cast<SuperListItem *>(item->child(0)->data()
                 .value<quintptr>());
+        }
+    }
+
+    return nullptr;
+}
+
+// -------------------------------------------------------
+
+QStandardItem * SuperListItem::getItemByID(QStandardItem *item, int id, bool
+    first)
+{
+    int l;
+
+    l = item->rowCount();
+    if (l > 0) {
+        SuperListItem *s;
+        QStandardItem *row;
+        int i;
+
+        for (i = 0; i < l; i++) {
+            row = item->child(i);
+            s = reinterpret_cast<SuperListItem *>(row->data().value<quintptr>());
+            if (s != nullptr && id == s->id()) {
+                return row;
+            }
+        }
+        if (first) {
+            return item->child(0);
         }
     }
 
@@ -283,8 +311,8 @@ void SuperListItem::fillComboBox(QComboBox* comboBox, QStandardItemModel* model,
 
 // -------------------------------------------------------
 
-void SuperListItem::copyModel(QStandardItemModel* model,
-                                             QStandardItemModel* baseModel)
+void SuperListItem::copyModel(QStandardItemModel* model, QStandardItemModel*
+    baseModel)
 {
     SuperListItem* super, *superBase;
     QList<QStandardItem*> row;
@@ -296,6 +324,25 @@ void SuperListItem::copyModel(QStandardItemModel* model,
         super->setId(superBase->id());
         row = super->getModelRow();
         model->appendRow(row);
+    }
+}
+
+// -------------------------------------------------------
+
+void SuperListItem::replaceModel(QStandardItemModel* model, QStandardItemModel*
+    baseModel)
+{
+    SuperListItem* super, *superBase;
+    int i, l;
+
+    for (i = 0, l = baseModel->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SuperListItem *>(model->item(i)->data()
+            .value<quintptr>());
+        superBase = reinterpret_cast<SuperListItem *>(baseModel->item(i)->data()
+            .value<quintptr>());
+        super->setCopy(*superBase);
+        model->removeRow(i);
+        model->insertRow(i, super->getModelRow());
     }
 }
 
@@ -354,12 +401,14 @@ void SuperListItem::copy(QStandardItemModel *model,
                            QStandardItemModel *modelToCopy)
 {
     QList<QStandardItem*> row;
-    for (int i = 0; i < modelToCopy->invisibleRootItem()->rowCount()-1; i++){
+    for (int i = 0; i < modelToCopy->invisibleRootItem()->rowCount(); i++){
         SuperListItem* super = reinterpret_cast<SuperListItem *>(modelToCopy
             ->item(i)->data().value<quintptr>());
-        SuperListItem* newSuper = super->createCopy();
-        row = newSuper->getModelRow();
-        model->appendRow(row);
+        if (super != nullptr) {
+            SuperListItem* newSuper = super->createCopy();
+            row = newSuper->getModelRow();
+            model->appendRow(row);
+        }
     }
     model->appendRow(SuperListItem::getEmptyItem());
 }
@@ -369,20 +418,8 @@ void SuperListItem::copy(QStandardItemModel *model,
 void SuperListItem::readTree(QStandardItemModel *model, SuperListItem
     *newInstance, const QJsonObject &json, const QString &name)
 {
-    QList<QStandardItem*> row;
-    SuperListItem *super;
-    QJsonArray tab;
-
-    tab = json[name].toArray();
-    for (int i = 0; i < tab.size(); i++) {
-        super = newInstance->createCopy();
-        super->read(tab.at(i).toObject());
-        row = super->getModelRow();
-        model->appendRow(row);
-    }
+    SuperListItem::readList(model, newInstance, json, name);
     model->appendRow(SuperListItem::getEmptyItem());
-
-    delete newInstance;
 }
 
 // -------------------------------------------------------
@@ -414,9 +451,49 @@ void SuperListItem::writeTree(QStandardItemModel *model, QJsonObject &json,
 
 // -------------------------------------------------------
 
+void SuperListItem::readList(QStandardItemModel *model, SuperListItem
+    *newInstance, const QJsonObject &json, const QString &name)
+{
+    QList<QStandardItem*> row;
+    SuperListItem *super;
+    QJsonArray tab;
+
+    tab = json[name].toArray();
+    for (int i = 0; i < tab.size(); i++) {
+        super = newInstance->createCopy();
+        super->read(tab.at(i).toObject());
+        row = super->getModelRow();
+        model->appendRow(row);
+    }
+
+    delete newInstance;
+}
+
+// -------------------------------------------------------
+
+void SuperListItem::writeList(QStandardItemModel *model, QJsonObject &json,
+    const QString &name)
+{
+    SuperListItem *super;
+    QJsonArray tab;
+    QJsonObject obj;
+
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
+        obj = QJsonObject();
+        super = reinterpret_cast<SuperListItem *>(model->item(i)->data().value<
+            quintptr>());
+        super->write(obj);
+        tab.append(obj);
+    }
+
+    json[name] = tab;
+}
+
+// -------------------------------------------------------
+
 void SuperListItem::reset() {
     p_id = -1;
-    p_name = "<None>";
+    p_name = "<" + RPM::translate(Translations::NONE) + ">";
 }
 
 // -------------------------------------------------------

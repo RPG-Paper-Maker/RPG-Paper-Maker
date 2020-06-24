@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -34,6 +34,8 @@ const QColor RPM::COLOR_ALMOST_TRANSPARENT = QColor(0, 0, 0, 20);
 const QColor RPM::COLOR_FORTY_TRANSPARENT = QColor(0, 0, 0, 40);
 const QColor RPM::COLOR_GREY = QColor(90, 90, 90);
 const QColor RPM::COLOR_MENU_SELECTION_BLUE = QColor(47, 139, 196);
+const QColor RPM::COLOR_CURSOR_SELECTION = QColor(100, 130, 170, 100);
+const QColor RPM::COLOR_COMMAND_COMMENT = QColor(18, 135, 90);
 
 // COMMON JSON
 const QString RPM::JSON_KEY = "k";
@@ -45,22 +47,55 @@ const QString RPM::EXTENSION_QSS = ".qss";
 const QString RPM::EXTENSION_RPM = ".rpm";
 const QString RPM::EXTENSION_PNG = ".png";
 const QString RPM::EXTENSION_JPG = ".jpg";
+const QString RPM::EXTENSION_JS = ".js";
+const QString RPM::EXTENSION_HTML = ".html";
 
 // STRING SYMBOLS
 const QString RPM::DASH = "-";
+const QString RPM::SLASH = "/";
+const QString RPM::COLON = ":";
+const QString RPM::DOT = ".";
+const QString RPM::DOT_DOT_DOT = "...";
+const QString RPM::SPACE = " ";
+const QString RPM::NEW_LINE = "\n";
+const QString RPM::PARENTHESIS_LEFT = "(";
+const QString RPM::PARENTHESIS_RIGHT = ")";
+const QString RPM::BRACKET_LEFT = "[";
+const QString RPM::BRACKET_RIGHT = "]";
+const QString RPM::EQUAL = "=";
+const QString RPM::PLUS = "+";
+const QString RPM::MINUS = "-";
+const QString RPM::TIMES = "*";
+const QString RPM::DIVIDED_BY = "/";
+const QString RPM::MODULO = "%";
 const QString RPM::TRUE_BOOL_STRING = "1";
 const QString RPM::FALSE_BOOL_STRING = "0";
 
 // FILE / FOLDER NAMES
 const QString RPM::FILE_MAP_INFOS = "infos" + EXTENSION_JSON;
 const QString RPM::FILE_MAP_OBJECTS = "objects" + EXTENSION_JSON;
+const QString RPM::FILE_MAIN = "main" + EXTENSION_JS;
+const QString RPM::FILE_INDEX = "index" + EXTENSION_HTML;
+const QString RPM::FILE_PACKAGE = "package" + EXTENSION_JSON;
 const QString RPM::FOLDER_GAMES = "RPG Paper Maker Games";
 const QString RPM::FOLDER_DESKTOP = "desktop";
 const QString RPM::FOLDER_CONTENT = "Content";
 const QString RPM::FOLDER_TEMP_MAP = "temp";
 const QString RPM::FOLDER_UNDO_REDO_TEMP_MAP = "tempUndoRedo";
+const QString RPM::FOLDER_APP = "app";
+#ifdef Q_OS_MACOS
+    const QString RPM::FOLDER_RESOURCES = "Resources";
+#else
+    const QString RPM::FOLDER_RESOURCES = "resources";
+#endif
 
 // PATHS
+#ifdef Q_OS_MACOS
+    const QString RPM::PATH_RESOURCES = Common::pathCombine(Common::pathCombine("Game.app", "Contents"), FOLDER_RESOURCES);
+#else
+    const QString RPM::PATH_RESOURCES = FOLDER_RESOURCES;
+#endif
+const QString RPM::PATH_APP = Common::pathCombine(PATH_RESOURCES, FOLDER_APP);
 const QString RPM::PATH_BASIC = Common::pathCombine(FOLDER_CONTENT, "basic");
 const QString RPM::PATH_BR = Common::pathCombine(FOLDER_CONTENT, "BR");
 const QString RPM::PATH_DATAS = Common::pathCombine(FOLDER_CONTENT, "Datas");
@@ -138,6 +173,8 @@ const QString RPM::PATH_WINDOW_SKINS = Common::pathCombine(PATH_HUD,
     "WindowSkins");
 const QString RPM::PATH_TITLE_SCREEN = Common::pathCombine(PATH_HUD,
     "TitleScreen");
+const QString RPM::PATH_HUD_ANIMATIONS = Common::pathCombine(PATH_HUD,
+    "Animations");
 const QString RPM::PATH_HUD_PICTURES = Common::pathCombine(PATH_HUD,
     "Pictures");
 const QString RPM::PATH_AUTOTILES = Common::pathCombine(PATH_TEXTURES_2D,
@@ -156,6 +193,8 @@ const QString RPM::PATH_TEXTURES_OBJECT_3D = Common::pathCombine(PATH_TEXTURES_2
     "Objects3D");
 const QString RPM::PATH_BATTLERS = Common::pathCombine(PATH_TEXTURES_2D,
     "Battlers");
+const QString RPM::PATH_SKY_BOXES = Common::pathCombine(PATH_TEXTURES_2D,
+    "SkyBoxes");
 const QString RPM::PATH_VIDEOS = Common::pathCombine(FOLDER_CONTENT,
     "Videos");
 const QString RPM::PATH_SONGS = Common::pathCombine(FOLDER_CONTENT,
@@ -182,68 +221,49 @@ const QString RPM::PATH_TRANSLATIONS = Common::pathCombine(FOLDER_CONTENT,
     "translations");
 const QString RPM::PATH_TRANSLATIONS_LANGUAGES = Common::pathCombine(RPM
     ::PATH_TRANSLATIONS, "languages" + EXTENSION_JSON);
+const QString RPM::PATH_TRANSLATIONS_CURRENT_LANGUAGE = Common::pathCombine(RPM
+    ::PATH_TRANSLATIONS, "current-language");
 const QString RPM::PATH_PATREON = Common::pathCombine(FOLDER_CONTENT, "patreon"
     + EXTENSION_JSON);
 const QString RPM::PATH_GAMES = Common::pathCombine(QStandardPaths
     ::writableLocation(QStandardPaths::StandardLocation::DocumentsLocation),
     FOLDER_GAMES);
 const QString RPM::PATH_TEXTURE_MISSING = ":/textures/Ressources/missing.png";
+const QString RPM::PATH_MAIN = Common::pathCombine(PATH_APP, FILE_MAIN);
+const QString RPM::PATH_INDEX = Common::pathCombine(PATH_APP, FILE_INDEX);
+const QString RPM::PATH_PACKAGE = Common::pathCombine(PATH_APP, FILE_PACKAGE);
 
 // INTEGERS
 const int RPM::PORTION_SIZE = 16;
 const int RPM::BASIC_SQUARE_SIZE = 32;
 const int RPM::MAX_PIXEL_SIZE = 4096;
+const int RPM::SCREEN_BASIC_WIDTH = 640;
+const int RPM::SCREEN_BASIC_HEIGHT = 480;
 
-// ENUM TO STRING
-const QStringList RPM::ENUM_TO_STRING_DAMAGES_KIND = {
-    "Statistic", "Currency", "Variable"
-};
-const QStringList RPM::ENUM_TO_STRING_EFFECT_SPECIAL_ACTION_KIND = {
-    "Apply weapon(s) effects and properties", "Open skills choice",
-    "Open items choice", "Escape", "End turn"
-};
-const QStringList RPM::ENUM_TO_STRING_INCREASE_DECREASE_KIND = {
-    "Statistic value", "Element resistance", "Status resistance",
-    "Experience gain", "Currency gain", "Skill cost", "Variable"
-};
-const QStringList RPM::ENUM_TO_STRING_OS_KIND = {
-    "Windows", "Linux", "Mac"
-};
-
-const QStringList RPM::ENUM_TO_STRING_TEAM = {
-    "team", "reserve", "hidden"
-};
-
-const QStringList RPM::ENUM_TO_STRING_OPERATION = {
-    "= (Equal to)", "!= (Not equal to)", ">= (Greater than or equal to)",
-    "<= (Lesser than or equal to)", "> (Greater than)", "< (Lesser than)"
-};
-
-const QStringList RPM::ENUM_TO_STRING_OPERATION_SIMPLE = {
-    "=", "!=", ">=", "<=", ">", "<"
-};
-
-const QStringList RPM::ENUM_TO_STRING_FORMULA_STAT = {
-    "Statistic", "Currency", "Variable"
-};
-
-const QStringList RPM::ENUM_TO_STRING_TITLE_SETTINGS = {
-    "Keyboard assigments"
-};
-
-const QStringList RPM::ENUM_TO_STRING_AXIS_KIND = {
-    "X", "Y", "Z"
-};
-
-const QStringList RPM::ENUM_TO_STRING_CONDITION_HEROES = {
-    "All the heroes", "None of the heroes", "At least one hero",
-    "The hero with instance ID"
-};
-
-const QStringList RPM::ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC = {
-    "X square position", "Y square position", "Z square position",
-    "X pixel position", "Y pixel position", "Z pixel position", "orientation"
-};
+// ENUMS TO STRING
+QStringList RPM::ENUM_TO_STRING_DAMAGES_KIND = {};
+QStringList RPM::ENUM_TO_STRING_EFFECT_SPECIAL_ACTION_KIND = {};
+QStringList RPM::ENUM_TO_STRING_INCREASE_DECREASE_KIND = {};
+QStringList RPM::ENUM_TO_STRING_OS_KIND = {};
+QStringList RPM::ENUM_TO_STRING_TEAM = {};
+QStringList RPM::ENUM_TO_STRING_OPERATION = {};
+QStringList RPM::ENUM_TO_STRING_OPERATION_SIMPLE = {};
+QStringList RPM::ENUM_TO_STRING_FORMULA_STAT = {};
+QStringList RPM::ENUM_TO_STRING_TITLE_SETTINGS = {};
+QStringList RPM::ENUM_TO_STRING_AXIS_KIND = {};
+QStringList RPM::ENUM_TO_STRING_CONDITION_HEROES = {};
+QStringList RPM::ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC = {};
+QStringList RPM::ENUM_TO_STRING_ANIMATION_POSITION_KIND = {};
+QStringList RPM::ENUM_TO_STRING_ANIMATION_CONDITION_KIND = {};
+QStringList RPM::ENUM_TO_STRING_MOUNTAIN_COLLISION_KIND = {};
+QStringList RPM::ENUM_TO_STRING_OBJECT_COLLISION_KIND = {};
+QStringList RPM::ENUM_TO_STRING_EVENT_COMMAND_KIND = {};
+QStringList RPM::ENUM_TO_STRING_TARGET_KIND = {};
+QStringList RPM::ENUM_TO_STRING_AVAILABLE_KIND = {};
+QStringList RPM::ENUM_TO_STRING_OBJECT_MOVING_KIND = {};
+QStringList RPM::ENUM_TO_STRING_SHAPE_KIND = {};
+QStringList RPM::ENUM_TO_STRING_TITLE_COMMAND_KIND = {};
+QStringList RPM::ENUM_TO_STRING_MONSTER_ACTION_TARGET_KIND = {};
 
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
@@ -302,6 +322,16 @@ int RPM::copiedCommandsCount() const {
 
 void RPM::copiedCommandsAppend(QStandardItem *item) {
     m_copiedCommands.append(item);
+}
+
+SuperListItem * RPM::selectedMonster() const
+{
+    return m_selectedMonster;
+}
+
+void RPM::setSelectedMonster(SuperListItem *si)
+{
+    m_selectedMonster = si;
 }
 
 // -------------------------------------------------------
@@ -368,6 +398,204 @@ void RPM::readEngineSettings() {
 
 void RPM::readTranslations() {
     RPM::get()->translations()->read();
+
+    // Construct RPM::ENUMs
+    RPM::ENUM_TO_STRING_DAMAGES_KIND = QStringList({
+        RPM::translate(Translations::STATISTIC),
+        RPM::translate(Translations::CURRENCY),
+        RPM::translate(Translations::VARIABLE)
+    });
+    RPM::ENUM_TO_STRING_EFFECT_SPECIAL_ACTION_KIND = QStringList({
+        RPM::translate(Translations::APPLY_WEAPON_EFFECTS),
+        RPM::translate(Translations::OPEN_SKILLS_CHOICE),
+        RPM::translate(Translations::OPEN_ITEMS_CHOICE),
+        RPM::translate(Translations::ESCAPE),
+        RPM::translate(Translations::END_TURN)
+    });
+    RPM::ENUM_TO_STRING_INCREASE_DECREASE_KIND = QStringList({
+        RPM::translate(Translations::STATISTIC_VALUE),
+        RPM::translate(Translations::ELEMENT_RESISTANCE),
+        RPM::translate(Translations::STATUS_RESISTANCE),
+        RPM::translate(Translations::CURRENCY_GAIN),
+        RPM::translate(Translations::SKILL_COST),
+        RPM::translate(Translations::VARIABLE)
+    });
+    RPM::ENUM_TO_STRING_OS_KIND = QStringList({
+        "Windows", "Linux", "Mac"
+    });
+
+    RPM::ENUM_TO_STRING_TEAM = QStringList({
+        RPM::translate(Translations::TEAM),
+        RPM::translate(Translations::RESERVE),
+        RPM::translate(Translations::HIDDEN)
+    });
+    RPM::ENUM_TO_STRING_OPERATION_SIMPLE = QStringList({
+        "=", "!=", ">=", "<=", ">", "<"
+    });
+    RPM::ENUM_TO_STRING_OPERATION = QStringList({
+        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(0) + " " + RPM::PARENTHESIS_LEFT +
+            RPM::translate(Translations::EQUAL_TO) + RPM::PARENTHESIS_RIGHT,
+        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(1) + " " + RPM::PARENTHESIS_LEFT +
+            RPM::translate(Translations::NOT_EQUAL_TO) + RPM::PARENTHESIS_RIGHT,
+        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(2) + " " + RPM::PARENTHESIS_LEFT +
+            RPM::translate(Translations::GREATER_THAN_OR_EQUAL_TO) + RPM
+            ::PARENTHESIS_RIGHT,
+        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(3) + " " + RPM::PARENTHESIS_LEFT +
+            RPM::translate(Translations::LESSER_THAN_OR_EQUAL_TO) + RPM
+            ::PARENTHESIS_RIGHT,
+        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(4) + " " + RPM::PARENTHESIS_LEFT +
+            RPM::translate(Translations::GREATER_THAN) + RPM::PARENTHESIS_RIGHT,
+        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(5) + " " + RPM::PARENTHESIS_LEFT +
+            RPM::translate(Translations::LESSER_THAN) + RPM::PARENTHESIS_RIGHT,
+    });
+    RPM::ENUM_TO_STRING_FORMULA_STAT = QStringList({
+        RPM::translate(Translations::STATISTIC),
+        RPM::translate(Translations::CURRENCY),
+        RPM::translate(Translations::VARIABLE)
+    });
+    RPM::ENUM_TO_STRING_TITLE_SETTINGS = QStringList({
+        RPM::translate(Translations::KEYBOARD_ASSIGNMENTS)
+    });
+    RPM::ENUM_TO_STRING_AXIS_KIND = QStringList({
+        RPM::translate(Translations::X),
+        RPM::translate(Translations::Y),
+        RPM::translate(Translations::Z)
+    });
+    RPM::ENUM_TO_STRING_CONDITION_HEROES = QStringList({
+        RPM::translate(Translations::ALL_HEROES),
+        RPM::translate(Translations::NONE_OF_HEROES),
+        RPM::translate(Translations::AT_LEAST_ONE_HERO),
+        RPM::translate(Translations::HERO_WITH_INSTANCE_ID)
+    });
+    RPM::ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC = QStringList({
+        RPM::translate(Translations::X_SQUARE_POSITION),
+        RPM::translate(Translations::Y_SQUARE_POSITION),
+        RPM::translate(Translations::Z_SQUARE_POSITION),
+        RPM::translate(Translations::X_PIXEL_POSITION),
+        RPM::translate(Translations::Y_PIXEL_POSITION),
+        RPM::translate(Translations::Z_PIXEL_POSITION),
+        RPM::translate(Translations::ORIENTATION)
+    });
+    RPM::ENUM_TO_STRING_ANIMATION_POSITION_KIND = QStringList({
+        RPM::translate(Translations::TOP),
+        RPM::translate(Translations::MIDDLE),
+        RPM::translate(Translations::BOTTOM),
+        RPM::translate(Translations::SCREEN_CENTER)
+    });
+    RPM::ENUM_TO_STRING_ANIMATION_CONDITION_KIND = QStringList({
+        RPM::translate(Translations::NONE),
+        RPM::translate(Translations::HIT),
+        RPM::translate(Translations::MISS),
+        RPM::translate(Translations::CRITICAL)
+    });
+    RPM::ENUM_TO_STRING_MOUNTAIN_COLLISION_KIND = QStringList({
+        RPM::translate(Translations::DEFAULT) + " (" + RPM::translate(
+            Translations::ACCORDING_HEIGHT_ANGLE) + ")",
+        RPM::translate(Translations::FORCE_ALWAYS_COLLIDES),
+        RPM::translate(Translations::FORCE_NEVER_COLLIDES)
+    });
+    RPM::ENUM_TO_STRING_OBJECT_COLLISION_KIND = QStringList({
+        RPM::translate(Translations::NONE),
+        RPM::translate(Translations::PERFECT),
+        RPM::translate(Translations::SIMPLIFIED),
+        RPM::translate(Translations::CUSTOM)
+    });
+    RPM::ENUM_TO_STRING_EVENT_COMMAND_KIND = QStringList({
+        RPM::translate(Translations::NONE),
+        RPM::translate(Translations::PERFECT),
+        RPM::translate(Translations::SIMPLIFIED),
+        RPM::translate(Translations::CUSTOM)
+    });
+    RPM::ENUM_TO_STRING_EVENT_COMMAND_KIND = QStringList({
+        "",
+        RPM::translate(Translations::SHOW_TEXT) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::CHANGE_VARIABLES) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::END_GAME),
+        RPM::translate(Translations::WHILE),
+        "",
+        RPM::translate(Translations::WHILE_BREAK),
+        RPM::translate(Translations::INPUT_NUMBER) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::CONDITION) + RPM::DOT_DOT_DOT,
+        "",
+        "",
+        RPM::translate(Translations::OPEN_MAIN_MENU),
+        RPM::translate(Translations::OPEN_SAVES_MENU),
+        RPM::translate(Translations::MODIFY_INVENTORY) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::MODIFY_TEAM) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::START_BATTLE) + RPM::DOT_DOT_DOT,
+        "",
+        "",
+        RPM::translate(Translations::CHANGE_STATE) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::SEND_EVENT) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::TELEPORT_OBJECT) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::MOVE_OBJECT) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::WAIT) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::MOVE_CAMERA) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::PLAY_MUSIC) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::STOP_MUSIC) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::PLAY_BACKGROUND_SOUND) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::STOP_BACKGROUND_SOUND) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::PLAY_A_SOUND) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::PLAY_MUSIC_EFFECT) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::CHANGE_PROPERTY) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::DISPLAY_CHOICES) + RPM::DOT_DOT_DOT,
+        "",
+        "",
+        RPM::translate(Translations::SCRIPT) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::DISPLAY_A_PICTURE) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::SET_MOVE_TURN_A_PICTURE) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::REMOVE_A_PICTURE) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::SET_DIALOG_BOX_OPTIONS) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::TITLE_SCREEN),
+        RPM::translate(Translations::CHANGE_SCREEN_TONE) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::REMOVE_OBJECT_FROM_MAP) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::STOP_REACTION),
+        RPM::translate(Translations::ALLOW_FORBID_SAVES) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::ALLOW_FORBID_MAIN_MENU) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::CALL_A_COMMON_REACTION) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::LABEL) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::JUMP_TO_LABEL) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::COMMENT) + RPM::DOT_DOT_DOT,
+        ""
+    });
+    RPM::ENUM_TO_STRING_TARGET_KIND = QStringList({
+        RPM::translate(Translations::NONE),
+        RPM::translate(Translations::USER),
+        RPM::translate(Translations::AN_ENEMY),
+        RPM::translate(Translations::AN_ALLY),
+        RPM::translate(Translations::ALL_ENEMIES),
+        RPM::translate(Translations::ALL_ALLIES)
+    });
+    RPM::ENUM_TO_STRING_AVAILABLE_KIND = QStringList({
+        RPM::translate(Translations::BATTLE_ONLY),
+        RPM::translate(Translations::MAIN_MENU_ONLY),
+        RPM::translate(Translations::ALWAYS),
+        RPM::translate(Translations::NEVER)
+    });
+    RPM::ENUM_TO_STRING_OBJECT_MOVING_KIND = QStringList({
+        RPM::translate(Translations::FIX),
+        RPM::translate(Translations::RANDOM),
+        RPM::translate(Translations::ROUTE)
+    });
+    RPM::ENUM_TO_STRING_SHAPE_KIND = QStringList({
+        RPM::translate(Translations::BOX),
+        RPM::translate(Translations::SPHERE),
+        RPM::translate(Translations::CYLINDER),
+        RPM::translate(Translations::CONE),
+        RPM::translate(Translations::CAPSULE),
+        RPM::translate(Translations::CUSTOM)
+    });
+    RPM::ENUM_TO_STRING_TITLE_COMMAND_KIND = QStringList({
+        RPM::translate(Translations::NEW_GAME),
+        RPM::translate(Translations::LOAD_GAME),
+        RPM::translate(Translations::SETTINGS),
+        RPM::translate(Translations::EXIT),
+        RPM::translate(Translations::SCRIPT)
+    });
+    RPM::ENUM_TO_STRING_MONSTER_ACTION_TARGET_KIND = QStringList({
+        RPM::translate(Translations::RANDOM),
+        RPM::translate(Translations::WEAK_ENEMIES)
+    });
 }
 
 // -------------------------------------------------------

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -57,7 +57,7 @@ SystemPicture * PicturesDatas::missingPicture() const {
 //
 // -------------------------------------------------------
 
-void PicturesDatas::setDefault(){
+void PicturesDatas::setDefault() {
     QList<QString> names;
 
     this->setDefaultBars(names);
@@ -73,6 +73,8 @@ void PicturesDatas::setDefault(){
     this->setDefaultTitleScreen(names);
     this->setDefaultObjects3D(names);
     this->setDefaultHUDPictures(names);
+    this->setDefaultAnimations(names);
+    this->setDefaultSkyBoxes(names);
 }
 
 // -------------------------------------------------------
@@ -98,7 +100,8 @@ void PicturesDatas::setDefaultIcons(QList<QString>& names) {
         "superHPPotion" << "megaHPPotion" << "MPPotion" << "superMPPotion" <<
         "megaMPPotion" << "TPPotion" << "superTPPotion" << "megaTPPotion" <<
         "key" << "woodenSword" << "ironAxe" << "bronzeHelmet" << "bronzeMail" <<
-        "bronzeVambraces" << "bronzeGreaves" << "saphirRing" << "saphirNecklace";
+        "bronzeVambraces" << "bronzeGreaves" << "saphirRing" << "saphirNecklace"
+        << "grass";
     setDefaultPictures(names, PictureKind::Icons);
 }
 
@@ -187,6 +190,39 @@ void PicturesDatas::setDefaultWalls(QList<QString>& names) {
 void PicturesDatas::setDefaultObjects3D(QList<QString> &names) {
     names << "chest" << "cupboard" << "fridge" << "table";
     setDefaultPictures(names, PictureKind::Object3D);
+}
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultAnimations(QList<QString>& names) {
+    names << "basic";
+    this->setDefaultPictures(names, PictureKind::Animations);
+}
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultSkyBoxes(QList<QString>& names)
+{
+    /*
+    names << "ocean-front" << "ocean-back"<< "ocean-top" << "ocean-bottom" <<
+        "ocean-left" << "ocean-right";*/
+    QList<SystemPicture*> pictures;
+    int i;
+
+    pictures << new SystemPicture;
+    for (i = 0; i < names.size() ; i++)
+        pictures << new SystemPicture(i + 1, names.at(i) + ".jpg", true);
+
+    QStandardItemModel* model = new QStandardItemModel;
+    QList<QStandardItem*> row;
+
+    for (int i = 0; i < pictures.size(); i++){
+        row = pictures.at(i)->getModelRow();
+        model->appendRow(row);
+    }
+    m_models[PictureKind::SkyBoxes] = model;
+
+    names.clear();
 }
 
 // -------------------------------------------------------

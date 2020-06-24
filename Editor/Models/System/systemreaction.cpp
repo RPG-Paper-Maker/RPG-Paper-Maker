@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -62,12 +62,15 @@ SuperListItem* SystemReaction::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemReaction::setCopy(const SystemReaction& copy){
-    SuperListItem::setCopy(copy);
-    p_id = copy.p_id;
+void SystemReaction::setCopy(const SuperListItem &super) {
+    const SystemReaction *reaction;
 
-    copyCommands(copy.m_modelCommands, m_modelCommands);
-    m_blockingHero = copy.m_blockingHero;
+    SuperListItem::setCopy(super);
+
+    reaction = reinterpret_cast<const SystemReaction *>(&super);
+    p_id = reaction->p_id;
+    copyCommands(reaction->m_modelCommands, m_modelCommands);
+    m_blockingHero = reaction->m_blockingHero;
 }
 
 // -------------------------------------------------------
@@ -129,14 +132,37 @@ void SystemReaction::copyCommandsItem(const QStandardItem* from,
 
 // -------------------------------------------------------
 
-void SystemReaction::deleteCommands(QStandardItem* item){
-    EventCommand* command = (EventCommand*) item->data().value<quintptr>();
+void SystemReaction::deleteCommands(QStandardItem *item)
+{
+    EventCommand *command = reinterpret_cast<EventCommand *>(item->data().value<
+        quintptr>());
 
     for (int i = 0; i < item->rowCount(); i++)
+    {
         deleteCommands(item->child(i));
-
+    }
     if (command != nullptr)
+    {
         delete command;
+    }
+}
+
+// -------------------------------------------------------
+
+void SystemReaction::getCommands(QList<EventCommand *> &list, QStandardItem
+    *item)
+{
+    EventCommand *command = reinterpret_cast<EventCommand *>(item->data().value<
+        quintptr>());
+
+    for (int i = 0; i < item->rowCount(); i++)
+    {
+        getCommands(list, item->child(i));
+    }
+    if (command != nullptr)
+    {
+        list << command;
+    }
 }
 
 // -------------------------------------------------------

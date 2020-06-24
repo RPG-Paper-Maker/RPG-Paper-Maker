@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -14,10 +14,12 @@
 #include <QStyleFactory>
 #include <QStandardPaths>
 #include <QDir>
+#include <QSplashScreen>
 #include "mainwindow.h"
 #include "rpm.h"
 #include "common.h"
 #include "dialogfirstlaunch.h"
+#include "dialogselectlanguage.h"
 
 //-------------------------------------------------
 //
@@ -62,6 +64,14 @@ int main(int argc, char *argv[]) {
     #endif
     QDir::setCurrent(bin.absolutePath());
 
+    // Splash screen
+    QPixmap pixmap(Common::pathCombine(Common::pathCombine(QDir::currentPath(),
+        RPM::FOLDER_CONTENT), "splash.png"));
+    QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
+    splash.show();
+    a.processEvents();
+    QTimer::singleShot(1000, &splash, &QWidget::close);
+
     // Detect if applciation name need to be changed according to OS
     #ifdef Q_OS_WIN
         realApplicationName = "RPG Paper Maker.exe";
@@ -100,10 +110,18 @@ int main(int argc, char *argv[]) {
     MainWindow *w = MainWindow::get();
     w->showMaximized();
 
+    // Show first launch language selection
+    DialogSelectLanguage dialogLanguage;
+    if (RPM::get()->engineSettings()->firstTimeLanguages()) {
+        dialogLanguage.exec();
+        RPM::get()->engineSettings()->setFirstTimeLanguages(false);
+        RPM::get()->engineSettings()->write();
+    }
+
     // Show first launch window
-    DialogFirstLaunch dialog;
+    DialogFirstLaunch dialogFirstLaunch;
     if (RPM::get()->engineSettings()->firstTime()) {
-        dialog.show();
+        dialogFirstLaunch.show();
         RPM::get()->engineSettings()->setFirstTime(false);
         RPM::get()->engineSettings()->write();
     }

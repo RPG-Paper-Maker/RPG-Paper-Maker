@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>385</width>
+    <width>389</width>
     <height>277</height>
    </rect>
   </property>
@@ -46,7 +46,7 @@
         <item row="0" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
           <item>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="labelStateID">
             <property name="text">
              <string>State's ID:</string>
             </property>

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -14,7 +14,8 @@
 
 #include <QStandardItemModel>
 #include <QMetaType>
-#include "systemlang.h"
+#include "systemicon.h"
+#include "systemprimitive.h"
 
 // -------------------------------------------------------
 //
@@ -24,24 +25,30 @@
 //
 // -------------------------------------------------------
 
-class SystemElement : public SystemLang
+class SystemElement : public SystemIcon
 {
 public:
+    static const QString JSON_EFFICIENCY;
+
     SystemElement();
-    SystemElement(int i, LangsTranslation *names,
-                  QStandardItemModel* efficiency = new QStandardItemModel);
+    SystemElement(int i, LangsTranslation *names, int ii);
     virtual ~SystemElement();
-    QStandardItemModel* efficiency() const;
+    QStandardItemModel* modelEfficiency() const;
+
+    void clearEfficiency();
+    void addEfficiencyDouble(int id, double d);
+    void updateEfficiency();
+    void updateEfficiencyChange();
+
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemElement& element);
-
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
-    void readEfficiency(QStandardItemModel* model, const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    QStandardItemModel* m_efficiency;
+    QHash<int, PrimitiveValue *> m_efficiency;
+    QStandardItemModel * m_modelEfficiency;
 };
 
 Q_DECLARE_METATYPE(SystemElement)

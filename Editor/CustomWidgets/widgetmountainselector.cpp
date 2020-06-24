@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -27,6 +27,8 @@ WidgetMountainSelector::WidgetMountainSelector(QWidget *parent) :
     ui->setupUi(this);
 
     this->updateAngle();
+
+    this->translate();
 }
 
 WidgetMountainSelector::~WidgetMountainSelector()
@@ -86,7 +88,27 @@ void WidgetMountainSelector::updateAngle() {
     angle = width == 0.0 ? 90 : qRadiansToDegrees(qAtan((ui->spinBoxSquareHeight
         ->value() * RPM::get()->getSquareSize() + ui->spinBoxPixelHeight
         ->value()) / width));
-    ui->labelAngle->setText("(angle = " + QString::number(angle) + "°)");
+    ui->labelAngle->setText(RPM::PARENTHESIS_LEFT + RPM::translate(Translations
+        ::ANGLE).toLower() + RPM::SPACE + RPM::EQUAL + RPM::SPACE + QString
+        ::number(angle) + "°" + RPM::PARENTHESIS_RIGHT);
+}
+
+//-------------------------------------------------
+
+void WidgetMountainSelector::translate()
+{
+    ui->labelTopFloor->setText(RPM::translate(Translations::TOP_FLOOR) + RPM
+        ::COLON);
+    ui->labelWidthPixels->setText(RPM::translate(Translations::PIXEL_S) + RPM
+        ::COLON);
+    ui->labelHeightPixels->setText(RPM::translate(Translations::PIXEL_S) + RPM
+        ::COLON);
+    ui->labelWidthSquares->setText(RPM::translate(Translations::SQUARE_S) + RPM
+        ::COLON);
+    ui->labelHeightSquares->setText(RPM::translate(Translations::SQUARE_S) + RPM
+        ::COLON);
+    ui->groupBoxBorderWidth->setTitle(RPM::translate(Translations::BORDER_WIDTH));
+    ui->groupBoxHeight->setTitle(RPM::translate(Translations::HEIGHT));
 }
 
 // -------------------------------------------------------

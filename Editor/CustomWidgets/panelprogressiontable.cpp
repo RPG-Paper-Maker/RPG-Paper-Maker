@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "panelprogressiontable.h"
 #include "ui_panelprogressiontable.h"
+#include "rpm.h"
 
 const QString PanelProgressionTable::NAME_EXPERIENCE = "Experience";
 
@@ -33,10 +34,14 @@ PanelProgressionTable::PanelProgressionTable(QWidget *parent) :
         SLOT(on_spinBoxInitValueChanged(int)));
     connect(ui->panelPrimitiveValueFinal, SIGNAL(numberUpdated(int)), this,
         SLOT(on_spinBoxFinalValueChanged(int)));
+    connect(ui->widgetSliderProgression, SIGNAL(equationChanged(int)), this, SLOT
+        (on_sliderProgressionValueChanged(int)));
 
     Q_FOREACH(QSlider * sl, findChildren<QSlider *>()) {
         sl->installEventFilter(this);
     }
+
+    this->translate();
 }
 
 PanelProgressionTable::~PanelProgressionTable()
@@ -89,6 +94,19 @@ void PanelProgressionTable::gotoGraph() {
     ui->tabWidget->setCurrentIndex(1);
 }
 
+//-------------------------------------------------
+
+void PanelProgressionTable::translate()
+{
+    ui->labelFinalValue->setText(RPM::translate(Translations::FINAL_VALUE) + RPM
+        ::COLON);
+    ui->labelInitialValue->setText(RPM::translate(Translations::INITIAL_VALUE) +
+        RPM::COLON);
+    ui->pushButtonReset->setText(RPM::translate(Translations::RESET));
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::TABLE));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::GRAPH));
+}
+
 // -------------------------------------------------------
 
 bool PanelProgressionTable::eventFilter(QObject *o, QEvent *e) {
@@ -129,7 +147,7 @@ void PanelProgressionTable::on_spinBoxFinalValueChanged(int i) {
 
 // -------------------------------------------------------
 
-void PanelProgressionTable::on_horizontalSlider_valueChanged(int i) {
+void PanelProgressionTable::on_sliderProgressionValueChanged(int i) {
     m_progression->setEquation(i);
     updateProgress();
 }
@@ -143,7 +161,7 @@ void PanelProgressionTable::on_pushButtonReset_clicked() {
     ui->panelPrimitiveValueInitial->updateKind();
     ui->panelPrimitiveValueFinal->updateValue(true);
     ui->panelPrimitiveValueFinal->updateKind();
-    ui->horizontalSlider->setValue(m_progression->equation());
+    ui->widgetSliderProgression->setEquation(m_progression->equation());
     m_updating = false;
     updateProgress();
 }

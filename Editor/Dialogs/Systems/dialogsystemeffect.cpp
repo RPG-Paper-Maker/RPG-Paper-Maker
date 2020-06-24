@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -13,6 +13,7 @@
 #include "ui_dialogsystemeffect.h"
 #include "rpm.h"
 #include "common.h"
+#include "dialogcommandcallacommonreaction.h"
 
 // -------------------------------------------------------
 //
@@ -28,6 +29,8 @@ DialogSystemEffect::DialogSystemEffect(SystemEffect &effect, QWidget *parent) :
     ui->setupUi(this);
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemEffect::~DialogSystemEffect() {
@@ -106,6 +109,9 @@ void DialogSystemEffect::initialize() {
     ui->panelPrimitiveValuePrecision->initializeModel(m_effect
         .damagesPrecisionFormula());
     ui->panelPrimitiveValuePrecision->updateModel();
+    ui->checkBoxStockValueIn->setChecked(m_effect.isDamageStockVariable());
+    ui->widgetVariableStockValueIn->initializeSuper(m_effect
+        .damagesStockVariable());
 
     // Status
     ui->comboBoxAddRemoveStatus->setCurrentIndex(m_effect.isAddStatus() ? 0 : 1);
@@ -134,13 +140,6 @@ void DialogSystemEffect::initialize() {
         .performSkillID());
     ui->panelPrimitiveValueSkillPerform->updateModel();
 
-    // Common reaction
-    ui->panelPrimitiveValueCommonReaction->initializeDataBaseCommandId(m_effect
-        .commonReactionID()->modelDataBase());
-    ui->panelPrimitiveValueCommonReaction->initializeModel(m_effect
-        .commonReactionID());
-    ui->panelPrimitiveValueCommonReaction->updateModel();
-
     // Special Action
     index = static_cast<int>(m_effect.specialActionKind());
     ui->comboBoxSpecialAction->addItems(RPM
@@ -152,6 +151,12 @@ void DialogSystemEffect::initialize() {
     ui->panelPrimitiveValueScript->initializeModel(m_effect
         .scriptFormula());
     ui->panelPrimitiveValueScript->updateModel();
+
+    // Temporarily change target
+    ui->checkBoxTemporarilyChangeTarget->setChecked(m_effect
+        .isTemporarilyChangeTarget());
+    ui->panelPrimitiveValueTemporarilyChangeTarget->initializeMessageAndUpdate(
+        m_effect.temporarilyChangeTargetFormula(), true);
 }
 
 // -------------------------------------------------------
@@ -194,6 +199,43 @@ void DialogSystemEffect::setPrecisionEnabled(bool checked) {
 }
 
 // -------------------------------------------------------
+
+void DialogSystemEffect::setStockVariableEnabled(bool checked)
+{
+    ui->widgetVariableStockValueIn->setEnabled(checked);
+}
+
+//-------------------------------------------------
+
+void DialogSystemEffect::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_EFFECT) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelWithFormula->setText(RPM::translate(Translations::WITH_FORMULA) +
+        RPM::COLON);
+    ui->radioButtonDamages->setText(RPM::translate(Translations::DAMAGES_ON));
+    ui->radioButtonSpecialAction->setText(RPM::translate(Translations
+        ::SPECIAL_ACTION) + RPM::COLON);
+    ui->checkBoxMaximum->setText(RPM::translate(Translations::MAXIMUM) + RPM
+        ::COLON);
+    ui->checkBoxMinimum->setText(RPM::translate(Translations::MINIMUM) + RPM
+        ::COLON);
+    ui->checkBoxCritical->setText(RPM::translate(Translations::CRITICAL) + RPM
+        ::COLON);
+    ui->checkBoxVariance->setText(RPM::translate(Translations::VARIANCE) + RPM
+        ::COLON);
+    ui->checkBoxElementID->setText(RPM::translate(Translations::ELEMENT_ID) +
+        RPM::COLON);
+    ui->checkBoxPrecision->setText(RPM::translate(Translations::PRECISION) + RPM
+        ::COLON);
+    ui->checkBoxStockValueIn->setText(RPM::translate(Translations
+        ::STOCK_VALUE_IN) + RPM::COLON);
+    ui->checkBoxTemporarilyChangeTarget->setText(RPM::translate(Translations
+        ::TEMPORARILY_CHANGE_TARGET) + RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -210,16 +252,17 @@ void DialogSystemEffect::on_radioButtonDamages_toggled(bool checked) {
     this->setMinimumEnabled(checked ? m_effect.isDamagesMinimum() : false);
     ui->checkBoxMaximum->setEnabled(checked);
     this->setMaximumEnabled(checked ? m_effect.isDamagesMaximum() : false);
-    /*
     ui->checkBoxElementID->setEnabled(checked);
-    */
-    this->setPrecisionEnabled(checked ? m_effect.isDamageElement() : false);
+    this->setElementEnabled(checked ? m_effect.isDamageElement() : false);
     ui->checkBoxVariance->setEnabled(checked);
     this->setVarianceEnabled(checked ? m_effect.isDamageVariance() : false);
     ui->checkBoxCritical->setEnabled(checked);
     this->setCriticalEnabled(checked ? m_effect.isDamageCritical() : false);
     ui->checkBoxPrecision->setEnabled(checked);
     this->setPrecisionEnabled(checked ? m_effect.isDamagePrecision() : false);
+    ui->checkBoxStockValueIn->setEnabled(checked);
+    this->setStockVariableEnabled(checked ? m_effect.isDamageStockVariable() :
+        false);
 }
 
 // -------------------------------------------------------
@@ -260,7 +303,7 @@ void DialogSystemEffect::on_radioButtonCallCommonReaction_toggled(bool checked) 
     m_effect.setKind(EffectKind::CommonReaction);
 
     // Enable
-    ui->panelPrimitiveValueCommonReaction->setEnabled(checked);
+    ui->pushButtonSelect_CallCommonReaction->setEnabled(checked);
 }
 
 // -------------------------------------------------------
@@ -337,6 +380,16 @@ void DialogSystemEffect::on_checkBoxPrecision_toggled(bool checked) {
 
 // -------------------------------------------------------
 
+void DialogSystemEffect::on_checkBoxStockValueIn_toggled(bool checked)
+{
+    m_effect.setIsDamageStockVariable(checked);
+
+    // Enable
+    setStockVariableEnabled(checked);
+}
+
+// -------------------------------------------------------
+
 void DialogSystemEffect::on_comboBoxAddRemoveStatus_currentIndexChanged(int
     index)
 {
@@ -357,4 +410,26 @@ void DialogSystemEffect::on_comboBoxSpecialAction_currentIndexChanged(int
     index)
 {
     m_effect.setSpecialActionKind(static_cast<EffectSpecialActionKind>(index));
+}
+
+// -------------------------------------------------------
+
+void DialogSystemEffect::on_checkBoxTemporarilyChangeTarget_toggled(bool checked)
+{
+    m_effect.setIsTemporarilyChangeTarget(checked);
+    ui->panelPrimitiveValueTemporarilyChangeTarget->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemEffect::on_pushButtonSelect_CallCommonReaction_clicked()
+{
+    DialogCommandCallACommonReaction dialog(m_effect.commonReaction());
+    if (dialog.exec() == QDialog::Accepted){
+        if (m_effect.commonReaction() != nullptr)
+        {
+            delete m_effect.commonReaction();
+        }
+        m_effect.setCommonReaction(dialog.getCommand());
+    }
 }

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -13,9 +13,7 @@
 #include "ui_dialogsetmaximum.h"
 #include "superlistitem.h"
 #include <QMessageBox>
-
-const QString DialogSetMaximum::STR_WARNING = "This maximum is incorrect "
-    "because it will delete IDs. Please reorder your stuff properly.";
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -33,6 +31,8 @@ DialogSetMaximum::DialogSetMaximum(QStandardItemModel* model, int max,
 
     ui->spinBoxMaximum->setMaximum(max);
     ui->spinBoxMaximum->setValue(model->invisibleRootItem()->rowCount());
+
+    this->translate();
 }
 
 DialogSetMaximum::~DialogSetMaximum()
@@ -74,11 +74,21 @@ bool DialogSetMaximum::isOrdered(int limit) const{
     return isOrderedMax(m_model, limit);
 }
 
+//-------------------------------------------------
+
+void DialogSetMaximum::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_MAXIMUM));
+    ui->labelMaximum->setText(RPM::translate(Translations::MAXIMUM) + RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
 // -------------------------------------------------------
 
 void DialogSetMaximum::accept(){
     if (isOrdered(maximum()))
         QDialog::accept();
     else
-        QMessageBox::information(this, "Warning", STR_WARNING);
+        QMessageBox::information(this, RPM::translate(Translations::WARNING),
+            RPM::translate(Translations::WARNING_MAXIMUM));
 }

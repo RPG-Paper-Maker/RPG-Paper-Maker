@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -87,7 +87,7 @@ void WidgetTreeLocalMaps::initializeModel(QStandardItemModel* m){
 
 void WidgetTreeLocalMaps::initializeProject(Project* p){
     m_project = p;
-    m_pathProject = p->pathCurrentProject();
+    m_pathProject = p->pathCurrentProjectApp();
 }
 
 QStandardItem* WidgetTreeLocalMaps::getSelected() const{
@@ -130,7 +130,7 @@ void WidgetTreeLocalMaps::updateNodesSaved(QStandardItem* item){
 
 void WidgetTreeLocalMaps::deleteAllMapTemp(){
     QString pathMaps = Common::pathCombine(RPM::get()->project()
-                                          ->pathCurrentProject(),
+                                          ->pathCurrentProjectApp(),
                                           RPM::PATH_MAPS);
     deleteMapTemp(pathMaps, m_model->invisibleRootItem());
 }
@@ -237,7 +237,7 @@ void WidgetTreeLocalMaps::deleteMap(QStandardItem* item){
             Common::pathCombine(RPM::PATH_MAPS,
                                Map::generateMapName(tag->id()));
 
-    QDir(Common::pathCombine(RPM::get()->project()->pathCurrentProject(),
+    QDir(Common::pathCombine(RPM::get()->project()->pathCurrentProjectApp(),
                             mapPath)).removeRecursively();
 
     // Remove from tree
@@ -283,7 +283,7 @@ void WidgetTreeLocalMaps::updateTileset(){
         else {
             QString path = Common::pathCombine(
                             Common::pathCombine(RPM::get()->project()
-                                               ->pathCurrentProject(),
+                                               ->pathCurrentProjectApp(),
                                                RPM::PATH_MAPS),
                             Map::generateMapName(tag->id()));
             MapProperties properties(path);
@@ -313,21 +313,29 @@ void WidgetTreeLocalMaps::updateTileset(){
 
 // -------------------------------------------------------
 
-void WidgetTreeLocalMaps::reload() {
-
+void WidgetTreeLocalMaps::reload()
+{
     // Loading map
-    if (m_widgetMapEditor != nullptr){
-        QStandardItem* selected = getSelected();
-        TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(selected->data().value
-            <quintptr>());
+    if (m_widgetMapEditor != nullptr)
+    {
+        QStandardItem *selected;
 
-        if (tag->id() == -1)
-            hideMap();
-        else
-            showMap(selected);
+        selected = getSelected();
+        if (selected != nullptr)
+        {
+            TreeMapTag *tag;
 
-        // Loading tileset texture
-        updateTileset();
+            tag = reinterpret_cast<TreeMapTag*>(selected->data().value<quintptr>());
+            if (tag->id() == -1)
+            {
+                this->hideMap();
+            } else {
+                this->showMap(selected);
+            }
+
+            // Loading tileset texture
+            this->updateTileset();
+        }
     }
 }
 
@@ -365,11 +373,21 @@ void WidgetTreeLocalMaps::cleanCopy(){
 
 void WidgetTreeLocalMaps::paste(QStandardItem* item){
     QStandardItem* copy = new QStandardItem;
+    QModelIndex index;
 
     // Insert tree
     TreeMapTag::copyTree(m_copied, copy);
     item->insertRow(item->rowCount(), copy);
     RPM::get()->project()->writeTreeMapDatas();
+
+    // Select the pasted map node
+    index = copy->index();
+    this->selectionModel()->clear();
+    this->selectionModel()->setCurrentIndex(index, QItemSelectionModel
+        ::Select);
+
+    // If dir, expand all
+    this->expandAllNode(copy);
 }
 
 // -------------------------------------------------------
@@ -387,6 +405,26 @@ bool WidgetTreeLocalMaps::setCurrentIndexFirstMap(QStandardItem* item) {
     }
 
     return false;
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeLocalMaps::expandAllNode(QStandardItem *item)
+{
+    int i, l;
+
+    for (i = 0, l = item->rowCount(); i < l; i++)
+    {
+        this->expandAllNode(item->child(i));
+    }
+    this->setExpanded(item->index(), true);
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeLocalMaps::disableContextMenu()
+{
+    this->setContextMenuPolicy(Qt::NoContextMenu);
 }
 
 // -------------------------------------------------------
@@ -496,13 +534,20 @@ void WidgetTreeLocalMaps::contextNewMap(){
         DialogMapProperties dialog(properties);
         if (dialog.exec() == QDialog::Accepted){
             TreeMapTag* tag = TreeMapTag::createMap(properties.name(), id);
-            TreeMapDatas::addMap(selected, selected->rowCount(), tag);
-            Map::writeNewMap(RPM::get()->project()->pathCurrentProject(),
+            QStandardItem *item = TreeMapDatas::addMap(selected, selected
+                ->rowCount(), tag);
+            Map::writeNewMap(RPM::get()->project()->pathCurrentProjectApp(),
                              properties);
             RPM::get()->project()->writeTreeMapDatas();
 
             // Loading tileset texture
             updateTileset();
+
+            // Select the new map node
+            QModelIndex index = item->index();
+            this->selectionModel()->clear();
+            this->selectionModel()->setCurrentIndex(index, QItemSelectionModel
+                ::Select);
         }
     }
 }
@@ -512,15 +557,22 @@ void WidgetTreeLocalMaps::contextNewMap(){
 void WidgetTreeLocalMaps::contextNewDirectory(){
     QStandardItem* selected = getSelected();
     if (selected != nullptr){
-        SuperListItem super(-1, "Directory");
+        SuperListItem super(-1, RPM::translate(Translations::DIRECTORY));
         DialogSystemName dialog(super);
         if (dialog.exec() == QDialog::Accepted){
             TreeMapTag* tag = TreeMapTag::createDir(super.name());
             QStandardItem* item = TreeMapDatas::addDir(selected,
                                                        selected->rowCount(),
                                                        tag);
-            this->expand(item->index());
+            QModelIndex index;
+            index = item->index();
+            this->expand(index);
             RPM::get()->project()->writeTreeMapDatas();
+
+            // Select the new directory node
+            this->selectionModel()->clear();
+            this->selectionModel()->setCurrentIndex(index, QItemSelectionModel
+                ::Select);
         }
     }
 }
@@ -534,7 +586,7 @@ void WidgetTreeLocalMaps::contextEditMap(){
             <quintptr>());
         QString path = Common::pathCombine(
                         Common::pathCombine(RPM::get()->project()
-                                           ->pathCurrentProject(),
+                                           ->pathCurrentProjectApp(),
                                            RPM::PATH_MAPS),
                         Map::generateMapName(tag->id()));
         MapProperties properties(path);
@@ -615,10 +667,9 @@ void WidgetTreeLocalMaps::contextPaste(){
 void WidgetTreeLocalMaps::contextDeleteMap(){
     QStandardItem* selected = getSelected();
     if (selected != nullptr){
-        QMessageBox::StandardButton box =
-               QMessageBox::warning(this, "Warning",
-                                    "Are you sure you want to delete this map?",
-                                    QMessageBox::Yes | QMessageBox::No);
+        QMessageBox::StandardButton box = QMessageBox::warning(this, RPM
+            ::translate(Translations::WARNING), RPM::translate(Translations
+            ::ARE_YOU_SURE_DELETE_THIS_MAP), QMessageBox::Yes | QMessageBox::No);
 
         if (box == QMessageBox::Yes){
             deleteMap(selected);
@@ -635,12 +686,11 @@ void WidgetTreeLocalMaps::contextDeleteMap(){
 void WidgetTreeLocalMaps::contextDeleteDirectory(){
     QStandardItem* selected = getSelected();
     if (selected != nullptr){
-        QMessageBox::StandardButton box =
-                QMessageBox::warning(this, "Warning",
-                                     "Are you sure you want to delete this "
-                                     "directory?\n This will delete all the "
-                                     "maps inside this folder.",
-                                      QMessageBox::Yes | QMessageBox::No);
+        QMessageBox::StandardButton box = QMessageBox::warning(this, RPM
+            ::translate(Translations::WARNING), RPM::translate(Translations
+            ::ARE_YOU_SURE_DELETE_THIS_DIRECTORY) + RPM::NEW_LINE + RPM::SPACE +
+            RPM::translate(Translations::THIS_WILL_DELETE_ALL_MAPS_INSIDE_FOLDER
+            ) + RPM::DOT, QMessageBox::Yes | QMessageBox::No);
 
         if (box == QMessageBox::Yes){
             deleteDirectory(selected);

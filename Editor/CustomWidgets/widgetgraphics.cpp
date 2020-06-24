@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -169,7 +169,7 @@ void WidgetGraphics::paintEvent(QPaintEvent *event) {
     if (m_selected) {
         QPen pen(Qt::DashLine);
         pen.setWidth(2);
-        pen.setColor(QColor(100, 130, 170, 100));
+        pen.setColor(RPM::COLOR_CURSOR_SELECTION);
         painter.setPen(pen);
         painter.drawRect(rect().x() + m_borderOffset, rect().y() + m_borderOffset,
             rect().width() - (m_borderOffset * 2), rect().height() - (

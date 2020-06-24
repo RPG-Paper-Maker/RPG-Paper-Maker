@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -51,6 +51,8 @@ PanelVideos::PanelVideos(QWidget *parent) :
         int)), this, SLOT(deletingContent(SuperListItem *, int)));
     connect(ui->treeViewAvailableContent, SIGNAL(doubleClicked(QModelIndex)),
         this, SLOT(on_treeViewAvailableContentDoubleClicked(QModelIndex)));
+
+    this->translate();
 }
 
 PanelVideos::~PanelVideos()
@@ -101,8 +103,8 @@ void PanelVideos::setKind() {
         (QModelIndex,QModelIndex)));
 
     // Update checkBox
-    ui->checkBoxContent->setText("Show available content of " + SystemVideo
-        ::getLocalFolder());
+    ui->checkBoxContent->setText(RPM::translate(Translations
+        ::SHOW_AVAILABLE_CONTENT) + RPM::SPACE + SystemVideo::getLocalFolder());
 
     // Player config
     m_player = new QMediaPlayer;
@@ -190,7 +192,9 @@ void PanelVideos::loadContentFromFolder(QString path, bool isBR) {
 
 void PanelVideos::deleteContent(QString path) {
     if (!QFile(path).remove()) {
-        QMessageBox::warning(this, "Warning", "Could not delete file at " + path);
+        QMessageBox::warning(this, RPM::translate(Translations::WARNING), RPM
+            ::translate(Translations::COULD_NOT_DELETE_FILE_AT) + RPM::SPACE +
+            path + RPM::DOT);
     }
 }
 
@@ -211,6 +215,15 @@ void PanelVideos::moveContent(){
 void PanelVideos::updateVideos() {
     m_video = reinterpret_cast<SystemVideo *>(ui->widgetPanelIDs->list()
         ->getSelected()->data().value<qintptr>());
+}
+
+//-------------------------------------------------
+
+void PanelVideos::translate()
+{
+    ui->checkBoxContent->setText(RPM::translate(Translations
+        ::SHOW_AVAILABLE_CONTENT));
+    ui->pushButtonRefresh->setText(RPM::translate(Translations::REFRESH));
 }
 
 // -------------------------------------------------------
@@ -260,8 +273,8 @@ void PanelVideos::on_pushButtonRefresh_clicked() {
 void PanelVideos::on_pushButtonAdd_clicked() {
 
     // Open dialog box
-    QStringList files = QFileDialog::getOpenFileNames(this, "Add new contents",
-        "", "Videos (*.mp4 *.ogv, *.avi)");
+    QStringList files = QFileDialog::getOpenFileNames(this, RPM::translate(
+        Translations::ADD_NEW_CONTENTS), "", "Videos (*.mp4 *.ogv, *.avi)");
     QString path;
 
     // Copy all the selected files
@@ -270,8 +283,9 @@ void PanelVideos::on_pushButtonAdd_clicked() {
         if (!QFile::copy(path, Common::pathCombine(SystemVideo::getFolder(false)
             , QFileInfo(path).fileName())))
         {
-            QMessageBox::warning(this, "Warning", "Could not copy file at " +
-                path);
+            QMessageBox::warning(this, RPM::translate(Translations::WARNING),
+                RPM::translate(Translations::COULD_NOT_COPY_FILE_AT) + RPM
+                ::SPACE + path + RPM::DOT);
         }
     }
 
@@ -287,9 +301,11 @@ void PanelVideos::deletingContent(SuperListItem *super, int row) {
     // If is BR, ask if sure action before
     if (reinterpret_cast<SystemSong *>(super)->isBR()) {
         loadAvailableContent(row);
-        QMessageBox::StandardButton box = QMessageBox::question(this,
-            "Deleting song", "You are trying to remove a BR song. Are you sure "
-            "you want to do it?", QMessageBox::Yes | QMessageBox::No);
+        QMessageBox::StandardButton box = QMessageBox::question(this, RPM
+            ::translate(Translations::DELETING_VIDEO), RPM::translate(
+            Translations::YOUR_TRYING_REMOVE_BR_VIDEO) + RPM::DOT + RPM::SPACE +
+            RPM::translate(Translations::ARE_YOU_SURE_WANT_DO_IT), QMessageBox
+            ::Yes | QMessageBox::No);
 
         if (box == QMessageBox::Yes) {
             deleteContent(path);

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -105,37 +105,39 @@ void SpecialElementsDatas::setDefault()
 // -------------------------------------------------------
 
 void SpecialElementsDatas::setDefaultSpriteWalls() {
-    this->addDefaultSpecial(new SystemSpriteWall(1, "Inside1", 1),
-        m_modelSpriteWalls);
+    this->addDefaultSpecial(new SystemSpriteWall(1, RPM::translate(Translations
+        ::INSIDE_1), 1), m_modelSpriteWalls);
 }
 
 // -------------------------------------------------------
 
 void SpecialElementsDatas::setDefaultAutotiles() {
-    this->addDefaultSpecial(new SystemAutotile(1, "General", 1),
-        m_modelAutotiles);
+    this->addDefaultSpecial(new SystemAutotile(1, RPM::translate(Translations
+        ::GENERAL), 1), m_modelAutotiles);
 }
 
 // -------------------------------------------------------
 
 void SpecialElementsDatas::setDefaulObjects3D() { 
-    this->addDefaultSpecial(new SystemObject3D(1, "Chest", ShapeKind::Box, -1,
-        -1, 1, ObjectCollisionKind::Perfect), m_modelObjects3D);
-    this->addDefaultSpecial(new SystemObject3D(2, "Cupboard", ShapeKind::Box, -1
-        ,  -1, 2, ObjectCollisionKind::Perfect, -1, 1.0, 2, 0, 2, 0),
+    this->addDefaultSpecial(new SystemObject3D(1, RPM::translate(Translations
+        ::CHEST_BOX), ShapeKind::Box, -1, -1, 1, ObjectCollisionKind::Perfect),
         m_modelObjects3D);
-    this->addDefaultSpecial(new SystemObject3D(3, "Fridge", ShapeKind::Box, -1
-        ,  -1, 3, ObjectCollisionKind::Perfect, -1, 1.0, 1, 0, 2, 0),
-        m_modelObjects3D);
-    this->addDefaultSpecial(new SystemObject3D(4, "Table", ShapeKind::Box, -1
-        ,  -1, 4, ObjectCollisionKind::Perfect, -1, 1.0, 2, 0, 0, 50),
-        m_modelObjects3D);
+    this->addDefaultSpecial(new SystemObject3D(2, RPM::translate(Translations
+        ::CUPBOARD), ShapeKind::Box, -1,  -1, 2, ObjectCollisionKind::Perfect,
+        -1, 1.0, 2, 0, 2, 0), m_modelObjects3D);
+    this->addDefaultSpecial(new SystemObject3D(3, RPM::translate(Translations
+        ::FRIDGE), ShapeKind::Box, -1,  -1, 3, ObjectCollisionKind::Perfect, -1,
+        1.0, 1, 0, 2, 0), m_modelObjects3D);
+    this->addDefaultSpecial(new SystemObject3D(4, RPM::translate(Translations
+        ::TABLE_OBJECT), ShapeKind::Box, -1,  -1, 4, ObjectCollisionKind
+        ::Perfect, -1, 1.0, 2, 0, 0, 50), m_modelObjects3D);
 }
 
 // -------------------------------------------------------
 
 void SpecialElementsDatas::setDefaulMountains() {
-    this->addDefaultSpecial(new SystemMountain(1, "grass", 1), m_modelMountains);
+    this->addDefaultSpecial(new SystemMountain(1, RPM::translate(Translations
+        ::GRASS), 1), m_modelMountains);
 }
 
 // -------------------------------------------------------

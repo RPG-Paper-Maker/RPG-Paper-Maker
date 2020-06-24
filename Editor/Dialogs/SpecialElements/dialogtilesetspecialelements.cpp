@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -34,6 +34,8 @@ DialogTilesetSpecialElements::DialogTilesetSpecialElements(
                 RPM::get()->project()->specialElementsDatas()->model(kind),
                 kind);
     initialize();
+
+    this->translate();
 }
 
 DialogTilesetSpecialElements::~DialogTilesetSpecialElements()
@@ -57,6 +59,7 @@ void DialogTilesetSpecialElements::initialize() {
     SuperListItem::copyModel(model, m_tileset->model(m_kind));
 
     ui->panelSuperList->list()->setCanBrutRemove(true);
+    ui->panelSuperList->list()->setCanCopyPaste(false);
     ui->panelSuperList->showButtonMax(false);
     ui->panelSuperList->showEditName(false);
     ui->panelSuperList->initializeModel(model);
@@ -88,6 +91,14 @@ void DialogTilesetSpecialElements::remove() {
     int index = ui->panelSuperList->list()->getIndex();
     if (index >= 0)
         model()->removeRow(index);
+}
+
+//-------------------------------------------------
+
+void DialogTilesetSpecialElements::translate()
+{
+    ui->groupBoxForTileset->setTitle(RPM::translate(Translations::FOR_TILESET));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

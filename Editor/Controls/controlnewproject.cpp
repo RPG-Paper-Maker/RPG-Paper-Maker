@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -69,35 +69,58 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
 
     // Checking if the project can be created
     if (dirName.count() == 0)
-        return "The directory name can't be empty.";
+        return RPM::translate(Translations::DIRECTORY_NAME_CANT_EMPTY) + RPM
+            ::DOT;
     if (!QDir::isAbsolutePath(location))
-        return "The path location " + location + " needs to be absolute.";
+        return RPM::translate(Translations::THE_PATH_LOCATION) + RPM::SPACE +
+            location + RPM::SPACE + RPM::translate(Translations
+            ::NEEDS_TO_BE_ABSOLUTE) + RPM::DOT;
     if (!pathLocation.exists())
-        return "The path location " + location + " doesn't exists.";
+        return RPM::translate(Translations::THE_PATH_LOCATION) + RPM::SPACE +
+            location + RPM::SPACE + RPM::translate(Translations::DOESNT_EXISTS)
+            + RPM::DOT;
     if (!pathLocation.mkdir(dirName)) {
-        return "The directory " + dirName + " already exists in " + location +
-            ".";
+        return RPM::translate(Translations::THE_DIRECTORY) + RPM::SPACE +
+            dirName + RPM::SPACE + RPM::translate(Translations
+            ::ALREADY_EXISTS_IN) + RPM::SPACE + location + RPM::DOT;
     }
 
     // If all is ok, then let's fill the project folder
 
     // Copying a basic project content
-    QString pathContent = Common::pathCombine(QDir::currentPath(), "Content");
-    QString pathBasicContent = Common::pathCombine( Common::pathCombine(
-        pathContent, "basic"), "Content");
-    if (!Common::copyPath(pathBasicContent, Common::pathCombine(pathDir,
-        "Content")))
+    QString pathContent = Common::pathCombine(QDir::currentPath(), RPM
+        ::FOLDER_CONTENT);
+    QString pathBasicContent = Common::pathCombine(Common::pathCombine(
+        pathContent, "basic"), RPM::FOLDER_CONTENT);
+    QString pathApp = Common::pathCombine(pathDir, RPM::PATH_APP);
+    Project *previousProject = RPM::get()->project();
+    Project *project = new Project();
+    RPM::get()->setProject(project);
+    project->setPathCurrentProject(pathDir);
+
+    // Copying a basic project content
+    if (!project->copyOSFiles()) {
+        return RPM::translate(Translations::ERROR_COPYING_EXECUTABLE_LIBRARIES)
+            + RPM::DOT + RPM::SPACE + RPM::translate(Translations
+            ::PLEASE_RETRY_WITH_NEW_PROJECT);
+    }
+    if (!Common::copyPath(pathBasicContent, Common::pathCombine(pathApp,
+        RPM::FOLDER_CONTENT)))
     {
-        return "Error while copying Content directory. Please verify if " +
-            pathBasicContent + " folder exists.";
+        return RPM::translate(Translations::ERROR_COPYING_CONTENT_DIRECTORY) +
+            RPM::DOT + RPM::SPACE + RPM::translate(Translations
+            ::PLEASE_VERIFY_IF) + RPM::SPACE + pathBasicContent + RPM::SPACE +
+            RPM::translate(Translations::FOLDER_EXISTS);
     }
 
     // Create folders
+    dir = QDir(pathApp);
     dir.mkpath(RPM::PATH_BARS);
     dir.mkpath(RPM::PATH_ICONS);
     dir.mkpath(RPM::PATH_FACESETS);
     dir.mkpath(RPM::PATH_WINDOW_SKINS);
     dir.mkpath(RPM::PATH_TITLE_SCREEN);
+    dir.mkpath(RPM::PATH_HUD_ANIMATIONS);
     dir.mkpath(RPM::PATH_HUD_PICTURES);
     dir.mkpath(RPM::PATH_AUTOTILES);
     dir.mkpath(RPM::PATH_CHARACTERS);
@@ -106,6 +129,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     dir.mkpath(RPM::PATH_SPRITE_WALLS);
     dir.mkpath(RPM::PATH_BATTLERS);
     dir.mkpath(RPM::PATH_TEXTURES_OBJECT_3D);
+    dir.mkpath(RPM::PATH_SKY_BOXES);
     dir.mkpath(RPM::PATH_VIDEOS);
     dir.mkpath(RPM::PATH_SONGS);
     dir.mkpath(RPM::PATH_MUSICS);
@@ -119,9 +143,6 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     dir.mkpath(RPM::PATH_HUD_PICTURES);
 
     // Create the default datas
-    Project *previousProject = RPM::get()->project();
-    Project *project = new Project();
-    RPM::get()->setProject(project);
     project->setDefault();
     project->gameDatas()->systemDatas()->projectName()->setAllNames(projectName);
     project->write(pathDir);
@@ -129,26 +150,20 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     if (error != nullptr)
         return error;
 
-    // Copying a basic project content
-    if (!project->copyOSFiles()) {
-        return "Error while copying excecutable and libraries. "
-            "Please retry with a new project.";
-    }
-
     // Create saves
     QJsonArray tab;
     tab.append(QJsonValue());
     tab.append(QJsonValue());
     tab.append(QJsonValue());
     tab.append(QJsonValue());
-    Common::writeArrayJSON(Common::pathCombine(pathDir, RPM::PATH_SAVES), tab);
+    Common::writeArrayJSON(Common::pathCombine(pathApp, RPM::PATH_SAVES), tab);
 
     // Creating first empty map
     dir.mkdir(RPM::PATH_MAPS);
     dir.mkdir(Common::pathCombine(RPM::PATH_MAPS,
         RPM::FOLDER_TEMP_MAP));
-    Map::writeDefaultMap(pathDir);
-    Map::writeDefaultBattleMap(pathDir);
+    Map::writeDefaultMap(pathApp);
+    Map::writeDefaultBattleMap(pathApp);
 
     // Restoring project
     RPM::get()->setProject(previousProject);

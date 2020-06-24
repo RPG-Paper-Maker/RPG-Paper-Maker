@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -37,9 +37,11 @@ public:
     QStandardItemModel* modelStates() const;
     QStandardItemModel* modelCommonReactors() const;
     QStandardItemModel* modelCommonObjects() const;
+
     void setDefault();
     void setDefaultEvent(QStandardItemModel* model, QStringList &namesEvents,
                          QList<QVector<SystemCreateParameter*>> &parameters);
+
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

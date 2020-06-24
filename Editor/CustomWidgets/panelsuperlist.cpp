@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -13,6 +13,7 @@
 #include "panelsuperlist.h"
 #include "ui_panelsuperlist.h"
 #include "dialogsetmaximum.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -28,6 +29,8 @@ PanelSuperList::PanelSuperList(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->widgetTextLang->hide();
+
+    this->translate();
 }
 
 PanelSuperList::~PanelSuperList()
@@ -83,7 +86,7 @@ void PanelSuperList::setMaximumLimit(int max) {
 
 void PanelSuperList::showEditName(bool b) {
     if (b) {
-        ui->label->show();
+        ui->labelName->show();
         if (m_isLang) {
             ui->widgetTextLang->show();
             ui->lineEditName->hide();
@@ -91,7 +94,7 @@ void PanelSuperList::showEditName(bool b) {
             ui->lineEditName->show();
         }
     } else {
-        ui->label->hide();
+        ui->labelName->hide();
         ui->lineEditName->hide();
     }
 }
@@ -101,6 +104,13 @@ void PanelSuperList::showEditName(bool b) {
 void PanelSuperList::updateMaximum(int max) {
     list()->setMaximum(max);
     emit maximumChanged();
+}
+
+// -------------------------------------------------------
+
+void PanelSuperList::translate() {
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->pushButtonMaximum->setText(RPM::translate(Translations::SET_MAX));
 }
 
 // -------------------------------------------------------
@@ -145,9 +155,11 @@ void PanelSuperList::on_pushButtonMinus_pressed() {
     if (DialogSetMaximum::isOrderedMax(list()->getModel(), value)) {
         updateMaximum(value);
     } else {
-        message = value == 0 ? "You cannot remove the last element because that"
-            " list cannot be empty." : DialogSetMaximum::STR_WARNING;
-        QMessageBox::information(this, "Warning", message);
+        message = value == 0 ? RPM::translate(Translations
+            ::CANNOT_REMOVE_LAST_ELEMENT_LIST_EMPTY) + RPM::DOT :
+            RPM::translate(Translations::WARNING_MAXIMUM) + RPM::DOT;
+        QMessageBox::information(this, RPM::translate(Translations::WARNING),
+            message);
     }
 }
 

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -21,6 +21,7 @@
 #include "systemspeedfrequency.h"
 #include "systemfontname.h"
 #include "systemfontsize.h"
+#include "systemskybox.h"
 
 const QString SystemDatas::JSON_PROJECT_NAME = "pn";
 const QString SystemDatas::JSON_SCREEN_WIDTH = "sw";
@@ -36,12 +37,16 @@ const QString SystemDatas::JSON_LAST_MAJOR_VERSION = "lmva";
 const QString SystemDatas::JSON_LAST_MINOR_VERSION = "lmiv";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_HEIGHT = "mch";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_ANGLE = "mca";
-const QString SystemDatas::JSON_SPEED_FREQUENCIES = "sf";
+const QString SystemDatas::JSON_SPEED = "sf";
+const QString SystemDatas::JSON_FREQUENCIES = "f";
 const QString SystemDatas::JSON_SOUND_CURSOR = "scu";
 const QString SystemDatas::JSON_SOUND_CONFIRMATION = "sco";
 const QString SystemDatas::JSON_SOUND_CANCEL = "sca";
 const QString SystemDatas::JSON_SOUND_IMPOSSIBLE = "si";
 const QString SystemDatas::JSON_DIALOG_BOX_OPTIONS = "dbo";
+const QString SystemDatas::JSON_SKY_BOXES = "sb";
+const QString SystemDatas::JSON_ANTIALIASING = "aa";
+const bool SystemDatas::DEFAULT_ANTIALIASING = false;
 
 // -------------------------------------------------------
 //
@@ -50,21 +55,25 @@ const QString SystemDatas::JSON_DIALOG_BOX_OPTIONS = "dbo";
 // -------------------------------------------------------
 
 SystemDatas::SystemDatas() :
-    m_projectName(new LangsTranslation("Project without name")),
+    m_projectName(new LangsTranslation(RPM::translate(Translations
+        ::PROJECT_WITHOUT_NAME))),
     m_mountainCollisionHeight(new PrimitiveValue(4)),
     m_mountainCollisionAngle(new PrimitiveValue(45.0)),
     m_idMapHero(1),
     m_idObjectHero(1),
     m_showBB(false),
+    m_antialiasing(false),
     m_modelColors(new QStandardItemModel),
     m_modelCurrencies(new QStandardItemModel),
     m_modelItemsTypes(new QStandardItemModel),
     m_modelWindowSkins(new QStandardItemModel),
     m_modelCameraProperties(new QStandardItemModel),
     m_modelDetections(new QStandardItemModel),
-    m_modelSpeedFrequencies(new QStandardItemModel),
+    m_modelSpeed(new QStandardItemModel),
+    m_modelFrequencies(new QStandardItemModel),
     m_modelFontSizes(new QStandardItemModel),
     m_modelFontNames(new QStandardItemModel),
+    m_modelSkyBoxes(new QStandardItemModel),
     m_lastMajorVersion(1),
     m_lastMinorVersion(0),
     m_soundCursor(new SystemPlaySong(-1, SongKind::Sound)),
@@ -87,9 +96,11 @@ SystemDatas::~SystemDatas() {
     SuperListItem::deleteModel(m_modelWindowSkins);
     SuperListItem::deleteModel(m_modelCameraProperties);
     SuperListItem::deleteModel(m_modelDetections);
-    SuperListItem::deleteModel(m_modelSpeedFrequencies);
+    SuperListItem::deleteModel(m_modelSpeed);
+    SuperListItem::deleteModel(m_modelFrequencies);
     SuperListItem::deleteModel(m_modelFontSizes);
     SuperListItem::deleteModel(m_modelFontNames);
+    SuperListItem::deleteModel(m_modelSkyBoxes);
 
     delete m_soundCursor;
     delete m_soundConfirmation;
@@ -170,6 +181,16 @@ bool SystemDatas::showBB() const { return m_showBB; }
 
 void SystemDatas::setShowBB(bool b) { m_showBB = b; }
 
+bool SystemDatas::antialiasing() const
+{
+    return m_antialiasing;
+}
+
+void SystemDatas::setAntialiasing(bool aa)
+{
+    m_antialiasing = aa;
+}
+
 QStandardItemModel * SystemDatas::modelColors() const {
     return m_modelColors;
 }
@@ -194,9 +215,14 @@ QStandardItemModel * SystemDatas::modelDetections() const {
     return m_modelDetections;
 }
 
-QStandardItemModel * SystemDatas::modelSpeedFrequencies() const {
-    return m_modelSpeedFrequencies;
+QStandardItemModel * SystemDatas::modelSpeed() const {
+    return m_modelSpeed;
 }
+
+QStandardItemModel * SystemDatas::modelFrequencies() const {
+    return m_modelFrequencies;
+}
+
 
 QStandardItemModel * SystemDatas::modelFontSizes() const {
     return m_modelFontSizes;
@@ -204,6 +230,11 @@ QStandardItemModel * SystemDatas::modelFontSizes() const {
 
 QStandardItemModel * SystemDatas::modelFontNames() const {
     return m_modelFontNames;
+}
+
+QStandardItemModel * SystemDatas::modelSkyBoxes() const
+{
+    return m_modelSkyBoxes;
 }
 
 int SystemDatas::lastMajorVersion() const {
@@ -267,11 +298,13 @@ void SystemDatas::setDefault() {
     this->setDefaultWindowSkins();
     this->setDefaultCameraProperties();
     this->setDefaultDetections();
-    this->setDefaultSpeedFrequencies();
+    this->setDefaultSpeed();
+    this->setDefaultFrequencies();
     this->setDefaultFontSizes();
     this->setDefaultFontNames();
     this->setDefaultSounds();
     this->setDefaultDialogBoxOptions();
+    this->setDefaultSkyBoxes();
 
     m_lastMajorVersion = 1;
     m_lastMinorVersion = 0;
@@ -282,7 +315,11 @@ void SystemDatas::setDefault() {
 void SystemDatas::setDefaultColors() {
     QStandardItem *item;
     SystemColor *color;
-    QString namesColors[] = {"Black", "White", "BlueSky"};
+    QString namesColors[] = {
+        RPM::translate(Translations::BLACK),
+        RPM::translate(Translations::WHITE),
+        RPM::translate(Translations::BLUE_SKY)
+    };
     int r[] = {0, 255, 199};
     int g[] = {0, 255, 224};
     int b[] = {0, 255, 221};
@@ -303,7 +340,10 @@ void SystemDatas::setDefaultColors() {
 void SystemDatas::setDefaultCurrencies() {
     QStandardItem *item;
     SystemCurrency *currency;
-    QString namesCurrencies[] = {"G", "XCoin"};
+    QString namesCurrencies[] = {
+        RPM::translate(Translations::G),
+        RPM::translate(Translations::XCOIN)
+    };
     int picCurrencies[] = {1, 2};
     int length = (sizeof(namesCurrencies)/sizeof(*namesCurrencies));
     for (int i = 0; i < length; i++){
@@ -323,7 +363,10 @@ void SystemDatas::setDefaultCurrencies() {
 void SystemDatas::setDefaultItemsTypes() {
     QStandardItem *item;
     SuperListItem *sys;
-    QString namesItemsKind[] = {"ingredient", "key items"};
+    QString namesItemsKind[] = {
+        RPM::translate(Translations::INGREDIENT),
+        RPM::translate(Translations::KEY_ITEMS)
+    };
     int length = (sizeof(namesItemsKind)/sizeof(*namesItemsKind));
     for (int i = 0; i < length; i++){
         item = new QStandardItem;
@@ -339,13 +382,13 @@ void SystemDatas::setDefaultItemsTypes() {
 
 void SystemDatas::setDefaultWindowSkins() {
     QStandardItem *item = new QStandardItem;
-    SystemWindowSkin *sys = new SystemWindowSkin(1, "Default", 1, QRectF(0, 0, 8,
-        8), QRectF(8, 0, 8, 8), QRectF(0, 8, 8, 8), QRectF(8, 8, 8, 8), QRectF(
-        16, 8, 8, 2), QRectF(16, 10, 8, 2), QRectF(16, 0, 2, 8), QRectF(18, 0,
-        2, 8), QRectF(0, 18, 72, 36), QRectF(0, 54, 72, 36), false, QRectF(88,
-        0, 80, 16), QRectF(24, 0, 64, 18), QRectF(168, 0, 16, 22), QRectF(72, 22
-        , 120, 18), QRectF(72, 40, 120, 18), QRectF(72, 58, 120, 18), QRectF(72,
-        76, 38, 14));
+    SystemWindowSkin *sys = new SystemWindowSkin(1, RPM::translate(Translations
+        ::DEFAULT), 1, QRectF(0, 0, 8, 8), QRectF(8, 0, 8, 8), QRectF(0, 8, 8,
+        8), QRectF(8, 8, 8, 8), QRectF(16, 8, 8, 2), QRectF(16, 10, 8, 2),
+        QRectF(16, 0, 2, 8), QRectF(18, 0, 2, 8), QRectF(0, 18, 72, 36), QRectF(
+        0, 54, 72, 36), false, QRectF(88, 0, 80, 16), QRectF(24, 0, 64, 18),
+        QRectF(168, 0, 16, 22), QRectF(72, 22, 120, 18), QRectF(72, 40, 120, 18)
+        , QRectF(72, 58, 120, 18), QRectF(72, 76, 38, 14));
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
     item->setText(sys->toString());
@@ -358,12 +401,14 @@ void SystemDatas::setDefaultCameraProperties() {
     QList<QStandardItem *> row;
     SystemCameraProperties *cameraProperties;
 
-    cameraProperties = new SystemCameraProperties(1, "Outside");
+    cameraProperties = new SystemCameraProperties(1, RPM::translate(Translations
+        ::OUTSIDE));
     row = cameraProperties->getModelRow();
     m_modelCameraProperties->appendRow(row);
-    cameraProperties = new SystemCameraProperties(2, "Battle", new
-        PrimitiveValue(360.0), new PrimitiveValue(SystemCameraProperties
-        ::DEFAULT_HORIZONTAL_ANGLE), new PrimitiveValue(60.0));
+    cameraProperties = new SystemCameraProperties(2, RPM::translate(Translations
+        ::BATTLE), new PrimitiveValue(360.0), new PrimitiveValue(
+        SystemCameraProperties::DEFAULT_HORIZONTAL_ANGLE), new PrimitiveValue(
+        60.0));
     row = cameraProperties->getModelRow();
     m_modelCameraProperties->appendRow(row);
 }
@@ -374,11 +419,13 @@ void SystemDatas::setDefaultDetections() {
     QList<QStandardItem *> row;
     SystemDetection *detection;
 
-    detection = new SystemDetection(1, "Front", 0, 0, 0, 1);
+    detection = new SystemDetection(1, RPM::translate(Translations::FRONT), 0, 0
+        , 0, 1);
     detection->setDefault();
     row = detection->getModelRow();
     m_modelDetections->appendRow(row);
-    detection = new SystemDetection(2, "Self", 0, 0, 0, 0);
+    detection = new SystemDetection(2, RPM::translate(Translations::SELF), 0, 0,
+        0, 0);
     detection->setSelf();
     row = detection->getModelRow();
     m_modelDetections->appendRow(row);
@@ -386,28 +433,42 @@ void SystemDatas::setDefaultDetections() {
 
 // -------------------------------------------------------
 
-void SystemDatas::setDefaultSpeedFrequencies() {
+void SystemDatas::setDefaultSpeed() {
     QList<QStandardItem *> row;
     SystemSpeedFrequency *speedFrequency;
 
-    speedFrequency = new SystemSpeedFrequency(1, "Normal", new PrimitiveValue(
-        1.0));
+    speedFrequency = new SystemSpeedFrequency(1, RPM::translate(Translations
+        ::NORMAL), new PrimitiveValue(1.0), true);
     row = speedFrequency->getModelRow();
-    m_modelSpeedFrequencies->appendRow(row);
-    speedFrequency = new SystemSpeedFrequency(2, "Low", new PrimitiveValue(0.75));
+    m_modelSpeed->appendRow(row);
+    speedFrequency = new SystemSpeedFrequency(2, RPM::translate(Translations
+        ::LOW), new PrimitiveValue(0.75), true);
     row = speedFrequency->getModelRow();
-    m_modelSpeedFrequencies->appendRow(row);
-    speedFrequency = new SystemSpeedFrequency(3, "Very low", new PrimitiveValue(
-        0.5));
+    m_modelSpeed->appendRow(row);
+    speedFrequency = new SystemSpeedFrequency(3, RPM::translate(Translations
+        ::VERY_LOW), new PrimitiveValue(0.5), true);
     row = speedFrequency->getModelRow();
-    m_modelSpeedFrequencies->appendRow(row);
-    speedFrequency = new SystemSpeedFrequency(4, "Fast", new PrimitiveValue(1.5));
+    m_modelSpeed->appendRow(row);
+    speedFrequency = new SystemSpeedFrequency(4, RPM::translate(Translations
+        ::FAST), new PrimitiveValue(1.5), true);
     row = speedFrequency->getModelRow();
-    m_modelSpeedFrequencies->appendRow(row);
-    speedFrequency = new SystemSpeedFrequency(5, "Very fast", new PrimitiveValue
-        (2.0));
+    m_modelSpeed->appendRow(row);
+    speedFrequency = new SystemSpeedFrequency(5, RPM::translate(Translations
+        ::VERY_FAST), new PrimitiveValue(2.0), true);
     row = speedFrequency->getModelRow();
-    m_modelSpeedFrequencies->appendRow(row);
+    m_modelSpeed->appendRow(row);
+}
+
+// -------------------------------------------------------
+
+void SystemDatas::setDefaultFrequencies() {
+    QList<QStandardItem *> row;
+    SystemSpeedFrequency *speedFrequency;
+
+    speedFrequency = new SystemSpeedFrequency(1, RPM::translate(Translations
+        ::INSTANTANEOUS), new PrimitiveValue(0.0), false);
+    row = speedFrequency->getModelRow();
+    m_modelFrequencies->appendRow(row);
 }
 
 // -------------------------------------------------------
@@ -416,19 +477,24 @@ void SystemDatas::setDefaultFontSizes() {
     QList<QStandardItem *> row;
     SystemFontSize *fontSize;
 
-    fontSize = new SystemFontSize(1, "Normal", new PrimitiveValue(13));
+    fontSize = new SystemFontSize(1, RPM::translate(Translations::NORMAL), new
+        PrimitiveValue(13));
     row = fontSize->getModelRow();
     m_modelFontSizes->appendRow(row);
-    fontSize = new SystemFontSize(2, "Small", new PrimitiveValue(10));
+    fontSize = new SystemFontSize(2, RPM::translate(Translations::SMALL), new
+        PrimitiveValue(10));
     row = fontSize->getModelRow();
     m_modelFontSizes->appendRow(row);
-    fontSize = new SystemFontSize(3, "Very small", new PrimitiveValue(7));
+    fontSize = new SystemFontSize(3, RPM::translate(Translations::VERY_SMALL),
+        new PrimitiveValue(7));
     row = fontSize->getModelRow();
     m_modelFontSizes->appendRow(row);
-    fontSize = new SystemFontSize(4, "Big", new PrimitiveValue(16));
+    fontSize = new SystemFontSize(4, RPM::translate(Translations::BIG), new
+        PrimitiveValue(16));
     row = fontSize->getModelRow();
     m_modelFontSizes->appendRow(row);
-    fontSize = new SystemFontSize(5, "Very big", new PrimitiveValue(19));
+    fontSize = new SystemFontSize(5, RPM::translate(Translations::VERY_BIG), new
+        PrimitiveValue(19));
     row = fontSize->getModelRow();
     m_modelFontSizes->appendRow(row);
 }
@@ -470,6 +536,14 @@ void SystemDatas::setDefaultDialogBoxOptions() {
 }
 
 // -------------------------------------------------------
+
+void SystemDatas::setDefaultSkyBoxes()
+{
+    m_modelSkyBoxes->appendRow((new SystemSkyBox(1, RPM::translate(Translations
+        ::SKY), 1, 2, 3, 4, 5, 6))->getModelRow());
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -487,9 +561,11 @@ void SystemDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelWindowSkins, false);
     SuperListItem::deleteModel(m_modelCameraProperties, false);
     SuperListItem::deleteModel(m_modelDetections, false);
-    SuperListItem::deleteModel(m_modelSpeedFrequencies, false);
+    SuperListItem::deleteModel(m_modelSpeed, false);
+    SuperListItem::deleteModel(m_modelFrequencies, false);
     SuperListItem::deleteModel(m_modelFontSizes, false);
     SuperListItem::deleteModel(m_modelFontNames, false);
+    SuperListItem::deleteModel(m_modelSkyBoxes, false);
 
     // Other options
     m_projectName->read(json[JSON_PROJECT_NAME].toObject());
@@ -511,6 +587,10 @@ void SystemDatas::read(const QJsonObject &json){
     m_pathBR = json["pathBR"].toString();
     m_framesAnimation = json["frames"].toInt();
     m_showBB = json.contains("bb");
+    if (json.contains(JSON_ANTIALIASING))
+    {
+        m_antialiasing = json[JSON_ANTIALIASING].toBool();
+    }
 
     // Colors
     jsonList = json[JSON_COLORS].toArray();
@@ -579,12 +659,19 @@ void SystemDatas::read(const QJsonObject &json){
     }
 
     // Speed frequencies
-    jsonList = json[JSON_SPEED_FREQUENCIES].toArray();
+    jsonList = json[JSON_SPEED].toArray();
     for (int i = 0; i < jsonList.size(); i++){
         SystemSpeedFrequency *speedFrequency = new SystemSpeedFrequency;
         speedFrequency->read(jsonList[i].toObject());
         row = speedFrequency->getModelRow();
-        m_modelSpeedFrequencies->appendRow(row);
+        m_modelSpeed->appendRow(row);
+    }
+    jsonList = json[JSON_FREQUENCIES].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        SystemSpeedFrequency *speedFrequency = new SystemSpeedFrequency;
+        speedFrequency->read(jsonList[i].toObject());
+        row = speedFrequency->getModelRow();
+        m_modelFrequencies->appendRow(row);
     }
 
     // Font size
@@ -604,6 +691,8 @@ void SystemDatas::read(const QJsonObject &json){
         row = fontname->getModelRow();
         m_modelFontNames->appendRow(row);
     }
+    SuperListItem::readList(m_modelSkyBoxes, new SystemSkyBox, json,
+        JSON_SKY_BOXES);
 
     // Version
     m_lastMajorVersion = json[JSON_LAST_MAJOR_VERSION].toInt();
@@ -650,6 +739,10 @@ void SystemDatas::write(QJsonObject &json) const{
     json["frames"] = m_framesAnimation;
     if (m_showBB)
         json["bb"] = m_showBB;
+    if (m_antialiasing != DEFAULT_ANTIALIASING)
+    {
+        json[JSON_ANTIALIASING] = m_antialiasing;
+    }
 
     // Colors
     jsonArray = QJsonArray();
@@ -726,16 +819,27 @@ void SystemDatas::write(QJsonObject &json) const{
 
     // Speed frequencies
     jsonArray = QJsonArray();
-    l = m_modelSpeedFrequencies->invisibleRootItem()->rowCount();
+    l = m_modelSpeed->invisibleRootItem()->rowCount();
     for (int i = 0; i < l; i++) {
         QJsonObject jsonCommon;
         SystemSpeedFrequency *speedFrequency = reinterpret_cast<
-            SystemSpeedFrequency *>(m_modelSpeedFrequencies->item(i)->data()
+            SystemSpeedFrequency *>(m_modelSpeed->item(i)->data()
             .value<quintptr>());
         speedFrequency->write(jsonCommon);
         jsonArray.append(jsonCommon);
     }
-    json[JSON_SPEED_FREQUENCIES] = jsonArray;
+    json[JSON_SPEED] = jsonArray;
+    jsonArray = QJsonArray();
+    l = m_modelFrequencies->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++) {
+        QJsonObject jsonCommon;
+        SystemSpeedFrequency *speedFrequency = reinterpret_cast<
+            SystemSpeedFrequency *>(m_modelFrequencies->item(i)->data()
+            .value<quintptr>());
+        speedFrequency->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json[JSON_FREQUENCIES] = jsonArray;
 
     // Font size
     jsonArray = QJsonArray();
@@ -760,6 +864,7 @@ void SystemDatas::write(QJsonObject &json) const{
         jsonArray.append(jsonCommon);
     }
     json[JSON_FONT_NAMES] = jsonArray;
+    SuperListItem::writeList(m_modelSkyBoxes, json, JSON_SKY_BOXES);
 
     // Version
     json[JSON_LAST_MAJOR_VERSION] = m_lastMajorVersion;

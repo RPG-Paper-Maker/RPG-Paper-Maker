@@ -32,7 +32,7 @@
       <number>15</number>
      </property>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="groupBoxEngineControls">
        <property name="title">
         <string>Engine Controls</string>
        </property>
@@ -44,7 +44,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="groupBoxGameControls">
        <property name="title">
         <string>Game Controls</string>
        </property>
@@ -55,7 +55,7 @@
            <widget class="WidgetSuperTree" name="treeViewGame"/>
           </item>
           <item>
-           <widget class="QGroupBox" name="groupBox_3">
+           <widget class="QGroupBox" name="groupBoxMenuControls">
             <property name="title">
              <string>Menus controls</string>
             </property>
@@ -69,7 +69,7 @@
              <item row="0" column="0">
               <layout class="QGridLayout" name="gridLayout_2">
                <item row="0" column="0">
-                <widget class="QLabel" name="label">
+                <widget class="QLabel" name="labelAction">
                  <property name="text">
                   <string>Action:</string>
                  </property>
@@ -105,7 +105,7 @@
                 </spacer>
                </item>
                <item row="1" column="0">
-                <widget class="QLabel" name="label_2">
+                <widget class="QLabel" name="labelCancel">
                  <property name="text">
                   <string>Cancel:</string>
                  </property>
@@ -128,7 +128,7 @@
                 </widget>
                </item>
                <item row="2" column="0">
-                <widget class="QLabel" name="label_3">
+                <widget class="QLabel" name="labelUp">
                  <property name="text">
                   <string>Up:</string>
                  </property>
@@ -151,7 +151,7 @@
                 </widget>
                </item>
                <item row="3" column="0">
-                <widget class="QLabel" name="label_4">
+                <widget class="QLabel" name="labelDown">
                  <property name="text">
                   <string>Down:</string>
                  </property>
@@ -174,7 +174,7 @@
                 </widget>
                </item>
                <item row="4" column="0">
-                <widget class="QLabel" name="label_5">
+                <widget class="QLabel" name="labelLeft">
                  <property name="text">
                   <string>Left:</string>
                  </property>
@@ -197,7 +197,7 @@
                 </widget>
                </item>
                <item row="5" column="0">
-                <widget class="QLabel" name="label_6">
+                <widget class="QLabel" name="labelRight">
                  <property name="text">
                   <string>Right:</string>
                  </property>

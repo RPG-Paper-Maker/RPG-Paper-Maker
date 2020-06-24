@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogcommandchangeproperty.h"
 #include "ui_dialogcommandchangeproperty.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -32,6 +33,8 @@ DialogCommandChangeProperty::DialogCommandChangeProperty(EventCommand *command,
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandChangeProperty::~DialogCommandChangeProperty() {
@@ -83,6 +86,34 @@ void DialogCommandChangeProperty::initialize(EventCommand *command) {
     }
 
     ui->panelPrimitiveNewValue->initializeCommand(command, i);
+}
+
+//-------------------------------------------------
+
+void DialogCommandChangeProperty::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::CHANGE_PROPERTY) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelNewValue->setText(RPM::translate(Translations::NEW_VALUE) + RPM
+        ::COLON);
+    ui->labelPropertyID->setText(RPM::translate(Translations::PROPERTY_ID) + RPM
+        ::COLON);
+    ui->groupBoxValue->setTitle(RPM::translate(Translations::VALUE));
+    ui->groupBoxOperation->setTitle(RPM::translate(Translations::OPERATION));
+    ui->groupBoxSelection->setTitle(RPM::translate(Translations::SELECTION));
+    ui->radioButtonPlus->setText(RPM::PARENTHESIS_LEFT + RPM::PLUS + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::PLUS));
+    ui->radioButtonMinus->setText(RPM::PARENTHESIS_LEFT + RPM::MINUS + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::MINUS));
+    ui->radioButtonTimes->setText(RPM::PARENTHESIS_LEFT + RPM::TIMES + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::TIMES));
+    ui->radioButtonEquals->setText(RPM::PARENTHESIS_LEFT + RPM::EQUAL + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::EQUALS));
+    ui->radioButtonModulo->setText(RPM::PARENTHESIS_LEFT + RPM::MODULO + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::MODULO));
+    ui->radioButtonDivided->setText(RPM::PARENTHESIS_LEFT + RPM::MODULO + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::DIVIDED_BY));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

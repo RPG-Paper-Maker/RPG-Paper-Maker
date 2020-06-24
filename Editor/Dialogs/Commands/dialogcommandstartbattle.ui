@@ -49,9 +49,9 @@
          <item row="0" column="0">
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
-            <widget class="QGroupBox" name="groupBox">
+            <widget class="QGroupBox" name="groupBoxTroopID">
              <property name="title">
-              <string>Troop's ID</string>
+              <string>Troop ID</string>
              </property>
              <layout class="QGridLayout" name="gridLayout">
               <item row="0" column="0">
@@ -135,7 +135,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="groupBox_3">
+            <widget class="QGroupBox" name="groupBoxBattleMap">
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -240,7 +240,7 @@
                  </widget>
                 </item>
                 <item row="3" column="1" colspan="2">
-                 <widget class="QLabel" name="label_7">
+                 <widget class="QLabel" name="labelIDMAp">
                   <property name="enabled">
                    <bool>false</bool>
                   </property>
@@ -275,18 +275,8 @@
                   </property>
                  </spacer>
                 </item>
-                <item row="4" column="1">
-                 <widget class="QLabel" name="label_8">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>X:</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="5" column="1">
-                 <widget class="QLabel" name="label_9">
+                 <widget class="QLabel" name="labelY">
                   <property name="enabled">
                    <bool>false</bool>
                   </property>
@@ -315,7 +305,7 @@
                  </widget>
                 </item>
                 <item row="6" column="1" colspan="2">
-                 <widget class="QLabel" name="label_10">
+                 <widget class="QLabel" name="labelYPlus">
                   <property name="enabled">
                    <bool>false</bool>
                   </property>
@@ -344,7 +334,7 @@
                  </widget>
                 </item>
                 <item row="7" column="1">
-                 <widget class="QLabel" name="label_11">
+                 <widget class="QLabel" name="labelZ">
                   <property name="enabled">
                    <bool>false</bool>
                   </property>
@@ -410,13 +400,23 @@
                   </property>
                  </widget>
                 </item>
+                <item row="4" column="1">
+                 <widget class="QLabel" name="labelX">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>X:</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </item>
              </layout>
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="groupBox_2">
+            <widget class="QGroupBox" name="groupBoxOptions">
              <property name="title">
               <string>Options</string>
              </property>
@@ -462,7 +462,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="groupBox_4">
+            <widget class="QGroupBox" name="groupBoxTransition">
              <property name="title">
               <string>Transition</string>
              </property>
@@ -470,7 +470,7 @@
               <item row="0" column="0">
                <layout class="QGridLayout" name="gridLayout_5">
                 <item row="0" column="0">
-                 <widget class="QLabel" name="label">
+                 <widget class="QLabel" name="labelStart">
                   <property name="text">
                    <string>Start:</string>
                   </property>
@@ -485,23 +485,8 @@
                    </size>
                   </property>
                   <property name="currentIndex">
-                   <number>2</number>
+                   <number>-1</number>
                   </property>
-                  <item>
-                   <property name="text">
-                    <string>None</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Fade in...</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Zoom in</string>
-                   </property>
-                  </item>
                  </widget>
                 </item>
                 <item row="0" column="3" rowspan="2">
@@ -518,7 +503,7 @@
                  </spacer>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QLabel" name="label_2">
+                 <widget class="QLabel" name="labelEnd">
                   <property name="text">
                    <string>End:</string>
                   </property>
@@ -527,23 +512,8 @@
                 <item row="1" column="1">
                  <widget class="QComboBox" name="comboBoxTransitionEnd">
                   <property name="currentIndex">
-                   <number>2</number>
+                   <number>-1</number>
                   </property>
-                  <item>
-                   <property name="text">
-                    <string>None</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Fade out...</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Zoom out</string>
-                   </property>
-                  </item>
                  </widget>
                 </item>
                 <item row="0" column="2">

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -62,12 +62,16 @@ QString SystemVariables::idToString() const
 
 // -------------------------------------------------------
 
-SuperListItem* SystemVariables::getById(int id) const{
-    for (int i = 0; i < variablesPerPage; i++){
-        SuperListItem* s = (SuperListItem*)(p_model->invisibleRootItem()
-                                            ->child(i)->data()
-                                            .value<quintptr>());
-        if (id == s->id()) return s;
+SuperListItem* SystemVariables::getById(int id) const {
+    SuperListItem *s;
+    int i;
+
+    for (i = 0; i < variablesPerPage; i++) {
+        s = reinterpret_cast<SuperListItem *>(p_model->invisibleRootItem()
+            ->child(i)->data().value<quintptr>());
+        if (id == s->id()) {
+            return s;
+        }
     }
 
     return nullptr;
@@ -76,20 +80,22 @@ SuperListItem* SystemVariables::getById(int id) const{
 // -------------------------------------------------------
 
 void SystemVariables::setDefaultVariables(bool i) {
-    QStandardItem *varItem;
     SuperListItem *var;
     int j, l;
 
     for (j = 1, l = SystemVariables::variablesPerPage; j <= l; j++) {
-        varItem = new QStandardItem;
-        var = new SuperListItem(j + ((id()-1) * l), i && j == 1 ? "Lucas "
-            "instance ID" : "");
-        varItem->setData(QVariant::fromValue(reinterpret_cast<quintptr>(var)));
-        varItem->setFlags(varItem->flags() ^ (Qt::ItemIsDropEnabled));
-        varItem->setText(var->toString());
-        p_model->invisibleRootItem()->appendRow(varItem);
+        var = new SuperListItem(j + ((id()-1) * l), i && j == 1 ? RPM::translate
+            (Translations::LUCAS_INSTANCE_ID) : "");
+        p_model->invisibleRootItem()->appendRow(var->getModelRow());
     }
-    setName(QString("Page ") + QString::number(id()));
+    setName(RPM::translate(Translations::PAGE) + RPM::SPACE + QString::number(id
+        ()));
+}
+
+// -------------------------------------------------------
+
+void SystemVariables::setDefault() {
+    this->setDefaultVariables(false);
 }
 
 // -------------------------------------------------------
@@ -98,6 +104,19 @@ SuperListItem* SystemVariables::createCopy() const{
     SystemVariables* super = new SystemVariables;
     super->setCopy(*this);
     return super;
+}
+
+// -------------------------------------------------------
+
+void SystemVariables::setCopy(const SuperListItem &super) {
+    const SystemVariables *variables;
+
+    variables = reinterpret_cast<const SystemVariables *>(&super);
+    if (p_model->invisibleRootItem()->rowCount() == 0) {
+        SuperListItem::copyModel(p_model, variables->p_model);
+    } else {
+        SuperListItem::replaceModel(p_model, variables->p_model);
+    }
 }
 
 // -------------------------------------------------------

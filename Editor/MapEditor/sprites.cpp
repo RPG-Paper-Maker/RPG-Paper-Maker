@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -292,7 +292,7 @@ bool Sprites::addSprite(QSet<Portion>& portionsOverflow, Position& p,
 
 bool Sprites::deleteSprite(QSet<Portion>& portionsOverflow, Position& p,
                            QJsonObject &previousObj,
-                           MapEditorSubSelectionKind &previousType)
+                           MapEditorSubSelectionKind &previousType, bool deletePtr)
 {
     SpriteDatas* previousSprite = removeSprite(portionsOverflow, p);
     bool changed = false;
@@ -301,7 +301,10 @@ bool Sprites::deleteSprite(QSet<Portion>& portionsOverflow, Position& p,
         previousSprite->write(previousObj);
         previousType = previousSprite->getSubKind();
         changed = true;
-        delete previousSprite;
+        if (deletePtr)
+        {
+            delete previousSprite;
+        }
     }
 
     return changed;
@@ -484,9 +487,10 @@ MapElement* Sprites::updateRaycasting(int squareSize, float &finalDistance,
         Portion portion;
         map->getLocalPortion(position, portion);
         MapPortion* mapPortion = map->mapPortion(portion);
+        bool remove = false;
         MapElement* newElement = mapPortion->updateRaycastingOverflowSprite(
                     squareSize, position, finalDistance, finalPosition, ray,
-                    cameraHAngle);
+                    cameraHAngle, remove);
         if (newElement != nullptr)
             element = newElement;
     }

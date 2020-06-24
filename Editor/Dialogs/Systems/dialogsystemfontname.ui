@@ -34,7 +34,7 @@
      <item>
       <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
        <item row="0" column="0">
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="labelName">
          <property name="text">
           <string>Name:</string>
          </property>
@@ -44,7 +44,7 @@
         <widget class="QLineEdit" name="lineEditName"/>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="labelFont">
          <property name="text">
           <string>Font:</string>
          </property>

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -27,6 +27,8 @@ DialogSystemLoot::DialogSystemLoot(SystemLoot &loot, QWidget *parent) :
     ui->setupUi(this);
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemLoot::~DialogSystemLoot() {
@@ -129,6 +131,28 @@ void DialogSystemLoot::radioChanged(bool checked, LootKind kind) {
         panel->updateValue();
         m_loot.updateName();
     }
+}
+
+//-------------------------------------------------
+
+void DialogSystemLoot::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_LOOT) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelAnd->setText(RPM::translate(Translations::AND));
+    ui->labelNumber->setText(RPM::translate(Translations::NUMBER) + RPM::COLON);
+    ui->labelProbability->setText(RPM::translate(Translations::PROBABILITY) +
+        RPM::COLON);
+    ui->labelLevelBetween->setText(RPM::translate(Translations::LEVEL_BETWEEN) +
+        RPM::COLON);
+    ui->radioButtonItem->setText(RPM::translate(Translations::ITEM_ID) + RPM
+        ::COLON);
+    ui->radioButtonArmor->setText(RPM::translate(Translations::ARMOR_ID) + RPM
+        ::COLON);
+    ui->radioButtonWeapon->setText(RPM::translate(Translations::WEAPON_ID) + RPM
+        ::COLON);
+    ui->groupBoxLoot->setTitle(RPM::translate(Translations::LOOT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

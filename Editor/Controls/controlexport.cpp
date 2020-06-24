@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -53,16 +53,30 @@ QString ControlExport::createDesktop(QString location, OSKind os, bool, int
         osMessage + "-v" + QString::number(major) + "." + QString::number(minor);
     QString path = Common::pathCombine(location, projectName);
 
-    // Copying all the project
-    message = copyAllProject(location, projectName, path, dirLocation);
-    if (message != nullptr || message == "-") {
+    // Create the folder
+    message = createFolder(location, projectName, path, dirLocation);
+    if (message != nullptr || message == "-")
+    {
+        return message;
+    }
+    // Copy dependencies
+    message = generateDesktopStuff(path, os, major, minor);
+    if (message != nullptr)
+    {
+        return message;
+    }
+
+    // Copy Content folder and extra files
+    message = copyAllProject(path);
+    if (message != nullptr)
+    {
         return message;
     }
 
     // Remove all the files that are no longer needed here
     removeDesktopNoNeed(path);
 
-    return generateDesktopStuff(path, os, major, minor);
+    return nullptr;
 }
 
 // -------------------------------------------------------
@@ -75,7 +89,7 @@ QString ControlExport::createBrowser(QString location) {
     QString path = Common::pathCombine(location, projectName);
 
     // Copying all the project
-    message = copyAllProject(location, projectName, path, dirLocation);
+    message = copyAllProject(path);
     if (message != nullptr)
         return message;
 
@@ -87,17 +101,23 @@ QString ControlExport::createBrowser(QString location) {
 
 // -------------------------------------------------------
 
-QString ControlExport::copyAllProject(QString location, QString projectName,
+QString ControlExport::createFolder(QString location, QString projectName,
     QString path, QDir dirLocation)
 {
-    if (!QDir::isAbsolutePath(location))
-        return "The path location needs to be absolute.";
+    if (!QDir::isAbsolutePath(location)) {
+        return RPM::translate(Translations::PATH_LOCATION_NEEDS_ABSOLUTE) + RPM
+            ::DOT;
+    }
     if (!dirLocation.exists())
-        return "The path location doesn't exists.";
+        return RPM::translate(Translations::PATH_LOCATION_DOESNT_EXISTS) + RPM
+                ::DOT;
     if (!dirLocation.mkdir(projectName)) {
         QMessageBox::StandardButton box = QMessageBox::question(nullptr,
-            "Existing folder", "The directory " + projectName + " already "
-            "exists.\nWould you like to overwrite the existing folder?",
+            RPM::translate(Translations::EXISTING_FOLDER), RPM::translate(
+            Translations::THE_DIRECTORY) + RPM::SPACE + projectName + RPM::SPACE
+            + RPM::translate(Translations::ALREADY_EXISTS) + RPM::DOT + RPM
+            ::NEW_LINE + RPM::translate(Translations
+            ::QUESTION_OVERWRITE_EXISTING_FOLDER),
             QMessageBox::Yes | QMessageBox::No);
         if (box == QMessageBox::Yes) {
             QDir(path).removeRecursively();
@@ -107,13 +127,35 @@ QString ControlExport::copyAllProject(QString location, QString projectName,
         }
     }
 
+    return nullptr;
+}
+
+// -------------------------------------------------------
+
+QString ControlExport::copyAllProject(QString path)
+{
     // Copy Content
-    QDir(m_project->pathCurrentProject()).mkdir("Content");
+    QDir(m_project->pathCurrentProjectApp()).mkdir(RPM::FOLDER_CONTENT);
     QString pathContentProject = Common::pathCombine(m_project
-        ->pathCurrentProject(), "Content");
-    QString pathContent = Common::pathCombine(path, "Content");
-    if (!Common::copyPath(pathContentProject, pathContent))
-        return "Error while copying Content directory. Please retry.";
+        ->pathCurrentProjectApp(), RPM::FOLDER_CONTENT);
+    QString pathContent = Common::pathCombine(Common::pathCombine(path, RPM
+        ::PATH_APP), RPM::FOLDER_CONTENT);
+    if (!Common::copyPath(pathContentProject, pathContent)) {
+        return RPM::translate(Translations::ERROR_COPYING_CONTENT_DIRECTORY) +
+            RPM::DOT + RPM::SPACE + RPM::translate(Translations::PLEASE_RETRY) +
+            RPM::DOT;
+    }
+
+    // Copy extra files for desktop
+    if (!QFile::copy(Common::pathCombine(m_project->pathCurrentProjectApp(), RPM
+        ::FILE_MAIN), Common::pathCombine(path, RPM::PATH_MAIN)) || !QFile::copy
+        (Common::pathCombine(m_project->pathCurrentProjectApp(), RPM::FILE_INDEX
+        ), Common::pathCombine(path, RPM::PATH_INDEX)) || !QFile::copy(Common
+        ::pathCombine(m_project->pathCurrentProjectApp(), RPM::FILE_PACKAGE),
+        Common::pathCombine(path, RPM::PATH_PACKAGE)))
+    {
+        return "-";
+    }
 
     return nullptr;
 }
@@ -123,10 +165,12 @@ QString ControlExport::copyAllProject(QString location, QString projectName,
 void ControlExport::removeWebNoNeed(QString path) {
 
     // Remove useless datas
-    QString pathDatas = Common::pathCombine(path, RPM::PATH_DATAS);
+    QString pathDatas = Common::pathCombine(Common::pathCombine(path, RPM
+        ::PATH_APP), RPM::PATH_DATAS);
     QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
     QFile(Common::pathCombine(pathDatas, "scripts.json")).remove();
-    QString pathScripts = Common::pathCombine(path, RPM::PATH_SCRIPTS_SYSTEM_DIR);
+    QString pathScripts = Common::pathCombine(Common::pathCombine(path, RPM
+        ::PATH_APP), RPM::PATH_SCRIPTS_SYSTEM_DIR);
     QDir(Common::pathCombine(pathScripts, "desktop")).removeRecursively();
     removeMapsTemp(pathDatas);
 }
@@ -136,10 +180,13 @@ void ControlExport::removeWebNoNeed(QString path) {
 void ControlExport::removeDesktopNoNeed(QString path) {
 
     // Remove useless datas
-    QString pathDatas = Common::pathCombine(path, RPM::PATH_DATAS);
+    QString pathDatas = Common::pathCombine(Common::pathCombine(path, RPM
+        ::PATH_APP), RPM::PATH_DATAS);
     QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
     QFile(Common::pathCombine(pathDatas, "scripts.json")).remove();
     QFile(Common::pathCombine(pathDatas, "pictures.json")).remove();
+    this->copyBRPictures(Common::pathCombine(path, RPM::PATH_APP));
+
     removeMapsTemp(pathDatas);
 }
 
@@ -195,10 +242,8 @@ QString ControlExport::generateDesktopStuff(QString path, OSKind os, int major,
     QString pathExecutable = Common::pathCombine("Content", executableFolder);
 
     if (!Common::copyPath(pathExecutable, path))
-        return "Could not copy in " + pathExecutable;
-
-    // Pictures
-    copyBRPictures(path);
+        return RPM::translate(Translations::COULD_NOT_COPY_IN) + RPM::SPACE +
+            pathExecutable;
 
     // Save last version
     RPM::get()->project()->gameDatas()->systemDatas()->setLastMajorVersion(major);

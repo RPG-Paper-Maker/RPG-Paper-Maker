@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -30,11 +30,11 @@ DialogSystemBattleMap::DialogSystemBattleMap(SystemBattleMap &battleMap,
 
     ui->setupUi(this);
 
-    ui->panelPrimitiveCameraPropertiesID->initializeDataBaseAndUpdate(battleMap
-        .cameraPropertiesID());
     position = battleMap.position();
     ui->panelSelectPositionMaps->initialize(battleMap.idMap(), position.x(),
         position.y(), position.getYpx(RPM::getSquareSize()), position.z());
+
+    this->translate();
 }
 
 DialogSystemBattleMap::~DialogSystemBattleMap()
@@ -52,6 +52,15 @@ TreeMapTag * DialogSystemBattleMap::currentTag() const {
     return ui->panelSelectPositionMaps->currentTag();
 }
 
+//-------------------------------------------------
+
+void DialogSystemBattleMap::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_BATTLE_MAP) + RPM
+        ::DOT_DOT_DOT);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
 //--------------------------------------------
 //
 //  SLOTS
@@ -60,14 +69,15 @@ TreeMapTag * DialogSystemBattleMap::currentTag() const {
 
 void DialogSystemBattleMap::accept() {
     if (currentTag()->isDir()) {
-        QMessageBox::warning(this, "Warning", "You should select a map and not "
-            "a folder.");
+        QMessageBox::warning(this, RPM::translate(Translations::WARNING), RPM
+            ::translate(Translations::YOU_SHOULD_SELECT_MAP_NOT_FOLDER));
     } else {
         Position3D position(ui->panelSelectPositionMaps->x(), ui
             ->panelSelectPositionMaps->y(), ui->panelSelectPositionMaps->yPlus()
             , ui->panelSelectPositionMaps->z());
         m_battleMap.setIDMap(ui->panelSelectPositionMaps->idMap());
         m_battleMap.setPosition(position);
+        m_battleMap.setName(ui->panelSelectPositionMaps->mapName());
         QDialog::accept();
     }
 }

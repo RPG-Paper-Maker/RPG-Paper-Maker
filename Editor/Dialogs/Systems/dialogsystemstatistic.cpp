@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogsystemstatistic.h"
 #include "ui_dialogsystemstatistic.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -28,6 +29,8 @@ DialogSystemStatistic::DialogSystemStatistic(SystemStatistic &statistic,
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemStatistic::~DialogSystemStatistic()
@@ -53,6 +56,21 @@ void DialogSystemStatistic::initialize(){
         ui->radioButtonFix->setChecked(true);
     else
         ui->radioButtonBar->setChecked(true);
+}
+
+//-------------------------------------------------
+
+void DialogSystemStatistic::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_STATISTIC) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelScriptAbbreviation->setText(RPM::translate(Translations
+        ::SCRIPT_ABBREVIATION) + RPM::COLON);
+    ui->radioButtonBar->setText(RPM::translate(Translations::BAR));
+    ui->radioButtonFix->setText(RPM::translate(Translations::FIX));
+    ui->groupBoxProperties->setTitle(RPM::translate(Translations::PROPERTIES));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

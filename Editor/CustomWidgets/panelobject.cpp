@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -43,9 +43,9 @@ PanelObject::PanelObject(QWidget *parent) :
 
     // Moving
     SuperListItem::fillComboBox(ui->comboBoxSpeed, RPM::get()->project()
-        ->gameDatas()->systemDatas()->modelSpeedFrequencies(), false);
+        ->gameDatas()->systemDatas()->modelSpeed(), false);
     SuperListItem::fillComboBox(ui->comboBoxFreq, RPM::get()->project()
-        ->gameDatas()->systemDatas()->modelSpeedFrequencies(), false);
+        ->gameDatas()->systemDatas()->modelFrequencies(), false);
 
     // Keep space when hiding widgets
     QSizePolicy sp_retain;
@@ -63,6 +63,14 @@ PanelObject::PanelObject(QWidget *parent) :
     m_layoutDetection = new QHBoxLayout(ui->pushButtonDetection);
     m_layoutDetection->setContentsMargins(9, 0, 9, 0);
     m_layoutDetection->addWidget(m_labelDetection, 0, Qt::AlignCenter);
+
+    // Comboboxes
+    ui->comboBoxMovingType->addItems(RPM::ENUM_TO_STRING_OBJECT_MOVING_KIND);
+    ui->comboBoxGraphics->addItem(RPM::translate(Translations::NONE));
+    ui->comboBoxGraphics->addItem(RPM::translate(Translations::FIX_SPRITE));
+    ui->comboBoxGraphics->addItem(RPM::translate(Translations::FACE_SPRITE));
+
+    this->translate();
 }
 
 PanelObject::~PanelObject()
@@ -280,7 +288,8 @@ void PanelObject::updateReactionsWidgets() {
             // Checkboxes and buttons
             variant = QVariant::fromValue(reinterpret_cast<quintptr>(event
                 ->reactionAt(super->id())));
-            checkbox = new QCheckBox("Block hero when reaction");
+            checkbox = new QCheckBox(RPM::translate(Translations
+                ::BLOCK_HERO_WHEN_REACTION));
             checkbox->setProperty("reaction", variant);
             connect(checkbox, SIGNAL(toggled(bool)), this, SLOT(
                 on_blockingHeroChanged(bool)));
@@ -306,10 +315,10 @@ void PanelObject::updateStateMoving(SystemState *state) {
     ui->comboBoxMovingType->setCurrentIndex(static_cast<int>(state
         ->objectMovingKind()));
     ui->comboBoxSpeed->setCurrentIndex(SuperListItem::getIndexById(RPM::get()
-        ->project()->gameDatas()->systemDatas()->modelSpeedFrequencies()
+        ->project()->gameDatas()->systemDatas()->modelSpeed()
         ->invisibleRootItem(), state->speedID()));
     ui->comboBoxFreq->setCurrentIndex(SuperListItem::getIndexById(RPM::get()
-        ->project()->gameDatas()->systemDatas()->modelSpeedFrequencies()
+        ->project()->gameDatas()->systemDatas()->modelFrequencies()
         ->invisibleRootItem(), state->frequencyID()));
 }
 
@@ -341,6 +350,43 @@ void PanelObject::passToSprite() {
 
 void PanelObject::passToNone() {
     ui->comboBoxGraphics->setCurrentIndex(0);
+}
+
+//-------------------------------------------------
+
+void PanelObject::translate()
+{
+    ui->labelFreq->setText(RPM::translate(Translations::FREQ) + RPM::COLON);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelType->setText(RPM::translate(Translations::TYPE) + RPM::COLON);
+    ui->labelModel->setText(RPM::translate(Translations::MODEL) + RPM::COLON);
+    ui->labelSpeed->setText(RPM::translate(Translations::SPEED) + RPM::COLON);
+    ui->labelEvents->setText(RPM::translate(Translations::EVENTS) + RPM::COLON);
+    ui->labelStates->setText(RPM::translate(Translations::STATES) + RPM::COLON);
+    ui->labelGraphics->setText(RPM::translate(Translations::GRAPHICS) + RPM
+        ::COLON);
+    ui->labelProperties->setText(RPM::translate(Translations::PROPERTIES) + RPM
+        ::COLON);
+    ui->groupBoxMoving->setTitle(RPM::translate(Translations::MOVING));
+    ui->groupBoxOptions->setTitle(RPM::translate(Translations::OPTIONS));
+    ui->checkBoxThrough->setText(RPM::translate(Translations::THROUGH));
+    ui->checkBoxDetection->setText(RPM::translate(Translations::DETECTION) + RPM
+        ::COLON);
+    ui->checkBoxPixelOffset->setText(RPM::translate(Translations::PIXEL_OFFSET));
+    ui->checkBoxDirectionFix->setText(RPM::translate(Translations::DIRECTION_FIX));
+    ui->checkBoxKeepPosition->setText(RPM::translate(Translations::KEEP_POSITION));
+    ui->checkBoxMoveAnimation->setText(RPM::translate(Translations
+        ::MOVE_ANIMATION));
+    ui->checkBoxSetWithCamera->setText(RPM::translate(Translations
+        ::SET_WITH_CAMERA));
+    ui->checkBoxStopAnimation->setText(RPM::translate(Translations
+        ::STOP_ANIMATION));
+    ui->checkBoxClimbAnimation->setText(RPM::translate(Translations
+        ::CLIMB_ANIMATION));
+    ui->checkBoxOneEventPerFrame->setText(RPM::translate(Translations
+        ::ONLY_ONE_EVENT_PER_FRAME));
+    ui->pushButtonEditRoute->setText(RPM::translate(Translations::EDIT_ROUTE) +
+        RPM::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------
@@ -505,6 +551,9 @@ void PanelObject::on_blockingHeroChanged(bool c) {
 // -------------------------------------------------------
 
 void PanelObject::on_comboBoxMovingType_currentIndexChanged(int index) {
+    if (m_model == nullptr) {
+        return;
+    }
     QStandardItem *selected;
     bool isRoute;
 
@@ -530,7 +579,7 @@ void PanelObject::on_comboBoxSpeed_currentIndexChanged(int index) {
     }
     reinterpret_cast<SystemState *>(ui->treeViewStates->getSelected()->data()
         .value<quintptr>())->setSpeedID(SuperListItem::getIdByIndex(RPM::get()
-        ->project()->gameDatas()->systemDatas()->modelSpeedFrequencies(), index));
+        ->project()->gameDatas()->systemDatas()->modelSpeed(), index));
 }
 
 // -------------------------------------------------------
@@ -541,7 +590,7 @@ void PanelObject::on_comboBoxFreq_currentIndexChanged(int index) {
     }
     reinterpret_cast<SystemState *>(ui->treeViewStates->getSelected()->data()
         .value<quintptr>())->setFrequencyID(SuperListItem::getIdByIndex(RPM
-        ::get()->project()->gameDatas()->systemDatas()->modelSpeedFrequencies(),
+        ::get()->project()->gameDatas()->systemDatas()->modelFrequencies(),
         index));
 }
 
@@ -603,6 +652,9 @@ void PanelObject::on_checkBoxPixelOffset_toggled(bool checked) {
 // -------------------------------------------------------
 
 void PanelObject::on_comboBoxGraphics_currentIndexChanged(int index) {
+    if (m_model == nullptr) {
+        return;
+    }
     QStandardItem *selected = ui->treeViewStates->getSelected();
 
     if (selected != nullptr) {
@@ -715,4 +767,29 @@ void PanelObject::on_pasteReaction() {
 
     SystemReaction::copyCommands(m_copiedReaction->modelCommands(), reaction
         ->modelCommands());
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_treeViewStates_idChanged(int previousID, int newID)
+{
+    QStandardItemModel *model;
+    SystemObjectEvent *event;
+    SystemReaction *reaction;
+    int i, l;
+
+    model = ui->treeViewEvents->getModel();
+    for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        event = reinterpret_cast<SystemObjectEvent *>(model->item(i)->data()
+            .value<quintptr>());
+        if (event != nullptr)
+        {
+            reaction = event->removeReaction(previousID, false);
+            if (reaction != nullptr)
+            {
+                event->addReaction(newID, reaction);
+            }
+        }
+    }
 }

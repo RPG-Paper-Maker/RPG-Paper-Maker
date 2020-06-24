@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogcommandremoveapicture.h"
 #include "ui_dialogcommandremoveapicture.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -32,6 +33,8 @@ DialogCommandRemoveAPicture::DialogCommandRemoveAPicture(EventCommand *command,
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandRemoveAPicture::~DialogCommandRemoveAPicture() {
@@ -53,6 +56,17 @@ void DialogCommandRemoveAPicture::initializePrimitives() {
     }
 
     ui->panelPrimitiveIndex->initializeNumber(m_parameters, properties);
+}
+
+//-------------------------------------------------
+
+void DialogCommandRemoveAPicture::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::REMOVE_A_PICTURE) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelImageIndex->setText(RPM::translate(Translations::IMAGE_INDEX) + RPM
+        ::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

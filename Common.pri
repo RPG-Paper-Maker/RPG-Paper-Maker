@@ -59,6 +59,7 @@ INCLUDEPATH += \
     $$EDITOR_PATH/Dialogs/Commands \
     $$EDITOR_PATH/Dialogs/Systems \
     $$EDITOR_PATH/Dialogs/SpecialElements \
+    $$EDITOR_PATH/Dialogs/Animations \
     $$EDITOR_PATH/CustomWidgets \
     $$EDITOR_PATH/Controls \
     $$EDITOR_PATH/Controls/MapEditor \

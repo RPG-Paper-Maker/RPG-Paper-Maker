@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -29,17 +29,14 @@
 class SystemBattleMap : public SuperListItem
 {
 public:
-    static const QString JSON_CAMERA_PROPERTIES_ID;
     static const QString JSON_ID_MAP;
     static const QString JSON_POSITION;
 
     SystemBattleMap();
-    SystemBattleMap(int i, QString name, PrimitiveValue *cpi = new
-        PrimitiveValue(PrimitiveValueKind::DataBase, 1), int im = 1, Position3D
+    SystemBattleMap(int i, QString name, int im = 1, Position3D
         p = Position3D(0, 0, 0, 0));
     virtual ~SystemBattleMap();
 
-    PrimitiveValue * cameraPropertiesID() const;
     int idMap() const;
     void setIDMap(int id);
     Position3D position() const;
@@ -53,7 +50,6 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    PrimitiveValue *m_cameraPropertiesID;
     int m_idMap;
     Position3D m_position;
 };

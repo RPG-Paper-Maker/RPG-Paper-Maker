@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QtMath>
 #include "systemprogressiontable.h"
 
 const QString SystemProgressionTable::JSON_INITIAL_VALUE = "i";
@@ -68,6 +69,126 @@ QHash<int, int> * SystemProgressionTable::table() {
 //
 // -------------------------------------------------------
 
+int SystemProgressionTable::easing(int e, double x, double start, double
+    change, double duration)
+{
+    return qFloor(easingDouble(e, x, start, change, duration));
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingDouble(int e, double x, double start, double
+    change, double duration)
+{
+    switch (e) {
+    case 0:
+        return easingLinear(x, start, change, duration);
+    case -1:
+        return easingQuadraticIn(x, start, change, duration);
+    case 1:
+        return easingQuadraticOut(x, start, change, duration);
+    case -2:
+        return easingCubicIn(x, start, change, duration);
+    case 2:
+        return easingCubicOut(x, start, change, duration);
+    case -3:
+        return easingQuarticIn(x, start, change, duration);
+    case 3:
+        return easingQuarticOut(x, start, change, duration);
+    case -4:
+        return easingQuinticIn(x, start, change, duration);
+    case 4:
+        return easingQuinticOut(x, start, change, duration);
+    default:
+        return 0.0;
+    }
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingLinear(double x, double start, double
+    change, double duration)
+{
+    return change * x / duration + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingQuadraticIn(double x, double start, double
+    change, double duration)
+{
+    x /= duration;
+    return change * x * x + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingQuadraticOut(double x, double start, double
+    change, double duration)
+{
+    x /= duration;
+    return -change * x * (x - 2) + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingCubicIn(double x, double start, double
+    change, double duration)
+{
+    x /= duration;
+    return change * x * x * x + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingCubicOut(double x, double start, double
+    change, double duration)
+{
+    x /= duration;
+    x--;
+    return change * (x * x * x + 1) + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingQuarticIn(double x, double start, double
+    change, double duration)
+{
+    x /= duration;
+    return change * x * x * x * x + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingQuarticOut(double x, double start, double
+    change, double duration)
+{
+    x /= duration;
+    x--;
+    return -change * (x * x * x * x - 1) + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingQuinticIn(double x, double start, double
+    change, double duration)
+{
+    x /= duration;
+    return change * x * x * x * x * x + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingQuinticOut(double x, double start,
+    double change, double duration)
+{
+    x /= duration;
+    x--;
+    return change * (x * x * x * x * x + 1) + start;
+}
+
+// -------------------------------------------------------
+
 void SystemProgressionTable::reset() {
     m_initialValue->setNumberValue(0);
     m_initialValue->setKind(PrimitiveValueKind::Number);
@@ -92,14 +213,26 @@ bool SystemProgressionTable::isDefault() const {
 //
 // -------------------------------------------------------
 
-void SystemProgressionTable::setCopy(const SystemProgressionTable& progression)
+SuperListItem * SystemProgressionTable::createCopy() const {
+    SystemProgressionTable *super = new SystemProgressionTable;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
+void SystemProgressionTable::setCopy(const SuperListItem &super)
 {
-    m_initialValue->setCopy(*progression.m_initialValue);
-    m_finalValue->setCopy(*progression.m_finalValue);
-    m_equation = progression.m_equation;
-    m_table.clear();
+    const SystemProgressionTable *table;
     QHash<int, int>::const_iterator i;
-    for (i = progression.m_table.begin(); i != progression.m_table.end(); i++) {
+
+    table = reinterpret_cast<const SystemProgressionTable *>(&super);
+
+    m_initialValue->setCopy(*table->m_initialValue);
+    m_finalValue->setCopy(*table->m_finalValue);
+    m_equation = table->m_equation;
+    m_table.clear();
+    for (i = table->m_table.begin(); i != table->m_table.end(); i++) {
         m_table.insert(i.key(), i.value());
     }
 }

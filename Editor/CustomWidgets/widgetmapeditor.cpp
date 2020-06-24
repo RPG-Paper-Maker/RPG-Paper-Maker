@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -21,6 +21,7 @@
 #include "rpm.h"
 #include "systemcolor.h"
 #include "common.h"
+#include "systemskybox.h"
 
 // -------------------------------------------------------
 //
@@ -39,7 +40,8 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_spinBoxX(nullptr),
     m_spinBoxY(nullptr),
     m_spinBoxYPlus(nullptr),
-    m_spinBoxZ(nullptr)
+    m_spinBoxZ(nullptr),
+    m_textureSkyBox(nullptr)
 {
     QPixmap cursorPixmap;
 
@@ -80,6 +82,10 @@ WidgetMapEditor::~WidgetMapEditor()
 {
     makeCurrent();
     delete m_timerFirstPressure;
+    if (m_textureSkyBox != nullptr)
+    {
+        delete m_textureSkyBox;
+    }
 }
 
 void WidgetMapEditor::setMenuBar(WidgetMenuBarMapEditor *m) {
@@ -150,11 +156,29 @@ Map * WidgetMapEditor::loadMap(int idMap, QVector3D *position, QVector3D
 
     Map *map = m_control.loadMap(idMap, position, positionObject, cameraDistance,
         cameraHorizontalAngle, cameraVerticalAngle);
-    m_backgroundColor = (map->mapProperties()->skyColorID()->kind() ==
-        PrimitiveValueKind::Variable) ? Qt::black : reinterpret_cast<
-        SystemColor *>(SuperListItem::getById(RPM::get()->project()->gameDatas()
-        ->systemDatas()->modelColors()->invisibleRootItem(), map
-        ->mapProperties()->skyColorID()->numberValue()))->color();
+
+    // Load background
+    if (m_control.map()->mapProperties()->isSkyColor())
+    {
+        m_backgroundColor = (map->mapProperties()->skyColorID()->kind() ==
+            PrimitiveValueKind::Variable) ? Qt::black : reinterpret_cast<
+            SystemColor *>(SuperListItem::getById(RPM::get()->project()
+            ->gameDatas()->systemDatas()->modelColors()->invisibleRootItem(),
+            map->mapProperties()->skyColorID()->numberValue()))->color();
+    } else
+    {
+        if (m_control.map()->mapProperties()->isSkyImage())
+        {
+            m_imageBackground = QImage(reinterpret_cast<SystemPicture *>(
+                SuperListItem::getById(RPM::get()->project()->picturesDatas()
+                ->model(PictureKind::Pictures)->invisibleRootItem(), m_control
+                .map()->mapProperties()->skyPictureID()->id()))->getPath(
+                PictureKind::Pictures));
+        } else
+        {
+            this->loadSkyBoxTexture();
+        }
+    }
 
     return map;
 }
@@ -164,6 +188,63 @@ Map * WidgetMapEditor::loadMap(int idMap, QVector3D *position, QVector3D
 void WidgetMapEditor::deleteMap() {
     makeCurrent();
     m_control.deleteMap();
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::loadSkyBoxTexture()
+{
+    /*
+    SystemSkyBox *skyBox;
+
+    skyBox = reinterpret_cast<SystemSkyBox *>(SuperListItem::getById(RPM::get()
+        ->project()->gameDatas()->systemDatas()->modelSkyBoxes()
+        ->invisibleRootItem(), m_control.map()->mapProperties()->skyboxID()
+        ->numberValue()));
+    const QImage posz = this->createSkyBoxImage(skyBox->frontID()->id());
+    const QImage negz = this->createSkyBoxImage(skyBox->backID()->id());
+    const QImage posy = this->createSkyBoxImage(skyBox->topID()->id());
+    const QImage negy = this->createSkyBoxImage(skyBox->bottomID()->id());
+    const QImage posx = this->createSkyBoxImage(skyBox->rightID()->id());
+    const QImage negx = this->createSkyBoxImage(skyBox->leftID()->id());
+
+    if (m_textureSkyBox != nullptr)
+    {
+        m_textureSkyBox->destroy();
+        delete m_textureSkyBox;
+    }
+    m_textureSkyBox = new QOpenGLTexture(QOpenGLTexture::TargetCubeMap);
+    m_textureSkyBox->create();
+    m_textureSkyBox->setSize(posx.width(), posx.height());
+    m_textureSkyBox->setFormat(QOpenGLTexture::RGBAFormat);
+    m_textureSkyBox->allocateStorage();
+    m_textureSkyBox->setData(0, 0, QOpenGLTexture::CubeMapPositiveX,
+        QOpenGLTexture::RGBA, QOpenGLTexture::UInt8, posx.constBits(), Q_NULLPTR);
+    m_textureSkyBox->setData(0, 0, QOpenGLTexture::CubeMapPositiveY,
+        QOpenGLTexture::RGBA, QOpenGLTexture::UInt8, posy.constBits(), Q_NULLPTR);
+    m_textureSkyBox->setData(0, 0, QOpenGLTexture::CubeMapPositiveZ,
+        QOpenGLTexture::RGBA, QOpenGLTexture::UInt8, posz.constBits(), Q_NULLPTR);
+    m_textureSkyBox->setData(0, 0, QOpenGLTexture::CubeMapNegativeX,
+        QOpenGLTexture::RGBA, QOpenGLTexture::UInt8, negx.constBits(), Q_NULLPTR);
+    m_textureSkyBox->setData(0, 0, QOpenGLTexture::CubeMapNegativeY,
+        QOpenGLTexture::RGBA, QOpenGLTexture::UInt8, negy.constBits(), Q_NULLPTR);
+    m_textureSkyBox->setData(0, 0, QOpenGLTexture::CubeMapNegativeZ,
+        QOpenGLTexture::RGBA, QOpenGLTexture::UInt8, negz.constBits(), Q_NULLPTR);
+    m_textureSkyBox->generateMipMaps();
+    m_textureSkyBox->setWrapMode(QOpenGLTexture::ClampToEdge);
+    m_textureSkyBox->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    m_textureSkyBox->setMagnificationFilter(QOpenGLTexture::LinearMipMapLinear);*/
+
+}
+
+// -------------------------------------------------------
+
+QImage WidgetMapEditor::createSkyBoxImage(int id)
+{
+    return QImage(reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM
+        ::get()->project()->picturesDatas()->model(PictureKind::SkyBoxes)
+        ->invisibleRootItem(), id))->getPath(PictureKind::SkyBoxes))
+        .convertToFormat(QImage::Format_RGBA8888);
 }
 
 // -------------------------------------------------------
@@ -179,15 +260,112 @@ void WidgetMapEditor::initializeSpinBoxesCoords(QSpinBox *x, QSpinBox *y,
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::initializeGL() {
-
+void WidgetMapEditor::initializeGL()
+{
     // Initialize OpenGL Backend
     initializeOpenGLFunctions();
     connect(this, SIGNAL(frameSwapped()), this, SLOT(update()));
-
     isGLInitialized = true;
+
+    /*
+    m_programSkyBox.addShaderFromSourceCode(
+                    QOpenGLShader::Vertex,
+                    R"(
+                    #version 130
+
+                    in vec3 aPosition;
+                    uniform mat4 mvpMatrix;
+                    out vec3 vTexCoord;
+
+                    void main()
+                    {
+                        gl_Position = mvpMatrix * vec4(aPosition, 1.0);
+                        vTexCoord = aPosition;
+                    }
+                    )");
+
+        m_programSkyBox.addShaderFromSourceCode(
+                    QOpenGLShader::Fragment,
+                    R"(
+                    #version 130
+
+                    in highp vec3 vTexCoord;
+                    uniform samplerCube uTexture;
+                    out highp vec4 fColor;
+
+                    void main()
+                    {
+                        gl_FragColor = textureCube(uTexture, vTexCoord);
+                    }
+                    )");
+
+        m_programSkyBox.link();
+        m_programSkyBox.bind();
+
+        QVector3D vertices[] =
+            {
+                {-1.0f,  1.0f, -1.0f},
+                {-1.0f, -1.0f, -1.0f},
+                {+1.0f, -1.0f, -1.0f},
+                {+1.0f, -1.0f, -1.0f},
+                {+1.0f, +1.0f, -1.0f},
+                {-1.0f, +1.0f, -1.0f},
+
+                {-1.0f, -1.0f, +1.0f},
+                {-1.0f, -1.0f, -1.0f},
+                {-1.0f, +1.0f, -1.0f},
+                {-1.0f, +1.0f, -1.0f},
+                {-1.0f, +1.0f, +1.0f},
+                {-1.0f, -1.0f, +1.0f},
+
+                {+1.0f, -1.0f, -1.0f},
+                {+1.0f, -1.0f, +1.0f},
+                {+1.0f, +1.0f, +1.0f},
+                {+1.0f, +1.0f, +1.0f},
+                {+1.0f, +1.0f, -1.0f},
+                {+1.0f, -1.0f, -1.0f},
+
+                {-1.0f, -1.0f, +1.0f},
+                {-1.0f, +1.0f, +1.0f},
+                {+1.0f, +1.0f, +1.0f},
+                {+1.0f, +1.0f, +1.0f},
+                {+1.0f, -1.0f, +1.0f},
+                {-1.0f, -1.0f, +1.0f},
+
+                {-1.0f, +1.0f, -1.0f},
+                {+1.0f, +1.0f, -1.0f},
+                {+1.0f, +1.0f, +1.0f},
+                {+1.0f, +1.0f, +1.0f},
+                {-1.0f, +1.0f, +1.0f},
+                {-1.0f, +1.0f, -1.0f},
+
+                {-1.0f, -1.0f, -1.0f},
+                {-1.0f, -1.0f, +1.0f},
+                {+1.0f, -1.0f, -1.0f},
+                {+1.0f, -1.0f, -1.0f},
+                {-1.0f, -1.0f, +1.0f},
+                {+1.0f, -1.0f, +1.0f}
+            };
+
+            m_vertexBufSkyBox.create();
+            m_vertexBufSkyBox.bind();
+            m_vertexBufSkyBox.allocate(vertices, 36 * sizeof(QVector3D));
+
+            m_programSkyBox.enableAttributeArray(0);
+            m_programSkyBox.setAttributeBuffer(0,
+                                        GL_FLOAT,
+                                        0,
+                                        3,
+                                        sizeof(QVector3D));
+
+            //m_programSkyBox.setUniformValue(m_programSkyBox.uniformLocation("uTexture"), 0);
+            m_vertexBufSkyBox.release();
+            m_programSkyBox.release();*/
+
     if (m_needUpdateMap)
+    {
         initializeMap();
+    }
 }
 
 // -------------------------------------------------------
@@ -214,6 +392,12 @@ void WidgetMapEditor::paintGL() {
     }
 
     if (m_control.map() != nullptr) {
+        if (m_control.map()->mapProperties()->isSkyImage())
+        {
+            p.begin(this);
+            p.drawImage(QRect(0, 0, this->width(), this->height()), m_imageBackground);
+            p.end();
+        }
         p.beginNativePainting();
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
@@ -291,6 +475,21 @@ void WidgetMapEditor::paintGL() {
             .y(), viewMatrix.row(2).z());
 
         // Paint
+        /*
+        if (!m_control.map()->mapProperties()->isSkyColor() && !m_control.map()
+            ->mapProperties()->isSkyImage())
+        {
+            m_programSkyBox.bind();
+            m_textureSkyBox->bind();
+            m_vertexBufSkyBox.bind();
+            m_programSkyBox.setUniformValue(m_programSkyBox.uniformLocation("mvpMatrix"), modelviewProjection);
+            glDrawArrays(GL_TRIANGLES,
+                             0,
+                             36);
+            m_vertexBufSkyBox.release();
+            m_textureSkyBox->release();
+            m_programSkyBox.release();
+        }*/
         m_control.paintGL(modelviewProjection, cameraRightWorldSpace,
             cameraUpWorldSpace, cameraDeepWorldSpace, kind, subKind, drawKind);
         p.endNativePainting();
@@ -611,10 +810,10 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent *event) {
         // Tooltip for height
         if (m_menuBar != nullptr) {
             if (event->pos().x() <= 50 && event->pos().y() <= 50) {
-                QToolTip::showText(this->mapToGlobal(event->pos()), "To change "
-                    "height square, use CTRL+mousewheel or CTRL+arrowUpDown.\n"
-                    "To change height plus, use CTRL+SHIFT+mousewheel or "
-                    "CTRL+SHIFT+arrowUpDown");
+                QToolTip::showText(this->mapToGlobal(event->pos()), RPM
+                    ::translate(Translations::CHANGE_HEIGHT_TOOLTIP_1) + RPM
+                    ::DOT + RPM::NEW_LINE + RPM::SPACE + RPM::translate(
+                    Translations::CHANGE_HEIGHT_TOOLTIP_2) + RPM::DOT);
             } else {
                 QToolTip::hideText();
             }

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -35,12 +35,13 @@ public:
     bool blockingHero() const;
     void setBlockingHero(bool b);
     virtual SuperListItem* createCopy() const;
-    void setCopy(const SystemReaction& copy);
+    virtual void setCopy(const SuperListItem& super);
     static void addEmptyCommand(QStandardItem *root);
     static void addCommand(QStandardItem *root, EventCommand* command);
     static void addCommandWithoutText(QStandardItem *root,
                                       EventCommand* command);
-    static void deleteCommands(QStandardItem* item);
+    static void deleteCommands(QStandardItem *item);
+    static void getCommands(QList<EventCommand *> &list, QStandardItem *item);
     static void copyCommands(const QStandardItemModel *from,
                              QStandardItemModel *to);
     static void copyCommandsItem(const QStandardItem *from, QStandardItem* to);

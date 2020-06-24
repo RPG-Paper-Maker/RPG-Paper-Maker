@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -34,6 +34,8 @@ DialogCommandChangeScreenTone::DialogCommandChangeScreenTone(EventCommand
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandChangeScreenTone::~DialogCommandChangeScreenTone() {
@@ -71,6 +73,25 @@ void DialogCommandChangeScreenTone::initializePrimitives() {
         int)), this, SLOT(on_spinBoxBlueValueChanged(int)));
     connect(ui->panelPrimitiveGrey->spinBoxNumber(), SIGNAL(valueChanged(
         int)), this, SLOT(on_spinBoxGreyValueChanged(int)));
+}
+
+//-------------------------------------------------
+
+void DialogCommandChangeScreenTone::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::CHANGE_SCREEN_TONE) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelRed->setText(RPM::translate(Translations::RED) + RPM::COLON);
+    ui->labelBlue->setText(RPM::translate(Translations::BLUE) + RPM::COLON);
+    ui->labelGrey->setText(RPM::translate(Translations::GREY) + RPM::COLON);
+    ui->labelTime->setText(RPM::translate(Translations::TIME) + RPM::COLON);
+    ui->labelGreen->setText(RPM::translate(Translations::GREEN) + RPM::COLON);
+    ui->labelSeconds->setText(RPM::translate(Translations::SECONDS));
+    ui->checkBoxColor->setText(RPM::translate(Translations::ADDING_COLOR_ID) +
+        RPM::COLON);
+    ui->checkBoxWaitEnd->setText(RPM::translate(Translations
+        ::WAIT_END_CHANGE_BEFORE_NEXT_COMMAND));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

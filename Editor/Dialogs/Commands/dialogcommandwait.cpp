@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogcommandwait.h"
 #include "ui_dialogcommandwait.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -32,6 +33,8 @@ DialogCommandWait::DialogCommandWait(EventCommand *command, SystemCommonObject
     if (command != nullptr) {
         initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandWait::~DialogCommandWait()
@@ -54,6 +57,16 @@ void DialogCommandWait::initializePrimitives() {
     }
 
     ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
+}
+
+//-------------------------------------------------
+
+void DialogCommandWait::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::WAIT) + RPM::DOT_DOT_DOT);
+    ui->labelTime->setText(RPM::translate(Translations::TIME) + RPM::COLON);
+    ui->labelSeconds->setText(RPM::translate(Translations::SECONDS));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

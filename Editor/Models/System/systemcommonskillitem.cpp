@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -46,9 +46,7 @@ SystemCommonSkillItem::SystemCommonSkillItem() :
     PrimitiveValue(0), new QStandardItemModel, new QStandardItemModel, new
     QStandardItemModel)
 {
-    m_modelCosts->setHorizontalHeaderLabels(QStringList({"Cost"}));
-    m_modelEffects->setHorizontalHeaderLabels(QStringList({"Effect"}));
-    m_modelCharacteristics->setHorizontalHeaderLabels(QStringList({"Characteristic"}));
+    this->initializeHeaders();
 }
 
 SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
@@ -173,6 +171,21 @@ QStandardItemModel * SystemCommonSkillItem::modelCharacteristics() const {
 
 // -------------------------------------------------------
 //
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void SystemCommonSkillItem::initializeHeaders() {
+    m_modelCosts->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::COST)}));
+    m_modelEffects->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::EFFECT)}));
+    m_modelCharacteristics->setHorizontalHeaderLabels(QStringList({RPM
+        ::translate(Translations::CHARACTERISTIC)}));
+}
+
+// -------------------------------------------------------
+//
 //  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
@@ -185,55 +198,56 @@ SuperListItem* SystemCommonSkillItem::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemCommonSkillItem::setCopy(const SystemCommonSkillItem &skillItem) {
-    SystemIcon::setCopy(skillItem);
+void SystemCommonSkillItem::setCopy(const SuperListItem &super) {
+    const SystemCommonSkillItem *skillitem;
     int i, l;
 
-    m_type = skillItem.m_type;
-    m_consumable = skillItem.m_consumable;
-    m_oneHand = skillItem.m_oneHand;
-    m_description->setCopy(*skillItem.m_description);
-    m_targetKind = skillItem.m_targetKind;
-    m_targetConditionFormula->setCopy(*skillItem.m_targetConditionFormula);
-    m_conditionFormula->setCopy(*skillItem.m_conditionFormula);
-    m_availableKind = skillItem.m_availableKind;
-    m_sound->setCopy(*skillItem.m_sound);
-    m_animationUserID->setCopy(*skillItem.m_animationUserID);
-    m_animationTargetID->setCopy(*skillItem.m_animationTargetID);
-    m_price->setCopy(*skillItem.m_price);
+    SystemIcon::setCopy(super);
+
+    skillitem = reinterpret_cast<const SystemCommonSkillItem *>(&super);
+
+    m_type = skillitem->m_type;
+    m_consumable = skillitem->m_consumable;
+    m_oneHand = skillitem->m_oneHand;
+    m_description->setCopy(*skillitem->m_description);
+    m_targetKind = skillitem->m_targetKind;
+    m_targetConditionFormula->setCopy(*skillitem->m_targetConditionFormula);
+    m_conditionFormula->setCopy(*skillitem->m_conditionFormula);
+    m_availableKind = skillitem->m_availableKind;
+    m_sound->setCopy(*skillitem->m_sound);
+    m_animationUserID->setCopy(*skillitem->m_animationUserID);
+    m_animationTargetID->setCopy(*skillitem->m_animationTargetID);
+    m_price->setCopy(*skillitem->m_price);
 
     SuperListItem::deleteModel(m_modelCosts, false);
-    for (i = 0, l = skillItem.m_modelCosts->invisibleRootItem()->rowCount(); i
+    for (i = 0, l = skillitem->m_modelCosts->invisibleRootItem()->rowCount(); i
         < l - 1; i++)
     {
-        m_modelCosts->insertRow(i, reinterpret_cast<SystemCost *>(skillItem
-            .m_modelCosts->item(i)->data().value<quintptr>())->createCopy()
+        m_modelCosts->insertRow(i, reinterpret_cast<SystemCost *>(skillitem
+            ->m_modelCosts->item(i)->data().value<quintptr>())->createCopy()
             ->getModelRow());
     }
     m_modelCosts->appendRow(new QStandardItem(SuperListItem::beginningText));
     SuperListItem::deleteModel(m_modelEffects, false);
-    for (i = 0, l = skillItem.m_modelEffects->invisibleRootItem()->rowCount(); i
+    for (i = 0, l = skillitem->m_modelEffects->invisibleRootItem()->rowCount(); i
         < l - 1; i++)
     {
-        m_modelEffects->insertRow(i, reinterpret_cast<SystemEffect *>(skillItem
-            .m_modelEffects->item(i)->data().value<quintptr>())->createCopy()
+        m_modelEffects->insertRow(i, reinterpret_cast<SystemEffect *>(skillitem
+            ->m_modelEffects->item(i)->data().value<quintptr>())->createCopy()
             ->getModelRow());
     }
     m_modelEffects->appendRow(new QStandardItem(SuperListItem::beginningText));
     SuperListItem::deleteModel(m_modelCharacteristics, false);
-    for (i = 0, l = skillItem.m_modelCharacteristics->invisibleRootItem()
+    for (i = 0, l = skillitem->m_modelCharacteristics->invisibleRootItem()
         ->rowCount(); i < l - 1; i++)
     {
         m_modelCharacteristics->insertRow(i, reinterpret_cast<SystemCharacteristic
-             *>(skillItem.m_modelCharacteristics->item(i)->data().value<quintptr>
+             *>(skillitem->m_modelCharacteristics->item(i)->data().value<quintptr>
             ())->createCopy()->getModelRow());
     }
     m_modelCharacteristics->appendRow(new QStandardItem(SuperListItem
         ::beginningText));
-    m_modelCosts->setHorizontalHeaderLabels(QStringList({"Cost"}));
-    m_modelEffects->setHorizontalHeaderLabels(QStringList({"Effect"}));
-    m_modelCharacteristics->setHorizontalHeaderLabels(QStringList({
-        "Characteristic"}));
+    this->initializeHeaders();
 }
 
 // -------------------------------------------------------

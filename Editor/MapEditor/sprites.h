@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -78,7 +78,7 @@ public:
                    MapEditorSubSelectionKind &previousType);
     bool deleteSprite(QSet<Portion> &portionsOverflow, Position& p,
                       QJsonObject &previousObj,
-                      MapEditorSubSelectionKind &previousType);
+                      MapEditorSubSelectionKind &previousType, bool deletePtr = true);
     void setSpriteWall(Position& p, SpriteWallDatas* sprite);
     SpriteWallDatas* removeSpriteWall(Position& p);
     bool addSpriteWall(Position& p, SpriteWallDatas *sprite,

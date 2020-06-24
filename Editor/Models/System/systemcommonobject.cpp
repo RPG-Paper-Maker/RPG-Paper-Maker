@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -122,7 +122,7 @@ void SystemCommonObject::setDefaultFirst() {
 
     // ID and name
     setId(1);
-    setName("Basic");
+    setName(RPM::translate(Translations::BASIC));
 
     modelEventsUser = RPM::get()->project()->gameDatas()->commonEventsDatas()
         ->modelEventsUser();
@@ -170,7 +170,7 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
 
     // ID and name
     setId(2);
-    setName("Hero");
+    setName(RPM::translate(Translations::HERO));
 
     // Properties
     item = new QStandardItem();
@@ -207,6 +207,22 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
         ::TRUE_BOOL_STRING, "1", "1"}));
     setDefaultHeroKeyPressEvent(modelEventsSystem, 13, false, false,
         EventCommandKind::OpenMainMenu, QVector<QString>({}));
+    SystemObjectEvent *event = new SystemObjectEvent(1, RPM::translate(
+        Translations::TIME), new QStandardItemModel, true);
+    event->addParameter(new SystemParameter(1, "", nullptr, new PrimitiveValue(
+        PrimitiveValueKind::Default)));
+    event->addParameter(new SystemParameter(2, "", nullptr, new PrimitiveValue(
+        PrimitiveValueKind::Default)));
+    event->setDefaultHero();
+    SystemReaction *reaction = event->reactionAt(1);
+    QVector<QString> list = QVector<QString>({"1", "7", "2", "1", "1", "3"});
+    EventCommand *command = new EventCommand(EventCommandKind::SendEvent, list);
+    SystemCommonReaction::addCommandWithoutText(reaction->modelCommands()
+        ->invisibleRootItem(), command);
+    item = new QStandardItem;
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(event)));
+    item->setText(toString());
+    m_events->appendRow(item);
     item = new QStandardItem();
     item->setText(SuperListItem::beginningText);
     m_events->appendRow(item);
@@ -380,16 +396,13 @@ SystemState * SystemCommonObject::getFirstState() const {
             ::get()->project()->gameDatas()->commonEventsDatas()
             ->modelCommonObjects()->invisibleRootItem(), m_inheritanceId));
         state = obj->getFirstState();
-        if (state != nullptr) {
-            return state;
-        }
     }
-    if (m_states->invisibleRootItem()->rowCount() > 0) {
+    if (m_states->invisibleRootItem()->rowCount() > 1) {
         return reinterpret_cast<SystemState *>(m_states->item(0)->data().value<
             qintptr>());
     }
 
-    return nullptr;
+    return state;
 }
 
 // -------------------------------------------------------
@@ -445,15 +458,17 @@ void SystemCommonObject::setCopy(const SuperListItem &super) {
     m_inheritanceId = object->inheritanceId();
 
     // Properties
+    SuperListItem::deleteModel(m_properties, false);
     SuperListItem::copy(m_properties, object->m_properties);
 
     // Events
     RPM::get()->project()->setCurrentObject(this);
+    SuperListItem::deleteModel(m_events, false);
     SuperListItem::copy(m_events, object->m_events);
 
     // States
+    SuperListItem::deleteModel(m_states, false);
     SuperListItem::copy(m_states, object->m_states);
-
 }
 
 // -------------------------------------------------------

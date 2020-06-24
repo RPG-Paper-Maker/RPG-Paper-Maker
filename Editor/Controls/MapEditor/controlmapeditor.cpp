@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -1382,9 +1382,11 @@ QString ControlMapEditor::getSquareInfos(MapEditorSelectionKind kind,
         if (!m_map->isInGrid(position)) {
             m_lastSquareInfos = "";
         } else {
-            m_lastSquareInfos = (element == nullptr ? "[NONE]" : "[" + (isObject
-                ? "OBJECT" : element->toString()) + "]") + "\n" + position
-                .toString(m_map->squareSize());
+            m_lastSquareInfos = (element == nullptr ? "[" + RPM::translate(
+                Translations::NONE).toUpper() +  "]" : "[" + (isObject
+                ? RPM::translate(Translations::OBJECT).toUpper() : element
+                ->toString()) + "]") + "\n" + position.toString(m_map
+                ->squareSize());
         }
     }
 
@@ -1428,20 +1430,21 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
         QJsonObject obj;
 
         element = mapPortion->updateElementPosition(previousPosition, k);
-        if (k == MapEditorSelectionKind::Sprites) {
-            SpriteDatas *sprite;
+        if (element != nullptr)
+        {
+            if (k == MapEditorSelectionKind::Sprites) {
+                SpriteDatas *sprite;
 
-            sprite = new SpriteDatas(*reinterpret_cast<SpriteDatas *>(
-                element));
-            this->eraseSprite(previousPosition);
-            this->stockSprite(newPosition, sprite, sprite->getSubKind(), false);
-        } else {
-            Object3DDatas *object3D;
+                sprite = reinterpret_cast<SpriteDatas *>(element);
+                this->eraseSprite(previousPosition, false, false);
+                this->stockSprite(newPosition, sprite, sprite->getSubKind(), false);
+            } else {
+                Object3DDatas *object3D;
 
-            object3D = Object3DDatas::instanciate(reinterpret_cast<Object3DDatas
-                *>(element)->datas());
-            this->eraseObject3D(previousPosition);
-            this->stockObject3D(newPosition, object3D);
+                object3D = (reinterpret_cast<Object3DDatas *>(element));
+                this->eraseObject3D(previousPosition, false, false);
+                this->stockObject3D(newPosition, object3D);
+            }
         }
     }
 }

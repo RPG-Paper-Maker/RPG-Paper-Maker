@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -126,6 +126,9 @@ void WidgetSuperTree::setItem(QStandardItem *selected, SuperListItem* super) {
             (SuperListItem*)(selected->data().value<quintptr>());
 
     QStandardItem* root = getRootOfItem(selected);
+    if (m_updateId) {
+        super->setId(previous == nullptr ? getNewId(p_model) : previous->id());
+    }
     QList<QStandardItem*> row = super->getModelRow();
     int index = selected->row();
     if (previous != nullptr)
@@ -153,15 +156,26 @@ void WidgetSuperTree::newItem(QStandardItem* selected){
 
 void WidgetSuperTree::editItem(QStandardItem *selected){
     SuperListItem* super = (SuperListItem*)(selected->data().value<quintptr>());
+    int previousID, newID;
+
+    previousID = super->id();
     if (super->openDialog())
+    {
+        newID = super->id();
+        if (previousID != newID)
+        {
+            emit idChanged(previousID, newID);
+        }
         setItem(selected, super);
+    }
 }
 
 // -------------------------------------------------------
 
 void WidgetSuperTree::copyItem(QStandardItem* selected){
-    SuperListItem* super = (SuperListItem*)(selected->data().value<quintptr>());
+    SuperListItem *super;
 
+    super = reinterpret_cast<SuperListItem *>(selected->data().value<quintptr>());
     if (m_copiedItem == nullptr)
         m_copiedItem = super->createCopy();
     else
@@ -222,6 +236,7 @@ QStandardItem* WidgetSuperTree::getRootOfItem(QStandardItem* selected){
 
 void WidgetSuperTree::updateAllNodesString(QStandardItem *item) {
     QList<QStandardItem *> row;
+    QStandardItem *itemRow;
     int i, j, l, ll;
     for (i = 0, l = item->rowCount(); i < l; i++) {
         updateAllNodesString(item->child(i));
@@ -230,7 +245,9 @@ void WidgetSuperTree::updateAllNodesString(QStandardItem *item) {
         if (super != nullptr) {
             row = super->getModelRow();
             for (j = 0, ll = row.size(); j < ll; j++) {
-                item->child(i, j)->setText(row.at(j)->text());
+                itemRow = row.at(j);
+                item->child(i, j)->setText(itemRow->text());
+                delete itemRow;
             }
         }
     }

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -42,6 +42,7 @@
 #include "dialogshapes.h"
 #include "dialogvideos.h"
 #include "common.h"
+#include "dialogselectlanguage.h"
 
 // -------------------------------------------------------
 //
@@ -51,7 +52,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    m_isMainMenu(true)
 {
     p_appName = "RPG Paper Maker";
     gameProcess = new QProcess(this);
@@ -76,15 +78,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Menu bar enabled actions
     enableNoGame();
+
+    this->translate();
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
     gameProcess->close();
     delete gameProcess;
     gameProcess = nullptr;
     cleanRecentProjectsActions();
+    delete ui;
     RPM::kill();
 }
 
@@ -138,9 +142,8 @@ void MainWindow::newProject(){
 // -------------------------------------------------------
 
 void MainWindow::openExistingProject(){
-    QString file = QFileDialog::getOpenFileName(this, "Open a project",
-                                                RPM::PATH_GAMES,
-                                                "RPG Paper Maker (*.rpm)");
+    QString file = QFileDialog::getOpenFileName(this, RPM::translate(
+        Translations::OPEN_PROJECT), RPM::PATH_GAMES, "RPG Paper Maker (*.rpm)");
     if (file.count() > 0) openProject(Common::getDirectoryPath(file));
 }
 
@@ -156,6 +159,7 @@ void MainWindow::openProject(QString pathProject) {
                 ->projectName()->mainName(), pathProject);
             enableGame();
             replaceMainPanel(new PanelProject(this, project));
+            m_isMainMenu = false;
         }
         else {
             delete project;
@@ -183,6 +187,7 @@ bool MainWindow::closeProject(){
     connect(panel, SIGNAL(openingProject(QString)), this, SLOT(
         openRecentProject(QString)));
     replaceMainPanel(panel);
+    m_isMainMenu = true;
 
     return true;
 }
@@ -211,6 +216,10 @@ void MainWindow::enableAll(bool b){
     ui->actionClose_project->setEnabled(b);
     ui->actionUndo->setEnabled(b);
     ui->actionRedo->setEnabled(b);
+    ui->actionHeight_up->setEnabled(b);
+    ui->actionHeight_down->setEnabled(b);
+    ui->actionHeight_plus_up->setEnabled(b);
+    ui->actionHeight_plus_down->setEnabled(b);
     ui->actionDatas_manager->setEnabled(b);
     ui->actionSystems_manager->setEnabled(b);
     ui->actionVariables_manager->setEnabled(b);
@@ -250,6 +259,10 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionClose_project->setEnabled(true);
     ui->actionUndo->setEnabled(true);
     ui->actionRedo->setEnabled(true);
+    ui->actionHeight_up->setEnabled(true);
+    ui->actionHeight_down->setEnabled(true);
+    ui->actionHeight_plus_up->setEnabled(true);
+    ui->actionHeight_plus_down->setEnabled(true);
     ui->actionDatas_manager->setEnabled(true);
     ui->actionSystems_manager->setEnabled(true);
     ui->actionVariables_manager->setEnabled(true);
@@ -308,13 +321,10 @@ void MainWindow::updateTextures(){
 bool MainWindow::close() {
     if (project != nullptr) {
         if (RPM::mapsToSave.count() > 0){
-            QMessageBox::StandardButton box =
-                    QMessageBox::question(this, "Quit",
-                                          "You have some maps that are not "
-                                          "saved. Do you want to save all?",
-                                          QMessageBox::Yes | QMessageBox::No |
-                                          QMessageBox::Cancel);
-
+            QMessageBox::StandardButton box = QMessageBox::question(this, RPM
+                ::translate(Translations::QUIT), RPM::translate(Translations
+                ::YOU_HAVE_MAPS_NOT_SAVED), QMessageBox::Yes |
+                QMessageBox::No | QMessageBox::Cancel);
             if (box == QMessageBox::Yes)
                 saveAllMaps();
             else if (box == QMessageBox::No)
@@ -367,6 +377,124 @@ void MainWindow::cleanRecentProjectsActions() {
         action = ui->menuOpen_project->actions().at(i);
         ui->menuOpen_project->removeAction(action);
         delete action;
+    }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::translate() {
+    ui->menuFile->setTitle(RPM::translate(Translations::FILE));
+    ui->menuEdition->setTitle(RPM::translate(Translations::EDITION));
+    ui->menuManagement->setTitle(RPM::translate(Translations::MANAGEMENT));
+    ui->menuSpecials->setTitle(RPM::translate(Translations::SPECIAL_ELEMENTS));
+    ui->menuDisplay->setTitle(RPM::translate(Translations::DISPLAY));
+    ui->menuOptions->setTitle(RPM::translate(Translations::OPTIONS));
+    ui->menuTest->setTitle(RPM::translate(Translations::TEST));
+    ui->menuHelp->setTitle(RPM::translate(Translations::HELP));
+    ui->actionNew_project->setText(RPM::translate(Translations::NEW_PROJECT));
+    ui->actionNew_project->setIconText(RPM::translate(Translations
+        ::NEW_PROJECT_TOOL));
+    ui->menuOpen_project->setTitle(RPM::translate(Translations::OPEN_PROJECT));
+    ui->actionBrowse->setText(RPM::translate(Translations::BROWSE) + RPM
+        ::DOT_DOT_DOT);
+    ui->actionBrowse->setIconText(RPM::translate(Translations::OPEN_PROJECT_TOOL));
+    ui->actionSave->setText(RPM::translate(Translations::SAVE));
+    ui->actionSave->setIconText(RPM::translate(Translations::SAVE_TOOL));
+    ui->actionSave_all->setText(RPM::translate(Translations::SAVE_ALL));
+    ui->actionSave_all->setIconText(RPM::translate(Translations::SAVE_ALL_TOOL));
+    ui->actionExport_standalone->setText(RPM::translate(Translations
+        ::EXPORT_STANDALONE) + RPM::DOT_DOT_DOT);
+    ui->actionClose_project->setText(RPM::translate(Translations::CLOSE_PROJECT));
+    ui->actionQuit->setText(RPM::translate(Translations::QUIT));
+    ui->actionUndo->setText(RPM::translate(Translations::UNDO));
+    ui->actionRedo->setText(RPM::translate(Translations::REDO));
+    ui->actionHeight_up->setText(RPM::translate(Translations::HEIGHT_UP));
+    ui->actionHeight_plus_up->setText(RPM::translate(Translations
+        ::HEIGHT_PLUS_UP));
+    ui->actionHeight_down->setText(RPM::translate(Translations::HEIGHT_DOWN));
+    ui->actionHeight_plus_down->setText(RPM::translate(Translations
+        ::HEIGHT_PLUS_DOWN));
+    ui->actionDatas_manager->setText(RPM::translate(Translations
+        ::DATAS_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionDatas_manager->setIconText(RPM::translate(Translations
+        ::DATAS_MANAGER_TOOL));
+    ui->actionSystems_manager->setText(RPM::translate(Translations
+        ::SYSTEMS_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionSystems_manager->setIconText(RPM::translate(Translations
+        ::SYSTEMS_MANAGER_TOOL));
+    ui->actionVariables_manager->setText(RPM::translate(Translations
+        ::VARIABLES_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionVariables_manager->setIconText(RPM::translate(Translations
+        ::VARIABLES_MANAGER_TOOL));
+    ui->actionCollisions_manager->setText(RPM::translate(Translations
+        ::COLLISIONS_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionCollisions_manager->setIconText(RPM::translate(Translations
+        ::COLLISIONS_MANAGER_TOOL));
+    ui->actionKeyboard_controls->setText(RPM::translate(Translations
+        ::KEYBOARD_CONTROLS) + RPM::DOT_DOT_DOT);
+    ui->actionKeyboard_controls->setIconText(RPM::translate(Translations
+        ::KEYBOARD_CONTROLS_TOOL));
+    ui->actionScripts_manager->setText(RPM::translate(Translations
+        ::SCRIPTS_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionScripts_manager->setIconText(RPM::translate(Translations
+        ::SCRIPTS_MANAGER_TOOL));
+    ui->actionPictures_manager->setText(RPM::translate(Translations
+        ::PICTURES_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionPictures_manager->setIconText(RPM::translate(Translations
+        ::PICTURES_MANAGER_TOOL));
+    ui->actionVideos_manager->setText(RPM::translate(Translations
+        ::VIDEOS_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionVideos_manager->setIconText(RPM::translate(Translations
+        ::VIDEOS_MANAGER_TOOL));
+    ui->actionSongs_manager->setText(RPM::translate(Translations
+        ::SONGS_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionSongs_manager->setIconText(RPM::translate(Translations
+        ::SONGS_MANAGER_TOOL));
+    ui->actionShapes_manager->setText(RPM::translate(Translations
+        ::SHAPES_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionShapes_manager->setIconText(RPM::translate(Translations
+        ::SHAPES_MANAGER_TOOL));
+    ui->actionAutotiles->setText(RPM::translate(Translations::AUTOTILES) + RPM
+        ::DOT_DOT_DOT);
+    ui->actionAutotiles->setIconText(RPM::translate(Translations::AUTOTILES_TOOL));
+    ui->actionAnimated_Autotiles->setText(RPM::translate(Translations
+        ::ANIMATED_AUTOTILES) + RPM::DOT_DOT_DOT);
+    ui->actionAnimated_Autotiles->setIconText(RPM::translate(Translations
+        ::ANIMATED_AUTOTILES_TOOL));
+    ui->actionSprite_walls->setText(RPM::translate(Translations::WALLS) + RPM
+        ::DOT_DOT_DOT);
+    ui->actionSprite_walls->setIconText(RPM::translate(Translations::WALLS_TOOL));
+    ui->action3D_objects->setText(RPM::translate(Translations::THREED_OBJECTS) +
+        RPM::DOT_DOT_DOT);
+    ui->action3D_objects->setIconText(RPM::translate(Translations
+        ::THREED_OBJECTS_TOOL));
+    ui->actionMountains->setText(RPM::translate(Translations::MOUNTAINS) + RPM
+        ::DOT_DOT_DOT);
+    ui->actionMountains->setIconText(RPM::translate(Translations::MOUNTAINS_TOOL));
+    ui->actionSet_BR_path_folder->setText(RPM::translate(Translations
+        ::SET_BR_PATH_FOLDER) + RPM::DOT_DOT_DOT);
+    ui->actionDebug_options->setText(RPM::translate(Translations
+        ::DEBUG_OPTIONS) + RPM::DOT_DOT_DOT);
+    ui->actionGeneral_options->setText(RPM::translate(Translations
+        ::GENERAL_OPTIONS) + RPM::DOT_DOT_DOT);
+    ui->actionChange_language->setText(RPM::translate(Translations
+        ::CHANGE_LANGUAGE) + RPM::DOT_DOT_DOT);
+    ui->actionShow_Hide_grid->setText(RPM::translate(Translations
+        ::SHOW_HIDE_GRID));
+    ui->actionShow_Hide_square_informations->setText(RPM::translate(Translations
+        ::SHOW_HIDE_SQUARE_INFORMATION));
+    ui->actionPlay->setText(RPM::translate(Translations::PLAY));
+    ui->actionPlay->setIconText(RPM::translate(Translations::PLAY_TOOL));
+    ui->actionAbout->setText(RPM::translate(Translations::ABOUT) + RPM
+        ::DOT_DOT_DOT);
+    ui->actionAuto_update->setText(RPM::translate(Translations
+        ::AUTO_DISPLAY_UPDATER));
+    if (m_isMainMenu)
+    {
+        reinterpret_cast<PanelMainMenu *>(mainPanel)->translate();
+    } else
+    {
+        reinterpret_cast<PanelProject *>(mainPanel)->translate();
     }
 }
 
@@ -657,7 +785,9 @@ void MainWindow::on_actionMountains_triggered() {
 // -------------------------------------------------------
 
 void MainWindow::on_actionSet_BR_path_folder_triggered(){
-    DialogLocation dialog(project->gameDatas()->systemDatas()->pathBR());
+    DialogLocation dialog(project->gameDatas()->systemDatas()->pathBR(), Common
+        ::pathCombine(QDir::currentPath(), RPM::PATH_BR));
+
     if (openDialog(dialog) == QDialog::Accepted){
         project->gameDatas()->systemDatas()->setPathBR(dialog.location());
         project->writeSystemDatas();
@@ -683,6 +813,14 @@ void MainWindow::on_actionGeneral_options_triggered() {
 
 // -------------------------------------------------------
 
+void MainWindow::on_actionChange_language_triggered()
+{
+    DialogSelectLanguage dialog;
+    openDialog(dialog);
+}
+
+// -------------------------------------------------------
+
 void MainWindow::on_actionShow_Hide_grid_triggered() {
     ((PanelProject*)mainPanel)->widgetMapEditor()->showHideGrid();
 }
@@ -698,9 +836,10 @@ void MainWindow::on_actionShow_Hide_square_informations_triggered() {
 void MainWindow::on_actionPlay_triggered() {
     if (RPM::get()->project()->isHeroDefined()) {
         if (RPM::mapsToSave.count() > 0) {
-            QMessageBox::StandardButton box = QMessageBox::question(this, "Save"
-                , "You have some maps that are not saved. Do you want to save "
-                "all?", QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+            QMessageBox::StandardButton box = QMessageBox::question(this, RPM
+                ::translate(Translations::SAVE), RPM::translate(Translations
+                ::YOU_HAVE_MAPS_NOT_SAVED), QMessageBox::Yes |
+                QMessageBox::No | QMessageBox::Cancel);
             if (box == QMessageBox::Yes) {
                 saveAllMaps();
             } else if (box == QMessageBox::Cancel) {
@@ -713,7 +852,7 @@ void MainWindow::on_actionPlay_triggered() {
         #ifdef Q_OS_WIN
             execName += ".exe";
         #elif __linux__
-            execName += ".sh";
+            execName += "";
         #else
             execName += ".app";
         #endif
@@ -724,7 +863,9 @@ void MainWindow::on_actionPlay_triggered() {
         gameProcess->start("\"" + Common::pathCombine(project
             ->pathCurrentProject(), execName) + "\"");
     } else {
-        QMessageBox::critical(this, "No hero defined", "There is no hero defined. Please define one hero before trying to launch again.\n You can define an object in a map as hero by right clicking on it in object mode and clicking on \"Define as Hero\".");
+        QMessageBox::critical(this, RPM::translate(Translations::NO_HERO_DEFINED
+            ), RPM::translate(Translations::NO_HERO_DEFINED_DESCRIPTION) + RPM
+            ::DOT);
     }
 }
 
@@ -768,24 +909,24 @@ void MainWindow::on_actionAbout_triggered() {
     name = "RPG Paper Maker";
     website = "http://rpg-paper-maker.com/";
     buildDate = Project::LAST_BUILD_DATE;
-    copyright = "RPG Paper Maker Copyright (C) 2017-2019 Wano\n\n"
-        "RPG Paper Maker is free for non commercial use. You don't have any fee "
-        "to pay as long as you don't plan to publish commercial games done with "
-        "RPG Paper Maker.";
-
-    QMessageBox::about(this, "About", name + " " + Project::ENGINE_VERSION +
-        "\n" + website + "\n\nBuilt on " + buildDate +
-        "\n\nThanks a lot to all the current Patreon donators and particularly:\n\n"
-        + patreonThanks + "\n\nAlso thanks to all the previous Patreon donators:\n\n"
-        + patreonPreviousThanks + "\n\n" + copyright);
+    copyright =  "RPG Paper Maker Copyright (C) 2017-2020 Wano\n\n" + RPM
+        ::translate(Translations::COPYRIGHT) + RPM::DOT;
+    QMessageBox::about(this, RPM::translate(Translations::ABOUT), name + RPM
+        ::SPACE + Project::ENGINE_VERSION + RPM::NEW_LINE + website + RPM
+        ::NEW_LINE + RPM::NEW_LINE + RPM::translate(Translations::BUILT_ON) +
+        RPM::SPACE + buildDate + RPM::NEW_LINE + RPM::NEW_LINE + RPM::translate(
+        Translations::THANKS_PATREON) + RPM::COLON + RPM::NEW_LINE + RPM
+        ::NEW_LINE + patreonThanks + RPM::NEW_LINE + RPM::NEW_LINE + RPM
+        ::translate(Translations::THANKS_PATREON_PREVIOUS) + RPM::COLON + RPM::
+        NEW_LINE + RPM::NEW_LINE + patreonPreviousThanks + RPM::NEW_LINE + RPM
+        ::NEW_LINE + copyright);
 }
 
 // -------------------------------------------------------
 
 void MainWindow::checkUpdate() {
-    QMessageBox::information(this, "Restart",
-                             "The engine is going to be restarted.");
-
+    QMessageBox::information(this, RPM::translate(Translations::RESTART), RPM
+        ::translate(Translations::ENGINE_GOING_RESTARTED) + RPM::DOT);
     QString realApplicationName;
     #ifdef Q_OS_WIN
         realApplicationName = "RPG Paper Maker temp.exe";

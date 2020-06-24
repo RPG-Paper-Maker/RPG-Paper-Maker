@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogsystemcurrency.h"
 #include "ui_dialogsystemcurrency.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -27,6 +28,8 @@ DialogSystemCurrency::DialogSystemCurrency(SystemCurrency &currency, QWidget
     ui->setupUi(this);
     
     initialize();
+
+    this->translate();
 }
 
 DialogSystemCurrency::~DialogSystemCurrency()
@@ -43,4 +46,14 @@ DialogSystemCurrency::~DialogSystemCurrency()
 void DialogSystemCurrency::initialize(){
     ui->widgetName->initializeNamesLang(&m_currency);
     ui->widgetIcon->initializeIcon(&m_currency);
+}
+
+//-------------------------------------------------
+
+void DialogSystemCurrency::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_CURRENCY) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

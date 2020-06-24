@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -62,17 +62,25 @@ public:
     static int getIdByIndex(QStandardItemModel* model, int index);
     static SuperListItem* getById(QStandardItem* item, int id,
                                   bool first = true);
+    static QStandardItem * getItemByID(QStandardItem *item, int id, bool first =
+        true);
     static SuperListItem* getByIndex(QStandardItemModel* model, int index);
     static void fillComboBox(QComboBox* comboBox, QStandardItemModel* model,
         bool showID = true, bool nameOnly = false, bool showIcon = false);
     static void copyModel(QStandardItemModel* model,
                           QStandardItemModel* baseModel);
+    static void replaceModel(QStandardItemModel* model, QStandardItemModel
+        *baseModel);
     static SuperListItem* getnewInstance(PictureKind kind);
     static QStandardItem * getEmptyItem();
     static void copy(QStandardItemModel *model, QStandardItemModel *modelToCopy);
     static void readTree(QStandardItemModel *model, SuperListItem *newInstance,
         const QJsonObject &json, const QString &name);
     static void writeTree(QStandardItemModel *model, QJsonObject &json, const
+        QString &name);
+    static void readList(QStandardItemModel *model, SuperListItem *newInstance,
+        const QJsonObject &json, const QString &name);
+    static void writeList(QStandardItemModel *model, QJsonObject &json, const
         QString &name);
     void reset();
     virtual void getIcon(QIcon &icon);

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -98,6 +98,8 @@ public:
     float intersection(int squareSize, QRay3D& ray, Position& position,
                        double cameraHAngle);
     float intersectionPlane(double angle, QRay3D& ray);
+    virtual MapElement * createCopy();
+    virtual void setCopy(const MapElement &element);
 
     static QString jsonFront;
 

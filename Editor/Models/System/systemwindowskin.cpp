@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -196,28 +196,31 @@ SuperListItem* SystemWindowSkin::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemWindowSkin::setCopy(const SystemWindowSkin& super) {
+void SystemWindowSkin::setCopy(const SuperListItem &super) {
+    const SystemWindowSkin *skin;
+
     SuperListItem::setCopy(super);
 
-    m_pictureID = super.m_pictureID;
-    m_topLeft = super.m_topLeft;
-    m_topRight = super.m_topRight;
-    m_botLeft = super.m_botLeft;
-    m_botRight = super.m_botRight;
-    m_left = super.m_left;
-    m_right = super.m_right;
-    m_top = super.m_top;
-    m_bot = super.m_bot;
-    m_background = super.m_background;
-    m_backgroundSelection = super.m_backgroundSelection;
-    m_backgroudRepeat = super.m_backgroudRepeat;
-    m_arrowEndMessage = super.m_arrowEndMessage;
-    m_arrowTargetSelection = super.m_arrowTargetSelection;
-    m_arrowUpDown = super.m_arrowUpDown;
-    m_textNormal = super.m_textNormal;
-    m_textCritical = super.m_textCritical;
-    m_textHeal = super.m_textHeal;
-    m_textMiss = super.m_textMiss;
+    skin = reinterpret_cast<const SystemWindowSkin *>(&super);
+    m_pictureID = skin->m_pictureID;
+    m_topLeft = skin->m_topLeft;
+    m_topRight = skin->m_topRight;
+    m_botLeft = skin->m_botLeft;
+    m_botRight = skin->m_botRight;
+    m_left = skin->m_left;
+    m_right = skin->m_right;
+    m_top = skin->m_top;
+    m_bot = skin->m_bot;
+    m_background = skin->m_background;
+    m_backgroundSelection = skin->m_backgroundSelection;
+    m_backgroudRepeat = skin->m_backgroudRepeat;
+    m_arrowEndMessage = skin->m_arrowEndMessage;
+    m_arrowTargetSelection = skin->m_arrowTargetSelection;
+    m_arrowUpDown = skin->m_arrowUpDown;
+    m_textNormal = skin->m_textNormal;
+    m_textCritical = skin->m_textCritical;
+    m_textHeal = skin->m_textHeal;
+    m_textMiss = skin->m_textMiss;
 }
 
 // -------------------------------------------------------

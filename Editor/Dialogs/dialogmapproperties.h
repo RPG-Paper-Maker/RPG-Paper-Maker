@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -32,7 +32,7 @@ class DialogMapProperties : public QDialog
     Q_OBJECT
 
 public:
-    DialogMapProperties(MapProperties& properties, QWidget *parent = 0);
+    DialogMapProperties(MapProperties& properties, QWidget *parent = nullptr);
     ~DialogMapProperties();
 
 private:
@@ -40,6 +40,7 @@ private:
     MapProperties& m_mapProperties;
 
     void initialize();
+    void translate();
 
 private slots:
     void on_spinBoxLength_valueChanged(int i);
@@ -47,6 +48,9 @@ private slots:
     void on_spinBoxHeight_valueChanged(int i);
     void on_spinBoxDepth_valueChanged(int i);
     void on_comboBoxTilesetCurrentIndexChanged(int index);
+    void on_radioButtonColor_toggled(bool checked);
+    void on_radioButtonPicture_toggled(bool checked);
+    void on_radioButtonSkybox_toggled(bool checked);
 };
 
 #endif // DIALOGMAPPROPERTIES_H

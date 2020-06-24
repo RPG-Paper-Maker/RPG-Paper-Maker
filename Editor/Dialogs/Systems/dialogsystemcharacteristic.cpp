@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -28,7 +28,17 @@ DialogSystemCharacteristic::DialogSystemCharacteristic(SystemCharacteristic
 {
     ui->setupUi(this);
 
+    ui->comboBoxIncreaseDecrease->addItem(RPM::translate(Translations::INCREASE));
+    ui->comboBoxIncreaseDecrease->addItem(RPM::translate(Translations::DECREASE));
+    ui->comboBoxIncreaseDecreaseKind->addItems(RPM
+        ::ENUM_TO_STRING_INCREASE_DECREASE_KIND);
+    ui->comboBoxSkillCostAll->addItem(RPM::translate(Translations::ALL));
+    ui->comboBoxSkillCostAll->addItem(RPM::translate(Translations::SPECIFIC));
+    ui->comboBoxUnit->addItem(RPM::translate(Translations::FIX));
+
     initialize();
+
+    this->translate();
 }
 
 DialogSystemCharacteristic::~DialogSystemCharacteristic() {
@@ -47,14 +57,12 @@ SystemCharacteristic & DialogSystemCharacteristic::characteristic() const {
 
 void DialogSystemCharacteristic::initialize() {
     int index = m_characteristic.increaseDecreaseKind()->id();
-    ui->comboBoxIncreaseDecreaseKind->addItems(RPM
-        ::ENUM_TO_STRING_INCREASE_DECREASE_KIND);
 
     // Temporary disable combobox
     QModelIndex modelIndex;
     QVariant v(0);
     int i, l;
-    for (i = 1, l = ui->comboBoxIncreaseDecreaseKind->count(); i < l; i++) {
+    for (i = 2, l = ui->comboBoxIncreaseDecreaseKind->count(); i < l; i++) {
         modelIndex = ui->comboBoxIncreaseDecreaseKind->model()->index(i, 0);
         ui->comboBoxIncreaseDecreaseKind->model()->setData(modelIndex, v, Qt
             ::UserRole - 1);
@@ -147,6 +155,19 @@ void DialogSystemCharacteristic::uncheckAllRadiosCharacters() {
     ui->radioButtonEquip->setAutoExclusive(true);
     ui->radioButtonEquipmentChange->setAutoExclusive(true);
     ui->radioButtonBeginEquipment->setAutoExclusive(true);
+}
+
+//-------------------------------------------------
+
+void DialogSystemCharacteristic::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_CHARACTERISTIC) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelWith->setText(RPM::translate(Translations::BUFF) + RPM::COLON);
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::BUFF));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::CHARACTER_SPECIFIC));
+    ui->tabWidget->setTabText(2, RPM::translate(Translations::OTHER));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

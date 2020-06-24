@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -10,6 +10,8 @@
 */
 
 #include <QTreeWidget>
+#include <QScrollBar>
+#include <QMessageBox>
 #include "dialogdatas.h"
 #include "ui_dialogdatas.h"
 #include "datastabkind.h"
@@ -18,7 +20,12 @@
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
 #include "systemmonstertroop.h"
+#include "systemanimationframeeffect.h"
 #include "dialogtilesetspecialelements.h"
+#include "dialogpicturespreview.h"
+#include "dialoganimationcopyframes.h"
+#include "dialoganimationclearframes.h"
+#include "dialoganimationcreatetransition.h"
 
 // -------------------------------------------------------
 //
@@ -45,6 +52,8 @@ DialogDatas::DialogDatas(GameDatas *gameDatas, QWidget *parent) :
     initializeStatus(gameDatas);
 
     ui->panelSuperListClasses->list()->setFocus(Qt::FocusReason::MouseFocusReason);
+
+    this->translate();
 }
 
 DialogDatas::~DialogDatas()
@@ -262,13 +271,23 @@ void DialogDatas::initializeClasses(GameDatas *gameDatas){
 // -------------------------------------------------------
 
 void DialogDatas::updateClass(SystemClass* sysClass) {
-
     ui->panelDatasClass->update(sysClass, sysClass);
 }
 
 // -------------------------------------------------------
 
 void DialogDatas::initializeAnimations(GameDatas *gameDatas) {
+    ui->widgetAnimation->setWidgetAnimationTexture(ui->widgetAnimationTexture);
+    ui->treeViewEffects->initializeNewItemInstance(new
+        SystemAnimationFrameEffect);
+    connect(ui->widgetAnimation, SIGNAL(animationFinished()), this, SLOT(
+        onAnimationFinished()));
+    ui->widgetPictureAnimation->setKind(PictureKind::Animations);
+    connect(ui->widgetPictureAnimation, SIGNAL(pictureChanged(SystemPicture *)),
+        this, SLOT(on_animationPictureChanged(SystemPicture *)));
+    ui->widgetAnimation->setScrollArea(ui->scrollAreaAnimation);
+    ui->panelSuperListAnimationFrames->list()->initializeNewItemInstance(new
+        SystemAnimationFrame);
     ui->panelSuperListAnimations->list()->initializeNewItemInstance(new
         SystemAnimation);
     ui->panelSuperListAnimations->initializeModel(gameDatas->animationsDatas()
@@ -279,13 +298,40 @@ void DialogDatas::initializeAnimations(GameDatas *gameDatas) {
     QModelIndex index = ui->panelSuperListAnimations->list()->getModel()->index(
         0, 0);
     ui->panelSuperListAnimations->list()->setIndex(0);
+    AnimationPositionKind pos = reinterpret_cast<SystemAnimation *>(ui
+        ->panelSuperListAnimations->list()->getSelected()->data().value<quintptr
+        >())->positionKind();
+    ui->comboBoxAnimationPosition->addItems(RPM
+        ::ENUM_TO_STRING_ANIMATION_POSITION_KIND);
+    ui->comboBoxAnimationPosition->setCurrentIndex(static_cast<int>(pos));
     on_pageAnimationsSelected(index, index);
 }
 
 // -------------------------------------------------------
 
-void DialogDatas::updateAnimation(SystemAnimation *) {
+void DialogDatas::updateAnimation(SystemAnimation *animation) {
+    ui->widgetPictureAnimation->setPicture(animation->picture());
+    ui->spinBoxAnimationRows->setValue(animation->rows());
+    ui->spinBoxAnimationColumns->setValue(animation->columns());
+    ui->comboBoxAnimationPosition->setCurrentIndex(static_cast<int>(animation
+        ->positionKind()));
+    ui->panelSuperListAnimationFrames->initializeModel(animation->framesModel());
+    QModelIndex index = ui->panelSuperListAnimationFrames->list()->getModel()
+        ->index(0, 0);
+    ui->panelSuperListAnimationFrames->list()->setIndex(0);
+    connect(ui->panelSuperListAnimationFrames->list()->selectionModel(), SIGNAL(
+        currentChanged(QModelIndex, QModelIndex)), this, SLOT(
+        on_pageAnimationFramesSelected(QModelIndex, QModelIndex)));
+    this->on_pageAnimationFramesSelected(index, index);
+}
 
+// -------------------------------------------------------
+
+void DialogDatas::updateAnimationFrame(SystemAnimationFrame *animationFrame) {
+    ui->widgetAnimation->setCurrentFrame(animationFrame);
+    ui->treeViewEffects->initializeModel(animationFrame->modelEffects());
+    ui->treeViewEffects->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->treeViewEffects->header()->setSectionResizeMode(1, QHeaderView::Interactive);
 }
 
 // -------------------------------------------------------
@@ -385,6 +431,116 @@ void DialogDatas::openSpecialElementsDialog(PictureKind kind) {
         RPM::get()->project()->writeSpecialsDatas();
     else
         RPM::get()->project()->readSpecialsDatas();
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::playAnimation(AnimationEffectConditionKind condition) {
+    this->setEnabled(false);
+    ui->widgetAnimation->playAnimation(condition, ui
+        ->panelSuperListAnimationFrames->list()->getModel());
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::translate() {
+    this->setWindowTitle(RPM::translate(Translations::DATAS_MANAGER) + RPM
+        ::DOT_DOT_DOT);
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::CLASSES));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::HEROES));
+    ui->tabWidget->setTabText(2, RPM::translate(Translations::MONSTERS));
+    ui->tabWidget->setTabText(3, RPM::translate(Translations::TROOPS));
+    ui->tabWidget->setTabText(4, RPM::translate(Translations::ITEMS));
+    ui->tabWidget->setTabText(5, RPM::translate(Translations::WEAPONS));
+    ui->tabWidget->setTabText(6, RPM::translate(Translations::ARMORS));
+    ui->tabWidget->setTabText(7, RPM::translate(Translations::SKILLS));
+    ui->tabWidget->setTabText(8, RPM::translate(Translations::ANIMATIONS));
+    ui->tabWidget->setTabText(9, RPM::translate(Translations::STATUS));
+    ui->tabWidget->setTabText(10, RPM::translate(Translations::TILESETS));
+    ui->tabWidgetAnimation->setTabText(0, RPM::translate(Translations::GRAPHICS));
+    ui->tabWidgetAnimation->setTabText(1, RPM::translate(Translations
+        ::SOUND_EFFECTS_FLASHS));
+    ui->groupBoxItems->setTitle(RPM::translate(Translations::ITEMS));
+    ui->groupBoxArmors->setTitle(RPM::translate(Translations::ARMORS));
+    ui->groupBoxHeroes->setTitle(RPM::translate(Translations::HEROES));
+    ui->groupBoxSkills->setTitle(RPM::translate(Translations::SKILLS));
+    ui->groupBoxStates->setTitle(RPM::translate(Translations::STATES));
+    ui->groupBoxStatus->setTitle(RPM::translate(Translations::STATUS));
+    ui->groupBoxTroops->setTitle(RPM::translate(Translations::TROOPS));
+    ui->groupBoxClasses->setTitle(RPM::translate(Translations::CLASSES));
+    ui->groupBoxWeapons->setTitle(RPM::translate(Translations::WEAPONS));
+    ui->groupBoxMonsters->setTitle(RPM::translate(Translations::MONSTERS));
+    ui->groupBoxTilesets->setTitle(RPM::translate(Translations::TILESETS));
+    ui->groupBoxAnimations->setTitle(RPM::translate(Translations::ANIMATIONS));
+    ui->groupBoxMonstersList->setTitle(RPM::translate(Translations
+        ::MONSTERS_LIST));
+    ui->groupBoxAnimationFrames->setTitle(RPM::translate(Translations::FRAMES));
+    ui->labelRows->setText(RPM::translate(Translations::ROWS) + RPM::COLON);
+    ui->labelWalls->setText(RPM::translate(Translations::WALLS) + RPM::COLON);
+    ui->labelSlopes->setText(RPM::translate(Translations::SLOPES) + RPM::COLON);
+    ui->labelColumns->setText(RPM::translate(Translations::COLUMNS) + RPM::COLON);
+    ui->labelPosition->setText(RPM::translate(Translations::POSITION) + RPM
+        ::COLON);
+    ui->label3DObjects->setText(RPM::translate(Translations::THREED_OBJECTS) +
+        RPM::COLON);
+    ui->labelAutotiles->setText(RPM::translate(Translations::AUTOTILES) + RPM
+        ::COLON);
+    ui->labelMountains->setText(RPM::translate(Translations::MOUNTAINS) + RPM
+        ::COLON);
+    ui->labelTilesetPicture->setText(RPM::translate(Translations::PICTURE) + RPM
+        ::COLON);
+    ui->labelAnimationPicture->setText(RPM::translate(Translations::PICTURE) +
+        RPM::COLON);
+    ui->labelAnimatedAutotiles->setText(RPM::translate(Translations
+        ::ANIMATED_AUTOTILES) + RPM::COLON);
+    ui->labelStatusAvailable->setText(RPM::translate(Translations
+        ::THIS_OPTION_NOT_AVAILABLE_YET));
+    ui->pushButtonSlopes->setText(RPM::translate(Translations::CHOOSE) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonPlayHit->setText(RPM::translate(Translations::PLAY_HIT));
+    ui->pushButtonPlayCrit->setText(RPM::translate(Translations::PLAY_CRIT));
+    ui->pushButtonPlayMiss->setText(RPM::translate(Translations::PLAY_MISS));
+    ui->pushButton3DObjects->setText(RPM::translate(Translations::CHOOSE) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonAutotiles->setText(RPM::translate(Translations::CHOOSE) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonMountains->setText(RPM::translate(Translations::CHOOSE) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonTroopTest->setText(RPM::translate(Translations::TEST) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonCopyFrames->setText(RPM::translate(Translations::COPY_FRAMES)
+        + RPM::DOT_DOT_DOT);
+    ui->pushButtonClearFrames->setText(RPM::translate(Translations::CLEAR_FRAMES
+        ) + RPM::DOT_DOT_DOT);
+    ui->pushButtonSpriteWalls->setText(RPM::translate(Translations::CHOOSE) +
+        RPM::DOT_DOT_DOT);
+    ui->pushButtonApplyTexture->setText(RPM::translate(Translations
+        ::APPLY_TEXTURE));
+    ui->pushButtonChangeBattler->setText(RPM::translate(Translations
+        ::CHANGE_BATTLER) + RPM::DOT_DOT_DOT);
+    ui->pushButtonCreateTransition->setText(RPM::translate(Translations
+        ::CREATE_TRANSITION) + RPM::DOT_DOT_DOT);
+    ui->pushButtonAnimatedAutotiles->setText(RPM::translate(Translations::CHOOSE
+        ) + RPM::DOT_DOT_DOT);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogDatas::showEvent(QShowEvent *event) {
+    QDialog::showEvent(event);
+
+    // Scroll area for animations centered
+    ui->scrollAreaAnimation->horizontalScrollBar()->setValue(ui
+        ->scrollAreaAnimation->horizontalScrollBar()->maximum() / 2);
+    ui->scrollAreaAnimation->verticalScrollBar()->setSliderPosition(ui
+        ->scrollAreaAnimation->verticalScrollBar()->maximum() / 2);
+
+    ui->tabWidget->setCurrentIndex(0);
 }
 
 // -------------------------------------------------------
@@ -489,8 +645,14 @@ void DialogDatas::on_pageHeroSelected(QModelIndex index, QModelIndex){
 void DialogDatas::on_pageMonsterSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListMonsters->list()->getModel()
             ->itemFromIndex(index);
+    SystemMonster *monster;
     if (selected != nullptr)
-        updateMonster((SystemMonster*)selected->data().value<quintptr>());
+    {
+        monster = reinterpret_cast<SystemMonster *>(selected->data().value<
+            quintptr>());
+        RPM::get()->setSelectedMonster(monster);
+        updateMonster(monster);
+    }
 }
 
 // -------------------------------------------------------
@@ -524,6 +686,20 @@ void DialogDatas::on_pageAnimationsSelected(QModelIndex index, QModelIndex){
 
 // -------------------------------------------------------
 
+void DialogDatas::on_pageAnimationFramesSelected(QModelIndex index, QModelIndex)
+{
+    QStandardItem *selected;
+
+    selected = ui->panelSuperListAnimationFrames->list()->getModel()
+        ->itemFromIndex(index);
+    if (selected != nullptr) {
+        this->updateAnimationFrame(reinterpret_cast<SystemAnimationFrame *>(
+            selected->data().value<quintptr>()));
+    }
+}
+
+// -------------------------------------------------------
+
 void DialogDatas::on_pageStatusSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListStatus->list()->getModel()
         ->itemFromIndex(index);
@@ -531,16 +707,6 @@ void DialogDatas::on_pageStatusSelected(QModelIndex index, QModelIndex){
         updateStatus(reinterpret_cast<SystemStatus *>(selected->data()
             .value<quintptr>()));
     }
-}
-
-// -------------------------------------------------------
-
-void DialogDatas::on_tilesetPictureChanged(SystemPicture* picture){
-    SystemTileset* tileset = (SystemTileset*) ui->panelSuperListTilesets->list()
-            ->getSelected()->data().value<quintptr>();
-
-    tileset->setPictureID(picture->id());
-    ui->widgetTilesetPictureSettings->updateImage(picture);
 }
 
 // -------------------------------------------------------
@@ -565,4 +731,134 @@ void DialogDatas::on_pushButtonMountains_clicked() {
 
 void DialogDatas::on_pushButton3DObjects_clicked() {
     openSpecialElementsDialog(PictureKind::Object3D);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_tilesetPictureChanged(SystemPicture* picture) {
+    reinterpret_cast<SystemTileset *>(ui->panelSuperListTilesets->list()
+        ->getSelected()->data().value<quintptr>())->setPictureID(picture->id());
+    ui->widgetTilesetPictureSettings->updateImage(picture);
+}
+
+// -------------------------------------------------------
+
+
+void DialogDatas::on_animationPictureChanged(SystemPicture *picture) {
+    reinterpret_cast<SystemAnimation *>(ui->panelSuperListTilesets->list()
+        ->getSelected()->data().value<quintptr>())->setPictureID(picture->id());
+    ui->widgetAnimationTexture->updatePicture(picture->id());
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_comboBoxAnimationPosition_currentIndexChanged(int index) {
+    AnimationPositionKind positionKind;
+
+    positionKind = static_cast<AnimationPositionKind>(index);
+    reinterpret_cast<SystemAnimation *>(ui->panelSuperListAnimations->list()
+        ->getSelected()->data().value<quintptr>())->setPositionKind(positionKind);
+    ui->widgetAnimation->setAnimationPositionKind(positionKind);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_spinBoxAnimationRows_valueChanged(int i) {
+    reinterpret_cast<SystemAnimation *>(ui->panelSuperListAnimations->list()
+        ->getSelected()->data().value<quintptr>())->setRows(i);
+    ui->widgetAnimationTexture->setRows(i);
+    ui->widgetAnimation->repaint();
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_spinBoxAnimationColumns_valueChanged(int i) {
+    reinterpret_cast<SystemAnimation *>(ui->panelSuperListAnimations->list()
+        ->getSelected()->data().value<quintptr>())->setColumns(i);
+    ui->widgetAnimationTexture->setColumns(i);
+    ui->widgetAnimation->repaint();
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonChangeBattler_clicked() {
+    DialogPicturesPreview dialog(ui->widgetAnimation->pictureBattler(),
+        PictureKind::Battlers);
+    dialog.exec();
+    ui->widgetAnimation->updateBattlerPicture(dialog.picture()->id());
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonCopyFrames_clicked() {
+    DialogAnimationCopyFrames dialog;
+    if (dialog.exec() == QDialog::Accepted) {
+        dialog.copyFrames(reinterpret_cast<SystemAnimation *>(ui
+            ->panelSuperListAnimations->list()->getSelected()->data().value<
+            quintptr>()));
+        ui->widgetAnimation->repaint();
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonClearFrames_clicked() {
+    DialogAnimationClearFrames dialog;
+    if (dialog.exec() == QDialog::Accepted) {
+        dialog.clearFrames(reinterpret_cast<SystemAnimation *>(ui
+            ->panelSuperListAnimations->list()->getSelected()->data().value<
+            quintptr>()));
+        ui->widgetAnimation->repaint();
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonCreateTransition_clicked() {
+    DialogAnimationCreateTransition dialog;
+    if (dialog.exec() == QDialog::Accepted) {
+        dialog.createTransition(reinterpret_cast<SystemAnimation *>(ui
+            ->panelSuperListAnimations->list()->getSelected()->data().value<
+            quintptr>()));
+        ui->widgetAnimation->repaint();
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonApplyTexture_clicked() {
+    if (ui->widgetAnimation->selectedElement() == nullptr) {
+        QMessageBox::information(this, RPM::translate(Translations::WARNING),
+            RPM::translate(Translations::SELECT_ELEMENT_TO_APPLY) + RPM::DOT);
+    } else {
+        ui->widgetAnimation->selectedElement()->setTexRow(ui
+            ->widgetAnimationTexture->currentRow());
+        ui->widgetAnimation->selectedElement()->setTexColumn(ui
+            ->widgetAnimationTexture->currentColumn());
+        ui->widgetAnimation->repaint();
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonPlayHit_clicked() {
+    this->playAnimation(AnimationEffectConditionKind::Hit);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonPlayMiss_clicked() {
+    this->playAnimation(AnimationEffectConditionKind::Miss);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonPlayCrit_clicked() {
+    this->playAnimation(AnimationEffectConditionKind::Critical);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::onAnimationFinished() {
+    this->setEnabled(true);
 }

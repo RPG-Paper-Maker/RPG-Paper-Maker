@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -34,6 +34,8 @@ DialogExport::DialogExport(Project* project, QWidget *parent) :
         ->lastMajorVersion());
     ui->spinBoxMinorVersion->setValue(project->gameDatas()->systemDatas()
         ->lastMinorVersion());
+
+    this->translate();
 }
 
 DialogExport::~DialogExport()
@@ -47,6 +49,21 @@ DialogExport::~DialogExport()
 //
 // -------------------------------------------------------
 
+void DialogExport::translate() {
+    this->setWindowTitle(RPM::translate(Translations::EXPORT_STANDALONE));
+    ui->labelMajor->setText(RPM::translate(Translations::MAJOR) + RPM::COLON);
+    ui->labelMinor->setText(RPM::translate(Translations::MINOR) + RPM::COLON);
+    ui->labelDeployOS->setText(RPM::translate(Translations::OS) + RPM::COLON);
+    ui->labelLocation->setText(RPM::translate(Translations::LOCATION) + RPM
+        ::COLON);
+    ui->checkBoxProtect->setText(RPM::translate(Translations::PROTECT_DATAS));
+    ui->radioButtonBrowser->setText(RPM::translate(Translations::DEPLOY_WEB));
+    ui->radioButtonDesktop->setText(RPM::translate(Translations::DEPLOY_DESKTOP));
+    ui->groupBoxVersion->setTitle(RPM::translate(Translations::VERSION));
+    ui->groupBoxTypeOfExport->setTitle(RPM::translate(Translations::TYPE_EXPORT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
 //-------------------------------------------------
 //
 //  SLOTS
@@ -54,15 +71,18 @@ DialogExport::~DialogExport()
 //-------------------------------------------------
 
 void DialogExport::on_pushButtonLocation_clicked(){
-    QString dir = QFileDialog::getExistingDirectory(this,"Select a location",
-                                                    ui->lineEditLocation
-                                                    ->text());
-    if (dir.count() > 0) ui->lineEditLocation->setText(dir);
+    QString dir;
+
+    dir = QFileDialog::getExistingDirectory(this, RPM::translate(Translations
+        ::SELECT_A_LOCATION), ui->lineEditLocation->text());
+    if (dir.count() > 0) {
+        ui->lineEditLocation->setText(dir);
+    }
 }
 
 // -------------------------------------------------------
 
-void DialogExport::accept(){
+void DialogExport::accept() {
     QString message = nullptr;
     OSKind osKind;
     QString location = ui->lineEditLocation->text();
@@ -78,8 +98,9 @@ void DialogExport::accept(){
     }
 
     if (message != nullptr) {
-        if (message != "-") {
-            QMessageBox::critical(this, "Error", message);
+        if (message != RPM::DASH) {
+            QMessageBox::critical(this, RPM::translate(Translations::ERROR_MESSAGE),
+                message);
         }
     } else {
         QDialog::accept();

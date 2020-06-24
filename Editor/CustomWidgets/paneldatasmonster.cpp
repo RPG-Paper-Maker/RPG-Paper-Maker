@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -15,6 +15,7 @@
 #include "rpm.h"
 #include "systemcurrency.h"
 #include "systemloot.h"
+#include "systemmonsteraction.h"
 
 // -------------------------------------------------------
 //
@@ -27,6 +28,8 @@ PanelDatasMonster::PanelDatasMonster(QWidget *parent) :
     ui(new Ui::PanelDatasMonster)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 PanelDatasMonster::~PanelDatasMonster()
@@ -52,8 +55,10 @@ int PanelDatasMonster::finalLevel() const {
 void PanelDatasMonster::initialize() {
     connect(ui->panelDatasCharacter->panelDatasClass(), SIGNAL(maxLevelUpdated(
         int)), this, SLOT(on_maxLevelChanged(int)));
-
+    connect(ui->treeViewActions, SIGNAL(needsUpdateJson(SuperListItem *)), this,
+        SLOT(on_treeViewActionsNeedsUpdateJson(SuperListItem *)));
     ui->treeViewLoots->initializeNewItemInstance(new SystemLoot);
+    ui->treeViewActions->initializeNewItemInstance(new SystemMonsterAction);
 }
 
 // -------------------------------------------------------
@@ -101,6 +106,14 @@ void PanelDatasMonster::update(SystemMonster *monster, int classIndex) {
     ui->treeViewLoots->header()->setSectionResizeMode(2, QHeaderView::Interactive);
     ui->treeViewLoots->header()->setSectionResizeMode(3, QHeaderView::Interactive);
     ui->treeViewLoots->header()->setSectionResizeMode(4, QHeaderView::Interactive);
+
+    // Actions
+    ui->treeViewActions->initializeModel(monster->modelActions());
+    ui->treeViewActions->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->treeViewActions->header()->setSectionResizeMode(1, QHeaderView::Interactive);
+    ui->treeViewActions->header()->setSectionResizeMode(2, QHeaderView::Interactive);
+    ui->treeViewActions->header()->setSectionResizeMode(3, QHeaderView::Interactive);
+    ui->treeViewActions->updateAbsoluteAllNodesString(); // For probability
 }
 
 // -------------------------------------------------------
@@ -122,6 +135,19 @@ void PanelDatasMonster::updateClass() {
     ui->panelDatasCharacter->updateClass();
 }
 
+//-------------------------------------------------
+
+void PanelDatasMonster::translate()
+{
+    ui->labelLoots->setText(RPM::translate(Translations::LOOTS) + RPM::COLON);
+    ui->labelCurrencies->setText(RPM::translate(Translations::CURRENCIES) + RPM
+        ::COLON);
+    ui->labelExperience->setText(RPM::translate(Translations::EXPERIENCE) + RPM
+        ::COLON);
+    ui->groupBoxActions->setTitle(RPM::translate(Translations::ACTIONS));
+    ui->groupBoxRewards->setTitle(RPM::translate(Translations::REWARDS));
+}
+
 // -------------------------------------------------------
 //
 //  SLOTS
@@ -131,4 +157,11 @@ void PanelDatasMonster::updateClass() {
 void PanelDatasMonster::on_maxLevelChanged(int lvl) {
     ui->panelProgressionTableRewardExp->setMaxLevel(lvl);
     ui->panelProgressionTableRewardExp->updateProgress();
+}
+
+// -------------------------------------------------------
+
+void PanelDatasMonster::on_treeViewActionsNeedsUpdateJson(SuperListItem *)
+{
+    ui->treeViewActions->updateAbsoluteAllNodesString();
 }

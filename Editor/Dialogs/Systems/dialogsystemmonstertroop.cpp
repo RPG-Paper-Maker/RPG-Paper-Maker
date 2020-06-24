@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -28,6 +28,8 @@ DialogSystemMonsterTroop::DialogSystemMonsterTroop(SystemMonsterTroop
     ui->setupUi(this);
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemMonsterTroop::~DialogSystemMonsterTroop()
@@ -41,15 +43,27 @@ DialogSystemMonsterTroop::~DialogSystemMonsterTroop()
 //
 // -------------------------------------------------------
 
-void DialogSystemMonsterTroop::initialize(){
+void DialogSystemMonsterTroop::initialize()
+{
+    int index;
+
+    index = SuperListItem::getIndexById(RPM::get()->project()->gameDatas()
+        ->monstersDatas()->model()->invisibleRootItem(), m_monsterTroop.id());
     SuperListItem::fillComboBox(ui->comboBoxMonster, RPM::get()->project()
-                                ->gameDatas()->monstersDatas()->model());
-    ui->comboBoxMonster->setCurrentIndex(
-                SuperListItem::getIndexById(RPM::get()->project()
-                                            ->gameDatas()->monstersDatas()
-                                            ->model()->invisibleRootItem(),
-                                            m_monsterTroop.id()));
+        ->gameDatas()->monstersDatas()->model());
+    ui->comboBoxMonster->setCurrentIndex(index);
     ui->spinBoxLevel->setValue(m_monsterTroop.level());
+}
+
+//-------------------------------------------------
+
+void DialogSystemMonsterTroop::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_MONSTER_TROOP) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelLevel->setText(RPM::translate(Translations::LEVEL) + RPM::COLON);
+    ui->labelMonster->setText(RPM::translate(Translations::MONSTER) + RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

@@ -1,0 +1,55 @@
+{
+	"add": [
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/translations/translations-en.json",
+            "target": "Engine/Content/translations/translations-en.json"
+        }
+    ],
+	"remove": [
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/translations/current-language",
+            "target": "Engine/Content/translations/current-language"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/translations/translations-eng.json",
+            "target": "Engine/Content/translations/translations-eng.json"
+        }
+    ],
+	"replace": [
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/translations/languages.json",
+            "target": "Engine/Content/translations/languages.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/translations/translations-es.json",
+            "target": "Engine/Content/translations/translations-es.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/translations/translations-fr.json",
+            "target": "Engine/Content/translations/translations-fr.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/translations/translations-br.json",
+            "target": "Engine/Content/translations/translations-br.json"
+        }
+    ],
+	"features": [
+        "French / Espanol / Português (Brasil) translations available"
+    ],
+	"bugs": [
+        "Improve image weird stretch in different resolution",
+        "Animation position wrong in different resolution"
+    ],
+    "finished": [
+        true,
+        true,
+        true
+    ]
+}

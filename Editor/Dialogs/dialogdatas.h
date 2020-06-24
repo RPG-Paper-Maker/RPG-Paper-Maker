@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -26,6 +26,8 @@
 #include "systemtileset.h"
 #include "systemanimation.h"
 #include "systemstatus.h"
+#include "systemanimationframe.h"
+#include "animationeffectconditionkind.h"
 
 // -------------------------------------------------------
 //
@@ -67,12 +69,18 @@ private:
     void initializeClasses(GameDatas *gameDatas);
     void updateClass(SystemClass *sysClass);
     void initializeAnimations(GameDatas *gameDatas);
-    void updateAnimation(SystemAnimation *sysAnimation);
+    void updateAnimation(SystemAnimation *animation);
+    void updateAnimationFrame(SystemAnimationFrame *animationFrame);
     void initializeStatus(GameDatas *gameDatas);
     void updateStatus(SystemStatus *sysStatus);
     void initializeTilesets(GameDatas *gameDatas);
     void updateTileset(SystemTileset *sysTileset);
     void openSpecialElementsDialog(PictureKind kind);
+    void playAnimation(AnimationEffectConditionKind condition);
+    void translate();
+
+protected:
+    virtual void showEvent(QShowEvent *event);
 
 private slots:
     void on_tabWidget_currentChanged(int index);
@@ -86,12 +94,26 @@ private slots:
     void on_pageTroopSelected(QModelIndex index, QModelIndex);
     void on_pageTilesetSelected(QModelIndex index, QModelIndex);
     void on_pageAnimationsSelected(QModelIndex index, QModelIndex);
+    void on_pageAnimationFramesSelected(QModelIndex index, QModelIndex);
     void on_pageStatusSelected(QModelIndex index, QModelIndex);
     void on_pushButtonAutotiles_clicked();
     void on_pushButtonSpriteWalls_clicked();
     void on_pushButtonMountains_clicked();
     void on_pushButton3DObjects_clicked();
-    void on_tilesetPictureChanged(SystemPicture* picture);
+    void on_tilesetPictureChanged(SystemPicture *picture);
+    void on_animationPictureChanged(SystemPicture *picture);
+    void on_comboBoxAnimationPosition_currentIndexChanged(int index);
+    void on_spinBoxAnimationRows_valueChanged(int i);
+    void on_spinBoxAnimationColumns_valueChanged(int i);
+    void on_pushButtonChangeBattler_clicked();
+    void on_pushButtonCopyFrames_clicked();
+    void on_pushButtonClearFrames_clicked();
+    void on_pushButtonCreateTransition_clicked();
+    void on_pushButtonApplyTexture_clicked();
+    void on_pushButtonPlayHit_clicked();
+    void on_pushButtonPlayMiss_clicked();
+    void on_pushButtonPlayCrit_clicked();
+    void onAnimationFinished();
 };
 
 #endif // DIALOGDATAS_H

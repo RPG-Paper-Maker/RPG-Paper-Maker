@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -49,7 +49,8 @@ void WeaponsDatas::setDefault() {
     SystemWeapon *weapon;
 
     QString names[] = {
-        "Wooden sword", "Iron axe"
+        RPM::translate(Translations::WOODEN_SWORD),
+        RPM::translate(Translations::IRON_AXE)
     };
     int iconsID[] = {
         26, 27
@@ -61,8 +62,8 @@ void WeaponsDatas::setDefault() {
         true, false
     };
     QString descriptions[] = {
-        "A sword used for beginners.",
-        "An axe used for beginners."
+        RPM::translate(Translations::WOODEN_SWORD_DESCRIPTION),
+        RPM::translate(Translations::IRON_AXE_DESCRIPTION)
     };
     int prices[] = {
         40, 50

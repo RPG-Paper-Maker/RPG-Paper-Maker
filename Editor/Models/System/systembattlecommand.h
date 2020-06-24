@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -23,20 +23,20 @@
 //
 // -------------------------------------------------------
 
-class SystemBattleCommand : public SystemLang
+class SystemBattleCommand : public SuperListItem
 {
 public:
     SystemBattleCommand();
-    SystemBattleCommand(int i, LangsTranslation *names, int idSkill);
+    SystemBattleCommand(int i, QString name, int idSkill);
     virtual ~SystemBattleCommand();
     int idSkill() const;
     void setIdSkill(int i);
     void updateName();
-    void setDefault();
+
+    virtual void setDefault();
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemBattleCommand& battleCommand);
-
+    virtual void setCopy(const SuperListItem &);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "animationsdatas.h"
 #include "systemanimation.h"
+#include "systemanimationframe.h"
 #include "rpm.h"
 #include "common.h"
 
@@ -45,24 +46,14 @@ QStandardItemModel* AnimationsDatas::model() const {
 //
 // -------------------------------------------------------
 
-void AnimationsDatas::setDefault(){
-    int i, length;
+void AnimationsDatas::setDefault() {
     SystemAnimation *animation;
     QStandardItem *item;
 
-    QString names[] = {
-        "Attack"
-    };
-    length = (sizeof(names)/sizeof(*names));
-
-    for (i = 0; i < length; i++) {
-        animation = new SystemAnimation(i + 1, names[i]);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(animation)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(animation->toString());
-        m_model->appendRow(item);
-    }
+    item = m_model->item(0);
+    animation = reinterpret_cast<SystemAnimation *>(item->data().value<quintptr>());
+    animation->setName(RPM::translate(Translations::ATTACK));
+    item->setText(animation->toString());
 }
 
 // -------------------------------------------------------

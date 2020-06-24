@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogcommandstopsong.h"
 #include "ui_dialogcommandstopsong.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -33,6 +34,8 @@ DialogCommandStopSong::DialogCommandStopSong(QString title, SongKind kind,
     ui->panelPrimitiveValueSeconds->initializeNumber(parameters, nullptr);
 
     if (command != nullptr) initialize(command);
+
+    this->translate();
 }
 
 DialogCommandStopSong::~DialogCommandStopSong()
@@ -58,6 +61,16 @@ EventCommandKind DialogCommandStopSong::getCommandKind() const {
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandStopSong::translate()
+{
+    ui->labelDisappearWithTime->setText(RPM::translate(Translations
+        ::DISAPPEAR_WITH_TIME) + RPM::COLON);
+    ui->labelSeconds->setText(RPM::translate(Translations::SECONDS));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandStopSong::initialize(EventCommand* command) {
     int i = 0;

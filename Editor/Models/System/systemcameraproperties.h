@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -33,6 +33,9 @@ public:
     static const QString JSON_TARGET_OFFSET_X;
     static const QString JSON_TARGET_OFFSET_Y;
     static const QString JSON_TARGET_OFFSET_Z;
+    static const QString JSON_IS_SQUARE_TARGET_OFFSET_X;
+    static const QString JSON_IS_SQUARE_TARGET_OFFSET_Y;
+    static const QString JSON_IS_SQUARE_TARGET_OFFSET_Z;
     static const QString JSON_FIELD_OF_VIEW;
     static const QString JSON_NEAR;
     static const QString JSON_FAR;
@@ -42,6 +45,9 @@ public:
     static const int DEFAULT_TARGET_OFFSET_X;
     static const int DEFAULT_TARGET_OFFSET_Y;
     static const int DEFAULT_TARGET_OFFSET_Z;
+    static const bool DEFAULT_IS_SQUARE_TARGET_OFFSET_X;
+    static const bool DEFAULT_IS_SQUARE_TARGET_OFFSET_Y;
+    static const bool DEFAULT_IS_SQUARE_TARGET_OFFSET_Z;
     static const double DEFAULT_FIELD_OF_VIEW;
     static const double DEFAULT_NEAR;
     static const double DEFAULT_FAR;
@@ -53,7 +59,10 @@ public:
         PrimitiveValue(DEFAULT_VERTICAL_ANGLE), PrimitiveValue *tox = new
         PrimitiveValue(DEFAULT_TARGET_OFFSET_X), PrimitiveValue *toy = new
         PrimitiveValue(DEFAULT_TARGET_OFFSET_Y), PrimitiveValue *toz = new
-        PrimitiveValue(DEFAULT_TARGET_OFFSET_Z), PrimitiveValue *fov = new
+        PrimitiveValue(DEFAULT_TARGET_OFFSET_Z), bool istox =
+        DEFAULT_IS_SQUARE_TARGET_OFFSET_X, bool istoy =
+        DEFAULT_IS_SQUARE_TARGET_OFFSET_Y, bool istoz =
+        DEFAULT_IS_SQUARE_TARGET_OFFSET_Z, PrimitiveValue *fov = new
         PrimitiveValue(DEFAULT_FIELD_OF_VIEW), PrimitiveValue *ne = new
         PrimitiveValue(DEFAULT_NEAR), PrimitiveValue *f = new PrimitiveValue(
         DEFAULT_FAR));
@@ -65,6 +74,12 @@ public:
     PrimitiveValue * targetOffsetX() const;
     PrimitiveValue * targetOffsetY() const;
     PrimitiveValue * targetOffsetZ() const;
+    bool isSquareTargetOffsetX() const;
+    void setIsSquareTargetOffsetX(bool istox);
+    bool isSquareTargetOffsetY() const;
+    void setIsSquareTargetOffsetY(bool istoy);
+    bool isSquareTargetOffsetZ() const;
+    void setIsSquareTargetOffsetZ(bool istoz);
     PrimitiveValue * fieldOfView() const;
     PrimitiveValue * nearCam() const;
     PrimitiveValue * farCam() const;
@@ -82,6 +97,9 @@ protected:
     PrimitiveValue *m_targetOffsetX;
     PrimitiveValue *m_targetOffsetY;
     PrimitiveValue *m_targetOffsetZ;
+    bool m_isSquareTargetOffsetX;
+    bool m_isSquareTargetOffsetY;
+    bool m_isSquareTargetOffsetZ;
     PrimitiveValue *m_fieldOfView;
     PrimitiveValue *m_near;
     PrimitiveValue *m_far;

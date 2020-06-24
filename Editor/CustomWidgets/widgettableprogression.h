@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -20,7 +20,6 @@ class WidgetTableProgression : public QTableWidget
 {
     Q_OBJECT
 public:
-    static const QString NAME_LEVEL;
     static const QColor EDITED_COLOR;
     static const QColor SUB_EDITED_COLOR;
 
@@ -38,15 +37,6 @@ public:
         QHash<int, int> *subTable = nullptr);
     void updateWithEasing(SystemProgressionTable* progression, WidgetChart
         *chartView, int finalLevel);
-    int easingLinear(double x, int start, int change, int duration);
-    int easingQuadraticIn(double x, int start, int change, int duration);
-    int easingQuadraticOut(double x, int start, int change, int duration);
-    int easingCubicIn(double x, int start, int change, int duration);
-    int easingCubicOut(double x, int start, int change, int duration);
-    int easingQuarticIn(double x, int start, int change, int duration);
-    int easingQuarticOut(double x, int start, int change, int duration);
-    int easingQuinticIn(double x, int start, int change, int duration);
-    int easingQuinticOut(double x, int start, int change, int duration);
     void updateTotal();
 
 protected:

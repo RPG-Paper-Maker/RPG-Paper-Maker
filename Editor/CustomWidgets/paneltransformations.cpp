@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -27,13 +27,14 @@ PanelTransformations::PanelTransformations(QWidget *parent) :
     ui->setupUi(this);
 
     this->initialize();
+
+    this->translate();
 }
 
 PanelTransformations::~PanelTransformations()
 {
-    delete ui;
-
     this->deletePosition();
+    delete ui;
 }
 
 // -------------------------------------------------------
@@ -75,7 +76,22 @@ void PanelTransformations::deletePosition() {
 
 void PanelTransformations::updateText() {
     ui->labelSelectedObject->setText(m_mapElementPosition == nullptr ?
-        "[NONE]\n\n\n\n" : m_mapElementPosition->toString(RPM::getSquareSize()));
+        RPM::BRACKET_LEFT + RPM::translate(Translations::NONE).toUpper() + RPM
+        ::BRACKET_RIGHT + RPM::NEW_LINE + RPM::NEW_LINE + RPM::NEW_LINE + RPM
+        ::NEW_LINE : m_mapElementPosition->toString(RPM::getSquareSize()));
+}
+
+//-------------------------------------------------
+
+void PanelTransformations::translate()
+{
+    ui->labelSelectedObjectTitle->setText(RPM::BRACKET_LEFT + RPM::translate(
+        Translations::SELECTED_OBJECT) + RPM::BRACKET_RIGHT);
+    ui->labelRotation->setText(RPM::translate(Translations::ROTATION) + RPM
+        ::COLON);
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::X));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::Y));
+    ui->tabWidget->setTabText(2, RPM::translate(Translations::Z));
 }
 
 // -------------------------------------------------------

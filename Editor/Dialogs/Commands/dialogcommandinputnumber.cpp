@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogcommandinputnumber.h"
 #include "ui_dialogcommandinputnumber.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -28,6 +29,8 @@ DialogCommandInputNumber::DialogCommandInputNumber(EventCommand *command,
     ui->widgetVariable->initialize();
 
     if (command != nullptr) initialize(command);
+
+    this->translate();
 }
 
 DialogCommandInputNumber::~DialogCommandInputNumber()
@@ -40,6 +43,16 @@ DialogCommandInputNumber::~DialogCommandInputNumber()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandInputNumber::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::INPUT_NUMBER) + RPM
+        ::DOT_DOT_DOT);
+
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandInputNumber::initialize(EventCommand* command){
     ui->widgetVariable->setCurrentId(command->valueCommandAt(0).toInt());

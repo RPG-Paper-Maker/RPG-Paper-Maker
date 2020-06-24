@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -138,15 +138,18 @@ SuperListItem* SystemLoot::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemLoot::setCopy(const SystemLoot &loot) {
-    SuperListItem::setCopy(loot);
+void SystemLoot::setCopy(const SuperListItem &super) {
+    const SystemLoot *loot;
 
-    m_kind = loot.kind();
-    m_lootID->setCopy(*loot.m_lootID);
-    m_number->setCopy(*loot.m_number);
-    m_probability->setCopy(*loot.m_probability);
-    m_initialLevel->setCopy(*loot.m_initialLevel);
-    m_finalLevel->setCopy(*loot.m_finalLevel);
+    SuperListItem::setCopy(super);
+    loot = reinterpret_cast<const SystemLoot *>(&super);
+
+    m_kind = loot->kind();
+    m_lootID->setCopy(*loot->m_lootID);
+    m_number->setCopy(*loot->m_number);
+    m_probability->setCopy(*loot->m_probability);
+    m_initialLevel->setCopy(*loot->m_initialLevel);
+    m_finalLevel->setCopy(*loot->m_finalLevel);
 
     updateName();
 }

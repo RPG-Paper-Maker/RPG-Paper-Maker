@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,7 +11,6 @@
 
 #include "dialogcommandsetdialogboxoptions.h"
 #include "ui_dialogcommandsetdialogboxoptions.h"
-
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -35,6 +34,8 @@ DialogCommandSetDialogBoxOptions::DialogCommandSetDialogBoxOptions(EventCommand
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandSetDialogBoxOptions::~DialogCommandSetDialogBoxOptions() {
@@ -89,6 +90,42 @@ void DialogCommandSetDialogBoxOptions::initializePrimitives() {
     ui->panelPrimitiveTextFont->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->systemDatas()->modelFontNames(), m_parameters,
         properties);
+    ui->comboBoxFacesetPosition->addItem(RPM::translate(Translations::BEHIND));
+    ui->comboBoxFacesetPosition->addItem(RPM::translate(Translations::ABOVE));
+    ui->comboBoxTextStroke->addItem(RPM::translate(Translations::YES));
+    ui->comboBoxTextStroke->addItem(RPM::translate(Translations::NO));
+}
+
+//-------------------------------------------------
+
+void DialogCommandSetDialogBoxOptions::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_DIALOG_BOX_OPTIONS) +
+        RPM::DOT_DOT_DOT);
+    ui->checkBoxX->setText(RPM::translate(Translations::X));
+    ui->checkBoxY->setText(RPM::translate(Translations::Y));
+    ui->checkBoxWidth->setText(RPM::translate(Translations::WIDTH));
+    ui->checkBoxHeight->setText(RPM::translate(Translations::HEIGHT));
+    ui->checkBoxFacesetX->setText(RPM::translate(Translations::X));
+    ui->checkBoxFacesetY->setText(RPM::translate(Translations::Y));
+    ui->checkBoxTextFont->setText(RPM::translate(Translations::FONT_ID));
+    ui->checkBoxTextSize->setText(RPM::translate(Translations::SIZE_ID));
+    ui->checkBoxTextColor->setText(RPM::translate(Translations::COLOR_ID));
+    ui->checkBoxPaddingTop->setText(RPM::translate(Translations::TOP));
+    ui->checkBoxTextStroke->setText(RPM::translate(Translations::OUTLINE));
+    ui->checkBoxPaddingLeft->setText(RPM::translate(Translations::LEFT));
+    ui->checkBoxPaddingRight->setText(RPM::translate(Translations::RIGHT));
+    ui->checkBoxWindowSkinID->setText(RPM::translate(Translations::WINDOW_SKIN_ID));
+    ui->checkBoxPaddingBottom->setText(RPM::translate(Translations::BOTTOM));
+    ui->checkBoxTextColorText->setText(RPM::translate(Translations::TEXT));
+    ui->checkBoxFacesetPosition->setText(RPM::translate(Translations::POSITION));
+    ui->checkBoxTextColorStroke->setText(RPM::translate(Translations::OUTLINE));
+    ui->checkBoxTextColorBackground->setText(RPM::translate(Translations::BACKGROUND));
+    ui->groupBoxTransform->setTitle(RPM::translate(Translations::TRANSFORM));
+    ui->groupBoxPadding->setTitle(RPM::translate(Translations::PADDING));
+    ui->groupBoxFaceset->setTitle(RPM::translate(Translations::FACESET));
+    ui->groupBoxText->setTitle(RPM::translate(Translations::TEXT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

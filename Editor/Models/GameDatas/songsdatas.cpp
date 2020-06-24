@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -106,7 +106,7 @@ void SongsDatas::setDefaultBackgroundSounds(QList<QString>& names) {
 // -------------------------------------------------------
 
 void SongsDatas::setDefaultSounds(QList<QString>& names) {
-    names << "Cancel" << "Confirmation" << "Cursor" << "Levelup";
+    names << "Cancel" << "Confirmation" << "Cursor" << "Levelup" << "Hit";
     setDefaultSongs(names, SongKind::Sound, "wav");
 }
 

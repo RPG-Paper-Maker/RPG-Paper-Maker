@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -38,6 +38,9 @@
 #include "dialogcommandremoveobjectfrommap.h"
 #include "dialogcommandallowforbidsavesmainmenu.h"
 #include "dialogcommandcallacommonreaction.h"
+#include "dialogcommandlabel.h"
+#include "dialogcommandcomment.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -54,6 +57,8 @@ DialogCommands::DialogCommands(SystemCommonObject *object,
     m_parameters(parameters)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 DialogCommands::~DialogCommands()
@@ -102,33 +107,35 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::MoveCamera:
         return new DialogCommandMoveCamera(command, object, parameters);
     case EventCommandKind::PlayMusic:
-        return new DialogCommandPlaySong("Play a music", SongKind::Music,
-                                         command, object, parameters);
+        return new DialogCommandPlaySong(RPM::translate(Translations::PLAY_MUSIC
+            ) + RPM::DOT_DOT_DOT, SongKind::Music, command, object, parameters);
     case EventCommandKind::StopMusic:
-        return new DialogCommandStopSong("Stop a music", SongKind::Music,
-                                         command, object, parameters);
+        return new DialogCommandStopSong(RPM::translate(Translations::STOP_MUSIC
+            ) + RPM::DOT_DOT_DOT, SongKind::Music, command, object, parameters);
     case EventCommandKind::PlayBackgroundSound:
-        return new DialogCommandPlaySong("Play a background sound",
-                                         SongKind::BackgroundSound,
-                                         command, object, parameters);
+        return new DialogCommandPlaySong(RPM::translate(Translations
+            ::PLAY_BACKGROUND_SOUND) + RPM::DOT_DOT_DOT , SongKind
+            ::BackgroundSound, command, object, parameters);
     case EventCommandKind::StopBackgroundSound:
-        return new DialogCommandStopSong("Stop a background sound",
-                                         SongKind::BackgroundSound,
-                                         command, object, parameters);
+        return new DialogCommandStopSong(RPM::translate(Translations
+            ::PLAY_BACKGROUND_SOUND) + RPM::DOT_DOT_DOT, SongKind
+            ::BackgroundSound, command, object, parameters);
     case EventCommandKind::PlayASound:
-        return new DialogCommandPlaySong("Play a sound", SongKind::Sound,
-                                         command, object, parameters);
+        return new DialogCommandPlaySong(RPM::translate(Translations
+            ::PLAY_A_SOUND) + RPM::DOT_DOT_DOT, SongKind::Sound, command, object
+            , parameters);
     case EventCommandKind::PlayMusicEffect:
-        return new DialogCommandPlaySong("Play a music effect",
-                                         SongKind::MusicEffect,
-                                         command, object, parameters);
+        return new DialogCommandPlaySong(RPM::translate(Translations
+            ::PLAY_MUSIC_EFFECT) + RPM::DOT_DOT_DOT, SongKind::MusicEffect,
+            command, object, parameters);
     case EventCommandKind::ChangeProperty:
         // Warning if no property available
         if (object == nullptr || object->modelProperties() == nullptr || object
             ->modelProperties()->invisibleRootItem()->rowCount() == 1)
         {
-            QMessageBox::information(nullptr, "Warning", "There are no properties "
-                "available to change.");
+            QMessageBox::information(nullptr, RPM::translate(Translations
+                ::WARNING), RPM::translate(Translations::THERE_ARE_NO_PROPERTIES
+                ) + RPM::DOT);
             return nullptr;
         }
         return new DialogCommandChangeProperty(command, object, parameters);
@@ -154,6 +161,12 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
             parameters);
     case EventCommandKind::CallACommonReaction:
         return new DialogCommandCallACommonReaction(command);
+    case EventCommandKind::Label:
+        return new DialogCommandLabel(false, command, object, parameters);
+    case EventCommandKind::JumpLabel:
+        return new DialogCommandLabel(true, command, object, parameters);
+    case EventCommandKind::Comment:
+        return new DialogCommandComment(command);
     default:
         return nullptr;
     }
@@ -181,6 +194,115 @@ void DialogCommands::openDialogCommand(EventCommandKind kind,
 void DialogCommands::openNonDialogCommand(EventCommandKind kind){
     p_command = new EventCommand(kind);
     accept();
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::translate() {
+    this->setWindowTitle(RPM::translate(Translations::COMMANDS) + RPM
+        ::DOT_DOT_DOT);
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::STAGING));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::MAP));
+    ui->tabWidget->setTabText(2, RPM::translate(Translations::BATTLE));
+    ui->tabWidget->setTabText(3, RPM::translate(Translations::STRUCTURE));
+    ui->pushButtonShowText->setText(EventCommand::kindToString(EventCommandKind
+        ::ShowText));
+    ui->pushButtonChangeVariables->setText(EventCommand::kindToString(
+        EventCommandKind::ChangeVariables));
+    ui->pushButtonEndGame->setText(EventCommand::kindToString(EventCommandKind
+        ::EndGame));
+    ui->pushButtonWhile->setText(EventCommand::kindToString(EventCommandKind
+        ::While));
+    ui->pushButtonWhileBreak->setText(EventCommand::kindToString(
+        EventCommandKind::WhileBreak));
+    ui->pushButtonInputNumber->setText(EventCommand::kindToString(
+        EventCommandKind::InputNumber));
+    ui->pushButtonCondition->setText(EventCommand::kindToString(EventCommandKind
+        ::If));
+    ui->pushButtonOpenMainMenu->setText(EventCommand::kindToString(
+        EventCommandKind::OpenMainMenu));
+    ui->pushButtonOpenSavesMenu->setText(EventCommand::kindToString(
+        EventCommandKind::OpenSavesMenu));
+    ui->pushButtonModifyInventory->setText(EventCommand::kindToString(
+        EventCommandKind::ModifyInventory));
+    ui->pushButtonModifyTeam->setText(EventCommand::kindToString(
+        EventCommandKind::ModifyTeam));
+    ui->pushButtonStartBattle->setText(EventCommand::kindToString(
+        EventCommandKind::StartBattle));
+    ui->pushButtonChangeState->setText(EventCommand::kindToString(
+        EventCommandKind::ChangeState));
+    ui->pushButtonSendEvent->setText(EventCommand::kindToString(EventCommandKind
+        ::SendEvent));
+    ui->pushButtonTeleportObject->setText(EventCommand::kindToString(
+        EventCommandKind::TeleportObject));
+    ui->pushButtonMoveObject->setText(EventCommand::kindToString(
+        EventCommandKind::MoveObject));
+    ui->pushButtonWait->setText(EventCommand::kindToString(EventCommandKind
+        ::Wait));
+    ui->pushButtonMoveCamera->setText(EventCommand::kindToString(
+        EventCommandKind::MoveCamera));
+    ui->pushButtonPlayMusic->setText(EventCommand::kindToString(EventCommandKind
+        ::PlayMusic));
+    ui->pushButtonStopMusic->setText(EventCommand::kindToString(EventCommandKind
+        ::StopMusic));
+    ui->pushButtonPlayBackgroundSound->setText(EventCommand::kindToString(
+        EventCommandKind::PlayBackgroundSound));
+    ui->pushButtonStopBackgroundSound->setText(EventCommand::kindToString(
+        EventCommandKind::StopBackgroundSound));
+    ui->pushButtonPlaySound->setText(EventCommand::kindToString(EventCommandKind
+        ::PlayASound));
+    ui->pushButtonPlayMusicEffect->setText(EventCommand::kindToString(
+        EventCommandKind::PlayMusicEffect));
+    ui->pushButtonChangeProperty->setText(EventCommand::kindToString(
+        EventCommandKind::ChangeProperty));
+    ui->pushButtonDisplayChoice->setText(EventCommand::kindToString(
+        EventCommandKind::DisplayChoice));
+    ui->pushButtonScript->setText(EventCommand::kindToString(EventCommandKind
+        ::Script));
+    ui->pushButtonDisplayPicture->setText(EventCommand::kindToString(
+        EventCommandKind::DisplayAPicture));
+    ui->pushButtonSetMoveTurnPicture->setText(EventCommand::kindToString(
+        EventCommandKind::SetMoveTurnAPicture));
+    ui->pushButtonRemovePicture->setText(EventCommand::kindToString(
+        EventCommandKind::RemoveAPicture));
+    ui->pushButtonSetDialogBoxOptions->setText(EventCommand::kindToString(
+        EventCommandKind::SetDialogBoxOptions));
+    ui->pushButtonTitleScreen->setText(EventCommand::kindToString(
+        EventCommandKind::TitleScreen));
+    ui->pushButtonChangeScreenTone->setText(EventCommand::kindToString(
+        EventCommandKind::ChangeScreenTone));
+    ui->pushButtonRemoveObjectFromMap->setText(EventCommand::kindToString(
+        EventCommandKind::RemoveObjectFromMap));
+    ui->pushButtonStopReaction->setText(EventCommand::kindToString(
+        EventCommandKind::StopReaction));
+    ui->pushButtonAllowForbidSaves->setText(EventCommand::kindToString(
+        EventCommandKind::AllowForbidSaves));
+    ui->pushButtonAllowForbidMainMenu->setText(EventCommand::kindToString(
+        EventCommandKind::AllowForbidMainMenu));
+    ui->pushButtonCallCommonReaction->setText(EventCommand::kindToString(
+        EventCommandKind::CallACommonReaction));
+    ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
+    ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));
+    ui->groupBoxMedia->setTitle(RPM::translate(Translations::MEDIA));
+    ui->groupBoxMenus->setTitle(RPM::translate(Translations::MENUS));
+    ui->groupBoxMusics->setTitle(RPM::translate(Translations::MUSICS));
+    ui->groupBoxSyntax->setTitle(RPM::translate(Translations::SYNTAX));
+    ui->groupBoxBattles->setTitle(RPM::translate(Translations::BATTLES));
+    ui->groupBoxDialogs->setTitle(RPM::translate(Translations::DIALOGS));
+    ui->groupBoxAdvanced->setTitle(RPM::translate(Translations::ADVANCED));
+    ui->groupBoxVariables->setTitle(RPM::translate(Translations::VARIABLES));
+    ui->groupBoxMusicsSounds->setTitle(RPM::translate(Translations
+        ::MUSICS_SOUNDS));
+    ui->groupBoxHeroesEnemies->setTitle(RPM::translate(Translations
+        ::HEROES_ENEMIES));
+    ui->groupBoxVisualEffects->setTitle(RPM::translate(Translations
+        ::VISUAL_EFFECTS));
+    ui->groupBoxSystemParameters->setTitle(RPM::translate(Translations
+        ::SYSTEM_PARAMETERS));
+    ui->groupBoxObjectsInteractions->setTitle(RPM::translate(Translations
+        ::OBJETS_INTERACTIONS));
+    ui->groupBoxMoveAnimationsCamera->setTitle(RPM::translate(Translations
+        ::MOVES_ANIMATIONS_CAMERA));
 }
 
 // -------------------------------------------------------
@@ -413,4 +535,25 @@ void DialogCommands::on_pushButtonAllowForbidMainMenu_clicked() {
 
 void DialogCommands::on_pushButtonCallCommonReaction_clicked() {
     this->openDialogCommand(EventCommandKind::CallACommonReaction);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonLabel_clicked()
+{
+    this->openDialogCommand(EventCommandKind::Label);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonJumpLabel_clicked()
+{
+    this->openDialogCommand(EventCommandKind::JumpLabel);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonComment_clicked()
+{
+    this->openDialogCommand(EventCommandKind::Comment);
 }

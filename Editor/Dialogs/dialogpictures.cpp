@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -42,6 +42,8 @@ DialogPictures::DialogPictures(QWidget *parent) :
     sp_retain = ui->widgetPicturePreview->sizePolicy();
     sp_retain.setRetainSizeWhenHidden(true);
     ui->widgetPicturePreview->setSizePolicy(sp_retain);
+
+    this->translate();
 }
 
 DialogPictures::~DialogPictures() {
@@ -77,10 +79,10 @@ QStandardItemModel* DialogPictures::createFoldersModel() const{
     itemHUD->setIcon(icon);
     itemHUD->setText("HUD");
     itemPictures->appendRow(itemHUD);
-    listNames << "Bars" << "Facesets" << "Icons" << "Pictures" << "TitleScreen"
-        << "WindowSkins";
-    listEnums << PictureKind::Bars << PictureKind::Facesets <<
-        PictureKind::Icons << PictureKind::Pictures << PictureKind
+    listNames << "Animations" << "Bars" << "Facesets" << "Icons" << "Pictures"
+        << "TitleScreen" << "WindowSkins";
+    listEnums << PictureKind::Animations << PictureKind::Bars << PictureKind
+        ::Facesets << PictureKind::Icons << PictureKind::Pictures << PictureKind
         ::TitleScreen << PictureKind::WindowSkins;
     addfolders(icon, itemHUD, listNames, listEnums);
 
@@ -94,11 +96,12 @@ QStandardItemModel* DialogPictures::createFoldersModel() const{
     listNames.clear();
     listEnums.clear();
     listNames << "Autotiles" << "Battlers" << "Characters" << "Mountains" <<
-        "Objects 3D" << "Tilesets" << "Walls";
+        "Objects 3D" << "Tilesets" << "Walls" << "SkyBoxes";
     listEnums << PictureKind::Autotiles << PictureKind::Battlers <<
         PictureKind::Characters << PictureKind::Mountains << PictureKind
-        ::Object3D << PictureKind::Tilesets << PictureKind::Walls;
-    addfolders(icon, itemTextures2D, listNames, listEnums);
+        ::Object3D << PictureKind::Tilesets << PictureKind::Walls << PictureKind
+        ::SkyBoxes;
+    this->addfolders(icon, itemTextures2D, listNames, listEnums);
 
     return model;
 }
@@ -120,6 +123,15 @@ void DialogPictures::addfolders(QIcon &icon,
         item->setText(names.at(i));
         root->appendRow(item);
     }
+}
+
+//-------------------------------------------------
+
+void DialogPictures::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::PICTURES_MANAGER) + RPM
+        ::DOT_DOT_DOT);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

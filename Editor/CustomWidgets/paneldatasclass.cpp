@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -14,6 +14,7 @@
 #include "ui_paneldatasclass.h"
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
+#include "rpm.h"
 
 const QString PanelDatasClass::NAME_EXPERIENCE = "Experience";
 
@@ -33,6 +34,8 @@ PanelDatasClass::PanelDatasClass(QWidget *parent) :
     Q_FOREACH(QSpinBox * sp, findChildren<QSpinBox*>()) {
         sp->installEventFilter(this);
     }
+
+    this->translate();
 }
 
 PanelDatasClass::~PanelDatasClass()
@@ -124,6 +127,31 @@ void PanelDatasClass::updateExperience() {
         ui->tableWidgetNextLevel->updateWithBaseInflation(expBase, expInflation,
             maxLevel, m_originalClass->expTable());
     }
+}
+
+//-------------------------------------------------
+
+void PanelDatasClass::translate()
+{
+    ui->groupBoxExperience->setTitle(RPM::translate(Translations::EXPERIENCE));
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::TO_NEXT_LEVEL));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::TOTAL));
+    ui->labelInitialLevel->setText(RPM::translate(Translations::INITIAL_LEVEL) +
+        RPM::COLON);
+    ui->labelMaxLevel->setText(RPM::translate(Translations::MAX_LEVEL) + RPM
+        ::COLON);
+    ui->labelBase->setText(RPM::translate(Translations::BASE) + RPM::COLON);
+    ui->labelInflation->setText(RPM::translate(Translations::INFLATION) + RPM
+        ::COLON);
+    ui->groupBoxCharacteristics->setTitle(RPM::translate(Translations
+        ::CHARACTERISTICS));
+    ui->groupBoxStatisticsProgression->setTitle(RPM::translate(Translations
+        ::STATISTICS_PROGRESSION));
+    ui->groupBoxSkillsToLearn->setTitle(RPM::translate(Translations
+        ::SKILLS_TO_LEARN));
+    ui->pushButtonReset->setText(RPM::translate(Translations::RESET));
+    ui->pushButtonSetClassValues->setText(RPM::translate(Translations
+        ::SET_TO_CLASS_VALUES));
 }
 
 // -------------------------------------------------------

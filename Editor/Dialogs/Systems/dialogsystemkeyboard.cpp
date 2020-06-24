@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -12,6 +12,7 @@
 #include "dialogsystemkeyboard.h"
 #include "ui_dialogsystemkeyboard.h"
 #include <QLabel>
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -30,6 +31,8 @@ DialogSystemKeyBoard::DialogSystemKeyBoard(SystemKeyBoard& key,
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemKeyBoard::~DialogSystemKeyBoard()
@@ -56,12 +59,25 @@ void DialogSystemKeyBoard::initialize(){
 // -------------------------------------------------------
 
 void DialogSystemKeyBoard::updateLabel(bool wait){
-    QString str = m_key.shortCutString() + " ...";
+    QString str;
 
-    if (wait)
-        str += " [WAITING FOR A SHORTCUT]";
-
+    str = m_key.shortCutString() + RPM::SPACE + RPM::DOT_DOT_DOT;
+    if (wait) {
+        str += RPM::SPACE + RPM::BRACKET_LEFT + RPM::translate(Translations
+            ::WAITING_FOR_SHORTCUT).toUpper() + RPM::BRACKET_RIGHT;
+    }
     ui->label->setText(str);
+}
+
+//-------------------------------------------------
+
+void DialogSystemKeyBoard::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::ENTER_SHORTCUTS) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonRemoveAll->setText(RPM::translate(Translations::REMOVE_ALL));
+    ui->pushButtonRemoveLast->setText(RPM::translate(Translations::REMOVE_LAST));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -33,6 +33,8 @@ DialogCommandCallACommonReaction::DialogCommandCallACommonReaction(EventCommand
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandCallACommonReaction::~DialogCommandCallACommonReaction() {
@@ -59,12 +61,26 @@ void DialogCommandCallACommonReaction::initializePrimitives() {
 void DialogCommandCallACommonReaction::clearParameters() {
     SuperListItem::deleteModel(m_modelParameters);
     m_modelParameters = new QStandardItemModel;
-    m_modelParameters->setHorizontalHeaderLabels(QStringList({"Name", "Value",
-        "Default value"}));
+    m_modelParameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::NAME), RPM::translate(Translations::VALUE), RPM::translate
+        (Translations::DEFAULT_VALUE)}));
     ui->treeViewParameters->initializeModel(m_modelParameters);
     ui->treeViewParameters->setColumnWidth(0,100);
     ui->treeViewParameters->setColumnWidth(1,250);
     ui->treeViewParameters->setColumnWidth(2,100);
+}
+
+//-------------------------------------------------
+
+void DialogCommandCallACommonReaction::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::CALL_A_COMMON_REACTION) +
+        RPM::DOT_DOT_DOT);
+    ui->labelCommonReaction->setText(RPM::translate(Translations
+        ::COMMON_REACTION) + RPM::COLON);
+    ui->groupBoxParameterValues->setTitle(RPM::translate(Translations
+        ::PARAMETER_VALUES));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

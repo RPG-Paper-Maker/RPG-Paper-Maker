@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="groupBoxSelection">
        <property name="title">
         <string>Selection</string>
        </property>
@@ -115,7 +115,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_3">
+      <widget class="QGroupBox" name="groupBoxOperation">
        <property name="title">
         <string>Operation</string>
        </property>
@@ -128,7 +128,7 @@
              <string>(=) Equals</string>
             </property>
             <property name="checked">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -136,6 +136,9 @@
            <widget class="QRadioButton" name="radioButtonPlus">
             <property name="text">
              <string>(+) Plus</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -173,7 +176,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="groupBoxNumber">
        <property name="title">
         <string>Number</string>
        </property>

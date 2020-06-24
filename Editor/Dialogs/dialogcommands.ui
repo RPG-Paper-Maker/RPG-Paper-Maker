@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tab_5">
       <attribute name="title">
@@ -39,7 +39,7 @@
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="0">
-          <widget class="QGroupBox" name="groupBox_2">
+          <widget class="QGroupBox" name="groupBoxDialogs">
            <property name="title">
             <string>Dialogs</string>
            </property>
@@ -89,7 +89,7 @@
           </widget>
          </item>
          <item row="0" column="1" rowspan="2">
-          <widget class="QGroupBox" name="groupBox_19">
+          <widget class="QGroupBox" name="groupBoxMoveAnimationsCamera">
            <property name="title">
             <string>Moves / Animations / Camera</string>
            </property>
@@ -169,7 +169,7 @@
           </widget>
          </item>
          <item row="1" column="0" rowspan="2">
-          <widget class="QGroupBox" name="groupBox_20">
+          <widget class="QGroupBox" name="groupBoxVisualEffects">
            <property name="title">
             <string>Visual effects</string>
            </property>
@@ -232,7 +232,7 @@
           </widget>
          </item>
          <item row="2" column="1" rowspan="2">
-          <widget class="QGroupBox" name="groupBox_6">
+          <widget class="QGroupBox" name="groupBoxMedia">
            <property name="title">
             <string>Media</string>
            </property>
@@ -285,7 +285,7 @@
           </widget>
          </item>
          <item row="3" column="0" rowspan="2">
-          <widget class="QGroupBox" name="groupBox_5">
+          <widget class="QGroupBox" name="groupBoxTime">
            <property name="title">
             <string>Time</string>
            </property>
@@ -357,7 +357,7 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_24">
+            <widget class="QGroupBox" name="groupBoxMenus">
              <property name="title">
               <string>Menus</string>
              </property>
@@ -421,7 +421,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="groupBox_25">
+            <widget class="QGroupBox" name="groupBoxMusicsSounds">
              <property name="title">
               <string>Musics / Sounds</string>
              </property>
@@ -511,7 +511,7 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_8">
+            <widget class="QGroupBox" name="groupBoxObjectsInteractions">
              <property name="title">
               <string>Objects interactions</string>
              </property>
@@ -558,7 +558,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="groupBox_11">
+            <widget class="QGroupBox" name="groupBoxTeam">
              <property name="title">
               <string>Team</string>
              </property>
@@ -595,7 +595,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="groupBox_26">
+            <widget class="QGroupBox" name="groupBoxSystemParameters">
              <property name="title">
               <string>System parameters</string>
              </property>
@@ -619,16 +619,6 @@
                   </property>
                   <property name="text">
                    <string>Allow/Forbid main menu...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButtonChangeGeneralOptions">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Change general options...</string>
                   </property>
                  </widget>
                 </item>
@@ -664,7 +654,7 @@
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout_10">
          <item row="0" column="0">
-          <widget class="QGroupBox" name="groupBox_22">
+          <widget class="QGroupBox" name="groupBoxBattles">
            <property name="title">
             <string>Battles</string>
            </property>
@@ -714,7 +704,7 @@
           </widget>
          </item>
          <item row="0" column="1" rowspan="2">
-          <widget class="QGroupBox" name="groupBox_23">
+          <widget class="QGroupBox" name="groupBoxHeroesEnemies">
            <property name="title">
             <string>Heroes / Enemies</string>
            </property>
@@ -797,7 +787,7 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QGroupBox" name="groupBox_15">
+          <widget class="QGroupBox" name="groupBoxMusics">
            <property name="title">
             <string>Musics</string>
            </property>
@@ -867,7 +857,7 @@
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout_4">
          <item row="0" column="0" rowspan="3">
-          <widget class="QGroupBox" name="groupBox_16">
+          <widget class="QGroupBox" name="groupBoxSyntax">
            <property name="title">
             <string>Syntax</string>
            </property>
@@ -898,7 +888,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonLabel">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Label...</string>
@@ -908,7 +898,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonJumpLabel">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Jump to label...</string>
@@ -928,7 +918,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonComment">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Comment...</string>
@@ -951,7 +941,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QGroupBox" name="groupBox_18">
+          <widget class="QGroupBox" name="groupBoxVariables">
            <property name="title">
             <string>Variables</string>
            </property>
@@ -971,7 +961,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QGroupBox" name="groupBox_21">
+          <widget class="QGroupBox" name="groupBoxAdvanced">
            <property name="title">
             <string>Avanced</string>
            </property>

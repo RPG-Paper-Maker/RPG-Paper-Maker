@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -34,6 +34,8 @@ DialogCommandDisplayAPicture::DialogCommandDisplayAPicture(EventCommand *command
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandDisplayAPicture::~DialogCommandDisplayAPicture() {
@@ -64,6 +66,27 @@ void DialogCommandDisplayAPicture::initializePrimitives() {
     ui->panelPrimitiveOpacity->initializeNumber(m_parameters, properties, false);
     ui->panelPrimitiveOpacity->setNumberDoubleValue(100);
     ui->panelPrimitiveAngle->initializeNumber(m_parameters, properties, false);
+    ui->comboBoxOrigin->addItem(RPM::translate(Translations::TOP_LEFT));
+    ui->comboBoxOrigin->addItem(RPM::translate(Translations::CENTER));
+}
+
+//-------------------------------------------------
+
+void DialogCommandDisplayAPicture::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::DISPLAY_A_PICTURE) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->labelZoom->setText(RPM::translate(Translations::ZOOM) + RPM::COLON);
+    ui->labelAngle->setText(RPM::translate(Translations::ANGLE) + RPM::COLON);
+    ui->labelIndex->setText(RPM::translate(Translations::INDEX) + RPM::COLON);
+    ui->labelOrigin->setText(RPM::translate(Translations::ORIGIN) + RPM::COLON);
+    ui->labelImageID->setText(RPM::translate(Translations::IMAGE_ID) + RPM::COLON);
+    ui->labelOpacity->setText(RPM::translate(Translations::OPACITY) + RPM::COLON);
+    ui->groupBoxEffects->setTitle(RPM::translate(Translations::EFFECTS));
+    ui->groupBoxCoordinates->setTitle(RPM::translate(Translations::COORDINATES));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------
@@ -75,7 +98,7 @@ void DialogCommandDisplayAPicture::initialize(EventCommand *command) {
     m_pictureID->setId(command->valueCommandAt(i++).toInt());
     ui->widgetPictureImage->initializeSuper(m_pictureID);
     ui->panelPrimitiveID->initializeCommand(command, i);
-    ui->comboBox->setCurrentIndex(command->valueCommandAt(i++) == RPM
+    ui->comboBoxOrigin->setCurrentIndex(command->valueCommandAt(i++) == RPM
         ::TRUE_BOOL_STRING ? 1 : 0);
     ui->panelPrimitiveX->initializeCommand(command, i);
     ui->panelPrimitiveY->initializeCommand(command, i);
@@ -91,8 +114,8 @@ EventCommand * DialogCommandDisplayAPicture::getCommand() const {
 
     command.append(QString::number(m_pictureID->id()));
     ui->panelPrimitiveID->getCommand(command);
-    command.append(ui->comboBox->currentIndex() == 1 ? RPM::TRUE_BOOL_STRING :
-        RPM::FALSE_BOOL_STRING);
+    command.append(ui->comboBoxOrigin->currentIndex() == 1 ? RPM
+        ::TRUE_BOOL_STRING : RPM::FALSE_BOOL_STRING);
     ui->panelPrimitiveX->getCommand(command);
     ui->panelPrimitiveY->getCommand(command);
     ui->panelPrimitiveZoom->getCommand(command);

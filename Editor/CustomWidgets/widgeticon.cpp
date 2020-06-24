@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "widgeticon.h"
 #include "ui_widgeticon.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -23,6 +24,8 @@ WidgetIcon::WidgetIcon(QWidget *parent) :
     ui(new Ui::WidgetIcon)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 WidgetIcon::~WidgetIcon()
@@ -44,6 +47,13 @@ void WidgetIcon::initializeIcon(SystemIcon *icon) {
     ui->widgetShowPicture->setActivateCoef(false);
     ui->widgetPicture->setKind(PictureKind::Icons);
     ui->widgetPicture->initialize(m_icon->pictureID());
+}
+
+//-------------------------------------------------
+
+void WidgetIcon::translate()
+{
+    ui->labelIcon->setText(RPM::translate(Translations::ICON) + RPM::COLON);
 }
 
 // -------------------------------------------------------

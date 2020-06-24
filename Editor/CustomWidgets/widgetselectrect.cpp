@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -12,6 +12,7 @@
 #include "widgetselectrect.h"
 #include "ui_widgetselectrect.h"
 #include "dialogrect.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -26,6 +27,8 @@ WidgetSelectRect::WidgetSelectRect(QWidget *parent) :
     m_selecting(false)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 WidgetSelectRect::~WidgetSelectRect()
@@ -51,6 +54,16 @@ void WidgetSelectRect::setRect(QRectF *rect) {
 
 void WidgetSelectRect::updateLabel(QString label) {
     ui->label->setText(label);
+}
+
+//-------------------------------------------------
+
+void WidgetSelectRect::translate()
+{
+    ui->pushButtonEnter->setText(RPM::translate(Translations::ENTER) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonSelect->setText(RPM::translate(Translations::SELECT) + RPM
+        ::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------

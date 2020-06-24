@@ -36,7 +36,7 @@
        <item>
         <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,0">
          <item row="0" column="0">
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="labelRed">
            <property name="text">
             <string>Red:</string>
            </property>
@@ -81,7 +81,7 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="labelGreen">
            <property name="text">
             <string>Green:</string>
            </property>
@@ -126,7 +126,7 @@
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="labelBlue">
            <property name="text">
             <string>Blue:</string>
            </property>
@@ -171,7 +171,7 @@
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QLabel" name="label_4">
+          <widget class="QLabel" name="labelGrey">
            <property name="text">
             <string>Grey:</string>
            </property>
@@ -315,7 +315,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QLabel" name="label_10">
+          <widget class="QLabel" name="labelTime">
            <property name="text">
             <string>Time:</string>
            </property>
@@ -338,7 +338,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_11">
+          <widget class="QLabel" name="labelSeconds">
            <property name="text">
             <string>second(s)</string>
            </property>

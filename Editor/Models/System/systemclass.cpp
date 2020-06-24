@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -12,6 +12,7 @@
 #include "systemclass.h"
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
+#include "rpm.h"
 
 const QString SystemClass::jsonInitialLevel = "iniL";
 const QString SystemClass::jsonMaxLevel = "mxL";
@@ -52,9 +53,7 @@ SystemClass::SystemClass(int i, LangsTranslation *names, int initialLevel, int
     m_statisticsProgression(stat),
     m_skills(s)
 {
-    m_statisticsProgression->setHorizontalHeaderLabels(
-                QStringList({"Statistic","Initial","Final"}));
-    m_skills->setHorizontalHeaderLabels(QStringList({"Skills","Levels"}));
+    this->initializeHeaders();
 }
 
 SystemClass::~SystemClass() {
@@ -122,6 +121,16 @@ SystemClass * SystemClass::createInheritanceClass() {
 
 // -------------------------------------------------------
 
+void SystemClass::initializeHeaders() {
+    m_statisticsProgression->setHorizontalHeaderLabels(QStringList({RPM
+        ::translate(Translations::STATISTIC), RPM::translate(Translations
+        ::INITIAL), RPM::translate(Translations::FINAL)}));
+    m_skills->setHorizontalHeaderLabels(QStringList({RPM::translate(Translations
+        ::SKILLS), RPM::translate(Translations::LEVELS)}));
+}
+
+// -------------------------------------------------------
+
 void SystemClass::reset() {
     m_initialLevel = 1;
     m_maxLevel = 100;
@@ -163,6 +172,8 @@ void SystemClass::setCopy(const SuperListItem &super) {
     QHash<int, int>::const_iterator it;
     int i, l;
 
+    SystemLang::setCopy(super);
+
     sys = reinterpret_cast<const SystemClass *>(&super);
     m_initialLevel = sys->m_initialLevel;
     m_maxLevel = sys->m_maxLevel;
@@ -176,6 +187,7 @@ void SystemClass::setCopy(const SuperListItem &super) {
     }
 
     // Skills
+    SuperListItem::deleteModel(m_skills, false);
     for (i = 0, l = sys->skills()->invisibleRootItem()->rowCount(); i < l - 1;
          i++)
     {
@@ -190,6 +202,7 @@ void SystemClass::setCopy(const SuperListItem &super) {
     m_skills->appendRow(item);
 
     // Statistics progression
+    SuperListItem::deleteModel(m_statisticsProgression, false);
     for (i = 0, l = sys->statisticsProgression()->invisibleRootItem()
          ->rowCount(); i < l - 1; i++)
     {
@@ -202,6 +215,7 @@ void SystemClass::setCopy(const SuperListItem &super) {
     item = new QStandardItem();
     item->setText(SuperListItem::beginningText);
     m_statisticsProgression->appendRow(item);
+    this->initializeHeaders();
 }
 
 // -------------------------------------------------------

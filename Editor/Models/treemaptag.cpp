@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -105,17 +105,18 @@ void TreeMapTag::copyItem(const QStandardItem* from,
     if (tag != nullptr){
         TreeMapTag* copyTag = new TreeMapTag;
         copyTag->setCopy(*tag);
+        copyTag->setId(tag->id());
         to->setData(QVariant::fromValue(
                           reinterpret_cast<quintptr>(copyTag)));
         to->setText(from->text());
         QString iconName = copyTag->isDir() ? "dir" : "map";
         to->setIcon(QIcon(":/icons/Ressources/" + iconName + ".png"));
 
-        if (!copyTag->isDir()){
+        if (!tag->isDir()){
             QString mapName =
-                    Map::generateMapName(copyTag->id());
+                    Map::generateMapName(tag->id());
             QString pathMaps = Common::pathCombine(
-                        RPM::get()->project()->pathCurrentProject(),
+                        RPM::get()->project()->pathCurrentProjectApp(),
                         RPM::PATH_MAPS);
             QString pathMapsTemp = Common::pathCombine(
                         pathMaps, RPM::FOLDER_TEMP_MAP);
@@ -154,23 +155,23 @@ void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
     if (tag != nullptr){
         TreeMapTag* copyTag = new TreeMapTag;
         copyTag->setCopy(*tag);
+        copyTag->setId(tag->id());
         to->setData(QVariant::fromValue(
                           reinterpret_cast<quintptr>(copyTag)));
         to->setText(from->text());
-        QString iconName = copyTag->isDir() ? "dir" : "map";
+        QString iconName = tag->isDir() ? "dir" : "map";
         to->setIcon(QIcon(":/icons/Ressources/" + iconName + ".png"));
 
         // Paste content
-        if (!copyTag->isDir()){
+        if (!tag->isDir()){
             QString pathMaps = Common::pathCombine(
-                        RPM::get()->project()->pathCurrentProject(),
+                        RPM::get()->project()->pathCurrentProjectApp(),
                         RPM::PATH_MAPS);
             QString pathMapsTemp =
                     Common::pathCombine(pathMaps, RPM::FOLDER_TEMP_MAP);
             QString pathMap =
-                    Common::pathCombine(pathMapsTemp,
-                                       Map::generateMapName(
-                                           copyTag->id()));
+                    Common::pathCombine(pathMapsTemp, Map::generateMapName(
+                                            tag->id()));
             int newId = Map::generateMapId();
             QString newMapName = Map::generateMapName(newId);
             MapProperties properties(pathMap);

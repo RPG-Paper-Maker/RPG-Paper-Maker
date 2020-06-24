@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -48,6 +48,8 @@ public:
     static const QColor COLOR_FORTY_TRANSPARENT;
     static const QColor COLOR_GREY;
     static const QColor COLOR_MENU_SELECTION_BLUE;
+    static const QColor COLOR_CURSOR_SELECTION;
+    static const QColor COLOR_COMMAND_COMMENT;
 
     // COMMON JSON
     static const QString JSON_KEY;
@@ -59,22 +61,47 @@ public:
     static const QString EXTENSION_RPM;
     static const QString EXTENSION_PNG;
     static const QString EXTENSION_JPG;
+    static const QString EXTENSION_JS;
+    static const QString EXTENSION_HTML;
 
     // STRING SYMBOLS
     static const QString DASH;
+    static const QString SLASH;
+    static const QString COLON;
+    static const QString DOT;
+    static const QString DOT_DOT_DOT;
+    static const QString SPACE;
+    static const QString NEW_LINE;
+    static const QString PARENTHESIS_LEFT;
+    static const QString PARENTHESIS_RIGHT;
+    static const QString BRACKET_LEFT;
+    static const QString BRACKET_RIGHT;
+    static const QString EQUAL;
+    static const QString PLUS;
+    static const QString MINUS;
+    static const QString TIMES;
+    static const QString DIVIDED_BY;
+    static const QString MODULO;
     static const QString TRUE_BOOL_STRING;
     static const QString FALSE_BOOL_STRING;
 
     // FILE / FOLDER NAMES
     static const QString FILE_MAP_INFOS;
     static const QString FILE_MAP_OBJECTS;
+    static const QString FILE_MAIN;
+    static const QString FILE_INDEX;
+    static const QString FILE_PACKAGE;
     static const QString FOLDER_GAMES;
     static const QString FOLDER_DESKTOP;
     static const QString FOLDER_CONTENT;
     static const QString FOLDER_TEMP_MAP;
     static const QString FOLDER_UNDO_REDO_TEMP_MAP;
+    static const QString FOLDER_RESOURCES;
+    static const QString FOLDER_APP;
 
     // PATHS
+    static const QString PATH_RESOURCES;
+    static const QString PATH_APP;
     static const QString PATH_BASIC;
     static const QString PATH_BR;
     static const QString PATH_DATAS;
@@ -116,6 +143,7 @@ public:
     static const QString PATH_FACESETS;
     static const QString PATH_WINDOW_SKINS;
     static const QString PATH_TITLE_SCREEN;
+    static const QString PATH_HUD_ANIMATIONS;
     static const QString PATH_HUD_PICTURES;
     static const QString PATH_AUTOTILES;
     static const QString PATH_CHARACTERS;
@@ -125,6 +153,7 @@ public:
     static const QString PATH_MOUNTAINS;
     static const QString PATH_TEXTURES_OBJECT_3D;
     static const QString PATH_BATTLERS;
+    static const QString PATH_SKY_BOXES;
     static const QString PATH_VIDEOS;
     static const QString PATH_SONGS;
     static const QString PATH_MUSICS;
@@ -138,28 +167,45 @@ public:
     static const QString PATH_ENGINE_SETTINGS;
     static const QString PATH_TRANSLATIONS;
     static const QString PATH_TRANSLATIONS_LANGUAGES;
+    static const QString PATH_TRANSLATIONS_CURRENT_LANGUAGE;
     static const QString PATH_PATREON;
     static const QString PATH_GAMES;
     static const QString PATH_TEXTURE_MISSING;
+    static const QString PATH_MAIN;
+    static const QString PATH_INDEX;
+    static const QString PATH_PACKAGE;
 
     // INTEGERS
     static const int PORTION_SIZE;
     static const int BASIC_SQUARE_SIZE;
     static const int MAX_PIXEL_SIZE;
+    static const int SCREEN_BASIC_WIDTH;
+    static const int SCREEN_BASIC_HEIGHT;
 
     // ENUM TO STRING
-    static const QStringList ENUM_TO_STRING_DAMAGES_KIND;
-    static const QStringList ENUM_TO_STRING_EFFECT_SPECIAL_ACTION_KIND;
-    static const QStringList ENUM_TO_STRING_INCREASE_DECREASE_KIND;
-    static const QStringList ENUM_TO_STRING_OS_KIND;
-    static const QStringList ENUM_TO_STRING_TEAM;
-    static const QStringList ENUM_TO_STRING_OPERATION;
-    static const QStringList ENUM_TO_STRING_OPERATION_SIMPLE;
-    static const QStringList ENUM_TO_STRING_FORMULA_STAT;
-    static const QStringList ENUM_TO_STRING_TITLE_SETTINGS;
-    static const QStringList ENUM_TO_STRING_AXIS_KIND;
-    static const QStringList ENUM_TO_STRING_CONDITION_HEROES;
-    static const QStringList ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC;
+    static QStringList ENUM_TO_STRING_DAMAGES_KIND;
+    static QStringList ENUM_TO_STRING_EFFECT_SPECIAL_ACTION_KIND;
+    static QStringList ENUM_TO_STRING_INCREASE_DECREASE_KIND;
+    static QStringList ENUM_TO_STRING_OS_KIND;
+    static QStringList ENUM_TO_STRING_TEAM;
+    static QStringList ENUM_TO_STRING_OPERATION;
+    static QStringList ENUM_TO_STRING_OPERATION_SIMPLE;
+    static QStringList ENUM_TO_STRING_FORMULA_STAT;
+    static QStringList ENUM_TO_STRING_TITLE_SETTINGS;
+    static QStringList ENUM_TO_STRING_AXIS_KIND;
+    static QStringList ENUM_TO_STRING_CONDITION_HEROES;
+    static QStringList ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC;
+    static QStringList ENUM_TO_STRING_ANIMATION_POSITION_KIND;
+    static QStringList ENUM_TO_STRING_ANIMATION_CONDITION_KIND;
+    static QStringList ENUM_TO_STRING_MOUNTAIN_COLLISION_KIND;
+    static QStringList ENUM_TO_STRING_OBJECT_COLLISION_KIND;
+    static QStringList ENUM_TO_STRING_EVENT_COMMAND_KIND;
+    static QStringList ENUM_TO_STRING_TARGET_KIND;
+    static QStringList ENUM_TO_STRING_AVAILABLE_KIND;
+    static QStringList ENUM_TO_STRING_OBJECT_MOVING_KIND;
+    static QStringList ENUM_TO_STRING_SHAPE_KIND;
+    static QStringList ENUM_TO_STRING_TITLE_COMMAND_KIND;
+    static QStringList ENUM_TO_STRING_MONSTER_ACTION_TARGET_KIND;
 
     // OTHER STATIC VALUES
     static QSet<int> mapsToSave;
@@ -178,6 +224,8 @@ public:
     QStandardItem * copiedCommandAt(int i) const;
     int copiedCommandsCount() const;
     void copiedCommandsAppend(QStandardItem *item);
+    SuperListItem * selectedMonster() const;
+    void setSelectedMonster(SuperListItem *si);
 
     static void writeJSON(QString path, const Serializable &obj);
     static void readJSON(QString path, Serializable &obj);
@@ -200,6 +248,7 @@ protected:
     EngineSettings *m_engineSettings;
     Translations *m_translations;
     QList<QStandardItem *> m_copiedCommands;
+    SuperListItem *m_selectedMonster;
 };
 
 #endif // RPM_H

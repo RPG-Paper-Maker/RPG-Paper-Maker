@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -319,7 +319,7 @@ bool Objects3D::addObject3D(QSet<Portion> &portionsOverflow, Position &p,
 // -------------------------------------------------------
 
 bool Objects3D::deleteObject3D(QSet<Portion> &portionsOverflow, Position &p,
-    QJsonObject &previousObj, MapEditorSubSelectionKind &previousType)
+    QJsonObject &previousObj, MapEditorSubSelectionKind &previousType, bool deletePtr)
 {
     Object3DDatas *previousObject3D;
     bool changed;
@@ -330,7 +330,10 @@ bool Objects3D::deleteObject3D(QSet<Portion> &portionsOverflow, Position &p,
         previousObject3D->write(previousObj);
         previousType = previousObject3D->getSubKind();
         changed = true;
-        delete previousObject3D;
+        if (deletePtr)
+        {
+            delete previousObject3D;
+        }
     }
 
     return changed;
@@ -361,6 +364,7 @@ MapElement* Objects3D::updateRaycasting(float &finalDistance, Position
     &finalPosition, QRay3D &ray)
 {
     MapElement* element = nullptr;
+    bool remove;
 
     for (QHash<Position, Object3DDatas *>::iterator i = m_all.begin(); i !=
         m_all.end(); i++)
@@ -384,7 +388,7 @@ MapElement* Objects3D::updateRaycasting(float &finalDistance, Position
         map->getLocalPortion(position, portion);
         MapPortion* mapPortion = map->mapPortion(portion);
         MapElement* newElement = mapPortion->updateRaycastingOverflowObject3D(
-            position, finalDistance, finalPosition, ray);
+            position, finalDistance, finalPosition, ray, remove);
         if (newElement != nullptr) {
             element = newElement;
         }
@@ -398,10 +402,14 @@ MapElement* Objects3D::updateRaycasting(float &finalDistance, Position
 bool Objects3D::updateRaycastingAt(Position &position, Object3DDatas *object3D,
     float &finalDistance, Position &finalPosition, QRay3D &ray)
 {
-    float newDistance = object3D->intersection(ray);
-    if (Common::getMinDistance(finalDistance, newDistance)) {
-        finalPosition = position;
-        return true;
+    if (object3D != nullptr) {
+        float newDistance;
+
+        newDistance = object3D->intersection(ray);
+        if (Common::getMinDistance(finalDistance, newDistance)) {
+            finalPosition = position;
+            return true;
+        }
     }
 
     return false;

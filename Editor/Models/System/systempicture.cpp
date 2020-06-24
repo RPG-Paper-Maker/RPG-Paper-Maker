@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -20,7 +20,7 @@
 // -------------------------------------------------------
 
 SystemPicture::SystemPicture() :
-    SystemPicture(-1, "<None>", false)
+    SystemPicture(-1, "<" + RPM::translate(Translations::NONE) + ">", false)
 {
 
 }
@@ -94,7 +94,7 @@ SystemPicture * SystemPicture::getByID(int id, PictureKind kind) {
 QString SystemPicture::getFolder(PictureKind kind, bool isBR){
     QString folder = isBR ? RPM::get()->project()->gameDatas()->systemDatas()
                             ->pathBR()
-                          : RPM::get()->project()->pathCurrentProject();
+                          : RPM::get()->project()->pathCurrentProjectApp();
 
     return Common::pathCombine(folder, getLocalFolder(kind));
 }
@@ -129,6 +129,10 @@ QString SystemPicture::getLocalFolder(PictureKind kind) {
         return RPM::PATH_TEXTURES_OBJECT_3D;
     case PictureKind::Pictures:
         return RPM::PATH_HUD_PICTURES;
+    case PictureKind::Animations:
+        return RPM::PATH_HUD_ANIMATIONS;
+    case PictureKind::SkyBoxes:
+        return RPM::PATH_SKY_BOXES;
     default:
         throw std::invalid_argument("Kind of picture path not implemented");
     }
@@ -139,13 +143,13 @@ QString SystemPicture::getLocalFolder(PictureKind kind) {
 QString SystemPicture::getPictureTitle(PictureKind kind) {
     switch(kind) {
     case PictureKind::Autotiles:
-        return "Autotiles";
+        return RPM::translate(Translations::AUTOTILES);
     case PictureKind::Walls:
-        return "Walls";
+        return RPM::translate(Translations::WALLS);
     case PictureKind::Object3D:
-        return "3D objects";
+        return RPM::translate(Translations::THREED_OBJECTS);
     case PictureKind::Mountains:
-        return "Mountains";
+        return RPM::translate(Translations::MOUNTAINS);
     default:
         return "";
     }
@@ -198,15 +202,18 @@ SuperListItem* SystemPicture::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemPicture::setCopy(const SystemPicture& super){
+void SystemPicture::setCopy(const SuperListItem &super) {
+    const SystemPicture *picture;
+
     SuperListItem::setCopy(super);
 
-    m_isBR = super.m_isBR;
+    picture = reinterpret_cast<const SystemPicture *>(&super);
+    m_isBR = picture->m_isBR;
     QHash<QPoint, CollisionSquare*>::const_iterator i;
-    for (i = super.m_collisions.begin(); i != super.m_collisions.end(); i++) {
+    for (i = picture->m_collisions.begin(); i != picture->m_collisions.end(); i++) {
         m_collisions.insert(i.key(), i.value()->createCopy());
     }
-    m_repeatCollisions = super.m_repeatCollisions;
+    m_repeatCollisions = picture->m_repeatCollisions;
 }
 
 // -------------------------------------------------------

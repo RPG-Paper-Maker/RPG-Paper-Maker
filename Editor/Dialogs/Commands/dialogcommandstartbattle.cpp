@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -48,8 +48,20 @@ DialogCommandStartBattle::DialogCommandStartBattle(EventCommand* command,
         RPM::get()->project()->gameDatas()->systemDatas()->modelColors(),
         m_parameters, nullptr);
     ui->panelPrimitiveValueTransitionColorEnd->showDataBase();
+    ui->comboBoxTransitionStart->addItem(RPM::translate(Translations::NONE));
+    ui->comboBoxTransitionStart->addItem(RPM::translate(Translations::FADE_IN) +
+        RPM::DOT_DOT_DOT);
+    ui->comboBoxTransitionStart->addItem(RPM::translate(Translations::ZOOM_IN));
+    ui->comboBoxTransitionStart->setCurrentIndex(2);
+    ui->comboBoxTransitionEnd->addItem(RPM::translate(Translations::NONE));
+    ui->comboBoxTransitionEnd->addItem(RPM::translate(Translations::FADE_OUT) +
+        RPM::DOT_DOT_DOT);
+    ui->comboBoxTransitionEnd->addItem(RPM::translate(Translations::ZOOM_OUT));
+    ui->comboBoxTransitionEnd->setCurrentIndex(2);
 
     if (command != nullptr) initialize(command);
+
+    this->translate();
 }
 
 DialogCommandStartBattle::~DialogCommandStartBattle()
@@ -62,6 +74,34 @@ DialogCommandStartBattle::~DialogCommandStartBattle()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandStartBattle::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::START_BATTLE) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->labelZ->setText(RPM::translate(Translations::Z) + RPM::COLON);
+    ui->labelEnd->setText(RPM::translate(Translations::END) + RPM::COLON);
+    ui->labelIDMAp->setText(RPM::translate(Translations::MAP_ID) + RPM::COLON);
+    ui->labelStart->setText(RPM::translate(Translations::START) + RPM::COLON);
+    ui->labelYPlus->setText(RPM::translate(Translations::Y_PLUS) + RPM::COLON);
+    ui->checkBoxEscape->setText(RPM::translate(Translations::ALLOW_ESCAPE));
+    ui->checkBoxGameOver->setText(RPM::translate(Translations
+        ::DEFEAT_CAUSES_GAME_OVER));
+    ui->radioButtonID->setText(RPM::translate(Translations::ID) + RPM::COLON);
+    ui->radioButtonRandom->setText(RPM::translate(Translations::RANDOM) + RPM
+        ::SPACE + RPM::PARENTHESIS_LEFT + RPM::translate(Translations
+        ::IN_MAP_PROPERTY) + RPM::PARENTHESIS_RIGHT);
+    ui->radioButtonVariableConstant->setText(RPM::translate(Translations::ID));
+    ui->groupBoxOptions->setTitle(RPM::translate(Translations::OPTIONS));
+    ui->groupBoxTroopID->setTitle(RPM::translate(Translations::TROOP_ID));
+    ui->groupBoxBattleMap->setTitle(RPM::translate(Translations::BATTLE_MAP));
+    ui->groupBoxTransition->setTitle(RPM::translate(Translations::TRANSITION));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandStartBattle::initialize(EventCommand* command){
     int i = 0;
@@ -191,11 +231,11 @@ void DialogCommandStartBattle::on_radioButtonSelect_toggled(bool checked){
 //--------------------------------------------
 
 void DialogCommandStartBattle::on_radioButtonNumber_toggled(bool checked){
-    ui->label_7->setEnabled(checked);
-    ui->label_8->setEnabled(checked);
-    ui->label_9->setEnabled(checked);
-    ui->label_10->setEnabled(checked);
-    ui->label_11->setEnabled(checked);
+    ui->labelIDMAp->setEnabled(checked);
+    ui->labelX->setEnabled(checked);
+    ui->labelY->setEnabled(checked);
+    ui->labelYPlus->setEnabled(checked);
+    ui->labelZ->setEnabled(checked);
     ui->widgetIdMap->setEnabled(checked);
     ui->widgetX->setEnabled(checked);
     ui->widgetY->setEnabled(checked);

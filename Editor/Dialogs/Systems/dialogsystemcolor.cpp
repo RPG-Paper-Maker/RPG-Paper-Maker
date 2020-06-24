@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -12,6 +12,7 @@
 #include <QColorDialog>
 #include "dialogsystemcolor.h"
 #include "ui_dialogsystemcolor.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -27,6 +28,8 @@ DialogSystemColor::DialogSystemColor(SystemColor& color, QWidget *parent) :
     ui->setupUi(this);
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemColor::~DialogSystemColor()
@@ -57,6 +60,18 @@ void DialogSystemColor::setBackgroundColor(QColor& color) {
         color.red()) + "," + QString::number(color.green()) + "," +
         QString::number(color.blue()) + "," + QString::number(color.alpha()) +
         ");");
+}
+
+//-------------------------------------------------
+
+void DialogSystemColor::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_COLOR) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->pushButtonColor->setText(RPM::translate(Translations::CHANGE_COLOR) +
+        RPM::DOT_DOT_DOT);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -27,8 +27,11 @@ PanelSelectPositionMaps::PanelSelectPositionMaps(QWidget *parent) :
     ui->setupUi(this);
 
     ui->treeViewLocalMaps->initializeWidgetMapEditor(ui->widgetMap);
-    m_treeMapDatas->read(RPM::get()->project()->pathCurrentProject());
+    m_treeMapDatas->read(RPM::get()->project()->pathCurrentProjectApp());
     ui->treeViewLocalMaps->initializeModel(m_treeMapDatas->model());
+    ui->treeViewLocalMaps->disableContextMenu();
+
+    this->translate();
 }
 
 PanelSelectPositionMaps::~PanelSelectPositionMaps()
@@ -85,6 +88,17 @@ void PanelSelectPositionMaps::initialize(int idMap, int x, int y, int yPlus, int
     QVector3D position(x * RPM::get()->getSquareSize(), y * RPM::get()
         ->getSquareSize() + yPlus, z * RPM::get()->getSquareSize());
     ui->treeViewLocalMaps->setMap(idMap, position);
+}
+
+//-------------------------------------------------
+
+void PanelSelectPositionMaps::translate()
+{
+    ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->labelZ->setText(RPM::translate(Translations::Z) + RPM::COLON);
+    ui->labelYPlus->setText(RPM::translate(Translations::Y_PLUS) + RPM::COLON);
+    ui->groupBoxCoordinates->setTitle(RPM::translate(Translations::COORDINATES));
 }
 
 //--------------------------------------------

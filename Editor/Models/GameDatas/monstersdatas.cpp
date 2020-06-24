@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -15,6 +15,7 @@
 #include "systemmonster.h"
 #include "lootkind.h"
 #include "systemloot.h"
+#include "systemmonsteraction.h"
 
 // -------------------------------------------------------
 //
@@ -50,13 +51,15 @@ void MonstersDatas::setDefault(QStandardItem* ,
                                QStandardItem* modelArmors)
 {
     SystemMonster* monster;
+    SystemMonsterAction *action;
     QStandardItem* item;
     QList<QStandardItem *> row;
     QStandardItemModel* loots;
     QStandardItemModel* actions;
     SuperListItem* sys = nullptr;
     SystemLoot* loot;
-    LangsTranslation* names[] = {new LangsTranslation("Wooly")};
+    LangsTranslation* names[] = {new LangsTranslation(RPM::translate(
+        Translations::WOOLY))};
     int classesIds[] = {5};
     int battlersIds[] = {5};
     int facesetsIds[] = {5};
@@ -118,7 +121,6 @@ void MonstersDatas::setDefault(QStandardItem* ,
 
         // Actions
         actions = new QStandardItemModel;
-        // TODO
 
         monster = new SystemMonster(i+1, names[i], classesIds[i], battlersIds[i],
             facesetsIds[i], SystemClass::createInheritanceClass(),
@@ -126,6 +128,9 @@ void MonstersDatas::setDefault(QStandardItem* ,
             , new PrimitiveValue(experiencesFinal[i]), experiencesEquation[i]),
             loots, actions);
         monster->insertCurrency(i + 1, currenciesProgression[i]);
+        action = new SystemMonsterAction(-1, "", MonsterActionKind::UseSkill);
+        action->setMonster(monster);
+        actions->appendRow(action->getModelRow());
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(monster)));
         item->setText(monster->toString());

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -30,6 +30,8 @@ DialogSystemBattleCommand::DialogSystemBattleCommand(
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemBattleCommand::~DialogSystemBattleCommand()
@@ -54,6 +56,17 @@ void DialogSystemBattleCommand::initialize(){
     SuperListItem::fillComboBox(ui->comboBoxSkill, RPM::get()->project()
                                 ->gameDatas()->skillsDatas()->model());
     ui->comboBoxSkill->setCurrentIndex(index);
+}
+
+//-------------------------------------------------
+
+void DialogSystemBattleCommand::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_BATTLE_COMMAND) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelSkillID->setText(RPM::translate(Translations::SKILL_ID) + RPM
+        ::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

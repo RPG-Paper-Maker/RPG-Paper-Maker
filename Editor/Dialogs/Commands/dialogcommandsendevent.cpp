@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -58,6 +58,8 @@ DialogCommandSendEvent::DialogCommandSendEvent(EventCommand *command,
     if (test) {
         delete command;
     }
+
+    this->translate();
 }
 
 DialogCommandSendEvent::~DialogCommandSendEvent()
@@ -75,6 +77,24 @@ DialogCommandSendEvent::~DialogCommandSendEvent()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandSendEvent::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SEND_EVENT) + RPM
+        ::DOT_DOT_DOT);
+    ui->checkBoxSenderNoReceive->setText(RPM::translate(Translations
+        ::SENDER_CANT_RECEIVE));
+    ui->radioButtonAll->setText(RPM::translate(Translations::ALL));
+    ui->radioButtonObject->setText(RPM::translate(Translations::OBJECT_ID) + RPM
+        ::COLON);
+    ui->radioButtonDetection->setText(RPM::translate(Translations::DETECTION_ID)
+        + RPM::COLON);
+    ui->groupBoxEvent->setTitle(RPM::translate(Translations::EVENT));
+    ui->groupBoxTarget->setTitle(RPM::translate(Translations::TARGET));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandSendEvent::initialize(EventCommand* command){
     int i = 0;

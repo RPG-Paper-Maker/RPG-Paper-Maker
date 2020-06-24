@@ -61,7 +61,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="labelModel">
          <property name="text">
           <string>Model:</string>
          </property>
@@ -152,7 +152,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="label_5">
+            <widget class="QLabel" name="labelStates">
              <property name="text">
               <string>States:</string>
              </property>
@@ -179,7 +179,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="label_7">
+            <widget class="QLabel" name="labelProperties">
              <property name="enabled">
               <bool>true</bool>
              </property>
@@ -218,7 +218,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="label_6">
+            <widget class="QLabel" name="labelEvents">
              <property name="text">
               <string>Events:</string>
              </property>
@@ -250,7 +250,7 @@
               <item row="0" column="0">
                <layout class="QGridLayout" name="gridLayout_5">
                 <item row="3" column="0" colspan="2">
-                 <widget class="QLabel" name="labelFrequency">
+                 <widget class="QLabel" name="labelFreq">
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
@@ -284,21 +284,6 @@
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
-                  <item>
-                   <property name="text">
-                    <string>Fix</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Random</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Route</string>
-                   </property>
-                  </item>
                  </widget>
                 </item>
                 <item row="3" column="2">
@@ -307,7 +292,7 @@
                    <bool>true</bool>
                   </property>
                   <property name="text">
-                   <string>x</string>
+                   <string>=</string>
                   </property>
                  </widget>
                 </item>
@@ -449,23 +434,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="comboBoxGraphics">
-               <item>
-                <property name="text">
-                 <string>None</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Sprite fix</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Sprite face</string>
-                </property>
-               </item>
-              </widget>
+              <widget class="QComboBox" name="comboBoxGraphics"/>
              </item>
             </layout>
            </item>

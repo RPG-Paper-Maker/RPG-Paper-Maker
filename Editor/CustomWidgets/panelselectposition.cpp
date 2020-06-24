@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -12,6 +12,7 @@
 #include "panelselectposition.h"
 #include "ui_panelselectposition.h"
 #include "dialogselectposition.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -24,6 +25,8 @@ PanelSelectPosition::PanelSelectPosition(QWidget *parent) :
     ui(new Ui::PanelSelectPosition)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 PanelSelectPosition::~PanelSelectPosition()
@@ -36,6 +39,19 @@ PanelSelectPosition::~PanelSelectPosition()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void PanelSelectPosition::translate()
+{
+    ui->labelLIDMap->setText(RPM::translate(Translations::MAP_ID) + RPM::COLON);
+    ui->labelYPlus->setText(RPM::translate(Translations::Y_PLUS) + RPM::COLON);
+    ui->labelLX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->labelLY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->labelLZ->setText(RPM::translate(Translations::Z) + RPM::COLON);
+    ui->pushButtonSelect->setText(RPM::translate(Translations::SELECT) + RPM
+        ::DOT_DOT_DOT);
+}
 
 void PanelSelectPosition::initialize(EventCommand *command, int &i) {
     ui->labelIDMap->setText(command->valueCommandAt(i++));

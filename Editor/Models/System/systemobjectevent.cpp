@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -121,6 +121,25 @@ void SystemObjectEvent::addReaction(int id, SystemReaction* reaction){
 
 // -------------------------------------------------------
 
+SystemReaction * SystemObjectEvent::removeReaction(int id, bool deleteReaction)
+{
+    SystemReaction *reaction;
+
+    reaction = m_reactions.value(id);
+    if (reaction != nullptr)
+    {
+        m_reactions.remove(id);
+        if (deleteReaction)
+        {
+            delete reaction;
+            return nullptr;
+        }
+    }
+    return reaction;
+}
+
+// -------------------------------------------------------
+
 void SystemObjectEvent::addParameter(SystemParameter* parameter){
     QStandardItem* item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(parameter)));
@@ -221,9 +240,9 @@ void SystemObjectEvent::updateParameters()
 
     SuperListItem::deleteModel(m_modelParameters);
     m_modelParameters = newModel;
-    m_modelParameters->setHorizontalHeaderLabels(QStringList({"Name", "Value",
-                                                              "Default value"})
-                                                 );
+    m_modelParameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::NAME), RPM::translate(Translations::VALUE), RPM::translate
+        (Translations::DEFAULT_VALUE)}));
 }
 
 // -------------------------------------------------------
@@ -266,22 +285,26 @@ SuperListItem* SystemObjectEvent::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemObjectEvent::setCopy(const SystemObjectEvent& event){
-    SuperListItem::setCopy(event);
-    p_id = event.p_id;
+void SystemObjectEvent::setCopy(const SuperListItem &super) {
+    const SystemObjectEvent *event;
+
+    SuperListItem::setCopy(super);
+
+    event = reinterpret_cast<const SystemObjectEvent *>(&super);
+    p_id = event->p_id;
 
     SystemParameter* param;
     QList<QStandardItem *> row;
     int l;
 
-    m_isSystem = event.m_isSystem;
+    m_isSystem = event->m_isSystem;
 
     // Parameters
     clearParameters();
-    l = event.m_modelParameters->invisibleRootItem()->rowCount();
+    l = event->m_modelParameters->invisibleRootItem()->rowCount();
     for (int i = 0; i < l; i++){
         param = new SystemParameter;
-        param->setCopy(*((SystemParameter*) event.m_modelParameters->item(i)
+        param->setCopy(*((SystemParameter*) event->m_modelParameters->item(i)
                          ->data().value<quintptr>()));
         row = param->getModelRow();
         m_modelParameters->appendRow(row);
@@ -290,7 +313,7 @@ void SystemObjectEvent::setCopy(const SystemObjectEvent& event){
     // Reactions
     clearReactions();
     QHash<int, SystemReaction*>::const_iterator i;
-    for (i = event.m_reactions.begin(); i != event.m_reactions.end(); i++){
+    for (i = event->m_reactions.begin(); i != event->m_reactions.end(); i++){
         SystemReaction* reaction = new SystemReaction;
         reaction->setCopy(*i.value());
         m_reactions[i.key()] = reaction;

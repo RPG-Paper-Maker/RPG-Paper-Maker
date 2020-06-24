@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -32,7 +32,7 @@ class WidgetSuperTree : public QTreeView
 {
     Q_OBJECT
 public:
-    explicit WidgetSuperTree(QWidget *parent = 0);
+    explicit WidgetSuperTree(QWidget *parent = nullptr);
     virtual ~WidgetSuperTree();
     QStandardItemModel* getModel() const;
     void setUpdateId(bool b);
@@ -94,6 +94,7 @@ signals:
     void needsUpdateJson(SuperListItem* super);
     void deletingItem(SuperListItem* super, int row);
     void tryingEdit();
+    void idChanged(int previousID, int newID);
 };
 
 #endif // WIDGETSUPERTREE_H

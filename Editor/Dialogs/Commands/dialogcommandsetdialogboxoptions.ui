@@ -79,7 +79,7 @@
        <item>
         <layout class="QGridLayout" name="gridLayout_9">
          <item row="0" column="0" rowspan="2">
-          <widget class="QGroupBox" name="groupBox_2">
+          <widget class="QGroupBox" name="groupBoxTransform">
            <property name="title">
             <string>Transform</string>
            </property>
@@ -209,7 +209,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QGroupBox" name="groupBox">
+          <widget class="QGroupBox" name="groupBoxFaceset">
            <property name="title">
             <string>Faceset</string>
            </property>
@@ -228,16 +228,6 @@
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
-                <item>
-                 <property name="text">
-                  <string>Behind</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Above</string>
-                 </property>
-                </item>
                </widget>
               </item>
               <item row="0" column="2">
@@ -311,7 +301,7 @@
           </widget>
          </item>
          <item row="1" column="1" rowspan="3">
-          <widget class="QGroupBox" name="groupBox_4">
+          <widget class="QGroupBox" name="groupBoxText">
            <property name="title">
             <string>Text</string>
            </property>
@@ -330,16 +320,6 @@
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
-                <item>
-                 <property name="text">
-                  <string>Yes</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>No</string>
-                 </property>
-                </item>
                </widget>
               </item>
               <item row="0" column="2" colspan="4">
@@ -533,7 +513,7 @@
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QGroupBox" name="groupBox_3">
+          <widget class="QGroupBox" name="groupBoxPadding">
            <property name="title">
             <string>Padding</string>
            </property>

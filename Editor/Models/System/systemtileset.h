@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -45,7 +45,6 @@ public:
     void updateModelSpriteWalls();
     void updateModel3DObjects();
     void updateModelMountains();
-
     static void updateModel(QStandardItemModel* model,
                             QStandardItemModel* completeModel);
     static void moveModel(QStandardItemModel* model,
@@ -53,7 +52,7 @@ public:
                           int index);
 
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemTileset &super);
+    virtual void setCopy(const SuperListItem &super);
 
     virtual void read(const QJsonObject &json);
     static void readModel(const QJsonObject &json, QString key,

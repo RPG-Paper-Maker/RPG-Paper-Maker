@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
      <item>
-      <widget class="QGroupBox" name="groupBox_22">
+      <widget class="QGroupBox" name="groupBoxCompleteList">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -224,38 +224,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QComboBox" name="comboBoxShape">
-         <item>
-          <property name="text">
-           <string>Box</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Sphere</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Cylinder</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Cone</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Capsule</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Custom</string>
-          </property>
-         </item>
-        </widget>
+        <widget class="QComboBox" name="comboBoxShape"/>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="labelTexture">
@@ -292,7 +261,7 @@
           <item row="0" column="0">
            <layout class="QGridLayout" name="gridLayout">
             <item row="0" column="0">
-             <widget class="QLabel" name="label_7">
+             <widget class="QLabel" name="labelWidth">
               <property name="text">
                <string>Width:</string>
               </property>
@@ -302,7 +271,7 @@
              <widget class="QSpinBox" name="spinBoxSquaresWidth"/>
             </item>
             <item row="0" column="2" colspan="2">
-             <widget class="QLabel" name="label_10">
+             <widget class="QLabel" name="labelWidthSquares">
               <property name="text">
                <string>square(s)</string>
               </property>
@@ -319,7 +288,7 @@
              <widget class="QSpinBox" name="spinBoxPixelsWidth"/>
             </item>
             <item row="0" column="6">
-             <widget class="QLabel" name="label_17">
+             <widget class="QLabel" name="labelWidthPixels">
               <property name="text">
                <string>pixel(s)</string>
               </property>
@@ -339,7 +308,7 @@
              </spacer>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_8">
+             <widget class="QLabel" name="labelHeight">
               <property name="text">
                <string>Height:</string>
               </property>
@@ -349,7 +318,7 @@
              <widget class="QSpinBox" name="spinBoxSquaresHeight"/>
             </item>
             <item row="1" column="2" colspan="2">
-             <widget class="QLabel" name="label_11">
+             <widget class="QLabel" name="labelHeightSquares">
               <property name="text">
                <string>square(s)</string>
               </property>
@@ -366,14 +335,14 @@
              <widget class="QSpinBox" name="spinBoxPixelsHeight"/>
             </item>
             <item row="1" column="6">
-             <widget class="QLabel" name="label_18">
+             <widget class="QLabel" name="labelHeightPixels">
               <property name="text">
                <string>pixel(s)</string>
               </property>
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="label_9">
+             <widget class="QLabel" name="labelDepth">
               <property name="text">
                <string>Depth:</string>
               </property>
@@ -383,7 +352,7 @@
              <widget class="QSpinBox" name="spinBoxSquaresDepth"/>
             </item>
             <item row="2" column="2" colspan="2">
-             <widget class="QLabel" name="label_12">
+             <widget class="QLabel" name="labelDepthSquares">
               <property name="text">
                <string>square(s)</string>
               </property>
@@ -400,7 +369,7 @@
              <widget class="QSpinBox" name="spinBoxPixelsDepth"/>
             </item>
             <item row="2" column="6">
-             <widget class="QLabel" name="label_19">
+             <widget class="QLabel" name="labelDepthPixels">
               <property name="text">
                <string>pixel(s)</string>
               </property>
@@ -414,25 +383,14 @@
              </widget>
             </item>
             <item row="4" column="0">
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="labelSizeTexture">
               <property name="text">
                <string>Texture:</string>
               </property>
              </widget>
             </item>
             <item row="4" column="1" colspan="2">
-             <widget class="QComboBox" name="comboBoxStretch">
-              <item>
-               <property name="text">
-                <string>Stretch</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Perfect size</string>
-               </property>
-              </item>
-             </widget>
+             <widget class="QComboBox" name="comboBoxStretch"/>
             </item>
             <item row="4" column="3" colspan="5">
              <spacer name="horizontalSpacer_3">
@@ -479,28 +437,7 @@
         <widget class="WidgetTilesetSettings" name="widgetTilesetSettings" native="true"/>
        </item>
        <item row="4" column="1">
-        <widget class="QComboBox" name="comboBoxCollision">
-         <item>
-          <property name="text">
-           <string>None</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Perfect</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Simplified</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Custom</string>
-          </property>
-         </item>
-        </widget>
+        <widget class="QComboBox" name="comboBoxCollision"/>
        </item>
        <item row="10" column="0">
         <widget class="QLabel" name="labelCollisionMountains">
@@ -510,23 +447,7 @@
         </widget>
        </item>
        <item row="10" column="1" colspan="3">
-        <widget class="QComboBox" name="comboBoxCollisionMountains">
-         <item>
-          <property name="text">
-           <string>Default (according to height and angle)</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Force always collides</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Force never collides</string>
-          </property>
-         </item>
-        </widget>
+        <widget class="QComboBox" name="comboBoxCollisionMountains"/>
        </item>
        <item row="10" column="4">
         <spacer name="horizontalSpacer_7">
@@ -549,9 +470,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetPreviewObject3D</class>
+   <class>WidgetPicture</class>
    <extends>QWidget</extends>
-   <header>widgetpreviewobject3d.h</header>
+   <header>widgetpicture.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -567,9 +488,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WidgetPicture</class>
+   <class>WidgetPreviewObject3D</class>
    <extends>QWidget</extends>
-   <header>widgetpicture.h</header>
+   <header>widgetpreviewobject3d.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

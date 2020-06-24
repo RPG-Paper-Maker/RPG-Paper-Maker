@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogsystemspeedfrequency.h"
 #include "ui_dialogsystemspeedfrequency.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -27,6 +28,8 @@ DialogSystemSpeedFrequency::DialogSystemSpeedFrequency(SystemSpeedFrequency &sf,
     ui->setupUi(this);
 
     this->initialize();
+
+    this->translate();
 }
 
 DialogSystemSpeedFrequency::~DialogSystemSpeedFrequency() {
@@ -43,6 +46,26 @@ void DialogSystemSpeedFrequency::initialize() {
     ui->lineEditName->setText(m_speedFrequency.name());
     ui->panelPrimitiveValue->initializeNumberAndUpdate(m_speedFrequency.value(),
         false);
+
+    // If frequency, change UI
+    if (!m_speedFrequency.isSpeed()) {
+        ui->labelValue->setText(RPM::translate(Translations::TIME) + RPM::COLON);
+        ui->labelX->hide();
+    } else {
+        ui->labelSeconds->hide();
+    }
+}
+
+//-------------------------------------------------
+
+void DialogSystemSpeedFrequency::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_SPEED_FREQUENCY) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelValue->setText(RPM::translate(Translations::VALUE) + RPM::COLON);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelSeconds->setText(RPM::translate(Translations::SECONDS));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

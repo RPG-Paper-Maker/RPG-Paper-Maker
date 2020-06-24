@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -72,6 +72,8 @@ public:
     void initializeRightMenu();
     void toggleSelection();
     int countSelectionKind() const;
+
+    void translate();
 
 private:
     Ui::WidgetMenuBarMapEditor *ui;

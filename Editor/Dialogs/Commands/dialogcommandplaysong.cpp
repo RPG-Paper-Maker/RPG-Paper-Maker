@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -39,6 +39,8 @@ DialogCommandPlaySong::DialogCommandPlaySong(QString title, SongKind kind,
     if (command != nullptr) {
         initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandPlaySong::DialogCommandPlaySong(QString title, SystemPlaySong
@@ -96,6 +98,14 @@ EventCommandKind DialogCommandPlaySong::getCommandKind() const {
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+//-------------------------------------------------
+
+void DialogCommandPlaySong::translate()
+{
+    ui->checkBoxSongID->setText(RPM::translate(Translations::SELECT_SONG_ID) +
+        RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandPlaySong::initialize(EventCommand* command) {
     int i = 0;

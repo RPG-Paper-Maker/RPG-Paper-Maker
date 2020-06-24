@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>430</width>
-    <height>276</height>
+    <height>386</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -51,7 +51,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,0">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="labelLocation">
            <property name="text">
             <string>Location:</string>
            </property>
@@ -82,7 +82,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBoxTypeOfExport">
          <property name="title">
           <string>Type of export</string>
          </property>
@@ -194,7 +194,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="groupBoxVersion">
          <property name="title">
           <string>Version</string>
          </property>
@@ -202,14 +202,14 @@
           <item row="0" column="0">
            <layout class="QGridLayout" name="gridLayout_4">
             <item row="0" column="0">
-             <widget class="QLabel" name="label_2">
+             <widget class="QLabel" name="labelMajor">
               <property name="text">
                <string>Major:</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLabel" name="label_3">
+             <widget class="QLabel" name="labelMinor">
               <property name="text">
                <string>Minor:</string>
               </property>

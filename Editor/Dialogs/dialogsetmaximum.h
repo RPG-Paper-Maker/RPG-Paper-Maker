@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -33,8 +33,6 @@ class DialogSetMaximum : public QDialog
     Q_OBJECT
 
 public:
-    static const QString STR_WARNING;
-
     explicit DialogSetMaximum(QStandardItemModel* model, int max,
                               QWidget *parent = nullptr);
     ~DialogSetMaximum();
@@ -47,6 +45,7 @@ private:
     QStandardItemModel* m_model;
 
     bool isOrdered(int limit) const;
+    void translate();
 
 private slots:
     void accept();

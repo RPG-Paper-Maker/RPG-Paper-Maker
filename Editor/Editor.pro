@@ -24,13 +24,21 @@ HEADERS += \
     CustomWidgets/panelsubtransformation.h \
     CustomWidgets/paneltransformations.h \
     CustomWidgets/panelvideos.h \
+    CustomWidgets/widgetanimation.h \
+    CustomWidgets/widgetanimationtexture.h \
+    CustomWidgets/widgetbuttonimage.h \
     CustomWidgets/widgetmountainselector.h \
+    CustomWidgets/widgetsliderprogression.h \
     CustomWidgets/widgettilesettexture.h \
     CustomWidgets/widgetvideo.h \
+    Dialogs/Animations/dialoganimationclearframes.h \
+    Dialogs/Animations/dialoganimationcopyframes.h \
+    Dialogs/Animations/dialoganimationcreatetransition.h \
     Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.h \
     Dialogs/Commands/dialogcommandcallacommonreaction.h \
     Dialogs/Commands/dialogcommandchangeproperty.h \
     Dialogs/Commands/dialogcommandchangescreentone.h \
+    Dialogs/Commands/dialogcommandcomment.h \
     Dialogs/Commands/dialogcommanddisplayapicture.h \
     Dialogs/Commands/dialogcommanddisplaychoice.h \
     Dialogs/Commands/dialogcommandremoveapicture.h \
@@ -38,15 +46,21 @@ HEADERS += \
     Dialogs/Commands/dialogcommandscript.h \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.h \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.h \
+    Dialogs/Systems/dialogsystemanimationframeeffect.h \
+    Dialogs/Systems/dialogsystemanimationframeelement.h \
     Dialogs/Systems/dialogsystembattlemap.h \
     Dialogs/Systems/dialogsystemcameraproperties.h \
     Dialogs/Systems/dialogsystemdetection.h \
     Dialogs/Systems/dialogsystemfontname.h \
     Dialogs/Systems/dialogsystemfontsize.h \
+    Dialogs/Systems/dialogsystemmonsteraction.h \
+    Dialogs/Systems/dialogsystemprimitive.h \
     Dialogs/Systems/dialogsystemproperty.h \
+    Dialogs/Systems/dialogsystemskybox.h \
     Dialogs/Systems/dialogsystemspeedfrequency.h \
     Dialogs/Systems/dialogsystemtitlecommand.h \
     Dialogs/dialogfirstlaunch.h \
+    Dialogs/dialogselectlanguage.h \
     Dialogs/dialogtilesettexture.h \
     Dialogs/dialogvideos.h \
     Dialogs/dialogvideospreview.h \
@@ -56,10 +70,16 @@ HEADERS += \
     Controls/controlnewproject.h \
     CustomWidgets/widgetmapeditor.h \
     CustomWidgets/panelproject.h \
+    Enums/animationeffectconditionkind.h \
+    Enums/animationpositionkind.h \
     Enums/axiskind.h \
     Enums/conditionheroeskind.h \
+    Enums/monsteractionkind.h \
+    Enums/monsteractiontargetkind.h \
     Enums/mountaincollisionkind.h \
     Enums/objectmovingkind.h \
+    Enums/operationkind.h \
+    Enums/systemprimitivekind.h \
     Enums/titlecommandkind.h \
     Enums/titlesettingkind.h \
     Enums/variablemapobjectcharacteristickind.h \
@@ -69,12 +89,18 @@ HEADERS += \
     MapEditor/mountains.h \
     MapEditor/textureseveral.h \
     Models/GameDatas/videosdatas.h \
+    Models/System/systemanimationframe.h \
+    Models/System/systemanimationframeeffect.h \
+    Models/System/systemanimationframeelement.h \
     Models/System/systemcameraproperties.h \
     Models/System/systemdetection.h \
     Models/System/systemfontname.h \
     Models/System/systemfontsize.h \
+    Models/System/systemmonsteraction.h \
     Models/System/systemmountain.h \
+    Models/System/systemprimitive.h \
     Models/System/systemproperty.h \
+    Models/System/systemskybox.h \
     Models/System/systemspeedfrequency.h \
     Models/System/systemtitlecommand.h \
     Models/System/systemvideo.h \
@@ -336,20 +362,29 @@ HEADERS += \
     MapEditor/object3dbox.h \
     CustomWidgets/widgetpreviewobject3d.h \
     MapEditor/object3dcustom.h \
-    CustomWidgets/widgetchart.h
+    CustomWidgets/widgetchart.h \
+    Dialogs/Commands/dialogcommandlabel.h
 
 SOURCES += \
     CustomWidgets/panelselectpositionmaps.cpp \
     CustomWidgets/panelsubtransformation.cpp \
     CustomWidgets/paneltransformations.cpp \
     CustomWidgets/panelvideos.cpp \
+    CustomWidgets/widgetanimation.cpp \
+    CustomWidgets/widgetanimationtexture.cpp \
+    CustomWidgets/widgetbuttonimage.cpp \
     CustomWidgets/widgetmountainselector.cpp \
+    CustomWidgets/widgetsliderprogression.cpp \
     CustomWidgets/widgettilesettexture.cpp \
     CustomWidgets/widgetvideo.cpp \
+    Dialogs/Animations/dialoganimationclearframes.cpp \
+    Dialogs/Animations/dialoganimationcopyframes.cpp \
+    Dialogs/Animations/dialoganimationcreatetransition.cpp \
     Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.cpp \
     Dialogs/Commands/dialogcommandcallacommonreaction.cpp \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
     Dialogs/Commands/dialogcommandchangescreentone.cpp \
+    Dialogs/Commands/dialogcommandcomment.cpp \
     Dialogs/Commands/dialogcommanddisplayapicture.cpp \
     Dialogs/Commands/dialogcommanddisplaychoice.cpp \
     Dialogs/Commands/dialogcommandremoveapicture.cpp \
@@ -357,15 +392,21 @@ SOURCES += \
     Dialogs/Commands/dialogcommandscript.cpp \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.cpp \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.cpp \
+    Dialogs/Systems/dialogsystemanimationframeeffect.cpp \
+    Dialogs/Systems/dialogsystemanimationframeelement.cpp \
     Dialogs/Systems/dialogsystembattlemap.cpp \
     Dialogs/Systems/dialogsystemcameraproperties.cpp \
     Dialogs/Systems/dialogsystemdetection.cpp \
     Dialogs/Systems/dialogsystemfontname.cpp \
     Dialogs/Systems/dialogsystemfontsize.cpp \
+    Dialogs/Systems/dialogsystemmonsteraction.cpp \
+    Dialogs/Systems/dialogsystemprimitive.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
+    Dialogs/Systems/dialogsystemskybox.cpp \
     Dialogs/Systems/dialogsystemspeedfrequency.cpp \
     Dialogs/Systems/dialogsystemtitlecommand.cpp \
     Dialogs/dialogfirstlaunch.cpp \
+    Dialogs/dialogselectlanguage.cpp \
     Dialogs/dialogtilesettexture.cpp \
     Dialogs/dialogvideos.cpp \
     Dialogs/dialogvideospreview.cpp \
@@ -381,12 +422,18 @@ SOURCES += \
     MapEditor/mountains.cpp \
     MapEditor/textureseveral.cpp \
     Models/GameDatas/videosdatas.cpp \
+    Models/System/systemanimationframe.cpp \
+    Models/System/systemanimationframeeffect.cpp \
+    Models/System/systemanimationframeelement.cpp \
     Models/System/systemcameraproperties.cpp \
     Models/System/systemdetection.cpp \
     Models/System/systemfontname.cpp \
     Models/System/systemfontsize.cpp \
+    Models/System/systemmonsteraction.cpp \
     Models/System/systemmountain.cpp \
+    Models/System/systemprimitive.cpp \
     Models/System/systemproperty.cpp \
+    Models/System/systemskybox.cpp \
     Models/System/systemspeedfrequency.cpp \
     Models/System/systemtitlecommand.cpp \
     Models/System/systemvideo.cpp \
@@ -621,7 +668,8 @@ SOURCES += \
     MapEditor/object3dbox.cpp \
     CustomWidgets/widgetpreviewobject3d.cpp \
     MapEditor/object3dcustom.cpp \
-    CustomWidgets/widgetchart.cpp
+    CustomWidgets/widgetchart.cpp \
+    Dialogs/Commands/dialogcommandlabel.cpp
 
 FORMS += \
     CustomWidgets/panelselectpositionmaps.ui \
@@ -629,12 +677,17 @@ FORMS += \
     CustomWidgets/paneltransformations.ui \
     CustomWidgets/panelvideos.ui \
     CustomWidgets/widgetmountainselector.ui \
+    CustomWidgets/widgetsliderprogression.ui \
     CustomWidgets/widgettilesettexture.ui \
     CustomWidgets/widgetvideo.ui \
+    Dialogs/Animations/dialoganimationclearframes.ui \
+    Dialogs/Animations/dialoganimationcopyframes.ui \
+    Dialogs/Animations/dialoganimationcreatetransition.ui \
     Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.ui \
     Dialogs/Commands/dialogcommandcallacommonreaction.ui \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
     Dialogs/Commands/dialogcommandchangescreentone.ui \
+    Dialogs/Commands/dialogcommandcomment.ui \
     Dialogs/Commands/dialogcommanddisplayapicture.ui \
     Dialogs/Commands/dialogcommanddisplaychoice.ui \
     Dialogs/Commands/dialogcommandremoveapicture.ui \
@@ -642,15 +695,21 @@ FORMS += \
     Dialogs/Commands/dialogcommandscript.ui \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.ui \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.ui \
+    Dialogs/Systems/dialogsystemanimationframeeffect.ui \
+    Dialogs/Systems/dialogsystemanimationframeelement.ui \
     Dialogs/Systems/dialogsystembattlemap.ui \
     Dialogs/Systems/dialogsystemcameraproperties.ui \
     Dialogs/Systems/dialogsystemdetection.ui \
     Dialogs/Systems/dialogsystemfontname.ui \
     Dialogs/Systems/dialogsystemfontsize.ui \
+    Dialogs/Systems/dialogsystemmonsteraction.ui \
+    Dialogs/Systems/dialogsystemprimitive.ui \
     Dialogs/Systems/dialogsystemproperty.ui \
+    Dialogs/Systems/dialogsystemskybox.ui \
     Dialogs/Systems/dialogsystemspeedfrequency.ui \
     Dialogs/Systems/dialogsystemtitlecommand.ui \
     Dialogs/dialogfirstlaunch.ui \
+    Dialogs/dialogselectlanguage.ui \
     Dialogs/dialogtilesettexture.ui \
     Dialogs/dialogvideos.ui \
     Dialogs/dialogvideospreview.ui \
@@ -743,7 +802,8 @@ FORMS += \
     Dialogs/dialogshapes.ui \
     CustomWidgets/panelshapes.ui \
     CustomWidgets/widgetshape.ui \
-    Dialogs/dialogshapespreview.ui
+    Dialogs/dialogshapespreview.ui \
+    Dialogs/Commands/dialogcommandlabel.ui
 
 # Resources are currently part of the Editor library, not the EditorApp. EditorApp's main function will require Q_INIT_RESOURCE.
 RESOURCES += \

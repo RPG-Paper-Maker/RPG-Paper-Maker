@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -56,6 +56,8 @@ DialogCommandTeleportObject::DialogCommandTeleportObject(
                                                             nullptr);
 
     if (command != nullptr) initialize(command);
+
+    this->translate();
 }
 
 DialogCommandTeleportObject::~DialogCommandTeleportObject()
@@ -72,6 +74,26 @@ DialogCommandTeleportObject::~DialogCommandTeleportObject()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandTeleportObject::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::TELEPORT_OBJECT) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->labelZ->setText(RPM::translate(Translations::Z) + RPM::COLON);
+    ui->labelIDMap->setText(RPM::translate(Translations::MAP_ID) + RPM::COLON);
+    ui->labelYPlus->setText(RPM::translate(Translations::Y_PLUS) + RPM::COLON);
+    ui->labelObjectID->setText(RPM::translate(Translations::OBJECT_ID) + RPM
+        ::COLON);
+    ui->groupBoxOptions->setTitle(RPM::translate(Translations::POSITION));
+    ui->groupBoxPosition->setTitle(RPM::translate(Translations::POSITION));
+    ui->radioButtonObject->setText(RPM::translate(Translations::OBJECT_ID) + RPM
+        ::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandTeleportObject::initialize(EventCommand* command){
     int i = 0;
@@ -155,11 +177,11 @@ void DialogCommandTeleportObject::on_radioButtonSelect_toggled(bool checked){
 //--------------------------------------------
 
 void DialogCommandTeleportObject::on_radioButtonNumber_toggled(bool checked){
-    ui->label_2->setEnabled(checked);
-    ui->label_3->setEnabled(checked);
-    ui->label_4->setEnabled(checked);
-    ui->label_5->setEnabled(checked);
-    ui->label_6->setEnabled(checked);
+    ui->labelIDMap->setEnabled(checked);
+    ui->labelX->setEnabled(checked);
+    ui->labelY->setEnabled(checked);
+    ui->labelYPlus->setEnabled(checked);
+    ui->labelZ->setEnabled(checked);
     ui->widgetIdMap->setEnabled(checked);
     ui->widgetX->setEnabled(checked);
     ui->widgetY->setEnabled(checked);

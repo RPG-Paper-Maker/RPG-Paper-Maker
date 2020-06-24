@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogsystemweaponarmorkind.h"
 #include "ui_dialogsystemweaponarmorkind.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -29,6 +30,8 @@ DialogSystemWeaponArmorKind::DialogSystemWeaponArmorKind(
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemWeaponArmorKind::~DialogSystemWeaponArmorKind()
@@ -46,6 +49,16 @@ DialogSystemWeaponArmorKind::~DialogSystemWeaponArmorKind()
 void DialogSystemWeaponArmorKind::initialize(){
     ui->widgetName->initializeNamesLang(&m_weaponArmorKind);
     ui->treeViewEquipment->setModel(m_weaponArmorKind.getEquipmentModel());
+}
+
+//-------------------------------------------------
+
+void DialogSystemWeaponArmorKind::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_KIND) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

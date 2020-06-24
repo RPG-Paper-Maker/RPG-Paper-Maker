@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -15,6 +15,7 @@
 #include "ui_widgetmenubarmapeditor.h"
 #include "common.h"
 #include "mainwindow.h"
+#include "rpm.h"
 
 QColor WidgetMenuBarMapEditor::colorBackgroundSelected(95, 158, 160);
 QColor WidgetMenuBarMapEditor::colorBackgroundRightSelected(120, 163, 131);
@@ -49,6 +50,8 @@ WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent, bool selection) 
         actions().at(static_cast<int>(m_selectionKind))->setProperty("selection",
             true);
     }
+
+    this->translate();
 }
 
 WidgetMenuBarMapEditor::~WidgetMenuBarMapEditor()
@@ -499,6 +502,30 @@ void WidgetMenuBarMapEditor::enableAllRight() {
     actionPin()->setEnabled(true);
     actionLayerNone()->setEnabled(true);
     actionLayerOn()->setEnabled(true);
+}
+
+//-------------------------------------------------
+
+void WidgetMenuBarMapEditor::translate()
+{
+    ui->menuEvents->setTitle(RPM::translate(Translations::OBJECT));
+    ui->menuFloors->setTitle(RPM::translate(Translations::FLOOR));
+    ui->menuMountain->setTitle(RPM::translate(Translations::MOUNTAIN));
+    ui->menu3D_object->setTitle(RPM::translate(Translations::THREED_OBJECT));
+    ui->menuFace_Sprite->setTitle(RPM::translate(Translations::FACE_SPRITE));
+    ui->actionSlope->setText(RPM::translate(Translations::SLOPE));
+    ui->actionFloors->setText(RPM::translate(Translations::FLOOR));
+    ui->actionObject->setText(RPM::translate(Translations::OBJECT));
+    ui->actionAutotile->setText(RPM::translate(Translations::AUTOTILE));
+    ui->actionMountain->setText(RPM::translate(Translations::MOUNTAIN));
+    ui->action3D_object->setText(RPM::translate(Translations::THREED_OBJECT));
+    ui->actionFix_Sprite->setText(RPM::translate(Translations::FIX_SPRITE));
+    ui->actionFace_Sprite->setText(RPM::translate(Translations::FACE_SPRITE));
+    ui->actionWall_Sprite->setText(RPM::translate(Translations::WALL));
+    ui->actionDouble_Sprite->setText(RPM::translate(Translations::DOUBLE_SPRITE));
+    ui->actionQuadra_Sprite->setText(RPM::translate(Translations::QUADRA_SPRITE));
+    ui->actionAnimated_Autotile->setText(RPM::translate(Translations
+        ::ANIMATED_AUTOTILE));
 }
 
 // -------------------------------------------------------

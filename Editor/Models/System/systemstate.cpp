@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -69,9 +69,15 @@ SystemState::~SystemState() {
     this->removeDetection();
 }
 
-QString SystemState::name() const { return m_state->name(); }
+QString SystemState::name() const {
+    return this->state()->name();
+}
 
-SuperListItem* SystemState::state() const { return m_state; }
+SuperListItem* SystemState::state() const
+{
+    return SuperListItem::getById(RPM::get()->project()->gameDatas()
+        ->commonEventsDatas()->modelStates()->invisibleRootItem(), id());
+}
 
 void SystemState::setState(SuperListItem* s) {
     m_state = s;
@@ -228,36 +234,39 @@ SuperListItem* SystemState::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemState::setCopy(const SystemState& state) {
-    SuperListItem::setCopy(state);
-    p_id = state.p_id;
+void SystemState::setCopy(const SuperListItem &super) {
+    const SystemState *state;
 
-    m_state = state.m_state;
-    m_graphicsId = state.m_graphicsId;
-    m_graphicsKind = state.m_graphicsKind;
-    m_indexX = state.m_indexX;
-    m_indexY = state.m_indexY;
-    m_rectTileset = state.m_rectTileset;
-    m_objectMovingKind = state.m_objectMovingKind;
+    SuperListItem::setCopy(super);
+
+    state = reinterpret_cast<const SystemState *>(&super);
+    p_id = state->p_id;
+    m_state = state->m_state;
+    m_graphicsId = state->m_graphicsId;
+    m_graphicsKind = state->m_graphicsKind;
+    m_indexX = state->m_indexX;
+    m_indexY = state->m_indexY;
+    m_rectTileset = state->m_rectTileset;
+    m_objectMovingKind = state->m_objectMovingKind;
     this->removeRoute();
-    if (state.m_eventCommandRoute != nullptr) {
+    if (state->m_eventCommandRoute != nullptr) {
         m_eventCommandRoute = new EventCommand;
-        m_eventCommandRoute->setCopy(*state.m_eventCommandRoute);
+        m_eventCommandRoute->setCopy(*state->m_eventCommandRoute);
     }
-    m_speedID = state.m_speedID;
-    m_frequencyID = state.m_frequencyID;
-    m_moveAnimation = state.m_moveAnimation;
-    m_stopAnimation = state.m_stopAnimation;
-    m_climbAnimation = state.m_climbAnimation;
-    m_directionFix = state.m_directionFix;
-    m_through = state.m_through;
-    m_setWithCamera = state.m_setWithCamera;
-    m_pixelOffset = state.m_pixelOffset;
-    m_keepPosition = state.m_keepPosition;
+    m_speedID = state->m_speedID;
+    m_frequencyID = state->m_frequencyID;
+    m_moveAnimation = state->m_moveAnimation;
+    m_stopAnimation = state->m_stopAnimation;
+    m_climbAnimation = state->m_climbAnimation;
+    m_directionFix = state->m_directionFix;
+    m_through = state->m_through;
+    m_setWithCamera = state->m_setWithCamera;
+    m_pixelOffset = state->m_pixelOffset;
+    m_keepPosition = state->m_keepPosition;
     this->removeDetection();
-    if (state.m_eventCommandDetection!= nullptr) {
+    if (state->m_eventCommandDetection!= nullptr) {
         m_eventCommandDetection = new EventCommand;
-        m_eventCommandDetection->setCopy(*state.m_eventCommandDetection);
+        m_eventCommandDetection->setCopy(*state->m_eventCommandDetection);
     }
 }
 

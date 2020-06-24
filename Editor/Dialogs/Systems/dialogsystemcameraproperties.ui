@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>414</width>
+    <width>428</width>
     <height>460</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Camera properties...</string>
+   <string>Set camera properties...</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_5">
    <property name="leftMargin">
@@ -36,7 +36,7 @@
        <item>
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
-          <widget class="QLabel" name="label_10">
+          <widget class="QLabel" name="labelName">
            <property name="text">
             <string>Name:</string>
            </property>
@@ -59,7 +59,7 @@
           </spacer>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="labelDistance">
            <property name="text">
             <string>Distance:</string>
            </property>
@@ -82,7 +82,7 @@
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="labelHorizontalAngle">
            <property name="text">
             <string>Horizontal angle:</string>
            </property>
@@ -105,7 +105,7 @@
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="labelVerticalAngle">
            <property name="text">
             <string>Vertical angle:</string>
            </property>
@@ -130,15 +130,15 @@
         </layout>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBoxTargetOffset">
          <property name="title">
           <string>Target offset</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
-           <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,1">
+           <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,1">
             <item row="0" column="0">
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="labelX">
               <property name="text">
                <string>X:</string>
               </property>
@@ -160,21 +160,24 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="2" rowspan="3">
+            <item row="0" column="2">
+             <widget class="QComboBox" name="comboBoxX"/>
+            </item>
+            <item row="0" column="3" rowspan="3">
              <spacer name="horizontalSpacer_2">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>68</width>
+                <width>17</width>
                 <height>78</height>
                </size>
               </property>
              </spacer>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_5">
+             <widget class="QLabel" name="labelY">
               <property name="text">
                <string>Y:</string>
               </property>
@@ -196,8 +199,11 @@
               </property>
              </widget>
             </item>
+            <item row="1" column="2">
+             <widget class="QComboBox" name="comboBoxY"/>
+            </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="label_6">
+             <widget class="QLabel" name="labelZ">
               <property name="text">
                <string>Z:</string>
               </property>
@@ -219,6 +225,9 @@
               </property>
              </widget>
             </item>
+            <item row="2" column="2">
+             <widget class="QComboBox" name="comboBoxZ"/>
+            </item>
            </layout>
           </item>
          </layout>
@@ -227,7 +236,7 @@
        <item>
         <layout class="QGridLayout" name="gridLayout_4">
          <item row="0" column="0">
-          <widget class="QLabel" name="label_7">
+          <widget class="QLabel" name="labelFieldOfView">
            <property name="text">
             <string>Field of view:</string>
            </property>
@@ -263,7 +272,7 @@
           </spacer>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_8">
+          <widget class="QLabel" name="labelNear">
            <property name="text">
             <string>Near:</string>
            </property>
@@ -286,7 +295,7 @@
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="label_9">
+          <widget class="QLabel" name="labelFar">
            <property name="text">
             <string>Far:</string>
            </property>

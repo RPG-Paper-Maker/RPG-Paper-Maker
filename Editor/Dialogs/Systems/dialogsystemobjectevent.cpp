@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogsystemobjectevent.h"
 #include "ui_dialogsystemobjectevent.h"
+#include "rpm.h"
 
 DialogSystemObjectEvent::DialogSystemObjectEvent(SystemObjectEvent &event,
                                                  QWidget *parent) :
@@ -21,6 +22,8 @@ DialogSystemObjectEvent::DialogSystemObjectEvent(SystemObjectEvent &event,
     ui->setupUi(this);
     
     initialize();
+
+    this->translate();
 }
 
 DialogSystemObjectEvent::~DialogSystemObjectEvent()
@@ -36,4 +39,13 @@ DialogSystemObjectEvent::~DialogSystemObjectEvent()
 
 void DialogSystemObjectEvent::initialize(){
     ui->widget->initialize(&m_event);
+}
+
+//-------------------------------------------------
+
+void DialogSystemObjectEvent::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_EVENT) + RPM
+        ::DOT_DOT_DOT);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

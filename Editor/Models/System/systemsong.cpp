@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -49,7 +49,7 @@ void SystemSong::setIsBR(bool b) { m_isBR = b; }
 QString SystemSong::getFolder(SongKind kind, bool isBR) {
     QString folder = isBR ? RPM::get()->project()->gameDatas()->systemDatas()
                             ->pathBR()
-                          : RPM::get()->project()->pathCurrentProject();
+                          : RPM::get()->project()->pathCurrentProjectApp();
 
     return Common::pathCombine(folder, getLocalFolder(kind));
 }
@@ -76,13 +76,13 @@ QString SystemSong::getLocalFolder(SongKind kind){
 QString SystemSong::getSongTitle(SongKind kind) {
     switch(kind) {
     case SongKind::Music:
-        return "Musics";
+        return RPM::translate(Translations::MUSICS);
     case SongKind::BackgroundSound:
-        return "Background sounds";
+        return RPM::translate(Translations::BACKGROUND_SOUNDS);
     case SongKind::Sound:
-        return "Sounds";
+        return RPM::translate(Translations::SOUNDS);
     case SongKind::MusicEffect:
-        return "Music effects";
+        return RPM::translate(Translations::MUSIC_EFFECTS);
     default:
         return "";
     }
@@ -117,10 +117,13 @@ SuperListItem* SystemSong::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemSong::setCopy(const SystemSong& super){
+void SystemSong::setCopy(const SuperListItem &super) {
+    const SystemSong *song;
+
     SuperListItem::setCopy(super);
 
-    m_isBR = super.m_isBR;
+    song = reinterpret_cast<const SystemSong *>(&super);
+    m_isBR = song->m_isBR;
 }
 
 // -------------------------------------------------------

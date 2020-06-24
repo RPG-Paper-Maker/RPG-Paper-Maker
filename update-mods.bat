@@ -17,6 +17,16 @@ set sourcePathModsScript=%pathRepos%\Game-Scripts\Content\Datas\Scripts
 set pathModsScript=%pathMods%\Scripts
 CALL :copy_mod %sourcePathModsScript% %pathModsScript% Game-Scripts
 
+set sourceFile=%pathRepos%\Game-Scripts\main.js
+set destinationFile=%pathMods%\main.js
+copy /Y %sourceFile% %destinationFile%
+set sourceFile=%pathRepos%\Game-Scripts\index.html
+set destinationFile=%pathMods%\index.html
+copy /Y %sourceFile% %destinationFile%
+set sourceFile=%pathRepos%\Game-Scripts\package.json
+set destinationFile=%pathMods%\package.json
+copy /Y %sourceFile% %destinationFile%
+
 set sourcePathModsBR=%pathRepos%\Basic-Ressources\Content
 set pathModsBR=%pathMods%\BR\Content
 mkdir %pathMods%\BR

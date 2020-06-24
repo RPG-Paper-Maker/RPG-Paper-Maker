@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -138,11 +138,11 @@ bool MapPortion::addSprite(QSet<Portion>& portionsOverflow, Position& p,
 bool MapPortion::deleteSprite(QSet<Portion> &portionsOverflow, Position& p,
                               QList<QJsonObject> &previous,
                               QList<MapEditorSubSelectionKind> &previousType,
-                              QList<Position> &positions)
+                              QList<Position> &positions, bool deletePtr)
 {
     QJsonObject prev;
     MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
-    bool changed = m_sprites->deleteSprite(portionsOverflow, p, prev, kind);
+    bool changed = m_sprites->deleteSprite(portionsOverflow, p, prev, kind, deletePtr);
 
     if (changed) {
         previous.append(prev);
@@ -188,11 +188,11 @@ bool MapPortion::addObject3D(QSet<Portion> &portionsOverflow, Position &p,
 
 bool MapPortion::deleteObject3D(QSet<Portion> &portionsOverflow, Position &p,
     QList<QJsonObject> &previous, QList<MapEditorSubSelectionKind> &previousType
-    , QList<Position> &positions)
+    , QList<Position> &positions, bool deletePtr)
 {
     QJsonObject prev;
     MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
-    bool changed = m_objects3D->deleteObject3D(portionsOverflow, p, prev, kind);
+    bool changed = m_objects3D->deleteObject3D(portionsOverflow, p, prev, kind, deletePtr);
 
     if (changed) {
         previous.append(prev);
@@ -445,15 +445,22 @@ MapElement* MapPortion::updateRaycastingOverflowSprite(int squareSize,
                                                         float &finalDistance,
                                                         Position &finalPosition,
                                                         QRay3D& ray,
-                                                        double cameraHAngle)
+                                                        double cameraHAngle,
+                                                       bool &remove)
 {
     SpriteDatas* sprite = m_sprites->spriteAt(position);
 
-    if (m_sprites->updateRaycastingAt(position, sprite, squareSize,
-                                      finalDistance, finalPosition, ray,
-                                      cameraHAngle))
+    if (sprite == nullptr)
     {
-        return sprite;
+        remove = true;
+    } else
+    {
+        if (m_sprites->updateRaycastingAt(position, sprite, squareSize,
+                                          finalDistance, finalPosition, ray,
+                                          cameraHAngle))
+        {
+            return sprite;
+        }
     }
 
     return nullptr;
@@ -462,15 +469,21 @@ MapElement* MapPortion::updateRaycastingOverflowSprite(int squareSize,
 // -------------------------------------------------------
 
 MapElement* MapPortion::updateRaycastingOverflowObject3D(Position& position,
-    float &finalDistance, Position &finalPosition, QRay3D& ray)
+    float &finalDistance, Position &finalPosition, QRay3D& ray, bool &remove)
 {
     Object3DDatas *object3D;
 
     object3D = m_objects3D->object3DAt(position);
-    if (m_objects3D->updateRaycastingAt(position, object3D, finalDistance,
-        finalPosition, ray))
+    if (object3D == nullptr)
     {
-        return object3D;
+        remove = true;
+    } else
+    {
+        if (m_objects3D->updateRaycastingAt(position, object3D, finalDistance,
+            finalPosition, ray))
+        {
+            return object3D;
+        }
     }
 
     return nullptr;
@@ -479,15 +492,21 @@ MapElement* MapPortion::updateRaycastingOverflowObject3D(Position& position,
 // -------------------------------------------------------
 
 MapElement * MapPortion::updateRaycastingOverflowMountain(Position &position,
-    float &finalDistance, Position &finalPosition, QRay3D &ray)
+    float &finalDistance, Position &finalPosition, QRay3D &ray, bool &remove)
 {
     MountainDatas *mountain;
 
     mountain = m_mountains->mountainAt(position);
-    if (m_mountains->updateRaycastingAt(position, mountain, finalDistance,
-        finalPosition, ray))
+    if (mountain == nullptr)
     {
-        return mountain;
+        remove = true;
+    } else
+    {
+        if (m_mountains->updateRaycastingAt(position, mountain, finalDistance,
+            finalPosition, ray))
+        {
+            return mountain;
+        }
     }
 
     return nullptr;

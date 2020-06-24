@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>515</width>
-    <height>1081</height>
+    <height>1238</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,7 +45,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="groupBoxRewards">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -67,7 +67,7 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
             <item>
-             <widget class="QLabel" name="label">
+             <widget class="QLabel" name="labelExperience">
               <property name="text">
                <string>Experience:</string>
               </property>
@@ -81,7 +81,7 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
-             <widget class="QLabel" name="label_2">
+             <widget class="QLabel" name="labelCurrencies">
               <property name="enabled">
                <bool>true</bool>
               </property>
@@ -108,7 +108,7 @@
           <item>
            <layout class="QGridLayout" name="gridLayout_3">
             <item row="0" column="0">
-             <widget class="QLabel" name="label_3">
+             <widget class="QLabel" name="labelLoots">
               <property name="enabled">
                <bool>true</bool>
               </property>
@@ -122,10 +122,10 @@
               <property name="enabled">
                <bool>true</bool>
               </property>
-              <attribute name="headerDefaultSectionSize">
+              <attribute name="headerMinimumSectionSize">
                <number>35</number>
               </attribute>
-              <attribute name="headerMinimumSectionSize">
+              <attribute name="headerDefaultSectionSize">
                <number>35</number>
               </attribute>
               <attribute name="headerStretchLastSection">
@@ -141,10 +141,28 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="groupBoxActions">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="title">
         <string>Actions</string>
        </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="WidgetSuperTree" name="treeViewActions">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>150</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>
@@ -152,6 +170,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
   <customwidget>
    <class>PanelDatasCharacter</class>
    <extends>QWidget</extends>
@@ -163,11 +186,6 @@
    <extends>QWidget</extends>
    <header>panelprogressiontable.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

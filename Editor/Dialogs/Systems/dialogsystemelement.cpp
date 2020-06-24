@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogsystemelement.h"
 #include "ui_dialogsystemelement.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -27,6 +28,8 @@ DialogSystemElement::DialogSystemElement(SystemElement& element,
     ui->setupUi(this);
     
     initialize();
+
+    this->translate();
 }
 
 DialogSystemElement::~DialogSystemElement()
@@ -44,7 +47,21 @@ SystemElement& DialogSystemElement::element() const { return m_element; }
 
 void DialogSystemElement::initialize(){
     ui->widgetTxtLangName->initializeNamesLang(&m_element);
-
-    ui->treeViewEfficiency->setModel(m_element.efficiency());
+    ui->widgetIcon->initializeIcon(&m_element);
+    ui->treeViewEfficiency->initializeModel(m_element.modelEfficiency());
     ui->treeViewEfficiency->setColumnWidth(0,250);
+    ui->treeViewEfficiency->setCanBeEmpty(false);
+    ui->treeViewEfficiency->setCanMove(false);
+    ui->treeViewEfficiency->setCanCreateDelete(false);
+}
+
+//-------------------------------------------------
+
+void DialogSystemElement::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_ELEMENT) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->groupBoxEfficiency->setTitle(RPM::translate(Translations::EFFICIENCY));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

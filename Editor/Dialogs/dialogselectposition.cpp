@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -28,6 +28,8 @@ DialogSelectPosition::DialogSelectPosition(int idMap, int x, int y, int yPlus,
     ui->setupUi(this);
 
     ui->panelSelectPositionMaps->initialize(idMap, x, y, yPlus, z);
+
+    this->translate();
 }
 
 DialogSelectPosition::~DialogSelectPosition()
@@ -69,6 +71,15 @@ TreeMapTag * DialogSelectPosition::currentTag() const {
     return ui->panelSelectPositionMaps->currentTag();
 }
 
+//-------------------------------------------------
+
+void DialogSelectPosition::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SELECT_MAP_POSITION) + RPM
+        ::DOT_DOT_DOT);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
 //--------------------------------------------
 //
 //  SLOTS
@@ -77,8 +88,9 @@ TreeMapTag * DialogSelectPosition::currentTag() const {
 
 void DialogSelectPosition::accept() {
     if (currentTag()->isDir()) {
-        QMessageBox::warning(this, "Warning", "You should select a map and not "
-            "a folder.");
+        QMessageBox::warning(this, RPM::translate(Translations::WARNING), RPM
+            ::translate(Translations::YOU_SHOULD_SELECT_MAP_NOT_FOLDER) + RPM
+            ::DOT);
     } else{
         QDialog::accept();
     }

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -46,8 +46,16 @@ DialogCommandMoveCamera::DialogCommandMoveCamera(EventCommand *command,
     ui->widgetNumberV->initializeNumber(parameters, nullptr, false);
     ui->widgetNumberDistance->initializeNumber(parameters, nullptr);
     ui->widgetNumberTime->initializeNumber(parameters, nullptr, false);
+    ui->comboBoxX->addItem(RPM::translate(Translations::SQUARE_S));
+    ui->comboBoxX->addItem(RPM::translate(Translations::PIXEL_S));
+    ui->comboBoxY->addItem(RPM::translate(Translations::SQUARE_S));
+    ui->comboBoxY->addItem(RPM::translate(Translations::PIXEL_S));
+    ui->comboBoxZ->addItem(RPM::translate(Translations::SQUARE_S));
+    ui->comboBoxZ->addItem(RPM::translate(Translations::PIXEL_S));
 
     if (command != nullptr) initialize(command);
+
+    this->translate();
 }
 
 DialogCommandMoveCamera::~DialogCommandMoveCamera()
@@ -63,6 +71,56 @@ DialogCommandMoveCamera::~DialogCommandMoveCamera()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandMoveCamera::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::MOVE_CAMERA) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->labelZ->setText(RPM::translate(Translations::Z) + RPM::COLON);
+    ui->labelTime->setText(RPM::translate(Translations::TIME) + RPM::COLON);
+    ui->labelSeconds->setText(RPM::translate(Translations::SECONDS));
+    ui->labelDistance->setText(RPM::translate(Translations::DISTANCE) + RPM
+        ::COLON);
+    ui->labelVertical->setText(RPM::translate(Translations::VERTICAL) + RPM
+        ::COLON);
+    ui->labelHorizontal->setText(RPM::translate(Translations::HORIZONTAL) + RPM
+        ::COLON);
+    ui->radioButtonTargetObjectID->setText(RPM::translate(Translations
+        ::OBJECT_ID) + RPM::COLON);
+    ui->radioButtonTargetUnchanged->setText(RPM::translate(Translations
+        ::UNCHANGED));
+    ui->checkBoxWaitEnd->setText(RPM::translate(Translations
+        ::WAIT_END_MOVE_BEFORE_NEXT_COMMAND));
+    ui->checkBoxtargetOffsetMove->setText(RPM::translate(Translations
+        ::TARGET_OFFSET));
+    ui->checkBoxCameraOrientation->setText(RPM::translate(Translations
+        ::TAKE_ACCOUNT_CAMERA_ORIENTATION));
+    ui->checkBoxtargetOffsetRotation->setText(RPM::translate(Translations
+        ::TARGET_OFFSET));
+    ui->groupBoxMove->setTitle(RPM::translate(Translations::MOVE));
+    ui->groupBoxZoom->setTitle(RPM::translate(Translations::ZOOM));
+    ui->groupBoxRotation->setTitle(RPM::translate(Translations::ROTATION));
+    ui->groupBoxOperation->setTitle(RPM::translate(Translations::OPERATION));
+    ui->groupBoxCameraTarget->setTitle(RPM::translate(Translations
+        ::CAMERA_TARGET));
+    ui->radioButtonPlus->setText(RPM::PARENTHESIS_LEFT + RPM::PLUS + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::PLUS));
+    ui->radioButtonMinus->setText(RPM::PARENTHESIS_LEFT + RPM::MINUS + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::MINUS));
+    ui->radioButtonTimes->setText(RPM::PARENTHESIS_LEFT + RPM::TIMES + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::TIMES));
+    ui->radioButtonEquals->setText(RPM::PARENTHESIS_LEFT + RPM::EQUAL + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::EQUALS));
+    ui->radioButtonModulo->setText(RPM::PARENTHESIS_LEFT + RPM::MODULO + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::MODULO));
+    ui->radioButtonDivided->setText(RPM::PARENTHESIS_LEFT + RPM::MODULO + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::DIVIDED_BY));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandMoveCamera::initialize(EventCommand* command) {
     int i = 0;

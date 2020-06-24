@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -36,6 +36,8 @@ DialogCommandDisplayChoice::DialogCommandDisplayChoice(EventCommand *command,
     } else {
         this->initializeDefault();
     }
+
+    this->translate();
 }
 
 DialogCommandDisplayChoice::~DialogCommandDisplayChoice() {
@@ -72,16 +74,31 @@ void DialogCommandDisplayChoice::initializeDefault() {
     SystemLang *lang;
     QList<QStandardItem *> row;
 
-    lang = new SystemLang(1, new LangsTranslation("Yes"));
+    lang = new SystemLang(1, new LangsTranslation(RPM::translate(Translations
+        ::YES)));
     lang->setDisplayID(false);
     row = lang->getModelRow();
     m_model->appendRow(row);
-    lang = new SystemLang(2, new LangsTranslation("No"));
+    lang = new SystemLang(2, new LangsTranslation(RPM::translate(Translations
+        ::NO)));
     lang->setDisplayID(false);
     row = lang->getModelRow();
     m_model->appendRow(row);
     m_model->appendRow(SuperListItem::getEmptyItem());
     ui->panelPrimitiveCancelAutoIndex->setNumberValue(2);
+}
+
+//-------------------------------------------------
+
+void DialogCommandDisplayChoice::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::DISPLAY_CHOICES) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelCancelAutoIndex->setText(RPM::translate(Translations
+        ::CANCEL_AUTO_INDEX) + RPM::COLON);
+    ui->groupBoxChoices->setTitle(RPM::translate(Translations::CHOICES));
+    ui->groupBoxOptions->setTitle(RPM::translate(Translations::OPTIONS));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -166,13 +166,13 @@ public:
         bool undoRedo = false);
     void removeSprite(Position &p, DrawKind drawKind);
     void removeSpriteWall(DrawKind drawKind);
-    void eraseSprite(Position &p, bool undoRedo = false);
+    void eraseSprite(Position &p, bool undoRedo = false, bool deletePtr = true);
     void eraseSpriteWall(Position &position, bool undoRedo = false);
     void addObject3D(Position &p, int specialID);
     void stockObject3D(Position &p, Object3DDatas *object3D, bool undoRedo =
         false);
     void removeObject3D(Position &p);
-    void eraseObject3D(Position &p, bool undoRedo = false);
+    void eraseObject3D(Position &p, bool undoRedo = false, bool deletePtr = true);
     void addMountain(Position &p, int specialID, int widthSquares, double
         widthPixels, int heightSquares, double heightPixels, QRect
         &defaultFloorRect);
@@ -190,7 +190,7 @@ public:
     void addObject(Position &p);
     void stockObject(Position &p, SystemCommonObject *object,
         bool undoRedo = false, bool move = false);
-    void removeObject(Position &p);
+    bool removeObject(Position &p);
     void eraseObject(Position &p, bool undoRedo = false, bool move = false);
     void moveObject(Position &p);
     void updateMapObjects();

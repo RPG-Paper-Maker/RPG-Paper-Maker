@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -50,9 +50,11 @@ private:
     EventCommand* p_command;
     SystemCommonObject* m_linkedObject;
     QStandardItemModel* m_parameters;
-    void openDialogCommand(EventCommandKind kind,
-                           EventCommand *command = nullptr);
+
+    void openDialogCommand(EventCommandKind kind, EventCommand *command =
+        nullptr);
     void openNonDialogCommand(EventCommandKind kind);
+    void translate();
 
 private slots:
     void on_pushButtonShowText_clicked();
@@ -93,6 +95,9 @@ private slots:
     void on_pushButtonAllowForbidSaves_clicked();
     void on_pushButtonAllowForbidMainMenu_clicked();
     void on_pushButtonCallCommonReaction_clicked();
+    void on_pushButtonLabel_clicked();
+    void on_pushButtonJumpLabel_clicked();
+    void on_pushButtonComment_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

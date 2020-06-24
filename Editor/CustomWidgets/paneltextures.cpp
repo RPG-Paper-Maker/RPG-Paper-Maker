@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -34,6 +34,8 @@ PanelTextures::PanelTextures(QWidget *parent) :
     m_currentObjects3DID(-1)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 PanelTextures::~PanelTextures() {
@@ -282,24 +284,24 @@ QString PanelTextures::createlabelText() {
     QString kindText = "";
     switch (m_kind) {
     case PictureKind::Autotiles:
-        kindText = "autotile";
+        kindText = RPM::translate(Translations::AUTOTILE).toLower();
         break;
     case PictureKind::Walls:
-        kindText = "wall";
+        kindText = RPM::translate(Translations::WALL).toLower();
         break;
     case PictureKind::Mountains:
-        kindText = "mountain";
+        kindText = RPM::translate(Translations::MOUNTAIN).toLower();
         break;
     case PictureKind::Object3D:
-        kindText = "3D object";
+        kindText = RPM::translate(Translations::THREED_OBJECT).toLower();
         break;
     default:
         break;
     }
 
-    return "You don't have any " + kindText + " in this tileset. You can add "
-        "it thanks to the button update list here or in the tileset tab in the "
-        "datas manager.";
+    return RPM::translate(Translations::PANEL_TEXTURES_TEXT_1) + RPM::SPACE +
+        kindText + RPM::SPACE + RPM::translate(Translations
+        ::PANEL_TEXTURES_TEXT_2);
 }
 
 // -------------------------------------------------------
@@ -510,6 +512,14 @@ void PanelTextures::updateShow() {
         this->showTileset();
         break;
     }
+}
+
+//-------------------------------------------------
+
+void PanelTextures::translate()
+{
+    ui->pushButtonUpdateList->setText(RPM::translate(Translations::UPDATE_LIST)
+        + RPM::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------

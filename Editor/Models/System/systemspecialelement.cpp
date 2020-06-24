@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -234,12 +234,15 @@ void SystemSpecialElement::updateCustomCollisionName() {
 void SystemSpecialElement::updateGenericObjectName(SuperListItem *obj,
     CustomShapeKind kind)
 {
-    SuperListItem *super;
-
-    super = SuperListItem::getById(RPM::get()->project()->shapesDatas()->model(
-        kind)->invisibleRootItem(), obj->id());
-    if (super != nullptr) {
-        obj->setName(super->name());
+    QStandardItemModel *model = RPM::get()->project()->shapesDatas()->model(
+        kind);
+    if (model != nullptr)
+    {
+        SuperListItem *super = SuperListItem::getById(model->invisibleRootItem()
+            , obj->id());
+        if (super != nullptr) {
+            obj->setName(super->name());
+        }
     }
 }
 
@@ -271,27 +274,30 @@ SuperListItem* SystemSpecialElement::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemSpecialElement::setCopy(const SystemSpecialElement& super) {
+void SystemSpecialElement::setCopy(const SuperListItem &super) {
+    const SystemSpecialElement *special;
+
     SuperListItem::setCopy(super);
 
-    m_shapeKind = super.m_shapeKind;
-    m_objID->setId(super.m_objID->id());
-    m_objID->setName(super.m_objID->name());
-    m_mtlID->setId(super.m_mtlID->id());
-    m_mtlID->setName(super.m_mtlID->name());
-    m_pictureID = super.m_pictureID;
-    m_collisionKind = super.m_collisionKind;
-    m_collisionCustomID->setId(super.m_collisionCustomID->id());
-    m_collisionCustomID->setName(super.m_collisionCustomID->name());
-    m_scale = super.m_scale;
-    m_widthSquare = super.m_widthSquare;
-    m_widthPixel = super.m_widthPixel;
-    m_heightSquare = super.m_heightSquare;
-    m_heightPixel = super.m_heightPixel;
-    m_depthSquare = super.m_depthSquare;
-    m_depthPixel = super.m_depthPixel;
-    m_stretch = super.m_stretch;
-    m_mountainCollisionKind = super.m_mountainCollisionKind;
+    special = reinterpret_cast<const SystemSpecialElement *>(&super);
+    m_shapeKind = special->m_shapeKind;
+    m_objID->setId(special->m_objID->id());
+    m_objID->setName(special->m_objID->name());
+    m_mtlID->setId(special->m_mtlID->id());
+    m_mtlID->setName(special->m_mtlID->name());
+    m_pictureID = special->m_pictureID;
+    m_collisionKind = special->m_collisionKind;
+    m_collisionCustomID->setId(special->m_collisionCustomID->id());
+    m_collisionCustomID->setName(special->m_collisionCustomID->name());
+    m_scale = special->m_scale;
+    m_widthSquare = special->m_widthSquare;
+    m_widthPixel = special->m_widthPixel;
+    m_heightSquare = special->m_heightSquare;
+    m_heightPixel = special->m_heightPixel;
+    m_depthSquare = special->m_depthSquare;
+    m_depthPixel = special->m_depthPixel;
+    m_stretch = special->m_stretch;
+    m_mountainCollisionKind = special->m_mountainCollisionKind;
 }
 
 // -------------------------------------------------------

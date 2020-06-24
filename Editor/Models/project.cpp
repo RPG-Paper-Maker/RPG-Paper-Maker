@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -19,8 +19,8 @@
 #include <QApplication>
 #include <QThread>
 
-const QString Project::ENGINE_VERSION = "1.4.1";
-const QString Project::LAST_BUILD_DATE = "December 6 2019";
+const QString Project::ENGINE_VERSION = "1.5.4";
+const QString Project::LAST_BUILD_DATE = "June 18 2020";
 const int Project::MAX_PROJECTS_NUMBER = 6;
 
 // -------------------------------------------------------
@@ -64,6 +64,11 @@ Project::~Project()
 // Gets
 
 QString Project::pathCurrentProject() const{ return p_pathCurrentProject; }
+
+QString Project::pathCurrentProjectApp() const
+{
+    return Common::pathCombine(p_pathCurrentProject, RPM::PATH_APP);
+}
 
 void Project::setPathCurrentProject(QString s){ p_pathCurrentProject = s; }
 
@@ -139,6 +144,8 @@ void Project::setDefault(){
     m_songsDatas->setDefault();
     m_shapesDatas->setDefault();
     p_gameDatas->setDefault();
+    p_gameDatas->readAnimations(this->pathCurrentProjectApp());
+    p_gameDatas->animationsDatas()->setDefault();
     m_treeMapDatas->setDefault();
     m_scriptsDatas->setDefault();
     m_specialElementsDatas->setDefault();
@@ -197,25 +204,28 @@ bool Project::readVersion(){
     QTextStream in(&file);
     m_version = in.readLine();
     file.close();
-    QString information = "This project is under " + m_version + " version but"
-                          + " your current RPG Paper Maker version is " +
-                          Project::ENGINE_VERSION;
+    QString information = RPM::translate(Translations::VERSION_PB_1) + RPM::SPACE
+        + m_version + RPM::SPACE + RPM::translate(Translations::VERSION_PB_2) +
+        RPM::SPACE + Project::ENGINE_VERSION + RPM::DOT;
 
     int dBefore = Common::versionDifferent(m_version, "0.3.0");
 
     // If impossible to convert the version
     if (dBefore == -2) {
-        QMessageBox::critical(nullptr, "Error: could not find project version",
-                              "Impossible to convert" + m_version + ".");
+        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR_MESSAGE) + RPM
+            ::COLON + RPM::SPACE + RPM::translate(Translations
+            ::COULD_NOT_FIND_PROJECT_VERSION) + RPM::DOT, RPM::translate(
+            Translations::IMPOSSIBLE_TO_CONVERT) + RPM::SPACE + m_version + RPM
+            ::DOT);
         return false;
     }
 
     // If version < 0.3.0, tell that the project updater didn't existed yet
     if (dBefore == -1) {
-        QMessageBox::critical(nullptr, "Error: impossible conversion",
-                              information + " and the projects cannot be " +
-                              "updated if the project version is inferior to " +
-                              "0.3.0.");
+        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR_MESSAGE) + RPM
+            ::COLON + RPM::SPACE + RPM::translate(Translations
+            ::IMPOSSIBLE_CONVERSION_1), information + RPM::SPACE + RPM
+            ::translate(Translations::IMPOSSIBLE_CONVERSION_2) + RPM::DOT);
         return false;
     }
 
@@ -223,9 +233,10 @@ bool Project::readVersion(){
 
     // If the project if superior to the engine
     if (d == 1) {
-        QMessageBox::critical(nullptr, "Error: impossible conversion",
-                              information + ". Please try to update a new " +
-                              "version of the engine and retry.");
+        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR_MESSAGE) + RPM
+            ::COLON + RPM::SPACE + RPM::translate(Translations
+            ::IMPOSSIBLE_CONVERSION_1), information + RPM::SPACE + RPM
+            ::translate(Translations::IMPOSSIBLE_CONVERSION_3) + RPM::DOT);
         return false;
     }
 
@@ -234,13 +245,12 @@ bool Project::readVersion(){
         QDir dirProject(p_pathCurrentProject);
         QString previousFolderName = dirProject.dirName() +
                                      "-" + m_version;
-        QMessageBox::StandardButton box =
-            QMessageBox::question(nullptr, "Error: conversion needed",
-                                  information + ". Convert the project? (a " +
-                                  "copy of your current project will be " +
-                                  "created under the name " + previousFolderName
-                                  + ".",
-                                  QMessageBox::Yes | QMessageBox::No);
+        QMessageBox::StandardButton box = QMessageBox::question(nullptr, RPM
+            ::translate(Translations::ERROR_MESSAGE) + RPM::COLON + RPM::SPACE + RPM
+            ::translate(Translations::CONVERSION_NEEDED), information + RPM
+            ::SPACE + RPM::translate(Translations::CONVERT_PROJECT) + RPM::SPACE
+            + previousFolderName + RPM::PARENTHESIS_RIGHT + RPM::DOT,
+            QMessageBox::Yes | QMessageBox::No);
         if (box == QMessageBox::Yes) {
             DialogProgress dialog;
             QThread* thread = new QThread(qApp->parent());
@@ -277,17 +287,18 @@ bool Project::readOS() {
 
     // Compare
     if (computerOS != projectOS) {
-        QString information = "This project is configured for " +
-                RPM::ENUM_TO_STRING_OS_KIND.at(projectOSInteger) + " OS but you seems to be on " +
-                RPM::ENUM_TO_STRING_OS_KIND.at(computerOSInteger) + " OS.";
-        QString question = "Would you like to convert the project for " +
-                RPM::ENUM_TO_STRING_OS_KIND.at(computerOSInteger) + " OS? (This will only keep" +
-                " \"Content\" folder, and \"game.rpm\", all the other " +
-                " files will be removed in the root of the project)";
-        QMessageBox::StandardButton box =
-                QMessageBox::question(nullptr, "Error: incompatible OS",
-                             information + "\n" + question,
-                             QMessageBox::Yes | QMessageBox::No);
+        QString information = RPM::translate(Translations::INCOMPATIBLE_OS_1) +
+            RPM::SPACE + RPM::ENUM_TO_STRING_OS_KIND.at(projectOSInteger) + RPM
+            ::SPACE + RPM::translate(Translations::INCOMPATIBLE_OS_2) + RPM
+            ::SPACE + RPM::ENUM_TO_STRING_OS_KIND.at(computerOSInteger) + RPM
+            ::SPACE + RPM::translate(Translations::INCOMPATIBLE_OS_3) + RPM::DOT;
+        QString question = RPM::translate(Translations::INCOMPATIBLE_OS_4) + RPM
+            ::SPACE + RPM::ENUM_TO_STRING_OS_KIND.at(computerOSInteger) + RPM
+            ::SPACE + RPM::translate(Translations::INCOMPATIBLE_OS_5) + RPM::DOT;
+        QMessageBox::StandardButton box = QMessageBox::question(nullptr, RPM
+            ::translate(Translations::ERROR_MESSAGE) + RPM::COLON + RPM::SPACE + RPM
+            ::translate(Translations::INCOMPATIBLE_OS), information + RPM
+            ::NEW_LINE + question, QMessageBox::Yes | QMessageBox::No);
         if (box == QMessageBox::Yes) {
             removeOSFiles();
             copyOSFiles();
@@ -304,7 +315,7 @@ bool Project::readOS() {
 OSKind Project::getProjectOS() {
     if (QFile(Common::pathCombine(p_pathCurrentProject,"Game.exe")).exists())
         return OSKind::Window;
-    else if (QFile(Common::pathCombine(p_pathCurrentProject,"Game.sh")).exists())
+    else if (QFile(Common::pathCombine(p_pathCurrentProject,"Game")).exists())
         return OSKind::Linux;
     else
         return OSKind::Mac;
@@ -325,7 +336,11 @@ OSKind Project::getComputerOS() {
 // -------------------------------------------------------
 
 bool Project::copyOSFiles() {
-    QString pathContent = Common::pathCombine(QDir::currentPath(), "Content");
+    QString pathContent = Common::pathCombine(QDir::currentPath(), RPM
+        ::FOLDER_CONTENT);
+    QString pathMain = Common::pathCombine(pathContent, RPM::FILE_MAIN);
+    QString pathIndex = Common::pathCombine(pathContent, RPM::FILE_INDEX);
+    QString pathPackage = Common::pathCombine(pathContent, RPM::FILE_PACKAGE);
 
     // Copy excecutable and libraries according to current OS
     QString strOS = "";
@@ -338,120 +353,230 @@ bool Project::copyOSFiles() {
     #endif
 
     // Copying a basic project content
-    return Common::copyPath(Common::pathCombine(pathContent, strOS),
-                           p_pathCurrentProject);
+    if (!Common::copyPath(Common::pathCombine(pathContent, strOS),
+        p_pathCurrentProject))
+    {
+        return false;
+    }
+
+    // Copy extra files for desktop
+    if (!QFile::copy(pathMain, Common::pathCombine(p_pathCurrentProject, RPM
+        ::PATH_MAIN)) || !QFile::copy(pathIndex, Common::pathCombine(
+        p_pathCurrentProject, RPM::PATH_INDEX)) || !QFile::copy(pathPackage,
+        Common::pathCombine(p_pathCurrentProject, RPM::PATH_PACKAGE)))
+    {
+        return false;
+    }
+
+    return true;
 }
 
 // -------------------------------------------------------
 
 void Project::removeOSFiles() {
-    QDirIterator directories(p_pathCurrentProject,
-                             QDir::Dirs | QDir::NoDotAndDotDot);
-    QDirIterator files(p_pathCurrentProject, QDir::Files);
+    QString path;
+    #ifdef Q_OS_MACOS
+        QDirIterator d1(p_pathCurrentProject, QDir::Dirs | QDir::NoDotAndDotDot);
+        QDirIterator f1(p_pathCurrentProject, QDir::Files);
+        while (d1.hasNext())
+        {
+            d1.next();
+            // Remove everything but Game.app
+            if (d1.fileName() == "Game.app")
+            {
+                QString p2 = Common::pathCombine(p_pathCurrentProject,
+                    "Game.app");
+                QDirIterator d2(p2, QDir::Dirs | QDir::NoDotAndDotDot);
+                QDirIterator f2(p2, QDir::Files);
+                while (d2.hasNext())
+                {
+                    d2.next();
+                    // Remove everything but Contents
+                    if (d2.fileName() != "Contents")
+                    {
+                        QDir(d2.filePath()).removeRecursively();
+                    } else
+                    {
+                        path = Common::pathCombine(p2, "Contents");
+                    }
+                }
+                while (f2.hasNext())
+                {
+                    f2.next();
+                    QFile(f2.filePath()).remove();
+                }
+            } else
+            {
+                QDir(d1.filePath()).removeRecursively();
+            }
+        }
+        while (f1.hasNext())
+        {
+            f1.next();
+            if (f1.fileName() != "game.rpm")
+            {
+                QFile(f1.filePath()).remove();
+            }
+        }
+    #else
+        path = p_pathCurrentProject;
+    #endif
 
-    // Remove directories exept Content
-    while (directories.hasNext()){
-        directories.next();
-        if (directories.fileName() != "Content")
-            QDir(directories.filePath()).removeRecursively();
+
+    QDirIterator d3(path, QDir::Dirs | QDir::NoDotAndDotDot);
+    QDirIterator f3(path, QDir::Files);
+
+    // Remove directories
+    while (d3.hasNext())
+    {
+        d3.next();
+
+        // Remove everything but resources
+        if (d3.fileName() == RPM::FOLDER_RESOURCES)
+        {
+            path = Common::pathCombine(path, RPM::FOLDER_RESOURCES);
+            QDirIterator d4(path, QDir::Dirs | QDir::NoDotAndDotDot);
+            QDirIterator f4(path, QDir::Files);
+            while (d4.hasNext())
+            {
+                d4.next();
+
+                // Remove everything but app
+                if (d4.fileName() == RPM::FOLDER_APP)
+                {
+                    path = Common::pathCombine(path, RPM::FOLDER_APP);
+                    QDirIterator d5(path, QDir::Dirs | QDir::NoDotAndDotDot);
+                    QDirIterator f5(path, QDir::Files);
+                    while (d5.hasNext())
+                    {
+                        d5.next();
+
+                        // Remove everything but Content
+                        if (d5.fileName() != RPM::FOLDER_CONTENT)
+                        {
+                            QDir(d5.filePath()).removeRecursively();
+                        }
+                    }
+                    while (f5.hasNext())
+                    {
+                        f5.next();
+                        QFile(f5.filePath()).remove();
+                    }
+                } else
+                {
+                    QDir(d4.filePath()).removeRecursively();
+                }
+            }
+            while (f4.hasNext())
+            {
+                f4.next();
+                QFile(f4.filePath()).remove();
+            }
+        } else
+        {
+            QDir(d3.filePath()).removeRecursively();
+        }
     }
 
     // Remove files exept game.rpm
-    while (files.hasNext()){
-        files.next();
-        if (files.fileName() != "game.rpm")
-            QFile(files.filePath()).remove();
+    while (f3.hasNext())
+    {
+        f3.next();
+        if (f3.fileName() != "game.rpm")
+        {
+            QFile(f3.filePath()).remove();
+        }
     }
 }
 
 // -------------------------------------------------------
 
 void Project::readGameDatas(){
-    p_gameDatas->read(p_pathCurrentProject);
+    p_gameDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readLangsDatas(){
-    m_langsDatas->read(p_pathCurrentProject);
+    m_langsDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readTreeMapDatas(){
-    m_treeMapDatas->read(p_pathCurrentProject);
+    m_treeMapDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readScriptsDatas(){
-    m_scriptsDatas->read(p_pathCurrentProject);
+    m_scriptsDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readKeyBoardDatas(){
-    m_keyBoardDatas->read(p_pathCurrentProject);
+    m_keyBoardDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readPicturesDatas(){
-    m_picturesDatas->read(p_pathCurrentProject);
+    m_picturesDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readVideosDatas() {
-    m_videosDatas->read(p_pathCurrentProject);
+    m_videosDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readSongsDatas(){
-    m_songsDatas->read(p_pathCurrentProject);
+    m_songsDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readShapesDatas(){
-    m_shapesDatas->read(p_pathCurrentProject);
+    m_shapesDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readSpecialsDatas() {
-    m_specialElementsDatas->read(p_pathCurrentProject);
+    m_specialElementsDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readSystemDatas(){
-    p_gameDatas->readSystem(p_pathCurrentProject);
+    p_gameDatas->readSystem(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readBattleSystemDatas() {
-    p_gameDatas->readBattleSystem(p_pathCurrentProject);
+    p_gameDatas->readBattleSystem(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readTilesetsDatas() {
-    p_gameDatas->readTilesets(p_pathCurrentProject);
+    p_gameDatas->readTilesets(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readCommonEvents() {
-    p_gameDatas->readCommonEvents(p_pathCurrentProject);
+    p_gameDatas->readCommonEvents(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readTitleScreenGameOver() {
-    p_gameDatas->readTitleScreenGameOver(p_pathCurrentProject);
+    p_gameDatas->readTitleScreenGameOver(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
@@ -479,69 +604,69 @@ void Project::writeAll() {
 // -------------------------------------------------------
 
 void Project::writeGameDatas(){
-    p_gameDatas->write(p_pathCurrentProject);
+    p_gameDatas->write(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::writeLangsDatas(){
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(),
                                         RPM::PATH_LANGS), *m_langsDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeTreeMapDatas(){
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(),
                                         RPM::PATH_TREE_MAP), *m_treeMapDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeScriptsDatas(){
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(),
                                         RPM::PATH_SCRIPTS), *m_scriptsDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeKeyBoardDatas(){
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(),
                                         RPM::PATH_KEYBOARD), *m_keyBoardDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writePicturesDatas(){
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(), RPM
         ::PATH_PICTURES_DATAS), *m_picturesDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeVideosDatas() {
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(), RPM
         ::PATH_VIDEOS_DATAS), *m_videosDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeSongsDatas() {
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(), RPM
         ::PATH_SONGS_DATAS), *m_songsDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeShapesDatas() {
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(), RPM
         ::PATH_SHAPES_DATAS), *m_shapesDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeSpecialsDatas() {
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(),
                                         RPM::PATH_SPECIAL_ELEMENTS),
                      *m_specialElementsDatas);
 }
@@ -549,31 +674,31 @@ void Project::writeSpecialsDatas() {
 // -------------------------------------------------------
 
 void Project::writeSystemDatas(){
-    p_gameDatas->writeSystem(p_pathCurrentProject);
+    p_gameDatas->writeSystem(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::writeBattleSystemDatas() {
-    p_gameDatas->writeBattleSystem(p_pathCurrentProject);
+    p_gameDatas->writeBattleSystem(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::writeTilesetsDatas() {
-    p_gameDatas->writeTilesets(p_pathCurrentProject);
+    p_gameDatas->writeTilesets(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::writeCommonEvents() {
-    p_gameDatas->writeCommonEvents(p_pathCurrentProject);
+    p_gameDatas->writeCommonEvents(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::writeTitleScreenGameOver() {
-    p_gameDatas->writeTitleScreenGameOver(p_pathCurrentProject);
+    p_gameDatas->writeTitleScreenGameOver(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
@@ -581,7 +706,8 @@ void Project::writeTitleScreenGameOver() {
 QString Project::createRPMFile() {
     QFile file(Common::pathCombine(p_pathCurrentProject, "game.rpm"));
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        return "Error while creating game.rpm file";
+        return RPM::translate(Translations::ERROR_WHILE_CREATING_RPM_FILE) + RPM
+            ::DOT;
     QTextStream out(&file);
     out << Project::ENGINE_VERSION;
 

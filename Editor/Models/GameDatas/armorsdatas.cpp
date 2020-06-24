@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -48,8 +48,12 @@ void ArmorsDatas::setDefault() {
     SystemArmor *armor;
 
     QString names[] = {
-        "Bronze Helmet", "Bronze Mail", "Bronze Vambraces", "Bronze Greaves",
-        "Saphir Ring", "Saphir Necklace"
+        RPM::translate(Translations::BRONZE_HELMET),
+        RPM::translate(Translations::BRONZE_MAIL),
+        RPM::translate(Translations::BRONZE_VAMBRACES),
+        RPM::translate(Translations::BRONZE_GREAVES),
+        RPM::translate(Translations::SAPHIR_RING),
+        RPM::translate(Translations::SAPHIR_NECKLACE)
     };
     int iconsID[] = {
         28, 29, 30, 31, 32, 33
@@ -58,10 +62,12 @@ void ArmorsDatas::setDefault() {
         1, 3, 5, 7, 9, 10
     };
     QString descriptions[] = {
-        "A bronze helmet.", "A bronze mail.", "A bronze vambraces.",
-        "A bronze greaves.",
-        "A beautiful saphir ring, the best color for a jewel.",
-        "A beautiful saphir necklace, the best color for a jewel."
+        RPM::translate(Translations::BRONZE_HELMET_DESCRIPTION),
+        RPM::translate(Translations::BRONZE_MAIL_DESCRIPTION),
+        RPM::translate(Translations::BRONZE_VAMBRACES_DESCRIPTION),
+        RPM::translate(Translations::BRONZE_GREAVES_DESCRIPTION),
+        RPM::translate(Translations::SAPHIR_RING_DESCRIPTION),
+        RPM::translate(Translations::SAPHIR_NECKLACE_DESCRIPTION)
     };
     int prices[] = {
         10, 50, 40, 30, 200, 150

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -31,7 +31,7 @@ PanelPicturePreview::PanelPicturePreview(QWidget *parent) :
     m_areNegIDsEnabled(true)
 {
     ui->setupUi(this);
-    ui->groupBox->hide();
+    ui->groupBoxOptions->hide();
 
     ui->widgetPanelIDs->showButtonMax(false);
     ui->widgetPanelIDs->list()->setCanBrutRemove(true);
@@ -50,6 +50,8 @@ PanelPicturePreview::PanelPicturePreview(QWidget *parent) :
         int)), this, SLOT(deletingContent(SuperListItem *, int)));
     connect(ui->treeViewAvailableContent, SIGNAL(doubleClicked(QModelIndex)),
         this, SLOT(on_treeViewAvailableContentDoubleClicked(QModelIndex)));
+
+    this->translate();
 }
 
 PanelPicturePreview::~PanelPicturePreview()
@@ -103,7 +105,7 @@ void PanelPicturePreview::setAreNegIDsEnabled(bool b) {
 void PanelPicturePreview::setChooseRect(bool b) {
     ui->widgetPreview->setChooseRect(b);
     if (b)
-        ui->groupBox->show();
+        ui->groupBoxOptions->show();
 }
 
 // -------------------------------------------------------
@@ -137,8 +139,9 @@ void PanelPicturePreview::setPictureKind(PictureKind kind) {
             on_listIndexChanged(QModelIndex,QModelIndex)));
 
         // Update checkBox
-        ui->checkBoxContent->setText("Show available content of " +
-            SystemPicture::getLocalFolder(kind));
+        ui->checkBoxContent->setText(RPM::translate(Translations
+            ::SHOW_AVAILABLE_CONTENT) + RPM::SPACE + SystemPicture
+            ::getLocalFolder(kind));
     }
 }
 
@@ -237,7 +240,9 @@ void PanelPicturePreview::loadContentFromFolder(QString path, bool isBR) {
 
 void PanelPicturePreview::deleteContent(QString path) {
     if (!QFile(path).remove()) {
-        QMessageBox::warning(this, "Warning", "Could not delete file at " + path);
+        QMessageBox::warning(this, RPM::translate(Translations::WARNING), RPM
+            ::translate(Translations::COULD_NOT_DELETE_FILE_AT) + RPM::SPACE +
+            path + RPM::DOT);
     }
 }
 
@@ -266,6 +271,16 @@ void PanelPicturePreview::updatePicture() {
 void PanelPicturePreview::showPictureWidget(bool b) {
     ui->widgetPreview->setVisible(b);
     ui->widgetTileset->setVisible(!b);
+}
+
+//-------------------------------------------------
+
+void PanelPicturePreview::translate()
+{
+    ui->checkBoxContent->setText(RPM::translate(Translations
+        ::SHOW_AVAILABLE_CONTENT));
+    ui->groupBoxOptions->setTitle(RPM::translate(Translations::OPTIONS));
+    ui->pushButtonRefresh->setText(RPM::translate(Translations::REFRESH));
 }
 
 // -------------------------------------------------------
@@ -315,8 +330,8 @@ void PanelPicturePreview::on_pushButtonRefresh_clicked() {
 void PanelPicturePreview::on_pushButtonAdd_clicked() {
 
     // Open dialog box
-    QStringList files = QFileDialog::getOpenFileNames(this, "Add new contents",
-        "", "Image (*.png *.jpg)");
+    QStringList files = QFileDialog::getOpenFileNames(this, RPM::translate(
+        Translations::ADD_NEW_CONTENTS), "", "Image (*.png *.jpg)");
     QString path;
 
     // Copy all the selected files
@@ -325,8 +340,9 @@ void PanelPicturePreview::on_pushButtonAdd_clicked() {
         if (!QFile::copy(path, Common::pathCombine(SystemPicture::getFolder(
             m_pictureKind, false), QFileInfo(path).fileName())))
         {
-            QMessageBox::warning(this, "Warning", "Could not copy file at " +
-                path);
+            QMessageBox::warning(this, RPM::translate(Translations::WARNING),
+                RPM::translate(Translations::COULD_NOT_COPY_FILE_AT) + RPM
+                ::SPACE + path + RPM::DOT);
         }
     }
 
@@ -342,9 +358,11 @@ void PanelPicturePreview::deletingContent(SuperListItem *super, int row) {
     // If is BR, ask if sure action before
     if (reinterpret_cast<SystemPicture *>(super)->isBR()) {
         loadAvailableContent(row);
-        QMessageBox::StandardButton box = QMessageBox::question(this,
-            "Deleting image", "You are trying to remove a BR image. "
-            "Are you sure you want to do it?", QMessageBox::Yes | QMessageBox::No);
+        QMessageBox::StandardButton box = QMessageBox::question(this, RPM
+            ::translate(Translations::DELETING_IMAGE), RPM::translate(
+            Translations::YOUR_TRYING_REMOVE_BR_IMAGE) + RPM::DOT + RPM::SPACE +
+            RPM::translate(Translations::ARE_YOU_SURE_WANT_DO_IT), QMessageBox::Yes |
+            QMessageBox::No);
 
         if (box == QMessageBox::Yes) {
             deleteContent(path);

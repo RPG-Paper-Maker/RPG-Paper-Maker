@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -224,26 +224,73 @@ QString Common::pathCombine(const QString &p1, const QString &p2) {
 // -------------------------------------------------------
 
 bool Common::copyPath(QString src, QString dst) {
-    QDir dir(src);
     QString dstPath;
+    QList<QPair<QString, QString>> symlinks;
+    bool b = copyPathSym(symlinks, src, dst);
+    if (!b)
+    {
+        return false;
+    }
+
+    #ifdef Q_OS_WIN
+        // ...
+    #else
+    while (!symlinks.isEmpty()) {
+        for (int i = symlinks.size() - 1; i >= 0; i--) {
+            QPair<QString, QString> pair = symlinks.at(i);
+            if (QFile(pair.first).exists() || QDir(pair.first).exists()) {
+                QFile::link(pair.first, pair.second);
+                symlinks.removeAt(i);
+            }
+        }
+    }
+    #endif
+
+    return true;
+}
+
+// -------------------------------------------------------
+
+bool Common::copyPathSym(QList<QPair<QString, QString>> &list, QString src,
+    QString dst)
+{
+    QDir dir(src);
+    QDir dirDst(dst);
+    QString dstPath, path, absolutePath;
 
     if (!dir.exists()) {
         return false;
     }
 
-    foreach (QString d, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+    foreach (QFileInfo id, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
+    {
+        QString d = id.fileName();
         dstPath = pathCombine(dst, d);
-        if (!dir.mkpath(dstPath)) {
-            return false;
-        }
-        if (!copyPath(pathCombine(src, d), dstPath)) {
-            return false;
+        if (id.isSymLink())
+        {
+            list << QPair<QString, QString>({id.symLinkTarget(), dstPath});
+        } else
+        {
+            if (!dir.mkpath(dstPath)) {
+                return false;
+            }
+            if (!copyPathSym(list, pathCombine(src, d), dstPath)) {
+                return false;
+            }
         }
     }
-
-    foreach (QString f, dir.entryList(QDir::Files)) {
-        if (!QFile::copy(pathCombine(src, f), pathCombine(dst, f))) {
-            return false;
+    foreach (QFileInfo ifo, dir.entryInfoList(QDir::Files))
+    {
+        QString f = ifo.fileName();
+        dstPath = pathCombine(dst, f);
+        if (ifo.isSymLink())
+        {
+            list << QPair<QString, QString>({ifo.symLinkTarget(), dstPath});
+        } else
+        {
+            if (!QFile::copy(pathCombine(src, f), dstPath)) {
+                return false;
+            }
         }
     }
 
@@ -402,4 +449,27 @@ bool Common::getMinDistance(float& finalDistance, float newDistance) {
     }
 
     return false;
+}
+
+// -------------------------------------------------------
+
+QPoint Common::rotatePoint(int x, int y, int cx, int cy, double angle) {
+      double s, c, xNew, yNew;
+
+      s = qSin(angle * (M_PI / 180.0));
+      c = qCos(angle * (M_PI / 180.0));
+
+      // translate point back to origin:
+      x -= cx;
+      y -= cy;
+
+      // rotate point
+      xNew = x * c - y * s;
+      yNew = x * s + y * c;
+
+      // translate point back:
+      x = qRound(xNew + cx);
+      y = qRound(yNew + cy);
+
+      return QPoint(x, y);
 }

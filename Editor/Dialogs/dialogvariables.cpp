@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -31,6 +31,8 @@ DialogVariables::DialogVariables(QWidget *parent) :
     ui->panelList->showButtonMax(false);
     ui->panelListPages->list()->initializeNewItemInstance(new SystemVariables);
     ui->panelListPages->setMaximumLimit(400);
+
+    this->translate();
 }
 
 DialogVariables::~DialogVariables()
@@ -64,6 +66,16 @@ int DialogVariables::getSelectedId() const{
     return ((SuperListItem*)selected->data().value<quintptr>())->id();
 }
 
+//-------------------------------------------------
+
+void DialogVariables::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::VARIABLES_MANAGER) + RPM
+        ::DOT_DOT_DOT);
+    ui->groupBoxVariables->setTitle(RPM::translate(Translations::VARIABLES));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
 // -------------------------------------------------------
 //
 //  SLOTS
@@ -86,7 +98,7 @@ void DialogVariables::on_pageSelected(QModelIndex index, QModelIndex){
 void DialogVariables::on_buttonBox_clicked(QAbstractButton *button){
     if((QPushButton*)button == ui->buttonBox->button(QDialogButtonBox::Ok)){
         RPM::writeJSON(Common::pathCombine(RPM::get()->project()
-                                            ->pathCurrentProject(),
+                                            ->pathCurrentProjectApp(),
                                             RPM::PATH_VARIABLES),
                          *(RPM::get()->project()->gameDatas()
                            ->variablesDatas()));
@@ -96,6 +108,6 @@ void DialogVariables::on_buttonBox_clicked(QAbstractButton *button){
     {
         RPM::get()->project()->gameDatas()
                 ->readVariablesSwitches(RPM::get()->project()
-                                        ->pathCurrentProject());
+                                        ->pathCurrentProjectApp());
     }
 }

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -12,6 +12,7 @@
 #include "dialogprogress.h"
 #include "ui_dialogprogress.h"
 #include <QtMath>
+//#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -28,15 +29,25 @@ DialogProgress::DialogProgress(QWidget *parent) :
     m_endValue(0)
 {
     ui->setupUi(this);
-    
 
+    ui->labelDescription->setWordWrap(true);
+    
     setWindowFlags(Qt::FramelessWindowHint);
     setWindowFlags(Qt::WindowTitleHint);
+
+    this->translate();
 }
 
 DialogProgress::~DialogProgress()
 {
     delete ui;
+}
+
+//-------------------------------------------------
+
+void DialogProgress::translate()
+{
+    //this->setWindowTitle(RPM::translate(Translations::IN_PROGRESS));
 }
 
 // -------------------------------------------------------

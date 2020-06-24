@@ -1,0 +1,24 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Autotiles/general.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Autotiles/general.png"
+        }
+    ],
+	"features": [
+    ],
+	"bugs": [
+        "Windows only bug sometimes crash with rotation",
+        "Windows only vertical lines on floors",
+        "No transparency on general autotile picture",
+        "Double faceset in show text command",
+        "Error when skill have no effects",
+        "Error in inheritance models algorithm",
+        "Target offset in camera properties not working",
+        "Display incorrect first state of an object in map editor with model",
+        "Faceset dialog box option position not working"
+	]
+}

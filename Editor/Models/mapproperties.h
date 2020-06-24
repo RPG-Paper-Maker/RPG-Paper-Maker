@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -42,6 +42,9 @@ public:
     static const QString JSON_CAMERA_PROPERTIES;
     static const QString JSON_IS_SKY_COLOR;
     static const QString JSON_SKY_COLOR_ID;
+    static const QString JSON_IS_SKY_IMAGE;
+    static const QString JSON_SKY_PICTURE_ID;
+    static const QString JSON_SKY_BOX_ID;
     static const QString JSON_STARTUP_OBJECT;
     static const QString JSON_OVERFLOW_SPRITES;
     static const QString JSON_OVERFLOW_OBJECTS3D;
@@ -68,8 +71,14 @@ public:
     SystemPlaySong * backgroundSound() const;
     void setBackgroundSound(SystemPlaySong *song);
     PrimitiveValue * cameraProperties() const;
+    bool isSkyColor() const;
+    void setIsSkyColor(bool isc);
     PrimitiveValue * skyColorID() const;
     void setSkyColorID(PrimitiveValue *skyColorID);
+    bool isSkyImage() const;
+    void setIsSkyImage(bool isi);
+    SuperListItem * skyPictureID() const;
+    PrimitiveValue * skyboxID() const;
     SystemCommonObject * startupObject() const;
 
     QString realName() const;
@@ -93,11 +102,11 @@ public:
     void adjustPosition(QVector3D *position);
     MapElement * updateRaycastingOverflowSprites(Portion &portion, float
         &finalDistance, Position &finalPosition, QRay3D &ray, double
-        cameraHAngle);
+        cameraHAngle, bool &save);
     MapElement * updateRaycastingOverflowObjects3D(Portion &portion, float
-        &finalDistance, Position &finalPosition, QRay3D &ray);
+        &finalDistance, Position &finalPosition, QRay3D &ray, bool &save);
     MapElement * updateRaycastingOverflowMountains(Portion &portion, float
-        &finalDistance, Position &finalPosition, QRay3D &ray);
+        &finalDistance, Position &finalPosition, QRay3D &ray, bool &save);
     void readOverflow(const QJsonArray &tab, QHash<Portion, QSet<Position> *>
         &overflow);
     void writeOverflow(QJsonObject &json, const QHash<Portion, QSet<Position> *>
@@ -116,8 +125,11 @@ protected:
     SystemPlaySong *m_music;
     SystemPlaySong *m_backgroundSound;
     PrimitiveValue *m_cameraProperties;
-    PrimitiveValue *m_skyColorID;
     bool m_isSkyColor;
+    PrimitiveValue *m_skyColorID;
+    bool m_isSkyImage;
+    SuperListItem *m_skyPictureID;
+    PrimitiveValue *m_skyboxID;
     SystemCommonObject *m_startupObject;
     QHash<Portion, QSet<Position> *> m_outOverflowSprites;
     QHash<Portion, QSet<Position> *> m_outOverflowObjects3D;

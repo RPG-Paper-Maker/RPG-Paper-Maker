@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -22,7 +22,7 @@ const QString SystemVideo::JSON_BR = "br";
 // -------------------------------------------------------
 
 SystemVideo::SystemVideo() :
-    SystemVideo(-1, "<None>", false)
+    SystemVideo(-1, "<" + RPM::translate(Translations::NONE) + ">", false)
 {
 
 }
@@ -61,7 +61,7 @@ SystemVideo * SystemVideo::getByID(int id) {
 
 QString SystemVideo::getFolder(bool isBR) {
     QString folder = isBR ? RPM::get()->project()->gameDatas()->systemDatas()
-        ->pathBR() : RPM::get()->project()->pathCurrentProject();
+        ->pathBR() : RPM::get()->project()->pathCurrentProjectApp();
 
     return Common::pathCombine(folder, getLocalFolder());
 }

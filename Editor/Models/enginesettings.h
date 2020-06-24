@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -38,11 +38,15 @@ public:
     static const QString JSON_ROTATION_ANGLES;
     static const QString JSON_UPDATER;
     static const QString JSON_SHOW_AVAILABLE_CONTENT;
+    static const QString JSON_FIRST_TIME_LANGUAGES;
+    static const QString JSON_CURRENT_LANGUAGE;
     static const QString THEME_DEFAULT;
     static const QString THEME_WHITE;
     static const QString THEME_WHITE_MAC;
     static const QString THEME_DARK;
     static const QString PATH_THEMES;
+    static const bool DEFAULT_FIRST_TIME_LANGUAGES;
+    static const QString DEFAULT_CURRENT_LANGUAGE;
 
     EngineSettings();
     virtual ~EngineSettings();
@@ -67,6 +71,10 @@ public:
     void setUpdater(bool u);
     bool showAvailableContent() const;
     void setShowAvailableContent(bool sac);
+    bool firstTimeLanguages() const;
+    void setFirstTimeLanguages(bool ftl);
+    QString currentLanguage() const;
+    void setCurrentLanguage(QString cl);
 
     void setDefault();
     QString getThemeContent() const;
@@ -90,6 +98,8 @@ protected:
     QList<double> m_rotationAngles;
     bool m_updater;
     bool m_showAvailableContent;
+    bool m_firstTimeLanguages;
+    QString m_currentLanguage;
 
     QString readContent(QString name) const;
 };

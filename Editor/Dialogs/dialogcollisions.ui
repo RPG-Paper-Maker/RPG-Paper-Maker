@@ -33,7 +33,7 @@
        <property name="currentIndex">
         <number>0</number>
        </property>
-       <widget class="QWidget" name="tab">
+       <widget class="QWidget" name="tabTilesets">
         <attribute name="title">
          <string>Tilesets</string>
         </attribute>
@@ -41,7 +41,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_22">
+            <widget class="QGroupBox" name="groupBoxTilesets">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -92,7 +92,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_23">
+            <widget class="QGroupBox" name="groupBoxCharacters">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -143,7 +143,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_25">
+            <widget class="QGroupBox" name="groupBoxAutotiles">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -194,7 +194,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_26">
+            <widget class="QGroupBox" name="groupBoxWalls">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -245,7 +245,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_24">
+            <widget class="QGroupBox" name="groupBoxMountains">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -315,23 +315,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QComboBox" name="comboBoxCollisionMountains">
-                 <item>
-                  <property name="text">
-                   <string>Default (according to height and angle)</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Force always collides</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Force never collides</string>
-                  </property>
-                 </item>
-                </widget>
+                <widget class="QComboBox" name="comboBoxCollisionMountains"/>
                </item>
                <item>
                 <spacer name="horizontalSpacer_7">
@@ -362,7 +346,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_27">
+            <widget class="QGroupBox" name="groupBoxObjects3D">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -401,28 +385,7 @@
            <item>
             <layout class="QGridLayout" name="gridLayout_6" rowstretch="0,1">
              <item row="0" column="1">
-              <widget class="QComboBox" name="comboBoxCollisionObject3D">
-               <item>
-                <property name="text">
-                 <string>None</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Perfect</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Simplified</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Custom</string>
-                </property>
-               </item>
-              </widget>
+              <widget class="QComboBox" name="comboBoxCollisionObject3D"/>
              </item>
              <item row="0" column="3">
               <spacer name="horizontalSpacer">
@@ -487,12 +450,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetPreviewObject3D</class>
-   <extends>QWidget</extends>
-   <header>widgetpreviewobject3d.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>WidgetShowPicture</class>
    <extends>QWidget</extends>
    <header>widgetshowpicture.h</header>
@@ -502,6 +459,12 @@
    <class>PanelSuperList</class>
    <extends>QWidget</extends>
    <header>panelsuperlist.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetPreviewObject3D</class>
+   <extends>QWidget</extends>
+   <header>widgetpreviewobject3d.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

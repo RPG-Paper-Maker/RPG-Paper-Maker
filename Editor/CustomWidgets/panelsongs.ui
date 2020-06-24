@@ -123,7 +123,7 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0">
          <item>
-          <widget class="QGroupBox" name="groupBox">
+          <widget class="QGroupBox" name="groupBoxOptions">
            <property name="title">
             <string>Options</string>
            </property>
@@ -150,7 +150,7 @@
                </widget>
               </item>
               <item row="0" column="0">
-               <widget class="QLabel" name="label">
+               <widget class="QLabel" name="labelVolume">
                 <property name="text">
                  <string>Volume:</string>
                 </property>
@@ -344,9 +344,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PanelSuperList</class>
+   <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
-   <header>panelsuperlist.h</header>
+   <header>panelprimitivevalue.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -355,9 +355,9 @@
    <header>widgetsupertree.h</header>
   </customwidget>
   <customwidget>
-   <class>PanelPrimitiveValue</class>
+   <class>PanelSuperList</class>
    <extends>QWidget</extends>
-   <header>panelprimitivevalue.h</header>
+   <header>panelsuperlist.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

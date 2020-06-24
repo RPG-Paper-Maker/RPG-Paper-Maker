@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -52,6 +52,8 @@ DialogRect::DialogRect(QRectF *rect, bool controlSquare, QWidget *parent) :
         ui->spinBoxX->setValue(static_cast<int>(rect->x()));
         ui->spinBoxY->setValue(static_cast<int>(rect->y()));
     }
+
+    this->translate();
 }
 
 DialogRect::~DialogRect()
@@ -93,6 +95,23 @@ int DialogRect::getOne() {
 
 int DialogRect::getTwo() {
     return RPM::coefSquareSize() * 2;
+}
+
+//-------------------------------------------------
+
+void DialogRect::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SELECT_RECT) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->labelXpx->setText(RPM::translate(Translations::PX));
+    ui->labelYpx->setText(RPM::translate(Translations::PX));
+    ui->labelWidth->setText(RPM::translate(Translations::WIDTH) + RPM::COLON);
+    ui->labelHeight->setText(RPM::translate(Translations::HEIGHT) + RPM::COLON);
+    ui->labelWidthpx->setText(RPM::translate(Translations::PX));
+    ui->labelHeightpx->setText(RPM::translate(Translations::PX));
+    ui->pushButtonClose->setText(RPM::translate(Translations::CLOSE));
 }
 
 // -------------------------------------------------------

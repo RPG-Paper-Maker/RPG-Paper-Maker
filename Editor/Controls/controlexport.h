@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -32,8 +32,9 @@ public:
     QString createDesktop(QString location, OSKind os, bool, int major, int
         minor);
     QString createBrowser(QString location);
-    QString copyAllProject(QString location, QString projectName, QString path,
-        QDir dirLocation);
+    QString createFolder(QString location, QString projectName, QString path,
+                         QDir dirLocation);
+    QString copyAllProject(QString path);
     void removeWebNoNeed(QString path);
     void removeDesktopNoNeed(QString path);
     QString generateWebStuff(QString path);

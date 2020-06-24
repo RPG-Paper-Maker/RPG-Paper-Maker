@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -34,6 +34,8 @@ PanelObjectEvent::PanelObjectEvent(QWidget *parent) :
         ->project()->gameDatas()->commonEventsDatas()->modelEventsSystem());
     SuperListItem::fillComboBox(ui->comboBoxEventsUser, RPM::get()->project()
         ->gameDatas()->commonEventsDatas()->modelEventsUser());
+
+    this->translate();
 }
 
 PanelObjectEvent::~PanelObjectEvent()
@@ -141,6 +143,18 @@ void PanelObjectEvent::getCommandObjectEvent(QVector<QString> &command) const {
         command.append(QString::number(param->id()));
         param->value()->getCommandParameter(command);
     }
+}
+
+//-------------------------------------------------
+
+void PanelObjectEvent::translate()
+{
+    ui->radioButtonEventUser->setText(RPM::translate(Translations::EVENT_USER) +
+        RPM::COLON);
+    ui->radioButtonEventSystem->setText(RPM::translate(Translations
+        ::EVENT_SYSTEM) + RPM::COLON);
+    ui->groupBoxParameterValues->setTitle(RPM::translate(Translations
+        ::PARAMETER_VALUES));
 }
 
 // -------------------------------------------------------

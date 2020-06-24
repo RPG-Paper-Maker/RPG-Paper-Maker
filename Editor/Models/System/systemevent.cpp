@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -12,6 +12,7 @@
 #include "systemevent.h"
 #include "systemcreateparameter.h"
 #include "widgetsupertree.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -29,9 +30,7 @@ SystemEvent::SystemEvent(int i, QString n, QStandardItemModel* parameters) :
     SuperListItem(i,n),
     m_modelParameters(parameters)
 {
-    m_modelParameters->setHorizontalHeaderLabels(QStringList({"Name",
-                                                              "Default value"
-                                                             }));
+    this->initializeHeaders();
 }
 
 SystemEvent::~SystemEvent(){
@@ -48,6 +47,13 @@ QStandardItemModel* SystemEvent::modelParameters() const {
 //
 // -------------------------------------------------------
 
+void SystemEvent::initializeHeaders() {
+    m_modelParameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::NAME), RPM::translate(Translations::DEFAULT_VALUE)}));
+}
+
+// -------------------------------------------------------
+
 SuperListItem* SystemEvent::createCopy() const{
     SystemEvent* super = new SystemEvent;
     super->setCopy(*this);
@@ -56,11 +62,17 @@ SuperListItem* SystemEvent::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemEvent::setCopy(const SystemEvent& item){
-    SuperListItem::setCopy(item);
+void SystemEvent::setCopy(const SuperListItem &super) {
+    const SystemEvent *event;
+
+    SuperListItem::setCopy(super);
+
+    event = reinterpret_cast<const SystemEvent *>(&super);
 
     // parameters
-    SuperListItem::copy(m_modelParameters, item.m_modelParameters);
+    SuperListItem::deleteModel(m_modelParameters, false);
+    SuperListItem::copy(m_modelParameters, event->m_modelParameters);
+    this->initializeHeaders();
 }
 
 // -------------------------------------------------------

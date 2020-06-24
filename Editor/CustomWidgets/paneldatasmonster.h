@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -48,8 +48,11 @@ private:
     Ui::PanelDatasMonster *ui;
     PanelSuperList *m_panelSuperList;
 
+    void translate();
+
 public slots:
     void on_maxLevelChanged(int lvl);
+    void on_treeViewActionsNeedsUpdateJson(SuperListItem *);
 };
 
 #endif // PANELDATASMONSTER_H

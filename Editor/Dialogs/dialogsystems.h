@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -42,10 +42,12 @@ public:
     int getSquareSize() const;
 
 protected:
-    bool eventFilter(QObject *o, QEvent *e);
+    virtual bool eventFilter(QObject *o, QEvent *e);
+    virtual void closeEvent(QCloseEvent *event);
 
 private:
     Ui::DialogSystems *ui;
+
     void initializeSystem(GameDatas *gameDatas);
     void initializeBattleSystem(GameDatas *gameDatas);
     void updateStatisticsBase();
@@ -58,11 +60,13 @@ private:
     void updateCommonReactors(SystemCommonReaction *sysCommonReactor);
     void initializeCommonObjects(GameDatas *gameDatas);
     void updateCommonObjects(SystemCommonObject *sysCommonObject);
+    void translate();
 
 private slots:
     void on_spinBoxScreenWidth_valueChanged(int i);
     void on_spinBoxScreenHeight_valueChanged(int i);
     void on_comboBoxScreenWindow_currentIndexChanged(int index);
+    void on_checkBoxAntialiasing_toggled(bool checked);
     void on_spinBoxSquareSize_valueChanged(int i);
     void on_spinBoxAnimationFrames_valueChanged(int i);
     void on_comboBoxBattleLevel_currentIndexChanged(int index);

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "dialogsystemlang.h"
 #include "ui_dialogsystemlang.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -26,6 +27,8 @@ DialogSystemLang::DialogSystemLang(SystemLang &model, QWidget *parent) :
     ui->setupUi(this);
     
     initialize();
+
+    this->translate();
 }
 
 DialogSystemLang::~DialogSystemLang()
@@ -41,4 +44,14 @@ DialogSystemLang::~DialogSystemLang()
 
 void DialogSystemLang::initialize(){
     ui->widgetName->initializeNamesLang(&m_model);
+}
+
+//-------------------------------------------------
+
+void DialogSystemLang::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SET_NAME) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

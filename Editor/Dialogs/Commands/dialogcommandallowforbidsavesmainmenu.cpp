@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -35,6 +35,8 @@ DialogCommandAllowForbidSavesMainMenu::DialogCommandAllowForbidSavesMainMenu(
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandAllowForbidSavesMainMenu::~DialogCommandAllowForbidSavesMainMenu() {
@@ -55,9 +57,18 @@ void DialogCommandAllowForbidSavesMainMenu::initializePrimitives() {
         properties = m_object->modelProperties();
     }
 
-    this->setWindowTitle(m_kind == EventCommandKind::AllowForbidSaves ?
-        "Allow/Forbid saves..." : "Allow/Forbid main menu...");
+    this->setWindowTitle(m_kind == EventCommandKind::AllowForbidSaves ? RPM
+        ::translate(Translations::ALLOW_FORBID_SAVES) + RPM::DOT_DOT_DOT : RPM
+        ::translate(Translations::ALLOW_FORBID_MAIN_MENU) + RPM::DOT_DOT_DOT);
     ui->panelPrimitiveAllow->initializeSwitch(m_parameters, properties);
+}
+
+//-------------------------------------------------
+
+void DialogCommandAllowForbidSavesMainMenu::translate()
+{
+    ui->labelAllow->setText(RPM::translate(Translations::ALLOW) + RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

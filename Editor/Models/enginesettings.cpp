@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -27,11 +27,15 @@ const QString EngineSettings::JSON_ROTATION_LEFT_RIGHT_CLICKS = "rlrc";
 const QString EngineSettings::JSON_ROTATION_ANGLES = "ra";
 const QString EngineSettings::JSON_UPDATER = "updater";
 const QString EngineSettings::JSON_SHOW_AVAILABLE_CONTENT = "sac";
+const QString EngineSettings::JSON_FIRST_TIME_LANGUAGES = "ftl";
+const QString EngineSettings::JSON_CURRENT_LANGUAGE = "cl";
 const QString EngineSettings::THEME_DEFAULT = "defaulttheme";
 const QString EngineSettings::THEME_WHITE = "whitetheme";
 const QString EngineSettings::THEME_WHITE_MAC ="whitemactheme";
 const QString EngineSettings::THEME_DARK = "darktheme";
 const QString EngineSettings::PATH_THEMES = ":/stylesheets/Themes/";
+const bool EngineSettings::DEFAULT_FIRST_TIME_LANGUAGES = true;
+const QString EngineSettings::DEFAULT_CURRENT_LANGUAGE = "en";
 
 // -------------------------------------------------------
 //
@@ -45,7 +49,9 @@ EngineSettings::EngineSettings() :
     m_theme(ThemeKind::Dark),
     m_firstTime(true),
     m_updater(true),
-    m_showAvailableContent(true)
+    m_showAvailableContent(true),
+    m_firstTimeLanguages(DEFAULT_FIRST_TIME_LANGUAGES),
+    m_currentLanguage(DEFAULT_CURRENT_LANGUAGE)
 {
     // Default mac theme should be white
     #ifdef Q_OS_MAC
@@ -147,6 +153,25 @@ bool EngineSettings::showAvailableContent() const {
 
 void EngineSettings::setShowAvailableContent(bool sac) {
     m_showAvailableContent = sac;
+}
+
+bool EngineSettings::firstTimeLanguages() const
+{
+    return m_firstTimeLanguages;
+}
+
+void EngineSettings::setFirstTimeLanguages(bool ftl)
+{
+    m_firstTimeLanguages = ftl;
+}
+
+QString EngineSettings::currentLanguage() const
+{
+    return m_currentLanguage;
+}
+void EngineSettings::setCurrentLanguage(QString cl)
+{
+    m_currentLanguage = cl;
 }
 
 // -------------------------------------------------------
@@ -310,6 +335,14 @@ void EngineSettings::read(const QJsonObject &json) {
     if (json.contains(JSON_SHOW_AVAILABLE_CONTENT)) {
         m_showAvailableContent = json[JSON_SHOW_AVAILABLE_CONTENT].toBool();
     }
+    if (json.contains(JSON_FIRST_TIME_LANGUAGES))
+    {
+        m_firstTimeLanguages = json[JSON_FIRST_TIME_LANGUAGES].toBool();
+    }
+    if (json.contains(JSON_CURRENT_LANGUAGE))
+    {
+        m_currentLanguage = json[JSON_CURRENT_LANGUAGE].toString();
+    }
 }
 
 // -------------------------------------------------------
@@ -357,5 +390,13 @@ void EngineSettings::write(QJsonObject &json) const {
     }
     if (!m_showAvailableContent) {
         json[JSON_SHOW_AVAILABLE_CONTENT] = m_showAvailableContent;
+    }
+    if (m_firstTimeLanguages != DEFAULT_FIRST_TIME_LANGUAGES)
+    {
+        json[JSON_FIRST_TIME_LANGUAGES] = m_firstTimeLanguages;
+    }
+    if (m_currentLanguage != DEFAULT_CURRENT_LANGUAGE)
+    {
+        json[JSON_CURRENT_LANGUAGE] = m_currentLanguage;
     }
 }

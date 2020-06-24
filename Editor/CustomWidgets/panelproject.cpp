@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -11,6 +11,7 @@
 
 #include "panelproject.h"
 #include "ui_panelproject.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -41,6 +42,8 @@ PanelProject::PanelProject(QWidget *parent) :
 
     // Menu bar
     ui->widgetMenuBar->initializeRightMenu();
+
+    this->translate();
 }
 
 PanelProject::PanelProject(QWidget *parent, Project *p) :
@@ -95,6 +98,17 @@ WidgetMapEditor * PanelProject::widgetMapEditor() const {
 
 WidgetTreeLocalMaps * PanelProject::widgetTreeLocalMaps() const {
     return ui->treeViewLocalMaps;
+}
+
+//-------------------------------------------------
+
+void PanelProject::translate()
+{
+    ui->widgetMenuBar->translate();
+    if (ui->treeViewLocalMaps->getModel() != nullptr)
+    {
+        RPM::get()->project()->treeMapDatas()->translate();
+    }
 }
 
 // -------------------------------------------------------

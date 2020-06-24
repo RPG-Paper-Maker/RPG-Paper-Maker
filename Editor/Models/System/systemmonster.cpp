@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -13,10 +13,12 @@
 #include "rpm.h"
 #include "systemcurrency.h"
 #include "systemloot.h"
+#include "systemmonsteraction.h"
 
 const QString SystemMonster::JSON_EXPERIENCE = "xp";
 const QString SystemMonster::JSON_CURRENCIES = "cur";
 const QString SystemMonster::JSON_LOOTS = "loots";
+const QString SystemMonster::JSON_ACTIONS = "a";
 
 // -------------------------------------------------------
 //
@@ -39,15 +41,14 @@ SystemMonster::SystemMonster(int i, LangsTranslation *names, int idClass, int
     m_modelLoots(loots),
     m_modelActions(actions)
 {
-    m_modelLoots->setHorizontalHeaderLabels(QStringList({"Name", "N", "P", "I",
-        "F"}));
+    this->initializeHeaders();
 }
 
 SystemMonster::~SystemMonster() {
     delete m_experience;
-    deleteCurrencies();
+    this->deleteCurrencies();
     SuperListItem::deleteModel(m_modelLoots);
-    delete m_modelActions;
+    SuperListItem::deleteModel(m_modelActions);
 }
 
 SystemProgressionTable * SystemMonster::experience() const {
@@ -70,6 +71,19 @@ QStandardItemModel* SystemMonster::modelActions() const {
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void SystemMonster::initializeHeaders() {
+    m_modelLoots->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::NAME), RPM::translate(Translations::NUMBER_SHORT), RPM
+        ::translate(Translations::PROBABILITY_SHORT), RPM::translate(
+        Translations::INITIAL_SHORT), RPM::translate(Translations::FINAL_SHORT)}));
+    m_modelActions->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::ACTION), RPM::translate(Translations::CONDITIONS), RPM
+        ::translate(Translations::PRIORITY), RPM::translate(Translations
+        ::PROBABILITY)}));
+}
+
 // -------------------------------------------------------
 
 void SystemMonster::deleteCurrencies() {
@@ -111,6 +125,25 @@ SystemProgressionTable * SystemMonster::currencyProgressionAt(int id) {
 }
 
 // -------------------------------------------------------
+
+void SystemMonster::updateProbabilities()
+{
+    QStandardItem *item;
+    SystemMonsterAction *action;
+    int i, l;
+
+    for (i = 0, l = m_modelActions->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        item = m_modelActions->item(i);
+        action = reinterpret_cast<SystemMonsterAction *>(item->data().value<
+            quintptr>());
+        if (action != nullptr) {
+            item->setText(action->probabilityToString());
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
@@ -124,37 +157,34 @@ SuperListItem* SystemMonster::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemMonster::setCopy(const SystemMonster& monster){
-    SystemHero::setCopy(monster);
-    QStandardItem* item;
-    QList<QStandardItem*> row;
-    int l;
+void SystemMonster::setCopy(const SuperListItem &super) {
+    const SystemMonster *monster;
+    QHash<int, SystemProgressionTable *>::const_iterator i;
+
+    SystemHero::setCopy(super);
+    monster = reinterpret_cast<const SystemMonster *>(&super);
 
     // Experience
-    m_experience->setCopy(*monster.m_experience);
+    m_experience->setCopy(*monster->m_experience);
 
     // Currencies
-    deleteCurrencies();
-    QHash<int, SystemProgressionTable *>::const_iterator i;
-    for (i = monster.m_currencies.begin(); i != monster.m_currencies.end(); i++)
+    this->deleteCurrencies();
+    for (i = monster->m_currencies.begin(); i != monster->m_currencies.end();
+         i++)
     {
         m_currencies.insert(i.key(), reinterpret_cast<SystemProgressionTable *>(
             i.value()->createCopy()));
     }
 
     // Loots
-    l = monster.modelLoots()->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l - 1; i++){
-        SystemLoot* loot = new SystemLoot;
-        SystemLoot* lootCopy = (SystemLoot*) monster.modelLoots()->item(i)
-                ->data().value<qintptr>();
-        loot->setCopy(*lootCopy);
-        row = loot->getModelRow();
-        m_modelLoots->appendRow(row);
-    }
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_modelLoots->appendRow(item);
+    SuperListItem::deleteModel(m_modelLoots, false);
+    SuperListItem::copy(m_modelLoots, monster->m_modelLoots);
+
+    // Loots
+    SuperListItem::deleteModel(m_modelActions, false);
+    SuperListItem::copy(m_modelActions, monster->m_modelActions);
+
+    this->initializeHeaders();
 }
 
 // -------------------------------------------------------
@@ -168,16 +198,20 @@ void SystemMonster::read(const QJsonObject &json){
     QJsonArray tab;
     QJsonObject obj, objHash;
     QJsonArray jsonRow;
-    QList<QStandardItem *> row;
     SystemProgressionTable *table;
     int i, l;
+
+    SuperListItem::deleteModel(m_modelLoots, false);
+    SuperListItem::deleteModel(m_modelActions, false);
+    this->initializeHeaders();
 
     // Experience
     m_experience->read(json[JSON_EXPERIENCE].toObject());
 
     // Currencies
     tab = json[JSON_CURRENCIES].toArray();
-    for (i = 0, l = tab.size(); i < l; i++) {
+    for (i = 0, l = tab.size(); i < l; i++)
+    {
         objHash = tab.at(i).toObject();
         obj = objHash["v"].toObject();
         table = new SystemProgressionTable;
@@ -187,6 +221,11 @@ void SystemMonster::read(const QJsonObject &json){
 
     // Loots
     SuperListItem::readTree(m_modelLoots, new SystemLoot, json, JSON_LOOTS);
+
+    // Actions
+    RPM::get()->setSelectedMonster(this);
+    SuperListItem::readTree(m_modelActions, new SystemMonsterAction, json,
+        JSON_ACTIONS);
 }
 
 // -------------------------------------------------------
@@ -218,4 +257,7 @@ void SystemMonster::write(QJsonObject &json) const{
 
     // Loots
     SuperListItem::writeTree(m_modelLoots, json, JSON_LOOTS);
+
+    // Actions
+    SuperListItem::writeTree(m_modelActions, json, JSON_ACTIONS);
 }

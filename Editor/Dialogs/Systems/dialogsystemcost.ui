@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Cost...</string>
+   <string>Set cost...</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <property name="leftMargin">
@@ -34,7 +34,7 @@
      <item>
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="labelApplyCostOn">
          <property name="text">
           <string>Apply cost on </string>
          </property>
@@ -70,7 +70,7 @@
         </spacer>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="labelWithValue">
          <property name="text">
           <string>with value</string>
          </property>
@@ -123,15 +123,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PanelDamagesKind</class>
-   <extends>QWidget</extends>
-   <header>paneldamageskind.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelDamagesKind</class>
+   <extends>QWidget</extends>
+   <header>paneldamageskind.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -46,9 +46,9 @@ void TilesetsDatas::setDefault(){
     SystemTileset* tileset;
 
     item = new QStandardItem;
-    tileset = new SystemTileset(1, "Plains", 1);
-    tileset->addSpecial(new SuperListItem(1, "General"),
-                        PictureKind::Autotiles);
+    tileset = new SystemTileset(1, RPM::translate(Translations::PLAINS), 1);
+    tileset->addSpecial(new SuperListItem(1, RPM::translate(Translations
+        ::GENERAL)), PictureKind::Autotiles);
     item->setData(QVariant::fromValue(
                       reinterpret_cast<quintptr>(tileset)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));

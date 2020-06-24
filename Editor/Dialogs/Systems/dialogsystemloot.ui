@@ -36,7 +36,7 @@
        <item>
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="labelNumber">
            <property name="text">
             <string>Number:</string>
            </property>
@@ -75,7 +75,7 @@
           </spacer>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="labelProbability">
            <property name="text">
             <string>Probability:</string>
            </property>
@@ -112,7 +112,7 @@
        <item>
         <layout class="QGridLayout" name="gridLayout_4">
          <item row="0" column="0" colspan="3">
-          <widget class="QLabel" name="label_4">
+          <widget class="QLabel" name="labelLevelBetween">
            <property name="text">
             <string>Level between:</string>
            </property>
@@ -135,7 +135,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QLabel" name="label_5">
+          <widget class="QLabel" name="labelAnd">
            <property name="text">
             <string>and</string>
            </property>
@@ -163,7 +163,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBoxLoot">
          <property name="title">
           <string>Loot</string>
          </property>

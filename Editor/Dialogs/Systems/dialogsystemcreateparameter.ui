@@ -34,7 +34,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="labelName">
          <property name="text">
           <string>Name:</string>
          </property>
@@ -51,7 +51,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="labelDefaultValue">
          <property name="text">
           <string>Default value:</string>
          </property>

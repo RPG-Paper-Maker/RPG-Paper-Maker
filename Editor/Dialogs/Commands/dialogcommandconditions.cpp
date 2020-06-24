@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -39,6 +39,8 @@ DialogCommandConditions::DialogCommandConditions(EventCommand *command,
     if (command != nullptr) {
         initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandConditions::~DialogCommandConditions()
@@ -155,6 +157,64 @@ void DialogCommandConditions::initializePrimitives() {
         properties);
 
     this->on_radioButtonHeroes_toggled(false);
+}
+
+//-------------------------------------------------
+
+void DialogCommandConditions::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::CONDITION) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelVariable->setText(RPM::translate(Translations::IS));
+    ui->labelOthersKey->setText(RPM::translate(Translations::IS));
+    ui->labelCurrencyIs->setText(RPM::translate(Translations::IS));
+    ui->labelItemInventory->setText(RPM::translate(Translations
+        ::NUMBER_IN_INVENTORY_IS));
+    ui->labelArmorInventory->setText(RPM::translate(Translations
+        ::NUMBER_IN_INVENTORY_IS));
+    ui->labelWeaponInventory->setText(RPM::translate(Translations
+        ::NUMBER_IN_INVENTORY_IS));
+    ui->radioButtonItem->setText(RPM::translate(Translations::ITEM_ID) + RPM
+        ::COLON);
+    ui->radioButtonArmor->setText(RPM::translate(Translations::ARMOR_ID) + RPM
+        ::COLON);
+    ui->radioButtonHeroes->setText(RPM::translate(Translations::HERO_MAYBE_MORE));
+    ui->radioButtonWeapon->setText(RPM::translate(Translations::WEAPON_ID) + RPM
+        ::COLON);
+    ui->radioButtonCurrency->setText(RPM::translate(Translations::CURRENCY_ID) +
+        RPM::COLON);
+    ui->radioButtonOthersKey->setText(RPM::translate(Translations::KEY_ID) + RPM
+        ::COLON);
+    ui->radioButtonHeroesNamed->setText(RPM::translate(Translations::ARE_NAMED));
+    ui->radioButtonHeroesSkill->setText(RPM::translate(Translations
+        ::ARE_ABLE_SKILL_ID));
+    ui->radioButtonHeroesInTeam->setText(RPM::translate(Translations::ARE_IN));
+    ui->radioButtonHeroesStatus->setText(RPM::translate(Translations
+        ::ARE_UNDER_EFFECT_STATUS_ID));
+    ui->radioButtonOthersScript->setText(RPM::translate(Translations::SCRIPT) +
+        RPM::COLON);
+    ui->radioButtonHeroesEquiped->setText(RPM::translate(Translations
+        ::ARE_EQUIPED_WITH));
+    ui->radioButtonHeroesStatistic->setText(RPM::translate(Translations
+        ::HAVE_STATISTIC_ID));
+    ui->radioButtonVariableParamProp->setText(RPM::translate(Translations::THIS_MESSAGE));
+    ui->radioButtonHeroesEquipedArmor->setText(RPM::translate(Translations
+        ::ARMOR_ID) + RPM::COLON);
+    ui->radioButtonHeroesEquipedWeapon->setText(RPM::translate(Translations
+        ::WEAPON_ID) + RPM::COLON);
+    ui->tabWidget->setTabText(0, RPM::translate(Translations
+        ::VARIABLES_PARAM_PROP));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::HEROES));
+    ui->tabWidget->setTabText(2, RPM::translate(Translations::POSSESSIONS));
+    ui->tabWidget->setTabText(3, RPM::translate(Translations::OTHERS));
+    ui->checkBox->setText(RPM::translate(Translations
+        ::ADD_ELSE_CONDITIONS_NOT_APPLY));
+    ui->checkBoxInTeam->setText(RPM::translate(Translations::IN_MESSAGE));
+    ui->checkBoxArmorEquiped->setText(RPM::translate(Translations
+        ::CHECK_ARMORS_EQUIPED_TOO));
+    ui->checkBoxWeaponEquiped->setText(RPM::translate(Translations
+        ::CHECK_WEAPONS_EQUIPED_TOO));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

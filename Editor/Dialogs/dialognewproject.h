@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -32,22 +32,25 @@ class DialogNewProject : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogNewProject(QWidget *parent = 0);
+    explicit DialogNewProject(QWidget *parent = nullptr);
     ~DialogNewProject();
-    void filterDirectoryName(const QString & s);
+
     QString getProjectName() const;
     QString getDirectoryName() const;
     QString getLocation() const;
+    void filterDirectoryName(const QString & s);
 
 private:
     Ui::DialogNewProject *ui;
     ControlNewproject m_control;
 
+    void translate();
+
 private slots:
-    void on_lineEditProjectName_textChanged(const QString & s);
+    void on_lineEditProjectName_textChanged(const QString &s);
     void on_lineEditDirectoryName_editingFinished();
     void on_pushButtonLocation_clicked();
-    void accept();
+    virtual void accept();
 };
 
 #endif // DIALOGNEWPROJECT_H

@@ -1,0 +1,32 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Change define as hero so it create a new object with model hero",
+        "Adding enemy touch event"
+    ],
+	"bugs": [
+        "Variable command crashing ingame",
+        "Delayed musics",
+        "Dealed damages overlap + no rounded decimal damages",
+        "Deleting command select command below but not the entire node",
+        "Weird space ingame on display text command node separation for different resolution",
+        "Weird display text for interlocutor small delay displaying",
+        "Primitive values widget cursor always going at the end",
+        "Change state not working on hero",
+        "Event command display / set / move / turn not centered correctly",
+        "When creating a map with depth > 0, crash",
+        "3D custom object no collisions",
+        "New battle maps not updating map name",
+        "Disable in map selector for teleport object/battle maps to create new maps / folders",
+        "Ingame crash when using start battle command with manual battle map position",
+        "When using other battle maps, problem with camera use",
+        "Weird collision with invisible hero",
+        "Going into another battle after you got a teamate killed in the one before let the character still appear alive",
+        "Battle option no game over when defeat: camera not changed",
+        "Battle option no game over when defeat: crash ingame when running a new battle with 0 HP",
+        "Battle option no game over when defeat: battle music doesn't stop",
+        "Remove About window shortcut in conflict with define as hero"
+	]
+}

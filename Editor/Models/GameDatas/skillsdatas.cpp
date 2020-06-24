@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -50,26 +50,37 @@ void SkillsDatas::setDefault(){
     QStandardItemModel *modelCosts, *modelEffects;
 
     QString names[] = {
-        "Attack", "Skill", "Item", "Escape", "End turn", "Blazing sword",
-        "Shadow", "Heal", "Fire", "Water", "Wind", "Bandage", "Concentration"
+        RPM::translate(Translations::ATTACK),
+        RPM::translate(Translations::SKILL),
+        RPM::translate(Translations::ITEM),
+        RPM::translate(Translations::ESCAPE),
+        RPM::translate(Translations::END_TURN),
+        RPM::translate(Translations::BLAZING_SWORD),
+        RPM::translate(Translations::SHADOW),
+        RPM::translate(Translations::HEAL),
+        RPM::translate(Translations::FIRE),
+        RPM::translate(Translations::WATER),
+        RPM::translate(Translations::WIND),
+        RPM::translate(Translations::BANDAGE),
+        RPM::translate(Translations::CONCENTRATION)
     };
     int iconsID[] = {
         3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
     };
     QString descriptions[] = {
-        "A basic attack (use the current weapon(s).",
-        "Use a skill.",
-        "Use an item.",
-        "Escape from the battle.",
-        "End a complete turn.",
-        "An amazing fire sword attack on all the ennemies.",
-        "A darkness attack on one ennemy.",
-        "Heal one ally.",
-        "A fire attack on one enemy.",
-        "A water attack on one enemy.",
-        "A wind attack on one enemy.",
-        "Heal yourself with bandages.",
-        "Increase your strength for the next attacks."
+        RPM::translate(Translations::ATTACK_DESCRIPTION),
+        RPM::translate(Translations::SKILL_DESCRIPTION),
+        RPM::translate(Translations::ITEM_DESCRIPTION),
+        RPM::translate(Translations::ESCAPE_DESCRIPTION),
+        RPM::translate(Translations::END_TURN_DESCRIPTION),
+        RPM::translate(Translations::BLAZING_SWORD_DESCRIPTION),
+        RPM::translate(Translations::SHADOW_DESCRIPTION),
+        RPM::translate(Translations::HEAL_DESCRIPTION),
+        RPM::translate(Translations::FIRE_DESCRIPTION),
+        RPM::translate(Translations::WATER_DESCRIPTION),
+        RPM::translate(Translations::WIND_DESCRIPTION),
+        RPM::translate(Translations::BANDAGE_DESCRIPTION),
+        RPM::translate(Translations::CONCENTRATION_DESCRIPTION)
     };
     TargetKind targetsKind[] = {
         TargetKind::Enemy, TargetKind::None, TargetKind::None, TargetKind::None,
@@ -130,8 +141,9 @@ void SkillsDatas::setDefault(){
             PrimitiveValueKind::None) : new PrimitiveValue(targetConditions[i]),
             new PrimitiveValue(PrimitiveValueKind::None), availablesKind[i], new
             SystemPlaySong(songsID[i], SongKind::Sound), new PrimitiveValue(
-            PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind
-            ::None), modelCosts, modelEffects);
+            PrimitiveValueKind::None), i == 0 ? new PrimitiveValue(
+            PrimitiveValueKind::DataBase, 1) : new PrimitiveValue(
+            PrimitiveValueKind::None), modelCosts, modelEffects);
         m_model->appendRow(skill->getModelRow());
     }
 }

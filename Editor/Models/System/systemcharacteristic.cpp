@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -371,42 +371,44 @@ SuperListItem* SystemCharacteristic::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemCharacteristic::setCopy(const SystemCharacteristic& characteristic) {
-    SuperListItem::setCopy(characteristic);
+void SystemCharacteristic::setCopy(const SuperListItem &super) {
+    const SystemCharacteristic *characteristic;
     int i, l;
 
-    m_kind = characteristic.m_kind;
-    m_isIncreaseDecrease = characteristic.m_isIncreaseDecrease;
-    m_increaseDecreaseKind->setId(characteristic.m_increaseDecreaseKind->id());
-    m_statValueID->setCopy(*characteristic.m_statValueID);
-    m_elementResID->setCopy(*characteristic.m_elementResID);
-    m_statusResID->setCopy(*characteristic.m_statusResID);
-    m_currencyGainID->setCopy(*characteristic.m_currencyGainID);
-    m_skillCostID->setCopy(*characteristic.m_skillCostID);
-    m_isAllSkillCost = characteristic.m_isAllSkillCost;
-    m_variableID->setId(characteristic.m_variableID->id());
-    m_operation = characteristic.m_operation;
-    m_value->setCopy(*characteristic.m_value);
-    m_unit = characteristic.m_unit;
-    m_script->setCopy(*characteristic.m_script);
-    m_isAllowEquip = characteristic.m_isAllowEquip;
-    m_isAllowEquipWeapon = characteristic.m_isAllowEquipWeapon;
-    m_equipWeaponTypeID->setCopy(*characteristic.m_equipWeaponTypeID);
-    m_equipArmorTypeID->setCopy(*characteristic.m_equipArmorTypeID);
-    m_isAllowChangeEquipment = characteristic.m_isAllowChangeEquipment;
-    m_changeEquipmentID->setCopy(*characteristic.m_changeEquipmentID);
-    m_beginEquipmentID->setCopy(*characteristic.m_beginEquipmentID);
-    m_isBeginWeapon = characteristic.m_isBeginWeapon;
-    m_beginWeaponArmorID->setCopy(*characteristic.m_beginWeaponArmorID);
+    SuperListItem::setCopy(super);
+    characteristic = reinterpret_cast<const SystemCharacteristic *>(&super);
+    m_kind = characteristic->m_kind;
+    m_isIncreaseDecrease = characteristic->m_isIncreaseDecrease;
+    m_increaseDecreaseKind->setId(characteristic->m_increaseDecreaseKind->id());
+    m_statValueID->setCopy(*characteristic->m_statValueID);
+    m_elementResID->setCopy(*characteristic->m_elementResID);
+    m_statusResID->setCopy(*characteristic->m_statusResID);
+    m_currencyGainID->setCopy(*characteristic->m_currencyGainID);
+    m_skillCostID->setCopy(*characteristic->m_skillCostID);
+    m_isAllSkillCost = characteristic->m_isAllSkillCost;
+    m_variableID->setId(characteristic->m_variableID->id());
+    m_operation = characteristic->m_operation;
+    m_value->setCopy(*characteristic->m_value);
+    m_unit = characteristic->m_unit;
+    m_script->setCopy(*characteristic->m_script);
+    m_isAllowEquip = characteristic->m_isAllowEquip;
+    m_isAllowEquipWeapon = characteristic->m_isAllowEquipWeapon;
+    m_equipWeaponTypeID->setCopy(*characteristic->m_equipWeaponTypeID);
+    m_equipArmorTypeID->setCopy(*characteristic->m_equipArmorTypeID);
+    m_isAllowChangeEquipment = characteristic->m_isAllowChangeEquipment;
+    m_changeEquipmentID->setCopy(*characteristic->m_changeEquipmentID);
+    m_beginEquipmentID->setCopy(*characteristic->m_beginEquipmentID);
+    m_isBeginWeapon = characteristic->m_isBeginWeapon;
+    m_beginWeaponArmorID->setCopy(*characteristic->m_beginWeaponArmorID);
     m_beginWeaponArmorID->setModelDataBase(m_modelBeginWeaponArmor);
 
     // Model weapon armor (begin)
     m_modelBeginWeaponArmor->clear();
-    for (i = 0, l = characteristic.m_modelBeginWeaponArmor->invisibleRootItem()
+    for (i = 0, l = characteristic->m_modelBeginWeaponArmor->invisibleRootItem()
         ->rowCount(); i < l; i++)
     {
         m_modelBeginWeaponArmor->insertRow(i, reinterpret_cast<
-            SystemCommonSkillItem *>(characteristic.m_modelBeginWeaponArmor->item
+            SystemCommonSkillItem *>(characteristic->m_modelBeginWeaponArmor->item
             (i)->data().value<quintptr>())->getModelRow());
     }
 }
@@ -418,9 +420,10 @@ QString SystemCharacteristic::toString() const {
     switch (m_kind) {
     case CharacteristicKind::IncreaseDecrease:
     {
-        text += QString(m_isIncreaseDecrease ? "Increase" : "Decrease") + " " +
+        text += QString(m_isIncreaseDecrease ? RPM::translate(Translations
+            ::INCREASE) : RPM::translate(Translations::DECREASE)) + RPM::SPACE +
             RPM::ENUM_TO_STRING_INCREASE_DECREASE_KIND.at(m_increaseDecreaseKind
-            ->id()) + " ";
+            ->id()) + RPM::SPACE;
         switch (static_cast<IncreaseDecreaseKind>(m_increaseDecreaseKind->id()))
         {
         case IncreaseDecreaseKind::StatValue:
@@ -436,7 +439,9 @@ QString SystemCharacteristic::toString() const {
             text += m_currencyGainID->toString();
             break;
         case IncreaseDecreaseKind::SkillCost:
-            text += m_isAllSkillCost ? "(all)" : m_skillCostID->toString();
+            text += m_isAllSkillCost ? RPM::PARENTHESIS_LEFT + RPM::translate(
+                Translations::ALL).toLower() + RPM::PARENTHESIS_RIGHT :
+                m_skillCostID->toString();
             break;
         case IncreaseDecreaseKind::Variable:
             text += QString::number(m_variableID->id());
@@ -449,21 +454,30 @@ QString SystemCharacteristic::toString() const {
         break;
     }
     case CharacteristicKind::AllowForbidEquip:
-        text += (m_isAllowEquip ? "Allow" : "Forbid") + QString(" equip ") + (
-            m_isAllowEquipWeapon ? "weapon " + m_equipWeaponTypeID->toString() :
-            "armor " + m_equipArmorTypeID->toString());
+        text += (m_isAllowEquip ? RPM::translate(Translations::ALLOW) : RPM
+            ::translate(Translations::FORBID)) + RPM::SPACE + RPM::translate(
+            Translations::EQUIP).toLower() + RPM::SPACE + (m_isAllowEquipWeapon
+            ? RPM::translate(Translations::WEAPON_ID).toLower() + RPM::SPACE +
+            m_equipWeaponTypeID->toString() : RPM::translate(Translations
+            ::ARMOR_ID).toLower() + RPM::SPACE + m_equipArmorTypeID->toString());
         break;
     case CharacteristicKind::AllowForbidChange:
-        text += (m_isAllowChangeEquipment ? "Allow" : "Forbid") + QString(
-            " change equipment ") + m_changeEquipmentID->toString();
+        text += (m_isAllowChangeEquipment ? RPM::translate(Translations::ALLOW)
+            : RPM::translate(Translations::FORBID)) + RPM::SPACE + RPM
+            ::translate(Translations::CHANGE_EQUIPMENT).toLower() + RPM::SPACE +
+            m_changeEquipmentID->toString();
         break;
     case CharacteristicKind::BeginEquipment:
-        text += "Begin equiment " + m_beginEquipmentID->toString() + " with " +
-            (m_isBeginWeapon ? "weapon" : "armor") + " " + m_beginWeaponArmorID
-            ->toString();
+        text += RPM::translate(Translations::BEGIN_EQUIPMENT) + RPM::SPACE +
+            m_beginEquipmentID->toString() + RPM::SPACE + RPM::translate(
+            Translations::WITH).toLower() + RPM::SPACE + (m_isBeginWeapon ? RPM
+            ::translate(Translations::WEAPON_ID).toLower() : RPM::translate(
+            Translations::ARMOR_ID).toLower()) + RPM::SPACE +
+            m_beginWeaponArmorID->toString();
         break;
     case CharacteristicKind::Script:
-        text += "Script: " + m_script->toString();
+        text += RPM::translate(Translations::SCRIPT) + RPM::COLON + RPM::SPACE +
+            m_script->toString();
         break;
     }
 

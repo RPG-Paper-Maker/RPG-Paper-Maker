@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Wano
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -47,7 +47,7 @@ void PanelDamagesKind::initialize(PrimitiveValue *statisticID, PrimitiveValue
     m_variableID = variableID;
     m_kind = kind;
     int index = m_kind->id();
-
+    ui->comboBoxChoice->clear();
     ui->comboBoxChoice->addItems(RPM::ENUM_TO_STRING_DAMAGES_KIND);
     ui->comboBoxChoice->setCurrentIndex(index);
     ui->panelPrimitiveValueStatistic->initializeDataBaseCommandId(m_statisticID
