@@ -1108,6 +1108,8 @@ public:
     static const QString HELP_ENGINE_3;
     static const QString CHANGE_LANGUAGE;
     static const QString ENEMY_TOUCH;
+    static const QString LABEL;
+    static const QString JUMP_TO_LABEL;
 
     Translations();
     virtual ~Translations();

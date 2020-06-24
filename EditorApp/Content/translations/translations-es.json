@@ -1077,5 +1077,7 @@
     "help.engine.2": "¡Compre la edición comercial aquí!",
     "help.engine.3": "O...",
     "change.language": "Cambiar idioma",
-    "enemy.touch": "Toque de enemigo"
+    "enemy.touch": "Toque de enemigo",
+    "label": "Etiqueta",
+    "jump.to.label": "Saltar a la etiqueta"
 }

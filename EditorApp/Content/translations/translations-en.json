@@ -1075,5 +1075,7 @@
     "help.engine.2": "Buy the commercial edition here!",
     "help.engine.3": "Or...",
     "change.language": "Change language",
-    "enemy.touch": "Enemy touch"
+    "enemy.touch": "Enemy touch",
+    "label": "Label",
+    "jump.to.label": "Jump to label"
 }

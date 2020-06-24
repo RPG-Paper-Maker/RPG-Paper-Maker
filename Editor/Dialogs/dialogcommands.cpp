@@ -38,6 +38,7 @@
 #include "dialogcommandremoveobjectfrommap.h"
 #include "dialogcommandallowforbidsavesmainmenu.h"
 #include "dialogcommandcallacommonreaction.h"
+#include "dialogcommandlabel.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -159,6 +160,10 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
             parameters);
     case EventCommandKind::CallACommonReaction:
         return new DialogCommandCallACommonReaction(command);
+    case EventCommandKind::Label:
+        return new DialogCommandLabel(false, command, object, parameters);
+    case EventCommandKind::JumpLabel:
+        return new DialogCommandLabel(true, command, object, parameters);
     default:
         return nullptr;
     }
@@ -527,4 +532,18 @@ void DialogCommands::on_pushButtonAllowForbidMainMenu_clicked() {
 
 void DialogCommands::on_pushButtonCallCommonReaction_clicked() {
     this->openDialogCommand(EventCommandKind::CallACommonReaction);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonLabel_clicked()
+{
+    this->openDialogCommand(EventCommandKind::Label);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonJumpLabel_clicked()
+{
+    this->openDialogCommand(EventCommandKind::JumpLabel);
 }

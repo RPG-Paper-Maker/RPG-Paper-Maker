@@ -361,7 +361,8 @@ HEADERS += \
     MapEditor/object3dbox.h \
     CustomWidgets/widgetpreviewobject3d.h \
     MapEditor/object3dcustom.h \
-    CustomWidgets/widgetchart.h
+    CustomWidgets/widgetchart.h \
+    Dialogs/Commands/dialogcommandlabel.h
 
 SOURCES += \
     CustomWidgets/panelselectpositionmaps.cpp \
@@ -665,7 +666,8 @@ SOURCES += \
     MapEditor/object3dbox.cpp \
     CustomWidgets/widgetpreviewobject3d.cpp \
     MapEditor/object3dcustom.cpp \
-    CustomWidgets/widgetchart.cpp
+    CustomWidgets/widgetchart.cpp \
+    Dialogs/Commands/dialogcommandlabel.cpp
 
 FORMS += \
     CustomWidgets/panelselectpositionmaps.ui \
@@ -797,7 +799,8 @@ FORMS += \
     Dialogs/dialogshapes.ui \
     CustomWidgets/panelshapes.ui \
     CustomWidgets/widgetshape.ui \
-    Dialogs/dialogshapespreview.ui
+    Dialogs/dialogshapespreview.ui \
+    Dialogs/Commands/dialogcommandlabel.ui
 
 # Resources are currently part of the Editor library, not the EditorApp. EditorApp's main function will require Q_INIT_RESOURCE.
 RESOURCES += \

@@ -280,6 +280,10 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strAllowForbidMainMenu(object, parameters); break;
     case EventCommandKind::CallACommonReaction:
         str += this->strCallACommonReaction(); break;
+    case EventCommandKind::Label:
+        str += this->strLabel(false, object, parameters); break;
+    case EventCommandKind::JumpLabel:
+        str += this->strLabel(true, object, parameters); break;
     default:
         break;
     }
@@ -1853,6 +1857,17 @@ QString EventCommand::strCallACommonReaction() const {
         ::getById(RPM::get()->project()->gameDatas()->commonEventsDatas()
         ->modelCommonReactors()->invisibleRootItem(), m_listCommand.at(i++)
         .toInt()))->toString();
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strLabel(bool jump, SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    return RPM::translate(jump ? Translations::JUMP_TO_LABEL : Translations
+        ::LABEL) + RPM::COLON + RPM::SPACE + this->strProperty(i, object,
+        parameters);
 }
 
 // -------------------------------------------------------

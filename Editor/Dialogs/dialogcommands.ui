@@ -888,7 +888,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonLabel">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Label...</string>
@@ -898,7 +898,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonJumpLabel">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Jump to label...</string>

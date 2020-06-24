@@ -68,6 +68,8 @@ enum class EventCommandKind {
     AllowForbidSaves,
     AllowForbidMainMenu,
     CallACommonReaction,
+    Label,
+    JumpLabel,
     Last
 };
 

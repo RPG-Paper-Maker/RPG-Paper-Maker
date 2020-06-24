@@ -22,12 +22,14 @@
         "Frame duration for objects moving in system manager"
     ],
 	"bugs": [
+        "When escaping, game app close",
+        "With different resolutions, show text command center option not correct",
         "Mountains issues with different width",
 		"Move square command go through mountains"
 	],
     "finished": [
-        0,
-        0,
+        1,
+        2,
         0,
         0,
         0,
@@ -44,7 +46,9 @@
         0,
         0,
 
-        0,
+        2,
+        2,
+        2,
         0
     ]
 }

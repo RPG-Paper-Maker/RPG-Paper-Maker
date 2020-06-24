@@ -1075,5 +1075,7 @@
     "help.engine.2": "Achetez l'édition commerciale ici !",
     "help.engine.3": "Ou...",
     "change.language": "Changer de langue",
-    "enemy.touch": "Au contact de l'enemi"
+    "enemy.touch": "Au contact de l'enemi",
+    "label": "Etiquette",
+    "jump.to.label": "Aller à l'étiquette"
 }
