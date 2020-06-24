@@ -81,7 +81,3 @@ INCLUDEPATH += \
     $$EDITOR_PATH/Models/System \
     $$EDITOR_PATH/Enums \
     $$EDITOR_PATH/MathUtils
-
-# Clean helpers
-win32: DEL_DIR_CMD = rmdir /s /q
-unix: DEL_DIR_CMD = rm -rf

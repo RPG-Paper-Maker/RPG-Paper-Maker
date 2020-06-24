@@ -145,6 +145,6 @@ QMAKE_CLEAN += $$DESTDIR/$$APP_FILENAME
 
 # Also add a custom clean command to remove the copied Content directory
 # (QMAKE_CLEAN only supports files)
-extraclean.commands = $$DEL_DIR_CMD $$DEST_CONTENT_DIR
+extraclean.commands = $$QMAKE_DEL_TREE $$DEST_CONTENT_DIR
 clean.depends = extraclean
 QMAKE_EXTRA_TARGETS += clean extraclean
