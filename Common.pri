@@ -36,15 +36,15 @@ ROOT_DESTDIR = $$MAIN_PROJECT_DIR/Build/$$VARIANT
 EDITOR_LIB_NAME = RPG-Paper-Maker
 # To check the compiler, be pragmatic and check the static lib extension directly
 # This way, we are sure to always have the matching prefix
-equals(QMAKE_EXTENSION_STATICLIB, ".a") {
+equals(QMAKE_EXTENSION_STATICLIB, "a") {
     LIB_FILENAME_PREFIX = "lib"
 } else {
     LIB_FILENAME_PREFIX = ""
 }
 # Ex:
-# win32 + msvc: "RPG-Paper-Maker.lib"
+# win32 + msvc:      "RPG-Paper-Maker.lib"
 # win32 + mingw g++: "libRPG-Paper-Maker.a"
-# unix + g++: "libRPG-Paper-Maker.a"
+# unix + g++:        "libRPG-Paper-Maker.a"
 LIB_FILENAME = $${LIB_FILENAME_PREFIX}$${EDITOR_LIB_NAME}.$$QMAKE_EXTENSION_STATICLIB
 
 # The following define makes your compiler emit warnings if you use
