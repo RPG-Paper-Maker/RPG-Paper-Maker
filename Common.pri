@@ -31,11 +31,21 @@ MAIN_PROJECT_DIR = $$PWD
 # Ex: path/to/RPG-Paper-Maker/Build/debug
 ROOT_DESTDIR = $$MAIN_PROJECT_DIR/Build/$$VARIANT
 
-# Output library name per platform
-# (useful for dependency change detection and cleanup)
+# Define output library name per compiler, not per platform (e.g. Windows can use MinGW and output like Unix)
+# Knowing this name is useful for dependency change detection and cleanup
 EDITOR_LIB_NAME = RPG-Paper-Maker
-win32: LIB_FILENAME = $${EDITOR_LIB_NAME}.$$QMAKE_EXTENSION_STATICLIB   # "RPG-Paper-Maker.lib"
-unix: LIB_FILENAME = lib$${EDITOR_LIB_NAME}.$$QMAKE_EXTENSION_STATICLIB # "libRPG-Paper-Maker.a"
+# To check the compiler, be pragmatic and check the static lib extension directly
+# This way, we are sure to always have the matching prefix
+equals(QMAKE_EXTENSION_STATICLIB, ".a") {
+    LIB_FILENAME_PREFIX = "lib"
+} else {
+    LIB_FILENAME_PREFIX = ""
+}
+# Ex:
+# win32 + msvc: "RPG-Paper-Maker.lib"
+# win32 + mingw g++: "libRPG-Paper-Maker.a"
+# unix + g++: "libRPG-Paper-Maker.a"
+LIB_FILENAME = $${LIB_FILENAME_PREFIX}$${EDITOR_LIB_NAME}.$$QMAKE_EXTENSION_STATICLIB
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
