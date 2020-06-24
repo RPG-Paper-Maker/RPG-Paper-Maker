@@ -567,13 +567,21 @@ void WidgetTreeCommands::deleteStartBattleBlock(QStandardItem *root, int row){
 
 // -------------------------------------------------------
 
-void WidgetTreeCommands::updateAllNodesString(QStandardItem *item){
-    for (int i = 0; i < item->rowCount(); i++){
-        updateAllNodesString(item->child(i));
-        EventCommand* command = reinterpret_cast<EventCommand *>(item->child(i)
-            ->data().value<quintptr>());
-        item->child(i)->setText(command->toString(m_linkedObject,
-                                                  m_parameters));
+void WidgetTreeCommands::updateAllNodesString(QStandardItem *item)
+{
+    EventCommand *command;
+    QStandardItem *child;
+    for (int i = 0; i < item->rowCount(); i++)
+    {
+        child = item->child(i);
+        updateAllNodesString(child);
+        command = reinterpret_cast<EventCommand *>(child->data().value<quintptr>());
+        child->setText(command->toString(m_linkedObject, m_parameters));
+        QBrush b(QColor(18, 135, 90));
+        if (command->kind() == EventCommandKind::Comment)
+        {
+            child->setForeground(b);
+        }
     }
 }
 

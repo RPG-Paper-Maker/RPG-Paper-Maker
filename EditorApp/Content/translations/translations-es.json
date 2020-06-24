@@ -1079,5 +1079,6 @@
     "change.language": "Cambiar idioma",
     "enemy.touch": "Toque de enemigo",
     "label": "Etiqueta",
-    "jump.to.label": "Saltar a la etiqueta"
+    "jump.to.label": "Saltar a la etiqueta",
+    "comment": "Comentario"
 }

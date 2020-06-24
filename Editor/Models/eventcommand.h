@@ -171,6 +171,7 @@ private:
     QString strCallACommonReaction() const;
     QString strLabel(bool jump, SystemCommonObject *object, QStandardItemModel
         *parameters) const;
+    QString strComment() const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

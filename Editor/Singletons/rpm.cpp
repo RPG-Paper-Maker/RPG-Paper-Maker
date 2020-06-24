@@ -35,6 +35,7 @@ const QColor RPM::COLOR_FORTY_TRANSPARENT = QColor(0, 0, 0, 40);
 const QColor RPM::COLOR_GREY = QColor(90, 90, 90);
 const QColor RPM::COLOR_MENU_SELECTION_BLUE = QColor(47, 139, 196);
 const QColor RPM::COLOR_CURSOR_SELECTION = QColor(100, 130, 170, 100);
+const QColor RPM::COLOR_COMMAND_COMMENT = QColor(18, 135, 90);
 
 // COMMON JSON
 const QString RPM::JSON_KEY = "k";
@@ -554,6 +555,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::CALL_A_COMMON_REACTION) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::LABEL) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::JUMP_TO_LABEL) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::COMMENT) + RPM::DOT_DOT_DOT,
         ""
     });
     RPM::ENUM_TO_STRING_TARGET_KIND = QStringList({

@@ -49,6 +49,7 @@ public:
     static const QColor COLOR_GREY;
     static const QColor COLOR_MENU_SELECTION_BLUE;
     static const QColor COLOR_CURSOR_SELECTION;
+    static const QColor COLOR_COMMAND_COMMENT;
 
     // COMMON JSON
     static const QString JSON_KEY;

@@ -1110,6 +1110,7 @@ public:
     static const QString ENEMY_TOUCH;
     static const QString LABEL;
     static const QString JUMP_TO_LABEL;
+    static const QString COMMENT;
 
     Translations();
     virtual ~Translations();

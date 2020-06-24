@@ -70,6 +70,7 @@ enum class EventCommandKind {
     CallACommonReaction,
     Label,
     JumpLabel,
+    Comment,
     Last
 };
 

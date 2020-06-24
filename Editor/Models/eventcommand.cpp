@@ -284,6 +284,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strLabel(false, object, parameters); break;
     case EventCommandKind::JumpLabel:
         str += this->strLabel(true, object, parameters); break;
+    case EventCommandKind::Comment:
+        str += this->strComment(); break;
     default:
         break;
     }
@@ -1868,6 +1870,13 @@ QString EventCommand::strLabel(bool jump, SystemCommonObject *object,
     return RPM::translate(jump ? Translations::JUMP_TO_LABEL : Translations
         ::LABEL) + RPM::COLON + RPM::SPACE + this->strProperty(i, object,
         parameters);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strComment() const
+{
+    return "# " + this->valueCommandAt(0);
 }
 
 // -------------------------------------------------------

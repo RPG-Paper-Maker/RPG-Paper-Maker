@@ -1098,6 +1098,7 @@ const QString Translations::CHANGE_LANGUAGE = "change.language";
 const QString Translations::ENEMY_TOUCH = "enemy.touch";
 const QString Translations::LABEL = "label";
 const QString Translations::JUMP_TO_LABEL = "jump.to.label";
+const QString Translations::COMMENT = "comment";
 
 // -------------------------------------------------------
 //

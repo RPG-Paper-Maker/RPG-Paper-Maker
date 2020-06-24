@@ -97,6 +97,7 @@ private slots:
     void on_pushButtonCallCommonReaction_clicked();
     void on_pushButtonLabel_clicked();
     void on_pushButtonJumpLabel_clicked();
+    void on_pushButtonComment_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

@@ -39,6 +39,7 @@
 #include "dialogcommandallowforbidsavesmainmenu.h"
 #include "dialogcommandcallacommonreaction.h"
 #include "dialogcommandlabel.h"
+#include "dialogcommandcomment.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -164,6 +165,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandLabel(false, command, object, parameters);
     case EventCommandKind::JumpLabel:
         return new DialogCommandLabel(true, command, object, parameters);
+    case EventCommandKind::Comment:
+        return new DialogCommandComment(command);
     default:
         return nullptr;
     }
@@ -546,4 +549,11 @@ void DialogCommands::on_pushButtonLabel_clicked()
 void DialogCommands::on_pushButtonJumpLabel_clicked()
 {
     this->openDialogCommand(EventCommandKind::JumpLabel);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonComment_clicked()
+{
+    this->openDialogCommand(EventCommandKind::Comment);
 }
