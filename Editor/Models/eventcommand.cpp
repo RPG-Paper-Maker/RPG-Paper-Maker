@@ -290,6 +290,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strChangeAStatistic(object, parameters); break;
     case EventCommandKind::ChangeASkill:
         str += this->strChangeASkill(object, parameters); break;
+    case EventCommandKind::ChangeName:
+        str += this->strChangeName(object, parameters); break;
     default:
         break;
     }
@@ -1976,6 +1978,30 @@ QString EventCommand::strOperationLearnForget(int &i) const
     }
 
     return str;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChangeName(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    QString selection;
+    int i = 0;
+    QString name = this->strProperty(i, object, parameters);
+    switch (m_listCommand.at(i++).toInt())
+    {
+    case 0:
+        selection += RPM::translate(Translations::HERO_ENEMY_INSTANCE_ID) + RPM
+            ::SPACE + this->strProperty(i, object, parameters);
+        break;
+    case 1:
+        selection += RPM::translate(Translations::THE_ENTIRE) + RPM::SPACE + RPM
+            ::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++).toInt());
+        break;
+    }
+
+    return RPM::translate(Translations::CHANGE_NAME) + RPM::COLON + RPM::SPACE +
+        selection + RPM::NEW_LINE + RPM::SPACE + name;
 }
 
 // -------------------------------------------------------

@@ -177,6 +177,8 @@ private:
     QString strChangeASkill(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
     QString strOperationLearnForget(int &i) const;
+    QString strChangeName(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

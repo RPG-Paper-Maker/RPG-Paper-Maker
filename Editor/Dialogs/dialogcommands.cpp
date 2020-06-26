@@ -42,6 +42,7 @@
 #include "dialogcommandcomment.h"
 #include "dialogcommandchangeastatistic.h"
 #include "dialogcommandchangeaskill.h"
+#include "dialogcommandchangename.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -173,6 +174,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandChangeAStatistic(command, object, parameters);
     case EventCommandKind::ChangeASkill:
         return new DialogCommandChangeASkill(command, object, parameters);
+    case EventCommandKind::ChangeName:
+        return new DialogCommandChangeName(command, object, parameters);
     default:
         return nullptr;
     }
@@ -287,6 +290,18 @@ void DialogCommands::translate() {
         EventCommandKind::AllowForbidMainMenu));
     ui->pushButtonCallCommonReaction->setText(EventCommand::kindToString(
         EventCommandKind::CallACommonReaction));
+    ui->pushButtonComment->setText(EventCommand::kindToString(
+        EventCommandKind::Comment));
+    ui->pushButtonJumpLabel->setText(EventCommand::kindToString(
+        EventCommandKind::JumpLabel));
+    ui->pushButtonLabel->setText(EventCommand::kindToString(
+        EventCommandKind::Label));
+    ui->pushButtonChangeStatistic->setText(EventCommand::kindToString(
+        EventCommandKind::ChangeAStatistic));
+    ui->pushButtonChangeSkill->setText(EventCommand::kindToString(
+        EventCommandKind::ChangeASkill));
+    ui->pushButtonChangeName->setText(EventCommand::kindToString(
+        EventCommandKind::ChangeName));
     ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
     ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));
     ui->groupBoxMedia->setTitle(RPM::translate(Translations::MEDIA));
@@ -576,4 +591,11 @@ void DialogCommands::on_pushButtonChangeStatistic_clicked()
 void DialogCommands::on_pushButtonChangeSkill_clicked()
 {
     this->openDialogCommand(EventCommandKind::ChangeASkill);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonChangeName_clicked()
+{
+    this->openDialogCommand(EventCommandKind::ChangeName);
 }

@@ -73,6 +73,7 @@ enum class EventCommandKind {
     Comment,
     ChangeAStatistic,
     ChangeASkill,
+    ChangeName,
     Last
 };
 

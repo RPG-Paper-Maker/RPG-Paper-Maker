@@ -100,6 +100,7 @@ private slots:
     void on_pushButtonComment_clicked();
     void on_pushButtonChangeStatistic_clicked();
     void on_pushButtonChangeSkill_clicked();
+    void on_pushButtonChangeName_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

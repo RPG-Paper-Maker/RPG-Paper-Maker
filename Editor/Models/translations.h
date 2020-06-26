@@ -1119,6 +1119,7 @@ public:
     static const QString CHANGE_A_SKILL;
     static const QString LEARN;
     static const QString FORGET;
+    static const QString CHANGE_NAME;
 
     Translations();
     virtual ~Translations();

@@ -1086,5 +1086,6 @@
     "can.go.above.maximum.value": "Pode ir acima do valor máximo",
     "change.a.skill": "Mudar uma habilidade",
     "learn": "Aprender",
-    "forget": "Esqueço"
+    "forget": "Esqueço",
+    "change.name": "Mude o nome"
 }

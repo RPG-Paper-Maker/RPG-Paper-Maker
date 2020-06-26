@@ -1107,6 +1107,7 @@ const QString Translations::CAN_GO_ABOVE_MAXIMUM_VALUE = "can.go.above.maximum.v
 const QString Translations::CHANGE_A_SKILL = "change.a.skill";
 const QString Translations::LEARN = "learn";
 const QString Translations::FORGET = "forget";
+const QString Translations::CHANGE_NAME = "change.name";
 
 // -------------------------------------------------------
 //

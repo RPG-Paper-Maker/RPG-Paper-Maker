@@ -1086,5 +1086,6 @@
     "can.go.above.maximum.value": "Can go above maximum value",
     "change.a.skill": "Change a skill",
     "learn": "Learn",
-    "forget": "Forget"
+    "forget": "Forget",
+    "change.name": "Change name"
 }
