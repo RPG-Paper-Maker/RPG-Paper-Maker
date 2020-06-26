@@ -1083,5 +1083,8 @@
     "hero.enemy.instance.id": "Instance héro / enemi d'ID",
     "the.entire": "L'ensemble",
     "maximum.statistic.value": "Valeur maximum de la statistique",
-    "can.go.above.maximum.value": "Peut aller au dessus de la valeur maximum"
+    "can.go.above.maximum.value": "Peut aller au dessus de la valeur maximum",
+    "change.a.skill": "Changer une compétence",
+    "learn": "Apprendre",
+    "forget": "Oublier"
 }

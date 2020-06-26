@@ -288,6 +288,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strComment(); break;
     case EventCommandKind::ChangeAStatistic:
         str += this->strChangeAStatistic(object, parameters); break;
+    case EventCommandKind::ChangeASkill:
+        str += this->strChangeASkill(object, parameters); break;
     default:
         break;
     }
@@ -1888,7 +1890,8 @@ QString EventCommand::strChangeAStatistic(SystemCommonObject *object,
 {
     int i = 0;
     QString statistic = RPM::translate(Translations::STATISTIC_ID) + RPM::SPACE
-        + this->strProperty(i, object, parameters);
+        + this->strDataBaseId(i, object, RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelCommonStatistics(), parameters);
     QString selection;
     switch (m_listCommand.at(i++).toInt())
     {
@@ -1927,6 +1930,52 @@ QString EventCommand::strChangeAStatistic(SystemCommonObject *object,
     return RPM::translate(Translations::CHANGE_A_STATISTIC) + RPM::NEW_LINE +
         "\t" + statistic + RPM::SPACE + selection + RPM::SPACE + value + RPM
         ::NEW_LINE + "\t" + option;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChangeASkill(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    QString skill = RPM::translate(Translations::SKILL_ID) + RPM::SPACE
+        + this->strDataBaseId(i, object, RPM::get()->project()->gameDatas()
+        ->skillsDatas()->model(), parameters);
+    QString selection;
+    switch (m_listCommand.at(i++).toInt())
+    {
+    case 0:
+        selection += RPM::translate(Translations::HERO_ENEMY_INSTANCE_ID) + RPM
+            ::SPACE + this->strProperty(i, object, parameters);
+        break;
+    case 1:
+        selection += RPM::translate(Translations::THE_ENTIRE) + RPM::SPACE + RPM
+            ::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++).toInt());
+        break;
+    }
+    QString operation = this->strOperationLearnForget(i);
+
+    return RPM::translate(Translations::CHANGE_A_SKILL) + RPM::NEW_LINE +
+        "\t" + skill + RPM::SPACE + selection;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strOperationLearnForget(int &i) const
+{
+    QString str;
+
+    switch (m_listCommand.at(i++).toInt())
+    {
+    case 0:
+        str += RPM::translate(Translations::LEARN);
+        break;
+    case 1:
+        str += RPM::translate(Translations::FORGET);
+        break;
+    }
+
+    return str;
 }
 
 // -------------------------------------------------------

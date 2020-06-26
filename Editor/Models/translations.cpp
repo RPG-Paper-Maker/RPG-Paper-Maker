@@ -1104,6 +1104,9 @@ const QString Translations::HERO_ENEMY_INSTANCE_ID = "hero.enemy.instance.id";
 const QString Translations::THE_ENTIRE = "the.entire";
 const QString Translations::MAXIMUM_STATISTIC_VALUE = "maximum.statistic.value";
 const QString Translations::CAN_GO_ABOVE_MAXIMUM_VALUE = "can.go.above.maximum.value";
+const QString Translations::CHANGE_A_SKILL = "change.a.skill";
+const QString Translations::LEARN = "learn";
+const QString Translations::FORGET = "forget";
 
 // -------------------------------------------------------
 //

@@ -744,7 +744,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonChangeSkill">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Change a skill...</string>

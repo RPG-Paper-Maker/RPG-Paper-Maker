@@ -1085,5 +1085,8 @@
     "hero.enemy.instance.id": "ID de instancia de héroe / enemigo",
     "the.entire": "Todas",
     "maximum.statistic.value": "Valor estadístico máximo",
-    "can.go.above.maximum.value": "Puede ir por encima del valor máximo"
+    "can.go.above.maximum.value": "Puede ir por encima del valor máximo",
+    "change.a.skill": "Cambiar una habilidad",
+    "learn": "Aprender",
+    "forget": "Olvidar"
 }

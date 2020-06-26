@@ -1116,6 +1116,9 @@ public:
     static const QString THE_ENTIRE;
     static const QString MAXIMUM_STATISTIC_VALUE;
     static const QString CAN_GO_ABOVE_MAXIMUM_VALUE;
+    static const QString CHANGE_A_SKILL;
+    static const QString LEARN;
+    static const QString FORGET;
 
     Translations();
     virtual ~Translations();

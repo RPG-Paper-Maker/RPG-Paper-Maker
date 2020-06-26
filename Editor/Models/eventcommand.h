@@ -174,7 +174,9 @@ private:
     QString strComment() const;
     QString strChangeAStatistic(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
-
+    QString strChangeASkill(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
+    QString strOperationLearnForget(int &i) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

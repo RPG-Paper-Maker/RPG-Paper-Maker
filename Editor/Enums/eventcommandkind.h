@@ -72,6 +72,7 @@ enum class EventCommandKind {
     JumpLabel,
     Comment,
     ChangeAStatistic,
+    ChangeASkill,
     Last
 };
 

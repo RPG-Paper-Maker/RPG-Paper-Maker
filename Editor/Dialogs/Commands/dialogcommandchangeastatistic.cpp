@@ -79,6 +79,9 @@ void DialogCommandChangeAStatistic::translate()
     ui->labelStatisticID->setText(RPM::translate(Translations::STATISTIC_ID) +
         RPM::COLON);
     ui->groupBoxSelection->setTitle(RPM::translate(Translations::SELECTION));
+    ui->radioButtonHeroEnemyInstanceID->setText(RPM::translate(Translations
+        ::HERO_ENEMY_INSTANCE_ID) + RPM::COLON);
+    ui->radioButtonEntire->setText(RPM::translate(Translations::THE_ENTIRE));
     ui->groupBoxOperation->setTitle(RPM::translate(Translations::OPERATION));
     ui->groupBoxValue->setTitle(RPM::translate(Translations::VALUE));
     ui->radioButtonPlus->setText(RPM::PARENTHESIS_LEFT + RPM::PLUS + RPM
@@ -93,11 +96,8 @@ void DialogCommandChangeAStatistic::translate()
         ::PARENTHESIS_RIGHT + RPM::translate(Translations::MODULO));
     ui->radioButtonDivided->setText(RPM::PARENTHESIS_LEFT + RPM::MODULO + RPM
         ::PARENTHESIS_RIGHT + RPM::translate(Translations::DIVIDED_BY));
-    ui->radioButtonEntire->setText(RPM::translate(Translations::THE_ENTIRE));
     ui->radioButtonValueMax->setText(RPM::translate(Translations
         ::MAXIMUM_STATISTIC_VALUE));
-    ui->radioButtonHeroEnemyInstanceID->setText(RPM::translate(Translations
-        ::HERO_ENEMY_INSTANCE_ID) + RPM::COLON);
     ui->checkBoxCanAboveMax->setText(RPM::translate(Translations
         ::CAN_GO_ABOVE_MAXIMUM_VALUE));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);

@@ -41,6 +41,7 @@
 #include "dialogcommandlabel.h"
 #include "dialogcommandcomment.h"
 #include "dialogcommandchangeastatistic.h"
+#include "dialogcommandchangeaskill.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -170,6 +171,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandComment(command);
     case EventCommandKind::ChangeAStatistic:
         return new DialogCommandChangeAStatistic(command, object, parameters);
+    case EventCommandKind::ChangeASkill:
+        return new DialogCommandChangeASkill(command, object, parameters);
     default:
         return nullptr;
     }
@@ -566,4 +569,11 @@ void DialogCommands::on_pushButtonComment_clicked()
 void DialogCommands::on_pushButtonChangeStatistic_clicked()
 {
     this->openDialogCommand(EventCommandKind::ChangeAStatistic);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonChangeSkill_clicked()
+{
+    this->openDialogCommand(EventCommandKind::ChangeASkill);
 }
