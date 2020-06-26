@@ -40,6 +40,7 @@
 #include "dialogcommandcallacommonreaction.h"
 #include "dialogcommandlabel.h"
 #include "dialogcommandcomment.h"
+#include "dialogcommandchangeastatistic.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -167,6 +168,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandLabel(true, command, object, parameters);
     case EventCommandKind::Comment:
         return new DialogCommandComment(command);
+    case EventCommandKind::ChangeAStatistic:
+        return new DialogCommandChangeAStatistic(command, object, parameters);
     default:
         return nullptr;
     }
@@ -556,4 +559,11 @@ void DialogCommands::on_pushButtonJumpLabel_clicked()
 void DialogCommands::on_pushButtonComment_clicked()
 {
     this->openDialogCommand(EventCommandKind::Comment);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonChangeStatistic_clicked()
+{
+    this->openDialogCommand(EventCommandKind::ChangeAStatistic);
 }

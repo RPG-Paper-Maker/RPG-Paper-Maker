@@ -172,6 +172,9 @@ private:
     QString strLabel(bool jump, SystemCommonObject *object, QStandardItemModel
         *parameters) const;
     QString strComment() const;
+    QString strChangeAStatistic(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
+
 };
 
 Q_DECLARE_METATYPE(EventCommand)

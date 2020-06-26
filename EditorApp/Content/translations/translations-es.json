@@ -1080,5 +1080,10 @@
     "enemy.touch": "Toque de enemigo",
     "label": "Etiqueta",
     "jump.to.label": "Saltar a la etiqueta",
-    "comment": "Comentario"
+    "comment": "Comentario",
+    "change.a.statistic": "Cambiar una estadística",
+    "hero.enemy.instance.id": "ID de instancia de héroe / enemigo",
+    "the.entire": "Todas",
+    "maximum.statistic.value": "Valor estadístico máximo",
+    "can.go.above.maximum.value": "Puede ir por encima del valor máximo"
 }

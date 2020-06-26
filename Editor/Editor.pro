@@ -36,6 +36,7 @@ HEADERS += \
     Dialogs/Animations/dialoganimationcreatetransition.h \
     Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.h \
     Dialogs/Commands/dialogcommandcallacommonreaction.h \
+    Dialogs/Commands/dialogcommandchangeastatistic.h \
     Dialogs/Commands/dialogcommandchangeproperty.h \
     Dialogs/Commands/dialogcommandchangescreentone.h \
     Dialogs/Commands/dialogcommandcomment.h \
@@ -382,6 +383,7 @@ SOURCES += \
     Dialogs/Animations/dialoganimationcreatetransition.cpp \
     Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.cpp \
     Dialogs/Commands/dialogcommandcallacommonreaction.cpp \
+    Dialogs/Commands/dialogcommandchangeastatistic.cpp \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
     Dialogs/Commands/dialogcommandchangescreentone.cpp \
     Dialogs/Commands/dialogcommandcomment.cpp \
@@ -685,6 +687,7 @@ FORMS += \
     Dialogs/Animations/dialoganimationcreatetransition.ui \
     Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.ui \
     Dialogs/Commands/dialogcommandcallacommonreaction.ui \
+    Dialogs/Commands/dialogcommandchangeastatistic.ui \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
     Dialogs/Commands/dialogcommandchangescreentone.ui \
     Dialogs/Commands/dialogcommandcomment.ui \

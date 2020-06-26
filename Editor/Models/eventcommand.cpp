@@ -286,6 +286,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strLabel(true, object, parameters); break;
     case EventCommandKind::Comment:
         str += this->strComment(); break;
+    case EventCommandKind::ChangeAStatistic:
+        str += this->strChangeAStatistic(object, parameters); break;
     default:
         break;
     }
@@ -1877,6 +1879,54 @@ QString EventCommand::strLabel(bool jump, SystemCommonObject *object,
 QString EventCommand::strComment() const
 {
     return "# " + this->valueCommandAt(0);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChangeAStatistic(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    QString statistic = RPM::translate(Translations::STATISTIC_ID) + RPM::SPACE
+        + this->strProperty(i, object, parameters);
+    QString selection;
+    switch (m_listCommand.at(i++).toInt())
+    {
+    case 0:
+        selection += RPM::translate(Translations::HERO_ENEMY_INSTANCE_ID) + RPM
+            ::SPACE + this->strProperty(i, object, parameters);
+        break;
+    case 1:
+        selection += RPM::translate(Translations::THE_ENTIRE) + RPM::SPACE + RPM
+            ::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++).toInt());
+        break;
+    }
+    QString operation = this->strChangeVariablesOperation(i);
+    QString value;
+    switch (m_listCommand.at(i++).toInt())
+    {
+    case 0:
+        value = RPM::translate(Translations::NUMBER) + RPM::SPACE + this
+            ->strProperty(i, object, parameters);
+        break;
+    case 1:
+        value = RPM::translate(Translations::FORMULA) + RPM::SPACE + this
+            ->strProperty(i, object, parameters);
+        break;
+    case 2:
+        value = RPM::translate(Translations::MAXIMUM_STATISTIC_VALUE);
+        break;
+    }
+    QString option;
+    if (RPM::stringToBool(m_listCommand.at(i++)))
+    {
+        option += RPM::NEW_LINE + RPM::BRACKET_LEFT + RPM::translate(
+            Translations::CAN_GO_ABOVE_MAXIMUM_VALUE) + RPM::BRACKET_RIGHT;
+    }
+
+    return RPM::translate(Translations::CHANGE_A_STATISTIC) + RPM::NEW_LINE +
+        "\t" + statistic + RPM::SPACE + selection + RPM::SPACE + value + RPM
+        ::NEW_LINE + "\t" + option;
 }
 
 // -------------------------------------------------------

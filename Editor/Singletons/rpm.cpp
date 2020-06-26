@@ -556,6 +556,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::LABEL) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::JUMP_TO_LABEL) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::COMMENT) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::CHANGE_A_STATISTIC) + RPM::DOT_DOT_DOT,
         ""
     });
     RPM::ENUM_TO_STRING_TARGET_KIND = QStringList({

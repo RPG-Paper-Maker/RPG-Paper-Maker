@@ -1111,6 +1111,11 @@ public:
     static const QString LABEL;
     static const QString JUMP_TO_LABEL;
     static const QString COMMENT;
+    static const QString CHANGE_A_STATISTIC;
+    static const QString HERO_ENEMY_INSTANCE_ID;
+    static const QString THE_ENTIRE;
+    static const QString MAXIMUM_STATISTIC_VALUE;
+    static const QString CAN_GO_ABOVE_MAXIMUM_VALUE;
 
     Translations();
     virtual ~Translations();
