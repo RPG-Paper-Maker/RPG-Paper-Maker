@@ -120,8 +120,8 @@ void DialogNewProject::on_pushButtonLocation_clicked()
 {
     QString dir;
 
-    dir = QFileDialog::getExistingDirectory(this, Translations
-        ::SELECT_A_LOCATION, ui->lineEditLocation->text());
+    dir = QFileDialog::getExistingDirectory(this, RPM::translate(Translations
+        ::SELECT_A_LOCATION), ui->lineEditLocation->text());
     if (dir.count() > 0)
     {
         ui->lineEditLocation->setText(dir);
