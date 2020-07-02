@@ -45,6 +45,7 @@
 #include "dialogcommandchangename.h"
 #include "dialogcommandchangeequipment.h"
 #include "dialogcommandchangemoney.h"
+#include "dialogcommanddisplayananimation.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -182,6 +183,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandChangeEquipment(command, object, parameters);
     case EventCommandKind::ModifyCurrency:
         return new DialogCommandChangeMoney(command, object, parameters);
+    case EventCommandKind::DisplayAnAnimation:
+        return new DialogCommandDisplayAnAnimation(command, object, parameters);
     default:
         return nullptr;
     }
@@ -618,4 +621,11 @@ void DialogCommands::on_pushButtonChangeEquiment_clicked()
 void DialogCommands::on_pushButtonModifyCurrency_clicked()
 {
     this->openDialogCommand(EventCommandKind::ModifyCurrency);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonDisplayAnimation_clicked()
+{
+    this->openDialogCommand(EventCommandKind::DisplayAnAnimation);
 }

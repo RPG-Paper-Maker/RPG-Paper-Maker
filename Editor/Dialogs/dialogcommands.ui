@@ -116,7 +116,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonDisplayAnimation">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Display an animation...</string>

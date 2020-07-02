@@ -183,6 +183,8 @@ private:
         *parameters) const;
     QString strModifyCurrency(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
+    QString strDisplayAnAnimation(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

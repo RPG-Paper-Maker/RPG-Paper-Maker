@@ -296,6 +296,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strChangeEquipment(object, parameters); break;
     case EventCommandKind::ModifyCurrency:
         str += this->strModifyCurrency(object, parameters); break;
+    case EventCommandKind::DisplayAnAnimation:
+        str += this->strDisplayAnAnimation(object, parameters); break;
     default:
         break;
     }
@@ -2061,6 +2063,28 @@ QString EventCommand::strModifyCurrency(SystemCommonObject *object,
 
     return RPM::translate(Translations::MODIFY_CURRENCY) + RPM::COLON + RPM
         ::SPACE + currency + RPM::SPACE + operation + RPM::SPACE + value;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strDisplayAnAnimation(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    QString objectID = RPM::translate(Translations::OBJECT_ID) + RPM::SPACE +
+        this->strMoveObjectID(object, parameters, i);
+    QString animation = RPM::translate(Translations::ANIMATION_ID) + RPM::SPACE
+        + this->strDataBaseId(i, object, RPM::get()->project()->gameDatas()
+        ->animationsDatas()->model(), parameters);
+    QString option;
+    if (RPM::stringToBool(m_listCommand.at(i++)))
+    {
+        option += RPM::NEW_LINE + RPM::BRACKET_LEFT + RPM::translate(
+            Translations::WAIT_END) + RPM::BRACKET_RIGHT;
+    }
+
+    return RPM::translate(Translations::DISPLAY_AN_ANIMATION) + RPM::COLON + RPM
+        ::SPACE + objectID + RPM::SPACE + animation + RPM::SPACE + option;
 }
 
 // -------------------------------------------------------

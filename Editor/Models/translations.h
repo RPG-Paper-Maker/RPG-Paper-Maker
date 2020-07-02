@@ -1123,6 +1123,9 @@ public:
     static const QString EQUIMENT_ID;
     static const QString APPLY_ONLY_IF_IN_INVENTORY;
     static const QString MODIFY_CURRENCY;
+    static const QString DISPLAY_AN_ANIMATION;
+    static const QString ANIMATION_ID;
+    static const QString WAIT_END_ANIMATION_NEXT_COMMAND;
 
     Translations();
     virtual ~Translations();

@@ -1090,5 +1090,8 @@
     "change.name": "Changer de nom",
     "equipment.id": "Equipement d'ID",
     "apply.only.if.in.inventory": "Appliquer seulement si dans l'inventaire",
-    "modify.currency": "Modifier la monnaie"
+    "modify.currency": "Modifier la monnaie",
+    "display.an.animation": "Afficher une animation",
+    "animation.id": "Animation d'ID",
+    "wait.end.animation.next.command": "Attendre la fin de l'animation avant la prochaine commande"
 }

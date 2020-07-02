@@ -1090,5 +1090,8 @@
     "change.name": "Change name",
     "equipment.id": "Equipment ID",
     "apply.only.if.in.inventory": "Apply only if in inventory",
-    "modify.currency": "Modify currency"
+    "modify.currency": "Modify currency",
+    "display.an.animation": "Display an animation",
+    "animation.id": "Animation ID",
+    "wait.end.animation.next.command": "Wait the end of the animation before the next command"
 }

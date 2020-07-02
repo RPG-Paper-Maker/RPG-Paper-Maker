@@ -1111,6 +1111,9 @@ const QString Translations::CHANGE_NAME = "change.name";
 const QString Translations::EQUIMENT_ID = "equipment.id";
 const QString Translations::APPLY_ONLY_IF_IN_INVENTORY = "apply.only.if.in.inventory";
 const QString Translations::MODIFY_CURRENCY = "modify.currency";
+const QString Translations::DISPLAY_AN_ANIMATION = "display.an.animation";
+const QString Translations::ANIMATION_ID = "animation.id";
+const QString Translations::WAIT_END_ANIMATION_NEXT_COMMAND = "wait.end.animation.next.command";
 
 // -------------------------------------------------------
 //

@@ -44,6 +44,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommandchangeproperty.h \
     Dialogs/Commands/dialogcommandchangescreentone.h \
     Dialogs/Commands/dialogcommandcomment.h \
+    Dialogs/Commands/dialogcommanddisplayananimation.h \
     Dialogs/Commands/dialogcommanddisplayapicture.h \
     Dialogs/Commands/dialogcommanddisplaychoice.h \
     Dialogs/Commands/dialogcommandremoveapicture.h \
@@ -395,6 +396,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
     Dialogs/Commands/dialogcommandchangescreentone.cpp \
     Dialogs/Commands/dialogcommandcomment.cpp \
+    Dialogs/Commands/dialogcommanddisplayananimation.cpp \
     Dialogs/Commands/dialogcommanddisplayapicture.cpp \
     Dialogs/Commands/dialogcommanddisplaychoice.cpp \
     Dialogs/Commands/dialogcommandremoveapicture.cpp \
@@ -703,6 +705,7 @@ FORMS += \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
     Dialogs/Commands/dialogcommandchangescreentone.ui \
     Dialogs/Commands/dialogcommandcomment.ui \
+    Dialogs/Commands/dialogcommanddisplayananimation.ui \
     Dialogs/Commands/dialogcommanddisplayapicture.ui \
     Dialogs/Commands/dialogcommanddisplaychoice.ui \
     Dialogs/Commands/dialogcommandremoveapicture.ui \
