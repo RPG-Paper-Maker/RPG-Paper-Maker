@@ -523,6 +523,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     for (int i = 0; i < jsonList.size(); i++){
         item = new QStandardItem;
         SystemWeaponArmorKind* sysWeaponKind = new SystemWeaponArmorKind;
+        sysWeaponKind->setIsWeapon(true);
         QJsonObject jsonKind = jsonList[i].toObject();
         sysWeaponKind->read(jsonKind);
         item->setData(QVariant::fromValue(
@@ -537,6 +538,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     for (int i = 0; i < jsonList.size(); i++){
         item = new QStandardItem;
         SystemWeaponArmorKind* sysArmorKind = new SystemWeaponArmorKind;
+        sysArmorKind->setIsWeapon(false);
         QJsonObject jsonKind = jsonList[i].toObject();
         sysArmorKind->read(jsonKind);
         item->setData(QVariant::fromValue(

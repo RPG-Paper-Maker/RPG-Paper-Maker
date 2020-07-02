@@ -1120,6 +1120,8 @@ public:
     static const QString LEARN;
     static const QString FORGET;
     static const QString CHANGE_NAME;
+    static const QString EQUIMENT_ID;
+    static const QString APPLY_ONLY_IF_IN_INVENTORY;
 
     Translations();
     virtual ~Translations();

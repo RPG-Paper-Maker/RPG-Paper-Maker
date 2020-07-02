@@ -65,6 +65,8 @@ void DialogCommandChangeAStatistic::initializePrimitives()
         m_parameters, properties);
     ui->panelPrimitiveHeroEnemyInstanceID->initializeNumber(m_parameters,
         properties);
+    ui->panelPrimitiveHeroEnemyInstanceID->showVariable();
+    ui->panelPrimitiveHeroEnemyInstanceID->setNumberValue(1);
     ui->panelPrimiteValueNumber->initializeNumber(m_parameters, properties);
     ui->panelPrimiteValueFormula->initializeMessage(true, m_parameters,
         properties);

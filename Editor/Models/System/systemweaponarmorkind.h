@@ -31,9 +31,11 @@ public:
     SystemWeaponArmorKind(int i, LangsTranslation *names,
                           QList<bool> equipment);
     virtual ~SystemWeaponArmorKind();
+    bool isWeapon();
+    void setIsWeapon(bool iw);
+
     QStandardItemModel* getEquipmentModel() const;
     bool getEquipmenAt(int id) const;
-
     void updateEquipment();
     void updateByModel(QStandardItemModel *model);
     void setDefault();
@@ -45,6 +47,7 @@ public:
 
 protected:
     QList<bool> m_equipment;
+    bool m_isWeapon;
 };
 
 Q_DECLARE_METATYPE(SystemWeaponArmorKind)

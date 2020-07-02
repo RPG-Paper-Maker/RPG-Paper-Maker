@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_5">
       <attribute name="title">
@@ -772,9 +772,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButtonChangeClass_4">
+               <widget class="QPushButton" name="pushButtonChangeEquiment">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Change equipment...</string>

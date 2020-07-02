@@ -28,13 +28,25 @@ SystemWeaponArmorKind::SystemWeaponArmorKind() :
 SystemWeaponArmorKind::SystemWeaponArmorKind(int i, LangsTranslation* names,
                                              QList<bool> equipment) :
     SystemLang(i,names),
-    m_equipment(equipment)
+    m_equipment(equipment),
+    m_isWeapon(true)
 {
 
 }
 
-SystemWeaponArmorKind::~SystemWeaponArmorKind(){
+SystemWeaponArmorKind::~SystemWeaponArmorKind()
+{
 
+}
+
+bool SystemWeaponArmorKind::isWeapon()
+{
+    return  m_isWeapon;
+}
+
+void SystemWeaponArmorKind::setIsWeapon(bool iw)
+{
+    m_isWeapon = iw;
 }
 
 // -------------------------------------------------------

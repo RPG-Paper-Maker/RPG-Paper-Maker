@@ -17,6 +17,8 @@
 #include "systemspritewall.h"
 #include "systemobject3d.h"
 #include "systemmountain.h"
+#include "systemcommonskillitem.h"
+#include "systemweaponarmorkind.h"
 
 const QString SuperListItem::JSON_ID = "id";
 const QString SuperListItem::JSON_NAME = "name";
@@ -487,6 +489,52 @@ void SuperListItem::writeList(QStandardItemModel *model, QJsonObject &json,
     }
 
     json[name] = tab;
+}
+
+// -------------------------------------------------------
+
+QStandardItemModel * SuperListItem::getWeaponsList(int id)
+{
+    QStandardItemModel *model = new QStandardItemModel;
+    updateWeaponsArmorsList(model, RPM::get()->project()->gameDatas()
+        ->weaponsDatas()->model(), RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelWeaponsKind(), id);
+
+    return model;
+}
+
+// -------------------------------------------------------
+
+QStandardItemModel * SuperListItem::getArmorsList(int id)
+{
+    QStandardItemModel *model = new QStandardItemModel;
+    updateWeaponsArmorsList(model, RPM::get()->project()->gameDatas()
+        ->armorsDatas()->model(), RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelArmorsKind(), id);
+
+    return model;
+}
+
+// -------------------------------------------------------
+
+void SuperListItem::updateWeaponsArmorsList(QStandardItemModel *model,
+    QStandardItemModel *modelWeaponArmor, QStandardItemModel
+    *modelWeaponArmorKind, int id)
+{
+    SystemCommonSkillItem *weaponArmor;
+    SystemWeaponArmorKind *kind;
+    for (int i = 0, l = modelWeaponArmor->invisibleRootItem()->rowCount(); i < l
+         ; i++)
+    {
+        weaponArmor = reinterpret_cast<SystemCommonSkillItem *>(modelWeaponArmor
+            ->item(i)->data().value<quintptr>());
+        kind = reinterpret_cast<SystemWeaponArmorKind *>(SuperListItem::getById(
+            modelWeaponArmorKind->invisibleRootItem(), weaponArmor->type()));
+        if (kind->getEquipmenAt(id))
+        {
+            model->appendRow(weaponArmor->getModelRow());
+        }
+    }
 }
 
 // -------------------------------------------------------

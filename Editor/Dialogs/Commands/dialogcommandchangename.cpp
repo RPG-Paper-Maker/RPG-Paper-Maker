@@ -60,6 +60,8 @@ void DialogCommandChangeName::initializePrimitives()
     ui->panelPrimitiveName->initializeMessage(false, m_parameters, properties);
     ui->panelPrimitiveHeroEnemyInstanceID->initializeNumber(m_parameters,
         properties);
+    ui->panelPrimitiveHeroEnemyInstanceID->showVariable();
+    ui->panelPrimitiveHeroEnemyInstanceID->setNumberValue(1);
 }
 
 //-------------------------------------------------

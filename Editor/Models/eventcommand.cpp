@@ -292,6 +292,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strChangeASkill(object, parameters); break;
     case EventCommandKind::ChangeName:
         str += this->strChangeName(object, parameters); break;
+    case EventCommandKind::ChangeEquipment:
+        str += this->strChangeEquipment(object, parameters); break;
     default:
         break;
     }
@@ -2002,6 +2004,41 @@ QString EventCommand::strChangeName(SystemCommonObject *object,
 
     return RPM::translate(Translations::CHANGE_NAME) + RPM::COLON + RPM::SPACE +
         selection + RPM::NEW_LINE + RPM::SPACE + name;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChangeEquipment(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    QString equipment = RPM::translate(Translations::EQUIMENT_ID) + RPM::SPACE +
+        this->strProperty(i, object, parameters) + RPM::SPACE + RPM::translate(
+        Translations::WITH).toLower() + RPM::SPACE;
+    equipment += RPM::translate(RPM::stringToBool(m_listCommand.at(i++)) ?
+        Translations::WEAPON_ID : Translations::ARMOR_ID) + RPM::SPACE;
+    equipment += this->strProperty(i, object, parameters);
+    QString selection;
+    switch (m_listCommand.at(i++).toInt())
+    {
+    case 0:
+        selection += RPM::translate(Translations::HERO_ENEMY_INSTANCE_ID) + RPM
+            ::SPACE + this->strProperty(i, object, parameters);
+        break;
+    case 1:
+        selection += RPM::translate(Translations::THE_ENTIRE) + RPM::SPACE + RPM
+            ::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++).toInt());
+        break;
+    }
+    QString option;
+    if (RPM::stringToBool(m_listCommand.at(i++)))
+    {
+        option += RPM::NEW_LINE + RPM::BRACKET_LEFT + RPM::translate(
+            Translations::APPLY_ONLY_IF_IN_INVENTORY) + RPM::BRACKET_RIGHT;
+    }
+
+    return RPM::translate(Translations::CHANGE_EQUIPMENT) + RPM::COLON + RPM
+        ::SPACE + equipment + RPM::SPACE + selection + option;
 }
 
 // -------------------------------------------------------

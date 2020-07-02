@@ -1108,6 +1108,8 @@ const QString Translations::CHANGE_A_SKILL = "change.a.skill";
 const QString Translations::LEARN = "learn";
 const QString Translations::FORGET = "forget";
 const QString Translations::CHANGE_NAME = "change.name";
+const QString Translations::EQUIMENT_ID = "equipment.id";
+const QString Translations::APPLY_ONLY_IF_IN_INVENTORY = "apply.only.if.in.inventory";
 
 // -------------------------------------------------------
 //

@@ -6,7 +6,7 @@
         "Skybox",
         "Command label",
         "Command comment",
-        "Command modify statistic",
+        "Command change statistic",
         "Command change a skill",
         "Command change name",
         "Command change equipment",
@@ -25,7 +25,9 @@
         "When escaping, game app close",
         "With different resolutions, show text command center option not correct",
         "Mountains issues with different width",
-		"Move square command go through mountains"
+		"Move square command go through mountains",
+        "Crash with some autotiles",
+        
 	],
     "finished": [
         1,
@@ -34,7 +36,7 @@
         2,
         2,
         2,
-        0,
+        2,
         0,
         0,
         0,

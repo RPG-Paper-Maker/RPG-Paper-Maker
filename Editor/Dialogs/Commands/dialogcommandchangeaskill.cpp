@@ -62,6 +62,8 @@ void DialogCommandChangeASkill::initializePrimitives()
         properties);
     ui->panelPrimitiveHeroEnemyInstanceID->initializeNumber(m_parameters,
         properties);
+    ui->panelPrimitiveHeroEnemyInstanceID->showVariable();
+    ui->panelPrimitiveHeroEnemyInstanceID->setNumberValue(1);
 }
 
 //-------------------------------------------------

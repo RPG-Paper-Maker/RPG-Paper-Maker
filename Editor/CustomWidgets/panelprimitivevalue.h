@@ -112,6 +112,7 @@ public:
     void showSwitch();
     void showKeyBoard();
     void showFront();
+    void clear();
     int getKindIndex(PrimitiveValueKind kind);
     void initializeCommand(EventCommand *command, int &i);
     void getCommand(QVector<QString> &command);

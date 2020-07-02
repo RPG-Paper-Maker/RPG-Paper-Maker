@@ -43,6 +43,7 @@
 #include "dialogcommandchangeastatistic.h"
 #include "dialogcommandchangeaskill.h"
 #include "dialogcommandchangename.h"
+#include "dialogcommandchangeequipment.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -176,6 +177,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandChangeASkill(command, object, parameters);
     case EventCommandKind::ChangeName:
         return new DialogCommandChangeName(command, object, parameters);
+    case EventCommandKind::ChangeEquipment:
+        return new DialogCommandChangeEquipment(command, object, parameters);
     default:
         return nullptr;
     }
@@ -598,4 +601,11 @@ void DialogCommands::on_pushButtonChangeSkill_clicked()
 void DialogCommands::on_pushButtonChangeName_clicked()
 {
     this->openDialogCommand(EventCommandKind::ChangeName);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonChangeEquiment_clicked()
+{
+    this->openDialogCommand(EventCommandKind::ChangeEquipment);
 }

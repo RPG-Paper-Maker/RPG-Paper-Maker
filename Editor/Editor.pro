@@ -38,6 +38,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommandcallacommonreaction.h \
     Dialogs/Commands/dialogcommandchangeaskill.h \
     Dialogs/Commands/dialogcommandchangeastatistic.h \
+    Dialogs/Commands/dialogcommandchangeequipment.h \
     Dialogs/Commands/dialogcommandchangename.h \
     Dialogs/Commands/dialogcommandchangeproperty.h \
     Dialogs/Commands/dialogcommandchangescreentone.h \
@@ -387,6 +388,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommandcallacommonreaction.cpp \
     Dialogs/Commands/dialogcommandchangeaskill.cpp \
     Dialogs/Commands/dialogcommandchangeastatistic.cpp \
+    Dialogs/Commands/dialogcommandchangeequipment.cpp \
     Dialogs/Commands/dialogcommandchangename.cpp \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
     Dialogs/Commands/dialogcommandchangescreentone.cpp \
@@ -693,6 +695,7 @@ FORMS += \
     Dialogs/Commands/dialogcommandcallacommonreaction.ui \
     Dialogs/Commands/dialogcommandchangeaskill.ui \
     Dialogs/Commands/dialogcommandchangeastatistic.ui \
+    Dialogs/Commands/dialogcommandchangeequipment.ui \
     Dialogs/Commands/dialogcommandchangename.ui \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
     Dialogs/Commands/dialogcommandchangescreentone.ui \

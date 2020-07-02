@@ -1087,5 +1087,7 @@
     "change.a.skill": "Mudar uma habilidade",
     "learn": "Aprender",
     "forget": "Esqueço",
-    "change.name": "Mude o nome"
+    "change.name": "Mude o nome",
+    "equipment.id": "Equipamento de ID",
+    "apply.only.if.in.inventory": "Aplicar somente se estiver no inventário"
 }

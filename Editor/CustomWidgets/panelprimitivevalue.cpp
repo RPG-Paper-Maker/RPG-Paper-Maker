@@ -744,6 +744,16 @@ void PanelPrimitiveValue::showFront() {
 
 // -------------------------------------------------------
 
+void PanelPrimitiveValue::clear()
+{
+    ui->comboBoxChoice->clear();
+    ui->comboBoxDataBase->clear();
+    ui->comboBoxProperty->clear();
+    ui->comboBoxParameter->clear();
+}
+
+// -------------------------------------------------------
+
 int PanelPrimitiveValue::getKindIndex(PrimitiveValueKind kind) {
     for (int i = 0; i < ui->comboBoxChoice->count(); i++) {
         if (ui->comboBoxChoice->itemData(i).toInt() == static_cast<int>(kind))
