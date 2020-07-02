@@ -84,8 +84,11 @@
     <addaction name="actionKeyboard_controls"/>
     <addaction name="actionScripts_manager"/>
     <addaction name="actionPictures_manager"/>
+    <addaction name="actionVideos_manager"/>
     <addaction name="actionSongs_manager"/>
     <addaction name="actionShapes_manager"/>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
@@ -287,7 +290,7 @@
     <string>Datas manager of your project</string>
    </property>
    <property name="shortcut">
-    <string>1</string>
+    <string>²</string>
    </property>
   </action>
   <action name="actionVariables_manager">
@@ -302,7 +305,7 @@
     <string>Variables</string>
    </property>
    <property name="shortcut">
-    <string>3</string>
+    <string>2</string>
    </property>
   </action>
   <action name="actionSystems_manager">
@@ -317,7 +320,7 @@
     <string>Systems</string>
    </property>
    <property name="shortcut">
-    <string>2</string>
+    <string>1</string>
    </property>
   </action>
   <action name="actionKeyboard_controls">
@@ -332,7 +335,7 @@
     <string>Keyboard</string>
    </property>
    <property name="shortcut">
-    <string>5</string>
+    <string>4</string>
    </property>
   </action>
   <action name="actionSave_all">
@@ -370,7 +373,7 @@
     <string>Pictures</string>
    </property>
    <property name="shortcut">
-    <string>8</string>
+    <string>6</string>
    </property>
   </action>
   <action name="actionSet_BR_path_folder">
@@ -512,7 +515,7 @@
     <string>Songs</string>
    </property>
    <property name="shortcut">
-    <string>9</string>
+    <string>8</string>
    </property>
   </action>
   <action name="actionCollisions_manager">
@@ -527,7 +530,7 @@
     <string>Collisions</string>
    </property>
    <property name="shortcut">
-    <string>4</string>
+    <string>3</string>
    </property>
   </action>
   <action name="actionScripts_manager">
@@ -542,7 +545,7 @@
     <string>Scripts</string>
    </property>
    <property name="shortcut">
-    <string>6</string>
+    <string>5</string>
    </property>
   </action>
   <action name="actionDebug_options">
@@ -629,19 +632,7 @@
     <string>Shapes</string>
    </property>
    <property name="shortcut">
-    <string>0</string>
-   </property>
-  </action>
-  <action name="actionVideos_manager">
-   <property name="icon">
-    <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/play_song.png</normaloff>:/icons/Ressources/play_song.png</iconset>
-   </property>
-   <property name="text">
-    <string>Videos manager</string>
-   </property>
-   <property name="iconText">
-    <string>Videos</string>
+    <string>9</string>
    </property>
   </action>
   <action name="actionAuto_update">
@@ -658,6 +649,21 @@
   <action name="actionChange_language">
    <property name="text">
     <string>Change language...</string>
+   </property>
+  </action>
+  <action name="actionVideos_manager">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/play_song.png</normaloff>:/icons/Ressources/play_song.png</iconset>
+   </property>
+   <property name="text">
+    <string>Videos manager</string>
+   </property>
+   <property name="iconText">
+    <string>Videos</string>
+   </property>
+   <property name="shortcut">
+    <string>7</string>
    </property>
   </action>
  </widget>
