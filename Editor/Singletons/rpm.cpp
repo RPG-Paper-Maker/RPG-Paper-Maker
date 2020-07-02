@@ -560,6 +560,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::CHANGE_A_SKILL) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::CHANGE_NAME) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::CHANGE_EQUIPMENT) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::MODIFY_CURRENCY) + RPM::DOT_DOT_DOT,
         ""
     });
     RPM::ENUM_TO_STRING_TARGET_KIND = QStringList({

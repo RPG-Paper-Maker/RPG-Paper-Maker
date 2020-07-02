@@ -566,12 +566,12 @@
               <item row="0" column="0">
                <layout class="QVBoxLayout" name="verticalLayout_15">
                 <item>
-                 <widget class="QPushButton" name="pushButtonChangeMoney">
+                 <widget class="QPushButton" name="pushButtonModifyCurrency">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
-                   <string>Change money...</string>
+                   <string>Modify currency...</string>
                   </property>
                  </widget>
                 </item>

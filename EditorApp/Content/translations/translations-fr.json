@@ -1089,5 +1089,6 @@
     "forget": "Oublier",
     "change.name": "Changer de nom",
     "equipment.id": "Equipement d'ID",
-    "apply.only.if.in.inventory": "Appliquer seulement si dans l'inventaire"
+    "apply.only.if.in.inventory": "Appliquer seulement si dans l'inventaire",
+    "modify.currency": "Modifier la monnaie"
 }

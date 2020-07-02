@@ -1122,6 +1122,7 @@ public:
     static const QString CHANGE_NAME;
     static const QString EQUIMENT_ID;
     static const QString APPLY_ONLY_IF_IN_INVENTORY;
+    static const QString MODIFY_CURRENCY;
 
     Translations();
     virtual ~Translations();

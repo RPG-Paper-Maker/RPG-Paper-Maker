@@ -294,6 +294,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strChangeName(object, parameters); break;
     case EventCommandKind::ChangeEquipment:
         str += this->strChangeEquipment(object, parameters); break;
+    case EventCommandKind::ModifyCurrency:
+        str += this->strModifyCurrency(object, parameters); break;
     default:
         break;
     }
@@ -2013,11 +2015,15 @@ QString EventCommand::strChangeEquipment(SystemCommonObject *object,
 {
     int i = 0;
     QString equipment = RPM::translate(Translations::EQUIMENT_ID) + RPM::SPACE +
-        this->strProperty(i, object, parameters) + RPM::SPACE + RPM::translate(
-        Translations::WITH).toLower() + RPM::SPACE;
-    equipment += RPM::translate(RPM::stringToBool(m_listCommand.at(i++)) ?
-        Translations::WEAPON_ID : Translations::ARMOR_ID) + RPM::SPACE;
-    equipment += this->strProperty(i, object, parameters);
+        this->strDataBaseId(i, object, RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelCommonEquipment(), parameters) + RPM::SPACE
+        + RPM::translate(Translations::WITH).toLower() + RPM::SPACE;
+    bool isWeapon = RPM::stringToBool(m_listCommand.at(i++));
+    equipment += RPM::translate(isWeapon ? Translations::WEAPON_ID :
+        Translations::ARMOR_ID) + RPM::SPACE;
+    equipment += this->strDataBaseId(i, object, isWeapon ? RPM::get()->project()
+        ->gameDatas()->weaponsDatas()->model() : RPM::get()->project()
+        ->gameDatas()->armorsDatas()->model(),  parameters);
     QString selection;
     switch (m_listCommand.at(i++).toInt())
     {
@@ -2039,6 +2045,22 @@ QString EventCommand::strChangeEquipment(SystemCommonObject *object,
 
     return RPM::translate(Translations::CHANGE_EQUIPMENT) + RPM::COLON + RPM
         ::SPACE + equipment + RPM::SPACE + selection + option;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strModifyCurrency(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    QString currency = RPM::translate(Translations::CURRENCY_ID) + RPM::SPACE +
+        this->strDataBaseId(i, object, RPM::get()->project()->gameDatas()
+        ->systemDatas()->modelCurrencies(), parameters);
+    QString operation = this->strChangeVariablesOperation(i);
+    QString value = this->strProperty(i, object, parameters);
+
+    return RPM::translate(Translations::MODIFY_CURRENCY) + RPM::COLON + RPM
+        ::SPACE + currency + RPM::SPACE + operation + RPM::SPACE + value;
 }
 
 // -------------------------------------------------------

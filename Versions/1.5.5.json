@@ -13,7 +13,7 @@
         "Command shake screen",
         "Command flash screen",
         "Command move camera (complete)",
-        "Command modify money",
+        "Command modify currency",
         "Command modify inventory: selection choose by ID",
         "Command change state: choose object and a map",
         "Demo game (in BR)",
@@ -27,7 +27,7 @@
         "Mountains issues with different width",
 		"Move square command go through mountains",
         "Crash with some autotiles",
-        
+        "Select a location translation incorrect for new project"
 	],
     "finished": [
         1,
@@ -51,6 +51,9 @@
         2,
         2,
         2,
-        0
+        2,
+        0,
+        2,
+        2
     ]
 }

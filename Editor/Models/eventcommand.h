@@ -181,6 +181,8 @@ private:
         *parameters) const;
     QString strChangeEquipment(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
+    QString strModifyCurrency(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

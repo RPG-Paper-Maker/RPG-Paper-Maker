@@ -102,6 +102,7 @@ private slots:
     void on_pushButtonChangeSkill_clicked();
     void on_pushButtonChangeName_clicked();
     void on_pushButtonChangeEquiment_clicked();
+    void on_pushButtonModifyCurrency_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H
