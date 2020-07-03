@@ -673,6 +673,10 @@ QString EventCommand::strCondition(SystemCommonObject *object,
             ::SPACE + this->strProperty(i, object, parameters);
         break;
     }
+    case 8: {
+        condition += RPM::translate(Translations::ESCAPED_LAST_BATTLE);
+        break;
+    }
     default:
         break;
     }

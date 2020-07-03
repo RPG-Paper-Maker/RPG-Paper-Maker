@@ -19,7 +19,7 @@
         "Command display animation",
         "Demo game (in BR)",
         "Menu open BR game",
-        "Start a battle command: escape node",
+        "Condition command: escaped last battle",
         "Frame duration for objects moving in system manager"
     ],
 	"bugs": [
@@ -47,7 +47,7 @@
         2,
         1,
         0,
-        0,
+        2,
         0,
 
         2,

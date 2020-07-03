@@ -74,6 +74,7 @@ void DialogCommandConditions::initializePrimitives() {
     m_groupButtonMain->addButton(ui->radioButtonWeapon);
     m_groupButtonMain->addButton(ui->radioButtonArmor);
     m_groupButtonMain->addButton(ui->radioButtonOthersKey);
+    m_groupButtonMain->addButton(ui->radioButtonEscapedLastBattle);
     m_groupButtonMain->addButton(ui->radioButtonOthersScript);
     m_groupButtonHeroesMain = new QButtonGroup;
     m_groupButtonHeroesMain->addButton(ui->radioButtonHeroesNamed);
@@ -202,6 +203,8 @@ void DialogCommandConditions::translate()
         ::ARMOR_ID) + RPM::COLON);
     ui->radioButtonHeroesEquipedWeapon->setText(RPM::translate(Translations
         ::WEAPON_ID) + RPM::COLON);
+    ui->radioButtonEscapedLastBattle->setText(RPM::translate(Translations
+        ::ESCAPED_LAST_BATTLE));
     ui->tabWidget->setTabText(0, RPM::translate(Translations
         ::VARIABLES_PARAM_PROP));
     ui->tabWidget->setTabText(1, RPM::translate(Translations::HEROES));
@@ -349,6 +352,11 @@ void DialogCommandConditions::initialize(EventCommand *command) {
         tabIndex = 3;
         break;
     }
+    case 8: {
+        ui->radioButtonEscapedLastBattle->setChecked(true);
+        tabIndex = 3;
+        break;
+    }
     default:
         break;
     }
@@ -439,6 +447,8 @@ EventCommand* DialogCommandConditions::getCommand() const {
     } else if (ui->radioButtonOthersScript->isChecked()) {
         command.append("7");
         ui->panelPrimitiveOthersScript->getCommand(command);
+    } else if (ui->radioButtonEscapedLastBattle->isChecked()) {
+        command.append("8");
     }
 
     return new EventCommand(EventCommandKind::If, command);

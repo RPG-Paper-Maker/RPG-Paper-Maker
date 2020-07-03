@@ -1095,5 +1095,6 @@
     "modify.currency": "Modificar dinero",
     "display.an.animation": "Mostrar una animación",
     "animation.id": "ID de animación",
-    "wait.end.animation.next.command": "Espera el final de la animación antes del siguiente comando"
+    "wait.end.animation.next.command": "Espera el final de la animación antes del siguiente comando",
+    "escaped.last.battle": "La última pelea se filtró"
 }

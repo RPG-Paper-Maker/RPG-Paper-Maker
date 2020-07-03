@@ -1157,7 +1157,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_6">
          <item row="0" column="0">
-          <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,1">
+          <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,0,1">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_23" stretch="0,0,0,1">
              <item>
@@ -1261,6 +1261,30 @@
             </layout>
            </item>
            <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_26" stretch="0,1">
+             <item>
+              <widget class="QRadioButton" name="radioButtonEscapedLastBattle">
+               <property name="text">
+                <string>Escaped last battle</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_30">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>368</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
             <layout class="QHBoxLayout" name="horizontalLayout_25" stretch="0,0,1">
              <item>
               <widget class="QRadioButton" name="radioButtonOthersScript">
@@ -1311,7 +1335,7 @@
              <property name="sizeHint" stdset="0">
               <size>
                <width>528</width>
-               <height>218</height>
+               <height>148</height>
               </size>
              </property>
             </spacer>

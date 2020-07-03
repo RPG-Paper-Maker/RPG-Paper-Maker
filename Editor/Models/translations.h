@@ -1126,6 +1126,7 @@ public:
     static const QString DISPLAY_AN_ANIMATION;
     static const QString ANIMATION_ID;
     static const QString WAIT_END_ANIMATION_NEXT_COMMAND;
+    static const QString ESCAPED_LAST_BATTLE;
 
     Translations();
     virtual ~Translations();

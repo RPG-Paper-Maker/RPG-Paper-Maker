@@ -1093,5 +1093,6 @@
     "modify.currency": "Modify currency",
     "display.an.animation": "Display an animation",
     "animation.id": "Animation ID",
-    "wait.end.animation.next.command": "Wait the end of the animation before the next command"
+    "wait.end.animation.next.command": "Wait the end of the animation before the next command",
+    "escaped.last.battle": "Escaped last battle"
 }

@@ -1093,5 +1093,6 @@
     "modify.currency": "Modificar moeda",
     "display.an.animation": "Exibir uma animação",
     "animation.id": "Animação de ID",
-    "wait.end.animation.next.command": "Aguarde o final da animação antes do próximo comando"
+    "wait.end.animation.next.command": "Aguarde o final da animação antes do próximo comando",
+    "escaped.last.battle": "A última luta vazou"
 }
