@@ -82,8 +82,8 @@ public:
         const QJsonObject &json, const QString &name);
     static void writeList(QStandardItemModel *model, QJsonObject &json, const
         QString &name);
-    static QStandardItemModel * getWeaponsList(int id);
-    static QStandardItemModel * getArmorsList(int id);
+    static void getWeaponsList(QStandardItemModel *model, int id);
+    static void getArmorsList(QStandardItemModel *model, int id);
     static void updateWeaponsArmorsList(QStandardItemModel *model,
         QStandardItemModel *modelWeaponArmor, QStandardItemModel
         *modelWeaponArmorKind, int id);

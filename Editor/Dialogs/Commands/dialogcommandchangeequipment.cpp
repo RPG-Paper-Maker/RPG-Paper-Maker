@@ -82,16 +82,16 @@ void DialogCommandChangeEquipment::initializePrimitives()
 
 void DialogCommandChangeEquipment::updateWeaponsArmors(int id)
 {
+    ui->panelPrimitiveWeaponArmorID->clear();
     m_weaponsArmors->clear();
-    delete m_weaponsArmors;
+    //delete m_weaponsArmors;
     if (ui->comboBoxWeaponArmor->currentIndex() == 0)
     {
-        m_weaponsArmors = SuperListItem::getWeaponsList(id);
+        SuperListItem::getWeaponsList(m_weaponsArmors, id);
     } else
     {
-        m_weaponsArmors = SuperListItem::getArmorsList(id);
+        SuperListItem::getArmorsList(m_weaponsArmors, id);
     }
-    ui->panelPrimitiveWeaponArmorID->clear();
     ui->panelPrimitiveWeaponArmorID->initializeDataBaseCommandId(m_weaponsArmors
         , m_parameters, m_properties);
 }

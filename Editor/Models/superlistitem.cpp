@@ -493,26 +493,20 @@ void SuperListItem::writeList(QStandardItemModel *model, QJsonObject &json,
 
 // -------------------------------------------------------
 
-QStandardItemModel * SuperListItem::getWeaponsList(int id)
+void SuperListItem::getWeaponsList(QStandardItemModel *model, int id)
 {
-    QStandardItemModel *model = new QStandardItemModel;
     updateWeaponsArmorsList(model, RPM::get()->project()->gameDatas()
         ->weaponsDatas()->model(), RPM::get()->project()->gameDatas()
         ->battleSystemDatas()->modelWeaponsKind(), id);
-
-    return model;
 }
 
 // -------------------------------------------------------
 
-QStandardItemModel * SuperListItem::getArmorsList(int id)
+void SuperListItem::getArmorsList(QStandardItemModel *model, int id)
 {
-    QStandardItemModel *model = new QStandardItemModel;
     updateWeaponsArmorsList(model, RPM::get()->project()->gameDatas()
         ->armorsDatas()->model(), RPM::get()->project()->gameDatas()
         ->battleSystemDatas()->modelArmorsKind(), id);
-
-    return model;
 }
 
 // -------------------------------------------------------
