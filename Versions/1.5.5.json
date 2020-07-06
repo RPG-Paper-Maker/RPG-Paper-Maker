@@ -28,7 +28,8 @@
         "Mountains issues with different width",
 		"Move square command go through mountains",
         "Crash with some autotiles",
-        "Select a location translation incorrect for new project"
+        "Select a location translation incorrect for new project",
+        "Crash when trying to open an empty save"
 	],
     "finished": [
         1,
@@ -53,8 +54,9 @@
         2,
         2,
         2,
-        2,
         0,
+        2,
+        2,
         2,
         2
     ]
