@@ -2119,8 +2119,8 @@
                             {
                                 "exe": true,
                                 "repo": "Dependencies",
-                                "source": "Game/osx/Game.app/Icon\r",
-                                "target": "Engine/Content/osx/Game.app/Icon\r"
+                                "source": "Game/osx/Game.app/Icon",
+                                "target": "Engine/Content/osx/Game.app/Icon"
                             },
                             {
                                 "files": [
