@@ -1,0 +1,32 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Skybox",
+        "Command shake screen",
+        "Command flash screen",
+        "Command move camera (complete)",
+        "Command modify inventory: selection choose by ID",
+        "Command change state: choose object and a map",
+        "Demo game (in BR)",
+        "Menu open BR game",
+        "Frame duration for objects moving in system manager"
+    ],
+	"bugs": [
+		"Move square command go through mountains"
+	],
+    "finished": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+
+        0
+    ]
+}

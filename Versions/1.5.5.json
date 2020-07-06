@@ -3,61 +3,22 @@
 	"remove": [],
 	"replace": [],
 	"features": [
-        "Skybox",
         "Command label",
         "Command comment",
         "Command change statistic",
         "Command change a skill",
         "Command change name",
         "Command change equipment",
-        "Command shake screen",
-        "Command flash screen",
-        "Command move camera (complete)",
         "Command modify currency",
-        "Command modify inventory: selection choose by ID",
-        "Command change state: choose object and a map",
         "Command display animation",
-        "Demo game (in BR)",
-        "Menu open BR game",
-        "Condition command: escaped last battle",
-        "Frame duration for objects moving in system manager"
+        "Condition command: escaped last battle"
     ],
 	"bugs": [
         "When escaping, game app close",
         "With different resolutions, show text command center option not correct",
         "Mountains issues with different width",
-		"Move square command go through mountains",
         "Crash with some autotiles",
         "Select a location translation incorrect for new project",
         "Crash when trying to open an empty save"
-	],
-    "finished": [
-        1,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        0,
-        0,
-        0,
-        2,
-        0,
-        0,
-        2,
-        1,
-        0,
-        2,
-        0,
-
-        2,
-        2,
-        2,
-        0,
-        2,
-        2,
-        2,
-        2
-    ]
+	]
 }
