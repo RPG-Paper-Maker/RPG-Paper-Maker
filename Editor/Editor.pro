@@ -13,7 +13,7 @@ win32 {
 # Editor static library
 TEMPLATE = lib
 CONFIG += staticlib
-TARGET = RPG-Paper-Maker
+TARGET = $$EDITOR_LIB_NAME
 
 # Library output path
 # Ex: path/to/RPG-Paper-Maker/Build/debug/Editor
@@ -835,10 +835,7 @@ DISTFILES += \
 OTHER_FILES +=
 
 
-# Clean target explicitly (custom build paths are not included in the default clean)
-# We need to find the exact library name depending on the platform
+# Custom build paths are not included in the default clean,
+# so we must clean the target (output library) explicitly
 # If you don't care preserving the destination folder, you can also delete DESTDIR entirely (see EditorApp.pro for directory removal)
-win32: LIB_FILENAME = "$${TARGET}.$$QMAKE_EXTENSION_STATICLIB"   # Ex: RPG-Paper-Maker.lib
-unix: LIB_FILENAME = "lib$${TARGET}.$$QMAKE_EXTENSION_STATICLIB" # Ex: libRPG-Paper-Maker.a
-QMAKE_CLEAN += "$$DESTDIR/$$LIB_FILENAME"
-
+QMAKE_CLEAN += $$DESTDIR/$$LIB_FILENAME  # Ex: path/to/RPG-Paper-Maker/Build/debug/Editor/RPG-Paper-Maker.lib

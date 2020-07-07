@@ -28,7 +28,8 @@ SOURCES += \
 HEADERS +=
 
 # Use the Editor library
-LIBS += -L$$MAIN_PROJECT_DIR/Build/$$VARIANT/Editor -lRPG-Paper-Maker
+LIBS += -L$$ROOT_DESTDIR/Editor -l$$EDITOR_LIB_NAME     # Ex: -Lpath/to/RPG-Paper-Maker/Build/debug/Editor -lRPG-Paper-Maker
+PRE_TARGETDEPS += $$ROOT_DESTDIR/Editor/$$LIB_FILENAME  # Ex: path/to/RPG-Paper-Maker/Build/debug/Editor/RPG-Paper-Maker.lib
 
 
 #-------------------------------------------------
@@ -98,8 +99,8 @@ DEST_PACKAGE = \"$$shell_path($$DEST_CONTENT_DIR/package.json)\"
 # In addition, we define two variants of the synchronization command because some destination folders are overlapping and we don't want one sync to break another one.
 win32 {
     # On Windows, please try it and if it fails, add dash to ignore errors: "-robocopy"
-    SYNC_PURGE_CMD = -robocopy /mir /xo  # Mirror folders, removing files/folders that are not in source anymore (/mir ~= /e + /purge)
-    SYNC_PRESERVE_CMD = -robocopy /e /xo # Copy folders (even empty), but don't remove file/folders that are not in source anymore
+    SYNC_PURGE_CMD = -robocopy -mir -xo  # Mirror folders, removing files/folders that are not in source anymore (/mir ~= /e + /purge)
+    SYNC_PRESERVE_CMD = -robocopy -e -xo # Copy folders (even empty), but don't remove file/folders that are not in source anymore
 }
 unix {
     # Create build Editor directory in case it wasn't created for the target yet
@@ -140,12 +141,10 @@ QMAKE_EXTRA_TARGETS += first copyGameResources
 # If you don't care preserving the destination folder, you can also delete DESTDIR entirely (in the custom clean command below)
 win32: APP_FILENAME = $${TARGET}.exe
 unix: APP_FILENAME = $$TARGET
-QMAKE_CLEAN += "$$DESTDIR/$$APP_FILENAME"
+QMAKE_CLEAN += $$DESTDIR/$$APP_FILENAME
 
 # Also add a custom clean command to remove the copied Content directory
 # (QMAKE_CLEAN only supports files)
-extraclean.commands = $$DEL_DIR_CMD $$DEST_CONTENT_DIR
+extraclean.commands = $$QMAKE_DEL_TREE $$DEST_CONTENT_DIR
 clean.depends = extraclean
 QMAKE_EXTRA_TARGETS += clean extraclean
-
-PRE_TARGETDEPS += $$ROOT_DESTDIR/Editor/libRPG-Paper-Maker.a
