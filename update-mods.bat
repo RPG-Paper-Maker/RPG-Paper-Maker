@@ -3,10 +3,9 @@ title Update mods
 
 setlocal
 
-set modsPath=./mods
-set localMessage=Local copy: 
+set localMessage=Local copy:
 set pathRepos=..
-set pathMods=%pathRepos%\RPG-Paper-Maker\mods
+set pathMods=.\mods
 
 IF EXIST %pathMods% (
 	@RD /S /Q "%pathMods%"
