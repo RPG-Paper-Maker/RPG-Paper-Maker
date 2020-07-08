@@ -98,13 +98,16 @@ install:
 script:
   - qmake -v
   - qmake -r "QMAKE_CXX=$CXX" "QMAKE_CC=$CC"
-  # g++ fails with virtual memory exhausted
-  # when too many processes are running, so don't use -j with it
+  # g++ fails with virtual memory exhausted when too many processes are running
+  # so don't use -j with it in.
+  # In counterpart, `make` on Xenial will take more than 10mn, so to prevent
+  # Travis from shutting down the process, use travis_wait to extend time to 20mn
+  # by logging every minute for that duration.
   - |
     echo "Processors found on virtual machine: ${PROCESSORS}"
     if [ "$CXX" = "g++" ]; then
       echo "g++: do not use parallel jobs to avoid virtual memory exhaustion"
-      make -s
+      travis_wait make -s
     else
       echo "clang: use ${PROCESSORS} parallel jobs"
       make -j${PROCESSORS} -s
