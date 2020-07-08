@@ -79,7 +79,7 @@ before_install:
   - |
     if [ "$TRAVIS_OS_NAME" = "osx" ]; then
       brew update
-      brew install qt${QT_MAJOR} swift
+      brew install qt${QT_MAJOR}
     fi
 
 install:
