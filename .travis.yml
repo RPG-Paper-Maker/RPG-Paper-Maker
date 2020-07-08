@@ -1,10 +1,10 @@
 language: cpp
 
 env:
-  linux:
-    - JOBS="$(nproc)"              # should be 2
-  osx:
-    - JOBS="$(sysctl -n hw.ncpu)"  # should be 2
+  linux: &linux_env
+    - PROCESSORS="$(nproc)"              # should be 2
+  osx: &osx_env
+    - PROCESSORS="$(sysctl -n hw.ncpu)"  # should be 2
 
 # Linux needs OpenGL
 # `matrix` tends to ignore apt packages defined at the top,
@@ -29,6 +29,7 @@ matrix:
       sudo: required
       compiler: gcc
       env:
+        - *linux_env
         - QT_MAJOR=5
         - QT_MINOR=14
         - QT_PATCH=2
@@ -42,6 +43,7 @@ matrix:
       sudo: required
       compiler: gcc
       env:
+        - *linux_env
         - QT_MAJOR=5
         - QT_MINOR=14
         - QT_PATCH=2
@@ -54,12 +56,14 @@ matrix:
       osx_image: xcode11.6
       compiler: clang
       env:
+        - *osx_env
         # current brew stable is 5.15.0
         - QT_MAJOR=5
     - os: osx
       osx_image: xcode12
       compiler: clang
       env:
+        - *osx_env
         # current brew stable is 5.15.0
         - QT_MAJOR=5
 
@@ -97,13 +101,13 @@ script:
   # g++ fails with virtual memory exhausted
   # when too many processes are running, so don't use -j with it
   - |
-    echo "Processors found on virtual machine: ${JOBS}"
+    echo "Processors found on virtual machine: ${PROCESSORS}"
     if [ "$CXX" = "g++" ]; then
       echo "g++: do not use parallel jobs to avoid virtual memory exhaustion"
       make
     else
-      echo "clang: use ${JOBS} parallel jobs"
-      make -j${JOBS}
+      echo "clang: use ${PROCESSORS} parallel jobs"
+      make -j${PROCESSORS}
     fi
   # Run with X11 display on Linux as some tests require a Qt app
   - |
