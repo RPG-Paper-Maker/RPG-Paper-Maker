@@ -5,9 +5,11 @@ env:
     - MAKEFLAGS="-j 2"
 
 # Linux needs OpenGL
+# `matrix` tends to ignore apt packages defined at the top,
+# so define a list here and reference it in each linux config
 addons:
   apt:
-    packages:
+    packages: &linux_packages
       - libglu1-mesa-dev
 
 # OSX needs to install subversion to use `svn` in update-mods
@@ -29,6 +31,10 @@ matrix:
         - QT_MINOR=14
         - QT_PATCH=2
         - DIST=xenial
+      addons:
+        apt:
+          packages:
+            - *linux_packages
     - os: linux
       dist: bionic
       sudo: required
@@ -38,6 +44,10 @@ matrix:
         - QT_MINOR=14
         - QT_PATCH=2
         - DIST=bionic
+      addons:
+        apt:
+          packages:
+            - *linux_packages
     - os: osx
       osx_image: xcode11.6
       compiler: clang
