@@ -4,6 +4,12 @@ env:
   global:
     - MAKEFLAGS="-j 2"
 
+# OSX needs to install subversion to use `svn` in update-mods
+addons:
+  homebrew:
+    packages:
+    - subversion
+
 matrix:
   include:
     - os: linux
