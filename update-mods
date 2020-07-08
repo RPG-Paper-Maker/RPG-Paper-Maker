@@ -22,7 +22,7 @@ else
 fi
 path='../Game-Scripts/main.js'
 pathModsMain="${modsPath}/main.js"
-if [ $path ]; then
+if [ -f $path ]; then
 	echo "$localMessage $path $moveSymbol $pathModsMain"
 	cp -r $path $pathModsMain
 else
@@ -32,7 +32,7 @@ else
 fi
 path='../Game-Scripts/index.html'
 pathModsIndex="${modsPath}/index.html"
-if [ $path ]; then
+if [ -f $path ]; then
 	echo "$localMessage $path $moveSymbol $pathModsIndex"
 	cp -r $path $pathModsIndex
 else
@@ -42,7 +42,7 @@ else
 fi
 path='../Game-Scripts/package.json'
 pathModsPackage="${modsPath}/package.json"
-if [ $path ]; then
+if [ -f $path ]; then
 	echo "$localMessage $path $moveSymbol $pathModsPackage"
 	cp -r $path $pathModsPackage
 else
