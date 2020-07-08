@@ -1,8 +1,10 @@
 language: cpp
 
 env:
-  global:
-    - MAKEFLAGS="-j 2"
+  linux:
+    - JOBS="$(nproc)"              # should be 2
+  osx:
+    - JOBS="$(sysctl -n hw.ncpu)"  # should be 2
 
 # Linux needs OpenGL
 # `matrix` tends to ignore apt packages defined at the top,
@@ -92,7 +94,7 @@ install:
 script:
   - qmake -v
   - qmake -r "QMAKE_CXX=$CXX" "QMAKE_CC=$CC"
-  - make
+  - make -j${JOBS}
   # Run with X11 display on Linux as some tests require a Qt app
   - |
     if [ "$TRAVIS_OS_NAME" = "linux" ]; then
