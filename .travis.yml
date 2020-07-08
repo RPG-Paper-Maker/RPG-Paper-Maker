@@ -104,10 +104,10 @@ script:
     echo "Processors found on virtual machine: ${PROCESSORS}"
     if [ "$CXX" = "g++" ]; then
       echo "g++: do not use parallel jobs to avoid virtual memory exhaustion"
-      make
+      make -s
     else
       echo "clang: use ${PROCESSORS} parallel jobs"
-      make -j${PROCESSORS}
+      make -j${PROCESSORS} -s
     fi
   # Run with X11 display on Linux as some tests require a Qt app
   - |
