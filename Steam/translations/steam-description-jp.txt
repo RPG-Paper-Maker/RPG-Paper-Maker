@@ -1,59 +1,59 @@
 --------------------------------------------------------------------------
 
-[b]���̃c�[���͏d���A�����ȊJ�����ł���A�����i�K�ɂ���܂��B��荂�x�ŏ��p�i���̋@�\�����������܂ł̊ԁA���Ȃ��̔E�ς͊��ӂ���܂��B�����ŋ@�\�J�����`�F�b�N�A�E�g���Ă��������B[url]http://rpg-paper-maker.com/index.php/features[/url]...[/b]
+[b]このツールは重く、活発な開発中であり、初期段階にあります。より高度で商用品質の機能が実装されるまでの間、あなたの忍耐は感謝されます。ここで機能開発をチェックアウトしてください。[url]http://rpg-paper-maker.com/index.php/features[/url]...[/b]
 
-[h2]3D�Q�[�������͕̂��G������HRPG Paper Maker����Ƃ��V���v���ɂ��܂��I[/h2]
+[h2]3Dゲームを作るのは複雑すぎる？RPG Paper Makerが作業をシンプルにします！[/h2]
 
-RPG Paper Maker�́A�񏤗p���p�̂��߂̖����̃Q�[���쐬�G���W���ŁA���p�\�Ȃ��ׂẴv���b�g�t�H�[���̂��߂̃V���v���ȃC���^�[�t�F�[�X���g�p���āA������2D�X�v���C�g��3D�I�u�W�F�N�g���g�p����3D��Ԃ��쐬���邱�Ƃ��ł��܂��B
-[b]Windows�ALinux�AMacOS[/b]�̂��ׂĂ̗��p�\�ȃv���b�g�t�H�[���ɑΉ����Ă��܂��B
+RPG Paper Makerは、非商用利用のための無料のゲーム作成エンジンで、利用可能なすべてのプラットフォームのためのシンプルなインターフェースを使用して、多くの2Dスプライトや3Dオブジェクトを使用して3D空間を作成することができます。
+[b]Windows、Linux、MacOS[/b]のすべての利用可能なプラットフォームに対応しています。
 
-[b]RPG Paper Maker�ł́A2D�Ɠ����悤��3D�̐��E��RPG���쐬���邱�Ƃ��ł��܂��I[/b] 
-RPG Paper Maker�ɂ́A[b]���g���ȃO���t�B�b�N�A�Z�b�g[/b]�����^����Ă���̂ŁA�����̃v���W�F�N�g�Ŏg�p���邱�Ƃ��ł��܂��B
+[b]RPG Paper Makerでは、2Dと同じように3Dの世界でRPGを作成することができます！[/b] 
+RPG Paper Makerには、[b]レトロなグラフィックアセット[/b]も収録されているので、自分のプロジェクトで使用することができます。
 
-[h2]�������̃^�C�v�̃Q�[���ɓK��[/h2]
+[h2]いくつかのタイプのゲームに適応[/h2]
 
-���[b]J-RPG[/b]�����ɍ��ꂽ�G���W���ł����A[b]�A�N�V����RPG[/b]�A[b]�^�N�e�B�J��RPG[/b]�ȂǁA�قƂ�ǂ̃Q�[������邱�Ƃ��ł��܂��B
+主に[b]J-RPG[/b]向けに作られたエンジンですが、[b]アクションRPG[/b]、[b]タクティカルRPG[/b]など、ほとんどのゲームを作ることができます。
 
-[h2]���S�Ҍ����ɐ݌v...[/h2]
+[h2]初心者向けに設計...[/h2]
 
-�������̗��O�̓V���v���ŁA3D�r�f�I�Q�[��[b]�̒m��[/b]���Ȃ��Ă��A3D�Q�[������邱�Ƃ��ł���Ƃ������Ƃł��B
-
-[list]
-[*] [b]�v���O���~���O[/b]
-[*] [b]3D���f�����O[/b]
-[/list]
-
-���[�U�[�t�����h���[�ȃC���^�[�t�F�[�X�ɂ��A���G�ȃA���S���Y�����C�ɂ����ɃQ�[�����\�z�ł��܂�!
-
-[h2]...�o���L�x�ȃ��[�U�[�����I[/h2]
-
-�v���O���~���O�⃂�f�����O�̒m�����������̕��́A���Ђ����傭�������B
+私たちの理念はシンプルで、3Dビデオゲーム[b]の知識[/b]がなくても、3Dゲームを作ることができるということです。
 
 [list]
-[*] [b]JavaScript�v���O�C���̍쐬�E�ύX[/b]���s���܂��B
-[*] [b]3D���f����.obj�`����[/b]�C���|�[�g���Ă��������B
+[*] [b]プログラミング[/b]
+[*] [b]3Dモデリング[/b]
+[/list]
+
+ユーザーフレンドリーなインターフェースにより、複雑なアルゴリズムを気にせずにゲームを構築できます!
+
+[h2]...経験豊富なユーザー向け！[/h2]
+
+プログラミングやモデリングの知識をお持ちの方は、ぜひご応募ください。
+
+[list]
+[*] [b]JavaScriptプラグインの作成・変更[/b]を行います。
+[*] [b]3Dモデルを.obj形式で[/b]インポートしてください。
 [/list]
  
-RPG Paper Maker�ƒm����g�ݍ��킹�邱�ƂŁA���Ȃ��̃Q�[��������ɓ��ʂȂ��̂ɂ��邱�Ƃ��ł��܂�!
+RPG Paper Makerと知識を組み合わせることで、あなたのゲームをさらに特別なものにすることができます!
  
-[h2]���Ȃ��̃Q�[���𖳗��Ō��J���ċ��L���悤...[/h2]
+[h2]あなたのゲームを無料で公開して共有しよう...[/h2]
 
-�Q�[���ŗ��v�𓾂Ȃ�����ARPG Paper Maker�͎��R�Ɏg���܂�! �Ȃ̂ŁA�����y���ނ��߂����ɃQ�[��������ăR�~���j�e�B�ɃV�F�A�������Ƃ��������A�|���炸�ɖ����łł���悤�ɂȂ�܂���!
+ゲームで利益を得ない限り、RPG Paper Makerは自由に使えます! なので、ただ楽しむためだけにゲームを作ってコミュニティにシェアしたいという方も、怖がらずに無料でできるようになりますよ!
  
-[h2]...�Q�[���𑽏��̗����𕥂��ď��i�����悤�I[/h2]
+[h2]...ゲームを多少の料金を払って商品化しよう！[/h2]
 
-RPG Paper Maker�ō��ꂽ�s�̂̃Q�[���́A�������̃Q�[���Ń`�[����1�l���̃��C�Z���X��̔�����K�v������܂��B
+RPG Paper Makerで作られた市販のゲームは、無制限のゲームでチームで1人分のライセンスを販売する必要があります。
 
 
 
 --------------------------------------------------------------------------
 
-RPG Paper Maker�́A�񏤗p���p�̂��߂̖����̃Q�[���쐬�G���W���ŁA���p�\�Ȃ��ׂẴv���b�g�t�H�[���̂��߂̃V���v���ȃC���^�[�t�F�[�X���g�p���āA������2D�X�v���C�g��3D�I�u�W�F�N�g��3D�F�����쐬���邱�Ƃ��ł��܂��BWindows�ALinux�AMacOS�ɑΉ����Ă��܂��B
+RPG Paper Makerは、非商用利用のための無料のゲーム作成エンジンで、利用可能なすべてのプラットフォームのためのシンプルなインターフェースを使用して、多くの2Dスプライトや3Dオブジェクトで3D宇宙を作成することができます。Windows、Linux、MacOSに対応しています。
 
 
 
-�{���i��RPG Paper Maker�̐��i�łł��B
+本製品はRPG Paper Makerの製品版です。
 
-[b]RPG Paper Maker�̖����łƏ��p�ł̋@�\�̈Ⴂ�͂���܂���B[/b]
+[b]RPG Paper Makerの無料版と商用版の機能の違いはありません。[/b]
 
-����DLC�́ARPG Paper Maker�ō��ꂽ���p�Q�[�������J���錠����񋟂��邾���ŁA����͂܂��A�C�ӂ̕��@�Ńv���W�F�N�g���x��������@�ɂ��邱�Ƃ��ł��܂��B
+このDLCは、RPG Paper Makerで作られた商用ゲームを公開する権利を提供するだけで、これはまた、任意の方法でプロジェクトを支援する方法にすることができます。
