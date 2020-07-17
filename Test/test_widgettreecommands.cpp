@@ -12,6 +12,9 @@
 
 #include "widgettreecommands.h"
 
+// only required to initialize localization strings
+#include "rpm.h"
+
 class TestWidgetTreeCommands : public QObject
 {
     Q_OBJECT
@@ -48,6 +51,12 @@ void TestWidgetTreeCommands::cleanupTestCase()
 
 void TestWidgetTreeCommands::test_initializeModel_noSelection()
 {
+    // WidgetTreeCommands constructor calls initializeCommandsList
+    // which calls EventCommand::kindToString which requires localized strings to be ready.
+    // Until this setup phase is extracted from WidgetTreeCommands constructor or
+    // EventCommand::kindToString is made robust against invalid keys, we must init the strings now.
+    RPM::get()->readTranslations();
+
     WidgetTreeCommands dummyWidgetTree;
     QStandardItemModel dummyModel;
 
