@@ -1,14 +1,16 @@
 {
 	"names": [
-		"English", 
+		"English",
 		"Français",
 		"Português (Brasil)",
-		"Espanol"
+		"Espanol",
+		"Japanese"
 	],
 	"short": [
 		"en",
 		"fr",
 		"br",
-		"es"
+		"es",
+		"jp"
 	]
 }
