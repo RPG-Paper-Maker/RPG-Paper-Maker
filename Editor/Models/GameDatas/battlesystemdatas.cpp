@@ -259,7 +259,7 @@ void BattleSystemDatas::setDefaultArmorsKind(){
     SystemWeaponArmorKind* sysWeaponArmorKind;
     QStandardItem* item;
     QString names[] = {
-        RPM::translate(Translations::SWORD),
+        RPM::translate(Translations::HELMET),
         RPM::translate(Translations::CAP),
         RPM::translate(Translations::MAIL),
         RPM::translate(Translations::VEST),

@@ -14,7 +14,9 @@
         "Frame duration for objects moving in system manager"
     ],
 	"bugs": [
-		"Move square command go through mountains"
+		"Move square command go through mountains",
+		"Project updater corrected for projects < 1.5.3",
+		"Wrong type for helmet bronze when creating a new project"
 	],
     "finished": [
         1,
@@ -27,6 +29,8 @@
         0,
         0,
 
-        0
+        0,
+        2,
+        2
     ]
 }
