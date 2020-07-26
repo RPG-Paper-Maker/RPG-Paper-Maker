@@ -3,7 +3,7 @@
 	"remove": [],
 	"replace": [],
 	"features": [
-        "Skybox",
+        "Background image and skybox",
         "Command shake screen",
         "Command flash screen",
         "Command move camera (complete)",
@@ -11,12 +11,16 @@
         "Command change state: choose object and a map",
         "Demo game (in BR)",
         "Menu open BR game",
-        "Frame duration for objects moving in system manager"
+        "Frame duration for objects moving in system manager",
+        "Japanase translation (beta)",
+        "Chinese tranlastion (beta)",
+        "DLCs (assets) importation"
     ],
 	"bugs": [
 		"Move square command go through mountains",
 		"Project updater corrected for projects < 1.5.3",
-		"Wrong type for helmet bronze when creating a new project"
+		"Wrong type for helmet bronze when creating a new project",
+		"Condition test with switches not working"
 	],
     "finished": [
         1,
@@ -28,8 +32,12 @@
         1,
         0,
         0,
+        2,
+        0,
+        0,
 
         0,
+        2,
         2,
         2
     ]
