@@ -46,6 +46,7 @@ public:
     QString pathCurrentProject() const;
     QString pathCurrentProjectApp() const;
     void setPathCurrentProject(QString s);
+    void setPathCurrentProjectApp(QString s);
     Map* currentMap(bool force = false) const;
     void setCurrentMap(Map* m);
     SystemCommonObject * currentObject() const;
@@ -113,6 +114,7 @@ public:
 
 private:
     QString p_pathCurrentProject;
+    QString p_pathCurrentProjectApp;
     Map* p_currentMap;
     Map* p_currentMapConfig;
     SystemCommonObject *m_currentObject;

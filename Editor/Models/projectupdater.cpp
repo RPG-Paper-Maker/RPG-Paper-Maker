@@ -244,6 +244,10 @@ void ProjectUpdater::check() {
     }
 
     // Updating for each version
+    if (Common::versionDifferent(m_project->version(), "1.5.3") == -1)
+    {
+        m_project->setPathCurrentProjectApp(m_project->pathCurrentProject());
+    }
     m_project->readAll();
     for (int i = index; i < incompatibleVersionsCount; i++) {
         emit progress(80, RPM::translate(Translations::CHECKING_VERSION) + RPM
@@ -799,6 +803,7 @@ void ProjectUpdater::updateVersion_1_5_0() {
     dir.mkpath(RPM::PATH_HUD_ANIMATIONS);
     dir.mkpath(RPM::PATH_SKY_BOXES);
     m_project->picturesDatas()->setDefaultSkyBoxes(names);
+    m_project->writeAll();
 }
 
 // -------------------------------------------------------
@@ -807,6 +812,7 @@ void ProjectUpdater::updateVersion_1_5_3() {
     QDir dir(m_project->pathCurrentProject());
     QList<QString> names;
     QString path = m_project->pathCurrentProject();
+    m_project->setPathCurrentProject(path);
 
     // Change Content folder location
     #ifdef Q_OS_MACOS

@@ -67,10 +67,19 @@ QString Project::pathCurrentProject() const{ return p_pathCurrentProject; }
 
 QString Project::pathCurrentProjectApp() const
 {
-    return Common::pathCombine(p_pathCurrentProject, RPM::PATH_APP);
+    return p_pathCurrentProjectApp;
 }
 
-void Project::setPathCurrentProject(QString s){ p_pathCurrentProject = s; }
+void Project::setPathCurrentProject(QString s)
+{
+    p_pathCurrentProject = s;
+    p_pathCurrentProjectApp = Common::pathCombine(s, RPM::PATH_APP);
+}
+
+void Project::setPathCurrentProjectApp(QString s)
+{
+    p_pathCurrentProjectApp = s;
+}
 
 Map* Project::currentMap(bool force) const {
     return RPM::isInConfig && !force ? p_currentMapConfig : p_currentMap;
