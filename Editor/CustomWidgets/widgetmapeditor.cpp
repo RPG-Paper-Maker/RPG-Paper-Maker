@@ -394,9 +394,11 @@ void WidgetMapEditor::paintGL() {
     if (m_control.map() != nullptr) {
         if (m_control.map()->mapProperties()->isSkyImage())
         {
-            p.begin(this);
+            if (!p.isActive())
+            {
+                p.begin(this);
+            }
             p.drawImage(QRect(0, 0, this->width(), this->height()), m_imageBackground);
-            p.end();
         }
         p.beginNativePainting();
         glEnable(GL_DEPTH_TEST);
@@ -493,14 +495,16 @@ void WidgetMapEditor::paintGL() {
         m_control.paintGL(modelviewProjection, cameraRightWorldSpace,
             cameraUpWorldSpace, cameraDeepWorldSpace, kind, subKind, drawKind);
         p.endNativePainting();
-        p.end();
 
         // Draw additional text informations
         if (m_menuBar != nullptr) {
             QString infos = m_control.getSquareInfos(kind, subKind, layerOn,
                 this->hasFocus());
             QStringList listInfos = infos.split("\n");
-            p.begin(this);
+            if (!p.isActive())
+            {
+                p.begin(this);
+            }
             if (m_control.displaySquareInformations()) {
                 p.drawImage(QRect(10, 10, 16, 16), m_imageHeight);
                 renderText(p, 32, 23, QString::number(m_control.cursor()
@@ -520,14 +524,16 @@ void WidgetMapEditor::paintGL() {
             {
                 p.drawImage(point.x() + 10, point.y() - 10, m_imageLayerOn);
             }
-            p.end();
         }
 
         // Update elapsed time
         m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
     }
-    else
+
+    if (p.isActive())
+    {
         p.end();
+    }
 }
 
 // -------------------------------------------------------
