@@ -743,9 +743,8 @@ void DialogDatas::on_tilesetPictureChanged(SystemPicture* picture) {
 
 // -------------------------------------------------------
 
-
 void DialogDatas::on_animationPictureChanged(SystemPicture *picture) {
-    reinterpret_cast<SystemAnimation *>(ui->panelSuperListTilesets->list()
+    reinterpret_cast<SystemAnimation *>(ui->panelSuperListAnimations->list()
         ->getSelected()->data().value<quintptr>())->setPictureID(picture->id());
     ui->widgetAnimationTexture->updatePicture(picture->id());
 }
