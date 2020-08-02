@@ -110,6 +110,12 @@
         <file>Shaders/static-3.3.vert</file>
         <file>Shaders/wallIndicator-3.3.frag</file>
         <file>Shaders/wallIndicator-3.3.vert</file>
+        <file>Shaders/sky.frag</file>
+        <file>Shaders/sky.vert</file>
+        <file>Shaders/sky-3.0.frag</file>
+        <file>Shaders/sky-3.0.vert</file>
+        <file>Shaders/sky-3.3.frag</file>
+        <file>Shaders/sky-3.3.vert</file>
     </qresource>
     <qresource prefix="/textures">
         <file>Ressources/editor_cursor.png</file>

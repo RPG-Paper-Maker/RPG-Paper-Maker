@@ -26,6 +26,7 @@ Map::Map() :
     m_mapProperties(new MapProperties),
     m_mapPortions(nullptr),
     m_cursor(nullptr),
+    m_skybox(nullptr),
     m_modelObjects(new QStandardItemModel),
     m_saved(true),
     m_detection(nullptr),
@@ -42,6 +43,7 @@ Map::Map() :
 Map::Map(int id) :
     m_mapPortions(nullptr),
     m_cursor(nullptr),
+    m_skybox(nullptr),
     m_modelObjects(new QStandardItemModel),
     m_detection(nullptr),
     m_programStatic(nullptr),
@@ -84,6 +86,7 @@ Map::Map(MapProperties* properties, SystemDetection *detection) :
     m_mapProperties(properties),
     m_mapPortions(nullptr),
     m_cursor(nullptr),
+    m_skybox(nullptr),
     m_modelObjects(new QStandardItemModel),
     m_saved(true),
     m_detection(detection),
@@ -103,6 +106,10 @@ Map::Map(MapProperties* properties, SystemDetection *detection) :
 
 Map::~Map() {
     delete m_cursor;
+    if (m_skybox != nullptr)
+    {
+        delete m_skybox;
+    }
     delete m_mapProperties;
     deletePortions();
     SuperListItem::deleteModel(m_modelObjects);
@@ -120,6 +127,11 @@ MapProperties* Map::mapProperties() const { return m_mapProperties; }
 void Map::setMapProperties(MapProperties* p) { m_mapProperties = p; }
 
 Cursor* Map::cursor() const { return m_cursor; }
+
+Skybox * Map::skybox() const
+{
+    return m_skybox;
+}
 
 int Map::squareSize() const { return m_squareSize; }
 
@@ -241,6 +253,14 @@ void Map::initializeCursor(QVector3D *position) {
     m_cursor = new Cursor(position);
     m_cursor->loadTexture(":/textures/Ressources/editor_cursor.png");
     m_cursor->initialize();
+}
+
+// -------------------------------------------------------
+
+void Map::initializeSkybox()
+{
+    m_skybox = new Skybox;
+    m_skybox->loadSkyBoxTexture(m_mapProperties);
 }
 
 // -------------------------------------------------------

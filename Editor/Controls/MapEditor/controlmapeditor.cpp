@@ -214,6 +214,14 @@ void ControlMapEditor::applyMap(Map *map, QVector3D *position, QVector3D
     m_cursorObject->loadTexture(":/textures/Ressources/object_square_cursor.png");
     m_cursorObject->initialize();
 
+    // Skybox
+    if (!m_map->mapProperties()->isSkyColor() && !m_map->mapProperties()
+        ->isSkyImage())
+    {
+        m_map->initializeSkybox();
+        m_map->skybox()->initializeGL();
+    }
+
     // Cursor start
     if (m_detection == nullptr) {
         heroPosition = Position3D(-1, 0, 0, -1);
@@ -1307,6 +1315,13 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     MapEditorSubSelectionKind subSelectionKind, DrawKind drawKind)
 {
     Position3D position;
+
+    // Draw skybox
+    if (m_map->skybox() != nullptr)
+    {
+        m_map->skybox()->paintGL(modelviewProjection, m_camera->positionX(),
+            m_camera->positionY(), m_camera->positionZ());
+    }
 
     // Drawing floors
     m_map->paintFloors(modelviewProjection);

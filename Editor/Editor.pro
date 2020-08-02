@@ -93,6 +93,7 @@ HEADERS += \
     Controls/controlmainwindow.h \
     MapEditor/mountain.h \
     MapEditor/mountains.h \
+    MapEditor/skybox.h \
     MapEditor/textureseveral.h \
     Models/GameDatas/videosdatas.h \
     Models/System/systemanimationframe.h \
@@ -432,6 +433,7 @@ SOURCES += \
     Controls/controlmainwindow.cpp \
     MapEditor/mountain.cpp \
     MapEditor/mountains.cpp \
+    MapEditor/skybox.cpp \
     MapEditor/textureseveral.cpp \
     Models/GameDatas/videosdatas.cpp \
     Models/System/systemanimationframe.cpp \

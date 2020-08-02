@@ -19,6 +19,7 @@
 #include "threadmapportionloader.h"
 #include "cursor.h"
 #include "textureseveral.h"
+#include "skybox.h"
 
 // -------------------------------------------------------
 //
@@ -38,6 +39,7 @@ public:
     MapProperties* mapProperties() const;
     void setMapProperties(MapProperties* p);
     Cursor* cursor() const;
+    Skybox * skybox() const;
     int squareSize() const;
     int portionsRay() const;
     bool saved() const;
@@ -71,6 +73,7 @@ public:
     void removeOverflowMountains(Position& p, Portion& portion);
 
     void initializeCursor(QVector3D *position);
+    void initializeSkybox();
     static void writeNewMap(QString path, MapProperties& properties);
     static void correctMap(QString path, MapProperties &previousProperties,
                            MapProperties& properties);
@@ -190,9 +193,10 @@ public:
                      QVector3D &cameraDeepWorldSpace);
 
 private:
-    MapProperties* m_mapProperties;
-    MapPortion** m_mapPortions;
-    Cursor* m_cursor;
+    MapProperties *m_mapProperties;
+    MapPortion **m_mapPortions;
+    Cursor *m_cursor;
+    Skybox *m_skybox;
     QStandardItemModel* m_modelObjects;
     QString m_pathMap;
     int m_portionsRay;
