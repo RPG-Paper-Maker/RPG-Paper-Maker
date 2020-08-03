@@ -42,7 +42,9 @@ void Map::writeDefaultMap(QString path){
     SystemMapObject super(1, RPM::translate(Translations::HERO), position);
     super.write(json);
     jsonObject.append(json);
-    properties.skyColorID()->setNumberValue(3);
+    properties.setIsSkyColor(false);
+    properties.setIsSkyImage(false);
+    properties.skyboxID()->setNumberValue(1);
     QString pathMap = writeMap(path, properties, jsonObject);
 
     // Portion
@@ -66,7 +68,9 @@ int Map::writeDefaultBattleMap(QString path) {
     properties.setId(Map::generateMapId());
     properties.cameraProperties()->setNumberValue(2);
     QJsonArray jsonObject;
-    properties.skyColorID()->setNumberValue(3);
+    properties.setIsSkyColor(false);
+    properties.setIsSkyImage(false);
+    properties.skyboxID()->setNumberValue(1);
     QString pathMap = writeMap(path, properties, jsonObject);
     Portion globalPortion(0, 0, 0);
     MapPortion mapPortion(globalPortion);

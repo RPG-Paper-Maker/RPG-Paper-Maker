@@ -80,12 +80,18 @@ void Skybox::loadSkyBoxTexture(MapProperties *properties)
     skyBox = reinterpret_cast<SystemSkyBox *>(SuperListItem::getById(RPM::get()
         ->project()->gameDatas()->systemDatas()->modelSkyBoxes()
         ->invisibleRootItem(), properties->skyboxID()->numberValue()));
-    const QImage posz = this->createSkyBoxImage(skyBox->frontID()->id());
-    const QImage negz = this->createSkyBoxImage(skyBox->backID()->id());
-    const QImage posy = this->createSkyBoxImage(skyBox->topID()->id());
-    const QImage negy = this->createSkyBoxImage(skyBox->bottomID()->id());
-    const QImage posx = this->createSkyBoxImage(skyBox->rightID()->id());
-    const QImage negx = this->createSkyBoxImage(skyBox->leftID()->id());
+    const QImage posz = this->createSkyBoxImage(skyBox->frontID()->id())
+        .mirrored(true, false);
+    const QImage negz = this->createSkyBoxImage(skyBox->backID()->id())
+        .mirrored(true, false);
+    const QImage posy = this->createSkyBoxImage(skyBox->topID()->id())
+        .mirrored(true, false);
+    const QImage negy = this->createSkyBoxImage(skyBox->bottomID()->id())
+        .mirrored(true, false);
+    const QImage posx = this->createSkyBoxImage(skyBox->leftID()->id())
+        .mirrored(true, false);
+    const QImage negx = this->createSkyBoxImage(skyBox->rightID()->id())
+        .mirrored(true, false);
 
     m_textureSkyBox.destroy();
     m_textureSkyBox.create();
