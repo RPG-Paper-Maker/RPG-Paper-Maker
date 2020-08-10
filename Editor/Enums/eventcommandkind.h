@@ -77,6 +77,8 @@ enum class EventCommandKind {
     ChangeEquipment,
     ModifyCurrency,
     DisplayAnAnimation,
+    ShakeScreen,
+    FlashScreen,
     Last
 };
 

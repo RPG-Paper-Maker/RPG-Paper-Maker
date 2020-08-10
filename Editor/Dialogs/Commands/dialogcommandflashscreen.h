@@ -9,32 +9,32 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#ifndef DIALOGCOMMANDCHANGESCREENTONE_H
-#define DIALOGCOMMANDCHANGESCREENTONE_H
+#ifndef DIALOGCOMMANDFLASHSCREEN_H
+#define DIALOGCOMMANDFLASHSCREEN_H
 
 #include "dialogcommand.h"
 
 // -------------------------------------------------------
 //
-//  CLASS DialogCommandChangeScreenTone
+//  CLASS DialogCommandFlashScreen
 //
-//  A dialog used for changing screen tone.
+//  A dialog used for flashing screen.
 //
 // -------------------------------------------------------
 
 namespace Ui {
-class DialogCommandChangeScreenTone;
+class DialogCommandFlashScreen;
 }
 
-class DialogCommandChangeScreenTone : public DialogCommand
+class DialogCommandFlashScreen : public DialogCommand
 {
     Q_OBJECT
 
 public:
-    explicit DialogCommandChangeScreenTone(EventCommand *command = nullptr,
+    explicit DialogCommandFlashScreen(EventCommand *command = nullptr,
         SystemCommonObject *object = nullptr, QStandardItemModel *parameters =
         nullptr, QWidget *parent = nullptr);
-    virtual ~DialogCommandChangeScreenTone();
+    virtual ~DialogCommandFlashScreen();
 
     virtual EventCommand * getCommand() const;
 
@@ -43,13 +43,12 @@ protected:
     QStandardItemModel *m_parameters;
 
     void initializePrimitives();
-
-    virtual void initialize(EventCommand *command);
+    virtual void initialize(EventCommand* command);
 
 private:
-    Ui::DialogCommandChangeScreenTone *ui;
+    Ui::DialogCommandFlashScreen *ui;
 
     void translate();
 };
 
-#endif // DIALOGCOMMANDCHANGESCREENTONE_H
+#endif // DIALOGCOMMANDFLASHSCREEN_H

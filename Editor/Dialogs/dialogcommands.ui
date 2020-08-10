@@ -189,7 +189,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonShakeScreen">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Shake screen...</string>
@@ -199,7 +199,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonFlashScreen">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Flash screen...</string>

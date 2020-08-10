@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#include "dialogcommandchangescreentone.h"
-#include "ui_dialogcommandchangescreentone.h"
+#include "dialogcommandflashscreen.h"
+#include "ui_dialogcommandflashscreen.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -19,26 +19,26 @@
 //
 // -------------------------------------------------------
 
-DialogCommandChangeScreenTone::DialogCommandChangeScreenTone(EventCommand
-    *command, SystemCommonObject *object, QStandardItemModel *parameters,
-    QWidget *parent) :
+DialogCommandFlashScreen::DialogCommandFlashScreen(EventCommand *command,
+    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
     m_object(object),
     m_parameters(parameters),
-    ui(new Ui::DialogCommandChangeScreenTone)
+    ui(new Ui::DialogCommandFlashScreen)
 {
     ui->setupUi(this);
 
     this->initializePrimitives();
 
     if (command != nullptr) {
-        this->initialize(command);
+        initialize(command);
     }
 
     this->translate();
 }
 
-DialogCommandChangeScreenTone::~DialogCommandChangeScreenTone() {
+DialogCommandFlashScreen::~DialogCommandFlashScreen()
+{
     delete ui;
 }
 
@@ -48,28 +48,33 @@ DialogCommandChangeScreenTone::~DialogCommandChangeScreenTone() {
 //
 // -------------------------------------------------------
 
-void DialogCommandChangeScreenTone::initializePrimitives() {
+void DialogCommandFlashScreen::initializePrimitives()
+{
     QStandardItemModel *properties;
 
     properties = nullptr;
     if (m_object != nullptr){
         properties = m_object->modelProperties();
     }
-    ui->panelColorsTransition->initializePrimitives(m_object, m_parameters);
+
+    ui->panelPrimitiveColorID->initializeDataBaseCommandId(RPM::get()->project()
+        ->gameDatas()->systemDatas()->modelColors(), m_parameters, properties);
     ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
+    ui->panelPrimitiveTime->setNumberDoubleValue(1);
 }
 
 //-------------------------------------------------
 
-void DialogCommandChangeScreenTone::translate()
+void DialogCommandFlashScreen::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::CHANGE_SCREEN_TONE) + RPM
+    this->setWindowTitle(RPM::translate(Translations::FLASH_SCREEN) + RPM
         ::DOT_DOT_DOT);
-    ui->panelColorsTransition->translate();
+    ui->labelColorID->setText(RPM::translate(Translations::COLOR_ID) + RPM
+        ::COLON);
+    ui->checkBoxWaitEnd->setText(RPM::translate(Translations
+        ::WAIT_END_MOVE_BEFORE_NEXT_COMMAND));
     ui->labelTime->setText(RPM::translate(Translations::TIME) + RPM::COLON);
     ui->labelSeconds->setText(RPM::translate(Translations::SECONDS));
-    ui->checkBoxWaitEnd->setText(RPM::translate(Translations
-        ::WAIT_END_CHANGE_BEFORE_NEXT_COMMAND));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -79,11 +84,11 @@ void DialogCommandChangeScreenTone::translate()
 //
 // -------------------------------------------------------
 
-void DialogCommandChangeScreenTone::initialize(EventCommand *command) {
+void DialogCommandFlashScreen::initialize(EventCommand *command) {
     int i;
 
     i = 0;
-    ui->panelColorsTransition->initialize(command, i);
+    ui->panelPrimitiveColorID->initializeCommand(command, i);
     ui->checkBoxWaitEnd->setChecked(RPM::stringToBool(command->valueCommandAt(
         i++)));
     ui->panelPrimitiveTime->initializeCommand(command, i);
@@ -91,12 +96,12 @@ void DialogCommandChangeScreenTone::initialize(EventCommand *command) {
 
 // -------------------------------------------------------
 
-EventCommand * DialogCommandChangeScreenTone::getCommand() const{
+EventCommand * DialogCommandFlashScreen::getCommand() const{
     QVector<QString> command;
 
-    ui->panelColorsTransition->getCommand(command);
+    ui->panelPrimitiveColorID->getCommand(command);
     command.append(RPM::boolToString(ui->checkBoxWaitEnd->isChecked()));
     ui->panelPrimitiveTime->getCommand(command);
 
-    return new EventCommand(EventCommandKind::ChangeScreenTone, command);
+    return new EventCommand(EventCommandKind::FlashScreen, command);
 }

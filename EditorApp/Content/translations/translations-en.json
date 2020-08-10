@@ -1094,5 +1094,10 @@
     "display.an.animation": "Display an animation",
     "animation.id": "Animation ID",
     "wait.end.animation.next.command": "Wait the end of the animation before the next command",
-    "escaped.last.battle": "Escaped last battle"
+    "escaped.last.battle": "Escaped last battle",
+    "shake.screen": "Shake screen",
+    "shakes.number": "Shakes number",
+    "per.second": "Per second",
+    "flash.screen": "Flash screen",
+    "transtion.time": "Transition time"
 }

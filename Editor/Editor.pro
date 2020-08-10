@@ -20,6 +20,7 @@ TARGET = $$EDITOR_LIB_NAME
 DESTDIR = $$ROOT_DESTDIR/Editor
 
 HEADERS += \
+    CustomWidgets/panelcolorstransition.h \
     CustomWidgets/panelselectpositionmaps.h \
     CustomWidgets/panelsubtransformation.h \
     CustomWidgets/paneltransformations.h \
@@ -47,11 +48,13 @@ HEADERS += \
     Dialogs/Commands/dialogcommanddisplayananimation.h \
     Dialogs/Commands/dialogcommanddisplayapicture.h \
     Dialogs/Commands/dialogcommanddisplaychoice.h \
+    Dialogs/Commands/dialogcommandflashscreen.h \
     Dialogs/Commands/dialogcommandremoveapicture.h \
     Dialogs/Commands/dialogcommandremoveobjectfrommap.h \
     Dialogs/Commands/dialogcommandscript.h \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.h \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.h \
+    Dialogs/Commands/dialogcommandshakescreen.h \
     Dialogs/Systems/dialogsystemanimationframeeffect.h \
     Dialogs/Systems/dialogsystemanimationframeelement.h \
     Dialogs/Systems/dialogsystembattlemap.h \
@@ -373,6 +376,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommandlabel.h
 
 SOURCES += \
+    CustomWidgets/panelcolorstransition.cpp \
     CustomWidgets/panelselectpositionmaps.cpp \
     CustomWidgets/panelsubtransformation.cpp \
     CustomWidgets/paneltransformations.cpp \
@@ -400,11 +404,13 @@ SOURCES += \
     Dialogs/Commands/dialogcommanddisplayananimation.cpp \
     Dialogs/Commands/dialogcommanddisplayapicture.cpp \
     Dialogs/Commands/dialogcommanddisplaychoice.cpp \
+    Dialogs/Commands/dialogcommandflashscreen.cpp \
     Dialogs/Commands/dialogcommandremoveapicture.cpp \
     Dialogs/Commands/dialogcommandremoveobjectfrommap.cpp \
     Dialogs/Commands/dialogcommandscript.cpp \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.cpp \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.cpp \
+    Dialogs/Commands/dialogcommandshakescreen.cpp \
     Dialogs/Systems/dialogsystemanimationframeeffect.cpp \
     Dialogs/Systems/dialogsystemanimationframeelement.cpp \
     Dialogs/Systems/dialogsystembattlemap.cpp \
@@ -686,6 +692,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommandlabel.cpp
 
 FORMS += \
+    CustomWidgets/panelcolorstransition.ui \
     CustomWidgets/panelselectpositionmaps.ui \
     CustomWidgets/panelsubtransformation.ui \
     CustomWidgets/paneltransformations.ui \
@@ -710,11 +717,13 @@ FORMS += \
     Dialogs/Commands/dialogcommanddisplayananimation.ui \
     Dialogs/Commands/dialogcommanddisplayapicture.ui \
     Dialogs/Commands/dialogcommanddisplaychoice.ui \
+    Dialogs/Commands/dialogcommandflashscreen.ui \
     Dialogs/Commands/dialogcommandremoveapicture.ui \
     Dialogs/Commands/dialogcommandremoveobjectfrommap.ui \
     Dialogs/Commands/dialogcommandscript.ui \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.ui \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.ui \
+    Dialogs/Commands/dialogcommandshakescreen.ui \
     Dialogs/Systems/dialogsystemanimationframeeffect.ui \
     Dialogs/Systems/dialogsystemanimationframeelement.ui \
     Dialogs/Systems/dialogsystembattlemap.ui \

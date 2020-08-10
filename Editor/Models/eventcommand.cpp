@@ -298,6 +298,10 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strModifyCurrency(object, parameters); break;
     case EventCommandKind::DisplayAnAnimation:
         str += this->strDisplayAnAnimation(object, parameters); break;
+    case EventCommandKind::ShakeScreen:
+        str += this->strShakeScreen(object, parameters); break;
+    case EventCommandKind::FlashScreen:
+        str += this->strFlashScreen(object, parameters); break;
     default:
         break;
     }
@@ -2089,6 +2093,55 @@ QString EventCommand::strDisplayAnAnimation(SystemCommonObject *object,
 
     return RPM::translate(Translations::DISPLAY_AN_ANIMATION) + RPM::COLON + RPM
         ::SPACE + objectID + RPM::SPACE + animation + RPM::SPACE + option;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strShakeScreen(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+
+    QString offset = this->strProperty(i, object, parameters);
+    QString shakesNumber = this->strProperty(i, object, parameters);
+    QString option;
+    if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
+        option += RPM::BRACKET_LEFT + RPM::translate(Translations::WAIT_END) +
+            RPM::BRACKET_RIGHT;
+    }
+    QString time = RPM::translate(Translations::TIME) + RPM::COLON + RPM::SPACE + this
+        ->strNumber(i, parameters) + RPM::SPACE + RPM::translate(Translations
+        ::SECONDS);
+
+    return RPM::translate(Translations::SHAKE_SCREEN) + RPM::COLON + RPM
+        ::NEW_LINE + RPM::translate(Translations::OFFSET) + RPM::COLON + RPM
+        ::SPACE + offset + RPM::SPACE + RPM::translate(Translations::PIXEL_S)
+        .toLower() + RPM::NEW_LINE + RPM::translate(Translations::SHAKES_NUMBER)
+        + RPM::COLON + RPM::SPACE + shakesNumber + RPM::NEW_LINE + option + RPM
+        ::NEW_LINE + time;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strFlashScreen(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+
+    QString colorID = this->strDataBaseId(i, object, RPM::get()->project()
+        ->gameDatas()->systemDatas()->modelColors(), parameters);
+    QString option;
+    if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
+        option += RPM::BRACKET_LEFT + RPM::translate(Translations::WAIT_END) +
+            RPM::BRACKET_RIGHT;
+    }
+    QString time = RPM::translate(Translations::TIME) + RPM::COLON + RPM::SPACE
+        + this->strProperty(i, object, parameters) + RPM::SPACE + RPM::translate
+        (Translations::SECONDS);
+
+    return RPM::translate(Translations::FLASH_SCREEN) + RPM::COLON + RPM
+        ::NEW_LINE + RPM::translate(Translations::COLOR_ID) + RPM::COLON + RPM
+        ::SPACE + colorID + RPM::NEW_LINE + option + RPM::NEW_LINE + time;
 }
 
 // -------------------------------------------------------

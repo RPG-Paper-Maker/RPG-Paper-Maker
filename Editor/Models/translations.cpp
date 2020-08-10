@@ -1115,6 +1115,11 @@ const QString Translations::DISPLAY_AN_ANIMATION = "display.an.animation";
 const QString Translations::ANIMATION_ID = "animation.id";
 const QString Translations::WAIT_END_ANIMATION_NEXT_COMMAND = "wait.end.animation.next.command";
 const QString Translations::ESCAPED_LAST_BATTLE = "escaped.last.battle";
+const QString Translations::SHAKE_SCREEN = "shake.screen";
+const QString Translations::SHAKES_NUMBER = "shakes.number";
+const QString Translations::PER_SECOND = "per.second";
+const QString Translations::FLASH_SCREEN = "flash.screen";
+const QString Translations::TRANSITION_TIME = "transtion.time";
 
 // -------------------------------------------------------
 //

@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#include "dialogcommandchangescreentone.h"
-#include "ui_dialogcommandchangescreentone.h"
+#include "dialogcommandshakescreen.h"
+#include "ui_dialogcommandshakescreen.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -19,26 +19,26 @@
 //
 // -------------------------------------------------------
 
-DialogCommandChangeScreenTone::DialogCommandChangeScreenTone(EventCommand
-    *command, SystemCommonObject *object, QStandardItemModel *parameters,
-    QWidget *parent) :
+DialogCommandShakeScreen::DialogCommandShakeScreen(EventCommand *command,
+    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
     m_object(object),
     m_parameters(parameters),
-    ui(new Ui::DialogCommandChangeScreenTone)
+    ui(new Ui::DialogCommandShakeScreen)
 {
     ui->setupUi(this);
 
     this->initializePrimitives();
 
     if (command != nullptr) {
-        this->initialize(command);
+        initialize(command);
     }
 
     this->translate();
 }
 
-DialogCommandChangeScreenTone::~DialogCommandChangeScreenTone() {
+DialogCommandShakeScreen::~DialogCommandShakeScreen()
+{
     delete ui;
 }
 
@@ -48,28 +48,39 @@ DialogCommandChangeScreenTone::~DialogCommandChangeScreenTone() {
 //
 // -------------------------------------------------------
 
-void DialogCommandChangeScreenTone::initializePrimitives() {
+void DialogCommandShakeScreen::initializePrimitives()
+{
     QStandardItemModel *properties;
 
     properties = nullptr;
     if (m_object != nullptr){
         properties = m_object->modelProperties();
     }
-    ui->panelColorsTransition->initializePrimitives(m_object, m_parameters);
+
+    ui->panelPrimitiveOffset->initializeNumber(m_parameters, properties);
+    ui->panelPrimitiveShakeNumber->initializeNumber(m_parameters, properties,
+        false);
     ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
+    ui->panelPrimitiveOffset->setNumberValue(30);
+    ui->panelPrimitiveShakeNumber->setNumberDoubleValue(5);
+    ui->panelPrimitiveTime->setNumberDoubleValue(2);
 }
 
 //-------------------------------------------------
 
-void DialogCommandChangeScreenTone::translate()
+void DialogCommandShakeScreen::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::CHANGE_SCREEN_TONE) + RPM
+    this->setWindowTitle(RPM::translate(Translations::SHAKE_SCREEN) + RPM
         ::DOT_DOT_DOT);
-    ui->panelColorsTransition->translate();
+    ui->labelOffset->setText(RPM::translate(Translations::OFFSET) + RPM::COLON);
+    ui->labelPixels->setText(RPM::translate(Translations::PIXEL_S).toLower());
+    ui->labelShakeNumber->setText(RPM::translate(Translations::SHAKES_NUMBER) +
+        RPM::COLON);
+    ui->labelPerSecond->setText(RPM::translate(Translations::PER_SECOND).toLower());
+    ui->checkBoxWaitEnd->setText(RPM::translate(Translations
+        ::WAIT_END_MOVE_BEFORE_NEXT_COMMAND));
     ui->labelTime->setText(RPM::translate(Translations::TIME) + RPM::COLON);
     ui->labelSeconds->setText(RPM::translate(Translations::SECONDS));
-    ui->checkBoxWaitEnd->setText(RPM::translate(Translations
-        ::WAIT_END_CHANGE_BEFORE_NEXT_COMMAND));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -79,11 +90,12 @@ void DialogCommandChangeScreenTone::translate()
 //
 // -------------------------------------------------------
 
-void DialogCommandChangeScreenTone::initialize(EventCommand *command) {
+void DialogCommandShakeScreen::initialize(EventCommand *command) {
     int i;
 
     i = 0;
-    ui->panelColorsTransition->initialize(command, i);
+    ui->panelPrimitiveOffset->initializeCommand(command, i);
+    ui->panelPrimitiveShakeNumber->initializeCommand(command, i);
     ui->checkBoxWaitEnd->setChecked(RPM::stringToBool(command->valueCommandAt(
         i++)));
     ui->panelPrimitiveTime->initializeCommand(command, i);
@@ -91,12 +103,13 @@ void DialogCommandChangeScreenTone::initialize(EventCommand *command) {
 
 // -------------------------------------------------------
 
-EventCommand * DialogCommandChangeScreenTone::getCommand() const{
+EventCommand * DialogCommandShakeScreen::getCommand() const{
     QVector<QString> command;
 
-    ui->panelColorsTransition->getCommand(command);
+    ui->panelPrimitiveOffset->getCommand(command);
+    ui->panelPrimitiveShakeNumber->getCommand(command);
     command.append(RPM::boolToString(ui->checkBoxWaitEnd->isChecked()));
     ui->panelPrimitiveTime->getCommand(command);
 
-    return new EventCommand(EventCommandKind::ChangeScreenTone, command);
+    return new EventCommand(EventCommandKind::ShakeScreen, command);
 }

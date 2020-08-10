@@ -1096,5 +1096,10 @@
     "display.an.animation": "Mostrar una animación",
     "animation.id": "ID de animación",
     "wait.end.animation.next.command": "Espera el final de la animación antes del siguiente comando",
-    "escaped.last.battle": "La última pelea se filtró"
+    "escaped.last.battle": "La última pelea se filtró",
+    "shake.screen": "Sacude la pantalla",
+    "shakes.number": "Numero de batidos",
+    "per.second": "Por segundo",
+    "flash.screen": "Flashear la pantalla",
+    "transtion.time": "Tiempo de transición"
 }

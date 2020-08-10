@@ -185,6 +185,10 @@ private:
         *parameters) const;
     QString strDisplayAnAnimation(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
+    QString strShakeScreen(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
+    QString strFlashScreen(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

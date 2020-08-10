@@ -1094,5 +1094,10 @@
     "display.an.animation": "Exibir uma animação",
     "animation.id": "Animação de ID",
     "wait.end.animation.next.command": "Aguarde o final da animação antes do próximo comando",
-    "escaped.last.battle": "A última luta vazou"
+    "escaped.last.battle": "A última luta vazou",
+    "shake.screen": "Agite a tela",
+    "shake.number": "Número de batidos",
+    "per.second": "Por segundo",
+    "flash.screen": "Piscar a tela",
+    "transtion.time": "Período de transição"
 }

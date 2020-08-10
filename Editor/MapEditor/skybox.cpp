@@ -199,8 +199,7 @@ void Skybox::initializeGL()
 
 void Skybox::paintGL(QMatrix4x4 &modelviewProjection, float x, float y, float z)
 {
-    float s = ((RPM::get()->getPortionsRay() * 2) + 1) * RPM::getSquareSize();
-    s = 4000;
+    float s = 4000 * RPM::getSquareSize();
     QVector3D pos(x, y, z);
     QVector3D size(s, s, s);
 

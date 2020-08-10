@@ -46,6 +46,8 @@
 #include "dialogcommandchangeequipment.h"
 #include "dialogcommandchangemoney.h"
 #include "dialogcommanddisplayananimation.h"
+#include "dialogcommandshakescreen.h"
+#include "dialogcommandflashscreen.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -185,6 +187,10 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandChangeMoney(command, object, parameters);
     case EventCommandKind::DisplayAnAnimation:
         return new DialogCommandDisplayAnAnimation(command, object, parameters);
+    case EventCommandKind::ShakeScreen:
+        return new DialogCommandShakeScreen(command, object, parameters);
+    case EventCommandKind::FlashScreen:
+        return new DialogCommandFlashScreen(command, object, parameters);
     default:
         return nullptr;
     }
@@ -628,4 +634,16 @@ void DialogCommands::on_pushButtonModifyCurrency_clicked()
 void DialogCommands::on_pushButtonDisplayAnimation_clicked()
 {
     this->openDialogCommand(EventCommandKind::DisplayAnAnimation);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonShakeScreen_clicked()
+{
+    this->openDialogCommand(EventCommandKind::ShakeScreen);
+}
+
+void DialogCommands::on_pushButtonFlashScreen_clicked()
+{
+    this->openDialogCommand(EventCommandKind::FlashScreen);
 }

@@ -104,6 +104,8 @@ private slots:
     void on_pushButtonChangeEquiment_clicked();
     void on_pushButtonModifyCurrency_clicked();
     void on_pushButtonDisplayAnimation_clicked();
+    void on_pushButtonShakeScreen_clicked();
+    void on_pushButtonFlashScreen_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H
