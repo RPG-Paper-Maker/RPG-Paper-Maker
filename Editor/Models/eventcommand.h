@@ -87,8 +87,10 @@ private:
         *parameters) const;
     QString strConditionPageVariables(SystemCommonObject *object,
         QStandardItemModel *parameters, int &i, int radioIndex) const;
-    QString strModifyInventory() const;
-    QString strModifyInventorySelection(int &i) const;
+    QString strModifyInventory(SystemCommonObject *object, QStandardItemModel
+                               *parameters) const;
+    QString strModifyInventorySelection(SystemCommonObject *object,
+        QStandardItemModel *parameters, int &i) const;
     QString strModifyTeam(QStandardItemModel *parameters) const;
     QString strModifyTeamInstance(int &i, QStandardItemModel *parameters) const;
     QString strModifyTeamMoveDelete(int &i, QStandardItemModel *parameters) const;

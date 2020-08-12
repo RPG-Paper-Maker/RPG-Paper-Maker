@@ -215,7 +215,7 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
     case EventCommandKind::OpenSavesMenu:
         str += RPM::translate(Translations::OPEN_SAVES_MENU); break;
     case EventCommandKind::ModifyInventory:
-        str += this->strModifyInventory(); break;
+        str += this->strModifyInventory(object, parameters); break;
     case EventCommandKind::ModifyTeam:
         str += this->strModifyTeam(parameters); break;
     case EventCommandKind::StartBattle:
@@ -710,12 +710,14 @@ QString EventCommand::strConditionPageVariables(SystemCommonObject *object,
 
 // -------------------------------------------------------
 
-QString EventCommand::strModifyInventory() const {
+QString EventCommand::strModifyInventory(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
     QString selection, operation ,number;
     int i;
 
     i = 0;
-    selection = this->strModifyInventorySelection(i);
+    selection = this->strModifyInventorySelection(object, parameters, i);
     operation = this->strChangeVariablesOperation(i);
     number = this->strNumberVariable(i);
 
@@ -725,10 +727,11 @@ QString EventCommand::strModifyInventory() const {
 
 // -------------------------------------------------------
 
-QString EventCommand::strModifyInventorySelection(int &i) const {
-    QStandardItem *item;
+QString EventCommand::strModifyInventorySelection(SystemCommonObject *object,
+    QStandardItemModel *parameters, int &i) const
+{
     QString selection;
-    int objectType, objectID;
+    int objectType;
 
     // Object type
     objectType = m_listCommand.at(i++).toInt();
@@ -748,23 +751,21 @@ QString EventCommand::strModifyInventorySelection(int &i) const {
     }
 
     // ID of the object
-    objectID = m_listCommand.at(i++).toInt();
-    item = nullptr;
-    switch(objectType) {
+    switch(objectType)
+    {
     case 0:
-        item = RPM::get()->project()->gameDatas()->itemsDatas()->model()
-            ->invisibleRootItem();
+        selection += this->strDataBaseId(i, object, RPM::get()->project()
+            ->gameDatas()->itemsDatas()->model(), parameters);
         break;
     case 1:
-        item = RPM::get()->project()->gameDatas()->weaponsDatas()->model()
-            ->invisibleRootItem();
+        selection += this->strDataBaseId(i, object, RPM::get()->project()
+            ->gameDatas()->weaponsDatas()->model(), parameters);
         break;
     case 2:
-        item = RPM::get()->project()->gameDatas()->armorsDatas()->model()
-            ->invisibleRootItem();
+        selection += this->strDataBaseId(i, object, RPM::get()->project()
+            ->gameDatas()->armorsDatas()->model(), parameters);
         break;
     }
-    selection += SuperListItem::getById(item, objectID)->toString();
 
     return selection;
 }

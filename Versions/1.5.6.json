@@ -14,7 +14,11 @@
         "Frame duration for objects moving in system manager",
         "Japanase translation (beta)",
         "Chinese tranlastion (beta)",
-        "DLCs (assets) importation"
+        "DLCs (assets) importation",
+        "Don't allow same state in one object",
+        "Export function for BR assets",
+        "Dynamic choose picture ID in command display / set / move / turn a picture",
+        "Website updater auto download self new version"
     ],
 	"bugs": [
 		"Move square command go through mountains",
@@ -30,12 +34,16 @@
         2,
         2,
         2,
-        0,
+        2,
         2,
         1,
         0,
         0,
         2,
+        0,
+        0,
+        0,
+        0,
         0,
         0,
 

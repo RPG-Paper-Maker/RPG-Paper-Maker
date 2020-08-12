@@ -853,18 +853,25 @@ void ProjectUpdater::updateVersion_1_5_6_commands(QStandardItem *commands)
     QVector<QString> list;
     int i, l;
 
-    for (i = 0, l = commands->rowCount(); i < l; i++) {
+    for (i = 0, l = commands->rowCount(); i < l; i++)
+    {
         child = commands->child(i);
         this->updateVersion_1_5_6_commands(child);
         command = reinterpret_cast<EventCommand *>(child->data().value<quintptr>());
         list = command->commands();
-        if (command->kind() == EventCommandKind::ChangeState) {
+        if (command->kind() == EventCommandKind::ChangeState)
+        {
             list.insert(0, QString::number(static_cast<int>(PrimitiveValueKind
                 ::DataBase)));
             list.insert(1, "-1");
             list.insert(2, QString::number(static_cast<int>(PrimitiveValueKind
                 ::DataBase)));
             list.insert(3, "-1");
+            command->setCommands(list);
+        } else if (command->kind() == EventCommandKind::ModifyInventory)
+        {
+            list.insert(1, QString::number(static_cast<int>(PrimitiveValueKind
+                ::DataBase)));
             command->setCommands(list);
         }
     }

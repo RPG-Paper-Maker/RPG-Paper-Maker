@@ -20,26 +20,35 @@
 //
 // -------------------------------------------------------
 
-DialogCommandModifyInventory::DialogCommandModifyInventory(
-        EventCommand *command,
-        QWidget *parent) :
+DialogCommandModifyInventory::DialogCommandModifyInventory(EventCommand *command
+    , SystemCommonObject *object, QStandardItemModel *parameters, QWidget
+    *parent) :
     DialogCommand(parent),
+    m_object(object),
+    m_parameters(parameters),
+    m_properties(nullptr),
     ui(new Ui::DialogCommandModifyInventory)
 {
     ui->setupUi(this);
     
-    ui->widgetNumber->initializeNumberVariable();
-    ui->widgetNumber->setNumberValue(1);
+    if (m_object != nullptr)
+    {
+        m_properties = m_object->modelProperties();
+    }
 
-    // Initilize comboBoxes
-    SuperListItem::fillComboBox(ui->comboBoxItem, RPM::get()->project()
-                                ->gameDatas()->itemsDatas()->model());
-    SuperListItem::fillComboBox(ui->comboBoxWeapon, RPM::get()->project()
-                                ->gameDatas()->weaponsDatas()->model());
-    SuperListItem::fillComboBox(ui->comboBoxArmor, RPM::get()->project()
-                                ->gameDatas()->armorsDatas()->model());
+    ui->panelPrimitiveItemID->initializeDataBaseCommandId(RPM::get()->project()
+        ->gameDatas()->itemsDatas()->model(), m_parameters, m_properties);
+    ui->panelPrimitiveWeaponID->initializeDataBaseCommandId(RPM::get()->project()
+        ->gameDatas()->weaponsDatas()->model(), m_parameters, m_properties);
+    ui->panelPrimitiveArmorID->initializeDataBaseCommandId(RPM::get()->project()
+        ->gameDatas()->armorsDatas()->model(), m_parameters, m_properties);
+    ui->panelPrimitiveNumber->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveNumber->setNumberValue(1);
 
-    if (command != nullptr) initialize(command);
+    if (command != nullptr)
+    {
+        initialize(command);
+    }
 
     this->translate();
 }
@@ -88,29 +97,19 @@ void DialogCommandModifyInventory::initialize(EventCommand* command){
 
     // Selection
     int type = command->valueCommandAt(i++).toInt();
-    int id = command->valueCommandAt(i++).toInt();
-    QStandardItem* item;
-    switch(type){
+    switch(type)
+    {
     case 0:
+        ui->panelPrimitiveItemID->initializeCommand(command, i);
         ui->radioButtonItem->setChecked(true);
-        item = RPM::get()->project()->gameDatas()->itemsDatas()->model()
-               ->invisibleRootItem();
-        ui->comboBoxItem->setCurrentIndex(SuperListItem::getIndexById(item,
-                                                                      id));
         break;
     case 1:
+        ui->panelPrimitiveWeaponID->initializeCommand(command, i);
         ui->radioButtonWeapon->setChecked(true);
-        item = RPM::get()->project()->gameDatas()->weaponsDatas()->model()
-               ->invisibleRootItem();
-        ui->comboBoxWeapon->setCurrentIndex(SuperListItem::getIndexById(item,
-                                                                        id));
         break;
     case 2:
+        ui->panelPrimitiveArmorID->initializeCommand(command, i);
         ui->radioButtonArmor->setChecked(true);
-        item = RPM::get()->project()->gameDatas()->weaponsDatas()->model()
-               ->invisibleRootItem();
-        ui->comboBoxWeapon->setCurrentIndex(SuperListItem::getIndexById(item,
-                                                                        id));
         break;
     }
 
@@ -125,7 +124,7 @@ void DialogCommandModifyInventory::initialize(EventCommand* command){
     }
 
     // Value
-    ui->widgetNumber->initializeCommand(command, i);
+    ui->panelPrimitiveNumber->initializeCommand(command, i);
 }
 
 // -------------------------------------------------------
@@ -144,27 +143,15 @@ EventCommand* DialogCommandModifyInventory::getCommand() const{
 void DialogCommandModifyInventory::selection(QVector<QString>& command) const{
     if (ui->radioButtonItem->isChecked()){
         command.append("0");
-        int index = ui->comboBoxItem->currentIndex();
-        QStandardItem* item = RPM::get()->project()->gameDatas()
-                              ->itemsDatas()->model()->item(index);
-        command.append(QString::number(((SuperListItem*)item->data()
-                                        .value<quintptr>())->id()));
+        ui->panelPrimitiveItemID->getCommand(command);
     }
     else if (ui->radioButtonWeapon->isChecked()){
         command.append("1");
-        int index = ui->comboBoxWeapon->currentIndex();
-        QStandardItem* item = RPM::get()->project()->gameDatas()
-                              ->weaponsDatas()->model()->item(index);
-        command.append(QString::number(((SuperListItem*)item->data()
-                                        .value<quintptr>())->id()));
+        ui->panelPrimitiveWeaponID->getCommand(command);
     }
     else if (ui->radioButtonArmor->isChecked()){
         command.append("2");
-        int index = ui->comboBoxArmor->currentIndex();
-        QStandardItem* item = RPM::get()->project()->gameDatas()
-                              ->armorsDatas()->model()->item(index);
-        command.append(QString::number(((SuperListItem*)item->data()
-                                        .value<quintptr>())->id()));
+        ui->panelPrimitiveArmorID->getCommand(command);
     }
 }
 
@@ -182,7 +169,7 @@ void DialogCommandModifyInventory::operation(QVector<QString>& command) const{
 // -------------------------------------------------------
 
 void DialogCommandModifyInventory::value(QVector<QString> &command) const{
-    ui->widgetNumber->getCommand(command);
+    ui->panelPrimitiveNumber->getCommand(command);
 }
 
 // -------------------------------------------------------
@@ -192,17 +179,17 @@ void DialogCommandModifyInventory::value(QVector<QString> &command) const{
 // -------------------------------------------------------
 
 void DialogCommandModifyInventory::on_radioButtonItem_toggled(bool checked){
-    ui->comboBoxItem->setEnabled(checked);
+    ui->panelPrimitiveItemID->setEnabled(checked);
 }
 
 // -------------------------------------------------------
 
 void DialogCommandModifyInventory::on_radioButtonWeapon_toggled(bool checked){
-    ui->comboBoxWeapon->setEnabled(checked);
+    ui->panelPrimitiveWeaponID->setEnabled(checked);
 }
 
 // -------------------------------------------------------
 
 void DialogCommandModifyInventory::on_radioButtonArmor_toggled(bool checked){
-    ui->comboBoxArmor->setEnabled(checked);
+    ui->panelPrimitiveArmorID->setEnabled(checked);
 }

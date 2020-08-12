@@ -32,11 +32,16 @@ class DialogCommandModifyInventory : public DialogCommand
 
 public:
     explicit DialogCommandModifyInventory(EventCommand *command = nullptr,
-                                          QWidget *parent = 0);
+        SystemCommonObject *object = nullptr, QStandardItemModel* parameters =
+        nullptr, QWidget *parent = nullptr);
     virtual ~DialogCommandModifyInventory();
     EventCommand* getCommand() const;
 
 protected:
+    SystemCommonObject *m_object;
+    QStandardItemModel *m_parameters;
+    QStandardItemModel* m_properties;
+
     virtual void initialize(EventCommand* command);
 
 private:
