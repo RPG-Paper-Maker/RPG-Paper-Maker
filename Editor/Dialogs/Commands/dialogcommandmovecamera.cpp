@@ -20,32 +20,40 @@
 // -------------------------------------------------------
 
 DialogCommandMoveCamera::DialogCommandMoveCamera(EventCommand *command,
-                                                 SystemCommonObject *,
+                                                 SystemCommonObject *object,
                                                  QStandardItemModel *parameters,
                                                  QWidget *parent) :
     DialogCommand(parent),
     ui(new Ui::DialogCommandMoveCamera),
+    m_object(object),
+    m_parameters(parameters),
+    m_properties(nullptr),
     m_modelObjects(nullptr)
 {
     ui->setupUi(this);
 
-    if (RPM::isInConfig){
+    if (RPM::isInConfig && !RPM::isInObjectConfig)
+    {
         m_modelObjects = new QStandardItemModel;
         Map::setModelObjects(m_modelObjects);
     }
     else{
-        m_modelObjects = RPM::get()->project()->currentMap()->modelObjects();
+        m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
+    }
+    if (m_object != nullptr)
+    {
+        m_properties = m_object->modelProperties();
     }
     ui->widgetPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
-                                                             parameters,
-                                                             nullptr);
-    ui->widgetNumberX->initializeNumber(parameters, nullptr);
-    ui->widgetNumberY->initializeNumber(parameters, nullptr);
-    ui->widgetNumberZ->initializeNumber(parameters, nullptr);
-    ui->widgetNumberH->initializeNumber(parameters, nullptr, false);
-    ui->widgetNumberV->initializeNumber(parameters, nullptr, false);
-    ui->widgetNumberDistance->initializeNumber(parameters, nullptr);
-    ui->widgetNumberTime->initializeNumber(parameters, nullptr, false);
+                                                             m_parameters,
+                                                             m_properties);
+    ui->widgetNumberX->initializeNumber(parameters, m_properties);
+    ui->widgetNumberY->initializeNumber(parameters, m_properties);
+    ui->widgetNumberZ->initializeNumber(parameters, m_properties);
+    ui->widgetNumberH->initializeNumber(parameters, m_properties, false);
+    ui->widgetNumberV->initializeNumber(parameters, m_properties, false);
+    ui->widgetNumberDistance->initializeNumber(parameters, m_properties);
+    ui->widgetNumberTime->initializeNumber(parameters, m_properties, false);
     ui->comboBoxX->addItem(RPM::translate(Translations::SQUARE_S));
     ui->comboBoxX->addItem(RPM::translate(Translations::PIXEL_S));
     ui->comboBoxY->addItem(RPM::translate(Translations::SQUARE_S));
@@ -62,8 +70,10 @@ DialogCommandMoveCamera::~DialogCommandMoveCamera()
 {
     delete ui;
 
-    if (RPM::isInConfig)
+    if (RPM::isInConfig && !RPM::isInObjectConfig)
+    {
         SuperListItem::deleteModel(m_modelObjects);
+    }
 }
 
 // -------------------------------------------------------

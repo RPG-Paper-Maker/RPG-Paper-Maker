@@ -35,7 +35,7 @@ public:
     DialogCommandMoveCamera(EventCommand *command = nullptr,
                             SystemCommonObject *object = nullptr,
                             QStandardItemModel* parameters = nullptr,
-                            QWidget *parent = 0);
+                            QWidget *parent = nullptr);
     virtual ~DialogCommandMoveCamera();
     EventCommand* getCommand() const;
 
@@ -45,8 +45,12 @@ private:
     void translate();
 
 protected:
-    virtual void initialize(EventCommand* command);
+    SystemCommonObject *m_object;
+    QStandardItemModel *m_parameters;
+    QStandardItemModel* m_properties;
     QStandardItemModel* m_modelObjects;
+
+    virtual void initialize(EventCommand* command);
 
 private slots:
     void on_radioButtonTargetObjectID_toggled(bool checked);
