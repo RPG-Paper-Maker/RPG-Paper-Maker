@@ -107,8 +107,12 @@ void DialogCommandChangeState::initializeObjects(int id, bool isCurrentMap)
                                           ->pathCurrentProjectApp(),
                                           RPM::PATH_MAPS);
     QString pathMap = Common::pathCombine(pathMaps, realName);
-
-    QString path = Common::pathCombine(pathMap, RPM::FILE_MAP_OBJECTS);
+    QString pathMapTemp = Common::pathCombine(pathMap, RPM::FOLDER_TEMP_MAP);
+    QString path = Common::pathCombine(pathMapTemp, RPM::FILE_MAP_OBJECTS);
+    if (!QFile(path).exists())
+    {
+        path = Common::pathCombine(pathMap, RPM::FILE_MAP_OBJECTS);
+    }
     QJsonDocument loadDoc;
     Common::readOtherJSON(path, loadDoc);
     QJsonObject json = loadDoc.object();

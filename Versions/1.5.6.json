@@ -21,7 +21,8 @@
 		"Project updater corrected for projects < 1.5.3",
 		"Wrong type for helmet bronze when creating a new project",
 		"Condition test with switches not working",
-        "Editing animation picture is editing tileset picture"
+        "Editing animation picture is editing tileset picture",
+        "Crash ingame save when depth > 0"
 	],
     "finished": [
         2,
@@ -38,6 +39,7 @@
         0,
 
         0,
+        2,
         2,
         2,
         2,
