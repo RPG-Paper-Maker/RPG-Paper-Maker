@@ -40,17 +40,27 @@ public:
      EventCommand * getCommand() const;
 
 protected:
+     void initializeMaps();
+     void initializeMapsInfos(QStandardItem *item, QString path, int level);
+     void initializeObjects(int id, bool isCurrentMap);
+
      virtual void initialize(EventCommand* command);
 
 private:
      Ui::DialogCommandChangeState *ui;
-     SystemCommonObject* m_object;
-     QStandardItemModel* m_parameters;
+     SystemCommonObject *m_object;
+     QStandardItemModel *m_parameters;
+     QStandardItemModel *m_properties;
+     QStandardItemModel *m_modelMaps;
+     QStandardItemModel *m_modelObjects;
 
      void initializeStateId();
      void selectionState(QVector<QString>& command) const;
      void operation(QVector<QString>& command) const;
      void translate();
+
+public slots:
+     void on_mapIDUpdated(int i);
 };
 
 #endif // DIALOGCOMMANDCHANGESTATE_H

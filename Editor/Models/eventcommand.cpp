@@ -378,6 +378,7 @@ QString EventCommand::strProperty(int &i, SystemCommonObject *object,
         return RPM::translate(Translations::NONE);
     case PrimitiveValueKind::Number:
     case PrimitiveValueKind::NumberDouble:
+    case PrimitiveValueKind::DataBase:
     case PrimitiveValueKind::Message:
         return value;
     case PrimitiveValueKind::Switch:
@@ -982,21 +983,40 @@ QString EventCommand::strStartBattleTransitionType(QStandardItemModel
 QString EventCommand::strChangeState(SystemCommonObject *object,
     QStandardItemModel *parameters) const
 {
-    QStandardItemModel *modelDataBase;
-    QString value, operation;
-    int i;
-
-    i = 0;
-    modelDataBase = nullptr;
-    if (object != nullptr) {
-        modelDataBase = object->modelStates();
+    int i = 0;
+    QString mapID;
+    switch (m_listCommand.at(i + 1).toInt())
+    {
+    case -1:
+        mapID = RPM::translate(Translations::THIS_MAP);
+        i += 2;
+        break;
+    default:
+        mapID = this->strProperty(i, object, parameters);
+        break;
     }
-
-    value = this->strDataBaseId(i, object, modelDataBase, parameters);
-    operation = this->strChangeStateOperation(i);
+    QString objectID;
+    switch (m_listCommand.at(i + 1).toInt())
+    {
+    case -1:
+        objectID = RPM::translate(Translations::THIS_OBJECT);
+        i += 2;
+        break;
+    case 0:
+        objectID = RPM::translate(Translations::HERO);
+        break;
+    default:
+        objectID = this->strProperty(i, object, parameters);
+        break;
+    }
+    QString value = this->strDataBaseId(i, object, RPM::get()->project()
+        ->gameDatas()->commonEventsDatas()->modelStates(), parameters);
+    QString operation = this->strChangeStateOperation(i);
 
     return RPM::translate(Translations::CHANGE_STATE) + RPM::COLON + RPM::SPACE
-        + operation + value;
+        + RPM::translate(Translations::MAP_ID) + RPM::SPACE + mapID + RPM::COMMA
+        + RPM::SPACE + RPM::translate(Translations::OBJECT_ID) + RPM::SPACE +
+        objectID + RPM::NEW_LINE + operation + value;
 }
 
 // -------------------------------------------------------

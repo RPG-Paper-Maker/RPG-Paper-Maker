@@ -71,6 +71,7 @@ public:
     static const QString DOT;
     static const QString DOT_DOT_DOT;
     static const QString SPACE;
+    static const QString COMMA;
     static const QString NEW_LINE;
     static const QString PARENTHESIS_LEFT;
     static const QString PARENTHESIS_RIGHT;

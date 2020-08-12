@@ -12,6 +12,7 @@
 #include "dialogcommandchangestate.h"
 #include "ui_dialogcommandchangestate.h"
 #include "rpm.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -27,7 +28,10 @@ DialogCommandChangeState::DialogCommandChangeState(
     DialogCommand(parent),
     ui(new Ui::DialogCommandChangeState),
     m_object(object),
-    m_parameters(parameters)
+    m_parameters(parameters),
+    m_properties(nullptr),
+    m_modelMaps(new QStandardItemModel),
+    m_modelObjects(new QStandardItemModel)
 {
     ui->setupUi(this);
 
@@ -40,6 +44,9 @@ DialogCommandChangeState::DialogCommandChangeState(
 DialogCommandChangeState::~DialogCommandChangeState()
 {
     delete ui;
+
+    SuperListItem::deleteModel(m_modelMaps);
+    SuperListItem::deleteModel(m_modelObjects);
 }
 
 // -------------------------------------------------------
@@ -48,15 +55,96 @@ DialogCommandChangeState::~DialogCommandChangeState()
 //
 // -------------------------------------------------------
 
-void DialogCommandChangeState::initializeStateId(){
-    QStandardItemModel* dataBase = nullptr;
-    QStandardItemModel* properties = nullptr;
-    if (m_object != nullptr){
-        dataBase = m_object->modelStates();
-        properties = m_object->modelProperties();
+void DialogCommandChangeState::initializeMaps()
+{
+    QStandardItem *item = new QStandardItem;
+    SuperListItem *super = new SuperListItem(-1, RPM::translate(Translations
+        ::THIS_MAP));
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
+    item->setText(super->name());
+    m_modelMaps->appendRow(item);
+    this->initializeMapsInfos(RPM::get()->project()->treeMapDatas()->model()
+        ->invisibleRootItem(), "", 0);
+    this->on_mapIDUpdated(-1);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandChangeState::initializeMapsInfos(QStandardItem *item, QString
+    path, int level)
+{
+    QStandardItem *child, *itemTag;
+    TreeMapTag *tag;
+    SuperListItem *super;
+    for (int i = 0, l = item->rowCount(); i < l; i++)
+    {
+        child = item->child(i);
+        tag = reinterpret_cast<TreeMapTag *>(child->data().value<quintptr>());
+        if (tag->isDir())
+        {
+            this->initializeMapsInfos(child, (level == 0 ? path : (level == 1 ?
+                tag->name() : Common::pathCombine(path, tag->name()))), level +
+                1);
+        } else
+        {
+            super = new SuperListItem(tag->id(), tag->name());
+            itemTag = new QStandardItem;
+            itemTag->setData(QVariant::fromValue(reinterpret_cast<quintptr>(
+                super)));
+            itemTag->setText(Common::pathCombine(path, super->name()));
+            m_modelMaps->appendRow(itemTag);
+        }
     }
-    ui->widgetStateId->initializeDataBaseCommandId(dataBase, m_parameters,
-                                                   properties);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandChangeState::initializeObjects(int id, bool isCurrentMap)
+{
+    SuperListItem::deleteModel(m_modelObjects, false);
+    QString realName = Map::generateMapName(id);
+    QString pathMaps = Common::pathCombine(RPM::get()->project()
+                                          ->pathCurrentProjectApp(),
+                                          RPM::PATH_MAPS);
+    QString pathMap = Common::pathCombine(pathMaps, realName);
+
+    QString path = Common::pathCombine(pathMap, RPM::FILE_MAP_OBJECTS);
+    QJsonDocument loadDoc;
+    Common::readOtherJSON(path, loadDoc);
+    QJsonObject json = loadDoc.object();
+    Map::readJSONArray(m_modelObjects, json["objs"].toArray());
+
+    // If no
+    if (!isCurrentMap)
+    {
+        delete reinterpret_cast<SuperListItem *>(m_modelObjects->item(0)->data()
+            .value<quintptr>());
+        delete reinterpret_cast<SuperListItem *>(m_modelObjects->item(1)->data()
+            .value<quintptr>());
+        m_modelObjects->removeRow(0);
+        m_modelObjects->removeRow(0);
+    }
+    ui->panelPrimitiveObjectID->clearDataBase();
+}
+
+// -------------------------------------------------------
+
+void DialogCommandChangeState::initializeStateId(){
+    if (m_object != nullptr){
+        m_properties = m_object->modelProperties();
+    }
+
+    connect(ui->panelPrimitiveMapID, SIGNAL(numberUpdated(int)), this, SLOT(
+        on_mapIDUpdated(int)));
+    Map::setModelObjects(m_modelObjects);
+    ui->panelPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
+        m_parameters, m_properties);
+    this->initializeMaps();
+    ui->panelPrimitiveMapID->initializeDataBaseCommandId(m_modelMaps,
+        m_parameters, m_properties);
+    ui->widgetStateId->initializeDataBaseCommandId(RPM::get()->project()
+        ->gameDatas()->commonEventsDatas()->modelStates(), m_parameters,
+        m_properties);
 }
 
 //-------------------------------------------------
@@ -80,6 +168,8 @@ void DialogCommandChangeState::translate()
 void DialogCommandChangeState::initialize(EventCommand* command){
     int i = 0;
 
+    ui->panelPrimitiveMapID->initializeCommand(command, i);
+    ui->panelPrimitiveObjectID->initializeCommand(command, i);
     ui->widgetStateId->initializeCommand(command,i);
     int action = command->valueCommandAt(i++).toInt();
     switch(action){
@@ -96,6 +186,9 @@ void DialogCommandChangeState::initialize(EventCommand* command){
 
 EventCommand* DialogCommandChangeState::getCommand() const{
     QVector<QString> command;
+
+    ui->panelPrimitiveMapID->getCommand(command);
+    ui->panelPrimitiveObjectID->getCommand(command);
     selectionState(command);
     operation(command);
 
@@ -116,5 +209,22 @@ void DialogCommandChangeState::operation(QVector<QString>& command) const{
     else if (ui->radioButtonRemove->isChecked()) command.append("2");
 }
 
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogCommandChangeState::on_mapIDUpdated(int i)
+{
+    Map *map = RPM::get()->project()->currentMap(true);
+    int mapID = (RPM::isInConfig && !RPM::isInObjectConfig) ? -1 : (map ==
+        nullptr ? -1 : map->mapProperties()->id());
+    if (i == -1)
+    {
+        i = mapID;
+    }
+    this->initializeObjects(i, mapID == i);
+}
 
 

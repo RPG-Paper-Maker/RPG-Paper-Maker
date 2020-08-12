@@ -1120,6 +1120,7 @@ const QString Translations::SHAKES_NUMBER = "shakes.number";
 const QString Translations::PER_SECOND = "per.second";
 const QString Translations::FLASH_SCREEN = "flash.screen";
 const QString Translations::TRANSITION_TIME = "transtion.time";
+const QString Translations::THIS_MAP = "this.map";
 
 // -------------------------------------------------------
 //

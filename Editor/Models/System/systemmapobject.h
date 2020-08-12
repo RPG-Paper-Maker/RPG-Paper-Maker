@@ -38,4 +38,6 @@ protected:
     Position3D m_position;
 };
 
+Q_DECLARE_METATYPE(SystemMapObject)
+
 #endif // SYSTEMMAPOBJECT_H

@@ -19,11 +19,11 @@
 #include "titlesettingkind.h"
 #include "systemcommonreaction.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 13;
+const int ProjectUpdater::incompatibleVersionsCount = 14;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
-     "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3"};
+     "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6"};
 
 // -------------------------------------------------------
 //
@@ -830,4 +830,42 @@ void ProjectUpdater::updateVersion_1_5_3() {
 
     // Read content again
     m_project->readAll();
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_5_6()
+{
+    // Update change state command
+    connect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_5_6_commands(QStandardItem *)));
+    this->updateCommands();
+    disconnect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_5_6_commands(QStandardItem *)));
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_5_6_commands(QStandardItem *commands)
+{
+    QStandardItem *child;
+    EventCommand *command;
+    QVector<QString> list;
+    int i, l;
+
+    for (i = 0, l = commands->rowCount(); i < l; i++) {
+        child = commands->child(i);
+        this->updateVersion_1_5_6_commands(child);
+        command = reinterpret_cast<EventCommand *>(child->data().value<quintptr>());
+        list = command->commands();
+        if (command->kind() == EventCommandKind::ChangeState) {
+            list.insert(0, QString::number(static_cast<int>(PrimitiveValueKind
+                ::DataBase)));
+            list.insert(1, "-1");
+            list.insert(2, QString::number(static_cast<int>(PrimitiveValueKind
+                ::DataBase)));
+            list.insert(3, "-1");
+            command->setCommands(list);
+        }
+    }
 }

@@ -57,6 +57,7 @@ const QString RPM::COLON = ":";
 const QString RPM::DOT = ".";
 const QString RPM::DOT_DOT_DOT = "...";
 const QString RPM::SPACE = " ";
+const QString RPM::COMMA = ",";
 const QString RPM::NEW_LINE = "\n";
 const QString RPM::PARENTHESIS_LEFT = "(";
 const QString RPM::PARENTHESIS_RIGHT = ")";

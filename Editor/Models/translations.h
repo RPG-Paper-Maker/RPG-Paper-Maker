@@ -1132,6 +1132,7 @@ public:
     static const QString PER_SECOND;
     static const QString FLASH_SCREEN;
     static const QString TRANSITION_TIME;
+    static const QString THIS_MAP;
 
     Translations();
     virtual ~Translations();
