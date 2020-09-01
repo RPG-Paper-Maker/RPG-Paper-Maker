@@ -61,9 +61,9 @@ void WidgetShowPicture::setDrawBackground(bool b) {
 //
 // -------------------------------------------------------
 
-void WidgetShowPicture::updatePicture(SystemPicture* picture, PictureKind kind)
+void WidgetShowPicture::updatePicture(SystemPicture* picture)
 {
-    this->updatePictureByName(picture->getPath(kind));
+    this->updatePictureByName(picture->getPath());
 }
 
 // -------------------------------------------------------

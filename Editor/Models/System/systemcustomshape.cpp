@@ -13,7 +13,6 @@
 #include "rpm.h"
 #include "common.h"
 
-const QString SystemCustomShape::JSON_BR = "br";
 const QString SystemCustomShape::PARSE_VERTEX = "v ";
 const QString SystemCustomShape::PARSE_NORMAL = "vn ";
 const QString SystemCustomShape::PARSE_TEXTURE = "vt ";
@@ -32,9 +31,10 @@ SystemCustomShape::SystemCustomShape() :
 
 }
 
-SystemCustomShape::SystemCustomShape(int i, QString n, bool isBR) :
-    SuperListItem(i, n),
-    m_isBR(isBR),
+SystemCustomShape::SystemCustomShape(int i, QString n, bool isBR, QString dlc,
+    CustomShapeKind kind) :
+    SystemResource(i, n, isBR, dlc),
+    m_kind(kind),
     m_loaded(false)
 {
 
@@ -44,12 +44,9 @@ SystemCustomShape::~SystemCustomShape() {
 
 }
 
-bool SystemCustomShape::isBR() const {
-    return m_isBR;
-}
-
-void SystemCustomShape::setIsBR(bool b) {
-    m_isBR = b;
+void SystemCustomShape::setKind(CustomShapeKind kind)
+{
+    m_kind = kind;
 }
 
 QVector3D SystemCustomShape::getVertexAt(int i) const {
@@ -89,11 +86,11 @@ SystemCustomShape * SystemCustomShape::getByID(int id, CustomShapeKind kind) {
 
 // -------------------------------------------------------
 
-QString SystemCustomShape::getFolder(CustomShapeKind kind, bool isBR) {
-    QString folder = isBR ? RPM::get()->project()->gameDatas()->systemDatas()
-        ->pathBR() : RPM::get()->project()->pathCurrentProjectApp();
-
-    return Common::pathCombine(folder, getLocalFolder(kind));
+QString SystemCustomShape::getFolder(CustomShapeKind kind, bool isBR, QString
+    dlc)
+{
+    return Common::pathCombine(SystemResource::getFolder(isBR, dlc),
+        SystemCustomShape::getLocalFolder(kind));
 }
 
 // -------------------------------------------------------
@@ -155,27 +152,27 @@ QString SystemCustomShape::getShapeExtensionBrowse(CustomShapeKind kind) {
 
 // -------------------------------------------------------
 
-QString SystemCustomShape::getPath(CustomShapeKind kind) const {
+QString SystemCustomShape::getPath() const {
     if (id() == -1)
         return "";
 
-    QString folder = getFolder(kind, m_isBR);
+    QString folder = getFolder(m_kind, m_isBR, m_dlc);
 
     return Common::pathCombine(folder, name());
 }
 
 // -------------------------------------------------------
 
-QString SystemCustomShape::getLocalPath(CustomShapeKind kind) const {
-    QString folder = getLocalFolder(kind);
+QString SystemCustomShape::getLocalPath() const {
+    QString folder = getLocalFolder(m_kind);
 
     return Common::pathCombine(folder, name());
 }
 
 // -------------------------------------------------------
 
-void SystemCustomShape::loadCustomObj(CustomShapeKind kind) {
-    if (kind != CustomShapeKind::OBJ || m_loaded) {
+void SystemCustomShape::loadCustomObj() {
+    if (m_kind != CustomShapeKind::OBJ || m_loaded) {
         return;
     }
 
@@ -193,7 +190,7 @@ void SystemCustomShape::loadCustomObj(CustomShapeKind kind) {
 
     // Parsing .obj file
     firstVertex = true;
-    fileName = this->getPath(CustomShapeKind::OBJ);
+    fileName = this->getPath();
     if (fileName.isEmpty()) {
         return;
     }
@@ -292,49 +289,8 @@ SuperListItem* SystemCustomShape::createCopy() const {
 void SystemCustomShape::setCopy(const SuperListItem &super) {
     const SystemCustomShape *shape;
 
-    SuperListItem::setCopy(super);
+    SystemResource::setCopy(super);
 
     shape = reinterpret_cast<const SystemCustomShape *>(&super);
-    m_isBR = shape->m_isBR;
-}
-
-// -------------------------------------------------------
-
-QList<QStandardItem *> SystemCustomShape::getModelRow() const {
-    QList<QStandardItem*> row = QList<QStandardItem*>();
-    QStandardItem* item = new QStandardItem;
-    QIcon icon = m_isBR ? QIcon(SuperListItem::pathIconBlue) : QIcon(
-        SuperListItem::pathIconRed);
-
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-
-    if (id() > 0) {
-        item->setIcon(icon);
-    }
-
-    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setText(toString());
-    row.append(item);
-
-    return row;
-}
-
-// -------------------------------------------------------
-//
-//  READ / WRITE
-//
-// -------------------------------------------------------
-
-void SystemCustomShape::read(const QJsonObject &json) {
-    SuperListItem::read(json);
-
-    m_isBR = json[JSON_BR].toBool();
-}
-
-// -------------------------------------------------------
-
-void SystemCustomShape::write(QJsonObject &json) const {
-    SuperListItem::write(json);
-
-    json[JSON_BR] = m_isBR;
+    m_kind = shape->m_kind;
 }

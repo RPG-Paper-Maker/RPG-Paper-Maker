@@ -13,7 +13,7 @@
 #define SYSTEMPICTURE_H
 
 #include <QMetaType>
-#include "superlistitem.h"
+#include "systemresource.h"
 #include "picturekind.h"
 #include "collisionsquare.h"
 #include "mapeditorsubselectionkind.h"
@@ -26,25 +26,26 @@
 //
 // -------------------------------------------------------
 
-class SystemPicture : public SuperListItem
+class SystemPicture : public SystemResource
 {
 public:
     SystemPicture();
-    SystemPicture(int i, QString n, bool isBR, bool isMissing = false);
+    SystemPicture(int i, QString n, bool isBR, QString dlc = "", bool isMissing
+        = false, PictureKind kind = PictureKind::None);
     virtual ~SystemPicture();
-    bool isBR() const;
-    void setIsBR(bool b);
+    void setKind(PictureKind k);
     QHash<QPoint, CollisionSquare*> *collisions();
     bool repeatCollisions() const;
-    void setRepeatCollisions(bool b, PictureKind kind);
+    void setRepeatCollisions(bool b);
+
     static SystemPicture * getByID(int id, PictureKind kind);
-    static QString getFolder(PictureKind kind, bool isBR);
+    static QString getFolder(PictureKind kind, bool isBR = false, QString dlc =
+        "");
     static QString getLocalFolder(PictureKind kind);
     static QString getPictureTitle(PictureKind kind);
     static PictureKind subSelectionToPictureKind(MapEditorSubSelectionKind
         subKind);
-    QString getPath(PictureKind kind) const;
-    QString getLocalPath(PictureKind kind) const;
+
     void getRepeatList(QImage& image,
                        QHash<QPoint, CollisionSquare *>& squares,
                        QHash<QPoint, CollisionSquare *>& list,
@@ -55,15 +56,16 @@ public:
     void setDefaultWallInside();
     void setDefaultCharacterTileset();
 
+    virtual QString getPath() const;
+    virtual QString getLocalPath() const;
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);
-    virtual QList<QStandardItem*> getModelRow() const;
     virtual void getIcon(QIcon &icon);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    bool m_isBR;
+    PictureKind m_kind;
     QHash<QPoint, CollisionSquare*> m_collisions;
     bool m_repeatCollisions;
     bool m_isMissing;

@@ -72,7 +72,7 @@ void WidgetTilesetSettings::updateImageSpecial(QImage& editedImage,
 
 void WidgetTilesetSettings::updateImageAutotile(SystemPicture* picture) {
     QImage editedImage;
-    QString path = picture->getPath(PictureKind::Autotiles);
+    QString path = picture->getPath();
     QImage image = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
         QImage();
     if (!image.isNull()) {
@@ -150,7 +150,6 @@ void WidgetTilesetSettings::on_horizontalSlider_valueChanged(int value) {
 // -------------------------------------------------------
 
 void WidgetTilesetSettings::on_checkBoxRepeat_toggled(bool checked) {
-    SystemPicture::getByID(m_pictureID, m_kind)->setRepeatCollisions(checked,
-        m_kind);
+    SystemPicture::getByID(m_pictureID, m_kind)->setRepeatCollisions(checked);
     ui->widgetTilesetPraticable->repaint();
 }

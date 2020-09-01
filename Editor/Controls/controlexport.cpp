@@ -185,7 +185,10 @@ void ControlExport::removeDesktopNoNeed(QString path) {
     QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
     QFile(Common::pathCombine(pathDatas, "scripts.json")).remove();
     QFile(Common::pathCombine(pathDatas, "pictures.json")).remove();
-    this->copyBRPictures(Common::pathCombine(path, RPM::PATH_APP));
+    QFile(Common::pathCombine(pathDatas, "shapes.json")).remove();
+    QFile(Common::pathCombine(pathDatas, "songs.json")).remove();
+    QFile(Common::pathCombine(pathDatas, "videos.json")).remove();
+    this->copyBRDLC(Common::pathCombine(path, RPM::PATH_APP));
 
     removeMapsTemp(pathDatas);
 }
@@ -215,7 +218,7 @@ QString ControlExport::generateWebStuff(QString path) {
         Common::pathCombine(pathJS, "utilities.js"));
 
     // Pictures
-    copyBRPictures(path);
+    copyBRDLC(path);
 
     return nullptr;
 }
@@ -269,49 +272,110 @@ void ControlExport::removeMapsTemp(QString pathDatas) {
 
 // -------------------------------------------------------
 
-void ControlExport::copyBRPictures(QString path) {
-    PictureKind kind;
+void ControlExport::copyBRDLC(QString path) {
+    this->copyBRDLCKind(path, 0, static_cast<int>(PictureKind::Bars),
+        static_cast<int>(PictureKind::Last));
+    this->copyBRDLCKind(path, 1, static_cast<int>(SongKind::Music),
+        static_cast<int>(SongKind::Last));
+    this->copyBRDLCKind(path, 2, static_cast<int>(CustomShapeKind::OBJ),
+        static_cast<int>(CustomShapeKind::Last));
+    this->copyBRDLCKind(path, 3, 0, 1);
+}
+
+// -------------------------------------------------------
+
+void ControlExport::copyBRDLCKind(QString path, int kind, int start, int end)
+{
     QStandardItemModel *model, *newModel;
-    SystemPicture *picture, *newPicture;
-    PicturesDatas newPicturesDatas;
+    SystemResource *resource, *newResource;
+    PicturesDatas *newPicturesDatas = new PicturesDatas;
+    SongsDatas *newSongsDatas = new SongsDatas;
+    ShapesDatas *newShapesDatas = new ShapesDatas;
+    VideosDatas *newVideosDatas = new VideosDatas;
 
     // Iterate all the pictures kind
-    for (int k = static_cast<int>(PictureKind::Bars); k != static_cast<int>(
-         PictureKind::Last); k++)
+    for (int k = start; k != end; k++)
     {
-       kind = static_cast<PictureKind>(k);
-       model = m_project->picturesDatas()->model(kind);
-       newModel = new QStandardItemModel;
-       newPicturesDatas.setModel(kind, newModel);
-       for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
-           picture = reinterpret_cast<SystemPicture *>(model->item(i)->data()
-               .value<qintptr>());
-           newPicture = new SystemPicture;
-           newPicture->setCopy(*picture);
-           newPicture->setId(picture->id());
+        newModel = new QStandardItemModel;
+        switch (kind)
+        {
+        case 0:
+            model = m_project->picturesDatas()->model(static_cast<PictureKind>(k));
+            newPicturesDatas->setModel(static_cast<PictureKind>(k), newModel);
+            break;
+        case 1:
+            model = m_project->songsDatas()->model(static_cast<SongKind>(k));
+            newSongsDatas->setModel(static_cast<SongKind>(k), newModel);
+            break;
+        case 2:
+            model = m_project->shapesDatas()->model(static_cast<CustomShapeKind>
+                (k));
+            newShapesDatas->setModel(static_cast<CustomShapeKind>(k), newModel);
+            break;
+        case 3:
+            model = m_project->videosDatas()->model();
+            newVideosDatas->setModel(newModel);
+            break;
+        default:
+            model = newModel;
+            break;
+        }
+        for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++)
+        {
+            resource = reinterpret_cast<SystemResource *>(model->item(i)->data()
+                .value<qintptr>());
+            newResource = reinterpret_cast<SystemResource *>(resource
+                ->createCopy());
+            newResource->setId(resource->id());
 
-           // If the picture is from BR, we need to copy it in the project
-           if (picture->isBR()) {
-                QString pathBR = picture->getPath(kind);
-                QString pathProject = Common::pathCombine(path, picture
-                    ->getLocalPath(kind));
-                if (QFile(pathProject).exists()) {
-                    QFileInfo fileInfo(picture->name());
+            // If is from BR or DLC, we need to copy it in the project
+            if (resource->isBR() || !resource->dlc().isEmpty())
+            {
+                QString pathBR = resource->getPath();
+                QString pathProject = Common::pathCombine(path, resource
+                    ->getLocalPath());
+                if (QFile(pathProject).exists())
+                {
+                    QFileInfo fileInfo(resource->name());
                     QString extension = fileInfo.completeSuffix();
                     QString baseName = fileInfo.baseName();
-                    newPicture->setName(baseName + "_br" + extension);
-                    pathProject = Common::pathCombine(path, newPicture
-                        ->getLocalPath(kind));
+                    newResource->setName(baseName + (resource->isBR() ? "_br" :
+                        "_dlc_" + resource->dlc()) + RPM::DOT + extension);
+                    pathProject = Common::pathCombine(path, newResource
+                        ->getLocalPath());
                 }
                 QFile::copy(pathBR, pathProject);
-                newPicture->setIsBR(false);
-           }
-           newPicturesDatas.model(kind)->appendRow(newPicture->getModelRow());
-       }
+                newResource->setIsBR(false);
+                newResource->setDlc("");
+            }
+
+            newModel->appendRow(newResource->getModelRow());
+        }
     }
 
-    // Copy the new picutres datas without BR
+    // Copy the new resources datas without BR and DLC
     QString pathDatas = Common::pathCombine(path, RPM::PATH_DATAS);
-    RPM::writeJSON(Common::pathCombine(pathDatas, "pictures.json"),
-        newPicturesDatas);
+    switch (kind)
+    {
+    case 0:
+        RPM::writeJSON(Common::pathCombine(pathDatas, "pictures.json"),
+            *newPicturesDatas);
+        break;
+    case 1:
+        RPM::writeJSON(Common::pathCombine(pathDatas, "songs.json"),
+            *newSongsDatas);
+        break;
+    case 2:
+        RPM::writeJSON(Common::pathCombine(pathDatas, "shapes.json"),
+            *newShapesDatas);
+        break;
+    case 3:
+        RPM::writeJSON(Common::pathCombine(pathDatas, "videos.json"),
+            *newVideosDatas);
+        break;
+    }
+    delete newPicturesDatas;
+    delete newSongsDatas;
+    delete newShapesDatas;
+    delete newVideosDatas;
 }

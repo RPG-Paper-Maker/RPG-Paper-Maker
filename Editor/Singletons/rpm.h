@@ -131,6 +131,7 @@ public:
     static const QString PATH_LANGS;
     static const QString PATH_SCRIPTS;
     static const QString PATH_KEYBOARD;
+    static const QString PATH_DLCS_DATAS;
     static const QString PATH_PICTURES_DATAS;
     static const QString PATH_VIDEOS_DATAS;
     static const QString PATH_SONGS_DATAS;
@@ -175,6 +176,8 @@ public:
     static const QString PATH_MAIN;
     static const QString PATH_INDEX;
     static const QString PATH_PACKAGE;
+    static const QString PATH_DLCS;
+    static const QString PATH_ICON_GREEN;
 
     // INTEGERS
     static const int PORTION_SIZE;

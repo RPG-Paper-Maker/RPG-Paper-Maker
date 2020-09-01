@@ -88,6 +88,8 @@ EventCommandKind DialogCommandPlaySong::getCommandKind() const {
         return EventCommandKind::PlayMusicEffect;
     case SongKind::None:
         return EventCommandKind::None;
+    default:
+        break;
     }
 
     return EventCommandKind::None;

@@ -1102,5 +1102,7 @@
     "per.second": "Por segundo",
     "flash.screen": "Flashear la pantalla",
     "transtion.time": "Tiempo de transición",
-    "this.map": "Este mapa"
+    "this.map": "Este mapa",
+    "import.dlc.s": "Importar DLC (s)",
+    "set.dlc.s.path.folder": "Seleccionar fichero de rutas DLC (s)"
 }

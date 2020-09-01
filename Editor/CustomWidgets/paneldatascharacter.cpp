@@ -143,7 +143,7 @@ void PanelDatasCharacter::on_comboBoxClass_currentIndexChanged(int index) {
 
 void PanelDatasCharacter::on_battlerPictureChanged(SystemPicture *picture) {
     currentHero()->setIdBattlerPicture(picture->id());
-    ui->widgetImageBattler->updatePicture(picture, PictureKind::Battlers);
+    ui->widgetImageBattler->updatePicture(picture);
 }
 
 
@@ -151,5 +151,5 @@ void PanelDatasCharacter::on_battlerPictureChanged(SystemPicture *picture) {
 
 void PanelDatasCharacter::on_facesetPictureChanged(SystemPicture *picture) {
     currentHero()->setIdFacesetPicture(picture->id());
-    ui->widgetImageFaceset->updatePicture(picture, PictureKind::Facesets);
+    ui->widgetImageFaceset->updatePicture(picture);
 }

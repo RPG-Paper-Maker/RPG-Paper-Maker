@@ -1121,6 +1121,8 @@ const QString Translations::PER_SECOND = "per.second";
 const QString Translations::FLASH_SCREEN = "flash.screen";
 const QString Translations::TRANSITION_TIME = "transtion.time";
 const QString Translations::THIS_MAP = "this.map";
+const QString Translations::IMPORT_DLC_S = "import.dlc.s";
+const QString Translations::SET_DLC_S_PATH_FOLDER = "set.dlc.s.path.folder";
 
 // -------------------------------------------------------
 //

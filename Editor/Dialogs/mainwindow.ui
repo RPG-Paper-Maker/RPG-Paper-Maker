@@ -95,10 +95,12 @@
      <string>Options</string>
     </property>
     <addaction name="actionSet_BR_path_folder"/>
+    <addaction name="actionSet_DLC_s_path_folder"/>
     <addaction name="actionDebug_options"/>
     <addaction name="actionGeneral_options"/>
     <addaction name="actionChange_language"/>
     <addaction name="actionAuto_update"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuSpecials">
     <property name="title">
@@ -380,9 +382,6 @@
    <property name="text">
     <string>Set BR path folder...</string>
    </property>
-   <property name="shortcut">
-    <string>Shift+U</string>
-   </property>
   </action>
   <action name="actionAutotiles">
    <property name="enabled">
@@ -552,16 +551,10 @@
    <property name="text">
     <string>Debug options...</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+U</string>
-   </property>
   </action>
   <action name="actionGeneral_options">
    <property name="text">
     <string>General options...</string>
-   </property>
-   <property name="shortcut">
-    <string>U</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -664,6 +657,11 @@
    </property>
    <property name="shortcut">
     <string>7</string>
+   </property>
+  </action>
+  <action name="actionSet_DLC_s_path_folder">
+   <property name="text">
+    <string>Set DLC(s) path folder...</string>
    </property>
   </action>
  </widget>

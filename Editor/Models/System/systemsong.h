@@ -13,7 +13,7 @@
 #define SYSTEMSONG_H
 
 #include <QMetaType>
-#include "superlistitem.h"
+#include "systemresource.h"
 #include "songkind.h"
 
 // -------------------------------------------------------
@@ -24,29 +24,26 @@
 //
 // -------------------------------------------------------
 
-class SystemSong : public SuperListItem
+class SystemSong : public SystemResource
 {
 public:
     SystemSong();
-    SystemSong(int i, QString n, bool isBR);
+    SystemSong(int i, QString n, bool isBR, QString dlc = "", SongKind kind =
+        SongKind::None);
     virtual ~SystemSong();
-    bool isBR() const;
-    void setIsBR(bool b);
-    static QString getFolder(SongKind kind, bool isBR);
+    void setKind(SongKind kind);
+
+    static QString getFolder(SongKind kind, bool isBR = false, QString dlc = "");
     static QString getLocalFolder(SongKind kind);
     static QString getSongTitle(SongKind kind);
-    QString getPath(SongKind kind) const;
-    QString getLocalPath(SongKind kind) const;
 
+    virtual QString getPath() const;
+    virtual QString getLocalPath() const;
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);
-    virtual QList<QStandardItem*> getModelRow() const;
-
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject &json) const;
 
 protected:
-    bool m_isBR;
+    SongKind m_kind;
 };
 
 Q_DECLARE_METATYPE(SystemSong)

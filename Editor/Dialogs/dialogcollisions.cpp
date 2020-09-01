@@ -88,8 +88,10 @@ void DialogCollisions::updateTileset(SystemTileset* tileset) {
 void DialogCollisions::initializeCharacters() {
 
     // Initialize name & pictures
-    ui->panelSuperListCharacters->list()->initializeNewItemInstance(
-                new SystemPicture);
+    SystemPicture *picture;
+    picture = new SystemPicture;
+    picture->setKind(PictureKind::Characters);
+    ui->panelSuperListCharacters->list()->initializeNewItemInstance(picture);
     ui->panelSuperListCharacters->list()->setAreNegIDsEnabled(false);
     ui->panelSuperListCharacters->initializeModel(RPM::get()->project()
                                               ->picturesDatas()
@@ -207,7 +209,7 @@ void DialogCollisions::updateMountain(SystemMountain *mountain) {
 
     // Picture management
     picture = mountain->picture();
-    ui->widgetShowPicture->updatePicture(picture, PictureKind::Mountains);
+    ui->widgetShowPicture->updatePicture(picture);
 
     // Collisions
     ui->comboBoxCollisionMountains->setCurrentIndex(static_cast<int>(mountain

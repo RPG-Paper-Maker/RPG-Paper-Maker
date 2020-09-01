@@ -148,6 +148,8 @@ const QString RPM::PATH_SCRIPTS = Common::pathCombine(PATH_DATAS,
     "scripts" + EXTENSION_JSON);
 const QString RPM::PATH_KEYBOARD = Common::pathCombine(PATH_DATAS,
     "keyBoard" + EXTENSION_JSON);
+const QString RPM::PATH_DLCS_DATAS = Common::pathCombine(PATH_DATAS,
+    "dlcs" + EXTENSION_JSON);
 const QString RPM::PATH_PICTURES_DATAS = Common::pathCombine(PATH_DATAS,
     "pictures" + EXTENSION_JSON);
 const QString RPM::PATH_VIDEOS_DATAS = Common::pathCombine(PATH_DATAS,
@@ -233,6 +235,8 @@ const QString RPM::PATH_TEXTURE_MISSING = ":/textures/Ressources/missing.png";
 const QString RPM::PATH_MAIN = Common::pathCombine(PATH_APP, FILE_MAIN);
 const QString RPM::PATH_INDEX = Common::pathCombine(PATH_APP, FILE_INDEX);
 const QString RPM::PATH_PACKAGE = Common::pathCombine(PATH_APP, FILE_PACKAGE);
+const QString RPM::PATH_DLCS = Common::pathCombine(FOLDER_CONTENT, "DLCs");
+const QString RPM::PATH_ICON_GREEN = ":/icons/Ressources/point_g.png";
 
 // INTEGERS
 const int RPM::PORTION_SIZE = 16;

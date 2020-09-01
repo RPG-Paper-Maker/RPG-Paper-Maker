@@ -24,8 +24,7 @@ void Map::loadTextures() {
 
     // Tileset
     QImage imageTileset(1, 1, QImage::Format_ARGB32);
-    QString path = m_mapProperties->tileset()->picture()->getPath(PictureKind
-        ::Tilesets);
+    QString path = m_mapProperties->tileset()->picture()->getPath();
     if (!path.isEmpty()) {
         imageTileset = QImage(path);
     } else {
@@ -173,7 +172,7 @@ bool Map::loadPicture(SystemPicture* picture, PictureKind kind, QImage& refImage
 {
     QImage image(1, 1, QImage::Format_ARGB32);
     refImage = image;
-    QString path = picture->getPath(kind);
+    QString path = picture->getPath();
 
     if (path.isEmpty()) {
         image.fill(QColor(0, 0, 0, 0));
@@ -238,7 +237,7 @@ TextureSeveral* Map::loadPictureAutotile(
         QImage& newImage, SystemPicture* picture, int& offset, int id)
 {
     QImage image(1, 1, QImage::Format_ARGB32);
-    QString path = picture->getPath(PictureKind::Autotiles);
+    QString path = picture->getPath();
 
     if (path.isEmpty())
         image.fill(QColor(0, 0, 0, 0));
@@ -441,7 +440,7 @@ TextureSeveral * Map::loadPictureMountain(QPainter& painter, TextureSeveral
     QString path;
 
     image = QImage(1, 1, QImage::Format_ARGB32);
-    path = picture->getPath(PictureKind::Mountains);
+    path = picture->getPath();
 
     if (path.isEmpty()) {
         image.fill(QColor(0, 0, 0, 0));

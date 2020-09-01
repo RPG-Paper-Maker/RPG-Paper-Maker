@@ -26,7 +26,8 @@ enum class CustomShapeKind {
     None,
     OBJ,
     MTL,
-    Collisions
+    Collisions,
+    Last
 };
 
 inline uint qHash(CustomShapeKind pos)

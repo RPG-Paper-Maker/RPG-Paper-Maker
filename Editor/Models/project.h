@@ -90,6 +90,7 @@ public:
     void readTilesetsDatas();
     void readCommonEvents();
     void readTitleScreenGameOver();
+    void readDlcs();
     void write(QString path);
     void writeAll();
     void writeGameDatas();
@@ -107,6 +108,7 @@ public:
     void writeTilesetsDatas();
     void writeCommonEvents();
     void writeTitleScreenGameOver();
+    void writeDlcs();
     void saveCurrentMap();
 
     QString createRPMFile();

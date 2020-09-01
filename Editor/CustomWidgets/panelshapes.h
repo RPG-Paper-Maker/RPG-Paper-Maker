@@ -51,7 +51,7 @@ private:
     void showShapes(bool b);
     void updateShapeItem(QStandardItem *item);
     void loadAvailableContent(int row = -1);
-    void loadContentFromFolder(QString path, bool isBR);
+    void loadContentFromFolder(QString path, bool isBR = false, QString dlc = "");
     void deleteContent(QString path);
     void moveContent();
     void updateShape();
@@ -68,6 +68,7 @@ private slots:
     void on_pushButtonAdd_clicked();
     void deletingContent(SuperListItem *super, int row);
     void on_treeViewAvailableContentDoubleClicked(QModelIndex);
+    void on_pushButtonDLC_clicked();
 };
 
 #endif // PANELSHAPES_H

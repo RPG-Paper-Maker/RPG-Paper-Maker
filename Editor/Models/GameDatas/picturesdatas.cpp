@@ -20,7 +20,7 @@
 // -------------------------------------------------------
 
 PicturesDatas::PicturesDatas() :
-    m_missingPicture(new SystemPicture(-2, "picture_not_found", true, true))
+    m_missingPicture(new SystemPicture(-2, "picture_not_found", true, "", true))
 {
 
 }
@@ -154,6 +154,7 @@ void PicturesDatas::setDefaultCharacters(QList<QString>& names) {
 
     // Insert tileset
     picture = new SystemPicture;
+    picture->setKind(PictureKind::Characters);
     picture->setDefaultCharacterTileset();
     m_models[PictureKind::Characters]->insertRow(1, picture->getModelRow());
 }
@@ -211,13 +212,17 @@ void PicturesDatas::setDefaultSkyBoxes(QList<QString>& names)
 // -------------------------------------------------------
 
 void PicturesDatas::fillList(QList<SystemPicture*> &pictures,
-                             QList<QString>& names)
+                             QList<QString>& names, PictureKind kind)
 {
     int i;
 
     pictures << new SystemPicture;
+    pictures.at(0)->setKind(kind);
     for (i = 0; i < names.size() ; i++)
-        pictures << new SystemPicture(i + 1, names.at(i) + ".png", true);
+    {
+        pictures << new SystemPicture(i + 1, names.at(i) + ".png", true, "",
+            false, kind);
+    }
 }
 
 // -------------------------------------------------------
@@ -226,7 +231,7 @@ void PicturesDatas::setDefaultPictures(QList<QString> &names,
                                        PictureKind kind)
 {
     QList<SystemPicture*> pictures;
-    fillList(pictures, names);
+    fillList(pictures, names, kind);
 
     QStandardItemModel* model = new QStandardItemModel;
     QList<QStandardItem*> row;
@@ -252,6 +257,7 @@ void PicturesDatas::read(const QJsonObject &json){
     QJsonArray jsonArray;
     QStandardItemModel* model;
     QList<QStandardItem*> row;
+    PictureKind k;
 
     // Clear
     QHash<PictureKind, QStandardItemModel*>::iterator i;
@@ -263,15 +269,17 @@ void PicturesDatas::read(const QJsonObject &json){
         jsonObj = jsonList.at(i).toObject();
         jsonArray = jsonObj["v"].toArray();
         model = new QStandardItemModel;
+        k = static_cast<PictureKind>(jsonObj["k"].toInt());
 
         for (int j = 0; j < jsonArray.size(); j++){
             SystemPicture* super = new SystemPicture;
             super->read(jsonArray[j].toObject());
+            super->setKind(k);
             row = super->getModelRow();
             model->appendRow(row);
         }
 
-        m_models[static_cast<PictureKind>(jsonObj["k"].toInt())] = model;
+        m_models[k] = model;
     }
 }
 

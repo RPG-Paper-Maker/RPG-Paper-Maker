@@ -13,8 +13,6 @@
 #include "rpm.h"
 #include "common.h"
 
-const QString SystemVideo::JSON_BR = "br";
-
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -27,9 +25,8 @@ SystemVideo::SystemVideo() :
 
 }
 
-SystemVideo::SystemVideo(int i, QString n, bool isBR) :
-    SuperListItem(i, n),
-    m_isBR(isBR)
+SystemVideo::SystemVideo(int i, QString n, bool isBR, QString dlc) :
+    SystemResource(i, n, isBR, dlc)
 {
 
 }
@@ -59,11 +56,9 @@ SystemVideo * SystemVideo::getByID(int id) {
 
 // -------------------------------------------------------
 
-QString SystemVideo::getFolder(bool isBR) {
-    QString folder = isBR ? RPM::get()->project()->gameDatas()->systemDatas()
-        ->pathBR() : RPM::get()->project()->pathCurrentProjectApp();
-
-    return Common::pathCombine(folder, getLocalFolder());
+QString SystemVideo::getFolder(bool isBR, QString dlc) {
+    return Common::pathCombine(SystemResource::getFolder(isBR, dlc),
+        SystemVideo::getLocalFolder());
 }
 
 // -------------------------------------------------------
@@ -79,7 +74,7 @@ QString SystemVideo::getPath() const {
         return "";
     }
 
-    QString folder = getFolder(m_isBR);
+    QString folder = getFolder(m_isBR, m_dlc);
 
     return Common::pathCombine(folder, name());
 }
@@ -102,56 +97,4 @@ SuperListItem * SystemVideo::createCopy() const {
     SystemVideo *super = new SystemVideo;
     super->setCopy(*this);
     return super;
-}
-
-// -------------------------------------------------------
-
-void SystemVideo::setCopy(const SuperListItem &super) {
-    const SystemVideo *video;
-
-    SuperListItem::setCopy(super);
-
-    video = reinterpret_cast<const SystemVideo *>(&super);
-    m_isBR = video->m_isBR;
-}
-
-// -------------------------------------------------------
-
-QList<QStandardItem *> SystemVideo::getModelRow() const {
-    QList<QStandardItem *> row = QList<QStandardItem *>();
-    QStandardItem *item = new QStandardItem;
-    QIcon icon = m_isBR ? QIcon(SuperListItem::pathIconBlue) : QIcon(
-        SuperListItem::pathIconRed);
-
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-
-    if (id() > 0) {
-        item->setIcon(icon);
-    }
-
-    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setText(toString());
-    row.append(item);
-
-    return row;
-}
-
-// -------------------------------------------------------
-//
-//  READ / WRITE
-//
-// -------------------------------------------------------
-
-void SystemVideo::read(const QJsonObject &json) {
-    SuperListItem::read(json);
-
-    m_isBR = json[JSON_BR].toBool();
-}
-
-// -------------------------------------------------------
-
-void SystemVideo::write(QJsonObject &json) const {
-    SuperListItem::write(json);
-
-    json[JSON_BR] = m_isBR;
 }

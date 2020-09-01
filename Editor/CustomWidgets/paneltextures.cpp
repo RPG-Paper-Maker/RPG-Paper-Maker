@@ -380,7 +380,7 @@ void PanelTextures::fillComboBox(SystemTileset *tileset, PictureKind kind) {
             (SuperListItem::getById(modelComplete->invisibleRootItem(), super
             ->id(), false));
         ui->comboBox->setItemIcon(i, QIcon(special == nullptr ? RPM
-            ::PATH_TEXTURE_MISSING : special->picture()->getPath(m_kind)));
+            ::PATH_TEXTURE_MISSING : special->picture()->getPath()));
     }
 
     // Select current ID
@@ -485,7 +485,7 @@ void PanelTextures::updateImageSpecial(SystemSpecialElement *special)
             (special));
         break;
     case PictureKind::Walls:
-        ui->widgetWallPreview->updatePicture(special->picture(), m_kind);
+        ui->widgetWallPreview->updatePicture(special->picture());
         break;
     default:
         break;

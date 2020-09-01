@@ -14,6 +14,7 @@
 #include <QFileDialog>
 #include "panelshapes.h"
 #include "ui_panelshapes.h"
+#include "dialogimportdlcs.h"
 #include "rpm.h"
 #include "common.h"
 
@@ -142,7 +143,7 @@ void PanelShapes::updateShapeItem(QStandardItem *item) {
         }
         if (m_shapeKind == CustomShapeKind::OBJ) {
             ui->widgetPreviewObject3D->show();
-            super->loadCustomObj(m_shapeKind);
+            super->loadCustomObj();
             ui->widgetPreviewObject3D->loadShape(super);
             ui->widgetPreviewObject3D->updateObject();
         }
@@ -165,8 +166,16 @@ void PanelShapes::loadAvailableContent(int row) {
     ui->treeViewAvailableContent->getModel()->clear();
 
     // Load content from folders
-    loadContentFromFolder(SystemCustomShape::getFolder(m_shapeKind, false), false);
+    loadContentFromFolder(SystemCustomShape::getFolder(m_shapeKind));
     loadContentFromFolder(SystemCustomShape::getFolder(m_shapeKind, true), true);
+    DlcsDatas *datas = RPM::get()->project()->gameDatas()->dlcsDatas();
+    QString dlc;
+    for (int i = 0, l = datas->dlcsCount(); i < l; i++)
+    {
+        dlc = datas->dlcAt(i);
+        loadContentFromFolder(SystemCustomShape::getFolder(m_shapeKind, false,
+            dlc), false, dlc);
+    }
 
     // Reselect index
     if (row != -1 && row != -2) {
@@ -178,16 +187,16 @@ void PanelShapes::loadAvailableContent(int row) {
 
 // -------------------------------------------------------
 
-void PanelShapes::loadContentFromFolder(QString path, bool isBR) {
+void PanelShapes::loadContentFromFolder(QString path, bool isBR,  QString dlc) {
     QDir dir(path);
     QStringList files = dir.entryList(QDir::Files);
-    QIcon icon = isBR ? QIcon(SuperListItem::pathIconBlue) :
-        QIcon(SuperListItem::pathIconRed);
+    QIcon icon = QIcon(isBR ? SuperListItem::pathIconBlue : (dlc.isEmpty() ?
+        SuperListItem::pathIconRed : RPM::PATH_ICON_GREEN));
     QStandardItem *item;
     SystemCustomShape *super;
 
     for (int i = 0; i < files.size(); i++) {
-        super = new SystemCustomShape(1, files.at(i), isBR);
+        super = new SystemCustomShape(1, files.at(i), isBR, dlc, m_shapeKind);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
         item->setIcon(icon);
@@ -233,6 +242,8 @@ void PanelShapes::translate()
     ui->checkBoxContent->setText(RPM::translate(Translations
         ::SHOW_AVAILABLE_CONTENT));
     ui->pushButtonRefresh->setText(RPM::translate(Translations::REFRESH));
+    ui->pushButtonDLC->setText(RPM::translate(Translations::IMPORT_DLC_S) + RPM
+        ::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------
@@ -306,8 +317,7 @@ void PanelShapes::on_pushButtonAdd_clicked() {
 // -------------------------------------------------------
 
 void PanelShapes::deletingContent(SuperListItem *super, int row) {
-    QString path = reinterpret_cast<SystemCustomShape *>(super)->getPath(
-        m_shapeKind);
+    QString path = reinterpret_cast<SystemCustomShape *>(super)->getPath();
 
     // If is BR, ask if sure action before
     if (reinterpret_cast<SystemCustomShape *>(super)->isBR()) {
@@ -332,4 +342,18 @@ void PanelShapes::deletingContent(SuperListItem *super, int row) {
 void PanelShapes::on_treeViewAvailableContentDoubleClicked(QModelIndex)
 {
     moveContent();
+}
+
+// -------------------------------------------------------
+
+void PanelShapes::on_pushButtonDLC_clicked()
+{
+    DialogImportDLCs dialog;
+    if (dialog.exec() == QDialog::Accepted) {
+        RPM::get()->project()->writeDlcs();
+        loadAvailableContent(0);
+    } else
+    {
+        RPM::get()->project()->readDlcs();
+    }
 }

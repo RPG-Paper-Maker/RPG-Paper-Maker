@@ -83,8 +83,7 @@ void WidgetAnimationTexture::updatePicture(int id) {
     m_idPicture = id;
     m_baseImage = QImage(reinterpret_cast<SystemPicture *>(SuperListItem
         ::getById(RPM::get()->project()->picturesDatas()->model(PictureKind
-        ::Animations)->invisibleRootItem(), m_idPicture))->getPath(PictureKind
-        ::Animations));
+        ::Animations)->invisibleRootItem(), m_idPicture))->getPath());
     m_image = m_baseImage.scaled(m_rows * MAX_SIZE, m_columns * MAX_SIZE);
     width = qMax(m_rows * m_columns * MAX_SIZE, this->parentWidget()->width());
     this->setGeometry(0, 0, width, MAX_SIZE);

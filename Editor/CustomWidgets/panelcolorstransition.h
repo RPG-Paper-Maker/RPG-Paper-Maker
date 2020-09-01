@@ -38,7 +38,7 @@ public:
     void initializePrimitives(SystemCommonObject *object, QStandardItemModel
         *parameters);
     void initialize(EventCommand *command, int &i);
-    EventCommand * getCommand(QVector<QString> &command) const;
+    void getCommand(QVector<QString> &command) const;
     void translate();
 
 protected:

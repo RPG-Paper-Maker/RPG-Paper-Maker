@@ -62,7 +62,7 @@ private:
     void showPictures(bool b);
     void updateImage(QStandardItem *item);
     void loadAvailableContent(int row = -1);
-    void loadContentFromFolder(QString path, bool isBR);
+    void loadContentFromFolder(QString path, bool isBR, QString dlc = "");
     void deleteContent(QString path);
     void moveContent();
     void updatePicture();
@@ -71,8 +71,6 @@ private:
 
 public slots:
     void showAvailableContent(bool b);
-
-private slots:
     void on_listIDsIndexChanged(QModelIndex index, QModelIndex);
     void on_listIndexChanged(QModelIndex index, QModelIndex);
     void on_pushButtonMove_clicked();
@@ -80,6 +78,7 @@ private slots:
     void on_pushButtonAdd_clicked();
     void deletingContent(SuperListItem *super, int row);
     void on_treeViewAvailableContentDoubleClicked(QModelIndex);
+    void on_pushButtonDLC_clicked();
 };
 
 #endif // PANELPICTUREPREVIEW_H

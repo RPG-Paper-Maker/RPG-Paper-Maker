@@ -15,7 +15,7 @@
 #include <QMetaType>
 #include <QVector3D>
 #include <QVector2D>
-#include "superlistitem.h"
+#include "systemresource.h"
 #include "customshapekind.h"
 
 // -------------------------------------------------------
@@ -26,21 +26,19 @@
 //
 // -------------------------------------------------------
 
-class SystemCustomShape : public SuperListItem
+class SystemCustomShape : public SystemResource
 {
 public:
-    static const QString JSON_BR;
     const static QString PARSE_VERTEX;
     const static QString PARSE_NORMAL;
     const static QString PARSE_TEXTURE;
     const static QString PARSE_FACE;
 
     SystemCustomShape();
-    SystemCustomShape(int i, QString n, bool isBR);
+    SystemCustomShape(int i, QString n, bool isBR, QString dlc = "",
+        CustomShapeKind kind = CustomShapeKind::None);
     virtual ~SystemCustomShape();
-
-    bool isBR() const;
-    void setIsBR(bool b);
+    void setKind(CustomShapeKind kind);
     QVector3D getVertexAt(int i) const;
     QVector2D getTextureAt(int i) const;
     QPair<int, int> getFace(int i) const;
@@ -49,24 +47,22 @@ public:
     QVector3D maxVertex() const;
 
     static SystemCustomShape * getByID(int id, CustomShapeKind kind);
-    static QString getFolder(CustomShapeKind kind, bool isBR);
+    static QString getFolder(CustomShapeKind kind, bool isBR = false, QString
+        dlc = "");
     static QString getLocalFolder(CustomShapeKind kind);
     static QString getShapeTitle(CustomShapeKind kind);
     static QString getShapeExtension(CustomShapeKind kind);
     static QString getShapeExtensionBrowse(CustomShapeKind kind);
 
-    QString getPath(CustomShapeKind kind) const;
-    QString getLocalPath(CustomShapeKind kind) const;
-    void loadCustomObj(CustomShapeKind kind);
+    void loadCustomObj();
 
+    virtual QString getPath() const;
+    virtual QString getLocalPath() const;
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);
-    virtual QList<QStandardItem*> getModelRow() const;
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject &json) const;
 
 protected:
-    bool m_isBR;
+    CustomShapeKind m_kind;
     QList<QVector3D> m_vertices;
     QList<QVector2D> m_textures;
     QList<QPair<int, int>> m_faces;

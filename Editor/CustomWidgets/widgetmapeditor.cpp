@@ -165,8 +165,7 @@ Map * WidgetMapEditor::loadMap(int idMap, QVector3D *position, QVector3D
         m_imageBackground = QImage(reinterpret_cast<SystemPicture *>(
             SuperListItem::getById(RPM::get()->project()->picturesDatas()->model
             (PictureKind::Pictures)->invisibleRootItem(), m_control.map()
-            ->mapProperties()->skyPictureID()->id()))->getPath(PictureKind
-            ::Pictures));
+            ->mapProperties()->skyPictureID()->id()))->getPath());
     }
 
     return map;

@@ -100,7 +100,7 @@ void PanelColorsTransition::initialize(EventCommand *command, int &i)
 
 // -------------------------------------------------------
 
-EventCommand * PanelColorsTransition::getCommand(QVector<QString> &command) const
+void PanelColorsTransition::getCommand(QVector<QString> &command) const
 {
     bool checked;
 

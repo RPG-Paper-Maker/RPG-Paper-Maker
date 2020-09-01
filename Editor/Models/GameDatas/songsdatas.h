@@ -36,7 +36,7 @@ public:
     void setModel(SongKind kind, QStandardItemModel* model);
     void setDefault();
     void fillList(QList<SystemSong*> &songs, QList<QString> &names,
-                  QString extension);
+                  QString extension, SongKind kind);
     void setDefaultSongs(QList<QString>& names, SongKind kind,
                          QString extension);
     void setDefaultMusics(QList<QString>& names);

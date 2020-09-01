@@ -69,6 +69,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemspeedfrequency.h \
     Dialogs/Systems/dialogsystemtitlecommand.h \
     Dialogs/dialogfirstlaunch.h \
+    Dialogs/dialogimportdlcs.h \
     Dialogs/dialogselectlanguage.h \
     Dialogs/dialogtilesettexture.h \
     Dialogs/dialogvideos.h \
@@ -98,6 +99,7 @@ HEADERS += \
     MapEditor/mountains.h \
     MapEditor/skybox.h \
     MapEditor/textureseveral.h \
+    Models/GameDatas/dlcsdatas.h \
     Models/GameDatas/videosdatas.h \
     Models/System/systemanimationframe.h \
     Models/System/systemanimationframeeffect.h \
@@ -110,6 +112,7 @@ HEADERS += \
     Models/System/systemmountain.h \
     Models/System/systemprimitive.h \
     Models/System/systemproperty.h \
+    Models/System/systemresource.h \
     Models/System/systemskybox.h \
     Models/System/systemspeedfrequency.h \
     Models/System/systemtitlecommand.h \
@@ -425,6 +428,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemspeedfrequency.cpp \
     Dialogs/Systems/dialogsystemtitlecommand.cpp \
     Dialogs/dialogfirstlaunch.cpp \
+    Dialogs/dialogimportdlcs.cpp \
     Dialogs/dialogselectlanguage.cpp \
     Dialogs/dialogtilesettexture.cpp \
     Dialogs/dialogvideos.cpp \
@@ -441,6 +445,7 @@ SOURCES += \
     MapEditor/mountains.cpp \
     MapEditor/skybox.cpp \
     MapEditor/textureseveral.cpp \
+    Models/GameDatas/dlcsdatas.cpp \
     Models/GameDatas/videosdatas.cpp \
     Models/System/systemanimationframe.cpp \
     Models/System/systemanimationframeeffect.cpp \
@@ -453,6 +458,7 @@ SOURCES += \
     Models/System/systemmountain.cpp \
     Models/System/systemprimitive.cpp \
     Models/System/systemproperty.cpp \
+    Models/System/systemresource.cpp \
     Models/System/systemskybox.cpp \
     Models/System/systemspeedfrequency.cpp \
     Models/System/systemtitlecommand.cpp \
@@ -738,6 +744,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemspeedfrequency.ui \
     Dialogs/Systems/dialogsystemtitlecommand.ui \
     Dialogs/dialogfirstlaunch.ui \
+    Dialogs/dialogimportdlcs.ui \
     Dialogs/dialogselectlanguage.ui \
     Dialogs/dialogtilesettexture.ui \
     Dialogs/dialogvideos.ui \

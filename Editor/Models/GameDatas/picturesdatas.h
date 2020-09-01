@@ -37,7 +37,8 @@ public:
     SystemPicture * missingPicture() const;
 
     void setDefault();
-    void fillList(QList<SystemPicture*> &pictures, QList<QString> &names);
+    void fillList(QList<SystemPicture*> &pictures, QList<QString> &names,
+        PictureKind kind);
     void setDefaultPictures(QList<QString>& names, PictureKind kind);
     void setDefaultBars(QList<QString>& names);
     void setDefaultFacesets(QList<QString>& names);

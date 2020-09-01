@@ -134,8 +134,8 @@ QImage Skybox::createSkyBoxImage(int id)
 {
     return QImage(reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM
         ::get()->project()->picturesDatas()->model(PictureKind::SkyBoxes)
-        ->invisibleRootItem(), id))->getPath(PictureKind::SkyBoxes))
-        .convertToFormat(QImage::Format_RGBA8888);
+        ->invisibleRootItem(), id))->getPath()).convertToFormat(QImage
+        ::Format_RGBA8888);
 }
 
 // -------------------------------------------------------

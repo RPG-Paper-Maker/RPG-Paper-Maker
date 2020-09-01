@@ -303,8 +303,7 @@ void WidgetTreeLocalMaps::updateTileset(){
                 break;
             default:
                 m_panelTextures->showTileset();
-                m_panelTextures->setTilesetImage(tileset->picture()->getPath(
-                    PictureKind::Tilesets));
+                m_panelTextures->setTilesetImage(tileset->picture()->getPath());
                 break;
             }
         }

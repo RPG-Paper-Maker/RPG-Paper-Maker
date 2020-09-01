@@ -16,6 +16,7 @@
 #include "ui_panelpicturepreview.h"
 #include "rpm.h"
 #include "common.h"
+#include "dialogimportdlcs.h"
 
 // -------------------------------------------------------
 //
@@ -176,12 +177,11 @@ void PanelPicturePreview::updateImage(QStandardItem *item) {
             } else if (m_picture->id() == 0) {
                 showPictureWidget(false);
                 ui->widgetTileset->setImage(RPM::get()->project()->currentMap(
-                    true)->mapProperties()->tileset()->picture()->getPath(
-                    PictureKind::Tilesets));
+                    true)->mapProperties()->tileset()->picture()->getPath());
             }
             else {
                 showPictureWidget(true);
-                ui->widgetPreview->setImage(m_picture->getPath(m_pictureKind));
+                ui->widgetPreview->setImage(m_picture->getPath());
             }
             ui->widgetPreview->repaint();
         }
@@ -205,8 +205,16 @@ void PanelPicturePreview::loadAvailableContent(int row) {
     ui->treeViewAvailableContent->getModel()->clear();
 
     // Load content from folders
-    loadContentFromFolder(SystemPicture::getFolder(m_pictureKind, false), false);
+    loadContentFromFolder(SystemPicture::getFolder(m_pictureKind), false);
     loadContentFromFolder(SystemPicture::getFolder(m_pictureKind, true), true);
+    DlcsDatas *datas = RPM::get()->project()->gameDatas()->dlcsDatas();
+    QString dlc;
+    for (int i = 0, l = datas->dlcsCount(); i < l; i++)
+    {
+        dlc = datas->dlcAt(i);
+        loadContentFromFolder(SystemPicture::getFolder(m_pictureKind, false, dlc
+            ), false, dlc);
+    }
 
     // Reselect index
     if (row != -1 && row != -2) {
@@ -218,16 +226,19 @@ void PanelPicturePreview::loadAvailableContent(int row) {
 
 // -------------------------------------------------------
 
-void PanelPicturePreview::loadContentFromFolder(QString path, bool isBR) {
+void PanelPicturePreview::loadContentFromFolder(QString path, bool isBR, QString
+    dlc)
+{
     QDir dir(path);
     QStringList files = dir.entryList(QDir::Files);
-    QIcon icon = isBR ? QIcon(SuperListItem::pathIconBlue) :
-        QIcon(SuperListItem::pathIconRed);
+    QIcon icon = QIcon(isBR ? SuperListItem::pathIconBlue : (dlc.isEmpty() ?
+        SuperListItem::pathIconRed : RPM::PATH_ICON_GREEN));
     QStandardItem *item;
     SystemPicture *super;
 
     for (int i = 0; i < files.size(); i++) {
-        super = new SystemPicture(1, files.at(i), isBR);
+        super = new SystemPicture(1, files.at(i), isBR, dlc, false,
+            m_pictureKind);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
         item->setIcon(icon);
@@ -281,6 +292,8 @@ void PanelPicturePreview::translate()
         ::SHOW_AVAILABLE_CONTENT));
     ui->groupBoxOptions->setTitle(RPM::translate(Translations::OPTIONS));
     ui->pushButtonRefresh->setText(RPM::translate(Translations::REFRESH));
+    ui->pushButtonDLC->setText(RPM::translate(Translations::IMPORT_DLC_S) + RPM
+        ::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------
@@ -353,7 +366,7 @@ void PanelPicturePreview::on_pushButtonAdd_clicked() {
 // -------------------------------------------------------
 
 void PanelPicturePreview::deletingContent(SuperListItem *super, int row) {
-    QString path = reinterpret_cast<SystemPicture *>(super)->getPath(m_pictureKind);
+    QString path = reinterpret_cast<SystemPicture *>(super)->getPath();
 
     // If is BR, ask if sure action before
     if (reinterpret_cast<SystemPicture *>(super)->isBR()) {
@@ -378,4 +391,18 @@ void PanelPicturePreview::deletingContent(SuperListItem *super, int row) {
 void PanelPicturePreview::on_treeViewAvailableContentDoubleClicked(QModelIndex)
 {
     moveContent();
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::on_pushButtonDLC_clicked()
+{
+    DialogImportDLCs dialog;
+    if (dialog.exec() == QDialog::Accepted) {
+        RPM::get()->project()->writeDlcs();
+        loadAvailableContent(0);
+    } else
+    {
+        RPM::get()->project()->readDlcs();
+    }
 }

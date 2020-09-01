@@ -18,7 +18,9 @@
         "Don't allow same state in one object",
         "Export function for BR assets",
         "Dynamic choose picture ID in command display / set / move / turn a picture",
-        "Website updater auto download self new version"
+        "Website updater auto download self new version",
+        "Add log.txt file when error ingame",
+        "Support shapes with faces vertices > 4"
     ],
 	"bugs": [
 		"Move square command go through mountains",
@@ -27,7 +29,8 @@
 		"Condition test with switches not working",
         "Editing animation picture is editing tileset picture",
         "Crash ingame save when depth > 0",
-        "Physijs error when removing scene"
+        "Physijs error when removing scene",
+        "Command move object: ignore if impossible not working"
 	],
     "finished": [
         2,
@@ -41,13 +44,16 @@
         0,
         2,
         0,
+        2,
         0,
         0,
         0,
         0,
+        2,
         0,
 
         0,
+        2,
         2,
         2,
         2,

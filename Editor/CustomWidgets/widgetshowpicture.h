@@ -35,7 +35,7 @@ public:
     void setRect(QRectF *rect);
     void setDrawBackground(bool b);
 
-    void updatePicture(SystemPicture* picture, PictureKind kind);
+    void updatePicture(SystemPicture* picture);
     void updatePictureByName(QString path);
     void updatePictureSize();
     void activateCanDrawRect();

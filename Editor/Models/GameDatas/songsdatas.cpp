@@ -61,13 +61,17 @@ void SongsDatas::setDefault(){
 // -------------------------------------------------------
 
 void SongsDatas::fillList(QList<SystemSong*> &songs, QList<QString>& names,
-                          QString extension)
+                          QString extension, SongKind kind)
 {
     int i;
 
     songs << new SystemSong;
+    songs.at(0)->setKind(kind);
     for (i = 0; i < names.size() ; i++)
-        songs << new SystemSong(i + 1, names.at(i) + "." + extension, true);
+    {
+        songs << new SystemSong(i + 1, names.at(i) + "." + extension, true, "",
+            kind);
+    }
 }
 
 // -------------------------------------------------------
@@ -76,7 +80,7 @@ void SongsDatas::setDefaultSongs(QList<QString> &names, SongKind kind,
                                  QString extension)
 {
     QList<SystemSong*> songs;
-    fillList(songs, names, extension);
+    fillList(songs, names, extension, kind);
 
     QStandardItemModel* model = new QStandardItemModel;
     QList<QStandardItem*> row;
@@ -140,15 +144,17 @@ void SongsDatas::read(const QJsonObject &json){
         jsonObj = jsonList.at(i).toObject();
         jsonArray = jsonObj["v"].toArray();
         model = new QStandardItemModel;
+        SongKind k = static_cast<SongKind>(jsonObj["k"].toInt());
 
         for (int j = 0; j < jsonArray.size(); j++){
             SystemSong* super = new SystemSong;
             super->read(jsonArray[j].toObject());
+            super->setKind(k);
             row = super->getModelRow();
             model->appendRow(row);
         }
 
-        m_models[static_cast<SongKind>(jsonObj["k"].toInt())] = model;
+        m_models[k] = model;
     }
 }
 

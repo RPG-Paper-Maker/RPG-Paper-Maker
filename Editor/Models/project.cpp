@@ -590,6 +590,13 @@ void Project::readTitleScreenGameOver() {
 
 // -------------------------------------------------------
 
+void Project::readDlcs()
+{
+    p_gameDatas->readDlcs(this->pathCurrentProjectApp());
+}
+
+// -------------------------------------------------------
+
 void Project::write(QString path) {
     setPathCurrentProject(path);
     this->writeAll();
@@ -708,6 +715,13 @@ void Project::writeCommonEvents() {
 
 void Project::writeTitleScreenGameOver() {
     p_gameDatas->writeTitleScreenGameOver(this->pathCurrentProjectApp());
+}
+
+// -------------------------------------------------------
+
+void Project::writeDlcs()
+{
+    p_gameDatas->writeDlcs(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------

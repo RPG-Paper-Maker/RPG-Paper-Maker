@@ -47,7 +47,7 @@ WidgetTilesetDirection::WidgetTilesetDirection(QWidget *parent) :
 void WidgetTilesetDirection::updateImage(SystemPicture* picture,
                                           PictureKind kind)
 {
-    QString path = picture->getPath(kind);
+    QString path = picture->getPath();
     m_image = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
         QImage();
     m_pictureID = picture->id();

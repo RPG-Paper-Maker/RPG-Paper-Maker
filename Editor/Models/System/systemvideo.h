@@ -13,7 +13,7 @@
 #define SYSTEMVIDEO_H
 
 #include <QMetaType>
-#include "superlistitem.h"
+#include "systemresource.h"
 
 // -------------------------------------------------------
 //
@@ -23,33 +23,23 @@
 //
 // -------------------------------------------------------
 
-class SystemVideo : public SuperListItem
+class SystemVideo : public SystemResource
 {
 public:
-    static const QString JSON_BR;
-
     SystemVideo();
-    SystemVideo(int i, QString n, bool isBR);
+    SystemVideo(int i, QString n, bool isBR, QString dlc = "");
     virtual ~SystemVideo();
 
     bool isBR() const;
     void setIsBR(bool b);
 
     static SystemVideo * getByID(int id);
-    static QString getFolder(bool isBR);
+    static QString getFolder(bool isBR = false, QString dlc = "");
     static QString getLocalFolder();
 
-    QString getPath() const;
-    QString getLocalPath() const;
-
+    virtual QString getPath() const;
+    virtual QString getLocalPath() const;
     virtual SuperListItem * createCopy() const;
-    virtual void setCopy(const SuperListItem &super);
-    virtual QList<QStandardItem*> getModelRow() const;
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject &json) const;
-
-protected:
-    bool m_isBR;
 };
 
 #endif // SYSTEMVIDEO_H

@@ -170,8 +170,7 @@ void PanelProject::on_menuBarPressed() {
         break;
     default:
         ui->panelTextures->showTileset();
-        ui->panelTextures->setTilesetImage(tileset->picture()->getPath(
-            PictureKind::Tilesets));
+        ui->panelTextures->setTilesetImage(tileset->picture()->getPath());
         break;
     }
 }

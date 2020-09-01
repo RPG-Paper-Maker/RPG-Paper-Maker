@@ -228,6 +228,7 @@ void MainWindow::enableAll(bool b){
     ui->actionPictures_manager->setEnabled(b);
     ui->actionVideos_manager->setEnabled(b);
     ui->actionSet_BR_path_folder->setEnabled(b);
+    ui->actionSet_DLC_s_path_folder->setEnabled(b);
     ui->actionDebug_options->setEnabled(b);
     ui->actionKeyboard_controls->setEnabled(b);
     ui->actionCollisions_manager->setEnabled(b);
@@ -271,6 +272,7 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionVideos_manager->setEnabled(true);
     ui->actionShapes_manager->setEnabled(true);
     ui->actionSet_BR_path_folder->setEnabled(true);
+    ui->actionSet_DLC_s_path_folder->setEnabled(true);
     ui->actionDebug_options->setEnabled(true);
     ui->actionKeyboard_controls->setEnabled(true);
     ui->actionCollisions_manager->setEnabled(true);
@@ -473,6 +475,8 @@ void MainWindow::translate() {
     ui->actionMountains->setIconText(RPM::translate(Translations::MOUNTAINS_TOOL));
     ui->actionSet_BR_path_folder->setText(RPM::translate(Translations
         ::SET_BR_PATH_FOLDER) + RPM::DOT_DOT_DOT);
+    ui->actionSet_DLC_s_path_folder->setText(RPM::translate(Translations
+        ::SET_DLC_S_PATH_FOLDER) + RPM::DOT_DOT_DOT);
     ui->actionDebug_options->setText(RPM::translate(Translations
         ::DEBUG_OPTIONS) + RPM::DOT_DOT_DOT);
     ui->actionGeneral_options->setText(RPM::translate(Translations
@@ -788,9 +792,24 @@ void MainWindow::on_actionSet_BR_path_folder_triggered(){
     DialogLocation dialog(project->gameDatas()->systemDatas()->pathBR(), Common
         ::pathCombine(QDir::currentPath(), RPM::PATH_BR));
 
-    if (openDialog(dialog) == QDialog::Accepted){
+    if (openDialog(dialog) == QDialog::Accepted)
+    {
         project->gameDatas()->systemDatas()->setPathBR(dialog.location());
         project->writeSystemDatas();
+    }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionSet_DLC_s_path_folder_triggered()
+{
+    DialogLocation dialog(project->gameDatas()->dlcsDatas()->path(), Common
+        ::pathCombine(QDir::currentPath(), RPM::PATH_DLCS));
+
+    if (openDialog(dialog) == QDialog::Accepted)
+    {
+        project->gameDatas()->dlcsDatas()->setPath(dialog.location());
+        project->writeDlcs();
     }
 }
 

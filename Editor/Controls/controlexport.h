@@ -40,7 +40,8 @@ public:
     QString generateWebStuff(QString path);
     QString generateDesktopStuff(QString path, OSKind os, int major, int minor);
     void removeMapsTemp(QString pathDatas);
-    void copyBRPictures(QString path);
+    void copyBRDLC(QString path);
+    void copyBRDLCKind(QString path, int kind, int start, int end);
 
 protected:
     Project *m_project;

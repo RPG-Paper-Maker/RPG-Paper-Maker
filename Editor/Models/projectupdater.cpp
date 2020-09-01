@@ -509,6 +509,7 @@ void ProjectUpdater::updateVersion_1_1_1() {
     // Tileset
     m_project->readPicturesDatas();
     picture = new SystemPicture;
+    picture->setKind(PictureKind::Characters);
     picture->setDefaultCharacterTileset();
     m_project->picturesDatas()->model(PictureKind::Characters)->insertRow(1,
         picture->getModelRow());
@@ -875,4 +876,8 @@ void ProjectUpdater::updateVersion_1_5_6_commands(QStandardItem *commands)
             command->setCommands(list);
         }
     }
+
+    // DLCs
+    m_project->gameDatas()->dlcsDatas()->setDefault();
+    m_project->writeDlcs();
 }

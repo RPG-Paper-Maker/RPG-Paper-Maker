@@ -28,6 +28,7 @@
 #include "animationsdatas.h"
 #include "statusdatas.h"
 #include "titlescreengameoverdatas.h"
+#include "dlcsdatas.h"
 
 // -------------------------------------------------------
 //
@@ -59,6 +60,7 @@ public:
     AnimationsDatas * animationsDatas() const;
     StatusDatas * statusDatas() const;
     TitleScreenGameOverDatas * titleScreenGameOverDatas() const;
+    DlcsDatas * dlcsDatas() const;
     bool isDatasRead() const;
 
     void setDefault();
@@ -80,6 +82,7 @@ public:
     void readStatus(QString path);
     void readTitleScreenGameOver(QString path);
     void readCommonEvents(QString path);
+    void readDlcs(QString path);
     void write(QString path);
     void writeTilesets(QString path);
     void writeSystem(QString path);
@@ -96,6 +99,7 @@ public:
     void writeStatus(QString path);
     void writeTitleScreenGameOver(QString path);
     void writeCommonEvents(QString path);
+    void writeDlcs(QString path);
 
 private:
     CommonEventsDatas* m_commonEventsDatas;
@@ -114,6 +118,7 @@ private:
     AnimationsDatas* m_animationsDatas;
     StatusDatas* m_statusDatas;
     TitleScreenGameOverDatas *m_titleScreenGameOverDatas;
+    DlcsDatas *m_dlcsDatas;
     bool m_isDatasRead;
 };
 

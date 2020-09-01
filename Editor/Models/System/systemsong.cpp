@@ -25,20 +25,22 @@ SystemSong::SystemSong() :
 
 }
 
-SystemSong::SystemSong(int i, QString n, bool isBR) :
-    SuperListItem(i,n),
-    m_isBR(isBR)
+SystemSong::SystemSong(int i, QString n, bool isBR, QString dlc, SongKind kind) :
+    SystemResource(i, n, isBR, dlc),
+    m_kind(kind)
 {
 
 }
 
-SystemSong::~SystemSong() {
+SystemSong::~SystemSong()
+{
 
 }
 
-bool SystemSong::isBR() const { return m_isBR; }
-
-void SystemSong::setIsBR(bool b) { m_isBR = b; }
+void SystemSong::setKind(SongKind kind)
+{
+    m_kind = kind;
+}
 
 // -------------------------------------------------------
 //
@@ -46,12 +48,10 @@ void SystemSong::setIsBR(bool b) { m_isBR = b; }
 //
 // -------------------------------------------------------
 
-QString SystemSong::getFolder(SongKind kind, bool isBR) {
-    QString folder = isBR ? RPM::get()->project()->gameDatas()->systemDatas()
-                            ->pathBR()
-                          : RPM::get()->project()->pathCurrentProjectApp();
-
-    return Common::pathCombine(folder, getLocalFolder(kind));
+QString SystemSong::getFolder(SongKind kind, bool isBR, QString dlc)
+{
+    return Common::pathCombine(SystemResource::getFolder(isBR, dlc),
+        SystemSong::getLocalFolder(kind));
 }
 
 // -------------------------------------------------------
@@ -90,19 +90,21 @@ QString SystemSong::getSongTitle(SongKind kind) {
 
 // -------------------------------------------------------
 
-QString SystemSong::getPath(SongKind kind) const{
+QString SystemSong::getPath() const
+{
     if (id() == -1)
         return "";
 
-    QString folder = getFolder(kind, m_isBR);
+    QString folder = getFolder(m_kind, m_isBR, m_dlc);
 
     return Common::pathCombine(folder, name());
 }
 
 // -------------------------------------------------------
 
-QString SystemSong::getLocalPath(SongKind kind) const{
-    QString folder = getLocalFolder(kind);
+QString SystemSong::getLocalPath() const
+{
+    QString folder = getLocalFolder(m_kind);
 
     return Common::pathCombine(folder, name());
 }
@@ -120,48 +122,8 @@ SuperListItem* SystemSong::createCopy() const{
 void SystemSong::setCopy(const SuperListItem &super) {
     const SystemSong *song;
 
-    SuperListItem::setCopy(super);
+    SystemResource::setCopy(super);
 
     song = reinterpret_cast<const SystemSong *>(&super);
-    m_isBR = song->m_isBR;
-}
-
-// -------------------------------------------------------
-
-QList<QStandardItem *> SystemSong::getModelRow() const{
-    QList<QStandardItem*> row = QList<QStandardItem*>();
-    QStandardItem* item = new QStandardItem;
-    QIcon icon = m_isBR ? QIcon(SuperListItem::pathIconBlue)
-                        : QIcon(SuperListItem::pathIconRed);
-
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-
-    if (id() != -1)
-        item->setIcon(icon);
-
-    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setText(toString());
-    row.append(item);
-
-    return row;
-}
-
-// -------------------------------------------------------
-//
-//  READ / WRITE
-//
-// -------------------------------------------------------
-
-void SystemSong::read(const QJsonObject &json){
-    SuperListItem::read(json);
-
-    m_isBR = json["br"].toBool();
-}
-
-// -------------------------------------------------------
-
-void SystemSong::write(QJsonObject &json) const{
-    SuperListItem::write(json);
-
-    json["br"] = m_isBR;
+    m_kind = song->m_kind;
 }

@@ -162,7 +162,7 @@ void PanelSpecialElements::update(SystemSpecialElement *sys) {
         ui->widgetPreviewObject3D->updateObject();
     }
     if (m_kind == PictureKind::Mountains) {
-        ui->widgetShowPicture->updatePicture(picture, PictureKind::Mountains);
+        ui->widgetShowPicture->updatePicture(picture);
     }
 }
 

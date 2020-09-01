@@ -130,9 +130,8 @@ void WidgetGraphics::paintEvent(QPaintEvent *event) {
     // Draw image
     if (m_state->graphicsKind() != MapEditorSubSelectionKind::None) {
         if (m_state->graphicsId() != -1) {
-            PictureKind kind = getPictureKind(true);
             SystemPicture* picture = getPicture(true);
-            QImage image(picture->getPath(kind));
+            QImage image(picture->getPath());
             float coef = RPM::coefReverseSquareSize();
             int x, y, newX, newY, width, height, newWidth, newHeight;
             QRect rect;

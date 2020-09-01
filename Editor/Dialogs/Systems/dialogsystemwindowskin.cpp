@@ -227,7 +227,7 @@ void DialogSystemWindowSkin::closeEvent(QCloseEvent *event) {
 
 void DialogSystemWindowSkin::on_pictureChanged(SystemPicture *picture) {
     m_windowSkin.setPictureID(picture->id());
-    ui->widgetShowPicture->updatePicture(picture, PictureKind::WindowSkins);
+    ui->widgetShowPicture->updatePicture(picture);
 }
 
 // -------------------------------------------------------

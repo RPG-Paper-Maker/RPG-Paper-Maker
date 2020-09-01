@@ -63,6 +63,6 @@ void WidgetIcon::translate()
 // -------------------------------------------------------
 
 void WidgetIcon::on_pictureChanged(SystemPicture *picture) {
-    ui->widgetShowPicture->updatePicture(picture, PictureKind::Icons);
+    ui->widgetShowPicture->updatePicture(picture);
     m_icon->setPictureID(picture->id());
 }

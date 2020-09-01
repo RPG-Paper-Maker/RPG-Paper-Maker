@@ -15,6 +15,7 @@
 #include <QGraphicsVideoItem>
 #include "panelvideos.h"
 #include "ui_panelvideos.h"
+#include "dialogimportdlcs.h"
 #include "rpm.h"
 #include "common.h"
 
@@ -157,8 +158,15 @@ void PanelVideos::loadAvailableContent(int row) {
     ui->treeViewAvailableContent->getModel()->clear();
 
     // Load content from folders
-    loadContentFromFolder(SystemVideo::getFolder(false), false);
+    loadContentFromFolder(SystemVideo::getFolder());
     loadContentFromFolder(SystemVideo::getFolder(true), true);
+    DlcsDatas *datas = RPM::get()->project()->gameDatas()->dlcsDatas();
+    QString dlc;
+    for (int i = 0, l = datas->dlcsCount(); i < l; i++)
+    {
+        dlc = datas->dlcAt(i);
+        loadContentFromFolder(SystemVideo::getFolder(false, dlc), false, dlc);
+    }
 
     // Reselect index
     if (row != -1 && row != -2) {
@@ -170,16 +178,16 @@ void PanelVideos::loadAvailableContent(int row) {
 
 // -------------------------------------------------------
 
-void PanelVideos::loadContentFromFolder(QString path, bool isBR) {
+void PanelVideos::loadContentFromFolder(QString path, bool isBR, QString dlc) {
     QDir dir(path);
     QStringList files = dir.entryList(QDir::Files);
-    QIcon icon = isBR ? QIcon(SuperListItem::pathIconBlue) : QIcon(
-        SuperListItem::pathIconRed);
+    QIcon icon = QIcon(isBR ? SuperListItem::pathIconBlue : (dlc.isEmpty() ?
+        SuperListItem::pathIconRed : RPM::PATH_ICON_GREEN));
     QStandardItem *item;
-    SystemSong *super;
+    SystemVideo *super;
 
     for (int i = 0; i < files.size(); i++) {
-        super = new SystemSong(1, files.at(i), isBR);
+        super = new SystemVideo(1, files.at(i), isBR, dlc);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
         item->setIcon(icon);
@@ -224,6 +232,8 @@ void PanelVideos::translate()
     ui->checkBoxContent->setText(RPM::translate(Translations
         ::SHOW_AVAILABLE_CONTENT));
     ui->pushButtonRefresh->setText(RPM::translate(Translations::REFRESH));
+    ui->pushButtonDLC->setText(RPM::translate(Translations::IMPORT_DLC_S) + RPM
+        ::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------
@@ -346,4 +356,18 @@ void PanelVideos::on_pushButtonStop_clicked() {
 void PanelVideos::on_pushButtonPause_clicked() {
     m_player->pause();
     ui->pushButtonPause->setEnabled(false);
+}
+
+// -------------------------------------------------------
+
+void PanelVideos::on_pushButtonDLC_clicked()
+{
+    DialogImportDLCs dialog;
+    if (dialog.exec() == QDialog::Accepted) {
+        RPM::get()->project()->writeDlcs();
+        loadAvailableContent(0);
+    } else
+    {
+        RPM::get()->project()->readDlcs();
+    }
 }

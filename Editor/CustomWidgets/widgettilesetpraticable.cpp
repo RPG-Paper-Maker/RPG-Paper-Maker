@@ -61,7 +61,7 @@ WidgetTilesetPraticable::~WidgetTilesetPraticable() {
 void WidgetTilesetPraticable::updateImage(SystemPicture* picture,
                                           PictureKind kind)
 {
-    QString path = picture->getPath(kind);
+    QString path = picture->getPath();
     m_baseImage = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
         QImage();
     updateImageGeneral(picture, kind);

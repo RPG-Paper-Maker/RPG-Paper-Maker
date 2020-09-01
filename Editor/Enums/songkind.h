@@ -27,7 +27,8 @@ enum class SongKind {
     Music,
     BackgroundSound,
     Sound,
-    MusicEffect
+    MusicEffect,
+    Last
 };
 
 inline uint qHash(SongKind pos)

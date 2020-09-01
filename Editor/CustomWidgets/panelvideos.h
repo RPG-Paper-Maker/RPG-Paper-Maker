@@ -52,7 +52,7 @@ private:
 
     void updateVideo(QStandardItem *item);
     void loadAvailableContent(int row = -1);
-    void loadContentFromFolder(QString path, bool isBR);
+    void loadContentFromFolder(QString path, bool isBR = false, QString dlc = "");
     void deleteContent(QString path);
     void moveContent();
     void updateVideos();
@@ -72,6 +72,7 @@ private slots:
     void on_pushButtonPlay_clicked();
     void on_pushButtonStop_clicked();
     void on_pushButtonPause_clicked();
+    void on_pushButtonDLC_clicked();
 };
 
 #endif // PANELVIDEOS_H

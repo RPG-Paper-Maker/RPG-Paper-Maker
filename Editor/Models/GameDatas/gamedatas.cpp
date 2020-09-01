@@ -36,6 +36,7 @@ GameDatas::GameDatas() :
     m_animationsDatas(new AnimationsDatas),
     m_statusDatas(new StatusDatas),
     m_titleScreenGameOverDatas(new TitleScreenGameOverDatas),
+    m_dlcsDatas(new DlcsDatas),
     m_isDatasRead(false)
 {
 
@@ -59,6 +60,7 @@ GameDatas::~GameDatas()
     delete m_animationsDatas;
     delete m_statusDatas;
     delete m_titleScreenGameOverDatas;
+    delete m_dlcsDatas;
 }
 
 CommonEventsDatas * GameDatas::commonEventsDatas() const {
@@ -125,6 +127,11 @@ TitleScreenGameOverDatas * GameDatas::titleScreenGameOverDatas() const {
     return m_titleScreenGameOverDatas;
 }
 
+DlcsDatas * GameDatas::dlcsDatas() const
+{
+    return m_dlcsDatas;
+}
+
 bool GameDatas::isDatasRead() const {
     return m_isDatasRead;
 }
@@ -143,6 +150,7 @@ void GameDatas::setDefault(){
     m_tilesetsDatas->setDefault();
     m_statusDatas->setDefault();
     m_titleScreenGameOverDatas->setDefault();
+    m_dlcsDatas->setDefault();
 }
 
 // -------------------------------------------------------
@@ -188,6 +196,7 @@ void GameDatas::read(QString path){
     readAnimations(path);
     readStatus(path);
     readTitleScreenGameOver(path);
+    readDlcs(path);
 
     m_isDatasRead = true;
 }
@@ -290,6 +299,13 @@ void GameDatas::readCommonEvents(QString path) {
 
 // -------------------------------------------------------
 
+void GameDatas::readDlcs(QString path)
+{
+    m_dlcsDatas->read(path);
+}
+
+// -------------------------------------------------------
+
 void GameDatas::write(QString path){
     writeCommonEvents(path);
     RPM::writeJSON(Common::pathCombine(path, RPM::PATH_VARIABLES),
@@ -308,6 +324,7 @@ void GameDatas::write(QString path){
     writeAnimations(path);
     writeStatus(path);
     writeTitleScreenGameOver(path);
+    writeDlcs(path);
 }
 
 // -------------------------------------------------------
@@ -405,4 +422,11 @@ void GameDatas::writeTitleScreenGameOver(QString path) {
 void GameDatas::writeCommonEvents(QString path) {
     RPM::writeJSON(Common::pathCombine(path, RPM::PATH_COMMON_EVENTS),
         *m_commonEventsDatas);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::writeDlcs(QString path)
+{
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_DLCS_DATAS), *m_dlcsDatas);
 }

@@ -66,9 +66,10 @@ void ShapesDatas::fillList(QList<SystemCustomShape *> &shapes, QList<QString>
     int i;
 
     shapes << new SystemCustomShape;
+    shapes.at(0)->setKind(kind);
     for (i = 0; i < names.size() ; i++) {
         shapes << new SystemCustomShape(i + 1, names.at(i) + SystemCustomShape
-            ::getShapeExtension(kind), true);
+            ::getShapeExtension(kind), true, "", kind);
     }
 }
 
@@ -139,7 +140,8 @@ void ShapesDatas::read(const QJsonObject &json){
         for (int j = 0; j < jsonArray.size(); j++) {
             SystemCustomShape *super = new SystemCustomShape;
             super->read(jsonArray[j].toObject());
-            super->loadCustomObj(kind);
+            super->setKind(kind);
+            super->loadCustomObj();
             row = super->getModelRow();
             model->appendRow(row);
         }
@@ -166,7 +168,7 @@ void ShapesDatas::write(QJsonObject &json) const {
             QJsonObject jsonObjPicture;
             SystemCustomShape *super = reinterpret_cast<SystemCustomShape *>(
                 model->item(j)->data().value<quintptr>());
-            super->loadCustomObj(kind);
+            super->loadCustomObj();
             super->write(jsonObjPicture);
             jsonArray.append(jsonObjPicture);
         }

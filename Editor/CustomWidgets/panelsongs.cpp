@@ -9,13 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#include "panelsongs.h"
-#include "ui_panelsongs.h"
-#include "rpm.h"
-#include "common.h"
 #include <QDirIterator>
 #include <QFileDialog>
 #include <QMessageBox>
+#include "panelsongs.h"
+#include "ui_panelsongs.h"
+#include "dialogimportdlcs.h"
+#include "rpm.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -313,7 +314,7 @@ void PanelSongs::updateSong(QStandardItem *item) {
         m_song = reinterpret_cast<SystemSong *>(item->data().value<qintptr>());
         if (m_song != nullptr) {
             if (m_song->id() != -1) {
-                QUrl path = QUrl::fromLocalFile(m_song->getPath(m_songKind));
+                QUrl path = QUrl::fromLocalFile(m_song->getPath());
                 switch (m_songKind) {
                 case SongKind::Music:
                     m_mediaPlayerMusicTemp->setMedia(path);
@@ -350,8 +351,16 @@ void PanelSongs::loadAvailableContent(int row) {
     ui->treeViewAvailableContent->getModel()->clear();
 
     // Load content from folders
-    loadContentFromFolder(SystemSong::getFolder(m_songKind, false), false);
+    loadContentFromFolder(SystemSong::getFolder(m_songKind));
     loadContentFromFolder(SystemSong::getFolder(m_songKind, true), true);
+    DlcsDatas *datas = RPM::get()->project()->gameDatas()->dlcsDatas();
+    QString dlc;
+    for (int i = 0, l = datas->dlcsCount(); i < l; i++)
+    {
+        dlc = datas->dlcAt(i);
+        loadContentFromFolder(SystemSong::getFolder(m_songKind, false, dlc
+            ), false, dlc);
+    }
 
     // Reselect index
     if (row != -1 && row != -2) {
@@ -363,16 +372,16 @@ void PanelSongs::loadAvailableContent(int row) {
 
 // -------------------------------------------------------
 
-void PanelSongs::loadContentFromFolder(QString path, bool isBR) {
+void PanelSongs::loadContentFromFolder(QString path, bool isBR, QString dlc) {
     QDir dir(path);
     QStringList files = dir.entryList(QDir::Files);
-    QIcon icon = isBR ? QIcon(SuperListItem::pathIconBlue) : QIcon(
-        SuperListItem::pathIconRed);
+    QIcon icon = QIcon(isBR ? SuperListItem::pathIconBlue : (dlc.isEmpty() ?
+        SuperListItem::pathIconRed : RPM::PATH_ICON_GREEN));
     QStandardItem *item;
     SystemSong *super;
 
     for (int i = 0; i < files.size(); i++) {
-        super = new SystemSong(1, files.at(i), isBR);
+        super = new SystemSong(1, files.at(i), isBR, dlc, m_songKind);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
         item->setIcon(icon);
@@ -462,6 +471,8 @@ void PanelSongs::translate()
     ui->checkBoxStart->setText(RPM::translate(Translations::START) + RPM::COLON);
     ui->groupBoxOptions->setTitle(RPM::translate(Translations::OPTIONS));
     ui->pushButtonRefresh->setText(RPM::translate(Translations::REFRESH));
+    ui->pushButtonDLC->setText(RPM::translate(Translations::IMPORT_DLC_S) + RPM
+        ::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------
@@ -487,7 +498,7 @@ void PanelSongs::play() {
         return;
 
     QMediaPlayer *temp = nullptr;
-    QUrl path = QUrl::fromLocalFile(m_song->getPath(m_songKind));
+    QUrl path = QUrl::fromLocalFile(m_song->getPath());
     int start = m_start[m_songKind];
     bool isStart = m_startBool[m_songKind];
     switch (m_songKind) {
@@ -661,7 +672,7 @@ void PanelSongs::on_pushButtonAdd_clicked() {
 // -------------------------------------------------------
 
 void PanelSongs::deletingContent(SuperListItem *super, int row) {
-    QString path = reinterpret_cast<SystemSong *>(super)->getPath(m_songKind);
+    QString path = reinterpret_cast<SystemSong *>(super)->getPath();
 
     // If is BR, ask if sure action before
     if (reinterpret_cast<SystemSong *>(super)->isBR()) {
@@ -813,4 +824,18 @@ void PanelSongs::positionSoundChanged(qint64 pos) {
 
 void PanelSongs::positionMusicEffectChanged(qint64 pos) {
     stopOnEnd(m_end[SongKind::MusicEffect], pos, m_mediaPlayerMusicEffect);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_pushButtonDLC_clicked()
+{
+    DialogImportDLCs dialog;
+    if (dialog.exec() == QDialog::Accepted) {
+        RPM::get()->project()->writeDlcs();
+        loadAvailableContent(0);
+    } else
+    {
+        RPM::get()->project()->readDlcs();
+    }
 }

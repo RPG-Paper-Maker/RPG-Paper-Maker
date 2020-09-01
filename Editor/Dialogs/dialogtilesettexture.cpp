@@ -30,8 +30,7 @@ DialogTilesetTexture::DialogTilesetTexture(int pictureID, QRect &rect, QWidget
     ui->widget->setIsResizable(false);
     ui->widget->setImage(reinterpret_cast<SystemPicture *>(SuperListItem
         ::getById(RPM::get()->project()->picturesDatas()->model(PictureKind
-        ::Tilesets)->invisibleRootItem(), pictureID))->getPath(PictureKind
-        ::Tilesets));
+        ::Tilesets)->invisibleRootItem(), pictureID))->getPath());
     ui->widget->setCurrentTexture(rect);
 
     this->translate();

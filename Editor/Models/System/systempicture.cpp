@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QDir>
 #include "systempicture.h"
 #include "rpm.h"
 #include "common.h"
@@ -25,9 +26,10 @@ SystemPicture::SystemPicture() :
 
 }
 
-SystemPicture::SystemPicture(int i, QString n, bool isBR, bool isMissing) :
-    SuperListItem(i,n),
-    m_isBR(isBR),
+SystemPicture::SystemPicture(int i, QString n, bool isBR, QString dlc, bool
+    isMissing, PictureKind kind) :
+    SystemResource(i, n, isBR, dlc),
+    m_kind(kind),
     m_repeatCollisions(false),
     m_isMissing(isMissing)
 {
@@ -42,9 +44,10 @@ SystemPicture::~SystemPicture() {
     }
 }
 
-bool SystemPicture::isBR() const { return m_isBR; }
-
-void SystemPicture::setIsBR(bool b) { m_isBR = b; }
+void SystemPicture::setKind(PictureKind k)
+{
+    m_kind = k;
+}
 
 QHash<QPoint, CollisionSquare*>* SystemPicture::collisions() {
     return &m_collisions;
@@ -54,11 +57,11 @@ bool SystemPicture::repeatCollisions() const {
     return m_repeatCollisions;
 }
 
-void SystemPicture::setRepeatCollisions(bool b, PictureKind kind) {
+void SystemPicture::setRepeatCollisions(bool b) {
     m_repeatCollisions = b;
 
     // Clear collisions
-    QImage image(this->getPath(kind));
+    QImage image(this->getPath());
     int xOffset = image.width() / RPM::get()->project()->gameDatas()
             ->systemDatas()->framesAnimation() / RPM::get()->getSquareSize();
     int yOffset = image.height() / 4 / RPM::get()->getSquareSize();
@@ -91,12 +94,10 @@ SystemPicture * SystemPicture::getByID(int id, PictureKind kind) {
 
 // -------------------------------------------------------
 
-QString SystemPicture::getFolder(PictureKind kind, bool isBR){
-    QString folder = isBR ? RPM::get()->project()->gameDatas()->systemDatas()
-                            ->pathBR()
-                          : RPM::get()->project()->pathCurrentProjectApp();
-
-    return Common::pathCombine(folder, getLocalFolder(kind));
+QString SystemPicture::getFolder(PictureKind kind, bool isBR, QString dlc)
+{
+    return Common::pathCombine(SystemResource::getFolder(isBR, dlc),
+        SystemPicture::getLocalFolder(kind));
 }
 
 // -------------------------------------------------------
@@ -171,7 +172,7 @@ PictureKind SystemPicture::subSelectionToPictureKind(MapEditorSubSelectionKind s
 
 // -------------------------------------------------------
 
-QString SystemPicture::getPath(PictureKind kind) const {
+QString SystemPicture::getPath() const {
     // If NONE, return empty path
     if (id() == -1) {
         return "";
@@ -179,15 +180,15 @@ QString SystemPicture::getPath(PictureKind kind) const {
         return RPM::PATH_TEXTURE_MISSING;
     }
 
-    QString folder = getFolder(kind, m_isBR);
+    QString folder = getFolder(m_kind, m_isBR, m_dlc);
 
     return Common::pathCombine(folder, name());
 }
 
 // -------------------------------------------------------
 
-QString SystemPicture::getLocalPath(PictureKind kind) const{
-    QString folder = getLocalFolder(kind);
+QString SystemPicture::getLocalPath() const{
+    QString folder = getLocalFolder(m_kind);
 
     return Common::pathCombine(folder, name());
 }
@@ -205,36 +206,15 @@ SuperListItem* SystemPicture::createCopy() const{
 void SystemPicture::setCopy(const SuperListItem &super) {
     const SystemPicture *picture;
 
-    SuperListItem::setCopy(super);
+    SystemResource::setCopy(super);
 
     picture = reinterpret_cast<const SystemPicture *>(&super);
-    m_isBR = picture->m_isBR;
+    m_kind = picture->m_kind;
     QHash<QPoint, CollisionSquare*>::const_iterator i;
     for (i = picture->m_collisions.begin(); i != picture->m_collisions.end(); i++) {
         m_collisions.insert(i.key(), i.value()->createCopy());
     }
     m_repeatCollisions = picture->m_repeatCollisions;
-}
-
-// -------------------------------------------------------
-
-QList<QStandardItem *> SystemPicture::getModelRow() const{
-    QList<QStandardItem*> row = QList<QStandardItem*>();
-    QStandardItem* item = new QStandardItem;
-    QIcon icon = m_isBR ? QIcon(SuperListItem::pathIconBlue)
-                        : QIcon(SuperListItem::pathIconRed);
-
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-
-    if (id() > 0) {
-        item->setIcon(icon);
-    }
-
-    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setText(toString());
-    row.append(item);
-
-    return row;
 }
 
 // -------------------------------------------------------
@@ -348,7 +328,7 @@ void SystemPicture::setDefaultCharacterTileset() {
 // -------------------------------------------------------
 
 void SystemPicture::getIcon(QIcon &icon) {
-    QPixmap pix(this->getPath(PictureKind::Icons));
+    QPixmap pix(this->getPath());
 
     icon = QIcon(pix);
 }
@@ -356,9 +336,7 @@ void SystemPicture::getIcon(QIcon &icon) {
 // -------------------------------------------------------
 
 void SystemPicture::read(const QJsonObject &json){
-    SuperListItem::read(json);
-
-    m_isBR = json["br"].toBool();
+    SystemResource::read(json);
 
     // Collisions
     QJsonArray tabCollisions = json["col"].toArray();
@@ -380,9 +358,7 @@ void SystemPicture::read(const QJsonObject &json){
 // -------------------------------------------------------
 
 void SystemPicture::write(QJsonObject &json) const{
-    SuperListItem::write(json);
-
-    json["br"] = m_isBR;
+    SystemResource::write(json);
 
     // Collisions
     QJsonArray tabCollisions;

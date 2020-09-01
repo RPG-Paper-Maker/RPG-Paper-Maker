@@ -79,7 +79,7 @@ private:
     void showSongs(bool b);
     void updateSong(QStandardItem *item);
     void loadAvailableContent(int row = -1);
-    void loadContentFromFolder(QString path, bool isBR);
+    void loadContentFromFolder(QString path, bool isBR = false, QString dlc = "");
     void deleteContent(QString path);
     void moveContent();
     void updateSongs();
@@ -122,6 +122,7 @@ private slots:
     void positionBackgroundSoundChanged(qint64 pos);
     void positionSoundChanged(qint64 pos);
     void positionMusicEffectChanged(qint64 pos);
+    void on_pushButtonDLC_clicked();
 };
 
 #endif // PANELSONGS_H
