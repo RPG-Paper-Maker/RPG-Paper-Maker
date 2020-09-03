@@ -243,30 +243,17 @@ void SystemCustomShape::loadCustomObj() {
             else if (fileLine.startsWith(PARSE_FACE)) {
                 lineList = fileLine.split(" ");
                 lineList.removeAll("");
-                l = lineList.size();
-
-                if (l == 4) {
-                    for (i = 1; i < l; i++) {
-                        arg = lineList[i].split("/");
-                        m_faces.append(QPair<int, int>(arg[0].toInt() - 1, arg[1]
-                            .toInt() - 1));
-                    }
-                } else if (l == 5) {
-                    arg1 = lineList[1].split("/");
-                    arg2 = lineList[2].split("/");
-                    arg3 = lineList[3].split("/");
-                    arg4 = lineList[4].split("/");
+                l = lineList.size() - 1;
+                arg1 = lineList[1].split("/");
+                for (i = 1; i < l - 1; i++)
+                {
+                    arg2 = lineList[1 + i].split("/");
+                    arg3 = lineList[2 + i].split("/");
                     m_faces.append(QPair<int, int>(arg1[0].toInt() - 1, arg1[1]
                         .toInt() - 1));
                     m_faces.append(QPair<int, int>(arg2[0].toInt() - 1, arg2[1]
                         .toInt() - 1));
                     m_faces.append(QPair<int, int>(arg3[0].toInt() - 1, arg3[1]
-                        .toInt() - 1));
-                    m_faces.append(QPair<int, int>(arg1[0].toInt() - 1, arg1[1]
-                        .toInt() - 1));
-                    m_faces.append(QPair<int, int>(arg3[0].toInt() - 1, arg3[1]
-                        .toInt() - 1));
-                    m_faces.append(QPair<int, int>(arg4[0].toInt() - 1, arg4[1]
                         .toInt() - 1));
                 }
             }

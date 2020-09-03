@@ -30,7 +30,8 @@
         "Editing animation picture is editing tileset picture",
         "Crash ingame save when depth > 0",
         "Physijs error when removing scene",
-        "Command move object: ignore if impossible not working"
+        "Command move object: ignore if impossible not working",
+        "Common reaction doesn't work in main menu"
 	],
     "finished": [
         2,
@@ -50,9 +51,10 @@
         0,
         0,
         2,
-        0,
+        2,
 
         0,
+        2,
         2,
         2,
         2,
