@@ -1102,5 +1102,6 @@
     "transtion.time": "Período de transição",
     "this.map": "Este mapa",
     "import.dlc.s": "Importar DLC (s)",
-    "set.dlc.s.path.folder": "Definir caminhos da pasta DLC (s)"
+    "set.dlc.s.path.folder": "Definir caminhos da pasta DLC (s)",
+    "cannot.duplicate.state": "Não é possível duplicar o estado"
 }

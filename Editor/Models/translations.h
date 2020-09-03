@@ -1135,6 +1135,7 @@ public:
     static const QString THIS_MAP;
     static const QString IMPORT_DLC_S;
     static const QString SET_DLC_S_PATH_FOLDER;
+    static const QString CANNOT_DUPLICATE_STATE;
 
     Translations();
     virtual ~Translations();

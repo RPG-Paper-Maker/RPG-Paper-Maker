@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QMessageBox>
 #include "dialogsystemstate.h"
 #include "ui_dialogsystemstate.h"
 #include "rpm.h"
@@ -71,6 +72,33 @@ void DialogSystemState::translate()
 //
 //  SLOTS
 //
+// -------------------------------------------------------
+
+void DialogSystemState::accept()
+{
+    int id = SuperListItem::getIdByIndex(RPM::get()->project()->gameDatas()
+        ->commonEventsDatas()->modelStates(), ui->comboBox->currentIndex());
+    if (RPM::get()->project()->currentObject() != nullptr)
+    {
+        SuperListItem *state;
+        QStandardItemModel *model = RPM::get()->project()->currentObject()
+            ->modelStates();
+        for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+        {
+            state = reinterpret_cast<SuperListItem *>(model->item(i)->data()
+                .value<quintptr>());
+            if (state != nullptr && state->id() == id)
+            {
+                QMessageBox::information(this, RPM::translate(Translations
+                    ::WARNING), RPM::translate(Translations
+                    ::CANNOT_DUPLICATE_STATE) + RPM::SPACE + state->toString());
+                return;
+            }
+        }
+    }
+    QDialog::accept();
+}
+
 // -------------------------------------------------------
 
 void DialogSystemState::on_comboBox_currentIndexChanged(int index) {

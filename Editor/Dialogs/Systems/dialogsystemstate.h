@@ -43,7 +43,8 @@ private:
     void initialize();
     void translate();
 
-private slots:
+public slots:
+    virtual void accept();
     void on_comboBox_currentIndexChanged(int index);
     void on_pushButtonStates_clicked();
 };

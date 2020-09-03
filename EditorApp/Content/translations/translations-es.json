@@ -1104,5 +1104,6 @@
     "transtion.time": "Tiempo de transición",
     "this.map": "Este mapa",
     "import.dlc.s": "Importar DLC (s)",
-    "set.dlc.s.path.folder": "Seleccionar fichero de rutas DLC (s)"
+    "set.dlc.s.path.folder": "Seleccionar fichero de rutas DLC (s)",
+    "cannot.duplicate.state": "No se puede duplicar el estado"
 }

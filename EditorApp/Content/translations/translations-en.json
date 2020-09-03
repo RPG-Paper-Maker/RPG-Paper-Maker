@@ -1102,5 +1102,6 @@
     "transtion.time": "Transition time",
     "this.map": "This map",
     "import.dlc.s": "Import DLC(s)",
-    "set.dlc.s.path.folder": "Set DLC(s) path folder"
+    "set.dlc.s.path.folder": "Set DLC(s) path folder",
+    "cannot.duplicate.state": "Cannot duplicate the state"
 }

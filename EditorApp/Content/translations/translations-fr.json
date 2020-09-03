@@ -1102,5 +1102,6 @@
     "transtion.time": "Temps de transition",
     "this.map": "Cette carte",
     "import.dlc.s": "Importer DLC(s)",
-    "set.dlc.s.path.folder": "Modifier le chemin du dossier DLC(s)"
+    "set.dlc.s.path.folder": "Modifier le chemin du dossier DLC(s)",
+    "cannot.duplicate.state": "Impossible de dupliquer l'état"
 }

@@ -1123,6 +1123,7 @@ const QString Translations::TRANSITION_TIME = "transtion.time";
 const QString Translations::THIS_MAP = "this.map";
 const QString Translations::IMPORT_DLC_S = "import.dlc.s";
 const QString Translations::SET_DLC_S_PATH_FOLDER = "set.dlc.s.path.folder";
+const QString Translations::CANNOT_DUPLICATE_STATE = "cannot.duplicate.state";
 
 // -------------------------------------------------------
 //
