@@ -36,10 +36,11 @@ public:
                                      SystemCommonObject *object = nullptr,
                                      QStandardItemModel* parameters = nullptr,
                                      bool idObjectFixed = false,
-                                     QWidget *parent = 0);
+                                     QWidget *parent = nullptr);
     virtual ~DialogCommandMoveObject();
     EventCommand* getCommand() const;
     void addMoveStepSquare(CommandMoveKind kind);
+    void addMove(QVector<QString> &commands);
 
 protected:
     virtual void initialize(EventCommand* command);
@@ -47,6 +48,9 @@ protected:
 private:
     Ui::DialogCommandMoveObject *ui;
     QStandardItemModel *m_modelObjects;
+    SystemCommonObject *m_object;
+    QStandardItemModel *m_parameters;
+    QStandardItemModel *m_properties;
 
     void translate();
 
@@ -64,6 +68,7 @@ private slots:
     void on_pushButtonStepSquareOppositeHero_clicked();
     void on_pushButtonStepSquareFront_clicked();
     void on_pushButtonStepSquareBack_clicked();
+    void on_pushButtonChangeGraphics_clicked();
 };
 
 #endif // DIALOGCOMMANDMOVEOBJECT_H

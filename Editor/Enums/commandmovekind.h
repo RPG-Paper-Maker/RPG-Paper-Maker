@@ -33,7 +33,8 @@ enum class CommandMoveKind {
     MoveHero,
     MoveOppositeHero,
     MoveFront,
-    MoveBack
+    MoveBack,
+    ChangeGraphics
 };
 
 #endif // COMMANDMOVEKIND_H

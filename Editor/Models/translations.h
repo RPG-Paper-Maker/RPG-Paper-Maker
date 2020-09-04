@@ -410,7 +410,7 @@ public:
     static const QString ONE_IN_FRONT;
     static const QString ONE_BACK;
     static const QString CHANGE_DIRECTION;
-    static const QString CHANGE_OBJECT_PROPERTIES;
+    static const QString CHANGE_OBJECT_OPTIONS;
     static const QString SELECT_SONG_ID;
     static const QString IMAGE_INDEX;
     static const QString USE_DYNAMIC;
@@ -1136,6 +1136,9 @@ public:
     static const QString IMPORT_DLC_S;
     static const QString SET_DLC_S_PATH_FOLDER;
     static const QString CANNOT_DUPLICATE_STATE;
+    static const QString PERMANENT;
+    static const QString CHANGE_GRAPHICS;
+    static const QString SELECT_PICTURE_ID;
 
     Translations();
     virtual ~Translations();

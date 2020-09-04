@@ -341,6 +341,37 @@ void PrimitiveValue::initializeCommandParameter(const EventCommand *command, int
 
 // -------------------------------------------------------
 
+void PrimitiveValue::initializeCommands(const QVector<QString> &command, int &i)
+{
+    m_kind = static_cast<PrimitiveValueKind>(command.at(i++).toInt());
+    switch (m_kind) {
+    case PrimitiveValueKind::Default:
+    case PrimitiveValueKind::Anything:
+    case PrimitiveValueKind::None:
+        break;
+    case PrimitiveValueKind::Number:
+    case PrimitiveValueKind::Variable:
+    case PrimitiveValueKind::Parameter:
+    case PrimitiveValueKind::Property:
+    case PrimitiveValueKind::DataBase:
+    case PrimitiveValueKind::KeyBoard:
+        m_numberValue = command.at(i++).toInt();
+        break;
+    case PrimitiveValueKind::Message:
+    case PrimitiveValueKind::Script:
+    case PrimitiveValueKind::Font:
+        m_messageValue = command.at(i++);
+        break;
+    case PrimitiveValueKind::Switch:
+        m_switchValue = command.at(i++) == RPM::TRUE_BOOL_STRING;
+        break;
+    case PrimitiveValueKind::NumberDouble:
+        m_numberDoubleValue = command.at(i++).toDouble();
+    }
+}
+
+// -------------------------------------------------------
+
 void PrimitiveValue::getCommandParameter(QVector<QString> &command) {
     command.append(QString::number(static_cast<int>(m_kind)));
     switch (m_kind) {

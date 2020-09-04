@@ -317,6 +317,7 @@ void DialogCommands::translate() {
         EventCommandKind::ChangeASkill));
     ui->pushButtonChangeName->setText(EventCommand::kindToString(
         EventCommandKind::ChangeName));
+
     ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
     ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));
     ui->groupBoxMedia->setTitle(RPM::translate(Translations::MEDIA));

@@ -455,23 +455,58 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>Change object properties:</string>
+                 <string>Change object options:</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBox_2">
+               <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1">
                 <item>
-                 <property name="text">
-                  <string>ON</string>
-                 </property>
+                 <widget class="QComboBox" name="comboBoxSwitch">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>25</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>25</height>
+                   </size>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>ON</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>OFF</string>
+                   </property>
+                  </item>
+                 </widget>
                 </item>
                 <item>
-                 <property name="text">
-                  <string>OFF</string>
-                 </property>
+                 <widget class="QCheckBox" name="checkBoxPermanent">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>25</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>25</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Permanent</string>
+                  </property>
+                 </widget>
                 </item>
-               </widget>
+               </layout>
               </item>
               <item>
                <widget class="QPushButton" name="pushButton_26">
@@ -544,9 +579,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_28">
+               <widget class="QPushButton" name="pushButtonChangeGraphics">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Change graphics...</string>

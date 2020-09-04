@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include "dialogpicturespreview.h"
 #include "dialogcommandmoveobject.h"
 #include "ui_dialogcommandmoveobject.h"
 #include "rpm.h"
@@ -21,13 +22,16 @@
 // -------------------------------------------------------
 
 DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
-                                                 SystemCommonObject *,
+                                                 SystemCommonObject *object,
                                                  QStandardItemModel *parameters,
                                                  bool idObjectFixed,
                                                  QWidget *parent) :
     DialogCommand(parent),
     ui(new Ui::DialogCommandMoveObject),
-    m_modelObjects(nullptr)
+    m_modelObjects(nullptr),
+    m_object(object),
+    m_parameters(parameters),
+    m_properties(nullptr)
 {
     ui->setupUi(this);
 
@@ -43,6 +47,10 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
         ui->horizontalSpacer->changeSize(0, 0);
     }
 
+    if (m_object != nullptr)
+    {
+        m_properties = m_object->modelProperties();
+    }
     if (RPM::isInConfig && !RPM::isInObjectConfig) {
         m_modelObjects = new QStandardItemModel;
         Map::setModelObjects(m_modelObjects);
@@ -50,8 +58,8 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
         m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
     }
     ui->widgetPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
-                                                             parameters,
-                                                             nullptr);
+                                                             m_parameters,
+                                                             m_properties);
 
     // Empty tree of move commands
     QStandardItemModel* model = new QStandardItemModel;
@@ -102,7 +110,7 @@ void DialogCommandMoveObject::translate()
     ui->labelStepSquareMoves->setText(RPM::translate(Translations
         ::STEP_SQUARE_MOVES) + RPM::COLON);
     ui->labelChangeObjectProperties->setText(RPM::translate(Translations
-        ::CHANGE_OBJECT_PROPERTIES) + RPM::COLON);
+        ::CHANGE_OBJECT_OPTIONS) + RPM::COLON);
     ui->checkBoxIgnore->setText(RPM::translate(Translations
         ::IGNORE_IF_IMPOSSIBLE));
     ui->checkBoxWaitEnd->setText(RPM::translate(Translations::WAIT_END));
@@ -134,6 +142,9 @@ void DialogCommandMoveObject::translate()
         ::ONE_TO_SOUTH_WEST));
     ui->pushButtonStepSquareOppositeHero->setText(RPM::translate(Translations
         ::ONE_OPPOSITE_TO_HERO));
+    ui->pushButtonChangeGraphics->setText(RPM::translate(Translations
+        ::CHANGE_GRAPHICS) + RPM::DOT_DOT_DOT);
+    ui->checkBoxPermanent->setText(RPM::translate(Translations::PERMANENT));
     ui->groupBoxMoves->setTitle(RPM::translate(Translations::MOVES));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
@@ -167,14 +178,18 @@ void DialogCommandMoveObject::initialize(EventCommand* command){
 // -------------------------------------------------------
 
 void DialogCommandMoveObject::addMoveStepSquare(CommandMoveKind kind){
-    QString k = QString::number((int) kind);
-    QString stepSquare = QString::number(ui->comboBoxStepSquare
-                                         ->currentIndex());
-    SystemCommandMove* move =
-            new SystemCommandMove(-1, "", QVector<QString>({k, stepSquare}));
-    QList<QStandardItem*> row =  move->getModelRow();
-    ui->treeView->getModel()->insertRow(ui->treeView->getSelected()->row(),
-                                        row);
+    ui->treeView->getModel()->insertRow(ui->treeView->getSelected()->row(), (new
+        SystemCommandMove(-1, "", QVector<QString>({QString::number(static_cast<
+        int>(kind)), QString::number(ui->comboBoxStepSquare->currentIndex())})))
+        ->getModelRow());
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::addMove(QVector<QString> &commands)
+{
+    ui->treeView->getModel()->insertRow(ui->treeView->getSelected()->row(), (new
+        SystemCommandMove(-1, "", commands))->getModelRow());
 }
 
 // -------------------------------------------------------
@@ -281,4 +296,45 @@ void DialogCommandMoveObject::on_pushButtonStepSquareFront_clicked() {
 
 void DialogCommandMoveObject::on_pushButtonStepSquareBack_clicked() {
     this->addMoveStepSquare(CommandMoveKind::MoveBack);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonChangeGraphics_clicked()
+{
+    SystemPicture picture(-1, "", false, "", false, PictureKind::Characters);
+    PrimitiveValue value(1);
+    DialogPicturesPreview dialog(&picture, PictureKind::Characters, false,
+        &value, m_object, m_parameters);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        QVector<QString> commands = QVector<QString>({QString::number(
+            static_cast<int>(CommandMoveKind::ChangeGraphics)), RPM
+            ::boolToString(ui->checkBoxPermanent->isChecked())});
+        if (dialog.isIDValue())
+        {
+            value.getCommandParameter(commands);
+        } else
+        {
+            PrimitiveValue valueFix(PrimitiveValueKind::Number, dialog.picture()
+                ->id());
+            valueFix.getCommandParameter(commands);
+        }
+        if (!dialog.isIDValue() && dialog.picture()->id() == 0)
+        {
+            QRect rect;
+            dialog.currentTexture(rect);
+            commands.append(QString::number(rect.x()));
+            commands.append(QString::number(rect.y()));
+            commands.append(QString::number(rect.width()));
+            commands.append(QString::number(rect.height()));
+        } else
+        {
+            commands.append(QString::number(dialog.indexX()));
+            commands.append(QString::number(dialog.indexY()));
+            commands.append("1");
+            commands.append("1");
+        }
+        this->addMove(commands);
+    }
 }

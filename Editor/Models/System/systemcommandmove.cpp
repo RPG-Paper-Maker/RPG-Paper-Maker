@@ -39,7 +39,8 @@ QString SystemCommandMove::toString() const{
                                                         .toInt());
     QString str = SuperListItem::beginningText;
 
-    switch (kind){
+    switch (kind)
+    {
     case CommandMoveKind::MoveNorth:
     case CommandMoveKind::MoveSouth:
     case CommandMoveKind::MoveWest:
@@ -53,6 +54,7 @@ QString SystemCommandMove::toString() const{
     case CommandMoveKind::MoveOppositeHero:
     case CommandMoveKind::MoveFront:
     case CommandMoveKind::MoveBack:
+    {
         QString stepSquare = m_command.at(i++) == "0" ? RPM::translate(
             Translations::SQUARE) : RPM::translate(Translations::STEP);
         QString dir;
@@ -83,11 +85,40 @@ QString SystemCommandMove::toString() const{
             dir = RPM::translate(Translations::FRONT).toLower(); break;
         case CommandMoveKind::MoveBack:
             dir = RPM::translate(Translations::BACK).toLower(); break;
+        default:
+            break;
         }
         str += RPM::translate(Translations::MOVE_1) + RPM::SPACE + stepSquare +
             RPM::SPACE + RPM::translate(Translations::TO).toLower() + RPM::SPACE
             + dir;
         break;
+    }
+    case CommandMoveKind::ChangeGraphics:
+    {
+        QString permanent;
+
+        if (RPM::stringToBool(m_command.at(i++)))
+        {
+            permanent = RPM::BRACKET_LEFT + RPM::translate(Translations
+                ::PERMANENT) + RPM::BRACKET_RIGHT;
+        }
+        PrimitiveValue value;
+        value.initializeCommands(m_command, i);
+        QString strValue;
+        if (value.kind() == PrimitiveValueKind::Number)
+        {
+            strValue = reinterpret_cast<SystemPicture *>(SuperListItem::getById(
+                RPM::get()->project()->picturesDatas()->model(PictureKind
+                ::Characters)->invisibleRootItem(), value.numberValue()))
+                ->toString();
+        } else
+        {
+            strValue = value.toString();
+        }
+        str += RPM::translate(Translations::CHANGE_GRAPHICS) + RPM::SPACE +
+            strValue + RPM::SPACE + permanent;
+        break;
+    }
     }
 
     return str;
@@ -106,7 +137,8 @@ void SystemCommandMove::initialize(const EventCommand *command, int& i){
                                                         .toInt());
 
     int j = 1;
-    switch (kind){
+    switch (kind)
+    {
     case CommandMoveKind::MoveNorth:
     case CommandMoveKind::MoveSouth:
     case CommandMoveKind::MoveWest:
@@ -120,6 +152,9 @@ void SystemCommandMove::initialize(const EventCommand *command, int& i){
     case CommandMoveKind::MoveOppositeHero:
     case CommandMoveKind::MoveFront:
     case CommandMoveKind::MoveBack:
+        break;
+    case CommandMoveKind::ChangeGraphics:
+        j = 7;
         break;
     }
 

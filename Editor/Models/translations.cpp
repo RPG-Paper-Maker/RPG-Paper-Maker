@@ -398,7 +398,7 @@ const QString Translations::ONE_OPPOSITE_TO_HERO = "1.opposite.to.hero";
 const QString Translations::ONE_IN_FRONT = "1.in.front";
 const QString Translations::ONE_BACK = "1.back";
 const QString Translations::CHANGE_DIRECTION = "change.direction";
-const QString Translations::CHANGE_OBJECT_PROPERTIES = "change.object.properties";
+const QString Translations::CHANGE_OBJECT_OPTIONS = "change.object.options";
 const QString Translations::SELECT_SONG_ID = "select.song.id";
 const QString Translations::IMAGE_INDEX = "image.index";
 const QString Translations::USE_DYNAMIC = "use.dynamic";
@@ -1124,6 +1124,9 @@ const QString Translations::THIS_MAP = "this.map";
 const QString Translations::IMPORT_DLC_S = "import.dlc.s";
 const QString Translations::SET_DLC_S_PATH_FOLDER = "set.dlc.s.path.folder";
 const QString Translations::CANNOT_DUPLICATE_STATE = "cannot.duplicate.state";
+const QString Translations::PERMANENT = "permanent";
+const QString Translations::CHANGE_GRAPHICS = "change.graphics";
+const QString Translations::SELECT_PICTURE_ID = "select.picture.id";
 
 // -------------------------------------------------------
 //

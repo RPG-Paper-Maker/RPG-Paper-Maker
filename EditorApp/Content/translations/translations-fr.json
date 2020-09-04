@@ -379,7 +379,7 @@
 	"1.in.front": "1 devant",
 	"1.back": "1 derrière",
 	"change.direction": "Changer de direction",
-	"change.object.properties": "Changer les propriétés d'objet",
+	"change.object.options": "Changer les options de l'objet",
 	"select.song.id": "Sélectionner une musique par ID",
 	"image.index": "Indice de l'image",
 	"use.dynamic": "Utiliser dynamiquement",
@@ -1103,5 +1103,8 @@
     "this.map": "Cette carte",
     "import.dlc.s": "Importer DLC(s)",
     "set.dlc.s.path.folder": "Modifier le chemin du dossier DLC(s)",
-    "cannot.duplicate.state": "Impossible de dupliquer l'état"
+    "cannot.duplicate.state": "Impossible de dupliquer l'état",
+    "permanent": "Permanent",
+    "change.graphics": "Changer l'apparence",
+    "select.picture.id": "Sélectionner une image par ID"
 }

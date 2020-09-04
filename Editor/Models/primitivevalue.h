@@ -67,6 +67,7 @@ public:
     bool isDefaultNumberDoubleValue() const;
     bool isDefaultMessageValue() const;
     void initializeCommandParameter(const EventCommand *command, int& i);
+    void initializeCommands(const QVector<QString> &command, int &i);
     void getCommandParameter(QVector<QString> &command);
     PrimitiveValue * createCopy() const;
     void setCopy(const PrimitiveValue &prim);

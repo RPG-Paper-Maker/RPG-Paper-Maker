@@ -20,12 +20,16 @@
 // -------------------------------------------------------
 
 DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
-                                             PictureKind kind,
-                                             QWidget *parent) :
+    PictureKind kind, bool isValueID, PrimitiveValue *valueID,
+    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogPicturesPreview),
     m_kind(kind),
-    m_initialPictureID(picture->id())
+    m_initialPictureID(picture->id()),
+    m_idValue(valueID),
+    m_object(object),
+    m_parameters(parameters),
+    m_properties(nullptr)
 {
     ui->setupUi(this);
 
@@ -34,6 +38,22 @@ DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
     ui->widget->changePicture(picture);
     ui->widget->showAvailableContent(RPM::get()->engineSettings()
         ->showAvailableContent());
+
+    if (m_object != nullptr)
+    {
+        m_properties = m_object->modelProperties();
+    }
+    if (m_idValue == nullptr)
+    {
+        ui->checkBoxPictureID->hide();
+        ui->panelPrimitiveValuePictureID->hide();
+    } else
+    {
+        ui->checkBoxPictureID->setChecked(isValueID);
+        m_idValue->setModelParameter(m_parameters);
+        m_idValue->setModelProperties(m_properties);
+        ui->panelPrimitiveValuePictureID->initializeNumberAndUpdate(m_idValue);
+    }
 
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
     connect(this, SIGNAL(rejected()), this, SLOT(on_rejected()));
@@ -47,8 +67,19 @@ DialogPicturesPreview::~DialogPicturesPreview()
     delete ui;
 }
 
-SystemPicture* DialogPicturesPreview::picture() const {
+SystemPicture * DialogPicturesPreview::picture() const
+{
     return ui->widget->picture();
+}
+
+PrimitiveValue * DialogPicturesPreview::idValue() const
+{
+    return m_idValue;
+}
+
+bool DialogPicturesPreview::isIDValue() const
+{
+    return ui->checkBoxPictureID->isChecked();
 }
 
 int DialogPicturesPreview::indexX() const {
@@ -91,6 +122,8 @@ void DialogPicturesPreview::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::SELECT_PICTURE) + RPM
         ::DOT_DOT_DOT);
+    ui->checkBoxPictureID->setText(RPM::translate(Translations
+        ::SELECT_PICTURE_ID) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -119,4 +152,11 @@ void DialogPicturesPreview::on_rejected(){
     ui->widget->setPicture(reinterpret_cast<SystemPicture *>(SuperListItem
         ::getById(RPM::get()->project()->picturesDatas()->model(m_kind)
         ->invisibleRootItem(), m_initialPictureID)));
+}
+
+// -------------------------------------------------------
+
+void DialogPicturesPreview::on_checkBoxPictureID_toggled(bool checked)
+{
+    ui->panelPrimitiveValuePictureID->setEnabled(checked);
 }

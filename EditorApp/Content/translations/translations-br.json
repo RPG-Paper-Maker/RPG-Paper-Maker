@@ -379,7 +379,7 @@
 	"1.in.front": "1 em frente",
 	"1.back": "1 pra trás",
 	"change.direction": "Alterar direção",
-	"change.object.properties": "Alterar propriedades do objeto",
+	"change.object.options": "Alterar opções do objeto",
 	"select.song.id": "Selecionar música por ID",
 	"image.index": "Índice de Imagem",
 	"use.dynamic": "Use dinâmico",
@@ -1103,5 +1103,8 @@
     "this.map": "Este mapa",
     "import.dlc.s": "Importar DLC (s)",
     "set.dlc.s.path.folder": "Definir caminhos da pasta DLC (s)",
-    "cannot.duplicate.state": "Não é possível duplicar o estado"
+    "cannot.duplicate.state": "Não é possível duplicar o estado",
+    "permanent": "Permanente",
+    "change.graphics": "Mudar a aparência",
+    "select.picture.id": "Selecionar imagem por ID"
 }

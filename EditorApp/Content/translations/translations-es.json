@@ -379,7 +379,7 @@
 	"1.in.front": "1 al frente",
 	"1.back": "1 atrás",
 	"change.direction": "Cambiar dirección",
-	"change.object.properties": "Cambiar propiedades de objeto",
+	"change.object.options": "Cambiar opciones de objeto",
 	"select.song.id": "Seleccionar sonido por ID",
 	"image.index": "Índice de imágenes",
 	"use.dynamic": "Utilizar dinámico",
@@ -1105,5 +1105,8 @@
     "this.map": "Este mapa",
     "import.dlc.s": "Importar DLC (s)",
     "set.dlc.s.path.folder": "Seleccionar fichero de rutas DLC (s)",
-    "cannot.duplicate.state": "No se puede duplicar el estado"
+    "cannot.duplicate.state": "No se puede duplicar el estado",
+    "permanent": "Permanente",
+    "change.graphics": "Cambiar la apariencia",
+    "select.picture.id": "Seleccionar imagen por ID"
 }

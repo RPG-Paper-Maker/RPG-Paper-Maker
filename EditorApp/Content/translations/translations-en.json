@@ -379,7 +379,7 @@
 	"1.in.front": "1 in front",
 	"1.back": "1 back",
 	"change.direction": "Change direction",
-	"change.object.properties": "Change object properties",
+	"change.object.options": "Change object options",
 	"select.song.id": "Select song by ID",
 	"image.index": "Image Index",
 	"use.dynamic": "Use dynamic",
@@ -1103,5 +1103,8 @@
     "this.map": "This map",
     "import.dlc.s": "Import DLC(s)",
     "set.dlc.s.path.folder": "Set DLC(s) path folder",
-    "cannot.duplicate.state": "Cannot duplicate the state"
+    "cannot.duplicate.state": "Cannot duplicate the state",
+    "permanent": "Permanent",
+    "change.graphics": "Change graphics",
+    "select.picture.id": "Select picture by ID"
 }

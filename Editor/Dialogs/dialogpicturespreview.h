@@ -16,6 +16,7 @@
 #include <QCloseEvent>
 #include "picturekind.h"
 #include "systempicture.h"
+#include "primitivevalue.h"
 
 // -------------------------------------------------------
 //
@@ -35,9 +36,13 @@ class DialogPicturesPreview : public QDialog
 
 public:
     explicit DialogPicturesPreview(SystemPicture* picture, PictureKind kind,
-                                   QWidget *parent = nullptr);
+        bool isValueID = false, PrimitiveValue *valueID = nullptr,
+        SystemCommonObject *object = nullptr, QStandardItemModel* parameters =
+        nullptr, QWidget *parent = nullptr);
     ~DialogPicturesPreview();
-    SystemPicture* picture() const;
+    SystemPicture * picture() const;
+    PrimitiveValue * idValue() const;
+    bool isIDValue() const;
     int indexX() const;
     void setIndexX(int i);
     int indexY() const;
@@ -54,12 +59,17 @@ private:
     Ui::DialogPicturesPreview *ui;
     PictureKind m_kind;
     int m_initialPictureID;
+    PrimitiveValue *m_idValue;
+    SystemCommonObject *m_object;
+    QStandardItemModel *m_parameters;
+    QStandardItemModel *m_properties;
 
     void translate();
 
-private slots:
+public slots:
     void on_accepted();
     void on_rejected();
+    void on_checkBoxPictureID_toggled(bool checked);
 
 signals:
     void dialogIsClosing();
