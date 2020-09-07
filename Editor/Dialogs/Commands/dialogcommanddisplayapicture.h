@@ -13,6 +13,7 @@
 #define DIALOGCOMMANDDISPLAYAPICTURE_H
 
 #include "dialogcommand.h"
+#include "primitivevalue.h"
 
 // -------------------------------------------------------
 //
@@ -41,7 +42,7 @@ public:
 protected:
     SystemCommonObject *m_object;
     QStandardItemModel *m_parameters;
-    SuperListItem *m_pictureID;
+    PrimitiveValue *m_valueID;
 
     void initializePrimitives();
 

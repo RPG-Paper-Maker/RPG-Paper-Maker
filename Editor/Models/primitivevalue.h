@@ -29,6 +29,8 @@
 class PrimitiveValue
 {
 public:
+    static const QString JSON_IS_ACTIVATED;
+
     PrimitiveValue();
     PrimitiveValue(int n);
     PrimitiveValue(double n);
@@ -48,6 +50,8 @@ public:
     void setMessageValue(QString m);
     bool switchValue() const;
     void setSwitchValue(bool s);
+    bool isActivated() const;
+    void setIsActivated(bool ia);
     QStandardItemModel* modelParameter() const;
     void setModelParameter(QStandardItemModel* model);
     QStandardItemModel* modelProperties() const;
@@ -66,9 +70,11 @@ public:
     bool isDefaultNumberValue() const;
     bool isDefaultNumberDoubleValue() const;
     bool isDefaultMessageValue() const;
-    void initializeCommandParameter(const EventCommand *command, int& i);
-    void initializeCommands(const QVector<QString> &command, int &i);
-    void getCommandParameter(QVector<QString> &command);
+    void initializeCommandParameter(const EventCommand *command, int& i, bool
+        active = false);
+    void initializeCommands(const QVector<QString> &command, int &i, bool active
+        = false);
+    void getCommandParameter(QVector<QString> &command, bool active = false);
     PrimitiveValue * createCopy() const;
     void setCopy(const PrimitiveValue &prim);
     void read(const QJsonObject &json);
@@ -80,6 +86,7 @@ protected:
     double m_numberDoubleValue;
     QString m_messageValue;
     bool m_switchValue;
+    bool m_isActivated;
     QStandardItemModel* m_modelParameter;
     QStandardItemModel* m_modelProperties;
     QStandardItemModel* m_modelDataBase;

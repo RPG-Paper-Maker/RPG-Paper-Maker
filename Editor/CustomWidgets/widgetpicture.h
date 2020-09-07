@@ -15,6 +15,7 @@
 #include <QWidget>
 #include <QListWidget>
 #include "systempicture.h"
+#include "primitivevalue.h"
 
 // -------------------------------------------------------
 //
@@ -41,6 +42,8 @@ public:
     void setPicture(SystemPicture* picture);
     void initialize(int i = 1);
     void initializeSuper(SuperListItem *super);
+    void initializePrimitive(PrimitiveValue *value, SystemCommonObject *object =
+        nullptr, QStandardItemModel *parameters = nullptr);
     void openDialog();
 
 private:
@@ -48,6 +51,9 @@ private:
     PictureKind m_kind;
     int m_picture;
     SuperListItem *m_pictureID;
+    PrimitiveValue *m_valueID;
+    SystemCommonObject *m_object;
+    QStandardItemModel *m_parameters;
 
 private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem*);

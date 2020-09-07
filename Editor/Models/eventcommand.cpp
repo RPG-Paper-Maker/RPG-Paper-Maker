@@ -365,7 +365,7 @@ QString EventCommand::strDataBaseId(int &i, SystemCommonObject *object,
 // -------------------------------------------------------
 
 QString EventCommand::strProperty(int &i, SystemCommonObject *object,
-    QStandardItemModel *parameters) const
+    QStandardItemModel *parameters, bool active) const
 {
     SuperListItem *super;
     PrimitiveValueKind kind;
@@ -373,6 +373,10 @@ QString EventCommand::strProperty(int &i, SystemCommonObject *object,
 
     kind = static_cast<PrimitiveValueKind>(m_listCommand.at(i++).toInt());
     value = m_listCommand.at(i++);
+    if (active)
+    {
+        i++;
+    }
     switch (kind){
     case PrimitiveValueKind::None:
         return RPM::translate(Translations::NONE);
@@ -1601,7 +1605,7 @@ QString EventCommand::strDisplayAPicture(SystemCommonObject *object,
     int i;
 
     i = 0;
-    id = m_listCommand.at(i++);
+    id = this->strProperty(i, object, parameters, true);
     index = this->strProperty(i, object, parameters);
     origin = m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING ? RPM::translate(
         Translations::CENTER) : RPM::translate(Translations::TOP_LEFT);
@@ -1637,7 +1641,7 @@ QString EventCommand::strSetMoveTurnAPicture(SystemCommonObject *object,
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
         options += "\n    " + RPM::translate(Translations::IMAGE_ID) + RPM
-            ::COLON + RPM::SPACE + m_listCommand.at(i++);
+            ::COLON + RPM::SPACE + this->strProperty(i, object, parameters, true);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {

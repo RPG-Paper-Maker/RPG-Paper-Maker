@@ -874,6 +874,21 @@ void ProjectUpdater::updateVersion_1_5_6_commands(QStandardItem *commands)
             list.insert(1, QString::number(static_cast<int>(PrimitiveValueKind
                 ::DataBase)));
             command->setCommands(list);
+        } else if (command->kind() == EventCommandKind::DisplayAPicture)
+        {
+            list.insert(0, QString::number(static_cast<int>(PrimitiveValueKind
+                ::Number)));
+            list.insert(2, RPM::boolToString(false));
+            command->setCommands(list);
+        } else if (command->kind() == EventCommandKind::SetMoveTurnAPicture)
+        {
+            if (RPM::stringToBool(list.at(2)))
+            {
+                list.insert(3, QString::number(static_cast<int>(
+                    PrimitiveValueKind::Number)));
+                list.insert(5, RPM::boolToString(false));
+            }
+            command->setCommands(list);
         }
     }
 

@@ -12,6 +12,8 @@
 #include "primitivevalue.h"
 #include "rpm.h"
 
+const QString PrimitiveValue::JSON_IS_ACTIVATED = "ia";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -24,6 +26,7 @@ PrimitiveValue::PrimitiveValue() :
     m_numberDoubleValue(0),
     m_messageValue(""),
     m_switchValue(true),
+    m_isActivated(false),
     m_modelParameter(nullptr),
     m_modelProperties(nullptr),
     m_modelDataBase(nullptr)
@@ -115,6 +118,16 @@ bool PrimitiveValue::switchValue() const {
 
 void PrimitiveValue::setSwitchValue(bool s) {
     m_switchValue = s;
+}
+
+bool PrimitiveValue::isActivated() const
+{
+    return m_isActivated;
+}
+
+void PrimitiveValue::setIsActivated(bool ia)
+{
+    m_isActivated = ia;
 }
 
 QStandardItemModel * PrimitiveValue::modelParameter() const {
@@ -309,7 +322,7 @@ bool PrimitiveValue::isDefaultMessageValue() const {
 // -------------------------------------------------------
 
 void PrimitiveValue::initializeCommandParameter(const EventCommand *command, int
-    &i)
+    &i, bool active)
 {
     m_kind = static_cast<PrimitiveValueKind>(command->valueCommandAt(i++)
         .toInt());
@@ -337,11 +350,16 @@ void PrimitiveValue::initializeCommandParameter(const EventCommand *command, int
     case PrimitiveValueKind::NumberDouble:
         m_numberDoubleValue = command->valueCommandAt(i++).toDouble();
     }
+    if (active)
+    {
+        m_isActivated = RPM::stringToBool(command->valueCommandAt(i++));
+    }
 }
 
 // -------------------------------------------------------
 
-void PrimitiveValue::initializeCommands(const QVector<QString> &command, int &i)
+void PrimitiveValue::initializeCommands(const QVector<QString> &command, int &i,
+    bool active)
 {
     m_kind = static_cast<PrimitiveValueKind>(command.at(i++).toInt());
     switch (m_kind) {
@@ -368,11 +386,16 @@ void PrimitiveValue::initializeCommands(const QVector<QString> &command, int &i)
     case PrimitiveValueKind::NumberDouble:
         m_numberDoubleValue = command.at(i++).toDouble();
     }
+    if (active)
+    {
+        m_isActivated = RPM::stringToBool(command.at(i++));
+    }
 }
 
 // -------------------------------------------------------
 
-void PrimitiveValue::getCommandParameter(QVector<QString> &command) {
+void PrimitiveValue::getCommandParameter(QVector<QString> &command, bool active)
+{
     command.append(QString::number(static_cast<int>(m_kind)));
     switch (m_kind) {
     case PrimitiveValueKind::Default:
@@ -398,6 +421,10 @@ void PrimitiveValue::getCommandParameter(QVector<QString> &command) {
         break;
     case PrimitiveValueKind::NumberDouble:
         command.append(QString::number(m_numberDoubleValue));
+    }
+    if (active)
+    {
+        command.append(RPM::boolToString(m_isActivated));
     }
 }
 
@@ -435,6 +462,7 @@ void PrimitiveValue::setCopy(const PrimitiveValue &prim) {
     case PrimitiveValueKind::NumberDouble:
         m_numberDoubleValue = prim.m_numberDoubleValue; break;
     }
+    m_isActivated = prim.m_isActivated;
     m_modelParameter = prim.m_modelParameter;
     m_modelProperties = prim.m_modelProperties;
     m_modelDataBase = prim.m_modelDataBase;
@@ -470,6 +498,10 @@ void PrimitiveValue::read(const QJsonObject &json) {
     case PrimitiveValueKind::NumberDouble:
         m_numberDoubleValue = v.toDouble(); break;
     }
+    if (json.contains(JSON_IS_ACTIVATED))
+    {
+        m_isActivated = json[JSON_IS_ACTIVATED].toBool();
+    }
 }
 
 // -------------------------------------------------------
@@ -502,4 +534,8 @@ void PrimitiveValue::write(QJsonObject &json) const{
         v = m_numberDoubleValue; break;
     }
     json[RPM::JSON_VALUE] = v;
+    if (m_isActivated)
+    {
+        json[JSON_IS_ACTIVATED] = m_isActivated;
+    }
 }

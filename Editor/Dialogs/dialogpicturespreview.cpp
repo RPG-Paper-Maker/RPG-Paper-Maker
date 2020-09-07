@@ -20,8 +20,8 @@
 // -------------------------------------------------------
 
 DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
-    PictureKind kind, bool isValueID, PrimitiveValue *valueID,
-    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
+    PictureKind kind, PrimitiveValue *valueID, SystemCommonObject *object,
+    QStandardItemModel *parameters, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogPicturesPreview),
     m_kind(kind),
@@ -49,7 +49,7 @@ DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
         ui->panelPrimitiveValuePictureID->hide();
     } else
     {
-        ui->checkBoxPictureID->setChecked(isValueID);
+        ui->checkBoxPictureID->setChecked(m_idValue->isActivated());
         m_idValue->setModelParameter(m_parameters);
         m_idValue->setModelProperties(m_properties);
         ui->panelPrimitiveValuePictureID->initializeNumberAndUpdate(m_idValue);
@@ -158,5 +158,6 @@ void DialogPicturesPreview::on_rejected(){
 
 void DialogPicturesPreview::on_checkBoxPictureID_toggled(bool checked)
 {
+    m_idValue->setIsActivated(checked);
     ui->panelPrimitiveValuePictureID->setEnabled(checked);
 }

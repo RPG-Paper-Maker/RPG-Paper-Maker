@@ -75,7 +75,7 @@ private:
         QStandardItemModel *dataBase = nullptr, QStandardItemModel *parameters =
         nullptr) const;
     QString strProperty(int &i, SystemCommonObject *object = nullptr,
-        QStandardItemModel *parameters = nullptr) const;
+        QStandardItemModel *parameters = nullptr, bool active = false) const;
     QString strNumber(int &i, QStandardItemModel *parameters = nullptr) const;
     QString strShowText(SystemCommonObject *object = nullptr, QStandardItemModel
         *parameters = nullptr) const;

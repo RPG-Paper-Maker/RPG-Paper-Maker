@@ -36,9 +36,8 @@ class DialogPicturesPreview : public QDialog
 
 public:
     explicit DialogPicturesPreview(SystemPicture* picture, PictureKind kind,
-        bool isValueID = false, PrimitiveValue *valueID = nullptr,
-        SystemCommonObject *object = nullptr, QStandardItemModel* parameters =
-        nullptr, QWidget *parent = nullptr);
+        PrimitiveValue *valueID = nullptr, SystemCommonObject *object = nullptr,
+        QStandardItemModel* parameters = nullptr, QWidget *parent = nullptr);
     ~DialogPicturesPreview();
     SystemPicture * picture() const;
     PrimitiveValue * idValue() const;

@@ -304,8 +304,8 @@ void DialogCommandMoveObject::on_pushButtonChangeGraphics_clicked()
 {
     SystemPicture picture(-1, "", false, "", false, PictureKind::Characters);
     PrimitiveValue value(1);
-    DialogPicturesPreview dialog(&picture, PictureKind::Characters, false,
-        &value, m_object, m_parameters);
+    DialogPicturesPreview dialog(&picture, PictureKind::Characters, &value,
+        m_object, m_parameters);
     if (dialog.exec() == QDialog::Accepted)
     {
         QVector<QString> commands = QVector<QString>({QString::number(

@@ -25,7 +25,7 @@ DialogCommandSetMoveTurnAPicture::DialogCommandSetMoveTurnAPicture(EventCommand
     DialogCommand(parent),
     m_object(object),
     m_parameters(parameters),
-    m_pictureID(new SuperListItem(-1)),
+    m_valueID(new PrimitiveValue(-1)),
     ui(new Ui::DialogCommandSetMoveTurnAPicture)
 {
     ui->setupUi(this);
@@ -41,6 +41,8 @@ DialogCommandSetMoveTurnAPicture::DialogCommandSetMoveTurnAPicture(EventCommand
 
 DialogCommandSetMoveTurnAPicture::~DialogCommandSetMoveTurnAPicture() {
     delete ui;
+
+    delete m_valueID;
 }
 
 // -------------------------------------------------------
@@ -59,7 +61,8 @@ void DialogCommandSetMoveTurnAPicture::initializePrimitives() {
 
     ui->panelPrimitiveIndex->initializeNumber(m_parameters, properties);
     ui->widgetPictureImageID->setKind(PictureKind::Pictures);
-    ui->widgetPictureImageID->initializeSuper(m_pictureID);
+    ui->widgetPictureImageID->initializePrimitive(m_valueID, m_object,
+        m_parameters);
     ui->panelPrimitiveZoom->initializeNumber(m_parameters, properties, false);
     ui->panelPrimitiveZoom->setNumberDoubleValue(100);
     ui->panelPrimitiveOpacity->initializeNumber(m_parameters, properties, false);
@@ -109,8 +112,9 @@ void DialogCommandSetMoveTurnAPicture::initialize(EventCommand *command) {
     if (checked) {
         ui->checkBoxSet->setChecked(true);
         ui->checkBoxImageID->setChecked(true);
-        m_pictureID->setId(command->valueCommandAt(i++).toInt());
-        ui->widgetPictureImageID->initializeSuper(m_pictureID);
+        m_valueID->initializeCommandParameter(command, i, true);
+        ui->widgetPictureImageID->initializePrimitive(m_valueID, m_object,
+            m_parameters);
     }
     checked = RPM::stringToBool(command->valueCommandAt(i++));
     if (checked) {
@@ -152,11 +156,13 @@ void DialogCommandSetMoveTurnAPicture::initialize(EventCommand *command) {
 EventCommand * DialogCommandSetMoveTurnAPicture::getCommand() const{
     QVector<QString> command;
 
+    // index kind / index value / is checked /id
+
     ui->panelPrimitiveIndex->getCommand(command);
     if (ui->checkBoxSet->isChecked()) {
         command.append(RPM::boolToString(ui->checkBoxImageID->isChecked()));
         if (ui->checkBoxImageID->isChecked()) {
-            command.append(QString::number(m_pictureID->id()));
+            m_valueID->getCommandParameter(command, true);
         }
         command.append(RPM::boolToString(ui->checkBoxZoom->isChecked()));
         if (ui->checkBoxZoom->isChecked()) {
