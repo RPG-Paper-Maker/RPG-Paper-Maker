@@ -34,7 +34,6 @@ class WidgetSelectionRectangle  : public QWidget
         void setSquareHeight(int s);
         void getCoefRect(QRect &rect) const;
         void setRectangle(int x, int y, int width, int height);
-        void setRealPosition();
         void makeFirstSelection(int x, int y, float zoom);
         void makeSelection(int x, int y, int w, int h, float zoom);
         void selectNone();
@@ -46,10 +45,8 @@ class WidgetSelectionRectangle  : public QWidget
         QRect m_rect;
         int m_squareWidth;
         int m_squareHeight;
-        int m_realX;
-        int m_realY;
-
-        void drawSquare(QPainter& painter, int x, int y, float zoom);
+        int m_initX;
+        int m_initY;
 };
 
 #endif // WIDGETSELECTIONRECTANGLE_H

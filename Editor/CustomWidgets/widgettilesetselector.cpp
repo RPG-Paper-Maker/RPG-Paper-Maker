@@ -98,12 +98,6 @@ void WidgetTilesetSelector::updateImage(){
 
 // -------------------------------------------------------
 
-void WidgetTilesetSelector::setRealCursorPosition(){
-    m_selectionRectangle->setRealPosition();
-}
-
-// -------------------------------------------------------
-
 void WidgetTilesetSelector::makeFirstSelection(int x, int y, float zoom){
     m_selectionRectangle->makeFirstSelection(x, y, zoom);
 }

@@ -43,7 +43,6 @@ protected:
     WidgetSelectionRectangle* m_selectionRectangle;
 
     void updateImage();
-    void setRealCursorPosition();
     void makeFirstSelection(int x, int y, float zoom = 1.0f);
     void makeSelection(int x, int y, float zoom = 1.0f);
     void selectNone();
