@@ -54,7 +54,9 @@ public:
     static const QString JSON_DIALOG_BOX_OPTIONS;
     static const QString JSON_SKY_BOXES;
     static const QString JSON_ANTIALIASING;
+    static const QString JSON_MAP_FRAME_DURATION;
     static const bool DEFAULT_ANTIALIASING;
+    static const int DEFAULT_MAP_FRAME_DURATION;
 
     SystemDatas();
     virtual ~SystemDatas();
@@ -74,6 +76,7 @@ public:
     void setSquareSize(int i);
     PrimitiveValue * mountainCollisionHeight() const;
     PrimitiveValue * mountainCollisionAngle() const;
+    PrimitiveValue * mapFrameDuration() const;
     int idMapHero() const;
     void setIdMapHero(int i);
     int idObjectHero() const;
@@ -135,6 +138,7 @@ private:
     int m_squareSize;
     PrimitiveValue *m_mountainCollisionHeight;
     PrimitiveValue *m_mountainCollisionAngle;
+    PrimitiveValue *m_mapFrameDuration;
     int m_idMapHero;
     int m_idObjectHero;
     QString m_pathBR;

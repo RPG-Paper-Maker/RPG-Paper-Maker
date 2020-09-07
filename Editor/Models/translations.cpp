@@ -1127,6 +1127,7 @@ const QString Translations::CANNOT_DUPLICATE_STATE = "cannot.duplicate.state";
 const QString Translations::PERMANENT = "permanent";
 const QString Translations::CHANGE_GRAPHICS = "change.graphics";
 const QString Translations::SELECT_PICTURE_ID = "select.picture.id";
+const QString Translations::MAP_FRAME_DURATION = "map.frame.duration";
 
 // -------------------------------------------------------
 //

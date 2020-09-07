@@ -138,6 +138,8 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->widgetMountainCollisionAngle->initializeNumberAndUpdate(systemDatas
         ->mountainCollisionAngle(), false);
     ui->spinBoxAnimationFrames->setValue(systemDatas->framesAnimation());
+    ui->panelPrimitiveMapFrameDuration->initializeNumberAndUpdate(systemDatas
+        ->mapFrameDuration());
 
     // Initializing all the models
     ui->panelSuperListColors->list()->initializeNewItemInstance(new SystemColor);
@@ -514,6 +516,8 @@ void DialogSystems::translate()
         ::MOUNTAIN_COLLISION_HEIGHT_LIMIT_1));
     ui->labelMountainsCollisionHeightLimit2->setText(RPM::translate(Translations
         ::MOUNTAIN_COLLISION_HEIGHT_LIMIT_2) + RPM::COLON);
+    ui->labelMapFrameDuration->setText(RPM::translate(Translations
+        ::MAP_FRAME_DURATION) + RPM::COLON);
     ui->radioButtonImage->setText(RPM::translate(Translations::IMAGE) + RPM
         ::COLON);
     ui->radioButtonVideo->setText(RPM::translate(Translations::VIDEO) + RPM

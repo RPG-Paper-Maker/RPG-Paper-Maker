@@ -1139,6 +1139,7 @@ public:
     static const QString PERMANENT;
     static const QString CHANGE_GRAPHICS;
     static const QString SELECT_PICTURE_ID;
+    static const QString MAP_FRAME_DURATION;
 
     Translations();
     virtual ~Translations();

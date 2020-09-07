@@ -46,7 +46,9 @@ const QString SystemDatas::JSON_SOUND_IMPOSSIBLE = "si";
 const QString SystemDatas::JSON_DIALOG_BOX_OPTIONS = "dbo";
 const QString SystemDatas::JSON_SKY_BOXES = "sb";
 const QString SystemDatas::JSON_ANTIALIASING = "aa";
+const QString SystemDatas::JSON_MAP_FRAME_DURATION = "mfd";
 const bool SystemDatas::DEFAULT_ANTIALIASING = false;
+const int SystemDatas::DEFAULT_MAP_FRAME_DURATION = 150;
 
 // -------------------------------------------------------
 //
@@ -59,6 +61,7 @@ SystemDatas::SystemDatas() :
         ::PROJECT_WITHOUT_NAME))),
     m_mountainCollisionHeight(new PrimitiveValue(4)),
     m_mountainCollisionAngle(new PrimitiveValue(45.0)),
+    m_mapFrameDuration(new PrimitiveValue(DEFAULT_MAP_FRAME_DURATION)),
     m_idMapHero(1),
     m_idObjectHero(1),
     m_showBB(false),
@@ -89,6 +92,7 @@ SystemDatas::~SystemDatas() {
     delete m_projectName;
     delete m_mountainCollisionHeight;
     delete m_mountainCollisionAngle;
+    delete m_mapFrameDuration;
 
     SuperListItem::deleteModel(m_modelColors);
     SuperListItem::deleteModel(m_modelCurrencies);
@@ -155,6 +159,11 @@ PrimitiveValue * SystemDatas::mountainCollisionHeight() const {
 
 PrimitiveValue * SystemDatas::mountainCollisionAngle() const {
     return m_mountainCollisionAngle;
+}
+
+PrimitiveValue * SystemDatas::mapFrameDuration() const
+{
+    return m_mapFrameDuration;
 }
 
 int SystemDatas::idMapHero() const {
@@ -582,6 +591,10 @@ void SystemDatas::read(const QJsonObject &json){
         m_mountainCollisionAngle->read(json[JSON_MOUNTAIN_COLLISION_ANGLE]
             .toObject());
     }
+    if (json.contains(JSON_MAP_FRAME_DURATION))
+    {
+        m_mapFrameDuration->read(json[JSON_MAP_FRAME_DURATION].toObject());
+    }
     m_idMapHero = json["idMapHero"].toInt();
     m_idObjectHero = json["idObjHero"].toInt();
     m_pathBR = json["pathBR"].toString();
@@ -723,15 +736,26 @@ void SystemDatas::write(QJsonObject &json) const{
     json[JSON_IS_SCREEN_WINDOW] = m_isScreenWindow;
     json["pr"] = m_portionsRay;
     json["ss"] = m_squareSize;
-    if (m_mountainCollisionHeight->numberValue() != 4) {
+    if (m_mountainCollisionHeight->kind() != PrimitiveValueKind::Number ||
+        m_mountainCollisionHeight->numberValue() != 4)
+    {
         obj = QJsonObject();
         m_mountainCollisionHeight->write(obj);
         json[JSON_MOUNTAIN_COLLISION_HEIGHT] = obj;
     }
-    if (m_mountainCollisionAngle->numberDoubleValue() != 45.0) {
+    if (m_mountainCollisionAngle->kind() != PrimitiveValueKind::NumberDouble ||
+        m_mountainCollisionAngle->numberDoubleValue() != 45.0)
+    {
         obj = QJsonObject();
         m_mountainCollisionAngle->write(obj);
         json[JSON_MOUNTAIN_COLLISION_ANGLE] = obj;
+    }
+    if (m_mapFrameDuration->kind() != PrimitiveValueKind::Number ||
+        m_mapFrameDuration->numberValue() != DEFAULT_MAP_FRAME_DURATION)
+    {
+        obj = QJsonObject();
+        m_mapFrameDuration->write(obj);
+        json[JSON_MAP_FRAME_DURATION] = obj;
     }
     json["idMapHero"] = m_idMapHero;
     json["idObjHero"] = m_idObjectHero;

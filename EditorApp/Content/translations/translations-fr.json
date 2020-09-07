@@ -1106,5 +1106,6 @@
     "cannot.duplicate.state": "Impossible de dupliquer l'état",
     "permanent": "Permanent",
     "change.graphics": "Changer l'apparence",
-    "select.picture.id": "Sélectionner une image par ID"
+    "select.picture.id": "Sélectionner une image par ID",
+    "map.frame.duration": "Durée d'une frame (carte)"
 }

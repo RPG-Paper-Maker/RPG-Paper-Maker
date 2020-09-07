@@ -1106,5 +1106,6 @@
     "cannot.duplicate.state": "Não é possível duplicar o estado",
     "permanent": "Permanente",
     "change.graphics": "Mudar a aparência",
-    "select.picture.id": "Selecionar imagem por ID"
+    "select.picture.id": "Selecionar imagem por ID",
+    "map.frame.duration": "Duração de um quadro (mapa)"
 }

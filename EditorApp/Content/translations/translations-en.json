@@ -1106,5 +1106,6 @@
     "cannot.duplicate.state": "Cannot duplicate the state",
     "permanent": "Permanent",
     "change.graphics": "Change graphics",
-    "select.picture.id": "Select picture by ID"
+    "select.picture.id": "Select picture by ID",
+    "map.frame.duration": "Map frame duration"
 }

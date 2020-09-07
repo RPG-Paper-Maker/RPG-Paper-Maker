@@ -64,9 +64,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-360</y>
                 <width>252</width>
-                <height>1178</height>
+                <height>1230</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_13">
@@ -412,6 +412,39 @@
                         </item>
                        </layout>
                       </item>
+                      <item>
+                       <layout class="QVBoxLayout" name="verticalLayout_29" stretch="0,0">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <widget class="QLabel" name="labelMapFrameDuration">
+                          <property name="enabled">
+                           <bool>true</bool>
+                          </property>
+                          <property name="text">
+                           <string>Map frame duration:</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="PanelPrimitiveValue" name="panelPrimitiveMapFrameDuration" native="true">
+                          <property name="minimumSize">
+                           <size>
+                            <width>200</width>
+                            <height>27</height>
+                           </size>
+                          </property>
+                          <property name="maximumSize">
+                           <size>
+                            <width>200</width>
+                            <height>16777215</height>
+                           </size>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
                      </layout>
                     </item>
                    </layout>
@@ -669,7 +702,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-508</y>
+                <y>0</y>
                 <width>624</width>
                 <height>1216</height>
                </rect>
