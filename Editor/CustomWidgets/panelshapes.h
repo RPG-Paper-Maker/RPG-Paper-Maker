@@ -69,6 +69,7 @@ private slots:
     void deletingContent(SuperListItem *super, int row);
     void on_treeViewAvailableContentDoubleClicked(QModelIndex);
     void on_pushButtonDLC_clicked();
+    void on_pushButtonExport_clicked();
 };
 
 #endif // PANELSHAPES_H

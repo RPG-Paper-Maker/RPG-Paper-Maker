@@ -292,6 +292,8 @@ void PanelPicturePreview::translate()
         ::SHOW_AVAILABLE_CONTENT));
     ui->groupBoxOptions->setTitle(RPM::translate(Translations::OPTIONS));
     ui->pushButtonRefresh->setText(RPM::translate(Translations::REFRESH));
+    ui->pushButtonExport->setText(RPM::translate(Translations::EXPORT) + RPM
+        ::DOT_DOT_DOT);
     ui->pushButtonDLC->setText(RPM::translate(Translations::IMPORT_DLC_S) + RPM
         ::DOT_DOT_DOT);
 }
@@ -404,5 +406,24 @@ void PanelPicturePreview::on_pushButtonDLC_clicked()
     } else
     {
         RPM::get()->project()->readDlcs();
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::on_pushButtonExport_clicked()
+{
+    QStandardItem *selected = ui->treeViewAvailableContent->getSelected();
+    if (selected != nullptr)
+    {
+        QString folder = QFileDialog::getExistingDirectory(this, RPM::translate(
+            Translations::CHOOSE_LOCATION) + RPM::DOT_DOT_DOT);
+        SystemPicture *picture = reinterpret_cast<SystemPicture *>(selected
+            ->data().value<quintptr>());
+        if (folder.isEmpty())
+        {
+            Common::copyPath(picture->getPath(), Common::pathCombine(folder,
+                picture->name()));
+        }
     }
 }

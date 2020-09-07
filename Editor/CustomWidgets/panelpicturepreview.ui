@@ -92,7 +92,7 @@
            </property>
            <property name="maximumSize">
             <size>
-             <width>200</width>
+             <width>16777215</width>
              <height>16777215</height>
             </size>
            </property>
@@ -102,13 +102,19 @@
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0,1">
+          <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0">
            <item>
             <widget class="QPushButton" name="pushButtonMove">
+             <property name="minimumSize">
+              <size>
+               <width>25</width>
+               <height>25</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
-               <width>16777215</width>
-               <height>22</height>
+               <width>25</width>
+               <height>25</height>
               </size>
              </property>
              <property name="text">
@@ -128,11 +134,24 @@
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="pushButtonExport">
+             <property name="text">
+              <string>Export...</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="pushButtonAdd">
+             <property name="minimumSize">
+              <size>
+               <width>25</width>
+               <height>25</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
-               <width>16777215</width>
-               <height>22</height>
+               <width>25</width>
+               <height>25</height>
               </size>
              </property>
              <property name="text">
@@ -156,7 +175,7 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>311</width>
+              <width>257</width>
               <height>368</height>
              </rect>
             </property>

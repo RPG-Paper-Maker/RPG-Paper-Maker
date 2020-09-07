@@ -1107,5 +1107,6 @@
     "permanent": "Permanente",
     "change.graphics": "Mudar a aparência",
     "select.picture.id": "Selecionar imagem por ID",
-    "map.frame.duration": "Duração de um quadro (mapa)"
+    "map.frame.duration": "Duração de um quadro (mapa)",
+    "export": "Exportar"
 }

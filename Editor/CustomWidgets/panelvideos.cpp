@@ -371,3 +371,22 @@ void PanelVideos::on_pushButtonDLC_clicked()
         RPM::get()->project()->readDlcs();
     }
 }
+
+// -------------------------------------------------------
+
+void PanelVideos::on_pushButtonExport_clicked()
+{
+    QStandardItem *selected = ui->treeViewAvailableContent->getSelected();
+    if (selected != nullptr)
+    {
+        QString folder = QFileDialog::getExistingDirectory(this, RPM::translate(
+            Translations::CHOOSE_LOCATION) + RPM::DOT_DOT_DOT);
+        SystemPicture *picture = reinterpret_cast<SystemPicture *>(selected
+            ->data().value<quintptr>());
+        if (folder.isEmpty())
+        {
+            Common::copyPath(picture->getPath(), Common::pathCombine(folder,
+                picture->name()));
+        }
+    }
+}

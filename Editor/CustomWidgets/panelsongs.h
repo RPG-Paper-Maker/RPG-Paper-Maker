@@ -123,6 +123,7 @@ private slots:
     void positionSoundChanged(qint64 pos);
     void positionMusicEffectChanged(qint64 pos);
     void on_pushButtonDLC_clicked();
+    void on_pushButtonExport_clicked();
 };
 
 #endif // PANELSONGS_H
