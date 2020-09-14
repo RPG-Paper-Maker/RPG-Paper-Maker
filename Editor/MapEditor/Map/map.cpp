@@ -602,10 +602,10 @@ Portion Map::getGlobalFromLocalPortion(Portion& portion) const{
 // -------------------------------------------------------
 
 Portion Map::getLocalFromGlobalPortion(Portion& portion) const {
-    return Portion(
-                portion.x() - (cursor()->getSquareX() / RPM::PORTION_SIZE),
-                portion.y() - (cursor()->getSquareY() / RPM::PORTION_SIZE),
-                portion.z() - (cursor()->getSquareZ() / RPM::PORTION_SIZE));
+    return Portion(portion.x() - qFloor(static_cast<double>(cursor()
+        ->getSquareX()) / RPM::PORTION_SIZE), portion.y() - qFloor(static_cast<
+        double>(cursor()->getSquareY()) / RPM::PORTION_SIZE), portion.z() -
+        qFloor(static_cast<double>(cursor()->getSquareZ()) / RPM::PORTION_SIZE));
 }
 
 // -------------------------------------------------------

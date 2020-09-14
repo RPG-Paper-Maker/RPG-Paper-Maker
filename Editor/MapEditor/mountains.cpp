@@ -133,7 +133,7 @@ void Mountains::getSetPortionsOverflow(QSet<Portion> &portionsOverflow, Position
     height = mountain->height(p.getYpx(RPM::get()->getSquareSize()));
 
     for (int i = -width; i <= width; i++) {
-        for (int j = 0; j < height; j++) {
+        for (int j = 0; j <= height; j++) {
             for (int k = -width; k <= width; k++) {
                 Position newPosition = p;
                 newPosition.addX(i);
