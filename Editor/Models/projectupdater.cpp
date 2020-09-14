@@ -174,6 +174,7 @@ void ProjectUpdater::updateCommands() {
     QList<QStandardItem *> list;
     QStandardItemModel *model;
     MapPortion *mapPortion;
+    MapProperties *properties;
     Portion portion;
     QJsonObject obj;
     int i, j, k, l, ll, lll;
@@ -195,6 +196,20 @@ void ProjectUpdater::updateCommands() {
             delete mapPortion;
             Common::writeOtherJSON(paths->at(j), obj);
         }
+    }
+
+    // Map startups
+    for (i = 0, l = m_listMapPropertiesPaths.size(); i < l; i++) {
+        properties = new MapProperties;
+        properties->read(m_listMapProperties.at(i));
+        list = properties->startupObject()->getAllCommandsList();
+        for (j = 0, ll = list.size(); j < ll; j++) {
+            emit updatingCommands(list.at(j));
+        }
+        obj = QJsonObject();
+        properties->write(obj);
+        delete properties;
+        Common::writeOtherJSON(m_listMapPropertiesPaths.at(i), obj);
     }
 
     // Common reactions

@@ -24,7 +24,6 @@
         "Support shapes with faces vertices > 4"
     ],
 	"bugs": [
-		"Move square command go through mountains",
 		"Project updater corrected for projects < 1.5.3",
 		"Wrong type for helmet bronze when creating a new project",
 		"Condition test with switches not working",
@@ -33,7 +32,13 @@
         "Physijs error when removing scene",
         "Command move object: ignore if impossible not working",
         "Common reaction doesn't work in main menu",
-        "Bug rectangle selection when right to left"
+        "Bug rectangle selection when right to left",
+        "Teleport into another map with screen tone transition bug getHex",
+        "Collisions not working well when depth > 0",
+        "Edit teleport object other map not displaying",
+        "Command remove object from map: this object still moving",
+        "Collision bug with bridge",
+        "Allow escape not working"
 	],
     "finished": [
         2,
@@ -43,7 +48,7 @@
         2,
         2,
         2,
-        1,
+        2,
         0,
         2,
         2,
@@ -56,15 +61,20 @@
         2,
         2,
 
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
         0,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
+        0,
+        0,
+        0,
         0
     ]
 }
