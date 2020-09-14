@@ -24,6 +24,7 @@ double Camera::defaultVAngle = 55.0;
 // -------------------------------------------------------
 
 Camera::Camera() :
+    m_distance(qRound(Camera::defaultDistance * RPM::get()->coefSquareSize())),
     m_horizontalAngle(Camera::defaultHAngle),
     m_verticalAngle(Camera::defaultVAngle),
     m_up(QVector3D(0.0,1.0,0.0))

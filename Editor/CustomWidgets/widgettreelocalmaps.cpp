@@ -203,6 +203,8 @@ void WidgetTreeLocalMaps::setMap(int id, QVector3D &position){
         tag->position()->setX(position.x());
         tag->position()->setY(position.y());
         tag->position()->setZ(position.z());
+        this->selectionModel()->setCurrentIndex(item->index(),
+            QItemSelectionModel::Select);
         this->setCurrentIndex(item->index());
     }
 }
