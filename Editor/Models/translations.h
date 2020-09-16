@@ -1141,6 +1141,8 @@ public:
     static const QString SELECT_PICTURE_ID;
     static const QString MAP_FRAME_DURATION;
     static const QString EXPORT;
+    static const QString EXAMPLE_PROJECT;
+    static const QString PROJECT_DEMO_ANY_SAVE_WONT_CONSERVED;
 
     Translations();
     virtual ~Translations();

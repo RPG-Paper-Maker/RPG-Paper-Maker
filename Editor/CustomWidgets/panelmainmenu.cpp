@@ -10,10 +10,13 @@
 */
 
 #include <QDesktopServices>
+#include <QDir>
+#include <QMessageBox>
 #include "mainwindow.h"
 #include "panelmainmenu.h"
 #include "ui_panelmainmenu.h"
 #include "rpm.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -51,6 +54,8 @@ PanelMainMenu::~PanelMainMenu()
 
 void PanelMainMenu::translate()
 {
+    ui->pushButtonExampleProject->setText(RPM::translate(Translations
+        ::EXAMPLE_PROJECT) + RPM::DOT_DOT_DOT);
     ui->pushButtonNewProject->setText(RPM::translate(Translations::NEW_PROJECT)
         + RPM::DOT_DOT_DOT);
     ui->pushButtonOpenProject->setText(RPM::translate(Translations::OPEN_PROJECT
@@ -67,6 +72,17 @@ void PanelMainMenu::translate()
 //
 //  SLOTS
 //
+// -------------------------------------------------------
+
+void PanelMainMenu::on_pushButtonExampleProject_clicked()
+{
+    QMessageBox::warning(this, RPM::translate(Translations::WARNING), RPM
+        ::translate(Translations::PROJECT_DEMO_ANY_SAVE_WONT_CONSERVED) + RPM
+        ::DOT);
+    this->openRecentProject(Common::pathCombine(QDir::currentPath(), RPM
+        ::PATH_EXAMPLE_GAME));
+}
+
 // -------------------------------------------------------
 
 void PanelMainMenu::on_pushButtonNewProject_clicked()

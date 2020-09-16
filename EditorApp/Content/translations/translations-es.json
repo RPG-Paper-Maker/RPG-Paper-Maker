@@ -1110,5 +1110,7 @@
     "change.graphics": "Cambiar la apariencia",
     "select.picture.id": "Seleccionar imagen por ID",
     "map.frame.duration": "Duración de una frame (mapa)",
-    "export": "Exportar"
+    "export": "Exportar",
+    "example.project": "Proyecto de muestra",
+    "project.demo.any.save.wont.conserved": "Este proyecto es una demostración y no se guardará ninguna copia de seguridad después de cerrar el software"
 }

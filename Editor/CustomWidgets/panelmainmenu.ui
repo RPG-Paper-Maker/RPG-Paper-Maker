@@ -48,7 +48,24 @@
         </spacer>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,0,0,0">
+        <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1,0,1,0">
+         <item>
+          <widget class="QPushButton" name="pushButtonExampleProject">
+           <property name="minimumSize">
+            <size>
+             <width>161</width>
+             <height>51</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Example project</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../ressources.qrc">
+             <normaloff>:/icons/Ressources/pictures.png</normaloff>:/icons/Ressources/pictures.png</iconset>
+           </property>
+          </widget>
+         </item>
          <item>
           <spacer name="horizontalSpacer_6">
            <property name="orientation">

@@ -1108,5 +1108,7 @@
     "change.graphics": "Change graphics",
     "select.picture.id": "Select picture by ID",
     "map.frame.duration": "Map frame duration",
-    "export": "Export"
+    "export": "Export",
+    "example.project": "Example project",
+    "project.demo.any.save.wont.conserved": "This project is a demo and any save won't be conserved after closing the engine"
 }
