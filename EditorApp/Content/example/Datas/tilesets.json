@@ -1,0 +1,1 @@
+{"list":[{"auto":[{"id":1,"name":"General"}],"id":1,"moun":[{"id":1,"name":"grass"},{"id":2,"name":"cave"}],"name":"Plains","objs":[{"id":1,"name":"Chest"}],"pic":1,"walls":[]},{"auto":[{"id":1,"name":"General"}],"id":2,"moun":[{"id":2,"name":"cave"}],"name":"Cave","objs":[],"pic":2,"walls":[{"id":2,"name":"Cave1"}]}]}
