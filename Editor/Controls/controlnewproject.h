@@ -32,7 +32,7 @@ public:
     static QChar forbiddenSymbols[];
 
     QString filterDirectoryName(const QString &s);
-    QString createNewProject(QString projectName, QString dirName, QString
+    static QString createNewProject(QString projectName, QString dirName, QString
         location);
 };
 

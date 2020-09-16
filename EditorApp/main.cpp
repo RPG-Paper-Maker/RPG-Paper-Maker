@@ -20,6 +20,7 @@
 #include "common.h"
 #include "dialogfirstlaunch.h"
 #include "dialogselectlanguage.h"
+#include "controlnewproject.h"
 
 //-------------------------------------------------
 //
@@ -105,6 +106,23 @@ int main(int argc, char *argv[]) {
             dirDocuments.mkdir(RPM::FOLDER_GAMES);
         }
     }
+
+    // Erase example game and refresh it
+    QDir(Common::pathCombine(QDir::currentPath(), RPM::PATH_EXAMPLE_GAME))
+        .removeRecursively();
+    ControlNewproject::createNewProject("Example", "Example", Common
+        ::pathCombine(QDir::currentPath(), RPM::PATH_EXAMPLE));
+    QDir(Common::pathCombine(Common::pathCombine(Common
+                                                 ::pathCombine(QDir::currentPath(), RPM::PATH_EXAMPLE_GAME), RPM
+                                                 ::PATH_APP), RPM::PATH_DATAS)).removeRecursively();
+    Common::copyPath(Common::pathCombine(QDir::currentPath(), RPM
+        ::PATH_EXAMPLE_DATAS), Common::pathCombine(Common::pathCombine(Common
+        ::pathCombine(QDir::currentPath(), RPM::PATH_EXAMPLE_GAME), RPM
+        ::PATH_APP), RPM::PATH_DATAS));
+    Common::copyPath(Common::pathCombine(Common::pathCombine(QDir::currentPath(), RPM
+        ::PATH_BASIC), RPM::PATH_SCRIPTS_DIR), Common::pathCombine(Common::pathCombine(Common
+        ::pathCombine(QDir::currentPath(), RPM::PATH_EXAMPLE_GAME), RPM
+        ::PATH_APP), RPM::PATH_SCRIPTS_DIR));
 
     // Opening window
     MainWindow *w = MainWindow::get();

@@ -99,6 +99,7 @@ public:
     static const QString FOLDER_UNDO_REDO_TEMP_MAP;
     static const QString FOLDER_RESOURCES;
     static const QString FOLDER_APP;
+    static const QString FOLDER_EXAMPLE;
 
     // PATHS
     static const QString PATH_RESOURCES;
@@ -178,6 +179,9 @@ public:
     static const QString PATH_PACKAGE;
     static const QString PATH_DLCS;
     static const QString PATH_ICON_GREEN;
+    static const QString PATH_EXAMPLE;
+    static const QString PATH_EXAMPLE_GAME;
+    static const QString PATH_EXAMPLE_DATAS;
 
     // INTEGERS
     static const int PORTION_SIZE;

@@ -59,6 +59,10 @@ Map::Map(int id) :
                                           RPM::PATH_MAPS);
     m_pathMap = Common::pathCombine(pathMaps, realName);
 
+    // Create temp folders if doesn't exists
+    QDir(m_pathMap).mkdir(RPM::FOLDER_TEMP_MAP);
+    QDir(m_pathMap).mkdir(RPM::FOLDER_UNDO_REDO_TEMP_MAP);
+
     // Temp map files
     if (!RPM::mapsToSave.contains(id)) {
         QString pathTemp = Common::pathCombine(m_pathMap,

@@ -38,7 +38,8 @@
         "Edit teleport object other map not displaying",
         "Command remove object from map: this object still moving",
         "Collision bug with bridge",
-        "Allow escape not working"
+        "Allow escape not working",
+        "Display an animation in map not always drawn correctly"
 	],
     "finished": [
         2,
@@ -71,10 +72,11 @@
         2,
         2,
         2,
-        0,
-        0,
-        0,
-        0,
-        0
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
     ]
 }

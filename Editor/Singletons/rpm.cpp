@@ -89,6 +89,7 @@ const QString RPM::FOLDER_APP = "app";
 #else
     const QString RPM::FOLDER_RESOURCES = "resources";
 #endif
+const QString RPM::FOLDER_EXAMPLE = "example";
 
 // PATHS
 #ifdef Q_OS_MACOS
@@ -237,6 +238,12 @@ const QString RPM::PATH_INDEX = Common::pathCombine(PATH_APP, FILE_INDEX);
 const QString RPM::PATH_PACKAGE = Common::pathCombine(PATH_APP, FILE_PACKAGE);
 const QString RPM::PATH_DLCS = Common::pathCombine(FOLDER_CONTENT, "DLCs");
 const QString RPM::PATH_ICON_GREEN = ":/icons/Ressources/point_g.png";
+const QString RPM::PATH_EXAMPLE = Common::pathCombine(FOLDER_CONTENT,
+    FOLDER_EXAMPLE);
+const QString RPM::PATH_EXAMPLE_GAME = Common::pathCombine(PATH_EXAMPLE,
+    "Example");
+const QString RPM::PATH_EXAMPLE_DATAS = Common::pathCombine(PATH_EXAMPLE,
+    "Datas");
 
 // INTEGERS
 const int RPM::PORTION_SIZE = 16;

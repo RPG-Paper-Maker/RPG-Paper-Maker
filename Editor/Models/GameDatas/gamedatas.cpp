@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QDir>
 #include "gamedatas.h"
 #include "rpm.h"
 #include "common.h"
@@ -217,6 +218,12 @@ void GameDatas::readTilesets(QString path) {
 
 void GameDatas::readSystem(QString path){
     m_systemDatas->read(path);
+    if (!QDir(m_systemDatas->pathBR()).exists())
+    {
+        m_systemDatas->setPathBR(Common::pathCombine(QDir::currentPath(), RPM
+            ::PATH_BR));
+        this->writeSystem(path);
+    }
 }
 
 // -------------------------------------------------------

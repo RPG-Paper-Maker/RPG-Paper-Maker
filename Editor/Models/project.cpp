@@ -185,6 +185,10 @@ bool Project::read(QString path){
     this->readAll();
     p_currentMap = nullptr;
 
+    // Create temp file if doesn't exists
+    QDir(Common::pathCombine(Common::pathCombine(path, RPM::PATH_APP), RPM
+        ::PATH_MAPS)).mkdir(RPM::FOLDER_TEMP_MAP);
+
     return true;
 }
 
