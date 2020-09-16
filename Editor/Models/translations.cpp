@@ -1223,7 +1223,7 @@ void Translations::readTranslations()
 
 QString Translations::get(const QString &key)
 {
-    return m_translations.value(key);
+    return m_translations.value(key, key);
 }
 
 // -------------------------------------------------------
