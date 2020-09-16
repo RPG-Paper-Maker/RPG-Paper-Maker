@@ -314,6 +314,19 @@ void EngineSettings::read(const QJsonObject &json) {
     for (i = 0, l = tab.size(); i < l; i++) {
         m_projectLinks << tab.at(i).toString();
     }
+    // Remove duplicates
+    /*
+    for (i = tab.size() - 1; i >= 0; i--) {
+        m_projectLinks << tab.at(i).toString();
+        for (j = 0, ll = tab.size(); j < ll && i != j; j++) {
+            if (m_projectLinks.at(i) == m_projectLinks.at(j))
+            {
+                m_projectNames.removeAt(i);
+                m_projectLinks.removeAt(i);
+                break;
+            }
+        }
+    }*/
     if (json.contains(JSON_FIRST_TIME)) {
         m_firstTime = json[JSON_FIRST_TIME].toBool();
     }

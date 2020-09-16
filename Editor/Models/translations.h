@@ -1143,6 +1143,8 @@ public:
     static const QString EXPORT;
     static const QString EXAMPLE_PROJECT;
     static const QString PROJECT_DEMO_ANY_SAVE_WONT_CONSERVED;
+    static const QString OPEN_PROJECT_FOLDER;
+    static const QString FOLDER;
 
     Translations();
     virtual ~Translations();

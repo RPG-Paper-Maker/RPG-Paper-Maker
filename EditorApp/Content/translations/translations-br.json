@@ -1110,7 +1110,7 @@
     "map.frame.duration": "Duração de um quadro (mapa)",
     "export": "Exportar",
     "example.project": "Projeto de amostra",
-    "project.demo.any.save.wont.conserved": "Este projeto é uma demonstração e nenhum backup será mantido após o fechamento do software
-
-"
+    "project.demo.any.save.wont.conserved": "Este projeto é uma demonstração e nenhum backup será mantido após o fechamento do software",
+    "open.project.folder": "Abra a pasta do projeto",
+    "folder": "Pasta"
 }

@@ -1110,5 +1110,7 @@
     "map.frame.duration": "Map frame duration",
     "export": "Export",
     "example.project": "Example project",
-    "project.demo.any.save.wont.conserved": "This project is a demo and any save won't be conserved after closing the engine"
+    "project.demo.any.save.wont.conserved": "This project is a demo and any save won't be conserved after closing the engine",
+    "open.project.folder": "Open project folder",
+    "folder": "Folder"
 }

@@ -1131,6 +1131,8 @@ const QString Translations::MAP_FRAME_DURATION = "map.frame.duration";
 const QString Translations::EXPORT = "export";
 const QString Translations::EXAMPLE_PROJECT = "example.project";
 const QString Translations::PROJECT_DEMO_ANY_SAVE_WONT_CONSERVED = "project.demo.any.save.wont.conserved";
+const QString Translations::OPEN_PROJECT_FOLDER = "open.project.folder";
+const QString Translations::FOLDER = "folder";
 
 // -------------------------------------------------------
 //

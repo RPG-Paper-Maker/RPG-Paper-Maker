@@ -19,6 +19,7 @@
 #include <QNetworkReply>
 #include <QEventLoop>
 #include <QUrl>
+#include <QDesktopServices>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dialognewproject.h"
@@ -212,6 +213,7 @@ void MainWindow::enableAll(bool b){
     ui->actionBrowse->setEnabled(b);
     ui->actionSave->setEnabled(b);
     ui->actionSave_all->setEnabled(b);
+    ui->actionOpen_project_folder->setEnabled(b);
     ui->actionExport_standalone->setEnabled(b);
     ui->actionClose_project->setEnabled(b);
     ui->actionUndo->setEnabled(b);
@@ -256,6 +258,7 @@ void MainWindow::enableGame(){ // When a project is opened
     enableNoGame();
     ui->actionSave->setEnabled(true);
     ui->actionSave_all->setEnabled(true);
+    ui->actionOpen_project_folder->setEnabled(true);
     ui->actionExport_standalone->setEnabled(true);
     ui->actionClose_project->setEnabled(true);
     ui->actionUndo->setEnabled(true);
@@ -393,7 +396,8 @@ void MainWindow::translate() {
     ui->menuOptions->setTitle(RPM::translate(Translations::OPTIONS));
     ui->menuTest->setTitle(RPM::translate(Translations::TEST));
     ui->menuHelp->setTitle(RPM::translate(Translations::HELP));
-    ui->actionNew_project->setText(RPM::translate(Translations::NEW_PROJECT));
+    ui->actionNew_project->setText(RPM::translate(Translations::NEW_PROJECT) +
+        RPM::DOT_DOT_DOT);
     ui->actionNew_project->setIconText(RPM::translate(Translations
         ::NEW_PROJECT_TOOL));
     ui->menuOpen_project->setTitle(RPM::translate(Translations::OPEN_PROJECT));
@@ -404,6 +408,10 @@ void MainWindow::translate() {
     ui->actionSave->setIconText(RPM::translate(Translations::SAVE_TOOL));
     ui->actionSave_all->setText(RPM::translate(Translations::SAVE_ALL));
     ui->actionSave_all->setIconText(RPM::translate(Translations::SAVE_ALL_TOOL));
+    ui->actionOpen_project_folder->setText(RPM::translate(Translations
+        ::OPEN_PROJECT_FOLDER));
+    ui->actionOpen_project_folder->setIconText(RPM::translate(Translations
+        ::FOLDER));
     ui->actionExport_standalone->setText(RPM::translate(Translations
         ::EXPORT_STANDALONE) + RPM::DOT_DOT_DOT);
     ui->actionClose_project->setText(RPM::translate(Translations::CLOSE_PROJECT));
@@ -532,6 +540,13 @@ void MainWindow::on_actionSave_triggered(){
 
 void MainWindow::on_actionSave_all_triggered(){
     saveAllMaps();
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionOpen_project_folder_triggered()
+{
+    QDesktopServices::openUrl(project->pathCurrentProject());
 }
 
 // -------------------------------------------------------

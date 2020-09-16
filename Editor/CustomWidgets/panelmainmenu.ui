@@ -33,7 +33,7 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,1">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,1">
        <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
@@ -48,24 +48,7 @@
         </spacer>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1,0,1,0">
-         <item>
-          <widget class="QPushButton" name="pushButtonExampleProject">
-           <property name="minimumSize">
-            <size>
-             <width>161</width>
-             <height>51</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Example project</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../ressources.qrc">
-             <normaloff>:/icons/Ressources/pictures.png</normaloff>:/icons/Ressources/pictures.png</iconset>
-           </property>
-          </widget>
-         </item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,0,0">
          <item>
           <spacer name="horizontalSpacer_6">
            <property name="orientation">
@@ -86,8 +69,14 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>161</width>
+             <width>200</width>
              <height>51</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>16777215</height>
             </size>
            </property>
            <property name="text">
@@ -112,24 +101,17 @@
           </widget>
          </item>
          <item>
-          <spacer name="horizontalSpacer_7">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>48</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
           <widget class="QPushButton" name="pushButtonOpenProject">
            <property name="minimumSize">
             <size>
-             <width>161</width>
+             <width>200</width>
              <height>51</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>16777215</height>
             </size>
            </property>
            <property name="text">
@@ -138,6 +120,46 @@
            <property name="icon">
             <iconset resource="../ressources.qrc">
              <normaloff>:/icons/Ressources/open_file.png</normaloff>:/icons/Ressources/open_file.png</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0">
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>158</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButtonExampleProject">
+           <property name="minimumSize">
+            <size>
+             <width>200</width>
+             <height>51</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Example project</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../ressources.qrc">
+             <normaloff>:/icons/Ressources/pictures.png</normaloff>:/icons/Ressources/pictures.png</iconset>
            </property>
           </widget>
          </item>
