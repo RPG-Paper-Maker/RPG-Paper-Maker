@@ -4,13 +4,15 @@
 		"Français",
 		"Português - Brasil",
 		"Espanol",
-		"日本語 (beta)"
+		"日本語 (beta)",
+		"中文 (beta)"
 	],
 	"short": [
 		"en",
 		"fr",
 		"br",
 		"es",
-		"jp"
+		"jp",
+		"cn"
 	]
 }
