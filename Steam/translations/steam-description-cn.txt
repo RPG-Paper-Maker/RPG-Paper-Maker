@@ -13,9 +13,8 @@ RPG Paper Maker提供了一種在[b]3D世界中輕鬆創建RPG的方法，就像
 [h2]適用於幾種類型的遊戲[/ h2]
 
 該軟件主要適用於[b] J-RPG [/b]，但是您幾乎可以使用[b]動作RPG [/b]，[b]戰術RPG [/b]等
-[h2]Concu pour les débutants...[/h2]
 
-Notre philosophie est simple : être capable de créer un jeu vidéo en 3D [b]sans aucune connaissance[/b] en:
+[h2]專為初學者設計...[/h2]
 
 我們的理念很簡單：能夠通過以下方式創建3D視頻遊戲[b]，而無需任何知識[/b]：
 
