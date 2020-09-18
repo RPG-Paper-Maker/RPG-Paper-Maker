@@ -15,6 +15,45 @@
 #include "common.h"
 #include "sprite.h"
 
+QVector3D Object3DBoxDatas::VERTICES_EQUAL[24] {
+
+    // Front
+    QVector3D(-1.0f, 1.0f, 1.0f),
+    QVector3D(1.0f, 1.0f, 1.0f),
+    QVector3D(1.0f, -1.0f, 1.0f),
+    QVector3D(-1.0f, -1.0f, 1.0f),
+
+    // Back
+    QVector3D(1.0f, 1.0f, -1.0f),
+    QVector3D(-1.0f, 1.0f, -1.0f),
+    QVector3D(-1.0f, -1.0f, -1.0f),
+    QVector3D(1.0f, -1.0f, -1.0f),
+
+    // Left
+    QVector3D(-1.0f, 1.0f, -1.0f),
+    QVector3D(-1.0f, 1.0f, 1.0f),
+    QVector3D(-1.0f, -1.0f, 1.0f),
+    QVector3D(-1.0f, -1.0f, -1.0f),
+
+    // Right
+    QVector3D(1.0f, 1.0f, 1.0f),
+    QVector3D(1.0f, 1.0f, -1.0f),
+    QVector3D(1.0f, -1.0f, -1.0f),
+    QVector3D(1.0f, -1.0f, 1.0f),
+
+    // Bottom
+    QVector3D(-1.0f, -1.0f, 1.0f),
+    QVector3D(1.0f, -1.0f, 1.0f),
+    QVector3D(1.0f, -1.0f, -1.0f),
+    QVector3D(-1.0f, -1.0f, -1.0f),
+
+    // Top
+    QVector3D(-1.0f, 1.0f, -1.0f),
+    QVector3D(1.0f, 1.0f, -1.0f),
+    QVector3D(1.0f, 1.0f, 1.0f),
+    QVector3D(-1.0f, 1.0f, 1.0f)
+};
+
 QVector3D Object3DBoxDatas::VERTICES[24] {
 
     // Front

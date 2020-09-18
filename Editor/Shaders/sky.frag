@@ -1,7 +1,9 @@
-uniform samplerCube uTexture;
-varying highp vec3 vTexCoord;
+precision mediump float;
+varying highp vec2 coordTexture;
+
+uniform sampler2D texture;
 
 void main()
 {
-    gl_FragColor = textureCube(uTexture, vTexCoord);
+    gl_FragColor = texture2D(texture, coordTexture);
 }

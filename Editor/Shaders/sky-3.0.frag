@@ -1,9 +1,12 @@
 #version 130
-uniform samplerCube uTexture;
-in highp vec3 vTexCoord;
+
+in highp vec2 coordTexture;
+
+uniform sampler2D texture;
+
 out highp vec4 fColor;
 
 void main()
 {
-    fColor = textureCube(uTexture, vTexCoord);
+    fColor = texture2D(texture, coordTexture);
 }

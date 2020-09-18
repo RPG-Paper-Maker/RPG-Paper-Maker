@@ -30,12 +30,9 @@
 class Skybox : protected QOpenGLFunctions
 {
 public:
-    static QVector<QVector3D> VERTICES_SKYBOX;
-    static QVector<GLuint> INDEXES_SKYBOX;
     static QString SHADER_NAME;
     static QString ATTR_MODEL_VIEW_PROJECTION;
     static QString ATTR_POS;
-    static QString ATTR_SIZE;
 
     Skybox();
     virtual ~Skybox();
@@ -47,13 +44,12 @@ public:
 
 protected:
     QOpenGLShaderProgram *m_programSkyBox;
-    QOpenGLTexture m_textureSkyBox;
+    QOpenGLTexture *m_textureSkyBox;
     QOpenGLBuffer m_vertexBufSkyBox;
     QOpenGLBuffer m_indexBufferSkyBox;
     QOpenGLVertexArrayObject m_vaoSkyBox;
     int u_modelViewProjection;
     int u_pos;
-    int u_size;
 };
 
 #endif // SKYBOX_H
