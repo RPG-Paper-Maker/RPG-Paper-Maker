@@ -1,7 +1,55 @@
 {
-	"add": [],
+	"add": [
+         {
+            "files": [
+                {
+                    "exe": true,
+                    "repo": "RPG-Paper-Maker",
+                    "source": "EditorApp/Content/DLCs/empty",
+                    "target": "Engine/Content/DLCs/empty"
+                }
+            ],
+            "target": "Engine/Content/DLCs"
+        }
+    ],
 	"remove": [],
-	"replace": [],
+	"replace": [
+         {
+            "files": [
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Images/Textures2D/SkyBoxes/clouds-back.png",
+                    "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-back.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Images/Textures2D/SkyBoxes/clouds-left.png",
+                    "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-left.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Images/Textures2D/SkyBoxes/clouds-right.png",
+                    "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-right.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Images/Textures2D/SkyBoxes/clouds-bottom.png",
+                    "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-bottom.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Images/Textures2D/SkyBoxes/clouds-front.png",
+                    "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-front.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Images/Textures2D/SkyBoxes/clouds-top.png",
+                    "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-top.png"
+                }
+            ],
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes"
+        }
+    ],
 	"features": [
         "Background image and skybox",
         "Command shake screen",

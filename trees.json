@@ -47,6 +47,36 @@
                             },
                             {
                                 "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/SkyBoxes/clouds-back.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-back.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/SkyBoxes/clouds-left.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-left.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/SkyBoxes/clouds-right.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-right.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/SkyBoxes/clouds-bottom.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-bottom.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/SkyBoxes/clouds-front.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-front.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/SkyBoxes/clouds-top.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-top.png"
+                                    }
                                 ],
                                 "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes"
                             },
@@ -677,9 +707,405 @@
                 "target": "Engine/Content/basic"
             },
             {
+                "files": [
+                    {
+                        "exe": true,
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/DLCs/empty",
+                        "target": "Engine/Content/DLCs/empty"
+                    }
+                ],
+                "target": "Engine/Content/DLCs"
+            },
+            {
                 "repo": "RPG-Paper-Maker",
                 "source": "EditorApp/Content/patreon.json",
                 "target": "Engine/Content/patreon.json"
+            },
+            {
+                "files": [
+                    {
+                        "files": [
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/status.json",
+                                "target": "Engine/Content/example/Datas/status.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/scripts.json",
+                                "target": "Engine/Content/example/Datas/scripts.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/saves.json",
+                                "target": "Engine/Content/example/Datas/saves.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/specialElements.json",
+                                "target": "Engine/Content/example/Datas/specialElements.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/battleSystem.json",
+                                "target": "Engine/Content/example/Datas/battleSystem.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/classes.json",
+                                "target": "Engine/Content/example/Datas/classes.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/armors.json",
+                                "target": "Engine/Content/example/Datas/armors.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/langs.json",
+                                "target": "Engine/Content/example/Datas/langs.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/heroes.json",
+                                "target": "Engine/Content/example/Datas/heroes.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/shapes.json",
+                                "target": "Engine/Content/example/Datas/shapes.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/dlcs.json",
+                                "target": "Engine/Content/example/Datas/dlcs.json"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "files": [
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0002/0_0_0.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0002/0_0_0.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0002/infos.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0002/infos.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0002/objects.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0002/objects.json"
+                                            }
+                                        ],
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0002"
+                                    },
+                                    {
+                                        "files": [
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0001/0_0_1.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0001/0_0_1.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0001/1_0_0.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0001/1_0_0.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0001/0_0_0.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0001/0_0_0.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0001/1_0_1.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0001/1_0_1.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0001/infos.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0001/infos.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0001/objects.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0001/objects.json"
+                                            }
+                                        ],
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0001"
+                                    },
+                                    {
+                                        "files": [
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_-1_3.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/2_-1_3.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_0_2.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/1_0_2.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_-1_2.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/0_-1_2.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_-1_2.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/3_-1_2.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_-1_1.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/0_-1_1.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_0_0.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/3_0_0.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_0_2.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/0_0_2.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_-1_2.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/1_-1_2.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_0_1.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/0_0_1.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_-1_0.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/3_-1_0.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_0_3.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/1_0_3.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_-1_0.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/1_-1_0.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_0_3.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/3_0_3.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_0_2.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/3_0_2.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_-1_1.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/2_-1_1.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_-1_3.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/1_-1_3.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_-1_3.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/0_-1_3.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_-1_3.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/3_-1_3.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_0_0.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/1_0_0.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_0_0.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/0_0_0.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_0_2.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/2_0_2.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_0_1.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/2_0_1.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_-1_1.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/1_-1_1.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_-1_1.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/3_-1_1.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_0_3.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/2_0_3.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_0_1.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/1_0_1.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_0_1.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/3_0_1.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_-1_0.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/0_-1_0.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_-1_0.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/2_-1_0.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_0_3.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/0_0_3.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_-1_2.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/2_-1_2.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/infos.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/infos.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_0_0.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/2_0_0.json"
+                                            },
+                                            {
+                                                "repo": "RPG-Paper-Maker",
+                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0003/objects.json",
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/objects.json"
+                                            }
+                                        ],
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003"
+                                    }
+                                ],
+                                "target": "Engine/Content/example/Datas/Maps"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/videos.json",
+                                "target": "Engine/Content/example/Datas/videos.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/animations.json",
+                                "target": "Engine/Content/example/Datas/animations.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/system.json",
+                                "target": "Engine/Content/example/Datas/system.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/monsters.json",
+                                "target": "Engine/Content/example/Datas/monsters.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/troops.json",
+                                "target": "Engine/Content/example/Datas/troops.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/songs.json",
+                                "target": "Engine/Content/example/Datas/songs.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/titlescreenGameover.json",
+                                "target": "Engine/Content/example/Datas/titlescreenGameover.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/settings.json",
+                                "target": "Engine/Content/example/Datas/settings.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/tilesets.json",
+                                "target": "Engine/Content/example/Datas/tilesets.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/weapons.json",
+                                "target": "Engine/Content/example/Datas/weapons.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/pictures.json",
+                                "target": "Engine/Content/example/Datas/pictures.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/keyBoard.json",
+                                "target": "Engine/Content/example/Datas/keyBoard.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/commonEvents.json",
+                                "target": "Engine/Content/example/Datas/commonEvents.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/skills.json",
+                                "target": "Engine/Content/example/Datas/skills.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/items.json",
+                                "target": "Engine/Content/example/Datas/items.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/treeMap.json",
+                                "target": "Engine/Content/example/Datas/treeMap.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/variables.json",
+                                "target": "Engine/Content/example/Datas/variables.json"
+                            }
+                        ],
+                        "target": "Engine/Content/example/Datas"
+                    }
+                ],
+                "target": "Engine/Content/example"
             },
             {
                 "files": [
@@ -705,8 +1131,18 @@
                     },
                     {
                         "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/translations/translations-cn.json",
+                        "target": "Engine/Content/translations/translations-cn.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
                         "source": "EditorApp/Content/translations/translations-br.json",
                         "target": "Engine/Content/translations/translations-br.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/translations/translations-jp.json",
+                        "target": "Engine/Content/translations/translations-jp.json"
                     }
                 ],
                 "target": "Engine/Content/translations"
@@ -1647,6 +2083,391 @@
         ],
         "onlyFiles": true,
         "target": "Engine/"
+    },
+    "example": {
+        "files": [
+            {
+                "files": [
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/status.json",
+                        "target": "Engine/Content/example/Datas/status.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/scripts.json",
+                        "target": "Engine/Content/example/Datas/scripts.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/saves.json",
+                        "target": "Engine/Content/example/Datas/saves.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/specialElements.json",
+                        "target": "Engine/Content/example/Datas/specialElements.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/battleSystem.json",
+                        "target": "Engine/Content/example/Datas/battleSystem.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/classes.json",
+                        "target": "Engine/Content/example/Datas/classes.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/armors.json",
+                        "target": "Engine/Content/example/Datas/armors.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/langs.json",
+                        "target": "Engine/Content/example/Datas/langs.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/heroes.json",
+                        "target": "Engine/Content/example/Datas/heroes.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/shapes.json",
+                        "target": "Engine/Content/example/Datas/shapes.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/dlcs.json",
+                        "target": "Engine/Content/example/Datas/dlcs.json"
+                    },
+                    {
+                        "files": [
+                            {
+                                "files": [
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0002/0_0_0.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0002/0_0_0.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0002/infos.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0002/infos.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0002/objects.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0002/objects.json"
+                                    }
+                                ],
+                                "target": "Engine/Content/example/Datas/Maps/MAP0002"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0001/0_0_1.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0001/0_0_1.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0001/1_0_0.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0001/1_0_0.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0001/0_0_0.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0001/0_0_0.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0001/1_0_1.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0001/1_0_1.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0001/infos.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0001/infos.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0001/objects.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0001/objects.json"
+                                    }
+                                ],
+                                "target": "Engine/Content/example/Datas/Maps/MAP0001"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_-1_3.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/2_-1_3.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_0_2.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/1_0_2.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_-1_2.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/0_-1_2.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_-1_2.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/3_-1_2.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_-1_1.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/0_-1_1.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_0_0.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/3_0_0.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_0_2.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/0_0_2.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_-1_2.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/1_-1_2.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_0_1.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/0_0_1.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_-1_0.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/3_-1_0.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_0_3.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/1_0_3.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_-1_0.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/1_-1_0.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_0_3.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/3_0_3.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_0_2.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/3_0_2.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_-1_1.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/2_-1_1.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_-1_3.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/1_-1_3.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_-1_3.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/0_-1_3.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_-1_3.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/3_-1_3.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_0_0.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/1_0_0.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_0_0.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/0_0_0.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_0_2.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/2_0_2.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_0_1.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/2_0_1.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_-1_1.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/1_-1_1.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_-1_1.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/3_-1_1.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_0_3.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/2_0_3.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/1_0_1.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/1_0_1.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/3_0_1.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/3_0_1.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_-1_0.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/0_-1_0.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_-1_0.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/2_-1_0.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_0_3.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/0_0_3.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_-1_2.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/2_-1_2.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/infos.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/infos.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_0_0.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/2_0_0.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0003/objects.json",
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/objects.json"
+                                    }
+                                ],
+                                "target": "Engine/Content/example/Datas/Maps/MAP0003"
+                            }
+                        ],
+                        "target": "Engine/Content/example/Datas/Maps"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/videos.json",
+                        "target": "Engine/Content/example/Datas/videos.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/animations.json",
+                        "target": "Engine/Content/example/Datas/animations.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/system.json",
+                        "target": "Engine/Content/example/Datas/system.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/monsters.json",
+                        "target": "Engine/Content/example/Datas/monsters.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/troops.json",
+                        "target": "Engine/Content/example/Datas/troops.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/songs.json",
+                        "target": "Engine/Content/example/Datas/songs.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/titlescreenGameover.json",
+                        "target": "Engine/Content/example/Datas/titlescreenGameover.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/settings.json",
+                        "target": "Engine/Content/example/Datas/settings.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/tilesets.json",
+                        "target": "Engine/Content/example/Datas/tilesets.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/weapons.json",
+                        "target": "Engine/Content/example/Datas/weapons.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/pictures.json",
+                        "target": "Engine/Content/example/Datas/pictures.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/keyBoard.json",
+                        "target": "Engine/Content/example/Datas/keyBoard.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/commonEvents.json",
+                        "target": "Engine/Content/example/Datas/commonEvents.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/skills.json",
+                        "target": "Engine/Content/example/Datas/skills.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/items.json",
+                        "target": "Engine/Content/example/Datas/items.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/treeMap.json",
+                        "target": "Engine/Content/example/Datas/treeMap.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/variables.json",
+                        "target": "Engine/Content/example/Datas/variables.json"
+                    }
+                ],
+                "target": "Engine/Content/example/Datas"
+            }
+        ],
+        "target": "Engine/Content/example"
     },
     "exeEngine": {
         "linux": {
@@ -4261,6 +5082,16 @@
             },
             {
                 "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/datas-dlcs.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/datas-dlcs.js"
+            },
+            {
+                "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/system-skybox.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-skybox.js"
+            },
+            {
+                "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/texture-several.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/texture-several.js"
             },
@@ -4806,8 +5637,18 @@
             },
             {
                 "repo": "RPG-Paper-Maker",
+                "source": "EditorApp/Content/translations/translations-cn.json",
+                "target": "Engine/Content/translations/translations-cn.json"
+            },
+            {
+                "repo": "RPG-Paper-Maker",
                 "source": "EditorApp/Content/translations/translations-br.json",
                 "target": "Engine/Content/translations/translations-br.json"
+            },
+            {
+                "repo": "RPG-Paper-Maker",
+                "source": "EditorApp/Content/translations/translations-jp.json",
+                "target": "Engine/Content/translations/translations-jp.json"
             }
         ],
         "target": "Engine/Content/translations"
