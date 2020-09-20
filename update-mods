@@ -67,7 +67,7 @@ path='../Dependencies/Game'
 pathModsGame="${modsPath}/Game"
 if [ -d $path ]; then
 	echo "$localMessage $path $moveSymbol $pathModsGame"
-	cp -r $path $pathModsGame
+	cp -R $path $pathModsGame
 else
 	pathGit="https://github.com/RPG-Paper-Maker/Dependencies/trunk/Game"
 	echo "$githubMessage $pathGit $moveSymbol $pathModsGame"

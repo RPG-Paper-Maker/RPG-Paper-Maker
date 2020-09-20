@@ -238,8 +238,7 @@ bool Common::copyPath(QString src, QString dst) {
     while (!symlinks.isEmpty()) {
         for (int i = symlinks.size() - 1; i >= 0; i--) {
             QPair<QString, QString> pair = symlinks.at(i);
-            if (QFile(pair.first).exists() || QDir(pair.first).exists()) {
-                QFile::link(pair.first, pair.second);
+            if (QFile::link(pair.first, pair.second)) {
                 symlinks.removeAt(i);
             }
         }
@@ -268,7 +267,7 @@ bool Common::copyPathSym(QList<QPair<QString, QString>> &list, QString src,
         dstPath = pathCombine(dst, d);
         if (id.isSymLink())
         {
-            list << QPair<QString, QString>({id.symLinkTarget(), dstPath});
+            list << QPair<QString, QString>({dir.relativeFilePath(id.symLinkTarget()), dstPath});
         } else
         {
             if (!dir.mkpath(dstPath)) {
@@ -285,7 +284,7 @@ bool Common::copyPathSym(QList<QPair<QString, QString>> &list, QString src,
         dstPath = pathCombine(dst, f);
         if (ifo.isSymLink())
         {
-            list << QPair<QString, QString>({ifo.symLinkTarget(), dstPath});
+            list << QPair<QString, QString>({dir.relativeFilePath(ifo.symLinkTarget()), dstPath});
         } else
         {
             if (!QFile::copy(pathCombine(src, f), dstPath)) {
