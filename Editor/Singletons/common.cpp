@@ -13,6 +13,8 @@
 #include <QtMath>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QMessageBox>
+
 #include "common.h"
 
 // -------------------------------------------------------
@@ -238,7 +240,8 @@ bool Common::copyPath(QString src, QString dst) {
     while (!symlinks.isEmpty()) {
         for (int i = symlinks.size() - 1; i >= 0; i--) {
             QPair<QString, QString> pair = symlinks.at(i);
-            if (QFile::link(pair.first, pair.second)) {
+            QFile::link(pair.first, pair.second);
+            if (QFile(pair.second).exists() || QDir(pair.second).exists()) {
                 symlinks.removeAt(i);
             }
         }
