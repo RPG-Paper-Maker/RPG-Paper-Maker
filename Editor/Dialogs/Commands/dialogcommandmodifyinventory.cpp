@@ -87,8 +87,8 @@ void DialogCommandModifyInventory::translate()
         ::PARENTHESIS_RIGHT + RPM::translate(Translations::EQUALS));
     ui->radioButtonModulo->setText(RPM::PARENTHESIS_LEFT + RPM::MODULO + RPM
         ::PARENTHESIS_RIGHT + RPM::translate(Translations::MODULO));
-    ui->radioButtonDivided->setText(RPM::PARENTHESIS_LEFT + RPM::MODULO + RPM
-        ::PARENTHESIS_RIGHT + RPM::translate(Translations::DIVIDED_BY));
+    ui->radioButtonDivided->setText(RPM::PARENTHESIS_LEFT + RPM::DIVIDED_BY +
+        RPM::PARENTHESIS_RIGHT + RPM::translate(Translations::DIVIDED_BY));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
