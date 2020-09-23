@@ -550,7 +550,7 @@ void MainWindow::on_actionSave_all_triggered(){
 
 void MainWindow::on_actionOpen_project_folder_triggered()
 {
-    QDesktopServices::openUrl(project->pathCurrentProject());
+    QDesktopServices::openUrl(QUrl::fromLocalFile(project->pathCurrentProject()));
 }
 
 // -------------------------------------------------------
