@@ -321,11 +321,11 @@ void WidgetTreeCommands::editCommand(QStandardItem *selected,
             }
 
             // Select all
+            selected->setData(QVariant::fromValue(reinterpret_cast<quintptr>(
+                newCommand)));
             this->selectChildren(selected);
 
             delete command;
-            selected->setData(QVariant::fromValue(
-                                  reinterpret_cast<quintptr>(newCommand)));
             updateAllNodesString(p_model->invisibleRootItem());
         }
         delete dialog;
