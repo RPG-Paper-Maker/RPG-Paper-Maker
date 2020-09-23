@@ -342,6 +342,10 @@ bool MainWindow::close() {
             deleteTempMaps();
     }
 
+    // Remove Example project
+    QDir(Common::pathCombine(QDir::currentPath(), RPM::PATH_EXAMPLE_GAME))
+        .removeRecursively();
+
     return true;
 }
 
@@ -991,5 +995,7 @@ void MainWindow::openRecentProject(QString path) {
 
 void MainWindow::closeEvent(QCloseEvent * event){
     if (!close())
+    {
         event->ignore();
+    }
 }
