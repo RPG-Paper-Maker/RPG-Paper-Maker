@@ -117,7 +117,8 @@ bool EventCommand::isErasable() const {
     return m_kind != EventCommandKind::None && m_kind != EventCommandKind
         ::EndWhile && m_kind != EventCommandKind::Else && m_kind !=
         EventCommandKind::EndIf && m_kind != EventCommandKind::IfWin && m_kind
-        != EventCommandKind::IfLose;
+        != EventCommandKind::IfLose && m_kind != EventCommandKind::Choice &&
+        m_kind != EventCommandKind::EndChoice;
 }
 
 // -------------------------------------------------------

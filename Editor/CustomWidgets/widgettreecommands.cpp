@@ -17,6 +17,7 @@
 #include "common.h"
 #include <QDebug>
 #include <algorithm>
+#include <QApplication>
 
 int WidgetTreeCommands::rectHeight = 17;
 int WidgetTreeCommands::rectXOffset = 20;
@@ -40,12 +41,10 @@ WidgetTreeCommands::WidgetTreeCommands(QWidget *parent) :
     this->setHeaderHidden(true);
     this->setIndentation(15);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
-    this->setSelectionMode(
-                QAbstractItemView::SelectionMode::ContiguousSelection);
     connect(this,
-            SIGNAL(clicked(QModelIndex)),
-            this,
-            SLOT(onTreeViewClicked(QModelIndex)));
+                SIGNAL(clicked(QModelIndex)),
+                this,
+                SLOT(onTreeViewClicked(QModelIndex)));
 
     // Context menu connections
     m_contextMenuCommonCommands = ContextMenuList::createContextCommand(this);
@@ -323,6 +322,9 @@ void WidgetTreeCommands::editCommand(QStandardItem *selected,
             // Select all
             selected->setData(QVariant::fromValue(reinterpret_cast<quintptr>(
                 newCommand)));
+            this->selectionModel()->clear();
+            this->selectionModel()->select(selected->index(),
+                QItemSelectionModel::SelectCurrent);
             this->selectChildren(selected);
 
             delete command;
@@ -587,10 +589,11 @@ void WidgetTreeCommands::updateAllNodesString(QStandardItem *item)
 
 // -------------------------------------------------------
 
-void WidgetTreeCommands::selectChildren(QStandardItem* item){
-
+void WidgetTreeCommands::selectChildren(QStandardItem* item, QItemSelectionModel
+    ::SelectionFlag flag)
+{
     // Select children
-    selectChildrenOnly(item);
+    selectChildrenOnly(item, flag);
 
     // Select others (end etc.)
     EventCommand* command = (EventCommand*) item->data().value<quintptr>();
@@ -603,34 +606,34 @@ void WidgetTreeCommands::selectChildren(QStandardItem* item){
         switch(command->kind()){
         case EventCommandKind::While:
             st = root->child(j+1);
-            sm->select(st->index(), QItemSelectionModel::Select);
+            sm->select(st->index(), flag);
             break;
         case EventCommandKind::EndWhile:
             st = root->child(j-1);
-            sm->select(st->index(), QItemSelectionModel::Select);
-            selectChildrenOnly(st);
+            sm->select(st->index(), flag);
+            selectChildrenOnly(st, flag);
             break;
         case EventCommandKind::StartBattle:
             if (command->isBattleWithoutGameOver()){
                 st = root->child(j+1);
-                sm->select(st->index(), QItemSelectionModel::Select);
-                selectChildrenOnly(st);
+                sm->select(st->index(), flag);
+                selectChildrenOnly(st, flag);
                 st = root->child(j+2);
-                sm->select(st->index(), QItemSelectionModel::Select);
-                selectChildrenOnly(st);
+                sm->select(st->index(), flag);
+                selectChildrenOnly(st, flag);
                 st = root->child(j+3);
-                sm->select(st->index(), QItemSelectionModel::Select);
+                sm->select(st->index(), flag);
             }
             break;
         case EventCommandKind::IfWin:
             st = root->child(j-1);
-            sm->select(st->index(), QItemSelectionModel::Select);
-            selectChildren(st);
+            sm->select(st->index(), flag);
+            selectChildren(st, flag);
             break;
         case EventCommandKind::IfLose:
             st = root->child(j-2);
-            sm->select(st->index(), QItemSelectionModel::Select);
-            selectChildren(st);
+            sm->select(st->index(), flag);
+            selectChildren(st, flag);
             break;
         case EventCommandKind::EndIf:
             st = root->child(j-1);
@@ -639,15 +642,15 @@ void WidgetTreeCommands::selectChildren(QStandardItem* item){
             // Battle
             if (command->kind() == EventCommandKind::IfLose){
                 st = root->child(j-3);
-                sm->select(st->index(), QItemSelectionModel::Select);
-                selectChildren(st);
+                sm->select(st->index(), flag);
+                selectChildren(st, flag);
             }
             // Condition
             else{
                 if (command->kind() == EventCommandKind::Else)
                     st = root->child(j-2);
-                sm->select(st->index(), QItemSelectionModel::Select);
-                selectChildren(st);
+                sm->select(st->index(), flag);
+                selectChildren(st, flag);
             }
             break;
         case EventCommandKind::If:
@@ -657,40 +660,40 @@ void WidgetTreeCommands::selectChildren(QStandardItem* item){
             // Else
             if (command->hasElse()){
                 st = root->child(j++);
-                sm->select(st->index(), QItemSelectionModel::Select);
-                selectChildrenOnly(st);
+                sm->select(st->index(), flag);
+                selectChildrenOnly(st, flag);
             }
 
             // End
             st = root->child(j);
-            sm->select(st->index(), QItemSelectionModel::Select);
+            sm->select(st->index(), flag);
             break;
         case EventCommandKind::Else:
             st = root->child(j-1);
-            sm->select(st->index(), QItemSelectionModel::Select);
-            selectChildren(st);
+            sm->select(st->index(), flag);
+            selectChildren(st, flag);
             break;
         case EventCommandKind::DisplayChoice:
             int i, nbChoices;
 
-            sm->select(item->index(), QItemSelectionModel::Select);
+            sm->select(item->index(), flag);
             j++;
             nbChoices = command->getChoicesNumber();
             for (i = 0; i < nbChoices; i++) {
                 st = root->child(j++);
-                sm->select(st->index(), QItemSelectionModel::Select);
-                selectChildrenOnly(st);
+                sm->select(st->index(), flag);
+                selectChildrenOnly(st, flag);
             }
             st = root->child(j);
-            sm->select(st->index(), QItemSelectionModel::Select);
+            sm->select(st->index(), flag);
             break;
         case EventCommandKind::Choice:
             st = root->child(j - command->valueCommandAt(0).toInt());
-            this->selectChildren(st);
+            this->selectChildren(st, flag);
             break;
         case EventCommandKind::EndChoice:
             st = root->child(j - 1);
-            this->selectChildren(st);
+            this->selectChildren(st, flag);
             break;
         default:
             break;
@@ -700,13 +703,15 @@ void WidgetTreeCommands::selectChildren(QStandardItem* item){
 
 // -------------------------------------------------------
 
-void WidgetTreeCommands::selectChildrenOnly(QStandardItem* item){
+void WidgetTreeCommands::selectChildrenOnly(QStandardItem* item,
+    QItemSelectionModel::SelectionFlag flag)
+{
     QModelIndex index = item->index();
 
     // Select children
     for (int i = 0; i < item->rowCount(); i++){
         QModelIndex childIndex = p_model->index(i, 0, index);
-        this->selectionModel()->select(childIndex, QItemSelectionModel::Select);
+        this->selectionModel()->select(childIndex, flag);
         selectChildren(item->child(i));
     }
 }
@@ -840,6 +845,7 @@ bool WidgetTreeCommands::isMouseSelectingCommand(const QPoint &pos) {
 
 void WidgetTreeCommands::updateKeyboardUpDown(int offset) {
     QStandardItem *item, *newItem;
+    EventCommand *command;
 
     if (m_availableCommands.length() > 0) {
         m_indexSelectedCommand += offset;
@@ -851,10 +857,33 @@ void WidgetTreeCommands::updateKeyboardUpDown(int offset) {
         item = getSelected();
         if (item != nullptr) {
             newItem = this->getModel()->item(item->row() + offset, item->column());
+            if (newItem != nullptr)
+            {
+                do
+                {
+                    command = nullptr;
+                    newItem = this->getModel()->item(item->row() + offset, item
+                        ->column());
+                    if (newItem != nullptr)
+                    {
+                        command = reinterpret_cast<EventCommand *>(newItem
+                            ->data().value<quintptr>());
+                    }
+                    if (offset < 0)
+                    {
+                        offset--;
+                    } else
+                    {
+                        offset++;
+                    }
+                } while (newItem != nullptr && !command->isErasable() &&
+                    command->kind() != EventCommandKind::None);
+            }
             if (newItem != nullptr) {
                 this->selectionModel()->clear();
                 this->selectionModel()->select(newItem->index(),
                     QItemSelectionModel::SelectCurrent);
+                selectChildren(newItem);
                 onSelectionChanged(newItem->index(), item->index());
             }
         }
@@ -928,20 +957,48 @@ void WidgetTreeCommands::keyPressEvent(QKeyEvent *event){
 
 void WidgetTreeCommands::mousePressEvent(QMouseEvent *event) {
     QPoint pos = event->pos();
+    QList<QStandardItem *> prevItems;
     QStandardItem *item;
 
     if (isMouseSelectingCommand(pos)) {
         contextNew();
     } else {
-        item = getSelected();
+        QModelIndex index = this->indexAt(event->pos());
+        item = p_model->itemFromIndex(index);
+        if (item == nullptr)
+        {
+            this->selectionModel()->clear();
+            return;
+        }
+        if (QApplication::keyboardModifiers() & Qt::ControlModifier)
+        {
+            prevItems = getAllSelected();
+            QItemSelectionModel::SelectionFlag flag = prevItems.contains(item) ?
+                QItemSelectionModel::Deselect : QItemSelectionModel::Select;
+            this->selectionModel()->select(index, flag);
+            this->selectChildren(item, flag);
+        } else
+        {
+            this->selectionModel()->clear();
+            this->selectionModel()->select(index, QItemSelectionModel::Select);
+            this->selectChildren(item, QItemSelectionModel::Select);
+        }
+        prevItems = getAllSelected();
+        this->selectionModel()->clear();
         if (item != nullptr && reinterpret_cast<EventCommand *>(item->data()
             .value<quintptr>())->kind() == EventCommandKind::None)
         {
             item->setText(">");
         }
         m_availableCommands = QList<EventCommandKind>();
+
+        for (int i = 0, l = prevItems.size(); i < l; i++)
+        {
+            this->selectionModel()->select(prevItems.at(i)->index(),
+                QItemSelectionModel::SelectCurrent);
+            this->selectChildren(prevItems.at(i));
+        }
         repaint();
-        QTreeView::mousePressEvent(event);
     }
 }
 
@@ -951,6 +1008,7 @@ void WidgetTreeCommands::mouseMoveEvent(QMouseEvent *event) {
     QPoint pos = event->pos();
     isMouseSelectingCommand(pos);
     QTreeView::mouseMoveEvent(event);
+    repaint();
 }
 
 // -------------------------------------------------------
@@ -1010,7 +1068,8 @@ void WidgetTreeCommands::onSelectionChanged(QModelIndex index, QModelIndex
 
     m_enteredCommand = "";
     m_availableCommands = QList<EventCommandKind>();
-    if (selected != nullptr) {
+    if (selected != nullptr)
+    {
         command = reinterpret_cast<EventCommand *>(selected->data().value<
             quintptr>());
         if (command->kind() == EventCommandKind::None) {
@@ -1019,8 +1078,18 @@ void WidgetTreeCommands::onSelectionChanged(QModelIndex index, QModelIndex
             selected->setText("> |");
             updateEnteredCommandText();
         }
+
+        selected = getSelected();
+        this->selectionModel()->clear();
+        if (selected != nullptr)
+        {
+            this->selectionModel()->select(selected->index(),
+                QItemSelectionModel::SelectCurrent);
+            selectChildren(selected);
+        }
     }
-    if (selectedBefore != nullptr) {
+    if (selectedBefore != nullptr)
+    {
         selectedBefore->setText(reinterpret_cast<EventCommand *>(selectedBefore
             ->data().value<quintptr>())->toString(m_linkedObject, m_parameters));
     }
@@ -1033,11 +1102,7 @@ void WidgetTreeCommands::onSelectionChanged(QModelIndex index, QModelIndex
 // -------------------------------------------------------
 
 void WidgetTreeCommands::onTreeViewClicked(const QModelIndex &) {
-    QModelIndexList l = this->selectionModel()->selectedIndexes();
 
-    for (int i = 0; i < l.size(); i++) {
-        selectChildren(p_model->itemFromIndex(l.at(i)));
-    }
 }
 
 // -------------------------------------------------------

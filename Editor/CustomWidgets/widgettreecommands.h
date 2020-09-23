@@ -80,8 +80,10 @@ protected:
     void deleteElseBlock(QStandardItem *root, int row);
     void deleteStartBattleBlock(QStandardItem *root, int row);
     void updateAllNodesString(QStandardItem* item);
-    void selectChildren(QStandardItem* item);
-    void selectChildrenOnly(QStandardItem* item);
+    void selectChildren(QStandardItem* item, QItemSelectionModel::SelectionFlag
+        flag = QItemSelectionModel::Select);
+    void selectChildrenOnly(QStandardItem* item, QItemSelectionModel
+        ::SelectionFlag flag = QItemSelectionModel::Select);
     static bool itemLessThan(const QStandardItem* item1,
                              const QStandardItem* item2);
     /// Return the index of the row above current selection.
