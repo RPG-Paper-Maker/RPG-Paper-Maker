@@ -466,11 +466,10 @@ void WidgetMenuBarMapEditor::forceNoRotation() {
 void WidgetMenuBarMapEditor::forcePencil() {
     WidgetMenuBarMapEditor *bar;
     QAction *action;
-    int index;
 
     bar = getBarRight();
-    index = bar->actions().indexOf(action);
-    if (index == static_cast<int>(MapEditorModesKind::DrawPin)) {
+    if (this->drawKind() == DrawKind::Pin)
+    {
         forceRight(static_cast<int>(MapEditorModesKind::DrawPencil));
     }
     action = bar->actions().at(static_cast<int>(MapEditorModesKind::DrawPin));
