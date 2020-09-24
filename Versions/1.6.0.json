@@ -22,10 +22,11 @@
     ],
 	"bugs": [
         "Loading screen should be black screen (no map previous color)",
-        "Sometimes keyboard in engine not detected",
         "Some issues with shake screen",
         "Operation: divide by %",
-        "Open project folder not working"
+        "Open project folder not working",
+        "Mountain in depth: can't go back to 0 Y axis floor",
+        "Command move camera: change target weird behavior when not checking target offset move"
 	],
     "finished": [
         0,
@@ -47,7 +48,8 @@
 
         0,
         0,
-        0,
+        2,
+        2,
         2,
         2
     ]

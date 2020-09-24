@@ -47,6 +47,7 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     // Mouse tracking
     this->setMouseTracking(true);
     this->setFocus();
+    this->setFocusPolicy(Qt::FocusPolicy::WheelFocus);
 
     // Initialize cursors
     cursorPixmap = QPixmap(":/icons/Ressources/translate_cursor.png");
