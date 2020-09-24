@@ -208,7 +208,7 @@ void MapProperties::clearOverflowSprites() {
     QHash<Portion, QSet<Position>*>::iterator i;
     for (i = m_outOverflowSprites.begin(); i != m_outOverflowSprites.end(); i++)
     {
-        delete *i;
+        delete i.value();
     }
     m_outOverflowSprites.clear();
 }
@@ -220,7 +220,7 @@ void MapProperties::clearOverflowObjects3D() {
     for (i = m_outOverflowObjects3D.begin(); i != m_outOverflowObjects3D.end();
          i++)
     {
-        delete *i;
+        delete i.value();
     }
     m_outOverflowObjects3D.clear();
 }
@@ -233,7 +233,7 @@ void MapProperties::clearOverflowMountains() {
     for (i = m_outOverflowMountains.begin(); i != m_outOverflowMountains.end();
          i++)
     {
-        delete *i;
+        delete i.value();
     }
     m_outOverflowMountains.clear();
 }
@@ -622,6 +622,8 @@ void MapProperties::writeOverflow(QJsonObject &json, const QHash<Portion, QSet<
     for (i = overflow.begin(); i != overflow.end(); i++) {
         portion = i.key();
         positions = i.value();
+        tabKey = QJsonArray();
+        tabValue = QJsonArray();
         portion.write(tabKey);
         for (j = positions->begin(); j != positions->end(); j++) {
             position = *j;
@@ -630,6 +632,7 @@ void MapProperties::writeOverflow(QJsonObject &json, const QHash<Portion, QSet<
             tabValue.append(tabPosition);
         }
 
+        objHash = QJsonObject();
         objHash[RPM::JSON_KEY] = tabKey;
         objHash[RPM::JSON_VALUE] = tabValue;
         tabOverflow.append(objHash);
