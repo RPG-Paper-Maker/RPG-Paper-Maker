@@ -62,7 +62,7 @@ void DialogCommandShakeScreen::initializePrimitives()
         false);
     ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
     ui->panelPrimitiveOffset->setNumberValue(30);
-    ui->panelPrimitiveShakeNumber->setNumberDoubleValue(5);
+    ui->panelPrimitiveShakeNumber->setNumberDoubleValue(2);
     ui->panelPrimitiveTime->setNumberDoubleValue(2);
 }
 

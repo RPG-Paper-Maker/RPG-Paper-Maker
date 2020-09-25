@@ -852,12 +852,16 @@ void ProjectUpdater::updateVersion_1_5_3() {
 
 void ProjectUpdater::updateVersion_1_5_6()
 {
-    // Update change state command
+    // Update change state command + modify inventory + pictures
     connect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
         updateVersion_1_5_6_commands(QStandardItem *)));
     this->updateCommands();
     disconnect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
         updateVersion_1_5_6_commands(QStandardItem *)));
+
+    // DLCs
+    m_project->gameDatas()->dlcsDatas()->setDefault();
+    m_project->writeDlcs();
 }
 
 // -------------------------------------------------------
@@ -906,8 +910,4 @@ void ProjectUpdater::updateVersion_1_5_6_commands(QStandardItem *commands)
             command->setCommands(list);
         }
     }
-
-    // DLCs
-    m_project->gameDatas()->dlcsDatas()->setDefault();
-    m_project->writeDlcs();
 }

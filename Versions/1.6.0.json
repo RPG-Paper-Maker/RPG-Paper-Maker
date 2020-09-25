@@ -22,11 +22,12 @@
     ],
 	"bugs": [
         "Loading screen should be black screen (no map previous color)",
-        "Some issues with shake screen",
+        "Shake screen command: weird offset",
         "Operation: divide by %",
         "Open project folder not working",
         "Mountain in depth: can't go back to 0 Y axis floor",
-        "Command move camera: change target weird behavior when not checking target offset move"
+        "Command move camera: change target weird behavior when not checking target offset move",
+        "Mountain with width = 0: collision problem"
 	],
     "finished": [
         0,
@@ -47,7 +48,8 @@
         2,
 
         0,
-        0,
+        2,
+        2,
         2,
         2,
         2,
