@@ -644,13 +644,18 @@ void MainWindow::on_actionDatas_manager_triggered(){
 void MainWindow::on_actionSystems_manager_triggered(){
     RPM::isInConfig = true;
     DialogSystems dialog(project->gameDatas());
-    int oldSquareSize = project->gameDatas()->systemDatas()->squareSize();
-    if (openDialog(dialog) == QDialog::Accepted) {
+    float ps = project->gameDatas()->systemDatas()->squareSize();
+    if (openDialog(dialog) == QDialog::Accepted)
+    {
         // If square size different, update all maps camera distance
-        int newSquareSize = dialog.getSquareSize();
-        if (newSquareSize != oldSquareSize)
-            ((PanelProject*)mainPanel)->widgetMapEditor()
-                ->updateCameraDistance(newSquareSize / ((float) oldSquareSize));
+        float s = dialog.getSquareSize();
+        if (!qFuzzyCompare(s, ps))
+        {
+            reinterpret_cast<PanelProject *>(mainPanel)->widgetTreeLocalMaps()
+                ->updateSquareSizeCoef(s, ps);
+            reinterpret_cast<PanelProject *>(mainPanel)->widgetMapEditor()
+                ->updateTagsSquares(s, ps);
+        }
         project->writeGameDatas();
     }
     else

@@ -17,6 +17,7 @@
 #include "treemapdatas.h"
 #include <QDir>
 #include <QMessageBox>
+#include <QtMath>
 
 // -------------------------------------------------------
 //
@@ -426,6 +427,40 @@ void WidgetTreeLocalMaps::expandAllNode(QStandardItem *item)
 void WidgetTreeLocalMaps::disableContextMenu()
 {
     this->setContextMenuPolicy(Qt::NoContextMenu);
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeLocalMaps::updateSquareSizeCoef(float s, float ps)
+{
+    this->updateSquareSizeCoefItem(s, ps, m_model->invisibleRootItem());
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeLocalMaps::updateSquareSizeCoefItem(float s, float ps, QStandardItem
+    *item)
+{
+    TreeMapTag *tag;
+    for (int i = 0, l = item->rowCount(); i < l; i++)
+    {
+        QStandardItem *child = item->child(i);
+        tag = reinterpret_cast<TreeMapTag *>(child->data().value<quintptr>());
+
+        if (tag->isDir())
+        {
+            this->updateSquareSizeCoefItem(s, ps, child);
+        } else
+        {
+            tag->position()->setX(tag->position()->x() / ps * s);
+            tag->position()->setY((static_cast<int>(tag->position()->y()) /
+                static_cast<int>(ps) * s) + qFloor(static_cast<double>((
+                static_cast<int>(tag->position()->y()) % static_cast<int>(ps)) *
+                (s / ps))));
+            tag->position()->setZ(tag->position()->z() / ps * s);
+            tag->setCameraDistance(qRound(tag->cameraDistance() / ps * s));
+        }
+    }
 }
 
 // -------------------------------------------------------

@@ -62,7 +62,7 @@ public:
     void needUpdateMapDetection(SystemDetection *detection, QVector3D *position,
         QVector3D *positionObject, int cameraDistance, double
         cameraHorizontalAngle, double cameraVerticalAngle);
-    void updateCameraDistance(float coef);
+    void updateTagsSquares(float s, float ps);
     void initializeMap();
     void save();
     void onKeyPress(int k, double speed);

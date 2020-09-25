@@ -57,11 +57,20 @@ QString TreeMapTag::realName() const {
     return Map::generateMapName(id());
 }
 
-QVector3D* TreeMapTag::position() const { return m_position; }
+QVector3D * TreeMapTag::position() const
+{
+    return m_position;
+}
 
-QVector3D* TreeMapTag::positionObject() const { return m_positionObject; }
+QVector3D * TreeMapTag::positionObject() const
+{
+    return m_positionObject;
+}
 
-int TreeMapTag::cameraDistance() const { return m_cameraDistance; }
+int TreeMapTag::cameraDistance() const
+{
+    return m_cameraDistance;
+}
 
 double TreeMapTag::cameraHorizontalAngle() const {
     return m_cameraHorizontalAngle;

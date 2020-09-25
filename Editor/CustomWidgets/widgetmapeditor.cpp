@@ -400,9 +400,12 @@ void WidgetMapEditor::needUpdateMapDetection(SystemDetection *detection,
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::updateCameraDistance(float coef) {
-    m_control.camera()->setDistance(static_cast<int>(m_control.camera()
-        ->distance() * coef));
+void WidgetMapEditor::updateTagsSquares(float s, float ps)
+{
+    m_control.cursor()->syncPositions();
+    m_control.cursorObject()->syncPositions();
+    m_control.camera()->setDistance(qRound(m_control.camera()->distance() / ps *
+        s));
 }
 
 // -------------------------------------------------------

@@ -29,7 +29,8 @@
         "Mountain in depth: can't go back to 0 Y axis floor",
         "Command move camera: change target weird behavior when not checking target offset move",
         "Mountain with width = 0: collision problem",
-        "Can't open project message error issue"
+        "Can't open project message error issue",
+        "Cursors position changed in map editor when updating square size"
 	],
     "finished": [
         0,
@@ -51,6 +52,7 @@
         2,
 
         0,
+        2,
         2,
         2,
         2,

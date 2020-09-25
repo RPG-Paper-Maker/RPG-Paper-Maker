@@ -33,8 +33,8 @@ public:
     static TreeMapTag* createMap(QString name, int id);
     bool isDir() const;
     QString realName() const;
-    QVector3D* position() const;
-    QVector3D* positionObject() const;
+    QVector3D * position() const;
+    QVector3D * positionObject() const;
     int cameraDistance() const;
     double cameraHorizontalAngle() const;
     double cameraVerticalAngle() const;

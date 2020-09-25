@@ -235,6 +235,13 @@ void Cursor::addHeight(int h, int hp) {
 
 // -------------------------------------------------------
 
+void Cursor::syncPositions()
+{
+    m_positionReal = *m_positionSquare;
+}
+
+// -------------------------------------------------------
+
 void Cursor::initializeVertices(){
 
     QVector3D pos(0.0f, 0.15f, 0.0f);

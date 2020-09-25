@@ -60,6 +60,8 @@ public:
     bool setCurrentIndexFirstMap(QStandardItem* item);
     void expandAllNode(QStandardItem *item);
     void disableContextMenu();
+    void updateSquareSizeCoef(float s, float ps);
+    void updateSquareSizeCoefItem(float s, float ps, QStandardItem *item);
 
 protected:
     virtual void keyPressEvent(QKeyEvent *event);
