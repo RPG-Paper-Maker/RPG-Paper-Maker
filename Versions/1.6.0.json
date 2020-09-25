@@ -18,7 +18,8 @@
         "Rotation for foors",
         "Tileset: new asset town (with 2 houses as 3D objects)",
         "New language: russian (beta)",
-        "Select a command with multiple lines: instant selection + perform up down keyboard selection"
+        "Select a command with multiple lines: instant selection + perform up down keyboard selection",
+        "Command script: intergation of $object variable representing this object"
     ],
 	"bugs": [
         "Loading screen should be black screen (no map previous color)",
@@ -27,7 +28,8 @@
         "Open project folder not working",
         "Mountain in depth: can't go back to 0 Y axis floor",
         "Command move camera: change target weird behavior when not checking target offset move",
-        "Mountain with width = 0: collision problem"
+        "Mountain with width = 0: collision problem",
+        "Can't open project message error issue"
 	],
     "finished": [
         0,
@@ -46,8 +48,10 @@
         0,
         0,
         2,
+        2,
 
         0,
+        2,
         2,
         2,
         2,

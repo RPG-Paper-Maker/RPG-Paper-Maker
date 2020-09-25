@@ -210,8 +210,12 @@ void Project::readAll() {
 bool Project::readVersion(){
 
     QFile file(Common::pathCombine(p_pathCurrentProject, "game.rpm"));
-    if(!file.open(QIODevice::ReadOnly)) {
-        QMessageBox::information(nullptr, "error", file.errorString());
+    if(!file.open(QIODevice::ReadOnly))
+    {
+        QMessageBox::information(nullptr, RPM::translate(Translations
+            ::ERROR_MESSAGE), RPM::translate(Translations
+            ::PATH_LOCATION_DOESNT_EXISTS) + RPM::DOT);
+        return false;
     }
 
     QTextStream in(&file);
