@@ -58,6 +58,9 @@ public:
     virtual int widthPixels() const = 0;
     virtual int heightPixels() const = 0;
     virtual int depthPixels() const = 0;
+    virtual int xOverflowCenter() const = 0;
+    virtual int yOverflowCenter() const = 0;
+    virtual int zOverflowCenter() const = 0;
     virtual void getCenter(QVector3D &center) const = 0;
     virtual int minDistanceFromCenter() const = 0;
     virtual void initializeVertices(QVector<Vertex> &vertices, QVector<GLuint>

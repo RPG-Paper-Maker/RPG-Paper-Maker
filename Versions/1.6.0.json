@@ -30,7 +30,8 @@
         "Command move camera: change target weird behavior when not checking target offset move",
         "Mountain with width = 0: collision problem",
         "Can't open project message error issue",
-        "Cursors position changed in map editor when updating square size"
+        "Cursors position changed in map editor when updating square size",
+        "Collisions problems with 3D objects"
 	],
     "finished": [
         0,
@@ -52,6 +53,7 @@
         2,
 
         0,
+        2,
         2,
         2,
         2,

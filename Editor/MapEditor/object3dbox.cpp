@@ -210,19 +210,19 @@ void Object3DBoxDatas::getPosSizeCenterInfos(QVector3D &pos, QVector3D &size,
 // -------------------------------------------------------
 
 qreal Object3DBoxDatas::xMin() const {
-    return 0;
+    return -this->width();
 }
 
 // -------------------------------------------------------
 
 qreal Object3DBoxDatas::yMin() const {
-    return 0;
+    return -this->height();
 }
 
 // -------------------------------------------------------
 
 qreal Object3DBoxDatas::zMin() const {
-    return 0;
+    return -this->depth();
 }
 
 // -------------------------------------------------------
@@ -276,6 +276,27 @@ int Object3DBoxDatas::heightPixels() const {
 
 int Object3DBoxDatas::depthPixels() const {
     return m_datas->depth();
+}
+
+// -------------------------------------------------------
+
+int Object3DBoxDatas::xOverflowCenter() const
+{
+    return 0;
+}
+
+// -------------------------------------------------------
+
+int Object3DBoxDatas::yOverflowCenter() const
+{
+    return 0;
+}
+
+// -------------------------------------------------------
+
+int Object3DBoxDatas::zOverflowCenter() const
+{
+    return 0;
 }
 
 // -------------------------------------------------------

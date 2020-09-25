@@ -157,15 +157,18 @@ void Objects3D::getSetPortionsOverflow(QSet<Portion> &portionsOverflow, Position
     int h = Common::ceil(object3D->yMax() * scale);
     int d = Common::ceil(object3D->zMax() * scale);
     int min = qMin(qMin(x, y), z);
-    int max = qMin(qMin(r, h), d);
+    int max = qMax(qMax(r, h), d);
+    int cx = object3D->xOverflowCenter();
+    int cy = object3D->yOverflowCenter();
+    int cz = object3D->zOverflowCenter();
 
     for (int i = min; i < max; i++) {
         for (int j = min; j < max; j++) {
             for (int k = min; k < max; k++) {
                 Position newPosition = p;
-                newPosition.addX(i);
-                newPosition.addY(j);
-                newPosition.addZ(k);
+                newPosition.addX(i + cx);
+                newPosition.addY(j + cy);
+                newPosition.addZ(k + cz);
                 Portion newPortion;
                 Map::getGlobalPortion(newPosition, newPortion);
                 if (newPortion != currentPortion) {

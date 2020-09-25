@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QtMath>
 #include "object3dcustom.h"
 #include "rpm.h"
 #include "common.h"
@@ -150,6 +151,27 @@ int Object3DCustomDatas::depthPixels() const {
     maximum = m_box.maximum();
 
     return static_cast<int>(maximum.z() - minimum.z());
+}
+
+// -------------------------------------------------------
+
+int Object3DCustomDatas::xOverflowCenter() const
+{
+    return qFloor(static_cast<qreal>(m_box.center().x() / RPM::getSquareSize()));
+}
+
+// -------------------------------------------------------
+
+int Object3DCustomDatas::yOverflowCenter() const
+{
+    return qFloor(static_cast<qreal>(m_box.center().y() / RPM::getSquareSize()));
+}
+
+// -------------------------------------------------------
+
+int Object3DCustomDatas::zOverflowCenter() const
+{
+    return qFloor(static_cast<qreal>(m_box.center().z() / RPM::getSquareSize()));
 }
 
 // -------------------------------------------------------
