@@ -22,7 +22,6 @@
         "Command script: intergation of $object variable representing this object"
     ],
 	"bugs": [
-        "Loading screen should be black screen (no map previous color)",
         "Shake screen command: weird offset",
         "Operation: divide by %",
         "Open project folder not working",
@@ -31,13 +30,15 @@
         "Mountain with width = 0: collision problem",
         "Can't open project message error issue",
         "Cursors position changed in map editor when updating square size",
-        "Collisions problems with 3D objects"
+        "Collisions problems with 3D objects",
+        "Command change state not always working with hero",
+        "Datas manager: animation not correctly updating picture texture"
 	],
     "finished": [
+        1,
+        1,
         0,
-        0,
-        0,
-        0,
+        1,
         0,
         0,
         0,
@@ -52,7 +53,8 @@
         2,
         2,
 
-        0,
+        2,
+        2,
         2,
         2,
         2,

@@ -311,6 +311,7 @@ void DialogDatas::initializeAnimations(GameDatas *gameDatas) {
 
 void DialogDatas::updateAnimation(SystemAnimation *animation) {
     ui->widgetPictureAnimation->setPicture(animation->picture());
+    ui->widgetAnimationTexture->updatePicture(animation->pictureID());
     ui->spinBoxAnimationRows->setValue(animation->rows());
     ui->spinBoxAnimationColumns->setValue(animation->columns());
     ui->comboBoxAnimationPosition->setCurrentIndex(static_cast<int>(animation
@@ -747,6 +748,7 @@ void DialogDatas::on_animationPictureChanged(SystemPicture *picture) {
     reinterpret_cast<SystemAnimation *>(ui->panelSuperListAnimations->list()
         ->getSelected()->data().value<quintptr>())->setPictureID(picture->id());
     ui->widgetAnimationTexture->updatePicture(picture->id());
+    ui->widgetAnimation->repaint();
 }
 
 // -------------------------------------------------------
