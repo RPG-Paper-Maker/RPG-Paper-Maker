@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>302</width>
-    <height>256</height>
+    <height>287</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,50 +33,7 @@
      </property>
      <item>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="labelFront">
-         <property name="text">
-          <string>Front:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="WidgetPicture" name="widgetPictureFront" native="true">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>27</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>27</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2" rowspan="6">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>118</width>
-           <height>188</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="labelBack">
-         <property name="text">
-          <string>Back:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
+       <item row="2" column="1">
         <widget class="WidgetPicture" name="widgetPictureBack" native="true">
          <property name="minimumSize">
           <size>
@@ -92,37 +49,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="labelTop">
-         <property name="text">
-          <string>Top:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="WidgetPicture" name="widgetPictureTop" native="true">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>27</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>27</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="labelBottom">
-         <property name="text">
-          <string>Bottom:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
+       <item row="4" column="1">
         <widget class="WidgetPicture" name="widgetPictureBottom" native="true">
          <property name="minimumSize">
           <size>
@@ -138,14 +65,30 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="labelLeft">
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelName">
          <property name="text">
-          <string>Left:</string>
+          <string>Name:</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="1" column="1">
+        <widget class="WidgetPicture" name="widgetPictureFront" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>27</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
         <widget class="WidgetPicture" name="widgetPictureLeft" native="true">
          <property name="minimumSize">
           <size>
@@ -161,14 +104,21 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item row="6" column="0">
         <widget class="QLabel" name="labelRight">
          <property name="text">
           <string>Right:</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item row="5" column="0">
+        <widget class="QLabel" name="labelLeft">
+         <property name="text">
+          <string>Left:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
         <widget class="WidgetPicture" name="widgetPictureRight" native="true">
          <property name="minimumSize">
           <size>
@@ -183,6 +133,66 @@
           </size>
          </property>
         </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelFront">
+         <property name="text">
+          <string>Front:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="labelTop">
+         <property name="text">
+          <string>Top:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="labelBack">
+         <property name="text">
+          <string>Back:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="labelBottom">
+         <property name="text">
+          <string>Bottom:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="WidgetPicture" name="widgetPictureTop" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>27</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEditName"/>
+       </item>
+       <item row="0" column="2" rowspan="7">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>118</width>
+           <height>188</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </item>

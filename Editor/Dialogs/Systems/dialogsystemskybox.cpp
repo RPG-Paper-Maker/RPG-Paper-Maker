@@ -44,6 +44,7 @@ DialogSystemSkyBox::~DialogSystemSkyBox()
 
 void DialogSystemSkyBox::initialize()
 {
+    ui->lineEditName->setText(m_skyBox.name());
     ui->widgetPictureFront->setKind(PictureKind::SkyBoxes);
     ui->widgetPictureFront->initializeSuper(m_skyBox.frontID());
     ui->widgetPictureBack->setKind(PictureKind::SkyBoxes);
@@ -64,6 +65,7 @@ void DialogSystemSkyBox::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::SET_SKY_BOX) + RPM
         ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
     ui->labelFront->setText(RPM::translate(Translations::FRONT) + RPM::COLON);
     ui->labelBack->setText(RPM::translate(Translations::BACK) + RPM::COLON);
     ui->labelTop->setText(RPM::translate(Translations::TOP) + RPM::COLON);
@@ -71,4 +73,15 @@ void DialogSystemSkyBox::translate()
     ui->labelLeft->setText(RPM::translate(Translations::LEFT) + RPM::COLON);
     ui->labelRight->setText(RPM::translate(Translations::RIGHT) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogSystemSkyBox::on_lineEditName_textChanged(const QString &text)
+{
+    m_skyBox.setName(text);
 }
