@@ -32,7 +32,12 @@
         "Cursors position changed in map editor when updating square size",
         "Collisions problems with 3D objects",
         "Command change state not always working with hero",
-        "Datas manager: animation not correctly updating picture texture"
+        "Datas manager: animation not correctly updating picture texture",
+        "When no exp stat, remove it in player state description",
+        "Some battle effects combinaison issues",
+        "Animations in engine: no sounds played",
+        "Engine crash with larger maps with overflows",
+        "Impossible to edit skybox name"
 	],
     "finished": [
         1,
@@ -62,6 +67,11 @@
         2,
         2,
         2,
+        2,
+        2,
+        2,
+        1,
+        0,
         2,
         2
     ]

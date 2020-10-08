@@ -443,19 +443,22 @@ MapElement * MapProperties::updateRaycastingOverflowSprites(Portion &portion,
         for (i = positions->begin(); i != positions->end(); i++) {
             position = *i;
             map->getLocalPortion(position, portion);
-            mapPortion = map->mapPortion(portion);
-            if (mapPortion != nullptr) {
-                remove = false;
-                element = mapPortion->updateRaycastingOverflowSprite(map
-                    ->squareSize(), position, finalDistance, finalPosition, ray,
-                    cameraHAngle, remove);
-                if (remove)
-                {
-                    positionsRemove.insert(position);
-                } else
-                {
-                    if (element != nullptr) {
-                        return element;
+            if (map->isInPortion(portion))
+            {
+                mapPortion = map->mapPortion(portion);
+                if (mapPortion != nullptr) {
+                    remove = false;
+                    element = mapPortion->updateRaycastingOverflowSprite(map
+                        ->squareSize(), position, finalDistance, finalPosition, ray,
+                        cameraHAngle, remove);
+                    if (remove)
+                    {
+                        positionsRemove.insert(position);
+                    } else
+                    {
+                        if (element != nullptr) {
+                            return element;
+                        }
                     }
                 }
             }
@@ -494,18 +497,21 @@ MapElement * MapProperties::updateRaycastingOverflowObjects3D(Portion& portion,
         for (i = positions->begin(); i != positions->end(); i++) {
             position = *i;
             map->getLocalPortion(position, portion);
-            mapPortion = map->mapPortion(portion);
-            if (mapPortion != nullptr) {
-                remove = false;
-                element = mapPortion->updateRaycastingOverflowObject3D(position,
-                    finalDistance, finalPosition, ray, remove);
-                if (remove)
-                {
-                    positionsRemove.insert(position);
-                } else
-                {
-                    if (element != nullptr) {
-                        return element;
+            if (map->isInPortion(portion))
+            {
+                mapPortion = map->mapPortion(portion);
+                if (mapPortion != nullptr) {
+                    remove = false;
+                    element = mapPortion->updateRaycastingOverflowObject3D(position,
+                        finalDistance, finalPosition, ray, remove);
+                    if (remove)
+                    {
+                        positionsRemove.insert(position);
+                    } else
+                    {
+                        if (element != nullptr) {
+                            return element;
+                        }
                     }
                 }
             }
@@ -544,18 +550,21 @@ MapElement * MapProperties::updateRaycastingOverflowMountains(Portion& portion,
         for (i = positions->begin(); i != positions->end(); i++) {
             position = *i;
             map->getLocalPortion(position, portion);
-            mapPortion = map->mapPortion(portion);
-            if (mapPortion != nullptr) {
-                remove = false;
-                element = mapPortion->updateRaycastingOverflowMountain(position
-                    , finalDistance, finalPosition, ray, remove);
-                if (remove)
-                {
-                    positionsRemove.insert(position);
-                } else
-                {
-                    if (element != nullptr) {
-                        return element;
+            if (map->isInPortion(portion))
+            {
+                mapPortion = map->mapPortion(portion);
+                if (mapPortion != nullptr) {
+                    remove = false;
+                    element = mapPortion->updateRaycastingOverflowMountain(position
+                        , finalDistance, finalPosition, ray, remove);
+                    if (remove)
+                    {
+                        positionsRemove.insert(position);
+                    } else
+                    {
+                        if (element != nullptr) {
+                            return element;
+                        }
                     }
                 }
             }
