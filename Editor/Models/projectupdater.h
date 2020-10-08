@@ -70,6 +70,7 @@ public slots:
     void updateVersion_1_5_3();
     void updateVersion_1_5_6();
     void updateVersion_1_5_6_commands(QStandardItem *commands);
+    void updateVersion_1_6_0();
 
 signals:
     void progress(int, QString);

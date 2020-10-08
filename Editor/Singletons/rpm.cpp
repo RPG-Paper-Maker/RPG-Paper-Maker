@@ -103,6 +103,7 @@ const QString RPM::PATH_BR = Common::pathCombine(FOLDER_CONTENT, "BR");
 const QString RPM::PATH_DATAS = Common::pathCombine(FOLDER_CONTENT, "Datas");
 const QString RPM::PATH_MAPS = Common::pathCombine(PATH_DATAS, "Maps");
 const QString RPM::PATH_SCRIPTS_DIR = Common::pathCombine(PATH_DATAS, "Scripts");
+const QString RPM::PATH_SAVES = Common::pathCombine(PATH_DATAS, "Saves");
 const QString RPM::PATH_SCRIPTS_SYSTEM_DIR = Common::pathCombine(
     PATH_SCRIPTS_DIR, "System");
 const QString RPM::PATH_SCRIPTS_PLUGINS_DIR = Common::pathCombine(
@@ -159,8 +160,6 @@ const QString RPM::PATH_SONGS_DATAS = Common::pathCombine(PATH_DATAS,
     "songs" + EXTENSION_JSON);
 const QString RPM::PATH_SHAPES_DATAS = Common::pathCombine(PATH_DATAS,
     "shapes" + EXTENSION_JSON);
-const QString RPM::PATH_SAVES = Common::pathCombine(PATH_DATAS,
-    "saves" + EXTENSION_JSON);
 const QString RPM::PATH_PICTURES = Common::pathCombine(FOLDER_CONTENT,
     "Images");
 const QString RPM::PATH_HUD = Common::pathCombine(PATH_PICTURES,

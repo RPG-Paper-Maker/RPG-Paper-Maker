@@ -19,11 +19,11 @@
 #include "titlesettingkind.h"
 #include "systemcommonreaction.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 14;
+const int ProjectUpdater::incompatibleVersionsCount = 15;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
-     "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6"};
+     "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0"};
 
 // -------------------------------------------------------
 //
@@ -910,4 +910,13 @@ void ProjectUpdater::updateVersion_1_5_6_commands(QStandardItem *commands)
             command->setCommands(list);
         }
     }
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_6_0()
+{
+    QFile(Common::pathCombine(Common::pathCombine(m_project
+        ->pathCurrentProjectApp(), RPM::PATH_DATAS), "saves.json")).remove();
+    QDir(m_project->pathCurrentProjectApp()).mkpath(RPM::PATH_SAVES);
 }

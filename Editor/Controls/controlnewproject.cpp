@@ -141,6 +141,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     dir.mkpath(RPM::PATH_MTL);
     dir.mkpath(RPM::PATH_COLLISIONS);
     dir.mkpath(RPM::PATH_HUD_PICTURES);
+    dir.mkpath(RPM::PATH_SAVES);
 
     // Create the default datas
     project->setDefault();
@@ -148,15 +149,9 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     project->write(pathDir);
     QString error = project->createRPMFile();
     if (error != nullptr)
+    {
         return error;
-
-    // Create saves
-    QJsonArray tab;
-    tab.append(QJsonValue());
-    tab.append(QJsonValue());
-    tab.append(QJsonValue());
-    tab.append(QJsonValue());
-    Common::writeArrayJSON(Common::pathCombine(pathApp, RPM::PATH_SAVES), tab);
+    }
 
     // Creating first empty map
     dir.mkdir(RPM::PATH_MAPS);
