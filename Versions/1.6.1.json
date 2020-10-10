@@ -1,0 +1,44 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Javascript game code documentation",
+        "Javascript game code tutorials",
+        "Plugins manager",
+        "Protect games datas (code, datas, musics, pictures, videos)",
+        "3D objects as objects (no animated)",
+        "Status in battles",
+        "Command shop menu",
+        "Command restock shop",
+        "Autotiles: add a different cutting option",
+        "Option for character's detection to return just the closest object instead of a list",
+        "First engine start: detect language",
+        "Rotation for foors",
+        "Tileset: new asset town (with 2 houses as 3D objects)",
+        "New language: russian (beta)"
+    ],
+	"bugs": [
+        "Some battle effects combinaison issues",
+        "Animations in engine: no sounds played",
+	],
+    "finished": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+
+        1,
+        0
+    ]
+}
