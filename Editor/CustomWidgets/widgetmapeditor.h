@@ -84,6 +84,7 @@ public:
     void heightPlusUp();
     void heightDown();
     void heightPlusDown();
+    void zoom(int value);
     void updateCursor();
 
 private:

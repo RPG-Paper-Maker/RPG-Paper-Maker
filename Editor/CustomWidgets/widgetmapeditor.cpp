@@ -566,6 +566,13 @@ void WidgetMapEditor::heightPlusDown() {
 
 // -------------------------------------------------------
 
+void WidgetMapEditor::zoom(int value)
+{
+    m_control.zoom(value);
+}
+
+// -------------------------------------------------------
+
 void WidgetMapEditor::updateCursor() {
     QCursor *cursor;
 

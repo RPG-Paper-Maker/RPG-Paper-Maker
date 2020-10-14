@@ -130,6 +130,8 @@
     <addaction name="actionHeight_plus_up"/>
     <addaction name="actionHeight_down"/>
     <addaction name="actionHeight_plus_down"/>
+    <addaction name="actionZoom_in"/>
+    <addaction name="actionZoom_out"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -676,6 +678,22 @@
    </property>
    <property name="iconText">
     <string>Folder</string>
+   </property>
+  </action>
+  <action name="actionZoom_in">
+   <property name="text">
+    <string>Zoom in</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+Up</string>
+   </property>
+  </action>
+  <action name="actionZoom_out">
+   <property name="text">
+    <string>Zoom out</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+Down</string>
    </property>
   </action>
  </widget>

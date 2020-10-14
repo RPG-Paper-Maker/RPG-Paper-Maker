@@ -16,11 +16,14 @@
         "First engine start: detect language",
         "Rotation for foors",
         "Tileset: new asset town (with 2 houses as 3D objects)",
-        "New language: russian (beta)"
+        "New language: russian (beta)",
+        "Camera zoom + rotation without mousewheel (using shift key)"
     ],
 	"bugs": [
         "Some battle effects combinaison issues",
         "Animations in engine: no sounds played",
+        "Custom 3D objects load issue",
+        "Layers not correctly applied ingame"
 	],
     "finished": [
         1,
@@ -37,8 +40,11 @@
         0,
         0,
         0,
+        2,
 
         1,
-        0
+        0,
+        2,
+        2
     ]
 }

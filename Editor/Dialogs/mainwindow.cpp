@@ -623,6 +623,26 @@ void MainWindow::on_actionHeight_plus_down_triggered() {
 
 // -------------------------------------------------------
 
+void MainWindow::on_actionZoom_in_triggered()
+{
+    if (project->currentMap() != nullptr)
+    {
+        reinterpret_cast<PanelProject *>(mainPanel)->widgetMapEditor()->zoom(1);
+    }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionZoom_out_triggered()
+{
+    if (project->currentMap() != nullptr)
+    {
+        reinterpret_cast<PanelProject *>(mainPanel)->widgetMapEditor()->zoom(-1);
+    }
+}
+
+// -------------------------------------------------------
+
 void MainWindow::on_actionDatas_manager_triggered(){
     RPM::isInConfig = true;
     DialogDatas dialog(project->gameDatas());

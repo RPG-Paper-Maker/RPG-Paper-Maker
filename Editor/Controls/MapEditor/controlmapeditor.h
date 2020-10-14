@@ -216,6 +216,7 @@ public:
     void heightPlusUp();
     void heightDown();
     void heightPlusDown();
+    void zoom(int value);
     void performUndoRedoAction(MapEditorSubSelectionKind kind, bool before,
         QJsonObject &obj, Position &position);
     QString getSquareInfos(MapEditorSelectionKind kind,

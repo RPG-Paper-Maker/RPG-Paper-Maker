@@ -1192,6 +1192,18 @@ void ControlMapEditor::heightPlusDown() {
 
 // -------------------------------------------------------
 
+void ControlMapEditor::zoom(int value)
+{
+    if (value > 0) {
+        m_camera->zoomPlus(m_map->squareSize());
+    } else
+    {
+        m_camera->zoomLess(m_map->squareSize());
+    }
+}
+
+// -------------------------------------------------------
+
 void ControlMapEditor::undoRedo(QJsonArray &states, bool reverseAction) {
     int init = reverseAction ? states.size() : 0;
     int incr = reverseAction ? -1 : 1;
@@ -1471,20 +1483,15 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
 // -------------------------------------------------------
 
 void ControlMapEditor::onMouseWheelMove(QWheelEvent *event, bool updateTree) {
-    if (m_isCtrlPressed) {
-        int value;
-
-        value = event->delta() > 0 ? 1 : -1;
+    if (m_isCtrlPressed)
+    {
+        int value = event->delta() > 0 ? 1 : -1;
         addHeight(m_isShiftPressed ? 0 : value, m_isShiftPressed
             ? value : 0);
-    } else {
-        if (event->delta() > 0) {
-            m_camera->zoomPlus(m_map->squareSize());
-        } else {
-            m_camera->zoomLess(m_map->squareSize());
-        }
+    } else
+    {
+        this->zoom(event->delta());
     }
-
     if (m_detection == nullptr && updateTree) {
         updateCameraTreeNode();
     }
@@ -1498,10 +1505,13 @@ void ControlMapEditor::onMouseMove(QPoint point, Qt::MouseButton button,
     updateMousePosition(point);
     m_mouseMove = point;
 
-    if (button == Qt::MouseButton::MiddleButton) {
+    if (button == Qt::MouseButton::MiddleButton || m_isShiftPressed)
+    {
         m_camera->onMouseWheelPressed(m_mouseMove, m_mouseBeforeUpdate);
         if (updateTree)
+        {
             updateCameraTreeNode();
+        }
     }
 }
 
@@ -1517,8 +1527,8 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
     // Update mouse
     updateMouse(point, selection, drawKind, layerOn);
 
-    if (button != Qt::MouseButton::MiddleButton) {
-
+    if (button != Qt::MouseButton::MiddleButton)
+    {
         // If ctrl key is pressed, teleport
         if (m_isCtrlPressed) {
             moveCursorToMousePosition(point);
