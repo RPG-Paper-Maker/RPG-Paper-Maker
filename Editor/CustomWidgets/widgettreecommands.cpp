@@ -855,15 +855,47 @@ void WidgetTreeCommands::updateKeyboardUpDown(int offset) {
         return;
     } else {
         item = getSelected();
-        if (item != nullptr) {
-            newItem = this->getModel()->item(item->row() + offset, item->column());
-            if (newItem != nullptr)
+        if (item != nullptr)
+        {
+            do
             {
-                do
+                command = nullptr;
+                newItem = item->parent();
+                if (newItem == nullptr)
                 {
-                    command = nullptr;
-                    newItem = this->getModel()->item(item->row() + offset, item
-                        ->column());
+                    newItem = this->getModel()->invisibleRootItem();
+                }
+                newItem = newItem->child(item->row() + offset, item->column());
+                if (newItem != nullptr)
+                {
+                    command = reinterpret_cast<EventCommand *>(newItem
+                        ->data().value<quintptr>());
+                }
+                if (offset < 0)
+                {
+                    offset--;
+                } else
+                {
+                    offset++;
+                }
+
+                // New parent
+                if (newItem == nullptr && item->parent() != nullptr)
+                {
+                    item = item->parent();
+                    if (offset < 0)
+                    {
+                        offset = -1;
+                    } else
+                    {
+                        offset = 1;
+                    }
+                    newItem = item->parent();
+                    if (newItem == nullptr)
+                    {
+                        newItem = this->getModel()->invisibleRootItem();
+                    }
+                    newItem = newItem->child(item->row() + offset, item->column());
                     if (newItem != nullptr)
                     {
                         command = reinterpret_cast<EventCommand *>(newItem
@@ -876,9 +908,9 @@ void WidgetTreeCommands::updateKeyboardUpDown(int offset) {
                     {
                         offset++;
                     }
-                } while (newItem != nullptr && !command->isErasable() &&
-                    command->kind() != EventCommandKind::None);
-            }
+                }
+            } while (newItem != nullptr && item != nullptr && !command
+                ->isErasable() && command->kind() != EventCommandKind::None);
             if (newItem != nullptr) {
                 this->selectionModel()->clear();
                 this->selectionModel()->select(newItem->index(),
