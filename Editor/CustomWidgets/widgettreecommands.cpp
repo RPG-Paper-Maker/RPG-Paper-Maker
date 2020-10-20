@@ -963,6 +963,11 @@ void WidgetTreeCommands::mousePressEvent(QMouseEvent *event) {
     if (isMouseSelectingCommand(pos)) {
         contextNew();
     } else {
+        prevItems = getAllSelected();
+        if (!(QApplication::keyboardModifiers() & Qt::ControlModifier))
+        {
+            QTreeView::mousePressEvent(event);
+        }
         QModelIndex index = this->indexAt(event->pos());
         item = p_model->itemFromIndex(index);
         if (item == nullptr)
@@ -972,7 +977,7 @@ void WidgetTreeCommands::mousePressEvent(QMouseEvent *event) {
         }
         if (QApplication::keyboardModifiers() & Qt::ControlModifier)
         {
-            prevItems = getAllSelected();
+
             QItemSelectionModel::SelectionFlag flag = prevItems.contains(item) ?
                 QItemSelectionModel::Deselect : QItemSelectionModel::Select;
             this->selectionModel()->select(index, flag);
@@ -983,21 +988,12 @@ void WidgetTreeCommands::mousePressEvent(QMouseEvent *event) {
             this->selectionModel()->select(index, QItemSelectionModel::Select);
             this->selectChildren(item, QItemSelectionModel::Select);
         }
-        prevItems = getAllSelected();
-        this->selectionModel()->clear();
         if (item != nullptr && reinterpret_cast<EventCommand *>(item->data()
             .value<quintptr>())->kind() == EventCommandKind::None)
         {
             item->setText(">");
         }
         m_availableCommands = QList<EventCommandKind>();
-
-        for (int i = 0, l = prevItems.size(); i < l; i++)
-        {
-            this->selectionModel()->select(prevItems.at(i)->index(),
-                QItemSelectionModel::SelectCurrent);
-            this->selectChildren(prevItems.at(i));
-        }
         repaint();
     }
 }
@@ -1013,8 +1009,15 @@ void WidgetTreeCommands::mouseMoveEvent(QMouseEvent *event) {
 
 // -------------------------------------------------------
 
-void WidgetTreeCommands::mouseDoubleClickEvent(QMouseEvent* event){
-    if (event->button() == Qt::MouseButton::LeftButton) {
+void WidgetTreeCommands::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    if (QApplication::keyboardModifiers() & Qt::ControlModifier)
+    {
+        this->mousePressEvent(event);
+        return;
+    }
+    if (event->button() == Qt::MouseButton::LeftButton)
+    {
         openCommand();
     }
 }

@@ -17,16 +17,26 @@
         "Rotation for foors",
         "Tileset: new asset town (with 2 houses as 3D objects)",
         "New language: russian (beta)",
-        "Camera zoom + rotation without mousewheel (using shift key)"
+        "Camera zoom + rotation without mousewheel (using shift key)",
+        "Chinese language: small improvement"
     ],
 	"bugs": [
         "Some battle effects combinaison issues",
         "Animations in engine: no sounds played",
         "Custom 3D objects load issue",
-        "Layers not correctly applied ingame"
+        "Layers not correctly applied ingame",
+        "Command display a picture: position left top and center reverted",
+        "Double Sprites, Quadra Sprites, and Fix Sprites that have been rotated renders incorrectly",
+        "Collapse/Expand markers on conditional statements no longer function",
+        "Unable to select more than one command at a time when editing an event",
+        "Commands selection with keyboard: wrong selection inside nodes",
+        "No Common Reaction <>0013, but two Common Reaction <>0015",
+        "The editor will crash when rotating a 3D object when the object's Y value is different than the Y value you're on",
+        "The Models used for making objects don't seem to work",
+        "Example game: saves not working"
 	],
     "finished": [
-        1,
+        2,
         0,
         1,
         0,
@@ -41,10 +51,20 @@
         0,
         0,
         2,
+        0,
 
         1,
         0,
         2,
-        2
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
     ]
 }
