@@ -131,10 +131,7 @@ void MonstersDatas::setDefault(QStandardItem* ,
         action = new SystemMonsterAction(-1, "", MonsterActionKind::UseSkill);
         action->setMonster(monster);
         actions->appendRow(action->getModelRow());
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(monster)));
-        item->setText(monster->toString());
-        m_model->appendRow(item);
+        m_model->appendRow(monster->getModelRow());
     }
 }
 

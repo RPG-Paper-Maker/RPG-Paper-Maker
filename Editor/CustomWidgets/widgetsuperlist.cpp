@@ -314,6 +314,33 @@ void WidgetSuperList::keyPressEvent(QKeyEvent *event) {
 }
 
 // -------------------------------------------------------
+
+void WidgetSuperList::dropEvent(QDropEvent *event) {
+    QPoint pos = event->pos();
+    QModelIndex index = this->indexAt(pos);
+    QStandardItem *item = this->getModel()->itemFromIndex(index);
+    QStandardItem *selected = this->getSelected();
+    QList<QStandardItem *> newItems;
+    SuperListItem *super;
+
+    if (item == nullptr) {
+        item = this->getModel()->item(this->getModel()->rowCount() - 1);
+    }
+    if (item->column() == 0) {
+        QListView::dropEvent(event);
+    } else {
+        super = reinterpret_cast<SuperListItem *>(selected->data().value<quintptr>());
+        this->getModel()->removeRow(selected->row());
+        if (super == nullptr) {
+            selected = SuperListItem::getEmptyItem();
+            this->getModel()->insertRow(item->row() + 1, selected);
+        } else {
+            this->getModel()->insertRow(item->row() + 1, super->getModelRow());
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //

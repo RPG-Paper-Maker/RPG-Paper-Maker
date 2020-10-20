@@ -304,11 +304,8 @@ void BattleSystemDatas::setDefaultBattleMaps(){
     SuperListItem::deleteModel(m_modelBattleMaps, false);
     SystemBattleMap* sysBattleMap = new SystemBattleMap(1, RPM::translate(
         Translations::DEFAULT), 2, Position3D(8, 0, 0, 7));
-    QStandardItem* item = new QStandardItem;
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sysBattleMap)));
-    item->setText(sysBattleMap->toString());
-    m_modelBattleMaps->appendRow(item);
-    item = new QStandardItem;
+    m_modelBattleMaps->appendRow(sysBattleMap->getModelRow());
+    QStandardItem *item = new QStandardItem;
     item->setText(SuperListItem::beginningText);
     m_modelBattleMaps->appendRow(item);
 }
@@ -462,7 +459,6 @@ void BattleSystemDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelCommonEquipment, false);
     SuperListItem::deleteModel(m_modelWeaponsKind, false);
     SuperListItem::deleteModel(m_modelArmorsKind, false);
-    SuperListItem::deleteModel(m_modelBattleMaps, false);
     SuperListItem::deleteModel(m_modelElements, false);
     SuperListItem::deleteModel(m_modelCommonStatistics, false);
     SuperListItem::deleteModel(m_modelCommonBattleCommand, false);
@@ -491,19 +487,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     }
 
     // Battle maps
-    jsonList = json[jsonBattleMaps].toArray();
-    for (int i = 0; i < jsonList.size(); i++){
-        item = new QStandardItem;
-        SystemBattleMap* sysBattleMap = new SystemBattleMap;
-        sysBattleMap->read(jsonList.at(i).toObject());
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(
-            sysBattleMap)));
-        item->setText(sysBattleMap->toString());
-        m_modelBattleMaps->appendRow(item);
-    }
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_modelBattleMaps->appendRow(item);
+    SuperListItem::readTree(m_modelBattleMaps, new SystemBattleMap, json, jsonBattleMaps);
 
     // Equipments
     jsonList = json[jsonCommonEquipment].toArray();

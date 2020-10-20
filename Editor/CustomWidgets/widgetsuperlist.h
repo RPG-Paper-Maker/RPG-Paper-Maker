@@ -50,7 +50,8 @@ public:
     void updateKeyboardUpDown(int offset);
 
 protected:
-    void keyPressEvent(QKeyEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void dropEvent(QDropEvent *event);
 
 private:
     QStandardItemModel* p_model;

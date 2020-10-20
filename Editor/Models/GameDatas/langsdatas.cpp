@@ -47,9 +47,7 @@ void LangsDatas::setDefault(){
 
     item = new QStandardItem();
     super = new SuperListItem(1, "English");
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
-    item->setText(super->toString());
-    m_model->appendRow(item);
+    m_model->appendRow(super->getModelRow());
     item = new QStandardItem();
     item->setText(SuperListItem::beginningText);
     m_model->appendRow(item);
@@ -75,12 +73,9 @@ void LangsDatas::read(const QJsonObject &json){
 
     // Read
     for (int i = 0; i < tab.size(); i++){
-        item = new QStandardItem;
         super = new SuperListItem;
         super->read(tab[i].toObject());
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
-        item->setText(super->toString());
-        m_model->appendRow(item);
+        m_model->appendRow(super->getModelRow());
     }
 
     item = new QStandardItem();

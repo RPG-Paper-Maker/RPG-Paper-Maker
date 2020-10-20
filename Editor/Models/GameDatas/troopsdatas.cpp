@@ -95,11 +95,7 @@ void TroopsDatas::setDefault(QStandardItem *modelMonsters){
 
         // System troop
         sysTroop = new SystemTroop(i+1, names[i], monsters);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(sysTroop)));
-        item->setText(sysTroop->toString());
-        m_model->appendRow(item);
+        m_model->appendRow(sysTroop->getModelRow());
     }
 }
 

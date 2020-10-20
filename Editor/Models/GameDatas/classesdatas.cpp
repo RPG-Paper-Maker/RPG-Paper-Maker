@@ -159,11 +159,7 @@ void ClassesDatas::setDefault(QStandardItem *modelSkills,
         sysClass = new SystemClass(i + 1, new LangsTranslation(names[i]),
             initialLevels[i], maxLevels[i], expBases[i], expInflations[i],
             statisticsProgression, skills);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(sysClass)));
-        item->setText(sysClass->toString());
-        m_model->appendRow(item);
+        m_model->appendRow(sysClass->getModelRow());
     }
 }
 

@@ -117,31 +117,19 @@ void CommonEventsDatas::setDefault(){
 
     // States
     super = new SuperListItem(1, RPM::translate(Translations::NORMAL));
-    item = new QStandardItem;
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
-    item->setText(super->toString());
-    m_modelStates->appendRow(item);
+    m_modelStates->appendRow(super->getModelRow());
 
     // Common reactors
     react = new SystemCommonReaction;
-    item = new QStandardItem;
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(react)));
-    item->setText(react->toString());
-    m_modelCommonReactors->appendRow(item);
+    m_modelCommonReactors->appendRow(react->getModelRow());
 
     // Common objects
     object = new SystemCommonObject;
     object->setDefaultFirst();
-    item = new QStandardItem;
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(object)));
-    item->setText(object->toString());
-    m_modelCommonObjects->appendRow(item);
+    m_modelCommonObjects->appendRow(object->getModelRow());
     object = new SystemCommonObject;
     object->setDefaultHero(m_modelEventsSystem, m_modelEventsUser);
-    item = new QStandardItem;
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(object)));
-    item->setText(object->toString());
-    m_modelCommonObjects->appendRow(item);
+    m_modelCommonObjects->appendRow(object->getModelRow());
 }
 
 // -------------------------------------------------------
@@ -166,10 +154,7 @@ void CommonEventsDatas::setDefaultEvent(QStandardItemModel* model,
         item->setText(SuperListItem::beginningText);
         modelParameters->appendRow(item);
         ev = new SystemEvent(i+1, namesEvents[i], modelParameters);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(ev)));
-        item->setText(ev->toString());
-        model->appendRow(item);
+        model->appendRow(ev->getModelRow());
     }
 }
 
@@ -180,7 +165,6 @@ void CommonEventsDatas::setDefaultEvent(QStandardItemModel* model,
 // -------------------------------------------------------
 
 void CommonEventsDatas::read(const QJsonObject &json){
-    QStandardItem* item;
     QJsonArray jsonList;
     SystemEvent* ev;
     SuperListItem* super;
@@ -197,54 +181,39 @@ void CommonEventsDatas::read(const QJsonObject &json){
     // Events
     jsonList = json["eventsSystem"].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        item = new QStandardItem;
         ev = new SystemEvent;
         ev->read(jsonList[i].toObject());
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(ev)));
-        item->setText(ev->toString());
-        m_modelEventsSystem->appendRow(item);
+        m_modelEventsSystem->appendRow(ev->getModelRow());
     }
     jsonList = json["eventsUser"].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        item = new QStandardItem;
         ev = new SystemEvent;
         ev->read(jsonList[i].toObject());
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(ev)));
-        item->setText(ev->toString());
-        m_modelEventsUser->appendRow(item);
+        m_modelEventsUser->appendRow(ev->getModelRow());
     }
 
     // States
     jsonList = json["states"].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        item = new QStandardItem;
         super = new SuperListItem;
         super->read(jsonList[i].toObject());
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
-        item->setText(super->toString());
-        m_modelStates->appendRow(item);
+        m_modelStates->appendRow(super->getModelRow());
     }
 
     // Common reactors
     jsonList = json["commonReactors"].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        item = new QStandardItem;
         react = new SystemCommonReaction;
         react->read(jsonList[i].toObject());
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(react)));
-        item->setText(react->toString());
-        m_modelCommonReactors->appendRow(item);
+        m_modelCommonReactors->appendRow(react->getModelRow());
     }
 
     // Common objects
     jsonList = json["commonObjects"].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        item = new QStandardItem;
         object = new SystemCommonObject;
         object->read(jsonList[i].toObject());
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(object)));
-        item->setText(object->toString());
-        m_modelCommonObjects->appendRow(item);
+        m_modelCommonObjects->appendRow(object->getModelRow());
     }
 }
 
