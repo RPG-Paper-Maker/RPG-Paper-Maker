@@ -1459,6 +1459,7 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
         element = mapPortion->updateElementPosition(previousPosition, k);
         if (element != nullptr)
         {
+            m_firstMouseCoords = newPosition;
             if (k == MapEditorSelectionKind::Sprites) {
                 SpriteDatas *sprite;
 
