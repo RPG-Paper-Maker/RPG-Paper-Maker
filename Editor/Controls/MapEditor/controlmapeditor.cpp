@@ -1531,8 +1531,15 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
     if (button != Qt::MouseButton::MiddleButton)
     {
         // If ctrl key is pressed, teleport
-        if (m_isCtrlPressed) {
+        if (QApplication::keyboardModifiers() & Qt::ControlModifier)
+        {
             moveCursorToMousePosition(point);
+            return;
+        }
+
+        // If shit pressed, do nothing
+        if (QApplication::keyboardModifiers() & Qt::ShiftModifier)
+        {
             return;
         }
 

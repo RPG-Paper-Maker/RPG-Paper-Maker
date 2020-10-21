@@ -666,8 +666,9 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent *event) {
             Qt::MouseButton button = *i;
             m_control.onMouseMove(event->pos(), button, m_menuBar != nullptr);
 
-            if (button != Qt::MouseButton::MiddleButton && !m_control
-                .isCtrlPressed())
+            if (button != Qt::MouseButton::MiddleButton && !(QApplication
+                ::keyboardModifiers() & Qt::ControlModifier) && !(QApplication
+                ::keyboardModifiers() & Qt::ShiftModifier))
             {
                 QRect defaultFloorRect;
                 if (m_menuBar != nullptr) {
