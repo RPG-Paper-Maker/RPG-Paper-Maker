@@ -738,11 +738,6 @@
                             },
                             {
                                 "repo": "RPG-Paper-Maker",
-                                "source": "EditorApp/Content/example/Datas/saves.json",
-                                "target": "Engine/Content/example/Datas/saves.json"
-                            },
-                            {
-                                "repo": "RPG-Paper-Maker",
                                 "source": "EditorApp/Content/example/Datas/specialElements.json",
                                 "target": "Engine/Content/example/Datas/specialElements.json"
                             },
@@ -2097,11 +2092,6 @@
                         "repo": "RPG-Paper-Maker",
                         "source": "EditorApp/Content/example/Datas/scripts.json",
                         "target": "Engine/Content/example/Datas/scripts.json"
-                    },
-                    {
-                        "repo": "RPG-Paper-Maker",
-                        "source": "EditorApp/Content/example/Datas/saves.json",
-                        "target": "Engine/Content/example/Datas/saves.json"
                     },
                     {
                         "repo": "RPG-Paper-Maker",
@@ -4927,6 +4917,11 @@
             },
             {
                 "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/autotiles.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/autotiles.js"
+            },
+            {
+                "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/system-currency.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-currency.js"
             },
@@ -5077,13 +5072,13 @@
             },
             {
                 "repo": "Game-Scripts",
-                "source": "Content/Datas/Scripts/System/datas-dlcs.js",
-                "target": "Engine/Content/basic/Content/Datas/Scripts/System/datas-dlcs.js"
+                "source": "Content/Datas/Scripts/System/system-skybox.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-skybox.js"
             },
             {
                 "repo": "Game-Scripts",
-                "source": "Content/Datas/Scripts/System/system-skybox.js",
-                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-skybox.js"
+                "source": "Content/Datas/Scripts/System/frame.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/frame.js"
             },
             {
                 "repo": "Game-Scripts",
@@ -5564,6 +5559,11 @@
                 "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/game.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/game.js"
+            },
+            {
+                "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/mountains.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/mountains.js"
             },
             {
                 "repo": "Game-Scripts",
