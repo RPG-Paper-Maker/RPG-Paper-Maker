@@ -1,6 +1,10 @@
 {
 	"add": [],
-	"remove": [],
+	"remove": [
+		{
+            "target": "Engine/Content/example/Datas/saves.json"
+        }
+	],
 	"replace": [],
 	"features": [
         "Javascript game code documentation",
