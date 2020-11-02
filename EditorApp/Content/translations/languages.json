@@ -4,15 +4,19 @@
 		"Français",
 		"Português - Brasil",
 		"Espanol",
+		"Русский (beta)",
 		"日本語 (beta)",
-		"中文 (beta)"
+		"中文 (beta)",
+		"한국어 (beta)"
 	],
 	"short": [
 		"en",
 		"fr",
 		"br",
 		"es",
+		"ru",
 		"jp",
-		"cn"
+		"cn",
+		"ko"
 	]
 }

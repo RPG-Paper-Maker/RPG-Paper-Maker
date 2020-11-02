@@ -19,12 +19,12 @@
         "New language: korean (beta)"
     ],
 	"bugs": [
-        "Some battle effects combinaison issues",
+        "Common reactions in battle effect: show text not applied",
         "Animations in engine: no sounds played",
         "Command set/move/turn a picture: game crash when setting picture ID",
         "Command teleport object: Yplus not working",
         "Font names and font sizes not changed in systems",
-        "Semi transparent elements issues according to camera angle",
+        "Improve semi transparent elements issues according to camera angle",
         "Walls: can't draw in the right and bottom limits of a map",
         "Battle maps duplication"
 	],
@@ -41,15 +41,15 @@
         0,
         0,
         0,
-        1,
-        0,
+        2,
+        2,
 
+        2,
+        0,
+        2,
+        2,
+        2,
         1,
-        0,
-        2,
-        2,
-        0,
-        0,
         0,
         2
     ]
