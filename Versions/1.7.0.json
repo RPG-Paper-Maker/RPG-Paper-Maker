@@ -1,0 +1,47 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Command enter a name menu",
+        "Main menu customization",
+        "Troops battle reactions",
+        "Object states: options (through, stop animation, direction fix, keep position)",
+        "Custom fonts",
+        "Random battles in map properties",
+        "Base equipment heroes",
+        "Characteristics for classes",
+        "Language manager",
+        "Command create object in map",
+        "Command move object (complete)",
+        "Command change status",
+        "Command input a number",
+        "Command reset camera",
+        "Command change battle music",
+        "Command change victory music",
+        "Command end battle",
+        "Items option: can't be sold"
+    ],
+	"bugs": [
+	],
+    "finished": [
+       	0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ]
+}

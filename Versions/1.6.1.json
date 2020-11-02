@@ -22,21 +22,5 @@
         "Some lists drag and drop were removing rows",
         "The editor crash when rotating a 3D object when the object's Y value is different than the Y value you're on",
         "Example game: saves not working"
-	],
-    "finished": [
-        2,
-        2,
-        2,
-
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2
-    ]
+	]
 }

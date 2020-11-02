@@ -456,6 +456,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     SystemElement *sysElement;
 
     // Clear
+    SuperListItem::deleteModel(m_modelBattleMaps, false);
     SuperListItem::deleteModel(m_modelCommonEquipment, false);
     SuperListItem::deleteModel(m_modelWeaponsKind, false);
     SuperListItem::deleteModel(m_modelArmorsKind, false);
@@ -591,16 +592,7 @@ void BattleSystemDatas::write(QJsonObject &json) const{
     json[JSON_BATLLE_VICTORY] = obj;
 
     // Battle maps
-    jsonArray = QJsonArray();
-    l = m_modelBattleMaps->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l - 1; i++){
-        QJsonObject jsonCommon;
-        SystemBattleMap* sysBattleMap = reinterpret_cast<SystemBattleMap*>(
-            m_modelBattleMaps->item(i)->data().value<quintptr>());
-        sysBattleMap->write(jsonCommon);
-        jsonArray.append(jsonCommon);
-    }
-    json[jsonBattleMaps] = jsonArray;
+    SuperListItem::writeTree(m_modelBattleMaps, json, jsonBattleMaps);
 
     // Equipments
     jsonArray = QJsonArray();
