@@ -57,3 +57,14 @@ void DialogSystemFontSize::translate()
     ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogSystemFontSize::on_lineEditName_textChanged(const QString &text)
+{
+    m_fontSize.setName(text);
+}

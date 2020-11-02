@@ -41,3 +41,14 @@ void DialogSystemFontName::translate()
     ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogSystemFontName::on_lineEditName_textChanged(const QString &text)
+{
+    m_fontName.setName(text);
+}

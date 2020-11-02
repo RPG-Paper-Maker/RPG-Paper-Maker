@@ -44,6 +44,9 @@ private:
 
     void initialize();
     void translate();
+
+public slots:
+    void on_lineEditName_textChanged(const QString &text);
 };
 
 #endif // DIALOGSYSTEMFONTNAME_H
