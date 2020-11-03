@@ -1126,6 +1126,11 @@
                     },
                     {
                         "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/translations/translations-ru.json",
+                        "target": "Engine/Content/translations/translations-ru.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
                         "source": "EditorApp/Content/translations/translations-cn.json",
                         "target": "Engine/Content/translations/translations-cn.json"
                     },
@@ -1138,6 +1143,11 @@
                         "repo": "RPG-Paper-Maker",
                         "source": "EditorApp/Content/translations/translations-jp.json",
                         "target": "Engine/Content/translations/translations-jp.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/translations/translations-ko.json",
+                        "target": "Engine/Content/translations/translations-ko.json"
                     }
                 ],
                 "target": "Engine/Content/translations"
@@ -5637,6 +5647,11 @@
             },
             {
                 "repo": "RPG-Paper-Maker",
+                "source": "EditorApp/Content/translations/translations-ru.json",
+                "target": "Engine/Content/translations/translations-ru.json"
+            },
+            {
+                "repo": "RPG-Paper-Maker",
                 "source": "EditorApp/Content/translations/translations-cn.json",
                 "target": "Engine/Content/translations/translations-cn.json"
             },
@@ -5649,6 +5664,11 @@
                 "repo": "RPG-Paper-Maker",
                 "source": "EditorApp/Content/translations/translations-jp.json",
                 "target": "Engine/Content/translations/translations-jp.json"
+            },
+            {
+                "repo": "RPG-Paper-Maker",
+                "source": "EditorApp/Content/translations/translations-ko.json",
+                "target": "Engine/Content/translations/translations-ko.json"
             }
         ],
         "target": "Engine/Content/translations"
