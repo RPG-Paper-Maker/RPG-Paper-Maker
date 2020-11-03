@@ -432,7 +432,7 @@ void PanelTextures::updateMountainsSize() {
 void PanelTextures::updateObject3DSize() {
     int w;
 
-    w = ui->comboBox->width();
+    w = ui->comboBox->width() - 10;
     ui->widget3DObjectPreview->setGeometry(0, 0, w, w);
     ui->widget3DObjectPreview->setFixedSize(w, w);
 }
