@@ -524,6 +524,18 @@ void ControlMapEditor::stockSprite(Position &p, SpriteDatas *sprite,
 void ControlMapEditor::stockSpriteWall(Position &position, SpriteWallDatas* sprite,
     bool undoRedo)
 {
+    // If on border, change position center to draw at extremity
+    if (position.x() == m_map->mapProperties()->length())
+    {
+        position.setX(position.x() - 1);
+        position.setCenterX(100);
+    }
+    if (position.z() == m_map->mapProperties()->width())
+    {
+        position.setZ(position.z() - 1);
+        position.setCenterZ(100);
+    }
+
     if (m_map->isInGrid(position) && (m_firstMouseCoords.x() == -500 || (
         m_firstMouseCoords.y() == position.y() && qFuzzyCompare(
         m_firstMouseCoords.yPlus(), position.yPlus()))))
@@ -648,7 +660,20 @@ void ControlMapEditor::eraseSprite(Position &p, bool undoRedo, bool deletePtr) {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseSpriteWall(Position &position, bool undoRedo) {
+void ControlMapEditor::eraseSpriteWall(Position &position, bool undoRedo)
+{
+    // If on border, change position center to draw at extremity
+    if (position.x() == m_map->mapProperties()->length())
+    {
+        position.setX(position.x() - 1);
+        position.setCenterX(100);
+    }
+    if (position.z() == m_map->mapProperties()->width())
+    {
+        position.setZ(position.z() - 1);
+        position.setCenterZ(100);
+    }
+
     if (m_map->isInGrid(position) && (m_firstMouseCoords.x() == -500 || (
         m_firstMouseCoords.y() == position.y() && qFuzzyCompare(
         m_firstMouseCoords.yPlus(), position.yPlus()))))

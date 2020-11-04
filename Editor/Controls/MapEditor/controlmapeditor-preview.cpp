@@ -138,9 +138,23 @@ void ControlMapEditor::updatePreviewWallSprites(int specialID) {
 
 void ControlMapEditor::updatePreviewWallSprite(Position &position, int specialID)
 {
+    // If on border, change position center to draw at extremity
+    if (position.x() == m_map->mapProperties()->length())
+    {
+        position.setX(position.x() - 1);
+        position.setCenterX(100);
+    }
+    if (position.z() == m_map->mapProperties()->width())
+    {
+        position.setZ(position.z() - 1);
+        position.setCenterZ(100);
+    }
+
+    // Get portion
     Portion portion;
     m_map->getLocalPortion(position, portion);
 
+    // Update wall preview
     if (m_map->isInGrid(position) && m_map->isInPortion(portion) && (
         m_firstMouseCoords.x() == -500 || (m_firstMouseCoords.y() == position
         .y() && qFuzzyCompare(m_firstMouseCoords.yPlus(), position.yPlus()))))

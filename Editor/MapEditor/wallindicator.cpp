@@ -47,7 +47,7 @@ void WallIndicator::getPosition(Position3D& position) {
 // -------------------------------------------------------
 
 void WallIndicator::setPosition(Position3D& pos, int w, int h) {
-    m_position.setInGrid(pos, w - 1, h - 1);
+    m_position.setInGrid(pos, w, h);
 }
 
 // -------------------------------------------------------

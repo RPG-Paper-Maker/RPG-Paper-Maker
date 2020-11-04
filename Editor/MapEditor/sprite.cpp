@@ -744,6 +744,7 @@ void SpriteWallDatas::initializeVertices(int squareSize, int width, int height,
                                          Position &position, int& count)
 {
     QVector3D pos, size, center, off;
+
     MapElement::getPosSizeCenter(pos, size, center, off, squareSize, position,
                                  1, height / squareSize, false);
 
