@@ -13,6 +13,7 @@
 #include <QScrollBar>
 #include <QApplication>
 #include <QTime>
+#include <QSound>
 #include "widgetanimation.h"
 #include "rpm.h"
 #include "common.h"
@@ -43,12 +44,8 @@ WidgetAnimation::WidgetAnimation(QWidget *parent) :
     m_lastMouseY(0),
     m_currentPlayedFrameID(-1),
     m_modelFrames(nullptr),
-    m_condition(AnimationEffectConditionKind::None),
-    m_mediaPlaylistSoundEffect(new QMediaPlaylist),
-    m_mediaPlayerSoundEffect(new QMediaPlayer)
+    m_condition(AnimationEffectConditionKind::None)
 {
-    //int i, l;
-
     this->setFocus();
     this->setMouseTracking(true);
     this->setFixedWidth(RPM::SCREEN_BASIC_WIDTH);
@@ -58,26 +55,11 @@ WidgetAnimation::WidgetAnimation(QWidget *parent) :
     m_contextMenu = ContextMenuList::createContextSuperList(this);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT
         (showContextMenu(const QPoint &)));
-
-    // Load every sounds
-    /*
-    for (i = 0, l = RPM::get()->project()->songsDatas()->model(SongKind::Sound)
-        ->invisibleRootItem()->rowCount(); i < l; i++)
-    {
-        m_mediaPlaylistSoundEffect->addMedia(QUrl::fromLocalFile(reinterpret_cast<
-            SystemSong *>(RPM::get()->project()->songsDatas()->model(SongKind
-            ::Sound)->item(i)->data().value<quintptr>())->getPath(SongKind
-            ::Sound)));
-    }
-    m_mediaPlaylistSoundEffect->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
-    m_mediaPlayerSoundEffect->setPlaylist(m_mediaPlaylistSoundEffect);*/
-
     updateAnimation();
 }
 
-WidgetAnimation::~WidgetAnimation() {
-    delete m_mediaPlayerSoundEffect;
-    delete m_mediaPlaylistSoundEffect;
+WidgetAnimation::~WidgetAnimation()
+{
 }
 
 void WidgetAnimation::setScrollArea(QScrollArea *scrollArea) {
@@ -490,7 +472,6 @@ void WidgetAnimation::updateAnimation() {
         this->repaint();
 
         // Play sounds
-        /*
         if (m_currentPlayedFrameID != -1) {
             SystemAnimationFrameEffect *effect;
             int i, l;
@@ -500,15 +481,15 @@ void WidgetAnimation::updateAnimation() {
                 effect = reinterpret_cast<SystemAnimationFrameEffect *>(
                     m_currentPlayedFrame->modelEffects()->item(i)->data().value<
                     quintptr>());
-                if (effect != nullptr && effect->isSoundEffect()) {
-                    m_mediaPlaylistSoundEffect->setCurrentIndex(SuperListItem
-                        ::getIndexById(RPM::get()->project()->songsDatas()
-                        ->model(SongKind::Sound)->invisibleRootItem(), effect
-                        ->soundEffect()->id()));
-                    m_mediaPlayerSoundEffect->play();
+                if (effect != nullptr && effect->isSoundEffect())
+                {
+                    QSound::play(reinterpret_cast<SystemSong *>(SuperListItem
+                        ::getById(RPM::get()->project()->songsDatas()->model(
+                        SongKind::Sound)->invisibleRootItem(), effect
+                        ->soundEffect()->id()))->getPath());
                 }
             }
-        }*/
+        }
     }
     QTimer::singleShot(0, this, SLOT(updateAnimation()));
 }

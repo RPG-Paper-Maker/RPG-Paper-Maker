@@ -15,8 +15,6 @@
 #include <QWidget>
 #include <QScrollArea>
 #include <QTimer>
-#include <QMediaPlaylist>
-#include <QMediaPlayer>
 #include "systemanimationframe.h"
 #include "animationpositionkind.h"
 #include "widgetanimationtexture.h"
@@ -72,8 +70,6 @@ protected:
     QStandardItemModel *m_modelFrames;
     AnimationEffectConditionKind m_condition;
     SystemAnimationFrame *m_currentPlayedFrame;
-    QMediaPlaylist *m_mediaPlaylistSoundEffect;
-    QMediaPlayer *m_mediaPlayerSoundEffect;
 
     void updateContextMenuCan();
 
