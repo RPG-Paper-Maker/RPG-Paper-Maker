@@ -44,6 +44,7 @@
 #include "dialogvideos.h"
 #include "common.h"
 #include "dialogselectlanguage.h"
+#include "dialogscripts.h"
 
 // -------------------------------------------------------
 //
@@ -54,7 +55,8 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    m_isMainMenu(true)
+    m_isMainMenu(true),
+    m_dialogScripts(new DialogScripts)
 {
     p_appName = "RPG Paper Maker";
     gameProcess = new QProcess(this);
@@ -90,6 +92,7 @@ MainWindow::~MainWindow()
     gameProcess = nullptr;
     cleanRecentProjectsActions();
     delete ui;
+    delete m_dialogScripts;
     RPM::kill();
 }
 
@@ -278,6 +281,7 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionSet_DLC_s_path_folder->setEnabled(true);
     ui->actionDebug_options->setEnabled(true);
     ui->actionKeyboard_controls->setEnabled(true);
+    ui->actionScripts_manager->setEnabled(true);
     ui->actionCollisions_manager->setEnabled(true);
     ui->actionAutotiles->setEnabled(true);
     ui->actionSprite_walls->setEnabled(true);
@@ -748,6 +752,17 @@ void MainWindow::on_actionKeyboard_controls_triggered(){
     else{
         RPM::get()->loadEngineSettings();
         project->readKeyBoardDatas();
+    }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionScripts_manager_triggered()
+{
+    if (m_dialogScripts->isHidden())
+    {
+        m_dialogScripts->initialize();
+        m_dialogScripts->show();
     }
 }
 

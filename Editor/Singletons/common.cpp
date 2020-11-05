@@ -164,6 +164,31 @@ void Common::readArrayJSON(QString path, QJsonDocument& loadDoc) {
 
 // -------------------------------------------------------
 
+void Common::write(QString path, QString content)
+{
+    QFile saveFile(path);
+    if (!saveFile.open(QIODevice::WriteOnly))
+    {
+        return;
+    }
+    saveFile.write(content.toUtf8());
+    saveFile.close();
+}
+
+// -------------------------------------------------------
+
+QString Common::read(QString path)
+{
+    QByteArray saveDatas;
+    QFile loadFile(path);
+    loadFile.open(QIODevice::ReadOnly);
+    saveDatas = loadFile.readAll();
+    loadFile.close();
+    return saveDatas;
+}
+
+// -------------------------------------------------------
+
 void Common::modifyJSONValue(QJsonObject &root, QString path, QJsonValue value)
 {
     QList<QJsonObject> objs;

@@ -20,6 +20,7 @@ TARGET = $$EDITOR_LIB_NAME
 DESTDIR = $$ROOT_DESTDIR/Editor
 
 HEADERS += \
+    CustomWidgets/codesyntaxhighlighter.h \
     CustomWidgets/panelcolorstransition.h \
     CustomWidgets/panelselectpositionmaps.h \
     CustomWidgets/panelsubtransformation.h \
@@ -28,6 +29,8 @@ HEADERS += \
     CustomWidgets/widgetanimation.h \
     CustomWidgets/widgetanimationtexture.h \
     CustomWidgets/widgetbuttonimage.h \
+    CustomWidgets/widgetcode.h \
+    CustomWidgets/widgetcodelinenumberarea.h \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgetsliderprogression.h \
     CustomWidgets/widgettilesettexture.h \
@@ -68,6 +71,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemskybox.h \
     Dialogs/Systems/dialogsystemspeedfrequency.h \
     Dialogs/Systems/dialogsystemtitlecommand.h \
+    Dialogs/dialogscripts.h \
     Dialogs/dialogfirstlaunch.h \
     Dialogs/dialogimportdlcs.h \
     Dialogs/dialogselectlanguage.h \
@@ -113,6 +117,7 @@ HEADERS += \
     Models/System/systemprimitive.h \
     Models/System/systemproperty.h \
     Models/System/systemresource.h \
+    Models/System/systemscript.h \
     Models/System/systemskybox.h \
     Models/System/systemspeedfrequency.h \
     Models/System/systemtitlecommand.h \
@@ -379,6 +384,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommandlabel.h
 
 SOURCES += \
+    CustomWidgets/codesyntaxhighlighter.cpp \
     CustomWidgets/panelcolorstransition.cpp \
     CustomWidgets/panelselectpositionmaps.cpp \
     CustomWidgets/panelsubtransformation.cpp \
@@ -387,6 +393,8 @@ SOURCES += \
     CustomWidgets/widgetanimation.cpp \
     CustomWidgets/widgetanimationtexture.cpp \
     CustomWidgets/widgetbuttonimage.cpp \
+    CustomWidgets/widgetcode.cpp \
+    CustomWidgets/widgetcodelinenumberarea.cpp \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgetsliderprogression.cpp \
     CustomWidgets/widgettilesettexture.cpp \
@@ -427,6 +435,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemskybox.cpp \
     Dialogs/Systems/dialogsystemspeedfrequency.cpp \
     Dialogs/Systems/dialogsystemtitlecommand.cpp \
+    Dialogs/dialogscripts.cpp \
     Dialogs/dialogfirstlaunch.cpp \
     Dialogs/dialogimportdlcs.cpp \
     Dialogs/dialogselectlanguage.cpp \
@@ -459,6 +468,7 @@ SOURCES += \
     Models/System/systemprimitive.cpp \
     Models/System/systemproperty.cpp \
     Models/System/systemresource.cpp \
+    Models/System/systemscript.cpp \
     Models/System/systemskybox.cpp \
     Models/System/systemspeedfrequency.cpp \
     Models/System/systemtitlecommand.cpp \
@@ -743,6 +753,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemskybox.ui \
     Dialogs/Systems/dialogsystemspeedfrequency.ui \
     Dialogs/Systems/dialogsystemtitlecommand.ui \
+    Dialogs/dialogscripts.ui \
     Dialogs/dialogfirstlaunch.ui \
     Dialogs/dialogimportdlcs.ui \
     Dialogs/dialogselectlanguage.ui \

@@ -1970,6 +1970,23 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>WidgetPicture</class>
+   <extends>QWidget</extends>
+   <header>widgetpicture.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PanelSuperList</class>
+   <extends>QWidget</extends>
+   <header>panelsuperlist.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
@@ -1991,23 +2008,6 @@
    <class>PanelObject</class>
    <extends>QWidget</extends>
    <header>panelobject.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetPicture</class>
-   <extends>QWidget</extends>
-   <header>widgetpicture.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
-   <class>PanelSuperList</class>
-   <extends>QWidget</extends>
-   <header>panelsuperlist.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

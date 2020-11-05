@@ -36,11 +36,11 @@ SuperListItem::SuperListItem() : SuperListItem(-1) {}
 
 SuperListItem::~SuperListItem() {}
 
-SuperListItem::SuperListItem(int i, QString n, bool datas) :
+SuperListItem::SuperListItem(int i, QString n, bool datas, bool displayID) :
     p_id(i),
     p_name(n),
     m_containsDatas(datas),
-    m_displayID(true)
+    m_displayID(displayID)
 {
 
 }

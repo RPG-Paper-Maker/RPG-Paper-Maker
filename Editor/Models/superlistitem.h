@@ -36,7 +36,8 @@ public:
 
     SuperListItem();
     virtual ~SuperListItem();
-    SuperListItem(int i, QString n = QString(), bool datas = false);
+    SuperListItem(int i, QString n = QString(), bool datas = false, bool
+        displayID = true);
     int id() const;
     bool isDefault();
     virtual void setId(int i);

@@ -18,6 +18,7 @@
 #include "project.h"
 #include "widgetmapeditor.h"
 #include "singleton.h"
+#include "dialogscripts.h"
 
 // -------------------------------------------------------
 //
@@ -69,6 +70,7 @@ private:
     QString p_appName;
     QString p_version;
     bool m_isMainMenu;
+    DialogScripts *m_dialogScripts;
 
     void updateTextures();
 
@@ -100,6 +102,7 @@ private slots:
     void on_actionVideos_manager_triggered();
     void on_actionShapes_manager_triggered();
     void on_actionKeyboard_controls_triggered();
+    void on_actionScripts_manager_triggered();
     void on_actionCollisions_manager_triggered();
     void on_actionAutotiles_triggered();
     void on_actionSprite_walls_triggered();

@@ -1,0 +1,96 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+#include "dialogscripts.h"
+#include "ui_dialogscripts.h"
+#include "systemscript.h"
+#include "rpm.h"
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
+DialogScripts::DialogScripts(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::DialogScripts)
+{
+    ui->setupUi(this);
+
+    m_widgetLineNumber = new WidgetCodeLineNumberArea(ui->widgetCodeSystem);
+    m_highlighterSystem = new CodeSyntaxHighlighter(ui->widgetCodeSystem
+        ->document());
+    ui->treeViewSystem->initializeNewItemInstance(new SuperListItem);
+
+    // Keep space when hiding widgets
+    QSizePolicy sp_retain;
+    QList<QWidget *> widgetList;
+    widgetList << ui->widgetCodeSystem;
+    for (int i = 0; i < widgetList.size(); i++) {
+        sp_retain = widgetList[i]->sizePolicy();
+        sp_retain.setRetainSizeWhenHidden(true);
+        widgetList[i]->setSizePolicy(sp_retain);
+    }
+}
+
+DialogScripts::~DialogScripts()
+{
+    delete ui;
+    delete m_widgetLineNumber;
+    delete m_highlighterSystem;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogScripts::initialize()
+{
+    ui->treeViewSystem->initializeModel(RPM::get()->project()->scriptsDatas()
+        ->modelSystem());
+    connect(ui->treeViewSystem->selectionModel(), SIGNAL(currentChanged(
+        QModelIndex, QModelIndex)), this, SLOT(on_scriptSystemSelected(
+        QModelIndex, QModelIndex)));
+    QModelIndex index = ui->treeViewSystem->getModel()->index(0, 0);
+    ui->treeViewSystem->setCurrentIndex(index);
+    on_scriptSystemSelected(index, index);
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogScripts::on_scriptSystemSelected(QModelIndex index, QModelIndex)
+{
+    QStandardItem *selected = ui->treeViewSystem->getModel()->itemFromIndex(
+        index);
+    if (selected != nullptr)
+    {
+        SystemScript *script = reinterpret_cast<SystemScript *>(selected->data()
+            .value<quintptr>());
+        if (script != nullptr)
+        {
+            ui->widgetCodeSystem->show();
+            ui->widgetCodeSystem->setPlainText(script->getCode());
+        } else
+        {
+            ui->widgetCodeSystem->hide();
+        }
+    } else
+    {
+        ui->widgetCodeSystem->hide();
+    }
+}
