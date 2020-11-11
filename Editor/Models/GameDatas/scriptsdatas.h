@@ -32,6 +32,8 @@ public:
     void read(QString path);
     QStandardItemModel* modelSystem() const;
     QStandardItemModel* modelPlugins() const;
+
+    bool containsPluginName(QString name) const;
     void setDefault();
 
     virtual void read(const QJsonObject &json);

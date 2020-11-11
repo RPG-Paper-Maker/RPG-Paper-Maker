@@ -60,7 +60,17 @@ public:
     QString tutorial() const;
     int parametersCount() const;
     SystemPluginParameter * parameterAt(int i) const;
+    void setType(PluginTypeKind type);
+    void setCategory(PluginCategoryKind category);
+    void setAuthor(QString author);
+    void setWebsite(QString website);
+    void setDescription(QString description);
+    void setVersion(QString version);
+    void setTutorial(QString tutorial);
 
+    void clearParameters();
+
+    virtual void setDefault();
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);

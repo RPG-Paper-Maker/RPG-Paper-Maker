@@ -107,10 +107,69 @@ SystemPluginParameter * SystemPlugin::parameterAt(int i) const
         ->data().value<quintptr>());
 }
 
+void SystemPlugin::setType(PluginTypeKind type)
+{
+    m_type = type;
+}
+
+void SystemPlugin::setCategory(PluginCategoryKind category)
+{
+    m_category = category;
+}
+
+void SystemPlugin::setAuthor(QString author)
+{
+    m_author = author;
+}
+
+void SystemPlugin::setWebsite(QString website)
+{
+    m_website = website;
+}
+
+void SystemPlugin::setDescription(QString description)
+{
+    m_description = description;
+}
+
+void SystemPlugin::setVersion(QString version)
+{
+    m_version = version;
+}
+
+void SystemPlugin::setTutorial(QString tutorial)
+{
+    m_tutorial = tutorial;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void SystemPlugin::clearParameters()
+{
+    SuperListItem::deleteModel(m_parameters, false);
+}
+
 // -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
+// -------------------------------------------------------
+
+void SystemPlugin::setDefault()
+{
+    this->setType(DEFAULT_TYPE);
+    this->setCategory(DEFAULT_CATEGORY);
+    this->setAuthor(DEFAULT_AUTHOR);
+    this->setWebsite(DEFAULT_WEBSITE);
+    this->setDescription(DEFAULT_DESCRIPTION);
+    this->setVersion(DEFAULT_VERSION);
+    this->setTutorial(DEFAULT_TUTORIAL);
+}
+
 // -------------------------------------------------------
 
 bool SystemPlugin::openDialog()
@@ -123,7 +182,6 @@ bool SystemPlugin::openDialog()
         this->setCopy(plugin);
         return true;
     }
-
     return false;
 }
 
@@ -140,9 +198,9 @@ SuperListItem* SystemPlugin::createCopy() const
 
 void SystemPlugin::setCopy(const SuperListItem &super)
 {
-    const SystemPlugin *plugin;
+    SystemScript::setCopy(super);
 
-    plugin = reinterpret_cast<const SystemPlugin *>(&super);
+    const SystemPlugin *plugin = reinterpret_cast<const SystemPlugin *>(&super);
     m_type = plugin->m_type;
     m_category = plugin->m_category;
     m_author = plugin->m_author;
@@ -150,7 +208,7 @@ void SystemPlugin::setCopy(const SuperListItem &super)
     m_description = plugin->m_description;
     m_version = plugin->m_version;
     m_tutorial = plugin->m_tutorial;
-    SuperListItem::deleteModel(m_parameters, false);
+    this->clearParameters();
     for (int i = 0, l = plugin->parametersCount(); i < l; i++)
     {
         m_parameters->appendRow(reinterpret_cast<SystemPluginParameter *>(plugin

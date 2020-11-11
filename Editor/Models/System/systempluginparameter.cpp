@@ -53,9 +53,10 @@ SuperListItem* SystemPluginParameter::createCopy() const
 
 void SystemPluginParameter::setCopy(const SuperListItem &super)
 {
-    const SystemPluginParameter *param;
+    SuperListItem::setCopy(super);
 
-    param = reinterpret_cast<const SystemPluginParameter *>(&super);
+    const SystemPluginParameter *param = reinterpret_cast<const
+        SystemPluginParameter *>(&super);
     m_name = param->m_name;
     m_help = param->m_help;
     m_defaultValue = param->m_defaultValue;

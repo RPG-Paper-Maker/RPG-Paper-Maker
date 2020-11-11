@@ -37,11 +37,18 @@ public:
 
     void initialize();
 
+protected:
+    virtual void accept();
+
 private:
     Ui::DialogSystemPlugin *ui;
     SystemPlugin& m_plugin;
+    QString m_previousName;
 
 public slots:
+    void on_radioButtonEmpty_toggled(bool checked);
+    void on_radioButtonLocal_toggled(bool checked);
+    void on_radioButtonOnline_toggled(bool checked);
     void on_lineEditName_textChanged(const QString &text);
 };
 
