@@ -31,6 +31,8 @@ WidgetCode::WidgetCode(QWidget *parent) :
         ::updateLineNumberArea);
     connect(this, &WidgetCode::cursorPositionChanged, this, &WidgetCode
         ::highlightCurrentLine);
+    connect(this, &WidgetCode::textChanged, this, &WidgetCode
+        ::onTextChanged);
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
 }
@@ -46,6 +48,10 @@ int WidgetCode::lineNumberAreaWidth()
     return 3 + fontMetrics().width(QLatin1Char('9')) * 5;
 }
 
+// -------------------------------------------------------
+//
+//  SLOTS
+//
 // -------------------------------------------------------
 
 void WidgetCode::updateLineNumberAreaWidth(int)
@@ -120,5 +126,24 @@ void WidgetCode::lineNumberAreaPaintEvent(QPaintEvent *event)
         top = bottom;
         bottom = top + qRound(blockBoundingRect(block).height());
         ++blockNumber;
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetCode::onTextChanged()
+{
+    QString text = this->toPlainText();
+    if (!text.isEmpty())
+    {
+        QString noTabs = this->toPlainText().replace("\t", "    ");
+        if (text != noTabs)
+        {
+            int position = this->textCursor().position() + 3;
+            this->setPlainText(noTabs);
+            QTextCursor cursor = this->textCursor();
+            cursor.setPosition(position);
+            this->setTextCursor(cursor);
+        }
     }
 }

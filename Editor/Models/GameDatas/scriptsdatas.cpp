@@ -12,6 +12,7 @@
 #include <QDir>
 #include "scriptsdatas.h"
 #include "systemscript.h"
+#include "systemplugin.h"
 #include "rpm.h"
 #include "common.h"
 
@@ -214,6 +215,7 @@ void ScriptsDatas::setDefault(){
             ->getModelRow());
     }
     m_modelSystem->appendRow(SuperListItem::getEmptyItem());
+    m_modelPlugins->appendRow(SuperListItem::getEmptyItem());
 }
 
 // -------------------------------------------------------
@@ -223,34 +225,30 @@ void ScriptsDatas::setDefault(){
 // -------------------------------------------------------
 
 void ScriptsDatas::read(const QJsonObject &json){
-    QJsonArray tab = json["system"].toArray();
+    QJsonArray tab;
 
     // Clear
     SuperListItem::deleteModel(m_modelSystem, false);
     SuperListItem::deleteModel(m_modelPlugins, false);
 
     // System
+    tab = json["system"].toArray();
     for (int i = 0; i < tab.size(); i++)
     {
         m_modelSystem->appendRow((new SystemScript(1, tab.at(i).toString()))
             ->getModelRow());
     }
     m_modelSystem->appendRow(SuperListItem::getEmptyItem());
-    tab = json["plugins"].toArray();
 
     // Plugins
-    for (int i = 0; i < tab.size(); i++){
-        QStandardItem* item = new QStandardItem;
-        item->setText(tab.at(i).toString());
-        m_modelPlugins->appendRow(item);
-    }
-    tab = json["plugins"].toArray();
+    SuperListItem::readTree(m_modelPlugins, new SystemPlugin, json, "plugins");
 }
 
 // -------------------------------------------------------
 
 void ScriptsDatas::write(QJsonObject &json) const{
     QJsonArray tab;
+    QJsonObject obj;
     SuperListItem *super;
 
     // System
@@ -266,10 +264,7 @@ void ScriptsDatas::write(QJsonObject &json) const{
     json["system"] = tab;
 
     // Plugins
-    for (int i = 0; i < m_modelPlugins->invisibleRootItem()->rowCount(); i++){
-        tab.append(m_modelPlugins->item(i)->text());
-    }
-    json["plugins"] = tab;
+    SuperListItem::writeTree(m_modelPlugins, json, "plugins");
 }
 
 // -------------------------------------------------------

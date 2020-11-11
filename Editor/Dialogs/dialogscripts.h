@@ -43,9 +43,12 @@ private:
     Ui::DialogScripts *ui;
     WidgetCodeLineNumberArea *m_widgetLineNumber;
     CodeSyntaxHighlighter *m_highlighterSystem;
+    WidgetCodeLineNumberArea *m_widgetLineNumberPlugin;
+    CodeSyntaxHighlighter *m_highlighterPlugin;
 
 public slots:
     void on_scriptSystemSelected(QModelIndex index, QModelIndex);
+    void on_scriptPluginSelected(QModelIndex index, QModelIndex);
 };
 
 #endif // DIALOGSCRIPTS_H

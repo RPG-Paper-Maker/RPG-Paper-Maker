@@ -17,9 +17,9 @@
 
 // -------------------------------------------------------
 //
-//  CLASS DialogSystemFontSize
+//  CLASS DialogSystemPrimitive
 //
-//  A dialog used for editing the model of a system font size.
+//  A dialog used for editing the model of a system primitive.
 //
 // -------------------------------------------------------
 

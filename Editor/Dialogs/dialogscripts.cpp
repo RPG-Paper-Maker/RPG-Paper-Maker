@@ -12,6 +12,7 @@
 #include "dialogscripts.h"
 #include "ui_dialogscripts.h"
 #include "systemscript.h"
+#include "systemplugin.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -29,12 +30,16 @@ DialogScripts::DialogScripts(QWidget *parent) :
     m_widgetLineNumber = new WidgetCodeLineNumberArea(ui->widgetCodeSystem);
     m_highlighterSystem = new CodeSyntaxHighlighter(ui->widgetCodeSystem
         ->document());
-    ui->treeViewSystem->initializeNewItemInstance(new SuperListItem);
+    m_widgetLineNumberPlugin = new WidgetCodeLineNumberArea(ui->widgetCodePlugin);
+    m_highlighterPlugin = new CodeSyntaxHighlighter(ui->widgetCodePlugin
+        ->document());
+    ui->treeViewSystem->initializeNewItemInstance(new SystemScript);
+    ui->treeViewPlugins->initializeNewItemInstance(new SystemPlugin);
 
     // Keep space when hiding widgets
     QSizePolicy sp_retain;
     QList<QWidget *> widgetList;
-    widgetList << ui->widgetCodeSystem;
+    widgetList << ui->widgetCodeSystem << ui->tabWidgetPlugin;
     for (int i = 0; i < widgetList.size(); i++) {
         sp_retain = widgetList[i]->sizePolicy();
         sp_retain.setRetainSizeWhenHidden(true);
@@ -57,6 +62,7 @@ DialogScripts::~DialogScripts()
 
 void DialogScripts::initialize()
 {
+    // System
     ui->treeViewSystem->initializeModel(RPM::get()->project()->scriptsDatas()
         ->modelSystem());
     connect(ui->treeViewSystem->selectionModel(), SIGNAL(currentChanged(
@@ -65,6 +71,16 @@ void DialogScripts::initialize()
     QModelIndex index = ui->treeViewSystem->getModel()->index(0, 0);
     ui->treeViewSystem->setCurrentIndex(index);
     on_scriptSystemSelected(index, index);
+
+    // Plugin
+    ui->treeViewPlugins->initializeModel(RPM::get()->project()->scriptsDatas()
+        ->modelPlugins());
+    connect(ui->treeViewPlugins->selectionModel(), SIGNAL(currentChanged(
+        QModelIndex, QModelIndex)), this, SLOT(on_scriptPluginSelected(
+        QModelIndex, QModelIndex)));
+    index = ui->treeViewPlugins->getModel()->index(0, 0);
+    ui->treeViewPlugins->setCurrentIndex(index);
+    on_scriptPluginSelected(index, index);
 }
 
 // -------------------------------------------------------
@@ -92,5 +108,28 @@ void DialogScripts::on_scriptSystemSelected(QModelIndex index, QModelIndex)
     } else
     {
         ui->widgetCodeSystem->hide();
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_scriptPluginSelected(QModelIndex index, QModelIndex)
+{
+    QStandardItem *selected = ui->treeViewPlugins->getModel()->itemFromIndex(
+        index);
+    if (selected != nullptr)
+    {
+        SystemPlugin *plugin = reinterpret_cast<SystemPlugin *>(selected->data()
+            .value<quintptr>());
+        if (plugin != nullptr)
+        {
+            ui->tabWidgetPlugin->show();
+        } else
+        {
+            ui->tabWidgetPlugin->hide();
+        }
+    } else
+    {
+        ui->tabWidgetPlugin->hide();
     }
 }

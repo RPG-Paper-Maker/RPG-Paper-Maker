@@ -66,6 +66,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemfontname.h \
     Dialogs/Systems/dialogsystemfontsize.h \
     Dialogs/Systems/dialogsystemmonsteraction.h \
+    Dialogs/Systems/dialogsystemplugin.h \
     Dialogs/Systems/dialogsystemprimitive.h \
     Dialogs/Systems/dialogsystemproperty.h \
     Dialogs/Systems/dialogsystemskybox.h \
@@ -93,6 +94,8 @@ HEADERS += \
     Enums/mountaincollisionkind.h \
     Enums/objectmovingkind.h \
     Enums/operationkind.h \
+    Enums/plugincategorykind.h \
+    Enums/plugintypekind.h \
     Enums/systemprimitivekind.h \
     Enums/titlecommandkind.h \
     Enums/titlesettingkind.h \
@@ -114,6 +117,8 @@ HEADERS += \
     Models/System/systemfontsize.h \
     Models/System/systemmonsteraction.h \
     Models/System/systemmountain.h \
+    Models/System/systemplugin.h \
+    Models/System/systempluginparameter.h \
     Models/System/systemprimitive.h \
     Models/System/systemproperty.h \
     Models/System/systemresource.h \
@@ -430,6 +435,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemfontname.cpp \
     Dialogs/Systems/dialogsystemfontsize.cpp \
     Dialogs/Systems/dialogsystemmonsteraction.cpp \
+    Dialogs/Systems/dialogsystemplugin.cpp \
     Dialogs/Systems/dialogsystemprimitive.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
     Dialogs/Systems/dialogsystemskybox.cpp \
@@ -465,6 +471,8 @@ SOURCES += \
     Models/System/systemfontsize.cpp \
     Models/System/systemmonsteraction.cpp \
     Models/System/systemmountain.cpp \
+    Models/System/systemplugin.cpp \
+    Models/System/systempluginparameter.cpp \
     Models/System/systemprimitive.cpp \
     Models/System/systemproperty.cpp \
     Models/System/systemresource.cpp \
@@ -748,6 +756,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemfontname.ui \
     Dialogs/Systems/dialogsystemfontsize.ui \
     Dialogs/Systems/dialogsystemmonsteraction.ui \
+    Dialogs/Systems/dialogsystemplugin.ui \
     Dialogs/Systems/dialogsystemprimitive.ui \
     Dialogs/Systems/dialogsystemproperty.ui \
     Dialogs/Systems/dialogsystemskybox.ui \

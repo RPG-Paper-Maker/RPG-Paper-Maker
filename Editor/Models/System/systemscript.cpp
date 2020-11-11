@@ -19,6 +19,12 @@
 //
 // -------------------------------------------------------
 
+SystemScript::SystemScript() :
+    SuperListItem()
+{
+
+}
+
 SystemScript::SystemScript(int i, QString name) :
     SuperListItem(i, name, false, false),
     m_changed(false),
