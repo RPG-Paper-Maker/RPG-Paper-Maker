@@ -11,6 +11,8 @@
 
 #include "dialogsystemplugin.h"
 #include "ui_dialogsystemplugin.h"
+#include "Quazip/quazip.h"
+#include "Quazip/quazipfile.h"
 
 // -------------------------------------------------------
 //
