@@ -72,12 +72,14 @@ void DialogScripts::initialize()
     ui->treeViewSystem->setCurrentIndex(index);
     on_scriptSystemSelected(index, index);
 
-    // Plugin
+    // Plugins
     ui->treeViewPlugins->initializeModel(RPM::get()->project()->scriptsDatas()
         ->modelPlugins());
     connect(ui->treeViewPlugins->selectionModel(), SIGNAL(currentChanged(
         QModelIndex, QModelIndex)), this, SLOT(on_scriptPluginSelected(
         QModelIndex, QModelIndex)));
+    connect(ui->treeViewPlugins, SIGNAL(modelUpdated()), this, SLOT(
+        on_pluginListUpdated()));
     index = ui->treeViewPlugins->getModel()->index(0, 0);
     ui->treeViewPlugins->setCurrentIndex(index);
     on_scriptPluginSelected(index, index);
@@ -132,4 +134,11 @@ void DialogScripts::on_scriptPluginSelected(QModelIndex index, QModelIndex)
     {
         ui->tabWidgetPlugin->hide();
     }
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pluginListUpdated()
+{
+    RPM::get()->project()->writeScriptsDatas();
 }

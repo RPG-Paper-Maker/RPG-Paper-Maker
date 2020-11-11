@@ -137,6 +137,7 @@ void WidgetSuperTree::setItem(QStandardItem *selected, SuperListItem* super) {
     QModelIndex modelIndex = p_model->index(index,0);
     setCurrentIndex(modelIndex);
     emit needsUpdateJson(super);
+    emit modelUpdated();
 }
 
 // -------------------------------------------------------
@@ -207,6 +208,7 @@ void WidgetSuperTree::deleteItem(QStandardItem* selected){
             emit deletingItem(super, row);
             delete super;
             emit needsUpdateJson(nullptr);
+            emit modelUpdated();
         }
     }
 }
@@ -287,6 +289,7 @@ void WidgetSuperTree::addNewItem(SuperListItem* super, QStandardItem *root,
     QModelIndex modelIndex = p_model->index(index, 0);
     setCurrentIndex(modelIndex);
     emit needsUpdateJson(super);
+    emit modelUpdated();
 }
 
 // -------------------------------------------------------
@@ -409,18 +412,18 @@ void WidgetSuperTree::dropEvent(QDropEvent *event) {
     if (item == nullptr) {
         item = this->getModel()->item(this->getModel()->rowCount() - 1);
     }
-    if (item->column() == 0) {
-        QTreeView::dropEvent(event);
+    super = reinterpret_cast<SuperListItem *>(selected->data().value<quintptr>());
+    int r= selected->row();
+    this->getModel()->removeRow(selected->row());
+
+    int row = item->column() == 0 ? item->row() : item->row() + 1;
+    if (super == nullptr) {
+        selected = SuperListItem::getEmptyItem();
+        this->getModel()->insertRow(row, selected);
     } else {
-        super = reinterpret_cast<SuperListItem *>(selected->data().value<quintptr>());
-        this->getModel()->removeRow(selected->row());
-        if (super == nullptr) {
-            selected = SuperListItem::getEmptyItem();
-            this->getModel()->insertRow(item->row() + 1, selected);
-        } else {
-            this->getModel()->insertRow(item->row() + 1, super->getModelRow());
-        }
+        this->getModel()->insertRow(row, super->getModelRow());
     }
+    emit modelUpdated();
 }
 
 // -------------------------------------------------------

@@ -49,6 +49,7 @@ private:
 public slots:
     void on_scriptSystemSelected(QModelIndex index, QModelIndex);
     void on_scriptPluginSelected(QModelIndex index, QModelIndex);
+    void on_pluginListUpdated();
 };
 
 #endif // DIALOGSCRIPTS_H

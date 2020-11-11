@@ -91,6 +91,7 @@ private slots:
     void contextDelete();
 
 signals:
+    void modelUpdated();
     void needsUpdateJson(SuperListItem* super);
     void deletingItem(SuperListItem* super, int row);
     void tryingEdit();
