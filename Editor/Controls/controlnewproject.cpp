@@ -40,8 +40,8 @@ ControlNewproject::ControlNewproject() {
 //
 // -------------------------------------------------------
 
-QString ControlNewproject::filterDirectoryName(const QString &s) {
-
+QString ControlNewproject::filterDirectoryName(const QString &s, bool space)
+{
     //  check if the given string contains forbidden symbols
     QString directory = "";
 
@@ -50,7 +50,7 @@ QString ControlNewproject::filterDirectoryName(const QString &s) {
         if (std::find(std::begin(forbiddenSymbols), std::end(forbiddenSymbols),
             s[i]) == std::end(forbiddenSymbols))
         {
-            directory += (s[i] == ' ') ? '-' : s[i]; // Don't accept spaces
+            directory += (!space && s[i] == ' ') ? '-' : s[i]; // Don't accept spaces
         }
     }
 

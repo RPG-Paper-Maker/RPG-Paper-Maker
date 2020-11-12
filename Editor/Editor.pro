@@ -118,6 +118,7 @@ HEADERS += \
     Models/System/systemmonsteraction.h \
     Models/System/systemmountain.h \
     Models/System/systemplugin.h \
+    Models/System/systemplugincommand.h \
     Models/System/systempluginparameter.h \
     Models/System/systemprimitive.h \
     Models/System/systemproperty.h \
@@ -489,6 +490,7 @@ SOURCES += \
     Models/System/systemmonsteraction.cpp \
     Models/System/systemmountain.cpp \
     Models/System/systemplugin.cpp \
+    Models/System/systemplugincommand.cpp \
     Models/System/systempluginparameter.cpp \
     Models/System/systemprimitive.cpp \
     Models/System/systemproperty.cpp \

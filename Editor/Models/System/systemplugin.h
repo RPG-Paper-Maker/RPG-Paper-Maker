@@ -37,6 +37,7 @@ public:
     static const QString JSON_VERSION;
     static const QString JSON_TUTORIAL;
     static const QString JSON_PARAMETERS;
+    static const QString JSON_COMMANDS;
     static const PluginTypeKind DEFAULT_TYPE;
     static const PluginCategoryKind DEFAULT_CATEGORY;
     static const QString DEFAULT_AUTHOR;
@@ -44,6 +45,8 @@ public:
     static const QString DEFAULT_DESCRIPTION;
     static const QString DEFAULT_VERSION;
     static const QString DEFAULT_TUTORIAL;
+    static const QString NAME_CODE;
+    static const QString NAME_JSON;
 
     SystemPlugin();
     SystemPlugin(int i, QString n, PluginTypeKind t = DEFAULT_TYPE,
@@ -60,6 +63,8 @@ public:
     QString tutorial() const;
     int parametersCount() const;
     SystemPluginParameter * parameterAt(int i) const;
+    int commandsCount() const;
+    SystemPluginParameter * commandAt(int i) const;
     void setType(PluginTypeKind type);
     void setCategory(PluginCategoryKind category);
     void setAuthor(QString author);
@@ -68,8 +73,12 @@ public:
     void setVersion(QString version);
     void setTutorial(QString tutorial);
 
+    QString getFolderName() const;
+    QString getFolderPath() const;
     void clearParameters();
+    void clearCommands();
 
+    virtual QString getPath() const;
     virtual void setDefault();
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
@@ -86,6 +95,9 @@ protected:
     QString m_version;
     QString m_tutorial;
     QStandardItemModel *m_parameters;
+    QStandardItemModel *m_commands;
 };
+
+Q_DECLARE_METATYPE(SystemPlugin)
 
 #endif // SYSTEMPLUGIN_H

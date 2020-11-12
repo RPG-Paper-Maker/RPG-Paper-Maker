@@ -33,6 +33,8 @@ DialogSystemPlugin::DialogSystemPlugin(SystemPlugin &plugin, QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->comboBoxCategory->addItems(RPM::ENUM_TO_STRING_PLUGIN_CATEGORY);
+
     this->initialize();
 }
 
@@ -104,11 +106,12 @@ void DialogSystemPlugin::accept()
     case PluginTypeKind::Empty:
     {
         dirPlugins.mkdir(m_plugin.name());
-        path = Common::pathCombine(pathPlugins, m_plugin.name());
+        path = m_plugin.getFolderPath();
         QJsonObject json;
         m_plugin.write(json);
-        Common::writeOtherJSON(Common::pathCombine(path, "info.json"), json);
-        QFile file(Common::pathCombine(path, "script.js"));
+        Common::writeOtherJSON(Common::pathCombine(path, SystemPlugin::NAME_JSON
+            ), json);
+        QFile file(Common::pathCombine(path, SystemPlugin::NAME_CODE));
         file.open(QIODevice::ReadWrite);
         file.close();
         break;
@@ -161,7 +164,7 @@ void DialogSystemPlugin::on_radioButtonOnline_toggled(bool checked)
 
 void DialogSystemPlugin::on_lineEditName_textChanged(const QString &text)
 {
-    QString filteredText = ControlNewproject::filterDirectoryName(text);
+    QString filteredText = ControlNewproject::filterDirectoryName(text, true);
     ui->lineEditName->setText(filteredText);
     m_plugin.setName(filteredText);
 }

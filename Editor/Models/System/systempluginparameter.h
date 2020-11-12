@@ -50,4 +50,6 @@ protected:
     QString m_value;
 };
 
+Q_DECLARE_METATYPE(SystemPluginParameter)
+
 #endif // SYSTEMPLUGINPARAMETER_H

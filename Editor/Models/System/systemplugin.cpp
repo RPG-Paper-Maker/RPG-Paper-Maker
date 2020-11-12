@@ -10,7 +10,11 @@
 */
 
 #include "systemplugin.h"
+#include "systemplugincommand.h"
+#include "systempluginparameter.h"
 #include "dialogsystemplugin.h"
+#include "common.h"
+#include "rpm.h"
 
 const QString SystemPlugin::JSON_TYPE = "t";
 const QString SystemPlugin::JSON_CATEGORY = "c";
@@ -20,6 +24,7 @@ const QString SystemPlugin::JSON_DESCRIPTION = "d";
 const QString SystemPlugin::JSON_VERSION = "v";
 const QString SystemPlugin::JSON_TUTORIAL = "tu";
 const QString SystemPlugin::JSON_PARAMETERS = "p";
+const QString SystemPlugin::JSON_COMMANDS = "co";
 const PluginTypeKind SystemPlugin::DEFAULT_TYPE = PluginTypeKind::Empty;
 const PluginCategoryKind SystemPlugin::DEFAULT_CATEGORY = PluginCategoryKind
     ::Battle;
@@ -28,6 +33,8 @@ const QString SystemPlugin::DEFAULT_WEBSITE = "";
 const QString SystemPlugin::DEFAULT_DESCRIPTION = "";
 const QString SystemPlugin::DEFAULT_VERSION = "1.0";
 const QString SystemPlugin::DEFAULT_TUTORIAL = "";
+const QString SystemPlugin::NAME_CODE = "code" + RPM::EXTENSION_JS;
+const QString SystemPlugin::NAME_JSON = "details" + RPM::EXTENSION_JSON;
 
 // -------------------------------------------------------
 //
@@ -41,8 +48,8 @@ SystemPlugin::SystemPlugin() :
 
 }
 
-SystemPlugin::SystemPlugin(int i, QString n, PluginTypeKind t, PluginCategoryKind c,
-    QString a, QString w, QString d, QString v, QString tu) :
+SystemPlugin::SystemPlugin(int i, QString n, PluginTypeKind t,
+    PluginCategoryKind c, QString a, QString w, QString d, QString v, QString tu) :
     SystemScript(i, n),
     m_type(t),
     m_category(c),
@@ -51,7 +58,8 @@ SystemPlugin::SystemPlugin(int i, QString n, PluginTypeKind t, PluginCategoryKin
     m_description(d),
     m_version(v),
     m_tutorial(tu),
-    m_parameters(new QStandardItemModel)
+    m_parameters(new QStandardItemModel),
+    m_commands(new QStandardItemModel)
 {
 
 }
@@ -107,6 +115,17 @@ SystemPluginParameter * SystemPlugin::parameterAt(int i) const
         ->data().value<quintptr>());
 }
 
+int SystemPlugin::commandsCount() const
+{
+    return m_commands->invisibleRootItem()->rowCount();
+}
+
+SystemPluginParameter * SystemPlugin::commandAt(int i) const
+{
+    return reinterpret_cast<SystemPluginParameter *>(m_commands->item(i)
+        ->data().value<quintptr>());
+}
+
 void SystemPlugin::setType(PluginTypeKind type)
 {
     m_type = type;
@@ -148,15 +167,45 @@ void SystemPlugin::setTutorial(QString tutorial)
 //
 // -------------------------------------------------------
 
+QString SystemPlugin::getFolderName() const
+{
+    return QString::number(p_id) + RPM::DASH + p_name;
+}
+
+// -------------------------------------------------------
+
+QString SystemPlugin::getFolderPath() const
+{
+    return Common::pathCombine(Common::pathCombine(RPM::get()->project()
+        ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_PLUGINS_DIR), this
+        ->getFolderName());
+}
+
+// -------------------------------------------------------
+
 void SystemPlugin::clearParameters()
 {
     SuperListItem::deleteModel(m_parameters, false);
 }
 
 // -------------------------------------------------------
+
+void SystemPlugin::clearCommands()
+{
+    SuperListItem::deleteModel(m_commands, false);
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
+// -------------------------------------------------------
+
+QString SystemPlugin::getPath() const
+{
+    return Common::pathCombine(this->getFolderPath(), NAME_CODE);
+}
+
 // -------------------------------------------------------
 
 void SystemPlugin::setDefault()
@@ -168,6 +217,8 @@ void SystemPlugin::setDefault()
     this->setDescription(DEFAULT_DESCRIPTION);
     this->setVersion(DEFAULT_VERSION);
     this->setTutorial(DEFAULT_TUTORIAL);
+    this->clearParameters();
+    this->clearCommands();
 }
 
 // -------------------------------------------------------
@@ -214,6 +265,12 @@ void SystemPlugin::setCopy(const SuperListItem &super)
         m_parameters->appendRow(reinterpret_cast<SystemPluginParameter *>(plugin
             ->parameterAt(i)->createCopy())->getModelRow());
     }
+    this->clearParameters();
+    for (int i = 0, l = plugin->commandsCount(); i < l; i++)
+    {
+        m_commands->appendRow(reinterpret_cast<SystemPluginCommand *>(plugin
+            ->commandAt(i))->createCopy()->getModelRow());
+    }
 }
 
 // -------------------------------------------------------
@@ -224,6 +281,7 @@ void SystemPlugin::read(const QJsonObject &json)
 
     // Clear model
     SuperListItem::deleteModel(m_parameters, false);
+    SuperListItem::deleteModel(m_commands, false);
 
     if (json.contains(JSON_TYPE))
     {
@@ -253,19 +311,10 @@ void SystemPlugin::read(const QJsonObject &json)
     {
         m_tutorial = json[JSON_TUTORIAL].toString();
     }
-    if (json.contains(JSON_PARAMETERS))
-    {
-        QJsonObject obj;
-        QJsonArray tab = json[JSON_PARAMETERS].toArray();
-        SystemPluginParameter *parameter;
-        for (int i = 0, l = tab.size(); i < l; i++)
-        {
-            obj = tab.at(i).toObject();
-            parameter = new SystemPluginParameter;
-            parameter->read(obj);
-            m_parameters->appendRow(parameter->getModelRow());
-        }
-    }
+    SuperListItem::readTree(m_parameters, new SystemPluginParameter, json,
+        JSON_PARAMETERS);
+    SuperListItem::readTree(m_commands, new SystemPluginCommand, json,
+        JSON_COMMANDS);
 }
 
 // -------------------------------------------------------
@@ -293,18 +342,6 @@ void SystemPlugin::write(QJsonObject &json) const {
     {
         json[JSON_VERSION] = m_version;
     }
-    QJsonArray tab;
-    QJsonObject obj;
-    SystemPluginParameter *parameter;
-    for (int i = 0, l = this->parametersCount(); i < l; i++)
-    {
-        obj = QJsonObject();
-        parameter = this->parameterAt(i);
-        parameter->write(obj);
-        tab.append(obj);
-    }
-    if (!tab.isEmpty())
-    {
-        json[JSON_PARAMETERS] = tab;
-    }
+    SuperListItem::writeTree(m_parameters, json, JSON_PARAMETERS);
+    SuperListItem::writeTree(m_commands, json, JSON_COMMANDS);
 }

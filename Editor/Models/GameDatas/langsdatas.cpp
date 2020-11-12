@@ -45,7 +45,6 @@ void LangsDatas::setDefault(){
     QStandardItem* item;
     SuperListItem* super;
 
-    item = new QStandardItem();
     super = new SuperListItem(1, "English");
     m_model->appendRow(super->getModelRow());
     item = new QStandardItem();

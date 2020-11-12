@@ -35,6 +35,7 @@ DialogScripts::DialogScripts(QWidget *parent) :
         ->document());
     ui->treeViewSystem->initializeNewItemInstance(new SystemScript);
     ui->treeViewPlugins->initializeNewItemInstance(new SystemPlugin);
+    ui->treeViewPlugins->setUpdateId(true);
 
     // Keep space when hiding widgets
     QSizePolicy sp_retain;
@@ -126,6 +127,7 @@ void DialogScripts::on_scriptPluginSelected(QModelIndex index, QModelIndex)
         if (plugin != nullptr)
         {
             ui->tabWidgetPlugin->show();
+            ui->widgetCodePlugin->setPlainText(plugin->getCode());
         } else
         {
             ui->tabWidgetPlugin->hide();
