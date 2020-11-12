@@ -14,6 +14,7 @@
 #include "ui_dialogscripts.h"
 #include "systemscript.h"
 #include "systemplugin.h"
+#include "common.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -62,6 +63,18 @@ DialogScripts::~DialogScripts()
 //
 // -------------------------------------------------------
 
+SystemScript * DialogScripts::getSelectedScript() const
+{
+    QStandardItem *selected = ui->treeViewSystem->getSelected();
+    if (selected != nullptr)
+    {
+        return reinterpret_cast<SystemScript *>(selected->data().value<quintptr>());
+    }
+    return nullptr;
+}
+
+// -------------------------------------------------------
+
 SystemPlugin * DialogScripts::getSelectedPlugin() const
 {
     QStandardItem *selected = ui->treeViewPlugins->getSelected();
@@ -85,6 +98,8 @@ void DialogScripts::initialize()
     QModelIndex index = ui->treeViewSystem->getModel()->index(0, 0);
     ui->treeViewSystem->setCurrentIndex(index);
     on_scriptSystemSelected(index, index);
+    connect(ui->widgetCodeSystem, SIGNAL(needSave()), this, SLOT(
+        on_scriptCodeNeedSave()));
 
     // Plugins
     ui->treeViewPlugins->initializeModel(RPM::get()->project()->scriptsDatas()
@@ -97,9 +112,73 @@ void DialogScripts::initialize()
     index = ui->treeViewPlugins->getModel()->index(0, 0);
     ui->treeViewPlugins->setCurrentIndex(index);
     on_scriptPluginSelected(index, index);
+    connect(ui->widgetCodePlugin, SIGNAL(needSave()), this, SLOT(
+        on_pluginCodeNeedSave()));
 
     // Focus close button
     ui->pushButtonClose->setFocus();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::updateScriptCodeSave()
+{
+    ui->treeViewSystem->updateAbsoluteAllNodesString();
+    ui->tabWidget->setTabText(0, "System" + (RPM::get()->project()
+        ->scriptsDatas()->allScriptsSaved() ? "" : RPM::SPACE + "*"));
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::updatePluginCodeSave()
+{
+    ui->tabWidgetPlugin->setTabText(1, "Code" + (this->getSelectedPlugin()
+        ->changed() ? RPM::SPACE + "*" : ""));
+    ui->treeViewPlugins->updateAbsoluteAllNodesString();
+    ui->tabWidget->setTabText(1, "Plugins" + (RPM::get()->project()
+        ->scriptsDatas()->allPluginsSaved() ? "" : RPM::SPACE + "*"));
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogScripts::keyPressEvent(QKeyEvent *event)
+{
+    // CTRL + S
+    QKeySequence keys = Common::getKeySequence(event);
+    QKeySequence ctrls(Qt::CTRL + Qt::Key_S);
+    if (keys.matches(ctrls))
+    {
+        SystemScript *script;
+        SystemPlugin *plugin;
+        switch (ui->tabWidget->currentIndex())
+        {
+        case 0: // System
+            script = this->getSelectedScript();
+            script->setChanged(false);
+            Common::write(script->getPath(), script->currentCode());
+            this->updateScriptCodeSave();
+            break;
+        case 1: // Plugins
+            switch (ui->tabWidgetPlugin->currentIndex())
+            {
+            case 1: // Code
+                plugin = this->getSelectedPlugin();
+                plugin->setChanged(false);
+                Common::write(plugin->getPath(), plugin->currentCode());
+                this->updatePluginCodeSave();
+                break;
+            default:
+                break;
+            }
+
+            break;
+        }
+    }
+    QDialog::keyPressEvent(event);
 }
 
 // -------------------------------------------------------
@@ -108,22 +187,15 @@ void DialogScripts::initialize()
 //
 // -------------------------------------------------------
 
-void DialogScripts::on_scriptSystemSelected(QModelIndex index, QModelIndex)
+void DialogScripts::on_scriptSystemSelected(QModelIndex, QModelIndex)
 {
-    QStandardItem *selected = ui->treeViewSystem->getModel()->itemFromIndex(
-        index);
-    if (selected != nullptr)
+    SystemScript *script = this->getSelectedScript();
+    if (script != nullptr)
     {
-        SystemScript *script = reinterpret_cast<SystemScript *>(selected->data()
-            .value<quintptr>());
-        if (script != nullptr)
-        {
-            ui->widgetCodeSystem->show();
-            ui->widgetCodeSystem->setPlainText(script->getCode());
-        } else
-        {
-            ui->widgetCodeSystem->hide();
-        }
+        ui->widgetCodeSystem->show();
+        ui->widgetCodeSystem->initialize(script);
+        this->updateScriptCodeSave();
+        ui->widgetCodeSystem->setFocus();
     } else
     {
         ui->widgetCodeSystem->hide();
@@ -139,7 +211,12 @@ void DialogScripts::on_scriptPluginSelected(QModelIndex, QModelIndex)
     {
         ui->tabWidgetPlugin->show();
         ui->panelPluginDetails->initialize(plugin);
-        ui->widgetCodePlugin->setPlainText(plugin->getCode());
+        ui->widgetCodePlugin->initialize(plugin);
+        this->updatePluginCodeSave();
+        if (ui->tabWidgetPlugin->currentIndex() == 1)
+        {
+            ui->widgetCodePlugin->setFocus();
+        }
     } else
     {
         ui->tabWidgetPlugin->hide();
@@ -159,4 +236,18 @@ void DialogScripts::on_pushButtonOpenPluginFolder_clicked()
 {
     QDesktopServices::openUrl(QUrl::fromLocalFile(this->getSelectedPlugin()
         ->getFolderPath()));
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_scriptCodeNeedSave()
+{
+    this->updateScriptCodeSave();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pluginCodeNeedSave()
+{
+    this->updatePluginCodeSave();
 }

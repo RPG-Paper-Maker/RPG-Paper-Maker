@@ -13,6 +13,7 @@
 #define WIDGETCODE_H
 
 #include <QPlainTextEdit>
+#include "systemscript.h"
 
 // -------------------------------------------------------
 //
@@ -29,20 +30,25 @@ class WidgetCode : public QPlainTextEdit
 public:
     WidgetCode(QWidget *parent = nullptr);
 
+    void initialize(SystemScript *script);
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
+private:
+    QWidget *lineNumberArea;
+    SystemScript *m_script;
+
+signals:
+    void needSave();
+
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void highlightCurrentLine();
     void updateLineNumberArea(const QRect &rect, int dy);
     void onTextChanged();
-
-private:
-    QWidget *lineNumberArea;
 };
 
 #endif // WIDGETCODE_H

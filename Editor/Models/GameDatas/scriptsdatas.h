@@ -34,6 +34,8 @@ public:
     QStandardItemModel* modelPlugins() const;
 
     bool containsPluginName(QString name) const;
+    bool allScriptsSaved() const;
+    bool allPluginsSaved() const;
     void setDefault();
 
     virtual void read(const QJsonObject &json);

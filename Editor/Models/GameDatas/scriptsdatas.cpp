@@ -68,6 +68,40 @@ bool ScriptsDatas::containsPluginName(QString name) const
 
 // -------------------------------------------------------
 
+bool ScriptsDatas::allScriptsSaved() const
+{
+    SystemScript *script;
+    for (int i = 0; i < m_modelSystem->invisibleRootItem()->rowCount(); i++)
+    {
+        script = reinterpret_cast<SystemScript *>(m_modelSystem->item(i)
+            ->data().value<quintptr>());
+        if (script != nullptr && script->changed())
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+// -------------------------------------------------------
+
+bool ScriptsDatas::allPluginsSaved() const
+{
+    SystemPlugin *plugin;
+    for (int i = 0; i < m_modelPlugins->invisibleRootItem()->rowCount(); i++)
+    {
+        plugin = reinterpret_cast<SystemPlugin *>(m_modelPlugins->item(i)
+            ->data().value<quintptr>());
+        if (plugin != nullptr && plugin->changed())
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+// -------------------------------------------------------
+
 void ScriptsDatas::setDefault(){
     QVector<QString> list({
         "platform.js",

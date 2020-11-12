@@ -38,15 +38,39 @@ SystemScript::~SystemScript()
 
 }
 
+bool SystemScript::changed() const
+{
+    return m_changed;
+}
+
+QString SystemScript::currentCode() const
+{
+    return m_currentCode;
+}
+
+void SystemScript::setChanged(bool changed)
+{
+    m_changed = changed;
+}
+
+void SystemScript::setCurrentCode(QString currentCode)
+{
+    m_currentCode = currentCode;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
 
-QString SystemScript::getCode() const
+QString SystemScript::getCode()
 {
-    return m_changed ? m_currentCode : Common::read(this->getPath());
+    if (!m_changed)
+    {
+        m_currentCode = Common::read(this->getPath());
+    }
+    return m_currentCode;
 }
 
 // -------------------------------------------------------
@@ -63,9 +87,9 @@ QString SystemScript::getPath() const
 
 // -------------------------------------------------------
 
-QString SystemScript::toString() const
+QString SystemScript::toStringName() const
 {
-    return SuperListItem::toString() + (m_changed ? " *" : "");
+    return SuperListItem::toStringName() + (m_changed ? " *" : "");
 }
 
 // -------------------------------------------------------

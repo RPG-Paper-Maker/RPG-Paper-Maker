@@ -28,11 +28,15 @@ public:
     SystemScript();
     SystemScript(int i, QString name);
     virtual ~SystemScript();
+    bool changed() const;
+    QString currentCode() const;
+    void setChanged(bool changed);
+    void setCurrentCode(QString currentCode);
 
-    QString getCode() const;
+    QString getCode();
 
     virtual QString getPath() const;
-    virtual QString toString() const;
+    virtual QString toStringName() const;
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

@@ -22,7 +22,8 @@
 // -------------------------------------------------------
 
 WidgetCode::WidgetCode(QWidget *parent) :
-    QPlainTextEdit(parent)
+    QPlainTextEdit(parent),
+    m_script(nullptr)
 {
     lineNumberArea = new WidgetCodeLineNumberArea(this);
     connect(this, &WidgetCode::blockCountChanged, this, &WidgetCode
@@ -41,6 +42,14 @@ WidgetCode::WidgetCode(QWidget *parent) :
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void WidgetCode::initialize(SystemScript *script)
+{
+    m_script = script;
+    this->setPlainText(script->getCode());
+}
+
 // -------------------------------------------------------
 
 int WidgetCode::lineNumberAreaWidth()
@@ -145,5 +154,12 @@ void WidgetCode::onTextChanged()
             cursor.setPosition(position);
             this->setTextCursor(cursor);
         }
+        text = noTabs;
+    }
+    if (m_script != nullptr && m_script->currentCode() != text)
+    {
+        m_script->setChanged(true);
+        m_script->setCurrentCode(text);
+        emit needSave();
     }
 }

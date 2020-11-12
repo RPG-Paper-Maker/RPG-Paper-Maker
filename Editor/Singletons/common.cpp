@@ -410,12 +410,10 @@ QKeySequence Common::getKeySequence(QKeyEvent *event) {
             if (modifiers & Qt::MetaModifier) {
                 keyInt += Qt::META;
             }
-
             return QKeySequence(keyInt);
         }
     }
-
-    return QKeySequence();
+    return QKeySequence(keyInt);
 }
 
 // -------------------------------------------------------

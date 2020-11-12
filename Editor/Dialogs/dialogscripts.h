@@ -38,8 +38,14 @@ public:
     explicit DialogScripts(QWidget *parent = nullptr);
     ~DialogScripts();
 
+    SystemScript * getSelectedScript() const;
     SystemPlugin * getSelectedPlugin() const;
     void initialize();
+    void updateScriptCodeSave();
+    void updatePluginCodeSave();
+
+protected:
+    virtual void keyPressEvent(QKeyEvent *event);
 
 private:
     Ui::DialogScripts *ui;
@@ -49,10 +55,12 @@ private:
     CodeSyntaxHighlighter *m_highlighterPlugin;
 
 public slots:
-    void on_scriptSystemSelected(QModelIndex index, QModelIndex);
+    void on_scriptSystemSelected(QModelIndex, QModelIndex);
     void on_scriptPluginSelected(QModelIndex, QModelIndex);
     void on_pluginListUpdated();
     void on_pushButtonOpenPluginFolder_clicked();
+    void on_scriptCodeNeedSave();
+    void on_pluginCodeNeedSave();
 };
 
 #endif // DIALOGSCRIPTS_H
