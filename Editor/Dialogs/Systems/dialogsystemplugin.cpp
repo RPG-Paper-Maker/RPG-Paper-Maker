@@ -56,6 +56,7 @@ void DialogSystemPlugin::initialize()
     case PluginTypeKind::Empty:
         ui->radioButtonEmpty->setChecked(true);
         ui->lineEditName->setText(m_plugin.name());
+        ui->lineEditName->setFocus();
         break;
     case PluginTypeKind::Local:
         ui->radioButtonLocal->setChecked(true);
@@ -113,6 +114,8 @@ void DialogSystemPlugin::accept()
             ), json);
         QFile file(Common::pathCombine(path, SystemPlugin::NAME_CODE));
         file.open(QIODevice::ReadWrite);
+        file.write(("(() => {\n    let pluginName = \"" + m_plugin.name() +
+            "\"\n\n    // Start code here\n\n})();").toUtf8());
         file.close();
         break;
     }

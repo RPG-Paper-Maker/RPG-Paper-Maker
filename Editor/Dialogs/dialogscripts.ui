@@ -111,6 +111,58 @@
               <attribute name="title">
                <string>Details</string>
               </attribute>
+              <layout class="QGridLayout" name="gridLayout_4">
+               <item row="0" column="0">
+                <widget class="QScrollArea" name="scrollArea">
+                 <property name="widgetResizable">
+                  <bool>true</bool>
+                 </property>
+                 <widget class="QWidget" name="scrollAreaWidgetContents">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>615</width>
+                    <height>394</height>
+                   </rect>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_5">
+                   <item row="0" column="0">
+                    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
+                     <item>
+                      <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,0">
+                       <item>
+                        <spacer name="horizontalSpacer_2">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="pushButtonOpenPluginFolder">
+                         <property name="text">
+                          <string>Open plugin folder</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                     <item>
+                      <widget class="PanelPluginDetails" name="panelPluginDetails" native="true"/>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
              </widget>
              <widget class="QWidget" name="tab_2">
               <attribute name="title">
@@ -128,7 +180,7 @@
              </widget>
              <widget class="QWidget" name="tab_4">
               <attribute name="title">
-               <string>Edition</string>
+               <string>Edit</string>
               </attribute>
              </widget>
              <widget class="QWidget" name="tab_3">
@@ -160,7 +212,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="pushButtonClose">
          <property name="text">
           <string>Close</string>
          </property>
@@ -173,6 +225,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>PanelPluginDetails</class>
+   <extends>QWidget</extends>
+   <header>panelplugindetails.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>WidgetSuperTree</class>
    <extends>QTreeView</extends>
@@ -187,7 +245,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>pushButton</sender>
+   <sender>pushButtonClose</sender>
    <signal>clicked()</signal>
    <receiver>DialogScripts</receiver>
    <slot>accept()</slot>

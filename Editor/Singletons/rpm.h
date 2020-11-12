@@ -85,6 +85,11 @@ public:
     static const QString MODULO;
     static const QString TRUE_BOOL_STRING;
     static const QString FALSE_BOOL_STRING;
+    static const QString TAG_OPEN_STRONG;
+    static const QString TAG_CLOSE_STRONG;
+    static const QString TAG_OPEN_A;
+    static const QString TAG_MIDDLE_A;
+    static const QString TAG_CLOSE_A;
 
     // FILE / FOLDER NAMES
     static const QString FILE_MAP_INFOS;

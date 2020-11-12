@@ -67,6 +67,7 @@ SystemPlugin::SystemPlugin(int i, QString n, PluginTypeKind t,
 SystemPlugin::~SystemPlugin()
 {
     SuperListItem::deleteModel(m_parameters);
+    SuperListItem::deleteModel(m_commands);
 }
 
 PluginTypeKind SystemPlugin::type() const
@@ -167,18 +168,10 @@ void SystemPlugin::setTutorial(QString tutorial)
 //
 // -------------------------------------------------------
 
-QString SystemPlugin::getFolderName() const
-{
-    return QString::number(p_id) + RPM::DASH + p_name;
-}
-
-// -------------------------------------------------------
-
 QString SystemPlugin::getFolderPath() const
 {
     return Common::pathCombine(Common::pathCombine(RPM::get()->project()
-        ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_PLUGINS_DIR), this
-        ->getFolderName());
+        ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_PLUGINS_DIR), p_name);
 }
 
 // -------------------------------------------------------
@@ -260,17 +253,9 @@ void SystemPlugin::setCopy(const SuperListItem &super)
     m_version = plugin->m_version;
     m_tutorial = plugin->m_tutorial;
     this->clearParameters();
-    for (int i = 0, l = plugin->parametersCount(); i < l; i++)
-    {
-        m_parameters->appendRow(reinterpret_cast<SystemPluginParameter *>(plugin
-            ->parameterAt(i)->createCopy())->getModelRow());
-    }
-    this->clearParameters();
-    for (int i = 0, l = plugin->commandsCount(); i < l; i++)
-    {
-        m_commands->appendRow(reinterpret_cast<SystemPluginCommand *>(plugin
-            ->commandAt(i))->createCopy()->getModelRow());
-    }
+    SuperListItem::copy(m_parameters, plugin->m_parameters);
+    this->clearCommands();
+    SuperListItem::copy(m_commands, plugin->m_commands);
 }
 
 // -------------------------------------------------------

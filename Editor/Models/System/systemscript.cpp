@@ -44,14 +44,6 @@ SystemScript::~SystemScript()
 //
 // -------------------------------------------------------
 
-QString SystemScript::getPath() const
-{
-    return Common::pathCombine(Common::pathCombine(RPM::get()->project()
-        ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_SYSTEM_DIR), p_name);
-}
-
-// -------------------------------------------------------
-
 QString SystemScript::getCode() const
 {
     return m_changed ? m_currentCode : Common::read(this->getPath());
@@ -61,6 +53,14 @@ QString SystemScript::getCode() const
 //
 //  VIRTUAL FUNCTIONS
 //
+// -------------------------------------------------------
+
+QString SystemScript::getPath() const
+{
+    return Common::pathCombine(Common::pathCombine(RPM::get()->project()
+        ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_SYSTEM_DIR), p_name);
+}
+
 // -------------------------------------------------------
 
 QString SystemScript::toString() const

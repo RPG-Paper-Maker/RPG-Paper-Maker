@@ -73,7 +73,6 @@ public:
     void setVersion(QString version);
     void setTutorial(QString tutorial);
 
-    QString getFolderName() const;
     QString getFolderPath() const;
     void clearParameters();
     void clearCommands();

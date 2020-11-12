@@ -71,6 +71,11 @@ const QString RPM::DIVIDED_BY = "/";
 const QString RPM::MODULO = "%";
 const QString RPM::TRUE_BOOL_STRING = "1";
 const QString RPM::FALSE_BOOL_STRING = "0";
+const QString RPM::TAG_OPEN_STRONG = "<strong>";
+const QString RPM::TAG_CLOSE_STRONG = "</strong>";
+const QString RPM::TAG_OPEN_A = "<a href=\"";
+const QString RPM::TAG_MIDDLE_A = "\" style=\"color: tomato;\">";
+const QString RPM::TAG_CLOSE_A = "</a>";
 
 // FILE / FOLDER NAMES
 const QString RPM::FILE_MAP_INFOS = "infos" + EXTENSION_JSON;

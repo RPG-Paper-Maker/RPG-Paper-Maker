@@ -29,9 +29,9 @@ public:
     SystemScript(int i, QString name);
     virtual ~SystemScript();
 
-    QString getPath() const;
     QString getCode() const;
 
+    virtual QString getPath() const;
     virtual QString toString() const;
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

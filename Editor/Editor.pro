@@ -22,6 +22,7 @@ DESTDIR = $$ROOT_DESTDIR/Editor
 HEADERS += \
     CustomWidgets/codesyntaxhighlighter.h \
     CustomWidgets/panelcolorstransition.h \
+    CustomWidgets/panelplugindetails.h \
     CustomWidgets/panelselectpositionmaps.h \
     CustomWidgets/panelsubtransformation.h \
     CustomWidgets/paneltransformations.h \
@@ -409,6 +410,7 @@ HEADERS += \
 SOURCES += \
     CustomWidgets/codesyntaxhighlighter.cpp \
     CustomWidgets/panelcolorstransition.cpp \
+    CustomWidgets/panelplugindetails.cpp \
     CustomWidgets/panelselectpositionmaps.cpp \
     CustomWidgets/panelsubtransformation.cpp \
     CustomWidgets/paneltransformations.cpp \
@@ -750,6 +752,7 @@ SOURCES += \
 
 FORMS += \
     CustomWidgets/panelcolorstransition.ui \
+    CustomWidgets/panelplugindetails.ui \
     CustomWidgets/panelselectpositionmaps.ui \
     CustomWidgets/panelsubtransformation.ui \
     CustomWidgets/paneltransformations.ui \

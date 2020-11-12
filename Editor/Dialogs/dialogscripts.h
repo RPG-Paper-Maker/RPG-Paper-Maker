@@ -16,6 +16,7 @@
 #include <QModelIndex>
 #include "widgetcodelinenumberarea.h"
 #include "codesyntaxhighlighter.h"
+#include "systemplugin.h"
 
 // -------------------------------------------------------
 //
@@ -37,6 +38,7 @@ public:
     explicit DialogScripts(QWidget *parent = nullptr);
     ~DialogScripts();
 
+    SystemPlugin * getSelectedPlugin() const;
     void initialize();
 
 private:
@@ -48,8 +50,9 @@ private:
 
 public slots:
     void on_scriptSystemSelected(QModelIndex index, QModelIndex);
-    void on_scriptPluginSelected(QModelIndex index, QModelIndex);
+    void on_scriptPluginSelected(QModelIndex, QModelIndex);
     void on_pluginListUpdated();
+    void on_pushButtonOpenPluginFolder_clicked();
 };
 
 #endif // DIALOGSCRIPTS_H

@@ -31,8 +31,8 @@ ScriptsDatas::ScriptsDatas() :
 
 ScriptsDatas::~ScriptsDatas()
 {
-    delete m_modelSystem;
-    delete m_modelPlugins;
+    SuperListItem::deleteModel(m_modelSystem, true);
+    SuperListItem::deleteModel(m_modelPlugins, true);
 }
 
 void ScriptsDatas::read(QString path){

@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QDesktopServices>
 #include "dialogscripts.h"
 #include "ui_dialogscripts.h"
 #include "systemscript.h"
@@ -61,6 +62,18 @@ DialogScripts::~DialogScripts()
 //
 // -------------------------------------------------------
 
+SystemPlugin * DialogScripts::getSelectedPlugin() const
+{
+    QStandardItem *selected = ui->treeViewPlugins->getSelected();
+    if (selected != nullptr)
+    {
+        return reinterpret_cast<SystemPlugin *>(selected->data().value<quintptr>());
+    }
+    return nullptr;
+}
+
+// -------------------------------------------------------
+
 void DialogScripts::initialize()
 {
     // System
@@ -84,6 +97,9 @@ void DialogScripts::initialize()
     index = ui->treeViewPlugins->getModel()->index(0, 0);
     ui->treeViewPlugins->setCurrentIndex(index);
     on_scriptPluginSelected(index, index);
+
+    // Focus close button
+    ui->pushButtonClose->setFocus();
 }
 
 // -------------------------------------------------------
@@ -116,22 +132,14 @@ void DialogScripts::on_scriptSystemSelected(QModelIndex index, QModelIndex)
 
 // -------------------------------------------------------
 
-void DialogScripts::on_scriptPluginSelected(QModelIndex index, QModelIndex)
+void DialogScripts::on_scriptPluginSelected(QModelIndex, QModelIndex)
 {
-    QStandardItem *selected = ui->treeViewPlugins->getModel()->itemFromIndex(
-        index);
-    if (selected != nullptr)
+    SystemPlugin *plugin = this->getSelectedPlugin();
+    if (plugin != nullptr)
     {
-        SystemPlugin *plugin = reinterpret_cast<SystemPlugin *>(selected->data()
-            .value<quintptr>());
-        if (plugin != nullptr)
-        {
-            ui->tabWidgetPlugin->show();
-            ui->widgetCodePlugin->setPlainText(plugin->getCode());
-        } else
-        {
-            ui->tabWidgetPlugin->hide();
-        }
+        ui->tabWidgetPlugin->show();
+        ui->panelPluginDetails->initialize(plugin);
+        ui->widgetCodePlugin->setPlainText(plugin->getCode());
     } else
     {
         ui->tabWidgetPlugin->hide();
@@ -143,4 +151,12 @@ void DialogScripts::on_scriptPluginSelected(QModelIndex index, QModelIndex)
 void DialogScripts::on_pluginListUpdated()
 {
     RPM::get()->project()->writeScriptsDatas();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pushButtonOpenPluginFolder_clicked()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(this->getSelectedPlugin()
+        ->getFolderPath()));
 }
