@@ -10,6 +10,7 @@
 */
 
 #include <QDesktopServices>
+#include <QDir>
 #include "dialogscripts.h"
 #include "ui_dialogscripts.h"
 #include "systemscript.h"
@@ -55,6 +56,8 @@ DialogScripts::~DialogScripts()
     delete ui;
     delete m_widgetLineNumber;
     delete m_highlighterSystem;
+    delete m_widgetLineNumberPlugin;
+    delete m_highlighterPlugin;
 }
 
 // -------------------------------------------------------
@@ -140,6 +143,17 @@ void DialogScripts::updatePluginCodeSave()
 }
 
 // -------------------------------------------------------
+
+void DialogScripts::updatePluginEditSave()
+{
+    ui->tabWidgetPlugin->setTabText(2, "Edit" + (this->getSelectedPlugin()
+        ->editChanged() ? RPM::SPACE + "*" : ""));
+    ui->treeViewPlugins->updateAbsoluteAllNodesString();
+    ui->tabWidget->setTabText(1, "Plugins" + (RPM::get()->project()
+        ->scriptsDatas()->allPluginsSaved() ? "" : RPM::SPACE + "*"));
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
@@ -163,14 +177,38 @@ void DialogScripts::keyPressEvent(QKeyEvent *event)
             this->updateScriptCodeSave();
             break;
         case 1: // Plugins
+            plugin = this->getSelectedPlugin();
             switch (ui->tabWidgetPlugin->currentIndex())
             {
             case 1: // Code
-                plugin = this->getSelectedPlugin();
                 plugin->setChanged(false);
                 Common::write(plugin->getPath(), plugin->currentCode());
                 this->updatePluginCodeSave();
                 break;
+            case 2: // Edit
+            {
+                plugin = this->getSelectedPlugin();
+                QString previousName = plugin->name();
+
+                // Check plugin name
+                if (!plugin->editedPlugin()->checkPluginName(previousName))
+                {
+                    return;
+                }
+                plugin->setEditChanged(false);
+                QDir(Common::pathCombine(RPM::get()->project()
+                    ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_PLUGINS_DIR))
+                    .rename(previousName, plugin->editedPlugin()->name());
+                plugin->setCopy(*plugin->editedPlugin());
+                QJsonObject json;
+                plugin->write(json);
+                Common::writeOtherJSON(Common::pathCombine(plugin
+                    ->getFolderPath(), SystemPlugin::NAME_JSON), json);
+                RPM::get()->project()->writeScriptsDatas();
+                this->updatePluginEditSave();
+                ui->panelPluginDetails->initialize(plugin);
+                break;
+            }
             default:
                 break;
             }
@@ -210,9 +248,19 @@ void DialogScripts::on_scriptPluginSelected(QModelIndex, QModelIndex)
     if (plugin != nullptr)
     {
         ui->tabWidgetPlugin->show();
-        ui->panelPluginDetails->initialize(plugin);
+        plugin->initializeEditedPlugin();
+        ui->panelPluginDetails->initialize(plugin->editedPlugin());
         ui->widgetCodePlugin->initialize(plugin);
         this->updatePluginCodeSave();
+        ui->lineEditName->setText(plugin->editedPlugin()->name());
+        ui->lineEditAuthor->setText(plugin->editedPlugin()->author());
+        ui->plainTextEditDescription->blockSignals(true);
+        ui->plainTextEditDescription->setPlainText(plugin->editedPlugin()
+            ->description());
+        ui->plainTextEditDescription->blockSignals(false);
+        ui->lineEditVersion->setText(plugin->editedPlugin()->version());
+        ui->lineEditWebsite->setText(plugin->editedPlugin()->website());
+        ui->lineEditTutorial->setText(plugin->editedPlugin()->tutorial());
         if (ui->tabWidgetPlugin->currentIndex() == 1)
         {
             ui->widgetCodePlugin->setFocus();
@@ -250,4 +298,61 @@ void DialogScripts::on_scriptCodeNeedSave()
 void DialogScripts::on_pluginCodeNeedSave()
 {
     this->updatePluginCodeSave();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_lineEditName_textEdited(const QString &text)
+{
+    SystemPlugin *plugin = this->getSelectedPlugin();
+    plugin->editedPlugin()->setName(text);
+    plugin->setEditChanged(true);
+    this->updatePluginEditSave();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_lineEditAuthor_textEdited(const QString &text)
+{
+    SystemPlugin *plugin = this->getSelectedPlugin();
+    plugin->editedPlugin()->setAuthor(text);
+    plugin->setEditChanged(true);
+    this->updatePluginEditSave();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_plainTextEditDescription_textChanged()
+{
+    SystemPlugin *plugin = this->getSelectedPlugin();
+    plugin->editedPlugin()->setDescription(ui->plainTextEditDescription
+        ->toPlainText());
+    plugin->setEditChanged(true);
+    this->updatePluginEditSave();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_lineEditVersion_textEdited(const QString &text)
+{
+    SystemPlugin *plugin = this->getSelectedPlugin();
+    plugin->editedPlugin()->setVersion(text);
+    plugin->setEditChanged(true);
+    this->updatePluginEditSave();
+}
+
+void DialogScripts::on_lineEditWebsite_textEdited(const QString &text)
+{
+    SystemPlugin *plugin = this->getSelectedPlugin();
+    plugin->editedPlugin()->setWebsite(text);
+    plugin->setEditChanged(true);
+    this->updatePluginEditSave();
+}
+
+void DialogScripts::on_lineEditTutorial_textEdited(const QString &text)
+{
+    SystemPlugin *plugin = this->getSelectedPlugin();
+    plugin->editedPlugin()->setTutorial(text);
+    plugin->setEditChanged(true);
+    this->updatePluginEditSave();
 }

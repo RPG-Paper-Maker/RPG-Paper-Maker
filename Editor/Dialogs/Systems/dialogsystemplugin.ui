@@ -249,9 +249,7 @@
                 </property>
                 <layout class="QGridLayout" name="gridLayout">
                  <item row="0" column="0">
-                  <widget class="PanelPluginDetails" name="panelPluginDetails" native="true">
-                   <layout class="QGridLayout" name="gridLayout_3"/>
-                  </widget>
+                  <widget class="PanelPluginDetails" name="panelPluginDetails" native="true"/>
                  </item>
                 </layout>
                </widget>

@@ -80,25 +80,16 @@ void DialogSystemPlugin::accept()
     QDir dirPlugins(pathPlugins);
     QString path;
 
+    // Check plugin name
+    if (!m_plugin.checkPluginName(m_previousName))
+    {
+        return;
+    }
+
     // Delete previous plugin
     if (!m_previousName.isEmpty())
     {
         QDir(Common::pathCombine(pathPlugins, m_previousName)).removeRecursively();
-    }
-
-    // Check plugin name
-    if (m_plugin.name().isEmpty())
-    {
-        QMessageBox::information(this, RPM::translate(Translations
-            ::WARNING), "The plugin name can't be empty.");
-        return;
-    }
-    if (RPM::get()->project()->scriptsDatas()->containsPluginName(m_plugin
-        .name()))
-    {
-        QMessageBox::information(this, RPM::translate(Translations
-            ::WARNING), "This plugin name already exists in your project.");
-        return;
     }
 
     // Check according to type
@@ -106,6 +97,8 @@ void DialogSystemPlugin::accept()
     {
     case PluginTypeKind::Empty:
     {
+        m_plugin.setDefault();
+        m_plugin.setType(PluginTypeKind::Empty);
         dirPlugins.mkdir(m_plugin.name());
         path = m_plugin.getFolderPath();
         QJsonObject json;
@@ -137,8 +130,6 @@ void DialogSystemPlugin::accept()
 
 void DialogSystemPlugin::on_radioButtonEmpty_toggled(bool checked)
 {
-    m_plugin.setDefault();
-    m_plugin.setType(PluginTypeKind::Empty);
     m_plugin.setName(ui->lineEditName->text());
 
     // Enable widgets

@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QMessageBox>
 #include "systemplugin.h"
 #include "systemplugincommand.h"
 #include "systempluginparameter.h"
@@ -59,7 +60,8 @@ SystemPlugin::SystemPlugin(int i, QString n, PluginTypeKind t,
     m_version(v),
     m_tutorial(tu),
     m_parameters(new QStandardItemModel),
-    m_commands(new QStandardItemModel)
+    m_commands(new QStandardItemModel),
+    m_editedPlugin(nullptr)
 {
 
 }
@@ -68,6 +70,7 @@ SystemPlugin::~SystemPlugin()
 {
     SuperListItem::deleteModel(m_parameters);
     SuperListItem::deleteModel(m_commands);
+    this->removeEditedPlugin();
 }
 
 PluginTypeKind SystemPlugin::type() const
@@ -127,6 +130,16 @@ SystemPluginParameter * SystemPlugin::commandAt(int i) const
         ->data().value<quintptr>());
 }
 
+bool SystemPlugin::editChanged() const
+{
+    return m_editChanged;
+}
+
+SystemPlugin * SystemPlugin::editedPlugin() const
+{
+    return m_editedPlugin;
+}
+
 void SystemPlugin::setType(PluginTypeKind type)
 {
     m_type = type;
@@ -162,6 +175,11 @@ void SystemPlugin::setTutorial(QString tutorial)
     m_tutorial = tutorial;
 }
 
+void SystemPlugin::setEditChanged(bool editChanged)
+{
+    m_editChanged = editChanged;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -172,6 +190,36 @@ QString SystemPlugin::getFolderPath() const
 {
     return Common::pathCombine(Common::pathCombine(RPM::get()->project()
         ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_PLUGINS_DIR), p_name);
+}
+
+// -------------------------------------------------------
+
+bool SystemPlugin::checkPluginName(QString previousName) const
+{
+    if (p_name.isEmpty())
+    {
+        QMessageBox::information(nullptr, RPM::translate(Translations
+            ::WARNING), "The plugin name can't be empty.");
+        return false;
+    }
+    if (previousName != p_name && RPM::get()->project()->scriptsDatas()
+        ->containsPluginName(p_name))
+    {
+        QMessageBox::information(nullptr, RPM::translate(Translations
+            ::WARNING), "This plugin name already exists in your project.");
+        return false;
+    }
+    return true;
+}
+
+// -------------------------------------------------------
+
+void SystemPlugin::initializeEditedPlugin()
+{
+    if (m_editedPlugin == nullptr)
+    {
+        m_editedPlugin = reinterpret_cast<SystemPlugin *>(this->createCopy());
+    }
 }
 
 // -------------------------------------------------------
@@ -189,9 +237,26 @@ void SystemPlugin::clearCommands()
 }
 
 // -------------------------------------------------------
+
+void SystemPlugin::removeEditedPlugin()
+{
+    if (m_editedPlugin != nullptr)
+    {
+        delete m_editedPlugin;
+    }
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
+// -------------------------------------------------------
+
+bool SystemPlugin::checkChanged() const
+{
+    return m_changed || m_editChanged;
+}
+
 // -------------------------------------------------------
 
 QString SystemPlugin::getPath() const
@@ -203,7 +268,6 @@ QString SystemPlugin::getPath() const
 
 void SystemPlugin::setDefault()
 {
-    this->setType(DEFAULT_TYPE);
     this->setCategory(DEFAULT_CATEGORY);
     this->setAuthor(DEFAULT_AUTHOR);
     this->setWebsite(DEFAULT_WEBSITE);
@@ -319,6 +383,10 @@ void SystemPlugin::write(QJsonObject &json) const {
     {
         json[JSON_AUTHOR] = m_author;
     }
+    if (m_website != DEFAULT_WEBSITE)
+    {
+        json[JSON_WEBSITE] = m_website;
+    }
     if (m_description != DEFAULT_DESCRIPTION)
     {
         json[JSON_DESCRIPTION] = m_description;
@@ -326,6 +394,10 @@ void SystemPlugin::write(QJsonObject &json) const {
     if (m_version != DEFAULT_VERSION)
     {
         json[JSON_VERSION] = m_version;
+    }
+    if (m_tutorial != DEFAULT_TUTORIAL)
+    {
+        json[JSON_TUTORIAL] = m_tutorial;
     }
     SuperListItem::writeTree(m_parameters, json, JSON_PARAMETERS);
     SuperListItem::writeTree(m_commands, json, JSON_COMMANDS);

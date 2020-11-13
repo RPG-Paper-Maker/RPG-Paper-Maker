@@ -65,6 +65,8 @@ public:
     SystemPluginParameter * parameterAt(int i) const;
     int commandsCount() const;
     SystemPluginParameter * commandAt(int i) const;
+    bool editChanged() const;
+    SystemPlugin * editedPlugin() const;
     void setType(PluginTypeKind type);
     void setCategory(PluginCategoryKind category);
     void setAuthor(QString author);
@@ -72,11 +74,16 @@ public:
     void setDescription(QString description);
     void setVersion(QString version);
     void setTutorial(QString tutorial);
+    void setEditChanged(bool editChanged);
 
     QString getFolderPath() const;
+    bool checkPluginName(QString previousName) const;
+    void initializeEditedPlugin();
     void clearParameters();
     void clearCommands();
+    void removeEditedPlugin();
 
+    virtual bool checkChanged() const;
     virtual QString getPath() const;
     virtual void setDefault();
     virtual bool openDialog();
@@ -95,6 +102,8 @@ protected:
     QString m_tutorial;
     QStandardItemModel *m_parameters;
     QStandardItemModel *m_commands;
+    bool m_editChanged;
+    SystemPlugin *m_editedPlugin;
 };
 
 Q_DECLARE_METATYPE(SystemPlugin)

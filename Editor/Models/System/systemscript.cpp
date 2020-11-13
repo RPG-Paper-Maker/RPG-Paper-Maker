@@ -79,6 +79,13 @@ QString SystemScript::getCode()
 //
 // -------------------------------------------------------
 
+bool SystemScript::checkChanged() const
+{
+    return m_changed;
+}
+
+// -------------------------------------------------------
+
 QString SystemScript::getPath() const
 {
     return Common::pathCombine(Common::pathCombine(RPM::get()->project()
@@ -89,7 +96,7 @@ QString SystemScript::getPath() const
 
 QString SystemScript::toStringName() const
 {
-    return SuperListItem::toStringName() + (m_changed ? " *" : "");
+    return SuperListItem::toStringName() + (this->checkChanged() ? " *" : "");
 }
 
 // -------------------------------------------------------

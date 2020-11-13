@@ -43,6 +43,7 @@ public:
     void initialize();
     void updateScriptCodeSave();
     void updatePluginCodeSave();
+    void updatePluginEditSave();
 
 protected:
     virtual void keyPressEvent(QKeyEvent *event);
@@ -61,6 +62,12 @@ public slots:
     void on_pushButtonOpenPluginFolder_clicked();
     void on_scriptCodeNeedSave();
     void on_pluginCodeNeedSave();
+    void on_lineEditName_textEdited(const QString &text);
+    void on_lineEditAuthor_textEdited(const QString &text);
+    void on_plainTextEditDescription_textChanged();
+    void on_lineEditVersion_textEdited(const QString &text);
+    void on_lineEditWebsite_textEdited(const QString &text);
+    void on_lineEditTutorial_textEdited(const QString &text);
 };
 
 #endif // DIALOGSCRIPTS_H

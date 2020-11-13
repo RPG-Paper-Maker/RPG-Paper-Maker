@@ -75,7 +75,7 @@ bool ScriptsDatas::allScriptsSaved() const
     {
         script = reinterpret_cast<SystemScript *>(m_modelSystem->item(i)
             ->data().value<quintptr>());
-        if (script != nullptr && script->changed())
+        if (script != nullptr && script->checkChanged())
         {
             return false;
         }
@@ -92,7 +92,7 @@ bool ScriptsDatas::allPluginsSaved() const
     {
         plugin = reinterpret_cast<SystemPlugin *>(m_modelPlugins->item(i)
             ->data().value<quintptr>());
-        if (plugin != nullptr && plugin->changed())
+        if (plugin != nullptr && plugin->checkChanged())
         {
             return false;
         }

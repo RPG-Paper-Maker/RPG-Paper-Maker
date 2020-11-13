@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>872</width>
+    <width>941</width>
     <height>551</height>
    </rect>
   </property>
@@ -51,13 +51,13 @@
            <widget class="WidgetSuperTree" name="treeViewSystem">
             <property name="minimumSize">
              <size>
-              <width>171</width>
+              <width>200</width>
               <height>0</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>171</width>
+              <width>200</width>
               <height>16777215</height>
              </size>
             </property>
@@ -90,13 +90,13 @@
             <widget class="WidgetSuperTree" name="treeViewPlugins">
              <property name="minimumSize">
               <size>
-               <width>171</width>
+               <width>200</width>
                <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>171</width>
+               <width>200</width>
                <height>16777215</height>
               </size>
              </property>
@@ -108,7 +108,7 @@
            <item>
             <widget class="QTabWidget" name="tabWidgetPlugin">
              <property name="currentIndex">
-              <number>0</number>
+              <number>2</number>
              </property>
              <widget class="QWidget" name="tab">
               <attribute name="title">
@@ -125,7 +125,7 @@
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>615</width>
+                    <width>655</width>
                     <height>394</height>
                    </rect>
                   </property>
@@ -133,7 +133,7 @@
                    <item row="0" column="0">
                     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
                      <item>
-                      <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,0">
+                      <layout class="QHBoxLayout" name="horizontalLayout_4">
                        <item>
                         <spacer name="horizontalSpacer_2">
                          <property name="orientation">
@@ -185,6 +185,170 @@
               <attribute name="title">
                <string>Edit</string>
               </attribute>
+              <layout class="QGridLayout" name="gridLayout_7">
+               <item row="0" column="0">
+                <widget class="QScrollArea" name="scrollArea_2">
+                 <property name="widgetResizable">
+                  <bool>true</bool>
+                 </property>
+                 <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>641</width>
+                    <height>851</height>
+                   </rect>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_9">
+                   <item row="0" column="0">
+                    <layout class="QGridLayout" name="gridLayout_8">
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="labelName">
+                       <property name="text">
+                        <string>Name:</string>
+                       </property>
+                       <property name="textFormat">
+                        <enum>Qt::RichText</enum>
+                       </property>
+                       <property name="wordWrap">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QLineEdit" name="lineEditName"/>
+                     </item>
+                     <item row="1" column="0">
+                      <widget class="QLabel" name="labelAuthor">
+                       <property name="text">
+                        <string>Author:</string>
+                       </property>
+                       <property name="textFormat">
+                        <enum>Qt::RichText</enum>
+                       </property>
+                       <property name="wordWrap">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="1">
+                      <widget class="QLineEdit" name="lineEditAuthor"/>
+                     </item>
+                     <item row="2" column="0">
+                      <widget class="QLabel" name="labelDescritpion">
+                       <property name="text">
+                        <string>Description:</string>
+                       </property>
+                       <property name="textFormat">
+                        <enum>Qt::RichText</enum>
+                       </property>
+                       <property name="wordWrap">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="2" column="1" rowspan="2">
+                      <widget class="QPlainTextEdit" name="plainTextEditDescription"/>
+                     </item>
+                     <item row="3" column="0">
+                      <spacer name="verticalSpacer">
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>78</width>
+                         <height>40</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                     <item row="4" column="0">
+                      <widget class="QLabel" name="labelVersion">
+                       <property name="text">
+                        <string>Version:</string>
+                       </property>
+                       <property name="textFormat">
+                        <enum>Qt::RichText</enum>
+                       </property>
+                       <property name="wordWrap">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="4" column="1">
+                      <widget class="QLineEdit" name="lineEditVersion"/>
+                     </item>
+                     <item row="5" column="0">
+                      <widget class="QLabel" name="labelWebsite">
+                       <property name="text">
+                        <string>Website:</string>
+                       </property>
+                       <property name="textFormat">
+                        <enum>Qt::RichText</enum>
+                       </property>
+                       <property name="wordWrap">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="5" column="1">
+                      <widget class="QLineEdit" name="lineEditWebsite"/>
+                     </item>
+                     <item row="6" column="0">
+                      <widget class="QLabel" name="labelTutorial">
+                       <property name="text">
+                        <string>Tutorial:</string>
+                       </property>
+                       <property name="textFormat">
+                        <enum>Qt::RichText</enum>
+                       </property>
+                       <property name="wordWrap">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="6" column="1">
+                      <widget class="QLineEdit" name="lineEditTutorial"/>
+                     </item>
+                     <item row="7" column="0" colspan="2">
+                      <widget class="QGroupBox" name="groupBoxParameters">
+                       <property name="title">
+                        <string>Parameters</string>
+                       </property>
+                       <layout class="QGridLayout" name="gridLayout_6">
+                        <item row="0" column="0">
+                         <widget class="QTreeView" name="treeView"/>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                     <item row="8" column="0" colspan="2">
+                      <widget class="QGroupBox" name="groupBoxCommands">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="title">
+                        <string>Commands</string>
+                       </property>
+                       <layout class="QGridLayout" name="gridLayout_10">
+                        <item row="0" column="0">
+                         <widget class="QTreeView" name="treeView_2"/>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
              </widget>
              <widget class="QWidget" name="tab_3">
               <attribute name="title">

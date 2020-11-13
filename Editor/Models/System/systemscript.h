@@ -35,6 +35,7 @@ public:
 
     QString getCode();
 
+    virtual bool checkChanged() const;
     virtual QString getPath() const;
     virtual QString toStringName() const;
     virtual void read(const QJsonObject &json);

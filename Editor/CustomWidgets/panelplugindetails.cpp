@@ -63,7 +63,7 @@ void PanelPluginDetails::initialize(SystemPlugin *plugin)
         ui->labelAuthor->hide();
     } else
     {
-        ui->labelName->show();
+        ui->labelAuthor->show();
         ui->labelAuthor->setText(RPM::TAG_OPEN_STRONG + "Author" + RPM::COLON + RPM::TAG_CLOSE_STRONG + RPM::SPACE + m_plugin->author());
     }
     if (m_plugin->description().isEmpty())
@@ -74,7 +74,7 @@ void PanelPluginDetails::initialize(SystemPlugin *plugin)
         ui->labelDescritpion->show();
         ui->labelDescritpion->setText(RPM::TAG_OPEN_STRONG + RPM::translate(
             Translations::DESCRIPTION) + RPM::COLON + RPM::TAG_CLOSE_STRONG +
-            RPM::SPACE + m_plugin->description());
+            RPM::SPACE + m_plugin->description().replace("\n", "<br />"));
     }
     if (m_plugin->version().isEmpty())
     {
