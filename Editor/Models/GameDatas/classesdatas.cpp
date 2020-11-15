@@ -48,7 +48,6 @@ void ClassesDatas::setDefault(QStandardItem *modelSkills,
                               QStandardItem *modelStatistics)
 {
     SystemClass* sysClass;
-    QStandardItem* item;
     SuperListItem* skill;
     SuperListItem* statistic;
     SystemStatisticProgression* statisticProgression;

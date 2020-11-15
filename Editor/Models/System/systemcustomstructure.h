@@ -23,8 +23,6 @@
 //
 // -------------------------------------------------------
 
-class PrimitiveValue;
-
 class SystemCustomStructure : public SuperListItem
 {
 public:
@@ -34,16 +32,14 @@ public:
     static const bool DEFAULT_IS_LIST;
 
     SystemCustomStructure();
-    SystemCustomStructure(int i, QString n, PrimitiveValue *v = nullptr, bool
-        il = DEFAULT_IS_LIST, QStandardItemModel *p = nullptr,
-        QStandardItemModel *l = nullptr);
+    SystemCustomStructure(int i, QString n, bool isList = false,
+        QStandardItemModel *m = new QStandardItemModel);
     virtual ~SystemCustomStructure();
-    PrimitiveValue * value();
-    bool isList() const;
     QStandardItemModel * properties() const;
     QStandardItemModel * list() const;
     void setIsList(bool isList);
 
+    bool isList() const;
     void initializeHeaders();
     void clearProperties();
     void clearList();
@@ -56,8 +52,6 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    PrimitiveValue *m_value;
-    bool m_isList;
     QStandardItemModel *m_properties;
     QStandardItemModel *m_list;
 };

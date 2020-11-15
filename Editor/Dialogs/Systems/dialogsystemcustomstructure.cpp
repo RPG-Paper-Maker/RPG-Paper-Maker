@@ -1,6 +1,12 @@
 #include "dialogsystemcustomstructure.h"
 #include "ui_dialogsystemcustomstructure.h"
 
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
 DialogSystemCustomStructure::DialogSystemCustomStructure(SystemCustomStructure
     &custom, QWidget *parent) :
     QDialog(parent),

@@ -111,6 +111,7 @@ public:
     void showParameter();
     void showProperty();
     void showDataBase();
+    void showDataBaseCustom();
     void clearDataBase();
     void showMessage();
     void showScript();

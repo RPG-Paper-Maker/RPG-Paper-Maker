@@ -65,6 +65,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystembattlemap.h \
     Dialogs/Systems/dialogsystemcameraproperties.h \
     Dialogs/Systems/dialogsystemcustomstructure.h \
+    Dialogs/Systems/dialogsystemcustomstructureelement.h \
     Dialogs/Systems/dialogsystemdetection.h \
     Dialogs/Systems/dialogsystemfontname.h \
     Dialogs/Systems/dialogsystemfontsize.h \
@@ -117,6 +118,7 @@ HEADERS += \
     Models/System/systemanimationframeelement.h \
     Models/System/systemcameraproperties.h \
     Models/System/systemcustomstructure.h \
+    Models/System/systemcustomstructureelement.h \
     Models/System/systemdetection.h \
     Models/System/systemfontname.h \
     Models/System/systemfontsize.h \
@@ -457,6 +459,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystembattlemap.cpp \
     Dialogs/Systems/dialogsystemcameraproperties.cpp \
     Dialogs/Systems/dialogsystemcustomstructure.cpp \
+    Dialogs/Systems/dialogsystemcustomstructureelement.cpp \
     Dialogs/Systems/dialogsystemdetection.cpp \
     Dialogs/Systems/dialogsystemfontname.cpp \
     Dialogs/Systems/dialogsystemfontsize.cpp \
@@ -494,6 +497,7 @@ SOURCES += \
     Models/System/systemanimationframeelement.cpp \
     Models/System/systemcameraproperties.cpp \
     Models/System/systemcustomstructure.cpp \
+    Models/System/systemcustomstructureelement.cpp \
     Models/System/systemdetection.cpp \
     Models/System/systemfontname.cpp \
     Models/System/systemfontsize.cpp \
@@ -798,6 +802,7 @@ FORMS += \
     Dialogs/Systems/dialogsystembattlemap.ui \
     Dialogs/Systems/dialogsystemcameraproperties.ui \
     Dialogs/Systems/dialogsystemcustomstructure.ui \
+    Dialogs/Systems/dialogsystemcustomstructureelement.ui \
     Dialogs/Systems/dialogsystemdetection.ui \
     Dialogs/Systems/dialogsystemfontname.ui \
     Dialogs/Systems/dialogsystemfontsize.ui \

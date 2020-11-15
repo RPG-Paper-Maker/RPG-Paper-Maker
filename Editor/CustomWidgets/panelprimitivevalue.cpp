@@ -261,8 +261,8 @@ void PanelPrimitiveValue::initializeAll(QStandardItemModel *parameters,
     QStandardItemModel *properties)
 {
     m_kind = PanelPrimitiveValueKind::All;
-    ui->comboBoxChoice->addItem("Custom structure");
-    ui->comboBoxChoice->addItem("Custom list");
+    this->addCustomStructure(false);
+    this->addCustomStructure(true);
     addVariable();
     addNumberDouble();
     addSwitch();
@@ -270,8 +270,6 @@ void PanelPrimitiveValue::initializeAll(QStandardItemModel *parameters,
     addMessage(false);
     addParameter(parameters);
     addProperty(properties);
-    //addDataBase(RPM::get()->project(), PrimitiveValueKind::CustomStructure);
-    //addDataBase(RPM::get()->project(), PrimitiveValueKind::CustomList);
     addDataBase(RPM::get()->project()->gameDatas()->classesDatas()->model(),
         PrimitiveValueKind::Class);
     addDataBase(RPM::get()->project()->gameDatas()->heroesDatas()->model(),
@@ -627,6 +625,8 @@ void PanelPrimitiveValue::hideAll() {
     ui->comboBoxKeyBoard->hide();
     ui->doubleSpinBoxNumber->hide();
     ui->fontComboBox->hide();
+    ui->widgetCustomList->hide();
+    ui->widgetCutomStructure->hide();
     ui->horizontalSpacer->changeSize(0, 0);
 }
 
@@ -713,6 +713,10 @@ void PanelPrimitiveValue::addDataBase(QStandardItemModel *model,
         if (kind == PrimitiveValueKind::DataBase)
         {
             m_model->setModelDataBase(model);
+            SuperListItem::fillComboBox(ui->comboBoxDataBase, model);
+            connect(ui->comboBoxDataBase, SIGNAL(currentIndexChanged(int)), this,
+               SLOT(on_comboBoxDataBaseCurrentIndexChanged(int)));
+            ui->comboBoxChoice->setCurrentIndex(0);
         }
     }
 }
@@ -837,15 +841,22 @@ void PanelPrimitiveValue::showProperty() {
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::showDataBase() {
-    PrimitiveValueKind kind;
-    kind = static_cast<PrimitiveValueKind>(ui->comboBoxChoice->currentData().toInt());
+void PanelPrimitiveValue::showDataBase()
+{
+    setKind(PrimitiveValueKind::DataBase);
+    hideAll();
+    ui->comboBoxDataBase->show();
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::showDataBaseCustom()
+{
+    PrimitiveValueKind kind = static_cast<PrimitiveValueKind>(ui->comboBoxChoice
+        ->currentData().toInt());
     QStandardItemModel *model;
     switch (kind)
     {
-    case PrimitiveValueKind::DataBase:
-        model = m_model->modelDataBase();
-        break;
     case PrimitiveValueKind::Class:
         model = RPM::get()->project()->gameDatas()->classesDatas()->model();
         break;
@@ -1211,8 +1222,8 @@ bool PanelPrimitiveValue::eventFilter(QObject *o, QEvent *e) {
 void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index) {
     PrimitiveValueKind kind = static_cast<PrimitiveValueKind>(ui->comboBoxChoice
         ->itemData(index).toInt());
-
-    switch(kind) {
+    switch(kind)
+    {
     case PrimitiveValueKind::Default:
         showDefault(); break;
     case PrimitiveValueKind::Anything:
@@ -1228,6 +1239,7 @@ void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index) {
     case PrimitiveValueKind::Property:
         showProperty(); break;
     case PrimitiveValueKind::DataBase:
+        showDataBase(); break;
     case PrimitiveValueKind::Class:
     case PrimitiveValueKind::Hero:
     case PrimitiveValueKind::Monster:
@@ -1260,7 +1272,7 @@ void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index) {
     case PrimitiveValueKind::State:
     case PrimitiveValueKind::CommonReaction:
     case PrimitiveValueKind::Model:
-        showDataBase(); break;
+        showDataBaseCustom(); break;
     case PrimitiveValueKind::Message:
         showMessage(); break;
     case PrimitiveValueKind::Script:
@@ -1273,6 +1285,10 @@ void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index) {
         showNumberDouble(); break;
     case PrimitiveValueKind::Font:
         showFront(); break;
+    case PrimitiveValueKind::CustomStructure:
+        showCustomStructure(false); break;
+    case PrimitiveValueKind::CustomList:
+        showCustomStructure(true); break;
     }
 }
 

@@ -320,8 +320,8 @@ void SuperListItem::copyModel(QStandardItemModel* model, QStandardItemModel*
     QList<QStandardItem*> row;
 
     for (int i = 0; i < baseModel->invisibleRootItem()->rowCount(); i++) {
-        superBase = (SuperListItem*) baseModel->item(i)->data()
-                .value<quintptr>();
+        superBase = reinterpret_cast<SuperListItem *>(baseModel->item(i)->data()
+                .value<quintptr>());
         super = superBase->createCopy();
         super->setId(superBase->id());
         row = super->getModelRow();
@@ -386,8 +386,6 @@ QList<QStandardItem *> SuperListItem::getModelRow() const{
         item->setText(m_displayID ? this->toString() : this->toStringName());
     }
     row.append(item);
-    RPM::get()->project();
-
     return row;
 }
 

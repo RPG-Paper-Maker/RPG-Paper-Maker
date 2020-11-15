@@ -413,7 +413,6 @@ void WidgetSuperTree::dropEvent(QDropEvent *event) {
         item = this->getModel()->item(this->getModel()->rowCount() - 1);
     }
     super = reinterpret_cast<SuperListItem *>(selected->data().value<quintptr>());
-    int r= selected->row();
     this->getModel()->removeRow(selected->row());
 
     int row = item->column() == 0 ? item->row() : item->row() + 1;

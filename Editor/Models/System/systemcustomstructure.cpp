@@ -11,6 +11,7 @@
 
 #include "systemcustomstructure.h"
 #include "dialogsystemcustomstructure.h"
+#include "systemcustomstructureelement.h"
 #include "rpm.h"
 
 const QString SystemCustomStructure::JSON_IS_LIST = "il";
@@ -30,23 +31,17 @@ SystemCustomStructure::SystemCustomStructure() :
 
 }
 
-SystemCustomStructure::SystemCustomStructure(int i, QString n, PrimitiveValue *v
-    , bool il, QStandardItemModel *p, QStandardItemModel *l) :
+SystemCustomStructure::SystemCustomStructure(int i, QString n, bool isList,
+    QStandardItemModel *m) :
     SuperListItem(i, n),
-    m_value(v),
-    m_isList(il),
-    m_properties(p),
-    m_list(l)
+    m_properties(isList ? nullptr : m),
+    m_list(isList ? m : nullptr)
 {
 
 }
 
 SystemCustomStructure::~SystemCustomStructure()
 {
-    if (m_value != nullptr)
-    {
-        delete m_value;
-    }
     if (m_properties != nullptr)
     {
         SuperListItem::deleteModel(m_properties);
@@ -55,16 +50,6 @@ SystemCustomStructure::~SystemCustomStructure()
     {
         SuperListItem::deleteModel(m_list);
     }
-}
-
-PrimitiveValue * SystemCustomStructure::value()
-{
-    return m_value;
-}
-
-bool SystemCustomStructure::isList() const
-{
-    return m_isList;
 }
 
 QStandardItemModel * SystemCustomStructure::properties() const
@@ -77,16 +62,16 @@ QStandardItemModel * SystemCustomStructure::list() const
     return m_list;
 }
 
-void SystemCustomStructure::setIsList(bool isList)
-{
-    m_isList = isList;
-}
-
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+bool SystemCustomStructure::isList() const
+{
+    return m_list != nullptr;
+}
 
 void SystemCustomStructure::initializeHeaders()
 {
@@ -131,35 +116,29 @@ void SystemCustomStructure::clearList()
 QString SystemCustomStructure::toString() const
 {
     QString str;
-    if (m_isList)
+    if (m_properties == nullptr)
     {
         str += RPM::BRACKET_LEFT;
         QStringList list;
         for (int i = 0, l = m_list->invisibleRootItem()->rowCount(); i < l; i++)
         {
-            list << reinterpret_cast<SystemCustomStructure *>(m_list->item(i)
-                ->data().value<quintptr>())->toString();
+            list << reinterpret_cast<SystemCustomStructureElement *>(m_list
+                ->item(i)->data().value<quintptr>())->toString();
         }
         str += list.join(RPM::COMMA);
         str += RPM::BRACKET_RIGHT;
     } else
     {
-        if (m_value == nullptr)
+        str += RPM::BRACE_LEFT;
+        QStringList list;
+        for (int i = 0, l = m_properties->invisibleRootItem()->rowCount(); i
+             < l; i++)
         {
-            str += RPM::BRACE_LEFT;
-            QStringList list;
-            for (int i = 0, l = m_properties->invisibleRootItem()->rowCount(); i
-                 < l; i++)
-            {
-                list << reinterpret_cast<SystemCustomStructure *>(m_properties
-                    ->item(i)->data().value<quintptr>())->toString();
-            }
-            str += list.join(RPM::COMMA);
-            str += RPM::BRACE_RIGHT;
-        } else
-        {
-            str += '"' + p_name + '"' + RPM::COLON + m_value->toString();
+            list << reinterpret_cast<SystemCustomStructureElement *>(
+                m_properties->item(i)->data().value<quintptr>())->toString();
         }
+        str += list.join(RPM::COMMA);
+        str += RPM::BRACE_RIGHT;
     }
     return str;
 }
@@ -225,20 +204,21 @@ void SystemCustomStructure::read(const QJsonObject &json)
     this->clearProperties();
     this->clearList();
 
+    bool isList = DEFAULT_IS_LIST;
     if (json.contains(JSON_IS_LIST))
     {
-        m_isList = json[JSON_IS_LIST].toBool();
+        isList = json[JSON_IS_LIST].toBool();
     }
-    if (m_isList)
+    if (isList)
     {
         m_list = new QStandardItemModel;
-        SuperListItem::readList(m_list, new SystemCustomStructure, json,
+        SuperListItem::readList(m_list, new SystemCustomStructureElement, json,
             JSON_LIST);
     } else
     {
         m_properties = new QStandardItemModel;
-        SuperListItem::readList(m_properties, new SystemCustomStructure, json,
-            JSON_PROPERTIES);
+        SuperListItem::readList(m_properties, new SystemCustomStructureElement,
+            json, JSON_PROPERTIES);
     }
     this->initializeHeaders();
 }
@@ -248,10 +228,6 @@ void SystemCustomStructure::read(const QJsonObject &json)
 void SystemCustomStructure::write(QJsonObject &json) const {
     SuperListItem::write(json);
 
-    if (m_isList != DEFAULT_IS_LIST)
-    {
-        json[JSON_IS_LIST] = m_isList;
-    }
     if (m_properties != nullptr)
     {
         SuperListItem::writeTree(m_properties, json, JSON_PROPERTIES);

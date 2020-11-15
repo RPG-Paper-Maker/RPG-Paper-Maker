@@ -76,7 +76,6 @@ void CommonEventsDatas::setDefault(){
     SystemCommonReaction* react;
     SystemCommonObject* object;
     SuperListItem* super;
-    QStandardItem* item;
 
     // Events system
     QStringList namesEventsSystem;
