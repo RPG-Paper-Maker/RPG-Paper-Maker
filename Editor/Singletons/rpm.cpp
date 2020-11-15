@@ -63,6 +63,8 @@ const QString RPM::PARENTHESIS_LEFT = "(";
 const QString RPM::PARENTHESIS_RIGHT = ")";
 const QString RPM::BRACKET_LEFT = "[";
 const QString RPM::BRACKET_RIGHT = "]";
+const QString RPM::BRACE_LEFT = "{";
+const QString RPM::BRACE_RIGHT = "}";
 const QString RPM::EQUAL = "=";
 const QString RPM::PLUS = "+";
 const QString RPM::MINUS = "-";

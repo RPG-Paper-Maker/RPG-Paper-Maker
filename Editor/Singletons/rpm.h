@@ -77,6 +77,8 @@ public:
     static const QString PARENTHESIS_RIGHT;
     static const QString BRACKET_LEFT;
     static const QString BRACKET_RIGHT;
+    static const QString BRACE_LEFT;
+    static const QString BRACE_RIGHT;
     static const QString EQUAL;
     static const QString PLUS;
     static const QString MINUS;

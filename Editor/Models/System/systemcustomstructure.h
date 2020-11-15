@@ -12,6 +12,7 @@
 #ifndef SYSTEMCUSTOMSTRUCTURE_H
 #define SYSTEMCUSTOMSTRUCTURE_H
 
+#include <QMetaType>
 #include "superlistitem.h"
 
 // -------------------------------------------------------
@@ -22,6 +23,8 @@
 //
 // -------------------------------------------------------
 
+class PrimitiveValue;
+
 class SystemCustomStructure : public SuperListItem
 {
 public:
@@ -31,9 +34,11 @@ public:
     static const bool DEFAULT_IS_LIST;
 
     SystemCustomStructure();
-    SystemCustomStructure(int i, QString n, bool il = DEFAULT_IS_LIST,
-        QStandardItemModel *p = nullptr, QStandardItemModel *l = nullptr);
+    SystemCustomStructure(int i, QString n, PrimitiveValue *v = nullptr, bool
+        il = DEFAULT_IS_LIST, QStandardItemModel *p = nullptr,
+        QStandardItemModel *l = nullptr);
     virtual ~SystemCustomStructure();
+    PrimitiveValue * value();
     bool isList() const;
     QStandardItemModel * properties() const;
     QStandardItemModel * list() const;
@@ -51,9 +56,12 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
+    PrimitiveValue *m_value;
     bool m_isList;
     QStandardItemModel *m_properties;
     QStandardItemModel *m_list;
 };
+
+Q_DECLARE_METATYPE(SystemCustomStructure)
 
 #endif // SYSTEMCUSTOMSTRUCTURE_H

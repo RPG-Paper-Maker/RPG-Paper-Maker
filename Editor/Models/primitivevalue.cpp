@@ -26,10 +26,8 @@ PrimitiveValue::PrimitiveValue() :
     m_numberDoubleValue(0),
     m_messageValue(""),
     m_switchValue(true),
-    m_customStructure(new SystemCustomStructure(0, "", false, new
-        QStandardItemModel)),
-    m_customList(new SystemCustomStructure(0, "", true, nullptr, new
-        QStandardItemModel)),
+    m_customStructure(new SystemCustomStructure(0, "", nullptr, false, new QStandardItemModel)),
+    m_customList(new SystemCustomStructure(0, "", nullptr, true, nullptr, new QStandardItemModel)),
     m_isActivated(false),
     m_modelParameter(nullptr),
     m_modelProperties(nullptr),
@@ -245,7 +243,7 @@ QString PrimitiveValue::toString() const {
     }
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Font:
-        return m_messageValue;
+        return '"' + m_messageValue + '"';
     case PrimitiveValueKind::Script:
         return RPM::translate(Translations::SCRIPT) + RPM::SPACE + ">" + RPM
             ::SPACE + m_messageValue;
@@ -256,8 +254,11 @@ QString PrimitiveValue::toString() const {
             ::SPACE + reinterpret_cast<SystemKeyBoard *>(SuperListItem::getById(
             RPM::get()->project()->keyBoardDatas()->model()
             ->invisibleRootItem(), m_numberValue))->toString();
+    case PrimitiveValueKind::CustomStructure:
+        return m_customStructure->toString();
+    case PrimitiveValueKind::CustomList:
+        return m_customList->toString();
     }
-
     return "";
 }
 

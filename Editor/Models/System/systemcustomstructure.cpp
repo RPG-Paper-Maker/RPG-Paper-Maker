@@ -30,9 +30,10 @@ SystemCustomStructure::SystemCustomStructure() :
 
 }
 
-SystemCustomStructure::SystemCustomStructure(int i, QString n, bool il,
-    QStandardItemModel *p, QStandardItemModel *l) :
+SystemCustomStructure::SystemCustomStructure(int i, QString n, PrimitiveValue *v
+    , bool il, QStandardItemModel *p, QStandardItemModel *l) :
     SuperListItem(i, n),
+    m_value(v),
     m_isList(il),
     m_properties(p),
     m_list(l)
@@ -42,6 +43,10 @@ SystemCustomStructure::SystemCustomStructure(int i, QString n, bool il,
 
 SystemCustomStructure::~SystemCustomStructure()
 {
+    if (m_value != nullptr)
+    {
+        delete m_value;
+    }
     if (m_properties != nullptr)
     {
         SuperListItem::deleteModel(m_properties);
@@ -50,6 +55,11 @@ SystemCustomStructure::~SystemCustomStructure()
     {
         SuperListItem::deleteModel(m_list);
     }
+}
+
+PrimitiveValue * SystemCustomStructure::value()
+{
+    return m_value;
 }
 
 bool SystemCustomStructure::isList() const
@@ -116,6 +126,44 @@ void SystemCustomStructure::clearList()
 //
 //  VIRTUAL FUNCTIONS
 //
+// -------------------------------------------------------
+
+QString SystemCustomStructure::toString() const
+{
+    QString str;
+    if (m_isList)
+    {
+        str += RPM::BRACKET_LEFT;
+        QStringList list;
+        for (int i = 0, l = m_list->invisibleRootItem()->rowCount(); i < l; i++)
+        {
+            list << reinterpret_cast<SystemCustomStructure *>(m_list->item(i)
+                ->data().value<quintptr>())->toString();
+        }
+        str += list.join(RPM::COMMA);
+        str += RPM::BRACKET_RIGHT;
+    } else
+    {
+        if (m_value == nullptr)
+        {
+            str += RPM::BRACE_LEFT;
+            QStringList list;
+            for (int i = 0, l = m_properties->invisibleRootItem()->rowCount(); i
+                 < l; i++)
+            {
+                list << reinterpret_cast<SystemCustomStructure *>(m_properties
+                    ->item(i)->data().value<quintptr>())->toString();
+            }
+            str += list.join(RPM::COMMA);
+            str += RPM::BRACE_RIGHT;
+        } else
+        {
+            str += '"' + p_name + '"' + RPM::COLON + m_value->toString();
+        }
+    }
+    return str;
+}
+
 // -------------------------------------------------------
 
 bool SystemCustomStructure::openDialog()
