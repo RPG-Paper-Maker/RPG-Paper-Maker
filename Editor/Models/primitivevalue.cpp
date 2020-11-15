@@ -26,6 +26,10 @@ PrimitiveValue::PrimitiveValue() :
     m_numberDoubleValue(0),
     m_messageValue(""),
     m_switchValue(true),
+    m_customStructure(new SystemCustomStructure(0, "", false, new
+        QStandardItemModel)),
+    m_customList(new SystemCustomStructure(0, "", true, nullptr, new
+        QStandardItemModel)),
     m_isActivated(false),
     m_modelParameter(nullptr),
     m_modelProperties(nullptr),
@@ -78,6 +82,12 @@ PrimitiveValue::PrimitiveValue(PrimitiveValueKind kind, QString m) :
     PrimitiveValue(kind)
 {
     m_messageValue = m;
+}
+
+PrimitiveValue::~PrimitiveValue()
+{
+    delete m_customStructure;
+    delete m_customList;
 }
 
 PrimitiveValueKind PrimitiveValue::kind() const {
@@ -180,6 +190,13 @@ PrimitiveValue * PrimitiveValue::createDefaultDataBaseValue() {
 
 PrimitiveValue * PrimitiveValue::createDefaultNumberValue() {
     return new PrimitiveValue(0);
+}
+
+// -------------------------------------------------------
+
+PrimitiveValue * PrimitiveValue::createDefaultNumberDoubleValue()
+{
+    return new PrimitiveValue(0.0);
 }
 
 // -------------------------------------------------------

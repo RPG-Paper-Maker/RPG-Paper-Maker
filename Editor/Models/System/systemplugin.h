@@ -61,10 +61,8 @@ public:
     QString description() const;
     QString version() const;
     QString tutorial() const;
-    int parametersCount() const;
-    SystemPluginParameter * parameterAt(int i) const;
-    int commandsCount() const;
-    SystemPluginParameter * commandAt(int i) const;
+    QStandardItemModel * parameters() const;
+    QStandardItemModel * commands() const;
     bool editChanged() const;
     SystemPlugin * editedPlugin() const;
     void setType(PluginTypeKind type);
@@ -78,7 +76,9 @@ public:
 
     QString getFolderPath() const;
     bool checkPluginName(QString previousName) const;
+    void readFromPath();
     void initializeEditedPlugin();
+    void initializeHeaders();
     void clearParameters();
     void clearCommands();
     void removeEditedPlugin();

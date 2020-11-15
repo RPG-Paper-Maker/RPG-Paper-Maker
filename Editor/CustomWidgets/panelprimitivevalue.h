@@ -66,6 +66,8 @@ public:
         QStandardItemModel *properties);
     void initializeFont(QStandardItemModel *parameters = nullptr,
         QStandardItemModel *properties = nullptr);
+    void initializeAll(QStandardItemModel *parameters = nullptr,
+        QStandardItemModel *properties = nullptr);
     void initializeModel(PrimitiveValue *m);
     void initializeNumberAndUpdate(PrimitiveValue *m, bool isInteger = true);
     void initializeNumberVariableAndUpdate(PrimitiveValue *m);
@@ -74,6 +76,7 @@ public:
     void initializePropertyAndUpdate(PrimitiveValue *m, QStandardItemModel
         *parameters, QStandardItemModel *properties);
     void initializeFontAndUpdate(PrimitiveValue *m);
+    void initializeAllAndUpdate(PrimitiveValue *m);
     void setKind(PrimitiveValueKind kind);
     void setNumberValue(int n);
     void setNumberDoubleValue(double n);
@@ -91,12 +94,14 @@ public:
     void addVariable();
     void addParameter(QStandardItemModel *model);
     void addProperty(QStandardItemModel *model);
-    void addDataBase(QStandardItemModel *model);
+    void addDataBase(QStandardItemModel *model, PrimitiveValueKind kind =
+        PrimitiveValueKind::DataBase);
     void addMessage(bool formula);
     void addScript();
     void addSwitch();
     void addKeyBoard();
     void addFont();
+    void addCustomStructure(bool isList);
     void showDefault();
     void showAnything();
     void showNone();
@@ -112,6 +117,7 @@ public:
     void showSwitch();
     void showKeyBoard();
     void showFront();
+    void showCustomStructure(bool isList);
     void clear();
     int getKindIndex(PrimitiveValueKind kind);
     void initializeCommand(EventCommand *command, int &i);

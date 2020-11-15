@@ -275,7 +275,8 @@ void ScriptsDatas::setDefault(){
 //
 // -------------------------------------------------------
 
-void ScriptsDatas::read(const QJsonObject &json){
+void ScriptsDatas::read(const QJsonObject &json)
+{
     QJsonArray tab;
 
     // Clear
@@ -292,30 +293,61 @@ void ScriptsDatas::read(const QJsonObject &json){
     m_modelSystem->appendRow(SuperListItem::getEmptyItem());
 
     // Plugins
-    SuperListItem::readTree(m_modelPlugins, new SystemPlugin, json, "plugins");
+    QList<QStandardItem*> row;
+    SystemPlugin *plugin;
+    tab = json["plugins"].toArray();
+    for (int i = 0; i < tab.size(); i++) {
+        plugin = new SystemPlugin(-1, tab.at(i).toString());
+        plugin->readFromPath();
+        m_modelPlugins->appendRow(plugin->getModelRow());
+    }
+    m_modelPlugins->appendRow(SuperListItem::getEmptyItem());
 }
 
 // -------------------------------------------------------
 
-void ScriptsDatas::write(QJsonObject &json) const{
-    QJsonArray tab;
-    QJsonObject obj;
-    SuperListItem *super;
-
+void ScriptsDatas::write(QJsonObject &json) const
+{
     // System
+    SuperListItem *super;
+    QJsonArray tab;
     for (int i = 0; i < m_modelSystem->invisibleRootItem()->rowCount(); i++)
     {
-        super = reinterpret_cast<SuperListItem *>(m_modelSystem->item(i)->data()
-            .value<quintptr>());
+        super = reinterpret_cast<SuperListItem *>(m_modelSystem->item(i)
+            ->data().value<quintptr>());
         if (super != nullptr)
         {
             tab.append(super->name());
+        } else
+        {
+            m_modelSystem->removeRow(i--);
         }
     }
-    json["system"] = tab;
+    m_modelSystem->appendRow(SuperListItem::getEmptyItem());
+    if (!tab.isEmpty())
+    {
+        json["system"] = tab;
+    }
 
     // Plugins
-    SuperListItem::writeTree(m_modelPlugins, json, "plugins");
+    tab = QJsonArray();
+    for (int i = 0; i < m_modelPlugins->invisibleRootItem()->rowCount(); i++)
+    {
+        super = reinterpret_cast<SuperListItem *>(m_modelPlugins->item(i)
+            ->data().value<quintptr>());
+        if (super != nullptr)
+        {
+            tab.append(super->name());
+        } else
+        {
+            m_modelPlugins->removeRow(i--);
+        }
+    }
+    m_modelPlugins->appendRow(SuperListItem::getEmptyItem());
+    if (!tab.isEmpty())
+    {
+        json["plugins"] = tab;
+    }
 }
 
 // -------------------------------------------------------

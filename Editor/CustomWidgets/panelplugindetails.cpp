@@ -108,6 +108,8 @@ void PanelPluginDetails::initialize(SystemPlugin *plugin)
             m_plugin->tutorial() + RPM::TAG_MIDDLE_A + m_plugin->tutorial() +
             RPM::TAG_CLOSE_A);
     }
-    ui->groupBoxParameters->setVisible(m_plugin->parametersCount() == 0);
-    ui->groupBoxCommands->setVisible(m_plugin->commandsCount() == 0);
+    ui->groupBoxParameters->setVisible(m_plugin->parameters()
+        ->invisibleRootItem()->rowCount() == 0);
+    ui->groupBoxCommands->setVisible(m_plugin->commands()->invisibleRootItem()
+        ->rowCount() == 0);
 }

@@ -66,7 +66,7 @@
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1,1,1,1,1,1,1,1,1,1,0">
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1,1,0,0,1,1,1,1,1,1,1,1,0">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -126,6 +126,12 @@
           </size>
          </property>
         </widget>
+       </item>
+       <item>
+        <widget class="WidgetCustomStructure" name="widgetCustomList" native="true"/>
+       </item>
+       <item>
+        <widget class="WidgetCustomStructure" name="widgetCutomStructure" native="true"/>
        </item>
        <item>
         <widget class="QComboBox" name="comboBoxKeyBoard">
@@ -303,6 +309,12 @@
    <class>WidgetVariable</class>
    <extends>QWidget</extends>
    <header>widgetvariable.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetCustomStructure</class>
+   <extends>QWidget</extends>
+   <header>widgetcustomstructure.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

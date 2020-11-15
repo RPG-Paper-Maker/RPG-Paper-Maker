@@ -27,6 +27,8 @@ PanelPrimitiveValue::PanelPrimitiveValue(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->comboBoxChoice->setMaxVisibleItems(12);
+    ui->comboBoxChoice->setStyleSheet("combobox-popup: 0;");
     Q_FOREACH(QSpinBox * sp, findChildren<QSpinBox*>()) {
         sp->installEventFilter(this);
     }
@@ -255,6 +257,96 @@ void PanelPrimitiveValue::initializeFont(QStandardItemModel *parameters,
 
 // -------------------------------------------------------
 
+void PanelPrimitiveValue::initializeAll(QStandardItemModel *parameters,
+    QStandardItemModel *properties)
+{
+    m_kind = PanelPrimitiveValueKind::All;
+    ui->comboBoxChoice->addItem("Custom structure");
+    ui->comboBoxChoice->addItem("Custom list");
+    addVariable();
+    addNumberDouble();
+    addSwitch();
+    addMessage(true);
+    addMessage(false);
+    addParameter(parameters);
+    addProperty(properties);
+    //addDataBase(RPM::get()->project(), PrimitiveValueKind::CustomStructure);
+    //addDataBase(RPM::get()->project(), PrimitiveValueKind::CustomList);
+    addDataBase(RPM::get()->project()->gameDatas()->classesDatas()->model(),
+        PrimitiveValueKind::Class);
+    addDataBase(RPM::get()->project()->gameDatas()->heroesDatas()->model(),
+        PrimitiveValueKind::Hero);
+    addDataBase(RPM::get()->project()->gameDatas()->monstersDatas()->model(),
+        PrimitiveValueKind::Monster);
+    addDataBase(RPM::get()->project()->gameDatas()->troopsDatas()->model(),
+        PrimitiveValueKind::Troop);
+    addDataBase(RPM::get()->project()->gameDatas()->itemsDatas()->model(),
+        PrimitiveValueKind::Item);
+    addDataBase(RPM::get()->project()->gameDatas()->weaponsDatas()->model(),
+        PrimitiveValueKind::Weapon);
+    addDataBase(RPM::get()->project()->gameDatas()->armorsDatas()->model(),
+        PrimitiveValueKind::Armor);
+    addDataBase(RPM::get()->project()->gameDatas()->skillsDatas()->model(),
+        PrimitiveValueKind::Skill);
+    addDataBase(RPM::get()->project()->gameDatas()->animationsDatas()->model(),
+        PrimitiveValueKind::Animation);
+    /*
+    addDataBase(RPM::get()->project()->gameDatas()->statusDatas()->model(),
+        PrimitiveValueKind::Statu);*/
+    addDataBase(RPM::get()->project()->gameDatas()->tilesetsDatas()->model(),
+        PrimitiveValueKind::Tileset);
+    addDataBase(RPM::get()->project()->gameDatas()->systemDatas()
+        ->modelFontSizes(), PrimitiveValueKind::FontSize);
+    addDataBase(RPM::get()->project()->gameDatas()->systemDatas()
+        ->modelFontNames(), PrimitiveValueKind::FontName);
+    addDataBase(RPM::get()->project()->gameDatas()->systemDatas()->modelColors()
+        , PrimitiveValueKind::Color);
+    addDataBase(RPM::get()->project()->gameDatas()->systemDatas()
+        ->modelWindowSkins(), PrimitiveValueKind::WindowSkin);
+    addDataBase(RPM::get()->project()->gameDatas()->systemDatas()
+        ->modelCurrencies(), PrimitiveValueKind::Currency);
+    addDataBase(RPM::get()->project()->gameDatas()->systemDatas()->modelSpeed(),
+        PrimitiveValueKind::Speed);
+    addDataBase(RPM::get()->project()->gameDatas()->systemDatas()
+        ->modelDetections(), PrimitiveValueKind::Detection);
+    addDataBase(RPM::get()->project()->gameDatas()->systemDatas()
+        ->modelcameraProperties(), PrimitiveValueKind::CameraProperty);
+    addDataBase(RPM::get()->project()->gameDatas()->systemDatas()
+        ->modelFrequencies(), PrimitiveValueKind::Frequency);
+    addDataBase(RPM::get()->project()->gameDatas()->systemDatas()
+        ->modelSkyBoxes(), PrimitiveValueKind::Skybox);
+    addDataBase(RPM::get()->project()->gameDatas()->battleSystemDatas()
+        ->modelBattleMaps(), PrimitiveValueKind::BattleMap);
+    addDataBase(RPM::get()->project()->gameDatas()->battleSystemDatas()
+        ->modelElements(), PrimitiveValueKind::Element);
+    addDataBase(RPM::get()->project()->gameDatas()->battleSystemDatas()
+        ->modelCommonStatistics(), PrimitiveValueKind::CommonStatistic);
+    addDataBase(RPM::get()->project()->gameDatas()->battleSystemDatas()
+        ->modelWeaponsKind(), PrimitiveValueKind::WeaponsKind);
+    addDataBase(RPM::get()->project()->gameDatas()->battleSystemDatas()
+        ->modelArmorsKind(), PrimitiveValueKind::ArmorsKind);
+    addDataBase(RPM::get()->project()->gameDatas()->battleSystemDatas()
+        ->modelCommonBattleCommand(), PrimitiveValueKind::CommonBattleCommand);
+    addDataBase(RPM::get()->project()->gameDatas()->battleSystemDatas()
+        ->modelCommonEquipment(), PrimitiveValueKind::CommonEquipment);
+    addDataBase(RPM::get()->project()->gameDatas()->commonEventsDatas()
+        ->modelEventsUser(), PrimitiveValueKind::Event);
+    addDataBase(RPM::get()->project()->gameDatas()->commonEventsDatas()
+        ->modelStates(), PrimitiveValueKind::State);
+    addDataBase(RPM::get()->project()->gameDatas()->commonEventsDatas()
+        ->modelCommonReactors(), PrimitiveValueKind::CommonReaction);
+    addDataBase(RPM::get()->project()->gameDatas()->commonEventsDatas()
+        ->modelCommonObjects(), PrimitiveValueKind::Model);
+    setNumberValue(m_model->numberValue());
+    setNumberDoubleValue(m_model->numberDoubleValue());
+    setSwitchValue(m_model->switchValue());
+    setMessageValue(m_model->messageValue());
+    ui->comboBoxChoice->setFixedWidth(200);
+    initialize();
+}
+
+// -------------------------------------------------------
+
 void PanelPrimitiveValue::initialize() {
     hideAll();
     connect(ui->comboBoxChoice, SIGNAL(currentIndexChanged(int)), this, SLOT(
@@ -325,6 +417,15 @@ void PanelPrimitiveValue::initializePropertyAndUpdate(PrimitiveValue *m,
 void PanelPrimitiveValue::initializeFontAndUpdate(PrimitiveValue *m) {
     initializeModel(m);
     initializeFont();
+    updateModel();
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::initializeAllAndUpdate(PrimitiveValue *m)
+{
+    initializeModel(m);
+    initializeAll();
     updateModel();
 }
 
@@ -430,6 +531,38 @@ void PanelPrimitiveValue::updateValue(bool update) {
             ->comboBoxProperty->currentIndex()));
         break;
     case PrimitiveValueKind::DataBase:
+    case PrimitiveValueKind::Class:
+    case PrimitiveValueKind::Hero:
+    case PrimitiveValueKind::Monster:
+    case PrimitiveValueKind::Troop:
+    case PrimitiveValueKind::Item:
+    case PrimitiveValueKind::Weapon:
+    case PrimitiveValueKind::Armor:
+    case PrimitiveValueKind::Skill:
+    case PrimitiveValueKind::Animation:
+    case PrimitiveValueKind::Status:
+    case PrimitiveValueKind::Tileset:
+    case PrimitiveValueKind::FontSize:
+    case PrimitiveValueKind::FontName:
+    case PrimitiveValueKind::Color:
+    case PrimitiveValueKind::WindowSkin:
+    case PrimitiveValueKind::Currency:
+    case PrimitiveValueKind::Speed:
+    case PrimitiveValueKind::Detection:
+    case PrimitiveValueKind::CameraProperty:
+    case PrimitiveValueKind::Frequency:
+    case PrimitiveValueKind::Skybox:
+    case PrimitiveValueKind::BattleMap:
+    case PrimitiveValueKind::Element:
+    case PrimitiveValueKind::CommonStatistic:
+    case PrimitiveValueKind::WeaponsKind:
+    case PrimitiveValueKind::ArmorsKind:
+    case PrimitiveValueKind::CommonBattleCommand:
+    case PrimitiveValueKind::CommonEquipment:
+    case PrimitiveValueKind::Event:
+    case PrimitiveValueKind::State:
+    case PrimitiveValueKind::CommonReaction:
+    case PrimitiveValueKind::Model:
         setNumberValue(update ? m_model->numberValue() :
             SuperListItem::getIdByIndex(m_model->modelDataBase(), ui
             ->comboBoxDataBase->currentIndex()));
@@ -570,15 +703,17 @@ void PanelPrimitiveValue::addProperty(QStandardItemModel *model) {
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::addDataBase(QStandardItemModel *model) {
-    if (model != nullptr && model->invisibleRootItem()->rowCount() > 0) {
-        ui->comboBoxChoice->insertItem(0, RPM::translate(Translations::SELECTION
-            ), static_cast<int>(PrimitiveValueKind::DataBase));
-        m_model->setModelDataBase(model);
-        SuperListItem::fillComboBox(ui->comboBoxDataBase, model);
-        connect(ui->comboBoxDataBase, SIGNAL(currentIndexChanged(int)), this,
-            SLOT(on_comboBoxDataBaseCurrentIndexChanged(int)));
-        ui->comboBoxChoice->setCurrentIndex(0);
+void PanelPrimitiveValue::addDataBase(QStandardItemModel *model,
+    PrimitiveValueKind kind)
+{
+    if (model != nullptr && model->invisibleRootItem()->rowCount() > 0)
+    {
+        ui->comboBoxChoice->addItem(RPM::ENUM_TO_PRIMITIVE_KIND.at(
+            static_cast<int>(kind)), static_cast<int>(kind));
+        if (kind == PrimitiveValueKind::DataBase)
+        {
+            m_model->setModelDataBase(model);
+        }
     }
 }
 
@@ -620,6 +755,21 @@ void PanelPrimitiveValue::addKeyBoard() {
 void PanelPrimitiveValue::addFont() {
     ui->comboBoxChoice->addItem(RPM::translate(Translations::FONT), static_cast<
         int>(PrimitiveValueKind::Font));
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::addCustomStructure(bool isList)
+{
+    if (isList)
+    {
+        ui->comboBoxChoice->addItem("Custom list", static_cast<int>(
+            PrimitiveValueKind::CustomList));
+    } else
+    {
+        ui->comboBoxChoice->addItem("Custom structure", static_cast<int>(
+            PrimitiveValueKind::CustomStructure));
+    }
 }
 
 // -------------------------------------------------------
@@ -688,8 +838,143 @@ void PanelPrimitiveValue::showProperty() {
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::showDataBase() {
-    setKind(PrimitiveValueKind::DataBase);
+    PrimitiveValueKind kind;
+    kind = static_cast<PrimitiveValueKind>(ui->comboBoxChoice->currentData().toInt());
+    QStandardItemModel *model;
+    switch (kind)
+    {
+    case PrimitiveValueKind::DataBase:
+        model = m_model->modelDataBase();
+        break;
+    case PrimitiveValueKind::Class:
+        model = RPM::get()->project()->gameDatas()->classesDatas()->model();
+        break;
+    case PrimitiveValueKind::Hero:
+        model = RPM::get()->project()->gameDatas()->heroesDatas()->model();
+        break;
+    case PrimitiveValueKind::Monster:
+        model = RPM::get()->project()->gameDatas()->monstersDatas()->model();
+        break;
+    case PrimitiveValueKind::Troop:
+        model = RPM::get()->project()->gameDatas()->troopsDatas()->model();
+        break;
+    case PrimitiveValueKind::Item:
+        model = RPM::get()->project()->gameDatas()->itemsDatas()->model();
+        break;
+    case PrimitiveValueKind::Weapon:
+        model = RPM::get()->project()->gameDatas()->weaponsDatas()->model();
+        break;
+    case PrimitiveValueKind::Armor:
+        model = RPM::get()->project()->gameDatas()->armorsDatas()->model();
+        break;
+    case PrimitiveValueKind::Skill:
+        model = RPM::get()->project()->gameDatas()->skillsDatas()->model();
+        break;
+    case PrimitiveValueKind::Animation:
+        model = RPM::get()->project()->gameDatas()->animationsDatas()->model();
+        break;
+    //case PrimitiveValueKind::Animation:
+    /*
+        model = RPM::get()->project()->gameDatas()->statusDatas()->model(),*/
+    case PrimitiveValueKind::Tileset:
+        model = RPM::get()->project()->gameDatas()->tilesetsDatas()->model();
+        break;
+    case PrimitiveValueKind::FontSize:
+        model = RPM::get()->project()->gameDatas()->systemDatas()
+            ->modelFontSizes();
+        break;
+    case PrimitiveValueKind::FontName:
+        model = RPM::get()->project()->gameDatas()->systemDatas()
+            ->modelFontNames();
+        break;
+    case PrimitiveValueKind::Color:
+        model = RPM::get()->project()->gameDatas()->systemDatas()->modelColors();
+        break;
+    case PrimitiveValueKind::WindowSkin:
+        model = RPM::get()->project()->gameDatas()->systemDatas()
+            ->modelWindowSkins();
+        break;
+    case PrimitiveValueKind::Currency:
+        model = RPM::get()->project()->gameDatas()->systemDatas()
+            ->modelCurrencies();
+        break;
+    case PrimitiveValueKind::Speed:
+        model = RPM::get()->project()->gameDatas()->systemDatas()->modelSpeed();
+        break;
+    case PrimitiveValueKind::Detection:
+        model = RPM::get()->project()->gameDatas()->systemDatas()
+            ->modelDetections();
+        break;
+    case PrimitiveValueKind::CameraProperty:
+        model = RPM::get()->project()->gameDatas()->systemDatas()
+            ->modelcameraProperties();
+        break;
+    case PrimitiveValueKind::Frequency:
+        model = RPM::get()->project()->gameDatas()->systemDatas()
+            ->modelFrequencies();
+        break;
+    case PrimitiveValueKind::Skybox:
+        model = RPM::get()->project()->gameDatas()->systemDatas()
+            ->modelSkyBoxes();
+        break;
+    case PrimitiveValueKind::BattleMap:
+        model = RPM::get()->project()->gameDatas()->battleSystemDatas()
+            ->modelBattleMaps();
+        break;
+    case PrimitiveValueKind::Element:
+        model = RPM::get()->project()->gameDatas()->battleSystemDatas()
+            ->modelElements();
+        break;
+    case PrimitiveValueKind::CommonStatistic:
+        model = RPM::get()->project()->gameDatas()->battleSystemDatas()
+            ->modelCommonStatistics();
+        break;
+    case PrimitiveValueKind::WeaponsKind:
+        model = RPM::get()->project()->gameDatas()->battleSystemDatas()
+            ->modelWeaponsKind();
+        break;
+    case PrimitiveValueKind::ArmorsKind:
+        model = RPM::get()->project()->gameDatas()->battleSystemDatas()
+            ->modelArmorsKind();
+        break;
+    case PrimitiveValueKind::CommonBattleCommand:
+        model = RPM::get()->project()->gameDatas()->battleSystemDatas()
+            ->modelCommonBattleCommand();
+        break;
+    case PrimitiveValueKind::CommonEquipment:
+        model = RPM::get()->project()->gameDatas()->battleSystemDatas()
+            ->modelCommonEquipment();
+        break;
+    case PrimitiveValueKind::Event:
+        model = RPM::get()->project()->gameDatas()->commonEventsDatas()
+            ->modelEventsUser();
+        break;
+    case PrimitiveValueKind::State:
+        model = RPM::get()->project()->gameDatas()->commonEventsDatas()
+            ->modelStates();
+        break;
+    case PrimitiveValueKind::CommonReaction:
+        model = RPM::get()->project()->gameDatas()->commonEventsDatas()
+            ->modelCommonReactors();
+        break;
+    case PrimitiveValueKind::Model:
+        model = RPM::get()->project()->gameDatas()->commonEventsDatas()
+            ->modelCommonObjects();
+        break;
+    default:
+        model = nullptr;
+        break;
+    }
+    m_model->setModelDataBase(model);
+    setKind(kind);
     hideAll();
+    disconnect(ui->comboBoxDataBase, SIGNAL(currentIndexChanged(int)), this,
+        SLOT(on_comboBoxDataBaseCurrentIndexChanged(int)));
+    ui->comboBoxDataBase->clear();
+    SuperListItem::fillComboBox(ui->comboBoxDataBase, model);
+    connect(ui->comboBoxDataBase, SIGNAL(currentIndexChanged(int)), this,
+        SLOT(on_comboBoxDataBaseCurrentIndexChanged(int)));
+    ui->comboBoxDataBase->setCurrentIndex(0);
     ui->comboBoxDataBase->show();
 }
 
@@ -740,6 +1025,23 @@ void PanelPrimitiveValue::showFront() {
     setKind(PrimitiveValueKind::Font);
     hideAll();
     ui->fontComboBox->show();
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::showCustomStructure(bool isList)
+{
+    if (isList)
+    {
+        setKind(PrimitiveValueKind::CustomList);
+        hideAll();
+        ui->widgetCustomList->show();
+    } else
+    {
+        setKind(PrimitiveValueKind::CustomStructure);
+        hideAll();
+        ui->widgetCutomStructure->show();
+    }
 }
 
 // -------------------------------------------------------
@@ -816,6 +1118,8 @@ void PanelPrimitiveValue::initializeCommand(EventCommand *command, int &i) {
             break;
         }
         break;
+    default:
+        break;
     }
 }
 
@@ -874,6 +1178,8 @@ void PanelPrimitiveValue::getCommand(QVector<QString> &command) {
             break;
         }
         break;
+    default:
+        break;
     }
 }
 
@@ -922,6 +1228,38 @@ void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index) {
     case PrimitiveValueKind::Property:
         showProperty(); break;
     case PrimitiveValueKind::DataBase:
+    case PrimitiveValueKind::Class:
+    case PrimitiveValueKind::Hero:
+    case PrimitiveValueKind::Monster:
+    case PrimitiveValueKind::Troop:
+    case PrimitiveValueKind::Item:
+    case PrimitiveValueKind::Weapon:
+    case PrimitiveValueKind::Armor:
+    case PrimitiveValueKind::Skill:
+    case PrimitiveValueKind::Animation:
+    case PrimitiveValueKind::Status:
+    case PrimitiveValueKind::Tileset:
+    case PrimitiveValueKind::FontSize:
+    case PrimitiveValueKind::FontName:
+    case PrimitiveValueKind::Color:
+    case PrimitiveValueKind::WindowSkin:
+    case PrimitiveValueKind::Currency:
+    case PrimitiveValueKind::Speed:
+    case PrimitiveValueKind::Detection:
+    case PrimitiveValueKind::CameraProperty:
+    case PrimitiveValueKind::Frequency:
+    case PrimitiveValueKind::Skybox:
+    case PrimitiveValueKind::BattleMap:
+    case PrimitiveValueKind::Element:
+    case PrimitiveValueKind::CommonStatistic:
+    case PrimitiveValueKind::WeaponsKind:
+    case PrimitiveValueKind::ArmorsKind:
+    case PrimitiveValueKind::CommonBattleCommand:
+    case PrimitiveValueKind::CommonEquipment:
+    case PrimitiveValueKind::Event:
+    case PrimitiveValueKind::State:
+    case PrimitiveValueKind::CommonReaction:
+    case PrimitiveValueKind::Model:
         showDataBase(); break;
     case PrimitiveValueKind::Message:
         showMessage(); break;

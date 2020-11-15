@@ -281,6 +281,7 @@ QStringList RPM::ENUM_TO_STRING_SHAPE_KIND = {};
 QStringList RPM::ENUM_TO_STRING_TITLE_COMMAND_KIND = {};
 QStringList RPM::ENUM_TO_STRING_MONSTER_ACTION_TARGET_KIND = {};
 QStringList RPM::ENUM_TO_STRING_PLUGIN_CATEGORY = {};
+QStringList RPM::ENUM_TO_PRIMITIVE_KIND = {};
 
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
@@ -626,6 +627,56 @@ void RPM::readTranslations() {
         "Menus",
         "Map",
         "Others"
+    });
+    RPM::ENUM_TO_PRIMITIVE_KIND = QStringList({
+        RPM::translate(Translations::NONE),
+        RPM::translate(Translations::ANYTHING),
+        RPM::translate(Translations::DEFAULT),
+        RPM::translate(Translations::NUMBER),
+        RPM::translate(Translations::VARIABLE),
+        RPM::translate(Translations::PARAMETER),
+        RPM::translate(Translations::PROPERTY),
+        RPM::translate(Translations::SELECTION),
+        RPM::translate(Translations::TEXT),
+        RPM::translate(Translations::FORMULA),
+        RPM::translate(Translations::SWITCH),
+        RPM::translate(Translations::KEY),
+        RPM::translate(Translations::NUMBER),
+        RPM::translate(Translations::FONT),
+        RPM::translate(Translations::CLASS),
+        RPM::translate(Translations::HERO),
+        RPM::translate(Translations::MONSTER),
+        RPM::translate(Translations::TROOP),
+        RPM::translate(Translations::ITEM),
+        "Weapon",
+        "Armor",
+        RPM::translate(Translations::SKILL),
+        "Animation",
+        RPM::translate(Translations::STATUS),
+        RPM::translate(Translations::TILESET),
+        RPM::translate(Translations::FONT_SIZE),
+        RPM::translate(Translations::FONT_NAME),
+        RPM::translate(Translations::COLOR),
+        "Window skin",
+        RPM::translate(Translations::CURRENCY),
+        RPM::translate(Translations::SPEED),
+        RPM::translate(Translations::DETECTION),
+        "Camera property",
+        "Frequency",
+        "Skybox",
+        RPM::translate(Translations::BATTLE_MAP),
+        "Element",
+        "Common statistic",
+        "Weapon kind",
+        "Armor kind",
+        "Common battle command",
+        "Common equipment",
+        RPM::translate(Translations::EVENT),
+        "State",
+        RPM::translate(Translations::COMMON_REACTION),
+        RPM::translate(Translations::MODEL),
+        "Custom structure",
+        "Custom list"
     });
 }
 

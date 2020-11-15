@@ -30,7 +30,8 @@ enum class PanelPrimitiveValueKind {
     Switch,
     Property,
     VariableParamProp,
-    Font
+    Font,
+    All
 };
 
 #endif // PANELPRIMITIVEVALUEKIND_H

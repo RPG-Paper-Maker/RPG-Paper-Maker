@@ -14,6 +14,7 @@
 
 #include <QMetaType>
 #include "superlistitem.h"
+#include "primitivevalue.h"
 
 // -------------------------------------------------------
 //
@@ -26,28 +27,27 @@
 class SystemPluginParameter : public SuperListItem
 {
 public:
-    static const QString JSON_NAME;
-    static const QString JSON_HELP;
+    static const QString JSON_DESCRIPTION;
     static const QString JSON_DEFAULT_VALUE;
-    static const QString JSON_VALUE;
-    static const QString DEFAULT_NAME;
-    static const QString DEFAULT_HELP;
-    static const QString DEFAULT_DEFAULT_VALUE;
-    static const QString DEFAULT_VALUE;
+    static const QString DEFAULT_DESCRIPTION;
 
     SystemPluginParameter();
+    SystemPluginParameter(int i, QString n, QString d = DEFAULT_DESCRIPTION,
+        PrimitiveValue *dv = PrimitiveValue::createDefaultNumberDoubleValue());
     virtual ~SystemPluginParameter();
+    QString description() const;
+    PrimitiveValue * defaultValue() const;
+    void setDescription(QString description);
 
+    virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    QString m_name;
-    QString m_help;
-    QString m_defaultValue;
-    QString m_value;
+    QString m_description;
+    PrimitiveValue *m_defaultValue;
 };
 
 Q_DECLARE_METATYPE(SystemPluginParameter)

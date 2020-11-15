@@ -63,7 +63,7 @@ SystemPlugin::SystemPlugin(int i, QString n, PluginTypeKind t,
     m_commands(new QStandardItemModel),
     m_editedPlugin(nullptr)
 {
-
+    this->initializeHeaders();
 }
 
 SystemPlugin::~SystemPlugin()
@@ -108,26 +108,14 @@ QString SystemPlugin::tutorial() const
     return m_tutorial;
 }
 
-int SystemPlugin::parametersCount() const
+QStandardItemModel * SystemPlugin::parameters() const
 {
-    return m_parameters->invisibleRootItem()->rowCount();
+    return m_parameters;
 }
 
-SystemPluginParameter * SystemPlugin::parameterAt(int i) const
+QStandardItemModel * SystemPlugin::commands() const
 {
-    return reinterpret_cast<SystemPluginParameter *>(m_parameters->item(i)
-        ->data().value<quintptr>());
-}
-
-int SystemPlugin::commandsCount() const
-{
-    return m_commands->invisibleRootItem()->rowCount();
-}
-
-SystemPluginParameter * SystemPlugin::commandAt(int i) const
-{
-    return reinterpret_cast<SystemPluginParameter *>(m_commands->item(i)
-        ->data().value<quintptr>());
+    return m_commands;
 }
 
 bool SystemPlugin::editChanged() const
@@ -214,12 +202,27 @@ bool SystemPlugin::checkPluginName(QString previousName) const
 
 // -------------------------------------------------------
 
+void SystemPlugin::readFromPath()
+{
+    RPM::readJSON(Common::pathCombine(this->getFolderPath(), NAME_JSON), *this);
+}
+
+// -------------------------------------------------------
+
 void SystemPlugin::initializeEditedPlugin()
 {
     if (m_editedPlugin == nullptr)
     {
         m_editedPlugin = reinterpret_cast<SystemPlugin *>(this->createCopy());
     }
+}
+
+// -------------------------------------------------------
+
+void SystemPlugin::initializeHeaders()
+{
+    m_parameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::NAME), RPM::translate(Translations::DEFAULT_VALUE)}));
 }
 
 // -------------------------------------------------------
@@ -320,6 +323,7 @@ void SystemPlugin::setCopy(const SuperListItem &super)
     SuperListItem::copy(m_parameters, plugin->m_parameters);
     this->clearCommands();
     SuperListItem::copy(m_commands, plugin->m_commands);
+    this->initializeHeaders();
 }
 
 // -------------------------------------------------------

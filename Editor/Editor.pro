@@ -32,6 +32,7 @@ HEADERS += \
     CustomWidgets/widgetbuttonimage.h \
     CustomWidgets/widgetcode.h \
     CustomWidgets/widgetcodelinenumberarea.h \
+    CustomWidgets/widgetcustomstructure.h \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgetsliderprogression.h \
     CustomWidgets/widgettilesettexture.h \
@@ -63,11 +64,13 @@ HEADERS += \
     Dialogs/Systems/dialogsystemanimationframeelement.h \
     Dialogs/Systems/dialogsystembattlemap.h \
     Dialogs/Systems/dialogsystemcameraproperties.h \
+    Dialogs/Systems/dialogsystemcustomstructure.h \
     Dialogs/Systems/dialogsystemdetection.h \
     Dialogs/Systems/dialogsystemfontname.h \
     Dialogs/Systems/dialogsystemfontsize.h \
     Dialogs/Systems/dialogsystemmonsteraction.h \
     Dialogs/Systems/dialogsystemplugin.h \
+    Dialogs/Systems/dialogsystempluginparameter.h \
     Dialogs/Systems/dialogsystemprimitive.h \
     Dialogs/Systems/dialogsystemproperty.h \
     Dialogs/Systems/dialogsystemskybox.h \
@@ -113,6 +116,7 @@ HEADERS += \
     Models/System/systemanimationframeeffect.h \
     Models/System/systemanimationframeelement.h \
     Models/System/systemcameraproperties.h \
+    Models/System/systemcustomstructure.h \
     Models/System/systemdetection.h \
     Models/System/systemfontname.h \
     Models/System/systemfontsize.h \
@@ -420,6 +424,7 @@ SOURCES += \
     CustomWidgets/widgetbuttonimage.cpp \
     CustomWidgets/widgetcode.cpp \
     CustomWidgets/widgetcodelinenumberarea.cpp \
+    CustomWidgets/widgetcustomstructure.cpp \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgetsliderprogression.cpp \
     CustomWidgets/widgettilesettexture.cpp \
@@ -451,11 +456,13 @@ SOURCES += \
     Dialogs/Systems/dialogsystemanimationframeelement.cpp \
     Dialogs/Systems/dialogsystembattlemap.cpp \
     Dialogs/Systems/dialogsystemcameraproperties.cpp \
+    Dialogs/Systems/dialogsystemcustomstructure.cpp \
     Dialogs/Systems/dialogsystemdetection.cpp \
     Dialogs/Systems/dialogsystemfontname.cpp \
     Dialogs/Systems/dialogsystemfontsize.cpp \
     Dialogs/Systems/dialogsystemmonsteraction.cpp \
     Dialogs/Systems/dialogsystemplugin.cpp \
+    Dialogs/Systems/dialogsystempluginparameter.cpp \
     Dialogs/Systems/dialogsystemprimitive.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
     Dialogs/Systems/dialogsystemskybox.cpp \
@@ -486,6 +493,7 @@ SOURCES += \
     Models/System/systemanimationframeeffect.cpp \
     Models/System/systemanimationframeelement.cpp \
     Models/System/systemcameraproperties.cpp \
+    Models/System/systemcustomstructure.cpp \
     Models/System/systemdetection.cpp \
     Models/System/systemfontname.cpp \
     Models/System/systemfontsize.cpp \
@@ -757,6 +765,7 @@ FORMS += \
     CustomWidgets/panelsubtransformation.ui \
     CustomWidgets/paneltransformations.ui \
     CustomWidgets/panelvideos.ui \
+    CustomWidgets/widgetcustomstructure.ui \
     CustomWidgets/widgetmountainselector.ui \
     CustomWidgets/widgetsliderprogression.ui \
     CustomWidgets/widgettilesettexture.ui \
@@ -788,11 +797,13 @@ FORMS += \
     Dialogs/Systems/dialogsystemanimationframeelement.ui \
     Dialogs/Systems/dialogsystembattlemap.ui \
     Dialogs/Systems/dialogsystemcameraproperties.ui \
+    Dialogs/Systems/dialogsystemcustomstructure.ui \
     Dialogs/Systems/dialogsystemdetection.ui \
     Dialogs/Systems/dialogsystemfontname.ui \
     Dialogs/Systems/dialogsystemfontsize.ui \
     Dialogs/Systems/dialogsystemmonsteraction.ui \
     Dialogs/Systems/dialogsystemplugin.ui \
+    Dialogs/Systems/dialogsystempluginparameter.ui \
     Dialogs/Systems/dialogsystemprimitive.ui \
     Dialogs/Systems/dialogsystemproperty.ui \
     Dialogs/Systems/dialogsystemskybox.ui \

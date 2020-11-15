@@ -17,6 +17,7 @@
 #include <QStandardItemModel>
 #include "primitivevaluekind.h"
 #include "eventcommand.h"
+#include "systemcustomstructure.h"
 
 // -------------------------------------------------------
 //
@@ -39,6 +40,7 @@ public:
     PrimitiveValue(PrimitiveValueKind kind);
     PrimitiveValue(PrimitiveValueKind kind, int n);
     PrimitiveValue(PrimitiveValueKind kind, QString m);
+    ~PrimitiveValue();
 
     PrimitiveValueKind kind() const;
     void setKind(PrimitiveValueKind k);
@@ -62,6 +64,7 @@ public:
     static PrimitiveValue * createKeyBoard(int id);
     static PrimitiveValue * createDefaultDataBaseValue();
     static PrimitiveValue * createDefaultNumberValue();
+    static PrimitiveValue * createDefaultNumberDoubleValue();
     static PrimitiveValue * createDefaultMessageValue();
 
     QString toString() const;
@@ -86,6 +89,8 @@ protected:
     double m_numberDoubleValue;
     QString m_messageValue;
     bool m_switchValue;
+    SystemCustomStructure *m_customStructure;
+    SystemCustomStructure *m_customList;
     bool m_isActivated;
     QStandardItemModel* m_modelParameter;
     QStandardItemModel* m_modelProperties;

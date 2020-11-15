@@ -38,7 +38,8 @@ DialogScripts::DialogScripts(QWidget *parent) :
         ->document());
     ui->treeViewSystem->initializeNewItemInstance(new SystemScript);
     ui->treeViewPlugins->initializeNewItemInstance(new SystemPlugin);
-    ui->treeViewPlugins->setUpdateId(true);
+    ui->treeViewEditParameter->initializeNewItemInstance(new
+        SystemPluginParameter);
 
     // Keep space when hiding widgets
     QSizePolicy sp_retain;
@@ -261,6 +262,10 @@ void DialogScripts::on_scriptPluginSelected(QModelIndex, QModelIndex)
         ui->lineEditVersion->setText(plugin->editedPlugin()->version());
         ui->lineEditWebsite->setText(plugin->editedPlugin()->website());
         ui->lineEditTutorial->setText(plugin->editedPlugin()->tutorial());
+        ui->treeViewEditParameter->initializeModel(plugin->editedPlugin()
+            ->parameters());
+        QModelIndex index = ui->treeViewEditParameter->getModel()->index(0, 0);
+        ui->treeViewEditParameter->setCurrentIndex(index);
         if (ui->tabWidgetPlugin->currentIndex() == 1)
         {
             ui->widgetCodePlugin->setFocus();
