@@ -59,6 +59,7 @@ public slots:
     void on_scriptSystemSelected(QModelIndex, QModelIndex);
     void on_scriptPluginSelected(QModelIndex, QModelIndex);
     void on_pluginListUpdated();
+    void on_pluginListDeleted(SuperListItem *super, int);
     void on_pushButtonOpenPluginFolder_clicked();
     void on_scriptCodeNeedSave();
     void on_pluginCodeNeedSave();

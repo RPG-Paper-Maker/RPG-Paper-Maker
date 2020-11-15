@@ -113,6 +113,8 @@ void DialogScripts::initialize()
         QModelIndex, QModelIndex)));
     connect(ui->treeViewPlugins, SIGNAL(modelUpdated()), this, SLOT(
         on_pluginListUpdated()));
+    connect(ui->treeViewPlugins, SIGNAL(deletingItem(SuperListItem *, int)),
+        this, SLOT(on_pluginListDeleted(SuperListItem *, int)));
     index = ui->treeViewPlugins->getModel()->index(0, 0);
     ui->treeViewPlugins->setCurrentIndex(index);
     on_scriptPluginSelected(index, index);
@@ -283,6 +285,14 @@ void DialogScripts::on_scriptPluginSelected(QModelIndex, QModelIndex)
 void DialogScripts::on_pluginListUpdated()
 {
     RPM::get()->project()->writeScriptsDatas();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pluginListDeleted(SuperListItem *super, int)
+{
+    QDir(reinterpret_cast<SystemPlugin *>(super)->getFolderPath())
+        .removeRecursively();
 }
 
 // -------------------------------------------------------
