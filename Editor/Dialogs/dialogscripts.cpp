@@ -118,6 +118,8 @@ void DialogScripts::initialize()
     on_scriptPluginSelected(index, index);
     connect(ui->widgetCodePlugin, SIGNAL(needSave()), this, SLOT(
         on_pluginCodeNeedSave()));
+    connect(ui->treeViewPlugins->getModel(), SIGNAL(itemChanged(QStandardItem *)
+        ), this, SLOT(on_treeViewPluginsItemChanged(QStandardItem *)));
 
     // Focus close button
     ui->pushButtonClose->setFocus();
@@ -303,6 +305,21 @@ void DialogScripts::on_scriptCodeNeedSave()
 void DialogScripts::on_pluginCodeNeedSave()
 {
     this->updatePluginCodeSave();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_treeViewPluginsItemChanged(QStandardItem *item)
+{
+    // Handle check / uncheck plugin
+    SystemPlugin *plugin = reinterpret_cast<SystemPlugin *>(item->data()
+        .value<quintptr>());
+    if (plugin != nullptr)
+    {
+        plugin->setIsON(item->checkState() == Qt::Checked);
+        plugin->editedPlugin()->setIsON(plugin->isON());
+        RPM::writeJSON(plugin->getJSONPath(), *plugin);
+    }
 }
 
 // -------------------------------------------------------

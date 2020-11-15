@@ -29,6 +29,7 @@
 class SystemPlugin : public SystemScript
 {
 public:
+    static const QString JSON_IS_ON;
     static const QString JSON_TYPE;
     static const QString JSON_CATEGORY;
     static const QString JSON_AUTHOR;
@@ -38,6 +39,7 @@ public:
     static const QString JSON_TUTORIAL;
     static const QString JSON_PARAMETERS;
     static const QString JSON_COMMANDS;
+    static const bool DEFAULT_IS_ON;
     static const PluginTypeKind DEFAULT_TYPE;
     static const PluginCategoryKind DEFAULT_CATEGORY;
     static const QString DEFAULT_AUTHOR;
@@ -49,11 +51,13 @@ public:
     static const QString NAME_JSON;
 
     SystemPlugin();
-    SystemPlugin(int i, QString n, PluginTypeKind t = DEFAULT_TYPE,
-        PluginCategoryKind c = DEFAULT_CATEGORY, QString a = DEFAULT_AUTHOR,
-        QString w = DEFAULT_WEBSITE, QString d = DEFAULT_DESCRIPTION, QString v
-        = DEFAULT_VERSION, QString tu = DEFAULT_TUTORIAL);
+    SystemPlugin(int i, QString n, bool io = DEFAULT_IS_ON, PluginTypeKind t =
+        DEFAULT_TYPE, PluginCategoryKind c = DEFAULT_CATEGORY, QString a =
+        DEFAULT_AUTHOR, QString w = DEFAULT_WEBSITE, QString d =
+        DEFAULT_DESCRIPTION, QString v = DEFAULT_VERSION, QString tu =
+        DEFAULT_TUTORIAL);
     virtual ~SystemPlugin();
+    bool isON() const;
     PluginTypeKind type() const;
     PluginCategoryKind category() const;
     QString author() const;
@@ -65,6 +69,7 @@ public:
     QStandardItemModel * commands() const;
     bool editChanged() const;
     SystemPlugin * editedPlugin() const;
+    void setIsON(bool isON);
     void setType(PluginTypeKind type);
     void setCategory(PluginCategoryKind category);
     void setAuthor(QString author);
@@ -75,6 +80,7 @@ public:
     void setEditChanged(bool editChanged);
 
     QString getFolderPath() const;
+    QString getJSONPath() const;
     bool checkPluginName(QString previousName) const;
     void readFromPath();
     void initializeEditedPlugin();
@@ -89,10 +95,12 @@ public:
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);
+    virtual QList<QStandardItem*> getModelRow() const;
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
+    bool m_isON;
     PluginTypeKind m_type;
     PluginCategoryKind m_category;
     QString m_author;

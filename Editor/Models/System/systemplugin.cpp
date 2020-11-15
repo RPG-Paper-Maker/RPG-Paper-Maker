@@ -17,6 +17,7 @@
 #include "common.h"
 #include "rpm.h"
 
+const QString SystemPlugin::JSON_IS_ON = "io";
 const QString SystemPlugin::JSON_TYPE = "t";
 const QString SystemPlugin::JSON_CATEGORY = "c";
 const QString SystemPlugin::JSON_AUTHOR = "a";
@@ -26,6 +27,7 @@ const QString SystemPlugin::JSON_VERSION = "v";
 const QString SystemPlugin::JSON_TUTORIAL = "tu";
 const QString SystemPlugin::JSON_PARAMETERS = "p";
 const QString SystemPlugin::JSON_COMMANDS = "co";
+const bool SystemPlugin::DEFAULT_IS_ON = true;
 const PluginTypeKind SystemPlugin::DEFAULT_TYPE = PluginTypeKind::Empty;
 const PluginCategoryKind SystemPlugin::DEFAULT_CATEGORY = PluginCategoryKind
     ::Battle;
@@ -49,9 +51,10 @@ SystemPlugin::SystemPlugin() :
 
 }
 
-SystemPlugin::SystemPlugin(int i, QString n, PluginTypeKind t,
+SystemPlugin::SystemPlugin(int i, QString n, bool io, PluginTypeKind t,
     PluginCategoryKind c, QString a, QString w, QString d, QString v, QString tu) :
     SystemScript(i, n),
+    m_isON(io),
     m_type(t),
     m_category(c),
     m_author(a),
@@ -71,6 +74,11 @@ SystemPlugin::~SystemPlugin()
     SuperListItem::deleteModel(m_parameters);
     SuperListItem::deleteModel(m_commands);
     this->removeEditedPlugin();
+}
+
+bool SystemPlugin::isON() const
+{
+    return m_isON;
 }
 
 PluginTypeKind SystemPlugin::type() const
@@ -128,6 +136,11 @@ SystemPlugin * SystemPlugin::editedPlugin() const
     return m_editedPlugin;
 }
 
+void SystemPlugin::setIsON(bool isON)
+{
+    m_isON = isON;
+}
+
 void SystemPlugin::setType(PluginTypeKind type)
 {
     m_type = type;
@@ -182,6 +195,13 @@ QString SystemPlugin::getFolderPath() const
 
 // -------------------------------------------------------
 
+QString SystemPlugin::getJSONPath() const
+{
+    return Common::pathCombine(this->getFolderPath(), NAME_JSON);
+}
+
+// -------------------------------------------------------
+
 bool SystemPlugin::checkPluginName(QString previousName) const
 {
     if (p_name.isEmpty())
@@ -204,7 +224,7 @@ bool SystemPlugin::checkPluginName(QString previousName) const
 
 void SystemPlugin::readFromPath()
 {
-    RPM::readJSON(Common::pathCombine(this->getFolderPath(), NAME_JSON), *this);
+    RPM::readJSON(this->getJSONPath(), *this);
 }
 
 // -------------------------------------------------------
@@ -312,6 +332,7 @@ void SystemPlugin::setCopy(const SuperListItem &super)
     SystemScript::setCopy(super);
 
     const SystemPlugin *plugin = reinterpret_cast<const SystemPlugin *>(&super);
+    m_isON = plugin->m_isON;
     m_type = plugin->m_type;
     m_category = plugin->m_category;
     m_author = plugin->m_author;
@@ -328,6 +349,24 @@ void SystemPlugin::setCopy(const SuperListItem &super)
 
 // -------------------------------------------------------
 
+QList<QStandardItem*> SystemPlugin::getModelRow() const
+{
+    QList<QStandardItem*> row = QList<QStandardItem*>();
+    QStandardItem* item = new QStandardItem;
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
+    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+    item->setCheckable(true);
+    if (m_isON)
+    {
+        item->setCheckState(Qt::Checked);
+    }
+    item->setText(this->toStringName());
+    row.append(item);
+    return row;
+}
+
+// -------------------------------------------------------
+
 void SystemPlugin::read(const QJsonObject &json)
 {
     SystemScript::read(json);
@@ -336,6 +375,10 @@ void SystemPlugin::read(const QJsonObject &json)
     SuperListItem::deleteModel(m_parameters, false);
     SuperListItem::deleteModel(m_commands, false);
 
+    if (json.contains(JSON_IS_ON))
+    {
+        m_isON = json[JSON_IS_ON].toBool();
+    }
     if (json.contains(JSON_TYPE))
     {
         m_type = static_cast<PluginTypeKind>(json[JSON_TYPE].toInt());
@@ -375,6 +418,10 @@ void SystemPlugin::read(const QJsonObject &json)
 void SystemPlugin::write(QJsonObject &json) const {
     SystemScript::write(json);
 
+    if (m_isON != DEFAULT_IS_ON)
+    {
+        json[JSON_IS_ON] = m_isON;
+    }
     if (m_type != DEFAULT_TYPE)
     {
         json[JSON_TYPE] = static_cast<int>(m_type);
