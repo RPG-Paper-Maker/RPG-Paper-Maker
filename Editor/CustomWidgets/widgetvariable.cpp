@@ -28,10 +28,7 @@ WidgetVariable::WidgetVariable(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QListWidgetItem* item = new QListWidgetItem;
-    item->setSizeHint(QSize(item->sizeHint().width(),
-                            ui->listWidget->height() - 4));
-    ui->listWidget->addItem(item);
+    ui->listWidget->addItem(new QListWidgetItem);
 }
 
 WidgetVariable::~WidgetVariable()

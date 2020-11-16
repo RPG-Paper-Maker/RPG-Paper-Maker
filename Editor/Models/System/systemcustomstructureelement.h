@@ -28,16 +28,20 @@ class SystemCustomStructureElement : public SuperListItem
 {
 public:
     static const QString JSON_IS_PROPERTY;
+    static const QString JSON_DESCRIPTION;
     static const QString JSON_VALUE;
     static const bool DEFAULT_IS_PROPERTY;
+    static const QString DEFAULT_DESCRIPTION;
 
     SystemCustomStructureElement();
     SystemCustomStructureElement(int i, QString n, bool ip = DEFAULT_IS_PROPERTY
         , PrimitiveValue *v = PrimitiveValue::createDefaultNumberDoubleValue());
     virtual ~SystemCustomStructureElement();
     bool isProperty() const;
+    QString description() const;
     PrimitiveValue * value() const;
     void setIsProperty(bool isProperty);
+    void setDescription(QString description);
 
     virtual QString toString() const;
     virtual bool openDialog();
@@ -49,6 +53,7 @@ public:
 
 protected:
     bool m_isProperty;
+    QString m_description;
     PrimitiveValue *m_value;
 };
 

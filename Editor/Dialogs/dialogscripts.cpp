@@ -40,6 +40,14 @@ DialogScripts::DialogScripts(QWidget *parent) :
     ui->treeViewPlugins->initializeNewItemInstance(new SystemPlugin);
     ui->treeViewEditParameter->initializeNewItemInstance(new
         SystemPluginParameter);
+    ui->treeViewSystem->header()->setStretchLastSection(false);
+    ui->treeViewSystem->header()->setSectionResizeMode(QHeaderView
+        ::ResizeToContents);
+    ui->treeViewSystem->header()->setMinimumSectionSize(200);
+    ui->treeViewPlugins->header()->setStretchLastSection(false);
+    ui->treeViewPlugins->header()->setSectionResizeMode(QHeaderView
+        ::ResizeToContents);
+    ui->treeViewPlugins->header()->setMinimumSectionSize(200);
 
     // Keep space when hiding widgets
     QSizePolicy sp_retain;

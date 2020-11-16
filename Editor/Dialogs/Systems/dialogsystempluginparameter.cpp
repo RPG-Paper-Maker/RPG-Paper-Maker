@@ -26,9 +26,6 @@ DialogSystemPluginParameter::DialogSystemPluginParameter(SystemPluginParameter
 {
     ui->setupUi(this);
 
-    ui->panelPrimitiveDefaultValue->initializeAllAndUpdate(parameter
-        .defaultValue());
-
     this->initialize();
 }
 
@@ -45,5 +42,8 @@ DialogSystemPluginParameter::~DialogSystemPluginParameter()
 
 void DialogSystemPluginParameter::initialize()
 {
-
+    ui->lineEditName->setText(m_parameter.name());
+    ui->lineEditDescription->setText(m_parameter.description());
+    ui->panelPrimitiveDefaultValue->initializeAllAndUpdate(m_parameter
+        .defaultValue());
 }

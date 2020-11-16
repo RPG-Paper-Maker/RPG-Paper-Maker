@@ -13,6 +13,8 @@
 #include "rpm.h"
 
 const QString PrimitiveValue::JSON_IS_ACTIVATED = "ia";
+const QString PrimitiveValue::JSON_CUSTOM_STRUCTURE = "cs";
+const QString PrimitiveValue::JSON_CUSTOM_LIST = "cl";
 
 // -------------------------------------------------------
 //
@@ -126,6 +128,16 @@ bool PrimitiveValue::switchValue() const {
 
 void PrimitiveValue::setSwitchValue(bool s) {
     m_switchValue = s;
+}
+
+SystemCustomStructure * PrimitiveValue::customStructure()
+{
+    return m_customStructure;
+}
+
+SystemCustomStructure * PrimitiveValue::customList()
+{
+    return m_customList;
 }
 
 bool PrimitiveValue::isActivated() const
@@ -308,6 +320,8 @@ void PrimitiveValue::labelTab(QString &str) const {
     case PrimitiveValueKind::Font:
         str += m_messageValue;
         break;
+    default:
+        break;
     }
 }
 
@@ -367,6 +381,9 @@ void PrimitiveValue::initializeCommandParameter(const EventCommand *command, int
         break;
     case PrimitiveValueKind::NumberDouble:
         m_numberDoubleValue = command->valueCommandAt(i++).toDouble();
+        break;
+    default:
+        break;
     }
     if (active)
     {
@@ -403,6 +420,9 @@ void PrimitiveValue::initializeCommands(const QVector<QString> &command, int &i,
         break;
     case PrimitiveValueKind::NumberDouble:
         m_numberDoubleValue = command.at(i++).toDouble();
+        break;
+    default:
+        break;
     }
     if (active)
     {
@@ -439,6 +459,9 @@ void PrimitiveValue::getCommandParameter(QVector<QString> &command, bool active)
         break;
     case PrimitiveValueKind::NumberDouble:
         command.append(QString::number(m_numberDoubleValue));
+        break;
+    default:
+        break;
     }
     if (active)
     {
@@ -470,6 +493,38 @@ void PrimitiveValue::setCopy(const PrimitiveValue &prim) {
     case PrimitiveValueKind::Property:
     case PrimitiveValueKind::DataBase:
     case PrimitiveValueKind::KeyBoard:
+    case PrimitiveValueKind::Class:
+    case PrimitiveValueKind::Hero:
+    case PrimitiveValueKind::Monster:
+    case PrimitiveValueKind::Troop:
+    case PrimitiveValueKind::Item:
+    case PrimitiveValueKind::Weapon:
+    case PrimitiveValueKind::Armor:
+    case PrimitiveValueKind::Skill:
+    case PrimitiveValueKind::Animation:
+    case PrimitiveValueKind::Status:
+    case PrimitiveValueKind::Tileset:
+    case PrimitiveValueKind::FontSize:
+    case PrimitiveValueKind::FontName:
+    case PrimitiveValueKind::Color:
+    case PrimitiveValueKind::WindowSkin:
+    case PrimitiveValueKind::Currency:
+    case PrimitiveValueKind::Speed:
+    case PrimitiveValueKind::Detection:
+    case PrimitiveValueKind::CameraProperty:
+    case PrimitiveValueKind::Frequency:
+    case PrimitiveValueKind::Skybox:
+    case PrimitiveValueKind::BattleMap:
+    case PrimitiveValueKind::Element:
+    case PrimitiveValueKind::CommonStatistic:
+    case PrimitiveValueKind::WeaponsKind:
+    case PrimitiveValueKind::ArmorsKind:
+    case PrimitiveValueKind::CommonBattleCommand:
+    case PrimitiveValueKind::CommonEquipment:
+    case PrimitiveValueKind::Event:
+    case PrimitiveValueKind::State:
+    case PrimitiveValueKind::CommonReaction:
+    case PrimitiveValueKind::Model:
          m_numberValue = prim.m_numberValue; break;
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Script:
@@ -479,6 +534,12 @@ void PrimitiveValue::setCopy(const PrimitiveValue &prim) {
         m_switchValue = prim.m_switchValue; break;
     case PrimitiveValueKind::NumberDouble:
         m_numberDoubleValue = prim.m_numberDoubleValue; break;
+    case PrimitiveValueKind::CustomStructure:
+        m_customStructure->setCopy(*prim.m_customStructure);
+        break;
+    case PrimitiveValueKind::CustomList:
+        m_customList->setCopy(*prim.m_customList);
+        break;
     }
     m_isActivated = prim.m_isActivated;
     m_modelParameter = prim.m_modelParameter;
@@ -495,7 +556,8 @@ void PrimitiveValue::read(const QJsonObject &json) {
 
     // Value
     v = json[RPM::JSON_VALUE];
-    switch (m_kind) {
+    switch (m_kind)
+    {
     case PrimitiveValueKind::Default:
     case PrimitiveValueKind::Anything:
     case PrimitiveValueKind::None:
@@ -506,6 +568,38 @@ void PrimitiveValue::read(const QJsonObject &json) {
     case PrimitiveValueKind::Property:
     case PrimitiveValueKind::DataBase:
     case PrimitiveValueKind::KeyBoard:
+    case PrimitiveValueKind::Class:
+    case PrimitiveValueKind::Hero:
+    case PrimitiveValueKind::Monster:
+    case PrimitiveValueKind::Troop:
+    case PrimitiveValueKind::Item:
+    case PrimitiveValueKind::Weapon:
+    case PrimitiveValueKind::Armor:
+    case PrimitiveValueKind::Skill:
+    case PrimitiveValueKind::Animation:
+    case PrimitiveValueKind::Status:
+    case PrimitiveValueKind::Tileset:
+    case PrimitiveValueKind::FontSize:
+    case PrimitiveValueKind::FontName:
+    case PrimitiveValueKind::Color:
+    case PrimitiveValueKind::WindowSkin:
+    case PrimitiveValueKind::Currency:
+    case PrimitiveValueKind::Speed:
+    case PrimitiveValueKind::Detection:
+    case PrimitiveValueKind::CameraProperty:
+    case PrimitiveValueKind::Frequency:
+    case PrimitiveValueKind::Skybox:
+    case PrimitiveValueKind::BattleMap:
+    case PrimitiveValueKind::Element:
+    case PrimitiveValueKind::CommonStatistic:
+    case PrimitiveValueKind::WeaponsKind:
+    case PrimitiveValueKind::ArmorsKind:
+    case PrimitiveValueKind::CommonBattleCommand:
+    case PrimitiveValueKind::CommonEquipment:
+    case PrimitiveValueKind::Event:
+    case PrimitiveValueKind::State:
+    case PrimitiveValueKind::CommonReaction:
+    case PrimitiveValueKind::Model:
         m_numberValue = v.toInt(); break;    
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Script:
@@ -515,6 +609,12 @@ void PrimitiveValue::read(const QJsonObject &json) {
         m_switchValue = v.toBool(); break;
     case PrimitiveValueKind::NumberDouble:
         m_numberDoubleValue = v.toDouble(); break;
+    case PrimitiveValueKind::CustomStructure:
+        m_customStructure->read(json[JSON_CUSTOM_STRUCTURE].toObject());
+        break;
+    case PrimitiveValueKind::CustomList:
+        m_customList->read(json[JSON_CUSTOM_LIST].toObject());
+        break;
     }
     if (json.contains(JSON_IS_ACTIVATED))
     {
@@ -526,11 +626,13 @@ void PrimitiveValue::read(const QJsonObject &json) {
 
 void PrimitiveValue::write(QJsonObject &json) const{
     QJsonValue v;
+    QJsonObject obj;
 
     json[RPM::JSON_KEY] = static_cast<int>(m_kind);
 
     // Value
-    switch (m_kind) {
+    switch (m_kind)
+    {
     case PrimitiveValueKind::Default:
     case PrimitiveValueKind::Anything:
     case PrimitiveValueKind::None:
@@ -541,6 +643,38 @@ void PrimitiveValue::write(QJsonObject &json) const{
     case PrimitiveValueKind::Property:
     case PrimitiveValueKind::DataBase:
     case PrimitiveValueKind::KeyBoard:
+    case PrimitiveValueKind::Class:
+    case PrimitiveValueKind::Hero:
+    case PrimitiveValueKind::Monster:
+    case PrimitiveValueKind::Troop:
+    case PrimitiveValueKind::Item:
+    case PrimitiveValueKind::Weapon:
+    case PrimitiveValueKind::Armor:
+    case PrimitiveValueKind::Skill:
+    case PrimitiveValueKind::Animation:
+    case PrimitiveValueKind::Status:
+    case PrimitiveValueKind::Tileset:
+    case PrimitiveValueKind::FontSize:
+    case PrimitiveValueKind::FontName:
+    case PrimitiveValueKind::Color:
+    case PrimitiveValueKind::WindowSkin:
+    case PrimitiveValueKind::Currency:
+    case PrimitiveValueKind::Speed:
+    case PrimitiveValueKind::Detection:
+    case PrimitiveValueKind::CameraProperty:
+    case PrimitiveValueKind::Frequency:
+    case PrimitiveValueKind::Skybox:
+    case PrimitiveValueKind::BattleMap:
+    case PrimitiveValueKind::Element:
+    case PrimitiveValueKind::CommonStatistic:
+    case PrimitiveValueKind::WeaponsKind:
+    case PrimitiveValueKind::ArmorsKind:
+    case PrimitiveValueKind::CommonBattleCommand:
+    case PrimitiveValueKind::CommonEquipment:
+    case PrimitiveValueKind::Event:
+    case PrimitiveValueKind::State:
+    case PrimitiveValueKind::CommonReaction:
+    case PrimitiveValueKind::Model:
         v = m_numberValue; break;
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Script:
@@ -550,6 +684,14 @@ void PrimitiveValue::write(QJsonObject &json) const{
         v = m_switchValue; break;
     case PrimitiveValueKind::NumberDouble:
         v = m_numberDoubleValue; break;
+    case PrimitiveValueKind::CustomStructure:
+        m_customStructure->write(obj);
+        json[JSON_CUSTOM_STRUCTURE] = obj;
+        break;
+    case PrimitiveValueKind::CustomList:
+        m_customList->write(obj);
+        json[JSON_CUSTOM_LIST] = obj;
+        break;
     }
     json[RPM::JSON_VALUE] = v;
     if (m_isActivated)

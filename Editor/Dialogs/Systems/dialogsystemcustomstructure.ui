@@ -41,7 +41,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QTreeView" name="treeView"/>
+        <widget class="WidgetSuperTree" name="treeView"/>
        </item>
       </layout>
      </item>
@@ -59,6 +59,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

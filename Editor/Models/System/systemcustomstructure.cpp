@@ -52,14 +52,9 @@ SystemCustomStructure::~SystemCustomStructure()
     }
 }
 
-QStandardItemModel * SystemCustomStructure::properties() const
+QStandardItemModel * SystemCustomStructure::model() const
 {
-    return m_properties;
-}
-
-QStandardItemModel * SystemCustomStructure::list() const
-{
-    return m_list;
+    return this->isList() ? m_list : m_properties;
 }
 
 // -------------------------------------------------------
@@ -175,20 +170,28 @@ void SystemCustomStructure::setCopy(const SuperListItem &super)
 
     const SystemCustomStructure *custom = reinterpret_cast<const
         SystemCustomStructure *>(&super);
+    this->clearProperties();
     if (custom->m_properties == nullptr)
     {
         m_properties = nullptr;
     } else
     {
-        this->clearProperties();
+        if (m_properties == nullptr)
+        {
+            m_properties = new QStandardItemModel;
+        }
         SuperListItem::copy(m_properties, custom->m_properties);
     }
+    this->clearList();
     if (custom->m_list == nullptr)
     {
         m_list = nullptr;
     } else
     {
-        this->clearList();
+        if (m_list == nullptr)
+        {
+            m_list = new QStandardItemModel;
+        }
         SuperListItem::copy(m_list, custom->m_list);
     }
     this->initializeHeaders();

@@ -36,10 +36,13 @@ public:
         *parent = nullptr);
     ~DialogSystemCustomStructure();
 
+    void initialize();
+
 private:
     Ui::DialogSystemCustomStructure *ui;
-
     SystemCustomStructure &m_custom;
+
+    void translate();
 };
 
 #endif // DIALOGSYSTEMCUSTOMSTRUCTURE_H

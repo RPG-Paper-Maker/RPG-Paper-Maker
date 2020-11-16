@@ -23,6 +23,8 @@ WidgetCustomStructure::WidgetCustomStructure(QWidget *parent) :
     ui(new Ui::WidgetCustomStructure)
 {
     ui->setupUi(this);
+
+    ui->listWidget->addItem(new QListWidgetItem);
 }
 
 WidgetCustomStructure::~WidgetCustomStructure()
@@ -39,7 +41,10 @@ WidgetCustomStructure::~WidgetCustomStructure()
 void WidgetCustomStructure::initialize(SystemCustomStructure *custom)
 {
     m_custom = custom;
+    ui->listWidget->item(0)->setText(custom->toString());
 }
+
+// -------------------------------------------------------
 
 void WidgetCustomStructure::openDialog()
 {

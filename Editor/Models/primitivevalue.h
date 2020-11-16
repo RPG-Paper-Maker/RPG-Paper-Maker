@@ -31,6 +31,8 @@ class PrimitiveValue
 {
 public:
     static const QString JSON_IS_ACTIVATED;
+    static const QString JSON_CUSTOM_STRUCTURE;
+    static const QString JSON_CUSTOM_LIST;
 
     PrimitiveValue();
     PrimitiveValue(int n);
@@ -51,6 +53,8 @@ public:
     QString messageValue() const;
     void setMessageValue(QString m);
     bool switchValue() const;
+    SystemCustomStructure * customStructure();
+    SystemCustomStructure * customList();
     void setSwitchValue(bool s);
     bool isActivated() const;
     void setIsActivated(bool ia);

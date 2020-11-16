@@ -64,6 +64,7 @@ SystemPlugin::SystemPlugin(int i, QString n, bool io, PluginTypeKind t,
     m_tutorial(tu),
     m_parameters(new QStandardItemModel),
     m_commands(new QStandardItemModel),
+    m_editChanged(false),
     m_editedPlugin(nullptr)
 {
     this->initializeHeaders();

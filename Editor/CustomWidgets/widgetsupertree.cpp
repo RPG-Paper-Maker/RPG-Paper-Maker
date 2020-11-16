@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QHeaderView>
 #include "widgetsupertree.h"
 #include "superlistitem.h"
 #include "rpm.h"

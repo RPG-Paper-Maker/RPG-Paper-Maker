@@ -14,8 +14,10 @@
 #include "rpm.h"
 
 const QString SystemCustomStructureElement::JSON_IS_PROPERTY = "ip";
+const QString SystemCustomStructureElement::JSON_DESCRIPTION = "d";
 const QString SystemCustomStructureElement::JSON_VALUE= "v";
 const bool SystemCustomStructureElement::DEFAULT_IS_PROPERTY = true;
+const QString SystemCustomStructureElement::DEFAULT_DESCRIPTION = "";
 
 // -------------------------------------------------------
 //
@@ -39,6 +41,11 @@ SystemCustomStructureElement::SystemCustomStructureElement(int i, QString n,
 
 }
 
+QString SystemCustomStructureElement::description() const
+{
+    return m_description;
+}
+
 SystemCustomStructureElement::~SystemCustomStructureElement()
 {
     delete m_value;
@@ -57,6 +64,11 @@ PrimitiveValue * SystemCustomStructureElement::value() const
 void SystemCustomStructureElement::setIsProperty(bool isProperty)
 {
     m_isProperty = isProperty;
+}
+
+void SystemCustomStructureElement::setDescription(QString description)
+{
+    m_description = description;
 }
 
 // -------------------------------------------------------
@@ -109,6 +121,7 @@ void SystemCustomStructureElement::setCopy(const SuperListItem &super)
     const SystemCustomStructureElement *element = reinterpret_cast<const
         SystemCustomStructureElement *>(&super);
     m_isProperty = element->m_isProperty;
+    m_description = element->m_description;
     m_value->setCopy(*element->m_value);
 }
 
@@ -140,6 +153,10 @@ void SystemCustomStructureElement::read(const QJsonObject &json)
     {
         m_isProperty = json[JSON_IS_PROPERTY].toBool();
     }
+    if (json.contains(JSON_DESCRIPTION))
+    {
+        m_description = json[JSON_DESCRIPTION].toBool();
+    }
     if (json.contains(JSON_VALUE))
     {
         m_value->read(json[JSON_VALUE].toObject());
@@ -154,6 +171,10 @@ void SystemCustomStructureElement::write(QJsonObject &json) const {
     if (m_isProperty != DEFAULT_IS_PROPERTY)
     {
         json[JSON_IS_PROPERTY] = m_isProperty;
+    }
+    if (m_description != DEFAULT_DESCRIPTION)
+    {
+        json[JSON_DESCRIPTION] = m_description;
     }
     if (!m_value->isDefaultNumberDoubleValue())
     {

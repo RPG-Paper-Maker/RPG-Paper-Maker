@@ -35,8 +35,7 @@ public:
     SystemCustomStructure(int i, QString n, bool isList = false,
         QStandardItemModel *m = new QStandardItemModel);
     virtual ~SystemCustomStructure();
-    QStandardItemModel * properties() const;
-    QStandardItemModel * list() const;
+    QStandardItemModel * model() const;
     void setIsList(bool isList);
 
     bool isList() const;

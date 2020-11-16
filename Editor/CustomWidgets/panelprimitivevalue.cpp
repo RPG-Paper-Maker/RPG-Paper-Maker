@@ -425,6 +425,8 @@ void PanelPrimitiveValue::initializeAllAndUpdate(PrimitiveValue *m)
     initializeModel(m);
     initializeAll();
     updateModel();
+    ui->widgetCutomStructure->initialize(m->customStructure());
+    ui->widgetCustomList->initialize(m->customList());
 }
 
 // -------------------------------------------------------
@@ -589,6 +591,8 @@ void PanelPrimitiveValue::updateValue(bool update) {
     case PrimitiveValueKind::Font:
         setMessageValue(update ? m_model->messageValue() : ui->fontComboBox
             ->currentText());
+        break;
+    default:
         break;
     }
 }
