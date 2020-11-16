@@ -245,6 +245,37 @@ QString PrimitiveValue::toString() const {
             m_numberValue)->toString();
     case PrimitiveValueKind::DataBase:
     case PrimitiveValueKind::Class:
+    case PrimitiveValueKind::Hero:
+    case PrimitiveValueKind::Monster:
+    case PrimitiveValueKind::Troop:
+    case PrimitiveValueKind::Item:
+    case PrimitiveValueKind::Weapon:
+    case PrimitiveValueKind::Armor:
+    case PrimitiveValueKind::Skill:
+    case PrimitiveValueKind::Animation:
+    case PrimitiveValueKind::Status:
+    case PrimitiveValueKind::Tileset:
+    case PrimitiveValueKind::FontSize:
+    case PrimitiveValueKind::FontName:
+    case PrimitiveValueKind::Color:
+    case PrimitiveValueKind::WindowSkin:
+    case PrimitiveValueKind::Currency:
+    case PrimitiveValueKind::Speed:
+    case PrimitiveValueKind::Detection:
+    case PrimitiveValueKind::CameraProperty:
+    case PrimitiveValueKind::Frequency:
+    case PrimitiveValueKind::Skybox:
+    case PrimitiveValueKind::BattleMap:
+    case PrimitiveValueKind::Element:
+    case PrimitiveValueKind::CommonStatistic:
+    case PrimitiveValueKind::WeaponsKind:
+    case PrimitiveValueKind::ArmorsKind:
+    case PrimitiveValueKind::CommonBattleCommand:
+    case PrimitiveValueKind::CommonEquipment:
+    case PrimitiveValueKind::Event:
+    case PrimitiveValueKind::State:
+    case PrimitiveValueKind::CommonReaction:
+    case PrimitiveValueKind::Model:
     {
         if (this->modelDataBase() == nullptr)
         {

@@ -37,6 +37,7 @@ public:
     static const QString JSON_DESCRIPTION;
     static const QString JSON_VERSION;
     static const QString JSON_TUTORIAL;
+    static const QString JSON_DEFAULT_PARAMETERS;
     static const QString JSON_PARAMETERS;
     static const QString JSON_COMMANDS;
     static const bool DEFAULT_IS_ON;
@@ -65,6 +66,7 @@ public:
     QString description() const;
     QString version() const;
     QString tutorial() const;
+    QStandardItemModel * defaultParameters() const;
     QStandardItemModel * parameters() const;
     QStandardItemModel * commands() const;
     bool editChanged() const;
@@ -85,6 +87,7 @@ public:
     void readFromPath();
     void initializeEditedPlugin();
     void initializeHeaders();
+    void clearDefaultParameters();
     void clearParameters();
     void clearCommands();
     void removeEditedPlugin();
@@ -108,6 +111,7 @@ protected:
     QString m_description;
     QString m_version;
     QString m_tutorial;
+    QStandardItemModel *m_defaultParameters;
     QStandardItemModel *m_parameters;
     QStandardItemModel *m_commands;
     bool m_editChanged;

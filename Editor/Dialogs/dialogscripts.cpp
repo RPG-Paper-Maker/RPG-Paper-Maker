@@ -212,7 +212,18 @@ void DialogScripts::keyPressEvent(QKeyEvent *event)
                 {
                     return;
                 }
+
+                // Set as not changed anymore
                 plugin->setEditChanged(false);
+
+                // Copy default parameters to current parameters values
+                plugin->editedPlugin()->clearParameters();
+                SuperListItem::copy(plugin->editedPlugin()->parameters(), plugin
+                    ->editedPlugin()->defaultParameters());
+                SystemPluginParameter::setAllDefault(plugin->editedPlugin()
+                    ->parameters(), false);
+                plugin->initializeHeaders();
+
                 QDir(Common::pathCombine(RPM::get()->project()
                     ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_PLUGINS_DIR))
                     .rename(previousName, plugin->editedPlugin()->name());
@@ -279,7 +290,7 @@ void DialogScripts::on_scriptPluginSelected(QModelIndex, QModelIndex)
         ui->lineEditWebsite->setText(plugin->editedPlugin()->website());
         ui->lineEditTutorial->setText(plugin->editedPlugin()->tutorial());
         ui->treeViewEditParameter->initializeModel(plugin->editedPlugin()
-            ->parameters());
+            ->defaultParameters());
         QModelIndex index = ui->treeViewEditParameter->getModel()->index(0, 0);
         ui->treeViewEditParameter->setCurrentIndex(index);
         RPM::get()->setSelectedList(ui->treeViewEditParameter->getModel());

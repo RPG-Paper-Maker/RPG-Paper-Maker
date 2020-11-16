@@ -394,6 +394,30 @@ QStandardItem * SuperListItem::getEmptyItem() {
 
 // -------------------------------------------------------
 
+void SuperListItem::removeEmptyInTree(QStandardItemModel *model)
+{
+    QStandardItem *item;
+    SuperListItem *super;
+    for (int i = model->invisibleRootItem()->rowCount() - 1; i >= 0; i--)
+    {
+        item = model->item(i);
+        if (item == nullptr)
+        {
+            model->removeRow(i);
+        } else
+        {
+            super = reinterpret_cast<SuperListItem *>(item->data().value<
+                quintptr>());
+            if (super == nullptr)
+            {
+                model->removeRow(i);
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+
 QList<QStandardItem *> SuperListItem::getModelRow() const{
     QList<QStandardItem*> row = QList<QStandardItem*>();
     QStandardItem* item = new QStandardItem;

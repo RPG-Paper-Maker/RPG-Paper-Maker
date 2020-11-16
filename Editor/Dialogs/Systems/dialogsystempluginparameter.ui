@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>641</width>
-    <height>153</height>
+    <width>635</width>
+    <height>157</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,20 +41,21 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEditName"/>
-       </item>
-       <item row="0" column="2" rowspan="3">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+        <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
+         <property name="spacing">
+          <number>0</number>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>88</width>
-           <height>88</height>
-          </size>
-         </property>
-        </spacer>
+         <item>
+          <widget class="QLabel" name="labelNameValue">
+           <property name="text">
+            <string>Name</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditName"/>
+         </item>
+        </layout>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="labelDescription">
@@ -64,7 +65,24 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEditDescription"/>
+        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="labelDescriptionValue">
+           <property name="text">
+            <string>Description</string>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditDescription"/>
+         </item>
+        </layout>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="labelDefaultValue">

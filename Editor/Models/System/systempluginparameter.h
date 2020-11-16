@@ -32,12 +32,17 @@ public:
     static const QString DEFAULT_DESCRIPTION;
 
     SystemPluginParameter();
-    SystemPluginParameter(int i, QString n, QString d = DEFAULT_DESCRIPTION,
-        PrimitiveValue *dv = PrimitiveValue::createDefaultNumberDoubleValue());
+    SystemPluginParameter(int i, QString n, bool id = true, QString d =
+        DEFAULT_DESCRIPTION, PrimitiveValue *dv = PrimitiveValue
+        ::createDefaultNumberDoubleValue());
     virtual ~SystemPluginParameter();
     QString description() const;
     PrimitiveValue * defaultValue() const;
+    bool isDefault() const;
     void setDescription(QString description);
+    void setIsDefault(bool isDefault);
+
+    static void setAllDefault(QStandardItemModel *model, bool def);
 
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
@@ -49,6 +54,7 @@ public:
 protected:
     QString m_description;
     PrimitiveValue *m_defaultValue;
+    bool m_isDefault;
 };
 
 Q_DECLARE_METATYPE(SystemPluginParameter)

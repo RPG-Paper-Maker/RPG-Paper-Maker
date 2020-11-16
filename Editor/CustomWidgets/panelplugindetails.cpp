@@ -25,6 +25,10 @@ PanelPluginDetails::PanelPluginDetails(QWidget *parent) :
     m_currentPlugin(nullptr)
 {
     ui->setupUi(this);
+
+    ui->treeViewEditParameter->initializeNewItemInstance(new SystemPlugin);
+    ui->treeViewEditParameter->setCanMove(false);
+    ui->treeViewEditParameter->setCanCreateDelete(false);
 }
 
 PanelPluginDetails::~PanelPluginDetails()
@@ -108,8 +112,10 @@ void PanelPluginDetails::initialize(SystemPlugin *plugin)
             m_plugin->tutorial() + RPM::TAG_MIDDLE_A + m_plugin->tutorial() +
             RPM::TAG_CLOSE_A);
     }
+    SuperListItem::removeEmptyInTree(m_plugin->parameters());
     ui->groupBoxParameters->setVisible(m_plugin->parameters()
-        ->invisibleRootItem()->rowCount() == 0);
+        ->invisibleRootItem()->rowCount() > 0);
+    ui->treeViewEditParameter->initializeModel(m_plugin->parameters());
     ui->groupBoxCommands->setVisible(m_plugin->commands()->invisibleRootItem()
-        ->rowCount() == 0);
+        ->rowCount() > 1);
 }

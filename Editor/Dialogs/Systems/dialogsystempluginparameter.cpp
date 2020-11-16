@@ -46,8 +46,19 @@ DialogSystemPluginParameter::~DialogSystemPluginParameter()
 
 void DialogSystemPluginParameter::initialize()
 {
-    ui->lineEditName->setText(m_parameter.name());
-    ui->lineEditDescription->setText(m_parameter.description());
+    if (m_parameter.isDefault())
+    {
+        ui->lineEditName->setText(m_parameter.name());
+        ui->lineEditDescription->setText(m_parameter.description());
+        ui->labelNameValue->hide();
+        ui->labelDescriptionValue->hide();
+    } else
+    {
+        ui->labelNameValue->setText(m_parameter.name());
+        ui->labelDescriptionValue->setText(m_parameter.description());
+        ui->lineEditName->hide();
+        ui->lineEditDescription->hide();
+    }
     ui->panelPrimitiveDefaultValue->initializeAllAndUpdate(m_parameter
         .defaultValue());
     connect(ui->panelPrimitiveDefaultValue->widgetCustomStructure(), SIGNAL(

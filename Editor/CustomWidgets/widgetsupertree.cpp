@@ -123,8 +123,8 @@ void WidgetSuperTree::updateAbsoluteAllNodesString() {
 // -------------------------------------------------------
 
 void WidgetSuperTree::setItem(QStandardItem *selected, SuperListItem* super) {
-    SuperListItem* previous =
-            (SuperListItem*)(selected->data().value<quintptr>());
+    SuperListItem* previous = reinterpret_cast<SuperListItem *>(selected->data()
+        .value<quintptr>());
 
     QStandardItem* root = getRootOfItem(selected);
     if (m_updateId) {
@@ -158,7 +158,8 @@ void WidgetSuperTree::newItem(QStandardItem* selected){
 // -------------------------------------------------------
 
 void WidgetSuperTree::editItem(QStandardItem *selected){
-    SuperListItem* super = (SuperListItem*)(selected->data().value<quintptr>());
+    SuperListItem *super = reinterpret_cast<SuperListItem *>(selected->data()
+        .value<quintptr>());
     int previousID, newID;
 
     previousID = super->id();
@@ -198,7 +199,8 @@ void WidgetSuperTree::pasteItem(QStandardItem* selected){
 // -------------------------------------------------------
 
 void WidgetSuperTree::deleteItem(QStandardItem* selected){
-    SuperListItem* super = (SuperListItem*)(selected->data().value<quintptr>());
+    SuperListItem *super = reinterpret_cast<SuperListItem *>(selected->data()
+        .value<quintptr>());
     int row;
 
     // Can't delete empty node
@@ -245,8 +247,8 @@ void WidgetSuperTree::updateAllNodesString(QStandardItem *item) {
     int i, j, l, ll;
     for (i = 0, l = item->rowCount(); i < l; i++) {
         updateAllNodesString(item->child(i));
-        SuperListItem* super = (SuperListItem*) item->child(i)->data()
-                               .value<quintptr>();
+        SuperListItem *super = reinterpret_cast<SuperListItem *>(item->child(i)
+            ->data().value<quintptr>());
         if (super != nullptr) {
             row = super->getModelRow();
             for (j = 0, ll = row.size(); j < ll; j++) {
@@ -266,8 +268,8 @@ int WidgetSuperTree::getNewId(QStandardItemModel *model, int offset){
         bool test = false;
         int length = model->invisibleRootItem()->rowCount() - offset;
         for (int j = 0; j < length; j++){
-            SuperListItem* super = (SuperListItem*) model->item(j)->data()
-                                   .value<quintptr>();
+            SuperListItem *super = reinterpret_cast<SuperListItem *>(model->item
+                (j)->data().value<quintptr>());
             if (id == super->id()){
                 test = true;
                 break;
@@ -386,14 +388,16 @@ void WidgetSuperTree::mouseDoubleClickEvent(QMouseEvent* event){
         if (event->button() == Qt::MouseButton::LeftButton){
             QStandardItem* selected = getSelected();
             if (selected != nullptr){
-                SuperListItem* super = (SuperListItem*)(selected->data()
-                                                        .value<quintptr>());
+                SuperListItem *super = reinterpret_cast<SuperListItem *>(
+                    selected->data().value<quintptr>());
                 // if empty, create a new command
-                if (super == nullptr){
+                if (super == nullptr)
+                {
                     newItem(selected);
                 }
                 // Else only edit the command
-                else{
+                else
+                {
                     editItem(selected);
                 }
             }
@@ -438,8 +442,10 @@ void WidgetSuperTree::onSelectionChanged(QModelIndex index, QModelIndex) {
     QStandardItem* selected = p_model->itemFromIndex(index);
     SuperListItem* super = nullptr;
     if (selected != nullptr)
-        super = (SuperListItem*) selected->data().value<quintptr>();
-
+    {
+        super = reinterpret_cast<SuperListItem *>(selected->data().value<
+            quintptr>());
+    }
     m_contextMenuCommonCommands->canEdit(m_canCreateDelete && super != nullptr);
 }
 

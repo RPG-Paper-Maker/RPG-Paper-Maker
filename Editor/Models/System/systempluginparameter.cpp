@@ -28,11 +28,12 @@ SystemPluginParameter::SystemPluginParameter() :
 
 }
 
-SystemPluginParameter::SystemPluginParameter(int i, QString n, QString d,
-    PrimitiveValue *dv) :
+SystemPluginParameter::SystemPluginParameter(int i, QString n, bool id, QString
+    d, PrimitiveValue *dv) :
     SuperListItem(i, n),
     m_description(d),
-    m_defaultValue(dv)
+    m_defaultValue(dv),
+    m_isDefault(id)
 {
 
 }
@@ -52,9 +53,44 @@ PrimitiveValue * SystemPluginParameter::defaultValue() const
     return m_defaultValue;
 }
 
+bool SystemPluginParameter::isDefault() const
+{
+    return m_isDefault;
+}
+
 void SystemPluginParameter::setDescription(QString description)
 {
     m_description = description;
+}
+
+void SystemPluginParameter::setIsDefault(bool isDefault)
+{
+    m_isDefault = isDefault;
+}
+
+// -------------------------------------------------------
+//
+//  STATIC FUNCTIONS
+//
+// -------------------------------------------------------
+
+void SystemPluginParameter::setAllDefault(QStandardItemModel *model, bool def)
+{
+    QStandardItem *item;
+    SystemPluginParameter *param;
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        item = model->item(i);
+        if (item != nullptr)
+        {
+            param = reinterpret_cast<SystemPluginParameter *>(item->data().value
+                <quintptr>());
+            if (param != nullptr)
+            {
+                param->setIsDefault(def);
+            }
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -95,6 +131,7 @@ void SystemPluginParameter::setCopy(const SuperListItem &super)
         SystemPluginParameter *>(&super);
     m_description = param->m_description;
     m_defaultValue->setCopy(*param->m_defaultValue);
+    m_isDefault = param->m_isDefault;
 }
 
 // -------------------------------------------------------

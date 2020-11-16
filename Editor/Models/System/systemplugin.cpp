@@ -25,6 +25,7 @@ const QString SystemPlugin::JSON_WEBSITE = "w";
 const QString SystemPlugin::JSON_DESCRIPTION = "d";
 const QString SystemPlugin::JSON_VERSION = "v";
 const QString SystemPlugin::JSON_TUTORIAL = "tu";
+const QString SystemPlugin::JSON_DEFAULT_PARAMETERS = "dp";
 const QString SystemPlugin::JSON_PARAMETERS = "p";
 const QString SystemPlugin::JSON_COMMANDS = "co";
 const bool SystemPlugin::DEFAULT_IS_ON = true;
@@ -62,6 +63,7 @@ SystemPlugin::SystemPlugin(int i, QString n, bool io, PluginTypeKind t,
     m_description(d),
     m_version(v),
     m_tutorial(tu),
+    m_defaultParameters(new QStandardItemModel),
     m_parameters(new QStandardItemModel),
     m_commands(new QStandardItemModel),
     m_editChanged(false),
@@ -72,6 +74,7 @@ SystemPlugin::SystemPlugin(int i, QString n, bool io, PluginTypeKind t,
 
 SystemPlugin::~SystemPlugin()
 {
+    SuperListItem::deleteModel(m_defaultParameters);
     SuperListItem::deleteModel(m_parameters);
     SuperListItem::deleteModel(m_commands);
     this->removeEditedPlugin();
@@ -115,6 +118,11 @@ QString SystemPlugin::version() const
 QString SystemPlugin::tutorial() const
 {
     return m_tutorial;
+}
+
+QStandardItemModel * SystemPlugin::defaultParameters() const
+{
+    return m_defaultParameters;
 }
 
 QStandardItemModel * SystemPlugin::parameters() const
@@ -242,8 +250,17 @@ void SystemPlugin::initializeEditedPlugin()
 
 void SystemPlugin::initializeHeaders()
 {
-    m_parameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
+    m_defaultParameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
         Translations::NAME), RPM::translate(Translations::DEFAULT_VALUE)}));
+    m_parameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::NAME), RPM::translate(Translations::VALUE)}));
+}
+
+// -------------------------------------------------------
+
+void SystemPlugin::clearDefaultParameters()
+{
+    SuperListItem::deleteModel(m_defaultParameters, false);
 }
 
 // -------------------------------------------------------
@@ -341,6 +358,8 @@ void SystemPlugin::setCopy(const SuperListItem &super)
     m_description = plugin->m_description;
     m_version = plugin->m_version;
     m_tutorial = plugin->m_tutorial;
+    this->clearDefaultParameters();
+    SuperListItem::copy(m_defaultParameters, plugin->m_defaultParameters);
     this->clearParameters();
     SuperListItem::copy(m_parameters, plugin->m_parameters);
     this->clearCommands();
@@ -373,6 +392,7 @@ void SystemPlugin::read(const QJsonObject &json)
     SystemScript::read(json);
 
     // Clear model
+    SuperListItem::deleteModel(m_defaultParameters, false);
     SuperListItem::deleteModel(m_parameters, false);
     SuperListItem::deleteModel(m_commands, false);
 
@@ -408,8 +428,11 @@ void SystemPlugin::read(const QJsonObject &json)
     {
         m_tutorial = json[JSON_TUTORIAL].toString();
     }
+    SuperListItem::readTree(m_defaultParameters, new SystemPluginParameter, json,
+        JSON_DEFAULT_PARAMETERS);
     SuperListItem::readTree(m_parameters, new SystemPluginParameter, json,
         JSON_PARAMETERS);
+    SystemPluginParameter::setAllDefault(m_parameters, false);
     SuperListItem::readTree(m_commands, new SystemPluginCommand, json,
         JSON_COMMANDS);
 }
@@ -451,6 +474,7 @@ void SystemPlugin::write(QJsonObject &json) const {
     {
         json[JSON_TUTORIAL] = m_tutorial;
     }
+    SuperListItem::writeTree(m_defaultParameters, json, JSON_DEFAULT_PARAMETERS);
     SuperListItem::writeTree(m_parameters, json, JSON_PARAMETERS);
     SuperListItem::writeTree(m_commands, json, JSON_COMMANDS);
 }
