@@ -111,14 +111,24 @@ void SystemCustomStructure::clearList()
 QString SystemCustomStructure::toString() const
 {
     QString str;
+    QStandardItem *item;
+    SystemCustomStructureElement *element;
     if (m_properties == nullptr)
     {
         str += RPM::BRACKET_LEFT;
         QStringList list;
         for (int i = 0, l = m_list->invisibleRootItem()->rowCount(); i < l; i++)
         {
-            list << reinterpret_cast<SystemCustomStructureElement *>(m_list
-                ->item(i)->data().value<quintptr>())->toString();
+            item = m_list->item(i);
+            if (item != nullptr)
+            {
+                element = reinterpret_cast<SystemCustomStructureElement *>(item
+                    ->data().value<quintptr>());
+                if (element != nullptr)
+                {
+                    list << element->toString();
+                }
+            }
         }
         str += list.join(RPM::COMMA);
         str += RPM::BRACKET_RIGHT;
@@ -129,8 +139,16 @@ QString SystemCustomStructure::toString() const
         for (int i = 0, l = m_properties->invisibleRootItem()->rowCount(); i
              < l; i++)
         {
-            list << reinterpret_cast<SystemCustomStructureElement *>(
-                m_properties->item(i)->data().value<quintptr>())->toString();
+            item = m_properties->item(i);
+            if (item != nullptr)
+            {
+                element = reinterpret_cast<SystemCustomStructureElement *>(item
+                    ->data().value<quintptr>());
+                if (element != nullptr)
+                {
+                    list << element->toString();
+                }
+            }
         }
         str += list.join(RPM::COMMA);
         str += RPM::BRACE_RIGHT;

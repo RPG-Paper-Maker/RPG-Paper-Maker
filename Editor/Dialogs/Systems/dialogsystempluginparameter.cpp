@@ -47,3 +47,18 @@ void DialogSystemPluginParameter::initialize()
     ui->panelPrimitiveDefaultValue->initializeAllAndUpdate(m_parameter
         .defaultValue());
 }
+
+// -------------------------------------------------------
+
+void DialogSystemPluginParameter::on_lineEditName_textEdited(const QString &text)
+{
+    m_parameter.setName(text);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemPluginParameter::on_lineEditDescription_textEdited(const
+    QString &text)
+{
+    m_parameter.setDescription(text);
+}

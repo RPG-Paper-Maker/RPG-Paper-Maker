@@ -40,8 +40,13 @@ public:
 
 private:
     Ui::DialogSystemCustomStructureElement *ui;
-
     SystemCustomStructureElement &m_element;
+
+    void translate();
+
+public slots:
+    void on_lineEditKey_textEdited(const QString &text);
+    void on_lineEditDescription_textEdited(const QString &text);
 };
 
 #endif // DIALOGSYSTEMCUSTOMSTRUCTUREELEMENT_H

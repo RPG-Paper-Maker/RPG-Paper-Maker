@@ -133,11 +133,12 @@ QList<QStandardItem*> SystemCustomStructureElement::getModelRow() const
     QStandardItem *item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setText(m_isProperty ? '"' + p_name + '"' : QString::number(p_id));
+    item->setText(SuperListItem::beginningText + (m_isProperty ? '"' + p_name +
+        '"' : QString::number(p_id)));
     row.append(item);
     QStandardItem *itemName = new QStandardItem;
     itemName->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-    itemName->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+    itemName->setFlags(itemName->flags() ^ (Qt::ItemIsDropEnabled));
     itemName->setText(m_value->toString());
     row.append(itemName);
     return row;

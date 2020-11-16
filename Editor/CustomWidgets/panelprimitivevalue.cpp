@@ -427,6 +427,17 @@ void PanelPrimitiveValue::initializeAllAndUpdate(PrimitiveValue *m)
     updateModel();
     ui->widgetCutomStructure->initialize(m->customStructure());
     ui->widgetCustomList->initialize(m->customList());
+    switch (m->kind())
+    {
+    case PrimitiveValueKind::CustomStructure:
+        this->showCustomStructure(false);
+        break;
+    case PrimitiveValueKind::CustomList:
+        this->showCustomStructure(true);
+        break;
+    default:
+        break;
+    }
 }
 
 // -------------------------------------------------------

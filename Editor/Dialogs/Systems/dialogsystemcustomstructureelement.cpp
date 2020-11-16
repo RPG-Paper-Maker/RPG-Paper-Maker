@@ -25,6 +25,10 @@ DialogSystemCustomStructureElement::DialogSystemCustomStructureElement(
     m_element(element)
 {
     ui->setupUi(this);
+
+    this->initialize();
+
+    this->translate();
 }
 
 DialogSystemCustomStructureElement::~DialogSystemCustomStructureElement()
@@ -40,5 +44,43 @@ DialogSystemCustomStructureElement::~DialogSystemCustomStructureElement()
 
 void DialogSystemCustomStructureElement::initialize()
 {
+    if (m_element.isProperty())
+    {
+        ui->lineEditKey->setText(m_element.name());
+        ui->lineEditDescription->setText(m_element.description());
+    } else
+    {
+        ui->labelKey->hide();
+        ui->lineEditKey->hide();
+        ui->labelDescription->hide();
+        ui->lineEditDescription->hide();
+    }
+    ui->panelPrimitiveValue->initializeAllAndUpdate(m_element.value());
+}
 
+// -------------------------------------------------------
+
+void DialogSystemCustomStructureElement::translate()
+{
+
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogSystemCustomStructureElement::on_lineEditKey_textEdited(const QString
+    &text)
+{
+    m_element.setName(text);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCustomStructureElement::on_lineEditDescription_textEdited(const
+    QString &text)
+{
+    m_element.setDescription(text);
 }

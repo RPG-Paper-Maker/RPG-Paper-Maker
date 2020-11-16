@@ -38,6 +38,7 @@ public:
 
     void initialize(SystemCustomStructure *custom);
     void openDialog();
+    void updateText();
 
 private:
     Ui::WidgetCustomStructure *ui;

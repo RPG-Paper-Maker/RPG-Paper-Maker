@@ -41,7 +41,7 @@ WidgetCustomStructure::~WidgetCustomStructure()
 void WidgetCustomStructure::initialize(SystemCustomStructure *custom)
 {
     m_custom = custom;
-    ui->listWidget->item(0)->setText(custom->toString());
+    this->updateText();
 }
 
 // -------------------------------------------------------
@@ -49,6 +49,14 @@ void WidgetCustomStructure::initialize(SystemCustomStructure *custom)
 void WidgetCustomStructure::openDialog()
 {
     m_custom->openDialog();
+    this->updateText();
+}
+
+// -------------------------------------------------------
+
+void WidgetCustomStructure::updateText()
+{
+    ui->listWidget->item(0)->setText(m_custom->toString());
 }
 
 // -------------------------------------------------------

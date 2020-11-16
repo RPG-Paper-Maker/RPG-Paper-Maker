@@ -101,6 +101,8 @@ SystemPlugin * DialogScripts::getSelectedPlugin() const
 
 void DialogScripts::initialize()
 {
+    //this->translate();
+
     // System
     ui->treeViewSystem->initializeModel(RPM::get()->project()->scriptsDatas()
         ->modelSystem());
@@ -130,6 +132,8 @@ void DialogScripts::initialize()
         on_pluginCodeNeedSave()));
     connect(ui->treeViewPlugins->getModel(), SIGNAL(itemChanged(QStandardItem *)
         ), this, SLOT(on_treeViewPluginsItemChanged(QStandardItem *)));
+    connect(ui->treeViewEditParameter, SIGNAL(modelUpdated()), this, SLOT(
+        on_pluginDefaultParametersUpdated()));
 
     // Focus close button
     ui->pushButtonClose->setFocus();
@@ -381,6 +385,8 @@ void DialogScripts::on_lineEditVersion_textEdited(const QString &text)
     this->updatePluginEditSave();
 }
 
+// -------------------------------------------------------
+
 void DialogScripts::on_lineEditWebsite_textEdited(const QString &text)
 {
     SystemPlugin *plugin = this->getSelectedPlugin();
@@ -389,10 +395,21 @@ void DialogScripts::on_lineEditWebsite_textEdited(const QString &text)
     this->updatePluginEditSave();
 }
 
+// -------------------------------------------------------
+
 void DialogScripts::on_lineEditTutorial_textEdited(const QString &text)
 {
     SystemPlugin *plugin = this->getSelectedPlugin();
     plugin->editedPlugin()->setTutorial(text);
+    plugin->setEditChanged(true);
+    this->updatePluginEditSave();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pluginDefaultParametersUpdated()
+{
+    SystemPlugin *plugin = this->getSelectedPlugin();
     plugin->setEditChanged(true);
     this->updatePluginEditSave();
 }

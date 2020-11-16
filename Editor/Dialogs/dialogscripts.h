@@ -70,6 +70,7 @@ public slots:
     void on_lineEditVersion_textEdited(const QString &text);
     void on_lineEditWebsite_textEdited(const QString &text);
     void on_lineEditTutorial_textEdited(const QString &text);
+    void on_pluginDefaultParametersUpdated();
 };
 
 #endif // DIALOGSCRIPTS_H

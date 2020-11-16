@@ -99,6 +99,24 @@ void SystemPluginParameter::setCopy(const SuperListItem &super)
 
 // -------------------------------------------------------
 
+QList<QStandardItem*> SystemPluginParameter::getModelRow() const
+{
+    QList<QStandardItem*> row = QList<QStandardItem*>();
+    QStandardItem *itemName = new QStandardItem;
+    itemName->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
+    itemName->setFlags(itemName->flags() ^ (Qt::ItemIsDropEnabled));
+    itemName->setText(this->toStringName());
+    row.append(itemName);
+    QStandardItem *itemValue = new QStandardItem;
+    itemValue->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
+    itemValue->setFlags(itemValue->flags() ^ (Qt::ItemIsDropEnabled));
+    itemValue->setText(m_defaultValue->toString());
+    row.append(itemValue);
+    return row;
+}
+
+// -------------------------------------------------------
+
 void SystemPluginParameter::read(const QJsonObject &json)
 {
     SuperListItem::read(json);
