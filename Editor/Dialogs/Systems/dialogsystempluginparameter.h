@@ -38,13 +38,19 @@ public:
 
     void initialize();
 
+protected:
+    virtual void accept();
+
 private:
     Ui::DialogSystemPluginParameter *ui;
     SystemPluginParameter &m_parameter;
+    QString m_previousName;
+    QStandardItemModel *m_completeList;
 
 public slots:
     void on_lineEditName_textEdited(const QString &text);
     void on_lineEditDescription_textEdited(const QString &text);
+    void on_widgetCustomStructureListClosed();
 };
 
 #endif // DIALOGSYSTEMPLUGINPARAMETER_H

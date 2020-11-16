@@ -63,6 +63,16 @@ PrimitiveValue * PanelPrimitiveValue::model() const {
     return m_model;
 }
 
+WidgetCustomStructure * PanelPrimitiveValue::widgetCustomStructure() const
+{
+    return ui->widgetCustomStructure;
+}
+
+WidgetCustomStructure * PanelPrimitiveValue::widgetCustomList() const
+{
+    return ui->widgetCustomList;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -425,7 +435,7 @@ void PanelPrimitiveValue::initializeAllAndUpdate(PrimitiveValue *m)
     initializeModel(m);
     initializeAll();
     updateModel();
-    ui->widgetCutomStructure->initialize(m->customStructure());
+    ui->widgetCustomStructure->initialize(m->customStructure());
     ui->widgetCustomList->initialize(m->customList());
     switch (m->kind())
     {
@@ -641,7 +651,7 @@ void PanelPrimitiveValue::hideAll() {
     ui->doubleSpinBoxNumber->hide();
     ui->fontComboBox->hide();
     ui->widgetCustomList->hide();
-    ui->widgetCutomStructure->hide();
+    ui->widgetCustomStructure->hide();
     ui->horizontalSpacer->changeSize(0, 0);
 }
 
@@ -1066,7 +1076,7 @@ void PanelPrimitiveValue::showCustomStructure(bool isList)
     {
         setKind(PrimitiveValueKind::CustomStructure);
         hideAll();
-        ui->widgetCutomStructure->show();
+        ui->widgetCustomStructure->show();
     }
 }
 

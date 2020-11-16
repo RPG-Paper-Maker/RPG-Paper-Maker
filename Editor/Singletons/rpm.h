@@ -243,6 +243,8 @@ public:
     void copiedCommandsAppend(QStandardItem *item);
     SuperListItem * selectedMonster() const;
     void setSelectedMonster(SuperListItem *si);
+    QStandardItemModel * selectedList() const;
+    void setSelectedList(QStandardItemModel *model);
 
     static void writeJSON(QString path, const Serializable &obj);
     static void readJSON(QString path, Serializable &obj);
@@ -266,6 +268,8 @@ protected:
     Translations *m_translations;
     QList<QStandardItem *> m_copiedCommands;
     SuperListItem *m_selectedMonster;
+    QStandardItemModel *m_selectedList;
+    QStandardItemModel *m_selectedList2;
 };
 
 #endif // RPM_H

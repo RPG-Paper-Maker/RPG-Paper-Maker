@@ -244,6 +244,7 @@ QString PrimitiveValue::toString() const {
             ::getById(this->modelProperties()->invisibleRootItem(),
             m_numberValue)->toString();
     case PrimitiveValueKind::DataBase:
+    case PrimitiveValueKind::Class:
     {
         if (this->modelDataBase() == nullptr)
         {

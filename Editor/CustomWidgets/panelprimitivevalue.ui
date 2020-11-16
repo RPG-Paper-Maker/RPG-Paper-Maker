@@ -131,7 +131,7 @@
         <widget class="WidgetCustomStructure" name="widgetCustomList" native="true"/>
        </item>
        <item>
-        <widget class="WidgetCustomStructure" name="widgetCutomStructure" native="true"/>
+        <widget class="WidgetCustomStructure" name="widgetCustomStructure" native="true"/>
        </item>
        <item>
         <widget class="QComboBox" name="comboBoxKeyBoard">

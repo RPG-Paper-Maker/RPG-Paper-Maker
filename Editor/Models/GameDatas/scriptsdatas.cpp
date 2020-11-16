@@ -53,17 +53,7 @@ QStandardItemModel* ScriptsDatas::modelPlugins() const {
 
 bool ScriptsDatas::containsPluginName(QString name) const
 {
-    SystemPlugin *plugin;
-    for (int i = 0; i < m_modelPlugins->invisibleRootItem()->rowCount(); i++)
-    {
-        plugin = reinterpret_cast<SystemPlugin *>(m_modelPlugins->item(i)
-            ->data().value<quintptr>());
-        if (plugin != nullptr && plugin->name() == name)
-        {
-            return true;
-        }
-    }
-    return false;
+    return SuperListItem::containsName(m_modelPlugins, name);
 }
 
 // -------------------------------------------------------

@@ -255,6 +255,7 @@ void SystemCustomStructure::write(QJsonObject &json) const {
     }
     if (m_list != nullptr)
     {
+        json[JSON_IS_LIST] = true;
         SuperListItem::writeTree(m_list, json, JSON_LIST);
     }
 }

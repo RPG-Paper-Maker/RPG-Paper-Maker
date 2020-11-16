@@ -9,8 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QMessageBox>
 #include "dialogsystemcustomstructureelement.h"
 #include "ui_dialogsystemcustomstructureelement.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -22,7 +24,9 @@ DialogSystemCustomStructureElement::DialogSystemCustomStructureElement(
     SystemCustomStructureElement &element, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogSystemCustomStructureElement),
-    m_element(element)
+    m_element(element),
+    m_previousName(element.name()),
+    m_completeList(RPM::get()->selectedList())
 {
     ui->setupUi(this);
 
@@ -56,6 +60,10 @@ void DialogSystemCustomStructureElement::initialize()
         ui->lineEditDescription->hide();
     }
     ui->panelPrimitiveValue->initializeAllAndUpdate(m_element.value());
+    connect(ui->panelPrimitiveValue->widgetCustomStructure(), SIGNAL(
+        windowClosed()), this, SLOT(on_widgetCustomStructureListClosed()));
+    connect(ui->panelPrimitiveValue->widgetCustomList(), SIGNAL(
+        windowClosed()), this, SLOT(on_widgetCustomStructureListClosed()));
 }
 
 // -------------------------------------------------------
@@ -63,6 +71,33 @@ void DialogSystemCustomStructureElement::initialize()
 void DialogSystemCustomStructureElement::translate()
 {
 
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogSystemCustomStructureElement::accept()
+{
+    if (m_element.isProperty())
+    {
+        if (m_element.name().isEmpty())
+        {
+            QMessageBox::information(nullptr, RPM::translate(Translations
+                ::WARNING), "The key can't be empty.");
+            return;
+        }
+        if (m_previousName != m_element.name() && SuperListItem::containsName(
+            RPM::get()->selectedList(), m_element.name()))
+        {
+            QMessageBox::information(nullptr, RPM::translate(Translations
+                ::WARNING), "This key already exists in your custom structure.");
+            return;
+        }
+    }
+    QDialog::accept();
 }
 
 // -------------------------------------------------------
@@ -83,4 +118,11 @@ void DialogSystemCustomStructureElement::on_lineEditDescription_textEdited(const
     QString &text)
 {
     m_element.setDescription(text);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCustomStructureElement::on_widgetCustomStructureListClosed()
+{
+    RPM::get()->setSelectedList(m_completeList);
 }

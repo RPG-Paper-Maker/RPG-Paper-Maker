@@ -122,6 +122,23 @@ QString SuperListItem::idToString() const {
 
 // -------------------------------------------------------
 
+bool SuperListItem::containsName(QStandardItemModel *model, QString name)
+{
+    SuperListItem *super;
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++)
+    {
+        super = reinterpret_cast<SuperListItem *>(model->item(i)->data().value<
+            quintptr>());
+        if (super != nullptr && super->name() == name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+// -------------------------------------------------------
+
 void SuperListItem::deleteModel(QStandardItemModel *model, bool deleteModel) {
     SuperListItem *super;
     int i, l;

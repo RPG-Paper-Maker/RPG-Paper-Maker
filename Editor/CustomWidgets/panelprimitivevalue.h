@@ -19,6 +19,7 @@
 #include "primitivevalue.h"
 #include "eventcommand.h"
 #include "panelprimitivevaluekind.h"
+#include "widgetcustomstructure.h"
 
 // -------------------------------------------------------
 //
@@ -44,6 +45,8 @@ public:
     QSpinBox * spinBoxNumber() const;
     QDoubleSpinBox * doubleSpinBoxNumber() const;
     PrimitiveValue * model() const;
+    WidgetCustomStructure * widgetCustomStructure() const;
+    WidgetCustomStructure * widgetCustomList() const;
 
     void updateModel();
     void initializePrimitives();

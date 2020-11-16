@@ -152,6 +152,7 @@ void WidgetSuperTree::newItem(QStandardItem* selected){
     }
     else
         delete super;
+    emit windowClosed();
 }
 
 // -------------------------------------------------------
@@ -170,6 +171,7 @@ void WidgetSuperTree::editItem(QStandardItem *selected){
         }
         setItem(selected, super);
     }
+    emit windowClosed();
 }
 
 // -------------------------------------------------------

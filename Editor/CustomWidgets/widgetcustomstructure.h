@@ -42,8 +42,10 @@ public:
 
 private:
     Ui::WidgetCustomStructure *ui;
-
     SystemCustomStructure *m_custom;
+
+signals:
+    void windowClosed();
 
 private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem *);

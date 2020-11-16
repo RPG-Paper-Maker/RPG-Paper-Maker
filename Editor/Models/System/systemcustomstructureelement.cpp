@@ -156,7 +156,7 @@ void SystemCustomStructureElement::read(const QJsonObject &json)
     }
     if (json.contains(JSON_DESCRIPTION))
     {
-        m_description = json[JSON_DESCRIPTION].toBool();
+        m_description = json[JSON_DESCRIPTION].toString();
     }
     if (json.contains(JSON_VALUE))
     {

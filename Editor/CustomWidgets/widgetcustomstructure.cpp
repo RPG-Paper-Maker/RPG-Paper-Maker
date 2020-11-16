@@ -50,6 +50,7 @@ void WidgetCustomStructure::openDialog()
 {
     m_custom->openDialog();
     this->updateText();
+    emit windowClosed();
 }
 
 // -------------------------------------------------------

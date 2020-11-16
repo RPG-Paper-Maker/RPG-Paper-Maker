@@ -96,6 +96,7 @@ signals:
     void deletingItem(SuperListItem* super, int row);
     void tryingEdit();
     void idChanged(int previousID, int newID);
+    void windowClosed();
 };
 
 #endif // WIDGETSUPERTREE_H

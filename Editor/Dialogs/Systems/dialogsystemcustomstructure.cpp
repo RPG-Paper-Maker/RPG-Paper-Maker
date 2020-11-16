@@ -51,6 +51,9 @@ void DialogSystemCustomStructure::initialize()
         "", !m_custom.isList()));
     QModelIndex index = ui->treeView->getModel()->index(0, 0);
     ui->treeView->setCurrentIndex(index);
+    RPM::get()->setSelectedList(m_custom.model());
+    connect(ui->treeView, SIGNAL(windowClosed()), this, SLOT(
+        on_treeviewWindowClosed()));
 }
 
 // -------------------------------------------------------
@@ -59,4 +62,15 @@ void DialogSystemCustomStructure::translate()
 {
     ui->label->setText((m_custom.isList() ? "Custom list elements" :
         "Custom structure properties") + RPM::COLON);
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogSystemCustomStructure::on_treeviewWindowClosed()
+{
+    RPM::get()->setSelectedList(m_custom.model());
 }

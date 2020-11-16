@@ -43,6 +43,9 @@ private:
     SystemCustomStructure &m_custom;
 
     void translate();
+
+public slots:
+    void on_treeviewWindowClosed();
 };
 
 #endif // DIALOGSYSTEMCUSTOMSTRUCTURE_H

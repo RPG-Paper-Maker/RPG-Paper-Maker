@@ -9,8 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QMessageBox>
 #include "dialogsystempluginparameter.h"
 #include "ui_dialogsystempluginparameter.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -22,7 +24,9 @@ DialogSystemPluginParameter::DialogSystemPluginParameter(SystemPluginParameter
     &parameter, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogSystemPluginParameter),
-    m_parameter(parameter)
+    m_parameter(parameter),
+    m_previousName(parameter.name()),
+    m_completeList(RPM::get()->selectedList())
 {
     ui->setupUi(this);
 
@@ -46,8 +50,40 @@ void DialogSystemPluginParameter::initialize()
     ui->lineEditDescription->setText(m_parameter.description());
     ui->panelPrimitiveDefaultValue->initializeAllAndUpdate(m_parameter
         .defaultValue());
+    connect(ui->panelPrimitiveDefaultValue->widgetCustomStructure(), SIGNAL(
+        windowClosed()), this, SLOT(on_widgetCustomStructureListClosed()));
+    connect(ui->panelPrimitiveDefaultValue->widgetCustomList(), SIGNAL(
+        windowClosed()), this, SLOT(on_widgetCustomStructureListClosed()));
 }
 
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogSystemPluginParameter::accept()
+{
+    if (m_parameter.name().isEmpty())
+    {
+        QMessageBox::information(nullptr, RPM::translate(Translations
+            ::WARNING), "The plugin parameter name can't be empty.");
+        return;
+    }
+    if (m_previousName != m_parameter.name() && SuperListItem::containsName(RPM
+        ::get()->selectedList(), m_parameter.name()))
+    {
+        QMessageBox::information(nullptr, RPM::translate(Translations
+            ::WARNING), "This plugin parameter name already exists in your parameters list.");
+        return;
+    }
+    QDialog::accept();
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
 // -------------------------------------------------------
 
 void DialogSystemPluginParameter::on_lineEditName_textEdited(const QString &text)
@@ -61,4 +97,11 @@ void DialogSystemPluginParameter::on_lineEditDescription_textEdited(const
     QString &text)
 {
     m_parameter.setDescription(text);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemPluginParameter::on_widgetCustomStructureListClosed()
+{
+    RPM::get()->setSelectedList(m_completeList);
 }

@@ -38,15 +38,21 @@ public:
 
     void initialize();
 
+protected:
+    virtual void accept();
+
 private:
     Ui::DialogSystemCustomStructureElement *ui;
     SystemCustomStructureElement &m_element;
+    QString m_previousName;
+    QStandardItemModel *m_completeList;
 
     void translate();
 
 public slots:
     void on_lineEditKey_textEdited(const QString &text);
     void on_lineEditDescription_textEdited(const QString &text);
+    void on_widgetCustomStructureListClosed();
 };
 
 #endif // DIALOGSYSTEMCUSTOMSTRUCTUREELEMENT_H

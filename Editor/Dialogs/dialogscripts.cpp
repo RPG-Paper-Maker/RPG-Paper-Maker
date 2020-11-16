@@ -282,6 +282,7 @@ void DialogScripts::on_scriptPluginSelected(QModelIndex, QModelIndex)
             ->parameters());
         QModelIndex index = ui->treeViewEditParameter->getModel()->index(0, 0);
         ui->treeViewEditParameter->setCurrentIndex(index);
+        RPM::get()->setSelectedList(ui->treeViewEditParameter->getModel());
         if (ui->tabWidgetPlugin->currentIndex() == 1)
         {
             ui->widgetCodePlugin->setFocus();
@@ -412,4 +413,5 @@ void DialogScripts::on_pluginDefaultParametersUpdated()
     SystemPlugin *plugin = this->getSelectedPlugin();
     plugin->setEditChanged(true);
     this->updatePluginEditSave();
+    ui->tabWidgetPlugin->setFocus();
 }

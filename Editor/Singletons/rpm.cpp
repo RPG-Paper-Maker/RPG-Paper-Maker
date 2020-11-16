@@ -354,6 +354,16 @@ void RPM::setSelectedMonster(SuperListItem *si)
     m_selectedMonster = si;
 }
 
+QStandardItemModel * RPM::selectedList() const
+{
+    return m_selectedList;
+}
+
+void RPM::setSelectedList(QStandardItemModel *model)
+{
+    m_selectedList = model;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
