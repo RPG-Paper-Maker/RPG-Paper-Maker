@@ -65,6 +65,34 @@ void SystemPluginCommand::setDescription(QString description)
 //
 // -------------------------------------------------------
 
+QString SystemPluginCommand::getStringDetails() const
+{
+    return "<li>" + this->getStringFunction() + RPM::SPACE + RPM::DASH + RPM
+        ::SPACE + m_description + "</li>";
+}
+
+// -------------------------------------------------------
+
+QString SystemPluginCommand::getStringFunction() const
+{
+    QString str = p_name + RPM::PARENTHESIS_LEFT;
+    QStringList list;
+    SuperListItem *super;
+    for (int i = 0, l = m_defaultParameters->invisibleRootItem()->rowCount(); i
+        < l; i++)
+    {
+        super = SuperListItem::getItemModelAt(m_defaultParameters, i);
+        if (super != nullptr)
+        {
+            list << super->name();
+        }
+    }
+    str += list.join(RPM::COMMA) + RPM::PARENTHESIS_RIGHT;
+    return str;
+}
+
+// -------------------------------------------------------
+
 void SystemPluginCommand::initializeHeaders()
 {
     m_defaultParameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
@@ -86,20 +114,7 @@ void SystemPluginCommand::clearDefaultParameters()
 
 QString SystemPluginCommand::toStringName() const
 {
-    QString str = SuperListItem::beginningText + p_name + RPM::PARENTHESIS_LEFT;
-    QStringList list;
-    SuperListItem *super;
-    for (int i = 0, l = m_defaultParameters->invisibleRootItem()->rowCount(); i
-        < l; i++)
-    {
-        super = SuperListItem::getItemModelAt(m_defaultParameters, i);
-        if (super != nullptr)
-        {
-            list << super->name();
-        }
-    }
-    str += list.join(RPM::COMMA) + RPM::PARENTHESIS_RIGHT;
-    return str;
+    return SuperListItem::beginningText + this->getStringFunction();
 }
 
 // -------------------------------------------------------

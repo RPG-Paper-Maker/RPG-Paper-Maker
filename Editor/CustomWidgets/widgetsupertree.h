@@ -98,6 +98,7 @@ signals:
     void idChanged(int previousID, int newID);
     void windowClosed();
     void beforeOpeningWindow();
+    void keyPressed(QKeyEvent *event);
 };
 
 #endif // WIDGETSUPERTREE_H

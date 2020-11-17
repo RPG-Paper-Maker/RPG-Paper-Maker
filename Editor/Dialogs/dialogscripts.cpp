@@ -55,6 +55,12 @@ DialogScripts::DialogScripts(QWidget *parent) :
         (on_pluginParameterOpeningWindow()));
     connect(ui->treeViewEditCommands, SIGNAL(beforeOpeningWindow()), this, SLOT
         (on_pluginCommandOpeningWindow()));
+    connect(ui->treeViewEditParameter, SIGNAL(keyPressed(QKeyEvent *)), this,
+        SLOT(on_treeKeyPressed(QKeyEvent *)));
+    connect(ui->treeViewEditCommands, SIGNAL(keyPressed(QKeyEvent *)), this,
+        SLOT(on_treeKeyPressed(QKeyEvent *)));
+    connect(ui->panelPluginDetails->treeViewParameters(), SIGNAL(keyPressed(
+        QKeyEvent *)), this, SLOT(on_treeKeyPressed(QKeyEvent *)));
 
     // Keep space when hiding widgets
     QSizePolicy sp_retain;
@@ -141,6 +147,8 @@ void DialogScripts::initialize()
         ), this, SLOT(on_treeViewPluginsItemChanged(QStandardItem *)));
     connect(ui->treeViewEditParameter, SIGNAL(modelUpdated()), this, SLOT(
         on_pluginDefaultParametersUpdated()));
+    connect(ui->treeViewEditCommands, SIGNAL(modelUpdated()), this, SLOT(
+        on_pluginCommandsUpdated()));
     connect(ui->panelPluginDetails->treeViewParameters(), SIGNAL(modelUpdated())
         , this, SLOT(on_pluginParametersUpdated()));
 
@@ -235,7 +243,7 @@ void DialogScripts::keyPressEvent(QKeyEvent *event)
                     ->getFolderPath(), SystemPlugin::NAME_JSON), json);
                 RPM::get()->project()->writeScriptsDatas();
                 this->updatePluginDetailsSave();
-                ui->panelPluginDetails->initialize(plugin);
+                ui->panelPluginDetails->initialize(plugin->editedPlugin());
                 break;
             }
             case 1: // Code
@@ -282,7 +290,7 @@ void DialogScripts::keyPressEvent(QKeyEvent *event)
                     ->getFolderPath(), SystemPlugin::NAME_JSON), json);
                 RPM::get()->project()->writeScriptsDatas();
                 this->updatePluginEditSave();
-                ui->panelPluginDetails->initialize(plugin);
+                ui->panelPluginDetails->initialize(plugin->editedPlugin());
                 break;
             }
             default:
@@ -476,7 +484,15 @@ void DialogScripts::on_pluginDefaultParametersUpdated()
     plugin->setEditChanged(true);
     plugin->setDefaultParametersChanged(true);
     this->updatePluginEditSave();
-    ui->tabWidgetPlugin->setFocus();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pluginCommandsUpdated()
+{
+    SystemPlugin *plugin = this->getSelectedPlugin();
+    plugin->setEditChanged(true);
+    this->updatePluginEditSave();
 }
 
 // -------------------------------------------------------
@@ -486,7 +502,7 @@ void DialogScripts::on_pluginParametersUpdated()
     SystemPlugin *plugin = this->getSelectedPlugin();
     plugin->setEditChanged(true);
     this->updatePluginDetailsSave();
-    ui->tabWidgetPlugin->setFocus();
+    SuperListItem::removeEmptyInTree(plugin->editedPlugin()->parameters());
 }
 
 // -------------------------------------------------------
@@ -501,4 +517,11 @@ void DialogScripts::on_pluginParameterOpeningWindow()
 void DialogScripts::on_pluginCommandOpeningWindow()
 {
     RPM::get()->setSelectedList(ui->treeViewEditCommands->getModel());
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_treeKeyPressed(QKeyEvent *)
+{
+    ui->tabWidgetPlugin->setFocus();
 }

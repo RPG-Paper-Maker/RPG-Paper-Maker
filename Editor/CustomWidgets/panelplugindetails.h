@@ -38,12 +38,10 @@ public:
     QTreeView * treeViewParameters() const;
 
     void initialize(SystemPlugin *plugin);
-    void removeCurrentPlugin();
 
 private:
     Ui::PanelPluginDetails *ui;
     SystemPlugin *m_plugin;
-    SystemPlugin *m_currentPlugin;
 };
 
 #endif // PANELPLUGINDETAILS_H

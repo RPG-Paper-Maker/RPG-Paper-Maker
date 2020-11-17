@@ -38,6 +38,8 @@ public:
     QStandardItemModel * defaultParameters() const;
     void setDescription(QString description);
 
+    QString getStringDetails() const;
+    QString getStringFunction() const;
     void initializeHeaders();
     void clearDefaultParameters();
 

@@ -11,6 +11,8 @@
 
 #include "panelplugindetails.h"
 #include "ui_panelplugindetails.h"
+#include "systemplugincommand.h"
+#include "systempluginparameter.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -21,12 +23,12 @@
 
 PanelPluginDetails::PanelPluginDetails(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::PanelPluginDetails),
-    m_currentPlugin(nullptr)
+    ui(new Ui::PanelPluginDetails)
 {
     ui->setupUi(this);
 
-    ui->treeViewEditParameter->initializeNewItemInstance(new SystemPlugin);
+    ui->treeViewEditParameter->initializeNewItemInstance(new
+        SystemPluginParameter);
     ui->treeViewEditParameter->setCanMove(false);
     ui->treeViewEditParameter->setCanCreateDelete(false);
 }
@@ -34,8 +36,6 @@ PanelPluginDetails::PanelPluginDetails(QWidget *parent) :
 PanelPluginDetails::~PanelPluginDetails()
 {
     delete ui;
-
-    this->removeCurrentPlugin();
 }
 
 QTreeView * PanelPluginDetails::treeViewParameters() const
@@ -49,21 +49,9 @@ QTreeView * PanelPluginDetails::treeViewParameters() const
 //
 // -------------------------------------------------------
 
-void PanelPluginDetails::removeCurrentPlugin()
-{
-    if (m_currentPlugin != nullptr)
-    {
-        delete m_currentPlugin;
-    }
-}
-
-// -------------------------------------------------------
-
 void PanelPluginDetails::initialize(SystemPlugin *plugin)
 {
     m_plugin = plugin;
-    this->removeCurrentPlugin();
-    m_currentPlugin = reinterpret_cast<SystemPlugin *>(plugin->createCopy());
     ui->labelName->setText(RPM::TAG_OPEN_STRONG + RPM::translate(Translations
         ::NAME) + RPM::COLON + RPM::TAG_CLOSE_STRONG + RPM::SPACE + m_plugin
         ->name());
@@ -123,4 +111,18 @@ void PanelPluginDetails::initialize(SystemPlugin *plugin)
     ui->treeViewEditParameter->initializeModel(m_plugin->parameters());
     ui->groupBoxCommands->setVisible(m_plugin->commands()->invisibleRootItem()
         ->rowCount() > 1);
+    QString strCommands = "<ul>";
+    SystemPluginCommand *command;
+    for (int i = 0, l = m_plugin->commands()->invisibleRootItem()->rowCount(); i
+        < l; i++)
+    {
+        command = reinterpret_cast<SystemPluginCommand *>(SuperListItem
+            ::getItemModelAt(m_plugin->commands(), i));
+        if (command != nullptr)
+        {
+            strCommands += command->getStringDetails();
+        }
+    }
+    strCommands += "</ul>";
+    ui->labelCommands->setText(strCommands);
 }

@@ -142,6 +142,21 @@
      <property name="title">
       <string>Commands</string>
      </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="labelCommands">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::RichText</enum>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>

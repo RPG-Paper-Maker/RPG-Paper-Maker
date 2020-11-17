@@ -374,6 +374,8 @@ void WidgetSuperTree::keyPressEvent(QKeyEvent *event) {
     if (key == Qt::Key_Down) {
         updateKeyboardUpDown(1);
     }
+
+    emit keyPressed(event);
 }
 
 // -------------------------------------------------------

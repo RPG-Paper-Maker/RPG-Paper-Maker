@@ -67,6 +67,7 @@ SystemPlugin::SystemPlugin(int i, QString n, bool io, PluginTypeKind t,
     m_parameters(new QStandardItemModel),
     m_commands(new QStandardItemModel),
     m_editChanged(false),
+    m_defaultParametersChanged(false),
     m_editedPlugin(nullptr)
 {
     this->initializeHeaders();
@@ -194,8 +195,6 @@ void SystemPlugin::setEditChanged(bool editChanged)
 {
     m_editChanged = editChanged;
 }
-
-// -------------------------------------------------------
 
 void SystemPlugin::setDefaultParametersChanged(bool parametersChanged)
 {
