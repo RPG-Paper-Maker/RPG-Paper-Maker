@@ -46,6 +46,7 @@ private:
 
 public slots:
     void on_treeviewWindowClosed();
+    void on_modelUpdated();
 };
 
 #endif // DIALOGSYSTEMCUSTOMSTRUCTURE_H

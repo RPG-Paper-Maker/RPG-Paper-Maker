@@ -54,6 +54,7 @@ void DialogSystemCustomStructure::initialize()
     RPM::get()->setSelectedList(m_custom.model());
     connect(ui->treeView, SIGNAL(windowClosed()), this, SLOT(
         on_treeviewWindowClosed()));
+    connect(ui->treeView, SIGNAL(modelUpdated()), this, SLOT(on_modelUpdated()));
 }
 
 // -------------------------------------------------------
@@ -73,4 +74,30 @@ void DialogSystemCustomStructure::translate()
 void DialogSystemCustomStructure::on_treeviewWindowClosed()
 {
     RPM::get()->setSelectedList(m_custom.model());
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCustomStructure::on_modelUpdated()
+{
+    if (m_custom.isList())
+    {
+        QStandardItem *item;
+        SuperListItem *super;
+        for (int i = 0, l = m_custom.model()->invisibleRootItem()->rowCount(); i
+            < l; i++)
+        {
+            item = m_custom.model()->item(i);
+            if (item != nullptr)
+            {
+                super = reinterpret_cast<SuperListItem *>(item->data().value<
+                    quintptr>());
+                if (super != nullptr)
+                {
+                    super->setId(i);
+                }
+            }
+        }
+        ui->treeView->updateAbsoluteAllNodesString();
+    }
 }
