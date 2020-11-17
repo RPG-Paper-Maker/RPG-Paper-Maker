@@ -134,6 +134,8 @@ void DialogScripts::initialize()
         ), this, SLOT(on_treeViewPluginsItemChanged(QStandardItem *)));
     connect(ui->treeViewEditParameter, SIGNAL(modelUpdated()), this, SLOT(
         on_pluginDefaultParametersUpdated()));
+    connect(ui->panelPluginDetails->treeViewParameters(), SIGNAL(modelUpdated())
+        , this, SLOT(on_pluginParametersUpdated()));
 
     // Focus close button
     ui->pushButtonClose->setFocus();
@@ -150,13 +152,20 @@ void DialogScripts::updateScriptCodeSave()
 
 // -------------------------------------------------------
 
+void DialogScripts::updatePluginsSave()
+{
+    ui->treeViewPlugins->updateAbsoluteAllNodesString();
+    ui->tabWidget->setTabText(1, "Plugins" + (RPM::get()->project()
+        ->scriptsDatas()->allPluginsSaved() ? "" : RPM::SPACE + "*"));
+}
+
+// -------------------------------------------------------
+
 void DialogScripts::updatePluginCodeSave()
 {
     ui->tabWidgetPlugin->setTabText(1, "Code" + (this->getSelectedPlugin()
         ->changed() ? RPM::SPACE + "*" : ""));
-    ui->treeViewPlugins->updateAbsoluteAllNodesString();
-    ui->tabWidget->setTabText(1, "Plugins" + (RPM::get()->project()
-        ->scriptsDatas()->allPluginsSaved() ? "" : RPM::SPACE + "*"));
+    this->updatePluginsSave();
 }
 
 // -------------------------------------------------------
@@ -165,9 +174,16 @@ void DialogScripts::updatePluginEditSave()
 {
     ui->tabWidgetPlugin->setTabText(2, "Edit" + (this->getSelectedPlugin()
         ->editChanged() ? RPM::SPACE + "*" : ""));
-    ui->treeViewPlugins->updateAbsoluteAllNodesString();
-    ui->tabWidget->setTabText(1, "Plugins" + (RPM::get()->project()
-        ->scriptsDatas()->allPluginsSaved() ? "" : RPM::SPACE + "*"));
+    this->updatePluginsSave();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::updatePluginDetailsSave()
+{
+    ui->tabWidgetPlugin->setTabText(0, "Details" + (this->getSelectedPlugin()
+        ->editChanged() ? RPM::SPACE + "*" : ""));
+    this->updatePluginsSave();
 }
 
 // -------------------------------------------------------
@@ -197,6 +213,24 @@ void DialogScripts::keyPressEvent(QKeyEvent *event)
             plugin = this->getSelectedPlugin();
             switch (ui->tabWidgetPlugin->currentIndex())
             {
+            case 0: // Details
+            {
+                plugin->setEditChanged(false);
+
+                // Copy edited plugin and write
+                plugin->clearParameters();
+                SuperListItem::copy(plugin->parameters(), plugin->editedPlugin()
+                    ->parameters());
+                plugin->initializeHeaders();
+                QJsonObject json;
+                plugin->write(json);
+                Common::writeOtherJSON(Common::pathCombine(plugin
+                    ->getFolderPath(), SystemPlugin::NAME_JSON), json);
+                RPM::get()->project()->writeScriptsDatas();
+                this->updatePluginDetailsSave();
+                ui->panelPluginDetails->initialize(plugin);
+                break;
+            }
             case 1: // Code
                 plugin->setChanged(false);
                 Common::write(plugin->getPath(), plugin->currentCode());
@@ -217,16 +251,23 @@ void DialogScripts::keyPressEvent(QKeyEvent *event)
                 plugin->setEditChanged(false);
 
                 // Copy default parameters to current parameters values
-                plugin->editedPlugin()->clearParameters();
-                SuperListItem::copy(plugin->editedPlugin()->parameters(), plugin
-                    ->editedPlugin()->defaultParameters());
-                SystemPluginParameter::setAllDefault(plugin->editedPlugin()
-                    ->parameters(), false);
-                plugin->initializeHeaders();
+                if (plugin->defaultParametersChanged())
+                {
+                    plugin->editedPlugin()->clearParameters();
+                    SuperListItem::copy(plugin->editedPlugin()->parameters(),
+                        plugin->editedPlugin()->defaultParameters());
+                    SystemPluginParameter::setAllDefault(plugin->editedPlugin()
+                        ->parameters(), false);
+                    plugin->editedPlugin()->initializeHeaders();
+                    plugin->setDefaultParametersChanged(false);
+                }
 
+                // Rename folder if necessary
                 QDir(Common::pathCombine(RPM::get()->project()
                     ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_PLUGINS_DIR))
                     .rename(previousName, plugin->editedPlugin()->name());
+
+                // Copy edited plugin and write
                 plugin->setCopy(*plugin->editedPlugin());
                 QJsonObject json;
                 plugin->write(json);
@@ -423,6 +464,17 @@ void DialogScripts::on_pluginDefaultParametersUpdated()
 {
     SystemPlugin *plugin = this->getSelectedPlugin();
     plugin->setEditChanged(true);
+    plugin->setDefaultParametersChanged(true);
     this->updatePluginEditSave();
+    ui->tabWidgetPlugin->setFocus();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pluginParametersUpdated()
+{
+    SystemPlugin *plugin = this->getSelectedPlugin();
+    plugin->setEditChanged(true);
+    this->updatePluginDetailsSave();
     ui->tabWidgetPlugin->setFocus();
 }

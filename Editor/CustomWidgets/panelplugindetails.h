@@ -13,6 +13,7 @@
 #define PANELPLUGINDETAILS_H
 
 #include <QWidget>
+#include <QTreeView>
 #include "systemplugin.h"
 
 // -------------------------------------------------------
@@ -34,6 +35,7 @@ class PanelPluginDetails : public QWidget
 public:
     explicit PanelPluginDetails(QWidget *parent = nullptr);
     ~PanelPluginDetails();
+    QTreeView * treeViewParameters() const;
 
     void initialize(SystemPlugin *plugin);
     void removeCurrentPlugin();

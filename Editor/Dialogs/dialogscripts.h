@@ -42,8 +42,10 @@ public:
     SystemPlugin * getSelectedPlugin() const;
     void initialize();
     void updateScriptCodeSave();
+    void updatePluginsSave();
     void updatePluginCodeSave();
     void updatePluginEditSave();
+    void updatePluginDetailsSave();
 
 protected:
     virtual void keyPressEvent(QKeyEvent *event);
@@ -71,6 +73,7 @@ public slots:
     void on_lineEditWebsite_textEdited(const QString &text);
     void on_lineEditTutorial_textEdited(const QString &text);
     void on_pluginDefaultParametersUpdated();
+    void on_pluginParametersUpdated();
 };
 
 #endif // DIALOGSCRIPTS_H

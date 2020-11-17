@@ -38,6 +38,11 @@ PanelPluginDetails::~PanelPluginDetails()
     this->removeCurrentPlugin();
 }
 
+QTreeView * PanelPluginDetails::treeViewParameters() const
+{
+    return ui->treeViewEditParameter;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

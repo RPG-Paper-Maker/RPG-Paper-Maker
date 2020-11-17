@@ -70,6 +70,7 @@ public:
     QStandardItemModel * parameters() const;
     QStandardItemModel * commands() const;
     bool editChanged() const;
+    bool defaultParametersChanged() const;
     SystemPlugin * editedPlugin() const;
     void setIsON(bool isON);
     void setType(PluginTypeKind type);
@@ -80,6 +81,7 @@ public:
     void setVersion(QString version);
     void setTutorial(QString tutorial);
     void setEditChanged(bool editChanged);
+    void setDefaultParametersChanged(bool defaultParametersChanged);
 
     QString getFolderPath() const;
     QString getJSONPath() const;
@@ -115,6 +117,7 @@ protected:
     QStandardItemModel *m_parameters;
     QStandardItemModel *m_commands;
     bool m_editChanged;
+    bool m_defaultParametersChanged;
     SystemPlugin *m_editedPlugin;
 };
 

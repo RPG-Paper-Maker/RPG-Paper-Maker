@@ -140,6 +140,11 @@ bool SystemPlugin::editChanged() const
     return m_editChanged;
 }
 
+bool SystemPlugin::defaultParametersChanged() const
+{
+    return m_defaultParametersChanged;
+}
+
 SystemPlugin * SystemPlugin::editedPlugin() const
 {
     return m_editedPlugin;
@@ -188,6 +193,13 @@ void SystemPlugin::setTutorial(QString tutorial)
 void SystemPlugin::setEditChanged(bool editChanged)
 {
     m_editChanged = editChanged;
+}
+
+// -------------------------------------------------------
+
+void SystemPlugin::setDefaultParametersChanged(bool parametersChanged)
+{
+    m_defaultParametersChanged = parametersChanged;
 }
 
 // -------------------------------------------------------
