@@ -145,6 +145,7 @@ void WidgetSuperTree::setItem(QStandardItem *selected, SuperListItem* super) {
 
 void WidgetSuperTree::newItem(QStandardItem* selected){
     SuperListItem* super = m_newItemInstance->createCopy();
+    emit beforeOpeningWindow();
     if (super->openDialog()){
         QStandardItem* root = getRootOfItem(selected);
         int index = selected->row();
@@ -161,8 +162,8 @@ void WidgetSuperTree::editItem(QStandardItem *selected){
     SuperListItem *super = reinterpret_cast<SuperListItem *>(selected->data()
         .value<quintptr>());
     int previousID, newID;
-
     previousID = super->id();
+    emit beforeOpeningWindow();
     if (super->openDialog())
     {
         newID = super->id();

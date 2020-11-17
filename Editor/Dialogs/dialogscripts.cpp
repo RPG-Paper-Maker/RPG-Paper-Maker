@@ -51,6 +51,10 @@ DialogScripts::DialogScripts(QWidget *parent) :
     ui->treeViewPlugins->header()->setSectionResizeMode(QHeaderView
         ::ResizeToContents);
     ui->treeViewPlugins->header()->setMinimumSectionSize(200);
+    connect(ui->treeViewEditParameter, SIGNAL(beforeOpeningWindow()), this, SLOT
+        (on_pluginParameterOpeningWindow()));
+    connect(ui->treeViewEditCommands, SIGNAL(beforeOpeningWindow()), this, SLOT
+        (on_pluginCommandOpeningWindow()));
 
     // Keep space when hiding widgets
     QSizePolicy sp_retain;
@@ -337,7 +341,6 @@ void DialogScripts::on_scriptPluginSelected(QModelIndex, QModelIndex)
             ->defaultParameters());
         QModelIndex index = ui->treeViewEditParameter->getModel()->index(0, 0);
         ui->treeViewEditParameter->setCurrentIndex(index);
-        RPM::get()->setSelectedList(ui->treeViewEditParameter->getModel());
         ui->treeViewEditCommands->initializeModel(plugin->editedPlugin()
             ->commands());
         index = ui->treeViewEditCommands->getModel()->index(0, 0);
@@ -484,4 +487,18 @@ void DialogScripts::on_pluginParametersUpdated()
     plugin->setEditChanged(true);
     this->updatePluginDetailsSave();
     ui->tabWidgetPlugin->setFocus();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pluginParameterOpeningWindow()
+{
+    RPM::get()->setSelectedList(ui->treeViewEditParameter->getModel());
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pluginCommandOpeningWindow()
+{
+    RPM::get()->setSelectedList(ui->treeViewEditCommands->getModel());
 }

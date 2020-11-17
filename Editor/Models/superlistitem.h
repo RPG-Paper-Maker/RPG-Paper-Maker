@@ -58,6 +58,7 @@ public:
     virtual QList<QStandardItem*> getModelRow() const;
     virtual void updateModelRow(QStandardItemModel* model, int row);
     static bool containsName(QStandardItemModel *model, QString name);
+    static SuperListItem * getItemModelAt(QStandardItemModel *model, int i);
     static void deleteModel(QStandardItemModel* model, bool deleteModel = true);
     static void deleteModelTree(QStandardItem* item);
     static int getIndexById(QStandardItem* item, int id, bool first = false);

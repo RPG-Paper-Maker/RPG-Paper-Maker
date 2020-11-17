@@ -74,6 +74,8 @@ public slots:
     void on_lineEditTutorial_textEdited(const QString &text);
     void on_pluginDefaultParametersUpdated();
     void on_pluginParametersUpdated();
+    void on_pluginParameterOpeningWindow();
+    void on_pluginCommandOpeningWindow();
 };
 
 #endif // DIALOGSCRIPTS_H

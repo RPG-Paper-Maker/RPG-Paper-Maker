@@ -38,8 +38,10 @@ public:
     QStandardItemModel * defaultParameters() const;
     void setDescription(QString description);
 
+    void initializeHeaders();
     void clearDefaultParameters();
 
+    virtual QString toStringName() const;
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);

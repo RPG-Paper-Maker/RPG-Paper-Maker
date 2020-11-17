@@ -139,6 +139,15 @@ bool SuperListItem::containsName(QStandardItemModel *model, QString name)
 
 // -------------------------------------------------------
 
+SuperListItem * SuperListItem::getItemModelAt(QStandardItemModel *model, int i)
+{
+    QStandardItem *item = model->item(i);
+    return item == nullptr ? nullptr : reinterpret_cast<SuperListItem *>(item
+        ->data().value<quintptr>());
+}
+
+// -------------------------------------------------------
+
 void SuperListItem::deleteModel(QStandardItemModel *model, bool deleteModel) {
     SuperListItem *super;
     int i, l;

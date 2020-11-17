@@ -12,6 +12,7 @@
 #include "systemplugincommand.h"
 #include "dialogsystemplugincommand.h"
 #include "systempluginparameter.h"
+#include "rpm.h"
 
 const QString SystemPluginCommand::JSON_DESCRIPTION = "d";
 const QString SystemPluginCommand::JSON_DEFAULT_PARAMETERS = "dp";
@@ -64,6 +65,14 @@ void SystemPluginCommand::setDescription(QString description)
 //
 // -------------------------------------------------------
 
+void SystemPluginCommand::initializeHeaders()
+{
+    m_defaultParameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::NAME), RPM::translate(Translations::DEFAULT_VALUE)}));
+}
+
+// -------------------------------------------------------
+
 void SystemPluginCommand::clearDefaultParameters()
 {
     SuperListItem::deleteModel(m_defaultParameters, false);
@@ -73,6 +82,26 @@ void SystemPluginCommand::clearDefaultParameters()
 //
 //  VIRTUAL FUNCTIONS
 //
+// -------------------------------------------------------
+
+QString SystemPluginCommand::toStringName() const
+{
+    QString str = SuperListItem::beginningText + p_name + RPM::PARENTHESIS_LEFT;
+    QStringList list;
+    SuperListItem *super;
+    for (int i = 0, l = m_defaultParameters->invisibleRootItem()->rowCount(); i
+        < l; i++)
+    {
+        super = SuperListItem::getItemModelAt(m_defaultParameters, i);
+        if (super != nullptr)
+        {
+            list << super->name();
+        }
+    }
+    str += list.join(RPM::COMMA) + RPM::PARENTHESIS_RIGHT;
+    return str;
+}
+
 // -------------------------------------------------------
 
 bool SystemPluginCommand::openDialog()
@@ -108,6 +137,7 @@ void SystemPluginCommand::setCopy(const SuperListItem &super)
     m_description = plugin->m_description;
     this->clearDefaultParameters();
     SuperListItem::copy(m_defaultParameters, plugin->m_defaultParameters);
+    this->initializeHeaders();
 }
 
 // -------------------------------------------------------
@@ -125,6 +155,7 @@ void SystemPluginCommand::read(const QJsonObject &json)
     }
     SuperListItem::readTree(m_defaultParameters, new SystemPluginParameter, json
         , JSON_DEFAULT_PARAMETERS);
+    this->initializeHeaders();
 }
 
 // -------------------------------------------------------

@@ -97,6 +97,7 @@ signals:
     void tryingEdit();
     void idChanged(int previousID, int newID);
     void windowClosed();
+    void beforeOpeningWindow();
 };
 
 #endif // WIDGETSUPERTREE_H

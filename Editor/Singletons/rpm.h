@@ -269,7 +269,6 @@ protected:
     QList<QStandardItem *> m_copiedCommands;
     SuperListItem *m_selectedMonster;
     QStandardItemModel *m_selectedList;
-    QStandardItemModel *m_selectedList2;
 };
 
 #endif // RPM_H
