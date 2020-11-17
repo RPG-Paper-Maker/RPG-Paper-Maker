@@ -15,6 +15,8 @@
 #include "ui_dialogscripts.h"
 #include "systemscript.h"
 #include "systemplugin.h"
+#include "systempluginparameter.h"
+#include "systemplugincommand.h"
 #include "common.h"
 #include "rpm.h"
 
@@ -40,6 +42,7 @@ DialogScripts::DialogScripts(QWidget *parent) :
     ui->treeViewPlugins->initializeNewItemInstance(new SystemPlugin);
     ui->treeViewEditParameter->initializeNewItemInstance(new
         SystemPluginParameter);
+    ui->treeViewEditCommands->initializeNewItemInstance(new SystemPluginCommand);
     ui->treeViewSystem->header()->setStretchLastSection(false);
     ui->treeViewSystem->header()->setSectionResizeMode(QHeaderView
         ::ResizeToContents);
@@ -335,6 +338,10 @@ void DialogScripts::on_scriptPluginSelected(QModelIndex, QModelIndex)
         QModelIndex index = ui->treeViewEditParameter->getModel()->index(0, 0);
         ui->treeViewEditParameter->setCurrentIndex(index);
         RPM::get()->setSelectedList(ui->treeViewEditParameter->getModel());
+        ui->treeViewEditCommands->initializeModel(plugin->editedPlugin()
+            ->commands());
+        index = ui->treeViewEditCommands->getModel()->index(0, 0);
+        ui->treeViewEditCommands->setCurrentIndex(index);
         if (ui->tabWidgetPlugin->currentIndex() == 1)
         {
             ui->widgetCodePlugin->setFocus();

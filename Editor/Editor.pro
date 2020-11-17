@@ -71,6 +71,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemfontsize.h \
     Dialogs/Systems/dialogsystemmonsteraction.h \
     Dialogs/Systems/dialogsystemplugin.h \
+    Dialogs/Systems/dialogsystemplugincommand.h \
     Dialogs/Systems/dialogsystempluginparameter.h \
     Dialogs/Systems/dialogsystemprimitive.h \
     Dialogs/Systems/dialogsystemproperty.h \
@@ -465,6 +466,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemfontsize.cpp \
     Dialogs/Systems/dialogsystemmonsteraction.cpp \
     Dialogs/Systems/dialogsystemplugin.cpp \
+    Dialogs/Systems/dialogsystemplugincommand.cpp \
     Dialogs/Systems/dialogsystempluginparameter.cpp \
     Dialogs/Systems/dialogsystemprimitive.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
@@ -808,6 +810,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemfontsize.ui \
     Dialogs/Systems/dialogsystemmonsteraction.ui \
     Dialogs/Systems/dialogsystemplugin.ui \
+    Dialogs/Systems/dialogsystemplugincommand.ui \
     Dialogs/Systems/dialogsystempluginparameter.ui \
     Dialogs/Systems/dialogsystemprimitive.ui \
     Dialogs/Systems/dialogsystemproperty.ui \

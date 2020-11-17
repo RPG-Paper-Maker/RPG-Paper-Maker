@@ -266,6 +266,10 @@ void SystemPlugin::initializeHeaders()
         Translations::NAME), RPM::translate(Translations::DEFAULT_VALUE)}));
     m_parameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
         Translations::NAME), RPM::translate(Translations::VALUE)}));
+    m_commands->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::NAME) + RPM::PARENTHESIS_LEFT + RPM::BRACKET_LEFT + RPM
+        ::translate(Translations::PARAMETERS) + RPM::BRACKET_RIGHT + RPM
+        ::PARENTHESIS_RIGHT}));
 }
 
 // -------------------------------------------------------

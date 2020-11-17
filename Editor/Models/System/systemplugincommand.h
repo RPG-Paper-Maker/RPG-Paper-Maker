@@ -15,11 +15,40 @@
 #include <QMetaType>
 #include "superlistitem.h"
 
+// -------------------------------------------------------
+//
+//  CLASS SystemPlugin
+//
+//  A particulary plugin command (datas).
+//
+// -------------------------------------------------------
+
 class SystemPluginCommand : public SuperListItem
 {
 public:
+    static const QString JSON_DESCRIPTION;
+    static const QString JSON_DEFAULT_PARAMETERS;
+    static const QString DEFAULT_DESCRIPTION;
+
     SystemPluginCommand();
+    SystemPluginCommand(int i, QString n, QString d = DEFAULT_DESCRIPTION,
+        QStandardItemModel *dp = new QStandardItemModel);
     virtual ~SystemPluginCommand();
+    QString description() const;
+    QStandardItemModel * defaultParameters() const;
+    void setDescription(QString description);
+
+    void clearDefaultParameters();
+
+    virtual bool openDialog();
+    virtual SuperListItem * createCopy() const;
+    virtual void setCopy(const SuperListItem &super);
+    virtual void read(const QJsonObject &json);
+    virtual void write(QJsonObject &json) const;
+
+protected:
+    QString m_description;
+    QStandardItemModel *m_defaultParameters;
 };
 
 Q_DECLARE_METATYPE(SystemPluginCommand)

@@ -16,7 +16,6 @@
 #include "systemscript.h"
 #include "plugintypekind.h"
 #include "plugincategorykind.h"
-#include "systempluginparameter.h"
 
 // -------------------------------------------------------
 //
