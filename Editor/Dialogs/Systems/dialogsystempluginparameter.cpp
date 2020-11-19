@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include "dialogsystempluginparameter.h"
 #include "ui_dialogsystempluginparameter.h"
+#include "systemcustomstructureelement.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -65,6 +66,33 @@ void DialogSystemPluginParameter::initialize()
         windowClosed()), this, SLOT(on_widgetCustomStructureListClosed()));
     connect(ui->panelPrimitiveDefaultValue->widgetCustomList(), SIGNAL(
         windowClosed()), this, SLOT(on_widgetCustomStructureListClosed()));
+    ui->treeView->setIndentation(15);
+    QStandardItemModel *model = new QStandardItemModel;
+    ui->treeView->initializeNewItemInstance(new SystemCustomStructureElement(0, "", false));
+    ui->treeView->initializeModel(model);
+    QStandardItem *item = new QStandardItem("{");
+    model->appendRow(item);
+    QStandardItem *item2 = new QStandardItem("\"k\":");
+    item->appendRow(item2);
+    QStandardItem *item3 = new QStandardItem("[");
+    item2->appendRow(item3);
+    QStandardItem *sitem = new QStandardItem("3");
+    sitem->setData(QVariant::fromValue(reinterpret_cast<quintptr>(new SystemCustomStructureElement)));
+    item3->appendRow(sitem);
+    item3->appendRow(new QStandardItem(">"));
+    item2->appendRow(new QStandardItem("]"));
+    item->appendRow(new QStandardItem(">"));
+    model->appendRow(new QStandardItem("}"));
+
+    ui->treeView->expandAll();
+}
+
+// -------------------------------------------------------
+
+void DialogSystemPluginParameter::translate()
+{
+    ui->labelDefaultValue->setText(RPM::translate(m_parameter.isDefault() ?
+        Translations::DEFAULT_VALUE : Translations::VALUE));
 }
 
 // -------------------------------------------------------

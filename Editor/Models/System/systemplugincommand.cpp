@@ -67,8 +67,8 @@ void SystemPluginCommand::setDescription(QString description)
 
 QString SystemPluginCommand::getStringDetails() const
 {
-    return "<li>" + this->getStringFunction() + RPM::SPACE + RPM::DASH + RPM
-        ::SPACE + m_description + "</li>";
+    return "<ul><li>" + this->getStringFunction() + RPM::SPACE + RPM::DASH + RPM
+        ::SPACE + m_description + "</li></ul>";
 }
 
 // -------------------------------------------------------
@@ -114,7 +114,7 @@ void SystemPluginCommand::clearDefaultParameters()
 
 QString SystemPluginCommand::toStringName() const
 {
-    return SuperListItem::beginningText + this->getStringFunction();
+    return SuperListItem::beginningText + RPM::SPACE + this->getStringFunction();
 }
 
 // -------------------------------------------------------

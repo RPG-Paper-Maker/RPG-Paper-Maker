@@ -1071,12 +1071,12 @@ void PanelPrimitiveValue::showCustomStructure(bool isList)
     {
         setKind(PrimitiveValueKind::CustomList);
         hideAll();
-        ui->widgetCustomList->show();
+        //ui->widgetCustomList->show();
     } else
     {
         setKind(PrimitiveValueKind::CustomStructure);
         hideAll();
-        ui->widgetCustomStructure->show();
+        //ui->widgetCustomStructure->show();
     }
 }
 
