@@ -14,7 +14,6 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QMessageBox>
-
 #include "common.h"
 
 // -------------------------------------------------------
@@ -282,26 +281,28 @@ bool Common::copyPathSym(QList<QPair<QString, QString>> &list, QString src,
     QString dst)
 {
     QDir dir(src);
-    QDir dirDst(dst);
-    QString dstPath, path, absolutePath;
-
-    if (!dir.exists()) {
+    if (!dir.exists())
+    {
         return false;
     }
-
+    QDir dirDst(dst);
+    QString dstPath, path, absolutePath;
     foreach (QFileInfo id, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
     {
         QString d = id.fileName();
         dstPath = pathCombine(dst, d);
         if (id.isSymLink())
         {
-            list << QPair<QString, QString>({dir.relativeFilePath(id.symLinkTarget()), dstPath});
+            list << QPair<QString, QString>({dir.relativeFilePath(id
+                .symLinkTarget()), dstPath});
         } else
         {
-            if (!dir.mkpath(dstPath)) {
+            if (!dir.mkpath(dstPath))
+            {
                 return false;
             }
-            if (!copyPathSym(list, pathCombine(src, d), dstPath)) {
+            if (!copyPathSym(list, pathCombine(src, d), dstPath))
+            {
                 return false;
             }
         }
@@ -312,7 +313,8 @@ bool Common::copyPathSym(QList<QPair<QString, QString>> &list, QString src,
         dstPath = pathCombine(dst, f);
         if (ifo.isSymLink())
         {
-            list << QPair<QString, QString>({dir.relativeFilePath(ifo.symLinkTarget()), dstPath});
+            list << QPair<QString, QString>({dir.relativeFilePath(ifo
+                .symLinkTarget()), dstPath});
         } else
         {
             if (!QFile::copy(pathCombine(src, f), dstPath)) {

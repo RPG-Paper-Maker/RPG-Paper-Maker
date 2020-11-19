@@ -420,7 +420,7 @@ void PanelPicturePreview::on_pushButtonExport_clicked()
             Translations::CHOOSE_LOCATION) + RPM::DOT_DOT_DOT);
         SystemPicture *picture = reinterpret_cast<SystemPicture *>(selected
             ->data().value<quintptr>());
-        if (folder.isEmpty())
+        if (!folder.isEmpty())
         {
             Common::copyPath(picture->getPath(), Common::pathCombine(folder,
                 picture->name()));

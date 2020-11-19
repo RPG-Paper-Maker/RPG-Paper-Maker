@@ -11,6 +11,8 @@
 
 #include <QDesktopServices>
 #include <QDir>
+#include <QFileDialog>
+#include <QMessageBox>
 #include "dialogscripts.h"
 #include "ui_dialogscripts.h"
 #include "systemscript.h"
@@ -61,6 +63,10 @@ DialogScripts::DialogScripts(QWidget *parent) :
         SLOT(on_treeKeyPressed(QKeyEvent *)));
     connect(ui->panelPluginDetails->treeViewParameters(), SIGNAL(keyPressed(
         QKeyEvent *)), this, SLOT(on_treeKeyPressed(QKeyEvent *)));
+
+    // Export text
+    ui->labelExport1->setText("<h2>Export this plugin localy and share it</h2>");
+    ui->labelExport2->setText("<h2>Export to the online database</h2><strong>Send us a .zip of the plugin folder with a description of the script and all the steps to test your plugin with an example</strong><br /><ul><li>Discord at " + RPM::TAG_OPEN_A +  "https://discordapp.com/invite/QncEnCE" + RPM::TAG_MIDDLE_A + "https://discordapp.com/invite/QncEnCE" + RPM::TAG_CLOSE_A + " in <strong>#plugins</strong></li></ul><br />OR...<br /><ul><li>Mail at " + RPM::TAG_OPEN_A +  "mailto:Wanok.rpm@gmail.com?subject=[PLUGIN SUGGESTION] - My plugin name&body=Hello,\n\nPlugin description, steps..." + RPM::TAG_MIDDLE_A + "Wanok.rpm@gmail.com" + RPM::TAG_CLOSE_A + "</li></ul>");
 
     // Keep space when hiding widgets
     QSizePolicy sp_retain;
@@ -524,4 +530,32 @@ void DialogScripts::on_pluginCommandOpeningWindow()
 void DialogScripts::on_treeKeyPressed(QKeyEvent *)
 {
     ui->tabWidgetPlugin->setFocus();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pushButtonExport_clicked()
+{
+    QString folder = QFileDialog::getExistingDirectory(this, RPM::translate(
+        Translations::CHOOSE_LOCATION) + RPM::DOT_DOT_DOT);
+    if (!folder.isEmpty())
+    {
+        SystemPlugin *plugin = this->getSelectedPlugin();
+        QString src = Common::pathCombine(Common::pathCombine(RPM::get()
+            ->project()->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_PLUGINS_DIR)
+            , plugin->name());
+        QString dst = Common::pathCombine(folder, plugin->name());
+        QDir(folder).mkdir(plugin->name());
+        if (Common::copyPath(src, dst))
+        {
+            QMessageBox::information(nullptr, RPM::translate(Translations
+                ::INFORMATION), "Sucessfully copied" + RPM::SPACE + src + RPM
+                ::SPACE + RPM::translate(Translations::TO) + RPM::SPACE + dst);
+        } else
+        {
+            QMessageBox::critical(nullptr, RPM::translate(Translations
+                ::ERROR_MESSAGE), "Impossible to copy" + RPM::SPACE + src + RPM
+                ::SPACE + RPM::translate(Translations::TO) + RPM::SPACE + dst);
+        }
+    }
 }

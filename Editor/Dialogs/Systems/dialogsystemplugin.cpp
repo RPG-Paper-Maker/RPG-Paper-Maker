@@ -13,8 +13,6 @@
 #include <QDir>
 #include "dialogsystemplugin.h"
 #include "ui_dialogsystemplugin.h"
-#include "Quazip/quazip.h"
-#include "Quazip/quazipfile.h"
 #include "controlnewproject.h"
 #include "common.h"
 #include "rpm.h"

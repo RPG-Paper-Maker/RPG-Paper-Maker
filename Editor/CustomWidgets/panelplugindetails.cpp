@@ -111,7 +111,7 @@ void PanelPluginDetails::initialize(SystemPlugin *plugin)
     ui->treeViewEditParameter->initializeModel(m_plugin->parameters());
     ui->groupBoxCommands->setVisible(m_plugin->commands()->invisibleRootItem()
         ->rowCount() > 1);
-    QString strCommands = "<ul>";
+    QString strCommands;
     SystemPluginCommand *command;
     for (int i = 0, l = m_plugin->commands()->invisibleRootItem()->rowCount(); i
         < l; i++)
@@ -123,6 +123,5 @@ void PanelPluginDetails::initialize(SystemPlugin *plugin)
             strCommands += command->getStringDetails();
         }
     }
-    strCommands += "</ul>";
     ui->labelCommands->setText(strCommands);
 }

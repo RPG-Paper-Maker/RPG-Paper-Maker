@@ -574,26 +574,33 @@ void WidgetMapEditor::zoom(int value)
 // -------------------------------------------------------
 
 void WidgetMapEditor::updateCursor() {
-    QCursor *cursor;
-
     if (m_menuBar == nullptr || m_menuBar->selectionKind() ==
         MapEditorSelectionKind::Objects)
     {
         setCursor(Qt::ArrowCursor);
-    } else {
-        switch (m_menuBar->drawKind()) {
+    } else
+    {
+        QCursor *cursor = nullptr;
+        switch (m_menuBar->drawKind())
+        {
         case DrawKind::Translate:
-            cursor = &m_cursorTranslate; break;
+            cursor = &m_cursorTranslate;
+            break;
         case DrawKind::Rotate:
-            cursor = &m_cursorRotate; break;
+            cursor = &m_cursorRotate;
+            break;
         case DrawKind::Scale:
-            cursor = &m_cursorScale; break;
+            cursor = &m_cursorScale;
+            break;
         case DrawKind::Pencil:
-            cursor = &m_cursorPencil; break;
+            cursor = &m_cursorPencil;
+            break;
         case DrawKind::Rectangle:
-            cursor = &m_cursorRectangle; break;
+            cursor = &m_cursorRectangle;
+            break;
         case DrawKind::Pin:
-            cursor = &m_cursorPinPaint; break;
+            cursor = &m_cursorPinPaint;
+            break;
         }
         setCursor(*cursor);
     }
@@ -605,50 +612,61 @@ void WidgetMapEditor::updateCursor() {
 //
 // -------------------------------------------------------
 
-bool WidgetMapEditor::focusNextPrevChild(bool) {
+bool WidgetMapEditor::focusNextPrevChild(bool)
+{
     return false;
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::focusOutEvent(QFocusEvent *) {
+void WidgetMapEditor::focusOutEvent(QFocusEvent *)
+{
     m_keysPressed.clear();
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::wheelEvent(QWheelEvent *event) {
-    if (m_control.map() != nullptr) {
+void WidgetMapEditor::wheelEvent(QWheelEvent *event)
+{
+    if (m_control.map() != nullptr)
+    {
         m_control.onMouseWheelMove(event);
     }
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::enterEvent(QEvent *) {
+void WidgetMapEditor::enterEvent(QEvent *)
+{
     updateCursor();
     this->setFocus();
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::leaveEvent(QEvent *) {
+void WidgetMapEditor::leaveEvent(QEvent *)
+{
     setCursor(Qt::ArrowCursor);
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::mouseMoveEvent(QMouseEvent *event) {
-    if (m_control.map() != nullptr) {
+void WidgetMapEditor::mouseMoveEvent(QMouseEvent *event)
+{
+    if (m_control.map() != nullptr)
+    {
 
         // Tooltip for height
-        if (m_menuBar != nullptr) {
-            if (event->pos().x() <= 50 && event->pos().y() <= 50) {
+        if (m_menuBar != nullptr)
+        {
+            if (event->pos().x() <= 50 && event->pos().y() <= 50)
+            {
                 QToolTip::showText(this->mapToGlobal(event->pos()), RPM
                     ::translate(Translations::CHANGE_HEIGHT_TOOLTIP_1) + RPM
                     ::DOT + RPM::NEW_LINE + RPM::SPACE + RPM::translate(
                     Translations::CHANGE_HEIGHT_TOOLTIP_2) + RPM::DOT);
-            } else {
+            } else
+            {
                 QToolTip::hideText();
             }
         }
@@ -656,22 +674,29 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent *event) {
         // Multi keys
         QSet<Qt::MouseButton> buttons;
         if (event->buttons() & Qt::LeftButton)
+        {
             buttons += Qt::LeftButton;
+        }
         if (event->buttons() & Qt::RightButton)
+        {
             buttons += Qt::RightButton;
+        }
         if (event->buttons() & Qt::MiddleButton)
+        {
             buttons += Qt::MiddleButton;
+        }
         QSet<Qt::MouseButton>::iterator i;
-        for (i = buttons.begin(); i != buttons.end(); i++) {
+        for (i = buttons.begin(); i != buttons.end(); i++)
+        {
             Qt::MouseButton button = *i;
             m_control.onMouseMove(event->pos(), button, m_menuBar != nullptr);
-
             if (button != Qt::MouseButton::MiddleButton && !(QApplication
                 ::keyboardModifiers() & Qt::ControlModifier) && !(QApplication
                 ::keyboardModifiers() & Qt::ShiftModifier))
             {
                 QRect defaultFloorRect;
-                if (m_menuBar != nullptr) {
+                if (m_menuBar != nullptr)
+                {
                     QRect tileset;
                     m_panelTextures->getTilesetTexture(tileset);
                     MapEditorSubSelectionKind subSelection = m_menuBar
@@ -687,7 +712,8 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent *event) {
                         , m_menuBar->drawKind(), layerOn, tileset, specialID,
                         widthSquares, widthPixels, heightSquares, heightPixels,
                         defaultFloorRect);
-                } else if (m_detection != nullptr) {
+                } else if (m_detection != nullptr)
+                {
                     defaultFloorRect.setWidth(1);
                     defaultFloorRect.setHeight(1);
                     m_control.addRemove(MapEditorSelectionKind::Objects3D,
@@ -701,12 +727,15 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent *event) {
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
+void WidgetMapEditor::mousePressEvent(QMouseEvent *event)
+{
     this->setFocus();
-    if (m_control.map() != nullptr) {
+    if (m_control.map() != nullptr)
+    {
         Qt::MouseButton button = event->button();
         QRect defaultFloorRect;
-        if (m_menuBar != nullptr) {
+        if (m_menuBar != nullptr)
+        {
             MapEditorSelectionKind selection = m_menuBar->selectionKind();
             MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
             DrawKind drawKind = m_menuBar->drawKind();
@@ -724,8 +753,10 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
                 heightPixels, defaultFloorRect, event->pos(), button);
 
             // Rotations
-            if (button != Qt::MouseButton::MiddleButton) {
-                if (drawKind == DrawKind::Rotate) {
+            if (button != Qt::MouseButton::MiddleButton)
+            {
+                if (drawKind == DrawKind::Rotate)
+                {
                     Position *position;
 
                     position = m_control.positionOnElement(selection, drawKind);
@@ -733,12 +764,16 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
                         ::MouseButton::LeftButton);
                 }
             }
-        } else {
-            if (button != Qt::MouseButton::MiddleButton) {
-                if (m_detection == nullptr) {
+        } else
+        {
+            if (button != Qt::MouseButton::MiddleButton)
+            {
+                if (m_detection == nullptr)
+                {
                     m_control.moveCursorToMousePosition(event->pos());
                     updateSpinBoxes();
-                } else {
+                } else
+                {
                     defaultFloorRect.setWidth(1);
                     defaultFloorRect.setHeight(1);
                     m_control.onMousePressed(MapEditorSelectionKind::Objects3D,
@@ -746,7 +781,8 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
                         false, defaultFloorRect, 1, 1, 0, 1, 0, defaultFloorRect
                         , event->pos(), button);
                 }
-            } else {
+            } else
+            {
                 m_control.updateMouseMove(event->pos());
                 m_control.update(MapEditorSelectionKind::None, DrawKind::Pencil,
                     false);
@@ -757,18 +793,22 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::mouseReleaseEvent(QMouseEvent *event) {
+void WidgetMapEditor::mouseReleaseEvent(QMouseEvent *event)
+{
     this->setFocus();
-    if (m_control.map() != nullptr) {
+    if (m_control.map() != nullptr)
+    {
         Qt::MouseButton button = event->button();
         QRect tileset;
-        if (m_menuBar != nullptr) {
+        if (m_menuBar != nullptr)
+        {
             m_panelTextures->getTilesetTexture(tileset);
             MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
             int specialID = m_panelTextures->getID();
             m_control.onMouseReleased(m_menuBar->selectionKind(), subSelection,
                 m_menuBar->drawKind(), tileset, specialID, event->pos(), button);
-        } else if (m_detection != nullptr) {
+        } else if (m_detection != nullptr)
+        {
             tileset.setWidth(1);
             tileset.setHeight(1);
             m_control.onMouseReleased(MapEditorSelectionKind::Objects3D,
@@ -781,22 +821,26 @@ void WidgetMapEditor::mouseReleaseEvent(QMouseEvent *event) {
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent *event) {
+void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent *event)
+{
     this->setFocus();
-    if (m_control.map() != nullptr) {
-        if (m_menuBar != nullptr) {
-            if (m_menuBar->selectionKind() == MapEditorSelectionKind::Objects) {
+    if (m_control.map() != nullptr)
+    {
+        if (m_menuBar != nullptr)
+        {
+            if (m_menuBar->selectionKind() == MapEditorSelectionKind::Objects)
+            {
                 addObject();
             }
             // Rotations
             Qt::MouseButton button = event->button();
             DrawKind drawKind = m_menuBar->drawKind();
             MapEditorSelectionKind selection = m_menuBar->selectionKind();
-            if (button != Qt::MouseButton::MiddleButton) {
-                if (drawKind == DrawKind::Rotate) {
-                    Position *position;
-
-                    position = m_control.positionOnElement(selection, drawKind);
+            if (button != Qt::MouseButton::MiddleButton)
+            {
+                if (drawKind == DrawKind::Rotate)
+                {
+                    Position *position = m_control.positionOnElement(selection, drawKind);
                     emit selectPositionTransformation(position, button == Qt
                         ::MouseButton::LeftButton);
                 }
@@ -807,55 +851,68 @@ void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent *event) {
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::keyPressEvent(QKeyEvent *event) {
-    if (m_control.map() != nullptr) {
+void WidgetMapEditor::keyPressEvent(QKeyEvent *event)
+{
+    if (m_control.map() != nullptr)
+    {
         int key = event->key();
 
         // Move cursor up / down with arrow shortcut for dialog select position
-        if (m_menuBar == nullptr) {
-            if (m_control.isCtrlPressed()) {
-                if (m_control.isShiftPressed()) {
-                    if (key == Qt::Key_Up) {
+        if (m_menuBar == nullptr)
+        {
+            if (m_control.isCtrlPressed())
+            {
+                if (m_control.isShiftPressed())
+                {
+                    if (key == Qt::Key_Up)
+                    {
                         this->heightPlusUp();
                         return;
-                    } else if (key == Qt::Key_Down) {
+                    } else if (key == Qt::Key_Down)
+                    {
                         this->heightPlusDown();
                         return;
                     }
-                } else {
-                    if (key == Qt::Key_Up) {
+                } else
+                {
+                    if (key == Qt::Key_Up)
+                    {
                         this->heightUp();
                         return;
-                    } else if (key == Qt::Key_Down) {
+                    } else if (key == Qt::Key_Down)
+                    {
                         this->heightDown();
                         return;
                     }
                 }
             }
         }
-
-        if (m_keysPressed.isEmpty()) {
+        if (m_keysPressed.isEmpty())
+        {
             m_firstPressure = true;
             m_timerFirstPressure->start(35);
             onKeyPress(event->key(), -1);
             m_control.cursor()->updatePositionSquare();
         }
-
-        if (event->modifiers() & Qt::ControlModifier) {
+        if (event->modifiers() & Qt::ControlModifier)
+        {
             m_control.setIsCtrlPressed(true);
             m_control.removePreviewElements();
         }
-        if (event->modifiers() & Qt::ShiftModifier) {
+        if (event->modifiers() & Qt::ShiftModifier)
+        {
             m_control.setIsShiftPressed(true);
         }
 
         // Tab
-        if (m_menuBar != nullptr && key == Qt::Key_Tab) {
+        if (m_menuBar != nullptr && key == Qt::Key_Tab)
+        {
             m_menuBar->toggleSelection();
         }
 
         // Move
-        if (!m_keysPressed.contains(key)) {
+        if (!m_keysPressed.contains(key))
+        {
             KeyBoardDatas *keyBoardDatas = RPM::get()->engineSettings()
                 ->keyBoardDatas();
             if ((keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorUp) &&
@@ -878,8 +935,8 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent *event) {
                 KeyBoardEngineKind::MoveCursorUp)) || (keyBoardDatas->isEqual(
                 key, KeyBoardEngineKind::MoveCursorDown) && keyBoardDatas
                 ->contains(m_keysPressed, KeyBoardEngineKind::MoveCursorLeft))
-                || (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorLeft)
-                && keyBoardDatas->contains(m_keysPressed,
+                || (keyBoardDatas->isEqual(key, KeyBoardEngineKind
+                ::MoveCursorLeft) && keyBoardDatas->contains(m_keysPressed,
                 KeyBoardEngineKind::MoveCursorDown)))
             {
                 m_control.cursor()->centerInSquare(0);
@@ -892,56 +949,63 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent *event) {
         {
             QKeySequence seq = Common::getKeySequence(event);
             QList<QAction*> actions = m_contextMenu->actions();
-            QAction* action;
-
-            action = actions.at(0);
-            if (Common::isPressingEnter(event) && action->isEnabled()) {
+            QAction* action = actions.at(0);
+            if (Common::isPressingEnter(event) && action->isEnabled())
+            {
                 contextNew();
                 return;
             }
             action = actions.at(1);
-            if (Common::isPressingEnter(event) && action->isEnabled()) {
+            if (Common::isPressingEnter(event) && action->isEnabled())
+            {
                 contextEdit();
                 return;
             }
             action = actions.at(3);
-            if (action->shortcut().matches(seq) && action->isEnabled()) {
+            if (action->shortcut().matches(seq) && action->isEnabled())
+            {
                 contextCopy();
                 return;
             }
             action = actions.at(4);
-            if (action->shortcut().matches(seq) && action->isEnabled()) {
+            if (action->shortcut().matches(seq) && action->isEnabled())
+            {
                 contextPaste();
                 return;
             }
             action = actions.at(6);
-            if (action->shortcut().matches(seq) && action->isEnabled()) {
+            if (action->shortcut().matches(seq) && action->isEnabled())
+            {
                 contextDelete();
                 return;
             }
             action = actions.at(8);
-            if (action->shortcut().matches(seq) && action->isEnabled()) {
+            if (action->shortcut().matches(seq) && action->isEnabled())
+            {
                 contextHero();
                 return;
             }
         }
-
         m_keysPressed += key;
     }
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::keyReleaseEvent(QKeyEvent *event) {
-    if (m_control.map() != nullptr) {
-        if (!event->isAutoRepeat()) {
+void WidgetMapEditor::keyReleaseEvent(QKeyEvent *event)
+{
+    if (m_control.map() != nullptr)
+    {
+        if (!event->isAutoRepeat())
+        {
             m_keysPressed -= event->key();
             m_control.onKeyReleased(event->key());
-
-            if (!(event->modifiers() & Qt::ControlModifier)) {
+            if (!(event->modifiers() & Qt::ControlModifier))
+            {
                 m_control.setIsCtrlPressed(false);
             }
-            if (!(event->modifiers() & Qt::ShiftModifier)) {
+            if (!(event->modifiers() & Qt::ShiftModifier))
+            {
                 m_control.setIsShiftPressed(false);
             }
         }
@@ -950,13 +1014,15 @@ void WidgetMapEditor::keyReleaseEvent(QKeyEvent *event) {
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::onFirstPressure() {
+void WidgetMapEditor::onFirstPressure()
+{
     m_firstPressure = false;
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::onKeyPress(int k, double speed) {
+void WidgetMapEditor::onKeyPress(int k, double speed)
+{
     m_control.onKeyPressed(k, speed);
     updateSpinBoxes();
 }
@@ -967,61 +1033,67 @@ void WidgetMapEditor::onKeyPress(int k, double speed) {
 //
 // -------------------------------------------------------
 
-void WidgetMapEditor::contextNew() {
-    if (m_control.isCursorObjectVisible()) {
+void WidgetMapEditor::contextNew()
+{
+    if (m_control.isCursorObjectVisible())
+    {
         addObject();
     }
-
     m_contextMenu->setFocus();
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::contextEdit() {
-    if (m_control.isCursorObjectVisible()) {
+void WidgetMapEditor::contextEdit()
+{
+    if (m_control.isCursorObjectVisible())
+    {
         addObject();
     }
-
     m_contextMenu->setFocus();
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::contextCopy() {
-    if (m_control.isCursorObjectVisible()) {
+void WidgetMapEditor::contextCopy()
+{
+    if (m_control.isCursorObjectVisible())
+    {
         m_control.copyObject();
     }
-
     m_contextMenu->setFocus();
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::contextPaste() {
-    if (m_control.isCursorObjectVisible()) {
+void WidgetMapEditor::contextPaste()
+{
+    if (m_control.isCursorObjectVisible())
+    {
         m_control.pasteObject();
     }
-
     m_contextMenu->setFocus();
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::contextDelete() {
-    if (m_control.isCursorObjectVisible()) {
+void WidgetMapEditor::contextDelete()
+{
+    if (m_control.isCursorObjectVisible())
+    {
         deleteObject();
     }
-
     m_contextMenu->setFocus();
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::contextHero() {
-    if (m_control.isCursorObjectVisible()) {
+void WidgetMapEditor::contextHero()
+{
+    if (m_control.isCursorObjectVisible())
+    {
         m_control.defineAsHero();
     }
-
     m_contextMenu->setFocus();
 }
 

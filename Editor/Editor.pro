@@ -137,23 +137,6 @@ HEADERS += \
     Models/System/systemtitlecommand.h \
     Models/System/systemvideo.h \
     Models/translations.h \
-    Quazip/JlCompress.h \
-    Quazip/ioapi.h \
-    Quazip/minizip_crypt.h \
-    Quazip/quaadler32.h \
-    Quazip/quachecksum32.h \
-    Quazip/quacrc32.h \
-    Quazip/quagzipfile.h \
-    Quazip/quaziodevice.h \
-    Quazip/quazip.h \
-    Quazip/quazip_global.h \
-    Quazip/quazip_qt_compat.h \
-    Quazip/quazipdir.h \
-    Quazip/quazipfile.h \
-    Quazip/quazipfileinfo.h \
-    Quazip/quazipnewinfo.h \
-    Quazip/unzip.h \
-    Quazip/zip.h \
     Singletons/singleton.h \
     Models/project.h \
     Dialogs/dialogdatas.h \
@@ -412,7 +395,7 @@ HEADERS += \
     CustomWidgets/widgetpreviewobject3d.h \
     MapEditor/object3dcustom.h \
     CustomWidgets/widgetchart.h \
-    Dialogs/Commands/dialogcommandlabel.h
+    Dialogs/Commands/dialogcommandlabel.h \
 
 SOURCES += \
     CustomWidgets/codesyntaxhighlighter.cpp \
@@ -694,20 +677,6 @@ SOURCES += \
     Dialogs/dialogrect.cpp \
     CustomWidgets/widgettilesetdirection.cpp \
     Dialogs/dialogdebugoptions.cpp \
-    Quazip/JlCompress.cpp \
-    Quazip/qioapi.cpp \
-    Quazip/quaadler32.cpp \
-    Quazip/quachecksum32.cpp \
-    Quazip/quacrc32.cpp \
-    Quazip/quagzipfile.cpp \
-    Quazip/quaziodevice.cpp \
-    Quazip/quazip.cpp \
-    Quazip/quazipdir.cpp \
-    Quazip/quazipfile.cpp \
-    Quazip/quazipfileinfo.cpp \
-    Quazip/quazipnewinfo.cpp \
-    Quazip/unzip.c \
-    Quazip/zip.c \
     Singletons/common.cpp \
     Dialogs/dialogsongs.cpp \
     CustomWidgets/panelsongs.cpp \
@@ -762,7 +731,7 @@ SOURCES += \
     CustomWidgets/widgetpreviewobject3d.cpp \
     MapEditor/object3dcustom.cpp \
     CustomWidgets/widgetchart.cpp \
-    Dialogs/Commands/dialogcommandlabel.cpp
+    Dialogs/Commands/dialogcommandlabel.cpp \
 
 FORMS += \
     CustomWidgets/panelcolorstransition.ui \
@@ -922,14 +891,10 @@ RESOURCES += \
 
 # Seems optional
 DISTFILES += \
-    Quazip/CMakeLists.txt \
-    Quazip/QuaZipConfig.cmake.in \
-    Quazip/quazip.pc.cmakein \
     darktheme.qss \
     whitetheme.qss
 
 OTHER_FILES +=
-
 
 # Custom build paths are not included in the default clean,
 # so we must clean the target (output library) explicitly

@@ -78,6 +78,7 @@ public slots:
     void on_pluginParameterOpeningWindow();
     void on_pluginCommandOpeningWindow();
     void on_treeKeyPressed(QKeyEvent *);
+    void on_pushButtonExport_clicked();
 };
 
 #endif // DIALOGSCRIPTS_H
