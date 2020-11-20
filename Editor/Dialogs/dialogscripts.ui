@@ -111,7 +111,7 @@
            <item>
             <widget class="QTabWidget" name="tabWidgetPlugin">
              <property name="currentIndex">
-              <number>3</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="tab">
               <attribute name="title">
@@ -128,8 +128,8 @@
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>165</width>
-                    <height>53</height>
+                    <width>655</width>
+                    <height>394</height>
                    </rect>
                   </property>
                   <layout class="QGridLayout" name="gridLayout_5">
@@ -510,15 +510,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
    <class>PanelPluginDetails</class>
    <extends>QWidget</extends>
    <header>panelplugindetails.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
   </customwidget>
   <customwidget>
    <class>WidgetCode</class>

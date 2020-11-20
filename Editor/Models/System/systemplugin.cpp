@@ -344,6 +344,22 @@ bool SystemPlugin::openDialog()
     if (dialog.exec() == QDialog::Accepted)
     {
         this->setCopy(plugin);
+
+        // Also copy the edited plugin
+        if (plugin.editedPlugin() == nullptr)
+        {
+            m_editedPlugin = nullptr;
+        } else
+        {
+            if (m_editedPlugin == nullptr)
+            {
+                m_editedPlugin = reinterpret_cast<SystemPlugin *>(this
+                    ->createCopy());
+            } else
+            {
+                m_editedPlugin->setCopy(*this);
+            }
+        }
         return true;
     }
     return false;

@@ -143,6 +143,12 @@
       <string>Commands</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
+      <property name="topMargin">
+       <number>15</number>
+      </property>
+      <property name="bottomMargin">
+       <number>15</number>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="labelCommands">
         <property name="text">

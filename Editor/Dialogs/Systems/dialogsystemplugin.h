@@ -38,18 +38,23 @@ public:
     void initialize();
 
 protected:
+    void translate();
+
     virtual void accept();
 
 private:
     Ui::DialogSystemPlugin *ui;
     SystemPlugin& m_plugin;
     QString m_previousName;
+    PluginTypeKind m_previousKind;
+    bool m_isImportPluginLoaded;
 
 public slots:
     void on_radioButtonEmpty_toggled(bool checked);
     void on_radioButtonLocal_toggled(bool checked);
     void on_radioButtonOnline_toggled(bool checked);
     void on_lineEditName_textChanged(const QString &text);
+    void on_pushButtonImport_clicked();
 };
 
 #endif // DIALOGSYSTEMPLUGIN_H
