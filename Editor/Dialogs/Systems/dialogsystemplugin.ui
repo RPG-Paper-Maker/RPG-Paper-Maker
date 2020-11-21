@@ -241,7 +241,7 @@
              <item>
               <layout class="QVBoxLayout" name="verticalLayout_3">
                <item>
-                <widget class="QTreeView" name="treeViewOnline">
+                <widget class="WidgetSuperTree" name="treeViewOnline">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -257,6 +257,9 @@
                    <height>16777215</height>
                   </size>
                  </property>
+                 <attribute name="headerVisible">
+                  <bool>false</bool>
+                 </attribute>
                 </widget>
                </item>
                <item>
@@ -274,7 +277,7 @@
              <item>
               <widget class="QScrollArea" name="scrollArea">
                <property name="enabled">
-                <bool>true</bool>
+                <bool>false</bool>
                </property>
                <property name="widgetResizable">
                 <bool>true</bool>
@@ -328,6 +331,11 @@
    <extends>QWidget</extends>
    <header>panelplugindetails.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

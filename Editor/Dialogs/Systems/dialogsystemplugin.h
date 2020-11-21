@@ -36,6 +36,7 @@ public:
     ~DialogSystemPlugin();
 
     void initialize();
+    void refreshOnline();
 
 protected:
     void translate();
@@ -48,6 +49,7 @@ private:
     QString m_previousName;
     PluginTypeKind m_previousKind;
     bool m_isImportPluginLoaded;
+    QStandardItemModel *m_onlineList;
 
 public slots:
     void on_radioButtonEmpty_toggled(bool checked);
@@ -55,6 +57,9 @@ public slots:
     void on_radioButtonOnline_toggled(bool checked);
     void on_lineEditName_textChanged(const QString &text);
     void on_pushButtonImport_clicked();
+    void on_pushButtonRefresh_clicked();
+    void on_comboBoxCategory_currentIndexChanged(int index);
+    void on_pluginSelected(QModelIndex, QModelIndex);
 };
 
 #endif // DIALOGSYSTEMPLUGIN_H

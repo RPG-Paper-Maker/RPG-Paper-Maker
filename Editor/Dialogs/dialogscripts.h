@@ -72,6 +72,7 @@ public slots:
     void on_lineEditVersion_textEdited(const QString &text);
     void on_lineEditWebsite_textEdited(const QString &text);
     void on_lineEditTutorial_textEdited(const QString &text);
+    void on_comboBoxCategory_currentIndexChanged(int index);
     void on_pluginDefaultParametersUpdated();
     void on_pluginParametersUpdated();
     void on_pluginCommandsUpdated();

@@ -28,6 +28,10 @@
 class SystemPlugin : public SystemScript
 {
 public:
+    static const QString JSON_CATEGORY_BATTLE;
+    static const QString JSON_CATEGORY_MENUS;
+    static const QString JSON_CATEGORY_MAP;
+    static const QString JSON_CATEGORY_OTHERS;
     static const QString JSON_IS_ON;
     static const QString JSON_TYPE;
     static const QString JSON_CATEGORY;
@@ -71,6 +75,7 @@ public:
     bool editChanged() const;
     bool defaultParametersChanged() const;
     SystemPlugin * editedPlugin() const;
+    bool isOnline() const;
     void setIsON(bool isON);
     void setType(PluginTypeKind type);
     void setCategory(PluginCategoryKind category);
@@ -81,7 +86,9 @@ public:
     void setTutorial(QString tutorial);
     void setEditChanged(bool editChanged);
     void setDefaultParametersChanged(bool defaultParametersChanged);
+    void setIsOnline(bool isOnline);
 
+    QString getJSONCategory() const;
     QString getFolderPath() const;
     QString getJSONPath() const;
     bool checkPluginName(QString previousName) const;
@@ -118,6 +125,7 @@ protected:
     bool m_editChanged;
     bool m_defaultParametersChanged;
     SystemPlugin *m_editedPlugin;
+    bool m_isOnline;
 };
 
 Q_DECLARE_METATYPE(SystemPlugin)

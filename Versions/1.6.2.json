@@ -27,7 +27,23 @@
         "Improve semi transparent elements issues according to camera angle",
         "Walls: can't draw in the right and bottom limits of a map",
         "Battle maps duplication",
-        "Crash sometimes when switching walls menu to 3D objects menu"
+        "Crash sometimes when switching walls menu to 3D objects menu",
+
+        "Objects random moves: no turn when camera turns + sometimes keep blocking in other map objects",
+        "Title screen picture problem when changing window resolution",
+        "Characters no longer learn skills as they level up",
+        "Duplicate issues with recent projects list (+add a clear button)",
+        "Item description not wrapped ingame",
+        "Flashing the screen will only flash white, regardless of color chosen",
+        "Crash with models inheritance",
+        "The Defense and Attacked animations (rows 6 and 7) of battle sprites don't run",
+        "Crash Systems / datas > Cancel > Ok",
+        "Correct custom 3D objects shapes: 1 meter = 1 square instead of 1 meter = 1 pixel",
+        "Mountains issue: sometimes going down and crossing the floor",
+        "Long wait if offline when running engine and in about",
+        "Black menu bar in white theme (Windows)",
+        "[NEED VERIFICATION] Miss indicator missing?",
+        "Impossible to rename window skins"
 	],
     "finished": [
         0,
@@ -53,6 +69,21 @@
         2,
         2,
         2,
-        2
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
     ]
 }

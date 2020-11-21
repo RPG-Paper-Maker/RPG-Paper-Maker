@@ -17,6 +17,10 @@
 #include "common.h"
 #include "rpm.h"
 
+const QString SystemPlugin::JSON_CATEGORY_BATTLE = "battle";
+const QString SystemPlugin::JSON_CATEGORY_MENUS = "menus";
+const QString SystemPlugin::JSON_CATEGORY_MAP = "map";
+const QString SystemPlugin::JSON_CATEGORY_OTHERS = "others";
 const QString SystemPlugin::JSON_IS_ON = "io";
 const QString SystemPlugin::JSON_TYPE = "t";
 const QString SystemPlugin::JSON_CATEGORY = "c";
@@ -68,7 +72,8 @@ SystemPlugin::SystemPlugin(int i, QString n, bool io, PluginTypeKind t,
     m_commands(new QStandardItemModel),
     m_editChanged(false),
     m_defaultParametersChanged(false),
-    m_editedPlugin(nullptr)
+    m_editedPlugin(nullptr),
+    m_isOnline(false)
 {
     this->initializeHeaders();
 }
@@ -151,6 +156,11 @@ SystemPlugin * SystemPlugin::editedPlugin() const
     return m_editedPlugin;
 }
 
+bool SystemPlugin::isOnline() const
+{
+    return m_isOnline;
+}
+
 void SystemPlugin::setIsON(bool isON)
 {
     m_isON = isON;
@@ -201,10 +211,33 @@ void SystemPlugin::setDefaultParametersChanged(bool parametersChanged)
     m_defaultParametersChanged = parametersChanged;
 }
 
+void SystemPlugin::setIsOnline(bool isOnline)
+{
+    m_isOnline = isOnline;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+QString SystemPlugin::getJSONCategory() const
+{
+    switch (m_category)
+    {
+    case PluginCategoryKind::Battle:
+        return JSON_CATEGORY_BATTLE;
+    case PluginCategoryKind::Menus:
+        return JSON_CATEGORY_MENUS;
+    case PluginCategoryKind::Map:
+        return JSON_CATEGORY_MAP;
+    case PluginCategoryKind::Others:
+        return JSON_CATEGORY_OTHERS;
+    }
+    return "";
+}
+
 // -------------------------------------------------------
 
 QString SystemPlugin::getFolderPath() const
@@ -406,10 +439,13 @@ QList<QStandardItem*> SystemPlugin::getModelRow() const
     QStandardItem* item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setCheckable(true);
-    if (m_isON)
+    if (!m_isOnline)
     {
-        item->setCheckState(Qt::Checked);
+        item->setCheckable(true);
+        if (m_isON)
+        {
+            item->setCheckState(Qt::Checked);
+        }
     }
     item->setText(this->toStringName());
     row.append(item);
