@@ -50,6 +50,9 @@ private:
     PluginTypeKind m_previousKind;
     bool m_isImportPluginLoaded;
     QStandardItemModel *m_onlineList;
+    bool m_isOnlinePluginLoaded;
+    bool m_isSettingprogramatically;
+    bool m_isFirstCheckOnline;
 
 public slots:
     void on_radioButtonEmpty_toggled(bool checked);

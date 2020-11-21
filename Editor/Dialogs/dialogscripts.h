@@ -56,6 +56,7 @@ private:
     CodeSyntaxHighlighter *m_highlighterSystem;
     WidgetCodeLineNumberArea *m_widgetLineNumberPlugin;
     CodeSyntaxHighlighter *m_highlighterPlugin;
+    bool m_isSettingprogramatically;
 
 public slots:
     void on_scriptSystemSelected(QModelIndex, QModelIndex);

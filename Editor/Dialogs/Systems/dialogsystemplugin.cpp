@@ -36,7 +36,10 @@ DialogSystemPlugin::DialogSystemPlugin(SystemPlugin &plugin, QWidget *parent) :
     m_previousName(plugin.name()),
     m_previousKind(plugin.type()),
     m_isImportPluginLoaded(false),
-    m_onlineList(nullptr)
+    m_onlineList(new QStandardItemModel),
+    m_isOnlinePluginLoaded(false),
+    m_isSettingprogramatically(false),
+    m_isFirstCheckOnline(true)
 {
     ui->setupUi(this);
 
@@ -49,10 +52,7 @@ DialogSystemPlugin::~DialogSystemPlugin()
 {
     delete ui;
 
-    if (m_onlineList != nullptr)
-    {
-        SuperListItem::deleteModel(m_onlineList, true);
-    }
+    SuperListItem::deleteModel(m_onlineList, true);
 }
 
 // -------------------------------------------------------
@@ -71,8 +71,10 @@ void DialogSystemPlugin::initialize()
 
     // Some widgets config
     PluginCategoryKind category = m_plugin.category();
+    m_isSettingprogramatically = true;
     ui->comboBoxCategory->addItems(RPM::ENUM_TO_STRING_PLUGIN_CATEGORY);
     ui->comboBoxCategory->setCurrentIndex(static_cast<int>(category));
+    m_isSettingprogramatically = false;
     ui->scrollArea->setVisible(false);
     ui->treeViewOnline->setCanMove(false);
     ui->treeViewOnline->setCanBeControled(false);
@@ -85,6 +87,7 @@ void DialogSystemPlugin::initialize()
 
     // Initialize according to plugin infos
     QString name = m_plugin.name();
+    SuperListItem *super;
     switch (m_plugin.type())
     {
     case PluginTypeKind::Empty:
@@ -97,6 +100,17 @@ void DialogSystemPlugin::initialize()
         break;
     case PluginTypeKind::Online:
         ui->radioButtonOnline->setChecked(true);
+        for (int i = 0, l = m_onlineList->invisibleRootItem()->rowCount(); i < l
+            ; i++)
+        {
+             super = SuperListItem::getItemModelAt(m_onlineList, i);
+             if (super->name() == name)
+             {
+                 QModelIndex index = ui->treeViewOnline->getModel()->index(i, 0);
+                 ui->treeViewOnline->setCurrentIndex(index);
+                 this->on_pluginSelected(index, index);
+             }
+        }
         break;
     }
 }
@@ -174,6 +188,14 @@ void DialogSystemPlugin::accept()
         ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_PLUGINS_DIR);
     QDir dirPlugins(pathPlugins);
 
+    // If online, check if a plugin is selected
+    if (m_plugin.type() == PluginTypeKind::Online && !m_isOnlinePluginLoaded)
+    {
+        QMessageBox::information(nullptr, RPM::translate(Translations
+            ::INFORMATION), "You need to select a plugin to import" + RPM
+            ::DOT);
+    }
+
     // Check plugin name
     if (!m_plugin.checkPluginName(m_previousName))
     {
@@ -201,8 +223,6 @@ void DialogSystemPlugin::accept()
     {
     case PluginTypeKind::Empty:
     {
-        m_plugin.setDefault();
-        m_plugin.setType(PluginTypeKind::Empty);
         dirPlugins.mkdir(m_plugin.name());
         path = m_plugin.getFolderPath();
         QJsonObject json;
@@ -246,8 +266,22 @@ void DialogSystemPlugin::accept()
         break;
     }
     case PluginTypeKind::Online:
+        dirPlugins.mkdir(m_plugin.name());
+        path = m_plugin.getFolderPath();
+        QJsonObject json;
+        m_plugin.write(json);
+        Common::writeOtherJSON(Common::pathCombine(path, SystemPlugin
+            ::NAME_JSON), json);
+        QFile file(Common::pathCombine(path, SystemPlugin::NAME_CODE));
+        file.open(QIODevice::ReadWrite);
+        file.write(m_plugin.currentCode().toUtf8());
+        file.close();
         break;
     }
+
+    // Erase changes
+    m_plugin.setChanged(false);
+    m_plugin.setEditChanged(false);
 
     // Accept if everything is ok
     QDialog::accept();
@@ -300,11 +334,11 @@ void DialogSystemPlugin::on_radioButtonOnline_toggled(bool checked)
     ui->panelPluginDetails->setEnabled(checked);
 
     // First search
-    if (checked && m_onlineList == nullptr)
+    if (checked && m_isFirstCheckOnline)
     {
-        m_onlineList = new QStandardItemModel;
         this->refreshOnline();
     }
+    m_isFirstCheckOnline = false;
 }
 
 // -------------------------------------------------------
@@ -342,7 +376,10 @@ void DialogSystemPlugin::on_pushButtonRefresh_clicked()
 void DialogSystemPlugin::on_comboBoxCategory_currentIndexChanged(int index)
 {
     m_plugin.setCategory(static_cast<PluginCategoryKind>(index));
-    this->refreshOnline();
+    if (!m_isSettingprogramatically)
+    {
+        this->refreshOnline();
+    }
 }
 
 // -------------------------------------------------------
@@ -354,9 +391,14 @@ void DialogSystemPlugin::on_pluginSelected(QModelIndex, QModelIndex)
     if (plugin == nullptr)
     {
         ui->scrollArea->setVisible(false);
+        m_isOnlinePluginLoaded = false;
     } else
     {
         ui->scrollArea->setVisible(true);
         ui->panelPluginDetails->initialize(plugin);
+        m_plugin.setCopy(*plugin);
+        m_plugin.setType(PluginTypeKind::Online);
+        m_plugin.setCurrentCode(plugin->currentCode());
+        m_isOnlinePluginLoaded = true;
     }
 }

@@ -30,10 +30,12 @@
 
 DialogScripts::DialogScripts(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogScripts)
+    ui(new Ui::DialogScripts),
+    m_isSettingprogramatically(false)
 {
     ui->setupUi(this);
 
+    ui->comboBoxCategory->addItems(RPM::ENUM_TO_STRING_PLUGIN_CATEGORY);
     m_widgetLineNumber = new WidgetCodeLineNumberArea(ui->widgetCodeSystem);
     m_highlighterSystem = new CodeSyntaxHighlighter(ui->widgetCodeSystem
         ->document());
@@ -63,7 +65,6 @@ DialogScripts::DialogScripts(QWidget *parent) :
         SLOT(on_treeKeyPressed(QKeyEvent *)));
     connect(ui->panelPluginDetails->treeViewParameters(), SIGNAL(keyPressed(
         QKeyEvent *)), this, SLOT(on_treeKeyPressed(QKeyEvent *)));
-    ui->comboBoxCategory->addItems(RPM::ENUM_TO_STRING_PLUGIN_CATEGORY);
 
     // Export text
     ui->labelExport1->setText("<h2>Export this plugin localy and share it</h2>");
@@ -352,8 +353,10 @@ void DialogScripts::on_scriptPluginSelected(QModelIndex, QModelIndex)
         ui->lineEditVersion->setText(plugin->editedPlugin()->version());
         ui->lineEditWebsite->setText(plugin->editedPlugin()->website());
         ui->lineEditTutorial->setText(plugin->editedPlugin()->tutorial());
+        m_isSettingprogramatically = true;
         ui->comboBoxCategory->setCurrentIndex(static_cast<int>(plugin
             ->editedPlugin()->category()));
+        m_isSettingprogramatically = false;
         ui->treeViewEditParameter->initializeModel(plugin->editedPlugin()
             ->defaultParameters());
         QModelIndex index = ui->treeViewEditParameter->getModel()->index(0, 0);
@@ -377,6 +380,9 @@ void DialogScripts::on_scriptPluginSelected(QModelIndex, QModelIndex)
 void DialogScripts::on_pluginListUpdated()
 {
     RPM::get()->project()->writeScriptsDatas();
+    this->updatePluginDetailsSave();
+    this->updatePluginEditSave();
+    this->updatePluginCodeSave();
 }
 
 // -------------------------------------------------------
@@ -496,6 +502,11 @@ void DialogScripts::on_comboBoxCategory_currentIndexChanged(int index)
         {
             plugin->editedPlugin()->setCategory(static_cast<PluginCategoryKind>(
                 index));
+            if (!m_isSettingprogramatically)
+            {
+                plugin->setEditChanged(true);
+                this->updatePluginEditSave();
+            }
         }
     }
 }
