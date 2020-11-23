@@ -46,7 +46,7 @@ public:
     void updateAbsoluteAllNodesString();
 
     static int getNewId(QStandardItemModel* model, int offset = 1);
-    QStandardItem* getSelected() const;
+    virtual QStandardItem* getSelected() const;
     void addNewItem(SuperListItem* super, QStandardItem* root, int index);
     void updateAllModelRow();
     void updateKeyboardUpDown(int offset);
@@ -59,7 +59,6 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent * event);
     virtual void dropEvent(QDropEvent *event);
 
-private:
     QStandardItemModel* p_model;
     ContextMenuList* m_contextMenuCommonCommands;
     SuperListItem* m_newItemInstance;
@@ -81,7 +80,7 @@ private:
     virtual void deleteItem(QStandardItem *selected);
     virtual void updateAllNodesString(QStandardItem* item);
 
-private slots:
+public slots:
     void onSelectionChanged(QModelIndex index, QModelIndex);
     void showContextMenu(const QPoint & p);
     void contextNew();

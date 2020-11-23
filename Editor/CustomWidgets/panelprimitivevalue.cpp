@@ -1315,6 +1315,8 @@ void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index) {
     case PrimitiveValueKind::CustomList:
         showCustomStructure(true); break;
     }
+
+    emit kindUpdated(kind);
 }
 
 // -------------------------------------------------------

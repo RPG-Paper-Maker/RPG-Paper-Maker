@@ -279,10 +279,6 @@ void DialogSystemPlugin::accept()
         break;
     }
 
-    // Erase changes
-    m_plugin.setChanged(false);
-    m_plugin.setEditChanged(false);
-
     // Accept if everything is ok
     QDialog::accept();
 }

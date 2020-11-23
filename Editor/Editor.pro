@@ -36,6 +36,7 @@ HEADERS += \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgetsliderprogression.h \
     CustomWidgets/widgettilesettexture.h \
+    CustomWidgets/widgettreestructure.h \
     CustomWidgets/widgetvideo.h \
     Dialogs/Animations/dialoganimationclearframes.h \
     Dialogs/Animations/dialoganimationcopyframes.h \
@@ -414,6 +415,7 @@ SOURCES += \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgetsliderprogression.cpp \
     CustomWidgets/widgettilesettexture.cpp \
+    CustomWidgets/widgettreestructure.cpp \
     CustomWidgets/widgetvideo.cpp \
     Dialogs/Animations/dialoganimationclearframes.cpp \
     Dialogs/Animations/dialoganimationcopyframes.cpp \

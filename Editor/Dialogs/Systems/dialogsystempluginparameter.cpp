@@ -47,6 +47,12 @@ DialogSystemPluginParameter::~DialogSystemPluginParameter()
 
 void DialogSystemPluginParameter::initialize()
 {
+    // Keep space when hiding widgets
+    QSizePolicy sp_retain;
+    sp_retain = ui->treeView->sizePolicy();
+    sp_retain.setRetainSizeWhenHidden(true);
+    ui->treeView->setSizePolicy(sp_retain);
+
     if (m_parameter.isDefault())
     {
         ui->lineEditName->setText(m_parameter.name());
@@ -60,31 +66,14 @@ void DialogSystemPluginParameter::initialize()
         ui->lineEditName->hide();
         ui->lineEditDescription->hide();
     }
-    ui->panelPrimitiveDefaultValue->initializeAllAndUpdate(m_parameter
-        .defaultValue());
     connect(ui->panelPrimitiveDefaultValue->widgetCustomStructure(), SIGNAL(
         windowClosed()), this, SLOT(on_widgetCustomStructureListClosed()));
     connect(ui->panelPrimitiveDefaultValue->widgetCustomList(), SIGNAL(
         windowClosed()), this, SLOT(on_widgetCustomStructureListClosed()));
-    ui->treeView->setIndentation(15);
-    QStandardItemModel *model = new QStandardItemModel;
-    ui->treeView->initializeNewItemInstance(new SystemCustomStructureElement(0, "", false));
-    ui->treeView->initializeModel(model);
-    QStandardItem *item = new QStandardItem("{");
-    model->appendRow(item);
-    QStandardItem *item2 = new QStandardItem("\"k\":");
-    item->appendRow(item2);
-    QStandardItem *item3 = new QStandardItem("[");
-    item2->appendRow(item3);
-    QStandardItem *sitem = new QStandardItem("3");
-    sitem->setData(QVariant::fromValue(reinterpret_cast<quintptr>(new SystemCustomStructureElement)));
-    item3->appendRow(sitem);
-    item3->appendRow(new QStandardItem(">"));
-    item2->appendRow(new QStandardItem("]"));
-    item->appendRow(new QStandardItem(">"));
-    model->appendRow(new QStandardItem("}"));
-
-    ui->treeView->expandAll();
+    connect(ui->panelPrimitiveDefaultValue, SIGNAL(kindUpdated(
+        PrimitiveValueKind)), this, SLOT(on_kindUpdated(PrimitiveValueKind)));
+    ui->panelPrimitiveDefaultValue->initializeAllAndUpdate(m_parameter
+        .defaultValue());
 }
 
 // -------------------------------------------------------
@@ -143,4 +132,21 @@ void DialogSystemPluginParameter::on_lineEditDescription_textEdited(const
 void DialogSystemPluginParameter::on_widgetCustomStructureListClosed()
 {
     RPM::get()->setSelectedList(m_completeList);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemPluginParameter::on_kindUpdated(PrimitiveValueKind kind)
+{
+    switch (kind)
+    {
+    case PrimitiveValueKind::CustomStructure:
+    case PrimitiveValueKind::CustomList:
+        ui->treeView->setVisible(true);
+        ui->treeView->initializeNodes(ui->panelPrimitiveDefaultValue->model());
+        break;
+    default:
+        ui->treeView->setVisible(false);
+        break;
+    }
 }

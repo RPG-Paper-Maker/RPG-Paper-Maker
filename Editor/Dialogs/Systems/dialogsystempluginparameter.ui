@@ -108,7 +108,7 @@
         </layout>
        </item>
        <item row="3" column="0" colspan="2">
-        <widget class="WidgetSuperTree" name="treeView">
+        <widget class="WidgetTreeStructure" name="treeView">
          <attribute name="headerVisible">
           <bool>false</bool>
          </attribute>
@@ -138,9 +138,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WidgetSuperTree</class>
+   <class>WidgetTreeStructure</class>
    <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
+   <header>widgettreestructure.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -141,6 +141,7 @@ private:
 
 signals:
     void numberUpdated(int i);
+    void kindUpdated(PrimitiveValueKind kind);
 
 private slots:
     void on_comboBoxChoiceCurrentIndexChanged(int index);

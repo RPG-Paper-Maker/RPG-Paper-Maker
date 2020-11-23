@@ -393,6 +393,8 @@ bool SystemPlugin::openDialog()
                 m_editedPlugin->setCopy(*this);
             }
         }
+        m_changed = false;
+        m_editChanged = false;
         return true;
     }
     return false;
