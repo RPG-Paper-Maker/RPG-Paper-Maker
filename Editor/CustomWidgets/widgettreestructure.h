@@ -45,6 +45,10 @@ public:
         *custom);
     void initializeNodesElement(QStandardItem *parent, PrimitiveValue *value,
         SystemCustomStructureElement *element = nullptr);
+    void selectChildren(QStandardItem *item, QItemSelectionModel::SelectionFlag
+        flag = QItemSelectionModel::Select);
+    void selectChildrenOnly(QStandardItem *item, QItemSelectionModel
+        ::SelectionFlag flag = QItemSelectionModel::Select);
 
     virtual QStandardItem * getSelected() const;
 
@@ -52,6 +56,10 @@ protected:
     PrimitiveValue *m_prim;
 
     virtual void newItem(QStandardItem *selected);
+    virtual void mousePressEvent(QMouseEvent *event);
+
+public slots:
+    void onSelectionChanged(QModelIndex index, QModelIndex indexBefore);
 };
 
 #endif // WIDGETTREESTRUCTURE_H
