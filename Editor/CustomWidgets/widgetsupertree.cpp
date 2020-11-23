@@ -287,8 +287,8 @@ int WidgetSuperTree::getNewId(QStandardItemModel *model, int offset){
 
 // -------------------------------------------------------
 
-void WidgetSuperTree::addNewItem(SuperListItem* super, QStandardItem *root,
-                                 int index)
+QStandardItem * WidgetSuperTree::addNewItem(SuperListItem* super, QStandardItem
+    *root, int index)
 {
     if (m_updateId) {
         super->setId(getNewId(p_model));
@@ -299,6 +299,7 @@ void WidgetSuperTree::addNewItem(SuperListItem* super, QStandardItem *root,
     setCurrentIndex(modelIndex);
     emit needsUpdateJson(super);
     emit modelUpdated();
+    return row.at(0);
 }
 
 // -------------------------------------------------------

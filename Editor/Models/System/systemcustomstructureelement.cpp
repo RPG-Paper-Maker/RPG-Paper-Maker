@@ -18,6 +18,8 @@ const QString SystemCustomStructureElement::JSON_DESCRIPTION = "d";
 const QString SystemCustomStructureElement::JSON_VALUE= "v";
 const bool SystemCustomStructureElement::DEFAULT_IS_PROPERTY = true;
 const QString SystemCustomStructureElement::DEFAULT_DESCRIPTION = "";
+const QString SystemCustomStructureElement::COLOR_CUSTOM = "#9932CC";
+const QString SystemCustomStructureElement::COLOR_KEY = "#FF8C00";
 
 // -------------------------------------------------------
 //
@@ -81,13 +83,50 @@ void SystemCustomStructureElement::setValue(PrimitiveValue *value)
 
 // -------------------------------------------------------
 //
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+QString SystemCustomStructureElement::getStringEnd() const
+{
+    switch (m_value->kind())
+    {
+    case PrimitiveValueKind::CustomStructure:
+        return "> <strong style=\"color:" + COLOR_CUSTOM + "\">}</strong>";
+    case PrimitiveValueKind::CustomList:
+        return "> <strong style=\"color:" + COLOR_CUSTOM + "\">}</strong>";
+    default:
+        return "";
+    }
+}
+
+// -------------------------------------------------------
+//
 //  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
 
 QString SystemCustomStructureElement::toString() const
 {
-    return ">" + this->toStringName();
+    QString str = "> ";
+    if (m_isProperty && !p_name.isEmpty())
+    {
+        str += "<strong style=\"color:" + COLOR_KEY + "\">\"" + p_name +
+            "\"</strong>" + RPM::COLON + RPM::SPACE;
+    }
+    switch (m_value->kind())
+    {
+    case PrimitiveValueKind::CustomStructure:
+        str += "<strong style=\"color:" + COLOR_CUSTOM + "\">{</strong>";
+        break;
+    case PrimitiveValueKind::CustomList:
+        str += "<strong style=\"color:" + COLOR_CUSTOM + "\">[</strong>";
+        break;
+    default:
+        str += m_value->toString();
+        break;
+    }
+    return str;
 }
 
 // -------------------------------------------------------

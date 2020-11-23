@@ -11,6 +11,7 @@
 
 #include <QApplication>
 #include "widgettreestructure.h"
+#include "htmldelegate.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -27,8 +28,10 @@ WidgetTreeStructure::WidgetTreeStructure(QWidget *parent) :
     this->setMouseTracking(true);
     this->setWordWrap(true);
     this->setHeaderHidden(true);
-    this->setIndentation(15);
+    this->setIndentation(25);
     this->setDragDropMode(QAbstractItemView::NoDragDrop);
+    HTMLDelegate* delegate = new HTMLDelegate();
+    this->setItemDelegate(delegate);
 }
 
 WidgetTreeStructure::~WidgetTreeStructure()
@@ -188,23 +191,21 @@ void WidgetTreeStructure::initializeNodesElement(QStandardItem *parent,
     case PrimitiveValueKind::CustomStructure:
         row = element->getModelRow();
         item = row.at(0);
-        item->setText("> {");
         parent->appendRow(item);
         this->initializeNodesCustom(item, element->value()->customStructure());
         row = element->getModelRow();
         item = row.at(0);
-        item->setText("> }");
+        item->setText(element->getStringEnd());
         parent->appendRow(item);
         break;
     case PrimitiveValueKind::CustomList:
         row = element->getModelRow();
         item = row.at(0);
-        item->setText("> [");
         parent->appendRow(item);
         this->initializeNodesCustom(item, element->value()->customList());
         row = element->getModelRow();
         item = row.at(0);
-        item->setText("> ]");
+        item->setText(element->getStringEnd());
         parent->appendRow(item);
         break;
     default:
@@ -246,8 +247,7 @@ void WidgetTreeStructure::selectChildren(QStandardItem *item,
         ::CustomStructure || element->value()->kind() == PrimitiveValueKind
         ::CustomList))
     {
-        st = root->child(j + ((item->text() == "> }" || item->text() == "> ]") ?
-            -1 : 1));
+        st = root->child(j + ((item->text() == element->getStringEnd()) ? -1 : 1));
         sm->select(st->index(), flag);
         selectChildrenOnly(st, flag);
     }
@@ -356,11 +356,9 @@ void WidgetTreeStructure::updateKeyboardUpDown(int offset)
 
 void WidgetTreeStructure::newItem(QStandardItem *selected)
 {
-    bool isProperty = true;
-    if (selected->parent() == this->first())
-    {
-        isProperty = m_prim->kind() == PrimitiveValueKind::CustomStructure;
-    }
+    bool isProperty = reinterpret_cast<SystemCustomStructureElement *>(selected
+        ->parent()->data().value<quintptr>())->value()->kind() ==
+        PrimitiveValueKind::CustomStructure;
     SystemCustomStructureElement *element = new SystemCustomStructureElement(-1,
         "", isProperty);
     QStandardItemModel *parentModel = this->getParentModel(selected, element);
@@ -370,7 +368,16 @@ void WidgetTreeStructure::newItem(QStandardItem *selected)
     {
         QStandardItem *root = this->getRootOfItem(selected);
         int index = selected->row();
-        this->addNewItem(element, root, index);
+        QStandardItem *item = this->addNewItem(element, root, index);
+        if (element->value()->kind() == PrimitiveValueKind::CustomStructure ||
+            element->value()->kind() == PrimitiveValueKind::CustomList)
+        {
+            QStandardItem *endItem = element->getModelRow().at(0);
+            endItem->setText(element->getStringEnd());
+            root->insertRow(index + 1, endItem);
+            item->appendRow(new QStandardItem(">"));
+            this->expand(item->index());
+        }
         parentModel->appendRow(element->getModelRow());
     } else
     {
@@ -510,6 +517,10 @@ void WidgetTreeStructure::mousePressEvent(QMouseEvent *event)
     this->repaint();
 }
 
+// -------------------------------------------------------
+//
+//  SLOTS
+//
 // -------------------------------------------------------
 
 void WidgetTreeStructure::onSelectionChanged(QModelIndex index, QModelIndex

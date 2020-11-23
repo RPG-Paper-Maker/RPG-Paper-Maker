@@ -397,6 +397,7 @@ HEADERS += \
     MapEditor/object3dcustom.h \
     CustomWidgets/widgetchart.h \
     Dialogs/Commands/dialogcommandlabel.h \
+    Utils/htmldelegate.h
 
 SOURCES += \
     CustomWidgets/codesyntaxhighlighter.cpp \
@@ -734,6 +735,7 @@ SOURCES += \
     MapEditor/object3dcustom.cpp \
     CustomWidgets/widgetchart.cpp \
     Dialogs/Commands/dialogcommandlabel.cpp \
+    Utils/htmldelegate.cpp
 
 FORMS += \
     CustomWidgets/panelcolorstransition.ui \

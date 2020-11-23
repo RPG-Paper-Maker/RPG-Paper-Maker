@@ -80,4 +80,5 @@ INCLUDEPATH += \
     $$EDITOR_PATH/Models/GameDatas \
     $$EDITOR_PATH/Models/System \
     $$EDITOR_PATH/Enums \
-    $$EDITOR_PATH/MathUtils
+    $$EDITOR_PATH/MathUtils \
+    $$EDITOR_PATH/Utils

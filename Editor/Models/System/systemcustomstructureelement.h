@@ -32,6 +32,8 @@ public:
     static const QString JSON_VALUE;
     static const bool DEFAULT_IS_PROPERTY;
     static const QString DEFAULT_DESCRIPTION;
+    static const QString COLOR_CUSTOM;
+    static const QString COLOR_KEY;
 
     SystemCustomStructureElement();
     SystemCustomStructureElement(int i, QString n, bool ip = DEFAULT_IS_PROPERTY
@@ -43,6 +45,8 @@ public:
     void setIsProperty(bool isProperty);
     void setDescription(QString description);
     void setValue(PrimitiveValue *value);
+
+    QString getStringEnd() const;
 
     virtual QString toString() const;
     virtual QString toStringName() const;

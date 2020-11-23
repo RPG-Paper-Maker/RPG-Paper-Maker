@@ -47,7 +47,7 @@ public:
 
     static int getNewId(QStandardItemModel* model, int offset = 1);
     virtual QStandardItem* getSelected() const;
-    void addNewItem(SuperListItem* super, QStandardItem* root, int index);
+    QStandardItem *addNewItem(SuperListItem* super, QStandardItem* root, int index);
     void updateAllModelRow();
     virtual void updateKeyboardUpDown(int offset);
 
