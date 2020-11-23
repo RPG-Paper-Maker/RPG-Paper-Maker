@@ -45,14 +45,12 @@ private:
     Ui::DialogSystemPluginParameter *ui;
     SystemPluginParameter &m_parameter;
     QString m_previousName;
-    QStandardItemModel *m_completeList;
 
     void translate();
 
 public slots:
     void on_lineEditName_textEdited(const QString &text);
     void on_lineEditDescription_textEdited(const QString &text);
-    void on_widgetCustomStructureListClosed();
     void on_kindUpdated(PrimitiveValueKind kind);
 };
 

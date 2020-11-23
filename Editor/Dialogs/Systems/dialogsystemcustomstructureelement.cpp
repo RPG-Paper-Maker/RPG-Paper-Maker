@@ -25,8 +25,7 @@ DialogSystemCustomStructureElement::DialogSystemCustomStructureElement(
     QDialog(parent),
     ui(new Ui::DialogSystemCustomStructureElement),
     m_element(element),
-    m_previousName(element.name()),
-    m_completeList(RPM::get()->selectedList())
+    m_previousName(element.name())
 {
     ui->setupUi(this);
 
@@ -60,10 +59,6 @@ void DialogSystemCustomStructureElement::initialize()
         ui->lineEditDescription->hide();
     }
     ui->panelPrimitiveValue->initializeAllAndUpdate(m_element.value());
-    connect(ui->panelPrimitiveValue->widgetCustomStructure(), SIGNAL(
-        windowClosed()), this, SLOT(on_widgetCustomStructureListClosed()));
-    connect(ui->panelPrimitiveValue->widgetCustomList(), SIGNAL(
-        windowClosed()), this, SLOT(on_widgetCustomStructureListClosed()));
 }
 
 // -------------------------------------------------------
@@ -118,11 +113,4 @@ void DialogSystemCustomStructureElement::on_lineEditDescription_textEdited(const
     QString &text)
 {
     m_element.setDescription(text);
-}
-
-// -------------------------------------------------------
-
-void DialogSystemCustomStructureElement::on_widgetCustomStructureListClosed()
-{
-    RPM::get()->setSelectedList(m_completeList);
 }

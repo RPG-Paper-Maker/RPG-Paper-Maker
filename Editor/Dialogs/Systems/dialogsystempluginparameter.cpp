@@ -26,8 +26,7 @@ DialogSystemPluginParameter::DialogSystemPluginParameter(SystemPluginParameter
     QDialog(parent),
     ui(new Ui::DialogSystemPluginParameter),
     m_parameter(parameter),
-    m_previousName(parameter.name()),
-    m_completeList(RPM::get()->selectedList())
+    m_previousName(parameter.name())
 {
     ui->setupUi(this);
 
@@ -66,15 +65,12 @@ void DialogSystemPluginParameter::initialize()
         ui->lineEditName->hide();
         ui->lineEditDescription->hide();
     }
-    connect(ui->panelPrimitiveDefaultValue->widgetCustomStructure(), SIGNAL(
-        windowClosed()), this, SLOT(on_widgetCustomStructureListClosed()));
-    connect(ui->panelPrimitiveDefaultValue->widgetCustomList(), SIGNAL(
-        windowClosed()), this, SLOT(on_widgetCustomStructureListClosed()));
     connect(ui->panelPrimitiveDefaultValue, SIGNAL(kindUpdated(
         PrimitiveValueKind)), this, SLOT(on_kindUpdated(PrimitiveValueKind)));
     ui->panelPrimitiveDefaultValue->initializeAllAndUpdate(m_parameter
         .defaultValue());
     this->on_kindUpdated(ui->panelPrimitiveDefaultValue->model()->kind());
+    ui->lineEditName->setFocus();
 }
 
 // -------------------------------------------------------
@@ -126,13 +122,6 @@ void DialogSystemPluginParameter::on_lineEditDescription_textEdited(const
     QString &text)
 {
     m_parameter.setDescription(text);
-}
-
-// -------------------------------------------------------
-
-void DialogSystemPluginParameter::on_widgetCustomStructureListClosed()
-{
-    RPM::get()->setSelectedList(m_completeList);
 }
 
 // -------------------------------------------------------

@@ -37,6 +37,8 @@ public:
 
     QStandardItem * first() const;
     QStandardItem * last() const;
+    QStandardItemModel * getParentModel(QStandardItem *selected,
+        SystemCustomStructureElement *element = nullptr) const;
     QList<QStandardItem *> getAllSelected() const;
     QStandardItem * getRootOfStructure(QStandardItem *selected) const;
     void initializeNodes(PrimitiveValue *v);
@@ -56,8 +58,10 @@ public:
 protected:
     PrimitiveValue *m_prim;
     SystemCustomStructureElement *m_element;
+    QStandardItemModel *m_completeList;
 
     virtual void newItem(QStandardItem *selected);
+    virtual void editItem(QStandardItem *selected);
     virtual void pasteItem(QStandardItem *selected);
     virtual void deleteItem(QStandardItem *selected);
     virtual void mousePressEvent(QMouseEvent *event);

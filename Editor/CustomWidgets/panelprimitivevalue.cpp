@@ -63,16 +63,6 @@ PrimitiveValue * PanelPrimitiveValue::model() const {
     return m_model;
 }
 
-WidgetCustomStructure * PanelPrimitiveValue::widgetCustomStructure() const
-{
-    return ui->widgetCustomStructure;
-}
-
-WidgetCustomStructure * PanelPrimitiveValue::widgetCustomList() const
-{
-    return ui->widgetCustomList;
-}
-
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -435,8 +425,6 @@ void PanelPrimitiveValue::initializeAllAndUpdate(PrimitiveValue *m)
     initializeModel(m);
     initializeAll();
     updateModel();
-    ui->widgetCustomStructure->initialize(m->customStructure());
-    ui->widgetCustomList->initialize(m->customList());
     switch (m->kind())
     {
     case PrimitiveValueKind::CustomStructure:
@@ -650,8 +638,6 @@ void PanelPrimitiveValue::hideAll() {
     ui->comboBoxKeyBoard->hide();
     ui->doubleSpinBoxNumber->hide();
     ui->fontComboBox->hide();
-    ui->widgetCustomList->hide();
-    ui->widgetCustomStructure->hide();
     ui->horizontalSpacer->changeSize(0, 0);
 }
 

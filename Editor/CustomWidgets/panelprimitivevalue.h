@@ -45,8 +45,6 @@ public:
     QSpinBox * spinBoxNumber() const;
     QDoubleSpinBox * doubleSpinBoxNumber() const;
     PrimitiveValue * model() const;
-    WidgetCustomStructure * widgetCustomStructure() const;
-    WidgetCustomStructure * widgetCustomList() const;
 
     void updateModel();
     void initializePrimitives();
