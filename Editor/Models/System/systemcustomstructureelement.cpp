@@ -97,7 +97,7 @@ QString SystemCustomStructureElement::toStringName() const
     QString str;
     if (m_isProperty)
     {
-        str += '"' + p_name + '"' + RPM::COLON;
+        str += '"' + p_name + '"' + RPM::COLON + RPM::SPACE;
     }
     switch (m_value->kind())
     {
@@ -105,7 +105,7 @@ QString SystemCustomStructureElement::toStringName() const
         str += "{";
         break;
     case PrimitiveValueKind::CustomList:
-        str += "}";
+        str += "[";
         break;
     default:
         str += m_value->toString();

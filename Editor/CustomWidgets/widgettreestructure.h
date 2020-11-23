@@ -57,6 +57,8 @@ protected:
     SystemCustomStructureElement *m_element;
 
     virtual void newItem(QStandardItem *selected);
+    virtual void pasteItem(QStandardItem *selected);
+    virtual void deleteItem(QStandardItem *selected);
     virtual void mousePressEvent(QMouseEvent *event);
 
 public slots:

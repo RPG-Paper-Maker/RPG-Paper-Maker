@@ -295,41 +295,115 @@ void WidgetTreeStructure::newItem(QStandardItem *selected)
 
 // -------------------------------------------------------
 
+void WidgetTreeStructure::pasteItem(QStandardItem* selected)
+{
+    if (m_copiedItem != nullptr)
+    {
+        SystemCustomStructureElement *element = reinterpret_cast<
+            SystemCustomStructureElement *>(m_copiedItem->createCopy());
+        SystemCustomStructureElement *parentElement = reinterpret_cast<
+            SystemCustomStructureElement *>(selected->parent()->data().value<
+            quintptr>());
+        int row = selected->row();
+        if (element->isProperty())
+        {
+            bool testName = false;
+            QStandardItemModel *model = parentElement->value()
+                ->customStructure()->model();
+            SystemCustomStructureElement *otherElement;
+            while (!testName)
+            {
+                testName = true;
+                for (int i = 0, l = model->invisibleRootItem()->rowCount(); i <
+                    l; i++)
+                {
+                    otherElement = reinterpret_cast<SystemCustomStructureElement
+                        *>(SuperListItem::getItemModelAt(model, i));
+                    if (otherElement != nullptr && i != row)
+                    {
+                        if (element->name() == otherElement->name())
+                        {
+                            testName = false;
+                            element->setName(element->name() + "_copy");
+                        }
+                    }
+                }
+            }
+        }
+
+        // Model
+        QStandardItemModel *model = (element->isProperty() ? parentElement
+            ->value()->customStructure() : parentElement->value()->customList())
+            ->model();
+        SystemCustomStructureElement *previous = reinterpret_cast<
+            SystemCustomStructureElement *>(SuperListItem::getItemModelAt(model,
+            row));
+        if (previous != nullptr)
+        {
+            model->removeRow(row);
+        }
+        model->insertRow(row, element->getModelRow());
+
+        this->setItem(selected, element);
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeStructure::deleteItem(QStandardItem* selected)
+{
+    SystemCustomStructureElement *element = reinterpret_cast<
+        SystemCustomStructureElement *>(selected->data().value<quintptr>());
+
+    // Can't delete empty node
+    if (element != nullptr)
+    {
+        // If can be empty
+        if (m_canBeEmpty || p_model->invisibleRootItem()->rowCount() > 2)
+        {
+            QStandardItem *root = getRootOfItem(selected);
+            int row = selected->row();
+
+            // Model
+            SystemCustomStructureElement *parentElement = reinterpret_cast<
+                SystemCustomStructureElement *>(selected->parent()->data().value
+                <quintptr>());
+            (element->isProperty() ? parentElement->value()->customStructure() :
+                parentElement->value()->customList())->model()->removeRow(row);
+
+            QModelIndex index = selected->index();
+            root->removeRow(row);
+            setCurrentIndex(index);
+            emit deletingItem(element, row);
+            delete element;
+            emit needsUpdateJson(nullptr);
+            emit modelUpdated();
+        }
+    }
+}
+
+// -------------------------------------------------------
+
 void WidgetTreeStructure::mousePressEvent(QMouseEvent *event)
 {
     // If first or last node, don't select
-    QStandardItem *selectedItem = p_model->itemFromIndex(this->indexAt(event
-        ->pos()));
-    if (selectedItem == this->first() || selectedItem == this->last())
+    QModelIndex index = this->indexAt(event->pos());
+    QStandardItem *item = p_model->itemFromIndex(index);
+    if (item == this->first() || item == this->last())
     {
         return;
     }
 
     // Else, continue...
     QList<QStandardItem *> prevItems = this->getAllSelected();
-    if (!(QApplication::keyboardModifiers() & Qt::ControlModifier))
-    {
-        QTreeView::mousePressEvent(event);
-    }
-    QModelIndex index = this->indexAt(event->pos());
-    QStandardItem *item = p_model->itemFromIndex(index);
+    QTreeView::mousePressEvent(event);
+    this->selectionModel()->clear();
     if (item == nullptr)
     {
-        this->selectionModel()->clear();
         return;
     }
-    if (QApplication::keyboardModifiers() & Qt::ControlModifier)
-    {
-        QItemSelectionModel::SelectionFlag flag = prevItems.contains(item) ?
-            QItemSelectionModel::Deselect : QItemSelectionModel::Select;
-        this->selectionModel()->select(index, flag);
-        this->selectChildren(item, flag);
-    } else
-    {
-        this->selectionModel()->clear();
-        this->selectionModel()->select(index, QItemSelectionModel::Select);
-        this->selectChildren(item, QItemSelectionModel::Select);
-    }
+    this->selectionModel()->select(index, QItemSelectionModel::Select);
+    this->selectChildren(item, QItemSelectionModel::Select);
     this->repaint();
 }
 

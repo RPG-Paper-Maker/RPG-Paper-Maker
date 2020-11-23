@@ -135,8 +135,7 @@ void WidgetSuperTree::setItem(QStandardItem *selected, SuperListItem* super) {
     if (previous != nullptr)
         root->removeRow(index);
     root->insertRow(index, row);
-    QModelIndex modelIndex = p_model->index(index,0);
-    setCurrentIndex(modelIndex);
+    setCurrentIndex((previous == nullptr ? selected : row.at(0))->index());
     emit needsUpdateJson(super);
     emit modelUpdated();
 }
@@ -179,13 +178,17 @@ void WidgetSuperTree::editItem(QStandardItem *selected){
 // -------------------------------------------------------
 
 void WidgetSuperTree::copyItem(QStandardItem* selected){
-    SuperListItem *super;
-
-    super = reinterpret_cast<SuperListItem *>(selected->data().value<quintptr>());
-    if (m_copiedItem == nullptr)
-        m_copiedItem = super->createCopy();
-    else
-        m_copiedItem->setCopy(*super);
+    SuperListItem *super = reinterpret_cast<SuperListItem *>(selected->data()
+        .value<quintptr>());
+    if (super != nullptr)
+    {
+        if (m_copiedItem == nullptr)
+        {
+            m_copiedItem = super->createCopy();
+        } else {
+            m_copiedItem->setCopy(*super);
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -468,30 +471,55 @@ void WidgetSuperTree::showContextMenu(const QPoint & p){
 
 // -------------------------------------------------------
 
-void WidgetSuperTree::contextNew(){
-    newItem(getSelected());
+void WidgetSuperTree::contextNew()
+{
+    QStandardItem *item = this->getSelected();
+    if (item != nullptr)
+    {
+        newItem(getSelected());
+    }
 }
 
 // -------------------------------------------------------
 
-void WidgetSuperTree::contextEdit(){
-    editItem(getSelected());
+void WidgetSuperTree::contextEdit()
+{
+    QStandardItem *item = this->getSelected();
+    if (item != nullptr)
+    {
+        editItem(getSelected());
+    }
 }
 
 // -------------------------------------------------------
 
-void WidgetSuperTree::contextCopy(){
-    copyItem(getSelected());
+void WidgetSuperTree::contextCopy()
+{
+    QStandardItem *item = this->getSelected();
+    if (item != nullptr)
+    {
+        copyItem(getSelected());
+    }
 }
 
 // -------------------------------------------------------
 
-void WidgetSuperTree::contextPaste(){
-    pasteItem(getSelected());
+void WidgetSuperTree::contextPaste()
+{
+    QStandardItem *item = this->getSelected();
+    if (item != nullptr)
+    {
+        pasteItem(getSelected());
+    }
 }
 
 // -------------------------------------------------------
 
-void WidgetSuperTree::contextDelete(){
-    deleteItem(getSelected());
+void WidgetSuperTree::contextDelete()
+{
+    QStandardItem *item = this->getSelected();
+    if (item != nullptr)
+    {
+        deleteItem(getSelected());
+    }
 }
