@@ -327,57 +327,59 @@ void WidgetSuperTree::updateKeyboardUpDown(int offset) {
 // -------------------------------------------------------
 
 void WidgetSuperTree::keyPressEvent(QKeyEvent *event) {
-    int key;
-
-    if (Common::isPressingEnter(event)) {
+    if (Common::isPressingEnter(event))
+    {
         emit tryingEdit();
     }
-
-    if (m_hasContextMenu || !m_canBeControled){
-
+    if (m_hasContextMenu || !m_canBeControled)
+    {
         // Forcing shortcuts
         QKeySequence seq = Common::getKeySequence(event);
         QList<QAction*> actions = m_contextMenuCommonCommands->actions();
-        QAction* action;
-
+        QAction *action;
         action = actions.at(6);
-        if (action->shortcut().matches(seq) && action->isEnabled()) {
+        if (action->shortcut().matches(seq) && action->isEnabled())
+        {
             contextDelete();
             return;
         }
-
-        if (m_canBeControled){
+        if (m_canBeControled)
+        {
             action = actions.at(1);
-            if (Common::isPressingEnter(event) && action->isEnabled()) {
+            if (Common::isPressingEnter(event) && action->isEnabled())
+            {
                 contextEdit();
                 return;
             }
             action = actions.at(0);
-            if (Common::isPressingEnter(event) && action->isEnabled()) {
+            if (Common::isPressingEnter(event) && action->isEnabled())
+            {
                 contextNew();
                 return;
             }
             action = actions.at(3);
-            if (action->shortcut().matches(seq) && action->isEnabled()) {
+            if (action->shortcut().matches(seq) && action->isEnabled())
+            {
                 contextCopy();
                 return;
             }
             action = actions.at(4);
-            if (action->shortcut().matches(seq) && action->isEnabled()) {
+            if (action->shortcut().matches(seq) && action->isEnabled())
+            {
                 contextPaste();
                 return;
             }
         }
     }
-
-    key = event->key();
-    if (key == Qt::Key_Up) {
+    int key = event->key();
+    if (key == Qt::Key_Up)
+    {
         updateKeyboardUpDown(-1);
     }
-    if (key == Qt::Key_Down) {
+    if (key == Qt::Key_Down)
+    {
         updateKeyboardUpDown(1);
     }
-
     emit keyPressed(event);
 }
 

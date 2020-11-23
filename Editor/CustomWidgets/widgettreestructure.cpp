@@ -169,23 +169,23 @@ void WidgetTreeStructure::initializeNodesElement(QStandardItem *parent,
     case PrimitiveValueKind::CustomStructure:
         row = element->getModelRow();
         item = row.at(0);
-        item->setText("{");
+        item->setText("> {");
         parent->appendRow(item);
         this->initializeNodesCustom(item, element->value()->customStructure());
         row = element->getModelRow();
         item = row.at(0);
-        item->setText("}");
+        item->setText("> }");
         parent->appendRow(item);
         break;
     case PrimitiveValueKind::CustomList:
         row = element->getModelRow();
         item = row.at(0);
-        item->setText("[");
+        item->setText("> [");
         parent->appendRow(item);
         this->initializeNodesCustom(item, element->value()->customList());
         row = element->getModelRow();
         item = row.at(0);
-        item->setText("]");
+        item->setText("> ]");
         parent->appendRow(item);
         break;
     default:
@@ -227,7 +227,8 @@ void WidgetTreeStructure::selectChildren(QStandardItem *item,
         ::CustomStructure || element->value()->kind() == PrimitiveValueKind
         ::CustomList))
     {
-        st = root->child(j+1);
+        st = root->child(j + ((item->text() == "> }" || item->text() == "> ]") ?
+            -1 : 1));
         sm->select(st->index(), flag);
         selectChildrenOnly(st, flag);
     }
@@ -258,6 +259,78 @@ QStandardItem* WidgetTreeStructure::getSelected() const
 {
     QList<QStandardItem *> list = getAllSelected();
     return list.isEmpty() ? nullptr : list.first();
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeStructure::updateKeyboardUpDown(int offset)
+{
+    QStandardItem *itemBegin = this->getSelected();
+    QStandardItem *item = itemBegin;
+    if (item != nullptr)
+    {
+        SystemCustomStructureElement *element = nullptr;
+        QStandardItem *newItem = item->parent();
+        if (newItem == nullptr)
+        {
+            newItem = this->getModel()->invisibleRootItem();
+        }
+        newItem = newItem->child(item->row() + offset, item->column());
+        if (newItem != nullptr)
+        {
+            element = reinterpret_cast<SystemCustomStructureElement *>(
+                newItem->data().value<quintptr>());
+        }
+        if (offset < 0)
+        {
+            offset--;
+        } else
+        {
+            offset++;
+        }
+
+        // New parent
+        if (newItem == nullptr && item->parent() != nullptr)
+        {
+            item = item->parent();
+            if (offset < 0)
+            {
+                offset = -1;
+            } else
+            {
+                offset = 1;
+            }
+            newItem = item->parent();
+            if (newItem == nullptr)
+            {
+                newItem = this->getModel()->invisibleRootItem();
+            }
+            newItem = newItem->child(item->row() + offset, item->column());
+            if (newItem != nullptr)
+            {
+                element = reinterpret_cast<SystemCustomStructureElement *>(
+                    newItem->data().value<quintptr>());
+            }
+            if (offset < 0)
+            {
+                offset--;
+            } else
+            {
+                offset++;
+            }
+        }
+        if (newItem != nullptr)
+        {
+            this->selectionModel()->clear();
+            this->selectionModel()->select(newItem->index(),
+                QItemSelectionModel::SelectCurrent);
+            if (element != nullptr)
+            {
+                this->selectChildren(newItem);
+            }
+            this->onSelectionChanged(newItem->index(), itemBegin->index());
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -417,9 +490,10 @@ void WidgetTreeStructure::onSelectionChanged(QModelIndex index, QModelIndex
     {
         item = p_model->itemFromIndex(indexBefore);
         this->selectionModel()->clear();
-        if (item != nullptr)
+        if (item != nullptr && item != this->first() & item != this->last())
         {
-            this->selectionModel()->select(indexBefore, QItemSelectionModel::Select);
+            this->selectionModel()->select(indexBefore, QItemSelectionModel
+                ::Select);
             this->selectChildren(item, QItemSelectionModel::Select);
         }
         this->repaint();

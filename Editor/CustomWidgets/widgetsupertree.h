@@ -49,7 +49,7 @@ public:
     virtual QStandardItem* getSelected() const;
     void addNewItem(SuperListItem* super, QStandardItem* root, int index);
     void updateAllModelRow();
-    void updateKeyboardUpDown(int offset);
+    virtual void updateKeyboardUpDown(int offset);
 
     static void copy(QStandardItemModel *model,
                      QStandardItemModel *modelToCopy);

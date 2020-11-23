@@ -51,6 +51,7 @@ public:
         ::SelectionFlag flag = QItemSelectionModel::Select);
 
     virtual QStandardItem * getSelected() const;
+    virtual void updateKeyboardUpDown(int offset);
 
 protected:
     PrimitiveValue *m_prim;
