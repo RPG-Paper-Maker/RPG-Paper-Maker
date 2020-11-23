@@ -43,7 +43,7 @@ public:
     void removeStructureModel();
     void initializeNodesCustom(QStandardItem *parent, SystemCustomStructure
         *custom);
-    void initializeNodesElement(QStandardItem *parent, PrimitiveValue *value,
+    void initializeNodesElement(QStandardItem *parent,
         SystemCustomStructureElement *element = nullptr);
     void selectChildren(QStandardItem *item, QItemSelectionModel::SelectionFlag
         flag = QItemSelectionModel::Select);
@@ -54,6 +54,7 @@ public:
 
 protected:
     PrimitiveValue *m_prim;
+    SystemCustomStructureElement *m_element;
 
     virtual void newItem(QStandardItem *selected);
     virtual void mousePressEvent(QMouseEvent *event);

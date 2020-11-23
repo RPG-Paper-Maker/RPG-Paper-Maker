@@ -42,12 +42,13 @@ public:
     PrimitiveValue * value() const;
     void setIsProperty(bool isProperty);
     void setDescription(QString description);
+    void setValue(PrimitiveValue *value);
 
     virtual QString toString() const;
+    virtual QString toStringName() const;
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);
-    virtual QList<QStandardItem*> getModelRow() const;
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

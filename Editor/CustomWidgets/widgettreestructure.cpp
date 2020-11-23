@@ -19,7 +19,8 @@
 // -------------------------------------------------------
 
 WidgetTreeStructure::WidgetTreeStructure(QWidget *parent) :
-    WidgetSuperTree(parent)
+    WidgetSuperTree(parent),
+    m_element(new SystemCustomStructureElement(-1, "", true, nullptr))
 {
     this->setMouseTracking(true);
     this->setWordWrap(true);
@@ -31,6 +32,8 @@ WidgetTreeStructure::WidgetTreeStructure(QWidget *parent) :
 WidgetTreeStructure::~WidgetTreeStructure()
 {
     this->removeStructureModel();
+    m_element->setValue(nullptr);
+    delete m_element;
 }
 
 // -------------------------------------------------------
@@ -129,7 +132,8 @@ void WidgetTreeStructure::initializeNodes(PrimitiveValue *v)
     m_prim = v;
     this->removeStructureModel();
     QStandardItemModel *model = new QStandardItemModel;
-    this->initializeNodesElement(model->invisibleRootItem(), m_prim);
+    m_element->setValue(m_prim);
+    this->initializeNodesElement(model->invisibleRootItem(), m_element);
     this->initializeModel(model);
     this->expandAll();
 }
@@ -145,7 +149,10 @@ void WidgetTreeStructure::initializeNodesCustom(QStandardItem *parent,
     {
         element = reinterpret_cast<SystemCustomStructureElement *>(SuperListItem
             ::getItemModelAt(custom->model(), i));
-        this->initializeNodesElement(parent, element->value(), element);
+        if (element != nullptr)
+        {
+            this->initializeNodesElement(parent, element);
+        }
     }
     parent->appendRow(new QStandardItem(">"));
 }
@@ -153,22 +160,33 @@ void WidgetTreeStructure::initializeNodesCustom(QStandardItem *parent,
 // -------------------------------------------------------
 
 void WidgetTreeStructure::initializeNodesElement(QStandardItem *parent,
-    PrimitiveValue *value, SystemCustomStructureElement *element)
+    SystemCustomStructureElement *element)
 {
     QStandardItem *item;
-    switch (value->kind())
+    QList<QStandardItem *> row;
+    switch (element->value()->kind())
     {
     case PrimitiveValueKind::CustomStructure:
-        item = new QStandardItem("{");
+        row = element->getModelRow();
+        item = row.at(0);
+        item->setText("{");
         parent->appendRow(item);
-        parent->appendRow(new QStandardItem("}"));
-        this->initializeNodesCustom(item, value->customStructure());
+        this->initializeNodesCustom(item, element->value()->customStructure());
+        row = element->getModelRow();
+        item = row.at(0);
+        item->setText("}");
+        parent->appendRow(item);
         break;
     case PrimitiveValueKind::CustomList:
-        item = new QStandardItem("[");
+        row = element->getModelRow();
+        item = row.at(0);
+        item->setText("[");
         parent->appendRow(item);
-        parent->appendRow(new QStandardItem("]"));
-        this->initializeNodesCustom(item, value->customList());
+        this->initializeNodesCustom(item, element->value()->customList());
+        row = element->getModelRow();
+        item = row.at(0);
+        item->setText("]");
+        parent->appendRow(item);
         break;
     default:
         if (element != nullptr)
@@ -256,16 +274,21 @@ void WidgetTreeStructure::newItem(QStandardItem *selected)
     {
         isProperty = m_prim->kind() == PrimitiveValueKind::CustomStructure;
     }
-    SuperListItem *super = new SystemCustomStructureElement(0, "", isProperty);
+    SystemCustomStructureElement *element = new SystemCustomStructureElement(-1,
+        "", isProperty);
     emit beforeOpeningWindow();
-    if (super->openDialog())
+    if (element->openDialog())
     {
         QStandardItem *root = this->getRootOfItem(selected);
         int index = selected->row();
-        this->addNewItem(super, root, index);
+        this->addNewItem(element, root, index);
+        SystemCustomStructureElement *parentElement = reinterpret_cast<
+            SystemCustomStructureElement *>(root->data().value<quintptr>());
+        (isProperty ? parentElement->value()->customStructure() : parentElement
+            ->value()->customList())->model()->appendRow(element->getModelRow());
     } else
     {
-        delete super;
+        delete element;
     }
     emit windowClosed();
 }
@@ -274,6 +297,15 @@ void WidgetTreeStructure::newItem(QStandardItem *selected)
 
 void WidgetTreeStructure::mousePressEvent(QMouseEvent *event)
 {
+    // If first or last node, don't select
+    QStandardItem *selectedItem = p_model->itemFromIndex(this->indexAt(event
+        ->pos()));
+    if (selectedItem == this->first() || selectedItem == this->last())
+    {
+        return;
+    }
+
+    // Else, continue...
     QList<QStandardItem *> prevItems = this->getAllSelected();
     if (!(QApplication::keyboardModifiers() & Qt::ControlModifier))
     {

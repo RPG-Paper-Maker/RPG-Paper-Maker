@@ -41,14 +41,17 @@ SystemCustomStructureElement::SystemCustomStructureElement(int i, QString n,
 
 }
 
+SystemCustomStructureElement::~SystemCustomStructureElement()
+{
+    if (m_value != nullptr)
+    {
+        delete m_value;
+    }
+}
+
 QString SystemCustomStructureElement::description() const
 {
     return m_description;
-}
-
-SystemCustomStructureElement::~SystemCustomStructureElement()
-{
-    delete m_value;
 }
 
 bool SystemCustomStructureElement::isProperty() const
@@ -71,6 +74,11 @@ void SystemCustomStructureElement::setDescription(QString description)
     m_description = description;
 }
 
+void SystemCustomStructureElement::setValue(PrimitiveValue *value)
+{
+    m_value = value;
+}
+
 // -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
@@ -79,12 +87,30 @@ void SystemCustomStructureElement::setDescription(QString description)
 
 QString SystemCustomStructureElement::toString() const
 {
+    return ">" + this->toStringName();
+}
+
+// -------------------------------------------------------
+
+QString SystemCustomStructureElement::toStringName() const
+{
     QString str;
     if (m_isProperty)
     {
         str += '"' + p_name + '"' + RPM::COLON;
     }
-    str += m_value->toString();
+    switch (m_value->kind())
+    {
+    case PrimitiveValueKind::CustomStructure:
+        str += "{";
+        break;
+    case PrimitiveValueKind::CustomList:
+        str += "}";
+        break;
+    default:
+        str += m_value->toString();
+        break;
+    }
     return str;
 }
 
@@ -123,25 +149,6 @@ void SystemCustomStructureElement::setCopy(const SuperListItem &super)
     m_isProperty = element->m_isProperty;
     m_description = element->m_description;
     m_value->setCopy(*element->m_value);
-}
-
-// -------------------------------------------------------
-
-QList<QStandardItem*> SystemCustomStructureElement::getModelRow() const
-{
-    QList<QStandardItem*> row = QList<QStandardItem*>();
-    QStandardItem *item = new QStandardItem;
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setText(SuperListItem::beginningText + (m_isProperty ? '"' + p_name +
-        '"' : QString::number(p_id)));
-    row.append(item);
-    QStandardItem *itemName = new QStandardItem;
-    itemName->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-    itemName->setFlags(itemName->flags() ^ (Qt::ItemIsDropEnabled));
-    itemName->setText(m_value->toString());
-    row.append(itemName);
-    return row;
 }
 
 // -------------------------------------------------------

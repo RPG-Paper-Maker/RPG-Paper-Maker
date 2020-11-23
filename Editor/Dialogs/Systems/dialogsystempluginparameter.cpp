@@ -74,6 +74,7 @@ void DialogSystemPluginParameter::initialize()
         PrimitiveValueKind)), this, SLOT(on_kindUpdated(PrimitiveValueKind)));
     ui->panelPrimitiveDefaultValue->initializeAllAndUpdate(m_parameter
         .defaultValue());
+    this->on_kindUpdated(ui->panelPrimitiveDefaultValue->model()->kind());
 }
 
 // -------------------------------------------------------

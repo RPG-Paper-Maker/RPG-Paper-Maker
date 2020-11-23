@@ -126,7 +126,7 @@ QString SystemCustomStructure::toString() const
                     ->data().value<quintptr>());
                 if (element != nullptr)
                 {
-                    list << element->toString();
+                    list << element->toStringName();
                 }
             }
         }
@@ -146,7 +146,7 @@ QString SystemCustomStructure::toString() const
                     ->data().value<quintptr>());
                 if (element != nullptr)
                 {
-                    list << element->toString();
+                    list << element->toStringName();
                 }
             }
         }
