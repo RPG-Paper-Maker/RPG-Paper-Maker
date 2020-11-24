@@ -483,6 +483,7 @@ void WidgetTreeStructure::deleteItem(QStandardItem* selected)
 
             QModelIndex index = selected->index();
             root->removeRow(row);
+            root->removeRow(row);
             setCurrentIndex(index);
             emit deletingItem(element, row);
             delete element;
@@ -538,5 +539,16 @@ void WidgetTreeStructure::onSelectionChanged(QModelIndex index, QModelIndex
             this->selectChildren(item, QItemSelectionModel::Select);
         }
         this->repaint();
+    } else
+    {
+        item = p_model->itemFromIndex(index);
+        this->selectionModel()->clear();
+        if (item != nullptr)
+        {
+            this->selectionModel()->select(index, QItemSelectionModel
+                ::Select);
+            this->selectChildren(item, QItemSelectionModel::Select);
+            this->repaint();
+        }
     }
 }

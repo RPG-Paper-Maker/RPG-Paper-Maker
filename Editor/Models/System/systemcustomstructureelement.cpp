@@ -141,10 +141,10 @@ QString SystemCustomStructureElement::toStringName() const
     switch (m_value->kind())
     {
     case PrimitiveValueKind::CustomStructure:
-        str += "{";
+        str += m_value->customStructure()->toString();
         break;
     case PrimitiveValueKind::CustomList:
-        str += "[";
+        str += m_value->customList()->toString();
         break;
     default:
         str += m_value->toString();

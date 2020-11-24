@@ -111,7 +111,6 @@ void SystemCustomStructure::clearList()
 QString SystemCustomStructure::toString() const
 {
     QString str;
-    QStandardItem *item;
     SystemCustomStructureElement *element;
     if (m_properties == nullptr)
     {
@@ -119,15 +118,11 @@ QString SystemCustomStructure::toString() const
         QStringList list;
         for (int i = 0, l = m_list->invisibleRootItem()->rowCount(); i < l; i++)
         {
-            item = m_list->item(i);
-            if (item != nullptr)
+            element = reinterpret_cast<SystemCustomStructureElement *>(
+                SuperListItem::getItemModelAt(m_list, i));
+            if (element != nullptr)
             {
-                element = reinterpret_cast<SystemCustomStructureElement *>(item
-                    ->data().value<quintptr>());
-                if (element != nullptr)
-                {
-                    list << element->toStringName();
-                }
+                list << element->toStringName();
             }
         }
         str += list.join(RPM::COMMA);
@@ -139,15 +134,11 @@ QString SystemCustomStructure::toString() const
         for (int i = 0, l = m_properties->invisibleRootItem()->rowCount(); i
              < l; i++)
         {
-            item = m_properties->item(i);
-            if (item != nullptr)
+            element = reinterpret_cast<SystemCustomStructureElement *>(
+                SuperListItem::getItemModelAt(m_properties, i));
+            if (element != nullptr)
             {
-                element = reinterpret_cast<SystemCustomStructureElement *>(item
-                    ->data().value<quintptr>());
-                if (element != nullptr)
-                {
-                    list << element->toStringName();
-                }
+                list << element->toStringName();
             }
         }
         str += list.join(RPM::COMMA);
