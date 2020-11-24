@@ -87,6 +87,14 @@ void SystemCustomStructureElement::setValue(PrimitiveValue *value)
 //
 // -------------------------------------------------------
 
+bool SystemCustomStructureElement::isCustom() const
+{
+    return m_value->kind() == PrimitiveValueKind::CustomStructure || m_value
+        ->kind() == PrimitiveValueKind::CustomList;
+}
+
+// -------------------------------------------------------
+
 QString SystemCustomStructureElement::getStringEnd() const
 {
     switch (m_value->kind())

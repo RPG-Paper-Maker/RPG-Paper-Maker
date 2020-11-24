@@ -46,6 +46,7 @@ public:
     void setDescription(QString description);
     void setValue(PrimitiveValue *value);
 
+    bool isCustom() const;
     QString getStringEnd() const;
 
     virtual QString toString() const;

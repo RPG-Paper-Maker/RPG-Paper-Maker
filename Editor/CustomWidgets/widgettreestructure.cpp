@@ -253,9 +253,7 @@ void WidgetTreeStructure::selectChildren(QStandardItem *item,
     QItemSelectionModel *sm = this->selectionModel();
     QStandardItem *st;
     int j = item->row();
-    if (element != nullptr && (element->value()->kind() == PrimitiveValueKind
-        ::CustomStructure || element->value()->kind() == PrimitiveValueKind
-        ::CustomList))
+    if (element != nullptr && element->isCustom())
     {
         st = root->child(j + ((item->text() == element->getStringEnd()) ? -1 : 1));
         sm->select(st->index(), flag);
@@ -330,8 +328,7 @@ void WidgetTreeStructure::addItemTree(QStandardItem *item,
     QStandardItem *root = this->getRootOfItem(item);
     int index = item->row();
     QStandardItem *newItem = this->addNewItem(element, root, index);
-    if (element->value()->kind() == PrimitiveValueKind::CustomStructure ||
-        element->value()->kind() == PrimitiveValueKind::CustomList)
+    if (element->isCustom())
     {
         QStandardItem *endItem = element->getModelRow().at(0);
         endItem->setText(element->getStringEnd());
@@ -375,8 +372,13 @@ void WidgetTreeStructure::updateKeyboardUpDown(int offset)
     QStandardItem *item = itemBegin;
     if (item != nullptr)
     {
-        SystemCustomStructureElement *element = nullptr;
+        SystemCustomStructureElement *element = reinterpret_cast<
+            SystemCustomStructureElement *>(item->data().value<quintptr>());
         QStandardItem *newItem = item->parent();
+        if (offset > 0 && element != nullptr && element->isCustom())
+        {
+            offset++;
+        }
         if (newItem == nullptr)
         {
             newItem = this->getModel()->invisibleRootItem();
@@ -401,7 +403,7 @@ void WidgetTreeStructure::updateKeyboardUpDown(int offset)
             item = item->parent();
             if (offset < 0)
             {
-                offset = -1;
+                offset = 0;
             } else
             {
                 offset = 1;
@@ -416,13 +418,6 @@ void WidgetTreeStructure::updateKeyboardUpDown(int offset)
             {
                 element = reinterpret_cast<SystemCustomStructureElement *>(
                     newItem->data().value<quintptr>());
-            }
-            if (offset < 0)
-            {
-                offset--;
-            } else
-            {
-                offset++;
             }
         }
         if (newItem != nullptr)
