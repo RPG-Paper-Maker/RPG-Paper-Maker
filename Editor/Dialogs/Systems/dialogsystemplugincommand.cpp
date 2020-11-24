@@ -65,6 +65,8 @@ void DialogSystemPluginCommand::initialize()
     ui->treeView->initializeModel(m_command.defaultParameters());
     connect(ui->treeView, SIGNAL(windowClosed()), this, SLOT(
         on_treeViewWindowClosed()));
+    connect(ui->treeView, SIGNAL(beforeOpeningWindow()), this, SLOT
+        (on_pluginParameterOpeningWindow()));
 }
 
 // -------------------------------------------------------
@@ -117,3 +119,9 @@ void DialogSystemPluginCommand::on_treeViewWindowClosed()
     RPM::get()->setSelectedList(m_completeList);
 }
 
+// -------------------------------------------------------
+
+void DialogSystemPluginCommand::on_pluginParameterOpeningWindow()
+{
+    RPM::get()->setSelectedList(ui->treeView->getModel());
+}

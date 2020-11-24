@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>547</width>
-    <height>332</height>
+    <width>522</width>
+    <height>361</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
       <number>15</number>
      </property>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
        <item>
         <layout class="QGridLayout" name="gridLayout">
          <item row="1" column="1">
@@ -89,7 +89,16 @@
         </layout>
        </item>
        <item>
-        <widget class="WidgetSuperTree" name="treeView"/>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Parameters</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="WidgetSuperTree" name="treeView"/>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </item>

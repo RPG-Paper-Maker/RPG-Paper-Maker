@@ -51,6 +51,7 @@ public slots:
     void on_lineEditName_textEdited(const QString &text);
     void on_lineEditDescription_textEdited(const QString &text);
     void on_treeViewWindowClosed();
+    void on_pluginParameterOpeningWindow();
 };
 
 #endif // DIALOGSYSTEMPLUGINCOMMAND_H
