@@ -55,8 +55,10 @@ public:
         ::SelectionFlag flag = QItemSelectionModel::Select);
     void removeElementParentModel(QStandardItem *item,
         SystemCustomStructureElement *element);
-    void removeItem(QStandardItem *item, PrimitiveValueKind kind, SystemCustomStructureElement *element);
+    void removeItem(QStandardItem *item, PrimitiveValueKind kind,
+        SystemCustomStructureElement *element);
     void addItem(QStandardItem *item, SystemCustomStructureElement *element);
+    void addItemTree(QStandardItem *item, SystemCustomStructureElement *element);
 
     virtual QStandardItem * getSelected() const;
     virtual void updateKeyboardUpDown(int offset);

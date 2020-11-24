@@ -317,6 +317,16 @@ void WidgetTreeStructure::addItem(QStandardItem *item,
 {
     SystemCustomStructureElement *previousElement = reinterpret_cast<
         SystemCustomStructureElement *>(item->data().value<quintptr>());
+    this->addItemTree(item, element);
+    this->getCustomStructureList(item, element)->insertElementAfter(
+        previousElement, element);
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeStructure::addItemTree(QStandardItem *item,
+    SystemCustomStructureElement *element)
+{
     QStandardItem *root = this->getRootOfItem(item);
     int index = item->row();
     QStandardItem *newItem = this->addNewItem(element, root, index);
@@ -326,11 +336,23 @@ void WidgetTreeStructure::addItem(QStandardItem *item,
         QStandardItem *endItem = element->getModelRow().at(0);
         endItem->setText(element->getStringEnd());
         root->insertRow(index + 1, endItem);
-        newItem->appendRow(new QStandardItem(">"));
+        QStandardItem *emptyItem = new QStandardItem(">");
+        newItem->appendRow(emptyItem);
+        QStandardItemModel *model = (element->value()->kind() ==
+            PrimitiveValueKind::CustomStructure ? element->value()
+            ->customStructure() : element->value()->customList())->model();
+        SystemCustomStructureElement *otherElement;
+        for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+        {
+            otherElement = reinterpret_cast<SystemCustomStructureElement *>(
+                SuperListItem::getItemModelAt(model, i));
+            if (otherElement != nullptr)
+            {
+                this->addItemTree(emptyItem, otherElement);
+            }
+        }
         this->expand(newItem->index());
     }
-    this->getCustomStructureList(item, element)->insertElementAfter(
-        previousElement, element);
 }
 
 // -------------------------------------------------------
@@ -561,7 +583,7 @@ void WidgetTreeStructure::updateContextMenu()
         SystemCustomStructureElement *element = reinterpret_cast<
             SystemCustomStructureElement *>(selected->data().value<quintptr>());
         m_contextMenuCommonCommands->canEdit(element != nullptr);
-        m_contextMenuCommonCommands->canNew(element == nullptr);
+        m_contextMenuCommonCommands->canNew(true);
         m_contextMenuCommonCommands->canCopy(element != nullptr);
         m_contextMenuCommonCommands->canPaste(m_copiedItem != nullptr);
         m_contextMenuCommonCommands->canDelete(element != nullptr);
