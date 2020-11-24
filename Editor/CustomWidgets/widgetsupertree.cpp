@@ -177,7 +177,8 @@ void WidgetSuperTree::editItem(QStandardItem *selected){
 
 // -------------------------------------------------------
 
-void WidgetSuperTree::copyItem(QStandardItem* selected){
+void WidgetSuperTree::copyItem(QStandardItem* selected)
+{
     SuperListItem *super = reinterpret_cast<SuperListItem *>(selected->data()
         .value<quintptr>());
     if (super != nullptr)
@@ -185,9 +186,14 @@ void WidgetSuperTree::copyItem(QStandardItem* selected){
         if (m_copiedItem == nullptr)
         {
             m_copiedItem = super->createCopy();
-        } else {
+        } else
+        {
             m_copiedItem->setCopy(*super);
         }
+        m_copiedSelected = selected;
+    } else
+    {
+        m_copiedSelected = nullptr;
     }
 }
 
@@ -412,7 +418,6 @@ void WidgetSuperTree::mouseDoubleClickEvent(QMouseEvent* event){
             }
         }
     }
-    QTreeView::mouseDoubleClickEvent(event);
 }
 
 // -------------------------------------------------------
@@ -466,10 +471,20 @@ void WidgetSuperTree::onSelectionChanged(QModelIndex index, QModelIndex) {
 
 void WidgetSuperTree::showContextMenu(const QPoint & p){
     if (m_hasContextMenu) {
-        QStandardItem* selected = getSelected();
+        QStandardItem *selected = getSelected();
         if (selected != nullptr)
+        {
+            this->updateContextMenu();
             m_contextMenuCommonCommands->showContextMenu(p);
+        }
     }
+}
+
+// -------------------------------------------------------
+
+void WidgetSuperTree::updateContextMenu()
+{
+
 }
 
 // -------------------------------------------------------

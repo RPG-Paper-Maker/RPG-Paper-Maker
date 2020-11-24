@@ -39,6 +39,8 @@ public:
     QStandardItem * last() const;
     QStandardItemModel * getParentModel(QStandardItem *selected,
         SystemCustomStructureElement *element = nullptr) const;
+    SystemCustomStructure * getCustomStructureList(QStandardItem *selected,
+        SystemCustomStructureElement *element = nullptr) const;
     QList<QStandardItem *> getAllSelected() const;
     QStandardItem * getRootOfStructure(QStandardItem *selected) const;
     void initializeNodes(PrimitiveValue *v);
@@ -51,6 +53,10 @@ public:
         flag = QItemSelectionModel::Select);
     void selectChildrenOnly(QStandardItem *item, QItemSelectionModel
         ::SelectionFlag flag = QItemSelectionModel::Select);
+    void removeElementParentModel(QStandardItem *item,
+        SystemCustomStructureElement *element);
+    void removeItem(QStandardItem *item, PrimitiveValueKind kind, SystemCustomStructureElement *element);
+    void addItem(QStandardItem *item, SystemCustomStructureElement *element);
 
     virtual QStandardItem * getSelected() const;
     virtual void updateKeyboardUpDown(int offset);
@@ -65,6 +71,7 @@ protected:
     virtual void pasteItem(QStandardItem *selected);
     virtual void deleteItem(QStandardItem *selected);
     virtual void mousePressEvent(QMouseEvent *event);
+    virtual void updateContextMenu();
 
 public slots:
     void onSelectionChanged(QModelIndex index, QModelIndex indexBefore);

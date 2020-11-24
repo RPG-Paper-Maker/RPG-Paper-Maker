@@ -103,6 +103,43 @@ void SystemCustomStructure::clearList()
 }
 
 // -------------------------------------------------------
+
+void SystemCustomStructure::removeElement(SystemCustomStructureElement *element)
+{
+    for (int i = 0, l = this->model()->invisibleRootItem()->rowCount(); i < l;
+        i++)
+    {
+        if (SuperListItem::getItemModelAt(this->model(), i) == element)
+        {
+            this->model()->removeRow(i);
+            delete element;
+            break;
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void SystemCustomStructure::insertElementAfter(SystemCustomStructureElement
+    *elementBefore, SystemCustomStructureElement *element)
+{
+    if (elementBefore == nullptr)
+    {
+        this->model()->appendRow(element->getModelRow());
+        return;
+    }
+    for (int i = 0, l = this->model()->invisibleRootItem()->rowCount(); i < l;
+        i++)
+    {
+        if (SuperListItem::getItemModelAt(this->model(), i) == elementBefore)
+        {
+            this->model()->insertRow(i, element->getModelRow());
+            break;
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //

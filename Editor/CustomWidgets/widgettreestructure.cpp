@@ -12,6 +12,7 @@
 #include <QApplication>
 #include "widgettreestructure.h"
 #include "htmldelegate.h"
+#include "systemcustomstructureelement.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -76,6 +77,15 @@ QStandardItem * WidgetTreeStructure::last() const
 QStandardItemModel * WidgetTreeStructure::getParentModel(QStandardItem *selected
     , SystemCustomStructureElement *element) const
 {
+    return this->getCustomStructureList(selected, element)->model();
+}
+
+// -------------------------------------------------------
+
+SystemCustomStructure * WidgetTreeStructure::getCustomStructureList(
+    QStandardItem *selected, SystemCustomStructureElement *element)
+    const
+{
     if (element == nullptr)
     {
         element = reinterpret_cast<SystemCustomStructureElement *>(selected
@@ -85,7 +95,7 @@ QStandardItemModel * WidgetTreeStructure::getParentModel(QStandardItem *selected
         SystemCustomStructureElement *>(selected->parent()->data().value<
         quintptr>());
     return (element->isProperty() ? parentElement->value()->customStructure() :
-        parentElement->value()->customList())->model();
+        parentElement->value()->customList());
 }
 
 // -------------------------------------------------------
@@ -269,6 +279,61 @@ void WidgetTreeStructure::selectChildrenOnly(QStandardItem *item,
 }
 
 // -------------------------------------------------------
+
+void WidgetTreeStructure::removeElementParentModel(QStandardItem *item,
+    SystemCustomStructureElement *element)
+{
+    this->getCustomStructureList(item, element)->removeElement(element);
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeStructure::removeItem(QStandardItem *item, PrimitiveValueKind
+    kind, SystemCustomStructureElement *element)
+{
+    QStandardItem *root = this->getRootOfItem(item);
+    QModelIndex index = item->index();
+    int row = item->row();
+    this->removeElementParentModel(item, element);
+    switch (kind)
+    {
+    case PrimitiveValueKind::CustomStructure:
+        root->removeRow(row);
+        break;
+    case PrimitiveValueKind::CustomList:
+        root->removeRow(row);
+        break;
+    default:
+        break;
+    }
+    root->removeRow(row);
+    this->setCurrentIndex(index);
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeStructure::addItem(QStandardItem *item,
+    SystemCustomStructureElement *element)
+{
+    SystemCustomStructureElement *previousElement = reinterpret_cast<
+        SystemCustomStructureElement *>(item->data().value<quintptr>());
+    QStandardItem *root = this->getRootOfItem(item);
+    int index = item->row();
+    QStandardItem *newItem = this->addNewItem(element, root, index);
+    if (element->value()->kind() == PrimitiveValueKind::CustomStructure ||
+        element->value()->kind() == PrimitiveValueKind::CustomList)
+    {
+        QStandardItem *endItem = element->getModelRow().at(0);
+        endItem->setText(element->getStringEnd());
+        root->insertRow(index + 1, endItem);
+        newItem->appendRow(new QStandardItem(">"));
+        this->expand(newItem->index());
+    }
+    this->getCustomStructureList(item, element)->insertElementAfter(
+        previousElement, element);
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
@@ -364,21 +429,11 @@ void WidgetTreeStructure::newItem(QStandardItem *selected)
     QStandardItemModel *parentModel = this->getParentModel(selected, element);
     RPM::get()->setSelectedList(parentModel);
     emit beforeOpeningWindow();
+    QModelIndex index = selected->index();
     if (element->openDialog())
     {
-        QStandardItem *root = this->getRootOfItem(selected);
-        int index = selected->row();
-        QStandardItem *item = this->addNewItem(element, root, index);
-        if (element->value()->kind() == PrimitiveValueKind::CustomStructure ||
-            element->value()->kind() == PrimitiveValueKind::CustomList)
-        {
-            QStandardItem *endItem = element->getModelRow().at(0);
-            endItem->setText(element->getStringEnd());
-            root->insertRow(index + 1, endItem);
-            item->appendRow(new QStandardItem(">"));
-            this->expand(item->index());
-        }
-        parentModel->appendRow(element->getModelRow());
+        this->addItem(selected, element);
+        this->setCurrentIndex(index);
     } else
     {
         delete element;
@@ -393,74 +448,69 @@ void WidgetTreeStructure::editItem(QStandardItem *selected)
 {
     SystemCustomStructureElement *element = reinterpret_cast<
         SystemCustomStructureElement *>(selected->data().value<quintptr>());
-    int previousID, newID;
-    previousID = element->id();
+    PrimitiveValueKind kind = element->value()->kind();
     RPM::get()->setSelectedList(this->getParentModel(selected));
     emit beforeOpeningWindow();
+    QModelIndex index = selected->index();
     if (element->openDialog())
     {
-        newID = element->id();
-        if (previousID != newID)
-        {
-            emit idChanged(previousID, newID);
-        }
-        setItem(selected, element);
+        SystemCustomStructureElement *copy = reinterpret_cast<
+            SystemCustomStructureElement *>(element->createCopy());
+        this->removeItem(selected, kind, element);
+        this->setCurrentIndex(index);
+        this->addItem(this->getSelected(), copy);
     }
+    this->setCurrentIndex(index);
     emit windowClosed();
     RPM::get()->setSelectedList(m_completeList);
 }
 
 // -------------------------------------------------------
 
-void WidgetTreeStructure::pasteItem(QStandardItem* selected)
+void WidgetTreeStructure::pasteItem(QStandardItem *selected)
 {
     if (m_copiedItem != nullptr)
     {
         SystemCustomStructureElement *element = reinterpret_cast<
             SystemCustomStructureElement *>(m_copiedItem->createCopy());
-        QStandardItemModel *parentModel = this->getParentModel(selected, element);
-        int row = selected->row();
-        if (element->isProperty())
+        QStandardItem *root = this->getRootOfItem(selected);
+        if (element->isProperty() && selected != m_copiedSelected)
         {
             bool testName = false;
             SystemCustomStructureElement *otherElement;
             while (!testName)
             {
                 testName = true;
-                for (int i = 0, l = parentModel->invisibleRootItem()->rowCount()
-                    ; i < l; i++)
+                for (int i = 0, l = root->rowCount(); i < l; i++)
                 {
                     otherElement = reinterpret_cast<SystemCustomStructureElement
-                        *>(SuperListItem::getItemModelAt(parentModel, i));
-                    if (otherElement != nullptr && i != row)
+                        *>(root->child(i)->data().value<quintptr>());
+                    if (otherElement != nullptr && element->name() ==
+                        otherElement->name())
                     {
-                        if (element->name() == otherElement->name())
-                        {
-                            testName = false;
-                            element->setName(element->name() + "_copy");
-                        }
+                        testName = false;
+                        element->setName(element->name() + "_copy");
                     }
                 }
             }
         }
-
-        // Model
-        SystemCustomStructureElement *previous = reinterpret_cast<
-            SystemCustomStructureElement *>(SuperListItem::getItemModelAt(
-            parentModel, row));
-        if (previous != nullptr)
+        QModelIndex index = selected->index();
+        SystemCustomStructureElement *previousElement = reinterpret_cast<
+            SystemCustomStructureElement *>(selected->data().value<quintptr>());
+        if (previousElement != nullptr)
         {
-            parentModel->removeRow(row);
+            this->removeItem(selected, previousElement->value()->kind(),
+                previousElement);
+            this->setCurrentIndex(index);
         }
-        parentModel->insertRow(row, element->getModelRow());
-
-        this->setItem(selected, element);
+        this->addItem(this->getSelected(), element);
+        this->setCurrentIndex(index);
     }
 }
 
 // -------------------------------------------------------
 
-void WidgetTreeStructure::deleteItem(QStandardItem* selected)
+void WidgetTreeStructure::deleteItem(QStandardItem *selected)
 {
     SystemCustomStructureElement *element = reinterpret_cast<
         SystemCustomStructureElement *>(selected->data().value<quintptr>());
@@ -471,24 +521,7 @@ void WidgetTreeStructure::deleteItem(QStandardItem* selected)
         // If can be empty
         if (m_canBeEmpty || p_model->invisibleRootItem()->rowCount() > 2)
         {
-            QStandardItem *root = getRootOfItem(selected);
-            int row = selected->row();
-
-            // Model
-            SystemCustomStructureElement *parentElement = reinterpret_cast<
-                SystemCustomStructureElement *>(selected->parent()->data().value
-                <quintptr>());
-            (element->isProperty() ? parentElement->value()->customStructure() :
-                parentElement->value()->customList())->model()->removeRow(row);
-
-            QModelIndex index = selected->index();
-            root->removeRow(row);
-            root->removeRow(row);
-            setCurrentIndex(index);
-            emit deletingItem(element, row);
-            delete element;
-            emit needsUpdateJson(nullptr);
-            emit modelUpdated();
+            this->removeItem(selected, element->value()->kind(), element);
         }
     }
 }
@@ -516,6 +549,23 @@ void WidgetTreeStructure::mousePressEvent(QMouseEvent *event)
     this->selectionModel()->select(index, QItemSelectionModel::Select);
     this->selectChildren(item, QItemSelectionModel::Select);
     this->repaint();
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeStructure::updateContextMenu()
+{
+    QStandardItem *selected = getSelected();
+    if (selected != nullptr)
+    {
+        SystemCustomStructureElement *element = reinterpret_cast<
+            SystemCustomStructureElement *>(selected->data().value<quintptr>());
+        m_contextMenuCommonCommands->canEdit(element != nullptr);
+        m_contextMenuCommonCommands->canNew(element == nullptr);
+        m_contextMenuCommonCommands->canCopy(element != nullptr);
+        m_contextMenuCommonCommands->canPaste(m_copiedItem != nullptr);
+        m_contextMenuCommonCommands->canDelete(element != nullptr);
+    }
 }
 
 // -------------------------------------------------------
@@ -551,4 +601,5 @@ void WidgetTreeStructure::onSelectionChanged(QModelIndex index, QModelIndex
             this->repaint();
         }
     }
+    this->updateContextMenu();
 }

@@ -59,10 +59,11 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent * event);
     virtual void dropEvent(QDropEvent *event);
 
-    QStandardItemModel* p_model;
-    ContextMenuList* m_contextMenuCommonCommands;
-    SuperListItem* m_newItemInstance;
-    SuperListItem* m_copiedItem;
+    QStandardItemModel *p_model;
+    ContextMenuList *m_contextMenuCommonCommands;
+    SuperListItem *m_newItemInstance;
+    SuperListItem *m_copiedItem;
+    QStandardItem *m_copiedSelected;
     bool m_canBeEmpty;
     bool m_updateId;
     bool m_hasContextMenu;
@@ -79,10 +80,11 @@ protected:
     virtual void pasteItem(QStandardItem *selected);
     virtual void deleteItem(QStandardItem *selected);
     virtual void updateAllNodesString(QStandardItem* item);
+    virtual void updateContextMenu();
 
 public slots:
     void onSelectionChanged(QModelIndex index, QModelIndex);
-    void showContextMenu(const QPoint & p);
+    virtual void showContextMenu(const QPoint &p);
     void contextNew();
     void contextEdit();
     void contextCopy();

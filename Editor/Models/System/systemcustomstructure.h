@@ -15,6 +15,8 @@
 #include <QMetaType>
 #include "superlistitem.h"
 
+class SystemCustomStructureElement;
+
 // -------------------------------------------------------
 //
 //  CLASS SystemCustomStructure
@@ -42,6 +44,9 @@ public:
     void initializeHeaders();
     void clearProperties();
     void clearList();
+    void removeElement(SystemCustomStructureElement *element);
+    void insertElementAfter(SystemCustomStructureElement *elementBefore,
+        SystemCustomStructureElement *element);
 
     virtual QString toString() const;
     virtual bool openDialog();
