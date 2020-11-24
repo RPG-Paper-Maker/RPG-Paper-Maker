@@ -106,6 +106,7 @@ private slots:
     void on_pushButtonDisplayAnimation_clicked();
     void on_pushButtonShakeScreen_clicked();
     void on_pushButtonFlashScreen_clicked();
+    void on_pushButtonPlugin_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

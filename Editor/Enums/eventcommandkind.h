@@ -79,6 +79,7 @@ enum class EventCommandKind {
     DisplayAnAnimation,
     ShakeScreen,
     FlashScreen,
+    Plugin,
     Last
 };
 

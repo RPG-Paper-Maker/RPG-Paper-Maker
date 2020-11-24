@@ -55,6 +55,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommanddisplayapicture.h \
     Dialogs/Commands/dialogcommanddisplaychoice.h \
     Dialogs/Commands/dialogcommandflashscreen.h \
+    Dialogs/Commands/dialogcommandplugin.h \
     Dialogs/Commands/dialogcommandremoveapicture.h \
     Dialogs/Commands/dialogcommandremoveobjectfrommap.h \
     Dialogs/Commands/dialogcommandscript.h \
@@ -435,6 +436,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommanddisplayapicture.cpp \
     Dialogs/Commands/dialogcommanddisplaychoice.cpp \
     Dialogs/Commands/dialogcommandflashscreen.cpp \
+    Dialogs/Commands/dialogcommandplugin.cpp \
     Dialogs/Commands/dialogcommandremoveapicture.cpp \
     Dialogs/Commands/dialogcommandremoveobjectfrommap.cpp \
     Dialogs/Commands/dialogcommandscript.cpp \
@@ -766,6 +768,7 @@ FORMS += \
     Dialogs/Commands/dialogcommanddisplayapicture.ui \
     Dialogs/Commands/dialogcommanddisplaychoice.ui \
     Dialogs/Commands/dialogcommandflashscreen.ui \
+    Dialogs/Commands/dialogcommandplugin.ui \
     Dialogs/Commands/dialogcommandremoveapicture.ui \
     Dialogs/Commands/dialogcommandremoveobjectfrommap.ui \
     Dialogs/Commands/dialogcommandscript.ui \

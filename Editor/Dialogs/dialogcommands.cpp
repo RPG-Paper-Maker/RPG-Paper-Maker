@@ -48,6 +48,7 @@
 #include "dialogcommanddisplayananimation.h"
 #include "dialogcommandshakescreen.h"
 #include "dialogcommandflashscreen.h"
+#include "dialogcommandplugin.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -191,6 +192,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandShakeScreen(command, object, parameters);
     case EventCommandKind::FlashScreen:
         return new DialogCommandFlashScreen(command, object, parameters);
+    case EventCommandKind::Plugin:
+        return new DialogCommandPlugin(command, object, parameters);
     default:
         return nullptr;
     }
@@ -644,7 +647,16 @@ void DialogCommands::on_pushButtonShakeScreen_clicked()
     this->openDialogCommand(EventCommandKind::ShakeScreen);
 }
 
+// -------------------------------------------------------
+
 void DialogCommands::on_pushButtonFlashScreen_clicked()
 {
     this->openDialogCommand(EventCommandKind::FlashScreen);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonPlugin_clicked()
+{
+    this->openDialogCommand(EventCommandKind::Plugin);
 }
