@@ -9,9 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QMessageBox>
 #include "dialogcommandplugin.h"
 #include "ui_dialogcommandplugin.h"
 #include "systemplugin.h"
+#include "systempluginparameter.h"
 #include "systemplugincommand.h"
 #include "rpm.h"
 
@@ -65,6 +67,15 @@ void DialogCommandPlugin::initializePrimitives()
     }
     ui->treeViewEditParameter->setCanMove(false);
     ui->treeViewEditParameter->setCanCreateDelete(false);
+    ui->treeViewEditParameter->initializeModel(m_currentParameters);
+}
+
+//-------------------------------------------------
+
+void DialogCommandPlugin::initializeHeader()
+{
+    m_currentParameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::NAME), RPM::translate(Translations::VALUE)}));
 }
 
 //-------------------------------------------------
@@ -83,9 +94,36 @@ void DialogCommandPlugin::translate()
 //
 // -------------------------------------------------------
 
+void DialogCommandPlugin::accept()
+{
+    if (ui->comboBoxCommand->currentIndex() == -1)
+    {
+        QMessageBox::information(this, RPM::translate(Translations::WARNING),
+            "You have to select a command to execute" + RPM::DOT);
+        return;
+    }
+    DialogCommand::accept();
+}
+
+// -------------------------------------------------------
+
 void DialogCommandPlugin::initialize(EventCommand *command)
 {
-
+    int i = 0;
+    ui->comboBoxPlugin->setCurrentIndex(command->valueCommandAt(i++).toInt());
+    ui->comboBoxCommand->setCurrentIndex(command->valueCommandAt(i++).toInt());
+    SystemPluginParameter *param;
+    for (int j = 0, l = m_currentParameters->invisibleRootItem()->rowCount(); j
+        < l; j++)
+    {
+        param = reinterpret_cast<SystemPluginParameter *>(SuperListItem
+            ::getItemModelAt(m_currentParameters, j));
+        if (i < command->commandsCount() - 1)
+        {
+            param->defaultValue()->initializeCommandParameter(command, i);
+        }
+    }
+    ui->treeViewEditParameter->updateAbsoluteAllNodesString();
 }
 
 // -------------------------------------------------------
@@ -93,7 +131,16 @@ void DialogCommandPlugin::initialize(EventCommand *command)
 EventCommand * DialogCommandPlugin::getCommand() const
 {
     QVector<QString> command;
-
+    command.append(QString::number(ui->comboBoxPlugin->currentIndex()));
+    command.append(QString::number(ui->comboBoxCommand->currentIndex()));
+    SystemPluginParameter *param;
+    for (int i = 0, l = m_currentParameters->invisibleRootItem()->rowCount(); i
+        < l; i++)
+    {
+        param = reinterpret_cast<SystemPluginParameter *>(SuperListItem
+            ::getItemModelAt(m_currentParameters, i));
+        param->defaultValue()->getCommandParameter(command);
+    }
     return new EventCommand(EventCommandKind::Plugin, command);
 }
 
@@ -110,11 +157,14 @@ void DialogCommandPlugin::on_comboBoxPlugin_currentIndexChanged(int index)
         index));
     ui->comboBoxCommand->clear();
     if (plugin == nullptr || plugin->commands()->invisibleRootItem()->rowCount()
-        == 0)
+        == 1)
     {
+        ui->labelCommand->setEnabled(false);
         ui->comboBoxCommand->setEnabled(false);
+        ui->groupBoxParameters->setEnabled(false);
     } else
     {
+        ui->labelCommand->setEnabled(true);
         ui->comboBoxCommand->setEnabled(true);
         SuperListItem::fillComboBox(ui->comboBoxCommand, plugin->commands(),
             false);
@@ -128,10 +178,20 @@ void DialogCommandPlugin::on_comboBoxCommand_currentIndexChanged(int index)
     SystemPlugin *plugin = reinterpret_cast<SystemPlugin *>(SuperListItem
         ::getByIndex(RPM::get()->project()->scriptsDatas()->modelPlugins(),
         ui->comboBoxPlugin->currentIndex()));
-    SystemPluginCommand *command = reinterpret_cast<SystemPluginCommand *>(
-        SuperListItem::getByIndex(plugin->commands(), index));
     SuperListItem::deleteModel(m_currentParameters, false);
     m_currentParameters->clear();
-    SuperListItem::copy(m_currentParameters, command->defaultParameters());
-    ui->treeViewEditParameter->initializeModel(m_currentParameters);
+    if (plugin != nullptr)
+    {
+        SystemPluginCommand *command = reinterpret_cast<SystemPluginCommand *>(
+            SuperListItem::getByIndex(plugin->commands(), index));
+        if (command != nullptr)
+        {
+            SuperListItem::copy(m_currentParameters, command->defaultParameters());
+            SuperListItem::removeEmptyInTree(m_currentParameters);
+            SystemPluginParameter::setAllDefault(m_currentParameters, false);
+        }
+    }
+    ui->groupBoxParameters->setEnabled(m_currentParameters->invisibleRootItem()
+        ->rowCount() > 0);
+    this->initializeHeader();
 }

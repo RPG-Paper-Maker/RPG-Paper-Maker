@@ -14,6 +14,7 @@
 
 #include <QMetaType>
 #include "superlistitem.h"
+#include "eventcommand.h"
 
 class SystemCustomStructureElement;
 
@@ -47,6 +48,9 @@ public:
     void removeElement(SystemCustomStructureElement *element);
     void insertElementAfter(SystemCustomStructureElement *elementBefore,
         SystemCustomStructureElement *element);
+    void initializeCommandParameter(const EventCommand *command, int& i);
+    void initializeCommands(const QVector<QString> &command, int &i);
+    void getCommandParameter(QVector<QString> &command);
 
     virtual QString toString() const;
     virtual bool openDialog();

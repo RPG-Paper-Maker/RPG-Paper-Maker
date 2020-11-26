@@ -140,6 +140,33 @@ void SystemCustomStructure::insertElementAfter(SystemCustomStructureElement
 }
 
 // -------------------------------------------------------
+
+void SystemCustomStructure::initializeCommandParameter(const EventCommand
+    *command, int& i)
+{
+    this->read(QJsonDocument::fromJson(command->valueCommandAt(i++).toUtf8())
+        .object());
+}
+
+// -------------------------------------------------------
+
+void SystemCustomStructure::initializeCommands(const QVector<QString> &command,
+    int &i)
+{
+    this->read(QJsonDocument::fromJson(command.at(i++).toUtf8()).object());
+}
+
+// -------------------------------------------------------
+
+void SystemCustomStructure::getCommandParameter(QVector<QString> &command)
+{
+    QJsonObject obj;
+    this->write(obj);
+    QJsonDocument doc(obj);
+    command.append(doc.toJson(QJsonDocument::JsonFormat::Compact));
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //

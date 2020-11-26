@@ -401,6 +401,38 @@ void PrimitiveValue::initializeCommandParameter(const EventCommand *command, int
     case PrimitiveValueKind::Property:
     case PrimitiveValueKind::DataBase:
     case PrimitiveValueKind::KeyBoard:
+    case PrimitiveValueKind::Class:
+    case PrimitiveValueKind::Hero:
+    case PrimitiveValueKind::Monster:
+    case PrimitiveValueKind::Troop:
+    case PrimitiveValueKind::Item:
+    case PrimitiveValueKind::Weapon:
+    case PrimitiveValueKind::Armor:
+    case PrimitiveValueKind::Skill:
+    case PrimitiveValueKind::Animation:
+    case PrimitiveValueKind::Status:
+    case PrimitiveValueKind::Tileset:
+    case PrimitiveValueKind::FontSize:
+    case PrimitiveValueKind::FontName:
+    case PrimitiveValueKind::Color:
+    case PrimitiveValueKind::WindowSkin:
+    case PrimitiveValueKind::Currency:
+    case PrimitiveValueKind::Speed:
+    case PrimitiveValueKind::Detection:
+    case PrimitiveValueKind::CameraProperty:
+    case PrimitiveValueKind::Frequency:
+    case PrimitiveValueKind::Skybox:
+    case PrimitiveValueKind::BattleMap:
+    case PrimitiveValueKind::Element:
+    case PrimitiveValueKind::CommonStatistic:
+    case PrimitiveValueKind::WeaponsKind:
+    case PrimitiveValueKind::ArmorsKind:
+    case PrimitiveValueKind::CommonBattleCommand:
+    case PrimitiveValueKind::CommonEquipment:
+    case PrimitiveValueKind::Event:
+    case PrimitiveValueKind::State:
+    case PrimitiveValueKind::CommonReaction:
+    case PrimitiveValueKind::Model:
         m_numberValue = command->valueCommandAt(i++).toInt();
         break;
     case PrimitiveValueKind::Message:
@@ -414,7 +446,11 @@ void PrimitiveValue::initializeCommandParameter(const EventCommand *command, int
     case PrimitiveValueKind::NumberDouble:
         m_numberDoubleValue = command->valueCommandAt(i++).toDouble();
         break;
-    default:
+    case PrimitiveValueKind::CustomStructure:
+        m_customStructure->initializeCommandParameter(command, i);
+        break;
+    case PrimitiveValueKind::CustomList:
+        m_customList->initializeCommandParameter(command, i);
         break;
     }
     if (active)
@@ -440,6 +476,38 @@ void PrimitiveValue::initializeCommands(const QVector<QString> &command, int &i,
     case PrimitiveValueKind::Property:
     case PrimitiveValueKind::DataBase:
     case PrimitiveValueKind::KeyBoard:
+    case PrimitiveValueKind::Class:
+    case PrimitiveValueKind::Hero:
+    case PrimitiveValueKind::Monster:
+    case PrimitiveValueKind::Troop:
+    case PrimitiveValueKind::Item:
+    case PrimitiveValueKind::Weapon:
+    case PrimitiveValueKind::Armor:
+    case PrimitiveValueKind::Skill:
+    case PrimitiveValueKind::Animation:
+    case PrimitiveValueKind::Status:
+    case PrimitiveValueKind::Tileset:
+    case PrimitiveValueKind::FontSize:
+    case PrimitiveValueKind::FontName:
+    case PrimitiveValueKind::Color:
+    case PrimitiveValueKind::WindowSkin:
+    case PrimitiveValueKind::Currency:
+    case PrimitiveValueKind::Speed:
+    case PrimitiveValueKind::Detection:
+    case PrimitiveValueKind::CameraProperty:
+    case PrimitiveValueKind::Frequency:
+    case PrimitiveValueKind::Skybox:
+    case PrimitiveValueKind::BattleMap:
+    case PrimitiveValueKind::Element:
+    case PrimitiveValueKind::CommonStatistic:
+    case PrimitiveValueKind::WeaponsKind:
+    case PrimitiveValueKind::ArmorsKind:
+    case PrimitiveValueKind::CommonBattleCommand:
+    case PrimitiveValueKind::CommonEquipment:
+    case PrimitiveValueKind::Event:
+    case PrimitiveValueKind::State:
+    case PrimitiveValueKind::CommonReaction:
+    case PrimitiveValueKind::Model:
         m_numberValue = command.at(i++).toInt();
         break;
     case PrimitiveValueKind::Message:
@@ -453,7 +521,11 @@ void PrimitiveValue::initializeCommands(const QVector<QString> &command, int &i,
     case PrimitiveValueKind::NumberDouble:
         m_numberDoubleValue = command.at(i++).toDouble();
         break;
-    default:
+    case PrimitiveValueKind::CustomStructure:
+        m_customStructure->initializeCommands(command, i);
+        break;
+    case PrimitiveValueKind::CustomList:
+        m_customList->initializeCommands(command, i);
         break;
     }
     if (active)
@@ -478,6 +550,38 @@ void PrimitiveValue::getCommandParameter(QVector<QString> &command, bool active)
     case PrimitiveValueKind::Property:
     case PrimitiveValueKind::DataBase:
     case PrimitiveValueKind::KeyBoard:
+    case PrimitiveValueKind::Class:
+    case PrimitiveValueKind::Hero:
+    case PrimitiveValueKind::Monster:
+    case PrimitiveValueKind::Troop:
+    case PrimitiveValueKind::Item:
+    case PrimitiveValueKind::Weapon:
+    case PrimitiveValueKind::Armor:
+    case PrimitiveValueKind::Skill:
+    case PrimitiveValueKind::Animation:
+    case PrimitiveValueKind::Status:
+    case PrimitiveValueKind::Tileset:
+    case PrimitiveValueKind::FontSize:
+    case PrimitiveValueKind::FontName:
+    case PrimitiveValueKind::Color:
+    case PrimitiveValueKind::WindowSkin:
+    case PrimitiveValueKind::Currency:
+    case PrimitiveValueKind::Speed:
+    case PrimitiveValueKind::Detection:
+    case PrimitiveValueKind::CameraProperty:
+    case PrimitiveValueKind::Frequency:
+    case PrimitiveValueKind::Skybox:
+    case PrimitiveValueKind::BattleMap:
+    case PrimitiveValueKind::Element:
+    case PrimitiveValueKind::CommonStatistic:
+    case PrimitiveValueKind::WeaponsKind:
+    case PrimitiveValueKind::ArmorsKind:
+    case PrimitiveValueKind::CommonBattleCommand:
+    case PrimitiveValueKind::CommonEquipment:
+    case PrimitiveValueKind::Event:
+    case PrimitiveValueKind::State:
+    case PrimitiveValueKind::CommonReaction:
+    case PrimitiveValueKind::Model:
         command.append(QString::number(m_numberValue));
         break;
     case PrimitiveValueKind::Message:
@@ -492,7 +596,11 @@ void PrimitiveValue::getCommandParameter(QVector<QString> &command, bool active)
     case PrimitiveValueKind::NumberDouble:
         command.append(QString::number(m_numberDoubleValue));
         break;
-    default:
+    case PrimitiveValueKind::CustomStructure:
+        m_customStructure->getCommandParameter(command);
+        break;
+    case PrimitiveValueKind::CustomList:
+        m_customList->getCommandParameter(command);
         break;
     }
     if (active)

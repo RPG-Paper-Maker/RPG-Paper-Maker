@@ -17,6 +17,9 @@
 #include "systemcommandmove.h"
 #include "conditionheroeskind.h"
 #include "systemcommonreaction.h"
+#include "systemplugin.h"
+#include "systemplugincommand.h"
+#include "systempluginparameter.h"
 
 const QString EventCommand::JSON_KIND = "kind";
 const QString EventCommand::JSON_COMMANDS = "command";
@@ -303,6 +306,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strShakeScreen(object, parameters); break;
     case EventCommandKind::FlashScreen:
         str += this->strFlashScreen(object, parameters); break;
+    case EventCommandKind::Plugin:
+        str += this->strPlugin(object, parameters); break;
     default:
         break;
     }
@@ -2168,6 +2173,60 @@ QString EventCommand::strFlashScreen(SystemCommonObject *object,
     return RPM::translate(Translations::FLASH_SCREEN) + RPM::COLON + RPM
         ::NEW_LINE + RPM::translate(Translations::COLOR_ID) + RPM::COLON + RPM
         ::SPACE + colorID + RPM::NEW_LINE + option + RPM::NEW_LINE + time;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strPlugin(SystemCommonObject *object, QStandardItemModel
+    *parameters) const
+{
+    int i = 0;
+
+    QString pluginName;
+    QString commandName;
+    QString commandParameters;
+    SystemPlugin *plugin = reinterpret_cast<SystemPlugin *>(SuperListItem
+        ::getByIndex(RPM::get()->project()->scriptsDatas()->modelPlugins(),
+        m_listCommand.at(i++).toInt()));
+    if (plugin != nullptr)
+    {
+        pluginName = plugin->name();
+        SystemPluginCommand *command = reinterpret_cast<SystemPluginCommand *>(
+            SuperListItem::getByIndex(plugin->commands(), m_listCommand.at(i++)
+            .toInt()));
+        if (command != nullptr)
+        {
+            commandName = command->name();
+            QStandardItemModel *currentParameters = new QStandardItemModel;
+            SuperListItem::copy(currentParameters, command->defaultParameters());
+            SystemPluginParameter *param;
+            QStringList list;
+            for (int j = 0, l = currentParameters->invisibleRootItem()
+                ->rowCount(); j < l; j++)
+            {
+                param = reinterpret_cast<SystemPluginParameter *>(SuperListItem
+                    ::getByIndex(currentParameters, j));
+                if (param != nullptr)
+                {
+                    if (i < this->commandsCount() - 1)
+                    {
+                        param->defaultValue()->initializeCommandParameter(this,
+                            i);
+                    }
+                    list << param->defaultValue()->toString();
+                }
+            }
+            if (!list.isEmpty())
+            {
+                commandParameters += RPM::PARENTHESIS_LEFT;
+                commandParameters += list.join(",");
+                commandParameters += RPM::PARENTHESIS_RIGHT;
+            }
+            delete currentParameters;
+        }
+    }
+    return "Plugin" + RPM::COLON + RPM::SPACE + pluginName + RPM::SPACE + RPM
+        ::DASH + RPM::SPACE + commandName + commandParameters;
 }
 
 // -------------------------------------------------------

@@ -191,6 +191,8 @@ private:
         *parameters) const;
     QString strFlashScreen(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
+    QString strPlugin(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

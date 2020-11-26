@@ -44,6 +44,9 @@ protected:
     QStandardItemModel *m_currentParameters;
 
     void initializePrimitives();
+    void initializeHeader();
+
+    virtual void accept();
     virtual void initialize(EventCommand *command);
 
 private:
