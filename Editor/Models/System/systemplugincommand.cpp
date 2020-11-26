@@ -41,7 +41,7 @@ SystemPluginCommand::SystemPluginCommand(int i, QString n, QString d,
 
 SystemPluginCommand::~SystemPluginCommand()
 {
-    delete m_defaultParameters;
+    SuperListItem::deleteModel(m_defaultParameters);
 }
 
 QString SystemPluginCommand::description() const

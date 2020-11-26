@@ -11,8 +11,8 @@
 
 #include <QApplication>
 #include "widgettreestructure.h"
-#include "htmldelegate.h"
 #include "systemcustomstructureelement.h"
+#include "htmldelegate.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -40,6 +40,7 @@ WidgetTreeStructure::~WidgetTreeStructure()
     this->removeStructureModel();
     m_element->setValue(nullptr);
     delete m_element;
+    delete this->itemDelegate();
 }
 
 // -------------------------------------------------------

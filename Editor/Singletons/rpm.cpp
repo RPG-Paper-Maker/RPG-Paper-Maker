@@ -594,6 +594,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::DISPLAY_AN_ANIMATION) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::SHAKE_SCREEN) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::FLASH_SCREEN) + RPM::DOT_DOT_DOT,
+        "Plugin" + RPM::DOT_DOT_DOT,
         ""
     });
     RPM::ENUM_TO_STRING_TARGET_KIND = QStringList({

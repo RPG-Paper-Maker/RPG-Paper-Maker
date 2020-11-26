@@ -2222,7 +2222,7 @@ QString EventCommand::strPlugin(SystemCommonObject *object, QStandardItemModel
                 commandParameters += list.join(",");
                 commandParameters += RPM::PARENTHESIS_RIGHT;
             }
-            delete currentParameters;
+            SuperListItem::deleteModel(currentParameters);
         }
     }
     return "Plugin" + RPM::COLON + RPM::SPACE + pluginName + RPM::SPACE + RPM

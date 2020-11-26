@@ -88,7 +88,8 @@ void SystemCustomStructure::clearProperties()
 {
     if (m_properties != nullptr)
     {
-        SuperListItem::deleteModel(m_properties, false);
+        SuperListItem::deleteModel(m_properties);
+        m_properties = nullptr;
     }
 }
 
@@ -98,7 +99,8 @@ void SystemCustomStructure::clearList()
 {
     if (m_list != nullptr)
     {
-        SuperListItem::deleteModel(m_list, false);
+        SuperListItem::deleteModel(m_list);
+        m_list = nullptr;
     }
 }
 
