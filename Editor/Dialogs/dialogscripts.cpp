@@ -68,7 +68,7 @@ DialogScripts::DialogScripts(QWidget *parent) :
 
     // Export text
     ui->labelExport1->setText("<h2>Export this plugin localy and share it</h2>");
-    ui->labelExport2->setText("<h2>Export to the online database</h2><strong>Send us a .zip of the plugin folder with a description of the script and all the steps to test your plugin with an example</strong><br /><ul><li>Discord at " + RPM::TAG_OPEN_A +  "https://discordapp.com/invite/QncEnCE" + RPM::TAG_MIDDLE_A + "https://discordapp.com/invite/QncEnCE" + RPM::TAG_CLOSE_A + " in <strong>#plugins</strong></li></ul><br />OR...<br /><ul><li>Mail at " + RPM::TAG_OPEN_A +  "mailto:Wanok.rpm@gmail.com?subject=[PLUGIN SUGGESTION] - My plugin name&body=Hello,\n\nPlugin description, steps..." + RPM::TAG_MIDDLE_A + "Wanok.rpm@gmail.com" + RPM::TAG_CLOSE_A + "</li></ul>");
+    ui->labelExport2->setText("<h2>Export to the online database</h2><strong>Check out the github wiki page in " + RPM::TAG_OPEN_A +  "https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/wiki/Online-plugins-submission" + RPM::TAG_MIDDLE_A + "https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/wiki/Online-plugins-submission" + RPM::TAG_CLOSE_A + "!</strong>");
 
     // Keep space when hiding widgets
     QSizePolicy sp_retain;
