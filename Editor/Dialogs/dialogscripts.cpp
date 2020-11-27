@@ -13,6 +13,9 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 #include "dialogscripts.h"
 #include "ui_dialogscripts.h"
 #include "systemscript.h"
@@ -162,6 +165,9 @@ void DialogScripts::initialize()
 
     // Focus close button
     ui->pushButtonClose->setFocus();
+
+    // Check updates
+    this->checkUpdates();
 }
 
 // -------------------------------------------------------
@@ -207,6 +213,74 @@ void DialogScripts::updatePluginDetailsSave()
     ui->tabWidgetPlugin->setTabText(0, "Details" + (this->getSelectedPlugin()
         ->editChanged() ? RPM::SPACE + "*" : ""));
     this->updatePluginsSave();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::checkUpdates()
+{
+    QStandardItemModel *model = RPM::get()->project()->scriptsDatas()
+        ->modelPlugins();
+    SystemPlugin *plugin, *newPlugin;
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        plugin = reinterpret_cast<SystemPlugin *>(SuperListItem::getItemModelAt(
+            model, i));
+        if (plugin != nullptr && plugin->type() == PluginTypeKind::Online)
+        {
+            // Load current plugins
+            QNetworkAccessManager manager;
+            QString pathPlugin = "https://raw.githubusercontent.com/"
+                "RPG-Paper-Maker/RPG-Paper-Maker/develop/Plugins/" + plugin
+                ->name();
+            QEventLoop loop;
+            QNetworkReply *reply = manager.get(QNetworkRequest(QUrl(pathPlugin +
+                "/" + SystemPlugin::NAME_JSON)));
+            QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+            QJsonObject doc;
+            QJsonDocument json;
+            loop.exec();
+            if (reply->error() != QNetworkReply::NetworkError::NoError)
+            {
+                continue;
+            }
+            doc = QJsonDocument::fromJson(reply->readAll()).object();
+            newPlugin = new SystemPlugin;
+            newPlugin->read(doc);
+            if (Common::versionDifferent(plugin->version(), newPlugin->version()
+                ) == -1)
+            {
+                QMessageBox::StandardButton box = QMessageBox::question(nullptr,
+                    RPM::translate(Translations::WARNING), QString("There is an new version of the plugin %1 available, would you like to download it?").arg(plugin->name()), QMessageBox::Yes |
+                    QMessageBox::No | QMessageBox::Cancel);
+                if (box == QMessageBox::Yes)
+                {
+                    newPlugin->setIsOnline(true);
+                    newPlugin->setType(PluginTypeKind::Online);
+                    plugin->setCopy(*newPlugin);
+                    reply = manager.get(QNetworkRequest(QUrl(pathPlugin + "/" +
+                        SystemPlugin::NAME_CODE)));
+                    QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(
+                        quit()));
+                    loop.exec();
+                    if (reply->error() != QNetworkReply::NetworkError::NoError)
+                    {
+                        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR_MESSAGE), QString("Error while trying to download %1 plugin").arg(plugin->name()) + RPM::DOT);
+                        continue;
+                    }
+                    plugin->setCurrentCode(reply->readAll());
+                    Common::write(plugin->getPath(), plugin->currentCode());
+                    doc[SystemPlugin::JSON_TYPE] = static_cast<int>(
+                        PluginTypeKind::Online);
+                    Common::writeOtherJSON(Common::pathCombine(plugin
+                        ->getFolderPath(), SystemPlugin::NAME_JSON), doc);
+                    RPM::get()->project()->writeScriptsDatas();
+                    QMessageBox::information(nullptr, "Success", QString("Successfully downlaoded the %1 plugin").arg(plugin->name()) + RPM::DOT);
+                }
+            }
+            delete newPlugin;
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -284,6 +358,28 @@ void DialogScripts::keyPressEvent(QKeyEvent *event)
                     plugin->editedPlugin()->initializeHeaders();
                     plugin->setDefaultParametersChanged(false);
                 }
+
+                // Force format for version
+                QStringList list = plugin->editedPlugin()->version().split(RPM
+                    ::DOT);
+                int size = list.size();
+                int nb1 = 0, nb2 = 0, nb3 = 0;
+                if (size >= 1)
+                {
+                    nb1 = list.at(0).toInt();
+                }
+                if (size >= 2)
+                {
+                    nb2 = list.at(1).toInt();
+                }
+                if (size >= 3)
+                {
+                    nb3 = list.at(2).toInt();
+                }
+                plugin->editedPlugin()->setVersion(QString::number(nb1) + RPM
+                    ::DOT + QString::number(nb2) + RPM::DOT + QString::number(
+                    nb3));
+                ui->lineEditVersion->setText(plugin->editedPlugin()->version());
 
                 // Rename folder if necessary
                 QDir(Common::pathCombine(RPM::get()->project()

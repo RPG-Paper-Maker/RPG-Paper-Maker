@@ -2205,7 +2205,7 @@ QString EventCommand::strPlugin(SystemCommonObject *object, QStandardItemModel
                 ->rowCount(); j < l; j++)
             {
                 param = reinterpret_cast<SystemPluginParameter *>(SuperListItem
-                    ::getByIndex(currentParameters, j));
+                    ::getItemModelAt(currentParameters, j));
                 if (param != nullptr)
                 {
                     if (i < this->commandsCount() - 1)

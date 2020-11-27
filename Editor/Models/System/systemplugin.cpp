@@ -39,7 +39,7 @@ const PluginCategoryKind SystemPlugin::DEFAULT_CATEGORY = PluginCategoryKind
 const QString SystemPlugin::DEFAULT_AUTHOR = "";
 const QString SystemPlugin::DEFAULT_WEBSITE = "";
 const QString SystemPlugin::DEFAULT_DESCRIPTION = "";
-const QString SystemPlugin::DEFAULT_VERSION = "1.0";
+const QString SystemPlugin::DEFAULT_VERSION = "1.0.0";
 const QString SystemPlugin::DEFAULT_TUTORIAL = "";
 const QString SystemPlugin::NAME_CODE = "code" + RPM::EXTENSION_JS;
 const QString SystemPlugin::NAME_JSON = "details" + RPM::EXTENSION_JSON;
@@ -424,6 +424,7 @@ void SystemPlugin::setCopy(const SuperListItem &super)
     m_description = plugin->m_description;
     m_version = plugin->m_version;
     m_tutorial = plugin->m_tutorial;
+    m_isOnline = plugin->m_isOnline;
     this->clearDefaultParameters();
     SuperListItem::copy(m_defaultParameters, plugin->m_defaultParameters);
     this->clearParameters();

@@ -164,6 +164,7 @@ void MainWindow::openProject(QString pathProject) {
             enableGame();
             replaceMainPanel(new PanelProject(this, project));
             m_isMainMenu = false;
+            m_dialogScripts->initialize();
         }
         else {
             delete project;
@@ -761,7 +762,6 @@ void MainWindow::on_actionScripts_manager_triggered()
 {
     if (m_dialogScripts->isHidden())
     {
-        m_dialogScripts->initialize();
         m_dialogScripts->show();
     }
 }

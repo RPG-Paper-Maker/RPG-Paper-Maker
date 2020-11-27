@@ -46,6 +46,7 @@ public:
     void updatePluginCodeSave();
     void updatePluginEditSave();
     void updatePluginDetailsSave();
+    void checkUpdates();
 
 protected:
     virtual void keyPressEvent(QKeyEvent *event);
