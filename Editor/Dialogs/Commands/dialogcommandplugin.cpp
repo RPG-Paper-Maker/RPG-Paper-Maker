@@ -58,6 +58,9 @@ DialogCommandPlugin::~DialogCommandPlugin()
 
 void DialogCommandPlugin::initializePrimitives()
 {
+    ui->treeViewEditParameter->setCanMove(false);
+    ui->treeViewEditParameter->setCanCreateDelete(false);
+    ui->treeViewEditParameter->initializeModel(m_currentParameters);
     SuperListItem::fillComboBox(ui->comboBoxPlugin, RPM::get()->project()
         ->scriptsDatas()->modelPlugins(), false);
     if (ui->comboBoxPlugin->count() == 0)
@@ -65,9 +68,6 @@ void DialogCommandPlugin::initializePrimitives()
         ui->comboBoxCommand->setEnabled(false);
         ui->treeViewEditParameter->setEnabled(false);
     }
-    ui->treeViewEditParameter->setCanMove(false);
-    ui->treeViewEditParameter->setCanCreateDelete(false);
-    ui->treeViewEditParameter->initializeModel(m_currentParameters);
 }
 
 //-------------------------------------------------
@@ -76,6 +76,24 @@ void DialogCommandPlugin::initializeHeader()
 {
     m_currentParameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
         Translations::NAME), RPM::translate(Translations::VALUE)}));
+}
+
+//-------------------------------------------------
+
+void DialogCommandPlugin::updateParameterProperties()
+{
+    SystemPluginParameter *param;
+    for (int i = 0, l = m_currentParameters->invisibleRootItem()->rowCount(); i
+        < l; i++)
+    {
+        param = reinterpret_cast<SystemPluginParameter *>(SuperListItem
+            ::getItemModelAt(m_currentParameters, i));
+        if (param != nullptr)
+        {
+            param->defaultValue()->updateModelsParametersProperties(m_parameters
+                , m_properties);
+        }
+    }
 }
 
 //-------------------------------------------------
@@ -124,6 +142,8 @@ void DialogCommandPlugin::initialize(EventCommand *command)
         {
             param->defaultValue()->initializeCommandParameter(command, i);
         }
+        param->defaultValue()->updateModelsParametersProperties(m_parameters,
+            m_properties);
     }
     ui->treeViewEditParameter->updateAbsoluteAllNodesString();
 }
@@ -195,5 +215,6 @@ void DialogCommandPlugin::on_comboBoxCommand_currentIndexChanged(int index)
     }
     ui->groupBoxParameters->setEnabled(m_currentParameters->invisibleRootItem()
         ->rowCount() > 0);
+    this->updateParameterProperties();
     this->initializeHeader();
 }

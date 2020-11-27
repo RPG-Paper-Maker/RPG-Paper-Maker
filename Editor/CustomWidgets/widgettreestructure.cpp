@@ -444,6 +444,8 @@ void WidgetTreeStructure::newItem(QStandardItem *selected)
         PrimitiveValueKind::CustomStructure;
     SystemCustomStructureElement *element = new SystemCustomStructureElement(-1,
         "", isProperty);
+    element->value()->updateModelsParametersProperties(m_element->value()
+        ->modelParameter(), m_element->value()->modelProperties());
     QStandardItemModel *parentModel = this->getParentModel(selected, element);
     RPM::get()->setSelectedList(parentModel);
     emit beforeOpeningWindow();

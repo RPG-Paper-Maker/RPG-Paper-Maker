@@ -10,6 +10,7 @@
 */
 
 #include "primitivevalue.h"
+#include "systemcustomstructureelement.h"
 #include "rpm.h"
 
 const QString PrimitiveValue::JSON_IS_ACTIVATED = "ia";
@@ -606,6 +607,38 @@ void PrimitiveValue::getCommandParameter(QVector<QString> &command, bool active)
     if (active)
     {
         command.append(RPM::boolToString(m_isActivated));
+    }
+}
+
+// -------------------------------------------------------
+
+void PrimitiveValue::updateModelsParametersProperties(QStandardItemModel
+    *parameters, QStandardItemModel *properties)
+{
+    m_modelParameter = parameters;
+    m_modelProperties = properties;
+    QStandardItemModel *model = nullptr;
+    switch (m_kind)
+    {
+    case PrimitiveValueKind::CustomStructure:
+        model = m_customStructure->model();
+        break;
+    case PrimitiveValueKind::CustomList:
+        model = m_customList->model();
+        break;
+    default:
+        return;
+    }
+    SystemCustomStructureElement *element;
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        element = reinterpret_cast<SystemCustomStructureElement *>(SuperListItem
+            ::getItemModelAt(model, i));
+        if (element != nullptr)
+        {
+            element->value()->updateModelsParametersProperties(parameters,
+                properties);
+        }
     }
 }
 

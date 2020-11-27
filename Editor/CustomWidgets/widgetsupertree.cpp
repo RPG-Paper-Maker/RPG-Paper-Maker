@@ -89,7 +89,6 @@ void WidgetSuperTree::initializeModel(QStandardItemModel* m){
     connect(this->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(onSelectionChanged(QModelIndex,QModelIndex)));
-
 }
 
 void WidgetSuperTree::initializeNewItemInstance(SuperListItem* item){

@@ -45,6 +45,7 @@ protected:
 
     void initializePrimitives();
     void initializeHeader();
+    void updateParameterProperties();
 
     virtual void accept();
     virtual void initialize(EventCommand *command);

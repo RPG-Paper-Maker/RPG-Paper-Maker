@@ -423,7 +423,7 @@ void PanelPrimitiveValue::initializeFontAndUpdate(PrimitiveValue *m) {
 void PanelPrimitiveValue::initializeAllAndUpdate(PrimitiveValue *m)
 {
     initializeModel(m);
-    initializeAll();
+    initializeAll(m_model->modelParameter(), m_model->modelProperties());
     updateModel();
     switch (m->kind())
     {

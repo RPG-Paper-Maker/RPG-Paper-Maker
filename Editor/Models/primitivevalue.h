@@ -82,6 +82,8 @@ public:
     void initializeCommands(const QVector<QString> &command, int &i, bool active
         = false);
     void getCommandParameter(QVector<QString> &command, bool active = false);
+    void updateModelsParametersProperties(QStandardItemModel *parameters,
+        QStandardItemModel *properties);
     PrimitiveValue * createCopy() const;
     void setCopy(const PrimitiveValue &prim);
     void read(const QJsonObject &json);

@@ -2213,6 +2213,9 @@ QString EventCommand::strPlugin(SystemCommonObject *object, QStandardItemModel
                         param->defaultValue()->initializeCommandParameter(this,
                             i);
                     }
+                    param->defaultValue()->updateModelsParametersProperties(
+                        parameters, object == nullptr ? nullptr : object
+                        ->modelProperties());
                     list << param->defaultValue()->toString();
                 }
             }
