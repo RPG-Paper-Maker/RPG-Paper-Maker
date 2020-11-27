@@ -65,7 +65,13 @@ void DialogSystemCustomStructureElement::initialize()
 
 void DialogSystemCustomStructureElement::translate()
 {
-
+    this->setWindowTitle(RPM::translate(Translations::ELEMENT) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelKey->setText(RPM::translate(Translations::KEY) + RPM::COLON);
+    ui->labelDescription->setText(RPM::translate(Translations::DESCRIPTION) +
+        RPM::COLON);
+    ui->labelValue->setText(RPM::translate(Translations::VALUE) + RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

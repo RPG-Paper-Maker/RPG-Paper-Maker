@@ -53,7 +53,6 @@ public:
     void getCommandParameter(QVector<QString> &command);
 
     virtual QString toString() const;
-    virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);

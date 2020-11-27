@@ -38,6 +38,7 @@ DialogScripts::DialogScripts(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // Plugins
     ui->comboBoxCategory->addItems(RPM::ENUM_TO_STRING_PLUGIN_CATEGORY);
     m_widgetLineNumber = new WidgetCodeLineNumberArea(ui->widgetCodeSystem);
     m_highlighterSystem = new CodeSyntaxHighlighter(ui->widgetCodeSystem
@@ -69,10 +70,6 @@ DialogScripts::DialogScripts(QWidget *parent) :
     connect(ui->panelPluginDetails->treeViewParameters(), SIGNAL(keyPressed(
         QKeyEvent *)), this, SLOT(on_treeKeyPressed(QKeyEvent *)));
 
-    // Export text
-    ui->labelExport1->setText("<h2>Export this plugin localy and share it</h2>");
-    ui->labelExport2->setText("<h2>Export to the online database</h2><strong>Check out the github wiki page in " + RPM::TAG_OPEN_A +  "https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/wiki/Online-plugins-submission" + RPM::TAG_MIDDLE_A + "https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/wiki/Online-plugins-submission" + RPM::TAG_CLOSE_A + "!</strong>");
-
     // Keep space when hiding widgets
     QSizePolicy sp_retain;
     QList<QWidget *> widgetList;
@@ -82,6 +79,8 @@ DialogScripts::DialogScripts(QWidget *parent) :
         sp_retain.setRetainSizeWhenHidden(true);
         widgetList[i]->setSizePolicy(sp_retain);
     }
+
+    this->translate();
 }
 
 DialogScripts::~DialogScripts()
@@ -175,8 +174,9 @@ void DialogScripts::initialize()
 void DialogScripts::updateScriptCodeSave()
 {
     ui->treeViewSystem->updateAbsoluteAllNodesString();
-    ui->tabWidget->setTabText(0, "System" + (RPM::get()->project()
-        ->scriptsDatas()->allScriptsSaved() ? "" : RPM::SPACE + "*"));
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::SYSTEM) + (RPM
+        ::get()->project()->scriptsDatas()->allScriptsSaved() ? "" : RPM::SPACE
+        + "*"));
 }
 
 // -------------------------------------------------------
@@ -184,16 +184,17 @@ void DialogScripts::updateScriptCodeSave()
 void DialogScripts::updatePluginsSave()
 {
     ui->treeViewPlugins->updateAbsoluteAllNodesString();
-    ui->tabWidget->setTabText(1, "Plugins" + (RPM::get()->project()
-        ->scriptsDatas()->allPluginsSaved() ? "" : RPM::SPACE + "*"));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::PLUGINS) + (RPM
+        ::get()->project()->scriptsDatas()->allPluginsSaved() ? "" : RPM::SPACE
+        + "*"));
 }
 
 // -------------------------------------------------------
 
 void DialogScripts::updatePluginCodeSave()
 {
-    ui->tabWidgetPlugin->setTabText(1, "Code" + (this->getSelectedPlugin()
-        ->changed() ? RPM::SPACE + "*" : ""));
+    ui->tabWidgetPlugin->setTabText(1, RPM::translate(Translations::CODE) + (
+        this->getSelectedPlugin()->changed() ? RPM::SPACE + "*" : ""));
     this->updatePluginsSave();
 }
 
@@ -201,8 +202,8 @@ void DialogScripts::updatePluginCodeSave()
 
 void DialogScripts::updatePluginEditSave()
 {
-    ui->tabWidgetPlugin->setTabText(2, "Edit" + (this->getSelectedPlugin()
-        ->editChanged() ? RPM::SPACE + "*" : ""));
+    ui->tabWidgetPlugin->setTabText(2, RPM::translate(Translations::EDIT) + (
+        this->getSelectedPlugin()->editChanged() ? RPM::SPACE + "*" : ""));
     this->updatePluginsSave();
 }
 
@@ -210,8 +211,8 @@ void DialogScripts::updatePluginEditSave()
 
 void DialogScripts::updatePluginDetailsSave()
 {
-    ui->tabWidgetPlugin->setTabText(0, "Details" + (this->getSelectedPlugin()
-        ->editChanged() ? RPM::SPACE + "*" : ""));
+    ui->tabWidgetPlugin->setTabText(0, RPM::translate(Translations::DETAILS) + (
+        this->getSelectedPlugin()->editChanged() ? RPM::SPACE + "*" : ""));
     this->updatePluginsSave();
 }
 
@@ -251,8 +252,10 @@ void DialogScripts::checkUpdates()
                 ) == -1)
             {
                 QMessageBox::StandardButton box = QMessageBox::question(nullptr,
-                    RPM::translate(Translations::WARNING), QString("There is an new version of the plugin %1 available, would you like to download it?").arg(plugin->name()), QMessageBox::Yes |
-                    QMessageBox::No | QMessageBox::Cancel);
+                    RPM::translate(Translations::WARNING), RPM::translate(
+                    Translations::THERE_IS_NEW_VERSION_PLUGIN).arg(plugin
+                    ->name()), QMessageBox::Yes | QMessageBox::No | QMessageBox
+                    ::Cancel);
                 if (box == QMessageBox::Yes)
                 {
                     newPlugin->setIsOnline(true);
@@ -265,7 +268,10 @@ void DialogScripts::checkUpdates()
                     loop.exec();
                     if (reply->error() != QNetworkReply::NetworkError::NoError)
                     {
-                        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR_MESSAGE), QString("Error while trying to download %1 plugin").arg(plugin->name()) + RPM::DOT);
+                        QMessageBox::critical(nullptr, RPM::translate(
+                            Translations::ERROR_MESSAGE), RPM::translate(
+                            Translations::ERROR_WHILE_DOWNLOAD_PLUGIN).arg(
+                            plugin->name()) + RPM::DOT);
                         continue;
                     }
                     plugin->setCurrentCode(reply->readAll());
@@ -275,12 +281,55 @@ void DialogScripts::checkUpdates()
                     Common::writeOtherJSON(Common::pathCombine(plugin
                         ->getFolderPath(), SystemPlugin::NAME_JSON), doc);
                     RPM::get()->project()->writeScriptsDatas();
-                    QMessageBox::information(nullptr, "Success", QString("Successfully downlaoded the %1 plugin").arg(plugin->name()) + RPM::DOT);
+                    QMessageBox::information(nullptr, RPM::translate(
+                        Translations::SUCCESS), RPM::translate(Translations
+                        ::SUCCESSFULLY_DOWNLOADED_PLUGIN).arg(plugin->name()) +
+                        RPM::DOT);
                 }
             }
             delete newPlugin;
         }
     }
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::SCRIPTS_MANAGER) + RPM
+        ::DOT_DOT_DOT);
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::SYSTEM));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::PLUGINS));
+    ui->tabWidgetPlugin->setTabText(0, RPM::translate(Translations::DETAILS));
+    ui->tabWidgetPlugin->setTabText(1, RPM::translate(Translations::CODE));
+    ui->tabWidgetPlugin->setTabText(2, RPM::translate(Translations::EDIT));
+    ui->tabWidgetPlugin->setTabText(3, RPM::translate(Translations::EXPORT));
+    ui->pushButtonOpenPluginFolder->setText(RPM::translate(Translations
+        ::OPEN_PLUGIN_FOLDER));
+    ui->labelName->setText(RPM::translate(Translations::NAME));
+    ui->labelAuthor->setText(RPM::translate(Translations::AUTHOR));
+    ui->labelDescritpion->setText(RPM::translate(Translations::DESCRIPTION));
+    ui->labelVersion->setText(RPM::translate(Translations::VERSION));
+    ui->labelWebsite->setText(RPM::translate(Translations::WEBSITE));
+    ui->labelTutorial->setText(RPM::translate(Translations::TUTORIAL));
+    ui->labelCategory->setText(RPM::translate(Translations::CATEGORY));
+    ui->groupBoxParameters->setTitle(RPM::translate(Translations::PARAMETERS));
+    ui->groupBoxCommands->setTitle(RPM::translate(Translations::COMMANDS));
+    ui->labelSystemWarning->setText("<strong style=\"color: red\">/!\\" + RPM
+        ::SPACE + RPM::translate(Translations::YOU_CAN_EDIT_SYSTEM_CODE_BUT) +
+        "</strong>");
+    ui->labelExport1->setText("<h2>" + RPM::translate(Translations
+        ::EXPORT_THIS_PLUGIN_LOCALLY) + "</h2>");
+    ui->labelExport2->setText("<h2>" + RPM::translate(Translations
+        ::EXPORT_TO_ONLINE_DATABASE) + "</h2><strong>" + RPM::translate(
+        Translations::CHECK_OUT_GITHUB_WIKI).arg(RPM::TAG_OPEN_A +
+        "https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/wiki/"
+        "Online-plugins-submission" + RPM::TAG_MIDDLE_A + "https://github.com/"
+        "RPG-Paper-Maker/RPG-Paper-Maker/wiki/Online-plugins-submission" + RPM
+        ::TAG_CLOSE_A) + "</strong>");
+    ui->pushButtonExport->setText(RPM::translate(Translations::EXPORT) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonClose->setText(RPM::translate(Translations::CLOSE));
 }
 
 // -------------------------------------------------------
@@ -674,13 +723,15 @@ void DialogScripts::on_pushButtonExport_clicked()
         if (Common::copyPath(src, dst))
         {
             QMessageBox::information(nullptr, RPM::translate(Translations
-                ::INFORMATION), "Sucessfully copied" + RPM::SPACE + src + RPM
-                ::SPACE + RPM::translate(Translations::TO) + RPM::SPACE + dst);
+                ::SUCCESS), RPM::translate(Translations::SUCCESSFULLY_COPIED) +
+                RPM::SPACE + src + RPM::SPACE + RPM::translate(Translations::TO)
+                + RPM::SPACE + dst);
         } else
         {
             QMessageBox::critical(nullptr, RPM::translate(Translations
-                ::ERROR_MESSAGE), "Impossible to copy" + RPM::SPACE + src + RPM
-                ::SPACE + RPM::translate(Translations::TO) + RPM::SPACE + dst);
+                ::ERROR_MESSAGE), RPM::translate(Translations
+                ::IMPOSSIBLE_TO_COPY) + RPM::SPACE + src + RPM::SPACE + RPM
+                ::translate(Translations::TO) + RPM::SPACE + dst);
         }
     }
 }

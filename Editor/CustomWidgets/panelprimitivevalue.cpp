@@ -778,12 +778,13 @@ void PanelPrimitiveValue::addCustomStructure(bool isList)
 {
     if (isList)
     {
-        ui->comboBoxChoice->addItem("Custom list", static_cast<int>(
-            PrimitiveValueKind::CustomList));
+        ui->comboBoxChoice->addItem(RPM::translate(Translations::CUSTOM_LIST),
+            static_cast<int>(PrimitiveValueKind::CustomList));
     } else
     {
-        ui->comboBoxChoice->addItem("Custom structure", static_cast<int>(
-            PrimitiveValueKind::CustomStructure));
+        ui->comboBoxChoice->addItem(RPM::translate(Translations
+            ::CUSTOM_STRUCTURE), static_cast<int>(PrimitiveValueKind
+            ::CustomStructure));
     }
 }
 

@@ -42,6 +42,8 @@ public:
 private:
     Ui::PanelPluginDetails *ui;
     SystemPlugin *m_plugin;
+
+    void translate();
 };
 
 #endif // PANELPLUGINDETAILS_H

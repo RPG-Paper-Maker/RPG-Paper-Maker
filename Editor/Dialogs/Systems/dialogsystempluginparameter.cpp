@@ -31,6 +31,8 @@ DialogSystemPluginParameter::DialogSystemPluginParameter(SystemPluginParameter
     ui->setupUi(this);
 
     this->initialize();
+
+    this->translate();
 }
 
 DialogSystemPluginParameter::~DialogSystemPluginParameter()
@@ -77,8 +79,14 @@ void DialogSystemPluginParameter::initialize()
 
 void DialogSystemPluginParameter::translate()
 {
+    this->setWindowTitle(RPM::translate(Translations::PARAMETER) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelDescription->setText(RPM::translate(Translations::DESCRIPTION) +
+        RPM::COLON);
     ui->labelDefaultValue->setText(RPM::translate(m_parameter.isDefault() ?
         Translations::DEFAULT_VALUE : Translations::VALUE));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------
@@ -92,14 +100,16 @@ void DialogSystemPluginParameter::accept()
     if (m_parameter.name().isEmpty())
     {
         QMessageBox::information(nullptr, RPM::translate(Translations
-            ::WARNING), "The plugin parameter name can't be empty.");
+            ::WARNING), RPM::translate(Translations
+            ::THE_PLUGIN_PARAMETER_NAME_EMPTY) + RPM::DOT);
         return;
     }
     if (m_previousName != m_parameter.name() && SuperListItem::containsName(RPM
         ::get()->selectedList(), m_parameter.name()))
     {
         QMessageBox::information(nullptr, RPM::translate(Translations
-            ::WARNING), "This plugin parameter name already exists in your parameters list.");
+            ::WARNING), RPM::translate(Translations
+            ::THIS_PLUGIN_PARAMETER_NAME_ALREADY_EXISTS) + RPM::DOT);
         return;
     }
     QDialog::accept();

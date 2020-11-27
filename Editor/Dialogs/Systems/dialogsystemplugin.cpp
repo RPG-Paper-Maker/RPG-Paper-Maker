@@ -120,7 +120,8 @@ void DialogSystemPlugin::initialize()
 void DialogSystemPlugin::refreshOnline()
 {
     ui->pushButtonRefresh->setEnabled(false);
-    ui->pushButtonRefresh->setText("Searching for plugins...");
+    ui->pushButtonRefresh->setText(RPM::translate(Translations
+        ::SEARCHING_FOR_PLUGINS) + RPM::DOT_DOT_DOT);
     SuperListItem::deleteModel(m_onlineList, false);
     QNetworkAccessManager manager;
     QString pluginsFolder = "https://raw.githubusercontent.com/RPG-Paper-Maker/"
@@ -166,14 +167,27 @@ void DialogSystemPlugin::refreshOnline()
         m_onlineList->appendRow(plugin->getModelRow());
     }
     ui->pushButtonRefresh->setEnabled(true);
-    ui->pushButtonRefresh->setText("Refresh");
+    ui->pushButtonRefresh->setText(RPM::translate(Translations::REFRESH));
 }
 
 // -------------------------------------------------------
 
 void DialogSystemPlugin::translate()
 {
-    // translate label import here
+    this->setWindowTitle(RPM::translate(Translations::SET_PLUGIN) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelCategory->setText(RPM::translate(Translations::CATEGORY) +
+        RPM::COLON);
+    ui->labelLocalPlugin->setText(RPM::translate(Translations
+        ::NO_PLUGIN_SELECTED) + RPM::COLON);
+    ui->radioButtonEmpty->setText(RPM::translate(Translations::CREATE_EMPTY));
+    ui->radioButtonLocal->setText(RPM::translate(Translations
+        ::IMPORT_FROM_LOCAL_PLUGIN));
+    ui->radioButtonOnline->setText(RPM::translate(Translations
+        ::ADD_FROM_ONLINE_PLUGINS_LIST));
+    ui->pushButtonRefresh->setText(RPM::translate(Translations::REFRESH));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------
@@ -192,8 +206,8 @@ void DialogSystemPlugin::accept()
     if (m_plugin.type() == PluginTypeKind::Online && !m_isOnlinePluginLoaded)
     {
         QMessageBox::information(nullptr, RPM::translate(Translations
-            ::INFORMATION), "You need to select a plugin to import" + RPM
-            ::DOT);
+            ::INFORMATION), RPM::translate(Translations
+            ::YOU_NEED_SELECT_PLUGIN_IMPORT) + RPM::DOT);
     }
 
     // Check plugin name
@@ -207,9 +221,9 @@ void DialogSystemPlugin::accept()
     {
         QMessageBox::StandardButton box = QMessageBox::question(this, RPM
             ::translate(Translations::WARNING), RPM::translate(Translations
-            ::WARNING) + RPM::COMMA + RPM::SPACE +
-            "You will erase any progress in this plugin if you continue. Keep going?",
-            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+            ::WARNING) + RPM::COMMA + RPM::SPACE + RPM::translate(Translations
+            ::YOU_WILL_ERASE_PROGRESS_PLUGIN), QMessageBox::Yes | QMessageBox
+            ::No | QMessageBox::Cancel);
         if (box != QMessageBox::Yes)
         {
             return;
@@ -241,8 +255,8 @@ void DialogSystemPlugin::accept()
         if (!m_isImportPluginLoaded)
         {
             QMessageBox::information(nullptr, RPM::translate(Translations
-                ::INFORMATION), "You need to select a plugin to import" + RPM
-                ::DOT);
+                ::INFORMATION), RPM::translate(Translations
+                ::YOU_NEED_SELECT_PLUGIN_IMPORT) + RPM::DOT);
             return;
         }
         QString src = ui->labelLocalPlugin->text();
@@ -254,8 +268,9 @@ void DialogSystemPlugin::accept()
         if (!Common::copyPath(src, Common::pathCombine(dst, m_plugin.name())))
         {
             QMessageBox::critical(nullptr, RPM::translate(Translations
-                ::ERROR_MESSAGE), "Impossible to copy" + RPM::SPACE + src + RPM
-                ::SPACE + RPM::translate(Translations::TO) + RPM::SPACE + dst);
+                ::ERROR_MESSAGE), RPM::translate(Translations
+                ::IMPOSSIBLE_TO_COPY) + RPM::SPACE + src + RPM::SPACE + RPM
+                ::translate(Translations::TO) + RPM::SPACE + dst);
             return;
         }
 

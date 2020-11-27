@@ -31,6 +31,8 @@ PanelPluginDetails::PanelPluginDetails(QWidget *parent) :
         SystemPluginParameter);
     ui->treeViewEditParameter->setCanMove(false);
     ui->treeViewEditParameter->setCanCreateDelete(false);
+
+    this->translate();
 }
 
 PanelPluginDetails::~PanelPluginDetails()
@@ -61,7 +63,9 @@ void PanelPluginDetails::initialize(SystemPlugin *plugin)
     } else
     {
         ui->labelAuthor->show();
-        ui->labelAuthor->setText(RPM::TAG_OPEN_STRONG + "Author" + RPM::COLON + RPM::TAG_CLOSE_STRONG + RPM::SPACE + m_plugin->author());
+        ui->labelAuthor->setText(RPM::TAG_OPEN_STRONG + RPM::translate(
+            Translations::AUTHOR) + RPM::COLON + RPM::TAG_CLOSE_STRONG + RPM
+            ::SPACE + m_plugin->author());
     }
     if (m_plugin->description().isEmpty())
     {
@@ -89,10 +93,10 @@ void PanelPluginDetails::initialize(SystemPlugin *plugin)
     } else
     {
         ui->labelWebsite->show();
-        ui->labelWebsite->setText(RPM::TAG_OPEN_STRONG + "Website" + RPM::COLON
-            + RPM::TAG_CLOSE_STRONG + RPM::SPACE + RPM::TAG_OPEN_A + m_plugin
-            ->website() + RPM::TAG_MIDDLE_A + m_plugin->website() + RPM
-            ::TAG_CLOSE_A);
+        ui->labelWebsite->setText(RPM::TAG_OPEN_STRONG + RPM::translate(
+            Translations::WEBSITE) + RPM::COLON + RPM::TAG_CLOSE_STRONG + RPM
+            ::SPACE + RPM::TAG_OPEN_A + m_plugin->website() + RPM::TAG_MIDDLE_A
+            + m_plugin->website() + RPM::TAG_CLOSE_A);
     }
     if (m_plugin->tutorial().isEmpty())
     {
@@ -100,10 +104,10 @@ void PanelPluginDetails::initialize(SystemPlugin *plugin)
     } else
     {
         ui->labelTutorial->show();
-        ui->labelTutorial->setText(RPM::TAG_OPEN_STRONG + "Tutorial" + RPM
-            ::COLON + RPM::TAG_CLOSE_STRONG + RPM::SPACE + RPM::TAG_OPEN_A +
-            m_plugin->tutorial() + RPM::TAG_MIDDLE_A + m_plugin->tutorial() +
-            RPM::TAG_CLOSE_A);
+        ui->labelTutorial->setText(RPM::TAG_OPEN_STRONG + RPM::translate(
+            Translations::TUTORIAL) + RPM::COLON + RPM::TAG_CLOSE_STRONG + RPM
+            ::SPACE + RPM::TAG_OPEN_A + m_plugin->tutorial() + RPM::TAG_MIDDLE_A
+            + m_plugin->tutorial() + RPM::TAG_CLOSE_A);
     }
     SuperListItem::removeEmptyInTree(m_plugin->parameters());
     ui->groupBoxParameters->setVisible(m_plugin->parameters()
@@ -124,4 +128,12 @@ void PanelPluginDetails::initialize(SystemPlugin *plugin)
         }
     }
     ui->labelCommands->setText(strCommands);
+}
+
+// -------------------------------------------------------
+
+void PanelPluginDetails::translate()
+{
+    ui->groupBoxCommands->setTitle(RPM::translate(Translations::COMMANDS));
+    ui->groupBoxParameters->setTitle(RPM::translate(Translations::PARAMETERS));
 }

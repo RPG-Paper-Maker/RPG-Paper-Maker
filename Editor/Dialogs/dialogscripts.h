@@ -59,6 +59,8 @@ private:
     CodeSyntaxHighlighter *m_highlighterPlugin;
     bool m_isSettingprogramatically;
 
+    void translate();
+
 public slots:
     void on_scriptSystemSelected(QModelIndex, QModelIndex);
     void on_scriptPluginSelected(QModelIndex, QModelIndex);

@@ -39,7 +39,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_12">
          <item row="0" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
+          <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
             <widget class="WidgetSuperTree" name="treeViewSystem">
              <property name="minimumSize">
@@ -72,11 +72,28 @@
             </widget>
            </item>
            <item>
-            <widget class="WidgetCode" name="widgetCodeSystem">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-            </widget>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QLabel" name="labelSystemWarning">
+               <property name="text">
+                <string>&lt;span style=&quot;color=red&quot;&gt;You can edit the system code, but be aware that all your progress will be removed after each new RPG Paper Maker update!</string>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::RichText</enum>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="WidgetCode" name="widgetCodeSystem">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
          </item>
@@ -111,7 +128,7 @@
            <item>
             <widget class="QTabWidget" name="tabWidgetPlugin">
              <property name="currentIndex">
-              <number>2</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="tab">
               <attribute name="title">

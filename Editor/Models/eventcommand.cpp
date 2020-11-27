@@ -2225,8 +2225,9 @@ QString EventCommand::strPlugin(SystemCommonObject *object, QStandardItemModel
             SuperListItem::deleteModel(currentParameters);
         }
     }
-    return "Plugin" + RPM::COLON + RPM::SPACE + pluginName + RPM::SPACE + RPM
-        ::DASH + RPM::SPACE + commandName + commandParameters;
+    return RPM::translate(Translations::PLUGIN) + RPM::COLON + RPM::SPACE +
+        pluginName + RPM::SPACE + RPM::DASH + RPM::SPACE + commandName +
+        commandParameters;
 }
 
 // -------------------------------------------------------

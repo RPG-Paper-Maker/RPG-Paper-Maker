@@ -10,7 +10,6 @@
 */
 
 #include "systemcustomstructure.h"
-#include "dialogsystemcustomstructure.h"
 #include "systemcustomstructureelement.h"
 #include "rpm.h"
 
@@ -211,21 +210,6 @@ QString SystemCustomStructure::toString() const
         str += RPM::BRACE_RIGHT;
     }
     return str;
-}
-
-// -------------------------------------------------------
-
-bool SystemCustomStructure::openDialog()
-{
-    SystemCustomStructure custom;
-    custom.setCopy(*this);
-    DialogSystemCustomStructure dialog(custom);
-    if (dialog.exec() == QDialog::Accepted)
-    {
-        this->setCopy(custom);
-        return true;
-    }
-    return false;
 }
 
 // -------------------------------------------------------

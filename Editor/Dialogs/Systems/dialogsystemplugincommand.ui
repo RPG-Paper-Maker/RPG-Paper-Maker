@@ -32,35 +32,18 @@
       <number>15</number>
      </property>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
        <item>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="1" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="labelDescriptionValue">
-             <property name="text">
-              <string>Description</string>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineEditDescription"/>
-           </item>
-          </layout>
-         </item>
          <item row="0" column="0">
           <widget class="QLabel" name="labelName">
            <property name="text">
             <string>Name:</string>
            </property>
           </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="lineEditName"/>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="labelDescription">
@@ -69,22 +52,8 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="labelNameValue">
-             <property name="text">
-              <string>Name</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineEditName"/>
-           </item>
-          </layout>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineEditDescription"/>
          </item>
         </layout>
        </item>

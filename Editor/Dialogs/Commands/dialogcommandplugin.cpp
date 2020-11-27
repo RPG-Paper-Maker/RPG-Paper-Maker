@@ -82,9 +82,11 @@ void DialogCommandPlugin::initializeHeader()
 
 void DialogCommandPlugin::translate()
 {
-    /*
-    this->setWindowTitle(RPM::translate(Translations::CHANGE_A_SKILL) + RPM
-        ::DOT_DOT_DOT);*/
+    this->setWindowTitle(RPM::translate(Translations::PLUGIN) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelPlugin->setText(RPM::translate(Translations::PLUGIN) + RPM::COLON);
+    ui->labelCommand->setText(RPM::translate(Translations::COMMAND) + RPM::COLON);
+    ui->groupBoxParameters->setTitle(RPM::translate(Translations::PARAMETERS));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
