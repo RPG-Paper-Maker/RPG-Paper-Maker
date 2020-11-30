@@ -82,6 +82,7 @@ public:
     void write();
     void updateTheme();
     void updateProject(QString name, QString link);
+    void clearProjects();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

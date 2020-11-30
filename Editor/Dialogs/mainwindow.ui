@@ -59,6 +59,7 @@
     </widget>
     <addaction name="actionNew_project"/>
     <addaction name="menuOpen_project"/>
+    <addaction name="actionClean_recent_projects"/>
     <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_all"/>
@@ -694,6 +695,11 @@
    </property>
    <property name="shortcut">
     <string>Shift+Down</string>
+   </property>
+  </action>
+  <action name="actionClean_recent_projects">
+   <property name="text">
+    <string>Clean recent projects</string>
    </property>
   </action>
  </widget>

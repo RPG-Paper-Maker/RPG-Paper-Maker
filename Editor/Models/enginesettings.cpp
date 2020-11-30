@@ -262,22 +262,36 @@ void EngineSettings::updateTheme() {
 // -------------------------------------------------------
 
 void EngineSettings::updateProject(QString name, QString link) {
-    int index, number;
-
-    index = m_projectLinks.indexOf(link);
-    if (index != -1) {
-        m_projectNames.removeAt(index);
-        m_projectLinks.removeAt(index);
-    }
     m_projectNames.insert(0, name);
     m_projectLinks.insert(0, link);
-    number = projectNumber();
-    if (number > Project::MAX_PROJECTS_NUMBER) {
-        m_projectNames.removeAt(number - 1);
-        m_projectLinks.removeAt(number - 1);
-    }
 
-   this->write();
+    // Remove duplicates
+    for (int i = m_projectLinks.size() - 1; i >= 0; i--)
+    {
+        for (int j = 0, l = m_projectLinks.size(); j < l && i != j; j++)
+        {
+            if (m_projectLinks.at(i) == m_projectLinks.at(j))
+            {
+                m_projectNames.removeAt(i);
+                m_projectLinks.removeAt(i);
+                break;
+            }
+        }
+    }
+    int nb = projectNumber();
+    if (nb > Project::MAX_PROJECTS_NUMBER) {
+        m_projectNames.removeAt(nb - 1);
+        m_projectLinks.removeAt(nb - 1);
+    }
+    this->write();
+}
+
+// -------------------------------------------------------
+
+void EngineSettings::clearProjects()
+{
+    m_projectLinks.clear();
+    m_projectNames.clear();
 }
 
 // -------------------------------------------------------
@@ -314,19 +328,6 @@ void EngineSettings::read(const QJsonObject &json) {
     for (i = 0, l = tab.size(); i < l; i++) {
         m_projectLinks << tab.at(i).toString();
     }
-    // Remove duplicates
-    /*
-    for (i = tab.size() - 1; i >= 0; i--) {
-        m_projectLinks << tab.at(i).toString();
-        for (j = 0, ll = tab.size(); j < ll && i != j; j++) {
-            if (m_projectLinks.at(i) == m_projectLinks.at(j))
-            {
-                m_projectNames.removeAt(i);
-                m_projectLinks.removeAt(i);
-                break;
-            }
-        }
-    }*/
     if (json.contains(JSON_FIRST_TIME)) {
         m_firstTime = json[JSON_FIRST_TIME].toBool();
     }

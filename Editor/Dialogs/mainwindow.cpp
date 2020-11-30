@@ -91,8 +91,8 @@ MainWindow::~MainWindow()
     delete gameProcess;
     gameProcess = nullptr;
     cleanRecentProjectsActions();
-    delete ui;
     delete m_dialogScripts;
+    delete ui;
     RPM::kill();
 }
 
@@ -533,6 +533,13 @@ void MainWindow::on_actionNew_project_triggered(){
 
 void MainWindow::on_actionBrowse_triggered(){
     openExistingProject();
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionClean_recent_projects_triggered()
+{
+    RPM::get()->engineSettings()->clearProjects();
 }
 
 // -------------------------------------------------------

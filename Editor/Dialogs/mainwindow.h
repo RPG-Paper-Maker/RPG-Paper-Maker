@@ -80,6 +80,7 @@ protected:
 private slots:
     void on_actionNew_project_triggered();
     void on_actionBrowse_triggered();
+    void on_actionClean_recent_projects_triggered();
     void on_actionSave_triggered();
     void on_actionSave_all_triggered();
     void on_actionOpen_project_folder_triggered();
