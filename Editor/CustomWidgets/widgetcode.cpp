@@ -52,6 +52,13 @@ void WidgetCode::initialize(SystemScript *script)
 
 // -------------------------------------------------------
 
+void WidgetCode::removeScript()
+{
+    m_script = nullptr;
+}
+
+// -------------------------------------------------------
+
 int WidgetCode::lineNumberAreaWidth()
 {
     return 3 + fontMetrics().width(QLatin1Char('9')) * 5;

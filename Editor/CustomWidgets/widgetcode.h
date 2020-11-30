@@ -31,6 +31,7 @@ public:
     WidgetCode(QWidget *parent = nullptr);
 
     void initialize(SystemScript *script);
+    void removeScript();
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
 

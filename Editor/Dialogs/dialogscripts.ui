@@ -370,7 +370,7 @@
                       </widget>
                      </item>
                      <item row="7" column="1">
-                      <widget class="QComboBox" name="comboBoxCategory"/>
+                      <widget class="ComboBoxWheel" name="comboBoxCategory"/>
                      </item>
                     </layout>
                    </item>
@@ -551,6 +551,11 @@
    <class>WidgetCode</class>
    <extends>QPlainTextEdit</extends>
    <header>widgetcode.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ComboBoxWheel</class>
+   <extends>QComboBox</extends>
+   <header>comboboxwheel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

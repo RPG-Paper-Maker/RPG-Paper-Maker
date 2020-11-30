@@ -80,16 +80,21 @@ DialogScripts::DialogScripts(QWidget *parent) :
         widgetList[i]->setSizePolicy(sp_retain);
     }
 
+    // Avoid focus because of scrollbar
+    ui->comboBoxCategory->setFocusPolicy( Qt::StrongFocus );
+
     this->translate();
 }
 
 DialogScripts::~DialogScripts()
 {
-    delete ui;
+    ui->widgetCodeSystem->removeScript();
+    ui->widgetCodePlugin->removeScript();
     delete m_widgetLineNumber;
     delete m_highlighterSystem;
     delete m_widgetLineNumberPlugin;
     delete m_highlighterPlugin;
+    delete ui;
 }
 
 // -------------------------------------------------------

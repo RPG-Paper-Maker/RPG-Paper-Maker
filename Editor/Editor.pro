@@ -21,6 +21,7 @@ DESTDIR = $$ROOT_DESTDIR/Editor
 
 HEADERS += \
     CustomWidgets/codesyntaxhighlighter.h \
+    CustomWidgets/comboboxwheel.h \
     CustomWidgets/panelcolorstransition.h \
     CustomWidgets/panelplugindetails.h \
     CustomWidgets/panelselectpositionmaps.h \
@@ -401,6 +402,7 @@ HEADERS += \
 
 SOURCES += \
     CustomWidgets/codesyntaxhighlighter.cpp \
+    CustomWidgets/comboboxwheel.cpp \
     CustomWidgets/panelcolorstransition.cpp \
     CustomWidgets/panelplugindetails.cpp \
     CustomWidgets/panelselectpositionmaps.cpp \

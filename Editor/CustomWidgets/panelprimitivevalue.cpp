@@ -266,7 +266,6 @@ void PanelPrimitiveValue::initializeAll(QStandardItemModel *parameters,
     addVariable();
     addNumberDouble();
     addSwitch();
-    addMessage(true);
     addMessage(false);
     addParameter(parameters);
     addProperty(properties);
