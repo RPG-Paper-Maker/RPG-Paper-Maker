@@ -41,8 +41,8 @@ const QString SystemPlugin::DEFAULT_WEBSITE = "";
 const QString SystemPlugin::DEFAULT_DESCRIPTION = "";
 const QString SystemPlugin::DEFAULT_VERSION = "1.0.0";
 const QString SystemPlugin::DEFAULT_TUTORIAL = "";
-const QString SystemPlugin::NAME_CODE = "code" + RPM::EXTENSION_JS;
-const QString SystemPlugin::NAME_JSON = "details" + RPM::EXTENSION_JSON;
+const QString SystemPlugin::NAME_CODE = "code.js";
+const QString SystemPlugin::NAME_JSON = "details.json";
 
 // -------------------------------------------------------
 //
