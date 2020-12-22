@@ -43,6 +43,8 @@ public:
     void setCanBeControled(bool b);
     void setCanMove(bool b);
     void setCanCreateDelete(bool b);
+    void setCanSameName(bool b);
+
     void updateAbsoluteAllNodesString();
 
     static int getNewId(QStandardItemModel* model, int offset = 1);
@@ -70,6 +72,7 @@ protected:
     bool m_canBeControled;
     bool m_canMove;
     bool m_canCreateDelete;
+    bool m_canSameName;
 
     QStandardItem* getRootOfItem(QStandardItem* selected);
     void setItem(QStandardItem *selected, SuperListItem* super);
@@ -95,6 +98,7 @@ signals:
     void modelUpdated();
     void needsUpdateJson(SuperListItem* super);
     void deletingItem(SuperListItem* super, int row);
+    void pastingItem(SuperListItem *previous, SuperListItem *after, int row);
     void tryingEdit();
     void idChanged(int previousID, int newID);
     void windowClosed();

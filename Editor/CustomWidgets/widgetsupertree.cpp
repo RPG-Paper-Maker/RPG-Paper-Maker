@@ -31,7 +31,8 @@ WidgetSuperTree::WidgetSuperTree(QWidget *parent) :
     m_hasContextMenu(true),
     m_canBeControled(true),
     m_canMove(true),
-    m_canCreateDelete(true)
+    m_canCreateDelete(true),
+    m_canSameName(true)
 {
     this->setIndentation(0);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -79,6 +80,11 @@ void WidgetSuperTree::setCanCreateDelete(bool b) {
     m_contextMenuCommonCommands->canCopy(b);
     m_contextMenuCommonCommands->canPaste(b);
     m_contextMenuCommonCommands->canDelete(b);
+}
+
+void WidgetSuperTree::setCanSameName(bool b)
+{
+    m_canSameName = b;
 }
 
 void WidgetSuperTree::initializeModel(QStandardItemModel* m){
@@ -201,6 +207,27 @@ void WidgetSuperTree::copyItem(QStandardItem* selected)
 void WidgetSuperTree::pasteItem(QStandardItem* selected){
     if (m_copiedItem != nullptr) {
         SuperListItem* super = m_copiedItem->createCopy();
+        if (!m_canSameName) {
+            bool test = true;
+            QString name;
+            while (test) {
+                test = false;
+                name = super->name();
+                for (int i = 0, l = p_model->invisibleRootItem()->rowCount(); i
+                     < l; i++)
+                {
+                    SuperListItem *superOther = SuperListItem::getItemModelAt(
+                        p_model, i);
+                    if (superOther != nullptr && name == superOther->name())
+                    {
+                        test = true;
+                        super->setName(name + "_copy");
+                        break;
+                    }
+                }
+            }
+        }
+        emit pastingItem(m_copiedItem, super, selected->row());
         setItem(selected, super);
     }
 }

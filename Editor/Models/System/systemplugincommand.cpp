@@ -150,6 +150,7 @@ void SystemPluginCommand::setCopy(const SuperListItem &super)
 
     const SystemPluginCommand *plugin = reinterpret_cast<const
         SystemPluginCommand *>(&super);
+    p_id = plugin->p_id;
     m_description = plugin->m_description;
     this->clearDefaultParameters();
     SuperListItem::copy(m_defaultParameters, plugin->m_defaultParameters);

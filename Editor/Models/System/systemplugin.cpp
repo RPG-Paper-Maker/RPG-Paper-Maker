@@ -59,6 +59,7 @@ SystemPlugin::SystemPlugin() :
 SystemPlugin::SystemPlugin(int i, QString n, bool io, PluginTypeKind t,
     PluginCategoryKind c, QString a, QString w, QString d, QString v, QString tu) :
     SystemScript(i, n),
+    m_displayIsOn(true),
     m_isON(io),
     m_type(t),
     m_category(c),
@@ -75,6 +76,7 @@ SystemPlugin::SystemPlugin(int i, QString n, bool io, PluginTypeKind t,
     m_editedPlugin(nullptr),
     m_isOnline(false)
 {
+    m_displayID = true;
     this->initializeHeaders();
 }
 
@@ -84,6 +86,11 @@ SystemPlugin::~SystemPlugin()
     SuperListItem::deleteModel(m_parameters);
     SuperListItem::deleteModel(m_commands);
     this->removeEditedPlugin();
+}
+
+bool SystemPlugin::displayIsOn() const
+{
+    return m_displayIsOn;
 }
 
 bool SystemPlugin::isON() const
@@ -159,6 +166,11 @@ SystemPlugin * SystemPlugin::editedPlugin() const
 bool SystemPlugin::isOnline() const
 {
     return m_isOnline;
+}
+
+void SystemPlugin::setDisplayIsOn(bool displayIsOn)
+{
+    m_displayIsOn = displayIsOn;
 }
 
 void SystemPlugin::setIsON(bool isON)
@@ -442,10 +454,13 @@ QList<QStandardItem*> SystemPlugin::getModelRow() const
     QStandardItem* item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setCheckable(true);
-    if (m_isON)
+    if (m_displayIsOn)
     {
-        item->setCheckState(Qt::Checked);
+        item->setCheckable(true);
+        if (m_isON)
+        {
+            item->setCheckState(Qt::Checked);
+        }
     }
     item->setText(this->toString());
     row.append(item);

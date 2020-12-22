@@ -286,6 +286,10 @@ bool Common::copyPathSym(QList<QPair<QString, QString>> &list, QString src,
         return false;
     }
     QDir dirDst(dst);
+    if (!dirDst.exists())
+    {
+        QDir().mkpath(dst);
+    }
     QString dstPath, path, absolutePath;
     foreach (QFileInfo id, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
     {

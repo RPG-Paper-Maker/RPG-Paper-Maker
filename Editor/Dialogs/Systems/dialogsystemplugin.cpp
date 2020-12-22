@@ -155,6 +155,8 @@ void DialogSystemPlugin::refreshOnline()
         plugin = new SystemPlugin;
         plugin->setIsOnline(true);
         plugin->read(doc);
+        plugin->setDisplayID(false);
+        plugin->setDisplayIsOn(false);
         reply = manager.get(QNetworkRequest(QUrl(pathPlugin + "/" + SystemPlugin
             ::NAME_CODE)));
         QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
@@ -291,6 +293,8 @@ void DialogSystemPlugin::accept()
         file.open(QIODevice::ReadWrite);
         file.write(m_plugin.currentCode().toUtf8());
         file.close();
+        m_plugin.setDisplayID(true);
+        m_plugin.setDisplayIsOn(true);
         break;
     }
 

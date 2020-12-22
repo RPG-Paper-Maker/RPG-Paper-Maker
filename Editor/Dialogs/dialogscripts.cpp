@@ -49,9 +49,11 @@ DialogScripts::DialogScripts(QWidget *parent) :
     ui->treeViewSystem->initializeNewItemInstance(new SystemScript);
     ui->treeViewPlugins->initializeNewItemInstance(new SystemPlugin);
     ui->treeViewPlugins->setUpdateId(true);
+    ui->treeViewPlugins->setCanSameName(false);
     ui->treeViewEditParameter->initializeNewItemInstance(new
         SystemPluginParameter);
     ui->treeViewEditCommands->initializeNewItemInstance(new SystemPluginCommand);
+    ui->treeViewEditCommands->setUpdateId(true);
     ui->treeViewSystem->header()->setStretchLastSection(false);
     ui->treeViewSystem->header()->setSectionResizeMode(QHeaderView
         ::ResizeToContents);
@@ -152,8 +154,11 @@ void DialogScripts::initialize()
         QModelIndex, QModelIndex)));
     connect(ui->treeViewPlugins, SIGNAL(modelUpdated()), this, SLOT(
         on_pluginListUpdated()));
-    connect(ui->treeViewPlugins, SIGNAL(deletingItem(SuperListItem *, int)),
+    connect(ui->treeViewPlugins, SIGNAL(deletingItem(SuperListItem*, int)),
         this, SLOT(on_pluginListDeleted(SuperListItem *, int)));
+    connect(ui->treeViewPlugins, SIGNAL(pastingItem(SuperListItem*,
+        SuperListItem*, int)), this, SLOT(on_pluginListPasted(SuperListItem*,
+        SuperListItem*, int)));
     index = ui->treeViewPlugins->getModel()->index(0, 0);
     ui->treeViewPlugins->setCurrentIndex(index);
     on_scriptPluginSelected(index, index);
@@ -304,8 +309,6 @@ void DialogScripts::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::SCRIPTS_MANAGER) + RPM
         ::DOT_DOT_DOT);
-    ui->tabWidget->setTabText(0, RPM::translate(Translations::SYSTEM));
-    ui->tabWidget->setTabText(1, RPM::translate(Translations::PLUGINS));
     ui->tabWidgetPlugin->setTabText(0, RPM::translate(Translations::DETAILS));
     ui->tabWidgetPlugin->setTabText(1, RPM::translate(Translations::CODE));
     ui->tabWidgetPlugin->setTabText(2, RPM::translate(Translations::EDIT));
@@ -539,6 +542,15 @@ void DialogScripts::on_pluginListDeleted(SuperListItem *super, int)
 {
     QDir(reinterpret_cast<SystemPlugin *>(super)->getFolderPath())
         .removeRecursively();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pluginListPasted(SuperListItem *previous, SuperListItem
+    *after, int)
+{
+    Common::copyPath(reinterpret_cast<SystemPlugin *>(previous)->getFolderPath()
+        , reinterpret_cast<SystemPlugin *>(after)->getFolderPath());
 }
 
 // -------------------------------------------------------

@@ -104,8 +104,12 @@ void SuperListItem::setCopy(const SuperListItem& item){
 // -------------------------------------------------------
 
 QString SuperListItem::toString() const {
-    return id() > 0 ? (QString(beginningText) + idToString() + QString(": ") +
-        name()) : name();
+    if (m_displayID)
+    {
+        return id() > 0 ? (QString(beginningText) + idToString() + QString(": ")
+            + name()) : name();
+    }
+    return this->toStringName();
 }
 
 // -------------------------------------------------------
@@ -433,7 +437,7 @@ QList<QStandardItem *> SuperListItem::getModelRow() const{
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
     if (!m_containsDatas || RPM::get()->project()->gameDatas()->isDatasRead()) {
-        item->setText(m_displayID ? this->toString() : this->toStringName());
+        item->setText(this->toString());
     }
     row.append(item);
     return row;

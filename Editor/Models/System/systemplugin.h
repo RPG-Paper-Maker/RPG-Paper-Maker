@@ -61,6 +61,7 @@ public:
         DEFAULT_DESCRIPTION, QString v = DEFAULT_VERSION, QString tu =
         DEFAULT_TUTORIAL);
     virtual ~SystemPlugin();
+    bool displayIsOn() const;
     bool isON() const;
     PluginTypeKind type() const;
     PluginCategoryKind category() const;
@@ -76,6 +77,7 @@ public:
     bool defaultParametersChanged() const;
     SystemPlugin * editedPlugin() const;
     bool isOnline() const;
+    void setDisplayIsOn(bool displayIsOn);
     void setIsON(bool isON);
     void setType(PluginTypeKind type);
     void setCategory(PluginCategoryKind category);
@@ -111,6 +113,7 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
+    bool m_displayIsOn;
     bool m_isON;
     PluginTypeKind m_type;
     PluginCategoryKind m_category;
