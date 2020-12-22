@@ -14,8 +14,8 @@
 #include "rpm.h"
 
 const QString PrimitiveValue::JSON_IS_ACTIVATED = "ia";
-const QString PrimitiveValue::JSON_CUSTOM_STRUCTURE = "cs";
-const QString PrimitiveValue::JSON_CUSTOM_LIST = "cl";
+const QString PrimitiveValue::JSON_CUSTOM_STRUCTURE = "customStructure";
+const QString PrimitiveValue::JSON_CUSTOM_LIST = "customList";
 
 // -------------------------------------------------------
 //

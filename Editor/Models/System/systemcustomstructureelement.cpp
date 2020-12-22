@@ -13,9 +13,9 @@
 #include "dialogsystemcustomstructureelement.h"
 #include "rpm.h"
 
-const QString SystemCustomStructureElement::JSON_IS_PROPERTY = "ip";
-const QString SystemCustomStructureElement::JSON_DESCRIPTION = "d";
-const QString SystemCustomStructureElement::JSON_VALUE= "v";
+const QString SystemCustomStructureElement::JSON_IS_PROPERTY = "isProperty";
+const QString SystemCustomStructureElement::JSON_DESCRIPTION = "description";
+const QString SystemCustomStructureElement::JSON_VALUE = "value";
 const bool SystemCustomStructureElement::DEFAULT_IS_PROPERTY = true;
 const QString SystemCustomStructureElement::DEFAULT_DESCRIPTION = "";
 const QString SystemCustomStructureElement::COLOR_CUSTOM = "#9932CC";

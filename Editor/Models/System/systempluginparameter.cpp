@@ -12,8 +12,8 @@
 #include "systempluginparameter.h"
 #include "dialogsystempluginparameter.h"
 
-const QString SystemPluginParameter::JSON_DESCRIPTION = "d";
-const QString SystemPluginParameter::JSON_DEFAULT_VALUE = "dv";
+const QString SystemPluginParameter::JSON_DESCRIPTION = "description";
+const QString SystemPluginParameter::JSON_DEFAULT_VALUE = "defaultValue";
 const QString SystemPluginParameter::DEFAULT_DESCRIPTION = "";
 
 // -------------------------------------------------------

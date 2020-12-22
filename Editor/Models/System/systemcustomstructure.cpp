@@ -13,9 +13,9 @@
 #include "systemcustomstructureelement.h"
 #include "rpm.h"
 
-const QString SystemCustomStructure::JSON_IS_LIST = "il";
-const QString SystemCustomStructure::JSON_PROPERTIES = "p";
-const QString SystemCustomStructure::JSON_LIST = "l";
+const QString SystemCustomStructure::JSON_IS_LIST = "isList";
+const QString SystemCustomStructure::JSON_PROPERTIES = "properties";
+const QString SystemCustomStructure::JSON_LIST = "list";
 const bool SystemCustomStructure::DEFAULT_IS_LIST = false;
 
 // -------------------------------------------------------

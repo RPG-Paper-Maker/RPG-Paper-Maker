@@ -14,8 +14,8 @@
 #include "systempluginparameter.h"
 #include "rpm.h"
 
-const QString SystemPluginCommand::JSON_DESCRIPTION = "d";
-const QString SystemPluginCommand::JSON_DEFAULT_PARAMETERS = "dp";
+const QString SystemPluginCommand::JSON_DESCRIPTION = "description";
+const QString SystemPluginCommand::JSON_DEFAULT_PARAMETERS = "defaultParameters";
 const QString SystemPluginCommand::DEFAULT_DESCRIPTION = "";
 
 // -------------------------------------------------------
