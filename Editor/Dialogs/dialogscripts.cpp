@@ -179,8 +179,6 @@ void DialogScripts::initialize()
     QModelIndex index = ui->treeViewSystem->getModel()->index(0, 0);
     ui->treeViewSystem->setCurrentIndex(index);
     on_scriptSystemSelected(index, index);
-    connect(ui->widgetCodeSystem, SIGNAL(needSave()), this, SLOT(
-        on_scriptCodeNeedSave()));
 
     // Libs
     ui->treeViewLibs->initializeModel(RPM::get()->project()->scriptsDatas()
@@ -254,17 +252,16 @@ void DialogScripts::initialize()
 void DialogScripts::updatePluginsSave()
 {
     ui->treeViewPlugins->updateAbsoluteAllNodesString();
-    ui->tabWidget->setTabText(1, RPM::translate(Translations::PLUGINS) + (RPM
-        ::get()->project()->scriptsDatas()->allPluginsSaved() ? "" : RPM::SPACE
-        + "*"));
+    ui->tabWidget->setTabText(0, "Plugins" + RPM::SPACE + (RPM::get()->project()
+        ->scriptsDatas()->allPluginsSaved() ? RPM::SPACE : "*"));
 }
 
 // -------------------------------------------------------
 
 void DialogScripts::updatePluginCodeSave()
 {
-    ui->tabWidgetPlugin->setTabText(1, RPM::translate(Translations::CODE) + (
-        this->getSelectedPlugin()->changed() ? RPM::SPACE + "*" : ""));
+    ui->tabWidgetPlugin->setTabText(1, RPM::translate(Translations::CODE) + RPM
+        ::SPACE + (this->getSelectedPlugin()->changed() ? "*" : RPM::SPACE));
     this->updatePluginsSave();
 }
 
@@ -272,8 +269,8 @@ void DialogScripts::updatePluginCodeSave()
 
 void DialogScripts::updatePluginEditSave()
 {
-    ui->tabWidgetPlugin->setTabText(2, RPM::translate(Translations::EDIT) + (
-        this->getSelectedPlugin()->editChanged() ? RPM::SPACE + "*" : ""));
+    ui->tabWidgetPlugin->setTabText(2, RPM::translate(Translations::EDIT) + RPM
+        ::SPACE + (this->getSelectedPlugin()->editChanged() ? "*" : RPM::SPACE));
     this->updatePluginsSave();
 }
 
@@ -281,8 +278,9 @@ void DialogScripts::updatePluginEditSave()
 
 void DialogScripts::updatePluginDetailsSave()
 {
-    ui->tabWidgetPlugin->setTabText(0, RPM::translate(Translations::DETAILS) + (
-        this->getSelectedPlugin()->editChanged() ? RPM::SPACE + "*" : ""));
+    ui->tabWidgetPlugin->setTabText(0, RPM::translate(Translations::DETAILS) +
+        RPM::SPACE + (this->getSelectedPlugin()->editChanged() ? "*" : RPM
+        ::SPACE));
     this->updatePluginsSave();
 }
 
@@ -413,7 +411,7 @@ void DialogScripts::keyPressEvent(QKeyEvent *event)
         SystemPlugin *plugin;
         switch (ui->tabWidget->currentIndex())
         {
-        case 1: // Plugins
+        case 0: // Plugins
             plugin = this->getSelectedPlugin();
             switch (ui->tabWidgetPlugin->currentIndex())
             {
