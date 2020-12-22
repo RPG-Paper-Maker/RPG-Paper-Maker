@@ -1116,7 +1116,6 @@
     "plugin": "插入",
     "command": "命令",
     "you.have.select.command.execute": "您必須選擇要執行的命令",
-    "you.can.edit.system.code.but": "您可以編輯系統代碼，但是請注意，每次更新RPG Paper Maker後，所有進度將被刪除！",
     "export.this.plugin.locally": "將此插件導出到本地並共享",
     "export.to.online.database": "導出到在線數據庫",
     "check.out.github.wiki": "查看％1中的github Wiki頁面！",

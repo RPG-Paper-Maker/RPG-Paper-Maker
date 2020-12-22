@@ -2186,14 +2186,14 @@ QString EventCommand::strPlugin(SystemCommonObject *object, QStandardItemModel
     QString commandName;
     QString commandParameters;
     SystemPlugin *plugin = reinterpret_cast<SystemPlugin *>(SuperListItem
-        ::getByIndex(RPM::get()->project()->scriptsDatas()->modelPlugins(),
-        m_listCommand.at(i++).toInt()));
+        ::getById(RPM::get()->project()->scriptsDatas()->modelPlugins()
+        ->invisibleRootItem(), m_listCommand.at(i++).toInt()));
     if (plugin != nullptr)
     {
         pluginName = plugin->name();
         SystemPluginCommand *command = reinterpret_cast<SystemPluginCommand *>(
-            SuperListItem::getByIndex(plugin->commands(), m_listCommand.at(i++)
-            .toInt()));
+            SuperListItem::getById(plugin->commands()->invisibleRootItem(),
+            m_listCommand.at(i++).toInt()));
         if (command != nullptr)
         {
             commandName = command->name();

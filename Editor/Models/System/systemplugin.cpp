@@ -442,15 +442,12 @@ QList<QStandardItem*> SystemPlugin::getModelRow() const
     QStandardItem* item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    if (!m_isOnline)
+    item->setCheckable(true);
+    if (m_isON)
     {
-        item->setCheckable(true);
-        if (m_isON)
-        {
-            item->setCheckState(Qt::Checked);
-        }
+        item->setCheckState(Qt::Checked);
     }
-    item->setText(this->toStringName());
+    item->setText(this->toString());
     row.append(item);
     return row;
 }

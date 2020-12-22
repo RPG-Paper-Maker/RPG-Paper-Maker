@@ -32,7 +32,7 @@ SystemPluginCommand::SystemPluginCommand() :
 
 SystemPluginCommand::SystemPluginCommand(int i, QString n, QString d,
     QStandardItemModel *dp) :
-    SuperListItem(i, n, false, false),
+    SuperListItem(i, n),
     m_description(d),
     m_defaultParameters(dp)
 {
@@ -112,9 +112,10 @@ void SystemPluginCommand::clearDefaultParameters()
 //
 // -------------------------------------------------------
 
-QString SystemPluginCommand::toStringName() const
+QString SystemPluginCommand::toString() const
 {
-    return SuperListItem::beginningText + RPM::SPACE + this->getStringFunction();
+    return SuperListItem::beginningText + this->idToString() + ": " + this
+        ->getStringFunction();
 }
 
 // -------------------------------------------------------

@@ -43,7 +43,7 @@ public:
     void initializeHeaders();
     void clearDefaultParameters();
 
-    virtual QString toStringName() const;
+    virtual QString toString() const;
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);

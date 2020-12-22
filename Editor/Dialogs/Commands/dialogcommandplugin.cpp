@@ -62,7 +62,7 @@ void DialogCommandPlugin::initializePrimitives()
     ui->treeViewEditParameter->setCanCreateDelete(false);
     ui->treeViewEditParameter->initializeModel(m_currentParameters);
     SuperListItem::fillComboBox(ui->comboBoxPlugin, RPM::get()->project()
-        ->scriptsDatas()->modelPlugins(), false);
+        ->scriptsDatas()->modelPlugins());
     if (ui->comboBoxPlugin->count() == 0)
     {
         ui->comboBoxCommand->setEnabled(false);
@@ -130,8 +130,14 @@ void DialogCommandPlugin::accept()
 void DialogCommandPlugin::initialize(EventCommand *command)
 {
     int i = 0;
-    ui->comboBoxPlugin->setCurrentIndex(command->valueCommandAt(i++).toInt());
-    ui->comboBoxCommand->setCurrentIndex(command->valueCommandAt(i++).toInt());
+    SystemPlugin *plugin = reinterpret_cast<SystemPlugin *>(SuperListItem
+        ::getById(RPM::get()->project()->scriptsDatas()->modelPlugins()
+        ->invisibleRootItem(), command->valueCommandAt(i++).toInt()));
+    ui->comboBoxPlugin->setCurrentIndex(SuperListItem::getIndexById(RPM::get()
+        ->project()->scriptsDatas()->modelPlugins()->invisibleRootItem(), plugin
+        ->id()));
+    ui->comboBoxCommand->setCurrentIndex(SuperListItem::getIndexById(plugin
+        ->commands()->invisibleRootItem(), command->valueCommandAt(i++).toInt()));
     SystemPluginParameter *param;
     for (int j = 0, l = m_currentParameters->invisibleRootItem()->rowCount(); j
         < l; j++)
@@ -153,8 +159,12 @@ void DialogCommandPlugin::initialize(EventCommand *command)
 EventCommand * DialogCommandPlugin::getCommand() const
 {
     QVector<QString> command;
-    command.append(QString::number(ui->comboBoxPlugin->currentIndex()));
-    command.append(QString::number(ui->comboBoxCommand->currentIndex()));
+    SystemPlugin *plugin = reinterpret_cast<SystemPlugin *>(SuperListItem
+        ::getByIndex(RPM::get()->project()->scriptsDatas()->modelPlugins(), ui
+        ->comboBoxPlugin->currentIndex()));
+    command.append(QString::number(plugin->id()));
+    command.append(QString::number(SuperListItem::getIdByIndex(plugin
+        ->commands(), ui->comboBoxCommand->currentIndex())));
     SystemPluginParameter *param;
     for (int i = 0, l = m_currentParameters->invisibleRootItem()->rowCount(); i
         < l; i++)
@@ -188,8 +198,7 @@ void DialogCommandPlugin::on_comboBoxPlugin_currentIndexChanged(int index)
     {
         ui->labelCommand->setEnabled(true);
         ui->comboBoxCommand->setEnabled(true);
-        SuperListItem::fillComboBox(ui->comboBoxCommand, plugin->commands(),
-            false);
+        SuperListItem::fillComboBox(ui->comboBoxCommand, plugin->commands());
     }
 }
 

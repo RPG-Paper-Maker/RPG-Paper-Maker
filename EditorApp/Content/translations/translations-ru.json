@@ -1116,7 +1116,6 @@
     "plugin": "Плагин",
     "command": "Команда",
     "you.have.select.command.execute": "Вы должны выбрать команду для выполнения",
-    "you.can.edit.system.code.but": "Вы можете редактировать системный код, но имейте в виду, что весь ваш прогресс будет удаляться после каждого нового обновления RPG Paper Maker!",
     "export.this.plugin.locally": "Экспортируйте этот плагин локально и поделитесь им",
     "export.to.online.database": "Экспорт в онлайн-базу",
     "check.out.github.wiki": "Посетите вики-страницу github в %1!",

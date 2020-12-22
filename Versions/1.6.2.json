@@ -17,7 +17,8 @@
         "Rotation for foors",
         "Tileset: new asset town (with 2 houses as 3D objects)",
         "New language: russian (beta)",
-        "New language: korean (beta)"
+        "New language: korean (beta)",
+        "Windows: when impossible to open Game app, try to redownload it"
     ],
 	"bugs": [
         "Common reactions in battle effect: show text not applied",
@@ -44,7 +45,11 @@
         "Long wait if offline when running engine and in about",
         "Black menu bar in white theme (Windows)",
         "[NEED VERIFICATION] Miss indicator missing?",
-        "Impossible to rename window skins"
+        "Impossible to rename window skins",
+        "Change state pb database pb when copy / paste (ID)",
+        "Camera small offset each time turn camera with arrow keys fast",
+        "Mountain collision force always and force never reverted",
+        "Mountain collision block in special conditions"
 	],
     "finished": [
         1,
@@ -62,6 +67,7 @@
         0,
         2,
         2,
+        0,
 
         2,
         2,
@@ -72,11 +78,14 @@
         2,
         2,
         2,
-        
         0,
         0,
         0,
         2,
+        0,
+        0,
+        0,
+        0,
         0,
         0,
         0,

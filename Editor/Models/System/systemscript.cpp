@@ -103,12 +103,12 @@ QString SystemScript::toStringName() const
 
 void SystemScript::read(const QJsonObject &json)
 {
-    SuperListItem::read(json);
+    p_name = json[JSON_NAME].toString();
 }
 
 // -------------------------------------------------------
 
 void SystemScript::write(QJsonObject &json) const
 {
-    SuperListItem::write(json);
+    json[JSON_NAME] = this->name();
 }

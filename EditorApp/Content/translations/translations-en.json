@@ -1116,7 +1116,6 @@
     "plugin": "Plugin",
     "command": "Command",
     "you.have.select.command.execute": "You have to select a command to execute",
-    "you.can.edit.system.code.but": "You can edit the system code, but be aware that all your progress will be removed after each new RPG Paper Maker update!",
     "export.this.plugin.locally": "Export this plugin locally and share it",
     "export.to.online.database": "Export to the online database",
     "check.out.github.wiki": "Check out the github wiki page in %1!",

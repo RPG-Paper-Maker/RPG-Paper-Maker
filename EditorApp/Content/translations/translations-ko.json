@@ -1116,7 +1116,6 @@
     "plugin": "플러그인",
     "command": "명령",
     "you.have.select.command.execute": "실행할 명령을 선택해야합니다",
-    "you.can.edit.system.code.but": "시스템 코드를 편집 할 수 있지만 새로운 RPG Paper Maker 업데이트가있을 때마다 모든 진행 상황이 제거된다는 점에 유의하십시오!",
     "export.this.plugin.locally": "이 플러그인을 로컬로 내보내고 공유하십시오",
     "export.to.online.database": "온라인 데이터베이스로 내보내기",
     "check.out.github.wiki": "%1 의 github 위키 페이지를 확인하십시오!",

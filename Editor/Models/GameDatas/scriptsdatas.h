@@ -40,7 +40,6 @@ public:
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
-    void writeDesktop(QString path) const;
     void writeBrowser(QString path) const;
 
 private:

@@ -1116,7 +1116,6 @@
     "plugin": "プラグイン",
     "command": "コマンド",
     "you.have.select.command.execute": "実行するコマンドを選択する必要があります",
-    "you.can.edit.system.code.but": "システムコードは編集できますが、新しいRPG Paper Makerが更新されるたびに、進行状況がすべて削除されることに注意してください。",
     "export.this.plugin.locally": "このプラグインをローカルにエクスポートして共有します",
     "export.to.online.database": "オンラインデータベースにエクスポートする",
     "check.out.github.wiki": "%1 のgithubwikiページをチェックしてください！",

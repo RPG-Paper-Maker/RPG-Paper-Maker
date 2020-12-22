@@ -1136,7 +1136,6 @@ const QString Translations::FOLDER = "folder";
 const QString Translations::PLUGIN = "plugin";
 const QString Translations::COMMAND = "command";
 const QString Translations::YOU_HAVE_SELECT_COMMAND_EXECUTE = "you.have.select.command.execute";
-const QString Translations::YOU_CAN_EDIT_SYSTEM_CODE_BUT = "you.can.edit.system.code.but";
 const QString Translations::EXPORT_THIS_PLUGIN_LOCALLY = "export.this.plugin.locally";
 const QString Translations::EXPORT_TO_ONLINE_DATABASE = "export.to.online.database";
 const QString Translations::CHECK_OUT_GITHUB_WIKI = "check.out.github.wiki";

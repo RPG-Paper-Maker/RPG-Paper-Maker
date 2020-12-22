@@ -48,6 +48,7 @@ DialogScripts::DialogScripts(QWidget *parent) :
         ->document());
     ui->treeViewSystem->initializeNewItemInstance(new SystemScript);
     ui->treeViewPlugins->initializeNewItemInstance(new SystemPlugin);
+    ui->treeViewPlugins->setUpdateId(true);
     ui->treeViewEditParameter->initializeNewItemInstance(new
         SystemPluginParameter);
     ui->treeViewEditCommands->initializeNewItemInstance(new SystemPluginCommand);
@@ -320,9 +321,6 @@ void DialogScripts::translate()
     ui->labelCategory->setText(RPM::translate(Translations::CATEGORY));
     ui->groupBoxParameters->setTitle(RPM::translate(Translations::PARAMETERS));
     ui->groupBoxCommands->setTitle(RPM::translate(Translations::COMMANDS));
-    ui->labelSystemWarning->setText("<strong style=\"color: red\">/!\\" + RPM
-        ::SPACE + RPM::translate(Translations::YOU_CAN_EDIT_SYSTEM_CODE_BUT) +
-        "</strong>");
     ui->labelExport1->setText("<h2>" + RPM::translate(Translations
         ::EXPORT_THIS_PLUGIN_LOCALLY) + "</h2>");
     ui->labelExport2->setText("<h2>" + RPM::translate(Translations
