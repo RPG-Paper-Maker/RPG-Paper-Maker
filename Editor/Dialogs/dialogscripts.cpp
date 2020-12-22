@@ -40,13 +40,40 @@ DialogScripts::DialogScripts(QWidget *parent) :
 
     // Plugins
     ui->comboBoxCategory->addItems(RPM::ENUM_TO_STRING_PLUGIN_CATEGORY);
-    m_widgetLineNumber = new WidgetCodeLineNumberArea(ui->widgetCodeSystem);
+    m_widgetLineNumberSystem = new WidgetCodeLineNumberArea(ui->widgetCodeSystem);
     m_highlighterSystem = new CodeSyntaxHighlighter(ui->widgetCodeSystem
+        ->document());
+    m_widgetLineNumberLibs = new WidgetCodeLineNumberArea(ui->widgetCodeLibs);
+    m_highlighterLibs = new CodeSyntaxHighlighter(ui->widgetCodeLibs->document());
+    m_widgetLineNumberSrc = new WidgetCodeLineNumberArea(ui->widgetCodeSrc);
+    m_highlighterSrc = new CodeSyntaxHighlighter(ui->widgetCodeSrc->document());
+    m_widgetLineNumberShaders = new WidgetCodeLineNumberArea(ui
+        ->widgetCodeShaders);
+    m_highlighterShaders = new CodeSyntaxHighlighter(ui->widgetCodeShaders
         ->document());
     m_widgetLineNumberPlugin = new WidgetCodeLineNumberArea(ui->widgetCodePlugin);
     m_highlighterPlugin = new CodeSyntaxHighlighter(ui->widgetCodePlugin
         ->document());
     ui->treeViewSystem->initializeNewItemInstance(new SystemScript);
+    ui->treeViewSystem->setIndentation(15);
+    ui->treeViewSystem->setCanMove(false);
+    ui->treeViewSystem->setCanBeControled(false);
+    ui->treeViewSystem->setCanCreateDelete(false);
+    ui->treeViewLibs->initializeNewItemInstance(new SystemScript);
+    ui->treeViewLibs->setIndentation(15);
+    ui->treeViewLibs->setCanMove(false);
+    ui->treeViewLibs->setCanBeControled(false);
+    ui->treeViewLibs->setCanCreateDelete(false);
+    ui->treeViewSrc->initializeNewItemInstance(new SystemScript);
+    ui->treeViewSrc->setIndentation(15);
+    ui->treeViewSrc->setCanMove(false);
+    ui->treeViewSrc->setCanBeControled(false);
+    ui->treeViewSrc->setCanCreateDelete(false);
+    ui->treeViewShaders->initializeNewItemInstance(new SystemScript);
+    ui->treeViewShaders->setIndentation(15);
+    ui->treeViewShaders->setCanMove(false);
+    ui->treeViewShaders->setCanBeControled(false);
+    ui->treeViewShaders->setCanCreateDelete(false);
     ui->treeViewPlugins->initializeNewItemInstance(new SystemPlugin);
     ui->treeViewPlugins->setUpdateId(true);
     ui->treeViewPlugins->setCanSameName(false);
@@ -58,6 +85,21 @@ DialogScripts::DialogScripts(QWidget *parent) :
     ui->treeViewSystem->header()->setSectionResizeMode(QHeaderView
         ::ResizeToContents);
     ui->treeViewSystem->header()->setMinimumSectionSize(200);
+
+    ui->treeViewLibs->header()->setStretchLastSection(false);
+    ui->treeViewLibs->header()->setSectionResizeMode(QHeaderView
+        ::ResizeToContents);
+    ui->treeViewLibs->header()->setMinimumSectionSize(200);
+
+    ui->treeViewSrc->header()->setStretchLastSection(false);
+    ui->treeViewSrc->header()->setSectionResizeMode(QHeaderView
+        ::ResizeToContents);
+    ui->treeViewSrc->header()->setMinimumSectionSize(200);
+
+    ui->treeViewShaders->header()->setStretchLastSection(false);
+    ui->treeViewShaders->header()->setSectionResizeMode(QHeaderView
+        ::ResizeToContents);
+    ui->treeViewShaders->header()->setMinimumSectionSize(200);
     ui->treeViewPlugins->header()->setStretchLastSection(false);
     ui->treeViewPlugins->header()->setSectionResizeMode(QHeaderView
         ::ResizeToContents);
@@ -76,7 +118,8 @@ DialogScripts::DialogScripts(QWidget *parent) :
     // Keep space when hiding widgets
     QSizePolicy sp_retain;
     QList<QWidget *> widgetList;
-    widgetList << ui->widgetCodeSystem << ui->tabWidgetPlugin;
+    widgetList << ui->widgetCodeSystem << ui->widgetCodeLibs << ui
+        ->widgetCodeSrc << ui->widgetCodeShaders << ui->tabWidgetPlugin;
     for (int i = 0; i < widgetList.size(); i++) {
         sp_retain = widgetList[i]->sizePolicy();
         sp_retain.setRetainSizeWhenHidden(true);
@@ -93,8 +136,14 @@ DialogScripts::~DialogScripts()
 {
     ui->widgetCodeSystem->removeScript();
     ui->widgetCodePlugin->removeScript();
-    delete m_widgetLineNumber;
+    delete m_widgetLineNumberSystem;
     delete m_highlighterSystem;
+    delete m_widgetLineNumberLibs;
+    delete m_highlighterLibs;
+    delete m_widgetLineNumberSrc;
+    delete m_highlighterSrc;
+    delete m_widgetLineNumberShaders;
+    delete m_highlighterShaders;
     delete m_widgetLineNumberPlugin;
     delete m_highlighterPlugin;
     delete ui;
@@ -104,18 +153,6 @@ DialogScripts::~DialogScripts()
 //
 //  INTERMEDIARY FUNCTIONS
 //
-// -------------------------------------------------------
-
-SystemScript * DialogScripts::getSelectedScript() const
-{
-    QStandardItem *selected = ui->treeViewSystem->getSelected();
-    if (selected != nullptr)
-    {
-        return reinterpret_cast<SystemScript *>(selected->data().value<quintptr>());
-    }
-    return nullptr;
-}
-
 // -------------------------------------------------------
 
 SystemPlugin * DialogScripts::getSelectedPlugin() const
@@ -132,11 +169,10 @@ SystemPlugin * DialogScripts::getSelectedPlugin() const
 
 void DialogScripts::initialize()
 {
-    //this->translate();
-
     // System
     ui->treeViewSystem->initializeModel(RPM::get()->project()->scriptsDatas()
         ->modelSystem());
+    ui->treeViewSystem->expandAll();
     connect(ui->treeViewSystem->selectionModel(), SIGNAL(currentChanged(
         QModelIndex, QModelIndex)), this, SLOT(on_scriptSystemSelected(
         QModelIndex, QModelIndex)));
@@ -145,6 +181,39 @@ void DialogScripts::initialize()
     on_scriptSystemSelected(index, index);
     connect(ui->widgetCodeSystem, SIGNAL(needSave()), this, SLOT(
         on_scriptCodeNeedSave()));
+
+    // Libs
+    ui->treeViewLibs->initializeModel(RPM::get()->project()->scriptsDatas()
+        ->modelLibs());
+    ui->treeViewLibs->expandAll();
+    connect(ui->treeViewLibs->selectionModel(), SIGNAL(currentChanged(
+        QModelIndex, QModelIndex)), this, SLOT(on_scriptLibsSelected(
+        QModelIndex, QModelIndex)));
+    index = ui->treeViewLibs->getModel()->index(0, 0);
+    ui->treeViewLibs->setCurrentIndex(index);
+    on_scriptLibsSelected(index, index);
+
+    // Src
+    ui->treeViewSrc->initializeModel(RPM::get()->project()->scriptsDatas()
+        ->modelSrc());
+    ui->treeViewSrc->expandAll();
+    connect(ui->treeViewSrc->selectionModel(), SIGNAL(currentChanged(QModelIndex
+        , QModelIndex)), this, SLOT(on_scriptSrcSelected(QModelIndex,
+        QModelIndex)));
+    index = ui->treeViewSrc->getModel()->index(0, 0);
+    ui->treeViewSrc->setCurrentIndex(index);
+    on_scriptSrcSelected(index, index);
+
+    // Shaders
+    ui->treeViewShaders->initializeModel(RPM::get()->project()->scriptsDatas()
+        ->modelShaders());
+    ui->treeViewShaders->expandAll();
+    connect(ui->treeViewShaders->selectionModel(), SIGNAL(currentChanged(
+        QModelIndex, QModelIndex)), this, SLOT(on_scriptShadersSelected(
+        QModelIndex, QModelIndex)));
+    index = ui->treeViewShaders->getModel()->index(0, 0);
+    ui->treeViewShaders->setCurrentIndex(index);
+    on_scriptShadersSelected(index, index);
 
     // Plugins
     ui->treeViewPlugins->initializeModel(RPM::get()->project()->scriptsDatas()
@@ -178,16 +247,6 @@ void DialogScripts::initialize()
 
     // Check updates
     this->checkUpdates();
-}
-
-// -------------------------------------------------------
-
-void DialogScripts::updateScriptCodeSave()
-{
-    ui->treeViewSystem->updateAbsoluteAllNodesString();
-    ui->tabWidget->setTabText(0, RPM::translate(Translations::SYSTEM) + (RPM
-        ::get()->project()->scriptsDatas()->allScriptsSaved() ? "" : RPM::SPACE
-        + "*"));
 }
 
 // -------------------------------------------------------
@@ -351,16 +410,9 @@ void DialogScripts::keyPressEvent(QKeyEvent *event)
     QKeySequence ctrls(Qt::CTRL + Qt::Key_S);
     if (keys.matches(ctrls))
     {
-        SystemScript *script;
         SystemPlugin *plugin;
         switch (ui->tabWidget->currentIndex())
         {
-        case 0: // System
-            script = this->getSelectedScript();
-            script->setChanged(false);
-            Common::write(script->getPath(), script->currentCode());
-            this->updateScriptCodeSave();
-            break;
         case 1: // Plugins
             plugin = this->getSelectedPlugin();
             switch (ui->tabWidgetPlugin->currentIndex())
@@ -468,18 +520,81 @@ void DialogScripts::keyPressEvent(QKeyEvent *event)
 //
 // -------------------------------------------------------
 
-void DialogScripts::on_scriptSystemSelected(QModelIndex, QModelIndex)
+void DialogScripts::on_scriptSystemSelected(QModelIndex index, QModelIndex)
 {
-    SystemScript *script = this->getSelectedScript();
-    if (script != nullptr)
+    QStandardItem *item = ui->treeViewSystem->getModel()->itemFromIndex(index);
+    if (item != nullptr)
     {
-        ui->widgetCodeSystem->show();
-        ui->widgetCodeSystem->initialize(script);
-        this->updateScriptCodeSave();
-        ui->widgetCodeSystem->setFocus();
-    } else
+        SystemScript *script = reinterpret_cast<SystemScript *>(item->data()
+            .value<quintptr>());
+        if (script != nullptr)
+        {
+            ui->widgetCodeSystem->show();
+            ui->widgetCodeSystem->initialize(script);
+        } else
+        {
+            ui->widgetCodeSystem->hide();
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_scriptLibsSelected(QModelIndex index, QModelIndex)
+{
+    QStandardItem *item = ui->treeViewLibs->getModel()->itemFromIndex(index);
+    if (item != nullptr)
     {
-        ui->widgetCodeSystem->hide();
+        SystemScript *script = reinterpret_cast<SystemScript *>(item->data()
+            .value<quintptr>());
+        if (script != nullptr)
+        {
+            ui->widgetCodeLibs->show();
+            ui->widgetCodeLibs->initialize(script);
+        } else
+        {
+            ui->widgetCodeLibs->hide();
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_scriptSrcSelected(QModelIndex index, QModelIndex)
+{
+    QStandardItem *item = ui->treeViewSrc->getModel()->itemFromIndex(index);
+    if (item != nullptr)
+    {
+        SystemScript *script = reinterpret_cast<SystemScript *>(item->data()
+            .value<quintptr>());
+        if (script != nullptr)
+        {
+            ui->widgetCodeSrc->show();
+            ui->widgetCodeSrc->initialize(script);
+        } else
+        {
+            ui->widgetCodeSrc->hide();
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_scriptShadersSelected(QModelIndex index, QModelIndex)
+{
+    QStandardItem *item = ui->treeViewShaders->getModel()->itemFromIndex(index);
+    if (item != nullptr)
+    {
+        SystemScript *script = reinterpret_cast<SystemScript *>(item->data()
+            .value<quintptr>());
+        if (script != nullptr)
+        {
+            ui->widgetCodeShaders->show();
+            ui->widgetCodeShaders->initialize(script);
+        } else
+        {
+            ui->widgetCodeShaders->hide();
+        }
     }
 }
 
@@ -559,13 +674,6 @@ void DialogScripts::on_pushButtonOpenPluginFolder_clicked()
 {
     QDesktopServices::openUrl(QUrl::fromLocalFile(this->getSelectedPlugin()
         ->getFolderPath()));
-}
-
-// -------------------------------------------------------
-
-void DialogScripts::on_scriptCodeNeedSave()
-{
-    this->updateScriptCodeSave();
 }
 
 // -------------------------------------------------------

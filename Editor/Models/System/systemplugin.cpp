@@ -77,6 +77,7 @@ SystemPlugin::SystemPlugin(int i, QString n, bool io, PluginTypeKind t,
     m_isOnline(false)
 {
     m_displayID = true;
+    m_editable = true;
     this->initializeHeaders();
 }
 

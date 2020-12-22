@@ -99,6 +99,46 @@ void WidgetCode::resizeEvent(QResizeEvent *e)
 
 // -------------------------------------------------------
 
+void WidgetCode::keyPressEvent(QKeyEvent *e)
+{
+    if (m_script->editable())
+    {
+        QPlainTextEdit::keyPressEvent(e);
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetCode::mousePressEvent(QMouseEvent *e)
+{
+    if (m_script->editable())
+    {
+        QPlainTextEdit::mousePressEvent(e);
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetCode::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    if (m_script->editable())
+    {
+        QPlainTextEdit::mouseDoubleClickEvent(e);
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetCode::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (m_script->editable())
+    {
+        QPlainTextEdit::mouseReleaseEvent(e);
+    }
+}
+
+// -------------------------------------------------------
+
 void WidgetCode::highlightCurrentLine()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;

@@ -30,21 +30,32 @@ public:
     ScriptsDatas();
     virtual ~ScriptsDatas();
     void read(QString path);
-    QStandardItemModel* modelSystem() const;
-    QStandardItemModel* modelPlugins() const;
+    QStandardItemModel * modelSystem() const;
+    QStandardItemModel * modelPlugins() const;
+    QStandardItemModel * modelLibs() const;
+    QStandardItemModel * modelSrc() const;
+    QStandardItemModel * modelShaders() const;
 
     bool containsPluginName(QString name) const;
     bool allScriptsSaved() const;
     bool allPluginsSaved() const;
     void setDefault();
+    void readSystem();
+    void readLibs();
+    void readSrc();
+    void readShaders();
+    void readFolder(QStandardItem *root, QString path);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
     void writeBrowser(QString path) const;
 
 private:
-    QStandardItemModel* m_modelSystem;
-    QStandardItemModel* m_modelPlugins;
+    QStandardItemModel *m_modelSystem;
+    QStandardItemModel *m_modelPlugins;
+    QStandardItemModel *m_modelLibs;
+    QStandardItemModel *m_modelSrc;
+    QStandardItemModel *m_modelShaders;
 };
 
 #endif // SCRIPTSDATAS_H

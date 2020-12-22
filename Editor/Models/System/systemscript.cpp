@@ -28,7 +28,8 @@ SystemScript::SystemScript() :
 SystemScript::SystemScript(int i, QString name) :
     SuperListItem(i, name, false, false),
     m_changed(false),
-    m_currentCode("")
+    m_currentCode(""),
+    m_editable(false)
 {
 
 }
@@ -46,6 +47,11 @@ bool SystemScript::changed() const
 QString SystemScript::currentCode() const
 {
     return m_currentCode;
+}
+
+bool SystemScript::editable() const
+{
+    return m_editable;
 }
 
 void SystemScript::setChanged(bool changed)
@@ -66,7 +72,7 @@ void SystemScript::setCurrentCode(QString currentCode)
 
 QString SystemScript::getCode()
 {
-    if (!m_changed)
+    if (!m_changed && m_editable)
     {
         m_currentCode = Common::read(this->getPath());
     }

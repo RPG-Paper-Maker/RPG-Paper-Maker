@@ -38,10 +38,8 @@ public:
     explicit DialogScripts(QWidget *parent = nullptr);
     ~DialogScripts();
 
-    SystemScript * getSelectedScript() const;
     SystemPlugin * getSelectedPlugin() const;
     void initialize();
-    void updateScriptCodeSave();
     void updatePluginsSave();
     void updatePluginCodeSave();
     void updatePluginEditSave();
@@ -53,8 +51,14 @@ protected:
 
 private:
     Ui::DialogScripts *ui;
-    WidgetCodeLineNumberArea *m_widgetLineNumber;
+    WidgetCodeLineNumberArea *m_widgetLineNumberSystem;
     CodeSyntaxHighlighter *m_highlighterSystem;
+    WidgetCodeLineNumberArea *m_widgetLineNumberLibs;
+    CodeSyntaxHighlighter *m_highlighterLibs;
+    WidgetCodeLineNumberArea *m_widgetLineNumberSrc;
+    CodeSyntaxHighlighter *m_highlighterSrc;
+    WidgetCodeLineNumberArea *m_widgetLineNumberShaders;
+    CodeSyntaxHighlighter *m_highlighterShaders;
     WidgetCodeLineNumberArea *m_widgetLineNumberPlugin;
     CodeSyntaxHighlighter *m_highlighterPlugin;
     bool m_isSettingprogramatically;
@@ -63,12 +67,14 @@ private:
 
 public slots:
     void on_scriptSystemSelected(QModelIndex, QModelIndex);
+    void on_scriptLibsSelected(QModelIndex, QModelIndex);
+    void on_scriptSrcSelected(QModelIndex, QModelIndex);
+    void on_scriptShadersSelected(QModelIndex, QModelIndex);
     void on_scriptPluginSelected(QModelIndex, QModelIndex);
     void on_pluginListUpdated();
     void on_pluginListDeleted(SuperListItem *super, int);
     void on_pluginListPasted(SuperListItem *previous, SuperListItem *after, int);
     void on_pushButtonOpenPluginFolder_clicked();
-    void on_scriptCodeNeedSave();
     void on_pluginCodeNeedSave();
     void on_treeViewPluginsItemChanged(QStandardItem *item);
     void on_lineEditName_textEdited(const QString &text);

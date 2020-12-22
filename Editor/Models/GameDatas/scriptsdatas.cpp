@@ -24,7 +24,10 @@
 
 ScriptsDatas::ScriptsDatas() :
     m_modelSystem(new QStandardItemModel),
-    m_modelPlugins(new QStandardItemModel)
+    m_modelPlugins(new QStandardItemModel),
+    m_modelLibs(new QStandardItemModel),
+    m_modelSrc(new QStandardItemModel),
+    m_modelShaders(new QStandardItemModel)
 {
 
 }
@@ -33,13 +36,30 @@ ScriptsDatas::~ScriptsDatas()
 {
     SuperListItem::deleteModel(m_modelSystem);
     SuperListItem::deleteModel(m_modelPlugins);
+    SuperListItem::deleteModel(m_modelLibs);
+    SuperListItem::deleteModel(m_modelSrc);
+    SuperListItem::deleteModel(m_modelShaders);
 }
 
 void ScriptsDatas::read(QString path){
     RPM::readJSON(Common::pathCombine(path, RPM::PATH_SCRIPTS), *this);
 }
 
-QStandardItemModel* ScriptsDatas::modelSystem() const { return m_modelSystem; }
+QStandardItemModel * ScriptsDatas::modelSystem() const {
+    return m_modelSystem;
+}
+
+QStandardItemModel * ScriptsDatas::modelLibs() const {
+    return m_modelLibs;
+}
+
+QStandardItemModel * ScriptsDatas::modelSrc() const {
+    return m_modelSrc;
+}
+
+QStandardItemModel * ScriptsDatas::modelShaders() const {
+    return m_modelShaders;
+}
 
 QStandardItemModel* ScriptsDatas::modelPlugins() const {
     return m_modelPlugins;
@@ -97,6 +117,76 @@ void ScriptsDatas::setDefault(){
 }
 
 // -------------------------------------------------------
+
+void ScriptsDatas::readSystem()
+{
+    SuperListItem::deleteModel(m_modelSystem, false);
+    this->readFolder(m_modelSystem->invisibleRootItem(), Common::pathCombine(RPM
+        ::get()->project()->pathCurrentProjectApp(), RPM
+        ::PATH_SCRIPTS_SYSTEM_DIR));
+}
+
+// -------------------------------------------------------
+
+void ScriptsDatas::readLibs()
+{
+    SuperListItem::deleteModel(m_modelLibs, false);
+    this->readFolder(m_modelLibs->invisibleRootItem(), Common::pathCombine(RPM
+        ::get()->project()->pathCurrentProjectApp(), RPM
+        ::PATH_SCRIPTS_LIBS_DIR));
+}
+
+// -------------------------------------------------------
+
+void ScriptsDatas::readSrc()
+{
+    SuperListItem::deleteModel(m_modelSrc, false);
+    this->readFolder(m_modelSrc->invisibleRootItem(), Common::pathCombine(RPM
+        ::get()->project()->pathCurrentProjectApp(), RPM
+        ::PATH_SCRIPTS_SRC_DIR));
+}
+
+// -------------------------------------------------------
+
+void ScriptsDatas::readShaders()
+{
+    SuperListItem::deleteModel(m_modelShaders, false);
+    this->readFolder(m_modelShaders->invisibleRootItem(), Common::pathCombine(
+        RPM::get()->project()->pathCurrentProjectApp(), RPM
+        ::PATH_SCRIPTS_SHADERS_DIR));
+}
+
+// -------------------------------------------------------
+
+void ScriptsDatas::readFolder(QStandardItem *root, QString path)
+{
+    QDir dir(path);
+    QIcon icon(":/icons/Ressources/dir.png");
+    QStandardItem *item;
+    SystemScript *script;
+    foreach (QFileInfo id, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
+    {
+        QString d = id.fileName();
+        item = new QStandardItem;
+        item->setData(QVariant::fromValue(nullptr));
+        item->setIcon(icon);
+        item->setText(d);
+        root->appendRow(item);
+        this->readFolder(item, Common::pathCombine(path, d));
+    }
+    foreach (QFileInfo ifo, dir.entryInfoList(QDir::Files))
+    {
+        QString f = ifo.fileName();
+        item = new QStandardItem;
+        script = new SystemScript(-1, f);
+        script->setCurrentCode(Common::read(Common::pathCombine(path, f)));
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(script)));
+        item->setText(f);
+        root->appendRow(item);
+    }
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -108,6 +198,11 @@ void ScriptsDatas::read(const QJsonObject &json)
 
     // Clear
     SuperListItem::deleteModel(m_modelPlugins, false);
+
+    this->readSystem();
+    this->readLibs();
+    this->readSrc();
+    this->readShaders();
 
     // Plugins
     QList<QStandardItem*> row;

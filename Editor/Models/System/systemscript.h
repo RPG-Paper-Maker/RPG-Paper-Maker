@@ -30,6 +30,7 @@ public:
     virtual ~SystemScript();
     bool changed() const;
     QString currentCode() const;
+    bool editable() const;
     void setChanged(bool changed);
     void setCurrentCode(QString currentCode);
 
@@ -44,6 +45,7 @@ public:
 protected:
     bool m_changed;
     QString m_currentCode;
+    bool m_editable;
 };
 
 Q_DECLARE_METATYPE(SystemScript)
