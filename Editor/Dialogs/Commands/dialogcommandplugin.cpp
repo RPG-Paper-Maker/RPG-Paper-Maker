@@ -133,25 +133,29 @@ void DialogCommandPlugin::initialize(EventCommand *command)
     SystemPlugin *plugin = reinterpret_cast<SystemPlugin *>(SuperListItem
         ::getById(RPM::get()->project()->scriptsDatas()->modelPlugins()
         ->invisibleRootItem(), command->valueCommandAt(i++).toInt()));
-    ui->comboBoxPlugin->setCurrentIndex(SuperListItem::getIndexById(RPM::get()
-        ->project()->scriptsDatas()->modelPlugins()->invisibleRootItem(), plugin
-        ->id()));
-    ui->comboBoxCommand->setCurrentIndex(SuperListItem::getIndexById(plugin
-        ->commands()->invisibleRootItem(), command->valueCommandAt(i++).toInt()));
-    SystemPluginParameter *param;
-    for (int j = 0, l = m_currentParameters->invisibleRootItem()->rowCount(); j
-        < l; j++)
+    if (plugin != nullptr)
     {
-        param = reinterpret_cast<SystemPluginParameter *>(SuperListItem
-            ::getItemModelAt(m_currentParameters, j));
-        if (i < command->commandsCount() - 1)
+        ui->comboBoxPlugin->setCurrentIndex(SuperListItem::getIndexById(RPM
+            ::get()->project()->scriptsDatas()->modelPlugins()
+            ->invisibleRootItem(), plugin->id()));
+        ui->comboBoxCommand->setCurrentIndex(SuperListItem::getIndexById(plugin
+            ->commands()->invisibleRootItem(), command->valueCommandAt(i++)
+            .toInt()));
+        SystemPluginParameter *param;
+        for (int j = 0, l = m_currentParameters->invisibleRootItem()->rowCount()
+             ; j < l; j++)
         {
-            param->defaultValue()->initializeCommandParameter(command, i);
+            param = reinterpret_cast<SystemPluginParameter *>(SuperListItem
+                ::getItemModelAt(m_currentParameters, j));
+            if (i < command->commandsCount() - 1)
+            {
+                param->defaultValue()->initializeCommandParameter(command, i);
+            }
+            param->defaultValue()->updateModelsParametersProperties(m_parameters
+                , m_properties);
         }
-        param->defaultValue()->updateModelsParametersProperties(m_parameters,
-            m_properties);
+        ui->treeViewEditParameter->updateAbsoluteAllNodesString();
     }
-    ui->treeViewEditParameter->updateAbsoluteAllNodesString();
 }
 
 // -------------------------------------------------------

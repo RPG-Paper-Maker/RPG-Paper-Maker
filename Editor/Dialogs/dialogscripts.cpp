@@ -233,28 +233,39 @@ void DialogScripts::updatePluginsSave()
 
 void DialogScripts::updatePluginCodeSave()
 {
-    ui->tabWidgetPlugin->setTabText(1, RPM::translate(Translations::CODE) + RPM
-        ::SPACE + (this->getSelectedPlugin()->changed() ? "*" : RPM::SPACE));
-    this->updatePluginsSave();
+    SystemPlugin *plugin = this->getSelectedPlugin();
+    if (plugin != nullptr)
+    {
+        ui->tabWidgetPlugin->setTabText(1, RPM::translate(Translations::CODE) +
+            RPM::SPACE + (plugin->changed() ? "*" : RPM::SPACE));
+        this->updatePluginsSave();
+    }
 }
 
 // -------------------------------------------------------
 
 void DialogScripts::updatePluginEditSave()
 {
-    ui->tabWidgetPlugin->setTabText(2, RPM::translate(Translations::EDIT) + RPM
-        ::SPACE + (this->getSelectedPlugin()->editChanged() ? "*" : RPM::SPACE));
-    this->updatePluginsSave();
+    SystemPlugin *plugin = this->getSelectedPlugin();
+    if (plugin != nullptr)
+    {
+        ui->tabWidgetPlugin->setTabText(2, RPM::translate(Translations::EDIT) +
+            RPM::SPACE + (plugin->editChanged() ? "*" : RPM::SPACE));
+        this->updatePluginsSave();
+    }
 }
 
 // -------------------------------------------------------
 
 void DialogScripts::updatePluginDetailsSave()
 {
-    ui->tabWidgetPlugin->setTabText(0, RPM::translate(Translations::DETAILS) +
-        RPM::SPACE + (this->getSelectedPlugin()->editChanged() ? "*" : RPM
-        ::SPACE));
-    this->updatePluginsSave();
+    SystemPlugin *plugin = this->getSelectedPlugin();
+    if (plugin != nullptr)
+    {
+        ui->tabWidgetPlugin->setTabText(0, RPM::translate(Translations::DETAILS)
+            + RPM::SPACE + (plugin->editChanged() ? "*" : RPM::SPACE));
+        this->updatePluginsSave();
+    }
 }
 
 // -------------------------------------------------------
@@ -608,6 +619,7 @@ void DialogScripts::on_pluginListDeleted(SuperListItem *super, int)
 {
     QDir(reinterpret_cast<SystemPlugin *>(super)->getFolderPath())
         .removeRecursively();
+    this->updatePluginsSave();
 }
 
 // -------------------------------------------------------
