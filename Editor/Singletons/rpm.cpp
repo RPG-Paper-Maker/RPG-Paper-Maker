@@ -119,8 +119,6 @@ const QString RPM::PATH_SCRIPTS_LIBS_DIR = Common::pathCombine(
     PATH_SCRIPTS_DIR, "Libs");
 const QString RPM::PATH_SCRIPTS_SHADERS_DIR = Common::pathCombine(
     PATH_SCRIPTS_DIR, "Shaders");
-const QString RPM::PATH_SCRIPTS_SRC_DIR = Common::pathCombine(
-    PATH_SCRIPTS_DIR, "src");
 const QString RPM::PATH_COMMON_EVENTS = Common::pathCombine(PATH_DATAS,
     "commonEvents" + EXTENSION_JSON);
 const QString RPM::PATH_VARIABLES = Common::pathCombine(PATH_DATAS,

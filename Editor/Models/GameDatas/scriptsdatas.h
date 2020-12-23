@@ -33,7 +33,6 @@ public:
     QStandardItemModel * modelSystem() const;
     QStandardItemModel * modelPlugins() const;
     QStandardItemModel * modelLibs() const;
-    QStandardItemModel * modelSrc() const;
     QStandardItemModel * modelShaders() const;
 
     bool containsPluginName(QString name) const;
@@ -42,7 +41,6 @@ public:
     void setDefault();
     void readSystem();
     void readLibs();
-    void readSrc();
     void readShaders();
     void readFolder(QStandardItem *root, QString path);
 
@@ -54,7 +52,6 @@ private:
     QStandardItemModel *m_modelSystem;
     QStandardItemModel *m_modelPlugins;
     QStandardItemModel *m_modelLibs;
-    QStandardItemModel *m_modelSrc;
     QStandardItemModel *m_modelShaders;
 };
 

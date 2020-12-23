@@ -120,7 +120,6 @@ public:
     static const QString PATH_SCRIPTS_PLUGINS_DIR;
     static const QString PATH_SCRIPTS_LIBS_DIR;
     static const QString PATH_SCRIPTS_SHADERS_DIR;
-    static const QString PATH_SCRIPTS_SRC_DIR;
     static const QString PATH_COMMON_EVENTS;
     static const QString PATH_VARIABLES;
     static const QString PATH_SYSTEM;

@@ -598,59 +598,6 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tab_6">
-        <attribute name="title">
-         <string>src</string>
-        </attribute>
-        <layout class="QGridLayout" name="gridLayout_13">
-         <item row="0" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_7">
-           <item>
-            <widget class="WidgetSuperTree" name="treeViewSrc">
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>200</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="horizontalScrollBarPolicy">
-              <enum>Qt::ScrollBarAsNeeded</enum>
-             </property>
-             <property name="sizeAdjustPolicy">
-              <enum>QAbstractScrollArea::AdjustToContents</enum>
-             </property>
-             <property name="headerHidden">
-              <bool>true</bool>
-             </property>
-             <attribute name="headerVisible">
-              <bool>false</bool>
-             </attribute>
-             <attribute name="headerStretchLastSection">
-              <bool>true</bool>
-             </attribute>
-            </widget>
-           </item>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_5">
-             <item>
-              <widget class="WidgetCode" name="widgetCodeSrc">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
       </widget>
      </item>
      <item>

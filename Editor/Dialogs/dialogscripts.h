@@ -55,8 +55,6 @@ private:
     CodeSyntaxHighlighter *m_highlighterSystem;
     WidgetCodeLineNumberArea *m_widgetLineNumberLibs;
     CodeSyntaxHighlighter *m_highlighterLibs;
-    WidgetCodeLineNumberArea *m_widgetLineNumberSrc;
-    CodeSyntaxHighlighter *m_highlighterSrc;
     WidgetCodeLineNumberArea *m_widgetLineNumberShaders;
     CodeSyntaxHighlighter *m_highlighterShaders;
     WidgetCodeLineNumberArea *m_widgetLineNumberPlugin;
@@ -68,7 +66,6 @@ private:
 public slots:
     void on_scriptSystemSelected(QModelIndex, QModelIndex);
     void on_scriptLibsSelected(QModelIndex, QModelIndex);
-    void on_scriptSrcSelected(QModelIndex, QModelIndex);
     void on_scriptShadersSelected(QModelIndex, QModelIndex);
     void on_scriptPluginSelected(QModelIndex, QModelIndex);
     void on_pluginListUpdated();

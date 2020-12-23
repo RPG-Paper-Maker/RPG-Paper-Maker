@@ -26,7 +26,6 @@ ScriptsDatas::ScriptsDatas() :
     m_modelSystem(new QStandardItemModel),
     m_modelPlugins(new QStandardItemModel),
     m_modelLibs(new QStandardItemModel),
-    m_modelSrc(new QStandardItemModel),
     m_modelShaders(new QStandardItemModel)
 {
 
@@ -37,7 +36,6 @@ ScriptsDatas::~ScriptsDatas()
     SuperListItem::deleteModel(m_modelSystem);
     SuperListItem::deleteModel(m_modelPlugins);
     SuperListItem::deleteModel(m_modelLibs);
-    SuperListItem::deleteModel(m_modelSrc);
     SuperListItem::deleteModel(m_modelShaders);
 }
 
@@ -51,10 +49,6 @@ QStandardItemModel * ScriptsDatas::modelSystem() const {
 
 QStandardItemModel * ScriptsDatas::modelLibs() const {
     return m_modelLibs;
-}
-
-QStandardItemModel * ScriptsDatas::modelSrc() const {
-    return m_modelSrc;
 }
 
 QStandardItemModel * ScriptsDatas::modelShaders() const {
@@ -138,16 +132,6 @@ void ScriptsDatas::readLibs()
 
 // -------------------------------------------------------
 
-void ScriptsDatas::readSrc()
-{
-    SuperListItem::deleteModel(m_modelSrc, false);
-    this->readFolder(m_modelSrc->invisibleRootItem(), Common::pathCombine(RPM
-        ::get()->project()->pathCurrentProjectApp(), RPM
-        ::PATH_SCRIPTS_SRC_DIR));
-}
-
-// -------------------------------------------------------
-
 void ScriptsDatas::readShaders()
 {
     SuperListItem::deleteModel(m_modelShaders, false);
@@ -201,7 +185,6 @@ void ScriptsDatas::read(const QJsonObject &json)
 
     this->readSystem();
     this->readLibs();
-    this->readSrc();
     this->readShaders();
 
     // Plugins

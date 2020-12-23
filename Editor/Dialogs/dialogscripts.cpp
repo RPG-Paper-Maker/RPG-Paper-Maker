@@ -45,8 +45,6 @@ DialogScripts::DialogScripts(QWidget *parent) :
         ->document());
     m_widgetLineNumberLibs = new WidgetCodeLineNumberArea(ui->widgetCodeLibs);
     m_highlighterLibs = new CodeSyntaxHighlighter(ui->widgetCodeLibs->document());
-    m_widgetLineNumberSrc = new WidgetCodeLineNumberArea(ui->widgetCodeSrc);
-    m_highlighterSrc = new CodeSyntaxHighlighter(ui->widgetCodeSrc->document());
     m_widgetLineNumberShaders = new WidgetCodeLineNumberArea(ui
         ->widgetCodeShaders);
     m_highlighterShaders = new CodeSyntaxHighlighter(ui->widgetCodeShaders
@@ -64,11 +62,6 @@ DialogScripts::DialogScripts(QWidget *parent) :
     ui->treeViewLibs->setCanMove(false);
     ui->treeViewLibs->setCanBeControled(false);
     ui->treeViewLibs->setCanCreateDelete(false);
-    ui->treeViewSrc->initializeNewItemInstance(new SystemScript);
-    ui->treeViewSrc->setIndentation(15);
-    ui->treeViewSrc->setCanMove(false);
-    ui->treeViewSrc->setCanBeControled(false);
-    ui->treeViewSrc->setCanCreateDelete(false);
     ui->treeViewShaders->initializeNewItemInstance(new SystemScript);
     ui->treeViewShaders->setIndentation(15);
     ui->treeViewShaders->setCanMove(false);
@@ -85,17 +78,10 @@ DialogScripts::DialogScripts(QWidget *parent) :
     ui->treeViewSystem->header()->setSectionResizeMode(QHeaderView
         ::ResizeToContents);
     ui->treeViewSystem->header()->setMinimumSectionSize(200);
-
     ui->treeViewLibs->header()->setStretchLastSection(false);
     ui->treeViewLibs->header()->setSectionResizeMode(QHeaderView
         ::ResizeToContents);
     ui->treeViewLibs->header()->setMinimumSectionSize(200);
-
-    ui->treeViewSrc->header()->setStretchLastSection(false);
-    ui->treeViewSrc->header()->setSectionResizeMode(QHeaderView
-        ::ResizeToContents);
-    ui->treeViewSrc->header()->setMinimumSectionSize(200);
-
     ui->treeViewShaders->header()->setStretchLastSection(false);
     ui->treeViewShaders->header()->setSectionResizeMode(QHeaderView
         ::ResizeToContents);
@@ -119,7 +105,7 @@ DialogScripts::DialogScripts(QWidget *parent) :
     QSizePolicy sp_retain;
     QList<QWidget *> widgetList;
     widgetList << ui->widgetCodeSystem << ui->widgetCodeLibs << ui
-        ->widgetCodeSrc << ui->widgetCodeShaders << ui->tabWidgetPlugin;
+        ->widgetCodeShaders << ui->tabWidgetPlugin;
     for (int i = 0; i < widgetList.size(); i++) {
         sp_retain = widgetList[i]->sizePolicy();
         sp_retain.setRetainSizeWhenHidden(true);
@@ -140,8 +126,6 @@ DialogScripts::~DialogScripts()
     delete m_highlighterSystem;
     delete m_widgetLineNumberLibs;
     delete m_highlighterLibs;
-    delete m_widgetLineNumberSrc;
-    delete m_highlighterSrc;
     delete m_widgetLineNumberShaders;
     delete m_highlighterShaders;
     delete m_widgetLineNumberPlugin;
@@ -190,17 +174,6 @@ void DialogScripts::initialize()
     index = ui->treeViewLibs->getModel()->index(0, 0);
     ui->treeViewLibs->setCurrentIndex(index);
     on_scriptLibsSelected(index, index);
-
-    // Src
-    ui->treeViewSrc->initializeModel(RPM::get()->project()->scriptsDatas()
-        ->modelSrc());
-    ui->treeViewSrc->expandAll();
-    connect(ui->treeViewSrc->selectionModel(), SIGNAL(currentChanged(QModelIndex
-        , QModelIndex)), this, SLOT(on_scriptSrcSelected(QModelIndex,
-        QModelIndex)));
-    index = ui->treeViewSrc->getModel()->index(0, 0);
-    ui->treeViewSrc->setCurrentIndex(index);
-    on_scriptSrcSelected(index, index);
 
     // Shaders
     ui->treeViewShaders->initializeModel(RPM::get()->project()->scriptsDatas()
@@ -552,26 +525,6 @@ void DialogScripts::on_scriptLibsSelected(QModelIndex index, QModelIndex)
         } else
         {
             ui->widgetCodeLibs->hide();
-        }
-    }
-}
-
-// -------------------------------------------------------
-
-void DialogScripts::on_scriptSrcSelected(QModelIndex index, QModelIndex)
-{
-    QStandardItem *item = ui->treeViewSrc->getModel()->itemFromIndex(index);
-    if (item != nullptr)
-    {
-        SystemScript *script = reinterpret_cast<SystemScript *>(item->data()
-            .value<quintptr>());
-        if (script != nullptr)
-        {
-            ui->widgetCodeSrc->show();
-            ui->widgetCodeSrc->initialize(script);
-        } else
-        {
-            ui->widgetCodeSrc->hide();
         }
     }
 }
