@@ -211,14 +211,14 @@ void Object3DCustomDatas::initializeVertices(QVector<Vertex> &vertices,
     float scale;
 
     scale = static_cast<float>(m_datas->scale());
-    size.setX(scale);
-    size.setY(scale);
-    size.setZ(scale);
     squareSize = RPM::get()->getSquareSize();
+    size.setX(scale * squareSize);
+    size.setY(scale * squareSize);
+    size.setZ(scale * squareSize);
     shape = m_datas->obj();
-    positionOffset.setX((position.x() * squareSize) + (RPM::getSquareSize() / 2));
+    positionOffset.setX((position.x() * squareSize) + (squareSize / 2));
     positionOffset.setY(position.getY(squareSize));
-    positionOffset.setZ((position.z() * squareSize) + (RPM::getSquareSize() / 2));
+    positionOffset.setZ((position.z() * squareSize) + (squareSize / 2));
     m_box = QBox3D(shape->minVertex() * size + positionOffset, shape
         ->maxVertex() * size + positionOffset);
     this->getCenter(center);

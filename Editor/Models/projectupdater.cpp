@@ -19,11 +19,11 @@
 #include "titlesettingkind.h"
 #include "systemcommonreaction.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 15;
+const int ProjectUpdater::incompatibleVersionsCount = 16;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
-     "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0"};
+     "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0", "1.6.2"};
 
 // -------------------------------------------------------
 //
@@ -919,4 +919,22 @@ void ProjectUpdater::updateVersion_1_6_0()
     QFile(Common::pathCombine(Common::pathCombine(m_project
         ->pathCurrentProjectApp(), RPM::PATH_DATAS), "saves.json")).remove();
     QDir(m_project->pathCurrentProjectApp()).mkpath(RPM::PATH_SAVES);
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_6_2()
+{
+    // Update 3D objects scale
+    QStandardItemModel *model = m_project->specialElementsDatas()->model(
+        PictureKind::Object3D);
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        SystemObject3D *obj = reinterpret_cast<SystemObject3D *>(SuperListItem
+            ::getItemModelAt(model, i));
+        if (obj != nullptr && obj->shapeKind() == ShapeKind::Custom)
+        {
+            obj->setScale(obj->scale() / RPM::getSquareSize());
+        }
+    }
 }
