@@ -444,6 +444,7 @@ void WidgetSuperTree::mouseDoubleClickEvent(QMouseEvent* event){
             }
         }
     }
+    QTreeView::mouseDoubleClickEvent(event);
 }
 
 // -------------------------------------------------------
