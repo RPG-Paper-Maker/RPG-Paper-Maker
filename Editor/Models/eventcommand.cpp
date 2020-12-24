@@ -515,8 +515,8 @@ QString EventCommand::strChangeVariables(SystemCommonObject *object,
         break;
     }
 
-    return RPM::translate(Translations::CHANGE_VARIABLES).toLower() + RPM::COLON
-        + RPM::SPACE + selection + RPM::SPACE + operation + RPM::SPACE + value;
+    return RPM::translate(Translations::CHANGE_VARIABLES) + RPM::COLON + RPM
+        ::SPACE + selection + RPM::SPACE + operation + RPM::SPACE + value;
 }
 
 // -------------------------------------------------------
