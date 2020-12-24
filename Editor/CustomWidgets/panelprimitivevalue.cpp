@@ -1007,6 +1007,14 @@ void PanelPrimitiveValue::clearDataBase() {
     ui->comboBoxChoice->removeItem(ui->comboBoxChoice->findData(static_cast<
         QVariant>(static_cast<int>(PrimitiveValueKind::DataBase))));
     addDataBase(m_model->modelDataBase());
+    if (m_model->modelDataBase() != nullptr && m_model->modelDataBase()
+        ->invisibleRootItem()->rowCount() > 0)
+    {
+        this->showDataBase();
+    } else
+    {
+        this->showNumber();
+    }
 }
 
 // -------------------------------------------------------

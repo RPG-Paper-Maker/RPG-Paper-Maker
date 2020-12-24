@@ -36,7 +36,10 @@ DialogCommandChangeState::DialogCommandChangeState(
     ui->setupUi(this);
 
     initializeStateId();
-    if(command != nullptr) initialize(command);
+    if (command != nullptr)
+    {
+        this->initialize(command);
+    }
 
     this->translate();
 }
