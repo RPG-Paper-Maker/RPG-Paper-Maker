@@ -227,8 +227,15 @@ void WidgetSuperTree::pasteItem(QStandardItem* selected){
                 }
             }
         }
+        if (m_updateId)
+        {
+            super->setId(this->getNewId(p_model));
+        }
         emit pastingItem(m_copiedItem, super, selected->row());
-        setItem(selected, super);
+        if (super->id() != -1)
+        {
+            setItem(selected, super);
+        }
     }
 }
 

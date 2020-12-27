@@ -81,6 +81,7 @@ private slots:
     void on_updateJsonEvents(SuperListItem *);
     void on_updateJsonProperties(SuperListItem *);
     void on_stateChanged(QModelIndex index, QModelIndex);
+    void on_statePastingItem(SuperListItem *previous, SuperListItem *after, int);
     void on_eventChanged(QModelIndex index, QModelIndex);
     void on_tabWidgetCommands_currentChanged(int index);
     void on_blockingHeroChanged(bool c);

@@ -40,6 +40,7 @@ PanelObject::PanelObject(QWidget *parent) :
     ui->treeViewProperties->setUpdateId(true);
     ui->treeViewEvents->initializeNewItemInstance(new SystemObjectEvent);
     ui->treeViewStates->initializeNewItemInstance(new SystemState);
+    ui->treeViewStates->setUpdateId(true);
 
     // Moving
     SuperListItem::fillComboBox(ui->comboBoxSpeed, RPM::get()->project()
@@ -141,6 +142,9 @@ void PanelObject::updateModel() {
         connect(ui->treeViewStates->selectionModel(), SIGNAL(currentChanged(
             QModelIndex,QModelIndex)), this, SLOT(on_stateChanged(QModelIndex,
             QModelIndex)));
+        connect(ui->treeViewStates, SIGNAL(pastingItem(SuperListItem *,
+            SuperListItem *, int)), this, SLOT(on_statePastingItem(SuperListItem
+            *, SuperListItem *, int)));
         connect(ui->treeViewStates, SIGNAL(needsUpdateJson(SuperListItem *)),
             this, SLOT(on_updateJsonStates(SuperListItem *)));
         index = ui->treeViewStates->getModel()->index(0,0);
@@ -507,6 +511,41 @@ void PanelObject::on_stateChanged(QModelIndex index, QModelIndex) {
     }
 
     on_eventChanged(eventIndex, eventIndex);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_statePastingItem(SuperListItem *previous, SuperListItem
+    *after, int)
+{
+    SuperListItem *state = SuperListItem::getById(RPM::get()->project()
+        ->gameDatas()->commonEventsDatas()->modelStates()->invisibleRootItem(),
+        after->id(), false);
+    if (state == nullptr)
+    {
+        after->setId(-1);
+    } else
+    {
+        // Update copied state name according to ID
+        after->setName(state->name());
+
+        // Copy the reactions associated to the current object events
+        SystemObjectEvent *event;
+        SystemReaction *reaction;
+        for (int i = 0, l = m_model->modelEvents()->invisibleRootItem()
+             ->rowCount(); i < l; i++)
+        {
+            event = reinterpret_cast<SystemObjectEvent *>(SuperListItem
+                ::getItemModelAt(m_model->modelEvents(), i));
+            if (event != nullptr)
+            {
+                reaction = reinterpret_cast<SystemReaction *>(event->reactionAt(
+                    previous->id())->createCopy());
+                reaction->setId(after->id());
+                event->addReaction(after->id(), reaction);
+            }
+        }
+    }
 }
 
 // -------------------------------------------------------

@@ -102,7 +102,7 @@ QString SystemCustomStructureElement::getStringEnd() const
     case PrimitiveValueKind::CustomStructure:
         return "> <strong style=\"color:" + COLOR_CUSTOM + "\">}</strong>";
     case PrimitiveValueKind::CustomList:
-        return "> <strong style=\"color:" + COLOR_CUSTOM + "\">}</strong>";
+        return "> <strong style=\"color:" + COLOR_CUSTOM + "\">]</strong>";
     default:
         return "";
     }
