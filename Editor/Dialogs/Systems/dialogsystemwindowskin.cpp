@@ -50,6 +50,7 @@ void DialogSystemWindowSkin::initialize() {
         ::getById(RPM::get()->project()->picturesDatas()->model(PictureKind
         ::WindowSkins)->invisibleRootItem(), m_windowSkin.pictureID()));
 
+    ui->lineEditName->setText(m_windowSkin.name());
     ui->widgetShowPicture->setActivateCoef(false);
     ui->widgetPicture->setKind(PictureKind::WindowSkins);
     connect(ui->widgetPicture, SIGNAL(pictureChanged(SystemPicture *)), this,
@@ -197,6 +198,7 @@ void DialogSystemWindowSkin::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::SET_WINDOW_SKIN) + RPM
         ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
     ui->labelOption->setText(RPM::translate(Translations::OPTION) + RPM::COLON);
     ui->labelPicture->setText(RPM::translate(Translations::PICTURE) + RPM::COLON);
     ui->groupBoxSideBorders->setTitle(RPM::translate(Translations::SIDE_BORDERS));
@@ -223,6 +225,13 @@ void DialogSystemWindowSkin::closeEvent(QCloseEvent *event) {
 //
 //  SLOTS
 //
+// -------------------------------------------------------
+
+void DialogSystemWindowSkin::on_lineEditName_textEdited(const QString &text)
+{
+    m_windowSkin.setName(text);
+}
+
 // -------------------------------------------------------
 
 void DialogSystemWindowSkin::on_pictureChanged(SystemPicture *picture) {

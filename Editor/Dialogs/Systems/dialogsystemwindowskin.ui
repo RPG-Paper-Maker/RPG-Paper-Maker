@@ -184,14 +184,24 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-460</y>
+            <y>0</y>
             <width>334</width>
-            <height>894</height>
+            <height>948</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_8">
            <item row="0" column="0">
             <layout class="QVBoxLayout" name="verticalLayout_7">
+             <item>
+              <widget class="QLabel" name="labelName">
+               <property name="text">
+                <string>Name:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="lineEditName"/>
+             </item>
              <item>
               <widget class="QLabel" name="labelPicture">
                <property name="text">

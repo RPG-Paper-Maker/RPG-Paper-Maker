@@ -50,6 +50,7 @@ private:
     virtual void closeEvent(QCloseEvent *event);
 
 public slots:
+    void on_lineEditName_textEdited(const QString &text);
     void on_pictureChanged(SystemPicture *picture);
     void on_horizontalSlider_valueChanged(int value);
     void on_comboBoxOptionBackground_currentIndexChanged(int index);
