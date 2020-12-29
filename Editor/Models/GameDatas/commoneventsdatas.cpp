@@ -42,10 +42,6 @@ CommonEventsDatas::~CommonEventsDatas()
     SuperListItem::deleteModel(m_modelCommonObjects);
 }
 
-void CommonEventsDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::PATH_COMMON_EVENTS), *this);
-}
-
 QStandardItemModel* CommonEventsDatas::modelEventsSystem() const {
     return m_modelEventsSystem;
 }
@@ -66,95 +62,8 @@ QStandardItemModel* CommonEventsDatas::modelCommonObjects() const {
     return m_modelCommonObjects;
 }
 
-// -------------------------------------------------------
-//
-//  INTERMEDIARY FUNCTIONS
-//
-// -------------------------------------------------------
-
-void CommonEventsDatas::setDefault(){
-    SystemCommonReaction* react;
-    SystemCommonObject* object;
-    SuperListItem* super;
-
-    // Events system
-    QStringList namesEventsSystem;
-    namesEventsSystem << RPM::translate(Translations::TIME) << RPM::translate(
-        Translations::CHRONOMETER) << RPM::translate(Translations::KEYPRESS) <<
-        RPM::translate(Translations::KEYRELEASE);
-    QList<QVector<SystemCreateParameter*>> parametersSystem;
-    parametersSystem << QVector<SystemCreateParameter*>({
-            new SystemCreateParameter(1, RPM::translate(Translations::INTERVAL),
-                new PrimitiveValue(0)),
-            new SystemCreateParameter(2, RPM::translate(Translations::REPEAT),
-                new PrimitiveValue(true))
-    });
-    parametersSystem << QVector<SystemCreateParameter*>({
-            new SystemCreateParameter(1, RPM::translate(Translations::LEFT_TIME)
-                , new PrimitiveValue(0))});
-    parametersSystem << QVector<SystemCreateParameter*>({
-            new SystemCreateParameter(1, RPM::translate(Translations::ID), new
-                PrimitiveValue),
-            new SystemCreateParameter(2, RPM::translate(Translations::REPEAT),
-                new PrimitiveValue(false)),
-            new SystemCreateParameter(3, RPM::translate(Translations
-                ::IMMEDIATE_REPEAT), new PrimitiveValue(false))});
-    parametersSystem << QVector<SystemCreateParameter*>({
-            new SystemCreateParameter(1, RPM::translate(Translations::ID), new
-                PrimitiveValue)});
-    setDefaultEvent(m_modelEventsSystem, namesEventsSystem, parametersSystem);
-
-    // Events user
-    QStringList namesEventsUser;
-    namesEventsUser << RPM::translate(Translations::HERO_ACTION) << RPM
-        ::translate(Translations::HERO_TOUCH) << RPM::translate(Translations
-        ::ENEMY_TOUCH);
-    QList<QVector<SystemCreateParameter*>> parametersUser;
-    parametersUser << QVector<SystemCreateParameter *>({}) << QVector<
-        SystemCreateParameter *>({}) << QVector<SystemCreateParameter *>({});
-    setDefaultEvent(m_modelEventsUser, namesEventsUser, parametersUser);
-
-    // States
-    super = new SuperListItem(1, RPM::translate(Translations::NORMAL));
-    m_modelStates->appendRow(super->getModelRow());
-
-    // Common reactors
-    react = new SystemCommonReaction;
-    m_modelCommonReactors->appendRow(react->getModelRow());
-
-    // Common objects
-    object = new SystemCommonObject;
-    object->setDefaultFirst();
-    m_modelCommonObjects->appendRow(object->getModelRow());
-    object = new SystemCommonObject;
-    object->setDefaultHero(m_modelEventsSystem, m_modelEventsUser);
-    m_modelCommonObjects->appendRow(object->getModelRow());
-}
-
-// -------------------------------------------------------
-
-void CommonEventsDatas::setDefaultEvent(QStandardItemModel* model,
-                                        QStringList& namesEvents,
-                                        QList<QVector<SystemCreateParameter*>>&
-                                        parameters)
-{
-    QStandardItemModel* modelParameters;
-    QList<QStandardItem*> row;
-    SystemEvent* ev;
-    QStandardItem* item;
-
-    for (int i = 0; i < namesEvents.size(); i++){
-        modelParameters = new QStandardItemModel;
-        for (int j = 0; j < parameters[i].size(); j++){
-            row = parameters[i][j]->getModelRow();
-            modelParameters->appendRow(row);
-        }
-        item = new QStandardItem();
-        item->setText(SuperListItem::beginningText);
-        modelParameters->appendRow(item);
-        ev = new SystemEvent(i+1, namesEvents[i], modelParameters);
-        model->appendRow(ev->getModelRow());
-    }
+void CommonEventsDatas::read(QString path){
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_COMMON_EVENTS), *this);
 }
 
 // -------------------------------------------------------

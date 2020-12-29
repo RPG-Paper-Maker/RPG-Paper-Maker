@@ -144,7 +144,6 @@ bool GameDatas::isDatasRead() const {
 // -------------------------------------------------------
 
 void GameDatas::setDefault(){
-    m_commonEventsDatas->setDefault();
     m_variablesDatas->setDefault();
     m_systemDatas->setDefault();
     setDefaultItemsCharacters();

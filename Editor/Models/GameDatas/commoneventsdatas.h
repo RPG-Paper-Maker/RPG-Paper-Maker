@@ -31,26 +31,23 @@ class CommonEventsDatas : public Serializable
 public:
     CommonEventsDatas();
     virtual ~CommonEventsDatas();
-    void read(QString path);
-    QStandardItemModel* modelEventsSystem() const;
-    QStandardItemModel* modelEventsUser() const;
-    QStandardItemModel* modelStates() const;
-    QStandardItemModel* modelCommonReactors() const;
-    QStandardItemModel* modelCommonObjects() const;
+    QStandardItemModel * modelEventsSystem() const;
+    QStandardItemModel * modelEventsUser() const;
+    QStandardItemModel * modelStates() const;
+    QStandardItemModel * modelCommonReactors() const;
+    QStandardItemModel * modelCommonObjects() const;
 
-    void setDefault();
-    void setDefaultEvent(QStandardItemModel* model, QStringList &namesEvents,
-                         QList<QVector<SystemCreateParameter*>> &parameters);
+    void read(QString path);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 private:
-    QStandardItemModel* m_modelEventsSystem;
-    QStandardItemModel* m_modelEventsUser;
-    QStandardItemModel* m_modelStates;
-    QStandardItemModel* m_modelCommonReactors;
-    QStandardItemModel* m_modelCommonObjects;
+    QStandardItemModel *m_modelEventsSystem;
+    QStandardItemModel *m_modelEventsUser;
+    QStandardItemModel *m_modelStates;
+    QStandardItemModel *m_modelCommonReactors;
+    QStandardItemModel *m_modelCommonObjects;
 };
 
 #endif // COMMONEVENTSDATAS_H

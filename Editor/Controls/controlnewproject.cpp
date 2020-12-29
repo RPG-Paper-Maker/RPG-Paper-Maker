@@ -145,6 +145,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
 
     // Create the default datas
     project->setDefault();
+    project->readCommonEvents();
     project->gameDatas()->systemDatas()->projectName()->setAllNames(projectName);
     project->write(pathDir);
     QString error = project->createRPMFile();
