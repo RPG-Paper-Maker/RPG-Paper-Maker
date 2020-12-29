@@ -52,8 +52,8 @@ void ArmorsDatas::setDefault() {
         RPM::translate(Translations::BRONZE_MAIL),
         RPM::translate(Translations::BRONZE_VAMBRACES),
         RPM::translate(Translations::BRONZE_GREAVES),
-        RPM::translate(Translations::SAPHIR_RING),
-        RPM::translate(Translations::SAPHIR_NECKLACE)
+        RPM::translate(Translations::SAPPHIRE_RING),
+        RPM::translate(Translations::SAPPHIRE_NECKLACE)
     };
     int iconsID[] = {
         28, 29, 30, 31, 32, 33
@@ -66,8 +66,8 @@ void ArmorsDatas::setDefault() {
         RPM::translate(Translations::BRONZE_MAIL_DESCRIPTION),
         RPM::translate(Translations::BRONZE_VAMBRACES_DESCRIPTION),
         RPM::translate(Translations::BRONZE_GREAVES_DESCRIPTION),
-        RPM::translate(Translations::SAPHIR_RING_DESCRIPTION),
-        RPM::translate(Translations::SAPHIR_NECKLACE_DESCRIPTION)
+        RPM::translate(Translations::SAPPHIRE_RING_DESCRIPTION),
+        RPM::translate(Translations::SAPPHIRE_NECKLACE_DESCRIPTION)
     };
     int prices[] = {
         10, 50, 40, 30, 200, 150

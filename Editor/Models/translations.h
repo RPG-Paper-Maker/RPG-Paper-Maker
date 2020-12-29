@@ -816,14 +816,14 @@ public:
     static const QString BRONZE_MAIL;
     static const QString BRONZE_VAMBRACES;
     static const QString BRONZE_GREAVES;
-    static const QString SAPHIR_RING;
-    static const QString SAPHIR_NECKLACE;
+    static const QString SAPPHIRE_RING;
+    static const QString SAPPHIRE_NECKLACE;
     static const QString BRONZE_HELMET_DESCRIPTION;
     static const QString BRONZE_MAIL_DESCRIPTION;
     static const QString BRONZE_VAMBRACES_DESCRIPTION;
     static const QString BRONZE_GREAVES_DESCRIPTION;
-    static const QString SAPHIR_RING_DESCRIPTION;
-    static const QString SAPHIR_NECKLACE_DESCRIPTION;
+    static const QString SAPPHIRE_RING_DESCRIPTION;
+    static const QString SAPPHIRE_NECKLACE_DESCRIPTION;
     static const QString SWORD;
     static const QString AXE;
     static const QString SPEAR;

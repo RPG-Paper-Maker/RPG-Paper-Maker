@@ -100,7 +100,7 @@ void PicturesDatas::setDefaultIcons(QList<QString>& names) {
         "superHPPotion" << "megaHPPotion" << "MPPotion" << "superMPPotion" <<
         "megaMPPotion" << "TPPotion" << "superTPPotion" << "megaTPPotion" <<
         "key" << "woodenSword" << "ironAxe" << "bronzeHelmet" << "bronzeMail" <<
-        "bronzeVambraces" << "bronzeGreaves" << "saphirRing" << "saphirNecklace"
+        "bronzeVambraces" << "bronzeGreaves" << "SAPPHIRERing" << "SAPPHIRENecklace"
         << "grass";
     setDefaultPictures(names, PictureKind::Icons);
 }
