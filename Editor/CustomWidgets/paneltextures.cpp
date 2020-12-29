@@ -352,8 +352,7 @@ void PanelTextures::showTransformations() {
     m_drawKind = DrawKind::Rotate;
     this->hideAll();
     ui->panelTransformations->show();
-    width = qMax(ui->panelTransformations->width(), this->parentWidget()
-        ->width());
+    width = this->parentWidget()->width();
     this->setFixedSize(width, this->parentWidget()->height());
     this->updateGeometry();
     height = ui->panelTransformations->height();
@@ -532,6 +531,8 @@ void PanelTextures::onSplitterMoved(int, int) {
     if (m_drawKind == DrawKind::Translate || m_drawKind == DrawKind::Rotate ||
         m_drawKind == DrawKind::Scale)
     {
+        this->showTransformations();
+    } else {
         if (m_kind == PictureKind::None)
             updateTilesetImage();
         else {
@@ -540,8 +541,6 @@ void PanelTextures::onSplitterMoved(int, int) {
             else
                 updateComboBoxSize();
         }
-    } else {
-        this->showTransformations();
     }
 }
 
