@@ -490,6 +490,21 @@ void ControlMapEditor::stockSprite(Position &p, SpriteDatas *sprite,
                 p.setLayer(m_currentLayer);
             }
 
+            // For extremity wall
+            if (!undoRedo)
+            {
+                if (p.x() == m_map->mapProperties()->length() - 1 && p.centerX()
+                    == 100)
+                {
+                    sprite->setXOffset(sprite->xOffset() - 1);
+                }
+                if (p.z() == m_map->mapProperties()->width() - 1 && p.centerZ()
+                    == 100)
+                {
+                    sprite->setZOffset(sprite->zOffset() - 1);
+                }
+            }
+
             // Add the sprite
             QSet<Portion> portionsOverflow;
             QJsonObject previous;

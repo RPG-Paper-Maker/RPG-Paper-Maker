@@ -45,6 +45,21 @@ bool MapElement::operator!=(const MapElement& other) const{
     return !operator==(other);
 }
 
+int MapElement::xOffset() const
+{
+    return m_xOffset;
+}
+
+int MapElement::yOffset() const
+{
+    return m_yOffset;
+}
+
+int MapElement::zOffset() const
+{
+    return m_zOffset;
+}
+
 void MapElement::setXOffset(int x) {
     m_xOffset = x;
 }

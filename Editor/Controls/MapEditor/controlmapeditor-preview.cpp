@@ -34,6 +34,17 @@ void ControlMapEditor::updatePreviewElements(MapEditorSelectionKind kind,
     int xOffset = m_positionRealOnSprite.x() - position.x();
     int yOffset = m_positionRealOnSprite.y() - position.y();
     int zOffset = m_positionRealOnSprite.z() - position.z();
+
+    // For extremity wall
+    if (position.x() == m_map->mapProperties()->length() - 1 && position.centerX() == 100)
+    {
+        xOffset--;
+    }
+    if (position.z() == m_map->mapProperties()->width() - 1 && position.centerZ() == 100)
+    {
+        zOffset--;
+    }
+
     m_positionPreviousPreview = position;
 
     // Remove previous

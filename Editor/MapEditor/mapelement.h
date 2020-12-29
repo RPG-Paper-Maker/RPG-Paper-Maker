@@ -35,6 +35,9 @@ public:
     virtual ~MapElement();
     bool operator==(const MapElement& other) const;
     bool operator!=(const MapElement& other) const;
+    int xOffset() const;
+    int yOffset() const;
+    int zOffset() const;
     void setXOffset(int x);
     void setYOffset(int y);
     void setZOffset(int z);
