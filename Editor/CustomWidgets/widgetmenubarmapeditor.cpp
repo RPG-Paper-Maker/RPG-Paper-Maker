@@ -571,7 +571,7 @@ void WidgetMenuBarMapEditor::paintEvent(QPaintEvent *e) {
             if (m_selection)
                 p.fillRect(adjustedActionRect, colorBackgroundSelected);
             else
-                p.fillRect(adjustedActionRect, colorBackgroundRightSelected);
+                p.fillRect(adjustedActionRect, RPM::get()->engineSettings()->theme() == ThemeKind::Dark ? colorBackgroundRightSelected : Qt::lightGray);
         }
 
         // Draw all the other stuff (text, special background..)
@@ -586,10 +586,12 @@ void WidgetMenuBarMapEditor::paintEvent(QPaintEvent *e) {
 
         // Drawing separator and disabled with darker color
         if (opt.icon.isNull()) {
-            if (action->text() == "|" || !action->isEnabled())
+            if (action->text() == "|" || !action->isEnabled()) {
                 p.setPen(QColor(100, 100, 100));
-            else
-                p.setPen(Qt::white);
+            } else {
+                p.setPen(RPM::get()->engineSettings()->theme() ==
+                    ThemeKind::Dark || action->property("selection") == true ? Qt::white : Qt::black);
+            }
             p.drawText(adjustedActionRect, action->text(),
                        QTextOption(Qt::AlignCenter));
             opt.text = "";

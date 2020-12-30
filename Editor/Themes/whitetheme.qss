@@ -36,22 +36,13 @@ QGroupBox::disabled {
     border: 1px solid grey;
 }
 
-QMenuBar {
-     background: #333333;
-     color:white;
-}
-
-QMenu{
-     background: #333333;
-     color:white;
-}
-
 QMenu::item:disabled{
-     color:silver;
+     color: #474747;
 }
 
 QMenu::item:selected {
      background-color: CadetBlue;
+     color: white;
 }
 
 WidgetMenuBarMapEditor{
@@ -61,6 +52,7 @@ WidgetMenuBarMapEditor{
 WidgetMenuBarMapEditor::item{
      padding: 10px;
      background: transparent;
+     color: black;
 }
 
 WidgetMenuBarMapEditor > QMenu::item:selected{
