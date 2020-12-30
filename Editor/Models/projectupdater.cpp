@@ -925,6 +925,9 @@ void ProjectUpdater::updateVersion_1_6_0()
 
 void ProjectUpdater::updateVersion_1_6_2()
 {
+    // Plugins
+    SuperListItem::deleteModel(m_project->scriptsDatas()->modelPlugins(), false);
+
     // Update 3D objects scale
     QStandardItemModel *model = m_project->specialElementsDatas()->model(
         PictureKind::Object3D);
