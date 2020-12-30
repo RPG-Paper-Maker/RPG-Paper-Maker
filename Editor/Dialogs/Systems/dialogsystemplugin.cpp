@@ -247,7 +247,8 @@ void DialogSystemPlugin::accept()
             ::NAME_JSON), json);
         QFile file(Common::pathCombine(path, SystemPlugin::NAME_CODE));
         file.open(QIODevice::ReadWrite);
-        file.write(("let pluginName = \"" + m_plugin.name() + "\";\n\n// Start code here").toUtf8());
+        file.write(("import { RPM } from \"../path.js\"\n\nlet pluginName = \""
+            + m_plugin.name() + "\";\n\n// Start code here").toUtf8());
         file.close();
         break;
     }
