@@ -172,7 +172,7 @@ QString SystemCustomShape::getLocalPath() const {
 // -------------------------------------------------------
 
 void SystemCustomShape::loadCustomObj() {
-    if (m_kind != CustomShapeKind::OBJ || m_loaded) {
+    if (m_kind != CustomShapeKind::OBJ) {
         return;
     }
 
