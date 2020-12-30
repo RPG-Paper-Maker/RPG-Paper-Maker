@@ -371,7 +371,6 @@ void ProjectUpdater::updateVersion_0_4_0() {
 
     // Adding a default special elements datas to the project
     SpecialElementsDatas specialElementsDatas;
-    specialElementsDatas.setDefault();
     RPM::writeJSON(Common::pathCombine(
                          m_project->pathCurrentProject(),
                          RPM::PATH_SPECIAL_ELEMENTS), specialElementsDatas);
@@ -402,9 +401,6 @@ void ProjectUpdater::updateVersion_0_4_3() {
     m_project->readPicturesDatas();
     m_project->picturesDatas()->setDefaultAutotiles(names);
     m_project->writePicturesDatas();
-    m_project->readSpecialsDatas();
-    m_project->specialElementsDatas()->setDefaultAutotiles();
-    m_project->writeSpecialsDatas();
 }
 
 // -------------------------------------------------------
@@ -558,11 +554,6 @@ void ProjectUpdater::updateVersion_1_2_0() {
     m_project->readPicturesDatas();
     m_project->picturesDatas()->setDefaultObjects3D(names);
     m_project->writePicturesDatas();
-
-    // Objects 3D default
-    m_project->readSpecialsDatas();
-    m_project->specialElementsDatas()->setDefaulObjects3D();
-    m_project->writeSpecialsDatas();
 }
 
 // -------------------------------------------------------
@@ -578,8 +569,6 @@ void ProjectUpdater::updateVersion_1_2_1() {
     // Default Mountains
     m_project->readShapesDatas();
     m_project->readSpecialsDatas();
-    m_project->specialElementsDatas()->setDefaulMountains();
-    m_project->writeSpecialsDatas();
     m_project->readTilesetsDatas();
     m_project->writeTilesetsDatas();
 }

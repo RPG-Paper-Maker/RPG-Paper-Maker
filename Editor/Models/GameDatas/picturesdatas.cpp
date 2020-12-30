@@ -189,8 +189,18 @@ void PicturesDatas::setDefaultWalls(QList<QString>& names) {
 // -------------------------------------------------------
 
 void PicturesDatas::setDefaultObjects3D(QList<QString> &names) {
-    names << "chest" << "cupboard" << "fridge" << "table";
-    setDefaultPictures(names, PictureKind::Object3D);
+    names << "chest" << "cupboard" << "fridge" << "table" << "bottom-chair" <<
+        "chair-back" << "big-log" << "small-log" << "tiny-log" <<
+        "cobblestone-cube" << "dresser" << "giant-wood-building" <<
+        "wood-deck" << "brick-building" << "bed" << "dining-table" << "cabinets1" <<
+        "cabinets2" << "macrowave" << "shop-stand1" << "shop-stand2" <<
+        "big-brick-building" << "green-building-with-door" << "green-building"
+        << "wood-building" << "big-bed" << "small-bookshelf" << "bookshelf" <<
+        "small-television" << "television" << "bench-stone" << "bench-wood" <<
+        "picnic-table-stone" << "picnic-table-wood" << "minecart" <<
+        "fancy-house" << "small-wood-post" << "roof-texture" << "brick-chimney"
+        << "tent";
+    this->setDefaultPictures(names, PictureKind::Object3D);
 }
 
 // -------------------------------------------------------

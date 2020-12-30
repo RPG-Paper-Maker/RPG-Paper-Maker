@@ -42,13 +42,6 @@ public:
     QStandardItemModel* modelObjects3D() const;
     QStandardItemModel* modelMountains() const;
     SystemObject3D * missingObject3D() const;
-    void setDefault();
-    void setDefaultSpriteWalls();
-    void setDefaultAutotiles();
-    void setDefaulObjects3D();
-    void setDefaulMountains();
-    void addDefaultSpecial(SystemSpecialElement *special, QStandardItemModel
-        *model);
 
     virtual void read(const QJsonObject &json);
     void readSpecials(const QJsonObject &json, PictureKind kind,

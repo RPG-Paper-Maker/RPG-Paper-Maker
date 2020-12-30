@@ -157,7 +157,7 @@ void Project::setDefault(){
     p_gameDatas->animationsDatas()->setDefault();
     m_treeMapDatas->setDefault();
     m_scriptsDatas->setDefault();
-    m_specialElementsDatas->setDefault();
+    m_specialElementsDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
