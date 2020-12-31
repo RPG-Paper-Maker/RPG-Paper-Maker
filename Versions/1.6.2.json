@@ -237,6 +237,11 @@
         },
         {
             "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/bookshelf.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/bookshelf.png"
+        },
+        {
+            "repo": "Basic-Ressources",
             "source": "Content/Images/Textures2D/Objects3D/tent.png",
             "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/tent.png"
         },
@@ -384,11 +389,6 @@
             "repo": "Basic-Ressources",
             "source": "Content/Images/Textures2D/Characters/chicken2.png",
             "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/chicken2.png"
-        },
-        {
-            "repo": "Basic-Ressources",
-            "source": "Content/Images/Textures2D/Characters/bookshelf.png",
-            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/bookshelf.png"
         },
         {
             "repo": "Basic-Ressources",
