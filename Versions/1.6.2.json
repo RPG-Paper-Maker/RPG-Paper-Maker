@@ -1,7 +1,575 @@
 {
-	"add": [],
-	"remove": [],
-	"replace": [],
+	"add": [
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Shapes/OBJ/Roof.obj",
+            "target": "Engine/Content/BR/Content/Shapes/OBJ/Roof.obj"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Tilesets/dungeon.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Tilesets/dungeon.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Walls/cave2.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Walls/cave2.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Walls/brick.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Walls/brick.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Walls/sandstone.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Walls/sandstone.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Walls/stone.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Walls/stone.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Walls/wood2.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Walls/wood2.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Walls/wood.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Walls/wood.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Walls/cave3.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Walls/cave3.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Mountains/wood-stairs.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/wood-stairs.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Mountains/green-roof.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/green-roof.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Mountains/blue-roof.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/blue-roof.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Mountains/ref-roof.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/ref-roof.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Mountains/gray-roof.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/gray-roof.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Battlers/slime.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers/slime.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Battlers/rat.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers/rat.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Battlers/lamia.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers/lamia.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Battlers/squid.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers/squid.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Battlers/bat.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers/bat.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Battlers/skeleton.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers/skeleton.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Battlers/knight.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers/knight.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Battlers/mimic.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers/mimic.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/dining-table.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/dining-table.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/small-wood-post.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/small-wood-post.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/dresser.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/dresser.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/cabinets2.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/cabinets2.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/bottom-chair.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/bottom-chair.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/big-bed.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/big-bed.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/fridge.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/fridge.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/green-building.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/green-building.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/chest.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/chest.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/wood-deck.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/wood-deck.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/cupboard.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/cupboard.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/giant-wood-building.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/giant-wood-building.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/template.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/template.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/tiny-log.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/tiny-log.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/small-log.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/small-log.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/kate.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/kate.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/roof-texture.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/roof-texture.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/fancy-house.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/fancy-house.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/big-log.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/big-log.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/television.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/television.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/small-television.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/small-television.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/cobblestone-cube.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/cobblestone-cube.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/chest.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/chest.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/picnic-table-wood.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/picnic-table-wood.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/bed.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/bed.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/tent.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/tent.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/wood-building.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/wood-building.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/stone-chimney.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/stone-chimney.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/brick-building.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/brick-building.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/chair-back.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/chair-back.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/shop-stand1.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/shop-stand1.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/brick-chimney.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/brick-chimney.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/picnic-table-stone.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/picnic-table-stone.png"
+        },
+        {
+            "repo": "Basic-Ressources",       
+            "source": "Content/Images/Textures2D/Objects3D/bench-stone.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/bench-stone.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/cube-table.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/cube-table.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/cabinets1.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/cabinets1.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/bench-wood.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/bench-wood.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/minecart.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/minecart.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/shop-stand2.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/shop-stand2.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/green-building-with-door.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/green-building-with-door.png"
+        },
+        {
+            "repo": "Basic-Ressources",        
+            "source": "Content/Images/Textures2D/Objects3D/big-brick-building.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/big-brick-building.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/wood-post.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/wood-post.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/small-bookshelf.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/small-bookshelf.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/macrowave.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/macrowave.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/slime.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/slime.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/villager5.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/villager5.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/rat.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/rat.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/save-warp-point.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/save-warp-point.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/lucas.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/lucas.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/plants1.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/plants1.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/villager1.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/villager1.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/lamia.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/lamia.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/chicken.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/chicken.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/squid.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/squid.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/chicken2.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/chicken2.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/villager2.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/villager2.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/goblin.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/goblin.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/villager3.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/villager3.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/flames1.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/flames1.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/villager4.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/villager4.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/bat.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/bat.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/gustav.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/gustav.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/villager6.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/villager6.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/skeleton.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/skeleton.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/keaton.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/keaton.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/knight.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/knight.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/villager7.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/villager7.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/cow.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/cow.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/cow2.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/cow2.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Icons/sapphireRing.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Icons/sapphireRing.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Icons/sapphireNecklace.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Icons/sapphireNecklace.png"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/commonEvents.json",
+            "target": "Engine/Content/basic/Content/Datas/commonEvents.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/specialElements.json",
+            "target": "Engine/Content/basic/Content/Datas/specialElements.json"
+        },
+        {
+            "files": [
+                {
+                    "repo": "Game-Script",
+                    "source": "Content/Datas/Scripts/Libs/howler.js",
+                    "target": "Engine/Content/basic/Content/Datas/Scripts/Libs/howler.js"
+                },
+                {
+                    "repo": "Game-Script",
+                    "source": "Content/Datas/Scripts/Libs/three.js",
+                    "target": "Engine/Content/basic/Content/Datas/Scripts/Libs/three.js"
+                }
+            ],
+            "target": "Engine/Content/basic/Content/Datas/Scripts/Libs"
+        },
+        {
+            "files": [
+                {
+                    "repo": "Game-Script",
+                    "source": "Content/Datas/Scripts/Shaders/fix.vert",
+                    "target": "Engine/Content/basic/Content/Datas/Scripts/Shaders/fix.vert"
+                },
+                {
+                    "repo": "Game-Script",
+                    "source": "Content/Datas/Scripts/Shaders/fix.frag",
+                    "target": "Engine/Content/basic/Content/Datas/Scripts/Shaders/fix.frag"
+                }
+            ],
+            "target": "Engine/Content/basic/Content/Datas/Scripts/Shaders"
+        },
+        {
+            "repo": "Game-Script",
+            "source": "Content/Datas/Scripts/Plugins/path.js",
+            "target": "Engine/Content/basic/Content/Datas/Scripts/Plugins/path.js"
+        }
+    ],
+	"remove": [
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Icons/saphirRing.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Icons/saphirRing.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Icons/saphirNecklace.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Icons/saphirNecklace.png"
+        }
+    ],
+	"replace": [
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Autotiles/general.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Autotiles/general.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/lucas.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/lucas.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/kate.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/kate.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/shana.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/shana.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/bibi.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/bibi.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/wooly.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/wooly.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Tilesets/plains.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Tilesets/plains.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Tilesets/inside.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Tilesets/inside.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Tilesets/cave.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Tilesets/cave.png"
+        }
+    ],
 	"features": [
         "Javascript game code tutorials",
         "Plugins manager",
