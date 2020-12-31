@@ -168,10 +168,8 @@ void ControlExport::removeWebNoNeed(QString path) {
     QString pathDatas = Common::pathCombine(Common::pathCombine(path, RPM
         ::PATH_APP), RPM::PATH_DATAS);
     QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
-    QFile(Common::pathCombine(pathDatas, "scripts.json")).remove();
     QString pathScripts = Common::pathCombine(Common::pathCombine(path, RPM
         ::PATH_APP), RPM::PATH_SCRIPTS_SYSTEM_DIR);
-    QDir(Common::pathCombine(pathScripts, "desktop")).removeRecursively();
     removeMapsTemp(pathDatas);
 }
 
@@ -183,7 +181,6 @@ void ControlExport::removeDesktopNoNeed(QString path) {
     QString pathDatas = Common::pathCombine(Common::pathCombine(path, RPM
         ::PATH_APP), RPM::PATH_DATAS);
     QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
-    QFile(Common::pathCombine(pathDatas, "scripts.json")).remove();
     QFile(Common::pathCombine(pathDatas, "pictures.json")).remove();
     QFile(Common::pathCombine(pathDatas, "shapes.json")).remove();
     QFile(Common::pathCombine(pathDatas, "songs.json")).remove();
