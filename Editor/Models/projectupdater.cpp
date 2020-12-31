@@ -154,16 +154,30 @@ void ProjectUpdater::copyExecutable() {
 void ProjectUpdater::copySystemScripts() {
     QString pathContent = Common::pathCombine(QDir::currentPath(), "Content");
     QString pathBasic = Common::pathCombine(pathContent, "basic");
-    QString pathScripts = Common::pathCombine(pathBasic,
-                                             RPM::PATH_SCRIPTS_SYSTEM_DIR);
-    QString pathProjectScripts =
-            Common::pathCombine(m_project->pathCurrentProjectApp(),
-                               RPM::PATH_SCRIPTS_SYSTEM_DIR);
+    QString pathProjectScripts = Common::pathCombine(m_project
+        ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_SYSTEM_DIR);
     QDir dir(pathProjectScripts);
     dir.removeRecursively();
     dir.cdUp();
     dir.mkdir("System");
-    Common::copyPath(pathScripts, pathProjectScripts);
+    Common::copyPath(Common::pathCombine(pathBasic, RPM::PATH_SCRIPTS_SYSTEM_DIR),
+        pathProjectScripts);
+    QString pathProjectShaders = Common::pathCombine(m_project
+        ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_SHADERS_DIR);
+    dir = QDir(pathProjectShaders);
+    dir.removeRecursively();
+    dir.cdUp();
+    dir.mkdir("Shaders");
+    Common::copyPath(Common::pathCombine(pathBasic, RPM::PATH_SCRIPTS_SHADERS_DIR),
+        pathProjectShaders);
+    QString pathProjectLibs = Common::pathCombine(m_project
+        ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_LIBS_DIR);
+    dir = QDir(pathProjectLibs);
+    dir.removeRecursively();
+    dir.cdUp();
+    dir.mkdir("Libs");
+    Common::copyPath(Common::pathCombine(pathBasic, RPM::PATH_SCRIPTS_LIBS_DIR),
+        pathProjectLibs);
 }
 
 // -------------------------------------------------------
@@ -927,6 +941,34 @@ void ProjectUpdater::updateVersion_1_6_2()
         if (obj != nullptr && obj->shapeKind() == ShapeKind::Custom)
         {
             obj->setScale(obj->scale() / RPM::getSquareSize());
+        }
+    }
+
+    // Remove include.js and add path.js
+    QFile(Common::pathCombine(Common::pathCombine(m_project->pathCurrentProjectApp(),
+        RPM::PATH_SCRIPTS_PLUGINS_DIR), "includes.js")).remove();
+    QFile::copy(Common::pathCombine(Common::pathCombine(Common::pathCombine(
+        Common::pathCombine(QDir::currentPath(), "Content"), "basic"), RPM
+        ::PATH_SCRIPTS_PLUGINS_DIR), "path.js"), Common::pathCombine(Common
+        ::pathCombine(m_project->pathCurrentProjectApp(), RPM
+        ::PATH_SCRIPTS_PLUGINS_DIR), "path.js"));
+
+    // Rename sapphire
+    model = m_project->picturesDatas()->model(PictureKind::Icons);
+    SystemPicture *picture;
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        picture = reinterpret_cast<SystemPicture *>(SuperListItem::getItemModelAt(
+            model, i));
+        if (picture != nullptr && picture->isBR())
+        {
+            if (picture->name() == "saphirRing.png")
+            {
+                picture->setName("sapphireRing.png");
+            } else if (picture->name() == "saphirNecklace.png")
+            {
+                picture->setName("sapphireNecklace.png");
+            }
         }
     }
 }
