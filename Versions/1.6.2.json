@@ -387,6 +387,11 @@
         },
         {
             "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/bookshelf.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/bookshelf.png"
+        },
+        {
+            "repo": "Basic-Ressources",
             "source": "Content/Images/Textures2D/Characters/villager2.png",
             "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/villager2.png"
         },
@@ -521,6 +526,11 @@
             "repo": "Basic-Ressources",
             "source": "Content/Images/HUD/Icons/saphirNecklace.png",
             "target": "Engine/Content/BR/Content/Images/HUD/Icons/saphirNecklace.png"
+        },
+        {
+            "repo": "Game-Scripts",
+            "source": "Content/Datas/Scripts/Plugins/includes.js",
+            "target": "Engine/Content/basic/Content/Datas/Scripts/Plugins/includes.js"
         }
     ],
 	"replace": [
