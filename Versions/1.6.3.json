@@ -16,8 +16,13 @@
         "Windows: when impossible to open Game app, try to redownload it"
     ],
 	"bugs": [
+        "White theme mac wrong police color for map editor menu bar",
+        "Windows text scaling issues (engine)",
+        "Issues with some custom musics playing",
+        "French translations broken"
 	],
     "finished": [
+        2,
         1,
         0,
         0,
@@ -25,6 +30,10 @@
         0,
         0,
         0,
+        0,
+        0,
+        0,
+
         0,
         0,
         0,

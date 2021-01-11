@@ -181,6 +181,7 @@ public:
     static const QString PATH_TRANSLATIONS_LANGUAGES;
     static const QString PATH_TRANSLATIONS_CURRENT_LANGUAGE;
     static const QString PATH_PATREON;
+    static const QString PATH_SPLASH;
     static const QString PATH_GAMES;
     static const QString PATH_TEXTURE_MISSING;
     static const QString PATH_MAIN;

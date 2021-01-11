@@ -239,6 +239,8 @@ const QString RPM::PATH_TRANSLATIONS_CURRENT_LANGUAGE = Common::pathCombine(RPM
     ::PATH_TRANSLATIONS, "current-language");
 const QString RPM::PATH_PATREON = Common::pathCombine(FOLDER_CONTENT, "patreon"
     + EXTENSION_JSON);
+const QString RPM::PATH_SPLASH = Common::pathCombine(FOLDER_CONTENT, "splash"
+    + EXTENSION_PNG);
 const QString RPM::PATH_GAMES = Common::pathCombine(QStandardPaths
     ::writableLocation(QStandardPaths::StandardLocation::DocumentsLocation),
     FOLDER_GAMES);

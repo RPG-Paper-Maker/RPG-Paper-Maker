@@ -15,6 +15,9 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QSplashScreen>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 #include "mainwindow.h"
 #include "rpm.h"
 #include "common.h"
@@ -66,12 +69,28 @@ int main(int argc, char *argv[]) {
     QDir::setCurrent(bin.absolutePath());
 
     // Splash screen
-    QPixmap pixmap(Common::pathCombine(Common::pathCombine(QDir::currentPath(),
-        RPM::FOLDER_CONTENT), "splash.png"));
+    QNetworkAccessManager manager;
+    QNetworkReply *reply;
+    QEventLoop loop;
+    QJsonObject doc;
+    QJsonDocument json;
+    reply = manager.get(QNetworkRequest(QUrl("https://raw.githubusercontent.com/"
+        "RPG-Paper-Maker/RPG-Paper-Maker/develop/EditorApp/Content/splash.png")));
+    QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+    if (reply->error() == QNetworkReply::NetworkError::NoError) {
+        QFile saveFile(Common::pathCombine(QDir::currentPath(), RPM::PATH_SPLASH));
+        if (saveFile.open(QIODevice::WriteOnly))
+        {
+            saveFile.write(reply->readAll());
+            saveFile.close();
+        }
+    }
+    QPixmap pixmap(Common::pathCombine(QDir::currentPath(), RPM::PATH_SPLASH));
     QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
     splash.show();
-    a.processEvents();
-    QTimer::singleShot(1000, &splash, &QWidget::close);
+    qApp->processEvents();
+    QTimer::singleShot(1250, &splash, &QWidget::close);
 
     // Detect if applciation name need to be changed according to OS
     #ifdef Q_OS_WIN
