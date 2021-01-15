@@ -13,14 +13,16 @@
         "Option for character's detection to return just the closest object instead of a list",
         "First engine start: detect language",
         "Rotation for foors",
-        "Windows: when impossible to open Game app, try to redownload it"
+        "Windows: when impossible to open Game app, try to redownload it",
+        "Check before writting JSON file to avoid corrupted files"
     ],
 	"bugs": [
         "White theme mac wrong police color for map editor menu bar",
         "Windows text scaling issues (engine)",
         "Issues with some custom musics playing",
         "French translations broken",
-        "Plugins wasn't unloaded if not enabled in the editor"
+        "Plugins wasn't unloaded if not enabled in the editor",
+        "Try fix object linking"
 	],
     "finished": [
         2,
@@ -34,11 +36,13 @@
         0,
         0,
         0,
+        2,
 
         0,
         0,
         0,
         0,
+        2,
         2
     ]
 }
