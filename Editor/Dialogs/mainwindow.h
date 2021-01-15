@@ -59,6 +59,7 @@ public:
     void updateRecentProjects(QString projectName, QString path);
     void updateMenuRecentProjects();
     void cleanRecentProjectsActions();
+    void runGame();
     void translate();
 
 private:
@@ -71,6 +72,7 @@ private:
     QString p_version;
     bool m_isMainMenu;
     DialogScripts *m_dialogScripts;
+    bool m_firstCrash;
 
     void updateTextures();
 
@@ -121,6 +123,7 @@ private slots:
     void on_actionAbout_triggered();
     void checkUpdate();
     void openRecentProject(QString path);
+    void on_gameErrorOccurred(QProcess::ProcessError);
 };
 
 #endif // MAINWINDOW_H

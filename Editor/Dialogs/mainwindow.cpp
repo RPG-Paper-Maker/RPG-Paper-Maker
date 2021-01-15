@@ -56,7 +56,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_isMainMenu(true),
-    m_dialogScripts(new DialogScripts)
+    m_dialogScripts(new DialogScripts),
+    m_firstCrash(true)
 {
     p_appName = "RPG Paper Maker";
     gameProcess = new QProcess(this);
@@ -75,6 +76,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->centralWidget->layout()->addWidget(mainPanel);
     connect(mainPanel, SIGNAL(openingProject(QString)), this, SLOT(
         openRecentProject(QString)));
+
+    // Connect process game
+    connect(gameProcess, SIGNAL(errorOccurred(QProcess::ProcessError)), this,
+        SLOT(on_gameErrorOccurred(QProcess::ProcessError)));
 
     // Add actions for recent projects
     updateMenuRecentProjects();
@@ -391,6 +396,44 @@ void MainWindow::cleanRecentProjectsActions() {
         action = ui->menuOpen_project->actions().at(i);
         ui->menuOpen_project->removeAction(action);
         delete action;
+    }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::runGame() {
+    if (RPM::get()->project()->isHeroDefined()) {
+        if (RPM::mapsToSave.count() > 0) {
+            QMessageBox::StandardButton box = QMessageBox::question(this, RPM
+                ::translate(Translations::SAVE), RPM::translate(Translations
+                ::YOU_HAVE_MAPS_NOT_SAVED), QMessageBox::Yes |
+                QMessageBox::No | QMessageBox::Cancel);
+            if (box == QMessageBox::Yes) {
+                saveAllMaps();
+            } else if (box == QMessageBox::Cancel) {
+                return;
+            }
+        }
+
+        // Play process
+        QString execName = "Game";
+        #ifdef Q_OS_WIN
+            execName += ".exe";
+        #elif __linux__
+            execName += "";
+        #else
+            execName += ".app";
+        #endif
+
+        if (gameProcess->isOpen()) {
+            gameProcess->close();
+        }
+        gameProcess->start("\"" + Common::pathCombine(project
+            ->pathCurrentProject(), execName) + "\"");
+    } else {
+        QMessageBox::critical(this, RPM::translate(Translations::NO_HERO_DEFINED
+            ), RPM::translate(Translations::NO_HERO_DEFINED_DESCRIPTION) + RPM
+            ::DOT);
     }
 }
 
@@ -919,39 +962,8 @@ void MainWindow::on_actionShow_Hide_square_informations_triggered() {
 // -------------------------------------------------------
 
 void MainWindow::on_actionPlay_triggered() {
-    if (RPM::get()->project()->isHeroDefined()) {
-        if (RPM::mapsToSave.count() > 0) {
-            QMessageBox::StandardButton box = QMessageBox::question(this, RPM
-                ::translate(Translations::SAVE), RPM::translate(Translations
-                ::YOU_HAVE_MAPS_NOT_SAVED), QMessageBox::Yes |
-                QMessageBox::No | QMessageBox::Cancel);
-            if (box == QMessageBox::Yes) {
-                saveAllMaps();
-            } else if (box == QMessageBox::Cancel) {
-                return;
-            }
-        }
-
-        // Play process
-        QString execName = "Game";
-        #ifdef Q_OS_WIN
-            execName += ".exe";
-        #elif __linux__
-            execName += "";
-        #else
-            execName += ".app";
-        #endif
-
-        if (gameProcess->isOpen()) {
-            gameProcess->close();
-        }
-        gameProcess->start("\"" + Common::pathCombine(project
-            ->pathCurrentProject(), execName) + "\"");
-    } else {
-        QMessageBox::critical(this, RPM::translate(Translations::NO_HERO_DEFINED
-            ), RPM::translate(Translations::NO_HERO_DEFINED_DESCRIPTION) + RPM
-            ::DOT);
-    }
+    m_firstCrash = true;
+    this->runGame();
 }
 
 // -------------------------------------------------------
@@ -1032,6 +1044,45 @@ void MainWindow::checkUpdate() {
 
 void MainWindow::openRecentProject(QString path) {
     this->openProject(path);
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_gameErrorOccurred(QProcess::ProcessError)
+{
+    if (m_firstCrash)
+    {
+        #ifdef Q_OS_WIN
+            m_firstCrash = false;
+
+            // Save new exe again
+            QNetworkAccessManager manager;
+            QNetworkReply *reply;
+            QEventLoop loop;
+            QJsonObject doc;
+            QJsonDocument json;
+            reply = manager.get(QNetworkRequest(QUrl("https://github.com/"
+                "RPG-Paper-Maker/Dependencies/releases/download/1.5.3/Game.exe")));
+            QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+            loop.exec();
+            if (reply->error() == QNetworkReply::NetworkError::NoError) {
+                QFile saveFile(Common::pathCombine(project->pathCurrentProject(),
+                    "Game.exe"));
+                if (saveFile.open(QIODevice::WriteOnly))
+                {
+                    saveFile.write(reply->readAll());
+                    saveFile.setPermissions(QFileDevice::ReadUser | QFileDevice
+                        ::WriteUser | QFileDevice::ExeUser | QFileDevice
+                        ::ReadGroup | QFileDevice::ExeGroup | QFileDevice
+                        ::ReadOther | QFileDevice::ExeOther);
+                    saveFile.close();
+                }
+            }
+
+            // Restart game
+            this->runGame();
+        #endif
+    }
 }
 
 // -------------------------------------------------------
