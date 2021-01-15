@@ -19,7 +19,8 @@
         "White theme mac wrong police color for map editor menu bar",
         "Windows text scaling issues (engine)",
         "Issues with some custom musics playing",
-        "French translations broken"
+        "French translations broken",
+        "Plugins wasn't unloaded if not enabled in the editor"
 	],
     "finished": [
         2,
@@ -37,6 +38,7 @@
         0,
         0,
         0,
-        0
+        0,
+        2
     ]
 }

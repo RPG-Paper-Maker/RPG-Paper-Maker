@@ -411,15 +411,18 @@ void MapObjects::write(QJsonObject & json) const{
     QJsonArray tab;
 
     QHash<Position, SystemCommonObject*>::const_iterator i;
+    Map *map = RPM::get()->project()->currentMap();
     for (i = m_all.begin(); i != m_all.end(); i++){
-        QJsonObject objHash;
-        QJsonArray tabKeyPosition;
-        QJsonObject objValueObject;
-        i.key().write(tabKeyPosition);
-        i.value()->write(objValueObject);
-        objHash["k"] = tabKeyPosition;
-        objHash["v"] = objValueObject;
-        tab.append(objHash);
+        if (map == nullptr || map->isObjectIdExisting(i.value()->id())) {
+            QJsonObject objHash;
+            QJsonArray tabKeyPosition;
+            QJsonObject objValueObject;
+            i.key().write(tabKeyPosition);
+            i.value()->write(objValueObject);
+            objHash["k"] = tabKeyPosition;
+            objHash["v"] = objValueObject;
+            tab.append(objHash);
+        }
     }
     json["list"] = tab;
 }
