@@ -14,7 +14,8 @@
         "First engine start: detect language",
         "Rotation for foors",
         "Windows: when impossible to open Game app, try to redownload it",
-        "Check before writting JSON file to avoid corrupted files"
+        "Check before writting JSON file to avoid corrupted files",
+        "Polish translation"
     ],
 	"bugs": [
         "White theme mac wrong police color for map editor menu bar",
@@ -37,11 +38,12 @@
         0,
         2,
         2,
+        2,
 
         0,
         0,
         0,
-        0,
+        2,
         2,
         2
     ]
