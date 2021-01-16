@@ -24,17 +24,12 @@ WidgetTreeCommands {
 
 WidgetMenuBarMapEditor{
     spacing: 0;
-    background-color: #333333;
 }
 
 WidgetMenuBarMapEditor::item{
      padding: 10px;
      background: transparent;
-}
-
-WidgetMenuBarMapEditor > QMenu::item{
-     background: #333333;
-     color: white;
+     color: black;
 }
 
 WidgetMenuBarMapEditor > QMenu::item:selected{
