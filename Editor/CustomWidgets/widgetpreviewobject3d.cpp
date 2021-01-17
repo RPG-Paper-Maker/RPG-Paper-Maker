@@ -23,7 +23,7 @@ WidgetPreviewObject3D::WidgetPreviewObject3D(QWidget *parent) :
     QOpenGLWidget(parent),
     m_object(nullptr),
     m_objectsGL(nullptr),
-    m_object3DShape(nullptr),
+    m_object3D(nullptr),
     m_camera(new Camera),
     m_isInitialized(false),
     m_program(nullptr),
@@ -37,13 +37,15 @@ WidgetPreviewObject3D::~WidgetPreviewObject3D() {
     if (m_object != nullptr) {
         delete m_object;
     }
-    if (m_object3DShape != nullptr) {
-        delete m_object3DShape;
-    }
     delete m_camera;
     if (m_program != nullptr) {
         delete m_program;
     }
+}
+
+SystemObject3D * WidgetPreviewObject3D::object3D() const
+{
+    return m_object3D;
 }
 
 // -------------------------------------------------------
@@ -56,30 +58,35 @@ void WidgetPreviewObject3D::clearObject() {
     this->makeCurrent();
     if (m_objectsGL != nullptr) {
         delete m_objectsGL;
+        m_objectsGL = nullptr;
     }
     if (m_texture != nullptr) {
         delete m_texture;
+        m_texture = nullptr;
     }
 }
 
 // -------------------------------------------------------
 
-void WidgetPreviewObject3D::loadObject(SystemObject3D *object) {
+void WidgetPreviewObject3D::loadObject(SystemObject3D *object)
+{
     if (m_object != nullptr) {
         delete m_object;
+        m_object = nullptr;
     }
+    m_object3D = object;
     m_object = Object3DDatas::instanciate(object);
 }
 
 // -------------------------------------------------------
 
 void WidgetPreviewObject3D::loadShape(SystemCustomShape *shape) {
-    if (m_object3DShape != nullptr) {
-        delete m_object3DShape;
+    if (m_object3D != nullptr) {
+        delete m_object3D;
     }
 
-    m_object3DShape = new SystemObject3D(-1, "", ShapeKind::Custom, shape->id());
-    this->loadObject(m_object3DShape);
+    m_object3D = new SystemObject3D(-1, "", ShapeKind::Custom, shape->id());
+    this->loadObject(m_object3D);
 }
 
 // -------------------------------------------------------
