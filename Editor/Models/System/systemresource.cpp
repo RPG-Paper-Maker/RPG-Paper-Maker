@@ -57,6 +57,16 @@ void SystemResource::setDlc(QString dlc)
     m_dlc = dlc;
 }
 
+QString SystemResource::base64() const
+{
+    return m_base64;
+}
+
+void SystemResource::setBase64(QString base64)
+{
+    m_base64 = base64;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -147,5 +157,9 @@ void SystemResource::write(QJsonObject &json) const{
     if (!m_dlc.isEmpty())
     {
         json["d"] = m_dlc;
+    }
+    if (!m_base64.isEmpty())
+    {
+        json["base64"] = m_base64;
     }
 }

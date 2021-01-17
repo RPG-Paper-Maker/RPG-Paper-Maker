@@ -33,6 +33,8 @@ public:
     void setIsBR(bool b);
     QString dlc() const;
     void setDlc(QString dlc);
+    QString base64() const;
+    void setBase64(QString base64);
 
     static QString getFolder(bool br, QString dlc);
 
@@ -47,6 +49,7 @@ public:
 protected:
     bool m_isBR;
     QString m_dlc;
+    QString m_base64;
 };
 
 Q_DECLARE_METATYPE(SystemResource)

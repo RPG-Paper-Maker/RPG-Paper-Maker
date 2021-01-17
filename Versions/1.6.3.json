@@ -19,11 +19,11 @@
     ],
 	"bugs": [
         "White theme mac wrong police color for map editor menu bar",
-        "Windows text scaling issues (engine)",
         "Issues with some custom musics playing",
         "French translations broken",
         "Plugins wasn't unloaded if not enabled in the editor",
-        "Try fix object linking"
+        "Try fix object linking",
+        "Show text command: not correctly displayed with some tags"
 	],
     "finished": [
         2,
@@ -40,9 +40,9 @@
         2,
         2,
 
+        2,
         0,
-        0,
-        0,
+        2,
         2,
         2,
         2

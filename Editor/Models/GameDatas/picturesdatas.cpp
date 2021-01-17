@@ -275,13 +275,14 @@ void PicturesDatas::read(const QJsonObject &json){
         SuperListItem::deleteModel(i.value());
 
     // Read
-    for (int i = 0; i < jsonList.size(); i++){
+    for (int i = 0; i < jsonList.size(); i++)
+    {
         jsonObj = jsonList.at(i).toObject();
         jsonArray = jsonObj["v"].toArray();
         model = new QStandardItemModel;
         k = static_cast<PictureKind>(jsonObj["k"].toInt());
-
-        for (int j = 0; j < jsonArray.size(); j++){
+        for (int j = 0; j < jsonArray.size(); j++)
+        {
             SystemPicture* super = new SystemPicture;
             super->read(jsonArray[j].toObject());
             super->setKind(k);

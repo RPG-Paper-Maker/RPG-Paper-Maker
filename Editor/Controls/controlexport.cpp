@@ -14,6 +14,7 @@
 #include "controlexport.h"
 #include "rpm.h"
 #include "common.h"
+#include <QMimeDatabase>
 
 // -------------------------------------------------------
 //
@@ -180,12 +181,17 @@ void ControlExport::removeDesktopNoNeed(QString path) {
     // Remove useless datas
     QString pathDatas = Common::pathCombine(Common::pathCombine(path, RPM
         ::PATH_APP), RPM::PATH_DATAS);
+    QString pathContent = Common::pathCombine(Common::pathCombine(path, RPM
+        ::PATH_APP), RPM::FOLDER_CONTENT);
     QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
     QFile(Common::pathCombine(pathDatas, "pictures.json")).remove();
     QFile(Common::pathCombine(pathDatas, "shapes.json")).remove();
     QFile(Common::pathCombine(pathDatas, "songs.json")).remove();
     QFile(Common::pathCombine(pathDatas, "videos.json")).remove();
     this->copyBRDLC(Common::pathCombine(path, RPM::PATH_APP));
+    QDir(Common::pathCombine(pathContent, "Images")).removeRecursively();
+    QDir(Common::pathCombine(pathContent, "Shapes")).removeRecursively();
+    QDir(Common::pathCombine(pathContent, "Songs")).removeRecursively();
 
     removeMapsTemp(pathDatas);
 }
@@ -262,8 +268,16 @@ void ControlExport::removeMapsTemp(QString pathDatas) {
 
     while (directories.hasNext()) {
         directories.next();
-        QDir(Common::pathCombine(Common::pathCombine(pathMaps, directories
-            .fileName()), "temp")).removeRecursively();
+        if (directories.fileName() == "temp")
+        {
+            QDir(directories.path()).removeRecursively();
+        } else
+        {
+            QDir(Common::pathCombine(Common::pathCombine(pathMaps, directories
+                .fileName()), "temp")).removeRecursively();
+            QDir(Common::pathCombine(Common::pathCombine(pathMaps, directories
+                .fileName()), "tempUndoRedo")).removeRecursively();
+        }
     }
 }
 
@@ -289,7 +303,9 @@ void ControlExport::copyBRDLCKind(QString path, int kind, int start, int end)
     SongsDatas *newSongsDatas = new SongsDatas;
     ShapesDatas *newShapesDatas = new ShapesDatas;
     VideosDatas *newVideosDatas = new VideosDatas;
-
+    QString type;
+    QMimeDatabase db;
+    QString pathResource;
     // Iterate all the pictures kind
     for (int k = start; k != end; k++)
     {
@@ -326,7 +342,7 @@ void ControlExport::copyBRDLCKind(QString path, int kind, int start, int end)
             newResource->setId(resource->id());
 
             // If is from BR or DLC, we need to copy it in the project
-            if (resource->isBR() || !resource->dlc().isEmpty())
+            if (kind == 3 && (resource->isBR() || !resource->dlc().isEmpty()))
             {
                 QString pathBR = resource->getPath();
                 QString pathProject = Common::pathCombine(path, resource
@@ -338,14 +354,27 @@ void ControlExport::copyBRDLCKind(QString path, int kind, int start, int end)
                     QString baseName = fileInfo.baseName();
                     newResource->setName(baseName + (resource->isBR() ? "_br" :
                         "_dlc_" + resource->dlc()) + RPM::DOT + extension);
-                    pathProject = Common::pathCombine(path, newResource
+                        pathProject = Common::pathCombine(path, newResource
                         ->getLocalPath());
                 }
                 QFile::copy(pathBR, pathProject);
                 newResource->setIsBR(false);
                 newResource->setDlc("");
+            } else {
+                QByteArray saveDatas;
+                pathResource = resource->getPath();
+                if (!pathResource.isEmpty())
+                {
+                    QFile loadFile(resource->getPath());
+                    loadFile.open(QIODevice::ReadOnly);
+                    saveDatas = loadFile.readAll();
+                    loadFile.close();
+                }
+                newResource->setBase64(QString(saveDatas.toBase64()));
+                newResource->setBase64((kind == 2 || resource->id() == -1 ? "" :
+                    "data:" + db.mimeTypeForFile(resource->getPath()).name() +
+                    ";base64,") + QString(saveDatas.toBase64()));
             }
-
             newModel->appendRow(newResource->getModelRow());
         }
     }
