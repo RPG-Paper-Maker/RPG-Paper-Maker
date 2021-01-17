@@ -247,6 +247,7 @@ void PanelVideos::showAvailableContent(bool b) {
     ui->treeViewAvailableContent->setVisible(b);
     ui->pushButtonMove->setVisible(b);
     ui->pushButtonRefresh->setVisible(b);
+    ui->pushButtonExport->setVisible(b);
     ui->pushButtonAdd->setVisible(b);
     RPM::get()->engineSettings()->setShowAvailableContent(b);
     RPM::get()->engineSettings()->write();
