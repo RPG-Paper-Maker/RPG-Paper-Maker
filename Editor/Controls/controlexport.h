@@ -35,6 +35,7 @@ public:
     QString createFolder(QString location, QString projectName, QString path,
                          QDir dirLocation);
     QString copyAllProject(QString path);
+    QString protectJSON(QString path);
     void removeWebNoNeed(QString path);
     void removeDesktopNoNeed(QString path);
     QString generateWebStuff(QString path);

@@ -4,7 +4,7 @@
 	"replace": [],
 	"features": [
         "Javascript game code tutorials",
-        "Protect games datas (code, datas, musics, pictures, videos)?",
+        "Protect games datas (datas, songs, shapes, pictures)",
         "3D objects as objects (no animated)",
         "Status in battles",
         "Command shop menu",
@@ -27,7 +27,7 @@
 	],
     "finished": [
         2,
-        1,
+        2,
         0,
         0,
         0,

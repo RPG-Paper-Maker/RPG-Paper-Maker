@@ -11,10 +11,12 @@
 
 #include <QDirIterator>
 #include <QMessageBox>
+#include <QMimeDatabase>
+#include <QFileInfo>
+#include "systemplugin.h"
 #include "controlexport.h"
 #include "rpm.h"
 #include "common.h"
-#include <QMimeDatabase>
 
 // -------------------------------------------------------
 //
@@ -76,6 +78,13 @@ QString ControlExport::createDesktop(QString location, OSKind os, bool, int
 
     // Remove all the files that are no longer needed here
     removeDesktopNoNeed(path);
+
+    // Convert JSON files
+    message = this->protectJSON(path);
+    if (message != nullptr)
+    {
+        return message;
+    }
 
     return nullptr;
 }
@@ -163,6 +172,63 @@ QString ControlExport::copyAllProject(QString path)
 
 // -------------------------------------------------------
 
+QString ControlExport::protectJSON(QString path)
+{
+    // Datas files
+    QString pathDatas = Common::pathCombine(Common::pathCombine(path, RPM
+        ::PATH_APP), RPM::PATH_DATAS);
+    QDir dirDatas(pathDatas);
+    QString currentPath;
+    foreach (QFileInfo ifo, dirDatas.entryInfoList(QDir::Files))
+    {
+        QByteArray saveDatas;
+        currentPath = ifo.absoluteFilePath();
+        QFile loadFile(currentPath);
+        loadFile.open(QIODevice::ReadOnly);
+        saveDatas = loadFile.readAll();
+        loadFile.close();
+        Common::write(currentPath, QString(saveDatas.toBase64()));
+    }
+
+    // Maps files
+    QString pathMaps = Common::pathCombine(Common::pathCombine(path, RPM
+        ::PATH_APP), RPM::PATH_MAPS);
+    QDir dirMaps(pathMaps);
+    foreach (QFileInfo id, dirMaps.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
+    {
+        QDir dirMap(id.filePath());
+        foreach (QFileInfo ifom, dirMap.entryInfoList(QDir::Files))
+        {
+            QByteArray saveDatas;
+            currentPath = ifom.absoluteFilePath();
+            QFile loadFile(currentPath);
+            loadFile.open(QIODevice::ReadOnly);
+            saveDatas = loadFile.readAll();
+            loadFile.close();
+            Common::write(currentPath, QString(saveDatas.toBase64()));
+        }
+    }
+
+    // Plugins files
+    QDir dirPlugins(Common::pathCombine(Common::pathCombine(path, RPM::PATH_APP),
+        RPM::PATH_SCRIPTS_PLUGINS_DIR));
+    foreach (QFileInfo id, dirPlugins.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
+    {
+        QByteArray saveDatas;
+        currentPath = Common::pathCombine(id.filePath(), SystemPlugin::NAME_JSON);
+        QFile loadFile(currentPath);
+        loadFile.open(QIODevice::ReadOnly);
+        saveDatas = loadFile.readAll();
+        loadFile.close();
+        Common::write(currentPath, QString(saveDatas.toBase64()));
+    }
+
+
+    return nullptr;
+}
+
+// -------------------------------------------------------
+
 void ControlExport::removeWebNoNeed(QString path) {
 
     // Remove useless datas
@@ -192,6 +258,14 @@ void ControlExport::removeDesktopNoNeed(QString path) {
     QDir(Common::pathCombine(pathContent, "Images")).removeRecursively();
     QDir(Common::pathCombine(pathContent, "Shapes")).removeRecursively();
     QDir(Common::pathCombine(pathContent, "Songs")).removeRecursively();
+
+    // Saves
+    QDir dir(Common::pathCombine(Common::pathCombine(path, RPM::PATH_APP), RPM
+        ::PATH_SAVES));
+    foreach (QFileInfo ifo, dir.entryInfoList(QDir::Files))
+    {
+        QFile(ifo.filePath()).remove();
+    }
 
     removeMapsTemp(pathDatas);
 }
@@ -270,7 +344,7 @@ void ControlExport::removeMapsTemp(QString pathDatas) {
         directories.next();
         if (directories.fileName() == "temp")
         {
-            QDir(directories.path()).removeRecursively();
+            QDir(directories.filePath()).removeRecursively();
         } else
         {
             QDir(Common::pathCombine(Common::pathCombine(pathMaps, directories
@@ -342,24 +416,27 @@ void ControlExport::copyBRDLCKind(QString path, int kind, int start, int end)
             newResource->setId(resource->id());
 
             // If is from BR or DLC, we need to copy it in the project
-            if (kind == 3 && (resource->isBR() || !resource->dlc().isEmpty()))
+            if (kind == 3)
             {
-                QString pathBR = resource->getPath();
-                QString pathProject = Common::pathCombine(path, resource
-                    ->getLocalPath());
-                if (QFile(pathProject).exists())
+                if ((resource->isBR() || !resource->dlc().isEmpty()))
                 {
-                    QFileInfo fileInfo(resource->name());
-                    QString extension = fileInfo.completeSuffix();
-                    QString baseName = fileInfo.baseName();
-                    newResource->setName(baseName + (resource->isBR() ? "_br" :
-                        "_dlc_" + resource->dlc()) + RPM::DOT + extension);
-                        pathProject = Common::pathCombine(path, newResource
+                    QString pathBR = resource->getPath();
+                    QString pathProject = Common::pathCombine(path, resource
                         ->getLocalPath());
+                    if (QFile(pathProject).exists())
+                    {
+                        QFileInfo fileInfo(resource->name());
+                        QString extension = fileInfo.completeSuffix();
+                        QString baseName = fileInfo.baseName();
+                        newResource->setName(baseName + (resource->isBR() ? "_br" :
+                            "_dlc_" + resource->dlc()) + RPM::DOT + extension);
+                            pathProject = Common::pathCombine(path, newResource
+                            ->getLocalPath());
+                    }
+                    QFile::copy(pathBR, pathProject);
+                    newResource->setIsBR(false);
+                    newResource->setDlc("");
                 }
-                QFile::copy(pathBR, pathProject);
-                newResource->setIsBR(false);
-                newResource->setDlc("");
             } else {
                 QByteArray saveDatas;
                 pathResource = resource->getPath();
@@ -370,7 +447,6 @@ void ControlExport::copyBRDLCKind(QString path, int kind, int start, int end)
                     saveDatas = loadFile.readAll();
                     loadFile.close();
                 }
-                newResource->setBase64(QString(saveDatas.toBase64()));
                 newResource->setBase64((kind == 2 || resource->id() == -1 ? "" :
                     "data:" + db.mimeTypeForFile(resource->getPath()).name() +
                     ";base64,") + QString(saveDatas.toBase64()));
