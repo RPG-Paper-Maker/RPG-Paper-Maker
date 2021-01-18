@@ -152,21 +152,33 @@ SuperListItem * SuperListItem::getItemModelAt(QStandardItemModel *model, int i)
 
 // -------------------------------------------------------
 
-void SuperListItem::deleteModel(QStandardItemModel *model, bool deleteModel) {
-    SuperListItem *super;
-    QStandardItem *item;
-    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+void SuperListItem::deleteModel(QStandardItemModel *model, bool deleteModel)
+{
+    SuperListItem::deleteModelItem(model->invisibleRootItem());
+    if (deleteModel)
     {
-        item = model->item(i);
-        super = reinterpret_cast<SuperListItem *>(item->data().value<quintptr>());
-        if (super != nullptr) {
+        delete model;
+    } else
+    {
+        model->clear();
+    }
+}
+
+// -------------------------------------------------------
+
+void SuperListItem::deleteModelItem(QStandardItem *item)
+{
+    SuperListItem *super;
+    QStandardItem *child;
+    for (int i = 0, l = item->rowCount(); i < l; i++)
+    {
+        child = item->child(i);
+        super = reinterpret_cast<SuperListItem *>(child->data().value<quintptr>());
+        if (super != nullptr)
+        {
             delete super;
         }
-    }
-    if (deleteModel) {
-        delete model;
-    } else {
-        model->clear();
+        SuperListItem::deleteModelItem(child);
     }
 }
 
