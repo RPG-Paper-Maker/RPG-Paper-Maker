@@ -45,6 +45,9 @@ public:
     bool saved() const;
     void setSaved(bool b);
     QStandardItemModel* modelObjects() const;
+    bool needReloadObjects3DTextures() const;
+    void setNeedReloadObjects3DTextures(bool b);
+
     MapPortion* mapPortion(Portion& p) const;
     MapPortion* mapPortionFromGlobal(Portion& p) const;
     MapPortion* mapPortion(int x, int y, int z) const;
@@ -106,8 +109,10 @@ public:
                              QOpenGLVertexArrayObject& vao,
                              QOpenGLShaderProgram* program);
     static QOpenGLShaderProgram* createProgram(QString shaderName);
+    void checkNeedReloadTextures();
     void loadTextures();
     void deleteTextures();
+    void deleteObjects3DTextures();
     void loadCharactersTextures();
     void loadPictures(PictureKind kind, QHash<int, QOpenGLTexture*>& textures);
     void deleteCharactersTextures();
@@ -115,6 +120,7 @@ public:
                              QHash<int, QOpenGLTexture*>& textures);
     static bool loadPicture(SystemPicture* picture, PictureKind kind, QImage
         &refImage);
+    void loadObjects3D();
     void loadAutotiles();
     TextureSeveral *loadPictureAutotile(
             QPainter& painter, TextureSeveral* textureSeveral,
@@ -203,6 +209,7 @@ private:
     int m_squareSize;
     bool m_saved;
     SystemDetection *m_detection;
+    bool m_needReloadObjects3DTextures;
 
     // Static program
     QOpenGLShaderProgram *m_programStatic;

@@ -134,3 +134,86 @@ void Object3DDatas::write(QJsonObject &json) const{
 
     json[JSON_DATAS_ID] = m_datas->id();
 }
+
+// -------------------------------------------------------
+//
+//
+//  ---------- Object3DObject
+//
+//
+// -------------------------------------------------------
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
+Object3DObject::Object3DObject(Object3DDatas &datas) :
+    m_datas(datas),
+    m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
+    m_indexBuffer(QOpenGLBuffer::IndexBuffer),
+    m_program(nullptr)
+{
+
+}
+
+Object3DObject::~Object3DObject()
+{
+
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void Object3DObject::initializeVertices(Position &position)
+{
+    m_vertices.clear();
+    m_indexes.clear();
+    unsigned int count = 0;
+    switch (m_datas.datas()->shapeKind())
+    {
+    case ShapeKind::Box:
+        reinterpret_cast<Object3DBoxDatas &>(m_datas).initializeVertices(
+            m_vertices, m_indexes, position, count);
+        break;
+    case ShapeKind::Custom:
+        reinterpret_cast<Object3DCustomDatas &>(m_datas).initializeVertices(
+            m_vertices, m_indexes, position, count);
+        break;
+    default:
+        break;
+    }
+}
+
+// -------------------------------------------------------
+//
+//  GL
+//
+// -------------------------------------------------------
+
+void Object3DObject::initializeGL(QOpenGLShaderProgram *programStatic)
+{
+    if (m_program == nullptr){
+        initializeOpenGLFunctions();
+        m_program = programStatic;
+    }
+}
+
+// -------------------------------------------------------
+
+void Object3DObject::updateGL(){
+    Map::updateGLStatic(m_vertexBuffer, m_indexBuffer, m_vertices, m_indexes,
+        m_vao, m_program);
+}
+
+// -------------------------------------------------------
+
+void Object3DObject::paintGL(){
+    m_vao.bind();
+    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, nullptr);
+    m_vao.release();
+}

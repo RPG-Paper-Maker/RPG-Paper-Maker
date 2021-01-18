@@ -31,6 +31,7 @@ class WidgetPreviewObject3D : public QOpenGLWidget, protected QOpenGLFunctions
 public:
     explicit WidgetPreviewObject3D(QWidget *parent = nullptr);
     ~WidgetPreviewObject3D();
+    SystemObject3D * object3D() const;
 
     void clearObject();
     void loadObject(SystemObject3D *object);
@@ -40,7 +41,7 @@ public:
 protected:
     Object3DDatas *m_object;
     Objects3DGL *m_objectsGL;
-    SystemObject3D *m_object3DShape;
+    SystemObject3D *m_object3D;
     Camera *m_camera;
     bool m_isInitialized;
     QOpenGLShaderProgram *m_program;

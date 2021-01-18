@@ -35,9 +35,11 @@ class PanelSpecialElements : public QWidget
 public:
     explicit PanelSpecialElements(QWidget *parent = nullptr);
     ~PanelSpecialElements();
+    SystemSpecialElement * specialElement() const;
 
     void initialize(QStandardItemModel *model, PictureKind kind);
     void update(SystemSpecialElement *sys);
+    void selectSpecialElement(SystemSpecialElement *sys);
     int currentIndex() const;
     PanelSuperList* superList() const;
 
@@ -46,6 +48,7 @@ private:
     QList<QSize> m_spacersSize;
     QStandardItemModel *m_model;
     PictureKind m_kind;
+    SystemSpecialElement *m_specialElement;
 
     void hideObject3D();
     void showObject3D();

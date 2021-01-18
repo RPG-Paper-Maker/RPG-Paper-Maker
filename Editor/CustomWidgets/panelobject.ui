@@ -418,20 +418,7 @@
               </widget>
              </item>
              <item>
-              <widget class="WidgetGraphics" name="frameGraphics">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-              </widget>
+              <widget class="WidgetGraphics" name="frameGraphics" native="true"/>
              </item>
              <item>
               <widget class="QComboBox" name="comboBoxGraphics"/>
@@ -456,7 +443,7 @@
   </customwidget>
   <customwidget>
    <class>WidgetGraphics</class>
-   <extends>QFrame</extends>
+   <extends>QWidget</extends>
    <header>widgetgraphics.h</header>
    <container>1</container>
   </customwidget>

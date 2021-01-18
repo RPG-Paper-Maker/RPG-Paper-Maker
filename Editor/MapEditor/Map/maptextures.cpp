@@ -17,6 +17,17 @@
 
 // -------------------------------------------------------
 
+void Map::checkNeedReloadTextures()
+{
+    if (m_needReloadObjects3DTextures)
+    {
+        this->deleteObjects3DTextures();
+        this->loadObjects3D();
+    }
+}
+
+// -------------------------------------------------------
+
 void Map::loadTextures() {
     QImage image;
 
@@ -39,7 +50,7 @@ void Map::loadTextures() {
     // Characters && walls && objects3D
     this->loadCharactersTextures();
     this->loadSpecialPictures(PictureKind::Walls, m_texturesSpriteWalls);
-    this->loadSpecialPictures(PictureKind::Object3D, m_texturesObjects3D);
+    this->loadObjects3D();
     this->loadAutotiles();
     this->loadMountains();
 
@@ -68,14 +79,7 @@ void Map::deleteTextures() {
         }
     }
     m_texturesSpriteWalls.clear();
-    for (QHash<int, QOpenGLTexture*>::iterator i = m_texturesObjects3D.begin()
-         ; i != m_texturesObjects3D.end(); i++)
-    {
-        if (*i != nullptr) {
-            delete *i;
-        }
-    }
-    m_texturesObjects3D.clear();
+    this->deleteObjects3DTextures();
     for (int i = 0; i < m_texturesAutotiles.size(); i++) {
         delete m_texturesAutotiles[i];
     }
@@ -93,6 +97,21 @@ void Map::deleteTextures() {
     if (m_textureDetection != nullptr) {
         delete m_textureDetection;
     }
+}
+
+// -------------------------------------------------------
+
+void Map::deleteObjects3DTextures()
+{
+    for (QHash<int, QOpenGLTexture*>::iterator i = m_texturesObjects3D.begin();
+        i != m_texturesObjects3D.end(); i++)
+    {
+        if (*i != nullptr)
+        {
+            delete *i;
+        }
+    }
+    m_texturesObjects3D.clear();
 }
 
 // -------------------------------------------------------
@@ -159,7 +178,7 @@ void Map::loadSpecialPictures(PictureKind kind,
         if (id != -1) {
             QImage image;
             loaded = loadPicture(special->picture(), kind, image);
-            textures[special->id()] = loaded ? this->createTexture(image) :
+            textures[special->id()] = loaded ? Map::createTexture(image) :
                 nullptr;
         }
     }
@@ -193,6 +212,13 @@ bool Map::loadPicture(SystemPicture* picture, PictureKind kind, QImage& refImage
         }
         return false;
     }
+}
+
+// -------------------------------------------------------
+
+void Map::loadObjects3D()
+{
+    this->loadSpecialPictures(PictureKind::Object3D, m_texturesObjects3D);
 }
 
 // -------------------------------------------------------

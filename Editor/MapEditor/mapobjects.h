@@ -24,6 +24,7 @@
 #include "systemcommonobject.h"
 #include "vertex.h"
 #include "sprites.h"
+#include "object3d.h"
 
 // -------------------------------------------------------
 //
@@ -39,32 +40,30 @@ public:
     MapObjects();
     virtual ~MapObjects();
     bool isEmpty() const;
+
     void updateEmpty();
-    SystemCommonObject* getObjectAt(Position& p) const;
-    void setObject(Position& p, SystemCommonObject* object);
-    SystemCommonObject* removeObject(Position& p);
-    bool addObject(Position& p, SystemCommonObject* object,
-                   QJsonObject &previousObj,
-                   MapEditorSubSelectionKind &previousType);
-    bool deleteObject(Position& p, QJsonObject &previousObj,
-                      MapEditorSubSelectionKind &previousType);
-
-    void removeObjectsOut(QList<int> &listDeletedObjectsIDs,
-                          MapProperties& properties);
-
-    void clearSprites();
-    void initializeVertices(int squareSize,
-                            QHash<int, QOpenGLTexture *> &characters, QOpenGLTexture *tileset);
+    SystemCommonObject * getObjectAt(Position &p) const;
+    void setObject(Position &p, SystemCommonObject *object);
+    SystemCommonObject * removeObject(Position &p);
+    bool addObject(Position &p, SystemCommonObject *object, QJsonObject
+        &previousObj, MapEditorSubSelectionKind &previousType);
+    bool deleteObject(Position &p, QJsonObject &previousObj,
+        MapEditorSubSelectionKind &previousType);
+    void removeObjectsOut(QList<int> &listDeletedObjectsIDs, MapProperties& properties);
+    void clear();
+    void initializeVertices(int squareSize, QHash<int, QOpenGLTexture *>
+        &characters, QOpenGLTexture *tileset);
     MapElement * updateRaycasting(int squareSize, float& finalDistance, Position
         &finalPosition, QRay3D &ray);
-    bool updateRaycastingAt(Position &position, int
-        squareSize, float &finalDistance, Position &finalPosition, QRay3D& ray);
+    bool updateRaycastingAt(Position &position, int squareSize, float
+        &finalDistance, Position &finalPosition, QRay3D& ray);
     QList<QStandardItem *> getAllCommandsList() const;
-    void initializeGL(QOpenGLShaderProgram* programStatic,
-                      QOpenGLShaderProgram *programFace);
+    void initializeGL(QOpenGLShaderProgram *programStatic, QOpenGLShaderProgram
+        *programFace);
     void updateGL();
-    void paintStaticSprites(int textureID, QOpenGLTexture* texture);
-    void paintFaceSprites(int textureID, QOpenGLTexture* texture);
+    void paintStaticSprites(int textureID, QOpenGLTexture *texture);
+    void paintFaceSprites(int textureID, QOpenGLTexture *texture);
+    void paintObjects3D(int textureID, QOpenGLTexture *texture);
     void paintSquares();
 
     virtual void read(const QJsonObject &json);
@@ -75,6 +74,7 @@ private:
     QHash<Position, MapElement *> m_allElements;
     QHash<int, QList<SpriteObject *>*> m_spritesStaticGL;
     QHash<int, QList<SpriteObject *>*> m_spritesFaceGL;
+    QHash<int, QList<Object3DObject *>*> m_objects3DGL;
     bool m_isEmpty;
 
     // OpenGL informations

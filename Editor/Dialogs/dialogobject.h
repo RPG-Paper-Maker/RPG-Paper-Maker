@@ -35,8 +35,12 @@ public:
     explicit DialogObject(SystemCommonObject* object, QWidget *parent = 0);
     ~DialogObject();
 
+protected:
+    virtual void accept();
+
 private:
     Ui::DialogObject *ui;
+    SystemCommonObject *m_object;
 
     void translate();
 };

@@ -70,6 +70,7 @@ PanelObject::PanelObject(QWidget *parent) :
     ui->comboBoxGraphics->addItem(RPM::translate(Translations::NONE));
     ui->comboBoxGraphics->addItem(RPM::translate(Translations::FIX_SPRITE));
     ui->comboBoxGraphics->addItem(RPM::translate(Translations::FACE_SPRITE));
+    ui->comboBoxGraphics->addItem(RPM::translate(Translations::THREED_OBJECT));
 
     this->translate();
 }
@@ -471,10 +472,18 @@ void PanelObject::on_stateChanged(QModelIndex index, QModelIndex) {
                 i = 1; break;
             case MapEditorSubSelectionKind::SpritesFace:
                 i = 2; break;
+            case MapEditorSubSelectionKind::Object3D:
+                i = 3; break;
             default:
                 break;
             }
+            int id = super->graphicsId();
             ui->comboBoxGraphics->setCurrentIndex(i);
+            super->setGraphicsId(id);
+            if (super->graphicsKind() == MapEditorSubSelectionKind::Object3D)
+            {
+                ui->frameGraphics->updateCurrentObject();
+            }
             ui->frameGraphics->repaint();
 
             // Events
@@ -705,9 +714,26 @@ void PanelObject::on_comboBoxGraphics_currentIndexChanged(int index) {
             case 0:
                 kind = MapEditorSubSelectionKind::None; break;
             case 1:
-                kind = MapEditorSubSelectionKind::SpritesFix; break;
+                kind = MapEditorSubSelectionKind::SpritesFix;
+                if (super->graphicsKind() != MapEditorSubSelectionKind::SpritesFace)
+                {
+                    super->setGraphicsId(1);
+                }
+                ui->frameGraphics->clearObject();
+                break;
             case 2:
-                kind = MapEditorSubSelectionKind::SpritesFace; break;
+                kind = MapEditorSubSelectionKind::SpritesFace;
+                if (super->graphicsKind() != MapEditorSubSelectionKind::SpritesFix)
+                {
+                    super->setGraphicsId(1);
+                }
+                ui->frameGraphics->clearObject();
+                break;
+            case 3:
+                kind = MapEditorSubSelectionKind::Object3D;
+                super->setGraphicsId(1);
+                ui->frameGraphics->updateCurrentObject();
+                break;
             }
             super->setGraphicsKind(kind);
             ui->frameGraphics->repaint();

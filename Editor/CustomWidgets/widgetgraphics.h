@@ -12,10 +12,10 @@
 #ifndef WIDGETGRAPHICS_H
 #define WIDGETGRAPHICS_H
 
-#include <QFrame>
 #include <QPainter>
 #include "systemstate.h"
 #include "systempicture.h"
+#include "widgetpreviewobject3d.h"
 
 // -------------------------------------------------------
 //
@@ -25,15 +25,17 @@
 //
 // -------------------------------------------------------
 
-class WidgetGraphics : public QFrame
+class WidgetGraphics : public WidgetPreviewObject3D
 {
     Q_OBJECT
 public:
     explicit WidgetGraphics(QWidget *parent = nullptr);
+    ~WidgetGraphics();
     void setState(SystemState *s);
 
     SystemPicture* getPicture(bool check = false);
     PictureKind getPictureKind(bool check = false);
+    void updateCurrentObject();
 
 protected:
     SystemState* m_state;
@@ -42,7 +44,8 @@ protected:
 
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseDoubleClickEvent(QMouseEvent*);
-    virtual void paintEvent(QPaintEvent*event);
+    virtual void paintEvent(QPaintEvent*);
+    virtual void paintGL();
 };
 
 #endif // WIDGETGRAPHICS_H

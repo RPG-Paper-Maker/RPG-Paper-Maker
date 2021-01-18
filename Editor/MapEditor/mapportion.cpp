@@ -698,7 +698,8 @@ void MapPortion::paintMountains(int textureID) {
 void MapPortion::paintObjectsStaticSprites(int textureID,
                                            QOpenGLTexture* texture)
 {
-    if (!m_mapObjects->isEmpty()) {
+    if (!m_mapObjects->isEmpty())
+    {
         m_mapObjects->paintStaticSprites(textureID, texture);
     }
 }
@@ -708,8 +709,19 @@ void MapPortion::paintObjectsStaticSprites(int textureID,
 void MapPortion::paintObjectsFaceSprites(int textureID,
                                          QOpenGLTexture* texture)
 {
-    if (!m_mapObjects->isEmpty()) {
+    if (!m_mapObjects->isEmpty())
+    {
         m_mapObjects->paintFaceSprites(textureID, texture);
+    }
+}
+
+// -------------------------------------------------------
+
+void MapPortion::paintObjectsObjects3D(int textureID, QOpenGLTexture *texture)
+{
+    if (!m_mapObjects->isEmpty())
+    {
+        m_mapObjects->paintObjects3D(textureID, texture);
     }
 }
 

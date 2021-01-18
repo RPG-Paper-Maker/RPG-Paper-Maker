@@ -13,6 +13,9 @@
 #define OBJECT3D_H
 
 #include <QOpenGLFunctions>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLBuffer>
+#include <QOpenGLVertexArrayObject>
 #include <qray3d.h>
 #include "mapelement.h"
 #include "shapekind.h"
@@ -74,6 +77,36 @@ public:
 
 protected:
     SystemObject3D *m_datas;
+};
+
+// -------------------------------------------------------
+//
+//  CLASS Object3DObject
+//
+//  A 3D object object in a portion of the map.
+//
+// -------------------------------------------------------
+
+class Object3DObject : protected QOpenGLFunctions
+{
+public:
+    Object3DObject(Object3DDatas& datas);
+    virtual ~Object3DObject();
+    void initializeVertices(Position &position);
+    void initializeGL(QOpenGLShaderProgram* programStatic);
+    void updateGL();
+    void paintGL();
+
+protected:
+    Object3DDatas &m_datas;
+
+    // OpenGL static
+    QOpenGLBuffer m_vertexBuffer;
+    QOpenGLBuffer m_indexBuffer;
+    QVector<Vertex> m_vertices;
+    QVector<GLuint> m_indexes;
+    QOpenGLVertexArrayObject m_vao;
+    QOpenGLShaderProgram* m_program;
 };
 
 #endif // OBJECT3D_H

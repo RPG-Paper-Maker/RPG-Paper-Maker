@@ -40,6 +40,24 @@ DialogSpecialElements::~DialogSpecialElements()
     delete ui;
 }
 
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+SystemSpecialElement * DialogSpecialElements::getSpecialElement() const
+{
+    return ui->widget->specialElement();
+}
+
+//-------------------------------------------------
+
+void DialogSpecialElements::selectSpecialElement(SystemSpecialElement *sys)
+{
+    ui->widget->selectSpecialElement(sys);
+}
+
 //-------------------------------------------------
 
 void DialogSpecialElements::translate()

@@ -13,6 +13,7 @@
 #include "dialogpicturespreview.h"
 #include "rpm.h"
 #include "panelobject.h"
+#include "dialogspecialelements.h"
 
 // -------------------------------------------------------
 //
@@ -21,10 +22,15 @@
 // -------------------------------------------------------
 
 WidgetGraphics::WidgetGraphics(QWidget *parent) :
-    QFrame(parent),
+    WidgetPreviewObject3D(parent),
     m_state(nullptr),
     m_selected(false),
     m_borderOffset(5)
+{
+
+}
+
+WidgetGraphics::~WidgetGraphics()
 {
 
 }
@@ -63,6 +69,16 @@ PictureKind WidgetGraphics::getPictureKind(bool check) {
 }
 
 // -------------------------------------------------------
+
+void WidgetGraphics::updateCurrentObject()
+{
+    this->loadObject(reinterpret_cast<SystemObject3D *>(SuperListItem::getById(
+        RPM::get()->project()->specialElementsDatas()->modelObjects3D()
+        ->invisibleRootItem(), m_state->graphicsId())));
+    this->updateObject();
+}
+
+// -------------------------------------------------------
 //
 //  EVENTS
 //
@@ -78,58 +94,89 @@ void WidgetGraphics::mousePressEvent(QMouseEvent *) {
 void WidgetGraphics::mouseDoubleClickEvent(QMouseEvent *) {
 
     bool wasNone = false;
-    if (m_state->graphicsKind() == MapEditorSubSelectionKind::None) {
+    if (m_state->graphicsKind() == MapEditorSubSelectionKind::None)
+    {
         wasNone = true;
         reinterpret_cast<PanelObject *>(this->parent())->passToSprite();
     }
 
-    PictureKind kind;
-    SystemPicture *picture;
+    switch (m_state->graphicsKind())
+    {
+    case MapEditorSubSelectionKind::SpritesFix:
+    case MapEditorSubSelectionKind::SpritesFace:
+    {
+        PictureKind kind;
+        SystemPicture *picture;
 
-    // Get picture
-    kind = getPictureKind();
-    picture = getPicture();
+        // Get picture
+        kind = getPictureKind();
+        picture = getPicture();
 
-    // Open dialog preview
-    DialogPicturesPreview dialog(picture, kind);
-    if (m_state->graphicsId() == 0) {
-        dialog.setCurrentTexture(m_state->rectTileset());
-    } else {
-        dialog.setIndexX(m_state->indexX());
-        dialog.setIndexY(m_state->indexY());
+        // Open dialog preview
+        DialogPicturesPreview dialog(picture, kind);
+        if (m_state->graphicsId() == 0) {
+            dialog.setCurrentTexture(m_state->rectTileset());
+        } else {
+            dialog.setIndexX(m_state->indexX());
+            dialog.setIndexY(m_state->indexY());
+        }
+
+        if (dialog.exec() == QDialog::Accepted) {
+            RPM::get()->project()->writePicturesDatas();
+            m_state->setGraphicsId(dialog.picture()->id());
+            m_state->setIndexX(dialog.indexX());
+            m_state->setIndexY(dialog.indexY());
+            QRect rect;
+            dialog.currentTexture(rect);
+            m_state->setRectTileset(rect);
+        } else {
+            RPM::get()->project()->readPicturesDatas();
+            if (wasNone)
+                reinterpret_cast<PanelObject *>(this->parent())->passToNone();
+        }
+        break;
     }
-
-    if (dialog.exec() == QDialog::Accepted) {
-        RPM::get()->project()->writePicturesDatas();
-        m_state->setGraphicsId(dialog.picture()->id());
-        m_state->setIndexX(dialog.indexX());
-        m_state->setIndexY(dialog.indexY());
-        QRect rect;
-        dialog.currentTexture(rect);
-        m_state->setRectTileset(rect);
-    } else {
-        RPM::get()->project()->readPicturesDatas();
-        if (wasNone)
-            reinterpret_cast<PanelObject *>(this->parent())->passToNone();
+    case MapEditorSubSelectionKind::Object3D:
+    {
+        DialogSpecialElements dialog(PictureKind::Object3D);
+        dialog.selectSpecialElement(m_object3D);
+        if (dialog.exec() == QDialog::Accepted)
+        {
+            m_state->setGraphicsId(dialog.getSpecialElement()->id());
+        }
+        this->updateCurrentObject();
+        repaint();
+        break;
     }
-
-    repaint();
+    default:
+        break;
+    }
+    this->repaint();
 }
 
 // -------------------------------------------------------
 
-void WidgetGraphics::paintEvent(QPaintEvent *event) {
-    QFrame::paintEvent(event);
+void WidgetGraphics::paintEvent(QPaintEvent*)
+{
+    this->paintGL();
+}
 
+// -------------------------------------------------------
+
+void WidgetGraphics::paintGL() {
     QPainter painter(this);
 
-    // Draw background
-    painter.fillRect(QRectF(rect().x() + 1, rect().y() + 1, rect().width() - 2,
-        rect().height() - 2), RPM::COLOR_ALMOST_TRANSPARENT);
+    // 3D
+    painter.beginNativePainting();
+    WidgetPreviewObject3D::paintGL();
+    painter.endNativePainting();
 
     // Draw image
-    if (m_state->graphicsKind() != MapEditorSubSelectionKind::None) {
-        if (m_state->graphicsId() != -1) {
+    if (m_state->graphicsKind() == MapEditorSubSelectionKind::SpritesFix ||
+        m_state->graphicsKind() == MapEditorSubSelectionKind::SpritesFace)
+    {
+        if (m_state->graphicsId() != -1)
+        {
             SystemPicture* picture = getPicture(true);
             QImage image(picture->getPath());
             float coef = RPM::coefReverseSquareSize();
@@ -168,10 +215,11 @@ void WidgetGraphics::paintEvent(QPaintEvent *event) {
     if (m_selected) {
         QPen pen(Qt::DashLine);
         pen.setWidth(2);
-        pen.setColor(RPM::COLOR_CURSOR_SELECTION);
+        pen.setColor(RPM::COLOR_PURPLE_SELECTION);
         painter.setPen(pen);
         painter.drawRect(rect().x() + m_borderOffset, rect().y() + m_borderOffset,
             rect().width() - (m_borderOffset * 2), rect().height() - (
             m_borderOffset * 2));
     }
+    painter.end();
 }

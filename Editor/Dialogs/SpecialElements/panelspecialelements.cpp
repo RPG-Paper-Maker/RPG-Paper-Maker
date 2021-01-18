@@ -51,6 +51,11 @@ PanelSpecialElements::~PanelSpecialElements()
     delete ui;
 }
 
+SystemSpecialElement * PanelSpecialElements::specialElement() const
+{
+    return m_specialElement;
+}
+
 int PanelSpecialElements::currentIndex() const {
     return this->superList()->list()->getIndex();
 }
@@ -129,6 +134,7 @@ void PanelSpecialElements::initialize(QStandardItemModel *model, PictureKind
 void PanelSpecialElements::update(SystemSpecialElement *sys) {
     SystemPicture *picture;
 
+    m_specialElement = sys;
     ui->comboBoxShape->setCurrentIndex(static_cast<int>(sys->shapeKind()));
     ui->widgetShapeObj->initialize(sys->objID());
     ui->widgetShapeMtl->initialize(sys->mtlID());
@@ -164,6 +170,17 @@ void PanelSpecialElements::update(SystemSpecialElement *sys) {
     if (m_kind == PictureKind::Mountains) {
         ui->widgetShowPicture->updatePicture(picture);
     }
+}
+
+// -------------------------------------------------------
+
+void PanelSpecialElements::selectSpecialElement(SystemSpecialElement *sys)
+{
+    //this->update(sys);
+    int index = SuperListItem::getIndexById(ui->panelSuperList->list()
+        ->getModel()->invisibleRootItem(), sys->id());
+    QModelIndex indexModel = ui->panelSuperList->list()->getModel()->index(index, 0);
+    ui->panelSuperList->list()->setCurrentIndex(indexModel);
 }
 
 // -------------------------------------------------------

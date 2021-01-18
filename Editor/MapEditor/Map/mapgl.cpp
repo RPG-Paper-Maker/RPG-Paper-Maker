@@ -302,7 +302,9 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
         for (int i = 0; i < totalSize; i++) {
             mapPortion = this->mapPortionBrut(i);
             if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
+            {
                 mapPortion->paintObjectsStaticSprites(textureID, texture);
+            }
         }
     }
 
@@ -321,6 +323,7 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
                     if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
                     {
                         mapPortion->paintObjects3D(textureID, u_hoveredStatic);
+                        mapPortion->paintObjectsObjects3D(textureID, texture);
                     }
                 }
                 texture->release();

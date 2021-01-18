@@ -30,6 +30,7 @@ Map::Map() :
     m_modelObjects(new QStandardItemModel),
     m_saved(true),
     m_detection(nullptr),
+    m_needReloadObjects3DTextures(false),
     m_programStatic(nullptr),
     m_programFaceSprite(nullptr),
     m_textureTileset(nullptr),
@@ -146,6 +147,16 @@ bool Map::saved() const { return m_saved; }
 void Map::setSaved(bool b){ m_saved = b; }
 
 QStandardItemModel* Map::modelObjects() const { return m_modelObjects; }
+
+bool Map::needReloadObjects3DTextures() const
+{
+    return m_needReloadObjects3DTextures;
+}
+
+void Map::setNeedReloadObjects3DTextures(bool b)
+{
+    m_needReloadObjects3DTextures = b;
+}
 
 MapPortion* Map::mapPortion(Portion &p) const {
     return mapPortion(p.x(), p.y(), p.z());

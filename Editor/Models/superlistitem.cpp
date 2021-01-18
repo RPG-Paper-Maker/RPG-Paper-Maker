@@ -154,11 +154,11 @@ SuperListItem * SuperListItem::getItemModelAt(QStandardItemModel *model, int i)
 
 void SuperListItem::deleteModel(QStandardItemModel *model, bool deleteModel) {
     SuperListItem *super;
-    int i, l;
-
-    for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
-        super = reinterpret_cast<SuperListItem *>(model->item(i)->data().value<
-            quintptr>());
+    QStandardItem *item;
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        item = model->item(i);
+        super = reinterpret_cast<SuperListItem *>(item->data().value<quintptr>());
         if (super != nullptr) {
             delete super;
         }

@@ -377,6 +377,9 @@ void ControlMapEditor::update(MapEditorSelectionKind selectionKind, DrawKind
     clearPortionsToUpdate();
     updateMovingPortions();
 
+    // Check textures need to be reloaded
+    m_map->checkNeedReloadTextures();
+
     // Camera
     m_camera->update(cursor(), m_map->squareSize());
 
