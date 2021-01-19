@@ -1240,10 +1240,12 @@ void Translations::readLanguages()
     Common::readOtherJSON(RPM::PATH_TRANSLATIONS_LANGUAGES, doc);
     obj = doc.object();
     tab = obj[JSON_NAMES].toArray();
+    m_languagesNames.clear();
     for (i = 0, l = tab.size(); i < l; i++) {
         m_languagesNames << tab.at(i).toString();
     }
     tab = obj[JSON_SHORT].toArray();
+    m_languagesShort.clear();
     for (i = 0, l = tab.size(); i < l; i++) {
         m_languagesShort << tab.at(i).toString();
     }

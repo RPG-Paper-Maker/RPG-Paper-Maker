@@ -150,8 +150,8 @@ int main(int argc, char *argv[]) {
     w->showMaximized();
 
     // Show first launch language selection
-    DialogSelectLanguage dialogLanguage;
     if (RPM::get()->engineSettings()->firstTimeLanguages()) {
+        DialogSelectLanguage dialogLanguage(QLocale::system().name().mid(0, 2));
         dialogLanguage.exec();
         RPM::get()->engineSettings()->setFirstTimeLanguages(false);
         RPM::get()->engineSettings()->write();

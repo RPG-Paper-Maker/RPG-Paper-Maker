@@ -31,13 +31,14 @@ class DialogSelectLanguage : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogSelectLanguage(QWidget *parent = nullptr);
+    explicit DialogSelectLanguage(QString lang = QString(), QWidget *parent =
+        nullptr);
     ~DialogSelectLanguage();
 
 private:
     Ui::DialogSelectLanguage *ui;
 
-    void initialize();
+    void initialize(QString &lang);
     void translate();
 
 public slots:
