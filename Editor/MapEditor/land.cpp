@@ -81,8 +81,8 @@ float LandDatas::intersection(int squareSize, QRay3D& ray, Position& position) {
 float LandDatas::staticIntersection(int squareSize, QRay3D& ray, Position& position,
     bool up)
 {
-    QVector3D pos, size;
-    getUpPosSize(pos, size, squareSize, position, up);
+    QVector3D pos, size, center;
+    getUpPosSizeCenter(pos, size, center, squareSize, position, up);
 
     QVector3D vecA = Lands::verticesQuad[0] * size + pos,
               vecC = Lands::verticesQuad[2] * size + pos;
@@ -93,13 +93,15 @@ float LandDatas::staticIntersection(int squareSize, QRay3D& ray, Position& posit
 
 // -------------------------------------------------------
 
-void LandDatas::getUpPosSize(QVector3D& pos, QVector3D& size, int squareSize,
-        Position &position, bool up)
+void LandDatas::getUpPosSizeCenter(QVector3D& pos, QVector3D& size, QVector3D&
+    center, int squareSize, Position &position, bool up)
 {
     // Position
     float yLayerOffset = position.layer() * 0.05f;
     if (!up)
+    {
         yLayerOffset *= -1;
+    }
     float yPosition = position.getY(squareSize) + yLayerOffset;
     pos.setX(position.x() * squareSize);
     pos.setY(yPosition);
@@ -109,14 +111,19 @@ void LandDatas::getUpPosSize(QVector3D& pos, QVector3D& size, int squareSize,
     size.setX(squareSize);
     size.setY(0.0f);
     size.setZ(squareSize);
+
+    // Center
+    center.setX(pos.x() + (squareSize / 2));
+    center.setY(pos.y());
+    center.setZ(pos.z() + (squareSize / 2));
 }
 
 // -------------------------------------------------------
 
-void LandDatas::getPosSize(QVector3D& pos, QVector3D& size, int squareSize,
-                           Position &position)
+void LandDatas::getPosSizeCenterLand(QVector3D& pos, QVector3D& size, QVector3D
+    &center, int squareSize, Position &position)
 {
-    getUpPosSize(pos, size, squareSize, position, m_up);
+    getUpPosSizeCenter(pos, size, center, squareSize, position, m_up);
 }
 
 // -------------------------------------------------------

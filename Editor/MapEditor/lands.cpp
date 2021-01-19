@@ -124,10 +124,10 @@ bool Lands::addLand(Position& p, LandDatas* land, QJsonObject &previous,
 
 // -------------------------------------------------------
 
-bool Lands::deleteLand(Position& p, QList<QJsonObject> &previous,
-                       QList<MapEditorSubSelectionKind> &previousType,
-                       QList<Position>& positions, QSet<MapPortion *> &update,
-                       QSet<MapPortion *> &save, bool removeLayers)
+bool Lands::deleteLand(Position& p, QList<QJsonObject> &previous, QList<
+    MapEditorSubSelectionKind> &previousType, QList<Position>& positions, QSet<
+    MapPortion *> &update, QSet<MapPortion *> &save, bool removeLayers, bool
+    deletePtr)
 { 
     QJsonObject prev;
     MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
@@ -138,13 +138,14 @@ bool Lands::deleteLand(Position& p, QList<QJsonObject> &previous,
         previousLand->write(prev);
         kind = previousLand->getSubKind();
         changed = true;
-
-        delete previousLand;
+        if (deletePtr)
+        {
+            delete previousLand;
+        }
     }
-
     m_autotiles->updateWithoutPreview(p, update, save);
-
-    if (changed) {
+    if (changed)
+    {
         previous.append(prev);
         previousType.append(kind);
         positions.append(p);
@@ -248,13 +249,13 @@ void Lands::updateAutotiles(Position &position, QHash<Position, MapElement *>
 //
 // -------------------------------------------------------
 
-void Lands::initializeVertices(QList<TextureSeveral *> &texturesAutotiles,
-                               QHash<Position, MapElement *> &previewSquares,
-                               int squareSize, int width, int height)
+void Lands::initializeVertices(QList<TextureSeveral *> &texturesAutotiles, QHash<
+    Position, MapElement *> &previewSquares, int squareSize, int width, int
+    height, MapElement *excludeElement)
 {
-    m_floors->initializeVertices(previewSquares, squareSize, width, height);
-    m_autotiles->initializeVertices(texturesAutotiles, previewSquares,
-                                    squareSize);
+    m_floors->initializeVertices(previewSquares, squareSize, width, height,
+        excludeElement);
+    m_autotiles->initializeVertices(texturesAutotiles, previewSquares, squareSize);
 }
 
 // -------------------------------------------------------
@@ -273,9 +274,10 @@ void Lands::updateGL(){
 
 // -------------------------------------------------------
 
-void Lands::paintGL(){
+void Lands::paintGL(int uniformHovered)
+{
     if (!m_floors->isEmpty()) {
-        m_floors->paintGL();
+        m_floors->paintGL(uniformHovered);
     }
 }
 

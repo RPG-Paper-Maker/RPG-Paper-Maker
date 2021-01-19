@@ -31,11 +31,11 @@ public:
 
     virtual void initializeVertices(int, int, int, QVector<Vertex>&,
                                     QVector<GLuint>&, Position&, int&);
-    void getPosSize(QVector3D& pos, QVector3D& size, int squareSize,
-                    Position &position);
+    void getPosSizeCenterLand(QVector3D& pos, QVector3D& size, QVector3D &center,
+        int squareSize, Position &position);
 
-    static void getUpPosSize(QVector3D& pos, QVector3D& size, int squareSize,
-        Position &position, bool up = true);
+    static void getUpPosSizeCenter(QVector3D& pos, QVector3D& size, QVector3D &center,
+        int squareSize, Position &position, bool up = true);
     float intersection(int squareSize, QRay3D& ray, Position& position);
     static float staticIntersection(int squareSize, QRay3D& ray, Position& position,
         bool up = true);

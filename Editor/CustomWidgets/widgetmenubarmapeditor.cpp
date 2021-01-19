@@ -241,9 +241,9 @@ void WidgetMenuBarMapEditor::initializeRightMenu() {
     m_actionTranslate = new QAction(QIcon(":/icons/Ressources/translate_disable.png"), "Translate");
     m_actionTranslate->setProperty("selection", false);
     m_actionTranslate->setEnabled(false);
-    m_actionRotate = new QAction(QIcon(":/icons/Ressources/rotate_disable.png"), "Rotate");
+    m_actionRotate = new QAction(QIcon(":/icons/Ressources/rotate.png"), "Rotate");
     m_actionRotate->setProperty("selection", false);
-    m_actionRotate->setEnabled(false);
+    m_actionRotate->setEnabled(true);
     this->connect(m_actionRotate, SIGNAL(triggered(bool)), this, SLOT(
         on_actionRotateTriggered(bool)));
     m_actionScale = new QAction(QIcon(":/icons/Ressources/scale_disable.png"), "Scale");
@@ -348,9 +348,9 @@ void WidgetMenuBarMapEditor::updateSelection(QAction *action) {
         } else {
             actionPin()->setIcon(QIcon(":/icons/Ressources/pin.png"));
         }
-        if (m_selectionKind == MapEditorSelectionKind::Land || m_selectionKind
-            == MapEditorSelectionKind::Mountains || m_selectionKind ==
-            MapEditorSelectionKind::Objects)
+        if (subSelectionAfter == MapEditorSubSelectionKind::Autotiles ||
+            m_selectionKind == MapEditorSelectionKind::Mountains ||
+            m_selectionKind == MapEditorSelectionKind::Objects)
         {
             this->forceNoRotation();
         } else {
@@ -391,7 +391,7 @@ void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu, QAction
     } else {
         this->actionPin()->setIcon(QIcon(":/icons/Ressources/pin.png"));
     }
-    if (m_selectionKind == MapEditorSelectionKind::Land || m_selectionKind ==
+    if (subKind == MapEditorSubSelectionKind::Autotiles || m_selectionKind ==
         MapEditorSelectionKind::Mountains || m_selectionKind ==
         MapEditorSelectionKind::Objects)
     {

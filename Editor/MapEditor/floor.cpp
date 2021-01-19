@@ -71,8 +71,8 @@ void FloorDatas::initializeVertices(int squareSize, int width, int height,
                                    QVector<GLuint>& indexes, Position& position,
                                    int& count)
 {
-    QVector3D pos, size;
-    getPosSize(pos, size, squareSize, position);
+    QVector3D pos, size, center;
+    getPosSizeCenterLand(pos, size, center, squareSize, position);
 
     float x = (float)(textureRect()->x() * squareSize) / width;
     float y = (float)(textureRect()->y() * squareSize) / height;
@@ -86,14 +86,26 @@ void FloorDatas::initializeVertices(int squareSize, int width, int height,
     h -= (coefY * 2);
 
     // Vertices
-    vertices.append(Vertex(Lands::verticesQuad[0] * size + pos,
-                    QVector2D(x, y)));
-    vertices.append(Vertex(Lands::verticesQuad[1] * size + pos,
-                    QVector2D(x + w, y)));
-    vertices.append(Vertex(Lands::verticesQuad[2] * size + pos,
-                    QVector2D(x + w, y + h)));
-    vertices.append(Vertex(Lands::verticesQuad[3] * size + pos,
-                    QVector2D(x, y + h)));
+    QVector3D vecA = Lands::verticesQuad[0] * size + pos;
+    QVector3D vecB = Lands::verticesQuad[1] * size + pos;
+    QVector3D vecC = Lands::verticesQuad[2] * size + pos;
+    QVector3D vecD = Lands::verticesQuad[3] * size + pos;
+    if (position.angleY() != 0.0) {
+        SpriteDatas::rotateSpriteX(vecA, vecB, vecC, vecD, center, position
+            .angleY(), 0, 1, 0);
+    }
+    if (position.angleX() != 0.0) {
+        SpriteDatas::rotateSpriteX(vecA, vecB, vecC, vecD, center, position
+            .angleX(), 1, 0, 0);
+    }
+    if (position.angleZ() != 0.0) {
+        SpriteDatas::rotateSpriteX(vecA, vecB, vecC, vecD, center, position
+            .angleZ(), 0, 0, 1);
+    }
+    vertices.append(Vertex(vecA, QVector2D(x, y)));
+    vertices.append(Vertex(vecB, QVector2D(x + w, y)));
+    vertices.append(Vertex(vecC, QVector2D(x + w, y + h)));
+    vertices.append(Vertex(vecD, QVector2D(x, y + h)));
 
     // indexes
     int offset = count * Lands::nbVerticesQuad;

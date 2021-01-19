@@ -23,7 +23,9 @@ Floors::Floors() :
     m_isEmpty(true),
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
     m_indexBuffer(QOpenGLBuffer::IndexBuffer),
-    m_programStatic(nullptr)
+    m_program(nullptr),
+    m_vertexBufferHovered(QOpenGLBuffer::VertexBuffer),
+    m_indexBufferHovered(QOpenGLBuffer::IndexBuffer)
 {
 
 }
@@ -137,7 +139,7 @@ bool Floors::updateRaycastingAt(Position &position, FloorDatas* floor, int
 // -------------------------------------------------------
 
 void Floors::initializeVertices(QHash<Position, MapElement *> &previewSquares,
-                                int squareSize, int width, int height)
+    int squareSize, int width, int height, MapElement *excludeElement)
 {
     QList<Position> layers;
     Position p;
@@ -145,6 +147,8 @@ void Floors::initializeVertices(QHash<Position, MapElement *> &previewSquares,
 
     m_vertices.clear();
     m_indexes.clear();
+    m_verticesHovered.clear();
+    m_indexesHovered.clear();
     int count = 0;
 
     // Create temp hash for preview
@@ -160,8 +164,9 @@ void Floors::initializeVertices(QHash<Position, MapElement *> &previewSquares,
 
     // Initialize vertices
     QHash<Position, FloorDatas*>::iterator i;
+    FloorDatas *floor;
     for (i = floorsWithPreview.begin(); i != floorsWithPreview.end(); i++) {
-        FloorDatas* floor = i.value();
+        floor = i.value();
         p = i.key();
         layer = p.layer();
         if (layer > 0) {
@@ -175,26 +180,41 @@ void Floors::initializeVertices(QHash<Position, MapElement *> &previewSquares,
                 layers.append(p);
             }
         } else {
-            floor->initializeVertices(squareSize, width, height, m_vertices,
-                m_indexes, p, count);
+            if (excludeElement == floor) {
+                int c = 0;
+                m_isHovered = true;
+                floor->initializeVertices(squareSize, width, height,
+                    m_verticesHovered, m_indexesHovered, p, c);
+            } else {
+                floor->initializeVertices(squareSize, width, height, m_vertices,
+                    m_indexes, p, count);
+            }
         }
     }
 
     // Vertices for layers
     for (j = 0, ll = layers.size(); j < ll; j++) {
         p = layers.at(j);
-        floorsWithPreview.value(p)->initializeVertices(squareSize, width, height
-            , m_vertices, m_indexes, p, count);
+        floor = floorsWithPreview.value(p);
+        if (excludeElement == floor) {
+            int c = 0;
+            floor->initializeVertices(squareSize, width, height,
+                m_verticesHovered, m_indexesHovered, p, c);
+        } else
+        {
+            floor->initializeVertices(squareSize, width, height, m_vertices,
+                m_indexes, p, count);
+        }
     }
 }
 
 // -------------------------------------------------------
 
 void Floors::initializeGL(QOpenGLShaderProgram *programStatic){
-    if (m_programStatic == nullptr){
+    if (m_program == nullptr){
         initializeOpenGLFunctions();
 
-        m_programStatic = programStatic;
+        m_program = programStatic;
     }
 }
 
@@ -202,15 +222,26 @@ void Floors::initializeGL(QOpenGLShaderProgram *programStatic){
 
 void Floors::updateGL() {
     Map::updateGLStatic(m_vertexBuffer, m_indexBuffer, m_vertices, m_indexes,
-                        m_vao, m_programStatic);
+        m_vao, m_program);
+    Map::updateGLStatic(m_vertexBufferHovered, m_indexBufferHovered,
+        m_verticesHovered, m_indexesHovered, m_vaoHovered, m_program);
 }
 
 // -------------------------------------------------------
 
-void Floors::paintGL() {
+void Floors::paintGL(int uniformHovered) {
     m_vao.bind();
     glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
     m_vao.release();
+
+    if (m_isHovered) {
+        m_program->setUniformValue(uniformHovered, true);
+        m_vaoHovered.bind();
+        glDrawElements(GL_TRIANGLES, m_indexesHovered.size(), GL_UNSIGNED_INT,
+            nullptr);
+        m_vaoHovered.release();
+        m_program->setUniformValue(uniformHovered, false);
+    }
 }
 
 // -------------------------------------------------------

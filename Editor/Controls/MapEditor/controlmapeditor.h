@@ -119,7 +119,7 @@ public:
     void removePortion(int i, int j, int k);
     void setPortion(int i, int j, int k, int m, int n, int o, bool visible);
     void loadPortion(int a, int b, int c, int i, int j, int k);
-    void updatePortions(DrawKind drawKind);
+    void updatePortions(MapEditorSelectionKind selectionKind, DrawKind drawKind);
     void saveTempPortions();
     void clearPortionsToUpdate();
     void setToNotSaved();
@@ -154,7 +154,8 @@ public:
         MapEditorSubSelectionKind kind, bool layerOn, bool undoRedo = false,
         bool force = false);
     void removeLand(Position &p, DrawKind drawKind);
-    void eraseLand(Position &p, bool undoRedo = false, bool force = false);
+    void eraseLand(Position &p, bool undoRedo = false, bool force = false, bool
+        deletePtr = true);
     void addSprite(Position &p, MapEditorSubSelectionKind kind, DrawKind drawKind,
         bool layerOn, QRect &tileset);
     SpriteDatas * getCompleteSprite(MapEditorSubSelectionKind kind, int xOffset,
@@ -285,6 +286,7 @@ protected:
     float m_distanceObject3D;
     float m_distanceMountain;
     float m_distanceObject;
+    MapPortion *m_mapPortionLand;
     MapPortion *m_mapPortionSprite;
     MapPortion *m_mapPortionObject3D;
     Position m_positionPreviousPreview;

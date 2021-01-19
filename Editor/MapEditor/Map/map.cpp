@@ -413,7 +413,7 @@ void Map::loadPortionThread(MapPortion* mapPortion, QString &path)
     }
     mapPortion->initializeVertices(m_squareSize, m_textureTileset,
         m_texturesAutotiles, m_texturesMountains, m_texturesCharacters,
-        m_texturesSpriteWalls, nullptr, nullptr);
+        m_texturesSpriteWalls, nullptr, nullptr, nullptr);
     mapPortion->updateEmpty();
     if (!mapPortion->isEmpty()) {
         mapPortion->initializeGL(m_programStatic, m_programFaceSprite);
@@ -435,13 +435,16 @@ void Map::replacePortion(Portion& previousPortion, Portion& newPortion,
 
 // -------------------------------------------------------
 
-void Map::updatePortion(MapPortion* mapPortion, MapElement *elementExcludeSprite
-    , MapElement *elementExcludeObject3D)
+void Map::updatePortion(MapPortion* mapPortion, MapElement *elementExcludeLand,
+    MapElement *elementExcludeSprite, MapElement *elementExcludeObject3D)
 {
     mapPortion->updateSpriteWalls();
     mapPortion->initializeVertices(m_squareSize, m_textureTileset,
         m_texturesAutotiles, m_texturesMountains, m_texturesCharacters,
-        m_texturesSpriteWalls, elementExcludeSprite, elementExcludeObject3D);
+        m_texturesSpriteWalls, elementExcludeLand != nullptr &&
+        elementExcludeLand->getSubKind() == MapEditorSubSelectionKind::Floors ?
+        elementExcludeLand : nullptr, elementExcludeSprite,
+        elementExcludeObject3D);
     mapPortion->initializeGL(m_programStatic, m_programFaceSprite);
     mapPortion->updateGL();
     mapPortion->updateEmpty();

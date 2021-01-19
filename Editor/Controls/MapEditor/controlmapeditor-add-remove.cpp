@@ -370,7 +370,9 @@ void ControlMapEditor::removeLand(Position &p, DrawKind drawKind) {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseLand(Position &p, bool undoRedo, bool force) {
+void ControlMapEditor::eraseLand(Position &p, bool undoRedo, bool force, bool
+    deletePtr)
+{
     if (force || (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
         m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
         .yPlus(), p.yPlus())))))
@@ -383,7 +385,7 @@ void ControlMapEditor::eraseLand(Position &p, bool undoRedo, bool force) {
             QList<MapEditorSubSelectionKind> previousType;
             QList<Position> positions;
             bool changed = mapPortion->deleteLand(p, previous, previousType,
-                positions, m_portionsToUpdate, m_portionsToSave);
+                positions, m_portionsToUpdate, m_portionsToSave, deletePtr);
             if (changed && m_map->saved())
                 setToNotSaved();
             if (changed) {

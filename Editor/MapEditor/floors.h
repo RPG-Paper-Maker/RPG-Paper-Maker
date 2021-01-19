@@ -47,10 +47,10 @@ public:
         Position &previousCoords);
 
     void initializeVertices(QHash<Position, MapElement*>& previewSquares,
-                            int squareSize, int width, int height);
+        int squareSize, int width, int height, MapElement *excludeElement);
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
-    void paintGL();
+    void paintGL(int uniformHovered);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -58,6 +58,7 @@ public:
 protected:
     QHash<Position, FloorDatas*> m_all;
     bool m_isEmpty;
+    bool m_isHovered;
 
     // OpenGL informations
     QOpenGLBuffer m_vertexBuffer;
@@ -65,7 +66,12 @@ protected:
     QVector<Vertex> m_vertices;
     QVector<GLuint> m_indexes;
     QOpenGLVertexArrayObject m_vao;
-    QOpenGLShaderProgram* m_programStatic;
+    QOpenGLShaderProgram* m_program;
+    QOpenGLBuffer m_vertexBufferHovered;
+    QOpenGLBuffer m_indexBufferHovered;
+    QVector<Vertex> m_verticesHovered;
+    QVector<GLuint> m_indexesHovered;
+    QOpenGLVertexArrayObject m_vaoHovered;
 };
 
 #endif // FLOORS_H

@@ -154,8 +154,8 @@ public:
     void loadPortionThread(MapPortion *mapPortion, QString &path);
     void replacePortion(Portion& previousPortion, Portion& newPortion,
                         bool visible);
-    void updatePortion(MapPortion *mapPortion, MapElement *elementExcludeSprite,
-        MapElement *elementExcludeObject3D);
+    void updatePortion(MapPortion *mapPortion, MapElement *elementExcludeLand,
+        MapElement *elementExcludeSprite, MapElement *elementExcludeObject3D);
     void updateSpriteWalls(MapEditorSubSelectionKind subSelection);
     void updateMapObjects();
     void loadPortions(Portion portion);

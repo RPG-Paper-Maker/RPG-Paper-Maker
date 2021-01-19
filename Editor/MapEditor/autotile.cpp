@@ -83,8 +83,8 @@ void AutotileDatas::initializeVertices(TextureSeveral *textureAutotile,
                                        QVector<GLuint>& indexes,
                                        Position& position, int& count)
 {
-    QVector3D pos, size;
-    getPosSize(pos, size, squareSize, position);
+    QVector3D pos, size, center;
+    getPosSizeCenterLand(pos, size, center, squareSize, position);
 
     int xTile = m_tileID % 64;
     int yTile = (m_tileID / 64) +

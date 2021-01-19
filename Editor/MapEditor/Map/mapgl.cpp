@@ -191,7 +191,7 @@ void Map::paintFloors(QMatrix4x4& modelviewProjection) {
     for (int i = 0; i < totalSize; i++) {
         mapPortion = this->mapPortionBrut(i);
         if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
-            mapPortion->paintFloors();
+            mapPortion->paintFloors(u_hoveredStatic);
     }
     m_textureTileset->release();
 
@@ -206,7 +206,6 @@ void Map::paintFloors(QMatrix4x4& modelviewProjection) {
         }
         texture->release();
     }
-
     m_programStatic->release();
 }
 

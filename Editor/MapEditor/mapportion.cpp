@@ -114,13 +114,12 @@ bool MapPortion::addLand(Position& p, LandDatas *land, QJsonObject& previous,
 
 // -------------------------------------------------------
 
-bool MapPortion::deleteLand(Position& p, QList<QJsonObject> &previous,
-                            QList<MapEditorSubSelectionKind> &previousType,
-                            QList<Position> &positions,
-                            QSet<MapPortion*>& update, QSet<MapPortion*>& save)
+bool MapPortion::deleteLand(Position& p, QList<QJsonObject> &previous, QList<
+    MapEditorSubSelectionKind> &previousType, QList<Position> &positions, QSet<
+    MapPortion*>& update, QSet<MapPortion*>& save, bool deletePtr)
 {
     return m_lands->deleteLand(p, previous, previousType, positions, update,
-                               save);
+        save, true, deletePtr);
 }
 
 // -------------------------------------------------------
@@ -557,6 +556,9 @@ MapElement * MapPortion::updateElementPosition(Position &previousPosition,
     MapEditorSelectionKind kind)
 {
     switch (kind) {
+    case MapEditorSelectionKind::Land:
+        return m_lands->getMapElementAt(previousPosition,
+            MapEditorSubSelectionKind::Floors);
     case MapEditorSelectionKind::Sprites:
         return m_sprites->spriteAt(previousPosition);
     case MapEditorSelectionKind::Objects3D:
@@ -574,15 +576,13 @@ MapElement * MapPortion::updateElementPosition(Position &previousPosition,
 
 
 void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
-                                    QList<TextureSeveral *> &autotiles,
-                                    QList<TextureSeveral *> &mountains,
-                                    QHash<int, QOpenGLTexture *> &characters,
-                                    QHash<int, QOpenGLTexture *> &walls,
-                                    MapElement *elementExcludeSprite,
-                                    MapElement *elementExcludeObject3D)
+    QList<TextureSeveral *> &autotiles, QList<TextureSeveral *> &mountains,
+    QHash<int, QOpenGLTexture *> &characters, QHash<int, QOpenGLTexture *> &walls,
+    MapElement *elementExcludeFloor, MapElement *elementExcludeSprite,
+    MapElement *elementExcludeObject3D)
 {
-    m_lands->initializeVertices(autotiles, m_previewSquares, squareSize,
-                                tileset->width(), tileset->height());
+    m_lands->initializeVertices(autotiles, m_previewSquares, squareSize, tileset
+        ->width(), tileset->height(), elementExcludeFloor);
     m_sprites->initializeVertices(walls, m_previewSquares, m_previewDelete,
                                   squareSize, tileset->width(),
                                   tileset->height(), elementExcludeSprite);
@@ -639,9 +639,10 @@ void MapPortion::updateGLObjects() {
 
 // -------------------------------------------------------
 
-void MapPortion::paintFloors(){
+void MapPortion::paintFloors(int uniformHovered)
+{
     if (!m_lands->isEmpty()) {
-        m_lands->paintGL();
+        m_lands->paintGL(uniformHovered);
     }
 }
 

@@ -372,7 +372,7 @@ void ControlMapEditor::update(MapEditorSelectionKind selectionKind, DrawKind
     drawKind, bool layerOn)
 {
     // Update portions
-    updatePortions(drawKind);
+    updatePortions(selectionKind, drawKind);
     saveTempPortions();
     clearPortionsToUpdate();
     updateMovingPortions();
@@ -433,7 +433,9 @@ void ControlMapEditor::updateWallIndicator() {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updatePortions(DrawKind drawKind) {
+void ControlMapEditor::updatePortions(MapEditorSelectionKind selectionKind,
+    DrawKind drawKind)
+{
     if (m_needMapObjectsUpdate) {
         m_needMapObjectsUpdate = false;
         m_map->updateMapObjects();
@@ -445,8 +447,11 @@ void ControlMapEditor::updatePortions(DrawKind drawKind) {
     isTransforming = drawKind == DrawKind::Rotate;
     for (i = m_portionsToUpdate.begin(); i != m_portionsToUpdate.end(); i++) {
         MapPortion *mapPortion = *i;
-        m_map->updatePortion(mapPortion, isTransforming ? m_elementOnSprite :
-            nullptr, isTransforming ? m_elementOnObject3D : nullptr);
+        m_map->updatePortion(mapPortion, isTransforming && selectionKind ==
+            MapEditorSelectionKind::Land ? m_elementOnLand : nullptr,
+            isTransforming && selectionKind == MapEditorSelectionKind::Sprites ?
+            m_elementOnSprite : nullptr, isTransforming && selectionKind ==
+            MapEditorSelectionKind::Objects3D ? m_elementOnObject3D : nullptr);
     }
 }
 
@@ -1463,18 +1468,30 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
         if (element != nullptr)
         {
             m_firstMouseCoords = newPosition;
-            if (k == MapEditorSelectionKind::Sprites) {
-                SpriteDatas *sprite;
-
-                sprite = reinterpret_cast<SpriteDatas *>(element);
+            switch (k) {
+            case MapEditorSelectionKind::Land:
+            {
+                FloorDatas *floor = reinterpret_cast<FloorDatas *>(element);
+                this->eraseLand(previousPosition, false, false, false);
+                this->stockLand(newPosition, floor, floor->getSubKind(), false);
+                break;
+            }
+            case MapEditorSelectionKind::Sprites:
+            {
+                SpriteDatas *sprite = reinterpret_cast<SpriteDatas *>(element);
                 this->eraseSprite(previousPosition, false, false);
                 this->stockSprite(newPosition, sprite, sprite->getSubKind(), false);
-            } else {
-                Object3DDatas *object3D;
-
-                object3D = (reinterpret_cast<Object3DDatas *>(element));
+                break;
+            }
+            case MapEditorSelectionKind::Objects3D:
+            {
+                Object3DDatas *object3D = (reinterpret_cast<Object3DDatas *>(element));
                 this->eraseObject3D(previousPosition, false, false);
                 this->stockObject3D(newPosition, object3D);
+                break;
+            }
+            default:
+                break;
             }
         }
     }

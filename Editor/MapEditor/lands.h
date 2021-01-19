@@ -36,10 +36,10 @@ public:
     bool addLand(Position& p, LandDatas* land, QJsonObject& previous,
                  MapEditorSubSelectionKind& previousType,
                  QSet<MapPortion *> &update, QSet<MapPortion *> &save);
-    bool deleteLand(Position& p, QList<QJsonObject> &previous,
-                    QList<MapEditorSubSelectionKind> &previousType,
-                    QList<Position> &positions, QSet<MapPortion *> &update,
-                    QSet<MapPortion *> &save, bool removeLayers = true);
+    bool deleteLand(Position& p, QList<QJsonObject> &previous, QList<
+        MapEditorSubSelectionKind> &previousType, QList<Position> &positions,
+        QSet<MapPortion *> &update, QSet<MapPortion *> &save, bool removeLayers
+        = true, bool deletePtr = true);
     void removeLandOut(MapProperties& properties);
     MapElement *updateRaycasting(int squareSize, float& finalDistance, Position
         &finalPosition, QRay3D &ray, Position &previousCoords);
@@ -55,12 +55,12 @@ public:
                          QSet<MapPortion*> &update, QSet<MapPortion*> &save,
                          QSet<MapPortion*> &previousPreview);
 
-    void initializeVertices(QList<TextureSeveral *> &texturesAutotiles,
-                            QHash<Position, MapElement*>& previewSquares,
-                            int squareSize, int width, int height);
+    void initializeVertices(QList<TextureSeveral *> &texturesAutotiles, QHash<
+        Position, MapElement*>& previewSquares, int squareSize, int width, int
+        height, MapElement *excludeElement);
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
-    void paintGL();
+    void paintGL(int uniformHovered);
     void paintAutotilesGL(int textureID);
 
     virtual void read(const QJsonObject &json);

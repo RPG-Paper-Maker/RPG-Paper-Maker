@@ -59,7 +59,7 @@ public:
     bool deleteLand(Position& p, QList<QJsonObject> &previous,
                     QList<MapEditorSubSelectionKind> &previousType,
                     QList<Position>& positions, QSet<MapPortion *> &update,
-                    QSet<MapPortion *> &save);
+                    QSet<MapPortion *> &save, bool deletePtr);
     bool addSprite(QSet<Portion>& portionsOverflow, Position& p,
                    SpriteDatas *sprite, QJsonObject &previous,
                    MapEditorSubSelectionKind &previousType);
@@ -146,7 +146,8 @@ public:
     void initializeVertices(int squareSize, QOpenGLTexture* tileset, QList<
         TextureSeveral *> &autotiles, QList<TextureSeveral *> &mountains, QHash<
         int, QOpenGLTexture *>& characters, QHash<int, QOpenGLTexture *> &walls,
-        MapElement *elementExcludeSprite, MapElement *elementExcludeObject3D);
+        MapElement *elementExcludeFloor, MapElement *elementExcludeSprite,
+        MapElement *elementExcludeObject3D);
     void initializeVerticesObjects(int squareSize,
                                    QHash<int, QOpenGLTexture*>& characters,
                                    QOpenGLTexture *tileset);
@@ -156,7 +157,7 @@ public:
                              QOpenGLShaderProgram *programFace);
     void updateGL();
     void updateGLObjects();
-    void paintFloors();
+    void paintFloors(int uniformHovered);
     void paintAutotiles(int textureID);
     void paintSprites(int uniformHovered);
     void paintSpritesWalls(int textureID);
