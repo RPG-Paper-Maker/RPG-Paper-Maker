@@ -45,6 +45,7 @@ public:
     void updatePluginEditSave();
     void updatePluginDetailsSave();
     void checkUpdates();
+    void translate();
 
 protected:
     virtual void keyPressEvent(QKeyEvent *event);
@@ -60,8 +61,6 @@ private:
     WidgetCodeLineNumberArea *m_widgetLineNumberPlugin;
     CodeSyntaxHighlighter *m_highlighterPlugin;
     bool m_isSettingprogramatically;
-
-    void translate();
 
 public slots:
     void on_scriptSystemSelected(QModelIndex, QModelIndex);

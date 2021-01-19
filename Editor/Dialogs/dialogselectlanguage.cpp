@@ -78,6 +78,7 @@ void DialogSelectLanguage::on_comboBox_currentIndexChanged(int index)
         ->languagesShortAt(index));
     RPM::get()->readTranslations();
     MainWindow::get()->translate();
+    MainWindow::get()->dialogScripts()->translate();
     this->translate();
     RPM::get()->engineSettings()->write();
 }

@@ -44,7 +44,6 @@
 #include "dialogvideos.h"
 #include "common.h"
 #include "dialogselectlanguage.h"
-#include "dialogscripts.h"
 
 // -------------------------------------------------------
 //
@@ -111,6 +110,11 @@ WidgetMapEditor* MainWindow::mapEditor() const{
 
 PanelTextures * MainWindow::panelTextures() const {
     return  reinterpret_cast<PanelProject *>(mainPanel)->panelTextures();
+}
+
+DialogScripts * MainWindow::dialogScripts() const
+{
+    return m_dialogScripts;
 }
 
 // -------------------------------------------------------

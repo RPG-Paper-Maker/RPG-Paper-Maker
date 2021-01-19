@@ -44,6 +44,7 @@ public:
     QString version() const;
     WidgetMapEditor * mapEditor() const;
     PanelTextures * panelTextures() const;
+    DialogScripts * dialogScripts() const;
     static void showNotImplementedWindow(QWidget* parent);
     void newProject();
     void openExistingProject();
