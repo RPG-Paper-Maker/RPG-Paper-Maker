@@ -132,7 +132,7 @@
            </property>
            <layout class="QGridLayout" name="gridLayout_5">
             <item row="0" column="0">
-             <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,0,0,1">
+             <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,0,0,0,1">
               <item>
                <widget class="QCheckBox" name="checkBoxReleaseAtEndBattle">
                 <property name="text">
@@ -150,7 +150,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="PanelPrimitiveValue" name="panelPrimitiveValueChanceReleaseDamage" native="true">
+                 <widget class="PanelPrimitiveValue" name="panelPrimitiveValueChanceReleaseBeingAttacked" native="true">
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
@@ -206,9 +206,9 @@
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QLabel" name="labelChanceAfterDamages">
+                 <widget class="QLabel" name="labelChanceAfterBeingAttacked">
                   <property name="text">
-                   <string>chance after dealing damages</string>
+                   <string>chance after being attacked</string>
                   </property>
                  </widget>
                 </item>
@@ -226,6 +226,13 @@
                  </spacer>
                 </item>
                </layout>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkBoxReleaseStartTurn">
+                <property name="text">
+                 <string>Release at the start of turn:</string>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="WidgetSuperTree" name="treeViewReleaseChanceTurn">

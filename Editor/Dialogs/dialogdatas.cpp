@@ -339,24 +339,22 @@ void DialogDatas::updateAnimationFrame(SystemAnimationFrame *animationFrame) {
 
 void DialogDatas::initializeStatus(GameDatas *gameDatas) {
     ui->panelSuperListStatus->setIsLang(true);
-    ui->panelSuperListStatus->list()->initializeNewItemInstance(new
-        SystemStatus);
-    ui->panelSuperListStatus->initializeModel(gameDatas->statusDatas()
-        ->model());
+    ui->panelSuperListStatus->list()->initializeNewItemInstance(new SystemStatus);
+    ui->panelSuperListStatus->initializeModel(gameDatas->statusDatas()->model());
     ui->panelSuperListStatus->showEditName(true);
     connect(ui->panelSuperListStatus->list()->selectionModel(), SIGNAL(
         currentChanged(QModelIndex, QModelIndex)), this, SLOT(
         on_pageStatusSelected(QModelIndex, QModelIndex)));
-    QModelIndex index = ui->panelSuperListStatus->list()->getModel()->index(
-        0, 0);
+    QModelIndex index = ui->panelSuperListStatus->list()->getModel()->index(0, 0);
     ui->panelSuperListStatus->list()->setIndex(0);
     on_pageStatusSelected(index, index);
 }
 
 // -------------------------------------------------------
 
-void DialogDatas::updateStatus(SystemStatus *) {
-
+void DialogDatas::updateStatus(SystemStatus *status)
+{
+    ui->panelStatus->initializeModel(status);
 }
 
 // -------------------------------------------------------

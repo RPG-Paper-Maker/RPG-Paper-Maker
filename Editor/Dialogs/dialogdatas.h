@@ -72,7 +72,7 @@ private:
     void updateAnimation(SystemAnimation *animation);
     void updateAnimationFrame(SystemAnimationFrame *animationFrame);
     void initializeStatus(GameDatas *gameDatas);
-    void updateStatus(SystemStatus *sysStatus);
+    void updateStatus(SystemStatus *status);
     void initializeTilesets(GameDatas *gameDatas);
     void updateTileset(SystemTileset *sysTileset);
     void openSpecialElementsDialog(PictureKind kind);

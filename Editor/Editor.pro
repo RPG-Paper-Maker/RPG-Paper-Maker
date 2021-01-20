@@ -138,6 +138,7 @@ HEADERS += \
     Models/System/systemscript.h \
     Models/System/systemskybox.h \
     Models/System/systemspeedfrequency.h \
+    Models/System/systemstatusreleaseturn.h \
     Models/System/systemtitlecommand.h \
     Models/System/systemvideo.h \
     Models/translations.h \
@@ -505,6 +506,7 @@ SOURCES += \
     Models/System/systemscript.cpp \
     Models/System/systemskybox.cpp \
     Models/System/systemspeedfrequency.cpp \
+    Models/System/systemstatusreleaseturn.cpp \
     Models/System/systemtitlecommand.cpp \
     Models/System/systemvideo.cpp \
     Models/project.cpp \
