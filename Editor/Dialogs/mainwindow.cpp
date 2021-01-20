@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2020 Wano
+    RPG Paper Maker Copyright (C) 2017-2021 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -1010,7 +1010,7 @@ void MainWindow::on_actionAbout_triggered() {
     name = "RPG Paper Maker";
     website = "http://rpg-paper-maker.com/";
     buildDate = Project::LAST_BUILD_DATE;
-    copyright =  "RPG Paper Maker Copyright (C) 2017-2020 Wano\n\n" + RPM
+    copyright =  "RPG Paper Maker Copyright (C) 2017-2021 Wano\n\n" + RPM
         ::translate(Translations::COPYRIGHT) + RPM::DOT;
     QMessageBox::about(this, RPM::translate(Translations::ABOUT), name + RPM
         ::SPACE + Project::ENGINE_VERSION + RPM::NEW_LINE + website + RPM
