@@ -22,8 +22,10 @@ const QString StatusDatas::JSON_STATUS = "status";
 //
 // -------------------------------------------------------
 
-StatusDatas::StatusDatas() {
-    m_model = new QStandardItemModel;
+StatusDatas::StatusDatas() :
+    m_model(new QStandardItemModel)
+{
+
 }
 
 StatusDatas::~StatusDatas()
@@ -31,11 +33,8 @@ StatusDatas::~StatusDatas()
     SuperListItem::deleteModel(m_model);
 }
 
-void StatusDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::PATH_STATUS), *this);
-}
-
-QStandardItemModel* StatusDatas::model() const {
+QStandardItemModel * StatusDatas::model() const
+{
     return m_model;
 }
 
@@ -45,11 +44,18 @@ QStandardItemModel* StatusDatas::model() const {
 //
 // -------------------------------------------------------
 
-void StatusDatas::setDefault() {
+void StatusDatas::read(QString path)
+{
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_STATUS), *this);
+}
+
+// -------------------------------------------------------
+
+void StatusDatas::setDefault()
+{
     int i, length;
     SystemStatus *status;
     QStandardItem *item;
-
     QString names[] = {
         RPM::translate(Translations::KO)
     };
@@ -57,8 +63,8 @@ void StatusDatas::setDefault() {
         -1
     };
     length = (sizeof(names)/sizeof(*names));
-
-    for (i = 0; i < length; i++) {
+    for (i = 0; i < length; i++)
+    {
         status = new SystemStatus(i + 1, new LangsTranslation(names[i]),
             iconsID[i]);
         item = new QStandardItem;
@@ -75,35 +81,31 @@ void StatusDatas::setDefault() {
 //
 // -------------------------------------------------------
 
-void StatusDatas::read(const QJsonObject &json) {
-    SystemStatus *status;
-    QStandardItem *item;
-
+void StatusDatas::read(const QJsonObject &json)
+{
     // Clear
     SuperListItem::deleteModel(m_model, false);
 
     // Read
     QJsonArray jsonList = json[JSON_STATUS].toArray();
-    for (int i = 0; i < jsonList.size(); i++) {
-        item = new QStandardItem;
+    SystemStatus *status;
+    for (int i = 0; i < jsonList.size(); i++)
+    {
         status = new SystemStatus;
         status->read(jsonList[i].toObject());
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(status)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(status->toString());
-        m_model->appendRow(item);
+        m_model->appendRow(status->getModelRow());
     }
 }
 
 // -------------------------------------------------------
 
-void StatusDatas::write(QJsonObject &json) const {
-    int i, l;
+void StatusDatas::write(QJsonObject &json) const
+{
     QJsonArray tab;
     QJsonObject obj;
     SystemStatus *status;
-
-    for (i = 0, l = m_model->invisibleRootItem()->rowCount(); i < l; i++) {
+    for (int i = 0, l = m_model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
         obj = QJsonObject();
         status = reinterpret_cast<SystemStatus *>(m_model->item(i)->data()
             .value<quintptr>());

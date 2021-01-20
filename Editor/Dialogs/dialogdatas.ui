@@ -46,7 +46,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>9</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -1021,7 +1021,7 @@
         <attribute name="title">
          <string>Status</string>
         </attribute>
-        <layout class="QGridLayout" name="gridLayout_33">
+        <layout class="QGridLayout" name="gridLayout_32">
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_15" stretch="0,1">
            <item>
@@ -1062,14 +1062,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labelStatusAvailable">
-             <property name="text">
-              <string>This option is not available yet</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
+            <widget class="PanelStatus" name="panelStatus" native="true"/>
            </item>
           </layout>
          </item>
@@ -1497,6 +1490,12 @@
    <class>WidgetAnimationTexture</class>
    <extends>QWidget</extends>
    <header>widgetanimationtexture.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelStatus</class>
+   <extends>QWidget</extends>
+   <header>panelstatus.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

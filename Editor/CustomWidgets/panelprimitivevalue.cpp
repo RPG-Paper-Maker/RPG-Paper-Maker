@@ -718,7 +718,7 @@ void PanelPrimitiveValue::addDataBase(QStandardItemModel *model,
 {
     if (model != nullptr && model->invisibleRootItem()->rowCount() > 0)
     {
-        ui->comboBoxChoice->addItem(RPM::ENUM_TO_PRIMITIVE_KIND.at(
+        ui->comboBoxChoice->addItem(RPM::ENUM_TO_STRING_PRIMITIVE_KIND.at(
             static_cast<int>(kind)), static_cast<int>(kind));
         if (kind == PrimitiveValueKind::DataBase)
         {

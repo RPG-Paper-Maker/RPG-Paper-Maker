@@ -494,8 +494,6 @@ void DialogDatas::translate() {
         RPM::COLON);
     ui->labelAnimatedAutotiles->setText(RPM::translate(Translations
         ::ANIMATED_AUTOTILES) + RPM::COLON);
-    ui->labelStatusAvailable->setText(RPM::translate(Translations
-        ::THIS_OPTION_NOT_AVAILABLE_YET));
     ui->pushButtonSlopes->setText(RPM::translate(Translations::CHOOSE) + RPM
         ::DOT_DOT_DOT);
     ui->pushButtonPlayHit->setText(RPM::translate(Translations::PLAY_HIT));

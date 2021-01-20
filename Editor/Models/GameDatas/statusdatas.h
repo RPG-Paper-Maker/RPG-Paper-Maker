@@ -31,15 +31,16 @@ public:
 
     StatusDatas();
     virtual ~StatusDatas();
+    QStandardItemModel * model() const;
+
     void read(QString path);
-    QStandardItemModel* model() const;
     void setDefault();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 private:
-    QStandardItemModel* m_model;
+    QStandardItemModel *m_model;
 };
 
 #endif // STATUSDATAS_H

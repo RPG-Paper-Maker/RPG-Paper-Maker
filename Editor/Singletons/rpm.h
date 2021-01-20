@@ -225,7 +225,8 @@ public:
     static QStringList ENUM_TO_STRING_TITLE_COMMAND_KIND;
     static QStringList ENUM_TO_STRING_MONSTER_ACTION_TARGET_KIND;
     static QStringList ENUM_TO_STRING_PLUGIN_CATEGORY;
-    static QStringList ENUM_TO_PRIMITIVE_KIND;
+    static QStringList ENUM_TO_STRING_PRIMITIVE_KIND;
+    static QStringList ENUM_TO_STRING_STATUS_RESTRICTIONS_KIND;
 
     // OTHER STATIC VALUES
     static QSet<int> mapsToSave;

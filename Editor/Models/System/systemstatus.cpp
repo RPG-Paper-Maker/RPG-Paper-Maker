@@ -29,7 +29,8 @@ SystemStatus::SystemStatus(int i, LangsTranslation *names, int pictureID) :
 
 }
 
-SystemStatus::~SystemStatus() {
+SystemStatus::~SystemStatus()
+{
 
 }
 

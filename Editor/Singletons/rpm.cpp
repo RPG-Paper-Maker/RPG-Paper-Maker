@@ -289,7 +289,8 @@ QStringList RPM::ENUM_TO_STRING_SHAPE_KIND = {};
 QStringList RPM::ENUM_TO_STRING_TITLE_COMMAND_KIND = {};
 QStringList RPM::ENUM_TO_STRING_MONSTER_ACTION_TARGET_KIND = {};
 QStringList RPM::ENUM_TO_STRING_PLUGIN_CATEGORY = {};
-QStringList RPM::ENUM_TO_PRIMITIVE_KIND = {};
+QStringList RPM::ENUM_TO_STRING_PRIMITIVE_KIND = {};
+QStringList RPM::ENUM_TO_STRING_STATUS_RESTRICTIONS_KIND = {};
 
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
@@ -647,7 +648,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::MAP),
         RPM::translate(Translations::OTHERS)
     });
-    RPM::ENUM_TO_PRIMITIVE_KIND = QStringList({
+    RPM::ENUM_TO_STRING_PRIMITIVE_KIND = QStringList({
         RPM::translate(Translations::NONE),
         RPM::translate(Translations::ANYTHING),
         RPM::translate(Translations::DEFAULT),
@@ -696,6 +697,16 @@ void RPM::readTranslations() {
         RPM::translate(Translations::MODEL),
         RPM::translate(Translations::CUSTOM_STRUCTURE),
         RPM::translate(Translations::CUSTOM_LIST)
+    });
+    RPM::ENUM_TO_STRING_STATUS_RESTRICTIONS_KIND = QStringList({
+        RPM::translate(Translations::NONE),
+        "Can't do anything",
+        "Can't use skills",
+        "Can't use items",
+        "Can't escape",
+        "Attack random target",
+        "Attack random ally",
+        "Attack random enemy"
     });
 }
 

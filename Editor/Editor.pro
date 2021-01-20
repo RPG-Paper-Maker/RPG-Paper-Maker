@@ -25,6 +25,7 @@ HEADERS += \
     CustomWidgets/panelcolorstransition.h \
     CustomWidgets/panelplugindetails.h \
     CustomWidgets/panelselectpositionmaps.h \
+    CustomWidgets/panelstatus.h \
     CustomWidgets/panelsubtransformation.h \
     CustomWidgets/paneltransformations.h \
     CustomWidgets/panelvideos.h \
@@ -104,6 +105,7 @@ HEADERS += \
     Enums/operationkind.h \
     Enums/plugincategorykind.h \
     Enums/plugintypekind.h \
+    Enums/statusrestrictionskind.h \
     Enums/systemprimitivekind.h \
     Enums/titlecommandkind.h \
     Enums/titlesettingkind.h \
@@ -406,6 +408,7 @@ SOURCES += \
     CustomWidgets/panelcolorstransition.cpp \
     CustomWidgets/panelplugindetails.cpp \
     CustomWidgets/panelselectpositionmaps.cpp \
+    CustomWidgets/panelstatus.cpp \
     CustomWidgets/panelsubtransformation.cpp \
     CustomWidgets/paneltransformations.cpp \
     CustomWidgets/panelvideos.cpp \
@@ -743,6 +746,7 @@ FORMS += \
     CustomWidgets/panelcolorstransition.ui \
     CustomWidgets/panelplugindetails.ui \
     CustomWidgets/panelselectpositionmaps.ui \
+    CustomWidgets/panelstatus.ui \
     CustomWidgets/panelsubtransformation.ui \
     CustomWidgets/paneltransformations.ui \
     CustomWidgets/panelvideos.ui \
