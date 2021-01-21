@@ -488,7 +488,7 @@ void DialogCommandConditions::on_radioButtonHeroes_toggled(bool checked) {
     ui->radioButtonHeroesEquiped->setEnabled(checked);
     this->on_radioButtonHeroesEquiped_toggled(checked && ui
         ->radioButtonHeroesEquiped->isChecked());
-    //ui->radioButtonHeroesStatus->setEnabled(checked);
+    ui->radioButtonHeroesStatus->setEnabled(checked);
     this->on_radioButtonHeroesStatus_toggled(checked && ui
         ->radioButtonHeroesStatus->isChecked());
     ui->radioButtonHeroesStatistic->setEnabled(checked);
