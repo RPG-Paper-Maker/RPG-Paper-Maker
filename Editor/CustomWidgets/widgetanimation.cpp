@@ -419,38 +419,47 @@ void WidgetAnimation::contextEdit() {
 // -------------------------------------------------------
 
 void WidgetAnimation::contextCopy() {
-    m_copiedElement = reinterpret_cast<SystemAnimationFrameElement *>(
-        m_selectedElement->createCopy());
+    if (m_selectedElement != nullptr)
+    {
+        m_copiedElement = reinterpret_cast<SystemAnimationFrameElement *>(
+            m_selectedElement->createCopy());
+    }
 }
 
 // -------------------------------------------------------
 
 void WidgetAnimation::contextPaste() {
-    SystemAnimationFrameElement *element;
-    int x, y;
+    if (m_copiedElement != nullptr)
+    {
+        SystemAnimationFrameElement *element;
+        int x, y;
 
-    x = m_lastMouseX;
-    y = m_lastMouseY;
-    if (m_positionKind != AnimationPositionKind::ScreenCenter) {
-        x -= RPM::SCREEN_BASIC_WIDTH / 2;
-        y -= RPM::SCREEN_BASIC_HEIGHT / 2;
+        x = m_lastMouseX;
+        y = m_lastMouseY;
+        if (m_positionKind != AnimationPositionKind::ScreenCenter) {
+            x -= RPM::SCREEN_BASIC_WIDTH / 2;
+            y -= RPM::SCREEN_BASIC_HEIGHT / 2;
+        }
+        element = reinterpret_cast<SystemAnimationFrameElement *>(m_copiedElement
+            ->createCopy());
+        element->setX(x);
+        element->setY(y);
+        element->setId(m_currentFrame->getElementMaxIndex() + 1);
+        m_currentFrame->addElement(element);
+        this->repaint();
     }
-    element = reinterpret_cast<SystemAnimationFrameElement *>(m_copiedElement
-        ->createCopy());
-    element->setX(x);
-    element->setY(y);
-    element->setId(m_currentFrame->getElementMaxIndex() + 1);
-    m_currentFrame->addElement(element);
-    this->repaint();
 }
 
 // -------------------------------------------------------
 
 void WidgetAnimation::contextDelete() {
-    m_currentFrame->deleteElement(m_selectedElement);
-    m_selectedElement = nullptr;
-    m_hoveredElement = nullptr;
-    this->repaint();
+    if (m_selectedElement != nullptr)
+    {
+        m_currentFrame->deleteElement(m_selectedElement);
+        m_selectedElement = nullptr;
+        m_hoveredElement = nullptr;
+        this->repaint();
+    }
 }
 
 // -------------------------------------------------------

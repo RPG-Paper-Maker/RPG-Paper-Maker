@@ -24,7 +24,8 @@
 
 PanelStatus::PanelStatus(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::PanelStatus)
+    ui(new Ui::PanelStatus),
+    m_model(nullptr)
 {
     ui->setupUi(this);
 
@@ -44,17 +45,19 @@ PanelStatus::~PanelStatus()
 
 void PanelStatus::initializePrimitives()
 {
-    ui->panelPrimitiveValueAnimationID->addNone();
-    ui->panelPrimitiveValueAnimationID->initializeDataBaseCommandId(RPM::get()
+    ui->panelPrimitiveAnimationID->addNone();
+    ui->panelPrimitiveAnimationID->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->animationsDatas()->model());
     ui->comboBoxRestrictions->addItems(RPM::ENUM_TO_STRING_STATUS_RESTRICTIONS_KIND);
-    ui->panelPrimitiveValueChanceReleaseBeingAttacked->initializeNumber(nullptr,
+    ui->panelPrimitivePriority->initializeNumber(nullptr, nullptr);
+    ui->panelPrimitiveBattlerPosition->initializeNumber(nullptr, nullptr);
+    ui->panelPrimitiveChanceReleaseBeingAttacked->initializeNumber(nullptr,
         nullptr, false);
     ui->treeViewReleaseChanceTurn->initializeNewItemInstance(new SystemStatusReleaseTurn);
-    ui->panelPrimitiveValueMessageAllyAffected->initializeMessage(false);
-    ui->panelPrimitiveValueMessageEnemyAffected->initializeMessage(false);
-    ui->panelPrimitiveValueMessageStatusHealed->initializeMessage(false);
-    ui->panelPrimitiveValueMessageStatusStillAffected->initializeMessage(false);
+    ui->panelPrimitiveMessageAllyAffected->initializeMessage(false);
+    ui->panelPrimitiveMessageEnemyAffected->initializeMessage(false);
+    ui->panelPrimitiveMessageStatusHealed->initializeMessage(false);
+    ui->panelPrimitiveMessageStatusStillAffected->initializeMessage(false);
     ui->treeViewEffects->initializeNewItemInstance(new SystemEffect);
     ui->treeViewCharacteristics->initializeNewItemInstance(new SystemCharacteristic);
 }
@@ -64,26 +67,81 @@ void PanelStatus::initializePrimitives()
 void PanelStatus::initializeModel(SystemStatus *model)
 {
     m_model = model;
-    ui->panelPrimitiveValueAnimationID->initializeModel(m_model->animationID());
-    ui->panelPrimitiveValueAnimationID->updateModel();
-    ui->panelPrimitiveValueChanceReleaseBeingAttacked->initializeModel(m_model
+    ui->panelPrimitiveAnimationID->initializeModel(m_model->animationID());
+    ui->panelPrimitiveAnimationID->updateModel();
+    ui->widgetIcon->initializeIcon(m_model);
+    ui->checkBoxReleaseAtEndBattle->setChecked(m_model->isReleaseAtEndBattle());
+    ui->checkBoxReleaseWith->setChecked(m_model->isReleaseAfterAttacked());
+    ui->panelPrimitiveChanceReleaseBeingAttacked->initializeModel(m_model
         ->chanceReleaseAfterAttacked());
-    ui->panelPrimitiveValueChanceReleaseBeingAttacked->updateModel();
-    ui->treeViewReleaseChanceTurn->initializeModel(m_model->modelReleaseAfterTurn());
+    ui->panelPrimitiveChanceReleaseBeingAttacked->updateModel();
+    ui->checkBoxReleaseStartTurn->setChecked(m_model->isReleaseStartTurn());
+    ui->treeViewReleaseChanceTurn->initializeModel(m_model->modelReleaseStartTurn());
+    ui->treeViewReleaseChanceTurn->updateAbsoluteAllNodesString();
     ui->treeViewReleaseChanceTurn->header()->setSectionResizeMode(0, QHeaderView::Interactive);
     ui->treeViewReleaseChanceTurn->header()->setSectionResizeMode(1, QHeaderView::Stretch);
-    ui->panelPrimitiveValueMessageAllyAffected->initializeModel(m_model
+    ui->panelPrimitiveMessageAllyAffected->initializeModel(m_model
         ->messageAllyAffected());
-    ui->panelPrimitiveValueMessageAllyAffected->updateModel();
-    ui->panelPrimitiveValueMessageEnemyAffected->initializeModel(m_model
+    ui->panelPrimitiveMessageAllyAffected->updateModel();
+    ui->panelPrimitiveMessageEnemyAffected->initializeModel(m_model
         ->messageEnemyAffected());
-    ui->panelPrimitiveValueMessageEnemyAffected->updateModel();
-    ui->panelPrimitiveValueMessageStatusHealed->initializeModel(m_model
+    ui->panelPrimitiveMessageEnemyAffected->updateModel();
+    ui->panelPrimitiveMessageStatusHealed->initializeModel(m_model
         ->messageStatusHealed());
-    ui->panelPrimitiveValueMessageStatusHealed->updateModel();
-    ui->panelPrimitiveValueMessageStatusStillAffected->initializeModel(m_model
+    ui->panelPrimitiveMessageStatusHealed->updateModel();
+    ui->panelPrimitiveMessageStatusStillAffected->initializeModel(m_model
         ->messageStatusStillAffected());
-    ui->panelPrimitiveValueMessageStatusStillAffected->updateModel();
+    ui->panelPrimitiveMessageStatusStillAffected->updateModel();
     ui->treeViewEffects->initializeModel(m_model->modelEffects());
+    ui->treeViewEffects->updateAbsoluteAllNodesString();
     ui->treeViewCharacteristics->initializeModel(m_model->modelCharacteristics());
+    ui->treeViewCharacteristics->updateAbsoluteAllNodesString();
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void PanelStatus::on_comboBoxRestrictions_currentIndexChanged(int index)
+{
+    if (m_model != nullptr)
+    {
+        m_model->setRestrictionsKind(static_cast<StatusRestrictionsKind>(index));
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelStatus::on_checkBoxReleaseAtEndBattle_toggled(bool checked)
+{
+    if (m_model != nullptr)
+    {
+        m_model->setIsReleaseAtEndBattle(checked);
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelStatus::on_checkBoxReleaseWith_toggled(bool checked)
+{
+    ui->panelPrimitiveChanceReleaseBeingAttacked->setEnabled(checked);
+    ui->labelPercent->setEnabled(checked);
+    ui->labelChanceAfterBeingAttacked->setEnabled(checked);
+    if (m_model != nullptr)
+    {
+        m_model->setIsReleaseAfterAttacked(checked);
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelStatus::on_checkBoxReleaseStartTurn_toggled(bool checked)
+{
+    ui->treeViewReleaseChanceTurn->setEnabled(checked);
+    if (m_model != nullptr)
+    {
+        m_model->setIsReleaseStartTurn(checked);
+    }
 }

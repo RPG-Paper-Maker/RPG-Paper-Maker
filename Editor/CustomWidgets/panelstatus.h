@@ -41,6 +41,12 @@ public:
 private:
     Ui::PanelStatus *ui;
     SystemStatus *m_model;
+
+public slots:
+    void on_comboBoxRestrictions_currentIndexChanged(int index);
+    void on_checkBoxReleaseAtEndBattle_toggled(bool checked);
+    void on_checkBoxReleaseWith_toggled(bool checked);
+    void on_checkBoxReleaseStartTurn_toggled(bool checked);
 };
 
 #endif // PANELSTATUS_H

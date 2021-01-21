@@ -80,6 +80,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemproperty.h \
     Dialogs/Systems/dialogsystemskybox.h \
     Dialogs/Systems/dialogsystemspeedfrequency.h \
+    Dialogs/Systems/dialogsystemstatusreleaseturn.h \
     Dialogs/Systems/dialogsystemtitlecommand.h \
     Dialogs/dialogscripts.h \
     Dialogs/dialogfirstlaunch.h \
@@ -464,6 +465,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemproperty.cpp \
     Dialogs/Systems/dialogsystemskybox.cpp \
     Dialogs/Systems/dialogsystemspeedfrequency.cpp \
+    Dialogs/Systems/dialogsystemstatusreleaseturn.cpp \
     Dialogs/Systems/dialogsystemtitlecommand.cpp \
     Dialogs/dialogscripts.cpp \
     Dialogs/dialogfirstlaunch.cpp \
@@ -797,6 +799,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemproperty.ui \
     Dialogs/Systems/dialogsystemskybox.ui \
     Dialogs/Systems/dialogsystemspeedfrequency.ui \
+    Dialogs/Systems/dialogsystemstatusreleaseturn.ui \
     Dialogs/Systems/dialogsystemtitlecommand.ui \
     Dialogs/dialogscripts.ui \
     Dialogs/dialogfirstlaunch.ui \

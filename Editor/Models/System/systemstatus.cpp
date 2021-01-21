@@ -17,11 +17,13 @@
 
 const QString SystemStatus::JSON_ANIMATION_ID = "animationID";
 const QString SystemStatus::JSON_RESTRICTION_KIND = "restrictionKind";
+const QString SystemStatus::JSON_PRIORITY = "priority";
+const QString SystemStatus::JSON_BATTLER_POSITION = "battlerPosition";
 const QString SystemStatus::JSON_IS_RELEASE_AT_END_BATTLE = "isReleaseAtEndBattle";
 const QString SystemStatus::JSON_IS_RELEASE_AFTER_ATTACKED = "isReleaseAfterAttacked";
 const QString SystemStatus::JSON_CHANCE_RELEASE_AFTER_ATTACKED = "chanceReleaseAfterAttacked";
-const QString SystemStatus::JSON_IS_RELEASE_AFTER_TURN = "isReleaseAfterTurn";
-const QString SystemStatus::JSON_RELEASE_AFTER_TURN = "releaseAfterTurn";
+const QString SystemStatus::JSON_IS_RELEASE_START_TURN = "isReleaseStartTurn";
+const QString SystemStatus::JSON_RELEASE_START_TURN = "releaseStartTurn";
 const QString SystemStatus::JSON_MESSAGE_ALLY_AFFECTED = "messageAllyAffected";
 const QString SystemStatus::JSON_MESSAGE_ENEMY_AFFECTED = "messageEnemyAffected";
 const QString SystemStatus::JSON_MESSAGE_STATUS_HEALED = "messageStatusHealed";
@@ -29,10 +31,12 @@ const QString SystemStatus::JSON_MESSAGE_STATUS_STILL_AFFECTED = "messageStatusS
 const QString SystemStatus::JSON_EFFECTS = "effects";
 const QString SystemStatus::JSON_CHARACTERISTICS = "characteristics";
 const StatusRestrictionsKind SystemStatus::DEFAULT_RESTRICTION_KIND = StatusRestrictionsKind::None;
-const bool SystemStatus::DEFAULT_IS_RELEASE_AT_END_BATTLE = true;
+const int SystemStatus::DEFAULT_PRIORITY = 0;
+const int SystemStatus::DEFAULT_BATTLER_POSITION = 0;
+const bool SystemStatus::DEFAULT_IS_RELEASE_AT_END_BATTLE = false;
 const bool SystemStatus::DEFAULT_IS_RELEASE_AFTER_ATTACKED = false;
 const double SystemStatus::DEFAULT_CHANCE_RELEASE_AFTER_ATTACKED = 0.0;
-const bool SystemStatus::DEFAULT_IS_RELEASE_AFTER_TURN = false;
+const bool SystemStatus::DEFAULT_IS_RELEASE_START_TURN = false;
 
 // -------------------------------------------------------
 //
@@ -47,21 +51,24 @@ SystemStatus::SystemStatus() :
 }
 
 SystemStatus::SystemStatus(int i, LangsTranslation *names, int pictureID,
-    PrimitiveValue *animationID, StatusRestrictionsKind restrictionsKind, bool
+    PrimitiveValue *animationID, StatusRestrictionsKind restrictionsKind,
+    PrimitiveValue *priority, PrimitiveValue *battlerPosition, bool
     isReleaseAtEndBattle, bool isReleaseAfterAttacked, PrimitiveValue
-    *chanceReleaseAfterAttacked, bool isReleaseAfterTurn, QStandardItemModel
-    *modelReleaseAfterTurn, PrimitiveValue *messageAllyAffected, PrimitiveValue
+    *chanceReleaseAfterAttacked, bool isReleaseStartTurn, QStandardItemModel
+    *modelReleaseStartTurn, PrimitiveValue *messageAllyAffected, PrimitiveValue
     *messageEnemyAffected, PrimitiveValue *messageStatusHealed, PrimitiveValue
     *messageStatusStillAffected, QStandardItemModel *modelEffects,
     QStandardItemModel *modelCharacteristics) :
     SystemIcon(i, names, pictureID),
     m_animationID(animationID),
     m_restrictionsKind(restrictionsKind),
+    m_priority(priority),
+    m_battlerPosition(battlerPosition),
     m_isReleaseAtEndBattle(isReleaseAtEndBattle),
     m_isReleaseAfterAttacked(isReleaseAfterAttacked),
     m_chanceReleaseAfterAttacked(chanceReleaseAfterAttacked),
-    m_isReleaseAfterTurn(isReleaseAfterTurn),
-    m_modelReleaseAfterTurn(modelReleaseAfterTurn),
+    m_isReleaseStartTurn(isReleaseStartTurn),
+    m_modelReleaseStartTurn(modelReleaseStartTurn),
     m_messageAllyAffected(messageAllyAffected),
     m_messageEnemyAffected(messageEnemyAffected),
     m_messageStatusHealed(messageStatusHealed),
@@ -70,13 +77,17 @@ SystemStatus::SystemStatus(int i, LangsTranslation *names, int pictureID,
     m_modelCharacteristics(modelCharacteristics)
 {
     this->initializeHeaders();
+    m_animationID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->animationsDatas()->model());
 }
 
 SystemStatus::~SystemStatus()
 {
     delete m_animationID;
+    delete m_priority;
+    delete m_battlerPosition;
     delete m_chanceReleaseAfterAttacked;
-    SuperListItem::deleteModel(m_modelReleaseAfterTurn);
+    SuperListItem::deleteModel(m_modelReleaseStartTurn);
     delete m_messageAllyAffected;
     delete m_messageEnemyAffected;
     delete m_messageStatusHealed;
@@ -98,6 +109,16 @@ StatusRestrictionsKind SystemStatus::restrictionsKind() const
 void SystemStatus::setRestrictionsKind(StatusRestrictionsKind restrictionKind)
 {
     m_restrictionsKind = restrictionKind;
+}
+
+PrimitiveValue * SystemStatus::priority() const
+{
+    return m_priority;
+}
+
+PrimitiveValue * SystemStatus::battlerPosition() const
+{
+    return m_battlerPosition;
 }
 
 bool SystemStatus::isReleaseAtEndBattle() const
@@ -125,19 +146,19 @@ PrimitiveValue * SystemStatus::chanceReleaseAfterAttacked() const
     return m_chanceReleaseAfterAttacked;
 }
 
-bool SystemStatus::isReleaseAfterTurn() const
+bool SystemStatus::isReleaseStartTurn() const
 {
-    return m_isReleaseAfterTurn;
+    return m_isReleaseStartTurn;
 }
 
-void SystemStatus::setIsReleaseAfterTurn(bool isReleaseAfterTurn)
+void SystemStatus::setIsReleaseStartTurn(bool isReleaseStartTurn)
 {
-    m_isReleaseAfterTurn = isReleaseAfterTurn;
+    m_isReleaseStartTurn = isReleaseStartTurn;
 }
 
-QStandardItemModel * SystemStatus::modelReleaseAfterTurn() const
+QStandardItemModel * SystemStatus::modelReleaseStartTurn() const
 {
-    return m_modelReleaseAfterTurn;
+    return m_modelReleaseStartTurn;
 }
 
 PrimitiveValue * SystemStatus::messageAllyAffected() const
@@ -176,9 +197,9 @@ QStandardItemModel * SystemStatus::modelCharacteristics() const
 //
 // -------------------------------------------------------
 
-void SystemStatus::clearReleaseAfterTurn()
+void SystemStatus::clearReleaseStartTurn()
 {
-    SuperListItem::deleteModel(m_modelReleaseAfterTurn, false);
+    SuperListItem::deleteModel(m_modelReleaseStartTurn, false);
 }
 
 // -------------------------------------------------------
@@ -199,7 +220,7 @@ void SystemStatus::clearCharacteristics()
 
 void SystemStatus::initializeHeaders()
 {
-    m_modelReleaseAfterTurn->setHorizontalHeaderLabels(QStringList({"Turn", "% chance"}));
+    m_modelReleaseStartTurn->setHorizontalHeaderLabels(QStringList({"Turn", "% chance"}));
     m_modelEffects->setHorizontalHeaderLabels(QStringList({RPM::translate(
         Translations::EFFECTS)}));
     m_modelCharacteristics->setHorizontalHeaderLabels(QStringList({RPM::translate(
@@ -235,12 +256,14 @@ void SystemStatus::setCopy(const SuperListItem &super)
     const SystemStatus *status = reinterpret_cast<const SystemStatus *>(&super);
     m_animationID->setCopy(*status->m_animationID);
     m_restrictionsKind = status->m_restrictionsKind;
+    m_priority->setCopy(*status->m_priority);
+    m_battlerPosition->setCopy(*status->m_battlerPosition);
     m_isReleaseAtEndBattle = status->m_isReleaseAtEndBattle;
     m_isReleaseAfterAttacked = status->m_isReleaseAfterAttacked;
     m_chanceReleaseAfterAttacked->setCopy(*status->m_chanceReleaseAfterAttacked);
-    m_isReleaseAfterTurn = status->m_isReleaseAfterTurn;
-    this->clearReleaseAfterTurn();
-    SuperListItem::copy(m_modelReleaseAfterTurn, status->m_modelReleaseAfterTurn);
+    m_isReleaseStartTurn = status->m_isReleaseStartTurn;
+    this->clearReleaseStartTurn();
+    SuperListItem::copy(m_modelReleaseStartTurn, status->m_modelReleaseStartTurn);
     m_messageAllyAffected->setCopy(*status->m_messageAllyAffected);
     m_messageEnemyAffected->setCopy(*status->m_messageEnemyAffected);
     m_messageStatusHealed->setCopy(*status->m_messageStatusHealed);
@@ -258,7 +281,7 @@ void SystemStatus::read(const QJsonObject &json) {
     SystemIcon::read(json);
 
     // Clear model
-    this->clearReleaseAfterTurn();
+    this->clearReleaseStartTurn();
     this->clearEffects();
     this->clearCharacteristics();
     this->initializeHeaders();
@@ -271,6 +294,14 @@ void SystemStatus::read(const QJsonObject &json) {
     {
         m_restrictionsKind = static_cast<StatusRestrictionsKind>(json[
             JSON_RESTRICTION_KIND].toInt());
+    }
+    if (json.contains(JSON_PRIORITY))
+    {
+        m_priority->read(json[JSON_PRIORITY].toObject());
+    }
+    if (json.contains(JSON_BATTLER_POSITION))
+    {
+        m_battlerPosition->read(json[JSON_BATTLER_POSITION].toObject());
     }
     if (json.contains(JSON_IS_RELEASE_AT_END_BATTLE))
     {
@@ -285,12 +316,12 @@ void SystemStatus::read(const QJsonObject &json) {
         m_chanceReleaseAfterAttacked->read(json[
             JSON_CHANCE_RELEASE_AFTER_ATTACKED].toObject());
     }
-    if (json.contains(JSON_IS_RELEASE_AFTER_TURN))
+    if (json.contains(JSON_IS_RELEASE_START_TURN))
     {
-        m_isReleaseAfterTurn = json[JSON_IS_RELEASE_AFTER_TURN].toBool();
+        m_isReleaseStartTurn = json[JSON_IS_RELEASE_START_TURN].toBool();
     }
-    SuperListItem::readTree(m_modelReleaseAfterTurn, new SystemStatus, json,
-        JSON_RELEASE_AFTER_TURN);
+    SuperListItem::readTree(m_modelReleaseStartTurn, new SystemStatus, json,
+        JSON_RELEASE_START_TURN);
     if (json.contains(JSON_MESSAGE_ALLY_AFFECTED))
     {
         m_messageAllyAffected->read(json[JSON_MESSAGE_ALLY_AFFECTED].toObject());
@@ -325,11 +356,21 @@ void SystemStatus::write(QJsonObject &json) const {
         m_animationID->write(obj);
         json[JSON_ANIMATION_ID] = obj;
     }
-    m_animationID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->animationsDatas()->model());
     if (m_restrictionsKind != DEFAULT_RESTRICTION_KIND)
     {
         json[JSON_RESTRICTION_KIND] = static_cast<int>(m_restrictionsKind);
+    }
+    if (!m_priority->isDefaultNumberValue())
+    {
+        obj = QJsonObject();
+        m_priority->write(obj);
+        json[JSON_PRIORITY] = obj;
+    }
+    if (!m_battlerPosition->isDefaultNumberValue())
+    {
+        obj = QJsonObject();
+        m_battlerPosition->write(obj);
+        json[JSON_BATTLER_POSITION] = obj;
     }
     if (m_isReleaseAtEndBattle != DEFAULT_IS_RELEASE_AT_END_BATTLE)
     {
@@ -347,11 +388,11 @@ void SystemStatus::write(QJsonObject &json) const {
         m_chanceReleaseAfterAttacked->write(obj);
         json[JSON_CHANCE_RELEASE_AFTER_ATTACKED] = obj;
     }
-    if (m_isReleaseAfterTurn != DEFAULT_IS_RELEASE_AFTER_TURN)
+    if (m_isReleaseStartTurn != DEFAULT_IS_RELEASE_START_TURN)
     {
-        json[JSON_IS_RELEASE_AFTER_TURN] = m_isReleaseAfterTurn;
+        json[JSON_IS_RELEASE_START_TURN] = m_isReleaseStartTurn;
     }
-    SuperListItem::writeTree(m_modelReleaseAfterTurn, json, JSON_RELEASE_AFTER_TURN);
+    SuperListItem::writeTree(m_modelReleaseStartTurn, json, JSON_RELEASE_START_TURN);
     if (!m_messageAllyAffected->isDefaultMessageValue())
     {
         obj = QJsonObject();

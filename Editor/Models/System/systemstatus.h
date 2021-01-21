@@ -30,11 +30,13 @@ class SystemStatus : public SystemIcon
 public:
     static const QString JSON_ANIMATION_ID;
     static const QString JSON_RESTRICTION_KIND;
+    static const QString JSON_PRIORITY;
+    static const QString JSON_BATTLER_POSITION;
     static const QString JSON_IS_RELEASE_AT_END_BATTLE;
     static const QString JSON_IS_RELEASE_AFTER_ATTACKED;
     static const QString JSON_CHANCE_RELEASE_AFTER_ATTACKED;
-    static const QString JSON_IS_RELEASE_AFTER_TURN;
-    static const QString JSON_RELEASE_AFTER_TURN;
+    static const QString JSON_IS_RELEASE_START_TURN;
+    static const QString JSON_RELEASE_START_TURN;
     static const QString JSON_MESSAGE_ALLY_AFFECTED;
     static const QString JSON_MESSAGE_ENEMY_AFFECTED;
     static const QString JSON_MESSAGE_STATUS_HEALED;
@@ -42,20 +44,25 @@ public:
     static const QString JSON_EFFECTS;
     static const QString JSON_CHARACTERISTICS;
     static const StatusRestrictionsKind DEFAULT_RESTRICTION_KIND;
+    static const int DEFAULT_PRIORITY;
+    static const int DEFAULT_BATTLER_POSITION;
     static const bool DEFAULT_IS_RELEASE_AT_END_BATTLE;
     static const bool DEFAULT_IS_RELEASE_AFTER_ATTACKED;
     static const double DEFAULT_CHANCE_RELEASE_AFTER_ATTACKED;
-    static const bool DEFAULT_IS_RELEASE_AFTER_TURN;
+    static const bool DEFAULT_IS_RELEASE_START_TURN;
 
     SystemStatus();
     SystemStatus(int i, LangsTranslation *names, int pictureID, PrimitiveValue
         *animationID = new PrimitiveValue(PrimitiveValueKind::None),
-        StatusRestrictionsKind restrictionsKind = DEFAULT_RESTRICTION_KIND, bool
-        isReleaseAtEndBattle = DEFAULT_IS_RELEASE_AT_END_BATTLE, bool
-        isReleaseAfterAttacked = DEFAULT_IS_RELEASE_AFTER_ATTACKED,
-        PrimitiveValue *chanceReleaseAfterAttacked = new PrimitiveValue(
-        DEFAULT_CHANCE_RELEASE_AFTER_ATTACKED), bool isReleaseAfterTurn =
-        DEFAULT_IS_RELEASE_AFTER_TURN, QStandardItemModel *modelReleaseAfterTurn =
+        StatusRestrictionsKind restrictionsKind = DEFAULT_RESTRICTION_KIND,
+        PrimitiveValue *priority = new PrimitiveValue(DEFAULT_PRIORITY),
+        PrimitiveValue *battlerPosition = new PrimitiveValue(
+        DEFAULT_BATTLER_POSITION), bool isReleaseAtEndBattle =
+        DEFAULT_IS_RELEASE_AT_END_BATTLE, bool isReleaseAfterAttacked =
+        DEFAULT_IS_RELEASE_AFTER_ATTACKED, PrimitiveValue
+        *chanceReleaseAfterAttacked = new PrimitiveValue(
+        DEFAULT_CHANCE_RELEASE_AFTER_ATTACKED), bool isReleaseStartTurn =
+        DEFAULT_IS_RELEASE_START_TURN, QStandardItemModel *modelReleaseStartTurn =
         new QStandardItemModel, PrimitiveValue *messageAllyAffected = new
         PrimitiveValue(QString()), PrimitiveValue *messageEnemyAffected = new
         PrimitiveValue(QString()), PrimitiveValue *messageStatusHealed = new
@@ -67,14 +74,16 @@ public:
     PrimitiveValue * animationID() const;
     StatusRestrictionsKind restrictionsKind() const;
     void setRestrictionsKind(StatusRestrictionsKind restrictionKind);
+    PrimitiveValue * priority() const;
+    PrimitiveValue * battlerPosition() const;
     bool isReleaseAtEndBattle() const;
     void setIsReleaseAtEndBattle(bool isReleaseAtEndBattle);
     bool isReleaseAfterAttacked() const;
     void setIsReleaseAfterAttacked(bool isReleaseAfterAttacked);
     PrimitiveValue * chanceReleaseAfterAttacked() const;
-    bool isReleaseAfterTurn() const;
-    void setIsReleaseAfterTurn(bool isReleaseAfterTurn);
-    QStandardItemModel * modelReleaseAfterTurn() const;
+    bool isReleaseStartTurn() const;
+    void setIsReleaseStartTurn(bool isReleaseStartTurn);
+    QStandardItemModel * modelReleaseStartTurn() const;
     PrimitiveValue * messageAllyAffected() const;
     PrimitiveValue * messageEnemyAffected() const;
     PrimitiveValue * messageStatusHealed() const;
@@ -82,7 +91,7 @@ public:
     QStandardItemModel * modelEffects() const;
     QStandardItemModel * modelCharacteristics() const;
 
-    void clearReleaseAfterTurn();
+    void clearReleaseStartTurn();
     void clearEffects();
     void clearCharacteristics();
     void initializeHeaders();
@@ -96,11 +105,13 @@ public:
 protected:
     PrimitiveValue *m_animationID;
     StatusRestrictionsKind m_restrictionsKind;
+    PrimitiveValue *m_priority;
+    PrimitiveValue *m_battlerPosition;
     bool m_isReleaseAtEndBattle;
     bool m_isReleaseAfterAttacked;
     PrimitiveValue *m_chanceReleaseAfterAttacked;
-    bool m_isReleaseAfterTurn;
-    QStandardItemModel *m_modelReleaseAfterTurn;
+    bool m_isReleaseStartTurn;
+    QStandardItemModel *m_modelReleaseStartTurn;
     PrimitiveValue *m_messageAllyAffected;
     PrimitiveValue *m_messageEnemyAffected;
     PrimitiveValue *m_messageStatusHealed;
