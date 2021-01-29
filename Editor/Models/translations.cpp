@@ -1181,6 +1181,29 @@ const QString Translations::ADD_FROM_ONLINE_PLUGINS_LIST = "add.from.online.plug
 const QString Translations::CUSTOM_STRUCTURE = "custom.structure";
 const QString Translations::CUSTOM_LIST = "custom.list";
 const QString Translations::OPEN_PLUGIN_FOLDER = "open.plugin.folder";
+const QString Translations::TURN = "turn";
+const QString Translations::PERCENT_CHANCE = "percent.chance";
+const QString Translations::RESTRICTIONS = "restrictions";
+const QString Translations::BATTLER_POSITION = "battler.position";
+const QString Translations::RELEASE_AT_END_BATTLE = "release.at.end.battle";
+const QString Translations::CHANCE_AFTER_BEING_ATTACKED = "chance.after.being.attacked";
+const QString Translations::RELEASE_AT_START_TURN = "release.at.start.turn";
+const QString Translations::RELEASE_CONDITIONS = "release.conditions";
+const QString Translations::MESSAGES = "messages";
+const QString Translations::ALLY_AFFECTED = "ally.affected";
+const QString Translations::ENEMY_AFFECTED = "enemy.affected";
+const QString Translations::STATUS_HEALED = "status.healed";
+const QString Translations::STATUS_STILL_AFFECTED = "status.still.affected";
+const QString Translations::SET_STATUS_RELEASE_TURN_CONDITIONS = "set.status.release.turn.conditions";
+const QString Translations::CHANCE = "chance";
+const QString Translations::RELEASE_WITH = "release.with";
+const QString Translations::CANT_DO_ANYTHING = "cant.do.anything";
+const QString Translations::CANT_USER_SKILLS = "cant.use.skills";
+const QString Translations::CANT_USE_ITEMS = "cant.use.items";
+const QString Translations::CANT_ESCAPE = "cant.escape";
+const QString Translations::ATTACK_RANDOM_TARGET = "attack.random.target";
+const QString Translations::ATTACK_RANDOM_ALLY = "attack.random.ally";
+const QString Translations::ATTACK_RANDOM_ENEMY = "attack.random.enemy";
 
 // -------------------------------------------------------
 //

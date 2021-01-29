@@ -700,13 +700,13 @@ void RPM::readTranslations() {
     });
     RPM::ENUM_TO_STRING_STATUS_RESTRICTIONS_KIND = QStringList({
         RPM::translate(Translations::NONE),
-        "Can't do anything",
-        "Can't use skills",
-        "Can't use items",
-        "Can't escape",
-        "Attack random target",
-        "Attack random ally",
-        "Attack random enemy"
+        RPM::translate(Translations::CANT_DO_ANYTHING),
+        RPM::translate(Translations::CANT_USER_SKILLS),
+        RPM::translate(Translations::CANT_USE_ITEMS),
+        RPM::translate(Translations::CANT_ESCAPE),
+        RPM::translate(Translations::ATTACK_RANDOM_TARGET),
+        RPM::translate(Translations::ATTACK_RANDOM_ALLY),
+        RPM::translate(Translations::ATTACK_RANDOM_ENEMY)
     });
 }
 

@@ -28,8 +28,8 @@ PanelStatus::PanelStatus(QWidget *parent) :
     m_model(nullptr)
 {
     ui->setupUi(this);
-
     this->initializePrimitives();
+    this->translate();
 }
 
 PanelStatus::~PanelStatus()
@@ -102,6 +102,28 @@ void PanelStatus::initializeModel(SystemStatus *model)
     ui->treeViewEffects->updateAbsoluteAllNodesString();
     ui->treeViewCharacteristics->initializeModel(m_model->modelCharacteristics());
     ui->treeViewCharacteristics->updateAbsoluteAllNodesString();
+}
+
+void PanelStatus::translate()
+{
+    ui->labelAnimation->setText(RPM::translate(Translations::ANIMATION_ID)+ RPM::COLON);
+    ui->labelRestrictions->setText(RPM::translate(Translations::RESTRICTIONS)+ RPM::COLON);
+    ui->labelPriority->setText(RPM::translate(Translations::PRIORITY)+ RPM::COLON);
+    ui->labelBattlerPosition->setText(RPM::translate(Translations::BATTLER_POSITION)+ RPM::COLON);
+    ui->groupBoxReleaseConditions->setTitle(RPM::translate(Translations::RELEASE_CONDITIONS));
+    ui->checkBoxReleaseAtEndBattle->setText(RPM::translate(Translations::RELEASE_AT_END_BATTLE));
+    ui->checkBoxReleaseWith->setText(RPM::translate(Translations::RELEASE_WITH));
+    ui->labelChanceAfterBeingAttacked->setText(RPM::translate(Translations
+        ::CHANCE_AFTER_BEING_ATTACKED).toLower());
+    ui->checkBoxReleaseStartTurn->setText(RPM::translate(Translations
+        ::RELEASE_AT_START_TURN) + RPM::COLON);
+    ui->groupBoxMessages->setTitle(RPM::translate(Translations::MESSAGES));
+    ui->labelAllyAffected->setText(RPM::translate(Translations::ALLY_AFFECTED) + RPM::COLON);
+    ui->labelEnemyAffected->setText(RPM::translate(Translations::ENEMY_AFFECTED) + RPM::COLON);
+    ui->labelStatusHealed->setText(RPM::translate(Translations::STATUS_HEALED) + RPM::COLON);
+    ui->labelStatusStillAffected->setText(RPM::translate(Translations::STATUS_STILL_AFFECTED) + RPM::COLON);
+    ui->groupBoxEffects->setTitle(RPM::translate(Translations::EFFECTS));
+    ui->groupBoxCharacteristics->setTitle(RPM::translate(Translations::CHARACTERISTICS));
 }
 
 // -------------------------------------------------------

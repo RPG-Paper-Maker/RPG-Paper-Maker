@@ -37,6 +37,7 @@ public:
 
     void initializePrimitives();
     void initializeModel(SystemStatus *model);
+    void translate();
 
 private:
     Ui::PanelStatus *ui;

@@ -56,9 +56,10 @@ void DialogSystemStatusReleaseTurn::initialize()
 
 void DialogSystemStatusReleaseTurn::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::SET_TITLE_COMMAND) + RPM
-        ::DOT_DOT_DOT);
-
+    this->setWindowTitle(RPM::translate(Translations::SET_STATUS_RELEASE_TURN_CONDITIONS) +
+        RPM::DOT_DOT_DOT);
+    ui->labelChance->setText(RPM::translate(Translations::CHANCE) + RPM::COLON);
+    ui->labelTurn->setText(RPM::translate(Translations::TURN) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

@@ -220,7 +220,8 @@ void SystemStatus::clearCharacteristics()
 
 void SystemStatus::initializeHeaders()
 {
-    m_modelReleaseStartTurn->setHorizontalHeaderLabels(QStringList({"Turn", "% chance"}));
+    m_modelReleaseStartTurn->setHorizontalHeaderLabels(QStringList({RPM
+        ::translate(Translations::TURN), RPM::translate(Translations::PERCENT_CHANCE)}));
     m_modelEffects->setHorizontalHeaderLabels(QStringList({RPM::translate(
         Translations::EFFECTS)}));
     m_modelCharacteristics->setHorizontalHeaderLabels(QStringList({RPM::translate(
