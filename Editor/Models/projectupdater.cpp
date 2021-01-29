@@ -19,11 +19,12 @@
 #include "titlesettingkind.h"
 #include "systemcommonreaction.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 16;
+const int ProjectUpdater::incompatibleVersionsCount = 17;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
-     "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0", "1.6.2"};
+     "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0", "1.6.2",
+    "1.6.3"};
 
 // -------------------------------------------------------
 //
@@ -971,4 +972,12 @@ void ProjectUpdater::updateVersion_1_6_2()
             }
         }
     }
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_6_3()
+{
+    // Status
+    m_project->gameDatas()->statusDatas()->setDefault();
 }

@@ -320,8 +320,8 @@ void SystemStatus::read(const QJsonObject &json) {
     {
         m_isReleaseStartTurn = json[JSON_IS_RELEASE_START_TURN].toBool();
     }
-    SuperListItem::readTree(m_modelReleaseStartTurn, new SystemStatus, json,
-        JSON_RELEASE_START_TURN);
+    SuperListItem::readTree(m_modelReleaseStartTurn, new SystemStatusReleaseTurn,
+        json, JSON_RELEASE_START_TURN);
     if (json.contains(JSON_MESSAGE_ALLY_AFFECTED))
     {
         m_messageAllyAffected->read(json[JSON_MESSAGE_ALLY_AFFECTED].toObject());

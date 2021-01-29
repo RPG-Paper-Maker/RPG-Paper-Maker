@@ -69,7 +69,13 @@ void PanelStatus::initializeModel(SystemStatus *model)
     m_model = model;
     ui->panelPrimitiveAnimationID->initializeModel(m_model->animationID());
     ui->panelPrimitiveAnimationID->updateModel();
+    ui->comboBoxRestrictions->setCurrentIndex(static_cast<int>(m_model
+        ->restrictionsKind()));
     ui->widgetIcon->initializeIcon(m_model);
+    ui->panelPrimitivePriority->initializeModel(m_model->priority());
+    ui->panelPrimitivePriority->updateModel();
+    ui->panelPrimitiveBattlerPosition->initializeModel(m_model->battlerPosition());
+    ui->panelPrimitiveBattlerPosition->updateModel();
     ui->checkBoxReleaseAtEndBattle->setChecked(m_model->isReleaseAtEndBattle());
     ui->checkBoxReleaseWith->setChecked(m_model->isReleaseAfterAttacked());
     ui->panelPrimitiveChanceReleaseBeingAttacked->initializeModel(m_model
@@ -77,9 +83,9 @@ void PanelStatus::initializeModel(SystemStatus *model)
     ui->panelPrimitiveChanceReleaseBeingAttacked->updateModel();
     ui->checkBoxReleaseStartTurn->setChecked(m_model->isReleaseStartTurn());
     ui->treeViewReleaseChanceTurn->initializeModel(m_model->modelReleaseStartTurn());
-    ui->treeViewReleaseChanceTurn->updateAbsoluteAllNodesString();
     ui->treeViewReleaseChanceTurn->header()->setSectionResizeMode(0, QHeaderView::Interactive);
     ui->treeViewReleaseChanceTurn->header()->setSectionResizeMode(1, QHeaderView::Stretch);
+    ui->treeViewReleaseChanceTurn->updateAbsoluteAllNodesString();
     ui->panelPrimitiveMessageAllyAffected->initializeModel(m_model
         ->messageAllyAffected());
     ui->panelPrimitiveMessageAllyAffected->updateModel();

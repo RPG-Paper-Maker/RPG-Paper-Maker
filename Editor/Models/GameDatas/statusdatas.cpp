@@ -53,26 +53,14 @@ void StatusDatas::read(QString path)
 
 void StatusDatas::setDefault()
 {
-    int i, length;
-    SystemStatus *status;
-    QStandardItem *item;
-    QString names[] = {
-        RPM::translate(Translations::KO)
-    };
-    int iconsID[] = {
-        -1
-    };
-    length = (sizeof(names)/sizeof(*names));
-    for (i = 0; i < length; i++)
-    {
-        status = new SystemStatus(i + 1, new LangsTranslation(names[i]),
-            iconsID[i]);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(status)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(status->toString());
-        m_model->appendRow(item);
-    }
+    SuperListItem::deleteModel(m_model, false);
+    m_model->appendRow((new SystemStatus(1, new LangsTranslation(RPM::translate(
+        Translations::KO)), -1, new PrimitiveValue(PrimitiveValueKind::None),
+        StatusRestrictionsKind::CantDoAnything, new PrimitiveValue(999), new
+        PrimitiveValue(8), false, false, new PrimitiveValue(0.0), false, new
+        QStandardItemModel, new PrimitiveValue(QString()), new PrimitiveValue(
+        QString()), new PrimitiveValue(QString()), new PrimitiveValue(QString()),
+        new QStandardItemModel, new QStandardItemModel))->getModelRow());
 }
 
 // -------------------------------------------------------
