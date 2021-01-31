@@ -210,6 +210,7 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
     // Update ID
     ui->treeViewBattleMap->setUpdateId(true);
     ui->treeViewBattleMap->setCanBeEmpty(false);
+    ui->treeViewBattleCommands->setUpdateId(true);
     ui->treeViewBattleCommands->setCanBeEmpty(false);
 
     // Fill combo boxes
