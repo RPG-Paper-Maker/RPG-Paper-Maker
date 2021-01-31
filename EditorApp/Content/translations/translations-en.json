@@ -1183,5 +1183,6 @@
     "cant.escape": "Can't escape",
     "attack.random.target": "Attack random target",
     "attack.random.ally": "Attack random ally",
-    "attack.random.enemy": "Attack random enemy"
+    "attack.random.enemy": "Attack random enemy",
+    "only.the.closest": "Only the closest"
 }

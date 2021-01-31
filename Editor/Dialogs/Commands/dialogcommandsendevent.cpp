@@ -30,11 +30,10 @@ DialogCommandSendEvent::DialogCommandSendEvent(EventCommand *command,
     bool test = command == nullptr;
     if (test) {
         QVector<QString> l({"1", QString::number(static_cast<int>(
-            PrimitiveValueKind::DataBase)), "1", RPM::TRUE_BOOL_STRING, "0", "1", "1",
-                            QString::number((int) PrimitiveValueKind::Default),
-                            "2",
-                            QString::number((int) PrimitiveValueKind::Default)}
-                           );
+            PrimitiveValueKind::DataBase)), "1", RPM::TRUE_BOOL_STRING, RPM
+            ::FALSE_BOOL_STRING, "0", "1", "1", QString::number(static_cast<int>(
+            PrimitiveValueKind::Default)), "2", QString::number(static_cast<int>(
+            PrimitiveValueKind::Default))});
         command = new EventCommand(EventCommandKind::SendEvent, l);
     }
 
@@ -78,14 +77,13 @@ DialogCommandSendEvent::~DialogCommandSendEvent()
 //
 // -------------------------------------------------------
 
-//-------------------------------------------------
-
 void DialogCommandSendEvent::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::SEND_EVENT) + RPM
         ::DOT_DOT_DOT);
     ui->checkBoxSenderNoReceive->setText(RPM::translate(Translations
         ::SENDER_CANT_RECEIVE));
+    ui->checkBoxOnlyTheClosest->setText(RPM::translate(Translations::ONLY_THE_CLOSEST));
     ui->radioButtonAll->setText(RPM::translate(Translations::ALL));
     ui->radioButtonObject->setText(RPM::translate(Translations::OBJECT_ID) + RPM
         ::COLON);
@@ -95,6 +93,8 @@ void DialogCommandSendEvent::translate()
     ui->groupBoxTarget->setTitle(RPM::translate(Translations::TARGET));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
+
+//-------------------------------------------------
 
 void DialogCommandSendEvent::initialize(EventCommand* command){
     int i = 0;
@@ -108,6 +108,8 @@ void DialogCommandSendEvent::initialize(EventCommand* command){
         ui->radioButtonDetection->setChecked(true);
         ui->panelPrimitiveDetectionID->initializeCommand(command, i);
         ui->checkBoxSenderNoReceive->setChecked(command->valueCommandAt(i++) ==
+            RPM::TRUE_BOOL_STRING);
+        ui->checkBoxOnlyTheClosest->setChecked(command->valueCommandAt(i++) ==
             RPM::TRUE_BOOL_STRING);
         break;
     case 2:
@@ -138,6 +140,8 @@ void DialogCommandSendEvent::chooseTarget(QVector<QString> &command) const{
         ui->panelPrimitiveDetectionID->getCommand(command);
         command.append(ui->checkBoxSenderNoReceive->isChecked() ? RPM
             ::TRUE_BOOL_STRING : RPM::FALSE_BOOL_STRING);
+        command.append(ui->checkBoxOnlyTheClosest->isChecked() ? RPM
+            ::TRUE_BOOL_STRING : RPM::FALSE_BOOL_STRING);
     } else if(ui->radioButtonObject->isChecked()) {
         command.append("2");
         ui->panelPrimitiveObjectID->getCommand(command);
@@ -152,6 +156,7 @@ void DialogCommandSendEvent::chooseTarget(QVector<QString> &command) const{
 
 void DialogCommandSendEvent::on_radioButtonDetection_toggled(bool checked) {
     ui->panelPrimitiveDetectionID->setEnabled(checked);
+    ui->checkBoxSenderNoReceive->setEnabled(checked);
     ui->checkBoxSenderNoReceive->setEnabled(checked);
 }
 

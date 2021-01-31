@@ -1217,6 +1217,7 @@ public:
     static const QString ATTACK_RANDOM_TARGET;
     static const QString ATTACK_RANDOM_ALLY;
     static const QString ATTACK_RANDOM_ENEMY;
+    static const QString ONLY_THE_CLOSEST;
 
     Translations();
     virtual ~Translations();

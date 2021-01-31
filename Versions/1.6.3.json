@@ -16,7 +16,10 @@
         "Windows: when impossible to open Game app, try to redownload it",
         "Check before writting JSON file to avoid corrupted files",
         "Polish translation",
-        "Battlers: choose number of frames and columns"
+        "Battlers: choose number of frames and columns",
+        "Backup system",
+        "Opened chest texture + cave entry in mountains",
+        "Options scripts refresh to the plugin Manager"
     ],
 	"bugs": [
         "White theme mac wrong police color for map editor menu bar",
@@ -28,7 +31,8 @@
         "Export button in resources not hidden when unchecking content",
         "Open 3D object Manager > OK > Re-open 3D object manager > Crash",
         "Fragment shader issue",
-        "Collisions issues with w = 0 mountains block under it"
+        "Collisions issues with w = 0 mountains block under it",
+        "Battle commands id always 1 with new"
 	],
     "finished": [
         2,
@@ -45,6 +49,9 @@
         2,
         2,
         0,
+        0,
+        0,
+        0,
 
         2,
         0,
@@ -55,6 +62,7 @@
         2,
         2,
         2,
-        2
+        2,
+        0
     ]
 }

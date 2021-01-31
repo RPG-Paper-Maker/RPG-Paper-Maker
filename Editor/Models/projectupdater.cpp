@@ -980,4 +980,35 @@ void ProjectUpdater::updateVersion_1_6_3()
 {
     // Status
     m_project->gameDatas()->statusDatas()->setDefault();
+
+    // Update send event commands
+    connect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_6_3_commands(QStandardItem *)));
+    this->updateCommands();
+    disconnect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_6_3_commands(QStandardItem *)));
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_6_3_commands(QStandardItem *commands)
+{
+    QStandardItem *child;
+    EventCommand *command;
+    QVector<QString> list;
+    QString type;
+    int i, l;
+    for (i = 0, l = commands->rowCount(); i < l; i++) {
+        child = commands->child(i);
+        this->updateVersion_1_5_6_commands(child);
+        command = reinterpret_cast<EventCommand *>(child->data().value<quintptr>());
+        list = command->commands();
+        if (command->kind() == EventCommandKind::SendEvent) {
+            type = list.at(0);
+            if (type == "1") {
+                list.insert(4, RPM::FALSE_BOOL_STRING);
+            }
+            command->setCommands(list);
+        }
+    }
 }

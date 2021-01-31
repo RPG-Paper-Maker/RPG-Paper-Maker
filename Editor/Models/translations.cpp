@@ -1204,6 +1204,7 @@ const QString Translations::CANT_ESCAPE = "cant.escape";
 const QString Translations::ATTACK_RANDOM_TARGET = "attack.random.target";
 const QString Translations::ATTACK_RANDOM_ALLY = "attack.random.ally";
 const QString Translations::ATTACK_RANDOM_ENEMY = "attack.random.enemy";
+const QString Translations::ONLY_THE_CLOSEST = "only.the.closest";
 
 // -------------------------------------------------------
 //

@@ -1087,7 +1087,7 @@ QString EventCommand::strSendEventTarget(SystemCommonObject *object,
 {
     QString str;
     int index;
-
+    QStringList opts;
     index = m_listCommand.at(i++).toInt();
     switch (index) {
     case 0:
@@ -1098,8 +1098,13 @@ QString EventCommand::strSendEventTarget(SystemCommonObject *object,
             this->strDataBaseId(i, object, RPM::get()->project()->gameDatas()
             ->systemDatas()->modelDetections(), parameters);
         if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
-            str += RPM::SPACE + RPM::PARENTHESIS_LEFT + RPM::translate(
-                Translations::SENDER_CANT_RECEIVE).toLower() + RPM
+            opts << RPM::translate(Translations::SENDER_CANT_RECEIVE).toLower();
+        }
+        if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
+            opts << RPM::translate(Translations::ONLY_THE_CLOSEST).toLower();
+        }
+        if (!opts.isEmpty()) {
+            str += RPM::SPACE + RPM::PARENTHESIS_LEFT + opts.join(", ") + RPM
                 ::PARENTHESIS_RIGHT;
         }
         break;

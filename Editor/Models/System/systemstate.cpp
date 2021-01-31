@@ -59,6 +59,7 @@ SystemState::SystemState(SuperListItem *state, MapEditorSubSelectionKind gk, int
     m_setWithCamera(c),
     m_pixelOffset(p),
     m_keepPosition(k),
+    m_itemDetection(new QStandardItem),
     m_eventCommandDetection(ecr)
 {
 
@@ -67,6 +68,7 @@ SystemState::SystemState(SuperListItem *state, MapEditorSubSelectionKind gk, int
 SystemState::~SystemState() {
     this->removeRoute();
     this->removeDetection();
+    delete m_itemDetection;
 }
 
 QString SystemState::name() const {
@@ -176,6 +178,10 @@ void SystemState::setSetWithCamera(bool b) { m_setWithCamera = b; }
 void SystemState::setPixelOffset(bool b) { m_pixelOffset = b; }
 
 void SystemState::setKeepPosition(bool b) { m_keepPosition = b; }
+
+QStandardItem * SystemState::itemDetection() const {
+    return m_itemDetection;
+}
 
 EventCommand * SystemState::eventCommandDetection() const {
     return m_eventCommandDetection;

@@ -254,6 +254,9 @@ QList<QStandardItem *> SystemCommonObject::getAllCommandsList() const {
                 if (state != nullptr) {
                     list << event->reactionAt(state->id())->modelCommands()
                         ->invisibleRootItem();
+                    state->itemDetection()->setData(QVariant::fromValue(
+                        reinterpret_cast<quintptr>(state->eventCommandDetection())));
+                    list << state->itemDetection();
                 }
             }
         }

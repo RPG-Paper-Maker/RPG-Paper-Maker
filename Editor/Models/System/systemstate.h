@@ -41,7 +41,6 @@ public:
         bool m, bool s, bool cl, bool d, bool t, bool c, bool p, bool k,
         EventCommand *ecd);
     virtual ~SystemState();
-
     virtual QString name() const;
     SuperListItem* state() const;
     void setState(SuperListItem* s);
@@ -79,6 +78,7 @@ public:
     void setSetWithCamera(bool b);
     void setPixelOffset(bool b);
     void setKeepPosition(bool b);
+    QStandardItem * itemDetection() const;
     EventCommand * eventCommandDetection() const;
     void setEventCommandDetection(EventCommand *ecd);
 
@@ -110,6 +110,7 @@ protected:
     bool m_setWithCamera;
     bool m_pixelOffset;
     bool m_keepPosition;
+    QStandardItem *m_itemDetection;
     EventCommand *m_eventCommandDetection;
 };
 
