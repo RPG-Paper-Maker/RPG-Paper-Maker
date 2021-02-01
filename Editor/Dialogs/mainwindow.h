@@ -37,6 +37,8 @@ class MainWindow : public QMainWindow, public Singleton<MainWindow>
     Q_OBJECT
 
 public:
+    static int MAX_BACKUPS;
+
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     ControlMainWindow control;
@@ -74,6 +76,7 @@ private:
     bool m_isMainMenu;
     DialogScripts *m_dialogScripts;
     bool m_firstCrash;
+    QTimer *m_timerBackup;
 
     void updateTextures();
 
@@ -125,6 +128,7 @@ private slots:
     void checkUpdate();
     void openRecentProject(QString path);
     void on_gameErrorOccurred(QProcess::ProcessError);
+    void updateBackup();
 };
 
 #endif // MAINWINDOW_H

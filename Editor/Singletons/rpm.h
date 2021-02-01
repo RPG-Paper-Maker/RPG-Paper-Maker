@@ -107,6 +107,7 @@ public:
     static const QString FOLDER_RESOURCES;
     static const QString FOLDER_APP;
     static const QString FOLDER_EXAMPLE;
+    static const QString FOLDER_BACKUPS;
 
     // PATHS
     static const QString PATH_RESOURCES;

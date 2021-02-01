@@ -45,6 +45,8 @@
 #include "common.h"
 #include "dialogselectlanguage.h"
 
+int MainWindow::MAX_BACKUPS = 5;
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -56,13 +58,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     m_isMainMenu(true),
     m_dialogScripts(new DialogScripts),
-    m_firstCrash(true)
+    m_firstCrash(true),
+    m_timerBackup(new QTimer)
 {
     p_appName = "RPG Paper Maker";
     gameProcess = new QProcess(this);
     project = nullptr;
-
     ui->setupUi(this);
+
+    // Backup every 30 minutes
+    connect(m_timerBackup, SIGNAL(timeout()), this, SLOT(updateBackup()));
 
     // Setting window title
     this->setWindowTitle(p_appName + " v." + Project::ENGINE_VERSION);
@@ -174,6 +179,10 @@ void MainWindow::openProject(QString pathProject) {
             replaceMainPanel(new PanelProject(this, project));
             m_isMainMenu = false;
             m_dialogScripts->initialize();
+
+            // Backup every 30 minutes
+            m_timerBackup->start(1000 * 60 * 30);
+            this->updateBackup();
         }
         else {
             delete project;
@@ -1086,6 +1095,53 @@ void MainWindow::on_gameErrorOccurred(QProcess::ProcessError)
             // Restart game
             this->runGame();
         #endif
+    }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::updateBackup() {
+    if (project != nullptr) {
+        QString pathBackups = Common::pathCombine(project->pathCurrentProject(),
+            RPM::FOLDER_BACKUPS);
+        QDir(project->pathCurrentProject()).mkdir(RPM::FOLDER_BACKUPS);
+
+        // Get backup index
+        QDir dir(pathBackups);
+        int index;
+        QStringList list;
+        foreach (QFileInfo id, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+            QString d = id.fileName();
+            index = d.at(0).unicode() - 1;
+            list.insert(index, d);
+        }
+        index = list.size();
+
+        // Do backup
+        QString folderBackup = QString::number(index + 1) + "~" + Common
+            ::getFormatNumber(QDateTime::currentDateTime().date().day(), 2) +
+            RPM::DASH + Common::getFormatNumber(QDateTime::currentDateTime()
+            .date().month(), 2) + RPM::DASH + Common::getFormatNumber(QDateTime
+            ::currentDateTime().date().year()) + RPM::DASH + Common
+            ::getFormatNumber(QTime::currentTime().hour(), 2) + RPM::COLON +
+            Common::getFormatNumber(QTime::currentTime().minute(), 2);
+        dir.mkdir(folderBackup);
+        Common::copyPath(Common::pathCombine(project->pathCurrentProjectApp(),
+            RPM::FOLDER_CONTENT), Common::pathCombine(Common::pathCombine(
+            pathBackups, folderBackup), RPM::FOLDER_CONTENT));
+
+        // If max reached, remove first index and remove others
+        if (index == MAX_BACKUPS) {
+            QDir(Common::pathCombine(pathBackups, list.at(0))).removeRecursively();
+            QString oldName, newName;
+            list << folderBackup;
+            for (int i = 1; i <= MAX_BACKUPS; i++) {
+                oldName = list.at(i);
+                newName = oldName;
+                newName.replace(0, 1, QString::number(i));
+                dir.rename(oldName, newName);
+            }
+        }
     }
 }
 

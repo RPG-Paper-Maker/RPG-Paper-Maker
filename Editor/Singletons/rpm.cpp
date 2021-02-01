@@ -97,6 +97,7 @@ const QString RPM::FOLDER_APP = "app";
     const QString RPM::FOLDER_RESOURCES = "resources";
 #endif
 const QString RPM::FOLDER_EXAMPLE = "example";
+const QString RPM::FOLDER_BACKUPS = "backups";
 
 // PATHS
 #ifdef Q_OS_MACOS
