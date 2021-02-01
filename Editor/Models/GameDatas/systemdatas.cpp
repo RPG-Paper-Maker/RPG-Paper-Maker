@@ -47,8 +47,10 @@ const QString SystemDatas::JSON_DIALOG_BOX_OPTIONS = "dbo";
 const QString SystemDatas::JSON_SKY_BOXES = "sb";
 const QString SystemDatas::JSON_ANTIALIASING = "aa";
 const QString SystemDatas::JSON_MAP_FRAME_DURATION = "mfd";
+const QString SystemDatas::JSON_PRICE_SOLD_ITEM = "priceSoldItem";
 const bool SystemDatas::DEFAULT_ANTIALIASING = false;
 const int SystemDatas::DEFAULT_MAP_FRAME_DURATION = 150;
+const double SystemDatas::DEFAULT_PRICE_SOLD_ITEM = 50.0;
 
 // -------------------------------------------------------
 //
@@ -62,6 +64,7 @@ SystemDatas::SystemDatas() :
     m_mountainCollisionHeight(new PrimitiveValue(4)),
     m_mountainCollisionAngle(new PrimitiveValue(45.0)),
     m_mapFrameDuration(new PrimitiveValue(DEFAULT_MAP_FRAME_DURATION)),
+    m_priceSoldItem(new PrimitiveValue(DEFAULT_PRICE_SOLD_ITEM)),
     m_idMapHero(1),
     m_idObjectHero(1),
     m_showBB(false),
@@ -93,6 +96,7 @@ SystemDatas::~SystemDatas() {
     delete m_mountainCollisionHeight;
     delete m_mountainCollisionAngle;
     delete m_mapFrameDuration;
+    delete m_priceSoldItem;
 
     SuperListItem::deleteModel(m_modelColors);
     SuperListItem::deleteModel(m_modelCurrencies);
@@ -164,6 +168,10 @@ PrimitiveValue * SystemDatas::mountainCollisionAngle() const {
 PrimitiveValue * SystemDatas::mapFrameDuration() const
 {
     return m_mapFrameDuration;
+}
+
+PrimitiveValue * SystemDatas::priceSoldItem() const {
+    return m_priceSoldItem;
 }
 
 int SystemDatas::idMapHero() const {
@@ -595,6 +603,10 @@ void SystemDatas::read(const QJsonObject &json){
     {
         m_mapFrameDuration->read(json[JSON_MAP_FRAME_DURATION].toObject());
     }
+    if (json.contains(JSON_PRICE_SOLD_ITEM))
+    {
+        m_priceSoldItem->read(json[JSON_PRICE_SOLD_ITEM].toObject());
+    }
     m_idMapHero = json["idMapHero"].toInt();
     m_idObjectHero = json["idObjHero"].toInt();
     m_pathBR = json["pathBR"].toString();
@@ -756,6 +768,12 @@ void SystemDatas::write(QJsonObject &json) const{
         obj = QJsonObject();
         m_mapFrameDuration->write(obj);
         json[JSON_MAP_FRAME_DURATION] = obj;
+    }
+    if (m_priceSoldItem->kind() != PrimitiveValueKind::NumberDouble ||
+        m_priceSoldItem->numberDoubleValue() != DEFAULT_PRICE_SOLD_ITEM) {
+        obj = QJsonObject();
+        m_priceSoldItem->write(obj);
+        json[JSON_PRICE_SOLD_ITEM] = obj;
     }
     json["idMapHero"] = m_idMapHero;
     json["idObjHero"] = m_idObjectHero;

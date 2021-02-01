@@ -140,6 +140,8 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->spinBoxAnimationFrames->setValue(systemDatas->framesAnimation());
     ui->panelPrimitiveMapFrameDuration->initializeNumberAndUpdate(systemDatas
         ->mapFrameDuration());
+    ui->primitiveValuePriceSoldItem->initializeNumberAndUpdate(systemDatas
+        ->priceSoldItem(), false);
 
     // Initializing all the models
     ui->panelSuperListColors->list()->initializeNewItemInstance(new SystemColor);

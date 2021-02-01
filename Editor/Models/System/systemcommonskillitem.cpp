@@ -43,7 +43,7 @@ SystemCommonSkillItem::SystemCommonSkillItem() :
     ::None), new PrimitiveValue(PrimitiveValueKind::None), AvailableKind::Never,
     new SystemPlaySong(-1, SongKind::Sound), new PrimitiveValue(
     PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind::None), new
-    PrimitiveValue(0), new QStandardItemModel, new QStandardItemModel, new
+    QStandardItemModel, new QStandardItemModel, new QStandardItemModel, new
     QStandardItemModel)
 {
     this->initializeHeaders();
@@ -54,8 +54,9 @@ SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
     *description, TargetKind targetKind, PrimitiveValue *targetConditionFormula,
     PrimitiveValue *conditionFormula, AvailableKind availableKind,
     SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
-    *animationTargetID, PrimitiveValue *price, QStandardItemModel *modelCosts,
-    QStandardItemModel*modelEffects, QStandardItemModel *modelCharacteristics) :
+    *animationTargetID, QStandardItemModel *modelPrice, QStandardItemModel
+    *modelCosts, QStandardItemModel*modelEffects, QStandardItemModel
+    *modelCharacteristics) :
     SystemIcon(i, names, pictureID),
     m_type(type),
     m_consumable(consumable),
@@ -68,7 +69,7 @@ SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
     m_sound(sound),
     m_animationUserID(animationUserID),
     m_animationTargetID(animationTargetID),
-    m_price(price),
+    m_modelPrice(modelPrice),
     m_modelCosts(modelCosts),
     m_modelEffects(modelEffects),
     m_modelCharacteristics(modelCharacteristics)
@@ -83,7 +84,7 @@ SystemCommonSkillItem::~SystemCommonSkillItem() {
     delete m_sound;
     delete m_animationUserID;
     delete m_animationTargetID;
-    delete m_price;
+    SuperListItem::deleteModel(m_modelPrice);
     SuperListItem::deleteModel(m_modelCosts);
     SuperListItem::deleteModel(m_modelEffects);
     SuperListItem::deleteModel(m_modelCharacteristics);
@@ -153,8 +154,8 @@ PrimitiveValue * SystemCommonSkillItem::animationTargetID() const {
     return m_animationTargetID;
 }
 
-PrimitiveValue * SystemCommonSkillItem::price() const {
-    return m_price;
+QStandardItemModel * SystemCommonSkillItem::modelPrice() const {
+    return m_modelPrice;
 }
 
 QStandardItemModel * SystemCommonSkillItem::modelCosts() const {
@@ -176,6 +177,8 @@ QStandardItemModel * SystemCommonSkillItem::modelCharacteristics() const {
 // -------------------------------------------------------
 
 void SystemCommonSkillItem::initializeHeaders() {
+    m_modelPrice->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::PRICE)}));
     m_modelCosts->setHorizontalHeaderLabels(QStringList({RPM::translate(
         Translations::COST)}));
     m_modelEffects->setHorizontalHeaderLabels(QStringList({RPM::translate(
@@ -200,7 +203,6 @@ SuperListItem* SystemCommonSkillItem::createCopy() const {
 
 void SystemCommonSkillItem::setCopy(const SuperListItem &super) {
     const SystemCommonSkillItem *skillitem;
-    int i, l;
 
     SystemIcon::setCopy(super);
 
@@ -217,36 +219,14 @@ void SystemCommonSkillItem::setCopy(const SuperListItem &super) {
     m_sound->setCopy(*skillitem->m_sound);
     m_animationUserID->setCopy(*skillitem->m_animationUserID);
     m_animationTargetID->setCopy(*skillitem->m_animationTargetID);
-    m_price->setCopy(*skillitem->m_price);
-
+    SuperListItem::deleteModel(m_modelPrice, false);
+    SuperListItem::copy(m_modelPrice, skillitem->m_modelPrice);
     SuperListItem::deleteModel(m_modelCosts, false);
-    for (i = 0, l = skillitem->m_modelCosts->invisibleRootItem()->rowCount(); i
-        < l - 1; i++)
-    {
-        m_modelCosts->insertRow(i, reinterpret_cast<SystemCost *>(skillitem
-            ->m_modelCosts->item(i)->data().value<quintptr>())->createCopy()
-            ->getModelRow());
-    }
-    m_modelCosts->appendRow(new QStandardItem(SuperListItem::beginningText));
+    SuperListItem::copy(m_modelCosts, skillitem->m_modelCosts);
     SuperListItem::deleteModel(m_modelEffects, false);
-    for (i = 0, l = skillitem->m_modelEffects->invisibleRootItem()->rowCount(); i
-        < l - 1; i++)
-    {
-        m_modelEffects->insertRow(i, reinterpret_cast<SystemEffect *>(skillitem
-            ->m_modelEffects->item(i)->data().value<quintptr>())->createCopy()
-            ->getModelRow());
-    }
-    m_modelEffects->appendRow(new QStandardItem(SuperListItem::beginningText));
+    SuperListItem::copy(m_modelEffects, skillitem->m_modelEffects);
     SuperListItem::deleteModel(m_modelCharacteristics, false);
-    for (i = 0, l = skillitem->m_modelCharacteristics->invisibleRootItem()
-        ->rowCount(); i < l - 1; i++)
-    {
-        m_modelCharacteristics->insertRow(i, reinterpret_cast<SystemCharacteristic
-             *>(skillitem->m_modelCharacteristics->item(i)->data().value<quintptr>
-            ())->createCopy()->getModelRow());
-    }
-    m_modelCharacteristics->appendRow(new QStandardItem(SuperListItem
-        ::beginningText));
+    SuperListItem::copy(m_modelCharacteristics, skillitem->m_modelCharacteristics);
     this->initializeHeaders();
 }
 
@@ -298,9 +278,12 @@ void SystemCommonSkillItem::read(const QJsonObject &json){
     }
     m_animationTargetID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->animationsDatas()->model());
-    if (json.contains(JSON_PRICE)) {
-        m_price->read(json[JSON_PRICE].toObject());
-    }
+
+    // Price
+    SuperListItem::readTree(m_modelPrice, new SystemCost(DamagesKind::Currency,
+        new PrimitiveValue(PrimitiveValueKind::DataBase, 1), new PrimitiveValue(
+        PrimitiveValueKind::DataBase, 1), 1, new PrimitiveValue(QString("1"))),
+        json, JSON_PRICE);
 
     // Costs
     SuperListItem::readTree(m_modelCosts, new SystemCost, json, JSON_COSTS);
@@ -365,13 +348,9 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
         m_animationTargetID->write(obj);
         json[JSON_ANIMATION_TARGET_ID] = obj;
     }
-    if (m_price->kind() != PrimitiveValueKind::Number || m_price->numberValue()
-        != 0)
-    {
-        obj = QJsonObject();
-        m_price->write(obj);
-        json[JSON_PRICE] = obj;
-    }
+
+    // Price
+    SuperListItem::writeTree(m_modelPrice, json, JSON_PRICE);
 
     // Costs
     SuperListItem::writeTree(m_modelCosts, json, JSON_COSTS);

@@ -30,7 +30,7 @@ public:
         oneHand, LangsTranslation *description, TargetKind targetKind,
         PrimitiveValue *targetConditionFormula, PrimitiveValue
         *conditionFormula, PrimitiveValue *animationUserID, PrimitiveValue
-        *animationTargetID, PrimitiveValue *price, QStandardItemModel
+        *animationTargetID, QStandardItemModel *price, QStandardItemModel
         *modelCosts, QStandardItemModel *modelEffects, QStandardItemModel
         *modelCharacteristics);
     virtual ~SystemWeapon();

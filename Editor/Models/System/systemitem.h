@@ -30,7 +30,7 @@ public:
         consumable, LangsTranslation *description, TargetKind targetKind,
         PrimitiveValue *conditionFormula, AvailableKind availableKind,
         SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
-        *animationTargetID, PrimitiveValue *price, QStandardItemModel
+        *animationTargetID, QStandardItemModel *price, QStandardItemModel
         *modelEffects);
     virtual ~SystemItem();
 

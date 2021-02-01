@@ -55,8 +55,10 @@ public:
     static const QString JSON_SKY_BOXES;
     static const QString JSON_ANTIALIASING;
     static const QString JSON_MAP_FRAME_DURATION;
+    static const QString JSON_PRICE_SOLD_ITEM;
     static const bool DEFAULT_ANTIALIASING;
     static const int DEFAULT_MAP_FRAME_DURATION;
+    static const double DEFAULT_PRICE_SOLD_ITEM;
 
     SystemDatas();
     virtual ~SystemDatas();
@@ -77,6 +79,7 @@ public:
     PrimitiveValue * mountainCollisionHeight() const;
     PrimitiveValue * mountainCollisionAngle() const;
     PrimitiveValue * mapFrameDuration() const;
+    PrimitiveValue * priceSoldItem() const;
     int idMapHero() const;
     void setIdMapHero(int i);
     int idObjectHero() const;
@@ -139,6 +142,7 @@ private:
     PrimitiveValue *m_mountainCollisionHeight;
     PrimitiveValue *m_mountainCollisionAngle;
     PrimitiveValue *m_mapFrameDuration;
+    PrimitiveValue *m_priceSoldItem;
     int m_idMapHero;
     int m_idObjectHero;
     QString m_pathBR;

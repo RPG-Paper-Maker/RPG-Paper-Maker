@@ -14,6 +14,7 @@
 #include "rpm.h"
 #include "common.h"
 #include "systemcharacteristic.h"
+#include "systemcost.h"
 
 // -------------------------------------------------------
 //
@@ -81,17 +82,22 @@ void ArmorsDatas::setDefault() {
         {SystemCharacteristic::createBuff(9, 10, false, false)},
     };
     length = (sizeof(names)/sizeof(*names));
-
+    QStandardItemModel *modelPrice;
     for (i = 0; i < length; i++) {
         modelCharacteristics = new QStandardItemModel;
+        modelPrice = new QStandardItemModel;
         for (j = 0, l = characteristics[i].length(); j < l; j++) {
             modelCharacteristics->appendRow(characteristics[i][j]->getModelRow());
         }
         modelCharacteristics->appendRow(new QStandardItem);
+        modelPrice->appendRow((new SystemCost(DamagesKind::Currency, new
+            PrimitiveValue(PrimitiveValueKind::DataBase, 1), new PrimitiveValue(
+            PrimitiveValueKind::DataBase, 1), 1, new PrimitiveValue(QString
+            ::number(prices[i]))))->getModelRow());
         armor = new SystemArmor(i + 1, new LangsTranslation(names[i]), iconsID
             [i], types[i], new LangsTranslation(descriptions[i]), new
-            PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(prices
-            [i]), modelCharacteristics);
+            PrimitiveValue(PrimitiveValueKind::None), modelPrice,
+            modelCharacteristics);
         m_model->appendRow(armor->getModelRow());
     }
 }

@@ -64,9 +64,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-644</y>
                 <width>252</width>
-                <height>1230</height>
+                <height>1270</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_13">
@@ -582,92 +582,84 @@
                    <property name="title">
                     <string>Other options</string>
                    </property>
-                   <layout class="QGridLayout" name="gridLayout_6">
+                   <layout class="QGridLayout" name="gridLayout_4">
                     <item row="0" column="0">
-                     <layout class="QVBoxLayout" name="verticalLayout_11">
+                     <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,1,0,0,0">
                       <property name="spacing">
-                       <number>10</number>
+                       <number>6</number>
                       </property>
                       <item>
-                       <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,1">
-                        <property name="spacing">
-                         <number>0</number>
+                       <widget class="QLabel" name="labelDefaultDialogBoxOptions">
+                        <property name="text">
+                         <string>Default dialog box options:</string>
                         </property>
-                        <item>
-                         <widget class="QLabel" name="labelDefaultDialogBoxOptions">
-                          <property name="text">
-                           <string>Default dialog box options:</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QPushButton" name="pushButtonDefaultDialogBoxOptions">
-                          <property name="text">
-                           <string>Select...</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QLabel" name="labelMaxNumberOfSaveSlots">
-                          <property name="enabled">
-                           <bool>false</bool>
-                          </property>
-                          <property name="text">
-                           <string>Max number of save slots:</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QSpinBox" name="spinBox_4">
-                          <property name="enabled">
-                           <bool>false</bool>
-                          </property>
-                          <property name="value">
-                           <number>4</number>
-                          </property>
-                         </widget>
-                        </item>
-                       </layout>
+                       </widget>
                       </item>
                       <item>
-                       <layout class="QGridLayout" name="gridLayout_4">
-                        <property name="horizontalSpacing">
-                         <number>6</number>
+                       <widget class="QPushButton" name="pushButtonDefaultDialogBoxOptions">
+                        <property name="text">
+                         <string>Select...</string>
                         </property>
-                        <property name="verticalSpacing">
-                         <number>0</number>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="labelMaxNumberOfSaveSlots">
+                        <property name="enabled">
+                         <bool>false</bool>
                         </property>
-                        <item row="0" column="0" colspan="2">
-                         <widget class="QLabel" name="labelPriceOfSoldItem">
-                          <property name="enabled">
-                           <bool>false</bool>
-                          </property>
-                          <property name="text">
-                           <string>Price of sold item:</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="1" column="0">
-                         <widget class="QSpinBox" name="spinBox_6">
-                          <property name="enabled">
-                           <bool>false</bool>
-                          </property>
-                          <property name="value">
-                           <number>50</number>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="1" column="1">
-                         <widget class="QLabel" name="labelPercentOfDefaultPrice">
-                          <property name="enabled">
-                           <bool>false</bool>
-                          </property>
-                          <property name="text">
-                           <string>% of default price</string>
-                          </property>
-                         </widget>
-                        </item>
-                       </layout>
+                        <property name="text">
+                         <string>Max number of save slots:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QSpinBox" name="spinBox_4">
+                        <property name="enabled">
+                         <bool>false</bool>
+                        </property>
+                        <property name="value">
+                         <number>4</number>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="labelPriceOfSoldItem">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
+                        <property name="text">
+                         <string>Price of sold item:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="PanelPrimitiveValue" name="primitiveValuePriceSoldItem" native="true">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>200</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>200</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="labelPercentOfDefaultPrice">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
+                        <property name="text">
+                         <string>% of default price</string>
+                        </property>
+                       </widget>
                       </item>
                      </layout>
                     </item>

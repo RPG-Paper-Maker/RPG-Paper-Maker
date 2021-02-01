@@ -25,7 +25,7 @@ SystemArmor::SystemArmor() :
 
 SystemArmor::SystemArmor(int i, LangsTranslation *names, int pictureID, int
     type, LangsTranslation *description, PrimitiveValue *conditionFormula,
-    PrimitiveValue *price, QStandardItemModel *modelCharacteristics) :
+    QStandardItemModel *price, QStandardItemModel *modelCharacteristics) :
     SystemCommonSkillItem(i, names, pictureID, type, false, true, description,
         TargetKind::None, new PrimitiveValue(PrimitiveValueKind::None),
         conditionFormula, AvailableKind::Never, new SystemPlaySong(-1, SongKind

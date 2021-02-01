@@ -14,6 +14,7 @@
 #include "rpm.h"
 #include "common.h"
 #include "systemeffect.h"
+#include "systemcost.h"
 
 // -------------------------------------------------------
 //
@@ -111,20 +112,24 @@ void ItemsDatas::setDefault() {
         "-100")}, {SystemEffect::createDamageTP("-2000")}, {}
     };
     length = (sizeof(names)/sizeof(*names));
-
+    QStandardItemModel *modelPrice;
     for (i = 0; i < length; i++) {
         modelEffects = new QStandardItemModel;
+        modelPrice = new QStandardItemModel;
         for (j = 0, l = effects[i].length(); j < l; j++) {
             modelEffects->appendRow(effects[i][j]->getModelRow());
         }
         modelEffects->appendRow(new QStandardItem);
+        modelPrice->appendRow((new SystemCost(DamagesKind::Currency, new
+            PrimitiveValue(PrimitiveValueKind::DataBase, 1), new PrimitiveValue(
+            PrimitiveValueKind::DataBase, 1), 1, new PrimitiveValue(QString
+            ::number(prices[i]))))->getModelRow());
         sys = new SystemItem(i + 1, new LangsTranslation(names[i]), iconsID[i],
             types[i], consumables[i], new LangsTranslation(descriptions[i]),
             targetsKind[i], new PrimitiveValue(targetConditionsFormulas[i]),
             availablesKind[i], new SystemPlaySong(songsID[i], SongKind::Sound),
             new PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
-            PrimitiveValueKind::None), new PrimitiveValue(prices[i]),
-            modelEffects);
+            PrimitiveValueKind::None), modelPrice, modelEffects);
         m_model->appendRow(sys->getModelRow());
     }
 }

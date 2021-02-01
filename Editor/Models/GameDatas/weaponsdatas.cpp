@@ -14,6 +14,7 @@
 #include "rpm.h"
 #include "common.h"
 #include "systemeffect.h"
+#include "systemcost.h"
 
 // -------------------------------------------------------
 //
@@ -73,20 +74,25 @@ void WeaponsDatas::setDefault() {
         SystemEffect::createDamage("2 + u.atk - t.pdef", "0", -1, "1")}
     };
     length = (sizeof(names)/sizeof(*names));
-
+    QStandardItemModel *modelPrice;
     for (i = 0; i < length; i++) {
         modelEffects = new QStandardItemModel;
+        modelPrice = new QStandardItemModel;
         for (j = 0, l = effects[i].length(); j < l; j++) {
             modelEffects->appendRow(effects[i][j]->getModelRow());
         }
         modelEffects->appendRow(new QStandardItem);
+        modelPrice->appendRow((new SystemCost(DamagesKind::Currency, new
+            PrimitiveValue(PrimitiveValueKind::DataBase, 1), new PrimitiveValue(
+            PrimitiveValueKind::DataBase, 1), 1, new PrimitiveValue(QString
+            ::number(prices[i]))))->getModelRow());
         weapon = new SystemWeapon(i + 1, new LangsTranslation(names[i]), iconsID
             [i], types[i], oneHands[i], new LangsTranslation(descriptions[i]),
             TargetKind::Enemy, new PrimitiveValue(PrimitiveValueKind::None), new
             PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
             PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind
-            ::None), new PrimitiveValue(prices[i]), new QStandardItemModel,
-            modelEffects, new QStandardItemModel);
+            ::None), modelPrice, new QStandardItemModel, modelEffects, new
+            QStandardItemModel);
         m_model->appendRow(weapon->getModelRow());
     }
 }

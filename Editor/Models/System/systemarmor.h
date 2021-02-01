@@ -28,7 +28,7 @@ public:
     SystemArmor();
     SystemArmor(int i, LangsTranslation *names, int pictureID, int type,
         LangsTranslation *description, PrimitiveValue *conditionFormula,
-        PrimitiveValue *price, QStandardItemModel *modelCharacteristics);
+        QStandardItemModel *price, QStandardItemModel *modelCharacteristics);
     virtual ~SystemArmor();
 
     virtual void read(const QJsonObject &json);

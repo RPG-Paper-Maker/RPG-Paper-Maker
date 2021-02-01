@@ -104,16 +104,9 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
+        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1,1">
          <item>
           <layout class="QGridLayout" name="gridLayout_4">
-           <item row="0" column="0">
-            <widget class="QLabel" name="labelDescription">
-             <property name="text">
-              <string>Description:</string>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="0" rowspan="2" colspan="3">
             <widget class="WidgetTextLang" name="widgetTextLangDescription" native="true">
              <property name="minimumSize">
@@ -130,6 +123,23 @@
              </property>
             </widget>
            </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="labelTarget">
+             <property name="text">
+              <string>Target:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0">
+            <widget class="QLabel" name="labelTargetAnimation">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Target animation ID:</string>
+             </property>
+            </widget>
+           </item>
            <item row="3" column="0">
             <widget class="QLabel" name="labelConditions">
              <property name="enabled">
@@ -140,36 +150,20 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="labelTarget">
-             <property name="text">
-              <string>Target:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1" colspan="2">
-            <widget class="QComboBox" name="comboBoxTarget">
-             <property name="minimumSize">
-              <size>
-               <width>250</width>
-               <height>27</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>250</width>
-               <height>27</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="labelTargetConditions">
+           <item row="7" column="0">
+            <widget class="QLabel" name="labelSound">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
-              <string>Target conditions formula:</string>
+              <string>Sound (main menu):</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="labelDescription">
+             <property name="text">
+              <string>Description:</string>
              </property>
             </widget>
            </item>
@@ -189,6 +183,26 @@
                <width>250</width>
                <height>27</height>
               </size>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="labelUserAnimation">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>User animation ID:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="labelTargetConditions">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Target conditions formula:</string>
              </property>
             </widget>
            </item>
@@ -215,21 +229,8 @@
              </property>
             </widget>
            </item>
-           <item row="7" column="0">
-            <widget class="QLabel" name="labelSound">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>Sound (main menu):</string>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="1" colspan="2">
-            <widget class="WidgetSong" name="widgetSongSound" native="true">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
+           <item row="4" column="1" colspan="2">
+            <widget class="QComboBox" name="comboBoxTarget">
              <property name="minimumSize">
               <size>
                <width>250</width>
@@ -241,45 +242,6 @@
                <width>250</width>
                <height>27</height>
               </size>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="0">
-            <widget class="QLabel" name="labelUserAnimation">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>User animation ID:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="1" colspan="2">
-            <widget class="PanelPrimitiveValue" name="panelPrimitiveValueAnimationUser" native="true">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>250</width>
-               <height>27</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>250</width>
-               <height>27</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="0">
-            <widget class="QLabel" name="labelTargetAnimation">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>Target animation ID:</string>
              </property>
             </widget>
            </item>
@@ -288,29 +250,6 @@
              <property name="enabled">
               <bool>true</bool>
              </property>
-             <property name="minimumSize">
-              <size>
-               <width>250</width>
-               <height>27</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>250</width>
-               <height>27</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="10" column="0">
-            <widget class="QLabel" name="labelPrice">
-             <property name="text">
-              <string>Price:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="10" column="1" colspan="2">
-            <widget class="PanelPrimitiveValue" name="panelPrimitiveValuePrice" native="true">
              <property name="minimumSize">
               <size>
                <width>250</width>
@@ -344,7 +283,57 @@
              </property>
             </widget>
            </item>
+           <item row="7" column="1" colspan="2">
+            <widget class="WidgetSong" name="widgetSongSound" native="true">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="1" colspan="2">
+            <widget class="PanelPrimitiveValue" name="panelPrimitiveValueAnimationUser" native="true">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBoxPrice">
+           <property name="title">
+            <string>Price</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="0" column="0">
+             <widget class="WidgetSuperTree" name="treeViewPrice"/>
+            </item>
+           </layout>
+          </widget>
          </item>
          <item>
           <widget class="QGroupBox" name="groupBoxCosts">
@@ -396,15 +385,15 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
   </customwidget>
   <customwidget>
    <class>WidgetTextLang</class>

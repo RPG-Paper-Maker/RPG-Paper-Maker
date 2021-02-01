@@ -49,18 +49,19 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
 
     // Retain size when hidden (because of widget icon having weird behaviors)
     QSizePolicy sp_retain;
-    QList<QWidget *> widgetList = QList<QWidget*>({
-        ui->labelType, ui->comboBoxType,
-        ui->checkBoxOneHand, ui->groupBoxCosts
-    });
+    QList<QWidget *> widgetList;
+    widgetList << ui->labelType << ui->comboBoxType << ui->checkBoxOneHand;
     for (int i = 0; i < widgetList.size(); i++) {
         sp_retain = widgetList[i]->sizePolicy();
         sp_retain.setRetainSizeWhenHidden(true);
         widgetList[i]->setSizePolicy(sp_retain);
     }
-
     ui->panelPrimitiveValueConditions->addNone();
     ui->panelPrimitiveValueConditions->initializeMessage(true);
+    ui->treeViewPrice->initializeNewItemInstance(new SystemCost(DamagesKind
+        ::Currency, new PrimitiveValue(PrimitiveValueKind::DataBase, 1), new
+        PrimitiveValue(PrimitiveValueKind::DataBase, 1), 1, new PrimitiveValue(
+        QString("1"))));
     ui->treeViewCost->initializeNewItemInstance(new SystemCost);
     ui->treeViewEffects->initializeNewItemInstance(new SystemEffect);
     ui->treeViewCharacteristics->initializeNewItemInstance(new SystemCharacteristic);
@@ -70,14 +71,12 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
     switch (m_kind) {
     case CommonSkillItemKind::Skill:
         initializeCommonSkill();
-
         ui->checkBoxOneHand->hide();
         ui->groupBoxCharacteristics->hide();
         ui->labelType->hide();
         ui->comboBoxType->hide();
         ui->checkBoxConsumable->hide();
-        ui->labelPrice->hide();
-        ui->panelPrimitiveValuePrice->hide();
+        ui->groupBoxPrice->hide();
         break;
     case CommonSkillItemKind::Item:
         initializeCommonSkill();
@@ -86,7 +85,6 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
         ui->groupBoxCharacteristics->hide();
         ui->groupBoxCosts->hide();
         SuperListItem::fillComboBox(ui->comboBoxType, getTypeModel());
-        ui->panelPrimitiveValuePrice->initializeNumberVariable();
         break;
     case CommonSkillItemKind::Armor:
         ui->checkBoxConsumable->hide();
@@ -108,7 +106,6 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
 
         // Initialize widgets
         SuperListItem::fillComboBox(ui->comboBoxType, getTypeModel());
-        ui->panelPrimitiveValuePrice->initializeNumberVariable();
         break;
     case CommonSkillItemKind::Weapon:
         initializeCommonSkill();
@@ -119,7 +116,6 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
         ui->comboBoxAvailable->hide();
         ui->labelSound->hide();
         ui->widgetSongSound->hide();
-        ui->panelPrimitiveValuePrice->initializeNumberVariable();
         break;
     }
 }
@@ -156,8 +152,7 @@ void PanelDatasCommonSkillItem::update(SystemCommonSkillItem *model) {
     ui->panelPrimitiveValueAnimationTarget->initializeModel(m_model
         ->animationTargetID());
     ui->panelPrimitiveValueAnimationTarget->updateModel();
-    ui->panelPrimitiveValuePrice->initializeModel(m_model->price());
-    ui->panelPrimitiveValuePrice->updateModel();
+    ui->treeViewPrice->initializeModel(m_model->modelPrice());
     ui->treeViewCost->initializeModel(m_model->modelCosts());
     ui->treeViewEffects->initializeModel(m_model->modelEffects());
     ui->treeViewCharacteristics->initializeModel(m_model->modelCharacteristics());
@@ -186,6 +181,7 @@ QStandardItemModel* PanelDatasCommonSkillItem::getTypeModel() {
 // -------------------------------------------------------
 
 void PanelDatasCommonSkillItem::updateAllModelsRow() {
+    ui->treeViewPrice->updateAllModelRow();
     ui->treeViewCost->updateAllModelRow();
     ui->treeViewEffects->updateAllModelRow();
     ui->treeViewCharacteristics->updateAllModelRow();
@@ -230,7 +226,6 @@ void PanelDatasCommonSkillItem::updateCommonSkill() {
 void PanelDatasCommonSkillItem::translate()
 {
     ui->labelType->setText(RPM::translate(Translations::TYPE) + RPM::COLON);
-    ui->labelPrice->setText(RPM::translate(Translations::PRICE) + RPM::COLON);
     ui->labelSound->setText(RPM::translate(Translations::SOUND_EFFECT) + RPM
         ::SPACE + RPM::PARENTHESIS_LEFT + RPM::translate(Translations::MAIN_MENU) +
         RPM::PARENTHESIS_RIGHT + RPM::COLON);
@@ -249,6 +244,7 @@ void PanelDatasCommonSkillItem::translate()
         ::TARGET_CONDITIONS_FORMULA) + RPM::COLON);
     ui->checkBoxConsumable->setText(RPM::translate(Translations::CONSOMABLE));
     ui->checkBoxOneHand->setText(RPM::translate(Translations::ONE_HAND));
+    ui->groupBoxPrice->setTitle(RPM::translate(Translations::PRICE));
     ui->groupBoxCosts->setTitle(RPM::translate(Translations::COSTS));
     ui->groupBoxEffects->setTitle(RPM::translate(Translations::EFFECTS));
     ui->groupBoxCharacteristics->setTitle(RPM::translate(Translations

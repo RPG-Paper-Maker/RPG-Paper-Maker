@@ -26,14 +26,6 @@ const QString SystemCost::JSON_VALUE_FORMULA = "vf";
 //
 // -------------------------------------------------------
 
-SystemCost::SystemCost() :
-    SystemCost(DamagesKind::Stat, new PrimitiveValue(PrimitiveValueKind
-        ::DataBase, 1), new PrimitiveValue(PrimitiveValueKind::DataBase, 1),
-        1, new PrimitiveValue(QString()))
-{
-
-}
-
 SystemCost::SystemCost(DamagesKind kind, PrimitiveValue *statisticID,
     PrimitiveValue *currencyID, int variableID, PrimitiveValue *valueFormula) :
     SuperListItem(-1, "", true),

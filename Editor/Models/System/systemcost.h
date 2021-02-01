@@ -34,9 +34,11 @@ public:
     static const QString JSON_VARIABLE_ID;
     static const QString JSON_VALUE_FORMULA;
 
-    SystemCost();
-    SystemCost(DamagesKind kind, PrimitiveValue *statisticID, PrimitiveValue
-        *currencyID, int variableID, PrimitiveValue *valueFormula);
+    SystemCost(DamagesKind kind = DamagesKind::Stat, PrimitiveValue
+        *statisticID = new PrimitiveValue(PrimitiveValueKind::DataBase, 1),
+        PrimitiveValue *currencyID = new PrimitiveValue(PrimitiveValueKind
+        ::DataBase, 1), int variableID = 1, PrimitiveValue *valueFormula = new
+        PrimitiveValue(QString()));
     virtual ~SystemCost();
     SuperListItem * kind() const;
     PrimitiveValue * statisticID() const;

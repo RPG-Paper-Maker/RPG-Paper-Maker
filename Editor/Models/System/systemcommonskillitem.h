@@ -54,7 +54,7 @@ public:
         TargetKind targetKind, PrimitiveValue *targetConditionFormula,
         PrimitiveValue *conditionFormula, AvailableKind availableKind,
         SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
-        *animationTargetID, PrimitiveValue *price, QStandardItemModel
+        *animationTargetID, QStandardItemModel *modelPrice, QStandardItemModel
         *modelCosts, QStandardItemModel *modelEffects, QStandardItemModel
         *modelCharacteristics);
     virtual ~SystemCommonSkillItem();
@@ -74,7 +74,7 @@ public:
     SystemPlaySong * sound() const;
     PrimitiveValue * animationUserID() const;
     PrimitiveValue * animationTargetID() const;
-    PrimitiveValue * price() const;
+    QStandardItemModel * modelPrice() const;
     QStandardItemModel * modelCosts() const;
     QStandardItemModel * modelEffects() const;
     QStandardItemModel * modelCharacteristics() const;
@@ -98,7 +98,7 @@ protected:
     SystemPlaySong *m_sound;
     PrimitiveValue *m_animationUserID;
     PrimitiveValue *m_animationTargetID;
-    PrimitiveValue *m_price;
+    QStandardItemModel *m_modelPrice;
     QStandardItemModel *m_modelCosts;
     QStandardItemModel *m_modelEffects;
     QStandardItemModel *m_modelCharacteristics;
