@@ -2262,7 +2262,11 @@ QString EventCommand::strStartShopMenu(SystemCommonObject *object, QStandardItem
         itemPrice->initialize(this, i);
         list << itemPrice->toString();
     }
-    return "Start shop menu" + RPM::COLON + RPM::NEW_LINE + list.join(RPM::NEW_LINE) + RPM::NEW_LINE + "Buy only" + RPM::COLON + RPM::SPACE + buyOnly + (stock ? RPM::NEW_LINE + "Stock in variable ID" + RPM::COLON + RPM::SPACE + stockVariable : "");
+    return RPM::translate(Translations::START_SHOP_MENU) + RPM::COLON + RPM
+        ::NEW_LINE + list.join(RPM::NEW_LINE) + RPM::NEW_LINE + RPM::translate(
+        Translations::BUY_ONLY) + RPM::COLON + RPM::SPACE + buyOnly + (stock ?
+        RPM::NEW_LINE + RPM::translate(Translations::STOCK_SHOP_INSTANCE_ID_IN_VARIABLE) +
+        RPM::COLON + RPM::SPACE + stockVariable : "");
 }
 
 // -------------------------------------------------------

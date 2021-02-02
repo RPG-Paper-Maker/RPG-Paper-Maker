@@ -325,6 +325,13 @@ void DialogCommands::translate() {
         EventCommandKind::ChangeASkill));
     ui->pushButtonChangeName->setText(EventCommand::kindToString(
         EventCommandKind::ChangeName));
+    ui->pushButtonChangeEquiment->setText(EventCommand::kindToString(EventCommandKind::ChangeEquipment));
+    ui->pushButtonModifyCurrency->setText(EventCommand::kindToString(EventCommandKind::ModifyCurrency));
+    ui->pushButtonDisplayAnimation->setText(EventCommand::kindToString(EventCommandKind::DisplayAnAnimation));
+    ui->pushButtonShakeScreen->setText(EventCommand::kindToString(EventCommandKind::ShakeScreen));
+    ui->pushButtonFlashScreen->setText(EventCommand::kindToString(EventCommandKind::FlashScreen));
+    ui->pushButtonPlugin->setText(EventCommand::kindToString(EventCommandKind::Plugin));
+    ui->pushButtonStartShopMenu->setText(EventCommand::kindToString(EventCommandKind::StartShopMenu));
 
     ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
     ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));

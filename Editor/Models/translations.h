@@ -1218,6 +1218,11 @@ public:
     static const QString ATTACK_RANDOM_ALLY;
     static const QString ATTACK_RANDOM_ENEMY;
     static const QString ONLY_THE_CLOSEST;
+    static const QString START_SHOP_MENU;
+    static const QString STOCK;
+    static const QString BUY_ONLY;
+    static const QString STOCK_SHOP_INSTANCE_ID_IN_VARIABLE;
+    static const QString UNLIMITED;
 
     Translations();
     virtual ~Translations();

@@ -1184,5 +1184,10 @@
     "attack.random.target": "Attack random target",
     "attack.random.ally": "Attack random ally",
     "attack.random.enemy": "Attack random enemy",
-    "only.the.closest": "Only the closest"
+    "only.the.closest": "Only the closest",
+    "start.shop.menu": "Start shop menu",
+    "stock": "Stock",
+    "buy.only": "Buy only",
+    "stock.shop.instance.id.in.variable": "Stock shop instance ID in variable",
+    "unlimited": "Unlimited"
 }

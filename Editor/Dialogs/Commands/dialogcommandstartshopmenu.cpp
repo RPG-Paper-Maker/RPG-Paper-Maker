@@ -51,7 +51,12 @@ DialogCommandStartShopMenu::~DialogCommandStartShopMenu()
 
 void DialogCommandStartShopMenu::translate()
 {
-
+    this->setWindowTitle(RPM::translate(Translations::START_SHOP_MENU) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelBuyOnly->setText(RPM::translate(Translations::BUY_ONLY) + RPM::COLON);
+    ui->checkBoxStockShopInstanceID->setText(RPM::translate(Translations
+        ::STOCK_SHOP_INSTANCE_ID_IN_VARIABLE) + RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------
@@ -62,7 +67,8 @@ void DialogCommandStartShopMenu::initializePrimitives()
     ui->treeViewItemPrice->initializeModel(m_modelItemPrice);
     m_modelItemPrice->appendRow(SuperListItem::getEmptyItem());
     m_modelItemPrice->setHorizontalHeaderLabels(QStringList({RPM::translate(
-        Translations::ITEM), RPM::translate(Translations::PRICE), "Stock"}));
+        Translations::ITEM), RPM::translate(Translations::PRICE), RPM::translate(
+        Translations::STOCK)}));
     ui->treeViewItemPrice->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     ui->treeViewItemPrice->header()->setSectionResizeMode(1, QHeaderView::Stretch);
     ui->treeViewItemPrice->header()->setSectionResizeMode(2, QHeaderView::Stretch);

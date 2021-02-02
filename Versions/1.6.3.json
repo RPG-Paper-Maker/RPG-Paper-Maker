@@ -23,7 +23,6 @@
     ],
 	"bugs": [
         "White theme mac wrong police color for map editor menu bar",
-        "[WINDOWS] Issues with some custom musics playing",
         "French translations broken",
         "Plugins wasn't unloaded if not enabled in the editor",
         "Try fix object linking",
@@ -54,7 +53,6 @@
         2,
 
         2,
-        0,
         2,
         2,
         2,

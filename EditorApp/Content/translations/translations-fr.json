@@ -1183,5 +1183,11 @@
     "cant.escape": "Ne peut pas s'échapper",
     "attack.random.target": "Attaquer des cibles aléatoires",
     "attack.random.ally": "Attaquer des alliés aléatoires",
-    "attack.random.enemy": "Attaquer des ennemies aléatoires"
+    "attack.random.enemy": "Attaquer des ennemies aléatoires",
+    "only.the.closest": "Uniquement le plus proche",
+    "start.shop.menu": "Démarrer le menu de magasin",
+    "stock": "Stock",
+    "buy.only": "Achat uniquement",
+    "stock.shop.instance.id.in.variable": "Stocker l'ID d'instance du magasin dans la variable",
+    "unlimited": "Illimité"
 }

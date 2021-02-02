@@ -12,6 +12,7 @@
 #include "dialogsystemcommanditemprice.h"
 #include "ui_dialogsystemcommanditemprice.h"
 #include "systemcost.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -84,7 +85,20 @@ void DialogSystemCommandItemPrice::initialize() {
 // -------------------------------------------------------
 
 void DialogSystemCommandItemPrice::translate() {
-
+    this->setWindowTitle(RPM::translate(Translations::ITEM) + RPM::SPACE + RPM
+        ::SLASH + RPM::SPACE + RPM::translate(Translations::PRICE) + RPM::SPACE +
+        RPM::SLASH + RPM::SPACE + RPM::translate(Translations::STOCK));
+    ui->groupBoxItem->setTitle(RPM::translate(Translations::ITEM));
+    ui->radioButtonItemID->setText(RPM::translate(Translations::ITEM_ID) + RPM::COLON);
+    ui->radioButtonWeaponID->setText(RPM::translate(Translations::WEAPON_ID) + RPM::COLON);
+    ui->radioButtonArmorID->setText(RPM::translate(Translations::ARMOR_ID) + RPM::COLON);
+    ui->groupBoxPrice->setTitle(RPM::translate(Translations::PRICE));
+    ui->radioButtonPriceDefault->setText(RPM::translate(Translations::DEFAULT));
+    ui->radioButtonPriceSpecific->setText(RPM::translate(Translations::SPECIFIC) + RPM::COLON);
+    ui->groupBoxStock->setTitle(RPM::translate(Translations::STOCK));
+    ui->radioButtonStockUnlimited->setText(RPM::translate(Translations::UNLIMITED));
+    ui->radioButtonStockSpecific->setText(RPM::translate(Translations::SPECIFIC) + RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

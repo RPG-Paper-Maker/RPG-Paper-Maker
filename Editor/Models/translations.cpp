@@ -1205,6 +1205,11 @@ const QString Translations::ATTACK_RANDOM_TARGET = "attack.random.target";
 const QString Translations::ATTACK_RANDOM_ALLY = "attack.random.ally";
 const QString Translations::ATTACK_RANDOM_ENEMY = "attack.random.enemy";
 const QString Translations::ONLY_THE_CLOSEST = "only.the.closest";
+const QString Translations::START_SHOP_MENU = "start.shop.menu";
+const QString Translations::STOCK = "stock";
+const QString Translations::BUY_ONLY = "buy.only";
+const QString Translations::STOCK_SHOP_INSTANCE_ID_IN_VARIABLE = "stock.shop.instance.id.in.variable";
+const QString Translations::UNLIMITED = "unlimited";
 
 // -------------------------------------------------------
 //

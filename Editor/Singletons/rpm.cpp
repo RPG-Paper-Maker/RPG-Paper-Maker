@@ -603,7 +603,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::SHAKE_SCREEN) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::FLASH_SCREEN) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::PLUGIN) + RPM::DOT_DOT_DOT,
-        "Start shop menu" + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::START_SHOP_MENU) + RPM::DOT_DOT_DOT,
         ""
     });
     RPM::ENUM_TO_STRING_TARGET_KIND = QStringList({
