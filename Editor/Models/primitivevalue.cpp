@@ -309,6 +309,13 @@ QString PrimitiveValue::toString() const {
 
 // -------------------------------------------------------
 
+bool PrimitiveValue::isFixNumberValue() const {
+    return m_kind == PrimitiveValueKind::DataBase || m_kind == PrimitiveValueKind
+        ::Number || m_kind == PrimitiveValueKind::NumberDouble;
+}
+
+// -------------------------------------------------------
+
 void PrimitiveValue::labelTab(QString &str) const {
     switch (m_kind) {
     case PrimitiveValueKind::Anything:

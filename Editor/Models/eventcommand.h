@@ -193,6 +193,8 @@ private:
         *parameters) const;
     QString strPlugin(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
+    QString strStartShopMenu(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

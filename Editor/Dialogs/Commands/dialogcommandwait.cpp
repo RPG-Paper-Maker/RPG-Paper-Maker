@@ -27,13 +27,11 @@ DialogCommandWait::DialogCommandWait(EventCommand *command, SystemCommonObject
     ui(new Ui::DialogCommandWait)
 {
     ui->setupUi(this);
-    
     this->initializePrimitives();
-
-    if (command != nullptr) {
+    if (command != nullptr)
+    {
         initialize(command);
     }
-
     this->translate();
 }
 

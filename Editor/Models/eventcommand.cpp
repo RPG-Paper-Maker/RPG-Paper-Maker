@@ -20,6 +20,7 @@
 #include "systemplugin.h"
 #include "systemplugincommand.h"
 #include "systempluginparameter.h"
+#include "systemcommanditemprice.h"
 
 const QString EventCommand::JSON_KIND = "kind";
 const QString EventCommand::JSON_COMMANDS = "command";
@@ -308,6 +309,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strFlashScreen(object, parameters); break;
     case EventCommandKind::Plugin:
         str += this->strPlugin(object, parameters); break;
+    case EventCommandKind::StartShopMenu:
+        str += this->strStartShopMenu(object, parameters); break;
     default:
         break;
     }
@@ -2236,6 +2239,30 @@ QString EventCommand::strPlugin(SystemCommonObject *object, QStandardItemModel
     return RPM::translate(Translations::PLUGIN) + RPM::COLON + RPM::SPACE +
         pluginName + RPM::SPACE + RPM::DASH + RPM::SPACE + commandName +
         commandParameters;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strStartShopMenu(SystemCommonObject *object, QStandardItemModel
+    *parameters) const
+{
+    int i = 0;
+    QString buyOnly = this->strProperty(i, object, parameters);
+    bool stock = this->valueCommandAt(i++) == RPM::TRUE_BOOL_STRING;
+    QString stockVariable;
+    if (stock)
+    {
+        stockVariable = this->valueCommandAt(i++);
+    }
+    SystemCommandItemPrice *itemPrice;
+    QStringList list;
+    while (i < this->commandsCount())
+    {
+        itemPrice = new SystemCommandItemPrice;
+        itemPrice->initialize(this, i);
+        list << itemPrice->toString();
+    }
+    return "Start shop menu" + RPM::COLON + RPM::NEW_LINE + list.join(RPM::NEW_LINE) + RPM::NEW_LINE + "Buy only" + RPM::COLON + RPM::SPACE + buyOnly + (stock ? RPM::NEW_LINE + "Stock in variable ID" + RPM::COLON + RPM::SPACE + stockVariable : "");
 }
 
 // -------------------------------------------------------

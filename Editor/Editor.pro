@@ -64,10 +64,12 @@ HEADERS += \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.h \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.h \
     Dialogs/Commands/dialogcommandshakescreen.h \
+    Dialogs/Commands/dialogcommandstartshopmenu.h \
     Dialogs/Systems/dialogsystemanimationframeeffect.h \
     Dialogs/Systems/dialogsystemanimationframeelement.h \
     Dialogs/Systems/dialogsystembattlemap.h \
     Dialogs/Systems/dialogsystemcameraproperties.h \
+    Dialogs/Systems/dialogsystemcommanditemprice.h \
     Dialogs/Systems/dialogsystemcustomstructureelement.h \
     Dialogs/Systems/dialogsystemdetection.h \
     Dialogs/Systems/dialogsystemfontname.h \
@@ -123,6 +125,7 @@ HEADERS += \
     Models/System/systemanimationframeeffect.h \
     Models/System/systemanimationframeelement.h \
     Models/System/systemcameraproperties.h \
+    Models/System/systemcommanditemprice.h \
     Models/System/systemcustomstructure.h \
     Models/System/systemcustomstructureelement.h \
     Models/System/systemdetection.h \
@@ -449,10 +452,12 @@ SOURCES += \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.cpp \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.cpp \
     Dialogs/Commands/dialogcommandshakescreen.cpp \
+    Dialogs/Commands/dialogcommandstartshopmenu.cpp \
     Dialogs/Systems/dialogsystemanimationframeeffect.cpp \
     Dialogs/Systems/dialogsystemanimationframeelement.cpp \
     Dialogs/Systems/dialogsystembattlemap.cpp \
     Dialogs/Systems/dialogsystemcameraproperties.cpp \
+    Dialogs/Systems/dialogsystemcommanditemprice.cpp \
     Dialogs/Systems/dialogsystemcustomstructureelement.cpp \
     Dialogs/Systems/dialogsystemdetection.cpp \
     Dialogs/Systems/dialogsystemfontname.cpp \
@@ -492,6 +497,7 @@ SOURCES += \
     Models/System/systemanimationframeeffect.cpp \
     Models/System/systemanimationframeelement.cpp \
     Models/System/systemcameraproperties.cpp \
+    Models/System/systemcommanditemprice.cpp \
     Models/System/systemcustomstructure.cpp \
     Models/System/systemcustomstructureelement.cpp \
     Models/System/systemdetection.cpp \
@@ -783,10 +789,12 @@ FORMS += \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.ui \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.ui \
     Dialogs/Commands/dialogcommandshakescreen.ui \
+    Dialogs/Commands/dialogcommandstartshopmenu.ui \
     Dialogs/Systems/dialogsystemanimationframeeffect.ui \
     Dialogs/Systems/dialogsystemanimationframeelement.ui \
     Dialogs/Systems/dialogsystembattlemap.ui \
     Dialogs/Systems/dialogsystemcameraproperties.ui \
+    Dialogs/Systems/dialogsystemcommanditemprice.ui \
     Dialogs/Systems/dialogsystemcustomstructureelement.ui \
     Dialogs/Systems/dialogsystemdetection.ui \
     Dialogs/Systems/dialogsystemfontname.ui \

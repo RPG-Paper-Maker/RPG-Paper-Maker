@@ -26,9 +26,7 @@ DialogSystemColor::DialogSystemColor(SystemColor& color, QWidget *parent) :
     m_color(color)
 {
     ui->setupUi(this);
-
-    initialize();
-
+    this->initialize();
     this->translate();
 }
 

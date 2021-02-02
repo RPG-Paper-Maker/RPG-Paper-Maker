@@ -80,6 +80,7 @@ enum class EventCommandKind {
     ShakeScreen,
     FlashScreen,
     Plugin,
+    StartShopMenu,
     Last
 };
 

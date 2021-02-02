@@ -232,10 +232,7 @@ void WidgetSuperTree::pasteItem(QStandardItem* selected){
             super->setId(this->getNewId(p_model));
         }
         emit pastingItem(m_copiedItem, super, selected->row());
-        if (super->id() != -1)
-        {
-            setItem(selected, super);
-        }
+        this->setItem(selected, super);
     }
 }
 

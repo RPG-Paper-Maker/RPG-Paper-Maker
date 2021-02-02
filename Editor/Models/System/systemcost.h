@@ -46,9 +46,13 @@ public:
     SuperListItem * variableID() const;
     PrimitiveValue * valueFormula() const;
 
+    static QString toStringPrice(QStandardItemModel *model);
     static SystemCost * createStat(int stat, int nb);
     static SystemCost * createMP(int nb);
     static SystemCost * createTP(int nb);
+
+    void initialize(const EventCommand *command, int &i);
+    void getCommand(QVector<QString> &command);
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;

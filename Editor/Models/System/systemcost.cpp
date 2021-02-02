@@ -75,6 +75,23 @@ PrimitiveValue * SystemCost::valueFormula() const {
 //
 // -------------------------------------------------------
 
+QString SystemCost::toStringPrice(QStandardItemModel *model)
+{
+    QStringList list;
+    SystemCost *cost;
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        cost = reinterpret_cast<SystemCost *>(SuperListItem::getItemModelAt(model, i));
+        if (cost != nullptr)
+        {
+            list << cost->toString();
+        }
+    }
+    return list.join(" + ");
+}
+
+// -------------------------------------------------------
+
 SystemCost * SystemCost::createStat(int stat, int nb) {
     return new SystemCost(DamagesKind::Stat, new PrimitiveValue(
         PrimitiveValueKind::DataBase, stat), PrimitiveValue
@@ -92,6 +109,45 @@ SystemCost * SystemCost::createMP(int nb) {
 
 SystemCost * SystemCost::createTP(int nb) {
     return SystemCost::createStat(5, nb);
+}
+
+// -------------------------------------------------------
+
+void SystemCost::initialize(const EventCommand *command, int &i)
+{
+    m_kind->setId(command->valueCommandAt(i++).toInt());
+    switch (m_kind->id()) {
+    case 0:
+        m_statisticID->initializeCommandParameter(command, i);
+        break;
+    case 1:
+        m_currencyID->initializeCommandParameter(command, i);
+        break;
+    case 2:
+        m_variableID->setId(command->valueCommandAt(i++).toInt());
+        break;
+    }
+    m_valueFormula->initializeCommandParameter(command, i);
+}
+
+// -------------------------------------------------------
+
+void SystemCost::getCommand(QVector<QString> &command)
+{
+    int index = m_kind->id();
+    command.append(QString::number(index));
+    switch (index) {
+    case 0:
+        m_statisticID->getCommandParameter(command);
+        break;
+    case 1:
+        m_currencyID->getCommandParameter(command);
+        break;
+    case 2:
+        command.append(QString::number(m_variableID->id()));
+        break;
+    }
+    m_valueFormula->getCommandParameter(command);
 }
 
 // -------------------------------------------------------
@@ -138,24 +194,19 @@ void SystemCost::setCopy(const SuperListItem &super) {
 // -------------------------------------------------------
 
 QString SystemCost::toString() const {
-    QString text = SuperListItem::beginningText;
-
-    QString textD;
+    QString text;
     switch (static_cast<DamagesKind>(m_kind->id())) {
     case DamagesKind::Stat:
-        textD += m_statisticID->toString();
+        text += m_statisticID->toString();
         break;
     case DamagesKind::Currency:
-        textD += m_currencyID->toString();
+        text += m_currencyID->toString();
         break;
     case DamagesKind::Variable:
-        textD += QString::number(m_variableID->id());
+        text += SuperListItem::beginningText + QString::number(m_variableID->id());
         break;
     }
-    text += RPM::ENUM_TO_STRING_DAMAGES_KIND.at(m_kind->id()) + " " + textD +
-        ": " + m_valueFormula->toString();
-
-    return text;
+    return text + ": " + m_valueFormula->toString();
 }
 
 // -------------------------------------------------------

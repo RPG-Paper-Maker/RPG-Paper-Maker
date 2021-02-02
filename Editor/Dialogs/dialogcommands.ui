@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_5">
       <attribute name="title">
@@ -365,12 +365,12 @@
               <item row="0" column="0">
                <layout class="QVBoxLayout" name="verticalLayout_19">
                 <item>
-                 <widget class="QPushButton" name="pushButtonStartShop">
+                 <widget class="QPushButton" name="pushButtonStartShopMenu">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
-                   <string>Start shop...</string>
+                   <string>Start shop menu...</string>
                   </property>
                  </widget>
                 </item>
@@ -380,7 +380,7 @@
                    <bool>false</bool>
                   </property>
                   <property name="text">
-                   <string>Enter a name...</string>
+                   <string>Enter a name menu...</string>
                   </property>
                  </widget>
                 </item>

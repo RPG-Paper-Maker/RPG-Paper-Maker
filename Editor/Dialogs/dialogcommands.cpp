@@ -49,6 +49,7 @@
 #include "dialogcommandshakescreen.h"
 #include "dialogcommandflashscreen.h"
 #include "dialogcommandplugin.h"
+#include "dialogcommandstartshopmenu.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -83,12 +84,14 @@ EventCommand* DialogCommands::getCommand() const{ return p_command; }
 //
 // -------------------------------------------------------
 
-DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
-                                                EventCommand* command,
-                                                SystemCommonObject *object,
-                                                QStandardItemModel *parameters)
+DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
+    EventCommand *command, SystemCommonObject *object, QStandardItemModel
+    *parameters)
 {
-    switch(kind){
+    QStandardItemModel *properties = object == nullptr ? nullptr : object
+        ->modelProperties();
+    switch(kind)
+    {
     case EventCommandKind::ShowText:
         return new DialogCommandShowText(command, object, parameters);
     case EventCommandKind::ChangeVariables:
@@ -194,6 +197,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandFlashScreen(command, object, parameters);
     case EventCommandKind::Plugin:
         return new DialogCommandPlugin(command, object, parameters);
+    case EventCommandKind::StartShopMenu:
+        return new DialogCommandStartShopMenu(command, properties, parameters);
     default:
         return nullptr;
     }
@@ -659,4 +664,11 @@ void DialogCommands::on_pushButtonFlashScreen_clicked()
 void DialogCommands::on_pushButtonPlugin_clicked()
 {
     this->openDialogCommand(EventCommandKind::Plugin);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonStartShopMenu_clicked()
+{
+    this->openDialogCommand(EventCommandKind::StartShopMenu);
 }

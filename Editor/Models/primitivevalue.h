@@ -72,6 +72,7 @@ public:
     static PrimitiveValue * createDefaultMessageValue();
 
     QString toString() const;
+    bool isFixNumberValue() const;
     void labelTab(QString& str) const;
     bool isDefaultDataBaseValue() const;
     bool isDefaultNumberValue() const;
