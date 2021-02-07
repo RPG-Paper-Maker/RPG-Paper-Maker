@@ -32,8 +32,6 @@ class PanelDatasClass : public QWidget
     Q_OBJECT
 
 public:
-    static const QString NAME_EXPERIENCE;
-
     explicit PanelDatasClass(QWidget *parent = nullptr);
     ~PanelDatasClass();
     int finalLevel() const;

@@ -16,8 +16,6 @@
 #include "systemclassskill.h"
 #include "rpm.h"
 
-const QString PanelDatasClass::NAME_EXPERIENCE = "Experience";
-
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -122,8 +120,8 @@ void PanelDatasClass::updateExperience() {
         int expInflation = ui->spinBoxClassInflation->value();
 
         ui->tableWidgetNextLevel->setTable(m_class->expTable());
-        ui->tableWidgetNextLevel->initialize(maxLevel - 1, NAME_EXPERIENCE);
-        ui->tableWidgetTotalLevel->initialize(maxLevel, NAME_EXPERIENCE);
+        ui->tableWidgetNextLevel->initialize(maxLevel - 1, RPM::translate(Translations::EXPERIENCE));
+        ui->tableWidgetTotalLevel->initialize(maxLevel, RPM::translate(Translations::EXPERIENCE));
         ui->tableWidgetNextLevel->updateWithBaseInflation(expBase, expInflation,
             maxLevel, m_originalClass->expTable());
     }
