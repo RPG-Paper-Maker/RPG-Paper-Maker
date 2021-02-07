@@ -46,7 +46,7 @@ SystemCommonSkillItem::SystemCommonSkillItem() :
     QStandardItemModel, new QStandardItemModel, new QStandardItemModel, new
     QStandardItemModel)
 {
-    this->initializeHeaders();
+
 }
 
 SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
@@ -74,7 +74,11 @@ SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
     m_modelEffects(modelEffects),
     m_modelCharacteristics(modelCharacteristics)
 {
-
+    m_animationUserID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->animationsDatas()->model());
+    m_animationTargetID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->animationsDatas()->model());
+    this->initializeHeaders();
 }
 
 SystemCommonSkillItem::~SystemCommonSkillItem() {
@@ -271,13 +275,9 @@ void SystemCommonSkillItem::read(const QJsonObject &json){
     if (json.contains(JSON_ANIMATION_USER_ID)) {
         m_animationUserID->read(json[JSON_ANIMATION_USER_ID].toObject());
     }
-    m_animationUserID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->animationsDatas()->model());
     if (json.contains(JSON_ANIMATION_TARGET_ID)) {
         m_animationTargetID->read(json[JSON_ANIMATION_TARGET_ID].toObject());
     }
-    m_animationTargetID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->animationsDatas()->model());
 
     // Price
     SuperListItem::readTree(m_modelPrice, new SystemCost(DamagesKind::Currency,
