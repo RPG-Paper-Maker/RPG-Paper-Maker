@@ -154,7 +154,7 @@ SuperListItem* SystemAnimation::createCopy() const{
 
 void SystemAnimation::setCopy(const SuperListItem &super) {
     const SystemAnimation *animation;
-
+    SuperListItem::setCopy(super);
     animation = reinterpret_cast<const SystemAnimation *>(&super);
     m_pictureID = animation->pictureID();
     m_positionKind = animation->m_positionKind;

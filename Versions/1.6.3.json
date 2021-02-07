@@ -31,7 +31,13 @@
         "Open 3D object Manager > OK > Re-open 3D object manager > Crash",
         "Fragment shader issue",
         "Collisions issues with w = 0 mountains block under it",
-        "Battle commands id always 1 with new"
+        "Battle commands id always 1 with new",
+        "Sometimes crash after copy paste in animation",
+        "Mountains display issue when 32x32 tiles",
+        "Changing animation in editor may make it crash",
+        "Battlers aren't face sprites",
+        "Objects in battle maps are not moving",
+        "Changing experience statistic outside of combat isn't leveling up check"
 	],
     "finished": [
         2,
@@ -39,7 +45,7 @@
         2,
         2,
         2,
-        1,
+        2,
         2,
         2,
         2,
@@ -61,6 +67,12 @@
         2,
         2,
         2,
-        2
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
     ]
 }

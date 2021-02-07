@@ -209,22 +209,21 @@ void WidgetSuperList::copy(QStandardItem *selected) {
 // -------------------------------------------------------
 
 void WidgetSuperList::paste(QStandardItem *selected) {
-    SuperListItem *super;
-    QModelIndex index;
-    int row;
-    int id;
-
-    super = reinterpret_cast<SuperListItem *>(selected->data().value<quintptr>());
-    id = super->id();
-    super->setCopy(*m_copiedItem);
-    super->setId(id);
-    index = selected->index();
-    row = selected->row();
-    p_model->removeRow(row);
-    p_model->insertRow(row, super->getModelRow());
-    this->selectionModel()->clear();
-    this->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
-    emit updated();
+    if (m_copiedItem)
+    {
+        SuperListItem *super = reinterpret_cast<SuperListItem *>(selected->data()
+            .value<quintptr>());
+        int id = super->id();
+        super->setCopy(*m_copiedItem);
+        super->setId(id);
+        QModelIndex index = selected->index();
+        int row = selected->row();
+        p_model->removeRow(row);
+        p_model->insertRow(row, super->getModelRow());
+        this->selectionModel()->clear();
+        this->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+        emit updated();
+    }
 }
 
 // -------------------------------------------------------
