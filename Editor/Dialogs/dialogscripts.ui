@@ -601,7 +601,7 @@
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0">
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,0">
        <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
@@ -614,6 +614,13 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonRefresh">
+         <property name="text">
+          <string>Refresh</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pushButtonClose">

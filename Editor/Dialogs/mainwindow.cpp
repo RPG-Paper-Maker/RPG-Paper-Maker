@@ -825,6 +825,7 @@ void MainWindow::on_actionScripts_manager_triggered()
 {
     if (m_dialogScripts->isHidden())
     {
+        m_dialogScripts->initialize();
         m_dialogScripts->show();
     }
 }

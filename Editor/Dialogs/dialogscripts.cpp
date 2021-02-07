@@ -153,6 +153,9 @@ SystemPlugin * DialogScripts::getSelectedPlugin() const
 
 void DialogScripts::initialize()
 {
+    // Refresh scripts
+    RPM::get()->project()->readScriptsDatas();
+
     // System
     ui->treeViewSystem->initializeModel(RPM::get()->project()->scriptsDatas()
         ->modelSystem());
@@ -820,4 +823,11 @@ void DialogScripts::on_pushButtonExport_clicked()
                 ::translate(Translations::TO) + RPM::SPACE + dst);
         }
     }
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pushButtonRefresh_clicked()
+{
+    this->initialize();
 }
