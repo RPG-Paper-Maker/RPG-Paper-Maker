@@ -2248,12 +2248,7 @@ QString EventCommand::strStartShopMenu(SystemCommonObject *object, QStandardItem
 {
     int i = 0;
     QString buyOnly = this->strProperty(i, object, parameters);
-    bool stock = this->valueCommandAt(i++) == RPM::TRUE_BOOL_STRING;
-    QString stockVariable;
-    if (stock)
-    {
-        stockVariable = this->valueCommandAt(i++);
-    }
+    QString shopID = this->strProperty(i, object, parameters);
     SystemCommandItemPrice *itemPrice;
     QStringList list;
     while (i < this->commandsCount())
@@ -2264,9 +2259,9 @@ QString EventCommand::strStartShopMenu(SystemCommonObject *object, QStandardItem
     }
     return RPM::translate(Translations::START_SHOP_MENU) + RPM::COLON + RPM
         ::NEW_LINE + list.join(RPM::NEW_LINE) + RPM::NEW_LINE + RPM::translate(
-        Translations::BUY_ONLY) + RPM::COLON + RPM::SPACE + buyOnly + (stock ?
-        RPM::NEW_LINE + RPM::translate(Translations::STOCK_SHOP_INSTANCE_ID_IN_VARIABLE) +
-        RPM::COLON + RPM::SPACE + stockVariable : "");
+        Translations::BUY_ONLY) + RPM::COLON + RPM::SPACE + buyOnly + RPM
+        ::NEW_LINE + RPM::translate(Translations::SHOP_ID) + RPM::COLON + RPM
+        ::SPACE + shopID;
 }
 
 // -------------------------------------------------------

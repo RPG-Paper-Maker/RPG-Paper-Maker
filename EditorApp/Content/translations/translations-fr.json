@@ -1188,6 +1188,6 @@
     "start.shop.menu": "Démarrer le menu de magasin",
     "stock": "Stock",
     "buy.only": "Achat uniquement",
-    "stock.shop.instance.id.in.variable": "Stocker l'ID d'instance du magasin dans la variable",
+    "shop.id": "Magasin d'ID",
     "unlimited": "Illimité"
 }

@@ -1221,7 +1221,7 @@ public:
     static const QString START_SHOP_MENU;
     static const QString STOCK;
     static const QString BUY_ONLY;
-    static const QString STOCK_SHOP_INSTANCE_ID_IN_VARIABLE;
+    static const QString SHOP_ID;
     static const QString UNLIMITED;
 
     Translations();

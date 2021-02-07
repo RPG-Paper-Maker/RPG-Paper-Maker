@@ -54,8 +54,7 @@ void DialogCommandStartShopMenu::translate()
     this->setWindowTitle(RPM::translate(Translations::START_SHOP_MENU) + RPM
         ::DOT_DOT_DOT);
     ui->labelBuyOnly->setText(RPM::translate(Translations::BUY_ONLY) + RPM::COLON);
-    ui->checkBoxStockShopInstanceID->setText(RPM::translate(Translations
-        ::STOCK_SHOP_INSTANCE_ID_IN_VARIABLE) + RPM::COLON);
+    ui->labelShopID->setText(RPM::translate(Translations::SHOP_ID) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -76,7 +75,8 @@ void DialogCommandStartShopMenu::initializePrimitives()
     ui->treeViewItemPrice->setCanBeControled(true);
     ui->panelPrimitiveValueBuyOnly->initializeSwitch(m_parameters, m_properties);
     ui->panelPrimitiveValueBuyOnly->setSwitchValue(false);
-    ui->widgetVariableStock->initialize(1);
+    ui->panelPrimitiveValueShopID->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveValueShopID->setNumberValue(1);
 }
 
 // -------------------------------------------------------
@@ -89,12 +89,7 @@ void DialogCommandStartShopMenu::initialize(EventCommand* command)
 {
     int i = 0;
     ui->panelPrimitiveValueBuyOnly->initializeCommand(command, i);
-    ui->checkBoxStockShopInstanceID->setChecked(command->valueCommandAt(i++) ==
-        RPM::TRUE_BOOL_STRING);
-    if (ui->checkBoxStockShopInstanceID->isChecked())
-    {
-        ui->widgetVariableStock->initialize(command->valueCommandAt(i++).toInt());
-    }
+    ui->panelPrimitiveValueShopID->initializeCommand(command, i);
     SystemCommandItemPrice *itemPrice;
     int j = 0;
     while (i < command->commandsCount())
@@ -113,12 +108,7 @@ EventCommand * DialogCommandStartShopMenu::getCommand() const
 {
     QVector<QString> command;
     ui->panelPrimitiveValueBuyOnly->getCommand(command);
-    command.append(ui->checkBoxStockShopInstanceID->isChecked() ? RPM
-        ::TRUE_BOOL_STRING : RPM::FALSE_BOOL_STRING);
-    if (ui->checkBoxStockShopInstanceID->isChecked())
-    {
-        command.append(QString::number(ui->widgetVariableStock->currentId()));
-    }
+    ui->panelPrimitiveValueShopID->getCommand(command);
     SystemCommandItemPrice *itemPrice;
     for (int i = 0, l = m_modelItemPrice->invisibleRootItem()->rowCount(); i < l; i ++)
     {
@@ -129,15 +119,4 @@ EventCommand * DialogCommandStartShopMenu::getCommand() const
         }
     }
     return new EventCommand(EventCommandKind::StartShopMenu, command);
-}
-
-// -------------------------------------------------------
-//
-//  SLOTS
-//
-// -------------------------------------------------------
-
-void DialogCommandStartShopMenu::on_checkBoxStockShopInstanceID_toggled(bool checked)
-{
-    ui->widgetVariableStock->setEnabled(checked);
 }

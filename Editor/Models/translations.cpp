@@ -1208,7 +1208,7 @@ const QString Translations::ONLY_THE_CLOSEST = "only.the.closest";
 const QString Translations::START_SHOP_MENU = "start.shop.menu";
 const QString Translations::STOCK = "stock";
 const QString Translations::BUY_ONLY = "buy.only";
-const QString Translations::STOCK_SHOP_INSTANCE_ID_IN_VARIABLE = "stock.shop.instance.id.in.variable";
+const QString Translations::SHOP_ID = "shop.id";
 const QString Translations::UNLIMITED = "unlimited";
 
 // -------------------------------------------------------

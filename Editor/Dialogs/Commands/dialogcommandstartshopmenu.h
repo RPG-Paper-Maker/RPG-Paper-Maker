@@ -51,9 +51,6 @@ protected:
 
 private:
     Ui::DialogCommandStartShopMenu *ui;
-
-public slots:
-    void on_checkBoxStockShopInstanceID_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDSTARTSHOPMENU_H

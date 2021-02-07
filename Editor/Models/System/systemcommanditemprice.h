@@ -54,7 +54,7 @@ public:
     void getCommand(QVector<QString> &command);
     void initializeHeaders();
 
-    virtual QString toString();
+    virtual QString toString() const;
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);

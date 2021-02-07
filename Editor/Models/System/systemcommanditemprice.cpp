@@ -264,7 +264,7 @@ void SystemCommandItemPrice::initializeHeaders()
 //
 // -------------------------------------------------------
 
-QString SystemCommandItemPrice::toString()
+QString SystemCommandItemPrice::toString() const
 {
     return this->toStringItem() + RPM::SPACE + RPM::SLASH + RPM::SPACE + this
         ->toStringPrice() + RPM::SPACE + RPM::SLASH + RPM::SPACE + this

@@ -1188,6 +1188,6 @@
     "start.shop.menu": "Start shop menu",
     "stock": "Stock",
     "buy.only": "Buy only",
-    "stock.shop.instance.id.in.variable": "Stock shop instance ID in variable",
+    "shop.id": "Shop ID",
     "unlimited": "Unlimited"
 }
