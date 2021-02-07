@@ -81,6 +81,7 @@ enum class EventCommandKind {
     FlashScreen,
     Plugin,
     StartShopMenu,
+    RestockShop,
     Last
 };
 

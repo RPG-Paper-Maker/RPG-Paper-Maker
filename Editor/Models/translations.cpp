@@ -1210,6 +1210,7 @@ const QString Translations::STOCK = "stock";
 const QString Translations::BUY_ONLY = "buy.only";
 const QString Translations::SHOP_ID = "shop.id";
 const QString Translations::UNLIMITED = "unlimited";
+const QString Translations::RESTOCK_SHOP = "restock.shop";
 
 // -------------------------------------------------------
 //

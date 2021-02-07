@@ -1223,6 +1223,7 @@ public:
     static const QString BUY_ONLY;
     static const QString SHOP_ID;
     static const QString UNLIMITED;
+    static const QString RESTOCK_SHOP;
 
     Translations();
     virtual ~Translations();

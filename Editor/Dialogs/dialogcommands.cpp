@@ -199,6 +199,8 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandPlugin(command, object, parameters);
     case EventCommandKind::StartShopMenu:
         return new DialogCommandStartShopMenu(command, properties, parameters);
+    case EventCommandKind::RestockShop:
+        return new DialogCommandStartShopMenu(command, properties, parameters, true);
     default:
         return nullptr;
     }
@@ -332,6 +334,7 @@ void DialogCommands::translate() {
     ui->pushButtonFlashScreen->setText(EventCommand::kindToString(EventCommandKind::FlashScreen));
     ui->pushButtonPlugin->setText(EventCommand::kindToString(EventCommandKind::Plugin));
     ui->pushButtonStartShopMenu->setText(EventCommand::kindToString(EventCommandKind::StartShopMenu));
+    ui->pushButtonRestockShop->setText(EventCommand::kindToString(EventCommandKind::RestockShop));
 
     ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
     ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));
@@ -678,4 +681,10 @@ void DialogCommands::on_pushButtonPlugin_clicked()
 void DialogCommands::on_pushButtonStartShopMenu_clicked()
 {
     this->openDialogCommand(EventCommandKind::StartShopMenu);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonRestockShop_clicked() {
+    this->openDialogCommand(EventCommandKind::RestockShop);
 }

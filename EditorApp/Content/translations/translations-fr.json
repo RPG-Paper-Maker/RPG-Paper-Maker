@@ -1189,5 +1189,6 @@
     "stock": "Stock",
     "buy.only": "Achat uniquement",
     "shop.id": "Magasin d'ID",
-    "unlimited": "Illimité"
+    "unlimited": "Illimité",
+    "restock.shop": "Réapprovisionner un magasin"
 }

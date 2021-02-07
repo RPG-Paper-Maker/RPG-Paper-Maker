@@ -21,11 +21,13 @@
 // -------------------------------------------------------
 
 DialogCommandStartShopMenu::DialogCommandStartShopMenu(EventCommand *command,
-    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, bool
+    isRestock, QWidget *parent) :
     DialogCommand(parent),
     m_properties(properties),
     m_parameters(parameters),
     m_modelItemPrice(new QStandardItemModel),
+    m_isRestock(isRestock),
     ui(new Ui::DialogCommandStartShopMenu)
 {
     ui->setupUi(this);
@@ -51,8 +53,8 @@ DialogCommandStartShopMenu::~DialogCommandStartShopMenu()
 
 void DialogCommandStartShopMenu::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::START_SHOP_MENU) + RPM
-        ::DOT_DOT_DOT);
+    this->setWindowTitle(RPM::translate(m_isRestock ? Translations::RESTOCK_SHOP :
+        Translations::START_SHOP_MENU) + RPM::DOT_DOT_DOT);
     ui->labelBuyOnly->setText(RPM::translate(Translations::BUY_ONLY) + RPM::COLON);
     ui->labelShopID->setText(RPM::translate(Translations::SHOP_ID) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
@@ -73,8 +75,15 @@ void DialogCommandStartShopMenu::initializePrimitives()
     ui->treeViewItemPrice->header()->setSectionResizeMode(2, QHeaderView::Stretch);
     ui->treeViewItemPrice->setCurrentIndex(ui->treeViewItemPrice->getModel()->index(0, 0));
     ui->treeViewItemPrice->setCanBeControled(true);
-    ui->panelPrimitiveValueBuyOnly->initializeSwitch(m_parameters, m_properties);
-    ui->panelPrimitiveValueBuyOnly->setSwitchValue(false);
+    if (m_isRestock)
+    {
+        ui->labelBuyOnly->hide();
+        ui->panelPrimitiveValueBuyOnly->hide();
+    } else
+    {
+        ui->panelPrimitiveValueBuyOnly->initializeSwitch(m_parameters, m_properties);
+        ui->panelPrimitiveValueBuyOnly->setSwitchValue(false);
+    }
     ui->panelPrimitiveValueShopID->initializeNumber(m_parameters, m_properties);
     ui->panelPrimitiveValueShopID->setNumberValue(1);
 }
@@ -88,7 +97,10 @@ void DialogCommandStartShopMenu::initializePrimitives()
 void DialogCommandStartShopMenu::initialize(EventCommand* command)
 {
     int i = 0;
-    ui->panelPrimitiveValueBuyOnly->initializeCommand(command, i);
+    if (!m_isRestock)
+    {
+        ui->panelPrimitiveValueBuyOnly->initializeCommand(command, i);
+    }
     ui->panelPrimitiveValueShopID->initializeCommand(command, i);
     SystemCommandItemPrice *itemPrice;
     int j = 0;
@@ -107,7 +119,10 @@ void DialogCommandStartShopMenu::initialize(EventCommand* command)
 EventCommand * DialogCommandStartShopMenu::getCommand() const
 {
     QVector<QString> command;
-    ui->panelPrimitiveValueBuyOnly->getCommand(command);
+    if (!m_isRestock)
+    {
+        ui->panelPrimitiveValueBuyOnly->getCommand(command);
+    }
     ui->panelPrimitiveValueShopID->getCommand(command);
     SystemCommandItemPrice *itemPrice;
     for (int i = 0, l = m_modelItemPrice->invisibleRootItem()->rowCount(); i < l; i ++)
@@ -118,5 +133,6 @@ EventCommand * DialogCommandStartShopMenu::getCommand() const
             itemPrice->getCommand(command);
         }
     }
-    return new EventCommand(EventCommandKind::StartShopMenu, command);
+    return new EventCommand(m_isRestock ? EventCommandKind::RestockShop :
+        EventCommandKind::StartShopMenu, command);
 }

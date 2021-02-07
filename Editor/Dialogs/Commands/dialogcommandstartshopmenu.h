@@ -33,7 +33,7 @@ class DialogCommandStartShopMenu : public DialogCommand
 public:
     explicit DialogCommandStartShopMenu(EventCommand *command = nullptr,
         QStandardItemModel *properties = nullptr, QStandardItemModel *parameters =
-        nullptr, QWidget *parent = nullptr);
+        nullptr, bool isRestock = false, QWidget *parent = nullptr);
     virtual ~DialogCommandStartShopMenu();
 
     void translate();
@@ -44,6 +44,7 @@ protected:
     QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
     QStandardItemModel *m_modelItemPrice;
+    bool m_isRestock;
 
     void initializePrimitives();
 

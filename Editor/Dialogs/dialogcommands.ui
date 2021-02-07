@@ -375,6 +375,13 @@
                  </widget>
                 </item>
                 <item>
+                 <widget class="QPushButton" name="pushButtonRestockShop">
+                  <property name="text">
+                   <string>Restock shop...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QPushButton" name="pushButtonChangeChronometer_4">
                   <property name="enabled">
                    <bool>false</bool>

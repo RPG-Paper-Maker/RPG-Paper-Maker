@@ -194,7 +194,7 @@ private:
     QString strPlugin(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
     QString strStartShopMenu(SystemCommonObject *object, QStandardItemModel
-        *parameters) const;
+        *parameters, bool isRestock = false) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

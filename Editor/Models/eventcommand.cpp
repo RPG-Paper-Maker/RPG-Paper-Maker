@@ -311,6 +311,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strPlugin(object, parameters); break;
     case EventCommandKind::StartShopMenu:
         str += this->strStartShopMenu(object, parameters); break;
+    case EventCommandKind::RestockShop:
+        str += this->strStartShopMenu(object, parameters, true); break;
     default:
         break;
     }
@@ -2244,10 +2246,14 @@ QString EventCommand::strPlugin(SystemCommonObject *object, QStandardItemModel
 // -------------------------------------------------------
 
 QString EventCommand::strStartShopMenu(SystemCommonObject *object, QStandardItemModel
-    *parameters) const
+    *parameters, bool isRestock) const
 {
     int i = 0;
-    QString buyOnly = this->strProperty(i, object, parameters);
+    QString buyOnly;
+    if (!isRestock)
+    {
+        buyOnly = this->strProperty(i, object, parameters);
+    }
     QString shopID = this->strProperty(i, object, parameters);
     SystemCommandItemPrice *itemPrice;
     QStringList list;
@@ -2257,11 +2263,12 @@ QString EventCommand::strStartShopMenu(SystemCommonObject *object, QStandardItem
         itemPrice->initialize(this, i);
         list << itemPrice->toString();
     }
-    return RPM::translate(Translations::START_SHOP_MENU) + RPM::COLON + RPM
-        ::NEW_LINE + list.join(RPM::NEW_LINE) + RPM::NEW_LINE + RPM::translate(
-        Translations::BUY_ONLY) + RPM::COLON + RPM::SPACE + buyOnly + RPM
-        ::NEW_LINE + RPM::translate(Translations::SHOP_ID) + RPM::COLON + RPM
-        ::SPACE + shopID;
+    return (isRestock ? RPM::translate(Translations::RESTOCK_SHOP) : RPM
+        ::translate(Translations::START_SHOP_MENU)) + RPM::COLON + RPM::NEW_LINE
+        + list.join(RPM::NEW_LINE) + (isRestock ? "" : (RPM::NEW_LINE + RPM
+        ::translate(Translations::BUY_ONLY) + RPM::COLON + RPM::SPACE + buyOnly))
+        + RPM::NEW_LINE + RPM::translate(Translations::SHOP_ID) + RPM::COLON +
+        RPM::SPACE + shopID;
 }
 
 // -------------------------------------------------------

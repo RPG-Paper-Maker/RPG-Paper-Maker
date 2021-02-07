@@ -1189,5 +1189,6 @@
     "stock": "Stock",
     "buy.only": "Buy only",
     "shop.id": "Shop ID",
-    "unlimited": "Unlimited"
+    "unlimited": "Unlimited",
+    "restock.shop": "Restock shop"
 }
