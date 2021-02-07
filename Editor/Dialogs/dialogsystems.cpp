@@ -138,6 +138,8 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->widgetMountainCollisionAngle->initializeNumberAndUpdate(systemDatas
         ->mountainCollisionAngle(), false);
     ui->spinBoxAnimationFrames->setValue(systemDatas->framesAnimation());
+    ui->spinBoxBattlersFrames->setValue(systemDatas->battlersFrames());
+    ui->spinBoxBattlersColumns->setValue(systemDatas->battlersColumns());
     ui->panelPrimitiveMapFrameDuration->initializeNumberAndUpdate(systemDatas
         ->mapFrameDuration());
     ui->primitiveValuePriceSoldItem->initializeNumberAndUpdate(systemDatas
@@ -574,6 +576,9 @@ void DialogSystems::translate()
         ::SETTINGS_CONFIGURATION));
     ui->groupBoxTitleScreenBackground->setTitle(RPM::translate(Translations
         ::BACKGROUND));
+    ui->groupBoxFrames->setTitle(RPM::translate(Translations::FRAMES));
+    ui->labelBattlersFrames->setText(RPM::translate(Translations::BATTLERS_FRAMES));
+    ui->labelBattlersColumns->setText(RPM::translate(Translations::BATTLERS_COLUMNS));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -621,6 +626,20 @@ void DialogSystems::on_spinBoxSquareSize_valueChanged(int i) {
 
 void DialogSystems::on_spinBoxAnimationFrames_valueChanged(int i) {
     RPM::get()->project()->gameDatas()->systemDatas()->setFramesAnimation(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxBattlersFrames_valueChanged(int i)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setBattlersFrames(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxBattlersColumns_valueChanged(int i)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setBattlersColumns(i);
 }
 
 // -------------------------------------------------------

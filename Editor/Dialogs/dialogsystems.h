@@ -69,6 +69,8 @@ private slots:
     void on_checkBoxAntialiasing_toggled(bool checked);
     void on_spinBoxSquareSize_valueChanged(int i);
     void on_spinBoxAnimationFrames_valueChanged(int i);
+    void on_spinBoxBattlersFrames_valueChanged(int i);
+    void on_spinBoxBattlersColumns_valueChanged(int i);
     void on_comboBoxBattleLevel_currentIndexChanged(int index);
     void on_comboBoxBattleExp_currentIndexChanged(int index);
     void on_pushButtonDefaultDialogBoxOptions_clicked();

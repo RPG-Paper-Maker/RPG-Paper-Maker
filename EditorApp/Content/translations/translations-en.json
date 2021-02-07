@@ -1190,5 +1190,7 @@
     "buy.only": "Buy only",
     "shop.id": "Shop ID",
     "unlimited": "Unlimited",
-    "restock.shop": "Restock shop"
+    "restock.shop": "Restock shop",
+    "battlers.frames": "Battlers frames",
+    "battlers.columns": "Battlers columns"
 }

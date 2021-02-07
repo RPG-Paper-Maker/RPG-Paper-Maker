@@ -47,9 +47,13 @@ const QString SystemDatas::JSON_DIALOG_BOX_OPTIONS = "dbo";
 const QString SystemDatas::JSON_SKY_BOXES = "sb";
 const QString SystemDatas::JSON_ANTIALIASING = "aa";
 const QString SystemDatas::JSON_MAP_FRAME_DURATION = "mfd";
+const QString SystemDatas::JSON_BATTLERS_FRAMES = "battlersFrames";
+const QString SystemDatas::JSON_BATTLERS_COLUMNS = "battlersColumns";
 const QString SystemDatas::JSON_PRICE_SOLD_ITEM = "priceSoldItem";
 const bool SystemDatas::DEFAULT_ANTIALIASING = false;
 const int SystemDatas::DEFAULT_MAP_FRAME_DURATION = 150;
+const int SystemDatas::DEFAULT_BATTLERS_FRAMES = 4;
+const int SystemDatas::DEFAULT_BATTLERS_COLUMNS = 9;
 const double SystemDatas::DEFAULT_PRICE_SOLD_ITEM = 50.0;
 
 // -------------------------------------------------------
@@ -67,6 +71,8 @@ SystemDatas::SystemDatas() :
     m_priceSoldItem(new PrimitiveValue(DEFAULT_PRICE_SOLD_ITEM)),
     m_idMapHero(1),
     m_idObjectHero(1),
+    m_battlersFrames(DEFAULT_BATTLERS_FRAMES),
+    m_battlersColumns(DEFAULT_BATTLERS_COLUMNS),
     m_showBB(false),
     m_antialiasing(false),
     m_modelColors(new QStandardItemModel),
@@ -193,6 +199,26 @@ void SystemDatas::setPathBR(QString p) { m_pathBR = p; }
 int SystemDatas::framesAnimation() const { return m_framesAnimation; }
 
 void SystemDatas::setFramesAnimation(int f) { m_framesAnimation = f; }
+
+int SystemDatas::battlersFrames() const
+{
+    return m_battlersFrames;
+}
+
+void SystemDatas::setBattlersFrames(int battlersFrames)
+{
+    m_battlersFrames = battlersFrames;
+}
+
+int SystemDatas::battlersColumns() const
+{
+    return m_battlersColumns;
+}
+
+void SystemDatas::setBattlersColumns(int battlersColumns)
+{
+    m_battlersColumns = battlersColumns;
+}
 
 bool SystemDatas::showBB() const { return m_showBB; }
 
@@ -611,6 +637,14 @@ void SystemDatas::read(const QJsonObject &json){
     m_idObjectHero = json["idObjHero"].toInt();
     m_pathBR = json["pathBR"].toString();
     m_framesAnimation = json["frames"].toInt();
+    if (json.contains(JSON_BATTLERS_FRAMES))
+    {
+        m_battlersFrames = json[JSON_BATTLERS_FRAMES].toInt();
+    }
+    if (json.contains(JSON_BATTLERS_COLUMNS))
+    {
+        m_battlersColumns = json[JSON_BATTLERS_COLUMNS].toInt();
+    }
     m_showBB = json.contains("bb");
     if (json.contains(JSON_ANTIALIASING))
     {
@@ -779,6 +813,14 @@ void SystemDatas::write(QJsonObject &json) const{
     json["idObjHero"] = m_idObjectHero;
     json["pathBR"] = m_pathBR;
     json["frames"] = m_framesAnimation;
+    if (m_battlersFrames != DEFAULT_BATTLERS_FRAMES)
+    {
+        json[JSON_BATTLERS_FRAMES] = m_battlersFrames;
+    }
+    if (m_battlersColumns != DEFAULT_BATTLERS_COLUMNS)
+    {
+        json[JSON_BATTLERS_COLUMNS] = m_battlersColumns;
+    }
     if (m_showBB)
         json["bb"] = m_showBB;
     if (m_antialiasing != DEFAULT_ANTIALIASING)

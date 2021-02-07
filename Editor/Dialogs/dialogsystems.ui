@@ -64,14 +64,14 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-644</y>
+                <y>-392</y>
                 <width>252</width>
-                <height>1270</height>
+                <height>1444</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_13">
                <item row="0" column="0">
-                <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0,0,0,0,1">
+                <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0,0,0,0,0,1">
                  <property name="spacing">
                   <number>20</number>
                  </property>
@@ -382,36 +382,19 @@
                         </item>
                        </layout>
                       </item>
-                      <item>
-                       <layout class="QVBoxLayout" name="verticalLayout_25" stretch="0,0">
-                        <property name="spacing">
-                         <number>0</number>
-                        </property>
-                        <item>
-                         <widget class="QLabel" name="labelAnimationFrames">
-                          <property name="text">
-                           <string>Animation frames:</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QSpinBox" name="spinBoxAnimationFrames">
-                          <property name="enabled">
-                           <bool>true</bool>
-                          </property>
-                          <property name="minimum">
-                           <number>1</number>
-                          </property>
-                          <property name="maximum">
-                           <number>99</number>
-                          </property>
-                          <property name="value">
-                           <number>4</number>
-                          </property>
-                         </widget>
-                        </item>
-                       </layout>
-                      </item>
+                     </layout>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QGroupBox" name="groupBoxFrames">
+                   <property name="title">
+                    <string>Frames</string>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_6">
+                    <item row="0" column="0">
+                     <layout class="QVBoxLayout" name="verticalLayout_34">
                       <item>
                        <layout class="QVBoxLayout" name="verticalLayout_29" stretch="0,0">
                         <property name="spacing">
@@ -440,6 +423,90 @@
                             <width>200</width>
                             <height>16777215</height>
                            </size>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                      <item>
+                       <layout class="QVBoxLayout" name="verticalLayout_25" stretch="0,0">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <widget class="QLabel" name="labelAnimationFrames">
+                          <property name="text">
+                           <string>Animation frames:</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QSpinBox" name="spinBoxAnimationFrames">
+                          <property name="enabled">
+                           <bool>true</bool>
+                          </property>
+                          <property name="minimum">
+                           <number>1</number>
+                          </property>
+                          <property name="maximum">
+                           <number>9999</number>
+                          </property>
+                          <property name="value">
+                           <number>4</number>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                      <item>
+                       <layout class="QVBoxLayout" name="verticalLayout_11">
+                        <item>
+                         <widget class="QLabel" name="labelBattlersFrames">
+                          <property name="text">
+                           <string>Battlers frames:</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QSpinBox" name="spinBoxBattlersFrames">
+                          <property name="enabled">
+                           <bool>true</bool>
+                          </property>
+                          <property name="minimum">
+                           <number>1</number>
+                          </property>
+                          <property name="maximum">
+                           <number>9999</number>
+                          </property>
+                          <property name="value">
+                           <number>4</number>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                      <item>
+                       <layout class="QVBoxLayout" name="verticalLayout_27">
+                        <item>
+                         <widget class="QLabel" name="labelBattlersColumns">
+                          <property name="text">
+                           <string>Battlers columns:</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QSpinBox" name="spinBoxBattlersColumns">
+                          <property name="enabled">
+                           <bool>true</bool>
+                          </property>
+                          <property name="minimum">
+                           <number>1</number>
+                          </property>
+                          <property name="maximum">
+                           <number>9999</number>
+                          </property>
+                          <property name="value">
+                           <number>9</number>
                           </property>
                          </widget>
                         </item>
@@ -1962,26 +2029,26 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>WidgetPicture</class>
    <extends>QWidget</extends>
    <header>widgetpicture.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
    <class>PanelSuperList</class>
    <extends>QWidget</extends>
    <header>panelsuperlist.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PanelPrimitiveValue</class>
-   <extends>QWidget</extends>
-   <header>panelprimitivevalue.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

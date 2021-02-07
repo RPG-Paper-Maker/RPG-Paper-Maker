@@ -1224,6 +1224,8 @@ public:
     static const QString SHOP_ID;
     static const QString UNLIMITED;
     static const QString RESTOCK_SHOP;
+    static const QString BATTLERS_FRAMES;
+    static const QString BATTLERS_COLUMNS;
 
     Translations();
     virtual ~Translations();

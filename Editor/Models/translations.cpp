@@ -1211,6 +1211,8 @@ const QString Translations::BUY_ONLY = "buy.only";
 const QString Translations::SHOP_ID = "shop.id";
 const QString Translations::UNLIMITED = "unlimited";
 const QString Translations::RESTOCK_SHOP = "restock.shop";
+const QString Translations::BATTLERS_FRAMES = "battlers.frames";
+const QString Translations::BATTLERS_COLUMNS = "battlers.columns";
 
 // -------------------------------------------------------
 //

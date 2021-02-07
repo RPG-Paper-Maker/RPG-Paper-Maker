@@ -55,9 +55,13 @@ public:
     static const QString JSON_SKY_BOXES;
     static const QString JSON_ANTIALIASING;
     static const QString JSON_MAP_FRAME_DURATION;
+    static const QString JSON_BATTLERS_FRAMES;
+    static const QString JSON_BATTLERS_COLUMNS;
     static const QString JSON_PRICE_SOLD_ITEM;
     static const bool DEFAULT_ANTIALIASING;
     static const int DEFAULT_MAP_FRAME_DURATION;
+    static const int DEFAULT_BATTLERS_FRAMES;
+    static const int DEFAULT_BATTLERS_COLUMNS;
     static const double DEFAULT_PRICE_SOLD_ITEM;
 
     SystemDatas();
@@ -88,6 +92,10 @@ public:
     void setPathBR(QString p);
     int framesAnimation() const;
     void setFramesAnimation(int f);
+    int battlersFrames() const;
+    void setBattlersFrames(int battlersFrames);
+    int battlersColumns() const;
+    void setBattlersColumns(int battlersColumns);
     bool showBB() const;
     void setShowBB(bool b);
     bool antialiasing() const;
@@ -147,6 +155,8 @@ private:
     int m_idObjectHero;
     QString m_pathBR;
     int m_framesAnimation;
+    int m_battlersFrames;
+    int m_battlersColumns;
     bool m_showBB;
     bool m_antialiasing;
     QStandardItemModel *m_modelColors;

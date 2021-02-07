@@ -1190,5 +1190,7 @@
     "buy.only": "Achat uniquement",
     "shop.id": "Magasin d'ID",
     "unlimited": "Illimité",
-    "restock.shop": "Réapprovisionner un magasin"
+    "restock.shop": "Réapprovisionner un magasin",
+    "battlers.frames": "Frames dans battlers",
+    "battlers.columns": "Colonnes dans battlers"
 }
