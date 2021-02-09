@@ -12,7 +12,13 @@
         }
     ],
 	"remove": [],
-	"replace": [],
+	"replace": [
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/commonEvents.json",
+            "target": "Engine/Content/basic/Content/Datas/commonEvents.json"
+        }
+    ],
 	"features": [
         "Javascript game code tutorials",
         "Protect games datas (datas, songs, shapes, pictures)",
