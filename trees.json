@@ -7883,21 +7883,6 @@
             {
                 "files": [
                     {
-                        "files": [
-                            {
-                                "repo": "Game-Scripts",
-                                "source": "Content/Datas/Scripts/Plugins/a/code.js",
-                                "target": "Engine/Content/basic/Content/Datas/Scripts/Plugins/a/code.js"
-                            },
-                            {
-                                "repo": "Game-Scripts",
-                                "source": "Content/Datas/Scripts/Plugins/a/details.json",
-                                "target": "Engine/Content/basic/Content/Datas/Scripts/Plugins/a/details.json"
-                            }
-                        ],
-                        "target": "Engine/Content/basic/Content/Datas/Scripts/Plugins/a"
-                    },
-                    {
                         "repo": "Game-Scripts",
                         "source": "Content/Datas/Scripts/Plugins/path.js",
                         "target": "Engine/Content/basic/Content/Datas/Scripts/Plugins/path.js"
