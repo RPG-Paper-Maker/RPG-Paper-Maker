@@ -993,22 +993,26 @@ void ProjectUpdater::updateVersion_1_6_3()
 
 void ProjectUpdater::updateVersion_1_6_3_commands(QStandardItem *commands)
 {
-    QStandardItem *child;
     EventCommand *command;
     QVector<QString> list;
     QString type;
     int i, l;
-    for (i = 0, l = commands->rowCount(); i < l; i++) {
-        child = commands->child(i);
-        this->updateVersion_1_5_6_commands(child);
-        command = reinterpret_cast<EventCommand *>(child->data().value<quintptr>());
+    if (commands->rowCount() == 0)
+    {
+        command = reinterpret_cast<EventCommand *>(commands->data().value<quintptr>());
         list = command->commands();
-        if (command->kind() == EventCommandKind::SendEvent) {
+        if (command->kind() == EventCommandKind::SendEvent)
+        {
             type = list.at(0);
-            if (type == "1") {
+            if (type == "1")
+            {
                 list.insert(4, RPM::FALSE_BOOL_STRING);
             }
             command->setCommands(list);
         }
+    }
+    for (i = 0, l = commands->rowCount(); i < l; i++)
+    {
+        this->updateVersion_1_6_3_commands(commands->child(i));
     }
 }
