@@ -47,6 +47,7 @@ public:
     const static int Y_MID_OFFSET;
     const static int Y_BOT_OFFSET;
     const static int Y_MIX_OFFSET;
+    static double randomOffset;
 
     MountainDatas();
     MountainDatas(int specialID, int ws, double wp, int hs, double hp);

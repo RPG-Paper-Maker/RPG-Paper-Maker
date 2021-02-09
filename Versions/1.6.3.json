@@ -33,7 +33,7 @@
         "Collisions issues with w = 0 mountains block under it",
         "Battle commands id always 1 with new",
         "Sometimes crash after copy paste in animation",
-        "Mountains display issue when 32x32 tiles",
+        "Mountains display issue with > 2 width mountains corners",
         "Changing animation in editor may make it crash",
         "Battlers aren't face sprites",
         "Objects in battle maps are not moving",
@@ -54,7 +54,7 @@
         2,
         2,
         2,
-        0,
+        1,
         2,
         2,
 
@@ -69,10 +69,10 @@
         2,
         2,
         2,
-        0,
-        0,
         2,
         2,
-        0
+        2,
+        2,
+        2
     ]
 }

@@ -32,6 +32,7 @@ const int MountainDatas::Y_TOP_OFFSET = 0;
 const int MountainDatas::Y_MID_OFFSET = 1;
 const int MountainDatas::Y_BOT_OFFSET = 2;
 const int MountainDatas::Y_MIX_OFFSET = 3;
+double MountainDatas::randomOffset = 0.01;
 
 // -------------------------------------------------------
 //
@@ -365,13 +366,18 @@ void MountainDatas::initializeVertices(QVector<Vertex> &vertices,
     height = RPM::MAX_PIXEL_SIZE;
     faceHeight = static_cast<float>(qSqrt((wp * wp) + (hp * hp)));
     w = static_cast<float>(squareSize) / width;
+    int y = MountainDatas::randomOffset;
+    MountainDatas::randomOffset += 0.01;
+    if (MountainDatas::randomOffset > 0.5) {
+        MountainDatas::randomOffset = 0.01;
+    }
     center.setX(position.x() * squareSize + (squareSize / 2));
-    center.setY(position.getY(squareSize) + (squareSize / 2));
+    center.setY(position.getY(squareSize) + (squareSize / 2) + y);
     center.setZ(position.z() * squareSize + (squareSize / 2));
     xLeft = position.x() * squareSize;
     xRight = (position.x() + 1) * squareSize;
-    yTop = position.getY(squareSize) + hp;
-    yBot = position.getY(squareSize);
+    yTop = position.getY(squareSize) + hp + y;
+    yBot = position.getY(squareSize) + y;
     zFront = (position.z() + 1) * squareSize + wp;
     zBack = zFront - wp;
     vecFrontB.setX(xLeft);
