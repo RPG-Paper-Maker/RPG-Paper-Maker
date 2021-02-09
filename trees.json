@@ -194,6 +194,11 @@
                                     },
                                     {
                                         "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Mountains/grass-small-cave-entry.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/grass-small-cave-entry.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
                                         "source": "Content/Images/Textures2D/Mountains/desert-noborders.png",
                                         "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/desert-noborders.png"
                                     },
@@ -316,6 +321,11 @@
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Images/Textures2D/Objects3D/big-bed.png",
                                         "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/big-bed.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Objects3D/chest-opened.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/chest-opened.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
@@ -1593,6 +1603,11 @@
                         "repo": "RPG-Paper-Maker",
                         "source": "EditorApp/Content/translations/translations-jp.json",
                         "target": "Engine/Content/translations/translations-jp.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/translations/translations-pl.json",
+                        "target": "Engine/Content/translations/translations-pl.json"
                     },
                     {
                         "repo": "RPG-Paper-Maker",
@@ -5366,6 +5381,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Datas/Status.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Datas/Status.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Datas/Videos.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Datas/Videos.d.ts"
                             },
@@ -5448,6 +5468,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Datas/Variables.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Datas/Variables.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Datas/Status.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Datas/Status.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -5536,6 +5561,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Scene/MenuShop.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/MenuShop.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Scene/Map.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/Map.d.ts"
                             },
@@ -5553,6 +5583,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Scene/BattleVictory.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/BattleVictory.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Scene/MenuBase.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/MenuBase.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -5583,6 +5618,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Scene/Map.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/Map.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Scene/MenuShop.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/MenuShop.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -5701,6 +5741,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Scene/BattleStartTurn.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/BattleStartTurn.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Scene/BattleSelection.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/BattleSelection.d.ts"
                             },
@@ -5726,8 +5771,18 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Scene/MenuBase.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/MenuBase.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Scene/MenuEquip.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/MenuEquip.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Scene/BattleStartTurn.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/BattleStartTurn.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -5811,6 +5866,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Graphic/ShopCurrencies.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Graphic/ShopCurrencies.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Graphic/Text.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Graphic/Text.js"
                             },
@@ -5818,6 +5878,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Graphic/Loots.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Graphic/Loots.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Graphic/SpinBox.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Graphic/SpinBox.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -5933,6 +5998,16 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Graphic/RewardsTop.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Graphic/RewardsTop.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Graphic/SpinBox.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Graphic/SpinBox.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Graphic/ShopCurrencies.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Graphic/ShopCurrencies.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6106,6 +6181,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/ShopItem.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/ShopItem.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/Currency.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/Currency.d.ts"
                             },
@@ -6113,6 +6193,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/CommonReaction.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/CommonReaction.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/Status.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/Status.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6291,6 +6376,16 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/Status.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/Status.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/StatusReleaseTurn.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/StatusReleaseTurn.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/AnimationFrameElement.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/AnimationFrameElement.js"
                             },
@@ -6333,6 +6428,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/PlaySong.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/PlaySong.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/StatusReleaseTurn.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/StatusReleaseTurn.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6456,6 +6556,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/ShopItem.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/ShopItem.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/Effect.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/Effect.d.ts"
                             },
@@ -6561,6 +6666,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Common/Easing2D.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Common/Easing2D.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Common/Interpreter.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Common/Interpreter.js"
                             },
@@ -6583,6 +6693,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Common/Utils.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Common/Utils.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Common/Easing2D.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Common/Easing2D.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6644,6 +6759,11 @@
                     },
                     {
                         "repo": "Game-Scripts",
+                        "source": "Content/Datas/Scripts/System/Definitions.d.ts",
+                        "target": "Engine/Content/basic/Content/Datas/Scripts/System/Definitions.d.ts"
+                    },
+                    {
+                        "repo": "Game-Scripts",
                         "source": "Content/Datas/Scripts/System/index.js",
                         "target": "Engine/Content/basic/Content/Datas/Scripts/System/index.js"
                     },
@@ -6664,6 +6784,11 @@
                     },
                     {
                         "files": [
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Core/Anchor2D.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Anchor2D.d.ts"
+                            },
                             {
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Core/Camera.d.ts",
@@ -6688,6 +6813,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Core/Floor.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Floor.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Core/Party.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Party.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6736,6 +6866,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Core/Rectangle.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Rectangle.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Core/Skill.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Skill.js"
                             },
@@ -6781,6 +6916,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Core/Status.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Status.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Core/TextureBundle.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/TextureBundle.d.ts"
                             },
@@ -6813,6 +6953,16 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Core/CollisionSquare.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/CollisionSquare.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Core/Rectangle.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Rectangle.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Core/SpinBox.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/SpinBox.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6876,6 +7026,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Core/Animation.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Animation.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Core/Player.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Player.d.ts"
                             },
@@ -6891,6 +7046,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Core/Status.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Status.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Core/Sprite.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Sprite.d.ts"
                             },
@@ -6903,6 +7063,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Core/Item.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Item.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Core/Anchor2D.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Anchor2D.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6976,6 +7141,16 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Core/Party.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Party.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Core/SpinBox.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/SpinBox.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Core/MapPortion.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/MapPortion.js"
                             },
@@ -7003,6 +7178,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Core/Player.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Player.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Core/Animation.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Animation.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -7093,6 +7273,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/PlayMusicEffect.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/PlayMusicEffect.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/fadeScreen.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/fadeScreen.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -7306,6 +7491,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/StartShopMenu.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/StartShopMenu.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/StartBattle.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/StartBattle.d.ts"
                             },
@@ -7496,6 +7686,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/StartShopMenu.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/StartShopMenu.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/ChangeEquipment.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeEquipment.js"
                             },
@@ -7558,6 +7753,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/IfLose.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/IfLose.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/fadeScreen.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/fadeScreen.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -7683,6 +7883,21 @@
             {
                 "files": [
                     {
+                        "files": [
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/Plugins/a/code.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/Plugins/a/code.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/Plugins/a/details.json",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/Plugins/a/details.json"
+                            }
+                        ],
+                        "target": "Engine/Content/basic/Content/Datas/Scripts/Plugins/a"
+                    },
+                    {
                         "repo": "Game-Scripts",
                         "source": "Content/Datas/Scripts/Plugins/path.js",
                         "target": "Engine/Content/basic/Content/Datas/Scripts/Plugins/path.js"
@@ -7749,6 +7964,11 @@
                 "repo": "RPG-Paper-Maker",
                 "source": "EditorApp/Content/translations/translations-jp.json",
                 "target": "Engine/Content/translations/translations-jp.json"
+            },
+            {
+                "repo": "RPG-Paper-Maker",
+                "source": "EditorApp/Content/translations/translations-pl.json",
+                "target": "Engine/Content/translations/translations-pl.json"
             },
             {
                 "repo": "RPG-Paper-Maker",

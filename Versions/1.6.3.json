@@ -1,5 +1,16 @@
 {
-	"add": [],
+	"add": [
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Mountains/grass-small-cave-entry.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/grass-small-cave-entry.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/chest-opened.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/chest-opened.png"
+        }
+    ],
 	"remove": [],
 	"replace": [],
 	"features": [
