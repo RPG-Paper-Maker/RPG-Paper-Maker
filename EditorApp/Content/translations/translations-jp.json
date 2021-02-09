@@ -1183,5 +1183,14 @@
     "cant.escape": "逃げられない",
     "attack.random.target": "ランダムターゲットを攻撃する",
     "attack.random.ally": "ランダムな味方を攻撃する",
-    "attack.random.enemy": "ランダムな敵を攻撃する"
+    "attack.random.enemy": "ランダムな敵を攻撃する",
+    "only.the.closest": "最も近いものだけ",
+    "start.shop.menu": "ショップメニューを開始",
+    "stock": "株式",
+    "buy.only": "購入のみ",
+    "shop.id": "ショップID",
+    "unlimited": "無制限",
+    "restock.shop": "補充店",
+    "battlers.frames": "バトラーズフレーム",
+    "battlers.columns": "バトラーコラム"
 }

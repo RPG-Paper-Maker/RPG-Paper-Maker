@@ -1185,5 +1185,14 @@
     "cant.escape": "No puedo escapar",
     "attack.random.target": "Atacar objetivos aleatorios",
     "attack.random.ally": "Atacar a aliados aleatorios",
-    "attack.random.enemy": "Atacar enemigos aleatorios"
+    "attack.random.enemy": "Atacar enemigos aleatorios",
+    "only.the.closest": "Solo el mas cercano",
+    "start.shop.menu": "Iniciar el menú de la tienda",
+    "stock": "Valores",
+    "buy.only": "Compra solamente",
+    "shop.id": "Tienda de ID",
+    "unlimited": "Ilimitado",
+    "restock.shop": "Reabastecer una tienda",
+    "battlers.frames": "Cuadros en luchadores",
+    "battlers.columns": "Columnas en luchadores"
 }

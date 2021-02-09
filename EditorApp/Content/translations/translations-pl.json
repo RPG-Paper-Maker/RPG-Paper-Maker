@@ -1183,5 +1183,14 @@
     "cant.escape": "Nie mogę uciec",
     "attack.random.target": "Atakuj losowe cele",
     "attack.random.ally": "Atakuj losowych sojuszników",
-    "attack.random.enemy": "Atakuj losowych wrogów"
+    "attack.random.enemy": "Atakuj losowych wrogów",
+    "only.the.closest": "Tylko najbliżsi",
+    "start.shop.menu": "Uruchom menu sklepu",
+    "stock": "Zbiory",
+    "buy.only": "Tylko kup",
+    "shop.id": "Sklep z identyfikatorami",
+    "unlimited": "bez limitu",
+    "restock.shop": "Uzupełnij sklep",
+    "battlers.frames": "Ramki w bojach",
+    "battlers.columns": "Kolumny w bojach"
 }

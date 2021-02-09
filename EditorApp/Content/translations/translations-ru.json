@@ -1183,5 +1183,14 @@
     "cant.escape": "Не могу убежать",
     "attack.random.target": "Атаковать случайные цели",
     "attack.random.ally": "Атакуйте случайных союзников",
-    "attack.random.enemy": "Атаковать случайных врагов"
+    "attack.random.enemy": "Атаковать случайных врагов",
+    "only.the.closest": "Только самые близкие",
+    "start.shop.menu": "Меню запуска магазина",
+    "stock": "Акции",
+    "buy.only": "Только покупка",
+    "shop.id": "ID магазин",
+    "unlimited": "Безлимитный",
+    "restock.shop": "Пополнить магазин",
+    "battlers.frames": "Кадры в Battlers",
+    "battlers.columns": "Колонны в Battlers"
 }

@@ -1187,5 +1187,14 @@
     "cant.escape": "Não pode escapar",
     "attack.random.target": "Ataque alvos aleatórios",
     "attack.random.ally": "Ataque aliados aleatórios",
-    "attack.random.enemy": "Ataque inimigos aleatórios"
+    "attack.random.enemy": "Ataque inimigos aleatórios",
+    "only.the.closest": "Apenas o mais próximo",
+    "start.shop.menu": "Menu da loja inicial",
+    "stock": "Estoque",
+    "buy.only": "Compra apenas",
+    "shop.id": "Loja de ID",
+    "unlimited": "Ilimitado",
+    "restock.shop": "Reabastecer uma loja",
+    "battlers.frames": "Quadros em batalha",
+    "battlers.columns": "Colunas em Battlers"
 }

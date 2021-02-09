@@ -1183,5 +1183,14 @@
     "cant.escape": "無法逃脫",
     "attack.random.target": "攻擊隨機目標",
     "attack.random.ally": "隨機攻擊盟友",
-    "attack.random.enemy": "攻擊隨機敵人"
+    "attack.random.enemy": "攻擊隨機敵人",
+    "only.the.closest": "只有最近的",
+    "start.shop.menu": "開店菜單",
+    "stock": "股票",
+    "buy.only": "只買",
+    "shop.id": "店鋪編號",
+    "unlimited": "無限",
+    "restock.shop": "補貨店",
+    "battlers.frames": "戰鬥機框架",
+    "battlers.columns": "戰鬥機專欄"
 }

@@ -1183,5 +1183,14 @@
     "cant.escape": "탈출 할 수 없어",
     "attack.random.target": "무작위 표적 공격",
     "attack.random.ally": "무작위 아군 공격",
-    "attack.random.enemy": "무작위 적 공격"
+    "attack.random.enemy": "무작위 적 공격",
+    "only.the.closest": "가장 가까운",
+    "start.shop.menu": "상점 메뉴 시작",
+    "stock": "스톡",
+    "buy.only": "구매 만",
+    "shop.id": "상점 ID",
+    "unlimited": "제한 없는",
+    "restock.shop": "재입고",
+    "battlers.frames": "Battlers 프레임",
+    "battlers.columns": "Battlers 컬럼"
 }
