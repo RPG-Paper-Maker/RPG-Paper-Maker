@@ -527,8 +527,6 @@ void DialogSystems::translate()
         ::COLON);
     ui->radioButtonVideo->setText(RPM::translate(Translations::VIDEO) + RPM
         ::COLON);
-    ui->checkBoxDisplayConsole->setText(RPM::translate(Translations
-        ::DISPLAY_CONSOLE));
     ui->checkBoxCommonReactionBlockingHero->setText(RPM::translate(Translations
         ::BLOCK_HERO_WHEN_REACTION));
     ui->groupBoxColors->setTitle(RPM::translate(Translations::COLORS));

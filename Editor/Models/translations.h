@@ -238,7 +238,6 @@ public:
     static const QString SYSTEM;
     static const QString GAME_NAME;
     static const QString GAME_NATIVE_RESOLUTION;
-    static const QString DISPLAY_CONSOLE;
     static const QString SQUARE_SIZE;
     static const QString IN_PX;
     static const QString RAY_PORTIONS;

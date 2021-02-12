@@ -226,7 +226,6 @@ const QString Translations::SELECT_SHAPE = "select.shape";
 const QString Translations::SYSTEM = "system";
 const QString Translations::GAME_NAME = "game.name";
 const QString Translations::GAME_NATIVE_RESOLUTION = "game.native.resolution";
-const QString Translations::DISPLAY_CONSOLE = "display.console";
 const QString Translations::SQUARE_SIZE = "square.size";
 const QString Translations::IN_PX = "in.px";
 const QString Translations::RAY_PORTIONS = "ray.portions";

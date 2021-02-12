@@ -55,41 +55,5 @@
         "Battlers aren't face sprites",
         "Objects in battle maps are not moving",
         "Changing experience statistic outside of combat isn't leveling up check"
-	],
-    "finished": [
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2
-    ]
+	]
 }
