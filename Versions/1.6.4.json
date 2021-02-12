@@ -5,9 +5,11 @@
 	"features": [
     ],
 	"bugs": [
-        "Export game issue pictures in BR"
+        "Export game issue pictures in BR",
+        "Removing an equipment is making every stat undefined"
 	],
     "finished": [
+        2,
         2
     ]
 }
