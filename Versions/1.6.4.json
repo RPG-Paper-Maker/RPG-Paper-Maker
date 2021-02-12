@@ -1,5 +1,18 @@
 {
-	"add": [],
+	"add": [
+        {
+            "repo": "Dependencies",
+            "source": "Engine/win32/ssleay32.dll",
+            "target": "Engine/ssleay32.dll",
+            "os": ["w"]
+        },
+        {
+            "repo": "Dependencies",
+            "source": "Engine/win32/libeay32.dll",
+            "target": "Engine/libeay32.dll",
+            "os": ["w"]
+        }
+    ],
 	"remove": [],
 	"replace": [],
 	"features": [

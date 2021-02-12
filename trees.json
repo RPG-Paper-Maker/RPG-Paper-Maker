@@ -2511,6 +2511,11 @@
                 "target": "Engine/Qt5OpenGL.dll"
             },
             {
+                "repo": "Dependencies",
+                "source": "Engine/win32/ssleay32.dll",
+                "target": "Engine/ssleay32.dll"
+            },
+            {
                 "files": [
                     {
                         "repo": "Dependencies",
@@ -2539,6 +2544,11 @@
                     }
                 ],
                 "target": "Engine/mediaservice"
+            },
+            {
+                "repo": "Dependencies",
+                "source": "Engine/win32/libeay32.dll",
+                "target": "Engine/libeay32.dll"
             },
             {
                 "files": [
