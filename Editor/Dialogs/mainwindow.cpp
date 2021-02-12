@@ -1066,36 +1066,31 @@ void MainWindow::on_gameErrorOccurred(QProcess::ProcessError)
 {
     if (m_firstCrash)
     {
+        m_firstCrash = false;
+        QString strOS = "";
+        QString exeName = "";
         #ifdef Q_OS_WIN
-            m_firstCrash = false;
+            strOS = "win32";
+            exeName = "Game.exe";
+        #elif __linux__
+            strOS = "linux";
+            exeName = "Game";
+        #else
+            strOS = "osx";
+        #endif
 
-            // Save new exe again
-            QNetworkAccessManager manager;
-            QNetworkReply *reply;
-            QEventLoop loop;
-            QJsonObject doc;
-            QJsonDocument json;
-            reply = manager.get(QNetworkRequest(QUrl("https://github.com/"
-                "RPG-Paper-Maker/Dependencies/releases/download/1.5.3/Game.exe")));
-            QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-            loop.exec();
-            if (reply->error() == QNetworkReply::NetworkError::NoError) {
-                QFile saveFile(Common::pathCombine(project->pathCurrentProject(),
-                    "Game.exe"));
-                if (saveFile.open(QIODevice::WriteOnly))
-                {
-                    saveFile.write(reply->readAll());
-                    saveFile.setPermissions(QFileDevice::ReadUser | QFileDevice
-                        ::WriteUser | QFileDevice::ExeUser | QFileDevice
-                        ::ReadGroup | QFileDevice::ExeGroup | QFileDevice
-                        ::ReadOther | QFileDevice::ExeOther);
-                    saveFile.close();
-                }
-            }
+        // Copying exe from engine folder
+        if (!exeName.isEmpty())
+        {
+            QString pathSrc = Common::pathCombine(Common::pathCombine(Common
+                ::pathCombine(QDir::currentPath(), RPM::FOLDER_CONTENT), strOS), exeName);
+            QString pathDst = Common::pathCombine(project->pathCurrentProject(), exeName);
+            QFile(pathDst).remove();
+            QFile::copy(pathSrc, pathDst);
 
             // Restart game
             this->runGame();
-        #endif
+        }
     }
 }
 
@@ -1105,13 +1100,18 @@ void MainWindow::updateBackup() {
     if (project != nullptr) {
         QString pathBackups = Common::pathCombine(project->pathCurrentProject(),
             RPM::FOLDER_BACKUPS);
-        QDir(project->pathCurrentProject()).mkdir(RPM::FOLDER_BACKUPS);
+        QDir dirProject(project->pathCurrentProject());
+        if (!dirProject.exists(RPM::FOLDER_BACKUPS))
+        {
+            QDir(project->pathCurrentProject()).mkdir(RPM::FOLDER_BACKUPS);
+        }
 
         // Get backup index
         QDir dir(pathBackups);
         int index;
         QStringList list;
-        foreach (QFileInfo id, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        foreach (QFileInfo id, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
+        {
             QString d = id.fileName();
             index = d.at(0).unicode() - 1;
             list.insert(index, d);

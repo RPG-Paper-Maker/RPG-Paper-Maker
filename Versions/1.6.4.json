@@ -19,9 +19,11 @@
     ],
 	"bugs": [
         "Export game issue pictures in BR",
-        "Removing an equipment is making every stat undefined"
+        "Removing an equipment is making every stat undefined",
+        "Add libs for SSL on Windows"
 	],
     "finished": [
+        2,
         2,
         2
     ]
