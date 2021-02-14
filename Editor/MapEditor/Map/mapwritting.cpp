@@ -266,20 +266,22 @@ void Map::deleteObjects(QStandardItemModel* model, int minI, int maxI,
     SystemMapObject* super;
     QList<int> list;
 
-    for (int i = 2; i < model->invisibleRootItem()->rowCount(); i++) {
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
         super = ((SystemMapObject*) model->item(i)->data().value<quintptr>());
-        Position3D position = super->position();
-        int x = position.x() / RPM::PORTION_SIZE;
-        int y = position.y() / RPM::PORTION_SIZE;
-        int z = position.z() / RPM::PORTION_SIZE;
-        if (x >= minI && x <= maxI && y >= minJ && y <= maxJ && z >= minK &&
-            z <= maxK)
+        if (super->id() > 0)
         {
-            delete super;
-            list.append(i);
+            Position3D position = super->position();
+            int x = position.x() / RPM::PORTION_SIZE;
+            int y = position.y() / RPM::PORTION_SIZE;
+            int z = position.z() / RPM::PORTION_SIZE;
+            if (x >= minI && x <= maxI && y >= minJ && y <= maxJ && z >= minK &&
+                z <= maxK)
+            {
+                delete super;
+                list.append(i);
+            }
         }
     }
-
     for (int i = list.size() - 1; i >= 0; i--) {
         model->removeRow(list.at(i));
     }
@@ -388,11 +390,14 @@ void Map::readJSONArray(QStandardItemModel *model, const QJsonArray & tab) {
 void Map::writeJSONArray(QStandardItemModel *model, QJsonArray & tab) {
     SystemMapObject* super;
 
-    for (int i = 2; i < model->invisibleRootItem()->rowCount(); i++){
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
         QJsonObject obj;
         super = ((SystemMapObject*) model->item(i)->data()
                  .value<quintptr>());
-        super->write(obj);
-        tab.append(obj);
+        if (super->id() > 0)
+        {
+            super->write(obj);
+            tab.append(obj);
+        }
     }
 }

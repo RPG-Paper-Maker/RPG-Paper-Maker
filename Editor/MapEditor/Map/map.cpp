@@ -655,10 +655,10 @@ int Map::removeObject(QStandardItemModel *model, Position3D &p) {
     SystemMapObject *super;
     int i, l;
 
-    for (i = 2, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+    for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
         super = reinterpret_cast<SystemMapObject *>(model->item(i)->data().value
             <quintptr>());
-        if (p == super->position()) {
+        if (super->id() > 0 && p == super->position()) {
             model->removeRow(i);
             delete super;
             return i;
