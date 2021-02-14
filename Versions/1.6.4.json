@@ -16,7 +16,8 @@
 	"remove": [],
 	"replace": [],
 	"features": [
-        "Add delete button for assets"
+        "Add delete button for assets",
+        "Mac users no cmd + delete to delete but only delete or backspace key"
     ],
 	"bugs": [
         "Export game issue pictures in BR",
@@ -25,6 +26,7 @@
         "Frames and columns battlers not handled for animations editor"
 	],
     "finished": [
+        2,
         2,
         2,
         2,

@@ -495,6 +495,7 @@ void WidgetTreeLocalMaps::showContextMenu(const QPoint & p){
 
 void WidgetTreeLocalMaps::keyPressEvent(QKeyEvent *event) {
     QKeySequence seq = Common::getKeySequence(event);
+    QKeySequence seqBackspace(Qt::Key_Backspace);
     QStandardItem* selected = getSelected();
     QList<QAction*> actions;
     QAction* action;
@@ -529,7 +530,9 @@ void WidgetTreeLocalMaps::keyPressEvent(QKeyEvent *event) {
                 return;
             }
             action = actions.at(7);
-            if (action->shortcut().matches(seq) && action->isEnabled()) {
+            if ((action->shortcut().matches(seq) || seq.matches(seqBackspace)) &&
+                action->isEnabled())
+            {
                 contextDeleteDirectory();
                 return;
             }
@@ -547,7 +550,9 @@ void WidgetTreeLocalMaps::keyPressEvent(QKeyEvent *event) {
                 return;
             }
             action = actions.at(4);
-            if (action->shortcut().matches(seq) && action->isEnabled()) {
+            if ((action->shortcut().matches(seq) || seq.matches(seqBackspace)) &&
+                action->isEnabled())
+            {
                 contextDeleteMap();
                 return;
             }

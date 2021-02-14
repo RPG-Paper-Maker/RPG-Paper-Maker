@@ -372,10 +372,12 @@ void WidgetSuperTree::keyPressEvent(QKeyEvent *event) {
     {
         // Forcing shortcuts
         QKeySequence seq = Common::getKeySequence(event);
+        QKeySequence seqBackspace(Qt::Key_Backspace);
         QList<QAction*> actions = m_contextMenuCommonCommands->actions();
         QAction *action;
         action = actions.at(6);
-        if (action->shortcut().matches(seq) && action->isEnabled())
+        if ((action->shortcut().matches(seq) || seq.matches(seqBackspace)) &&
+            action->isEnabled())
         {
             contextDelete();
             return;

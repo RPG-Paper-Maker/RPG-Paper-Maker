@@ -274,33 +274,33 @@ void WidgetSuperList::keyPressEvent(QKeyEvent *event) {
         emit tryingEdit();
     }
 
-    if (m_hasContextMenu || m_canBrutRemove){
+    QKeySequence seq = Common::getKeySequence(event);
+    QKeySequence seqBackspace(Qt::Key_Backspace);
+    QList<QAction*> actions = m_contextMenu->actions();
+    QAction* action;
 
-        QKeySequence seq = Common::getKeySequence(event);
-        QList<QAction*> actions = m_contextMenu->actions();
-        QAction* action;
-
-        // Forcing shortcuts
-        action = actions.at(0);
-        if (Common::isPressingEnter(event) && action->isEnabled()) {
-            contextEdit();
-            return;
-        }
-        action = actions.at(2);
-        if (action->shortcut().matches(seq) && action->isEnabled()) {
-            contextCopy();
-            return;
-        }
-        action = actions.at(3);
-        if (action->shortcut().matches(seq) && action->isEnabled()) {
-            contextPaste();
-            return;
-        }
-        action = actions.at(5);
-        if (action->shortcut().matches(seq) && action->isEnabled()) {
-            contextDelete();
-            return;
-        }
+    // Forcing shortcuts
+    action = actions.at(0);
+    if (Common::isPressingEnter(event) && action->isEnabled()) {
+        contextEdit();
+        return;
+    }
+    action = actions.at(2);
+    if (action->shortcut().matches(seq) && action->isEnabled()) {
+        contextCopy();
+        return;
+    }
+    action = actions.at(3);
+    if (action->shortcut().matches(seq) && action->isEnabled()) {
+        contextPaste();
+        return;
+    }
+    action = actions.at(5);
+    if ((action->shortcut().matches(seq) || seq.matches(seqBackspace)) &&
+         action->isEnabled())
+    {
+        contextDelete();
+        return;
     }
 
     key = event->key();
