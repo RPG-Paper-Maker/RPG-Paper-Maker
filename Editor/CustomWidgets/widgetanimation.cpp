@@ -291,14 +291,15 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
         2, RPM::SCREEN_BASIC_HEIGHT);
 
     // Battler
-    frames = RPM::get()->project()->gameDatas()->systemDatas()->framesAnimation();
+    frames = RPM::get()->project()->gameDatas()->systemDatas()->battlersFrames();
+    int columns = RPM::get()->project()->gameDatas()->systemDatas()->battlersColumns();
     switch (m_positionKind) {
     case AnimationPositionKind::Top:
-        offsetY = (m_imageBattler.height() / 9); break;
+        offsetY = (m_imageBattler.height() / columns); break;
     case AnimationPositionKind::Middle:
-        offsetY = -(m_imageBattler.height() / 9 / 2); break;
+        offsetY = -(m_imageBattler.height() / columns / 2); break;
     case AnimationPositionKind::Bottom:
-        offsetY = -(m_imageBattler.height() / 9); break;
+        offsetY = -(m_imageBattler.height() / columns); break;
     default:
         offsetY = 0; break;
     }
@@ -306,7 +307,7 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
         painter.drawImage((RPM::SCREEN_BASIC_WIDTH / 2) - (m_imageBattler
             .width() / frames / 2), (RPM::SCREEN_BASIC_HEIGHT / 2) + offsetY,
             m_imageBattler, 0, 0, m_imageBattler.width() / frames,
-            m_imageBattler.height() / 9);
+            m_imageBattler.height() / columns);
     }
 
     // Elements

@@ -20,9 +20,11 @@
 	"bugs": [
         "Export game issue pictures in BR",
         "Removing an equipment is making every stat undefined",
-        "Add libs for SSL on Windows"
+        "Add libs for SSL on Windows",
+        "Frames and columns battlers not handled for animations editor"
 	],
     "finished": [
+        2,
         2,
         2,
         2
