@@ -484,6 +484,7 @@ void PanelSongs::translate()
 void PanelSongs::showAvailableContent(bool b) {
     ui->checkBoxContent->setChecked(b);
     ui->treeViewAvailableContent->setVisible(b);
+    ui->pushButtonDelete->setVisible(b);
     ui->pushButtonMove->setVisible(b);
     ui->pushButtonRefresh->setVisible(b);
     ui->pushButtonExport->setVisible(b);
@@ -643,6 +644,13 @@ void PanelSongs::on_pushButtonMove_clicked() {
 
 void PanelSongs::on_pushButtonRefresh_clicked() {
     loadAvailableContent();
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_pushButtonDelete_clicked()
+{
+    ui->widgetPanelIDs->list()->contextDelete();
 }
 
 // -------------------------------------------------------

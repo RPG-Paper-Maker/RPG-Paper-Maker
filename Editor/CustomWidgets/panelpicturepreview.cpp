@@ -307,10 +307,10 @@ void PanelPicturePreview::translate()
 void PanelPicturePreview::showAvailableContent(bool b) {
     ui->checkBoxContent->setChecked(b);
     ui->treeViewAvailableContent->setVisible(b);
+    ui->pushButtonDelete->setVisible(b);
     ui->pushButtonMove->setVisible(b);
     ui->pushButtonRefresh->setVisible(b);
     ui->pushButtonExport->setVisible(b);
-
     ui->pushButtonAdd->setVisible(b);
     RPM::get()->engineSettings()->setShowAvailableContent(b);
     RPM::get()->engineSettings()->write();
@@ -340,6 +340,13 @@ void PanelPicturePreview::on_pushButtonMove_clicked() {
 
 void PanelPicturePreview::on_pushButtonRefresh_clicked() {
     loadAvailableContent();
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::on_pushButtonDelete_clicked()
+{
+    ui->widgetPanelIDs->list()->contextDelete();
 }
 
 // -------------------------------------------------------

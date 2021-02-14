@@ -69,7 +69,7 @@ private:
     void brutDelete(QStandardItem *selected);
     void deleteClear(QStandardItem *selected);
 
-private slots:
+public slots:
     void openDialog(QModelIndex);
     void showContextMenu(const QPoint & p);
     void contextEdit();

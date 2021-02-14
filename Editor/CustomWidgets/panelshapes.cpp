@@ -255,6 +255,7 @@ void PanelShapes::translate()
 void PanelShapes::showAvailableContent(bool b) {
     ui->checkBoxContent->setChecked(b);
     ui->treeViewAvailableContent->setVisible(b);
+    ui->pushButtonDelete->setVisible(b);
     ui->pushButtonMove->setVisible(b);
     ui->pushButtonRefresh->setVisible(b);
     ui->pushButtonExport->setVisible(b);
@@ -287,6 +288,13 @@ void PanelShapes::on_pushButtonMove_clicked() {
 
 void PanelShapes::on_pushButtonRefresh_clicked() {
     loadAvailableContent();
+}
+
+// -------------------------------------------------------
+
+void PanelShapes::on_pushButtonDelete_clicked()
+{
+    ui->widgetPanelIDs->list()->contextDelete();
 }
 
 // -------------------------------------------------------

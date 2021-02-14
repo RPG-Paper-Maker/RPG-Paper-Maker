@@ -66,6 +66,7 @@ private slots:
     void on_listIndexChanged(QModelIndex index, QModelIndex);
     void on_pushButtonMove_clicked();
     void on_pushButtonRefresh_clicked();
+    void on_pushButtonDelete_clicked();
     void on_pushButtonAdd_clicked();
     void deletingContent(SuperListItem *super, int row);
     void on_treeViewAvailableContentDoubleClicked(QModelIndex);

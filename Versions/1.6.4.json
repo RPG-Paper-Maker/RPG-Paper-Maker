@@ -16,6 +16,7 @@
 	"remove": [],
 	"replace": [],
 	"features": [
+        "Add delete button for assets"
     ],
 	"bugs": [
         "Export game issue pictures in BR",
@@ -24,6 +25,7 @@
         "Frames and columns battlers not handled for animations editor"
 	],
     "finished": [
+        2,
         2,
         2,
         2,

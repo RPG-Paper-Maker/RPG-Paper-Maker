@@ -245,6 +245,7 @@ void PanelVideos::translate()
 void PanelVideos::showAvailableContent(bool b) {
     ui->checkBoxContent->setChecked(b);
     ui->treeViewAvailableContent->setVisible(b);
+    ui->pushButtonDelete->setVisible(b);
     ui->pushButtonMove->setVisible(b);
     ui->pushButtonRefresh->setVisible(b);
     ui->pushButtonExport->setVisible(b);
@@ -277,6 +278,13 @@ void PanelVideos::on_pushButtonMove_clicked() {
 
 void PanelVideos::on_pushButtonRefresh_clicked() {
     loadAvailableContent();
+}
+
+// -------------------------------------------------------
+
+void PanelVideos::on_pushButtonDelete_clicked()
+{
+    ui->widgetPanelIDs->list()->contextDelete();
 }
 
 // -------------------------------------------------------
