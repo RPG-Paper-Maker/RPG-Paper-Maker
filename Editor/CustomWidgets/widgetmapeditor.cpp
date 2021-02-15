@@ -947,6 +947,7 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent *event)
         if (m_menuBar != nullptr && m_menuBar->selectionKind() ==
             MapEditorSelectionKind::Objects)
         {
+            m_control.updateMenuContext();
             QKeySequence seq = Common::getKeySequence(event);
             QList<QAction*> actions = m_contextMenu->actions();
             QAction* action = actions.at(0);

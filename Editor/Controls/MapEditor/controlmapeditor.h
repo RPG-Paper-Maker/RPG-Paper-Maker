@@ -182,6 +182,7 @@ public:
     void removeMountain(Position &p);
     bool eraseMountain(Position &p, bool undoRedo = false);
     void setCursorObjectPosition(Position &p);
+    void updateMenuContext();
     void showObjectMenuContext();
     void defineAsHero();
     void addHero(SystemCommonObject *object, Position3D &position);
