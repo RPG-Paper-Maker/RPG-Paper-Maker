@@ -12,6 +12,7 @@
 #include "controlmapeditor.h"
 #include "rpm.h"
 #include "dialogobject.h"
+#include "systemmapobject.h"
 
 // -------------------------------------------------------
 
@@ -43,16 +44,22 @@ void ControlMapEditor::setStartPosition(Position3D &p) {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::showObjectMenuContext(){
+void ControlMapEditor::updateMenuContext()
+{
     bool isEmpty = m_selectedObject == nullptr;
-
-    // Edit possible actions
     m_contextMenu->canNew(isEmpty);
     m_contextMenu->canEdit(!isEmpty);
     m_contextMenu->canCopy(!isEmpty);
     m_contextMenu->canPaste(m_copiedObject != nullptr);
     m_contextMenu->canDelete(!isEmpty);
     m_contextMenu->canHero(true);
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::showObjectMenuContext()
+{
+    this->updateMenuContext();
 
     // Show menu context
     m_contextMenu->showContextMenu(m_mouse);
@@ -63,7 +70,7 @@ void ControlMapEditor::showObjectMenuContext(){
 void ControlMapEditor::defineAsHero() {
     SystemDatas *datas = RPM::get()->project()->gameDatas()->systemDatas();
     Position position;
-    m_cursorObject->getPosition3D(position);
+    m_cursorObject->getPosition(position);
 
     // If no object selected, create a fresh new object with hero model
     if (m_selectedObject == nullptr)
@@ -166,7 +173,7 @@ void ControlMapEditor::pasteObject() {
         m_selectedObject->setId(m_map->generateObjectId());
 
         // Add the object on the map
-        m_cursorObject->getPosition3D(position);
+        m_cursorObject->getPosition(position);
         stockObject(position, m_selectedObject);
         m_controlUndoRedo.addState(m_map->mapProperties()->id(), m_changes);
     }

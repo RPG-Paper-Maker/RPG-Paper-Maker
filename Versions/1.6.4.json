@@ -42,9 +42,11 @@
         "Add libs for SSL on Windows",
         "Frames and columns battlers not handled for animations editor",
         "Objects collisions sometimes crashing when in a border of a map",
-        "Create new state with first previous object is displaying none graphics but with a 3D object inside"
+        "Create new state with first previous object is displaying none graphics but with a 3D object inside",
+        "Paste object in mountains with yPlus not placed correctly"
 	],
     "finished": [
+        2,
         2,
         2,
         2,

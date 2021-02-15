@@ -17,7 +17,7 @@
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLFunctions>
 #include <QOpenGLTexture>
-#include "position3d.h"
+#include "position.h"
 #include "vertex.h"
 
 // -------------------------------------------------------
@@ -49,6 +49,7 @@ public:
     void setFrameNumber(int i);
     QVector3D* position() const;
     void getPosition3D(Position3D& position) const;
+    void getPosition(Position &position) const;
     Portion getPortion() const;
     void loadTexture(QString path);
     void updatePositionSquare();

@@ -98,6 +98,12 @@ void Cursor::setFrameNumber(int i) { m_frameNumber = i; }
 
 QVector3D* Cursor::position() const { return m_positionSquare; }
 
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
 void Cursor::getPosition3D(Position3D &position) const {
     if (m_positionSquare->x() < 0 || m_positionSquare->z() < 0) {
         position.setCoords(-1, 0, 0, -1);
@@ -108,9 +114,17 @@ void Cursor::getPosition3D(Position3D &position) const {
 }
 
 // -------------------------------------------------------
-//
-//  INTERMEDIARY FUNCTIONS
-//
+
+void Cursor::getPosition(Position &position) const
+{
+    if (m_positionSquare->x() < 0 || m_positionSquare->z() < 0) {
+        position.setCoords(-1, 0, 0, -1);
+    } else {
+        position.setCoords(this->getSquareX(), this->getSquareY(), this
+            ->getPercentYPlus(), this->getSquareZ());
+    }
+}
+
 // -------------------------------------------------------
 
 Portion Cursor::getPortion() const{
