@@ -11,13 +11,30 @@
             "source": "Engine/win32/libeay32.dll",
             "target": "Engine/libeay32.dll",
             "os": ["w"]
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Shapes/OBJ/chest-opened.obj",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Tilesets/chest-opened.obj"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/chest-opened2.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/chest-opened2.png"
         }
     ],
 	"remove": [],
-	"replace": [],
+	"replace": [
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Objects3D/chest-opened1.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/chest-opened1.png"
+        }
+    ],
 	"features": [
         "Add delete button for assets",
-        "Mac users no cmd + delete to delete but only delete or backspace key"
+        "Mac users no cmd + delete to delete but only delete or backspace key",
+        "Chest opened default 3D objects + Wood opened chest 2"
     ],
 	"bugs": [
         "Export game issue pictures in BR",
@@ -28,6 +45,7 @@
         "Create new state with first previous object is displaying none graphics but with a 3D object inside"
 	],
     "finished": [
+        2,
         2,
         2,
         2,

@@ -95,7 +95,7 @@ void ShapesDatas::setDefaultShapes(QList<QString> &names, CustomShapeKind kind)
 // -------------------------------------------------------
 
 void ShapesDatas::setDefaultObj(QList<QString>& names) {
-    names << "Roof";
+    names << "chest-opened" << "Roof";
     setDefaultShapes(names, CustomShapeKind::OBJ);
 }
 
