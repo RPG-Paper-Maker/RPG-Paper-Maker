@@ -394,20 +394,22 @@ void WidgetTreeCommands::deleteCommand() {
 
     for (int i = 0; i < list.size(); i++){
         selected = list.at(i);
-        command = reinterpret_cast<EventCommand *>(selected->data().value<
-            quintptr>());
-
-        if (command != nullptr && command->kind() != EventCommandKind::None) {
-            root = getRootOfCommand(selected);
-
-            // Delete selected command
-            QList<EventCommand *> list;
-            SystemCommonReaction::getCommands(list, selected);
-            row = selected->row();
-            root->removeRow(row);
-            for (int j = 0, l = list.size(); j < l; j++)
+        if (selected != nullptr)
+        {
+            command = reinterpret_cast<EventCommand *>(selected->data().value<
+                quintptr>());
+            if (command != nullptr && command->kind() != EventCommandKind::None)
             {
-                delete list.at(j);
+                root = getRootOfCommand(selected);
+                // Delete selected command
+                QList<EventCommand *> listCommands;
+                SystemCommonReaction::getCommands(listCommands, selected);
+                row = selected->row();
+                root->removeRow(row);
+                for (int j = 0, l = listCommands.size(); j < l; j++)
+                {
+                    delete listCommands.at(j);
+                }
             }
         }
     }
@@ -415,9 +417,12 @@ void WidgetTreeCommands::deleteCommand() {
     // Select node below
     if (row != -1) {
         QStandardItem *item = this->getModel()->item(row);
-        this->selectionModel()->select(item->index(), QItemSelectionModel
-            ::SelectCurrent);
-        this->selectChildren(item);
+        if (item != nullptr)
+        {
+            this->selectionModel()->select(item->index(), QItemSelectionModel
+                ::SelectCurrent);
+            this->selectChildren(item);
+        }
     }
 }
 
