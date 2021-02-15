@@ -29,6 +29,11 @@
             "repo": "Basic-Ressources",
             "source": "Content/Images/Textures2D/Objects3D/chest-opened1.png",
             "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/chest-opened1.png"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/commonEvents.json",
+            "target": "Engine/Content/basic/Content/Datas/commonEvents.json"
         }
     ],
 	"features": [
