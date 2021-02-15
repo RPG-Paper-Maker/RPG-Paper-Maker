@@ -1191,5 +1191,6 @@
     "unlimited": "Unlimited",
     "restock.shop": "Restock shop",
     "battlers.frames": "Battlers frames",
-    "battlers.columns": "Battlers columns"
+    "battlers.columns": "Battlers columns",
+    "you.cant.export.macos.windows": "You can't export MacOS version while on Windows. Please use Linux or MacOS computer to export it"
 }

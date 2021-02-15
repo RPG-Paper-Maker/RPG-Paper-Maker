@@ -1212,6 +1212,7 @@ const QString Translations::UNLIMITED = "unlimited";
 const QString Translations::RESTOCK_SHOP = "restock.shop";
 const QString Translations::BATTLERS_FRAMES = "battlers.frames";
 const QString Translations::BATTLERS_COLUMNS = "battlers.columns";
+const QString Translations::YOU_CANT_EXPORT_MACOS_WINDOWS = "you.cant.export.macos.windows";
 
 // -------------------------------------------------------
 //

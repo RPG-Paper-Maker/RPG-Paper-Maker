@@ -45,6 +45,7 @@ private:
 
 private slots:
     void on_pushButtonLocation_clicked();
+    void on_comboBoxOSDeploy_currentIndexChanged(int index);
     void accept();
     void on_radioButtonDesktop_toggled(bool checked);
 };

@@ -82,6 +82,19 @@ void DialogExport::on_pushButtonLocation_clicked(){
 
 // -------------------------------------------------------
 
+void DialogExport::on_comboBoxOSDeploy_currentIndexChanged(int index)
+{
+    #ifdef Q_OS_WIN
+        if (index == 2) // If windows and mac
+        {
+            QMessageBox::warning(this, RPM::translate(Translations::WARNING),
+                RPM::translate(Translations::YOU_CANT_EXPORT_MACOS_WINDOWS));
+        }
+    #endif
+}
+
+// -------------------------------------------------------
+
 void DialogExport::accept() {
     QString message = nullptr;
     OSKind osKind;

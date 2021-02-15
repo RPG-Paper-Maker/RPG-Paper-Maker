@@ -1225,6 +1225,7 @@ public:
     static const QString RESTOCK_SHOP;
     static const QString BATTLERS_FRAMES;
     static const QString BATTLERS_COLUMNS;
+    static const QString YOU_CANT_EXPORT_MACOS_WINDOWS;
 
     Translations();
     virtual ~Translations();
