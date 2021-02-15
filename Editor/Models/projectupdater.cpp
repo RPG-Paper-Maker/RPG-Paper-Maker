@@ -19,12 +19,12 @@
 #include "titlesettingkind.h"
 #include "systemcommonreaction.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 17;
+const int ProjectUpdater::incompatibleVersionsCount = 18;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
      "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0", "1.6.2",
-    "1.6.3"};
+    "1.6.3", "1.6.4"};
 
 // -------------------------------------------------------
 //
@@ -1029,7 +1029,7 @@ void ProjectUpdater::updateVersion_1_6_4()
     {
         picture = reinterpret_cast<SystemPicture *>(SuperListItem::getItemModelAt(
             model, i));
-        if (picture != nullptr && picture->name() == "chest-opened.png")
+        if (picture != nullptr && picture->name() == "chest-opened.png" && picture->isBR())
         {
             picture->setName("chest-opened1.png");
         }
@@ -1047,7 +1047,7 @@ void ProjectUpdater::updateVersion_1_6_4()
         for (i = 0, l = 4; i < l; i++)
         {
             objectEvent = reinterpret_cast<SystemObjectEvent *>(SuperListItem
-                ::getItemModelAt(hero->modelEvents(), 0));
+                ::getItemModelAt(hero->modelEvents(), i));
             if (objectEvent != nullptr)
             {
                 reaction = objectEvent->reactionAt(1);
@@ -1057,6 +1057,7 @@ void ProjectUpdater::updateVersion_1_6_4()
                 {
                     list = command->commands();
                     list.replace(2, RPM::TRUE_BOOL_STRING);
+                    command->setCommands(list);
                 }
             }
         }
