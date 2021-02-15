@@ -15,7 +15,7 @@
         {
             "repo": "Basic-Ressources",
             "source": "Content/Shapes/OBJ/chest-opened.obj",
-            "target": "Engine/Content/BR/Content/Images/Textures2D/Tilesets/chest-opened.obj"
+            "target": "Engine/Content/BR/Content/Shapes/OBJ/chest-opened.obj"
         },
         {
             "repo": "Basic-Ressources",
