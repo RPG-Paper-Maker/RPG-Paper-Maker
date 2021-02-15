@@ -304,6 +304,11 @@
                                     },
                                     {
                                         "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Objects3D/chest-opened2.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/chest-opened2.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
                                         "source": "Content/Images/Textures2D/Objects3D/table.png",
                                         "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/table.png"
                                     },
@@ -324,8 +329,8 @@
                                     },
                                     {
                                         "repo": "Basic-Ressources",
-                                        "source": "Content/Images/Textures2D/Objects3D/chest-opened.png",
-                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/chest-opened.png"
+                                        "source": "Content/Images/Textures2D/Objects3D/chest-opened1.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/chest-opened1.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
@@ -959,6 +964,11 @@
                                 "repo": "Basic-Ressources",
                                 "source": "Content/Shapes/OBJ/Roof.obj",
                                 "target": "Engine/Content/BR/Content/Shapes/OBJ/Roof.obj"
+                            },
+                            {
+                                "repo": "Basic-Ressources",
+                                "source": "Content/Shapes/OBJ/chest-opened.obj",
+                                "target": "Engine/Content/BR/Content/Shapes/OBJ/chest-opened.obj"
                             }
                         ],
                         "target": "Engine/Content/BR/Content/Shapes/OBJ"
