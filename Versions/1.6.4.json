@@ -34,6 +34,11 @@
             "repo": "RPG-Paper-Maker",
             "source": "EditorApp/Content/basic/Content/Datas/commonEvents.json",
             "target": "Engine/Content/basic/Content/Datas/commonEvents.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/specialElements.json",
+            "target": "Engine/Content/basic/Content/Datas/specialElements.json"
         }
     ],
 	"features": [
