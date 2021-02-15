@@ -36,8 +36,8 @@ ControlExport::ControlExport(Project *project) :
 //
 // -------------------------------------------------------
 
-QString ControlExport::createDesktop(QString location, OSKind os, bool, int
-    major, int minor)
+QString ControlExport::createDesktop(QString location, OSKind os, bool protect,
+    int major, int minor)
 {
     QString message;
     QString osMessage;
@@ -77,21 +77,32 @@ QString ControlExport::createDesktop(QString location, OSKind os, bool, int
     }
 
     // Remove all the files that are no longer needed here
-    removeDesktopNoNeed(path);
+    removeDesktopNoNeed(path, protect);
 
     // Convert JSON files
-    message = this->protectJSON(path);
-    if (message != nullptr)
+    if (protect)
     {
-        return message;
+        message = this->protectJSON(path);
+        if (message != nullptr)
+        {
+            return message;
+        }
     }
 
+    // If protected, create a .protect file
+    if (protect)
+    {
+        QFile protectFile(Common::pathCombine(Common::pathCombine(path, RPM
+            ::PATH_APP), ".protect"));
+        protectFile.open(QIODevice::WriteOnly);
+        protectFile.close();
+    }
     return nullptr;
 }
 
 // -------------------------------------------------------
 
-QString ControlExport::createBrowser(QString location) {
+QString ControlExport::createBrowser(QString location, bool protect) {
     QString message;
     QDir dirLocation(location);
     QString projectName = QDir(m_project->pathCurrentProject()).dirName() +
@@ -106,7 +117,7 @@ QString ControlExport::createBrowser(QString location) {
     // Remove all the files that are no longer needed here
     removeWebNoNeed(path);
 
-    return generateWebStuff(path);
+    return generateWebStuff(path, protect);
 }
 
 // -------------------------------------------------------
@@ -242,7 +253,7 @@ void ControlExport::removeWebNoNeed(QString path) {
 
 // -------------------------------------------------------
 
-void ControlExport::removeDesktopNoNeed(QString path) {
+void ControlExport::removeDesktopNoNeed(QString path, bool protect) {
 
     // Remove useless datas
     QString pathDatas = Common::pathCombine(Common::pathCombine(path, RPM
@@ -254,12 +265,16 @@ void ControlExport::removeDesktopNoNeed(QString path) {
     QFile(Common::pathCombine(pathDatas, "shapes.json")).remove();
     QFile(Common::pathCombine(pathDatas, "songs.json")).remove();
     QFile(Common::pathCombine(pathDatas, "videos.json")).remove();
-    this->copyBRDLC(Common::pathCombine(path, RPM::PATH_APP));
-    QDir(Common::pathCombine(pathContent, "Images")).removeRecursively();
-    QDir(Common::pathCombine(pathContent, "Shapes")).removeRecursively();
-    QDir(Common::pathCombine(pathContent, "Songs")).removeRecursively();
+    this->copyBRDLC(Common::pathCombine(path, RPM::PATH_APP), protect);
+    // If protected, remove assets folders (except videos)
+    if (protect)
+    {
+        QDir(Common::pathCombine(pathContent, "Images")).removeRecursively();
+        QDir(Common::pathCombine(pathContent, "Shapes")).removeRecursively();
+        QDir(Common::pathCombine(pathContent, "Songs")).removeRecursively();
+    }
 
-    // Saves
+    // Remove Saves
     QDir dir(Common::pathCombine(Common::pathCombine(path, RPM::PATH_APP), RPM
         ::PATH_SAVES));
     foreach (QFileInfo ifo, dir.entryInfoList(QDir::Files))
@@ -272,7 +287,7 @@ void ControlExport::removeDesktopNoNeed(QString path) {
 
 // -------------------------------------------------------
 
-QString ControlExport::generateWebStuff(QString path) {
+QString ControlExport::generateWebStuff(QString path, bool protect) {
     QString pathWeb = Common::pathCombine("Content", "web");
 
     // Write index.php
@@ -295,7 +310,7 @@ QString ControlExport::generateWebStuff(QString path) {
         Common::pathCombine(pathJS, "utilities.js"));
 
     // Pictures
-    copyBRDLC(path);
+    copyBRDLC(path, protect);
 
     return nullptr;
 }
@@ -357,19 +372,20 @@ void ControlExport::removeMapsTemp(QString pathDatas) {
 
 // -------------------------------------------------------
 
-void ControlExport::copyBRDLC(QString path) {
-    this->copyBRDLCKind(path, 0, static_cast<int>(PictureKind::Bars),
+void ControlExport::copyBRDLC(QString path, bool protect) {
+    this->copyBRDLCKind(path, protect, 0, static_cast<int>(PictureKind::Bars),
         static_cast<int>(PictureKind::Last));
-    this->copyBRDLCKind(path, 1, static_cast<int>(SongKind::Music),
+    this->copyBRDLCKind(path, protect, 1, static_cast<int>(SongKind::Music),
         static_cast<int>(SongKind::Last));
-    this->copyBRDLCKind(path, 2, static_cast<int>(CustomShapeKind::OBJ),
+    this->copyBRDLCKind(path, protect, 2, static_cast<int>(CustomShapeKind::OBJ),
         static_cast<int>(CustomShapeKind::Last));
-    this->copyBRDLCKind(path, 3, 0, 1);
+    this->copyBRDLCKind(path, protect, 3, 0, 1);
 }
 
 // -------------------------------------------------------
 
-void ControlExport::copyBRDLCKind(QString path, int kind, int start, int end)
+void ControlExport::copyBRDLCKind(QString path, bool protect, int kind, int
+    start, int end)
 {
     QStandardItemModel *model, *newModel;
     SystemResource *resource, *newResource;
@@ -415,8 +431,8 @@ void ControlExport::copyBRDLCKind(QString path, int kind, int start, int end)
                 ->createCopy());
             newResource->setId(resource->id());
 
-            // If is from BR or DLC, we need to copy it in the project
-            if (kind == 3)
+            // If not protected or video, and is from BR or DLC, we need to copy it in the project
+            if (!protect || kind == 3)
             {
                 if ((resource->isBR() || !resource->dlc().isEmpty()))
                 {

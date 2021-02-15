@@ -94,7 +94,7 @@ void DialogExport::accept() {
             ->spinBoxMinorVersion->value());
     }
     else if (ui->radioButtonBrowser->isChecked()){
-        message = m_control.createBrowser(location);
+        message = m_control.createBrowser(location, ui->checkBoxProtect->isChecked());
     }
 
     if (message != nullptr) {

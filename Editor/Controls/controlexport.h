@@ -29,20 +29,20 @@ class ControlExport
 {
 public:
     ControlExport(Project *project);
-    QString createDesktop(QString location, OSKind os, bool, int major, int
-        minor);
-    QString createBrowser(QString location);
+    QString createDesktop(QString location, OSKind os, bool protect, int major,
+        int minor);
+    QString createBrowser(QString location, bool protect);
     QString createFolder(QString location, QString projectName, QString path,
                          QDir dirLocation);
     QString copyAllProject(QString path);
     QString protectJSON(QString path);
     void removeWebNoNeed(QString path);
-    void removeDesktopNoNeed(QString path);
-    QString generateWebStuff(QString path);
+    void removeDesktopNoNeed(QString path, bool protect);
+    QString generateWebStuff(QString path, bool protect);
     QString generateDesktopStuff(QString path, OSKind os, int major, int minor);
     void removeMapsTemp(QString pathDatas);
-    void copyBRDLC(QString path);
-    void copyBRDLCKind(QString path, int kind, int start, int end);
+    void copyBRDLC(QString path, bool protect);
+    void copyBRDLCKind(QString path, bool protect, int kind, int start, int end);
 
 protected:
     Project *m_project;

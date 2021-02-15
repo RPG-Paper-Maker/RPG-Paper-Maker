@@ -44,9 +44,11 @@
         "Objects collisions sometimes crashing when in a border of a map",
         "Create new state with first previous object is displaying none graphics but with a 3D object inside",
         "Paste object in mountains with yPlus not placed correctly",
-        "Can't use delete key on objects after right clicking"
+        "Can't use delete key on objects after right clicking",
+        "Protect game datas: checkbox not applied"
 	],
     "finished": [
+        2,
         2,
         2,
         2,
