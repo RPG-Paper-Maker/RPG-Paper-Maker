@@ -483,6 +483,8 @@ void PanelObject::on_stateChanged(QModelIndex index, QModelIndex) {
             if (super->graphicsKind() == MapEditorSubSelectionKind::Object3D)
             {
                 ui->frameGraphics->updateCurrentObject();
+            } else {
+                ui->frameGraphics->clearObject();
             }
             ui->frameGraphics->repaint();
 
