@@ -1193,5 +1193,6 @@
     "unlimited": "Ilimitado",
     "restock.shop": "Reabastecer una tienda",
     "battlers.frames": "Cuadros en luchadores",
-    "battlers.columns": "Columnas en luchadores"
+    "battlers.columns": "Columnas en luchadores",
+    "you.cant.export.macos.windows": "No puede exportar una versión de MacOS en Windows. Utilice una computadora Linux o MacOS para exportarlo"
 }

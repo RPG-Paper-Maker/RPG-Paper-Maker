@@ -1191,5 +1191,6 @@
     "unlimited": "無限",
     "restock.shop": "補貨店",
     "battlers.frames": "戰鬥機框架",
-    "battlers.columns": "戰鬥機專欄"
+    "battlers.columns": "戰鬥機專欄",
+    "you.cant.export.macos.windows": "在Windows上，您無法導出MacOS版本。請使用Linux或MacOS計算機將其導出"
 }

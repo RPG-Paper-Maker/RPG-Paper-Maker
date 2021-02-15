@@ -1191,5 +1191,6 @@
     "unlimited": "제한 없는",
     "restock.shop": "재입고",
     "battlers.frames": "Battlers 프레임",
-    "battlers.columns": "Battlers 컬럼"
+    "battlers.columns": "Battlers 컬럼",
+    "you.cant.export.macos.windows": "Windows에서는 MacOS 버전을 내보낼 수 없습니다. 내보내기하려면 Linux 또는 MacOS 컴퓨터를 사용하십시오"
 }
