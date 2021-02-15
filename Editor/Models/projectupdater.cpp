@@ -1016,3 +1016,49 @@ void ProjectUpdater::updateVersion_1_6_3_commands(QStandardItem *commands)
         this->updateVersion_1_6_3_commands(commands->child(i));
     }
 }
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_6_4()
+{
+    // Change chest opened name
+    QStandardItemModel *model = m_project->picturesDatas()->model(PictureKind::Object3D);
+    SystemPicture *picture;
+    int i, l;
+    for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        picture = reinterpret_cast<SystemPicture *>(SuperListItem::getItemModelAt(
+            model, i));
+        if (picture != nullptr && picture->name() == "chest-opened.png")
+        {
+            picture->setName("chest-opened1.png");
+        }
+    }
+    // Change hero to check ignore if impossible
+    SystemCommonObject *hero = reinterpret_cast<SystemCommonObject *>(SuperListItem
+        ::getById(m_project->gameDatas()->commonEventsDatas()->modelCommonObjects()
+        ->invisibleRootItem(), 2));
+    if (hero != nullptr)
+    {
+        SystemObjectEvent *objectEvent;
+        SystemReaction *reaction;
+        EventCommand *command;
+        QVector<QString> list;
+        for (i = 0, l = 4; i < l; i++)
+        {
+            objectEvent = reinterpret_cast<SystemObjectEvent *>(SuperListItem
+                ::getItemModelAt(hero->modelEvents(), 0));
+            if (objectEvent != nullptr)
+            {
+                reaction = objectEvent->reactionAt(1);
+                command = reinterpret_cast<EventCommand *>(SuperListItem
+                    ::getItemModelAt(reaction->modelCommands(), 0));
+                if (command != nullptr && command->kind() == EventCommandKind::MoveObject)
+                {
+                    list = command->commands();
+                    list.replace(2, RPM::TRUE_BOOL_STRING);
+                }
+            }
+        }
+    }
+}
