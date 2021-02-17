@@ -1213,6 +1213,8 @@ const QString Translations::RESTOCK_SHOP = "restock.shop";
 const QString Translations::BATTLERS_FRAMES = "battlers.frames";
 const QString Translations::BATTLERS_COLUMNS = "battlers.columns";
 const QString Translations::YOU_CANT_EXPORT_MACOS_WINDOWS = "you.cant.export.macos.windows";
+const QString Translations::ENTER_A_NAME_MENU = "enter.a.name.menu";
+const QString Translations::MAX_CHARACTERS = "max.characters";
 
 // -------------------------------------------------------
 //

@@ -82,6 +82,7 @@ enum class EventCommandKind {
     Plugin,
     StartShopMenu,
     RestockShop,
+    EnterANameMenu,
     Last
 };
 

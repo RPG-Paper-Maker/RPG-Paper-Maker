@@ -1192,5 +1192,7 @@
     "restock.shop": "Réapprovisionner un magasin",
     "battlers.frames": "Frames dans battlers",
     "battlers.columns": "Colonnes dans battlers",
-    "you.cant.export.macos.windows": "Vous ne pouvez pas exporter une version MacOS en étant sous Windows. Veuillez utiliser un ordinateur sous Linux ou MacOS pour l'exporter"
+    "you.cant.export.macos.windows": "Vous ne pouvez pas exporter une version MacOS en étant sous Windows. Veuillez utiliser un ordinateur sous Linux ou MacOS pour l'exporter",
+    "enter.a.name.menu": "Menu entrer un nom",
+    "max.characters": "Nombre max de caractères"
 }

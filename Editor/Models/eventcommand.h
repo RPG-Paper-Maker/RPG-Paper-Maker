@@ -195,6 +195,8 @@ private:
         *parameters) const;
     QString strStartShopMenu(SystemCommonObject *object, QStandardItemModel
         *parameters, bool isRestock = false) const;
+    QString strEnterANameMenu(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

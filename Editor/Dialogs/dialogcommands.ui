@@ -382,9 +382,9 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButtonChangeChronometer_4">
+                 <widget class="QPushButton" name="pushButtonEnterANameMenu">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Enter a name menu...</string>

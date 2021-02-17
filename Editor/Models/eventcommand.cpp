@@ -313,6 +313,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strStartShopMenu(object, parameters); break;
     case EventCommandKind::RestockShop:
         str += this->strStartShopMenu(object, parameters, true); break;
+    case EventCommandKind::EnterANameMenu:
+        str += this->strEnterANameMenu(object, parameters); break;
     default:
         break;
     }
@@ -2269,6 +2271,20 @@ QString EventCommand::strStartShopMenu(SystemCommonObject *object, QStandardItem
         ::translate(Translations::BUY_ONLY) + RPM::COLON + RPM::SPACE + buyOnly))
         + RPM::NEW_LINE + RPM::translate(Translations::SHOP_ID) + RPM::COLON +
         RPM::SPACE + shopID;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strEnterANameMenu(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    QString heroInstanceID = this->strProperty(i, object, parameters);
+    QString maxCharacters = this->strProperty(i, object, parameters);
+    return RPM::translate(Translations::ENTER_A_NAME_MENU) + RPM::COLON + RPM
+        ::NEW_LINE + RPM::translate(Translations::HERO_WITH_INSTANCE_ID) + RPM
+        ::COLON + RPM::SPACE + heroInstanceID + RPM::NEW_LINE + RPM::translate(
+        Translations::MAX_CHARACTERS) + RPM::COLON + RPM::SPACE + maxCharacters;
 }
 
 // -------------------------------------------------------

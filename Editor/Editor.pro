@@ -65,6 +65,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.h \
     Dialogs/Commands/dialogcommandshakescreen.h \
     Dialogs/Commands/dialogcommandstartshopmenu.h \
+    Dialogs/Commands/dialogcommandenteranamemenu.h \
     Dialogs/Systems/dialogsystemanimationframeeffect.h \
     Dialogs/Systems/dialogsystemanimationframeelement.h \
     Dialogs/Systems/dialogsystembattlemap.h \
@@ -601,6 +602,7 @@ SOURCES += \
     Models/System/systemobjectevent.cpp \
     Models/System/systemstate.cpp \
     Dialogs/Commands/dialogcommandchangestate.cpp \
+    Dialogs/Commands/dialogcommandenteranamemenu.cpp \
     Dialogs/dialogobject.cpp \
     MapEditor/mapobjects.cpp \
     Models/System/systemreaction.cpp \
@@ -906,7 +908,8 @@ FORMS += \
     CustomWidgets/panelshapes.ui \
     CustomWidgets/widgetshape.ui \
     Dialogs/dialogshapespreview.ui \
-    Dialogs/Commands/dialogcommandlabel.ui
+    Dialogs/Commands/dialogcommandlabel.ui \
+    Dialogs/Commands/dialogcommandenteranamemenu.ui
 
 # Resources are currently part of the Editor library, not the EditorApp. EditorApp's main function will require Q_INIT_RESOURCE.
 RESOURCES += \

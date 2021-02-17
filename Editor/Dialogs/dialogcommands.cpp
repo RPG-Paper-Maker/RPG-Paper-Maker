@@ -50,6 +50,7 @@
 #include "dialogcommandflashscreen.h"
 #include "dialogcommandplugin.h"
 #include "dialogcommandstartshopmenu.h"
+#include "dialogcommandenteranamemenu.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -201,6 +202,8 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandStartShopMenu(command, properties, parameters);
     case EventCommandKind::RestockShop:
         return new DialogCommandStartShopMenu(command, properties, parameters, true);
+    case EventCommandKind::EnterANameMenu:
+        return new DialogCommandEnterANameMenu(command, properties, parameters);
     default:
         return nullptr;
     }
@@ -685,6 +688,14 @@ void DialogCommands::on_pushButtonStartShopMenu_clicked()
 
 // -------------------------------------------------------
 
-void DialogCommands::on_pushButtonRestockShop_clicked() {
+void DialogCommands::on_pushButtonRestockShop_clicked()
+{
     this->openDialogCommand(EventCommandKind::RestockShop);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonEnterANameMenu_clicked()
+{
+    this->openDialogCommand(EventCommandKind::EnterANameMenu);
 }

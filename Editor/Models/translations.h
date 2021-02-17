@@ -1226,6 +1226,8 @@ public:
     static const QString BATTLERS_FRAMES;
     static const QString BATTLERS_COLUMNS;
     static const QString YOU_CANT_EXPORT_MACOS_WINDOWS;
+    static const QString ENTER_A_NAME_MENU;
+    static const QString MAX_CHARACTERS;
 
     Translations();
     virtual ~Translations();
