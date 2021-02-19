@@ -35,6 +35,8 @@ public:
     ~DialogEnterNameOptions();
     QList<QList<QString>> table() const;
 
+    void translate();
+
 private:
     Ui::DialogEnterNameOptions *ui;
 

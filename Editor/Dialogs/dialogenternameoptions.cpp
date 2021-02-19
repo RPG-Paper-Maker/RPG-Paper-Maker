@@ -11,6 +11,7 @@
 
 #include "dialogenternameoptions.h"
 #include "ui_dialogenternameoptions.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -41,6 +42,7 @@ DialogEnterNameOptions::DialogEnterNameOptions(QList<
             ui->tableWidget->setItem(i, j, new QTableWidgetItem(list.at(j)));
         }
     }
+    this->translate();
 }
 
 DialogEnterNameOptions::~DialogEnterNameOptions()
@@ -62,6 +64,21 @@ QList<QList<QString>> DialogEnterNameOptions::table() const
         table.append(list);
     }
     return table;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogEnterNameOptions::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::ENTER_NAME_OPTIONS) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelRows->setText(RPM::translate(Translations::ROWS) + RPM::COLON);
+    ui->labelColumns->setText(RPM::translate(Translations::COLUMNS) + RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

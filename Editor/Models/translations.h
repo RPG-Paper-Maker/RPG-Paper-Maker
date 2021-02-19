@@ -1228,6 +1228,7 @@ public:
     static const QString YOU_CANT_EXPORT_MACOS_WINDOWS;
     static const QString ENTER_A_NAME_MENU;
     static const QString MAX_CHARACTERS;
+    static const QString ENTER_NAME_OPTIONS;
 
     Translations();
     virtual ~Translations();

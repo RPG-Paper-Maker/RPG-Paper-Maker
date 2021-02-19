@@ -1215,6 +1215,7 @@ const QString Translations::BATTLERS_COLUMNS = "battlers.columns";
 const QString Translations::YOU_CANT_EXPORT_MACOS_WINDOWS = "you.cant.export.macos.windows";
 const QString Translations::ENTER_A_NAME_MENU = "enter.a.name.menu";
 const QString Translations::MAX_CHARACTERS = "max.characters";
+const QString Translations::ENTER_NAME_OPTIONS = "enter.name.options";
 
 // -------------------------------------------------------
 //

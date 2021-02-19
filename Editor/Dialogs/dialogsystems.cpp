@@ -578,6 +578,8 @@ void DialogSystems::translate()
     ui->groupBoxFrames->setTitle(RPM::translate(Translations::FRAMES));
     ui->labelBattlersFrames->setText(RPM::translate(Translations::BATTLERS_FRAMES));
     ui->labelBattlersColumns->setText(RPM::translate(Translations::BATTLERS_COLUMNS));
+    ui->pushButtonEnterNameOptions->setText(RPM::translate(Translations
+        ::ENTER_NAME_OPTIONS) + RPM::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
