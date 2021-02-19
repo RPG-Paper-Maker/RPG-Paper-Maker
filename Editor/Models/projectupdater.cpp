@@ -19,12 +19,12 @@
 #include "titlesettingkind.h"
 #include "systemcommonreaction.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 18;
+const int ProjectUpdater::incompatibleVersionsCount = 19;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
      "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0", "1.6.2",
-    "1.6.3", "1.6.4"};
+    "1.6.3", "1.6.4", "1.7.0"};
 
 // -------------------------------------------------------
 //
@@ -1062,4 +1062,11 @@ void ProjectUpdater::updateVersion_1_6_4()
             }
         }
     }
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_7_0()
+{
+    m_project->gameDatas()->systemDatas()->setdefaultEnterNameOptions();
 }

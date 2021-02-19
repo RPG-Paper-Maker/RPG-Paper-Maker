@@ -50,6 +50,7 @@ const QString SystemDatas::JSON_MAP_FRAME_DURATION = "mfd";
 const QString SystemDatas::JSON_BATTLERS_FRAMES = "battlersFrames";
 const QString SystemDatas::JSON_BATTLERS_COLUMNS = "battlersColumns";
 const QString SystemDatas::JSON_PRICE_SOLD_ITEM = "priceSoldItem";
+const QString SystemDatas::JSON_ENTER_NAME_TABLE = "enterNameTable";
 const bool SystemDatas::DEFAULT_ANTIALIASING = false;
 const int SystemDatas::DEFAULT_MAP_FRAME_DURATION = 150;
 const int SystemDatas::DEFAULT_BATTLERS_FRAMES = 4;
@@ -178,6 +179,16 @@ PrimitiveValue * SystemDatas::mapFrameDuration() const
 
 PrimitiveValue * SystemDatas::priceSoldItem() const {
     return m_priceSoldItem;
+}
+
+QList<QList<QString>> SystemDatas::enterNameTable() const
+{
+    return m_enterNameTable;
+}
+
+void SystemDatas::setEnterNameTable(QList<QList<QString>> enterNameTable)
+{
+    m_enterNameTable = enterNameTable;
 }
 
 int SystemDatas::idMapHero() const {
@@ -347,6 +358,7 @@ void SystemDatas::setDefault() {
     this->setDefaultFontNames();
     this->setDefaultSounds();
     this->setDefaultDialogBoxOptions();
+    this->setdefaultEnterNameOptions();
     this->setDefaultSkyBoxes();
 
     m_lastMajorVersion = 1;
@@ -580,6 +592,21 @@ void SystemDatas::setDefaultDialogBoxOptions() {
 
 // -------------------------------------------------------
 
+void SystemDatas::setdefaultEnterNameOptions()
+{
+    m_enterNameTable = QList<QList<QString>>({
+        QList<QString>({"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"}),
+        QList<QString>({"n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}),
+        QList<QString>({"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"}),
+        QList<QString>({"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}),
+        QList<QString>({"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "^", "@", "|"}),
+        QList<QString>({"?", "!", "#", "$", "%", "[", "]", "{", "}", "(", ")", "<", ">"}),
+        QList<QString>({"&", "*", "+", "-", "/", "=", ":", ";", ".", "~", " ", " ", " "})
+    });
+}
+
+// -------------------------------------------------------
+
 void SystemDatas::setDefaultSkyBoxes()
 {
     m_modelSkyBoxes->appendRow((new SystemSkyBox(1, RPM::translate(Translations
@@ -765,6 +792,22 @@ void SystemDatas::read(const QJsonObject &json){
 
     // Dialog box options
     m_dialogBoxOptions->read(json[JSON_DIALOG_BOX_OPTIONS].toObject());
+
+    // Enter name options
+    jsonList = json[JSON_ENTER_NAME_TABLE].toArray();
+    QList<QString> listEnterName;
+    QJsonArray tab;
+    m_enterNameTable.clear();
+    for (int i = 0, l = jsonList.size(); i < l; i++)
+    {
+        listEnterName = QList<QString>();
+        tab = jsonList.at(i).toArray();
+        for (int j = 0, m = tab.size(); j < m; j++)
+        {
+            listEnterName.append(tab.at(j).toString());
+        }
+        m_enterNameTable.append(listEnterName);
+    }
 }
 
 // -------------------------------------------------------
@@ -970,4 +1013,20 @@ void SystemDatas::write(QJsonObject &json) const{
     // Dialog box options
     obj = m_dialogBoxOptions->getJSON();
     json[JSON_DIALOG_BOX_OPTIONS] = obj;
+
+    // Enter name options
+    jsonArray = QJsonArray();
+    QList<QString> listEnterName;
+    QJsonArray tab;
+    for (int i = 0, l = m_enterNameTable.size(); i < l; i++)
+    {
+        listEnterName = m_enterNameTable.at(i);
+        tab = QJsonArray();
+        for (int j = 0, m = listEnterName.size(); j < m; j++)
+        {
+            tab.append(listEnterName.at(j));
+        }
+        jsonArray.append(tab);
+    }
+    json[JSON_ENTER_NAME_TABLE] = jsonArray;
 }

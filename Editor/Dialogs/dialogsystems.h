@@ -74,6 +74,7 @@ private slots:
     void on_comboBoxBattleLevel_currentIndexChanged(int index);
     void on_comboBoxBattleExp_currentIndexChanged(int index);
     void on_pushButtonDefaultDialogBoxOptions_clicked();
+    void on_pushButtonEnterNameOptions_clicked();
     void on_statisticsUpdated();
     void on_equipmentUpdated();
     void on_radioButtonImage_toggled(bool checked);

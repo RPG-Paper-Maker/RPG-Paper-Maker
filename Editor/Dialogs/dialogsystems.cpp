@@ -31,6 +31,7 @@
 #include "systemfontname.h"
 #include "dialogcommandsetdialogboxoptions.h"
 #include "systemskybox.h"
+#include "dialogenternameoptions.h"
 
 // -------------------------------------------------------
 //
@@ -679,6 +680,19 @@ void DialogSystems::on_pushButtonDefaultDialogBoxOptions_clicked() {
         command = dialog.getCommand();
         RPM::get()->project()->gameDatas()->systemDatas()->setDialogBoxOptions(
             command);
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_pushButtonEnterNameOptions_clicked()
+{
+    QList<QList<QString>> table = RPM::get()->project()->gameDatas()->systemDatas()
+        ->enterNameTable();
+    DialogEnterNameOptions dialog(table);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        RPM::get()->project()->gameDatas()->systemDatas()->setEnterNameTable(dialog.table());
     }
 }
 

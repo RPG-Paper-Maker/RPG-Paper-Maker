@@ -64,9 +64,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-789</y>
                 <width>252</width>
-                <height>1415</height>
+                <height>1446</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_13">
@@ -641,7 +641,7 @@
                    </property>
                    <layout class="QGridLayout" name="gridLayout_4">
                     <item row="0" column="0">
-                     <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,1,0,0,0">
+                     <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,1,0,0,0,0">
                       <property name="spacing">
                        <number>6</number>
                       </property>
@@ -715,6 +715,13 @@
                         </property>
                         <property name="text">
                          <string>% of default price</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="pushButtonEnterNameOptions">
+                        <property name="text">
+                         <string>Enter name options...</string>
                         </property>
                        </widget>
                       </item>

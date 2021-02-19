@@ -58,6 +58,7 @@ public:
     static const QString JSON_BATTLERS_FRAMES;
     static const QString JSON_BATTLERS_COLUMNS;
     static const QString JSON_PRICE_SOLD_ITEM;
+    static const QString JSON_ENTER_NAME_TABLE;
     static const bool DEFAULT_ANTIALIASING;
     static const int DEFAULT_MAP_FRAME_DURATION;
     static const int DEFAULT_BATTLERS_FRAMES;
@@ -84,6 +85,8 @@ public:
     PrimitiveValue * mountainCollisionAngle() const;
     PrimitiveValue * mapFrameDuration() const;
     PrimitiveValue * priceSoldItem() const;
+    QList<QList<QString>> enterNameTable() const;
+    void setEnterNameTable(QList<QList<QString>> enterNameTable);
     int idMapHero() const;
     void setIdMapHero(int i);
     int idObjectHero() const;
@@ -135,6 +138,7 @@ public:
     void setDefaultFontNames();
     void setDefaultSounds();
     void setDefaultDialogBoxOptions();
+    void setdefaultEnterNameOptions();
     void setDefaultSkyBoxes();
 
     virtual void read(const QJsonObject &json);
@@ -151,6 +155,7 @@ private:
     PrimitiveValue *m_mountainCollisionAngle;
     PrimitiveValue *m_mapFrameDuration;
     PrimitiveValue *m_priceSoldItem;
+    QList<QList<QString>> m_enterNameTable;
     int m_idMapHero;
     int m_idObjectHero;
     QString m_pathBR;

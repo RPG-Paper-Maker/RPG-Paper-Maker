@@ -85,6 +85,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemspeedfrequency.h \
     Dialogs/Systems/dialogsystemstatusreleaseturn.h \
     Dialogs/Systems/dialogsystemtitlecommand.h \
+    Dialogs/dialogenternameoptions.h \
     Dialogs/dialogscripts.h \
     Dialogs/dialogfirstlaunch.h \
     Dialogs/dialogimportdlcs.h \
@@ -473,6 +474,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemspeedfrequency.cpp \
     Dialogs/Systems/dialogsystemstatusreleaseturn.cpp \
     Dialogs/Systems/dialogsystemtitlecommand.cpp \
+    Dialogs/dialogenternameoptions.cpp \
     Dialogs/dialogscripts.cpp \
     Dialogs/dialogfirstlaunch.cpp \
     Dialogs/dialogimportdlcs.cpp \
@@ -811,6 +813,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemspeedfrequency.ui \
     Dialogs/Systems/dialogsystemstatusreleaseturn.ui \
     Dialogs/Systems/dialogsystemtitlecommand.ui \
+    Dialogs/dialogenternameoptions.ui \
     Dialogs/dialogscripts.ui \
     Dialogs/dialogfirstlaunch.ui \
     Dialogs/dialogimportdlcs.ui \
