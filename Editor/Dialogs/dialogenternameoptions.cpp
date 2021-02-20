@@ -54,12 +54,14 @@ QList<QList<QString>> DialogEnterNameOptions::table() const
 {
     QList<QList<QString>> table;
     QList<QString> list;
+    QTableWidgetItem *item;
     for (int i = 0, l = ui->spinBoxRows->value(); i < l; i++)
     {
         list = QList<QString>();
         for (int j = 0, m = ui->spinBoxColumns->value(); j < m; j++)
         {
-            list.append(ui->tableWidget->item(i, j)->text());
+            item = ui->tableWidget->item(i, j);
+            list.append(item == nullptr ? " " : item->text());
         }
         table.append(list);
     }

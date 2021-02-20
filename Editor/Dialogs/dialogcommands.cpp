@@ -338,7 +338,7 @@ void DialogCommands::translate() {
     ui->pushButtonPlugin->setText(EventCommand::kindToString(EventCommandKind::Plugin));
     ui->pushButtonStartShopMenu->setText(EventCommand::kindToString(EventCommandKind::StartShopMenu));
     ui->pushButtonRestockShop->setText(EventCommand::kindToString(EventCommandKind::RestockShop));
-
+    ui->pushButtonEnterANameMenu->setText(EventCommand::kindToString(EventCommandKind::EnterANameMenu));
     ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
     ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));
     ui->groupBoxMedia->setTitle(RPM::translate(Translations::MEDIA));

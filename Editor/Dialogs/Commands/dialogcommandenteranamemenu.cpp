@@ -63,7 +63,7 @@ void DialogCommandEnterANameMenu::initializePrimitives()
     ui->panelPrimitiveHeroInstanceID->initializeNumber(m_parameters, m_properties);
     ui->panelPrimitiveHeroInstanceID->setKind(PrimitiveValueKind::Variable);
     ui->panelPrimitiveMaxCharacters->initializeNumber(m_parameters, m_properties);
-    ui->panelPrimitiveMaxCharacters->setNumberValue(6);
+    ui->panelPrimitiveMaxCharacters->setNumberValue(12);
 }
 
 // -------------------------------------------------------
