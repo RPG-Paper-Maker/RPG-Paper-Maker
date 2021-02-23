@@ -121,7 +121,6 @@ void PanelSuperList::translate() {
 
 void PanelSuperList::on_lineEditName_textChanged(const QString &s) {
     ui->widgetList->setName(s);
-
     emit nameChanged(ui->widgetList->getSelected());
 }
 

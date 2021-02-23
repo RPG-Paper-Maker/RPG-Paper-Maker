@@ -23,8 +23,8 @@
 GameDatas::GameDatas() :
     m_commonEventsDatas(new CommonEventsDatas),
     m_variablesDatas(new VariablesDatas),
-    m_systemDatas(new SystemDatas),
     m_battleSystemDatas(new BattleSystemDatas),
+    m_systemDatas(new SystemDatas),
     m_itemsDatas(new ItemsDatas),
     m_skillsDatas(new SkillsDatas),
     m_weaponsDatas(new WeaponsDatas),
@@ -47,8 +47,8 @@ GameDatas::~GameDatas()
 {
     delete m_commonEventsDatas;
     delete m_variablesDatas;
-    delete m_systemDatas;
     delete m_battleSystemDatas;
+    delete m_systemDatas;
     delete m_itemsDatas;
     delete m_skillsDatas;
     delete m_weaponsDatas;
@@ -182,10 +182,10 @@ void GameDatas::setDefaultItemsCharacters() {
 void GameDatas::read(QString path){
     readVariablesSwitches(path);
     readCommonEvents(path);
-    readSystem(path);
     readItems(path);
     readSkills(path);
     readBattleSystem(path);
+    readSystem(path);
     readWeapons(path);
     readArmors(path);
     readHeroes(path);

@@ -34,6 +34,7 @@ SystemSelectStatistic::SystemSelectStatistic(int id, QString name,
 {
     m_statisticID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->battleSystemDatas()->modelCommonStatistics());
+    this->setName(m_statisticID->toString());
 }
 
 SystemSelectStatistic::~SystemSelectStatistic()
@@ -60,6 +61,7 @@ bool SystemSelectStatistic::openDialog()
     if (dialog.exec() == QDialog::Accepted)
     {
         this->setCopy(selectStatistic);
+        this->setName(m_statisticID->toString());
         return true;
     }
     return false;
@@ -97,6 +99,7 @@ void SystemSelectStatistic::read(const QJsonObject &json)
     {
         m_statisticID->read(json[JSON_STATISTIC_ID].toObject());
     }
+    this->setName(m_statisticID->toString());
 }
 
 // -------------------------------------------------------

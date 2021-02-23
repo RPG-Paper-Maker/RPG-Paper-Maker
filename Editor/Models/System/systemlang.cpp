@@ -126,6 +126,8 @@ void SystemLang::read(const QJsonObject &json){
     setName(m_names->mainName());
 }
 
+// -------------------------------------------------------
+
 void SystemLang::write(QJsonObject &json) const{
     SuperListItem::writeId(json);
     QJsonObject obj;

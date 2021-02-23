@@ -26,6 +26,8 @@ DialogSystemSelectStatistic::DialogSystemSelectStatistic(SystemSelectStatistic
     m_selectStatistic(selectStatistic)
 {
     ui->setupUi(this);
+    this->initialize();
+    this->translate();
 }
 
 DialogSystemSelectStatistic::~DialogSystemSelectStatistic()

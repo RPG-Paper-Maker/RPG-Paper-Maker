@@ -29,6 +29,9 @@
 #include "systemspeedfrequency.h"
 #include "systemfontsize.h"
 #include "systemfontname.h"
+#include "systeminventoryfilter.h"
+#include "systemmainmenucommand.h"
+#include "systemselectstatistic.h"
 #include "dialogcommandsetdialogboxoptions.h"
 #include "systemskybox.h"
 #include "dialogenternameoptions.h"
@@ -336,18 +339,26 @@ void DialogSystems::initializeTitleScreenGameOver(GameDatas *gameDatas) {
 
 void DialogSystems::initializeMainMenu(GameDatas *gameDatas){
     ui->panelSuperListItemsTypes->setIsLang(true);
-    ui->panelSuperListItemsTypes->list()->initializeModel(gameDatas
-        ->systemDatas()->modelItemsTypes());
+    ui->panelSuperListItemsTypes->list()->setCanEdit(true);
+    ui->panelSuperListItemsTypes->initializeModel(gameDatas->systemDatas()
+        ->modelItemsTypes());
     ui->panelSuperListItemsTypes->list()->initializeNewItemInstance(new SystemLang);
     ui->panelSuperListItemsTypes->showEditName(true);
-    ui->panelSuperListInventoryFilters->setIsLang(true);
-    ui->panelSuperListInventoryFilters->list()->initializeModel(gameDatas
-        ->systemDatas()->modelInventoryFilters());
-    ui->panelSuperListMainMenuCommands->setIsLang(true);
-    ui->panelSuperListMainMenuCommands->list()->initializeModel(gameDatas
-        ->systemDatas()->modelMainMenuCommands());
-    ui->panelSuperListHeroesStatistics->list()->initializeModel(gameDatas
-        ->systemDatas()->modelHeroesStatistics());
+    ui->panelSuperListInventoryFilters->list()->setCanEdit(true);
+    ui->panelSuperListInventoryFilters->showEditName(false);
+    ui->panelSuperListInventoryFilters->initializeModel(gameDatas->systemDatas()
+        ->modelInventoryFilters());
+    ui->panelSuperListInventoryFilters->list()->initializeNewItemInstance(new SystemInventoryFilter);
+    ui->panelSuperListMainMenuCommands->list()->setCanEdit(true);
+    ui->panelSuperListMainMenuCommands->showEditName(false);
+    ui->panelSuperListMainMenuCommands->initializeModel(gameDatas->systemDatas()
+        ->modelMainMenuCommands());
+    ui->panelSuperListMainMenuCommands->list()->initializeNewItemInstance(new SystemMainMenuCommand);
+    ui->panelSuperListHeroesStatistics->list()->setCanEdit(true);
+    ui->panelSuperListHeroesStatistics->showEditName(false);
+    ui->panelSuperListHeroesStatistics->initializeModel(gameDatas->systemDatas()
+        ->modelHeroesStatistics());
+    ui->panelSuperListHeroesStatistics->list()->initializeNewItemInstance(new SystemSelectStatistic);
 }
 
 // -------------------------------------------------------

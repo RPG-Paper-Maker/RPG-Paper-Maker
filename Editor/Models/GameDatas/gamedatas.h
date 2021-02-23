@@ -104,8 +104,8 @@ public:
 private:
     CommonEventsDatas* m_commonEventsDatas;
     VariablesDatas* m_variablesDatas;
-    SystemDatas* m_systemDatas;
     BattleSystemDatas* m_battleSystemDatas;
+    SystemDatas* m_systemDatas;
     ItemsDatas* m_itemsDatas;
     SkillsDatas* m_skillsDatas;
     WeaponsDatas* m_weaponsDatas;
