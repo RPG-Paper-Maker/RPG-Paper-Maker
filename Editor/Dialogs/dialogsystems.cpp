@@ -335,9 +335,19 @@ void DialogSystems::initializeTitleScreenGameOver(GameDatas *gameDatas) {
 // -------------------------------------------------------
 
 void DialogSystems::initializeMainMenu(GameDatas *gameDatas){
+    ui->panelSuperListItemsTypes->setIsLang(true);
     ui->panelSuperListItemsTypes->list()->initializeModel(gameDatas
-                                                          ->systemDatas()
-                                                          ->modelItemsTypes());
+        ->systemDatas()->modelItemsTypes());
+    ui->panelSuperListItemsTypes->list()->initializeNewItemInstance(new SystemLang);
+    ui->panelSuperListItemsTypes->showEditName(true);
+    ui->panelSuperListInventoryFilters->setIsLang(true);
+    ui->panelSuperListInventoryFilters->list()->initializeModel(gameDatas
+        ->systemDatas()->modelInventoryFilters());
+    ui->panelSuperListMainMenuCommands->setIsLang(true);
+    ui->panelSuperListMainMenuCommands->list()->initializeModel(gameDatas
+        ->systemDatas()->modelMainMenuCommands());
+    ui->panelSuperListHeroesStatistics->list()->initializeModel(gameDatas
+        ->systemDatas()->modelHeroesStatistics());
 }
 
 // -------------------------------------------------------
@@ -545,7 +555,6 @@ void DialogSystems::translate()
     ui->groupBoxBattleMaps->setTitle(RPM::translate(Translations::BATTLE_MAPS));
     ui->groupBoxCurrencies->setTitle(RPM::translate(Translations::CURRENCIES));
     ui->groupBoxDetections->setTitle(RPM::translate(Translations::DETECTIONS));
-    ui->groupBoxItemsTypes->setTitle(RPM::translate(Translations::ITEMS_TYPES));
     ui->groupBoxParameters->setTitle(RPM::translate(Translations::PARAMETERS));
     ui->groupBoxFrequencies->setTitle(RPM::translate(Translations::FREQUENCIES));
     ui->groupBoxOtheOptions->setTitle(RPM::translate(Translations::OTHER_OPTIONS));
@@ -580,6 +589,10 @@ void DialogSystems::translate()
     ui->labelBattlersColumns->setText(RPM::translate(Translations::BATTLERS_COLUMNS));
     ui->pushButtonEnterNameOptions->setText(RPM::translate(Translations
         ::ENTER_NAME_OPTIONS) + RPM::DOT_DOT_DOT);
+    ui->groupBoxItemsTypes->setTitle(RPM::translate(Translations::ITEMS_TYPES));
+    ui->groupBoxInventoryFilters->setTitle(RPM::translate(Translations::INVENTORY_FILTERS));
+    ui->groupBoxMainMenuCommands->setTitle(RPM::translate(Translations::MAIN_MENU_COMMANDS));
+    ui->groupBoxHeroesStatistics->setTitle(RPM::translate(Translations::HEROES_STATISTICS_TO_DISPLAY));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

@@ -1195,5 +1195,18 @@
     "you.cant.export.macos.windows": "You can't export MacOS version while on Windows. Please use Linux or MacOS computer to export it",
     "enter.a.name.menu": "Enter a name menu",
     "max.characters": "Max characters",
-    "enter.name.options": "Enter name options"
+    "enter.name.options": "Enter name options",
+    "inventory.filters": "Inventory filters",
+    "main.menu.commands": "Main menu commands",
+    "heroes.statistics.to.display": "Heroes statistics to display",
+    "set.inventory.filter": "Set inventory filter",
+    "kind": "Kind",
+    "item.type.id": "Item type ID",
+    "consumables": "Consumables",
+    "weapons.and.armors": "Weapon and armors",
+    "ingredients": "Ingredients",
+    "key.item": "Key item",
+    "inventory": "Inventory",
+    "set.main.menu.command": "Set main menu command",
+    "order": "Order"
 }

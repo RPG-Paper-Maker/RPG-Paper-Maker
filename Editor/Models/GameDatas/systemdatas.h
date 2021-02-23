@@ -36,6 +36,10 @@ public:
     static const QString JSON_SCREEN_HEIGHT;
     static const QString JSON_IS_SCREEN_WINDOW;
     static const QString JSON_COLORS;
+    static const QString JSON_ITEMS_TYPES;
+    static const QString JSON_INVENTORY_FILTERS;
+    static const QString JSON_MAIN_MENU_COMMANDS;
+    static const QString JSON_HEROES_STATISTICS;
     static const QString JSON_WINDOW_SKINS;
     static const QString JSON_CAMERA_PROPERTIES;
     static const QString JSON_DETECTIONS;
@@ -106,6 +110,9 @@ public:
     QStandardItemModel * modelColors() const;
     QStandardItemModel * modelCurrencies() const;
     QStandardItemModel * modelItemsTypes() const;
+    QStandardItemModel * modelInventoryFilters() const;
+    QStandardItemModel * modelMainMenuCommands() const;
+    QStandardItemModel * modelHeroesStatistics() const;
     QStandardItemModel * modelWindowSkins() const;
     QStandardItemModel * modelcameraProperties() const;
     QStandardItemModel * modelDetections() const;
@@ -129,6 +136,9 @@ public:
     void setDefaultColors();
     void setDefaultCurrencies();
     void setDefaultItemsTypes();
+    void setDefaultInventoryFilters();
+    void setDefaultMainMenuCommands();
+    void setDefaultHeroesStatistics();
     void setDefaultWindowSkins();
     void setDefaultCameraProperties();
     void setDefaultDetections();
@@ -167,6 +177,9 @@ private:
     QStandardItemModel *m_modelColors;
     QStandardItemModel *m_modelCurrencies;
     QStandardItemModel *m_modelItemsTypes;
+    QStandardItemModel *m_modelInventoryFilters;
+    QStandardItemModel *m_modelMainMenuCommands;
+    QStandardItemModel *m_modelHeroesStatistics;
     QStandardItemModel *m_modelWindowSkins;
     QStandardItemModel *m_modelCameraProperties;
     QStandardItemModel *m_modelDetections;

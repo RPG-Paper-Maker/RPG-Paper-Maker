@@ -30,6 +30,7 @@ class SystemLang : public SuperListItem
 {
 public:
     SystemLang();
+    SystemLang(int i, QString name);
     SystemLang(int i, LangsTranslation* names);
     virtual ~SystemLang();
 

@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>3</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -64,7 +64,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-789</y>
+                <y>0</y>
                 <width>252</width>
                 <height>1446</height>
                </rect>
@@ -1694,31 +1694,91 @@
         <attribute name="title">
          <string>Main menu</string>
         </attribute>
-        <widget class="QGroupBox" name="groupBoxItemsTypes">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>20</y>
-           <width>214</width>
-           <height>304</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Items types</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_22">
-          <item row="0" column="0">
-           <widget class="PanelSuperList" name="panelSuperListItemsTypes" native="true">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+        <layout class="QGridLayout" name="gridLayout_51">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_50" rowstretch="1,1" columnstretch="1,1">
+           <property name="spacing">
+            <number>15</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBoxItemsTypes">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="title">
+              <string>Items types</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_22">
+              <item row="0" column="0">
+               <widget class="PanelSuperList" name="panelSuperListItemsTypes" native="true">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QGroupBox" name="groupBoxInventoryFilters">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="title">
+              <string>Inventory filters</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_47">
+              <item row="0" column="0">
+               <widget class="PanelSuperList" name="panelSuperListInventoryFilters" native="true">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QGroupBox" name="groupBoxMainMenuCommands">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="title">
+              <string>Main menu commands</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_48">
+              <item row="0" column="0">
+               <widget class="PanelSuperList" name="panelSuperListMainMenuCommands" native="true">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QGroupBox" name="groupBoxHeroesStatistics">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="title">
+              <string>Heroes statistics to display</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_49">
+              <item row="0" column="0">
+               <widget class="PanelSuperList" name="panelSuperListHeroesStatistics" native="true">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
        <widget class="QWidget" name="tab_6">
         <attribute name="title">

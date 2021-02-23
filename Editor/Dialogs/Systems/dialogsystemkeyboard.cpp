@@ -20,7 +20,6 @@
 //
 // -------------------------------------------------------
 
-
 DialogSystemKeyBoard::DialogSystemKeyBoard(SystemKeyBoard& key,
                                            QWidget *parent) :
     QDialog(parent),

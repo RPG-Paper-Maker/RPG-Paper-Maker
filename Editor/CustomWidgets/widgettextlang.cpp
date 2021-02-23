@@ -76,10 +76,13 @@ void WidgetTextLang::initializeNames() {
 // -------------------------------------------------------
 
 void WidgetTextLang::on_lineEdit_textChanged(const QString &text) {
-    if (m_lang != nullptr) {
+    if (m_lang != nullptr)
+    {
         m_lang->setName(text);
     }
-    m_l->setMainName(text);
-
+    if (m_l != nullptr)
+    {
+        m_l->setMainName(text);
+    }
     emit mainChanged(text);
 }

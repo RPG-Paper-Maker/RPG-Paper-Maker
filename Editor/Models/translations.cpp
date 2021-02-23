@@ -1216,6 +1216,19 @@ const QString Translations::YOU_CANT_EXPORT_MACOS_WINDOWS = "you.cant.export.mac
 const QString Translations::ENTER_A_NAME_MENU = "enter.a.name.menu";
 const QString Translations::MAX_CHARACTERS = "max.characters";
 const QString Translations::ENTER_NAME_OPTIONS = "enter.name.options";
+const QString Translations::INVENTORY_FILTERS = "inventory.filters";
+const QString Translations::MAIN_MENU_COMMANDS = "main.menu.commands";
+const QString Translations::HEROES_STATISTICS_TO_DISPLAY = "heroes.statistics.to.display";
+const QString Translations::SET_INVENTORY_FILTER = "set.inventory.filter";
+const QString Translations::KIND = "kind";
+const QString Translations::ITEM_TYPE_ID = "item.type.id";
+const QString Translations::CONSUMABLES = "consumables";
+const QString Translations::WEAPONS_AND_ARMORS = "weapons.and.armors";
+const QString Translations::INGREDIENTS = "ingredients";
+const QString Translations::KEY_ITEM = "key.item";
+const QString Translations::INVENTORY = "inventory";
+const QString Translations::SET_MAIN_MENU_COMMAND = "set.main.menu.command";
+const QString Translations::ORDER = "order";
 
 // -------------------------------------------------------
 //

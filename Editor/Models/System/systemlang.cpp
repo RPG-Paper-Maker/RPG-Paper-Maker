@@ -24,6 +24,12 @@ SystemLang::SystemLang() :
 
 }
 
+SystemLang::SystemLang(int i, QString name) :
+    SystemLang(i, new LangsTranslation(name))
+{
+
+}
+
 SystemLang::SystemLang(int i, LangsTranslation *names) :
     SuperListItem(i, names->defaultMainName()),
     m_names(names)
@@ -31,7 +37,8 @@ SystemLang::SystemLang(int i, LangsTranslation *names) :
 
 }
 
-SystemLang::~SystemLang(){
+SystemLang::~SystemLang()
+{
     delete m_names;
 }
 

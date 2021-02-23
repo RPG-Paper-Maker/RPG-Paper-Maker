@@ -1229,6 +1229,19 @@ public:
     static const QString ENTER_A_NAME_MENU;
     static const QString MAX_CHARACTERS;
     static const QString ENTER_NAME_OPTIONS;
+    static const QString INVENTORY_FILTERS;
+    static const QString MAIN_MENU_COMMANDS;
+    static const QString HEROES_STATISTICS_TO_DISPLAY;
+    static const QString SET_INVENTORY_FILTER;
+    static const QString KIND;
+    static const QString ITEM_TYPE_ID;
+    static const QString CONSUMABLES;
+    static const QString WEAPONS_AND_ARMORS;
+    static const QString INGREDIENTS;
+    static const QString KEY_ITEM;
+    static const QString INVENTORY;
+    static const QString SET_MAIN_MENU_COMMAND;
+    static const QString ORDER;
 
     Translations();
     virtual ~Translations();

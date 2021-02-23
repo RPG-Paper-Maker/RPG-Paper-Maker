@@ -75,12 +75,15 @@ HEADERS += \
     Dialogs/Systems/dialogsystemdetection.h \
     Dialogs/Systems/dialogsystemfontname.h \
     Dialogs/Systems/dialogsystemfontsize.h \
+    Dialogs/Systems/dialogsysteminventoryfilter.h \
+    Dialogs/Systems/dialogsystemmainmenucommand.h \
     Dialogs/Systems/dialogsystemmonsteraction.h \
     Dialogs/Systems/dialogsystemplugin.h \
     Dialogs/Systems/dialogsystemplugincommand.h \
     Dialogs/Systems/dialogsystempluginparameter.h \
     Dialogs/Systems/dialogsystemprimitive.h \
     Dialogs/Systems/dialogsystemproperty.h \
+    Dialogs/Systems/dialogsystemselectstatistic.h \
     Dialogs/Systems/dialogsystemskybox.h \
     Dialogs/Systems/dialogsystemspeedfrequency.h \
     Dialogs/Systems/dialogsystemstatusreleaseturn.h \
@@ -103,6 +106,8 @@ HEADERS += \
     Enums/animationpositionkind.h \
     Enums/axiskind.h \
     Enums/conditionheroeskind.h \
+    Enums/inventoryfilterkind.h \
+    Enums/mainmenucommandkind.h \
     Enums/monsteractionkind.h \
     Enums/monsteractiontargetkind.h \
     Enums/mountaincollisionkind.h \
@@ -133,6 +138,8 @@ HEADERS += \
     Models/System/systemdetection.h \
     Models/System/systemfontname.h \
     Models/System/systemfontsize.h \
+    Models/System/systeminventoryfilter.h \
+    Models/System/systemmainmenucommand.h \
     Models/System/systemmonsteraction.h \
     Models/System/systemmountain.h \
     Models/System/systemplugin.h \
@@ -142,6 +149,7 @@ HEADERS += \
     Models/System/systemproperty.h \
     Models/System/systemresource.h \
     Models/System/systemscript.h \
+    Models/System/systemselectstatistic.h \
     Models/System/systemskybox.h \
     Models/System/systemspeedfrequency.h \
     Models/System/systemstatusreleaseturn.h \
@@ -464,12 +472,15 @@ SOURCES += \
     Dialogs/Systems/dialogsystemdetection.cpp \
     Dialogs/Systems/dialogsystemfontname.cpp \
     Dialogs/Systems/dialogsystemfontsize.cpp \
+    Dialogs/Systems/dialogsysteminventoryfilter.cpp \
+    Dialogs/Systems/dialogsystemmainmenucommand.cpp \
     Dialogs/Systems/dialogsystemmonsteraction.cpp \
     Dialogs/Systems/dialogsystemplugin.cpp \
     Dialogs/Systems/dialogsystemplugincommand.cpp \
     Dialogs/Systems/dialogsystempluginparameter.cpp \
     Dialogs/Systems/dialogsystemprimitive.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
+    Dialogs/Systems/dialogsystemselectstatistic.cpp \
     Dialogs/Systems/dialogsystemskybox.cpp \
     Dialogs/Systems/dialogsystemspeedfrequency.cpp \
     Dialogs/Systems/dialogsystemstatusreleaseturn.cpp \
@@ -506,6 +517,8 @@ SOURCES += \
     Models/System/systemdetection.cpp \
     Models/System/systemfontname.cpp \
     Models/System/systemfontsize.cpp \
+    Models/System/systeminventoryfilter.cpp \
+    Models/System/systemmainmenucommand.cpp \
     Models/System/systemmonsteraction.cpp \
     Models/System/systemmountain.cpp \
     Models/System/systemplugin.cpp \
@@ -515,6 +528,7 @@ SOURCES += \
     Models/System/systemproperty.cpp \
     Models/System/systemresource.cpp \
     Models/System/systemscript.cpp \
+    Models/System/systemselectstatistic.cpp \
     Models/System/systemskybox.cpp \
     Models/System/systemspeedfrequency.cpp \
     Models/System/systemstatusreleaseturn.cpp \
@@ -803,12 +817,15 @@ FORMS += \
     Dialogs/Systems/dialogsystemdetection.ui \
     Dialogs/Systems/dialogsystemfontname.ui \
     Dialogs/Systems/dialogsystemfontsize.ui \
+    Dialogs/Systems/dialogsysteminventoryfilter.ui \
+    Dialogs/Systems/dialogsystemmainmenucommand.ui \
     Dialogs/Systems/dialogsystemmonsteraction.ui \
     Dialogs/Systems/dialogsystemplugin.ui \
     Dialogs/Systems/dialogsystemplugincommand.ui \
     Dialogs/Systems/dialogsystempluginparameter.ui \
     Dialogs/Systems/dialogsystemprimitive.ui \
     Dialogs/Systems/dialogsystemproperty.ui \
+    Dialogs/Systems/dialogsystemselectstatistic.ui \
     Dialogs/Systems/dialogsystemskybox.ui \
     Dialogs/Systems/dialogsystemspeedfrequency.ui \
     Dialogs/Systems/dialogsystemstatusreleaseturn.ui \

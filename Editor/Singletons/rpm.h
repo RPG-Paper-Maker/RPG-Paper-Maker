@@ -228,6 +228,8 @@ public:
     static QStringList ENUM_TO_STRING_PLUGIN_CATEGORY;
     static QStringList ENUM_TO_STRING_PRIMITIVE_KIND;
     static QStringList ENUM_TO_STRING_STATUS_RESTRICTIONS_KIND;
+    static QStringList ENUM_TO_INVENTORY_FILTER_KIND;
+    static QStringList ENUM_TO_MAIN_MENU_COMMAND_KIND;
 
     // OTHER STATIC VALUES
     static QSet<int> mapsToSave;

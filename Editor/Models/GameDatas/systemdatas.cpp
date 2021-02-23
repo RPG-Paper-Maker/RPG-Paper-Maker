@@ -22,12 +22,19 @@
 #include "systemfontname.h"
 #include "systemfontsize.h"
 #include "systemskybox.h"
+#include "systeminventoryfilter.h"
+#include "systemmainmenucommand.h"
+#include "systemselectstatistic.h"
 
 const QString SystemDatas::JSON_PROJECT_NAME = "pn";
 const QString SystemDatas::JSON_SCREEN_WIDTH = "sw";
 const QString SystemDatas::JSON_SCREEN_HEIGHT = "sh";
 const QString SystemDatas::JSON_IS_SCREEN_WINDOW = "isw";
 const QString SystemDatas::JSON_COLORS = "colors";
+const QString SystemDatas::JSON_ITEMS_TYPES = "itemsTypes";
+const QString SystemDatas::JSON_INVENTORY_FILTERS = "inventoryFilters";
+const QString SystemDatas::JSON_MAIN_MENU_COMMANDS = "mainMenuCommands";
+const QString SystemDatas::JSON_HEROES_STATISTICS = "heroesStatistics";
 const QString SystemDatas::JSON_WINDOW_SKINS = "wskins";
 const QString SystemDatas::JSON_CAMERA_PROPERTIES = "cp";
 const QString SystemDatas::JSON_DETECTIONS = "d";
@@ -79,6 +86,9 @@ SystemDatas::SystemDatas() :
     m_modelColors(new QStandardItemModel),
     m_modelCurrencies(new QStandardItemModel),
     m_modelItemsTypes(new QStandardItemModel),
+    m_modelInventoryFilters(new QStandardItemModel),
+    m_modelMainMenuCommands(new QStandardItemModel),
+    m_modelHeroesStatistics(new QStandardItemModel),
     m_modelWindowSkins(new QStandardItemModel),
     m_modelCameraProperties(new QStandardItemModel),
     m_modelDetections(new QStandardItemModel),
@@ -104,10 +114,12 @@ SystemDatas::~SystemDatas() {
     delete m_mountainCollisionAngle;
     delete m_mapFrameDuration;
     delete m_priceSoldItem;
-
     SuperListItem::deleteModel(m_modelColors);
     SuperListItem::deleteModel(m_modelCurrencies);
     SuperListItem::deleteModel(m_modelItemsTypes);
+    SuperListItem::deleteModel(m_modelInventoryFilters);
+    SuperListItem::deleteModel(m_modelMainMenuCommands);
+    SuperListItem::deleteModel(m_modelHeroesStatistics);
     SuperListItem::deleteModel(m_modelWindowSkins);
     SuperListItem::deleteModel(m_modelCameraProperties);
     SuperListItem::deleteModel(m_modelDetections);
@@ -116,7 +128,6 @@ SystemDatas::~SystemDatas() {
     SuperListItem::deleteModel(m_modelFontSizes);
     SuperListItem::deleteModel(m_modelFontNames);
     SuperListItem::deleteModel(m_modelSkyBoxes);
-
     delete m_soundCursor;
     delete m_soundConfirmation;
     delete m_soundCancel;
@@ -257,6 +268,21 @@ QStandardItemModel * SystemDatas::modelItemsTypes() const {
     return m_modelItemsTypes;
 }
 
+QStandardItemModel * SystemDatas::modelInventoryFilters() const
+{
+    return m_modelInventoryFilters;
+}
+
+QStandardItemModel * SystemDatas::modelMainMenuCommands() const
+{
+    return m_modelMainMenuCommands;
+}
+
+QStandardItemModel * SystemDatas::modelHeroesStatistics() const
+{
+    return m_modelHeroesStatistics;
+}
+
 QStandardItemModel * SystemDatas::modelWindowSkins() const {
     return m_modelWindowSkins;
 }
@@ -349,6 +375,9 @@ void SystemDatas::setDefault() {
     this->setDefaultColors();
     this->setDefaultCurrencies();
     this->setDefaultItemsTypes();
+    this->setDefaultInventoryFilters();
+    this->setDefaultMainMenuCommands();
+    this->setDefaultHeroesStatistics();
     this->setDefaultWindowSkins();
     this->setDefaultCameraProperties();
     this->setDefaultDetections();
@@ -416,21 +445,77 @@ void SystemDatas::setDefaultCurrencies() {
 // -------------------------------------------------------
 
 void SystemDatas::setDefaultItemsTypes() {
-    QStandardItem *item;
-    SuperListItem *sys;
-    QString namesItemsKind[] = {
-        RPM::translate(Translations::INGREDIENT),
-        RPM::translate(Translations::KEY_ITEMS)
-    };
-    int length = (sizeof(namesItemsKind)/sizeof(*namesItemsKind));
-    for (int i = 0; i < length; i++){
-        item = new QStandardItem;
-        sys = new SuperListItem(i+1, namesItemsKind[i]);
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(sys->toString());
-        m_modelItemsTypes->appendRow(item);
-    }
+    m_modelItemsTypes->appendRow((new SystemLang(1, RPM::translate(Translations
+        ::INGREDIENT)))->getModelRow());
+    m_modelItemsTypes->appendRow((new SystemLang(2, RPM::translate(Translations
+        ::KEY_ITEM)))->getModelRow());
+}
+
+// -------------------------------------------------------
+
+void SystemDatas::setDefaultInventoryFilters()
+{
+    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(1, new
+        LangsTranslation(RPM::translate(Translations::ALL))))->getModelRow());
+    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(2, new
+        LangsTranslation(RPM::translate(Translations::CONSUMABLES)),
+        InventoryFilterKind::Consumables))->getModelRow());
+    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(3, new
+        LangsTranslation(RPM::translate(Translations::INGREDIENTS)),
+        InventoryFilterKind::Custom))->getModelRow());
+    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(4, new
+        LangsTranslation(RPM::translate(Translations::KEY_ITEMS)),
+        InventoryFilterKind::Custom, new PrimitiveValue(PrimitiveValueKind
+        ::DataBase, 2)))->getModelRow());
+    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(5, new
+        LangsTranslation(RPM::translate(Translations::WEAPONS)),
+        InventoryFilterKind::Weapons))->getModelRow());
+    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(6, new
+        LangsTranslation(RPM::translate(Translations::ARMORS)),
+        InventoryFilterKind::Armors))->getModelRow());
+}
+
+// -------------------------------------------------------
+
+void SystemDatas::setDefaultMainMenuCommands()
+{
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(1, new
+        LangsTranslation(RPM::translate(Translations::INVENTORY))))->getModelRow());
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(2, new
+        LangsTranslation(RPM::translate(Translations::SKILLS)),
+        MainMenuCommandKind::Skills))->getModelRow());
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(3, new
+        LangsTranslation(RPM::translate(Translations::EQUIP)),
+        MainMenuCommandKind::Equip))->getModelRow());
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(4, new
+        LangsTranslation(RPM::translate(Translations::STATES)),
+        MainMenuCommandKind::States))->getModelRow());
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(5, new
+        LangsTranslation(RPM::translate(Translations::ORDER)),
+        MainMenuCommandKind::Order))->getModelRow());
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(6, new
+        LangsTranslation(RPM::translate(Translations::SAVE)),
+        MainMenuCommandKind::Save))->getModelRow());
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(7, new
+        LangsTranslation(RPM::translate(Translations::QUIT)),
+        MainMenuCommandKind::Quit))->getModelRow());
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(8, new
+        LangsTranslation(RPM::translate(Translations::SCRIPT)),
+        MainMenuCommandKind::Script))->getModelRow());
+}
+
+// -------------------------------------------------------
+
+void SystemDatas::setDefaultHeroesStatistics()
+{
+    m_modelHeroesStatistics->appendRow((new SystemSelectStatistic(1, "HP", new
+        PrimitiveValue(PrimitiveValueKind::DataBase, 3)))->getModelRow());
+    m_modelHeroesStatistics->appendRow((new SystemSelectStatistic(2, "MP", new
+        PrimitiveValue(PrimitiveValueKind::DataBase, 4)))->getModelRow());
+    m_modelHeroesStatistics->appendRow((new SystemSelectStatistic(3, "TP", new
+        PrimitiveValue(PrimitiveValueKind::DataBase, 5)))->getModelRow());
+    m_modelHeroesStatistics->appendRow((new SystemSelectStatistic(1, "Exp", new
+        PrimitiveValue(PrimitiveValueKind::DataBase, 2)))->getModelRow());
 }
 
 // -------------------------------------------------------
@@ -702,17 +787,14 @@ void SystemDatas::read(const QJsonObject &json){
         m_modelCurrencies->appendRow(item);
     }
 
-    // Items kind
-    jsonList = json["itemsTypes"].toArray();
-    for (int i = 0; i < jsonList.size(); i++){
-        item = new QStandardItem;
-        SuperListItem* sys = new SuperListItem;
-        sys->read(jsonList[i].toObject());
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(sys->toString());
-        m_modelItemsTypes->appendRow(item);
-    }
+    // Menus
+    SuperListItem::readList(m_modelItemsTypes, new SystemLang, json, JSON_ITEMS_TYPES);
+    SuperListItem::readList(m_modelInventoryFilters, new SystemInventoryFilter,
+        json, JSON_INVENTORY_FILTERS);
+    SuperListItem::readList(m_modelMainMenuCommands, new SystemMainMenuCommand,
+        json, JSON_MAIN_MENU_COMMANDS);
+    SuperListItem::readList(m_modelHeroesStatistics, new SystemSelectStatistic,
+        json, JSON_HEROES_STATISTICS);
 
     // Window skins
     jsonList = json[JSON_WINDOW_SKINS].toArray();
@@ -895,17 +977,11 @@ void SystemDatas::write(QJsonObject &json) const{
     }
     json["currencies"] = jsonArray;
 
-    // Items kind
-    jsonArray = QJsonArray();
-    l = m_modelItemsTypes->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l; i++){
-        QJsonObject jsonCommon;
-        SuperListItem* sys = ((SuperListItem*)m_modelItemsTypes->item(i)
-                              ->data().value<quintptr>());
-        sys->write(jsonCommon);
-        jsonArray.append(jsonCommon);
-    }
-    json["itemsTypes"] = jsonArray;
+    // Menus
+    SuperListItem::writeList(m_modelItemsTypes, json, JSON_ITEMS_TYPES);
+    SuperListItem::writeList(m_modelInventoryFilters, json, JSON_INVENTORY_FILTERS);
+    SuperListItem::writeList(m_modelMainMenuCommands, json, JSON_MAIN_MENU_COMMANDS);
+    SuperListItem::writeList(m_modelHeroesStatistics, json, JSON_HEROES_STATISTICS);
 
     // Window skins
     jsonArray = QJsonArray();
