@@ -1069,4 +1069,8 @@ void ProjectUpdater::updateVersion_1_6_4()
 void ProjectUpdater::updateVersion_1_7_0()
 {
     m_project->gameDatas()->systemDatas()->setdefaultEnterNameOptions();
+    m_project->gameDatas()->systemDatas()->setDefaultItemsTypes();
+    m_project->gameDatas()->systemDatas()->setDefaultInventoryFilters();
+    m_project->gameDatas()->systemDatas()->setDefaultMainMenuCommands();
+    m_project->gameDatas()->systemDatas()->setDefaultHeroesStatistics();
 }

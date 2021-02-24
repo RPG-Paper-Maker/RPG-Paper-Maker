@@ -445,6 +445,7 @@ void SystemDatas::setDefaultCurrencies() {
 // -------------------------------------------------------
 
 void SystemDatas::setDefaultItemsTypes() {
+    SuperListItem::deleteModel(m_modelItemsTypes, false);
     m_modelItemsTypes->appendRow((new SystemLang(1, RPM::translate(Translations
         ::INGREDIENT)))->getModelRow());
     m_modelItemsTypes->appendRow((new SystemLang(2, RPM::translate(Translations
@@ -499,9 +500,6 @@ void SystemDatas::setDefaultMainMenuCommands()
     m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(7, new
         LangsTranslation(RPM::translate(Translations::QUIT)),
         MainMenuCommandKind::Quit))->getModelRow());
-    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(8, new
-        LangsTranslation(RPM::translate(Translations::SCRIPT)),
-        MainMenuCommandKind::Script))->getModelRow());
 }
 
 // -------------------------------------------------------
@@ -514,8 +512,6 @@ void SystemDatas::setDefaultHeroesStatistics()
         PrimitiveValue(PrimitiveValueKind::DataBase, 4)))->getModelRow());
     m_modelHeroesStatistics->appendRow((new SystemSelectStatistic(3, "TP", new
         PrimitiveValue(PrimitiveValueKind::DataBase, 5)))->getModelRow());
-    m_modelHeroesStatistics->appendRow((new SystemSelectStatistic(1, "Exp", new
-        PrimitiveValue(PrimitiveValueKind::DataBase, 2)))->getModelRow());
 }
 
 // -------------------------------------------------------
@@ -713,6 +709,9 @@ void SystemDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelColors, false);
     SuperListItem::deleteModel(m_modelCurrencies, false);
     SuperListItem::deleteModel(m_modelItemsTypes, false);
+    SuperListItem::deleteModel(m_modelInventoryFilters, false);
+    SuperListItem::deleteModel(m_modelMainMenuCommands, false);
+    SuperListItem::deleteModel(m_modelHeroesStatistics, false);
     SuperListItem::deleteModel(m_modelWindowSkins, false);
     SuperListItem::deleteModel(m_modelCameraProperties, false);
     SuperListItem::deleteModel(m_modelDetections, false);
