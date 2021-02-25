@@ -28,6 +28,7 @@ HEADERS += \
     CustomWidgets/panelstatus.h \
     CustomWidgets/panelsubtransformation.h \
     CustomWidgets/paneltransformations.h \
+    CustomWidgets/paneltroopreaction.h \
     CustomWidgets/panelvideos.h \
     CustomWidgets/widgetanimation.h \
     CustomWidgets/widgetanimationtexture.h \
@@ -88,6 +89,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemspeedfrequency.h \
     Dialogs/Systems/dialogsystemstatusreleaseturn.h \
     Dialogs/Systems/dialogsystemtitlecommand.h \
+    Dialogs/Systems/dialogsystemtroopreactionconditions.h \
     Dialogs/dialogenternameoptions.h \
     Dialogs/dialogscripts.h \
     Dialogs/dialogfirstlaunch.h \
@@ -426,6 +428,7 @@ SOURCES += \
     CustomWidgets/panelstatus.cpp \
     CustomWidgets/panelsubtransformation.cpp \
     CustomWidgets/paneltransformations.cpp \
+    CustomWidgets/paneltroopreaction.cpp \
     CustomWidgets/panelvideos.cpp \
     CustomWidgets/widgetanimation.cpp \
     CustomWidgets/widgetanimationtexture.cpp \
@@ -485,6 +488,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemspeedfrequency.cpp \
     Dialogs/Systems/dialogsystemstatusreleaseturn.cpp \
     Dialogs/Systems/dialogsystemtitlecommand.cpp \
+    Dialogs/Systems/dialogsystemtroopreactionconditions.cpp \
     Dialogs/dialogenternameoptions.cpp \
     Dialogs/dialogscripts.cpp \
     Dialogs/dialogfirstlaunch.cpp \
@@ -777,6 +781,7 @@ FORMS += \
     CustomWidgets/panelstatus.ui \
     CustomWidgets/panelsubtransformation.ui \
     CustomWidgets/paneltransformations.ui \
+    CustomWidgets/paneltroopreaction.ui \
     CustomWidgets/panelvideos.ui \
     CustomWidgets/widgetcustomstructure.ui \
     CustomWidgets/widgetmountainselector.ui \
@@ -830,6 +835,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemspeedfrequency.ui \
     Dialogs/Systems/dialogsystemstatusreleaseturn.ui \
     Dialogs/Systems/dialogsystemtitlecommand.ui \
+    Dialogs/Systems/dialogsystemtroopreactionconditions.ui \
     Dialogs/dialogenternameoptions.ui \
     Dialogs/dialogscripts.ui \
     Dialogs/dialogfirstlaunch.ui \

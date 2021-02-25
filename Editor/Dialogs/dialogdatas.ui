@@ -46,7 +46,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>3</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -373,13 +373,42 @@
               </layout>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupBoxStates">
+              <widget class="QGroupBox" name="groupBoxTroopsReactions">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="title">
-                <string>States</string>
+                <string>Reactions</string>
                </property>
+               <layout class="QGridLayout" name="gridLayout_33">
+                <item row="0" column="0">
+                 <layout class="QHBoxLayout" name="horizontalLayout_20" stretch="0,1">
+                  <item>
+                   <widget class="PanelSuperList" name="panelSuperListTroopReaction" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>175</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>175</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QTabWidget" name="tabWidgetTroopReaction">
+                    <property name="currentIndex">
+                     <number>-1</number>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
               </widget>
              </item>
             </layout>
@@ -1434,15 +1463,15 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
    <class>WidgetPicture</class>
    <extends>QWidget</extends>
    <header>widgetpicture.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
   </customwidget>
   <customwidget>
    <class>PanelSuperList</class>

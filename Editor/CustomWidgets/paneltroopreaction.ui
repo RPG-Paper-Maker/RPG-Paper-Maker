@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PanelTroopReaction</class>
+ <widget class="QWidget" name="PanelTroopReaction">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>592</width>
+    <height>345</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,1,0,0">
+       <item>
+        <widget class="QLabel" name="labelName">
+         <property name="text">
+          <string>Name:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEditName"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="labelCondition">
+         <property name="text">
+          <string>Condition:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonCondition">
+         <property name="text">
+          <string>....</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="labelFrequency">
+         <property name="text">
+          <string>Frequency:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBoxFrequency"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="WidgetTreeCommands" name="widgetTreeCommands" native="true"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>WidgetTreeCommands</class>
+   <extends>QWidget</extends>
+   <header>widgettreecommands.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
