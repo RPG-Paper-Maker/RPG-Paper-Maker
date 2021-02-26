@@ -20,7 +20,7 @@
 // -------------------------------------------------------
 
 SystemReaction::SystemReaction() :
-    SystemReaction(1, "", new QStandardItemModel, true)
+    SystemReaction(1, "")
 {
 
 }

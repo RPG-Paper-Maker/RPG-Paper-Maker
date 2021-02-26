@@ -47,6 +47,9 @@
             <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
              <item>
               <widget class="QCheckBox" name="checkBox">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string>Number of turns:</string>
                </property>
@@ -54,6 +57,9 @@
              </item>
              <item>
               <widget class="PanelPrimitiveValue" name="panelPrimitiveTurnPlus" native="true">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>290</width>
@@ -102,7 +108,10 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLabel" name="label">
+              <widget class="QLabel" name="labelPlus">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string>+</string>
                </property>
@@ -110,6 +119,9 @@
              </item>
              <item>
               <widget class="PanelPrimitiveValue" name="panelPrimitiveTurnTimes" native="true">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>290</width>
@@ -128,7 +140,10 @@
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_2">
+              <widget class="QLabel" name="labelTimes">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string>x</string>
                </property>
@@ -150,16 +165,27 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,1">
+            <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,1">
              <item>
-              <widget class="QCheckBox" name="checkBox_2">
+              <widget class="QCheckBox" name="checkBoxMonstersHeroes">
                <property name="text">
-                <string>Monsters:</string>
+                <string/>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="comboBox"/>
+              <widget class="QComboBox" name="comboBoxHeroesMonsters">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="comboBoxHeroMonsterNumber">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <spacer name="horizontalSpacer_3">
@@ -192,14 +218,20 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLabel" name="label_3">
+              <widget class="QLabel" name="labelWithInstanceID">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
-                <string>with index:</string>
+                <string>with instance ID:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="PanelPrimitiveValue" name="panelPrimitiveTurnTimes_2" native="true">
+              <widget class="PanelPrimitiveValue" name="panelPrimitiveInstanceID" native="true">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>290</width>
@@ -252,14 +284,20 @@
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,0,1">
                  <item>
-                  <widget class="QCheckBox" name="checkBox_3">
+                  <widget class="QCheckBox" name="checkBoxStatusID">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
                    <property name="text">
                     <string>Are under effect of status ID:</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="PanelPrimitiveValue" name="panelPrimitiveTurnTimes_3" native="true">
+                  <widget class="PanelPrimitiveValue" name="panelPrimitiveStatusID" native="true">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
                    <property name="minimumSize">
                     <size>
                      <width>290</width>
@@ -295,14 +333,20 @@
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,0,0,1">
                  <item>
-                  <widget class="QCheckBox" name="checkBox_4">
+                  <widget class="QCheckBox" name="checkBoxStatisticID">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
                    <property name="text">
                     <string>Have the statistic ID</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="PanelPrimitiveValue" name="panelPrimitiveTurnTimes_4" native="true">
+                  <widget class="PanelPrimitiveValue" name="panelPrimitiveStatisticID" native="true">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
                    <property name="minimumSize">
                     <size>
                      <width>290</width>
@@ -321,7 +365,11 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="comboBox_2"/>
+                  <widget class="QComboBox" name="comboBoxStatusCompare">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
                  </item>
                  <item>
                   <spacer name="horizontalSpacer_8">
@@ -358,7 +406,10 @@
               </spacer>
              </item>
              <item>
-              <widget class="PanelPrimitiveValue" name="panelPrimitiveTurnTimes_5" native="true">
+              <widget class="PanelPrimitiveValue" name="panelPrimitiveStatisticCompare" native="true">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>290</width>
@@ -377,7 +428,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="comboBox_3"/>
+              <widget class="QComboBox" name="comboBoxCompareUnit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <spacer name="horizontalSpacer_9">

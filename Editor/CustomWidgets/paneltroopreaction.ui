@@ -41,9 +41,9 @@
         <widget class="QLineEdit" name="lineEditName"/>
        </item>
        <item>
-        <widget class="QLabel" name="labelCondition">
+        <widget class="QLabel" name="labelConditions">
          <property name="text">
-          <string>Condition:</string>
+          <string>Conditions:</string>
          </property>
         </widget>
        </item>

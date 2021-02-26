@@ -1,9 +1,11 @@
 #include "dialogsystemtroopreactionconditions.h"
 #include "ui_dialogsystemtroopreactionconditions.h"
 
-DialogSystemTroopReactionConditions::DialogSystemTroopReactionConditions(QWidget *parent) :
+DialogSystemTroopReactionConditions::DialogSystemTroopReactionConditions(
+    SystemTroopReactionConditions &conditions, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogSystemTroopReactionConditions)
+    ui(new Ui::DialogSystemTroopReactionConditions),
+    m_conditions(conditions)
 {
     ui->setupUi(this);
 }

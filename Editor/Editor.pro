@@ -121,6 +121,7 @@ HEADERS += \
     Enums/systemprimitivekind.h \
     Enums/titlecommandkind.h \
     Enums/titlesettingkind.h \
+    Enums/troopreactionfrequencykind.h \
     Enums/variablemapobjectcharacteristickind.h \
     MapEditor/Map/map.h \
     Controls/controlmainwindow.h \
@@ -156,6 +157,8 @@ HEADERS += \
     Models/System/systemspeedfrequency.h \
     Models/System/systemstatusreleaseturn.h \
     Models/System/systemtitlecommand.h \
+    Models/System/systemtroopreaction.h \
+    Models/System/systemtroopreactionconditions.h \
     Models/System/systemvideo.h \
     Models/translations.h \
     Singletons/singleton.h \
@@ -537,6 +540,8 @@ SOURCES += \
     Models/System/systemspeedfrequency.cpp \
     Models/System/systemstatusreleaseturn.cpp \
     Models/System/systemtitlecommand.cpp \
+    Models/System/systemtroopreaction.cpp \
+    Models/System/systemtroopreactionconditions.cpp \
     Models/System/systemvideo.cpp \
     Models/project.cpp \
     Dialogs/dialogdatas.cpp \
