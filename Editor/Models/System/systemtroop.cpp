@@ -11,7 +11,11 @@
 
 #include "systemtroop.h"
 #include "systemmonstertroop.h"
+#include "systemtroopreaction.h"
 #include "rpm.h"
+
+const QString SystemTroop::JSON_MONSTERS_LIST = "l";
+const QString SystemTroop::JSON_REACTIONS = "reactions";
 
 // -------------------------------------------------------
 //
@@ -19,24 +23,35 @@
 //
 // -------------------------------------------------------
 
-SystemTroop::SystemTroop() : SuperListItem()
+SystemTroop::SystemTroop() :
+    SystemTroop(1, "")
 {
-    m_monstersList = new QStandardItemModel();
+
 }
 
-SystemTroop::SystemTroop(int i, QString n, QStandardItemModel* monstersList) :
+SystemTroop::SystemTroop(int i, QString n, QStandardItemModel *monstersList,
+    QStandardItemModel *reactions) :
     SuperListItem(i,n),
-    m_monstersList(monstersList)
+    m_monstersList(monstersList),
+    m_reactions(reactions)
 {
     this->initializeHeaders();
 }
 
-SystemTroop::~SystemTroop() {
+SystemTroop::~SystemTroop()
+{
     SuperListItem::deleteModel(m_monstersList);
+    SuperListItem::deleteModel(m_reactions);
 }
 
-QStandardItemModel * SystemTroop::monstersList() const {
+QStandardItemModel * SystemTroop::monstersList() const
+{
     return m_monstersList;
+}
+
+QStandardItemModel * SystemTroop::reactions() const
+{
+    return m_reactions;
 }
 
 // -------------------------------------------------------
@@ -45,7 +60,8 @@ QStandardItemModel * SystemTroop::monstersList() const {
 //
 // -------------------------------------------------------
 
-void SystemTroop::initializeHeaders() {
+void SystemTroop::initializeHeaders()
+{
     m_monstersList->setHorizontalHeaderLabels(QStringList({RPM::translate(
         Translations::MONSTER), RPM::translate(Translations::LEVEL)}));
 }
@@ -56,55 +72,44 @@ void SystemTroop::initializeHeaders() {
 //
 // -------------------------------------------------------
 
-SuperListItem * SystemTroop::createCopy() const {
-    SystemTroop* super = new SystemTroop;
+SuperListItem * SystemTroop::createCopy() const
+{
+    SystemTroop *super = new SystemTroop;
     super->setCopy(*this);
     return super;
 }
 
 // -------------------------------------------------------
 
-void SystemTroop::setCopy(const SuperListItem &super) {
+void SystemTroop::setCopy(const SuperListItem &super)
+{
     const SystemTroop *troop;
-    QStandardItem *item;
-    SystemMonsterTroop *sys;
-
     SuperListItem::setCopy(super);
     troop = reinterpret_cast<const SystemTroop *>(&super);
-
-    // Currencies
     SuperListItem::deleteModel(m_monstersList, false);
-    for (int i = 0, l = troop->m_monstersList->invisibleRootItem()->rowCount();
-         i < l; i++)
-    {
-        sys = reinterpret_cast<SystemMonsterTroop *>(troop->m_monstersList->item
-            (i)->data().value<quintptr>());
-        if (sys != nullptr) {
-            m_monstersList->appendRow(sys->createCopy()->getModelRow());
-        }
-    }
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_monstersList->appendRow(item);
+    SuperListItem::copy(m_monstersList, troop->m_monstersList);
+    SuperListItem::deleteModel(m_reactions, false);
+    SuperListItem::copy(m_reactions, troop->m_reactions);
     this->initializeHeaders();
 }
 
 // -------------------------------------------------------
 
-void SystemTroop::read(const QJsonObject &json) {
+void SystemTroop::read(const QJsonObject &json)
+{
     SuperListItem::read(json);
-
     this->initializeHeaders();
-
-    // Monsters list
-    SuperListItem::readTree(m_monstersList, new SystemMonsterTroop, json, "l");
+    SuperListItem::readTree(m_monstersList, new SystemMonsterTroop, json,
+        JSON_MONSTERS_LIST);
+    SuperListItem::readTree(m_reactions, new SystemTroopReaction, json,
+        JSON_REACTIONS);
 }
 
 // -------------------------------------------------------
 
-void SystemTroop::write(QJsonObject &json) const{
+void SystemTroop::write(QJsonObject &json) const
+{
     SuperListItem::write(json);
-
-    // Monsters list
-    SuperListItem::writeTree(m_monstersList, json, "l");
+    SuperListItem::writeTree(m_monstersList, json, JSON_MONSTERS_LIST);
+    SuperListItem::writeTree(m_reactions, json, JSON_REACTIONS);
 }

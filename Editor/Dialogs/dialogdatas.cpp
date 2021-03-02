@@ -232,6 +232,7 @@ void DialogDatas::initializeTroops(GameDatas *gameDatas){
     ui->panelSuperListTroops->initializeModel(gameDatas->troopsDatas()
                                               ->model());
     ui->treeViewMonstersList->initializeNewItemInstance(new SystemMonsterTroop);
+    ui->treeViewTroopReaction->initializeNewItemInstance(new SystemTroopReaction);
     connect(ui->panelSuperListTroops->list()->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageTroopSelected(QModelIndex,QModelIndex)));
@@ -239,6 +240,11 @@ void DialogDatas::initializeTroops(GameDatas *gameDatas){
             ->index(0,0);
     ui->panelSuperListTroops->list()->setIndex(0);
     on_pageTroopSelected(index,index);
+    connect(ui->treeViewTroopReaction->selectionModel(), SIGNAL(currentChanged(
+        QModelIndex, QModelIndex)), this, SLOT(on_pageTroopReactionSelected(
+        QModelIndex, QModelIndex)));
+    connect(ui->panelTroopReaction, SIGNAL(nameChanged()), this, SLOT(
+        onTroopReactionNameChanged()));
 }
 
 // -------------------------------------------------------
@@ -247,6 +253,7 @@ void DialogDatas::updateTroop(SystemTroop *sysTroop){
     ui->treeViewMonstersList->initializeModel(sysTroop->monstersList());
     ui->treeViewMonstersList->setColumnWidth(0,250);
     ui->treeViewMonstersList->setColumnWidth(1,50);
+    ui->treeViewTroopReaction->initializeModel(sysTroop->reactions());
 }
 
 // -------------------------------------------------------
@@ -655,10 +662,28 @@ void DialogDatas::on_pageMonsterSelected(QModelIndex index, QModelIndex){
 // -------------------------------------------------------
 
 void DialogDatas::on_pageTroopSelected(QModelIndex index, QModelIndex){
-    QStandardItem* selected = ui->panelSuperListTroops->list()->getModel()
-            ->itemFromIndex(index);
+    QStandardItem *selected = ui->panelSuperListTroops->list()->getModel()
+        ->itemFromIndex(index);
     if (selected != nullptr)
-        updateTroop((SystemTroop*)selected->data().value<quintptr>());
+    {
+        this->updateTroop(reinterpret_cast<SystemTroop *>(selected->data()
+            .value<quintptr>()));
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pageTroopReactionSelected(QModelIndex index, QModelIndex)
+{
+    QStandardItem *selected = ui->treeViewTroopReaction->getModel()
+        ->itemFromIndex(index);
+    if (selected != nullptr)
+    {
+        SystemTroopReaction *reaction = reinterpret_cast<SystemTroopReaction *>(
+            selected->data().value<quintptr>());
+        ui->panelTroopReaction->initialize(reaction);
+        ui->panelTroopReaction->setEnabled(reaction != nullptr);
+    }
 }
 
 // -------------------------------------------------------
@@ -856,6 +881,23 @@ void DialogDatas::on_pushButtonPlayCrit_clicked() {
 
 // -------------------------------------------------------
 
-void DialogDatas::onAnimationFinished() {
+void DialogDatas::onAnimationFinished()
+{
     this->setEnabled(true);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::onTroopReactionNameChanged()
+{
+    QStandardItem *selected = ui->treeViewTroopReaction->getSelected();
+    if (selected != nullptr)
+    {
+        SystemTroopReaction *reaction = reinterpret_cast<SystemTroopReaction *>(
+            selected->data().value<quintptr>());
+        if (reaction != nullptr)
+        {
+            selected->setText(reaction->toString());
+        }
+    }
 }

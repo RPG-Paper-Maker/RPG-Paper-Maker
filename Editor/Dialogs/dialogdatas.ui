@@ -384,25 +384,52 @@
                 <item row="0" column="0">
                  <layout class="QHBoxLayout" name="horizontalLayout_20" stretch="0,1">
                   <item>
-                   <widget class="PanelSuperList" name="panelSuperListTroopReaction" native="true">
+                   <widget class="WidgetSuperTree" name="treeViewTroopReaction">
                     <property name="minimumSize">
                      <size>
-                      <width>175</width>
+                      <width>150</width>
                       <height>0</height>
                      </size>
                     </property>
                     <property name="maximumSize">
                      <size>
-                      <width>175</width>
+                      <width>150</width>
                       <height>16777215</height>
                      </size>
                     </property>
+                    <property name="verticalScrollBarPolicy">
+                     <enum>Qt::ScrollBarAsNeeded</enum>
+                    </property>
+                    <property name="horizontalScrollBarPolicy">
+                     <enum>Qt::ScrollBarAlwaysOff</enum>
+                    </property>
+                    <property name="editTriggers">
+                     <set>QAbstractItemView::NoEditTriggers</set>
+                    </property>
+                    <property name="showDropIndicator" stdset="0">
+                     <bool>false</bool>
+                    </property>
+                    <property name="indentation">
+                     <number>0</number>
+                    </property>
+                    <attribute name="headerVisible">
+                     <bool>false</bool>
+                    </attribute>
+                    <attribute name="headerMinimumSectionSize">
+                     <number>1</number>
+                    </attribute>
+                    <attribute name="headerDefaultSectionSize">
+                     <number>57</number>
+                    </attribute>
+                    <attribute name="headerStretchLastSection">
+                     <bool>true</bool>
+                    </attribute>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QTabWidget" name="tabWidgetTroopReaction">
-                    <property name="currentIndex">
-                     <number>-1</number>
+                   <widget class="PanelTroopReaction" name="panelTroopReaction" native="true">
+                    <property name="enabled">
+                     <bool>false</bool>
                     </property>
                    </widget>
                   </item>
@@ -1525,6 +1552,12 @@
    <class>PanelStatus</class>
    <extends>QWidget</extends>
    <header>panelstatus.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelTroopReaction</class>
+   <extends>QWidget</extends>
+   <header>paneltroopreaction.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

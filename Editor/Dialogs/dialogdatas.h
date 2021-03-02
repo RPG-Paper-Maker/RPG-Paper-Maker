@@ -92,6 +92,7 @@ private slots:
     void on_pageHeroSelected(QModelIndex index, QModelIndex);
     void on_pageMonsterSelected(QModelIndex index, QModelIndex);
     void on_pageTroopSelected(QModelIndex index, QModelIndex);
+    void on_pageTroopReactionSelected(QModelIndex index, QModelIndex);
     void on_pageTilesetSelected(QModelIndex index, QModelIndex);
     void on_pageAnimationsSelected(QModelIndex index, QModelIndex);
     void on_pageAnimationFramesSelected(QModelIndex index, QModelIndex);
@@ -114,6 +115,7 @@ private slots:
     void on_pushButtonPlayMiss_clicked();
     void on_pushButtonPlayCrit_clicked();
     void onAnimationFinished();
+    void onTroopReactionNameChanged();
 };
 
 #endif // DIALOGDATAS_H

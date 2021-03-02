@@ -277,6 +277,7 @@ QStringList RPM::ENUM_TO_STRING_FORMULA_STAT = {};
 QStringList RPM::ENUM_TO_STRING_TITLE_SETTINGS = {};
 QStringList RPM::ENUM_TO_STRING_AXIS_KIND = {};
 QStringList RPM::ENUM_TO_STRING_CONDITION_HEROES = {};
+QStringList RPM::ENUM_TO_STRING_CONDITION_PLAYERS = {};
 QStringList RPM::ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC = {};
 QStringList RPM::ENUM_TO_STRING_ANIMATION_POSITION_KIND = {};
 QStringList RPM::ENUM_TO_STRING_ANIMATION_CONDITION_KIND = {};
@@ -294,6 +295,7 @@ QStringList RPM::ENUM_TO_STRING_PRIMITIVE_KIND = {};
 QStringList RPM::ENUM_TO_STRING_STATUS_RESTRICTIONS_KIND = {};
 QStringList RPM::ENUM_TO_INVENTORY_FILTER_KIND = {};
 QStringList RPM::ENUM_TO_MAIN_MENU_COMMAND_KIND = {};
+QStringList RPM::ENUM_TO_TROOP_REACTION_FREQUENCY_KIND = {};
 
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
@@ -506,6 +508,16 @@ void RPM::readTranslations() {
         RPM::translate(Translations::NONE_OF_HEROES),
         RPM::translate(Translations::AT_LEAST_ONE_HERO),
         RPM::translate(Translations::HERO_WITH_INSTANCE_ID)
+    });
+    RPM::ENUM_TO_STRING_CONDITION_PLAYERS = QStringList({
+        //RPM::translate(Translations::ALL_PLAYERS),
+        //RPM::translate(Translations::NONE_OF_PLAYERS),
+        //RPM::translate(Translations::AT_LEAST_ONE_PLAYER),
+        //RPM::translate(Translations::PLAYER_WITH_INSTANCE_ID)
+        "All players",
+                                                           "None of the players",
+                                                           "At least one player",
+                                                           "Player with instance ID"
     });
     RPM::ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC = QStringList({
         RPM::translate(Translations::X_SQUARE_POSITION),
@@ -732,6 +744,15 @@ void RPM::readTranslations() {
         RPM::translate(Translations::SAVE),
         RPM::translate(Translations::QUIT),
         RPM::translate(Translations::SCRIPT)
+    });
+    RPM::ENUM_TO_TROOP_REACTION_FREQUENCY_KIND = QStringList({
+        //RPM::translate(Translations::ONE_TIME),
+                                                                 "One time",
+        //RPM::translate(Translations::EACH_TURN_BEGIN),
+                                                                 "Each turn (begin)",
+        //RPM::translate(Translations::EACH_TURN_END),
+                                                          "Each turn (end)",
+        RPM::translate(Translations::ALWAYS)
     });
 }
 

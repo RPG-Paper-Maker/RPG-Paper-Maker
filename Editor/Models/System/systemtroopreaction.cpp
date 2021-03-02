@@ -10,6 +10,7 @@
 */
 
 #include "systemtroopreaction.h"
+#include "dialogsystemname.h"
 
 const QString SystemTroopReaction::JSON_CONDITIONS = "conditions";
 const QString SystemTroopReaction::JSON_FREQUENCY = "frequency";
@@ -64,7 +65,22 @@ void SystemTroopReaction::setFrequency(TroopReactionFrequencyKind frequency)
 //
 // -------------------------------------------------------
 
-SuperListItem* SystemTroopReaction::createCopy() const
+bool SystemTroopReaction::openDialog()
+{
+    SystemTroopReaction reaction;
+    reaction.setCopy(*this);
+    DialogSystemName dialog(reaction);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        this->setCopy(reaction);
+        return true;
+    }
+    return false;
+}
+
+// -------------------------------------------------------
+
+SuperListItem * SystemTroopReaction::createCopy() const
 {
     SystemTroopReaction *super = new SystemTroopReaction;
     super->setCopy(*this);
@@ -76,8 +92,8 @@ SuperListItem* SystemTroopReaction::createCopy() const
 void SystemTroopReaction::setCopy(const SuperListItem &super)
 {
     const SystemTroopReaction *troopReaction;
-    SystemReaction::setCopy(super);
     troopReaction = reinterpret_cast<const SystemTroopReaction *>(&super);
+    SystemReaction::setCopy(*troopReaction);
     m_conditions->setCopy(*troopReaction->m_conditions);
     m_frequency = troopReaction->m_frequency;
 }
@@ -86,6 +102,7 @@ void SystemTroopReaction::setCopy(const SuperListItem &super)
 
 void SystemTroopReaction::read(const QJsonObject &json)
 {
+    SuperListItem::read(json);
     SystemReaction::read(json);
     if (json.contains(JSON_CONDITIONS))
     {
@@ -101,6 +118,7 @@ void SystemTroopReaction::read(const QJsonObject &json)
 // -------------------------------------------------------
 
 void SystemTroopReaction::write(QJsonObject &json) const {
+    SuperListItem::write(json);
     SystemReaction::write(json);
     QJsonObject obj;
     m_conditions->write(obj);

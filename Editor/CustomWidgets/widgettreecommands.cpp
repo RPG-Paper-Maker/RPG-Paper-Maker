@@ -76,13 +76,16 @@ void WidgetTreeCommands::initializeModel(QStandardItemModel* m){
     this->setModel(p_model);
     this->expandAll();
 
-    // Connect for context menu
-    connect(this->selectionModel(),
-            SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
-            SLOT(onSelectionChanged(QModelIndex,QModelIndex)));
+    if (m != nullptr)
+    {
+        // Connect for context menu
+        connect(this->selectionModel(),
+                SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
+                SLOT(onSelectionChanged(QModelIndex,QModelIndex)));
 
-    // Update text in nodes
-    updateAllNodesString(p_model->invisibleRootItem());
+        // Update text in nodes
+        updateAllNodesString(p_model->invisibleRootItem());
+    }
 }
 
 // -------------------------------------------------------

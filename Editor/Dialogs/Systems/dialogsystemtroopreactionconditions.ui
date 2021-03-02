@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>641</width>
-    <height>362</height>
+    <width>848</width>
+    <height>294</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -42,13 +42,13 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="0">
-          <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,1">
+          <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,1">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
+            <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,1">
              <item>
-              <widget class="QCheckBox" name="checkBox">
+              <widget class="QCheckBox" name="checkBoxNumberOfTurns">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="text">
                 <string>Number of turns:</string>
@@ -76,36 +76,6 @@
                 <enum>Qt::LeftToRight</enum>
                </property>
               </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>258</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,1">
-             <item>
-              <spacer name="horizontalSpacer_11">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>13</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
              </item>
              <item>
               <widget class="QLabel" name="labelPlus">
@@ -150,13 +120,13 @@
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_2">
+              <spacer name="horizontalSpacer">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>338</width>
+                 <width>258</width>
                  <height>20</height>
                 </size>
                </property>
@@ -165,11 +135,11 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,1">
+            <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0,1">
              <item>
               <widget class="QCheckBox" name="checkBoxMonstersHeroes">
                <property name="text">
-                <string/>
+                <string>The</string>
                </property>
               </widget>
              </item>
@@ -186,36 +156,6 @@
                 <bool>false</bool>
                </property>
               </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_3">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>478</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,0,0,1">
-             <item>
-              <spacer name="horizontalSpacer_5">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>13</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
              </item>
              <item>
               <widget class="QLabel" name="labelWithInstanceID">
@@ -250,13 +190,13 @@
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_6">
+              <spacer name="horizontalSpacer_3">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>298</width>
+                 <width>40</width>
                  <height>20</height>
                 </size>
                </property>
@@ -265,7 +205,7 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
              <item>
               <spacer name="horizontalSpacer_4">
                <property name="orientation">
@@ -273,7 +213,7 @@
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>98</width>
+                 <width>40</width>
                  <height>58</height>
                 </size>
                </property>
@@ -365,7 +305,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="comboBoxStatusCompare">
+                  <widget class="QComboBox" name="comboBoxStatisticCompare">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -386,66 +326,66 @@
                  </item>
                 </layout>
                </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,0,0,1">
+                 <item>
+                  <spacer name="horizontalSpacer_2">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="PanelPrimitiveValue" name="panelPrimitiveStatisticCompare" native="true">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>290</width>
+                     <height>27</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>290</width>
+                     <height>27</height>
+                    </size>
+                   </property>
+                   <property name="layoutDirection">
+                    <enum>Qt::LeftToRight</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="comboBoxStatisticCompareUnit">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_9">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>168</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
               </layout>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,0,0,1">
-             <item>
-              <spacer name="horizontalSpacer_10">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="PanelPrimitiveValue" name="panelPrimitiveStatisticCompare" native="true">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>290</width>
-                 <height>27</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>290</width>
-                 <height>27</height>
-                </size>
-               </property>
-               <property name="layoutDirection">
-                <enum>Qt::LeftToRight</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="comboBoxCompareUnit">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_9">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>168</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
              </item>
             </layout>
            </item>

@@ -51,8 +51,8 @@ public:
     void initializeParameterEvent(QStandardItemModel *properties,
         QStandardItemModel *parameters);
     void initializeNumberVariable();
-    void initializeNumber(QStandardItemModel *parameters, QStandardItemModel
-        *properties, bool isInteger = true);
+    void initializeNumber(QStandardItemModel *parameters = nullptr,
+        QStandardItemModel *properties = nullptr, bool isInteger = true);
     void initializeDataBaseCommandId(QStandardItemModel *dataBase,
         QStandardItemModel *parameters = nullptr, QStandardItemModel
         *properties = nullptr);

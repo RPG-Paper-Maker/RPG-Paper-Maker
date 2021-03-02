@@ -27,20 +27,27 @@
 class SystemTroop : public SuperListItem
 {
 public:
+    static const QString JSON_MONSTERS_LIST;
+    static const QString JSON_REACTIONS;
+
     SystemTroop();
-    SystemTroop(int i, QString n, QStandardItemModel *monstersList);
+    SystemTroop(int i, QString n, QStandardItemModel *monstersList = new
+        QStandardItemModel, QStandardItemModel *reactions = new
+        QStandardItemModel);
     virtual ~SystemTroop();
-    QStandardItemModel* monstersList() const;
+    QStandardItemModel * monstersList() const;
+    QStandardItemModel * reactions() const;
 
     void initializeHeaders();
 
-    virtual SuperListItem* createCopy() const;
+    virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
     QStandardItemModel *m_monstersList;
+    QStandardItemModel *m_reactions;
 };
 
 Q_DECLARE_METATYPE(SystemTroop)
