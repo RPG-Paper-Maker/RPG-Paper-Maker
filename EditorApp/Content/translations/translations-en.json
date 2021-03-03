@@ -1208,5 +1208,16 @@
     "key.item": "Key item",
     "inventory": "Inventory",
     "set.main.menu.command": "Set main menu command",
-    "order": "Order"
+    "order": "Order",
+    "reactions": "Reactions",
+    "set.conditions": "Set conditions",
+    "number.of.turns": "Number of turns",
+    "the.s": "The",
+    "all.players": "All players",
+    "none.of.players": "None of the players",
+    "at.least.one.player": "At least one player",
+    "player.with.instance.id": "Player with instance ID",
+    "one.time": "One time",
+    "each.turn.begin": "Each turn (begin)",
+    "each.turn.end": "Each turn (end)"
 }

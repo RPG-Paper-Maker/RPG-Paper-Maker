@@ -1208,5 +1208,16 @@
     "key.item": "Objet clé",
     "inventory": "Inventaire",
     "set.main.menu.command": "Modifier la commande du menu principal",
-    "order": "Ordre"
+    "order": "Ordre",
+    "reactions": "Reactions",
+    "set.conditions": "Modifier les conditions",
+    "number.of.turns": "Nombre de tours",
+    "the.s": "Le(s)",
+    "all.players": "Tous les joueurs",
+    "none.of.players": "Aucun des joueurs",
+    "at.least.one.player": "Au moins un joueur",
+    "player.with.instance.id": "Le joueur d'ID d'instance",
+    "one.time": "Une seule fois",
+    "each.turn.begin": "À chaque tour (début)",
+    "each.turn.end": "À chaque tour (fin)"
 }

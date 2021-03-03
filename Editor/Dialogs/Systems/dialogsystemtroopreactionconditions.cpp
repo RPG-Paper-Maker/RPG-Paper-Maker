@@ -113,7 +113,15 @@ void DialogSystemTroopReactionConditions::initialize()
 
 void DialogSystemTroopReactionConditions::translate()
 {
-
+    this->setWindowTitle(RPM::translate(Translations::SET_CONDITIONS) + RPM
+        ::DOT_DOT_DOT);
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::BATTLE));
+    ui->checkBoxNumberOfTurns->setText(RPM::translate(Translations::NUMBER_OF_TURNS));
+    ui->checkBoxMonstersHeroes->setText(RPM::translate(Translations::THE_S));
+    ui->labelWithInstanceID->setText(RPM::translate(Translations::HERO_WITH_INSTANCE_ID));
+    ui->checkBoxStatusID->setText(RPM::translate(Translations::ARE_UNDER_EFFECT_STATUS_ID) + RPM::COLON);
+    ui->checkBoxStatisticID->setText(RPM::translate(Translations::HAVE_STATISTIC_ID) + RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

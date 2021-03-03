@@ -1242,6 +1242,17 @@ public:
     static const QString INVENTORY;
     static const QString SET_MAIN_MENU_COMMAND;
     static const QString ORDER;
+    static const QString REACTIONS;
+    static const QString SET_CONDITIONS;
+    static const QString NUMBER_OF_TURNS;
+    static const QString THE_S;
+    static const QString ALL_PLAYERS;
+    static const QString NONE_OF_PLAYERS;
+    static const QString AT_LEAST_ONE_PLAYER;
+    static const QString PLAYER_WITH_INSTANCE_ID;
+    static const QString ONE_TIME;
+    static const QString EACH_TURN_BEGIN;
+    static const QString EACH_TURN_END;
 
     Translations();
     virtual ~Translations();

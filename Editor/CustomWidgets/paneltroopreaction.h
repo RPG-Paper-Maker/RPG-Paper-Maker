@@ -28,6 +28,7 @@ public:
     ~PanelTroopReaction();
 
     void initialize(SystemTroopReaction *reaction);
+    void translate();
 
 private:
     Ui::PanelTroopReaction *ui;

@@ -510,14 +510,10 @@ void RPM::readTranslations() {
         RPM::translate(Translations::HERO_WITH_INSTANCE_ID)
     });
     RPM::ENUM_TO_STRING_CONDITION_PLAYERS = QStringList({
-        //RPM::translate(Translations::ALL_PLAYERS),
-        //RPM::translate(Translations::NONE_OF_PLAYERS),
-        //RPM::translate(Translations::AT_LEAST_ONE_PLAYER),
-        //RPM::translate(Translations::PLAYER_WITH_INSTANCE_ID)
-        "All players",
-                                                           "None of the players",
-                                                           "At least one player",
-                                                           "Player with instance ID"
+        RPM::translate(Translations::ALL_PLAYERS),
+        RPM::translate(Translations::NONE_OF_PLAYERS),
+        RPM::translate(Translations::AT_LEAST_ONE_PLAYER),
+        RPM::translate(Translations::PLAYER_WITH_INSTANCE_ID)
     });
     RPM::ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC = QStringList({
         RPM::translate(Translations::X_SQUARE_POSITION),
@@ -746,12 +742,9 @@ void RPM::readTranslations() {
         RPM::translate(Translations::SCRIPT)
     });
     RPM::ENUM_TO_TROOP_REACTION_FREQUENCY_KIND = QStringList({
-        //RPM::translate(Translations::ONE_TIME),
-                                                                 "One time",
-        //RPM::translate(Translations::EACH_TURN_BEGIN),
-                                                                 "Each turn (begin)",
-        //RPM::translate(Translations::EACH_TURN_END),
-                                                          "Each turn (end)",
+        RPM::translate(Translations::ONE_TIME),
+        RPM::translate(Translations::EACH_TURN_BEGIN),
+        RPM::translate(Translations::EACH_TURN_END),
         RPM::translate(Translations::ALWAYS)
     });
 }

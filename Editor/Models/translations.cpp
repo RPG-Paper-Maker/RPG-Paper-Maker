@@ -1229,6 +1229,17 @@ const QString Translations::KEY_ITEM = "key.item";
 const QString Translations::INVENTORY = "inventory";
 const QString Translations::SET_MAIN_MENU_COMMAND = "set.main.menu.command";
 const QString Translations::ORDER = "order";
+const QString Translations::REACTIONS = "reactions";
+const QString Translations::SET_CONDITIONS = "set.conditions";
+const QString Translations::NUMBER_OF_TURNS = "number.of.turns";
+const QString Translations::THE_S = "the.s";
+const QString Translations::ALL_PLAYERS = "all.players";
+const QString Translations::NONE_OF_PLAYERS = "none.of.players";
+const QString Translations::AT_LEAST_ONE_PLAYER = "at.least.one.player";
+const QString Translations::PLAYER_WITH_INSTANCE_ID = "player.with.instance.id";
+const QString Translations::ONE_TIME = "one.time";
+const QString Translations::EACH_TURN_BEGIN = "each.turn.begin";
+const QString Translations::EACH_TURN_END = "each.turn.end";
 
 // -------------------------------------------------------
 //

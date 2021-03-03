@@ -471,7 +471,7 @@ void DialogDatas::translate() {
     ui->groupBoxArmors->setTitle(RPM::translate(Translations::ARMORS));
     ui->groupBoxHeroes->setTitle(RPM::translate(Translations::HEROES));
     ui->groupBoxSkills->setTitle(RPM::translate(Translations::SKILLS));
-    //ui->groupBoxTroopsReactions->setTitle(RPM::translate(Translations::REACTIONS));
+    ui->groupBoxTroopsReactions->setTitle(RPM::translate(Translations::REACTIONS));
     ui->groupBoxStatus->setTitle(RPM::translate(Translations::STATUS));
     ui->groupBoxTroops->setTitle(RPM::translate(Translations::TROOPS));
     ui->groupBoxClasses->setTitle(RPM::translate(Translations::CLASSES));

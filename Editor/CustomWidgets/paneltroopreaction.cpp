@@ -26,6 +26,7 @@ PanelTroopReaction::PanelTroopReaction(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->comboBoxFrequency->addItems(RPM::ENUM_TO_TROOP_REACTION_FREQUENCY_KIND);
+    this->translate();
 }
 
 PanelTroopReaction::~PanelTroopReaction()
@@ -54,6 +55,15 @@ void PanelTroopReaction::initialize(SystemTroopReaction *reaction)
             ->frequency()));
         ui->widgetTreeCommands->initializeModel(m_reaction->modelCommands());
     }
+}
+
+// -------------------------------------------------------
+
+void PanelTroopReaction::translate()
+{
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelConditions->setText(RPM::translate(Translations::CONDITIONS) + RPM::COLON);
+    ui->labelFrequency->setText(RPM::translate(Translations::FREQUENCY) + RPM::COLON);
 }
 
 // -------------------------------------------------------
