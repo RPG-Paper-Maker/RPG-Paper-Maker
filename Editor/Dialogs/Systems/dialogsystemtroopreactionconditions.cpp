@@ -45,8 +45,12 @@ DialogSystemTroopReactionConditions::~DialogSystemTroopReactionConditions()
 void DialogSystemTroopReactionConditions::initializePrimitives()
 {
     ui->panelPrimitiveTurnPlus->initializeNumber();
+    ui->panelPrimitiveTurnPlus->setNumberValue(1);
     ui->panelPrimitiveTurnTimes->initializeNumber();
+    ui->panelPrimitiveTurnTimes->setNumberValue(1);
     ui->panelPrimitiveInstanceID->initializeNumber();
+    ui->panelPrimitiveInstanceID->setKind(PrimitiveValueKind::Variable);
+    ui->panelPrimitiveInstanceID->setNumberValue(1);
     ui->panelPrimitiveStatusID->initializeDataBaseCommandId(RPM::get()->project()
         ->gameDatas()->statusDatas()->model());
     ui->panelPrimitiveStatisticID->initializeDataBaseCommandId(RPM::get()->project()
@@ -77,32 +81,32 @@ void DialogSystemTroopReactionConditions::initialize()
     if (m_conditions.isNumberOfTurn())
     {
         ui->checkBoxNumberOfTurns->setChecked(true);
-        ui->panelPrimitiveTurnPlus->initializeModel(m_conditions.numberOfTurnPlus());
-        ui->panelPrimitiveTurnPlus->updateModel();
-        ui->panelPrimitiveTurnTimes->initializeModel(m_conditions.numberOfTurnTimes());
-        ui->panelPrimitiveTurnTimes->updateModel();
     }
+    ui->panelPrimitiveTurnPlus->initializeModel(m_conditions.numberOfTurnPlus());
+    ui->panelPrimitiveTurnPlus->updateModel();
+    ui->panelPrimitiveTurnTimes->initializeModel(m_conditions.numberOfTurnTimes());
+    ui->panelPrimitiveTurnTimes->updateModel();
     if (m_conditions.isHeroesMonsters())
     {
         ui->checkBoxMonstersHeroes->setChecked(true);
-        ui->panelPrimitiveInstanceID->initializeModel(m_conditions.heroInstanceID());
-        ui->panelPrimitiveInstanceID->updateModel();
         if (m_conditions.isStatusID())
         {
             ui->checkBoxStatusID->setChecked(true);
-            ui->panelPrimitiveStatusID->initializeModel(m_conditions.statusID());
-            ui->panelPrimitiveStatusID->updateModel();
         }
         if (m_conditions.isStatisticID())
         {
             ui->checkBoxStatisticID->setChecked(true);
-            ui->panelPrimitiveStatisticID->initializeModel(m_conditions.statisticID());
-            ui->panelPrimitiveStatisticID->updateModel();
-            ui->panelPrimitiveStatisticCompare->initializeModel(m_conditions
-                .statisticCompare());
-            ui->panelPrimitiveStatisticCompare->updateModel();
         }
     }
+    ui->panelPrimitiveInstanceID->initializeModel(m_conditions.heroInstanceID());
+    ui->panelPrimitiveInstanceID->updateModel();
+    ui->panelPrimitiveStatusID->initializeModel(m_conditions.statusID());
+    ui->panelPrimitiveStatusID->updateModel();
+    ui->panelPrimitiveStatisticID->initializeModel(m_conditions.statisticID());
+    ui->panelPrimitiveStatisticID->updateModel();
+    ui->panelPrimitiveStatisticCompare->initializeModel(m_conditions
+        .statisticCompare());
+    ui->panelPrimitiveStatisticCompare->updateModel();
 }
 
 // -------------------------------------------------------

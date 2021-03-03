@@ -56,8 +56,8 @@ public:
     SystemTroopReactionConditions();
     SystemTroopReactionConditions(int i, QString n, bool isNumberOfTurn =
         DEFAULT_IS_NUMBER_OF_TURN, PrimitiveValue *numberOfTurnPlus = new
-        PrimitiveValue(0), PrimitiveValue *numberOfTurnTimes = new
-        PrimitiveValue(0), bool isHeroesMonsters = DEFAULT_IS_HEROES_MONSTERS,
+        PrimitiveValue(1), PrimitiveValue *numberOfTurnTimes = new
+        PrimitiveValue(1), bool isHeroesMonsters = DEFAULT_IS_HEROES_MONSTERS,
         bool isHeroes = DEFAULT_IS_HEROES, ConditionHeroesKind
         conditionHeroesKind = DEFAULT_CONDITION_HEROES_KIND, PrimitiveValue
         *heroInstanceID = new PrimitiveValue(PrimitiveValueKind::Variable, 1),

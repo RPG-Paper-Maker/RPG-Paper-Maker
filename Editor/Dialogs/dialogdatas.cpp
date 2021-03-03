@@ -233,6 +233,7 @@ void DialogDatas::initializeTroops(GameDatas *gameDatas){
                                               ->model());
     ui->treeViewMonstersList->initializeNewItemInstance(new SystemMonsterTroop);
     ui->treeViewTroopReaction->initializeNewItemInstance(new SystemTroopReaction);
+    ui->treeViewTroopReaction->setUpdateId(true);
     connect(ui->panelSuperListTroops->list()->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageTroopSelected(QModelIndex,QModelIndex)));

@@ -29,7 +29,7 @@ const QString SystemTroopReactionConditions::JSON_STATISTIC_COMPARE = "statistic
 const QString SystemTroopReactionConditions::JSON_STATISTIC_COMPARE_UNIT = "statisticCompareUnit";
 const bool SystemTroopReactionConditions::DEFAULT_IS_NUMBER_OF_TURN = false;
 const bool SystemTroopReactionConditions::DEFAULT_IS_HEROES_MONSTERS = false;
-const bool SystemTroopReactionConditions::DEFAULT_IS_HEROES = false;
+const bool SystemTroopReactionConditions::DEFAULT_IS_HEROES = true;
 const ConditionHeroesKind SystemTroopReactionConditions::DEFAULT_CONDITION_HEROES_KIND = ConditionHeroesKind::AllTheHeroes;
 const bool SystemTroopReactionConditions::DEFAULT_IS_HERO_INSTANCE_ID = false;
 const bool SystemTroopReactionConditions::DEFAULT_IS_STATUS_ID = false;
@@ -234,19 +234,31 @@ void SystemTroopReactionConditions::setCopy(const SuperListItem &super)
     SuperListItem::setCopy(super);
     conditions = reinterpret_cast<const SystemTroopReactionConditions *>(&super);
     m_isNumberOfTurn = conditions->m_isNumberOfTurn;
-    m_numberOfTurnPlus->setCopy(*conditions->m_numberOfTurnPlus);
-    m_numberOfTurnTimes->setCopy(*conditions->m_numberOfTurnTimes);
+    if (m_isNumberOfTurn)
+    {
+        m_numberOfTurnPlus->setCopy(*conditions->m_numberOfTurnPlus);
+        m_numberOfTurnTimes->setCopy(*conditions->m_numberOfTurnTimes);
+    }
     m_isHeroesMonsters = conditions->m_isHeroesMonsters;
-    m_isHeroes = conditions->m_isHeroes;
-    m_conditionHeroesKind = conditions->m_conditionHeroesKind;
-    m_heroInstanceID->setCopy(*conditions->m_heroInstanceID);
     m_isStatusID = conditions->m_isStatusID;
-    m_statusID->setCopy(*conditions->m_statusID);
     m_isStatisticID = conditions->m_isStatisticID;
-    m_statisticID->setCopy(*conditions->m_statisticID);
-    m_statisticOperationKind = conditions->m_statisticOperationKind;
-    m_statisticCompare->setCopy(*conditions->m_statisticCompare);
-    m_statisticCompareUnit = conditions->m_statisticCompareUnit;
+    if (m_isHeroesMonsters)
+    {
+        m_isHeroes = conditions->m_isHeroes;
+        m_conditionHeroesKind = conditions->m_conditionHeroesKind;
+        m_heroInstanceID->setCopy(*conditions->m_heroInstanceID);
+        if (m_isStatusID)
+        {
+            m_statusID->setCopy(*conditions->m_statusID);
+        }
+        if (m_isStatisticID)
+        {
+            m_statisticID->setCopy(*conditions->m_statisticID);
+            m_statisticOperationKind = conditions->m_statisticOperationKind;
+            m_statisticCompare->setCopy(*conditions->m_statisticCompare);
+            m_statisticCompareUnit = conditions->m_statisticCompareUnit;
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -323,13 +335,15 @@ void SystemTroopReactionConditions::write(QJsonObject &json) const {
     {
         json[JSON_IS_NUMBER_OF_TURN] = m_isNumberOfTurn;
     }
-    if (!m_numberOfTurnPlus->isDefaultNumberValue())
+    if (m_numberOfTurnPlus->kind() != PrimitiveValueKind::Number ||
+        m_numberOfTurnPlus->numberValue() != 1)
     {
         obj = QJsonObject();
         m_numberOfTurnPlus->write(obj);
         json[JSON_NUMBER_OF_TURN_PLUS] = obj;
     }
-    if (!m_numberOfTurnTimes->isDefaultNumberValue())
+    if (m_numberOfTurnTimes->kind() != PrimitiveValueKind::Number ||
+        m_numberOfTurnTimes->numberValue() != 1)
     {
         obj = QJsonObject();
         m_numberOfTurnTimes->write(obj);
