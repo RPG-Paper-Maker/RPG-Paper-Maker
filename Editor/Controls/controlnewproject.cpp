@@ -137,11 +137,18 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     dir.mkpath(RPM::PATH_SOUNDS);
     dir.mkpath(RPM::PATH_MUSIC_EFFECTS);
     dir.mkpath(RPM::PATH_SHAPES);
+    dir.mkpath(RPM::PATH_FONTS);
+    dir.mkpath(RPM::PATH_STYLES);
     dir.mkpath(RPM::PATH_OBJ);
     dir.mkpath(RPM::PATH_MTL);
     dir.mkpath(RPM::PATH_COLLISIONS);
     dir.mkpath(RPM::PATH_HUD_PICTURES);
     dir.mkpath(RPM::PATH_SAVES);
+
+    // Create default font file
+    QFile fileFont(Common::pathCombine(pathApp, RPM::PATH_STYLE_FONT));
+    fileFont.open(QIODevice::WriteOnly);
+    fileFont.close();
 
     // Create the default datas
     project->setDefault();

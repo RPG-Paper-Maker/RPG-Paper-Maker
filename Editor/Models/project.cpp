@@ -41,6 +41,7 @@ Project::Project() :
     m_videosDatas(new VideosDatas),
     m_songsDatas(new SongsDatas),
     m_shapesDatas(new ShapesDatas),
+    m_fontsDatas(new FontsDatas),
     m_keyBoardDatas(new KeyBoardDatas),
     m_specialElementsDatas(new SpecialElementsDatas)
 {
@@ -57,6 +58,7 @@ Project::~Project()
     delete m_videosDatas;
     delete m_songsDatas;
     delete m_shapesDatas;
+    delete m_fontsDatas;
     delete m_keyBoardDatas;
     delete m_specialElementsDatas;
 }
@@ -126,6 +128,11 @@ SongsDatas* Project::songsDatas() const { return m_songsDatas; }
 
 ShapesDatas* Project::shapesDatas() const { return m_shapesDatas; }
 
+FontsDatas * Project::fontsDatas() const
+{
+    return m_fontsDatas;
+}
+
 KeyBoardDatas* Project::keyBoardDatas() const { return m_keyBoardDatas; }
 
 SpecialElementsDatas* Project::specialElementsDatas() const {
@@ -152,6 +159,7 @@ void Project::setDefault(){
     m_videosDatas->setDefault();
     m_songsDatas->setDefault();
     m_shapesDatas->setDefault();
+    m_fontsDatas->setDefault();
     p_gameDatas->setDefault();
     p_gameDatas->readAnimations(this->pathCurrentProjectApp());
     p_gameDatas->animationsDatas()->setDefault();
@@ -203,6 +211,7 @@ void Project::readAll() {
     this->readScriptsDatas();
     this->readSpecialsDatas();
     this->readShapesDatas();
+    this->readFontsDatas();
 }
 
 // -------------------------------------------------------
@@ -562,6 +571,13 @@ void Project::readShapesDatas(){
 
 // -------------------------------------------------------
 
+void Project::readFontsDatas()
+{
+    m_fontsDatas->read(this->pathCurrentProjectApp());
+}
+
+// -------------------------------------------------------
+
 void Project::readSpecialsDatas() {
     m_specialElementsDatas->read(this->pathCurrentProjectApp());
 }
@@ -621,6 +637,7 @@ void Project::writeAll() {
     writeSpecialsDatas();
     writeGameDatas();
     writeShapesDatas();
+    writeFontsDatas();
     writeTreeMapDatas();
     writeScriptsDatas();
 }
@@ -685,6 +702,14 @@ void Project::writeSongsDatas() {
 void Project::writeShapesDatas() {
     RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(), RPM
         ::PATH_SHAPES_DATAS), *m_shapesDatas);
+}
+
+// -------------------------------------------------------
+
+void Project::writeFontsDatas()
+{
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(), RPM
+        ::PATH_FONTS_DATAS), *m_fontsDatas);
 }
 
 // -------------------------------------------------------

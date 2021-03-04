@@ -168,6 +168,8 @@ const QString RPM::PATH_PICTURES_DATAS = Common::pathCombine(PATH_DATAS,
     "pictures" + EXTENSION_JSON);
 const QString RPM::PATH_VIDEOS_DATAS = Common::pathCombine(PATH_DATAS,
     "videos" + EXTENSION_JSON);
+const QString RPM::PATH_FONTS_DATAS = Common::pathCombine(PATH_DATAS,
+    "fonts" + EXTENSION_JSON);
 const QString RPM::PATH_SONGS_DATAS = Common::pathCombine(PATH_DATAS,
     "songs" + EXTENSION_JSON);
 const QString RPM::PATH_SHAPES_DATAS = Common::pathCombine(PATH_DATAS,
@@ -216,6 +218,12 @@ const QString RPM::PATH_SONGS = Common::pathCombine(FOLDER_CONTENT,
     "Songs");
 const QString RPM::PATH_MUSICS = Common::pathCombine(PATH_SONGS,
     "Musics");
+const QString RPM::PATH_FONTS = Common::pathCombine(FOLDER_CONTENT,
+    "Fonts");
+const QString RPM::PATH_STYLES = Common::pathCombine(FOLDER_CONTENT,
+    "Styles");
+const QString RPM::PATH_STYLE_FONT = Common::pathCombine(PATH_STYLES,
+    "fonts.css");
 const QString RPM::PATH_BACKGROUND_SOUNDS = Common::pathCombine(PATH_SONGS,
     "BackgroundSounds");
 const QString RPM::PATH_SOUNDS = Common::pathCombine(PATH_SONGS,

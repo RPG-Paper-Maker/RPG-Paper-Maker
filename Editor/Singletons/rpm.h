@@ -145,6 +145,7 @@ public:
     static const QString PATH_DLCS_DATAS;
     static const QString PATH_PICTURES_DATAS;
     static const QString PATH_VIDEOS_DATAS;
+    static const QString PATH_FONTS_DATAS;
     static const QString PATH_SONGS_DATAS;
     static const QString PATH_SHAPES_DATAS;
     static const QString PATH_SAVES;
@@ -170,6 +171,9 @@ public:
     static const QString PATH_VIDEOS;
     static const QString PATH_SONGS;
     static const QString PATH_MUSICS;
+    static const QString PATH_FONTS;
+    static const QString PATH_STYLES;
+    static const QString PATH_STYLE_FONT;
     static const QString PATH_BACKGROUND_SOUNDS;
     static const QString PATH_SOUNDS;
     static const QString PATH_MUSIC_EFFECTS;

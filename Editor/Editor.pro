@@ -23,6 +23,7 @@ HEADERS += \
     CustomWidgets/codesyntaxhighlighter.h \
     CustomWidgets/comboboxwheel.h \
     CustomWidgets/panelcolorstransition.h \
+    CustomWidgets/panelfonts.h \
     CustomWidgets/panelplugindetails.h \
     CustomWidgets/panelselectpositionmaps.h \
     CustomWidgets/panelstatus.h \
@@ -91,6 +92,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemtitlecommand.h \
     Dialogs/Systems/dialogsystemtroopreactionconditions.h \
     Dialogs/dialogenternameoptions.h \
+    Dialogs/dialogfonts.h \
     Dialogs/dialogscripts.h \
     Dialogs/dialogfirstlaunch.h \
     Dialogs/dialogimportdlcs.h \
@@ -130,6 +132,7 @@ HEADERS += \
     MapEditor/skybox.h \
     MapEditor/textureseveral.h \
     Models/GameDatas/dlcsdatas.h \
+    Models/GameDatas/fontsdatas.h \
     Models/GameDatas/videosdatas.h \
     Models/System/systemanimationframe.h \
     Models/System/systemanimationframeeffect.h \
@@ -139,6 +142,7 @@ HEADERS += \
     Models/System/systemcustomstructure.h \
     Models/System/systemcustomstructureelement.h \
     Models/System/systemdetection.h \
+    Models/System/systemfont.h \
     Models/System/systemfontname.h \
     Models/System/systemfontsize.h \
     Models/System/systeminventoryfilter.h \
@@ -426,6 +430,7 @@ SOURCES += \
     CustomWidgets/codesyntaxhighlighter.cpp \
     CustomWidgets/comboboxwheel.cpp \
     CustomWidgets/panelcolorstransition.cpp \
+    CustomWidgets/panelfonts.cpp \
     CustomWidgets/panelplugindetails.cpp \
     CustomWidgets/panelselectpositionmaps.cpp \
     CustomWidgets/panelstatus.cpp \
@@ -493,6 +498,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemtitlecommand.cpp \
     Dialogs/Systems/dialogsystemtroopreactionconditions.cpp \
     Dialogs/dialogenternameoptions.cpp \
+    Dialogs/dialogfonts.cpp \
     Dialogs/dialogscripts.cpp \
     Dialogs/dialogfirstlaunch.cpp \
     Dialogs/dialogimportdlcs.cpp \
@@ -513,6 +519,7 @@ SOURCES += \
     MapEditor/skybox.cpp \
     MapEditor/textureseveral.cpp \
     Models/GameDatas/dlcsdatas.cpp \
+    Models/GameDatas/fontsdatas.cpp \
     Models/GameDatas/videosdatas.cpp \
     Models/System/systemanimationframe.cpp \
     Models/System/systemanimationframeeffect.cpp \
@@ -522,6 +529,7 @@ SOURCES += \
     Models/System/systemcustomstructure.cpp \
     Models/System/systemcustomstructureelement.cpp \
     Models/System/systemdetection.cpp \
+    Models/System/systemfont.cpp \
     Models/System/systemfontname.cpp \
     Models/System/systemfontsize.cpp \
     Models/System/systeminventoryfilter.cpp \
@@ -781,6 +789,7 @@ SOURCES += \
 
 FORMS += \
     CustomWidgets/panelcolorstransition.ui \
+    CustomWidgets/panelfonts.ui \
     CustomWidgets/panelplugindetails.ui \
     CustomWidgets/panelselectpositionmaps.ui \
     CustomWidgets/panelstatus.ui \
@@ -842,6 +851,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemtitlecommand.ui \
     Dialogs/Systems/dialogsystemtroopreactionconditions.ui \
     Dialogs/dialogenternameoptions.ui \
+    Dialogs/dialogfonts.ui \
     Dialogs/dialogscripts.ui \
     Dialogs/dialogfirstlaunch.ui \
     Dialogs/dialogimportdlcs.ui \

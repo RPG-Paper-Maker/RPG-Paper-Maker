@@ -89,8 +89,7 @@
     <addaction name="actionVideos_manager"/>
     <addaction name="actionSongs_manager"/>
     <addaction name="actionShapes_manager"/>
-    <addaction name="separator"/>
-    <addaction name="separator"/>
+    <addaction name="actionFonts_manager"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
@@ -190,6 +189,7 @@
    <addaction name="actionVideos_manager"/>
    <addaction name="actionSongs_manager"/>
    <addaction name="actionShapes_manager"/>
+   <addaction name="actionFonts_manager"/>
    <addaction name="separator"/>
    <addaction name="actionAutotiles"/>
    <addaction name="actionAnimated_Autotiles"/>
@@ -700,6 +700,18 @@
   <action name="actionClean_recent_projects">
    <property name="text">
     <string>Clean recent projects</string>
+   </property>
+  </action>
+  <action name="actionFonts_manager">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/fonts.png</normaloff>:/icons/Ressources/fonts.png</iconset>
+   </property>
+   <property name="text">
+    <string>Fonts manager</string>
+   </property>
+   <property name="iconText">
+    <string>Fonts</string>
    </property>
   </action>
  </widget>

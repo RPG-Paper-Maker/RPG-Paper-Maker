@@ -42,6 +42,7 @@
 #include "dialogsongs.h"
 #include "dialogshapes.h"
 #include "dialogvideos.h"
+#include "dialogfonts.h"
 #include "common.h"
 #include "dialogselectlanguage.h"
 
@@ -249,6 +250,7 @@ void MainWindow::enableAll(bool b){
     ui->actionVariables_manager->setEnabled(b);
     ui->actionSongs_manager->setEnabled(b);
     ui->actionShapes_manager->setEnabled(b);
+    ui->actionFonts_manager->setEnabled(b);
     ui->actionPictures_manager->setEnabled(b);
     ui->actionVideos_manager->setEnabled(b);
     ui->actionSet_BR_path_folder->setEnabled(b);
@@ -296,6 +298,7 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionPictures_manager->setEnabled(true);
     ui->actionVideos_manager->setEnabled(true);
     ui->actionShapes_manager->setEnabled(true);
+    ui->actionFonts_manager->setEnabled(true);
     ui->actionSet_BR_path_folder->setEnabled(true);
     ui->actionSet_DLC_s_path_folder->setEnabled(true);
     ui->actionDebug_options->setEnabled(true);
@@ -529,6 +532,10 @@ void MainWindow::translate() {
         ::SHAPES_MANAGER) + RPM::DOT_DOT_DOT);
     ui->actionShapes_manager->setIconText(RPM::translate(Translations
         ::SHAPES_MANAGER_TOOL));
+    ui->actionFonts_manager->setText(RPM::translate(Translations
+        ::FONTS_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionFonts_manager->setIconText(RPM::translate(Translations
+        ::FONTS_MANAGER_TOOL));
     ui->actionAutotiles->setText(RPM::translate(Translations::AUTOTILES) + RPM
         ::DOT_DOT_DOT);
     ui->actionAutotiles->setIconText(RPM::translate(Translations::AUTOTILES_TOOL));
@@ -802,6 +809,17 @@ void MainWindow::on_actionShapes_manager_triggered() {
         project->writeShapesDatas();
     else
         project->readShapesDatas();
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionFonts_manager_triggered()
+{
+    DialogFonts dialog;
+    if (openDialog(dialog) == QDialog::Accepted)
+        project->writeFontsDatas();
+    else
+        project->readFontsDatas();
 }
 
 // -------------------------------------------------------

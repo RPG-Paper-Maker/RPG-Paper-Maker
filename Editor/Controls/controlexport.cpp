@@ -265,6 +265,7 @@ void ControlExport::removeDesktopNoNeed(QString path, bool protect) {
     QFile(Common::pathCombine(pathDatas, "shapes.json")).remove();
     QFile(Common::pathCombine(pathDatas, "songs.json")).remove();
     QFile(Common::pathCombine(pathDatas, "videos.json")).remove();
+    QFile(Common::pathCombine(pathDatas, "fonts.json")).remove();
     this->copyBRDLC(Common::pathCombine(path, RPM::PATH_APP), protect);
     // If protected, remove assets folders (except videos)
     if (protect)
@@ -380,6 +381,7 @@ void ControlExport::copyBRDLC(QString path, bool protect) {
     this->copyBRDLCKind(path, protect, 2, static_cast<int>(CustomShapeKind::OBJ),
         static_cast<int>(CustomShapeKind::Last));
     this->copyBRDLCKind(path, protect, 3, 0, 1);
+    this->copyBRDLCKind(path, protect, 4, 0, 1);
 }
 
 // -------------------------------------------------------
@@ -393,6 +395,7 @@ void ControlExport::copyBRDLCKind(QString path, bool protect, int kind, int
     SongsDatas *newSongsDatas = new SongsDatas;
     ShapesDatas *newShapesDatas = new ShapesDatas;
     VideosDatas *newVideosDatas = new VideosDatas;
+    FontsDatas *newFontsDatas = new FontsDatas;
     QString type;
     QMimeDatabase db;
     QString pathResource;
@@ -419,6 +422,10 @@ void ControlExport::copyBRDLCKind(QString path, bool protect, int kind, int
             model = m_project->videosDatas()->model();
             newVideosDatas->setModel(newModel);
             break;
+        case 4:
+            model = m_project->fontsDatas()->model();
+            newFontsDatas->setModel(newModel);
+            break;
         default:
             model = newModel;
             break;
@@ -431,8 +438,8 @@ void ControlExport::copyBRDLCKind(QString path, bool protect, int kind, int
                 ->createCopy());
             newResource->setId(resource->id());
 
-            // If not protected or video, and is from BR or DLC, we need to copy it in the project
-            if (!protect || kind == 3)
+            // If not protected or video or fonts, and is from BR or DLC, we need to copy it in the project
+            if (!protect || kind == 3 || kind == 4)
             {
                 if ((resource->isBR() || !resource->dlc().isEmpty()))
                 {
@@ -491,9 +498,14 @@ void ControlExport::copyBRDLCKind(QString path, bool protect, int kind, int
         RPM::writeJSON(Common::pathCombine(pathDatas, "videos.json"),
             *newVideosDatas);
         break;
+    case 4:
+        RPM::writeJSON(Common::pathCombine(pathDatas, "fonts.json"),
+            *newFontsDatas);
+        break;
     }
     delete newPicturesDatas;
     delete newSongsDatas;
     delete newShapesDatas;
     delete newVideosDatas;
+    delete newFontsDatas;
 }

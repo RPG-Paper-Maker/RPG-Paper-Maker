@@ -1253,6 +1253,10 @@ public:
     static const QString ONE_TIME;
     static const QString EACH_TURN_BEGIN;
     static const QString EACH_TURN_END;
+    static const QString FONTS_MANAGER;
+    static const QString FONTS_MANAGER_TOOL;
+    static const QString DELETING_FONT;
+    static const QString YOUR_TRYING_REMOVE_BR_FONT;
 
     Translations();
     virtual ~Translations();

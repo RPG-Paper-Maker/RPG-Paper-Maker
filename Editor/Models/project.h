@@ -21,6 +21,7 @@
 #include "videosdatas.h"
 #include "songsdatas.h"
 #include "shapesdatas.h"
+#include "fontsdatas.h"
 #include "keyboarddatas.h"
 #include "specialelementsdatas.h"
 #include "oskind.h"
@@ -61,6 +62,7 @@ public:
     VideosDatas * videosDatas() const;
     SongsDatas* songsDatas() const;
     ShapesDatas * shapesDatas() const;
+    FontsDatas * fontsDatas() const;
     KeyBoardDatas* keyBoardDatas() const;
     SpecialElementsDatas* specialElementsDatas() const;
     QString version() const;
@@ -84,6 +86,7 @@ public:
     void readVideosDatas();
     void readSongsDatas();
     void readShapesDatas();
+    void readFontsDatas();
     void readSpecialsDatas();
     void readSystemDatas();
     void readBattleSystemDatas();
@@ -102,6 +105,7 @@ public:
     void writeVideosDatas();
     void writeSongsDatas();
     void writeShapesDatas();
+    void writeFontsDatas();
     void writeSpecialsDatas();
     void writeSystemDatas();
     void writeBattleSystemDatas();
@@ -129,6 +133,7 @@ private:
     VideosDatas *m_videosDatas;
     SongsDatas* m_songsDatas;
     ShapesDatas * m_shapesDatas;
+    FontsDatas *m_fontsDatas;
     KeyBoardDatas* m_keyBoardDatas;
     SpecialElementsDatas* m_specialElementsDatas;
     QString m_version;

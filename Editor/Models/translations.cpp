@@ -1240,6 +1240,10 @@ const QString Translations::PLAYER_WITH_INSTANCE_ID = "player.with.instance.id";
 const QString Translations::ONE_TIME = "one.time";
 const QString Translations::EACH_TURN_BEGIN = "each.turn.begin";
 const QString Translations::EACH_TURN_END = "each.turn.end";
+const QString Translations::FONTS_MANAGER = "fonts.manager";
+const QString Translations::FONTS_MANAGER_TOOL = "fonts.manager.tool";
+const QString Translations::DELETING_FONT = "deleting.font";
+const QString Translations::YOUR_TRYING_REMOVE_BR_FONT = "your.trying.remove.br.font";
 
 // -------------------------------------------------------
 //

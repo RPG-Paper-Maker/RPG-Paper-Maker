@@ -1219,5 +1219,9 @@
     "player.with.instance.id": "Player with instance ID",
     "one.time": "One time",
     "each.turn.begin": "Each turn (begin)",
-    "each.turn.end": "Each turn (end)"
+    "each.turn.end": "Each turn (end)",
+    "fonts.manager": "Fonts manager",
+    "fonts.manager.tool": "Fonts",
+    "deleting.font": "Deleting font",
+    "your.trying.remove.br.font": "You are trying to remove a BR font"
 }
