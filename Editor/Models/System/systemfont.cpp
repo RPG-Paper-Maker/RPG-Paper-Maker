@@ -71,8 +71,9 @@ QString SystemFont::getLocalFolder() {
 
 QString SystemFont::getCSS(QString name) const
 {
-    return "@font-face {\n\tfont-family: \"" + name + "\";\n\tsrc: url(\"" + this
-        ->getPath() + "\");}";
+    return "@font-face {\n\tfont-family: \"" + name + "\";\n\tsrc: url(\"" + (
+        this->isBR() || !this->dlc().isEmpty() ? this->getPath() : "../Fonts/" +
+        this->name()) + "\");\n}\n";
 }
 
 // -------------------------------------------------------

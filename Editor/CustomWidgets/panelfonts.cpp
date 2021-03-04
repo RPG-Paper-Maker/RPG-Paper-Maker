@@ -81,7 +81,7 @@ void PanelFonts::setAreNegIDsEnabled(bool b) {
 
 void PanelFonts::setKind() {
     ui->widgetPanelIDs->list()->setAreNegIDsEnabled(m_areNegIDsEnabled);
-    ui->widgetPanelIDs->initializeModel(RPM::get()->project()->videosDatas()
+    ui->widgetPanelIDs->initializeModel(RPM::get()->project()->fontsDatas()
         ->model());
 
     // Connection of list

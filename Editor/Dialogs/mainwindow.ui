@@ -713,6 +713,9 @@
    <property name="iconText">
     <string>Fonts</string>
    </property>
+   <property name="shortcut">
+    <string>0</string>
+   </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

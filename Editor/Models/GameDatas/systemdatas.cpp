@@ -637,14 +637,10 @@ void SystemDatas::setDefaultFontSizes() {
 
 // -------------------------------------------------------
 
-void SystemDatas::setDefaultFontNames() {
-    QList<QStandardItem *> row;
-    SystemFontName *fontName;
-
-    fontName = new SystemFontName(1, "sans-serif", new PrimitiveValue(
-        PrimitiveValueKind::Message, "sans-serif"));
-    row = fontName->getModelRow();
-    m_modelFontNames->appendRow(row);
+void SystemDatas::setDefaultFontNames()
+{
+    m_modelFontNames->appendRow((new SystemFontName(1, "Default", false, new
+        PrimitiveValue(SystemFontName::DEFAULT_FONT)))->getModelRow());
 }
 
 // -------------------------------------------------------
@@ -1058,14 +1054,27 @@ void SystemDatas::write(QJsonObject &json) const{
     // Font name
     jsonArray = QJsonArray();
     l = m_modelFontNames->invisibleRootItem()->rowCount();
+    QString css;
+    QString currenCSS;
     for (int i = 0; i < l; i++) {
         QJsonObject jsonCommon;
         SystemFontName *fontname = reinterpret_cast<SystemFontName *>(
             m_modelFontNames->item(i)->data().value<quintptr>());
+        currenCSS = fontname->getCSS();
+        if (!currenCSS.isEmpty())
+        {
+            css += fontname->getCSS();
+        }
         fontname->write(jsonCommon);
         jsonArray.append(jsonCommon);
     }
     json[JSON_FONT_NAMES] = jsonArray;
+    QFile fileFont(Common::pathCombine(RPM::get()->project()
+        ->pathCurrentProjectApp(), RPM::PATH_STYLE_FONT));
+    fileFont.open(QIODevice::WriteOnly);
+    fileFont.write(css.toUtf8());
+    fileFont.close();
+
     SuperListItem::writeList(m_modelSkyBoxes, json, JSON_SKY_BOXES);
 
     // Version

@@ -47,6 +47,9 @@ private:
 
 public slots:
     void on_lineEditName_textChanged(const QString &text);
+    void on_radioButtonBasic_toggled(bool checked);
+    void on_radioButtonCustomFontID_toggled(bool checked);
+    void on_comboBoxCustomFontID_currentIndexChanged(int index);
 };
 
 #endif // DIALOGSYSTEMFONTNAME_H

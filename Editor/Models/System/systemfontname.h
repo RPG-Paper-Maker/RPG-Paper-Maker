@@ -27,14 +27,26 @@
 class SystemFontName : public SuperListItem
 {
 public:
+    static const QString JSON_IS_BASIC;
     static const QString JSON_FONT;
+    static const QString JSON_CUSTOM_FONT_ID;
+    static const bool DEFAULT_IS_BASIC;
     static const QString DEFAULT_FONT;
+    static const int DEFAULT_CUSTOM_FONT_ID;
 
     SystemFontName();
-    SystemFontName(int i, QString n, PrimitiveValue *f);
+    SystemFontName(int i, QString n, bool isBasic = DEFAULT_IS_BASIC,
+        PrimitiveValue *font = new PrimitiveValue(DEFAULT_FONT), int customFontID
+        = DEFAULT_CUSTOM_FONT_ID);
     virtual ~SystemFontName();
 
+    bool isBasic() const;
+    void setIsBasic(bool isBasic);
     PrimitiveValue * font() const;
+    int customFontID() const;
+    void setCustomFontID(int customFontID);
+
+    QString getCSS() const;
 
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
@@ -43,7 +55,9 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
+    bool m_isBasic;
     PrimitiveValue * m_font;
+    int m_customFontID;
 };
 
 Q_DECLARE_METATYPE(SystemFontName)

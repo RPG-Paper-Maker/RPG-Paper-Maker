@@ -1219,5 +1219,9 @@
     "player.with.instance.id": "Le joueur d'ID d'instance",
     "one.time": "Une seule fois",
     "each.turn.begin": "À chaque tour (début)",
-    "each.turn.end": "À chaque tour (fin)"
+    "each.turn.end": "À chaque tour (fin)",
+    "fonts.manager": "Gestionnaire de fonts",
+    "fonts.manager.tool": "Fonts",
+    "deleting.font": "Suppression de la font",
+    "your.trying.remove.br.font": "Vous êtes en train de supprimer une font du BR"
 }

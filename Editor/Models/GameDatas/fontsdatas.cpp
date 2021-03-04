@@ -50,12 +50,8 @@ void FontsDatas::setModel(QStandardItemModel *model) {
 // -------------------------------------------------------
 
 void FontsDatas::setDefault() {
-    QList<QStandardItem *> row;
-    SystemFont *font;
-
-    font = new SystemFont;
-    row = font->getModelRow();
-    m_model->appendRow(row);
+    m_model->appendRow((new SystemFont)->getModelRow());
+    m_model->appendRow((new SystemFont(1, "Default.ttf", true))->getModelRow());
 }
 
 // -------------------------------------------------------
