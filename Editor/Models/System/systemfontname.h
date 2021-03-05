@@ -46,7 +46,7 @@ public:
     int customFontID() const;
     void setCustomFontID(int customFontID);
 
-    QString getCSS() const;
+    QString getCSS(QStandardItemModel *modelFonts = nullptr) const;
 
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;

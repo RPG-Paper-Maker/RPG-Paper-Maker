@@ -77,11 +77,12 @@ void SystemFontName::setCustomFontID(int customFontID)
 //
 // -------------------------------------------------------
 
-QString SystemFontName::getCSS() const
+QString SystemFontName::getCSS(QStandardItemModel *modelFonts) const
 {
     return m_isBasic ? "" : reinterpret_cast<SystemFont *>(SuperListItem
-        ::getById(RPM::get()->project()->fontsDatas()->model()
-        ->invisibleRootItem(), m_customFontID))->getCSS(this->name());
+        ::getById((modelFonts == nullptr ? RPM::get()->project()->fontsDatas()
+        ->model() : modelFonts)->invisibleRootItem(), m_customFontID))->getCSS(
+        this->name());
 }
 
 // -------------------------------------------------------

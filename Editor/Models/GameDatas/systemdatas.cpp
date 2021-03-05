@@ -1054,8 +1054,7 @@ void SystemDatas::write(QJsonObject &json) const{
     // Font name
     jsonArray = QJsonArray();
     l = m_modelFontNames->invisibleRootItem()->rowCount();
-    QString css;
-    QString currenCSS;
+    QString css, currenCSS;
     for (int i = 0; i < l; i++) {
         QJsonObject jsonCommon;
         SystemFontName *fontname = reinterpret_cast<SystemFontName *>(
@@ -1063,7 +1062,7 @@ void SystemDatas::write(QJsonObject &json) const{
         currenCSS = fontname->getCSS();
         if (!currenCSS.isEmpty())
         {
-            css += fontname->getCSS();
+            css += currenCSS;
         }
         fontname->write(jsonCommon);
         jsonArray.append(jsonCommon);

@@ -15,6 +15,7 @@
 #include <QFileInfo>
 #include "systemplugin.h"
 #include "controlexport.h"
+#include "systemfontname.h"
 #include "rpm.h"
 #include "common.h"
 
@@ -439,6 +440,7 @@ void ControlExport::copyBRDLCKind(QString path, bool protect, int kind, int
             newResource->setId(resource->id());
 
             // If not protected or video or fonts, and is from BR or DLC, we need to copy it in the project
+            QString css, currenCSS;
             if (!protect || kind == 3 || kind == 4)
             {
                 if ((resource->isBR() || !resource->dlc().isEmpty()))
@@ -501,6 +503,23 @@ void ControlExport::copyBRDLCKind(QString path, bool protect, int kind, int
     case 4:
         RPM::writeJSON(Common::pathCombine(pathDatas, "fonts.json"),
             *newFontsDatas);
+        // Rewrite style fonts.css
+        int l = m_project->gameDatas()->systemDatas()->modelFontNames()
+            ->invisibleRootItem()->rowCount();
+        QString css, currenCSS;
+        for (int i = 0; i < l; i++) {
+            currenCSS = reinterpret_cast<SystemFontName *>(m_project->gameDatas()
+                ->systemDatas()->modelFontNames()->item(i)->data().value<
+                quintptr>())->getCSS(newFontsDatas->model());
+            if (!currenCSS.isEmpty())
+            {
+                css += currenCSS;
+            }
+        }
+        QFile fileFont(Common::pathCombine(path, RPM::PATH_STYLE_FONT));
+        fileFont.open(QIODevice::WriteOnly);
+        fileFont.write(css.toUtf8());
+        fileFont.close();
         break;
     }
     delete newPicturesDatas;
