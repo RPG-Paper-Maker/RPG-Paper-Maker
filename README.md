@@ -24,11 +24,12 @@ The [organization](https://github.com/RPG-Paper-Maker) contains some independent
 - [Game-documentation](https://github.com/RPG-Paper-Maker/Game-documentation) contains all the stuff for generating javascript game documentation for users.
 - [Basic-Ressources](https://github.com/RPG-Paper-Maker/Basic-Ressources) contains all the basic ressources that the users can use for there projects (pictures, musics...).
 - [Updater](https://github.com/RPG-Paper-Maker/Updater) is the updater that installs and check for RPG Paper Maker updates.
+- [Dependencies](https://github.com/RPG-Paper-Maker/Dependencies) contains all the dynamic libraries needed for games and the engine for working in standalone. It also contains all the binaries executable.
 
 ## How to build the project
 
 - Install Qt on your OS with
-[the Open Source installation](https://www.qt.io/download-open-source/#section-2). During the installation, you should select the most recent Qt version (**/!\ Linux users should use Qt5.8 for having musics working**). We recommend you to use the QtCreator IDE too. You should also install gcc compiler if it is not already done.
+[the Open Source installation](https://www.qt.io/download-open-source/#section-2). During the installation, you should select Qt version 5.x  (**/!\ Linux users should use Qt5.8 for having musics working**). We recommend you to use the QtCreator IDE too. You should also install gcc compiler if it is not already done.
 - Clone and go to this repo
 - Update the modules with the command:
 
