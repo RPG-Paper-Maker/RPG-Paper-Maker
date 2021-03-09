@@ -450,15 +450,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetShowPicture</class>
-   <extends>QWidget</extends>
-   <header>widgetshowpicture.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PanelSuperList</class>
    <extends>QWidget</extends>
    <header>panelsuperlist.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetShowPicture</class>
+   <extends>QWidget</extends>
+   <header>widgetshowpicture.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

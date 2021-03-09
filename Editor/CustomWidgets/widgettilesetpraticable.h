@@ -55,6 +55,7 @@ protected:
     bool m_firstResize;
     Qt::CursorShape m_lastCursorShape;
 
+    int getPictureRows() const;
     void updateImageGeneral(SystemPicture* picture, PictureKind kind);
     void getMousePoint(QPoint& point, QMouseEvent *event);
     void getRectCollision(QRect& rect, const QPoint& localPoint,

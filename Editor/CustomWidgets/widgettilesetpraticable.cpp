@@ -58,6 +58,15 @@ WidgetTilesetPraticable::~WidgetTilesetPraticable() {
 //
 // -------------------------------------------------------
 
+int WidgetTilesetPraticable::getPictureRows() const
+{
+    return reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM::get()
+        ->project()->picturesDatas()->model(PictureKind::Characters)
+        ->invisibleRootItem(), m_pictureID))->getRows();
+}
+
+// -------------------------------------------------------
+
 void WidgetTilesetPraticable::updateImage(SystemPicture* picture,
                                           PictureKind kind)
 {
@@ -144,7 +153,7 @@ void WidgetTilesetPraticable::getRect(QRect& rect, const QPoint& localPoint,
 // -------------------------------------------------------
 
 void WidgetTilesetPraticable::getRectRepeatBot(QRect& rect) const {
-    int h = qCeil(m_image.height() / 4.0f);
+    int h = qCeil(m_image.height() / static_cast<qreal>(this->getPictureRows()));
     rect.setX(0);
     rect.setY(h);
     rect.setWidth(m_image.width());
@@ -160,7 +169,7 @@ void WidgetTilesetPraticable::getRectRepeatTop(QRect& rect) const {
     rect.setX(w);
     rect.setY(0);
     rect.setWidth(m_image.width() - w);
-    rect.setHeight(qCeil(m_image.height() / 4.0f));
+    rect.setHeight(qCeil(m_image.height() / static_cast<qreal>(this->getPictureRows())));
 }
 
 // -------------------------------------------------------

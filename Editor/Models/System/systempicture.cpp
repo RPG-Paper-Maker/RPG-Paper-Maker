@@ -69,7 +69,7 @@ void SystemPicture::setRepeatCollisions(bool b) {
     QImage image(this->getPath());
     int xOffset = image.width() / RPM::get()->project()->gameDatas()
             ->systemDatas()->framesAnimation() / RPM::get()->getSquareSize();
-    int yOffset = image.height() / 4 / RPM::get()->getSquareSize();
+    int yOffset = image.height() / this->getRows() / RPM::get()->getSquareSize();
     QHash<QPoint, CollisionSquare*> colCopy(m_collisions);
     if (b) {
         for (QHash<QPoint, CollisionSquare*>::iterator k = colCopy.begin();
@@ -255,7 +255,7 @@ void SystemPicture::getRepeatList(QImage& image,
 {
     int xOffset = image.width() / RPM::get()->project()->gameDatas()
             ->systemDatas()->framesAnimation() / RPM::get()->getSquareSize();
-    int yOffset = image.height() / 4 / RPM::get()->getSquareSize();
+    int yOffset = image.height() / this->getRows() / RPM::get()->getSquareSize();
     for (QHash<QPoint, CollisionSquare*>::iterator k = squares.begin();
          k != squares.end(); k++)
     {
@@ -263,7 +263,7 @@ void SystemPicture::getRepeatList(QImage& image,
         for (int i = 0; i < RPM::get()->project()->gameDatas()
              ->systemDatas()->framesAnimation(); i++)
         {
-            for (int j = 0; j < 4; j++) {
+            for (int j = 0; j < this->getRows(); j++) {
                 if (i != 0 || j != 0) {
                     list.insert(QPoint(p.x() + (i * xOffset),
                                        p.y() + (j * yOffset)),
