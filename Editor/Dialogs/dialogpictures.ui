@@ -35,7 +35,7 @@
       <number>15</number>
      </property>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
        <item>
         <widget class="QTreeView" name="treeView">
          <property name="minimumSize">

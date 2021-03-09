@@ -336,6 +336,7 @@ void PanelObject::updateStateOptions(SystemState *state) {
     ui->checkBoxThrough->setChecked(state->through());
     ui->checkBoxSetWithCamera->setChecked(state->setWithCamera());
     ui->checkBoxPixelOffset->setChecked(state->pixelOffset());
+    ui->checkBoxKeepPosition->setChecked(state->keepPosition());
 }
 
 // -------------------------------------------------------
@@ -697,6 +698,13 @@ void PanelObject::on_checkBoxSetWithCamera_toggled(bool checked) {
 
 void PanelObject::on_checkBoxPixelOffset_toggled(bool checked) {
     getSelectedState()->setPixelOffset(checked);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_checkBoxKeepPosition_toggled(bool checked)
+{
+    getSelectedState()->setKeepPosition(checked);
 }
 
 // -------------------------------------------------------

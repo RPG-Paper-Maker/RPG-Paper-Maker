@@ -193,7 +193,7 @@ void WidgetGraphics::paintGL() {
             } else {
                 width = image.width() / RPM::get()->project()->gameDatas()
                     ->systemDatas()->framesAnimation();
-                height = image.height() / 4;
+                height = image.height() / this->getPicture()->getRows();
                 newX = (m_state->indexX() >= RPM::get()->project()->gameDatas()
                     ->systemDatas()->framesAnimation() ? RPM::get()->project()
                     ->gameDatas()->systemDatas()->framesAnimation() - 1 :

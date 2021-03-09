@@ -14,6 +14,9 @@
 #include "rpm.h"
 #include "common.h"
 
+const QString SystemPicture::JSON_IS_STOP_ANIMATION = "isStopAnimation";
+const bool SystemPicture::DEFAULT_IS_STOP_ANIMATION = false;
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -21,22 +24,24 @@
 // -------------------------------------------------------
 
 SystemPicture::SystemPicture() :
-    SystemPicture(-1, "<" + RPM::translate(Translations::NONE) + ">", false)
+    SystemPicture(-1, "<" + RPM::translate(Translations::NONE) + ">")
 {
 
 }
 
 SystemPicture::SystemPicture(int i, QString n, bool isBR, QString dlc, bool
-    isMissing, PictureKind kind) :
+    isMissing, PictureKind kind, bool isStopAnimation) :
     SystemResource(i, n, isBR, dlc),
     m_kind(kind),
     m_repeatCollisions(false),
-    m_isMissing(isMissing)
+    m_isMissing(isMissing),
+    m_isStopAnimation(isStopAnimation)
 {
 
 }
 
-SystemPicture::~SystemPicture() {
+SystemPicture::~SystemPicture()
+{
     for (QHash<QPoint, CollisionSquare*>::iterator i = m_collisions.begin();
          i != m_collisions.end(); i++)
     {
@@ -79,6 +84,16 @@ void SystemPicture::setRepeatCollisions(bool b) {
     }
     else
         getRepeatList(image, colCopy, m_collisions, true);
+}
+
+bool SystemPicture::isStopAnimation() const
+{
+    return m_isStopAnimation;
+}
+
+void SystemPicture::setIsStopAnimation(bool isStopAnimation)
+{
+    m_isStopAnimation = isStopAnimation;
 }
 
 // -------------------------------------------------------
@@ -172,6 +187,19 @@ PictureKind SystemPicture::subSelectionToPictureKind(MapEditorSubSelectionKind s
 
 // -------------------------------------------------------
 
+int SystemPicture::getRows() const
+{
+    switch (m_kind)
+    {
+    case PictureKind::Characters:
+        return 4 + (m_isStopAnimation ? 4 : 0);
+    default:
+        return 1;
+    }
+}
+
+// -------------------------------------------------------
+
 QString SystemPicture::getPath() const {
     // If NONE, return empty path
     if (id() == -1) {
@@ -215,6 +243,7 @@ void SystemPicture::setCopy(const SuperListItem &super) {
         m_collisions.insert(i.key(), i.value()->createCopy());
     }
     m_repeatCollisions = picture->m_repeatCollisions;
+    m_isStopAnimation = picture->m_isStopAnimation;
 }
 
 // -------------------------------------------------------
@@ -353,6 +382,10 @@ void SystemPicture::read(const QJsonObject &json){
     }
     if (json.contains("rcol"))
         m_repeatCollisions = json["rcol"].toBool();
+    if (json.contains(JSON_IS_STOP_ANIMATION))
+    {
+        m_isStopAnimation = json[JSON_IS_STOP_ANIMATION].toBool();
+    }
 }
 
 // -------------------------------------------------------
@@ -381,4 +414,8 @@ void SystemPicture::write(QJsonObject &json) const{
         json["col"] = tabCollisions;
     if (m_repeatCollisions)
         json["rcol"] = m_repeatCollisions;
+    if (m_isStopAnimation != DEFAULT_IS_STOP_ANIMATION)
+    {
+        json[JSON_IS_STOP_ANIMATION] = m_isStopAnimation;
+    }
 }

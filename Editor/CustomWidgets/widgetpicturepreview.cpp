@@ -21,6 +21,7 @@
 
 WidgetPicturePreview::WidgetPicturePreview(QWidget *parent) :
     QWidget(parent),
+    m_picture(nullptr),
     m_selectionRectangle(new WidgetSelectionRectangle),
     m_chooseRect(false),
     m_indexX(0),
@@ -35,6 +36,16 @@ WidgetPicturePreview::~WidgetPicturePreview()
 }
 
 void WidgetPicturePreview::setKind(PictureKind kind) { m_kind = kind; }
+
+SystemPicture * WidgetPicturePreview::picture() const
+{
+    return m_picture;
+}
+
+void WidgetPicturePreview::setPicture(SystemPicture *picture)
+{
+    m_picture = picture;
+}
 
 void WidgetPicturePreview::setChooseRect(bool b) { m_chooseRect = b; }
 
@@ -54,8 +65,11 @@ void WidgetPicturePreview::setIndexX(int i) {
 int WidgetPicturePreview::indexY() const { return m_indexY; }
 
 void WidgetPicturePreview::setIndexY(int i) {
-    if (i >= 4)
-        i = 3;
+    int max = m_picture == nullptr ? 4 : m_picture->getRows();
+    if (i >= max - 1)
+    {
+        i = max - 1;
+    }
 
     m_indexY = i;
 
@@ -76,6 +90,7 @@ void WidgetPicturePreview::setImage(QString path){
 // -------------------------------------------------------
 
 void WidgetPicturePreview::setNoneImage(){
+    this->setPicture(nullptr);
     m_image = QImage();
     updateImageSize();
 }
@@ -93,10 +108,9 @@ void WidgetPicturePreview::updateImageSize(){
 
         switch (m_kind){
         case PictureKind::Characters:
-            m_selectionRectangle->setSquareWidth(m_image.width() *
-                                                 coef / frames);
-            m_selectionRectangle->setSquareHeight(m_image.height() *
-                                                  coef/ 4);
+            m_selectionRectangle->setSquareWidth(m_image.width() * coef / frames);
+            m_selectionRectangle->setSquareHeight(m_image.height() * coef/ (
+                m_picture == nullptr ? 4 : m_picture->getRows()));
             updateRectangleCharacter();
             break;
         default:

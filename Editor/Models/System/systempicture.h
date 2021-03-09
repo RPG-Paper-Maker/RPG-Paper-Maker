@@ -29,14 +29,20 @@
 class SystemPicture : public SystemResource
 {
 public:
+    static const QString JSON_IS_STOP_ANIMATION;
+    static const bool DEFAULT_IS_STOP_ANIMATION;
+
     SystemPicture();
-    SystemPicture(int i, QString n, bool isBR, QString dlc = "", bool isMissing
-        = false, PictureKind kind = PictureKind::None);
+    SystemPicture(int i, QString n, bool isBR = false, QString dlc = "", bool
+        isMissing = false, PictureKind kind = PictureKind::None, bool
+        isStopAnimation = DEFAULT_IS_STOP_ANIMATION);
     virtual ~SystemPicture();
     void setKind(PictureKind k);
     QHash<QPoint, CollisionSquare*> *collisions();
     bool repeatCollisions() const;
     void setRepeatCollisions(bool b);
+    bool isStopAnimation() const;
+    void setIsStopAnimation(bool isStopAnimation);
 
     static SystemPicture * getByID(int id, PictureKind kind);
     static QString getFolder(PictureKind kind, bool isBR = false, QString dlc =
@@ -46,6 +52,7 @@ public:
     static PictureKind subSelectionToPictureKind(MapEditorSubSelectionKind
         subKind);
 
+    int getRows() const;
     void getRepeatList(QImage& image,
                        QHash<QPoint, CollisionSquare *>& squares,
                        QHash<QPoint, CollisionSquare *>& list,
@@ -69,6 +76,7 @@ protected:
     QHash<QPoint, CollisionSquare*> m_collisions;
     bool m_repeatCollisions;
     bool m_isMissing;
+    bool m_isStopAnimation;
 };
 
 Q_DECLARE_METATYPE(SystemPicture)

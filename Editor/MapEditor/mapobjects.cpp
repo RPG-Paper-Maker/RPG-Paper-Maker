@@ -206,6 +206,7 @@ void MapObjects::initializeVertices(int squareSize, QHash<int, QOpenGLTexture *>
     SpriteObject *spriteObject;
     Object3DObject *object3DObject;
     QHash<Position, SystemCommonObject*>::iterator i;
+    SystemPicture *picture;
     int graphicsId, x, y, width, height, frames;
     for (i = m_all.begin(); i != m_all.end(); i++)
     {
@@ -232,7 +233,10 @@ void MapObjects::initializeVertices(int squareSize, QHash<int, QOpenGLTexture *>
                 } else
                 {
                     texture = characters[graphicsId];
-
+                    picture = reinterpret_cast<SystemPicture *>(SuperListItem
+                        ::getById(RPM::get()->project()->picturesDatas()->model(
+                        PictureKind::Characters)->invisibleRootItem(),
+                        graphicsId));
                     // If texture ID doesn't exist, load missing texture
                     if (texture == nullptr)
                     {
@@ -242,7 +246,7 @@ void MapObjects::initializeVertices(int squareSize, QHash<int, QOpenGLTexture *>
                     frames = RPM::get()->project()->gameDatas()->systemDatas()
                         ->framesAnimation();
                     width = texture->width() / frames / squareSize;
-                    height = texture->height() / 4 / squareSize;
+                    height = texture->height() / picture->getRows() / squareSize;
                     x = (state->indexX() >= frames ? frames - 1 : state
                         ->indexX()) * width;
                     y = state->indexY() * height;

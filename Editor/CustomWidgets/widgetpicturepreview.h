@@ -14,7 +14,7 @@
 
 #include <QWidget>
 #include "widgetselectionrectangle.h"
-#include "picturekind.h"
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
@@ -30,6 +30,8 @@ class WidgetPicturePreview : public QWidget
 public:
     explicit WidgetPicturePreview(QWidget *parent = 0);
     ~WidgetPicturePreview();
+    SystemPicture * picture() const;
+    void setPicture(SystemPicture *picture);
     void setKind(PictureKind kind);
     void setChooseRect(bool b);
     int indexX() const;
@@ -43,6 +45,7 @@ public:
     void updateRectangleCharacter();
 
 protected:
+    SystemPicture *m_picture;
     QImage m_image;
     float m_zoom;
     WidgetSelectionRectangle* m_selectionRectangle;

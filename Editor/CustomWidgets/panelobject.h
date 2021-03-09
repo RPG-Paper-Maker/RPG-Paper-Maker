@@ -95,6 +95,7 @@ private slots:
     void on_checkBoxThrough_toggled(bool checked);
     void on_checkBoxSetWithCamera_toggled(bool checked);
     void on_checkBoxPixelOffset_toggled(bool checked);
+    void on_checkBoxKeepPosition_toggled(bool checked);
     void on_comboBoxGraphics_currentIndexChanged(int index);
     void on_checkBoxDetection_toggled(bool checked);
     void on_checkBoxDetection_clicked();

@@ -32,7 +32,6 @@ PanelPicturePreview::PanelPicturePreview(QWidget *parent) :
     m_areNegIDsEnabled(true)
 {
     ui->setupUi(this);
-    ui->groupBoxOptions->hide();
 
     ui->widgetPanelIDs->showButtonMax(false);
     ui->widgetPanelIDs->list()->setCanBrutRemove(true);
@@ -115,6 +114,15 @@ void PanelPicturePreview::setPictureKind(PictureKind kind) {
     bool isNone = kind == PictureKind::None;
     m_pictureKind = kind;
     ui->widgetPreview->setKind(kind);
+    switch (kind)
+    {
+    case PictureKind::Characters:
+        ui->groupBoxOptions->show();
+        break;
+    default:
+        ui->groupBoxOptions->hide();
+        break;
+    }
 
     showPictures(!isNone);
 
@@ -171,6 +179,7 @@ void PanelPicturePreview::updateImage(QStandardItem *item) {
         m_picture = reinterpret_cast<SystemPicture *>(item->data()
             .value<qintptr>());
         if (m_picture != nullptr) {
+            ui->checkBoxStopAnimation->setChecked(m_picture->isStopAnimation());
             if (m_picture->id() == -1) {
                 showPictureWidget(true);
                 ui->widgetPreview->setNoneImage();
@@ -181,13 +190,19 @@ void PanelPicturePreview::updateImage(QStandardItem *item) {
             }
             else {
                 showPictureWidget(true);
+                ui->widgetPreview->setPicture(m_picture);
                 ui->widgetPreview->setImage(m_picture->getPath());
             }
             ui->widgetPreview->repaint();
+            if (m_pictureKind == PictureKind::Characters)
+            {
+                ui->groupBoxOptions->show();
+            }
         }
     } else{
         ui->widgetPreview->setNoneImage();
         ui->widgetPreview->repaint();
+        ui->groupBoxOptions->hide();
     }
 }
 
@@ -434,5 +449,18 @@ void PanelPicturePreview::on_pushButtonExport_clicked()
             Common::copyPath(picture->getPath(), Common::pathCombine(folder,
                 picture->name()));
         }
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::on_checkBoxStopAnimation_toggled(bool checked)
+{
+    if (m_picture != nullptr && ui->groupBoxOptions->isVisible())
+    {
+        m_picture->setIsStopAnimation(checked);
+        ui->widgetPreview->setImage(m_picture->getPath());
+        this->setIndexY(this->indexY());
+        ui->widgetPreview->repaint();
     }
 }

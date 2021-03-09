@@ -335,7 +335,7 @@
                 <item row="0" column="1">
                  <widget class="QCheckBox" name="checkBoxThrough">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Through</string>
@@ -345,7 +345,7 @@
                 <item row="3" column="0">
                  <widget class="QCheckBox" name="checkBoxDirectionFix">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Direction fix</string>
@@ -369,7 +369,7 @@
                 <item row="1" column="0">
                  <widget class="QCheckBox" name="checkBoxStopAnimation">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Stop animation</string>
@@ -396,7 +396,7 @@
                 <item row="3" column="1">
                  <widget class="QCheckBox" name="checkBoxKeepPosition">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Keep position</string>

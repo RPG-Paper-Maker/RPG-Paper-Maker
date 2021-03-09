@@ -145,9 +145,11 @@ void PicturesDatas::setDefaultBattlers(QList<QString>& names) {
 
 void PicturesDatas::setDefaultCharacters(QList<QString>& names) {
     SystemPicture *picture;
+    QList<bool> isStopAnimation;
 
     names << "lucas";
-    setDefaultPictures(names, PictureKind::Characters);
+    isStopAnimation << true;
+    setDefaultPictures(names, PictureKind::Characters, isStopAnimation);
     picture = reinterpret_cast<SystemPicture *>(m_models[PictureKind::Characters]
         ->item(1)->data().value<quintptr>());
     picture->setDefaultLucas();
@@ -221,8 +223,8 @@ void PicturesDatas::setDefaultSkyBoxes(QList<QString>& names)
 
 // -------------------------------------------------------
 
-void PicturesDatas::fillList(QList<SystemPicture*> &pictures,
-                             QList<QString>& names, PictureKind kind)
+void PicturesDatas::fillList(QList<SystemPicture*> &pictures, QList<QString>&
+    names, PictureKind kind, QList<bool> isStopAnimation)
 {
     int i;
 
@@ -231,17 +233,17 @@ void PicturesDatas::fillList(QList<SystemPicture*> &pictures,
     for (i = 0; i < names.size() ; i++)
     {
         pictures << new SystemPicture(i + 1, names.at(i) + ".png", true, "",
-            false, kind);
+            false, kind, isStopAnimation.isEmpty() ? false : isStopAnimation.at(i));
     }
 }
 
 // -------------------------------------------------------
 
-void PicturesDatas::setDefaultPictures(QList<QString> &names,
-                                       PictureKind kind)
+void PicturesDatas::setDefaultPictures(QList<QString> &names, PictureKind kind,
+    QList<bool> isStopAnimation)
 {
     QList<SystemPicture*> pictures;
-    fillList(pictures, names, kind);
+    fillList(pictures, names, kind, isStopAnimation);
 
     QStandardItemModel* model = new QStandardItemModel;
     QList<QStandardItem*> row;

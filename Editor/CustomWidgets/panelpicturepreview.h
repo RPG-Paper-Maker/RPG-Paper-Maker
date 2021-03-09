@@ -81,6 +81,7 @@ public slots:
     void on_treeViewAvailableContentDoubleClicked(QModelIndex);
     void on_pushButtonDLC_clicked();
     void on_pushButtonExport_clicked();
+    void on_checkBoxStopAnimation_toggled(bool checked);
 };
 
 #endif // PANELPICTUREPREVIEW_H
