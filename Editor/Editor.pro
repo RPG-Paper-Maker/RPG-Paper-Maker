@@ -85,6 +85,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystempluginparameter.h \
     Dialogs/Systems/dialogsystemprimitive.h \
     Dialogs/Systems/dialogsystemproperty.h \
+    Dialogs/Systems/dialogsystemrandombattle.h \
     Dialogs/Systems/dialogsystemselectstatistic.h \
     Dialogs/Systems/dialogsystemskybox.h \
     Dialogs/Systems/dialogsystemspeedfrequency.h \
@@ -491,6 +492,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystempluginparameter.cpp \
     Dialogs/Systems/dialogsystemprimitive.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
+    Dialogs/Systems/dialogsystemrandombattle.cpp \
     Dialogs/Systems/dialogsystemselectstatistic.cpp \
     Dialogs/Systems/dialogsystemskybox.cpp \
     Dialogs/Systems/dialogsystemspeedfrequency.cpp \
@@ -844,6 +846,7 @@ FORMS += \
     Dialogs/Systems/dialogsystempluginparameter.ui \
     Dialogs/Systems/dialogsystemprimitive.ui \
     Dialogs/Systems/dialogsystemproperty.ui \
+    Dialogs/Systems/dialogsystemrandombattle.ui \
     Dialogs/Systems/dialogsystemselectstatistic.ui \
     Dialogs/Systems/dialogsystemskybox.ui \
     Dialogs/Systems/dialogsystemspeedfrequency.ui \

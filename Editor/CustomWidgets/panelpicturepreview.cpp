@@ -311,6 +311,7 @@ void PanelPicturePreview::translate()
         ::DOT_DOT_DOT);
     ui->pushButtonDLC->setText(RPM::translate(Translations::IMPORT_DLC_S) + RPM
         ::DOT_DOT_DOT);
+    ui->checkBoxStopAnimation->setText(RPM::translate(Translations::STOP_ANIMATION));
 }
 
 // -------------------------------------------------------

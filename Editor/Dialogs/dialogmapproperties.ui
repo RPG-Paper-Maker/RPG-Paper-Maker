@@ -506,7 +506,7 @@
           </size>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -543,34 +543,31 @@
           </attribute>
           <layout class="QGridLayout" name="gridLayout_10">
            <item row="0" column="0">
-            <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,1">
+            <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0">
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
                <item>
-                <widget class="QLabel" name="label_9">
+                <widget class="QLabel" name="labelBattleMapID">
                  <property name="enabled">
-                  <bool>false</bool>
+                  <bool>true</bool>
                  </property>
                  <property name="text">
-                  <string>Battle map:</string>
+                  <string>Battle map ID:</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QComboBox" name="comboBoxBattleMap">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
+                <widget class="PanelPrimitiveValue" name="panelPrimitiveBattleMapID" native="true">
                  <property name="minimumSize">
                   <size>
-                   <width>200</width>
-                   <height>0</height>
+                   <width>250</width>
+                   <height>27</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
-                   <width>200</width>
-                   <height>16777215</height>
+                   <width>250</width>
+                   <height>27</height>
                   </size>
                  </property>
                 </widget>
@@ -593,7 +590,7 @@
              <item>
               <widget class="QGroupBox" name="groupBox_2">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="title">
                 <string>Random battles</string>
@@ -607,7 +604,7 @@
                   <item>
                    <layout class="QGridLayout" name="gridLayout">
                     <item row="0" column="0">
-                     <widget class="QLabel" name="label_11">
+                     <widget class="QLabel" name="labelNumberOfStepsAfter">
                       <property name="text">
                        <string>Number of steps after next battle:</string>
                       </property>
@@ -627,7 +624,7 @@
                      </spacer>
                     </item>
                     <item row="1" column="0">
-                     <widget class="PanelPrimitiveValue" name="widgetConstantVariableSteps" native="true">
+                     <widget class="PanelPrimitiveValue" name="panelPrimitiveNumberSteps" native="true">
                       <property name="minimumSize">
                        <size>
                         <width>250</width>
@@ -643,14 +640,14 @@
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QLabel" name="label_12">
+                     <widget class="QLabel" name="labelWithVariationInPercent">
                       <property name="text">
                        <string>with variation (in %):</string>
                       </property>
                      </widget>
                     </item>
                     <item row="3" column="0">
-                     <widget class="PanelPrimitiveValue" name="widgetConstantVariableStepsVariation" native="true">
+                     <widget class="PanelPrimitiveValue" name="panelPrimitiveVariationBattle" native="true">
                       <property name="minimumSize">
                        <size>
                         <width>250</width>

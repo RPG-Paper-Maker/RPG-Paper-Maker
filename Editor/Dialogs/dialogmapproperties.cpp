@@ -92,8 +92,11 @@ void DialogMapProperties::initialize() {
     ui->panelPrimitiveValueSkyBoxID->initializeDataBaseAndUpdate(m_mapProperties
         .skyboxID());
 
-    ui->widgetConstantVariableSteps->initializeNumberVariable();
-    ui->widgetConstantVariableStepsVariation->initializeNumberVariable();
+    // Random battles
+    ui->panelPrimitiveBattleMapID->initializeDataBaseCommandId(RPM::get()
+        ->project()->gameDatas()->battleSystemDatas()->modelBattleMaps());
+    ui->panelPrimitiveNumberSteps->initializeNumber();
+    ui->panelPrimitiveVariationBattle->initializeNumber();
 
     // Invisible object
     ui->panelObject->initializeList(RPM::get()->project()->gameDatas()
