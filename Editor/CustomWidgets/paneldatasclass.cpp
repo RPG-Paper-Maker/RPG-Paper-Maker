@@ -14,6 +14,7 @@
 #include "ui_paneldatasclass.h"
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
+#include "systemcharacteristic.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -52,6 +53,7 @@ int PanelDatasClass::finalLevel() const {
 // -------------------------------------------------------
 
 void PanelDatasClass::initialize(bool isClass) {
+    ui->treeViewCharacteristic->initializeNewItemInstance(new SystemCharacteristic);
     ui->treeViewStatisticsProgression->initializeNewItemInstance(new
         SystemStatisticProgression);
     ui->treeViewClassSkills->initializeNewItemInstance(new SystemClassSkill);
@@ -82,6 +84,7 @@ void PanelDatasClass::update(SystemClass *sysClass, SystemClass *originalClass)
     ui->spinBoxClassMaxLevel->setValue(maxLevel);
     ui->spinBoxClassBase->setValue(expBase);
     ui->spinBoxClassInflation->setValue(expInflation);
+    ui->treeViewCharacteristic->initializeModel(sysClass->characteristics());
     ui->treeViewStatisticsProgression->initializeModel(sysClass
         ->statisticsProgression());
     ui->treeViewStatisticsProgression->header()->setSectionResizeMode(0,

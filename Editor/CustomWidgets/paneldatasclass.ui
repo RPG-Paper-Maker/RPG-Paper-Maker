@@ -282,14 +282,14 @@
      <item row="1" column="0">
       <widget class="QGroupBox" name="groupBoxCharacteristics">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="title">
         <string>Characteristics</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_27">
         <item row="0" column="0">
-         <widget class="QTreeView" name="treeViewCharacteristic">
+         <widget class="WidgetSuperTree" name="treeViewCharacteristic">
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>

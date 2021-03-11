@@ -12,6 +12,7 @@
 #include "systemclass.h"
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
+#include "systemcharacteristic.h"
 #include "rpm.h"
 
 const QString SystemClass::jsonInitialLevel = "iniL";
@@ -19,6 +20,7 @@ const QString SystemClass::jsonMaxLevel = "mxL";
 const QString SystemClass::jsonExpBase = "eB";
 const QString SystemClass::jsonExpInflation = "eI";
 const QString SystemClass::jsonExpTable = "eT";
+const QString SystemClass::JSON_CHARACTERISTICS = "characteristics";
 const QString SystemClass::jsonStats = "stats";
 const QString SystemClass::jsonSkills = "skills";
 
@@ -35,46 +37,45 @@ SystemClass::SystemClass() :
 }
 
 SystemClass::SystemClass(int i, LangsTranslation *names, int initialLevel, int
-    maxLevel, int expBase, int expInflation) :
-    SystemClass(i, names, initialLevel, maxLevel, expBase, expInflation, new
-        QStandardItemModel, new QStandardItemModel)
-{
-
-}
-
-SystemClass::SystemClass(int i, LangsTranslation *names, int initialLevel, int
-    maxLevel, int expBase, int expInflation, QStandardItemModel *stat,
-    QStandardItemModel *s) :
+    maxLevel, int expBase, int expInflation, QStandardItemModel *characteristics,
+    QStandardItemModel *stats, QStandardItemModel *skills) :
     SystemLang(i, names),
     m_initialLevel(initialLevel),
     m_maxLevel(maxLevel),
     m_expBase(expBase),
     m_expInflation(expInflation),
-    m_statisticsProgression(stat),
-    m_skills(s)
+    m_characteristics(characteristics),
+    m_statisticsProgression(stats),
+    m_skills(skills)
 {
     this->initializeHeaders();
 }
 
-SystemClass::~SystemClass() {
+SystemClass::~SystemClass()
+{
+    SuperListItem::deleteModel(m_characteristics);
     SuperListItem::deleteModel(m_statisticsProgression);
     SuperListItem::deleteModel(m_skills);
 }
 
-int SystemClass::initialLevel() const {
+int SystemClass::initialLevel() const
+{
     return m_initialLevel;
 }
 
-void SystemClass::setInitialLevel(int i, SystemClass *originalClass) {
+void SystemClass::setInitialLevel(int i, SystemClass *originalClass)
+{
     m_initialLevel = originalClass == nullptr || originalClass == this ||
         (originalClass != this && originalClass->initialLevel() != i) ? i : -1;
 }
 
-int SystemClass::maxLevel() const {
+int SystemClass::maxLevel() const
+{
     return m_maxLevel;
 }
 
-void SystemClass::setMaxLevel(int i, SystemClass *originalClass) {
+void SystemClass::setMaxLevel(int i, SystemClass *originalClass)
+{
     m_maxLevel = originalClass == nullptr || originalClass == this ||
         (originalClass != this && originalClass->maxLevel() != i) ? i : -1;
 }
@@ -83,7 +84,8 @@ int SystemClass::expBase() const {
     return m_expBase;
 }
 
-void SystemClass::setExpBase(int i, SystemClass *originalClass) {
+void SystemClass::setExpBase(int i, SystemClass *originalClass)
+{
     m_expBase = originalClass == nullptr || originalClass == this ||
         (originalClass != this && originalClass->expBase() != i) ? i : -1;
 }
@@ -92,20 +94,29 @@ int SystemClass::expInflation() const {
     return m_expInflation;
 }
 
-void SystemClass::setExpInflation(int i, SystemClass *originalClass) {
+void SystemClass::setExpInflation(int i, SystemClass *originalClass)
+{
     m_expInflation = originalClass == nullptr || originalClass == this ||
         (originalClass != this && originalClass->expInflation() != i) ? i : -1;
 }
 
-QHash<int, int> * SystemClass::expTable() {
+QHash<int, int> * SystemClass::expTable()
+{
     return &m_expTable;
 }
 
-QStandardItemModel* SystemClass::statisticsProgression() const {
+QStandardItemModel * SystemClass::characteristics() const
+{
+    return m_characteristics;
+}
+
+QStandardItemModel* SystemClass::statisticsProgression() const
+{
     return m_statisticsProgression;
 }
 
-QStandardItemModel* SystemClass::skills() const {
+QStandardItemModel* SystemClass::skills() const
+{
     return m_skills;
 }
 
@@ -122,6 +133,8 @@ SystemClass * SystemClass::createInheritanceClass() {
 // -------------------------------------------------------
 
 void SystemClass::initializeHeaders() {
+    m_characteristics->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::CHARACTERISTICS)}));
     m_statisticsProgression->setHorizontalHeaderLabels(QStringList({RPM
         ::translate(Translations::STATISTIC), RPM::translate(Translations
         ::INITIAL), RPM::translate(Translations::FINAL)}));
@@ -155,7 +168,8 @@ void SystemClass::setClassValues() {
 //
 // -------------------------------------------------------
 
-SuperListItem* SystemClass::createCopy() const{
+SuperListItem* SystemClass::createCopy() const
+{
     SystemClass* super = new SystemClass;
     super->setCopy(*this);
     return super;
@@ -163,7 +177,8 @@ SuperListItem* SystemClass::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemClass::setCopy(const SuperListItem &super) {
+void SystemClass::setCopy(const SuperListItem &super)
+{
     const SystemClass *sys;
     SystemStatisticProgression *progression;
     SystemClassSkill *classSkill;
@@ -171,9 +186,7 @@ void SystemClass::setCopy(const SuperListItem &super) {
     QStandardItem *item;
     QHash<int, int>::const_iterator it;
     int i, l;
-
     SystemLang::setCopy(super);
-
     sys = reinterpret_cast<const SystemClass *>(&super);
     m_initialLevel = sys->m_initialLevel;
     m_maxLevel = sys->m_maxLevel;
@@ -186,35 +199,17 @@ void SystemClass::setCopy(const SuperListItem &super) {
         m_expTable.insert(it.key(), it.value());
     }
 
+    // Characteristics
+    SuperListItem::deleteModel(m_characteristics, false);
+    SuperListItem::copy(m_characteristics, sys->m_characteristics);
+
     // Skills
     SuperListItem::deleteModel(m_skills, false);
-    for (i = 0, l = sys->skills()->invisibleRootItem()->rowCount(); i < l - 1;
-         i++)
-    {
-        classSkill = new SystemClassSkill;
-        classSkill->setCopy(*reinterpret_cast<SystemClassSkill *>(sys->skills()
-            ->item(i)->data().value<quintptr>()));
-        row = classSkill->getModelRow();
-        m_skills->appendRow(row);
-    }
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_skills->appendRow(item);
+    SuperListItem::copy(m_skills, sys->m_skills);
 
     // Statistics progression
     SuperListItem::deleteModel(m_statisticsProgression, false);
-    for (i = 0, l = sys->statisticsProgression()->invisibleRootItem()
-         ->rowCount(); i < l - 1; i++)
-    {
-        progression = new SystemStatisticProgression;
-        progression->setCopy(*reinterpret_cast<SystemStatisticProgression *>(sys
-            ->statisticsProgression()->item(i)->data().value<quintptr>()));
-        row = progression->getModelRow();
-        m_statisticsProgression->appendRow(row);
-    }
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_statisticsProgression->appendRow(item);
+    SuperListItem::copy(m_statisticsProgression, sys->m_statisticsProgression);
     this->initializeHeaders();
 }
 
@@ -256,9 +251,13 @@ void SystemClass::read(const QJsonObject &json){
         m_expTable[level] = value;
     }
 
+    // Characteristics
+    SuperListItem::readTree(m_characteristics, new SystemCharacteristic,
+        json, JSON_CHARACTERISTICS);
+
     // Statistics
-    SuperListItem::readTree(m_statisticsProgression, new
-        SystemStatisticProgression, json, jsonStats);
+    SuperListItem::readTree(m_statisticsProgression, new SystemStatisticProgression,
+        json, jsonStats);
 
     // Skills
     SuperListItem::readTree(m_skills, new SystemClassSkill, json, jsonSkills);
@@ -300,6 +299,9 @@ void SystemClass::write(QJsonObject &json) const{
     if (!tab.isEmpty()) {
         json[jsonExpTable] = tab;
     }
+
+    // Characteristics
+    SuperListItem::writeTree(m_characteristics, json, JSON_CHARACTERISTICS);
 
     // Statistics
     SuperListItem::writeTree(m_statisticsProgression, json, jsonStats);

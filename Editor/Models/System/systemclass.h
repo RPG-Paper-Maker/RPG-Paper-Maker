@@ -32,15 +32,15 @@ public:
     static const QString jsonExpBase;
     static const QString jsonExpInflation;
     static const QString jsonExpTable;
+    static const QString JSON_CHARACTERISTICS;
     static const QString jsonStats;
     static const QString jsonSkills;
 
     SystemClass();
     SystemClass(int i, LangsTranslation *names, int initialLevel, int maxLevel,
-        int expBase, int expInflation);
-    SystemClass(int i, LangsTranslation *names, int initialLevel, int maxLevel,
-        int expBase, int expInflation, QStandardItemModel *stat,
-        QStandardItemModel *s);
+        int expBase, int expInflation, QStandardItemModel *characteristics = new
+        QStandardItemModel, QStandardItemModel *stats = new QStandardItemModel,
+        QStandardItemModel *skills = new QStandardItemModel);
     virtual ~SystemClass();
     int initialLevel() const;
     void setInitialLevel(int i, SystemClass *originalClass = nullptr);
@@ -51,6 +51,7 @@ public:
     int expInflation() const;
     void setExpInflation(int i, SystemClass *originalClass = nullptr);
     QHash<int, int> * expTable();
+    QStandardItemModel * characteristics() const;
     QStandardItemModel* statisticsProgression() const;
     QStandardItemModel* skills() const;
 
@@ -71,8 +72,9 @@ protected:
     int m_expBase;
     int m_expInflation;
     QHash<int, int> m_expTable;
-    QStandardItemModel* m_statisticsProgression;
-    QStandardItemModel* m_skills;
+    QStandardItemModel *m_characteristics;
+    QStandardItemModel *m_statisticsProgression;
+    QStandardItemModel *m_skills;
 };
 
 Q_DECLARE_METATYPE(SystemClass)
