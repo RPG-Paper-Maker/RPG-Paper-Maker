@@ -12,6 +12,7 @@
 #include "mapproperties.h"
 #include "rpm.h"
 #include "common.h"
+#include "systemrandombattle.h"
 
 const QString MapProperties::JSON_TILESET_ID = "tileset";
 const QString MapProperties::JSON_LENGTH = "l";
@@ -27,9 +28,15 @@ const QString MapProperties::JSON_IS_SKY_IMAGE = "isi";
 const QString MapProperties::JSON_SKY_PICTURE_ID = "ipid";
 const QString MapProperties::JSON_SKY_BOX_ID = "sbid";
 const QString MapProperties::JSON_STARTUP_OBJECT = "so";
+const QString MapProperties::JSON_RANDOM_BATTLE_MAP_ID = "randomBattleMapID";
+const QString MapProperties::JSON_RANDOM_BATTLES = "battles";
+const QString MapProperties::JSON_RANDOM_BATTLE_NUMBER_STEP = "randomBattleNumberStep";
+const QString MapProperties::JSON_RANDOM_BATTLE_VARIATION = "randomBattleVariation";
 const QString MapProperties::JSON_OVERFLOW_SPRITES = "ofsprites";
 const QString MapProperties::JSON_OVERFLOW_OBJECTS3D = "of3d";
 const QString MapProperties::JSON_OVERFLOW_MOUNTAINS = "ofmoun";
+const int MapProperties::DEFAULT_RANDOM_BATTLE_NUMBER_STEP = 50;
+const int MapProperties::DEFAULT_RANDOM_BATTLE_VARIATION = 20;
 
 // -------------------------------------------------------
 //
@@ -44,7 +51,9 @@ MapProperties::MapProperties() :
 
 }
 
-MapProperties::MapProperties(QString path) {
+MapProperties::MapProperties(QString path) :
+    MapProperties()
+{
     RPM::readJSON(Common::pathCombine(path, RPM::FILE_MAP_INFOS), *this);
 }
 
@@ -64,7 +73,11 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w, int h
     m_isSkyImage(false),
     m_skyPictureID(new SuperListItem(-1)),
     m_skyboxID(new PrimitiveValue(PrimitiveValueKind::DataBase, 1)),
-    m_startupObject(new SystemCommonObject)
+    m_startupObject(new SystemCommonObject),
+    m_randomBattleMapID(PrimitiveValue::createDefaultDataBaseValue()),
+    m_randomBattles(new QStandardItemModel),
+    m_randomBattleNumberStep(new PrimitiveValue(DEFAULT_RANDOM_BATTLE_NUMBER_STEP)),
+    m_randomBattleVariation(new PrimitiveValue(DEFAULT_RANDOM_BATTLE_VARIATION))
 {
     m_cameraProperties->setModelDataBase(RPM::get()->project()->gameDatas()
         ->systemDatas()->modelcameraProperties());
@@ -73,6 +86,9 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w, int h
     m_skyboxID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->systemDatas()->modelSkyBoxes());
     m_startupObject->setDefaultStartupObject();
+    m_randomBattleMapID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelBattleMaps());
+    this->initializeHeaders();
 }
 
 MapProperties::~MapProperties() {
@@ -86,6 +102,10 @@ MapProperties::~MapProperties() {
     delete m_skyPictureID;
     delete m_skyboxID;
     delete m_startupObject;
+    delete m_randomBattleMapID;
+    SuperListItem::deleteModel(m_randomBattles);
+    delete m_randomBattleNumberStep;
+    delete m_randomBattleVariation;
 }
 
 SystemTileset * MapProperties::tileset() const {
@@ -192,14 +212,45 @@ SystemCommonObject * MapProperties::startupObject() const {
     return m_startupObject;
 }
 
+PrimitiveValue * MapProperties::randomBattleMapID() const
+{
+    return m_randomBattleMapID;
+}
+
+QStandardItemModel * MapProperties::randomBattles() const
+{
+    return m_randomBattles;
+}
+
+PrimitiveValue * MapProperties::randomBattleNumberStep() const
+{
+    return m_randomBattleNumberStep;
+}
+
+PrimitiveValue * MapProperties::randomBattleVariation() const
+{
+    return m_randomBattleVariation;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
 
-QString MapProperties::realName() const {
+QString MapProperties::realName() const
+{
     return Map::generateMapName(this->id());
+}
+
+// -------------------------------------------------------
+
+void MapProperties::initializeHeaders()
+{
+    m_randomBattles->setHorizontalHeaderLabels(QStringList({RPM
+        ::translate(Translations::TROOP), /*RPM::translate(Translations
+        ::TERRAIN)*/ "Terrain", RPM::translate(Translations::PRIORITY), RPM
+        ::translate(Translations::PROBABILITY)}));
 }
 
 // -------------------------------------------------------
@@ -341,7 +392,6 @@ void MapProperties::setCopy(const SuperListItem &super) {
     QSet<Position>::iterator j;
     QSet<Position> *set, *superSet;
     const MapProperties *properties;
-
     properties = reinterpret_cast<const MapProperties *>(&super);
     SystemLang::setCopy(*properties);
     m_length = properties->m_length;
@@ -355,6 +405,11 @@ void MapProperties::setCopy(const SuperListItem &super) {
     m_isSkyImage = properties->m_isSkyImage;
     m_skyPictureID->setId(properties->m_skyPictureID->id());
     m_skyboxID->setCopy(*properties->m_skyboxID);
+    m_randomBattleMapID->setCopy(*properties->m_randomBattleMapID);
+    SuperListItem::deleteModel(m_randomBattles, false);
+    SuperListItem::copy(m_randomBattles, properties->m_randomBattles);
+    m_randomBattleNumberStep->setCopy(*properties->m_randomBattleNumberStep);
+    m_randomBattleVariation->setCopy(*properties->m_randomBattleVariation);
     this->clearOverflowSprites();
     for (i = properties->m_outOverflowSprites.begin(); i != properties
          ->m_outOverflowSprites.end(); i++)
@@ -388,6 +443,7 @@ void MapProperties::setCopy(const SuperListItem &super) {
         }
         m_outOverflowMountains.insert(i.key(), set);
     }
+    this->initializeHeaders();
 }
 
 // -------------------------------------------------------
@@ -659,6 +715,10 @@ void MapProperties::read(const QJsonObject &json){
     SystemLang::read(json);
     QJsonObject obj;
 
+    // Clear
+    SuperListItem::deleteModel(m_randomBattles, false);
+    this->initializeHeaders();
+
     setTilesetID(json[JSON_TILESET_ID].toInt());
     m_length = json[JSON_LENGTH].toInt();
     m_width = json[JSON_WIDTH].toInt();
@@ -666,31 +726,22 @@ void MapProperties::read(const QJsonObject &json){
     m_depth = json[JSON_DEPTH].toInt();
 
     // Musics
-    m_music = new SystemPlaySong(-1, SongKind::Music);
     m_music->read(json[JSON_MUSIC].toObject());
-    m_backgroundSound = new SystemPlaySong(-1, SongKind::BackgroundSound);
     m_backgroundSound->read(json[JSON_BACKGROUND_SOUND].toObject());
 
     // Camera properties
-    m_cameraProperties = new PrimitiveValue(PrimitiveValueKind::DataBase, 1);
     if (json.contains(JSON_CAMERA_PROPERTIES)) {
         m_cameraProperties->read(json[JSON_CAMERA_PROPERTIES].toObject());
     }
-    m_cameraProperties->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->systemDatas()->modelcameraProperties());
 
     // Sky
     m_isSkyColor = json.contains(JSON_IS_SKY_COLOR) ? json[JSON_IS_SKY_COLOR]
         .toBool() : true;
-    m_skyColorID = new PrimitiveValue(PrimitiveValueKind::DataBase, 1);
     if (m_isSkyColor) {
         m_skyColorID->read(json[JSON_SKY_COLOR_ID].toObject());
     }
-    m_skyColorID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->systemDatas()->modelColors());
     m_isSkyImage = json.contains(JSON_IS_SKY_IMAGE) ? json[JSON_IS_SKY_IMAGE]
         .toBool() : false;
-    m_skyPictureID = new SuperListItem(-1);
     if (m_isSkyImage) {
         m_skyPictureID->setId(json[JSON_SKY_PICTURE_ID].toInt());
     }
@@ -701,6 +752,23 @@ void MapProperties::read(const QJsonObject &json){
     }
     m_skyboxID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->systemDatas()->modelSkyBoxes());
+
+    // Random battles
+    if (json.contains(JSON_RANDOM_BATTLE_MAP_ID))
+    {
+        m_randomBattleMapID->read(json[JSON_RANDOM_BATTLE_MAP_ID].toObject());
+    }
+    RPM::get()->project()->setCurrentMapProperties(this);
+    SuperListItem::readTree(m_randomBattles, new SystemRandomBattle, json,
+        JSON_RANDOM_BATTLES);
+    if (json.contains(JSON_RANDOM_BATTLE_NUMBER_STEP))
+    {
+        m_randomBattleNumberStep->read(json[JSON_RANDOM_BATTLE_NUMBER_STEP].toObject());
+    }
+    if (json.contains(JSON_RANDOM_BATTLE_VARIATION))
+    {
+        m_randomBattleVariation->read(json[JSON_RANDOM_BATTLE_VARIATION].toObject());
+    }
 
     // Invisible object
     m_startupObject = new SystemCommonObject;
@@ -757,6 +825,27 @@ void MapProperties::write(QJsonObject &json) const {
         obj = QJsonObject();
         m_skyboxID->write(obj);
         json[JSON_SKY_BOX_ID] = obj;
+    }
+
+    // Random battles
+    if (!m_randomBattleMapID->isDefaultDataBaseValue())
+    {
+        obj = QJsonObject();
+        m_randomBattleMapID->write(obj);
+        json[JSON_RANDOM_BATTLE_MAP_ID] = obj;
+    }
+    SuperListItem::writeTree(m_randomBattles, json, JSON_RANDOM_BATTLES);
+    if (!m_randomBattleNumberStep->isDefaultNumberValue(DEFAULT_RANDOM_BATTLE_NUMBER_STEP))
+    {
+        obj = QJsonObject();
+        m_randomBattleNumberStep->write(obj);
+        json[JSON_RANDOM_BATTLE_NUMBER_STEP] = obj;
+    }
+    if (!m_randomBattleVariation->isDefaultNumberValue(DEFAULT_RANDOM_BATTLE_VARIATION))
+    {
+        obj = QJsonObject();
+        m_randomBattleVariation->write(obj);
+        json[JSON_RANDOM_BATTLE_VARIATION] = obj;
     }
 
     // Invisible object

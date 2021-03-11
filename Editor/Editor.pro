@@ -155,6 +155,7 @@ HEADERS += \
     Models/System/systempluginparameter.h \
     Models/System/systemprimitive.h \
     Models/System/systemproperty.h \
+    Models/System/systemrandombattle.h \
     Models/System/systemresource.h \
     Models/System/systemscript.h \
     Models/System/systemselectstatistic.h \
@@ -543,6 +544,7 @@ SOURCES += \
     Models/System/systempluginparameter.cpp \
     Models/System/systemprimitive.cpp \
     Models/System/systemproperty.cpp \
+    Models/System/systemrandombattle.cpp \
     Models/System/systemresource.cpp \
     Models/System/systemscript.cpp \
     Models/System/systemselectstatistic.cpp \

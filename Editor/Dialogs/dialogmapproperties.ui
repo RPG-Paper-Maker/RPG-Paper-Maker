@@ -599,7 +599,7 @@
                 <item row="0" column="0">
                  <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
                   <item>
-                   <widget class="QTreeView" name="treeViewRandomBattles"/>
+                   <widget class="WidgetSuperTree" name="treeViewRandomBattles"/>
                   </item>
                   <item>
                    <layout class="QGridLayout" name="gridLayout">
@@ -721,6 +721,11 @@
    <extends>QWidget</extends>
    <header>widgetpicture.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

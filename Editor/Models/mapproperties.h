@@ -46,9 +46,15 @@ public:
     static const QString JSON_SKY_PICTURE_ID;
     static const QString JSON_SKY_BOX_ID;
     static const QString JSON_STARTUP_OBJECT;
+    static const QString JSON_RANDOM_BATTLE_MAP_ID;
+    static const QString JSON_RANDOM_BATTLES;
+    static const QString JSON_RANDOM_BATTLE_NUMBER_STEP;
+    static const QString JSON_RANDOM_BATTLE_VARIATION;
     static const QString JSON_OVERFLOW_SPRITES;
     static const QString JSON_OVERFLOW_OBJECTS3D;
     static const QString JSON_OVERFLOW_MOUNTAINS;
+    static const int DEFAULT_RANDOM_BATTLE_NUMBER_STEP;
+    static const int DEFAULT_RANDOM_BATTLE_VARIATION;
 
     MapProperties();
     MapProperties(QString path);
@@ -80,8 +86,13 @@ public:
     SuperListItem * skyPictureID() const;
     PrimitiveValue * skyboxID() const;
     SystemCommonObject * startupObject() const;
+    PrimitiveValue * randomBattleMapID() const;
+    QStandardItemModel * randomBattles() const;
+    PrimitiveValue * randomBattleNumberStep() const;
+    PrimitiveValue * randomBattleVariation() const;
 
     QString realName() const;
+    void initializeHeaders();
     void clearOverflowSprites();
     void clearOverflowObjects3D();
     void clearOverflowMountains();
@@ -131,6 +142,10 @@ protected:
     SuperListItem *m_skyPictureID;
     PrimitiveValue *m_skyboxID;
     SystemCommonObject *m_startupObject;
+    PrimitiveValue *m_randomBattleMapID;
+    QStandardItemModel *m_randomBattles;
+    PrimitiveValue *m_randomBattleNumberStep;
+    PrimitiveValue *m_randomBattleVariation;
     QHash<Portion, QSet<Position> *> m_outOverflowSprites;
     QHash<Portion, QSet<Position> *> m_outOverflowObjects3D;
     QHash<Portion, QSet<Position> *> m_outOverflowMountains;

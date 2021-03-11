@@ -50,6 +50,8 @@ public:
     void setPathCurrentProjectApp(QString s);
     Map* currentMap(bool force = false) const;
     void setCurrentMap(Map* m);
+    MapProperties * currentMapProperties() const;
+    void setCurrentMapProperties(MapProperties *currentMapProperties);
     SystemCommonObject * currentObject() const;
     void setCurrentObject(SystemCommonObject *object);
     QStandardItemModel * currentParameters() const;
@@ -123,6 +125,7 @@ private:
     QString p_pathCurrentProjectApp;
     Map* p_currentMap;
     Map* p_currentMapConfig;
+    MapProperties *m_currentMapProperties;
     SystemCommonObject *m_currentObject;
     QStandardItemModel *m_currentParameters;
     GameDatas* p_gameDatas;

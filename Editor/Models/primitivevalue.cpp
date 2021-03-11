@@ -373,8 +373,8 @@ bool PrimitiveValue::isDefaultDataBaseValue() const {
 
 // -------------------------------------------------------
 
-bool PrimitiveValue::isDefaultNumberValue() const {
-    return m_kind == PrimitiveValueKind::Number && m_numberValue == 0;
+bool PrimitiveValue::isDefaultNumberValue(int value) const {
+    return m_kind == PrimitiveValueKind::Number && m_numberValue == value;
 }
 
 // -------------------------------------------------------

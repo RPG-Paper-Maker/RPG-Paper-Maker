@@ -12,6 +12,7 @@
 #include "dialogmapproperties.h"
 #include "ui_dialogmapproperties.h"
 #include "rpm.h"
+#include "systemrandombattle.h"
 
 // -------------------------------------------------------
 //
@@ -93,10 +94,17 @@ void DialogMapProperties::initialize() {
         .skyboxID());
 
     // Random battles
-    ui->panelPrimitiveBattleMapID->initializeDataBaseCommandId(RPM::get()
-        ->project()->gameDatas()->battleSystemDatas()->modelBattleMaps());
-    ui->panelPrimitiveNumberSteps->initializeNumber();
-    ui->panelPrimitiveVariationBattle->initializeNumber();
+    connect(ui->treeViewRandomBattles, SIGNAL(needsUpdateJson(SuperListItem *)),
+        this, SLOT(on_treeViewRandomBattlesNeedsUpdateJson(SuperListItem *)));
+    ui->panelPrimitiveBattleMapID->initializeDataBaseAndUpdate(m_mapProperties
+        .randomBattleMapID());
+    ui->treeViewRandomBattles->initializeNewItemInstance(new SystemRandomBattle);
+    ui->treeViewRandomBattles->initializeModel(m_mapProperties.randomBattles());
+    ui->panelPrimitiveNumberSteps->initializeNumberAndUpdate(m_mapProperties
+        .randomBattleNumberStep());
+    ui->panelPrimitiveVariationBattle->initializeNumberAndUpdate(m_mapProperties
+        .randomBattleVariation());
+    this->on_treeViewRandomBattlesNeedsUpdateJson(nullptr);
 
     // Invisible object
     ui->panelObject->initializeList(RPM::get()->project()->gameDatas()
@@ -195,4 +203,11 @@ void DialogMapProperties::on_radioButtonSkybox_toggled(bool checked)
     m_mapProperties.setIsSkyColor(ui->radioButtonColor->isChecked());
     m_mapProperties.setIsSkyImage(ui->radioButtonPicture->isChecked());
     ui->panelPrimitiveValueSkyBoxID->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogMapProperties::on_treeViewRandomBattlesNeedsUpdateJson(SuperListItem *)
+{
+    ui->treeViewRandomBattles->updateAbsoluteAllNodesString();
 }

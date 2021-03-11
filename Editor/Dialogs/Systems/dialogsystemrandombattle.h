@@ -13,6 +13,15 @@
 #define DIALOGSYSTEMRANDOMBATTLE_H
 
 #include <QDialog>
+#include "systemrandombattle.h"
+
+// -------------------------------------------------------
+//
+//  CLASS DialogSystemRandomBattle
+//
+//  A dialog used for editing the model of a system random battle.
+//
+// -------------------------------------------------------
 
 namespace Ui {
 class DialogSystemRandomBattle;
@@ -23,11 +32,19 @@ class DialogSystemRandomBattle : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogSystemRandomBattle(QWidget *parent = nullptr);
+    explicit DialogSystemRandomBattle(SystemRandomBattle &randomBattle, QWidget
+        *parent = nullptr);
     ~DialogSystemRandomBattle();
+
+    void initialize();
+    void translate();
 
 private:
     Ui::DialogSystemRandomBattle *ui;
+    SystemRandomBattle &m_randomBattle;
+
+public slots:
+    void on_priorityUpdated(int p);
 };
 
 #endif // DIALOGSYSTEMRANDOMBATTLE_H

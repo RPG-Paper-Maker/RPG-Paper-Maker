@@ -75,7 +75,7 @@ public:
     bool isFixNumberValue() const;
     void labelTab(QString& str) const;
     bool isDefaultDataBaseValue() const;
-    bool isDefaultNumberValue() const;
+    bool isDefaultNumberValue(int value = 0) const;
     bool isDefaultNumberDoubleValue() const;
     bool isDefaultMessageValue() const;
     void initializeCommandParameter(const EventCommand *command, int& i, bool

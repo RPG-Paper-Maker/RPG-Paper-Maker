@@ -94,6 +94,16 @@ void Project::setCurrentMap(Map* m) {
         p_currentMap = m;
 }
 
+MapProperties * Project::currentMapProperties() const
+{
+    return m_currentMapProperties;
+}
+
+void Project::setCurrentMapProperties(MapProperties *currentMapProperties)
+{
+    m_currentMapProperties = currentMapProperties;
+}
+
 SystemCommonObject * Project::currentObject() const {
     return m_currentObject;
 }
