@@ -11,6 +11,7 @@
 
 #include "dialogsystemrandombattle.h"
 #include "ui_dialogsystemrandombattle.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -56,7 +57,15 @@ void DialogSystemRandomBattle::initialize()
 
 void DialogSystemRandomBattle::translate()
 {
-
+    this->setWindowTitle(RPM::translate(Translations::SET_RANDOM_BATTLE) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelTroopID->setText(RPM::translate(Translations::TROOP_ID) + RPM::COLON);
+    ui->labelPriority->setText(RPM::translate(Translations::PRIORITY) + RPM::COLON);
+    ui->labelProbability->setText(RPM::translate(Translations::PROBABILITY) + RPM::COLON);
+    ui->groupBox->setTitle(RPM::translate(Translations::TERRAIN));
+    ui->radioButtonEntireMap->setText(RPM::translate(Translations::ENTIRE_MAP));
+    ui->radioButtonTerrain->setText(RPM::translate(Translations::TERRAIN));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

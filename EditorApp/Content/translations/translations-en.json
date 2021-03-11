@@ -1223,5 +1223,11 @@
     "fonts.manager": "Fonts manager",
     "fonts.manager.tool": "Fonts",
     "deleting.font": "Deleting font",
-    "your.trying.remove.br.font": "You are trying to remove a BR font"
+    "your.trying.remove.br.font": "You are trying to remove a BR font",
+    "battle.map.id": "Battle map ID",
+    "random.battles": "Random battles",
+    "number.of.steps.after.next.battle": "Number of steps after next battle",
+    "set.random.battle": "Set random battle",
+    "terrain": "Terrain",
+    "entire.map": "Entire map"
 }

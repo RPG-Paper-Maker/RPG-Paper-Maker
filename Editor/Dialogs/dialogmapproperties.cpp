@@ -103,7 +103,7 @@ void DialogMapProperties::initialize() {
     ui->panelPrimitiveNumberSteps->initializeNumberAndUpdate(m_mapProperties
         .randomBattleNumberStep());
     ui->panelPrimitiveVariationBattle->initializeNumberAndUpdate(m_mapProperties
-        .randomBattleVariation());
+        .randomBattleVariance());
     this->on_treeViewRandomBattlesNeedsUpdateJson(nullptr);
 
     // Invisible object
@@ -141,6 +141,14 @@ void DialogMapProperties::translate() {
         ::COLON);
     ui->groupBoxSky->setTitle(RPM::translate(Translations::SKY));
     ui->groupBoxSizes->setTitle(RPM::translate(Translations::SIZE));
+    ui->labelBattleMapID->setText(RPM::translate(Translations::BATTLE_MAP_ID) +
+        RPM::COLON);
+    ui->groupBoxRandomBattle->setTitle(RPM::translate(Translations::RANDOM_BATTLES));
+    ui->labelNumberOfStepsAfter->setText(RPM::translate(Translations
+        ::NUMBER_OF_STEPS_AFTER_NEXT_BATTLE) + RPM::COLON);
+    ui->labelWithVariationInPercent->setText(RPM::translate(Translations
+        ::VARIANCE) + RPM::SPACE + RPM::PARENTHESIS_LEFT + "%" + RPM
+        ::PARENTHESIS_RIGHT + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

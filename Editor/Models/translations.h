@@ -1257,6 +1257,12 @@ public:
     static const QString FONTS_MANAGER_TOOL;
     static const QString DELETING_FONT;
     static const QString YOUR_TRYING_REMOVE_BR_FONT;
+    static const QString BATTLE_MAP_ID;
+    static const QString RANDOM_BATTLES;
+    static const QString NUMBER_OF_STEPS_AFTER_NEXT_BATTLE;
+    static const QString SET_RANDOM_BATTLE;
+    static const QString TERRAIN;
+    static const QString ENTIRE_MAP;
 
     Translations();
     virtual ~Translations();

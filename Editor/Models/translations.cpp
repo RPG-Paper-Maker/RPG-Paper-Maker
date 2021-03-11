@@ -1244,6 +1244,12 @@ const QString Translations::FONTS_MANAGER = "fonts.manager";
 const QString Translations::FONTS_MANAGER_TOOL = "fonts.manager.tool";
 const QString Translations::DELETING_FONT = "deleting.font";
 const QString Translations::YOUR_TRYING_REMOVE_BR_FONT = "your.trying.remove.br.font";
+const QString Translations::BATTLE_MAP_ID = "battle.map.id";
+const QString Translations::RANDOM_BATTLES = "random.battles";
+const QString Translations::NUMBER_OF_STEPS_AFTER_NEXT_BATTLE = "number.of.steps.after.next.battle";
+const QString Translations::SET_RANDOM_BATTLE = "set.random.battle";
+const QString Translations::TERRAIN = "terrain";
+const QString Translations::ENTIRE_MAP = "entire.map";
 
 // -------------------------------------------------------
 //

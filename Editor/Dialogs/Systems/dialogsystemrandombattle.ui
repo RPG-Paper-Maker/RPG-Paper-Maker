@@ -186,7 +186,7 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1">
               <item>
-               <widget class="QRadioButton" name="radioButtonEntireMap_2">
+               <widget class="QRadioButton" name="radioButtonTerrain">
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
@@ -211,7 +211,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QTreeView" name="treeView">
+             <widget class="QTreeView" name="treeViewTerrain">
               <property name="enabled">
                <bool>false</bool>
               </property>

@@ -49,12 +49,12 @@ public:
     static const QString JSON_RANDOM_BATTLE_MAP_ID;
     static const QString JSON_RANDOM_BATTLES;
     static const QString JSON_RANDOM_BATTLE_NUMBER_STEP;
-    static const QString JSON_RANDOM_BATTLE_VARIATION;
+    static const QString JSON_RANDOM_BATTLE_VARIANCE;
     static const QString JSON_OVERFLOW_SPRITES;
     static const QString JSON_OVERFLOW_OBJECTS3D;
     static const QString JSON_OVERFLOW_MOUNTAINS;
     static const int DEFAULT_RANDOM_BATTLE_NUMBER_STEP;
-    static const int DEFAULT_RANDOM_BATTLE_VARIATION;
+    static const int DEFAULT_RANDOM_BATTLE_VARIANCE;
 
     MapProperties();
     MapProperties(QString path);
@@ -89,7 +89,7 @@ public:
     PrimitiveValue * randomBattleMapID() const;
     QStandardItemModel * randomBattles() const;
     PrimitiveValue * randomBattleNumberStep() const;
-    PrimitiveValue * randomBattleVariation() const;
+    PrimitiveValue * randomBattleVariance() const;
 
     QString realName() const;
     void initializeHeaders();
@@ -145,7 +145,7 @@ protected:
     PrimitiveValue *m_randomBattleMapID;
     QStandardItemModel *m_randomBattles;
     PrimitiveValue *m_randomBattleNumberStep;
-    PrimitiveValue *m_randomBattleVariation;
+    PrimitiveValue *m_randomBattleVariance;
     QHash<Portion, QSet<Position> *> m_outOverflowSprites;
     QHash<Portion, QSet<Position> *> m_outOverflowObjects3D;
     QHash<Portion, QSet<Position> *> m_outOverflowMountains;

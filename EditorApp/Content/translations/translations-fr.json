@@ -1025,7 +1025,7 @@
     "end.loop": "Fin boucle",
     "break.loop": "Stopper la boucle",
     "and.stock.in.variable": "et stocker dans la variable",
-    "troop": "Groupe de monstre",
+    "troop": "Groupe de monstres",
     "with.battle.map": "Avec la carte de combat",
     "fade": "Fondu",
     "wait.end": "Attendre la fin",
@@ -1223,5 +1223,11 @@
     "fonts.manager": "Gestionnaire de fonts",
     "fonts.manager.tool": "Fonts",
     "deleting.font": "Suppression de la font",
-    "your.trying.remove.br.font": "Vous êtes en train de supprimer une font du BR"
+    "your.trying.remove.br.font": "Vous êtes en train de supprimer une font du BR",
+    "battle.map.id": "Carte de combat d'ID",
+    "random.battles": "Combats aléatoires",
+    "number.of.steps.after.next.battle": "Nombre de pas après le combat suivant",
+    "set.random.battle": "Modifier le combat aléatoire",
+    "terrain": "Terrain",
+    "entire.map": "La carte entière"
 }

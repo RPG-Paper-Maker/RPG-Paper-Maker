@@ -29,14 +29,14 @@ const QString MapProperties::JSON_SKY_PICTURE_ID = "ipid";
 const QString MapProperties::JSON_SKY_BOX_ID = "sbid";
 const QString MapProperties::JSON_STARTUP_OBJECT = "so";
 const QString MapProperties::JSON_RANDOM_BATTLE_MAP_ID = "randomBattleMapID";
-const QString MapProperties::JSON_RANDOM_BATTLES = "battles";
+const QString MapProperties::JSON_RANDOM_BATTLES = "randomBattles";
 const QString MapProperties::JSON_RANDOM_BATTLE_NUMBER_STEP = "randomBattleNumberStep";
-const QString MapProperties::JSON_RANDOM_BATTLE_VARIATION = "randomBattleVariation";
+const QString MapProperties::JSON_RANDOM_BATTLE_VARIANCE = "randomBattleVariance";
 const QString MapProperties::JSON_OVERFLOW_SPRITES = "ofsprites";
 const QString MapProperties::JSON_OVERFLOW_OBJECTS3D = "of3d";
 const QString MapProperties::JSON_OVERFLOW_MOUNTAINS = "ofmoun";
-const int MapProperties::DEFAULT_RANDOM_BATTLE_NUMBER_STEP = 50;
-const int MapProperties::DEFAULT_RANDOM_BATTLE_VARIATION = 20;
+const int MapProperties::DEFAULT_RANDOM_BATTLE_NUMBER_STEP = 300;
+const int MapProperties::DEFAULT_RANDOM_BATTLE_VARIANCE = 20;
 
 // -------------------------------------------------------
 //
@@ -77,7 +77,7 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w, int h
     m_randomBattleMapID(PrimitiveValue::createDefaultDataBaseValue()),
     m_randomBattles(new QStandardItemModel),
     m_randomBattleNumberStep(new PrimitiveValue(DEFAULT_RANDOM_BATTLE_NUMBER_STEP)),
-    m_randomBattleVariation(new PrimitiveValue(DEFAULT_RANDOM_BATTLE_VARIATION))
+    m_randomBattleVariance(new PrimitiveValue(DEFAULT_RANDOM_BATTLE_VARIANCE))
 {
     m_cameraProperties->setModelDataBase(RPM::get()->project()->gameDatas()
         ->systemDatas()->modelcameraProperties());
@@ -105,7 +105,7 @@ MapProperties::~MapProperties() {
     delete m_randomBattleMapID;
     SuperListItem::deleteModel(m_randomBattles);
     delete m_randomBattleNumberStep;
-    delete m_randomBattleVariation;
+    delete m_randomBattleVariance;
 }
 
 SystemTileset * MapProperties::tileset() const {
@@ -227,9 +227,9 @@ PrimitiveValue * MapProperties::randomBattleNumberStep() const
     return m_randomBattleNumberStep;
 }
 
-PrimitiveValue * MapProperties::randomBattleVariation() const
+PrimitiveValue * MapProperties::randomBattleVariance() const
 {
-    return m_randomBattleVariation;
+    return m_randomBattleVariance;
 }
 
 // -------------------------------------------------------
@@ -248,9 +248,9 @@ QString MapProperties::realName() const
 void MapProperties::initializeHeaders()
 {
     m_randomBattles->setHorizontalHeaderLabels(QStringList({RPM
-        ::translate(Translations::TROOP), /*RPM::translate(Translations
-        ::TERRAIN)*/ "Terrain", RPM::translate(Translations::PRIORITY), RPM
-        ::translate(Translations::PROBABILITY)}));
+        ::translate(Translations::TROOP), RPM::translate(Translations::TERRAIN),
+        RPM::translate(Translations::PRIORITY), RPM::translate(Translations
+        ::PROBABILITY)}));
 }
 
 // -------------------------------------------------------
@@ -409,7 +409,7 @@ void MapProperties::setCopy(const SuperListItem &super) {
     SuperListItem::deleteModel(m_randomBattles, false);
     SuperListItem::copy(m_randomBattles, properties->m_randomBattles);
     m_randomBattleNumberStep->setCopy(*properties->m_randomBattleNumberStep);
-    m_randomBattleVariation->setCopy(*properties->m_randomBattleVariation);
+    m_randomBattleVariance->setCopy(*properties->m_randomBattleVariance);
     this->clearOverflowSprites();
     for (i = properties->m_outOverflowSprites.begin(); i != properties
          ->m_outOverflowSprites.end(); i++)
@@ -765,9 +765,9 @@ void MapProperties::read(const QJsonObject &json){
     {
         m_randomBattleNumberStep->read(json[JSON_RANDOM_BATTLE_NUMBER_STEP].toObject());
     }
-    if (json.contains(JSON_RANDOM_BATTLE_VARIATION))
+    if (json.contains(JSON_RANDOM_BATTLE_VARIANCE))
     {
-        m_randomBattleVariation->read(json[JSON_RANDOM_BATTLE_VARIATION].toObject());
+        m_randomBattleVariance->read(json[JSON_RANDOM_BATTLE_VARIANCE].toObject());
     }
 
     // Invisible object
@@ -841,11 +841,11 @@ void MapProperties::write(QJsonObject &json) const {
         m_randomBattleNumberStep->write(obj);
         json[JSON_RANDOM_BATTLE_NUMBER_STEP] = obj;
     }
-    if (!m_randomBattleVariation->isDefaultNumberValue(DEFAULT_RANDOM_BATTLE_VARIATION))
+    if (!m_randomBattleVariance->isDefaultNumberValue(DEFAULT_RANDOM_BATTLE_VARIANCE))
     {
         obj = QJsonObject();
-        m_randomBattleVariation->write(obj);
-        json[JSON_RANDOM_BATTLE_VARIATION] = obj;
+        m_randomBattleVariance->write(obj);
+        json[JSON_RANDOM_BATTLE_VARIANCE] = obj;
     }
 
     // Invisible object
