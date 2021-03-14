@@ -108,23 +108,31 @@ void DialogSystemCharacteristic::initialize() {
     ui->comboBoxUnit->setCurrentIndex(m_characteristic.unit() ? 0 : 1);
 
     // Character
-    ui->comboBoxEquipAllowForbid->setCurrentIndex(m_characteristic
-        .isAllowEquip() ? 0 : 1);
+    index = m_characteristic.isAllowEquip() ? 0 : 1;
+    ui->comboBoxEquipAllowForbid->addItem(RPM::translate(Translations::ALLOW));
+    ui->comboBoxEquipAllowForbid->addItem(RPM::translate(Translations::FORBID));
+    ui->comboBoxEquipAllowForbid->setCurrentIndex(index);
     ui->panelPrimitiveValueArmorKindID->hide();
-    ui->comboBoxEquipWeaponArmor->setCurrentIndex(m_characteristic
-        .isAllowEquipWeapon() ? 0 : 1);
+    index = m_characteristic.isAllowEquipWeapon() ? 0 : 1;
+    ui->comboBoxEquipWeaponArmor->addItem(RPM::translate(Translations::WEAPON));
+    ui->comboBoxEquipWeaponArmor->addItem(RPM::translate(Translations::ARMOR));
+    ui->comboBoxEquipWeaponArmor->setCurrentIndex(index);
     ui->panelPrimitiveValueWeaponKindID->initializeDataBaseAndUpdate(
         m_characteristic.equipWeaponTypeID());
     ui->panelPrimitiveValueArmorKindID->initializeDataBaseAndUpdate(
         m_characteristic.equipArmorTypeID());
-    ui->comboBoxEquipmentChange->setCurrentIndex(m_characteristic
-        .isAllowChangeEquipment() ? 0 : 1);
+    index = m_characteristic.isAllowChangeEquipment() ? 0 : 1;
+    ui->comboBoxEquipmentChange->addItem(RPM::translate(Translations::ALLOW));
+    ui->comboBoxEquipmentChange->addItem(RPM::translate(Translations::FORBID));
+    ui->comboBoxEquipmentChange->setCurrentIndex(index);
     ui->panelPrimitiveValueEquipmentChangeID->initializeDataBaseAndUpdate(
         m_characteristic.changeEquipmentID());
     ui->panelPrimitiveValueBeginEquipmentID->initializeDataBaseAndUpdate(
         m_characteristic.beginEquipmentID());
-    ui->comboBoxBeginWeaponArmor->setCurrentIndex(m_characteristic
-        .isBeginWeapon() ? 0 : 1);
+    index = m_characteristic.isBeginWeapon() ? 0 : 1;
+    ui->comboBoxBeginWeaponArmor->addItem(RPM::translate(Translations::WEAPON));
+    ui->comboBoxBeginWeaponArmor->addItem(RPM::translate(Translations::ARMOR));
+    ui->comboBoxBeginWeaponArmor->setCurrentIndex(index);
     m_characteristic.updateModelBeginWeaponArmor();
     ui->panelPrimitiveValueBeginWeaponArmorID->initializeDataBaseAndUpdate(
         m_characteristic.beginWeaponArmorID());
@@ -163,10 +171,17 @@ void DialogSystemCharacteristic::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::SET_CHARACTERISTIC) + RPM
         ::DOT_DOT_DOT);
-    ui->labelWith->setText(RPM::translate(Translations::BUFF) + RPM::COLON);
+    ui->labelWith->setText(RPM::translate(Translations::WITH));
     ui->tabWidget->setTabText(0, RPM::translate(Translations::BUFF));
     ui->tabWidget->setTabText(1, RPM::translate(Translations::CHARACTER_SPECIFIC));
     ui->tabWidget->setTabText(2, RPM::translate(Translations::OTHER));
+    ui->radioButtonBuff->setText(RPM::translate(Translations::BUFF) + RPM::COLON);
+    ui->radioButtonEquip->setText(RPM::translate(Translations::EQUIP) + RPM::COLON);
+    ui->radioButtonEquipmentChange->setText(RPM::translate(Translations
+        ::CHANGE_EQUIPMENT) + RPM::COLON);
+    ui->radioButtonBeginEquipment->setText(RPM::translate(Translations::BEGIN_EQUIPMENT)
+        + RPM::COLON);
+    ui->radioButtonScript->setText(RPM::translate(Translations::SCRIPT) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

@@ -49,8 +49,8 @@ public:
     static const QString JSON_CHARACTERISTICS;
 
     SystemCommonSkillItem();
-    SystemCommonSkillItem(int i, LangsTranslation *names, int pictureID, int
-        type, bool consumable, bool oneHand, LangsTranslation *description,
+    SystemCommonSkillItem(int i, QString name, int pictureID, int
+        type, bool consumable, bool oneHand, SystemLang *description,
         TargetKind targetKind, PrimitiveValue *targetConditionFormula,
         PrimitiveValue *conditionFormula, AvailableKind availableKind,
         SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
@@ -64,7 +64,7 @@ public:
     void setConsumable(bool b);
     bool oneHand() const;
     void setOneHand(bool b);
-    LangsTranslation * description() const;
+    SystemLang * description() const;
     TargetKind targetKind() const;
     void setTargetKind(TargetKind k);
     PrimitiveValue * targetConditionFormula() const;
@@ -90,7 +90,7 @@ protected:
     int m_type;
     bool m_consumable;
     bool m_oneHand;
-    LangsTranslation *m_description;
+    SystemLang *m_description;
     TargetKind m_targetKind;
     PrimitiveValue *m_targetConditionFormula;
     PrimitiveValue *m_conditionFormula;

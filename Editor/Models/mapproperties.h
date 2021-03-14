@@ -58,7 +58,7 @@ public:
 
     MapProperties();
     MapProperties(QString path);
-    MapProperties(int i, LangsTranslation *names, int l, int w, int h, int d,
+    MapProperties(int i, QString name, int l, int w, int h, int d,
         int idTileset);
     virtual ~MapProperties();
 

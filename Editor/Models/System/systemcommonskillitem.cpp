@@ -38,26 +38,25 @@ const QString SystemCommonSkillItem::JSON_CHARACTERISTICS = "car";
 // -------------------------------------------------------
 
 SystemCommonSkillItem::SystemCommonSkillItem() :
-    SystemCommonSkillItem(1, new LangsTranslation, -1, 1, false, true, new
-    LangsTranslation, TargetKind::None, new PrimitiveValue(PrimitiveValueKind
-    ::None), new PrimitiveValue(PrimitiveValueKind::None), AvailableKind::Never,
-    new SystemPlaySong(-1, SongKind::Sound), new PrimitiveValue(
-    PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind::None), new
-    QStandardItemModel, new QStandardItemModel, new QStandardItemModel, new
-    QStandardItemModel)
+    SystemCommonSkillItem(1, "", -1, 1, false, true, new SystemLang, TargetKind
+        ::None, new PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
+        PrimitiveValueKind::None), AvailableKind::Never, new SystemPlaySong(-1,
+        SongKind::Sound), new PrimitiveValue(PrimitiveValueKind::None), new
+        PrimitiveValue(PrimitiveValueKind::None), new QStandardItemModel, new
+        QStandardItemModel, new QStandardItemModel, new QStandardItemModel)
 {
 
 }
 
-SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
-    pictureID, int type, bool consumable, bool oneHand, LangsTranslation
+SystemCommonSkillItem::SystemCommonSkillItem(int i, QString name, int
+    pictureID, int type, bool consumable, bool oneHand, SystemLang
     *description, TargetKind targetKind, PrimitiveValue *targetConditionFormula,
     PrimitiveValue *conditionFormula, AvailableKind availableKind,
     SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
     *animationTargetID, QStandardItemModel *modelPrice, QStandardItemModel
     *modelCosts, QStandardItemModel*modelEffects, QStandardItemModel
     *modelCharacteristics) :
-    SystemIcon(i, names, pictureID),
+    SystemIcon(i, name, pictureID),
     m_type(type),
     m_consumable(consumable),
     m_oneHand(oneHand),
@@ -118,7 +117,7 @@ void SystemCommonSkillItem::setOneHand(bool b) {
     m_oneHand = b;
 }
 
-LangsTranslation * SystemCommonSkillItem::description() const {
+SystemLang *SystemCommonSkillItem::description() const {
     return m_description;
 }
 
@@ -250,9 +249,7 @@ void SystemCommonSkillItem::read(const QJsonObject &json){
     if (json.contains(JSON_ONE_HAND)) {
         m_oneHand = json[JSON_ONE_HAND].toBool();
     }
-    if (json.contains(JSON_DESCRIPTION)) {
-        m_description->read(json[JSON_DESCRIPTION].toObject());
-    }
+    m_description->read(json[JSON_DESCRIPTION].toObject());
     if (json.contains(JSON_TARGET_KIND)) {
         m_targetKind = static_cast<TargetKind>(json[JSON_TARGET_KIND].toInt());
     }
@@ -312,11 +309,9 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
     if (!m_oneHand) {
         json[JSON_ONE_HAND] = m_oneHand;
     }
-    if (!m_description->isEmpty()) {
-        obj = QJsonObject();
-        m_description->write(obj);
-        json[JSON_DESCRIPTION] = obj;
-    }
+    obj = QJsonObject();
+    m_description->write(obj);
+    json[JSON_DESCRIPTION] = obj;
     if (m_targetKind != TargetKind::None) {
         json[JSON_TARGET_KIND] = static_cast<int>(m_targetKind);
     }

@@ -270,7 +270,6 @@ HEADERS += \
     Dialogs/dialogmapproperties.h \
     Models/GameDatas/langsdatas.h \
     Models/mapproperties.h \
-    Models/langstranslation.h \
     MapEditor/portion.h \
     MapEditor/cursor.h \
     Models/enginesettings.h \
@@ -652,7 +651,6 @@ SOURCES += \
     Dialogs/dialogmapproperties.cpp \
     Models/GameDatas/langsdatas.cpp \
     Models/mapproperties.cpp \
-    Models/langstranslation.cpp \
     MapEditor/portion.cpp \
     MapEditor/cursor.cpp \
     Models/enginesettings.cpp \

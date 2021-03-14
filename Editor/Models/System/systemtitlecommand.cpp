@@ -22,14 +22,13 @@ const QString SystemTitleCommand::JSON_SCRIPT = "s";
 // -------------------------------------------------------
 
 SystemTitleCommand::SystemTitleCommand() :
-    SystemTitleCommand(-1, new LangsTranslation, TitleCommandKind::NewGame)
+    SystemTitleCommand(-1, "", TitleCommandKind::NewGame)
 {
 
 }
 
-SystemTitleCommand::SystemTitleCommand(int i, LangsTranslation *names,
-    TitleCommandKind k) :
-    SystemLang(i, names),
+SystemTitleCommand::SystemTitleCommand(int i, QString name, TitleCommandKind k) :
+    SystemLang(i, name),
     m_kind(k)
 {
 

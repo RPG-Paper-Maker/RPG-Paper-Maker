@@ -628,17 +628,17 @@ void ProjectUpdater::updateVersion_1_3_0() {
 
     // Title screen commands
     m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleCommands()
-        ->appendRow((new SystemTitleCommand(-1, new LangsTranslation("New game")
-        , TitleCommandKind::NewGame))->getModelRow());
+        ->appendRow((new SystemTitleCommand(-1, "New game", TitleCommandKind
+        ::NewGame))->getModelRow());
     m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleCommands()
-        ->appendRow((new SystemTitleCommand(-1, new LangsTranslation("Load game"
-        ), TitleCommandKind::LoadGame))->getModelRow());
+        ->appendRow((new SystemTitleCommand(-1, "Load game", TitleCommandKind
+        ::LoadGame))->getModelRow());
     m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleCommands()
-        ->appendRow((new SystemTitleCommand(-1, new LangsTranslation("Settings"),
-        TitleCommandKind::Settings))->getModelRow());
+        ->appendRow((new SystemTitleCommand(-1, "Settings", TitleCommandKind
+        ::Settings))->getModelRow());
     m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleCommands()
-        ->appendRow((new SystemTitleCommand(-1, new LangsTranslation("Exit"),
-        TitleCommandKind::Exit))->getModelRow());
+        ->appendRow((new SystemTitleCommand(-1, "Exit", TitleCommandKind::Exit))
+        ->getModelRow());
 
     // Title screen settings
     item = new QStandardItem;

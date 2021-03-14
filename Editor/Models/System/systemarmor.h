@@ -26,9 +26,9 @@ class SystemArmor : public SystemCommonSkillItem
 {
 public:
     SystemArmor();
-    SystemArmor(int i, LangsTranslation *names, int pictureID, int type,
-        LangsTranslation *description, PrimitiveValue *conditionFormula,
-        QStandardItemModel *price, QStandardItemModel *modelCharacteristics);
+    SystemArmor(int i, QString name, int pictureID, int type, SystemLang
+        *description, PrimitiveValue *conditionFormula, QStandardItemModel
+        *price, QStandardItemModel *modelCharacteristics);
     virtual ~SystemArmor();
 
     virtual void read(const QJsonObject &json);

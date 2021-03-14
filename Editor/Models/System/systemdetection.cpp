@@ -107,27 +107,24 @@ void SystemDetection::setCurrentHeightPixels(double v) {
 //
 // -------------------------------------------------------
 
-Map * SystemDetection::createDetectionMap() {
-    Map *map;
-    MapProperties *mapProperties;
-
-    mapProperties = new MapProperties(1, new LangsTranslation(""), 1 +
-        m_fieldLeft + m_fieldRight, 1 + m_fieldTop + m_fieldBot, 1000, 1000, 1);
-    map = new Map(mapProperties, this);
-
-    return map;
+Map * SystemDetection::createDetectionMap()
+{
+    return new Map(new MapProperties(1, "", 1 + m_fieldLeft +  m_fieldRight, 1 +
+        m_fieldTop + m_fieldBot, 1000, 1000, 1), this);
 }
 
 // -------------------------------------------------------
 
-void SystemDetection::getTargetPosition(QVector3D *position) const {
+void SystemDetection::getTargetPosition(QVector3D *position) const
+{
     position->setX(m_fieldLeft * RPM::getSquareSize());
     position->setZ(m_fieldTop * RPM::getSquareSize());
 }
 
 // -------------------------------------------------------
 
-SystemObject3D * SystemDetection::instanciateObject() const {
+SystemObject3D * SystemDetection::instanciateObject() const
+{
     return new SystemObject3D(1, "", ShapeKind::Box, -1, -1, -2,
         ObjectCollisionKind::None, -1, 1.0, 1, 0, m_currentHeightSquares,
         m_currentHeightPixels, 1, 0, true);

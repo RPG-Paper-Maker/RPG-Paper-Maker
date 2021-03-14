@@ -566,11 +566,10 @@ void WidgetTreeLocalMaps::contextNewMap(){
     QStandardItem* selected = getSelected();
     if (selected != nullptr){
         MapProperties properties;
-        properties.names()->updateNames();
+        properties.updateNames();
         int id = Map::generateMapId();
         properties.setId(id);
-        properties.names()->setAllNames(
-                    Map::generateMapName(id));
+        properties.setAllNames(Map::generateMapName(id));
 
         DialogMapProperties dialog(properties);
         if (dialog.exec() == QDialog::Accepted){
@@ -631,7 +630,7 @@ void WidgetTreeLocalMaps::contextEditMap(){
                                            RPM::PATH_MAPS),
                         Map::generateMapName(tag->id()));
         MapProperties properties(path);
-        properties.names()->updateNames();
+        properties.updateNames();
         MapProperties previousProperties;
         previousProperties.setCopy(properties);
 

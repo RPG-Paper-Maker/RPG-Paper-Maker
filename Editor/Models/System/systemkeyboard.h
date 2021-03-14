@@ -26,9 +26,9 @@ class SystemKeyBoard : public SystemLang
 {
 public:
     SystemKeyBoard();
-    SystemKeyBoard(int i, LangsTranslation *names, QString abreviation);
-    SystemKeyBoard(int i, LangsTranslation *names, QString abreviation,
-                   QVector<QVector<int>> shortcut);
+    SystemKeyBoard(int i, QString name, QString abreviation);
+    SystemKeyBoard(int i, QString name, QString abreviation, QVector<QVector<int>>
+        shortcut);
     virtual ~SystemKeyBoard();
     QString abbreviation() const;
     void setAbbreviation(QString s);

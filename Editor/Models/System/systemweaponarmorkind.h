@@ -28,8 +28,7 @@ class SystemWeaponArmorKind : public SystemLang
 {
 public:
     SystemWeaponArmorKind();
-    SystemWeaponArmorKind(int i, LangsTranslation *names,
-                          QList<bool> equipment);
+    SystemWeaponArmorKind(int i, QString name, QList<bool> equipment);
     virtual ~SystemWeaponArmorKind();
     bool isWeapon();
     void setIsWeapon(bool iw);

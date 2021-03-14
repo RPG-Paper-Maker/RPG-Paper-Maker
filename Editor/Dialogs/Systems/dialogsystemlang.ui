@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>234</width>
-    <height>81</height>
+    <width>323</width>
+    <height>192</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,32 +27,30 @@
     <number>10</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0">
      <property name="spacing">
       <number>15</number>
      </property>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
        <item>
-        <widget class="QLabel" name="labelName">
-         <property name="text">
-          <string>Name:</string>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
+         <item>
+          <widget class="QLabel" name="labelAll">
+           <property name="text">
+            <string>All:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditAll"/>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="WidgetTextLang" name="widgetName" native="true">
-         <property name="minimumSize">
-          <size>
-           <width>150</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>150</width>
-           <height>16777215</height>
-          </size>
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="currentIndex">
+          <number>-1</number>
          </property>
         </widget>
        </item>
@@ -72,14 +70,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>WidgetTextLang</class>
-   <extends>QWidget</extends>
-   <header>widgettextlang.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>

@@ -41,6 +41,9 @@ private:
 
     void initialize();
     void translate();
+
+public slots:
+    void on_lineEditAll_textEdited(const QString &text);
 };
 
 #endif // DIALOGSYSTEMLANG_H

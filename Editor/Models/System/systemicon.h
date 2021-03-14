@@ -29,7 +29,7 @@ public:
     static const QString JSON_PICTURE_ID;
 
     SystemIcon();
-    SystemIcon(int i, LangsTranslation* names, int pictureID);
+    SystemIcon(int i, QString name, int pictureID);
     virtual ~SystemIcon();
     int pictureID() const;
     void setPictureID(int id);

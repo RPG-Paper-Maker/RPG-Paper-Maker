@@ -124,12 +124,12 @@ void ItemsDatas::setDefault() {
             PrimitiveValue(PrimitiveValueKind::DataBase, 1), new PrimitiveValue(
             PrimitiveValueKind::DataBase, 1), 1, new PrimitiveValue(QString
             ::number(prices[i]))))->getModelRow());
-        sys = new SystemItem(i + 1, new LangsTranslation(names[i]), iconsID[i],
-            types[i], consumables[i], new LangsTranslation(descriptions[i]),
-            targetsKind[i], new PrimitiveValue(targetConditionsFormulas[i]),
-            availablesKind[i], new SystemPlaySong(songsID[i], SongKind::Sound),
-            new PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
-            PrimitiveValueKind::None), modelPrice, modelEffects);
+        sys = new SystemItem(i + 1, names[i], iconsID[i], types[i], consumables[i],
+            new SystemLang(-1, descriptions[i]), targetsKind[i], new
+            PrimitiveValue(targetConditionsFormulas[i]), availablesKind[i], new
+            SystemPlaySong(songsID[i], SongKind::Sound), new PrimitiveValue(
+            PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind
+            ::None), modelPrice, modelEffects);
         m_model->appendRow(sys->getModelRow());
     }
 }

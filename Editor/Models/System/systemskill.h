@@ -26,12 +26,12 @@ class SystemSkill : public SystemCommonSkillItem
 {
 public:
     SystemSkill();
-    SystemSkill(int i, LangsTranslation *names, int pictureID, LangsTranslation
-        *description, TargetKind targetKind, PrimitiveValue
-        *targetConditionFormula, PrimitiveValue *conditionFormula, AvailableKind
-        availableKind, SystemPlaySong *sound, PrimitiveValue *animationUserID,
-        PrimitiveValue *animationTargetID, QStandardItemModel *modelCosts,
-        QStandardItemModel *modelEffects);
+    SystemSkill(int i, QString name, int pictureID, SystemLang *description,
+        TargetKind targetKind, PrimitiveValue *targetConditionFormula,
+        PrimitiveValue *conditionFormula, AvailableKind availableKind,
+        SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
+        *animationTargetID, QStandardItemModel *modelCosts, QStandardItemModel
+        *modelEffects);
     virtual ~SystemSkill();
 
     virtual void read(const QJsonObject &json);

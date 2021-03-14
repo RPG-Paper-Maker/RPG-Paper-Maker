@@ -74,13 +74,11 @@ void DialogCommandDisplayChoice::initializeDefault() {
     SystemLang *lang;
     QList<QStandardItem *> row;
 
-    lang = new SystemLang(1, new LangsTranslation(RPM::translate(Translations
-        ::YES)));
+    lang = new SystemLang(1, RPM::translate(Translations::YES));
     lang->setDisplayID(false);
     row = lang->getModelRow();
     m_model->appendRow(row);
-    lang = new SystemLang(2, new LangsTranslation(RPM::translate(Translations
-        ::NO)));
+    lang = new SystemLang(2, RPM::translate(Translations::NO));
     lang->setDisplayID(false);
     row = lang->getModelRow();
     m_model->appendRow(row);
@@ -146,7 +144,7 @@ void DialogCommandDisplayChoice::initialize(EventCommand *command) {
                 row = lang->getModelRow();
                 m_model->appendRow(row);
             }
-            lang = new SystemLang(id, new LangsTranslation);
+            lang = new SystemLang(id, "");
             lang->setDisplayID(false);
             i++;
         }

@@ -89,25 +89,22 @@ void TitleScreenGameOverDatas::read(QString path){
 
 // -------------------------------------------------------
 
-void TitleScreenGameOverDatas::setDefault() {
+void TitleScreenGameOverDatas::setDefault()
+{
     QStandardItem *item;
     SuperListItem *super;
 
     m_titleBackgroundImageID->setId(1);
     m_titleBackgroundVideoID->setId(-1);
     m_titleMusic->setId(1);
-    m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, new
-        LangsTranslation(RPM::translate(Translations::NEW_GAME)),
-        TitleCommandKind::NewGame))->getModelRow());
-    m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, new
-        LangsTranslation(RPM::translate(Translations::LOAD_GAME)),
-        TitleCommandKind::LoadGame))->getModelRow());
-    m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, new
-        LangsTranslation(RPM::translate(Translations::SETTINGS)),
-        TitleCommandKind::Settings))->getModelRow());
-    m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, new
-        LangsTranslation(RPM::translate(Translations::EXIT)), TitleCommandKind
-        ::Exit))->getModelRow());
+    m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, RPM::translate(
+        Translations::NEW_GAME), TitleCommandKind::NewGame))->getModelRow());
+    m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, RPM::translate(
+        Translations::LOAD_GAME), TitleCommandKind::LoadGame))->getModelRow());
+    m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, RPM::translate(
+        Translations::SETTINGS), TitleCommandKind::Settings))->getModelRow());
+    m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, RPM::translate(
+        Translations::EXIT), TitleCommandKind::Exit))->getModelRow());
     item = new QStandardItem;
     super = new SuperListItem(0, RPM::ENUM_TO_STRING_TITLE_SETTINGS.at(
         static_cast<int>(TitleSettingKind::KeyboardAssignment)));

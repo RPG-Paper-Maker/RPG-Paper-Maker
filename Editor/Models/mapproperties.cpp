@@ -45,8 +45,7 @@ const int MapProperties::DEFAULT_RANDOM_BATTLE_VARIANCE = 20;
 // -------------------------------------------------------
 
 MapProperties::MapProperties() :
-    MapProperties(1, new LangsTranslation(Map::generateMapName(1)), 16, 16, 16,
-        0, 1)
+    MapProperties(1, Map::generateMapName(1), 16, 16, 16,0, 1)
 {
 
 }
@@ -57,9 +56,9 @@ MapProperties::MapProperties(QString path) :
     RPM::readJSON(Common::pathCombine(path, RPM::FILE_MAP_INFOS), *this);
 }
 
-MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w, int h
-    , int d, int idTileset) :
-    SystemLang(i, names),
+MapProperties::MapProperties(int i, QString name, int l, int w, int h, int d,
+    int idTileset) :
+    SystemLang(i, name),
     m_tilesetID(idTileset),
     m_length(l),
     m_width(w),

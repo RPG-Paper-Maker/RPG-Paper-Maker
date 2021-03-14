@@ -26,17 +26,17 @@ const QString SystemMonster::JSON_ACTIONS = "a";
 //
 // -------------------------------------------------------
 
-SystemMonster::SystemMonster() : SystemMonster(1, new LangsTranslation, 1, 1,
-    1, new SystemClass, new SystemProgressionTable, new QStandardItemModel, new
-    QStandardItemModel)
+SystemMonster::SystemMonster() :
+    SystemMonster(1, "", 1, 1, 1, new SystemClass, new SystemProgressionTable,
+    new QStandardItemModel, new QStandardItemModel)
 {
 
 }
 
-SystemMonster::SystemMonster(int i, LangsTranslation *names, int idClass, int
-    idBattler, int idFaceset, SystemClass *classInherit, SystemProgressionTable
-    *exp, QStandardItemModel *loots, QStandardItemModel *actions) :
-    SystemHero(i, names, idClass, idBattler, idFaceset, classInherit),
+SystemMonster::SystemMonster(int i, QString name, int idClass, int idBattler,
+    int idFaceset, SystemClass *classInherit, SystemProgressionTable *exp,
+    QStandardItemModel *loots, QStandardItemModel *actions) :
+    SystemHero(i, name, idClass, idBattler, idFaceset, classInherit),
     m_experience(exp),
     m_modelLoots(loots),
     m_modelActions(actions)

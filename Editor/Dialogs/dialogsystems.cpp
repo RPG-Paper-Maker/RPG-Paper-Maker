@@ -130,7 +130,7 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->panelSuperListSkyBoxes->list()->setCanEdit(true);
 
     // Values
-    ui->widgetGameName->initializeNamesTrans(systemDatas->projectName());
+    ui->widgetGameName->initializeNamesLang(systemDatas->projectName());
     ui->spinBoxScreenWidth->setValue(systemDatas->screenWidth());
     ui->spinBoxScreenHeight->setValue(systemDatas->screenHeight());
     ui->spinBoxScreenWidth->setEnabled(systemDatas->isScreenWindow());

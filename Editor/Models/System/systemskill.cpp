@@ -23,13 +23,13 @@ SystemSkill::SystemSkill() :
 
 }
 
-SystemSkill::SystemSkill(int i, LangsTranslation *names, int pictureID,
-    LangsTranslation *description, TargetKind
+SystemSkill::SystemSkill(int i, QString name, int pictureID,
+    SystemLang *description, TargetKind
     targetKind, PrimitiveValue *targetConditionFormula, PrimitiveValue
     *conditionFormula, AvailableKind availableKind, SystemPlaySong *sound,
     PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
     QStandardItemModel *modelCosts, QStandardItemModel *modelEffects) :
-    SystemCommonSkillItem(i, names, pictureID, 1, false, true, description,
+    SystemCommonSkillItem(i, name, pictureID, 1, false, true, description,
         targetKind, targetConditionFormula, conditionFormula, availableKind,
         sound, animationUserID, animationTargetID, new QStandardItemModel,
         modelCosts, modelEffects, new QStandardItemModel)
@@ -37,7 +37,8 @@ SystemSkill::SystemSkill(int i, LangsTranslation *names, int pictureID,
 
 }
 
-SystemSkill::~SystemSkill() {
+SystemSkill::~SystemSkill()
+{
 
 }
 

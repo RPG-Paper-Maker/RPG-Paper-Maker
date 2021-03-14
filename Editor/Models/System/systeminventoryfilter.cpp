@@ -26,14 +26,14 @@ const QString SystemInventoryFilter::DEFAULT_SCRIPT = "";
 // -------------------------------------------------------
 
 SystemInventoryFilter::SystemInventoryFilter():
-    SystemInventoryFilter(1, new LangsTranslation(""))
+    SystemInventoryFilter(1, "")
 {
 
 }
 
-SystemInventoryFilter::SystemInventoryFilter(int id, LangsTranslation *names,
+SystemInventoryFilter::SystemInventoryFilter(int id, QString name,
     InventoryFilterKind kind, PrimitiveValue *itemTypeID, QString script):
-    SystemLang(id, names),
+    SystemLang(id, name),
     m_kind(kind),
     m_itemTypeID(itemTypeID),
     m_script(script)

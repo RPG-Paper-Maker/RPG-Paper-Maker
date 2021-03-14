@@ -18,15 +18,15 @@
 //
 // -------------------------------------------------------
 
-SystemStatistic::SystemStatistic() : SystemLang()
+SystemStatistic::SystemStatistic() :
+    SystemLang()
 {
 
 }
 
-SystemStatistic::SystemStatistic(int i, LangsTranslation* names,
-                                 QString abbreviation,
-                                 bool isFix) :
-    SystemLang(i,names),
+SystemStatistic::SystemStatistic(int i, QString name, QString abbreviation, bool
+    isFix) :
+    SystemLang(i, name),
     m_abbreviation(abbreviation),
     m_isFix(isFix)
 {

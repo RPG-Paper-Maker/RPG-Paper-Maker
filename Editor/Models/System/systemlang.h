@@ -15,7 +15,6 @@
 #include <QStandardItemModel>
 #include <QMetaType>
 #include "superlistitem.h"
-#include "langstranslation.h"
 #include "eventcommand.h"
 
 // -------------------------------------------------------
@@ -29,12 +28,20 @@
 class SystemLang : public SuperListItem
 {
 public:
+    static const QString JSON_NAMES;
+
     SystemLang();
     SystemLang(int i, QString name);
-    SystemLang(int i, LangsTranslation* names);
+    SystemLang(int i, QVector<int> ids, QVector<QString> names);
     virtual ~SystemLang();
 
-    LangsTranslation* names() const;
+    int mainID() const;
+    QString mainName() const;
+    void setMainName(QString n);
+    QString defaultMainName() const;
+    void updateNames();
+    void setAllNames(QString n);
+    bool isEmpty() const;
 
     virtual void setDefault();
     virtual QString name() const;
@@ -42,13 +49,13 @@ public:
     virtual void getCommand(QVector<QString> &command);
     virtual void initializeCommand(const EventCommand *command, int &i);
     virtual bool openDialog();
-    virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SuperListItem& super);
+    virtual SuperListItem * createCopy() const;
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    LangsTranslation* m_names;
+    QHash<int, QString> m_names;
 };
 
 Q_DECLARE_METATYPE(SystemLang)

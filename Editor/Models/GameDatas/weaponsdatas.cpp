@@ -86,13 +86,12 @@ void WeaponsDatas::setDefault() {
             PrimitiveValue(PrimitiveValueKind::DataBase, 1), new PrimitiveValue(
             PrimitiveValueKind::DataBase, 1), 1, new PrimitiveValue(QString
             ::number(prices[i]))))->getModelRow());
-        weapon = new SystemWeapon(i + 1, new LangsTranslation(names[i]), iconsID
-            [i], types[i], oneHands[i], new LangsTranslation(descriptions[i]),
-            TargetKind::Enemy, new PrimitiveValue(PrimitiveValueKind::None), new
-            PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
+        weapon = new SystemWeapon(i + 1, names[i], iconsID[i], types[i],
+            oneHands[i], new SystemLang(-1, descriptions[i]), TargetKind::Enemy,
+            new PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
             PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind
-            ::None), modelPrice, new QStandardItemModel, modelEffects, new
-            QStandardItemModel);
+            ::None), new PrimitiveValue(PrimitiveValueKind::None), modelPrice,
+            new QStandardItemModel, modelEffects, new QStandardItemModel);
         m_model->appendRow(weapon->getModelRow());
     }
 }

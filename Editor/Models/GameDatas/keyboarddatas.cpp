@@ -72,23 +72,19 @@ void KeyBoardDatas::setDefaultEngine(){
     int i = 1;
 
     // Keys assigns
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::MOVE_CURSOR_UP)), "CursorUp");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::MOVE_CURSOR_UP), "CursorUp");
     super->appendShortCut(QVector<int>({16777235}));
     super->appendShortCut(QVector<int>({87}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::MOVE_CURSOR_DOWN)), "CursorDown");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::MOVE_CURSOR_DOWN), "CursorDown");
     super->appendShortCut(QVector<int>({16777237}));
     super->appendShortCut(QVector<int>({83}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::MOVE_CURSOR_LEFT)), "CursorLeft");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::MOVE_CURSOR_LEFT), "CursorLeft");
     super->appendShortCut(QVector<int>({16777234}));
     super->appendShortCut(QVector<int>({65}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::MOVE_CURSOR_RIGHT)), "CursorRight");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::MOVE_CURSOR_RIGHT), "CursorRight");
     super->appendShortCut(QVector<int>({16777236}));
     super->appendShortCut(QVector<int>({68}));
     list.append(super);
@@ -111,62 +107,49 @@ void KeyBoardDatas::setDefaultGame(){
     int i = 1;
 
     // Keys assigns
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::MOVE_HERO_UP)), "UpHero");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::MOVE_HERO_UP), "UpHero");
     super->appendShortCut(QVector<int>({87}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::MOVE_HERO_DOWN)), "DownHero");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::MOVE_HERO_DOWN), "DownHero");
     super->appendShortCut(QVector<int>({83}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::MOVE_HERO_LEFT)), "LeftHero");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::MOVE_HERO_LEFT), "LeftHero");
     super->appendShortCut(QVector<int>({65}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::MOVE_HERO_RIGHT)), "RightHero");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::MOVE_HERO_RIGHT), "RightHero");
     super->appendShortCut(QVector<int>({68}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::MOVE_MENU_UP)), "UpMenu");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::MOVE_MENU_UP), "UpMenu");
     super->appendShortCut(QVector<int>({16777235}));
     super->appendShortCut(QVector<int>({87}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::MOVE_MENU_DOWN)), "DownMenu");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::MOVE_MENU_DOWN), "DownMenu");
     super->appendShortCut(QVector<int>({16777237}));
     super->appendShortCut(QVector<int>({83}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::MOVE_MENU_LEFT)), "LeftMenu");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::MOVE_MENU_LEFT), "LeftMenu");
     super->appendShortCut(QVector<int>({16777234}));
     super->appendShortCut(QVector<int>({65}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::MOVE_MENU_RIGHT)), "RightMenu");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::MOVE_MENU_RIGHT), "RightMenu");
     super->appendShortCut(QVector<int>({16777236}));
     super->appendShortCut(QVector<int>({68}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::MOVE_CAMERA_LEFT)), "LeftCamera");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::MOVE_CAMERA_LEFT), "LeftCamera");
     super->appendShortCut(QVector<int>({16777234}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::MOVE_CAMERA_RIGHT)), "RightCamera");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::MOVE_CAMERA_RIGHT), "RightCamera");
     super->appendShortCut(QVector<int>({16777236}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::ACTION)), "Action");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::ACTION), "Action");
     super->appendShortCut(QVector<int>({16777220}));
     super->appendShortCut(QVector<int>({16777221}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::CANCEL)), "Cancel");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::CANCEL), "Cancel");
     super->appendShortCut(QVector<int>({88}));
     super->appendShortCut(QVector<int>({16777216}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation(RPM::translate(
-        Translations::OPEN_CLOSE_MAIN_MENU)), "MainMenu");
+    super = new SystemKeyBoard(i++, RPM::translate(Translations::OPEN_CLOSE_MAIN_MENU), "MainMenu");
     super->appendShortCut(QVector<int>({16777216}));
     list.append(super);
     setDefault(list);

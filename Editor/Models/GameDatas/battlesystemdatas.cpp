@@ -241,10 +241,8 @@ void BattleSystemDatas::setDefaultWeaponsKind() {
     int length = (sizeof(names)/sizeof(*names));
 
     for (int i = 0; i < length; i++){
-        sysWeaponArmorKind =
-                new SystemWeaponArmorKind(i + 1,
-                                          new LangsTranslation(names[i]),
-                                          equipmentsAssigment);
+        sysWeaponArmorKind = new SystemWeaponArmorKind(i + 1, names[i],
+            equipmentsAssigment);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(
                           reinterpret_cast<quintptr>(sysWeaponArmorKind)));
@@ -256,8 +254,6 @@ void BattleSystemDatas::setDefaultWeaponsKind() {
 // -------------------------------------------------------
 
 void BattleSystemDatas::setDefaultArmorsKind(){
-    SystemWeaponArmorKind* sysWeaponArmorKind;
-    QStandardItem* item;
     QString names[] = {
         RPM::translate(Translations::HELMET),
         RPM::translate(Translations::CAP),
@@ -282,19 +278,11 @@ void BattleSystemDatas::setDefaultArmorsKind(){
         QList<bool>({false,false,false,false,false,false,true}),
         QList<bool>({false,false,false,false,false,false,true})
     };
-
     int length = (sizeof(names)/sizeof(*names));
-
-    for (int i = 0; i < length; i++){
-        sysWeaponArmorKind =
-                new SystemWeaponArmorKind(i+1,
-                                          new LangsTranslation(names[i]),
-                                          equipmentsAssigment[i]);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(sysWeaponArmorKind)));
-        item->setText(sysWeaponArmorKind->toString());
-        m_modelArmorsKind->appendRow(item);
+    for (int i = 0; i < length; i++)
+    {
+        m_modelArmorsKind->appendRow((new SystemWeaponArmorKind(i + 1, names[i],
+            equipmentsAssigment[i]))->getModelRow());
     }
 }
 
@@ -327,99 +315,69 @@ void BattleSystemDatas::setDefaultElements() {
     SystemElement *sysElement;
     int length = (sizeof(names)/sizeof(*names));
     int i, j;
-
     // Create all the elements and add efficiencies
-    for (i = 0; i < length; i++){
-        sysElement = new SystemElement(i+1, new LangsTranslation(names[i]),
-            icons[i]);
-        for (j = 0; j < length; j++) {
+    for (i = 0; i < length; i++)
+    {
+        sysElement = new SystemElement(i + 1, names[i], icons[i]);
+        for (j = 0; j < length; j++)
+        {
             sysElement->addEfficiencyDouble(j + 1, efficiencies[i][j]);
         }
-
         m_modelElements->appendRow(sysElement->getModelRow());
     }
 }
 
 // -------------------------------------------------------
 
-void BattleSystemDatas::setDefaultCommonEquipment(){
+void BattleSystemDatas::setDefaultCommonEquipment()
+{
     int i = 1;
-    SystemLang* items[] = {
-        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
-            ::LEFT_HAND))),
-        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
-            ::RIGHT_HAND))),
-        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
-            ::HEAD))),
-        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
-            ::CHEST))),
-        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
-            ::ARMS))),
-        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
-            ::LEGS))),
-        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
-            ::ACCESSORY)))
+    SystemLang *items[] = {
+        new SystemLang(i++, RPM::translate(Translations::LEFT_HAND)),
+        new SystemLang(i++, RPM::translate(Translations::RIGHT_HAND)),
+        new SystemLang(i++, RPM::translate(Translations::HEAD)),
+        new SystemLang(i++, RPM::translate(Translations::CHEST)),
+        new SystemLang(i++, RPM::translate(Translations::ARMS)),
+        new SystemLang(i++, RPM::translate(Translations::LEGS)),
+        new SystemLang(i++, RPM::translate(Translations::ACCESSORY))
     };
     int length = (sizeof(items)/sizeof(*items));
-    QStandardItem* item;
-
-    for (i = 0; i < length; i++){
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(items[i])));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(items[i]->toString());
-        m_modelCommonEquipment->appendRow(item);
+    for (i = 0; i < length; i++)
+    {
+        m_modelCommonEquipment->appendRow(items[i]->getModelRow());
     }
 }
 
 // -------------------------------------------------------
 
-void BattleSystemDatas::setDefaultCommonStatistics(){
+void BattleSystemDatas::setDefaultCommonStatistics()
+{
     int i = 1;
     SystemStatistic* items[] = {
-        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
-            Translations::LV)), "lv", true),
-        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
-            Translations::EXP)), "xp", false),
-        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
-            Translations::HP)), "hp", false),
-        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
-            Translations::MP)), "mp", false),
-        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
-            Translations::TP)), "tp", false),
-        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
-            Translations::ATTACK)), "atk", true),
-        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
-            Translations::MAGIC)), "mag", true),
-        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
-            Translations::STRENGTH)), "str", true),
-        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
-            Translations::INTELLIGENCE)), "int", true),
-        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
-            Translations::P_DEFENSE)), "pdef", true),
-        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
-            Translations::M_DEFENSE)), "mdef", true),
-        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
-            Translations::AGILITY)), "agi", true)
+        new SystemStatistic(i++, RPM::translate(Translations::LV), "lv", true),
+        new SystemStatistic(i++, RPM::translate(Translations::EXP), "xp", false),
+        new SystemStatistic(i++, RPM::translate(Translations::HP), "hp", false),
+        new SystemStatistic(i++, RPM::translate(Translations::MP), "mp", false),
+        new SystemStatistic(i++, RPM::translate(Translations::TP), "tp", false),
+        new SystemStatistic(i++, RPM::translate(Translations::ATTACK), "atk", true),
+        new SystemStatistic(i++, RPM::translate(Translations::MAGIC), "mag", true),
+        new SystemStatistic(i++, RPM::translate(Translations::STRENGTH), "str", true),
+        new SystemStatistic(i++, RPM::translate(Translations::INTELLIGENCE), "int", true),
+        new SystemStatistic(i++, RPM::translate(Translations::P_DEFENSE), "pdef", true),
+        new SystemStatistic(i++, RPM::translate(Translations::M_DEFENSE), "mdef", true),
+        new SystemStatistic(i++, RPM::translate(Translations::AGILITY), "agi", true)
     };
-
     int length = (sizeof(items)/sizeof(*items));
-    QStandardItem* item;
-
-    for (i = 0; i < length; i++){
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(items[i])));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(items[i]->toString());
-        m_modelCommonStatistics->appendRow(item);
+    for (i = 0; i < length; i++)
+    {
+        m_modelCommonStatistics->appendRow(items[i]->getModelRow());
     }
 }
 
 // -------------------------------------------------------
 
-void BattleSystemDatas::setDefaultCommonBattleCommand(){
+void BattleSystemDatas::setDefaultCommonBattleCommand()
+{
     int i = 1;
     SystemBattleCommand* items[] = {
         new SystemBattleCommand(i++, RPM::translate(Translations::ATTACK), 1),
@@ -430,15 +388,9 @@ void BattleSystemDatas::setDefaultCommonBattleCommand(){
     };
 
     int length = (sizeof(items)/sizeof(*items));
-    QStandardItem* item;
-
-    for (i = 0; i < length; i++){
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(items[i])));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(items[i]->toString());
-        m_modelCommonBattleCommand->appendRow(item);
+    for (i = 0; i < length; i++)
+    {
+        m_modelCommonBattleCommand->appendRow(items[i]->getModelRow());
     }
 }
 

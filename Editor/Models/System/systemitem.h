@@ -26,12 +26,11 @@ class SystemItem : public SystemCommonSkillItem
 {
 public:
     SystemItem();
-    SystemItem(int i, LangsTranslation *names, int pictureID, int type, bool
-        consumable, LangsTranslation *description, TargetKind targetKind,
-        PrimitiveValue *conditionFormula, AvailableKind availableKind,
-        SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
-        *animationTargetID, QStandardItemModel *price, QStandardItemModel
-        *modelEffects);
+    SystemItem(int i, QString name, int pictureID, int type, bool consumable,
+        SystemLang *description, TargetKind targetKind, PrimitiveValue
+        *conditionFormula, AvailableKind availableKind, SystemPlaySong *sound,
+        PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
+        QStandardItemModel *price, QStandardItemModel *modelEffects);
     virtual ~SystemItem();
 
     virtual void read(const QJsonObject &json);

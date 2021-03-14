@@ -31,15 +31,15 @@ const QString SystemClass::jsonSkills = "skills";
 // -------------------------------------------------------
 
 SystemClass::SystemClass() :
-    SystemClass(1, new LangsTranslation, 1, 100, 5, 30)
+    SystemClass(1, "", 1, 100, 5, 30)
 {
 
 }
 
-SystemClass::SystemClass(int i, LangsTranslation *names, int initialLevel, int
-    maxLevel, int expBase, int expInflation, QStandardItemModel *characteristics,
+SystemClass::SystemClass(int i, QString name, int initialLevel, int maxLevel,
+    int expBase, int expInflation, QStandardItemModel *characteristics,
     QStandardItemModel *stats, QStandardItemModel *skills) :
-    SystemLang(i, names),
+    SystemLang(i, name),
     m_initialLevel(initialLevel),
     m_maxLevel(maxLevel),
     m_expBase(expBase),
@@ -127,7 +127,7 @@ QStandardItemModel* SystemClass::skills() const
 // -------------------------------------------------------
 
 SystemClass * SystemClass::createInheritanceClass() {
-    return new SystemClass(-1, new LangsTranslation, -1, -1, -1, -1);
+    return new SystemClass(-1, "", -1, -1, -1, -1);
 }
 
 // -------------------------------------------------------
@@ -180,12 +180,7 @@ SuperListItem* SystemClass::createCopy() const
 void SystemClass::setCopy(const SuperListItem &super)
 {
     const SystemClass *sys;
-    SystemStatisticProgression *progression;
-    SystemClassSkill *classSkill;
-    QList<QStandardItem *> row;
-    QStandardItem *item;
     QHash<int, int>::const_iterator it;
-    int i, l;
     SystemLang::setCopy(super);
     sys = reinterpret_cast<const SystemClass *>(&super);
     m_initialLevel = sys->m_initialLevel;

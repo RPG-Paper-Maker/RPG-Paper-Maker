@@ -52,7 +52,7 @@ public:
     static const bool DEFAULT_IS_RELEASE_START_TURN;
 
     SystemStatus();
-    SystemStatus(int i, LangsTranslation *names, int pictureID, PrimitiveValue
+    SystemStatus(int i, QString name, int pictureID, PrimitiveValue
         *animationID = new PrimitiveValue(PrimitiveValueKind::None),
         StatusRestrictionsKind restrictionsKind = DEFAULT_RESTRICTION_KIND,
         PrimitiveValue *priority = new PrimitiveValue(DEFAULT_PRIORITY),

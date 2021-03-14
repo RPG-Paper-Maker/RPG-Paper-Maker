@@ -71,8 +71,7 @@ const double SystemDatas::DEFAULT_PRICE_SOLD_ITEM = 50.0;
 // -------------------------------------------------------
 
 SystemDatas::SystemDatas() :
-    m_projectName(new LangsTranslation(RPM::translate(Translations
-        ::PROJECT_WITHOUT_NAME))),
+    m_projectName(new SystemLang(-1, RPM::translate(Translations::PROJECT_WITHOUT_NAME))),
     m_mountainCollisionHeight(new PrimitiveValue(4)),
     m_mountainCollisionAngle(new PrimitiveValue(45.0)),
     m_mapFrameDuration(new PrimitiveValue(DEFAULT_MAP_FRAME_DURATION)),
@@ -139,7 +138,7 @@ void SystemDatas::read(QString path) {
     RPM::readJSON(Common::pathCombine(path, RPM::PATH_SYSTEM), *this);
 }
 
-LangsTranslation * SystemDatas::projectName() const {
+SystemLang *SystemDatas::projectName() const {
     return m_projectName;
 }
 
@@ -432,8 +431,7 @@ void SystemDatas::setDefaultCurrencies() {
     int length = (sizeof(namesCurrencies)/sizeof(*namesCurrencies));
     for (int i = 0; i < length; i++){
         item = new QStandardItem;
-        currency = new SystemCurrency(i + 1, new LangsTranslation(
-            namesCurrencies[i]), picCurrencies[i]);
+        currency = new SystemCurrency(i + 1, namesCurrencies[i], picCurrencies[i]);
         item->setData(QVariant::fromValue(
                           reinterpret_cast<quintptr>(currency)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
@@ -456,50 +454,49 @@ void SystemDatas::setDefaultItemsTypes() {
 
 void SystemDatas::setDefaultInventoryFilters()
 {
-    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(1, new
-        LangsTranslation(RPM::translate(Translations::ALL))))->getModelRow());
-    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(2, new
-        LangsTranslation(RPM::translate(Translations::CONSUMABLES)),
-        InventoryFilterKind::Consumables))->getModelRow());
-    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(3, new
-        LangsTranslation(RPM::translate(Translations::INGREDIENTS)),
-        InventoryFilterKind::Custom))->getModelRow());
-    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(4, new
-        LangsTranslation(RPM::translate(Translations::KEY_ITEMS)),
-        InventoryFilterKind::Custom, new PrimitiveValue(PrimitiveValueKind
-        ::DataBase, 2)))->getModelRow());
-    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(5, new
-        LangsTranslation(RPM::translate(Translations::WEAPONS)),
-        InventoryFilterKind::Weapons))->getModelRow());
-    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(6, new
-        LangsTranslation(RPM::translate(Translations::ARMORS)),
-        InventoryFilterKind::Armors))->getModelRow());
+    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(1, RPM
+        ::translate(Translations::ALL)))->getModelRow());
+    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(2, RPM
+        ::translate(Translations::CONSUMABLES), InventoryFilterKind
+        ::Consumables))->getModelRow());
+    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(3, RPM
+        ::translate(Translations::INGREDIENTS), InventoryFilterKind::Custom))
+        ->getModelRow());
+    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(4, RPM
+        ::translate(Translations::KEY_ITEMS), InventoryFilterKind::Custom,
+        new PrimitiveValue(PrimitiveValueKind::DataBase, 2)))->getModelRow());
+    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(5, RPM
+        ::translate(Translations::WEAPONS), InventoryFilterKind::Weapons))
+        ->getModelRow());
+    m_modelInventoryFilters->appendRow((new SystemInventoryFilter(6, RPM
+        ::translate(Translations::ARMORS), InventoryFilterKind::Armors))
+        ->getModelRow());
 }
 
 // -------------------------------------------------------
 
 void SystemDatas::setDefaultMainMenuCommands()
 {
-    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(1, new
-        LangsTranslation(RPM::translate(Translations::INVENTORY))))->getModelRow());
-    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(2, new
-        LangsTranslation(RPM::translate(Translations::SKILLS)),
-        MainMenuCommandKind::Skills))->getModelRow());
-    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(3, new
-        LangsTranslation(RPM::translate(Translations::EQUIP)),
-        MainMenuCommandKind::Equip))->getModelRow());
-    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(4, new
-        LangsTranslation(RPM::translate(Translations::STATES)),
-        MainMenuCommandKind::States))->getModelRow());
-    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(5, new
-        LangsTranslation(RPM::translate(Translations::ORDER)),
-        MainMenuCommandKind::Order))->getModelRow());
-    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(6, new
-        LangsTranslation(RPM::translate(Translations::SAVE)),
-        MainMenuCommandKind::Save))->getModelRow());
-    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(7, new
-        LangsTranslation(RPM::translate(Translations::QUIT)),
-        MainMenuCommandKind::Quit))->getModelRow());
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(1, RPM
+        ::translate(Translations::INVENTORY)))->getModelRow());
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(2, RPM
+        ::translate(Translations::SKILLS), MainMenuCommandKind::Skills))
+        ->getModelRow());
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(3, RPM
+        ::translate(Translations::EQUIP), MainMenuCommandKind::Equip))
+        ->getModelRow());
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(4, RPM
+        ::translate(Translations::STATES), MainMenuCommandKind::States))
+        ->getModelRow());
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(5, RPM
+        ::translate(Translations::ORDER), MainMenuCommandKind::Order))
+        ->getModelRow());
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(6, RPM
+        ::translate(Translations::SAVE), MainMenuCommandKind::Save))
+        ->getModelRow());
+    m_modelMainMenuCommands->appendRow((new SystemMainMenuCommand(7, RPM
+        ::translate(Translations::QUIT), MainMenuCommandKind::Quit))
+        ->getModelRow());
 }
 
 // -------------------------------------------------------

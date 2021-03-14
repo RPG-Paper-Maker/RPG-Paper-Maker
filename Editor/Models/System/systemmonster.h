@@ -32,9 +32,9 @@ public:
     static const QString JSON_ACTIONS;
 
     SystemMonster();
-    SystemMonster(int i, LangsTranslation* names, int idClass, int idBattler,
-        int idFaceset, SystemClass *classInherit, SystemProgressionTable *exp,
-        QStandardItemModel *loots, QStandardItemModel *actions);
+    SystemMonster(int i, QString name, int idClass, int idBattler, int idFaceset,
+        SystemClass *classInherit, SystemProgressionTable *exp, QStandardItemModel
+        *loots, QStandardItemModel *actions);
     virtual ~SystemMonster();
     SystemProgressionTable * experience() const;
     QHash<int, SystemProgressionTable *> * currencies();

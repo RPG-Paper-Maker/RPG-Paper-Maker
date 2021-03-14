@@ -31,7 +31,7 @@ public:
     static const QString JSON_EFFICIENCY;
 
     SystemElement();
-    SystemElement(int i, LangsTranslation *names, int ii);
+    SystemElement(int i, QString name, int ii);
     virtual ~SystemElement();
     QStandardItemModel* modelEfficiency() const;
 

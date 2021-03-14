@@ -134,7 +134,7 @@ void PanelDatasCommonSkillItem::update(SystemCommonSkillItem *model) {
     ui->checkBoxConsumable->setChecked(m_model->consumable());
     ui->checkBoxOneHand->setChecked(m_model->oneHand());
     ui->widgetIcon->initializeIcon(m_model);
-    ui->widgetTextLangDescription->initializeNamesTrans(m_model->description());
+    ui->widgetTextLangDescription->initializeNamesLang(m_model->description());
     ui->panelPrimitiveValueConditions->initializeModel(m_model
         ->conditionFormula());
     ui->panelPrimitiveValueConditions->updateModel();

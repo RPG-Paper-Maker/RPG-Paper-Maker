@@ -135,14 +135,13 @@ void SkillsDatas::setDefault(){
             modelEffects->appendRow(effects[i][j]->getModelRow());
         }
         modelEffects->appendRow(new QStandardItem);
-        skill = new SystemSkill(i + 1, new LangsTranslation(names[i]), iconsID
-            [i], new LangsTranslation(descriptions[i]), targetsKind[i],
-            targetConditions[i].isEmpty() ? new PrimitiveValue(
-            PrimitiveValueKind::None) : new PrimitiveValue(targetConditions[i]),
-            new PrimitiveValue(PrimitiveValueKind::None), availablesKind[i], new
-            SystemPlaySong(songsID[i], SongKind::Sound), new PrimitiveValue(
-            PrimitiveValueKind::None), i == 0 ? new PrimitiveValue(
-            PrimitiveValueKind::DataBase, 1) : new PrimitiveValue(
+        skill = new SystemSkill(i + 1, names[i], iconsID[i], new SystemLang(-1,
+            descriptions[i]), targetsKind[i], targetConditions[i].isEmpty() ?
+            new PrimitiveValue(PrimitiveValueKind::None) : new PrimitiveValue(
+            targetConditions[i]), new PrimitiveValue(PrimitiveValueKind::None),
+            availablesKind[i], new SystemPlaySong(songsID[i], SongKind::Sound),
+            new PrimitiveValue(PrimitiveValueKind::None), i == 0 ? new
+            PrimitiveValue(PrimitiveValueKind::DataBase, 1) : new PrimitiveValue(
             PrimitiveValueKind::None), modelCosts, modelEffects);
         m_model->appendRow(skill->getModelRow());
     }

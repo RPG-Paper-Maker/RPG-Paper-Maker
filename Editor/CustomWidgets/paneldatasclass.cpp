@@ -106,6 +106,7 @@ void PanelDatasClass::update(SystemClass *sysClass, SystemClass *originalClass)
     m_updating = false;
 
     updateExperience();
+    ui->treeViewCharacteristic->updateAbsoluteAllNodesString();
 }
 
 // -------------------------------------------------------

@@ -30,7 +30,7 @@ public:
     static const QString JSON_SCRIPT;
 
     SystemTitleCommand();
-    SystemTitleCommand(int i, LangsTranslation *names, TitleCommandKind k);
+    SystemTitleCommand(int i, QString name, TitleCommandKind k);
     virtual ~SystemTitleCommand();
 
     TitleCommandKind kind() const;

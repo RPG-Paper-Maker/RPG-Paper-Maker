@@ -33,8 +33,8 @@ public:
     static const QString jsonClassInherit;
 
     SystemHero();
-    SystemHero(int i, LangsTranslation* names, int idClass, int idBattler, int
-        idFaceset, SystemClass *classInherit);
+    SystemHero(int i, QString name, int idClass, int idBattler, int idFaceset,
+        SystemClass *classInherit);
     virtual ~SystemHero();
     int idClass() const;
     void setIdClass(int id);

@@ -31,14 +31,14 @@ const QString SystemHero::jsonClassInherit = "ci";
 // -------------------------------------------------------
 
 SystemHero::SystemHero() :
-    SystemHero(1, new LangsTranslation, 1, 1, 1, new SystemClass)
+    SystemHero(1, "", 1, 1, 1, new SystemClass)
 {
 
 }
 
-SystemHero::SystemHero(int i, LangsTranslation* names, int idClass,
-    int idBattler, int idFaceset, SystemClass *classInherit) :
-    SystemLang(i, names),
+SystemHero::SystemHero(int i, QString name, int idClass, int idBattler, int
+    idFaceset, SystemClass *classInherit) :
+    SystemLang(i, name),
     m_idClass(idClass),
     m_idBattlerPicture(idBattler),
     m_idFacesetPicture(idFaceset),

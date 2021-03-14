@@ -34,7 +34,7 @@
      <item>
       <widget class="QPushButton" name="pushButton">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="maximumSize">
         <size>

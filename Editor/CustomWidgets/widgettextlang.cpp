@@ -22,7 +22,6 @@
 WidgetTextLang::WidgetTextLang(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::WidgetTextLang),
-    m_l(nullptr),
     m_lang(nullptr)
 {
     ui->setupUi(this);
@@ -33,7 +32,10 @@ WidgetTextLang::~WidgetTextLang()
     delete ui;
 }
 
-QLineEdit* WidgetTextLang::lineEdit() const { return ui->lineEdit; }
+QLineEdit * WidgetTextLang::lineEdit() const
+{
+    return ui->lineEdit;
+}
 
 // -------------------------------------------------------
 //
@@ -41,32 +43,23 @@ QLineEdit* WidgetTextLang::lineEdit() const { return ui->lineEdit; }
 //
 // -------------------------------------------------------
 
-void WidgetTextLang::initializeNamesTrans(LangsTranslation *l) {
-    m_l = l;
-
-    initializeNames();
-}
-
-// -------------------------------------------------------
-
-void WidgetTextLang::initializeNamesLang(SystemLang *lang) {
+void WidgetTextLang::initializeNamesLang(SystemLang *lang)
+{
     m_lang = lang;
-    m_l = lang->names();
-
-    initializeNames();
+    this->initializeNames();
 }
 
 // -------------------------------------------------------
 
-void WidgetTextLang::initializeNames() {
-    QString mainName;
-    m_l->updateNames();
-    mainName = m_l->mainName();
-    if (m_lang != nullptr) {
+void WidgetTextLang::initializeNames()
+{
+    m_lang->updateNames();
+    QString mainName = m_lang->mainName();
+    if (m_lang != nullptr)
+    {
         m_lang->setName(mainName);
     }
-
-    lineEdit()->setText(mainName);
+    this->lineEdit()->setText(mainName);
 }
 
 // -------------------------------------------------------
@@ -75,14 +68,21 @@ void WidgetTextLang::initializeNames() {
 //
 // -------------------------------------------------------
 
-void WidgetTextLang::on_lineEdit_textChanged(const QString &text) {
+void WidgetTextLang::on_lineEdit_textChanged(const QString &text)
+{
     if (m_lang != nullptr)
     {
-        m_lang->setName(text);
-    }
-    if (m_l != nullptr)
-    {
-        m_l->setMainName(text);
+        m_lang->setMainName(text);
     }
     emit mainChanged(text);
+}
+
+// -------------------------------------------------------
+
+void WidgetTextLang::on_pushButton_clicked()
+{
+    if (m_lang != nullptr)
+    {
+        m_lang->openDialog();
+    }
 }

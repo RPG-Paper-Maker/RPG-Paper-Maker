@@ -25,9 +25,7 @@ DialogSystemLang::DialogSystemLang(SystemLang &model, QWidget *parent) :
     m_model(model)
 {
     ui->setupUi(this);
-    
-    initialize();
-
+    this->initialize();
     this->translate();
 }
 
@@ -42,8 +40,9 @@ DialogSystemLang::~DialogSystemLang()
 //
 // -------------------------------------------------------
 
-void DialogSystemLang::initialize(){
-    ui->widgetName->initializeNamesLang(&m_model);
+void DialogSystemLang::initialize()
+{
+
 }
 
 //-------------------------------------------------
@@ -52,6 +51,17 @@ void DialogSystemLang::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::SET_NAME) + RPM
         ::DOT_DOT_DOT);
-    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelAll->setText(RPM::translate(Translations::ALL) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogSystemLang::on_lineEditAll_textEdited(const QString &text)
+{
+    m_model.setAllNames(text);
 }

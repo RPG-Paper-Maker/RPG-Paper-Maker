@@ -22,13 +22,13 @@ const QString SystemElement::JSON_EFFICIENCY = "e";
 // -------------------------------------------------------
 
 SystemElement::SystemElement() :
-    SystemElement(1, new LangsTranslation, -1)
+    SystemElement(1, "", -1)
 {
 
 }
 
-SystemElement::SystemElement(int i, LangsTranslation* names, int ii) :
-    SystemIcon(i,names, ii),
+SystemElement::SystemElement(int i, QString name, int ii) :
+    SystemIcon(i,name, ii),
     m_modelEfficiency(new QStandardItemModel)
 {
 

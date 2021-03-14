@@ -27,8 +27,7 @@ class SystemStatistic : public SystemLang
 {
 public:
     SystemStatistic();
-    SystemStatistic(int i, LangsTranslation *names, QString abbreviation,
-                    bool isFix);
+    SystemStatistic(int i, QString name, QString abbreviation, bool isFix);
     virtual ~SystemStatistic();
     QString abbreviation() const;
     void setAbbreviation(QString s);

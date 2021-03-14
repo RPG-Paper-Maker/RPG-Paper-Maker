@@ -18,13 +18,14 @@
 //
 // -------------------------------------------------------
 
-SystemCurrency::SystemCurrency() : SystemCurrency(1, new LangsTranslation, -1)
+SystemCurrency::SystemCurrency() :
+    SystemCurrency(1, "", -1)
 {
 
 }
 
-SystemCurrency::SystemCurrency(int i, LangsTranslation* names, int pictureID) :
-    SystemIcon(i, names, pictureID)
+SystemCurrency::SystemCurrency(int i, QString name, int pictureID) :
+    SystemIcon(i, name, pictureID)
 {
 
 }

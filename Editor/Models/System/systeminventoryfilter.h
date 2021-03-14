@@ -34,8 +34,8 @@ public:
     static const QString DEFAULT_SCRIPT;
 
     SystemInventoryFilter();
-    SystemInventoryFilter(int i, LangsTranslation* names, InventoryFilterKind
-        kind = DEFAULT_KIND, PrimitiveValue *itemTypeID = new PrimitiveValue(
+    SystemInventoryFilter(int i, QString name, InventoryFilterKind kind =
+        DEFAULT_KIND, PrimitiveValue *itemTypeID = new PrimitiveValue(
         PrimitiveValueKind::DataBase, 1), QString script = DEFAULT_SCRIPT);
     virtual ~SystemInventoryFilter();
     InventoryFilterKind kind() const;

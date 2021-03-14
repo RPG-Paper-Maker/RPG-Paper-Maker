@@ -20,14 +20,14 @@
 // -------------------------------------------------------
 
 SystemWeaponArmorKind::SystemWeaponArmorKind() :
-    SystemWeaponArmorKind(1, new LangsTranslation, QList<bool>())
+    SystemWeaponArmorKind(1, "", QList<bool>())
 {
 
 }
 
-SystemWeaponArmorKind::SystemWeaponArmorKind(int i, LangsTranslation* names,
-                                             QList<bool> equipment) :
-    SystemLang(i,names),
+SystemWeaponArmorKind::SystemWeaponArmorKind(int i, QString name, QList<bool>
+    equipment) :
+    SystemLang(i, name),
     m_equipment(equipment),
     m_isWeapon(true)
 {

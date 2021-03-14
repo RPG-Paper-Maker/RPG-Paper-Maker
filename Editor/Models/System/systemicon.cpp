@@ -19,13 +19,13 @@ const QString SystemIcon::JSON_PICTURE_ID = "pid";
 //
 // -------------------------------------------------------
 
-SystemIcon::SystemIcon() : SystemIcon(1, new LangsTranslation, -1)
+SystemIcon::SystemIcon() : SystemIcon(1, "", -1)
 {
 
 }
 
-SystemIcon::SystemIcon(int i, LangsTranslation *names, int pictureID) :
-    SystemLang(i, names),
+SystemIcon::SystemIcon(int i, QString name, int pictureID) :
+    SystemLang(i, name),
     m_pictureID(pictureID)
 {
 

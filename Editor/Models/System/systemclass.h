@@ -37,8 +37,8 @@ public:
     static const QString jsonSkills;
 
     SystemClass();
-    SystemClass(int i, LangsTranslation *names, int initialLevel, int maxLevel,
-        int expBase, int expInflation, QStandardItemModel *characteristics = new
+    SystemClass(int i, QString name, int initialLevel, int maxLevel, int expBase,
+        int expInflation, QStandardItemModel *characteristics = new
         QStandardItemModel, QStandardItemModel *stats = new QStandardItemModel,
         QStandardItemModel *skills = new QStandardItemModel);
     virtual ~SystemClass();

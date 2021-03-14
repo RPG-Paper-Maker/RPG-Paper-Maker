@@ -45,21 +45,20 @@ const bool SystemStatus::DEFAULT_IS_RELEASE_START_TURN = false;
 // -------------------------------------------------------
 
 SystemStatus::SystemStatus() :
-    SystemStatus(1, new LangsTranslation, -1)
+    SystemStatus(1, "", -1)
 {
 
 }
 
-SystemStatus::SystemStatus(int i, LangsTranslation *names, int pictureID,
-    PrimitiveValue *animationID, StatusRestrictionsKind restrictionsKind,
-    PrimitiveValue *priority, PrimitiveValue *battlerPosition, bool
-    isReleaseAtEndBattle, bool isReleaseAfterAttacked, PrimitiveValue
-    *chanceReleaseAfterAttacked, bool isReleaseStartTurn, QStandardItemModel
-    *modelReleaseStartTurn, PrimitiveValue *messageAllyAffected, PrimitiveValue
-    *messageEnemyAffected, PrimitiveValue *messageStatusHealed, PrimitiveValue
-    *messageStatusStillAffected, QStandardItemModel *modelEffects,
-    QStandardItemModel *modelCharacteristics) :
-    SystemIcon(i, names, pictureID),
+SystemStatus::SystemStatus(int i, QString name, int pictureID, PrimitiveValue
+    *animationID, StatusRestrictionsKind restrictionsKind, PrimitiveValue
+    *priority, PrimitiveValue *battlerPosition, bool isReleaseAtEndBattle, bool
+    isReleaseAfterAttacked, PrimitiveValue *chanceReleaseAfterAttacked, bool
+    isReleaseStartTurn, QStandardItemModel *modelReleaseStartTurn, PrimitiveValue
+    *messageAllyAffected, PrimitiveValue *messageEnemyAffected, PrimitiveValue
+    *messageStatusHealed, PrimitiveValue *messageStatusStillAffected,
+    QStandardItemModel *modelEffects, QStandardItemModel *modelCharacteristics) :
+    SystemIcon(i, name, pictureID),
     m_animationID(animationID),
     m_restrictionsKind(restrictionsKind),
     m_priority(priority),

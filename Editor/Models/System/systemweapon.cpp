@@ -23,17 +23,16 @@ SystemWeapon::SystemWeapon() :
 
 }
 
-SystemWeapon::SystemWeapon(int i, LangsTranslation* names, int pictureID, int
-    type, bool oneHand, LangsTranslation *description, TargetKind targetKind,
-    PrimitiveValue *targetConditionFormula, PrimitiveValue *conditionFormula,
-    PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
-    QStandardItemModel *price, QStandardItemModel *modelCosts, QStandardItemModel
-    *modelEffects, QStandardItemModel *modelCharacteristics) :
-    SystemCommonSkillItem(i, names, pictureID, type, false, oneHand,
-        description, targetKind, targetConditionFormula, conditionFormula,
-        AvailableKind::Never, new SystemPlaySong(-1, SongKind::Sound),
-        animationUserID, animationTargetID, price, modelCosts, modelEffects,
-        modelCharacteristics)
+SystemWeapon::SystemWeapon(int i, QString name, int pictureID, int type, bool
+    oneHand, SystemLang *description, TargetKind targetKind, PrimitiveValue
+    *targetConditionFormula, PrimitiveValue *conditionFormula, PrimitiveValue
+    *animationUserID, PrimitiveValue *animationTargetID, QStandardItemModel
+    *price, QStandardItemModel *modelCosts, QStandardItemModel *modelEffects,
+    QStandardItemModel *modelCharacteristics) :
+    SystemCommonSkillItem(i, name, pictureID, type, false, oneHand, description,
+        targetKind, targetConditionFormula, conditionFormula, AvailableKind::Never,
+        new SystemPlaySong(-1, SongKind::Sound), animationUserID,
+        animationTargetID, price, modelCosts, modelEffects, modelCharacteristics)
 {
 
 }

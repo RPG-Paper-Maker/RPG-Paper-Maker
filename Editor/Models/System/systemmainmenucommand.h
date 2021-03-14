@@ -32,8 +32,8 @@ public:
     static const QString DEFAULT_SCRIPT;
 
     SystemMainMenuCommand();
-    SystemMainMenuCommand(int i, LangsTranslation* names, MainMenuCommandKind
-        kind = DEFAULT_KIND, QString script = DEFAULT_SCRIPT);
+    SystemMainMenuCommand(int i, QString name, MainMenuCommandKind kind =
+        DEFAULT_KIND, QString script = DEFAULT_SCRIPT);
     virtual ~SystemMainMenuCommand();
     MainMenuCommandKind kind() const;
     void setKind(MainMenuCommandKind kind);

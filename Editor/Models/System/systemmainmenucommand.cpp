@@ -25,14 +25,14 @@ const QString SystemMainMenuCommand::DEFAULT_SCRIPT = "";
 // -------------------------------------------------------
 
 SystemMainMenuCommand::SystemMainMenuCommand():
-    SystemMainMenuCommand(1, new LangsTranslation(""))
+    SystemMainMenuCommand(1, "")
 {
 
 }
 
-SystemMainMenuCommand::SystemMainMenuCommand(int id, LangsTranslation *names,
+SystemMainMenuCommand::SystemMainMenuCommand(int id, QString name,
     MainMenuCommandKind kind, QString script):
-    SystemLang(id, names),
+    SystemLang(id, name),
     m_kind(kind),
     m_script(script)
 {

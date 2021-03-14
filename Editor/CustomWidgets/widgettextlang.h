@@ -35,18 +35,17 @@ public:
     explicit WidgetTextLang(QWidget *parent = nullptr);
     ~WidgetTextLang();
     QLineEdit* lineEdit() const;
-    void initializeNamesTrans(LangsTranslation *l);
     void initializeNamesLang(SystemLang *lang);
 
 private:
     Ui::WidgetTextLang *ui;
-    LangsTranslation *m_l;
     SystemLang *m_lang;
 
     void initializeNames();
 
 private slots:
     void on_lineEdit_textChanged(const QString &text);
+    void on_pushButton_clicked();
 
 signals:
     void mainChanged(const QString &name);

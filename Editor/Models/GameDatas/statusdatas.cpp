@@ -54,13 +54,13 @@ void StatusDatas::read(QString path)
 void StatusDatas::setDefault()
 {
     SuperListItem::deleteModel(m_model, false);
-    m_model->appendRow((new SystemStatus(1, new LangsTranslation(RPM::translate(
-        Translations::KO)), -1, new PrimitiveValue(PrimitiveValueKind::None),
-        StatusRestrictionsKind::CantDoAnything, new PrimitiveValue(999), new
-        PrimitiveValue(8), false, false, new PrimitiveValue(0.0), false, new
-        QStandardItemModel, new PrimitiveValue(QString()), new PrimitiveValue(
-        QString()), new PrimitiveValue(QString()), new PrimitiveValue(QString()),
-        new QStandardItemModel, new QStandardItemModel))->getModelRow());
+    m_model->appendRow((new SystemStatus(1, RPM::translate(Translations::KO), -1,
+        new PrimitiveValue(PrimitiveValueKind::None), StatusRestrictionsKind
+        ::CantDoAnything, new PrimitiveValue(999), new PrimitiveValue(8), false,
+        false, new PrimitiveValue(0.0), false, new QStandardItemModel, new
+        PrimitiveValue(QString()), new PrimitiveValue(QString()), new
+        PrimitiveValue(QString()), new PrimitiveValue(QString()), new
+        QStandardItemModel, new QStandardItemModel))->getModelRow());
 }
 
 // -------------------------------------------------------

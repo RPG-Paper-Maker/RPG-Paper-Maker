@@ -50,12 +50,11 @@ DialogSystemTitleCommand::~DialogSystemTitleCommand() {
 //
 // -------------------------------------------------------
 
-void DialogSystemTitleCommand::initialize() {
-    int index;
-
-    ui->widgetTextLangName->initializeNamesTrans(m_titleCommand.names());
+void DialogSystemTitleCommand::initialize()
+{
+    ui->widgetTextLangName->initializeNamesLang(&m_titleCommand);
     ui->plainTextEditScript->insertPlainText(m_titleCommand.script());
-    index = static_cast<int>(m_titleCommand.kind());
+    int index = static_cast<int>(m_titleCommand.kind());
     ui->comboBoxTypeCommand->addItems(RPM::ENUM_TO_STRING_TITLE_COMMAND_KIND);
     ui->comboBoxTypeCommand->setCurrentIndex(index);
 }

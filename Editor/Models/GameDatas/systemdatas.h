@@ -15,7 +15,7 @@
 #include <QStandardItemModel>
 #include "serializable.h"
 #include "primitivevalue.h"
-#include "langstranslation.h"
+#include "systemlang.h"
 #include "systemplaysong.h"
 
 // -------------------------------------------------------
@@ -74,7 +74,7 @@ public:
 
     void read(QString path);
     SystemDatas(QString path);
-    LangsTranslation * projectName() const;
+    SystemLang * projectName() const;
     int screenWidth() const;
     void setScreenWidth(int w);
     int screenHeight() const;
@@ -155,7 +155,7 @@ public:
     virtual void write(QJsonObject &json) const;
 
 private:
-    LangsTranslation *m_projectName;
+    SystemLang *m_projectName;
     int m_screenWidth;
     int m_screenHeight;
     bool m_isScreenWindow;

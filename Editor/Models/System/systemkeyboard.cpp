@@ -21,22 +21,20 @@
 // -------------------------------------------------------
 
 SystemKeyBoard::SystemKeyBoard() :
-    SystemKeyBoard(1, new LangsTranslation(""), "")
+    SystemKeyBoard(1, "", "")
 {
 
 }
 
-SystemKeyBoard::SystemKeyBoard(int i, LangsTranslation *names,
-                               QString abreviation) :
-    SystemKeyBoard(i, names, abreviation, QVector<QVector<int>>({}))
+SystemKeyBoard::SystemKeyBoard(int i, QString name, QString abreviation) :
+    SystemKeyBoard(i, name, abreviation, QVector<QVector<int>>({}))
 {
 
 }
 
-SystemKeyBoard::SystemKeyBoard(int i, LangsTranslation *names,
-                               QString abreviation,
-                               QVector<QVector<int>> shortcut) :
-    SystemLang(i,names),
+SystemKeyBoard::SystemKeyBoard(int i, QString name, QString abreviation, QVector
+    <QVector<int>> shortcut) :
+    SystemLang(i,name),
     m_abbreviation(abreviation),
     m_shortcuts(shortcut)
 {
