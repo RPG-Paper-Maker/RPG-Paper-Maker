@@ -135,7 +135,7 @@ void SkillsDatas::setDefault(){
             modelEffects->appendRow(effects[i][j]->getModelRow());
         }
         modelEffects->appendRow(new QStandardItem);
-        skill = new SystemSkill(i + 1, names[i], iconsID[i], new SystemLang(-1,
+        skill = new SystemSkill(i + 1, names[i], iconsID[i], new SystemTranslatable(-1,
             descriptions[i]), targetsKind[i], targetConditions[i].isEmpty() ?
             new PrimitiveValue(PrimitiveValueKind::None) : new PrimitiveValue(
             targetConditions[i]), new PrimitiveValue(PrimitiveValueKind::None),

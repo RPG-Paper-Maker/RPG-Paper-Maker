@@ -25,7 +25,7 @@ PanelTroopReaction::PanelTroopReaction(QWidget *parent) :
     m_reaction(nullptr)
 {
     ui->setupUi(this);
-    ui->comboBoxFrequency->addItems(RPM::ENUM_TO_TROOP_REACTION_FREQUENCY_KIND);
+    ui->comboBoxFrequency->addItems(RPM::ENUM_TO_STRING_TROOP_REACTION_FREQUENCY_KIND);
     this->translate();
 }
 

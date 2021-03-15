@@ -24,7 +24,7 @@ SystemItem::SystemItem() :
 }
 
 SystemItem::SystemItem(int i, QString name, int pictureID, int type, bool
-    consumable, SystemLang *description, TargetKind targetKind, PrimitiveValue
+    consumable, SystemTranslatable *description, TargetKind targetKind, PrimitiveValue
     *targetConditionFormula, AvailableKind availableKind, SystemPlaySong *sound,
     PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
     QStandardItemModel *price, QStandardItemModel *modelEffects) :

@@ -27,7 +27,7 @@ SystemWeaponArmorKind::SystemWeaponArmorKind() :
 
 SystemWeaponArmorKind::SystemWeaponArmorKind(int i, QString name, QList<bool>
     equipment) :
-    SystemLang(i, name),
+    SystemTranslatable(i, name),
     m_equipment(equipment),
     m_isWeapon(true)
 {
@@ -59,11 +59,11 @@ QStandardItemModel* SystemWeaponArmorKind::getEquipmentModel() const{
     QStandardItemModel* model = new QStandardItemModel;
     QStandardItemModel* equipmentModel = RPM::get()->project()->gameDatas()
             ->battleSystemDatas()->modelCommonEquipment();
-    SystemLang* equipment;
+    SystemTranslatable* equipment;
     QStandardItem* item;
 
     for (int i = 0; i < equipmentModel->invisibleRootItem()->rowCount(); i++){
-        equipment = (SystemLang*) equipmentModel->item(i)->data()
+        equipment = (SystemTranslatable*) equipmentModel->item(i)->data()
                 .value<qintptr>();
         item = new QStandardItem;
         item->setData(QVariant::fromValue(
@@ -90,12 +90,12 @@ void SystemWeaponArmorKind::updateEquipment(){
     QStandardItemModel* model = RPM::get()->project()->gameDatas()
             ->battleSystemDatas()->modelCommonEquipment();
     QList<bool> previousEquipment = m_equipment;
-    SystemLang* equipment;
+    SystemTranslatable* equipment;
     int index;
 
     m_equipment.clear();
     for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
-        equipment = (SystemLang*) model->item(i)->data().value<qintptr>();
+        equipment = (SystemTranslatable*) model->item(i)->data().value<qintptr>();
         index = equipment->id() - 1;
 
         if (index < previousEquipment.size())
@@ -145,7 +145,7 @@ SuperListItem* SystemWeaponArmorKind::createCopy() const{
 void SystemWeaponArmorKind::setCopy(const SuperListItem &super) {
     const SystemWeaponArmorKind *kind;
 
-    SystemLang::setCopy(super);
+    SystemTranslatable::setCopy(super);
 
     kind = reinterpret_cast<const SystemWeaponArmorKind *>(&super);
     m_equipment = kind->m_equipment;
@@ -158,7 +158,7 @@ void SystemWeaponArmorKind::setCopy(const SuperListItem &super) {
 // -------------------------------------------------------
 
 void SystemWeaponArmorKind::read(const QJsonObject &json){
-    SystemLang::read(json);
+    SystemTranslatable::read(json);
     QJsonArray jsonEquipment = json["equipment"].toArray();
 
     for (int i = 0; i < jsonEquipment.size(); i++)
@@ -168,7 +168,7 @@ void SystemWeaponArmorKind::read(const QJsonObject &json){
 // -------------------------------------------------------
 
 void SystemWeaponArmorKind::write(QJsonObject &json) const{
-    SystemLang::write(json);
+    SystemTranslatable::write(json);
     QJsonArray tab;
 
     for (int i = 0; i < m_equipment.size(); i++)

@@ -26,7 +26,7 @@ class SystemSkill : public SystemCommonSkillItem
 {
 public:
     SystemSkill();
-    SystemSkill(int i, QString name, int pictureID, SystemLang *description,
+    SystemSkill(int i, QString name, int pictureID, SystemTranslatable *description,
         TargetKind targetKind, PrimitiveValue *targetConditionFormula,
         PrimitiveValue *conditionFormula, AvailableKind availableKind,
         SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue

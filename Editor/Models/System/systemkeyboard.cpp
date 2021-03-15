@@ -34,7 +34,7 @@ SystemKeyBoard::SystemKeyBoard(int i, QString name, QString abreviation) :
 
 SystemKeyBoard::SystemKeyBoard(int i, QString name, QString abreviation, QVector
     <QVector<int>> shortcut) :
-    SystemLang(i,name),
+    SystemTranslatable(i,name),
     m_abbreviation(abreviation),
     m_shortcuts(shortcut)
 {
@@ -154,7 +154,7 @@ SuperListItem* SystemKeyBoard::createCopy() const{
 void SystemKeyBoard::setCopy(const SuperListItem &super) {
     const SystemKeyBoard *kb;
 
-    SystemLang::setCopy(super);
+    SystemTranslatable::setCopy(super);
 
     kb = reinterpret_cast<const SystemKeyBoard *>(&super);
 
@@ -204,7 +204,7 @@ QList<QStandardItem *> SystemKeyBoard::getModelRow() const{
 // -------------------------------------------------------
 
 void SystemKeyBoard::read(const QJsonObject &json){
-    SystemLang::read(json);
+    SystemTranslatable::read(json);
 
     m_abbreviation = json["abr"].toString();
 
@@ -222,7 +222,7 @@ void SystemKeyBoard::read(const QJsonObject &json){
 // -------------------------------------------------------
 
 void SystemKeyBoard::write(QJsonObject &json) const{
-    SystemLang::write(json);
+    SystemTranslatable::write(json);
     json["abr"] = m_abbreviation;
 
     QJsonArray jsonShort;

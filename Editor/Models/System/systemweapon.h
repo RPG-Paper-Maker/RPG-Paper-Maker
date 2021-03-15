@@ -27,7 +27,7 @@ class SystemWeapon : public SystemCommonSkillItem
 public:
     SystemWeapon();
     SystemWeapon(int i, QString name, int pictureID, int type, bool
-        oneHand, SystemLang *description, TargetKind targetKind,
+        oneHand, SystemTranslatable *description, TargetKind targetKind,
         PrimitiveValue *targetConditionFormula, PrimitiveValue
         *conditionFormula, PrimitiveValue *animationUserID, PrimitiveValue
         *animationTargetID, QStandardItemModel *price, QStandardItemModel

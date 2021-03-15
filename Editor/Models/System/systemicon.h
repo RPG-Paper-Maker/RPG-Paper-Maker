@@ -13,7 +13,7 @@
 #define SYSTEMICON_H
 
 #include <QMetaType>
-#include "systemlang.h"
+#include "systemtranslatable.h"
 
 // -------------------------------------------------------
 //
@@ -23,7 +23,7 @@
 //
 // -------------------------------------------------------
 
-class SystemIcon : public SystemLang
+class SystemIcon : public SystemTranslatable
 {
 public:
     static const QString JSON_PICTURE_ID;

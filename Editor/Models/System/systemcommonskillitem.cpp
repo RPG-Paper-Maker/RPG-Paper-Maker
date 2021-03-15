@@ -38,7 +38,7 @@ const QString SystemCommonSkillItem::JSON_CHARACTERISTICS = "car";
 // -------------------------------------------------------
 
 SystemCommonSkillItem::SystemCommonSkillItem() :
-    SystemCommonSkillItem(1, "", -1, 1, false, true, new SystemLang, TargetKind
+    SystemCommonSkillItem(1, "", -1, 1, false, true, new SystemTranslatable, TargetKind
         ::None, new PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
         PrimitiveValueKind::None), AvailableKind::Never, new SystemPlaySong(-1,
         SongKind::Sound), new PrimitiveValue(PrimitiveValueKind::None), new
@@ -49,7 +49,7 @@ SystemCommonSkillItem::SystemCommonSkillItem() :
 }
 
 SystemCommonSkillItem::SystemCommonSkillItem(int i, QString name, int
-    pictureID, int type, bool consumable, bool oneHand, SystemLang
+    pictureID, int type, bool consumable, bool oneHand, SystemTranslatable
     *description, TargetKind targetKind, PrimitiveValue *targetConditionFormula,
     PrimitiveValue *conditionFormula, AvailableKind availableKind,
     SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
@@ -117,7 +117,7 @@ void SystemCommonSkillItem::setOneHand(bool b) {
     m_oneHand = b;
 }
 
-SystemLang *SystemCommonSkillItem::description() const {
+SystemTranslatable *SystemCommonSkillItem::description() const {
     return m_description;
 }
 

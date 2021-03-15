@@ -12,7 +12,7 @@
 #ifndef SYSTEMTITLECOMMAND_H
 #define SYSTEMTITLECOMMAND_H
 
-#include "systemlang.h"
+#include "systemtranslatable.h"
 #include "titlecommandkind.h"
 
 // -------------------------------------------------------
@@ -23,7 +23,7 @@
 //
 // -------------------------------------------------------
 
-class SystemTitleCommand : public SystemLang
+class SystemTitleCommand : public SystemTranslatable
 {
 public:
     static const QString JSON_KIND;

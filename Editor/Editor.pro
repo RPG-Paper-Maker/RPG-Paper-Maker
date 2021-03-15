@@ -78,6 +78,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemfontname.h \
     Dialogs/Systems/dialogsystemfontsize.h \
     Dialogs/Systems/dialogsysteminventoryfilter.h \
+    Dialogs/Systems/dialogsystemlanguage.h \
     Dialogs/Systems/dialogsystemmainmenucommand.h \
     Dialogs/Systems/dialogsystemmonsteraction.h \
     Dialogs/Systems/dialogsystemplugin.h \
@@ -91,9 +92,11 @@ HEADERS += \
     Dialogs/Systems/dialogsystemspeedfrequency.h \
     Dialogs/Systems/dialogsystemstatusreleaseturn.h \
     Dialogs/Systems/dialogsystemtitlecommand.h \
+    Dialogs/Systems/dialogsystemtranslatable.h \
     Dialogs/Systems/dialogsystemtroopreactionconditions.h \
     Dialogs/dialogenternameoptions.h \
     Dialogs/dialogfonts.h \
+    Dialogs/dialoglanguages.h \
     Dialogs/dialogscripts.h \
     Dialogs/dialogfirstlaunch.h \
     Dialogs/dialogimportdlcs.h \
@@ -112,6 +115,7 @@ HEADERS += \
     Enums/axiskind.h \
     Enums/conditionheroeskind.h \
     Enums/inventoryfilterkind.h \
+    Enums/languagekind.h \
     Enums/mainmenucommandkind.h \
     Enums/monsteractionkind.h \
     Enums/monsteractiontargetkind.h \
@@ -147,6 +151,7 @@ HEADERS += \
     Models/System/systemfontname.h \
     Models/System/systemfontsize.h \
     Models/System/systeminventoryfilter.h \
+    Models/System/systemlanguage.h \
     Models/System/systemmainmenucommand.h \
     Models/System/systemmonsteraction.h \
     Models/System/systemmountain.h \
@@ -163,6 +168,7 @@ HEADERS += \
     Models/System/systemspeedfrequency.h \
     Models/System/systemstatusreleaseturn.h \
     Models/System/systemtitlecommand.h \
+    Models/System/systemtranslatable.h \
     Models/System/systemtroopreaction.h \
     Models/System/systemtroopreactionconditions.h \
     Models/System/systemvideo.h \
@@ -214,7 +220,6 @@ HEADERS += \
     Models/System/systemclass.h \
     Dialogs/Commands/dialogcommandmodifyteam.h \
     Models/GameDatas/battlesystemdatas.h \
-    Models/System/systemlang.h \
     Models/System/systemelement.h \
     Dialogs/Systems/dialogsystemelement.h \
     Models/System/systemweaponarmorkind.h \
@@ -317,7 +322,6 @@ HEADERS += \
     Dialogs/dialoglocation.h \
     Dialogs/Commands/dialogcommandwait.h \
     CustomWidgets/widgetgraphics.h \
-    Dialogs/Systems/dialogsystemlang.h \
     Enums/drawkind.h \
     Enums/mapeditormodeskind.h \
     MapEditor/lands.h \
@@ -485,6 +489,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemfontname.cpp \
     Dialogs/Systems/dialogsystemfontsize.cpp \
     Dialogs/Systems/dialogsysteminventoryfilter.cpp \
+    Dialogs/Systems/dialogsystemlanguage.cpp \
     Dialogs/Systems/dialogsystemmainmenucommand.cpp \
     Dialogs/Systems/dialogsystemmonsteraction.cpp \
     Dialogs/Systems/dialogsystemplugin.cpp \
@@ -498,9 +503,11 @@ SOURCES += \
     Dialogs/Systems/dialogsystemspeedfrequency.cpp \
     Dialogs/Systems/dialogsystemstatusreleaseturn.cpp \
     Dialogs/Systems/dialogsystemtitlecommand.cpp \
+    Dialogs/Systems/dialogsystemtranslatable.cpp \
     Dialogs/Systems/dialogsystemtroopreactionconditions.cpp \
     Dialogs/dialogenternameoptions.cpp \
     Dialogs/dialogfonts.cpp \
+    Dialogs/dialoglanguages.cpp \
     Dialogs/dialogscripts.cpp \
     Dialogs/dialogfirstlaunch.cpp \
     Dialogs/dialogimportdlcs.cpp \
@@ -535,6 +542,7 @@ SOURCES += \
     Models/System/systemfontname.cpp \
     Models/System/systemfontsize.cpp \
     Models/System/systeminventoryfilter.cpp \
+    Models/System/systemlanguage.cpp \
     Models/System/systemmainmenucommand.cpp \
     Models/System/systemmonsteraction.cpp \
     Models/System/systemmountain.cpp \
@@ -551,6 +559,7 @@ SOURCES += \
     Models/System/systemspeedfrequency.cpp \
     Models/System/systemstatusreleaseturn.cpp \
     Models/System/systemtitlecommand.cpp \
+    Models/System/systemtranslatable.cpp \
     Models/System/systemtroopreaction.cpp \
     Models/System/systemtroopreactionconditions.cpp \
     Models/System/systemvideo.cpp \
@@ -596,7 +605,6 @@ SOURCES += \
     Models/System/systemclass.cpp \
     Dialogs/Commands/dialogcommandmodifyteam.cpp \
     Models/GameDatas/battlesystemdatas.cpp \
-    Models/System/systemlang.cpp \
     Models/System/systemelement.cpp \
     Dialogs/Systems/dialogsystemelement.cpp \
     Models/System/systemweaponarmorkind.cpp \
@@ -693,7 +701,6 @@ SOURCES += \
     Dialogs/dialoglocation.cpp \
     Dialogs/Commands/dialogcommandwait.cpp \
     CustomWidgets/widgetgraphics.cpp \
-    Dialogs/Systems/dialogsystemlang.cpp \
     MapEditor/lands.cpp \
     MapEditor/vertexbillboard.cpp \
     MapEditor/threadmapportionloader.cpp \
@@ -839,6 +846,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemfontname.ui \
     Dialogs/Systems/dialogsystemfontsize.ui \
     Dialogs/Systems/dialogsysteminventoryfilter.ui \
+    Dialogs/Systems/dialogsystemlanguage.ui \
     Dialogs/Systems/dialogsystemmainmenucommand.ui \
     Dialogs/Systems/dialogsystemmonsteraction.ui \
     Dialogs/Systems/dialogsystemplugin.ui \
@@ -852,9 +860,11 @@ FORMS += \
     Dialogs/Systems/dialogsystemspeedfrequency.ui \
     Dialogs/Systems/dialogsystemstatusreleaseturn.ui \
     Dialogs/Systems/dialogsystemtitlecommand.ui \
+    Dialogs/Systems/dialogsystemtranslatable.ui \
     Dialogs/Systems/dialogsystemtroopreactionconditions.ui \
     Dialogs/dialogenternameoptions.ui \
     Dialogs/dialogfonts.ui \
+    Dialogs/dialoglanguages.ui \
     Dialogs/dialogscripts.ui \
     Dialogs/dialogfirstlaunch.ui \
     Dialogs/dialogimportdlcs.ui \
@@ -917,7 +927,6 @@ FORMS += \
     Dialogs/Systems/dialogsystemstate.ui \
     Dialogs/dialoglocation.ui \
     Dialogs/Commands/dialogcommandwait.ui \
-    Dialogs/Systems/dialogsystemlang.ui \
     Dialogs/Commands/dialogcommandmovecamera.ui \
     Dialogs/dialogprogress.ui \
     Dialogs/SpecialElements/dialogspecialelements.ui \

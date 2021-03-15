@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DialogSystemLang</class>
- <widget class="QDialog" name="DialogSystemLang">
+ <class>DialogSystemTranslatable</class>
+ <widget class="QDialog" name="DialogSystemTranslatable">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -75,7 +75,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DialogSystemLang</receiver>
+   <receiver>DialogSystemTranslatable</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -91,7 +91,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DialogSystemLang</receiver>
+   <receiver>DialogSystemTranslatable</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

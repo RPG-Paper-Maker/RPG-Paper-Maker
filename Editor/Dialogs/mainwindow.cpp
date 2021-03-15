@@ -43,6 +43,7 @@
 #include "dialogshapes.h"
 #include "dialogvideos.h"
 #include "dialogfonts.h"
+#include "dialoglanguages.h"
 #include "common.h"
 #include "dialogselectlanguage.h"
 
@@ -259,6 +260,7 @@ void MainWindow::enableAll(bool b){
     ui->actionKeyboard_controls->setEnabled(b);
     ui->actionCollisions_manager->setEnabled(b);
     ui->actionScripts_manager->setEnabled(b);
+    ui->actionLanguage_manager->setEnabled(b);
     ui->actionAutotiles->setEnabled(b);
     ui->actionSprite_walls->setEnabled(b);
     ui->action3D_objects->setEnabled(b);
@@ -304,6 +306,7 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionDebug_options->setEnabled(true);
     ui->actionKeyboard_controls->setEnabled(true);
     ui->actionScripts_manager->setEnabled(true);
+    ui->actionLanguage_manager->setEnabled(true);
     ui->actionCollisions_manager->setEnabled(true);
     ui->actionAutotiles->setEnabled(true);
     ui->actionSprite_walls->setEnabled(true);
@@ -845,6 +848,20 @@ void MainWindow::on_actionScripts_manager_triggered()
     {
         m_dialogScripts->initialize();
         m_dialogScripts->show();
+    }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionLanguage_manager_triggered()
+{
+    DialogLanguages dialog;
+    if (openDialog(dialog) == QDialog::Accepted)
+    {
+        project->writeLangsDatas();
+    } else
+    {
+        project->readLangsDatas();
     }
 }
 

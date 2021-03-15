@@ -39,7 +39,7 @@ SystemClass::SystemClass() :
 SystemClass::SystemClass(int i, QString name, int initialLevel, int maxLevel,
     int expBase, int expInflation, QStandardItemModel *characteristics,
     QStandardItemModel *stats, QStandardItemModel *skills) :
-    SystemLang(i, name),
+    SystemTranslatable(i, name),
     m_initialLevel(initialLevel),
     m_maxLevel(maxLevel),
     m_expBase(expBase),
@@ -181,7 +181,7 @@ void SystemClass::setCopy(const SuperListItem &super)
 {
     const SystemClass *sys;
     QHash<int, int>::const_iterator it;
-    SystemLang::setCopy(super);
+    SystemTranslatable::setCopy(super);
     sys = reinterpret_cast<const SystemClass *>(&super);
     m_initialLevel = sys->m_initialLevel;
     m_maxLevel = sys->m_maxLevel;
@@ -215,7 +215,7 @@ void SystemClass::setCopy(const SuperListItem &super)
 // -------------------------------------------------------
 
 void SystemClass::read(const QJsonObject &json){
-    SystemLang::read(json);
+    SystemTranslatable::read(json);
     QJsonArray tab;
     QList<QStandardItem *> row;
 
@@ -261,7 +261,7 @@ void SystemClass::read(const QJsonObject &json){
 // -------------------------------------------------------
 
 void SystemClass::write(QJsonObject &json) const{
-    SystemLang::write(json);
+    SystemTranslatable::write(json);
     QJsonArray tab;
     QJsonObject obj;
 

@@ -13,7 +13,7 @@
 #define SYSTEMBATTLECOMMAND_H
 
 #include <QMetaType>
-#include "systemlang.h"
+#include "systemtranslatable.h"
 
 // -------------------------------------------------------
 //

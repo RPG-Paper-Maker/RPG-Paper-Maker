@@ -33,7 +33,7 @@ SystemInventoryFilter::SystemInventoryFilter():
 
 SystemInventoryFilter::SystemInventoryFilter(int id, QString name,
     InventoryFilterKind kind, PrimitiveValue *itemTypeID, QString script):
-    SystemLang(id, name),
+    SystemTranslatable(id, name),
     m_kind(kind),
     m_itemTypeID(itemTypeID),
     m_script(script)
@@ -105,7 +105,7 @@ SuperListItem* SystemInventoryFilter::createCopy() const
 void SystemInventoryFilter::setCopy(const SuperListItem &super)
 {
     const SystemInventoryFilter *inventoryFilter;
-    SystemLang::setCopy(super);
+    SystemTranslatable::setCopy(super);
     inventoryFilter = reinterpret_cast<const SystemInventoryFilter *>(&super);
     m_kind = inventoryFilter->m_kind;
     m_itemTypeID->setCopy(*inventoryFilter->m_itemTypeID);
@@ -119,7 +119,7 @@ void SystemInventoryFilter::setCopy(const SuperListItem &super)
 // -------------------------------------------------------
 
 void SystemInventoryFilter::read(const QJsonObject &json){
-    SystemLang::read(json);
+    SystemTranslatable::read(json);
     if (json.contains(JSON_KIND))
     {
         m_kind = static_cast<InventoryFilterKind>(json[JSON_KIND].toInt());
@@ -137,7 +137,7 @@ void SystemInventoryFilter::read(const QJsonObject &json){
 // -------------------------------------------------------
 
 void SystemInventoryFilter::write(QJsonObject &json) const {
-    SystemLang::write(json);
+    SystemTranslatable::write(json);
     QJsonObject obj;
     if (m_kind != DEFAULT_KIND)
     {

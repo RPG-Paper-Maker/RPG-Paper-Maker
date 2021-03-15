@@ -46,7 +46,7 @@ void DialogSystemMainMenuCommand::initialize()
     this->setVisibleScript(false);
     ui->widgetTextLangName->initializeNamesLang(&m_mainMenuCommand);
     int index = static_cast<int>(m_mainMenuCommand.kind());
-    ui->comboBoxKind->addItems(RPM::ENUM_TO_MAIN_MENU_COMMAND_KIND);
+    ui->comboBoxKind->addItems(RPM::ENUM_TO_STRING_MAIN_MENU_COMMAND_KIND);
     ui->comboBoxKind->setCurrentIndex(index);
     if (m_mainMenuCommand.kind() == MainMenuCommandKind::Script) {
         this->setVisibleScript(true);

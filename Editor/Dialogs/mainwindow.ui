@@ -85,6 +85,7 @@
     <addaction name="actionCollisions_manager"/>
     <addaction name="actionKeyboard_controls"/>
     <addaction name="actionScripts_manager"/>
+    <addaction name="actionLanguage_manager"/>
     <addaction name="actionPictures_manager"/>
     <addaction name="actionVideos_manager"/>
     <addaction name="actionSongs_manager"/>
@@ -184,6 +185,7 @@
    <addaction name="actionCollisions_manager"/>
    <addaction name="actionKeyboard_controls"/>
    <addaction name="actionScripts_manager"/>
+   <addaction name="actionLanguage_manager"/>
    <addaction name="separator"/>
    <addaction name="actionPictures_manager"/>
    <addaction name="actionVideos_manager"/>
@@ -380,7 +382,7 @@
     <string>Pictures</string>
    </property>
    <property name="shortcut">
-    <string>6</string>
+    <string>7</string>
    </property>
   </action>
   <action name="actionSet_BR_path_folder">
@@ -519,7 +521,7 @@
     <string>Songs</string>
    </property>
    <property name="shortcut">
-    <string>8</string>
+    <string>9</string>
    </property>
   </action>
   <action name="actionCollisions_manager">
@@ -630,7 +632,7 @@
     <string>Shapes</string>
    </property>
    <property name="shortcut">
-    <string>9</string>
+    <string>0</string>
    </property>
   </action>
   <action name="actionAuto_update">
@@ -661,7 +663,7 @@
     <string>Videos</string>
    </property>
    <property name="shortcut">
-    <string>7</string>
+    <string>8</string>
    </property>
   </action>
   <action name="actionSet_DLC_s_path_folder">
@@ -714,7 +716,22 @@
     <string>Fonts</string>
    </property>
    <property name="shortcut">
-    <string>0</string>
+    <string>°</string>
+   </property>
+  </action>
+  <action name="actionLanguage_manager">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/lang.png</normaloff>:/icons/Ressources/lang.png</iconset>
+   </property>
+   <property name="text">
+    <string>Languages manager</string>
+   </property>
+   <property name="iconText">
+    <string>Languages</string>
+   </property>
+   <property name="shortcut">
+    <string>6</string>
    </property>
   </action>
  </widget>

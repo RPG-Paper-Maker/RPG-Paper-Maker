@@ -172,7 +172,7 @@ void PanelSuperList::on_listIndexChanged(QModelIndex index, QModelIndex) {
             ->data().value<quintptr>());
 
         if (m_isLang) {
-            SystemLang *lang = reinterpret_cast<SystemLang *>(selected
+            SystemTranslatable *lang = reinterpret_cast<SystemTranslatable *>(selected
                 ->data().value<quintptr>());
             ui->widgetTextLang->initializeNamesLang(lang);
         } else {

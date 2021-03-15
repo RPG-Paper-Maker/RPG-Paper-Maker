@@ -25,7 +25,7 @@ SystemIcon::SystemIcon() : SystemIcon(1, "", -1)
 }
 
 SystemIcon::SystemIcon(int i, QString name, int pictureID) :
-    SystemLang(i, name),
+    SystemTranslatable(i, name),
     m_pictureID(pictureID)
 {
 
@@ -52,7 +52,7 @@ void SystemIcon::setPictureID(int id) {
 void SystemIcon::setCopy(const SuperListItem &super) {
     const SystemIcon *icon;
 
-    SystemLang::setCopy(super);
+    SystemTranslatable::setCopy(super);
 
     icon = reinterpret_cast<const SystemIcon *>(&super);
     m_pictureID = icon->m_pictureID;
@@ -65,7 +65,7 @@ void SystemIcon::setCopy(const SuperListItem &super) {
 // -------------------------------------------------------
 
 void SystemIcon::read(const QJsonObject &json){
-    SystemLang::read(json);
+    SystemTranslatable::read(json);
 
     m_pictureID = json[JSON_PICTURE_ID].toInt();
 }
@@ -73,7 +73,7 @@ void SystemIcon::read(const QJsonObject &json){
 // -------------------------------------------------------
 
 void SystemIcon::write(QJsonObject &json) const{
-    SystemLang::write(json);
+    SystemTranslatable::write(json);
 
     json[JSON_PICTURE_ID] = m_pictureID;
 }

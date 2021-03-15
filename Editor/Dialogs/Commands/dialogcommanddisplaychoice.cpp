@@ -11,7 +11,7 @@
 
 #include "dialogcommanddisplaychoice.h"
 #include "ui_dialogcommanddisplaychoice.h"
-#include "systemlang.h"
+#include "systemtranslatable.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -54,13 +54,13 @@ DialogCommandDisplayChoice::~DialogCommandDisplayChoice() {
 
 void DialogCommandDisplayChoice::initializePrimitives() {
     QStandardItemModel *properties;
-    SystemLang * lang;
+    SystemTranslatable * lang;
 
     properties = m_object == nullptr ? nullptr : m_object->modelProperties();
     ui->treeViewChoices->setUpdateId(true);
     ui->treeViewChoices->setCanBeEmpty(false);
     ui->treeViewChoices->initializeModel(m_model);
-    lang = new SystemLang;
+    lang = new SystemTranslatable;
     lang->setDisplayID(false);
     ui->treeViewChoices->initializeNewItemInstance(lang);
     ui->panelPrimitiveCancelAutoIndex->initializeProperty(m_parameters,
@@ -71,14 +71,14 @@ void DialogCommandDisplayChoice::initializePrimitives() {
 // -------------------------------------------------------
 
 void DialogCommandDisplayChoice::initializeDefault() {
-    SystemLang *lang;
+    SystemTranslatable *lang;
     QList<QStandardItem *> row;
 
-    lang = new SystemLang(1, RPM::translate(Translations::YES));
+    lang = new SystemTranslatable(1, RPM::translate(Translations::YES));
     lang->setDisplayID(false);
     row = lang->getModelRow();
     m_model->appendRow(row);
-    lang = new SystemLang(2, RPM::translate(Translations::NO));
+    lang = new SystemTranslatable(2, RPM::translate(Translations::NO));
     lang->setDisplayID(false);
     row = lang->getModelRow();
     m_model->appendRow(row);
@@ -107,12 +107,12 @@ void DialogCommandDisplayChoice::translate()
 
 EventCommand * DialogCommandDisplayChoice::getCommand() const {
     QVector<QString> command;
-    SystemLang *lang;
+    SystemTranslatable *lang;
     int i, l;
 
     ui->panelPrimitiveCancelAutoIndex->getCommand(command);
     for (i = 0, l = m_model->invisibleRootItem()->rowCount(); i < l; i++) {
-        lang = reinterpret_cast<SystemLang *>(m_model->item(i)->data().value<
+        lang = reinterpret_cast<SystemTranslatable *>(m_model->item(i)->data().value<
             quintptr>());
         if (lang != nullptr) {
             command.append(RPM::DASH);
@@ -127,7 +127,7 @@ EventCommand * DialogCommandDisplayChoice::getCommand() const {
 // -------------------------------------------------------
 
 void DialogCommandDisplayChoice::initialize(EventCommand *command) {
-    SystemLang * lang;
+    SystemTranslatable * lang;
     QList<QStandardItem *> row;
     QString next;
     int i, l, id;
@@ -144,7 +144,7 @@ void DialogCommandDisplayChoice::initialize(EventCommand *command) {
                 row = lang->getModelRow();
                 m_model->appendRow(row);
             }
-            lang = new SystemLang(id, "");
+            lang = new SystemTranslatable(id, "");
             lang->setDisplayID(false);
             i++;
         }

@@ -12,7 +12,7 @@
 #ifndef SYSTEMMAINMENUCOMMAND_H
 #define SYSTEMMAINMENUCOMMAND_H
 
-#include "systemlang.h"
+#include "systemtranslatable.h"
 #include "mainmenucommandkind.h"
 
 // -------------------------------------------------------
@@ -23,7 +23,7 @@
 //
 // -------------------------------------------------------
 
-class SystemMainMenuCommand : public SystemLang
+class SystemMainMenuCommand : public SystemTranslatable
 {
 public:
     static const QString JSON_KIND;

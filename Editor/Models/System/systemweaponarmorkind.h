@@ -14,7 +14,7 @@
 
 #include <QStandardItemModel>
 #include <QMetaType>
-#include "systemlang.h"
+#include "systemtranslatable.h"
 
 // -------------------------------------------------------
 //
@@ -24,7 +24,7 @@
 //
 // -------------------------------------------------------
 
-class SystemWeaponArmorKind : public SystemLang
+class SystemWeaponArmorKind : public SystemTranslatable
 {
 public:
     SystemWeaponArmorKind();

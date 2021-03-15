@@ -28,7 +28,7 @@ SystemTitleCommand::SystemTitleCommand() :
 }
 
 SystemTitleCommand::SystemTitleCommand(int i, QString name, TitleCommandKind k) :
-    SystemLang(i, name),
+    SystemTranslatable(i, name),
     m_kind(k)
 {
 
@@ -85,7 +85,7 @@ void SystemTitleCommand::setCopy(const SuperListItem &super) {
     const SystemTitleCommand *titleCommand;
 
     titleCommand = reinterpret_cast<const SystemTitleCommand *>(&super);
-    SystemLang::setCopy(*titleCommand);
+    SystemTranslatable::setCopy(*titleCommand);
 
     m_kind = titleCommand->m_kind;
     m_script = m_kind == TitleCommandKind::Script ? titleCommand->m_script : "";
@@ -109,7 +109,7 @@ QList<QStandardItem *> SystemTitleCommand::getModelRow() const{
 // -------------------------------------------------------
 
 void SystemTitleCommand::read(const QJsonObject &json) {
-    SystemLang::read(json);
+    SystemTranslatable::read(json);
 
     if (json.contains(JSON_KIND)) {
         m_kind = static_cast<TitleCommandKind>(json[JSON_KIND].toInt());
@@ -122,7 +122,7 @@ void SystemTitleCommand::read(const QJsonObject &json) {
 // -------------------------------------------------------
 
 void SystemTitleCommand::write(QJsonObject &json) const {
-    SystemLang::write(json);
+    SystemTranslatable::write(json);
 
     if (m_kind != TitleCommandKind::NewGame) {
         json[JSON_KIND] = static_cast<int>(m_kind);

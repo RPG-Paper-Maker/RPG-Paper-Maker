@@ -267,7 +267,7 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
     ui->panelSuperListCommonEquipments->list()->initializeModel(gameDatas
         ->battleSystemDatas()->modelCommonEquipment());
     ui->panelSuperListCommonEquipments->list()->initializeNewItemInstance(
-        new SystemLang);
+        new SystemTranslatable);
     ui->panelSuperListCommonStatistics->list()->initializeModel(gameDatas
         ->battleSystemDatas()->modelCommonStatistics());
     ui->panelSuperListCommonStatistics->list()->initializeNewItemInstance(
@@ -342,7 +342,7 @@ void DialogSystems::initializeMainMenu(GameDatas *gameDatas){
     ui->panelSuperListItemsTypes->list()->setCanEdit(true);
     ui->panelSuperListItemsTypes->initializeModel(gameDatas->systemDatas()
         ->modelItemsTypes());
-    ui->panelSuperListItemsTypes->list()->initializeNewItemInstance(new SystemLang);
+    ui->panelSuperListItemsTypes->list()->initializeNewItemInstance(new SystemTranslatable);
     ui->panelSuperListItemsTypes->showEditName(true);
     ui->panelSuperListInventoryFilters->list()->setCanEdit(true);
     ui->panelSuperListInventoryFilters->showEditName(false);

@@ -71,7 +71,7 @@ const double SystemDatas::DEFAULT_PRICE_SOLD_ITEM = 50.0;
 // -------------------------------------------------------
 
 SystemDatas::SystemDatas() :
-    m_projectName(new SystemLang(-1, RPM::translate(Translations::PROJECT_WITHOUT_NAME))),
+    m_projectName(new SystemTranslatable(-1, RPM::translate(Translations::PROJECT_WITHOUT_NAME))),
     m_mountainCollisionHeight(new PrimitiveValue(4)),
     m_mountainCollisionAngle(new PrimitiveValue(45.0)),
     m_mapFrameDuration(new PrimitiveValue(DEFAULT_MAP_FRAME_DURATION)),
@@ -138,7 +138,7 @@ void SystemDatas::read(QString path) {
     RPM::readJSON(Common::pathCombine(path, RPM::PATH_SYSTEM), *this);
 }
 
-SystemLang *SystemDatas::projectName() const {
+SystemTranslatable *SystemDatas::projectName() const {
     return m_projectName;
 }
 
@@ -444,9 +444,9 @@ void SystemDatas::setDefaultCurrencies() {
 
 void SystemDatas::setDefaultItemsTypes() {
     SuperListItem::deleteModel(m_modelItemsTypes, false);
-    m_modelItemsTypes->appendRow((new SystemLang(1, RPM::translate(Translations
+    m_modelItemsTypes->appendRow((new SystemTranslatable(1, RPM::translate(Translations
         ::INGREDIENT)))->getModelRow());
-    m_modelItemsTypes->appendRow((new SystemLang(2, RPM::translate(Translations
+    m_modelItemsTypes->appendRow((new SystemTranslatable(2, RPM::translate(Translations
         ::KEY_ITEM)))->getModelRow());
 }
 
@@ -780,7 +780,7 @@ void SystemDatas::read(const QJsonObject &json){
     }
 
     // Menus
-    SuperListItem::readList(m_modelItemsTypes, new SystemLang, json, JSON_ITEMS_TYPES);
+    SuperListItem::readList(m_modelItemsTypes, new SystemTranslatable, json, JSON_ITEMS_TYPES);
     SuperListItem::readList(m_modelInventoryFilters, new SystemInventoryFilter,
         json, JSON_INVENTORY_FILTERS);
     SuperListItem::readList(m_modelMainMenuCommands, new SystemMainMenuCommand,

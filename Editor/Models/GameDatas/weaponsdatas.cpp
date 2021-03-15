@@ -87,7 +87,7 @@ void WeaponsDatas::setDefault() {
             PrimitiveValueKind::DataBase, 1), 1, new PrimitiveValue(QString
             ::number(prices[i]))))->getModelRow());
         weapon = new SystemWeapon(i + 1, names[i], iconsID[i], types[i],
-            oneHands[i], new SystemLang(-1, descriptions[i]), TargetKind::Enemy,
+            oneHands[i], new SystemTranslatable(-1, descriptions[i]), TargetKind::Enemy,
             new PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
             PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind
             ::None), new PrimitiveValue(PrimitiveValueKind::None), modelPrice,

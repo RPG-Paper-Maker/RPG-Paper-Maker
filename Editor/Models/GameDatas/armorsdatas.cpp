@@ -95,7 +95,7 @@ void ArmorsDatas::setDefault() {
             PrimitiveValueKind::DataBase, 1), 1, new PrimitiveValue(QString
             ::number(prices[i]))))->getModelRow());
         armor = new SystemArmor(i + 1, names[i], iconsID[i], types[i], new
-            SystemLang(-1, descriptions[i]), new PrimitiveValue(
+            SystemTranslatable(-1, descriptions[i]), new PrimitiveValue(
             PrimitiveValueKind::None), modelPrice, modelCharacteristics);
         m_model->appendRow(armor->getModelRow());
     }

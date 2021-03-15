@@ -58,7 +58,7 @@ MapProperties::MapProperties(QString path) :
 
 MapProperties::MapProperties(int i, QString name, int l, int w, int h, int d,
     int idTileset) :
-    SystemLang(i, name),
+    SystemTranslatable(i, name),
     m_tilesetID(idTileset),
     m_length(l),
     m_width(w),
@@ -392,7 +392,7 @@ void MapProperties::setCopy(const SuperListItem &super) {
     QSet<Position> *set, *superSet;
     const MapProperties *properties;
     properties = reinterpret_cast<const MapProperties *>(&super);
-    SystemLang::setCopy(*properties);
+    SystemTranslatable::setCopy(*properties);
     m_length = properties->m_length;
     m_width = properties->m_width;
     m_height = properties->m_height;
@@ -711,7 +711,7 @@ void MapProperties::writeOverflow(QJsonObject &json, const QHash<Portion, QSet<
 // -------------------------------------------------------
 
 void MapProperties::read(const QJsonObject &json){
-    SystemLang::read(json);
+    SystemTranslatable::read(json);
     QJsonObject obj;
 
     // Clear
@@ -785,7 +785,7 @@ void MapProperties::read(const QJsonObject &json){
 // -------------------------------------------------------
 
 void MapProperties::write(QJsonObject &json) const {
-    SystemLang::write(json);
+    SystemTranslatable::write(json);
     QJsonObject obj;
 
     json[JSON_TILESET_ID] = m_tilesetID;

@@ -27,7 +27,7 @@ class SystemItem : public SystemCommonSkillItem
 public:
     SystemItem();
     SystemItem(int i, QString name, int pictureID, int type, bool consumable,
-        SystemLang *description, TargetKind targetKind, PrimitiveValue
+        SystemTranslatable *description, TargetKind targetKind, PrimitiveValue
         *conditionFormula, AvailableKind availableKind, SystemPlaySong *sound,
         PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
         QStandardItemModel *price, QStandardItemModel *modelEffects);

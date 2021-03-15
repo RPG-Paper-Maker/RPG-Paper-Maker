@@ -24,7 +24,7 @@ SystemArmor::SystemArmor() :
 }
 
 SystemArmor::SystemArmor(int i, QString name, int pictureID, int
-    type, SystemLang *description, PrimitiveValue *conditionFormula,
+    type, SystemTranslatable *description, PrimitiveValue *conditionFormula,
     QStandardItemModel *price, QStandardItemModel *modelCharacteristics) :
     SystemCommonSkillItem(i, name, pictureID, type, false, true, description,
     TargetKind::None, new PrimitiveValue(PrimitiveValueKind::None),

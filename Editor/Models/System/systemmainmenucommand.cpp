@@ -32,7 +32,7 @@ SystemMainMenuCommand::SystemMainMenuCommand():
 
 SystemMainMenuCommand::SystemMainMenuCommand(int id, QString name,
     MainMenuCommandKind kind, QString script):
-    SystemLang(id, name),
+    SystemTranslatable(id, name),
     m_kind(kind),
     m_script(script)
 {
@@ -97,7 +97,7 @@ SuperListItem* SystemMainMenuCommand::createCopy() const
 void SystemMainMenuCommand::setCopy(const SuperListItem &super)
 {
     const SystemMainMenuCommand *mainMenuCommand;
-    SystemLang::setCopy(super);
+    SystemTranslatable::setCopy(super);
     mainMenuCommand = reinterpret_cast<const SystemMainMenuCommand *>(&super);
     m_kind = mainMenuCommand->m_kind;
     m_script = mainMenuCommand->m_script;
@@ -111,7 +111,7 @@ void SystemMainMenuCommand::setCopy(const SuperListItem &super)
 
 void SystemMainMenuCommand::read(const QJsonObject &json)
 {
-    SystemLang::read(json);
+    SystemTranslatable::read(json);
     if (json.contains(JSON_KIND))
     {
         m_kind = static_cast<MainMenuCommandKind>(json[JSON_KIND].toInt());
@@ -126,7 +126,7 @@ void SystemMainMenuCommand::read(const QJsonObject &json)
 
 void SystemMainMenuCommand::write(QJsonObject &json) const
 {
-    SystemLang::write(json);
+    SystemTranslatable::write(json);
     QJsonObject obj;
     if (m_kind != DEFAULT_KIND)
     {

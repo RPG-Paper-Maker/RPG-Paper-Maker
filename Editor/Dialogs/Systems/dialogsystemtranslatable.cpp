@@ -9,8 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#include "dialogsystemlang.h"
-#include "ui_dialogsystemlang.h"
+#include "dialogsystemtranslatable.h"
+#include "ui_dialogsystemtranslatable.h"
+#include "systemlanguage.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -19,9 +20,9 @@
 //
 // -------------------------------------------------------
 
-DialogSystemLang::DialogSystemLang(SystemLang &model, QWidget *parent) :
+DialogSystemTranslatable::DialogSystemTranslatable(SystemTranslatable &model, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogSystemLang),
+    ui(new Ui::DialogSystemTranslatable),
     m_model(model)
 {
     ui->setupUi(this);
@@ -29,7 +30,7 @@ DialogSystemLang::DialogSystemLang(SystemLang &model, QWidget *parent) :
     this->translate();
 }
 
-DialogSystemLang::~DialogSystemLang()
+DialogSystemTranslatable::~DialogSystemTranslatable()
 {
     delete ui;
 }
@@ -40,14 +41,26 @@ DialogSystemLang::~DialogSystemLang()
 //
 // -------------------------------------------------------
 
-void DialogSystemLang::initialize()
+void DialogSystemTranslatable::initialize()
 {
-
+    QStandardItemModel *model = RPM::get()->project()->langsDatas()->model();
+    QWidget *widget;
+    SystemLanguage *language;
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        language = reinterpret_cast<SystemLanguage *>(SuperListItem
+            ::getItemModelAt(model, i));
+        if (language != nullptr)
+        {
+            //widget = new QWidget(nullptr);
+            ui->tabWidget->insertTab(i, widget, language->name());
+        }
+    }
 }
 
 //-------------------------------------------------
 
-void DialogSystemLang::translate()
+void DialogSystemTranslatable::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::SET_NAME) + RPM
         ::DOT_DOT_DOT);
@@ -61,7 +74,7 @@ void DialogSystemLang::translate()
 //
 // -------------------------------------------------------
 
-void DialogSystemLang::on_lineEditAll_textEdited(const QString &text)
+void DialogSystemTranslatable::on_lineEditAll_textEdited(const QString &text)
 {
     m_model.setAllNames(text);
 }

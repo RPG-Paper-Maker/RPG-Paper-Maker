@@ -38,7 +38,7 @@ SystemHero::SystemHero() :
 
 SystemHero::SystemHero(int i, QString name, int idClass, int idBattler, int
     idFaceset, SystemClass *classInherit) :
-    SystemLang(i, name),
+    SystemTranslatable(i, name),
     m_idClass(idClass),
     m_idBattlerPicture(idBattler),
     m_idFacesetPicture(idFaceset),
@@ -121,7 +121,7 @@ SuperListItem* SystemHero::createCopy() const {
 void SystemHero::setCopy(const SuperListItem &super) {
     const SystemHero *hero;
 
-    SystemLang::setCopy(super);
+    SystemTranslatable::setCopy(super);
     hero = reinterpret_cast<const SystemHero *>(&super);
     m_idClass = hero->m_idClass;
     m_idBattlerPicture = hero->m_idBattlerPicture;
@@ -136,7 +136,7 @@ void SystemHero::setCopy(const SuperListItem &super) {
 // -------------------------------------------------------
 
 void SystemHero::read(const QJsonObject &json){
-    SystemLang::read(json);
+    SystemTranslatable::read(json);
     m_idClass = json[jsonClass].toInt();
     m_idBattlerPicture = json[jsonBattler].toInt();
     m_idFacesetPicture = json[jsonFaceset].toInt();
@@ -144,7 +144,7 @@ void SystemHero::read(const QJsonObject &json){
 }
 
 void SystemHero::write(QJsonObject &json) const{
-    SystemLang::write(json);
+    SystemTranslatable::write(json);
     json[jsonClass] = m_idClass;
     json[jsonBattler] = m_idBattlerPicture;
     json[jsonFaceset] = m_idFacesetPicture;

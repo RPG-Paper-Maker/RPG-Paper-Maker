@@ -301,9 +301,10 @@ QStringList RPM::ENUM_TO_STRING_MONSTER_ACTION_TARGET_KIND = {};
 QStringList RPM::ENUM_TO_STRING_PLUGIN_CATEGORY = {};
 QStringList RPM::ENUM_TO_STRING_PRIMITIVE_KIND = {};
 QStringList RPM::ENUM_TO_STRING_STATUS_RESTRICTIONS_KIND = {};
-QStringList RPM::ENUM_TO_INVENTORY_FILTER_KIND = {};
-QStringList RPM::ENUM_TO_MAIN_MENU_COMMAND_KIND = {};
-QStringList RPM::ENUM_TO_TROOP_REACTION_FREQUENCY_KIND = {};
+QStringList RPM::ENUM_TO_STRING_INVENTORY_FILTER_KIND = {};
+QStringList RPM::ENUM_TO_STRING_MAIN_MENU_COMMAND_KIND = {};
+QStringList RPM::ENUM_TO_STRING_TROOP_REACTION_FREQUENCY_KIND = {};
+QStringList RPM::ENUM_TO_STRING_LANGUAGE_KIND = {};
 
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
@@ -730,7 +731,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::ATTACK_RANDOM_ALLY),
         RPM::translate(Translations::ATTACK_RANDOM_ENEMY)
     });
-    RPM::ENUM_TO_INVENTORY_FILTER_KIND = QStringList({
+    RPM::ENUM_TO_STRING_INVENTORY_FILTER_KIND = QStringList({
         RPM::translate(Translations::ALL),
         RPM::translate(Translations::CONSUMABLES),
         RPM::translate(Translations::CUSTOM),
@@ -739,7 +740,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::WEAPONS_AND_ARMORS),
         RPM::translate(Translations::SCRIPT)
     });
-    RPM::ENUM_TO_MAIN_MENU_COMMAND_KIND = QStringList({
+    RPM::ENUM_TO_STRING_MAIN_MENU_COMMAND_KIND = QStringList({
         RPM::translate(Translations::INVENTORY),
         RPM::translate(Translations::SKILLS),
         RPM::translate(Translations::EQUIP),
@@ -749,11 +750,23 @@ void RPM::readTranslations() {
         RPM::translate(Translations::QUIT),
         RPM::translate(Translations::SCRIPT)
     });
-    RPM::ENUM_TO_TROOP_REACTION_FREQUENCY_KIND = QStringList({
+    RPM::ENUM_TO_STRING_TROOP_REACTION_FREQUENCY_KIND = QStringList({
         RPM::translate(Translations::ONE_TIME),
         RPM::translate(Translations::EACH_TURN_BEGIN),
         RPM::translate(Translations::EACH_TURN_END),
         RPM::translate(Translations::ALWAYS)
+    });
+    RPM::ENUM_TO_STRING_LANGUAGE_KIND = QStringList({
+        "Custom",
+        "English",
+        "Français",
+        "Português - Brasil",
+        "Espanol",
+        "Polski",
+        "Русский",
+        "日本語",
+        "中文",
+        "한국어"
     });
 }
 

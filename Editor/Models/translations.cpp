@@ -1272,20 +1272,31 @@ QStringList Translations::languagesNames() const
     return m_languagesNames;
 }
 
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
 int Translations::indexOfLanguagesShort(QString s) const
 {
     return m_languagesShort.indexOf(s);
 }
+
+// -------------------------------------------------------
+
+QString Translations::nameOfLanguagesShort(QString s) const
+{
+    return m_languagesNames.at(this->indexOfLanguagesShort(s));
+}
+
+// -------------------------------------------------------
 
 QString Translations::languagesShortAt(int i) const
 {
     return m_languagesShort.at(i);
 }
 
-// -------------------------------------------------------
-//
-//  INTERMEDIARY FUNCTIONS
-//
 // -------------------------------------------------------
 
 void Translations::read()

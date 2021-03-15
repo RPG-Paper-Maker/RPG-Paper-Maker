@@ -43,7 +43,7 @@ QLineEdit * WidgetTextLang::lineEdit() const
 //
 // -------------------------------------------------------
 
-void WidgetTextLang::initializeNamesLang(SystemLang *lang)
+void WidgetTextLang::initializeNamesLang(SystemTranslatable *lang)
 {
     m_lang = lang;
     this->initializeNames();

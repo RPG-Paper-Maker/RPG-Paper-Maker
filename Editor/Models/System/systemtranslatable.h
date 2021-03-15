@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#ifndef SYSTEMLANG_H
-#define SYSTEMLANG_H
+#ifndef SYSTEMTRANSLATABLE_H
+#define SYSTEMTRANSLATABLE_H
 
 #include <QStandardItemModel>
 #include <QMetaType>
@@ -19,21 +19,21 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SystemLang
+//  CLASS SystemTranslatable
 //
 //  A particulary lang (lang).
 //
 // -------------------------------------------------------
 
-class SystemLang : public SuperListItem
+class SystemTranslatable : public SuperListItem
 {
 public:
     static const QString JSON_NAMES;
 
-    SystemLang();
-    SystemLang(int i, QString name);
-    SystemLang(int i, QVector<int> ids, QVector<QString> names);
-    virtual ~SystemLang();
+    SystemTranslatable();
+    SystemTranslatable(int i, QString name);
+    SystemTranslatable(int i, QVector<int> ids, QVector<QString> names);
+    virtual ~SystemTranslatable();
 
     int mainID() const;
     QString mainName() const;
@@ -58,6 +58,6 @@ protected:
     QHash<int, QString> m_names;
 };
 
-Q_DECLARE_METATYPE(SystemLang)
+Q_DECLARE_METATYPE(SystemTranslatable)
 
-#endif // SYSTEMLANG_H
+#endif // SYSTEMTRANSLATABLE_H

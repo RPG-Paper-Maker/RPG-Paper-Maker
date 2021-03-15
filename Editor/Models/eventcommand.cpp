@@ -1558,7 +1558,7 @@ QString EventCommand::strDisplayChoice(SystemCommonObject *object,
 {
     QStringList choices;
     QString cancelIndex, next;
-    SystemLang *lang;
+    SystemTranslatable *lang;
     int i, l;
 
     i = 0;
@@ -1573,7 +1573,7 @@ QString EventCommand::strDisplayChoice(SystemCommonObject *object,
                 choices << " - " + lang->name();
                 delete lang;
             }
-            lang = new SystemLang;
+            lang = new SystemTranslatable;
         }
         lang->initializeCommand(this, i);
     }

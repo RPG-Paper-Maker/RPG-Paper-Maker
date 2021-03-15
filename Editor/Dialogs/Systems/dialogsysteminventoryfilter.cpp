@@ -47,7 +47,7 @@ void DialogSystemInventoryFilter::initialize()
     this->setVisibleScript(false);
     ui->widgetTextLangName->initializeNamesLang(&m_inventoryFilter);
     int index = static_cast<int>(m_inventoryFilter.kind());
-    ui->comboBoxKind->addItems(RPM::ENUM_TO_INVENTORY_FILTER_KIND);
+    ui->comboBoxKind->addItems(RPM::ENUM_TO_STRING_INVENTORY_FILTER_KIND);
     ui->comboBoxKind->setCurrentIndex(index);
     if (m_inventoryFilter.kind() == InventoryFilterKind::Custom) {
         this->setVisibleCustom(true);

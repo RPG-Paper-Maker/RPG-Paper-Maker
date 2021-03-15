@@ -12,7 +12,7 @@
 #ifndef SYSTEMKEYBOARD_H
 #define SYSTEMKEYBOARD_H
 
-#include "systemlang.h"
+#include "systemtranslatable.h"
 
 // -------------------------------------------------------
 //
@@ -22,7 +22,7 @@
 //
 // -------------------------------------------------------
 
-class SystemKeyBoard : public SystemLang
+class SystemKeyBoard : public SystemTranslatable
 {
 public:
     SystemKeyBoard();

@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#include "systemlang.h"
-#include "dialogsystemlang.h"
+#include "systemtranslatable.h"
+#include "dialogsystemtranslatable.h"
 #include "rpm.h"
 
-const QString SystemLang::JSON_NAMES = "names";
+const QString SystemTranslatable::JSON_NAMES = "names";
 
 // -------------------------------------------------------
 //
@@ -21,19 +21,19 @@ const QString SystemLang::JSON_NAMES = "names";
 //
 // -------------------------------------------------------
 
-SystemLang::SystemLang() :
-    SystemLang(-1, "")
+SystemTranslatable::SystemTranslatable() :
+    SystemTranslatable(-1, "")
 {
 
 }
 
-SystemLang::SystemLang(int i, QString name) :
+SystemTranslatable::SystemTranslatable(int i, QString name) :
     SuperListItem(i, name)
 {
     this->setMainName(name);
 }
 
-SystemLang::SystemLang(int i, QVector<int> ids, QVector<QString> names) :
+SystemTranslatable::SystemTranslatable(int i, QVector<int> ids, QVector<QString> names) :
     SuperListItem(i, "")
 {
     for (int i = 0, l = ids.size(); i < l; i++)
@@ -43,7 +43,7 @@ SystemLang::SystemLang(int i, QVector<int> ids, QVector<QString> names) :
     this->setName(this->mainName());
 }
 
-SystemLang::~SystemLang()
+SystemTranslatable::~SystemTranslatable()
 {
 
 }
@@ -54,7 +54,7 @@ SystemLang::~SystemLang()
 //
 // -------------------------------------------------------
 
-int SystemLang::mainID() const
+int SystemTranslatable::mainID() const
 {
     return RPM::get()->project() == nullptr ? 1 : RPM::get()->project()
         ->langsDatas()->mainLang();;
@@ -62,36 +62,36 @@ int SystemLang::mainID() const
 
 // -------------------------------------------------------
 
-QString SystemLang::mainName() const
+QString SystemTranslatable::mainName() const
 {
     return m_names[this->mainID()];
 }
 
 // -------------------------------------------------------
 
-void SystemLang::setMainName(QString n)
+void SystemTranslatable::setMainName(QString n)
 {
     m_names[this->mainID()] = n;
 }
 
 // -------------------------------------------------------
 
-QString SystemLang::defaultMainName() const
+QString SystemTranslatable::defaultMainName() const
 {
     return m_names[1];
 }
 
 // -------------------------------------------------------
 
-void SystemLang::updateNames()
+void SystemTranslatable::updateNames()
 {
     QHash<int, QString> names = m_names;
     QStandardItemModel *model = RPM::get()->project()->langsDatas()->model();
-    SystemLang *entry;
+    SystemTranslatable *entry;
     for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l
          - 1; i++)
     {
-        entry = reinterpret_cast<SystemLang *>(SuperListItem::getItemModelAt(model, i));
+        entry = reinterpret_cast<SystemTranslatable *>(SuperListItem::getItemModelAt(model, i));
         if (entry != nullptr)
         {
             m_names[entry->id()] = names[entry->id()];
@@ -101,7 +101,7 @@ void SystemLang::updateNames()
 
 // -------------------------------------------------------
 
-void SystemLang::setAllNames(QString n)
+void SystemTranslatable::setAllNames(QString n)
 {
     QHash<int, QString>::const_iterator i;
     for (i = m_names.begin(); i != m_names.end(); i++) {
@@ -111,7 +111,7 @@ void SystemLang::setAllNames(QString n)
 
 // -------------------------------------------------------
 
-bool SystemLang::isEmpty() const
+bool SystemTranslatable::isEmpty() const
 {
     QHash<int, QString>::const_iterator i;
     for (i = m_names.begin(); i != m_names.end(); i++) {
@@ -128,21 +128,21 @@ bool SystemLang::isEmpty() const
 //
 // -------------------------------------------------------
 
-void SystemLang::setDefault()
+void SystemTranslatable::setDefault()
 {
     this->setName(p_name);
 }
 
 // -------------------------------------------------------
 
-QString SystemLang::name() const
+QString SystemTranslatable::name() const
 {
     return this->mainName();
 }
 
 // -------------------------------------------------------
 
-void SystemLang::setName(QString n)
+void SystemTranslatable::setName(QString n)
 {
     SuperListItem::setName(n);
     this->setMainName(n);
@@ -150,7 +150,7 @@ void SystemLang::setName(QString n)
 
 // -------------------------------------------------------
 
-void SystemLang::getCommand(QVector<QString> &command)
+void SystemTranslatable::getCommand(QVector<QString> &command)
 {
     QHash<int, QString>::const_iterator i;
     for (i = m_names.begin(); i != m_names.end(); i++) {
@@ -161,7 +161,7 @@ void SystemLang::getCommand(QVector<QString> &command)
 
 // -------------------------------------------------------
 
-void SystemLang::initializeCommand(const EventCommand *command, int &i)
+void SystemTranslatable::initializeCommand(const EventCommand *command, int &i)
 {
     int id = command->valueCommandAt(i++).toInt();
     QString name = command->valueCommandAt(i++);
@@ -170,11 +170,11 @@ void SystemLang::initializeCommand(const EventCommand *command, int &i)
 
 // -------------------------------------------------------
 
-bool SystemLang::openDialog()
+bool SystemTranslatable::openDialog()
 {
-    SystemLang super;
+    SystemTranslatable super;
     super.setCopy(*this);
-    DialogSystemLang dialog(super);
+    DialogSystemTranslatable dialog(super);
     if (dialog.exec() == QDialog::Accepted)
     {
         setCopy(super);
@@ -185,18 +185,18 @@ bool SystemLang::openDialog()
 
 // -------------------------------------------------------
 
-SuperListItem * SystemLang::createCopy() const
+SuperListItem * SystemTranslatable::createCopy() const
 {
-    SystemLang* super = new SystemLang;
+    SystemTranslatable* super = new SystemTranslatable;
     super->setCopy(*this);
     return super;
 }
 
 // -------------------------------------------------------
 
-void SystemLang::setCopy(const SuperListItem &super)
+void SystemTranslatable::setCopy(const SuperListItem &super)
 {
-    const SystemLang *lang = reinterpret_cast<const SystemLang *>(&super);
+    const SystemTranslatable *lang = reinterpret_cast<const SystemTranslatable *>(&super);
     SuperListItem::setCopy(*lang);
     m_names = lang->m_names;
     this->setName(this->mainName());
@@ -204,7 +204,7 @@ void SystemLang::setCopy(const SuperListItem &super)
 
 // -------------------------------------------------------
 
-void SystemLang::read(const QJsonObject &json)
+void SystemTranslatable::read(const QJsonObject &json)
 {
     SuperListItem::readId(json);
     QJsonObject obj = json[JSON_NAMES].toObject();
@@ -217,7 +217,7 @@ void SystemLang::read(const QJsonObject &json)
 
 // -------------------------------------------------------
 
-void SystemLang::write(QJsonObject &json) const
+void SystemTranslatable::write(QJsonObject &json) const
 {
     SuperListItem::writeId(json);
     QJsonObject obj;

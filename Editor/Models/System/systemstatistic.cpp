@@ -19,14 +19,14 @@
 // -------------------------------------------------------
 
 SystemStatistic::SystemStatistic() :
-    SystemLang()
+    SystemTranslatable()
 {
 
 }
 
 SystemStatistic::SystemStatistic(int i, QString name, QString abbreviation, bool
     isFix) :
-    SystemLang(i, name),
+    SystemTranslatable(i, name),
     m_abbreviation(abbreviation),
     m_isFix(isFix)
 {
@@ -75,7 +75,7 @@ SuperListItem* SystemStatistic::createCopy() const{
 void SystemStatistic::setCopy(const SuperListItem &super) {
     const SystemStatistic *statistic;
 
-    SystemLang::setCopy(super);
+    SystemTranslatable::setCopy(super);
 
     statistic = reinterpret_cast<const SystemStatistic *>(&super);
     m_abbreviation = statistic->abbreviation();
@@ -89,7 +89,7 @@ void SystemStatistic::setCopy(const SuperListItem &super) {
 // -------------------------------------------------------
 
 void SystemStatistic::read(const QJsonObject &json){
-    SystemLang::read(json);
+    SystemTranslatable::read(json);
     m_abbreviation = json["abr"].toString();
     m_isFix = json["fix"].toBool();
 }
@@ -97,7 +97,7 @@ void SystemStatistic::read(const QJsonObject &json){
 // -------------------------------------------------------
 
 void SystemStatistic::write(QJsonObject &json) const{
-    SystemLang::write(json);
+    SystemTranslatable::write(json);
     json["abr"] = m_abbreviation;
     json["fix"] = m_isFix;
 }

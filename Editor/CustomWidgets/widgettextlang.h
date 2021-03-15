@@ -13,7 +13,7 @@
 #define WIDGETTEXTLANG_H
 
 #include <QLineEdit>
-#include "systemlang.h"
+#include "systemtranslatable.h"
 
 // -------------------------------------------------------
 //
@@ -35,11 +35,11 @@ public:
     explicit WidgetTextLang(QWidget *parent = nullptr);
     ~WidgetTextLang();
     QLineEdit* lineEdit() const;
-    void initializeNamesLang(SystemLang *lang);
+    void initializeNamesLang(SystemTranslatable *lang);
 
 private:
     Ui::WidgetTextLang *ui;
-    SystemLang *m_lang;
+    SystemTranslatable *m_lang;
 
     void initializeNames();
 

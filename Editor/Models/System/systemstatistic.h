@@ -13,7 +13,7 @@
 #define SYSTEMSTATISTIC_H
 
 #include <QMetaType>
-#include "systemlang.h"
+#include "systemtranslatable.h"
 
 // -------------------------------------------------------
 //
@@ -23,7 +23,7 @@
 //
 // -------------------------------------------------------
 
-class SystemStatistic : public SystemLang
+class SystemStatistic : public SystemTranslatable
 {
 public:
     SystemStatistic();

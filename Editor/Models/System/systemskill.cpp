@@ -24,7 +24,7 @@ SystemSkill::SystemSkill() :
 }
 
 SystemSkill::SystemSkill(int i, QString name, int pictureID,
-    SystemLang *description, TargetKind
+    SystemTranslatable *description, TargetKind
     targetKind, PrimitiveValue *targetConditionFormula, PrimitiveValue
     *conditionFormula, AvailableKind availableKind, SystemPlaySong *sound,
     PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,

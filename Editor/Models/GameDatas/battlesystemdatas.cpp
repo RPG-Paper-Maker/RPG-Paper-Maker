@@ -10,7 +10,7 @@
 */
 
 #include "battlesystemdatas.h"
-#include "systemlang.h"
+#include "systemtranslatable.h"
 #include "systemweaponarmorkind.h"
 #include "systemelement.h"
 #include "systemstatistic.h"
@@ -332,14 +332,14 @@ void BattleSystemDatas::setDefaultElements() {
 void BattleSystemDatas::setDefaultCommonEquipment()
 {
     int i = 1;
-    SystemLang *items[] = {
-        new SystemLang(i++, RPM::translate(Translations::LEFT_HAND)),
-        new SystemLang(i++, RPM::translate(Translations::RIGHT_HAND)),
-        new SystemLang(i++, RPM::translate(Translations::HEAD)),
-        new SystemLang(i++, RPM::translate(Translations::CHEST)),
-        new SystemLang(i++, RPM::translate(Translations::ARMS)),
-        new SystemLang(i++, RPM::translate(Translations::LEGS)),
-        new SystemLang(i++, RPM::translate(Translations::ACCESSORY))
+    SystemTranslatable *items[] = {
+        new SystemTranslatable(i++, RPM::translate(Translations::LEFT_HAND)),
+        new SystemTranslatable(i++, RPM::translate(Translations::RIGHT_HAND)),
+        new SystemTranslatable(i++, RPM::translate(Translations::HEAD)),
+        new SystemTranslatable(i++, RPM::translate(Translations::CHEST)),
+        new SystemTranslatable(i++, RPM::translate(Translations::ARMS)),
+        new SystemTranslatable(i++, RPM::translate(Translations::LEGS)),
+        new SystemTranslatable(i++, RPM::translate(Translations::ACCESSORY))
     };
     int length = (sizeof(items)/sizeof(*items));
     for (i = 0; i < length; i++)
@@ -446,7 +446,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     jsonList = json[jsonCommonEquipment].toArray();
     for (int i = 0; i < jsonList.size(); i++){
         item = new QStandardItem;
-        SystemLang* sysEquipment = new SystemLang;
+        SystemTranslatable* sysEquipment = new SystemTranslatable;
         sysEquipment->read(jsonList[i].toObject());
         item->setData(QVariant::fromValue(
                           reinterpret_cast<quintptr>(sysEquipment)));
@@ -551,7 +551,7 @@ void BattleSystemDatas::write(QJsonObject &json) const{
     l = m_modelCommonEquipment->invisibleRootItem()->rowCount();
     for (int i = 0; i < l; i++){
         QJsonObject jsonCommon;
-        SystemLang* sysEquipment = reinterpret_cast<SystemLang*>(
+        SystemTranslatable* sysEquipment = reinterpret_cast<SystemTranslatable*>(
             m_modelCommonEquipment->item(i)->data().value<quintptr>());
         sysEquipment->write(jsonCommon);
         jsonArray.append(jsonCommon);
@@ -563,7 +563,7 @@ void BattleSystemDatas::write(QJsonObject &json) const{
     l = m_modelWeaponsKind->invisibleRootItem()->rowCount();
     for (int i = 0; i < l; i++){
         QJsonObject jsonCommon;
-        SystemLang* sysWeaponKind = reinterpret_cast<SystemLang*>(
+        SystemTranslatable* sysWeaponKind = reinterpret_cast<SystemTranslatable*>(
             m_modelWeaponsKind->item(i)->data().value<quintptr>());
         sysWeaponKind->write(jsonCommon);
         jsonArray.append(jsonCommon);
@@ -575,7 +575,7 @@ void BattleSystemDatas::write(QJsonObject &json) const{
     l = m_modelArmorsKind->invisibleRootItem()->rowCount();
     for (int i = 0; i < l; i++){
         QJsonObject jsonCommon;
-        SystemLang* sysArmorKind = reinterpret_cast<SystemLang*>(
+        SystemTranslatable* sysArmorKind = reinterpret_cast<SystemTranslatable*>(
             m_modelArmorsKind->item(i)->data().value<quintptr>());
         sysArmorKind->write(jsonCommon);
         jsonArray.append(jsonCommon);

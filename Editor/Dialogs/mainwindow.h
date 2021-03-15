@@ -111,6 +111,7 @@ private slots:
     void on_actionFonts_manager_triggered();
     void on_actionKeyboard_controls_triggered();
     void on_actionScripts_manager_triggered();
+    void on_actionLanguage_manager_triggered();
     void on_actionCollisions_manager_triggered();
     void on_actionAutotiles_triggered();
     void on_actionSprite_walls_triggered();

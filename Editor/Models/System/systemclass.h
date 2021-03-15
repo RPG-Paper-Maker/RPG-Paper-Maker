@@ -14,7 +14,7 @@
 
 #include <QStandardItemModel>
 #include <QMetaType>
-#include "systemlang.h"
+#include "systemtranslatable.h"
 
 // -------------------------------------------------------
 //
@@ -24,7 +24,7 @@
 //
 // -------------------------------------------------------
 
-class SystemClass : public SystemLang
+class SystemClass : public SystemTranslatable
 {
 public:
     static const QString jsonInitialLevel;

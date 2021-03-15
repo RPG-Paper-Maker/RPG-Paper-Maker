@@ -12,6 +12,9 @@
 #include "langsdatas.h"
 #include "rpm.h"
 #include "common.h"
+#include "systemlanguage.h"
+
+const QString LangsDatas::JSON_LANGS = "langs";
 
 // -------------------------------------------------------
 //
@@ -29,11 +32,10 @@ LangsDatas::~LangsDatas()
     SuperListItem::deleteModel(m_model);
 }
 
-void LangsDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::PATH_LANGS), *this);
+QStandardItemModel * LangsDatas::model() const
+{
+    return m_model;
 }
-
-QStandardItemModel* LangsDatas::model() const { return m_model; }
 
 // -------------------------------------------------------
 //
@@ -41,59 +43,47 @@ QStandardItemModel* LangsDatas::model() const { return m_model; }
 //
 // -------------------------------------------------------
 
-void LangsDatas::setDefault(){
-    QStandardItem* item;
-    SuperListItem* super;
-
-    super = new SuperListItem(1, "English");
-    m_model->appendRow(super->getModelRow());
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_model->appendRow(item);
+int LangsDatas::mainLang() const
+{
+    return reinterpret_cast<SystemLanguage *>(m_model->item(0)->data().value<quintptr>())->id();
 }
 
-int LangsDatas::mainLang() const{
-    return ((SuperListItem*) m_model->item(0)->data().value<quintptr>())->id();
+// -------------------------------------------------------
+
+void LangsDatas::read(QString path)
+{
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_LANGS), *this);
+}
+
+// -------------------------------------------------------
+
+void LangsDatas::setDefault()
+{
+    int index = RPM::get()->translations()->indexOfLanguagesShort(RPM::get()
+        ->engineSettings()->currentLanguage());
+    m_model->appendRow((new SystemLanguage(1, RPM::get()->translations()
+        ->languagesNames().at(index), static_cast<LanguageKind>(index + 1)))
+        ->getModelRow());
 }
 
 // -------------------------------------------------------
 //
-//  READ / WRITE
+//  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
 
-void LangsDatas::read(const QJsonObject &json){
-    QStandardItem* item;
-    SuperListItem* super;
-    QJsonArray tab = json["langs"].toArray();
-
+void LangsDatas::read(const QJsonObject &json)
+{
     // Clear
     SuperListItem::deleteModel(m_model, false);
 
     // Read
-    for (int i = 0; i < tab.size(); i++){
-        super = new SuperListItem;
-        super->read(tab[i].toObject());
-        m_model->appendRow(super->getModelRow());
-    }
-
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_model->appendRow(item);
+    SuperListItem::readTree(m_model, new SystemLanguage, json, JSON_LANGS);
 }
 
 // -------------------------------------------------------
 
-void LangsDatas::write(QJsonObject &json) const{
-    QJsonArray tab;
-    SuperListItem* super;
-
-    for (int i = 0; i < m_model->invisibleRootItem()->rowCount()-1; i++){
-        QJsonObject obj;
-        super = (SuperListItem*) m_model->item(i)->data().value<quintptr>();
-        super->write(obj);
-        tab.append(obj);
-    }
-
-    json["langs"] = tab;
+void LangsDatas::write(QJsonObject &json) const
+{
+    SuperListItem::writeTree(m_model, json, JSON_LANGS);
 }

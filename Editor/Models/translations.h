@@ -1267,9 +1267,10 @@ public:
     Translations();
     virtual ~Translations();
     QStringList languagesNames() const;
-    int indexOfLanguagesShort(QString s) const;
-    QString languagesShortAt(int i) const;
 
+    int indexOfLanguagesShort(QString s) const;
+    QString nameOfLanguagesShort(QString s) const;
+    QString languagesShortAt(int i) const;
     void read();
     void readLanguages();
     void readTranslations();

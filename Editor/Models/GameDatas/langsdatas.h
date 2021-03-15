@@ -27,12 +27,15 @@
 class LangsDatas : public Serializable
 {
 public:
+    static const QString JSON_LANGS;
+
     LangsDatas();
     virtual ~LangsDatas();
-    void read(QString path);
-    QStandardItemModel* model() const;
-    void setDefault();
+    QStandardItemModel * model() const;
+
     int mainLang() const;
+    void read(QString path);
+    void setDefault();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

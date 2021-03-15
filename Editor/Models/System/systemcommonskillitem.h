@@ -50,7 +50,7 @@ public:
 
     SystemCommonSkillItem();
     SystemCommonSkillItem(int i, QString name, int pictureID, int
-        type, bool consumable, bool oneHand, SystemLang *description,
+        type, bool consumable, bool oneHand, SystemTranslatable *description,
         TargetKind targetKind, PrimitiveValue *targetConditionFormula,
         PrimitiveValue *conditionFormula, AvailableKind availableKind,
         SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
@@ -64,7 +64,7 @@ public:
     void setConsumable(bool b);
     bool oneHand() const;
     void setOneHand(bool b);
-    SystemLang * description() const;
+    SystemTranslatable * description() const;
     TargetKind targetKind() const;
     void setTargetKind(TargetKind k);
     PrimitiveValue * targetConditionFormula() const;
@@ -90,7 +90,7 @@ protected:
     int m_type;
     bool m_consumable;
     bool m_oneHand;
-    SystemLang *m_description;
+    SystemTranslatable *m_description;
     TargetKind m_targetKind;
     PrimitiveValue *m_targetConditionFormula;
     PrimitiveValue *m_conditionFormula;

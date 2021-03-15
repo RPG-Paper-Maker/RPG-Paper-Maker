@@ -12,7 +12,7 @@
 #ifndef SYSTEMINVENTORYFILTER_H
 #define SYSTEMINVENTORYFILTER_H
 
-#include "systemlang.h"
+#include "systemtranslatable.h"
 #include "inventoryfilterkind.h"
 #include "primitivevalue.h"
 
@@ -24,7 +24,7 @@
 //
 // -------------------------------------------------------
 
-class SystemInventoryFilter : public SystemLang
+class SystemInventoryFilter : public SystemTranslatable
 {
 public:
     static const QString JSON_KIND;

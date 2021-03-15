@@ -9,41 +9,37 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#ifndef DIALOGSYSTEMLANG_H
-#define DIALOGSYSTEMLANG_H
+#ifndef DIALOGLANGUAGES_H
+#define DIALOGLANGUAGES_H
 
 #include <QDialog>
-#include "systemlang.h"
 
 // -------------------------------------------------------
 //
-//  CLASS DialogSystemLang
+//  CLASS DialogLanguages
 //
-//  A dialog used for editing the model of a system lang.
+//  A dialog used for updating languages.
 //
 // -------------------------------------------------------
+
 
 namespace Ui {
-class DialogSystemLang;
+class DialogLanguages;
 }
 
-class DialogSystemLang : public QDialog
+class DialogLanguages : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogSystemLang(SystemLang& model, QWidget *parent = 0);
-    ~DialogSystemLang();
-
-private:
-    Ui::DialogSystemLang *ui;
-    SystemLang& m_model;
+    explicit DialogLanguages(QWidget *parent = nullptr);
+    ~DialogLanguages();
 
     void initialize();
     void translate();
 
-public slots:
-    void on_lineEditAll_textEdited(const QString &text);
+private:
+    Ui::DialogLanguages *ui;
 };
 
-#endif // DIALOGSYSTEMLANG_H
+#endif // DIALOGLANGUAGES_H

@@ -12,7 +12,7 @@
 #ifndef SYSTEMHEROES_H
 #define SYSTEMHEROES_H
 
-#include "systemlang.h"
+#include "systemtranslatable.h"
 #include "systempicture.h"
 #include "systemclass.h"
 
@@ -24,7 +24,7 @@
 //
 // -------------------------------------------------------
 
-class SystemHero : public SystemLang
+class SystemHero : public SystemTranslatable
 {
 public:
     static const QString jsonClass;

@@ -13,7 +13,7 @@
 #define MAPPROPERTIES_H
 
 #include <QHash>
-#include "systemlang.h"
+#include "systemtranslatable.h"
 #include "systemtileset.h"
 #include "position.h"
 #include "qray3d.h"
@@ -29,7 +29,7 @@
 //
 // -------------------------------------------------------
 
-class MapProperties : public SystemLang
+class MapProperties : public SystemTranslatable
 {
 public:
     static const QString JSON_TILESET_ID;
