@@ -14,6 +14,7 @@
 #include "common.h"
 #include "systemtitlecommand.h"
 #include "titlesettingkind.h"
+#include "systemcheckable.h"
 
 const QString TitleScreenGameOverDatas::JSON_IS_TITLE_BACKGROUND_IMAGE = "itbi";
 const QString TitleScreenGameOverDatas::JSON_TITLE_BACKGROUND_IMAGE = "tb";
@@ -21,7 +22,6 @@ const QString TitleScreenGameOverDatas::JSON_TITLE_BACKGROUND_VIDEO = "tbv";
 const QString TitleScreenGameOverDatas::JSON_TITLE_MUSIC = "tm";
 const QString TitleScreenGameOverDatas::JSON_TITLE_COMMANDS = "tc";
 const QString TitleScreenGameOverDatas::JSON_TITLE_SETTINGS = "ts";
-const QString TitleScreenGameOverDatas::JSON_TITLE_SETTINGS_ON = "tso";
 
 // -------------------------------------------------------
 //
@@ -91,12 +91,25 @@ void TitleScreenGameOverDatas::read(QString path){
 
 void TitleScreenGameOverDatas::setDefault()
 {
-    QStandardItem *item;
-    SuperListItem *super;
+    this->setDefaultTitle();
+    this->setDefaultTitleCommands();
+    this->setDefaultTitleSettings();
+}
 
+// -------------------------------------------------------
+
+void TitleScreenGameOverDatas::setDefaultTitle()
+{
     m_titleBackgroundImageID->setId(1);
     m_titleBackgroundVideoID->setId(-1);
     m_titleMusic->setId(1);
+}
+
+// -------------------------------------------------------
+
+void TitleScreenGameOverDatas::setDefaultTitleCommands()
+{
+    SuperListItem::deleteModel(m_modelTitleCommands, false);
     m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, RPM::translate(
         Translations::NEW_GAME), TitleCommandKind::NewGame))->getModelRow());
     m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, RPM::translate(
@@ -105,15 +118,26 @@ void TitleScreenGameOverDatas::setDefault()
         Translations::SETTINGS), TitleCommandKind::Settings))->getModelRow());
     m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, RPM::translate(
         Translations::EXIT), TitleCommandKind::Exit))->getModelRow());
-    item = new QStandardItem;
-    super = new SuperListItem(0, RPM::ENUM_TO_STRING_TITLE_SETTINGS.at(
-        static_cast<int>(TitleSettingKind::KeyboardAssignment)));
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
-    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setText(super->toStringName());
-    item->setCheckable(true);
-    item->setCheckState(Qt::Checked);
-    m_modelTitleSettings->appendRow(item);
+}
+
+// -------------------------------------------------------
+
+void TitleScreenGameOverDatas::setDefaultTitleSettings()
+{
+    SuperListItem::deleteModel(m_modelTitleSettings, false);
+    this->addTitleSetting(TitleSettingKind::KeyboardAssignment);
+    this->addTitleSetting(TitleSettingKind::Language);
+}
+
+// -------------------------------------------------------
+
+void TitleScreenGameOverDatas::addTitleSetting(TitleSettingKind kind)
+{
+    int index = static_cast<int>(kind);
+    SystemCheckable *super = new SystemCheckable(index, RPM::ENUM_TO_STRING_TITLE_SETTINGS
+        .at(index));
+    super->setDisplayID(false);
+    m_modelTitleSettings->appendRow(super->getModelRow());
 }
 
 // -------------------------------------------------------
@@ -123,12 +147,6 @@ void TitleScreenGameOverDatas::setDefault()
 // -------------------------------------------------------
 
 void TitleScreenGameOverDatas::read(const QJsonObject &json) {
-    QStandardItem *item;
-    SuperListItem *super;
-    QJsonArray tab;
-    QJsonObject obj;
-    int i, l;
-
     // Clear
     SuperListItem::deleteModel(m_modelTitleCommands, false);
     SuperListItem::deleteModel(m_modelTitleSettings, false);
@@ -152,21 +170,9 @@ void TitleScreenGameOverDatas::read(const QJsonObject &json) {
     m_titleMusic->read(json[JSON_TITLE_MUSIC].toObject());
     SuperListItem::readTree(m_modelTitleCommands, new SystemTitleCommand, json,
         JSON_TITLE_COMMANDS);
-    tab = json[JSON_TITLE_SETTINGS].toArray();
-    for (i = 0, l = tab.size(); i < l; i++) {
-        obj = tab.at(i).toObject();
-        super = new SuperListItem;
-        super->read(obj);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(super->toStringName());
-        item->setCheckable(true);
-        if (obj[JSON_TITLE_SETTINGS_ON].toBool()) {
-            item->setCheckState(Qt::Checked);
-        }
-        m_modelTitleSettings->appendRow(item);
-    }
+    SystemCheckable *super = new SystemCheckable;
+    super->setDisplayID(false);
+    SuperListItem::readList(m_modelTitleSettings, super, json, JSON_TITLE_SETTINGS);
 }
 
 // -------------------------------------------------------
@@ -193,17 +199,13 @@ void TitleScreenGameOverDatas::write(QJsonObject &json) const {
     m_titleMusic->write(obj);
     json[JSON_TITLE_MUSIC] = obj;
     SuperListItem::writeTree(m_modelTitleCommands, json, JSON_TITLE_COMMANDS);
+    SystemCheckable *super;
     for (i = 0, l = m_modelTitleSettings->invisibleRootItem()->rowCount(); i < l
          ; i++)
     {
-        obj = QJsonObject();
         item = m_modelTitleSettings->item(i);
-        reinterpret_cast<SuperListItem *>(item->data().value<quintptr>())->write
-            (obj);
-        if (item->checkState() == Qt::Checked) {
-            obj[JSON_TITLE_SETTINGS_ON] = true;
-        }
-        tab.append(obj);
+        super = reinterpret_cast<SystemCheckable *>(item->data().value<quintptr>());
+        super->setChecked(item->checkState() == Qt::Checked);
     }
-    json[JSON_TITLE_SETTINGS] = tab;
+    SuperListItem::writeList(m_modelTitleSettings, json, JSON_TITLE_SETTINGS);
 }

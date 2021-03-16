@@ -505,7 +505,8 @@ void RPM::readTranslations() {
         RPM::translate(Translations::VARIABLE)
     });
     RPM::ENUM_TO_STRING_TITLE_SETTINGS = QStringList({
-        RPM::translate(Translations::KEYBOARD_ASSIGNMENTS)
+        RPM::translate(Translations::KEYBOARD_ASSIGNMENTS),
+        "Language"
     });
     RPM::ENUM_TO_STRING_AXIS_KIND = QStringList({
         RPM::translate(Translations::X),

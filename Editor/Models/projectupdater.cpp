@@ -1073,4 +1073,39 @@ void ProjectUpdater::updateVersion_1_7_0()
     m_project->gameDatas()->systemDatas()->setDefaultInventoryFilters();
     m_project->gameDatas()->systemDatas()->setDefaultMainMenuCommands();
     m_project->gameDatas()->systemDatas()->setDefaultHeroesStatistics();
+
+    // Languages
+    m_project->langsDatas()->setDefault();
+    m_project->gameDatas()->titleScreenGameOverDatas()->setDefaultTitleSettings();
+
+    // Update show text commands
+    connect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_7_0_commands(QStandardItem *)));
+    this->updateCommands();
+    disconnect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_7_0_commands(QStandardItem *)));
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_7_0_commands(QStandardItem *commands)
+{
+    EventCommand *command;
+    QVector<QString> list;
+    QString text;
+    int i, l;
+    if (commands->rowCount() == 0)
+    {
+        command = reinterpret_cast<EventCommand *>(commands->data().value<quintptr>());
+        list = command->commands();
+        if (command->kind() == EventCommandKind::ShowText)
+        {
+            list.insert(3, QString::number(m_project->langsDatas()->mainLang()));
+            command->setCommands(list);
+        }
+    }
+    for (i = 0, l = commands->rowCount(); i < l; i++)
+    {
+        this->updateVersion_1_7_0_commands(commands->child(i));
+    }
 }

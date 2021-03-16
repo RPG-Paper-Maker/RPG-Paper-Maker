@@ -21,7 +21,8 @@
 // -------------------------------------------------------
 
 enum class TitleSettingKind {
-    KeyboardAssignment
+    KeyboardAssignment,
+    Language
 };
 
 #endif // TITLESETTINGKIND_H

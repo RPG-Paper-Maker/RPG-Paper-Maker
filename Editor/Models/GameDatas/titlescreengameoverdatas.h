@@ -14,6 +14,7 @@
 
 #include "serializable.h"
 #include "systemplaysong.h"
+#include "titlesettingkind.h"
 
 // -------------------------------------------------------
 //
@@ -33,7 +34,6 @@ public:
     static const QString JSON_TITLE_MUSIC;
     static const QString JSON_TITLE_COMMANDS;
     static const QString JSON_TITLE_SETTINGS;
-    static const QString JSON_TITLE_SETTINGS_ON;
 
     TitleScreenGameOverDatas();
     virtual ~TitleScreenGameOverDatas();
@@ -48,6 +48,10 @@ public:
 
     void read(QString path);
     void setDefault();
+    void setDefaultTitle();
+    void setDefaultTitleCommands();
+    void setDefaultTitleSettings();
+    void addTitleSetting(TitleSettingKind kind);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

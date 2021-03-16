@@ -59,6 +59,7 @@ void LangsDatas::read(QString path)
 
 void LangsDatas::setDefault()
 {
+    SuperListItem::deleteModel(m_model, false);
     int index = RPM::get()->translations()->indexOfLanguagesShort(RPM::get()
         ->engineSettings()->currentLanguage());
     m_model->appendRow((new SystemLanguage(1, RPM::get()->translations()

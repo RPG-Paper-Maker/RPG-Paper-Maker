@@ -144,6 +144,7 @@ HEADERS += \
     Models/System/systemanimationframeeffect.h \
     Models/System/systemanimationframeelement.h \
     Models/System/systemcameraproperties.h \
+    Models/System/systemcheckable.h \
     Models/System/systemcommanditemprice.h \
     Models/System/systemcustomstructure.h \
     Models/System/systemcustomstructureelement.h \
@@ -536,6 +537,7 @@ SOURCES += \
     Models/System/systemanimationframeeffect.cpp \
     Models/System/systemanimationframeelement.cpp \
     Models/System/systemcameraproperties.cpp \
+    Models/System/systemcheckable.cpp \
     Models/System/systemcommanditemprice.cpp \
     Models/System/systemcustomstructure.cpp \
     Models/System/systemcustomstructureelement.cpp \
