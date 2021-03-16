@@ -32,26 +32,21 @@ class DialogCommandTeleportObject : public DialogCommand
 
 public:
     explicit DialogCommandTeleportObject(EventCommand *command = nullptr,
-                                         SystemCommonObject *object = nullptr,
-                                         QStandardItemModel *parameters =
-                                         nullptr,
-                                         QWidget *parent = 0);
+        QStandardItemModel *properties = nullptr, QStandardItemModel
+        *parameters = nullptr, QWidget *parent = nullptr);
     virtual ~DialogCommandTeleportObject();
-    EventCommand* getCommand() const;
 
-protected:
-    virtual void initialize(EventCommand* command);
+    void initializePrimitives();
+    void translate();
+
+    virtual EventCommand * getCommand() const;
+    virtual void initialize(EventCommand *command);
 
 private:
     Ui::DialogCommandTeleportObject *ui;
-    QStandardItemModel* m_modelObjects;
-
-    void translate();
-
-private slots:
-   void on_radioButtonSelect_toggled(bool checked);
-   void on_radioButtonNumber_toggled(bool checked);
-   void on_radioButtonObject_toggled(bool checked);
+    QStandardItemModel *m_properties;
+    QStandardItemModel *m_parameters;
+    QStandardItemModel *m_modelObjects;
 };
 
 #endif // DIALOGTELEPORTOBJECT_H

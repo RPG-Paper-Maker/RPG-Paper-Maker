@@ -143,22 +143,18 @@ int EventCommand::getSongID(QStandardItemModel *parameters) const {
 // -------------------------------------------------------
 
 int EventCommand::getChoicesNumber() const {
+    int i = 2;
+    int l = this->commandsCount();
+    int nb = 0;
     QString next;
-    int i, l, nb;
-
-    i = 2;
-    l = this->commandsCount();
-    nb = 0;
     while (i < l) {
         next = m_listCommand.at(i);
         if (next == RPM::DASH) {
-            m_listCommand.at(i++).toInt();
             i++;
             nb++;
         }
         i += 2;
     }
-
     return nb;
 }
 

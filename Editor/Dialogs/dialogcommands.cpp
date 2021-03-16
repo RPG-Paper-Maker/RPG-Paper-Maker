@@ -112,7 +112,7 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::SendEvent:
         return new DialogCommandSendEvent(command, object, parameters);
     case EventCommandKind::TeleportObject:
-        return new DialogCommandTeleportObject(command, object, parameters);
+        return new DialogCommandTeleportObject(command, properties, parameters);
     case EventCommandKind::MoveObject:
         return new DialogCommandMoveObject(command, object, parameters);
     case EventCommandKind::Wait:

@@ -25,6 +25,7 @@ HEADERS += \
     CustomWidgets/panelcolorstransition.h \
     CustomWidgets/panelfonts.h \
     CustomWidgets/panelplugindetails.h \
+    CustomWidgets/panelposition.h \
     CustomWidgets/panelselectpositionmaps.h \
     CustomWidgets/panelstatus.h \
     CustomWidgets/panelsubtransformation.h \
@@ -56,6 +57,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommandchangeproperty.h \
     Dialogs/Commands/dialogcommandchangescreentone.h \
     Dialogs/Commands/dialogcommandcomment.h \
+    Dialogs/Commands/dialogcommandcreateobjectinmap.h \
     Dialogs/Commands/dialogcommanddisplayananimation.h \
     Dialogs/Commands/dialogcommanddisplayapicture.h \
     Dialogs/Commands/dialogcommanddisplaychoice.h \
@@ -439,6 +441,7 @@ SOURCES += \
     CustomWidgets/panelcolorstransition.cpp \
     CustomWidgets/panelfonts.cpp \
     CustomWidgets/panelplugindetails.cpp \
+    CustomWidgets/panelposition.cpp \
     CustomWidgets/panelselectpositionmaps.cpp \
     CustomWidgets/panelstatus.cpp \
     CustomWidgets/panelsubtransformation.cpp \
@@ -470,6 +473,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
     Dialogs/Commands/dialogcommandchangescreentone.cpp \
     Dialogs/Commands/dialogcommandcomment.cpp \
+    Dialogs/Commands/dialogcommandcreateobjectinmap.cpp \
     Dialogs/Commands/dialogcommanddisplayananimation.cpp \
     Dialogs/Commands/dialogcommanddisplayapicture.cpp \
     Dialogs/Commands/dialogcommanddisplaychoice.cpp \
@@ -804,6 +808,7 @@ FORMS += \
     CustomWidgets/panelcolorstransition.ui \
     CustomWidgets/panelfonts.ui \
     CustomWidgets/panelplugindetails.ui \
+    CustomWidgets/panelposition.ui \
     CustomWidgets/panelselectpositionmaps.ui \
     CustomWidgets/panelstatus.ui \
     CustomWidgets/panelsubtransformation.ui \
@@ -829,6 +834,7 @@ FORMS += \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
     Dialogs/Commands/dialogcommandchangescreentone.ui \
     Dialogs/Commands/dialogcommandcomment.ui \
+    Dialogs/Commands/dialogcommandcreateobjectinmap.ui \
     Dialogs/Commands/dialogcommanddisplayananimation.ui \
     Dialogs/Commands/dialogcommanddisplayapicture.ui \
     Dialogs/Commands/dialogcommanddisplaychoice.ui \
