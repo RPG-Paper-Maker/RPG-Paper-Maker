@@ -52,5 +52,8 @@ void DialogLanguages::initialize()
 
 void DialogLanguages::translate()
 {
-
+    this->setWindowTitle(RPM::translate(Translations::LANGUAGES_MANAGER) + RPM
+        ::DOT_DOT_DOT);
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::LANGUAGES));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

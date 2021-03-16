@@ -55,7 +55,11 @@ void DialogSystemLanguage::initialize()
 
 void DialogSystemLanguage::translate()
 {
-
+    this->setWindowTitle(RPM::translate(Translations::SET_LANGUAGE) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelType->setText(RPM::translate(Translations::TYPE) + RPM::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

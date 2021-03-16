@@ -1229,5 +1229,10 @@
     "number.of.steps.after.next.battle": "Number of steps after next battle",
     "set.random.battle": "Set random battle",
     "terrain": "Terrain",
-    "entire.map": "Entire map"
+    "entire.map": "Entire map",
+    "language": "Language",
+    "languages.manager": "Languages manager",
+    "languages.manager.tool": "Languages",
+    "languages": "Languages",
+    "set.language": "Set language"
 }

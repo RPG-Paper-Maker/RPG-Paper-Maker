@@ -1229,5 +1229,10 @@
     "number.of.steps.after.next.battle": "Nombre de pas après le combat suivant",
     "set.random.battle": "Modifier le combat aléatoire",
     "terrain": "Terrain",
-    "entire.map": "La carte entière"
+    "entire.map": "La carte entière",
+    "language": "Langue",
+    "languages.manager": "Gestionnaire de langues",
+    "languages.manager.tool": "Langues",
+    "languages": "Langues",
+    "set.language": "Modifier une langue"
 }

@@ -1263,6 +1263,11 @@ public:
     static const QString SET_RANDOM_BATTLE;
     static const QString TERRAIN;
     static const QString ENTIRE_MAP;
+    static const QString LANGUAGE;
+    static const QString LANGUAGES_MANAGER;
+    static const QString LANGUAGES_MANAGER_TOOL;
+    static const QString LANGUAGES;
+    static const QString SET_LANGUAGE;
 
     Translations();
     virtual ~Translations();

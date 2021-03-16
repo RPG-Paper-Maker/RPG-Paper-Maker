@@ -1250,6 +1250,11 @@ const QString Translations::NUMBER_OF_STEPS_AFTER_NEXT_BATTLE = "number.of.steps
 const QString Translations::SET_RANDOM_BATTLE = "set.random.battle";
 const QString Translations::TERRAIN = "terrain";
 const QString Translations::ENTIRE_MAP = "entire.map";
+const QString Translations::LANGUAGE = "language";
+const QString Translations::LANGUAGES_MANAGER = "languages.manager";
+const QString Translations::LANGUAGES_MANAGER_TOOL = "languages.manager.tool";
+const QString Translations::LANGUAGES = "languages";
+const QString Translations::SET_LANGUAGE = "set.language";
 
 // -------------------------------------------------------
 //

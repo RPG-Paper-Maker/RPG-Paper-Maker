@@ -519,6 +519,10 @@ void MainWindow::translate() {
         ::SCRIPTS_MANAGER) + RPM::DOT_DOT_DOT);
     ui->actionScripts_manager->setIconText(RPM::translate(Translations
         ::SCRIPTS_MANAGER_TOOL));
+    ui->actionLanguage_manager->setText(RPM::translate(Translations
+        ::LANGUAGES_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionLanguage_manager->setIconText(RPM::translate(Translations
+        ::LANGUAGES_MANAGER_TOOL));
     ui->actionPictures_manager->setText(RPM::translate(Translations
         ::PICTURES_MANAGER) + RPM::DOT_DOT_DOT);
     ui->actionPictures_manager->setIconText(RPM::translate(Translations
