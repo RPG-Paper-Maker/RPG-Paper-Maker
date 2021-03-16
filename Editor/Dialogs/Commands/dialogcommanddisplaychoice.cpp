@@ -116,7 +116,6 @@ EventCommand * DialogCommandDisplayChoice::getCommand() const {
             quintptr>());
         if (lang != nullptr) {
             command.append(RPM::DASH);
-            command.append(QString::number(lang->id()));
             lang->getCommand(command);
         }
     }
@@ -130,7 +129,7 @@ void DialogCommandDisplayChoice::initialize(EventCommand *command) {
     SystemTranslatable * lang;
     QList<QStandardItem *> row;
     QString next;
-    int i, l, id;
+    int i, l;
 
     i = 0;
     l = command->commandsCount();
@@ -139,12 +138,11 @@ void DialogCommandDisplayChoice::initialize(EventCommand *command) {
     while (i < l) {
         next = command->valueCommandAt(i);
         if (next == RPM::DASH) {
-            id = command->valueCommandAt(++i).toInt();
             if (lang != nullptr) {
                 row = lang->getModelRow();
                 m_model->appendRow(row);
             }
-            lang = new SystemTranslatable(id, "");
+            lang = new SystemTranslatable(-1, "");
             lang->setDisplayID(false);
             i++;
         }

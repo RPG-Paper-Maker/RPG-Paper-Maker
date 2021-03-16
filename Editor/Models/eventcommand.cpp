@@ -1577,14 +1577,15 @@ QString EventCommand::strDisplayChoice(SystemCommonObject *object,
     while (i < l) {
         next = m_listCommand.at(i);
         if (next == RPM::DASH) {
-            i += 2;
+            i += 1;
             if (lang != nullptr) {
                 choices << " - " + lang->name();
                 delete lang;
             }
             lang = new SystemTranslatable;
+        } else {
+            lang->initializeCommand(this, i);
         }
-        lang->initializeCommand(this, i);
     }
     if (lang != nullptr) {
         choices << " - " + lang->name();
