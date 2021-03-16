@@ -94,7 +94,7 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
     switch(kind)
     {
     case EventCommandKind::ShowText:
-        return new DialogCommandShowText(command, object, parameters);
+        return new DialogCommandShowText(command, properties, parameters);
     case EventCommandKind::ChangeVariables:
         return new DialogCommandChangeVariables(command, object, parameters);
     case EventCommandKind::InputNumber:
