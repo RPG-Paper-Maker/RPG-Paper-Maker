@@ -43,6 +43,8 @@ public:
 
     explicit WidgetComplexMessage(QWidget *parent = nullptr);
     ~WidgetComplexMessage();
+    QString text() const;
+    void setText(QString text);
 
     void initializeWidgets(QStandardItemModel *properties, QStandardItemModel
         *parameters);

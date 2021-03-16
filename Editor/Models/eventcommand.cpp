@@ -458,14 +458,23 @@ QString EventCommand::strNumber(int &i, QStandardItemModel *parameters) const {
 QString EventCommand::strShowText(SystemCommonObject *object, QStandardItemModel
     *parameters) const
 {
-    QString interlocutor, text;
-    int i;
-
-    i = 0;
-    interlocutor = this->strProperty(i, object, parameters);
+    int i = 0;
+    QString interlocutor = this->strProperty(i, object, parameters);
     i++;
-    text = m_listCommand.at(i++);
-
+    int id;
+    QString text;
+    while (i < this->commandsCount())
+    {
+        id = this->valueCommandAt(i++).toInt();
+        text = this->valueCommandAt(i++);
+        if (id == RPM::get()->project()->langsDatas()->mainLang())
+        {
+            break;
+        } else
+        {
+            text = "";
+        }
+    }
     return RPM::translate(Translations::SHOW_TEXT) + RPM::SPACE + RPM
         ::BRACKET_LEFT + interlocutor + RPM::BRACKET_RIGHT + RPM::COLON + RPM
         ::SPACE + text;

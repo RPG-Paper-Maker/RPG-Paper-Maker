@@ -49,6 +49,16 @@ WidgetComplexMessage::~WidgetComplexMessage()
     delete ui;
 }
 
+QString WidgetComplexMessage::text() const
+{
+    return ui->plainTextMessage->toPlainText();
+}
+
+void WidgetComplexMessage::setText(QString text)
+{
+    ui->plainTextMessage->setPlainText(text);
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

@@ -14,6 +14,7 @@
 
 #include "dialogcommand.h"
 #include "systempicture.h"
+#include "widgetcomplexmessage.h"
 
 // -------------------------------------------------------
 //
@@ -43,6 +44,7 @@ protected:
     SuperListItem *m_facesetID;
     QStandardItemModel *m_parameters;
     QStandardItemModel *m_properties;
+    QHash<int, WidgetComplexMessage *> m_widgets;
 
     void initializeWidgets(QStandardItemModel *properties, QStandardItemModel
         *parameters);
