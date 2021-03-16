@@ -83,6 +83,15 @@ void WidgetTextLang::on_pushButton_clicked()
 {
     if (m_lang != nullptr)
     {
-        m_lang->openDialog();
+        QString mainName = m_lang->mainName();
+        if (m_lang->SystemTranslatable::openDialog())
+        {
+            QString newMainName = m_lang->mainName();
+            if (mainName != newMainName)
+            {
+                ui->lineEdit->setText(newMainName);
+                emit mainChanged(newMainName);
+            }
+        }
     }
 }

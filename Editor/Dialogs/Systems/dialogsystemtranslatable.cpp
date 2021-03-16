@@ -45,14 +45,29 @@ void DialogSystemTranslatable::initialize()
 {
     QStandardItemModel *model = RPM::get()->project()->langsDatas()->model();
     QWidget *widget;
+    QGridLayout *layout;
     SystemLanguage *language;
+    QLineEdit *lineEdit;
     for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
     {
         language = reinterpret_cast<SystemLanguage *>(SuperListItem
             ::getItemModelAt(model, i));
         if (language != nullptr)
         {
-            //widget = new QWidget(nullptr);
+            widget = new QWidget;
+            layout = new QGridLayout(widget);
+            layout->addWidget(new QLabel(RPM::translate(Translations::NAME) +
+                RPM::COLON), 0, 0);
+            lineEdit = new QLineEdit(m_model.specificName(language->id()));
+            connect(lineEdit, &QLineEdit::textEdited, [this, language](const QString &text)
+            {
+                m_model.setSpecificName(language->id(), text);
+            });
+            connect(ui->lineEditAll, &QLineEdit::textEdited, [lineEdit](const QString &text)
+            {
+                lineEdit->setText(text);
+            });
+            layout->addWidget(lineEdit, 0, 1);
             ui->tabWidget->insertTab(i, widget, language->name());
         }
     }

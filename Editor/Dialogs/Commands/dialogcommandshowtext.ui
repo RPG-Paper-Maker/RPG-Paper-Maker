@@ -32,7 +32,7 @@
       <number>15</number>
      </property>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,1,0">
+      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,1">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0">
          <item>
@@ -370,9 +370,6 @@
        </item>
        <item>
         <widget class="QPlainTextEdit" name="plainTextMessage"/>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4"/>
        </item>
       </layout>
      </item>

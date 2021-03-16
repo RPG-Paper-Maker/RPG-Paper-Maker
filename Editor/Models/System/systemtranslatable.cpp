@@ -67,11 +67,26 @@ QString SystemTranslatable::mainName() const
     return m_names[this->mainID()];
 }
 
+
+// -------------------------------------------------------
+
+QString SystemTranslatable::specificName(int id) const
+{
+    return m_names[id];
+}
+
 // -------------------------------------------------------
 
 void SystemTranslatable::setMainName(QString n)
 {
-    m_names[this->mainID()] = n;
+    this->setSpecificName(this->mainID(), n);
+}
+
+// -------------------------------------------------------
+
+void SystemTranslatable::setSpecificName(int id, QString n)
+{
+    m_names[id] = n;
 }
 
 // -------------------------------------------------------
@@ -177,7 +192,7 @@ bool SystemTranslatable::openDialog()
     DialogSystemTranslatable dialog(super);
     if (dialog.exec() == QDialog::Accepted)
     {
-        setCopy(super);
+        this->SystemTranslatable::setCopy(super);
         return true;
     }
     return false;

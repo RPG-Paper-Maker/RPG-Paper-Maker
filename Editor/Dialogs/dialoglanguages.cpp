@@ -45,6 +45,7 @@ void DialogLanguages::initialize()
     ui->treeViewLanguages->initializeNewItemInstance(new SystemLanguage);
     ui->treeViewLanguages->initializeModel(RPM::get()->project()->langsDatas()->model());
     ui->treeViewLanguages->setCanBeEmpty(false);
+    ui->treeViewLanguages->setUpdateId(true);
 }
 
 // -------------------------------------------------------

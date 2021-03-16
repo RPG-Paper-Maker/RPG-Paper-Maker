@@ -36,6 +36,7 @@ HEADERS += \
     CustomWidgets/widgetbuttonimage.h \
     CustomWidgets/widgetcode.h \
     CustomWidgets/widgetcodelinenumberarea.h \
+    CustomWidgets/widgetcomplexmessage.h \
     CustomWidgets/widgetcustomstructure.h \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgetsliderprogression.h \
@@ -448,6 +449,7 @@ SOURCES += \
     CustomWidgets/widgetbuttonimage.cpp \
     CustomWidgets/widgetcode.cpp \
     CustomWidgets/widgetcodelinenumberarea.cpp \
+    CustomWidgets/widgetcomplexmessage.cpp \
     CustomWidgets/widgetcustomstructure.cpp \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgetsliderprogression.cpp \
@@ -806,6 +808,7 @@ FORMS += \
     CustomWidgets/paneltransformations.ui \
     CustomWidgets/paneltroopreaction.ui \
     CustomWidgets/panelvideos.ui \
+    CustomWidgets/widgetcomplexmessage.ui \
     CustomWidgets/widgetcustomstructure.ui \
     CustomWidgets/widgetmountainselector.ui \
     CustomWidgets/widgetsliderprogression.ui \

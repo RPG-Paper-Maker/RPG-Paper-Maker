@@ -37,7 +37,9 @@ public:
 
     int mainID() const;
     QString mainName() const;
+    QString specificName(int id) const;
     void setMainName(QString n);
+    void setSpecificName(int id, QString n);
     QString defaultMainName() const;
     void updateNames();
     void setAllNames(QString n);
