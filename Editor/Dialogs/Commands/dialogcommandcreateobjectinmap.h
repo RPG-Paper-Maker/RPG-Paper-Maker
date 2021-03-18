@@ -12,24 +12,35 @@
 #ifndef DIALOGCOMMANDCREATEOBJECTINMAP_H
 #define DIALOGCOMMANDCREATEOBJECTINMAP_H
 
-#include <QDialog>
+#include "dialogcommand.h"
 
 namespace Ui {
 class DialogCommandCreateObjectInMap;
 }
 
-class DialogCommandCreateObjectInMap : public QDialog
+class DialogCommandCreateObjectInMap : public DialogCommand
 {
     Q_OBJECT
 
 public:
-    explicit DialogCommandCreateObjectInMap(QWidget *parent = nullptr);
+    explicit DialogCommandCreateObjectInMap(EventCommand *command = nullptr,
+        QStandardItemModel *properties = nullptr, QStandardItemModel *parameters
+        = nullptr, QWidget *parent = nullptr);
     ~DialogCommandCreateObjectInMap();
 
+    void translate();
+    void initializePrimitives();
 
+    virtual EventCommand * getCommand() const;
+    virtual void initialize(EventCommand* command);
 
 private:
     Ui::DialogCommandCreateObjectInMap *ui;
+    QStandardItemModel *m_properties;
+    QStandardItemModel *m_parameters;
+
+public slots:
+    void on_checkBoxStock_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDCREATEOBJECTINMAP_H

@@ -46,7 +46,6 @@ private:
     Ui::DialogCommandTeleportObject *ui;
     QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
-    QStandardItemModel *m_modelObjects;
 };
 
 #endif // DIALOGTELEPORTOBJECT_H

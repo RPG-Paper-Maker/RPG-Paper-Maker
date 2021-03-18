@@ -1268,6 +1268,9 @@ public:
     static const QString LANGUAGES_MANAGER_TOOL;
     static const QString LANGUAGES;
     static const QString SET_LANGUAGE;
+    static const QString CREATE_OBJECT_IN_MAP;
+    static const QString NEW_OBJECT_MODEL_ID;
+    static const QString STOCK_ID_IN_VARIABLE_ID;
 
     Translations();
     virtual ~Translations();

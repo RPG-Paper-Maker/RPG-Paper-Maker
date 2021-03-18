@@ -26,15 +26,16 @@ class PanelPosition : public QWidget
 public:
     explicit PanelPosition(QWidget *parent = nullptr);
     ~PanelPosition();
+    QStandardItemModel * modelObjects() const;
 
     void getCommand(QVector<QString> &command) const;
-    void initializePrimitives(QStandardItemModel *modelObjects,
-        QStandardItemModel *properties, QStandardItemModel *parameters);
-    void initialize(EventCommand *command, int &i);
+    void initializePrimitives(QStandardItemModel *properties, QStandardItemModel *parameters);
+    void initializeCommand(EventCommand *command, int &i);
     void translate();
 
 private:
     Ui::PanelPosition *ui;
+    QStandardItemModel *m_modelObjects;
 
 public slots:
    void on_radioButtonSelect_toggled(bool checked);

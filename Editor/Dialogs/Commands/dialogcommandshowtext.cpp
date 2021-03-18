@@ -73,6 +73,7 @@ void DialogCommandShowText::initializeWidgets(QStandardItemModel *properties,
             widget = new QWidget;
             layout = new QGridLayout(widget);
             complexMessage = new WidgetComplexMessage;
+            complexMessage->initializeWidgets(m_properties, m_parameters);
             m_widgets.insert(language->id(), complexMessage);
             layout->addWidget(complexMessage, 0, 0);
             ui->tabWidget->insertTab(i, widget, language->name());

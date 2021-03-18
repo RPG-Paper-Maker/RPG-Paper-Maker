@@ -1255,6 +1255,9 @@ const QString Translations::LANGUAGES_MANAGER = "languages.manager";
 const QString Translations::LANGUAGES_MANAGER_TOOL = "languages.manager.tool";
 const QString Translations::LANGUAGES = "languages";
 const QString Translations::SET_LANGUAGE = "set.language";
+const QString Translations::CREATE_OBJECT_IN_MAP = "create.object.in.map";
+const QString Translations::NEW_OBJECT_MODEL_ID = "new.object.model.id";
+const QString Translations::STOCK_ID_IN_VARIABLE_ID = "stock.id.in.variable.id";
 
 // -------------------------------------------------------
 //

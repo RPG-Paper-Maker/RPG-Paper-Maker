@@ -1234,5 +1234,8 @@
     "languages.manager": "Languages manager",
     "languages.manager.tool": "Languages",
     "languages": "Languages",
-    "set.language": "Set language"
+    "set.language": "Set language",
+    "create.object.in.map": "Create object in map",
+    "new.object.model.id": "New object model ID",
+    "stock.id.in.variable.id": "Stock ID in variable ID"
 }

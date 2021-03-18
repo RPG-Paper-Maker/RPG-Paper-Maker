@@ -144,9 +144,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButtonJumpLabel_5">
+               <widget class="QPushButton" name="pushButtonCreateObjectInMap">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Create object in map...</string>

@@ -1234,5 +1234,8 @@
     "languages.manager": "Gestionnaire de langues",
     "languages.manager.tool": "Langues",
     "languages": "Langues",
-    "set.language": "Modifier une langue"
+    "set.language": "Modifier une langue",
+    "create.object.in.map": "Créer un object dans la carte",
+    "new.object.model.id": "Nouvel object de modèle d'ID",
+    "stock.id.in.variable.id": "Stocker l'ID dans la variable d'ID"
 }

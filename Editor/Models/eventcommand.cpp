@@ -311,6 +311,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strStartShopMenu(object, parameters, true); break;
     case EventCommandKind::EnterANameMenu:
         str += this->strEnterANameMenu(object, parameters); break;
+    case EventCommandKind::CreateObjectInMap:
+        str += this->strCreateObjectInMap(object, parameters); break;
     default:
         break;
     }
@@ -2291,6 +2293,27 @@ QString EventCommand::strEnterANameMenu(SystemCommonObject *object,
         ::NEW_LINE + RPM::translate(Translations::HERO_WITH_INSTANCE_ID) + RPM
         ::COLON + RPM::SPACE + heroInstanceID + RPM::NEW_LINE + RPM::translate(
         Translations::MAX_CHARACTERS) + RPM::COLON + RPM::SPACE + maxCharacters;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strCreateObjectInMap(SystemCommonObject *object, QStandardItemModel
+    *parameters) const
+{
+    int i = 0;
+    QString strModelID = this->strProperty(i, object, parameters);
+    QString strPosition = this->strTeleportObjectPosition(object, parameters, i);
+    QString strStockID;
+    if (RPM::stringToBool(this->valueCommandAt(i++)))
+    {
+        strStockID = RPM::BRACKET_LEFT + RPM::translate(Translations::STOCK_INSTANCE_ID_IN)
+            .toLower() + RPM::SPACE + this->strProperty(i, object, parameters) +
+            RPM::BRACKET_RIGHT + RPM::SPACE;
+    }
+    return RPM::translate(Translations::CREATE_OBJECT_IN_MAP) + RPM::COLON + RPM
+        ::SPACE + RPM::translate(Translations::NEW_OBJECT_MODEL_ID) + RPM::COLON
+        + RPM::SPACE + strModelID + RPM::SPACE + strStockID + RPM::translate(
+        Translations::TO_THE_COORDINATES).toLower() + RPM::NEW_LINE + strPosition;
 }
 
 // -------------------------------------------------------

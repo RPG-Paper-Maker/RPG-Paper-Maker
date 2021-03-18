@@ -26,10 +26,9 @@
 class DialogCommand : public QDialog
 {
 public:
-    explicit DialogCommand(QWidget *parent = 0);
-    virtual EventCommand* getCommand() const = 0;
+    explicit DialogCommand(QWidget *parent = nullptr);
 
-protected:
+    virtual EventCommand* getCommand() const = 0;
     virtual void initialize(EventCommand* command) = 0;
 };
 

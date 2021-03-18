@@ -21,7 +21,8 @@
 
 PanelPosition::PanelPosition(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::PanelPosition)
+    ui(new Ui::PanelPosition),
+    m_modelObjects(nullptr)
 {
     ui->setupUi(this);
     this->translate();
@@ -30,6 +31,15 @@ PanelPosition::PanelPosition(QWidget *parent) :
 PanelPosition::~PanelPosition()
 {
     delete ui;
+    if (RPM::isInConfig && !RPM::isInObjectConfig)
+    {
+        SuperListItem::deleteModel(m_modelObjects);
+    }
+}
+
+QStandardItemModel * PanelPosition::modelObjects() const
+{
+    return m_modelObjects;
 }
 
 // -------------------------------------------------------
@@ -61,21 +71,29 @@ void PanelPosition::getCommand(QVector<QString> &command) const
 
 // -------------------------------------------------------
 
-void PanelPosition::initializePrimitives(QStandardItemModel *modelObjects,
-    QStandardItemModel *properties, QStandardItemModel *parameters)
+void PanelPosition::initializePrimitives(QStandardItemModel *properties,
+    QStandardItemModel *parameters)
 {
+    if (RPM::isInConfig && !RPM::isInObjectConfig)
+    {
+        m_modelObjects = new QStandardItemModel;
+        Map::setModelObjects(m_modelObjects);
+    } else
+    {
+        m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
+    }
     ui->widgetIdMap->initializeNumber(parameters, properties);
     ui->widgetX->initializeNumber(parameters, properties);
     ui->widgetY->initializeNumber(parameters, properties);
     ui->widgetYplus->initializeNumber(parameters, properties);
     ui->widgetZ->initializeNumber(parameters, properties);
-    ui->widgetObjectIDPosition->initializeDataBaseCommandId(modelObjects,
+    ui->widgetObjectIDPosition->initializeDataBaseCommandId(m_modelObjects,
         parameters, properties);
 }
 
 // -------------------------------------------------------
 
-void PanelPosition::initialize(EventCommand *command, int &i)
+void PanelPosition::initializeCommand(EventCommand *command, int &i)
 {
     switch (command->valueCommandAt(i++).toInt())
     {
@@ -102,10 +120,10 @@ void PanelPosition::initialize(EventCommand *command, int &i)
 
 void PanelPosition::translate()
 {
+    ui->radioButtonNumber->setText(RPM::translate(Translations::MAP_ID) + RPM::COLON);
     ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
     ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
     ui->labelZ->setText(RPM::translate(Translations::Z) + RPM::COLON);
-    ui->labelIDMap->setText(RPM::translate(Translations::MAP_ID) + RPM::COLON);
     ui->labelYPlus->setText(RPM::translate(Translations::Y_PLUS) + RPM::COLON);
     ui->radioButtonObject->setText(RPM::translate(Translations::OBJECT_ID) + RPM::COLON);
 }
@@ -125,7 +143,6 @@ void PanelPosition::on_radioButtonSelect_toggled(bool checked)
 
 void PanelPosition::on_radioButtonNumber_toggled(bool checked)
 {
-    ui->labelIDMap->setEnabled(checked);
     ui->labelX->setEnabled(checked);
     ui->labelY->setEnabled(checked);
     ui->labelYPlus->setEnabled(checked);

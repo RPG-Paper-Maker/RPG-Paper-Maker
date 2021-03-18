@@ -25,8 +25,7 @@ DialogCommandTeleportObject::DialogCommandTeleportObject(EventCommand *command,
     DialogCommand(parent),
     ui(new Ui::DialogCommandTeleportObject),
     m_properties(properties),
-    m_parameters(parameters),
-    m_modelObjects(nullptr)
+    m_parameters(parameters)
 {
     ui->setupUi(this);
     this->initializePrimitives();
@@ -40,10 +39,6 @@ DialogCommandTeleportObject::DialogCommandTeleportObject(EventCommand *command,
 DialogCommandTeleportObject::~DialogCommandTeleportObject()
 {
     delete ui;
-    if (RPM::isInConfig && !RPM::isInObjectConfig)
-    {
-        SuperListItem::deleteModel(m_modelObjects);
-    }
 }
 
 // -------------------------------------------------------
@@ -54,18 +49,10 @@ DialogCommandTeleportObject::~DialogCommandTeleportObject()
 
 void DialogCommandTeleportObject::initializePrimitives()
 {
-    if (RPM::isInConfig && !RPM::isInObjectConfig)
-    {
-        m_modelObjects = new QStandardItemModel;
-        Map::setModelObjects(m_modelObjects);
-    } else
-    {
-        m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
-    }
-    ui->widgetObjectID->initializeDataBaseCommandId(m_modelObjects, m_parameters,
-        m_properties);
+    ui->panelPosition->initializePrimitives(m_properties, m_parameters);
+    ui->widgetObjectID->initializeDataBaseCommandId(ui->panelPosition->modelObjects(),
+        m_parameters, m_properties);
     ui->widgetObjectID->setNumberValue(0);
-    ui->panelPosition->initializePrimitives(m_modelObjects, m_properties, m_parameters);
 }
 
 // -------------------------------------------------------
@@ -111,7 +98,7 @@ void DialogCommandTeleportObject::initialize(EventCommand *command)
     ui->widgetObjectID->initializeCommand(command, i);
 
     // Position
-    ui->panelPosition->initialize(command, i);
+    ui->panelPosition->initializeCommand(command, i);
 
     // Options
     ui->comboBoxDirection->setCurrentIndex(command->valueCommandAt(i++).toInt());
