@@ -33,26 +33,24 @@ class DialogCommandMoveObject : public DialogCommand
 
 public:
     explicit DialogCommandMoveObject(EventCommand *command = nullptr,
-                                     SystemCommonObject *object = nullptr,
-                                     QStandardItemModel* parameters = nullptr,
-                                     bool idObjectFixed = false,
-                                     QWidget *parent = nullptr);
+        QStandardItemModel* properties = nullptr, QStandardItemModel* parameters
+        = nullptr, bool idObjectFixed = false, QWidget *parent = nullptr);
     virtual ~DialogCommandMoveObject();
-    EventCommand* getCommand() const;
+
+    void translate();
+    void initializePrimitives();
     void addMoveStepSquare(CommandMoveKind kind);
     void addMove(QVector<QString> &commands);
 
-protected:
+    virtual EventCommand * getCommand() const;
     virtual void initialize(EventCommand* command);
 
 private:
     Ui::DialogCommandMoveObject *ui;
     QStandardItemModel *m_modelObjects;
-    SystemCommonObject *m_object;
-    QStandardItemModel *m_parameters;
     QStandardItemModel *m_properties;
-
-    void translate();
+    QStandardItemModel *m_parameters;
+    bool m_idObjectFixed;
 
 private slots:
     void on_pushButtonStepSquareNorth_clicked();
@@ -68,6 +66,7 @@ private slots:
     void on_pushButtonStepSquareOppositeHero_clicked();
     void on_pushButtonStepSquareFront_clicked();
     void on_pushButtonStepSquareBack_clicked();
+    void on_pushButtonJump_clicked();
     void on_pushButtonChangeGraphics_clicked();
 };
 

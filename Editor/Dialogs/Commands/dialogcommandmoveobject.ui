@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>841</width>
-    <height>608</height>
+    <height>641</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -273,10 +273,17 @@
                 </property>
                </widget>
               </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonJump">
+                <property name="text">
+                 <string>Jump...</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </item>
             <item>
-             <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0,0,0,0,0,0,0,1,0,0,0,0">
+             <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0">
               <item>
                <widget class="QLabel" name="labelChangeDirection">
                 <property name="minimumSize">
@@ -307,9 +314,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_25">
+               <widget class="QPushButton" name="pushButtonTurnNorth">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Turn to North</string>
@@ -317,9 +324,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_19">
+               <widget class="QPushButton" name="pushButtonTurnSouth">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Turn to South</string>
@@ -327,9 +334,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_20">
+               <widget class="QPushButton" name="pushButtonTurnWest">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Turn to West</string>
@@ -337,9 +344,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_16">
+               <widget class="QPushButton" name="pushButtonTurnEast">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Turn to East</string>
@@ -387,9 +394,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_18">
+               <widget class="QPushButton" name="pushButtonTurn45Right">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Turn 45° right</string>
@@ -397,9 +404,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_14">
+               <widget class="QPushButton" name="pushButtonTurn45Left">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Turn 45° left</string>
@@ -407,19 +414,26 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_37">
+               <widget class="QPushButton" name="pushButtonTurn90Right">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
-                 <string>Turn 180*</string>
+                 <string>Turn 90° right</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_13">
+               <widget class="QPushButton" name="pushButtonTurn90Left">
+                <property name="text">
+                 <string>Turn 90° left</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonLookAtHero">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Look at the hero</string>
@@ -427,9 +441,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_22">
+               <widget class="QPushButton" name="pushButtonLookAtHeroOpposite">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Look at the hero opposite</string>
@@ -439,7 +453,7 @@
              </layout>
             </item>
             <item>
-             <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+             <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
               <item>
                <widget class="QLabel" name="labelChangeObjectProperties">
                 <property name="minimumSize">
@@ -509,9 +523,9 @@
                </layout>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_26">
+               <widget class="QPushButton" name="pushButtonChangeSpeed">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Change speed...</string>
@@ -519,9 +533,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_35">
+               <widget class="QPushButton" name="pushButtonChangeFrequency">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Change frequency...</string>
@@ -529,9 +543,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_31">
+               <widget class="QPushButton" name="pushButtonMoveAnimation">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Move animation</string>
@@ -539,9 +553,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_33">
+               <widget class="QPushButton" name="pushButtonStopAnimation">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Stop animation</string>
@@ -549,9 +563,19 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_34">
+               <widget class="QPushButton" name="pushButtonClimbAnimation">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>Climb animation</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonFixDirection">
+                <property name="enabled">
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Fix direction</string>
@@ -559,9 +583,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_36">
+               <widget class="QPushButton" name="pushButtonThrough">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Through</string>
@@ -569,12 +593,32 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_23">
+               <widget class="QPushButton" name="pushButtonSetWithCamera">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Set with camera</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonPixelOffset">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>Pixel offset</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonKeepPosition">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>Keep position</string>
                 </property>
                </widget>
               </item>
@@ -589,52 +633,29 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_27">
+               <widget class="QPushButton" name="pushButtonWait">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
-                 <string>Change opacity...</string>
+                 <string>Wait...</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_29">
+               <widget class="QPushButton" name="pushButtonPlaySound">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
-                 <string>Change bending...</string>
+                 <string>Play sound...</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_32">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
+               <widget class="QPushButton" name="pushButtonScript">
                 <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_30">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>....</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_2">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>...</string>
+                 <string>Script...</string>
                 </property>
                </widget>
               </item>

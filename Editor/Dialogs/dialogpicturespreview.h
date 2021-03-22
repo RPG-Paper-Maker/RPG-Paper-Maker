@@ -36,7 +36,7 @@ class DialogPicturesPreview : public QDialog
 
 public:
     explicit DialogPicturesPreview(SystemPicture* picture, PictureKind kind,
-        PrimitiveValue *valueID = nullptr, SystemCommonObject *object = nullptr,
+        PrimitiveValue *valueID = nullptr, QStandardItemModel *properties = nullptr,
         QStandardItemModel* parameters = nullptr, QWidget *parent = nullptr);
     ~DialogPicturesPreview();
     SystemPicture * picture() const;
@@ -59,9 +59,8 @@ private:
     PictureKind m_kind;
     int m_initialPictureID;
     PrimitiveValue *m_idValue;
-    SystemCommonObject *m_object;
-    QStandardItemModel *m_parameters;
     QStandardItemModel *m_properties;
+    QStandardItemModel *m_parameters;
 
     void translate();
 

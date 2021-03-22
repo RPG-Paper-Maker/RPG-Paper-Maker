@@ -20,10 +20,10 @@
 // -------------------------------------------------------
 
 DialogCommandSetMoveTurnAPicture::DialogCommandSetMoveTurnAPicture(EventCommand
-    *command, SystemCommonObject *object, QStandardItemModel *parameters,
+    *command, QStandardItemModel *properties, QStandardItemModel *parameters,
     QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     m_valueID(new PrimitiveValue(-1)),
     ui(new Ui::DialogCommandSetMoveTurnAPicture)
@@ -52,25 +52,18 @@ DialogCommandSetMoveTurnAPicture::~DialogCommandSetMoveTurnAPicture() {
 // -------------------------------------------------------
 
 void DialogCommandSetMoveTurnAPicture::initializePrimitives() {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr){
-        properties = m_object->modelProperties();
-    }
-
-    ui->panelPrimitiveIndex->initializeNumber(m_parameters, properties);
+    ui->panelPrimitiveIndex->initializeNumber(m_parameters, m_properties);
     ui->widgetPictureImageID->setKind(PictureKind::Pictures);
-    ui->widgetPictureImageID->initializePrimitive(m_valueID, m_object,
+    ui->widgetPictureImageID->initializePrimitive(m_valueID, m_properties,
         m_parameters);
-    ui->panelPrimitiveZoom->initializeNumber(m_parameters, properties, false);
+    ui->panelPrimitiveZoom->initializeNumber(m_parameters, m_properties, false);
     ui->panelPrimitiveZoom->setNumberDoubleValue(100);
-    ui->panelPrimitiveOpacity->initializeNumber(m_parameters, properties, false);
+    ui->panelPrimitiveOpacity->initializeNumber(m_parameters, m_properties, false);
     ui->panelPrimitiveOpacity->setNumberDoubleValue(100);
-    ui->panelPrimitiveX->initializeNumber(m_parameters, properties, false);
-    ui->panelPrimitiveY->initializeNumber(m_parameters, properties, false);
-    ui->panelPrimitiveAngle->initializeNumber(m_parameters, properties, false);
-    ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
+    ui->panelPrimitiveX->initializeNumber(m_parameters, m_properties, false);
+    ui->panelPrimitiveY->initializeNumber(m_parameters, m_properties, false);
+    ui->panelPrimitiveAngle->initializeNumber(m_parameters, m_properties, false);
+    ui->panelPrimitiveTime->initializeNumber(m_parameters, m_properties, false);
 }
 
 //-------------------------------------------------
@@ -113,7 +106,7 @@ void DialogCommandSetMoveTurnAPicture::initialize(EventCommand *command) {
         ui->checkBoxSet->setChecked(true);
         ui->checkBoxImageID->setChecked(true);
         m_valueID->initializeCommandParameter(command, i, true);
-        ui->widgetPictureImageID->initializePrimitive(m_valueID, m_object,
+        ui->widgetPictureImageID->initializePrimitive(m_valueID, m_properties,
             m_parameters);
     }
     checked = RPM::stringToBool(command->valueCommandAt(i++));

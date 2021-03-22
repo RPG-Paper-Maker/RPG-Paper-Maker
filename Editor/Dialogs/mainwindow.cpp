@@ -103,6 +103,7 @@ MainWindow::~MainWindow()
     gameProcess = nullptr;
     cleanRecentProjectsActions();
     delete m_dialogScripts;
+    delete m_timerBackup;
     delete ui;
     RPM::kill();
 }

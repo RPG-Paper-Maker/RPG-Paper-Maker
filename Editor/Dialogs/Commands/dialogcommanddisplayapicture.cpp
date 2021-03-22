@@ -20,9 +20,9 @@
 // -------------------------------------------------------
 
 DialogCommandDisplayAPicture::DialogCommandDisplayAPicture(EventCommand *command,
-    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     m_valueID(new PrimitiveValue(-1)),
     ui(new Ui::DialogCommandDisplayAPicture)
@@ -51,24 +51,17 @@ DialogCommandDisplayAPicture::~DialogCommandDisplayAPicture() {
 // -------------------------------------------------------
 
 void DialogCommandDisplayAPicture::initializePrimitives() {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr){
-        properties = m_object->modelProperties();
-    }
-
     ui->widgetPictureImage->setKind(PictureKind::Pictures);
-    ui->widgetPictureImage->initializePrimitive(m_valueID, m_object,
+    ui->widgetPictureImage->initializePrimitive(m_valueID, m_properties,
         m_parameters);
-    ui->panelPrimitiveID->initializeNumber(m_parameters, properties);
-    ui->panelPrimitiveX->initializeNumber(m_parameters, properties, false);
-    ui->panelPrimitiveY->initializeNumber(m_parameters, properties, false);
-    ui->panelPrimitiveZoom->initializeNumber(m_parameters, properties, false);
+    ui->panelPrimitiveID->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveX->initializeNumber(m_parameters, m_properties, false);
+    ui->panelPrimitiveY->initializeNumber(m_parameters, m_properties, false);
+    ui->panelPrimitiveZoom->initializeNumber(m_parameters, m_properties, false);
     ui->panelPrimitiveZoom->setNumberDoubleValue(100);
-    ui->panelPrimitiveOpacity->initializeNumber(m_parameters, properties, false);
+    ui->panelPrimitiveOpacity->initializeNumber(m_parameters, m_properties, false);
     ui->panelPrimitiveOpacity->setNumberDoubleValue(100);
-    ui->panelPrimitiveAngle->initializeNumber(m_parameters, properties, false);
+    ui->panelPrimitiveAngle->initializeNumber(m_parameters, m_properties, false);
     ui->comboBoxOrigin->addItem(RPM::translate(Translations::TOP_LEFT));
     ui->comboBoxOrigin->addItem(RPM::translate(Translations::CENTER));
 }
@@ -99,7 +92,7 @@ void DialogCommandDisplayAPicture::initialize(EventCommand *command) {
 
     i = 0;
     m_valueID->initializeCommandParameter(command, i, true);
-    ui->widgetPictureImage->initializePrimitive(m_valueID, m_object,
+    ui->widgetPictureImage->initializePrimitive(m_valueID, m_properties,
         m_parameters);
     ui->panelPrimitiveID->initializeCommand(command, i);
     ui->comboBoxOrigin->setCurrentIndex(command->valueCommandAt(i++) == RPM

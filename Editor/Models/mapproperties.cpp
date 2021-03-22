@@ -90,7 +90,8 @@ MapProperties::MapProperties(int i, QString name, int l, int w, int h, int d,
     this->initializeHeaders();
 }
 
-MapProperties::~MapProperties() {
+MapProperties::~MapProperties()
+{
     this->clearOverflowSprites();
     this->clearOverflowObjects3D();
     this->clearOverflowMountains();
@@ -744,7 +745,6 @@ void MapProperties::read(const QJsonObject &json){
     if (m_isSkyImage) {
         m_skyPictureID->setId(json[JSON_SKY_PICTURE_ID].toInt());
     }
-    m_skyboxID = new PrimitiveValue(PrimitiveValueKind::DataBase, 1);
     if (!m_isSkyColor && !m_isSkyImage)
     {
         m_skyboxID->read(json[JSON_SKY_BOX_ID].toObject());
@@ -770,6 +770,7 @@ void MapProperties::read(const QJsonObject &json){
     }
 
     // Invisible object
+    delete m_startupObject;
     m_startupObject = new SystemCommonObject;
     m_startupObject->read(json[JSON_STARTUP_OBJECT].toObject());
 

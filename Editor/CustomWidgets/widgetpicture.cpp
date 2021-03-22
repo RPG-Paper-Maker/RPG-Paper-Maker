@@ -26,7 +26,7 @@ WidgetPicture::WidgetPicture(QWidget *parent) :
     ui(new Ui::WidgetPicture),
     m_pictureID(nullptr),
     m_valueID(nullptr),
-    m_object(nullptr),
+    m_properties(nullptr),
     m_parameters(nullptr)
 {
     ui->setupUi(this);
@@ -81,10 +81,10 @@ void WidgetPicture::initializeSuper(SuperListItem *super) {
 }
 
 void WidgetPicture::initializePrimitive(PrimitiveValue *value,
-    SystemCommonObject *object, QStandardItemModel *parameters)
+    QStandardItemModel *properties, QStandardItemModel *parameters)
 {
     m_valueID = value;
-    m_object = object;
+    m_properties = properties;
     m_parameters = parameters;
     if (m_valueID->kind() == PrimitiveValueKind::Number)
     {
@@ -102,7 +102,7 @@ void WidgetPicture::initializePrimitive(PrimitiveValue *value,
 // -------------------------------------------------------
 
 void WidgetPicture::openDialog(){
-    DialogPicturesPreview dialog(this->picture(), m_kind, m_valueID, m_object,
+    DialogPicturesPreview dialog(this->picture(), m_kind, m_valueID, m_properties,
         m_parameters);
     int previousPictureID = m_picture;
     SystemPicture *pic;

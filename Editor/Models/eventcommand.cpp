@@ -1292,10 +1292,10 @@ QString EventCommand::strMoveObjectOptions(int &i) const {
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveObjectMoves(int &i) const {
+QString EventCommand::strMoveObjectMoves(int &i) const
+{
     SystemCommandMove move;
     QString strMoves;
-
     while(i < commandsCount()) {
         move = SystemCommandMove();
         strMoves += "\n";

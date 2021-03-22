@@ -1091,14 +1091,23 @@ int PanelPrimitiveValue::getKindIndex(PrimitiveValueKind kind) {
         if (ui->comboBoxChoice->itemData(i).toInt() == static_cast<int>(kind))
             return i;
     }
-
     return -1;
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::initializeCommand(EventCommand *command, int &i) {
-    switch (m_kind) {
+void PanelPrimitiveValue::initializeCommand(EventCommand *command, int &i)
+{
+    QVector<QString> commands = command->commands();
+    this->initializeCommandList(commands, i);
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::initializeCommandList(QVector<QString> &command, int &i)
+{
+    switch (m_kind)
+    {
     case PanelPrimitiveValueKind::Primitives:
     case PanelPrimitiveValueKind::ParameterEvent:
         break;
@@ -1106,45 +1115,46 @@ void PanelPrimitiveValue::initializeCommand(EventCommand *command, int &i) {
     case PanelPrimitiveValueKind::DataBaseCommandId:
     case PanelPrimitiveValueKind::Number:
     case PanelPrimitiveValueKind::VariableParamProp:
-        setKind(static_cast<PrimitiveValueKind>(command->valueCommandAt(i++)
-            .toInt()));
+        this->setKind(static_cast<PrimitiveValueKind>(command.at(i++).toInt()));
         if (m_model->kind() == PrimitiveValueKind::NumberDouble)
-            setNumberDoubleValue(command->valueCommandAt(i++).toDouble());
-        else
-            setNumberValue(command->valueCommandAt(i++).toInt());
+        {
+            this->setNumberDoubleValue(command.at(i++).toDouble());
+        } else
+        {
+            this->setNumberValue(command.at(i++).toInt());
+        }
         break;
     case PanelPrimitiveValueKind::Message:
     case PanelPrimitiveValueKind::Font:
-        setKind(static_cast<PrimitiveValueKind>(command->valueCommandAt(i++)
-            .toInt()));
+        this->setKind(static_cast<PrimitiveValueKind>(command.at(i++).toInt()));
         if (m_model->kind() == PrimitiveValueKind::Message || m_model->kind() ==
             PrimitiveValueKind::Font)
         {
-            setMessageValue(command->valueCommandAt(i++));
+            this->setMessageValue(command.at(i++));
         } else {
-            setNumberValue(command->valueCommandAt(i++).toInt());
+            this->setNumberValue(command.at(i++).toInt());
         }
         break;
     case PanelPrimitiveValueKind::Switch:
     case PanelPrimitiveValueKind::Property:
-        setKind(static_cast<PrimitiveValueKind>(command->valueCommandAt(i++)
-            .toInt()));
-        switch (m_model->kind()) {
+        this->setKind(static_cast<PrimitiveValueKind>(command.at(i++).toInt()));
+        switch (m_model->kind())
+        {
         case PrimitiveValueKind::Number:
         case PrimitiveValueKind::Variable:
         case PrimitiveValueKind::Parameter:
         case PrimitiveValueKind::Property:
         case PrimitiveValueKind::KeyBoard:
-            setNumberValue(command->valueCommandAt(i++).toInt());
+            this->setNumberValue(command.at(i++).toInt());
             break;
         case PrimitiveValueKind::NumberDouble:
-            setNumberDoubleValue(command->valueCommandAt(i++).toDouble());
+            this->setNumberDoubleValue(command.at(i++).toDouble());
             break;
         case PrimitiveValueKind::Switch:
-            setSwitchValue(command->valueCommandAt(i++) == RPM::TRUE_BOOL_STRING);
+            this->setSwitchValue(command.at(i++) == RPM::TRUE_BOOL_STRING);
             break;
         default:
-            setMessageValue(command->valueCommandAt(i++));
+            this->setMessageValue(command.at(i++));
             break;
         }
         break;
@@ -1155,7 +1165,8 @@ void PanelPrimitiveValue::initializeCommand(EventCommand *command, int &i) {
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::getCommand(QVector<QString> &command) {
+void PanelPrimitiveValue::getCommand(QVector<QString> &command)
+{
     switch (m_kind) {
     case PanelPrimitiveValueKind::Primitives:
     case PanelPrimitiveValueKind::ParameterEvent:

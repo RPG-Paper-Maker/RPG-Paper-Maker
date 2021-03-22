@@ -14,6 +14,7 @@
 
 #include "superlistitem.h"
 #include "eventcommand.h"
+#include "commandmovekind.h"
 
 // -------------------------------------------------------
 //
@@ -26,15 +27,24 @@
 class SystemCommandMove : public SuperListItem
 {
 public:
-    SystemCommandMove();
-    SystemCommandMove(int i, QString n, QVector<QString> command);
-    virtual QString toString() const;
+    SystemCommandMove(int i = -1, QString n = "", QVector<QString> command =
+        QVector<QString>(), QStandardItemModel *properties = nullptr,
+        QStandardItemModel *parameters = nullptr);
+
+    CommandMoveKind getKind() const;
+    void getCommand(QVector<QString> &command) const;
+    void initializePropertiesParameters(QStandardItemModel *properties,
+        QStandardItemModel *parameters);
     void initialize(const EventCommand* command, int& i);
-    void getCommand(QVector<QString> &command);
+
+    virtual QString toString() const;
+    virtual bool openDialog();
     virtual QList<QStandardItem*> getModelRow() const;
 
 protected:
     QVector<QString> m_command;
+    QStandardItemModel *m_properties;
+    QStandardItemModel *m_parameters;
 };
 
 #endif // SYSTEMCOMMANDMOVE_H

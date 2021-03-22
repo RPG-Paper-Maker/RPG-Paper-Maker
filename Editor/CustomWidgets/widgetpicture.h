@@ -42,7 +42,7 @@ public:
     void setPicture(SystemPicture* picture);
     void initialize(int i = 1);
     void initializeSuper(SuperListItem *super);
-    void initializePrimitive(PrimitiveValue *value, SystemCommonObject *object =
+    void initializePrimitive(PrimitiveValue *value, QStandardItemModel *properties =
         nullptr, QStandardItemModel *parameters = nullptr);
     void openDialog();
 
@@ -52,7 +52,7 @@ private:
     int m_picture;
     SuperListItem *m_pictureID;
     PrimitiveValue *m_valueID;
-    SystemCommonObject *m_object;
+    QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
 
 private slots:

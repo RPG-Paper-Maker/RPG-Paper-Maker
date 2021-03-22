@@ -20,16 +20,15 @@
 // -------------------------------------------------------
 
 DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
-    PictureKind kind, PrimitiveValue *valueID, SystemCommonObject *object,
+    PictureKind kind, PrimitiveValue *valueID, QStandardItemModel *properties,
     QStandardItemModel *parameters, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogPicturesPreview),
     m_kind(kind),
     m_initialPictureID(picture->id()),
     m_idValue(valueID),
-    m_object(object),
-    m_parameters(parameters),
-    m_properties(nullptr)
+    m_properties(properties),
+    m_parameters(parameters)
 {
     ui->setupUi(this);
 
@@ -39,10 +38,6 @@ DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
     ui->widget->showAvailableContent(RPM::get()->engineSettings()
         ->showAvailableContent());
 
-    if (m_object != nullptr)
-    {
-        m_properties = m_object->modelProperties();
-    }
     if (m_idValue == nullptr)
     {
         ui->checkBoxPictureID->hide();

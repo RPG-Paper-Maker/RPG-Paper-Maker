@@ -10,7 +10,7 @@
 */
 
 #include "systemcommandmove.h"
-#include "commandmovekind.h"
+#include "dialogjump.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -19,26 +19,84 @@
 //
 // -------------------------------------------------------
 
-SystemCommandMove::SystemCommandMove() :
-    SystemCommandMove(-1, "", QVector<QString>())
-{
-
-}
-
-SystemCommandMove::SystemCommandMove(int i, QString n,
-                                     QVector<QString> command) :
+SystemCommandMove::SystemCommandMove(int i, QString n, QVector<QString> command,
+    QStandardItemModel *properties, QStandardItemModel *parameters) :
     SuperListItem(i, n),
-    m_command(command)
+    m_command(command),
+    m_properties(properties),
+    m_parameters(parameters)
 {
 
 }
 
-QString SystemCommandMove::toString() const{
-    int i = 0;
-    CommandMoveKind kind = static_cast<CommandMoveKind>(m_command.at(i++)
-                                                        .toInt());
-    QString str = SuperListItem::beginningText;
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
 
+CommandMoveKind SystemCommandMove::getKind() const
+{
+    return static_cast<CommandMoveKind>(m_command.at(0).toInt());
+}
+
+// -------------------------------------------------------
+
+void SystemCommandMove::getCommand(QVector<QString> &command) const
+{
+    for (int i = 0; i < m_command.size(); i++)
+    {
+        command.append(m_command.at(i));
+    }
+}
+
+// -------------------------------------------------------
+
+void SystemCommandMove::initialize(const EventCommand *command, int &i)
+{
+    m_command.append(command->valueCommandAt(i));
+    CommandMoveKind kind = static_cast<CommandMoveKind>(command->valueCommandAt(
+        i++).toInt());
+    int j = 1;
+    switch (kind)
+    {
+    case CommandMoveKind::MoveNorth:
+    case CommandMoveKind::MoveSouth:
+    case CommandMoveKind::MoveWest:
+    case CommandMoveKind::MoveEast:
+    case CommandMoveKind::MoveNorthWest:
+    case CommandMoveKind::MoveNorthEast:
+    case CommandMoveKind::MoveSouthWest:
+    case CommandMoveKind::MoveSouthEast:
+    case CommandMoveKind::MoveRandom:
+    case CommandMoveKind::MoveHero:
+    case CommandMoveKind::MoveOppositeHero:
+    case CommandMoveKind::MoveFront:
+    case CommandMoveKind::MoveBack:
+        break;
+    case CommandMoveKind::ChangeGraphics:
+        j = 7;
+        break;
+    case CommandMoveKind::Jump:
+        j = 13;
+    }
+    for (int k = 0; k < j; k++)
+    {
+        m_command.append(command->valueCommandAt(i++));
+    }
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+QString SystemCommandMove::toString() const
+{
+    int i = 0;
+    CommandMoveKind kind = static_cast<CommandMoveKind>(m_command.at(i++).toInt());
+    QString str = SuperListItem::beginningText;
     switch (kind)
     {
     case CommandMoveKind::MoveNorth:
@@ -58,7 +116,8 @@ QString SystemCommandMove::toString() const{
         QString stepSquare = m_command.at(i++) == "0" ? RPM::translate(
             Translations::SQUARE) : RPM::translate(Translations::STEP);
         QString dir;
-        switch (kind){
+        switch (kind)
+        {
         case CommandMoveKind::MoveNorth:
             dir = RPM::translate(Translations::NORTH); break;
         case CommandMoveKind::MoveSouth:
@@ -119,64 +178,68 @@ QString SystemCommandMove::toString() const{
             strValue + RPM::SPACE + permanent;
         break;
     }
+    case CommandMoveKind::Jump:
+    {
+        QString stepSquare = m_command.at(i++) == "0" ? RPM::translate(
+            Translations::SQUARE) : RPM::translate(Translations::STEP);
+        PrimitiveValue x;
+        x.initializeCommands(m_command, i);
+        PrimitiveValue y;
+        y.initializeCommands(m_command, i);
+        PrimitiveValue yPlus;
+        yPlus.initializeCommands(m_command, i);
+        PrimitiveValue z;
+        z.initializeCommands(m_command, i);
+        PrimitiveValue peakY;
+        peakY.initializeCommands(m_command, i);
+        PrimitiveValue peakYPlus;
+        peakYPlus.initializeCommands(m_command, i);
+        str += "Jump" + RPM::SPACE + stepSquare.toLower() + RPM::SPACE + "X: " +
+            x.toString() + ", Y: " + y.toString()+ ", Y plus: " + yPlus.toString()
+            + ", Z: " + z.toString() + ", " + "Peak" + RPM::SPACE + "Y: " +
+            peakY.toString() + ", " + "Peak" + RPM::SPACE + "Y plus: " +
+            peakYPlus.toString();
+        break;
     }
-
+    }
     return str;
 }
 
 // -------------------------------------------------------
-//
-//  INTERMEDIARY FUNCTIONS
-//
-// -------------------------------------------------------
 
-void SystemCommandMove::initialize(const EventCommand *command, int& i){
-    m_command.append(command->valueCommandAt(i));
-    CommandMoveKind kind = static_cast<CommandMoveKind>(command
-                                                        ->valueCommandAt(i++)
-                                                        .toInt());
-
-    int j = 1;
-    switch (kind)
+bool SystemCommandMove::openDialog()
+{
+    switch (this->getKind())
     {
-    case CommandMoveKind::MoveNorth:
-    case CommandMoveKind::MoveSouth:
-    case CommandMoveKind::MoveWest:
-    case CommandMoveKind::MoveEast:
-    case CommandMoveKind::MoveNorthWest:
-    case CommandMoveKind::MoveNorthEast:
-    case CommandMoveKind::MoveSouthWest:
-    case CommandMoveKind::MoveSouthEast:
-    case CommandMoveKind::MoveRandom:
-    case CommandMoveKind::MoveHero:
-    case CommandMoveKind::MoveOppositeHero:
-    case CommandMoveKind::MoveFront:
-    case CommandMoveKind::MoveBack:
-        break;
-    case CommandMoveKind::ChangeGraphics:
-        j = 7;
+    case CommandMoveKind::Jump:
+    {
+        DialogJump dialog(m_properties, m_parameters);
+        dialog.initialize(m_command);
+        if (dialog.exec() == QDialog::Accepted)
+        {
+            for (int i = m_command.size() - 1; i >= 2; i--)
+            {
+                m_command.removeAt(i);
+            }
+            dialog.getCommand(m_command);
+            return true;
+        }
         break;
     }
-
-    for (int k = 0; k < j; k++)
-        m_command.append(command->valueCommandAt(i++));
+    default:
+        break;
+    }
+    return false;
 }
 
 // -------------------------------------------------------
 
-void SystemCommandMove::getCommand(QVector<QString> &command){
-    for (int i = 0; i < m_command.size(); i++)
-        command.append(m_command.at(i));
-}
-
-// -------------------------------------------------------
-
-QList<QStandardItem*> SystemCommandMove::getModelRow() const{
+QList<QStandardItem*> SystemCommandMove::getModelRow() const
+{
     QList<QStandardItem*> row = QList<QStandardItem*>();
-    QStandardItem* item = new QStandardItem;
+    QStandardItem *item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     item->setText(toString());
     row.append(item);
-
     return row;
 }

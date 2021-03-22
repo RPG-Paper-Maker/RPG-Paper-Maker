@@ -123,6 +123,7 @@ public:
     void clear();
     int getKindIndex(PrimitiveValueKind kind);
     void initializeCommand(EventCommand *command, int &i);
+    void initializeCommandList(QVector<QString> &command, int &i);
     void getCommand(QVector<QString> &command);
 
 protected:

@@ -99,6 +99,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemtroopreactionconditions.h \
     Dialogs/dialogenternameoptions.h \
     Dialogs/dialogfonts.h \
+    Dialogs/dialogjump.h \
     Dialogs/dialoglanguages.h \
     Dialogs/dialogscripts.h \
     Dialogs/dialogfirstlaunch.h \
@@ -514,6 +515,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemtroopreactionconditions.cpp \
     Dialogs/dialogenternameoptions.cpp \
     Dialogs/dialogfonts.cpp \
+    Dialogs/dialogjump.cpp \
     Dialogs/dialoglanguages.cpp \
     Dialogs/dialogscripts.cpp \
     Dialogs/dialogfirstlaunch.cpp \
@@ -875,6 +877,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemtroopreactionconditions.ui \
     Dialogs/dialogenternameoptions.ui \
     Dialogs/dialogfonts.ui \
+    Dialogs/dialogjump.ui \
     Dialogs/dialoglanguages.ui \
     Dialogs/dialogscripts.ui \
     Dialogs/dialogfirstlaunch.ui \

@@ -69,7 +69,6 @@ DialogCommands::DialogCommands(SystemCommonObject *object,
     m_parameters(parameters)
 {
     ui->setupUi(this);
-
     this->translate();
 }
 
@@ -115,7 +114,7 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::TeleportObject:
         return new DialogCommandTeleportObject(command, properties, parameters);
     case EventCommandKind::MoveObject:
-        return new DialogCommandMoveObject(command, object, parameters);
+        return new DialogCommandMoveObject(command, properties, parameters);
     case EventCommandKind::Wait:
         return new DialogCommandWait(command, object, parameters);
     case EventCommandKind::MoveCamera:
@@ -158,9 +157,9 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::Script:
         return new DialogCommandScript(command, object, parameters);
     case EventCommandKind::DisplayAPicture:
-        return new DialogCommandDisplayAPicture(command, object, parameters);
+        return new DialogCommandDisplayAPicture(command, properties, parameters);
     case EventCommandKind::SetMoveTurnAPicture:
-        return new DialogCommandSetMoveTurnAPicture(command, object, parameters);
+        return new DialogCommandSetMoveTurnAPicture(command, properties, parameters);
     case EventCommandKind::RemoveAPicture:
         return new DialogCommandRemoveAPicture(command, object, parameters);
     case EventCommandKind::SetDialogBoxOptions:

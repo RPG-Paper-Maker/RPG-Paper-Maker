@@ -12,8 +12,9 @@
 #include "dialogpicturespreview.h"
 #include "dialogcommandmoveobject.h"
 #include "ui_dialogcommandmoveobject.h"
-#include "rpm.h"
 #include "systemcommandmove.h"
+#include "dialogjump.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -22,71 +23,32 @@
 // -------------------------------------------------------
 
 DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
-                                                 SystemCommonObject *object,
-                                                 QStandardItemModel *parameters,
-                                                 bool idObjectFixed,
-                                                 QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, bool
+    idObjectFixed, QWidget *parent) :
     DialogCommand(parent),
     ui(new Ui::DialogCommandMoveObject),
     m_modelObjects(nullptr),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
-    m_properties(nullptr)
+    m_idObjectFixed(idObjectFixed)
 {
     ui->setupUi(this);
-
-    QSizePolicy sp_retain;
-    sp_retain = ui->pushButtonEmpty->sizePolicy();
-    sp_retain.setRetainSizeWhenHidden(true);
-    ui->pushButtonEmpty->setSizePolicy(sp_retain);
-    ui->pushButtonEmpty->hide();
-    
-    if (idObjectFixed) {
-        ui->labelObjectID->hide();
-        ui->widgetPrimitiveObjectID->hide();
-        ui->horizontalSpacer->changeSize(0, 0);
-    }
-
-    if (m_object != nullptr)
+    this->initializePrimitives();
+    if (command != nullptr)
     {
-        m_properties = m_object->modelProperties();
+        this->initialize(command);
     }
-    if (RPM::isInConfig && !RPM::isInObjectConfig) {
-        m_modelObjects = new QStandardItemModel;
-        Map::setModelObjects(m_modelObjects);
-    } else {
-        m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
-    }
-    ui->widgetPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
-                                                             m_parameters,
-                                                             m_properties);
-
-    // Empty tree of move commands
-    QStandardItemModel* model = new QStandardItemModel;
-    ui->treeView->initializeModel(model);
-    ui->treeView->setHasContextMenu(false);
-    ui->treeView->setCanBeControled(false);
-    ui->comboBoxStepSquare->addItem(RPM::translate(Translations::SQUARE));
-    ui->comboBoxStepSquare->addItem(RPM::translate(Translations::STEP));
-
-    if (command != nullptr) initialize(command);
-
-    QStandardItem* item = new QStandardItem;
-    item->setText(SuperListItem::beginningText);
-    model->appendRow(item);
-    ui->treeView->setCurrentIndex(model->index(model->invisibleRootItem()
-                                               ->rowCount()-1, 0));
-
+    ui->treeView->getModel()->appendRow(SuperListItem::getEmptyItem());
+    ui->treeView->setCurrentIndex(ui->treeView->getModel()->index(0, 0));
     this->translate();
 }
 
 DialogCommandMoveObject::~DialogCommandMoveObject()
 {
     SuperListItem::deleteModel(ui->treeView->getModel());
-
     delete ui;
-
-    if (RPM::isInConfig && !RPM::isInObjectConfig) {
+    if (RPM::isInConfig && !RPM::isInObjectConfig)
+    {
         SuperListItem::deleteModel(m_modelObjects);
     }
 }
@@ -97,91 +59,82 @@ DialogCommandMoveObject::~DialogCommandMoveObject()
 //
 // -------------------------------------------------------
 
-//-------------------------------------------------
-
 void DialogCommandMoveObject::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::MOVE_OBJECT) + RPM
-        ::DOT_DOT_DOT);
-    ui->labelObjectID->setText(RPM::translate(Translations::OBJECT_ID) + RPM
-        ::COLON);
-    ui->labelChangeDirection->setText(RPM::translate(Translations
-        ::CHANGE_DIRECTION) + RPM::COLON);
-    ui->labelStepSquareMoves->setText(RPM::translate(Translations
-        ::STEP_SQUARE_MOVES) + RPM::COLON);
-    ui->labelChangeObjectProperties->setText(RPM::translate(Translations
-        ::CHANGE_OBJECT_OPTIONS) + RPM::COLON);
-    ui->checkBoxIgnore->setText(RPM::translate(Translations
-        ::IGNORE_IF_IMPOSSIBLE));
+    this->setWindowTitle(RPM::translate(Translations::MOVE_OBJECT) + RPM::DOT_DOT_DOT);
+    ui->labelObjectID->setText(RPM::translate(Translations::OBJECT_ID) + RPM::COLON);
+    ui->labelChangeDirection->setText(RPM::translate(Translations::CHANGE_DIRECTION)
+        + RPM::COLON);
+    ui->labelStepSquareMoves->setText(RPM::translate(Translations::STEP_SQUARE_MOVES)
+        + RPM::COLON);
+    ui->labelChangeObjectProperties->setText(RPM::translate(Translations::CHANGE_OBJECT_OPTIONS)
+        + RPM::COLON);
+    ui->checkBoxIgnore->setText(RPM::translate(Translations::IGNORE_IF_IMPOSSIBLE));
     ui->checkBoxWaitEnd->setText(RPM::translate(Translations::WAIT_END));
-    ui->checkBoxCameraOrientation->setText(RPM::translate(Translations
-        ::WITH_CAMERA_ORIENTATION));
-    ui->pushButtonStepSquareBack->setText(RPM::translate(Translations
-        ::ONE_BACK));
-    ui->pushButtonStepSquareEast->setText(RPM::translate(Translations
-        ::ONE_TO_EAST));
-    ui->pushButtonStepSquareHero->setText(RPM::translate(Translations
-        ::ONE_TO_HERO));
-    ui->pushButtonStepSquareWest->setText(RPM::translate(Translations
-        ::ONE_TO_WEST));
-    ui->pushButtonStepSquareFront->setText(RPM::translate(Translations
-        ::ONE_IN_FRONT));
-    ui->pushButtonStepSquareNorth->setText(RPM::translate(Translations
-        ::ONE_TO_NORTH));
-    ui->pushButtonStepSquareSouth->setText(RPM::translate(Translations
-        ::ONE_TO_SOUTH));
-    ui->pushButtonStepSquareRandom->setText(RPM::translate(Translations
-        ::ONE_TO_RANDOME));
-    ui->pushButtonStepSquareNorthEast->setText(RPM::translate(Translations
-        ::ONE_TO_NORTH_EAST));
-    ui->pushButtonStepSquareNorthWest->setText(RPM::translate(Translations
-        ::ONE_TO_NORTH_WEST));
-    ui->pushButtonStepSquareSouthEast->setText(RPM::translate(Translations
-        ::ONE_TO_SOUTH_EAST));
-    ui->pushButtonStepSquareSouthWest->setText(RPM::translate(Translations
-        ::ONE_TO_SOUTH_WEST));
-    ui->pushButtonStepSquareOppositeHero->setText(RPM::translate(Translations
-        ::ONE_OPPOSITE_TO_HERO));
-    ui->pushButtonChangeGraphics->setText(RPM::translate(Translations
-        ::CHANGE_GRAPHICS) + RPM::DOT_DOT_DOT);
+    ui->checkBoxCameraOrientation->setText(RPM::translate(Translations::WITH_CAMERA_ORIENTATION));
+    ui->pushButtonStepSquareBack->setText(RPM::translate(Translations::ONE_BACK));
+    ui->pushButtonStepSquareEast->setText(RPM::translate(Translations::ONE_TO_EAST));
+    ui->pushButtonStepSquareHero->setText(RPM::translate(Translations::ONE_TO_HERO));
+    ui->pushButtonStepSquareWest->setText(RPM::translate(Translations::ONE_TO_WEST));
+    ui->pushButtonStepSquareFront->setText(RPM::translate(Translations::ONE_IN_FRONT));
+    ui->pushButtonStepSquareNorth->setText(RPM::translate(Translations::ONE_TO_NORTH));
+    ui->pushButtonStepSquareSouth->setText(RPM::translate(Translations::ONE_TO_SOUTH));
+    ui->pushButtonStepSquareRandom->setText(RPM::translate(Translations::ONE_TO_RANDOME));
+    ui->pushButtonStepSquareNorthEast->setText(RPM::translate(Translations::ONE_TO_NORTH_EAST));
+    ui->pushButtonStepSquareNorthWest->setText(RPM::translate(Translations::ONE_TO_NORTH_WEST));
+    ui->pushButtonStepSquareSouthEast->setText(RPM::translate(Translations::ONE_TO_SOUTH_EAST));
+    ui->pushButtonStepSquareSouthWest->setText(RPM::translate(Translations::ONE_TO_SOUTH_WEST));
+    ui->pushButtonStepSquareOppositeHero->setText(RPM::translate(Translations::ONE_OPPOSITE_TO_HERO));
+    ui->pushButtonChangeGraphics->setText(RPM::translate(Translations ::CHANGE_GRAPHICS)
+        + RPM::DOT_DOT_DOT);
     ui->checkBoxPermanent->setText(RPM::translate(Translations::PERMANENT));
     ui->groupBoxMoves->setTitle(RPM::translate(Translations::MOVES));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
-void DialogCommandMoveObject::initialize(EventCommand* command){
-    int i = 0;
-    QStandardItemModel* model = ui->treeView->getModel();
-    QStandardItem* item;
-    SystemCommandMove* move;
+// -------------------------------------------------------
 
-    // Object ID
-    ui->widgetPrimitiveObjectID->initializeCommand(command, i);
-
-    // Options
-    ui->checkBoxIgnore->setChecked(command->valueCommandAt(i++) == "1");
-    ui->checkBoxWaitEnd->setChecked(command->valueCommandAt(i++) == "1");
-    ui->checkBoxCameraOrientation->setChecked(command->valueCommandAt(i++)
-                                              == "1");
-
-    // List of move commands
-    while(i < command->commandsCount()){
-        move = new SystemCommandMove;
-        move->initialize(command, i);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(move)));
-        item->setText(move->toString());
-        model->appendRow(item);
+void DialogCommandMoveObject::initializePrimitives()
+{
+    QSizePolicy sp_retain;
+    sp_retain = ui->pushButtonEmpty->sizePolicy();
+    sp_retain.setRetainSizeWhenHidden(true);
+    ui->pushButtonEmpty->setSizePolicy(sp_retain);
+    ui->pushButtonEmpty->hide();
+    if (m_idObjectFixed)
+    {
+        ui->labelObjectID->hide();
+        ui->widgetPrimitiveObjectID->hide();
+        ui->horizontalSpacer->changeSize(0, 0);
     }
+    // Model objects
+    if (RPM::isInConfig && !RPM::isInObjectConfig)
+    {
+        m_modelObjects = new QStandardItemModel;
+        Map::setModelObjects(m_modelObjects);
+    } else
+    {
+        m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
+    }
+    ui->widgetPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
+        m_parameters, m_properties);
+
+    // Empty tree of move commands
+    QStandardItemModel *model = new QStandardItemModel;
+    ui->treeView->initializeModel(model);
+    ui->treeView->setHasContextMenu(false);
+    ui->comboBoxStepSquare->addItem(RPM::translate(Translations::SQUARE));
+    ui->comboBoxStepSquare->addItem(RPM::translate(Translations::STEP));
 }
 
 // -------------------------------------------------------
 
-void DialogCommandMoveObject::addMoveStepSquare(CommandMoveKind kind){
+void DialogCommandMoveObject::addMoveStepSquare(CommandMoveKind kind)
+{
     ui->treeView->getModel()->insertRow(ui->treeView->getSelected()->row(), (new
         SystemCommandMove(-1, "", QVector<QString>({QString::number(static_cast<
-        int>(kind)), QString::number(ui->comboBoxStepSquare->currentIndex())})))
-        ->getModelRow());
+        int>(kind)), QString::number(ui->comboBoxStepSquare->currentIndex())}),
+        m_properties, m_parameters))->getModelRow());
 }
 
 // -------------------------------------------------------
@@ -189,14 +142,14 @@ void DialogCommandMoveObject::addMoveStepSquare(CommandMoveKind kind){
 void DialogCommandMoveObject::addMove(QVector<QString> &commands)
 {
     ui->treeView->getModel()->insertRow(ui->treeView->getSelected()->row(), (new
-        SystemCommandMove(-1, "", commands))->getModelRow());
+        SystemCommandMove(-1, "", commands, m_properties, m_parameters))->getModelRow());
 }
 
 // -------------------------------------------------------
 
-EventCommand* DialogCommandMoveObject::getCommand() const{
+EventCommand * DialogCommandMoveObject::getCommand() const
+{
     QVector<QString> command;
-    int l;
 
     // Object ID
     ui->widgetPrimitiveObjectID->getCommand(command);
@@ -207,13 +160,42 @@ EventCommand* DialogCommandMoveObject::getCommand() const{
     command.append(ui->checkBoxCameraOrientation->isChecked() ? "1" : "0");
 
     // List of move commands
-    l = ui->treeView->getModel()->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l - 1; i++){
-        ((SystemCommandMove*) ui->treeView->getModel()->item(i)->data()
-        .value<quintptr>())->getCommand(command);
+    SystemCommandMove *move;
+    for (int i = 0, l = ui->treeView->getModel()->invisibleRootItem()->rowCount();
+        i < l; i++)
+    {
+        move = reinterpret_cast<SystemCommandMove *>(SuperListItem::getItemModelAt(
+            ui->treeView->getModel(), i));
+        if (move != nullptr)
+        {
+            move->getCommand(command);
+        }
     }
-
     return new EventCommand(EventCommandKind::MoveObject, command);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::initialize(EventCommand *command)
+{
+    int i = 0;
+
+    // Object ID
+    ui->widgetPrimitiveObjectID->initializeCommand(command, i);
+
+    // Options
+    ui->checkBoxIgnore->setChecked(command->valueCommandAt(i++) == "1");
+    ui->checkBoxWaitEnd->setChecked(command->valueCommandAt(i++) == "1");
+    ui->checkBoxCameraOrientation->setChecked(command->valueCommandAt(i++) == "1");
+
+    // List of move commands
+    SystemCommandMove *move;
+    while(i < command->commandsCount())
+    {
+        move = new SystemCommandMove;
+        move->initialize(command, i);
+        ui->treeView->getModel()->appendRow(move->getModelRow());
+    }
 }
 
 // -------------------------------------------------------
@@ -222,80 +204,108 @@ EventCommand* DialogCommandMoveObject::getCommand() const{
 //
 // -------------------------------------------------------
 
-void DialogCommandMoveObject::on_pushButtonStepSquareNorth_clicked(){
+void DialogCommandMoveObject::on_pushButtonStepSquareNorth_clicked()
+{
     this->addMoveStepSquare(CommandMoveKind::MoveNorth);
 }
 
 // -------------------------------------------------------
 
-void DialogCommandMoveObject::on_pushButtonStepSquareSouth_clicked(){
+void DialogCommandMoveObject::on_pushButtonStepSquareSouth_clicked()
+{
     this->addMoveStepSquare(CommandMoveKind::MoveSouth);
 }
 
 // -------------------------------------------------------
 
-void DialogCommandMoveObject::on_pushButtonStepSquareWest_clicked(){
+void DialogCommandMoveObject::on_pushButtonStepSquareWest_clicked()
+{
     this->addMoveStepSquare(CommandMoveKind::MoveWest);
 }
 
 // -------------------------------------------------------
 
-void DialogCommandMoveObject::on_pushButtonStepSquareEast_clicked(){
+void DialogCommandMoveObject::on_pushButtonStepSquareEast_clicked()
+{
     this->addMoveStepSquare(CommandMoveKind::MoveEast);
 }
 
 // -------------------------------------------------------
 
-void DialogCommandMoveObject::on_pushButtonStepSquareNorthWest_clicked() {
+void DialogCommandMoveObject::on_pushButtonStepSquareNorthWest_clicked()
+{
     this->addMoveStepSquare(CommandMoveKind::MoveNorthWest);
 }
 
 // -------------------------------------------------------
 
-void DialogCommandMoveObject::on_pushButtonStepSquareNorthEast_clicked() {
+void DialogCommandMoveObject::on_pushButtonStepSquareNorthEast_clicked()
+{
     this->addMoveStepSquare(CommandMoveKind::MoveNorthEast);
 }
 
 // -------------------------------------------------------
 
-void DialogCommandMoveObject::on_pushButtonStepSquareSouthWest_clicked() {
+void DialogCommandMoveObject::on_pushButtonStepSquareSouthWest_clicked()
+{
     this->addMoveStepSquare(CommandMoveKind::MoveSouthWest);
 }
 
 // -------------------------------------------------------
 
-void DialogCommandMoveObject::on_pushButtonStepSquareSouthEast_clicked() {
+void DialogCommandMoveObject::on_pushButtonStepSquareSouthEast_clicked()
+{
     this->addMoveStepSquare(CommandMoveKind::MoveSouthEast);
 }
 
 // -------------------------------------------------------
 
-void DialogCommandMoveObject::on_pushButtonStepSquareRandom_clicked() {
+void DialogCommandMoveObject::on_pushButtonStepSquareRandom_clicked()
+{
     this->addMoveStepSquare(CommandMoveKind::MoveRandom);
 }
 
 // -------------------------------------------------------
 
-void DialogCommandMoveObject::on_pushButtonStepSquareHero_clicked() {
+void DialogCommandMoveObject::on_pushButtonStepSquareHero_clicked()
+{
     this->addMoveStepSquare(CommandMoveKind::MoveHero);
 }
 
 // -------------------------------------------------------
 
-void DialogCommandMoveObject::on_pushButtonStepSquareOppositeHero_clicked() {
+void DialogCommandMoveObject::on_pushButtonStepSquareOppositeHero_clicked()
+{
     this->addMoveStepSquare(CommandMoveKind::MoveOppositeHero);
 }
 
 // -------------------------------------------------------
 
-void DialogCommandMoveObject::on_pushButtonStepSquareFront_clicked() {
+void DialogCommandMoveObject::on_pushButtonStepSquareFront_clicked()
+{
     this->addMoveStepSquare(CommandMoveKind::MoveFront);
 }
 
 // -------------------------------------------------------
 
-void DialogCommandMoveObject::on_pushButtonStepSquareBack_clicked() {
+void DialogCommandMoveObject::on_pushButtonStepSquareBack_clicked()
+{
     this->addMoveStepSquare(CommandMoveKind::MoveBack);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonJump_clicked()
+{
+    DialogJump dialog(m_properties, m_parameters);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        QVector<QString> command = QVector<QString>({ QString::number(static_cast
+            <int>(CommandMoveKind::Jump)), QString::number(ui->comboBoxStepSquare
+            ->currentIndex())});
+        dialog.getCommand(command);
+        this->addMove(command);
+    }
 }
 
 // -------------------------------------------------------
@@ -305,12 +315,12 @@ void DialogCommandMoveObject::on_pushButtonChangeGraphics_clicked()
     SystemPicture picture(-1, "", false, "", false, PictureKind::Characters);
     PrimitiveValue value(1);
     DialogPicturesPreview dialog(&picture, PictureKind::Characters, &value,
-        m_object, m_parameters);
+        m_properties, m_parameters);
     if (dialog.exec() == QDialog::Accepted)
     {
-        QVector<QString> commands = QVector<QString>({QString::number(
-            static_cast<int>(CommandMoveKind::ChangeGraphics)), RPM
-            ::boolToString(ui->checkBoxPermanent->isChecked())});
+        QVector<QString> commands = QVector<QString>({QString::number(static_cast
+            <int>(CommandMoveKind::ChangeGraphics)), RPM::boolToString(ui
+            ->checkBoxPermanent->isChecked())});
         if (dialog.isIDValue())
         {
             value.getCommandParameter(commands);

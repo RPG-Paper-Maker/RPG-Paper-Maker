@@ -21,6 +21,7 @@
 
 Floors::Floors() :
     m_isEmpty(true),
+    m_isHovered(false),
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
     m_indexBuffer(QOpenGLBuffer::IndexBuffer),
     m_program(nullptr),
