@@ -41,6 +41,7 @@ public:
     void initializePrimitives();
     void addMoveStepSquare(CommandMoveKind kind);
     void addMoveEmpty(CommandMoveKind kind);
+    void addMoveOnOffPermanent(CommandMoveKind kind);
     void addMove(QVector<QString> &commands);
 
     virtual EventCommand * getCommand() const;
@@ -76,7 +77,20 @@ private slots:
     void on_pushButtonTurn90Left_clicked();
     void on_pushButtonLookAtHero_clicked();
     void on_pushButtonLookAtHeroOpposite_clicked();
+    void on_pushButtonChangeSpeed_clicked();
+    void on_pushButtonChangeFrequency_clicked();
+    void on_pushButtonMoveAnimation_clicked();
+    void on_pushButtonStopAnimation_clicked();
+    void on_pushButtonClimbAnimation_clicked();
+    void on_pushButtonFixDirection_clicked();
+    void on_pushButtonThrough_clicked();
+    void on_pushButtonSetWithCamera_clicked();
+    void on_pushButtonPixelOffset_clicked();
+    void on_pushButtonKeepPosition_clicked();
     void on_pushButtonChangeGraphics_clicked();
+    void on_pushButtonWait_clicked();
+    void on_pushButtonPlaySound_clicked();
+    void on_pushButtonScript_clicked();
 };
 
 #endif // DIALOGCOMMANDMOVEOBJECT_H

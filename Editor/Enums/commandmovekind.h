@@ -43,7 +43,20 @@ enum class CommandMoveKind {
     Turn90Right,
     Turn90Left,
     LookAtHero,
-    LookAtHeroOpposite
+    LookAtHeroOpposite,
+    ChangeSpeed,
+    ChangeFrequency,
+    MoveAnimation,
+    StopAnimation,
+    ClimbAnimation,
+    FixDirection,
+    Through,
+    SetWithCamera,
+    PixelOffset,
+    KeepPosition,
+    Wait,
+    PlaySound,
+    Script
 };
 
 #endif // COMMANDMOVEKIND_H

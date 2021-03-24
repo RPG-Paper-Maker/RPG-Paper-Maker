@@ -116,31 +116,31 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::MoveObject:
         return new DialogCommandMoveObject(command, properties, parameters);
     case EventCommandKind::Wait:
-        return new DialogCommandWait(command, object, parameters);
+        return new DialogCommandWait(command, properties, parameters);
     case EventCommandKind::MoveCamera:
         return new DialogCommandMoveCamera(command, object, parameters);
     case EventCommandKind::PlayMusic:
         return new DialogCommandPlaySong(RPM::translate(Translations::PLAY_MUSIC
-            ) + RPM::DOT_DOT_DOT, SongKind::Music, command, object, parameters);
+            ) + RPM::DOT_DOT_DOT, SongKind::Music, command, properties, parameters);
     case EventCommandKind::StopMusic:
         return new DialogCommandStopSong(RPM::translate(Translations::STOP_MUSIC
             ) + RPM::DOT_DOT_DOT, SongKind::Music, command, object, parameters);
     case EventCommandKind::PlayBackgroundSound:
         return new DialogCommandPlaySong(RPM::translate(Translations
             ::PLAY_BACKGROUND_SOUND) + RPM::DOT_DOT_DOT , SongKind
-            ::BackgroundSound, command, object, parameters);
+            ::BackgroundSound, command, properties, parameters);
     case EventCommandKind::StopBackgroundSound:
         return new DialogCommandStopSong(RPM::translate(Translations
             ::PLAY_BACKGROUND_SOUND) + RPM::DOT_DOT_DOT, SongKind
             ::BackgroundSound, command, object, parameters);
     case EventCommandKind::PlayASound:
         return new DialogCommandPlaySong(RPM::translate(Translations
-            ::PLAY_A_SOUND) + RPM::DOT_DOT_DOT, SongKind::Sound, command, object
-            , parameters);
+            ::PLAY_A_SOUND) + RPM::DOT_DOT_DOT, SongKind::Sound, command,
+            properties, parameters);
     case EventCommandKind::PlayMusicEffect:
         return new DialogCommandPlaySong(RPM::translate(Translations
             ::PLAY_MUSIC_EFFECT) + RPM::DOT_DOT_DOT, SongKind::MusicEffect,
-            command, object, parameters);
+            command, properties, parameters);
     case EventCommandKind::ChangeProperty:
         // Warning if no property available
         if (object == nullptr || object->modelProperties() == nullptr || object
@@ -155,7 +155,7 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::DisplayChoice:
         return new DialogCommandDisplayChoice(command, object, parameters);
     case EventCommandKind::Script:
-        return new DialogCommandScript(command, object, parameters);
+        return new DialogCommandScript(command, properties, parameters);
     case EventCommandKind::DisplayAPicture:
         return new DialogCommandDisplayAPicture(command, properties, parameters);
     case EventCommandKind::SetMoveTurnAPicture:

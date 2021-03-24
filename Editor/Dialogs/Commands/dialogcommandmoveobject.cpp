@@ -14,6 +14,10 @@
 #include "ui_dialogcommandmoveobject.h"
 #include "systemcommandmove.h"
 #include "dialogjump.h"
+#include "dialogcommandwait.h"
+#include "dialogcommandplaysong.h"
+#include "dialogcommandscript.h"
+#include "dialognumber.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -150,10 +154,21 @@ void DialogCommandMoveObject::addMoveEmpty(CommandMoveKind kind)
 
 // -------------------------------------------------------
 
+void DialogCommandMoveObject::addMoveOnOffPermanent(CommandMoveKind kind)
+{
+    QVector<QString> commands = QVector<QString>({QString::number(static_cast
+        <int>(kind)), RPM::boolToString(ui->comboBoxSwitch->currentIndex() == 0),
+        RPM::boolToString(ui->checkBoxPermanent->isChecked())});
+    this->addMove(commands);
+}
+
+// -------------------------------------------------------
+
 void DialogCommandMoveObject::addMove(QVector<QString> &commands)
 {
     ui->treeView->getModel()->insertRow(ui->treeView->getSelected()->row(), (new
-        SystemCommandMove(-1, "", commands, m_properties, m_parameters))->getModelRow());
+        SystemCommandMove(-1, "", commands, m_properties, m_parameters))
+        ->getModelRow());
 }
 
 // -------------------------------------------------------
@@ -377,6 +392,103 @@ void DialogCommandMoveObject::on_pushButtonLookAtHeroOpposite_clicked()
 
 // -------------------------------------------------------
 
+void DialogCommandMoveObject::on_pushButtonChangeSpeed_clicked()
+{
+    PrimitiveValue *value = PrimitiveValue::createDefaultDataBaseValue();
+    value->setModelDataBase(RPM::get()->project()->gameDatas()->systemDatas()->modelSpeed());
+    value->setModelParameter(m_parameters);
+    value->setModelProperties(m_properties);
+    DialogNumber dialog(value, RPM::translate(Translations::SPEED) + RPM::COLON);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        QVector<QString> commands = QVector<QString>({QString::number(static_cast
+            <int>(CommandMoveKind::ChangeSpeed)), RPM::boolToString(ui->
+            checkBoxPermanent->isChecked())});
+        value->getCommandParameter(commands);
+        this->addMove(commands);
+    }
+    delete value;
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonChangeFrequency_clicked()
+{
+    PrimitiveValue *value = PrimitiveValue::createDefaultDataBaseValue();
+    value->setModelDataBase(RPM::get()->project()->gameDatas()->systemDatas()
+        ->modelSpeed());
+    value->setModelParameter(m_parameters);
+    value->setModelProperties(m_properties);
+    DialogNumber dialog(value, RPM::translate(Translations::FREQUENCY) + RPM::COLON);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        QVector<QString> commands = QVector<QString>({QString::number(static_cast
+            <int>(CommandMoveKind::ChangeFrequency)), RPM::boolToString(ui->
+            checkBoxPermanent->isChecked())});
+        value->getCommandParameter(commands);
+        this->addMove(commands);
+    }
+    delete value;
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonMoveAnimation_clicked()
+{
+    this->addMoveOnOffPermanent(CommandMoveKind::MoveAnimation);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonStopAnimation_clicked()
+{
+    this->addMoveOnOffPermanent(CommandMoveKind::StopAnimation);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonClimbAnimation_clicked()
+{
+    this->addMoveOnOffPermanent(CommandMoveKind::ClimbAnimation);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonFixDirection_clicked()
+{
+    this->addMoveOnOffPermanent(CommandMoveKind::FixDirection);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonThrough_clicked()
+{
+    this->addMoveOnOffPermanent(CommandMoveKind::Through);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonSetWithCamera_clicked()
+{
+    this->addMoveOnOffPermanent(CommandMoveKind::SetWithCamera);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonPixelOffset_clicked()
+{
+    this->addMoveOnOffPermanent(CommandMoveKind::PixelOffset);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonKeepPosition_clicked()
+{
+    this->addMoveOnOffPermanent(CommandMoveKind::KeepPosition);
+}
+
+// -------------------------------------------------------
+
 void DialogCommandMoveObject::on_pushButtonChangeGraphics_clicked()
 {
     SystemPicture picture(-1, "", false, "", false, PictureKind::Characters);
@@ -413,5 +525,48 @@ void DialogCommandMoveObject::on_pushButtonChangeGraphics_clicked()
             commands.append("1");
         }
         this->addMove(commands);
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonWait_clicked()
+{
+    DialogCommandWait dialog(nullptr, m_properties, m_parameters);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        QVector<QString> commands = QVector<QString>({QString::number(static_cast
+            <int>(CommandMoveKind::Wait))});
+        dialog.getCommandList(commands);
+        this->addMove(commands);
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonPlaySound_clicked()
+{
+    DialogCommandPlaySong dialog(RPM::translate(Translations::PLAY_A_SOUND) +
+        RPM::DOT_DOT_DOT, SongKind::Sound, nullptr, m_properties, m_parameters);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        QVector<QString> commands = QVector<QString>({QString::number(static_cast
+            <int>(CommandMoveKind::PlaySound))});
+        dialog.getCommandList(commands);
+        this->addMove(commands);
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonScript_clicked()
+{
+    DialogCommandScript dialog(nullptr, m_properties, m_parameters);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+       QVector<QString> commands = QVector<QString>({QString::number(static_cast
+           <int>(CommandMoveKind::Script))});
+       dialog.getCommandList(commands);
+       this->addMove(commands);
     }
 }

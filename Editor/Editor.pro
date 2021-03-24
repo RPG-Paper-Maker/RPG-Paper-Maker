@@ -101,6 +101,7 @@ HEADERS += \
     Dialogs/dialogfonts.h \
     Dialogs/dialogjump.h \
     Dialogs/dialoglanguages.h \
+    Dialogs/dialognumber.h \
     Dialogs/dialogscripts.h \
     Dialogs/dialogfirstlaunch.h \
     Dialogs/dialogimportdlcs.h \
@@ -517,6 +518,7 @@ SOURCES += \
     Dialogs/dialogfonts.cpp \
     Dialogs/dialogjump.cpp \
     Dialogs/dialoglanguages.cpp \
+    Dialogs/dialognumber.cpp \
     Dialogs/dialogscripts.cpp \
     Dialogs/dialogfirstlaunch.cpp \
     Dialogs/dialogimportdlcs.cpp \
@@ -879,6 +881,7 @@ FORMS += \
     Dialogs/dialogfonts.ui \
     Dialogs/dialogjump.ui \
     Dialogs/dialoglanguages.ui \
+    Dialogs/dialognumber.ui \
     Dialogs/dialogscripts.ui \
     Dialogs/dialogfirstlaunch.ui \
     Dialogs/dialogimportdlcs.ui \

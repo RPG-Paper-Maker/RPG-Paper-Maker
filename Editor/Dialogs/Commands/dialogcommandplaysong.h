@@ -33,12 +33,15 @@ class DialogCommandPlaySong : public DialogCommand
 
 public:
     explicit DialogCommandPlaySong(QString title, SongKind kind, EventCommand
-        *command = nullptr, SystemCommonObject *object = nullptr,
+        *command = nullptr, QStandardItemModel *properties = nullptr,
         QStandardItemModel *parameters = nullptr, QWidget *parent = nullptr);
     explicit DialogCommandPlaySong(QString title, SystemPlaySong *song);
     ~DialogCommandPlaySong();
+
     EventCommandKind getCommandKind() const;
-    EventCommand* getCommand() const;
+    void getCommandList(QVector<QString> command) const;
+
+    virtual EventCommand* getCommand() const;
 
 protected:
     SongKind m_kind;

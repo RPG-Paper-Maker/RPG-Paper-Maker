@@ -90,6 +90,23 @@ void SystemCommandMove::initialize(const EventCommand *command, int &i)
     case CommandMoveKind::LookAtHeroOpposite:
         j = 0;
         break;
+    case CommandMoveKind::ChangeSpeed:
+    case CommandMoveKind::ChangeFrequency:
+    case CommandMoveKind::MoveAnimation:
+    case CommandMoveKind::StopAnimation:
+    case CommandMoveKind::ClimbAnimation:
+    case CommandMoveKind::FixDirection:
+    case CommandMoveKind::Through:
+    case CommandMoveKind::SetWithCamera:
+    case CommandMoveKind::PixelOffset:
+    case CommandMoveKind::KeepPosition:
+        j = 3;
+        break;
+    case CommandMoveKind::Wait:
+        break;
+    case CommandMoveKind::PlaySound:
+    case CommandMoveKind::Script:
+        break;
     }
     for (int k = 0; k < j; k++)
     {

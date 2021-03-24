@@ -20,24 +20,23 @@
 // -------------------------------------------------------
 
 DialogCommandScript::DialogCommandScript(EventCommand *command,
-    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     ui(new Ui::DialogCommandScript)
 {
     ui->setupUi(this);
-
     this->initializePrimitives();
-
-    if (command != nullptr) {
+    if (command != nullptr)
+    {
         this->initialize(command);
     }
-
     this->translate();
 }
 
-DialogCommandScript::~DialogCommandScript() {
+DialogCommandScript::~DialogCommandScript()
+{
     delete ui;
 }
 
@@ -48,14 +47,7 @@ DialogCommandScript::~DialogCommandScript() {
 // -------------------------------------------------------
 
 void DialogCommandScript::initializePrimitives() {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr){
-        properties = m_object->modelProperties();
-    }
-
-    ui->panelPrimitiveScript->initializeMessage(false, m_parameters, properties,
+    ui->panelPrimitiveScript->initializeMessage(false, m_parameters, m_properties,
         false);
     ui->panelPrimitiveScript->showVariable();
 }
@@ -68,6 +60,19 @@ void DialogCommandScript::translate()
     ui->checkBoxDynamic->setText(RPM::translate(Translations::USE_DYNAMIC) + RPM
         ::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
+void DialogCommandScript::getCommandList(QVector<QString> command) const
+{
+    command.append(ui->checkBoxDynamic->isChecked() ? RPM::TRUE_BOOL_STRING :
+        RPM::FALSE_BOOL_STRING);
+    if (ui->checkBoxDynamic->isChecked())
+    {
+        ui->panelPrimitiveScript->getCommand(command);
+    } else
+    {
+        command.append(ui->plainTextEditScript->toPlainText());
+    }
 }
 
 // -------------------------------------------------------
@@ -92,17 +97,10 @@ void DialogCommandScript::initialize(EventCommand *command) {
 
 // -------------------------------------------------------
 
-EventCommand * DialogCommandScript::getCommand() const{
+EventCommand * DialogCommandScript::getCommand() const
+{
     QVector<QString> command;
-
-    command.append(ui->checkBoxDynamic->isChecked() ? RPM::TRUE_BOOL_STRING :
-        RPM::FALSE_BOOL_STRING);
-    if (ui->checkBoxDynamic->isChecked()) {
-        ui->panelPrimitiveScript->getCommand(command);
-    } else {
-        command.append(ui->plainTextEditScript->toPlainText());
-    }
-
+    this->getCommandList(command);
     return new EventCommand(EventCommandKind::Script, command);
 }
 

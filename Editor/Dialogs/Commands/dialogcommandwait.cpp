@@ -19,10 +19,10 @@
 //
 // -------------------------------------------------------
 
-DialogCommandWait::DialogCommandWait(EventCommand *command, SystemCommonObject
-    *object, QStandardItemModel *parameters, QWidget *parent) :
+DialogCommandWait::DialogCommandWait(EventCommand *command, QStandardItemModel
+    *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     ui(new Ui::DialogCommandWait)
 {
@@ -47,14 +47,7 @@ DialogCommandWait::~DialogCommandWait()
 // -------------------------------------------------------
 
 void DialogCommandWait::initializePrimitives() {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr){
-        properties = m_object->modelProperties();
-    }
-
-    ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
+    ui->panelPrimitiveTime->initializeNumber(m_parameters, m_properties, false);
 }
 
 //-------------------------------------------------
@@ -68,25 +61,29 @@ void DialogCommandWait::translate()
 }
 
 // -------------------------------------------------------
+
+void DialogCommandWait::getCommandList(QVector<QString> command) const
+{
+    ui->panelPrimitiveTime->getCommand(command);
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
 
-void DialogCommandWait::initialize(EventCommand *command) {
-    int i;
-
-    i = 0;
-    ui->panelPrimitiveTime->initializeCommand(command, i);
+EventCommand * DialogCommandWait::getCommand() const
+{
+    QVector<QString> command;
+    this->getCommandList(command);
+    return new EventCommand(EventCommandKind::Wait, command);
 }
 
 // -------------------------------------------------------
 
-EventCommand * DialogCommandWait::getCommand() const{
-    QVector<QString> command;
-
-    ui->panelPrimitiveTime->getCommand(command);
-
-    return new EventCommand(EventCommandKind::Wait, command);
+void DialogCommandWait::initialize(EventCommand *command)
+{
+    int i = 0;
+    ui->panelPrimitiveTime->initializeCommand(command, i);
 }
-

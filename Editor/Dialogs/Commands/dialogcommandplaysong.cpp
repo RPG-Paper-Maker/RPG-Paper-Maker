@@ -20,7 +20,7 @@
 // -------------------------------------------------------
 
 DialogCommandPlaySong::DialogCommandPlaySong(QString title, SongKind kind,
-    EventCommand *command, SystemCommonObject *, QStandardItemModel
+    EventCommand *command, QStandardItemModel *properties, QStandardItemModel
     *parameters, QWidget *parent) :
     DialogCommand(parent),
     m_kind(kind),
@@ -31,8 +31,8 @@ DialogCommandPlaySong::DialogCommandPlaySong(QString title, SongKind kind,
     
     this->setWindowTitle(title);
     ui->widget->setSongKind(kind);
-    ui->widget->initializePrimitives(parameters, nullptr);
-    ui->panelPrimitiveValueSongID->initializeNumber(parameters, nullptr);
+    ui->widget->initializePrimitives(parameters, properties);
+    ui->panelPrimitiveValueSongID->initializeNumber(parameters, properties);
     ui->widget->showAvailableContent(RPM::get()->engineSettings()
         ->showAvailableContent());
 
@@ -100,7 +100,6 @@ EventCommandKind DialogCommandPlaySong::getCommandKind() const {
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
-//-------------------------------------------------
 
 void DialogCommandPlaySong::translate()
 {
@@ -119,12 +118,18 @@ void DialogCommandPlaySong::initialize(EventCommand* command) {
 
 // -------------------------------------------------------
 
-EventCommand* DialogCommandPlaySong::getCommand() const {
-    QVector<QString> command;
+void DialogCommandPlaySong::getCommandList(QVector<QString> command) const
+{
     command.append(ui->checkBoxSongID->isChecked() ? "1" : "0");
     ui->panelPrimitiveValueSongID->getCommand(command);
     ui->widget->getCommand(command);
+}
 
+// -------------------------------------------------------
+
+EventCommand* DialogCommandPlaySong::getCommand() const {
+    QVector<QString> command;
+    this->getCommandList(command);
     return new EventCommand(getCommandKind(), command);
 }
 
