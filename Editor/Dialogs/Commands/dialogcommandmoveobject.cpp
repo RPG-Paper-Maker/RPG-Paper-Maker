@@ -141,6 +141,15 @@ void DialogCommandMoveObject::addMoveStepSquare(CommandMoveKind kind)
 
 // -------------------------------------------------------
 
+void DialogCommandMoveObject::addMoveEmpty(CommandMoveKind kind)
+{
+    QVector<QString> commands = QVector<QString>({QString::number(static_cast
+        <int>(kind))});
+    this->addMove(commands);
+}
+
+// -------------------------------------------------------
+
 void DialogCommandMoveObject::addMove(QVector<QString> &commands)
 {
     ui->treeView->getModel()->insertRow(ui->treeView->getSelected()->row(), (new
@@ -308,6 +317,62 @@ void DialogCommandMoveObject::on_pushButtonJump_clicked()
         dialog.getCommand(command);
         this->addMove(command);
     }
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonTurnNorth_clicked()
+{
+    this->addMoveEmpty(CommandMoveKind::TurnNorth);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonTurnSouth_clicked()
+{
+    this->addMoveEmpty(CommandMoveKind::TurnSouth);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonTurnWest_clicked()
+{
+    this->addMoveEmpty(CommandMoveKind::TurnWest);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonTurnEast_clicked()
+{
+    this->addMoveEmpty(CommandMoveKind::TurnEast);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonTurn90Right_clicked()
+{
+    this->addMoveEmpty(CommandMoveKind::Turn90Right);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonTurn90Left_clicked()
+{
+    this->addMoveEmpty(CommandMoveKind::Turn90Left);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonLookAtHero_clicked()
+{
+    this->addMoveEmpty(CommandMoveKind::LookAtHero);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonLookAtHeroOpposite_clicked()
+{
+    this->addMoveEmpty(CommandMoveKind::LookAtHeroOpposite);
 }
 
 // -------------------------------------------------------

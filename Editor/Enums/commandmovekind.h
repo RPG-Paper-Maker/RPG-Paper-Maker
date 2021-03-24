@@ -35,7 +35,15 @@ enum class CommandMoveKind {
     MoveFront,
     MoveBack,
     ChangeGraphics,
-    Jump
+    Jump,
+    TurnNorth,
+    TurnSouth,
+    TurnWest,
+    TurnEast,
+    Turn90Right,
+    Turn90Left,
+    LookAtHero,
+    LookAtHeroOpposite
 };
 
 #endif // COMMANDMOVEKIND_H

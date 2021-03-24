@@ -40,6 +40,7 @@ public:
     void translate();
     void initializePrimitives();
     void addMoveStepSquare(CommandMoveKind kind);
+    void addMoveEmpty(CommandMoveKind kind);
     void addMove(QVector<QString> &commands);
 
     virtual EventCommand * getCommand() const;
@@ -67,6 +68,14 @@ private slots:
     void on_pushButtonStepSquareFront_clicked();
     void on_pushButtonStepSquareBack_clicked();
     void on_pushButtonJump_clicked();
+    void on_pushButtonTurnNorth_clicked();
+    void on_pushButtonTurnSouth_clicked();
+    void on_pushButtonTurnWest_clicked();
+    void on_pushButtonTurnEast_clicked();
+    void on_pushButtonTurn90Right_clicked();
+    void on_pushButtonTurn90Left_clicked();
+    void on_pushButtonLookAtHero_clicked();
+    void on_pushButtonLookAtHeroOpposite_clicked();
     void on_pushButtonChangeGraphics_clicked();
 };
 

@@ -79,6 +79,17 @@ void SystemCommandMove::initialize(const EventCommand *command, int &i)
         break;
     case CommandMoveKind::Jump:
         j = 15;
+        break;
+    case CommandMoveKind::TurnNorth:
+    case CommandMoveKind::TurnSouth:
+    case CommandMoveKind::TurnWest:
+    case CommandMoveKind::TurnEast:
+    case CommandMoveKind::Turn90Right:
+    case CommandMoveKind::Turn90Left:
+    case CommandMoveKind::LookAtHero:
+    case CommandMoveKind::LookAtHeroOpposite:
+        j = 0;
+        break;
     }
     for (int k = 0; k < j; k++)
     {
@@ -205,6 +216,30 @@ QString SystemCommandMove::toString() const
             Translations::SECONDS).toLower();
         break;
     }
+    case CommandMoveKind::TurnNorth:
+        str += "Turn north";
+        break;
+    case CommandMoveKind::TurnSouth:
+        str += "Turn south";
+        break;
+    case CommandMoveKind::TurnWest:
+        str += "Turn west";
+        break;
+    case CommandMoveKind::TurnEast:
+        str += "Turn east";
+        break;
+    case CommandMoveKind::Turn90Right:
+        str += "Turn 90° right";
+        break;
+    case CommandMoveKind::Turn90Left:
+        str += "Turn 90° left";
+        break;
+    case CommandMoveKind::LookAtHero:
+        str += "Look at hero";
+        break;
+    case CommandMoveKind::LookAtHeroOpposite:
+        str += "Look at hero opposite";
+        break;
     }
     return str;
 }
