@@ -49,6 +49,7 @@ void DialogJump::getCommand(QVector<QString> &command) const
     ui->panelPrimitiveZ->getCommand(command);
     ui->panelPrimitivePeakY->getCommand(command);
     ui->panelPrimitivePeakYPlus->getCommand(command);
+    ui->panelPrimitiveTime->getCommand(command);
 }
 
 // -------------------------------------------------------
@@ -61,6 +62,8 @@ void DialogJump::initializePrimitives()
     ui->panelPrimitiveZ->initializeNumber(m_parameters, m_properties);
     ui->panelPrimitivePeakY->initializeNumber(m_parameters, m_properties);
     ui->panelPrimitivePeakYPlus->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveTime->initializeNumber(m_parameters, m_properties, false);
+    ui->panelPrimitiveTime->setNumberDoubleValue(1.0);
 }
 
 // -------------------------------------------------------
@@ -74,6 +77,7 @@ void DialogJump::initialize(QVector<QString> &commands)
     ui->panelPrimitiveZ->initializeCommandList(commands, i);
     ui->panelPrimitivePeakY->initializeCommandList(commands, i);
     ui->panelPrimitivePeakYPlus->initializeCommandList(commands, i);
+    ui->panelPrimitiveTime->initializeCommandList(commands, i);
 }
 
 // -------------------------------------------------------

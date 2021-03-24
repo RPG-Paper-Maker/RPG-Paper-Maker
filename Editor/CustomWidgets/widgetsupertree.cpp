@@ -147,17 +147,21 @@ void WidgetSuperTree::setItem(QStandardItem *selected, SuperListItem* super) {
 
 // -------------------------------------------------------
 
-void WidgetSuperTree::newItem(QStandardItem* selected){
-    SuperListItem* super = m_newItemInstance->createCopy();
-    emit beforeOpeningWindow();
-    if (super->openDialog()){
-        QStandardItem* root = getRootOfItem(selected);
-        int index = selected->row();
-        addNewItem(super, root, index);
+void WidgetSuperTree::newItem(QStandardItem* selected)
+{
+    if (m_newItemInstance != nullptr)
+    {
+        SuperListItem* super = m_newItemInstance->createCopy();
+        emit beforeOpeningWindow();
+        if (super->openDialog()){
+            QStandardItem* root = getRootOfItem(selected);
+            int index = selected->row();
+            addNewItem(super, root, index);
+        }
+        else
+            delete super;
+        emit windowClosed();
     }
-    else
-        delete super;
-    emit windowClosed();
 }
 
 // -------------------------------------------------------

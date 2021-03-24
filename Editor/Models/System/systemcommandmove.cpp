@@ -78,7 +78,7 @@ void SystemCommandMove::initialize(const EventCommand *command, int &i)
         j = 7;
         break;
     case CommandMoveKind::Jump:
-        j = 13;
+        j = 15;
     }
     for (int k = 0; k < j; k++)
     {
@@ -194,11 +194,15 @@ QString SystemCommandMove::toString() const
         peakY.initializeCommands(m_command, i);
         PrimitiveValue peakYPlus;
         peakYPlus.initializeCommands(m_command, i);
+        PrimitiveValue time;
+        time.initializeCommands(m_command, i);
         str += "Jump" + RPM::SPACE + stepSquare.toLower() + RPM::SPACE + "X: " +
             x.toString() + ", Y: " + y.toString()+ ", Y plus: " + yPlus.toString()
             + ", Z: " + z.toString() + ", " + "Peak" + RPM::SPACE + "Y: " +
             peakY.toString() + ", " + "Peak" + RPM::SPACE + "Y plus: " +
-            peakYPlus.toString();
+            peakYPlus.toString() + RPM::SPACE + ", " + RPM::translate(
+            Translations::TIME) + RPM::COLON + time.toString() + RPM::translate(
+            Translations::SECONDS).toLower();
         break;
     }
     }

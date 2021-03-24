@@ -396,7 +396,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonTurn45Right">
                 <property name="enabled">
-                 <bool>true</bool>
+                 <bool>false</bool>
                 </property>
                 <property name="text">
                  <string>Turn 45° right</string>
@@ -406,7 +406,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonTurn45Left">
                 <property name="enabled">
-                 <bool>true</bool>
+                 <bool>false</bool>
                 </property>
                 <property name="text">
                  <string>Turn 45° left</string>
