@@ -11,6 +11,11 @@
 
 #include "systemcommandmove.h"
 #include "dialogjump.h"
+#include "dialognumber.h"
+#include "dialogpicturespreview.h"
+#include "dialogcommandwait.h"
+#include "dialogcommandplaysong.h"
+#include "dialogcommandscript.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -306,7 +311,7 @@ QString SystemCommandMove::toString() const
         default:
             break;
         }
-        str += RPM::COLON + RPM::SPACE + value.toString();
+        str += RPM::COLON + RPM::SPACE + value.toString() + permanent;
         break;
     }
     case CommandMoveKind::MoveAnimation:
@@ -406,10 +411,157 @@ bool SystemCommandMove::openDialog()
         }
         break;
     }
+    case CommandMoveKind::ChangeGraphics:
+    {
+        int i = 2;
+        PrimitiveValue id;
+        id.initializeCommands(m_command, i);
+        SystemPicture *picture = reinterpret_cast<SystemPicture *>(SuperListItem
+            ::getById(RPM::get()->project()->picturesDatas()->model(PictureKind
+            ::Characters)->invisibleRootItem(), id.kind() == PrimitiveValueKind
+            ::Number ? id.numberValue() : -1));
+        DialogPicturesPreview dialog(picture, PictureKind::Characters, &id,
+            m_properties, m_parameters);
+        if (dialog.exec() == QDialog::Accepted)
+        {
+            for (int i = m_command.size() - 1; i >= 2; i--)
+            {
+                m_command.removeAt(i);
+            }
+            if (dialog.isIDValue())
+            {
+                id.getCommandParameter(m_command);
+            } else
+            {
+                PrimitiveValue valueFix(PrimitiveValueKind::Number, dialog.picture()
+                    ->id());
+                valueFix.getCommandParameter(m_command);
+            }
+            if (!dialog.isIDValue() && dialog.picture()->id() == 0)
+            {
+                QRect rect;
+                dialog.currentTexture(rect);
+                m_command.append(QString::number(rect.x()));
+                m_command.append(QString::number(rect.y()));
+                m_command.append(QString::number(rect.width()));
+                m_command.append(QString::number(rect.height()));
+            } else
+            {
+                m_command.append(QString::number(dialog.indexX()));
+                m_command.append(QString::number(dialog.indexY()));
+                m_command.append("1");
+                m_command.append("1");
+            }
+            return true;
+        }
+        break;
+    }
+    case CommandMoveKind::ChangeSpeed:
+    case CommandMoveKind::ChangeFrequency:
+    {
+        int i = 2;
+        PrimitiveValue value;
+        value.initializeCommands(m_command, i);
+        value.setModelParameter(m_parameters);
+        value.setModelProperties(m_properties);
+        QString label;
+        if (this->getKind() == CommandMoveKind::ChangeSpeed)
+        {
+            label = RPM::translate(Translations::SPEED) + RPM::COLON;
+            value.setModelDataBase(RPM::get()->project()->gameDatas()->systemDatas()->modelSpeed());
+        } else
+        {
+            label = RPM::translate(Translations::FREQUENCY) + RPM::COLON;
+            value.setModelDataBase(RPM::get()->project()->gameDatas()->systemDatas()->modelFrequencies());
+        }
+        DialogNumber dialog(&value, label);
+        if (dialog.exec() == QDialog::Accepted)
+        {
+            for (int i = m_command.size() - 1; i >= 2; i--)
+            {
+                m_command.removeAt(i);
+            }
+            value.getCommandParameter(m_command);
+            return true;
+        }
+        break;
+    }
+    case CommandMoveKind::Wait:
+    {
+        QVector<QString> commandList = m_command;
+        commandList.removeFirst();
+        EventCommand command(EventCommandKind::Wait, commandList);
+        DialogCommandWait dialog(&command, m_properties, m_parameters);
+        if (dialog.exec() == QDialog::Accepted)
+        {
+            for (int i = m_command.size() - 1; i >= 1; i--)
+            {
+                m_command.removeAt(i);
+            }
+            dialog.getCommandList(m_command);
+            return true;
+        }
+        break;
+    }
+    case CommandMoveKind::PlaySound:
+    {
+        QVector<QString> commandList = m_command;
+        commandList.removeFirst();
+        EventCommand command(EventCommandKind::PlayASound, commandList);
+        DialogCommandPlaySong dialog(RPM::translate(Translations::PLAY_A_SOUND),
+            SongKind::Sound, &command, m_properties, m_parameters);
+        if (dialog.exec() == QDialog::Accepted)
+        {
+            for (int i = m_command.size() - 1; i >= 1; i--)
+            {
+                m_command.removeAt(i);
+            }
+            dialog.getCommandList(m_command);
+            return true;
+        }
+        break;
+    }
+    case CommandMoveKind::Script:
+    {
+        QVector<QString> commandList = m_command;
+        commandList.removeFirst();
+        EventCommand command(EventCommandKind::Script, commandList);
+        DialogCommandScript dialog(&command, m_properties, m_parameters);
+        if (dialog.exec() == QDialog::Accepted)
+        {
+            for (int i = m_command.size() - 1; i >= 1; i--)
+            {
+                m_command.removeAt(i);
+            }
+            dialog.getCommandList(m_command);
+            return true;
+        }
+        break;
+    }
     default:
         break;
     }
     return false;
+}
+
+// -------------------------------------------------------
+
+SuperListItem* SystemCommandMove::createCopy() const
+{
+    SystemCommandMove *super = new SystemCommandMove;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
+void SystemCommandMove::setCopy(const SuperListItem &super)
+{
+    SuperListItem::setCopy(super);
+    const SystemCommandMove *move = reinterpret_cast<const SystemCommandMove *>(&super);
+    m_command = move->m_command;
+    m_properties = move->m_properties;
+    m_parameters = move->m_parameters;
 }
 
 // -------------------------------------------------------

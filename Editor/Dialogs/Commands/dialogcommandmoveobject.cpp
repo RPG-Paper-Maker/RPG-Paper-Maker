@@ -126,9 +126,8 @@ void DialogCommandMoveObject::initializePrimitives()
     // Empty tree of move commands
     QStandardItemModel *model = new QStandardItemModel;
     ui->treeView->initializeModel(model);
-    ui->treeView->setHasContextMenu(false);
+    ui->treeView->setHasContextMenu(true);
     ui->treeView->setCanBeEmpty(true);
-    ui->treeView->setCanBeControled(false);
     ui->comboBoxStepSquare->addItem(RPM::translate(Translations::SQUARE));
     ui->comboBoxStepSquare->addItem(RPM::translate(Translations::STEP));
 }
