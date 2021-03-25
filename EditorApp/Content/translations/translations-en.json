@@ -1237,5 +1237,19 @@
     "set.language": "Set language",
     "create.object.in.map": "Create object in map",
     "new.object.model.id": "New object model ID",
-    "stock.id.in.variable.id": "Stock ID in variable ID"
+    "stock.id.in.variable.id": "Stock ID in variable ID",
+    "jump": "Jump",
+    "peak": "Peak",
+    "turn.north": "Turn north",
+    "turn.south": "Turn south",
+    "turn.west": "Turn west",
+    "turn.east": "Turn east",
+    "turn.90.right": "Turn 90° right",
+    "turn.90.left": "Turn 90° left",
+    "look.at.hero": "Look at hero",
+    "look.at.hero.opposite": "Look at hero opposite",
+    "change.speed": "Change speed",
+    "change.frequency": "Change frequency",
+    "set.number": "Set number",
+    "final.position.offset": "Final position offset"
 }

@@ -11,6 +11,7 @@
 
 #include "dialogjump.h"
 #include "ui_dialogjump.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -84,5 +85,10 @@ void DialogJump::initialize(QVector<QString> &commands)
 
 void DialogJump::translate()
 {
-
+    this->setWindowTitle(RPM::translate(Translations::JUMP) + RPM::DOT_DOT_DOT);
+    ui->groupBoxFinalPositionOffset->setTitle(RPM::translate(Translations::FINAL_POSITION_OFFSET));
+    ui->groupBoxPeak->setTitle(RPM::translate(Translations::PEAK));
+    ui->labelTime->setText(RPM::translate(Translations::TIME) + RPM::COLON);
+    ui->labelSeconds->setText(RPM::translate(Translations::SECONDS));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

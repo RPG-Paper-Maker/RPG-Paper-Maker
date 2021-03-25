@@ -1258,6 +1258,20 @@ const QString Translations::SET_LANGUAGE = "set.language";
 const QString Translations::CREATE_OBJECT_IN_MAP = "create.object.in.map";
 const QString Translations::NEW_OBJECT_MODEL_ID = "new.object.model.id";
 const QString Translations::STOCK_ID_IN_VARIABLE_ID = "stock.id.in.variable.id";
+const QString Translations::JUMP = "jump";
+const QString Translations::PEAK = "peak";
+const QString Translations::TURN_NORTH = "turn.north";
+const QString Translations::TURN_SOUTH = "turn.south";
+const QString Translations::TURN_WEST = "turn.west";
+const QString Translations::TURN_EAST = "turn.east";
+const QString Translations::TURN_90_RIGHT = "turn.90.right";
+const QString Translations::TURN_90_LEFT = "turn.90.left";
+const QString Translations::LOOK_AT_HERO = "look.at.hero";
+const QString Translations::LOOK_AT_HERO_OPPOSITE = "look.at.hero.opposite";
+const QString Translations::CHANGE_SPEED = "change.speed";
+const QString Translations::CHANGE_FREQUENCY = "change.frequency";
+const QString Translations::SET_NUMBER = "set.number";
+const QString Translations::FINAL_POSITION_OFFSET = "final.position.offset";
 
 // -------------------------------------------------------
 //

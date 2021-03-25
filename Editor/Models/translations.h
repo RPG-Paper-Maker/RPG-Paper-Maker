@@ -1271,6 +1271,20 @@ public:
     static const QString CREATE_OBJECT_IN_MAP;
     static const QString NEW_OBJECT_MODEL_ID;
     static const QString STOCK_ID_IN_VARIABLE_ID;
+    static const QString JUMP;
+    static const QString PEAK;
+    static const QString TURN_NORTH;
+    static const QString TURN_SOUTH;
+    static const QString TURN_WEST;
+    static const QString TURN_EAST;
+    static const QString TURN_90_RIGHT;
+    static const QString TURN_90_LEFT;
+    static const QString LOOK_AT_HERO;
+    static const QString LOOK_AT_HERO_OPPOSITE;
+    static const QString CHANGE_SPEED;
+    static const QString CHANGE_FREQUENCY;
+    static const QString SET_NUMBER;
+    static const QString FINAL_POSITION_OFFSET;
 
     Translations();
     virtual ~Translations();

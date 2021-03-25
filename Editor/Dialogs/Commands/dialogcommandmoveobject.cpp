@@ -89,10 +89,31 @@ void DialogCommandMoveObject::translate()
     ui->pushButtonStepSquareSouthEast->setText(RPM::translate(Translations::ONE_TO_SOUTH_EAST));
     ui->pushButtonStepSquareSouthWest->setText(RPM::translate(Translations::ONE_TO_SOUTH_WEST));
     ui->pushButtonStepSquareOppositeHero->setText(RPM::translate(Translations::ONE_OPPOSITE_TO_HERO));
-    ui->pushButtonChangeGraphics->setText(RPM::translate(Translations ::CHANGE_GRAPHICS)
-        + RPM::DOT_DOT_DOT);
+    ui->pushButtonChangeGraphics->setText(RPM::translate(Translations ::CHANGE_GRAPHICS) + RPM::DOT_DOT_DOT);
     ui->checkBoxPermanent->setText(RPM::translate(Translations::PERMANENT));
     ui->groupBoxMoves->setTitle(RPM::translate(Translations::MOVES));
+    ui->pushButtonJump->setText(RPM::translate(Translations::JUMP) + RPM::DOT_DOT_DOT);
+    ui->pushButtonTurnNorth->setText(RPM::translate(Translations::TURN_NORTH));
+    ui->pushButtonTurnSouth->setText(RPM::translate(Translations::TURN_SOUTH));
+    ui->pushButtonTurnWest->setText(RPM::translate(Translations::TURN_WEST));
+    ui->pushButtonTurnEast->setText(RPM::translate(Translations::TURN_EAST));
+    ui->pushButtonTurn90Right->setText(RPM::translate(Translations::TURN_90_RIGHT));
+    ui->pushButtonTurn90Left->setText(RPM::translate(Translations::TURN_90_LEFT));
+    ui->pushButtonLookAtHero->setText(RPM::translate(Translations::LOOK_AT_HERO));
+    ui->pushButtonLookAtHeroOpposite->setText(RPM::translate(Translations::LOOK_AT_HERO_OPPOSITE));
+    ui->pushButtonChangeSpeed->setText(RPM::translate(Translations::CHANGE_SPEED) + RPM::DOT_DOT_DOT);
+    ui->pushButtonChangeFrequency->setText(RPM::translate(Translations::CHANGE_FREQUENCY) + RPM::DOT_DOT_DOT);
+    ui->pushButtonMoveAnimation->setText(RPM::translate(Translations::MOVE_ANIMATION));
+    ui->pushButtonStopAnimation->setText(RPM::translate(Translations::STOP_ANIMATION));
+    ui->pushButtonClimbAnimation->setText(RPM::translate(Translations::CLIMB_ANIMATION));
+    ui->pushButtonFixDirection->setText(RPM::translate(Translations::DIRECTION_FIX));
+    ui->pushButtonThrough->setText(RPM::translate(Translations::THROUGH));
+    ui->pushButtonSetWithCamera->setText(RPM::translate(Translations::SET_WITH_CAMERA));
+    ui->pushButtonPixelOffset->setText(RPM::translate(Translations::PIXEL_OFFSET));
+    ui->pushButtonKeepPosition->setText(RPM::translate(Translations::KEEP_POSITION));
+    ui->pushButtonWait->setText(RPM::translate(Translations::WAIT) + RPM::DOT_DOT_DOT);
+    ui->pushButtonPlaySound->setText(RPM::translate(Translations::PLAY_A_SOUND) + RPM::DOT_DOT_DOT);
+    ui->pushButtonScript->setText(RPM::translate(Translations::SCRIPT) + RPM::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -397,7 +418,8 @@ void DialogCommandMoveObject::on_pushButtonChangeSpeed_clicked()
     value->setModelDataBase(RPM::get()->project()->gameDatas()->systemDatas()->modelSpeed());
     value->setModelParameter(m_parameters);
     value->setModelProperties(m_properties);
-    DialogNumber dialog(value, RPM::translate(Translations::SPEED) + RPM::COLON);
+    DialogNumber dialog(value, RPM::translate(Translations::CHANGE_SPEED) + RPM
+        ::DOT_DOT_DOT, RPM::translate(Translations::SPEED) + RPM::COLON);
     if (dialog.exec() == QDialog::Accepted)
     {
         QVector<QString> commands = QVector<QString>({QString::number(static_cast
@@ -417,7 +439,8 @@ void DialogCommandMoveObject::on_pushButtonChangeFrequency_clicked()
     value->setModelDataBase(RPM::get()->project()->gameDatas()->systemDatas()->modelFrequencies());
     value->setModelParameter(m_parameters);
     value->setModelProperties(m_properties);
-    DialogNumber dialog(value, RPM::translate(Translations::FREQUENCY) + RPM::COLON);
+    DialogNumber dialog(value, RPM::translate(Translations::CHANGE_FREQUENCY) +
+        RPM::DOT_DOT_DOT, RPM::translate(Translations::FREQUENCY) + RPM::COLON);
     if (dialog.exec() == QDialog::Accepted)
     {
         QVector<QString> commands = QVector<QString>({QString::number(static_cast

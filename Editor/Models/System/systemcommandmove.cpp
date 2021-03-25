@@ -250,38 +250,39 @@ QString SystemCommandMove::toString() const
         time.initializeCommands(m_command, i);
         time.setModelParameter(m_parameters);
         time.setModelProperties(m_properties);
-        str += "Jump" + RPM::SPACE + stepSquare.toLower() + RPM::SPACE + "X: " +
-            x.toString() + ", Y: " + y.toString()+ ", Y plus: " + yPlus.toString()
-            + ", Z: " + z.toString() + ", " + "Peak" + RPM::SPACE + "Y: " +
-            peakY.toString() + ", " + "Peak" + RPM::SPACE + "Y plus: " +
-            peakYPlus.toString() + RPM::SPACE + ", " + RPM::translate(
-            Translations::TIME) + RPM::COLON + time.toString() + RPM::translate(
-            Translations::SECONDS).toLower();
+        str += RPM::translate(Translations::JUMP) + RPM::SPACE + stepSquare
+            .toLower() + RPM::SPACE + "X: " + x.toString() + ", Y: " + y
+            .toString()+ ", Y plus: " + yPlus.toString() + ", Z: " + z.toString()
+            + ", " + RPM::translate(Translations::PEAK) + RPM::SPACE + "Y: " +
+            peakY.toString() + ", " + RPM::translate(Translations::PEAK) + RPM
+            ::SPACE + "Y plus: " + peakYPlus.toString() + RPM::SPACE + ", " +
+            RPM::translate(Translations::TIME) + RPM::COLON + time.toString() +
+            RPM::translate(Translations::SECONDS).toLower();
         break;
     }
     case CommandMoveKind::TurnNorth:
-        str += "Turn north";
+        str += RPM::translate(Translations::TURN_NORTH);
         break;
     case CommandMoveKind::TurnSouth:
-        str += "Turn south";
+        str += RPM::translate(Translations::TURN_SOUTH);
         break;
     case CommandMoveKind::TurnWest:
-        str += "Turn west";
+        str += RPM::translate(Translations::TURN_WEST);
         break;
     case CommandMoveKind::TurnEast:
-        str += "Turn east";
+        str += RPM::translate(Translations::TURN_EAST);
         break;
     case CommandMoveKind::Turn90Right:
-        str += "Turn 90° right";
+        str += RPM::translate(Translations::TURN_90_RIGHT);
         break;
     case CommandMoveKind::Turn90Left:
-        str += "Turn 90° left";
+        str += RPM::translate(Translations::TURN_90_LEFT);
         break;
     case CommandMoveKind::LookAtHero:
-        str += "Look at hero";
+        str += RPM::translate(Translations::LOOK_AT_HERO);
         break;
     case CommandMoveKind::LookAtHeroOpposite:
-        str += "Look at hero opposite";
+        str += RPM::translate(Translations::LOOK_AT_HERO_OPPOSITE);
         break;
     case CommandMoveKind::ChangeSpeed:
     case CommandMoveKind::ChangeFrequency:
@@ -301,12 +302,12 @@ QString SystemCommandMove::toString() const
         case CommandMoveKind::ChangeSpeed:
             value.setModelDataBase(RPM::get()->project()->gameDatas()->systemDatas()
                 ->modelSpeed());
-            str += "Change speed";
+            str += RPM::translate(Translations::CHANGE_SPEED);
             break;
         case CommandMoveKind::ChangeFrequency:
             value.setModelDataBase(RPM::get()->project()->gameDatas()->systemDatas()
                 ->modelFrequencies());
-            str += "Change frequency";
+            str += RPM::translate(Translations::CHANGE_FREQUENCY);
             break;
         default:
             break;
@@ -464,17 +465,20 @@ bool SystemCommandMove::openDialog()
         value.initializeCommands(m_command, i);
         value.setModelParameter(m_parameters);
         value.setModelProperties(m_properties);
+        QString title;
         QString label;
         if (this->getKind() == CommandMoveKind::ChangeSpeed)
         {
+            title = RPM::translate(Translations::CHANGE_SPEED) + RPM::DOT_DOT_DOT;
             label = RPM::translate(Translations::SPEED) + RPM::COLON;
             value.setModelDataBase(RPM::get()->project()->gameDatas()->systemDatas()->modelSpeed());
         } else
         {
+            title = RPM::translate(Translations::CHANGE_FREQUENCY) + RPM::DOT_DOT_DOT;
             label = RPM::translate(Translations::FREQUENCY) + RPM::COLON;
             value.setModelDataBase(RPM::get()->project()->gameDatas()->systemDatas()->modelFrequencies());
         }
-        DialogNumber dialog(&value, label);
+        DialogNumber dialog(&value, title, label);
         if (dialog.exec() == QDialog::Accepted)
         {
             for (int i = m_command.size() - 1; i >= 2; i--)

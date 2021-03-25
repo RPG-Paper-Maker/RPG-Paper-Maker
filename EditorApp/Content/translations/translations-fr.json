@@ -1237,5 +1237,19 @@
     "set.language": "Modifier une langue",
     "create.object.in.map": "Créer un object dans la carte",
     "new.object.model.id": "Nouvel object de modèle d'ID",
-    "stock.id.in.variable.id": "Stocker l'ID dans la variable d'ID"
+    "stock.id.in.variable.id": "Stocker l'ID dans la variable d'ID",
+    "jump": "Saut",
+    "peak": "Sommet",
+    "turn.north": "Tourner vers le nord",
+    "turn.south": "Tourner vers le sud",
+    "turn.west": "Tourner vers l'ouest",
+    "turn.east": "Tourner vers l'est",
+    "turn.90.right": "Tourner 90° à droite",
+    "turn.90.left": "Tourner 90° à gauche",
+    "look.at.hero": "Regarder le héro",
+    "look.at.hero.opposite": "Regarder à l'opposé du héro",
+    "change.speed": "Changer la vitesse",
+    "change.frequency": "Changer la fréquence",
+    "set.number": "Modifier un nombre",
+    "final.position.offset": "Décallage de la position finale"
 }

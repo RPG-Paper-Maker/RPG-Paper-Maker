@@ -19,9 +19,11 @@
 //
 // -------------------------------------------------------
 
-DialogNumber::DialogNumber(PrimitiveValue *value, QString label, QWidget *parent) :
+DialogNumber::DialogNumber(PrimitiveValue *value, QString title, QString label,
+    QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogNumber),
+    m_title(title),
     m_label(label),
     m_value(value)
 {
@@ -50,7 +52,8 @@ void DialogNumber::initialize()
 
 void DialogNumber::translate()
 {
-    this->setWindowTitle("Set number" + RPM::DOT_DOT_DOT);
+    this->setWindowTitle(m_title.isEmpty() ? RPM::translate(Translations
+        ::SET_NUMBER) + RPM::DOT_DOT_DOT : m_title);
     ui->label->setText(m_label.isEmpty() ? RPM::translate(Translations::NUMBER)
         + RPM::COLON : m_label);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);

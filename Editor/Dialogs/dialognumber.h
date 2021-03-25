@@ -25,8 +25,8 @@ class DialogNumber : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogNumber(PrimitiveValue *value, QString label = QString(),
-        QWidget *parent = nullptr);
+    explicit DialogNumber(PrimitiveValue *value, QString title, QString label =
+        QString(), QWidget *parent = nullptr);
     ~DialogNumber();
 
     void initialize();
@@ -34,6 +34,7 @@ public:
 
 private:
     Ui::DialogNumber *ui;
+    QString m_title;
     QString m_label;
     PrimitiveValue *m_value;
 };
