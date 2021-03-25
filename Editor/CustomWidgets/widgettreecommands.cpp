@@ -458,9 +458,9 @@ QStandardItem* WidgetTreeCommands::insertCommand(EventCommand* command,
 {
     QStandardItem* item = new QStandardItem();
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(command)));
-    item->setText(command->toString(m_linkedObject, m_parameters));
+    item->setText(command->toString(m_linkedObject == nullptr ? nullptr :
+        m_linkedObject->modelProperties(), m_parameters));
     root->insertRow(pos, item);
-
     return item;
 }
 
@@ -586,7 +586,8 @@ void WidgetTreeCommands::updateAllNodesString(QStandardItem *item)
         child = item->child(i);
         updateAllNodesString(child);
         command = reinterpret_cast<EventCommand *>(child->data().value<quintptr>());
-        child->setText(command->toString(m_linkedObject, m_parameters));
+        child->setText(command->toString(m_linkedObject == nullptr ? nullptr :
+            m_linkedObject->modelProperties(), m_parameters));
         QBrush b(QColor(18, 135, 90));
         if (command->kind() == EventCommandKind::Comment)
         {
@@ -1134,7 +1135,8 @@ void WidgetTreeCommands::onSelectionChanged(QModelIndex index, QModelIndex
     if (selectedBefore != nullptr)
     {
         selectedBefore->setText(reinterpret_cast<EventCommand *>(selectedBefore
-            ->data().value<quintptr>())->toString(m_linkedObject, m_parameters));
+            ->data().value<quintptr>())->toString(m_linkedObject == nullptr ?
+            nullptr : m_linkedObject->modelProperties(), m_parameters));
     }
 
     m_contextMenuCommonCommands->canEdit(command != nullptr &&

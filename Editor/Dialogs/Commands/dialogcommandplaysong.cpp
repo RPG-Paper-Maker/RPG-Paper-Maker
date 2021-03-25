@@ -118,7 +118,7 @@ void DialogCommandPlaySong::initialize(EventCommand* command) {
 
 // -------------------------------------------------------
 
-void DialogCommandPlaySong::getCommandList(QVector<QString> command) const
+void DialogCommandPlaySong::getCommandList(QVector<QString> &command) const
 {
     command.append(ui->checkBoxSongID->isChecked() ? "1" : "0");
     ui->panelPrimitiveValueSongID->getCommand(command);

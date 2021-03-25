@@ -62,7 +62,7 @@ void DialogCommandWait::translate()
 
 // -------------------------------------------------------
 
-void DialogCommandWait::getCommandList(QVector<QString> command) const
+void DialogCommandWait::getCommandList(QVector<QString> &command) const
 {
     ui->panelPrimitiveTime->getCommand(command);
 }

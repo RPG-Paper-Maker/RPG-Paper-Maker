@@ -43,7 +43,7 @@ DialogNumber::~DialogNumber()
 
 void DialogNumber::initialize()
 {
-    ui->panelPrimitiveNumber->initializeNumberAndUpdate(m_value);
+    ui->panelPrimitiveNumber->initializeDataBaseAndUpdate(m_value);
 }
 
 // -------------------------------------------------------

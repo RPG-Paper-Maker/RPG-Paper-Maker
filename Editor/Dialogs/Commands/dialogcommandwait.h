@@ -38,7 +38,7 @@ public:
 
     void initializePrimitives();
     void translate();
-    void getCommandList(QVector<QString> command) const;
+    void getCommandList(QVector<QString> &command) const;
 
     virtual EventCommand * getCommand() const;
     virtual void initialize(EventCommand* command);

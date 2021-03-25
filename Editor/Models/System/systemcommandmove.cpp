@@ -92,6 +92,8 @@ void SystemCommandMove::initialize(const EventCommand *command, int &i)
         break;
     case CommandMoveKind::ChangeSpeed:
     case CommandMoveKind::ChangeFrequency:
+        j = 3;
+        break;
     case CommandMoveKind::MoveAnimation:
     case CommandMoveKind::StopAnimation:
     case CommandMoveKind::ClimbAnimation:
@@ -100,12 +102,16 @@ void SystemCommandMove::initialize(const EventCommand *command, int &i)
     case CommandMoveKind::SetWithCamera:
     case CommandMoveKind::PixelOffset:
     case CommandMoveKind::KeepPosition:
-        j = 3;
+        j = 2;
         break;
     case CommandMoveKind::Wait:
+        j = 2;
         break;
     case CommandMoveKind::PlaySound:
+        j = 12;
+        break;
     case CommandMoveKind::Script:
+        j = RPM::stringToBool(command->valueCommandAt(1)) ? 3 : 2;
         break;
     }
     for (int k = 0; k < j; k++)
@@ -183,7 +189,6 @@ QString SystemCommandMove::toString() const
     case CommandMoveKind::ChangeGraphics:
     {
         QString permanent;
-
         if (RPM::stringToBool(m_command.at(i++)))
         {
             permanent = RPM::BRACKET_LEFT + RPM::translate(Translations
@@ -191,6 +196,8 @@ QString SystemCommandMove::toString() const
         }
         PrimitiveValue value;
         value.initializeCommands(m_command, i);
+        value.setModelParameter(m_parameters);
+        value.setModelProperties(m_properties);
         QString strValue;
         if (value.kind() == PrimitiveValueKind::Number)
         {
@@ -212,18 +219,32 @@ QString SystemCommandMove::toString() const
             Translations::SQUARE) : RPM::translate(Translations::STEP);
         PrimitiveValue x;
         x.initializeCommands(m_command, i);
+        x.setModelParameter(m_parameters);
+        x.setModelProperties(m_properties);
         PrimitiveValue y;
         y.initializeCommands(m_command, i);
+        y.setModelParameter(m_parameters);
+        y.setModelProperties(m_properties);
         PrimitiveValue yPlus;
         yPlus.initializeCommands(m_command, i);
+        yPlus.setModelParameter(m_parameters);
+        yPlus.setModelProperties(m_properties);
         PrimitiveValue z;
         z.initializeCommands(m_command, i);
+        z.setModelParameter(m_parameters);
+        z.setModelProperties(m_properties);
         PrimitiveValue peakY;
         peakY.initializeCommands(m_command, i);
+        peakY.setModelParameter(m_parameters);
+        peakY.setModelProperties(m_properties);
         PrimitiveValue peakYPlus;
         peakYPlus.initializeCommands(m_command, i);
+        peakYPlus.setModelParameter(m_parameters);
+        peakYPlus.setModelProperties(m_properties);
         PrimitiveValue time;
         time.initializeCommands(m_command, i);
+        time.setModelParameter(m_parameters);
+        time.setModelProperties(m_properties);
         str += "Jump" + RPM::SPACE + stepSquare.toLower() + RPM::SPACE + "X: " +
             x.toString() + ", Y: " + y.toString()+ ", Y plus: " + yPlus.toString()
             + ", Z: " + z.toString() + ", " + "Peak" + RPM::SPACE + "Y: " +
@@ -257,6 +278,109 @@ QString SystemCommandMove::toString() const
     case CommandMoveKind::LookAtHeroOpposite:
         str += "Look at hero opposite";
         break;
+    case CommandMoveKind::ChangeSpeed:
+    case CommandMoveKind::ChangeFrequency:
+    {
+        QString permanent;
+        if (RPM::stringToBool(m_command.at(i++)))
+        {
+            permanent = RPM::BRACKET_LEFT + RPM::translate(Translations
+                ::PERMANENT) + RPM::BRACKET_RIGHT;
+        }
+        PrimitiveValue value;
+        value.initializeCommands(m_command, i);
+        value.setModelParameter(m_parameters);
+        value.setModelProperties(m_properties);
+        switch (kind)
+        {
+        case CommandMoveKind::ChangeSpeed:
+            value.setModelDataBase(RPM::get()->project()->gameDatas()->systemDatas()
+                ->modelSpeed());
+            str += "Change speed";
+            break;
+        case CommandMoveKind::ChangeFrequency:
+            value.setModelDataBase(RPM::get()->project()->gameDatas()->systemDatas()
+                ->modelFrequencies());
+            str += "Change frequency";
+            break;
+        default:
+            break;
+        }
+        str += RPM::COLON + RPM::SPACE + value.toString();
+        break;
+    }
+    case CommandMoveKind::MoveAnimation:
+    case CommandMoveKind::StopAnimation:
+    case CommandMoveKind::ClimbAnimation:
+    case CommandMoveKind::FixDirection:
+    case CommandMoveKind::Through:
+    case CommandMoveKind::SetWithCamera:
+    case CommandMoveKind::PixelOffset:
+    case CommandMoveKind::KeepPosition:
+    {
+        QStringList options;
+        options << (RPM::stringToBool(m_command.at(i++)) ? "ON" : "OFF");
+        if (RPM::stringToBool(m_command.at(i++)))
+        {
+            options << RPM::translate(Translations::PERMANENT).toLower();
+        }
+        switch (kind)
+        {
+        case CommandMoveKind::MoveAnimation:
+            str += RPM::translate(Translations::MOVE_ANIMATION);
+            break;
+        case CommandMoveKind::StopAnimation:
+            str += RPM::translate(Translations::STOP_ANIMATION);
+            break;
+        case CommandMoveKind::ClimbAnimation:
+            str += RPM::translate(Translations::CLIMB_ANIMATION);
+            break;
+        case CommandMoveKind::FixDirection:
+            str += RPM::translate(Translations::DIRECTION_FIX);
+            break;
+        case CommandMoveKind::Through:
+            str += RPM::translate(Translations::THROUGH);
+            break;
+        case CommandMoveKind::SetWithCamera:
+            str += RPM::translate(Translations::SET_WITH_CAMERA);
+            break;
+        case CommandMoveKind::PixelOffset:
+            str += RPM::translate(Translations::PIXEL_OFFSET);
+            break;
+        case CommandMoveKind::KeepPosition:
+            str += RPM::translate(Translations::KEEP_POSITION);
+            break;
+        default:
+            break;
+        }
+        str += RPM::SPACE + RPM::BRACKET_LEFT + options.join(RPM::COMMA) + RPM
+            ::BRACKET_RIGHT;
+        break;
+    }
+    case CommandMoveKind::Wait:
+    {
+        QVector<QString> list = m_command;
+        list.removeFirst();
+        EventCommand command(EventCommandKind::Wait, list);
+        str += command.toString(m_properties, m_parameters);
+        break;
+    }
+    case CommandMoveKind::PlaySound:
+    {
+        QVector<QString> list = m_command;
+        list.removeFirst();
+        EventCommand command(EventCommandKind::PlayASound, list);
+        str += command.toString(m_properties, m_parameters);
+        break;
+    }
+    case CommandMoveKind::Script:
+    {
+        QVector<QString> list = m_command;
+        list.removeFirst();
+        EventCommand command(EventCommandKind::Script, list);
+        str += command.toString(m_properties, m_parameters);
+        break;
+    }
     }
     return str;
 }

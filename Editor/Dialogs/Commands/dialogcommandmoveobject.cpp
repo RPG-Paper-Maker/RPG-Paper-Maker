@@ -415,8 +415,7 @@ void DialogCommandMoveObject::on_pushButtonChangeSpeed_clicked()
 void DialogCommandMoveObject::on_pushButtonChangeFrequency_clicked()
 {
     PrimitiveValue *value = PrimitiveValue::createDefaultDataBaseValue();
-    value->setModelDataBase(RPM::get()->project()->gameDatas()->systemDatas()
-        ->modelSpeed());
+    value->setModelDataBase(RPM::get()->project()->gameDatas()->systemDatas()->modelFrequencies());
     value->setModelParameter(m_parameters);
     value->setModelProperties(m_properties);
     DialogNumber dialog(value, RPM::translate(Translations::FREQUENCY) + RPM::COLON);

@@ -62,7 +62,9 @@ void DialogCommandScript::translate()
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
-void DialogCommandScript::getCommandList(QVector<QString> command) const
+// -------------------------------------------------------
+
+void DialogCommandScript::getCommandList(QVector<QString> &command) const
 {
     command.append(ui->checkBoxDynamic->isChecked() ? RPM::TRUE_BOOL_STRING :
         RPM::FALSE_BOOL_STRING);

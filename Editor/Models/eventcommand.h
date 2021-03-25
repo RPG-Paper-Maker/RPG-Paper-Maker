@@ -61,7 +61,7 @@ public:
     int getChoicesNumber() const;
     void getChoicesIDs(QList<int> &list);
     void setCopy(const EventCommand &copy);
-    QString toString(SystemCommonObject *object = nullptr, QStandardItemModel
+    QString toString(QStandardItemModel *properties = nullptr, QStandardItemModel
         *parameters = nullptr) const;
     void read(const QJsonObject &json);
     QJsonObject getJSON() const;
@@ -71,25 +71,25 @@ private:
     QVector<QString> m_listCommand;
 
     QString strNumberVariable(int &i) const;
-    QString strDataBaseId(int &i, SystemCommonObject *object = nullptr,
+    QString strDataBaseId(int &i, QStandardItemModel *properties = nullptr,
         QStandardItemModel *dataBase = nullptr, QStandardItemModel *parameters =
         nullptr) const;
-    QString strProperty(int &i, SystemCommonObject *object = nullptr,
+    QString strProperty(int &i, QStandardItemModel *properties = nullptr,
         QStandardItemModel *parameters = nullptr, bool active = false) const;
     QString strNumber(int &i, QStandardItemModel *parameters = nullptr) const;
-    QString strShowText(SystemCommonObject *object = nullptr, QStandardItemModel
+    QString strShowText(QStandardItemModel *properties = nullptr, QStandardItemModel
         *parameters = nullptr) const;
-    QString strChangeVariables(SystemCommonObject *object, QStandardItemModel
+    QString strChangeVariables(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
     QString strChangeVariablesOperation(int &i) const;
     QString strInputNumber() const;
-    QString strCondition(SystemCommonObject *object, QStandardItemModel
+    QString strCondition(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strConditionPageVariables(SystemCommonObject *object,
+    QString strConditionPageVariables(QStandardItemModel *properties,
         QStandardItemModel *parameters, int &i, int radioIndex) const;
-    QString strModifyInventory(SystemCommonObject *object, QStandardItemModel
+    QString strModifyInventory(QStandardItemModel *properties, QStandardItemModel
                                *parameters) const;
-    QString strModifyInventorySelection(SystemCommonObject *object,
+    QString strModifyInventorySelection(QStandardItemModel *properties,
         QStandardItemModel *parameters, int &i) const;
     QString strModifyTeam(QStandardItemModel *parameters) const;
     QString strModifyTeamInstance(int &i, QStandardItemModel *parameters) const;
@@ -101,29 +101,29 @@ private:
     QString strStartBattleTransition(QStandardItemModel *parameters, int &i) const;
     QString strStartBattleTransitionType(QStandardItemModel *parameters, int &i,
         int type, QString name) const;
-    QString strChangeState(SystemCommonObject *object, QStandardItemModel
+    QString strChangeState(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
     QString strChangeStateOperation(int &i) const;
-    QString strSendEvent(SystemCommonObject *object, QStandardItemModel
+    QString strSendEvent(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strSendEventTarget(SystemCommonObject *object, QStandardItemModel
+    QString strSendEventTarget(QStandardItemModel *properties, QStandardItemModel
         *parameters, int &i) const;
-    QString strTeleportObject(SystemCommonObject *object, QStandardItemModel
+    QString strTeleportObject(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strTeleportObjectPosition(SystemCommonObject *object,
+    QString strTeleportObjectPosition(QStandardItemModel *properties,
         QStandardItemModel *parameters, int &i) const;
     QString strTeleportObjectOptions(int &i) const;
-    QString strMoveObject(SystemCommonObject *object, QStandardItemModel
+    QString strMoveObject(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strMoveObjectID(SystemCommonObject *object, QStandardItemModel
+    QString strMoveObjectID(QStandardItemModel *properties, QStandardItemModel
         *parameters, int &i) const;
     QString strMoveObjectOptions(int &i) const;
     QString strMoveObjectMoves(int &i) const;
-    QString strWait(SystemCommonObject *object, QStandardItemModel *parameters)
+    QString strWait(QStandardItemModel *properties, QStandardItemModel *parameters)
         const;
-    QString strMoveCamera(SystemCommonObject *object, QStandardItemModel
+    QString strMoveCamera(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strMoveCameraTarget(SystemCommonObject *object, QStandardItemModel
+    QString strMoveCameraTarget(QStandardItemModel *properties, QStandardItemModel
         *parameters, int &i) const;
     QString strMoveCameraMove(QStandardItemModel *parameters, int &i, QString
         &operation) const;
@@ -132,72 +132,72 @@ private:
     QString strMoveCameraZoom(QStandardItemModel *parameters, int &i, QString
         &operation) const;
     QString strMoveCameraOptions(QStandardItemModel *parameters, int &i) const;
-    QString strPlaySong(SystemCommonObject*, QStandardItemModel *parameters,
+    QString strPlaySong(QStandardItemModel *properties, QStandardItemModel *parameters,
         SongKind kind) const;
-    QString strPlayMusic(SystemCommonObject *object, QStandardItemModel
+    QString strPlayMusic(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strPlayBackgroundSound(SystemCommonObject *object,
+    QString strPlayBackgroundSound(QStandardItemModel *properties,
         QStandardItemModel *parameters) const;
-    QString strPlaySound(SystemCommonObject *object, QStandardItemModel
+    QString strPlaySound(QStandardItemModel *properties, QStandardItemModel
          *parameters) const;
-    QString strPlayMusicEffect(SystemCommonObject *object, QStandardItemModel
+    QString strPlayMusicEffect(QStandardItemModel *properties, QStandardItemModel
          *parameters) const;
-    QString strStopSong(SystemCommonObject*, QStandardItemModel *parameters) const;
-    QString strStopMusic(SystemCommonObject *object, QStandardItemModel
+    QString strStopSong(QStandardItemModel *properties, QStandardItemModel *parameters) const;
+    QString strStopMusic(QStandardItemModel *properties, QStandardItemModel
          *parameters) const;
-    QString strStopBackgroundSound(SystemCommonObject *object,
+    QString strStopBackgroundSound(QStandardItemModel *properties,
          QStandardItemModel *parameters) const;
-    QString strChangeProperty(SystemCommonObject *object,
+    QString strChangeProperty(QStandardItemModel *properties,
          QStandardItemModel *parameters) const;
-    QString strDisplayChoice(SystemCommonObject *object, QStandardItemModel
+    QString strDisplayChoice(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strScript(SystemCommonObject *object, QStandardItemModel *parameters
+    QString strScript(QStandardItemModel *properties, QStandardItemModel *parameters
         ) const;
     QString strChoice() const;
-    QString strDisplayAPicture(SystemCommonObject *object, QStandardItemModel
+    QString strDisplayAPicture(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strSetMoveTurnAPicture(SystemCommonObject *object,
+    QString strSetMoveTurnAPicture(QStandardItemModel *properties,
         QStandardItemModel *parameters) const;
-    QString strRemoveAPicture(SystemCommonObject *object, QStandardItemModel
+    QString strRemoveAPicture(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strSetDialogBoxOptions(SystemCommonObject *object,
+    QString strSetDialogBoxOptions(QStandardItemModel *properties,
         QStandardItemModel *parameters) const;
-    QString strChangeScreenTone(SystemCommonObject *object, QStandardItemModel
+    QString strChangeScreenTone(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strRemoveObjectFromMap(SystemCommonObject *object,
+    QString strRemoveObjectFromMap(QStandardItemModel *properties,
         QStandardItemModel *parameters) const;
-    QString strAllowForbidSaves(SystemCommonObject *object, QStandardItemModel
+    QString strAllowForbidSaves(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strAllowForbidMainMenu(SystemCommonObject *object,
+    QString strAllowForbidMainMenu(QStandardItemModel *properties,
         QStandardItemModel *parameters) const;
     QString strCallACommonReaction() const;
-    QString strLabel(bool jump, SystemCommonObject *object, QStandardItemModel
+    QString strLabel(bool jump, QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
     QString strComment() const;
-    QString strChangeAStatistic(SystemCommonObject *object, QStandardItemModel
+    QString strChangeAStatistic(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strChangeASkill(SystemCommonObject *object, QStandardItemModel
+    QString strChangeASkill(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
     QString strOperationLearnForget(int &i) const;
-    QString strChangeName(SystemCommonObject *object, QStandardItemModel
+    QString strChangeName(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strChangeEquipment(SystemCommonObject *object, QStandardItemModel
+    QString strChangeEquipment(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strModifyCurrency(SystemCommonObject *object, QStandardItemModel
+    QString strModifyCurrency(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strDisplayAnAnimation(SystemCommonObject *object, QStandardItemModel
+    QString strDisplayAnAnimation(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strShakeScreen(SystemCommonObject *object, QStandardItemModel
+    QString strShakeScreen(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strFlashScreen(SystemCommonObject *object, QStandardItemModel
+    QString strFlashScreen(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strPlugin(SystemCommonObject *object, QStandardItemModel
+    QString strPlugin(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strStartShopMenu(SystemCommonObject *object, QStandardItemModel
+    QString strStartShopMenu(QStandardItemModel *properties, QStandardItemModel
         *parameters, bool isRestock = false) const;
-    QString strEnterANameMenu(SystemCommonObject *object, QStandardItemModel
+    QString strEnterANameMenu(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
-    QString strCreateObjectInMap(SystemCommonObject *object, QStandardItemModel
+    QString strCreateObjectInMap(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
 };
 
