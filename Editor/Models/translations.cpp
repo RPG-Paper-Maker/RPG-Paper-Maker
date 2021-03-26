@@ -1274,6 +1274,7 @@ const QString Translations::SET_NUMBER = "set.number";
 const QString Translations::FINAL_POSITION_OFFSET = "final.position.offset";
 const QString Translations::CHANGE_STATUS = "change.status";
 const QString Translations::STATUS_ID = "status.id";
+const QString Translations::RESET_CAMERA = "reset.camera";
 
 // -------------------------------------------------------
 //

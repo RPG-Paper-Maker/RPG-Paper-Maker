@@ -346,6 +346,7 @@ void DialogCommands::translate() {
     ui->pushButtonEnterANameMenu->setText(EventCommand::kindToString(EventCommandKind::EnterANameMenu));
     ui->pushButtonCreateObjectInMap->setText(EventCommand::kindToString(EventCommandKind::CreateObjectInMap));
     ui->pushButtonCreateObjectInMap->setText(EventCommand::kindToString(EventCommandKind::ChangeStatus));
+    ui->pushButtonResetCamera->setText(EventCommand::kindToString(EventCommandKind::ResetCamera));
     ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
     ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));
     ui->groupBoxMedia->setTitle(RPM::translate(Translations::MEDIA));
@@ -719,4 +720,11 @@ void DialogCommands::on_pushButtonCreateObjectInMap_clicked()
 void DialogCommands::on_pushButtonChangeStatus_clicked()
 {
     this->openDialogCommand(EventCommandKind::ChangeStatus);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonResetCamera_clicked()
+{
+    this->openNonDialogCommand(EventCommandKind::ResetCamera);
 }

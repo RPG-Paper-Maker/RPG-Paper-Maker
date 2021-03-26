@@ -628,6 +628,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::ENTER_A_NAME_MENU) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::CREATE_OBJECT_IN_MAP) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::CHANGE_STATUS) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::RESET_CAMERA),
         ""
     });
     RPM::ENUM_TO_STRING_TARGET_KIND = QStringList({

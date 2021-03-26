@@ -136,7 +136,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonResetCamera">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Reset camera</string>

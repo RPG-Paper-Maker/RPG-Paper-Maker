@@ -112,6 +112,7 @@ private slots:
     void on_pushButtonEnterANameMenu_clicked();
     void on_pushButtonCreateObjectInMap_clicked();
     void on_pushButtonChangeStatus_clicked();
+    void on_pushButtonResetCamera_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

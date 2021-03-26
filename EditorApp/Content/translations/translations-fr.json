@@ -1253,5 +1253,6 @@
     "set.number": "Modifier un nombre",
     "final.position.offset": "Décallage de la position finale",
     "change.status": "Changer le status",
-    "status.id": "Status d'ID"
+    "status.id": "Status d'ID",
+    "reset.camera": "Réinitialiser la caméra"
 }

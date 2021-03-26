@@ -1287,6 +1287,7 @@ public:
     static const QString FINAL_POSITION_OFFSET;
     static const QString CHANGE_STATUS;
     static const QString STATUS_ID;
+    static const QString RESET_CAMERA;
 
     Translations();
     virtual ~Translations();

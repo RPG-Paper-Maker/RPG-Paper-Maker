@@ -85,6 +85,7 @@ enum class EventCommandKind {
     EnterANameMenu,
     CreateObjectInMap,
     ChangeStatus,
+    ResetCamera,
     Last
 };
 

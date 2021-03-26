@@ -315,6 +315,8 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
         str += this->strCreateObjectInMap(properties, parameters); break;
     case EventCommandKind::ChangeStatus:
         str += this->strChangeStatus(properties, parameters); break;
+    case EventCommandKind::ResetCamera:
+        str += RPM::translate(Translations::RESET_CAMERA); break;
     default:
         break;
     }

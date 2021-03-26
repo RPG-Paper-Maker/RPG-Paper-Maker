@@ -1253,5 +1253,6 @@
     "set.number": "Set number",
     "final.position.offset": "Final position offset",
     "change.status": "Change status",
-    "status.id": "Status ID"
+    "status.id": "Status ID",
+    "reset.camera": "Reset camera"
 }
