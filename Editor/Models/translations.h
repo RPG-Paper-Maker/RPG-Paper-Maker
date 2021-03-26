@@ -1288,6 +1288,8 @@ public:
     static const QString CHANGE_STATUS;
     static const QString STATUS_ID;
     static const QString RESET_CAMERA;
+    static const QString STOCK_VALUE_IN_VARIABLE_ID;
+    static const QString DIGITS;
 
     Translations();
     virtual ~Translations();

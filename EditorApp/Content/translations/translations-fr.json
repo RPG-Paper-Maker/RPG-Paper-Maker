@@ -1254,5 +1254,7 @@
     "final.position.offset": "Décallage de la position finale",
     "change.status": "Changer le status",
     "status.id": "Status d'ID",
-    "reset.camera": "Réinitialiser la caméra"
+    "reset.camera": "Réinitialiser la caméra",
+    "stock.value.in.variable.id": "Stocker la valeur dans la variable d'ID",
+    "digits": "Chiffres"
 }

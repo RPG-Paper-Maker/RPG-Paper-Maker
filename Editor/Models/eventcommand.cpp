@@ -204,7 +204,7 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::WhileBreak:
         str += RPM::translate(Translations::BREAK_LOOP); break;
     case EventCommandKind::InputNumber:
-        str += strInputNumber(); break;
+        str += strInputNumber(properties, parameters); break;
     case EventCommandKind::If:
         str += strCondition(properties, parameters); break;
     case EventCommandKind::Else:
@@ -560,10 +560,16 @@ QString EventCommand::strChangeVariablesOperation(int &i) const {
 
 // -------------------------------------------------------
 
-QString EventCommand::strInputNumber() const {
-    return RPM::translate(Translations::INPUT_NUMBER_IN_VARIABLE) + RPM::SPACE +
-        RPM::get()->project()->gameDatas()->variablesDatas()->getVariableById(
-        m_listCommand.at(0).toInt())->toString();
+QString EventCommand::strInputNumber(QStandardItemModel *properties,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    QString stockVariable = this->strProperty(i, properties, parameters);
+    QString digits = this->strProperty(i, properties, parameters);
+    return RPM::translate(Translations::INPUT_NUMBER) + RPM::COLON + RPM::SPACE +
+        RPM::translate(Translations::STOCK_VALUE_IN_VARIABLE_ID) + RPM::SPACE +
+        stockVariable + RPM::COMMA + RPM::SPACE + RPM::translate(Translations
+        ::DIGITS) + RPM::SPACE + digits;
 }
 
 // -------------------------------------------------------

@@ -1254,5 +1254,7 @@
     "final.position.offset": "Final position offset",
     "change.status": "Change status",
     "status.id": "Status ID",
-    "reset.camera": "Reset camera"
+    "reset.camera": "Reset camera",
+    "stock.value.in.variable.id": "Stock value in variable ID",
+    "digits": "Digits"
 }

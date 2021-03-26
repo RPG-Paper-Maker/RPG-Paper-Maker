@@ -33,17 +33,20 @@ class DialogCommandInputNumber : public DialogCommand
 
 public:
     explicit DialogCommandInputNumber(EventCommand *command = nullptr,
-                                      QWidget *parent = 0);
+        QStandardItemModel *properties = nullptr, QStandardItemModel *parameters
+        = nullptr, QWidget *parent = nullptr);
     virtual ~DialogCommandInputNumber();
-    EventCommand* getCommand() const;
 
-protected:
-    virtual void initialize(EventCommand* command);
+    void initializePrimitives();
+    void translate();
+
+    virtual EventCommand * getCommand() const;
+    virtual void initialize(EventCommand *command);
 
 private:
     Ui::DialogCommandInputNumber *ui;
-
-    void translate();
+    QStandardItemModel *m_properties;
+    QStandardItemModel *m_parameters;
 };
 
 #endif // DIALOGINPUTNUMBER_H

@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>78</height>
+    <width>431</width>
+    <height>128</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Input number</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout_2">
    <property name="leftMargin">
     <number>15</number>
    </property>
@@ -27,36 +27,93 @@
     <number>10</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
+     <property name="spacing">
+      <number>15</number>
+     </property>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="labelVariableAssigment">
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelStockInVariableID">
          <property name="text">
-          <string>Variable assignment:</string>
-         </property>
-         <property name="buddy">
-          <cstring>widgetVariable</cstring>
+          <string>Stock in variable ID:</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="WidgetVariable" name="widgetVariable" native="true"/>
+       <item row="0" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="PanelPrimitiveValue" name="panelPrimitiveStockVariableID" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>250</width>
+             <height>27</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>250</width>
+             <height>27</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>18</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelDigits">
+         <property name="text">
+          <string>Digits:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="PanelPrimitiveValue" name="panelPrimitiveDigits" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>250</width>
+             <height>27</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>250</width>
+             <height>27</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
       </layout>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
@@ -74,9 +131,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetVariable</class>
+   <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
-   <header>widgetvariable.h</header>
+   <header>panelprimitivevalue.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

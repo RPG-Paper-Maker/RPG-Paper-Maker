@@ -82,7 +82,8 @@ private:
     QString strChangeVariables(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
     QString strChangeVariablesOperation(int &i) const;
-    QString strInputNumber() const;
+    QString strInputNumber(QStandardItemModel *properties, QStandardItemModel
+        *parameters) const;
     QString strCondition(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
     QString strConditionPageVariables(QStandardItemModel *properties,
