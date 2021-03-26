@@ -313,6 +313,8 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
         str += this->strEnterANameMenu(properties, parameters); break;
     case EventCommandKind::CreateObjectInMap:
         str += this->strCreateObjectInMap(properties, parameters); break;
+    case EventCommandKind::ChangeStatus:
+        str += this->strChangeStatus(properties, parameters); break;
     default:
         break;
     }
@@ -2045,6 +2047,23 @@ QString EventCommand::strOperationLearnForget(int &i) const
 
 // -------------------------------------------------------
 
+QString EventCommand::strOperationAddRemove(int &i) const
+{
+    QString str;
+    switch (m_listCommand.at(i++).toInt())
+    {
+    case 0:
+        str += RPM::translate(Translations::ADD);
+        break;
+    case 1:
+        str += RPM::translate(Translations::REMOVE);
+        break;
+    }
+    return str;
+}
+
+// -------------------------------------------------------
+
 QString EventCommand::strChangeName(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
@@ -2311,6 +2330,32 @@ QString EventCommand::strCreateObjectInMap(QStandardItemModel *properties, QStan
         ::SPACE + RPM::translate(Translations::NEW_OBJECT_MODEL_ID) + RPM::COLON
         + RPM::SPACE + strModelID + RPM::SPACE + strStockID + RPM::translate(
         Translations::TO_THE_COORDINATES).toLower() + RPM::NEW_LINE + strPosition;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChangeStatus(QStandardItemModel *properties,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    QString selection;
+    switch (m_listCommand.at(i++).toInt())
+    {
+    case 0:
+        selection += RPM::translate(Translations::HERO_ENEMY_INSTANCE_ID) + RPM
+            ::SPACE + this->strProperty(i, properties, parameters);
+        break;
+    case 1:
+        selection += RPM::translate(Translations::THE_ENTIRE) + RPM::SPACE + RPM
+            ::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++).toInt());
+        break;
+    }
+    QString operation = this->strOperationAddRemove(i);
+    QString status = RPM::translate(Translations::STATUS_ID) + RPM::SPACE
+        + this->strDataBaseId(i, properties, RPM::get()->project()->gameDatas()
+        ->statusDatas()->model(), parameters);
+    return RPM::translate(Translations::CHANGE_STATUS) + RPM::COLON + RPM::SPACE
+        + operation + RPM::SPACE + status + RPM::SPACE + selection;
 }
 
 // -------------------------------------------------------

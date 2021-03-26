@@ -1285,6 +1285,8 @@ public:
     static const QString CHANGE_FREQUENCY;
     static const QString SET_NUMBER;
     static const QString FINAL_POSITION_OFFSET;
+    static const QString CHANGE_STATUS;
+    static const QString STATUS_ID;
 
     Translations();
     virtual ~Translations();

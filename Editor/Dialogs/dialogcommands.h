@@ -111,6 +111,7 @@ private slots:
     void on_pushButtonRestockShop_clicked();
     void on_pushButtonEnterANameMenu_clicked();
     void on_pushButtonCreateObjectInMap_clicked();
+    void on_pushButtonChangeStatus_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

@@ -84,6 +84,7 @@ enum class EventCommandKind {
     RestockShop,
     EnterANameMenu,
     CreateObjectInMap,
+    ChangeStatus,
     Last
 };
 

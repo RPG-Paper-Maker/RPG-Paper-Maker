@@ -52,6 +52,7 @@
 #include "dialogcommandstartshopmenu.h"
 #include "dialogcommandenteranamemenu.h"
 #include "dialogcommandcreateobjectinmap.h"
+#include "dialogcommandchangestatus.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -206,6 +207,8 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandEnterANameMenu(command, properties, parameters);
     case EventCommandKind::CreateObjectInMap:
         return new DialogCommandCreateObjectInMap(command, properties, parameters);
+    case EventCommandKind::ChangeStatus:
+        return new DialogCommandChangeStatus(command, properties, parameters);
     default:
         return nullptr;
     }
@@ -342,6 +345,7 @@ void DialogCommands::translate() {
     ui->pushButtonRestockShop->setText(EventCommand::kindToString(EventCommandKind::RestockShop));
     ui->pushButtonEnterANameMenu->setText(EventCommand::kindToString(EventCommandKind::EnterANameMenu));
     ui->pushButtonCreateObjectInMap->setText(EventCommand::kindToString(EventCommandKind::CreateObjectInMap));
+    ui->pushButtonCreateObjectInMap->setText(EventCommand::kindToString(EventCommandKind::ChangeStatus));
     ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
     ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));
     ui->groupBoxMedia->setTitle(RPM::translate(Translations::MEDIA));
@@ -703,7 +707,16 @@ void DialogCommands::on_pushButtonEnterANameMenu_clicked()
     this->openDialogCommand(EventCommandKind::EnterANameMenu);
 }
 
+// -------------------------------------------------------
+
 void DialogCommands::on_pushButtonCreateObjectInMap_clicked()
 {
     this->openDialogCommand(EventCommandKind::CreateObjectInMap);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonChangeStatus_clicked()
+{
+    this->openDialogCommand(EventCommandKind::ChangeStatus);
 }

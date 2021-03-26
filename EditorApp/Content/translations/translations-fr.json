@@ -131,7 +131,7 @@
 	"armors": "Armures",
 	"skills": "Compétences",
 	"animations": "Animations",
-	"status": "Statuts",
+	"status": "Status",
 	"monsters.list": "Liste de monstres",
 	"picture": "Image",
 	"position": "Position",
@@ -1251,5 +1251,7 @@
     "change.speed": "Changer la vitesse",
     "change.frequency": "Changer la fréquence",
     "set.number": "Modifier un nombre",
-    "final.position.offset": "Décallage de la position finale"
+    "final.position.offset": "Décallage de la position finale",
+    "change.status": "Changer le status",
+    "status.id": "Status d'ID"
 }

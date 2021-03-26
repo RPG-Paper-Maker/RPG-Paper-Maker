@@ -1251,5 +1251,7 @@
     "change.speed": "Change speed",
     "change.frequency": "Change frequency",
     "set.number": "Set number",
-    "final.position.offset": "Final position offset"
+    "final.position.offset": "Final position offset",
+    "change.status": "Change status",
+    "status.id": "Status ID"
 }

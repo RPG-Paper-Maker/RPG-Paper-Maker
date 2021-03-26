@@ -179,6 +179,7 @@ private:
     QString strChangeASkill(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
     QString strOperationLearnForget(int &i) const;
+    QString strOperationAddRemove(int &i) const;
     QString strChangeName(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
     QString strChangeEquipment(QStandardItemModel *properties, QStandardItemModel
@@ -198,6 +199,8 @@ private:
     QString strEnterANameMenu(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
     QString strCreateObjectInMap(QStandardItemModel *properties, QStandardItemModel
+        *parameters) const;
+    QString strChangeStatus(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
 };
 
