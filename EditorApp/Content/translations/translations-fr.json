@@ -1256,5 +1256,7 @@
     "status.id": "Status d'ID",
     "reset.camera": "Réinitialiser la caméra",
     "stock.value.in.variable.id": "Stocker la valeur dans la variable d'ID",
-    "digits": "Chiffres"
+    "digits": "Chiffres",
+    "change.battle.music": "Changer la musique de combat",
+    "change.victory.music": "Changer la musique de victoire"
 }

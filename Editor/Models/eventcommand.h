@@ -203,6 +203,10 @@ private:
         *parameters) const;
     QString strChangeStatus(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
+    QString strChangeBattleMusic(QStandardItemModel *properties, QStandardItemModel
+        *parameters) const;
+    QString strChangeVictoryMusic(QStandardItemModel *properties, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

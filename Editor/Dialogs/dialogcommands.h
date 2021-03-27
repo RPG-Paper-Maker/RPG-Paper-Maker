@@ -113,6 +113,8 @@ private slots:
     void on_pushButtonCreateObjectInMap_clicked();
     void on_pushButtonChangeStatus_clicked();
     void on_pushButtonResetCamera_clicked();
+    void on_pushButtonChangeBattleMusic_clicked();
+    void on_pushButtonChangeVictoryMusic_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

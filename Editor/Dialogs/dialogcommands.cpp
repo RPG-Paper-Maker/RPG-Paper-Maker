@@ -209,6 +209,14 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandCreateObjectInMap(command, properties, parameters);
     case EventCommandKind::ChangeStatus:
         return new DialogCommandChangeStatus(command, properties, parameters);
+    case EventCommandKind::ChangeBattleMusic:
+        return new DialogCommandPlaySong(RPM::translate(Translations
+            ::CHANGE_BATTLE_MUSIC), SongKind::Music, command, properties,
+            parameters, EventCommandKind::ChangeBattleMusic);
+    case EventCommandKind::ChangeVictoryMusic:
+        return new DialogCommandPlaySong(RPM::translate(Translations
+            ::CHANGE_VICTORY_MUSIC), SongKind::Music, command, properties,
+            parameters, EventCommandKind::ChangeVictoryMusic);
     default:
         return nullptr;
     }
@@ -347,6 +355,8 @@ void DialogCommands::translate() {
     ui->pushButtonCreateObjectInMap->setText(EventCommand::kindToString(EventCommandKind::CreateObjectInMap));
     ui->pushButtonCreateObjectInMap->setText(EventCommand::kindToString(EventCommandKind::ChangeStatus));
     ui->pushButtonResetCamera->setText(EventCommand::kindToString(EventCommandKind::ResetCamera));
+    ui->pushButtonChangeBattleMusic->setText(EventCommand::kindToString(EventCommandKind::ChangeBattleMusic));
+    ui->pushButtonChangeVictoryMusic->setText(EventCommand::kindToString(EventCommandKind::ChangeVictoryMusic));
     ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
     ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));
     ui->groupBoxMedia->setTitle(RPM::translate(Translations::MEDIA));
@@ -727,4 +737,18 @@ void DialogCommands::on_pushButtonChangeStatus_clicked()
 void DialogCommands::on_pushButtonResetCamera_clicked()
 {
     this->openNonDialogCommand(EventCommandKind::ResetCamera);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonChangeBattleMusic_clicked()
+{
+    this->openDialogCommand(EventCommandKind::ChangeBattleMusic);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonChangeVictoryMusic_clicked()
+{
+    this->openDialogCommand(EventCommandKind::ChangeVictoryMusic);
 }

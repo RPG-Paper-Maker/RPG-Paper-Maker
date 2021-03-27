@@ -86,6 +86,8 @@ enum class EventCommandKind {
     CreateObjectInMap,
     ChangeStatus,
     ResetCamera,
+    ChangeBattleMusic,
+    ChangeVictoryMusic,
     Last
 };
 

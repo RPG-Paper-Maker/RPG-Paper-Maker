@@ -317,6 +317,10 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
         str += this->strChangeStatus(properties, parameters); break;
     case EventCommandKind::ResetCamera:
         str += RPM::translate(Translations::RESET_CAMERA); break;
+    case EventCommandKind::ChangeBattleMusic:
+        str += this->strChangeBattleMusic(properties, parameters); break;
+    case EventCommandKind::ChangeVictoryMusic:
+        str += this->strChangeVictoryMusic(properties, parameters); break;
     default:
         break;
     }
@@ -2364,6 +2368,24 @@ QString EventCommand::strChangeStatus(QStandardItemModel *properties,
         ->statusDatas()->model(), parameters);
     return RPM::translate(Translations::CHANGE_STATUS) + RPM::COLON + RPM::SPACE
         + operation + RPM::SPACE + status + RPM::SPACE + selection;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChangeBattleMusic(QStandardItemModel *properties,
+    QStandardItemModel *parameters) const
+{
+    return RPM::translate(Translations::CHANGE_BATTLE_MUSIC) + RPM::COLON + RPM
+        ::SPACE + this->strPlaySong(properties, parameters, SongKind::Music);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChangeVictoryMusic(QStandardItemModel *properties,
+    QStandardItemModel *parameters) const
+{
+    return RPM::translate(Translations::CHANGE_VICTORY_MUSIC) + RPM::COLON + RPM
+        ::SPACE + this->strPlaySong(properties, parameters, SongKind::Music);
 }
 
 // -------------------------------------------------------

@@ -1290,6 +1290,8 @@ public:
     static const QString RESET_CAMERA;
     static const QString STOCK_VALUE_IN_VARIABLE_ID;
     static const QString DIGITS;
+    static const QString CHANGE_BATTLE_MUSIC;
+    static const QString CHANGE_VICTORY_MUSIC;
 
     Translations();
     virtual ~Translations();

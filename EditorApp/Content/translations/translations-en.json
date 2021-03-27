@@ -1256,5 +1256,7 @@
     "status.id": "Status ID",
     "reset.camera": "Reset camera",
     "stock.value.in.variable.id": "Stock value in variable ID",
-    "digits": "Digits"
+    "digits": "Digits",
+    "change.battle.music": "Change battle music",
+    "change.victory.music": "Change victory music"
 }

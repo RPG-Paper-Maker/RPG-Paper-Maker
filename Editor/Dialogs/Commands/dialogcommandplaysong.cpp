@@ -21,9 +21,10 @@
 
 DialogCommandPlaySong::DialogCommandPlaySong(QString title, SongKind kind,
     EventCommand *command, QStandardItemModel *properties, QStandardItemModel
-    *parameters, QWidget *parent) :
+    *parameters, EventCommandKind eventCommandKind, QWidget *parent) :
     DialogCommand(parent),
     m_kind(kind),
+    m_eventCommandKind(eventCommandKind),
     m_song(nullptr),
     ui(new Ui::DialogCommandPlaySong)
 {
@@ -48,27 +49,8 @@ DialogCommandPlaySong::DialogCommandPlaySong(QString title, SystemPlaySong
     DialogCommandPlaySong(title, song->kind())
 {
     EventCommand command;
-    EventCommandKind commandKind;
-
     m_song = song;
-    switch (m_kind) {
-    case SongKind::Music:
-        commandKind = EventCommandKind::PlayMusic;
-        break;
-    case SongKind::BackgroundSound:
-        commandKind = EventCommandKind::PlayBackgroundSound;
-        break;
-    case SongKind::Sound:
-        commandKind = EventCommandKind::PlayASound;
-        break;
-    case SongKind::MusicEffect:
-        commandKind = EventCommandKind::PlayMusicEffect;
-        break;
-    default:
-        commandKind = EventCommandKind::None;
-    }
-
-    song->toEventCommand(command, commandKind);
+    song->toEventCommand(command, this->getCommandKind());
     initialize(&command);
 }
 
@@ -76,23 +58,26 @@ DialogCommandPlaySong::~DialogCommandPlaySong() {
     delete ui;
 }
 
-EventCommandKind DialogCommandPlaySong::getCommandKind() const {
-    switch(m_kind) {
-    case SongKind::Music:
-        return EventCommandKind::PlayMusic;
-    case SongKind::BackgroundSound:
-        return EventCommandKind::PlayBackgroundSound;
-    case SongKind::Sound:
-        return EventCommandKind::PlayASound;
-    case SongKind::MusicEffect:
-        return EventCommandKind::PlayMusicEffect;
-    case SongKind::None:
-        return EventCommandKind::None;
-    default:
-        break;
+EventCommandKind DialogCommandPlaySong::getCommandKind() const
+{
+    if (m_eventCommandKind == EventCommandKind::None)
+    {
+        switch(m_kind) {
+        case SongKind::Music:
+            return EventCommandKind::PlayMusic;
+        case SongKind::BackgroundSound:
+            return EventCommandKind::PlayBackgroundSound;
+        case SongKind::Sound:
+            return EventCommandKind::PlayASound;
+        case SongKind::MusicEffect:
+            return EventCommandKind::PlayMusicEffect;
+        default:
+            return EventCommandKind::None;
+        }
+    } else
+    {
+        return m_eventCommandKind;
     }
-
-    return EventCommandKind::None;
 }
 
 // -------------------------------------------------------

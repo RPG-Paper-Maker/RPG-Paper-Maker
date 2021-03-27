@@ -34,7 +34,8 @@ class DialogCommandPlaySong : public DialogCommand
 public:
     explicit DialogCommandPlaySong(QString title, SongKind kind, EventCommand
         *command = nullptr, QStandardItemModel *properties = nullptr,
-        QStandardItemModel *parameters = nullptr, QWidget *parent = nullptr);
+        QStandardItemModel *parameters = nullptr, EventCommandKind
+        eventCommandKind = EventCommandKind::None, QWidget *parent = nullptr);
     explicit DialogCommandPlaySong(QString title, SystemPlaySong *song);
     ~DialogCommandPlaySong();
 
@@ -45,6 +46,7 @@ public:
 
 protected:
     SongKind m_kind;
+    EventCommandKind m_eventCommandKind;
     SystemPlaySong *m_song;
 
     virtual void initialize(EventCommand *command);
