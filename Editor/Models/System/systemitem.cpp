@@ -27,12 +27,13 @@ SystemItem::SystemItem(int i, QString name, int pictureID, int type, bool
     consumable, SystemTranslatable *description, TargetKind targetKind, PrimitiveValue
     *targetConditionFormula, AvailableKind availableKind, SystemPlaySong *sound,
     PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
-    QStandardItemModel *price, QStandardItemModel *modelEffects) :
+    PrimitiveValue *canBeSold, QStandardItemModel *price, QStandardItemModel
+    *modelEffects) :
     SystemCommonSkillItem (i, name, pictureID, type, consumable, true,
         description, targetKind, targetConditionFormula, new PrimitiveValue(
         PrimitiveValueKind::None), availableKind, sound, animationUserID,
-        animationTargetID, price, new QStandardItemModel, modelEffects, new
-        QStandardItemModel)
+        animationTargetID, canBeSold, price, new QStandardItemModel,
+        modelEffects, new QStandardItemModel)
 {
 
 }

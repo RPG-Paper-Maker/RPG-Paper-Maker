@@ -128,8 +128,8 @@ void ItemsDatas::setDefault() {
             new SystemTranslatable(-1, descriptions[i]), targetsKind[i], new
             PrimitiveValue(targetConditionsFormulas[i]), availablesKind[i], new
             SystemPlaySong(songsID[i], SongKind::Sound), new PrimitiveValue(
-            PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind
-            ::None), modelPrice, modelEffects);
+            PrimitiveValueKind::None), new PrimitiveValue(true), new
+            PrimitiveValue(PrimitiveValueKind::None), modelPrice, modelEffects);
         m_model->appendRow(sys->getModelRow());
     }
 }

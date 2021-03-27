@@ -43,6 +43,7 @@ public:
     static const QString JSON_SOUND;
     static const QString JSON_ANIMATION_USER_ID;
     static const QString JSON_ANIMATION_TARGET_ID;
+    static const QString JSON_CAN_BE_SOLD;
     static const QString JSON_PRICE;
     static const QString JSON_COSTS;
     static const QString JSON_EFFECTS;
@@ -54,9 +55,9 @@ public:
         TargetKind targetKind, PrimitiveValue *targetConditionFormula,
         PrimitiveValue *conditionFormula, AvailableKind availableKind,
         SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
-        *animationTargetID, QStandardItemModel *modelPrice, QStandardItemModel
-        *modelCosts, QStandardItemModel *modelEffects, QStandardItemModel
-        *modelCharacteristics);
+        *animationTargetID, PrimitiveValue *canBeSold, QStandardItemModel
+        *modelPrice, QStandardItemModel *modelCosts, QStandardItemModel
+        *modelEffects, QStandardItemModel *modelCharacteristics);
     virtual ~SystemCommonSkillItem();
     int type() const;
     void setType(int t);
@@ -74,6 +75,7 @@ public:
     SystemPlaySong * sound() const;
     PrimitiveValue * animationUserID() const;
     PrimitiveValue * animationTargetID() const;
+    PrimitiveValue * canBeSold() const;
     QStandardItemModel * modelPrice() const;
     QStandardItemModel * modelCosts() const;
     QStandardItemModel * modelEffects() const;
@@ -98,6 +100,7 @@ protected:
     SystemPlaySong *m_sound;
     PrimitiveValue *m_animationUserID;
     PrimitiveValue *m_animationTargetID;
+    PrimitiveValue *m_canBeSold;
     QStandardItemModel *m_modelPrice;
     QStandardItemModel *m_modelCosts;
     QStandardItemModel *m_modelEffects;

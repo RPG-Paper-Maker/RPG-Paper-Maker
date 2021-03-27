@@ -30,7 +30,8 @@ public:
         SystemTranslatable *description, TargetKind targetKind, PrimitiveValue
         *conditionFormula, AvailableKind availableKind, SystemPlaySong *sound,
         PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
-        QStandardItemModel *price, QStandardItemModel *modelEffects);
+        PrimitiveValue *canBeSold, QStandardItemModel *price, QStandardItemModel
+        *modelEffects);
     virtual ~SystemItem();
 
     virtual void read(const QJsonObject &json);

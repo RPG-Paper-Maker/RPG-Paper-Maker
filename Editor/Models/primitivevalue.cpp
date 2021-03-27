@@ -218,6 +218,13 @@ PrimitiveValue * PrimitiveValue::createDefaultMessageValue() {
 
 // -------------------------------------------------------
 
+PrimitiveValue * PrimitiveValue::createDefaultSwitchValue()
+{
+    return new PrimitiveValue(true);
+}
+
+// -------------------------------------------------------
+
 QString PrimitiveValue::toString() const {
     switch (m_kind) {
     case PrimitiveValueKind::Default:
@@ -384,11 +391,17 @@ bool PrimitiveValue::isDefaultNumberDoubleValue() const {
         0.0;
 }
 
-
 // -------------------------------------------------------
 
 bool PrimitiveValue::isDefaultMessageValue() const {
     return m_kind == PrimitiveValueKind::Message && m_messageValue.isEmpty();
+}
+
+// -------------------------------------------------------
+
+bool PrimitiveValue::isDefaultSwitchValue() const
+{
+    return m_kind == PrimitiveValueKind::Switch && m_switchValue;
 }
 
 // -------------------------------------------------------

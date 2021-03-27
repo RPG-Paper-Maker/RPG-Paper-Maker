@@ -31,8 +31,8 @@ SystemSkill::SystemSkill(int i, QString name, int pictureID,
     QStandardItemModel *modelCosts, QStandardItemModel *modelEffects) :
     SystemCommonSkillItem(i, name, pictureID, 1, false, true, description,
         targetKind, targetConditionFormula, conditionFormula, availableKind,
-        sound, animationUserID, animationTargetID, new QStandardItemModel,
-        modelCosts, modelEffects, new QStandardItemModel)
+        sound, animationUserID, animationTargetID, new PrimitiveValue(true), new
+        QStandardItemModel, modelCosts, modelEffects, new QStandardItemModel)
 {
 
 }

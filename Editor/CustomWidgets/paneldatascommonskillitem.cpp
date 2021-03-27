@@ -67,20 +67,19 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
     ui->treeViewCharacteristics->initializeNewItemInstance(new SystemCharacteristic);
     ui->comboBoxTarget->addItems(RPM::ENUM_TO_STRING_TARGET_KIND);
     ui->comboBoxAvailable->addItems(RPM::ENUM_TO_STRING_AVAILABLE_KIND);
-
+    initializeCommonSkill();
     switch (m_kind) {
     case CommonSkillItemKind::Skill:
-        initializeCommonSkill();
         ui->checkBoxOneHand->hide();
         ui->groupBoxCharacteristics->hide();
         ui->labelType->hide();
         ui->comboBoxType->hide();
         ui->checkBoxConsumable->hide();
         ui->groupBoxPrice->hide();
+        ui->labelCanBeSold->hide();
+        ui->panelPrimitiveCanBeSold->hide();
         break;
     case CommonSkillItemKind::Item:
-        initializeCommonSkill();
-
         ui->checkBoxOneHand->hide();
         ui->groupBoxCharacteristics->hide();
         ui->groupBoxCosts->hide();
@@ -108,8 +107,6 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
         SuperListItem::fillComboBox(ui->comboBoxType, getTypeModel());
         break;
     case CommonSkillItemKind::Weapon:
-        initializeCommonSkill();
-
         SuperListItem::fillComboBox(ui->comboBoxType, getTypeModel());
         ui->checkBoxConsumable->hide();
         ui->labelAvailable->hide();
@@ -152,6 +149,8 @@ void PanelDatasCommonSkillItem::update(SystemCommonSkillItem *model) {
     ui->panelPrimitiveValueAnimationTarget->initializeModel(m_model
         ->animationTargetID());
     ui->panelPrimitiveValueAnimationTarget->updateModel();
+    ui->panelPrimitiveCanBeSold->initializeModel(m_model->canBeSold());
+    ui->panelPrimitiveCanBeSold->updateModel();
     ui->treeViewPrice->initializeModel(m_model->modelPrice());
     ui->treeViewCost->initializeModel(m_model->modelCosts());
     ui->treeViewEffects->initializeModel(m_model->modelEffects());
@@ -201,6 +200,7 @@ void PanelDatasCommonSkillItem::initializeCommonSkill() {
     ui->panelPrimitiveValueAnimationTarget->initializeDataBaseCommandId(RPM
         ::get()->project()->gameDatas()->animationsDatas()->model(), nullptr
         , nullptr);
+    ui->panelPrimitiveCanBeSold->initializeSwitch(nullptr, nullptr);
 }
 
 // -------------------------------------------------------
@@ -242,6 +242,8 @@ void PanelDatasCommonSkillItem::translate()
         ::TARGET_ANIMATION_ID) + RPM::COLON);
     ui->labelTargetConditions->setText(RPM::translate(Translations
         ::TARGET_CONDITIONS_FORMULA) + RPM::COLON);
+    ui->labelCanBeSold->setText(RPM::translate(Translations::CAN_BE_SOLD) + RPM
+        ::COLON);
     ui->checkBoxConsumable->setText(RPM::translate(Translations::CONSOMABLE));
     ui->checkBoxOneHand->setText(RPM::translate(Translations::ONE_HAND));
     ui->groupBoxPrice->setTitle(RPM::translate(Translations::PRICE));

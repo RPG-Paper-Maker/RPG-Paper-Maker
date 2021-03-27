@@ -1259,5 +1259,6 @@
     "digits": "Chiffres",
     "change.battle.music": "Changer la musique de combat",
     "change.victory.music": "Changer la musique de victoire",
-    "end.battle": "Finir le combat"
+    "end.battle": "Finir le combat",
+    "can.be.sold": "Peut être vendu"
 }

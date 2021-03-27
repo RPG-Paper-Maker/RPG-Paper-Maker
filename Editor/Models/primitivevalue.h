@@ -70,6 +70,7 @@ public:
     static PrimitiveValue * createDefaultNumberValue();
     static PrimitiveValue * createDefaultNumberDoubleValue();
     static PrimitiveValue * createDefaultMessageValue();
+    static PrimitiveValue * createDefaultSwitchValue();
 
     QString toString() const;
     bool isFixNumberValue() const;
@@ -78,6 +79,7 @@ public:
     bool isDefaultNumberValue(int value = 0) const;
     bool isDefaultNumberDoubleValue() const;
     bool isDefaultMessageValue() const;
+    bool isDefaultSwitchValue() const;
     void initializeCommandParameter(const EventCommand *command, int& i, bool
         active = false);
     void initializeCommands(const QVector<QString> &command, int &i, bool active

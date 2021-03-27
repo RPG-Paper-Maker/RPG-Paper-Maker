@@ -31,8 +31,8 @@ SystemWeapon::SystemWeapon(int i, QString name, int pictureID, int type, bool
     QStandardItemModel *modelCharacteristics) :
     SystemCommonSkillItem(i, name, pictureID, type, false, oneHand, description,
         targetKind, targetConditionFormula, conditionFormula, AvailableKind::Never,
-        new SystemPlaySong(-1, SongKind::Sound), animationUserID,
-        animationTargetID, price, modelCosts, modelEffects, modelCharacteristics)
+        new SystemPlaySong(-1, SongKind::Sound), animationUserID, animationTargetID,
+        new PrimitiveValue(true), price, modelCosts, modelEffects, modelCharacteristics)
 {
 
 }
