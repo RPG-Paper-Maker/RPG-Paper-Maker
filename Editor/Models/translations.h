@@ -1292,6 +1292,7 @@ public:
     static const QString DIGITS;
     static const QString CHANGE_BATTLE_MUSIC;
     static const QString CHANGE_VICTORY_MUSIC;
+    static const QString END_BATTLE;
 
     Translations();
     virtual ~Translations();

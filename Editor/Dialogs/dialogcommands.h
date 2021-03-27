@@ -115,6 +115,7 @@ private slots:
     void on_pushButtonResetCamera_clicked();
     void on_pushButtonChangeBattleMusic_clicked();
     void on_pushButtonChangeVictoryMusic_clicked();
+    void on_pushButtonEndBattle_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

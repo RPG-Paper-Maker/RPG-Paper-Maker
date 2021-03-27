@@ -321,6 +321,8 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
         str += this->strChangeBattleMusic(properties, parameters); break;
     case EventCommandKind::ChangeVictoryMusic:
         str += this->strChangeVictoryMusic(properties, parameters); break;
+    case EventCommandKind::EndBattle:
+        str += RPM::translate(Translations::END_BATTLE); break;
     default:
         break;
     }

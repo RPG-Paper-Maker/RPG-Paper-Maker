@@ -752,3 +752,10 @@ void DialogCommands::on_pushButtonChangeVictoryMusic_clicked()
 {
     this->openDialogCommand(EventCommandKind::ChangeVictoryMusic);
 }
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonEndBattle_clicked()
+{
+    this->openNonDialogCommand(EventCommandKind::EndBattle);
+}

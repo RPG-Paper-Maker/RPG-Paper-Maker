@@ -88,6 +88,7 @@ enum class EventCommandKind {
     ResetCamera,
     ChangeBattleMusic,
     ChangeVictoryMusic,
+    EndBattle,
     Last
 };
 

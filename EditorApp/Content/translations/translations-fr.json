@@ -1258,5 +1258,6 @@
     "stock.value.in.variable.id": "Stocker la valeur dans la variable d'ID",
     "digits": "Chiffres",
     "change.battle.music": "Changer la musique de combat",
-    "change.victory.music": "Changer la musique de victoire"
+    "change.victory.music": "Changer la musique de victoire",
+    "end.battle": "Finir le combat"
 }

@@ -1279,6 +1279,7 @@ const QString Translations::STOCK_VALUE_IN_VARIABLE_ID = "stock.value.in.variabl
 const QString Translations::DIGITS = "digits";
 const QString Translations::CHANGE_BATTLE_MUSIC = "change.battle.music";
 const QString Translations::CHANGE_VICTORY_MUSIC = "change.victory.music";
+const QString Translations::END_BATTLE = "end.battle";
 
 // -------------------------------------------------------
 //
