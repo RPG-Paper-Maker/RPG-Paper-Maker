@@ -1,5 +1,16 @@
 {
-	"add": [],
+	"add": [
+        {
+            "files": [
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Fonts/Default.ttf",
+                    "target": "Engine/Content/BR/Content/Fonts/Default.ttf"
+                }
+            ],
+            "target": "Engine/Content/BR/Content/Fonts"
+        }
+    ],
 	"remove": [],
 	"replace": [],
 	"features": [

@@ -954,6 +954,16 @@
             {
                 "files": [
                     {
+                        "repo": "Basic-Ressources",
+                        "source": "Content/Fonts/Default.ttf",
+                        "target": "Engine/Content/BR/Content/Fonts/Default.ttf"
+                    }
+                ],
+                "target": "Engine/Content/BR/Content/Fonts"
+            },
+            {
+                "files": [
+                    {
                         "files": [
                         ],
                         "target": "Engine/Content/BR/Content/Shapes/Collisions"
@@ -1241,9 +1251,19 @@
                                     {
                                         "files": [
                                             {
+                                                "files": [
+                                                ],
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0002/temp"
+                                            },
+                                            {
                                                 "repo": "RPG-Paper-Maker",
                                                 "source": "EditorApp/Content/example/Datas/Maps/MAP0002/0_0_0.json",
                                                 "target": "Engine/Content/example/Datas/Maps/MAP0002/0_0_0.json"
+                                            },
+                                            {
+                                                "files": [
+                                                ],
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0002/tempUndoRedo"
                                             },
                                             {
                                                 "repo": "RPG-Paper-Maker",
@@ -1305,6 +1325,11 @@
                                     },
                                     {
                                         "files": [
+                                            {
+                                                "files": [
+                                                ],
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/temp"
+                                            },
                                             {
                                                 "repo": "RPG-Paper-Maker",
                                                 "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_-1_3.json",
@@ -1411,6 +1436,11 @@
                                                 "target": "Engine/Content/example/Datas/Maps/MAP0003/2_0_2.json"
                                             },
                                             {
+                                                "files": [
+                                                ],
+                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/tempUndoRedo"
+                                            },
+                                            {
                                                 "repo": "RPG-Paper-Maker",
                                                 "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_0_1.json",
                                                 "target": "Engine/Content/example/Datas/Maps/MAP0003/2_0_1.json"
@@ -1495,6 +1525,11 @@
                                 "repo": "RPG-Paper-Maker",
                                 "source": "EditorApp/Content/example/Datas/system.json",
                                 "target": "Engine/Content/example/Datas/system.json"
+                            },
+                            {
+                                "repo": "RPG-Paper-Maker",
+                                "source": "EditorApp/Content/example/Datas/fonts.json",
+                                "target": "Engine/Content/example/Datas/fonts.json"
                             },
                             {
                                 "repo": "RPG-Paper-Maker",
@@ -2638,9 +2673,19 @@
                             {
                                 "files": [
                                     {
+                                        "files": [
+                                        ],
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0002/temp"
+                                    },
+                                    {
                                         "repo": "RPG-Paper-Maker",
                                         "source": "EditorApp/Content/example/Datas/Maps/MAP0002/0_0_0.json",
                                         "target": "Engine/Content/example/Datas/Maps/MAP0002/0_0_0.json"
+                                    },
+                                    {
+                                        "files": [
+                                        ],
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0002/tempUndoRedo"
                                     },
                                     {
                                         "repo": "RPG-Paper-Maker",
@@ -2702,6 +2747,11 @@
                             },
                             {
                                 "files": [
+                                    {
+                                        "files": [
+                                        ],
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/temp"
+                                    },
                                     {
                                         "repo": "RPG-Paper-Maker",
                                         "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_-1_3.json",
@@ -2808,6 +2858,11 @@
                                         "target": "Engine/Content/example/Datas/Maps/MAP0003/2_0_2.json"
                                     },
                                     {
+                                        "files": [
+                                        ],
+                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/tempUndoRedo"
+                                    },
+                                    {
                                         "repo": "RPG-Paper-Maker",
                                         "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_0_1.json",
                                         "target": "Engine/Content/example/Datas/Maps/MAP0003/2_0_1.json"
@@ -2892,6 +2947,11 @@
                         "repo": "RPG-Paper-Maker",
                         "source": "EditorApp/Content/example/Datas/system.json",
                         "target": "Engine/Content/example/Datas/system.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/example/Datas/fonts.json",
+                        "target": "Engine/Content/example/Datas/fonts.json"
                     },
                     {
                         "repo": "RPG-Paper-Maker",
@@ -5326,6 +5386,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Datas/Languages.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Datas/Languages.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Datas/Armors.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Datas/Armors.js"
                             },
@@ -5363,6 +5428,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Datas/Tilesets.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Datas/Tilesets.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Datas/Languages.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Datas/Languages.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -5576,6 +5646,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Scene/BattleEndTurn.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/BattleEndTurn.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Scene/TitleScreen.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/TitleScreen.d.ts"
                             },
@@ -5583,6 +5658,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Scene/MenuShop.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/MenuShop.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Scene/BattleEndTurn.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/BattleEndTurn.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -5618,6 +5698,16 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Scene/MenuSkills.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/MenuSkills.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Scene/ChangeLanguage.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/ChangeLanguage.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Scene/ChangeLanguage.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/ChangeLanguage.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -5683,6 +5773,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Scene/index.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/index.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Scene/MenuEnterAName.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/MenuEnterAName.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -5778,6 +5873,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Scene/MenuInventory.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/MenuInventory.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Scene/MenuEnterAName.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/MenuEnterAName.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6176,6 +6276,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/FontName.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/FontName.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/Skill.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/Skill.js"
                             },
@@ -6193,6 +6298,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/Monster.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/Monster.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/MainMenuCommand.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/MainMenuCommand.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6236,8 +6346,18 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/RandomBattle.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/RandomBattle.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/MapObject.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/MapObject.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/InventoryFilter.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/InventoryFilter.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6351,6 +6471,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/MainMenuCommand.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/MainMenuCommand.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/SpecialElement.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/SpecialElement.d.ts"
                             },
@@ -6376,6 +6501,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/InventoryFilter.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/InventoryFilter.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/Base.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/Base.js"
                             },
@@ -6388,6 +6518,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/Weapon.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/Weapon.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/FontName.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/FontName.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6406,13 +6541,28 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/TroopReactionConditions.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/TroopReactionConditions.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/AnimationFrameElement.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/AnimationFrameElement.js"
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/RandomBattle.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/RandomBattle.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/PlaySong.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/PlaySong.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/TroopReaction.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/TroopReaction.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6526,6 +6676,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/TroopReactionConditions.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/TroopReactionConditions.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/Armor.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/Armor.d.ts"
                             },
@@ -6548,6 +6703,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/DynamicValue.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/DynamicValue.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/TroopReaction.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/TroopReaction.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -7281,6 +7441,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/EnterANameMenu.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/EnterANameMenu.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/Comment.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/Comment.d.ts"
                             },
@@ -7356,6 +7521,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/EndBattle.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/EndBattle.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/ChangeName.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeName.js"
                             },
@@ -7398,6 +7568,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/PlaySound.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/PlaySound.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ChangeStatus.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeStatus.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -7451,6 +7626,21 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/EndBattle.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/EndBattle.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/EnterANameMenu.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/EnterANameMenu.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/CreateObjectInMap.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/CreateObjectInMap.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/StartBattle.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/StartBattle.js"
                             },
@@ -7486,6 +7676,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ChangeStatus.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeStatus.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/InputNumber.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/InputNumber.d.ts"
                             },
@@ -7503,6 +7698,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/index.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/index.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ChangeBattleMusic.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeBattleMusic.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -7586,6 +7786,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ResetCamera.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ResetCamera.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/ChangeName.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeName.d.ts"
                             },
@@ -7661,6 +7866,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ResetCamera.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ResetCamera.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/ChangeASkill.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeASkill.d.ts"
                             },
@@ -7711,6 +7921,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ChangeVictoryMusic.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeVictoryMusic.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/ChangeEquipment.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeEquipment.js"
                             },
@@ -7751,6 +7966,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ChangeBattleMusic.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeBattleMusic.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/ChangeEquipment.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeEquipment.d.ts"
                             },
@@ -7763,6 +7983,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/StopMusic.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/StopMusic.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ChangeVictoryMusic.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeVictoryMusic.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -7788,6 +8013,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/PlayMusic.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/PlayMusic.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/CreateObjectInMap.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/CreateObjectInMap.js"
                             },
                             {
                                 "repo": "Game-Scripts",
