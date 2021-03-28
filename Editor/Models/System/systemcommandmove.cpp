@@ -112,7 +112,7 @@ void SystemCommandMove::initialize(const EventCommand *command, int &i)
     case CommandMoveKind::Wait:
         j = 2;
         break;
-    case CommandMoveKind::PlaySound:
+    case CommandMoveKind::PlayASound:
         j = 12;
         break;
     case CommandMoveKind::Script:
@@ -371,7 +371,7 @@ QString SystemCommandMove::toString() const
         str += command.toString(m_properties, m_parameters);
         break;
     }
-    case CommandMoveKind::PlaySound:
+    case CommandMoveKind::PlayASound:
     {
         QVector<QString> list = m_command;
         list.removeFirst();
@@ -507,7 +507,7 @@ bool SystemCommandMove::openDialog()
         }
         break;
     }
-    case CommandMoveKind::PlaySound:
+    case CommandMoveKind::PlayASound:
     {
         QVector<QString> commandList = m_command;
         commandList.removeFirst();

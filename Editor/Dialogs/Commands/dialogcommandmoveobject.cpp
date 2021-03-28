@@ -572,7 +572,7 @@ void DialogCommandMoveObject::on_pushButtonPlaySound_clicked()
     if (dialog.exec() == QDialog::Accepted)
     {
         QVector<QString> commands = QVector<QString>({QString::number(static_cast
-            <int>(CommandMoveKind::PlaySound))});
+            <int>(CommandMoveKind::PlayASound))});
         dialog.getCommandList(commands);
         this->addMove(commands);
     }

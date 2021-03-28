@@ -55,7 +55,7 @@ enum class CommandMoveKind {
     PixelOffset,
     KeepPosition,
     Wait,
-    PlaySound,
+    PlayASound,
     Script
 };
 
