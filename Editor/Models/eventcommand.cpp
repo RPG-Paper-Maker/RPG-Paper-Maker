@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QMessageBox>
 #include "eventcommand.h"
 #include "rpm.h"
 #include "widgetcomboboxteam.h"
@@ -63,7 +64,14 @@ int EventCommand::commandsCount() const {
 }
 
 QString EventCommand::valueCommandAt(int index) const {
-    return m_listCommand.at(index);
+    if (index < m_listCommand.size()) {
+        return m_listCommand.at(index);
+    } else {
+        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR_MESSAGE),
+            "Can't read command " + this->kindToString(m_kind) +
+            ", please report to devs." + "\n" + m_listCommand.toList().join(","));
+        return "";
+    }
 }
 
 QVector<QString> EventCommand::commands() {

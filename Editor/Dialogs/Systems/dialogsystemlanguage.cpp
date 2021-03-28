@@ -83,5 +83,6 @@ void DialogSystemLanguage::on_comboBoxType_currentIndexChanged(int index)
         m_language.setKind(kind);
         ui->lineEditName->setText(kind == LanguageKind::Custom ? "Custom" : RPM
             ::get()->translations()->languagesNames().at(index - 1));
+        m_language.setName(ui->lineEditName->text());
     }
 }

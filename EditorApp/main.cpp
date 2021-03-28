@@ -127,8 +127,8 @@ int main(int argc, char *argv[]) {
     }
 
     // Erase example game and refresh it
-    QDir(Common::pathCombine(QDir::currentPath(), RPM::PATH_EXAMPLE_GAME))
-        .removeRecursively();
+    QString path = Common::pathCombine(QDir::currentPath(), RPM::PATH_EXAMPLE_GAME);
+    QDir(path).removeRecursively();
     ControlNewproject::createNewProject("Example", "Example", Common
         ::pathCombine(QDir::currentPath(), RPM::PATH_EXAMPLE));
     QDir(Common::pathCombine(Common::pathCombine(Common::pathCombine(QDir
@@ -144,6 +144,12 @@ int main(int argc, char *argv[]) {
         ::PATH_EXAMPLE_GAME), RPM::PATH_APP), RPM::PATH_SCRIPTS_DIR));
     QDir(Common::pathCombine(Common::pathCombine(QDir::currentPath(), RPM
         ::PATH_EXAMPLE_GAME), RPM::PATH_APP)).mkpath(RPM::PATH_SAVES);
+    Project project;
+    project.setPathCurrentProject(path);
+    RPM::get()->setProject(&project);
+    project.readAll();
+    project.writeAll();
+    RPM::get()->setProject(nullptr);
 
     // Opening window
     MainWindow *w = MainWindow::get();

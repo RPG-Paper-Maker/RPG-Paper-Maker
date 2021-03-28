@@ -76,7 +76,7 @@ void PanelMainMenu::translate()
 
 void PanelMainMenu::on_pushButtonExampleProject_clicked()
 {
-    QMessageBox::warning(this, RPM::translate(Translations::WARNING), RPM
+    QMessageBox::information(this, RPM::translate(Translations::WARNING), RPM
         ::translate(Translations::PROJECT_DEMO_ANY_SAVE_WONT_CONSERVED) + RPM
         ::DOT);
     this->openRecentProject(Common::pathCombine(QDir::currentPath(), RPM

@@ -353,7 +353,7 @@ void DialogCommands::translate() {
     ui->pushButtonRestockShop->setText(EventCommand::kindToString(EventCommandKind::RestockShop));
     ui->pushButtonEnterANameMenu->setText(EventCommand::kindToString(EventCommandKind::EnterANameMenu));
     ui->pushButtonCreateObjectInMap->setText(EventCommand::kindToString(EventCommandKind::CreateObjectInMap));
-    ui->pushButtonCreateObjectInMap->setText(EventCommand::kindToString(EventCommandKind::ChangeStatus));
+    ui->pushButtonChangeStatus->setText(EventCommand::kindToString(EventCommandKind::ChangeStatus));
     ui->pushButtonResetCamera->setText(EventCommand::kindToString(EventCommandKind::ResetCamera));
     ui->pushButtonChangeBattleMusic->setText(EventCommand::kindToString(EventCommandKind::ChangeBattleMusic));
     ui->pushButtonChangeVictoryMusic->setText(EventCommand::kindToString(EventCommandKind::ChangeVictoryMusic));

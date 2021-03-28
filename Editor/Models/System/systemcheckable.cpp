@@ -48,6 +48,24 @@ void SystemCheckable::setChecked(bool checked)
 //
 // -------------------------------------------------------
 
+SuperListItem* SystemCheckable::createCopy() const
+{
+    SystemCheckable* super = new SystemCheckable;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
+void SystemCheckable::setCopy(const SuperListItem &super)
+{
+    SuperListItem::setCopy(super);
+    const SystemCheckable *checkable = reinterpret_cast<const SystemCheckable *>(&super);
+    m_checked = checkable->m_checked;
+}
+
+// -------------------------------------------------------
+
 QList<QStandardItem *> SystemCheckable::getModelRow() const
 {
     QList<QStandardItem*> row = QList<QStandardItem*>();

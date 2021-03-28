@@ -1068,6 +1068,13 @@ void ProjectUpdater::updateVersion_1_6_4()
 
 void ProjectUpdater::updateVersion_1_7_0()
 {
+    // Fonts
+    QDir dir = QDir(m_project->pathCurrentProjectApp());
+    dir.mkpath(RPM::PATH_FONTS);
+    dir.mkpath(RPM::PATH_STYLES);
+    m_project->fontsDatas()->setDefault();
+
+    // Kind
     m_project->gameDatas()->systemDatas()->setdefaultEnterNameOptions();
     m_project->gameDatas()->systemDatas()->setDefaultItemsTypes();
     m_project->gameDatas()->systemDatas()->setDefaultInventoryFilters();
@@ -1077,6 +1084,16 @@ void ProjectUpdater::updateVersion_1_7_0()
     // Languages
     m_project->langsDatas()->setDefault();
     m_project->gameDatas()->titleScreenGameOverDatas()->setDefaultTitleSettings();
+
+    // Languages update description json
+    this->updateVersion_1_7_0_json(RPM::PATH_ITEMS, "items");
+    this->updateVersion_1_7_0_json(RPM::PATH_WEAPONS, "weapons");
+    this->updateVersion_1_7_0_json(RPM::PATH_ARMORS, "armors");
+    this->updateVersion_1_7_0_json(RPM::PATH_SKILLS, "skills");
+    m_project->gameDatas()->readItems(m_project->pathCurrentProjectApp());
+    m_project->gameDatas()->readWeapons(m_project->pathCurrentProjectApp());
+    m_project->gameDatas()->readArmors(m_project->pathCurrentProjectApp());
+    m_project->gameDatas()->readSkills(m_project->pathCurrentProjectApp());
 
     // Update show text commands
     connect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
@@ -1102,10 +1119,44 @@ void ProjectUpdater::updateVersion_1_7_0_commands(QStandardItem *commands)
         {
             list.insert(3, QString::number(m_project->langsDatas()->mainLang()));
             command->setCommands(list);
+        } else if (command->kind() == EventCommandKind::DisplayChoice)
+        {
+            i = 0;
+            while (i < list.size())
+            {
+                if (list.at(i) == RPM::DASH)
+                {
+                    list.removeAt(i + 1);
+                }
+                i++;
+            }
+            command->setCommands(list);
         }
     }
     for (i = 0, l = commands->rowCount(); i < l; i++)
     {
         this->updateVersion_1_7_0_commands(commands->child(i));
     }
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_7_0_json(QString path, QString listName)
+{
+    QJsonDocument loadDoc;
+    path = Common::pathCombine(m_project->pathCurrentProjectApp(), path);
+    Common::readOtherJSON(path, loadDoc);
+    QJsonObject json = loadDoc.object();
+    QJsonArray tab = json[listName].toArray();
+    QJsonObject obj, dObj;
+    for (int i = 0, l = tab.size(); i < l; i++)
+    {
+        obj = tab.at(i).toObject();
+        dObj = QJsonObject();
+        dObj["names"] = obj["d"].toObject();
+        obj["d"] = dObj;
+        tab[i] = obj;
+    }
+    json[listName] = tab;
+    Common::writeOtherJSON(path, json);
 }
