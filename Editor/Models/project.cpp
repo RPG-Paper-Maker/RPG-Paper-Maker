@@ -216,12 +216,12 @@ void Project::readAll() {
     this->readPicturesDatas();
     this->readVideosDatas();
     this->readSongsDatas();
+    this->readFontsDatas();
     this->readGameDatas();
     this->readTreeMapDatas();
     this->readScriptsDatas();
     this->readSpecialsDatas();
     this->readShapesDatas();
-    this->readFontsDatas();
 }
 
 // -------------------------------------------------------
