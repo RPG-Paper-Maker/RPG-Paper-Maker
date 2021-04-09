@@ -1262,5 +1262,6 @@
     "change.battle.music": "Cambia la música de batalla",
     "change.victory.music": "Cambia la música de la victoria",
     "end.battle": "Terminar la pelea",
-    "can.be.sold": "Puede ser vendido"
+    "can.be.sold": "Puede ser vendido",
+    "is.looking.at": "Mira hacia"
 }

@@ -1260,5 +1260,6 @@
     "change.battle.music": "Change battle music",
     "change.victory.music": "Change victory music",
     "end.battle": "End battle",
-    "can.be.sold": "Can be sold"
+    "can.be.sold": "Can be sold",
+    "is.looking.at": "Is looking at"
 }

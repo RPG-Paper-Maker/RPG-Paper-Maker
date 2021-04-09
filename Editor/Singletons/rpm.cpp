@@ -306,6 +306,7 @@ QStringList RPM::ENUM_TO_STRING_INVENTORY_FILTER_KIND = {};
 QStringList RPM::ENUM_TO_STRING_MAIN_MENU_COMMAND_KIND = {};
 QStringList RPM::ENUM_TO_STRING_TROOP_REACTION_FREQUENCY_KIND = {};
 QStringList RPM::ENUM_TO_STRING_LANGUAGE_KIND = {};
+QStringList RPM::ENUM_TO_STRING_ORIENTATION_KIND = {};
 
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
@@ -787,6 +788,12 @@ void RPM::readTranslations() {
         "日本語",
         "中文",
         "한국어"
+    });
+    RPM::ENUM_TO_STRING_ORIENTATION_KIND = QStringList({
+        RPM::translate(Translations::SOUTH),
+        RPM::translate(Translations::WEST),
+        RPM::translate(Translations::NORTH),
+        RPM::translate(Translations::EAST)
     });
 }
 

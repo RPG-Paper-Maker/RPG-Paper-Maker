@@ -1294,6 +1294,7 @@ public:
     static const QString CHANGE_VICTORY_MUSIC;
     static const QString END_BATTLE;
     static const QString CAN_BE_SOLD;
+    static const QString IS_LOOKING_AT;
 
     Translations();
     virtual ~Translations();

@@ -237,6 +237,7 @@ public:
     static QStringList ENUM_TO_STRING_MAIN_MENU_COMMAND_KIND;
     static QStringList ENUM_TO_STRING_TROOP_REACTION_FREQUENCY_KIND;
     static QStringList ENUM_TO_STRING_LANGUAGE_KIND;
+    static QStringList ENUM_TO_STRING_ORIENTATION_KIND;
 
     // OTHER STATIC VALUES
     static QSet<int> mapsToSave;

@@ -1260,5 +1260,6 @@
     "change.battle.music": "バトルミュージックを変える",
     "change.victory.music": "勝利の音楽を変える",
     "end.battle": "戦いを終わらせる",
-    "can.be.sold": "販売可能"
+    "can.be.sold": "販売可能",
+    "is.looking.at": "見ている"
 }

@@ -49,6 +49,10 @@ DialogCommandConditions::~DialogCommandConditions()
     delete m_groupButtonMain;
     delete m_groupButtonHeroesMain;
     delete m_groupButtonHeroesEquiped;
+    if (RPM::isInConfig && !RPM::isInObjectConfig)
+    {
+        SuperListItem::deleteModel(m_modelObjects);
+    }
 }
 
 // -------------------------------------------------------
@@ -76,6 +80,7 @@ void DialogCommandConditions::initializePrimitives() {
     m_groupButtonMain->addButton(ui->radioButtonOthersKey);
     m_groupButtonMain->addButton(ui->radioButtonEscapedLastBattle);
     m_groupButtonMain->addButton(ui->radioButtonOthersScript);
+    m_groupButtonMain->addButton(ui->radioButtonObjectIDLookingAt);
     m_groupButtonHeroesMain = new QButtonGroup;
     m_groupButtonHeroesMain->addButton(ui->radioButtonHeroesNamed);
     m_groupButtonHeroesMain->addButton(ui->radioButtonHeroesInTeam);
@@ -157,6 +162,18 @@ void DialogCommandConditions::initializePrimitives() {
     ui->panelPrimitiveOthersScript->initializeMessage(true, m_parameters,
         properties);
 
+    // Model objects
+    if (RPM::isInConfig && !RPM::isInObjectConfig)
+    {
+        m_modelObjects = new QStandardItemModel;
+        Map::setModelObjects(m_modelObjects);
+    } else
+    {
+        m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
+    }
+    ui->panelPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
+        m_parameters, properties);
+    ui->comboBoxObjectLookingAt->addItems(RPM::ENUM_TO_STRING_ORIENTATION_KIND);
     this->on_radioButtonHeroes_toggled(false);
 }
 
@@ -217,6 +234,9 @@ void DialogCommandConditions::translate()
         ::CHECK_ARMORS_EQUIPED_TOO));
     ui->checkBoxWeaponEquiped->setText(RPM::translate(Translations
         ::CHECK_WEAPONS_EQUIPED_TOO));
+    ui->radioButtonObjectIDLookingAt->setText(RPM::translate(Translations
+        ::OBJECT_ID) + RPM::COLON);
+    ui->labelIsLookingAt->setText(RPM::translate(Translations::IS_LOOKING_AT).toLower());
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -357,6 +377,14 @@ void DialogCommandConditions::initialize(EventCommand *command) {
         tabIndex = 3;
         break;
     }
+    case 9: {
+        ui->radioButtonObjectIDLookingAt->setChecked(true);
+        ui->panelPrimitiveObjectID->initializeCommand(command, i);
+        ui->comboBoxObjectLookingAt->setCurrentIndex(command->valueCommandAt(i++)
+            .toInt());
+        tabIndex = 3;
+        break;
+    }
     default:
         break;
     }
@@ -365,9 +393,8 @@ void DialogCommandConditions::initialize(EventCommand *command) {
 
 // -------------------------------------------------------
 
-EventCommand* DialogCommandConditions::getCommand() const {
+EventCommand * DialogCommandConditions::getCommand() const {
     QVector<QString> command;
-
     command.append(RPM::boolToString(ui->checkBox->isChecked()));
     if (ui->radioButtonVariableParamProp->isChecked()) {
         command.append("0");
@@ -449,8 +476,11 @@ EventCommand* DialogCommandConditions::getCommand() const {
         ui->panelPrimitiveOthersScript->getCommand(command);
     } else if (ui->radioButtonEscapedLastBattle->isChecked()) {
         command.append("8");
+    } else if (ui->radioButtonObjectIDLookingAt->isChecked()) {
+        command.append("9");
+        ui->panelPrimitiveObjectID->getCommand(command);
+        command.append(QString::number(ui->comboBoxObjectLookingAt->currentIndex()));
     }
-
     return new EventCommand(EventCommandKind::If, command);
 }
 
@@ -608,6 +638,15 @@ void DialogCommandConditions::on_radioButtonOthersKey_toggled(bool checked) {
     ui->panelPrimitiveOthersKeyID->setEnabled(checked);
     ui->labelOthersKey->setEnabled(checked);
     ui->panelPrimitiveOthersKeyValue->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandConditions::on_radioButtonObjectIDLookingAt_toggled(bool checked)
+{
+    ui->panelPrimitiveObjectID->setEnabled(checked);
+    ui->labelIsLookingAt->setEnabled(checked);
+    ui->comboBoxObjectLookingAt->setEnabled(checked);
 }
 
 // -------------------------------------------------------

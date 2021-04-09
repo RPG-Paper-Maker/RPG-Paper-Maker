@@ -1260,5 +1260,6 @@
     "change.battle.music": "Измените боевую музыку",
     "change.victory.music": "Измени музыку победы",
     "end.battle": "Закончить бой",
-    "can.be.sold": "Можно продать"
+    "can.be.sold": "Можно продать",
+    "is.looking.at": "Смотреть в сторону"
 }

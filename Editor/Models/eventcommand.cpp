@@ -728,6 +728,15 @@ QString EventCommand::strCondition(QStandardItemModel *properties,
         condition += RPM::translate(Translations::ESCAPED_LAST_BATTLE);
         break;
     }
+    case 9: {
+        QString objectID = this->strMoveObjectID(properties, parameters, i);
+        QString orientation = RPM::ENUM_TO_STRING_ORIENTATION_KIND.at(this
+            ->valueCommandAt(i++).toInt());
+        condition += RPM::translate(Translations::OBJECT_ID) + RPM::SPACE +
+            objectID + RPM::SPACE + RPM::translate(Translations::IS_LOOKING_AT)
+            .toLower() + RPM::SPACE + orientation;
+        break;
+    }
     default:
         break;
     }
