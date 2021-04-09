@@ -366,23 +366,23 @@ void WidgetTreeCommands::copyCommand() {
 // -------------------------------------------------------
 //  pasteCommand: paste the copied command in the selected command
 
-void WidgetTreeCommands::pasteCommand() {
-    QStandardItem *copiedCommand, *root, *copy, *selected;
-    int i, l;
-
-    selected = getSelected();
-    root = this->getRootOfCommand(selected);
+void WidgetTreeCommands::pasteCommand()
+{
+    QStandardItem *selected = this->getSelected();
 
     // Paste copy and fill a new list of copies
-    root = getRootOfCommand(selected);
-    for (i = 0, l = RPM::get()->copiedCommandsCount(); i < l; i++) {
+    QStandardItem *root = this->getRootOfCommand(selected);
+    QStandardItem *copiedCommand, *copy;
+    int insertionRow;
+    for (int i = 0, l = RPM::get()->copiedCommandsCount(); i < l; i++)
+    {
         copiedCommand = RPM::get()->copiedCommandAt(i);
         copy = new QStandardItem;
         SystemCommonReaction::copyCommandsItem(copiedCommand, copy);
-        int insertionRow = getInsertionRow(selected, root);
+        insertionRow = this->getInsertionRow(selected, root);
         root->insertRow(insertionRow, copy);
-        expand(copy->index());
-        updateAllNodesString(copy);
+        this->expand(copy->index());
+        this->updateAllNodesString(copy);
     }
 }
 

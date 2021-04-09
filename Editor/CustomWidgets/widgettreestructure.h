@@ -70,6 +70,7 @@ protected:
 
     virtual void newItem(QStandardItem *selected);
     virtual void editItem(QStandardItem *selected);
+    virtual void copyItem(QStandardItem *selected);
     virtual void pasteItem(QStandardItem *selected);
     virtual void deleteItem(QStandardItem *selected);
     virtual void mousePressEvent(QMouseEvent *event);

@@ -4,10 +4,12 @@
 	"replace": [],
 	"features": [
         "Add arrows in choices box when some items are not visible",
-        "Plugins manager: copy paramters to other parameters",
+        "Plugins manager: copy parameters to other parameters",
         "Command conditions: direction object",
         "Plugin manager: new custom structures (vector2, vector3, image, enum, song, icon)",
-        "Menu languages ingame: add a confirmation box"
+        "Menu languages ingame: add a confirmation box",
+        "Plugin manager: add a picture to describe plugin",
+        "Open dev tool in external window (CTRL+ALT+I)"
     ],
 	"bugs": [
         "Command start a battle: troop ID and battle map ID doesn't accept properties",
@@ -24,11 +26,13 @@
         "If the title music is the same as the starting map, the music will stop when you choose new game"
 	],
     "finished": [
+        2,
+        2,
         0,
         0,
         0,
         0,
-        0,
+        2
         
         0,
         0,

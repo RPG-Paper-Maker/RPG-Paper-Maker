@@ -70,8 +70,10 @@ DialogScripts::DialogScripts(QWidget *parent) :
     ui->treeViewPlugins->initializeNewItemInstance(new SystemPlugin);
     ui->treeViewPlugins->setUpdateId(true);
     ui->treeViewPlugins->setCanSameName(false);
+    ui->treeViewEditParameter->setCanSameName(false);
     ui->treeViewEditParameter->initializeNewItemInstance(new
         SystemPluginParameter);
+    ui->treeViewEditCommands->setCanSameName(false);
     ui->treeViewEditCommands->initializeNewItemInstance(new SystemPluginCommand);
     ui->treeViewEditCommands->setUpdateId(true);
     ui->treeViewSystem->header()->setStretchLastSection(false);
@@ -497,6 +499,8 @@ void DialogScripts::keyPressEvent(QKeyEvent *event)
         }
     }
     QDialog::keyPressEvent(event);
+    ui->treeViewEditParameter->forceKeyPress(event);
+    ui->treeViewEditCommands->forceKeyPress(event);
 }
 
 // -------------------------------------------------------

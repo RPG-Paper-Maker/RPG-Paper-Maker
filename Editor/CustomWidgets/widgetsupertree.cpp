@@ -117,6 +117,13 @@ void WidgetSuperTree::updateAllModelRow() {
 
 // -------------------------------------------------------
 
+void WidgetSuperTree::forceKeyPress(QKeyEvent *event)
+{
+    this->keyPressEvent(event);
+}
+
+// -------------------------------------------------------
+
 void WidgetSuperTree::updateAbsoluteAllNodesString() {
     this->updateAllNodesString(this->getModel()->invisibleRootItem());
 }

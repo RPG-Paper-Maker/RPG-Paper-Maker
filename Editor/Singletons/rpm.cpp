@@ -19,6 +19,7 @@
 #include "rpm.h"
 #include "common.h"
 #include "systemcommonreaction.h"
+#include "systemcustomstructureelement.h"
 
 // COLORS
 const QColor RPM::COLOR_GRAY_SELECTION_DARKER = QColor(60, 60, 60);
@@ -322,7 +323,8 @@ bool RPM::isInObjectConfig = false;
 RPM::RPM() :
     m_project(nullptr),
     m_engineSettings(new EngineSettings),
-    m_translations(new Translations)
+    m_translations(new Translations),
+    m_copiedCustomElement(nullptr)
 {
 
 }
@@ -335,6 +337,7 @@ RPM::~RPM() {
     delete m_engineSettings;
     delete m_translations;
     this->clearCommands();
+    delete m_copiedCustomElement;
 }
 
 Project* RPM::project() const {
@@ -363,6 +366,16 @@ int RPM::copiedCommandsCount() const {
 
 void RPM::copiedCommandsAppend(QStandardItem *item) {
     m_copiedCommands.append(item);
+}
+
+SystemCustomStructureElement * RPM::copiedCustomElement() const
+{
+    return m_copiedCustomElement;
+}
+
+void RPM::setCopiedCustomElement(SystemCustomStructureElement *copiedCustomElement)
+{
+    m_copiedCustomElement = copiedCustomElement;
 }
 
 SuperListItem * RPM::selectedMonster() const
@@ -812,11 +825,11 @@ void RPM::loadEngineSettings() {
 
 // -------------------------------------------------------
 
-void RPM::clearCommands() {
+void RPM::clearCommands()
+{
     QStandardItem *copiedCommand;
-    int i, l;
-
-    for (i = 0, l = this->copiedCommandsCount(); i < l; i++) {
+    for (int i = 0, l = this->copiedCommandsCount(); i < l; i++)
+    {
         copiedCommand = this->copiedCommandAt(i);
         SystemCommonReaction::deleteCommands(copiedCommand);
         delete copiedCommand;

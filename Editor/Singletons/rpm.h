@@ -255,6 +255,8 @@ public:
     QStandardItem * copiedCommandAt(int i) const;
     int copiedCommandsCount() const;
     void copiedCommandsAppend(QStandardItem *item);
+    SystemCustomStructureElement * copiedCustomElement() const;
+    void setCopiedCustomElement(SystemCustomStructureElement *copiedCustomElement);
     SuperListItem * selectedMonster() const;
     void setSelectedMonster(SuperListItem *si);
     QStandardItemModel * selectedList() const;
@@ -281,6 +283,7 @@ protected:
     EngineSettings *m_engineSettings;
     Translations *m_translations;
     QList<QStandardItem *> m_copiedCommands;
+    SystemCustomStructureElement *m_copiedCustomElement;
     SuperListItem *m_selectedMonster;
     QStandardItemModel *m_selectedList;
 };

@@ -487,45 +487,62 @@ void WidgetTreeStructure::editItem(QStandardItem *selected)
 
 // -------------------------------------------------------
 
+void WidgetTreeStructure::copyItem(QStandardItem *selected)
+{
+    SuperListItem *super = reinterpret_cast<SuperListItem *>(selected->data()
+        .value<quintptr>());
+    if (super != nullptr)
+    {
+        if (RPM::get()->copiedCustomElement() == nullptr)
+        {
+            RPM::get()->setCopiedCustomElement(reinterpret_cast<
+                SystemCustomStructureElement *>(super->createCopy()));
+        } else
+        {
+            RPM::get()->copiedCustomElement()->setCopy(*super);
+        }
+    }
+}
+
+// -------------------------------------------------------
+
 void WidgetTreeStructure::pasteItem(QStandardItem *selected)
 {
-    if (m_copiedItem != nullptr)
+    SystemCustomStructureElement *element = reinterpret_cast<
+        SystemCustomStructureElement *>(RPM::get()->copiedCustomElement()
+        ->createCopy());
+    QStandardItem *root = this->getRootOfItem(selected);
+    if (element->isProperty() && selected != m_copiedSelected)
     {
-        SystemCustomStructureElement *element = reinterpret_cast<
-            SystemCustomStructureElement *>(m_copiedItem->createCopy());
-        QStandardItem *root = this->getRootOfItem(selected);
-        if (element->isProperty() && selected != m_copiedSelected)
+        bool testName = false;
+        SystemCustomStructureElement *otherElement;
+        while (!testName)
         {
-            bool testName = false;
-            SystemCustomStructureElement *otherElement;
-            while (!testName)
+            testName = true;
+            for (int i = 0, l = root->rowCount(); i < l; i++)
             {
-                testName = true;
-                for (int i = 0, l = root->rowCount(); i < l; i++)
+                otherElement = reinterpret_cast<SystemCustomStructureElement
+                    *>(root->child(i)->data().value<quintptr>());
+                if (otherElement != nullptr && element->name() ==
+                    otherElement->name())
                 {
-                    otherElement = reinterpret_cast<SystemCustomStructureElement
-                        *>(root->child(i)->data().value<quintptr>());
-                    if (otherElement != nullptr && element->name() ==
-                        otherElement->name())
-                    {
-                        testName = false;
-                        element->setName(element->name() + "_copy");
-                    }
+                    testName = false;
+                    element->setName(element->name() + "_copy");
                 }
             }
         }
-        QModelIndex index = selected->index();
-        SystemCustomStructureElement *previousElement = reinterpret_cast<
-            SystemCustomStructureElement *>(selected->data().value<quintptr>());
-        if (previousElement != nullptr)
-        {
-            this->removeItem(selected, previousElement->value()->kind(),
-                previousElement);
-            this->setCurrentIndex(index);
-        }
-        this->addItem(this->getSelected(), element);
+    }
+    QModelIndex index = selected->index();
+    SystemCustomStructureElement *previousElement = reinterpret_cast<
+        SystemCustomStructureElement *>(selected->data().value<quintptr>());
+    if (previousElement != nullptr)
+    {
+        this->removeItem(selected, previousElement->value()->kind(),
+            previousElement);
         this->setCurrentIndex(index);
     }
+    this->addItem(this->getSelected(), element);
+    this->setCurrentIndex(index);
 }
 
 // -------------------------------------------------------
@@ -583,7 +600,7 @@ void WidgetTreeStructure::updateContextMenu()
         m_contextMenuCommonCommands->canEdit(element != nullptr);
         m_contextMenuCommonCommands->canNew(true);
         m_contextMenuCommonCommands->canCopy(element != nullptr);
-        m_contextMenuCommonCommands->canPaste(m_copiedItem != nullptr);
+        m_contextMenuCommonCommands->canPaste(RPM::get()->copiedCustomElement() != nullptr);
         m_contextMenuCommonCommands->canDelete(element != nullptr);
     }
 }

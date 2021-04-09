@@ -45,6 +45,7 @@ public:
     void setCanCreateDelete(bool b);
     void setCanSameName(bool b);
 
+    void forceKeyPress(QKeyEvent *event);
     void updateAbsoluteAllNodesString();
 
     static int getNewId(QStandardItemModel* model, int offset = 1);
