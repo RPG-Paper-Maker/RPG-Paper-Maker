@@ -1,0 +1,46 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Add arrows in choices box when some items are not visible",
+        "Plugins manager: copy paramters to other parameters",
+        "Command conditions: direction object",
+        "Plugin manager: new custom structures (vector2, vector3, image, enum, song, icon)",
+        "Menu languages ingame: add a confirmation box"
+    ],
+	"bugs": [
+        "Command start a battle: troop ID and battle map ID doesn't accept properties",
+        "Command change statistic: statistics completely removed because of statistics default progression",
+        "Some particular issues with mountains collisions",
+        "Collisions issues with some 3D custom objects",
+        "Define as hero in another map is not deleting the previous hero",
+        "Plugin manager: crash when trying to desactivate specific plugin",
+        "Error when trying to find hero in a common reaction",
+        "Setting the Number Of Steps after next battle to 99 or lower crashes the game",
+        "Change autotile picture not updated directly (picture preview)",
+        "Battlers rows instead of columns (typo)",
+        "Adding a second Release at the start of turn condition applies the effect twice",
+        "If the title music is the same as the starting map, the music will stop when you choose new game"
+	],
+    "finished": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ]
+}

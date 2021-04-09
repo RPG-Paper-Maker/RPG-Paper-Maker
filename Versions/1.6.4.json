@@ -58,21 +58,5 @@
         "Can't use delete key on objects after right clicking",
         "Protect game datas: checkbox not applied",
         "Collisions between moving random character blocking each others"
-	],
-    "finished": [
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2
-    ]
+	]
 }
