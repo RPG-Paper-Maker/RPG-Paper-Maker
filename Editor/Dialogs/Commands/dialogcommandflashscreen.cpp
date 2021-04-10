@@ -20,9 +20,9 @@
 // -------------------------------------------------------
 
 DialogCommandFlashScreen::DialogCommandFlashScreen(EventCommand *command,
-    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     ui(new Ui::DialogCommandFlashScreen)
 {
@@ -50,16 +50,9 @@ DialogCommandFlashScreen::~DialogCommandFlashScreen()
 
 void DialogCommandFlashScreen::initializePrimitives()
 {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr){
-        properties = m_object->modelProperties();
-    }
-
     ui->panelPrimitiveColorID->initializeDataBaseCommandId(RPM::get()->project()
-        ->gameDatas()->systemDatas()->modelColors(), m_parameters, properties);
-    ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
+        ->gameDatas()->systemDatas()->modelColors(), m_parameters, m_properties);
+    ui->panelPrimitiveTime->initializeNumber(m_parameters, m_properties, false);
     ui->panelPrimitiveTime->setNumberDoubleValue(1);
 }
 

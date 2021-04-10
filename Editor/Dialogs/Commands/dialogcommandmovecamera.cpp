@@ -20,14 +20,11 @@
 // -------------------------------------------------------
 
 DialogCommandMoveCamera::DialogCommandMoveCamera(EventCommand *command,
-                                                 SystemCommonObject *object,
-                                                 QStandardItemModel *parameters,
-                                                 QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
     ui(new Ui::DialogCommandMoveCamera),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
-    m_properties(nullptr),
     m_modelObjects(nullptr)
 {
     ui->setupUi(this);
@@ -39,10 +36,6 @@ DialogCommandMoveCamera::DialogCommandMoveCamera(EventCommand *command,
     }
     else{
         m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
-    }
-    if (m_object != nullptr)
-    {
-        m_properties = m_object->modelProperties();
     }
     ui->widgetPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
                                                              m_parameters,

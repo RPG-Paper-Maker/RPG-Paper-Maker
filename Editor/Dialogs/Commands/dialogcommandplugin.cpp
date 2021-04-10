@@ -24,9 +24,9 @@
 // -------------------------------------------------------
 
 DialogCommandPlugin::DialogCommandPlugin(EventCommand *command,
-    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
-    m_properties(object == nullptr ? nullptr : object->modelProperties()),
+    m_properties(properties),
     m_parameters(parameters),
     m_currentParameters(new QStandardItemModel),
     ui(new Ui::DialogCommandPlugin)

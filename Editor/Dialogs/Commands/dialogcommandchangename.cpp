@@ -20,9 +20,9 @@
 // -------------------------------------------------------
 
 DialogCommandChangeName::DialogCommandChangeName(EventCommand *command,
-    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     ui(new Ui::DialogCommandChangeName)
 {
@@ -50,16 +50,10 @@ DialogCommandChangeName::~DialogCommandChangeName()
 
 void DialogCommandChangeName::initializePrimitives()
 {
-    QStandardItemModel *properties = nullptr;
-    if (m_object != nullptr)
-    {
-        properties = m_object->modelProperties();
-    }
-
     ui->comboBoxTeam->addItems(RPM::ENUM_TO_STRING_TEAM);
-    ui->panelPrimitiveName->initializeMessage(false, m_parameters, properties);
+    ui->panelPrimitiveName->initializeMessage(false, m_parameters, m_properties);
     ui->panelPrimitiveHeroEnemyInstanceID->initializeNumber(m_parameters,
-        properties);
+        m_properties);
     ui->panelPrimitiveHeroEnemyInstanceID->showVariable();
     ui->panelPrimitiveHeroEnemyInstanceID->setNumberValue(1);
 }

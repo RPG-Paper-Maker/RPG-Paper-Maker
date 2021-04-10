@@ -32,14 +32,14 @@ class DialogCommandChangeASkill : public DialogCommand
 
 public:
     explicit DialogCommandChangeASkill(EventCommand *command = nullptr,
-        SystemCommonObject *object = nullptr, QStandardItemModel *parameters =
+        QStandardItemModel *properties = nullptr, QStandardItemModel *parameters =
         nullptr, QWidget *parent = nullptr);
     ~DialogCommandChangeASkill();
 
     virtual EventCommand * getCommand() const;
 
 protected:
-    SystemCommonObject *m_object;
+    QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
 
     void initializePrimitives();

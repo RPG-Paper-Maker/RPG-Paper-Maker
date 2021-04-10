@@ -23,12 +23,11 @@
 // -------------------------------------------------------
 
 DialogCommandChangeEquipment::DialogCommandChangeEquipment(EventCommand *command
-    , SystemCommonObject *object, QStandardItemModel *parameters, QWidget
+    , QStandardItemModel *properties, QStandardItemModel *parameters, QWidget
     *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
-    m_properties(nullptr),
     m_weaponsArmors(new QStandardItemModel),
     ui(new Ui::DialogCommandChangeEquipment)
 {
@@ -61,11 +60,6 @@ DialogCommandChangeEquipment::~DialogCommandChangeEquipment()
 
 void DialogCommandChangeEquipment::initializePrimitives()
 {
-    if (m_object != nullptr)
-    {
-        m_properties = m_object->modelProperties();
-    }
-
     ui->comboBoxTeam->addItems(RPM::ENUM_TO_STRING_TEAM);
     ui->comboBoxWeaponArmor->addItem(RPM::translate(Translations::WEAPON_ID));
     ui->comboBoxWeaponArmor->addItem(RPM::translate(Translations::ARMOR_ID));

@@ -32,19 +32,18 @@ class DialogCommandStartBattle : public DialogCommand
 
 public:
     explicit DialogCommandStartBattle(EventCommand *command = nullptr,
-                                      SystemCommonObject *object = nullptr,
-                                      QStandardItemModel *parameters = nullptr,
-                                      QWidget *parent = nullptr);
+        QStandardItemModel *properties = nullptr, QStandardItemModel *parameters
+        = nullptr, QWidget *parent = nullptr);
     virtual ~DialogCommandStartBattle();
-    EventCommand* getCommand() const;
+    EventCommand * getCommand() const;
 
 protected:
     virtual void initialize(EventCommand* command);
 
 private:
     Ui::DialogCommandStartBattle *ui;
-    SystemCommonObject* m_object;
-    QStandardItemModel* m_parameters;
+    QStandardItemModel *m_properties;
+    QStandardItemModel *m_parameters;
 
     void translate();
 

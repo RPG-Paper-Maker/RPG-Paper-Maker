@@ -20,11 +20,12 @@
 // -------------------------------------------------------
 
 DialogCommandSendEvent::DialogCommandSendEvent(EventCommand *command,
-    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
-    ui(new Ui::DialogCommandSendEvent)
+    ui(new Ui::DialogCommandSendEvent),
+    m_properties(properties),
+    m_parameters(parameters)
 {
-    QStandardItemModel *properties;
     ui->setupUi(this);
 
     bool test = command == nullptr;
@@ -37,7 +38,6 @@ DialogCommandSendEvent::DialogCommandSendEvent(EventCommand *command,
         command = new EventCommand(EventCommandKind::SendEvent, l);
     }
 
-    properties = object == nullptr ? nullptr : object->modelProperties();
     ui->panelPrimitiveDetectionID->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->systemDatas()->modelDetections(), parameters,
         properties);

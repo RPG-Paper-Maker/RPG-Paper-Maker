@@ -31,17 +31,17 @@ class DialogCommandStopSong : public DialogCommand
     Q_OBJECT
 
 public:
-    explicit DialogCommandStopSong(QString title, SongKind kind,
-                                   EventCommand *command = nullptr,
-                                   SystemCommonObject *object = nullptr,
-                                   QStandardItemModel* parameters = nullptr,
-                                   QWidget *parent = nullptr);
+    explicit DialogCommandStopSong(QString title, SongKind kind, EventCommand
+        *command = nullptr, QStandardItemModel *properties = nullptr,
+        QStandardItemModel* parameters = nullptr, QWidget *parent = nullptr);
     ~DialogCommandStopSong();
     EventCommandKind getCommandKind() const;
     EventCommand* getCommand() const;
 
 protected:
     SongKind m_kind;
+    QStandardItemModel *m_properties;
+    QStandardItemModel *m_parameters;
 
     virtual void initialize(EventCommand* command);
 

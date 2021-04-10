@@ -21,9 +21,9 @@
 // -------------------------------------------------------
 
 DialogCommandDisplayChoice::DialogCommandDisplayChoice(EventCommand *command,
-    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     m_model(new QStandardItemModel),
     ui(new Ui::DialogCommandDisplayChoice)
@@ -53,10 +53,8 @@ DialogCommandDisplayChoice::~DialogCommandDisplayChoice() {
 // -------------------------------------------------------
 
 void DialogCommandDisplayChoice::initializePrimitives() {
-    QStandardItemModel *properties;
     SystemTranslatable * lang;
 
-    properties = m_object == nullptr ? nullptr : m_object->modelProperties();
     ui->treeViewChoices->setUpdateId(true);
     ui->treeViewChoices->setCanBeEmpty(false);
     ui->treeViewChoices->initializeModel(m_model);
@@ -64,7 +62,7 @@ void DialogCommandDisplayChoice::initializePrimitives() {
     lang->setDisplayID(false);
     ui->treeViewChoices->initializeNewItemInstance(lang);
     ui->panelPrimitiveCancelAutoIndex->initializeProperty(m_parameters,
-        properties, true);
+        m_properties, true);
     ui->panelPrimitiveCancelAutoIndex->showNumber();
 }
 

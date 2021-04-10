@@ -33,8 +33,8 @@ class DialogCommandChangeState : public DialogCommand
 
 public:
      DialogCommandChangeState(EventCommand *command = nullptr,
-                              SystemCommonObject *object = nullptr,
-                              QStandardItemModel* parameters = nullptr,
+                              QStandardItemModel *properties = nullptr,
+                              QStandardItemModel *parameters = nullptr,
                               QWidget *parent = nullptr);
      virtual ~DialogCommandChangeState();
      EventCommand * getCommand() const;
@@ -48,9 +48,8 @@ protected:
 
 private:
      Ui::DialogCommandChangeState *ui;
-     SystemCommonObject *m_object;
-     QStandardItemModel *m_parameters;
      QStandardItemModel *m_properties;
+     QStandardItemModel *m_parameters;
      QStandardItemModel *m_modelMaps;
      QStandardItemModel *m_modelObjects;
 

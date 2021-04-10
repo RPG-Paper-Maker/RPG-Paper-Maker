@@ -20,9 +20,9 @@
 // -------------------------------------------------------
 
 DialogCommandChangeProperty::DialogCommandChangeProperty(EventCommand *command,
-    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     ui(new Ui::DialogCommandChangeProperty)
 {
@@ -48,16 +48,9 @@ DialogCommandChangeProperty::~DialogCommandChangeProperty() {
 // -------------------------------------------------------
 
 void DialogCommandChangeProperty::initializePrimitives() {
-    QStandardItemModel *dataBase;
-
-    dataBase = nullptr;
-    if (m_object != nullptr){
-        dataBase = m_object->modelProperties();
-    }
-
-    ui->panelPrimitivePropertyIDValue->initializeDataBaseCommandId(dataBase,
+    ui->panelPrimitivePropertyIDValue->initializeDataBaseCommandId(m_properties,
         m_parameters, nullptr);
-    ui->panelPrimitiveNewValue->initializeProperty(m_parameters, dataBase);
+    ui->panelPrimitiveNewValue->initializeProperty(m_parameters, m_properties);
     ui->panelPrimitiveNewValue->showNumberDouble();
 }
 

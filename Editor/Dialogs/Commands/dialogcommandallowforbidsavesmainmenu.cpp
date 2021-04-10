@@ -20,10 +20,10 @@
 // -------------------------------------------------------
 
 DialogCommandAllowForbidSavesMainMenu::DialogCommandAllowForbidSavesMainMenu(
-    EventCommandKind kind, EventCommand *command, SystemCommonObject *object,
+    EventCommandKind kind, EventCommand *command, QStandardItemModel *properties,
     QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     m_kind(kind),
     ui(new Ui::DialogCommandAllowForbidSavesMainMenu)
@@ -50,17 +50,10 @@ DialogCommandAllowForbidSavesMainMenu::~DialogCommandAllowForbidSavesMainMenu() 
 // -------------------------------------------------------
 
 void DialogCommandAllowForbidSavesMainMenu::initializePrimitives() {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr){
-        properties = m_object->modelProperties();
-    }
-
     this->setWindowTitle(m_kind == EventCommandKind::AllowForbidSaves ? RPM
         ::translate(Translations::ALLOW_FORBID_SAVES) + RPM::DOT_DOT_DOT : RPM
         ::translate(Translations::ALLOW_FORBID_MAIN_MENU) + RPM::DOT_DOT_DOT);
-    ui->panelPrimitiveAllow->initializeSwitch(m_parameters, properties);
+    ui->panelPrimitiveAllow->initializeSwitch(m_parameters, m_properties);
 }
 
 //-------------------------------------------------

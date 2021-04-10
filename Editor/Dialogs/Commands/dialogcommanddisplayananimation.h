@@ -32,14 +32,14 @@ class DialogCommandDisplayAnAnimation : public DialogCommand
 
 public:
     explicit DialogCommandDisplayAnAnimation(EventCommand *command = nullptr,
-        SystemCommonObject *object = nullptr, QStandardItemModel *parameters =
+        QStandardItemModel *properties = nullptr, QStandardItemModel *parameters =
         nullptr, QWidget *parent = nullptr);
     ~DialogCommandDisplayAnAnimation();
 
     virtual EventCommand * getCommand() const;
 
 protected:
-    SystemCommonObject *m_object;
+    QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
     QStandardItemModel *m_modelObjects;
 

@@ -20,10 +20,10 @@
 // -------------------------------------------------------
 
 DialogCommandRemoveObjectFromMap::DialogCommandRemoveObjectFromMap(EventCommand
-    *command, SystemCommonObject *object, QStandardItemModel *parameters,
+    *command, QStandardItemModel *properties, QStandardItemModel *parameters,
     QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     ui(new Ui::DialogCommandRemoveObjectFromMap)
 {
@@ -53,12 +53,6 @@ DialogCommandRemoveObjectFromMap::~DialogCommandRemoveObjectFromMap() {
 // -------------------------------------------------------
 
 void DialogCommandRemoveObjectFromMap::initializePrimitives() {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr){
-        properties = m_object->modelProperties();
-    }
     if (RPM::isInConfig && !RPM::isInObjectConfig) {
         m_modelObjects = new QStandardItemModel;
         Map::setModelObjects(m_modelObjects);
@@ -68,7 +62,7 @@ void DialogCommandRemoveObjectFromMap::initializePrimitives() {
     }
 
     ui->panelPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
-        m_parameters, properties);
+        m_parameters, m_properties);
 }
 
 //-------------------------------------------------

@@ -35,14 +35,14 @@ public:
     explicit PanelColorsTransition(QWidget *parent = nullptr);
     ~PanelColorsTransition();
 
-    void initializePrimitives(SystemCommonObject *object, QStandardItemModel
+    void initializePrimitives(QStandardItemModel *properties, QStandardItemModel
         *parameters);
     void initialize(EventCommand *command, int &i);
     void getCommand(QVector<QString> &command) const;
     void translate();
 
 protected:
-    SystemCommonObject *m_object;
+    QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
 
 private:

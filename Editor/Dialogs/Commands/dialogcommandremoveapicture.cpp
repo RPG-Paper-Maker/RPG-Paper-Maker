@@ -20,9 +20,9 @@
 // -------------------------------------------------------
 
 DialogCommandRemoveAPicture::DialogCommandRemoveAPicture(EventCommand *command,
-    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     ui(new Ui::DialogCommandRemoveAPicture)
 {
@@ -48,14 +48,7 @@ DialogCommandRemoveAPicture::~DialogCommandRemoveAPicture() {
 // -------------------------------------------------------
 
 void DialogCommandRemoveAPicture::initializePrimitives() {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr){
-        properties = m_object->modelProperties();
-    }
-
-    ui->panelPrimitiveIndex->initializeNumber(m_parameters, properties);
+    ui->panelPrimitiveIndex->initializeNumber(m_parameters, m_properties);
 }
 
 //-------------------------------------------------

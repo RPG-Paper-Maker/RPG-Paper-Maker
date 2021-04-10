@@ -21,21 +21,14 @@
 // -------------------------------------------------------
 
 DialogCommandModifyInventory::DialogCommandModifyInventory(EventCommand *command
-    , SystemCommonObject *object, QStandardItemModel *parameters, QWidget
+    , QStandardItemModel *properties, QStandardItemModel *parameters, QWidget
     *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
-    m_properties(nullptr),
     ui(new Ui::DialogCommandModifyInventory)
 {
     ui->setupUi(this);
-    
-    if (m_object != nullptr)
-    {
-        m_properties = m_object->modelProperties();
-    }
-
     ui->panelPrimitiveItemID->initializeDataBaseCommandId(RPM::get()->project()
         ->gameDatas()->itemsDatas()->model(), m_parameters, m_properties);
     ui->panelPrimitiveWeaponID->initializeDataBaseCommandId(RPM::get()->project()
@@ -44,7 +37,6 @@ DialogCommandModifyInventory::DialogCommandModifyInventory(EventCommand *command
         ->gameDatas()->armorsDatas()->model(), m_parameters, m_properties);
     ui->panelPrimitiveNumber->initializeNumber(m_parameters, m_properties);
     ui->panelPrimitiveNumber->setNumberValue(1);
-
     if (command != nullptr)
     {
         initialize(command);

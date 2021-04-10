@@ -20,10 +20,10 @@
 // -------------------------------------------------------
 
 DialogCommandDisplayAnAnimation::DialogCommandDisplayAnAnimation(EventCommand
-    *command, SystemCommonObject *object, QStandardItemModel *parameters,
+    *command, QStandardItemModel *properties, QStandardItemModel *parameters,
     QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     m_modelObjects(nullptr),
     ui(new Ui::DialogCommandDisplayAnAnimation)
@@ -56,12 +56,6 @@ DialogCommandDisplayAnAnimation::~DialogCommandDisplayAnAnimation()
 
 void DialogCommandDisplayAnAnimation::initializePrimitives()
 {
-    QStandardItemModel *properties = nullptr;
-    if (m_object != nullptr)
-    {
-        properties = m_object->modelProperties();
-    }
-
     if (RPM::isInConfig && !RPM::isInObjectConfig) {
         m_modelObjects = new QStandardItemModel;
         Map::setModelObjects(m_modelObjects);
@@ -69,10 +63,10 @@ void DialogCommandDisplayAnAnimation::initializePrimitives()
         m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
     }
     ui->panelPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
-        m_parameters, properties);
+        m_parameters, m_properties);
     ui->panelPrimitiveAnimationID->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->animationsDatas()->model(), m_parameters,
-        properties);
+        m_properties);
 }
 
 //-------------------------------------------------

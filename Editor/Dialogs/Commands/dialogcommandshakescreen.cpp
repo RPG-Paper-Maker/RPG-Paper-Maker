@@ -20,9 +20,9 @@
 // -------------------------------------------------------
 
 DialogCommandShakeScreen::DialogCommandShakeScreen(EventCommand *command,
-    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     ui(new Ui::DialogCommandShakeScreen)
 {
@@ -50,17 +50,10 @@ DialogCommandShakeScreen::~DialogCommandShakeScreen()
 
 void DialogCommandShakeScreen::initializePrimitives()
 {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr){
-        properties = m_object->modelProperties();
-    }
-
-    ui->panelPrimitiveOffset->initializeNumber(m_parameters, properties);
-    ui->panelPrimitiveShakeNumber->initializeNumber(m_parameters, properties,
+    ui->panelPrimitiveOffset->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveShakeNumber->initializeNumber(m_parameters, m_properties,
         false);
-    ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
+    ui->panelPrimitiveTime->initializeNumber(m_parameters, m_properties, false);
     ui->panelPrimitiveOffset->setNumberValue(30);
     ui->panelPrimitiveShakeNumber->setNumberDoubleValue(2);
     ui->panelPrimitiveTime->setNumberDoubleValue(2);

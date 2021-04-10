@@ -35,14 +35,14 @@ class DialogCommandChangeProperty : public DialogCommand
 
 public:
     explicit DialogCommandChangeProperty(EventCommand *command = nullptr,
-        SystemCommonObject *object = nullptr, QStandardItemModel *parameters =
+        QStandardItemModel *properties = nullptr, QStandardItemModel *parameters =
         nullptr, QWidget *parent = nullptr);
     virtual ~DialogCommandChangeProperty();
 
     virtual EventCommand* getCommand() const;
 
 protected:
-    SystemCommonObject *m_object;
+    QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
 
     void initializePrimitives();

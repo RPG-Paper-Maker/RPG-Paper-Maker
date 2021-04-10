@@ -33,7 +33,7 @@ class DialogCommandSendEvent : public DialogCommand
 
 public:
     explicit DialogCommandSendEvent(EventCommand *command = nullptr,
-        SystemCommonObject *object = nullptr, QStandardItemModel *parameters =
+        QStandardItemModel *properties = nullptr, QStandardItemModel *parameters =
         nullptr, QWidget *parent = nullptr);
     ~DialogCommandSendEvent();
     EventCommand* getCommand() const;
@@ -44,6 +44,8 @@ protected:
 private:
     Ui::DialogCommandSendEvent *ui;
     SystemObjectEvent* m_event;
+    QStandardItemModel *m_properties;
+    QStandardItemModel *m_parameters;
     QStandardItemModel *m_modelObjects;
 
     void chooseTarget(QVector<QString> &command) const;

@@ -20,10 +20,10 @@
 // -------------------------------------------------------
 
 DialogCommandChangeVariables::DialogCommandChangeVariables(EventCommand *command
-    , SystemCommonObject *object, QStandardItemModel *parameters, QWidget
+    , QStandardItemModel *properties, QStandardItemModel *parameters, QWidget
     *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     m_modelObjects(nullptr),
     ui(new Ui::DialogCommandChangeVariables)
@@ -55,29 +55,22 @@ DialogCommandChangeVariables::~DialogCommandChangeVariables()
 // -------------------------------------------------------
 
 void DialogCommandChangeVariables::initializePrimitives() {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr){
-        properties = m_object->modelProperties();
-    }
-
     ui->widgetVariableOne->initialize();
-    ui->panelPrimitiveValueNumber->initializeNumber(m_parameters, properties);
-    ui->panelPrimitiveValueRandom1->initializeNumber(m_parameters, properties);
-    ui->panelPrimitiveValueRandom2->initializeNumber(m_parameters, properties);
-    ui->panelPrimitiveMessage->initializeMessage(false, m_parameters, properties);
-    ui->panelPrimitiveSwitch->initializeSwitch(m_parameters, properties);
-    ui->panelPrimitiveValueInstanceID->initializeNumber(m_parameters, properties);
+    ui->panelPrimitiveValueNumber->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveValueRandom1->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveValueRandom2->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveMessage->initializeMessage(false, m_parameters, m_properties);
+    ui->panelPrimitiveSwitch->initializeSwitch(m_parameters, m_properties);
+    ui->panelPrimitiveValueInstanceID->initializeNumber(m_parameters, m_properties);
     ui->panelPrimitiveValueNumberItem->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->weaponsDatas()->model(), m_parameters,
-        properties);
+        m_properties);
     ui->panelPrimitiveValueStatisticID->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->battleSystemDatas()->modelCommonStatistics(),
-        m_parameters, properties);
+        m_parameters, m_properties);
     ui->panelPrimitiveValueTotalCurrency->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->systemDatas()->modelCurrencies(), m_parameters
-        , properties);
+        , m_properties);
     if (RPM::isInConfig && !RPM::isInObjectConfig) {
         m_modelObjects = new QStandardItemModel;
         Map::setModelObjects(m_modelObjects);
@@ -85,7 +78,7 @@ void DialogCommandChangeVariables::initializePrimitives() {
         m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
     }
     ui->panelPrimitiveValueObjectsMap->initializeDataBaseCommandId(
-        m_modelObjects, m_parameters, properties);
+        m_modelObjects, m_parameters, m_properties);
     ui->comboBoxObjectMapCharacteristics->addItems(RPM
         ::ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC);
 }

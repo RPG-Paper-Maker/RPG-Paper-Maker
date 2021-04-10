@@ -34,7 +34,7 @@ class DialogCommandConditions : public DialogCommand
 
 public:
     explicit DialogCommandConditions(EventCommand *command = nullptr,
-        SystemCommonObject *object = nullptr, QStandardItemModel *parameters =
+        QStandardItemModel *properties = nullptr, QStandardItemModel *parameters =
         nullptr, bool hideElse = false, QWidget *parent = nullptr);
     virtual ~DialogCommandConditions();
 
@@ -44,7 +44,7 @@ public:
 
 protected:
     QStandardItemModel *m_modelObjects;
-    SystemCommonObject *m_object;
+    QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
     QButtonGroup *m_groupButtonMain, *m_groupButtonHeroesMain,
         *m_groupButtonHeroesEquiped;

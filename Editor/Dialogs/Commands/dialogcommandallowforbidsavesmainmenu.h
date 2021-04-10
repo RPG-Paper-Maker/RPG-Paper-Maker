@@ -32,14 +32,14 @@ class DialogCommandAllowForbidSavesMainMenu : public DialogCommand
 
 public:
     explicit DialogCommandAllowForbidSavesMainMenu(EventCommandKind kind,
-        EventCommand *command = nullptr, SystemCommonObject *object = nullptr,
+        EventCommand *command = nullptr, QStandardItemModel *properties = nullptr,
         QStandardItemModel *parameters = nullptr, QWidget *parent = nullptr);
     virtual ~DialogCommandAllowForbidSavesMainMenu();
 
     virtual EventCommand * getCommand() const;
 
 protected:
-    SystemCommonObject *m_object;
+    QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
     EventCommandKind m_kind;
 

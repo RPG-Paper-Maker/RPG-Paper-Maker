@@ -32,14 +32,14 @@ class DialogCommandChangeAStatistic : public DialogCommand
 
 public:
     explicit DialogCommandChangeAStatistic(EventCommand *command = nullptr,
-        SystemCommonObject *object = nullptr, QStandardItemModel *parameters =
+        QStandardItemModel *properties = nullptr, QStandardItemModel *parameters =
         nullptr, QWidget *parent = nullptr);
     ~DialogCommandChangeAStatistic();
 
     virtual EventCommand * getCommand() const;
 
 protected:
-    SystemCommonObject *m_object;
+    QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
 
     void initializePrimitives();

@@ -20,10 +20,10 @@
 // -------------------------------------------------------
 
 DialogCommandSetDialogBoxOptions::DialogCommandSetDialogBoxOptions(EventCommand
-    *command, SystemCommonObject *object, QStandardItemModel *parameters,
+    *command, QStandardItemModel *properties, QStandardItemModel *parameters,
     QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     ui(new Ui::DialogCommandSetDialogBoxOptions)
 {
@@ -49,47 +49,40 @@ DialogCommandSetDialogBoxOptions::~DialogCommandSetDialogBoxOptions() {
 // -------------------------------------------------------
 
 void DialogCommandSetDialogBoxOptions::initializePrimitives() {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr){
-        properties = m_object->modelProperties();
-    }
-
     ui->panelPrimitiveWindowSkinID->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->systemDatas()->modelWindowSkins(),
-        m_parameters, properties);
-    ui->panelPrimitiveX->initializeNumber(m_parameters, properties, false);
-    ui->panelPrimitiveY->initializeNumber(m_parameters, properties, false);
-    ui->panelPrimitiveWidth->initializeNumber(m_parameters, properties, false);
-    ui->panelPrimitiveHeight->initializeNumber(m_parameters, properties, false);
-    ui->panelPrimitivePaddingLeft->initializeNumber(m_parameters, properties,
+        m_parameters, m_properties);
+    ui->panelPrimitiveX->initializeNumber(m_parameters, m_properties, false);
+    ui->panelPrimitiveY->initializeNumber(m_parameters, m_properties, false);
+    ui->panelPrimitiveWidth->initializeNumber(m_parameters, m_properties, false);
+    ui->panelPrimitiveHeight->initializeNumber(m_parameters, m_properties, false);
+    ui->panelPrimitivePaddingLeft->initializeNumber(m_parameters, m_properties,
         false);
-    ui->panelPrimitivePaddingTop->initializeNumber(m_parameters, properties,
+    ui->panelPrimitivePaddingTop->initializeNumber(m_parameters, m_properties,
         false);
-    ui->panelPrimitivePaddingRight->initializeNumber(m_parameters, properties,
+    ui->panelPrimitivePaddingRight->initializeNumber(m_parameters, m_properties,
         false);
-    ui->panelPrimitivePaddingBottom->initializeNumber(m_parameters, properties,
+    ui->panelPrimitivePaddingBottom->initializeNumber(m_parameters, m_properties,
         false);
-    ui->panelPrimitiveFacesetX->initializeNumber(m_parameters, properties,
+    ui->panelPrimitiveFacesetX->initializeNumber(m_parameters, m_properties,
         false);
-    ui->panelPrimitiveFacesetY->initializeNumber(m_parameters, properties,
+    ui->panelPrimitiveFacesetY->initializeNumber(m_parameters, m_properties,
         false);
     ui->panelPrimitiveTextColorText->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->systemDatas()->modelColors(), m_parameters,
-        properties);
+        m_properties);
     ui->panelPrimitiveTextColorStroke->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->systemDatas()->modelColors(), m_parameters,
-        properties);
+        m_properties);
     ui->panelPrimitiveTextColorBackground->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->systemDatas()->modelColors(), m_parameters,
-        properties);
+        m_properties);
     ui->panelPrimitiveTextSize->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->systemDatas()->modelFontSizes(), m_parameters,
-        properties);
+        m_properties);
     ui->panelPrimitiveTextFont->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->systemDatas()->modelFontNames(), m_parameters,
-        properties);
+        m_properties);
     ui->comboBoxFacesetPosition->addItem(RPM::translate(Translations::BEHIND));
     ui->comboBoxFacesetPosition->addItem(RPM::translate(Translations::ABOVE));
     ui->comboBoxTextStroke->addItem(RPM::translate(Translations::YES));

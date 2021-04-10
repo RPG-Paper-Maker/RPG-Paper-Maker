@@ -32,7 +32,7 @@ class DialogCommandPlugin : public DialogCommand
 
 public:
     explicit DialogCommandPlugin(EventCommand *command = nullptr,
-        SystemCommonObject *object = nullptr, QStandardItemModel *parameters =
+        QStandardItemModel *properties = nullptr, QStandardItemModel *parameters =
         nullptr, QWidget *parent = nullptr);
     ~DialogCommandPlugin();
 

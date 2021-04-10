@@ -33,9 +33,8 @@ class DialogCommandMoveCamera : public DialogCommand
 
 public:
     DialogCommandMoveCamera(EventCommand *command = nullptr,
-                            SystemCommonObject *object = nullptr,
-                            QStandardItemModel* parameters = nullptr,
-                            QWidget *parent = nullptr);
+        QStandardItemModel *properties = nullptr, QStandardItemModel *parameters
+        = nullptr, QWidget *parent = nullptr);
     virtual ~DialogCommandMoveCamera();
     EventCommand* getCommand() const;
 
@@ -45,10 +44,9 @@ private:
     void translate();
 
 protected:
-    SystemCommonObject *m_object;
+    QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
-    QStandardItemModel* m_properties;
-    QStandardItemModel* m_modelObjects;
+    QStandardItemModel *m_modelObjects;
 
     virtual void initialize(EventCommand* command);
 

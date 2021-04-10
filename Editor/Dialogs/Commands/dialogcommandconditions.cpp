@@ -21,10 +21,10 @@
 // -------------------------------------------------------
 
 DialogCommandConditions::DialogCommandConditions(EventCommand *command,
-    SystemCommonObject *object, QStandardItemModel *parameters, bool hideElse,
+    QStandardItemModel *properties, QStandardItemModel *parameters, bool hideElse,
     QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     ui(new Ui::DialogCommandConditions)
 {
@@ -62,13 +62,6 @@ DialogCommandConditions::~DialogCommandConditions()
 // -------------------------------------------------------
 
 void DialogCommandConditions::initializePrimitives() {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr){
-        properties = m_object->modelProperties();
-    }
-
     // Radios groups
     m_groupButtonMain = new QButtonGroup;
     m_groupButtonMain->addButton(ui->radioButtonVariableParamProp);
@@ -96,71 +89,71 @@ void DialogCommandConditions::initializePrimitives() {
 
     // Primitives
     ui->panelPrimitiveVariableParamPropValue->initializeVariableParamProp(
-        m_parameters, properties);
+        m_parameters, m_properties);
     ui->panelPrimitiveVariableParamPropValue->showVariable();
     ui->comboBoxVariableOperation->addItems(RPM::ENUM_TO_STRING_OPERATION);
     ui->panelPrimitiveVariableParamPropTestValue->initializeProperty(
-        m_parameters, properties);
+        m_parameters, m_properties);
     ui->panelPrimitiveVariableParamPropTestValue->showNumberDouble();
 
     // Heroes
     ui->comboBoxHeroes->addItems(RPM::ENUM_TO_STRING_CONDITION_HEROES);
-    ui->panelPrimitiveHeroInstanceID->initializeNumber(m_parameters, properties);
+    ui->panelPrimitiveHeroInstanceID->initializeNumber(m_parameters, m_properties);
     ui->panelPrimitiveHeroInstanceID->showVariable();
     ui->panelPrimitiveHeroInstanceID->hide();
     ui->comboBoxHeroTeam->addItems(RPM::ENUM_TO_STRING_TEAM);
     ui->panelPrimitiveHeroesNamed->initializeMessage(false, m_parameters,
-        properties);
+        m_properties);
     ui->comboBoxHeroInTeam->addItems(RPM::ENUM_TO_STRING_TEAM);
     ui->panelPrimitiveHeroesSkillID->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->skillsDatas()->model(), m_parameters,
-        properties);
+        m_properties);
     ui->panelPrimitiveHeroesEquipedWeaponID->initializeDataBaseCommandId(RPM
         ::get()->project()->gameDatas()->weaponsDatas()->model(), m_parameters,
-        properties);
+        m_properties);
     ui->panelPrimitiveHeroesEquipedArmorID->initializeDataBaseCommandId(RPM
         ::get()->project()->gameDatas()->armorsDatas()->model(), m_parameters,
-        properties);
+        m_properties);
     ui->panelPrimitiveHeroesStatusID->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->statusDatas()->model(), m_parameters,
-        properties);
+        m_properties);
     ui->panelPrimitiveHeroesStatisticID->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->battleSystemDatas()->modelCommonStatistics(),
-        m_parameters, properties);
+        m_parameters, m_properties);
     ui->comboBoxStatisticOperation->addItems(RPM::ENUM_TO_STRING_OPERATION);
     ui->panelPrimitiveHeroesStatisticValue->initializeProperty(m_parameters,
-        properties);
+        m_properties);
     ui->panelPrimitiveHeroesStatisticValue->showNumberDouble();
 
     // Possessions
     ui->panelPrimitiveCurrencyID->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->systemDatas()->modelCurrencies(), m_parameters
-        , properties);
+        , m_properties);
     ui->comboBoxOperationCurrency->addItems(RPM::ENUM_TO_STRING_OPERATION);
-    ui->panelPrimitiveCurrencyValue->initializeNumber(m_parameters, properties,
+    ui->panelPrimitiveCurrencyValue->initializeNumber(m_parameters, m_properties,
         false);
     ui->panelPrimitiveItemID->initializeDataBaseCommandId(RPM::get()->project()
-        ->gameDatas()->itemsDatas()->model(), m_parameters, properties);
+        ->gameDatas()->itemsDatas()->model(), m_parameters, m_properties);
     ui->comboBoxOperationItem->addItems(RPM::ENUM_TO_STRING_OPERATION);
-    ui->panelPrimitiveItemValue->initializeNumber(m_parameters, properties,
+    ui->panelPrimitiveItemValue->initializeNumber(m_parameters, m_properties,
         false);
     ui->panelPrimitiveWeaponID->initializeDataBaseCommandId(RPM::get()->project()
-        ->gameDatas()->weaponsDatas()->model(), m_parameters, properties);
+        ->gameDatas()->weaponsDatas()->model(), m_parameters, m_properties);
     ui->comboBoxOperationWeapon->addItems(RPM::ENUM_TO_STRING_OPERATION);
-    ui->panelPrimitiveWeaponValue->initializeNumber(m_parameters, properties,
+    ui->panelPrimitiveWeaponValue->initializeNumber(m_parameters, m_properties,
         false);
     ui->panelPrimitiveArmorID->initializeDataBaseCommandId(RPM::get()->project()
-        ->gameDatas()->armorsDatas()->model(), m_parameters, properties);
+        ->gameDatas()->armorsDatas()->model(), m_parameters, m_properties);
     ui->comboBoxOperationArmor->addItems(RPM::ENUM_TO_STRING_OPERATION);
-    ui->panelPrimitiveArmorValue->initializeNumber(m_parameters, properties,
+    ui->panelPrimitiveArmorValue->initializeNumber(m_parameters, m_properties,
         false);
 
     // Others
     ui->panelPrimitiveOthersKeyID->initializeDataBaseCommandId(RPM::get()
-        ->project()->keyBoardDatas()->model(), m_parameters, properties);
-    ui->panelPrimitiveOthersKeyValue->initializeSwitch(m_parameters, properties);
+        ->project()->keyBoardDatas()->model(), m_parameters, m_properties);
+    ui->panelPrimitiveOthersKeyValue->initializeSwitch(m_parameters, m_properties);
     ui->panelPrimitiveOthersScript->initializeMessage(true, m_parameters,
-        properties);
+        m_properties);
 
     // Model objects
     if (RPM::isInConfig && !RPM::isInObjectConfig)
@@ -172,7 +165,7 @@ void DialogCommandConditions::initializePrimitives() {
         m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
     }
     ui->panelPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
-        m_parameters, properties);
+        m_parameters, m_properties);
     ui->comboBoxObjectLookingAt->addItems(RPM::ENUM_TO_STRING_ORIENTATION_KIND);
     this->on_radioButtonHeroes_toggled(false);
 }

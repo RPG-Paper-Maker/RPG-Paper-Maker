@@ -20,18 +20,18 @@
 // -------------------------------------------------------
 
 DialogCommandStopSong::DialogCommandStopSong(QString title, SongKind kind,
-                                             EventCommand *command,
-                                             SystemCommonObject *,
-                                             QStandardItemModel *parameters,
-                                             QWidget *parent) :
+    EventCommand *command, QStandardItemModel *properties, QStandardItemModel
+    *parameters, QWidget *parent) :
     DialogCommand(parent),
     m_kind(kind),
+    m_properties(properties),
+    m_parameters(parameters),
     ui(new Ui::DialogCommandStopSong)
 {
     ui->setupUi(this);
     
     this->setWindowTitle(title);
-    ui->panelPrimitiveValueSeconds->initializeNumber(parameters, nullptr);
+    ui->panelPrimitiveValueSeconds->initializeNumber(parameters, properties);
 
     if (command != nullptr) initialize(command);
 

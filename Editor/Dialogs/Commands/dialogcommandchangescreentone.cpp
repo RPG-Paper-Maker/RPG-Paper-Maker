@@ -20,10 +20,10 @@
 // -------------------------------------------------------
 
 DialogCommandChangeScreenTone::DialogCommandChangeScreenTone(EventCommand
-    *command, SystemCommonObject *object, QStandardItemModel *parameters,
+    *command, QStandardItemModel *properties, QStandardItemModel *parameters,
     QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     ui(new Ui::DialogCommandChangeScreenTone)
 {
@@ -49,14 +49,8 @@ DialogCommandChangeScreenTone::~DialogCommandChangeScreenTone() {
 // -------------------------------------------------------
 
 void DialogCommandChangeScreenTone::initializePrimitives() {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr){
-        properties = m_object->modelProperties();
-    }
-    ui->panelColorsTransition->initializePrimitives(m_object, m_parameters);
-    ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
+    ui->panelColorsTransition->initializePrimitives(m_properties, m_parameters);
+    ui->panelPrimitiveTime->initializeNumber(m_parameters, m_properties, false);
 }
 
 //-------------------------------------------------

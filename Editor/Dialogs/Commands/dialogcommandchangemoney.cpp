@@ -20,9 +20,9 @@
 // -------------------------------------------------------
 
 DialogCommandChangeMoney::DialogCommandChangeMoney(EventCommand *command,
-    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     ui(new Ui::DialogCommandChangeMoney)
 {
@@ -50,16 +50,10 @@ DialogCommandChangeMoney::~DialogCommandChangeMoney()
 
 void DialogCommandChangeMoney::initializePrimitives()
 {
-    QStandardItemModel *properties = nullptr;
-    if (m_object != nullptr)
-    {
-        properties = m_object->modelProperties();
-    }
-
     ui->panelPrimitiveMoneyID->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->systemDatas()->modelCurrencies(), m_parameters,
-        properties);
-    ui->panelPrimitiveNumber->initializeNumber(m_parameters, properties);
+        m_properties);
+    ui->panelPrimitiveNumber->initializeNumber(m_parameters, m_properties);
     ui->panelPrimitiveNumber->setNumberValue(1);
 }
 

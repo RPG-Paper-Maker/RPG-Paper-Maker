@@ -21,32 +21,32 @@
 // -------------------------------------------------------
 
 DialogCommandStartBattle::DialogCommandStartBattle(EventCommand* command,
-    SystemCommonObject* object, QStandardItemModel* parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel* parameters, QWidget *parent) :
     DialogCommand(parent),
     ui(new Ui::DialogCommandStartBattle),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters)
 {
     ui->setupUi(this);
 
     // Initialize widgets
     ui->widgetVariableConstant->initializeDataBaseCommandId(RPM::get()
-        ->project()->gameDatas()->troopsDatas()->model(), m_parameters, nullptr);
+        ->project()->gameDatas()->troopsDatas()->model(), m_parameters, m_properties);
     ui->panelPrimitiveValueIDBattleMap->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->battleSystemDatas()->modelBattleMaps(),
-        m_parameters, nullptr);
-    ui->widgetIdMap->initializeNumber(parameters, nullptr);
-    ui->widgetX->initializeNumber(parameters, nullptr);
-    ui->widgetY->initializeNumber(parameters, nullptr);
-    ui->widgetYplus->initializeNumber(parameters, nullptr);
-    ui->widgetZ->initializeNumber(parameters, nullptr);
+        m_parameters, m_properties);
+    ui->widgetIdMap->initializeNumber(parameters, m_properties);
+    ui->widgetX->initializeNumber(parameters, m_properties);
+    ui->widgetY->initializeNumber(parameters, m_properties);
+    ui->widgetYplus->initializeNumber(parameters, m_properties);
+    ui->widgetZ->initializeNumber(parameters, m_properties);
     ui->panelPrimitiveValueTransitionColorStart->initializeDataBaseCommandId(
         RPM::get()->project()->gameDatas()->systemDatas()->modelColors(),
-        m_parameters, nullptr);
+        m_parameters, m_properties);
     ui->panelPrimitiveValueTransitionColorStart->showDataBase();
     ui->panelPrimitiveValueTransitionColorEnd->initializeDataBaseCommandId(
         RPM::get()->project()->gameDatas()->systemDatas()->modelColors(),
-        m_parameters, nullptr);
+        m_parameters, m_properties);
     ui->panelPrimitiveValueTransitionColorEnd->showDataBase();
     ui->comboBoxTransitionStart->addItem(RPM::translate(Translations::NONE));
     ui->comboBoxTransitionStart->addItem(RPM::translate(Translations::FADE_IN) +

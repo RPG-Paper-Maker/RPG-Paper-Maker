@@ -32,14 +32,14 @@ class DialogCommandLabel : public DialogCommand
 
 public:
     explicit DialogCommandLabel(bool jump, EventCommand *command = nullptr,
-        SystemCommonObject *object = nullptr, QStandardItemModel *parameters =
+        QStandardItemModel *properties = nullptr, QStandardItemModel *parameters =
         nullptr, QWidget *parent = nullptr);
     ~DialogCommandLabel();
 
     virtual EventCommand * getCommand() const;
 
 protected:
-    SystemCommonObject *m_object;
+    QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
     bool m_isJump;
 

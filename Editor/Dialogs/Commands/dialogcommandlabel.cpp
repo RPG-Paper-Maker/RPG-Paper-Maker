@@ -20,9 +20,9 @@
 // -------------------------------------------------------
 
 DialogCommandLabel::DialogCommandLabel(bool jump, EventCommand *command,
-    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     m_isJump(jump),
     ui(new Ui::DialogCommandLabel)
@@ -50,14 +50,7 @@ DialogCommandLabel::~DialogCommandLabel()
 // -------------------------------------------------------
 
 void DialogCommandLabel::initializePrimitives() {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr){
-        properties = m_object->modelProperties();
-    }
-
-    ui->panelPrimitiveLabel->initializeMessage(false, m_parameters, properties);
+    ui->panelPrimitiveLabel->initializeMessage(false, m_parameters, m_properties);
 }
 
 //-------------------------------------------------

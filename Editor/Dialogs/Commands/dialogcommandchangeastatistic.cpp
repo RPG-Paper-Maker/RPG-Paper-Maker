@@ -20,10 +20,10 @@
 // -------------------------------------------------------
 
 DialogCommandChangeAStatistic::DialogCommandChangeAStatistic(EventCommand
-    *command, SystemCommonObject *object, QStandardItemModel *parameters,
+    *command, QStandardItemModel *properties, QStandardItemModel *parameters,
     QWidget *parent) :
     DialogCommand(parent),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
     ui(new Ui::DialogCommandChangeAStatistic)
 {
@@ -51,25 +51,17 @@ DialogCommandChangeAStatistic::~DialogCommandChangeAStatistic()
 
 void DialogCommandChangeAStatistic::initializePrimitives()
 {
-    QStandardItemModel *properties;
-
-    properties = nullptr;
-    if (m_object != nullptr)
-    {
-        properties = m_object->modelProperties();
-    }
-
     ui->comboBoxTeam->addItems(RPM::ENUM_TO_STRING_TEAM);
     ui->panelPrimitiveStatisticID->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->battleSystemDatas()->modelCommonStatistics(),
-        m_parameters, properties);
+        m_parameters, m_properties);
     ui->panelPrimitiveHeroEnemyInstanceID->initializeNumber(m_parameters,
-        properties);
+        m_properties);
     ui->panelPrimitiveHeroEnemyInstanceID->showVariable();
     ui->panelPrimitiveHeroEnemyInstanceID->setNumberValue(1);
-    ui->panelPrimiteValueNumber->initializeNumber(m_parameters, properties);
+    ui->panelPrimiteValueNumber->initializeNumber(m_parameters, m_properties);
     ui->panelPrimiteValueFormula->initializeMessage(true, m_parameters,
-        properties);
+        m_properties);
 }
 
 //-------------------------------------------------

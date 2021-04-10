@@ -32,14 +32,14 @@ class DialogCommandShakeScreen : public DialogCommand
 
 public:
     explicit DialogCommandShakeScreen(EventCommand *command = nullptr,
-        SystemCommonObject *object = nullptr, QStandardItemModel *parameters =
+        QStandardItemModel *properties = nullptr, QStandardItemModel *parameters =
         nullptr, QWidget *parent = nullptr);
     virtual ~DialogCommandShakeScreen();
 
     virtual EventCommand * getCommand() const;
 
 protected:
-    SystemCommonObject *m_object;
+    QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
 
     void initializePrimitives();

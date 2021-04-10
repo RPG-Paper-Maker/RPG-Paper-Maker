@@ -20,16 +20,12 @@
 //
 // -------------------------------------------------------
 
-DialogCommandChangeState::DialogCommandChangeState(
-        EventCommand *command,
-        SystemCommonObject* object,
-        QStandardItemModel* parameters,
-        QWidget *parent) :
+DialogCommandChangeState::DialogCommandChangeState(EventCommand *command,
+    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
     ui(new Ui::DialogCommandChangeState),
-    m_object(object),
+    m_properties(properties),
     m_parameters(parameters),
-    m_properties(nullptr),
     m_modelMaps(new QStandardItemModel),
     m_modelObjects(new QStandardItemModel)
 {
@@ -137,10 +133,6 @@ void DialogCommandChangeState::initializeObjects(int id, bool isCurrentMap)
 // -------------------------------------------------------
 
 void DialogCommandChangeState::initializeStateId(){
-    if (m_object != nullptr){
-        m_properties = m_object->modelProperties();
-    }
-
     connect(ui->panelPrimitiveMapID, SIGNAL(numberUpdated(int)), this, SLOT(
         on_mapIDUpdated(int)));
     Map::setModelObjects(m_modelObjects);

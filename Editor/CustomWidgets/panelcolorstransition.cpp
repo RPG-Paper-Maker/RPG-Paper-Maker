@@ -37,24 +37,17 @@ PanelColorsTransition::~PanelColorsTransition()
 //
 // -------------------------------------------------------
 
-void PanelColorsTransition::initializePrimitives(SystemCommonObject *object,
+void PanelColorsTransition::initializePrimitives(QStandardItemModel *properties,
     QStandardItemModel *parameters)
 {
-    m_object = object;
+    m_properties = properties;
     m_parameters = parameters;
-
-    QStandardItemModel *properties = nullptr;
-    if (m_object != nullptr)
-    {
-        properties = m_object->modelProperties();
-    }
-
-    ui->panelPrimitiveRed->initializeNumber(m_parameters, properties);
-    ui->panelPrimitiveGreen->initializeNumber(m_parameters, properties);
-    ui->panelPrimitiveBlue->initializeNumber(m_parameters, properties);
-    ui->panelPrimitiveGrey->initializeNumber(m_parameters, properties);
+    ui->panelPrimitiveRed->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveGreen->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveBlue->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveGrey->initializeNumber(m_parameters, m_properties);
     ui->panelPrimitiveColor->initializeDataBaseCommandId(RPM::get()->project()
-        ->gameDatas()->systemDatas()->modelColors(), m_parameters, properties);
+        ->gameDatas()->systemDatas()->modelColors(), m_parameters, m_properties);
 
     // Connections
     connect(ui->panelPrimitiveRed->spinBoxNumber(), SIGNAL(valueChanged(
