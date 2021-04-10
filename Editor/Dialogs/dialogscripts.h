@@ -88,6 +88,7 @@ public slots:
     void on_treeKeyPressed(QKeyEvent *);
     void on_pushButtonExport_clicked();
     void on_pushButtonRefresh_clicked();
+    void on_pushButtonPicture_clicked();
 };
 
 #endif // DIALOGSCRIPTS_H

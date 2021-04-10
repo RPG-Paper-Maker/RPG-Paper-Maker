@@ -26,7 +26,7 @@ PanelPluginDetails::PanelPluginDetails(QWidget *parent) :
     ui(new Ui::PanelPluginDetails)
 {
     ui->setupUi(this);
-
+    ui->widgetShowPicture->setActivateCoef(false);
     ui->treeViewEditParameter->initializeNewItemInstance(new
         SystemPluginParameter);
     ui->treeViewEditParameter->setCanMove(false);
@@ -128,6 +128,14 @@ void PanelPluginDetails::initialize(SystemPlugin *plugin)
         }
     }
     ui->labelCommands->setText(strCommands);
+    this->updatePicture();
+}
+
+// -------------------------------------------------------
+
+void PanelPluginDetails::updatePicture()
+{
+    ui->widgetShowPicture->updatePictureByName(m_plugin->getPicPath());
 }
 
 // -------------------------------------------------------

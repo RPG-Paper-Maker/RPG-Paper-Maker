@@ -361,13 +361,14 @@ void DialogScripts::translate()
     ui->tabWidgetPlugin->setTabText(3, RPM::translate(Translations::EXPORT));
     ui->pushButtonOpenPluginFolder->setText(RPM::translate(Translations
         ::OPEN_PLUGIN_FOLDER));
-    ui->labelName->setText(RPM::translate(Translations::NAME));
-    ui->labelAuthor->setText(RPM::translate(Translations::AUTHOR));
-    ui->labelDescritpion->setText(RPM::translate(Translations::DESCRIPTION));
-    ui->labelVersion->setText(RPM::translate(Translations::VERSION));
-    ui->labelWebsite->setText(RPM::translate(Translations::WEBSITE));
-    ui->labelTutorial->setText(RPM::translate(Translations::TUTORIAL));
-    ui->labelCategory->setText(RPM::translate(Translations::CATEGORY));
+    ui->labelPicture->setText(RPM::translate(Translations::PICTURE) + RPM::COLON);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelAuthor->setText(RPM::translate(Translations::AUTHOR) + RPM::COLON);
+    ui->labelDescritpion->setText(RPM::translate(Translations::DESCRIPTION) + RPM::COLON);
+    ui->labelVersion->setText(RPM::translate(Translations::VERSION) + RPM::COLON);
+    ui->labelWebsite->setText(RPM::translate(Translations::WEBSITE) + RPM::COLON);
+    ui->labelTutorial->setText(RPM::translate(Translations::TUTORIAL) + RPM::COLON);
+    ui->labelCategory->setText(RPM::translate(Translations::CATEGORY) + RPM::COLON);
     ui->groupBoxParameters->setTitle(RPM::translate(Translations::PARAMETERS));
     ui->groupBoxCommands->setTitle(RPM::translate(Translations::COMMANDS));
     ui->labelExport1->setText("<h2>" + RPM::translate(Translations
@@ -834,4 +835,23 @@ void DialogScripts::on_pushButtonExport_clicked()
 void DialogScripts::on_pushButtonRefresh_clicked()
 {
     this->initialize();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pushButtonPicture_clicked()
+{
+    // Open dialog box
+    QString file = QFileDialog::getOpenFileName(this, RPM::translate(
+        Translations::ADD_NEW_CONTENTS), "", "Image (*.png)");
+
+    // Copy the image
+    SystemPlugin *plugin = this->getSelectedPlugin();
+    if (!file.isEmpty() && !QFile::copy(file, plugin->getPicPath()))
+    {
+        QMessageBox::warning(this, RPM::translate(Translations::WARNING),
+            RPM::translate(Translations::COULD_NOT_COPY_FILE_AT) + RPM
+            ::SPACE + file + RPM::DOT);
+    }
+    ui->panelPluginDetails->updatePicture();
 }

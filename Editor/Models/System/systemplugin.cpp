@@ -43,6 +43,7 @@ const QString SystemPlugin::DEFAULT_VERSION = "1.0.0";
 const QString SystemPlugin::DEFAULT_TUTORIAL = "";
 const QString SystemPlugin::NAME_CODE = "code.js";
 const QString SystemPlugin::NAME_JSON = "details.json";
+const QString SystemPlugin::NAME_PIC = "pic.png";
 
 // -------------------------------------------------------
 //
@@ -264,6 +265,13 @@ QString SystemPlugin::getFolderPath() const
 QString SystemPlugin::getJSONPath() const
 {
     return Common::pathCombine(this->getFolderPath(), NAME_JSON);
+}
+
+// -------------------------------------------------------
+
+QString SystemPlugin::getPicPath() const
+{
+    return Common::pathCombine(this->getFolderPath(), NAME_PIC);
 }
 
 // -------------------------------------------------------

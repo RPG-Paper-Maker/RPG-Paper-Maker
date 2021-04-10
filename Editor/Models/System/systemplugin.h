@@ -53,6 +53,7 @@ public:
     static const QString DEFAULT_TUTORIAL;
     static const QString NAME_CODE;
     static const QString NAME_JSON;
+    static const QString NAME_PIC;
 
     SystemPlugin();
     SystemPlugin(int i, QString n, bool io = DEFAULT_IS_ON, PluginTypeKind t =
@@ -93,6 +94,7 @@ public:
     QString getJSONCategory() const;
     QString getFolderPath() const;
     QString getJSONPath() const;
+    QString getPicPath() const;
     bool checkPluginName(QString previousName) const;
     void readFromPath();
     void initializeEditedPlugin();

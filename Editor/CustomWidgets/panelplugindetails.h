@@ -38,6 +38,7 @@ public:
     QTreeView * treeViewParameters() const;
 
     void initialize(SystemPlugin *plugin);
+    void updatePicture();
 
 private:
     Ui::PanelPluginDetails *ui;
