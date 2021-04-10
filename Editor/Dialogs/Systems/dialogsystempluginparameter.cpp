@@ -69,8 +69,14 @@ void DialogSystemPluginParameter::initialize()
     }
     connect(ui->panelPrimitiveDefaultValue, SIGNAL(kindUpdated(
         PrimitiveValueKind)), this, SLOT(on_kindUpdated(PrimitiveValueKind)));
+
+    // Primitives
     ui->panelPrimitiveDefaultValue->initializeAllAndUpdate(m_parameter
         .defaultValue());
+    ui->panelPrimitiveValueX->initializeNumberAndUpdate(ui->panelPrimitiveDefaultValue->model()->x());
+    ui->panelPrimitiveValueY->initializeNumberAndUpdate(ui->panelPrimitiveDefaultValue->model()->y());
+    ui->panelPrimitiveValueZ->initializeNumberAndUpdate(ui->panelPrimitiveDefaultValue->model()->z());
+
     this->on_kindUpdated(ui->panelPrimitiveDefaultValue->model()->kind());
     ui->lineEditName->setFocus();
 }
@@ -85,7 +91,7 @@ void DialogSystemPluginParameter::translate()
     ui->labelDescription->setText(RPM::translate(Translations::DESCRIPTION) +
         RPM::COLON);
     ui->labelDefaultValue->setText(RPM::translate(m_parameter.isDefault() ?
-        Translations::DEFAULT_VALUE : Translations::VALUE));
+        Translations::DEFAULT_VALUE : Translations::VALUE) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -138,6 +144,13 @@ void DialogSystemPluginParameter::on_lineEditDescription_textEdited(const
 
 void DialogSystemPluginParameter::on_kindUpdated(PrimitiveValueKind kind)
 {
+    ui->treeView->setVisible(false);
+    ui->labelX->setVisible(false);
+    ui->labelY->setVisible(false);
+    ui->labelZ->setVisible(false);
+    ui->panelPrimitiveValueX->setVisible(false);
+    ui->panelPrimitiveValueY->setVisible(false);
+    ui->panelPrimitiveValueZ->setVisible(false);
     switch (kind)
     {
     case PrimitiveValueKind::CustomStructure:
@@ -145,8 +158,21 @@ void DialogSystemPluginParameter::on_kindUpdated(PrimitiveValueKind kind)
         ui->treeView->setVisible(true);
         ui->treeView->initializeNodes(ui->panelPrimitiveDefaultValue->model());
         break;
+    case PrimitiveValueKind::Vector2:
+        ui->labelX->setVisible(true);
+        ui->labelY->setVisible(true);
+        ui->panelPrimitiveValueX->setVisible(true);
+        ui->panelPrimitiveValueY->setVisible(true);
+        break;
+    case PrimitiveValueKind::Vector3:
+        ui->labelX->setVisible(true);
+        ui->labelY->setVisible(true);
+        ui->labelZ->setVisible(true);
+        ui->panelPrimitiveValueX->setVisible(true);
+        ui->panelPrimitiveValueY->setVisible(true);
+        ui->panelPrimitiveValueZ->setVisible(true);
+        break;
     default:
-        ui->treeView->setVisible(false);
         break;
     }
 }

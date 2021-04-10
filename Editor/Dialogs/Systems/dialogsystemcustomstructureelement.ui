@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>623</width>
-    <height>159</height>
+    <width>625</width>
+    <height>262</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,56 +27,184 @@
     <number>10</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
+    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0">
      <property name="spacing">
       <number>15</number>
      </property>
      <item>
-      <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,1">
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEditKey"/>
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1">
+       <item>
+        <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0">
+         <item row="0" column="0">
+          <widget class="QLabel" name="labelKey">
+           <property name="text">
+            <string>Key:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineEditDescription"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="labelValue">
+           <property name="text">
+            <string>Value:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="lineEditKey"/>
+         </item>
+         <item row="2" column="1">
+          <widget class="PanelPrimitiveValue" name="panelPrimitiveValue" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>500</width>
+             <height>27</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>500</width>
+             <height>27</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="labelDescription">
+           <property name="text">
+            <string>Description:</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
-       <item row="2" column="1">
-        <widget class="PanelPrimitiveValue" name="panelPrimitiveValue" native="true">
-         <property name="minimumSize">
-          <size>
-           <width>500</width>
-           <height>27</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>500</width>
-           <height>27</height>
-          </size>
-         </property>
-        </widget>
+       <item>
+        <layout class="QGridLayout" name="gridLayoutVectors">
+         <item row="0" column="0">
+          <widget class="QLabel" name="labelX">
+           <property name="text">
+            <string>X:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
+           <item>
+            <widget class="PanelPrimitiveValue" name="panelPrimitiveValueX" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="labelY">
+           <property name="text">
+            <string>Y:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1">
+           <item>
+            <widget class="PanelPrimitiveValue" name="panelPrimitiveValueY" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="labelZ">
+           <property name="text">
+            <string>Z:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1">
+           <item>
+            <widget class="PanelPrimitiveValue" name="panelPrimitiveValueZ" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="labelDescription">
-         <property name="text">
-          <string>Description:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="labelKey">
-         <property name="text">
-          <string>Key:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEditDescription"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="labelValue">
-         <property name="text">
-          <string>Value:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

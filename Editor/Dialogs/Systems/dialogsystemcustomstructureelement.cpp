@@ -58,7 +58,12 @@ void DialogSystemCustomStructureElement::initialize()
         ui->labelDescription->hide();
         ui->lineEditDescription->hide();
     }
+    connect(ui->panelPrimitiveValue, SIGNAL(kindUpdated(PrimitiveValueKind)),
+        this, SLOT(on_kindUpdated(PrimitiveValueKind)));
     ui->panelPrimitiveValue->initializeAllAndUpdate(m_element.value());
+    ui->panelPrimitiveValueX->initializeNumberAndUpdate(m_element.value()->x());
+    ui->panelPrimitiveValueY->initializeNumberAndUpdate(m_element.value()->y());
+    ui->panelPrimitiveValueZ->initializeNumberAndUpdate(m_element.value()->z());
 }
 
 // -------------------------------------------------------
@@ -119,4 +124,35 @@ void DialogSystemCustomStructureElement::on_lineEditDescription_textEdited(const
     QString &text)
 {
     m_element.setDescription(text);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCustomStructureElement::on_kindUpdated(PrimitiveValueKind kind)
+{
+    ui->labelX->setVisible(false);
+    ui->labelY->setVisible(false);
+    ui->labelZ->setVisible(false);
+    ui->panelPrimitiveValueX->setVisible(false);
+    ui->panelPrimitiveValueY->setVisible(false);
+    ui->panelPrimitiveValueZ->setVisible(false);
+    switch (kind)
+    {
+    case PrimitiveValueKind::Vector2:
+        ui->labelX->setVisible(true);
+        ui->labelY->setVisible(true);
+        ui->panelPrimitiveValueX->setVisible(true);
+        ui->panelPrimitiveValueY->setVisible(true);
+        break;
+    case PrimitiveValueKind::Vector3:
+        ui->labelX->setVisible(true);
+        ui->labelY->setVisible(true);
+        ui->labelZ->setVisible(true);
+        ui->panelPrimitiveValueX->setVisible(true);
+        ui->panelPrimitiveValueY->setVisible(true);
+        ui->panelPrimitiveValueZ->setVisible(true);
+        break;
+    default:
+        break;
+    }
 }

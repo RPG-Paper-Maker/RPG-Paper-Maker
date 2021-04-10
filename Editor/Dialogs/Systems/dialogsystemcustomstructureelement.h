@@ -51,6 +51,7 @@ private:
 public slots:
     void on_lineEditKey_textEdited(const QString &text);
     void on_lineEditDescription_textEdited(const QString &text);
+    void on_kindUpdated(PrimitiveValueKind kind);
 };
 
 #endif // DIALOGSYSTEMCUSTOMSTRUCTUREELEMENT_H

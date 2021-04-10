@@ -263,12 +263,26 @@ void PanelPrimitiveValue::initializeAll(QStandardItemModel *parameters,
     m_kind = PanelPrimitiveValueKind::All;
     this->addCustomStructure(false);
     this->addCustomStructure(true);
+    ui->comboBoxChoice->addItem("Vector2", static_cast<int>(PrimitiveValueKind::Vector2));
+    ui->comboBoxChoice->addItem("Vector3", static_cast<int>(PrimitiveValueKind::Vector3));
     addVariable();
     addNumberDouble();
     addSwitch();
     addMessage(false);
     addParameter(parameters);
     addProperty(properties);
+    if (m_model->x() == nullptr)
+    {
+        m_model->setX(new PrimitiveValue(0));
+    }
+    if (m_model->y() == nullptr)
+    {
+        m_model->setY(new PrimitiveValue(0));
+    }
+    if (m_model->z() == nullptr)
+    {
+        m_model->setZ(new PrimitiveValue(0));
+    }
     addDataBase(RPM::get()->project()->gameDatas()->classesDatas()->model(),
         PrimitiveValueKind::Class);
     addDataBase(RPM::get()->project()->gameDatas()->heroesDatas()->model(),
@@ -287,9 +301,8 @@ void PanelPrimitiveValue::initializeAll(QStandardItemModel *parameters,
         PrimitiveValueKind::Skill);
     addDataBase(RPM::get()->project()->gameDatas()->animationsDatas()->model(),
         PrimitiveValueKind::Animation);
-    /*
     addDataBase(RPM::get()->project()->gameDatas()->statusDatas()->model(),
-        PrimitiveValueKind::Statu);*/
+        PrimitiveValueKind::Status);
     addDataBase(RPM::get()->project()->gameDatas()->tilesetsDatas()->model(),
         PrimitiveValueKind::Tileset);
     addDataBase(RPM::get()->project()->gameDatas()->systemDatas()
@@ -334,6 +347,48 @@ void PanelPrimitiveValue::initializeAll(QStandardItemModel *parameters,
         ->modelCommonReactors(), PrimitiveValueKind::CommonReaction);
     addDataBase(RPM::get()->project()->gameDatas()->commonEventsDatas()
         ->modelCommonObjects(), PrimitiveValueKind::Model);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::Bars),
+        PrimitiveValueKind::Bars);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::Icons),
+        PrimitiveValueKind::Icons);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::Autotiles),
+        PrimitiveValueKind::Autotiles);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::Characters),
+        PrimitiveValueKind::Characters);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::Mountains),
+        PrimitiveValueKind::Mountains);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::Tilesets),
+        PrimitiveValueKind::Tilesets);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::Walls),
+        PrimitiveValueKind::Walls);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::Battlers),
+        PrimitiveValueKind::Battlers);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::Facesets),
+        PrimitiveValueKind::Facesets);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::WindowSkins),
+        PrimitiveValueKind::WindowSkins);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::TitleScreen),
+        PrimitiveValueKind::TitleScreen);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::Object3D),
+        PrimitiveValueKind::Object3D);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::Pictures),
+        PrimitiveValueKind::Pictures);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::Animations),
+        PrimitiveValueKind::Animations);
+    addDataBase(RPM::get()->project()->picturesDatas()->model(PictureKind::SkyBoxes),
+        PrimitiveValueKind::SkyBoxes);
+    /*
+    addDataBase(RPM::get()->project()->gameDatas()->commonEventsDatas()
+    ->modelCommonObjects(), PrimitiveValueKind::Enum);*/
+    addDataBase(RPM::get()->project()->songsDatas()->model(SongKind::Music),
+        PrimitiveValueKind::Music);
+    addDataBase(RPM::get()->project()->songsDatas()->model(SongKind::BackgroundSound),
+        PrimitiveValueKind::BackgroundSound);
+    addDataBase(RPM::get()->project()->songsDatas()->model(SongKind::Sound),
+        PrimitiveValueKind::Sound);
+    addDataBase(RPM::get()->project()->songsDatas()->model(SongKind::MusicEffect),
+        PrimitiveValueKind::MusicEffect);
+
     setNumberValue(m_model->numberValue());
     setNumberDoubleValue(m_model->numberDoubleValue());
     setSwitchValue(m_model->switchValue());
@@ -571,6 +626,26 @@ void PanelPrimitiveValue::updateValue(bool update) {
     case PrimitiveValueKind::State:
     case PrimitiveValueKind::CommonReaction:
     case PrimitiveValueKind::Model:
+    case PrimitiveValueKind::Bars:
+    case PrimitiveValueKind::Icons:
+    case PrimitiveValueKind::Autotiles:
+    case PrimitiveValueKind::Characters:
+    case PrimitiveValueKind::Mountains:
+    case PrimitiveValueKind::Tilesets:
+    case PrimitiveValueKind::Walls:
+    case PrimitiveValueKind::Battlers:
+    case PrimitiveValueKind::Facesets:
+    case PrimitiveValueKind::WindowSkins:
+    case PrimitiveValueKind::TitleScreen:
+    case PrimitiveValueKind::Object3D:
+    case PrimitiveValueKind::Pictures:
+    case PrimitiveValueKind::Animations:
+    case PrimitiveValueKind::SkyBoxes:
+    case PrimitiveValueKind::Enum:
+    case PrimitiveValueKind::Music:
+    case PrimitiveValueKind::BackgroundSound:
+    case PrimitiveValueKind::Sound:
+    case PrimitiveValueKind::MusicEffect:
         setNumberValue(update ? m_model->numberValue() :
             SuperListItem::getIdByIndex(m_model->modelDataBase(), ui
             ->comboBoxDataBase->currentIndex()));
@@ -631,6 +706,7 @@ void PanelPrimitiveValue::hideAll() {
     ui->comboBoxParameter->hide();
     ui->comboBoxProperty->hide();
     ui->comboBoxDataBase->hide();
+    ui->comboBoxDataBase_2->hide();
     ui->lineEditMessage->hide();
     ui->lineEditScript->hide();
     ui->comboBoxSwitch->hide();
@@ -895,9 +971,9 @@ void PanelPrimitiveValue::showDataBaseCustom()
     case PrimitiveValueKind::Animation:
         model = RPM::get()->project()->gameDatas()->animationsDatas()->model();
         break;
-    //case PrimitiveValueKind::Animation:
-    /*
-        model = RPM::get()->project()->gameDatas()->statusDatas()->model(),*/
+    case PrimitiveValueKind::Status:
+        model = RPM::get()->project()->gameDatas()->statusDatas()->model();
+        break;
     case PrimitiveValueKind::Tileset:
         model = RPM::get()->project()->gameDatas()->tilesetsDatas()->model();
         break;
@@ -983,11 +1059,69 @@ void PanelPrimitiveValue::showDataBaseCustom()
         model = RPM::get()->project()->gameDatas()->commonEventsDatas()
             ->modelCommonObjects();
         break;
+    case PrimitiveValueKind::Bars:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::Bars);
+        break;
+    case PrimitiveValueKind::Icons:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::Icons);
+        break;
+    case PrimitiveValueKind::Autotiles:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::Autotiles);
+        break;
+    case PrimitiveValueKind::Characters:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::Characters);
+        break;
+    case PrimitiveValueKind::Mountains:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::Mountains);
+        break;
+    case PrimitiveValueKind::Tilesets:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::TitleScreen);
+        break;
+    case PrimitiveValueKind::Walls:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::Walls);
+        break;
+    case PrimitiveValueKind::Battlers:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::Battlers);
+        break;
+    case PrimitiveValueKind::Facesets:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::Facesets);
+        break;
+    case PrimitiveValueKind::WindowSkins:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::WindowSkins);
+        break;
+    case PrimitiveValueKind::TitleScreen:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::TitleScreen);
+        break;
+    case PrimitiveValueKind::Object3D:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::Object3D);
+        break;
+    case PrimitiveValueKind::Pictures:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::Pictures);
+        break;
+    case PrimitiveValueKind::Animations:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::Animations);
+        break;
+    case PrimitiveValueKind::SkyBoxes:
+        model = RPM::get()->project()->picturesDatas()->model(PictureKind::SkyBoxes);
+        break;
+    case PrimitiveValueKind::Music:
+        model = RPM::get()->project()->songsDatas()->model(SongKind::Music);
+        break;
+    case PrimitiveValueKind::BackgroundSound:
+        model = RPM::get()->project()->songsDatas()->model(SongKind::BackgroundSound);
+        break;
+    case PrimitiveValueKind::Sound:
+        model = RPM::get()->project()->songsDatas()->model(SongKind::Sound);
+        break;
+    case PrimitiveValueKind::MusicEffect:
+        model = RPM::get()->project()->songsDatas()->model(SongKind::MusicEffect);
+        break;
     default:
         model = nullptr;
         break;
     }
     m_model->setModelDataBase(model);
+    int id = m_model->numberValue();
     setKind(kind);
     hideAll();
     disconnect(ui->comboBoxDataBase, SIGNAL(currentIndexChanged(int)), this,
@@ -996,7 +1130,8 @@ void PanelPrimitiveValue::showDataBaseCustom()
     SuperListItem::fillComboBox(ui->comboBoxDataBase, model);
     connect(ui->comboBoxDataBase, SIGNAL(currentIndexChanged(int)), this,
         SLOT(on_comboBoxDataBaseCurrentIndexChanged(int)));
-    ui->comboBoxDataBase->setCurrentIndex(0);
+    ui->comboBoxDataBase->setCurrentIndex(SuperListItem::getIndexById(model
+        ->invisibleRootItem(), id, true));
     ui->comboBoxDataBase->show();
 }
 
@@ -1065,13 +1200,27 @@ void PanelPrimitiveValue::showCustomStructure(bool isList)
     {
         setKind(PrimitiveValueKind::CustomList);
         hideAll();
-        //ui->widgetCustomList->show();
     } else
     {
         setKind(PrimitiveValueKind::CustomStructure);
         hideAll();
-        //ui->widgetCustomStructure->show();
     }
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::showVector2()
+{
+    this->setKind(PrimitiveValueKind::Vector2);
+    this->hideAll();
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::showVector3()
+{
+    this->setKind(PrimitiveValueKind::Vector3);
+    this->hideAll();
 }
 
 // -------------------------------------------------------
@@ -1302,6 +1451,26 @@ void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index) {
     case PrimitiveValueKind::State:
     case PrimitiveValueKind::CommonReaction:
     case PrimitiveValueKind::Model:
+    case PrimitiveValueKind::Bars:
+    case PrimitiveValueKind::Icons:
+    case PrimitiveValueKind::Autotiles:
+    case PrimitiveValueKind::Characters:
+    case PrimitiveValueKind::Mountains:
+    case PrimitiveValueKind::Tilesets:
+    case PrimitiveValueKind::Walls:
+    case PrimitiveValueKind::Battlers:
+    case PrimitiveValueKind::Facesets:
+    case PrimitiveValueKind::WindowSkins:
+    case PrimitiveValueKind::TitleScreen:
+    case PrimitiveValueKind::Object3D:
+    case PrimitiveValueKind::Pictures:
+    case PrimitiveValueKind::Animations:
+    case PrimitiveValueKind::SkyBoxes:
+    case PrimitiveValueKind::Enum:
+    case PrimitiveValueKind::Music:
+    case PrimitiveValueKind::BackgroundSound:
+    case PrimitiveValueKind::Sound:
+    case PrimitiveValueKind::MusicEffect:
         showDataBaseCustom(); break;
     case PrimitiveValueKind::Message:
         showMessage(); break;
@@ -1319,6 +1488,12 @@ void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index) {
         showCustomStructure(false); break;
     case PrimitiveValueKind::CustomList:
         showCustomStructure(true); break;
+    case PrimitiveValueKind::Vector2:
+        this->showVector2();
+        break;
+    case PrimitiveValueKind::Vector3:
+        this->showVector3();
+        break;
     }
 
     emit kindUpdated(kind);

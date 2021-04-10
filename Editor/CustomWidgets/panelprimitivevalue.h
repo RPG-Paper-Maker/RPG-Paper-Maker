@@ -120,6 +120,8 @@ public:
     void showKeyBoard();
     void showFront();
     void showCustomStructure(bool isList);
+    void showVector2();
+    void showVector3();
     void clear();
     int getKindIndex(PrimitiveValueKind kind);
     void initializeCommand(EventCommand *command, int &i);

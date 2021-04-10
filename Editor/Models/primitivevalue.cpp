@@ -16,6 +16,9 @@
 const QString PrimitiveValue::JSON_IS_ACTIVATED = "ia";
 const QString PrimitiveValue::JSON_CUSTOM_STRUCTURE = "customStructure";
 const QString PrimitiveValue::JSON_CUSTOM_LIST = "customList";
+const QString PrimitiveValue::JSON_X = "x";
+const QString PrimitiveValue::JSON_Y = "y";
+const QString PrimitiveValue::JSON_Z = "z";
 
 // -------------------------------------------------------
 //
@@ -31,6 +34,9 @@ PrimitiveValue::PrimitiveValue() :
     m_switchValue(true),
     m_customStructure(new SystemCustomStructure(0, "")),
     m_customList(new SystemCustomStructure(0, "", true)),
+    m_x(nullptr),
+    m_y(nullptr),
+    m_z(nullptr),
     m_isActivated(false),
     m_modelParameter(nullptr),
     m_modelProperties(nullptr),
@@ -89,6 +95,18 @@ PrimitiveValue::~PrimitiveValue()
 {
     delete m_customStructure;
     delete m_customList;
+    if (m_x != nullptr)
+    {
+        delete m_x;
+    }
+    if (m_y != nullptr)
+    {
+        delete m_y;
+    }
+    if (m_z != nullptr)
+    {
+        delete m_z;
+    }
 }
 
 PrimitiveValueKind PrimitiveValue::kind() const {
@@ -139,6 +157,36 @@ SystemCustomStructure * PrimitiveValue::customStructure()
 SystemCustomStructure * PrimitiveValue::customList()
 {
     return m_customList;
+}
+
+PrimitiveValue * PrimitiveValue::x() const
+{
+    return m_x;
+}
+
+void PrimitiveValue::setX(PrimitiveValue *x)
+{
+    m_x = x;
+}
+
+PrimitiveValue * PrimitiveValue::y() const
+{
+    return m_y;
+}
+
+void PrimitiveValue::setY(PrimitiveValue *y)
+{
+    m_y = y;
+}
+
+PrimitiveValue * PrimitiveValue::z() const
+{
+    return m_z;
+}
+
+void PrimitiveValue::setZ(PrimitiveValue *z)
+{
+    m_z = z;
 }
 
 bool PrimitiveValue::isActivated() const
@@ -284,6 +332,26 @@ QString PrimitiveValue::toString() const {
     case PrimitiveValueKind::State:
     case PrimitiveValueKind::CommonReaction:
     case PrimitiveValueKind::Model:
+    case PrimitiveValueKind::Bars:
+    case PrimitiveValueKind::Icons:
+    case PrimitiveValueKind::Autotiles:
+    case PrimitiveValueKind::Characters:
+    case PrimitiveValueKind::Mountains:
+    case PrimitiveValueKind::Tilesets:
+    case PrimitiveValueKind::Walls:
+    case PrimitiveValueKind::Battlers:
+    case PrimitiveValueKind::Facesets:
+    case PrimitiveValueKind::WindowSkins:
+    case PrimitiveValueKind::TitleScreen:
+    case PrimitiveValueKind::Object3D:
+    case PrimitiveValueKind::Pictures:
+    case PrimitiveValueKind::Animations:
+    case PrimitiveValueKind::SkyBoxes:
+    case PrimitiveValueKind::Enum:
+    case PrimitiveValueKind::Music:
+    case PrimitiveValueKind::BackgroundSound:
+    case PrimitiveValueKind::Sound:
+    case PrimitiveValueKind::MusicEffect:
     {
         if (this->modelDataBase() == nullptr)
         {
@@ -310,6 +378,11 @@ QString PrimitiveValue::toString() const {
         return m_customStructure->toString();
     case PrimitiveValueKind::CustomList:
         return m_customList->toString();
+    case PrimitiveValueKind::Vector2:
+        return "x: " + m_x->toString() + ", y: " + m_y->toString();
+    case PrimitiveValueKind::Vector3:
+        return "x: " + m_x->toString() + ", y: " + m_y->toString() + ", z: " +
+            m_z->toString();
     }
     return "";
 }
@@ -454,6 +527,26 @@ void PrimitiveValue::initializeCommandParameter(const EventCommand *command, int
     case PrimitiveValueKind::State:
     case PrimitiveValueKind::CommonReaction:
     case PrimitiveValueKind::Model:
+    case PrimitiveValueKind::Bars:
+    case PrimitiveValueKind::Icons:
+    case PrimitiveValueKind::Autotiles:
+    case PrimitiveValueKind::Characters:
+    case PrimitiveValueKind::Mountains:
+    case PrimitiveValueKind::Tilesets:
+    case PrimitiveValueKind::Walls:
+    case PrimitiveValueKind::Battlers:
+    case PrimitiveValueKind::Facesets:
+    case PrimitiveValueKind::WindowSkins:
+    case PrimitiveValueKind::TitleScreen:
+    case PrimitiveValueKind::Object3D:
+    case PrimitiveValueKind::Pictures:
+    case PrimitiveValueKind::Animations:
+    case PrimitiveValueKind::SkyBoxes:
+    case PrimitiveValueKind::Enum:
+    case PrimitiveValueKind::Music:
+    case PrimitiveValueKind::BackgroundSound:
+    case PrimitiveValueKind::Sound:
+    case PrimitiveValueKind::MusicEffect:
         m_numberValue = command->valueCommandAt(i++).toInt();
         break;
     case PrimitiveValueKind::Message:
@@ -472,6 +565,15 @@ void PrimitiveValue::initializeCommandParameter(const EventCommand *command, int
         break;
     case PrimitiveValueKind::CustomList:
         m_customList->initializeCommandParameter(command, i);
+        break;
+    case PrimitiveValueKind::Vector2:
+        m_x->initializeCommandParameter(command, i);
+        m_y->initializeCommandParameter(command, i);
+        break;
+    case PrimitiveValueKind::Vector3:
+        m_x->initializeCommandParameter(command, i);
+        m_y->initializeCommandParameter(command, i);
+        m_z->initializeCommandParameter(command, i);
         break;
     }
     if (active)
@@ -529,6 +631,26 @@ void PrimitiveValue::initializeCommands(const QVector<QString> &command, int &i,
     case PrimitiveValueKind::State:
     case PrimitiveValueKind::CommonReaction:
     case PrimitiveValueKind::Model:
+    case PrimitiveValueKind::Bars:
+    case PrimitiveValueKind::Icons:
+    case PrimitiveValueKind::Autotiles:
+    case PrimitiveValueKind::Characters:
+    case PrimitiveValueKind::Mountains:
+    case PrimitiveValueKind::Tilesets:
+    case PrimitiveValueKind::Walls:
+    case PrimitiveValueKind::Battlers:
+    case PrimitiveValueKind::Facesets:
+    case PrimitiveValueKind::WindowSkins:
+    case PrimitiveValueKind::TitleScreen:
+    case PrimitiveValueKind::Object3D:
+    case PrimitiveValueKind::Pictures:
+    case PrimitiveValueKind::Animations:
+    case PrimitiveValueKind::SkyBoxes:
+    case PrimitiveValueKind::Enum:
+    case PrimitiveValueKind::Music:
+    case PrimitiveValueKind::BackgroundSound:
+    case PrimitiveValueKind::Sound:
+    case PrimitiveValueKind::MusicEffect:
         m_numberValue = command.at(i++).toInt();
         break;
     case PrimitiveValueKind::Message:
@@ -547,6 +669,15 @@ void PrimitiveValue::initializeCommands(const QVector<QString> &command, int &i,
         break;
     case PrimitiveValueKind::CustomList:
         m_customList->initializeCommands(command, i);
+        break;
+    case PrimitiveValueKind::Vector2:
+        m_x->initializeCommands(command, i);
+        m_y->initializeCommands(command, i);
+        break;
+    case PrimitiveValueKind::Vector3:
+        m_x->initializeCommands(command, i);
+        m_y->initializeCommands(command, i);
+        m_z->initializeCommands(command, i);
         break;
     }
     if (active)
@@ -603,6 +734,26 @@ void PrimitiveValue::getCommandParameter(QVector<QString> &command, bool active)
     case PrimitiveValueKind::State:
     case PrimitiveValueKind::CommonReaction:
     case PrimitiveValueKind::Model:
+    case PrimitiveValueKind::Bars:
+    case PrimitiveValueKind::Icons:
+    case PrimitiveValueKind::Autotiles:
+    case PrimitiveValueKind::Characters:
+    case PrimitiveValueKind::Mountains:
+    case PrimitiveValueKind::Tilesets:
+    case PrimitiveValueKind::Walls:
+    case PrimitiveValueKind::Battlers:
+    case PrimitiveValueKind::Facesets:
+    case PrimitiveValueKind::WindowSkins:
+    case PrimitiveValueKind::TitleScreen:
+    case PrimitiveValueKind::Object3D:
+    case PrimitiveValueKind::Pictures:
+    case PrimitiveValueKind::Animations:
+    case PrimitiveValueKind::SkyBoxes:
+    case PrimitiveValueKind::Enum:
+    case PrimitiveValueKind::Music:
+    case PrimitiveValueKind::BackgroundSound:
+    case PrimitiveValueKind::Sound:
+    case PrimitiveValueKind::MusicEffect:
         command.append(QString::number(m_numberValue));
         break;
     case PrimitiveValueKind::Message:
@@ -622,6 +773,15 @@ void PrimitiveValue::getCommandParameter(QVector<QString> &command, bool active)
         break;
     case PrimitiveValueKind::CustomList:
         m_customList->getCommandParameter(command);
+        break;
+    case PrimitiveValueKind::Vector2:
+        m_x->getCommandParameter(command);
+        m_y->getCommandParameter(command);
+        break;
+    case PrimitiveValueKind::Vector3:
+        m_x->getCommandParameter(command);
+        m_y->getCommandParameter(command);
+        m_z->getCommandParameter(command);
         break;
     }
     if (active)
@@ -718,6 +878,26 @@ void PrimitiveValue::setCopy(const PrimitiveValue &prim) {
     case PrimitiveValueKind::State:
     case PrimitiveValueKind::CommonReaction:
     case PrimitiveValueKind::Model:
+    case PrimitiveValueKind::Bars:
+    case PrimitiveValueKind::Icons:
+    case PrimitiveValueKind::Autotiles:
+    case PrimitiveValueKind::Characters:
+    case PrimitiveValueKind::Mountains:
+    case PrimitiveValueKind::Tilesets:
+    case PrimitiveValueKind::Walls:
+    case PrimitiveValueKind::Battlers:
+    case PrimitiveValueKind::Facesets:
+    case PrimitiveValueKind::WindowSkins:
+    case PrimitiveValueKind::TitleScreen:
+    case PrimitiveValueKind::Object3D:
+    case PrimitiveValueKind::Pictures:
+    case PrimitiveValueKind::Animations:
+    case PrimitiveValueKind::SkyBoxes:
+    case PrimitiveValueKind::Enum:
+    case PrimitiveValueKind::Music:
+    case PrimitiveValueKind::BackgroundSound:
+    case PrimitiveValueKind::Sound:
+    case PrimitiveValueKind::MusicEffect:
          m_numberValue = prim.m_numberValue; break;
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Script:
@@ -732,6 +912,35 @@ void PrimitiveValue::setCopy(const PrimitiveValue &prim) {
         break;
     case PrimitiveValueKind::CustomList:
         m_customList->setCopy(*prim.m_customList);
+        break;
+    case PrimitiveValueKind::Vector2:
+        if (m_x == nullptr)
+        {
+            m_x = new PrimitiveValue(0);
+        }
+        if (m_y == nullptr)
+        {
+            m_y = new PrimitiveValue(0);
+        }
+        m_x->setCopy(*prim.m_x);
+        m_y->setCopy(*prim.m_y);
+        break;
+    case PrimitiveValueKind::Vector3:
+        if (m_x == nullptr)
+        {
+            m_x = new PrimitiveValue(0);
+        }
+        if (m_y == nullptr)
+        {
+            m_y = new PrimitiveValue(0);
+        }
+        if (m_z == nullptr)
+        {
+            m_z = new PrimitiveValue(0);
+        }
+        m_x->setCopy(*prim.m_x);
+        m_y->setCopy(*prim.m_y);
+        m_z->setCopy(*prim.m_z);
         break;
     }
     m_isActivated = prim.m_isActivated;
@@ -793,6 +1002,26 @@ void PrimitiveValue::read(const QJsonObject &json) {
     case PrimitiveValueKind::State:
     case PrimitiveValueKind::CommonReaction:
     case PrimitiveValueKind::Model:
+    case PrimitiveValueKind::Bars:
+    case PrimitiveValueKind::Icons:
+    case PrimitiveValueKind::Autotiles:
+    case PrimitiveValueKind::Characters:
+    case PrimitiveValueKind::Mountains:
+    case PrimitiveValueKind::Tilesets:
+    case PrimitiveValueKind::Walls:
+    case PrimitiveValueKind::Battlers:
+    case PrimitiveValueKind::Facesets:
+    case PrimitiveValueKind::WindowSkins:
+    case PrimitiveValueKind::TitleScreen:
+    case PrimitiveValueKind::Object3D:
+    case PrimitiveValueKind::Pictures:
+    case PrimitiveValueKind::Animations:
+    case PrimitiveValueKind::SkyBoxes:
+    case PrimitiveValueKind::Enum:
+    case PrimitiveValueKind::Music:
+    case PrimitiveValueKind::BackgroundSound:
+    case PrimitiveValueKind::Sound:
+    case PrimitiveValueKind::MusicEffect:
         m_numberValue = v.toInt(); break;    
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Script:
@@ -807,6 +1036,35 @@ void PrimitiveValue::read(const QJsonObject &json) {
         break;
     case PrimitiveValueKind::CustomList:
         m_customList->read(json[JSON_CUSTOM_LIST].toObject());
+        break;
+    case PrimitiveValueKind::Vector2:
+        if (m_x == nullptr)
+        {
+            m_x = new PrimitiveValue(0);
+        }
+        if (m_y == nullptr)
+        {
+            m_y = new PrimitiveValue(0);
+        }
+        m_x->read(json[JSON_X].toObject());
+        m_y->read(json[JSON_X].toObject());
+        break;
+    case PrimitiveValueKind::Vector3:
+        if (m_x == nullptr)
+        {
+            m_x = new PrimitiveValue(0);
+        }
+        if (m_y == nullptr)
+        {
+            m_y = new PrimitiveValue(0);
+        }
+        if (m_z == nullptr)
+        {
+            m_z = new PrimitiveValue(0);
+        }
+        m_x->read(json[JSON_X].toObject());
+        m_y->read(json[JSON_X].toObject());
+        m_z->read(json[JSON_X].toObject());
         break;
     }
     if (json.contains(JSON_IS_ACTIVATED))
@@ -868,6 +1126,26 @@ void PrimitiveValue::write(QJsonObject &json) const{
     case PrimitiveValueKind::State:
     case PrimitiveValueKind::CommonReaction:
     case PrimitiveValueKind::Model:
+    case PrimitiveValueKind::Bars:
+    case PrimitiveValueKind::Icons:
+    case PrimitiveValueKind::Autotiles:
+    case PrimitiveValueKind::Characters:
+    case PrimitiveValueKind::Mountains:
+    case PrimitiveValueKind::Tilesets:
+    case PrimitiveValueKind::Walls:
+    case PrimitiveValueKind::Battlers:
+    case PrimitiveValueKind::Facesets:
+    case PrimitiveValueKind::WindowSkins:
+    case PrimitiveValueKind::TitleScreen:
+    case PrimitiveValueKind::Object3D:
+    case PrimitiveValueKind::Pictures:
+    case PrimitiveValueKind::Animations:
+    case PrimitiveValueKind::SkyBoxes:
+    case PrimitiveValueKind::Enum:
+    case PrimitiveValueKind::Music:
+    case PrimitiveValueKind::BackgroundSound:
+    case PrimitiveValueKind::Sound:
+    case PrimitiveValueKind::MusicEffect:
         v = m_numberValue; break;
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Script:
@@ -884,6 +1162,20 @@ void PrimitiveValue::write(QJsonObject &json) const{
     case PrimitiveValueKind::CustomList:
         m_customList->write(obj);
         json[JSON_CUSTOM_LIST] = obj;
+        break;
+    case PrimitiveValueKind::Vector2:
+        m_x->write(obj);
+        json[JSON_X] = obj;
+        m_y->write(obj);
+        json[JSON_Y] = obj;
+        break;
+    case PrimitiveValueKind::Vector3:
+        m_x->write(obj);
+        json[JSON_X] = obj;
+        m_y->write(obj);
+        json[JSON_Y] = obj;
+        m_z->write(obj);
+        json[JSON_Z] = obj;
         break;
     }
     json[RPM::JSON_VALUE] = v;

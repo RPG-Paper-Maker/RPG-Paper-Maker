@@ -33,6 +33,9 @@ public:
     static const QString JSON_IS_ACTIVATED;
     static const QString JSON_CUSTOM_STRUCTURE;
     static const QString JSON_CUSTOM_LIST;
+    static const QString JSON_X;
+    static const QString JSON_Y;
+    static const QString JSON_Z;
 
     PrimitiveValue();
     PrimitiveValue(int n);
@@ -55,6 +58,12 @@ public:
     bool switchValue() const;
     SystemCustomStructure * customStructure();
     SystemCustomStructure * customList();
+    PrimitiveValue * x() const;
+    void setX(PrimitiveValue *x);
+    PrimitiveValue * y() const;
+    void setY(PrimitiveValue *y);
+    PrimitiveValue * z() const;
+    void setZ(PrimitiveValue *z);
     void setSwitchValue(bool s);
     bool isActivated() const;
     void setIsActivated(bool ia);
@@ -100,6 +109,9 @@ protected:
     bool m_switchValue;
     SystemCustomStructure *m_customStructure;
     SystemCustomStructure *m_customList;
+    PrimitiveValue *m_x;
+    PrimitiveValue *m_y;
+    PrimitiveValue *m_z;
     bool m_isActivated;
     QStandardItemModel* m_modelParameter;
     QStandardItemModel* m_modelProperties;

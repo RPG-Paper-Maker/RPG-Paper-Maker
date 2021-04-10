@@ -68,7 +68,29 @@ enum class PrimitiveValueKind {
     CommonReaction,
     Model,
     CustomStructure,
-    CustomList
+    CustomList,
+    Vector2,
+    Vector3,
+    Bars,
+    Icons,
+    Autotiles,
+    Characters,
+    Mountains,
+    Tilesets,
+    Walls,
+    Battlers,
+    Facesets,
+    WindowSkins,
+    TitleScreen,
+    Object3D,
+    Pictures,
+    Animations,
+    SkyBoxes,
+    Enum,
+    Music,
+    BackgroundSound,
+    Sound,
+    MusicEffect
 };
 
 #endif // PRIMITIVEVALUEKIND_H
