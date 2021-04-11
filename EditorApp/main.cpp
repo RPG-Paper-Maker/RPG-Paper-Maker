@@ -147,8 +147,10 @@ int main(int argc, char *argv[]) {
     Project project;
     project.setPathCurrentProject(path);
     RPM::get()->setProject(&project);
-    project.readAll();
-    project.writeAll();
+    project.readLangsDatas();
+    project.readFontsDatas();
+    project.readSystemDatas();
+    project.writeSystemDatas();
     RPM::get()->setProject(nullptr);
 
     // Opening window
