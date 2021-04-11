@@ -1191,7 +1191,7 @@
     "unlimited": "Безлимитный",
     "restock.shop": "Пополнить магазин",
     "battlers.frames": "Кадры в Battlers",
-    "battlers.columns": "Колонны в Battlers",
+    "battlers.rows": "Линии в Battlers",
     "you.cant.export.macos.windows": "Вы не можете экспортировать версию MacOS из-под Windows. Пожалуйста, используйте компьютер Linux или MacOS для его экспорта",
     "enter.a.name.menu": "Войти в меню имени",
     "max.characters": "Максимальное количество символов",

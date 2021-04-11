@@ -1191,7 +1191,7 @@
     "unlimited": "bez limitu",
     "restock.shop": "Uzupełnij sklep",
     "battlers.frames": "Ramki w bojach",
-    "battlers.columns": "Kolumny w bojach",
+    "battlers.rows": "Linie w bojach",
     "you.cant.export.macos.windows": "Nie możesz wyeksportować wersji MacOS w systemie Windows. Aby go wyeksportować, użyj komputera z systemem Linux lub MacOS",
     "enter.a.name.menu": "Wprowadź nazwę",
     "max.characters": "Maksymalna liczba znaków",

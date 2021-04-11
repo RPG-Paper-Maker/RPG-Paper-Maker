@@ -506,7 +506,7 @@
           </size>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -699,6 +699,17 @@
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>WidgetPicture</class>
+   <extends>QWidget</extends>
+   <header>widgetpicture.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
    <class>WidgetTextLang</class>
    <extends>QWidget</extends>
    <header>widgettextlang.h</header>
@@ -715,17 +726,6 @@
    <extends>QWidget</extends>
    <header>panelobject.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetPicture</class>
-   <extends>QWidget</extends>
-   <header>widgetpicture.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

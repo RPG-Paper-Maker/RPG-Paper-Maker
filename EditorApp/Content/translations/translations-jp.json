@@ -1191,7 +1191,7 @@
     "unlimited": "無制限",
     "restock.shop": "補充店",
     "battlers.frames": "バトラーズフレーム",
-    "battlers.columns": "バトラーコラム",
+    "battlers.rows": "戦闘員の列",
     "you.cant.export.macos.windows": "WindowsではMacOSバージョンをエクスポートできません。 LinuxまたはMacOSコンピューターを使用してエクスポートしてください",
     "enter.a.name.menu": "名前メニューを入力してください",
     "max.characters": "最大文字数",

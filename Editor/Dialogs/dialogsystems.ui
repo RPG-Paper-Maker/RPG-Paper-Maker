@@ -64,7 +64,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-350</y>
                 <width>252</width>
                 <height>1446</height>
                </rect>
@@ -478,9 +478,9 @@
                       <item>
                        <layout class="QVBoxLayout" name="verticalLayout_27">
                         <item>
-                         <widget class="QLabel" name="labelBattlersColumns">
+                         <widget class="QLabel" name="labelBattlersRows">
                           <property name="text">
-                           <string>Battlers columns:</string>
+                           <string>Battlers rows:</string>
                           </property>
                          </widget>
                         </item>

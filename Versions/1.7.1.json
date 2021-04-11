@@ -20,11 +20,13 @@
         "Plugin manager: crash when trying to desactivate specific plugin",
         "Error when trying to find hero in a common reaction",
         "Setting the number of steps after next battle to 99 or lower crashes the game",
-        "Change autotile picture not updated directly (picture preview)",
         "Battlers rows instead of columns (typo)",
-        "Adding a second Release at the start of turn condition applies the effect twice",
+        "Status: Adding a second release at the start of turn condition applies the effect twice",
         "If the title music is the same as the starting map, the music will stop when you choose new game",
-        "List plugins parameters headers wrong display"
+        "List plugins parameters headers wrong display",
+        "Example game: chest no texture",
+        "Close project is removing example game",
+        "Engine: Wall to moutains display bug"
 	],
     "finished": [
         2,
@@ -41,7 +43,9 @@
         2,
         2,
         0,
-        0,
+        2,
+        2,
+        2,
         0,
         0,
         0,

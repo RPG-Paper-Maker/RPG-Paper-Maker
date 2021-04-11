@@ -596,8 +596,8 @@ void DialogSystems::translate()
     ui->groupBoxTitleScreenBackground->setTitle(RPM::translate(Translations
         ::BACKGROUND));
     ui->groupBoxFrames->setTitle(RPM::translate(Translations::FRAMES));
-    ui->labelBattlersFrames->setText(RPM::translate(Translations::BATTLERS_FRAMES));
-    ui->labelBattlersColumns->setText(RPM::translate(Translations::BATTLERS_COLUMNS));
+    ui->labelBattlersFrames->setText(RPM::translate(Translations::BATTLERS_FRAMES) + RPM::COLON);
+    ui->labelBattlersRows->setText(RPM::translate(Translations::BATTLERS_ROWS) + RPM::COLON);
     ui->pushButtonEnterNameOptions->setText(RPM::translate(Translations
         ::ENTER_NAME_OPTIONS) + RPM::DOT_DOT_DOT);
     ui->groupBoxItemsTypes->setTitle(RPM::translate(Translations::ITEMS_TYPES));
