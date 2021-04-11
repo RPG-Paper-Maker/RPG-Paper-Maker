@@ -193,7 +193,7 @@ public:
     void stockObject(Position &p, SystemCommonObject *object,
         bool undoRedo = false, bool move = false);
     bool removeObject(Position &p);
-    void eraseObject(Position &p, bool undoRedo = false, bool move = false);
+    void eraseObject(Position &p, bool undoRedo = false, bool move = false, bool force = false);
     void moveObject(Position &p);
     void updateMapObjects();
     void setObjectPosition(Position &position);
@@ -202,7 +202,7 @@ public:
     bool isObjectInCursor(Position3D &p);
     void updateObjectEdition(MapPortion *mapPortion);
     void updatePortionsToSaveOverflow(QSet<Portion> &portionsOverflow);
-    MapPortion * getMapPortion(Position &p, Portion &portion, bool undoRedo);
+    MapPortion * getMapPortion(Position &p, Portion &portion, bool undoRedo, bool force = false);
     void traceLine(Position &previousCoords, Position &coords,
         QList<Position> &positions);
     int getLayer(MapPortion *mapPortion, float d, Position &p, bool layerOn,

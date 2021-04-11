@@ -686,7 +686,7 @@ void ControlMapEditor::clearPortionsToUpdate() {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::setToNotSaved () {
+void ControlMapEditor::setToNotSaved() {
     if (m_treeMapNode != nullptr) {
         m_map->setSaved(false);
         RPM::mapsToSave.insert(m_map->mapProperties()->id());
@@ -912,12 +912,12 @@ void ControlMapEditor::updatePortionsToSaveOverflow(QSet<Portion> &portionsOverf
 // -------------------------------------------------------
 
 MapPortion * ControlMapEditor::getMapPortion(Position &p, Portion &portion,
-    bool undoRedo)
+    bool undoRedo, bool force)
 {
     MapPortion *mapPortion = nullptr;
     m_map->getLocalPortion(p, portion);
 
-    if (m_map->isInPortion(portion, undoRedo ? 0 : -1))
+    if (m_map->isInPortion(portion, undoRedo || force ? 0 : -1))
         mapPortion = m_map->mapPortion(portion);
     else if (undoRedo) {
         Portion globalPortion;

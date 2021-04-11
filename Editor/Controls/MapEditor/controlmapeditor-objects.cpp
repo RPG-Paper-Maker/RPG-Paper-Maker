@@ -78,17 +78,44 @@ void ControlMapEditor::defineAsHero() {
         // Remove previous object
         if (datas->idMapHero() != -1)
         {
-            if (datas->idMapHero() == m_map->mapProperties()->id())
+            Portion globalPortion;
+            Portion portion;
+            SystemMapObject *mapObject;
+            Map *map = datas->idMapHero() == m_map->mapProperties()->id() ?
+                m_map : new Map(datas->idMapHero());
+            Position posPrevious;
+            mapObject = reinterpret_cast<SystemMapObject *>(SuperListItem
+                ::getById(map->modelObjects()->invisibleRootItem(), datas
+                ->idObjectHero()));
+            posPrevious = mapObject->position();
+            Map::getGlobalPortion(posPrevious, globalPortion);
+            MapPortion *mapPortion = nullptr;
+            if (map == m_map)
             {
-                Position posPrevious;
-                SystemMapObject *mapObject = reinterpret_cast<SystemMapObject *>
-                    (SuperListItem::getById(m_map->modelObjects()
-                    ->invisibleRootItem(), datas->idObjectHero()));
-                posPrevious = mapObject->position();
-                if (m_map->isInGrid(posPrevious))
+                map->getLocalPortion(posPrevious, portion);
+                if (map->isInPortion(portion, 0))
                 {
-                    this->eraseObject(posPrevious);
+                    mapPortion = map->mapPortion(portion);
                 }
+            }
+            if (mapPortion == nullptr)
+            {
+                mapPortion = map->loadPortionMap(globalPortion.x(),
+                    globalPortion.y(), globalPortion.z());
+                QJsonObject previous;
+                MapEditorSubSelectionKind previousType = MapEditorSubSelectionKind::None;
+                map->deleteObject(posPrevious, mapPortion, previous, previousType);
+                map->savePortionMap(mapPortion);
+                map->writeObjects(true);
+                delete mapPortion;
+            } else
+            {
+                this->eraseObject(posPrevious, false, false, true);
+            }
+            if (map != m_map)
+            {
+                map->save();
+                delete map;
             }
         }
         m_selectedObject = new SystemCommonObject;
@@ -258,10 +285,10 @@ bool ControlMapEditor::removeObject(Position &p){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseObject(Position &p, bool undoRedo, bool move) {
+void ControlMapEditor::eraseObject(Position &p, bool undoRedo, bool move, bool force) {
     Portion portion;
     m_map->getLocalPortion(p, portion);
-    MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
+    MapPortion *mapPortion = getMapPortion(p, portion, undoRedo, force);
 
     if (mapPortion != nullptr) {
         MapObjects *mapObjects = mapPortion->mapObjects();

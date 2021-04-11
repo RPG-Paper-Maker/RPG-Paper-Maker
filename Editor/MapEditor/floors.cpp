@@ -221,7 +221,8 @@ void Floors::initializeGL(QOpenGLShaderProgram *programStatic){
 
 // -------------------------------------------------------
 
-void Floors::updateGL() {
+void Floors::updateGL()
+{
     Map::updateGLStatic(m_vertexBuffer, m_indexBuffer, m_vertices, m_indexes,
         m_vao, m_program);
     Map::updateGLStatic(m_vertexBufferHovered, m_indexBufferHovered,

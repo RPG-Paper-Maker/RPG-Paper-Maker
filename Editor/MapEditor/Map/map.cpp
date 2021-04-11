@@ -417,7 +417,10 @@ void Map::loadPortionThread(MapPortion* mapPortion, QString &path)
     mapPortion->updateEmpty();
     if (!mapPortion->isEmpty()) {
         mapPortion->initializeGL(m_programStatic, m_programFaceSprite);
-        mapPortion->updateGL();
+        if (m_programStatic != nullptr && m_programFaceSprite != nullptr)
+        {
+            mapPortion->updateGL();
+        }
     }
 }
 
