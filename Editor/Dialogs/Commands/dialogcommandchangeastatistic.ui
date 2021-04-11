@@ -213,7 +213,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="0" column="0">
-           <layout class="QGridLayout" name="gridLayout_4">
+           <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,0,1">
             <item row="0" column="0" colspan="3">
              <layout class="QHBoxLayout" name="horizontalLayout_3">
               <item>

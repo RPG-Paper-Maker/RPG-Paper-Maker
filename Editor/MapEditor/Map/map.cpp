@@ -552,8 +552,8 @@ bool Map::isPortionInGrid(Portion& portion) const {
     int d = m_mapProperties->depth() / RPM::PORTION_SIZE;
     int h = m_mapProperties->height() / RPM::PORTION_SIZE;
 
-    return (portion.x() >= 0 && portion.x() < l && portion.y() >= -d &&
-            portion.y() < h && portion.z() >= 0 && portion.z() < w);
+    return (portion.x() >= 0 && portion.x() <= l && portion.y() >= -d &&
+            portion.y() < h && portion.z() >= 0 && portion.z() <= w);
 }
 
 // -------------------------------------------------------
