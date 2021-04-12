@@ -166,7 +166,7 @@ public:
     void paintMountains(int textureID);
     void paintObjectsStaticSprites(int textureID, QOpenGLTexture* texture);
     void paintObjectsFaceSprites(int textureID, QOpenGLTexture* texture);
-    void paintObjectsObjects3D(int textureID, QOpenGLTexture* texture);
+    void paintObjectsObjects3D(int textureID);
     void paintObjectsSquares();
 
     void read(const QJsonObject &json);

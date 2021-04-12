@@ -474,17 +474,15 @@ void MapObjects::paintFaceSprites(int textureID, QOpenGLTexture *texture)
 
 // -------------------------------------------------------
 
-void MapObjects::paintObjects3D(int textureID, QOpenGLTexture *texture)
+void MapObjects::paintObjects3D(int textureID)
 {
     QList<Object3DObject *> *list = m_objects3DGL.value(textureID);
     if (list != nullptr)
     {
-        texture->bind();
         for (int i = 0; i < list->size(); i++)
         {
             list->at(i)->paintGL();
         }
-        texture->release();
     }
 }
 

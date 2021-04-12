@@ -63,7 +63,7 @@ public:
     void updateGL();
     void paintStaticSprites(int textureID, QOpenGLTexture *texture);
     void paintFaceSprites(int textureID, QOpenGLTexture *texture);
-    void paintObjects3D(int textureID, QOpenGLTexture *texture);
+    void paintObjects3D(int textureID);
     void paintSquares();
 
     virtual void read(const QJsonObject &json);

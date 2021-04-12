@@ -322,7 +322,7 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
                     if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
                     {
                         mapPortion->paintObjects3D(textureID, u_hoveredStatic);
-                        mapPortion->paintObjectsObjects3D(textureID, texture);
+                        mapPortion->paintObjectsObjects3D(textureID);
                     }
                 }
                 texture->release();

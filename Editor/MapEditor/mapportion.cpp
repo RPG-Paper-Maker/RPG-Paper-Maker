@@ -718,11 +718,11 @@ void MapPortion::paintObjectsFaceSprites(int textureID,
 
 // -------------------------------------------------------
 
-void MapPortion::paintObjectsObjects3D(int textureID, QOpenGLTexture *texture)
+void MapPortion::paintObjectsObjects3D(int textureID)
 {
     if (!m_mapObjects->isEmpty())
     {
-        m_mapObjects->paintObjects3D(textureID, texture);
+        m_mapObjects->paintObjects3D(textureID);
     }
 }
 
