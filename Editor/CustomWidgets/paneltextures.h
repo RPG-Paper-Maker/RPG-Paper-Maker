@@ -85,6 +85,7 @@ private:
     int m_currentWallsID;
     int m_currentMountainID;
     int m_currentObjects3DID;
+    int m_mountainsHeight;
 
     void updateTilesetImage();
     int getCurrentID() const;

@@ -31,7 +31,8 @@ PanelTextures::PanelTextures(QWidget *parent) :
     m_currentAutotilesID(-1),
     m_currentWallsID(-1),
     m_currentMountainID(-1),
-    m_currentObjects3DID(-1)
+    m_currentObjects3DID(-1),
+    m_mountainsHeight(-1)
 {
     ui->setupUi(this);
 
@@ -272,7 +273,7 @@ void PanelTextures::updateWidgetSize() {
 
     currentSpecial = this->getSpecialWidget();
     width = qMax(currentSpecial->width(), this->parentWidget()->width());
-    height = ui->comboBox->height() + + ui->pushButtonUpdateList->height() +
+    height = ui->comboBox->height() + ui->pushButtonUpdateList->height() +
         12 + currentSpecial->height();
     this->setGeometry(0, 0, width, height);
     this->setFixedSize(width, height);
@@ -399,7 +400,6 @@ void PanelTextures::fillComboBox(SystemTileset *tileset, PictureKind kind) {
 void PanelTextures::updateWallsSize() {
     if (m_kind == PictureKind::Walls) {
         int w, h;
-
         w = qMax(ui->comboBox->width(), ui->widgetWallPreview->width());
         h = ui->comboBox->height() + ui->pushButtonUpdateList->height() +
             ui->widgetWallPreview->height() + 18;
@@ -412,13 +412,18 @@ void PanelTextures::updateWallsSize() {
 
 // -------------------------------------------------------
 
-void PanelTextures::updateMountainsSize() {
-    if (m_kind == PictureKind::Mountains) {
+void PanelTextures::updateMountainsSize()
+{
+    if (m_kind == PictureKind::Mountains)
+    {
         int w, h;
-
         w = ui->comboBox->width();
+        if (m_mountainsHeight == -1)
+        {
+            m_mountainsHeight = ui->widgetMountainPreview->height();
+        }
         h = ui->comboBox->height() + ui->pushButtonUpdateList->height() +
-            ui->widgetMountainPreview->height() + 18;
+            m_mountainsHeight + 18;
         ui->widgetMountainPreview->setGeometry(0, 0, w, ui
             ->widgetMountainPreview->height());
         this->setGeometry(0, 0, w, h);
