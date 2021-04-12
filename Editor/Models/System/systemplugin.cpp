@@ -526,6 +526,7 @@ void SystemPlugin::read(const QJsonObject &json)
     SystemPluginParameter::setAllDefault(m_parameters, false);
     SuperListItem::readTree(m_commands, new SystemPluginCommand, json,
         JSON_COMMANDS);
+    this->initializeHeaders();
 }
 
 // -------------------------------------------------------
