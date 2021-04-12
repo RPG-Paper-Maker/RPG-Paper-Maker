@@ -198,7 +198,7 @@ void MainWindow::openProject(QString pathProject) {
 // -------------------------------------------------------
 
 bool MainWindow::closeProject(){
-    if (!close())
+    if (!close(false))
         return false;
 
     RPM::mapsToSave.clear();
@@ -353,7 +353,7 @@ void MainWindow::updateTextures(){
 
 // -------------------------------------------------------
 
-bool MainWindow::close() {
+bool MainWindow::close(bool example) {
     if (project != nullptr) {
         if (RPM::mapsToSave.count() > 0){
             QMessageBox::StandardButton box = QMessageBox::question(this, RPM
@@ -373,9 +373,11 @@ bool MainWindow::close() {
     }
 
     // Remove Example project
-    QDir(Common::pathCombine(QDir::currentPath(), RPM::PATH_EXAMPLE_GAME))
-        .removeRecursively();
-
+    if (example)
+    {
+        QDir(Common::pathCombine(QDir::currentPath(), RPM::PATH_EXAMPLE_GAME))
+            .removeRecursively();
+    }
     return true;
 }
 

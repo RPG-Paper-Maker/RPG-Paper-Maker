@@ -58,7 +58,7 @@ public:
     void enableGame();
     void saveAllMaps();
     void deleteTempMaps();
-    bool close();
+    bool close(bool example = true);
     void updateRecentProjects(QString projectName, QString path);
     void updateMenuRecentProjects();
     void cleanRecentProjectsActions();
