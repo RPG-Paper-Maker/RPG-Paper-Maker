@@ -664,6 +664,7 @@ void DialogScripts::on_treeViewPluginsItemChanged(QStandardItem *item)
     if (plugin != nullptr)
     {
         plugin->setIsON(item->checkState() == Qt::Checked);
+        plugin->initializeEditedPlugin();
         plugin->editedPlugin()->setIsON(plugin->isON());
         RPM::writeJSON(plugin->getJSONPath(), *plugin);
     }
