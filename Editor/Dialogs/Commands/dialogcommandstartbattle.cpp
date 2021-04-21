@@ -91,6 +91,7 @@ void DialogCommandStartBattle::translate()
     ui->checkBoxEscape->setText(RPM::translate(Translations::ALLOW_ESCAPE));
     ui->checkBoxGameOver->setText(RPM::translate(Translations
         ::DEFEAT_CAUSES_GAME_OVER));
+    ui->radioButtonDefault->setText(RPM::translate(Translations::DEFAULT));
     ui->radioButtonID->setText(RPM::translate(Translations::ID) + RPM::COLON);
     ui->radioButtonRandom->setText(RPM::translate(Translations::RANDOM) + RPM
         ::SPACE + RPM::PARENTHESIS_LEFT + RPM::translate(Translations
@@ -141,6 +142,9 @@ void DialogCommandStartBattle::initialize(EventCommand* command){
         ui->widgetYplus->initializeCommand(command, i);
         ui->widgetZ->initializeCommand(command, i);
         break;
+    case 3:
+        ui->radioButtonDefault->setChecked(true);
+        break;
     }
 
     // Transition
@@ -174,21 +178,25 @@ EventCommand* DialogCommandStartBattle::getCommand() const{
     }
 
     // Battle map
-    if (ui->radioButtonID->isChecked()){
+    if (ui->radioButtonID->isChecked())
+    {
         command.append("0");
         ui->panelPrimitiveValueIDBattleMap->getCommand(command);
-    }
-    else if (ui->radioButtonSelect->isChecked()) {
+    } else if (ui->radioButtonSelect->isChecked())
+    {
         command.append("1");
         ui->panelSelectPosition->getCommand(command);
-    }
-    else if (ui->radioButtonNumber->isChecked()){
+    } else if (ui->radioButtonNumber->isChecked())
+    {
         command.append("2");
         ui->widgetIdMap->getCommand(command);
         ui->widgetX->getCommand(command);
         ui->widgetY->getCommand(command);
         ui->widgetYplus->getCommand(command);
         ui->widgetZ->getCommand(command);
+    } else if (ui->radioButtonDefault->isChecked())
+    {
+        command.append("3");
     }
 
     // Transition
