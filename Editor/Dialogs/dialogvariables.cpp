@@ -26,12 +26,10 @@ DialogVariables::DialogVariables(QWidget *parent) :
     ui(new Ui::DialogVariables)
 {
     ui->setupUi(this);
-    
-
     ui->panelList->showButtonMax(false);
     ui->panelListPages->list()->initializeNewItemInstance(new SystemVariables);
     ui->panelListPages->setMaximumLimit(400);
-
+    ui->panelList->list()->initializeNewItemInstance(new SuperListItem);
     this->translate();
 }
 
