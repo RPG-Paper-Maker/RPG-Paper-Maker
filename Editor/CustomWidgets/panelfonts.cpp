@@ -302,15 +302,17 @@ void PanelFonts::deletingContent(SuperListItem *super, int row) {
     QString path = reinterpret_cast<SystemFont *>(super)->getPath();
 
     // If is BR, ask if sure action before
-    if (reinterpret_cast<SystemFont *>(super)->isBR()) {
+    if (reinterpret_cast<SystemFont *>(super)->isBR())
+    {
         loadAvailableContent(row);
-        QMessageBox::StandardButton box = QMessageBox::question(this, RPM
-            ::translate(Translations::DELETING_FONT), RPM::translate(
-            Translations::YOUR_TRYING_REMOVE_BR_FONT) + RPM::DOT + RPM::SPACE +
-            RPM::translate(Translations::ARE_YOU_SURE_WANT_DO_IT), QMessageBox
-            ::Yes | QMessageBox::No);
-
-        if (box == QMessageBox::Yes) {
+        QMessageBox box(QMessageBox::Question, RPM::translate(Translations
+            ::DELETING_FONT), RPM::translate(Translations::YOUR_TRYING_REMOVE_BR_FONT)
+            + RPM::DOT + RPM::SPACE + RPM::translate(Translations::ARE_YOU_SURE_WANT_DO_IT),
+            QMessageBox::Yes | QMessageBox::No);
+        box.setButtonText(QMessageBox::Yes, RPM::translate(Translations::YES));
+        box.setButtonText(QMessageBox::No, RPM::translate(Translations::NO));
+        if (box.exec() == QMessageBox::Yes)
+        {
             deleteContent(path);
             loadAvailableContent();
         }

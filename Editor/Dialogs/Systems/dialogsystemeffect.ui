@@ -479,16 +479,6 @@
              <property name="enabled">
               <bool>false</bool>
              </property>
-             <item>
-              <property name="text">
-               <string>Add</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Remove</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item row="0" column="3" colspan="3">
@@ -613,16 +603,6 @@
              <property name="enabled">
               <bool>false</bool>
              </property>
-             <item>
-              <property name="text">
-               <string>Add</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Remove</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item row="12" column="3">

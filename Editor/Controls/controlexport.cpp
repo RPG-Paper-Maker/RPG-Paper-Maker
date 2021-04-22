@@ -134,14 +134,15 @@ QString ControlExport::createFolder(QString location, QString projectName,
         return RPM::translate(Translations::PATH_LOCATION_DOESNT_EXISTS) + RPM
                 ::DOT;
     if (!dirLocation.mkdir(projectName)) {
-        QMessageBox::StandardButton box = QMessageBox::question(nullptr,
-            RPM::translate(Translations::EXISTING_FOLDER), RPM::translate(
-            Translations::THE_DIRECTORY) + RPM::SPACE + projectName + RPM::SPACE
-            + RPM::translate(Translations::ALREADY_EXISTS) + RPM::DOT + RPM
-            ::NEW_LINE + RPM::translate(Translations
-            ::QUESTION_OVERWRITE_EXISTING_FOLDER),
-            QMessageBox::Yes | QMessageBox::No);
-        if (box == QMessageBox::Yes) {
+        QMessageBox box(QMessageBox::Question, RPM::translate(Translations
+            ::EXISTING_FOLDER), RPM::translate(Translations::THE_DIRECTORY) +
+            RPM::SPACE + projectName + RPM::SPACE + RPM::translate(Translations
+            ::ALREADY_EXISTS) + RPM::DOT + RPM::NEW_LINE + RPM::translate(
+            Translations::QUESTION_OVERWRITE_EXISTING_FOLDER), QMessageBox::Yes
+            | QMessageBox::No);
+        box.setButtonText(QMessageBox::Yes, RPM::translate(Translations::YES));
+        box.setButtonText(QMessageBox::No, RPM::translate(Translations::NO));
+        if (box.exec() == QMessageBox::Yes) {
             QDir(path).removeRecursively();
             dirLocation.mkdir(projectName);
         } else {

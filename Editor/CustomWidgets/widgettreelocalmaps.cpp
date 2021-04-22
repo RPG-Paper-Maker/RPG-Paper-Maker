@@ -707,11 +707,13 @@ void WidgetTreeLocalMaps::contextPaste(){
 void WidgetTreeLocalMaps::contextDeleteMap(){
     QStandardItem* selected = getSelected();
     if (selected != nullptr){
-        QMessageBox::StandardButton box = QMessageBox::warning(this, RPM
-            ::translate(Translations::WARNING), RPM::translate(Translations
-            ::ARE_YOU_SURE_DELETE_THIS_MAP), QMessageBox::Yes | QMessageBox::No);
-
-        if (box == QMessageBox::Yes){
+        QMessageBox box(QMessageBox::Warning, RPM::translate(Translations::WARNING),
+            RPM::translate(Translations::ARE_YOU_SURE_DELETE_THIS_MAP),
+            QMessageBox::Yes | QMessageBox::No);
+        box.setButtonText(QMessageBox::Yes, RPM::translate(Translations::YES));
+        box.setButtonText(QMessageBox::No, RPM::translate(Translations::NO));
+        if (box.exec() == QMessageBox::Yes)
+        {
             deleteMap(selected);
             RPM::get()->project()->writeTreeMapDatas();
 
@@ -725,14 +727,17 @@ void WidgetTreeLocalMaps::contextDeleteMap(){
 
 void WidgetTreeLocalMaps::contextDeleteDirectory(){
     QStandardItem* selected = getSelected();
-    if (selected != nullptr){
-        QMessageBox::StandardButton box = QMessageBox::warning(this, RPM
-            ::translate(Translations::WARNING), RPM::translate(Translations
-            ::ARE_YOU_SURE_DELETE_THIS_DIRECTORY) + RPM::NEW_LINE + RPM::SPACE +
-            RPM::translate(Translations::THIS_WILL_DELETE_ALL_MAPS_INSIDE_FOLDER
-            ) + RPM::DOT, QMessageBox::Yes | QMessageBox::No);
-
-        if (box == QMessageBox::Yes){
+    if (selected != nullptr)
+    {
+        QMessageBox box(QMessageBox::Warning, RPM::translate(Translations::WARNING),
+            RPM::translate(Translations::ARE_YOU_SURE_DELETE_THIS_DIRECTORY) +
+            RPM::NEW_LINE + RPM::SPACE + RPM::translate(Translations
+            ::THIS_WILL_DELETE_ALL_MAPS_INSIDE_FOLDER) + RPM::DOT, QMessageBox
+            ::Yes | QMessageBox::No);
+        box.setButtonText(QMessageBox::Yes, RPM::translate(Translations::YES));
+        box.setButtonText(QMessageBox::No, RPM::translate(Translations::NO));
+        if (box.exec() == QMessageBox::Yes)
+        {
             deleteDirectory(selected);
             RPM::get()->project()->writeTreeMapDatas();
 

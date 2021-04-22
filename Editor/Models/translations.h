@@ -1295,6 +1295,8 @@ public:
     static const QString END_BATTLE;
     static const QString CAN_BE_SOLD;
     static const QString IS_LOOKING_AT;
+    static const QString CLEAN_RECENT_PROJECTS;
+    static const QString WITH_PRECISION;
 
     Translations();
     virtual ~Translations();

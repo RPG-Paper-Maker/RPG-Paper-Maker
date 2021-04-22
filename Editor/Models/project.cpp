@@ -281,13 +281,16 @@ bool Project::readVersion(){
         QDir dirProject(p_pathCurrentProject);
         QString previousFolderName = dirProject.dirName() +
                                      "-" + m_version;
-        QMessageBox::StandardButton box = QMessageBox::question(nullptr, RPM
-            ::translate(Translations::ERROR_MESSAGE) + RPM::COLON + RPM::SPACE + RPM
-            ::translate(Translations::CONVERSION_NEEDED), information + RPM
-            ::SPACE + RPM::translate(Translations::CONVERT_PROJECT) + RPM::SPACE
-            + previousFolderName + RPM::PARENTHESIS_RIGHT + RPM::DOT,
-            QMessageBox::Yes | QMessageBox::No);
-        if (box == QMessageBox::Yes) {
+        QMessageBox box(QMessageBox::Question, RPM::translate(Translations
+            ::ERROR_MESSAGE) + RPM::COLON + RPM::SPACE + RPM::translate(
+            Translations::CONVERSION_NEEDED), information + RPM::SPACE + RPM
+            ::translate(Translations::CONVERT_PROJECT) + RPM::SPACE +
+            previousFolderName + RPM::PARENTHESIS_RIGHT + RPM::DOT, QMessageBox
+            ::Yes | QMessageBox::No);
+        box.setButtonText(QMessageBox::Yes, RPM::translate(Translations::YES));
+        box.setButtonText(QMessageBox::No, RPM::translate(Translations::NO));
+        if (box.exec() == QMessageBox::Yes)
+        {
             DialogProgress dialog;
             QThread* thread = new QThread(qApp->parent());
             ProjectUpdater* worker = new ProjectUpdater(this,
@@ -303,13 +306,10 @@ bool Project::readVersion(){
                           &dialog, SLOT(setValueLabel(int, QString)));
             thread->start();
             dialog.exec();
-
             return true;
         }
-
         return false;
     }
-
     return true;
 }
 
@@ -331,11 +331,13 @@ bool Project::readOS() {
         QString question = RPM::translate(Translations::INCOMPATIBLE_OS_4) + RPM
             ::SPACE + RPM::ENUM_TO_STRING_OS_KIND.at(computerOSInteger) + RPM
             ::SPACE + RPM::translate(Translations::INCOMPATIBLE_OS_5) + RPM::DOT;
-        QMessageBox::StandardButton box = QMessageBox::question(nullptr, RPM
-            ::translate(Translations::ERROR_MESSAGE) + RPM::COLON + RPM::SPACE + RPM
-            ::translate(Translations::INCOMPATIBLE_OS), information + RPM
-            ::NEW_LINE + question, QMessageBox::Yes | QMessageBox::No);
-        if (box == QMessageBox::Yes) {
+        QMessageBox box(QMessageBox::Question, RPM::translate(Translations
+            ::ERROR_MESSAGE) + RPM::COLON + RPM::SPACE + RPM::translate(
+            Translations::INCOMPATIBLE_OS), information + RPM::NEW_LINE +
+            question, QMessageBox::Yes | QMessageBox::No);
+        box.setButtonText(QMessageBox::Yes, RPM::translate(Translations::YES));
+        box.setButtonText(QMessageBox::No, RPM::translate(Translations::NO));
+        if (box.exec() == QMessageBox::Yes) {
             removeOSFiles();
             copyOSFiles();
         }

@@ -308,12 +308,14 @@ void DialogScripts::checkUpdates()
             if (Common::versionDifferent(plugin->version(), newPlugin->version()
                 ) == -1)
             {
-                QMessageBox::StandardButton box = QMessageBox::question(nullptr,
-                    RPM::translate(Translations::WARNING), RPM::translate(
-                    Translations::THERE_IS_NEW_VERSION_PLUGIN).arg(plugin
-                    ->name()), QMessageBox::Yes | QMessageBox::No | QMessageBox
-                    ::Cancel);
-                if (box == QMessageBox::Yes)
+                QMessageBox box(QMessageBox::Question, RPM::translate(Translations
+                    ::WARNING), RPM::translate(Translations::THERE_IS_NEW_VERSION_PLUGIN)
+                    .arg(plugin->name()), QMessageBox::Yes | QMessageBox::No |
+                    QMessageBox::Cancel);
+                box.setButtonText(QMessageBox::Yes, RPM::translate(Translations::YES));
+                box.setButtonText(QMessageBox::No, RPM::translate(Translations::NO));
+                box.setButtonText(QMessageBox::Cancel, RPM::translate(Translations::CANCEL));
+                if (box.exec() == QMessageBox::Yes)
                 {
                     newPlugin->setIsOnline(true);
                     newPlugin->setType(PluginTypeKind::Online);

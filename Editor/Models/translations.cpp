@@ -1282,6 +1282,8 @@ const QString Translations::CHANGE_VICTORY_MUSIC = "change.victory.music";
 const QString Translations::END_BATTLE = "end.battle";
 const QString Translations::CAN_BE_SOLD = "can.be.sold";
 const QString Translations::IS_LOOKING_AT = "is.looking.at";
+const QString Translations::CLEAN_RECENT_PROJECTS = "clean.recent.projects";
+const QString Translations::WITH_PRECISION = "with.precision";
 
 // -------------------------------------------------------
 //

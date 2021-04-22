@@ -1261,5 +1261,7 @@
     "change.victory.music": "勝利の音楽を変える",
     "end.battle": "戦いを終わらせる",
     "can.be.sold": "販売可能",
-    "is.looking.at": "見ている"
+    "is.looking.at": "見ている",
+    "clean.recent.projects": "Clean recent projects",
+    "with.precision": "With precision"
 }

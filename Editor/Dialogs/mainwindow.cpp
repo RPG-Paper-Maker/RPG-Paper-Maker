@@ -353,23 +353,33 @@ void MainWindow::updateTextures(){
 
 // -------------------------------------------------------
 
-bool MainWindow::close(bool example) {
-    if (project != nullptr) {
-        if (RPM::mapsToSave.count() > 0){
-            QMessageBox::StandardButton box = QMessageBox::question(this, RPM
-                ::translate(Translations::QUIT), RPM::translate(Translations
-                ::YOU_HAVE_MAPS_NOT_SAVED), QMessageBox::Yes |
-                QMessageBox::No | QMessageBox::Cancel);
-            if (box == QMessageBox::Yes)
+bool MainWindow::close(bool example)
+{
+    if (project != nullptr)
+    {
+        if (RPM::mapsToSave.count() > 0)
+        {
+            QMessageBox box(QMessageBox::Question, RPM::translate(Translations
+                ::QUIT), RPM::translate(Translations::YOU_HAVE_MAPS_NOT_SAVED),
+                QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+            box.setButtonText(QMessageBox::Yes, RPM::translate(Translations::YES));
+            box.setButtonText(QMessageBox::No, RPM::translate(Translations::NO));
+            box.setButtonText(QMessageBox::Cancel, RPM::translate(Translations::CANCEL));
+            int result = box.exec();
+            if (result == QMessageBox::Yes)
+            {
                 saveAllMaps();
-            else if (box == QMessageBox::No)
+            } else if (result == QMessageBox::No)
+            {
                 deleteTempMaps();
-            else {
+            } else
+            {
                 return false;
             }
-        }
-        else
+        } else
+        {
             deleteTempMaps();
+        }
     }
 
     // Remove Example project
@@ -426,13 +436,19 @@ void MainWindow::cleanRecentProjectsActions() {
 void MainWindow::runGame() {
     if (RPM::get()->project()->isHeroDefined()) {
         if (RPM::mapsToSave.count() > 0) {
-            QMessageBox::StandardButton box = QMessageBox::question(this, RPM
+            QMessageBox box(QMessageBox::Question, RPM
                 ::translate(Translations::SAVE), RPM::translate(Translations
                 ::YOU_HAVE_MAPS_NOT_SAVED), QMessageBox::Yes |
                 QMessageBox::No | QMessageBox::Cancel);
-            if (box == QMessageBox::Yes) {
+            box.setButtonText(QMessageBox::Yes, RPM::translate(Translations::YES));
+            box.setButtonText(QMessageBox::No, RPM::translate(Translations::NO));
+            box.setButtonText(QMessageBox::Cancel, RPM::translate(Translations::CANCEL));
+            int result = box.exec();
+            if (result == QMessageBox::Yes)
+            {
                 saveAllMaps();
-            } else if (box == QMessageBox::Cancel) {
+            } else if (result == QMessageBox::Cancel)
+            {
                 return;
             }
         }
@@ -478,6 +494,7 @@ void MainWindow::translate() {
     ui->actionBrowse->setText(RPM::translate(Translations::BROWSE) + RPM
         ::DOT_DOT_DOT);
     ui->actionBrowse->setIconText(RPM::translate(Translations::OPEN_PROJECT_TOOL));
+    ui->actionClean_recent_projects->setText(RPM::translate(Translations::CLEAN_RECENT_PROJECTS));
     ui->actionSave->setText(RPM::translate(Translations::SAVE));
     ui->actionSave->setIconText(RPM::translate(Translations::SAVE_TOOL));
     ui->actionSave_all->setText(RPM::translate(Translations::SAVE_ALL));

@@ -221,12 +221,14 @@ void DialogSystemPlugin::accept()
     // Delete previous plugin
     if (!m_previousName.isEmpty())
     {
-        QMessageBox::StandardButton box = QMessageBox::question(this, RPM
-            ::translate(Translations::WARNING), RPM::translate(Translations
-            ::WARNING) + RPM::COMMA + RPM::SPACE + RPM::translate(Translations
-            ::YOU_WILL_ERASE_PROGRESS_PLUGIN), QMessageBox::Yes | QMessageBox
-            ::No | QMessageBox::Cancel);
-        if (box != QMessageBox::Yes)
+        QMessageBox box(QMessageBox::Question, RPM::translate(Translations
+            ::WARNING), RPM::translate(Translations::WARNING) + RPM::COMMA + RPM
+            ::SPACE + RPM::translate(Translations::YOU_WILL_ERASE_PROGRESS_PLUGIN),
+            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+        box.setButtonText(QMessageBox::Yes, RPM::translate(Translations::YES));
+        box.setButtonText(QMessageBox::No, RPM::translate(Translations::NO));
+        box.setButtonText(QMessageBox::Cancel, RPM::translate(Translations::CANCEL));
+        if (box.exec() != QMessageBox::Yes)
         {
             return;
         }

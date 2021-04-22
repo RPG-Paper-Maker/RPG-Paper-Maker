@@ -14,19 +14,21 @@
         "Status: to apply effects the release function needs to be active",
         "Status: error sometimes occur with release at start of turn with a player that already has the status",
         "Open save menu command with and object: crash",
-        "Try fixing object linking"
+        "Try fixing object linking",
+        "Ingame error when troop with empty monsters list"
 	],
     "finished": [
         2,
         2,
 
-        0,
+        2,
+        2,
         2,
         0,
         0,
         0,
         0,
         0,
-        0
+        2
     ]
 }

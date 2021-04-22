@@ -114,7 +114,10 @@ void DialogSystemEffect::initialize() {
         .damagesStockVariable());
 
     // Status
-    ui->comboBoxAddRemoveStatus->setCurrentIndex(m_effect.isAddStatus() ? 0 : 1);
+    index = m_effect.isAddStatus() ? 0 : 1;
+    ui->comboBoxAddRemoveStatus->addItem(RPM::translate(Translations::ADD));
+    ui->comboBoxAddRemoveStatus->addItem(RPM::translate(Translations::REMOVE));
+    ui->comboBoxAddRemoveStatus->setCurrentIndex(index);
     ui->panelPrimitiveValueStatusID->initializeDataBaseCommandId(m_effect
         .statusID()->modelDataBase());
     ui->panelPrimitiveValueStatusID->initializeModel(m_effect
@@ -126,7 +129,10 @@ void DialogSystemEffect::initialize() {
     ui->panelPrimitiveValueStatusPrecision->updateModel();
 
     // Add / Remove skill
-    ui->comboBoxAddRemoveSkill->setCurrentIndex(m_effect.isAddSkill() ? 0 : 1);
+    index = m_effect.isAddSkill() ? 0 : 1;
+    ui->comboBoxAddRemoveSkill->addItem(RPM::translate(Translations::ADD));
+    ui->comboBoxAddRemoveSkill->addItem(RPM::translate(Translations::REMOVE));
+    ui->comboBoxAddRemoveSkill->setCurrentIndex(index);
     ui->panelPrimitiveValueSkillAdd->initializeDataBaseCommandId(m_effect
         .addSkillID()->modelDataBase());
     ui->panelPrimitiveValueSkillAdd->initializeModel(m_effect
@@ -232,6 +238,9 @@ void DialogSystemEffect::translate()
         ::STOCK_VALUE_IN) + RPM::COLON);
     ui->checkBoxTemporarilyChangeTarget->setText(RPM::translate(Translations
         ::TEMPORARILY_CHANGE_TARGET) + RPM::COLON);
+    ui->radioButtonStatus->setText(RPM::translate(Translations::STATUS) + RPM::COLON);
+    ui->labelWithPrecision->setText(RPM::translate(Translations::WITH_PRECISION).toLower());
+    ui->radioButtonCallCommonReaction->setText(RPM::translate(Translations::CALL_A_COMMON_REACTION) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

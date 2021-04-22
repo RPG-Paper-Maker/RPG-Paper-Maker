@@ -331,13 +331,14 @@ void PanelShapes::deletingContent(SuperListItem *super, int row) {
     // If is BR, ask if sure action before
     if (reinterpret_cast<SystemCustomShape *>(super)->isBR()) {
         loadAvailableContent(row);
-        QMessageBox::StandardButton box = QMessageBox::question(this, RPM
-            ::translate(Translations::DELETING_SHAPE), RPM::translate(
-            Translations::YOUR_TRYING_REMOVE_BR_SHAPE) + RPM::DOT + RPM::SPACE +
-            RPM::translate(Translations::ARE_YOU_SURE_WANT_DO_IT), QMessageBox
-            ::Yes | QMessageBox::No);
-
-        if (box == QMessageBox::Yes) {
+        QMessageBox box(QMessageBox::Question, RPM::translate(Translations
+            ::DELETING_SHAPE), RPM::translate(Translations::YOUR_TRYING_REMOVE_BR_SHAPE)
+            + RPM::DOT + RPM::SPACE + RPM::translate(Translations::ARE_YOU_SURE_WANT_DO_IT),
+            QMessageBox::Yes | QMessageBox::No);
+        box.setButtonText(QMessageBox::Yes, RPM::translate(Translations::YES));
+        box.setButtonText(QMessageBox::No, RPM::translate(Translations::NO));
+        if (box.exec() == QMessageBox::Yes)
+        {
             deleteContent(path);
             loadAvailableContent();
         }

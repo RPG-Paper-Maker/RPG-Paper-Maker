@@ -1261,5 +1261,7 @@
     "change.victory.music": "승리 음악 변경",
     "end.battle": "전투 종료",
     "can.be.sold": "판매 가능",
-    "is.looking.at": "보고있다"
+    "is.looking.at": "보고있다",
+    "clean.recent.projects": "Clean recent projects",
+    "with.precision": "With precision"
 }

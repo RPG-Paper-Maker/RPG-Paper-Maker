@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>In progress...</string>
+   <string>RPG Paper Maker</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
