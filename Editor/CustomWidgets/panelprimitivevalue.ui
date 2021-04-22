@@ -88,10 +88,10 @@
           <enum>Qt::StrongFocus</enum>
          </property>
          <property name="minimum">
-          <number>-999999999</number>
+          <number>-16777215</number>
          </property>
          <property name="maximum">
-          <number>999999999</number>
+          <number>16777215</number>
          </property>
         </widget>
        </item>
@@ -189,10 +189,10 @@
           <number>3</number>
          </property>
          <property name="minimum">
-          <double>-9999999999.000000000000000</double>
+          <double>-16777215.000000000000000</double>
          </property>
          <property name="maximum">
-          <double>9999999999.000000000000000</double>
+          <double>16777215.000000000000000</double>
          </property>
         </widget>
        </item>

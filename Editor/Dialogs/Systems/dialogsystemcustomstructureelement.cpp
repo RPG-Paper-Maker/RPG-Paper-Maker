@@ -64,6 +64,18 @@ void DialogSystemCustomStructureElement::initialize()
     ui->panelPrimitiveValueX->initializeNumberAndUpdate(m_element.value()->x());
     ui->panelPrimitiveValueY->initializeNumberAndUpdate(m_element.value()->y());
     ui->panelPrimitiveValueZ->initializeNumberAndUpdate(m_element.value()->z());
+
+    // Min + max
+    if (m_element.value()->isMinActivated())
+    {
+        ui->spinBoxMin->setValue(m_element.value()->min());
+        ui->checkBoxMin->setChecked(true);
+    }
+    if (m_element.value()->isMaxActivated())
+    {
+        ui->spinBoxMax->setValue(m_element.value()->max());
+        ui->checkBoxMax->setChecked(true);
+    }
 }
 
 // -------------------------------------------------------
@@ -136,6 +148,10 @@ void DialogSystemCustomStructureElement::on_kindUpdated(PrimitiveValueKind kind)
     ui->panelPrimitiveValueX->setVisible(false);
     ui->panelPrimitiveValueY->setVisible(false);
     ui->panelPrimitiveValueZ->setVisible(false);
+    ui->checkBoxMin->setVisible(false);
+    ui->checkBoxMax->setVisible(false);
+    ui->spinBoxMin->setVisible(false);
+    ui->spinBoxMax->setVisible(false);
     switch (kind)
     {
     case PrimitiveValueKind::Vector2:
@@ -152,7 +168,44 @@ void DialogSystemCustomStructureElement::on_kindUpdated(PrimitiveValueKind kind)
         ui->panelPrimitiveValueY->setVisible(true);
         ui->panelPrimitiveValueZ->setVisible(true);
         break;
+    case PrimitiveValueKind::Number:
+    case PrimitiveValueKind::NumberDouble:
+        ui->checkBoxMin->setVisible(true);
+        ui->checkBoxMax->setVisible(true);
+        ui->spinBoxMin->setVisible(true);
+        ui->spinBoxMax->setVisible(true);
+        break;
     default:
         break;
     }
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCustomStructureElement::on_checkBoxMin_toggled(bool checked)
+{
+    ui->panelPrimitiveValue->updateMin(checked ? ui->spinBoxMin->value() : -QWIDGETSIZE_MAX);
+    ui->spinBoxMin->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCustomStructureElement::on_checkBoxMax_toggled(bool checked)
+{
+    ui->panelPrimitiveValue->updateMax(checked ? ui->spinBoxMax->value() : QWIDGETSIZE_MAX);
+    ui->spinBoxMax->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCustomStructureElement::on_spinBoxMin_valueChanged(int i)
+{
+    ui->panelPrimitiveValue->updateMin(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCustomStructureElement::on_spinBoxMax_valueChanged(int i)
+{
+    ui->panelPrimitiveValue->updateMax(i);
 }

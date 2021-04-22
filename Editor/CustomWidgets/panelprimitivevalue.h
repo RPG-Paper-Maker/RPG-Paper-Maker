@@ -103,6 +103,8 @@ public:
     void addKeyBoard();
     void addFont();
     void addCustomStructure(bool isList);
+    void updateMin(int min);
+    void updateMax(int max);
     void showDefault();
     void showAnything();
     void showNone();

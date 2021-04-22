@@ -19,6 +19,8 @@ const QString PrimitiveValue::JSON_CUSTOM_LIST = "customList";
 const QString PrimitiveValue::JSON_X = "x";
 const QString PrimitiveValue::JSON_Y = "y";
 const QString PrimitiveValue::JSON_Z = "z";
+const QString PrimitiveValue::JSON_MIN = "min";
+const QString PrimitiveValue::JSON_MAX = "max";
 
 // -------------------------------------------------------
 //
@@ -37,6 +39,8 @@ PrimitiveValue::PrimitiveValue() :
     m_x(nullptr),
     m_y(nullptr),
     m_z(nullptr),
+    m_min(-QWIDGETSIZE_MAX),
+    m_max(QWIDGETSIZE_MAX),
     m_isActivated(false),
     m_modelParameter(nullptr),
     m_modelProperties(nullptr),
@@ -187,6 +191,26 @@ PrimitiveValue * PrimitiveValue::z() const
 void PrimitiveValue::setZ(PrimitiveValue *z)
 {
     m_z = z;
+}
+
+int PrimitiveValue::min() const
+{
+    return m_min;
+}
+
+void PrimitiveValue::setMin(int min)
+{
+    m_min = min;
+}
+
+int PrimitiveValue::max() const
+{
+    return m_max;
+}
+
+void PrimitiveValue::setMax(int max)
+{
+    m_max = max;
 }
 
 bool PrimitiveValue::isActivated() const
@@ -392,6 +416,20 @@ QString PrimitiveValue::toString() const {
 bool PrimitiveValue::isFixNumberValue() const {
     return m_kind == PrimitiveValueKind::DataBase || m_kind == PrimitiveValueKind
         ::Number || m_kind == PrimitiveValueKind::NumberDouble;
+}
+
+// -------------------------------------------------------
+
+bool PrimitiveValue::isMinActivated() const
+{
+    return m_min != -QWIDGETSIZE_MAX;
+}
+
+// -------------------------------------------------------
+
+bool PrimitiveValue::isMaxActivated() const
+{
+    return m_max != QWIDGETSIZE_MAX;
 }
 
 // -------------------------------------------------------
@@ -943,6 +981,8 @@ void PrimitiveValue::setCopy(const PrimitiveValue &prim) {
         m_z->setCopy(*prim.m_z);
         break;
     }
+    m_min = prim.m_min;
+    m_max = prim.m_max;
     m_isActivated = prim.m_isActivated;
     m_modelParameter = prim.m_modelParameter;
     m_modelProperties = prim.m_modelProperties;
@@ -1071,6 +1111,14 @@ void PrimitiveValue::read(const QJsonObject &json) {
     {
         m_isActivated = json[JSON_IS_ACTIVATED].toBool();
     }
+    if (json.contains(JSON_MIN))
+    {
+        m_min = json[JSON_MIN].toInt();
+    }
+    if (json.contains(JSON_MAX))
+    {
+        m_max = json[JSON_MAX].toInt();
+    }
 }
 
 // -------------------------------------------------------
@@ -1182,5 +1230,13 @@ void PrimitiveValue::write(QJsonObject &json) const{
     if (m_isActivated)
     {
         json[JSON_IS_ACTIVATED] = m_isActivated;
+    }
+    if (m_min != -QWIDGETSIZE_MAX)
+    {
+        json[JSON_MIN] = m_min;
+    }
+    if (m_max != QWIDGETSIZE_MAX)
+    {
+        json[JSON_MAX] = m_max;
     }
 }

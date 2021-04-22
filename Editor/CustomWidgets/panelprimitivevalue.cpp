@@ -865,6 +865,24 @@ void PanelPrimitiveValue::addCustomStructure(bool isList)
 
 // -------------------------------------------------------
 
+void PanelPrimitiveValue::updateMin(int min)
+{
+    m_model->setMin(min);
+    ui->spinBoxNumber->setMinimum(min);
+    ui->doubleSpinBoxNumber->setMinimum(min);
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::updateMax(int max)
+{
+    m_model->setMax(max);
+    ui->spinBoxNumber->setMaximum(max);
+    ui->doubleSpinBoxNumber->setMaximum(max);
+}
+
+// -------------------------------------------------------
+
 void PanelPrimitiveValue::showDefault() {
     setKind(PrimitiveValueKind::Default);
     hideAll();

@@ -36,6 +36,8 @@ public:
     static const QString JSON_X;
     static const QString JSON_Y;
     static const QString JSON_Z;
+    static const QString JSON_MIN;
+    static const QString JSON_MAX;
 
     PrimitiveValue();
     PrimitiveValue(int n);
@@ -64,6 +66,10 @@ public:
     void setY(PrimitiveValue *y);
     PrimitiveValue * z() const;
     void setZ(PrimitiveValue *z);
+    int min() const;
+    void setMin(int min);
+    int max() const;
+    void setMax(int max);
     void setSwitchValue(bool s);
     bool isActivated() const;
     void setIsActivated(bool ia);
@@ -83,6 +89,8 @@ public:
 
     QString toString() const;
     bool isFixNumberValue() const;
+    bool isMinActivated() const;
+    bool isMaxActivated() const;
     void labelTab(QString& str) const;
     bool isDefaultDataBaseValue() const;
     bool isDefaultNumberValue(int value = 0) const;
@@ -112,6 +120,8 @@ protected:
     PrimitiveValue *m_x;
     PrimitiveValue *m_y;
     PrimitiveValue *m_z;
+    int m_min;
+    int m_max;
     bool m_isActivated;
     QStandardItemModel* m_modelParameter;
     QStandardItemModel* m_modelProperties;

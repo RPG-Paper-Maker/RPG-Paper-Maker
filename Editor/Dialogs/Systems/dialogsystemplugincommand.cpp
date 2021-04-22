@@ -30,9 +30,7 @@ DialogSystemPluginCommand::DialogSystemPluginCommand(SystemPluginCommand
     m_completeList(RPM::get()->selectedList())
 {
     ui->setupUi(this);
-
     this->initialize();
-
     this->translate();
 }
 

@@ -52,6 +52,10 @@ public slots:
     void on_lineEditKey_textEdited(const QString &text);
     void on_lineEditDescription_textEdited(const QString &text);
     void on_kindUpdated(PrimitiveValueKind kind);
+    void on_checkBoxMin_toggled(bool checked);
+    void on_checkBoxMax_toggled(bool checked);
+    void on_spinBoxMin_valueChanged(int i);
+    void on_spinBoxMax_valueChanged(int i);
 };
 
 #endif // DIALOGSYSTEMCUSTOMSTRUCTUREELEMENT_H
