@@ -274,8 +274,8 @@ void Map::deleteObjects(QStandardItemModel* model, int minI, int maxI,
             int x = position.x() / RPM::PORTION_SIZE;
             int y = position.y() / RPM::PORTION_SIZE;
             int z = position.z() / RPM::PORTION_SIZE;
-            if (x >= minI && x <= maxI && y >= minJ && y <= maxJ && z >= minK &&
-                z <= maxK)
+            if (x >= minI && x < maxI && y >= minJ && y < maxJ && z >= minK &&
+                z < maxK)
             {
                 delete super;
                 list.append(i);
