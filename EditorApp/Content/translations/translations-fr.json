@@ -1264,5 +1264,6 @@
     "is.looking.at": "Regarde vers",
     "clean.recent.projects": "Nettoyer les projets récents",
     "with.precision": "Avec précision",
-    "max.number.choices.display": "Nombre maximum de choix à afficher"
+    "max.number.choices.display": "Nombre maximum de choix à afficher",
+    "can.be.triggered.another.object": "Peut être déclenché avec un autre objet"
 }

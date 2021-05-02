@@ -19,10 +19,12 @@
 #include "systemevent.h"
 
 const QString SystemCommonObject::JSON_ONLY_ONE_EVENT_PER_FRAME = "ooepf";
+const QString SystemCommonObject::JSON_CAN_BE_TRIGGERED_ANOTHER_OBJECT = "canBeTriggeredAnotherObject";
 const QString SystemCommonObject::JSON_INHERITANCE_ID = "hId";
 const QString SystemCommonObject::JSON_STATES = "states";
 const QString SystemCommonObject::JSON_PROPERTIES = "p";
 const QString SystemCommonObject::JSON_EVENTS = "events";
+const bool SystemCommonObject::DEFAULT_CAN_BE_TRIGGERED_ANOTHER_OBJECT = true;
 
 // -------------------------------------------------------
 //
@@ -31,17 +33,19 @@ const QString SystemCommonObject::JSON_EVENTS = "events";
 // -------------------------------------------------------
 
 SystemCommonObject::SystemCommonObject() :
-    SystemCommonObject(1, "", false, -1, new QStandardItemModel, new
-        QStandardItemModel, new QStandardItemModel)
+    SystemCommonObject(1, "", false, DEFAULT_CAN_BE_TRIGGERED_ANOTHER_OBJECT, -1,
+        new QStandardItemModel, new QStandardItemModel, new QStandardItemModel)
 {
 
 }
 
 SystemCommonObject::SystemCommonObject(int i, QString n, bool
-    onlyOneEventPerFrame, int id, QStandardItemModel *states, QStandardItemModel
-    *properties, QStandardItemModel *events) :
+    onlyOneEventPerFrame, bool canBeTriggeredAnotherObject, int id,
+    QStandardItemModel *states, QStandardItemModel *properties,
+    QStandardItemModel *events) :
     SuperListItem(i,n),
     m_onlyOneEventPerFrame(onlyOneEventPerFrame),
+    m_canBeTriggeredAnotherObject(canBeTriggeredAnotherObject),
     m_inheritanceId(id),
     m_states(states),
     m_properties(properties),
@@ -62,6 +66,16 @@ bool SystemCommonObject::onlyOneEventPerFrame() const {
 
 void SystemCommonObject::setOnlyOneEventPerFrame(bool b) {
     m_onlyOneEventPerFrame = b;
+}
+
+bool SystemCommonObject::canBeTriggeredAnotherObject() const
+{
+    return m_canBeTriggeredAnotherObject;
+}
+
+void SystemCommonObject::setCanBeTriggeredAnotherObject(bool canBeTriggeredAnotherObject)
+{
+    m_canBeTriggeredAnotherObject = canBeTriggeredAnotherObject;
 }
 
 int SystemCommonObject::inheritanceId() const {
@@ -292,6 +306,7 @@ void SystemCommonObject::setCopy(const SuperListItem &super) {
 
     p_id = object->p_id;
     m_onlyOneEventPerFrame = object->m_onlyOneEventPerFrame;
+    m_canBeTriggeredAnotherObject = object->m_canBeTriggeredAnotherObject;
     m_inheritanceId = object->inheritanceId();
 
     // Properties
@@ -314,6 +329,10 @@ void SystemCommonObject::read(const QJsonObject &json) {
     SuperListItem::read(json);
 
     m_onlyOneEventPerFrame = json[JSON_ONLY_ONE_EVENT_PER_FRAME].toBool();
+    if (json.contains(JSON_CAN_BE_TRIGGERED_ANOTHER_OBJECT))
+    {
+        m_canBeTriggeredAnotherObject = json[JSON_CAN_BE_TRIGGERED_ANOTHER_OBJECT].toBool();
+    }
     m_inheritanceId = json[JSON_INHERITANCE_ID].toInt();
 
     // Properties
@@ -335,6 +354,10 @@ void SystemCommonObject::write(QJsonObject &json) const {
     SuperListItem::write(json);
 
     json[JSON_ONLY_ONE_EVENT_PER_FRAME] = m_onlyOneEventPerFrame;
+    if (m_canBeTriggeredAnotherObject != DEFAULT_CAN_BE_TRIGGERED_ANOTHER_OBJECT)
+    {
+        json[JSON_CAN_BE_TRIGGERED_ANOTHER_OBJECT] = m_canBeTriggeredAnotherObject;
+    }
     json[JSON_INHERITANCE_ID] = m_inheritanceId;
 
     // Properties

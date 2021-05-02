@@ -52,7 +52,7 @@ void Map::writeDefaultMap(QString path){
     MapPortion mapPortion(globalPortion);
     mapPortion.fillWithFloor(&properties);
     SystemCommonObject* o = new SystemCommonObject(1, RPM::translate(
-        Translations::HERO), false, 2, new QStandardItemModel, new
+        Translations::HERO), false, false, 2, new QStandardItemModel, new
         QStandardItemModel, new QStandardItemModel);
     QJsonObject previous;
     MapEditorSubSelectionKind previousType;

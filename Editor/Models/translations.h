@@ -1298,6 +1298,7 @@ public:
     static const QString CLEAN_RECENT_PROJECTS;
     static const QString WITH_PRECISION;
     static const QString MAX_NUMBER_CHOICES_DISPLAY;
+    static const QString CAN_BE_TRIGGERED_ANOTHER_OBJECT;
 
     Translations();
     virtual ~Translations();

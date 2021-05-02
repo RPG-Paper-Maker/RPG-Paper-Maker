@@ -1264,5 +1264,6 @@
     "is.looking.at": "Is looking at",
     "clean.recent.projects": "Clean recent projects",
     "with.precision": "With precision",
-    "max.number.choices.display": "Max number of choices to display"
+    "max.number.choices.display": "Max number of choices to display",
+    "can.be.triggered.another.object": "Can be triggered with another object"
 }

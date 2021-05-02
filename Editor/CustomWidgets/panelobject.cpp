@@ -119,6 +119,7 @@ void PanelObject::updateModel() {
         QModelIndex index;
         ui->lineEditName->setText(m_model->name());
         ui->checkBoxOneEventPerFrame->setChecked(m_model->onlyOneEventPerFrame());
+        ui->checkBoxCanBeTriggeredAnotherObject->setChecked(m_model->canBeTriggeredAnotherObject());
         initializeCommonInheritance();
 
         // Properties
@@ -391,6 +392,8 @@ void PanelObject::translate()
         ::CLIMB_ANIMATION));
     ui->checkBoxOneEventPerFrame->setText(RPM::translate(Translations
         ::ONLY_ONE_EVENT_PER_FRAME));
+    ui->checkBoxCanBeTriggeredAnotherObject->setText(RPM::translate(Translations
+        ::CAN_BE_TRIGGERED_ANOTHER_OBJECT));
     ui->pushButtonEditRoute->setText(RPM::translate(Translations::EDIT_ROUTE) +
         RPM::DOT_DOT_DOT);
 }
@@ -409,6 +412,13 @@ void PanelObject::on_lineEditName_textChanged(const QString &text) {
 
 void PanelObject::on_checkBoxOneEventPerFrame_toggled(bool checked) {
     m_model->setOnlyOneEventPerFrame(checked);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_checkBoxCanBeTriggeredAnotherObject_toggled(bool checked)
+{
+    m_model->setCanBeTriggeredAnotherObject(checked);
 }
 
 // -------------------------------------------------------
