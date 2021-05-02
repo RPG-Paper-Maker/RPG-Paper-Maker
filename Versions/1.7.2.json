@@ -16,19 +16,5 @@
         "Open save menu command with and object: crash",
         "Try fixing object linking",
         "Ingame error when troop with empty monsters list"
-	],
-    "finished": [
-        2,
-        2,
-
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2
-    ]
+	]
 }
