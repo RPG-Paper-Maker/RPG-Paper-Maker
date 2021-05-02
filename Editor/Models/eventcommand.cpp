@@ -1594,37 +1594,41 @@ QString EventCommand::strChangeProperty(QStandardItemModel *properties,
 QString EventCommand::strDisplayChoice(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
+    int i = 0;
+    int l = this->commandsCount();
+    QString cancelIndex = this->strProperty(i, properties, parameters);
+    QString maxChoices = this->strProperty(i, properties, parameters);
+    SystemTranslatable *lang = nullptr;
     QStringList choices;
-    QString cancelIndex, next;
-    SystemTranslatable *lang;
-    int i, l;
-
-    i = 0;
-    l = this->commandsCount();
-    cancelIndex = this->strProperty(i, properties, parameters);
-    lang = nullptr;
-    while (i < l) {
+    QString next;
+    while (i < l)
+    {
         next = m_listCommand.at(i);
-        if (next == RPM::DASH) {
+        if (next == RPM::DASH)
+        {
             i += 1;
-            if (lang != nullptr) {
-                choices << " - " + lang->name();
+            if (lang != nullptr)
+            {
+                choices << lang->name();
                 delete lang;
             }
             lang = new SystemTranslatable;
-        } else {
+        } else
+        {
             lang->initializeCommand(this, i);
         }
     }
-    if (lang != nullptr) {
-        choices << " - " + lang->name();
+    if (lang != nullptr)
+    {
+        choices << lang->name();
         delete lang;
     }
-
     return RPM::translate(Translations::DISPLAY_CHOICES) + RPM::COLON + RPM
         ::SPACE + RPM::BRACKET_LEFT + RPM::translate(Translations
-        ::CANCEL_AUTO_INDEX).toLower() + RPM::EQUAL + cancelIndex + RPM
-        ::BRACKET_RIGHT + RPM::NEW_LINE + choices.join(RPM::NEW_LINE);
+        ::CANCEL_AUTO_INDEX).toLower() + RPM::EQUAL + cancelIndex + RPM::COMMA +
+        RPM::SPACE + RPM::translate(Translations::MAX_NUMBER_CHOICES_DISPLAY)
+        .toLower() + RPM::EQUAL + maxChoices + RPM::BRACKET_RIGHT + RPM::NEW_LINE +
+        choices.join(RPM::SPACE + "|" + RPM::SPACE);
 }
 
 // -------------------------------------------------------

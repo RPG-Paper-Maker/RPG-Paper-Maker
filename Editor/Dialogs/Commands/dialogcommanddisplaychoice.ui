@@ -41,7 +41,30 @@
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
-           <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1">
+           <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,1">
+            <item>
+             <widget class="QLabel" name="labelMaxNumberChoicesDisplay">
+              <property name="text">
+               <string>Max number of choices to display:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveMaxNumberChoicesDisplay" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
+            </item>
             <item>
              <widget class="QLabel" name="labelCancelAutoIndex">
               <property name="text">

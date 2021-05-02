@@ -1284,6 +1284,7 @@ const QString Translations::CAN_BE_SOLD = "can.be.sold";
 const QString Translations::IS_LOOKING_AT = "is.looking.at";
 const QString Translations::CLEAN_RECENT_PROJECTS = "clean.recent.projects";
 const QString Translations::WITH_PRECISION = "with.precision";
+const QString Translations::MAX_NUMBER_CHOICES_DISPLAY = "max.number.choices.display";
 
 // -------------------------------------------------------
 //

@@ -4,7 +4,7 @@
 	"replace": [],
 	"features": [
         "Change error message when class in hero and monster doesn't exist",
-        "Command display choices: choose max number of boxes to display",
+        "Command display choices: choose max number of choices to display",
         "Object option: cannot be triggered with another object",
         "Creating new state on object: copy states options from the previously selected state",
         "Scripts manager: add save + save & close buttons"
@@ -33,7 +33,7 @@
 	],
     "finished": [
         2,
-        0,
+        2,
         0,
         0,
         0,

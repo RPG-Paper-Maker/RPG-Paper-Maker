@@ -19,12 +19,12 @@
 #include "titlesettingkind.h"
 #include "systemcommonreaction.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 19;
+const int ProjectUpdater::incompatibleVersionsCount = 20;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
      "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0", "1.6.2",
-    "1.6.3", "1.6.4", "1.7.0"};
+    "1.6.3", "1.6.4", "1.7.0", "1.7.3"};
 
 // -------------------------------------------------------
 //
@@ -1159,4 +1159,40 @@ void ProjectUpdater::updateVersion_1_7_0_json(QString path, QString listName)
     }
     json[listName] = tab;
     Common::writeOtherJSON(path, json);
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_7_3()
+{
+    // Update display choice for max number of box to display
+    connect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_7_3_commands(QStandardItem *)));
+    this->updateCommands();
+    disconnect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_7_3_commands(QStandardItem *)));
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_7_3_commands(QStandardItem *commands)
+{
+    EventCommand *command;
+    QVector<QString> list;
+    QString text;
+    int i, l;
+    if (commands->rowCount() == 0)
+    {
+        command = reinterpret_cast<EventCommand *>(commands->data().value<quintptr>());
+        list = command->commands();
+        if (command->kind() == EventCommandKind::DisplayChoice)
+        {
+            list.insert(2, "3");
+            list.insert(3, "5");
+        }
+    }
+    for (i = 0, l = commands->rowCount(); i < l; i++)
+    {
+        this->updateVersion_1_7_3_commands(commands->child(i));
+    }
 }

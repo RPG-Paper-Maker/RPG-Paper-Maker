@@ -61,9 +61,8 @@ void DialogCommandDisplayChoice::initializePrimitives() {
     lang = new SystemTranslatable;
     lang->setDisplayID(false);
     ui->treeViewChoices->initializeNewItemInstance(lang);
-    ui->panelPrimitiveCancelAutoIndex->initializeProperty(m_parameters,
-        m_properties, true);
-    ui->panelPrimitiveCancelAutoIndex->showNumber();
+    ui->panelPrimitiveCancelAutoIndex->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveMaxNumberChoicesDisplay->initializeNumber(m_parameters, m_properties);
 }
 
 // -------------------------------------------------------
@@ -82,6 +81,7 @@ void DialogCommandDisplayChoice::initializeDefault() {
     m_model->appendRow(row);
     m_model->appendRow(SuperListItem::getEmptyItem());
     ui->panelPrimitiveCancelAutoIndex->setNumberValue(2);
+    ui->panelPrimitiveMaxNumberChoicesDisplay->setNumberValue(5);
 }
 
 //-------------------------------------------------
@@ -92,6 +92,8 @@ void DialogCommandDisplayChoice::translate()
         ::DOT_DOT_DOT);
     ui->labelCancelAutoIndex->setText(RPM::translate(Translations
         ::CANCEL_AUTO_INDEX) + RPM::COLON);
+    ui->labelMaxNumberChoicesDisplay->setText(RPM::translate(Translations
+        ::MAX_NUMBER_CHOICES_DISPLAY) + RPM::COLON);
     ui->groupBoxChoices->setTitle(RPM::translate(Translations::CHOICES));
     ui->groupBoxOptions->setTitle(RPM::translate(Translations::OPTIONS));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
@@ -109,6 +111,7 @@ EventCommand * DialogCommandDisplayChoice::getCommand() const {
     int i, l;
 
     ui->panelPrimitiveCancelAutoIndex->getCommand(command);
+    ui->panelPrimitiveMaxNumberChoicesDisplay->getCommand(command);
     for (i = 0, l = m_model->invisibleRootItem()->rowCount(); i < l; i++) {
         lang = reinterpret_cast<SystemTranslatable *>(m_model->item(i)->data().value<
             quintptr>());
@@ -132,6 +135,7 @@ void DialogCommandDisplayChoice::initialize(EventCommand *command) {
     i = 0;
     l = command->commandsCount();
     ui->panelPrimitiveCancelAutoIndex->initializeCommand(command, i);
+    ui->panelPrimitiveMaxNumberChoicesDisplay->initializeCommand(command, i);
     lang = nullptr;
     while (i < l) {
         next = command->valueCommandAt(i);

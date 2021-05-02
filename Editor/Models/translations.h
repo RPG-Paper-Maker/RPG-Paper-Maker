@@ -1297,6 +1297,7 @@ public:
     static const QString IS_LOOKING_AT;
     static const QString CLEAN_RECENT_PROJECTS;
     static const QString WITH_PRECISION;
+    static const QString MAX_NUMBER_CHOICES_DISPLAY;
 
     Translations();
     virtual ~Translations();

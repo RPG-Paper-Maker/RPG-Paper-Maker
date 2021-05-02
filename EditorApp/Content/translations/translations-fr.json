@@ -1263,5 +1263,6 @@
     "can.be.sold": "Peut être vendu",
     "is.looking.at": "Regarde vers",
     "clean.recent.projects": "Nettoyer les projets récents",
-    "with.precision": "Avec précision"
+    "with.precision": "Avec précision",
+    "max.number.choices.display": "Nombre maximum de choix à afficher"
 }
