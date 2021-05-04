@@ -6,7 +6,6 @@
         "Change error message when class in hero and monster doesn't exist",
         "Command display choices: choose max number of choices to display",
         "Object option: cannot be triggered with another object",
-        "Creating new state on object: copy states options from the previously selected state",
         "Scripts manager: add save + save & close buttons"
     ],
 	"bugs": [
@@ -29,15 +28,16 @@
         "Skill to learn and troops monsters levels: limited to max 99",
         "Problem with troops reactions",
         "Change statistics command: wrong behavior with bars (should add an option to edit the current or max value)",
-        "Object linking issue: checking define a hero and copy/paste possible issue"
+        "Object linking issue: checking define a hero and copy/paste possible issue",
+        "Sometimes crash when hitting space in animations menu"
 	],
     "finished": [
         2,
         2,
-        0,
-        0,
-        0,
+        2,
+        2,
 
+        0,
         0,
         0,
         0,

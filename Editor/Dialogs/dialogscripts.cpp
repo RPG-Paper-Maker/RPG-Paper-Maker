@@ -353,6 +353,131 @@ void DialogScripts::checkUpdates()
 
 // -------------------------------------------------------
 
+void DialogScripts::save(SystemPlugin *plugin, int indexPlugins, int index)
+{
+    if (plugin->editedPlugin() == nullptr)
+    {
+        return;
+    }
+    switch (index)
+    {
+    case 0: // Plugins
+        switch (indexPlugins)
+        {
+        case 0: // Details
+        {
+            plugin->setEditChanged(false);
+
+            // Copy edited plugin and write
+            plugin->clearParameters();
+            SuperListItem::copy(plugin->parameters(), plugin->editedPlugin()
+                ->parameters());
+            plugin->initializeHeaders();
+            QJsonObject json;
+            plugin->write(json);
+            Common::writeOtherJSON(Common::pathCombine(plugin
+                ->getFolderPath(), SystemPlugin::NAME_JSON), json);
+            RPM::get()->project()->writeScriptsDatas();
+            this->updatePluginDetailsSave();
+            ui->panelPluginDetails->initialize(plugin->editedPlugin());
+            break;
+        }
+        case 1: // Code
+            plugin->setChanged(false);
+            Common::write(plugin->getPath(), plugin->currentCode());
+            this->updatePluginCodeSave();
+            break;
+        case 2: // Edit
+        {
+            QString previousName = plugin->name();
+
+            // Check plugin name
+            if (!plugin->editedPlugin()->checkPluginName(previousName))
+            {
+                return;
+            }
+
+            // Set as not changed anymore
+            plugin->setEditChanged(false);
+
+            // Copy default parameters to current parameters values
+            if (plugin->defaultParametersChanged())
+            {
+                plugin->editedPlugin()->clearParameters();
+                SuperListItem::copy(plugin->editedPlugin()->parameters(),
+                    plugin->editedPlugin()->defaultParameters());
+                SystemPluginParameter::setAllDefault(plugin->editedPlugin()
+                    ->parameters(), false);
+                plugin->editedPlugin()->initializeHeaders();
+                plugin->setDefaultParametersChanged(false);
+            }
+
+            // Force format for version
+            QStringList list = plugin->editedPlugin()->version().split(RPM
+                ::DOT);
+            int size = list.size();
+            int nb1 = 0, nb2 = 0, nb3 = 0;
+            if (size >= 1)
+            {
+                nb1 = list.at(0).toInt();
+            }
+            if (size >= 2)
+            {
+                nb2 = list.at(1).toInt();
+            }
+            if (size >= 3)
+            {
+                nb3 = list.at(2).toInt();
+            }
+            plugin->editedPlugin()->setVersion(QString::number(nb1) + RPM
+                ::DOT + QString::number(nb2) + RPM::DOT + QString::number(
+                nb3));
+            ui->lineEditVersion->setText(plugin->editedPlugin()->version());
+
+            // Rename folder if necessary
+            QDir(Common::pathCombine(RPM::get()->project()
+                ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_PLUGINS_DIR))
+                .rename(previousName, plugin->editedPlugin()->name());
+
+            // Copy edited plugin and write
+            plugin->setCopy(*plugin->editedPlugin());
+            QJsonObject json;
+            plugin->write(json);
+            Common::writeOtherJSON(Common::pathCombine(plugin
+                ->getFolderPath(), SystemPlugin::NAME_JSON), json);
+            RPM::get()->project()->writeScriptsDatas();
+            this->updatePluginEditSave();
+            ui->panelPluginDetails->initialize(plugin->editedPlugin());
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::saveAll()
+{
+    SystemPlugin *plugin;
+    for (int i = 0, l = ui->treeViewPlugins->getModel()->invisibleRootItem()
+         ->rowCount(); i < l; i++)
+    {
+        plugin = reinterpret_cast<SystemPlugin *>(SuperListItem::getItemModelAt(
+            ui->treeViewPlugins->getModel(), i));
+        if (plugin != nullptr)
+        {
+            this->save(plugin, 0);
+            this->save(plugin, 1);
+            this->save(plugin, 2);
+        }
+    }
+}
+
+// -------------------------------------------------------
+
 void DialogScripts::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::SCRIPTS_MANAGER) + RPM
@@ -400,106 +525,8 @@ void DialogScripts::keyPressEvent(QKeyEvent *event)
     QKeySequence ctrls(Qt::CTRL + Qt::Key_S);
     if (keys.matches(ctrls))
     {
-        SystemPlugin *plugin;
-        switch (ui->tabWidget->currentIndex())
-        {
-        case 0: // Plugins
-            plugin = this->getSelectedPlugin();
-            switch (ui->tabWidgetPlugin->currentIndex())
-            {
-            case 0: // Details
-            {
-                plugin->setEditChanged(false);
-
-                // Copy edited plugin and write
-                plugin->clearParameters();
-                SuperListItem::copy(plugin->parameters(), plugin->editedPlugin()
-                    ->parameters());
-                plugin->initializeHeaders();
-                QJsonObject json;
-                plugin->write(json);
-                Common::writeOtherJSON(Common::pathCombine(plugin
-                    ->getFolderPath(), SystemPlugin::NAME_JSON), json);
-                RPM::get()->project()->writeScriptsDatas();
-                this->updatePluginDetailsSave();
-                ui->panelPluginDetails->initialize(plugin->editedPlugin());
-                break;
-            }
-            case 1: // Code
-                plugin->setChanged(false);
-                Common::write(plugin->getPath(), plugin->currentCode());
-                this->updatePluginCodeSave();
-                break;
-            case 2: // Edit
-            {
-                plugin = this->getSelectedPlugin();
-                QString previousName = plugin->name();
-
-                // Check plugin name
-                if (!plugin->editedPlugin()->checkPluginName(previousName))
-                {
-                    return;
-                }
-
-                // Set as not changed anymore
-                plugin->setEditChanged(false);
-
-                // Copy default parameters to current parameters values
-                if (plugin->defaultParametersChanged())
-                {
-                    plugin->editedPlugin()->clearParameters();
-                    SuperListItem::copy(plugin->editedPlugin()->parameters(),
-                        plugin->editedPlugin()->defaultParameters());
-                    SystemPluginParameter::setAllDefault(plugin->editedPlugin()
-                        ->parameters(), false);
-                    plugin->editedPlugin()->initializeHeaders();
-                    plugin->setDefaultParametersChanged(false);
-                }
-
-                // Force format for version
-                QStringList list = plugin->editedPlugin()->version().split(RPM
-                    ::DOT);
-                int size = list.size();
-                int nb1 = 0, nb2 = 0, nb3 = 0;
-                if (size >= 1)
-                {
-                    nb1 = list.at(0).toInt();
-                }
-                if (size >= 2)
-                {
-                    nb2 = list.at(1).toInt();
-                }
-                if (size >= 3)
-                {
-                    nb3 = list.at(2).toInt();
-                }
-                plugin->editedPlugin()->setVersion(QString::number(nb1) + RPM
-                    ::DOT + QString::number(nb2) + RPM::DOT + QString::number(
-                    nb3));
-                ui->lineEditVersion->setText(plugin->editedPlugin()->version());
-
-                // Rename folder if necessary
-                QDir(Common::pathCombine(RPM::get()->project()
-                    ->pathCurrentProjectApp(), RPM::PATH_SCRIPTS_PLUGINS_DIR))
-                    .rename(previousName, plugin->editedPlugin()->name());
-
-                // Copy edited plugin and write
-                plugin->setCopy(*plugin->editedPlugin());
-                QJsonObject json;
-                plugin->write(json);
-                Common::writeOtherJSON(Common::pathCombine(plugin
-                    ->getFolderPath(), SystemPlugin::NAME_JSON), json);
-                RPM::get()->project()->writeScriptsDatas();
-                this->updatePluginEditSave();
-                ui->panelPluginDetails->initialize(plugin->editedPlugin());
-                break;
-            }
-            default:
-                break;
-            }
-
-            break;
-        }
+        this->save(this->getSelectedPlugin(), ui->tabWidgetPlugin->currentIndex(),
+            ui->tabWidget->currentIndex());
     }
     QDialog::keyPressEvent(event);
     ui->treeViewEditParameter->forceKeyPress(event);
@@ -838,6 +865,21 @@ void DialogScripts::on_pushButtonExport_clicked()
 void DialogScripts::on_pushButtonRefresh_clicked()
 {
     this->initialize();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pushButtonSave_clicked()
+{
+    this->saveAll();
+}
+
+// -------------------------------------------------------
+
+void DialogScripts::on_pushButtonSaveAndClose_clicked()
+{
+    this->saveAll();
+    QDialog::close();
 }
 
 // -------------------------------------------------------

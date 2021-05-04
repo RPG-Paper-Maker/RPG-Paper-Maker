@@ -45,6 +45,8 @@ public:
     void updatePluginEditSave();
     void updatePluginDetailsSave();
     void checkUpdates();
+    void save(SystemPlugin *plugin, int indexPlugins = 0, int index = 0);
+    void saveAll();
     void translate();
 
 protected:
@@ -88,6 +90,8 @@ public slots:
     void on_treeKeyPressed(QKeyEvent *);
     void on_pushButtonExport_clicked();
     void on_pushButtonRefresh_clicked();
+    void on_pushButtonSave_clicked();
+    void on_pushButtonSaveAndClose_clicked();
     void on_pushButtonPicture_clicked();
 };
 
