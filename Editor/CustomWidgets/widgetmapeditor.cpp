@@ -92,10 +92,6 @@ void WidgetMapEditor::setPanelTextures(PanelTextures *m){
     m_panelTextures = m;
 }
 
-void WidgetMapEditor::setTreeMapNode(QStandardItem *item) {
-    m_control.setTreeMapNode(item);
-}
-
 Map * WidgetMapEditor::getMap() const {
     return m_control.map();
 }

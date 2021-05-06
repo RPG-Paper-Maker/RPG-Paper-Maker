@@ -51,7 +51,6 @@ ControlMapEditor::ControlMapEditor() :
     m_needMapObjectsUpdate(false),
     m_displayGrid(true),
     m_displaySquareInformations(true),
-    m_treeMapNode(nullptr),
     m_isDrawingWall(false),
     m_isDeletingWall(false),
     m_isDeleting(false),
@@ -144,10 +143,6 @@ bool ControlMapEditor::displaySquareInformations() const {
 
 void ControlMapEditor::setContextMenu(ContextMenuList *m){
     m_contextMenu = m;
-}
-
-void ControlMapEditor::setTreeMapNode(QStandardItem *item) {
-    m_treeMapNode = item;
 }
 
 // -------------------------------------------------------
@@ -330,17 +325,17 @@ void ControlMapEditor::deleteMap(bool updateCamera) {
         m_grid = nullptr;
     }
 
+    // Update camera node
+    if (updateCamera && m_map != nullptr) {
+        m_camera->setDistance(static_cast<int>(m_camera->distance() /
+            RPM::coefSquareSize()));
+        updateCameraTreeNode();
+    }
+
     // Map
     if (m_map != nullptr) {
         delete m_map;
         m_map = nullptr;
-    }
-
-    // Update camera node
-    if (updateCamera && m_treeMapNode != nullptr) {
-        m_camera->setDistance(static_cast<int>(m_camera->distance() /
-            RPM::coefSquareSize()));
-        updateCameraTreeNode();
     }
 }
 
@@ -355,8 +350,8 @@ void ControlMapEditor::onResize(int width, int height) {
 // -------------------------------------------------------
 
 void ControlMapEditor::updateCameraTreeNode() {
-    TreeMapTag *tag = reinterpret_cast<TreeMapTag *>(m_treeMapNode->data()
-        .value<quintptr>());
+    TreeMapTag *tag = reinterpret_cast<TreeMapTag *>(m_map->getAssociatedMapItem()
+        ->data().value<quintptr>());
     tag->setCameraDistance(m_camera->distance());
     tag->setCameraHorizontalAngle(m_camera->horizontalAngle());
     tag->setCameraVerticalAngle(m_camera->verticalAngle());
@@ -686,20 +681,24 @@ void ControlMapEditor::clearPortionsToUpdate() {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::setToNotSaved() {
-    if (m_treeMapNode != nullptr) {
-        m_map->setSaved(false);
-        RPM::mapsToSave.insert(m_map->mapProperties()->id());
-        m_treeMapNode->setText(m_map->mapProperties()->name() + " *");
+void ControlMapEditor::setToNotSaved(Map *map)
+{
+    if (map == nullptr)
+    {
+        map = m_map;
+    }
+    if (map != nullptr)
+    {
+        map->setSaved(false);
+        RPM::mapsToSave.insert(map->mapProperties()->id());
+        map->getAssociatedMapItem()->setText(map->mapProperties()->name() + " *");
     }
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::save() {
-    if (m_treeMapNode != nullptr) {
-        m_treeMapNode->setText(m_map->mapProperties()->name());
-    }
+    m_map->getAssociatedMapItem()->setText(m_map->mapProperties()->name());
 }
 
 // -------------------------------------------------------

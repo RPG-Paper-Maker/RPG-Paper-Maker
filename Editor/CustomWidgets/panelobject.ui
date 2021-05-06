@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>779</width>
-    <height>639</height>
+    <height>668</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,9 +27,9 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,0,1">
+    <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,1,0">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1,0,0">
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,1,0,0">
        <item>
         <widget class="QLabel" name="labelName">
          <property name="text">
@@ -39,6 +39,20 @@
        </item>
        <item>
         <widget class="QLineEdit" name="lineEditName"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>ID:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="labelID">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="horizontalSpacer">
@@ -76,40 +90,6 @@
            <width>150</width>
            <height>16777215</height>
           </size>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,0,0">
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBoxOneEventPerFrame">
-         <property name="text">
-          <string>Only one event per frame</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBoxCanBeTriggeredAnotherObject">
-         <property name="text">
-          <string>Can be triggered with another object</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -455,6 +435,40 @@
           </layout>
          </item>
         </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,0,1">
+       <item>
+        <widget class="QCheckBox" name="checkBoxOneEventPerFrame">
+         <property name="text">
+          <string>Only one event per frame</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBoxCanBeTriggeredAnotherObject">
+         <property name="text">
+          <string>Can be triggered with another object</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </item>

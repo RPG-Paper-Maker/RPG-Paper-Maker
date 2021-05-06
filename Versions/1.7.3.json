@@ -9,8 +9,7 @@
         "Scripts manager: add save + save & close buttons"
     ],
 	"bugs": [
-        "Some issues map properites state going back to normal",
-        "Weird behavior of camera for zooming option",
+        "Weird behavior of camera on Z offset axis (no dezooming)",
         "Random starting battle error",
         "Set invisible hero sometimes still invisible after loading game",
         "Sometimes crashing after placing moutains in corners of the map",
@@ -37,6 +36,8 @@
         2,
         2,
 
+        2,
+        2,
         0,
         0,
         0,
@@ -53,10 +54,7 @@
         0,
         0,
         0,
-        0,
-        0,
-        0,
-        0,
+        2,
         0
     ]
 }

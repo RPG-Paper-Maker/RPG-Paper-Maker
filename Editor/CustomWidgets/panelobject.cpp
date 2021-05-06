@@ -17,6 +17,7 @@
 #include "systemstate.h"
 #include "systemcommonreaction.h"
 #include "rpm.h"
+#include "common.h"
 #include "objectmovingkind.h"
 #include "dialogcommandmoveobject.h"
 #include "dialogcommandsendevent.h"
@@ -118,6 +119,7 @@ void PanelObject::updateModel() {
 
         QModelIndex index;
         ui->lineEditName->setText(m_model->name());
+        ui->labelID->setText(Common::getFormatNumber(m_model->id()));
         ui->checkBoxOneEventPerFrame->setChecked(m_model->onlyOneEventPerFrame());
         ui->checkBoxCanBeTriggeredAnotherObject->setChecked(m_model->canBeTriggeredAnotherObject());
         initializeCommonInheritance();

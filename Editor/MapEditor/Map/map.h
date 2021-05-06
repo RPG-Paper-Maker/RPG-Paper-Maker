@@ -175,7 +175,7 @@ public:
     int generateObjectId() const;
     bool isOKPositionID(Position3D &p, int id) const;
     static QString generateObjectName(int id);
-
+    QStandardItem * getAssociatedMapItem(QStandardItem *item = nullptr) const;
 
     void readObjects();
     static void loadObjects(QStandardItemModel *model, QString pathMap,

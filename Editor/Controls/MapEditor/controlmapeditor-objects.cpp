@@ -107,6 +107,7 @@ void ControlMapEditor::defineAsHero() {
                 map->deleteObject(posPrevious, mapPortion, previous, previousType);
                 map->savePortionMap(mapPortion);
                 map->writeObjects(true);
+                this->setToNotSaved(map);
                 delete mapPortion;
             } else
             {
@@ -114,7 +115,6 @@ void ControlMapEditor::defineAsHero() {
             }
             if (map != m_map)
             {
-                map->save();
                 delete map;
             }
         }

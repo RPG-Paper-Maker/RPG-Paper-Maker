@@ -176,7 +176,6 @@ void WidgetTreeLocalMaps::showMap(QStandardItem *item) {
                                      tag->cameraDistance(),
                                      tag->cameraHorizontalAngle(),
                                      tag->cameraVerticalAngle());
-    m_widgetMapEditor->setTreeMapNode(item);
 }
 
 // -------------------------------------------------------
@@ -190,8 +189,6 @@ void WidgetTreeLocalMaps::hideMap(){
 
     if (m_project != nullptr)
         m_project->setCurrentMap(nullptr);
-
-    m_widgetMapEditor->setTreeMapNode(nullptr);
 }
 
 // -------------------------------------------------------

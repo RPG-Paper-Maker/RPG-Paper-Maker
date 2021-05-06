@@ -774,3 +774,28 @@ int Map::generateMapId(){
 QString Map::generateMapName(int id){
     return "MAP" + Common::getFormatNumber(id);
 }
+
+// -------------------------------------------------------
+
+QStandardItem * Map::getAssociatedMapItem(QStandardItem *item) const
+{
+    if (item == nullptr)
+    {
+        item = RPM::get()->project()->treeMapDatas()->model()->invisibleRootItem();
+    }
+    TreeMapTag *tag = reinterpret_cast<TreeMapTag *>(item->data().value<quintptr>());
+    QStandardItem *newItem;
+    if (tag != nullptr && tag->id() == m_mapProperties->id())
+    {
+        return item;
+    }
+    for (int i = 0, l = item->rowCount(); i < l; i++)
+    {
+        newItem = this->getAssociatedMapItem(item->child(i));
+        if (newItem != nullptr)
+        {
+            return newItem;
+        }
+    }
+    return nullptr;
+}

@@ -38,7 +38,6 @@ public:
     ~WidgetMapEditor();
     void setMenuBar(WidgetMenuBarMapEditor *m);
     void setPanelTextures(PanelTextures *m);
-    void setTreeMapNode(QStandardItem *item);
     Map * getMap() const;
     int cameraDistance() const;
     double cameraHorizontalAngle() const;

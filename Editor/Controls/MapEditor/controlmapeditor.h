@@ -54,7 +54,6 @@ public:
     bool displaySquareInformations() const;
 
     void setContextMenu(ContextMenuList *m);
-    void setTreeMapNode(QStandardItem *item);
     void moveCursorToMousePosition(QPoint point);
     void updateCameraTreeNode();
     void initialize();
@@ -122,7 +121,7 @@ public:
     void updatePortions(MapEditorSelectionKind selectionKind, DrawKind drawKind);
     void saveTempPortions();
     void clearPortionsToUpdate();
-    void setToNotSaved();
+    void setToNotSaved(Map *map = nullptr);
     void save();
     void addRemove(MapEditorSelectionKind selection,
         MapEditorSubSelectionKind subSelection, DrawKind drawKind, bool layerOn,
@@ -303,7 +302,6 @@ protected:
     bool m_needMapObjectsUpdate;
     bool m_displayGrid;
     bool m_displaySquareInformations;
-    QStandardItem *m_treeMapNode;
     SystemCommonObject *m_selectedObject;
     ContextMenuList *m_contextMenu;
     bool m_isDrawingWall;
