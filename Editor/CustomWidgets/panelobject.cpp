@@ -41,7 +41,6 @@ PanelObject::PanelObject(QWidget *parent) :
     ui->treeViewProperties->setUpdateId(true);
     ui->treeViewEvents->initializeNewItemInstance(new SystemObjectEvent);
     ui->treeViewStates->initializeNewItemInstance(new SystemState);
-    ui->treeViewStates->setUpdateId(true);
 
     // Moving
     SuperListItem::fillComboBox(ui->comboBoxSpeed, RPM::get()->project()

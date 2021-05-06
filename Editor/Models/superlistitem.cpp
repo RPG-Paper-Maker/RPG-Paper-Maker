@@ -36,11 +36,12 @@ SuperListItem::SuperListItem() : SuperListItem(-1) {}
 
 SuperListItem::~SuperListItem() {}
 
-SuperListItem::SuperListItem(int i, QString n, bool datas, bool displayID) :
+SuperListItem::SuperListItem(int i, QString n, bool datas, bool displayID, bool isNew) :
     p_id(i),
     p_name(n),
     m_containsDatas(datas),
-    m_displayID(displayID)
+    m_displayID(displayID),
+    m_isNew(isNew)
 {
 
 }
@@ -55,6 +56,16 @@ void SuperListItem::setName(QString n){ p_name = n; }
 
 void SuperListItem::setDisplayID(bool b) {
     m_displayID = b;
+}
+
+bool SuperListItem::isNew() const
+{
+    return m_isNew;
+}
+
+void SuperListItem::setIsNew(bool isNew)
+{
+    m_isNew = isNew;
 }
 
 // -------------------------------------------------------
@@ -99,6 +110,7 @@ SuperListItem* SuperListItem::createCopy() const{
 void SuperListItem::setCopy(const SuperListItem& item){
     p_name = item.name();
     m_displayID = item.m_displayID;
+    m_isNew = item.m_isNew;
 }
 
 // -------------------------------------------------------

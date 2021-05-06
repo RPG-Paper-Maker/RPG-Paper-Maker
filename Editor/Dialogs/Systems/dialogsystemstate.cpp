@@ -25,7 +25,8 @@ DialogSystemState::DialogSystemState(SystemState& state, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogSystemState),
     m_state(state),
-    m_needUpdate(true)
+    m_needUpdate(true),
+    m_previousID(state.id())
 {
     ui->setupUi(this);
     
@@ -78,14 +79,15 @@ void DialogSystemState::accept()
 {
     int id = SuperListItem::getIdByIndex(RPM::get()->project()->gameDatas()
         ->commonEventsDatas()->modelStates(), ui->comboBox->currentIndex());
-    if (RPM::get()->project()->currentObject() != nullptr)
+    if (RPM::get()->project()->currentObject() != nullptr && (m_state.isNew() ||
+        m_state.id() != m_previousID))
     {
         SuperListItem *state;
         QStandardItemModel *model = RPM::get()->project()->currentObject()
             ->modelStates();
         for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
         {
-            state = reinterpret_cast<SuperListItem *>(model->item(i)->data()
+            state = reinterpret_cast<SystemState *>(model->item(i)->data()
                 .value<quintptr>());
             if (state != nullptr && state->id() == id)
             {

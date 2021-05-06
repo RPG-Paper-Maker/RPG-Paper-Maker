@@ -39,6 +39,7 @@ private:
     Ui::DialogSystemState *ui;
     SystemState& m_state;
     bool m_needUpdate;
+    int m_previousID;
 
     void initialize();
     void translate();
