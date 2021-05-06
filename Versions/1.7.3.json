@@ -11,7 +11,7 @@
 	"bugs": [
         "Weird behavior of camera on Z offset axis (no dezooming)",
         "Random starting battle error",
-        "Set invisible hero sometimes still invisible after loading game",
+        "Set invisible hero and then use change graphics: wrong display",
         "Sometimes crashing after placing moutains in corners of the map",
         "Command start a battle: sometimes teleported on the top of the map for premade battle maps in Systems > battle maps",
         "Map editor tileset scrollbar not correcly updated when switching section",
@@ -38,8 +38,8 @@
 
         2,
         2,
-        0,
-        0,
+        2,
+        2,
         0,
         0,
         0,

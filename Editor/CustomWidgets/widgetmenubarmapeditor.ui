@@ -60,7 +60,6 @@
     <string>Mountain</string>
    </property>
    <addaction name="actionMountain"/>
-   <addaction name="actionSlope"/>
   </widget>
   <widget class="QMenu" name="menu3D_object">
    <property name="enabled">

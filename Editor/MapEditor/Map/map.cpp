@@ -550,13 +550,12 @@ bool Map::isInGrid(Position3D &position, int offset) const {
 // -------------------------------------------------------
 
 bool Map::isPortionInGrid(Portion& portion) const {
-    int l = m_mapProperties->length() / RPM::PORTION_SIZE;
-    int w = m_mapProperties->width() / RPM::PORTION_SIZE;
+    int l = qCeil(m_mapProperties->length() / RPM::PORTION_SIZE);
+    int w = qCeil(m_mapProperties->width() / RPM::PORTION_SIZE);
     int d = m_mapProperties->depth() / RPM::PORTION_SIZE;
     int h = m_mapProperties->height() / RPM::PORTION_SIZE;
-
-    return (portion.x() >= 0 && portion.x() <= l && portion.y() >= -d &&
-            portion.y() < h && portion.z() >= 0 && portion.z() <= w);
+    return (portion.x() >= 0 && portion.x() < l && portion.y() >= -d &&
+            portion.y() < h && portion.z() >= 0 && portion.z() < w);
 }
 
 // -------------------------------------------------------
