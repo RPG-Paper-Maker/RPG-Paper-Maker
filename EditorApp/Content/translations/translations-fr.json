@@ -1265,5 +1265,6 @@
     "clean.recent.projects": "Nettoyer les projets récents",
     "with.precision": "Avec précision",
     "max.number.choices.display": "Nombre maximum de choix à afficher",
-    "can.be.triggered.another.object": "Peut être déclenché avec un autre objet"
+    "can.be.triggered.another.object": "Peut être déclenché avec un autre objet",
+    "apply.change.maximum.value": "Appliquer le changement à la valeur maximale"
 }

@@ -1189,6 +1189,11 @@ void ProjectUpdater::updateVersion_1_7_3_commands(QStandardItem *commands)
         {
             list.insert(2, "3");
             list.insert(3, "5");
+            command->setCommands(list);
+        } else if (command->kind() == EventCommandKind::ChangeAStatistic)
+        {
+            list.append(RPM::boolToString(false));
+            command->setCommands(list);
         }
     }
     for (i = 0, l = commands->rowCount(); i < l; i++)

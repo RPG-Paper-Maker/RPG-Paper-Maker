@@ -1299,6 +1299,7 @@ public:
     static const QString WITH_PRECISION;
     static const QString MAX_NUMBER_CHOICES_DISPLAY;
     static const QString CAN_BE_TRIGGERED_ANOTHER_OBJECT;
+    static const QString APPLY_CHANGE_MAXIMUM_VALUE;
 
     Translations();
     virtual ~Translations();

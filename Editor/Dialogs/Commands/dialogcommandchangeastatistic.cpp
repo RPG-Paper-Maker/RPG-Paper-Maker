@@ -94,6 +94,8 @@ void DialogCommandChangeAStatistic::translate()
         ::MAXIMUM_STATISTIC_VALUE));
     ui->checkBoxCanAboveMax->setText(RPM::translate(Translations
         ::CAN_GO_ABOVE_MAXIMUM_VALUE));
+    ui->checkBoxApplyChangeMaximumValue->setText(RPM::translate(Translations
+        ::APPLY_CHANGE_MAXIMUM_VALUE));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -147,13 +149,14 @@ void DialogCommandChangeAStatistic::initialize(EventCommand *command) {
     }
     ui->checkBoxCanAboveMax->setChecked(RPM::stringToBool(command
         ->valueCommandAt(i++)));
+    ui->checkBoxApplyChangeMaximumValue->setChecked(RPM::stringToBool(command
+        ->valueCommandAt(i++)));
 }
 
 // -------------------------------------------------------
 
 EventCommand * DialogCommandChangeAStatistic::getCommand() const{
     QVector<QString> command;
-
     ui->panelPrimitiveStatisticID->getCommand(command);
     if (ui->radioButtonHeroEnemyInstanceID->isChecked())
     {
@@ -193,6 +196,6 @@ EventCommand * DialogCommandChangeAStatistic::getCommand() const{
         command.append("2");
     }
     command.append(RPM::boolToString(ui->checkBoxCanAboveMax->isChecked()));
-
+    command.append(RPM::boolToString(ui->checkBoxApplyChangeMaximumValue->isChecked()));
     return new EventCommand(EventCommandKind::ChangeAStatistic, command);
 }

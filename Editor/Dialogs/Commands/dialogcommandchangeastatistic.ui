@@ -214,6 +214,33 @@
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="0" column="0">
            <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,0,1">
+            <item row="1" column="0" colspan="3">
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QRadioButton" name="radioButtonValueFormula">
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="PanelPrimitiveValue" name="panelPrimiteValueFormula" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
             <item row="0" column="0" colspan="3">
              <layout class="QHBoxLayout" name="horizontalLayout_3">
               <item>
@@ -244,50 +271,30 @@
               </item>
              </layout>
             </item>
-            <item row="0" column="3" rowspan="2">
-             <spacer name="horizontalSpacer_6">
+            <item row="2" column="0">
+             <widget class="QRadioButton" name="radioButtonValueMax">
+              <property name="text">
+               <string>Maximum statistic value</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2" colspan="2">
+             <spacer name="horizontalSpacer_5">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>248</width>
-                <height>58</height>
+                <width>308</width>
+                <height>20</height>
                </size>
               </property>
              </spacer>
             </item>
-            <item row="1" column="0" colspan="3">
-             <layout class="QHBoxLayout" name="horizontalLayout_4">
-              <item>
-               <widget class="QRadioButton" name="radioButtonValueFormula">
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="PanelPrimitiveValue" name="panelPrimiteValueFormula" native="true">
-                <property name="minimumSize">
-                 <size>
-                  <width>250</width>
-                  <height>27</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>250</width>
-                  <height>27</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="2" column="0">
-             <widget class="QRadioButton" name="radioButtonValueMax">
+            <item row="3" column="0" colspan="2">
+             <widget class="QCheckBox" name="checkBoxCanAboveMax">
               <property name="text">
-               <string>Maximum statistic value</string>
+               <string>Can go above maximum value</string>
               </property>
              </widget>
             </item>
@@ -304,21 +311,34 @@
               </property>
              </spacer>
             </item>
-            <item row="3" column="0" colspan="2">
-             <widget class="QCheckBox" name="checkBoxCanAboveMax">
-              <property name="text">
-               <string>Can go above maximum value</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="2" colspan="2">
-             <spacer name="horizontalSpacer_5">
+            <item row="0" column="3" rowspan="2">
+             <spacer name="horizontalSpacer_6">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>308</width>
+                <width>248</width>
+                <height>58</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="4" column="0">
+             <widget class="QCheckBox" name="checkBoxApplyChangeMaximumValue">
+              <property name="text">
+               <string>Apply change to maximum value</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1" colspan="3">
+             <spacer name="horizontalSpacer_7">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
                 <height>20</height>
                </size>
               </property>
