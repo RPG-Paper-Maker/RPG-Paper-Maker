@@ -21,7 +21,7 @@
         "Troops monsters levels: limited to max 99",
         "Problem with troops reactions",
         "Change statistics command: wrong behavior with bars (should add an option to edit the current or max value)",
-        "Object linking issue: checking define a hero and copy/paste possible issue",
+        "Object linking issue: checking define a hero possible issue + no more random objects removed",
         "Sometimes crash when hitting space in animations menu",
         "Battlers not positioned correctly with several players"
 	],
@@ -39,7 +39,7 @@
         2,
         2,
         2,
-        1,
+        2,
         2,
         2,
         2,

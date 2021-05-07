@@ -121,7 +121,7 @@ bool WidgetShowPicture::isInsideImage(QPoint& pos) const {
 // -------------------------------------------------------
 
 void WidgetShowPicture::updateToRectBefore() {
-    if (m_rect->width() <= 0 || m_rect->height() <= 0) {
+    if (m_rect != nullptr && (m_rect->width() <= 0 || m_rect->height() <= 0)) {
         m_rect->setX(m_rectBefore.x());
         m_rect->setY(m_rectBefore.y());
         m_rect->setWidth(m_rectBefore.width());
