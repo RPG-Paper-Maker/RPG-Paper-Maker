@@ -1263,5 +1263,8 @@
     "can.be.sold": "Можно продать",
     "is.looking.at": "Смотреть в сторону",
     "clean.recent.projects": "Очистить недавние проекты",
-    "with.precision": "Tочно"
+    "with.precision": "Tочно",
+    "max.number.choices.display": "Максимальное количество вариантов для отображения",
+    "can.be.triggered.another.object": "Может быть активирован другим объектом",
+    "apply.change.maximum.value": "Применить изменение к максимальному значению"
 }

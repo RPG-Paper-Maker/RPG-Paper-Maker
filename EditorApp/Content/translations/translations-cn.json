@@ -1262,6 +1262,9 @@
     "end.battle": "結束戰鬥",
     "can.be.sold": "可出售",
     "is.looking.at": "在看",
-    "clean.recent.projects": "Clean recent projects",
-    "with.precision": "With precision"
+    "clean.recent.projects": "清除最近的項目",
+    "with.precision": "精度高",
+    "max.number.choices.display": "顯示的最大選擇數",
+    "can.be.triggered.another.object": "可以被另一個對象觸發",
+    "apply.change.maximum.value": "將更改應用於最大值"
 }

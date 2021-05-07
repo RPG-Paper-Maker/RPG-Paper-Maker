@@ -1262,6 +1262,9 @@
     "end.battle": "전투 종료",
     "can.be.sold": "판매 가능",
     "is.looking.at": "보고있다",
-    "clean.recent.projects": "Clean recent projects",
-    "with.precision": "With precision"
+    "clean.recent.projects": "최근 프로젝트 지우기",
+    "with.precision": "정밀함",
+    "max.number.choices.display": "표시 할 최대 선택 수",
+    "can.be.triggered.another.object": "다른 개체로 트리거 될 수 있습니다.",
+    "apply.change.maximum.value": "최대 값에 변경 사항 적용"
 }

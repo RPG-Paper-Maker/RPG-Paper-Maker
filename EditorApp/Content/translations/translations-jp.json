@@ -1262,6 +1262,9 @@
     "end.battle": "戦いを終わらせる",
     "can.be.sold": "販売可能",
     "is.looking.at": "見ている",
-    "clean.recent.projects": "Clean recent projects",
-    "with.precision": "With precision"
+    "clean.recent.projects": "最近のプロジェクトをクリアする",
+    "with.precision": "正確に",
+    "max.number.choices.display": "表示する選択肢の最大数",
+    "can.be.triggered.another.object": "別のオブジェクトでトリガーできます",
+    "apply.change.maximum.value": "最大値に変更を適用します"
 }

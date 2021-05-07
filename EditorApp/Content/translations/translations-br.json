@@ -1267,5 +1267,8 @@
     "can.be.sold": "Pode ser vendido",
     "is.looking.at": "Olhe para",
     "clean.recent.projects": "Limpe projetos recentes",
-    "with.precision": "Precisamente"
+    "with.precision": "Precisamente",
+    "max.number.choices.display": "Número máximo de opções para exibir",
+    "can.be.triggered.another.object": "Pode ser acionado com outro objeto",
+    "apply.change.maximum.value": "Aplicar alteração ao valor máximo"
 }
