@@ -241,9 +241,6 @@ void DialogDatas::initializeTroops(GameDatas *gameDatas){
             ->index(0,0);
     ui->panelSuperListTroops->list()->setIndex(0);
     on_pageTroopSelected(index,index);
-    connect(ui->treeViewTroopReaction->selectionModel(), SIGNAL(currentChanged(
-        QModelIndex, QModelIndex)), this, SLOT(on_pageTroopReactionSelected(
-        QModelIndex, QModelIndex)));
     connect(ui->panelTroopReaction, SIGNAL(nameChanged()), this, SLOT(
         onTroopReactionNameChanged()));
 }
@@ -255,6 +252,9 @@ void DialogDatas::updateTroop(SystemTroop *sysTroop){
     ui->treeViewMonstersList->setColumnWidth(0,250);
     ui->treeViewMonstersList->setColumnWidth(1,50);
     ui->treeViewTroopReaction->initializeModel(sysTroop->reactions());
+    connect(ui->treeViewTroopReaction->selectionModel(), SIGNAL(currentChanged(
+        QModelIndex, QModelIndex)), this, SLOT(on_pageTroopReactionSelected(
+        QModelIndex, QModelIndex)));
 }
 
 // -------------------------------------------------------

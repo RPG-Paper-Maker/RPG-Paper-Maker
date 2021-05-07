@@ -22,7 +22,8 @@
         "Problem with troops reactions",
         "Change statistics command: wrong behavior with bars (should add an option to edit the current or max value)",
         "Object linking issue: checking define a hero and copy/paste possible issue",
-        "Sometimes crash when hitting space in animations menu"
+        "Sometimes crash when hitting space in animations menu",
+        "Battlers not positioned correctly with several players"
 	],
     "finished": [
         2,
@@ -38,11 +39,12 @@
         2,
         2,
         2,
+        1,
+        2,
+        2,
         0,
         2,
         0,
-        0,
-        2,
-        0
+        2
     ]
 }
