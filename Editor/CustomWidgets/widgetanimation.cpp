@@ -411,7 +411,7 @@ void WidgetAnimation::showContextMenu(const QPoint &p) {
 // -------------------------------------------------------
 
 void WidgetAnimation::contextEdit() {
-    if (m_selectedElement->openDialog()) {
+    if (m_selectedElement != nullptr && m_selectedElement->openDialog()) {
         m_currentFrame->reorder(m_selectedElement);
         this->repaint();
     }
@@ -430,7 +430,7 @@ void WidgetAnimation::contextCopy() {
 // -------------------------------------------------------
 
 void WidgetAnimation::contextPaste() {
-    if (m_copiedElement != nullptr)
+    if (m_copiedElement != nullptr && m_selectedElement != nullptr)
     {
         SystemAnimationFrameElement *element;
         int x, y;
