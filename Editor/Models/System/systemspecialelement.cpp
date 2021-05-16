@@ -27,6 +27,7 @@ const QString SystemSpecialElement::JSON_DEPTH_SQUARE = "ds";
 const QString SystemSpecialElement::JSON_DEPTH_PIXEL = "dp";
 const QString SystemSpecialElement::JSON_STRETCH = "st";
 const QString SystemSpecialElement::JSON_MOUNTAIN_COLLISION_KIND = "mck";
+const QString SystemSpecialElement::JSON_IS_ANIMATED = "isAnimated";
 
 // -------------------------------------------------------
 //
@@ -44,7 +45,7 @@ SystemSpecialElement::SystemSpecialElement(int i, QString n, ShapeKind shapeKind
     , int objID, int mtlID, int pictureID, ObjectCollisionKind collisionKind,
     int collisionCustomID, double scale, int wS, double wP, int hS, double hP,
     int dS, double dP, bool stretch, MountainCollisionKind
-    mountainCollisionKind) :
+    mountainCollisionKind, bool isAnimated) :
     SuperListItem(i, n),
     m_shapeKind(shapeKind),
     m_objID(new SuperListItem(objID)),
@@ -60,7 +61,8 @@ SystemSpecialElement::SystemSpecialElement(int i, QString n, ShapeKind shapeKind
     m_depthSquare(dS),
     m_depthPixel(dP),
     m_stretch(stretch),
-    m_mountainCollisionKind(mountainCollisionKind)
+    m_mountainCollisionKind(mountainCollisionKind),
+    m_isAnimated(isAnimated)
 {
     updateObjName();
     updateMtlName();
@@ -206,6 +208,16 @@ void SystemSpecialElement::setMountainCollisionKind(MountainCollisionKind
     m_mountainCollisionKind = mountainCollisionKind;
 }
 
+bool SystemSpecialElement::isAnimated() const
+{
+    return m_isAnimated;
+}
+
+void SystemSpecialElement::setIsAnimated(bool isAnimated)
+{
+    m_isAnimated = isAnimated;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -298,6 +310,7 @@ void SystemSpecialElement::setCopy(const SuperListItem &super) {
     m_depthPixel = special->m_depthPixel;
     m_stretch = special->m_stretch;
     m_mountainCollisionKind = special->m_mountainCollisionKind;
+    m_isAnimated = special->m_isAnimated;
 }
 
 // -------------------------------------------------------
@@ -354,6 +367,10 @@ void SystemSpecialElement::read(const QJsonObject &json){
     if (json.contains(JSON_MOUNTAIN_COLLISION_KIND)) {
         m_mountainCollisionKind = static_cast<MountainCollisionKind>(json[
             JSON_MOUNTAIN_COLLISION_KIND].toInt());
+    }
+    if (json.contains(JSON_IS_ANIMATED))
+    {
+        m_isAnimated = json[JSON_IS_ANIMATED].toBool();
     }
 }
 
@@ -415,5 +432,9 @@ void SystemSpecialElement::write(QJsonObject &json) const{
     if (m_mountainCollisionKind != MountainCollisionKind::Default) {
         json[JSON_MOUNTAIN_COLLISION_KIND] = static_cast<int>(
             m_mountainCollisionKind);
+    }
+    if (m_isAnimated)
+    {
+        json[JSON_IS_ANIMATED] = m_isAnimated;
     }
 }

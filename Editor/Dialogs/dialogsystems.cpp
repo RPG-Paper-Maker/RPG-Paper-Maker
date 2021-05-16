@@ -144,6 +144,8 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->spinBoxAnimationFrames->setValue(systemDatas->framesAnimation());
     ui->spinBoxBattlersFrames->setValue(systemDatas->battlersFrames());
     ui->spinBoxBattlersColumns->setValue(systemDatas->battlersColumns());
+    ui->spinBoxAutotilesFrames->setValue(systemDatas->autotilesFrames());
+    ui->spinBoxAutotilesFrameDuration->setValue(systemDatas->autotilesFrameDuration());
     ui->panelPrimitiveMapFrameDuration->initializeNumberAndUpdate(systemDatas
         ->mapFrameDuration());
     ui->primitiveValuePriceSoldItem->initializeNumberAndUpdate(systemDatas
@@ -665,6 +667,20 @@ void DialogSystems::on_spinBoxBattlersFrames_valueChanged(int i)
 void DialogSystems::on_spinBoxBattlersColumns_valueChanged(int i)
 {
     RPM::get()->project()->gameDatas()->systemDatas()->setBattlersColumns(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxAutotilesFrames_valueChanged(int i)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setAutotilesFrames(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxAutotilesFrameDuration_valueChanged(int i)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setAutotilesFrameDuration(i);
 }
 
 // -------------------------------------------------------

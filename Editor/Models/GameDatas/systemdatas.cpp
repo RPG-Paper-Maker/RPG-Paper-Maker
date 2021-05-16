@@ -58,11 +58,15 @@ const QString SystemDatas::JSON_BATTLERS_FRAMES = "battlersFrames";
 const QString SystemDatas::JSON_BATTLERS_COLUMNS = "battlersColumns";
 const QString SystemDatas::JSON_PRICE_SOLD_ITEM = "priceSoldItem";
 const QString SystemDatas::JSON_ENTER_NAME_TABLE = "enterNameTable";
+const QString SystemDatas::JSON_AUTOTILES_FRAMES = "autotilesFrames";
+const QString SystemDatas::JSON_AUTOTILES_FRAME_DURATION = "autotilesFrameDuration";
 const bool SystemDatas::DEFAULT_ANTIALIASING = false;
 const int SystemDatas::DEFAULT_MAP_FRAME_DURATION = 150;
 const int SystemDatas::DEFAULT_BATTLERS_FRAMES = 4;
 const int SystemDatas::DEFAULT_BATTLERS_COLUMNS = 9;
 const double SystemDatas::DEFAULT_PRICE_SOLD_ITEM = 50.0;
+const int SystemDatas::DEFAULT_AUTOTILES_FRAMES = 4;
+const int SystemDatas::DEFAULT_AUTOTILES_FRAME_DURATION = 150;
 
 // -------------------------------------------------------
 //
@@ -80,6 +84,8 @@ SystemDatas::SystemDatas() :
     m_idObjectHero(1),
     m_battlersFrames(DEFAULT_BATTLERS_FRAMES),
     m_battlersColumns(DEFAULT_BATTLERS_COLUMNS),
+    m_autotilesFrames(DEFAULT_AUTOTILES_FRAMES),
+    m_autotilesFrameDuration(DEFAULT_AUTOTILES_FRAME_DURATION),
     m_showBB(false),
     m_antialiasing(false),
     m_modelColors(new QStandardItemModel),
@@ -239,6 +245,26 @@ int SystemDatas::battlersColumns() const
 void SystemDatas::setBattlersColumns(int battlersColumns)
 {
     m_battlersColumns = battlersColumns;
+}
+
+int SystemDatas::autotilesFrames() const
+{
+    return m_autotilesFrames;
+}
+
+void SystemDatas::setAutotilesFrames(int autotilesFrames)
+{
+    m_autotilesFrames = autotilesFrames;
+}
+
+int SystemDatas::autotilesFrameDuration() const
+{
+    return m_autotilesFrameDuration;
+}
+
+void SystemDatas::setAutotilesFrameDuration(int autotilesFrameDuration)
+{
+    m_autotilesFrameDuration = autotilesFrameDuration;
 }
 
 bool SystemDatas::showBB() const { return m_showBB; }
@@ -749,6 +775,14 @@ void SystemDatas::read(const QJsonObject &json){
     {
         m_battlersColumns = json[JSON_BATTLERS_COLUMNS].toInt();
     }
+    if (json.contains(JSON_AUTOTILES_FRAMES))
+    {
+        m_autotilesFrames = json[JSON_AUTOTILES_FRAMES].toInt();
+    }
+    if (json.contains(JSON_AUTOTILES_FRAME_DURATION))
+    {
+        m_autotilesFrameDuration = json[JSON_AUTOTILES_FRAME_DURATION].toInt();
+    }
     m_showBB = json.contains("bb");
     if (json.contains(JSON_ANTIALIASING))
     {
@@ -937,6 +971,14 @@ void SystemDatas::write(QJsonObject &json) const{
     if (m_battlersColumns != DEFAULT_BATTLERS_COLUMNS)
     {
         json[JSON_BATTLERS_COLUMNS] = m_battlersColumns;
+    }
+    if (m_autotilesFrames != DEFAULT_AUTOTILES_FRAMES)
+    {
+        json[JSON_AUTOTILES_FRAMES] = m_autotilesFrames;
+    }
+    if (m_autotilesFrameDuration != DEFAULT_AUTOTILES_FRAME_DURATION)
+    {
+        json[JSON_AUTOTILES_FRAME_DURATION] = m_autotilesFrameDuration;
     }
     if (m_showBB)
         json["bb"] = m_showBB;

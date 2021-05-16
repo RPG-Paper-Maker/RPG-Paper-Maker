@@ -27,8 +27,10 @@ SystemAutotile::SystemAutotile() :
 
 }
 
-SystemAutotile::SystemAutotile(int i, QString n, int pictureId) :
-    SystemSpecialElement(i, n, ShapeKind::Box, -1, -1, pictureId)
+SystemAutotile::SystemAutotile(int i, QString n, int pictureId, bool isAnimated) :
+    SystemSpecialElement(i, n, ShapeKind::Box, -1, -1, pictureId,
+        ObjectCollisionKind::None, -1, 1.0, 1, 0, 1, 0, 1, 0, false,
+        MountainCollisionKind::Default, isAnimated)
 {
 
 }

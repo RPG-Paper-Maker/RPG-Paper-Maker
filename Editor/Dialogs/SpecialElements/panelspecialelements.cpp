@@ -160,6 +160,7 @@ void PanelSpecialElements::update(SystemSpecialElement *sys) {
     ui->comboBoxStretch->setCurrentIndex(sys->stretch() ? 0 : 1);
     ui->comboBoxCollisionMountains->setCurrentIndex(static_cast<int>(sys
         ->mountainCollisionKind()));
+    ui->checkBoxAnimated->setChecked(sys->isAnimated());
 
     // Object previewer
     if (m_kind == PictureKind::Object3D) {
@@ -200,6 +201,7 @@ void PanelSpecialElements::hideObject3D() {
     ui->comboBoxCollision->hide();
     ui->widgetShapeCollisions->hide();
     ui->labelScale->hide();
+    ui->checkBoxAnimated->hide();
     ui->doubleSpinBoxScale->hide();
     ui->groupBoxSize->hide();
     ui->widgetPreviewObject3D->hide();
@@ -220,6 +222,7 @@ void PanelSpecialElements::hideMountain() {
     ui->gridLayout_3->setRowStretch(9, 0);
     ui->labelCollisionMountains->hide();
     ui->comboBoxCollisionMountains->hide();
+    ui->checkBoxAnimated->hide();
     ui->horizontalSpacer_7->changeSize(0, 0);
 }
 
@@ -539,15 +542,28 @@ void PanelSpecialElements::on_comboBoxStretch_currentIndexChanged(int index) {
 void PanelSpecialElements::on_comboBoxCollisionMountains_currentIndexChanged(int
     index)
 {
-    if (m_model == nullptr) {
+    if (m_model == nullptr)
+    {
         return;
     }
+    SystemSpecialElement *element = this->currentElement();
+    if (element != nullptr)
+    {
+        element->setMountainCollisionKind(static_cast<MountainCollisionKind>(index));
+    }
+}
 
-    SystemSpecialElement *element;
+// -------------------------------------------------------
 
-    element = this->currentElement();
-    if (element != nullptr) {
-        element->setMountainCollisionKind(static_cast<MountainCollisionKind>(
-            index));
+void PanelSpecialElements::on_checkBoxAnimated_toggled(bool checked)
+{
+    if (m_model == nullptr)
+    {
+        return;
+    }
+    SystemSpecialElement *element = this->currentElement();
+    if (element != nullptr)
+    {
+        element->setIsAnimated(checked);
     }
 }

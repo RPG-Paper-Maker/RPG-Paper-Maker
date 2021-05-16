@@ -63,11 +63,15 @@ public:
     static const QString JSON_BATTLERS_COLUMNS;
     static const QString JSON_PRICE_SOLD_ITEM;
     static const QString JSON_ENTER_NAME_TABLE;
+    static const QString JSON_AUTOTILES_FRAMES;
+    static const QString JSON_AUTOTILES_FRAME_DURATION;
     static const bool DEFAULT_ANTIALIASING;
     static const int DEFAULT_MAP_FRAME_DURATION;
     static const int DEFAULT_BATTLERS_FRAMES;
     static const int DEFAULT_BATTLERS_COLUMNS;
     static const double DEFAULT_PRICE_SOLD_ITEM;
+    static const int DEFAULT_AUTOTILES_FRAMES;
+    static const int DEFAULT_AUTOTILES_FRAME_DURATION;
 
     SystemDatas();
     virtual ~SystemDatas();
@@ -103,6 +107,10 @@ public:
     void setBattlersFrames(int battlersFrames);
     int battlersColumns() const;
     void setBattlersColumns(int battlersColumns);
+    int autotilesFrames() const;
+    void setAutotilesFrames(int autotilesFrames);
+    int autotilesFrameDuration() const;
+    void setAutotilesFrameDuration(int autotilesFrameDuration);
     bool showBB() const;
     void setShowBB(bool b);
     bool antialiasing() const;
@@ -172,6 +180,8 @@ private:
     int m_framesAnimation;
     int m_battlersFrames;
     int m_battlersColumns;
+    int m_autotilesFrames;
+    int m_autotilesFrameDuration;
     bool m_showBB;
     bool m_antialiasing;
     QStandardItemModel *m_modelColors;

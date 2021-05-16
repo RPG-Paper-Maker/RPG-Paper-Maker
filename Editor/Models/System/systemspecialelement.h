@@ -45,6 +45,7 @@ public:
     const static QString JSON_DEPTH_PIXEL;
     const static QString JSON_STRETCH;
     const static QString JSON_MOUNTAIN_COLLISION_KIND;
+    const static QString JSON_IS_ANIMATED;
 
     SystemSpecialElement();
     SystemSpecialElement(int i, QString n, ShapeKind shapeKind = ShapeKind::Box,
@@ -52,7 +53,8 @@ public:
         collisionKind = ObjectCollisionKind::None, int collisionCustomID = -1,
         double scale = 1.0, int wS = 1, double wP = 0, int hS = 1, double hP = 0
         , int dS = 1, double dP = 0, bool stretch = false, MountainCollisionKind
-        mountainCollisionKind = MountainCollisionKind::Default);
+        mountainCollisionKind = MountainCollisionKind::Default, bool isAnimated
+        = false);
     virtual ~SystemSpecialElement();
 
     ShapeKind shapeKind() const;
@@ -87,6 +89,8 @@ public:
     void setStretch(bool s);
     MountainCollisionKind mountainCollisionKind() const;
     void setMountainCollisionKind(MountainCollisionKind mountainCollisionKind);
+    bool isAnimated() const;
+    void setIsAnimated(bool isAnimated);
 
     void updateObjName();
     void updateMtlName();
@@ -115,6 +119,7 @@ protected:
     double m_depthPixel;
     bool m_stretch;
     MountainCollisionKind m_mountainCollisionKind;
+    bool m_isAnimated;
 
     SystemPicture* pictureByKind(PictureKind kind) const;
 };

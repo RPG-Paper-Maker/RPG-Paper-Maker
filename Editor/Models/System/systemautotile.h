@@ -27,7 +27,7 @@ class SystemAutotile : public SystemSpecialElement
 {
 public:
     SystemAutotile();
-    SystemAutotile(int i, QString n, int pictureId);
+    SystemAutotile(int i, QString n, int pictureId, bool isAnimated);
     virtual ~SystemAutotile();
     static int NUMBER_ROWS;
     static int NUMBER_COLUMNS;
