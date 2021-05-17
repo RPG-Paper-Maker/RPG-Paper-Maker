@@ -103,7 +103,8 @@ public:
                             int squareSize);
     void initializeGL(QOpenGLShaderProgram* program);
     void updateGL();
-    void paintGL(int textureID);
+    void paintGL(QOpenGLShaderProgram *program, int textureID, bool isAnimated,
+        int frame, int uniform);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -112,9 +113,6 @@ protected:
     QHash<Position, AutotileDatas*> m_all;
     QList<Autotile*> m_autotilesGL;
     bool m_isEmpty;
-
-    // OpenGL
-    QOpenGLShaderProgram* m_program;
 };
 
 #endif // AUTOTILES_H

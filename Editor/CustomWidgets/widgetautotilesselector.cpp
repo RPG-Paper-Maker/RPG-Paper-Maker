@@ -38,6 +38,7 @@ WidgetAutotilesSelector::~WidgetAutotilesSelector()
 
 void WidgetAutotilesSelector::currentTexture(QRect &rect) const {
     m_selectionRectangle->getCoefRect(rect);
+
 }
 
 // -------------------------------------------------------
@@ -52,7 +53,7 @@ void WidgetAutotilesSelector::setImage(SystemAutotile *autotile) {
 
     coef = RPM::coefReverseSquareSize();
     if (!image.isNull()) {
-        Map::editPictureAutotilePreview(image, m_texture);
+        Map::editPictureAutotilePreview(image, m_texture, autotile->isAnimated());
         m_texture = m_texture.scaled(static_cast<int>(m_texture.width() * coef),
             static_cast<int>(m_texture.height() * coef));
         width = static_cast<int>(SystemAutotile::getPreviewWidth(image) * coef);

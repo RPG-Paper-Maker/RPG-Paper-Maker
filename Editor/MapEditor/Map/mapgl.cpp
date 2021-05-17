@@ -44,6 +44,7 @@ void Map::initializeGL(){
     u_modelViewProjection = m_programFaceSprite
             ->uniformLocation("modelViewProjection");
     u_hoveredFace = m_programFaceSprite->uniformLocation("hovered");
+    u_yOffset = m_programStatic->uniformLocation("yOffset");
 
     // Release
     m_programFaceSprite->release();
@@ -178,7 +179,7 @@ QOpenGLShaderProgram* Map::createProgram(QString shaderName) {
 
 // -------------------------------------------------------
 
-void Map::paintFloors(QMatrix4x4& modelviewProjection) {
+void Map::paintFloors(QMatrix4x4& modelviewProjection, int autotileFrame) {
     MapPortion* mapPortion;
     int totalSize = getMapPortionTotalSize();
 
@@ -197,14 +198,18 @@ void Map::paintFloors(QMatrix4x4& modelviewProjection) {
 
     // Autotiles
     for (int j = 0; j < m_texturesAutotiles.size(); j++) {
-        QOpenGLTexture* texture = m_texturesAutotiles[j]->texture();
-        texture->bind();
-        for (int i = 0; i < totalSize; i++) {
+        TextureSeveral *texture = m_texturesAutotiles[j];
+        texture->texture()->bind();
+        for (int i = 0; i < totalSize; i++)
+        {
             mapPortion = this->mapPortionBrut(i);
             if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
-                mapPortion->paintAutotiles(j);
+            {
+                mapPortion->paintAutotiles(m_programStatic, j, texture
+                    ->isAnimated(), autotileFrame, u_yOffset);
+            }
         }
-        texture->release();
+        texture->texture()->release();
     }
     m_programStatic->release();
 }

@@ -122,16 +122,16 @@ public:
         &refImage);
     void loadObjects3D();
     void loadAutotiles();
-    TextureSeveral *loadPictureAutotile(
-            QPainter& painter, TextureSeveral* textureSeveral,
-            QImage& newImage, SystemPicture* picture, int& offset, int id);
+    TextureSeveral *loadPictureAutotile(QPainter& painter, TextureSeveral* textureSeveral,
+            QImage& newImage, SystemPicture* picture, int& offset, int id, bool isAnimated);
     static void editPictureWall(QImage& image, QImage& refImage);
-    TextureSeveral *editPictureAutotile(
-            QPainter& painter, TextureSeveral* textureSeveral,
-            QImage& newImage, QImage& image, int& offset, int id);
+    TextureSeveral *editPictureAutotile(QPainter& painter, TextureSeveral* textureSeveral,
+            QImage& newImage, QImage& image, int& offset, int id, bool isAnimated);
+    TextureSeveral * resetPictureAutotile(QPainter& painter, TextureSeveral
+        *textureAutotile, QImage &newImage, int &offset);
     void paintPictureAutotile(QPainter& painter,
                               QImage& image, int& offset, QPoint &point);
-    static void editPictureAutotilePreview(QImage& image, QImage& refImage);
+    static void editPictureAutotilePreview(QImage& image, QImage& refImage, bool isAnimated);
     void loadMountains();
     TextureSeveral *loadPictureMountain(QPainter &painter, TextureSeveral
         *textureSeveral, QImage &newImage, SystemPicture *picture, int &offset,
@@ -156,6 +156,7 @@ public:
                         bool visible);
     void updatePortion(MapPortion *mapPortion, MapElement *elementExcludeLand,
         MapElement *elementExcludeSprite, MapElement *elementExcludeObject3D);
+    void updateAutotiles(int autotilesFrame);
     void updateSpriteWalls(MapEditorSubSelectionKind subSelection);
     void updateMapObjects();
     void loadPortions(Portion portion);
@@ -192,7 +193,7 @@ public:
     static QString generateMapName(int id);
 
     void initializeGL();
-    void paintFloors(QMatrix4x4 &modelviewProjection);
+    void paintFloors(QMatrix4x4 &modelviewProjection, int autotileFrame);
     void paintOthers(QMatrix4x4 &modelviewProjection,
                      QVector3D& cameraRightWorldSpace,
                      QVector3D& cameraUpWorldSpace,
@@ -223,6 +224,7 @@ private:
     int u_cameraDeepWorldspace;
     int u_modelViewProjection;
     int u_hoveredFace;
+    int u_yOffset;
 
     // Textures
     QOpenGLTexture* m_textureTileset;

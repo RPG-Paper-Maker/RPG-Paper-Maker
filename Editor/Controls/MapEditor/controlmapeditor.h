@@ -230,7 +230,7 @@ public:
     void paintGL(QMatrix4x4 &modelviewProjection, QVector3D &cameraRightWorldSpace,
         QVector3D &cameraUpWorldSpace, QVector3D &cameraDeepWorldSpace,
         MapEditorSelectionKind selectionKind,
-        MapEditorSubSelectionKind subSelectionKind, DrawKind drawKind);
+        MapEditorSubSelectionKind subSelectionKind, DrawKind drawKind, int autotileFrame);
     void onMouseWheelMove(QWheelEvent *event, bool updateTree = true);
     void onMouseMove(QPoint point, Qt::MouseButton button, bool updateTree = true);
     void onMousePressed(MapEditorSelectionKind selection,

@@ -17,7 +17,8 @@
 //
 // -------------------------------------------------------
 
-TextureSeveral::TextureSeveral()
+TextureSeveral::TextureSeveral() :
+    m_isAnimated(false)
 {
 
 }
@@ -43,6 +44,16 @@ void TextureSeveral::setBegin(int id, QPoint& point) {
 void TextureSeveral::setEnd(int id, QPoint& point) {
     m_endID = id;
     m_endPoint = point;
+}
+
+bool TextureSeveral::isAnimated() const
+{
+    return m_isAnimated;
+}
+
+void TextureSeveral::setIsAnimated(bool animated)
+{
+    m_isAnimated = animated;
 }
 
 // -------------------------------------------------------

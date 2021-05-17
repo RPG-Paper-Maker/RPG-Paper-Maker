@@ -231,7 +231,8 @@ void Floors::updateGL()
 
 // -------------------------------------------------------
 
-void Floors::paintGL(int uniformHovered) {
+void Floors::paintGL(int uniformHovered)
+{
     m_vao.bind();
     glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
     m_vao.release();

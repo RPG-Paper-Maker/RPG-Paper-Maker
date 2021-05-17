@@ -40,7 +40,9 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_spinBoxX(nullptr),
     m_spinBoxY(nullptr),
     m_spinBoxYPlus(nullptr),
-    m_spinBoxZ(nullptr)
+    m_spinBoxZ(nullptr),
+    m_autotileFrame(0),
+    m_timerAutotileFrame(new QTimer)
 {
     QPixmap cursorPixmap;
 
@@ -71,6 +73,7 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     // Timers
     m_timerFirstPressure->setSingleShot(true);
     connect(m_timerFirstPressure, SIGNAL(timeout()), this, SLOT(onFirstPressure()));
+    connect(m_timerAutotileFrame, SIGNAL(timeout()), this, SLOT(onAutotileFrame()));
 
     m_contextMenu = ContextMenuList::createContextObject(this);
     m_control.setContextMenu(m_contextMenu);
@@ -82,6 +85,7 @@ WidgetMapEditor::~WidgetMapEditor()
 {
     makeCurrent();
     delete m_timerFirstPressure;
+    delete m_timerAutotileFrame;
 }
 
 void WidgetMapEditor::setMenuBar(WidgetMenuBarMapEditor *m) {
@@ -148,6 +152,10 @@ Map * WidgetMapEditor::loadMap(int idMap, QVector3D *position, QVector3D
 
     Map *map = m_control.loadMap(idMap, position, positionObject, cameraDistance,
         cameraHorizontalAngle, cameraVerticalAngle);
+
+    // Start autotile timer
+    m_timerAutotileFrame->start(RPM::get()->project()->gameDatas()->systemDatas()
+        ->autotilesFrameDuration());
 
     // Load background
     if (m_control.map()->mapProperties()->isSkyColor())
@@ -311,7 +319,8 @@ void WidgetMapEditor::paintGL() {
 
         // Paint
         m_control.paintGL(modelviewProjection, cameraRightWorldSpace,
-            cameraUpWorldSpace, cameraDeepWorldSpace, kind, subKind, drawKind);
+            cameraUpWorldSpace, cameraDeepWorldSpace, kind, subKind, drawKind,
+            m_autotileFrame);
         p.endNativePainting();
         p.end();
 
@@ -1014,6 +1023,14 @@ void WidgetMapEditor::keyReleaseEvent(QKeyEvent *event)
 void WidgetMapEditor::onFirstPressure()
 {
     m_firstPressure = false;
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::onAutotileFrame()
+{
+    m_autotileFrame = (m_autotileFrame + 1) % RPM::get()->project()->gameDatas()
+        ->systemDatas()->autotilesFrames();
 }
 
 // -------------------------------------------------------

@@ -37,7 +37,7 @@ public:
     ~WidgetTilesetSettings();
     void updateImage(SystemPicture* picture);
     void updateImageSpecial(QImage& editedImage, SystemPicture* picture);
-    void updateImageAutotile(SystemPicture* picture);
+    void updateImageAutotile(SystemPicture* picture, bool isAnimated);
     PictureKind kind() const;
     void setKind(PictureKind kind);
     void updateZoom(int zoom);

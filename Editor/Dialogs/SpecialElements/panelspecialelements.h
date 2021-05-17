@@ -57,6 +57,8 @@ private:
     void showBox();
     void showCustomObject();
     void showCustomObjectCollision(bool b);
+    void showAutotiles();
+    void hideAutotiles();
     SystemSpecialElement * currentElement() const;
     void translate();
 

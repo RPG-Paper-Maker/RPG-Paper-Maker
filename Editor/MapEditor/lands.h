@@ -61,7 +61,7 @@ public:
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
     void paintGL(int uniformHovered);
-    void paintAutotilesGL(int textureID);
+    void paintAutotilesGL(QOpenGLShaderProgram *program, int textureID, bool isAnimated, int frame, int uniform);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

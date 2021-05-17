@@ -1331,7 +1331,7 @@ void ControlMapEditor::performUndoRedoAction(MapEditorSubSelectionKind kind,
 void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     QVector3D &cameraRightWorldSpace, QVector3D &cameraUpWorldSpace,
     QVector3D &cameraDeepWorldSpace, MapEditorSelectionKind selectionKind,
-    MapEditorSubSelectionKind subSelectionKind, DrawKind drawKind)
+    MapEditorSubSelectionKind subSelectionKind, DrawKind drawKind, int autotileFrame)
 {
     Position3D position;
 
@@ -1343,7 +1343,7 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     }
 
     // Drawing floors
-    m_map->paintFloors(modelviewProjection);
+    m_map->paintFloors(modelviewProjection, autotileFrame);
 
     // Drawing object cursor
     if (selectionKind == MapEditorSelectionKind::Objects) {

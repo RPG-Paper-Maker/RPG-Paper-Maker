@@ -31,6 +31,8 @@ public:
     void setTexture(QOpenGLTexture* texture);
     void setBegin(int id, QPoint& point);
     void setEnd(int id, QPoint& point);
+    bool isAnimated() const;
+    void setIsAnimated(bool animated);
     static bool isSup(QRect* rect, QPoint& point);
     static bool isInf(QRect* rect, QPoint& point);
     bool isInTexture(int id, QRect* rect);
@@ -44,6 +46,7 @@ protected:
     int m_endID;
     QPoint m_endPoint;
     QList<QPair<int, QPoint>> m_list;
+    bool m_isAnimated;
 };
 
 #endif // TEXTUREAUTOTILE_H

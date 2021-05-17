@@ -145,7 +145,8 @@ void DialogCollisions::initializeAutotiles() {
 
 void DialogCollisions::updateAutotile(SystemAutotile* autotile) {
     SystemPicture* picture = autotile->picture();
-    ui->widgetAutotilePictureSettings->updateImageAutotile(picture);
+    ui->widgetAutotilePictureSettings->updateImageAutotile(picture, autotile
+        ->isAnimated());
 }
 
 // -------------------------------------------------------

@@ -70,13 +70,13 @@ void WidgetTilesetSettings::updateImageSpecial(QImage& editedImage,
 
 // -------------------------------------------------------
 
-void WidgetTilesetSettings::updateImageAutotile(SystemPicture* picture) {
+void WidgetTilesetSettings::updateImageAutotile(SystemPicture* picture, bool isAnimated) {
     QImage editedImage;
     QString path = picture->getPath();
     QImage image = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
         QImage();
     if (!image.isNull()) {
-        Map::editPictureAutotilePreview(image, editedImage);
+        Map::editPictureAutotilePreview(image, editedImage, isAnimated);
     } else
         editedImage = image;
     updateImageSpecial(editedImage, picture);

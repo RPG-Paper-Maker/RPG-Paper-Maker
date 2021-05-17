@@ -119,10 +119,13 @@ private:
     QImage m_imageHeight;
     QImage m_imageHeightPlus;
     QImage m_imageBackground;
+    int m_autotileFrame;
+    QTimer *m_timerAutotileFrame;
 
 public slots:
     void update();
     void onFirstPressure();
+    void onAutotileFrame();
 
 protected slots:
     bool focusNextPrevChild(bool);

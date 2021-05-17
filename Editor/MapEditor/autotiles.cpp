@@ -452,8 +452,21 @@ void Autotiles::updateGL(){
 
 // -------------------------------------------------------
 
-void Autotiles::paintGL(int textureID){
+void Autotiles::paintGL(QOpenGLShaderProgram *program, int textureID, bool
+    isAnimated, int frame, int uniform)
+{
+    if (isAnimated)
+    {
+        float ok = static_cast<float>(frame) / RPM::get()
+                ->project()->gameDatas()->systemDatas()->autotilesFrames();
+        program->setUniformValue(uniform, static_cast<float>(frame) / RPM::get()
+            ->project()->gameDatas()->systemDatas()->autotilesFrames());
+    }
     m_autotilesGL.at(textureID)->paintGL();
+    if (isAnimated)
+    {
+        program->setUniformValue(uniform, 0.0f);
+    }
 }
 
 // -------------------------------------------------------

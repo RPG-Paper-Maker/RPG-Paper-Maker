@@ -158,7 +158,8 @@ public:
     void updateGL();
     void updateGLObjects();
     void paintFloors(int uniformHovered);
-    void paintAutotiles(int textureID);
+    void paintAutotiles(QOpenGLShaderProgram *program, int textureID, bool
+        isAnimated, int frame, int uniform);
     void paintSprites(int uniformHovered);
     void paintSpritesWalls(int textureID);
     void paintFaceSprites(int uniformHovered);

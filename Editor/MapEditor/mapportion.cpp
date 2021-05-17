@@ -648,9 +648,10 @@ void MapPortion::paintFloors(int uniformHovered)
 
 // -------------------------------------------------------
 
-void MapPortion::paintAutotiles(int textureID) {
+void MapPortion::paintAutotiles(QOpenGLShaderProgram *program, int textureID,
+    bool isAnimated, int frame, int uniform) {
     if (!m_lands->isEmpty()) {
-        m_lands->paintAutotilesGL(textureID);
+        m_lands->paintAutotilesGL(program, textureID, isAnimated, frame, uniform);
     }
 }
 

@@ -283,9 +283,11 @@ void Lands::paintGL(int uniformHovered)
 
 // -------------------------------------------------------
 
-void Lands::paintAutotilesGL(int textureID) {
+void Lands::paintAutotilesGL(QOpenGLShaderProgram *program, int textureID, bool
+    isAnimated, int frame, int uniform)
+{
     if (!m_autotiles->isEmpty()) {
-        m_autotiles->paintGL(textureID);
+        m_autotiles->paintGL(program, textureID, isAnimated, frame, uniform);
     }
 }
 

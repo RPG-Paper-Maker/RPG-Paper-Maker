@@ -90,16 +90,27 @@ void PanelSpecialElements::initialize(QStandardItemModel *model, PictureKind
     ui->comboBoxCollision->model()->setData(modelIndex, v, Qt::UserRole - 1);
 
     // Update UI widgets visible according to kind
-    if (m_kind == PictureKind::Object3D) {
+    if (m_kind == PictureKind::Object3D)
+    {
         showObject3D();
-    } else {
+    } else
+    {
         hideObject3D();
     }
-    if (m_kind == PictureKind::Mountains) {
+    if (m_kind == PictureKind::Mountains)
+    {
         showMountain();
         ui->widgetShowPicture->setCover(true);
-    } else {
+    } else
+    {
         hideMountain();
+    }
+    if (m_kind == PictureKind::Autotiles)
+    {
+        this->showAutotiles();
+    } else
+    {
+        this->hideAutotiles();
     }
 
     // Initialize widgets and connections
@@ -143,7 +154,7 @@ void PanelSpecialElements::update(SystemSpecialElement *sys) {
     picture = sys->picture();
     ui->widgetPicture->setPicture(picture);
     if (m_kind == PictureKind::Autotiles) {
-        ui->widgetTilesetSettings->updateImageAutotile(picture);
+        ui->widgetTilesetSettings->updateImageAutotile(picture, sys->isAnimated());
     } else {
         ui->widgetTilesetSettings->updateImage(picture);
     }
@@ -201,7 +212,6 @@ void PanelSpecialElements::hideObject3D() {
     ui->comboBoxCollision->hide();
     ui->widgetShapeCollisions->hide();
     ui->labelScale->hide();
-    ui->checkBoxAnimated->hide();
     ui->doubleSpinBoxScale->hide();
     ui->groupBoxSize->hide();
     ui->widgetPreviewObject3D->hide();
@@ -222,7 +232,6 @@ void PanelSpecialElements::hideMountain() {
     ui->gridLayout_3->setRowStretch(9, 0);
     ui->labelCollisionMountains->hide();
     ui->comboBoxCollisionMountains->hide();
-    ui->checkBoxAnimated->hide();
     ui->horizontalSpacer_7->changeSize(0, 0);
 }
 
@@ -232,7 +241,6 @@ void PanelSpecialElements::showMountain() {
     ui->widgetTilesetSettings->hide();
     ui->scrollArea->show();
     ui->gridLayout_3->setRowStretch(7, 0);
-
     ui->horizontalSpacer_7->changeSize(m_spacersSize.at(5).width(),
         m_spacersSize.at(5).height());
 }
@@ -304,6 +312,20 @@ void PanelSpecialElements::showCustomObject() {
 
 void PanelSpecialElements::showCustomObjectCollision(bool b) {
     ui->widgetShapeCollisions->setVisible(b);
+}
+
+// -------------------------------------------------------
+
+void PanelSpecialElements::showAutotiles()
+{
+    ui->checkBoxAnimated->show();
+}
+
+// -------------------------------------------------------
+
+void PanelSpecialElements::hideAutotiles()
+{
+    ui->checkBoxAnimated->hide();
 }
 
 // -------------------------------------------------------
@@ -403,7 +425,7 @@ void PanelSpecialElements::on_pictureChanged(SystemPicture *picture) {
         ->getSelected()->data().value<quintptr>());
     sys->setPictureID(picture->id());
     if (m_kind == PictureKind::Autotiles) {
-        ui->widgetTilesetSettings->updateImageAutotile(picture);
+        ui->widgetTilesetSettings->updateImageAutotile(picture, sys->isAnimated());
     } else {
         ui->widgetTilesetSettings->updateImage(picture);
     }

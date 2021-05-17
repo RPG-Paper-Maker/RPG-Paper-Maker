@@ -5,12 +5,14 @@ in highp vec2 coordTexture;
 uniform sampler2D text;
 uniform float alpha_threshold;
 uniform bool hovered;
+uniform float yOffset;
 
 out highp vec4 fColor;
 
 void main()
 {
-    vec4 color = texture(text, coordTexture);
+    vec2 coords = vec2(coordTexture.x, coordTexture.y + yOffset);
+    vec4 color = texture(text, coords);
     if (color.a <= alpha_threshold) // Or whichever comparison here
         discard;
 
