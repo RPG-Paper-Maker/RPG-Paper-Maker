@@ -72,8 +72,8 @@ void SystemAutotile::setCopy(const SuperListItem &super) {
 
 // -------------------------------------------------------
 
-int SystemAutotile::getPreviewWidth(QImage& image) {
-    return getPreviewColumns(image) * RPM::get()->getSquareSize();
+int SystemAutotile::getPreviewWidth(QImage& image, bool isAnimated) {
+    return getPreviewColumns(image) * RPM::get()->getSquareSize() / (isAnimated ? 4 : 1);
 }
 
 // -------------------------------------------------------

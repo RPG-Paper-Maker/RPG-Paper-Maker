@@ -56,9 +56,9 @@ void WidgetAutotilesSelector::setImage(SystemAutotile *autotile) {
         Map::editPictureAutotilePreview(image, m_texture, autotile->isAnimated());
         m_texture = m_texture.scaled(static_cast<int>(m_texture.width() * coef),
             static_cast<int>(m_texture.height() * coef));
-        width = static_cast<int>(SystemAutotile::getPreviewWidth(image) * coef);
-        height = static_cast<int>(SystemAutotile::getPreviewHeight(image) *
-            coef);
+        width = static_cast<int>(SystemAutotile::getPreviewWidth(image, autotile
+            ->isAnimated()) * coef);
+        height = static_cast<int>(SystemAutotile::getPreviewHeight(image) * coef);
     } else {
         m_texture = image;
         width = 0;
@@ -71,8 +71,8 @@ void WidgetAutotilesSelector::setImage(SystemAutotile *autotile) {
     // If cursor out of the new texture
     QRect cursorRect;
     m_selectionRectangle->getCoefRect(cursorRect);
-    QRect newTextureRect(0, 0, SystemAutotile::getPreviewWidth(m_texture) /
-        RPM::get()->getSquareSize(), SystemAutotile::getPreviewHeight(
+    QRect newTextureRect(0, 0, SystemAutotile::getPreviewWidth(m_texture, autotile
+        ->isAnimated()) / RPM::get()->getSquareSize(), SystemAutotile::getPreviewHeight(
         m_texture) / RPM::get()->getSquareSize());
     if (!newTextureRect.contains(cursorRect)) {
         makeSelection(0, 0);

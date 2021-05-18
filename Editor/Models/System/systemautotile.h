@@ -31,7 +31,7 @@ public:
     virtual ~SystemAutotile();
     static int NUMBER_ROWS;
     static int NUMBER_COLUMNS;
-    static int getPreviewWidth(QImage& image);
+    static int getPreviewWidth(QImage& image, bool isAnimated);
     static int getPreviewHeight(QImage& image);
     static int getPreviewColumns(QImage& image);
     static int getPreviewRows(QImage& image);

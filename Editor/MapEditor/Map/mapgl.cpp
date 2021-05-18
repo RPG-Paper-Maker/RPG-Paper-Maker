@@ -188,6 +188,7 @@ void Map::paintFloors(QMatrix4x4& modelviewProjection, int autotileFrame) {
     m_programStatic->setUniformValue(u_modelviewProjectionStatic,
                                      modelviewProjection);
     m_programStatic->setUniformValue(u_hoveredStatic, false);
+    m_programStatic->setUniformValue(u_yOffset, 0.0f);
     m_textureTileset->bind();
     for (int i = 0; i < totalSize; i++) {
         mapPortion = this->mapPortionBrut(i);

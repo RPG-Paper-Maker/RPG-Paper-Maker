@@ -230,8 +230,7 @@ void Map::loadAutotiles() {
     QStandardItemModel* modelSpecials = RPM::get()->project()
             ->specialElementsDatas()->model(PictureKind::Autotiles);
     int id;
-    QImage newImage(64 * m_squareSize, RPM::MAX_PIXEL_SIZE,
-                    QImage::Format_ARGB32);
+    QImage newImage(64 * m_squareSize, RPM::MAX_PIXEL_SIZE, QImage::Format_ARGB32);
     SystemPicture *picture;
     QPainter painter;
     painter.begin(&newImage);
@@ -282,30 +281,38 @@ TextureSeveral* Map::loadPictureAutotile(
 TextureSeveral * Map::editPictureAutotile(QPainter &painter, TextureSeveral
     *textureAutotile, QImage& newImage, QImage& image, int &offset, int id, bool isAnimated)
 {
-    int width = (image.width() / 2) / m_squareSize;
+    int frames = isAnimated ? RPM::get()->project()->gameDatas()->systemDatas()
+        ->autotilesFrames() : 1;
+    int width = (image.width() / 2) / m_squareSize / frames;
     int height = (image.height() / 3) / m_squareSize;
     int size = width * height;
-    if (isAnimated)
+    for (int i = 0; i < size; i++)
     {
-        if (textureAutotile != nullptr)
-        {
-            textureAutotile = this->resetPictureAutotile(painter, textureAutotile,
-                newImage, offset);
-        }
-        offset = 0;
-    }
-    for (int i = 0; i < size; i++) {
         QPoint point(i % width, i / width);
-        if (offset == 0 && textureAutotile == nullptr) {
+        if (isAnimated)
+        {
+            if (textureAutotile != nullptr)
+            {
+                textureAutotile = this->resetPictureAutotile(painter, textureAutotile,
+                    newImage, offset);
+            }
+            offset = 0;
+        }
+        if (offset == 0 && textureAutotile == nullptr)
+        {
             textureAutotile = new TextureSeveral;
             textureAutotile->setIsAnimated(isAnimated);
             textureAutotile->setBegin(id, point);
         }
-        paintPictureAutotile(painter, image, offset, point);
+        for (int j = 0; j < frames; j++)
+        {
+            QPoint p((point.x() * frames) + j, point.y());
+            this->paintPictureAutotile(painter, image, offset, p);
+            offset++;
+        }
         textureAutotile->setEnd(id, point);
         textureAutotile->addToList(id, point);
-        offset++;
-        if (offset == 6) {
+        if (!isAnimated && offset == 6) {
             textureAutotile = this->resetPictureAutotile(painter, textureAutotile,
                 newImage, offset);
         }
@@ -321,7 +328,7 @@ TextureSeveral * Map::resetPictureAutotile(QPainter& painter, TextureSeveral
     painter.end();
     textureAutotile->setTexture(createTexture(newImage));
     m_texturesAutotiles.append(textureAutotile);
-    newImage = QImage(64 * m_squareSize, RPM::MAX_PIXEL_SIZE, QImage::Format_ARGB32);
+    newImage.fill(Qt::GlobalColor::transparent);
     painter.begin(&newImage);
     offset = 0;
     return nullptr;
@@ -403,8 +410,8 @@ void Map::editPictureWall(QImage& image, QImage& refImage) {
 
 void Map::editPictureAutotilePreview(QImage& image, QImage& refImage, bool isAnimated)
 {
-    QImage newImage(SystemAutotile::getPreviewWidth(image), SystemAutotile
-        ::getPreviewHeight(image), QImage::Format_ARGB32);
+    QImage newImage(SystemAutotile::getPreviewWidth(image, isAnimated),
+        SystemAutotile::getPreviewHeight(image), QImage::Format_ARGB32);
     newImage.fill(Qt::transparent);
     QPainter painter;
     painter.begin(&newImage);
