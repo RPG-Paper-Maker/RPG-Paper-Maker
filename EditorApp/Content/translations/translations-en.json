@@ -1269,5 +1269,7 @@
     "apply.change.maximum.value": "Apply change to maximum value",
     "animated": "Animated",
     "autotiles.frames": "Autotiles frames",
-    "autotiles.frame.duration": "Autotiles frame duration"
+    "autotiles.frame.duration": "Autotiles frame duration",
+    "phoenix.feather": "Phoenix feather",
+    "phoenix.feather.description": "Resurrect an ally"
 }

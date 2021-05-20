@@ -69,6 +69,9 @@ void WeaponsDatas::setDefault() {
     int prices[] = {
         40, 50
     };
+    QString targetConditionsFormulas[] = {
+        "t.hp > 0", "t.hp > 0"
+    };
     QVector<SystemEffect *> effects[] = {
         {SystemEffect::createDamage("1 + u.atk - t.pdef", "0", -1, "1")}, {
         SystemEffect::createDamage("2 + u.atk - t.pdef", "0", -1, "1")}
@@ -88,7 +91,7 @@ void WeaponsDatas::setDefault() {
             ::number(prices[i]))))->getModelRow());
         weapon = new SystemWeapon(i + 1, names[i], iconsID[i], types[i],
             oneHands[i], new SystemTranslatable(-1, descriptions[i]), TargetKind::Enemy,
-            new PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
+            new PrimitiveValue(targetConditionsFormulas[i]), new PrimitiveValue(
             PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind
             ::None), new PrimitiveValue(PrimitiveValueKind::None), modelPrice,
             new QStandardItemModel, modelEffects, new QStandardItemModel);

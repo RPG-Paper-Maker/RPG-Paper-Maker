@@ -59,16 +59,17 @@ void ItemsDatas::setDefault() {
         RPM::translate(Translations::TP_POTION),
         RPM::translate(Translations::SUPER_TP_POTION),
         RPM::translate(Translations::MEGA_TP_POTION),
+        RPM::translate(Translations::PHOENIX_FEATHER),
         RPM::translate(Translations::KEY)
     };
     int iconsID[] = {
-        16, 17, 18, 19, 20, 21, 22, 23, 24, 25
+        16, 17, 18, 19, 20, 21, 22, 23, 24, -1, 25
     };
     int types[] = {
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 2
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2
     };
     bool consumables[] = {
-        true, true, true, true, true, true, true, true, true, false
+        true, true, true, true, true, true, true, true, true, true, false
     };
     QString descriptions[] = {
         RPM::translate(Translations::HP_POTION_DESCRIPTION),
@@ -80,28 +81,29 @@ void ItemsDatas::setDefault() {
         RPM::translate(Translations::TP_POTION_DESCRIPTION),
         RPM::translate(Translations::SUPER_TP_POTION_DESCRIPTION),
         RPM::translate(Translations::MEGA_TP_POTION_DESCRIPTION),
+        RPM::translate(Translations::PHOENIX_FEATHER_DESCRIPTION),
         RPM::translate(Translations::KEY)
     };
     TargetKind targetsKind[] = {
         TargetKind::Ally, TargetKind::Ally, TargetKind::Ally, TargetKind::Ally,
         TargetKind::Ally, TargetKind::Ally, TargetKind::Ally, TargetKind::Ally,
-        TargetKind::Ally, TargetKind::None
+        TargetKind::Ally, TargetKind::Ally, TargetKind::None
     };
     QString targetConditionsFormulas[] = {
         "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0",
-        "t.hp > 0", "t.hp > 0", "t.hp > 0", ""
+        "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp === 0", ""
     };
     AvailableKind availablesKind[] = {
         AvailableKind::Always, AvailableKind::Always, AvailableKind::Always,
         AvailableKind::Always, AvailableKind::Always, AvailableKind::Always,
         AvailableKind::Always, AvailableKind::Always, AvailableKind::Always,
-        AvailableKind::Never
+        AvailableKind::Always, AvailableKind::Never
     };
     int songsID[] = {
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
     };
     int prices[] = {
-        10, 100, 500, 20, 200, 600, 20, 200, 600, 0
+        10, 100, 500, 20, 200, 600, 20, 200, 600, 1000, 0
     };
     QVector<SystemEffect *> effects[] = {
         {SystemEffect::createDamage("-10", QString())}, {SystemEffect
@@ -109,7 +111,8 @@ void ItemsDatas::setDefault() {
         QString())}, {SystemEffect::createDamageMP("-10")}, {SystemEffect
         ::createDamageMP("-100")}, {SystemEffect::createDamageMP("-2000")}, {
         SystemEffect::createDamageTP("-10")}, {SystemEffect::createDamageTP(
-        "-100")}, {SystemEffect::createDamageTP("-2000")}, {}
+        "-100")}, {SystemEffect::createDamageTP("-2000")}, {SystemEffect
+        ::createDamage("-1", QString())}, {}
     };
     length = (sizeof(names)/sizeof(*names));
     QStandardItemModel *modelPrice;
@@ -125,11 +128,12 @@ void ItemsDatas::setDefault() {
             PrimitiveValueKind::DataBase, 1), 1, new PrimitiveValue(QString
             ::number(prices[i]))))->getModelRow());
         sys = new SystemItem(i + 1, names[i], iconsID[i], types[i], consumables[i],
-            new SystemTranslatable(-1, descriptions[i]), targetsKind[i], new
-            PrimitiveValue(targetConditionsFormulas[i]), availablesKind[i], new
-            SystemPlaySong(songsID[i], SongKind::Sound), new PrimitiveValue(
-            PrimitiveValueKind::None), new PrimitiveValue(true), new
-            PrimitiveValue(PrimitiveValueKind::None), modelPrice, modelEffects);
+            new SystemTranslatable(-1, descriptions[i]), targetsKind[i],
+            targetConditionsFormulas[i].isEmpty() ? new PrimitiveValue(
+            PrimitiveValueKind::None) : new PrimitiveValue(targetConditionsFormulas[i]),
+            availablesKind[i], new SystemPlaySong(songsID[i], SongKind::Sound),
+            new PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
+            PrimitiveValueKind::None), new PrimitiveValue(true), modelPrice, modelEffects);
         m_model->appendRow(sys->getModelRow());
     }
 }

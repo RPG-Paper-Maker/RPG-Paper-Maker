@@ -1269,5 +1269,7 @@
     "apply.change.maximum.value": "Appliquer le changement à la valeur maximale",
     "animated": "Animé",
     "autotiles.frames": "Frames dans autotiles",
-    "autotiles.frame.duration": "Durée de frame dans autotiles"
+    "autotiles.frame.duration": "Durée de frame dans autotiles",
+    "phoenix.feather": "Plume de phoenix",
+    "phoenix.feather.description": "Ressuscite un allié"
 }

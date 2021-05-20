@@ -1303,6 +1303,8 @@ public:
     static const QString ANIMATED;
     static const QString AUTOTILES_FRAMES;
     static const QString AUTOTILES_FRAME_DURATION;
+    static const QString PHOENIX_FEATHER;
+    static const QString PHOENIX_FEATHER_DESCRIPTION;
 
     Translations();
     virtual ~Translations();

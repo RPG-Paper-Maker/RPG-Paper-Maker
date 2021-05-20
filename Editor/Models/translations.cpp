@@ -1290,6 +1290,8 @@ const QString Translations::APPLY_CHANGE_MAXIMUM_VALUE = "apply.change.maximum.v
 const QString Translations::ANIMATED = "animated";
 const QString Translations::AUTOTILES_FRAMES = "autotiles.frames";
 const QString Translations::AUTOTILES_FRAME_DURATION = "autotiles.frame.duration";
+const QString Translations::PHOENIX_FEATHER = "phoenix.feather";
+const QString Translations::PHOENIX_FEATHER_DESCRIPTION = "phoenix.feather.description";
 
 // -------------------------------------------------------
 //
