@@ -371,6 +371,7 @@ void PanelSpecialElements::translate()
     ui->groupBoxSize->setTitle(RPM::translate(Translations::SIZE));
     ui->groupBoxCompleteList->setTitle(RPM::translate(Translations
         ::COMPLETE_LIST));
+    ui->checkBoxAnimated->setText(RPM::translate(Translations::ANIMATED));
 }
 
 // -------------------------------------------------------

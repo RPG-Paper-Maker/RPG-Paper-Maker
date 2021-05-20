@@ -1266,5 +1266,8 @@
     "with.precision": "With precision",
     "max.number.choices.display": "Max number of choices to display",
     "can.be.triggered.another.object": "Can be triggered with another object",
-    "apply.change.maximum.value": "Apply change to maximum value"
+    "apply.change.maximum.value": "Apply change to maximum value",
+    "animated": "Animated",
+    "autotiles.frames": "Autotiles frames",
+    "autotiles.frame.duration": "Autotiles frame duration"
 }

@@ -1300,6 +1300,9 @@ public:
     static const QString MAX_NUMBER_CHOICES_DISPLAY;
     static const QString CAN_BE_TRIGGERED_ANOTHER_OBJECT;
     static const QString APPLY_CHANGE_MAXIMUM_VALUE;
+    static const QString ANIMATED;
+    static const QString AUTOTILES_FRAMES;
+    static const QString AUTOTILES_FRAME_DURATION;
 
     Translations();
     virtual ~Translations();

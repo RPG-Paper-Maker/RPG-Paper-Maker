@@ -606,6 +606,8 @@ void DialogSystems::translate()
     ui->groupBoxInventoryFilters->setTitle(RPM::translate(Translations::INVENTORY_FILTERS));
     ui->groupBoxMainMenuCommands->setTitle(RPM::translate(Translations::MAIN_MENU_COMMANDS));
     ui->groupBoxHeroesStatistics->setTitle(RPM::translate(Translations::HEROES_STATISTICS_TO_DISPLAY));
+    ui->labelAutotilesFrames->setText(RPM::translate(Translations::AUTOTILES_FRAMES) + RPM::COLON);
+    ui->labelAutotilesFrameDuration->setText(RPM::translate(Translations::AUTOTILES_FRAME_DURATION) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
