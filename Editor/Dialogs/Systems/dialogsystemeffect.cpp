@@ -27,9 +27,7 @@ DialogSystemEffect::DialogSystemEffect(SystemEffect &effect, QWidget *parent) :
     m_effect(effect)
 {
     ui->setupUi(this);
-
-    initialize();
-
+    this->initialize();
     this->translate();
 }
 
@@ -215,32 +213,24 @@ void DialogSystemEffect::setStockVariableEnabled(bool checked)
 
 void DialogSystemEffect::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::SET_EFFECT) + RPM
-        ::DOT_DOT_DOT);
-    ui->labelWithFormula->setText(RPM::translate(Translations::WITH_FORMULA) +
-        RPM::COLON);
+    this->setWindowTitle(RPM::translate(Translations::SET_EFFECT) + RPM::DOT_DOT_DOT);
+    ui->labelWithFormula->setText(RPM::translate(Translations::WITH_FORMULA) + RPM::COLON);
     ui->radioButtonDamages->setText(RPM::translate(Translations::DAMAGES_ON));
-    ui->radioButtonSpecialAction->setText(RPM::translate(Translations
-        ::SPECIAL_ACTION) + RPM::COLON);
-    ui->checkBoxMaximum->setText(RPM::translate(Translations::MAXIMUM) + RPM
-        ::COLON);
-    ui->checkBoxMinimum->setText(RPM::translate(Translations::MINIMUM) + RPM
-        ::COLON);
-    ui->checkBoxCritical->setText(RPM::translate(Translations::CRITICAL) + RPM
-        ::COLON);
-    ui->checkBoxVariance->setText(RPM::translate(Translations::VARIANCE) + RPM
-        ::COLON);
-    ui->checkBoxElementID->setText(RPM::translate(Translations::ELEMENT_ID) +
-        RPM::COLON);
-    ui->checkBoxPrecision->setText(RPM::translate(Translations::PRECISION) + RPM
-        ::COLON);
-    ui->checkBoxStockValueIn->setText(RPM::translate(Translations
-        ::STOCK_VALUE_IN) + RPM::COLON);
-    ui->checkBoxTemporarilyChangeTarget->setText(RPM::translate(Translations
-        ::TEMPORARILY_CHANGE_TARGET) + RPM::COLON);
+    ui->radioButtonSpecialAction->setText(RPM::translate(Translations::SPECIAL_ACTION) + RPM::COLON);
+    ui->checkBoxMaximum->setText(RPM::translate(Translations::MAXIMUM) + RPM::COLON);
+    ui->checkBoxMinimum->setText(RPM::translate(Translations::MINIMUM) + RPM::COLON);
+    ui->checkBoxCritical->setText(RPM::translate(Translations::CRITICAL) + RPM::COLON);
+    ui->checkBoxVariance->setText(RPM::translate(Translations::VARIANCE) + RPM::COLON);
+    ui->checkBoxElementID->setText(RPM::translate(Translations::ELEMENT_ID) + RPM::COLON);
+    ui->checkBoxPrecision->setText(RPM::translate(Translations::PRECISION) + RPM::COLON);
+    ui->checkBoxStockValueIn->setText(RPM::translate(Translations::STOCK_VALUE_IN) + RPM::COLON);
+    ui->checkBoxTemporarilyChangeTarget->setText(RPM::translate(Translations::TEMPORARILY_CHANGE_TARGET) + RPM::COLON);
     ui->radioButtonStatus->setText(RPM::translate(Translations::STATUS) + RPM::COLON);
     ui->labelWithPrecision->setText(RPM::translate(Translations::WITH_PRECISION).toLower());
     ui->radioButtonCallCommonReaction->setText(RPM::translate(Translations::CALL_A_COMMON_REACTION) + RPM::COLON);
+    ui->radioButtonAddRemoveSkill->setText(RPM::translate(Translations::SKILL) + RPM::COLON);
+    ui->radioButtonPerformSkill->setText(RPM::translate(Translations::PERFORM_SKILL) + RPM::COLON);
+    ui->radioButtonScript->setText(RPM::translate(Translations::SCRIPT) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

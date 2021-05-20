@@ -1292,6 +1292,7 @@ const QString Translations::AUTOTILES_FRAMES = "autotiles.frames";
 const QString Translations::AUTOTILES_FRAME_DURATION = "autotiles.frame.duration";
 const QString Translations::PHOENIX_FEATHER = "phoenix.feather";
 const QString Translations::PHOENIX_FEATHER_DESCRIPTION = "phoenix.feather.description";
+const QString Translations::PERFORM_SKILL = "perform.skill";
 
 // -------------------------------------------------------
 //

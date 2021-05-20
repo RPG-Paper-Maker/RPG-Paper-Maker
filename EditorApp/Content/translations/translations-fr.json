@@ -1177,7 +1177,7 @@
     "chance": "Chance",
     "release.with": "Libérer avec",
     "cant.do.anything": "Ne peut rien faire",
-    "cant.use.skills": "Ne peut pas utiliser des sorts",
+    "cant.use.skills": "Ne peut pas utiliser des compétences",
     "cant.use.items": "Ne peut pas utiliser des objets",
     "cant.escape": "Ne peut pas s'échapper",
     "attack.random.target": "Attaquer des cibles aléatoires",
@@ -1271,5 +1271,6 @@
     "autotiles.frames": "Frames dans autotiles",
     "autotiles.frame.duration": "Durée de frame dans autotiles",
     "phoenix.feather": "Plume de phoenix",
-    "phoenix.feather.description": "Ressuscite un allié"
+    "phoenix.feather.description": "Ressuscite un allié",
+    "perform.skill": "Effectuer une compétence"
 }

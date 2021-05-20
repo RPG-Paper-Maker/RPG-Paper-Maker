@@ -40,7 +40,7 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>0</y>
+          <y>-135</y>
           <width>626</width>
           <height>541</height>
          </rect>
@@ -428,7 +428,7 @@
            <item row="15" column="0" colspan="2">
             <widget class="QRadioButton" name="radioButtonScript">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
               <string>Script:</string>
@@ -562,7 +562,7 @@
            <item row="12" column="0" colspan="3">
             <widget class="QRadioButton" name="radioButtonPerformSkill">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
               <string>Perform skill:</string>
@@ -591,7 +591,7 @@
            <item row="11" column="0" colspan="2">
             <widget class="QRadioButton" name="radioButtonAddRemoveSkill">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
               <string>Skill:</string>

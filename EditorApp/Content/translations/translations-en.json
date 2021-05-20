@@ -1271,5 +1271,6 @@
     "autotiles.frames": "Autotiles frames",
     "autotiles.frame.duration": "Autotiles frame duration",
     "phoenix.feather": "Phoenix feather",
-    "phoenix.feather.description": "Resurrect an ally"
+    "phoenix.feather.description": "Resurrect an ally",
+    "perform.skill": "Perform skill"
 }
