@@ -18,13 +18,14 @@
 #include "systemtitlecommand.h"
 #include "titlesettingkind.h"
 #include "systemcommonreaction.h"
+#include "systemcommonskillitem.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 20;
+const int ProjectUpdater::incompatibleVersionsCount = 21;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
      "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0", "1.6.2",
-    "1.6.3", "1.6.4", "1.7.0", "1.7.3"};
+    "1.6.3", "1.6.4", "1.7.0", "1.7.3", "1.8.0"};
 
 // -------------------------------------------------------
 //
@@ -1199,5 +1200,21 @@ void ProjectUpdater::updateVersion_1_7_3_commands(QStandardItem *commands)
     for (i = 0, l = commands->rowCount(); i < l; i++)
     {
         this->updateVersion_1_7_3_commands(commands->child(i));
+    }
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_8_0()
+{
+    SystemCommonSkillItem *skill;
+    for (int i = 1; i <= 4; i++)
+    {
+        skill = reinterpret_cast<SystemCommonSkillItem *>(SuperListItem
+            ::getItemModelAt(m_project->gameDatas()->skillsDatas()->model(), i));
+        if (skill != nullptr)
+        {
+            skill->setTargetKind(TargetKind::User);
+        }
     }
 }

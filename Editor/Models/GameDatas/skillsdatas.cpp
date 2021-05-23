@@ -83,8 +83,8 @@ void SkillsDatas::setDefault(){
         RPM::translate(Translations::CONCENTRATION_DESCRIPTION)
     };
     TargetKind targetsKind[] = {
-        TargetKind::Enemy, TargetKind::None, TargetKind::None, TargetKind::None,
-        TargetKind::None, TargetKind::AllEnemies, TargetKind::Enemy, TargetKind
+        TargetKind::Enemy, TargetKind::User, TargetKind::User, TargetKind::User,
+        TargetKind::User, TargetKind::AllEnemies, TargetKind::Enemy, TargetKind
         ::Ally, TargetKind::Enemy, TargetKind::Enemy, TargetKind::Enemy,
         TargetKind::User, TargetKind::User
     };
