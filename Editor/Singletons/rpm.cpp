@@ -481,6 +481,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::STATISTIC_VALUE),
         RPM::translate(Translations::ELEMENT_RESISTANCE),
         RPM::translate(Translations::STATUS_RESISTANCE),
+        RPM::translate(Translations::EXPERIENCE_GAIN),
         RPM::translate(Translations::CURRENCY_GAIN),
         RPM::translate(Translations::SKILL_COST),
         RPM::translate(Translations::VARIABLE)

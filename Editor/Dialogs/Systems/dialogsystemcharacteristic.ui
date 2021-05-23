@@ -584,7 +584,7 @@
            <item row="0" column="0">
             <widget class="QRadioButton" name="radioButtonScript">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
               <string>Script:</string>

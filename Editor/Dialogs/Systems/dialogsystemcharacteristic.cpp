@@ -58,16 +58,6 @@ SystemCharacteristic & DialogSystemCharacteristic::characteristic() const {
 void DialogSystemCharacteristic::initialize() {
     int index = m_characteristic.increaseDecreaseKind()->id();
 
-    // Temporary disable combobox
-    QModelIndex modelIndex;
-    QVariant v(0);
-    int i, l;
-    for (i = 2, l = ui->comboBoxIncreaseDecreaseKind->count(); i < l; i++) {
-        modelIndex = ui->comboBoxIncreaseDecreaseKind->model()->index(i, 0);
-        ui->comboBoxIncreaseDecreaseKind->model()->setData(modelIndex, v, Qt
-            ::UserRole - 1);
-    }
-
     switch(m_characteristic.kind()) {
     case CharacteristicKind::IncreaseDecrease:
         ui->radioButtonBuff->setChecked(true);
