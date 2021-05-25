@@ -251,11 +251,15 @@ void DialogCommandStartBattle::on_radioButtonNumber_toggled(bool checked){
     ui->widgetZ->setEnabled(checked);
 }
 
+//--------------------------------------------
+
 void DialogCommandStartBattle::on_comboBoxTransitionStart_currentIndexChanged(
     int index)
 {
     ui->panelPrimitiveValueTransitionColorStart->setEnabled(index == 1);
 }
+
+//--------------------------------------------
 
 void DialogCommandStartBattle::on_comboBoxTransitionEnd_currentIndexChanged(
     int index)

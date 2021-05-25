@@ -102,16 +102,98 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBoxOptions">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
+      <widget class="QGroupBox" name="groupBoxTransition">
        <property name="title">
-        <string>Options</string>
+        <string>Transition</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout_5">
+       <layout class="QGridLayout" name="gridLayout_6">
         <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_4">
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="1" column="1">
+           <widget class="QComboBox" name="comboBoxTransitionStart">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="currentIndex">
+             <number>-1</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="comboBoxTransitionEnd">
+            <property name="currentIndex">
+             <number>-1</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="PanelPrimitiveValue" name="panelPrimitiveValueTransitionColorEnd" native="true">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>250</width>
+              <height>27</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>250</width>
+              <height>27</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelStart">
+            <property name="text">
+             <string>Start:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="labelEnd">
+            <property name="text">
+             <string>End:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3" rowspan="2">
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>38</width>
+              <height>58</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="2">
+           <widget class="PanelPrimitiveValue" name="panelPrimitiveValueTransitionColorStart" native="true">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>250</width>
+              <height>27</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>250</width>
+              <height>27</height>
+             </size>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="labelDirection">
             <property name="text">
@@ -133,103 +215,16 @@
               <height>16777215</height>
              </size>
             </property>
-            <item>
-             <property name="text">
-              <string>Unchanged</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>North</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>South</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>West</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>East</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>North-West</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>North-East</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>South-West</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>South-East</string>
-             </property>
-            </item>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="labelShadingBefore">
-            <property name="text">
-             <string>Shading before:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QComboBox" name="comboBoxShadinBefore">
-            <item>
-             <property name="text">
-              <string>ON</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>OFF</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="labelShadingAfter">
-            <property name="text">
-             <string>Shading after:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QComboBox" name="comboBoxShadingAfter">
-            <item>
-             <property name="text">
-              <string>ON</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>OFF</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <spacer name="horizontalSpacer_2">
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer_4">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>178</width>
+              <width>40</width>
               <height>20</height>
              </size>
             </property>

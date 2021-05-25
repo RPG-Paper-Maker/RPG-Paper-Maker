@@ -46,6 +46,10 @@ private:
     Ui::DialogCommandTeleportObject *ui;
     QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
+
+private slots:
+    void on_comboBoxTransitionStart_currentIndexChanged(int index);
+    void on_comboBoxTransitionEnd_currentIndexChanged(int index);
 };
 
 #endif // DIALOGTELEPORTOBJECT_H

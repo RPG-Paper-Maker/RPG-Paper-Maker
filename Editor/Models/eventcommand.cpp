@@ -1233,29 +1233,16 @@ QString EventCommand::strTeleportObjectOptions(int &i) const {
     case 0:
         listOptions << str + RPM::translate(Translations::UNCHANGED); break;
     case 1:
-        listOptions << str + RPM::translate(Translations::NORTH); break;
-    case 2:
         listOptions << str + RPM::translate(Translations::SOUTH); break;
-    case 3:
+    case 2:
         listOptions << str + RPM::translate(Translations::WEST); break;
+    case 3:
+        listOptions << str + RPM::translate(Translations::NORTH); break;
     case 4:
         listOptions << str + RPM::translate(Translations::EAST); break;
-    case 5:
-        listOptions << str + RPM::translate(Translations::NORTH_WEST); break;
-    case 6:
-        listOptions << str + RPM::translate(Translations::NORTH_EAST); break;
-    case 7:
-        listOptions << str + RPM::translate(Translations::SOUTH_WEST); break;
-    case 8:
-        listOptions << str + RPM::translate(Translations::SOUTH_EAST); break;
     }
-    str = RPM::translate(Translations::SHADING_BEFORE) + RPM::COLON;
-    listOptions << ((m_listCommand.at(i++) == "0") ? "ON" : "OFF");
-    str = RPM::translate(Translations::SHADING_AFTER) + RPM::COLON;
-    listOptions << ((m_listCommand.at(i++) == "0") ? "ON" : "OFF");
     strOptions += listOptions.join(";");
     strOptions += RPM::BRACKET_RIGHT;
-
     return strOptions;
 }
 
