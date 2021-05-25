@@ -27,17 +27,7 @@ DialogSystemCharacteristic::DialogSystemCharacteristic(SystemCharacteristic
     m_characteristic(characteristic)
 {
     ui->setupUi(this);
-
-    ui->comboBoxIncreaseDecrease->addItem(RPM::translate(Translations::INCREASE));
-    ui->comboBoxIncreaseDecrease->addItem(RPM::translate(Translations::DECREASE));
-    ui->comboBoxIncreaseDecreaseKind->addItems(RPM
-        ::ENUM_TO_STRING_INCREASE_DECREASE_KIND);
-    ui->comboBoxSkillCostAll->addItem(RPM::translate(Translations::ALL));
-    ui->comboBoxSkillCostAll->addItem(RPM::translate(Translations::SPECIFIC));
-    ui->comboBoxUnit->addItem(RPM::translate(Translations::FIX));
-
-    initialize();
-
+    this->initialize();
     this->translate();
 }
 
@@ -56,29 +46,36 @@ SystemCharacteristic & DialogSystemCharacteristic::characteristic() const {
 // -------------------------------------------------------
 
 void DialogSystemCharacteristic::initialize() {
-    int index = m_characteristic.increaseDecreaseKind()->id();
-
     switch(m_characteristic.kind()) {
     case CharacteristicKind::IncreaseDecrease:
         ui->radioButtonBuff->setChecked(true);
         break;
     case CharacteristicKind::AllowForbidEquip:
+        ui->tabWidget->setCurrentIndex(1);
         ui->radioButtonEquip->setChecked(true);
         break;
     case CharacteristicKind::AllowForbidChange:
+        ui->tabWidget->setCurrentIndex(1);
         ui->radioButtonEquipmentChange->setChecked(true);
         break;
     case CharacteristicKind::BeginEquipment:
+        ui->tabWidget->setCurrentIndex(1);
         ui->radioButtonBeginEquipment->setChecked(true);
         break;
     case CharacteristicKind::Script:
+        ui->tabWidget->setCurrentIndex(2);
         ui->radioButtonScript->setChecked(true);
         break;
     }
 
     // Buff
-    ui->comboBoxIncreaseDecrease->setCurrentIndex(m_characteristic
-        .isIncreaseDecrease() ? 0 : 1);
+    int index = m_characteristic.isIncreaseDecrease() ? 0 : 1;
+    ui->comboBoxIncreaseDecrease->addItem(RPM::translate(Translations::INCREASE));
+    ui->comboBoxIncreaseDecrease->addItem(RPM::translate(Translations::DECREASE));
+    ui->comboBoxIncreaseDecrease->setCurrentIndex(index);
+    index = m_characteristic.increaseDecreaseKind()->id();
+    ui->comboBoxIncreaseDecreaseKind->addItems(RPM
+        ::ENUM_TO_STRING_INCREASE_DECREASE_KIND);
     ui->comboBoxIncreaseDecreaseKind->setCurrentIndex(index);
     ui->panelPrimitiveValueStatValue->initializeDataBaseAndUpdate(
         m_characteristic.statValueID());
@@ -90,12 +87,16 @@ void DialogSystemCharacteristic::initialize() {
         m_characteristic.currencyGainID());
     ui->panelPrimitiveValueSkillCost->initializeDataBaseAndUpdate(
         m_characteristic.skillCostID());
+    index = m_characteristic.isAllSkillCost() ? 0 : 1;
+    ui->comboBoxSkillCostAll->addItem(RPM::translate(Translations::ALL));
+    ui->comboBoxSkillCostAll->addItem(RPM::translate(Translations::SPECIFIC));
+    ui->comboBoxSkillCostAll->setCurrentIndex(index);
     ui->widgetVariable->initializeSuper(m_characteristic.variableID());
-    ui->comboBoxOperation->setCurrentIndex(m_characteristic.operation() ? 0 :
-        1);
-    ui->panelPrimitiveValue->initializeNumberVariableAndUpdate(m_characteristic
-        .value());
-    ui->comboBoxUnit->setCurrentIndex(m_characteristic.unit() ? 0 : 1);
+    ui->comboBoxOperation->setCurrentIndex(m_characteristic.operation() ? 0 : 1);
+    ui->panelPrimitiveValue->initializeNumberVariableAndUpdate(m_characteristic.value());
+    index = m_characteristic.unit() ? 0 : 1;
+    ui->comboBoxUnit->addItem(RPM::translate(Translations::FIX));
+    ui->comboBoxUnit->setCurrentIndex(index);
 
     // Character
     index = m_characteristic.isAllowEquip() ? 0 : 1;

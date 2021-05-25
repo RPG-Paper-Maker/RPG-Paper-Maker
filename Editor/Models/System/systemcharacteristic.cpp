@@ -524,8 +524,12 @@ void SystemCharacteristic::read(const QJsonObject &json) {
             }
             break;
         case IncreaseDecreaseKind::SkillCost:
-            if (json.contains(JSON_SKILL_COST_ID)) {
-                m_skillCostID->read(json[JSON_SKILL_COST_ID].toObject());
+            if (json.contains(JSON_IS_ALL_SKILL_COST))
+            {
+                m_isAllSkillCost = json[JSON_IS_ALL_SKILL_COST].toBool();
+                if (json.contains(JSON_SKILL_COST_ID)) {
+                    m_skillCostID->read(json[JSON_SKILL_COST_ID].toObject());
+                }
             }
             break;
         case IncreaseDecreaseKind::Variable:
@@ -648,7 +652,7 @@ void SystemCharacteristic::write(QJsonObject &json) const {
                 if (!m_skillCostID->isDefaultDataBaseValue()) {
                     obj = QJsonObject();
                     m_skillCostID->write(obj);
-                    json[JSON_STAT_VALUE_ID] = obj;
+                    json[JSON_SKILL_COST_ID] = obj;
                 }
             }
             break;

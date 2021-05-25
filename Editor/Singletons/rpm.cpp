@@ -483,8 +483,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::STATUS_RESISTANCE),
         RPM::translate(Translations::EXPERIENCE_GAIN),
         RPM::translate(Translations::CURRENCY_GAIN),
-        RPM::translate(Translations::SKILL_COST),
-        RPM::translate(Translations::VARIABLE)
+        RPM::translate(Translations::SKILL_COST)
     });
     RPM::ENUM_TO_STRING_OS_KIND = QStringList({
         "Windows", "Linux", "Mac"
