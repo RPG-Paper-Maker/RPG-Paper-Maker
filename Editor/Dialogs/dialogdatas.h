@@ -93,6 +93,7 @@ private slots:
     void on_pageMonsterSelected(QModelIndex index, QModelIndex);
     void on_pageTroopSelected(QModelIndex index, QModelIndex);
     void on_pageTroopReactionSelected(QModelIndex index, QModelIndex);
+    void on_pushButtonTroopTest_clicked();
     void on_pageTilesetSelected(QModelIndex index, QModelIndex);
     void on_pageAnimationsSelected(QModelIndex index, QModelIndex);
     void on_pageAnimationFramesSelected(QModelIndex index, QModelIndex);

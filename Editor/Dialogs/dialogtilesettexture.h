@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-
 #ifndef DIALOGTILESETTEXTURE_H
 #define DIALOGTILESETTEXTURE_H
 

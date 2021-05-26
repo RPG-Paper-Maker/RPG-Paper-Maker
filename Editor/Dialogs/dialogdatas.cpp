@@ -26,6 +26,7 @@
 #include "dialoganimationcopyframes.h"
 #include "dialoganimationclearframes.h"
 #include "dialoganimationcreatetransition.h"
+#include "dialogtroopbattletest.h"
 
 // -------------------------------------------------------
 //
@@ -684,6 +685,19 @@ void DialogDatas::on_pageTroopReactionSelected(QModelIndex index, QModelIndex)
             selected->data().value<quintptr>());
         ui->panelTroopReaction->initialize(reaction);
         ui->panelTroopReaction->setEnabled(reaction != nullptr);
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonTroopTest_clicked()
+{
+    QStandardItem *selected = ui->panelSuperListTroops->list()->getSelected();
+    if (selected != nullptr)
+    {
+        DialogTroopBattleTest dialog(reinterpret_cast<SystemTroop *>(selected
+            ->data().value<quintptr>())->id());
+        dialog.exec();
     }
 }
 

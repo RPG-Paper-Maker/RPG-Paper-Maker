@@ -24,6 +24,7 @@ HEADERS += \
     CustomWidgets/comboboxwheel.h \
     CustomWidgets/panelcolorstransition.h \
     CustomWidgets/panelfonts.h \
+    CustomWidgets/panelherotroopbattletest.h \
     CustomWidgets/panelplugindetails.h \
     CustomWidgets/panelposition.h \
     CustomWidgets/panelselectpositionmaps.h \
@@ -108,6 +109,7 @@ HEADERS += \
     Dialogs/dialogimportdlcs.h \
     Dialogs/dialogselectlanguage.h \
     Dialogs/dialogtilesettexture.h \
+    Dialogs/dialogtroopbattletest.h \
     Dialogs/dialogvideos.h \
     Dialogs/dialogvideospreview.h \
     Dialogs/mainwindow.h \
@@ -157,6 +159,7 @@ HEADERS += \
     Models/System/systemfont.h \
     Models/System/systemfontname.h \
     Models/System/systemfontsize.h \
+    Models/System/systemherotroopbattletest.h \
     Models/System/systeminventoryfilter.h \
     Models/System/systemlanguage.h \
     Models/System/systemmainmenucommand.h \
@@ -443,6 +446,7 @@ SOURCES += \
     CustomWidgets/comboboxwheel.cpp \
     CustomWidgets/panelcolorstransition.cpp \
     CustomWidgets/panelfonts.cpp \
+    CustomWidgets/panelherotroopbattletest.cpp \
     CustomWidgets/panelplugindetails.cpp \
     CustomWidgets/panelposition.cpp \
     CustomWidgets/panelselectpositionmaps.cpp \
@@ -526,6 +530,7 @@ SOURCES += \
     Dialogs/dialogimportdlcs.cpp \
     Dialogs/dialogselectlanguage.cpp \
     Dialogs/dialogtilesettexture.cpp \
+    Dialogs/dialogtroopbattletest.cpp \
     Dialogs/dialogvideos.cpp \
     Dialogs/dialogvideospreview.cpp \
     Dialogs/mainwindow.cpp \
@@ -555,6 +560,7 @@ SOURCES += \
     Models/System/systemfont.cpp \
     Models/System/systemfontname.cpp \
     Models/System/systemfontsize.cpp \
+    Models/System/systemherotroopbattletest.cpp \
     Models/System/systeminventoryfilter.cpp \
     Models/System/systemlanguage.cpp \
     Models/System/systemmainmenucommand.cpp \
@@ -813,6 +819,7 @@ SOURCES += \
 FORMS += \
     CustomWidgets/panelcolorstransition.ui \
     CustomWidgets/panelfonts.ui \
+    CustomWidgets/panelherotroopbattletest.ui \
     CustomWidgets/panelplugindetails.ui \
     CustomWidgets/panelposition.ui \
     CustomWidgets/panelselectpositionmaps.ui \
@@ -890,6 +897,7 @@ FORMS += \
     Dialogs/dialogimportdlcs.ui \
     Dialogs/dialogselectlanguage.ui \
     Dialogs/dialogtilesettexture.ui \
+    Dialogs/dialogtroopbattletest.ui \
     Dialogs/dialogvideos.ui \
     Dialogs/dialogvideospreview.ui \
     Dialogs/mainwindow.ui \
