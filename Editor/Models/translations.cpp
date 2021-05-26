@@ -1294,6 +1294,7 @@ const QString Translations::PHOENIX_FEATHER = "phoenix.feather";
 const QString Translations::PHOENIX_FEATHER_DESCRIPTION = "phoenix.feather.description";
 const QString Translations::PERFORM_SKILL = "perform.skill";
 const QString Translations::APPLY = "apply";
+const QString Translations::EQUIPMENTS = "equipments";
 
 // -------------------------------------------------------
 //

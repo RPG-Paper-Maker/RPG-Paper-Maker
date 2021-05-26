@@ -31,14 +31,14 @@
      <item>
       <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,1">
        <item row="0" column="0">
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="labelHero">
          <property name="text">
           <string>Hero ID:</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QComboBox" name="comboBox"/>
+        <widget class="QComboBox" name="comboBoxHero"/>
        </item>
        <item row="0" column="2">
         <spacer name="horizontalSpacer">
@@ -54,14 +54,14 @@
         </spacer>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="labelLevel">
          <property name="text">
           <string>Level:</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QSpinBox" name="spinBox">
+        <widget class="QSpinBox" name="spinBoxLevel">
          <property name="minimum">
           <number>-999999999</number>
          </property>
@@ -89,13 +89,17 @@
       </layout>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="groupBoxEquipments">
        <property name="title">
         <string>Equipments</string>
        </property>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <widget class="QTreeView" name="treeView"/>
+         <widget class="WidgetSuperTree" name="treeViewEquipments">
+          <attribute name="headerVisible">
+           <bool>false</bool>
+          </attribute>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -104,6 +108,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

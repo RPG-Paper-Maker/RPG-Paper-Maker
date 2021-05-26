@@ -40,6 +40,9 @@
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,1,0">
+       <property name="spacing">
+        <number>4</number>
+       </property>
        <item>
         <widget class="QPushButton" name="pushButtonAdd">
          <property name="maximumSize">

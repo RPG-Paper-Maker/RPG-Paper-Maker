@@ -12,6 +12,7 @@
 #include "dialogtroopbattletest.h"
 #include "ui_dialogtroopbattletest.h"
 #include "panelherotroopbattletest.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -26,6 +27,7 @@ DialogTroopBattleTest::DialogTroopBattleTest(int troopID, QWidget *parent) :
 {
     ui->setupUi(this);
     this->addHero();
+    this->translate();
 }
 
 DialogTroopBattleTest::~DialogTroopBattleTest()
@@ -48,4 +50,14 @@ void DialogTroopBattleTest::addHero(int index)
     SystemHeroTroopBattleTest *hero = new SystemHeroTroopBattleTest;
     m_heros.append(hero);
     ui->tabWidget->insertTab(index, new PanelHeroTroopBattleTest(hero), hero->name());
+}
+
+// -------------------------------------------------------
+
+void DialogTroopBattleTest::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::TEST) + RPM::DOT_DOT_DOT);
+    ui->pushButtonCopy->setText(RPM::translate(Translations::COPY));
+    ui->pushButtonPaste->setText(RPM::translate(Translations::PASTE));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

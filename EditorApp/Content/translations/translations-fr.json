@@ -1273,5 +1273,6 @@
     "phoenix.feather": "Plume de phoenix",
     "phoenix.feather.description": "Ressuscite un allié",
     "perform.skill": "Effectuer une compétence",
-    "apply": "Appliquer"
+    "apply": "Appliquer",
+    "equipments": "Equipements"
 }

@@ -1307,6 +1307,7 @@ public:
     static const QString PHOENIX_FEATHER_DESCRIPTION;
     static const QString PERFORM_SKILL;
     static const QString APPLY;
+    static const QString EQUIPMENTS;
 
     Translations();
     virtual ~Translations();

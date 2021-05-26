@@ -28,6 +28,7 @@ public:
     ~DialogTroopBattleTest();
 
     void addHero(int index = 0);
+    void translate();
 
 private:
     Ui::DialogTroopBattleTest *ui;

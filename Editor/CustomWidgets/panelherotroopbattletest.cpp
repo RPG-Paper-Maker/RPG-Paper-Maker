@@ -11,6 +11,7 @@
 
 #include "panelherotroopbattletest.h"
 #include "ui_panelherotroopbattletest.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -25,9 +26,38 @@ PanelHeroTroopBattleTest::PanelHeroTroopBattleTest(SystemHeroTroopBattleTest *he
     m_hero(hero)
 {
     ui->setupUi(this);
+    this->initialize();
+    this->translate();
 }
 
 PanelHeroTroopBattleTest::~PanelHeroTroopBattleTest()
 {
     delete ui;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTION
+//
+// -------------------------------------------------------
+
+void PanelHeroTroopBattleTest::initialize()
+{
+    int index = SuperListItem::getIndexById(RPM::get()->project()->gameDatas()
+        ->heroesDatas()->model()->invisibleRootItem(), m_hero->heroID(), true);
+    SuperListItem::fillComboBox(ui->comboBoxHero, RPM::get()->project()->gameDatas()
+        ->heroesDatas()->model());
+    ui->comboBoxHero->setCurrentIndex(index);
+    ui->spinBoxLevel->setValue(m_hero->level());
+    ui->treeViewEquipments->setCanCreateDelete(false);
+    ui->treeViewEquipments->initializeModel(m_hero->modelEquipments());
+}
+
+// -------------------------------------------------------
+
+void PanelHeroTroopBattleTest::translate()
+{
+    ui->labelHero->setText(RPM::translate(Translations::HERO) + RPM::COLON);
+    ui->labelLevel->setText(RPM::translate(Translations::LEVEL) + RPM::COLON);
+    ui->groupBoxEquipments->setTitle(RPM::translate(Translations::EQUIPMENTS));
 }

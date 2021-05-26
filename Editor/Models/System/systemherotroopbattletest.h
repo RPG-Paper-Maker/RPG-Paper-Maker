@@ -28,6 +28,11 @@ class SystemHeroTroopBattleTest : public SuperListItem
 public:
     SystemHeroTroopBattleTest();
     virtual ~SystemHeroTroopBattleTest();
+    int heroID() const;
+    void setHeroID(int heroID);
+    int level() const;
+    void setLevel(int level);
+    QStandardItemModel * modelEquipments() const;
 
     virtual QString name() const;
 

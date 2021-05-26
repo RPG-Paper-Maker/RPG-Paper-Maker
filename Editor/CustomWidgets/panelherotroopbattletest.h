@@ -28,6 +28,9 @@ public:
         *parent = nullptr);
     ~PanelHeroTroopBattleTest();
 
+    void initialize();
+    void translate();
+
 private:
     Ui::PanelHeroTroopBattleTest *ui;
     SystemHeroTroopBattleTest *m_hero;

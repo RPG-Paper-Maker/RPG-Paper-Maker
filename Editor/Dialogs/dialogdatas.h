@@ -80,9 +80,9 @@ private:
     void copyTemp();
     void removeTemp();
     void copyPreviousTemp();
-    void apply();
+    void apply(bool texture = true);
     void cancel();
-    void ok();
+    void ok(bool texture = true);
     void updateTextures();
     void translate();
 

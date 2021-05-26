@@ -502,9 +502,9 @@ void DialogDatas::copyPreviousTemp()
 
 // -------------------------------------------------------
 
-void DialogDatas::apply()
+void DialogDatas::apply(bool texture)
 {
-    this->ok();
+    this->ok(texture);
 }
 
 // -------------------------------------------------------
@@ -519,11 +519,14 @@ void DialogDatas::cancel()
 
 // -------------------------------------------------------
 
-void DialogDatas::ok()
+void DialogDatas::ok(bool texture)
 {
     RPM::get()->project()->writeGameDatas();
     RPM::get()->project()->writePicturesDatas();
-    this->updateTextures();
+    if (texture)
+    {
+        this->updateTextures();
+    }
 }
 
 // -------------------------------------------------------
@@ -805,6 +808,8 @@ void DialogDatas::on_pushButtonTroopTest_clicked()
     QStandardItem *selected = ui->panelSuperListTroops->list()->getSelected();
     if (selected != nullptr)
     {
+        // Apply changes before opening window
+        this->apply(false);
         DialogTroopBattleTest dialog(reinterpret_cast<SystemTroop *>(selected
             ->data().value<quintptr>())->id());
         dialog.exec();

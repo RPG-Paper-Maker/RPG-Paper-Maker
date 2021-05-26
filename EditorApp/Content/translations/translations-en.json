@@ -1273,5 +1273,6 @@
     "phoenix.feather": "Phoenix feather",
     "phoenix.feather.description": "Resurrect an ally",
     "perform.skill": "Perform skill",
-    "apply": "Apply"
+    "apply": "Apply",
+    "equipments": "Equipments"
 }
