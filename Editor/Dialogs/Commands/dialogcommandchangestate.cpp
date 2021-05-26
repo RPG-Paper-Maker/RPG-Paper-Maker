@@ -106,7 +106,7 @@ void DialogCommandChangeState::initializeObjects(int id, bool isCurrentMap)
                                           ->pathCurrentProjectApp(),
                                           RPM::PATH_MAPS);
     QString pathMap = Common::pathCombine(pathMaps, realName);
-    QString pathMapTemp = Common::pathCombine(pathMap, RPM::FOLDER_TEMP_MAP);
+    QString pathMapTemp = Common::pathCombine(pathMap, RPM::FOLDER_TEMP);
     QString path = Common::pathCombine(pathMapTemp, RPM::FILE_MAP_OBJECTS);
     if (!QFile(path).exists())
     {

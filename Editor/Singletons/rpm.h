@@ -102,7 +102,7 @@ public:
     static const QString FOLDER_GAMES;
     static const QString FOLDER_DESKTOP;
     static const QString FOLDER_CONTENT;
-    static const QString FOLDER_TEMP_MAP;
+    static const QString FOLDER_TEMP;
     static const QString FOLDER_UNDO_REDO_TEMP_MAP;
     static const QString FOLDER_RESOURCES;
     static const QString FOLDER_APP;

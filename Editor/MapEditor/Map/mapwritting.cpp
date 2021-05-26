@@ -19,7 +19,7 @@
 
 void Map::save(){
     QString pathTemp = Common::pathCombine(m_pathMap,
-                                          RPM::FOLDER_TEMP_MAP);
+                                          RPM::FOLDER_TEMP);
     Common::copyAllFiles(pathTemp, m_pathMap);
     Common::deleteAllFiles(pathTemp);
 }
@@ -117,7 +117,7 @@ QString Map::writeMap(QString path, MapProperties& properties,
     Common::writeOtherJSON(Common::pathCombine(dirMap, RPM::FILE_MAP_OBJECTS),
                           json);
 
-    QDir(dirMap).mkdir(RPM::FOLDER_TEMP_MAP);
+    QDir(dirMap).mkdir(RPM::FOLDER_TEMP);
     QDir(dirMap).mkdir(RPM::FOLDER_UNDO_REDO_TEMP_MAP);
 
     return dirMap;
@@ -330,7 +330,7 @@ void Map::readObjects(){
 
 void Map::loadObjects(QStandardItemModel* model, QString pathMap, bool temp) {
     if (temp)
-        pathMap = Common::pathCombine(pathMap, RPM::FOLDER_TEMP_MAP);
+        pathMap = Common::pathCombine(pathMap, RPM::FOLDER_TEMP);
     QString path = Common::pathCombine(pathMap, RPM::FILE_MAP_OBJECTS);
     QJsonDocument loadDoc;
     Common::readOtherJSON(path, loadDoc);
@@ -348,7 +348,7 @@ void Map::writeObjects(bool temp) const {
 
 void Map::saveObjects(QStandardItemModel* model, QString pathMap, bool temp) {
     if (temp)
-        pathMap = Common::pathCombine(pathMap, RPM::FOLDER_TEMP_MAP);
+        pathMap = Common::pathCombine(pathMap, RPM::FOLDER_TEMP);
     QString path = Common::pathCombine(pathMap, RPM::FILE_MAP_OBJECTS);
     QJsonObject json;
     QJsonArray portions;

@@ -77,12 +77,22 @@ private:
     void updateTileset(SystemTileset *sysTileset);
     void openSpecialElementsDialog(PictureKind kind);
     void playAnimation(AnimationEffectConditionKind condition);
+    void copyTemp();
+    void removeTemp();
+    void copyPreviousTemp();
+    void apply();
+    void cancel();
+    void ok();
+    void updateTextures();
     void translate();
 
 protected:
     virtual void showEvent(QShowEvent *event);
 
-private slots:
+public slots:
+    virtual void accept();
+    virtual void reject();
+    void on_pushButtonApply_clicked();
     void on_tabWidget_currentChanged(int index);
     void on_pageItemsSelected(QModelIndex index, QModelIndex);
     void on_pageSkillsSelected(QModelIndex index, QModelIndex);

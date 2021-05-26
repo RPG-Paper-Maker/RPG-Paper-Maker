@@ -46,57 +46,63 @@ WidgetTreeLocalMaps::WidgetTreeLocalMaps(QWidget *parent) :
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     m_contextMenuMap = ContextMenuList::createContextMap(this);
     m_contextMenuDirectory = ContextMenuList::createContextDirectory(this);
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
-            this, SLOT(showContextMenu(const QPoint &)));
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(
+        showContextMenu(const QPoint &)));
 }
 
 WidgetTreeLocalMaps::~WidgetTreeLocalMaps()
 {
     delete m_contextMenuMap;
     delete m_contextMenuDirectory;
-    cleanCopy();
+    this->cleanCopy();
 }
 
-void WidgetTreeLocalMaps::initializeWidgetMapEditor(WidgetMapEditor* w){
+void WidgetTreeLocalMaps::initializeWidgetMapEditor(WidgetMapEditor *w)
+{
     m_widgetMapEditor = w;
 }
 
-void WidgetTreeLocalMaps::initializeWidgetMenuBar(WidgetMenuBarMapEditor* w){
+void WidgetTreeLocalMaps::initializeWidgetMenuBar(WidgetMenuBarMapEditor *w)
+{
     m_widgetMenuMapEditor = w;
 }
 
-void WidgetTreeLocalMaps::initializePanelTextures(
-        PanelTextures* w)
+void WidgetTreeLocalMaps::initializePanelTextures(PanelTextures *w)
 {
     m_panelTextures = w;
 }
 
-void WidgetTreeLocalMaps::initializeModel(QStandardItemModel* m){
+void WidgetTreeLocalMaps::initializeModel(QStandardItemModel *m)
+{
     m_model = m;
     this->setModel(m_model);
     this->expandAll();
-    connect(this->selectionModel(),
-            SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
-            SLOT(on_selectionChanged(QModelIndex,QModelIndex)));
-    if (!setCurrentIndexFirstMap(m_model->invisibleRootItem())) {
+    connect(this->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+        this, SLOT(on_selectionChanged(QModelIndex,QModelIndex)));
+    if (!setCurrentIndexFirstMap(m_model->invisibleRootItem()))
+    {
         QModelIndex modelIndex = m_model->index(0, 0);
-        setCurrentIndex(modelIndex);
+        this->setCurrentIndex(modelIndex);
     }
-    connect(m_model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-            this, SLOT(removed(QModelIndex,int,int)));
+    connect(m_model, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(removed(
+        QModelIndex,int,int)));
 }
 
-void WidgetTreeLocalMaps::initializeProject(Project* p){
+void WidgetTreeLocalMaps::initializeProject(Project *p)
+{
     m_project = p;
     m_pathProject = p->pathCurrentProjectApp();
 }
 
-QStandardItem* WidgetTreeLocalMaps::getSelected() const{
+QStandardItem * WidgetTreeLocalMaps::getSelected() const
+{
     return m_model->itemFromIndex(this->selectionModel()->currentIndex());
 }
 
-QStandardItemModel* WidgetTreeLocalMaps::getModel() const { return m_model; }
-
+QStandardItemModel * WidgetTreeLocalMaps::getModel() const
+{
+    return m_model;
+}
 
 // -------------------------------------------------------
 //
@@ -104,25 +110,29 @@ QStandardItemModel* WidgetTreeLocalMaps::getModel() const { return m_model; }
 //
 // -------------------------------------------------------
 
-void WidgetTreeLocalMaps::updateNodeSaved(QStandardItem* item){
-    TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(item->data().value
-        <quintptr>());
+void WidgetTreeLocalMaps::updateNodeSaved(QStandardItem *item)
+{
+    TreeMapTag *tag = reinterpret_cast<TreeMapTag*>(item->data().value<quintptr>());
     if (tag != nullptr)
+    {
         item->setText(tag->name());
+    }
 }
 
 // -------------------------------------------------------
 
-void WidgetTreeLocalMaps::updateAllNodesSaved(){
-    updateNodesSaved(m_model->invisibleRootItem());
+void WidgetTreeLocalMaps::updateAllNodesSaved()
+{
+    this->updateNodesSaved(m_model->invisibleRootItem());
 }
 
 // -------------------------------------------------------
 
-void WidgetTreeLocalMaps::updateNodesSaved(QStandardItem* item){
-    updateNodeSaved(item);
-
-    for (int i = 0; i < item->rowCount(); i++){
+void WidgetTreeLocalMaps::updateNodesSaved(QStandardItem *item)
+{
+    this->updateNodeSaved(item);
+    for (int i = 0; i < item->rowCount(); i++)
+    {
         updateNodesSaved(item->child(i));
     }
 }
@@ -138,25 +148,22 @@ void WidgetTreeLocalMaps::deleteAllMapTemp(){
 
 // -------------------------------------------------------
 
-void WidgetTreeLocalMaps::deleteMapTemp(QString& path, QStandardItem* item){
-    TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(item->data().value
+void WidgetTreeLocalMaps::deleteMapTemp(QString &path, QStandardItem *item)
+{
+    TreeMapTag *tag = reinterpret_cast<TreeMapTag*>(item->data().value
         <quintptr>());
-
-    if (tag != nullptr && !tag->isDir()){
-        QString pathMap =
-                Common::pathCombine(path,
-                                   Map::generateMapName(
-                                       tag->id()));
-        QString pathTemp = Common::pathCombine(pathMap,
-                                              RPM::FOLDER_TEMP_MAP);
+    if (tag != nullptr && !tag->isDir())
+    {
+        QString pathMap = Common::pathCombine(path, Map::generateMapName(tag->id()));
+        QString pathTemp = Common::pathCombine(pathMap, RPM::FOLDER_TEMP);
         Common::deleteAllFiles(pathTemp);
-        pathTemp = Common::pathCombine(pathMap,
-                                      RPM::FOLDER_UNDO_REDO_TEMP_MAP);
+        pathTemp = Common::pathCombine(pathMap, RPM::FOLDER_UNDO_REDO_TEMP_MAP);
         Common::deleteAllFiles(pathTemp);
-    }
-    else{
-        for (int i = 0; i < item->rowCount(); i++){
-            deleteMapTemp(path, item->child(i));
+    } else
+    {
+        for (int i = 0; i < item->rowCount(); i++)
+        {
+            this->deleteMapTemp(path, item->child(i));
         }
     }
 }
@@ -363,8 +370,8 @@ void WidgetTreeLocalMaps::cleanCopy(){
         // Remove files temp
         QString pathMaps = Common::pathCombine(m_pathProject, RPM::PATH_MAPS);
         QDir(Common::pathCombine(
-                 pathMaps, RPM::FOLDER_TEMP_MAP)).removeRecursively();
-        QDir(pathMaps).mkdir(RPM::FOLDER_TEMP_MAP);
+                 pathMaps, RPM::FOLDER_TEMP)).removeRecursively();
+        QDir(pathMaps).mkdir(RPM::FOLDER_TEMP);
     }
 }
 
@@ -634,7 +641,7 @@ void WidgetTreeLocalMaps::contextEditMap(){
         DialogMapProperties dialog(properties);
         if (dialog.exec() == QDialog::Accepted){
             QString pathTemp = Common::pathCombine(path,
-                                                  RPM::FOLDER_TEMP_MAP);
+                                                  RPM::FOLDER_TEMP);
             if (RPM::mapsToSave.contains(properties.id())) {
                 Common::copyAllFiles(pathTemp, path);
                 Common::deleteAllFiles(pathTemp);

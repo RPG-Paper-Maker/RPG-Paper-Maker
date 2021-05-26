@@ -746,19 +746,13 @@ void MainWindow::on_actionZoom_out_triggered()
 // -------------------------------------------------------
 
 void MainWindow::on_actionDatas_manager_triggered(){
-    RPM::isInConfig = true;
-    DialogDatas dialog(project->gameDatas());
-    if (openDialog(dialog) == QDialog::Accepted) {
-        project->writeGameDatas();
-        project->writePicturesDatas();
-    }
-    else {
-        project->readGameDatas();
-        project->readPicturesDatas();
-    }
-    RPM::isInConfig = false;
-
-    updateTextures();
+    DialogDatas dialog(project->gameDatas(), this);
+    dialog.exec();
+    /*
+    DialogDatas *dialog = new DialogDatas(project->gameDatas(), this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->show();
+    */
 }
 
 // -------------------------------------------------------

@@ -63,6 +63,7 @@ public:
     void updateMenuRecentProjects();
     void cleanRecentProjectsActions();
     void runGame();
+    void updateTextures();
     void translate();
 
 private:
@@ -77,8 +78,6 @@ private:
     DialogScripts *m_dialogScripts;
     bool m_firstCrash;
     QTimer *m_timerBackup;
-
-    void updateTextures();
 
 protected:
     virtual void closeEvent(QCloseEvent *event);

@@ -22,7 +22,9 @@
 	    "Command change chronometer",
 	    "Command conditions: status",
 	    "Ray portions ingame and editor (limit 20) with warning",
-	    "Max number slot saves"
+	    "Max number slot saves",
+	    "All variables set to 0 by default instead of null",
+	    "Apply button in Datas manager (but cannot switch to other windows yet)"
     ],
     "bugs": [],
     "finished": [
@@ -45,6 +47,8 @@
         0,
         0,
         0,
-        0
+        0,
+        2,
+        2
     ]
 }

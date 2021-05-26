@@ -62,13 +62,12 @@ Map::Map(int id) :
     m_pathMap = Common::pathCombine(pathMaps, realName);
 
     // Create temp folders if doesn't exists
-    QDir(m_pathMap).mkdir(RPM::FOLDER_TEMP_MAP);
+    QDir(m_pathMap).mkdir(RPM::FOLDER_TEMP);
     QDir(m_pathMap).mkdir(RPM::FOLDER_UNDO_REDO_TEMP_MAP);
 
     // Temp map files
     if (!RPM::mapsToSave.contains(id)) {
-        QString pathTemp = Common::pathCombine(m_pathMap,
-                                              RPM::FOLDER_TEMP_MAP);
+        QString pathTemp = Common::pathCombine(m_pathMap, RPM::FOLDER_TEMP);
         Common::deleteAllFiles(pathTemp);
         QFile(Common::pathCombine(m_pathMap, RPM::FILE_MAP_OBJECTS)).copy(
                     Common::pathCombine(pathTemp, RPM::FILE_MAP_OBJECTS));
@@ -300,9 +299,8 @@ QString Map::getPortionPath(int i, int j, int k) {
 // -------------------------------------------------------
 
 QString Map::getPortionPathTemp(int i, int j, int k) {
-    return Common::pathCombine(m_pathMap, Common::pathCombine(
-                                  RPM::FOLDER_TEMP_MAP,
-                                  getPortionPathMap(i, j, k)));
+    return Common::pathCombine(m_pathMap, Common::pathCombine(RPM::FOLDER_TEMP,
+        getPortionPathMap(i, j, k)));
 }
 
 // -------------------------------------------------------
@@ -379,9 +377,8 @@ QString Map::getMapInfosPath() const{
 // -------------------------------------------------------
 
 QString Map::getMapObjectsPath() const{
-    return Common::pathCombine(m_pathMap,
-                              Common::pathCombine(RPM::FOLDER_TEMP_MAP,
-                                                 RPM::FILE_MAP_OBJECTS));
+    return Common::pathCombine(m_pathMap, Common::pathCombine(RPM::FOLDER_TEMP,
+        RPM::FILE_MAP_OBJECTS));
 }
 
 // -------------------------------------------------------

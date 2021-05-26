@@ -128,7 +128,7 @@ void TreeMapTag::copyItem(const QStandardItem* from,
                         RPM::get()->project()->pathCurrentProjectApp(),
                         RPM::PATH_MAPS);
             QString pathMapsTemp = Common::pathCombine(
-                        pathMaps, RPM::FOLDER_TEMP_MAP);
+                        pathMaps, RPM::FOLDER_TEMP);
             QString pathMapSource = Common::pathCombine(pathMaps, mapName);
             QString pathMapTarget = Common::pathCombine(pathMapsTemp, mapName);
             QDir(pathMapsTemp).mkdir(mapName);
@@ -139,11 +139,11 @@ void TreeMapTag::copyItem(const QStandardItem* from,
             // Remove temp
             QDir(Common::pathCombine(
                      pathMapTarget,
-                     RPM::FOLDER_TEMP_MAP)).removeRecursively();
+                     RPM::FOLDER_TEMP)).removeRecursively();
             QDir(Common::pathCombine(
                      pathMapTarget,
                      RPM::FOLDER_UNDO_REDO_TEMP_MAP)).removeRecursively();
-            QDir(pathMapTarget).mkdir(RPM::FOLDER_TEMP_MAP);
+            QDir(pathMapTarget).mkdir(RPM::FOLDER_TEMP);
             QDir(pathMapTarget).mkdir(RPM::FOLDER_UNDO_REDO_TEMP_MAP);
         }
     }
@@ -177,7 +177,7 @@ void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
                         RPM::get()->project()->pathCurrentProjectApp(),
                         RPM::PATH_MAPS);
             QString pathMapsTemp =
-                    Common::pathCombine(pathMaps, RPM::FOLDER_TEMP_MAP);
+                    Common::pathCombine(pathMaps, RPM::FOLDER_TEMP);
             QString pathMap =
                     Common::pathCombine(pathMapsTemp, Map::generateMapName(
                                             tag->id()));

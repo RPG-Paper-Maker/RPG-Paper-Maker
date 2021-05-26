@@ -90,6 +90,7 @@ SystemCommonSkillItem::~SystemCommonSkillItem() {
     delete m_sound;
     delete m_animationUserID;
     delete m_animationTargetID;
+    delete m_canBeSold;
     SuperListItem::deleteModel(m_modelPrice);
     SuperListItem::deleteModel(m_modelCosts);
     SuperListItem::deleteModel(m_modelEffects);

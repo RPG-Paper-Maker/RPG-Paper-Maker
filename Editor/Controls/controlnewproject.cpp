@@ -158,8 +158,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
 
     // Creating first empty map
     dir.mkdir(RPM::PATH_MAPS);
-    dir.mkdir(Common::pathCombine(RPM::PATH_MAPS,
-        RPM::FOLDER_TEMP_MAP));
+    dir.mkdir(Common::pathCombine(RPM::PATH_MAPS, RPM::FOLDER_TEMP));
     Map::writeDefaultMap(pathApp);
     Map::writeDefaultBattleMap(pathApp);
 

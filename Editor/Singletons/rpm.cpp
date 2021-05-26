@@ -89,7 +89,7 @@ const QString RPM::FILE_PACKAGE = "package" + EXTENSION_JSON;
 const QString RPM::FOLDER_GAMES = "RPG Paper Maker Games";
 const QString RPM::FOLDER_DESKTOP = "desktop";
 const QString RPM::FOLDER_CONTENT = "Content";
-const QString RPM::FOLDER_TEMP_MAP = "temp";
+const QString RPM::FOLDER_TEMP = "temp";
 const QString RPM::FOLDER_UNDO_REDO_TEMP_MAP = "tempUndoRedo";
 const QString RPM::FOLDER_APP = "app";
 #ifdef Q_OS_MACOS

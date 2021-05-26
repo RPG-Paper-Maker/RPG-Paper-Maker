@@ -205,7 +205,7 @@ bool Project::read(QString path){
 
     // Create temp file if doesn't exists
     QDir(Common::pathCombine(Common::pathCombine(path, RPM::PATH_APP), RPM
-        ::PATH_MAPS)).mkdir(RPM::FOLDER_TEMP_MAP);
+        ::PATH_MAPS)).mkdir(RPM::FOLDER_TEMP);
 
     return true;
 }

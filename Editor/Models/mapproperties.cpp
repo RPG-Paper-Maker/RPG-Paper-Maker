@@ -450,7 +450,7 @@ void MapProperties::setCopy(const SuperListItem &super) {
 
 void MapProperties::save(QString path, bool temp) {
     if (temp) {
-        path = Common::pathCombine(path, RPM::FOLDER_TEMP_MAP);
+        path = Common::pathCombine(path, RPM::FOLDER_TEMP);
     }
     RPM::writeJSON(Common::pathCombine(path, RPM::FILE_MAP_INFOS), *this);
 }

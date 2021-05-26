@@ -1272,5 +1272,6 @@
     "autotiles.frame.duration": "Durée de frame dans autotiles",
     "phoenix.feather": "Plume de phoenix",
     "phoenix.feather.description": "Ressuscite un allié",
-    "perform.skill": "Effectuer une compétence"
+    "perform.skill": "Effectuer une compétence",
+    "apply": "Appliquer"
 }

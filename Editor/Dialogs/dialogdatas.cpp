@@ -12,10 +12,13 @@
 #include <QTreeWidget>
 #include <QScrollBar>
 #include <QMessageBox>
+#include <QDir>
+#include "mainwindow.h"
 #include "dialogdatas.h"
 #include "ui_dialogdatas.h"
 #include "datastabkind.h"
 #include "superlistitem.h"
+#include "common.h"
 #include "rpm.h"
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
@@ -38,28 +41,29 @@ DialogDatas::DialogDatas(GameDatas *gameDatas, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogDatas)
 {
+    RPM::isInConfig = true;
     ui->setupUi(this);
-    
-    initializeItems(gameDatas);
-    initializeSkills(gameDatas);
-    initializeWeapons(gameDatas);
-    initializeArmors(gameDatas);
-    initializeClasses(gameDatas);
-    initializeHeroes(gameDatas);
-    initializeMonsters(gameDatas);
-    initializeTroops(gameDatas);
-    initializeTilesets(gameDatas);
-    initializeAnimations(gameDatas);
-    initializeStatus(gameDatas);
-
+    this->initializeItems(gameDatas);
+    this->initializeSkills(gameDatas);
+    this->initializeWeapons(gameDatas);
+    this->initializeArmors(gameDatas);
+    this->initializeClasses(gameDatas);
+    this->initializeHeroes(gameDatas);
+    this->initializeMonsters(gameDatas);
+    this->initializeTroops(gameDatas);
+    this->initializeTilesets(gameDatas);
+    this->initializeAnimations(gameDatas);
+    this->initializeStatus(gameDatas);
     ui->panelSuperListClasses->list()->setFocus(Qt::FocusReason::MouseFocusReason);
-
+    this->copyTemp();
     this->translate();
 }
 
 DialogDatas::~DialogDatas()
 {
     delete ui;
+    this->removeTemp();
+    RPM::isInConfig = false;
 }
 
 int DialogDatas::finalLevel() const {
@@ -451,6 +455,88 @@ void DialogDatas::playAnimation(AnimationEffectConditionKind condition) {
 
 // -------------------------------------------------------
 
+void DialogDatas::copyTemp()
+{
+    QString src = Common::pathCombine(RPM::get()->project()->pathCurrentProjectApp(),
+        RPM::PATH_DATAS);
+    QDir dir(src);
+    QString dst = Common::pathCombine(src, RPM::FOLDER_TEMP);
+    QDir dirDst(dst);
+    if (dirDst.exists())
+    {
+        dirDst.removeRecursively();
+    }
+    dir.mkdir(RPM::FOLDER_TEMP);
+    foreach (QFileInfo ifo, dir.entryInfoList(QDir::Files))
+    {
+        QFile::copy(Common::pathCombine(src, ifo.fileName()), Common
+            ::pathCombine(dst, ifo.fileName()));
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::removeTemp()
+{
+    QDir(Common::pathCombine(Common::pathCombine(RPM::get()->project()
+        ->pathCurrentProjectApp(), RPM::PATH_DATAS), RPM::FOLDER_TEMP))
+        .removeRecursively();
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::copyPreviousTemp()
+{
+    QString dst = Common::pathCombine(RPM::get()->project()->pathCurrentProjectApp(),
+        RPM::PATH_DATAS);
+    QString src = Common::pathCombine(dst, RPM::FOLDER_TEMP);
+    QDir dir(src);
+    QString dstPath;
+    foreach (QFileInfo ifo, dir.entryInfoList(QDir::Files))
+    {
+        dstPath = Common::pathCombine(dst, ifo.fileName());
+        QFile(dstPath).remove();
+        QFile::copy(Common::pathCombine(src, ifo.fileName()), dstPath);
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::apply()
+{
+    this->ok();
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::cancel()
+{
+    this->copyPreviousTemp();
+    RPM::get()->project()->readGameDatas();
+    RPM::get()->project()->readPicturesDatas();
+    this->updateTextures();
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::ok()
+{
+    RPM::get()->project()->writeGameDatas();
+    RPM::get()->project()->writePicturesDatas();
+    this->updateTextures();
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::updateTextures()
+{
+    RPM::isInConfig = false;
+    reinterpret_cast<MainWindow *>(this->parentWidget())->updateTextures();
+    RPM::isInConfig = true;
+}
+
+// -------------------------------------------------------
+
 void DialogDatas::translate() {
     this->setWindowTitle(RPM::translate(Translations::DATAS_MANAGER) + RPM
         ::DOT_DOT_DOT);
@@ -528,6 +614,7 @@ void DialogDatas::translate() {
         ::CREATE_TRANSITION) + RPM::DOT_DOT_DOT);
     ui->pushButtonAnimatedAutotiles->setText(RPM::translate(Translations::CHOOSE
         ) + RPM::DOT_DOT_DOT);
+    ui->pushButtonApply->setText(RPM::translate(Translations::APPLY));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -553,6 +640,29 @@ void DialogDatas::showEvent(QShowEvent *event) {
 //
 //  SLOTS
 //
+// -------------------------------------------------------
+
+void DialogDatas::accept()
+{
+    this->ok();
+    QDialog::accept();
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::reject()
+{
+    this->cancel();
+    QDialog::reject();
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonApply_clicked()
+{
+    this->apply();
+}
+
 // -------------------------------------------------------
 
 void DialogDatas::on_tabWidget_currentChanged(int index) {
