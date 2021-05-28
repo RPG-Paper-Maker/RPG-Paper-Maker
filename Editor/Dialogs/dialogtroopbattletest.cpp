@@ -26,7 +26,7 @@ DialogTroopBattleTest::DialogTroopBattleTest(int troopID, QWidget *parent) :
     m_troopID(troopID)
 {
     ui->setupUi(this);
-    this->addHero();
+    this->initialize();
     this->translate();
 }
 
@@ -45,6 +45,20 @@ DialogTroopBattleTest::~DialogTroopBattleTest()
 //
 // -------------------------------------------------------
 
+void DialogTroopBattleTest::initialize()
+{
+    m_battleMapID = 1;
+    int index = SuperListItem::getIndexById(RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelBattleMaps()->invisibleRootItem(),
+        m_battleMapID, true);
+    SuperListItem::fillComboBox(ui->comboBoxBattleMap, RPM::get()->project()
+        ->gameDatas()->battleSystemDatas()->modelBattleMaps());
+    ui->comboBoxBattleMap->setCurrentIndex(index);
+    this->addHero();
+}
+
+// -------------------------------------------------------
+
 void DialogTroopBattleTest::addHero(int index)
 {
     SystemHeroTroopBattleTest *hero = new SystemHeroTroopBattleTest;
@@ -57,6 +71,7 @@ void DialogTroopBattleTest::addHero(int index)
 void DialogTroopBattleTest::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::TEST) + RPM::DOT_DOT_DOT);
+    ui->labelBattleMap->setText(RPM::translate(Translations::BATTLE_MAP) + RPM::COLON);
     ui->pushButtonCopy->setText(RPM::translate(Translations::COPY));
     ui->pushButtonPaste->setText(RPM::translate(Translations::PASTE));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);

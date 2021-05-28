@@ -10,6 +10,7 @@
 */
 
 #include "systemherotroopbattletest.h"
+#include "systemherotroopbattletestequipment.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -32,7 +33,8 @@ SystemHeroTroopBattleTest::SystemHeroTroopBattleTest() :
         equipment = SuperListItem::getItemModelAt(model, i);
         if (equipment != nullptr)
         {
-            m_modelEquipments->appendRow(new QStandardItem("<> " + equipment->name() + RPM::COLON + RPM::SPACE + RPM::translate(Translations::NONE)));
+            m_modelEquipments->appendRow((new SystemHeroTroopBattleTestEquipment(
+                equipment->id(), equipment->name()))->getModelRow());
         }
     }
 }

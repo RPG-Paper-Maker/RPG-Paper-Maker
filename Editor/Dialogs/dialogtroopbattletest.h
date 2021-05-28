@@ -27,12 +27,14 @@ public:
     explicit DialogTroopBattleTest(int troopID, QWidget *parent = nullptr);
     ~DialogTroopBattleTest();
 
+    void initialize();
     void addHero(int index = 0);
     void translate();
 
 private:
     Ui::DialogTroopBattleTest *ui;
     int m_troopID;
+    int m_battleMapID;
     QList<SystemHeroTroopBattleTest *> m_heros;
 };
 

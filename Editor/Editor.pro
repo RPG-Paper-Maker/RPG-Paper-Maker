@@ -82,6 +82,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemdetection.h \
     Dialogs/Systems/dialogsystemfontname.h \
     Dialogs/Systems/dialogsystemfontsize.h \
+    Dialogs/Systems/dialogsystemherotroopbattletestequipment.h \
     Dialogs/Systems/dialogsysteminventoryfilter.h \
     Dialogs/Systems/dialogsystemlanguage.h \
     Dialogs/Systems/dialogsystemmainmenucommand.h \
@@ -160,6 +161,7 @@ HEADERS += \
     Models/System/systemfontname.h \
     Models/System/systemfontsize.h \
     Models/System/systemherotroopbattletest.h \
+    Models/System/systemherotroopbattletestequipment.h \
     Models/System/systeminventoryfilter.h \
     Models/System/systemlanguage.h \
     Models/System/systemmainmenucommand.h \
@@ -503,6 +505,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemdetection.cpp \
     Dialogs/Systems/dialogsystemfontname.cpp \
     Dialogs/Systems/dialogsystemfontsize.cpp \
+    Dialogs/Systems/dialogsystemherotroopbattletestequipment.cpp \
     Dialogs/Systems/dialogsysteminventoryfilter.cpp \
     Dialogs/Systems/dialogsystemlanguage.cpp \
     Dialogs/Systems/dialogsystemmainmenucommand.cpp \
@@ -561,6 +564,7 @@ SOURCES += \
     Models/System/systemfontname.cpp \
     Models/System/systemfontsize.cpp \
     Models/System/systemherotroopbattletest.cpp \
+    Models/System/systemherotroopbattletestequipment.cpp \
     Models/System/systeminventoryfilter.cpp \
     Models/System/systemlanguage.cpp \
     Models/System/systemmainmenucommand.cpp \
@@ -870,6 +874,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemdetection.ui \
     Dialogs/Systems/dialogsystemfontname.ui \
     Dialogs/Systems/dialogsystemfontsize.ui \
+    Dialogs/Systems/dialogsystemherotroopbattletestequipment.ui \
     Dialogs/Systems/dialogsysteminventoryfilter.ui \
     Dialogs/Systems/dialogsystemlanguage.ui \
     Dialogs/Systems/dialogsystemmainmenucommand.ui \
