@@ -61,3 +61,24 @@ void PanelHeroTroopBattleTest::translate()
     ui->labelLevel->setText(RPM::translate(Translations::LEVEL) + RPM::COLON);
     ui->groupBoxEquipments->setTitle(RPM::translate(Translations::EQUIPMENTS));
 }
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void PanelHeroTroopBattleTest::on_comboBoxHero_currentIndexChanged(int index)
+{
+    SuperListItem *hero = SuperListItem::getByIndex(RPM::get()->project()
+        ->gameDatas()->heroesDatas()->model(), index);
+    m_hero->setHeroID(hero->id());
+    emit this->heroChanged(hero->name());
+}
+
+// -------------------------------------------------------
+
+void PanelHeroTroopBattleTest::on_spinBoxLevel_valueChanged(int i)
+{
+    m_hero->setLevel(i);
+}

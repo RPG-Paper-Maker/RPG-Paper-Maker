@@ -34,6 +34,13 @@ public:
 private:
     Ui::PanelHeroTroopBattleTest *ui;
     SystemHeroTroopBattleTest *m_hero;
+
+public slots:
+    void on_comboBoxHero_currentIndexChanged(int index);
+    void on_spinBoxLevel_valueChanged(int i);
+
+signals:
+    void heroChanged(QString name);
 };
 
 #endif // PANELHEROTROOPBATTLETEST_H

@@ -23,7 +23,9 @@
 DialogTroopBattleTest::DialogTroopBattleTest(int troopID, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogTroopBattleTest),
-    m_troopID(troopID)
+    m_troopID(troopID),
+    m_battleMapID(1),
+    m_copy(nullptr)
 {
     ui->setupUi(this);
     this->initialize();
@@ -47,7 +49,6 @@ DialogTroopBattleTest::~DialogTroopBattleTest()
 
 void DialogTroopBattleTest::initialize()
 {
-    m_battleMapID = 1;
     int index = SuperListItem::getIndexById(RPM::get()->project()->gameDatas()
         ->battleSystemDatas()->modelBattleMaps()->invisibleRootItem(),
         m_battleMapID, true);
@@ -59,11 +60,21 @@ void DialogTroopBattleTest::initialize()
 
 // -------------------------------------------------------
 
-void DialogTroopBattleTest::addHero(int index)
+void DialogTroopBattleTest::addHero(int index, SystemHeroTroopBattleTest *hero)
 {
-    SystemHeroTroopBattleTest *hero = new SystemHeroTroopBattleTest;
-    m_heros.append(hero);
-    ui->tabWidget->insertTab(index, new PanelHeroTroopBattleTest(hero), hero->name());
+    if (hero == nullptr)
+    {
+        hero = new SystemHeroTroopBattleTest;
+    }
+    m_heros.insert(index, hero);
+    PanelHeroTroopBattleTest *panel = new PanelHeroTroopBattleTest(hero);
+    ui->tabWidget->insertTab(index, panel, hero->name());
+    connect(panel, &PanelHeroTroopBattleTest::heroChanged, this, [this, hero](
+        const QString &text)
+    {
+        ui->tabWidget->setTabText(m_heros.indexOf(hero), text);
+    });
+    ui->tabWidget->setCurrentIndex(index);
 }
 
 // -------------------------------------------------------
@@ -75,4 +86,55 @@ void DialogTroopBattleTest::translate()
     ui->pushButtonCopy->setText(RPM::translate(Translations::COPY));
     ui->pushButtonPaste->setText(RPM::translate(Translations::PASTE));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogTroopBattleTest::on_comboBoxBattleMap_currentIndexChanged(int index)
+{
+    m_battleMapID = SuperListItem::getIdByIndex(RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelBattleMaps(), index);
+}
+
+// -------------------------------------------------------
+
+void DialogTroopBattleTest::on_pushButtonAdd_clicked()
+{
+    this->addHero(ui->tabWidget->currentIndex() + 1);
+}
+
+// -------------------------------------------------------
+
+void DialogTroopBattleTest::on_pushButtonRemove_clicked()
+{
+    if (ui->tabWidget->count() > 0)
+    {
+        int index = ui->tabWidget->currentIndex();
+        delete m_heros.at(index);
+        m_heros.removeAt(index);
+        ui->tabWidget->removeTab(index);
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogTroopBattleTest::on_pushButtonCopy_clicked()
+{
+    m_copy = reinterpret_cast<SystemHeroTroopBattleTest *>(m_heros.at(ui
+        ->tabWidget->currentIndex()));
+}
+
+// -------------------------------------------------------
+
+void DialogTroopBattleTest::on_pushButtonPaste_clicked()
+{
+    if (m_copy != nullptr)
+    {
+        this->addHero(ui->tabWidget->currentIndex() + 1, reinterpret_cast<
+            SystemHeroTroopBattleTest *>(m_copy->createCopy()));
+    }
 }

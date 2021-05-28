@@ -26,6 +26,12 @@
 class SystemHeroTroopBattleTest : public SuperListItem
 {
 public:
+    static const QString JSON_HERO_ID;
+    static const QString JSON_LEVEL;
+    static const QString JSON_EQUIPMENTS;
+    static const int DEFAULT_HERO_ID;
+    static const int DEFAULT_LEVEL;
+
     SystemHeroTroopBattleTest();
     virtual ~SystemHeroTroopBattleTest();
     int heroID() const;
@@ -35,6 +41,10 @@ public:
     QStandardItemModel * modelEquipments() const;
 
     virtual QString name() const;
+    virtual SuperListItem * createCopy() const;
+    virtual void setCopy(const SuperListItem &super);
+    virtual void read(const QJsonObject &json);
+    virtual void write(QJsonObject &json) const;
 
 protected:
     int m_heroID;

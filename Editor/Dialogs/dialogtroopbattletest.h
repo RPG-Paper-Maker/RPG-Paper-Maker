@@ -28,7 +28,7 @@ public:
     ~DialogTroopBattleTest();
 
     void initialize();
-    void addHero(int index = 0);
+    void addHero(int index = 0, SystemHeroTroopBattleTest *hero = nullptr);
     void translate();
 
 private:
@@ -36,6 +36,14 @@ private:
     int m_troopID;
     int m_battleMapID;
     QList<SystemHeroTroopBattleTest *> m_heros;
+    SystemHeroTroopBattleTest *m_copy;
+
+public slots:
+    void on_comboBoxBattleMap_currentIndexChanged(int index);
+    void on_pushButtonAdd_clicked();
+    void on_pushButtonRemove_clicked();
+    void on_pushButtonCopy_clicked();
+    void on_pushButtonPaste_clicked();
 };
 
 #endif // DIALOGTROOPBATTLETEST_H

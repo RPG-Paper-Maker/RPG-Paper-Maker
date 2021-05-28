@@ -178,6 +178,21 @@ void SystemHeroTroopBattleTestEquipment::setCopy(const SuperListItem &super)
     p_id = equipment->p_id;
     m_kind = equipment->m_kind;
     m_weaponArmorID = equipment->m_weaponArmorID;
+    int i, l;
+    m_modelWeapons->clear();
+    for (i = 0, l = equipment->m_modelWeapons->invisibleRootItem()->rowCount();
+         i < l; i++)
+    {
+        m_modelWeapons->insertRow(i, reinterpret_cast<SystemCommonSkillItem *>(
+            SuperListItem::getItemModelAt(equipment->m_modelWeapons, i))->getModelRow());
+    }
+    m_modelArmors->clear();
+    for (i = 0, l = equipment->m_modelArmors->invisibleRootItem()->rowCount();
+         i < l; i++)
+    {
+        m_modelArmors->insertRow(i, reinterpret_cast<SystemCommonSkillItem *>(
+            SuperListItem::getItemModelAt(equipment->m_modelArmors, i))->getModelRow());
+    }
 }
 
 // -------------------------------------------------------
