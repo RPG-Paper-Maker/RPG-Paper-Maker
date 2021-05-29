@@ -40,6 +40,8 @@ public:
     static const QString JSON_SHOW_AVAILABLE_CONTENT;
     static const QString JSON_FIRST_TIME_LANGUAGES;
     static const QString JSON_CURRENT_LANGUAGE;
+    static const QString JSON_BATTLE_TROOP_TEST_BATTLE_MAP_ID;
+    static const QString JSON_BATTLE_TROOP_TEST_HEROES;
     static const QString THEME_DEFAULT;
     static const QString THEME_WHITE;
     static const QString THEME_WHITE_MAC;
@@ -47,6 +49,7 @@ public:
     static const QString PATH_THEMES;
     static const bool DEFAULT_FIRST_TIME_LANGUAGES;
     static const QString DEFAULT_CURRENT_LANGUAGE;
+    static const int DEFAULT_BATTLE_TROOP_TEST_BATTLE_MAP_ID;
 
     EngineSettings();
     virtual ~EngineSettings();
@@ -75,6 +78,10 @@ public:
     void setFirstTimeLanguages(bool ftl);
     QString currentLanguage() const;
     void setCurrentLanguage(QString cl);
+    int battleTroopTestBattleMapID() const;
+    void setBattleTroopTestBattleMapID(int battleTroopTestBattleMapID);
+    QJsonArray battleTroopTestHeroes() const;
+    void setBattleTroopTestHeroes(QJsonArray &battleTroopTestHeroes);
 
     void setDefault();
     QString getThemeContent() const;
@@ -83,6 +90,7 @@ public:
     void updateTheme();
     void updateProject(QString name, QString link);
     void clearProjects();
+    void clearTroopBattleTestHeroes();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -101,6 +109,8 @@ protected:
     bool m_showAvailableContent;
     bool m_firstTimeLanguages;
     QString m_currentLanguage;
+    int m_battleTroopTestBattleMapID;
+    QJsonArray m_battleTroopTestHeroes;
 
     QString readContent(QString name) const;
 };

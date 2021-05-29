@@ -40,6 +40,8 @@ public:
     void setLevel(int level);
     QStandardItemModel * modelEquipments() const;
 
+    void updateEquipments();
+
     virtual QString name() const;
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);

@@ -35,10 +35,12 @@ private:
     Ui::DialogTroopBattleTest *ui;
     int m_troopID;
     int m_battleMapID;
-    QList<SystemHeroTroopBattleTest *> m_heros;
+    QList<SystemHeroTroopBattleTest *> m_heroes;
     SystemHeroTroopBattleTest *m_copy;
 
 public slots:
+    virtual void accept();
+    virtual void reject();
     void on_comboBoxBattleMap_currentIndexChanged(int index);
     void on_pushButtonAdd_clicked();
     void on_pushButtonRemove_clicked();

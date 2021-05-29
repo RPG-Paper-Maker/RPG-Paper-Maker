@@ -29,6 +29,8 @@ const QString EngineSettings::JSON_UPDATER = "updater";
 const QString EngineSettings::JSON_SHOW_AVAILABLE_CONTENT = "sac";
 const QString EngineSettings::JSON_FIRST_TIME_LANGUAGES = "ftl";
 const QString EngineSettings::JSON_CURRENT_LANGUAGE = "cl";
+const QString EngineSettings::JSON_BATTLE_TROOP_TEST_BATTLE_MAP_ID = "battleTroopTestBattleMapID";
+const QString EngineSettings::JSON_BATTLE_TROOP_TEST_HEROES = "battleTroopTestHeroes";
 const QString EngineSettings::THEME_DEFAULT = "defaulttheme";
 const QString EngineSettings::THEME_WHITE = "whitetheme";
 const QString EngineSettings::THEME_WHITE_MAC ="whitemactheme";
@@ -36,6 +38,7 @@ const QString EngineSettings::THEME_DARK = "darktheme";
 const QString EngineSettings::PATH_THEMES = ":/stylesheets/Themes/";
 const bool EngineSettings::DEFAULT_FIRST_TIME_LANGUAGES = true;
 const QString EngineSettings::DEFAULT_CURRENT_LANGUAGE = "en";
+const int EngineSettings::DEFAULT_BATTLE_TROOP_TEST_BATTLE_MAP_ID = 1;
 
 // -------------------------------------------------------
 //
@@ -51,7 +54,8 @@ EngineSettings::EngineSettings() :
     m_updater(true),
     m_showAvailableContent(true),
     m_firstTimeLanguages(DEFAULT_FIRST_TIME_LANGUAGES),
-    m_currentLanguage(DEFAULT_CURRENT_LANGUAGE)
+    m_currentLanguage(DEFAULT_CURRENT_LANGUAGE),
+    m_battleTroopTestBattleMapID(DEFAULT_BATTLE_TROOP_TEST_BATTLE_MAP_ID)
 {
     // Default mac theme should be white
     #ifdef Q_OS_MAC
@@ -172,6 +176,26 @@ QString EngineSettings::currentLanguage() const
 void EngineSettings::setCurrentLanguage(QString cl)
 {
     m_currentLanguage = cl;
+}
+
+int EngineSettings::battleTroopTestBattleMapID() const
+{
+    return m_battleTroopTestBattleMapID;
+}
+
+void EngineSettings::setBattleTroopTestBattleMapID(int battleTroopTestBattleMapID)
+{
+    m_battleTroopTestBattleMapID = battleTroopTestBattleMapID;
+}
+
+QJsonArray EngineSettings::battleTroopTestHeroes() const
+{
+    return m_battleTroopTestHeroes;
+}
+
+void EngineSettings::setBattleTroopTestHeroes(QJsonArray &battleTroopTestHeros)
+{
+    m_battleTroopTestHeroes = battleTroopTestHeros;
 }
 
 // -------------------------------------------------------
@@ -321,10 +345,12 @@ void EngineSettings::read(const QJsonObject &json) {
     m_theme = json.contains(JSON_THEME) ? static_cast<ThemeKind>(json[
         JSON_THEME].toInt()) : ThemeKind::Dark;
     tab = json[JSON_PROJECT_NAMES].toArray();
+    m_projectNames.clear();
     for (i = 0, l = tab.size(); i < l; i++) {
         m_projectNames << tab.at(i).toString();
     }
     tab = json[JSON_PROJECT_LINKS].toArray();
+    m_projectLinks.clear();
     for (i = 0, l = tab.size(); i < l; i++) {
         m_projectLinks << tab.at(i).toString();
     }
@@ -357,6 +383,11 @@ void EngineSettings::read(const QJsonObject &json) {
     {
         m_currentLanguage = json[JSON_CURRENT_LANGUAGE].toString();
     }
+    if (json.contains(JSON_BATTLE_TROOP_TEST_BATTLE_MAP_ID))
+    {
+        m_battleTroopTestBattleMapID = json[JSON_BATTLE_TROOP_TEST_BATTLE_MAP_ID].toInt();
+    }
+    m_battleTroopTestHeroes = json[JSON_BATTLE_TROOP_TEST_HEROES].toArray();
 }
 
 // -------------------------------------------------------
@@ -413,4 +444,9 @@ void EngineSettings::write(QJsonObject &json) const {
     {
         json[JSON_CURRENT_LANGUAGE] = m_currentLanguage;
     }
+    if (m_battleTroopTestBattleMapID != DEFAULT_BATTLE_TROOP_TEST_BATTLE_MAP_ID)
+    {
+        json[JSON_BATTLE_TROOP_TEST_BATTLE_MAP_ID] = m_battleTroopTestBattleMapID;
+    }
+    json[JSON_BATTLE_TROOP_TEST_HEROES] = m_battleTroopTestHeroes;
 }

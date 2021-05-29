@@ -24,7 +24,7 @@ DialogTroopBattleTest::DialogTroopBattleTest(int troopID, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogTroopBattleTest),
     m_troopID(troopID),
-    m_battleMapID(1),
+    m_battleMapID(RPM::get()->engineSettings()->battleTroopTestBattleMapID()),
     m_copy(nullptr)
 {
     ui->setupUi(this);
@@ -35,9 +35,9 @@ DialogTroopBattleTest::DialogTroopBattleTest(int troopID, QWidget *parent) :
 DialogTroopBattleTest::~DialogTroopBattleTest()
 {
     delete ui;
-    for (int i = 0, l = m_heros.size(); i < l; i++)
+    for (int i = 0, l = m_heroes.size(); i < l; i++)
     {
-        delete m_heros.at(i);
+        delete m_heroes.at(i);
     }
 }
 
@@ -55,7 +55,19 @@ void DialogTroopBattleTest::initialize()
     SuperListItem::fillComboBox(ui->comboBoxBattleMap, RPM::get()->project()
         ->gameDatas()->battleSystemDatas()->modelBattleMaps());
     ui->comboBoxBattleMap->setCurrentIndex(index);
-    this->addHero();
+    QJsonArray tab = RPM::get()->engineSettings()->battleTroopTestHeroes();
+    SystemHeroTroopBattleTest *hero;
+    for (int i = 0, l = tab.size(); i < l; i++)
+    {
+        hero = new SystemHeroTroopBattleTest;
+        hero->read(tab.at(i).toObject());
+        this->addHero(i, hero);
+    }
+    if (tab.isEmpty())
+    {
+        this->addHero();
+    }
+    ui->tabWidget->setCurrentIndex(0);
 }
 
 // -------------------------------------------------------
@@ -66,13 +78,13 @@ void DialogTroopBattleTest::addHero(int index, SystemHeroTroopBattleTest *hero)
     {
         hero = new SystemHeroTroopBattleTest;
     }
-    m_heros.insert(index, hero);
+    m_heroes.insert(index, hero);
     PanelHeroTroopBattleTest *panel = new PanelHeroTroopBattleTest(hero);
     ui->tabWidget->insertTab(index, panel, hero->name());
     connect(panel, &PanelHeroTroopBattleTest::heroChanged, this, [this, hero](
         const QString &text)
     {
-        ui->tabWidget->setTabText(m_heros.indexOf(hero), text);
+        ui->tabWidget->setTabText(m_heroes.indexOf(hero), text);
     });
     ui->tabWidget->setCurrentIndex(index);
 }
@@ -92,6 +104,32 @@ void DialogTroopBattleTest::translate()
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void DialogTroopBattleTest::accept()
+{
+    RPM::get()->engineSettings()->setBattleTroopTestBattleMapID(m_battleMapID);
+    QJsonArray tab;
+    QJsonObject obj;
+    for (int i = 0, l = m_heroes.size(); i < l; i++)
+    {
+        obj = QJsonObject();
+        m_heroes.at(i)->write(obj);
+        tab.append(obj);
+    }
+    RPM::get()->engineSettings()->setBattleTroopTestHeroes(tab);
+    RPM::get()->engineSettings()->write();
+    QDialog::accept();
+}
+
+// -------------------------------------------------------
+
+void DialogTroopBattleTest::reject()
+{
+    RPM::get()->engineSettings()->read();
+    QDialog::reject();
+}
+
 // -------------------------------------------------------
 
 void DialogTroopBattleTest::on_comboBoxBattleMap_currentIndexChanged(int index)
@@ -114,8 +152,8 @@ void DialogTroopBattleTest::on_pushButtonRemove_clicked()
     if (ui->tabWidget->count() > 0)
     {
         int index = ui->tabWidget->currentIndex();
-        delete m_heros.at(index);
-        m_heros.removeAt(index);
+        delete m_heroes.at(index);
+        m_heroes.removeAt(index);
         ui->tabWidget->removeTab(index);
     }
 }
@@ -124,7 +162,7 @@ void DialogTroopBattleTest::on_pushButtonRemove_clicked()
 
 void DialogTroopBattleTest::on_pushButtonCopy_clicked()
 {
-    m_copy = reinterpret_cast<SystemHeroTroopBattleTest *>(m_heros.at(ui
+    m_copy = reinterpret_cast<SystemHeroTroopBattleTest *>(m_heroes.at(ui
         ->tabWidget->currentIndex()));
 }
 
