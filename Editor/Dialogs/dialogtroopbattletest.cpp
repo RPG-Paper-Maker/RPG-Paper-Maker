@@ -9,10 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QDir>
 #include "dialogtroopbattletest.h"
 #include "ui_dialogtroopbattletest.h"
 #include "panelherotroopbattletest.h"
 #include "rpm.h"
+#include "common.h"
+
+ const QString DialogTroopBattleTest::JSON_TROOP_ID = "troopID";
 
 // -------------------------------------------------------
 //
@@ -25,7 +29,8 @@ DialogTroopBattleTest::DialogTroopBattleTest(int troopID, QWidget *parent) :
     ui(new Ui::DialogTroopBattleTest),
     m_troopID(troopID),
     m_battleMapID(RPM::get()->engineSettings()->battleTroopTestBattleMapID()),
-    m_copy(nullptr)
+    m_copy(nullptr),
+    m_gameProcess(new QProcess(this))
 {
     ui->setupUi(this);
     this->initialize();
@@ -39,6 +44,8 @@ DialogTroopBattleTest::~DialogTroopBattleTest()
     {
         delete m_heroes.at(i);
     }
+    m_gameProcess->close();
+    delete m_gameProcess;
 }
 
 // -------------------------------------------------------
@@ -119,7 +126,28 @@ void DialogTroopBattleTest::accept()
     }
     RPM::get()->engineSettings()->setBattleTroopTestHeroes(tab);
     RPM::get()->engineSettings()->write();
-    QDialog::accept();
+    QDir(RPM::get()->project()->pathCurrentProjectApp()).mkdir("Test");
+    obj = QJsonObject();
+    obj[JSON_TROOP_ID] = m_troopID;
+    obj[EngineSettings::JSON_BATTLE_TROOP_TEST_BATTLE_MAP_ID] = m_battleMapID;
+    obj[EngineSettings::JSON_BATTLE_TROOP_TEST_HEROES] = tab;
+    Common::writeOtherJSON(Common::pathCombine(Common::pathCombine(RPM::get()
+        ->project()->pathCurrentProjectApp(), "Test"), "test.json"), obj);
+
+    // Run app test
+    QString execName = "Game";
+    #ifdef Q_OS_WIN
+        execName += ".exe";
+    #elif __linux__
+        execName += "";
+    #else
+        execName += ".app";
+    #endif
+    if (m_gameProcess->isOpen()) {
+        m_gameProcess->close();
+    }
+    m_gameProcess->start("\"" + Common::pathCombine(RPM::get()->project()
+        ->pathCurrentProject(), execName) + "\" \"--modeTest=battleTroop\"");
 }
 
 // -------------------------------------------------------
@@ -127,6 +155,8 @@ void DialogTroopBattleTest::accept()
 void DialogTroopBattleTest::reject()
 {
     RPM::get()->engineSettings()->read();
+    QDir(Common::pathCombine(RPM::get()->project()->pathCurrentProjectApp(), "Test"))
+        .removeRecursively();
     QDialog::reject();
 }
 

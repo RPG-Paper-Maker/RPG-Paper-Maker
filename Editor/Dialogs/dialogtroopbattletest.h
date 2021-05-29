@@ -13,6 +13,7 @@
 #define DIALOGTROOPBATTLETEST_H
 
 #include <QDialog>
+#include <QProcess>
 #include "systemherotroopbattletest.h"
 
 namespace Ui {
@@ -24,6 +25,8 @@ class DialogTroopBattleTest : public QDialog
     Q_OBJECT
 
 public:
+    static const QString JSON_TROOP_ID;
+
     explicit DialogTroopBattleTest(int troopID, QWidget *parent = nullptr);
     ~DialogTroopBattleTest();
 
@@ -37,6 +40,7 @@ private:
     int m_battleMapID;
     QList<SystemHeroTroopBattleTest *> m_heroes;
     SystemHeroTroopBattleTest *m_copy;
+    QProcess *m_gameProcess;
 
 public slots:
     virtual void accept();
