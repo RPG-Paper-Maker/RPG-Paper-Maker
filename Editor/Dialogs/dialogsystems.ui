@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -64,7 +64,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-481</y>
+                <y>0</y>
                 <width>252</width>
                 <height>1560</height>
                </rect>
@@ -1141,223 +1141,340 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1,1,1">
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_20" stretch="0,0,0,1">
-             <property name="spacing">
-              <number>20</number>
+            <widget class="QScrollArea" name="scrollArea_3">
+             <property name="minimumSize">
+              <size>
+               <width>320</width>
+               <height>0</height>
+              </size>
              </property>
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_22">
-               <property name="spacing">
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="labelStatisticAssociatedToLevel">
-                 <property name="text">
-                  <string>Statistic associated to level:</string>
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents_3">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>304</width>
+                <height>882</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_52">
+               <item row="0" column="0">
+                <layout class="QVBoxLayout" name="verticalLayout_20" stretch="0,0,0,1">
+                 <property name="spacing">
+                  <number>20</number>
                  </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="comboBoxBattleLevel"/>
-               </item>
-               <item>
-                <widget class="QLabel" name="labelStatisticAssociatedToExp">
-                 <property name="text">
-                  <string>Statistic associated to exp:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="comboBoxBattleExp"/>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_22">
+                   <property name="spacing">
+                    <number>6</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="labelStatisticAssociatedToLevel">
+                     <property name="text">
+                      <string>Statistic associated to level:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="comboBoxBattleLevel"/>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="labelStatisticAssociatedToExp">
+                     <property name="text">
+                      <string>Statistic associated to exp:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="comboBoxBattleExp"/>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="QGroupBox" name="groupBoxFormulas">
+                   <property name="enabled">
+                    <bool>true</bool>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="title">
+                    <string>Formulas</string>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_27">
+                    <item row="0" column="0">
+                     <layout class="QVBoxLayout" name="verticalLayout_21">
+                      <item>
+                       <widget class="QLabel" name="labelIsDead">
+                        <property name="text">
+                         <string>Is dead:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="PanelPrimitiveValue" name="panelPrimitiveValueFormulaIsDead" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>250</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>250</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="labelCriticalInfluence">
+                        <property name="text">
+                         <string>Critical influence:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="PanelPrimitiveValue" name="panelPrimitiveValueFormulaCrit" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>250</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>250</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="labelHeroesBattlersCenterOffset">
+                        <property name="text">
+                         <string>Heroes battlers center offset:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="PanelPrimitiveValue" name="panelPrimitiveHeroesBattlersCenterOffset" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>250</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>250</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="labelHeroesBattlersOffset">
+                        <property name="text">
+                         <string>Heroes battlers offset:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="PanelPrimitiveValue" name="panelPrimitiveHeroesBattlersOffset" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>250</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>250</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="labelTroopsBattlersCenterOffset">
+                        <property name="text">
+                         <string>Troops battlers center offset:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="PanelPrimitiveValue" name="panelPrimitiveTroopsBattlersCenterOffset" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>250</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>250</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="labelTroopsBattlersOffset">
+                        <property name="text">
+                         <string>Troops battlers offset:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="PanelPrimitiveValue" name="panelPrimitiveTroopsBattlersOffset" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>250</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>250</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QGroupBox" name="groupBoxMusics">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="title">
+                    <string>Musics</string>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_26">
+                    <item row="0" column="0">
+                     <layout class="QVBoxLayout" name="verticalLayout_16">
+                      <item>
+                       <widget class="QLabel" name="labelBattle">
+                        <property name="text">
+                         <string>Battle:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="WidgetSong" name="widgetChooseBattleMusic" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>200</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>200</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="labelLevelUp">
+                        <property name="text">
+                         <string>Level up:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="WidgetSong" name="widgetChooseBattleLevelUp" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>200</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>200</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="labelVictory">
+                        <property name="text">
+                         <string>Victory:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="WidgetSong" name="widgetChooseBattleVictory" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>200</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>200</width>
+                          <height>27</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item row="0" column="1">
+                     <spacer name="horizontalSpacer_2">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QGroupBox" name="groupBoxBattleMaps">
+                   <property name="title">
+                    <string>Battle maps</string>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_25">
+                    <item row="0" column="0">
+                     <widget class="WidgetSuperTree" name="treeViewBattleMap">
+                      <attribute name="headerVisible">
+                       <bool>false</bool>
+                      </attribute>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
-             </item>
-             <item>
-              <widget class="QGroupBox" name="groupBoxFormulas">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="title">
-                <string>Formulas</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_27">
-                <item row="0" column="0">
-                 <layout class="QVBoxLayout" name="verticalLayout_21">
-                  <item>
-                   <widget class="QLabel" name="labelIsDead">
-                    <property name="text">
-                     <string>Is dead:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="PanelPrimitiveValue" name="panelPrimitiveValueFormulaIsDead" native="true">
-                    <property name="minimumSize">
-                     <size>
-                      <width>250</width>
-                      <height>27</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>250</width>
-                      <height>27</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="labelCriticalInfluence">
-                    <property name="text">
-                     <string>Critical influence:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="PanelPrimitiveValue" name="panelPrimitiveValueFormulaCrit" native="true">
-                    <property name="minimumSize">
-                     <size>
-                      <width>250</width>
-                      <height>27</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>250</width>
-                      <height>27</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QGroupBox" name="groupBoxMusics">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="title">
-                <string>Musics</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_26">
-                <item row="0" column="0">
-                 <layout class="QVBoxLayout" name="verticalLayout_16">
-                  <item>
-                   <widget class="QLabel" name="labelBattle">
-                    <property name="text">
-                     <string>Battle:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="WidgetSong" name="widgetChooseBattleMusic" native="true">
-                    <property name="minimumSize">
-                     <size>
-                      <width>200</width>
-                      <height>27</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>200</width>
-                      <height>27</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="labelLevelUp">
-                    <property name="text">
-                     <string>Level up:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="WidgetSong" name="widgetChooseBattleLevelUp" native="true">
-                    <property name="minimumSize">
-                     <size>
-                      <width>200</width>
-                      <height>27</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>200</width>
-                      <height>27</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="labelVictory">
-                    <property name="text">
-                     <string>Victory:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="WidgetSong" name="widgetChooseBattleVictory" native="true">
-                    <property name="minimumSize">
-                     <size>
-                      <width>200</width>
-                      <height>27</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>200</width>
-                      <height>27</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item row="0" column="1">
-                 <spacer name="horizontalSpacer_2">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QGroupBox" name="groupBoxBattleMaps">
-               <property name="title">
-                <string>Battle maps</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_25">
-                <item row="0" column="0">
-                 <widget class="WidgetSuperTree" name="treeViewBattleMap">
-                  <attribute name="headerVisible">
-                   <bool>false</bool>
-                  </attribute>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-            </layout>
+             </widget>
+            </widget>
            </item>
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_31" stretch="1,1">

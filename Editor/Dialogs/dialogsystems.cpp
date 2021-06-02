@@ -237,6 +237,14 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
         ->battleSystemDatas()->formulaIsDead(), true);
     ui->panelPrimitiveValueFormulaCrit->initializeMessageAndUpdate(gameDatas
         ->battleSystemDatas()->formulaCrit(), true);
+    ui->panelPrimitiveHeroesBattlersCenterOffset->initializeMessageAndUpdate(
+        gameDatas->battleSystemDatas()->heroesBattlersCenterOffset(), true);
+    ui->panelPrimitiveHeroesBattlersOffset->initializeMessageAndUpdate(
+        gameDatas->battleSystemDatas()->heroesBattlersOffset(), true);
+    ui->panelPrimitiveTroopsBattlersCenterOffset->initializeMessageAndUpdate(
+        gameDatas->battleSystemDatas()->troopsBattlersCenterOffset(), true);
+    ui->panelPrimitiveTroopsBattlersOffset->initializeMessageAndUpdate(
+        gameDatas->battleSystemDatas()->troopsBattlersOffset(), true);
 
     // Initialize musics
     ui->widgetChooseBattleMusic->initialize(gameDatas->battleSystemDatas()

@@ -546,9 +546,13 @@ void PanelPrimitiveValue::setMessageValue(QString m) {
 
     switch(m_model->kind()) {
     case PrimitiveValueKind::Message:
-        ui->lineEditMessage->setText(m); break;
+        ui->lineEditMessage->setText(m);
+        ui->lineEditMessage->setCursorPosition(0);
+        break;
     case PrimitiveValueKind::Script:
-        ui->lineEditScript->setText(m); break;
+        ui->lineEditScript->setText(m);
+        ui->lineEditScript->setCursorPosition(0);
+        break;
     case PrimitiveValueKind::Font:
     {
         QFont font(m);

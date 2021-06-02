@@ -42,6 +42,14 @@ public:
     static const QString jsonCommonEquipment;
     static const QString jsonCommonStatistics;
     static const QString jsonCommonBattleCommand;
+    static const QString JSON_HEROES_BATTLERS_CENTER_OFFSET;
+    static const QString JSON_HEROES_BATTLERS_OFFSET;
+    static const QString JSON_TROOPS_BATTLERS_CENTER_OFFSET;
+    static const QString JSON_TROOPS_BATTLERS_OFFSET;
+    static const QString DEFAULT_HEROES_BATTLERS_CENTER_OFFSET;
+    static const QString DEFAULT_HEROES_BATTLERS_OFFSET;
+    static const QString DEFAULT_TROOPS_BATTLERS_CENTER_OFFSET;
+    static const QString DEFAULT_TROOPS_BATTLERS_OFFSET;
 
     BattleSystemDatas();
     virtual ~BattleSystemDatas();
@@ -52,6 +60,10 @@ public:
     void setIdStatisticExp(int i);
     PrimitiveValue * formulaIsDead() const;
     PrimitiveValue * formulaCrit() const;
+    PrimitiveValue * heroesBattlersCenterOffset() const;
+    PrimitiveValue * heroesBattlersOffset() const;
+    PrimitiveValue * troopsBattlersCenterOffset() const;
+    PrimitiveValue * troopsBattlersOffset() const;
     SystemPlaySong * music() const;
     void setMusic(SystemPlaySong *song);
     SystemPlaySong * levelup() const;
@@ -65,6 +77,7 @@ public:
     QStandardItemModel * modelCommonEquipment() const;
     QStandardItemModel * modelCommonStatistics() const;
     QStandardItemModel * modelCommonBattleCommand() const;
+
     void getSortedStatistics(QVector<SystemStatistic*>& fixes,
                              QVector<SystemStatistic*>& bars) const;
     void updateEquipments();
@@ -86,6 +99,10 @@ private:
     int m_idStatisticExp;
     PrimitiveValue *m_formulaIsDead;
     PrimitiveValue *m_formulaCrit;
+    PrimitiveValue *m_heroesBattlersCenterOffset;
+    PrimitiveValue *m_heroesBattlersOffset;
+    PrimitiveValue *m_troopsBattlersCenterOffset;
+    PrimitiveValue *m_troopsBattlersOffset;
     SystemPlaySong *m_music;
     SystemPlaySong *m_levelup;
     SystemPlaySong *m_victory;
@@ -96,6 +113,7 @@ private:
     QStandardItemModel *m_modelCommonEquipment;
     QStandardItemModel *m_modelCommonStatistics;
     QStandardItemModel *m_modelCommonBattleCommand;
+
     void updateEquipmentsKind(QStandardItemModel *model);
 };
 

@@ -31,6 +31,14 @@ const QString BattleSystemDatas::jsonElements = "elements";
 const QString BattleSystemDatas::jsonCommonEquipment = "equipments";
 const QString BattleSystemDatas::jsonCommonStatistics = "statistics";
 const QString BattleSystemDatas::jsonCommonBattleCommand = "battleCommands";
+const QString BattleSystemDatas::JSON_HEROES_BATTLERS_CENTER_OFFSET = "heroesBattlersCenterOffset";
+const QString BattleSystemDatas::JSON_HEROES_BATTLERS_OFFSET = "heroesBattlersOffset";
+const QString BattleSystemDatas::JSON_TROOPS_BATTLERS_CENTER_OFFSET = "troopsBattlersCenterOffset";
+const QString BattleSystemDatas::JSON_TROOPS_BATTLERS_OFFSET = "troopsBattlersOffset";
+const QString BattleSystemDatas::DEFAULT_HEROES_BATTLERS_CENTER_OFFSET = "new Vector3(2 * Datas.Systems.SQUARE_SIZE), 0, -Datas.Systems.SQUARE_SIZE)";
+const QString BattleSystemDatas::DEFAULT_HEROES_BATTLERS_OFFSET = "new Vector3(i * Datas.Systems.SQUARE_SIZE / 2, 0, i * Datas.Systems.SQUARE_SIZE)";
+const QString BattleSystemDatas::DEFAULT_TROOPS_BATTLERS_CENTER_OFFSET = "new Vector3(-2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)";
+const QString BattleSystemDatas::DEFAULT_TROOPS_BATTLERS_OFFSET = "new Vector3(-i * Datas.Systems.SQUARE_SIZE * 3 / 4), 0, i * Datas.Systems.SQUARE_SIZE)";
 
 // -------------------------------------------------------
 //
@@ -41,6 +49,10 @@ const QString BattleSystemDatas::jsonCommonBattleCommand = "battleCommands";
 BattleSystemDatas::BattleSystemDatas() :
     m_formulaIsDead(new PrimitiveValue(QString())),
     m_formulaCrit(new PrimitiveValue(QString())),
+    m_heroesBattlersCenterOffset(new PrimitiveValue(DEFAULT_HEROES_BATTLERS_CENTER_OFFSET)),
+    m_heroesBattlersOffset(new PrimitiveValue(DEFAULT_HEROES_BATTLERS_OFFSET)),
+    m_troopsBattlersCenterOffset(new PrimitiveValue(DEFAULT_TROOPS_BATTLERS_CENTER_OFFSET)),
+    m_troopsBattlersOffset(new PrimitiveValue(DEFAULT_TROOPS_BATTLERS_OFFSET)),
     m_music(new SystemPlaySong(-1, SongKind::Music)),
     m_levelup(new SystemPlaySong(-1, SongKind::Sound)),
     m_victory(new SystemPlaySong(-1, SongKind::Music))
@@ -58,6 +70,10 @@ BattleSystemDatas::~BattleSystemDatas()
 {
     delete m_formulaIsDead;
     delete m_formulaCrit;
+    delete m_heroesBattlersCenterOffset;
+    delete m_heroesBattlersOffset;
+    delete m_troopsBattlersCenterOffset;
+    delete m_troopsBattlersOffset;
     if (m_music != nullptr) {
         delete m_music;
     }
@@ -67,7 +83,6 @@ BattleSystemDatas::~BattleSystemDatas()
     if (m_victory != nullptr) {
         delete m_victory;
     }
-
     SuperListItem::deleteModel(m_modelCommonEquipment);
     SuperListItem::deleteModel(m_modelWeaponsKind);
     SuperListItem::deleteModel(m_modelArmorsKind);
@@ -95,6 +110,26 @@ PrimitiveValue * BattleSystemDatas::formulaIsDead() const {
 
 PrimitiveValue * BattleSystemDatas::formulaCrit() const {
     return m_formulaCrit;
+}
+
+PrimitiveValue * BattleSystemDatas::heroesBattlersCenterOffset() const
+{
+    return m_heroesBattlersCenterOffset;
+}
+
+PrimitiveValue * BattleSystemDatas::heroesBattlersOffset() const
+{
+    return m_heroesBattlersOffset;
+}
+
+PrimitiveValue * BattleSystemDatas::troopsBattlersCenterOffset() const
+{
+    return m_troopsBattlersCenterOffset;
+}
+
+PrimitiveValue * BattleSystemDatas::troopsBattlersOffset() const
+{
+    return m_troopsBattlersOffset;
 }
 
 SystemPlaySong * BattleSystemDatas::music() const {
@@ -427,6 +462,22 @@ void BattleSystemDatas::read(const QJsonObject &json){
     if (json.contains(JSON_FORMULA_CRIT)) {
         m_formulaCrit->read(json[JSON_FORMULA_CRIT].toObject());
     }
+    if (json.contains(JSON_HEROES_BATTLERS_CENTER_OFFSET))
+    {
+        m_heroesBattlersCenterOffset->read(json[JSON_HEROES_BATTLERS_CENTER_OFFSET].toObject());
+    }
+    if (json.contains(JSON_HEROES_BATTLERS_OFFSET))
+    {
+        m_heroesBattlersOffset->read(json[JSON_HEROES_BATTLERS_OFFSET].toObject());
+    }
+    if (json.contains(JSON_TROOPS_BATTLERS_CENTER_OFFSET))
+    {
+        m_troopsBattlersCenterOffset->read(json[JSON_TROOPS_BATTLERS_CENTER_OFFSET].toObject());
+    }
+    if (json.contains(JSON_TROOPS_BATTLERS_OFFSET))
+    {
+        m_troopsBattlersOffset->read(json[JSON_TROOPS_BATTLERS_OFFSET].toObject());
+    }
 
     // Musics
     if (json.contains(JSON_BATLLE_MUSIC)) {
@@ -530,6 +581,34 @@ void BattleSystemDatas::write(QJsonObject &json) const{
         obj = QJsonObject();
         m_formulaCrit->write(obj);
         json[JSON_FORMULA_CRIT] = obj;
+    }
+    if (m_heroesBattlersCenterOffset->kind() != PrimitiveValueKind::Message ||
+        m_heroesBattlersCenterOffset->messageValue() != DEFAULT_HEROES_BATTLERS_CENTER_OFFSET)
+    {
+        obj = QJsonObject();
+        m_heroesBattlersCenterOffset->write(obj);
+        json[JSON_HEROES_BATTLERS_CENTER_OFFSET] = obj;
+    }
+    if (m_heroesBattlersOffset->kind() != PrimitiveValueKind::Message ||
+        m_heroesBattlersOffset->messageValue() != DEFAULT_HEROES_BATTLERS_OFFSET)
+    {
+        obj = QJsonObject();
+        m_heroesBattlersOffset->write(obj);
+        json[JSON_HEROES_BATTLERS_OFFSET] = obj;
+    }
+    if (m_troopsBattlersCenterOffset->kind() != PrimitiveValueKind::Message ||
+        m_troopsBattlersCenterOffset->messageValue() != DEFAULT_TROOPS_BATTLERS_CENTER_OFFSET)
+    {
+        obj = QJsonObject();
+        m_troopsBattlersCenterOffset->write(obj);
+        json[JSON_TROOPS_BATTLERS_CENTER_OFFSET] = obj;
+    }
+    if (m_troopsBattlersOffset->kind() != PrimitiveValueKind::Message ||
+        m_troopsBattlersOffset->messageValue() != DEFAULT_TROOPS_BATTLERS_OFFSET)
+    {
+        obj = QJsonObject();
+        m_troopsBattlersOffset->write(obj);
+        json[JSON_TROOPS_BATTLERS_OFFSET] = obj;
     }
 
     // Musics
