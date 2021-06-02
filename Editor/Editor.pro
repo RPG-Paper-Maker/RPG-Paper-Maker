@@ -41,6 +41,7 @@ HEADERS += \
     CustomWidgets/widgetcomplexmessage.h \
     CustomWidgets/widgetcustomstructure.h \
     CustomWidgets/widgetmountainselector.h \
+    CustomWidgets/widgetpreviewtroop.h \
     CustomWidgets/widgetsliderprogression.h \
     CustomWidgets/widgettilesettexture.h \
     CustomWidgets/widgettreestructure.h \
@@ -465,6 +466,7 @@ SOURCES += \
     CustomWidgets/widgetcomplexmessage.cpp \
     CustomWidgets/widgetcustomstructure.cpp \
     CustomWidgets/widgetmountainselector.cpp \
+    CustomWidgets/widgetpreviewtroop.cpp \
     CustomWidgets/widgetsliderprogression.cpp \
     CustomWidgets/widgettilesettexture.cpp \
     CustomWidgets/widgettreestructure.cpp \

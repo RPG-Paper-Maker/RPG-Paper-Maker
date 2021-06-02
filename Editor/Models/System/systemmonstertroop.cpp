@@ -56,7 +56,17 @@ void SystemMonsterTroop::updateName() {
 }
 
 // -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
 
+QString SystemMonsterTroop::toString() const
+{
+    return SuperListItem::toString() + " (lv." + QString::number(m_level) + ")";
+}
+
+// -------------------------------------------------------
 
 bool SystemMonsterTroop::openDialog(){
     SystemMonsterTroop monsterTroop;
@@ -87,24 +97,6 @@ void SystemMonsterTroop::setCopy(const SuperListItem &super) {
     p_id = monsterTroop->p_id;
     this->updateName();
     m_level = monsterTroop->m_level;
-}
-
-// -------------------------------------------------------
-
-QList<QStandardItem *> SystemMonsterTroop::getModelRow() const{
-    QList<QStandardItem*> row = QList<QStandardItem*>();
-    QStandardItem* itemID = new QStandardItem;
-    QStandardItem* itemLevel = new QStandardItem;
-    itemID->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-    itemID->setText(toString());
-    itemID->setFlags(itemID->flags() ^ (Qt::ItemIsDropEnabled));
-    itemLevel->setText(QString::number(m_level));
-    itemLevel->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-    itemLevel->setFlags(itemLevel->flags() ^ (Qt::ItemIsDropEnabled));
-    row.append(itemID);
-    row.append(itemLevel);
-
-    return row;
 }
 
 // -------------------------------------------------------

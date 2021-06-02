@@ -51,9 +51,14 @@ public:
     void setIsCtrlPressed(bool b);
     bool isShiftPressed() const;
     void setIsShiftPressed(bool b);
+    bool displayGrid() const;
+    void setDisplayGrid(bool displayGrid);
     bool displaySquareInformations() const;
-
+    void setDisplaySquareInformations(bool displaySquareInformations);
+    bool displayCursor() const;
+    void setDisplayCursor(bool displayCursor);
     void setContextMenu(ContextMenuList *m);
+
     void moveCursorToMousePosition(QPoint point);
     void updateCameraTreeNode();
     void initialize();
@@ -302,6 +307,7 @@ protected:
     bool m_needMapObjectsUpdate;
     bool m_displayGrid;
     bool m_displaySquareInformations;
+    bool m_displayCursor;
     SystemCommonObject *m_selectedObject;
     ContextMenuList *m_contextMenu;
     bool m_isDrawingWall;

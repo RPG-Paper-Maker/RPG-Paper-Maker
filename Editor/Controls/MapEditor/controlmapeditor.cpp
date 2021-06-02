@@ -51,6 +51,7 @@ ControlMapEditor::ControlMapEditor() :
     m_needMapObjectsUpdate(false),
     m_displayGrid(true),
     m_displaySquareInformations(true),
+    m_displayCursor(true),
     m_isDrawingWall(false),
     m_isDeletingWall(false),
     m_isDeleting(false),
@@ -137,11 +138,38 @@ void ControlMapEditor::setIsShiftPressed(bool b) {
     m_isShiftPressed = b;
 }
 
-bool ControlMapEditor::displaySquareInformations() const {
+bool ControlMapEditor::displayGrid() const
+{
+    return m_displayGrid;
+}
+
+void ControlMapEditor::setDisplayGrid(bool displayGrid)
+{
+    m_displayGrid = displayGrid;
+}
+
+bool ControlMapEditor::displaySquareInformations() const
+{
     return m_displaySquareInformations;
 }
 
-void ControlMapEditor::setContextMenu(ContextMenuList *m){
+void ControlMapEditor::setDisplaySquareInformations(bool displaySquareInformations)
+{
+    m_displaySquareInformations = displaySquareInformations;
+}
+
+bool ControlMapEditor::displayCursor() const
+{
+    return m_displayCursor;
+}
+
+void ControlMapEditor::setDisplayCursor(bool displayCursor)
+{
+    m_displayCursor = displayCursor;
+}
+
+void ControlMapEditor::setContextMenu(ContextMenuList *m)
+{
     m_contextMenu = m;
 }
 
@@ -1353,7 +1381,10 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     }
 
     // Drawing user cursor
-    m_map->cursor()->paintGL(modelviewProjection);
+    if (m_displayCursor)
+    {
+        m_map->cursor()->paintGL(modelviewProjection);
+    }
 
     // Drawing start cursor
     if (m_cursorStart != nullptr) {

@@ -231,7 +231,8 @@ void DialogDatas::updateMonster(SystemMonster *sysMonster){
 
 // -------------------------------------------------------
 
-void DialogDatas::initializeTroops(GameDatas *gameDatas){
+void DialogDatas::initializeTroops(GameDatas *gameDatas)
+{
     ui->panelSuperListTroops->list()->initializeNewItemInstance(
                 new SystemTroop);
     ui->panelSuperListTroops->initializeModel(gameDatas->troopsDatas()
@@ -252,7 +253,9 @@ void DialogDatas::initializeTroops(GameDatas *gameDatas){
 
 // -------------------------------------------------------
 
-void DialogDatas::updateTroop(SystemTroop *sysTroop){
+void DialogDatas::updateTroop(SystemTroop *sysTroop)
+{
+    ui->widgetPreviewTroops->initialize(sysTroop);
     ui->treeViewMonstersList->initializeModel(sysTroop->monstersList());
     ui->treeViewMonstersList->setColumnWidth(0,250);
     ui->treeViewMonstersList->setColumnWidth(1,50);

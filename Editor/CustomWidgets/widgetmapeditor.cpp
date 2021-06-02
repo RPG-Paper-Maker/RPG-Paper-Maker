@@ -41,6 +41,8 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_spinBoxY(nullptr),
     m_spinBoxYPlus(nullptr),
     m_spinBoxZ(nullptr),
+    m_position(nullptr),
+    m_positionObject(nullptr),
     m_autotileFrame(0),
     m_timerAutotileFrame(new QTimer)
 {
