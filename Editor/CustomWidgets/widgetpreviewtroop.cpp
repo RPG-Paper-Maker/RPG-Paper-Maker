@@ -62,6 +62,13 @@ void WidgetPreviewTroop::clear()
 
 // -------------------------------------------------------
 
+void WidgetPreviewTroop::initializeTree(WidgetSuperTree *tree)
+{
+    connect(tree, SIGNAL(modelUpdated()), this, SLOT(onTreeUpdated()));
+}
+
+// -------------------------------------------------------
+
 void WidgetPreviewTroop::initialize(SystemTroop *troop)
 {
     m_troop = troop;
@@ -109,6 +116,13 @@ void WidgetPreviewTroop::getVectorExpression(QVector3D &vec, QString expression,
 //
 //  VIRTUAL FUNCTIONS
 //
+// -------------------------------------------------------
+
+void WidgetPreviewTroop::onTreeUpdated()
+{
+    this->initialize(m_troop);
+}
+
 // -------------------------------------------------------
 
 void WidgetPreviewTroop::paintGL()
@@ -190,12 +204,17 @@ Map * WidgetPreviewTroop::loadMap(int idMap, QVector3D *position, QVector3D
             hero = reinterpret_cast<SystemHero *>(SuperListItem::getById(RPM::get()
                 ->project()->gameDatas()->monstersDatas()->model()->invisibleRootItem(),
                 monster->id(), true));
-            QVector3D center;
-            this->getVectorExpression(center, RPM::get()->project()->gameDatas()
-                ->battleSystemDatas()->troopsBattlersCenterOffset()->messageValue());
-            QVector3D offset;
-            this->getVectorExpression(offset, RPM::get()->project()->gameDatas()
-                ->battleSystemDatas()->troopsBattlersOffset()->messageValue(), i);
+            QVector3D center, offset;
+            if (monster->isSpecificPosition())
+            {
+                this->getVectorExpression(center, monster->specificPosition()
+                    ->messageValue());
+            } else {
+                this->getVectorExpression(center, RPM::get()->project()->gameDatas()
+                    ->battleSystemDatas()->troopsBattlersCenterOffset()->messageValue());
+                this->getVectorExpression(offset, RPM::get()->project()->gameDatas()
+                    ->battleSystemDatas()->troopsBattlersOffset()->messageValue(), i);
+            }
             QVector3D p = pos + center + offset;
             battler = new Battler(p, hero->idBattlerPicture(), true);
             battler->initializeGL(map->programFaceSprite());

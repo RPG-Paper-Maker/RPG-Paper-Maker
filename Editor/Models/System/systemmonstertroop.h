@@ -14,6 +14,7 @@
 
 #include <QMetaType>
 #include "superlistitem.h"
+#include "primitivevalue.h"
 
 // -------------------------------------------------------
 //
@@ -26,11 +27,20 @@
 class SystemMonsterTroop : public SuperListItem
 {
 public:
-    SystemMonsterTroop();
-    SystemMonsterTroop(int i, QString n, int level);
+    static const QString JSON_LEVEL;
+    static const QString JSON_IS_SPECIFIC_POSITION;
+    static const QString JSON_SPECIFIC_POSITION;
+    static const bool DEFAULT_IS_SPECIFIC_POSITION;
+
+    SystemMonsterTroop(int i = 1, QString n = "", int level = 1, bool isSpecificPosition =
+        DEFAULT_IS_SPECIFIC_POSITION, PrimitiveValue *specificPosition =
+        PrimitiveValue::createDefaultMessageValue());
     virtual ~SystemMonsterTroop();
     int level() const;
     void setLevel(int l);
+    bool isSpecificPosition() const;
+    void setIsSpecificPosition(bool isSpecificPosition);
+    PrimitiveValue * specificPosition() const;
 
     void updateName();
 
@@ -43,6 +53,8 @@ public:
 
 protected:
     int m_level;
+    bool m_isSpecificPosition;
+    PrimitiveValue *m_specificPosition;
 };
 
 Q_DECLARE_METATYPE(SystemMonsterTroop)

@@ -46,6 +46,7 @@ private:
 private slots:
     void on_comboBoxMonster_currentIndexChanged(int index);
     void on_spinBoxLevel_valueChanged(int i);
+    void on_checkBoxSpecificPosition_toggled(bool checked);
 };
 
 #endif // DIALOGSYSTEMMONSTERTROOP_H

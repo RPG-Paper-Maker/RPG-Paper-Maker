@@ -1295,6 +1295,7 @@ const QString Translations::PHOENIX_FEATHER_DESCRIPTION = "phoenix.feather.descr
 const QString Translations::PERFORM_SKILL = "perform.skill";
 const QString Translations::APPLY = "apply";
 const QString Translations::EQUIPMENTS = "equipments";
+const QString Translations::SPECIFIC_POSITION_ACCORDING_CENTER = "specific.position.according.center";
 
 // -------------------------------------------------------
 //

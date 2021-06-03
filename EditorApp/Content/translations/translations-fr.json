@@ -1274,5 +1274,6 @@
     "phoenix.feather.description": "Ressuscite un allié",
     "perform.skill": "Effectuer une compétence",
     "apply": "Appliquer",
-    "equipments": "Equipements"
+    "equipments": "Equipements",
+    "specific.position.according.center": "Position spécifique (en fonction de centre)"
 }

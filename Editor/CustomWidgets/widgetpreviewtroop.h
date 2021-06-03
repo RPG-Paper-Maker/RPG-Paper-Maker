@@ -13,6 +13,7 @@
 #include "widgetmapeditor.h"
 #include "systemtroop.h"
 #include "battler.h"
+#include "widgetsupertree.h"
 
 #ifndef WIDGETPREVIEWTROOP_H
 #define WIDGETPREVIEWTROOP_H
@@ -26,6 +27,7 @@ public:
     ~WidgetPreviewTroop();
 
     void clear();
+    void initializeTree(WidgetSuperTree *tree);
     void initialize(SystemTroop *troop);
     void getVectorExpression(QVector3D &vec, QString expression, int i = 0);
 
@@ -37,6 +39,9 @@ protected:
     SystemTroop *m_troop;
     QList<Battler *> m_battlers;
     QScriptEngine m_engine;
+
+public slots:
+    void onTreeUpdated();
 
 protected slots:
     virtual void wheelEvent(QWheelEvent *event);

@@ -1274,5 +1274,6 @@
     "phoenix.feather.description": "Resurrect an ally",
     "perform.skill": "Perform skill",
     "apply": "Apply",
-    "equipments": "Equipments"
+    "equipments": "Equipments",
+    "specific.position.according.center": "Specific position (according to center)"
 }

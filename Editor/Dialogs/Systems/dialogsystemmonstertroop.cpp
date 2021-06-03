@@ -26,9 +26,7 @@ DialogSystemMonsterTroop::DialogSystemMonsterTroop(SystemMonsterTroop
     m_monsterTroop(monsterTroop)
 {
     ui->setupUi(this);
-
-    initialize();
-
+    this->initialize();
     this->translate();
 }
 
@@ -45,14 +43,19 @@ DialogSystemMonsterTroop::~DialogSystemMonsterTroop()
 
 void DialogSystemMonsterTroop::initialize()
 {
-    int index;
-
-    index = SuperListItem::getIndexById(RPM::get()->project()->gameDatas()
+    int index = SuperListItem::getIndexById(RPM::get()->project()->gameDatas()
         ->monstersDatas()->model()->invisibleRootItem(), m_monsterTroop.id());
     SuperListItem::fillComboBox(ui->comboBoxMonster, RPM::get()->project()
         ->gameDatas()->monstersDatas()->model());
     ui->comboBoxMonster->setCurrentIndex(index);
     ui->spinBoxLevel->setValue(m_monsterTroop.level());
+    ui->panelPrimitiveSpecificPosition->initializeMessage(true);
+    if (m_monsterTroop.isSpecificPosition())
+    {
+        ui->checkBoxSpecificPosition->setChecked(true);
+    }
+    ui->panelPrimitiveSpecificPosition->initializeMessageAndUpdate(m_monsterTroop
+        .specificPosition(), true);
 }
 
 //-------------------------------------------------
@@ -63,6 +66,7 @@ void DialogSystemMonsterTroop::translate()
         ::DOT_DOT_DOT);
     ui->labelLevel->setText(RPM::translate(Translations::LEVEL) + RPM::COLON);
     ui->labelMonster->setText(RPM::translate(Translations::MONSTER) + RPM::COLON);
+    ui->checkBoxSpecificPosition->setText(RPM::translate(Translations::SPECIFIC_POSITION_ACCORDING_CENTER) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -82,4 +86,12 @@ void DialogSystemMonsterTroop::on_comboBoxMonster_currentIndexChanged(int index)
 
 void DialogSystemMonsterTroop::on_spinBoxLevel_valueChanged(int i) {
     m_monsterTroop.setLevel(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemMonsterTroop::on_checkBoxSpecificPosition_toggled(bool checked)
+{
+    m_monsterTroop.setIsSpecificPosition(checked);
+    ui->panelPrimitiveSpecificPosition->setEnabled(checked);
 }

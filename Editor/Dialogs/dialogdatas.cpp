@@ -233,8 +233,8 @@ void DialogDatas::updateMonster(SystemMonster *sysMonster){
 
 void DialogDatas::initializeTroops(GameDatas *gameDatas)
 {
-    ui->panelSuperListTroops->list()->initializeNewItemInstance(
-                new SystemTroop);
+    ui->widgetPreviewTroops->initializeTree(ui->treeViewMonstersList);
+    ui->panelSuperListTroops->list()->initializeNewItemInstance(new SystemTroop);
     ui->panelSuperListTroops->initializeModel(gameDatas->troopsDatas()
                                               ->model());
     ui->treeViewMonstersList->initializeNewItemInstance(new SystemMonsterTroop);

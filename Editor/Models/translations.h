@@ -1308,6 +1308,7 @@ public:
     static const QString PERFORM_SKILL;
     static const QString APPLY;
     static const QString EQUIPMENTS;
+    static const QString SPECIFIC_POSITION_ACCORDING_CENTER;
 
     Translations();
     virtual ~Translations();
