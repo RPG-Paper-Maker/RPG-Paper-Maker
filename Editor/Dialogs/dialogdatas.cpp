@@ -235,8 +235,7 @@ void DialogDatas::initializeTroops(GameDatas *gameDatas)
 {
     ui->widgetPreviewTroops->initializeTree(ui->treeViewMonstersList);
     ui->panelSuperListTroops->list()->initializeNewItemInstance(new SystemTroop);
-    ui->panelSuperListTroops->initializeModel(gameDatas->troopsDatas()
-                                              ->model());
+    ui->panelSuperListTroops->initializeModel(gameDatas->troopsDatas()->model());
     ui->treeViewMonstersList->initializeNewItemInstance(new SystemMonsterTroop);
     ui->treeViewTroopReaction->initializeNewItemInstance(new SystemTroopReaction);
     ui->treeViewTroopReaction->setUpdateId(true);
@@ -816,6 +815,7 @@ void DialogDatas::on_pushButtonTroopTest_clicked()
         DialogTroopBattleTest dialog(reinterpret_cast<SystemTroop *>(selected
             ->data().value<quintptr>())->id());
         dialog.exec();
+        ui->widgetPreviewTroops->reload();
     }
 }
 

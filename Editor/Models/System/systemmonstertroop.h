@@ -31,10 +31,11 @@ public:
     static const QString JSON_IS_SPECIFIC_POSITION;
     static const QString JSON_SPECIFIC_POSITION;
     static const bool DEFAULT_IS_SPECIFIC_POSITION;
+    static const QString DEFAULT_SPECIFIC_POSITION;
 
     SystemMonsterTroop(int i = 1, QString n = "", int level = 1, bool isSpecificPosition =
-        DEFAULT_IS_SPECIFIC_POSITION, PrimitiveValue *specificPosition =
-        PrimitiveValue::createDefaultMessageValue());
+        DEFAULT_IS_SPECIFIC_POSITION, PrimitiveValue *specificPosition = new
+        PrimitiveValue(DEFAULT_SPECIFIC_POSITION));
     virtual ~SystemMonsterTroop();
     int level() const;
     void setLevel(int l);

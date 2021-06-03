@@ -30,8 +30,10 @@ public:
     void initializeTree(WidgetSuperTree *tree);
     void initialize(SystemTroop *troop);
     void getVectorExpression(QVector3D &vec, QString expression, int i = 0);
+    void reload();
 
-    virtual void paintGL();
+    virtual void paintOther3DStuff();
+    virtual void paintOtherHUDStuff(QPainter &p);
     virtual Map * loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
         int cameraDistance, double cameraHorizontalAngle, double cameraVerticalAngle);
 

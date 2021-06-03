@@ -78,10 +78,10 @@ void Battler::initializeVertices()
     QVector2D s(size.x(), size.y());
 
     // Vertices
-    m_vertices.append(VertexBillboard(m_position, texA, s, Sprite::modelQuad[0]));
-    m_vertices.append(VertexBillboard(m_position, texB, s, Sprite::modelQuad[1]));
-    m_vertices.append(VertexBillboard(m_position, texC, s, Sprite::modelQuad[2]));
-    m_vertices.append(VertexBillboard(m_position, texD, s, Sprite::modelQuad[3]));
+    m_vertices.append(VertexBillboard(m_position, texA, s, Sprite::modelFaceQuad[0]));
+    m_vertices.append(VertexBillboard(m_position, texB, s, Sprite::modelFaceQuad[1]));
+    m_vertices.append(VertexBillboard(m_position, texC, s, Sprite::modelFaceQuad[2]));
+    m_vertices.append(VertexBillboard(m_position, texD, s, Sprite::modelFaceQuad[3]));
 
     // indexes
     for (int i = 0; i < Sprite::nbIndexesQuad; i++)

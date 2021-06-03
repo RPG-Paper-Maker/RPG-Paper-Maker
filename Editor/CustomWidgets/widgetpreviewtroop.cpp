@@ -53,6 +53,7 @@ void WidgetPreviewTroop::clear()
     {
         delete m_positionObject;
     }
+    this->makeCurrent();
     for (int i = 0, l = m_battlers.size(); i < l; i++)
     {
         delete m_battlers.at(i);
@@ -83,9 +84,9 @@ void WidgetPreviewTroop::initialize(SystemTroop *troop)
         ->cameraProperties()->numberValue()));
     this->clear();
     this->deleteMap();
-    m_position = new QVector3D(battleMap->position().x() * RPM::getSquareSize(),
+    m_position = new QVector3D(battleMap->position().x() * RPM::getSquareSize() + (RPM::getSquareSize() / 2),
         battleMap->position().y() * RPM::getSquareSize() + battleMap->position()
-        .yPlus(), battleMap->position().z() * RPM::getSquareSize());
+        .yPlus(), battleMap->position().z() * RPM::getSquareSize() + (RPM::getSquareSize() / 2));
     m_positionObject = new QVector3D();
     this->needUpdateMap(battleMap->idMap(), m_position, m_positionObject,
         cameraProperties->distance()->numberDoubleValue(), cameraProperties
@@ -102,7 +103,7 @@ void WidgetPreviewTroop::getVectorExpression(QVector3D &vec, QString expression,
     local = m_engine.pushContext();
     local->activationObject().setProperty("$$SQUARE_SIZE", RPM::getSquareSize());
     local->activationObject().setProperty("i", i);
-    QString expr = expression.replace("new Vector3(", "");
+    QString expr = expression.replace("new Core.Vector3(", "");
     expr = expr.remove(expr.size() - 1, 1);
     expr = expr.replace("Datas.Systems.SQUARE_SIZE", "$$SQUARE_SIZE");
     QStringList list = expr.split(",");
@@ -113,6 +114,13 @@ void WidgetPreviewTroop::getVectorExpression(QVector3D &vec, QString expression,
 }
 
 // -------------------------------------------------------
+
+void WidgetPreviewTroop::reload()
+{
+    this->initialize(m_troop);
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
@@ -120,24 +128,25 @@ void WidgetPreviewTroop::getVectorExpression(QVector3D &vec, QString expression,
 
 void WidgetPreviewTroop::onTreeUpdated()
 {
-    this->initialize(m_troop);
+    this->reload();
 }
 
 // -------------------------------------------------------
 
-void WidgetPreviewTroop::paintGL()
+void WidgetPreviewTroop::paintOther3DStuff()
 {
-    WidgetMapEditor::paintGL();
     m_control.map()->programFaceSprite()->bind();
     for (int i = 0, l = m_battlers.size(); i < l; i++)
     {
         m_battlers.at(i)->paintGL();
     }
     m_control.map()->programFaceSprite()->release();
+}
 
-    // Draw lines
-    QPainter p(this);
-    p.begin(this);
+// -------------------------------------------------------
+
+void WidgetPreviewTroop::paintOtherHUDStuff(QPainter &p)
+{
     p.setRenderHint(QPainter::Antialiasing);
     QPen pen(RPM::COLOR_ALMOST_WHITE_SEMI_TRANSPARENT, 2);
     p.setPen(pen);
@@ -145,7 +154,6 @@ void WidgetPreviewTroop::paintGL()
         ::SCREEN_BASIC_HEIGHT / 2);
     p.drawLine(RPM::SCREEN_BASIC_WIDTH / 2, 0, RPM::SCREEN_BASIC_WIDTH / 2, RPM
         ::SCREEN_BASIC_HEIGHT);
-    p.end();
 }
 
 // -------------------------------------------------------
@@ -156,8 +164,6 @@ Map * WidgetPreviewTroop::loadMap(int idMap, QVector3D *position, QVector3D
 {
     Map *map = WidgetMapEditor::loadMap(idMap, position, positionObject,
         cameraDistance, cameraHorizontalAngle, cameraVerticalAngle);
-    QVector3D pos(m_position->x() + (RPM::getSquareSize() / 2), m_position->y(),
-        m_position->z() - RPM::getSquareSize());
 
     // Add heroes battlers
     QJsonArray heroes = RPM::get()->engineSettings()->battleTroopTestHeroes();
@@ -184,7 +190,7 @@ Map * WidgetPreviewTroop::loadMap(int idMap, QVector3D *position, QVector3D
         QVector3D offset;
         this->getVectorExpression(offset, RPM::get()->project()->gameDatas()
             ->battleSystemDatas()->heroesBattlersOffset()->messageValue(), i);
-        QVector3D p = pos + center + offset;
+        QVector3D p = *m_position + center + offset;
         battler = new Battler(p, hero->idBattlerPicture());
         battler->initializeGL(map->programFaceSprite());
         battler->initializeVertices();
@@ -215,7 +221,7 @@ Map * WidgetPreviewTroop::loadMap(int idMap, QVector3D *position, QVector3D
                 this->getVectorExpression(offset, RPM::get()->project()->gameDatas()
                     ->battleSystemDatas()->troopsBattlersOffset()->messageValue(), i);
             }
-            QVector3D p = pos + center + offset;
+            QVector3D p = *m_position + center + offset;
             battler = new Battler(p, hero->idBattlerPicture(), true);
             battler->initializeGL(map->programFaceSprite());
             battler->initializeVertices();

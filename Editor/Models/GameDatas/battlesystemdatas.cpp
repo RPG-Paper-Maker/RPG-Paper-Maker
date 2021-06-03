@@ -35,10 +35,10 @@ const QString BattleSystemDatas::JSON_HEROES_BATTLERS_CENTER_OFFSET = "heroesBat
 const QString BattleSystemDatas::JSON_HEROES_BATTLERS_OFFSET = "heroesBattlersOffset";
 const QString BattleSystemDatas::JSON_TROOPS_BATTLERS_CENTER_OFFSET = "troopsBattlersCenterOffset";
 const QString BattleSystemDatas::JSON_TROOPS_BATTLERS_OFFSET = "troopsBattlersOffset";
-const QString BattleSystemDatas::DEFAULT_HEROES_BATTLERS_CENTER_OFFSET = "new Vector3(2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)";
-const QString BattleSystemDatas::DEFAULT_HEROES_BATTLERS_OFFSET = "new Vector3(i * Datas.Systems.SQUARE_SIZE / 2, 0, i * Datas.Systems.SQUARE_SIZE)";
-const QString BattleSystemDatas::DEFAULT_TROOPS_BATTLERS_CENTER_OFFSET = "new Vector3(-2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)";
-const QString BattleSystemDatas::DEFAULT_TROOPS_BATTLERS_OFFSET = "new Vector3(-i * Datas.Systems.SQUARE_SIZE * 3 / 4, 0, i * Datas.Systems.SQUARE_SIZE)";
+const QString BattleSystemDatas::DEFAULT_HEROES_BATTLERS_CENTER_OFFSET = "new Core.Vector3(2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)";
+const QString BattleSystemDatas::DEFAULT_HEROES_BATTLERS_OFFSET = "new Core.Vector3(i * Datas.Systems.SQUARE_SIZE / 2, 0, i * Datas.Systems.SQUARE_SIZE)";
+const QString BattleSystemDatas::DEFAULT_TROOPS_BATTLERS_CENTER_OFFSET = "new Core.Vector3(-2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)";
+const QString BattleSystemDatas::DEFAULT_TROOPS_BATTLERS_OFFSET = "new Core.Vector3(-i * Datas.Systems.SQUARE_SIZE * 3 / 4, 0, i * Datas.Systems.SQUARE_SIZE)";
 
 // -------------------------------------------------------
 //

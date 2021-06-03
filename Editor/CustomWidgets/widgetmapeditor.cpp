@@ -323,17 +323,15 @@ void WidgetMapEditor::paintGL() {
         m_control.paintGL(modelviewProjection, cameraRightWorldSpace,
             cameraUpWorldSpace, cameraDeepWorldSpace, kind, subKind, drawKind,
             m_autotileFrame);
+        this->paintOther3DStuff();
         p.endNativePainting();
         p.end();
-
         // Draw additional text informations
+        p.begin(this);
         if (m_menuBar != nullptr) {
             QString infos = m_control.getSquareInfos(kind, subKind, layerOn,
                 this->hasFocus());
             QStringList listInfos = infos.split("\n");
-
-            p.begin(this);
-
             if (m_control.displaySquareInformations()) {
                 p.drawImage(QRect(10, 10, 16, 16), m_imageHeight);
                 renderText(p, 32, 23, QString::number(m_control.cursor()
@@ -354,11 +352,28 @@ void WidgetMapEditor::paintGL() {
                 p.drawImage(point.x() + 10, point.y() - 10, m_imageLayerOn);
             }
         }
+        this->paintOtherHUDStuff(p);
+        p.end();
 
         // Update elapsed time
         m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
+        return;
     }
     p.end();
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::paintOther3DStuff()
+{
+
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::paintOtherHUDStuff(QPainter &)
+{
+
 }
 
 // -------------------------------------------------------

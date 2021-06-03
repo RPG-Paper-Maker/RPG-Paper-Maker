@@ -55,6 +55,8 @@ public:
     void resizeGL(int width, int height);
     void initializeGL();
     void paintGL();
+    virtual void paintOther3DStuff();
+    virtual void paintOtherHUDStuff(QPainter &p);
     void needUpdateMap(int idMap, QVector3D *position, QVector3D *positionObject,
         int cameraDistance, double cameraHorizontalAngle, double
         cameraVerticalAngle);

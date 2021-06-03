@@ -44,6 +44,7 @@ public:
     virtual ~Sprite();
     static QVector3D verticesQuad[];
     static QVector3D modelQuad[];
+    static QVector3D modelFaceQuad[];
     static GLuint indexesQuad[];
     static int nbVerticesQuad;
     static int nbIndexesQuad;

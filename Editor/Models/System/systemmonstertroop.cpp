@@ -17,6 +17,7 @@ const QString SystemMonsterTroop::JSON_LEVEL = "l";
 const QString SystemMonsterTroop::JSON_IS_SPECIFIC_POSITION = "isSpecificPosition";
 const QString SystemMonsterTroop::JSON_SPECIFIC_POSITION = "specificPosition";
 const bool SystemMonsterTroop::DEFAULT_IS_SPECIFIC_POSITION = false;
+const QString SystemMonsterTroop::DEFAULT_SPECIFIC_POSITION = "new Core.Vector3(0,0,0)";
 
 // -------------------------------------------------------
 //
@@ -115,9 +116,8 @@ SuperListItem* SystemMonsterTroop::createCopy() const
 
 void SystemMonsterTroop::setCopy(const SuperListItem &super)
 {
-    const SystemMonsterTroop *monsterTroop = monsterTroop = reinterpret_cast<
-        const SystemMonsterTroop *>(&super);
-
+    const SystemMonsterTroop *monsterTroop = reinterpret_cast<const
+        SystemMonsterTroop *>(&super);
     p_id = monsterTroop->p_id;
     this->updateName();
     m_level = monsterTroop->m_level;
@@ -152,7 +152,8 @@ void SystemMonsterTroop::write(QJsonObject &json) const
     {
         json[JSON_IS_SPECIFIC_POSITION] = m_isSpecificPosition;
     }
-    if (!m_specificPosition->isDefaultMessageValue())
+    if (m_specificPosition->kind() != PrimitiveValueKind::Message ||
+        m_specificPosition->messageValue() != DEFAULT_SPECIFIC_POSITION)
     {
         QJsonObject obj;
         m_specificPosition->write(obj);
