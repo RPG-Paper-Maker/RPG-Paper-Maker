@@ -11,6 +11,7 @@
 
 #include "widgetmapeditor.h"
 #include "systemtroop.h"
+#include "battler.h"
 
 #ifndef WIDGETPREVIEWTROOP_H
 #define WIDGETPREVIEWTROOP_H
@@ -25,6 +26,14 @@ public:
 
     void clear();
     void initialize(SystemTroop *troop);
+
+    virtual void paintGL();
+    virtual Map * loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
+        int cameraDistance, double cameraHorizontalAngle, double cameraVerticalAngle);
+
+protected:
+    SystemTroop *m_troop;
+    QList<Battler *> m_battlers;
 
 protected slots:
     virtual void wheelEvent(QWheelEvent *event);

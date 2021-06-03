@@ -60,6 +60,7 @@ public:
     MapObjects* objectsPortion(Portion& p);
     MapObjects* objectsPortion(int x, int y, int z);
     QOpenGLTexture * textureMissing() const;
+    QOpenGLShaderProgram * programFaceSprite() const;
 
     bool addObject(Position& p, MapPortion *mapPortion,
                    SystemCommonObject* object, QJsonObject &previous,

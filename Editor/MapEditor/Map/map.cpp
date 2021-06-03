@@ -223,6 +223,11 @@ QOpenGLTexture * Map::textureMissing() const {
     return m_textureMissing;
 }
 
+QOpenGLShaderProgram * Map::programFaceSprite() const
+{
+    return m_programFaceSprite;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

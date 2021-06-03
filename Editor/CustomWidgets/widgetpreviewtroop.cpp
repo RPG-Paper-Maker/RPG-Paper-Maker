@@ -14,6 +14,9 @@
 #include "rpm.h"
 #include "systembattlemap.h"
 #include "systemcameraproperties.h"
+#include "systemherotroopbattletest.h"
+#include "systemhero.h"
+#include "systemmonstertroop.h"
 
 // -------------------------------------------------------
 //
@@ -22,7 +25,8 @@
 // -------------------------------------------------------
 
 WidgetPreviewTroop::WidgetPreviewTroop(QWidget *parent) :
-    WidgetMapEditor(parent)
+    WidgetMapEditor(parent),
+    m_troop(nullptr)
 {
     m_control.setDisplayGrid(false);
     m_control.setDisplayCursor(false);
@@ -55,6 +59,7 @@ void WidgetPreviewTroop::clear()
 
 void WidgetPreviewTroop::initialize(SystemTroop *troop)
 {
+    m_troop = troop;
     SystemBattleMap *battleMap = reinterpret_cast<SystemBattleMap *>(SuperListItem
         ::getById(RPM::get()->project()->gameDatas()->battleSystemDatas()
         ->modelBattleMaps()->invisibleRootItem(), RPM::get()->engineSettings()
@@ -67,8 +72,8 @@ void WidgetPreviewTroop::initialize(SystemTroop *troop)
     this->clear();
     this->deleteMap();
     m_position = new QVector3D(battleMap->position().x() * RPM::getSquareSize(),
-        battleMap->position().y() * RPM::getSquareSize(), battleMap->position()
-        .z() * RPM::getSquareSize());
+        battleMap->position().y() * RPM::getSquareSize() + battleMap->position()
+        .yPlus(), battleMap->position().z() * RPM::getSquareSize());
     m_positionObject = new QVector3D();
     this->needUpdateMap(battleMap->idMap(), m_position, m_positionObject,
         cameraProperties->distance()->numberDoubleValue(), cameraProperties
@@ -81,6 +86,95 @@ void WidgetPreviewTroop::initialize(SystemTroop *troop)
 //
 //  VIRTUAL FUNCTIONS
 //
+// -------------------------------------------------------
+
+void WidgetPreviewTroop::paintGL()
+{
+    WidgetMapEditor::paintGL();
+    m_control.map()->programFaceSprite()->bind();
+    for (int i = 0, l = m_battlers.size(); i < l; i++)
+    {
+        m_battlers.at(i)->paintGL();
+    }
+    m_control.map()->programFaceSprite()->release();
+
+    // Draw lines
+    QPainter p(this);
+    p.begin(this);
+    p.setRenderHint(QPainter::Antialiasing);
+    QPen pen(RPM::COLOR_GREY, 2);
+    p.setPen(pen);
+    p.drawLine(0, RPM::SCREEN_BASIC_HEIGHT / 2, RPM::SCREEN_BASIC_WIDTH, RPM
+        ::SCREEN_BASIC_HEIGHT / 2);
+    p.drawLine(RPM::SCREEN_BASIC_WIDTH / 2, 0, RPM::SCREEN_BASIC_WIDTH / 2, RPM
+        ::SCREEN_BASIC_HEIGHT);
+    p.end();
+}
+
+// -------------------------------------------------------
+
+Map * WidgetPreviewTroop::loadMap(int idMap, QVector3D *position, QVector3D
+    *positionObject, int cameraDistance, double cameraHorizontalAngle, double
+    cameraVerticalAngle)
+{
+    Map *map = WidgetMapEditor::loadMap(idMap, position, positionObject,
+        cameraDistance, cameraHorizontalAngle, cameraVerticalAngle);
+    QVector3D pos(m_position->x() + (RPM::getSquareSize() / 2), m_position->y(),
+        m_position->z() - RPM::getSquareSize());
+
+    // Add heroes battlers
+    QJsonArray heroes = RPM::get()->engineSettings()->battleTroopTestHeroes();
+    QJsonObject obj;
+    if (heroes.isEmpty())
+    {
+        obj[SystemHeroTroopBattleTest::JSON_HERO_ID] = 1;
+        heroes.append(obj);
+    }
+    int heroID;
+    SystemHero *hero;
+    Battler *battler;
+    for (int i = 0, l = heroes.size(); i < l; i++)
+    {
+        obj = heroes.at(i).toObject();
+        heroID = obj.contains(SystemHeroTroopBattleTest::JSON_HERO_ID) ? obj[
+            SystemHeroTroopBattleTest::JSON_HERO_ID].toInt() : 1;
+        hero = reinterpret_cast<SystemHero *>(SuperListItem::getById(RPM::get()
+            ->project()->gameDatas()->heroesDatas()->model()->invisibleRootItem(),
+            heroID, true));
+        QVector3D p(pos.x() + (2 * RPM::getSquareSize()) + (i * RPM
+            ::getSquareSize()), pos.y(), pos.z() - RPM::getSquareSize() + (i * RPM::getSquareSize()));
+        battler = new Battler(p, hero->idBattlerPicture());
+        battler->initializeGL(map->programFaceSprite());
+        battler->initializeVertices();
+        battler->updateGL();
+        m_battlers.append(battler);
+    }
+
+    // Add enemies battlers
+    SystemMonsterTroop *monster;
+    for (int i = 0, l = m_troop->monstersList()->invisibleRootItem()->rowCount();
+        i < l; i++)
+    {
+        monster = reinterpret_cast<SystemMonsterTroop *>(SuperListItem
+            ::getItemModelAt(m_troop->monstersList(), i));
+        if (monster != nullptr)
+        {
+            hero = reinterpret_cast<SystemHero *>(SuperListItem::getById(RPM::get()
+                ->project()->gameDatas()->monstersDatas()->model()->invisibleRootItem(),
+                monster->id(), true));
+            QVector3D p(pos.x() - (2 * RPM::getSquareSize()) - (i * RPM
+                ::getSquareSize()), pos.y(), pos.z() - RPM::getSquareSize() + (i * RPM::getSquareSize()));
+            battler = new Battler(p, hero->idBattlerPicture(), true);
+            battler->initializeGL(map->programFaceSprite());
+            battler->initializeVertices();
+            battler->updateGL();
+            m_battlers.append(battler);
+        }
+    }
+
+    return map;
+}
+
 // -------------------------------------------------------
 
 void WidgetPreviewTroop::wheelEvent(QWheelEvent *)

@@ -46,7 +46,7 @@ public:
     void applyMap(SystemDetection *detection, QVector3D *position, QVector3D
         *positionObject, int cameraDistance, double cameraHorizontalAngle,
         double cameraVerticalAngle);
-    Map * loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
+    virtual Map * loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
         int cameraDistance, double cameraHorizontalAngle, double
         cameraVerticalAngle);
     void deleteMap();
