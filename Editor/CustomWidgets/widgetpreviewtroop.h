@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QScriptEngine>
 #include "widgetmapeditor.h"
 #include "systemtroop.h"
 #include "battler.h"
@@ -26,6 +27,7 @@ public:
 
     void clear();
     void initialize(SystemTroop *troop);
+    void getVectorExpression(QVector3D &vec, QString expression, int i = 0);
 
     virtual void paintGL();
     virtual Map * loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
@@ -34,6 +36,7 @@ public:
 protected:
     SystemTroop *m_troop;
     QList<Battler *> m_battlers;
+    QScriptEngine m_engine;
 
 protected slots:
     virtual void wheelEvent(QWheelEvent *event);

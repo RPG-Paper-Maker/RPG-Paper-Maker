@@ -43,6 +43,7 @@ public:
     static const QColor COLOR_PURPLE_SELECTION;
     static const QColor COLOR_PURPLE_SELCTION_BACKGROUND;
     static const QColor COLOR_ALMOST_WHITE;
+    static const QColor COLOR_ALMOST_WHITE_SEMI_TRANSPARENT;
     static const QColor COLOR_ALMOST_BLACK;
     static const QColor COLOR_ALMOST_TRANSPARENT;
     static const QColor COLOR_FORTY_TRANSPARENT;

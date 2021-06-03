@@ -2269,6 +2269,11 @@
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
@@ -2279,11 +2284,6 @@
    <extends>QWidget</extends>
    <header>widgettreecommands.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
   </customwidget>
   <customwidget>
    <class>WidgetTextLang</class>

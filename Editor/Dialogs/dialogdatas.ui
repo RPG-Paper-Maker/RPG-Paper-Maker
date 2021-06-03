@@ -49,7 +49,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>3</number>
+        <number>0</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -162,8 +162,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>837</width>
-                <height>533</height>
+                <width>98</width>
+                <height>28</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_3">
@@ -238,8 +238,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>837</width>
-                <height>533</height>
+                <width>98</width>
+                <height>28</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_5">
@@ -1070,7 +1070,7 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>635</width>
+                             <width>98</width>
                              <height>110</height>
                             </rect>
                            </property>
@@ -1261,7 +1261,7 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>245</width>
+                  <width>154</width>
                   <height>686</height>
                  </rect>
                 </property>
