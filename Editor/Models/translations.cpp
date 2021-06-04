@@ -1296,6 +1296,7 @@ const QString Translations::PERFORM_SKILL = "perform.skill";
 const QString Translations::APPLY = "apply";
 const QString Translations::EQUIPMENTS = "equipments";
 const QString Translations::SPECIFIC_POSITION_ACCORDING_CENTER = "specific.position.according.center";
+const QString Translations::PREVIEW = "preview";
 
 // -------------------------------------------------------
 //

@@ -12,6 +12,8 @@
 #ifndef DIALOGCOMMANDSHOWTEXT_H
 #define DIALOGCOMMANDSHOWTEXT_H
 
+#include <QProcess>
+#include <QTimer>
 #include "dialogcommand.h"
 #include "systempicture.h"
 #include "widgetcomplexmessage.h"
@@ -45,6 +47,8 @@ protected:
     QStandardItemModel *m_parameters;
     QStandardItemModel *m_properties;
     QHash<int, WidgetComplexMessage *> m_widgets;
+    QProcess *m_gameProcess;
+    QTimer *m_timer;
 
     void initializeWidgets(QStandardItemModel *properties, QStandardItemModel
         *parameters);
@@ -55,6 +59,12 @@ private:
     Ui::DialogCommandShowText *ui;
 
     void translate();
+
+public slots:
+    virtual void accept();
+    virtual void reject();
+    void on_pushButtonPreview_clicked();
+    void updateTestFile();
 };
 
 #endif // DIALOGCOMMANDSHOWTEXT_H

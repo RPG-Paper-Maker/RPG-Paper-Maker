@@ -1275,5 +1275,6 @@
     "perform.skill": "Perform skill",
     "apply": "Apply",
     "equipments": "Equipments",
-    "specific.position.according.center": "Specific position (according to center)"
+    "specific.position.according.center": "Specific position (according to center)",
+    "preview": "Preview"
 }

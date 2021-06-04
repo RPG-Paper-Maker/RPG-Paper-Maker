@@ -9,10 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QDir>
 #include "dialogcommandshowtext.h"
 #include "ui_dialogcommandshowtext.h"
 #include "eventcommandkind.h"
 #include "rpm.h"
+#include "common.h"
 #include "systemvariables.h"
 #include "systemfontsize.h"
 #include "systemlanguage.h"
@@ -26,6 +28,8 @@
 DialogCommandShowText::DialogCommandShowText(EventCommand *command,
     QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
+    m_gameProcess(new QProcess(this)),
+    m_timer(new QTimer),
     ui(new Ui::DialogCommandShowText)
 {
     ui->setupUi(this);
@@ -39,6 +43,9 @@ DialogCommandShowText::DialogCommandShowText(EventCommand *command,
 
 DialogCommandShowText::~DialogCommandShowText()
 {
+    m_gameProcess->close();
+    delete m_gameProcess;
+    delete m_timer;
     delete ui;
     delete m_facesetID;
 }
@@ -91,6 +98,7 @@ void DialogCommandShowText::translate()
         ::COLON);
     ui->labelInterlocutor->setText(RPM::translate(Translations::INTERLOCUTOR) +
         RPM::COLON);
+    ui->pushButtonPreview->setText(RPM::translate(Translations::PREVIEW) + RPM::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -135,4 +143,62 @@ void DialogCommandShowText::initialize(EventCommand *command)
             widget->setText(text);
         }
     }
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogCommandShowText::accept()
+{
+    QDir(Common::pathCombine(RPM::get()->project()->pathCurrentProjectApp(), "Test"))
+        .removeRecursively();
+    QDialog::accept();
+}
+
+// -------------------------------------------------------
+
+void DialogCommandShowText::reject()
+{
+    QDir(Common::pathCombine(RPM::get()->project()->pathCurrentProjectApp(), "Test"))
+        .removeRecursively();
+    QDialog::reject();
+}
+
+// -------------------------------------------------------
+
+void DialogCommandShowText::on_pushButtonPreview_clicked()
+{
+    m_timer->start(1);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTestFile()));
+    this->updateTestFile();
+
+    // Run app test
+    QString execName = "Game";
+    #ifdef Q_OS_WIN
+        execName += ".exe";
+    #elif __linux__
+        execName += "";
+    #else
+        execName += ".app";
+    #endif
+    if (m_gameProcess->isOpen()) {
+        m_gameProcess->close();
+    }
+    m_gameProcess->start("\"" + Common::pathCombine(RPM::get()->project()
+        ->pathCurrentProject(), execName) + "\" \"--modeTest=showTextPreview\"");
+}
+
+//-------------------------------------------------
+
+void DialogCommandShowText::updateTestFile()
+{
+    EventCommand *command = this->getCommand();
+    QJsonObject obj = command->getJSON();
+    QDir(RPM::get()->project()->pathCurrentProjectApp()).mkdir("Test");
+    Common::writeOtherJSON(Common::pathCombine(Common::pathCombine(RPM::get()
+        ->project()->pathCurrentProjectApp(), "Test"), "test.json"), obj);
+    delete command;
 }

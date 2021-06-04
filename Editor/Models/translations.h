@@ -1309,6 +1309,7 @@ public:
     static const QString APPLY;
     static const QString EQUIPMENTS;
     static const QString SPECIFIC_POSITION_ACCORDING_CENTER;
+    static const QString PREVIEW;
 
     Translations();
     virtual ~Translations();

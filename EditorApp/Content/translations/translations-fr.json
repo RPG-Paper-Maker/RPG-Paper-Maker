@@ -1275,5 +1275,6 @@
     "perform.skill": "Effectuer une compétence",
     "apply": "Appliquer",
     "equipments": "Equipements",
-    "specific.position.according.center": "Position spécifique (en fonction de centre)"
+    "specific.position.according.center": "Position spécifique (en fonction de centre)",
+    "preview": "Aperçu"
 }
