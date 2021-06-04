@@ -678,7 +678,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonForceAction">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Force an action...</string>

@@ -12,7 +12,6 @@
 #ifndef DIALOGINPUTNUMBER_H
 #define DIALOGINPUTNUMBER_H
 
-#include <QDialog>
 #include "dialogcommand.h"
 
 // -------------------------------------------------------

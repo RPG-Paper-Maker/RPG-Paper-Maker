@@ -53,6 +53,7 @@
 #include "dialogcommandenteranamemenu.h"
 #include "dialogcommandcreateobjectinmap.h"
 #include "dialogcommandchangestatus.h"
+#include "dialogcommandforceanaction.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -216,6 +217,8 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandPlaySong(RPM::translate(Translations
             ::CHANGE_VICTORY_MUSIC), SongKind::Music, command, properties,
             parameters, EventCommandKind::ChangeVictoryMusic);
+    case EventCommandKind::ForceAnAction:
+        return new DialogCommandForceAnAction(command, properties, parameters);
     default:
         return nullptr;
     }
@@ -757,4 +760,11 @@ void DialogCommands::on_pushButtonChangeVictoryMusic_clicked()
 void DialogCommands::on_pushButtonEndBattle_clicked()
 {
     this->openNonDialogCommand(EventCommandKind::EndBattle);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonForceAction_clicked()
+{
+    this->openDialogCommand(EventCommandKind::ForceAnAction);
 }

@@ -89,6 +89,7 @@ enum class EventCommandKind {
     ChangeBattleMusic,
     ChangeVictoryMusic,
     EndBattle,
+    ForceAnAction,
     Last
 };
 
