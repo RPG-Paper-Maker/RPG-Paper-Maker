@@ -1276,5 +1276,9 @@
     "apply": "Apply",
     "equipments": "Equipments",
     "specific.position.according.center": "Specific position (according to center)",
-    "preview": "Preview"
+    "preview": "Preview",
+    "last.target": "Last target",
+    "force.an.action": "Force an action",
+    "enemy": "Enemy",
+    "use.battler.turn": "Use battler turn"
 }

@@ -331,6 +331,8 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
         str += this->strChangeVictoryMusic(properties, parameters); break;
     case EventCommandKind::EndBattle:
         str += RPM::translate(Translations::END_BATTLE); break;
+    case EventCommandKind::ForceAnAction:
+        str += this->strForceAnAction(properties, parameters); break;
     default:
         break;
     }
@@ -2396,6 +2398,76 @@ QString EventCommand::strChangeVictoryMusic(QStandardItemModel *properties,
 {
     return RPM::translate(Translations::CHANGE_VICTORY_MUSIC) + RPM::COLON + RPM
         ::SPACE + this->strPlaySong(properties, parameters, SongKind::Music);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strForceAnAction(QStandardItemModel *properties,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    QString battler = RPM::translate(Translations::BATTLER) + RPM::SPACE;
+    switch(this->valueCommandAt(i++).toInt())
+    {
+    case 0:
+        battler += RPM::translate(Translations::ENEMY) + RPM::COLON + RPM::SPACE
+            + QString::number(this->valueCommandAt(i++).toInt());
+        break;
+    case 1:
+        battler += RPM::translate(Translations::HERO_ENEMY_INSTANCE_ID) + RPM
+            ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters);
+        break;
+    }
+    QString action = RPM::translate(Translations::ACTION) + RPM::SPACE;
+    switch(this->valueCommandAt(i++).toInt())
+    {
+    case 0:
+        action += RPM::translate(Translations::USE_SKILL_ID) + RPM::COLON + RPM
+            ::SPACE + this->strDataBaseId(i, properties, RPM::get()->project()
+            ->gameDatas()->skillsDatas()->model(), parameters);
+        break;
+    case 1:
+        action += RPM::translate(Translations::USE_ITEM_ID) + RPM::COLON + RPM
+            ::SPACE + this->strDataBaseId(i, properties, RPM::get()->project()
+            ->gameDatas()->itemsDatas()->model(), parameters);
+        break;
+    case 2:
+        action += RPM::translate(Translations::DO_NOTHING);
+        break;
+    }
+    QString target = RPM::translate(Translations::TARGET) + RPM::SPACE;
+    int index = this->valueCommandAt(i++).toInt();
+    switch (index)
+    {
+    case 0:
+        target += RPM::translate(Translations::RANDOM);
+        break;
+    case 1:
+        target += RPM::translate(Translations::LAST_TARGET);
+        break;
+    case 2:
+        switch(this->valueCommandAt(i++).toInt())
+        {
+        case 0:
+            target += RPM::translate(Translations::ENEMY) + RPM::COLON + RPM::SPACE
+                + QString::number(this->valueCommandAt(i++).toInt());
+            break;
+        case 1:
+            target += RPM::translate(Translations::HERO_ENEMY_INSTANCE_ID) + RPM
+                ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters);
+            break;
+        }
+        break;
+    }
+    QString option;
+    if (RPM::stringToBool(this->valueCommandAt(i++)))
+    {
+        option += RPM::SPACE + RPM::BRACKET_LEFT + RPM::translate(Translations
+            ::USE_BATTLER_TURN) + RPM::BRACKET_RIGHT;
+    }
+    return RPM::translate(Translations::FORCE_AN_ACTION) + RPM::COLON + RPM::SPACE +
+        battler + RPM::SPACE + RPM::DASH + RPM::SPACE + action + RPM::SPACE + RPM
+        ::DASH + RPM::SPACE + target + option;
 }
 
 // -------------------------------------------------------

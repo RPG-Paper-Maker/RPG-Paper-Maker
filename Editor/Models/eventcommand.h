@@ -207,6 +207,8 @@ private:
         *parameters) const;
     QString strChangeVictoryMusic(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
+    QString strForceAnAction(QStandardItemModel *properties, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

@@ -55,10 +55,9 @@ void DialogCommandForceAnAction::initializePrimitives()
     ui->panelPrimitiveValueSkillID->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->skillsDatas()->model(), m_parameters, m_properties);
     ui->panelPrimitiveValueItemID->initializeDataBaseCommandId(RPM::get()
-        ->project()->gameDatas()->skillsDatas()->model(), m_parameters, m_properties);
+        ->project()->gameDatas()->itemsDatas()->model(), m_parameters, m_properties);
     ui->comboBoxTarget->addItem(RPM::translate(Translations::RANDOM));
-    //ui->comboBoxTarget->addItem(RPM::translate(Translations::LAST_TARGET));
-    ui->comboBoxTarget->addItem("Last target");
+    ui->comboBoxTarget->addItem(RPM::translate(Translations::LAST_TARGET));
     ui->comboBoxTarget->addItem(RPM::translate(Translations::CUSTOM));
     ui->panelPrimitiveHeroEnemyInstanceIDTarget->initializeNumber(m_parameters,
         m_properties);
@@ -82,7 +81,20 @@ void DialogCommandForceAnAction::initializePrimitives()
 
 void DialogCommandForceAnAction::translate()
 {
-    //this->setWindowTitle(RPM::translate(Translations::FORCE_AN_ACTION) + RPM::DOT_DOT_DOT);
+    this->setWindowTitle(RPM::translate(Translations::FORCE_AN_ACTION) + RPM::DOT_DOT_DOT);
+    ui->groupBoxBattler->setTitle(RPM::translate(Translations::BATTLER));
+    ui->radioButtonEnemy->setText(RPM::translate(Translations::ENEMY) + RPM::COLON);
+    ui->radioButtonHeroEnemyInstanceID->setText(RPM::translate(Translations
+        ::HERO_ENEMY_INSTANCE_ID) + RPM::COLON);
+    ui->groupBoxAction->setTitle(RPM::translate(Translations::ACTION));
+    ui->radioButtonUseSkillID->setText(RPM::translate(Translations::USE_SKILL_ID) + RPM::COLON);
+    ui->radioButtonUseItemID->setText(RPM::translate(Translations::USE_ITEM_ID) + RPM::COLON);
+    ui->radioButtonDoNothing->setText(RPM::translate(Translations::DO_NOTHING));
+    ui->groupBoxTarget->setTitle(RPM::translate(Translations::TARGET));
+    ui->radioButtonEnemyTarget->setText(RPM::translate(Translations::ENEMY) + RPM::COLON);
+    ui->radioButtonHeroEnemyInstanceIDTarget->setText(RPM::translate(Translations
+        ::HERO_ENEMY_INSTANCE_ID) + RPM::COLON);
+    ui->checkBoxUseBattlerTurn->setText(RPM::translate(Translations::USE_BATTLER_TURN));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -112,6 +124,9 @@ EventCommand * DialogCommandForceAnAction::getCommand() const
     {
         command.append("1");
         ui->panelPrimitiveValueItemID->getCommand(command);
+    } else if (ui->radioButtonDoNothing->isChecked())
+    {
+        command.append("2");
     }
     command.append(QString::number(ui->comboBoxTarget->currentIndex()));
     if (ui->comboBoxTarget->currentIndex() == 2)
@@ -155,6 +170,9 @@ void DialogCommandForceAnAction::initialize(EventCommand *command)
     case 1:
         ui->radioButtonUseItemID->setChecked(true);
         ui->panelPrimitiveValueItemID->initializeCommand(command, i);
+        break;
+    case 2:
+        ui->radioButtonDoNothing->setChecked(true);
         break;
     }
     ui->comboBoxTarget->setCurrentIndex(command->valueCommandAt(i++).toInt());

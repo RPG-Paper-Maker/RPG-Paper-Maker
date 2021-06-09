@@ -1310,6 +1310,10 @@ public:
     static const QString EQUIPMENTS;
     static const QString SPECIFIC_POSITION_ACCORDING_CENTER;
     static const QString PREVIEW;
+    static const QString LAST_TARGET;
+    static const QString FORCE_AN_ACTION;
+    static const QString ENEMY;
+    static const QString USE_BATTLER_TURN;
 
     Translations();
     virtual ~Translations();

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>526</width>
-    <height>458</height>
+    <height>487</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -172,23 +172,6 @@
               </item>
              </layout>
             </item>
-            <item row="0" column="0">
-             <widget class="QRadioButton" name="radioButtonUseSkillID">
-              <property name="text">
-               <string>Use a skill ID:</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QRadioButton" name="radioButtonUseItemID">
-              <property name="text">
-               <string>Use an item ID:</string>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="1">
              <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1">
               <item>
@@ -224,6 +207,30 @@
                </spacer>
               </item>
              </layout>
+            </item>
+            <item row="0" column="0">
+             <widget class="QRadioButton" name="radioButtonUseSkillID">
+              <property name="text">
+               <string>Use a skill ID:</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radioButtonUseItemID">
+              <property name="text">
+               <string>Use an item ID:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QRadioButton" name="radioButtonDoNothing">
+              <property name="text">
+               <string>Do nothing</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>

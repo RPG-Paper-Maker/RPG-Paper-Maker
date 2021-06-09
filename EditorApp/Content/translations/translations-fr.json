@@ -1276,5 +1276,9 @@
     "apply": "Appliquer",
     "equipments": "Equipements",
     "specific.position.according.center": "Position spécifique (en fonction de centre)",
-    "preview": "Aperçu"
+    "preview": "Aperçu",
+    "last.target": "Dernière cible",
+    "force.an.action": "Forcer une action",
+    "enemy": "Ennemi",
+    "use.battler.turn": "Utiliser le tour du battler"
 }

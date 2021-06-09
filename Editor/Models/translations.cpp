@@ -1297,6 +1297,10 @@ const QString Translations::APPLY = "apply";
 const QString Translations::EQUIPMENTS = "equipments";
 const QString Translations::SPECIFIC_POSITION_ACCORDING_CENTER = "specific.position.according.center";
 const QString Translations::PREVIEW = "preview";
+const QString Translations::LAST_TARGET = "last.target";
+const QString Translations::FORCE_AN_ACTION = "force.an.action";
+const QString Translations::ENEMY = "enemy";
+const QString Translations::USE_BATTLER_TURN = "use.battler.turn";
 
 // -------------------------------------------------------
 //
