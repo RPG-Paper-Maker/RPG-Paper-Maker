@@ -33,6 +33,7 @@ WidgetTreeCommands::WidgetTreeCommands(QWidget *parent) :
     p_model(nullptr),
     m_linkedObject(nullptr),
     m_parameters(nullptr),
+    m_troopMonstersList(nullptr),
     m_displayEnterBar(true)
 {
     this->setMouseTracking(true);
@@ -98,6 +99,13 @@ void WidgetTreeCommands::initializeLinkedObject(SystemCommonObject* object){
 
 void WidgetTreeCommands::initializeParameters(QStandardItemModel* parameters){
     m_parameters = parameters;
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeCommands::initializeTroopMonstersList(QStandardItemModel *troopMonstersList)
+{
+    m_troopMonstersList = troopMonstersList;
 }
 
 // -------------------------------------------------------
@@ -181,13 +189,13 @@ void WidgetTreeCommands::newCommand(QStandardItem* selected) {
     int result = QDialog::Accepted;
 
     if (m_enteredCommand.isEmpty()) {
-        DialogCommands dialog(m_linkedObject, m_parameters);
+        DialogCommands dialog(m_linkedObject, m_parameters, m_troopMonstersList);
         result = dialog.exec();
         command = dialog.getCommand();
     } else {
         EventCommandKind kind = m_availableCommands.at(m_indexSelectedCommand);
         DialogCommand *dialogCommand = DialogCommands::getDialogCommand(kind,
-            nullptr, m_linkedObject, m_parameters);
+            nullptr, m_linkedObject, m_parameters, m_troopMonstersList);
         m_enteredCommand = "";
         updateEnteredCommandText();
         if (dialogCommand == nullptr) {
@@ -244,9 +252,8 @@ void WidgetTreeCommands::editCommand(QStandardItem *selected,
 {
     // An editable command has a dialog associated to it
     if (command->isEditable()){
-        DialogCommand* dialog =
-                DialogCommands::getDialogCommand(command->kind(), command,
-                                                 m_linkedObject, m_parameters);
+        DialogCommand *dialog = DialogCommands::getDialogCommand(command->kind(),
+            command, m_linkedObject, m_parameters, m_troopMonstersList);
         if (dialog->exec() == QDialog::Accepted){
             EventCommand* newCommand = dialog->getCommand();
             QStandardItem* root = getRootOfCommand(selected);
@@ -459,7 +466,7 @@ QStandardItem* WidgetTreeCommands::insertCommand(EventCommand* command,
     QStandardItem* item = new QStandardItem();
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(command)));
     item->setText(command->toString(m_linkedObject == nullptr ? nullptr :
-        m_linkedObject->modelProperties(), m_parameters));
+        m_linkedObject->modelProperties(), m_parameters, m_troopMonstersList));
     root->insertRow(pos, item);
     return item;
 }
@@ -587,7 +594,7 @@ void WidgetTreeCommands::updateAllNodesString(QStandardItem *item)
         updateAllNodesString(child);
         command = reinterpret_cast<EventCommand *>(child->data().value<quintptr>());
         child->setText(command->toString(m_linkedObject == nullptr ? nullptr :
-            m_linkedObject->modelProperties(), m_parameters));
+            m_linkedObject->modelProperties(), m_parameters, m_troopMonstersList));
         QBrush b(QColor(18, 135, 90));
         if (command->kind() == EventCommandKind::Comment)
         {
@@ -1136,7 +1143,8 @@ void WidgetTreeCommands::onSelectionChanged(QModelIndex index, QModelIndex
     {
         selectedBefore->setText(reinterpret_cast<EventCommand *>(selectedBefore
             ->data().value<quintptr>())->toString(m_linkedObject == nullptr ?
-            nullptr : m_linkedObject->modelProperties(), m_parameters));
+            nullptr : m_linkedObject->modelProperties(), m_parameters,
+            m_troopMonstersList));
     }
 
     m_contextMenuCommonCommands->canEdit(command != nullptr &&

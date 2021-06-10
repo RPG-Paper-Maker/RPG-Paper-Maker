@@ -20,11 +20,13 @@
 // -------------------------------------------------------
 
 DialogCommandForceAnAction::DialogCommandForceAnAction(EventCommand *command,
-    QStandardItemModel *properties, QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters,
+    QStandardItemModel *troopMonstersList, QWidget *parent) :
     DialogCommand(parent),
     ui(new Ui::DialogCommandForceAnAction),
     m_properties(properties),
-    m_parameters(parameters)
+    m_parameters(parameters),
+    m_troopMonstersList(troopMonstersList)
 {
     ui->setupUi(this);
     this->initializePrimitives();
@@ -48,6 +50,7 @@ DialogCommandForceAnAction::~DialogCommandForceAnAction()
 
 void DialogCommandForceAnAction::initializePrimitives()
 {
+    SuperListItem::fillComboBox(ui->comboBoxEnemies, m_troopMonstersList);
     ui->panelPrimitiveHeroEnemyInstanceID->initializeNumber(m_parameters,
         m_properties);
     ui->panelPrimitiveHeroEnemyInstanceID->showVariable();
@@ -59,6 +62,7 @@ void DialogCommandForceAnAction::initializePrimitives()
     ui->comboBoxTarget->addItem(RPM::translate(Translations::RANDOM));
     ui->comboBoxTarget->addItem(RPM::translate(Translations::LAST_TARGET));
     ui->comboBoxTarget->addItem(RPM::translate(Translations::CUSTOM));
+    SuperListItem::fillComboBox(ui->comboBoxEnemiesTarget, m_troopMonstersList);
     ui->panelPrimitiveHeroEnemyInstanceIDTarget->initializeNumber(m_parameters,
         m_properties);
     ui->panelPrimitiveHeroEnemyInstanceIDTarget->showVariable();

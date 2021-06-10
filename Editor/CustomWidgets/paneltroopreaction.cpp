@@ -40,7 +40,8 @@ PanelTroopReaction::~PanelTroopReaction()
 //
 // -------------------------------------------------------
 
-void PanelTroopReaction::initialize(SystemTroopReaction *reaction)
+void PanelTroopReaction::initialize(SystemTroopReaction *reaction, QStandardItemModel
+    *troopMonstersList)
 {
     m_reaction = reaction;
     if (m_reaction == nullptr)
@@ -54,6 +55,7 @@ void PanelTroopReaction::initialize(SystemTroopReaction *reaction)
         ui->comboBoxFrequency->setCurrentIndex(static_cast<int>(m_reaction
             ->frequency()));
         ui->widgetTreeCommands->initializeModel(m_reaction->modelCommands());
+        ui->widgetTreeCommands->initializeTroopMonstersList(troopMonstersList);
     }
 }
 

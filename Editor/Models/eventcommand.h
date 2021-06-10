@@ -62,7 +62,7 @@ public:
     void getChoicesIDs(QList<int> &list);
     void setCopy(const EventCommand &copy);
     QString toString(QStandardItemModel *properties = nullptr, QStandardItemModel
-        *parameters = nullptr) const;
+        *parameters = nullptr, QStandardItemModel *troopMonstersList = nullptr) const;
     void read(const QJsonObject &json);
     QJsonObject getJSON() const;
 
@@ -70,6 +70,7 @@ private:
     EventCommandKind m_kind;
     QVector<QString> m_listCommand;
 
+    QString strTroopMonstersList(QStandardItemModel *model, int &i) const;
     QString strNumberVariable(int &i) const;
     QString strDataBaseId(int &i, QStandardItemModel *properties = nullptr,
         QStandardItemModel *dataBase = nullptr, QStandardItemModel *parameters =
@@ -208,7 +209,7 @@ private:
     QString strChangeVictoryMusic(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
     QString strForceAnAction(QStandardItemModel *properties, QStandardItemModel
-        *parameters) const;
+        *parameters, QStandardItemModel *troopMonstersList) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

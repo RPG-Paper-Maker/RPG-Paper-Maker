@@ -798,7 +798,9 @@ void DialogDatas::on_pageTroopReactionSelected(QModelIndex index, QModelIndex)
     {
         SystemTroopReaction *reaction = reinterpret_cast<SystemTroopReaction *>(
             selected->data().value<quintptr>());
-        ui->panelTroopReaction->initialize(reaction);
+        ui->panelTroopReaction->initialize(reaction, reinterpret_cast<SystemTroop *>(
+            ui->panelSuperListTroops->list()->getSelected()->data().value<quintptr>())
+            ->monstersList());
         ui->panelTroopReaction->setEnabled(reaction != nullptr);
     }
 }

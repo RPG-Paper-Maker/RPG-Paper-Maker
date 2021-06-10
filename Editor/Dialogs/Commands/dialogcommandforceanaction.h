@@ -25,7 +25,8 @@ class DialogCommandForceAnAction : public DialogCommand
 public:
     explicit DialogCommandForceAnAction(EventCommand *command = nullptr,
         QStandardItemModel *properties = nullptr, QStandardItemModel *parameters
-        = nullptr, QWidget *parent = nullptr);
+        = nullptr, QStandardItemModel *troopMonstersList = nullptr, QWidget
+        *parent = nullptr);
     virtual ~DialogCommandForceAnAction();
 
     void initializePrimitives();
@@ -38,6 +39,7 @@ private:
     Ui::DialogCommandForceAnAction *ui;
     QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
+    QStandardItemModel *m_troopMonstersList;
 
 public slots:
     void on_radioButtonEnemy_toggled(bool checked);

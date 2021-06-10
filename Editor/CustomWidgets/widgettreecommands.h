@@ -42,6 +42,7 @@ public:
     void initializeModel(QStandardItemModel* m);
     void initializeLinkedObject(SystemCommonObject* object);
     void initializeParameters(QStandardItemModel* parameters);
+    void initializeTroopMonstersList(QStandardItemModel *troopMonstersList);
     QStandardItem* getSelected() const;
     QStandardItemModel* getModel() const;
     QList<QStandardItem*> getAllSelected() const;
@@ -52,6 +53,7 @@ protected:
     ContextMenuList* m_contextMenuCommonCommands;
     SystemCommonObject* m_linkedObject;
     QStandardItemModel* m_parameters;
+    QStandardItemModel *m_troopMonstersList;
     QString m_enteredCommand;
     QTimer m_timerEnterCommand;
     bool m_displayEnterBar;

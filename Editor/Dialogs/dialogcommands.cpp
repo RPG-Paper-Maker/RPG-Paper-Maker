@@ -62,13 +62,13 @@
 //
 // -------------------------------------------------------
 
-DialogCommands::DialogCommands(SystemCommonObject *object,
-                               QStandardItemModel *parameters,
-                               QWidget *parent) :
+DialogCommands::DialogCommands(SystemCommonObject *object, QStandardItemModel
+    *parameters, QStandardItemModel *troopMonstersList, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogCommands),
     m_linkedObject(object),
-    m_parameters(parameters)
+    m_parameters(parameters),
+    m_troopMonstersList(troopMonstersList)
 {
     ui->setupUi(this);
     this->translate();
@@ -89,7 +89,7 @@ EventCommand* DialogCommands::getCommand() const{ return p_command; }
 
 DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
     EventCommand *command, SystemCommonObject *object, QStandardItemModel
-    *parameters)
+    *parameters, QStandardItemModel *troopMonstersList)
 {
     QStandardItemModel *properties = object == nullptr ? nullptr : object
         ->modelProperties();
@@ -218,7 +218,8 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
             ::CHANGE_VICTORY_MUSIC), SongKind::Music, command, properties,
             parameters, EventCommandKind::ChangeVictoryMusic);
     case EventCommandKind::ForceAnAction:
-        return new DialogCommandForceAnAction(command, properties, parameters);
+        return new DialogCommandForceAnAction(command, properties, parameters,
+            troopMonstersList);
     default:
         return nullptr;
     }
@@ -226,12 +227,12 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
 
 // -------------------------------------------------------
 
-void DialogCommands::openDialogCommand(EventCommandKind kind,
-                                       EventCommand* command)
+void DialogCommands::openDialogCommand(EventCommandKind kind, EventCommand *command)
 {
     DialogCommand *dialog;
 
-    dialog = this->getDialogCommand(kind, command, m_linkedObject, m_parameters);
+    dialog = this->getDialogCommand(kind, command, m_linkedObject, m_parameters,
+        m_troopMonstersList);
     if (dialog != nullptr) {
         if (dialog->exec() == QDialog::Accepted){
             p_command = dialog->getCommand();

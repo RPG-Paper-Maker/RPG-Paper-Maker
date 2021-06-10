@@ -27,7 +27,7 @@ public:
     explicit PanelTroopReaction(QWidget *parent = nullptr);
     ~PanelTroopReaction();
 
-    void initialize(SystemTroopReaction *reaction);
+    void initialize(SystemTroopReaction *reaction, QStandardItemModel *troopMonstersList);
     void translate();
 
 private:

@@ -35,21 +35,21 @@ class DialogCommands : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogCommands(SystemCommonObject* object = nullptr,
-                            QStandardItemModel* parameters = nullptr,
-                            QWidget *parent = nullptr);
+    explicit DialogCommands(SystemCommonObject *object = nullptr,
+        QStandardItemModel *parameters = nullptr, QStandardItemModel
+        *troopMonstersList = nullptr, QWidget *parent = nullptr);
     ~DialogCommands();
-    static DialogCommand* getDialogCommand(EventCommandKind kind,
-                                           EventCommand *command,
-                                           SystemCommonObject *object,
-                                           QStandardItemModel *parameters);
-    EventCommand* getCommand() const;
+    static DialogCommand * getDialogCommand(EventCommandKind kind, EventCommand
+        *command, SystemCommonObject *object, QStandardItemModel *parameters,
+        QStandardItemModel *troopMonstersList);
+    EventCommand * getCommand() const;
 
 private:
     Ui::DialogCommands *ui;
     EventCommand* p_command;
-    SystemCommonObject* m_linkedObject;
-    QStandardItemModel* m_parameters;
+    SystemCommonObject *m_linkedObject;
+    QStandardItemModel *m_parameters;
+    QStandardItemModel *m_troopMonstersList;
 
     void openDialogCommand(EventCommandKind kind, EventCommand *command =
         nullptr);

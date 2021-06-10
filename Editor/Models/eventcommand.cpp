@@ -193,7 +193,7 @@ void EventCommand::setCopy(const EventCommand &copy) {
 // -------------------------------------------------------
 
 QString EventCommand::toString(QStandardItemModel *properties, QStandardItemModel
-    *parameters) const
+    *parameters, QStandardItemModel *troopMonstersList) const
 {
     QString str;
 
@@ -332,12 +332,25 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::EndBattle:
         str += RPM::translate(Translations::END_BATTLE); break;
     case EventCommandKind::ForceAnAction:
-        str += this->strForceAnAction(properties, parameters); break;
+        str += this->strForceAnAction(properties, parameters, troopMonstersList);
+        break;
     default:
         break;
     }
-
     return str;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strTroopMonstersList(QStandardItemModel *model, int &i) const
+{
+    if (model == nullptr)
+    {
+        return "";
+    }
+     SuperListItem *super = SuperListItem::getByIndex(model, this->valueCommandAt(i++)
+        .toInt());;
+     return super == nullptr ? "" : super->toString();
 }
 
 // -------------------------------------------------------
@@ -2403,7 +2416,7 @@ QString EventCommand::strChangeVictoryMusic(QStandardItemModel *properties,
 // -------------------------------------------------------
 
 QString EventCommand::strForceAnAction(QStandardItemModel *properties,
-    QStandardItemModel *parameters) const
+    QStandardItemModel *parameters, QStandardItemModel *troopMonstersList) const
 {
     int i = 0;
     QString battler = RPM::translate(Translations::BATTLER) + RPM::SPACE;
@@ -2411,7 +2424,7 @@ QString EventCommand::strForceAnAction(QStandardItemModel *properties,
     {
     case 0:
         battler += RPM::translate(Translations::ENEMY) + RPM::COLON + RPM::SPACE
-            + QString::number(this->valueCommandAt(i++).toInt());
+            + this->strTroopMonstersList(troopMonstersList, i);
         break;
     case 1:
         battler += RPM::translate(Translations::HERO_ENEMY_INSTANCE_ID) + RPM
@@ -2450,7 +2463,7 @@ QString EventCommand::strForceAnAction(QStandardItemModel *properties,
         {
         case 0:
             target += RPM::translate(Translations::ENEMY) + RPM::COLON + RPM::SPACE
-                + QString::number(this->valueCommandAt(i++).toInt());
+                + this->strTroopMonstersList(troopMonstersList, i);
             break;
         case 1:
             target += RPM::translate(Translations::HERO_ENEMY_INSTANCE_ID) + RPM
