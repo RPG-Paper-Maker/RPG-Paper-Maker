@@ -157,7 +157,7 @@ void DialogCommandSendEvent::chooseTarget(QVector<QString> &command) const{
 void DialogCommandSendEvent::on_radioButtonDetection_toggled(bool checked) {
     ui->panelPrimitiveDetectionID->setEnabled(checked);
     ui->checkBoxSenderNoReceive->setEnabled(checked);
-    ui->checkBoxSenderNoReceive->setEnabled(checked);
+    ui->checkBoxOnlyTheClosest->setEnabled(checked);
 }
 
 // -------------------------------------------------------
