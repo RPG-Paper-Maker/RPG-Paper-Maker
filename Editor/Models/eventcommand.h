@@ -81,7 +81,7 @@ private:
     QString strShowText(QStandardItemModel *properties = nullptr, QStandardItemModel
         *parameters = nullptr) const;
     QString strChangeVariables(QStandardItemModel *properties, QStandardItemModel
-        *parameters) const;
+        *parameters, QStandardItemModel *troopMonstersList) const;
     QString strChangeVariablesOperation(int &i) const;
     QString strInputNumber(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;

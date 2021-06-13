@@ -202,7 +202,7 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::ShowText:
         str += this->strShowText(properties, parameters); break;
     case EventCommandKind::ChangeVariables:
-        str += this->strChangeVariables(properties, parameters); break;
+        str += this->strChangeVariables(properties, parameters, troopMonstersList); break;
     case EventCommandKind::EndGame:
         str += RPM::translate(Translations::GAME_OVER); break;
     case EventCommandKind::While:
@@ -512,7 +512,7 @@ QString EventCommand::strShowText(QStandardItemModel *properties, QStandardItemM
 // -------------------------------------------------------
 
 QString EventCommand::strChangeVariables(QStandardItemModel *properties,
-    QStandardItemModel *parameters) const
+    QStandardItemModel *parameters, QStandardItemModel *troopMonstersList) const
 {
     QString selection, operation, value, checked;
     int i, index;
@@ -530,6 +530,7 @@ QString EventCommand::strChangeVariables(QStandardItemModel *properties,
     }
     operation = this->strChangeVariablesOperation(i);
     index = m_listCommand.at(i++).toInt();
+    QStandardItemModel *model = nullptr;
     switch (index) {
     case 0:
         value += this->strProperty(i, properties, parameters);
@@ -558,8 +559,61 @@ QString EventCommand::strChangeVariables(QStandardItemModel *properties,
         value += RPM::ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC.at(
             m_listCommand.at(i++).toInt()).toLower();
         break;
+    case 5:
+        value += RPM::translate(Translations::NUMBER_OF).toLower() + RPM::SPACE;
+        switch (this->valueCommandAt(i++).toInt())
+        {
+        case 0:
+            value += RPM::translate(Translations::ITEM).toLower();
+            model = RPM::get()->project()->gameDatas()->itemsDatas()->model();
+            break;
+        case 1:
+            value += RPM::translate(Translations::WEAPON).toLower();
+            model = RPM::get()->project()->gameDatas()->weaponsDatas()->model();
+            break;
+        case 2:
+            value += RPM::translate(Translations::ARMOR).toLower();
+            model = RPM::get()->project()->gameDatas()->armorsDatas()->model();
+            break;
+        }
+        value += RPM::SPACE + this->strDataBaseId(i, properties, model, parameters) +
+            RPM::translate(Translations::IN_INVENTORY).toLower();
+        break;
+    case 6:
+        value += RPM::translate(Translations::TOTAL_CURRENCY).toLower() + RPM::SPACE;
+        switch (this->valueCommandAt(i++).toInt())
+        {
+        case 0:
+            value += RPM::translate(Translations::OWNED).toLower();
+            break;
+        case 1:
+            value += RPM::translate(Translations::EARNED).toLower();
+            break;
+        case 2:
+            value += RPM::translate(Translations::USED).toLower();
+            break;
+        }
+        value += RPM::SPACE + this->strDataBaseId(i, properties, RPM::get()->project()
+            ->gameDatas()->systemDatas()->modelCurrencies(), parameters);
+        break;
+    case 7:
+        value += RPM::translate(Translations::HERO_ENEMY_INSTANCE_ID).toLower() +
+            RPM::SPACE + this->strProperty(i, properties, parameters) + RPM::SPACE +
+            RPM::translate(Translations::STATISTIC_ID).toLower() + RPM::SPACE;
+        value += this->strDataBaseId(i, properties, RPM::get()->project()
+            ->gameDatas()->battleSystemDatas()->modelCommonStatistics(), parameters);
+        break;
+    case 8:
+        value += RPM::translate(Translations::ENEMY).toLower() + RPM::SPACE +
+            this->strTroopMonstersList(troopMonstersList, i) + RPM::SPACE + RPM
+            ::translate(Translations::INSTANCE_ID).toLower();
+        break;
+    case 9:
+        value += RPM::translate(Translations::OTHER_CHARACTERISTICS).toLower() +
+            RPM::SPACE + RPM::ENUM_TO_STRING_CHANGE_VARIABLES_OTHER_CHARACTERISTICS
+            .at(this->valueCommandAt(i++).toInt());
+        break;
     }
-
     return RPM::translate(Translations::CHANGE_VARIABLES) + RPM::COLON + RPM
         ::SPACE + selection + RPM::SPACE + operation + RPM::SPACE + value;
 }

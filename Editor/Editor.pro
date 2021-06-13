@@ -124,6 +124,7 @@ HEADERS += \
     Enums/animationeffectconditionkind.h \
     Enums/animationpositionkind.h \
     Enums/axiskind.h \
+    Enums/changevariablesothercharacteristics.h \
     Enums/conditionheroeskind.h \
     Enums/inventoryfilterkind.h \
     Enums/languagekind.h \

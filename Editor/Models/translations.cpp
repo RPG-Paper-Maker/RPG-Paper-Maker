@@ -1301,6 +1301,27 @@ const QString Translations::LAST_TARGET = "last.target";
 const QString Translations::FORCE_AN_ACTION = "force.an.action";
 const QString Translations::ENEMY = "enemy";
 const QString Translations::USE_BATTLER_TURN = "use.battler.turn";
+const QString Translations::OWNED = "owned";
+const QString Translations::EARNED = "earned";
+const QString Translations::USED = "used";
+const QString Translations::IN_INVENTORY = "in.inventory";
+const QString Translations::INSTANCE_ID = "instance.id";
+const QString Translations::NUMBER_OF = "number.of";
+const QString Translations::TOTAL_CURRENCY = "total.currency";
+const QString Translations::OTHER_CHARACTERISTICS = "other.characteristics";
+const QString Translations::CURRENT_MAP_ID = "current.map.id";
+const QString Translations::NUMBER_IN_TEAM = "number.in.team";
+const QString Translations::NUMBER_IN_HIDDEN = "number.in.hidden";
+const QString Translations::NUMBER_IN_RESERVE = "number.in.reserve";
+const QString Translations::TOTAL_NUMBER_OF_STEPS = "total.number.of.steps";
+const QString Translations::TOTAL_NUMBER_OF_SECONDS = "total.number.of.seconds";
+const QString Translations::TOTAL_NUMBER_OF_SAVES_DONE = "total.number.of.saves.done";
+const QString Translations::TOTAL_NUMBER_OF_BATTLES = "total.number.of.battles";
+const QString Translations::CAMERA_X_POSITION = "camera.x.position";
+const QString Translations::CAMERA_Y_POSITION = "camera.y.position";
+const QString Translations::CAMERA_Z_POSITION = "camera.z.position";
+const QString Translations::TOTAL_SECONDS_CURRENT_MUSIC = "total.seconds.current.music";
+const QString Translations::TOTAL_SECONDS_CURRENT_BACKGROUND_MUSIC = "total.seconds.current.background.music";
 
 // -------------------------------------------------------
 //

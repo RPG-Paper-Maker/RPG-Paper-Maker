@@ -35,23 +35,24 @@ class DialogCommandChangeVariables : public DialogCommand
 public:
     explicit DialogCommandChangeVariables(EventCommand *command = nullptr,
         QStandardItemModel *properties = nullptr, QStandardItemModel *parameters =
-        nullptr, QWidget *parent = nullptr);
+        nullptr, QStandardItemModel *troopMonstersList = nullptr, QWidget *parent =
+        nullptr);
     virtual ~DialogCommandChangeVariables();
-    EventCommand* getCommand() const;
+
+    void initializePrimitives();
+    void translate();
+
+    virtual EventCommand * getCommand() const;
+    virtual void initialize(EventCommand *command);
 
 protected:
     QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
+    QStandardItemModel *m_troopMonstersList;
     QStandardItemModel *m_modelObjects;
-
-    void initializePrimitives();
-
-    virtual void initialize(EventCommand *command);
 
 private:
     Ui::DialogCommandChangeVariables *ui;
-
-    void translate();
 
 private slots:
     void on_radioButtonOneVariable_toggled(bool checked);
@@ -60,7 +61,13 @@ private slots:
     void on_radioButtonRandom_toggled(bool checked);
     void on_radioButtonMessage_toggled(bool checked);
     void on_radioButtonSwitch_toggled(bool checked);
+    void on_radioButtonNumberItem_toggled(bool checked);
+    void on_radioButtonTotalCurrency_toggled(bool checked);
+    void on_radioButtonNumberStat_toggled(bool checked);
     void on_radioButtonObjectInMap_toggled(bool checked);
+    void on_radioButtonEnemy_toggled(bool checked);
+    void on_radioButtonOtherCharacteristics_toggled(bool checked);
+    void on_comboBoxNumberItem_currentIndexChanged(int index);
 };
 
 #endif // DIALOGCOMMANDCHANGEVARIABLES_H

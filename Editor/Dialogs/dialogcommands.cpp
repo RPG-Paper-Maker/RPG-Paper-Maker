@@ -98,7 +98,8 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::ShowText:
         return new DialogCommandShowText(command, properties, parameters);
     case EventCommandKind::ChangeVariables:
-        return new DialogCommandChangeVariables(command, properties, parameters);
+        return new DialogCommandChangeVariables(command, properties, parameters,
+            troopMonstersList);
     case EventCommandKind::InputNumber:
         return new DialogCommandInputNumber(command, properties, parameters);
     case EventCommandKind::If:

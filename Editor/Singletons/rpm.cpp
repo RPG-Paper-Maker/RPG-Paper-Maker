@@ -308,6 +308,7 @@ QStringList RPM::ENUM_TO_STRING_MAIN_MENU_COMMAND_KIND = {};
 QStringList RPM::ENUM_TO_STRING_TROOP_REACTION_FREQUENCY_KIND = {};
 QStringList RPM::ENUM_TO_STRING_LANGUAGE_KIND = {};
 QStringList RPM::ENUM_TO_STRING_ORIENTATION_KIND = {};
+QStringList RPM::ENUM_TO_STRING_CHANGE_VARIABLES_OTHER_CHARACTERISTICS = {};
 
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
@@ -817,6 +818,21 @@ void RPM::readTranslations() {
         RPM::translate(Translations::WEST),
         RPM::translate(Translations::NORTH),
         RPM::translate(Translations::EAST)
+    });
+    RPM::ENUM_TO_STRING_CHANGE_VARIABLES_OTHER_CHARACTERISTICS = QStringList({
+        RPM::translate(Translations::CURRENT_MAP_ID),
+        RPM::translate(Translations::NUMBER_IN_TEAM),
+        RPM::translate(Translations::NUMBER_IN_HIDDEN),
+        RPM::translate(Translations::NUMBER_IN_RESERVE),
+        RPM::translate(Translations::TOTAL_NUMBER_OF_STEPS),
+        RPM::translate(Translations::TOTAL_NUMBER_OF_SECONDS),
+        RPM::translate(Translations::TOTAL_NUMBER_OF_SAVES_DONE),
+        RPM::translate(Translations::TOTAL_NUMBER_OF_BATTLES),
+        RPM::translate(Translations::CAMERA_X_POSITION),
+        RPM::translate(Translations::CAMERA_Y_POSITION),
+        RPM::translate(Translations::CAMERA_Z_POSITION),
+        RPM::translate(Translations::TOTAL_SECONDS_CURRENT_MUSIC),
+        RPM::translate(Translations::TOTAL_SECONDS_CURRENT_BACKGROUND_MUSIC)
     });
 }
 

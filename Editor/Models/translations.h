@@ -1314,6 +1314,27 @@ public:
     static const QString FORCE_AN_ACTION;
     static const QString ENEMY;
     static const QString USE_BATTLER_TURN;
+    static const QString OWNED;
+    static const QString EARNED;
+    static const QString USED;
+    static const QString IN_INVENTORY;
+    static const QString INSTANCE_ID;
+    static const QString NUMBER_OF;
+    static const QString TOTAL_CURRENCY;
+    static const QString OTHER_CHARACTERISTICS;
+    static const QString CURRENT_MAP_ID;
+    static const QString NUMBER_IN_TEAM;
+    static const QString NUMBER_IN_HIDDEN;
+    static const QString NUMBER_IN_RESERVE;
+    static const QString TOTAL_NUMBER_OF_STEPS;
+    static const QString TOTAL_NUMBER_OF_SECONDS;
+    static const QString TOTAL_NUMBER_OF_SAVES_DONE;
+    static const QString TOTAL_NUMBER_OF_BATTLES;
+    static const QString CAMERA_X_POSITION;
+    static const QString CAMERA_Y_POSITION;
+    static const QString CAMERA_Z_POSITION;
+    static const QString TOTAL_SECONDS_CURRENT_MUSIC;
+    static const QString TOTAL_SECONDS_CURRENT_BACKGROUND_MUSIC;
 
     Translations();
     virtual ~Translations();
