@@ -226,7 +226,7 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::ModifyInventory:
         str += this->strModifyInventory(properties, parameters); break;
     case EventCommandKind::ModifyTeam:
-        str += this->strModifyTeam(parameters); break;
+        str += this->strModifyTeam(properties, parameters); break;
     case EventCommandKind::StartBattle:
         str += this->strStartBattle(parameters); break;
     case EventCommandKind::IfWin:
@@ -896,66 +896,63 @@ QString EventCommand::strModifyInventorySelection(QStandardItemModel *properties
 
 // -------------------------------------------------------
 
-QString EventCommand::strModifyTeam(QStandardItemModel *parameters) const {
+QString EventCommand::strModifyTeam(QStandardItemModel *properties,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    int kind = m_listCommand.at(i++).toInt();
     QString operation;
-    int i, kind;
-
-    i = 0;
-    kind = m_listCommand.at(i++).toInt();
-    if (kind == 0) {
-        operation += this->strModifyTeamInstance(i, parameters);
-    } else if (kind == 1) {
-        operation += this->strModifyTeamMoveDelete(i, parameters);
+    switch (kind)
+    {
+    case 0:
+    {
+        operation += RPM::translate(Translations::CREATE_NEW_INSTANCE_WITH_LEVEL)
+            .toLower() + RPM::SPACE;
+        operation += this->strProperty(i, properties, parameters) + RPM::SPACE +
+            RPM::translate(Translations::IN_MESSAGE).toLower() + RPM::SPACE;
+        operation += RPM::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++).toInt())
+            .toLower() + RPM::SPACE + RPM::translate(Translations::OF).toLower()
+            + RPM::SPACE;
+        QString stockVariable = this->strProperty(i, properties, parameters);
+        int kindNew = m_listCommand.at(i++).toInt();
+        if (kindNew == 0)
+        {
+            operation += RPM::translate(Translations::HERO_ID).toLower() + RPM::SPACE +
+                this->strDataBaseId(i, properties, RPM::get()->project()
+                ->gameDatas()->heroesDatas()->model(), parameters);
+        } else if (kindNew == 1)
+        {
+            operation += RPM::translate(Translations::MONSTER_ID).toLower() + RPM::SPACE +
+                this->strDataBaseId(i, properties, RPM::get()->project()
+                ->gameDatas()->monstersDatas()->model(), parameters);
+        }
+        operation += RPM::SPACE + RPM::translate(Translations::AND_STOCK_IN_VARIABLE)
+            + RPM::SPACE + stockVariable;
+        break;
     }
-
+    case 1:
+        operation += RPM::translate(Translations::ADD_ENEMY_INSTANCE_ID) + RPM
+            ::SPACE + this->strProperty(i, properties, parameters) + RPM::SPACE +
+            RPM::translate(Translations::IN_MESSAGE) + RPM::SPACE;
+        operation += RPM::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++).toInt());
+        break;
+    case 2:
+        bool move = m_listCommand.at(i++).toInt() == 0;
+        operation += RPM::translate(Translations::MODIFY) + RPM::SPACE + (
+            move ? RPM::translate(Translations::MOVE_VERB) : RPM::translate(
+            Translations::REMOVE)) + RPM::SPACE + RPM::translate(Translations
+            ::CHARACTER_WITH_INSTANCE_ID) + RPM::SPACE + this->strProperty(i,
+            properties, parameters);
+        if (move)
+        {
+            operation += RPM::SPACE + RPM::translate(Translations::TO).toLower() +
+                RPM::SPACE + RPM::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++)
+                .toInt());
+        }
+        break;
+    }
     return RPM::translate(Translations::MODIFY_TEAM) + RPM::COLON + RPM::SPACE
         + operation;
-}
-
-// -------------------------------------------------------
-
-QString EventCommand::strModifyTeamInstance(int &i, QStandardItemModel
-    *parameters) const
-{
-    QString level, teamNew, stockVariable, character;
-    int kindNew, idNew;
-
-    level = this->strNumber(i, parameters);
-    teamNew = RPM::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++).toInt()).toLower();
-    stockVariable = RPM::get()->project()->gameDatas()->variablesDatas()
-        ->getVariableById(m_listCommand.at(i++).toInt())->toString();
-    kindNew = m_listCommand.at(i++).toInt();
-    idNew = m_listCommand.at(i++).toInt();
-    if (kindNew == 0) {
-        character += RPM::translate(Translations::HERO).toLower() + RPM::SPACE +
-            SuperListItem::getById(RPM::get()->project()->gameDatas()
-            ->heroesDatas()->model()->invisibleRootItem(), idNew)->toString();
-    } else if (kindNew == 1) {
-        character += RPM::translate(Translations::MONSTER).toLower() + RPM
-            ::SPACE;
-    }
-
-    return RPM::translate(Translations::CREATE_NEW_INSTANCE_WITH_LEVEL)
-        .toLower() + RPM::SPACE + level + RPM::SPACE + RPM::translate(
-        Translations::IN_MESSAGE).toLower() + RPM::SPACE + teamNew + RPM::SPACE + RPM
-        ::translate(Translations::OF).toLower() + RPM::SPACE + character + RPM
-        ::SPACE + RPM::translate(Translations::AND_STOCK_IN_VARIABLE) + RPM
-        ::SPACE + stockVariable;
-}
-
-// -------------------------------------------------------
-
-QString EventCommand::strModifyTeamMoveDelete(int &i, QStandardItemModel
-    *parameters) const
-{
-    QString addRemove, characterID, addRemoveTeam;
-
-    addRemove = m_listCommand.at(i++).toInt() == 0 ? "move" : "remove";
-    characterID = this->strNumber(i, parameters);
-    addRemoveTeam = RPM::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++).toInt());
-
-    return addRemove + " the character with id " + characterID + " in " +
-        addRemoveTeam;
 }
 
 // -------------------------------------------------------

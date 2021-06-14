@@ -1301,5 +1301,9 @@
     "camera.y.position": "Camera Y position",
     "camera.z.position": "Camera Z position",
     "total.seconds.current.music": "Total seconds played of the current music",
-    "total.seconds.current.background.music": "Total seconds played of the current background music"
+    "total.seconds.current.background.music": "Total seconds played of the current background music",
+    "character.with.instance.id": "Character with instance ID",
+    "add.enemy.instance.id": "Add enemy with instance ID",
+    "modify": "Modify",
+    "hero.id": "Hero ID"
 }

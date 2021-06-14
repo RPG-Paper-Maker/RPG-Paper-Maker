@@ -1335,6 +1335,10 @@ public:
     static const QString CAMERA_Z_POSITION;
     static const QString TOTAL_SECONDS_CURRENT_MUSIC;
     static const QString TOTAL_SECONDS_CURRENT_BACKGROUND_MUSIC;
+    static const QString CHARACTER_WITH_INSTANCE_ID;
+    static const QString ADD_ENEMY_INSTANCE_ID;
+    static const QString MODIFY;
+    static const QString HERO_ID;
 
     Translations();
     virtual ~Translations();

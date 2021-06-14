@@ -38,7 +38,7 @@ public:
     EventCommand* getCommand() const;
 
 protected:
-    QStandardItemModel* m_properties;
+    QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
 
     virtual void initialize(EventCommand* command);

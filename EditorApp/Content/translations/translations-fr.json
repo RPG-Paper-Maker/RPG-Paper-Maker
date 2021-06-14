@@ -1301,5 +1301,9 @@
     "camera.y.position": "Position Y de la camera",
     "camera.z.position": "Position Z de la camera",
     "total.seconds.current.music": "Secondes totales jouées de la musique actuelle",
-    "total.seconds.current.background.music": "Secondes totales jouées de la musique de fond actuelle"
+    "total.seconds.current.background.music": "Secondes totales jouées de la musique de fond actuelle",
+    "character.with.instance.id": "Personnage avec instance d'ID",
+    "add.enemy.instance.id": "Ajouter un ennemi avec instance d'ID",
+    "modify": "Modifier",
+    "hero.id": "Héro d'ID"
 }

@@ -93,9 +93,7 @@ private:
                                *parameters) const;
     QString strModifyInventorySelection(QStandardItemModel *properties,
         QStandardItemModel *parameters, int &i) const;
-    QString strModifyTeam(QStandardItemModel *parameters) const;
-    QString strModifyTeamInstance(int &i, QStandardItemModel *parameters) const;
-    QString strModifyTeamMoveDelete(int &i, QStandardItemModel *parameters) const;
+    QString strModifyTeam(QStandardItemModel *properties, QStandardItemModel *parameters) const;
     QString strStartBattle(QStandardItemModel *parameters) const;
     QString strStartBattleTroop(QStandardItemModel *parameters, int &i) const;
     QString strStartBattleMap(QStandardItemModel *parameters, int &i) const;

@@ -12,6 +12,7 @@
 #ifndef DIALOGCOMMANDMODIFYTEAM_H
 #define DIALOGCOMMANDMODIFYTEAM_H
 
+#include <QButtonGroup>
 #include "dialogcommand.h"
 
 // -------------------------------------------------------
@@ -32,25 +33,30 @@ class DialogCommandModifyTeam : public DialogCommand
 
 public:
     explicit DialogCommandModifyTeam(EventCommand *command = nullptr,
-                                     QWidget *parent = 0);
+        QStandardItemModel *properties = nullptr, QStandardItemModel *parameters =
+        nullptr, QWidget *parent = nullptr);
     virtual ~DialogCommandModifyTeam();
-    EventCommand* getCommand() const;
 
-protected:
-    virtual void initialize(EventCommand* command);
+    void initializePrimitives();
+    void translate();
+
+    virtual void initialize(EventCommand *command);
+    virtual EventCommand * getCommand() const;
 
 private:
     Ui::DialogCommandModifyTeam *ui;
-
-    void getNewInstance(QVector<QString> &command) const;
-    void getAddRemove(QVector<QString> &command) const;
-    void translate();
+    QStandardItemModel *m_properties;
+    QStandardItemModel *m_parameters;
+    QButtonGroup *m_groupMain;
+    QButtonGroup *m_groupHeroMonster;
 
 private slots:
     void on_radioButtonNewInstance_toggled(bool checked);
     void on_radioButtonHero_toggled(bool checked);
     void on_radioButtonMonster_toggled(bool checked);
-    void on_radioButtonAddRemove_toggled(bool checked);
+    void on_radioButtonAddEnemy_toggled(bool checked);
+    void on_radioButtonModify_toggled(bool checked);
+    void on_comboBoxModify_currentIndexChanged(int index);
 };
 
 #endif // DIALOGCOMMANDMODIFYTEAM_H

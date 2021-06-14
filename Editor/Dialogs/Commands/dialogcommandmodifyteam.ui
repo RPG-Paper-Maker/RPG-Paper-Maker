@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>661</width>
-    <height>260</height>
+    <height>312</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -95,30 +95,7 @@
       </layout>
      </item>
      <item>
-      <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,1">
-       <item row="0" column="2">
-        <widget class="QComboBox" name="comboBoxHero">
-         <property name="minimumSize">
-          <size>
-           <width>175</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>175</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QComboBox" name="comboBoxMonster">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
+      <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0">
        <item row="0" column="1">
         <widget class="QRadioButton" name="radioButtonHero">
          <property name="minimumSize">
@@ -138,19 +115,6 @@
          </attribute>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QRadioButton" name="radioButtonMonster">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Monster</string>
-         </property>
-         <attribute name="buttonGroup">
-          <string notr="true">buttonGroup_2</string>
-         </attribute>
-        </widget>
-       </item>
        <item row="0" column="3" rowspan="2">
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
@@ -164,14 +128,65 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="0">
+       <item row="1" column="1">
+        <widget class="QRadioButton" name="radioButtonMonster">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Monster</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">buttonGroup_2</string>
+         </attribute>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="PanelPrimitiveValue" name="panelPrimitiveHero" native="true">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>250</width>
+           <height>27</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="PanelPrimitiveValue" name="panelPrimitiveMonster" native="true">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>250</width>
+           <height>27</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" rowspan="2">
         <spacer name="horizontalSpacer_4">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>40</width>
+           <width>0</width>
            <height>20</height>
           </size>
          </property>
@@ -202,7 +217,20 @@
         </widget>
        </item>
        <item>
-        <widget class="WidgetVariable" name="widgetVariableStock" native="true"/>
+        <widget class="PanelPrimitiveValue" name="panelPrimitiveVariableStock" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>250</width>
+           <height>27</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="horizontalSpacer_6">
@@ -220,14 +248,74 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,1">
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QRadioButton" name="radioButtonAddRemove">
+        <widget class="QRadioButton" name="radioButtonAddEnemy">
+         <property name="text">
+          <string>Add enemy with instance ID:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="PanelPrimitiveValue" name="panelPrimitiveEnemyInstanceID" native="true">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>250</width>
+           <height>27</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="labelInInstanceEnemy">
          <property name="enabled">
           <bool>false</bool>
          </property>
          <property name="text">
-          <string/>
+          <string>in</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBoxInstanceTeamEnemy">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_9">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>288</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,1">
+       <item>
+        <widget class="QRadioButton" name="radioButtonModify">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Modify:</string>
          </property>
          <attribute name="buttonGroup">
           <string notr="true">buttonGroup</string>
@@ -235,20 +323,10 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBoxAddRemove">
+        <widget class="QComboBox" name="comboBoxModify">
          <property name="enabled">
           <bool>false</bool>
          </property>
-         <item>
-          <property name="text">
-           <string>Move</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Remove</string>
-          </property>
-         </item>
         </widget>
        </item>
        <item>
@@ -257,12 +335,12 @@
           <bool>false</bool>
          </property>
          <property name="text">
-          <string>the character with ID </string>
+          <string>character with instance ID </string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="PanelPrimitiveValue" name="widgetVariableConstantAddRemove" native="true">
+        <widget class="PanelPrimitiveValue" name="panelPrimitiveValueModify" native="true">
          <property name="enabled">
           <bool>false</bool>
          </property>
@@ -311,7 +389,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="labelAddRemoveIn">
+        <widget class="QLabel" name="labelAddRemoveTo">
          <property name="enabled">
           <bool>false</bool>
          </property>
@@ -328,12 +406,12 @@
           </size>
          </property>
          <property name="text">
-          <string>in</string>
+          <string>to</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBoxAddRemoveTeam">
+        <widget class="QComboBox" name="comboBoxModifyIn">
          <property name="enabled">
           <bool>false</bool>
          </property>
@@ -375,12 +453,6 @@
    <header>panelprimitivevalue.h</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>WidgetVariable</class>
-   <extends>QWidget</extends>
-   <header>widgetvariable.h</header>
-   <container>1</container>
-  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
@@ -418,7 +490,7 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

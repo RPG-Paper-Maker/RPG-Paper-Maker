@@ -1217,4 +1217,36 @@ void ProjectUpdater::updateVersion_1_8_0()
             skill->setTargetKind(TargetKind::User);
         }
     }
+
+    // Update modify team
+    connect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_8_0_commands(QStandardItem *)));
+    this->updateCommands();
+    disconnect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_8_0_commands(QStandardItem *)));
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_8_0_commands(QStandardItem *commands)
+{
+    EventCommand *command;
+    QVector<QString> list;
+    QString text;
+    int i, l;
+    if (commands->rowCount() == 0)
+    {
+        command = reinterpret_cast<EventCommand *>(commands->data().value<quintptr>());
+        list = command->commands();
+        if (command->kind() == EventCommandKind::ModifyTeam)
+        {
+            list.insert(4, QString::number(static_cast<int>(PrimitiveValueKind::Variable)));
+            list.insert(7, QString::number(static_cast<int>(PrimitiveValueKind::DataBase)));
+            command->setCommands(list);
+        }
+    }
+    for (i = 0, l = commands->rowCount(); i < l; i++)
+    {
+        this->updateVersion_1_8_0_commands(commands->child(i));
+    }
 }

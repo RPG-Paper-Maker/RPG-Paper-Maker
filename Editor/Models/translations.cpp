@@ -1322,6 +1322,10 @@ const QString Translations::CAMERA_Y_POSITION = "camera.y.position";
 const QString Translations::CAMERA_Z_POSITION = "camera.z.position";
 const QString Translations::TOTAL_SECONDS_CURRENT_MUSIC = "total.seconds.current.music";
 const QString Translations::TOTAL_SECONDS_CURRENT_BACKGROUND_MUSIC = "total.seconds.current.background.music";
+const QString Translations::CHARACTER_WITH_INSTANCE_ID = "character.with.instance.id";
+const QString Translations::ADD_ENEMY_INSTANCE_ID = "add.enemy.instance.id";
+const QString Translations::MODIFY = "modify";
+const QString Translations::HERO_ID = "hero.id";
 
 // -------------------------------------------------------
 //
