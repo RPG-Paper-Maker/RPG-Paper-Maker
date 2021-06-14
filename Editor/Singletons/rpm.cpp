@@ -648,6 +648,8 @@ void RPM::readTranslations() {
         RPM::translate(Translations::CHANGE_BATTLE_MUSIC) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::CHANGE_VICTORY_MUSIC) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::END_BATTLE),
+        RPM::translate(Translations::FORCE_AN_ACTION) + RPM::DOT_DOT_DOT,
+        "Change map properties" + RPM::DOT_DOT_DOT,
         ""
     });
     RPM::ENUM_TO_STRING_TARGET_KIND = QStringList({

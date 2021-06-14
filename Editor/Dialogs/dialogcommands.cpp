@@ -770,3 +770,10 @@ void DialogCommands::on_pushButtonForceAction_clicked()
 {
     this->openDialogCommand(EventCommandKind::ForceAnAction);
 }
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonChangeMapProperties_clicked()
+{
+    this->openDialogCommand(EventCommandKind::ChangeMapProperties);
+}

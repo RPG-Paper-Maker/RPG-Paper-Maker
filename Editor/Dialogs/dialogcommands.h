@@ -117,6 +117,7 @@ private slots:
     void on_pushButtonChangeVictoryMusic_clicked();
     void on_pushButtonEndBattle_clicked();
     void on_pushButtonForceAction_clicked();
+    void on_pushButtonChangeMapProperties_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H
