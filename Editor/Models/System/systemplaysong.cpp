@@ -43,7 +43,9 @@ SystemPlaySong::SystemPlaySong(int i, SongKind kind, PrimitiveValue *volume,
     m_isEnd(isEnd),
     m_end(end),
     m_isSelectedByID(isSelectedByID),
-    m_valueID(valueID)
+    m_valueID(valueID),
+    m_parameters(nullptr),
+    m_properties(nullptr)
 {
 
 }
@@ -101,6 +103,26 @@ void SystemPlaySong::setIsSelectedByID(bool b) {
 
 PrimitiveValue * SystemPlaySong::valueID() const {
     return m_valueID;
+}
+
+QStandardItemModel * SystemPlaySong::parameters() const
+{
+    return m_parameters;
+}
+
+void SystemPlaySong::setParameters(QStandardItemModel *parameters)
+{
+    m_parameters = parameters;
+}
+
+QStandardItemModel * SystemPlaySong::properties() const
+{
+    return m_properties;
+}
+
+void SystemPlaySong::setProperties(QStandardItemModel *properties)
+{
+    m_properties = properties;
 }
 
 // -------------------------------------------------------

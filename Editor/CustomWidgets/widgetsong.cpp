@@ -37,6 +37,11 @@ WidgetSong::~WidgetSong()
     delete ui;
 }
 
+SystemPlaySong * WidgetSong::song() const
+{
+    return m_song;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

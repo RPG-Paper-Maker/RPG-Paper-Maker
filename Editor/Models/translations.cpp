@@ -1326,6 +1326,8 @@ const QString Translations::CHARACTER_WITH_INSTANCE_ID = "character.with.instanc
 const QString Translations::ADD_ENEMY_INSTANCE_ID = "add.enemy.instance.id";
 const QString Translations::MODIFY = "modify";
 const QString Translations::HERO_ID = "hero.id";
+const QString Translations::CHANGE_MAP_PROPERTIES = "change.map.properties";
+const QString Translations::TILESET_ID = "tileset.id";
 
 // -------------------------------------------------------
 //

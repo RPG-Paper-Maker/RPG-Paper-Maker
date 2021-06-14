@@ -1339,6 +1339,8 @@ public:
     static const QString ADD_ENEMY_INSTANCE_ID;
     static const QString MODIFY;
     static const QString HERO_ID;
+    static const QString CHANGE_MAP_PROPERTIES;
+    static const QString TILESET_ID;
 
     Translations();
     virtual ~Translations();

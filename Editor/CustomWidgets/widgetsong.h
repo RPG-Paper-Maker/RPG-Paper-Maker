@@ -36,6 +36,8 @@ class WidgetSong : public QWidget
 public:
     explicit WidgetSong(QWidget *parent = nullptr);
     ~WidgetSong();
+    SystemPlaySong * song() const;
+
     void initialize(SystemPlaySong* song);
     void update();
     void openDialog();

@@ -54,6 +54,7 @@
 #include "dialogcommandcreateobjectinmap.h"
 #include "dialogcommandchangestatus.h"
 #include "dialogcommandforceanaction.h"
+#include "dialogcommandchangemapproperties.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -221,6 +222,8 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::ForceAnAction:
         return new DialogCommandForceAnAction(command, properties, parameters,
             troopMonstersList);
+    case EventCommandKind::ChangeMapProperties:
+        return new DialogCommandChangeMapProperties(command, properties, parameters);
     default:
         return nullptr;
     }

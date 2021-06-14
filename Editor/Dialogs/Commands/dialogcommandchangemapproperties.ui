@@ -127,7 +127,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="PanelPrimitiveValue" name="panelPrimitiveMusic" native="true">
+               <widget class="WidgetSong" name="widgetSongMusic" native="true">
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
@@ -153,7 +153,7 @@
                </widget>
               </item>
               <item row="2" column="1">
-               <widget class="PanelPrimitiveValue" name="panelPrimitiveBackgroundMusic" native="true">
+               <widget class="WidgetSong" name="widgetSongBackgroundMusic" native="true">
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
@@ -336,6 +336,12 @@
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSong</class>
+   <extends>QWidget</extends>
+   <header>widgetsong.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

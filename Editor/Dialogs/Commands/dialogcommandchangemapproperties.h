@@ -29,6 +29,7 @@ public:
     virtual ~DialogCommandChangeMapProperties();
 
     void initializePrimitives();
+    void initializeMapsInfos(QStandardItem *item, QString path, int level);
     void translate();
 
     virtual EventCommand * getCommand() const;
@@ -38,6 +39,16 @@ private:
     Ui::DialogCommandChangeMapProperties *ui;
     QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
+    QStandardItemModel *m_modelMaps;
+
+public slots:
+    void on_checkBoxTilesetID_toggled(bool checked);
+    void on_checkBoxMusic_toggled(bool checked);
+    void on_checkBoxBackgroundMusic_toggled(bool checked);
+    void on_checkBoxCameraPropertiesID_toggled(bool checked);
+    void on_checkBoxSky_toggled(bool checked);
+    void on_radioButtonColorID_toggled(bool checked);
+    void on_radioButtonSkyboxID_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDCHANGEMAPPROPERTIES_H

@@ -46,7 +46,8 @@ DialogCommandPlaySong::DialogCommandPlaySong(QString title, SongKind kind,
 
 DialogCommandPlaySong::DialogCommandPlaySong(QString title, SystemPlaySong
     *song) :
-    DialogCommandPlaySong(title, song->kind())
+    DialogCommandPlaySong(title, song->kind(), nullptr, song->properties(), song
+        ->parameters())
 {
     EventCommand command;
     m_song = song;

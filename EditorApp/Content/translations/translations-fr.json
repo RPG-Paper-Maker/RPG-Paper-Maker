@@ -1305,5 +1305,7 @@
     "character.with.instance.id": "Personnage avec instance d'ID",
     "add.enemy.instance.id": "Ajouter un ennemi avec instance d'ID",
     "modify": "Modifier",
-    "hero.id": "Héro d'ID"
+    "hero.id": "Héro d'ID",
+    "change.map.properties": "Changer les propriétés de carte",
+    "tileset.id": "Tileset d'ID"
 }

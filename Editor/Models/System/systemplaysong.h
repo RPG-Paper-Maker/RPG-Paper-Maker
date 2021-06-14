@@ -46,6 +46,10 @@ public:
     bool isSelectedByID() const;
     void setIsSelectedByID(bool b);
     PrimitiveValue * valueID() const;
+    QStandardItemModel * parameters() const;
+    void setParameters(QStandardItemModel *parameters);
+    QStandardItemModel * properties() const;
+    void setProperties(QStandardItemModel *properties);
 
     void setDefault();
     void updateName();
@@ -68,6 +72,8 @@ protected:
     PrimitiveValue *m_end;
     bool m_isSelectedByID;
     PrimitiveValue *m_valueID;
+    QStandardItemModel *m_parameters;
+    QStandardItemModel *m_properties;
 };
 
 #endif // SYSTEMPLAYSONG_H

@@ -1305,5 +1305,7 @@
     "character.with.instance.id": "Character with instance ID",
     "add.enemy.instance.id": "Add enemy with instance ID",
     "modify": "Modify",
-    "hero.id": "Hero ID"
+    "hero.id": "Hero ID",
+    "change.map.properties": "Change map properties",
+    "tileset.id": "Tileset ID"
 }
