@@ -56,6 +56,8 @@ public:
     EventCommand * createEventCommand(EventCommandKind kind);
     void toEventCommand(EventCommand& command, EventCommandKind kind);
     void fromEventCommand(EventCommand& command);
+    void getCommand(QVector<QString> &command) const;
+    void initializeCommand(EventCommand *command, int &i);
     bool isNone() const;
 
     virtual SuperListItem* createCopy() const;

@@ -176,15 +176,7 @@ EventCommand * SystemPlaySong::createEventCommand(EventCommandKind kind) {
 void SystemPlaySong::toEventCommand(EventCommand& command, EventCommandKind kind)
 {
     QVector<QString> list;
-    list << (m_isSelectedByID ? "1" : "0");
-    m_valueID->getCommandParameter(list);
-    list << QString::number(p_id);
-    m_volume->getCommandParameter(list);
-    list << (m_isStart ? "1" : "0");
-    m_start->getCommandParameter(list);
-    list << (m_isEnd ? "1" : "0");
-    m_end->getCommandParameter(list);
-
+    this->getCommand(list);
     command.setKind(kind);
     command.setCommands(list);
 }
@@ -194,15 +186,36 @@ void SystemPlaySong::toEventCommand(EventCommand& command, EventCommandKind kind
 void SystemPlaySong::fromEventCommand(EventCommand& command)
 {
     int i = 0;
+    this->initializeCommand(&command, i);
+}
 
-    m_isSelectedByID = command.valueCommandAt(i++) == "1";
-    m_valueID->initializeCommandParameter(&command, i);
-    p_id = command.valueCommandAt(i++).toInt();
-    m_volume->initializeCommandParameter(&command, i);
-    m_isStart = command.valueCommandAt(i++) == "1";
-    m_start->initializeCommandParameter(&command, i);
-    m_isEnd = command.valueCommandAt(i++) == "1";
-    m_end->initializeCommandParameter(&command, i);
+// -------------------------------------------------------
+
+void SystemPlaySong::getCommand(QVector<QString> &command) const
+{
+    command << (m_isSelectedByID ? "1" : "0");
+    m_valueID->getCommandParameter(command);
+    command << QString::number(p_id);
+    m_volume->getCommandParameter(command);
+    command << (m_isStart ? "1" : "0");
+    m_start->getCommandParameter(command);
+    command << (m_isEnd ? "1" : "0");
+    m_end->getCommandParameter(command);
+}
+
+// -------------------------------------------------------
+
+void SystemPlaySong::initializeCommand(EventCommand *command, int &i)
+{
+    m_isSelectedByID = command->valueCommandAt(i++) == "1";
+    m_valueID->initializeCommandParameter(command, i);
+    p_id = command->valueCommandAt(i++).toInt();
+    m_volume->initializeCommandParameter(command, i);
+    m_isStart = command->valueCommandAt(i++) == "1";
+    m_start->initializeCommandParameter(command, i);
+    m_isEnd = command->valueCommandAt(i++) == "1";
+    m_end->initializeCommandParameter(command, i);
+    this->updateName();
 }
 
 // -------------------------------------------------------

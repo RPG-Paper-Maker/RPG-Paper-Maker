@@ -133,7 +133,7 @@ private:
         &operation) const;
     QString strMoveCameraOptions(QStandardItemModel *parameters, int &i) const;
     QString strPlaySong(QStandardItemModel *properties, QStandardItemModel *parameters,
-        SongKind kind) const;
+        SongKind kind, int &i) const;
     QString strPlayMusic(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
     QString strPlayBackgroundSound(QStandardItemModel *properties,
@@ -208,6 +208,8 @@ private:
         *parameters) const;
     QString strForceAnAction(QStandardItemModel *properties, QStandardItemModel
         *parameters, QStandardItemModel *troopMonstersList) const;
+    QString strChangeMapProperties(QStandardItemModel *properties, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

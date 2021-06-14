@@ -334,6 +334,8 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::ForceAnAction:
         str += this->strForceAnAction(properties, parameters, troopMonstersList);
         break;
+    case EventCommandKind::ChangeMapProperties:
+        str += this->strChangeMapProperties(properties, parameters); break;
     default:
         break;
     }
@@ -1537,13 +1539,10 @@ QString EventCommand::strMoveCameraOptions(QStandardItemModel *parameters, int
 // -------------------------------------------------------
 
 QString EventCommand::strPlaySong(QStandardItemModel *properties, QStandardItemModel
-    *parameters, SongKind kind) const
+    *parameters, SongKind kind, int &i) const
 {
     QString idNumber, id, volume, start, end;
     bool isIDNumber, isStart, isEnd;
-    int i;
-
-    i = 0;
     isIDNumber = m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING;
     idNumber = this->strProperty(i, properties, parameters);
     id = SuperListItem::getById(RPM::get()->project()->songsDatas()->model(kind)
@@ -1564,8 +1563,9 @@ QString EventCommand::strPlaySong(QStandardItemModel *properties, QStandardItemM
 QString EventCommand::strPlayMusic(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
+    int i = 0;
     return RPM::translate(Translations::PLAY_MUSIC) + RPM::COLON + RPM::SPACE +
-        this->strPlaySong(properties, parameters, SongKind::Music);
+        this->strPlaySong(properties, parameters, SongKind::Music, i);
 }
 
 // -------------------------------------------------------
@@ -1573,9 +1573,10 @@ QString EventCommand::strPlayMusic(QStandardItemModel *properties,
 QString EventCommand::strPlayBackgroundSound(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
+    int i = 0;
     return RPM::translate(Translations::PLAY_BACKGROUND_SOUND) + RPM::COLON +
         RPM::SPACE + this->strPlaySong(properties, parameters, SongKind
-        ::BackgroundSound);
+        ::BackgroundSound, i);
 }
 
 // -------------------------------------------------------
@@ -1583,8 +1584,9 @@ QString EventCommand::strPlayBackgroundSound(QStandardItemModel *properties,
 QString EventCommand::strPlaySound(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
+    int i = 0;
     return RPM::translate(Translations::PLAY_A_SOUND) + RPM::COLON + RPM::SPACE
-        + this->strPlaySong(properties, parameters, SongKind::Sound);
+        + this->strPlaySong(properties, parameters, SongKind::Sound, i);
 }
 
 // -------------------------------------------------------
@@ -1592,8 +1594,9 @@ QString EventCommand::strPlaySound(QStandardItemModel *properties,
 QString EventCommand::strPlayMusicEffect(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
+    int i = 0;
     return RPM::translate(Translations::PLAY_MUSIC_EFFECT) + RPM::COLON + RPM
-        ::SPACE + this->strPlaySong(properties, parameters, SongKind::MusicEffect);
+        ::SPACE + this->strPlaySong(properties, parameters, SongKind::MusicEffect, i);
 }
 
 // -------------------------------------------------------
@@ -2451,8 +2454,9 @@ QString EventCommand::strChangeStatus(QStandardItemModel *properties,
 QString EventCommand::strChangeBattleMusic(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
+    int i = 0;
     return RPM::translate(Translations::CHANGE_BATTLE_MUSIC) + RPM::COLON + RPM
-        ::SPACE + this->strPlaySong(properties, parameters, SongKind::Music);
+        ::SPACE + this->strPlaySong(properties, parameters, SongKind::Music, i);
 }
 
 // -------------------------------------------------------
@@ -2460,8 +2464,9 @@ QString EventCommand::strChangeBattleMusic(QStandardItemModel *properties,
 QString EventCommand::strChangeVictoryMusic(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
+    int i = 0;
     return RPM::translate(Translations::CHANGE_VICTORY_MUSIC) + RPM::COLON + RPM
-        ::SPACE + this->strPlaySong(properties, parameters, SongKind::Music);
+        ::SPACE + this->strPlaySong(properties, parameters, SongKind::Music, i);
 }
 
 // -------------------------------------------------------
@@ -2532,6 +2537,70 @@ QString EventCommand::strForceAnAction(QStandardItemModel *properties,
     return RPM::translate(Translations::FORCE_AN_ACTION) + RPM::COLON + RPM::SPACE +
         battler + RPM::SPACE + RPM::DASH + RPM::SPACE + action + RPM::SPACE + RPM
         ::DASH + RPM::SPACE + target + option;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChangeMapProperties(QStandardItemModel *properties,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    QString str = RPM::translate(Translations::CHANGE_MAP_PROPERTIES) + RPM
+        ::COLON + RPM::SPACE;
+    switch (m_listCommand.at(i + 1).toInt())
+    {
+    case -1:
+        str += RPM::translate(Translations::THIS_MAP);
+        i += 2;
+        break;
+    default:
+        str += this->strProperty(i, properties, parameters);
+        break;
+    }
+    QStringList list;
+    if (RPM::stringToBool(this->valueCommandAt(i++)))
+    {
+        list << RPM::translate(Translations::TILESET_ID) + RPM::COLON + RPM
+            ::SPACE + this->strDataBaseId(i, properties, RPM::get()->project()
+            ->gameDatas()->tilesetsDatas()->model(), parameters);
+    }
+    if (RPM::stringToBool(this->valueCommandAt(i++)))
+    {
+        list << RPM::translate(Translations::MUSIC) + RPM::COLON + RPM::SPACE +
+            this->strPlaySong(properties, parameters, SongKind::Music, i);
+    }
+    if (RPM::stringToBool(this->valueCommandAt(i++)))
+    {
+        list << RPM::translate(Translations::BACKGROUND_SOUND) + RPM::COLON + RPM
+            ::SPACE + this->strPlaySong(properties, parameters, SongKind
+            ::BackgroundSound, i);
+    }
+    if (RPM::stringToBool(this->valueCommandAt(i++)))
+    {
+        list << RPM::translate(Translations::CAMERA_PROPERTIES_ID) + RPM::COLON +
+            RPM::SPACE + this->strDataBaseId(i, properties, RPM::get()->project()
+            ->gameDatas()->systemDatas()->modelcameraProperties(), parameters);
+    }
+    if (RPM::stringToBool(this->valueCommandAt(i++)))
+    {
+        QString sky = RPM::translate(Translations::SKY) + RPM::COLON + RPM::SPACE;
+        switch (this->valueCommandAt(i++).toInt())
+        {
+        case 0:
+            sky += RPM::translate(Translations::COLOR_ID).toLower() + RPM::SPACE +
+                this->strDataBaseId(i, properties, RPM::get()->project()
+                ->gameDatas()->systemDatas()->modelColors(), parameters);
+            break;
+        case 1:
+            sky += RPM::translate(Translations::SKYBOX_ID).toLower() + RPM::SPACE +
+                this->strDataBaseId(i, properties, RPM::get()->project()
+                ->gameDatas()->systemDatas()->modelSkyBoxes(), parameters);
+            break;
+        }
+        list << sky;
+    }
+    str += list.join(RPM::NEW_LINE);
+    return str;
 }
 
 // -------------------------------------------------------

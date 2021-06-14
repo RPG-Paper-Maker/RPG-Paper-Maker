@@ -136,6 +136,40 @@ void DialogCommandChangeMapProperties::translate()
 EventCommand * DialogCommandChangeMapProperties::getCommand() const
 {
     QVector<QString> command;
+    ui->panelPrimitiveMapID->getCommand(command);
+    command.append(RPM::boolToString(ui->checkBoxTilesetID->isChecked()));
+    if (ui->checkBoxTilesetID->isChecked())
+    {
+        ui->panelPrimitiveTilesetID->getCommand(command);
+    }
+    command.append(RPM::boolToString(ui->checkBoxMusic->isChecked()));
+    if (ui->checkBoxMusic->isChecked())
+    {
+        ui->widgetSongMusic->song()->getCommand(command);
+    }
+    command.append(RPM::boolToString(ui->checkBoxBackgroundMusic->isChecked()));
+    if (ui->checkBoxBackgroundMusic->isChecked())
+    {
+        ui->widgetSongBackgroundMusic->song()->getCommand(command);
+    }
+    command.append(RPM::boolToString(ui->checkBoxCameraPropertiesID->isChecked()));
+    if (ui->checkBoxCameraPropertiesID->isChecked())
+    {
+        ui->panelPrimitiveCameraPropertiesID->getCommand(command);
+    }
+    command.append(RPM::boolToString(ui->checkBoxSky->isChecked()));
+    if (ui->checkBoxSky->isChecked())
+    {
+        if (ui->radioButtonColorID->isChecked())
+        {
+            command.append("0");
+            ui->panelPrimitiveColorID->getCommand(command);
+        } else if (ui->radioButtonSkyboxID->isChecked())
+        {
+            command.append("1");
+            ui->panelPrimitiveSkyboxID->getCommand(command);
+        }
+    }
     return new EventCommand(EventCommandKind::ChangeMapProperties, command);
 }
 
@@ -144,6 +178,45 @@ EventCommand * DialogCommandChangeMapProperties::getCommand() const
 void DialogCommandChangeMapProperties::initialize(EventCommand *command)
 {
     int i = 0;
+    ui->panelPrimitiveMapID->initializeCommand(command, i);
+    if (RPM::stringToBool(command->valueCommandAt(i++)))
+    {
+        ui->checkBoxTilesetID->setChecked(true);
+        ui->panelPrimitiveTilesetID->initializeCommand(command, i);
+    }
+    if (RPM::stringToBool(command->valueCommandAt(i++)))
+    {
+        ui->checkBoxMusic->setChecked(true);
+        ui->widgetSongMusic->song()->initializeCommand(command, i);
+        ui->widgetSongMusic->update();
+    }
+    if (RPM::stringToBool(command->valueCommandAt(i++)))
+    {
+        ui->checkBoxBackgroundMusic->setChecked(true);
+        ui->widgetSongBackgroundMusic->song()->initializeCommand(command, i);
+        ui->widgetSongBackgroundMusic->update();
+    }
+    if (RPM::stringToBool(command->valueCommandAt(i++)))
+    {
+        ui->checkBoxCameraPropertiesID->setChecked(true);
+        ui->panelPrimitiveCameraPropertiesID->initializeCommand(command, i);
+    }
+    if (RPM::stringToBool(command->valueCommandAt(i++)))
+    {
+        ui->checkBoxSky->setChecked(true);
+        int kind = command->valueCommandAt(i++).toInt();
+        switch (kind)
+        {
+        case 0:
+            ui->radioButtonColorID->setChecked(true);
+            ui->panelPrimitiveColorID->initializeCommand(command, i);
+            break;
+        case 1:
+            ui->radioButtonSkyboxID->setChecked(true);
+            ui->panelPrimitiveSkyboxID->initializeCommand(command, i);
+            break;
+        }
+    }
 }
 
 // -------------------------------------------------------
