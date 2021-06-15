@@ -54,7 +54,9 @@ void DialogCommandChangeExperienceCurve::initializePrimitives()
     ui->panelPrimitiveHeroEnemyInstanceID->setNumberValue(1);
     ui->comboBoxTeam->addItems(RPM::ENUM_TO_STRING_TEAM);
     ui->panelPrimitiveRange->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveRange->setNumberValue(2);
     ui->panelPrimitiveRangeTo->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveRangeTo->setNumberValue(2);
     ui->panelPrimitiveTotalExperience->initializeNumber(m_parameters, m_properties);
 }
 
@@ -97,6 +99,38 @@ void DialogCommandChangeExperienceCurve::translate()
 EventCommand * DialogCommandChangeExperienceCurve::getCommand() const
 {
     QVector<QString> command;
+    if (ui->radioButtonHeroEnemyInstanceID->isChecked())
+    {
+        command.append("0");
+        ui->panelPrimitiveHeroEnemyInstanceID->getCommand(command);
+    }
+    if (ui->radioButtonEntire->isChecked())
+    {
+        command.append("1");
+        command.append(QString::number(ui->comboBoxTeam->currentIndex()));
+    }
+    ui->panelPrimitiveRange->getCommand(command);
+    ui->panelPrimitiveRangeTo->getCommand(command);
+    if (ui->radioButtonEquals->isChecked())
+    {
+        command.append("0");
+    } else if (ui->radioButtonPlus->isChecked())
+    {
+        command.append("1");
+    } else if (ui->radioButtonMinus->isChecked())
+    {
+        command.append("2");
+    } else if (ui->radioButtonTimes->isChecked())
+    {
+        command.append("3");
+    } else if (ui->radioButtonDivided->isChecked())
+    {
+        command.append("4");
+    } else if (ui->radioButtonModulo->isChecked())
+    {
+        command.append("5");
+    }
+    ui->panelPrimitiveTotalExperience->getCommand(command);
     return new EventCommand(EventCommandKind::ChangeExperienceCurve, command);
 }
 
@@ -105,6 +139,35 @@ EventCommand * DialogCommandChangeExperienceCurve::getCommand() const
 void DialogCommandChangeExperienceCurve::initialize(EventCommand *command)
 {
     int i = 0;
+    switch (command->valueCommandAt(i++).toInt())
+    {
+    case 0:
+        ui->radioButtonHeroEnemyInstanceID->setChecked(true);
+        ui->panelPrimitiveHeroEnemyInstanceID->initializeCommand(command, i);
+        break;
+    case 1:
+        ui->radioButtonEntire->setChecked(true);
+        ui->comboBoxTeam->setCurrentIndex(command->valueCommandAt(i++).toInt());
+        break;
+    }
+    ui->panelPrimitiveRange->initializeCommand(command, i);
+    ui->panelPrimitiveRangeTo->initializeCommand(command, i);
+    switch (command->valueCommandAt(i++).toInt())
+    {
+    case 0:
+        ui->radioButtonEquals->setChecked(true); break;
+    case 1:
+        ui->radioButtonPlus->setChecked(true); break;
+    case 2:
+        ui->radioButtonMinus->setChecked(true); break;
+    case 3:
+        ui->radioButtonTimes->setChecked(true); break;
+    case 4:
+        ui->radioButtonDivided->setChecked(true); break;
+    case 5:
+        ui->radioButtonModulo->setChecked(true); break;
+    }
+    ui->panelPrimitiveTotalExperience->initializeCommand(command, i);
 }
 
 // -------------------------------------------------------

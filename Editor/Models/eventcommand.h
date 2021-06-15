@@ -210,6 +210,8 @@ private:
         *parameters, QStandardItemModel *troopMonstersList) const;
     QString strChangeMapProperties(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
+    QString strChangeExperienceCurve(QStandardItemModel *properties, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

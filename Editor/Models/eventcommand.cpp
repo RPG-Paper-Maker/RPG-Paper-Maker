@@ -336,6 +336,8 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
         break;
     case EventCommandKind::ChangeMapProperties:
         str += this->strChangeMapProperties(properties, parameters); break;
+    case EventCommandKind::ChangeExperienceCurve:
+        str += this->strChangeExperienceCurve(properties, parameters); break;
     default:
         break;
     }
@@ -2600,6 +2602,36 @@ QString EventCommand::strChangeMapProperties(QStandardItemModel *properties,
         list << sky;
     }
     str += list.join(RPM::NEW_LINE);
+    return str;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChangeExperienceCurve(QStandardItemModel *properties,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    QString str = RPM::translate(Translations::CHANGE_EXPERIENCE_CURVE) + RPM
+        ::COLON + RPM::SPACE;
+    switch (m_listCommand.at(i++).toInt())
+    {
+    case 0:
+        str += RPM::translate(Translations::HERO_ENEMY_INSTANCE_ID) + RPM
+            ::SPACE + this->strProperty(i, properties, parameters);
+        break;
+    case 1:
+        str += RPM::translate(Translations::THE_ENTIRE) + RPM::SPACE + RPM
+            ::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++).toInt());
+        break;
+    }
+    str += RPM::SPACE + RPM::translate(Translations::LEVEL).toLower() + RPM
+        ::SPACE + RPM::translate(Translations::RANGE).toLower() + RPM::SPACE +
+        this->strProperty(i, properties, parameters) + RPM::SPACE + RPM::translate(
+        Translations::TO).toLower() + RPM::SPACE;
+    str += this->strProperty(i, properties, parameters) + RPM::SPACE + RPM::translate(
+        Translations::TOTAL_EXPERIENCE).toLower() + RPM::SPACE;
+    str += this->strChangeVariablesOperation(i) + RPM::SPACE;
+    str += this->strProperty(i, properties, parameters);
     return str;
 }
 
