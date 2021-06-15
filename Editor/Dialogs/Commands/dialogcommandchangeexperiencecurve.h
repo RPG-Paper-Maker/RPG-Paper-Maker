@@ -40,6 +40,8 @@ private:
     QStandardItemModel *m_parameters;
 
 public slots:
+    void on_radioButtonHeroEnemyInstanceID_toggled(bool checked);
+    void on_radioButtonEntire_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDCHANGEEXPERIENCECURVE_H

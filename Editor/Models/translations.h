@@ -1341,6 +1341,8 @@ public:
     static const QString HERO_ID;
     static const QString CHANGE_MAP_PROPERTIES;
     static const QString TILESET_ID;
+    static const QString CHANGE_EXPERIENCE_CURVE;
+    static const QString TOTAL_EXPERIENCE;
 
     Translations();
     virtual ~Translations();

@@ -88,7 +88,11 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QComboBox" name="comboBoxTeam"/>
+             <widget class="QComboBox" name="comboBoxTeam">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+             </widget>
             </item>
             <item row="1" column="2" colspan="3">
              <spacer name="horizontalSpacer_3">

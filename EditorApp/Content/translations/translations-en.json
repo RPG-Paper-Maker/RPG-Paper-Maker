@@ -1307,5 +1307,7 @@
     "modify": "Modify",
     "hero.id": "Hero ID",
     "change.map.properties": "Change map properties",
-    "tileset.id": "Tileset ID"
+    "tileset.id": "Tileset ID",
+    "change.experience.curve": "Change experience curve",
+    "total.experience": "Total experience"
 }
