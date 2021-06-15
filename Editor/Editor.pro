@@ -54,6 +54,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommandchangeaskill.h \
     Dialogs/Commands/dialogcommandchangeastatistic.h \
     Dialogs/Commands/dialogcommandchangeequipment.h \
+    Dialogs/Commands/dialogcommandchangeexperiencecurve.h \
     Dialogs/Commands/dialogcommandchangemapproperties.h \
     Dialogs/Commands/dialogcommandchangemoney.h \
     Dialogs/Commands/dialogcommandchangename.h \
@@ -483,6 +484,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommandchangeaskill.cpp \
     Dialogs/Commands/dialogcommandchangeastatistic.cpp \
     Dialogs/Commands/dialogcommandchangeequipment.cpp \
+    Dialogs/Commands/dialogcommandchangeexperiencecurve.cpp \
     Dialogs/Commands/dialogcommandchangemapproperties.cpp \
     Dialogs/Commands/dialogcommandchangemoney.cpp \
     Dialogs/Commands/dialogcommandchangename.cpp \
@@ -855,6 +857,7 @@ FORMS += \
     Dialogs/Commands/dialogcommandchangeaskill.ui \
     Dialogs/Commands/dialogcommandchangeastatistic.ui \
     Dialogs/Commands/dialogcommandchangeequipment.ui \
+    Dialogs/Commands/dialogcommandchangeexperiencecurve.ui \
     Dialogs/Commands/dialogcommandchangemapproperties.ui \
     Dialogs/Commands/dialogcommandchangemoney.ui \
     Dialogs/Commands/dialogcommandchangename.ui \

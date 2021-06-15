@@ -91,6 +91,7 @@ enum class EventCommandKind {
     EndBattle,
     ForceAnAction,
     ChangeMapProperties,
+    ChangeExperienceCurve,
     Last
 };
 

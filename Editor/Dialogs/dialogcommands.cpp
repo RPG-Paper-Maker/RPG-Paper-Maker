@@ -55,6 +55,7 @@
 #include "dialogcommandchangestatus.h"
 #include "dialogcommandforceanaction.h"
 #include "dialogcommandchangemapproperties.h"
+#include "dialogcommandchangeexperiencecurve.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -224,6 +225,8 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
             troopMonstersList);
     case EventCommandKind::ChangeMapProperties:
         return new DialogCommandChangeMapProperties(command, properties, parameters);
+    case EventCommandKind::ChangeExperienceCurve:
+        return new DialogCommandChangeExperienceCurve(command, properties, parameters);
     default:
         return nullptr;
     }
@@ -779,4 +782,11 @@ void DialogCommands::on_pushButtonForceAction_clicked()
 void DialogCommands::on_pushButtonChangeMapProperties_clicked()
 {
     this->openDialogCommand(EventCommandKind::ChangeMapProperties);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonChangeExperienceCurve_clicked()
+{
+    this->openDialogCommand(EventCommandKind::ChangeExperienceCurve);
 }
