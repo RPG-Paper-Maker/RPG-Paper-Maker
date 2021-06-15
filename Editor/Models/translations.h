@@ -1343,6 +1343,8 @@ public:
     static const QString TILESET_ID;
     static const QString CHANGE_EXPERIENCE_CURVE;
     static const QString TOTAL_EXPERIENCE;
+    static const QString CHANGE_CLASS;
+    static const QString CLASS_ID;
 
     Translations();
     virtual ~Translations();

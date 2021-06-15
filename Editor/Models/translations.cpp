@@ -1330,6 +1330,8 @@ const QString Translations::CHANGE_MAP_PROPERTIES = "change.map.properties";
 const QString Translations::TILESET_ID = "tileset.id";
 const QString Translations::CHANGE_EXPERIENCE_CURVE = "change.experience.curve";
 const QString Translations::TOTAL_EXPERIENCE = "total.experience";
+const QString Translations::CHANGE_CLASS = "change.class";
+const QString Translations::CLASS_ID = "class.id";
 
 // -------------------------------------------------------
 //

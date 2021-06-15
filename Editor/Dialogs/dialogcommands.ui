@@ -759,9 +759,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButtonChangeClass_3">
+               <widget class="QPushButton" name="pushButtonChangeClass">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Change class...</string>
@@ -775,6 +775,16 @@
                 </property>
                 <property name="text">
                  <string>Change equipment...</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonChangeGraphics">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Change graphics...</string>
                 </property>
                </widget>
               </item>

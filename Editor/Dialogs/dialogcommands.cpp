@@ -56,6 +56,7 @@
 #include "dialogcommandforceanaction.h"
 #include "dialogcommandchangemapproperties.h"
 #include "dialogcommandchangeexperiencecurve.h"
+#include "dialogcommandchangeclass.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -227,6 +228,8 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandChangeMapProperties(command, properties, parameters);
     case EventCommandKind::ChangeExperienceCurve:
         return new DialogCommandChangeExperienceCurve(command, properties, parameters);
+    case EventCommandKind::ChangeClass:
+        return new DialogCommandChangeClass(command, properties, parameters);
     default:
         return nullptr;
     }
@@ -789,4 +792,11 @@ void DialogCommands::on_pushButtonChangeMapProperties_clicked()
 void DialogCommands::on_pushButtonChangeExperienceCurve_clicked()
 {
     this->openDialogCommand(EventCommandKind::ChangeExperienceCurve);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonChangeClass_clicked()
+{
+    this->openDialogCommand(EventCommandKind::ChangeClass);
 }

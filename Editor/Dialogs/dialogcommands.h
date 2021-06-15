@@ -119,6 +119,7 @@ private slots:
     void on_pushButtonForceAction_clicked();
     void on_pushButtonChangeMapProperties_clicked();
     void on_pushButtonChangeExperienceCurve_clicked();
+    void on_pushButtonChangeClass_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

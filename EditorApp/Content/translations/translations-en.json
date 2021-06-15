@@ -1309,5 +1309,7 @@
     "change.map.properties": "Change map properties",
     "tileset.id": "Tileset ID",
     "change.experience.curve": "Change experience curve",
-    "total.experience": "Total experience"
+    "total.experience": "Total experience",
+    "change.class": "Change class",
+    "class.id": "Class ID"
 }

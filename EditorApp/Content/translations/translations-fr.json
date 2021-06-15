@@ -1309,5 +1309,7 @@
     "change.map.properties": "Changer les propriétés de carte",
     "tileset.id": "Tileset d'ID",
     "change.experience.curve": "Changer la courbed d'expérience",
-    "total.experience": "Expérience totale"
+    "total.experience": "Expérience totale",
+    "change.class": "Changer la classe",
+    "class.id": "Classe d'ID"
 }

@@ -212,6 +212,8 @@ private:
         *parameters) const;
     QString strChangeExperienceCurve(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
+    QString strChangeClass(QStandardItemModel *properties, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

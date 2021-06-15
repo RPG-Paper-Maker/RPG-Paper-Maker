@@ -92,6 +92,7 @@ enum class EventCommandKind {
     ForceAnAction,
     ChangeMapProperties,
     ChangeExperienceCurve,
+    ChangeClass,
     Last
 };
 
