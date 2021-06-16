@@ -62,6 +62,7 @@ const QString SystemDatas::JSON_AUTOTILES_FRAMES = "autotilesFrames";
 const QString SystemDatas::JSON_AUTOTILES_FRAME_DURATION = "autotilesFrameDuration";
 const QString SystemDatas::JSON_PORTION_RAY_ENGINE = "portionRayEngine";
 const QString SystemDatas::JSON_PORTION_RAY_INGAME = "portionRayIngame";
+const QString SystemDatas::JSON_SAVE_SLOTS = "saveSlots";
 const bool SystemDatas::DEFAULT_ANTIALIASING = false;
 const int SystemDatas::DEFAULT_MAP_FRAME_DURATION = 150;
 const int SystemDatas::DEFAULT_BATTLERS_FRAMES = 4;
@@ -71,6 +72,7 @@ const int SystemDatas::DEFAULT_AUTOTILES_FRAMES = 4;
 const int SystemDatas::DEFAULT_AUTOTILES_FRAME_DURATION = 150;
 const int SystemDatas::DEFAULT_PORTION_RAY_ENGINE = 6;
 const int SystemDatas::DEFAULT_PORTION_RAY_INGAME = 3;
+const int SystemDatas::DEFAULT_SAVE_SLOTS = 4;
 
 // -------------------------------------------------------
 //
@@ -114,7 +116,8 @@ SystemDatas::SystemDatas() :
     m_soundConfirmation(new SystemPlaySong(-1, SongKind::Sound)),
     m_soundCancel(new SystemPlaySong(-1, SongKind::Sound)),
     m_soundImpossible(new SystemPlaySong(-1, SongKind::Sound)),
-    m_dialogBoxOptions(new EventCommand(EventCommandKind::SetDialogBoxOptions))
+    m_dialogBoxOptions(new EventCommand(EventCommandKind::SetDialogBoxOptions)),
+    m_saveSlots(DEFAULT_SAVE_SLOTS)
 {
 
 }
@@ -402,6 +405,16 @@ EventCommand * SystemDatas::dialogBoxOptions() const {
 
 void SystemDatas::setDialogBoxOptions(EventCommand *command) {
     m_dialogBoxOptions = command;
+}
+
+int SystemDatas::saveSlots() const
+{
+    return m_saveSlots;
+}
+
+void SystemDatas::setSaveSlots(int saveSlots)
+{
+    m_saveSlots = saveSlots;
 }
 
 // -------------------------------------------------------
@@ -944,6 +957,12 @@ void SystemDatas::read(const QJsonObject &json){
         }
         m_enterNameTable.append(listEnterName);
     }
+
+    // Save slots
+    if (json.contains(JSON_SAVE_SLOTS))
+    {
+        m_saveSlots = json[JSON_SAVE_SLOTS].toInt();
+    }
 }
 
 // -------------------------------------------------------
@@ -1186,4 +1205,10 @@ void SystemDatas::write(QJsonObject &json) const{
         jsonArray.append(tab);
     }
     json[JSON_ENTER_NAME_TABLE] = jsonArray;
+
+    // Save slots
+    if (m_saveSlots != DEFAULT_SAVE_SLOTS)
+    {
+        json[JSON_SAVE_SLOTS] = m_saveSlots;
+    }
 }

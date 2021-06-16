@@ -373,6 +373,11 @@ void DialogCommands::translate() {
     ui->pushButtonResetCamera->setText(EventCommand::kindToString(EventCommandKind::ResetCamera));
     ui->pushButtonChangeBattleMusic->setText(EventCommand::kindToString(EventCommandKind::ChangeBattleMusic));
     ui->pushButtonChangeVictoryMusic->setText(EventCommand::kindToString(EventCommandKind::ChangeVictoryMusic));
+    ui->pushButtonForceAction->setText(EventCommand::kindToString(EventCommandKind::ForceAnAction));
+    ui->pushButtonChangeMapProperties->setText(EventCommand::kindToString(EventCommandKind::ChangeMapProperties));
+    ui->pushButtonChangeExperienceCurve->setText(EventCommand::kindToString(EventCommandKind::ChangeExperienceCurve));
+    ui->pushButtonChangeClass->setText(EventCommand::kindToString(EventCommandKind::ChangeClass));
+    ui->pushButtonChangeChronometer->setText(EventCommand::kindToString(EventCommandKind::ChangeChronometer));
     ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
     ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));
     ui->groupBoxMedia->setTitle(RPM::translate(Translations::MEDIA));

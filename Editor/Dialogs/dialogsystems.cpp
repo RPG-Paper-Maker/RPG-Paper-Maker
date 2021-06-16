@@ -150,6 +150,7 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->spinBoxAutotilesFrameDuration->setValue(systemDatas->autotilesFrameDuration());
     ui->panelPrimitiveMapFrameDuration->initializeNumberAndUpdate(systemDatas
         ->mapFrameDuration());
+    ui->spinBoxSaveSlots->setValue(systemDatas->saveSlots());
     ui->primitiveValuePriceSoldItem->initializeNumberAndUpdate(systemDatas
         ->priceSoldItem(), false);
 
@@ -749,6 +750,13 @@ void DialogSystems::on_pushButtonDefaultDialogBoxOptions_clicked() {
         RPM::get()->project()->gameDatas()->systemDatas()->setDialogBoxOptions(
             command);
     }
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxSaveSlots_valueChanged(int i)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setSaveSlots(i);
 }
 
 // -------------------------------------------------------

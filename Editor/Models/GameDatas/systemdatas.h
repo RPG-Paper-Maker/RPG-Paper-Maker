@@ -67,6 +67,7 @@ public:
     static const QString JSON_AUTOTILES_FRAME_DURATION;
     static const QString JSON_PORTION_RAY_ENGINE;
     static const QString JSON_PORTION_RAY_INGAME;
+    static const QString JSON_SAVE_SLOTS;
     static const bool DEFAULT_ANTIALIASING;
     static const int DEFAULT_MAP_FRAME_DURATION;
     static const int DEFAULT_BATTLERS_FRAMES;
@@ -76,6 +77,7 @@ public:
     static const int DEFAULT_AUTOTILES_FRAME_DURATION;
     static const int DEFAULT_PORTION_RAY_ENGINE;
     static const int DEFAULT_PORTION_RAY_INGAME;
+    static const int DEFAULT_SAVE_SLOTS;
 
     SystemDatas();
     virtual ~SystemDatas();
@@ -145,6 +147,8 @@ public:
     SystemPlaySong * soundImpossible() const;
     EventCommand * dialogBoxOptions() const;
     void setDialogBoxOptions(EventCommand *command);
+    int saveSlots() const;
+    void setSaveSlots(int saveSlots);
 
     void setDefault();
     void setDefaultColors();
@@ -212,6 +216,7 @@ private:
     SystemPlaySong *m_soundCancel;
     SystemPlaySong *m_soundImpossible;
     EventCommand *m_dialogBoxOptions;
+    int m_saveSlots;
 };
 
 #endif // SYSTEMDATAS_H
