@@ -74,6 +74,7 @@ private slots:
     void on_radioButtonArmor_toggled(bool checked);
     void on_radioButtonOthersKey_toggled(bool checked);
     void on_radioButtonObjectIDLookingAt_toggled(bool checked);
+    void on_radioButtonChronometerID_toggled(bool checked);
     void on_radioButtonOthersScript_toggled(bool checked);
 };
 

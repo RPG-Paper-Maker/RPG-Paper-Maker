@@ -72,6 +72,7 @@ void DialogCommandConditions::initializePrimitives() {
     m_groupButtonMain->addButton(ui->radioButtonArmor);
     m_groupButtonMain->addButton(ui->radioButtonOthersKey);
     m_groupButtonMain->addButton(ui->radioButtonEscapedLastBattle);
+    m_groupButtonMain->addButton(ui->radioButtonChronometerID);
     m_groupButtonMain->addButton(ui->radioButtonOthersScript);
     m_groupButtonMain->addButton(ui->radioButtonObjectIDLookingAt);
     m_groupButtonHeroesMain = new QButtonGroup;
@@ -152,6 +153,11 @@ void DialogCommandConditions::initializePrimitives() {
     ui->panelPrimitiveOthersKeyID->initializeDataBaseCommandId(RPM::get()
         ->project()->keyBoardDatas()->model(), m_parameters, m_properties);
     ui->panelPrimitiveOthersKeyValue->initializeSwitch(m_parameters, m_properties);
+    ui->panelPrimitiveChronometerID->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveChronometerID->setKind(PrimitiveValueKind::Variable);
+    ui->panelPrimitiveChronometerID->setNumberValue(1);
+    ui->comboBoxChronometerOperation->addItems(RPM::ENUM_TO_STRING_OPERATION);
+    ui->panelPrimitiveChronometerSeconds->initializeNumber(m_parameters, m_properties);
     ui->panelPrimitiveOthersScript->initializeMessage(true, m_parameters,
         m_properties);
 
@@ -230,6 +236,8 @@ void DialogCommandConditions::translate()
     ui->radioButtonObjectIDLookingAt->setText(RPM::translate(Translations
         ::OBJECT_ID) + RPM::COLON);
     ui->labelIsLookingAt->setText(RPM::translate(Translations::IS_LOOKING_AT).toLower());
+    ui->radioButtonChronometerID->setText(RPM::translate(Translations::CHRONOMETER_ID) + RPM::COLON);
+    ui->labelSeconds->setText(RPM::translate(Translations::SECONDS).toLower());
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -239,7 +247,8 @@ void DialogCommandConditions::translate()
 //
 // -------------------------------------------------------
 
-void DialogCommandConditions::initialize(EventCommand *command) {
+void DialogCommandConditions::initialize(EventCommand *command)
+{
     int i, tabIndex;
 
     i = 0;
@@ -378,6 +387,14 @@ void DialogCommandConditions::initialize(EventCommand *command) {
         tabIndex = 3;
         break;
     }
+    case 10: {
+        ui->radioButtonChronometerID->setChecked(true);
+        ui->panelPrimitiveChronometerID->initializeCommand(command, i);
+        ui->comboBoxChronometerOperation->setCurrentIndex(command->valueCommandAt(i++).toInt());
+        ui->panelPrimitiveChronometerSeconds->initializeCommand(command, i);
+        tabIndex = 3;
+        break;
+    }
     default:
         break;
     }
@@ -473,6 +490,11 @@ EventCommand * DialogCommandConditions::getCommand() const {
         command.append("9");
         ui->panelPrimitiveObjectID->getCommand(command);
         command.append(QString::number(ui->comboBoxObjectLookingAt->currentIndex()));
+    } else if (ui->radioButtonChronometerID->isChecked()) {
+        command.append("10");
+        ui->panelPrimitiveChronometerID->getCommand(command);
+        command.append(QString::number(ui->comboBoxChronometerOperation->currentIndex()));
+        ui->panelPrimitiveChronometerSeconds->getCommand(command);
     }
     return new EventCommand(EventCommandKind::If, command);
 }
@@ -640,6 +662,16 @@ void DialogCommandConditions::on_radioButtonObjectIDLookingAt_toggled(bool check
     ui->panelPrimitiveObjectID->setEnabled(checked);
     ui->labelIsLookingAt->setEnabled(checked);
     ui->comboBoxObjectLookingAt->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandConditions::on_radioButtonChronometerID_toggled(bool checked)
+{
+    ui->panelPrimitiveChronometerID->setEnabled(checked);
+    ui->comboBoxChronometerOperation->setEnabled(checked);
+    ui->panelPrimitiveChronometerSeconds->setEnabled(checked);
+    ui->labelSeconds->setEnabled(checked);
 }
 
 // -------------------------------------------------------

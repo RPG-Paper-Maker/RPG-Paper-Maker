@@ -814,6 +814,15 @@ QString EventCommand::strCondition(QStandardItemModel *properties,
             .toLower() + RPM::SPACE + orientation;
         break;
     }
+    case 10: {
+        condition += RPM::translate(Translations::CHRONOMETER_ID) + RPM::SPACE +
+            this->strProperty(i, properties, parameters) + RPM::SPACE;
+        condition += RPM::ENUM_TO_STRING_OPERATION.at(this->valueCommandAt(i++)
+            .toInt()) + RPM::SPACE;
+        condition += this->strProperty(i, properties, parameters) + RPM::SPACE +
+            RPM::translate(Translations::SECONDS).toLower();
+        break;
+    }
     default:
         break;
     }
