@@ -12,7 +12,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>909</width>
+    <width>751</width>
     <height>502</height>
    </rect>
   </property>
@@ -30,7 +30,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>909</width>
+     <width>751</width>
      <height>22</height>
     </rect>
    </property>
@@ -109,7 +109,6 @@
      <string>Special elements</string>
     </property>
     <addaction name="actionAutotiles"/>
-    <addaction name="actionAnimated_Autotiles"/>
     <addaction name="actionSprite_walls"/>
     <addaction name="action3D_objects"/>
     <addaction name="actionMountains"/>
@@ -194,7 +193,6 @@
    <addaction name="actionFonts_manager"/>
    <addaction name="separator"/>
    <addaction name="actionAutotiles"/>
-   <addaction name="actionAnimated_Autotiles"/>
    <addaction name="actionSprite_walls"/>
    <addaction name="action3D_objects"/>
    <addaction name="actionMountains"/>
@@ -392,7 +390,7 @@
   </action>
   <action name="actionAutotiles">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="../ressources.qrc">

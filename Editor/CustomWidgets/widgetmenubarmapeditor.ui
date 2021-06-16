@@ -34,7 +34,6 @@
    </property>
    <addaction name="actionFloors"/>
    <addaction name="actionAutotile"/>
-   <addaction name="actionAnimated_Autotile"/>
   </widget>
   <widget class="QMenu" name="menuEvents">
    <property name="title">

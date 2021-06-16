@@ -60,6 +60,7 @@ public:
     void setDefaultLucas();
     void setDefaultTilesetPlains();
     void setDefaultAutotiles();
+    void setDefaultWater();
     void setDefaultWallInside();
     void setDefaultCharacterTileset();
 

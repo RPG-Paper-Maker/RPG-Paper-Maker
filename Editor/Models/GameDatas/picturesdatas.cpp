@@ -128,10 +128,12 @@ void PicturesDatas::setDefaultHUDPictures(QList<QString>& names) {
 // -------------------------------------------------------
 
 void PicturesDatas::setDefaultAutotiles(QList<QString>& names) {
-    names << "general";
+    names << "general" << "water";
     setDefaultPictures(names, PictureKind::Autotiles);
     reinterpret_cast<SystemPicture *>(m_models[PictureKind::Autotiles]->item(1)
         ->data().value<quintptr>())->setDefaultAutotiles();
+    reinterpret_cast<SystemPicture *>(m_models[PictureKind::Autotiles]->item(2)
+        ->data().value<quintptr>())->setDefaultWater();
 }
 
 // -------------------------------------------------------

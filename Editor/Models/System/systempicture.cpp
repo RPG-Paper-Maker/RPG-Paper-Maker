@@ -320,8 +320,15 @@ void SystemPicture::setDefaultTilesetPlains() {
 // -------------------------------------------------------
 
 void SystemPicture::setDefaultAutotiles() {
-    m_collisions.insert(QPoint(2, 0),
-                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+    m_collisions.insert(QPoint(2, 0), new CollisionSquare(new QRectF(0, 0, 100, 100)));
+}
+
+// -------------------------------------------------------
+
+void SystemPicture::setDefaultWater()
+{
+    m_collisions.insert(QPoint(0, 0), new CollisionSquare(new QRectF(0, 0, 100, 100)));
+    m_collisions.insert(QPoint(0, 1), new CollisionSquare(new QRectF(0, 0, 100, 100)));
 }
 
 // -------------------------------------------------------
