@@ -405,7 +405,7 @@ void ProjectUpdater::updateVersion_0_4_0() {
     // Limit portion ray
     m_project->readLangsDatas();
     m_project->readSystemDatas();
-    m_project->gameDatas()->systemDatas()->setPortionRay(6);
+    m_project->gameDatas()->systemDatas()->setPortionRayEditor(6);
     m_project->writeSystemDatas();
 }
 

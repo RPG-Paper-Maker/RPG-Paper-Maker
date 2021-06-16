@@ -64,7 +64,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-252</y>
                 <width>252</width>
                 <height>1560</height>
                </rect>
@@ -252,7 +252,7 @@
                         <item>
                          <widget class="QLabel" name="labelRayPortionsEditor">
                           <property name="enabled">
-                           <bool>false</bool>
+                           <bool>true</bool>
                           </property>
                           <property name="text">
                            <string>Ray portions (editor):</string>
@@ -260,9 +260,12 @@
                          </widget>
                         </item>
                         <item>
-                         <widget class="QSpinBox" name="spinBox_5">
+                         <widget class="QSpinBox" name="spinBoxRayEditor">
                           <property name="enabled">
-                           <bool>false</bool>
+                           <bool>true</bool>
+                          </property>
+                          <property name="maximum">
+                           <number>20</number>
                           </property>
                          </widget>
                         </item>
@@ -276,7 +279,7 @@
                         <item>
                          <widget class="QLabel" name="labelRayPortionsIngame">
                           <property name="enabled">
-                           <bool>false</bool>
+                           <bool>true</bool>
                           </property>
                           <property name="text">
                            <string>Ray portions (ingame):</string>
@@ -284,9 +287,12 @@
                          </widget>
                         </item>
                         <item>
-                         <widget class="QSpinBox" name="spinBox_8">
+                         <widget class="QSpinBox" name="spinBoxRayIngame">
                           <property name="enabled">
-                           <bool>false</bool>
+                           <bool>true</bool>
+                          </property>
+                          <property name="maximum">
+                           <number>20</number>
                           </property>
                          </widget>
                         </item>
@@ -2257,6 +2263,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>WidgetPicture</class>
    <extends>QWidget</extends>
    <header>widgetpicture.h</header>
@@ -2272,12 +2284,6 @@
    <class>WidgetSuperTree</class>
    <extends>QTreeView</extends>
    <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
-   <class>PanelPrimitiveValue</class>
-   <extends>QWidget</extends>
-   <header>panelprimitivevalue.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>WidgetTreeCommands</class>

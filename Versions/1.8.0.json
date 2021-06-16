@@ -20,7 +20,7 @@
 	    "Command change experience curve",
 	    "Command change class",
 	    "Command change chronometer",
-	    "Ray portions ingame and editor (limit 20) with warning",
+	    "Ray portions ingame and editor (limit 20)",
 	    "Max number slot saves",
 	    "All variables set to 0 by default instead of null",
 	    "Apply button in Datas manager (but cannot switch to other windows yet)"
@@ -43,8 +43,8 @@
         2,
         2,
         2,
-        1,
-        0,
+        2,
+        2,
         0,
         2,
         2

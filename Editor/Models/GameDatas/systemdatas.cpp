@@ -60,6 +60,8 @@ const QString SystemDatas::JSON_PRICE_SOLD_ITEM = "priceSoldItem";
 const QString SystemDatas::JSON_ENTER_NAME_TABLE = "enterNameTable";
 const QString SystemDatas::JSON_AUTOTILES_FRAMES = "autotilesFrames";
 const QString SystemDatas::JSON_AUTOTILES_FRAME_DURATION = "autotilesFrameDuration";
+const QString SystemDatas::JSON_PORTION_RAY_ENGINE = "portionRayEngine";
+const QString SystemDatas::JSON_PORTION_RAY_INGAME = "portionRayIngame";
 const bool SystemDatas::DEFAULT_ANTIALIASING = false;
 const int SystemDatas::DEFAULT_MAP_FRAME_DURATION = 150;
 const int SystemDatas::DEFAULT_BATTLERS_FRAMES = 4;
@@ -67,6 +69,8 @@ const int SystemDatas::DEFAULT_BATTLERS_COLUMNS = 9;
 const double SystemDatas::DEFAULT_PRICE_SOLD_ITEM = 50.0;
 const int SystemDatas::DEFAULT_AUTOTILES_FRAMES = 4;
 const int SystemDatas::DEFAULT_AUTOTILES_FRAME_DURATION = 150;
+const int SystemDatas::DEFAULT_PORTION_RAY_ENGINE = 6;
+const int SystemDatas::DEFAULT_PORTION_RAY_INGAME = 3;
 
 // -------------------------------------------------------
 //
@@ -76,6 +80,8 @@ const int SystemDatas::DEFAULT_AUTOTILES_FRAME_DURATION = 150;
 
 SystemDatas::SystemDatas() :
     m_projectName(new SystemTranslatable(-1, RPM::translate(Translations::PROJECT_WITHOUT_NAME))),
+    m_portionsRayEditor(DEFAULT_PORTION_RAY_ENGINE),
+    m_portionsRayIngame(DEFAULT_PORTION_RAY_INGAME),
     m_mountainCollisionHeight(new PrimitiveValue(4)),
     m_mountainCollisionAngle(new PrimitiveValue(45.0)),
     m_mapFrameDuration(new PrimitiveValue(DEFAULT_MAP_FRAME_DURATION)),
@@ -172,9 +178,25 @@ void SystemDatas::setIsScreenWinow(bool b) {
     m_isScreenWindow = b;
 }
 
-int SystemDatas::portionsRay() const { return m_portionsRay; }
+int SystemDatas::portionsRayEditor() const
+{
+    return m_portionsRayEditor;
+}
 
-void SystemDatas::setPortionRay(int p) { m_portionsRay = p; }
+void SystemDatas::setPortionRayEditor(int p)
+{
+    m_portionsRayEditor = p;
+}
+
+int SystemDatas::portionsRayIngame() const
+{
+    return m_portionsRayIngame;
+}
+
+void SystemDatas::setPortionRayIngame(int p)
+{
+    m_portionsRayIngame = p;
+}
 
 int SystemDatas::squareSize() const { return m_squareSize; }
 
@@ -392,7 +414,6 @@ void SystemDatas::setDefault() {
     m_screenWidth = 640;
     m_screenHeight = 480;
     m_isScreenWindow = true;
-    m_portionsRay = 6;
     m_squareSize = 16;
     m_framesAnimation = 4;
     m_pathBR = Common::pathCombine(QDir::currentPath(), RPM::PATH_BR);
@@ -745,7 +766,14 @@ void SystemDatas::read(const QJsonObject &json){
     m_screenWidth = json[JSON_SCREEN_WIDTH].toInt();
     m_screenHeight = json[JSON_SCREEN_HEIGHT].toInt();
     m_isScreenWindow = json[JSON_IS_SCREEN_WINDOW].toBool();
-    m_portionsRay = json["pr"].toInt();
+    if (json.contains(JSON_PORTION_RAY_ENGINE))
+    {
+        m_portionsRayEditor = json[JSON_PORTION_RAY_ENGINE].toInt();
+    }
+    if (json.contains(JSON_PORTION_RAY_INGAME))
+    {
+        m_portionsRayIngame = json[JSON_PORTION_RAY_INGAME].toInt();
+    }
     m_squareSize = json["ss"].toInt();
     if (json.contains(JSON_MOUNTAIN_COLLISION_HEIGHT)) {
         m_mountainCollisionHeight->read(json[JSON_MOUNTAIN_COLLISION_HEIGHT]
@@ -931,7 +959,14 @@ void SystemDatas::write(QJsonObject &json) const{
     json[JSON_SCREEN_WIDTH] = m_screenWidth;
     json[JSON_SCREEN_HEIGHT] = m_screenHeight;
     json[JSON_IS_SCREEN_WINDOW] = m_isScreenWindow;
-    json["pr"] = m_portionsRay;
+    if (m_portionsRayEditor != DEFAULT_PORTION_RAY_ENGINE)
+    {
+        json[JSON_PORTION_RAY_ENGINE] = m_portionsRayEditor;
+    }
+    if (m_portionsRayIngame != DEFAULT_PORTION_RAY_INGAME)
+    {
+        json[JSON_PORTION_RAY_INGAME] = m_portionsRayIngame;
+    }
     json["ss"] = m_squareSize;
     if (m_mountainCollisionHeight->kind() != PrimitiveValueKind::Number ||
         m_mountainCollisionHeight->numberValue() != 4)

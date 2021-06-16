@@ -438,7 +438,7 @@ float RPM::coefReverseSquareSize() {
 // -------------------------------------------------------
 
 int RPM::getPortionsRay() {
-    return RPM::get()->project()->gameDatas()->systemDatas()->portionsRay();
+    return RPM::get()->project()->gameDatas()->systemDatas()->portionsRayEditor();
 }
 
 // -------------------------------------------------------

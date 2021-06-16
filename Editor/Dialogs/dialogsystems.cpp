@@ -137,6 +137,8 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->spinBoxScreenHeight->setEnabled(systemDatas->isScreenWindow());
     ui->checkBoxAntialiasing->setChecked(systemDatas->antialiasing());
     ui->spinBoxSquareSize->setValue(systemDatas->squareSize());
+    ui->spinBoxRayEditor->setValue(systemDatas->portionsRayEditor());
+    ui->spinBoxRayIngame->setValue(systemDatas->portionsRayIngame());
     ui->widgetMountainCollisionHeight->initializeNumberAndUpdate(systemDatas
         ->mountainCollisionHeight());
     ui->widgetMountainCollisionAngle->initializeNumberAndUpdate(systemDatas
@@ -657,6 +659,20 @@ void DialogSystems::on_checkBoxAntialiasing_toggled(bool checked)
 
 void DialogSystems::on_spinBoxSquareSize_valueChanged(int i) {
     RPM::get()->project()->gameDatas()->systemDatas()->setSquareSize(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxRayEditor_valueChanged(int i)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setPortionRayEditor(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxRayIngame_valueChanged(int i)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setPortionRayIngame(i);
 }
 
 // -------------------------------------------------------

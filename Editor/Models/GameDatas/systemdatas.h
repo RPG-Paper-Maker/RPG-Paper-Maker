@@ -65,6 +65,8 @@ public:
     static const QString JSON_ENTER_NAME_TABLE;
     static const QString JSON_AUTOTILES_FRAMES;
     static const QString JSON_AUTOTILES_FRAME_DURATION;
+    static const QString JSON_PORTION_RAY_ENGINE;
+    static const QString JSON_PORTION_RAY_INGAME;
     static const bool DEFAULT_ANTIALIASING;
     static const int DEFAULT_MAP_FRAME_DURATION;
     static const int DEFAULT_BATTLERS_FRAMES;
@@ -72,6 +74,8 @@ public:
     static const double DEFAULT_PRICE_SOLD_ITEM;
     static const int DEFAULT_AUTOTILES_FRAMES;
     static const int DEFAULT_AUTOTILES_FRAME_DURATION;
+    static const int DEFAULT_PORTION_RAY_ENGINE;
+    static const int DEFAULT_PORTION_RAY_INGAME;
 
     SystemDatas();
     virtual ~SystemDatas();
@@ -85,8 +89,10 @@ public:
     void setScreenHeight(int h);
     bool isScreenWindow() const;
     void setIsScreenWinow(bool b);
-    int portionsRay() const;
-    void setPortionRay(int p);
+    int portionsRayEditor() const;
+    void setPortionRayEditor(int p);
+    int portionsRayIngame() const;
+    void setPortionRayIngame(int p);
     int squareSize() const;
     void setSquareSize(int i);
     PrimitiveValue * mountainCollisionHeight() const;
@@ -167,7 +173,8 @@ private:
     int m_screenWidth;
     int m_screenHeight;
     bool m_isScreenWindow;
-    int m_portionsRay;
+    int m_portionsRayEditor;
+    int m_portionsRayIngame;
     int m_squareSize;
     PrimitiveValue *m_mountainCollisionHeight;
     PrimitiveValue *m_mountainCollisionAngle;
