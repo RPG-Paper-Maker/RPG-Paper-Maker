@@ -19,6 +19,7 @@
 #include "titlesettingkind.h"
 #include "systemcommonreaction.h"
 #include "systemcommonskillitem.h"
+#include "systemevent.h"
 
 const int ProjectUpdater::incompatibleVersionsCount = 21;
 
@@ -1224,6 +1225,14 @@ void ProjectUpdater::updateVersion_1_8_0()
     this->updateCommands();
     disconnect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
         updateVersion_1_8_0_commands(QStandardItem *)));
+
+    // Chronometer system event
+    SystemEvent *event = reinterpret_cast<SystemEvent *>(SuperListItem
+        ::getItemModelAt(m_project->gameDatas()->commonEventsDatas()
+        ->modelEventsSystem(), 2));
+    event->setName("Chronometer finished");
+    reinterpret_cast<SystemCreateParameter *>(SuperListItem::getItemModelAt(event
+        ->modelParameters(), 0))->setName("ID");
 }
 
 // -------------------------------------------------------
