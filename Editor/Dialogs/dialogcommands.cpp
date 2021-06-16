@@ -57,6 +57,7 @@
 #include "dialogcommandchangemapproperties.h"
 #include "dialogcommandchangeexperiencecurve.h"
 #include "dialogcommandchangeclass.h"
+#include "dialogcommandchangechronometer.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -230,6 +231,8 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandChangeExperienceCurve(command, properties, parameters);
     case EventCommandKind::ChangeClass:
         return new DialogCommandChangeClass(command, properties, parameters);
+    case EventCommandKind::ChangeChronometer:
+        return new DialogCommandChangeChronometer(command, properties, parameters);
     default:
         return nullptr;
     }
@@ -799,4 +802,11 @@ void DialogCommands::on_pushButtonChangeExperienceCurve_clicked()
 void DialogCommands::on_pushButtonChangeClass_clicked()
 {
     this->openDialogCommand(EventCommandKind::ChangeClass);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonChangeChronometer_clicked()
+{
+    this->openDialogCommand(EventCommandKind::ChangeChronometer);
 }

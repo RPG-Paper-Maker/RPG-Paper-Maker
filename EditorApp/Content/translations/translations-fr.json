@@ -1311,5 +1311,13 @@
     "change.experience.curve": "Changer la courbed d'expérience",
     "total.experience": "Expérience totale",
     "change.class": "Changer la classe",
-    "class.id": "Classe d'ID"
+    "class.id": "Classe d'ID",
+    "change.chronometer": "Changer le chronomètre",
+    "chronometer.id": "Chronomètre d'ID",
+    "stock.chronometer.id.in.variable.id": "Stocker l'ID du chronomètre dans la variable d'ID",
+    "pause": "Pause",
+    "stop": "Stop",
+    "display.on.screen": "Afficher sur l'écran",
+    "stock.current.chronometer.value.in.variable.id": "Stocker la valeur courante du chronomètre dans la variable d'ID",
+    "continue": "continuer"
 }

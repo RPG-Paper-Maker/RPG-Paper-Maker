@@ -1311,5 +1311,13 @@
     "change.experience.curve": "Change experience curve",
     "total.experience": "Total experience",
     "change.class": "Change class",
-    "class.id": "Class ID"
+    "class.id": "Class ID",
+    "change.chronometer": "Change chronometer",
+    "chronometer.id": "Chronometer ID",
+    "stock.chronometer.id.in.variable.id": "Stock chronometer ID in variable ID",
+    "pause": "Pause",
+    "stop": "Stop",
+    "display.on.screen": "Display on screen",
+    "stock.current.chronometer.value.in.variable.id": "Stock current chronometer value in variable ID",
+    "continue": "continue"
 }

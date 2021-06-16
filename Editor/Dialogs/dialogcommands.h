@@ -120,6 +120,7 @@ private slots:
     void on_pushButtonChangeMapProperties_clicked();
     void on_pushButtonChangeExperienceCurve_clicked();
     void on_pushButtonChangeClass_clicked();
+    void on_pushButtonChangeChronometer_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

@@ -340,6 +340,8 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
         str += this->strChangeExperienceCurve(properties, parameters); break;
     case EventCommandKind::ChangeClass:
         str += this->strChangeClass(properties, parameters); break;
+    case EventCommandKind::ChangeChronometer:
+        str += this->strChangeChronometer(properties, parameters); break;
     default:
         break;
     }
@@ -2656,6 +2658,55 @@ QString EventCommand::strChangeClass(QStandardItemModel *properties, QStandardIt
         str += RPM::translate(Translations::THE_ENTIRE) + RPM::SPACE + RPM
             ::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++).toInt());
         break;
+    }
+    return str;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChangeChronometer(QStandardItemModel *properties, QStandardItemModel
+    *parameters) const
+{
+    int i = 0;
+    QString str = RPM::translate(Translations::CHANGE_CHRONOMETER) + RPM::COLON
+        + RPM::SPACE;
+    QString id = this->strProperty(i, properties, parameters);
+    int operation = this->valueCommandAt(i++).toInt();
+    switch (operation)
+    {
+    case 0:
+        str += RPM::translate(Translations::START).toLower();
+        break;
+    case 1:
+        str += RPM::translate(Translations::PAUSE).toLower();
+        break;
+    case 2:
+        str += RPM::translate(Translations::CONTINUE).toLower();
+        break;
+    case 3:
+        str += RPM::translate(Translations::STOP).toLower();
+        break;
+    }
+    str += RPM::SPACE + RPM::translate(Translations::CHRONOMETER_ID).toLower() +
+        RPM::SPACE + id;
+    if (operation == 0)
+    {
+        str += RPM::SPACE + RPM::translate(Translations::TIME).toLower() + RPM
+            ::SPACE + this->strProperty(i, properties, parameters) + RPM::SPACE +
+            RPM::translate(Translations::SECONDS).toLower();
+        if (RPM::stringToBool(this->valueCommandAt(i++)))
+        {
+            str += RPM::SPACE + RPM::BRACKET_LEFT + RPM::translate(Translations
+                ::DISPLAY_ON_SCREEN) + RPM::BRACKET_RIGHT;
+        }
+    } else
+    {
+        if (RPM::stringToBool(this->valueCommandAt(i++)))
+        {
+            str += RPM::SPACE + RPM::BRACKET_LEFT + RPM::translate(Translations
+                ::STOCK_CURRENT_CHRONOMETER_VALUE_IN_VARIABLE_ID) + RPM::SPACE +
+                this->strProperty(i, properties, parameters) + RPM::BRACKET_RIGHT;
+        }
     }
     return str;
 }

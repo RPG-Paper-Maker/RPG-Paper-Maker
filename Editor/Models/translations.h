@@ -1345,6 +1345,14 @@ public:
     static const QString TOTAL_EXPERIENCE;
     static const QString CHANGE_CLASS;
     static const QString CLASS_ID;
+    static const QString CHANGE_CHRONOMETER;
+    static const QString CHRONOMETER_ID;
+    static const QString STOCK_CHRONOMETER_ID_IN_VARIABLE_ID;
+    static const QString PAUSE;
+    static const QString STOP;
+    static const QString DISPLAY_ON_SCREEN;
+    static const QString STOCK_CURRENT_CHRONOMETER_VALUE_IN_VARIABLE_ID;
+    static const QString CONTINUE;
 
     Translations();
     virtual ~Translations();

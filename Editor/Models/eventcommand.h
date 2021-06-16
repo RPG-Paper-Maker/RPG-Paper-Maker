@@ -214,6 +214,8 @@ private:
         *parameters) const;
     QString strChangeClass(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
+    QString strChangeChronometer(QStandardItemModel *properties, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

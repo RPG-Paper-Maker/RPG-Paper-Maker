@@ -1332,6 +1332,14 @@ const QString Translations::CHANGE_EXPERIENCE_CURVE = "change.experience.curve";
 const QString Translations::TOTAL_EXPERIENCE = "total.experience";
 const QString Translations::CHANGE_CLASS = "change.class";
 const QString Translations::CLASS_ID = "class.id";
+const QString Translations::CHANGE_CHRONOMETER = "change.chronometer";
+const QString Translations::CHRONOMETER_ID = "chronometer.id";
+const QString Translations::STOCK_CHRONOMETER_ID_IN_VARIABLE_ID = "stock.chronometer.id.in.variable.id";
+const QString Translations::PAUSE = "pause";
+const QString Translations::STOP = "stop";
+const QString Translations::DISPLAY_ON_SCREEN = "display.on.screen";
+const QString Translations::STOCK_CURRENT_CHRONOMETER_VALUE_IN_VARIABLE_ID = "stock.current.chronometer.value.in.variable.id";
+const QString Translations::CONTINUE = "continue";
 
 // -------------------------------------------------------
 //

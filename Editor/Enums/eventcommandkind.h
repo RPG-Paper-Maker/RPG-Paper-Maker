@@ -93,6 +93,7 @@ enum class EventCommandKind {
     ChangeMapProperties,
     ChangeExperienceCurve,
     ChangeClass,
+    ChangeChronometer,
     Last
 };
 
