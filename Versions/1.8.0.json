@@ -14,7 +14,7 @@
             "repo": "RPG-Paper-Maker",
             "source": "EditorApp/Content/basic/Content/Datas/commonEvents.json",
             "target": "Engine/Content/basic/Content/Datas/commonEvents.json"
-        }
+        },
         {
             "repo": "Dependencies",
             "source": "Engine/linux/libraries/libQt5Script.so.5",
