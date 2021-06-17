@@ -6,6 +6,16 @@
             "target": "Engine/Content/BR/Content/Images/Textures2D/Autotiles/water.png"
         },
         {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/specialElements.json",
+            "target": "Engine/Content/basic/Content/Datas/specialElements.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/commonEvents.json",
+            "target": "Engine/Content/basic/Content/Datas/commonEvents.json"
+        }
+        {
             "repo": "Dependencies",
             "source": "Engine/linux/libraries/libQt5Script.so.5",
             "target": "Engine/libraries/libQt5Script.so.5",
