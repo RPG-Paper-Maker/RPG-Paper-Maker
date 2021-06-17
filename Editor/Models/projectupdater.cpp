@@ -1229,7 +1229,7 @@ void ProjectUpdater::updateVersion_1_8_0()
     // Chronometer system event
     SystemEvent *event = reinterpret_cast<SystemEvent *>(SuperListItem
         ::getItemModelAt(m_project->gameDatas()->commonEventsDatas()
-        ->modelEventsSystem(), 2));
+        ->modelEventsSystem(), 1));
     event->setName("Chronometer finished");
     reinterpret_cast<SystemCreateParameter *>(SuperListItem::getItemModelAt(event
         ->modelParameters(), 0))->setName("ID");
