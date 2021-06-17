@@ -44,6 +44,11 @@
                                 "files": [
                                     {
                                         "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Autotiles/water.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Autotiles/water.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
                                         "source": "Content/Images/Textures2D/Autotiles/general.png",
                                         "target": "Engine/Content/BR/Content/Images/Textures2D/Autotiles/general.png"
                                     }
@@ -1690,6 +1695,11 @@
                         "target": "Engine/libraries/libQt5Gui.so.5"
                     },
                     {
+                        "repo": "Dependencies",
+                        "source": "Engine/linux/libraries/libQt5Script.so.5",
+                        "target": "Engine/libraries/libQt5Script.so.5"
+                    },
+                    {
                         "files": [
                             {
                                 "files": [
@@ -2447,6 +2457,56 @@
                                             }
                                         ],
                                         "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtPrintSupport.framework"
+                                    },
+                                    {
+                                        "files": [
+                                            {
+                                                "repo": "Dependencies",
+                                                "sl": true,
+                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtScript.framework/Resources",
+                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtScript.framework/Resources"
+                                            },
+                                            {
+                                                "files": [
+                                                    {
+                                                        "repo": "Dependencies",
+                                                        "sl": true,
+                                                        "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtScript.framework/Versions/Current",
+                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtScript.framework/Versions/Current"
+                                                    },
+                                                    {
+                                                        "files": [
+                                                            {
+                                                                "files": [
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtScript.framework/Versions/5/Resources/Info.plist",
+                                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtScript.framework/Versions/5/Resources/Info.plist"
+                                                                    }
+                                                                ],
+                                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtScript.framework/Versions/5/Resources"
+                                                            },
+                                                            {
+                                                                "exe": true,
+                                                                "repo": "Dependencies",
+                                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtScript.framework/Versions/5/QtScript",
+                                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtScript.framework/Versions/5/QtScript"
+                                                            }
+                                                        ],
+                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtScript.framework/Versions/5"
+                                                    }
+                                                ],
+                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtScript.framework/Versions"
+                                            },
+                                            {
+                                                "exe": true,
+                                                "repo": "Dependencies",
+                                                "sl": true,
+                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtScript.framework/QtScript",
+                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtScript.framework/QtScript"
+                                            }
+                                        ],
+                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtScript.framework"
                                     }
                                 ],
                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks"
@@ -2498,6 +2558,11 @@
                 "repo": "Dependencies",
                 "source": "Engine/win32/Qt5Multimedia.dll",
                 "target": "Engine/Qt5Multimedia.dll"
+            },
+            {
+                "repo": "Dependencies",
+                "source": "Engine/win32/Qt5Script.dll",
+                "target": "Engine/Qt5Script.dll"
             },
             {
                 "repo": "Dependencies",
@@ -5681,6 +5746,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Scene/ShowTextPreview.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/ShowTextPreview.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Scene/BattleVictory.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/BattleVictory.js"
                             },
@@ -5843,6 +5913,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Scene/BattleInitialize.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/BattleInitialize.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Scene/ShowTextPreview.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/ShowTextPreview.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6201,6 +6276,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/HeroTroopBattleTestEquipment.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/HeroTroopBattleTestEquipment.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/Statistic.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/Statistic.d.ts"
                             },
@@ -6296,6 +6376,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/TroopMonster.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/TroopMonster.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/Monster.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/Monster.d.ts"
                             },
@@ -6373,6 +6458,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/ClassSkill.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/ClassSkill.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/HeroTroopBattleTest.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/HeroTroopBattleTest.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6551,6 +6641,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/HeroTroopBattleTestEquipment.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/HeroTroopBattleTestEquipment.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/RandomBattle.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/RandomBattle.d.ts"
                             },
@@ -6583,6 +6678,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/Item.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/Item.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/Autotile.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/Autotile.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6623,6 +6723,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/TitleCommand.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/TitleCommand.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/HeroTroopBattleTest.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/HeroTroopBattleTest.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6678,6 +6783,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/TroopReactionConditions.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/TroopReactionConditions.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/Autotile.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/Autotile.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -6788,6 +6898,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/System/State.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/State.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/System/TroopMonster.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/System/TroopMonster.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -7391,6 +7506,11 @@
                         "files": [
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ChangeExperienceCurve.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeExperienceCurve.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/StopReaction.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/StopReaction.d.ts"
                             },
@@ -7491,6 +7611,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ChangeClass.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeClass.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/DisplayAnAnimation.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/DisplayAnAnimation.d.ts"
                             },
@@ -7518,6 +7643,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/Wait.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/Wait.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ChangeChronometer.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeChronometer.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -7586,6 +7716,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ChangeExperienceCurve.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeExperienceCurve.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/JumpToLabel.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/JumpToLabel.js"
                             },
@@ -7613,6 +7748,16 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/Plugin.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/Plugin.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ChangeMapProperties.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeMapProperties.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ForceAnAction.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ForceAnAction.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -7691,6 +7836,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ChangeClass.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeClass.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/TeleportObject.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/TeleportObject.js"
                             },
@@ -7718,6 +7868,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/StartBattle.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/StartBattle.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ChangeChronometer.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeChronometer.js"
                             },
                             {
                                 "repo": "Game-Scripts",
@@ -7911,6 +8066,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ForceAnAction.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ForceAnAction.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/InputNumber.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/InputNumber.js"
                             },
@@ -7933,6 +8093,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/EventCommand/SendEvent.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/SendEvent.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/EventCommand/ChangeMapProperties.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/ChangeMapProperties.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
