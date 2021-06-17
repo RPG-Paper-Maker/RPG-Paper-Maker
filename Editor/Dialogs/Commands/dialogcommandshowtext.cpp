@@ -187,8 +187,10 @@ void DialogCommandShowText::on_pushButtonPreview_clicked()
     if (m_gameProcess->isOpen()) {
         m_gameProcess->close();
     }
+    QStringList arguments;
+    arguments << "--modeTest" << "showTextPreview";
     m_gameProcess->start("\"" + Common::pathCombine(RPM::get()->project()
-        ->pathCurrentProject(), execName) + "\" \"--modeTest=showTextPreview\"");
+        ->pathCurrentProject(), execName) + "\"", arguments);
 }
 
 //-------------------------------------------------

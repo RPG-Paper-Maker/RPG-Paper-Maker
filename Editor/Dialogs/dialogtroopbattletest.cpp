@@ -146,8 +146,10 @@ void DialogTroopBattleTest::accept()
     if (m_gameProcess->isOpen()) {
         m_gameProcess->close();
     }
+    QStringList arguments;
+    arguments << "--modeTest" << "battleTroop";
     m_gameProcess->start("\"" + Common::pathCombine(RPM::get()->project()
-        ->pathCurrentProject(), execName) + "\" \"--modeTest=battleTroop\"");
+        ->pathCurrentProject(), execName) + "\"", arguments);
 }
 
 // -------------------------------------------------------
