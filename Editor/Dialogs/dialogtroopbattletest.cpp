@@ -148,8 +148,14 @@ void DialogTroopBattleTest::accept()
     }
     QStringList arguments;
     arguments << "--modeTest" << "battleTroop";
-    m_gameProcess->start("\"" + Common::pathCombine(RPM::get()->project()
-        ->pathCurrentProject(), execName) + "\"", arguments);
+    #ifdef Q_OS_WIN
+        m_gameProcess->start("\"" + Common::pathCombine(RPM::get()->project()
+            ->pathCurrentProject(), execName) + "\"", arguments);
+    #else
+        m_gameProcess->start("\"" + Common::pathCombine(RPM::get()->project()
+            ->pathCurrentProject(), execName) + "\" \"" + arguments.at(0) + "\" \""
+            + arguments.at(1) + "\"");
+    #endif
 }
 
 // -------------------------------------------------------
