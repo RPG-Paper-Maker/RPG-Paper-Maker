@@ -316,9 +316,11 @@ void WidgetTreeCommands::editCommand(QStandardItem *selected,
                     }
                 }
                 // Delete unused pointers commands copies
-                for (i = 0; i < l; i++) {
+                for (i = 0, l = previousCommands.size(); i < l; i++)
+                {
                     item = previousCommands.at(i);
-                    if (item != nullptr) {
+                    if (item != nullptr)
+                    {
                         delete reinterpret_cast<EventCommand *>(item->data()
                             .value<quintptr>());
                     }
