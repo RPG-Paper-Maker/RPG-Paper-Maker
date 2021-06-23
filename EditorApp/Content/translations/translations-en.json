@@ -1319,5 +1319,9 @@
     "stop": "Stop",
     "display.on.screen": "Display on screen",
     "stock.current.chronometer.value.in.variable.id": "Stock current chronometer value in variable ID",
-    "continue": "Continue"
+    "continue": "Continue",
+    "heroes.battlers.center.offset": "Heroes battlers center offset",
+    "heroes.battlers.offset": "Heroes battlers offset",
+    "troops.battlers.center.offset": "Troops battlers center offset",
+    "troops.battlers.offset": "Troops battlers offset"
 }

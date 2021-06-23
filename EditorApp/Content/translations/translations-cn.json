@@ -1319,5 +1319,9 @@
     "stop": "停止",
     "display.on.screen": "在屏幕上顯示",
     "stock.current.chronometer.value.in.variable.id": "變量 ID 中的庫存當前天文鐘值",
-    "continue": "繼續"
+    "continue": "繼續",
+    "heroes.battlers.center.offset": "英雄戰士中心偏移",
+    "heroes.battlers.offset": "英雄戰士抵消",
+    "troops.battlers.center.offset": "部隊戰士中心偏移",
+    "troops.battlers.offset": "部隊戰鬥員抵消"
 }

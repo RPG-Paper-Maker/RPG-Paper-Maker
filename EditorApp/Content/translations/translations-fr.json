@@ -1319,5 +1319,9 @@
     "stop": "Stop",
     "display.on.screen": "Afficher sur l'écran",
     "stock.current.chronometer.value.in.variable.id": "Stocker la valeur courante du chronomètre dans la variable d'ID",
-    "continue": "Continuer"
+    "continue": "Continuer",
+    "heroes.battlers.center.offset": "Décalage central des héros battlers",
+    "heroes.battlers.offset": "Décalage des héros battlers",
+    "troops.battlers.center.offset": "Décalage central des enemis battlers",
+    "troops.battlers.offset": "Décalage des enemis battlers"
 }

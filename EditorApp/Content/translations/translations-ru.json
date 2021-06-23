@@ -1319,5 +1319,9 @@
     "stop": "Стоп",
     "display.on.screen": "Показать на экране",
     "stock.current.chronometer.value.in.variable.id": "Zapisz bieżącą wartość stopera w zmiennej ID",
-    "continue": "Продолжать"
+    "continue": "Продолжать",
+    "heroes.battlers.center.offset": "Смещение центра героев-бойцов",
+    "heroes.battlers.offset": "Сменные герои-бойцы",
+    "troops.battlers.center.offset": "Смещение центра вражеских бойцов",
+    "troops.battlers.offset": "Смена вражеских бойцов"
 }

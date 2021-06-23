@@ -1319,5 +1319,9 @@
     "stop": "중지",
     "display.on.screen": "화면에 표시",
     "stock.current.chronometer.value.in.variable.id": "변수 ID의 재고 현재 크로노 미터 값",
-    "continue": "계속하다"
+    "continue": "계속하다",
+    "heroes.battlers.center.offset": "Heroes Battlers 센터 오프셋",
+    "heroes.battlers.offset": "영웅 배틀 러 오프셋",
+    "troops.battlers.center.offset": "부대 전투 센터 오프셋",
+    "troops.battlers.offset": "병력 배틀 러 오프셋"
 }

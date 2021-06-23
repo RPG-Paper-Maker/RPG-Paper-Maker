@@ -1321,5 +1321,9 @@
     "stop": "Detener",
     "display.on.screen": "Mostrar en pantalla",
     "stock.current.chronometer.value.in.variable.id": "Almacene el valor actual del cronómetro en la variable ID",
-    "continue": "Seguir"
+    "continue": "Seguir",
+    "heroes.battlers.center.offset": "Cambiando a los combatientes enemigos",
+    "heroes.battlers.offset": "Héroes cambiantes, luchadores",
+    "troops.battlers.center.offset": "Desplazamiento central de los combatientes enemigos",
+    "troops.battlers.offset": "Cambiando a los combatientes enemigos"
 }

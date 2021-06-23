@@ -619,6 +619,11 @@ void DialogSystems::translate()
     ui->groupBoxHeroesStatistics->setTitle(RPM::translate(Translations::HEROES_STATISTICS_TO_DISPLAY));
     ui->labelAutotilesFrames->setText(RPM::translate(Translations::AUTOTILES_FRAMES) + RPM::COLON);
     ui->labelAutotilesFrameDuration->setText(RPM::translate(Translations::AUTOTILES_FRAME_DURATION) + RPM::COLON);
+    ui->labelHeroesBattlersCenterOffset->setText(RPM::translate(Translations::HEROES_BATTLERS_CENTER_OFFSET) + RPM::COLON);
+    ui->labelHeroesBattlersOffset->setText(RPM::translate(Translations::HEROES_BATTLERS_OFFSET) + RPM::COLON);
+    ui->labelTroopsBattlersCenterOffset->setText(RPM::translate(Translations::TROOPS_BATTLERS_CENTER_OFFSET) + RPM::COLON);
+    ui->labelTroopsBattlersOffset->setText(RPM::translate(Translations::TROOPS_BATTLERS_OFFSET) + RPM::COLON);
+    ui->pushButtonDefaultDialogBoxOptions->setText(RPM::translate(Translations::SELECT) + RPM::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

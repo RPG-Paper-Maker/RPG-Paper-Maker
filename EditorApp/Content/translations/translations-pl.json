@@ -1319,5 +1319,9 @@
     "stop": "Stop",
     "display.on.screen": "Wyświetl stoper na ekranie",
     "stock.current.chronometer.value.in.variable.id": "Zapisz bieżącą wartość stopera w zmiennej ID",
-    "continue": "Wznowienie"
+    "continue": "Wznowienie",
+    "heroes.battlers.center.offset": "[Battler: bohaterowie] Wyrównanie (mapa)",
+    "heroes.battlers.offset": "[Battler: bohaterowie] Wyrównanie (battler)",
+    "troops.battlers.center.offset": "[Battler: horda] Wyrównanie (mapa)",
+    "troops.battlers.offset": "[Battler: horda] Wyrównanie (battler)"
 }

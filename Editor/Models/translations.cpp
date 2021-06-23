@@ -1340,6 +1340,10 @@ const QString Translations::STOP = "stop";
 const QString Translations::DISPLAY_ON_SCREEN = "display.on.screen";
 const QString Translations::STOCK_CURRENT_CHRONOMETER_VALUE_IN_VARIABLE_ID = "stock.current.chronometer.value.in.variable.id";
 const QString Translations::CONTINUE = "continue";
+const QString Translations::HEROES_BATTLERS_CENTER_OFFSET = "heroes.battlers.center.offset";
+const QString Translations::HEROES_BATTLERS_OFFSET = "heroes.battlers.offset";
+const QString Translations::TROOPS_BATTLERS_CENTER_OFFSET = "troops.battlers.center.offset";
+const QString Translations::TROOPS_BATTLERS_OFFSET = "troops.battlers.offset";
 
 // -------------------------------------------------------
 //

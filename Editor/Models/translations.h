@@ -1353,6 +1353,10 @@ public:
     static const QString DISPLAY_ON_SCREEN;
     static const QString STOCK_CURRENT_CHRONOMETER_VALUE_IN_VARIABLE_ID;
     static const QString CONTINUE;
+    static const QString HEROES_BATTLERS_CENTER_OFFSET;
+    static const QString HEROES_BATTLERS_OFFSET;
+    static const QString TROOPS_BATTLERS_CENTER_OFFSET;
+    static const QString TROOPS_BATTLERS_OFFSET;
 
     Translations();
     virtual ~Translations();

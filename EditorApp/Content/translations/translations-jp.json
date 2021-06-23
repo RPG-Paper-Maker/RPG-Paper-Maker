@@ -1319,5 +1319,9 @@
     "stop": "やめる",
     "display.on.screen": "画面に表示",
     "stock.current.chronometer.value.in.variable.id": "変数IDの現在のクロノメーター値をストックします",
-    "continue": "継続する"
+    "continue": "継続する",
+    "heroes.battlers.center.offset": "ヒーローズバターズセンターオフセット",
+    "heroes.battlers.offset": "英雄の戦闘機は相殺しました",
+    "troops.battlers.center.offset": "部隊戦闘員センターオフセット",
+    "troops.battlers.offset": "軍隊の戦闘機は相殺しました"
 }
