@@ -15,9 +15,11 @@
         "Effect damage on variables now accept negative number",
         "Direction fix working for move, jump",
         "Jump updating direction",
-        "Jump update bounding box collision position"
+        "Jump update bounding box collision position",
+        "Update missing translations"
     ],
     "finished": [
+        2,
         2,
         2,
         2,

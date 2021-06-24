@@ -1323,5 +1323,6 @@
     "heroes.battlers.center.offset": "Heroes battlers center offset",
     "heroes.battlers.offset": "Heroes battlers offset",
     "troops.battlers.center.offset": "Troops battlers center offset",
-    "troops.battlers.offset": "Troops battlers offset"
+    "troops.battlers.offset": "Troops battlers offset",
+    "save.and.close": "Save and close"
 }

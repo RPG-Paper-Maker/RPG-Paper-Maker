@@ -373,6 +373,7 @@ void DialogCommands::translate() {
     ui->pushButtonResetCamera->setText(EventCommand::kindToString(EventCommandKind::ResetCamera));
     ui->pushButtonChangeBattleMusic->setText(EventCommand::kindToString(EventCommandKind::ChangeBattleMusic));
     ui->pushButtonChangeVictoryMusic->setText(EventCommand::kindToString(EventCommandKind::ChangeVictoryMusic));
+    ui->pushButtonEndBattle->setText(EventCommand::kindToString(EventCommandKind::EndBattle));
     ui->pushButtonForceAction->setText(EventCommand::kindToString(EventCommandKind::ForceAnAction));
     ui->pushButtonChangeMapProperties->setText(EventCommand::kindToString(EventCommandKind::ChangeMapProperties));
     ui->pushButtonChangeExperienceCurve->setText(EventCommand::kindToString(EventCommandKind::ChangeExperienceCurve));

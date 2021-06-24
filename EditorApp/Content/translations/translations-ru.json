@@ -1323,5 +1323,6 @@
     "heroes.battlers.center.offset": "Смещение центра героев-бойцов",
     "heroes.battlers.offset": "Сменные герои-бойцы",
     "troops.battlers.center.offset": "Смещение центра вражеских бойцов",
-    "troops.battlers.offset": "Смена вражеских бойцов"
+    "troops.battlers.offset": "Смена вражеских бойцов",
+    "save.and.close": "Сохрани и закрой"
 }

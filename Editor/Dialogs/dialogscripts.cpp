@@ -510,6 +510,9 @@ void DialogScripts::translate()
     ui->pushButtonExport->setText(RPM::translate(Translations::EXPORT) + RPM
         ::DOT_DOT_DOT);
     ui->pushButtonClose->setText(RPM::translate(Translations::CLOSE));
+    ui->pushButtonRefresh->setText(RPM::translate(Translations::REFRESH));
+    ui->pushButtonSave->setText(RPM::translate(Translations::SAVE));
+    ui->pushButtonSaveAndClose->setText(RPM::translate(Translations::SAVE_AND_CLOSE));
 }
 
 // -------------------------------------------------------

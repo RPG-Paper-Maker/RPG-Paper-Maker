@@ -1323,5 +1323,6 @@
     "heroes.battlers.center.offset": "英雄戰士中心偏移",
     "heroes.battlers.offset": "英雄戰士抵消",
     "troops.battlers.center.offset": "部隊戰士中心偏移",
-    "troops.battlers.offset": "部隊戰鬥員抵消"
+    "troops.battlers.offset": "部隊戰鬥員抵消",
+    "save.and.close": "保存並關閉"
 }

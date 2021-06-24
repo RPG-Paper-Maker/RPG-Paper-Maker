@@ -1323,5 +1323,6 @@
     "heroes.battlers.center.offset": "ヒーローズバターズセンターオフセット",
     "heroes.battlers.offset": "英雄の戦闘機は相殺しました",
     "troops.battlers.center.offset": "部隊戦闘員センターオフセット",
-    "troops.battlers.offset": "軍隊の戦闘機は相殺しました"
+    "troops.battlers.offset": "軍隊の戦闘機は相殺しました",
+    "save.and.close": "保存して閉じます"
 }

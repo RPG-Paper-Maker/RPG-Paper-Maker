@@ -1323,5 +1323,6 @@
     "heroes.battlers.center.offset": "[Battler: bohaterowie] Wyrównanie (mapa)",
     "heroes.battlers.offset": "[Battler: bohaterowie] Wyrównanie (battler)",
     "troops.battlers.center.offset": "[Battler: horda] Wyrównanie (mapa)",
-    "troops.battlers.offset": "[Battler: horda] Wyrównanie (battler)"
+    "troops.battlers.offset": "[Battler: horda] Wyrównanie (battler)",
+    "save.and.close": "Zapisz i zamknij"
 }

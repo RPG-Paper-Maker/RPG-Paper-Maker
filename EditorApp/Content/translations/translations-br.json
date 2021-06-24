@@ -1327,5 +1327,6 @@
     "heroes.battlers.center.offset": "Deslocamento central dos heróis lutadores",
     "heroes.battlers.offset": "Lutadores de heróis mutantes",
     "troops.battlers.center.offset": "Deslocamento central dos combatentes inimigos",
-    "troops.battlers.offset": "Mudando de batalha contra inimigos"
+    "troops.battlers.offset": "Mudando de batalha contra inimigos",
+    "save.and.close": "Salvar e fechar"
 }

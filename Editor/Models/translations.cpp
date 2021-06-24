@@ -1344,6 +1344,7 @@ const QString Translations::HEROES_BATTLERS_CENTER_OFFSET = "heroes.battlers.cen
 const QString Translations::HEROES_BATTLERS_OFFSET = "heroes.battlers.offset";
 const QString Translations::TROOPS_BATTLERS_CENTER_OFFSET = "troops.battlers.center.offset";
 const QString Translations::TROOPS_BATTLERS_OFFSET = "troops.battlers.offset";
+const QString Translations::SAVE_AND_CLOSE = "save.and.close";
 
 // -------------------------------------------------------
 //

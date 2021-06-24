@@ -1325,5 +1325,6 @@
     "heroes.battlers.center.offset": "Cambiando a los combatientes enemigos",
     "heroes.battlers.offset": "Héroes cambiantes, luchadores",
     "troops.battlers.center.offset": "Desplazamiento central de los combatientes enemigos",
-    "troops.battlers.offset": "Cambiando a los combatientes enemigos"
+    "troops.battlers.offset": "Cambiando a los combatientes enemigos",
+    "save.and.close": "Guardar y cerrar"
 }

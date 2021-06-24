@@ -1323,5 +1323,6 @@
     "heroes.battlers.center.offset": "Décalage central des héros battlers",
     "heroes.battlers.offset": "Décalage des héros battlers",
     "troops.battlers.center.offset": "Décalage central des enemis battlers",
-    "troops.battlers.offset": "Décalage des enemis battlers"
+    "troops.battlers.offset": "Décalage des enemis battlers",
+    "save.and.close": "Sauvegarder et fermer"
 }
