@@ -1324,5 +1324,6 @@
     "heroes.battlers.offset": "Сменные герои-бойцы",
     "troops.battlers.center.offset": "Смещение центра вражеских бойцов",
     "troops.battlers.offset": "Смена вражеских бойцов",
-    "save.and.close": "Сохрани и закрой"
+    "save.and.close": "Сохрани и закрой",
+    "impossible.to.paste.item": "Невозможно скопировать этот элемент, не удается найти связанный идентификатор"
 }

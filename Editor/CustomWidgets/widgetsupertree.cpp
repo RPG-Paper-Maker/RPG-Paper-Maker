@@ -10,6 +10,7 @@
 */
 
 #include <QHeaderView>
+#include <QMessageBox>
 #include "widgetsupertree.h"
 #include "superlistitem.h"
 #include "rpm.h"
@@ -240,12 +241,20 @@ void WidgetSuperTree::pasteItem(QStandardItem* selected){
                 }
             }
         }
+        int id = super->id();
         if (m_updateId)
         {
-            super->setId(this->getNewId(p_model));
+            id = this->getNewId(p_model);
+            super->setId(id);
         }
         emit pastingItem(m_copiedItem, super, selected->row());
-        this->setItem(selected, super);
+        if (super->id() == -2) { // (see states where we don't want to duplicate)
+            QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR_MESSAGE),
+                RPM::translate(Translations::IMPOSSIBLE_TO_PASTE_ITEM) + RPM
+                ::SPACE + Common::getFormatNumber(id) + RPM::DOT);
+        } else {
+            this->setItem(selected, super);
+        }
     }
 }
 

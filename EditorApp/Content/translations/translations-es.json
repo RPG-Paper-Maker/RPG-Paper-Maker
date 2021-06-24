@@ -1326,5 +1326,6 @@
     "heroes.battlers.offset": "Héroes cambiantes, luchadores",
     "troops.battlers.center.offset": "Desplazamiento central de los combatientes enemigos",
     "troops.battlers.offset": "Cambiando a los combatientes enemigos",
-    "save.and.close": "Guardar y cerrar"
+    "save.and.close": "Guardar y cerrar",
+    "impossible.to.paste.item": "No se puede copiar este elemento, no se puede encontrar el ID asociado"
 }

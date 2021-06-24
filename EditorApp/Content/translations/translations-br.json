@@ -1328,5 +1328,6 @@
     "heroes.battlers.offset": "Lutadores de heróis mutantes",
     "troops.battlers.center.offset": "Deslocamento central dos combatentes inimigos",
     "troops.battlers.offset": "Mudando de batalha contra inimigos",
-    "save.and.close": "Salvar e fechar"
+    "save.and.close": "Salvar e fechar",
+    "impossible.to.paste.item": "Não é possível copiar este item, não é possível encontrar o ID associado"
 }

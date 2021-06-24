@@ -1324,5 +1324,6 @@
     "heroes.battlers.offset": "Heroes battlers offset",
     "troops.battlers.center.offset": "Troops battlers center offset",
     "troops.battlers.offset": "Troops battlers offset",
-    "save.and.close": "Save and close"
+    "save.and.close": "Save and close",
+    "impossible.to.paste.item": "Impossible to paste this item, cannot find an associated ID"
 }

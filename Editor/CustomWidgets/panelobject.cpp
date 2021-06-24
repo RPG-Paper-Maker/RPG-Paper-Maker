@@ -41,6 +41,7 @@ PanelObject::PanelObject(QWidget *parent) :
     ui->treeViewProperties->setUpdateId(true);
     ui->treeViewEvents->initializeNewItemInstance(new SystemObjectEvent);
     ui->treeViewStates->initializeNewItemInstance(new SystemState);
+    ui->treeViewStates->setUpdateId(true);
 
     // Moving
     SuperListItem::fillComboBox(ui->comboBoxSpeed, RPM::get()->project()
@@ -546,7 +547,7 @@ void PanelObject::on_statePastingItem(SuperListItem *previous, SuperListItem
         after->id(), false);
     if (state == nullptr)
     {
-        after->setId(-1);
+        after->setId(-2);
     } else
     {
         // Update copied state name according to ID

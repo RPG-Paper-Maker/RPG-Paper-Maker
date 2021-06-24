@@ -1324,5 +1324,6 @@
     "heroes.battlers.offset": "英雄戰士抵消",
     "troops.battlers.center.offset": "部隊戰士中心偏移",
     "troops.battlers.offset": "部隊戰鬥員抵消",
-    "save.and.close": "保存並關閉"
+    "save.and.close": "保存並關閉",
+    "impossible.to.paste.item": "無法粘貼此項目，找不到關聯的 ID"
 }
