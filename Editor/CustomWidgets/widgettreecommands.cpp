@@ -294,7 +294,8 @@ void WidgetTreeCommands::editCommand(QStandardItem *selected,
                 command->getChoicesIDs(ids);
                 newCommand->getChoicesIDs(newIds);
                 // Remove all the previous choices
-                for (i = ids.size(); i >= 1; i--) {
+                for (i = ids.size(); i >= 1; i--)
+                {
                     item = new QStandardItem;
                     SystemReaction::copyCommandsItem(root->child(row + i),
                         item);
@@ -303,7 +304,8 @@ void WidgetTreeCommands::editCommand(QStandardItem *selected,
                     root->removeRow(row + i);
                 }
                 // Add new choices and copy commands if same ID
-                for (i = 0, l = newIds.size(); i < l; i++) {
+                for (i = 0, l = newIds.size(); i < l; i++)
+                {
                     id = newIds.at(i);
                     index = ids.indexOf(id);
                     if (index == -1) {

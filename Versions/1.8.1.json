@@ -1,0 +1,33 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "In game error message: when code error, don't display the default dialog box anymore"
+    ],
+    "bugs": [
+        "Command display choices: issue with editing with different number of choices",
+        "Command display choices: wrong y position of choices box",
+        "Command display choices: crash when choice only contains a number",
+        "Mountains overflow issue if collision is out of the map",
+        "Avoid crashes when checking a portion datas",
+        "Battle commands skills not correctly executed + not correctly displayed",
+        "Effect damage on variables now accept negative number",
+        "Direction fix working for move, jump",
+        "Jump updating direction",
+        "Jump update bounding box collision position"
+    ],
+    "finished": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+    ]
+}

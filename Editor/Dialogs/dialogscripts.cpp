@@ -529,8 +529,10 @@ void DialogScripts::keyPressEvent(QKeyEvent *event)
             ui->tabWidget->currentIndex());
     }
     QDialog::keyPressEvent(event);
-    ui->treeViewEditParameter->forceKeyPress(event);
-    ui->treeViewEditCommands->forceKeyPress(event);
+    if (ui->tabWidgetPlugin->currentIndex() == 2) {
+        ui->treeViewEditParameter->forceKeyPress(event);
+        ui->treeViewEditCommands->forceKeyPress(event);
+    }
 }
 
 // -------------------------------------------------------
