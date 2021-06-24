@@ -75,6 +75,8 @@ public:
     QStandardItemModel * parameters() const;
     QStandardItemModel * commands() const;
     bool editChanged() const;
+    bool detailsChanged() const;
+    void setDetailsChanged(bool detailsChanged);
     bool defaultParametersChanged() const;
     SystemPlugin * editedPlugin() const;
     bool isOnline() const;
@@ -128,6 +130,7 @@ protected:
     QStandardItemModel *m_parameters;
     QStandardItemModel *m_commands;
     bool m_editChanged;
+    bool m_detailsChanged;
     bool m_defaultParametersChanged;
     SystemPlugin *m_editedPlugin;
     bool m_isOnline;

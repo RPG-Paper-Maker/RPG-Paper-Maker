@@ -73,6 +73,7 @@ SystemPlugin::SystemPlugin(int i, QString n, bool io, PluginTypeKind t,
     m_parameters(new QStandardItemModel),
     m_commands(new QStandardItemModel),
     m_editChanged(false),
+    m_detailsChanged(false),
     m_defaultParametersChanged(false),
     m_editedPlugin(nullptr),
     m_isOnline(false)
@@ -153,6 +154,16 @@ QStandardItemModel * SystemPlugin::commands() const
 bool SystemPlugin::editChanged() const
 {
     return m_editChanged;
+}
+
+bool SystemPlugin::detailsChanged() const
+{
+    return m_detailsChanged;
+}
+
+void SystemPlugin::setDetailsChanged(bool detailsChanged)
+{
+    m_detailsChanged = detailsChanged;
 }
 
 bool SystemPlugin::defaultParametersChanged() const
@@ -364,7 +375,7 @@ void SystemPlugin::removeEditedPlugin()
 
 bool SystemPlugin::checkChanged() const
 {
-    return m_changed || m_editChanged;
+    return m_changed || m_editChanged || m_detailsChanged;
 }
 
 // -------------------------------------------------------

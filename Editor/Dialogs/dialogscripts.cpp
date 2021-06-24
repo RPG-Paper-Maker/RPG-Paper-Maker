@@ -268,7 +268,7 @@ void DialogScripts::updatePluginDetailsSave()
     if (plugin != nullptr)
     {
         ui->tabWidgetPlugin->setTabText(0, RPM::translate(Translations::DETAILS)
-            + RPM::SPACE + (plugin->editChanged() ? "*" : RPM::SPACE));
+            + RPM::SPACE + (plugin->detailsChanged() ? "*" : RPM::SPACE));
         this->updatePluginsSave();
     }
 }
@@ -366,7 +366,7 @@ void DialogScripts::save(SystemPlugin *plugin, int indexPlugins, int index)
         {
         case 0: // Details
         {
-            plugin->setEditChanged(false);
+            plugin->setDetailsChanged(false);
 
             // Copy edited plugin and write
             plugin->clearParameters();
@@ -610,6 +610,8 @@ void DialogScripts::on_scriptPluginSelected(QModelIndex, QModelIndex)
         plugin->initializeEditedPlugin();
         ui->panelPluginDetails->initialize(plugin->editedPlugin());
         ui->widgetCodePlugin->initialize(plugin);
+        this->updatePluginDetailsSave();
+        this->updatePluginEditSave();
         this->updatePluginCodeSave();
         ui->lineEditName->setText(plugin->editedPlugin()->name());
         ui->lineEditAuthor->setText(plugin->editedPlugin()->author());
@@ -708,6 +710,7 @@ void DialogScripts::on_lineEditName_textEdited(const QString &text)
     SystemPlugin *plugin = this->getSelectedPlugin();
     plugin->editedPlugin()->setName(text);
     plugin->setEditChanged(true);
+    this->updatePluginDetailsSave();
     this->updatePluginEditSave();
 }
 
@@ -718,6 +721,7 @@ void DialogScripts::on_lineEditAuthor_textEdited(const QString &text)
     SystemPlugin *plugin = this->getSelectedPlugin();
     plugin->editedPlugin()->setAuthor(text);
     plugin->setEditChanged(true);
+    this->updatePluginDetailsSave();
     this->updatePluginEditSave();
 }
 
@@ -729,6 +733,7 @@ void DialogScripts::on_plainTextEditDescription_textChanged()
     plugin->editedPlugin()->setDescription(ui->plainTextEditDescription
         ->toPlainText());
     plugin->setEditChanged(true);
+    this->updatePluginDetailsSave();
     this->updatePluginEditSave();
 }
 
@@ -739,6 +744,7 @@ void DialogScripts::on_lineEditVersion_textEdited(const QString &text)
     SystemPlugin *plugin = this->getSelectedPlugin();
     plugin->editedPlugin()->setVersion(text);
     plugin->setEditChanged(true);
+    this->updatePluginDetailsSave();
     this->updatePluginEditSave();
 }
 
@@ -749,6 +755,7 @@ void DialogScripts::on_lineEditWebsite_textEdited(const QString &text)
     SystemPlugin *plugin = this->getSelectedPlugin();
     plugin->editedPlugin()->setWebsite(text);
     plugin->setEditChanged(true);
+    this->updatePluginDetailsSave();
     this->updatePluginEditSave();
 }
 
@@ -759,6 +766,7 @@ void DialogScripts::on_lineEditTutorial_textEdited(const QString &text)
     SystemPlugin *plugin = this->getSelectedPlugin();
     plugin->editedPlugin()->setTutorial(text);
     plugin->setEditChanged(true);
+    this->updatePluginDetailsSave();
     this->updatePluginEditSave();
 }
 
@@ -776,6 +784,7 @@ void DialogScripts::on_comboBoxCategory_currentIndexChanged(int index)
             if (!m_isSettingprogramatically)
             {
                 plugin->setEditChanged(true);
+                this->updatePluginDetailsSave();
                 this->updatePluginEditSave();
             }
         }
@@ -789,6 +798,7 @@ void DialogScripts::on_pluginDefaultParametersUpdated()
     SystemPlugin *plugin = this->getSelectedPlugin();
     plugin->setEditChanged(true);
     plugin->setDefaultParametersChanged(true);
+    this->updatePluginDetailsSave();
     this->updatePluginEditSave();
 }
 
@@ -798,6 +808,7 @@ void DialogScripts::on_pluginCommandsUpdated()
 {
     SystemPlugin *plugin = this->getSelectedPlugin();
     plugin->setEditChanged(true);
+    this->updatePluginDetailsSave();
     this->updatePluginEditSave();
 }
 
@@ -806,7 +817,7 @@ void DialogScripts::on_pluginCommandsUpdated()
 void DialogScripts::on_pluginParametersUpdated()
 {
     SystemPlugin *plugin = this->getSelectedPlugin();
-    plugin->setEditChanged(true);
+    plugin->setDetailsChanged(true);
     this->updatePluginDetailsSave();
     SuperListItem::removeEmptyInTree(plugin->editedPlugin()->parameters());
 }
