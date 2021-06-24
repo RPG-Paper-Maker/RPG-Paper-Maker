@@ -262,6 +262,8 @@ void DialogDatas::updateTroop(SystemTroop *sysTroop)
     connect(ui->treeViewTroopReaction->selectionModel(), SIGNAL(currentChanged(
         QModelIndex, QModelIndex)), this, SLOT(on_pageTroopReactionSelected(
         QModelIndex, QModelIndex)));
+    QModelIndex index = ui->treeViewTroopReaction->getModel()->index(0, 0);
+    ui->treeViewTroopReaction->setCurrentIndex(index);
 }
 
 // -------------------------------------------------------
