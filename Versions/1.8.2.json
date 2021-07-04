@@ -1,7 +1,18 @@
 {
 	"add": [],
 	"remove": [],
-	"replace": [],
+	"replace": [
+		{
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Autotiles/general.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Autotiles/general.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Tilesets/plains.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Tilesets/plains.png"
+        }
+	],
 	"features": [
 		"Plains tileset asset small reworking"
     ],
