@@ -460,6 +460,7 @@ void DialogSystems::updateCommonReactors(SystemCommonReaction *
 
 void DialogSystems::initializeCommonObjects(GameDatas *gameDatas){
     ui->widgetCommonObject->showName(false);
+    ui->widgetCommonObject->showID(false);
     ui->panelSuperListCommonObjects->list()
             ->initializeNewItemInstance(new SystemCommonObject);
     ui->panelSuperListCommonObjects

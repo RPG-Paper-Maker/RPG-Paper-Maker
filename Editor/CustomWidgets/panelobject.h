@@ -50,6 +50,7 @@ public:
     void initializeCommonInheritance();
     void showStateWidgets(bool b);
     void showName(bool b);
+    void showID(bool b);
     void showInvisible(bool b);
     void updateReactions();
     void updateReactionsWidgets();

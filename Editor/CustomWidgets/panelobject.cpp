@@ -218,15 +218,25 @@ void PanelObject::showStateWidgets(bool b) {
 
 // -------------------------------------------------------
 
-void PanelObject::showName(bool b) {
+void PanelObject::showName(bool b)
+{
     ui->labelName->setVisible(b);
     ui->lineEditName->setVisible(b);
 }
 
 // -------------------------------------------------------
 
+void PanelObject::showID(bool b)
+{
+    ui->labelID->setVisible(b);
+    ui->label->setVisible(b);
+}
+
+// -------------------------------------------------------
+
 void PanelObject::showInvisible(bool b) {
     this->showName(!b);
+    this->showID(!b);
     ui->groupBoxOptions->setEnabled(!b);
     ui->groupBoxMoving->setEnabled(!b);
     ui->labelGraphics->setEnabled(!b);

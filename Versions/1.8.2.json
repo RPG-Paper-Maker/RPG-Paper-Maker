@@ -1,0 +1,23 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+		"Plains tileset asset small reworking"
+    ],
+    "bugs": [
+        "Fullscreen and screen size not working anymore",
+        "3D objects as objects small shift position",
+        "Command change variables: crash when using map object characteristics",
+        "Collisions issues with floors directions on big maps",
+        "Command change state: background issues if changing object from another map"
+    ],
+    "finished": [
+    	2,
+        2,
+        2,
+        2,
+        2,
+        2
+    ]
+}
