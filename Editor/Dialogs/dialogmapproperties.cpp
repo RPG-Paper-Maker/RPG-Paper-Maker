@@ -26,16 +26,18 @@ DialogMapProperties::DialogMapProperties(MapProperties &properties,
     ui(new Ui::DialogMapProperties),
     m_mapProperties(properties)
 {
+    RPM::isInConfig = true;
+    RPM::isInObjectConfig = true;
     ui->setupUi(this);
-
-    initialize();
-
+    this->initialize();
     this->translate();
 }
 
 DialogMapProperties::~DialogMapProperties()
 {
     delete ui;
+    RPM::isInObjectConfig = false;
+    RPM::isInConfig = false;
 }
 
 // -------------------------------------------------------
