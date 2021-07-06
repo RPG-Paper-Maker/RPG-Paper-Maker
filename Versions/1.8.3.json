@@ -1,0 +1,25 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Troops monsters level can use variables",
+		"Setting battle music or victory music to none is keeping the map music"
+    ],
+    "bugs": [
+        "Creating a new map is making the engine crash after a few seconds",
+        "Dialog datas wrong apply button behaviour",
+        "Typo final value lowercased",
+        "Troop reaction conditions problem with turn x1",
+        "Problem when running several music effects"
+    ],
+    "finished": [
+    	2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+    ]
+}
