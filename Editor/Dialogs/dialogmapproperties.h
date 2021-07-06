@@ -42,6 +42,11 @@ private:
     void initialize();
     void translate();
 
+protected:
+    virtual void closeEvent(QCloseEvent *event);
+    virtual void accept();
+    virtual void reject();
+
 private slots:
     void on_spinBoxLength_valueChanged(int i);
     void on_spinBoxWidth_valueChanged(int i);

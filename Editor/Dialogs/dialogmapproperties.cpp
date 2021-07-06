@@ -36,8 +36,6 @@ DialogMapProperties::DialogMapProperties(MapProperties &properties,
 DialogMapProperties::~DialogMapProperties()
 {
     delete ui;
-    RPM::isInObjectConfig = false;
-    RPM::isInConfig = false;
 }
 
 // -------------------------------------------------------
@@ -152,6 +150,37 @@ void DialogMapProperties::translate() {
         ::VARIANCE) + RPM::SPACE + RPM::PARENTHESIS_LEFT + "%" + RPM
         ::PARENTHESIS_RIGHT + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogMapProperties::closeEvent(QCloseEvent *event)
+{
+    RPM::isInObjectConfig = false;
+    RPM::isInConfig = false;
+    QDialog::closeEvent(event);
+}
+
+// -------------------------------------------------------
+
+void DialogMapProperties::accept()
+{
+    RPM::isInObjectConfig = false;
+    RPM::isInConfig = false;
+    QDialog::accept();
+}
+
+// -------------------------------------------------------
+
+void DialogMapProperties::reject()
+{
+    RPM::isInObjectConfig = false;
+    RPM::isInConfig = false;
+    QDialog::reject();
 }
 
 // -------------------------------------------------------
