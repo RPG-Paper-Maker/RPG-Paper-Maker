@@ -506,7 +506,7 @@ void DialogDatas::copyPreviousTemp()
 
 // -------------------------------------------------------
 
-void DialogDatas::apply(bool texture)
+void DialogDatas::applyTemp(bool texture)
 {
     this->ok(texture);
 }
@@ -667,7 +667,8 @@ void DialogDatas::reject()
 
 void DialogDatas::on_pushButtonApply_clicked()
 {
-    this->apply();
+    this->ok();
+    this->copyTemp();
 }
 
 // -------------------------------------------------------
@@ -815,7 +816,7 @@ void DialogDatas::on_pushButtonTroopTest_clicked()
     if (selected != nullptr)
     {
         // Apply changes before opening window
-        this->apply(false);
+        this->applyTemp(false);
         DialogTroopBattleTest dialog(reinterpret_cast<SystemTroop *>(selected
             ->data().value<quintptr>())->id());
         dialog.exec();
