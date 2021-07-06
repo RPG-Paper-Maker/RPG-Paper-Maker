@@ -48,7 +48,7 @@ void DialogSystemMonsterTroop::initialize()
     SuperListItem::fillComboBox(ui->comboBoxMonster, RPM::get()->project()
         ->gameDatas()->monstersDatas()->model());
     ui->comboBoxMonster->setCurrentIndex(index);
-    ui->spinBoxLevel->setValue(m_monsterTroop.level());
+    ui->panelPrimitiveLevel->initializeNumberAndUpdate(m_monsterTroop.level());
     ui->panelPrimitiveSpecificPosition->initializeMessage(true);
     if (m_monsterTroop.isSpecificPosition())
     {
@@ -80,12 +80,6 @@ void DialogSystemMonsterTroop::on_comboBoxMonster_currentIndexChanged(int index)
 {
     m_monsterTroop.setId(SuperListItem::getIdByIndex(RPM::get()->project()
         ->gameDatas()->monstersDatas()->model(), index));
-}
-
-// -------------------------------------------------------
-
-void DialogSystemMonsterTroop::on_spinBoxLevel_valueChanged(int i) {
-    m_monsterTroop.setLevel(i);
 }
 
 // -------------------------------------------------------

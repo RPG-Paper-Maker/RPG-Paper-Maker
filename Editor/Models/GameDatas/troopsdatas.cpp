@@ -75,8 +75,8 @@ void TroopsDatas::setDefault(QStandardItem *modelMonsters){
             id = idsMonsters[i][j];
             monster = SuperListItem::getById(modelMonsters, id);
             level = levels[i][j];
-            sysMonsterTroop = new SystemMonsterTroop(id, monster->name(),
-                                                     level);
+            sysMonsterTroop = new SystemMonsterTroop(id, monster->name(), new
+                PrimitiveValue(level));
             itemMonster = new QStandardItem;
             itemMonster->setData(
                         QVariant::fromValue(

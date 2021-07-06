@@ -25,8 +25,8 @@ const QString SystemMonsterTroop::DEFAULT_SPECIFIC_POSITION = "new Core.Vector3(
 //
 // -------------------------------------------------------
 
-SystemMonsterTroop::SystemMonsterTroop(int i, QString n, int level, bool
-    isSpecificPosition, PrimitiveValue *specificPosition) :
+SystemMonsterTroop::SystemMonsterTroop(int i, QString n, PrimitiveValue *level,
+    bool isSpecificPosition, PrimitiveValue *specificPosition) :
     SuperListItem(i,n),
     m_level(level),
     m_isSpecificPosition(isSpecificPosition),
@@ -40,14 +40,9 @@ SystemMonsterTroop::~SystemMonsterTroop()
     delete m_specificPosition;
 }
 
-int SystemMonsterTroop::level() const
+PrimitiveValue * SystemMonsterTroop::level() const
 {
     return m_level;
-}
-
-void SystemMonsterTroop::setLevel(int l)
-{
-    m_level = l;
 }
 
 bool SystemMonsterTroop::isSpecificPosition() const
@@ -85,7 +80,7 @@ void SystemMonsterTroop::updateName()
 
 QString SystemMonsterTroop::toString() const
 {
-    return SuperListItem::toString() + " (lv." + QString::number(m_level) + ")";
+    return SuperListItem::toString() + " (lv." + m_level->toString() + ")";
 }
 
 // -------------------------------------------------------
@@ -131,7 +126,10 @@ void SystemMonsterTroop::read(const QJsonObject &json)
 {
     p_id = json[SuperListItem::JSON_ID].toInt();
     this->updateName();
-    m_level = json[JSON_LEVEL].toInt();
+    if (json.contains(JSON_LEVEL))
+    {
+        m_level->read(json[JSON_LEVEL].toObject());
+    }
     if (json.contains(JSON_IS_SPECIFIC_POSITION))
     {
         m_isSpecificPosition = json[JSON_IS_SPECIFIC_POSITION].toBool();
@@ -147,7 +145,13 @@ void SystemMonsterTroop::read(const QJsonObject &json)
 void SystemMonsterTroop::write(QJsonObject &json) const
 {
     json[SuperListItem::JSON_ID] = p_id;
-    json[JSON_LEVEL] = m_level;
+    QJsonObject obj;
+    if (m_level->kind() != PrimitiveValueKind::Number || m_level->numberValue() != 1)
+    {
+        obj = QJsonObject();
+        m_level->write(obj);
+        json[JSON_LEVEL] = obj;
+    }
     if (m_isSpecificPosition != DEFAULT_IS_SPECIFIC_POSITION)
     {
         json[JSON_IS_SPECIFIC_POSITION] = m_isSpecificPosition;
@@ -155,7 +159,7 @@ void SystemMonsterTroop::write(QJsonObject &json) const
     if (m_specificPosition->kind() != PrimitiveValueKind::Message ||
         m_specificPosition->messageValue() != DEFAULT_SPECIFIC_POSITION)
     {
-        QJsonObject obj;
+        obj = QJsonObject();
         m_specificPosition->write(obj);
         json[JSON_SPECIFIC_POSITION] = obj;
     }

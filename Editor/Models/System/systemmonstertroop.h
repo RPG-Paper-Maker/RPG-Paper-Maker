@@ -33,12 +33,11 @@ public:
     static const bool DEFAULT_IS_SPECIFIC_POSITION;
     static const QString DEFAULT_SPECIFIC_POSITION;
 
-    SystemMonsterTroop(int i = 1, QString n = "", int level = 1, bool isSpecificPosition =
-        DEFAULT_IS_SPECIFIC_POSITION, PrimitiveValue *specificPosition = new
-        PrimitiveValue(DEFAULT_SPECIFIC_POSITION));
+    SystemMonsterTroop(int i = 1, QString n = "", PrimitiveValue *level = new
+        PrimitiveValue(1), bool isSpecificPosition = DEFAULT_IS_SPECIFIC_POSITION,
+        PrimitiveValue *specificPosition = new PrimitiveValue(DEFAULT_SPECIFIC_POSITION));
     virtual ~SystemMonsterTroop();
-    int level() const;
-    void setLevel(int l);
+    PrimitiveValue * level() const;
     bool isSpecificPosition() const;
     void setIsSpecificPosition(bool isSpecificPosition);
     PrimitiveValue * specificPosition() const;
@@ -53,7 +52,7 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    int m_level;
+    PrimitiveValue *m_level;
     bool m_isSpecificPosition;
     PrimitiveValue *m_specificPosition;
 };
