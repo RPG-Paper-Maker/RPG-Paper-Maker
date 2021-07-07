@@ -1269,7 +1269,7 @@ void ProjectUpdater::updateVersion_1_8_3()
         ::PATH_TROOPS);
     Common::readOtherJSON(path, loadDoc);
     QJsonObject json = loadDoc.object();
-    QJsonArray tab = json["l"].toArray();
+    QJsonArray tab = json["troops"].toArray();
     QJsonObject objTroop, dObj, objMonster, objLevel;
     QJsonArray tabMonster;
     PrimitiveValue v;
@@ -1279,7 +1279,7 @@ void ProjectUpdater::updateVersion_1_8_3()
         tabMonster = objTroop["l"].toArray();
         for (int j = 0, m = tabMonster.size(); j < m; j++)
         {
-            objMonster = tabMonster.at(i).toObject();
+            objMonster = tabMonster.at(j).toObject();
             objLevel = QJsonObject();
             v.setKind(PrimitiveValueKind::Number);
             v.setNumberValue(objMonster["l"].toInt());
@@ -1290,6 +1290,7 @@ void ProjectUpdater::updateVersion_1_8_3()
         objTroop["l"] = tabMonster;
         tab[i] = objTroop;
     }
-    json["l"] = tab;
+    json["troops"] = tab;
     Common::writeOtherJSON(path, json);
+    m_project->gameDatas()->readTroops(m_project->pathCurrentProjectApp());
 }
