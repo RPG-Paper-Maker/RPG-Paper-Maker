@@ -532,7 +532,13 @@ void DialogScripts::keyPressEvent(QKeyEvent *event)
             ui->tabWidget->currentIndex());
     }
     QDialog::keyPressEvent(event);
-    if (ui->tabWidgetPlugin->currentIndex() == 2) {
+    QKeySequence ctrlC(Qt::CTRL + Qt::Key_C);
+    QKeySequence ctrlV(Qt::CTRL + Qt::Key_V);
+    QKeySequence ctrlDel(Qt::Key_Delete);
+    if (ui->tabWidgetPlugin->currentIndex() == 2 && (keys.matches(ctrlC) || (
+        keys.matches(ctrlV)) || keys.matches(ctrlDel) || Common
+        ::isPressingEnter(event)))
+    {
         ui->treeViewEditParameter->forceKeyPress(event);
         ui->treeViewEditCommands->forceKeyPress(event);
     }
