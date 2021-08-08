@@ -1653,7 +1653,7 @@ QString EventCommand::strChangeProperty(QStandardItemModel *properties,
     int i;
 
     i = 0;
-    propertyID = this->strDataBaseId(i, properties, parameters);
+    propertyID = this->strDataBaseId(i, properties, properties, parameters);
     operation = this->strChangeVariablesOperation(i);
     newValue = this->strProperty(i, properties, parameters);
 
