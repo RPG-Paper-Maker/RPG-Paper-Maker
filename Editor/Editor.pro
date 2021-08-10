@@ -40,12 +40,14 @@ HEADERS += \
     CustomWidgets/widgetcodelinenumberarea.h \
     CustomWidgets/widgetcomplexmessage.h \
     CustomWidgets/widgetcustomstructure.h \
+    CustomWidgets/widgetimage.h \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgetpreviewtroop.h \
     CustomWidgets/widgetsliderprogression.h \
     CustomWidgets/widgettilesettexture.h \
     CustomWidgets/widgettreestructure.h \
     CustomWidgets/widgetvideo.h \
+    CustomWidgets/widgetnews.h \
     Dialogs/Animations/dialoganimationclearframes.h \
     Dialogs/Animations/dialoganimationcopyframes.h \
     Dialogs/Animations/dialoganimationcreatetransition.h \
@@ -472,12 +474,14 @@ SOURCES += \
     CustomWidgets/widgetcodelinenumberarea.cpp \
     CustomWidgets/widgetcomplexmessage.cpp \
     CustomWidgets/widgetcustomstructure.cpp \
+    CustomWidgets/widgetimage.cpp \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgetpreviewtroop.cpp \
     CustomWidgets/widgetsliderprogression.cpp \
     CustomWidgets/widgettilesettexture.cpp \
     CustomWidgets/widgettreestructure.cpp \
     CustomWidgets/widgetvideo.cpp \
+    CustomWidgets/widgetnews.cpp \
     Dialogs/Animations/dialoganimationclearframes.cpp \
     Dialogs/Animations/dialoganimationcopyframes.cpp \
     Dialogs/Animations/dialoganimationcreatetransition.cpp \
@@ -853,6 +857,7 @@ FORMS += \
     CustomWidgets/widgetsliderprogression.ui \
     CustomWidgets/widgettilesettexture.ui \
     CustomWidgets/widgetvideo.ui \
+    CustomWidgets/widgetnews.ui \
     Dialogs/Animations/dialoganimationclearframes.ui \
     Dialogs/Animations/dialoganimationcopyframes.ui \
     Dialogs/Animations/dialoganimationcreatetransition.ui \

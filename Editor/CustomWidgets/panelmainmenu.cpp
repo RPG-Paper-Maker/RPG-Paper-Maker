@@ -12,6 +12,9 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include "mainwindow.h"
 #include "panelmainmenu.h"
 #include "ui_panelmainmenu.h"
@@ -35,6 +38,40 @@ PanelMainMenu::PanelMainMenu(QWidget *parent) :
     ui->labelCommercial->setTextFormat(Qt::RichText);
     ui->labelCommercial->setTextInteractionFlags(Qt::TextBrowserInteraction);
     ui->labelCommercial->setOpenExternalLinks(true);
+
+    // News
+    QNetworkAccessManager manager;
+    QNetworkReply *reply;
+    QEventLoop loop;
+    QJsonObject obj;
+    QJsonArray json;
+    reply = manager.get(QNetworkRequest(QUrl("https://raw.githubusercontent.com/"
+        "RPG-Paper-Maker/RPG-Paper-Maker/develop/News/content.json")));
+    this->connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+    if (reply->error() == QNetworkReply::NetworkError::NoError) {
+        json = QJsonDocument::fromJson(reply->readAll()).array();
+    }
+    reply = manager.get(QNetworkRequest(QUrl("https://raw.githubusercontent.com/"
+        "RPG-Paper-Maker/RPG-Paper-Maker/develop/News/1.png")));
+    this->connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+    if (reply->error() == QNetworkReply::NetworkError::NoError) {
+        QImage image(reply->readAll());
+        obj = json[0].toObject();
+        ui->widgetNews1->update(obj["title"].toString(), image, obj["link"].toString());
+    }
+    reply = manager.get(QNetworkRequest(QUrl("https://raw.githubusercontent.com/"
+        "RPG-Paper-Maker/RPG-Paper-Maker/develop/News/2.png")));
+    this->connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+    if (reply->error() == QNetworkReply::NetworkError::NoError) {
+        QImage image(reply->readAll());
+        obj = json[1].toObject();
+        ui->widgetNews2->update(obj["title"].toString(), image, obj["link"].toString());
+    }
+
+    // Recent projects
     this->connect(ui->panelRecentProjects, SIGNAL(openingProject(QString)), this
         , SLOT(openRecentProject(QString)));
 
