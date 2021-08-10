@@ -1250,16 +1250,6 @@
                                 "files": [
                                     {
                                         "files": [
-                                        ],
-                                        "target": "Engine/Content/example/Datas/Maps/temp"
-                                    },
-                                    {
-                                        "files": [
-                                            {
-                                                "files": [
-                                                ],
-                                                "target": "Engine/Content/example/Datas/Maps/MAP0002/temp"
-                                            },
                                             {
                                                 "repo": "RPG-Paper-Maker",
                                                 "source": "EditorApp/Content/example/Datas/Maps/MAP0002/0_0_0.json",
@@ -1285,11 +1275,6 @@
                                     },
                                     {
                                         "files": [
-                                            {
-                                                "files": [
-                                                ],
-                                                "target": "Engine/Content/example/Datas/Maps/MAP0001/temp"
-                                            },
                                             {
                                                 "repo": "RPG-Paper-Maker",
                                                 "source": "EditorApp/Content/example/Datas/Maps/MAP0001/0_0_1.json",
@@ -1330,11 +1315,6 @@
                                     },
                                     {
                                         "files": [
-                                            {
-                                                "files": [
-                                                ],
-                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/temp"
-                                            },
                                             {
                                                 "repo": "RPG-Paper-Maker",
                                                 "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_-1_3.json",
@@ -2732,16 +2712,6 @@
                         "files": [
                             {
                                 "files": [
-                                ],
-                                "target": "Engine/Content/example/Datas/Maps/temp"
-                            },
-                            {
-                                "files": [
-                                    {
-                                        "files": [
-                                        ],
-                                        "target": "Engine/Content/example/Datas/Maps/MAP0002/temp"
-                                    },
                                     {
                                         "repo": "RPG-Paper-Maker",
                                         "source": "EditorApp/Content/example/Datas/Maps/MAP0002/0_0_0.json",
@@ -2767,11 +2737,6 @@
                             },
                             {
                                 "files": [
-                                    {
-                                        "files": [
-                                        ],
-                                        "target": "Engine/Content/example/Datas/Maps/MAP0001/temp"
-                                    },
                                     {
                                         "repo": "RPG-Paper-Maker",
                                         "source": "EditorApp/Content/example/Datas/Maps/MAP0001/0_0_1.json",
@@ -2812,11 +2777,6 @@
                             },
                             {
                                 "files": [
-                                    {
-                                        "files": [
-                                        ],
-                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/temp"
-                                    },
                                     {
                                         "repo": "RPG-Paper-Maker",
                                         "source": "EditorApp/Content/example/Datas/Maps/MAP0003/2_-1_3.json",
@@ -7116,6 +7076,11 @@
                             },
                             {
                                 "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Core/CustomGeometry.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/CustomGeometry.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Core/Camera.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Camera.js"
                             },
@@ -7338,6 +7303,11 @@
                                 "repo": "Game-Scripts",
                                 "source": "Content/Datas/Scripts/System/Core/Object3DBox.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/Object3DBox.js"
+                            },
+                            {
+                                "repo": "Game-Scripts",
+                                "source": "Content/Datas/Scripts/System/Core/CustomGeometry.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Core/CustomGeometry.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts",
