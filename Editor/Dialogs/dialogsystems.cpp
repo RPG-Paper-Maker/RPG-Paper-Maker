@@ -206,7 +206,10 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
 
 // -------------------------------------------------------
 
-void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
+void DialogSystems::initializeBattleSystem(GameDatas *gameDatas)
+{
+    // Set as translatable
+    ui->panelSuperListCommonEquipments->setIsLang(true);
 
     // Don't show edit name
     ui->panelSuperListCommonStatistics->showEditName(false);
@@ -215,6 +218,7 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
     ui->panelSuperListArmorsKind->showEditName(false);
 
     // Allow editions
+    ui->panelSuperListCommonEquipments->list()->setCanEdit(true);
     ui->panelSuperListCommonStatistics->list()->setCanEdit(true);
     ui->panelSuperListElements->list()->setCanEdit(true);
     ui->panelSuperListWeaponsKind->list()->setCanEdit(true);
@@ -277,10 +281,14 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
         ->battleSystemDatas()->modelElements());
     ui->panelSuperListElements->list()->initializeNewItemInstance(
         new SystemElement);
-    ui->panelSuperListCommonEquipments->list()->initializeModel(gameDatas
+    ui->panelSuperListCommonEquipments->initializeModel(gameDatas
         ->battleSystemDatas()->modelCommonEquipment());
     ui->panelSuperListCommonEquipments->list()->initializeNewItemInstance(
         new SystemTranslatable);
+    ui->panelSuperListCommonEquipments->showEditName(true);
+    QModelIndex index = ui->panelSuperListCommonEquipments->list()->getModel()
+        ->index(0, 0);
+    ui->panelSuperListCommonEquipments->list()->setCurrentIndex(index);
     ui->panelSuperListCommonStatistics->list()->initializeModel(gameDatas
         ->battleSystemDatas()->modelCommonStatistics());
     ui->panelSuperListCommonStatistics->list()->initializeNewItemInstance(
