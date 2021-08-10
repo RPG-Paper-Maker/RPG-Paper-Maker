@@ -57,7 +57,8 @@ PanelMainMenu::PanelMainMenu(QWidget *parent) :
     this->connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
     if (reply->error() == QNetworkReply::NetworkError::NoError) {
-        QImage image(reply->readAll());
+        QImage image;
+        image.loadFromData(reply->readAll());
         obj = json[0].toObject();
         ui->widgetNews1->update(obj["title"].toString(), image, obj["link"].toString());
     }
@@ -66,7 +67,8 @@ PanelMainMenu::PanelMainMenu(QWidget *parent) :
     this->connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
     if (reply->error() == QNetworkReply::NetworkError::NoError) {
-        QImage image(reply->readAll());
+        QImage image;
+        image.loadFromData(reply->readAll());
         obj = json[1].toObject();
         ui->widgetNews2->update(obj["title"].toString(), image, obj["link"].toString());
     }
