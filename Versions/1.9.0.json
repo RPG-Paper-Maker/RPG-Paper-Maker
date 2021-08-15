@@ -1,0 +1,32 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Mouse controls (ingame)",
+	    "Web browser integration",
+	    "Draw mode pixel (you can draw elements on the exact pixel position of the mouse, when currently it's only drawing on the pointed square)",
+	    "Terrain tag tileset",
+	    "Detections: choose smaller boxes",
+	    "System: initial party members",
+	    "Command change meteo",
+	    "Command game over + game over screen",
+	    "Command play a video",
+	    "Hero description",
+	    "Skills messages (ingame battles)"
+    ],
+    "bugs": [],
+    "finished": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ]
+}
