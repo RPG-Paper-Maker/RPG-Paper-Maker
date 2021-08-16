@@ -64,9 +64,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-794</y>
+                <y>0</y>
                 <width>252</width>
-                <height>1560</height>
+                <height>1589</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_13">
@@ -120,13 +120,6 @@
                     <string>Game native resolution</string>
                    </property>
                    <layout class="QGridLayout" name="gridLayout_3">
-                    <item row="1" column="0">
-                     <widget class="QCheckBox" name="checkBoxAntialiasing">
-                      <property name="text">
-                       <string>Antialiasing</string>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="0" column="0">
                      <layout class="QGridLayout" name="gridLayout_2">
                       <item row="0" column="0">
@@ -193,6 +186,23 @@
                        <widget class="QComboBox" name="comboBoxScreenWindow"/>
                       </item>
                      </layout>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QCheckBox" name="checkBoxAntialiasing">
+                      <property name="text">
+                       <string>Antialiasing</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QCheckBox" name="checkBoxMouseControls">
+                      <property name="text">
+                       <string>Mouse controls</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </widget>
@@ -1161,7 +1171,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-182</y>
+                <y>0</y>
                 <width>304</width>
                 <height>882</height>
                </rect>

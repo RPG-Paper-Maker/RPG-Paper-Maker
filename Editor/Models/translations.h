@@ -1359,6 +1359,7 @@ public:
     static const QString TROOPS_BATTLERS_OFFSET;
     static const QString SAVE_AND_CLOSE;
     static const QString IMPOSSIBLE_TO_PASTE_ITEM;
+    static const QString MOUSE_CONTROLS;
 
     Translations();
     virtual ~Translations();

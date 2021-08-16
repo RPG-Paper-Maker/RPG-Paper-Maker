@@ -30,6 +30,7 @@ const QString SystemDatas::JSON_PROJECT_NAME = "pn";
 const QString SystemDatas::JSON_SCREEN_WIDTH = "sw";
 const QString SystemDatas::JSON_SCREEN_HEIGHT = "sh";
 const QString SystemDatas::JSON_IS_SCREEN_WINDOW = "isw";
+const QString SystemDatas::JSON_IS_MOUSE_CONTROLS = "isMouseControls";
 const QString SystemDatas::JSON_COLORS = "colors";
 const QString SystemDatas::JSON_ITEMS_TYPES = "itemsTypes";
 const QString SystemDatas::JSON_INVENTORY_FILTERS = "inventoryFilters";
@@ -64,6 +65,7 @@ const QString SystemDatas::JSON_PORTION_RAY_ENGINE = "portionRayEngine";
 const QString SystemDatas::JSON_PORTION_RAY_INGAME = "portionRayIngame";
 const QString SystemDatas::JSON_SAVE_SLOTS = "saveSlots";
 const bool SystemDatas::DEFAULT_ANTIALIASING = false;
+const bool SystemDatas::DEFAULT_IS_MOUSE_CONTROLS = true;
 const int SystemDatas::DEFAULT_MAP_FRAME_DURATION = 150;
 const int SystemDatas::DEFAULT_BATTLERS_FRAMES = 4;
 const int SystemDatas::DEFAULT_BATTLERS_COLUMNS = 9;
@@ -82,6 +84,7 @@ const int SystemDatas::DEFAULT_SAVE_SLOTS = 4;
 
 SystemDatas::SystemDatas() :
     m_projectName(new SystemTranslatable(-1, RPM::translate(Translations::PROJECT_WITHOUT_NAME))),
+    m_isMouseControls(DEFAULT_IS_MOUSE_CONTROLS),
     m_portionsRayEditor(DEFAULT_PORTION_RAY_ENGINE),
     m_portionsRayIngame(DEFAULT_PORTION_RAY_INGAME),
     m_mountainCollisionHeight(new PrimitiveValue(4)),
@@ -179,6 +182,16 @@ bool SystemDatas::isScreenWindow() const {
 
 void SystemDatas::setIsScreenWinow(bool b) {
     m_isScreenWindow = b;
+}
+
+bool SystemDatas::isMouseControls() const
+{
+    return m_isMouseControls;
+}
+
+void SystemDatas::setIsMouseControls(bool isMouseControls)
+{
+    m_isMouseControls = isMouseControls;
 }
 
 int SystemDatas::portionsRayEditor() const
@@ -779,6 +792,9 @@ void SystemDatas::read(const QJsonObject &json){
     m_screenWidth = json[JSON_SCREEN_WIDTH].toInt();
     m_screenHeight = json[JSON_SCREEN_HEIGHT].toInt();
     m_isScreenWindow = json[JSON_IS_SCREEN_WINDOW].toBool();
+    if (json.contains(JSON_IS_MOUSE_CONTROLS)) {
+        m_isMouseControls = json[JSON_IS_MOUSE_CONTROLS].toBool();
+    }
     if (json.contains(JSON_PORTION_RAY_ENGINE))
     {
         m_portionsRayEditor = json[JSON_PORTION_RAY_ENGINE].toInt();
@@ -978,6 +994,10 @@ void SystemDatas::write(QJsonObject &json) const{
     json[JSON_SCREEN_WIDTH] = m_screenWidth;
     json[JSON_SCREEN_HEIGHT] = m_screenHeight;
     json[JSON_IS_SCREEN_WINDOW] = m_isScreenWindow;
+    if (m_isMouseControls != DEFAULT_IS_MOUSE_CONTROLS)
+    {
+        json[JSON_IS_MOUSE_CONTROLS] = m_isMouseControls;
+    }
     if (m_portionsRayEditor != DEFAULT_PORTION_RAY_ENGINE)
     {
         json[JSON_PORTION_RAY_ENGINE] = m_portionsRayEditor;

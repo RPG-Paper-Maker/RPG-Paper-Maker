@@ -35,6 +35,7 @@ public:
     static const QString JSON_SCREEN_WIDTH;
     static const QString JSON_SCREEN_HEIGHT;
     static const QString JSON_IS_SCREEN_WINDOW;
+    static const QString JSON_IS_MOUSE_CONTROLS;
     static const QString JSON_COLORS;
     static const QString JSON_ITEMS_TYPES;
     static const QString JSON_INVENTORY_FILTERS;
@@ -69,6 +70,7 @@ public:
     static const QString JSON_PORTION_RAY_INGAME;
     static const QString JSON_SAVE_SLOTS;
     static const bool DEFAULT_ANTIALIASING;
+    static const bool DEFAULT_IS_MOUSE_CONTROLS;
     static const int DEFAULT_MAP_FRAME_DURATION;
     static const int DEFAULT_BATTLERS_FRAMES;
     static const int DEFAULT_BATTLERS_COLUMNS;
@@ -91,6 +93,8 @@ public:
     void setScreenHeight(int h);
     bool isScreenWindow() const;
     void setIsScreenWinow(bool b);
+    bool isMouseControls() const;
+    void setIsMouseControls(bool isMouseControls);
     int portionsRayEditor() const;
     void setPortionRayEditor(int p);
     int portionsRayIngame() const;
@@ -177,6 +181,7 @@ private:
     int m_screenWidth;
     int m_screenHeight;
     bool m_isScreenWindow;
+    bool m_isMouseControls;
     int m_portionsRayEditor;
     int m_portionsRayIngame;
     int m_squareSize;

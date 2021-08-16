@@ -67,6 +67,7 @@ private slots:
     void on_spinBoxScreenHeight_valueChanged(int i);
     void on_comboBoxScreenWindow_currentIndexChanged(int index);
     void on_checkBoxAntialiasing_toggled(bool checked);
+    void on_checkBoxMouseControls_toggled(bool checked);
     void on_spinBoxSquareSize_valueChanged(int i);
     void on_spinBoxRayEditor_valueChanged(int i);
     void on_spinBoxRayIngame_valueChanged(int i);

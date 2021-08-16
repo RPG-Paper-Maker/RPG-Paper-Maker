@@ -136,6 +136,7 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->spinBoxScreenWidth->setEnabled(systemDatas->isScreenWindow());
     ui->spinBoxScreenHeight->setEnabled(systemDatas->isScreenWindow());
     ui->checkBoxAntialiasing->setChecked(systemDatas->antialiasing());
+    ui->checkBoxMouseControls->setChecked(systemDatas->isMouseControls());
     ui->spinBoxSquareSize->setValue(systemDatas->squareSize());
     ui->spinBoxRayEditor->setValue(systemDatas->portionsRayEditor());
     ui->spinBoxRayIngame->setValue(systemDatas->portionsRayIngame());
@@ -668,6 +669,13 @@ void DialogSystems::on_comboBoxScreenWindow_currentIndexChanged(int index) {
 void DialogSystems::on_checkBoxAntialiasing_toggled(bool checked)
 {
     RPM::get()->project()->gameDatas()->systemDatas()->setAntialiasing(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_checkBoxMouseControls_toggled(bool checked)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setIsMouseControls(checked);
 }
 
 // -------------------------------------------------------
