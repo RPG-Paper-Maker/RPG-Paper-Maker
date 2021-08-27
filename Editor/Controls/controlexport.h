@@ -31,14 +31,14 @@ public:
     ControlExport(Project *project);
     QString createDesktop(QString location, OSKind os, bool protect, int major,
         int minor);
-    QString createBrowser(QString location, bool protect);
+    QString createBrowser(QString location, int major, int minor);
     QString createFolder(QString location, QString projectName, QString path,
                          QDir dirLocation);
     QString copyAllProject(QString path);
     QString protectJSON(QString path);
     void removeWebNoNeed(QString path);
     void removeDesktopNoNeed(QString path, bool protect);
-    QString generateWebStuff(QString path, bool protect);
+    QString generateWebStuff(QString path);
     QString generateDesktopStuff(QString path, OSKind os, int major, int minor);
     void removeMapsTemp(QString pathDatas);
     void copyBRDLC(QString path, bool protect);

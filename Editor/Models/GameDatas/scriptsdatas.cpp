@@ -229,23 +229,3 @@ void ScriptsDatas::write(QJsonObject &json) const
         json["plugins"] = tab;
     }
 }
-
-// -------------------------------------------------------
-
-void ScriptsDatas::writeBrowser(QString path) const{
-    path = Common::pathCombine(path, "includes.html");
-
-    QFile writeInfos(path);
-    if(!writeInfos.open(QIODevice::Append | QIODevice::Text))
-        return;
-
-    QTextStream out(&writeInfos);
-
-    for (int i = 0; i < m_modelSystem->invisibleRootItem()->rowCount(); i++){
-        out << "<script type=\"text/javascript\" src=\"Content/Datas/Scripts/"
-            << m_modelSystem->item(i)->text()
-            << ".js\"></script>\n";
-    }
-
-    writeInfos.close();
-}

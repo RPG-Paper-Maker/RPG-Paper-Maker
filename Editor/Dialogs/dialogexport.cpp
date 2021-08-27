@@ -70,7 +70,8 @@ void DialogExport::translate() {
 //
 //-------------------------------------------------
 
-void DialogExport::on_pushButtonLocation_clicked(){
+void DialogExport::on_pushButtonLocation_clicked()
+{
     QString dir;
 
     dir = QFileDialog::getExistingDirectory(this, RPM::translate(Translations
@@ -84,45 +85,51 @@ void DialogExport::on_pushButtonLocation_clicked(){
 
 void DialogExport::on_comboBoxOSDeploy_currentIndexChanged(int index)
 {
-    #ifdef Q_OS_WIN
-        if (index == 2) // If windows and mac
-        {
-            QMessageBox::warning(this, RPM::translate(Translations::WARNING),
-                RPM::translate(Translations::YOU_CANT_EXPORT_MACOS_WINDOWS));
-        }
-    #endif
+    if (index == 2) // If windows and mac
+    {
+        #ifdef Q_OS_WIN
+            QMessageBox::warning(this, RPM::translate(Translations::WARNING), RPM
+                ::translate(Translations::YOU_CANT_EXPORT_MACOS_WINDOWS));
+        #endif
+    }
 }
 
 // -------------------------------------------------------
 
-void DialogExport::accept() {
+void DialogExport::accept()
+{
     QString message = nullptr;
     OSKind osKind;
     QString location = ui->lineEditLocation->text();
-
-    if (ui->radioButtonDesktop->isChecked()){
+    if (ui->radioButtonDesktop->isChecked())
+    {
         osKind = static_cast<OSKind>(ui->comboBoxOSDeploy->currentIndex());
         message = m_control.createDesktop(location, osKind, ui->checkBoxProtect
             ->isChecked(), ui->spinBoxMajorVersion->value(), ui
             ->spinBoxMinorVersion->value());
+    } else if (ui->radioButtonBrowser->isChecked())
+    {
+        message = m_control.createBrowser(location, ui->spinBoxMajorVersion
+            ->value(), ui->spinBoxMinorVersion->value());
     }
-    else if (ui->radioButtonBrowser->isChecked()){
-        message = m_control.createBrowser(location, ui->checkBoxProtect->isChecked());
-    }
-
-    if (message != nullptr) {
-        if (message != RPM::DASH) {
+    if (message != nullptr)
+    {
+        if (message != RPM::DASH)
+        {
             QMessageBox::critical(this, RPM::translate(Translations::ERROR_MESSAGE),
                 message);
         }
-    } else {
+    } else
+    {
         QDialog::accept();
     }
 }
 
 // -------------------------------------------------------
 
-void DialogExport::on_radioButtonDesktop_toggled(bool checked){
+void DialogExport::on_radioButtonDesktop_toggled(bool checked)
+{
     ui->labelDeployOS->setEnabled(checked);
     ui->comboBoxOSDeploy->setEnabled(checked);
+    ui->checkBoxProtect->setEnabled(checked);
 }

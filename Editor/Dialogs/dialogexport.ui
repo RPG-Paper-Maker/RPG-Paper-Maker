@@ -181,7 +181,7 @@
             <item>
              <widget class="QRadioButton" name="radioButtonBrowser">
               <property name="enabled">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
               <property name="text">
                <string>Deploy for web browser</string>

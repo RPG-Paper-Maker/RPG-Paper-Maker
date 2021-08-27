@@ -46,7 +46,6 @@ public:
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
-    void writeBrowser(QString path) const;
 
 private:
     QStandardItemModel *m_modelSystem;

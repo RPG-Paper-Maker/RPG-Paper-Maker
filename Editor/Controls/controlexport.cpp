@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QApplication>
 #include <QDirIterator>
 #include <QMessageBox>
 #include <QMimeDatabase>
@@ -103,22 +104,25 @@ QString ControlExport::createDesktop(QString location, OSKind os, bool protect,
 
 // -------------------------------------------------------
 
-QString ControlExport::createBrowser(QString location, bool protect) {
+QString ControlExport::createBrowser(QString location, int major, int minor)
+{
     QString message;
     QDir dirLocation(location);
     QString projectName = QDir(m_project->pathCurrentProject()).dirName() +
-        "BROWSER";
+        "BROWSER" + "-v" + QString::number(major) + "." + QString::number(minor);;
     QString path = Common::pathCombine(location, projectName);
 
     // Copying all the project
     message = copyAllProject(path);
     if (message != nullptr)
+    {
         return message;
+    }
 
     // Remove all the files that are no longer needed here
     removeWebNoNeed(path);
 
-    return generateWebStuff(path, protect);
+    return generateWebStuff(path);
 }
 
 // -------------------------------------------------------
@@ -248,8 +252,14 @@ void ControlExport::removeWebNoNeed(QString path) {
     QString pathDatas = Common::pathCombine(Common::pathCombine(path, RPM
         ::PATH_APP), RPM::PATH_DATAS);
     QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
-    QString pathScripts = Common::pathCombine(Common::pathCombine(path, RPM
-        ::PATH_APP), RPM::PATH_SCRIPTS_SYSTEM_DIR);
+    QFile(Common::pathCombine(Common::pathCombine(path, RPM::PATH_APP),
+        "package.json")).remove();
+    QFile(Common::pathCombine(Common::pathCombine(path, RPM::PATH_APP),
+        "main.js")).remove();
+    QFile(Common::pathCombine(Common::pathCombine(path, RPM::PATH_APP),
+        "empty")).remove();
+
+    // Temps
     removeMapsTemp(pathDatas);
 }
 
@@ -290,30 +300,40 @@ void ControlExport::removeDesktopNoNeed(QString path, bool protect) {
 
 // -------------------------------------------------------
 
-QString ControlExport::generateWebStuff(QString path, bool protect) {
-    QString pathWeb = Common::pathCombine("Content", "web");
+QString ControlExport::generateWebStuff(QString path) {
+    QString pathWeb = Common::pathCombine(Common::pathCombine(QDir::currentPath(),
+        "Content"), "web");
 
-    // Write index.php
-    QFile::copy(Common::pathCombine(pathWeb, "index.php"), Common::pathCombine(
-        path, "index.php"));
-
-    // Write include.html
-    m_project->scriptsDatas()->writeBrowser(path);
-
-    // Write three.js library and other .js files to include
-    QDir dir(path);
-    if (!dir.mkdir("js"))
-        return "The directory js already exists.";
-    QString pathJS = Common::pathCombine(path, "js");
-    QFile::copy(Common::pathCombine(pathWeb, "three.js"), Common::pathCombine(
-        pathJS, "three.js"));
-    QFile::copy(Common::pathCombine(pathWeb, "index.js"), Common::pathCombine(
-        pathJS, "index.js"));
-    QFile::copy(Common::pathCombine(pathWeb, "utilities.js"),
-        Common::pathCombine(pathJS, "utilities.js"));
+    // Libs modules + Platform.js + Globals.js
+    QString pathScriptsLibs = Common::pathCombine(Common::pathCombine(path, RPM
+        ::PATH_APP), RPM::PATH_SCRIPTS_LIBS_DIR);
+    QString pathScriptsSystem = Common::pathCombine(Common::pathCombine(path,
+        RPM::PATH_APP), RPM::PATH_SCRIPTS_SYSTEM_DIR);
+    QString pathScriptsCommon = Common::pathCombine(pathScriptsSystem, "Common");
+    QString pathThreejs = Common::pathCombine(pathScriptsLibs, "three.js");
+    QFile(pathThreejs).remove();
+    QFile::copy(Common::pathCombine(pathWeb, "three.js"), pathThreejs);
+    QString pathHowlerjs = Common::pathCombine(pathScriptsLibs, "howler.js");
+    QFile(pathHowlerjs).remove();
+    QFile::copy(Common::pathCombine(pathWeb, "howler.js"), pathHowlerjs);
+    QString pathGlobalsjs = Common::pathCombine(pathScriptsSystem, "Globals.js");
+    QFile(pathGlobalsjs).remove();
+    QFile::copy(Common::pathCombine(pathWeb, "Globals.js"), pathGlobalsjs);
+    QString pathPlatformjs = Common::pathCombine(pathScriptsCommon, "Platform.js");
+    QFile(pathPlatformjs).remove();
+    QFile::copy(Common::pathCombine(pathWeb, "Platform.js"), pathPlatformjs);
 
     // Pictures
-    copyBRDLC(path, protect);
+    copyBRDLC(Common::pathCombine(path, RPM::PATH_APP), false);
+
+    // Move to root
+    QFile::copy(Common::pathCombine(m_project->pathCurrentProjectApp(), RPM
+        ::FILE_INDEX), Common::pathCombine(path, RPM::FILE_INDEX));
+    QString pathContentProject = Common::pathCombine(path, RPM::FOLDER_CONTENT);
+    QString pathContent = Common::pathCombine(Common::pathCombine(path, RPM
+        ::PATH_APP), RPM::FOLDER_CONTENT);
+    Common::copyPath(pathContent, pathContentProject);
+    QDir(Common::pathCombine(path, RPM::PATH_RESOURCES)).removeRecursively();
 
     return nullptr;
 }
