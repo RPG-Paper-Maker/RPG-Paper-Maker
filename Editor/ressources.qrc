@@ -80,6 +80,9 @@
         <file>Ressources/text-right.png</file>
         <file>Ressources/point_g.png</file>
         <file>Ressources/fonts.png</file>
+        <file>Ressources/pixel.png</file>
+        <file>Ressources/pixel_disable.png</file>
+        <file>Ressources/square.png</file>
     </qresource>
     <qresource prefix="/">
         <file>Shaders/cursor.frag</file>

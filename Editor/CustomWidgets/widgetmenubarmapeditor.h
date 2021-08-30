@@ -38,15 +38,15 @@ class WidgetMenuBarMapEditor : public QMenuBar
     Q_OBJECT
 
 public:
-    static QColor colorBackgroundSelected;
-    static QColor colorBackgroundRightSelected;
-
+    static const QColor COLOR_BACKGROUND_SELECTED;
+    static const QColor COLOR_BACKGROUND_RIGHT_SELECTED;
+    static const char* PROPERTY_SELECTION;
     explicit WidgetMenuBarMapEditor(QWidget *parent = nullptr, bool selection =
         true);
     ~WidgetMenuBarMapEditor();
-
     MapEditorSelectionKind selectionKind() const;
     MapEditorSubSelectionKind subSelectionKind();
+    bool squareOn() const;
     DrawKind drawKind();
     bool layerOn() const;
     QAction * actionFloors() const;
@@ -59,6 +59,8 @@ public:
     QAction * actionMountain() const;
     QAction * actionObject3D() const;
     QAction * actionEvents() const;
+    QAction * actionSquare() const;
+    QAction * actionPixel() const;
     QAction * actionTranslate() const;
     QAction * actionRotate() const;
     QAction * actionScale() const;
@@ -68,11 +70,21 @@ public:
     QAction * actionLayerNone() const;
     QAction * actionLayerOn() const;
 
+    WidgetMenuBarMapEditor * getBarRight();
     bool containsMenu() const;
+    int countSelectionKind() const;
     void initializeRightMenu();
     void toggleSelection();
-    int countSelectionKind() const;
-
+    void updateSelection(QAction *action);
+    void updateMenutext(QMenu *menu, QAction *action);
+    void updateSubSelection(QMenu *menu, QAction *menuAction, QAction *action);
+    void updateRight(QAction *action);
+    void forceSquare();
+    void forceNoneLayer();
+    void forceNoRotation();
+    void forcePencil();
+    void forceRight(int i);
+    void enableAllRight();
     void translate();
 
 private:
@@ -81,6 +93,8 @@ private:
     bool m_selection;
     QAction *m_actionHeight;
     QAction *m_actionHeightPlus;
+    QAction *m_actionSquare;
+    QAction *m_actionPixel;
     QAction *m_actionTranslate;
     QAction *m_actionRotate;
     QAction *m_actionScale;
@@ -94,17 +108,6 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *e);
-
-    void updateSelection(QAction *action);
-    void updateMenutext(QMenu *menu, QAction *action);
-    void updateSubSelection(QMenu *menu, QAction *menuAction, QAction *action);
-    void updateRight(QAction *action);
-    void forceNoneLayer();
-    void forceNoRotation();
-    void forcePencil();
-    void forceRight(int i);
-    void enableAllRight();
-    WidgetMenuBarMapEditor * getBarRight();
 
 private slots:
     void on_menuFloors_triggered(QAction *action);

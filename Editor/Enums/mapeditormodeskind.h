@@ -21,13 +21,16 @@
 // -------------------------------------------------------
 
 enum class MapEditorModesKind {
+    Square,
+    Pixel,
+    Sepator1,
     TransformTranslate,
     TransformRotate,
     TransformScale,
     DrawPencil,
     DrawRectangle,
     DrawPin,
-    Sepator1,
+    Sepator2,
     LayerNone,
     LayerOn
 };
