@@ -71,19 +71,19 @@ public:
         double cameraVerticalAngle);
     void deleteMap(bool updateCamera = true);
     void onResize(int width, int height);
-    void update(MapEditorSelectionKind selectionKind, DrawKind drawKind, bool
+    void update(MapEditorSelectionKind selectionKind, bool square, DrawKind drawKind, bool
         layerOn);
-    void updateMouse(QPoint point, MapEditorSelectionKind selectionKind,
-        DrawKind drawKind, bool layerOn);
+    void updateMouse(QPoint point, MapEditorSelectionKind selectionKind, bool
+        square, DrawKind drawKind, bool layerOn);
     void updateMousePosition(QPoint point);
     void updateMouseMove(QPoint point);
     bool mousePositionChanged(QPoint point);
-    void updateRaycasting(MapEditorSelectionKind selectionKind, DrawKind
+    void updateRaycasting(MapEditorSelectionKind selectionKind, bool square, DrawKind
         drawKind, bool layerOn);
     void getPortionsInRay(QList<Portion> &portions);
     void updatePortionsInRay(QList<Portion> &portions,
                              QList<Portion> &adjacents);
-    void updateRaycastingLand(MapPortion *mapPortion);
+    void updateRaycastingLand(MapPortion *mapPortion, bool square);
     void updateRaycastingSprites(MapPortion *mapPortion, bool layerOn);
     void updateRaycastingObjects3D(MapPortion *mapPortion);
     void updateRaycastingMountains(MapPortion *mapPortion);
@@ -96,7 +96,7 @@ public:
         QMatrix4x4 &view);
     QVector3D getPositionOnRay(QVector3D &ray, int distance);
     void getCorrectPositionOnRay(Position &position, QVector3D &ray,
-        int distance, bool accurate = false);
+        int distance, bool accurate = false, bool square = true);
     void updateWallIndicator();
     void updatePreviewElements(MapEditorSelectionKind kind,
         MapEditorSubSelectionKind subKind, DrawKind drawKind, bool layerOn,
@@ -239,10 +239,10 @@ public:
     void onMouseWheelMove(QWheelEvent *event, bool updateTree = true);
     void onMouseMove(QPoint point, Qt::MouseButton button, bool updateTree = true);
     void onMousePressed(MapEditorSelectionKind selection,
-        MapEditorSubSelectionKind subSelection, DrawKind drawKind, bool layerOn,
-        QRect &tileset, int specialID, int widthSquares, double widthPixels, int
-        heightSquares, double heightPixels, QRect &defaultFloorRect, QPoint
-        point, Qt::MouseButton button);
+        MapEditorSubSelectionKind subSelection, bool square, DrawKind drawKind,
+        bool layerOn, QRect &tileset, int specialID, int widthSquares, double
+        widthPixels, int heightSquares, double heightPixels, QRect
+        &defaultFloorRect, QPoint point, Qt::MouseButton button);
     void onMouseReleased(MapEditorSelectionKind, MapEditorSubSelectionKind,
         DrawKind drawKind, QRect &, int specialID, QPoint, Qt::MouseButton button);
     void onKeyPressed(int k, double speed);

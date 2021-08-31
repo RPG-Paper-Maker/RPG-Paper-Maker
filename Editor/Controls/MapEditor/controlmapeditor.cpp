@@ -391,8 +391,8 @@ void ControlMapEditor::updateCameraTreeNode() {
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::update(MapEditorSelectionKind selectionKind, DrawKind
-    drawKind, bool layerOn)
+void ControlMapEditor::update(MapEditorSelectionKind selectionKind, bool square,
+    DrawKind drawKind, bool layerOn)
 {
     // Update portions
     updatePortions(selectionKind, drawKind);
@@ -407,7 +407,7 @@ void ControlMapEditor::update(MapEditorSelectionKind selectionKind, DrawKind
     m_camera->update(cursor(), m_map->squareSize());
 
     // Raycasting
-    updateRaycasting(selectionKind, drawKind, layerOn);
+    updateRaycasting(selectionKind, square, drawKind, layerOn);
 
     // Mouse update
     m_mouseBeforeUpdate = m_mouseMove;
@@ -416,11 +416,11 @@ void ControlMapEditor::update(MapEditorSelectionKind selectionKind, DrawKind
 // -------------------------------------------------------
 
 void ControlMapEditor::updateMouse(QPoint point, MapEditorSelectionKind
-    selectionKind, DrawKind drawKind, bool layerOn)
+    selectionKind, bool square, DrawKind drawKind, bool layerOn)
 {
     updateMousePosition(point);
     m_mouseMove = point;
-    updateRaycasting(selectionKind, drawKind, layerOn);
+    updateRaycasting(selectionKind, square, drawKind, layerOn);
     m_mouseBeforeUpdate = m_mouseMove;
 }
 
@@ -1569,14 +1569,14 @@ void ControlMapEditor::onMouseMove(QPoint point, Qt::MouseButton button,
 // -------------------------------------------------------
 
 void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
-    MapEditorSubSelectionKind subSelection, DrawKind drawKind, bool layerOn,
+    MapEditorSubSelectionKind subSelection, bool square, DrawKind drawKind, bool layerOn,
     QRect &tileset, int specialID, int widthSquares, double widthPixels, int
     heightSquares, double heightPixels, QRect &defaultFloorRect, QPoint point,
     Qt::MouseButton button)
 {
 
     // Update mouse
-    updateMouse(point, selection, drawKind, layerOn);
+    updateMouse(point, selection, square, drawKind, layerOn);
 
     if (button != Qt::MouseButton::MiddleButton)
     {

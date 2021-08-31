@@ -303,10 +303,10 @@ void Position::getStringLayerYPlus(QString& infos, int squareSize) const {
         ::number(m_angleY) + ", " + QString::number(m_angleZ) + RPM
         ::BRACKET_RIGHT + RPM::NEW_LINE + RPM::translate(Translations::CENTER) +
         RPM::SPACE + RPM::translate(Translations::X) + RPM::SPACE + RPM::EQUAL +
-        RPM::SPACE + QString::number(m_centerX) + "%" + RPM::NEW_LINE + RPM
-        ::translate(Translations::CENTER) + RPM::SPACE + RPM::translate(
-        Translations::Z) + RPM::SPACE + RPM::EQUAL + RPM::SPACE + QString
-        ::number(m_centerZ) + "%";
+        RPM::SPACE + QString::number(m_centerX * squareSize / 100) + "px" + RPM
+        ::NEW_LINE + RPM::translate(Translations::CENTER) + RPM::SPACE + RPM
+        ::translate(Translations::Z) + RPM::SPACE + RPM::EQUAL + RPM::SPACE +
+        QString::number(m_centerZ * squareSize / 100) + "px";
 }
 
 // -------------------------------------------------------

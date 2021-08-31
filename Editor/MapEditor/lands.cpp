@@ -174,7 +174,6 @@ MapElement* Lands::updateRaycasting(int squareSize, float& finalDistance,
         finalPosition, ray, previousCoords);
     elementAutotile = m_autotiles->updateRaycasting(squareSize, finalDistance,
         finalPosition, ray, previousCoords);
-
     return elementAutotile == nullptr ? elementFloor : elementAutotile;
 }
 

@@ -20,7 +20,7 @@
 // -------------------------------------------------------
 
 void ControlMapEditor::updateRaycasting(MapEditorSelectionKind selectionKind,
-    DrawKind drawKind, bool layerOn)
+    bool square, DrawKind drawKind, bool layerOn)
 {
     QList<Portion> portions;
     QMatrix4x4 projection, view;
@@ -39,7 +39,7 @@ void ControlMapEditor::updateRaycasting(MapEditorSelectionKind selectionKind,
         ->getY()) : m_firstMouseCoords.getY(RPM::get()->getSquareSize());
     m_distancePlane = (height - m_camera->positionY()) / rayDirection.y();
     getCorrectPositionOnRay(m_positionOnPlane, rayDirection, static_cast<int>(
-        m_distancePlane));
+        m_distancePlane), false, square);
     cameraPosition = QVector3D(m_camera->positionX(), m_camera->positionY(),
         m_camera->positionZ());
     m_ray.setOrigin(cameraPosition);
@@ -91,7 +91,7 @@ void ControlMapEditor::updateRaycasting(MapEditorSelectionKind selectionKind,
         }
         else {
             if (m_elementOnLand == nullptr) {
-                updateRaycastingLand(mapPortion);
+                updateRaycastingLand(mapPortion, square);
             }
             if (m_elementOnSprite == nullptr) {
                 updateRaycastingSprites(mapPortion, layerOn);
@@ -309,12 +309,20 @@ void ControlMapEditor::updatePortionsInRay(QList<Portion> &portions,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updateRaycastingLand(MapPortion *mapPortion)
+void ControlMapEditor::updateRaycastingLand(MapPortion *mapPortion, bool square)
 {
     MapElement *element = m_elementOnLand;
     m_elementOnLand = mapPortion->updateRaycastingLand(m_map->squareSize(),
         m_distanceLand, m_positionOnLand, m_ray, m_firstMouseCoords);
-    if (m_elementOnLand != element) {
+    if (!square)
+    {
+        m_positionOnLand.setCenterX(qFloor((m_camera->positionX() + (m_ray
+            .direction().x() * m_distanceLand)) / RPM::getSquareSize() * 100) % 100);
+        m_positionOnLand.setCenterZ(qFloor((m_camera->positionZ() + (m_ray
+            .direction().z() * m_distanceLand)) / RPM::getSquareSize() * 100) % 100);
+    }
+    if (m_elementOnLand != element)
+    {
         m_mapPortionLand = mapPortion;
     }
 }
@@ -418,7 +426,7 @@ QVector3D ControlMapEditor::getPositionOnRay(QVector3D &ray, int distance) {
 // -------------------------------------------------------
 
 void ControlMapEditor::getCorrectPositionOnRay(Position &position,
-    QVector3D &ray, int distance,  bool accurate)
+    QVector3D &ray, int distance,  bool accurate, bool square)
 {
     QVector3D point = getPositionOnRay(ray, distance);
     int x, y, z;
@@ -426,20 +434,26 @@ void ControlMapEditor::getCorrectPositionOnRay(Position &position,
     y = qFloor(static_cast<qreal>(point.y()) / m_map->squareSize());
     yPlus = Common::modulo(qFloor(static_cast<qreal>(point.y())), m_map
         ->squareSize()) * 100.0 / m_map->squareSize();
-
-    if (accurate) {
+    if (accurate)
+    {
         x = qRound((point.x() + 1) / m_map->squareSize());
         z = qRound((point.z() + 1) / m_map->squareSize());
-    }
-    else {
+    } else
+    {
         x = qRound(point.x() + 1) / m_map->squareSize();
         z = qRound(point.z() + 1) / m_map->squareSize();
         if (static_cast<int>(point.x()) < 0) x--;
         if (static_cast<int>(point.z()) < 0) z--;
     }
-
     position.setX(x);
     position.setY(y);
     position.setYPlus(yPlus);
     position.setZ(z);
+    if (!square)
+    {
+        position.setCenterX(static_cast<float>(static_cast<int>(point.x() + 1) %
+            m_map->squareSize()) / m_map->squareSize() * 100);
+        position.setCenterZ(static_cast<float>(static_cast<int>(point.z() + 1) %
+            m_map->squareSize()) / m_map->squareSize() * 100);
+    }
 }
