@@ -67,7 +67,7 @@ void Cursor::setX(int x, bool withReal){
 }
 
 void Cursor::setY(Position3D pos, bool withReal) {
-    int y = pos.getY(RPM::getSquareSize());
+    int y = pos.getY();
 
     m_positionSquare->setY(y);
     if (withReal)

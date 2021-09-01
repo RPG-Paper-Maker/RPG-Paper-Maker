@@ -44,12 +44,12 @@ double Position3D::yPlus() const { return m_y_plus; }
 
 void Position3D::setYPlus(double yPlus) { m_y_plus = yPlus; }
 
-int Position3D::getY(int squareSize) const {
-    return (m_y * squareSize) + getYpx(squareSize);
+int Position3D::getY() const {
+    return (m_y * RPM::getSquareSize()) + this->getYpx();
 }
 
-int Position3D::getYpx(int squareSize) const {
-    return static_cast<int>(m_y_plus * squareSize / 100);
+int Position3D::getYpx() const {
+    return static_cast<int>(m_y_plus * RPM::getSquareSize() / 100);
 }
 
 void Position3D::setCoords(int x, int y, double yPlus, int z) {

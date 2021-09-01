@@ -102,7 +102,7 @@ void LandDatas::getUpPosSizeCenter(QVector3D& pos, QVector3D& size, QVector3D&
     {
         yLayerOffset *= -1;
     }
-    float yPosition = position.getY(squareSize) + yLayerOffset;
+    float yPosition = position.getY() + yLayerOffset;
     pos.setX(position.x() * squareSize);
     pos.setY(yPosition);
     pos.setZ(position.z() * squareSize);

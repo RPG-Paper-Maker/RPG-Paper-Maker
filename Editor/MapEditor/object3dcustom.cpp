@@ -216,9 +216,9 @@ void Object3DCustomDatas::initializeVertices(QVector<Vertex> &vertices,
     size.setY(scale * squareSize);
     size.setZ(scale * squareSize);
     shape = m_datas->obj();
-    positionOffset.setX((position.x() * squareSize) + (squareSize / 2));
-    positionOffset.setY(position.getY(squareSize));
-    positionOffset.setZ((position.z() * squareSize) + (squareSize / 2));
+    positionOffset.setX((position.x() * squareSize) + position.getCenterXPixels());
+    positionOffset.setY(position.getY());
+    positionOffset.setZ((position.z() * squareSize) + position.getCenterZPixels());
     m_box = QBox3D(shape->minVertex() * size + positionOffset, shape
         ->maxVertex() * size + positionOffset);
     this->getCenter(center);

@@ -78,7 +78,7 @@ void PanelTransformations::updateText() {
     ui->labelSelectedObject->setText(m_mapElementPosition == nullptr ?
         RPM::BRACKET_LEFT + RPM::translate(Translations::NONE).toUpper() + RPM
         ::BRACKET_RIGHT + RPM::NEW_LINE + RPM::NEW_LINE + RPM::NEW_LINE + RPM
-        ::NEW_LINE : m_mapElementPosition->toString(RPM::getSquareSize()));
+        ::NEW_LINE : m_mapElementPosition->toString());
 }
 
 //-------------------------------------------------

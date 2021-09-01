@@ -290,8 +290,22 @@ void Position::getBotRight(Position& position) const {
 
 // -------------------------------------------------------
 
-void Position::getStringLayerYPlus(QString& infos, int squareSize) const {
-    int yPlus = getYpx(squareSize);
+int Position::getCenterXPixels() const
+{
+    return m_centerX * RPM::getSquareSize() / 100;
+}
+
+// -------------------------------------------------------
+
+int Position::getCenterZPixels() const
+{
+    return m_centerZ * RPM::getSquareSize() / 100;
+}
+
+// -------------------------------------------------------
+
+void Position::getStringLayerYPlus(QString& infos) const {
+    int yPlus = this->getYpx();
     if (yPlus > 0) {
         infos += RPM::translate(Translations::Y) + "+ = " + QString::number(
             yPlus) + RPM::translate(Translations::PX) + RPM::NEW_LINE;
@@ -303,15 +317,16 @@ void Position::getStringLayerYPlus(QString& infos, int squareSize) const {
         ::number(m_angleY) + ", " + QString::number(m_angleZ) + RPM
         ::BRACKET_RIGHT + RPM::NEW_LINE + RPM::translate(Translations::CENTER) +
         RPM::SPACE + RPM::translate(Translations::X) + RPM::SPACE + RPM::EQUAL +
-        RPM::SPACE + QString::number(m_centerX * squareSize / 100) + "px" + RPM
+        RPM::SPACE + QString::number(this->getCenterXPixels()) + "px" + RPM
         ::NEW_LINE + RPM::translate(Translations::CENTER) + RPM::SPACE + RPM
         ::translate(Translations::Z) + RPM::SPACE + RPM::EQUAL + RPM::SPACE +
-        QString::number(m_centerZ * squareSize / 100) + "px";
+        QString::number(this->getCenterZPixels()) + "px";
 }
 
 // -------------------------------------------------------
 
-QString Position::toString(int squareSize) const {
+QString Position::toString() const
+{
     QString infos;
 
     infos = RPM::BRACKET_LEFT + RPM::translate(Translations::X) + RPM::SPACE +
@@ -320,7 +335,7 @@ QString Position::toString(int squareSize) const {
         QString::number(m_y) + "," + RPM::SPACE + RPM::translate(Translations::Z
         ) + RPM::SPACE + RPM::EQUAL + RPM::SPACE + QString::number(m_z) + RPM
         ::BRACKET_RIGHT + RPM::NEW_LINE;
-    getStringLayerYPlus(infos, squareSize);
+    getStringLayerYPlus(infos);
 
     return infos;
 }

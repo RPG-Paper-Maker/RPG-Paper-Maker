@@ -35,8 +35,8 @@ public:
     bool operator!=(const Position3D& other) const;
     double yPlus() const;
     void setYPlus(double yPlus);
-    int getY(int squareSize) const;
-    int getYpx(int squareSize) const;
+    int getY() const;
+    int getYpx() const;
     void setCoords(int x, int y, double yPlus, int z);
     void setInGrid(Position3D &p, int w, int h);
     bool isOutMapPorperties(MapProperties& properties);

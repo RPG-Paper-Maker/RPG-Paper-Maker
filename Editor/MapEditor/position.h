@@ -71,8 +71,10 @@ public:
     void getTopRight(Position& position) const;
     void getBotLeft(Position& position) const;
     void getBotRight(Position& position) const;
+    int getCenterXPixels() const;
+    int getCenterZPixels() const;
 
-    virtual QString toString(int squareSize) const;
+    virtual QString toString() const;
 
     void read(const QJsonArray &json);
     void write(QJsonArray & json) const;
@@ -85,7 +87,7 @@ protected:
     double m_angleX;
     double m_angleZ;
 
-    void getStringLayerYPlus(QString& infos, int squareSize) const;
+    void getStringLayerYPlus(QString& infos) const;
 };
 
 inline uint qHash(const Position& pos)

@@ -117,8 +117,7 @@ void MapElement::getPosSizeCenter(
     // Center
     center.setX((position.x() + m_xOffset) * squareSize +
                 ((int)(squareSize * position.centerX() / 100.0)));
-    center.setY((float) position.getY(squareSize) +
-                ((m_yOffset + (height / 2.0)) * squareSize));
+    center.setY((float) position.getY() + ((m_yOffset + (height / 2.0)) * squareSize));
     center.setZ((position.z() + m_zOffset) * squareSize +
                 ((int)(squareSize * position.centerZ() / 100.0)));
 

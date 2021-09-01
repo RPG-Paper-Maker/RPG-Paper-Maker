@@ -372,12 +372,12 @@ void MountainDatas::initializeVertices(QVector<Vertex> &vertices,
         MountainDatas::randomOffset = 0.01;
     }
     center.setX(position.x() * squareSize + (squareSize / 2));
-    center.setY(position.getY(squareSize) + (squareSize / 2) + y);
+    center.setY(position.getY() + (squareSize / 2) + y);
     center.setZ(position.z() * squareSize + (squareSize / 2));
     xLeft = position.x() * squareSize;
     xRight = (position.x() + 1) * squareSize;
-    yTop = position.getY(squareSize) + hp + y;
-    yBot = position.getY(squareSize) + y;
+    yTop = position.getY() + hp + y;
+    yBot = position.getY() + y;
     zFront = (position.z() + 1) * squareSize + wp;
     zBack = zFront - wp;
     vecFrontB.setX(xLeft);

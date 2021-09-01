@@ -32,8 +32,7 @@ DialogSystemBattleMap::DialogSystemBattleMap(SystemBattleMap &battleMap,
 
     position = battleMap.position();
     ui->panelSelectPositionMaps->initialize(battleMap.idMap(), position.x(),
-        position.y(), position.getYpx(RPM::getSquareSize()), position.z());
-
+        position.y(), position.getYpx(), position.z());
     this->translate();
 }
 

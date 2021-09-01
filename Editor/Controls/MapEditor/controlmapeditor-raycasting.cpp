@@ -36,7 +36,7 @@ void ControlMapEditor::updateRaycasting(MapEditorSelectionKind selectionKind,
     view = m_camera->view();
     rayDirection = getRayWorld(m_mouse, projection, view);
     height = m_firstMouseCoords.x() == -500 ? static_cast<int>(this->cursor()
-        ->getY()) : m_firstMouseCoords.getY(RPM::get()->getSquareSize());
+        ->getY()) : m_firstMouseCoords.getY();
     m_distancePlane = (height - m_camera->positionY()) / rayDirection.y();
     getCorrectPositionOnRay(m_positionOnPlane, rayDirection, static_cast<int>(
         m_distancePlane), false, square);
@@ -108,16 +108,14 @@ void ControlMapEditor::updateRaycasting(MapEditorSelectionKind selectionKind,
         }
     }
 
-    yGrid = m_positionOnPlane.getY(RPM::get()->getSquareSize());
-    if (m_distanceLand == 0.0f || m_positionOnLand.getY(RPM::get()
-        ->getSquareSize()) < yGrid)
+    yGrid = m_positionOnPlane.getY();
+    if (m_distanceLand == 0.0f || m_positionOnLand.getY() < yGrid)
     {
         m_positionOnLand = m_positionOnPlane;
         m_elementOnLand = nullptr;
     }
 
-    if (m_distanceSprite == 0.0f || m_positionOnSprite.getY(RPM::get()
-        ->getSquareSize()) < yGrid)
+    if (m_distanceSprite == 0.0f || m_positionOnSprite.getY() < yGrid)
     {
         m_positionOnSprite = m_positionOnLand;
         m_positionRealOnSprite = m_positionOnLand;

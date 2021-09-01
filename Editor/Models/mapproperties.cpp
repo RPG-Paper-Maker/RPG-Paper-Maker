@@ -364,7 +364,7 @@ const
 {
     int y, d, h;
 
-    y = position.getY(squareSize);
+    y = position.getY();
     d = m_depth * squareSize;
     h = m_height * squareSize + squareSize - 1;
 

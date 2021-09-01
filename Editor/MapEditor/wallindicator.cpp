@@ -54,7 +54,7 @@ void WallIndicator::setPosition(Position3D& pos, int w, int h) {
 
 void WallIndicator::get3DPosition(QVector3D& vector) {
     vector.setX(m_position.x() * m_squareSize);
-    vector.setY(m_position.getY(m_squareSize));
+    vector.setY(m_position.getY());
     vector.setZ(m_position.z() * m_squareSize);
 }
 

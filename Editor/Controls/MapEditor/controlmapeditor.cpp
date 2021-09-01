@@ -266,7 +266,7 @@ void ControlMapEditor::applyMap(Map *map, QVector3D *position, QVector3D
             }
         }
         m_positionStart = new QVector3D(heroPosition.x() * m_map->squareSize(),
-            heroPosition.getY(m_map->squareSize()), heroPosition.z() * m_map
+            heroPosition.getY(), heroPosition.z() * m_map
             ->squareSize());
         m_cursorStart = new Cursor(m_positionStart);
         m_cursorStart->setFrameNumber(1);
@@ -1450,8 +1450,7 @@ QString ControlMapEditor::getSquareInfos(MapEditorSelectionKind kind,
             m_lastSquareInfos = (element == nullptr ? "[" + RPM::translate(
                 Translations::NONE).toUpper() +  "]" : "[" + (isObject
                 ? RPM::translate(Translations::OBJECT).toUpper() : element
-                ->toString()) + "]") + "\n" + position.toString(m_map
-                ->squareSize());
+                ->toString()) + "]") + "\n" + position.toString();
         }
     }
 

@@ -193,14 +193,17 @@ void Object3DBoxDatas::getPosSizeCenterInfos(QVector3D &pos, QVector3D &size,
     size.setZ(static_cast<float>(this->depthPixels()) - (2 * coef));
 
     // Center
-    center.setX(squareSize / 2);
+    center.setX(position.getCenterXPixels());
     center.setY(static_cast<float>(this->heightPixels()) / 2);
-    center.setZ(squareSize / 2);
+    center.setZ(position.getCenterZPixels());
 
     // Position
-    pos.setX((position.x() * squareSize) + coef);
-    pos.setY(position.getY(squareSize) + coef);
-    pos.setZ((position.z() * squareSize) + coef);
+    pos.setX((position.x() * squareSize) - (squareSize / 2) + center.x() + coef);
+    pos.setY(position.getY() + coef);
+    pos.setZ((position.z() * squareSize) - (squareSize / 2) + center.z() + coef);
+    center.setX(center.x() + (position.x() * squareSize) + coef);
+    center.setY(center.y() + position.getY() + coef);
+    center.setZ(center.z() + (position.z() * squareSize) + coef);
 }
 
 // -------------------------------------------------------
@@ -352,7 +355,7 @@ void Object3DBoxDatas::initializeVertices(QVector<Vertex> &vertices,
     // Vertices
     for (i = 0; i < NB_VERTICES; i++) {
         tex = TEXTURES[i];
-        vec = VERTICES[i] * size;
+        vec = (VERTICES[i] * size) + pos;
         if (position.angleY() != 0.0) {
             SpriteDatas::rotateVertexX(vec, center, position.angleY(), 0, 1, 0);
         }
@@ -362,7 +365,7 @@ void Object3DBoxDatas::initializeVertices(QVector<Vertex> &vertices,
         if (position.angleZ() != 0.0) {
             SpriteDatas::rotateVertexX(vec, center, position.angleZ(), 0, 0, 1);
         }
-        vertices.append(Vertex(vec + pos, QVector2D(textures[static_cast<int>(
+        vertices.append(Vertex(vec, QVector2D(textures[static_cast<int>(
             tex.x())], textures[static_cast<int>(tex.y())])));
     }
 
