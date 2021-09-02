@@ -27,7 +27,8 @@ enum class VariableMapObjectCharacteristicKind {
     XPixelPosition,
     YPixelPosition,
     ZPixelPosition,
-    Orientation
+    Orientation,
+    Terrain
 };
 
 #endif // VARIABLEMAPOBJECTCHARACTERISTICKIND_H

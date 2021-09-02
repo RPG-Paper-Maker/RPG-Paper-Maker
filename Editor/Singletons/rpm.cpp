@@ -548,7 +548,8 @@ void RPM::readTranslations() {
         RPM::translate(Translations::X_PIXEL_POSITION),
         RPM::translate(Translations::Y_PIXEL_POSITION),
         RPM::translate(Translations::Z_PIXEL_POSITION),
-        RPM::translate(Translations::ORIENTATION)
+        RPM::translate(Translations::ORIENTATION),
+        RPM::translate(Translations::TERRAIN)
     });
     RPM::ENUM_TO_STRING_ANIMATION_POSITION_KIND = QStringList({
         RPM::translate(Translations::TOP),

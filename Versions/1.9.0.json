@@ -15,7 +15,9 @@
 	    "Hero description",
 	    "Skills messages (ingame battles)"
     ],
-    "bugs": [],
+    "bugs": [
+    	"Closing a project make engine crash"
+    ],
     "finished": [
         2,
         2,
@@ -27,6 +29,8 @@
         0,
         0,
         0,
+        0,
+
         0
     ]
 }
