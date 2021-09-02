@@ -33,6 +33,8 @@ public:
     static const QString JSON_BOT;
     static const QString JSON_TERRAIN;
     static const int DEFAULT_TERRAIN;
+    static const int MIN_TERRAIN;
+    static const int MAX_TERRAIN;
 
     CollisionSquare();
     CollisionSquare(QRectF *rect);
@@ -45,7 +47,6 @@ public:
     bool top() const;
     bool bot() const;
     int terrain() const;
-    void setTerrain(int terrain);
 
     bool hasAllDirections() const;
     void setDefaultPraticable();
@@ -54,6 +55,8 @@ public:
     void revertRight();
     void revertBot();
     void revertLeft();
+    void decreaseTerrain();
+    void increaseTerrain();
     CollisionSquare * createCopy();
 
     virtual void read(const QJsonObject &json);

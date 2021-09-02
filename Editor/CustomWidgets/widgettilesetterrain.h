@@ -38,8 +38,7 @@ protected:
     int m_pictureID;
     PictureKind m_kind;
 
-    virtual void mousePressEvent(QMouseEvent *);
-    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *);
 };
 

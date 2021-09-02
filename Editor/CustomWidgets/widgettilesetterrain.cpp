@@ -137,17 +137,29 @@ void WidgetTilesetTerrain::checkStillExisting(QPoint& hovered,
 //
 // -------------------------------------------------------
 
-void WidgetTilesetTerrain::mousePressEvent(QMouseEvent*)
+void WidgetTilesetTerrain::mousePressEvent(QMouseEvent *event)
 {
-
+    QPoint point;
+    this->getMousePoint(point, event);
+    if (point.x() != -1 && point.y() != -1)
+    {
+        QHash<QPoint, CollisionSquare*> *squares = SystemPicture::getByID(
+            m_pictureID, m_kind)->collisions();
+        CollisionSquare *collision = squares->value(point);
+        if (collision == nullptr)
+        {
+            collision = new CollisionSquare;
+            squares->insert(point, collision);
+        }
+        if (event->button() == Qt::MouseButton::LeftButton)
+        {
+            collision->increaseTerrain();
+        } else if (event->button() == Qt::MouseButton::RightButton)
+        {
+            collision->decreaseTerrain();
+        }
+    }
     this->repaint();
-}
-
-// -------------------------------------------------------
-
-void WidgetTilesetTerrain::mouseMoveEvent(QMouseEvent *event)
-{
-
 }
 
 // -------------------------------------------------------
@@ -187,7 +199,7 @@ void WidgetTilesetTerrain::paintEvent(QPaintEvent *)
             }
             text = QString::number(terrain);
             x = i * RPM::BASIC_SQUARE_SIZE + (text.length() == 1 ? 12 : 7);
-            y = j * RPM::BASIC_SQUARE_SIZE - 11;
+            y = j * RPM::BASIC_SQUARE_SIZE + 21;
             painter.setPen(penBlack);
             painter.drawText(QPoint(x - 2, y ), text);
             painter.drawText(QPoint(x + 2, y), text);

@@ -20,6 +20,8 @@ const QString CollisionSquare::JSON_TOP = "t";
 const QString CollisionSquare::JSON_BOT = "b";
 const QString CollisionSquare::JSON_TERRAIN = "terrain";
 const int CollisionSquare::DEFAULT_TERRAIN = 0;
+const int CollisionSquare::MIN_TERRAIN = 0;
+const int CollisionSquare::MAX_TERRAIN = 99;
 
 // -------------------------------------------------------
 //
@@ -90,11 +92,6 @@ int CollisionSquare::terrain() const
     return m_terrain;
 }
 
-void CollisionSquare::setTerrain(int terrain)
-{
-    m_terrain = terrain;
-}
-
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -155,6 +152,25 @@ void CollisionSquare::revertLeft()
     m_left = !m_left;
 }
 
+// -------------------------------------------------------
+
+void CollisionSquare::decreaseTerrain()
+{
+    if (m_terrain > MIN_TERRAIN)
+    {
+        m_terrain--;
+    }
+}
+
+// -------------------------------------------------------
+
+void CollisionSquare::increaseTerrain()
+{
+    if (m_terrain < MAX_TERRAIN)
+    {
+        m_terrain++;
+    }
+}
 
 // -------------------------------------------------------
 
