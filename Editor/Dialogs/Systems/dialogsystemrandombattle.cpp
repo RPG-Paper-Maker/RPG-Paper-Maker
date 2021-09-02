@@ -11,6 +11,7 @@
 
 #include "dialogsystemrandombattle.h"
 #include "ui_dialogsystemrandombattle.h"
+#include "systemnumber.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -51,6 +52,12 @@ void DialogSystemRandomBattle::initialize()
     {
         this->on_priorityUpdated(m_randomBattle.priority()->numberValue());
     }
+    if (!m_randomBattle.isEntireMap())
+    {
+        ui->radioButtonTerrain->setChecked(true);
+    }
+    ui->treeViewTerrain->initializeModel(m_randomBattle.terrains());
+    ui->treeViewTerrain->initializeNewItemInstance(new SystemNumber);
 }
 
 // -------------------------------------------------------
@@ -77,4 +84,12 @@ void DialogSystemRandomBattle::translate()
 void DialogSystemRandomBattle::on_priorityUpdated(int p)
 {
     ui->labelProbabilityValue->setText(m_randomBattle.probabilityToString(p) + "%");
+}
+
+// -------------------------------------------------------
+
+void DialogSystemRandomBattle::on_radioButtonTerrain_toggled(bool checked)
+{
+    ui->treeViewTerrain->setEnabled(checked);
+    m_randomBattle.setIsEntireMap(!checked);
 }

@@ -45,6 +45,7 @@ private:
 
 public slots:
     void on_priorityUpdated(int p);
+    void on_radioButtonTerrain_toggled(bool checked);
 };
 
 #endif // DIALOGSYSTEMRANDOMBATTLE_H

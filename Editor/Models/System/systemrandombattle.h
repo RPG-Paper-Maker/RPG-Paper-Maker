@@ -30,6 +30,7 @@ public:
     static const QString JSON_TROOP_ID;
     static const QString JSON_PRIORITY;
     static const QString JSON_IS_ENTIRE_MAP;
+    static const QString JSON_TERRAINS;
     static const int DEFAULT_PRIORITY;
     static const bool DEFAULT_IS_ENTIRE_MAP;
 
@@ -37,12 +38,14 @@ public:
     SystemRandomBattle(int i, QString name, PrimitiveValue *troopID =
         PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue *priority =
         new PrimitiveValue(DEFAULT_PRIORITY), bool isEntireMap =
-        DEFAULT_IS_ENTIRE_MAP);
+        DEFAULT_IS_ENTIRE_MAP, QStandardItemModel *terrains = new
+        QStandardItemModel);
     virtual ~SystemRandomBattle();
     PrimitiveValue * troopID() const;
     PrimitiveValue * priority() const;
     bool isEntireMap() const;
     void setIsEntireMap(bool isEntireMap);
+    QStandardItemModel * terrains() const;
     MapProperties * mapProperties() const;
     void setMapProperties(MapProperties *mapProperties);
     bool editing() const;
@@ -62,6 +65,7 @@ protected:
     PrimitiveValue *m_troopID;
     PrimitiveValue *m_priority;
     bool m_isEntireMap;
+    QStandardItemModel *m_terrains;
     MapProperties *m_mapProperties;
     bool m_editing;
 };

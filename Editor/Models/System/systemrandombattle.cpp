@@ -10,12 +10,14 @@
 */
 
 #include "systemrandombattle.h"
-#include "rpm.h"
 #include "dialogsystemrandombattle.h"
+#include "systemnumber.h"
+#include "rpm.h"
 
 const QString SystemRandomBattle::JSON_TROOP_ID = "troopID";
 const QString SystemRandomBattle::JSON_PRIORITY = "priority";
 const QString SystemRandomBattle::JSON_IS_ENTIRE_MAP = "isEntireMap";
+const QString SystemRandomBattle::JSON_TERRAINS = "terrains";
 const int SystemRandomBattle::DEFAULT_PRIORITY = 10;
 const bool SystemRandomBattle::DEFAULT_IS_ENTIRE_MAP = true;
 
@@ -32,11 +34,13 @@ SystemRandomBattle::SystemRandomBattle() :
 }
 
 SystemRandomBattle::SystemRandomBattle(int i, QString name, PrimitiveValue
-    *troopID, PrimitiveValue *priority, bool isEntireMap) :
+    *troopID, PrimitiveValue *priority, bool isEntireMap, QStandardItemModel
+    *terrains) :
     SuperListItem(i, name),
     m_troopID(troopID),
     m_priority(priority),
     m_isEntireMap(isEntireMap),
+    m_terrains(terrains),
     m_mapProperties(nullptr),
     m_editing(false)
 {
@@ -49,6 +53,7 @@ SystemRandomBattle::~SystemRandomBattle()
 {
     delete m_troopID;
     delete m_priority;
+    SuperListItem::deleteModel(m_terrains);
 }
 
 PrimitiveValue * SystemRandomBattle::troopID() const
@@ -69,6 +74,11 @@ bool SystemRandomBattle::isEntireMap() const
 void SystemRandomBattle::setIsEntireMap(bool isEntireMap)
 {
     m_isEntireMap = isEntireMap;
+}
+
+QStandardItemModel * SystemRandomBattle::terrains() const
+{
+    return m_terrains;
 }
 
 MapProperties * SystemRandomBattle::mapProperties() const
@@ -134,7 +144,22 @@ QString SystemRandomBattle::probabilityToString(int p) const
 
 QString SystemRandomBattle::terrainToString() const
 {
-    return "-";
+    if (m_isEntireMap)
+    {
+        return RPM::DASH;
+    }
+    SystemNumber *terrain;
+    QStringList list;
+    for (int i = 0, l = m_terrains->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        terrain = reinterpret_cast<SystemNumber *>(SuperListItem::getItemModelAt(
+            m_terrains, i));
+        if (terrain != nullptr)
+        {
+            list << terrain->value()->toString();
+        }
+    }
+    return list.join(RPM::COMMA);
 }
 
 // -------------------------------------------------------
@@ -180,6 +205,8 @@ void SystemRandomBattle::setCopy(const SuperListItem &super)
     m_troopID->setCopy(*randomBattle->m_troopID);
     m_priority->setCopy(*randomBattle->m_priority);
     m_isEntireMap = randomBattle->m_isEntireMap;
+    SuperListItem::deleteModel(m_terrains, false);
+    SuperListItem::copy(m_terrains, randomBattle->m_terrains);
     m_mapProperties = randomBattle->m_mapProperties;
 }
 
@@ -221,6 +248,8 @@ QList<QStandardItem *> SystemRandomBattle::getModelRow() const
 void SystemRandomBattle::read(const QJsonObject &json)
 {
     SuperListItem::read(json);
+
+    SuperListItem::deleteModel(m_terrains, false);
     if (json.contains(JSON_TROOP_ID))
     {
         m_troopID->read(json[JSON_TROOP_ID].toObject());
@@ -233,6 +262,7 @@ void SystemRandomBattle::read(const QJsonObject &json)
     {
         m_isEntireMap = json[JSON_IS_ENTIRE_MAP].toBool();
     }
+    SuperListItem::readTree(m_terrains, new SystemNumber, json, JSON_TERRAINS);
     m_mapProperties = RPM::get()->project()->currentMapProperties();
 }
 
@@ -258,5 +288,6 @@ void SystemRandomBattle::write(QJsonObject &json) const
     if (m_isEntireMap != DEFAULT_IS_ENTIRE_MAP)
     {
         json[JSON_IS_ENTIRE_MAP] = m_isEntireMap;
+        SuperListItem::writeTree(m_terrains, json, JSON_TERRAINS);
     }
 }

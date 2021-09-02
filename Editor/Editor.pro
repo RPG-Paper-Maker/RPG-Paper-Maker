@@ -96,6 +96,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemlanguage.h \
     Dialogs/Systems/dialogsystemmainmenucommand.h \
     Dialogs/Systems/dialogsystemmonsteraction.h \
+    Dialogs/Systems/dialogsystemnumber.h \
     Dialogs/Systems/dialogsystemplugin.h \
     Dialogs/Systems/dialogsystemplugincommand.h \
     Dialogs/Systems/dialogsystempluginparameter.h \
@@ -178,6 +179,7 @@ HEADERS += \
     Models/System/systemmainmenucommand.h \
     Models/System/systemmonsteraction.h \
     Models/System/systemmountain.h \
+    Models/System/systemnumber.h \
     Models/System/systemplugin.h \
     Models/System/systemplugincommand.h \
     Models/System/systempluginparameter.h \
@@ -530,6 +532,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemlanguage.cpp \
     Dialogs/Systems/dialogsystemmainmenucommand.cpp \
     Dialogs/Systems/dialogsystemmonsteraction.cpp \
+    Dialogs/Systems/dialogsystemnumber.cpp \
     Dialogs/Systems/dialogsystemplugin.cpp \
     Dialogs/Systems/dialogsystemplugincommand.cpp \
     Dialogs/Systems/dialogsystempluginparameter.cpp \
@@ -591,6 +594,7 @@ SOURCES += \
     Models/System/systemmainmenucommand.cpp \
     Models/System/systemmonsteraction.cpp \
     Models/System/systemmountain.cpp \
+    Models/System/systemnumber.cpp \
     Models/System/systemplugin.cpp \
     Models/System/systemplugincommand.cpp \
     Models/System/systempluginparameter.cpp \
@@ -906,6 +910,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemlanguage.ui \
     Dialogs/Systems/dialogsystemmainmenucommand.ui \
     Dialogs/Systems/dialogsystemmonsteraction.ui \
+    Dialogs/Systems/dialogsystemnumber.ui \
     Dialogs/Systems/dialogsystemplugin.ui \
     Dialogs/Systems/dialogsystemplugincommand.ui \
     Dialogs/Systems/dialogsystempluginparameter.ui \

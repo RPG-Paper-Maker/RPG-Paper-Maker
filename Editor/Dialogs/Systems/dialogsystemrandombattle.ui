@@ -188,7 +188,7 @@
               <item>
                <widget class="QRadioButton" name="radioButtonTerrain">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Terrain:</string>
@@ -211,10 +211,13 @@
              </layout>
             </item>
             <item>
-             <widget class="QTreeView" name="treeViewTerrain">
+             <widget class="WidgetSuperTree" name="treeViewTerrain">
               <property name="enabled">
                <bool>false</bool>
               </property>
+              <attribute name="headerVisible">
+               <bool>false</bool>
+              </attribute>
              </widget>
             </item>
            </layout>
@@ -244,6 +247,11 @@
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
