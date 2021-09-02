@@ -31,6 +31,8 @@ public:
     static const QString JSON_RIGHT;
     static const QString JSON_TOP;
     static const QString JSON_BOT;
+    static const QString JSON_TERRAIN;
+    static const int DEFAULT_TERRAIN;
 
     CollisionSquare();
     CollisionSquare(QRectF *rect);
@@ -42,6 +44,8 @@ public:
     bool right() const;
     bool top() const;
     bool bot() const;
+    int terrain() const;
+    void setTerrain(int terrain);
 
     bool hasAllDirections() const;
     void setDefaultPraticable();
@@ -61,6 +65,7 @@ protected:
     bool m_right;
     bool m_top;
     bool m_bot;
+    int m_terrain;
 };
 
 inline uint qHash(const QPoint &key) {

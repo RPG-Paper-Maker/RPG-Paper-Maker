@@ -54,6 +54,7 @@ void WidgetTilesetSettings::updateImage(SystemPicture* picture) {
     m_pictureID = picture->id();
     ui->widgetTilesetPraticable->updateImage(picture, m_kind);
     ui->widgetTilesetDirection->updateImage(picture, m_kind);
+    ui->widgetTilesetTerrain->updateImage(picture, m_kind);
     ui->checkBoxRepeat->setChecked(picture->repeatCollisions());
 }
 
@@ -65,6 +66,7 @@ void WidgetTilesetSettings::updateImageSpecial(QImage& editedImage,
     m_pictureID = picture->id();
     ui->widgetTilesetPraticable->updateImageSpecial(editedImage, picture, m_kind);
     ui->widgetTilesetDirection->updateImageSpecial(editedImage, picture, m_kind);
+    ui->widgetTilesetTerrain->updateImageSpecial(editedImage, picture, m_kind);
     ui->checkBoxRepeat->setChecked(picture->repeatCollisions());
 }
 

@@ -131,6 +131,30 @@
          </item>
         </layout>
        </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>Terrain</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QScrollArea" name="scrollArea_3">
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="WidgetTilesetTerrain" name="widgetTilesetTerrain">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>374</width>
+              <height>247</height>
+             </rect>
+            </property>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </item>
     </layout>
@@ -148,6 +172,12 @@
    <class>WidgetTilesetDirection</class>
    <extends>QWidget</extends>
    <header>widgettilesetdirection.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetTilesetTerrain</class>
+   <extends>QWidget</extends>
+   <header>widgettilesetterrain.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

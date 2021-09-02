@@ -251,11 +251,12 @@ void WidgetTilesetDirection::paintEvent(QPaintEvent *){
 
     // Draw arrows
     painter.setPen(RPM::COLOR_GREY);
+    CollisionSquare *collision;
     for (int i = 0; i < m_image.width() / RPM::BASIC_SQUARE_SIZE; i++) {
         for (int j = 0; j < m_image.height() / RPM::BASIC_SQUARE_SIZE; j++) {
 
             // Get collision setting
-            CollisionSquare* collision = squares->value(QPoint(i, j));
+            collision = squares->value(QPoint(i, j));
             bool left = true, right = true, top = true, bot = true;
             if (collision != nullptr) {
                 left = collision->left();
