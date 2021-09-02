@@ -34,6 +34,7 @@ public:
     explicit PanelMainMenu(QWidget *parent = nullptr);
     ~PanelMainMenu();
 
+    void loadContents();
     void translate();
 
 private:

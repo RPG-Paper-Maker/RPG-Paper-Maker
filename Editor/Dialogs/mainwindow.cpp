@@ -79,6 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Update main panel
     mainPanel = new PanelMainMenu(this);
+    reinterpret_cast<PanelMainMenu *>(mainPanel)->loadContents();
     ui->centralWidget->layout()->addWidget(mainPanel);
     connect(mainPanel, SIGNAL(openingProject(QString)), this, SLOT(
         openRecentProject(QString)));
@@ -197,7 +198,8 @@ void MainWindow::openProject(QString pathProject) {
 
 // -------------------------------------------------------
 
-bool MainWindow::closeProject(){
+bool MainWindow::closeProject()
+{
     if (!close(false))
         return false;
 
@@ -214,6 +216,7 @@ bool MainWindow::closeProject(){
         openRecentProject(QString)));
     replaceMainPanel(panel);
     m_isMainMenu = true;
+    panel->loadContents();
 
     return true;
 }

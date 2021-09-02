@@ -32,13 +32,27 @@ PanelMainMenu::PanelMainMenu(QWidget *parent) :
     ui(new Ui::PanelMainMenu)
 {
     ui->setupUi(this);
-
     ui->pushButtonNewProject->setAutoFillBackground(true);
     ui->widgetPatreon->updateImage(":/images/Ressources/become-patreon.png", 0.5);
     ui->labelCommercial->setTextFormat(Qt::RichText);
     ui->labelCommercial->setTextInteractionFlags(Qt::TextBrowserInteraction);
     ui->labelCommercial->setOpenExternalLinks(true);
+    this->translate();
+}
 
+PanelMainMenu::~PanelMainMenu()
+{
+    delete ui;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void PanelMainMenu::loadContents()
+{
     // News
     QNetworkAccessManager manager;
     QNetworkReply *reply;
@@ -76,19 +90,8 @@ PanelMainMenu::PanelMainMenu(QWidget *parent) :
     // Recent projects
     this->connect(ui->panelRecentProjects, SIGNAL(openingProject(QString)), this
         , SLOT(openRecentProject(QString)));
-
-    this->translate();
 }
 
-PanelMainMenu::~PanelMainMenu()
-{
-    delete ui;
-}
-
-// -------------------------------------------------------
-//
-//  INTERMEDIARY FUNCTIONS
-//
 // -------------------------------------------------------
 
 void PanelMainMenu::translate()
