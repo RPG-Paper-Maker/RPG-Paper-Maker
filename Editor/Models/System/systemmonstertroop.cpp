@@ -38,6 +38,7 @@ SystemMonsterTroop::SystemMonsterTroop(int i, QString n, PrimitiveValue *level,
 SystemMonsterTroop::~SystemMonsterTroop()
 {
     delete m_specificPosition;
+    delete m_level;
 }
 
 PrimitiveValue * SystemMonsterTroop::level() const
@@ -115,7 +116,7 @@ void SystemMonsterTroop::setCopy(const SuperListItem &super)
         SystemMonsterTroop *>(&super);
     p_id = monsterTroop->p_id;
     this->updateName();
-    m_level = monsterTroop->m_level;
+    m_level->setCopy(*monsterTroop->m_level);
     m_isSpecificPosition = monsterTroop->m_isSpecificPosition;
     m_specificPosition->setCopy(*monsterTroop->m_specificPosition);
 }
