@@ -69,6 +69,7 @@ int main(int argc, char *argv[]) {
     QDir::setCurrent(bin.absolutePath());
 
     // Splash screen
+    /*
     QNetworkAccessManager manager;
     QNetworkReply *reply;
     QEventLoop loop;
@@ -90,7 +91,7 @@ int main(int argc, char *argv[]) {
     QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
     splash.show();
     qApp->processEvents();
-    QTimer::singleShot(1250, &splash, &QWidget::close);
+    QTimer::singleShot(1250, &splash, &QWidget::close);*/
 
     // Detect if applciation name need to be changed according to OS
     #ifdef Q_OS_WIN

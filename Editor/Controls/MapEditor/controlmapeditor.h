@@ -116,6 +116,7 @@ public:
         heightPixels, QRect &defaultFloorRect);
     void updatePreviewElement(Position& p, Portion &portion, MapElement *element);
     void updatePreviewElementGrid(Position &p, Portion &portion, MapElement *element);
+    void updatePreviewDetection();
     void updateMovingPortions();
     void updateMovingPortionsEastWest(Portion &newPortion);
     void updateMovingPortionsNorthSouth(Portion &newPortion);

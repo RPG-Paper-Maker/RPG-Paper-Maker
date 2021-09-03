@@ -289,7 +289,8 @@ void WidgetMapEditor::paintGL() {
             bool mousePosChanged = m_control.mousePositionChanged(point);
             m_control.updateMousePosition(point);
             m_control.update(kind, square, drawKind, layerOn);
-            if (m_menuBar != nullptr) {
+            if (m_menuBar != nullptr)
+            {
                 QRect tileset;
                 m_panelTextures->getTilesetTexture(tileset);
                 int specialID = m_panelTextures->getID();
@@ -305,6 +306,9 @@ void WidgetMapEditor::paintGL() {
                         layerOn, tileset, specialID, widthSquares, widthPixels,
                         heightSquares, heightPixels, defaultTopFloor);
                 }
+            } else
+            {
+                m_control.updatePreviewDetection();
             }
         }
 

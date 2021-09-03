@@ -56,7 +56,15 @@ void MapPortion::getGlobalPortion(Portion& portion) {
     portion = m_globalPortion;
 }
 
-MapObjects* MapPortion::mapObjects() const { return m_mapObjects; }
+MapObjects * MapPortion::mapObjects() const
+{
+    return m_mapObjects;
+}
+
+Objects3D * MapPortion::objects3D()
+{
+    return m_objects3D;
+}
 
 bool MapPortion::isVisibleLoaded() const {
     return isVisible() && !isEmpty();

@@ -65,12 +65,14 @@ public:
     SystemObject3D * instanciateObject() const;
     void setSelf();
     void initializeObjects(Objects3D *objects3D, Portion &globalPortion);
-    void addObject(Position3D &position, SystemObject3D *object);
-    void deleteObject(Position3D &position);
-    void correctPosition(Position3D &newPosition, Position3D &position);
+    void addObject(Position &position, SystemObject3D *object);
+    void deleteObject(Position &position);
+    void correctPosition(Position &newPosition, Position &position);
     void removeLimitDetections();
-    void generateCircle(int radius, Position3D &origin);
-    void generateRectangle(int length, int width, Position3D &origin);
+    void generateCircle(int radius, Position &origin);
+    void generateRectangle(int length, int width, Position &origin);
+    void clearPreview(Objects3D *objects3D);
+    void updatePreview(Objects3D *objects3D, Position &position);
 
     virtual void setDefault();
     virtual bool openDialog();
@@ -86,7 +88,9 @@ protected:
     int m_fieldBot;
     int m_currentHeightSquares;
     double m_currentHeightPixels;
-    QHash<Position3D, SystemObject3D *> m_boxes;
+    QHash<Position, SystemObject3D *> m_boxes;
+    Position m_currentPreviewPosition;
+    SystemObject3D *m_currentPreviewObject;
 };
 
 Q_DECLARE_METATYPE(SystemDetection);

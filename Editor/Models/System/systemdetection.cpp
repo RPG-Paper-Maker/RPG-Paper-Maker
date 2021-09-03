@@ -48,16 +48,21 @@ SystemDetection::SystemDetection(int i, QString n, int fl, int fr, int ft, int
     m_fieldTop(ft),
     m_fieldBot(fb),
     m_currentHeightSquares(1),
-    m_currentHeightPixels(0.0)
+    m_currentHeightPixels(0.0),
+    m_currentPreviewObject(nullptr)
 {
 
 }
 
 SystemDetection::~SystemDetection() {
-    for (QHash<Position3D, SystemObject3D *>::iterator it = m_boxes.begin(); it
+    for (QHash<Position, SystemObject3D *>::iterator it = m_boxes.begin(); it
          != m_boxes.end(); it++)
     {
         delete *it;
+    }
+    if (m_currentPreviewObject != nullptr)
+    {
+        delete m_currentPreviewObject;
     }
 }
 
@@ -143,7 +148,7 @@ void SystemDetection::setSelf() {
 void SystemDetection::initializeObjects(Objects3D *objects3D, Portion
     &globalPortion)
 {
-    QHash<Position3D, SystemObject3D *>::iterator it;
+    QHash<Position, SystemObject3D *>::iterator it;
     QSet<Portion> portionsOverflow;
     Object3DDatas *object;
     Position position;
@@ -161,9 +166,9 @@ void SystemDetection::initializeObjects(Objects3D *objects3D, Portion
 
 // -------------------------------------------------------
 
-void SystemDetection::addObject(Position3D &position, SystemObject3D *object) {
+void SystemDetection::addObject(Position &position, SystemObject3D *object) {
     SystemObject3D *previousObject;
-    Position3D newPosition;
+    Position newPosition;
 
     this->correctPosition(newPosition, position);
     previousObject = m_boxes.value(newPosition);
@@ -175,9 +180,9 @@ void SystemDetection::addObject(Position3D &position, SystemObject3D *object) {
 
 // -------------------------------------------------------
 
-void SystemDetection::deleteObject(Position3D &position) {
+void SystemDetection::deleteObject(Position &position) {
     SystemObject3D *object;
-    Position3D newPosition;
+    Position newPosition;
 
     this->correctPosition(newPosition, position);
     object = m_boxes.value(newPosition);
@@ -189,8 +194,7 @@ void SystemDetection::deleteObject(Position3D &position) {
 
 // -------------------------------------------------------
 
-void SystemDetection::correctPosition(Position3D &newPosition, Position3D
-    &position)
+void SystemDetection::correctPosition(Position &newPosition, Position &position)
 {
     newPosition.setX(position.x() - m_fieldLeft);
     newPosition.setY(position.y());
@@ -201,8 +205,8 @@ void SystemDetection::correctPosition(Position3D &newPosition, Position3D
 // -------------------------------------------------------
 
 void SystemDetection::removeLimitDetections() {
-    QHash<Position3D, SystemObject3D *>::iterator it;
-    QList<Position3D> removeList;
+    QHash<Position, SystemObject3D *>::iterator it;
+    QList<Position> removeList;
     Position position;
     int i, l;
 
@@ -222,7 +226,7 @@ void SystemDetection::removeLimitDetections() {
 
 // -------------------------------------------------------
 
-void SystemDetection::generateCircle(int radius, Position3D &origin) {
+void SystemDetection::generateCircle(int radius, Position &origin) {
     SystemObject3D *object;
     Position position;
     int x, z;
@@ -243,8 +247,7 @@ void SystemDetection::generateCircle(int radius, Position3D &origin) {
 
 // -------------------------------------------------------
 
-void SystemDetection::generateRectangle(int length, int width, Position3D
-    &origin)
+void SystemDetection::generateRectangle(int length, int width, Position &origin)
 {
     SystemObject3D *object;
     Position position;
@@ -260,6 +263,46 @@ void SystemDetection::generateRectangle(int length, int width, Position3D
             this->addObject(position, object);
         }
     }
+}
+
+// -------------------------------------------------------
+
+void SystemDetection::clearPreview(Objects3D *objects3D)
+{
+    QSet<Portion> portionsOverflow;
+    QJsonObject prev;
+    MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::Object3D;
+    SystemObject3D *object = m_boxes.value(m_currentPreviewPosition);
+    if (object == nullptr)
+    {
+        objects3D->deleteObject3D(portionsOverflow, m_currentPreviewPosition, prev, kind);
+        if (m_currentPreviewObject != nullptr)
+        {
+            delete m_currentPreviewObject;
+            m_currentPreviewObject = nullptr;
+        }
+    } else
+    {
+        objects3D->addObject3D(portionsOverflow, m_currentPreviewPosition, new
+            Object3DBoxDatas(object), prev, kind);
+    }
+}
+
+// -------------------------------------------------------
+
+void SystemDetection::updatePreview(Objects3D *objects3D, Position &position)
+{
+    QSet<Portion> portionsOverflow;
+    QJsonObject prev;
+    MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::Object3D;
+    m_currentPreviewPosition = position;
+    if (m_currentPreviewObject != nullptr)
+    {
+        delete m_currentPreviewObject;
+    }
+    m_currentPreviewObject = this->instanciateObject();
+    objects3D->addObject3D(portionsOverflow, m_currentPreviewPosition, new
+        Object3DBoxDatas(m_currentPreviewObject), prev, kind);
 }
 
 // -------------------------------------------------------
@@ -302,7 +345,7 @@ SuperListItem * SystemDetection::createCopy() const {
 
 void SystemDetection::setCopy(const SuperListItem &super) {
     const SystemDetection *detection;
-    QHash<Position3D, SystemObject3D *>::const_iterator it;
+    QHash<Position, SystemObject3D *>::const_iterator it;
     SystemObject3D *object;
 
     SuperListItem::setCopy(super);
@@ -364,7 +407,7 @@ void SystemDetection::read(const QJsonObject &json) {
 // -------------------------------------------------------
 
 void SystemDetection::write(QJsonObject &json) const {
-    QHash<Position3D, SystemObject3D *>::const_iterator it;
+    QHash<Position, SystemObject3D *>::const_iterator it;
     SystemObject3D *object;
     QJsonArray tab, tabPosition;
     QJsonObject obj, objHash;

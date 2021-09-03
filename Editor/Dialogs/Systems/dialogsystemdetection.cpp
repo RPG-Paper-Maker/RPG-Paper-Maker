@@ -225,8 +225,7 @@ void DialogSystemDetection::on_spinBoxRadiusLength_valueChanged(int i) {
 // -------------------------------------------------------
 
 void DialogSystemDetection::on_pushButtonGenerate_pressed() {
-    Position3D position;
-
+    Position position;
     ui->widgetMapEditor->getMap()->cursor()->getPosition3D(position);
     if (ui->comboBoxAutomatic->currentIndex() == 0) {
         m_detection.generateCircle(ui->spinBoxRadiusLength->value(), position);

@@ -73,9 +73,14 @@ void ControlMapEditor::removePreviewElements() {
     {
         MapPortion *mapPortion = *i;
         m_portionsToUpdate += mapPortion;
-        mapPortion->clearPreview();
+        if (m_detection == nullptr)
+        {
+            mapPortion->clearPreview();
+        } else
+        {
+            m_detection->clearPreview(mapPortion->objects3D());
+        }
     }
-
     m_portionsPreviousPreview.clear();
 }
 
@@ -277,4 +282,27 @@ void ControlMapEditor::updatePreviewElementGrid(Position &p, Portion &portion,
         mapPortion->addPreview(p, element);
     m_portionsToUpdate += mapPortion;
     m_portionsPreviousPreview += mapPortion;
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updatePreviewDetection()
+{
+    this->removePreviewElements();
+    if (!m_isDeleting)
+    {
+        Position position;
+        bool isObject;
+        this->getPositionSelected(position, MapEditorSelectionKind::Objects3D,
+            MapEditorSubSelectionKind::Object3D, false, isObject);
+        Portion portion;
+        m_map->getLocalPortion(position, portion);
+        MapPortion *mapPortion = m_map->mapPortion(portion);
+        if (mapPortion != nullptr && m_map->isInGrid(position))
+        {
+            m_detection->updatePreview(mapPortion->objects3D(), position);
+            m_portionsToUpdate += mapPortion;
+            m_portionsPreviousPreview += mapPortion;
+        }
+    }
 }

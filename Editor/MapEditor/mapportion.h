@@ -45,6 +45,7 @@ public:
     void setDetection(SystemDetection *detection);
     void getGlobalPortion(Portion& portion);
     MapObjects* mapObjects() const;
+    Objects3D * objects3D();
 
     bool isVisibleLoaded() const;
     bool isVisible() const;
