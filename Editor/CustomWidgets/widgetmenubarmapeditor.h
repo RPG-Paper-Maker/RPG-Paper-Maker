@@ -73,7 +73,7 @@ public:
     WidgetMenuBarMapEditor * getBarRight();
     bool containsMenu() const;
     int countSelectionKind() const;
-    void initializeRightMenu();
+    void initializeRightMenu(bool detection = false);
     void toggleSelection();
     void updateSelection(QAction *action);
     void updateMenutext(QMenu *menu, QAction *action);
@@ -85,6 +85,7 @@ public:
     void forcePencil();
     void forceRight(int i);
     void enableAllRight();
+    void setDetection();
     void translate();
 
 private:

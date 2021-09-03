@@ -16,7 +16,8 @@
 	    "Skills messages (ingame battles)"
     ],
     "bugs": [
-    	"Closing a project make engine crash"
+    	"Closing a project make engine crash",
+    	"Memory leak with monster troop"
     ],
     "finished": [
         2,
@@ -31,6 +32,7 @@
         0,
         0,
 
+        2,
         2
     ]
 }

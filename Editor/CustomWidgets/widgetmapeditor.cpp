@@ -255,14 +255,15 @@ void WidgetMapEditor::paintGL() {
         bool square;
         DrawKind drawKind;
         bool layerOn;
-        if (m_menuBar == nullptr) {
+        if (m_menuBar == nullptr || m_detection != nullptr)
+        {
             kind = MapEditorSelectionKind::Land;
             subKind = MapEditorSubSelectionKind::None;
             square = true;
             drawKind = DrawKind::Pencil;
             layerOn = false;
-        }
-        else {
+        } else
+        {
             kind = m_menuBar->selectionKind();
             subKind = m_menuBar->subSelectionKind();
             square = m_menuBar->squareOn();
@@ -271,7 +272,7 @@ void WidgetMapEditor::paintGL() {
         }
 
         QPoint point = mapFromGlobal(QCursor::pos());
-        if (!RPM::isInConfig || m_menuBar == nullptr) {
+        if (!RPM::isInConfig || m_menuBar == nullptr || m_detection != nullptr) {
 
             // Key press
             if (!m_firstPressure) {
@@ -289,7 +290,7 @@ void WidgetMapEditor::paintGL() {
             bool mousePosChanged = m_control.mousePositionChanged(point);
             m_control.updateMousePosition(point);
             m_control.update(kind, square, drawKind, layerOn);
-            if (m_menuBar != nullptr)
+            if (m_menuBar != nullptr && m_detection == nullptr)
             {
                 QRect tileset;
                 m_panelTextures->getTilesetTexture(tileset);
@@ -306,7 +307,7 @@ void WidgetMapEditor::paintGL() {
                         layerOn, tileset, specialID, widthSquares, widthPixels,
                         heightSquares, heightPixels, defaultTopFloor);
                 }
-            } else
+            } else if (m_detection != nullptr)
             {
                 m_control.updatePreviewDetection();
             }
@@ -352,8 +353,8 @@ void WidgetMapEditor::paintGL() {
                         QFont(), QColor(255, 255, 255));
                 }
             }
-            if (m_menuBar->layerOn() && m_menuBar->selectionKind() !=
-                MapEditorSelectionKind::Objects)
+            if (m_detection == nullptr && m_menuBar->layerOn() && m_menuBar
+                ->selectionKind() != MapEditorSelectionKind::Objects)
             {
                 p.drawImage(point.x() + 10, point.y() - 10, m_imageLayerOn);
             }
@@ -603,7 +604,7 @@ void WidgetMapEditor::zoom(int value)
 
 void WidgetMapEditor::updateCursor() {
     if (m_menuBar == nullptr || m_menuBar->selectionKind() ==
-        MapEditorSelectionKind::Objects)
+        MapEditorSelectionKind::Objects || m_detection != nullptr)
     {
         setCursor(Qt::ArrowCursor);
     } else
@@ -723,7 +724,7 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent *event)
                 ::keyboardModifiers() & Qt::ShiftModifier))
             {
                 QRect defaultFloorRect;
-                if (m_menuBar != nullptr)
+                if (m_menuBar != nullptr && m_detection == nullptr)
                 {
                     QRect tileset;
                     m_panelTextures->getTilesetTexture(tileset);
@@ -762,7 +763,7 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event)
     {
         Qt::MouseButton button = event->button();
         QRect defaultFloorRect;
-        if (m_menuBar != nullptr)
+        if (m_menuBar != nullptr && m_detection == nullptr)
         {
             MapEditorSelectionKind selection = m_menuBar->selectionKind();
             MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
@@ -829,7 +830,7 @@ void WidgetMapEditor::mouseReleaseEvent(QMouseEvent *event)
     {
         Qt::MouseButton button = event->button();
         QRect tileset;
-        if (m_menuBar != nullptr)
+        if (m_menuBar != nullptr && m_detection == nullptr)
         {
             m_panelTextures->getTilesetTexture(tileset);
             MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
@@ -855,7 +856,7 @@ void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent *event)
     this->setFocus();
     if (m_control.map() != nullptr)
     {
-        if (m_menuBar != nullptr)
+        if (m_menuBar != nullptr && m_detection == nullptr)
         {
             if (m_menuBar->selectionKind() == MapEditorSelectionKind::Objects)
             {
@@ -887,7 +888,7 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent *event)
         int key = event->key();
 
         // Move cursor up / down with arrow shortcut for dialog select position
-        if (m_menuBar == nullptr)
+        if (m_menuBar == nullptr || m_detection != nullptr)
         {
             if (m_control.isCtrlPressed())
             {
@@ -974,7 +975,7 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent *event)
 
         // Shortcut
         if (m_menuBar != nullptr && m_menuBar->selectionKind() ==
-            MapEditorSelectionKind::Objects)
+            MapEditorSelectionKind::Objects && m_detection == nullptr)
         {
             m_control.updateMenuContext();
             QKeySequence seq = Common::getKeySequence(event);

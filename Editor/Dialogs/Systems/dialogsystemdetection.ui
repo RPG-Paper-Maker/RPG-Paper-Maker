@@ -27,7 +27,7 @@
     <number>10</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,0">
+    <layout class="QVBoxLayout" name="verticalLayout_4" stretch="1,0">
      <property name="spacing">
       <number>15</number>
      </property>
@@ -376,7 +376,7 @@
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
+        <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,1">
          <item>
           <widget class="QLabel" name="labelDescription">
            <property name="text">
@@ -385,7 +385,17 @@
           </widget>
          </item>
          <item>
-          <widget class="WidgetMapEditor" name="widgetMapEditor"/>
+          <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="WidgetMenuBarMapEditor" name="widgetMenuBarMapEditor" native="true"/>
+           </item>
+           <item>
+            <widget class="WidgetMapEditor" name="widgetMapEditor"/>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -410,6 +420,12 @@
    <class>WidgetMapEditor</class>
    <extends>QOpenGLWidget</extends>
    <header>widgetmapeditor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetMenuBarMapEditor</class>
+   <extends>QWidget</extends>
+   <header>widgetmenubarmapeditor.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

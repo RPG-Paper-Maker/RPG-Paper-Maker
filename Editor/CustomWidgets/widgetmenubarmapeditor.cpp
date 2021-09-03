@@ -55,7 +55,6 @@ WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent, bool selection) 
         }
         actions().at(static_cast<int>(m_selectionKind))->setProperty(PROPERTY_SELECTION, true);
     }
-
     this->translate();
 }
 
@@ -318,64 +317,73 @@ int WidgetMenuBarMapEditor::countSelectionKind() const
 
 // -------------------------------------------------------
 
-void WidgetMenuBarMapEditor::initializeRightMenu()
+void WidgetMenuBarMapEditor::initializeRightMenu(bool detection)
 {
     WidgetMenuBarMapEditor *bar = new WidgetMenuBarMapEditor(this, false);
     bar->clear();
 
     // Square or pixel mode
-    m_actionSquare = new QAction(QIcon(":/icons/Ressources/square.png"),
-        "Square");
+    m_actionSquare = new QAction(QIcon(":/icons/Ressources/square.png"), "Square");
     m_actionSquare->setProperty(PROPERTY_SELECTION, true);
-    m_actionPixel = new QAction(QIcon(":/icons/Ressources/pixel_disable.png"),
-        "Pixel");
-    m_actionPixel->setEnabled(false);
+    if (detection)
+    {
+        m_actionPixel = new QAction(QIcon(":/icons/Ressources/pixel.png"), "Pixel");
+        m_actionPixel->setEnabled(true);
+    } else
+    {
+        m_actionPixel = new QAction(QIcon(":/icons/Ressources/pixel_disable.png"),
+            "Pixel");
+        m_actionPixel->setEnabled(false);
+    }
     m_actionPixel->setProperty(PROPERTY_SELECTION, false);
     bar->addAction(m_actionSquare);
     bar->addAction(m_actionPixel);
-    bar->addAction("|");
+    if (!detection)
+    {
+        bar->addAction("|");
 
-    // Draw mode
-    m_actionTranslate = new QAction(QIcon(":/icons/Ressources/translate_disable.png"), "Translate");
-    m_actionTranslate->setProperty(PROPERTY_SELECTION, false);
-    m_actionTranslate->setEnabled(false);
-    m_actionRotate = new QAction(QIcon(":/icons/Ressources/rotate.png"), "Rotate");
-    m_actionRotate->setProperty(PROPERTY_SELECTION, false);
-    m_actionRotate->setEnabled(true);
-    this->connect(m_actionRotate, SIGNAL(triggered(bool)), this, SLOT(
-        on_actionRotateTriggered(bool)));
-    m_actionScale = new QAction(QIcon(":/icons/Ressources/scale_disable.png"), "Scale");
-    m_actionScale->setProperty(PROPERTY_SELECTION, false);
-    m_actionScale->setEnabled(false);
-    m_actionPencil = new QAction(QIcon(":/icons/Ressources/pencil.png"), "Pencil");
-    m_actionPencil->setProperty(PROPERTY_SELECTION, true);
-    this->connect(m_actionPencil, SIGNAL(triggered(bool)), this, SLOT(
-        on_actionDrawTriggered(bool)));
-    m_actionRectangle = new QAction(QIcon(":/icons/Ressources/rectangle.png"),
-        "Rectangle");
-    m_actionRectangle->setEnabled(false);
-    m_actionRectangle->setProperty(PROPERTY_SELECTION, false);
-    m_actionPin = new QAction(QIcon(":/icons/Ressources/pin.png"), "Pin of paint");
-    m_actionPin->setProperty(PROPERTY_SELECTION, false);
-    this->connect(m_actionPin, SIGNAL(triggered(bool)), this, SLOT(
-        on_actionDrawTriggered(bool)));
-    bar->addAction(m_actionTranslate);
-    bar->addAction(m_actionRotate);
-    bar->addAction(m_actionScale);
-    bar->addAction(m_actionPencil);
-    bar->addAction(m_actionRectangle);
-    bar->addAction(m_actionPin);
-    bar->addAction("|");
+        // Draw mode
+        m_actionTranslate = new QAction(QIcon(":/icons/Ressources/translate_disable.png"), "Translate");
+        m_actionTranslate->setProperty(PROPERTY_SELECTION, false);
+        m_actionTranslate->setEnabled(false);
+        m_actionRotate = new QAction(QIcon(":/icons/Ressources/rotate.png"), "Rotate");
+        m_actionRotate->setProperty(PROPERTY_SELECTION, false);
+        m_actionRotate->setEnabled(true);
+        this->connect(m_actionRotate, SIGNAL(triggered(bool)), this, SLOT(
+            on_actionRotateTriggered(bool)));
+        m_actionScale = new QAction(QIcon(":/icons/Ressources/scale_disable.png"), "Scale");
+        m_actionScale->setProperty(PROPERTY_SELECTION, false);
+        m_actionScale->setEnabled(false);
+        m_actionPencil = new QAction(QIcon(":/icons/Ressources/pencil.png"), "Pencil");
+        m_actionPencil->setProperty(PROPERTY_SELECTION, true);
+        this->connect(m_actionPencil, SIGNAL(triggered(bool)), this, SLOT(
+            on_actionDrawTriggered(bool)));
+        m_actionRectangle = new QAction(QIcon(":/icons/Ressources/rectangle.png"),
+            "Rectangle");
+        m_actionRectangle->setEnabled(false);
+        m_actionRectangle->setProperty(PROPERTY_SELECTION, false);
+        m_actionPin = new QAction(QIcon(":/icons/Ressources/pin.png"), "Pin of paint");
+        m_actionPin->setProperty(PROPERTY_SELECTION, false);
+        this->connect(m_actionPin, SIGNAL(triggered(bool)), this, SLOT(
+            on_actionDrawTriggered(bool)));
+        bar->addAction(m_actionTranslate);
+        bar->addAction(m_actionRotate);
+        bar->addAction(m_actionScale);
+        bar->addAction(m_actionPencil);
+        bar->addAction(m_actionRectangle);
+        bar->addAction(m_actionPin);
+        bar->addAction("|");
 
-    // Layer
-    m_actionLayerNone = new QAction(QIcon(":/icons/Ressources/layer_none.png"),
-        "Normal");
-    m_actionLayerNone->setProperty(PROPERTY_SELECTION, true);
-    m_actionLayerOn = new QAction(QIcon(":/icons/Ressources/layer_on.png"),
-        "On top");
-    m_actionLayerOn->setProperty(PROPERTY_SELECTION, false);
-    bar->addAction(m_actionLayerNone);
-    bar->addAction(m_actionLayerOn);
+        // Layer
+        m_actionLayerNone = new QAction(QIcon(":/icons/Ressources/layer_none.png"),
+            "Normal");
+        m_actionLayerNone->setProperty(PROPERTY_SELECTION, true);
+        m_actionLayerOn = new QAction(QIcon(":/icons/Ressources/layer_on.png"),
+            "On top");
+        m_actionLayerOn->setProperty(PROPERTY_SELECTION, false);
+        bar->addAction(m_actionLayerNone);
+        bar->addAction(m_actionLayerOn);
+    }
 
     // Add bar to right corner
     this->setCornerWidget(bar);
@@ -621,6 +629,17 @@ void WidgetMenuBarMapEditor::enableAllRight()
 
 //-------------------------------------------------
 
+void WidgetMenuBarMapEditor::setDetection()
+{
+    for (int i = 0, l = this->actions().size(); i < l; ++i)
+    {
+        this->actions().at(i)->setVisible(false);
+    }
+    this->repaint();
+}
+
+//-------------------------------------------------
+
 void WidgetMenuBarMapEditor::translate()
 {
     ui->menuEvents->setTitle(RPM::translate(Translations::OBJECT));
@@ -687,6 +706,10 @@ void WidgetMenuBarMapEditor::paintEvent(QPaintEvent *e)
     for (int i = 0, l = this->actions().size(); i < l; ++i)
     {
         action = this->actions().at(i);
+        if (!action->isVisible())
+        {
+            continue;
+        }
         adjustedActionRect = this->actionGeometry(action);
 
         // Fill by the magic color the selected item

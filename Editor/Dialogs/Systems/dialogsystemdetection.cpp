@@ -34,12 +34,12 @@ DialogSystemDetection::DialogSystemDetection(SystemDetection &detection, QWidget
     m_first(true)
 {
     ui->setupUi(this);
-
+    ui->widgetMapEditor->setMenuBar(ui->widgetMenuBarMapEditor);
+    ui->widgetMenuBarMapEditor->initializeRightMenu(true);
+    ui->widgetMenuBarMapEditor->setDetection();
     ui->comboBoxAutomatic->addItem(RPM::translate(Translations::CIRCLE));
     ui->comboBoxAutomatic->addItem(RPM::translate(Translations::RECTANGLE));
-
     this->initialize();
-
     this->translate();
 }
 
