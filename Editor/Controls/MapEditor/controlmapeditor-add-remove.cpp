@@ -775,6 +775,10 @@ void ControlMapEditor::stockObject3D(Position &p, Object3DDatas *object3D, bool
                 , previous, previousType);
             if (m_detection != nullptr) {
                 m_detection->addObject(p, object3D->datas());
+                if (m_map->isInPortion(portion, 0)) {
+                    m_portionsToUpdate += mapPortion;
+                }
+                return;
             }
             if (changed && m_map->saved()) {
                 setToNotSaved();
@@ -839,6 +843,10 @@ void ControlMapEditor::eraseObject3D(Position &p, bool undoRedo, bool deletePtr)
                 previous, previousType, positions, deletePtr);
             if (m_detection != nullptr) {
                 m_detection->deleteObject(p);
+                if (m_map->isInPortion(portion, 0)) {
+                    m_portionsToUpdate += mapPortion;
+                }
+                return;
             }
             if (changed && m_map->saved()) {
                 setToNotSaved();
