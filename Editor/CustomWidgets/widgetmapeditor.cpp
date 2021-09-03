@@ -259,7 +259,7 @@ void WidgetMapEditor::paintGL() {
         {
             kind = MapEditorSelectionKind::Land;
             subKind = MapEditorSubSelectionKind::None;
-            square = true;
+            square = m_detection == nullptr ? true : m_menuBar->squareOn(true);
             drawKind = DrawKind::Pencil;
             layerOn = false;
         } else
@@ -807,9 +807,10 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event)
                     defaultFloorRect.setWidth(1);
                     defaultFloorRect.setHeight(1);
                     m_control.onMousePressed(MapEditorSelectionKind::Objects3D,
-                        MapEditorSubSelectionKind::Object3D, true, DrawKind
-                        ::Pencil, false, defaultFloorRect, 1, 1, 0, 1, 0,
-                        defaultFloorRect, event->pos(), button);
+                        MapEditorSubSelectionKind::Object3D, m_menuBar
+                        ->squareOn(true), DrawKind::Pencil, false,
+                        defaultFloorRect, 1, 1, 0, 1, 0, defaultFloorRect, event
+                        ->pos(), button);
                 }
             } else
             {

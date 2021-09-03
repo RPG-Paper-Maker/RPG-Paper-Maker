@@ -169,7 +169,6 @@ void SystemDetection::initializeObjects(Objects3D *objects3D, Portion
 void SystemDetection::addObject(Position &position, SystemObject3D *object) {
     SystemObject3D *previousObject;
     Position newPosition;
-
     this->correctPosition(newPosition, position);
     previousObject = m_boxes.value(newPosition);
     if (previousObject != nullptr) {
@@ -200,6 +199,8 @@ void SystemDetection::correctPosition(Position &newPosition, Position &position)
     newPosition.setY(position.y());
     newPosition.setYPlus(position.yPlus());
     newPosition.setZ(position.z() - m_fieldTop);
+    newPosition.setCenterX(position.centerX());
+    newPosition.setCenterZ(position.centerZ());
 }
 
 // -------------------------------------------------------
@@ -272,7 +273,9 @@ void SystemDetection::clearPreview(Objects3D *objects3D)
     QSet<Portion> portionsOverflow;
     QJsonObject prev;
     MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::Object3D;
-    SystemObject3D *object = m_boxes.value(m_currentPreviewPosition);
+    Position newPosition;
+    this->correctPosition(newPosition, m_currentPreviewPosition);
+    SystemObject3D *object = m_boxes.value(newPosition);
     if (object == nullptr)
     {
         objects3D->deleteObject3D(portionsOverflow, m_currentPreviewPosition, prev, kind);

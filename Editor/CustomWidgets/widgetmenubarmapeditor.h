@@ -46,7 +46,7 @@ public:
     ~WidgetMenuBarMapEditor();
     MapEditorSelectionKind selectionKind() const;
     MapEditorSubSelectionKind subSelectionKind();
-    bool squareOn() const;
+    bool squareOn(bool detection = false) const;
     DrawKind drawKind();
     bool layerOn() const;
     QAction * actionFloors() const;

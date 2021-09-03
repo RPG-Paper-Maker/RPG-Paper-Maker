@@ -126,12 +126,12 @@ MapEditorSubSelectionKind WidgetMenuBarMapEditor::subSelectionKind()
     return MapEditorSubSelectionKind::None;
 }
 
-bool WidgetMenuBarMapEditor::squareOn() const
+bool WidgetMenuBarMapEditor::squareOn(bool detection) const
 {
     WidgetMenuBarMapEditor *bar = reinterpret_cast<WidgetMenuBarMapEditor *>(
         this->cornerWidget());
-    if (bar->actions().at(static_cast<int>(MapEditorModesKind::Square))
-        ->property(PROPERTY_SELECTION) == true)
+    if (bar->actions().at(detection ? 0 : static_cast<int>(MapEditorModesKind
+        ::Square))->property(PROPERTY_SELECTION) == true)
     {
         return true;
     }
