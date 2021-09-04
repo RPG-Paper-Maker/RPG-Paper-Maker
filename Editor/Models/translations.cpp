@@ -1347,6 +1347,8 @@ const QString Translations::TROOPS_BATTLERS_OFFSET = "troops.battlers.offset";
 const QString Translations::SAVE_AND_CLOSE = "save.and.close";
 const QString Translations::IMPOSSIBLE_TO_PASTE_ITEM = "impossible.to.paste.item";
 const QString Translations::MOUSE_CONTROLS = "mouse.controls";
+const QString Translations::NEW_BOX_LENGTH = "new.box.length";
+const QString Translations::NEW_BOX_WIDTH = "new.box.width";
 
 // -------------------------------------------------------
 //

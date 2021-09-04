@@ -64,8 +64,9 @@ void DialogSystemDetection::initialize() {
     ui->spinBoxFieldBot->setValue(m_detection.fieldBot());
     ui->labelWidth->hide();
     ui->spinBoxWidth->hide();
+    ui->spinBoxLengthPixels->setMaximum(RPM::getSquareSize() - 1);
+    ui->spinBoxWidthPixels->setMaximum(RPM::getSquareSize() - 1);
     ui->spinBoxHeightPixels->setMaximum(RPM::getSquareSize() - 1);
-
     m_detection.getTargetPosition(m_position);
     this->updateMap();
 }
@@ -102,12 +103,20 @@ void DialogSystemDetection::translate()
     ui->labelWidth->setText(RPM::translate(Translations::WIDTH) + RPM::COLON);
     ui->labelPixels->setText(RPM::translate(Translations::PIXEL_S));
     ui->labelSquares->setText(RPM::translate(Translations::SQUARE_S));
+    ui->labelPixels_2->setText(RPM::translate(Translations::PIXEL_S));
+    ui->labelSquares_2->setText(RPM::translate(Translations::SQUARE_S));
+    ui->labelPixels_3->setText(RPM::translate(Translations::PIXEL_S));
+    ui->labelSquares_3->setText(RPM::translate(Translations::SQUARE_S));
     ui->labelDescription->setText(RPM::translate(Translations
         ::DETECTION_DESCRIPTION));
     ui->labelRadiusLength->setText(RPM::translate(Translations::RADIUS) + RPM
         ::COLON);
     ui->groupBoxField->setTitle(RPM::translate(Translations::FIELD));
     ui->groupBoxAutomatic->setTitle(RPM::translate(Translations::AUTOMATIC));
+    ui->groupBoxNewBoxLength->setTitle(RPM::translate(Translations
+        ::NEW_BOX_LENGTH));
+    ui->groupBoxNewBoxWidth->setTitle(RPM::translate(Translations
+        ::NEW_BOX_WIDTH));
     ui->groupBoxNewBoxHeight->setTitle(RPM::translate(Translations
         ::NEW_BOX_HEIGHT));
     ui->pushButtonGenerate->setText(RPM::translate(Translations::GENERATE));
@@ -186,6 +195,32 @@ void DialogSystemDetection::on_spinBoxFieldBot_valueChanged(int i) {
         m_position->setZ(z);
     }
     this->updateMap();
+}
+
+// -------------------------------------------------------
+
+void DialogSystemDetection::on_spinBoxLengthSquares_valueChanged(int i) {
+    m_detection.setCurrentLengthSquares(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemDetection::on_spinBoxLengthPixels_valueChanged(int i) {
+    m_detection.setCurrentLengthPixels(static_cast<double>(i) / RPM
+        ::getSquareSize() * 100.0);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemDetection::on_spinBoxWidthSquares_valueChanged(int i) {
+    m_detection.setCurrentWidthSquares(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemDetection::on_spinBoxWidthPixels_valueChanged(int i) {
+    m_detection.setCurrentWidthPixels(static_cast<double>(i) / RPM
+        ::getSquareSize() * 100.0);
 }
 
 // -------------------------------------------------------

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>937</width>
-    <height>555</height>
+    <height>679</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,7 +34,10 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,1">
+        <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,1">
+         <property name="spacing">
+          <number>6</number>
+         </property>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
            <item>
@@ -180,25 +183,37 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBoxNewBoxHeight">
-           <property name="title">
-            <string>New box height</string>
+          <widget class="QGroupBox" name="groupBoxNewBoxLength">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
            </property>
-           <layout class="QGridLayout" name="gridLayout_4">
+           <property name="title">
+            <string>New box length</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_6">
+            <property name="topMargin">
+             <number>9</number>
+            </property>
+            <property name="bottomMargin">
+             <number>9</number>
+            </property>
             <item row="0" column="0">
-             <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,1">
-              <item row="0" column="0">
-               <widget class="QLabel" name="labelSquares">
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <item>
+               <widget class="QLabel" name="labelSquares_3">
                 <property name="text">
                  <string>Square(s):</string>
                 </property>
                </widget>
               </item>
-              <item row="0" column="1">
-               <widget class="QSpinBox" name="spinBoxHeightSquares">
+              <item>
+               <widget class="QSpinBox" name="spinBoxLengthSquares">
                 <property name="minimumSize">
                  <size>
-                  <width>100</width>
+                  <width>50</width>
                   <height>0</height>
                  </size>
                 </property>
@@ -216,31 +231,18 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="2" rowspan="2">
-               <spacer name="horizontalSpacer_2">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>13</width>
-                  <height>48</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="labelPixels">
+              <item>
+               <widget class="QLabel" name="labelPixels_3">
                 <property name="text">
                  <string>Pixel(s):</string>
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
-               <widget class="QSpinBox" name="spinBoxHeightPixels">
+              <item>
+               <widget class="QSpinBox" name="spinBoxLengthPixels">
                 <property name="minimumSize">
                  <size>
-                  <width>100</width>
+                  <width>50</width>
                   <height>0</height>
                  </size>
                 </property>
@@ -254,6 +256,205 @@
                  <number>999</number>
                 </property>
                </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>13</width>
+                  <height>13</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBoxNewBoxWidth">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>New box width</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <property name="topMargin">
+             <number>9</number>
+            </property>
+            <property name="bottomMargin">
+             <number>9</number>
+            </property>
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,1">
+              <item>
+               <widget class="QLabel" name="labelSquares">
+                <property name="text">
+                 <string>Square(s):</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBoxWidthSquares">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="maximum">
+                 <number>999</number>
+                </property>
+                <property name="value">
+                 <number>1</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="labelPixels">
+                <property name="text">
+                 <string>Pixel(s):</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBoxWidthPixels">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="maximum">
+                 <number>999</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>13</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBoxNewBoxHeight">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>New box height</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <property name="topMargin">
+             <number>9</number>
+            </property>
+            <property name="bottomMargin">
+             <number>9</number>
+            </property>
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,0,0,0,1">
+              <item>
+               <widget class="QLabel" name="labelSquares_2">
+                <property name="text">
+                 <string>Square(s):</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBoxHeightSquares">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="maximum">
+                 <number>999</number>
+                </property>
+                <property name="value">
+                 <number>1</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="labelPixels_2">
+                <property name="text">
+                 <string>Pixel(s):</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBoxHeightPixels">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="maximum">
+                 <number>999</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_3">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>13</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
              </layout>
             </item>

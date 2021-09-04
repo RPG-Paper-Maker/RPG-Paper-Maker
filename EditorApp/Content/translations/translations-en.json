@@ -1326,5 +1326,7 @@
     "troops.battlers.offset": "Troops battlers offset",
     "save.and.close": "Save and close",
     "impossible.to.paste.item": "Impossible to paste this item, cannot find an associated ID",
-    "mouse.controls": "Mouse controls"
+    "mouse.controls": "Mouse controls",
+    "new.box.length": "New box length",
+    "new.box.width": "New box width"
 }

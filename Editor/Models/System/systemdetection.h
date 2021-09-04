@@ -57,6 +57,10 @@ public:
     void setFieldTop(int f);
     int fieldBot() const;
     void setFieldBot(int f);
+    void setCurrentLengthSquares(int v);
+    void setCurrentLengthPixels(double v);
+    void setCurrentWidthSquares(int v);
+    void setCurrentWidthPixels(double v);
     void setCurrentHeightSquares(int v);
     void setCurrentHeightPixels(double v);
 
@@ -86,6 +90,10 @@ protected:
     int m_fieldRight;
     int m_fieldTop;
     int m_fieldBot;
+    int m_currentLengthSquares;
+    double m_currentLengthPixels;
+    int m_currentWidthSquares;
+    double m_currentWidthPixels;
     int m_currentHeightSquares;
     double m_currentHeightPixels;
     QHash<Position, SystemObject3D *> m_boxes;

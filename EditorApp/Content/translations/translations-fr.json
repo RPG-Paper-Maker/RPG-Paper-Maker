@@ -1325,5 +1325,7 @@
     "troops.battlers.center.offset": "Décalage central des enemis battlers",
     "troops.battlers.offset": "Décalage des enemis battlers",
     "save.and.close": "Sauvegarder et fermer",
-    "impossible.to.paste.item": "Impossible de copier cet élement, impossible de trouver l'ID associée"
+    "impossible.to.paste.item": "Impossible de copier cet élement, impossible de trouver l'ID associée",
+    "new.box.length": "Nouv. longueur de boite",
+    "new.box.width": "Nouv. largeur de boite"
 }

@@ -47,6 +47,10 @@ SystemDetection::SystemDetection(int i, QString n, int fl, int fr, int ft, int
     m_fieldRight(fr),
     m_fieldTop(ft),
     m_fieldBot(fb),
+    m_currentLengthSquares(1),
+    m_currentLengthPixels(0.0),
+    m_currentWidthSquares(1),
+    m_currentWidthPixels(0.0),
     m_currentHeightSquares(1),
     m_currentHeightPixels(0.0),
     m_currentPreviewObject(nullptr)
@@ -98,11 +102,33 @@ void SystemDetection::setFieldBot(int f) {
     m_fieldBot = f;
 }
 
-void SystemDetection::setCurrentHeightSquares(int v) {
+void SystemDetection::setCurrentLengthSquares(int v)
+{
+    m_currentLengthSquares = v;
+}
+
+void SystemDetection::setCurrentLengthPixels(double v)
+{
+    m_currentLengthPixels = v;
+}
+
+void SystemDetection::setCurrentWidthSquares(int v)
+{
+    m_currentWidthSquares = v;
+}
+
+void SystemDetection::setCurrentWidthPixels(double v)
+{
+    m_currentWidthPixels = v;
+}
+
+void SystemDetection::setCurrentHeightSquares(int v)
+{
     m_currentHeightSquares = v;
 }
 
-void SystemDetection::setCurrentHeightPixels(double v) {
+void SystemDetection::setCurrentHeightPixels(double v)
+{
     m_currentHeightPixels = v;
 }
 
@@ -131,8 +157,9 @@ void SystemDetection::getTargetPosition(QVector3D *position) const
 SystemObject3D * SystemDetection::instanciateObject() const
 {
     return new SystemObject3D(1, "", ShapeKind::Box, -1, -1, -2,
-        ObjectCollisionKind::None, -1, 1.0, 1, 0, m_currentHeightSquares,
-        m_currentHeightPixels, 1, 0, true);
+        ObjectCollisionKind::None, -1, 1.0, m_currentLengthSquares,
+        m_currentLengthPixels, m_currentHeightSquares, m_currentHeightPixels,
+        m_currentWidthSquares, m_currentWidthPixels, true);
 }
 
 // -------------------------------------------------------

@@ -1360,6 +1360,8 @@ public:
     static const QString SAVE_AND_CLOSE;
     static const QString IMPOSSIBLE_TO_PASTE_ITEM;
     static const QString MOUSE_CONTROLS;
+    static const QString NEW_BOX_LENGTH;
+    static const QString NEW_BOX_WIDTH;
 
     Translations();
     virtual ~Translations();
