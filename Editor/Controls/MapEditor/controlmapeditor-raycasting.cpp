@@ -449,9 +449,13 @@ void ControlMapEditor::getCorrectPositionOnRay(Position &position,
     position.setZ(z);
     if (!square)
     {
-        position.setCenterX(static_cast<float>(static_cast<int>(point.x() + 1) %
+        position.setCenterX(static_cast<float>(qRound(point.x() + 1) %
             m_map->squareSize()) / m_map->squareSize() * 100);
-        position.setCenterZ(static_cast<float>(static_cast<int>(point.z() + 1) %
+        position.setCenterZ(static_cast<float>(qRound(point.z() + 1) %
             m_map->squareSize()) / m_map->squareSize() * 100);
+    } else
+    {
+        position.setCenterX(50);
+        position.setCenterZ(50);
     }
 }
