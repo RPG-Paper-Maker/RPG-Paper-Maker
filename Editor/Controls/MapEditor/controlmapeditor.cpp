@@ -392,13 +392,16 @@ void ControlMapEditor::updateCameraTreeNode() {
 // -------------------------------------------------------
 
 void ControlMapEditor::update(MapEditorSelectionKind selectionKind, bool square,
-    DrawKind drawKind, bool layerOn)
+    DrawKind drawKind, bool layerOn, bool needUpdatePortions)
 {
     // Update portions
-    updatePortions(selectionKind, drawKind);
-    saveTempPortions();
-    clearPortionsToUpdate();
-    updateMovingPortions();
+    if (needUpdatePortions)
+    {
+        updatePortions(selectionKind, drawKind);
+        saveTempPortions();
+        clearPortionsToUpdate();
+        updateMovingPortions();
+    }
 
     // Check textures need to be reloaded
     m_map->checkNeedReloadTextures();

@@ -288,17 +288,21 @@ void ControlMapEditor::updatePreviewElementGrid(Position &p, Portion &portion,
 
 void ControlMapEditor::updatePreviewDetection()
 {
-    this->removePreviewElements();
     if (!m_isDeleting)
     {
         Position position;
         bool isObject;
         this->getPositionSelected(position, MapEditorSelectionKind::Objects3D,
             MapEditorSubSelectionKind::Object3D, false, isObject);
+        this->removePreviewElements();
         Portion portion;
         m_map->getLocalPortion(position, portion);
         MapPortion *mapPortion = m_map->mapPortion(portion);
-        if (mapPortion != nullptr && m_map->isInGrid(position))
+        if (mapPortion != nullptr && m_map->isInGrid(position) && m_map
+            ->isInPortion(portion) && (m_firstMouseCoords.x() == -500 || (
+            m_firstMouseCoords.y() == m_positionPreviousPreview.y() &&
+            qFuzzyCompare(m_firstMouseCoords.yPlus(), m_positionPreviousPreview
+            .yPlus()))))
         {
             m_detection->updatePreview(mapPortion->objects3D(), position);
             m_portionsToUpdate += mapPortion;

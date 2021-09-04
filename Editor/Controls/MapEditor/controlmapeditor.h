@@ -72,7 +72,7 @@ public:
     void deleteMap(bool updateCamera = true);
     void onResize(int width, int height);
     void update(MapEditorSelectionKind selectionKind, bool square, DrawKind drawKind, bool
-        layerOn);
+        layerOn, bool needUpdatePortions = true);
     void updateMouse(QPoint point, MapEditorSelectionKind selectionKind, bool
         square, DrawKind drawKind, bool layerOn);
     void updateMousePosition(QPoint point);

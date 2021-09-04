@@ -79,7 +79,6 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
 
     m_contextMenu = ContextMenuList::createContextObject(this);
     m_control.setContextMenu(m_contextMenu);
-
     m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
 }
 
@@ -90,15 +89,18 @@ WidgetMapEditor::~WidgetMapEditor()
     delete m_timerAutotileFrame;
 }
 
-void WidgetMapEditor::setMenuBar(WidgetMenuBarMapEditor *m) {
+void WidgetMapEditor::setMenuBar(WidgetMenuBarMapEditor *m)
+{
     m_menuBar = m;
 }
 
-void WidgetMapEditor::setPanelTextures(PanelTextures *m){
+void WidgetMapEditor::setPanelTextures(PanelTextures *m)
+{
     m_panelTextures = m;
 }
 
-Map * WidgetMapEditor::getMap() const {
+Map * WidgetMapEditor::getMap() const
+{
     return m_control.map();
 }
 
@@ -257,8 +259,10 @@ void WidgetMapEditor::paintGL() {
         bool layerOn;
         if (m_menuBar == nullptr || m_detection != nullptr)
         {
-            kind = MapEditorSelectionKind::Land;
-            subKind = MapEditorSubSelectionKind::None;
+            kind = m_detection == nullptr ? MapEditorSelectionKind::Land :
+                MapEditorSelectionKind::Objects3D;
+            subKind = m_detection == nullptr ? MapEditorSubSelectionKind::None :
+                MapEditorSubSelectionKind::Object3D;
             square = m_detection == nullptr ? true : m_menuBar->squareOn(true);
             drawKind = DrawKind::Pencil;
             layerOn = false;
@@ -336,10 +340,14 @@ void WidgetMapEditor::paintGL() {
         // Draw additional text informations
         p.begin(this);
         if (m_menuBar != nullptr) {
-            QString infos = m_control.getSquareInfos(kind, subKind, layerOn,
-                this->hasFocus());
-            QStringList listInfos = infos.split("\n");
-            if (m_control.displaySquareInformations()) {
+            QStringList listInfos;
+            if (m_detection == nullptr)
+            {
+                listInfos = m_control.getSquareInfos(kind, subKind, layerOn,
+                    this->hasFocus()).split("\n");
+            }
+            if (m_control.displaySquareInformations())
+            {
                 p.drawImage(QRect(10, 10, 16, 16), m_imageHeight);
                 renderText(p, 32, 23, QString::number(m_control.cursor()
                     ->getSquareY()), QFont(), QColor(255, 255, 255), QColor(),
@@ -816,7 +824,7 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event)
             {
                 m_control.updateMouseMove(event->pos());
                 m_control.update(MapEditorSelectionKind::None, true, DrawKind
-                    ::Pencil, false);
+                    ::Pencil, false, false);
             }
         }
     }
