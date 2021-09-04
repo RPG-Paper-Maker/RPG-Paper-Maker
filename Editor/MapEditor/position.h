@@ -31,8 +31,8 @@ public:
     Position(const Position3D &pos);
     Position(const Position &pos);
     Position(int x, int y, double y_plus, int z, int layer = 0);
-    Position(int x, int y, double y_plus, int z, int layer, int centerX,
-             int centerZ, double angleY, double angleX = 0, double angleZ = 0);
+    Position(int x, int y, double y_plus, int z, int layer, double centerX,
+             double centerZ, double angleY, double angleX = 0, double angleZ = 0);
     virtual ~Position();
 
     bool operator==(const Position& other) const;
@@ -43,10 +43,10 @@ public:
     void setCoords(int x, int y, double y_plus, int z);
     int layer() const;
     void setLayer(int l);
-    int centerX() const;
-    void setCenterX(int x);
-    int centerZ() const;
-    void setCenterZ(int z);
+    double centerX() const;
+    void setCenterX(double x);
+    double centerZ() const;
+    void setCenterZ(double z);
     double angleY() const;
     void setAngleY(double a);
     void addAngleY(double a);
@@ -81,8 +81,8 @@ public:
 
 protected:
     int m_layer;
-    int m_centerX;
-    int m_centerZ;
+    double m_centerX;
+    double m_centerZ;
     double m_angleY;
     double m_angleX;
     double m_angleZ;

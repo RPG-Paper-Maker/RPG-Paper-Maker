@@ -41,8 +41,8 @@ Position::Position(int x, int y, double y_plus, int z, int layer) :
 
 }
 
-Position::Position(int x, int y, double y_plus, int z, int layer, int centerX,
-                   int centerZ, double angleY, double angleX, double angleZ) :
+Position::Position(int x, int y, double y_plus, int z, int layer, double centerX,
+                   double centerZ, double angleY, double angleX, double angleZ) :
     Position3D(x, y, y_plus, z),
     m_layer(layer),
     m_centerX(centerX),
@@ -89,13 +89,13 @@ int Position::layer() const { return m_layer; }
 
 void Position::setLayer(int l) { m_layer = l; }
 
-int Position::centerX() const{ return m_centerX; }
+double Position::centerX() const{ return m_centerX; }
 
-void Position::setCenterX(int x){ m_centerX = x; }
+void Position::setCenterX(double x){ m_centerX = x; }
 
-int Position::centerZ() const{ return m_centerZ; }
+double Position::centerZ() const{ return m_centerZ; }
 
-void Position::setCenterZ(int z){ m_centerZ = z; }
+void Position::setCenterZ(double z){ m_centerZ = z; }
 
 double Position::angleY() const {
     return m_angleY;
@@ -354,8 +354,8 @@ void Position::read(const QJsonArray & json) {
     m_layer = json[4].toInt();
     size = json.size();
     if (size > 5) {
-        m_centerX = json[5].toInt();
-        m_centerZ = json[6].toInt();
+        m_centerX = json[5].toDouble();
+        m_centerZ = json[6].toDouble();
         m_angleY = json[7].toDouble();
         if (size > 8) {
             m_angleX = json[8].toDouble();
@@ -370,7 +370,7 @@ void Position::write(QJsonArray &json) const{
     Position3D::write(json);
 
     json.append(m_layer);
-    if (m_centerX != 50 || m_centerZ != 50 || m_angleY != 0.0 || m_angleX != 0.0
+    if (m_centerX != 50.0 || m_centerZ != 50.0 || m_angleY != 0.0 || m_angleX != 0.0
         || m_angleZ != 0.0)
     {
         json.append(m_centerX);
