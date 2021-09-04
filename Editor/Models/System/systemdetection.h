@@ -34,6 +34,10 @@ public:
     static const QString JSON_FIELD_TOP;
     static const QString JSON_FIELD_BOT;
     static const QString JSON_BOXES;
+    static const QString JSON_BOXES_LENGTH_SQUARES;
+    static const QString JSON_BOXES_LENGTH_PIXELS;
+    static const QString JSON_BOXES_WIDTH_SQUARES;
+    static const QString JSON_BOXES_WIDTH_PIXELS;
     static const QString JSON_BOXES_HEIGHT_SQUARES;
     static const QString JSON_BOXES_HEIGHT_PIXELS;
     static const int DEFAULT_FIELD_LEFT;
@@ -67,6 +71,7 @@ public:
     Map * createDetectionMap();
     void getTargetPosition(QVector3D *position) const;
     SystemObject3D * instanciateObject() const;
+    void setFront();
     void setSelf();
     void initializeObjects(Objects3D *objects3D, Portion &globalPortion);
     void addObject(Position &position, SystemObject3D *object);

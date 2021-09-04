@@ -73,6 +73,7 @@ public:
     int widthSquare() const;
     void setWidthSquare(int ws);
     int widthPixel() const;
+    double widthP() const;
     void setWidthPixel(int wp);
     int height() const;
     int heightSquare() const;
@@ -84,6 +85,7 @@ public:
     int depthSquare() const;
     void setDepthSquare(int ds);
     int depthPixel() const;
+    double depthP() const;
     void setDepthPixel(int dp);
     bool stretch() const;
     void setStretch(bool s);

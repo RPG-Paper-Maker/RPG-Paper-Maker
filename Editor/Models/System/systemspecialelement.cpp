@@ -142,6 +142,11 @@ int SystemSpecialElement::widthPixel() const {
     return static_cast<int>(m_widthPixel * RPM::get()->getSquareSize() / 100);
 }
 
+double SystemSpecialElement::widthP() const
+{
+    return m_widthPixel;
+}
+
 void SystemSpecialElement::setWidthPixel(int wp) {
     m_widthPixel = static_cast<double>(wp) / RPM::get()->getSquareSize() * 100;
 }
@@ -162,7 +167,8 @@ int SystemSpecialElement::heightPixel() const {
     return static_cast<int>(m_heightPixel * RPM::get()->getSquareSize() / 100);
 }
 
-double SystemSpecialElement::heightP() const {
+double SystemSpecialElement::heightP() const
+{
     return m_heightPixel;
 }
 
@@ -184,6 +190,11 @@ void SystemSpecialElement::setDepthSquare(int ds) {
 
 int SystemSpecialElement::depthPixel() const {
     return static_cast<int>(m_depthPixel * RPM::get()->getSquareSize() / 100);
+}
+
+double SystemSpecialElement::depthP() const
+{
+    return m_depthPixel;
 }
 
 void SystemSpecialElement::setDepthPixel(int dp) {

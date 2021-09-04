@@ -627,7 +627,7 @@ void SystemDatas::setDefaultDetections() {
 
     detection = new SystemDetection(1, RPM::translate(Translations::FRONT), 0, 0
         , 0, 1);
-    detection->setDefault();
+    detection->setFront();
     row = detection->getModelRow();
     m_modelDetections->appendRow(row);
     detection = new SystemDetection(2, RPM::translate(Translations::SELF), 0, 0,

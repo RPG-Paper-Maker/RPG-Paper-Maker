@@ -19,6 +19,10 @@ const QString SystemDetection::JSON_FIELD_RIGHT = "fr";
 const QString SystemDetection::JSON_FIELD_TOP = "ft";
 const QString SystemDetection::JSON_FIELD_BOT = "fb";
 const QString SystemDetection::JSON_BOXES = "b";
+const QString SystemDetection::JSON_BOXES_LENGTH_SQUARES = "bls";
+const QString SystemDetection::JSON_BOXES_LENGTH_PIXELS = "blp";
+const QString SystemDetection::JSON_BOXES_WIDTH_SQUARES = "bws";
+const QString SystemDetection::JSON_BOXES_WIDTH_PIXELS = "bwp";
 const QString SystemDetection::JSON_BOXES_HEIGHT_SQUARES = "bhs";
 const QString SystemDetection::JSON_BOXES_HEIGHT_PIXELS = "bhp";
 const int SystemDetection::DEFAULT_FIELD_LEFT = 2;
@@ -164,9 +168,16 @@ SystemObject3D * SystemDetection::instanciateObject() const
 
 // -------------------------------------------------------
 
-void SystemDetection::setSelf() {
-    Position3D position;
+void SystemDetection::setFront() {
+    Position position(0, 0, 0, 0, 0, 50, 0, 0);
+    m_boxes.insert(position, new SystemObject3D(1, "", ShapeKind::Box, -1, -1, -2,
+        ObjectCollisionKind::None, -1, 1.0, 0, 12.5, 0, 12.5, 0, 12.5, true));
+}
 
+// -------------------------------------------------------
+
+void SystemDetection::setSelf() {
+    Position position;
     m_boxes.insert(position, this->instanciateObject());
 }
 
@@ -342,8 +353,7 @@ void SystemDetection::updatePreview(Objects3D *objects3D, Position &position)
 // -------------------------------------------------------
 
 void SystemDetection::setDefault() {
-    Position3D position;
-
+    Position position;
     position.setZ(1);
     m_boxes.insert(position, this->instanciateObject());
 }
@@ -402,7 +412,7 @@ void SystemDetection::setCopy(const SuperListItem &super) {
 void SystemDetection::read(const QJsonObject &json) {
     QJsonArray tab;
     QJsonObject obj;
-    Position3D position;
+    Position position;
     SystemObject3D *object;
     int i, l;
 
@@ -426,10 +436,15 @@ void SystemDetection::read(const QJsonObject &json) {
         position.read(obj[RPM::JSON_KEY].toArray());
         obj = obj[RPM::JSON_VALUE].toObject();
         object = new SystemObject3D(1, "", ShapeKind::Box, -1, -1, -2,
-            ObjectCollisionKind::None, -1, 1.0, 1, 0, obj.contains(
-            JSON_BOXES_HEIGHT_SQUARES) ? obj[JSON_BOXES_HEIGHT_SQUARES].toInt()
-            : 1, obj.contains(JSON_BOXES_HEIGHT_PIXELS) ? obj[
-            JSON_BOXES_HEIGHT_PIXELS].toDouble() : 0, 1, 0, true);
+            ObjectCollisionKind::None, -1, 1.0, obj.contains(JSON_BOXES_LENGTH_SQUARES) ?
+            obj[JSON_BOXES_LENGTH_SQUARES].toInt() : 1, obj.contains(
+            JSON_BOXES_LENGTH_PIXELS) ? obj[JSON_BOXES_LENGTH_PIXELS].toDouble() :
+            0, obj.contains(JSON_BOXES_HEIGHT_SQUARES) ? obj[JSON_BOXES_HEIGHT_SQUARES]
+            .toInt() : 1, obj.contains(JSON_BOXES_HEIGHT_PIXELS) ? obj[
+            JSON_BOXES_HEIGHT_PIXELS].toDouble() : 0, obj.contains(
+            JSON_BOXES_WIDTH_SQUARES) ? obj[JSON_BOXES_WIDTH_SQUARES].toInt() :
+            1, obj.contains(JSON_BOXES_WIDTH_PIXELS) ? obj[JSON_BOXES_WIDTH_PIXELS]
+            .toDouble() : 0, true);
         m_boxes.insert(position, object);
     }
 }
@@ -462,6 +477,18 @@ void SystemDetection::write(QJsonObject &json) const {
             it.key().write(tabPosition);
             obj = QJsonObject();
             object = it.value();
+            if (object->widthSquare() != 1) {
+                obj[JSON_BOXES_LENGTH_SQUARES] = object->widthSquare();
+            }
+            if (object->widthP() != 0.0) {
+                obj[JSON_BOXES_LENGTH_PIXELS] = object->widthP();
+            }
+            if (object->depthSquare() != 1) {
+                obj[JSON_BOXES_WIDTH_SQUARES] = object->depthSquare();
+            }
+            if (object->depthP() != 0.0) {
+                obj[JSON_BOXES_WIDTH_PIXELS] = object->depthP();
+            }
             if (object->heightSquare() != 1) {
                 obj[JSON_BOXES_HEIGHT_SQUARES] = object->heightSquare();
             }
