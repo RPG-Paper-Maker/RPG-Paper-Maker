@@ -64,7 +64,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-796</y>
                 <width>252</width>
                 <height>1589</height>
                </rect>
@@ -828,7 +828,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-576</y>
                 <width>624</width>
                 <height>1216</height>
                </rect>
@@ -1018,17 +1018,16 @@
                     </widget>
                    </item>
                    <item>
-                    <spacer name="verticalSpacer_2">
-                     <property name="orientation">
-                      <enum>Qt::Vertical</enum>
+                    <widget class="QGroupBox" name="groupBoxInitialParty">
+                     <property name="title">
+                      <string>Initial party</string>
                      </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>20</width>
-                       <height>40</height>
-                      </size>
-                     </property>
-                    </spacer>
+                     <layout class="QGridLayout" name="gridLayout_53">
+                      <item row="0" column="0">
+                       <widget class="WidgetSuperTree" name="treeView"/>
+                      </item>
+                     </layout>
+                    </widget>
                    </item>
                   </layout>
                  </item>

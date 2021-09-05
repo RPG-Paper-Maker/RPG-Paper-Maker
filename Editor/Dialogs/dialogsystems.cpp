@@ -35,6 +35,7 @@
 #include "dialogcommandsetdialogboxoptions.h"
 #include "systemskybox.h"
 #include "dialogenternameoptions.h"
+#include "systeminitialpartymember.h"
 
 // -------------------------------------------------------
 //
@@ -195,6 +196,7 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
         SystemSkyBox);
     ui->panelSuperListSkyBoxes->initializeModel(gameDatas->systemDatas()
         ->modelSkyBoxes());
+    ui->treeView->initializeNewItemInstance(new SystemInitialPartyMember);
 
     // Sounds
     ui->widgetChooseCursor->initialize(gameDatas->systemDatas()->soundCursor());
@@ -595,6 +597,7 @@ void DialogSystems::translate()
     ui->groupBoxTitleScreen->setTitle(RPM::translate(Translations::TITLE_SCREEN));
     ui->groupBoxWeaponsKind->setTitle(RPM::translate(Translations::WEAPONS_KIND));
     ui->groupBoxWindowSkins->setTitle(RPM::translate(Translations::WINDOW_SKINS));
+    ui->groupBoxInitialParty->setTitle(RPM::translate(Translations::INITIAL_PARTY_MEMBERS));
     ui->groupBoxGlobalSounds->setTitle(RPM::translate(Translations
         ::GLOBAL_SOUNDS));
     ui->groupBoxMenuCommands->setTitle(RPM::translate(Translations

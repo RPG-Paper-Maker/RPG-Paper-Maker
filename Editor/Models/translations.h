@@ -1362,6 +1362,8 @@ public:
     static const QString MOUSE_CONTROLS;
     static const QString NEW_BOX_LENGTH;
     static const QString NEW_BOX_WIDTH;
+    static const QString INITIAL_PARTY_MEMBERS;
+    static const QString SET_INITIAL_PARTY_MEMBERS;
 
     Translations();
     virtual ~Translations();

@@ -58,6 +58,7 @@ public:
     static const QString JSON_SOUND_IMPOSSIBLE;
     static const QString JSON_DIALOG_BOX_OPTIONS;
     static const QString JSON_SKY_BOXES;
+    static const QString JSON_INITIAL_PARTY_MEMBERS;
     static const QString JSON_ANTIALIASING;
     static const QString JSON_MAP_FRAME_DURATION;
     static const QString JSON_BATTLERS_FRAMES;
@@ -141,6 +142,7 @@ public:
     QStandardItemModel * modelFontSizes() const;
     QStandardItemModel * modelFontNames() const;
     QStandardItemModel * modelSkyBoxes() const;
+    QStandardItemModel * modelInitialPartyMembers() const;
     int lastMajorVersion() const;
     void setLastMajorVersion(int v);
     int lastMinorVersion() const;
@@ -172,6 +174,7 @@ public:
     void setDefaultDialogBoxOptions();
     void setdefaultEnterNameOptions();
     void setDefaultSkyBoxes();
+    void setDefaultInitialPartyMembers();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -214,6 +217,7 @@ private:
     QStandardItemModel *m_modelFontSizes;
     QStandardItemModel *m_modelFontNames;
     QStandardItemModel *m_modelSkyBoxes;
+    QStandardItemModel *m_modelInitialPartyMembers;
     int m_lastMajorVersion;
     int m_lastMinorVersion;
     SystemPlaySong *m_soundCursor;

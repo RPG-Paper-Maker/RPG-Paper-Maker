@@ -1349,6 +1349,8 @@ const QString Translations::IMPOSSIBLE_TO_PASTE_ITEM = "impossible.to.paste.item
 const QString Translations::MOUSE_CONTROLS = "mouse.controls";
 const QString Translations::NEW_BOX_LENGTH = "new.box.length";
 const QString Translations::NEW_BOX_WIDTH = "new.box.width";
+const QString Translations::INITIAL_PARTY_MEMBERS = "initial.party.members";
+const QString Translations::SET_INITIAL_PARTY_MEMBERS = "set.initial.party.member";
 
 // -------------------------------------------------------
 //

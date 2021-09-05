@@ -1327,5 +1327,7 @@
     "save.and.close": "Sauvegarder et fermer",
     "impossible.to.paste.item": "Impossible de copier cet élement, impossible de trouver l'ID associée",
     "new.box.length": "Nouv. longueur de boite",
-    "new.box.width": "Nouv. largeur de boite"
+    "new.box.width": "Nouv. largeur de boite",
+    "initial.party.members": "Membres initials de partie",
+    "set.initial.party.member": "Modifier le membre initial de partie"
 }

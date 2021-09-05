@@ -92,6 +92,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemfontname.h \
     Dialogs/Systems/dialogsystemfontsize.h \
     Dialogs/Systems/dialogsystemherotroopbattletestequipment.h \
+    Dialogs/Systems/dialogsysteminitialpartymember.h \
     Dialogs/Systems/dialogsysteminventoryfilter.h \
     Dialogs/Systems/dialogsystemlanguage.h \
     Dialogs/Systems/dialogsystemmainmenucommand.h \
@@ -146,6 +147,7 @@ HEADERS += \
     Enums/plugintypekind.h \
     Enums/statusrestrictionskind.h \
     Enums/systemprimitivekind.h \
+    Enums/teamkind.h \
     Enums/titlecommandkind.h \
     Enums/titlesettingkind.h \
     Enums/troopreactionfrequencykind.h \
@@ -174,6 +176,7 @@ HEADERS += \
     Models/System/systemfontsize.h \
     Models/System/systemherotroopbattletest.h \
     Models/System/systemherotroopbattletestequipment.h \
+    Models/System/systeminitialpartymember.h \
     Models/System/systeminventoryfilter.h \
     Models/System/systemlanguage.h \
     Models/System/systemmainmenucommand.h \
@@ -528,6 +531,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemfontname.cpp \
     Dialogs/Systems/dialogsystemfontsize.cpp \
     Dialogs/Systems/dialogsystemherotroopbattletestequipment.cpp \
+    Dialogs/Systems/dialogsysteminitialpartymember.cpp \
     Dialogs/Systems/dialogsysteminventoryfilter.cpp \
     Dialogs/Systems/dialogsystemlanguage.cpp \
     Dialogs/Systems/dialogsystemmainmenucommand.cpp \
@@ -589,6 +593,7 @@ SOURCES += \
     Models/System/systemfontsize.cpp \
     Models/System/systemherotroopbattletest.cpp \
     Models/System/systemherotroopbattletestequipment.cpp \
+    Models/System/systeminitialpartymember.cpp \
     Models/System/systeminventoryfilter.cpp \
     Models/System/systemlanguage.cpp \
     Models/System/systemmainmenucommand.cpp \
@@ -906,6 +911,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemfontname.ui \
     Dialogs/Systems/dialogsystemfontsize.ui \
     Dialogs/Systems/dialogsystemherotroopbattletestequipment.ui \
+    Dialogs/Systems/dialogsysteminitialpartymember.ui \
     Dialogs/Systems/dialogsysteminventoryfilter.ui \
     Dialogs/Systems/dialogsystemlanguage.ui \
     Dialogs/Systems/dialogsystemmainmenucommand.ui \

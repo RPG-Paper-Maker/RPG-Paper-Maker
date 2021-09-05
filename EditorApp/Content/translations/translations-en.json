@@ -1328,5 +1328,7 @@
     "impossible.to.paste.item": "Impossible to paste this item, cannot find an associated ID",
     "mouse.controls": "Mouse controls",
     "new.box.length": "New box length",
-    "new.box.width": "New box width"
+    "new.box.width": "New box width",
+    "initial.party.members": "Initial party members",
+    "set.initial.party.member": "Set initial party member"
 }

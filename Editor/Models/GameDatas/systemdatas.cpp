@@ -25,6 +25,7 @@
 #include "systeminventoryfilter.h"
 #include "systemmainmenucommand.h"
 #include "systemselectstatistic.h"
+#include "systeminitialpartymember.h"
 
 const QString SystemDatas::JSON_PROJECT_NAME = "pn";
 const QString SystemDatas::JSON_SCREEN_WIDTH = "sw";
@@ -53,6 +54,7 @@ const QString SystemDatas::JSON_SOUND_CANCEL = "sca";
 const QString SystemDatas::JSON_SOUND_IMPOSSIBLE = "si";
 const QString SystemDatas::JSON_DIALOG_BOX_OPTIONS = "dbo";
 const QString SystemDatas::JSON_SKY_BOXES = "sb";
+const QString SystemDatas::JSON_INITIAL_PARTY_MEMBERS = "initialPartyMembers";
 const QString SystemDatas::JSON_ANTIALIASING = "aa";
 const QString SystemDatas::JSON_MAP_FRAME_DURATION = "mfd";
 const QString SystemDatas::JSON_BATTLERS_FRAMES = "battlersFrames";
@@ -113,6 +115,7 @@ SystemDatas::SystemDatas() :
     m_modelFontSizes(new QStandardItemModel),
     m_modelFontNames(new QStandardItemModel),
     m_modelSkyBoxes(new QStandardItemModel),
+    m_modelInitialPartyMembers(new QStandardItemModel),
     m_lastMajorVersion(1),
     m_lastMinorVersion(0),
     m_soundCursor(new SystemPlaySong(-1, SongKind::Sound)),
@@ -125,7 +128,8 @@ SystemDatas::SystemDatas() :
 
 }
 
-SystemDatas::~SystemDatas() {
+SystemDatas::~SystemDatas()
+{
     delete m_projectName;
     delete m_mountainCollisionHeight;
     delete m_mountainCollisionAngle;
@@ -145,6 +149,7 @@ SystemDatas::~SystemDatas() {
     SuperListItem::deleteModel(m_modelFontSizes);
     SuperListItem::deleteModel(m_modelFontNames);
     SuperListItem::deleteModel(m_modelSkyBoxes);
+    SuperListItem::deleteModel(m_modelInitialPartyMembers);
     delete m_soundCursor;
     delete m_soundConfirmation;
     delete m_soundCancel;
@@ -380,6 +385,11 @@ QStandardItemModel * SystemDatas::modelSkyBoxes() const
     return m_modelSkyBoxes;
 }
 
+QStandardItemModel * SystemDatas::modelInitialPartyMembers() const
+{
+    return m_modelInitialPartyMembers;
+}
+
 int SystemDatas::lastMajorVersion() const {
     return m_lastMajorVersion;
 }
@@ -461,6 +471,7 @@ void SystemDatas::setDefault() {
     this->setDefaultDialogBoxOptions();
     this->setdefaultEnterNameOptions();
     this->setDefaultSkyBoxes();
+    this->setDefaultInitialPartyMembers();
 
     m_lastMajorVersion = 1;
     m_lastMinorVersion = 0;
@@ -760,6 +771,11 @@ void SystemDatas::setDefaultSkyBoxes()
         ::SKY), 1, 2, 3, 4, 5, 6))->getModelRow());
 }
 
+void SystemDatas::setDefaultInitialPartyMembers()
+{
+
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE
@@ -786,6 +802,7 @@ void SystemDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelFontSizes, false);
     SuperListItem::deleteModel(m_modelFontNames, false);
     SuperListItem::deleteModel(m_modelSkyBoxes, false);
+    SuperListItem::deleteModel(m_modelInitialPartyMembers, false);
 
     // Other options
     m_projectName->read(json[JSON_PROJECT_NAME].toObject());
@@ -944,6 +961,8 @@ void SystemDatas::read(const QJsonObject &json){
     }
     SuperListItem::readList(m_modelSkyBoxes, new SystemSkyBox, json,
         JSON_SKY_BOXES);
+    SuperListItem::readTree(m_modelInitialPartyMembers, new
+        SystemInitialPartyMember, json, JSON_INITIAL_PARTY_MEMBERS);
 
     // Version
     m_lastMajorVersion = json[JSON_LAST_MAJOR_VERSION].toInt();
@@ -1188,6 +1207,7 @@ void SystemDatas::write(QJsonObject &json) const{
     fileFont.close();
 
     SuperListItem::writeList(m_modelSkyBoxes, json, JSON_SKY_BOXES);
+    SuperListItem::writeTree(m_modelInitialPartyMembers, json, JSON_INITIAL_PARTY_MEMBERS);
 
     // Version
     json[JSON_LAST_MAJOR_VERSION] = m_lastMajorVersion;
