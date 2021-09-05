@@ -101,6 +101,7 @@ void DialogSystems::closeEvent(QCloseEvent *event)
 
 void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     SystemDatas *systemDatas = RPM::get()->project()->gameDatas()->systemDatas();
+    systemDatas->updateModelsToString();
     int index = systemDatas->isScreenWindow() ? 0 : 1;
     ui->comboBoxScreenWindow->addItem(RPM::translate(Translations::WINDOW));
     ui->comboBoxScreenWindow->addItem(RPM::translate(Translations::FULL_SCREEN));
@@ -197,6 +198,7 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->panelSuperListSkyBoxes->initializeModel(gameDatas->systemDatas()
         ->modelSkyBoxes());
     ui->treeView->initializeNewItemInstance(new SystemInitialPartyMember);
+    ui->treeView->initializeModel(gameDatas->systemDatas()->modelInitialPartyMembers());
 
     // Sounds
     ui->widgetChooseCursor->initialize(gameDatas->systemDatas()->soundCursor());

@@ -21,12 +21,12 @@
 #include "systemcommonskillitem.h"
 #include "systemevent.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 22;
+const int ProjectUpdater::incompatibleVersionsCount = 23;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
      "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0", "1.6.2",
-    "1.6.3", "1.6.4", "1.7.0", "1.7.3", "1.8.0", "1.8.3"};
+    "1.6.3", "1.6.4", "1.7.0", "1.7.3", "1.8.0", "1.8.3", "1.9.0"};
 
 // -------------------------------------------------------
 //
@@ -1293,4 +1293,11 @@ void ProjectUpdater::updateVersion_1_8_3()
     json["troops"] = tab;
     Common::writeOtherJSON(path, json);
     m_project->gameDatas()->readTroops(m_project->pathCurrentProjectApp());
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_9_0()
+{
+    m_project->gameDatas()->systemDatas()->setDefaultInitialPartyMembers();
 }

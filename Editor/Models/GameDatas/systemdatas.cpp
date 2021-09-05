@@ -771,9 +771,18 @@ void SystemDatas::setDefaultSkyBoxes()
         ::SKY), 1, 2, 3, 4, 5, 6))->getModelRow());
 }
 
+// -------------------------------------------------------
+
 void SystemDatas::setDefaultInitialPartyMembers()
 {
+    m_modelInitialPartyMembers->insertRow(0, (new SystemInitialPartyMember)->getModelRow());
+}
 
+// -------------------------------------------------------
+
+void SystemDatas::updateModelsToString()
+{
+    SuperListItem::updateModelToString(m_modelInitialPartyMembers);
 }
 
 // -------------------------------------------------------

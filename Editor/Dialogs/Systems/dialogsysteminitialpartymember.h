@@ -34,6 +34,11 @@ public:
 private:
     Ui::DialogSystemInitialPartyMember *ui;
     SystemInitialPartyMember &m_model;
+
+public slots:
+    void on_comboBoxInstanceTeam_currentIndexChanged(int index);
+    void on_radioButtonHero_toggled(bool checked);
+    void on_radioButtonMonster_toggled(bool checked);
 };
 
 #endif // DIALOGSYSTEMINITIALPARTYMEMBER_H

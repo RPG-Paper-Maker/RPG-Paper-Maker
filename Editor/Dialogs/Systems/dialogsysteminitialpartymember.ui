@@ -91,37 +91,8 @@
         </layout>
        </item>
        <item>
-        <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0">
-         <item row="0" column="1">
-          <widget class="QRadioButton" name="radioButtonHero">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Hero</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3" rowspan="2">
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>178</width>
-             <height>38</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="1" column="1">
+        <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
+         <item row="1" column="0">
           <widget class="QRadioButton" name="radioButtonMonster">
            <property name="enabled">
             <bool>true</bool>
@@ -131,26 +102,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveHero" native="true">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
+         <item row="1" column="1">
           <widget class="PanelPrimitiveValue" name="panelPrimitiveMonster" native="true">
            <property name="enabled">
             <bool>false</bool>
@@ -169,15 +121,50 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0" rowspan="2">
-          <spacer name="horizontalSpacer_4">
+         <item row="0" column="1">
+          <widget class="PanelPrimitiveValue" name="panelPrimitiveHero" native="true">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>250</width>
+             <height>27</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>250</width>
+             <height>27</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="radioButtonHero">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Hero</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2" rowspan="2">
+          <spacer name="horizontalSpacer_2">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>0</width>
-             <height>20</height>
+             <width>178</width>
+             <height>38</height>
             </size>
            </property>
           </spacer>
@@ -185,20 +172,7 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,1">
-         <item>
-          <spacer name="horizontalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,1">
          <item>
           <widget class="QLabel" name="labelStockVariable">
            <property name="text">

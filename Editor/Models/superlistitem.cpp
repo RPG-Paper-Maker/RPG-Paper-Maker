@@ -611,6 +611,21 @@ void SuperListItem::updateWeaponsArmorsList(QStandardItemModel *model,
 
 // -------------------------------------------------------
 
+void SuperListItem::updateModelToString(QStandardItemModel *model)
+{
+    SuperListItem *super;
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        super = SuperListItem::getItemModelAt(model, i);
+        if (super != nullptr)
+        {
+            model->item(i)->setText(super->toString());
+        }
+    }
+}
+
+// -------------------------------------------------------
+
 void SuperListItem::reset() {
     p_id = -1;
     p_name = "<" + RPM::translate(Translations::NONE) + ">";

@@ -94,6 +94,7 @@ public:
         QStandardItemModel *modelWeaponArmor, QStandardItemModel
         *modelWeaponArmorKind, int id);
     static void removeEmptyInTree(QStandardItemModel *model);
+    static void updateModelToString(QStandardItemModel *model);
     void reset();
     virtual void getIcon(QIcon &icon);
 

@@ -64,7 +64,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-796</y>
+                <y>0</y>
                 <width>252</width>
                 <height>1589</height>
                </rect>
@@ -1024,7 +1024,11 @@
                      </property>
                      <layout class="QGridLayout" name="gridLayout_53">
                       <item row="0" column="0">
-                       <widget class="WidgetSuperTree" name="treeView"/>
+                       <widget class="WidgetSuperTree" name="treeView">
+                        <attribute name="headerVisible">
+                         <bool>false</bool>
+                        </attribute>
+                       </widget>
                       </item>
                      </layout>
                     </widget>

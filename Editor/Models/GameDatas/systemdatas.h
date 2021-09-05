@@ -175,6 +175,7 @@ public:
     void setdefaultEnterNameOptions();
     void setDefaultSkyBoxes();
     void setDefaultInitialPartyMembers();
+    void updateModelsToString();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
