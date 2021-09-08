@@ -344,6 +344,8 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
         str += this->strChangeClass(properties, parameters); break;
     case EventCommandKind::ChangeChronometer:
         str += this->strChangeChronometer(properties, parameters); break;
+    case EventCommandKind::ChangeWeather:
+        str += this->strChangeWeather(properties, parameters); break;
     default:
         break;
     }
@@ -2718,6 +2720,60 @@ QString EventCommand::strChangeChronometer(QStandardItemModel *properties, QStan
                 ::STOCK_CURRENT_CHRONOMETER_VALUE_IN_VARIABLE_ID) + RPM::SPACE +
                 this->strProperty(i, properties, parameters) + RPM::BRACKET_RIGHT;
         }
+    }
+    return str;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChangeWeather(QStandardItemModel *properties,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    QString str = RPM::translate(Translations::CHANGE_WEATHER) + RPM::COLON
+        + RPM::SPACE;
+    switch (this->valueCommandAt(i++).toInt())
+    {
+    case 0:
+        str += RPM::translate(Translations::NONE);
+        break;
+    case 1:
+        str += RPM::translate(Translations::CUSTOM) + RPM::NEW_LINE;
+        QStringList list;
+        QString texture = RPM::translate(Translations::TEXTURE) + RPM::COLON +
+            RPM::SPACE;
+        switch (this->valueCommandAt(i++).toInt())
+        {
+        case 0:
+            texture += RPM::translate(Translations::COLOR_ID) + RPM::COLON + RPM
+                ::SPACE + this->strProperty(i, properties, parameters);
+            break;
+        case 1:
+            texture += RPM::translate(Translations::IMAGE) + RPM::COLON + RPM
+                ::SPACE + this->strProperty(i, properties, parameters, true);
+            break;
+        }
+        list << texture;
+        list << RPM::translate(Translations::NUMBER_PER_PORTION) + RPM::COLON +
+            RPM::SPACE + this->strProperty(i, properties, parameters);
+        list << RPM::translate(Translations::RAY_PORTIONS) + RPM::COLON +
+            RPM::SPACE + this->strProperty(i, properties, parameters);
+        list << RPM::translate(Translations::SIZE) + RPM::COLON +
+            RPM::SPACE + this->strProperty(i, properties, parameters);
+        list << "depthTest" + RPM::COLON + RPM::SPACE + this->strProperty(i,
+            properties, parameters);
+        list << "depthWrite" + RPM::COLON + RPM::SPACE + this->strProperty(i,
+            properties, parameters);
+        list << RPM::translate(Translations::INITIAL_VELOCITY) + RPM::COLON +
+            RPM::SPACE + this->strProperty(i, properties, parameters);
+        list << RPM::translate(Translations::VELOCITY_ADDITION) + RPM::COLON +
+            RPM::SPACE + this->strProperty(i, properties, parameters);
+        list << RPM::translate(Translations::INITIAL_Y_ROTATION) + RPM::COLON +
+            RPM::SPACE + this->strProperty(i, properties, parameters);
+        list << RPM::translate(Translations::Y_ROTATION_ADDITION) + RPM::COLON +
+            RPM::SPACE + this->strProperty(i, properties, parameters);
+        str += list.join(RPM::NEW_LINE);
+        break;
     }
     return str;
 }

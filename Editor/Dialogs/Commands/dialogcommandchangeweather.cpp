@@ -109,7 +109,29 @@ void DialogCommandChangeWeather::translate()
 EventCommand * DialogCommandChangeWeather::getCommand() const
 {
     QVector<QString> command;
-
+    if (ui->radioButtonNone->isChecked())
+    {
+        command.append("0");
+    } else {
+        command.append("1");
+        if (ui->radioButtonColor->isChecked())
+        {
+            command.append("0");
+            ui->panelPrimitiveColorID->getCommand(command);
+        } else {
+            command.append("1");
+            m_imageValueID->getCommandParameter(command, true);
+        }
+        ui->panelPrimitiveNumberPerPortion->getCommand(command);
+        ui->panelPrimitivePortionsRay->getCommand(command);
+        ui->panelPrimitiveSize->getCommand(command);
+        ui->panelPrimitiveDepthTest->getCommand(command);
+        ui->panelPrimitiveDepthWrite->getCommand(command);
+        ui->panelPrimitiveInitialVelocity->getCommand(command);
+        ui->panelPrimitiveVelocityAddition->getCommand(command);
+        ui->panelPrimitiveInitialYRotation->getCommand(command);
+        ui->panelPrimitiveYRotationAddition->getCommand(command);
+    }
     return new EventCommand(EventCommandKind::ChangeWeather, command);
 }
 
@@ -118,7 +140,37 @@ EventCommand * DialogCommandChangeWeather::getCommand() const
 void DialogCommandChangeWeather::initialize(EventCommand *command)
 {
     int i = 0;
-
+    switch (command->valueCommandAt(i++).toInt())
+    {
+    case 0:
+        ui->radioButtonNone->setChecked(true);
+        break;
+    case 1:
+        ui->radioButtonCustom->setChecked(true);
+        switch (command->valueCommandAt(i++).toInt())
+        {
+        case 0:
+            ui->radioButtonColor->setChecked(true);
+            ui->panelPrimitiveColorID->initializeCommand(command, i);
+            break;
+        case 1:
+            ui->radioButtonImage->setChecked(true);
+            m_imageValueID->initializeCommandParameter(command, i, true);
+            ui->widgetPictureImage->initializePrimitive(m_imageValueID,
+                m_properties, m_parameters);
+            break;
+        }
+        ui->panelPrimitiveNumberPerPortion->initializeCommand(command, i);
+        ui->panelPrimitivePortionsRay->initializeCommand(command, i);
+        ui->panelPrimitiveSize->initializeCommand(command, i);
+        ui->panelPrimitiveDepthTest->initializeCommand(command, i);
+        ui->panelPrimitiveDepthWrite->initializeCommand(command, i);
+        ui->panelPrimitiveInitialVelocity->initializeCommand(command, i);
+        ui->panelPrimitiveVelocityAddition->initializeCommand(command, i);
+        ui->panelPrimitiveInitialYRotation->initializeCommand(command, i);
+        ui->panelPrimitiveYRotationAddition->initializeCommand(command, i);
+        break;
+    }
 }
 
 // -------------------------------------------------------
