@@ -382,6 +382,7 @@ void DialogCommands::translate() {
     ui->pushButtonChangeExperienceCurve->setText(EventCommand::kindToString(EventCommandKind::ChangeExperienceCurve));
     ui->pushButtonChangeClass->setText(EventCommand::kindToString(EventCommandKind::ChangeClass));
     ui->pushButtonChangeChronometer->setText(EventCommand::kindToString(EventCommandKind::ChangeChronometer));
+    ui->pushButtonChangeWeather->setText(EventCommand::kindToString(EventCommandKind::ChangeWeather));
     ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
     ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));
     ui->groupBoxMedia->setTitle(RPM::translate(Translations::MEDIA));

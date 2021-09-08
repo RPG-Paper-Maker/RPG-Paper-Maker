@@ -1351,6 +1351,14 @@ const QString Translations::NEW_BOX_LENGTH = "new.box.length";
 const QString Translations::NEW_BOX_WIDTH = "new.box.width";
 const QString Translations::INITIAL_PARTY_MEMBERS = "initial.party.members";
 const QString Translations::SET_INITIAL_PARTY_MEMBERS = "set.initial.party.member";
+const QString Translations::CHANGE_WEATHER = "change.weather";
+const QString Translations::RAIN = "rain";
+const QString Translations::SNOW = "snow";
+const QString Translations::NUMBER_PER_PORTION = "number.per.portion";
+const QString Translations::INITIAL_VELOCITY = "initial.velocity";
+const QString Translations::VELOCITY_ADDITION = "velocity.addition";
+const QString Translations::INITIAL_Y_ROTATION = "initial.y.rotation";
+const QString Translations::Y_ROTATION_ADDITION = "y.rotation.addition";
 
 // -------------------------------------------------------
 //

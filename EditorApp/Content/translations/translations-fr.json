@@ -1329,5 +1329,13 @@
     "new.box.length": "Nouv. longueur de boite",
     "new.box.width": "Nouv. largeur de boite",
     "initial.party.members": "Membres initials de partie",
-    "set.initial.party.member": "Modifier le membre initial de partie"
+    "set.initial.party.member": "Modifier le membre initial de partie",
+    "change.weather": "Changer la météo",
+    "rain": "Pluie",
+    "snow": "Neige",
+    "number.per.portion": "Nombre par portion",
+    "initial.velocity": "Vélocité initiale",
+    "velocity.addition": "Ajout de vélocité",
+    "initial.y.rotation": "Rotation Y initiale",
+    "y.rotation.addition": "Ajout de rotation Y"
 }

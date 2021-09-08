@@ -656,6 +656,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::CHANGE_EXPERIENCE_CURVE) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::CHANGE_CLASS) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::CHANGE_CHRONOMETER) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::CHANGE_WEATHER) + RPM::DOT_DOT_DOT,
         ""
     });
     RPM::ENUM_TO_STRING_TARGET_KIND = QStringList({

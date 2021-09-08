@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>445</width>
-    <height>489</height>
+    <width>471</width>
+    <height>535</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3">
+  <layout class="QGridLayout" name="gridLayout_4">
    <property name="leftMargin">
     <number>15</number>
    </property>
@@ -27,12 +27,12 @@
     <number>10</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0">
+    <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,0">
      <property name="spacing">
       <number>15</number>
      </property>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
          <item>
@@ -105,396 +105,409 @@
         </layout>
        </item>
        <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="labelTexture">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Texture:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1" rowspan="2">
-          <widget class="QRadioButton" name="radioButtonColor">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Color ID:</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2" rowspan="2" colspan="2">
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveColorID" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="4" rowspan="2">
-          <spacer name="horizontalSpacer_6">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="1" column="0" rowspan="2">
-          <spacer name="horizontalSpacer_7">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>48</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="2" column="1">
-          <widget class="QRadioButton" name="radioButtonImage">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Image:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <widget class="WidgetPicture" name="widgetPictureImage" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>200</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>200</width>
-             <height>27</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="3" colspan="2">
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>88</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <widget class="QLabel" name="labelNumberPerPortion">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Number per portion:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveNumberPerPortion" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2" rowspan="9">
-          <spacer name="horizontalSpacer_4">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>17</width>
-             <height>288</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="labelPortionsRay">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Portions ray:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="PanelPrimitiveValue" name="panelPrimitivePortionsRay" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="labelSize">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Size:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveSize" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="labelDepthTest">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>depthTest:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveDepthTest" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="labelDepthWrite">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>depthWrite:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveDepthWrite" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="labelInitialVelocity">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Initial velocity:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveInitialVelocity" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="labelVelocityAddition">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Velocity addition:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveVelocityAddition" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="labelInitialYRotation">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Initial Y rotation:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="1">
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveInitialYRotation" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="0">
-          <widget class="QLabel" name="labelYRotationAddition">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Y rotation addition:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="1">
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveYRotationAddition" native="true">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="QGroupBox" name="groupBoxOptions">
+         <property name="title">
+          <string>Options</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <layout class="QGridLayout" name="gridLayout">
+              <item row="0" column="0">
+               <widget class="QLabel" name="labelTexture">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Texture:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1" rowspan="2">
+               <widget class="QRadioButton" name="radioButtonColor">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Color ID:</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2" rowspan="2" colspan="2">
+               <widget class="PanelPrimitiveValue" name="panelPrimitiveColorID" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4" rowspan="2">
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="1" column="0" rowspan="2">
+               <spacer name="horizontalSpacer_7">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>48</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="2" column="1">
+               <widget class="QRadioButton" name="radioButtonImage">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Image:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="WidgetPicture" name="widgetPictureImage" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>200</width>
+                  <height>27</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>200</width>
+                  <height>27</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="3" colspan="2">
+               <spacer name="horizontalSpacer_3">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>88</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QGridLayout" name="gridLayout_2">
+              <item row="0" column="0">
+               <widget class="QLabel" name="labelNumberPerPortion">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Number per portion:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="PanelPrimitiveValue" name="panelPrimitiveNumberPerPortion" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2" rowspan="9">
+               <spacer name="horizontalSpacer_4">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>17</width>
+                  <height>288</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="labelPortionsRay">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Portions ray:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="PanelPrimitiveValue" name="panelPrimitivePortionsRay" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="labelSize">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Size:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="PanelPrimitiveValue" name="panelPrimitiveSize" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="labelDepthTest">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>depthTest:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="PanelPrimitiveValue" name="panelPrimitiveDepthTest" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="labelDepthWrite">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>depthWrite:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="PanelPrimitiveValue" name="panelPrimitiveDepthWrite" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="labelInitialVelocity">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Initial velocity:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="PanelPrimitiveValue" name="panelPrimitiveInitialVelocity" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="labelVelocityAddition">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Velocity addition:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="PanelPrimitiveValue" name="panelPrimitiveVelocityAddition" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QLabel" name="labelInitialYRotation">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Initial Y rotation:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="PanelPrimitiveValue" name="panelPrimitiveInitialYRotation" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="labelYRotationAddition">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Y rotation addition:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="PanelPrimitiveValue" name="panelPrimitiveYRotationAddition" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </item>

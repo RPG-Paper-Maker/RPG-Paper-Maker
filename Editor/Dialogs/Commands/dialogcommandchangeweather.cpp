@@ -79,9 +79,23 @@ void DialogCommandChangeWeather::initializePrimitives()
 
 void DialogCommandChangeWeather::translate()
 {
-    /*
     this->setWindowTitle(RPM::translate(Translations::CHANGE_WEATHER) + RPM
-        ::DOT_DOT_DOT);*/
+        ::DOT_DOT_DOT);
+    ui->radioButtonNone->setText(RPM::translate(Translations::NONE));
+    ui->radioButtonCustom->setText(RPM::translate(Translations::CUSTOM) + RPM::COLON);
+    ui->pushButtonRain->setText(RPM::translate(Translations::RAIN));
+    ui->pushButtonSnow->setText(RPM::translate(Translations::SNOW));
+    ui->groupBoxOptions->setTitle(RPM::translate(::Translations::OPTIONS));
+    ui->labelTexture->setText(RPM::translate(Translations::TEXTURE) + RPM::COLON);
+    ui->radioButtonColor->setText(RPM::translate(Translations::COLOR_ID) + RPM::COLON);
+    ui->radioButtonImage->setText(RPM::translate(Translations::IMAGE) + RPM::COLON);
+    ui->labelNumberPerPortion->setText(RPM::translate(Translations::NUMBER_PER_PORTION) + RPM::COLON);
+    ui->labelPortionsRay->setText(RPM::translate(Translations::RAY_PORTIONS) + RPM::COLON);
+    ui->labelSize->setText(RPM::translate(Translations::SIZE) + RPM::COLON);
+    ui->labelInitialVelocity->setText(RPM::translate(Translations::INITIAL_VELOCITY) + RPM::COLON);
+    ui->labelVelocityAddition->setText(RPM::translate(Translations::VELOCITY_ADDITION) + RPM::COLON);
+    ui->labelInitialYRotation->setText(RPM::translate(Translations::INITIAL_Y_ROTATION) + RPM::COLON);
+    ui->labelYRotationAddition->setText(RPM::translate(Translations::Y_ROTATION_ADDITION) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -139,6 +153,7 @@ void DialogCommandChangeWeather::on_radioButtonCustom_toggled(bool checked)
     ui->panelPrimitiveInitialYRotation->setEnabled(checked);
     ui->labelYRotationAddition->setEnabled(checked);
     ui->panelPrimitiveYRotationAddition->setEnabled(checked);
+    ui->groupBoxOptions->setEnabled(checked);
 }
 
 // -------------------------------------------------------

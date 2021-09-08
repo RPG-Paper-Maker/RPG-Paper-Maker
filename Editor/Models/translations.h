@@ -1364,6 +1364,14 @@ public:
     static const QString NEW_BOX_WIDTH;
     static const QString INITIAL_PARTY_MEMBERS;
     static const QString SET_INITIAL_PARTY_MEMBERS;
+    static const QString CHANGE_WEATHER;
+    static const QString RAIN;
+    static const QString SNOW;
+    static const QString NUMBER_PER_PORTION;
+    static const QString INITIAL_VELOCITY;
+    static const QString VELOCITY_ADDITION;
+    static const QString INITIAL_Y_ROTATION;
+   static  const QString Y_ROTATION_ADDITION;
 
     Translations();
     virtual ~Translations();

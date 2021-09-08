@@ -1330,5 +1330,13 @@
     "new.box.length": "New box length",
     "new.box.width": "New box width",
     "initial.party.members": "Initial party members",
-    "set.initial.party.member": "Set initial party member"
+    "set.initial.party.member": "Set initial party member",
+    "change.weather": "Change weather",
+    "rain": "Rain",
+    "snow": "Snow",
+    "number.per.portion": "Number per portion",
+    "initial.velocity": "Initial velocity",
+    "velocity.addition": "Velocity addition",
+    "initial.y.rotation": "Initial Y rotation",
+    "y.rotation.addition": "Y rotation addition"
 }
