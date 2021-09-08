@@ -48,6 +48,8 @@ public slots:
     void on_radioButtonCustom_toggled(bool checked);
     void on_radioButtonColor_toggled(bool checked);
     void on_radioButtonImage_toggled(bool checked);
+    void on_pushButtonRain_clicked();
+    void on_pushButtonSnow_clicked();
 };
 
 #endif // DIALOGCOMMANDCHANGEWEATHER_H

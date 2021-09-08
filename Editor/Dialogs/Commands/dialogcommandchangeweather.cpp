@@ -73,6 +73,7 @@ void DialogCommandChangeWeather::initializePrimitives()
     ui->panelPrimitiveVelocityAddition->initializeMessage(true, m_parameters, m_properties);
     ui->panelPrimitiveInitialYRotation->initializeMessage(true, m_parameters, m_properties);
     ui->panelPrimitiveYRotationAddition->initializeMessage(true, m_parameters, m_properties);
+    this->on_pushButtonRain_clicked();
 }
 
 // -------------------------------------------------------
@@ -168,4 +169,66 @@ void DialogCommandChangeWeather::on_radioButtonColor_toggled(bool checked)
 void DialogCommandChangeWeather::on_radioButtonImage_toggled(bool checked)
 {
     ui->widgetPictureImage->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandChangeWeather::on_pushButtonRain_clicked()
+{
+    ui->radioButtonImage->setChecked(true);
+    m_imageValueID->setIsActivated(false);
+    m_imageValueID->setKind(PrimitiveValueKind::Number);
+    m_imageValueID->setNumberValue(1);
+    ui->widgetPictureImage->setPicture(reinterpret_cast<SystemPicture *>(
+        SuperListItem::getById(RPM::get()->project()->picturesDatas()->model(
+        PictureKind::Particles)->invisibleRootItem(), 1)));
+    ui->panelPrimitiveNumberPerPortion->setKind(PrimitiveValueKind::Number);
+    ui->panelPrimitiveNumberPerPortion->setNumberValue(300);
+    ui->panelPrimitivePortionsRay->setKind(PrimitiveValueKind::Number);
+    ui->panelPrimitivePortionsRay->setNumberValue(1);
+    ui->panelPrimitiveSize->setKind(PrimitiveValueKind::Number);
+    ui->panelPrimitiveSize->setNumberValue(6);
+    ui->panelPrimitiveDepthTest->setKind(PrimitiveValueKind::Switch);
+    ui->panelPrimitiveDepthTest->setSwitchValue(true);
+    ui->panelPrimitiveDepthWrite->setKind(PrimitiveValueKind::Switch);
+    ui->panelPrimitiveDepthWrite->setSwitchValue(false);
+    ui->panelPrimitiveInitialVelocity->setKind(PrimitiveValueKind::Message);
+    ui->panelPrimitiveInitialVelocity->setMessageValue("-6");
+    ui->panelPrimitiveVelocityAddition->setKind(PrimitiveValueKind::Message);
+    ui->panelPrimitiveVelocityAddition->setMessageValue("-Math.random() * 0.002");
+    ui->panelPrimitiveInitialYRotation->setKind(PrimitiveValueKind::Message);
+    ui->panelPrimitiveInitialYRotation->setMessageValue("0");
+    ui->panelPrimitiveYRotationAddition->setKind(PrimitiveValueKind::Message);
+    ui->panelPrimitiveYRotationAddition->setMessageValue("0");
+}
+
+// -------------------------------------------------------
+
+void DialogCommandChangeWeather::on_pushButtonSnow_clicked()
+{
+    ui->radioButtonImage->setChecked(true);
+    m_imageValueID->setIsActivated(false);
+    m_imageValueID->setKind(PrimitiveValueKind::Number);
+    m_imageValueID->setNumberValue(2);
+    ui->widgetPictureImage->setPicture(reinterpret_cast<SystemPicture *>(
+        SuperListItem::getById(RPM::get()->project()->picturesDatas()->model(
+        PictureKind::Particles)->invisibleRootItem(), 2)));
+    ui->panelPrimitiveNumberPerPortion->setKind(PrimitiveValueKind::Number);
+    ui->panelPrimitiveNumberPerPortion->setNumberValue(200);
+    ui->panelPrimitivePortionsRay->setKind(PrimitiveValueKind::Number);
+    ui->panelPrimitivePortionsRay->setNumberValue(2);
+    ui->panelPrimitiveSize->setKind(PrimitiveValueKind::Number);
+    ui->panelPrimitiveSize->setNumberValue(6);
+    ui->panelPrimitiveDepthTest->setKind(PrimitiveValueKind::Switch);
+    ui->panelPrimitiveDepthTest->setSwitchValue(true);
+    ui->panelPrimitiveDepthWrite->setKind(PrimitiveValueKind::Switch);
+    ui->panelPrimitiveDepthWrite->setSwitchValue(false);
+    ui->panelPrimitiveInitialVelocity->setKind(PrimitiveValueKind::Message);
+    ui->panelPrimitiveInitialVelocity->setMessageValue("-1");
+    ui->panelPrimitiveVelocityAddition->setKind(PrimitiveValueKind::Message);
+    ui->panelPrimitiveVelocityAddition->setMessageValue("-Math.random() * 0.002");
+    ui->panelPrimitiveInitialYRotation->setKind(PrimitiveValueKind::Message);
+    ui->panelPrimitiveInitialYRotation->setMessageValue("0");
+    ui->panelPrimitiveYRotationAddition->setKind(PrimitiveValueKind::Message);
+    ui->panelPrimitiveYRotationAddition->setMessageValue("0.001");
 }
