@@ -207,12 +207,12 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButtonChangeMeteo">
+               <widget class="QPushButton" name="pushButtonChangeWeather">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
-                 <string>Change meteo...</string>
+                 <string>Change weather...</string>
                 </property>
                </widget>
               </item>

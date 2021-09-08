@@ -121,6 +121,7 @@ private slots:
     void on_pushButtonChangeExperienceCurve_clicked();
     void on_pushButtonChangeClass_clicked();
     void on_pushButtonChangeChronometer_clicked();
+    void on_pushButtonChangeWeather_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

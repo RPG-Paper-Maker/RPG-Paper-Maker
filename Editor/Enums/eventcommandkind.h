@@ -94,6 +94,7 @@ enum class EventCommandKind {
     ChangeExperienceCurve,
     ChangeClass,
     ChangeChronometer,
+    ChangeWeather,
     Last
 };
 

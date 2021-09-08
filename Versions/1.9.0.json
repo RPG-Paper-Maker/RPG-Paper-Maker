@@ -9,11 +9,12 @@
 	    "Terrain tag tileset",
 	    "Detections: choose smaller boxes",
 	    "System: initial party members",
-	    "Command change meteo",
+	    "Command change weather (rain, snow, custom particles)",
 	    "Command game over + game over screen",
 	    "Command play a video",
 	    "Hero description",
-	    "Skills messages (ingame battles)"
+	    "Skills messages (ingame battles)",
+	    "Updating default camera properties (distance+vertical angle)"
     ],
     "bugs": [
     	"Closing a project make engine crash",
@@ -25,12 +26,13 @@
         2,
         2,
         2,
+        2,
         1,
         0,
         0,
         0,
         0,
-        0,
+        2
 
         2,
         2

@@ -53,7 +53,6 @@ PanelMainMenu::~PanelMainMenu()
 
 void PanelMainMenu::loadContents()
 {
-    /*
     // News
     QNetworkAccessManager manager;
     QNetworkReply *reply;
@@ -86,7 +85,7 @@ void PanelMainMenu::loadContents()
         image.loadFromData(reply->readAll());
         obj = json[1].toObject();
         ui->widgetNews2->update(obj["title"].toString(), image, obj["link"].toString());
-    }*/
+    }
 
     // Recent projects
     this->connect(ui->panelRecentProjects, SIGNAL(openingProject(QString)), this

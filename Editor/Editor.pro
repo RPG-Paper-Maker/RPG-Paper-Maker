@@ -66,6 +66,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommandchangeproperty.h \
     Dialogs/Commands/dialogcommandchangescreentone.h \
     Dialogs/Commands/dialogcommandchangestatus.h \
+    Dialogs/Commands/dialogcommandchangeweather.h \
     Dialogs/Commands/dialogcommandcomment.h \
     Dialogs/Commands/dialogcommandcreateobjectinmap.h \
     Dialogs/Commands/dialogcommanddisplayananimation.h \
@@ -506,6 +507,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
     Dialogs/Commands/dialogcommandchangescreentone.cpp \
     Dialogs/Commands/dialogcommandchangestatus.cpp \
+    Dialogs/Commands/dialogcommandchangeweather.cpp \
     Dialogs/Commands/dialogcommandcomment.cpp \
     Dialogs/Commands/dialogcommandcreateobjectinmap.cpp \
     Dialogs/Commands/dialogcommanddisplayananimation.cpp \
@@ -886,6 +888,7 @@ FORMS += \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
     Dialogs/Commands/dialogcommandchangescreentone.ui \
     Dialogs/Commands/dialogcommandchangestatus.ui \
+    Dialogs/Commands/dialogcommandchangeweather.ui \
     Dialogs/Commands/dialogcommandcomment.ui \
     Dialogs/Commands/dialogcommandcreateobjectinmap.ui \
     Dialogs/Commands/dialogcommanddisplayananimation.ui \
