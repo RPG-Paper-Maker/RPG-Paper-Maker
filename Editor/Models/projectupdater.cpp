@@ -1300,4 +1300,5 @@ void ProjectUpdater::updateVersion_1_8_3()
 void ProjectUpdater::updateVersion_1_9_0()
 {
     m_project->gameDatas()->systemDatas()->setDefaultInitialPartyMembers();
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_PARTICLES);
 }

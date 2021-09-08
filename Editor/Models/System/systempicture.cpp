@@ -149,6 +149,8 @@ QString SystemPicture::getLocalFolder(PictureKind kind) {
         return RPM::PATH_HUD_ANIMATIONS;
     case PictureKind::SkyBoxes:
         return RPM::PATH_SKY_BOXES;
+    case PictureKind::Particles:
+        return RPM::PATH_PARTICLES;
     default:
         throw std::invalid_argument("Kind of picture path not implemented");
     }

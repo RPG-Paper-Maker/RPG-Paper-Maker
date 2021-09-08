@@ -75,6 +75,7 @@ void PicturesDatas::setDefault() {
     this->setDefaultHUDPictures(names);
     this->setDefaultAnimations(names);
     this->setDefaultSkyBoxes(names);
+    this->setDefaultParticles(names);
 }
 
 // -------------------------------------------------------
@@ -219,6 +220,14 @@ void PicturesDatas::setDefaultSkyBoxes(QList<QString>& names)
     names << "clouds-front" << "clouds-back"<< "clouds-top" << "clouds-bottom"
         << "clouds-left" << "clouds-right";
     this->setDefaultPictures(names, PictureKind::SkyBoxes);
+}
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultParticles(QList<QString>& names)
+{
+    names << "raindrop" << "snowflake";
+    this->setDefaultPictures(names, PictureKind::Particles);
 }
 
 // -------------------------------------------------------

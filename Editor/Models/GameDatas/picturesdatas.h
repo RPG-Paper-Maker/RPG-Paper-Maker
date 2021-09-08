@@ -55,6 +55,7 @@ public:
     void setDefaultObjects3D(QList<QString>& names);
     void setDefaultAnimations(QList<QString>& names);
     void setDefaultSkyBoxes(QList<QString>& names);
+    void setDefaultParticles(QList<QString>& names);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

@@ -214,6 +214,8 @@ const QString RPM::PATH_BATTLERS = Common::pathCombine(PATH_TEXTURES_2D,
     "Battlers");
 const QString RPM::PATH_SKY_BOXES = Common::pathCombine(PATH_TEXTURES_2D,
     "SkyBoxes");
+const QString RPM::PATH_PARTICLES = Common::pathCombine(PATH_TEXTURES_2D,
+    "Particles");
 const QString RPM::PATH_VIDEOS = Common::pathCombine(FOLDER_CONTENT,
     "Videos");
 const QString RPM::PATH_SONGS = Common::pathCombine(FOLDER_CONTENT,

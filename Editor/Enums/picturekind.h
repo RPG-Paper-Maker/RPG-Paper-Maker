@@ -39,6 +39,7 @@ enum class PictureKind {
     Pictures,
     Animations,
     SkyBoxes,
+    Particles,
     Last
 };
 

@@ -61,7 +61,7 @@ void DialogCommandChangeWeather::initializePrimitives()
     ui->radioButtonNone->setChecked(true);
     ui->panelPrimitiveColorID->initializeDataBaseCommandId(RPM::get()->project()
         ->gameDatas()->systemDatas()->modelColors(), m_parameters, m_properties);
-    ui->widgetPictureImage->setKind(PictureKind::Pictures);
+    ui->widgetPictureImage->setKind(PictureKind::Particles);
     ui->widgetPictureImage->initializePrimitive(m_imageValueID, m_properties,
         m_parameters);
     ui->panelPrimitiveNumberPerPortion->initializeNumber(m_parameters, m_properties);

@@ -130,6 +130,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     dir.mkpath(RPM::PATH_BATTLERS);
     dir.mkpath(RPM::PATH_TEXTURES_OBJECT_3D);
     dir.mkpath(RPM::PATH_SKY_BOXES);
+    dir.mkpath(RPM::PATH_PARTICLES);
     dir.mkpath(RPM::PATH_VIDEOS);
     dir.mkpath(RPM::PATH_SONGS);
     dir.mkpath(RPM::PATH_MUSICS);
