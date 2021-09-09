@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>471</width>
-    <height>535</height>
+    <height>599</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -511,6 +511,63 @@
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBoxWaitEnd">
+         <property name="text">
+          <string>Wait the end of the command before the next command</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0,0,0">
+         <item>
+          <spacer name="horizontalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelTime">
+           <property name="text">
+            <string>Time:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="PanelPrimitiveValue" name="panelPrimitiveTime" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>250</width>
+             <height>27</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>250</width>
+             <height>27</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelSeconds">
+           <property name="text">
+            <string>second(s)</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>

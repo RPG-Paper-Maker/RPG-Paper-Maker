@@ -2775,6 +2775,12 @@ QString EventCommand::strChangeWeather(QStandardItemModel *properties,
         str += list.join(RPM::NEW_LINE);
         break;
     }
+    if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
+        str += RPM::NEW_LINE + RPM::BRACKET_LEFT + RPM::translate(Translations
+        ::WAIT_END) + RPM::BRACKET_RIGHT + RPM::NEW_LINE + RPM::translate(
+        Translations::TIME) + RPM::COLON + RPM::SPACE + this->strProperty(i,
+        properties, parameters) + RPM::SPACE + RPM::translate(Translations::SECONDS);
+    }
     return str;
 }
 

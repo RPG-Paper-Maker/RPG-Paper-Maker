@@ -73,6 +73,8 @@ void DialogCommandChangeWeather::initializePrimitives()
     ui->panelPrimitiveVelocityAddition->initializeMessage(true, m_parameters, m_properties);
     ui->panelPrimitiveInitialYRotation->initializeMessage(true, m_parameters, m_properties);
     ui->panelPrimitiveYRotationAddition->initializeMessage(true, m_parameters, m_properties);
+    ui->panelPrimitiveTime->initializeNumber(m_parameters, m_properties, false);
+    ui->panelPrimitiveTime->setNumberDoubleValue(0);
     this->on_pushButtonRain_clicked();
 }
 
@@ -97,6 +99,9 @@ void DialogCommandChangeWeather::translate()
     ui->labelVelocityAddition->setText(RPM::translate(Translations::VELOCITY_ADDITION) + RPM::COLON);
     ui->labelInitialYRotation->setText(RPM::translate(Translations::INITIAL_Y_ROTATION) + RPM::COLON);
     ui->labelYRotationAddition->setText(RPM::translate(Translations::Y_ROTATION_ADDITION) + RPM::COLON);
+    ui->checkBoxWaitEnd->setText(RPM::translate(Translations::WAIT_END_MOVE_BEFORE_NEXT_COMMAND));
+    ui->labelTime->setText(RPM::translate(Translations::TIME) + RPM::COLON);
+    ui->labelSeconds->setText(RPM::translate(Translations::SECONDS));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -132,6 +137,8 @@ EventCommand * DialogCommandChangeWeather::getCommand() const
         ui->panelPrimitiveInitialYRotation->getCommand(command);
         ui->panelPrimitiveYRotationAddition->getCommand(command);
     }
+    command.append(RPM::boolToString(ui->checkBoxWaitEnd->isChecked()));
+    ui->panelPrimitiveTime->getCommand(command);
     return new EventCommand(EventCommandKind::ChangeWeather, command);
 }
 
@@ -171,6 +178,8 @@ void DialogCommandChangeWeather::initialize(EventCommand *command)
         ui->panelPrimitiveYRotationAddition->initializeCommand(command, i);
         break;
     }
+    ui->checkBoxWaitEnd->setChecked(RPM::stringToBool(command->valueCommandAt(i++)));
+    ui->panelPrimitiveTime->initializeCommand(command, i);
 }
 
 // -------------------------------------------------------
