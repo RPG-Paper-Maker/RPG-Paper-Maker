@@ -53,6 +53,8 @@ const QString SystemDatas::JSON_SOUND_CONFIRMATION = "sco";
 const QString SystemDatas::JSON_SOUND_CANCEL = "sca";
 const QString SystemDatas::JSON_SOUND_IMPOSSIBLE = "si";
 const QString SystemDatas::JSON_DIALOG_BOX_OPTIONS = "dbo";
+const QString SystemDatas::JSON_FACESET_SCALING_WIDTH = "facesetScalingWidth";
+const QString SystemDatas::JSON_FACESET_SCALING_HEIGHT = "facesetScalingHeight";
 const QString SystemDatas::JSON_SKY_BOXES = "sb";
 const QString SystemDatas::JSON_INITIAL_PARTY_MEMBERS = "initialPartyMembers";
 const QString SystemDatas::JSON_ANTIALIASING = "aa";
@@ -76,6 +78,8 @@ const int SystemDatas::DEFAULT_AUTOTILES_FRAMES = 4;
 const int SystemDatas::DEFAULT_AUTOTILES_FRAME_DURATION = 150;
 const int SystemDatas::DEFAULT_PORTION_RAY_ENGINE = 6;
 const int SystemDatas::DEFAULT_PORTION_RAY_INGAME = 3;
+const int SystemDatas::DEFAULT_FACESET_SCALING_WIDTH = 160;
+const int SystemDatas::DEFAULT_FACESET_SCALING_HEIGHT = 160;
 const int SystemDatas::DEFAULT_SAVE_SLOTS = 4;
 
 // -------------------------------------------------------
@@ -123,6 +127,8 @@ SystemDatas::SystemDatas() :
     m_soundCancel(new SystemPlaySong(-1, SongKind::Sound)),
     m_soundImpossible(new SystemPlaySong(-1, SongKind::Sound)),
     m_dialogBoxOptions(new EventCommand(EventCommandKind::SetDialogBoxOptions)),
+    m_facesetScalingWidth(DEFAULT_FACESET_SCALING_WIDTH),
+    m_facesetScalingHeight(DEFAULT_FACESET_SCALING_HEIGHT),
     m_saveSlots(DEFAULT_SAVE_SLOTS)
 {
 
@@ -428,6 +434,26 @@ EventCommand * SystemDatas::dialogBoxOptions() const {
 
 void SystemDatas::setDialogBoxOptions(EventCommand *command) {
     m_dialogBoxOptions = command;
+}
+
+int SystemDatas::facesetScalingWidth() const
+{
+    return m_facesetScalingWidth;
+}
+
+void SystemDatas::setFacesetScalingWidth(int facesetScalingWidth)
+{
+    m_facesetScalingWidth = facesetScalingWidth;
+}
+
+int SystemDatas::facesetScalingHeight() const
+{
+    return m_facesetScalingHeight;
+}
+
+void SystemDatas::setFacesetScalingHeight(int facesetScalingHeight)
+{
+    m_facesetScalingHeight = facesetScalingHeight;
 }
 
 int SystemDatas::saveSlots() const
@@ -986,6 +1012,16 @@ void SystemDatas::read(const QJsonObject &json){
     // Dialog box options
     m_dialogBoxOptions->read(json[JSON_DIALOG_BOX_OPTIONS].toObject());
 
+    // Faceset
+    if (json.contains(JSON_FACESET_SCALING_WIDTH))
+    {
+        m_facesetScalingWidth = json[JSON_FACESET_SCALING_WIDTH].toInt();
+    }
+    if (json.contains(JSON_FACESET_SCALING_HEIGHT))
+    {
+        m_facesetScalingHeight = json[JSON_FACESET_SCALING_HEIGHT].toInt();
+    }
+
     // Enter name options
     jsonList = json[JSON_ENTER_NAME_TABLE].toArray();
     QList<QString> listEnterName;
@@ -1238,6 +1274,16 @@ void SystemDatas::write(QJsonObject &json) const{
     // Dialog box options
     obj = m_dialogBoxOptions->getJSON();
     json[JSON_DIALOG_BOX_OPTIONS] = obj;
+
+    // Faceset
+    if (m_facesetScalingWidth != DEFAULT_FACESET_SCALING_WIDTH)
+    {
+        json[JSON_FACESET_SCALING_WIDTH] = m_facesetScalingWidth;
+    }
+    if (m_facesetScalingHeight != DEFAULT_FACESET_SCALING_HEIGHT)
+    {
+        json[JSON_FACESET_SCALING_HEIGHT] = m_facesetScalingHeight;
+    }
 
     // Enter name options
     jsonArray = QJsonArray();

@@ -628,6 +628,12 @@ void DialogSystems::translate()
     ui->labelBattlersRows->setText(RPM::translate(Translations::BATTLERS_ROWS) + RPM::COLON);
     ui->pushButtonEnterNameOptions->setText(RPM::translate(Translations
         ::ENTER_NAME_OPTIONS) + RPM::DOT_DOT_DOT);
+    ui->labelFacesetScalingWidth->setText(RPM::translate(Translations
+        ::FACESET_SCALING_WIDTH + RPM::SPACE + RPM::PARENTHESIS_LEFT + RPM
+        ::translate(Translations::IN_PX) + RPM::PARENTHESIS_RIGHT + RPM::COLON));
+    ui->labelFacesetScalingHeight->setText(RPM::translate(Translations
+        ::FACESET_SCALING_HEIGHT + RPM::SPACE + RPM::PARENTHESIS_LEFT + RPM
+        ::translate(Translations::IN_PX) + RPM::PARENTHESIS_RIGHT + RPM::COLON));
     ui->groupBoxItemsTypes->setTitle(RPM::translate(Translations::ITEMS_TYPES));
     ui->groupBoxInventoryFilters->setTitle(RPM::translate(Translations::INVENTORY_FILTERS));
     ui->groupBoxMainMenuCommands->setTitle(RPM::translate(Translations::MAIN_MENU_COMMANDS));
@@ -777,6 +783,20 @@ void DialogSystems::on_pushButtonDefaultDialogBoxOptions_clicked() {
         RPM::get()->project()->gameDatas()->systemDatas()->setDialogBoxOptions(
             command);
     }
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxFacesetScalingWidth_valueChanged(int i)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setFacesetScalingWidth(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxFacesetScalingHeight_valueChanged(int i)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setFacesetScalingHeight(i);
 }
 
 // -------------------------------------------------------

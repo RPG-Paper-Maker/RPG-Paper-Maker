@@ -1338,5 +1338,7 @@
     "initial.velocity": "Initial velocity",
     "velocity.addition": "Velocity addition",
     "initial.y.rotation": "Initial Y rotation",
-    "y.rotation.addition": "Y rotation addition"
+    "y.rotation.addition": "Y rotation addition",
+    "faceset.scaling.width": "Faceset scaling width",
+    "faceset.scaling.height": "Faceset scaling height"
 }

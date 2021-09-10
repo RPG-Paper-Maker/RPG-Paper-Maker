@@ -57,6 +57,8 @@ public:
     static const QString JSON_SOUND_CANCEL;
     static const QString JSON_SOUND_IMPOSSIBLE;
     static const QString JSON_DIALOG_BOX_OPTIONS;
+    static const QString JSON_FACESET_SCALING_WIDTH;
+    static const QString JSON_FACESET_SCALING_HEIGHT;
     static const QString JSON_SKY_BOXES;
     static const QString JSON_INITIAL_PARTY_MEMBERS;
     static const QString JSON_ANTIALIASING;
@@ -80,6 +82,8 @@ public:
     static const int DEFAULT_AUTOTILES_FRAME_DURATION;
     static const int DEFAULT_PORTION_RAY_ENGINE;
     static const int DEFAULT_PORTION_RAY_INGAME;
+    static const int DEFAULT_FACESET_SCALING_WIDTH;
+    static const int DEFAULT_FACESET_SCALING_HEIGHT;
     static const int DEFAULT_SAVE_SLOTS;
 
     SystemDatas();
@@ -153,6 +157,10 @@ public:
     SystemPlaySong * soundImpossible() const;
     EventCommand * dialogBoxOptions() const;
     void setDialogBoxOptions(EventCommand *command);
+    int facesetScalingWidth() const;
+    void setFacesetScalingWidth(int facesetScalingWidth);
+    int facesetScalingHeight() const;
+    void setFacesetScalingHeight(int facesetScalingHeight);
     int saveSlots() const;
     void setSaveSlots(int saveSlots);
 
@@ -226,6 +234,8 @@ private:
     SystemPlaySong *m_soundCancel;
     SystemPlaySong *m_soundImpossible;
     EventCommand *m_dialogBoxOptions;
+    int m_facesetScalingWidth;
+    int m_facesetScalingHeight;
     int m_saveSlots;
 };
 

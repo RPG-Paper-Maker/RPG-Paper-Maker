@@ -79,6 +79,8 @@ private slots:
     void on_comboBoxBattleLevel_currentIndexChanged(int index);
     void on_comboBoxBattleExp_currentIndexChanged(int index);
     void on_pushButtonDefaultDialogBoxOptions_clicked();
+    void on_spinBoxFacesetScalingWidth_valueChanged(int i);
+    void on_spinBoxFacesetScalingHeight_valueChanged(int i);
     void on_spinBoxSaveSlots_valueChanged(int i);
     void on_pushButtonEnterNameOptions_clicked();
     void on_statisticsUpdated();

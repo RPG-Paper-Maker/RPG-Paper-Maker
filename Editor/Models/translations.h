@@ -1371,7 +1371,9 @@ public:
     static const QString INITIAL_VELOCITY;
     static const QString VELOCITY_ADDITION;
     static const QString INITIAL_Y_ROTATION;
-   static  const QString Y_ROTATION_ADDITION;
+    static const QString Y_ROTATION_ADDITION;
+    static const QString FACESET_SCALING_WIDTH;
+    static const QString FACESET_SCALING_HEIGHT;
 
     Translations();
     virtual ~Translations();
