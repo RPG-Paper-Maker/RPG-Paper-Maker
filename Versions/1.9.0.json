@@ -14,7 +14,9 @@
 	    "Command play a video",
 	    "Hero description",
 	    "Skills messages (ingame battles)",
-	    "Updating default camera properties (distance+vertical angle)"
+	    "Updating default camera properties (distance+vertical angle)",
+	    "Add Cyrillic letters to Default.ttf font",
+	    "Adding a scrollbar for some comboboxes"
     ],
     "bugs": [
     	"Closing a project make engine crash",
@@ -27,12 +29,14 @@
         2,
         2,
         2,
+        2,
         1,
         0,
         0,
         0,
-        0,
-        2
+        2,
+        2,
+        2,
 
         2,
         2

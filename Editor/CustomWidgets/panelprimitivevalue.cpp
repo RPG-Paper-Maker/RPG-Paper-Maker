@@ -26,7 +26,13 @@ PanelPrimitiveValue::PanelPrimitiveValue(QWidget *parent) :
     m_modelNeedDelete(true)
 {
     ui->setupUi(this);
-
+    ui->comboBoxChoice->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui->comboBoxDataBase->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui->comboBoxDataBase_2->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui->comboBoxKeyBoard->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui->comboBoxParameter->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui->comboBoxProperty->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui->comboBoxSwitch->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     ui->comboBoxChoice->setMaxVisibleItems(12);
     ui->comboBoxChoice->setStyleSheet("combobox-popup: 0;");
     Q_FOREACH(QSpinBox * sp, findChildren<QSpinBox*>()) {
