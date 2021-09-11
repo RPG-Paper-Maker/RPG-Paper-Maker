@@ -64,7 +64,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-1013</y>
+                <y>0</y>
                 <width>252</width>
                 <height>1699</height>
                </rect>
@@ -1908,6 +1908,207 @@
              <property name="title">
               <string>Game over</string>
              </property>
+             <layout class="QGridLayout" name="gridLayout_58">
+              <item row="0" column="0">
+               <layout class="QHBoxLayout" name="horizontalLayout_12" stretch="0,1">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_37" stretch="0,0,0,1">
+                  <item>
+                   <widget class="QGroupBox" name="groupBoxGameOverBackground">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>300</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="title">
+                     <string>Background</string>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout_54">
+                     <item row="0" column="0">
+                      <layout class="QGridLayout" name="gridLayout_55" rowstretch="0,1">
+                       <item row="0" column="0">
+                        <widget class="QRadioButton" name="radioButtonImageGameOver">
+                         <property name="text">
+                          <string>Image:</string>
+                         </property>
+                         <property name="checked">
+                          <bool>true</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="WidgetPicture" name="widgetPictureGameOverBackground" native="true">
+                         <property name="minimumSize">
+                          <size>
+                           <width>200</width>
+                           <height>27</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>200</width>
+                           <height>27</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="2" rowspan="2">
+                        <spacer name="horizontalSpacer_7">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>78</width>
+                           <height>58</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item row="1" column="0">
+                        <widget class="QRadioButton" name="radioButtonVideoGameOver">
+                         <property name="text">
+                          <string>Video:</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="1">
+                        <widget class="WidgetVideo" name="widgetVideoGameOverBackground" native="true">
+                         <property name="enabled">
+                          <bool>false</bool>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>200</width>
+                           <height>27</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>200</width>
+                           <height>27</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_13" stretch="0,1">
+                    <item>
+                     <widget class="QLabel" name="labelMusicGameOver">
+                      <property name="text">
+                       <string>Music:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_8">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>0</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_14" stretch="0,1">
+                    <item>
+                     <widget class="WidgetSong" name="widgetChooseMusicGameOver" native="true">
+                      <property name="minimumSize">
+                       <size>
+                        <width>200</width>
+                        <height>27</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>200</width>
+                        <height>27</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_9">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>108</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <spacer name="verticalSpacer_6">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>308</width>
+                      <height>13</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QGroupBox" name="groupBoxMenuCommandsGameOver">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="title">
+                   <string>Menu commands</string>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_56">
+                   <item row="0" column="0">
+                    <widget class="WidgetSuperTree" name="treeViewGameOverMenuCommands">
+                     <attribute name="headerVisible">
+                      <bool>false</bool>
+                     </attribute>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>

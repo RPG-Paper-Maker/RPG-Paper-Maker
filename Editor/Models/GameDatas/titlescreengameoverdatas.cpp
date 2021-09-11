@@ -13,6 +13,7 @@
 #include "rpm.h"
 #include "common.h"
 #include "systemtitlecommand.h"
+#include "systemgameovercommand.h"
 #include "titlesettingkind.h"
 #include "systemcheckable.h"
 
@@ -22,6 +23,13 @@ const QString TitleScreenGameOverDatas::JSON_TITLE_BACKGROUND_VIDEO = "tbv";
 const QString TitleScreenGameOverDatas::JSON_TITLE_MUSIC = "tm";
 const QString TitleScreenGameOverDatas::JSON_TITLE_COMMANDS = "tc";
 const QString TitleScreenGameOverDatas::JSON_TITLE_SETTINGS = "ts";
+const QString TitleScreenGameOverDatas::JSON_IS_GAME_OVER_BACKGROUND_IMAGE = "isGameOverBackgroundImage";
+const QString TitleScreenGameOverDatas::JSON_GAME_OVER_BACKGROUND_IMAGE = "gameOverBackgroundImage";
+const QString TitleScreenGameOverDatas::JSON_GAME_OVER_BACKGROUND_VIDEO = "gameOverBackgroundVideo";
+const QString TitleScreenGameOverDatas::JSON_GAME_OVER_MUSIC = "gameOverMusic";
+const QString TitleScreenGameOverDatas::JSON_GAME_OVER_COMMANDS = "gameOverCommands";
+const bool TitleScreenGameOverDatas::DEFAULT_IS_TITLE_BACKGROUND_IMAGE = true;
+const bool TitleScreenGameOverDatas::DEFAULT_IS_GAME_OVER_BACKGROUND_IMAGE = true;
 
 // -------------------------------------------------------
 //
@@ -30,50 +38,97 @@ const QString TitleScreenGameOverDatas::JSON_TITLE_SETTINGS = "ts";
 // -------------------------------------------------------
 
 TitleScreenGameOverDatas::TitleScreenGameOverDatas() :
-    m_isBackgroundImage(true),
+    m_isTitleBackgroundImage(DEFAULT_IS_TITLE_BACKGROUND_IMAGE),
     m_titleBackgroundImageID(new SuperListItem),
     m_titleBackgroundVideoID(new SuperListItem),
     m_titleMusic(new SystemPlaySong(-1, SongKind::Music)),
     m_modelTitleCommands(new QStandardItemModel),
-    m_modelTitleSettings(new QStandardItemModel)
+    m_modelTitleSettings(new QStandardItemModel),
+    m_isGameOverBackgroundImage(DEFAULT_IS_GAME_OVER_BACKGROUND_IMAGE),
+    m_gameOverBackgroundImageID(new SuperListItem),
+    m_gameOverBackgroundVideoID(new SuperListItem),
+    m_gameOverMusic(new SystemPlaySong(-1, SongKind::Music)),
+    m_modelGameOverCommands(new QStandardItemModel)
 {
 
 }
 
-TitleScreenGameOverDatas::~TitleScreenGameOverDatas() {
+TitleScreenGameOverDatas::~TitleScreenGameOverDatas()
+{
     delete m_titleBackgroundImageID;
     delete m_titleBackgroundVideoID;
     delete m_titleMusic;
+    delete m_gameOverBackgroundImageID;
+    delete m_gameOverBackgroundVideoID;
+    delete m_gameOverMusic;
     SuperListItem::deleteModel(m_modelTitleCommands);
     SuperListItem::deleteModel(m_modelTitleSettings);
+    SuperListItem::deleteModel(m_modelGameOverCommands);
 }
 
-bool TitleScreenGameOverDatas::isBackgroundImage() const {
-    return m_isBackgroundImage;
+bool TitleScreenGameOverDatas::isTitleBackgroundImage() const
+{
+    return m_isTitleBackgroundImage;
 }
 
-void TitleScreenGameOverDatas::setIsBackgroundImage(bool b) {
-    m_isBackgroundImage = b;
+void TitleScreenGameOverDatas::setIsTitleBackgroundImage(bool b)
+{
+    m_isTitleBackgroundImage = b;
 }
 
-SuperListItem * TitleScreenGameOverDatas::titleBackgroundImageID() const {
+SuperListItem * TitleScreenGameOverDatas::titleBackgroundImageID() const
+{
     return m_titleBackgroundImageID;
 }
 
-SuperListItem * TitleScreenGameOverDatas::titleBackgroundVideoID() const {
+SuperListItem * TitleScreenGameOverDatas::titleBackgroundVideoID() const
+{
     return m_titleBackgroundVideoID;
 }
 
-SystemPlaySong * TitleScreenGameOverDatas::titleMusic() const {
+SystemPlaySong * TitleScreenGameOverDatas::titleMusic() const
+{
     return m_titleMusic;
 }
 
-QStandardItemModel * TitleScreenGameOverDatas::modelTitleCommands() const {
+QStandardItemModel * TitleScreenGameOverDatas::modelTitleCommands() const
+{
     return m_modelTitleCommands;
 }
 
-QStandardItemModel * TitleScreenGameOverDatas::modelTitleSettings() const {
+QStandardItemModel * TitleScreenGameOverDatas::modelTitleSettings() const
+{
     return m_modelTitleSettings;
+}
+
+bool TitleScreenGameOverDatas::isGameOverBackgroundImage() const
+{
+    return m_isGameOverBackgroundImage;
+}
+
+void TitleScreenGameOverDatas::setIsGameOverBackgroundImage(bool isGameOverBackgroundImage)
+{
+    m_isGameOverBackgroundImage = isGameOverBackgroundImage;
+}
+
+SuperListItem * TitleScreenGameOverDatas::gameOverBackgroundImageID() const
+{
+    return m_gameOverBackgroundImageID;
+}
+
+SuperListItem * TitleScreenGameOverDatas::gameOverBackgroundVideoID() const
+{
+    return m_gameOverBackgroundVideoID;
+}
+
+SystemPlaySong * TitleScreenGameOverDatas::gameOverMusic() const
+{
+    return m_gameOverMusic;
+}
+
+QStandardItemModel * TitleScreenGameOverDatas::modelGameOverCommands() const
+{
+    return m_modelGameOverCommands;
 }
 
 // -------------------------------------------------------
@@ -82,9 +137,9 @@ QStandardItemModel * TitleScreenGameOverDatas::modelTitleSettings() const {
 //
 // -------------------------------------------------------
 
-void TitleScreenGameOverDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::PATH_TITLE_SCREEN_GAME_OVER),
-        *this);
+void TitleScreenGameOverDatas::read(QString path)
+{
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_TITLE_SCREEN_GAME_OVER), *this);
 }
 
 // -------------------------------------------------------
@@ -94,6 +149,8 @@ void TitleScreenGameOverDatas::setDefault()
     this->setDefaultTitle();
     this->setDefaultTitleCommands();
     this->setDefaultTitleSettings();
+    this->setDefaultGameOver();
+    this->setDefaultGameOverCommands();
 }
 
 // -------------------------------------------------------
@@ -141,28 +198,57 @@ void TitleScreenGameOverDatas::addTitleSetting(TitleSettingKind kind)
 }
 
 // -------------------------------------------------------
+
+void TitleScreenGameOverDatas::setDefaultGameOver()
+{
+    m_gameOverBackgroundImageID->setId(1);
+    m_gameOverBackgroundVideoID->setId(-1);
+}
+
+// -------------------------------------------------------
+
+void TitleScreenGameOverDatas::setDefaultGameOverCommands()
+{
+    SuperListItem::deleteModel(m_modelGameOverCommands, false);
+    m_modelGameOverCommands->appendRow((new SystemGameOverCommand(-1, RPM
+        ::translate(Translations::CONTINUE), GameOverCommandKind::Continue))
+        ->getModelRow());
+    m_modelGameOverCommands->appendRow((new SystemGameOverCommand(-1, RPM
+        ::translate(Translations::TITLE_SCREEN), GameOverCommandKind::TitleScreen))
+        ->getModelRow());
+    m_modelGameOverCommands->appendRow((new SystemGameOverCommand(-1, RPM
+        ::translate(Translations::EXIT), GameOverCommandKind::Exit))->getModelRow());
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
 
-void TitleScreenGameOverDatas::read(const QJsonObject &json) {
+void TitleScreenGameOverDatas::read(const QJsonObject &json)
+{
     // Clear
     SuperListItem::deleteModel(m_modelTitleCommands, false);
     SuperListItem::deleteModel(m_modelTitleSettings, false);
+    SuperListItem::deleteModel(m_modelGameOverCommands, false);
 
     // Title screen
-    if (json.contains(JSON_IS_TITLE_BACKGROUND_IMAGE)) {
-        m_isBackgroundImage = json[JSON_IS_TITLE_BACKGROUND_IMAGE].toBool();
+    if (json.contains(JSON_IS_TITLE_BACKGROUND_IMAGE))
+    {
+        m_isTitleBackgroundImage = json[JSON_IS_TITLE_BACKGROUND_IMAGE].toBool();
     } else {
-        m_isBackgroundImage = true;
+        m_isTitleBackgroundImage = true;
     }
-    if (json.contains(JSON_TITLE_BACKGROUND_IMAGE)) {
+    if (json.contains(JSON_TITLE_BACKGROUND_IMAGE))
+    {
         m_titleBackgroundImageID->setId(json[JSON_TITLE_BACKGROUND_IMAGE].toInt());
-    } else {
+    } else
+    {
         m_titleBackgroundImageID->reset();
     }
-    if (json.contains(JSON_TITLE_BACKGROUND_VIDEO)) {
+    if (json.contains(JSON_TITLE_BACKGROUND_VIDEO))
+    {
         m_titleBackgroundVideoID->setId(json[JSON_TITLE_BACKGROUND_VIDEO].toInt());
     } else {
         m_titleBackgroundVideoID->reset();
@@ -173,6 +259,30 @@ void TitleScreenGameOverDatas::read(const QJsonObject &json) {
     SystemCheckable *super = new SystemCheckable;
     super->setDisplayID(false);
     SuperListItem::readList(m_modelTitleSettings, super, json, JSON_TITLE_SETTINGS);
+
+    // Game over
+    if (json.contains(JSON_IS_GAME_OVER_BACKGROUND_IMAGE))
+    {
+        m_isGameOverBackgroundImage = json[JSON_IS_GAME_OVER_BACKGROUND_IMAGE].toBool();
+    } else {
+        m_isGameOverBackgroundImage = true;
+    }
+    if (json.contains(JSON_GAME_OVER_BACKGROUND_IMAGE))
+    {
+        m_gameOverBackgroundImageID->setId(json[JSON_GAME_OVER_BACKGROUND_IMAGE].toInt());
+    } else
+    {
+        m_gameOverBackgroundImageID->reset();
+    }
+    if (json.contains(JSON_GAME_OVER_BACKGROUND_VIDEO))
+    {
+        m_gameOverBackgroundVideoID->setId(json[JSON_GAME_OVER_BACKGROUND_VIDEO].toInt());
+    } else {
+        m_gameOverBackgroundVideoID->reset();
+    }
+    m_gameOverMusic->read(json[JSON_GAME_OVER_MUSIC].toObject());
+    SuperListItem::readTree(m_modelGameOverCommands, new SystemGameOverCommand,
+        json, JSON_GAME_OVER_COMMANDS);
 }
 
 // -------------------------------------------------------
@@ -183,15 +293,20 @@ void TitleScreenGameOverDatas::write(QJsonObject &json) const {
     QJsonObject obj;
     int i, l;
 
-    if (m_isBackgroundImage) {
+    // Title screen
+    if (m_isTitleBackgroundImage)
+    {
         m_titleBackgroundVideoID->reset();
-        if (!m_titleBackgroundImageID->isDefault()) {
+        if (!m_titleBackgroundImageID->isDefault())
+        {
             json[JSON_TITLE_BACKGROUND_IMAGE] = m_titleBackgroundImageID->id();
         }
-    } else {
+    } else
+    {
         m_titleBackgroundImageID->reset();
-        json[JSON_IS_TITLE_BACKGROUND_IMAGE] = m_isBackgroundImage;
-        if (m_titleBackgroundVideoID->id() != -1) {
+        json[JSON_IS_TITLE_BACKGROUND_IMAGE] = m_isTitleBackgroundImage;
+        if (m_titleBackgroundVideoID->id() != -1)
+        {
             json[JSON_TITLE_BACKGROUND_VIDEO] = m_titleBackgroundVideoID->id();
         }
     }
@@ -200,12 +315,33 @@ void TitleScreenGameOverDatas::write(QJsonObject &json) const {
     json[JSON_TITLE_MUSIC] = obj;
     SuperListItem::writeTree(m_modelTitleCommands, json, JSON_TITLE_COMMANDS);
     SystemCheckable *super;
-    for (i = 0, l = m_modelTitleSettings->invisibleRootItem()->rowCount(); i < l
-         ; i++)
+    for (i = 0, l = m_modelTitleSettings->invisibleRootItem()->rowCount(); i < l; i++)
     {
         item = m_modelTitleSettings->item(i);
         super = reinterpret_cast<SystemCheckable *>(item->data().value<quintptr>());
         super->setChecked(item->checkState() == Qt::Checked);
     }
     SuperListItem::writeList(m_modelTitleSettings, json, JSON_TITLE_SETTINGS);
+
+    // Game over
+    if (m_isGameOverBackgroundImage)
+    {
+        m_gameOverBackgroundVideoID->reset();
+        if (!m_gameOverBackgroundImageID->isDefault())
+        {
+            json[JSON_GAME_OVER_BACKGROUND_IMAGE] = m_gameOverBackgroundImageID->id();
+        }
+    } else
+    {
+        m_gameOverBackgroundImageID->reset();
+        json[JSON_IS_GAME_OVER_BACKGROUND_IMAGE] = m_isGameOverBackgroundImage;
+        if (m_gameOverBackgroundVideoID->id() != -1)
+        {
+            json[JSON_GAME_OVER_BACKGROUND_VIDEO] = m_gameOverBackgroundVideoID->id();
+        }
+    }
+    obj = QJsonObject();
+    m_gameOverMusic->write(obj);
+    json[JSON_GAME_OVER_MUSIC] = obj;
+    SuperListItem::writeTree(m_modelGameOverCommands, json, JSON_GAME_OVER_COMMANDS);
 }

@@ -151,6 +151,8 @@ QString SystemPicture::getLocalFolder(PictureKind kind) {
         return RPM::PATH_SKY_BOXES;
     case PictureKind::Particles:
         return RPM::PATH_PARTICLES;
+    case PictureKind::GameOver:
+        return RPM::PATH_GAME_OVER;
     default:
         throw std::invalid_argument("Kind of picture path not implemented");
     }

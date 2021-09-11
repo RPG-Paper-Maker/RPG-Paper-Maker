@@ -192,6 +192,8 @@ const QString RPM::PATH_WINDOW_SKINS = Common::pathCombine(PATH_HUD,
     "WindowSkins");
 const QString RPM::PATH_TITLE_SCREEN = Common::pathCombine(PATH_HUD,
     "TitleScreen");
+const QString RPM::PATH_GAME_OVER = Common::pathCombine(PATH_HUD,
+    "GameOver");
 const QString RPM::PATH_HUD_ANIMATIONS = Common::pathCombine(PATH_HUD,
     "Animations");
 const QString RPM::PATH_HUD_PICTURES = Common::pathCombine(PATH_HUD,
@@ -301,6 +303,7 @@ QStringList RPM::ENUM_TO_STRING_AVAILABLE_KIND = {};
 QStringList RPM::ENUM_TO_STRING_OBJECT_MOVING_KIND = {};
 QStringList RPM::ENUM_TO_STRING_SHAPE_KIND = {};
 QStringList RPM::ENUM_TO_STRING_TITLE_COMMAND_KIND = {};
+QStringList RPM::ENUM_TO_STRING_GAME_OVER_COMMAND_KIND = {};
 QStringList RPM::ENUM_TO_STRING_MONSTER_ACTION_TARGET_KIND = {};
 QStringList RPM::ENUM_TO_STRING_PLUGIN_CATEGORY = {};
 QStringList RPM::ENUM_TO_STRING_PRIMITIVE_KIND = {};
@@ -690,6 +693,12 @@ void RPM::readTranslations() {
         RPM::translate(Translations::NEW_GAME),
         RPM::translate(Translations::LOAD_GAME),
         RPM::translate(Translations::SETTINGS),
+        RPM::translate(Translations::EXIT),
+        RPM::translate(Translations::SCRIPT)
+    });
+    RPM::ENUM_TO_STRING_GAME_OVER_COMMAND_KIND = QStringList({
+        RPM::translate(Translations::CONTINUE),
+        RPM::translate(Translations::TITLE_SCREEN),
         RPM::translate(Translations::EXIT),
         RPM::translate(Translations::SCRIPT)
     });

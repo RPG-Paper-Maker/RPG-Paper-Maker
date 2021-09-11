@@ -92,6 +92,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemdetection.h \
     Dialogs/Systems/dialogsystemfontname.h \
     Dialogs/Systems/dialogsystemfontsize.h \
+    Dialogs/Systems/dialogsystemgameovercommand.h \
     Dialogs/Systems/dialogsystemherotroopbattletestequipment.h \
     Dialogs/Systems/dialogsysteminitialpartymember.h \
     Dialogs/Systems/dialogsysteminventoryfilter.h \
@@ -136,6 +137,7 @@ HEADERS += \
     Enums/axiskind.h \
     Enums/changevariablesothercharacteristics.h \
     Enums/conditionheroeskind.h \
+    Enums/gameovercommandkind.h \
     Enums/inventoryfilterkind.h \
     Enums/languagekind.h \
     Enums/mainmenucommandkind.h \
@@ -175,6 +177,7 @@ HEADERS += \
     Models/System/systemfont.h \
     Models/System/systemfontname.h \
     Models/System/systemfontsize.h \
+    Models/System/systemgameovercommand.h \
     Models/System/systemherotroopbattletest.h \
     Models/System/systemherotroopbattletestequipment.h \
     Models/System/systeminitialpartymember.h \
@@ -532,6 +535,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemdetection.cpp \
     Dialogs/Systems/dialogsystemfontname.cpp \
     Dialogs/Systems/dialogsystemfontsize.cpp \
+    Dialogs/Systems/dialogsystemgameovercommand.cpp \
     Dialogs/Systems/dialogsystemherotroopbattletestequipment.cpp \
     Dialogs/Systems/dialogsysteminitialpartymember.cpp \
     Dialogs/Systems/dialogsysteminventoryfilter.cpp \
@@ -593,6 +597,7 @@ SOURCES += \
     Models/System/systemfont.cpp \
     Models/System/systemfontname.cpp \
     Models/System/systemfontsize.cpp \
+    Models/System/systemgameovercommand.cpp \
     Models/System/systemherotroopbattletest.cpp \
     Models/System/systemherotroopbattletestequipment.cpp \
     Models/System/systeminitialpartymember.cpp \
@@ -913,6 +918,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemdetection.ui \
     Dialogs/Systems/dialogsystemfontname.ui \
     Dialogs/Systems/dialogsystemfontsize.ui \
+    Dialogs/Systems/dialogsystemgameovercommand.ui \
     Dialogs/Systems/dialogsystemherotroopbattletestequipment.ui \
     Dialogs/Systems/dialogsysteminitialpartymember.ui \
     Dialogs/Systems/dialogsysteminventoryfilter.ui \

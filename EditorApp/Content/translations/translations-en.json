@@ -1340,5 +1340,6 @@
     "initial.y.rotation": "Initial Y rotation",
     "y.rotation.addition": "Y rotation addition",
     "faceset.scaling.width": "Faceset scaling width",
-    "faceset.scaling.height": "Faceset scaling height"
+    "faceset.scaling.height": "Faceset scaling height",
+    "set.game.over.command": "Set game over command"
 }

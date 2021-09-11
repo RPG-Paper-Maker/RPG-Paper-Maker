@@ -1374,6 +1374,7 @@ public:
     static const QString Y_ROTATION_ADDITION;
     static const QString FACESET_SCALING_WIDTH;
     static const QString FACESET_SCALING_HEIGHT;
+    static const QString SET_GAME_OVER_COMMAND;
 
     Translations();
     virtual ~Translations();

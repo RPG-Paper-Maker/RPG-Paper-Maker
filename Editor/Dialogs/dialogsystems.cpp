@@ -26,6 +26,7 @@
 #include "systemcameraproperties.h"
 #include "systemdetection.h"
 #include "systemtitlecommand.h"
+#include "systemgameovercommand.h"
 #include "systemspeedfrequency.h"
 #include "systemfontsize.h"
 #include "systemfontname.h"
@@ -339,8 +340,11 @@ void DialogSystems::updateStatisticsBase(){
 
 // -------------------------------------------------------
 
-void DialogSystems::initializeTitleScreenGameOver(GameDatas *gameDatas) {
-    if (!gameDatas->titleScreenGameOverDatas()->isBackgroundImage()) {
+void DialogSystems::initializeTitleScreenGameOver(GameDatas *gameDatas)
+{
+    // Title screen
+    if (!gameDatas->titleScreenGameOverDatas()->isTitleBackgroundImage())
+    {
         ui->radioButtonVideo->setChecked(true);
     }
     ui->widgetPictureTitleBackground->setKind(PictureKind::TitleScreen);
@@ -359,6 +363,23 @@ void DialogSystems::initializeTitleScreenGameOver(GameDatas *gameDatas) {
     ui->treeViewTitleSettings->initializeNewItemInstance(new SuperListItem);
     ui->treeViewTitleSettings->initializeModel(gameDatas
         ->titleScreenGameOverDatas()->modelTitleSettings());
+
+    // Game over
+    if (!gameDatas->titleScreenGameOverDatas()->isGameOverBackgroundImage())
+    {
+        ui->radioButtonVideoGameOver->setChecked(true);
+    }
+    ui->widgetPictureGameOverBackground->setKind(PictureKind::GameOver);
+    ui->widgetPictureGameOverBackground->initializeSuper(gameDatas
+        ->titleScreenGameOverDatas()->gameOverBackgroundImageID());
+    ui->widgetVideoGameOverBackground->initialize(gameDatas
+        ->titleScreenGameOverDatas()->gameOverBackgroundVideoID());
+    ui->widgetChooseMusicGameOver->initialize(gameDatas->titleScreenGameOverDatas()
+        ->gameOverMusic());
+    ui->treeViewGameOverMenuCommands->initializeNewItemInstance(new
+        SystemGameOverCommand);
+    ui->treeViewGameOverMenuCommands->initializeModel(gameDatas
+        ->titleScreenGameOverDatas()->modelGameOverCommands());
 }
 
 // -------------------------------------------------------
@@ -836,7 +857,7 @@ void DialogSystems::on_equipmentUpdated(){
 void DialogSystems::on_radioButtonImage_toggled(bool checked) {
     ui->widgetPictureTitleBackground->setEnabled(checked);
     RPM::get()->project()->gameDatas()->titleScreenGameOverDatas()
-        ->setIsBackgroundImage(checked);
+        ->setIsTitleBackgroundImage(checked);
 }
 
 // -------------------------------------------------------
@@ -844,7 +865,25 @@ void DialogSystems::on_radioButtonImage_toggled(bool checked) {
 void DialogSystems::on_radioButtonVideo_toggled(bool checked) {
     ui->widgetVideoTitleBackground->setEnabled(checked);
     RPM::get()->project()->gameDatas()->titleScreenGameOverDatas()
-        ->setIsBackgroundImage(!checked);
+        ->setIsTitleBackgroundImage(!checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_radioButtonImageGameOver_toggled(bool checked)
+{
+    ui->widgetPictureGameOverBackground->setEnabled(checked);
+    RPM::get()->project()->gameDatas()->titleScreenGameOverDatas()
+        ->setIsGameOverBackgroundImage(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_radioButtonVideoGameOver_toggled(bool checked)
+{
+    ui->widgetVideoGameOverBackground->setEnabled(checked);
+    RPM::get()->project()->gameDatas()->titleScreenGameOverDatas()
+        ->setIsGameOverBackgroundImage(!checked);
 }
 
 // -------------------------------------------------------

@@ -158,6 +158,7 @@ public:
     static const QString PATH_FACESETS;
     static const QString PATH_WINDOW_SKINS;
     static const QString PATH_TITLE_SCREEN;
+    static const QString PATH_GAME_OVER;
     static const QString PATH_HUD_ANIMATIONS;
     static const QString PATH_HUD_PICTURES;
     static const QString PATH_AUTOTILES;
@@ -231,6 +232,7 @@ public:
     static QStringList ENUM_TO_STRING_OBJECT_MOVING_KIND;
     static QStringList ENUM_TO_STRING_SHAPE_KIND;
     static QStringList ENUM_TO_STRING_TITLE_COMMAND_KIND;
+    static QStringList ENUM_TO_STRING_GAME_OVER_COMMAND_KIND;
     static QStringList ENUM_TO_STRING_MONSTER_ACTION_TARGET_KIND;
     static QStringList ENUM_TO_STRING_PLUGIN_CATEGORY;
     static QStringList ENUM_TO_STRING_PRIMITIVE_KIND;

@@ -87,6 +87,8 @@ private slots:
     void on_equipmentUpdated();
     void on_radioButtonImage_toggled(bool checked);
     void on_radioButtonVideo_toggled(bool checked);
+    void on_radioButtonImageGameOver_toggled(bool checked);
+    void on_radioButtonVideoGameOver_toggled(bool checked);
     void on_pageEventsSelected(QModelIndex index, QModelIndex);
     void on_pageCommonReactorsSelected(QModelIndex index, QModelIndex);
     void on_pageCommonObjectsSelected(QModelIndex index, QModelIndex);

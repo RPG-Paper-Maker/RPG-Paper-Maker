@@ -16,7 +16,9 @@
 	    "Skills messages (ingame battles)",
 	    "Updating default camera properties (distance+vertical angle)",
 	    "Add Cyrillic letters to Default.ttf font",
-	    "Adding a scrollbar for some comboboxes"
+	    "Adding a scrollbar for some comboboxes",
+	    "Faceset scaling",
+	    "Add Ukrainian language (beta)"
     ],
     "bugs": [
     	"Closing a project make engine crash",
@@ -34,6 +36,8 @@
         0,
         0,
         0,
+        2,
+        2,
         2,
         2,
         2,

@@ -76,6 +76,7 @@ void PicturesDatas::setDefault() {
     this->setDefaultAnimations(names);
     this->setDefaultSkyBoxes(names);
     this->setDefaultParticles(names);
+    this->setDefaultGameOver(names);
 }
 
 // -------------------------------------------------------
@@ -228,6 +229,15 @@ void PicturesDatas::setDefaultParticles(QList<QString>& names)
 {
     names << "raindrop" << "snowflake";
     this->setDefaultPictures(names, PictureKind::Particles);
+}
+
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultGameOver(QList<QString> &names)
+{
+    names << "background";
+    this->setDefaultPictures(names, PictureKind::GameOver);
 }
 
 // -------------------------------------------------------

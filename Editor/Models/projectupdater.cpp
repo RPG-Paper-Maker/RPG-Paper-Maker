@@ -1301,4 +1301,10 @@ void ProjectUpdater::updateVersion_1_9_0()
 {
     m_project->gameDatas()->systemDatas()->setDefaultInitialPartyMembers();
     QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_PARTICLES);
+    QStringList names;
+    m_project->picturesDatas()->setDefaultParticles(names);
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_GAME_OVER);
+    m_project->picturesDatas()->setDefaultGameOver(names);
+    m_project->gameDatas()->titleScreenGameOverDatas()->setDefaultGameOver();
+    m_project->gameDatas()->titleScreenGameOverDatas()->setDefaultGameOverCommands();
 }
