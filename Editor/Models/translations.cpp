@@ -1362,6 +1362,7 @@ const QString Translations::Y_ROTATION_ADDITION = "y.rotation.addition";
 const QString Translations::FACESET_SCALING_WIDTH = "faceset.scaling.width";
 const QString Translations::FACESET_SCALING_HEIGHT = "faceset.scaling.height";
 const QString Translations::SET_GAME_OVER_COMMAND = "set.game.over.command";
+const QString Translations::PLAY_A_VIDEO = "play.a.video";
 
 // -------------------------------------------------------
 //

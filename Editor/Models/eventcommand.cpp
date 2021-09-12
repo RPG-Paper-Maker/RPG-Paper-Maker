@@ -346,6 +346,8 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
         str += this->strChangeChronometer(properties, parameters); break;
     case EventCommandKind::ChangeWeather:
         str += this->strChangeWeather(properties, parameters); break;
+    case EventCommandKind::PlayAVideo:
+        str += this->strPlayAVideo(properties, parameters); break;
     default:
         break;
     }
@@ -2780,6 +2782,50 @@ QString EventCommand::strChangeWeather(QStandardItemModel *properties,
         ::WAIT_END) + RPM::BRACKET_RIGHT + RPM::NEW_LINE + RPM::translate(
         Translations::TIME) + RPM::COLON + RPM::SPACE + this->strProperty(i,
         properties, parameters) + RPM::SPACE + RPM::translate(Translations::SECONDS);
+    }
+    return str;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strPlayAVideo(QStandardItemModel *properties,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    QString str = RPM::translate(Translations::PLAY_A_VIDEO) + RPM::COLON + RPM
+        ::SPACE;
+    QString video = SuperListItem::getById(RPM::get()->project()->videosDatas()
+        ->model()->invisibleRootItem(), this->valueCommandAt(i++).toInt())
+        ->toString();
+    QString operation;
+    switch (this->valueCommandAt(i++).toInt())
+    {
+    case 0:
+        operation = RPM::translate(Translations::PLAY).toLower();
+        break;
+    case 1:
+        operation = RPM::translate(Translations::PAUSE).toLower();
+        break;
+    case 2:
+        operation = RPM::translate(Translations::STOP).toLower();
+        break;
+    }
+    str += operation + RPM::SPACE + RPM::translate(Translations::VIDEO).toLower()
+        + RPM::SPACE + video;
+    QStringList options;
+    if (RPM::stringToBool(this->valueCommandAt(i++)))
+    {
+        options << RPM::translate(Translations::START) + RPM::COLON + RPM::SPACE
+            + this->strProperty(i, properties, parameters) + RPM::SPACE + RPM
+            ::translate(Translations::SECONDS);
+    }
+    if (RPM::stringToBool(this->valueCommandAt(i++)))
+    {
+        options << RPM::translate(Translations::WAIT_END_CHANGE_BEFORE_NEXT_COMMAND);
+    }
+    if (!options.isEmpty())
+    {
+        str += RPM::NEW_LINE + RPM::BRACKET_LEFT + options.join(";") + RPM::BRACKET_RIGHT;
     }
     return str;
 }

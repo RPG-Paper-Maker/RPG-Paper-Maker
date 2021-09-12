@@ -218,6 +218,8 @@ private:
         *parameters) const;
     QString strChangeWeather(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
+    QString strPlayAVideo(QStandardItemModel *properties, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

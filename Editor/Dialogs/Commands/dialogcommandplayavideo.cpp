@@ -58,8 +58,16 @@ void DialogCommandPlayAVideo::initializePrimitives()
 
 void DialogCommandPlayAVideo::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::CHANGE_WEATHER) + RPM
+    this->setWindowTitle(RPM::translate(Translations::PLAY_A_VIDEO) + RPM
         ::DOT_DOT_DOT);
+    ui->labelVideo->setText(RPM::translate(Translations::VIDEO) + RPM::COLON);
+    ui->groupBoxOperation->setTitle(RPM::translate(Translations::OPERATION));
+    ui->radioButtonPlay->setText(RPM::translate(Translations::PLAY));
+    ui->radioButtonPause->setText(RPM::translate(Translations::PAUSE));
+    ui->radioButtonStop->setText(RPM::translate(Translations::STOP));
+    ui->checkBoxStart->setText(RPM::translate(Translations::START) + RPM::COLON);
+    ui->checkBoxWaitEnd->setText(RPM::translate(Translations
+        ::WAIT_END_CHANGE_BEFORE_NEXT_COMMAND));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

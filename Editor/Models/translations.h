@@ -1375,6 +1375,7 @@ public:
     static const QString FACESET_SCALING_WIDTH;
     static const QString FACESET_SCALING_HEIGHT;
     static const QString SET_GAME_OVER_COMMAND;
+    static const QString PLAY_A_VIDEO;
 
     Translations();
     virtual ~Translations();
