@@ -24,7 +24,8 @@ DialogCommandPlayAVideo::DialogCommandPlayAVideo(EventCommand *command,
     DialogCommand(parent),
     ui(new Ui::DialogCommandPlayAVideo),
     m_properties(properties),
-    m_parameters(parameters)
+    m_parameters(parameters),
+    m_videoID(new SuperListItem)
 {
     ui->setupUi(this);
     this->initializePrimitives();
@@ -38,6 +39,7 @@ DialogCommandPlayAVideo::DialogCommandPlayAVideo(EventCommand *command,
 DialogCommandPlayAVideo::~DialogCommandPlayAVideo()
 {
     delete ui;
+    delete m_videoID;
 }
 
 // -------------------------------------------------------
@@ -48,7 +50,8 @@ DialogCommandPlayAVideo::~DialogCommandPlayAVideo()
 
 void DialogCommandPlayAVideo::initializePrimitives()
 {
-
+    ui->widgetVideo->initialize(m_videoID);
+    ui->panelPrimitiveStart->initializeNumber(m_parameters, m_properties, false);
 }
 
 // -------------------------------------------------------
@@ -69,6 +72,25 @@ void DialogCommandPlayAVideo::translate()
 EventCommand * DialogCommandPlayAVideo::getCommand() const
 {
     QVector<QString> command;
+    command.append(QString::number(m_videoID->id()));
+    if (ui->radioButtonPlay->isChecked())
+    {
+        command.append("0");
+    }
+    if (ui->radioButtonPause->isChecked())
+    {
+        command.append("1");
+    }
+    if (ui->radioButtonStop->isChecked())
+    {
+        command.append("2");
+    }
+    command.append(RPM::boolToString(ui->checkBoxStart->isChecked()));
+    if (ui->checkBoxStart->isChecked())
+    {
+        ui->panelPrimitiveStart->getCommand(command);
+    }
+    command.append(RPM::boolToString(ui->checkBoxWaitEnd->isChecked()));
     return new EventCommand(EventCommandKind::PlayAVideo, command);
 }
 
@@ -76,5 +98,37 @@ EventCommand * DialogCommandPlayAVideo::getCommand() const
 
 void DialogCommandPlayAVideo::initialize(EventCommand *command)
 {
+    int i = 0;
+    m_videoID->setId(command->valueCommandAt(i++).toInt());
+    ui->widgetVideo->update();
+    switch (command->valueCommandAt(i++).toInt())
+    {
+    case 0:
+        ui->radioButtonPlay->setChecked(true);
+        break;
+    case 1:
+        ui->radioButtonPause->setChecked(true);
+        break;
+    case 2:
+        ui->radioButtonStop->setChecked(true);
+        break;
+    }
+    ui->checkBoxStart->setChecked(RPM::stringToBool(command->valueCommandAt(i++)));
+    if (ui->checkBoxStart->isChecked())
+    {
+        ui->panelPrimitiveStart->initializeCommand(command, i);
+    }
+    ui->checkBoxWaitEnd->setChecked(RPM::stringToBool(command->valueCommandAt(i++)));
+}
 
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogCommandPlayAVideo::on_checkBoxStart_toggled(bool checked)
+{
+    ui->panelPrimitiveStart->setEnabled(checked);
+    ui->labelSeconds->setEnabled(checked);
 }

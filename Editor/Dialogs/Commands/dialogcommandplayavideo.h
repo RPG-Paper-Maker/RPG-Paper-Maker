@@ -38,6 +38,10 @@ private:
     Ui::DialogCommandPlayAVideo *ui;
     QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
+    SuperListItem *m_videoID;
+
+public slots:
+    void on_checkBoxStart_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDPLAYAVIDEO_H
