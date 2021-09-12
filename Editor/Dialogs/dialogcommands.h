@@ -122,6 +122,7 @@ private slots:
     void on_pushButtonChangeClass_clicked();
     void on_pushButtonChangeChronometer_clicked();
     void on_pushButtonChangeWeather_clicked();
+    void on_pushButtonPlayAVideo_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

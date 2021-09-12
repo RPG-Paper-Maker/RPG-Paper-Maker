@@ -270,9 +270,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButtonPlayVideo">
+               <widget class="QPushButton" name="pushButtonPlayAVideo">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Play a video...</string>

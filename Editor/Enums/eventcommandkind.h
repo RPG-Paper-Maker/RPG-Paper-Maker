@@ -95,6 +95,7 @@ enum class EventCommandKind {
     ChangeClass,
     ChangeChronometer,
     ChangeWeather,
+    PlayAVideo,
     Last
 };
 

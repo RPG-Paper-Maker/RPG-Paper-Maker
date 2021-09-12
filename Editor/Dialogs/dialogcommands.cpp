@@ -59,6 +59,7 @@
 #include "dialogcommandchangeclass.h"
 #include "dialogcommandchangechronometer.h"
 #include "dialogcommandchangeweather.h"
+#include "dialogcommandplayavideo.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -236,6 +237,8 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandChangeChronometer(command, properties, parameters);
     case EventCommandKind::ChangeWeather:
         return new DialogCommandChangeWeather(command, properties, parameters);
+    case EventCommandKind::PlayAVideo:
+        return new DialogCommandPlayAVideo(command, properties, parameters);
     default:
         return nullptr;
     }
@@ -826,4 +829,11 @@ void DialogCommands::on_pushButtonChangeChronometer_clicked()
 void DialogCommands::on_pushButtonChangeWeather_clicked()
 {
     this->openDialogCommand(EventCommandKind::ChangeWeather);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonPlayAVideo_clicked()
+{
+    this->openDialogCommand(EventCommandKind::PlayAVideo);
 }
