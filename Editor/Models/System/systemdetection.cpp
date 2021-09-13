@@ -169,9 +169,9 @@ SystemObject3D * SystemDetection::instanciateObject() const
 // -------------------------------------------------------
 
 void SystemDetection::setFront() {
-    Position position(0, 0, 0, 1, 0, 93.75, 50.0, 0);
+    Position position(0, 0, 0, 1, 0, 87.5, 50.0, 0);
     m_boxes.insert(position, new SystemObject3D(1, "", ShapeKind::Box, -1, -1, -2,
-        ObjectCollisionKind::None, -1, 1.0, 0, 12.5, 0, 12.5, 0, 12.5, true));
+        ObjectCollisionKind::None, -1, 1.0, 0, 25, 0, 25, 0, 25, true));
 }
 
 // -------------------------------------------------------
