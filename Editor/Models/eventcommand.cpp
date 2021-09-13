@@ -2794,38 +2794,38 @@ QString EventCommand::strPlayAVideo(QStandardItemModel *properties,
     int i = 0;
     QString str = RPM::translate(Translations::PLAY_A_VIDEO) + RPM::COLON + RPM
         ::SPACE;
-    QString video = SuperListItem::getById(RPM::get()->project()->videosDatas()
-        ->model()->invisibleRootItem(), this->valueCommandAt(i++).toInt())
-        ->toString();
-    QString operation;
     switch (this->valueCommandAt(i++).toInt())
     {
     case 0:
-        operation = RPM::translate(Translations::PLAY).toLower();
+    {
+        str += RPM::translate(Translations::PLAY).toLower() + RPM::SPACE + RPM
+            ::translate(Translations::VIDEO).toLower() + RPM::SPACE +
+            SuperListItem::getById(RPM::get()->project()->videosDatas()->model()
+            ->invisibleRootItem(), this->valueCommandAt(i++).toInt())                                                                                         ->toString();;
+        QStringList options;
+        if (RPM::stringToBool(this->valueCommandAt(i++)))
+        {
+            options << RPM::translate(Translations::START) + RPM::COLON + RPM
+                ::SPACE + this->strProperty(i, properties, parameters) + RPM
+                ::SPACE + RPM::translate(Translations::SECONDS);
+        }
+        if (RPM::stringToBool(this->valueCommandAt(i++)))
+        {
+            options << RPM::translate(Translations::WAIT_END_CHANGE_BEFORE_NEXT_COMMAND);
+        }
+        if (!options.isEmpty())
+        {
+            str += RPM::NEW_LINE + RPM::BRACKET_LEFT + options.join(";") + RPM
+                ::BRACKET_RIGHT;
+        }
         break;
+    }
     case 1:
-        operation = RPM::translate(Translations::PAUSE).toLower();
+        str += RPM::translate(Translations::PAUSE).toLower();
         break;
     case 2:
-        operation = RPM::translate(Translations::STOP).toLower();
+        str += RPM::translate(Translations::STOP).toLower();
         break;
-    }
-    str += operation + RPM::SPACE + RPM::translate(Translations::VIDEO).toLower()
-        + RPM::SPACE + video;
-    QStringList options;
-    if (RPM::stringToBool(this->valueCommandAt(i++)))
-    {
-        options << RPM::translate(Translations::START) + RPM::COLON + RPM::SPACE
-            + this->strProperty(i, properties, parameters) + RPM::SPACE + RPM
-            ::translate(Translations::SECONDS);
-    }
-    if (RPM::stringToBool(this->valueCommandAt(i++)))
-    {
-        options << RPM::translate(Translations::WAIT_END_CHANGE_BEFORE_NEXT_COMMAND);
-    }
-    if (!options.isEmpty())
-    {
-        str += RPM::NEW_LINE + RPM::BRACKET_LEFT + options.join(";") + RPM::BRACKET_RIGHT;
     }
     return str;
 }

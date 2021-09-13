@@ -30,6 +30,7 @@ public:
 
     void initializePrimitives();
     void translate();
+    void setVideoEnabled(bool enable);
 
     virtual EventCommand * getCommand() const;
     virtual void initialize(EventCommand* command);
@@ -42,6 +43,9 @@ private:
 
 public slots:
     void on_checkBoxStart_toggled(bool checked);
+    void on_radioButtonPlay_toggled(bool checked);
+    void on_radioButtonPause_toggled(bool checked);
+    void on_radioButtonStop_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDPLAYAVIDEO_H

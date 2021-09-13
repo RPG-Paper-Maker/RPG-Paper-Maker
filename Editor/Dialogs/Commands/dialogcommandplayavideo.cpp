@@ -72,6 +72,17 @@ void DialogCommandPlayAVideo::translate()
 }
 
 // -------------------------------------------------------
+
+void DialogCommandPlayAVideo::setVideoEnabled(bool enable)
+{
+    ui->labelVideo->setEnabled(enable);
+    ui->widgetVideo->setEnabled(enable);
+    ui->checkBoxStart->setEnabled(enable);
+    this->on_checkBoxStart_toggled(enable && ui->checkBoxStart->isChecked());
+    ui->checkBoxWaitEnd->setEnabled(enable);
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
@@ -80,7 +91,6 @@ void DialogCommandPlayAVideo::translate()
 EventCommand * DialogCommandPlayAVideo::getCommand() const
 {
     QVector<QString> command;
-    command.append(QString::number(m_videoID->id()));
     if (ui->radioButtonPlay->isChecked())
     {
         command.append("0");
@@ -93,12 +103,16 @@ EventCommand * DialogCommandPlayAVideo::getCommand() const
     {
         command.append("2");
     }
-    command.append(RPM::boolToString(ui->checkBoxStart->isChecked()));
-    if (ui->checkBoxStart->isChecked())
+    if (ui->radioButtonPlay->isChecked())
     {
-        ui->panelPrimitiveStart->getCommand(command);
+        command.append(QString::number(m_videoID->id()));
+        command.append(RPM::boolToString(ui->checkBoxStart->isChecked()));
+        if (ui->checkBoxStart->isChecked())
+        {
+            ui->panelPrimitiveStart->getCommand(command);
+        }
+        command.append(RPM::boolToString(ui->checkBoxWaitEnd->isChecked()));
     }
-    command.append(RPM::boolToString(ui->checkBoxWaitEnd->isChecked()));
     return new EventCommand(EventCommandKind::PlayAVideo, command);
 }
 
@@ -107,8 +121,6 @@ EventCommand * DialogCommandPlayAVideo::getCommand() const
 void DialogCommandPlayAVideo::initialize(EventCommand *command)
 {
     int i = 0;
-    m_videoID->setId(command->valueCommandAt(i++).toInt());
-    ui->widgetVideo->update();
     switch (command->valueCommandAt(i++).toInt())
     {
     case 0:
@@ -121,12 +133,17 @@ void DialogCommandPlayAVideo::initialize(EventCommand *command)
         ui->radioButtonStop->setChecked(true);
         break;
     }
-    ui->checkBoxStart->setChecked(RPM::stringToBool(command->valueCommandAt(i++)));
-    if (ui->checkBoxStart->isChecked())
+    if (ui->radioButtonPlay->isChecked())
     {
-        ui->panelPrimitiveStart->initializeCommand(command, i);
+        m_videoID->setId(command->valueCommandAt(i++).toInt());
+        ui->widgetVideo->update();
+        ui->checkBoxStart->setChecked(RPM::stringToBool(command->valueCommandAt(i++)));
+        if (ui->checkBoxStart->isChecked())
+        {
+            ui->panelPrimitiveStart->initializeCommand(command, i);
+        }
+        ui->checkBoxWaitEnd->setChecked(RPM::stringToBool(command->valueCommandAt(i++)));
     }
-    ui->checkBoxWaitEnd->setChecked(RPM::stringToBool(command->valueCommandAt(i++)));
 }
 
 // -------------------------------------------------------
@@ -139,4 +156,25 @@ void DialogCommandPlayAVideo::on_checkBoxStart_toggled(bool checked)
 {
     ui->panelPrimitiveStart->setEnabled(checked);
     ui->labelSeconds->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandPlayAVideo::on_radioButtonPlay_toggled(bool checked)
+{
+    this->setVideoEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandPlayAVideo::on_radioButtonPause_toggled(bool checked)
+{
+    this->setVideoEnabled(!checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandPlayAVideo::on_radioButtonStop_toggled(bool checked)
+{
+   this->setVideoEnabled(!checked);
 }
