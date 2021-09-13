@@ -25,13 +25,15 @@
 class SystemItem : public SystemCommonSkillItem
 {
 public:
+    static const QString DEFAULT_BATTLE_MESSAGE;
+
     SystemItem();
     SystemItem(int i, QString name, int pictureID, int type, bool consumable,
         SystemTranslatable *description, TargetKind targetKind, PrimitiveValue
         *conditionFormula, AvailableKind availableKind, SystemPlaySong *sound,
         PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
-        PrimitiveValue *canBeSold, QStandardItemModel *price, QStandardItemModel
-        *modelEffects);
+        PrimitiveValue *canBeSold, SystemTranslatable *battleMessage,
+        QStandardItemModel *price, QStandardItemModel *modelEffects);
     virtual ~SystemItem();
 
     virtual void read(const QJsonObject &json);

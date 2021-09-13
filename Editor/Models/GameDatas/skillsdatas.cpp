@@ -142,7 +142,8 @@ void SkillsDatas::setDefault(){
             availablesKind[i], new SystemPlaySong(songsID[i], SongKind::Sound),
             new PrimitiveValue(PrimitiveValueKind::None), i == 0 ? new
             PrimitiveValue(PrimitiveValueKind::DataBase, 1) : new PrimitiveValue(
-            PrimitiveValueKind::None), modelCosts, modelEffects);
+            PrimitiveValueKind::None), new SystemTranslatable(1, SystemSkill
+            ::DEFAULT_BATTLE_MESSAGE), modelCosts, modelEffects);
         m_model->appendRow(skill->getModelRow());
     }
 }

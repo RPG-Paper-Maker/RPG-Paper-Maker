@@ -11,6 +11,8 @@
 
 #include "systemskill.h"
 
+const QString SystemSkill::DEFAULT_BATTLE_MESSAGE = "[skill]";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -20,18 +22,20 @@
 SystemSkill::SystemSkill() :
     SystemCommonSkillItem()
 {
-
+    m_battleMessage->setAllNames(DEFAULT_BATTLE_MESSAGE);
 }
 
-SystemSkill::SystemSkill(int i, QString name, int pictureID,
-    SystemTranslatable *description, TargetKind
-    targetKind, PrimitiveValue *targetConditionFormula, PrimitiveValue
-    *conditionFormula, AvailableKind availableKind, SystemPlaySong *sound,
-    PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
-    QStandardItemModel *modelCosts, QStandardItemModel *modelEffects) :
-    SystemCommonSkillItem(i, name, pictureID, 1, false, true, description,
-        targetKind, targetConditionFormula, conditionFormula, availableKind,
-        sound, animationUserID, animationTargetID, new PrimitiveValue(true), new
+SystemSkill::SystemSkill(int i, QString name, int pictureID, SystemTranslatable
+    *description, TargetKind targetKind, PrimitiveValue *targetConditionFormula,
+    PrimitiveValue *conditionFormula, AvailableKind availableKind, SystemPlaySong
+    *sound, PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
+    SystemTranslatable *battleMessage, QStandardItemModel *modelCosts,
+    QStandardItemModel *modelEffects) :
+    SystemCommonSkillItem(i, name, pictureID, SystemCommonSkillItem::DEFAULT_TYPE,
+        SystemCommonSkillItem::DEFAULT_CONSUMABLE, SystemCommonSkillItem
+        ::DEFAULT_ONE_HAND, description, targetKind, targetConditionFormula,
+        conditionFormula, availableKind, sound, animationUserID,
+        animationTargetID, new PrimitiveValue(true), battleMessage, new
         QStandardItemModel, modelCosts, modelEffects, new QStandardItemModel)
 {
 
@@ -48,12 +52,14 @@ SystemSkill::~SystemSkill()
 //
 // -------------------------------------------------------
 
-void SystemSkill::read(const QJsonObject &json){
+void SystemSkill::read(const QJsonObject &json)
+{
     SystemCommonSkillItem::read(json);
 }
 
 // -------------------------------------------------------
 
-void SystemSkill::write(QJsonObject &json) const{
+void SystemSkill::write(QJsonObject &json) const
+{
     SystemCommonSkillItem::write(json);
 }

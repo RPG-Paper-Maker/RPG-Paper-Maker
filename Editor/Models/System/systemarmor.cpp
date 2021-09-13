@@ -30,13 +30,15 @@ SystemArmor::SystemArmor(int i, QString name, int pictureID, int
         TargetKind::None, new PrimitiveValue(PrimitiveValueKind::None),
         conditionFormula, AvailableKind::Never, new SystemPlaySong(-1, SongKind
         ::Sound), new PrimitiveValue(PrimitiveValueKind::None), new
-        PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(true), price,
-        new QStandardItemModel, new QStandardItemModel, modelCharacteristics)
+        PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(true), new
+        SystemTranslatable, price, new QStandardItemModel, new QStandardItemModel,
+        modelCharacteristics)
 {
 
 }
 
-SystemArmor::~SystemArmor() {
+SystemArmor::~SystemArmor()
+{
 
 }
 
@@ -46,12 +48,14 @@ SystemArmor::~SystemArmor() {
 //
 // -------------------------------------------------------
 
-void SystemArmor::read(const QJsonObject &json){
+void SystemArmor::read(const QJsonObject &json)
+{
     SystemCommonSkillItem::read(json);
 }
 
 // -------------------------------------------------------
 
-void SystemArmor::write(QJsonObject &json) const{
+void SystemArmor::write(QJsonObject &json) const
+{
     SystemCommonSkillItem::write(json);
 }

@@ -27,10 +27,16 @@ SystemTranslatable::SystemTranslatable() :
 
 }
 
-SystemTranslatable::SystemTranslatable(int i, QString name) :
+SystemTranslatable::SystemTranslatable(int i, QString name, bool all) :
     SuperListItem(i, name)
 {
-    this->setMainName(name);
+    if (all)
+    {
+        this->setAllNames(name);
+    } else
+    {
+        this->setMainName(name);
+    }
 }
 
 SystemTranslatable::SystemTranslatable(int i, QVector<int> ids, QVector<QString> names) :

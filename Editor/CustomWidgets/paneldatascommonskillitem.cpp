@@ -102,6 +102,8 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
         ui->panelPrimitiveValueAnimationTarget->hide();
         ui->labelSound->hide();
         ui->widgetSongSound->hide();
+        ui->labelBattleMessage->hide();
+        ui->widgetTextLangBattleMessage->hide();
 
         // Initialize widgets
         SuperListItem::fillComboBox(ui->comboBoxType, getTypeModel());
@@ -113,6 +115,8 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
         ui->comboBoxAvailable->hide();
         ui->labelSound->hide();
         ui->widgetSongSound->hide();
+        ui->labelBattleMessage->hide();
+        ui->widgetTextLangBattleMessage->hide();
         break;
     }
 }
@@ -151,11 +155,11 @@ void PanelDatasCommonSkillItem::update(SystemCommonSkillItem *model) {
     ui->panelPrimitiveValueAnimationTarget->updateModel();
     ui->panelPrimitiveCanBeSold->initializeModel(m_model->canBeSold());
     ui->panelPrimitiveCanBeSold->updateModel();
+    ui->widgetTextLangBattleMessage->initializeNamesLang(m_model->battleMessage());
     ui->treeViewPrice->initializeModel(m_model->modelPrice());
     ui->treeViewCost->initializeModel(m_model->modelCosts());
     ui->treeViewEffects->initializeModel(m_model->modelEffects());
     ui->treeViewCharacteristics->initializeModel(m_model->modelCharacteristics());
-
     updateAllModelsRow();
 }
 
@@ -244,6 +248,8 @@ void PanelDatasCommonSkillItem::translate()
         ::TARGET_CONDITIONS_FORMULA) + RPM::COLON);
     ui->labelCanBeSold->setText(RPM::translate(Translations::CAN_BE_SOLD) + RPM
         ::COLON);
+    ui->labelBattleMessage->setText(RPM::translate(Translations::BATTLE_MESSAGE)
+        + RPM::COLON);
     ui->checkBoxConsumable->setText(RPM::translate(Translations::CONSOMABLE));
     ui->checkBoxOneHand->setText(RPM::translate(Translations::ONE_HAND));
     ui->groupBoxPrice->setTitle(RPM::translate(Translations::PRICE));

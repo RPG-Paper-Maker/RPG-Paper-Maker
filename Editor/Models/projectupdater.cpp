@@ -20,6 +20,8 @@
 #include "systemcommonreaction.h"
 #include "systemcommonskillitem.h"
 #include "systemevent.h"
+#include "systemitem.h"
+#include "systemskill.h"
 
 const int ProjectUpdater::incompatibleVersionsCount = 23;
 
@@ -1307,4 +1309,24 @@ void ProjectUpdater::updateVersion_1_9_0()
     m_project->picturesDatas()->setDefaultGameOver(names);
     m_project->gameDatas()->titleScreenGameOverDatas()->setDefaultGameOver();
     m_project->gameDatas()->titleScreenGameOverDatas()->setDefaultGameOverCommands();
+    QStandardItemModel *model = m_project->gameDatas()->itemsDatas()->model();
+    SystemItem *item;
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        item = reinterpret_cast<SystemItem *>(SuperListItem::getItemModelAt(model, i));
+        if (item != nullptr)
+        {
+            item->battleMessage()->setAllNames(SystemItem::DEFAULT_BATTLE_MESSAGE);
+        }
+    }
+    model = m_project->gameDatas()->skillsDatas()->model();
+    SystemSkill *skill;
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        skill = reinterpret_cast<SystemSkill *>(SuperListItem::getItemModelAt(model, i));
+        if (skill != nullptr)
+        {
+            skill->battleMessage()->setAllNames(SystemSkill::DEFAULT_BATTLE_MESSAGE);
+        }
+    }
 }

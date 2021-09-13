@@ -51,7 +51,6 @@ public:
     void setIdFacesetPicture(int id);
     SystemClass * classInherit() const;
     SystemTranslatable * description() const;
-    void setDescription(SystemTranslatable *description);
 
     SystemPicture * getPictureBattler() const;
     SystemPicture * getPictureFaceset() const;

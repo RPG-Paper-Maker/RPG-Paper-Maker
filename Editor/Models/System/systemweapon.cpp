@@ -32,12 +32,14 @@ SystemWeapon::SystemWeapon(int i, QString name, int pictureID, int type, bool
     SystemCommonSkillItem(i, name, pictureID, type, false, oneHand, description,
         targetKind, targetConditionFormula, conditionFormula, AvailableKind::Never,
         new SystemPlaySong(-1, SongKind::Sound), animationUserID, animationTargetID,
-        new PrimitiveValue(true), price, modelCosts, modelEffects, modelCharacteristics)
+        new PrimitiveValue(true), new SystemTranslatable, price, modelCosts,
+        modelEffects, modelCharacteristics)
 {
 
 }
 
-SystemWeapon::~SystemWeapon() {
+SystemWeapon::~SystemWeapon()
+{
 
 }
 
@@ -47,12 +49,14 @@ SystemWeapon::~SystemWeapon() {
 //
 // -------------------------------------------------------
 
-void SystemWeapon::read(const QJsonObject &json) {
+void SystemWeapon::read(const QJsonObject &json)
+{
     SystemCommonSkillItem::read(json);
 }
 
 // -------------------------------------------------------
 
-void SystemWeapon::write(QJsonObject &json) const {
+void SystemWeapon::write(QJsonObject &json) const
+{
     SystemCommonSkillItem::write(json);
 }

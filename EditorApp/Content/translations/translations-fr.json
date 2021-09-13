@@ -1341,5 +1341,6 @@
     "faceset.scaling.width": "Longueur d'étirement du faceset",
     "faceset.scaling.height": "Largeur d'étirement du faceset",
     "set.game.over.command": "Modifier la commande de game over",
-    "play.a.video": "Jouer une vidéo"
+    "play.a.video": "Jouer une vidéo",
+    "battle.message": "Message de combat"
 }

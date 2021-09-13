@@ -27,10 +27,19 @@ const QString SystemCommonSkillItem::JSON_SOUND = "s";
 const QString SystemCommonSkillItem::JSON_ANIMATION_USER_ID = "auid";
 const QString SystemCommonSkillItem::JSON_ANIMATION_TARGET_ID = "atid";
 const QString SystemCommonSkillItem::JSON_CAN_BE_SOLD = "canBeSold";
+const QString SystemCommonSkillItem::JSON_BATTLE_MESSAGE = "battleMessage";
 const QString SystemCommonSkillItem::JSON_PRICE = "p";
 const QString SystemCommonSkillItem::JSON_COSTS = "cos";
 const QString SystemCommonSkillItem::JSON_EFFECTS = "e";
 const QString SystemCommonSkillItem::JSON_CHARACTERISTICS = "car";
+const int SystemCommonSkillItem::DEFAULT_ID = 1;
+const QString SystemCommonSkillItem::DEFAULT_NAME = "";
+const int SystemCommonSkillItem::DEFAULT_PICTURE_ID = -1;
+const int SystemCommonSkillItem::DEFAULT_TYPE = 1;
+const bool SystemCommonSkillItem::DEFAULT_CONSUMABLE = false;
+const bool SystemCommonSkillItem::DEFAULT_ONE_HAND = true;
+const TargetKind SystemCommonSkillItem::DEFAULT_TARGET_KIND = TargetKind::None;
+const AvailableKind SystemCommonSkillItem::DEFAULT_AVAILABLE_KIND = AvailableKind::Never;
 
 // -------------------------------------------------------
 //
@@ -38,24 +47,13 @@ const QString SystemCommonSkillItem::JSON_CHARACTERISTICS = "car";
 //
 // -------------------------------------------------------
 
-SystemCommonSkillItem::SystemCommonSkillItem() :
-    SystemCommonSkillItem(1, "", -1, 1, false, true, new SystemTranslatable,
-        TargetKind::None, new PrimitiveValue(PrimitiveValueKind::None), new
-        PrimitiveValue(PrimitiveValueKind::None), AvailableKind::Never, new
-        SystemPlaySong(-1, SongKind::Sound), new PrimitiveValue(
-        PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind::None),
-        PrimitiveValue::createDefaultSwitchValue(), new QStandardItemModel, new
-        QStandardItemModel, new QStandardItemModel, new QStandardItemModel)
-{
-
-}
-
 SystemCommonSkillItem::SystemCommonSkillItem(int i, QString name, int
     pictureID, int type, bool consumable, bool oneHand, SystemTranslatable
     *description, TargetKind targetKind, PrimitiveValue *targetConditionFormula,
     PrimitiveValue *conditionFormula, AvailableKind availableKind,
     SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
-    *animationTargetID, PrimitiveValue *canBeSold, QStandardItemModel *modelPrice, QStandardItemModel
+    *animationTargetID, PrimitiveValue *canBeSold, SystemTranslatable
+    *battleMessage, QStandardItemModel *modelPrice, QStandardItemModel
     *modelCosts, QStandardItemModel*modelEffects, QStandardItemModel
     *modelCharacteristics) :
     SystemIcon(i, name, pictureID),
@@ -71,6 +69,7 @@ SystemCommonSkillItem::SystemCommonSkillItem(int i, QString name, int
     m_animationUserID(animationUserID),
     m_animationTargetID(animationTargetID),
     m_canBeSold(canBeSold),
+    m_battleMessage(battleMessage),
     m_modelPrice(modelPrice),
     m_modelCosts(modelCosts),
     m_modelEffects(modelEffects),
@@ -91,6 +90,7 @@ SystemCommonSkillItem::~SystemCommonSkillItem() {
     delete m_animationUserID;
     delete m_animationTargetID;
     delete m_canBeSold;
+    delete m_battleMessage;
     SuperListItem::deleteModel(m_modelPrice);
     SuperListItem::deleteModel(m_modelCosts);
     SuperListItem::deleteModel(m_modelEffects);
@@ -166,6 +166,11 @@ PrimitiveValue * SystemCommonSkillItem::canBeSold() const
     return m_canBeSold;
 }
 
+SystemTranslatable * SystemCommonSkillItem::battleMessage() const
+{
+    return m_battleMessage;
+}
+
 QStandardItemModel * SystemCommonSkillItem::modelPrice() const {
     return m_modelPrice;
 }
@@ -232,6 +237,7 @@ void SystemCommonSkillItem::setCopy(const SuperListItem &super) {
     m_animationUserID->setCopy(*skillitem->m_animationUserID);
     m_animationTargetID->setCopy(*skillitem->m_animationTargetID);
     m_canBeSold->setCopy(*skillitem->m_canBeSold);
+    m_battleMessage->setCopy(*skillitem->m_battleMessage);
     SuperListItem::deleteModel(m_modelPrice, false);
     SuperListItem::copy(m_modelPrice, skillitem->m_modelPrice);
     SuperListItem::deleteModel(m_modelCosts, false);
@@ -289,6 +295,7 @@ void SystemCommonSkillItem::read(const QJsonObject &json)
     if (json.contains(JSON_CAN_BE_SOLD)) {
         m_canBeSold->read(json[JSON_CAN_BE_SOLD].toObject());
     }
+    m_battleMessage->read(json[JSON_BATTLE_MESSAGE].toObject());
 
     // Price
     SuperListItem::readTree(m_modelPrice, new SystemCost(DamagesKind::Currency,
@@ -363,6 +370,9 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
         m_canBeSold->write(obj);
         json[JSON_CAN_BE_SOLD] = obj;
     }
+    obj = QJsonObject();
+    m_battleMessage->write(obj);
+    json[JSON_BATTLE_MESSAGE] = obj;
 
     // Price
     SuperListItem::writeTree(m_modelPrice, json, JSON_PRICE);

@@ -133,7 +133,9 @@ void ItemsDatas::setDefault() {
             PrimitiveValueKind::None) : new PrimitiveValue(targetConditionsFormulas[i]),
             availablesKind[i], new SystemPlaySong(songsID[i], SongKind::Sound),
             new PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
-            PrimitiveValueKind::None), new PrimitiveValue(true), modelPrice, modelEffects);
+            PrimitiveValueKind::None), new PrimitiveValue(true), new
+            SystemTranslatable(1, SystemItem::DEFAULT_BATTLE_MESSAGE), modelPrice,
+            modelEffects);
         m_model->appendRow(sys->getModelRow());
     }
 }

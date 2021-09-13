@@ -45,6 +45,7 @@ SystemHero::SystemHero(int i, QString name, int idClass, int idBattler, int
 SystemHero::~SystemHero()
 {
     delete m_classInherit;
+    delete m_description;
 }
 
 int SystemHero::idClass() const
@@ -85,11 +86,6 @@ SystemClass * SystemHero::classInherit() const
 SystemTranslatable * SystemHero::description() const
 {
     return m_description;
-}
-
-void SystemHero::setDescription(SystemTranslatable *description)
-{
-    m_description = description;
 }
 
 // -------------------------------------------------------

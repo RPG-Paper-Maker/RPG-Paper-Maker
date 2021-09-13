@@ -11,6 +11,8 @@
 
 #include "systemitem.h"
 
+const QString SystemItem::DEFAULT_BATTLE_MESSAGE = "[item]";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -20,20 +22,21 @@
 SystemItem::SystemItem() :
     SystemCommonSkillItem()
 {
-
+    m_battleMessage->setAllNames(DEFAULT_BATTLE_MESSAGE);
 }
 
 SystemItem::SystemItem(int i, QString name, int pictureID, int type, bool
     consumable, SystemTranslatable *description, TargetKind targetKind, PrimitiveValue
     *targetConditionFormula, AvailableKind availableKind, SystemPlaySong *sound,
     PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
-    PrimitiveValue *canBeSold, QStandardItemModel *price, QStandardItemModel
-    *modelEffects) :
-    SystemCommonSkillItem (i, name, pictureID, type, consumable, true,
-        description, targetKind, targetConditionFormula, new PrimitiveValue(
-        PrimitiveValueKind::None), availableKind, sound, animationUserID,
-        animationTargetID, canBeSold, price, new QStandardItemModel,
-        modelEffects, new QStandardItemModel)
+    PrimitiveValue *canBeSold, SystemTranslatable *battleMessage,
+    QStandardItemModel *price, QStandardItemModel *modelEffects) :
+    SystemCommonSkillItem(i, name, pictureID, type, consumable,
+        SystemCommonSkillItem::DEFAULT_ONE_HAND, description, targetKind,
+        targetConditionFormula, new PrimitiveValue(PrimitiveValueKind::None),
+        availableKind, sound, animationUserID, animationTargetID, canBeSold,
+        battleMessage, price, new QStandardItemModel, modelEffects, new
+        QStandardItemModel)
 {
 
 }

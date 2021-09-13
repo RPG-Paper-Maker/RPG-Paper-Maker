@@ -31,7 +31,7 @@ public:
     static const QString JSON_NAMES;
 
     SystemTranslatable();
-    SystemTranslatable(int i, QString name);
+    SystemTranslatable(int i, QString name, bool all = false);
     SystemTranslatable(int i, QVector<int> ids, QVector<QString> names);
     virtual ~SystemTranslatable();
 
