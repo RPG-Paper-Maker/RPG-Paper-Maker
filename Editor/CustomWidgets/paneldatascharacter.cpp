@@ -87,6 +87,7 @@ void PanelDatasCharacter::update(SystemHero *hero, int classIndex) {
     picture = hero->getPictureFaceset();
     ui->widgetPictureFaceset->setPicture(picture);
     on_facesetPictureChanged(picture);
+    ui->widgetTextLangDescription->initializeNamesLang(hero->description());
 
     // Class
     updateClass();

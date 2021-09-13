@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,1">
+      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,1">
        <item>
         <widget class="QLabel" name="labelClass">
          <property name="text">
@@ -43,6 +43,29 @@
           <size>
            <width>150</width>
            <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Description:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="WidgetTextLang" name="widgetTextLangDescription" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>27</height>
           </size>
          </property>
         </widget>
@@ -196,7 +219,7 @@
                  <x>0</x>
                  <y>0</y>
                  <width>337</width>
-                 <height>92</height>
+                 <height>67</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout">
@@ -245,6 +268,12 @@
    <class>WidgetShowPicture</class>
    <extends>QWidget</extends>
    <header>widgetshowpicture.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetTextLang</class>
+   <extends>QWidget</extends>
+   <header>widgettextlang.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

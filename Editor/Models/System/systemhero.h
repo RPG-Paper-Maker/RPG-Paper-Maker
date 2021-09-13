@@ -27,14 +27,21 @@
 class SystemHero : public SystemTranslatable
 {
 public:
-    static const QString jsonClass;
-    static const QString jsonBattler;
-    static const QString jsonFaceset;
-    static const QString jsonClassInherit;
+    static const QString JSON_CLASS;
+    static const QString JSON_BATTLER;
+    static const QString JSON_FACESET;
+    static const QString JSON_CLASS_INHERIT;
+    static const QString JSON_DESCRIPTION;
+    static const int DEFAULT_ID;
+    static const QString DEFAULT_NAME;
+    static const int DEFAULT_ID_CLASS;
+    static const int DEFAULT_ID_BATTLER;
+    static const int DEFAULT_ID_FACESET;
 
-    SystemHero();
-    SystemHero(int i, QString name, int idClass, int idBattler, int idFaceset,
-        SystemClass *classInherit);
+    SystemHero(int i = DEFAULT_ID, QString name = DEFAULT_NAME, int idClass =
+        DEFAULT_ID_CLASS, int idBattler = DEFAULT_ID_BATTLER, int idFaceset =
+        DEFAULT_ID_FACESET, SystemClass *classInherit = new SystemClass,
+        SystemTranslatable *description = new SystemTranslatable);
     virtual ~SystemHero();
     int idClass() const;
     void setIdClass(int id);
@@ -43,8 +50,11 @@ public:
     int idFacesetPicture() const;
     void setIdFacesetPicture(int id);
     SystemClass * classInherit() const;
-    SystemPicture* getPictureBattler() const;
-    SystemPicture* getPictureFaceset() const;
+    SystemTranslatable * description() const;
+    void setDescription(SystemTranslatable *description);
+
+    SystemPicture * getPictureBattler() const;
+    SystemPicture * getPictureFaceset() const;
     SystemClass * getClass() const;
     int maxLevel() const;
 
@@ -57,7 +67,8 @@ protected:
     int m_idClass;
     int m_idBattlerPicture;
     int m_idFacesetPicture;
-    SystemClass * m_classInherit;
+    SystemClass *m_classInherit;
+    SystemTranslatable *m_description;
 };
 
 Q_DECLARE_METATYPE(SystemHero)
