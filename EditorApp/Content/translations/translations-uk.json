@@ -1338,5 +1338,10 @@
     "initial.velocity": "Початкова швидкість",
     "velocity.addition": "Додаток швидкості",
     "initial.y.rotation": "Початковий поворот по Y",
-    "y.rotation.addition": "Додаток до повороту по Y"
+    "y.rotation.addition": "Додаток до повороту по Y",
+    "faceset.scaling.width": "Ширина масштабу облич",
+    "faceset.scaling.height": "Висота масштабу облич",
+    "set.game.over.command": "Встановити команду кінця гри",
+    "play.a.video": "Програти відео",
+    "battle.message": "Бойове повідомлення"
 }
