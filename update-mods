@@ -10,13 +10,13 @@ if [ -d $modsPath ]; then
 fi
 mkdir mods
 
-path='../Game-Scripts-Build'
+path='../Game-Scripts-Build/Scripts'
 pathModsScript="${modsPath}/Scripts"
 if [ -d $path ]; then
 	echo "$localMessage $path $moveSymbol $pathModsScript"
 	cp -r $path $pathModsScript
 else
-	pathGit="https://github.com/RPG-Paper-Maker/Game-Scripts-Build/trunk"
+	pathGit="https://github.com/RPG-Paper-Maker/Game-Scripts-Build/trunk/Scripts"
 	echo "$githubMessage $pathGit $moveSymbol $modsPath"
 	svn export $pathGit $pathModsScript
 fi

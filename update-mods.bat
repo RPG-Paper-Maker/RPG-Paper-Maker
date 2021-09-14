@@ -12,7 +12,7 @@ IF EXIST %pathMods% (
 )
 mkdir %pathMods%
 
-set sourcePathModsScript=%pathRepos%\Game-Scripts-Build
+set sourcePathModsScript=%pathRepos%\Game-Scripts-Build\Scripts
 set pathModsScript=%pathMods%\Scripts
 CALL :copy_mod %sourcePathModsScript% %pathModsScript% Game-Scripts-Build
 
