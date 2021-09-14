@@ -1301,6 +1301,25 @@ void ProjectUpdater::updateVersion_1_8_3()
 
 void ProjectUpdater::updateVersion_1_9_0()
 {
+    QStandardItemModel *model = m_project->gameDatas()->commonEventsDatas()
+        ->modelEventsSystem();
+    QJsonArray eventsSystem = QJsonDocument::fromJson(QString("[{\"id\":5,\"name\":\"MouseDown\",\"p\":[{\"d\":{\"k\":3,\"v\":0},\"id\":1,\"name\":\"x\"},{\"d\":{\"k\":3,\"v\":0},\"id\":2,\"name\":\"y\"},{\"d\":{\"k\":10,\"v\":true},\"id\":3,\"name\":\"Left\"},{\"d\":{\"k\":10,\"v\":false},\"id\":4,\"name\":\"Repeat\"}]},{\"id\":6,\"name\":\"MouseUp\",\"p\":[{\"d\":{\"k\":3,\"v\":0},\"id\":1,\"name\":\"x\"},{\"d\":{\"k\":3,\"v\":0},\"id\":2,\"name\":\"y\"},{\"d\":{\"k\":10,\"v\":true},\"id\":3,\"name\":\"Left\"}]},{\"id\":7,\"name\":\"MouseMove\",\"p\":[{\"d\":{\"k\":3,\"v\":0},\"id\":1,\"name\":\"x\"},{\"d\":{\"k\":3,\"v\":0},\"id\":2,\"name\":\"y\"}]}]").toUtf8()).array();
+    SystemEvent *event = new SystemEvent;
+    event->read(eventsSystem.at(0).toObject());
+    model->appendRow(event->getModelRow());
+    event = new SystemEvent;
+    event->read(eventsSystem.at(1).toObject());
+    model->appendRow(event->getModelRow());
+    event = new SystemEvent;
+    event->read(eventsSystem.at(2).toObject());
+    model->appendRow(event->getModelRow());
+    QJsonObject mouseDownReaction = QJsonDocument::fromJson(QString("{\"id\":5,\"name\":\"MouseDown\",\"p\":[{\"id\":1,\"name\":\"x\",\"v\":{\"k\":1,\"v\":null}},{\"id\":2,\"name\":\"y\",\"v\":{\"k\":1,\"v\":null}},{\"id\":3,\"name\":\"Left\",\"v\":{\"k\":2,\"v\":null}},{\"id\":4,\"name\":\"Repeat\",\"v\":{\"k\":10,\"v\":true}}],\"r\":{\"1\":{\"bh\":false,\"c\":[{\"children\":[{\"command\":[7,-1,1,1,1,2,1],\"kind\":21}],\"command\":[0,7,8,\"Core.ReactionInterpreter.currentParameters[1].getValue() <= (Common.ScreenResolution.CANVAS_WIDTH - Common.ScreenResolution.getScreenX(64)) / 2\"],\"kind\":8},{\"command\":[],\"kind\":10},{\"children\":[{\"command\":[7,-1,1,1,1,3,1],\"kind\":21}],\"command\":[0,7,8,\"Core.ReactionInterpreter.currentParameters[1].getValue() >= (Common.ScreenResolution.CANVAS_WIDTH + Common.ScreenResolution.getScreenX(64)) / 2\"],\"kind\":8},{\"command\":[],\"kind\":10},{\"children\":[{\"command\":[7,-1,1,1,1,0,1],\"kind\":21}],\"command\":[0,7,8,\"Core.ReactionInterpreter.currentParameters[2].getValue() <= (Common.ScreenResolution.CANVAS_HEIGHT - Common.ScreenResolution.getScreenY(64)) / 2\"],\"kind\":8},{\"command\":[],\"kind\":10},{\"children\":[{\"command\":[7,-1,1,1,1,1,1],\"kind\":21}],\"command\":[0,7,8,\"Core.ReactionInterpreter.currentParameters[2].getValue() >= (Common.ScreenResolution.CANVAS_HEIGHT + Common.ScreenResolution.getScreenY(64)) / 2\"],\"kind\":8},{\"command\":[],\"kind\":10},{\"command\":[1,7,2,1,0,1,2],\"kind\":19}]}},\"sys\":true}").toUtf8()).object();
+    SystemObjectEvent *reaction = new SystemObjectEvent;
+    reaction->read(mouseDownReaction);
+    model = m_project->gameDatas()->commonEventsDatas()->modelCommonObjects();
+    SystemCommonObject *object = reinterpret_cast<SystemCommonObject *>(
+        SuperListItem::getItemModelAt(model, 1));
+    object->modelEvents()->appendRow(reaction->getModelRow());
     m_project->gameDatas()->systemDatas()->setDefaultInitialPartyMembers();
     QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_PARTICLES);
     QStringList names;
@@ -1309,7 +1328,7 @@ void ProjectUpdater::updateVersion_1_9_0()
     m_project->picturesDatas()->setDefaultGameOver(names);
     m_project->gameDatas()->titleScreenGameOverDatas()->setDefaultGameOver();
     m_project->gameDatas()->titleScreenGameOverDatas()->setDefaultGameOverCommands();
-    QStandardItemModel *model = m_project->gameDatas()->itemsDatas()->model();
+    model = m_project->gameDatas()->itemsDatas()->model();
     SystemItem *item;
     for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
     {
