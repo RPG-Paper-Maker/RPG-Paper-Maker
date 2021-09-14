@@ -82,6 +82,11 @@
                 }
             ],
             "target": "Engine/Content/web"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/commonEvents.json",
+            "target": "Engine/Content/basic/Content/Datas/commonEvents.json"
         }
     ],
 	"features": [
