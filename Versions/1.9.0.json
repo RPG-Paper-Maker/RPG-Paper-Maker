@@ -1,7 +1,89 @@
 {
-	"add": [],
+	"add": [
+        {
+            "files": [
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Images/Textures2D/Particles/snowflake.png",
+                    "target": "Engine/Content/BR/Content/Images/Textures2D/Particles/snowflake.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Images/Textures2D/Particles/raindrop.png",
+                    "target": "Engine/Content/BR/Content/Images/Textures2D/Particles/raindrop.png"
+                }
+            ],
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Particles"
+        },
+        {
+            "files": [
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Images/HUD/GameOver/background.png",
+                    "target": "Engine/Content/BR/Content/Images/HUD/GameOver/background.png"
+                }
+            ],
+            "target": "Engine/Content/BR/Content/Images/HUD/GameOver"
+        }
+    ],
 	"remove": [],
-	"replace": [],
+	"replace": [
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Facesets/lucas.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Facesets/lucas.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Facesets/kate.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Facesets/kate.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Facesets/shana.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Facesets/shana.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Facesets/bibi.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Facesets/bibi.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Facesets/wooly.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Facesets/wooly.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Fonts/Default.ttf",
+            "target": "Engine/Content/BR/Content/Fonts/Default.ttf"
+        },
+        {
+            "files": [
+                {
+                    "repo": "Dependencies",
+                    "source": "Game/web/Platform.js",
+                    "target": "Engine/Content/web/Platform.js"
+                },
+                {
+                    "repo": "Dependencies",
+                    "source": "Game/web/howler.js",
+                    "target": "Engine/Content/web/howler.js"
+                },
+                {
+                    "repo": "Dependencies",
+                    "source": "Game/web/three.js",
+                    "target": "Engine/Content/web/three.js"
+                },
+                {
+                    "repo": "Dependencies",
+                    "source": "Game/web/Globals.js",
+                    "target": "Engine/Content/web/Globals.js"
+                }
+            ],
+            "target": "Engine/Content/web"
+        }
+    ],
 	"features": [
         "Mouse controls (ingame)",
 	    "Web browser integration",
