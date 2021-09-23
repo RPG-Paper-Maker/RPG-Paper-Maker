@@ -23,12 +23,12 @@
 #include "systemitem.h"
 #include "systemskill.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 23;
+const int ProjectUpdater::incompatibleVersionsCount = 24;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
      "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0", "1.6.2",
-    "1.6.3", "1.6.4", "1.7.0", "1.7.3", "1.8.0", "1.8.3", "1.9.0"};
+    "1.6.3", "1.6.4", "1.7.0", "1.7.3", "1.8.0", "1.8.3", "1.9.0", "1.9.1"};
 
 // -------------------------------------------------------
 //
@@ -1348,4 +1348,11 @@ void ProjectUpdater::updateVersion_1_9_0()
             skill->battleMessage()->setAllNames(SystemSkill::DEFAULT_BATTLE_MESSAGE);
         }
     }
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_9_1()
+{
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_GAME_OVER);
 }

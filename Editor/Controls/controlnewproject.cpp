@@ -144,6 +144,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     dir.mkpath(RPM::PATH_MTL);
     dir.mkpath(RPM::PATH_COLLISIONS);
     dir.mkpath(RPM::PATH_HUD_PICTURES);
+    dir.mkpath(RPM::PATH_GAME_OVER);
     dir.mkpath(RPM::PATH_SAVES);
 
     // Create the default datas
