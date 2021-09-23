@@ -33,6 +33,8 @@ PanelPrimitiveValue::PanelPrimitiveValue(QWidget *parent) :
     ui->comboBoxParameter->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     ui->comboBoxProperty->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     ui->comboBoxSwitch->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui->comboBoxSwitch->addItem(RPM::translate(Translations::ON));
+    ui->comboBoxSwitch->addItem(RPM::translate(Translations::OFF));
     ui->comboBoxChoice->setMaxVisibleItems(12);
     ui->comboBoxChoice->setStyleSheet("combobox-popup: 0;");
     Q_FOREACH(QSpinBox * sp, findChildren<QSpinBox*>()) {
@@ -44,7 +46,6 @@ PanelPrimitiveValue::PanelPrimitiveValue(QWidget *parent) :
     Q_FOREACH(QComboBox * sp, findChildren<QComboBox*>()) {
         sp->installEventFilter(this);
     }
-
     this->translate();
 }
 

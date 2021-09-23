@@ -152,6 +152,9 @@ void DialogCommandChangeState::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::CHANGE_STATE) + RPM
         ::DOT_DOT_DOT);
+    ui->groupBoxObject->setTitle(RPM::translate(Translations::OBJECT));
+    ui->labelMapID->setText(RPM::translate(Translations::MAP_ID) + RPM::COLON);
+    ui->labelObjectID->setText(RPM::translate(Translations::OBJECT_ID) + RPM::COLON);
     ui->labelStateID->setText(RPM::translate(Translations::STATE_ID) + RPM
         ::COLON);
     ui->radioButtonAdd->setText(RPM::translate(Translations::ADD));

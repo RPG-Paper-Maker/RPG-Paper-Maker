@@ -1377,6 +1377,10 @@ public:
     static const QString SET_GAME_OVER_COMMAND;
     static const QString PLAY_A_VIDEO;
     static const QString BATTLE_MESSAGE;
+    static const QString ON;
+    static const QString OFF;
+    static const QString ANTIALIASING;
+    static const QString SKYBOXES;
 
     Translations();
     virtual ~Translations();

@@ -607,6 +607,7 @@ void DialogDatas::translate() {
         ::DOT_DOT_DOT);
     ui->pushButtonTroopTest->setText(RPM::translate(Translations::TEST) + RPM
         ::DOT_DOT_DOT);
+    ui->groupBoxAnimationsOptions->setTitle(RPM::translate(Translations::OPTIONS));
     ui->pushButtonCopyFrames->setText(RPM::translate(Translations::COPY_FRAMES)
         + RPM::DOT_DOT_DOT);
     ui->pushButtonClearFrames->setText(RPM::translate(Translations::CLEAR_FRAMES

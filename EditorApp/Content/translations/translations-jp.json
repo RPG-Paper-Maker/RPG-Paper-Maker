@@ -1343,5 +1343,9 @@
     "faceset.scaling.height": "フェースセットのスケーリングの高さ",
     "set.game.over.command": "ゲームオーバーコマンドを設定する",
     "play.a.video": "ビデオを再生する",
-    "battle.message": "バトルメッセージ"
+    "battle.message": "バトルメッセージ",
+    "on": "ON",
+    "off": "OFF",
+    "antialiasing": "Antialiasing",
+    "skyboxes": "Skyboxes"
 }

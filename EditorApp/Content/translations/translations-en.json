@@ -1343,5 +1343,9 @@
     "faceset.scaling.height": "Faceset scaling height",
     "set.game.over.command": "Set game over command",
     "play.a.video": "Play a video",
-    "battle.message": "Battle message"
+    "battle.message": "Battle message",
+    "on": "ON",
+    "off": "OFF",
+    "antialiasing": "Antialiasing",
+    "skyboxes": "Skyboxes"
 }

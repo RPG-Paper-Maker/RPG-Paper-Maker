@@ -228,6 +228,7 @@ void DialogSystemEffect::translate()
     ui->radioButtonStatus->setText(RPM::translate(Translations::STATUS) + RPM::COLON);
     ui->labelWithPrecision->setText(RPM::translate(Translations::WITH_PRECISION).toLower());
     ui->radioButtonCallCommonReaction->setText(RPM::translate(Translations::CALL_A_COMMON_REACTION) + RPM::COLON);
+    ui->pushButtonSelect_CallCommonReaction->setText(RPM::translate(Translations::SELECT) + RPM::DOT_DOT_DOT);
     ui->radioButtonAddRemoveSkill->setText(RPM::translate(Translations::SKILL) + RPM::COLON);
     ui->radioButtonPerformSkill->setText(RPM::translate(Translations::PERFORM_SKILL) + RPM::COLON);
     ui->radioButtonScript->setText(RPM::translate(Translations::SCRIPT) + RPM::COLON);

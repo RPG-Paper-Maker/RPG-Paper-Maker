@@ -1343,5 +1343,9 @@
     "faceset.scaling.height": "패싯 스케일링 높이",
     "set.game.over.command": "게임 오버 명령 설정",
     "play.a.video": "동영상 재생",
-    "battle.message": "전투 메시지"
+    "battle.message": "전투 메시지",
+    "on": "ON",
+    "off": "OFF",
+    "antialiasing": "Antialiasing",
+    "skyboxes": "Skyboxes"
 }

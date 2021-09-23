@@ -1343,5 +1343,9 @@
     "faceset.scaling.height": "Висота масштабу облич",
     "set.game.over.command": "Встановити команду кінця гри",
     "play.a.video": "Програти відео",
-    "battle.message": "Бойове повідомлення"
+    "battle.message": "Бойове повідомлення",
+    "on": "ON",
+    "off": "OFF",
+    "antialiasing": "Antialiasing",
+    "skyboxes": "Skyboxes"
 }

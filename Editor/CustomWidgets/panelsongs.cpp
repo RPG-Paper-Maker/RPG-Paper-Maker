@@ -471,6 +471,8 @@ void PanelSongs::translate()
     ui->checkBoxStart->setText(RPM::translate(Translations::START) + RPM::COLON);
     ui->groupBoxOptions->setTitle(RPM::translate(Translations::OPTIONS));
     ui->pushButtonRefresh->setText(RPM::translate(Translations::REFRESH));
+    ui->pushButtonExport->setText(RPM::translate(Translations::EXPORT) + RPM
+        ::DOT_DOT_DOT);
     ui->pushButtonDLC->setText(RPM::translate(Translations::IMPORT_DLC_S) + RPM
         ::DOT_DOT_DOT);
 }

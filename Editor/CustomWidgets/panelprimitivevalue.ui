@@ -267,16 +267,6 @@
          <property name="focusPolicy">
           <enum>Qt::StrongFocus</enum>
          </property>
-         <item>
-          <property name="text">
-           <string>ON</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>OFF</string>
-          </property>
-         </item>
         </widget>
        </item>
        <item>

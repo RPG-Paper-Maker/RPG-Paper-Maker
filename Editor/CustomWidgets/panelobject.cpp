@@ -100,7 +100,7 @@ void PanelObject::initializeList(QStandardItemModel *list) {
 
 void PanelObject::updateList() {
     ui->comboBoxInheritance->clear();
-    ui->comboBoxInheritance->addItem("None");
+    ui->comboBoxInheritance->addItem(RPM::translate(Translations::NONE));
     SuperListItem::fillComboBox(ui->comboBoxInheritance, m_list);
 }
 

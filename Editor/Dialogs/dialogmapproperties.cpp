@@ -116,11 +116,10 @@ void DialogMapProperties::initialize() {
 
 // -------------------------------------------------------
 
-void DialogMapProperties::translate() {
-    this->setWindowTitle(RPM::translate(Translations::MAP_PROPERTIES) + RPM
-        ::DOT_DOT_DOT);
-    ui->tabWidget->setTabText(0, RPM::translate(Translations
-        ::MAP_STARTUP_REACTIONS));
+void DialogMapProperties::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::MAP_PROPERTIES) + RPM::DOT_DOT_DOT);
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::MAP_STARTUP_REACTIONS));
     ui->tabWidget->setTabText(1, RPM::translate(Translations::BATTLES));
     ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
     ui->labelDepth->setText(RPM::translate(Translations::DEPTH) + RPM::COLON);
@@ -129,26 +128,19 @@ void DialogMapProperties::translate() {
     ui->labelLength->setText(RPM::translate(Translations::LENGTH) + RPM::COLON);
     ui->labelheight->setText(RPM::translate(Translations::HEIGHT) + RPM::COLON);
     ui->labelTileset->setText(RPM::translate(Translations::TILESET) + RPM::COLON);
-    ui->labelCameraPropID->setText(RPM::translate(Translations
-        ::CAMERA_PROPERTIES_ID) + RPM::COLON);
-    ui->labelBackgroundSound->setText(RPM::translate(Translations
-        ::BACKGROUND_SOUND) + RPM::COLON);
-    ui->radioButtonColor->setText(RPM::translate(Translations::COLOR_ID) + RPM
-        ::COLON);
-    ui->radioButtonSkybox->setText(RPM::translate(Translations::PICTURE) + RPM
-        ::COLON);
-    ui->radioButtonSkybox->setText(RPM::translate(Translations::SKYBOX_ID) + RPM
-        ::COLON);
+    ui->labelCameraPropID->setText(RPM::translate(Translations::CAMERA_PROPERTIES_ID) + RPM::COLON);
+    ui->labelBackgroundSound->setText(RPM::translate(Translations::BACKGROUND_SOUND) + RPM::COLON);
+    ui->radioButtonColor->setText(RPM::translate(Translations::COLOR_ID) + RPM::COLON);
+    ui->radioButtonPicture->setText(RPM::translate(Translations::PICTURE) + RPM::COLON);
+    ui->radioButtonSkybox->setText(RPM::translate(Translations::PICTURE) + RPM::COLON);
+    ui->radioButtonSkybox->setText(RPM::translate(Translations::SKYBOX_ID) + RPM::COLON);
     ui->groupBoxSky->setTitle(RPM::translate(Translations::SKY));
     ui->groupBoxSizes->setTitle(RPM::translate(Translations::SIZE));
-    ui->labelBattleMapID->setText(RPM::translate(Translations::BATTLE_MAP_ID) +
-        RPM::COLON);
+    ui->labelBattleMapID->setText(RPM::translate(Translations::BATTLE_MAP_ID) + RPM::COLON);
     ui->groupBoxRandomBattle->setTitle(RPM::translate(Translations::RANDOM_BATTLES));
-    ui->labelNumberOfStepsAfter->setText(RPM::translate(Translations
-        ::NUMBER_OF_STEPS_AFTER_NEXT_BATTLE) + RPM::COLON);
-    ui->labelWithVariationInPercent->setText(RPM::translate(Translations
-        ::VARIANCE) + RPM::SPACE + RPM::PARENTHESIS_LEFT + "%" + RPM
-        ::PARENTHESIS_RIGHT + RPM::COLON);
+    ui->labelNumberOfStepsAfter->setText(RPM::translate(Translations::NUMBER_OF_STEPS_AFTER_NEXT_BATTLE) + RPM::COLON);
+    ui->labelWithVariationInPercent->setText(RPM::translate(Translations::VARIANCE) +
+        RPM::SPACE + RPM::PARENTHESIS_LEFT + "%" + RPM::PARENTHESIS_RIGHT + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

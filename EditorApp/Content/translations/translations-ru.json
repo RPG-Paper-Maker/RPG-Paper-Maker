@@ -1343,5 +1343,9 @@
     "faceset.scaling.height": "Высота масштабирования лиц",
     "set.game.over.command": "Установить команду конца игры",
     "play.a.video": "Проиграть видео",
-    "battle.message": "Боевое сообщение"
+    "battle.message": "Боевое сообщение",
+    "on": "ON",
+    "off": "OFF",
+    "antialiasing": "Antialiasing",
+    "skyboxes": "Skyboxes"
 }

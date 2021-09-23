@@ -862,7 +862,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-518</y>
                 <width>624</width>
                 <height>1216</height>
                </rect>
@@ -945,7 +945,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QGroupBox" name="groupBox">
+                    <widget class="QGroupBox" name="groupBoxSkyBoxes">
                      <property name="enabled">
                       <bool>true</bool>
                      </property>
@@ -2511,6 +2511,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>WidgetPicture</class>
+   <extends>QWidget</extends>
+   <header>widgetpicture.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>PanelSuperList</class>
    <extends>QWidget</extends>
    <header>panelsuperlist.h</header>
@@ -2525,12 +2531,6 @@
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetPicture</class>
-   <extends>QWidget</extends>
-   <header>widgetpicture.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

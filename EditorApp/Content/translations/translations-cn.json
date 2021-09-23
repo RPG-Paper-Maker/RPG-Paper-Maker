@@ -1343,5 +1343,9 @@
     "faceset.scaling.height": "Faceset 縮放高度",
     "set.game.over.command": "設置遊戲結束命令",
     "play.a.video": "播放視頻",
-    "battle.message": "戰鬥訊息"
+    "battle.message": "戰鬥訊息",
+    "on": "ON",
+    "off": "OFF",
+    "antialiasing": "Antialiasing",
+    "skyboxes": "Skyboxes"
 }

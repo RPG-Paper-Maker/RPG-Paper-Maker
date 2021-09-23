@@ -232,6 +232,8 @@ void PanelVideos::translate()
     ui->checkBoxContent->setText(RPM::translate(Translations
         ::SHOW_AVAILABLE_CONTENT));
     ui->pushButtonRefresh->setText(RPM::translate(Translations::REFRESH));
+    ui->pushButtonExport->setText(RPM::translate(Translations::EXPORT) + RPM
+        ::DOT_DOT_DOT);
     ui->pushButtonDLC->setText(RPM::translate(Translations::IMPORT_DLC_S) + RPM
         ::DOT_DOT_DOT);
 }

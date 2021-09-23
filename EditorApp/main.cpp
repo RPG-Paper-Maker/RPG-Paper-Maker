@@ -113,6 +113,7 @@ int main(int argc, char *argv[]) {
     // Load RPM settings
     RPM::get()->readEngineSettings();
     RPM::get()->readTranslations();
+    RPM::get()->engineSettings()->keyBoardDatas()->updateHeader();
 
     // General stylesheet configuration
     RPM::get()->engineSettings()->updateTheme();

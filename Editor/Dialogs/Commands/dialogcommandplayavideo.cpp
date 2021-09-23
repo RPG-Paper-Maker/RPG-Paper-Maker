@@ -66,6 +66,7 @@ void DialogCommandPlayAVideo::translate()
     ui->radioButtonPause->setText(RPM::translate(Translations::PAUSE));
     ui->radioButtonStop->setText(RPM::translate(Translations::STOP));
     ui->checkBoxStart->setText(RPM::translate(Translations::START) + RPM::COLON);
+    ui->labelSeconds->setText(RPM::translate(Translations::SECONDS).toLower());
     ui->checkBoxWaitEnd->setText(RPM::translate(Translations
         ::WAIT_END_CHANGE_BEFORE_NEXT_COMMAND));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);

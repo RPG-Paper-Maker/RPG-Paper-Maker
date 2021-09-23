@@ -25,8 +25,7 @@ const QString SystemCustomShape::PARSE_FACE = "f ";
 // -------------------------------------------------------
 
 SystemCustomShape::SystemCustomShape() :
-    SystemCustomShape(-1, "<" + RPM::translate(Translations::NONE).toUpper() +
-        ">", false)
+    SystemCustomShape(-1, "<" + RPM::translate(Translations::NONE) + ">", false)
 {
 
 }

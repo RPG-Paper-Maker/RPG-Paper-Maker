@@ -1343,5 +1343,9 @@
     "faceset.scaling.height": "Rozciągnij szerokość faceset",
     "set.game.over.command": "Zmień grę na polecenie",
     "play.a.video": "Odtwórz film",
-    "battle.message": "Wiadomość bojowa"
+    "battle.message": "Wiadomość bojowa",
+    "on": "ON",
+    "off": "OFF",
+    "antialiasing": "Antialiasing",
+    "skyboxes": "Skyboxes"
 }

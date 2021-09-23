@@ -1347,5 +1347,9 @@
     "faceset.scaling.height": "Alongar a largura do conjunto de faces",
     "set.game.over.command": "Mudar o game over command",
     "play.a.video": "Reproduza um vídeo",
-    "battle.message": "Mensagem de Combate"
+    "battle.message": "Mensagem de Combate",
+    "on": "ON",
+    "off": "OFF",
+    "antialiasing": "Antialiasing",
+    "skyboxes": "Skyboxes"
 }

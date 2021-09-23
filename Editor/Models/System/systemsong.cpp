@@ -20,7 +20,7 @@
 // -------------------------------------------------------
 
 SystemSong::SystemSong() :
-    SystemSong(-1, "<None>", false)
+    SystemSong(-1, "<" + RPM::translate(Translations::NONE) + ">", false)
 {
 
 }

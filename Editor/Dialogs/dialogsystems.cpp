@@ -650,11 +650,11 @@ void DialogSystems::translate()
     ui->pushButtonEnterNameOptions->setText(RPM::translate(Translations
         ::ENTER_NAME_OPTIONS) + RPM::DOT_DOT_DOT);
     ui->labelFacesetScalingWidth->setText(RPM::translate(Translations
-        ::FACESET_SCALING_WIDTH + RPM::SPACE + RPM::PARENTHESIS_LEFT + RPM
-        ::translate(Translations::IN_PX) + RPM::PARENTHESIS_RIGHT + RPM::COLON));
+        ::FACESET_SCALING_WIDTH) + RPM::SPACE + RPM::PARENTHESIS_LEFT + RPM
+        ::translate(Translations::IN_PX) + RPM::PARENTHESIS_RIGHT + RPM::COLON);
     ui->labelFacesetScalingHeight->setText(RPM::translate(Translations
-        ::FACESET_SCALING_HEIGHT + RPM::SPACE + RPM::PARENTHESIS_LEFT + RPM
-        ::translate(Translations::IN_PX) + RPM::PARENTHESIS_RIGHT + RPM::COLON));
+        ::FACESET_SCALING_HEIGHT) + RPM::SPACE + RPM::PARENTHESIS_LEFT + RPM
+        ::translate(Translations::IN_PX) + RPM::PARENTHESIS_RIGHT + RPM::COLON);
     ui->groupBoxItemsTypes->setTitle(RPM::translate(Translations::ITEMS_TYPES));
     ui->groupBoxInventoryFilters->setTitle(RPM::translate(Translations::INVENTORY_FILTERS));
     ui->groupBoxMainMenuCommands->setTitle(RPM::translate(Translations::MAIN_MENU_COMMANDS));
@@ -666,6 +666,15 @@ void DialogSystems::translate()
     ui->labelTroopsBattlersCenterOffset->setText(RPM::translate(Translations::TROOPS_BATTLERS_CENTER_OFFSET) + RPM::COLON);
     ui->labelTroopsBattlersOffset->setText(RPM::translate(Translations::TROOPS_BATTLERS_OFFSET) + RPM::COLON);
     ui->pushButtonDefaultDialogBoxOptions->setText(RPM::translate(Translations::SELECT) + RPM::DOT_DOT_DOT);
+    ui->checkBoxAntialiasing->setText(RPM::translate(Translations::ANTIALIASING));
+    ui->checkBoxMouseControls->setText(RPM::translate(Translations::MOUSE_CONTROLS));
+    ui->groupBoxSkyBoxes->setTitle(RPM::translate(Translations::SKYBOXES));
+    ui->groupBoxInitialParty->setTitle(RPM::translate(Translations::INITIAL_PARTY_MEMBERS));
+    ui->groupBoxGameOverBackground->setTitle(RPM::translate(Translations::BACKGROUND));
+    ui->radioButtonImageGameOver->setText(RPM::translate(Translations::IMAGE) + RPM::COLON);
+    ui->radioButtonVideoGameOver->setText(RPM::translate(Translations::VIDEO) + RPM::COLON);
+    ui->labelMusicGameOver->setText(RPM::translate(Translations::MUSIC) + RPM::COLON);
+    ui->groupBoxMenuCommandsGameOver->setTitle(RPM::translate(Translations::MENU_COMMANDS));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

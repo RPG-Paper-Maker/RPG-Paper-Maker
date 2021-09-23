@@ -518,6 +518,8 @@ void MainWindow::translate() {
     ui->actionHeight_down->setText(RPM::translate(Translations::HEIGHT_DOWN));
     ui->actionHeight_plus_down->setText(RPM::translate(Translations
         ::HEIGHT_PLUS_DOWN));
+    ui->actionZoom_in->setText(RPM::translate(Translations::ZOOM_IN));
+    ui->actionZoom_out->setText(RPM::translate(Translations::ZOOM_OUT));
     ui->actionDatas_manager->setText(RPM::translate(Translations
         ::DATAS_MANAGER) + RPM::DOT_DOT_DOT);
     ui->actionDatas_manager->setIconText(RPM::translate(Translations
