@@ -213,6 +213,10 @@ void SuperListItem::deleteModelTree(QStandardItem *item) {
 // -------------------------------------------------------
 
 int SuperListItem::getIndexById(QStandardItem* item, int id, bool first) {
+    if (item == nullptr)
+    {
+        return -1;
+    }
     int l;
 
     l = item->rowCount();
@@ -238,19 +242,19 @@ int SuperListItem::getIndexById(QStandardItem* item, int id, bool first) {
 // -------------------------------------------------------
 
 int SuperListItem::getIdByIndex(QStandardItemModel* model, int index){
-    SuperListItem *super;
-
-    super = SuperListItem::getByIndex(model, index);
-
+    SuperListItem *super = SuperListItem::getByIndex(model, index);
     return super == nullptr ? -1 : super->id();
 }
 
 // -------------------------------------------------------
 
-SuperListItem* SuperListItem::getById(QStandardItem* item, int id, bool first) {
-    int l;
-
-    l = item->rowCount();
+SuperListItem* SuperListItem::getById(QStandardItem* item, int id, bool first)
+{
+    if (item == nullptr)
+    {
+        return nullptr;
+    }
+    int l = item->rowCount();
     if (l > 0) {
         SuperListItem *s;
         int i;
@@ -276,6 +280,10 @@ SuperListItem* SuperListItem::getById(QStandardItem* item, int id, bool first) {
 QStandardItem * SuperListItem::getItemByID(QStandardItem *item, int id, bool
     first)
 {
+    if (item == nullptr)
+    {
+        return nullptr;
+    }
     int l;
 
     l = item->rowCount();
@@ -302,6 +310,10 @@ QStandardItem * SuperListItem::getItemByID(QStandardItem *item, int id, bool
 // -------------------------------------------------------
 
 SuperListItem * SuperListItem::getByIndex(QStandardItemModel* model, int index) {
+    if (model == nullptr)
+    {
+        return nullptr;
+    }
     int i, l;
 
     for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {

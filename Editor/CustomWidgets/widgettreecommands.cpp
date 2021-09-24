@@ -254,6 +254,10 @@ void WidgetTreeCommands::editCommand(QStandardItem *selected,
     if (command->isEditable()){
         DialogCommand *dialog = DialogCommands::getDialogCommand(command->kind(),
             command, m_linkedObject, m_parameters, m_troopMonstersList);
+        if (dialog == nullptr)
+        {
+            return;
+        }
         if (dialog->exec() == QDialog::Accepted){
             EventCommand* newCommand = dialog->getCommand();
             QStandardItem* root = getRootOfCommand(selected);

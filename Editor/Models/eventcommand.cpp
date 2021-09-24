@@ -379,9 +379,12 @@ QString EventCommand::strNumberVariable(int &i) const {
     case PrimitiveValueKind::Number:
         return QString::number(value);
     case PrimitiveValueKind::Variable:
-        return RPM::translate(Translations::VARIABLE) + RPM::SPACE + RPM::get()
-            ->project()->gameDatas()->variablesDatas()->getVariableById(value)
-            ->toString();
+    {
+        SuperListItem *super = RPM::get()->project()->gameDatas()
+            ->variablesDatas()->getVariableById(value);
+        return super == nullptr ? "" : RPM::translate(Translations::VARIABLE) +
+            RPM::SPACE + super->toString();
+    }
     default:
         return "";
     }
@@ -402,16 +405,29 @@ QString EventCommand::strDataBaseId(int &i, QStandardItemModel *properties,
     case PrimitiveValueKind::Number:
         return QString::number(value);
     case PrimitiveValueKind::Variable:
-        return RPM::translate(Translations::VARIABLE) + RPM::SPACE + RPM::get()
-            ->project()->gameDatas()->variablesDatas()->getVariableById(value)
-            ->toString();
+        super = RPM::get()->project()->gameDatas()->variablesDatas()
+            ->getVariableById(value);
+        return super == nullptr ? "" : RPM::translate(Translations::VARIABLE) +
+            RPM::SPACE + super->toString();
     case PrimitiveValueKind::DataBase:
+        if (dataBase == nullptr)
+        {
+            return "";
+        }
         super = SuperListItem::getById(dataBase->invisibleRootItem(), value);
         return super == nullptr ? "" : super->toString();
     case PrimitiveValueKind::Parameter:
+        if (parameters == nullptr)
+        {
+            return "";
+        }
         super = SuperListItem::getById(parameters->invisibleRootItem(), value);
         return super == nullptr ? "" : super->toString();
     case PrimitiveValueKind::Property:
+        if (properties == nullptr)
+        {
+            return "";
+        }
         super = SuperListItem::getById(properties->invisibleRootItem(), value);
         return super == nullptr ? "" : super->toString();
     default:
@@ -533,10 +549,13 @@ QString EventCommand::strChangeVariables(QStandardItemModel *properties,
 
     i = 0;
     checked = m_listCommand.at(i++);
-    if (!RPM::stringToBool(checked)) {
-        selection += RPM::get()->project()->gameDatas()->variablesDatas()
-            ->getVariableById(m_listCommand.at(i++).toInt())->toString();
-    } else {
+    if (!RPM::stringToBool(checked))
+    {
+        SuperListItem *super = RPM::get()->project()->gameDatas()->variablesDatas()
+            ->getVariableById(m_listCommand.at(i++).toInt());
+        selection += super == nullptr ? "" : super->toString();
+    } else
+    {
         selection += m_listCommand.at(i++);
         selection += RPM::SPACE + RPM::translate(Translations::TO).toLower() +
             RPM::SPACE;

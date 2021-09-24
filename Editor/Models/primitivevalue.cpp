@@ -310,9 +310,12 @@ QString PrimitiveValue::toString() const {
     case PrimitiveValueKind::NumberDouble:
         return QString::number(m_numberDoubleValue);
     case PrimitiveValueKind::Variable:
-        return RPM::translate(Translations::VARIABLE) + RPM::COLON + RPM::SPACE
-            + RPM::get()->project()->gameDatas()->variablesDatas()
-            ->getVariableById(m_numberValue)->toString();
+    {
+        SuperListItem *super = RPM::get()->project()->gameDatas()->variablesDatas()
+            ->getVariableById(m_numberValue);
+        return super == nullptr ? "" : RPM::translate(Translations::VARIABLE) +
+            RPM::COLON + RPM::SPACE + super->toString();
+    }
     case PrimitiveValueKind::Parameter:
         return this->modelParameter() == nullptr ? "" : RPM::translate(
             Translations::PARAMETER) + RPM::COLON + RPM::SPACE + SuperListItem
@@ -451,10 +454,13 @@ void PrimitiveValue::labelTab(QString &str) const {
         str += QString::number(m_numberDoubleValue);
         break;
     case PrimitiveValueKind::Variable:
-        str += RPM::translate(Translations::VARIABLE_SHORT) + ">" + RPM::get()
-            ->project()->gameDatas()->variablesDatas()->getVariableById(
-            m_numberValue)->name();
+    {
+        SuperListItem *super = RPM::get()->project()->gameDatas()->variablesDatas()
+            ->getVariableById(m_numberValue);
+        str += super == nullptr ? "" : RPM::translate(Translations::VARIABLE_SHORT)
+            + ">" + super->name();
         break;
+    }
     case PrimitiveValueKind::Message:
         str += "\"" + m_messageValue + "\"";
         break;

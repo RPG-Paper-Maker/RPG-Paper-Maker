@@ -73,7 +73,6 @@ SuperListItem* SystemVariables::getById(int id) const {
             return s;
         }
     }
-
     return nullptr;
 }
 
