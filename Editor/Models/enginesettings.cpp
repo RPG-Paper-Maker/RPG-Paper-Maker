@@ -31,6 +31,8 @@ const QString EngineSettings::JSON_FIRST_TIME_LANGUAGES = "ftl";
 const QString EngineSettings::JSON_CURRENT_LANGUAGE = "cl";
 const QString EngineSettings::JSON_BATTLE_TROOP_TEST_BATTLE_MAP_ID = "battleTroopTestBattleMapID";
 const QString EngineSettings::JSON_BATTLE_TROOP_TEST_HEROES = "battleTroopTestHeroes";
+const QString EngineSettings::JSON_TAB_INDEX_DATAS = "tabIndexDatas";
+const QString EngineSettings::JSON_TAB_INDEX_SYSTEMS = "tabIndexSystems";
 const QString EngineSettings::THEME_DEFAULT = "defaulttheme";
 const QString EngineSettings::THEME_WHITE = "whitetheme";
 const QString EngineSettings::THEME_WHITE_MAC ="whitemactheme";
@@ -39,6 +41,8 @@ const QString EngineSettings::PATH_THEMES = ":/stylesheets/Themes/";
 const bool EngineSettings::DEFAULT_FIRST_TIME_LANGUAGES = true;
 const QString EngineSettings::DEFAULT_CURRENT_LANGUAGE = "en";
 const int EngineSettings::DEFAULT_BATTLE_TROOP_TEST_BATTLE_MAP_ID = 1;
+const int EngineSettings::DEFAULT_TAB_INDEX_DATAS = 0;
+const int EngineSettings::DEFAULT_TAB_INDEX_SYSTEMS = 0;
 
 // -------------------------------------------------------
 //
@@ -55,7 +59,9 @@ EngineSettings::EngineSettings() :
     m_showAvailableContent(true),
     m_firstTimeLanguages(DEFAULT_FIRST_TIME_LANGUAGES),
     m_currentLanguage(DEFAULT_CURRENT_LANGUAGE),
-    m_battleTroopTestBattleMapID(DEFAULT_BATTLE_TROOP_TEST_BATTLE_MAP_ID)
+    m_battleTroopTestBattleMapID(DEFAULT_BATTLE_TROOP_TEST_BATTLE_MAP_ID),
+    m_tabIndexDatas(DEFAULT_TAB_INDEX_DATAS),
+    m_tabIndexSystems(DEFAULT_TAB_INDEX_SYSTEMS)
 {
     // Default mac theme should be white
     #ifdef Q_OS_MAC
@@ -196,6 +202,26 @@ QJsonArray EngineSettings::battleTroopTestHeroes() const
 void EngineSettings::setBattleTroopTestHeroes(QJsonArray &battleTroopTestHeros)
 {
     m_battleTroopTestHeroes = battleTroopTestHeros;
+}
+
+int EngineSettings::tabIndexDatas() const
+{
+    return m_tabIndexDatas;
+}
+
+void EngineSettings::setTabIndexDatas(int tabIndexDatas)
+{
+    m_tabIndexDatas = tabIndexDatas;
+}
+
+int EngineSettings::tabIndexSystems() const
+{
+    return m_tabIndexSystems;
+}
+
+void EngineSettings::setTabIndexSystems(int tabIndexSystems)
+{
+    m_tabIndexSystems = tabIndexSystems;
 }
 
 // -------------------------------------------------------
@@ -388,6 +414,14 @@ void EngineSettings::read(const QJsonObject &json) {
         m_battleTroopTestBattleMapID = json[JSON_BATTLE_TROOP_TEST_BATTLE_MAP_ID].toInt();
     }
     m_battleTroopTestHeroes = json[JSON_BATTLE_TROOP_TEST_HEROES].toArray();
+    if (json.contains(JSON_TAB_INDEX_DATAS))
+    {
+        m_tabIndexDatas = json[JSON_TAB_INDEX_DATAS].toInt();
+    }
+    if (json.contains(JSON_TAB_INDEX_SYSTEMS))
+    {
+        m_tabIndexSystems = json[JSON_TAB_INDEX_SYSTEMS].toInt();
+    }
 }
 
 // -------------------------------------------------------
@@ -449,4 +483,12 @@ void EngineSettings::write(QJsonObject &json) const {
         json[JSON_BATTLE_TROOP_TEST_BATTLE_MAP_ID] = m_battleTroopTestBattleMapID;
     }
     json[JSON_BATTLE_TROOP_TEST_HEROES] = m_battleTroopTestHeroes;
+    if (m_tabIndexDatas != DEFAULT_TAB_INDEX_DATAS)
+    {
+        json[JSON_TAB_INDEX_DATAS] = m_tabIndexDatas;
+    }
+    if (m_tabIndexSystems != DEFAULT_TAB_INDEX_SYSTEMS)
+    {
+        json[JSON_TAB_INDEX_SYSTEMS] = m_tabIndexSystems;
+    }
 }

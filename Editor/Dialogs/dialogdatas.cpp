@@ -57,6 +57,7 @@ DialogDatas::DialogDatas(GameDatas *gameDatas, QWidget *parent) :
     ui->panelSuperListClasses->list()->setFocus(Qt::FocusReason::MouseFocusReason);
     this->copyTemp();
     this->translate();
+    ui->tabWidget->setCurrentIndex(RPM::get()->engineSettings()->tabIndexDatas());
 }
 
 DialogDatas::~DialogDatas()
@@ -640,8 +641,6 @@ void DialogDatas::showEvent(QShowEvent *event) {
         ->scrollAreaAnimation->horizontalScrollBar()->maximum() / 2);
     ui->scrollAreaAnimation->verticalScrollBar()->setSliderPosition(ui
         ->scrollAreaAnimation->verticalScrollBar()->maximum() / 2);
-
-    ui->tabWidget->setCurrentIndex(0);
 }
 
 // -------------------------------------------------------
@@ -674,7 +673,10 @@ void DialogDatas::on_pushButtonApply_clicked()
 
 // -------------------------------------------------------
 
-void DialogDatas::on_tabWidget_currentChanged(int index) {
+void DialogDatas::on_tabWidget_currentChanged(int index)
+{
+    RPM::get()->engineSettings()->setTabIndexDatas(index);
+    RPM::get()->engineSettings()->write();
     switch (index) {
     case 1:
         ui->panelDatasHero->updateClasses();

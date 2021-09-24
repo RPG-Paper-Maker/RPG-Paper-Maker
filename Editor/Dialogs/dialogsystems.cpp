@@ -49,7 +49,6 @@ DialogSystems::DialogSystems(GameDatas *gameDatas, QWidget *parent) :
     ui(new Ui::DialogSystems)
 {
     ui->setupUi(this);
-    
     initializeSystem(gameDatas);
     initializeBattleSystem(gameDatas);
     initializeTitleScreenGameOver(gameDatas);
@@ -65,6 +64,7 @@ DialogSystems::DialogSystems(GameDatas *gameDatas, QWidget *parent) :
     }
 
     this->translate();
+    ui->tabWidget->setCurrentIndex(RPM::get()->engineSettings()->tabIndexSystems());
 }
 
 DialogSystems::~DialogSystems()
@@ -965,7 +965,10 @@ void DialogSystems::on_checkBoxCommonReactionBlockingHero_toggled(bool checked){
 
 // -------------------------------------------------------
 
-void DialogSystems::on_tabWidget_currentChanged(int index) {
+void DialogSystems::on_tabWidget_currentChanged(int index)
+{
+    RPM::get()->engineSettings()->setTabIndexSystems(index);
+    RPM::get()->engineSettings()->write();
     switch (index) {
     case 5:
         RPM::get()->project()->setCurrentObject(nullptr);

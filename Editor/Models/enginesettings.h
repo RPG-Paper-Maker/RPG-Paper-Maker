@@ -42,6 +42,8 @@ public:
     static const QString JSON_CURRENT_LANGUAGE;
     static const QString JSON_BATTLE_TROOP_TEST_BATTLE_MAP_ID;
     static const QString JSON_BATTLE_TROOP_TEST_HEROES;
+    static const QString JSON_TAB_INDEX_DATAS;
+    static const QString JSON_TAB_INDEX_SYSTEMS;
     static const QString THEME_DEFAULT;
     static const QString THEME_WHITE;
     static const QString THEME_WHITE_MAC;
@@ -50,6 +52,8 @@ public:
     static const bool DEFAULT_FIRST_TIME_LANGUAGES;
     static const QString DEFAULT_CURRENT_LANGUAGE;
     static const int DEFAULT_BATTLE_TROOP_TEST_BATTLE_MAP_ID;
+    static const int DEFAULT_TAB_INDEX_DATAS;
+    static const int DEFAULT_TAB_INDEX_SYSTEMS;
 
     EngineSettings();
     virtual ~EngineSettings();
@@ -82,6 +86,10 @@ public:
     void setBattleTroopTestBattleMapID(int battleTroopTestBattleMapID);
     QJsonArray battleTroopTestHeroes() const;
     void setBattleTroopTestHeroes(QJsonArray &battleTroopTestHeroes);
+    int tabIndexDatas() const;
+    void setTabIndexDatas(int tabIndexDatas);
+    int tabIndexSystems() const;
+    void setTabIndexSystems(int tabIndexSystems);
 
     void setDefault();
     QString getThemeContent() const;
@@ -111,6 +119,8 @@ protected:
     QString m_currentLanguage;
     int m_battleTroopTestBattleMapID;
     QJsonArray m_battleTroopTestHeroes;
+    int m_tabIndexDatas;
+    int m_tabIndexSystems;
 
     QString readContent(QString name) const;
 };
