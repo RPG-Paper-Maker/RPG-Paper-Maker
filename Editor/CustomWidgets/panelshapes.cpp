@@ -145,7 +145,7 @@ void PanelShapes::updateShapeItem(QStandardItem *item) {
             ui->widgetPreviewObject3D->show();
             super->loadCustomObj();
             ui->widgetPreviewObject3D->loadShape(super);
-            ui->widgetPreviewObject3D->updateObject();
+            ui->widgetPreviewObject3D->updateObject(true);
         }
     } else {
         ui->widgetPreviewObject3D->hide();

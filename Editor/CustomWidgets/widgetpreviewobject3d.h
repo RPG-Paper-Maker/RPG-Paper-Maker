@@ -36,7 +36,7 @@ public:
     void clearObject();
     void loadObject(SystemObject3D *object);
     void loadShape(SystemCustomShape *shape);
-    void updateObject();
+    void updateObject(bool missingTexture = false);
 
 protected:
     Object3DDatas *m_object;
@@ -47,6 +47,7 @@ protected:
     QOpenGLShaderProgram *m_program;
     int u_modelviewProjection;
     QOpenGLTexture *m_texture;
+    bool m_isMissingTexture;
 
     virtual void resizeGL(int width, int height);
     virtual void initializeGL();

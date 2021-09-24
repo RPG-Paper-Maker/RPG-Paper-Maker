@@ -27,7 +27,8 @@ WidgetPreviewObject3D::WidgetPreviewObject3D(QWidget *parent) :
     m_camera(new Camera),
     m_isInitialized(false),
     m_program(nullptr),
-    m_texture(nullptr)
+    m_texture(nullptr),
+    m_isMissingTexture(false)
 {
 
 }
@@ -84,14 +85,15 @@ void WidgetPreviewObject3D::loadShape(SystemCustomShape *shape) {
     if (m_object3D != nullptr) {
         delete m_object3D;
     }
-
     m_object3D = new SystemObject3D(-1, "", ShapeKind::Custom, shape->id());
+    m_isMissingTexture = true;
     this->loadObject(m_object3D);
 }
 
 // -------------------------------------------------------
 
-void WidgetPreviewObject3D::updateObject() {
+void WidgetPreviewObject3D::updateObject(bool missingTexture) {
+    m_isMissingTexture = missingTexture;
     if (m_isInitialized) {
         Position position;
         QImage image;
@@ -105,8 +107,14 @@ void WidgetPreviewObject3D::updateObject() {
         m_objectsGL->updateGL();
 
         // Texture
-        Map::loadPicture(m_object->datas()->picture(), PictureKind::Object3D,
-            image);
+        if (missingTexture)
+        {
+            image = QImage(RPM::PATH_TEXTURE_MISSING);
+        } else
+        {
+            Map::loadPicture(m_object->datas()->picture(), PictureKind::Object3D,
+                image);
+        }
         m_texture = Map::createTexture(image);
 
         // Update camera position
@@ -144,7 +152,7 @@ void WidgetPreviewObject3D::initializeGL() {
     m_isInitialized = true;
     this->makeCurrent();
     if (m_object != nullptr) {
-        this->updateObject();
+        this->updateObject(m_isMissingTexture);
     }
 }
 
