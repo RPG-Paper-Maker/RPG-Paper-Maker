@@ -1168,6 +1168,7 @@ QString EventCommand::strChangeState(QStandardItemModel *properties,
         break;
     case 0:
         objectID = RPM::translate(Translations::HERO);
+        i += 2;
         break;
     default:
         objectID = this->strProperty(i, properties, parameters);
