@@ -112,6 +112,12 @@
               <height>27</height>
              </size>
             </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>999999999</number>
+            </property>
            </widget>
           </item>
           <item row="1" column="1">
@@ -130,6 +136,12 @@
               <width>60</width>
               <height>27</height>
              </size>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>999999999</number>
             </property>
            </widget>
           </item>
