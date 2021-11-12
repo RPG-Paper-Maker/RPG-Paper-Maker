@@ -405,41 +405,34 @@ void WidgetTreeCommands::pasteCommand()
 
 void WidgetTreeCommands::deleteCommand() {
     QList<QStandardItem*> list = getAllSelected();
-    QStandardItem* selected;
+    QStandardItem* selected = nullptr;
     EventCommand* command;
     QStandardItem* root;
     int row = -1;
+    if (!list.isEmpty())
+    {
+        this->updateKeyboardUpDown(1);
 
-    for (int i = 0; i < list.size(); i++){
-        selected = list.at(i);
-        if (selected != nullptr)
+        for (int i = 0; i < list.size(); i++)
         {
-            command = reinterpret_cast<EventCommand *>(selected->data().value<
-                quintptr>());
-            if (command != nullptr && command->kind() != EventCommandKind::None)
+            selected = list.at(i);
+            if (selected != nullptr)
             {
-                root = getRootOfCommand(selected);
-                // Delete selected command
-                QList<EventCommand *> listCommands;
-                SystemCommonReaction::getCommands(listCommands, selected);
-                row = selected->row();
-                root->removeRow(row);
-                for (int j = 0, l = listCommands.size(); j < l; j++)
+                command = reinterpret_cast<EventCommand *>(selected->data().value<quintptr>());
+                if (command != nullptr && command->kind() != EventCommandKind::None)
                 {
-                    delete listCommands.at(j);
+                    root = getRootOfCommand(selected);
+                    // Delete selected command
+                    QList<EventCommand *> listCommands;
+                    SystemCommonReaction::getCommands(listCommands, selected);
+                    row = selected->row();
+                    root->removeRow(row);
+                    for (int j = 0, l = listCommands.size(); j < l; j++)
+                    {
+                        delete listCommands.at(j);
+                    }
                 }
             }
-        }
-    }
-
-    // Select node below
-    if (row != -1) {
-        QStandardItem *item = this->getModel()->item(row);
-        if (item != nullptr)
-        {
-            this->selectionModel()->select(item->index(), QItemSelectionModel
-                ::SelectCurrent);
-            this->selectChildren(item);
         }
     }
 }
