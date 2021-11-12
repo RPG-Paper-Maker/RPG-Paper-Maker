@@ -33,7 +33,8 @@ WidgetSuperTree::WidgetSuperTree(QWidget *parent) :
     m_canBeControled(true),
     m_canMove(true),
     m_canCreateDelete(true),
-    m_canSameName(true)
+    m_canSameName(true),
+    m_pasteBeforeSelected(false)
 {
     this->setIndentation(0);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -86,6 +87,11 @@ void WidgetSuperTree::setCanCreateDelete(bool b) {
 void WidgetSuperTree::setCanSameName(bool b)
 {
     m_canSameName = b;
+}
+
+void WidgetSuperTree::setPasteBeforeSelected(bool b)
+{
+    m_pasteBeforeSelected = b;
 }
 
 void WidgetSuperTree::initializeModel(QStandardItemModel* m){
@@ -218,7 +224,8 @@ void WidgetSuperTree::copyItem(QStandardItem* selected)
 
 // -------------------------------------------------------
 
-void WidgetSuperTree::pasteItem(QStandardItem* selected){
+void WidgetSuperTree::pasteItem(QStandardItem* selected)
+{
     if (m_copiedItem != nullptr) {
         SuperListItem* super = m_copiedItem->createCopy();
         if (!m_canSameName) {
@@ -253,7 +260,13 @@ void WidgetSuperTree::pasteItem(QStandardItem* selected){
                 RPM::translate(Translations::IMPOSSIBLE_TO_PASTE_ITEM) + RPM
                 ::SPACE + Common::getFormatNumber(id) + RPM::DOT);
         } else {
-            this->setItem(selected, super);
+            if (m_pasteBeforeSelected)
+            {
+                this->addNewItem(super, p_model->invisibleRootItem(), selected->index().row());
+            } else
+            {
+                this->setItem(selected, super);
+            }
         }
     }
 }

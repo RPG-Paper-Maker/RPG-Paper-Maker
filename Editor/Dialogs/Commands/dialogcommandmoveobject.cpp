@@ -44,6 +44,7 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
     }
     ui->treeView->getModel()->appendRow(SuperListItem::getEmptyItem());
     ui->treeView->setCurrentIndex(ui->treeView->getModel()->index(0, 0));
+    ui->treeView->setPasteBeforeSelected(true);
     this->translate();
 }
 

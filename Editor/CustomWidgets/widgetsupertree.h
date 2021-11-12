@@ -44,6 +44,7 @@ public:
     void setCanMove(bool b);
     void setCanCreateDelete(bool b);
     void setCanSameName(bool b);
+    void setPasteBeforeSelected(bool b);
 
     void forceKeyPress(QKeyEvent *event);
     void updateAbsoluteAllNodesString();
@@ -74,6 +75,7 @@ protected:
     bool m_canMove;
     bool m_canCreateDelete;
     bool m_canSameName;
+    bool m_pasteBeforeSelected;
 
     QStandardItem* getRootOfItem(QStandardItem* selected);
     void setItem(QStandardItem *selected, SuperListItem* super);
