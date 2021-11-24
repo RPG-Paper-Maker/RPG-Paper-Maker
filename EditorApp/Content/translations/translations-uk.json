@@ -1192,7 +1192,7 @@
     "restock.shop": "Оновити запас крамниці",
     "battlers.frames": "Кадри бійців",
     "battlers.rows": "Рядки бійців",
-    "you.cant.export.macos.windows": "Неможливо експортувати версію для MacOS з-під Windows. Будь ласка, використовуйте комп'ютер з Linux або MacOS для такого експорту",
+    "you.cant.export.macos.windows": "Неможливо експортувати версію для MacOS з-під Windows/Linux. Будь ласка, використовуйте комп'ютер з MacOS для такого експорту",
     "enter.a.name.menu": "Екран введення імені",
     "max.characters": "Макс. символів",
     "enter.name.options": "Опції введення імені",

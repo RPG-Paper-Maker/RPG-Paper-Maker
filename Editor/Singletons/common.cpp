@@ -336,6 +336,8 @@ bool Common::copyPathSym(QList<QPair<QString, QString>> &list, QString src,
         dstPath = pathCombine(dst, f);
         if (ifo.isSymLink())
         {
+            QString a = ifo
+                    .symLinkTarget();
             list << QPair<QString, QString>({dir.relativeFilePath(ifo
                 .symLinkTarget()), dstPath});
         } else
@@ -385,6 +387,13 @@ void Common::deleteAllFiles(QString pathSource) {
         files.next();
         QFile(files.filePath()).remove();
     }
+}
+
+// -------------------------------------------------------
+
+bool Common::isWindowsx64()
+{
+    return QSysInfo::currentCpuArchitecture().contains(QLatin1String("64"));
 }
 
 // -------------------------------------------------------

@@ -1192,7 +1192,7 @@
     "restock.shop": "補貨店",
     "battlers.frames": "戰鬥機框架",
     "battlers.rows": "戰鬥機行",
-    "you.cant.export.macos.windows": "在Windows上，您無法導出MacOS版本。請使用Linux或MacOS計算機將其導出",
+    "you.cant.export.macos.windows": "在Windows/Linux上，您無法導出MacOS版本。請使用LMacOS計算機將其導出",
     "enter.a.name.menu": "進入名稱菜單",
     "max.characters": "最多字符",
     "enter.name.options": "輸入名稱選項",

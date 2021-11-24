@@ -67,8 +67,11 @@ DEST_SCRIPTS = \"$$shell_path($$DEST_CONTENT_DIR/basic/Content/Datas/Scripts)\"
 FROM_BR= \"$$shell_path($$MODS_PATH/BR$$SLASH_END)\"
 DEST_BR = \"$$shell_path($$DEST_CONTENT_DIR/BR)\"
 
-FROM_WIN= \"$$shell_path($$MODS_PATH/Game/win32$$SLASH_END)\"
-DEST_WIN = \"$$shell_path($$DEST_CONTENT_DIR/win32)\"
+FROM_WINX64 = \"$$shell_path($$MODS_PATH/Game/winx64$$SLASH_END)\"
+DEST_WINX64 = \"$$shell_path($$DEST_CONTENT_DIR/winx64)\"
+
+FROM_WINX86 = \"$$shell_path($$MODS_PATH/Game/winx86$$SLASH_END)\"
+DEST_WINX86 = \"$$shell_path($$DEST_CONTENT_DIR/winx86)\"
 
 FROM_LINUX= \"$$shell_path($$MODS_PATH/Game/linux$$SLASH_END)\"
 DEST_LINUX = \"$$shell_path($$DEST_CONTENT_DIR/linux)\"
@@ -121,12 +124,13 @@ copyGameResources.commands = \
     $$SYNC_PRESERVE_CMD $$FROM_CONTENT  $$DEST_CONTENT  $$escape_expand(\n\t) \
     $$SYNC_PURGE_CMD    $$FROM_SCRIPTS  $$DEST_SCRIPTS  $$escape_expand(\n\t) \
     $$SYNC_PURGE_CMD    $$FROM_BR       $$DEST_BR       $$escape_expand(\n\t) \
-    $$SYNC_PURGE_CMD    $$FROM_WIN      $$DEST_WIN      $$escape_expand(\n\t) \
+    $$SYNC_PURGE_CMD    $$FROM_WINX64   $$DEST_WINX64   $$escape_expand(\n\t) \
+    $$SYNC_PURGE_CMD    $$FROM_WINX86   $$DEST_WINX86   $$escape_expand(\n\t) \
     $$SYNC_PURGE_CMD    $$FROM_LINUX    $$DEST_LINUX    $$escape_expand(\n\t) \
     $$SYNC_PURGE_CMD    $$FROM_OSX      $$DEST_OSX      $$escape_expand(\n\t) \
     $$SYNC_PURGE_CMD    $$FROM_WEB      $$DEST_WEB      $$escape_expand(\n\t) \
     $$QMAKE_COPY        $$FROM_MAIN     $$DEST_MAIN     $$escape_expand(\n\t) \
-    $$QMAKE_COPY        $$FROM_INDEX    $$DEST_INDEX     $$escape_expand(\n\t) \
+    $$QMAKE_COPY        $$FROM_INDEX    $$DEST_INDEX    $$escape_expand(\n\t) \
     $$QMAKE_COPY        $$FROM_PACKAGE  $$DEST_PACKAGE
 
 # Setup all those extra commands

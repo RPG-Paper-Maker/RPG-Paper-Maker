@@ -21,7 +21,8 @@
 // -------------------------------------------------------
 
 enum class OSKind {
-    Window,
+    Windowsx64,
+    Windowsx86,
     Linux,
     Mac
 };

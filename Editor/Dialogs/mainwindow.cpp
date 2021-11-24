@@ -1128,7 +1128,13 @@ void MainWindow::on_gameErrorOccurred(QProcess::ProcessError)
         QString strOS = "";
         QString exeName = "";
         #ifdef Q_OS_WIN
-            strOS = "win32";
+            if (Common::isWindowsx64())
+            {
+                strOS = "winx64";
+            } else
+            {
+                strOS = "winx86";
+            }
             exeName = "Game.exe";
         #elif __linux__
             strOS = "linux";
@@ -1136,7 +1142,6 @@ void MainWindow::on_gameErrorOccurred(QProcess::ProcessError)
         #else
             strOS = "osx";
         #endif
-
         // Copying exe from engine folder
         if (!exeName.isEmpty())
         {

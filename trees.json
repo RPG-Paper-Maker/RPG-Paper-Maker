@@ -3147,11 +3147,17 @@
             "source": "Game/osx/Game.app/Contents/MacOS/Game",
             "target": "Engine/Content/osx/Game.app/Contents/MacOS/Game"
         },
-        "win32": {
+        "winx64": {
             "exe": true,
             "repo": "Dependencies",
-            "source": "Game/win32/Game.exe",
-            "target": "Engine/Content/win32/Game.exe"
+            "source": "Game/winx64/Game.exe",
+            "target": "Engine/Content/winx64/Game.exe"
+        },
+        "winx86": {
+            "exe": true,
+            "repo": "Dependencies",
+            "source": "Game/winx86/Game.exe",
+            "target": "Engine/Content/winx86/Game.exe"
         }
     },
     "games": {
@@ -3162,377 +3168,384 @@
                         "files": [
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/swiftshader/libEGL.dll",
-                                "target": "Engine/Content/win32/swiftshader/libEGL.dll"
+                                "source": "Game/winx64/swiftshader/libEGL.dll",
+                                "target": "Engine/Content/winx64/swiftshader/libEGL.dll"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/swiftshader/libGLESv2.dll",
-                                "target": "Engine/Content/win32/swiftshader/libGLESv2.dll"
+                                "source": "Game/winx64/swiftshader/libGLESv2.dll",
+                                "target": "Engine/Content/winx64/swiftshader/libGLESv2.dll"
                             }
                         ],
-                        "target": "Engine/Content/win32/swiftshader"
+                        "target": "Engine/Content/winx64/swiftshader"
+                    },
+                    {
+                        "exe": true,
+                        "large": "Game.exe",
+                        "repo": "Dependencies",
+                        "source": "Game/winx64/Game.exe",
+                        "target": "Engine/Content/winx64/Game.exe"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/libEGL.dll",
-                        "target": "Engine/Content/win32/libEGL.dll"
+                        "source": "Game/winx64/libEGL.dll",
+                        "target": "Engine/Content/winx64/libEGL.dll"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/vk_swiftshader_icd.json",
-                        "target": "Engine/Content/win32/vk_swiftshader_icd.json"
+                        "source": "Game/winx64/vk_swiftshader_icd.json",
+                        "target": "Engine/Content/winx64/vk_swiftshader_icd.json"
                     },
                     {
                         "files": [
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/sr.pak",
-                                "target": "Engine/Content/win32/locales/sr.pak"
+                                "source": "Game/winx64/locales/sr.pak",
+                                "target": "Engine/Content/winx64/locales/sr.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/fi.pak",
-                                "target": "Engine/Content/win32/locales/fi.pak"
+                                "source": "Game/winx64/locales/fi.pak",
+                                "target": "Engine/Content/winx64/locales/fi.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/ar.pak",
-                                "target": "Engine/Content/win32/locales/ar.pak"
+                                "source": "Game/winx64/locales/ar.pak",
+                                "target": "Engine/Content/winx64/locales/ar.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/he.pak",
-                                "target": "Engine/Content/win32/locales/he.pak"
+                                "source": "Game/winx64/locales/he.pak",
+                                "target": "Engine/Content/winx64/locales/he.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/ja.pak",
-                                "target": "Engine/Content/win32/locales/ja.pak"
+                                "source": "Game/winx64/locales/ja.pak",
+                                "target": "Engine/Content/winx64/locales/ja.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/ml.pak",
-                                "target": "Engine/Content/win32/locales/ml.pak"
+                                "source": "Game/winx64/locales/ml.pak",
+                                "target": "Engine/Content/winx64/locales/ml.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/bg.pak",
-                                "target": "Engine/Content/win32/locales/bg.pak"
+                                "source": "Game/winx64/locales/bg.pak",
+                                "target": "Engine/Content/winx64/locales/bg.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/es-419.pak",
-                                "target": "Engine/Content/win32/locales/es-419.pak"
+                                "source": "Game/winx64/locales/es-419.pak",
+                                "target": "Engine/Content/winx64/locales/es-419.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/sv.pak",
-                                "target": "Engine/Content/win32/locales/sv.pak"
+                                "source": "Game/winx64/locales/sv.pak",
+                                "target": "Engine/Content/winx64/locales/sv.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/uk.pak",
-                                "target": "Engine/Content/win32/locales/uk.pak"
+                                "source": "Game/winx64/locales/uk.pak",
+                                "target": "Engine/Content/winx64/locales/uk.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/ms.pak",
-                                "target": "Engine/Content/win32/locales/ms.pak"
+                                "source": "Game/winx64/locales/ms.pak",
+                                "target": "Engine/Content/winx64/locales/ms.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/id.pak",
-                                "target": "Engine/Content/win32/locales/id.pak"
+                                "source": "Game/winx64/locales/id.pak",
+                                "target": "Engine/Content/winx64/locales/id.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/nl.pak",
-                                "target": "Engine/Content/win32/locales/nl.pak"
+                                "source": "Game/winx64/locales/nl.pak",
+                                "target": "Engine/Content/winx64/locales/nl.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/bn.pak",
-                                "target": "Engine/Content/win32/locales/bn.pak"
+                                "source": "Game/winx64/locales/bn.pak",
+                                "target": "Engine/Content/winx64/locales/bn.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/hi.pak",
-                                "target": "Engine/Content/win32/locales/hi.pak"
+                                "source": "Game/winx64/locales/hi.pak",
+                                "target": "Engine/Content/winx64/locales/hi.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/nb.pak",
-                                "target": "Engine/Content/win32/locales/nb.pak"
+                                "source": "Game/winx64/locales/nb.pak",
+                                "target": "Engine/Content/winx64/locales/nb.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/ta.pak",
-                                "target": "Engine/Content/win32/locales/ta.pak"
+                                "source": "Game/winx64/locales/ta.pak",
+                                "target": "Engine/Content/winx64/locales/ta.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/en-GB.pak",
-                                "target": "Engine/Content/win32/locales/en-GB.pak"
+                                "source": "Game/winx64/locales/en-GB.pak",
+                                "target": "Engine/Content/winx64/locales/en-GB.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/hr.pak",
-                                "target": "Engine/Content/win32/locales/hr.pak"
+                                "source": "Game/winx64/locales/hr.pak",
+                                "target": "Engine/Content/winx64/locales/hr.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/gu.pak",
-                                "target": "Engine/Content/win32/locales/gu.pak"
+                                "source": "Game/winx64/locales/gu.pak",
+                                "target": "Engine/Content/winx64/locales/gu.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/zh-CN.pak",
-                                "target": "Engine/Content/win32/locales/zh-CN.pak"
+                                "source": "Game/winx64/locales/zh-CN.pak",
+                                "target": "Engine/Content/winx64/locales/zh-CN.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/lv.pak",
-                                "target": "Engine/Content/win32/locales/lv.pak"
+                                "source": "Game/winx64/locales/lv.pak",
+                                "target": "Engine/Content/winx64/locales/lv.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/kn.pak",
-                                "target": "Engine/Content/win32/locales/kn.pak"
+                                "source": "Game/winx64/locales/kn.pak",
+                                "target": "Engine/Content/winx64/locales/kn.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/pt-BR.pak",
-                                "target": "Engine/Content/win32/locales/pt-BR.pak"
+                                "source": "Game/winx64/locales/pt-BR.pak",
+                                "target": "Engine/Content/winx64/locales/pt-BR.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/ru.pak",
-                                "target": "Engine/Content/win32/locales/ru.pak"
+                                "source": "Game/winx64/locales/ru.pak",
+                                "target": "Engine/Content/winx64/locales/ru.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/ca.pak",
-                                "target": "Engine/Content/win32/locales/ca.pak"
+                                "source": "Game/winx64/locales/ca.pak",
+                                "target": "Engine/Content/winx64/locales/ca.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/it.pak",
-                                "target": "Engine/Content/win32/locales/it.pak"
+                                "source": "Game/winx64/locales/it.pak",
+                                "target": "Engine/Content/winx64/locales/it.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/el.pak",
-                                "target": "Engine/Content/win32/locales/el.pak"
+                                "source": "Game/winx64/locales/el.pak",
+                                "target": "Engine/Content/winx64/locales/el.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/et.pak",
-                                "target": "Engine/Content/win32/locales/et.pak"
+                                "source": "Game/winx64/locales/et.pak",
+                                "target": "Engine/Content/winx64/locales/et.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/fr.pak",
-                                "target": "Engine/Content/win32/locales/fr.pak"
+                                "source": "Game/winx64/locales/fr.pak",
+                                "target": "Engine/Content/winx64/locales/fr.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/te.pak",
-                                "target": "Engine/Content/win32/locales/te.pak"
+                                "source": "Game/winx64/locales/te.pak",
+                                "target": "Engine/Content/winx64/locales/te.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/de.pak",
-                                "target": "Engine/Content/win32/locales/de.pak"
+                                "source": "Game/winx64/locales/de.pak",
+                                "target": "Engine/Content/winx64/locales/de.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/sk.pak",
-                                "target": "Engine/Content/win32/locales/sk.pak"
+                                "source": "Game/winx64/locales/sk.pak",
+                                "target": "Engine/Content/winx64/locales/sk.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/es.pak",
-                                "target": "Engine/Content/win32/locales/es.pak"
+                                "source": "Game/winx64/locales/es.pak",
+                                "target": "Engine/Content/winx64/locales/es.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/fil.pak",
-                                "target": "Engine/Content/win32/locales/fil.pak"
+                                "source": "Game/winx64/locales/fil.pak",
+                                "target": "Engine/Content/winx64/locales/fil.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/zh-TW.pak",
-                                "target": "Engine/Content/win32/locales/zh-TW.pak"
+                                "source": "Game/winx64/locales/zh-TW.pak",
+                                "target": "Engine/Content/winx64/locales/zh-TW.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/mr.pak",
-                                "target": "Engine/Content/win32/locales/mr.pak"
+                                "source": "Game/winx64/locales/mr.pak",
+                                "target": "Engine/Content/winx64/locales/mr.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/ro.pak",
-                                "target": "Engine/Content/win32/locales/ro.pak"
+                                "source": "Game/winx64/locales/ro.pak",
+                                "target": "Engine/Content/winx64/locales/ro.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/sw.pak",
-                                "target": "Engine/Content/win32/locales/sw.pak"
+                                "source": "Game/winx64/locales/sw.pak",
+                                "target": "Engine/Content/winx64/locales/sw.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/lt.pak",
-                                "target": "Engine/Content/win32/locales/lt.pak"
+                                "source": "Game/winx64/locales/lt.pak",
+                                "target": "Engine/Content/winx64/locales/lt.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/tr.pak",
-                                "target": "Engine/Content/win32/locales/tr.pak"
+                                "source": "Game/winx64/locales/tr.pak",
+                                "target": "Engine/Content/winx64/locales/tr.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/pt-PT.pak",
-                                "target": "Engine/Content/win32/locales/pt-PT.pak"
+                                "source": "Game/winx64/locales/pt-PT.pak",
+                                "target": "Engine/Content/winx64/locales/pt-PT.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/pl.pak",
-                                "target": "Engine/Content/win32/locales/pl.pak"
+                                "source": "Game/winx64/locales/pl.pak",
+                                "target": "Engine/Content/winx64/locales/pl.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/am.pak",
-                                "target": "Engine/Content/win32/locales/am.pak"
+                                "source": "Game/winx64/locales/am.pak",
+                                "target": "Engine/Content/winx64/locales/am.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/hu.pak",
-                                "target": "Engine/Content/win32/locales/hu.pak"
+                                "source": "Game/winx64/locales/hu.pak",
+                                "target": "Engine/Content/winx64/locales/hu.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/cs.pak",
-                                "target": "Engine/Content/win32/locales/cs.pak"
+                                "source": "Game/winx64/locales/cs.pak",
+                                "target": "Engine/Content/winx64/locales/cs.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/da.pak",
-                                "target": "Engine/Content/win32/locales/da.pak"
+                                "source": "Game/winx64/locales/da.pak",
+                                "target": "Engine/Content/winx64/locales/da.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/en-US.pak",
-                                "target": "Engine/Content/win32/locales/en-US.pak"
+                                "source": "Game/winx64/locales/en-US.pak",
+                                "target": "Engine/Content/winx64/locales/en-US.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/fa.pak",
-                                "target": "Engine/Content/win32/locales/fa.pak"
+                                "source": "Game/winx64/locales/fa.pak",
+                                "target": "Engine/Content/winx64/locales/fa.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/vi.pak",
-                                "target": "Engine/Content/win32/locales/vi.pak"
+                                "source": "Game/winx64/locales/vi.pak",
+                                "target": "Engine/Content/winx64/locales/vi.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/sl.pak",
-                                "target": "Engine/Content/win32/locales/sl.pak"
+                                "source": "Game/winx64/locales/sl.pak",
+                                "target": "Engine/Content/winx64/locales/sl.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/ko.pak",
-                                "target": "Engine/Content/win32/locales/ko.pak"
+                                "source": "Game/winx64/locales/ko.pak",
+                                "target": "Engine/Content/winx64/locales/ko.pak"
                             },
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/locales/th.pak",
-                                "target": "Engine/Content/win32/locales/th.pak"
+                                "source": "Game/winx64/locales/th.pak",
+                                "target": "Engine/Content/winx64/locales/th.pak"
                             }
                         ],
-                        "target": "Engine/Content/win32/locales"
+                        "target": "Engine/Content/winx64/locales"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/chrome_100_percent.pak",
-                        "target": "Engine/Content/win32/chrome_100_percent.pak"
+                        "source": "Game/winx64/chrome_100_percent.pak",
+                        "target": "Engine/Content/winx64/chrome_100_percent.pak"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/chrome_200_percent.pak",
-                        "target": "Engine/Content/win32/chrome_200_percent.pak"
+                        "source": "Game/winx64/chrome_200_percent.pak",
+                        "target": "Engine/Content/winx64/chrome_200_percent.pak"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/libGLESv2.dll",
-                        "target": "Engine/Content/win32/libGLESv2.dll"
+                        "source": "Game/winx64/libGLESv2.dll",
+                        "target": "Engine/Content/winx64/libGLESv2.dll"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/vulkan-1.dll",
-                        "target": "Engine/Content/win32/vulkan-1.dll"
+                        "source": "Game/winx64/vulkan-1.dll",
+                        "target": "Engine/Content/winx64/vulkan-1.dll"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/v8_context_snapshot.bin",
-                        "target": "Engine/Content/win32/v8_context_snapshot.bin"
+                        "source": "Game/winx64/v8_context_snapshot.bin",
+                        "target": "Engine/Content/winx64/v8_context_snapshot.bin"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/d3dcompiler_47.dll",
-                        "target": "Engine/Content/win32/d3dcompiler_47.dll"
+                        "source": "Game/winx64/d3dcompiler_47.dll",
+                        "target": "Engine/Content/winx64/d3dcompiler_47.dll"
                     },
                     {
                         "files": [
                             {
                                 "repo": "Dependencies",
-                                "source": "Game/win32/Dictionaries/fr-FR-3-0.bdic",
-                                "target": "Engine/Content/win32/Dictionaries/fr-FR-3-0.bdic"
+                                "source": "Game/winx64/Dictionaries/fr-FR-3-0.bdic",
+                                "target": "Engine/Content/winx64/Dictionaries/fr-FR-3-0.bdic"
                             }
                         ],
-                        "target": "Engine/Content/win32/Dictionaries"
+                        "target": "Engine/Content/winx64/Dictionaries"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/resources.pak",
-                        "target": "Engine/Content/win32/resources.pak"
+                        "source": "Game/winx64/resources.pak",
+                        "target": "Engine/Content/winx64/resources.pak"
                     },
                     {
                         "exe": true,
                         "repo": "Dependencies",
-                        "source": "Game/win32/version",
-                        "target": "Engine/Content/win32/version"
+                        "source": "Game/winx64/version",
+                        "target": "Engine/Content/winx64/version"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/ffmpeg.dll",
-                        "target": "Engine/Content/win32/ffmpeg.dll"
+                        "source": "Game/winx64/ffmpeg.dll",
+                        "target": "Engine/Content/winx64/ffmpeg.dll"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/LICENSES.chromium.html",
-                        "target": "Engine/Content/win32/LICENSES.chromium.html"
+                        "source": "Game/winx64/LICENSES.chromium.html",
+                        "target": "Engine/Content/winx64/LICENSES.chromium.html"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/LICENSE.txt",
-                        "target": "Engine/Content/win32/LICENSE.txt"
+                        "source": "Game/winx64/LICENSE.txt",
+                        "target": "Engine/Content/winx64/LICENSE.txt"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/snapshot_blob.bin",
-                        "target": "Engine/Content/win32/snapshot_blob.bin"
+                        "source": "Game/winx64/snapshot_blob.bin",
+                        "target": "Engine/Content/winx64/snapshot_blob.bin"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/icudtl.dat",
-                        "target": "Engine/Content/win32/icudtl.dat"
+                        "source": "Game/winx64/icudtl.dat",
+                        "target": "Engine/Content/winx64/icudtl.dat"
                     },
                     {
                         "repo": "Dependencies",
-                        "source": "Game/win32/vk_swiftshader.dll",
-                        "target": "Engine/Content/win32/vk_swiftshader.dll"
+                        "source": "Game/winx64/vk_swiftshader.dll",
+                        "target": "Engine/Content/winx64/vk_swiftshader.dll"
                     },
                     {
                         "files": [
@@ -3541,17 +3554,17 @@
                                     {
                                         "exe": true,
                                         "repo": "Dependencies",
-                                        "source": "Game/win32/resources/app/empty",
-                                        "target": "Engine/Content/win32/resources/app/empty"
+                                        "source": "Game/winx64/resources/app/empty",
+                                        "target": "Engine/Content/winx64/resources/app/empty"
                                     }
                                 ],
-                                "target": "Engine/Content/win32/resources/app"
+                                "target": "Engine/Content/winx64/resources/app"
                             }
                         ],
-                        "target": "Engine/Content/win32/resources"
+                        "target": "Engine/Content/winx64/resources"
                     }
                 ],
-                "target": "Engine/Content/win32"
+                "target": "Engine/Content/winx64"
             },
             {
                 "files": [
@@ -4708,6 +4721,13 @@
                                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Resources"
                                                                     },
                                                                     {
+                                                                        "exe": true,
+                                                                        "large": "Electron Framework",
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework",
+                                                                        "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework"
+                                                                    },
+                                                                    {
                                                                         "files": [
                                                                             {
                                                                                 "repo": "Dependencies",
@@ -5045,6 +5065,401 @@
                     }
                 ],
                 "target": "Engine/Content/osx"
+            },
+            {
+                "files": [
+                    {
+                        "files": [
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/swiftshader/libEGL.dll",
+                                "target": "Engine/Content/winx86/swiftshader/libEGL.dll"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/swiftshader/libGLESv2.dll",
+                                "target": "Engine/Content/winx86/swiftshader/libGLESv2.dll"
+                            }
+                        ],
+                        "target": "Engine/Content/winx86/swiftshader"
+                    },
+                    {
+                        "exe": true,
+                        "large": "Game.exe",
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/Game.exe",
+                        "target": "Engine/Content/winx86/Game.exe"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/libEGL.dll",
+                        "target": "Engine/Content/winx86/libEGL.dll"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/vk_swiftshader_icd.json",
+                        "target": "Engine/Content/winx86/vk_swiftshader_icd.json"
+                    },
+                    {
+                        "files": [
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/sr.pak",
+                                "target": "Engine/Content/winx86/locales/sr.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/fi.pak",
+                                "target": "Engine/Content/winx86/locales/fi.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/ar.pak",
+                                "target": "Engine/Content/winx86/locales/ar.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/he.pak",
+                                "target": "Engine/Content/winx86/locales/he.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/ja.pak",
+                                "target": "Engine/Content/winx86/locales/ja.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/ml.pak",
+                                "target": "Engine/Content/winx86/locales/ml.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/bg.pak",
+                                "target": "Engine/Content/winx86/locales/bg.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/es-419.pak",
+                                "target": "Engine/Content/winx86/locales/es-419.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/sv.pak",
+                                "target": "Engine/Content/winx86/locales/sv.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/uk.pak",
+                                "target": "Engine/Content/winx86/locales/uk.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/ms.pak",
+                                "target": "Engine/Content/winx86/locales/ms.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/id.pak",
+                                "target": "Engine/Content/winx86/locales/id.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/nl.pak",
+                                "target": "Engine/Content/winx86/locales/nl.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/bn.pak",
+                                "target": "Engine/Content/winx86/locales/bn.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/hi.pak",
+                                "target": "Engine/Content/winx86/locales/hi.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/nb.pak",
+                                "target": "Engine/Content/winx86/locales/nb.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/ta.pak",
+                                "target": "Engine/Content/winx86/locales/ta.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/en-GB.pak",
+                                "target": "Engine/Content/winx86/locales/en-GB.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/hr.pak",
+                                "target": "Engine/Content/winx86/locales/hr.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/gu.pak",
+                                "target": "Engine/Content/winx86/locales/gu.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/zh-CN.pak",
+                                "target": "Engine/Content/winx86/locales/zh-CN.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/lv.pak",
+                                "target": "Engine/Content/winx86/locales/lv.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/kn.pak",
+                                "target": "Engine/Content/winx86/locales/kn.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/pt-BR.pak",
+                                "target": "Engine/Content/winx86/locales/pt-BR.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/ru.pak",
+                                "target": "Engine/Content/winx86/locales/ru.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/ca.pak",
+                                "target": "Engine/Content/winx86/locales/ca.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/it.pak",
+                                "target": "Engine/Content/winx86/locales/it.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/el.pak",
+                                "target": "Engine/Content/winx86/locales/el.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/et.pak",
+                                "target": "Engine/Content/winx86/locales/et.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/fr.pak",
+                                "target": "Engine/Content/winx86/locales/fr.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/te.pak",
+                                "target": "Engine/Content/winx86/locales/te.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/de.pak",
+                                "target": "Engine/Content/winx86/locales/de.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/sk.pak",
+                                "target": "Engine/Content/winx86/locales/sk.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/es.pak",
+                                "target": "Engine/Content/winx86/locales/es.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/fil.pak",
+                                "target": "Engine/Content/winx86/locales/fil.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/zh-TW.pak",
+                                "target": "Engine/Content/winx86/locales/zh-TW.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/mr.pak",
+                                "target": "Engine/Content/winx86/locales/mr.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/ro.pak",
+                                "target": "Engine/Content/winx86/locales/ro.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/sw.pak",
+                                "target": "Engine/Content/winx86/locales/sw.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/lt.pak",
+                                "target": "Engine/Content/winx86/locales/lt.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/tr.pak",
+                                "target": "Engine/Content/winx86/locales/tr.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/pt-PT.pak",
+                                "target": "Engine/Content/winx86/locales/pt-PT.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/pl.pak",
+                                "target": "Engine/Content/winx86/locales/pl.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/am.pak",
+                                "target": "Engine/Content/winx86/locales/am.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/hu.pak",
+                                "target": "Engine/Content/winx86/locales/hu.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/cs.pak",
+                                "target": "Engine/Content/winx86/locales/cs.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/da.pak",
+                                "target": "Engine/Content/winx86/locales/da.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/en-US.pak",
+                                "target": "Engine/Content/winx86/locales/en-US.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/fa.pak",
+                                "target": "Engine/Content/winx86/locales/fa.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/vi.pak",
+                                "target": "Engine/Content/winx86/locales/vi.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/sl.pak",
+                                "target": "Engine/Content/winx86/locales/sl.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/ko.pak",
+                                "target": "Engine/Content/winx86/locales/ko.pak"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/winx86/locales/th.pak",
+                                "target": "Engine/Content/winx86/locales/th.pak"
+                            }
+                        ],
+                        "target": "Engine/Content/winx86/locales"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/chrome_100_percent.pak",
+                        "target": "Engine/Content/winx86/chrome_100_percent.pak"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/chrome_200_percent.pak",
+                        "target": "Engine/Content/winx86/chrome_200_percent.pak"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/libGLESv2.dll",
+                        "target": "Engine/Content/winx86/libGLESv2.dll"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/vulkan-1.dll",
+                        "target": "Engine/Content/winx86/vulkan-1.dll"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/v8_context_snapshot.bin",
+                        "target": "Engine/Content/winx86/v8_context_snapshot.bin"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/d3dcompiler_47.dll",
+                        "target": "Engine/Content/winx86/d3dcompiler_47.dll"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/resources.pak",
+                        "target": "Engine/Content/winx86/resources.pak"
+                    },
+                    {
+                        "exe": true,
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/version",
+                        "target": "Engine/Content/winx86/version"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/ffmpeg.dll",
+                        "target": "Engine/Content/winx86/ffmpeg.dll"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/LICENSES.chromium.html",
+                        "target": "Engine/Content/winx86/LICENSES.chromium.html"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/snapshot_blob.bin",
+                        "target": "Engine/Content/winx86/snapshot_blob.bin"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/icudtl.dat",
+                        "target": "Engine/Content/winx86/icudtl.dat"
+                    },
+                    {
+                        "exe": true,
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/LICENSE",
+                        "target": "Engine/Content/winx86/LICENSE"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Game/winx86/vk_swiftshader.dll",
+                        "target": "Engine/Content/winx86/vk_swiftshader.dll"
+                    },
+                    {
+                        "files": [
+                            {
+                                "files": [
+                                    {
+                                        "exe": true,
+                                        "repo": "Dependencies",
+                                        "source": "Game/winx86/resources/app/empty",
+                                        "target": "Engine/Content/winx86/resources/app/empty"
+                                    }
+                                ],
+                                "target": "Engine/Content/winx86/resources/app"
+                            }
+                        ],
+                        "target": "Engine/Content/winx86/resources"
+                    }
+                ],
+                "target": "Engine/Content/winx86"
             },
             {
                 "files": [
@@ -5399,6 +5814,13 @@
                         "repo": "Dependencies",
                         "source": "Game/linux/LICENSES.chromium.html",
                         "target": "Engine/Content/linux/LICENSES.chromium.html"
+                    },
+                    {
+                        "exe": true,
+                        "large": "Game",
+                        "repo": "Dependencies",
+                        "source": "Game/linux/Game",
+                        "target": "Engine/Content/linux/Game"
                     },
                     {
                         "repo": "Dependencies",

@@ -85,12 +85,13 @@ void DialogExport::on_pushButtonLocation_clicked()
 
 void DialogExport::on_comboBoxOSDeploy_currentIndexChanged(int index)
 {
-    if (index == 2) // If windows and mac
+    if (index == static_cast<int>(OSKind::Mac)) // If windows and mac
     {
-        #ifdef Q_OS_WIN
+        #if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
             QMessageBox::warning(this, RPM::translate(Translations::WARNING), RPM
-                ::translate(Translations::YOU_CANT_EXPORT_MACOS_WINDOWS));
+                ::translate(Translations::YOU_CANT_EXPORT_MACOS_WINDOWS) + RPM::DOT);
         #endif
+        ui->comboBoxOSDeploy->setCurrentIndex(0);
     }
 }
 

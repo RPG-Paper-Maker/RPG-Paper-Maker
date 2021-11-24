@@ -45,8 +45,10 @@ QString ControlExport::createDesktop(QString location, OSKind os, bool protect,
     QString osMessage;
 
     switch(os) {
-    case OSKind::Window:
-        osMessage = "WINDOWS"; break;
+    case OSKind::Windowsx64:
+        osMessage = "WINDOWS-x64"; break;
+    case OSKind::Windowsx86:
+        osMessage = "WINDOWS-x86"; break;
     case OSKind::Linux:
         osMessage = "LINUX"; break;
     case OSKind::Mac:
@@ -347,8 +349,11 @@ QString ControlExport::generateDesktopStuff(QString path, OSKind os, int major,
     QString executableFolder;
 
     switch(os) {
-    case OSKind::Window:
-        executableFolder = "win32";
+    case OSKind::Windowsx64:
+        executableFolder = "winx64";
+        break;
+    case OSKind::Windowsx86:
+        executableFolder = "winx86";
         break;
     case OSKind::Linux:
         executableFolder = "linux";

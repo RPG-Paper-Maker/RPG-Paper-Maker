@@ -1192,7 +1192,7 @@
     "restock.shop": "Uzupełnij sklep",
     "battlers.frames": "[Battlers] ilość kolumn",
     "battlers.rows": "[Battlers] ilość wierszy",
-    "you.cant.export.macos.windows": "Nie możesz wyeksportować wersji MacOS w systemie Windows. Aby go wyeksportować, użyj komputera z systemem Linux lub MacOS",
+    "you.cant.export.macos.windows": "Nie możesz wyeksportować wersji MacOS w systemie Windows/Linux. Aby go wyeksportować, użyj komputera z systemem MacOS",
     "enter.a.name.menu": "Wprowadź nazwę",
     "max.characters": "Maksymalna liczba znaków",
     "enter.name.options": "Opcje wprowadzania nazwy",

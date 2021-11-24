@@ -1192,7 +1192,7 @@
     "restock.shop": "ショップにアイテムを補充",
     "battlers.frames": "バトラー画像のフレーム数(横):",
     "battlers.rows": "バトラー画像のパターン数(縦):",
-    "you.cant.export.macos.windows": "WindowsではMacOSバージョンをエクスポートできません。 LinuxまたはMacOSコンピューターを使用してエクスポートしてください",
+    "you.cant.export.macos.windows": "Windows/LinuxではMacOSバージョンをエクスポートできません。MacOSコンピューターを使用してエクスポートしてください",
     "enter.a.name.menu": "名前入力メニュー",
     "max.characters": "最大文字数",
     "enter.name.options": "名前入力メニューオプション",

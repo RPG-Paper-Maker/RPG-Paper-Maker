@@ -352,7 +352,7 @@ bool Project::readOS() {
 
 OSKind Project::getProjectOS() {
     if (QFile(Common::pathCombine(p_pathCurrentProject,"Game.exe")).exists())
-        return OSKind::Window;
+        return OSKind::Windowsx64;
     else if (QFile(Common::pathCombine(p_pathCurrentProject,"Game")).exists())
         return OSKind::Linux;
     else
@@ -363,7 +363,7 @@ OSKind Project::getProjectOS() {
 
 OSKind Project::getComputerOS() {
     #ifdef Q_OS_WIN
-        return OSKind::Window;
+        return Common::isWindowsx64() ? OSKind::Windowsx64 : OSKind::Windowsx86;
     #elif __linux__
         return OSKind::Linux;
     #else
@@ -383,7 +383,13 @@ bool Project::copyOSFiles() {
     // Copy excecutable and libraries according to current OS
     QString strOS = "";
     #ifdef Q_OS_WIN
-        strOS = "win32";
+        if (Common::isWindowsx64())
+        {
+            strOS = "winx64";
+        } else
+        {
+            strOS = "winx86";
+        }
     #elif __linux__
         strOS = "linux";
     #else

@@ -1192,7 +1192,7 @@
     "restock.shop": "Пополнить магазин",
     "battlers.frames": "Кадры в Battlers",
     "battlers.rows": "Линии в Battlers",
-    "you.cant.export.macos.windows": "Вы не можете экспортировать версию MacOS из-под Windows. Пожалуйста, используйте компьютер Linux или MacOS для его экспорта",
+    "you.cant.export.macos.windows": "Вы не можете экспортировать версию MacOS из-под Windows/Linux. Пожалуйста, используйте компьютер MacOS для его экспорта",
     "enter.a.name.menu": "Войти в меню имени",
     "max.characters": "Максимальное количество символов",
     "enter.name.options": "Варианты ввода имени",

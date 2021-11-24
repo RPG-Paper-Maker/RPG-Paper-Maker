@@ -50,6 +50,7 @@ public:
     static bool isDirEmpty(QString path);
     static void copyAllFiles(QString pathSource, QString pathTarget);
     static void deleteAllFiles(QString pathSource);
+    static bool isWindowsx64();
     static QString getFormatNumber(int number, int format = 4, int type = 10);
     static int modulo(int x, int m);
     static int ceil(qreal r);
