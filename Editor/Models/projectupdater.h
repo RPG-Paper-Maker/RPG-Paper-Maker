@@ -40,6 +40,7 @@ public:
     void copyExecutable();
     void copySystemScripts();
     void updateCommands();
+    void updateObjects();
 
 protected:
     Project* m_project;
@@ -85,11 +86,14 @@ public slots:
     void updateVersion_1_8_3();
     void updateVersion_1_9_0();
     void updateVersion_1_9_1();
+    void updateVersion_1_9_2();
+    void updateVersion_1_9_2_objects(SystemCommonObject *object);
 
 signals:
     void progress(int, QString);
     void finished();
     void updatingCommands(QStandardItem *commands);
+    void updatingObject(SystemCommonObject *object);
 };
 
 #endif // PROJECTUPDATER_H

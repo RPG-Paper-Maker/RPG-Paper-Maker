@@ -50,6 +50,7 @@ public:
     bool deleteObject(Position &p, QJsonObject &previousObj,
         MapEditorSubSelectionKind &previousType);
     void removeObjectsOut(QList<int> &listDeletedObjectsIDs, MapProperties& properties);
+    QList<SystemCommonObject *> getObjects() const;
     void clear();
     void initializeVertices(int squareSize, QHash<int, QOpenGLTexture *>
         &characters, QOpenGLTexture *tileset);

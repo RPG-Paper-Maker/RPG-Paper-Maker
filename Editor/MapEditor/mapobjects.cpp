@@ -136,6 +136,19 @@ void MapObjects::removeObjectsOut(QList<int> &listDeletedObjectsIDs,
 }
 
 // -------------------------------------------------------
+
+QList<SystemCommonObject *> MapObjects::getObjects() const
+{
+    QList<SystemCommonObject *> list;
+    QHash<Position, SystemCommonObject *>::const_iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++)
+    {
+        list << i.value();
+    }
+    return list;
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //

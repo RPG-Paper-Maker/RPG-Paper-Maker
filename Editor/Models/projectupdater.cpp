@@ -23,12 +23,12 @@
 #include "systemitem.h"
 #include "systemskill.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 24;
+const int ProjectUpdater::incompatibleVersionsCount = 25;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
      "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0", "1.6.2",
-    "1.6.3", "1.6.4", "1.7.0", "1.7.3", "1.8.0", "1.8.3", "1.9.0", "1.9.1"};
+    "1.6.3", "1.6.4", "1.7.0", "1.7.3", "1.8.0", "1.8.3", "1.9.0", "1.9.1", "1.9.2"};
 
 // -------------------------------------------------------
 //
@@ -247,6 +247,59 @@ void ProjectUpdater::updateCommands() {
         for (j = 0, ll = list.size(); j < ll; j++) {
             emit updatingCommands(list.at(j));
         }
+    }
+
+    m_project->writeCommonEvents();
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateObjects() {
+    QList<QJsonObject> *mapPortions;
+    QList<QString> *paths;
+    QList<SystemCommonObject *> list;
+    QStandardItemModel *model;
+    MapPortion *mapPortion;
+    MapProperties *properties;
+    Portion portion;
+    QJsonObject obj;
+    int i, j, k, l, ll, lll;
+
+    // Map portions
+    for (i = 0, l = m_listMapPortionsPaths.size(); i < l; i++) {
+        mapPortions = m_listMapPortions.at(i);
+        paths = m_listMapPortionsPaths.at(i);
+        for (j = 0, ll = paths->size(); j < ll; j++) {
+            obj = mapPortions->at(j);
+            mapPortion = new MapPortion(portion);
+            mapPortion->read(obj);
+            list = mapPortion->mapObjects()->getObjects();
+            for (k = 0, lll = list.size(); k < lll; k++) {
+                emit updatingObject(list.at(k));
+            }
+            obj = QJsonObject();
+            mapPortion->write(obj);
+            delete mapPortion;
+            Common::writeOtherJSON(paths->at(j), obj);
+        }
+    }
+
+    // Map startups
+    for (i = 0, l = m_listMapPropertiesPaths.size(); i < l; i++) {
+        properties = new MapProperties;
+        properties->read(m_listMapProperties.at(i));
+        emit updatingObject(properties->startupObject());
+        obj = QJsonObject();
+        properties->write(obj);
+        delete properties;
+        Common::writeOtherJSON(m_listMapPropertiesPaths.at(i), obj);
+    }
+
+    // Models
+    model = m_project->gameDatas()->commonEventsDatas()->modelCommonObjects();
+    for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        emit updatingObject(reinterpret_cast<SystemCommonObject *>(model->item(i)
+            ->data().value<quintptr>()));
     }
 
     m_project->writeCommonEvents();
@@ -1355,4 +1408,40 @@ void ProjectUpdater::updateVersion_1_9_0()
 void ProjectUpdater::updateVersion_1_9_1()
 {
     QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_GAME_OVER);
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_9_2()
+{
+    // Update time event parameter to seconds
+    connect(this, SIGNAL(updatingObjects(SystemCommonObject *)), this, SLOT(
+        updateVersion_1_9_2_commands(SystemCommonObject *)));
+    this->updateObjects();
+    disconnect(this, SIGNAL(updatingObjects(SystemCommonObject *)), this, SLOT(
+        updateVersion_1_9_2_commands(SystemCommonObject *)));
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_9_2_objects(SystemCommonObject *object)
+{
+    SystemObjectEvent *event;
+    SystemParameter *parameter;
+    for (int i = 0, l = object->modelEvents()->invisibleRootItem()->rowCount();
+         i < l; i++)
+    {
+        event = reinterpret_cast<SystemObjectEvent *>(SuperListItem::getItemModelAt(
+            object->modelEvents(), i));
+        if (event != nullptr && event->isSystem() && event->id() == 1)
+        {
+            parameter = reinterpret_cast<SystemParameter *>(SuperListItem
+                ::getItemModelAt(event->modelParameters(), i));
+            if (parameter != nullptr)
+            {
+                parameter->value()->setNumberDoubleValue(parameter->value()
+                    ->numberDoubleValue() / 1000.0f);
+            }
+        }
+    }
 }
