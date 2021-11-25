@@ -82,7 +82,7 @@ void WidgetVariable::initializeSuper(SuperListItem *super) {
 // -------------------------------------------------------
 
 void WidgetVariable::openDialog(){
-    DialogVariables dialog;
+    DialogVariables dialog(p_currentId);
     VariablesDatas* datas = RPM::get()->project()->gameDatas()
                                     ->variablesDatas();
     QStandardItemModel* m = datas->model();

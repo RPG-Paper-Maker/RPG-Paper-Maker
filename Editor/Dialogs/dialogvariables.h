@@ -33,13 +33,14 @@ class DialogVariables : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogVariables(QWidget *parent = 0);
+    explicit DialogVariables(int id = 1, QWidget *parent = 0);
     ~DialogVariables();
     void initializeModel(QStandardItemModel* m);
     int getSelectedId() const;
 
 private:
     Ui::DialogVariables *ui;
+    int m_currentID;
 
     void translate();
 

@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <cmath>
+#include <QtMath>
 #include "dialogvariables.h"
 #include "systemvariables.h"
 #include "ui_dialogvariables.h"
@@ -21,9 +23,10 @@
 //
 // -------------------------------------------------------
 
-DialogVariables::DialogVariables(QWidget *parent) :
+DialogVariables::DialogVariables(int id, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogVariables)
+    ui(new Ui::DialogVariables),
+    m_currentID(id)
 {
     ui->setupUi(this);
     ui->panelList->showButtonMax(false);
@@ -46,9 +49,12 @@ void DialogVariables::initializeModel(QStandardItemModel* m){
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageSelected(QModelIndex,QModelIndex)));
 
-    QModelIndex index = ui->panelListPages->list()->getModel()->index(0,0);
+    QModelIndex index = ui->panelListPages->list()->getModel()->index(qFloor(
+        (m_currentID - 1) / 25.0), 0);
     ui->panelListPages->list()->setCurrentIndex(index);
     on_pageSelected(index, index);
+    index = ui->panelList->list()->getModel()->index((m_currentID - 1) % 25, 0);
+    ui->panelList->list()->setCurrentIndex(index);
 }
 
 // -------------------------------------------------------
