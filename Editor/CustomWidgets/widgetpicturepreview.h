@@ -38,6 +38,7 @@ public:
     void setIndexX(int i);
     int indexY() const;
     void setIndexY(int i);
+    void setIsLimitIndex(bool isLimitIndex);
     void setImage(QString path);
     void setNoneImage();
     void updateImageSize();
@@ -53,6 +54,7 @@ protected:
     bool m_chooseRect;
     int m_indexX;
     int m_indexY;
+    bool m_isLimitIndex;
 
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *);

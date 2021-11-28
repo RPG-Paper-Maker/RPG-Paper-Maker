@@ -28,11 +28,12 @@ public:
     static const QString DEFAULT_BATTLE_MESSAGE;
 
     SystemSkill();
-    SystemSkill(int i, QString name, int pictureID, SystemTranslatable *description,
-        TargetKind targetKind, PrimitiveValue *targetConditionFormula,
-        PrimitiveValue *conditionFormula, AvailableKind availableKind,
-        SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
-        *animationTargetID, SystemTranslatable *battleMessage, QStandardItemModel *modelCosts, QStandardItemModel
+    SystemSkill(int i, QString name, int pictureID, int pictureIndexX, int
+        pictureIndexY, SystemTranslatable *description, TargetKind targetKind,
+        PrimitiveValue *targetConditionFormula, PrimitiveValue *conditionFormula,
+        AvailableKind availableKind, SystemPlaySong *sound, PrimitiveValue
+        *animationUserID, PrimitiveValue *animationTargetID, SystemTranslatable
+        *battleMessage, QStandardItemModel *modelCosts, QStandardItemModel
         *modelEffects);
     virtual ~SystemSkill();
 

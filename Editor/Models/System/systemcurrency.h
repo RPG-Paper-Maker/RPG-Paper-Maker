@@ -27,7 +27,8 @@ class SystemCurrency : public SystemIcon
 {
 public:
     SystemCurrency();
-    SystemCurrency(int i, QString name, int pictureID);
+    SystemCurrency(int i, QString name, int pictureID, int pictureIndexX =
+        DEFAULT_PICTURE_INDEX_X, int pictureIndexY = DEFAULT_PICTURE_INDEX_Y);
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;

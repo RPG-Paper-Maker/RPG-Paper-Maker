@@ -55,6 +55,7 @@ const QString SystemDatas::JSON_SOUND_IMPOSSIBLE = "si";
 const QString SystemDatas::JSON_DIALOG_BOX_OPTIONS = "dbo";
 const QString SystemDatas::JSON_FACESET_SCALING_WIDTH = "facesetScalingWidth";
 const QString SystemDatas::JSON_FACESET_SCALING_HEIGHT = "facesetScalingHeight";
+const QString SystemDatas::JSON_ICONS_SIZE = "iconsSize";
 const QString SystemDatas::JSON_SKY_BOXES = "sb";
 const QString SystemDatas::JSON_INITIAL_PARTY_MEMBERS = "initialPartyMembers";
 const QString SystemDatas::JSON_ANTIALIASING = "aa";
@@ -80,6 +81,7 @@ const int SystemDatas::DEFAULT_PORTION_RAY_ENGINE = 6;
 const int SystemDatas::DEFAULT_PORTION_RAY_INGAME = 3;
 const int SystemDatas::DEFAULT_FACESET_SCALING_WIDTH = 160;
 const int SystemDatas::DEFAULT_FACESET_SCALING_HEIGHT = 160;
+const int SystemDatas::DEFAULT_ICONS_SIZE = 16;
 const int SystemDatas::DEFAULT_SAVE_SLOTS = 4;
 
 // -------------------------------------------------------
@@ -129,6 +131,7 @@ SystemDatas::SystemDatas() :
     m_dialogBoxOptions(new EventCommand(EventCommandKind::SetDialogBoxOptions)),
     m_facesetScalingWidth(DEFAULT_FACESET_SCALING_WIDTH),
     m_facesetScalingHeight(DEFAULT_FACESET_SCALING_HEIGHT),
+    m_iconsSize(DEFAULT_ICONS_SIZE),
     m_saveSlots(DEFAULT_SAVE_SLOTS)
 {
 
@@ -456,6 +459,16 @@ void SystemDatas::setFacesetScalingHeight(int facesetScalingHeight)
     m_facesetScalingHeight = facesetScalingHeight;
 }
 
+int SystemDatas::iconsSize() const
+{
+    return m_iconsSize;
+}
+
+void SystemDatas::setIconsSize(int iconsSize)
+{
+    m_iconsSize = iconsSize;
+}
+
 int SystemDatas::saveSlots() const
 {
     return m_saveSlots;
@@ -537,11 +550,12 @@ void SystemDatas::setDefaultCurrencies() {
         RPM::translate(Translations::G),
         RPM::translate(Translations::XCOIN)
     };
-    int picCurrencies[] = {1, 2};
+    int iconsX[] = {15, 0};
+    int iconsY[] = {0, 1};
     int length = (sizeof(namesCurrencies)/sizeof(*namesCurrencies));
     for (int i = 0; i < length; i++){
         item = new QStandardItem;
-        currency = new SystemCurrency(i + 1, namesCurrencies[i], picCurrencies[i]);
+        currency = new SystemCurrency(i + 1, namesCurrencies[i], 1, iconsX[i], iconsY[i]);
         item->setData(QVariant::fromValue(
                           reinterpret_cast<quintptr>(currency)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
@@ -1022,6 +1036,12 @@ void SystemDatas::read(const QJsonObject &json){
         m_facesetScalingHeight = json[JSON_FACESET_SCALING_HEIGHT].toInt();
     }
 
+    // Icons
+    if (json.contains(JSON_ICONS_SIZE))
+    {
+        m_iconsSize = json[JSON_ICONS_SIZE].toInt();
+    }
+
     // Enter name options
     jsonList = json[JSON_ENTER_NAME_TABLE].toArray();
     QList<QString> listEnterName;
@@ -1283,6 +1303,12 @@ void SystemDatas::write(QJsonObject &json) const{
     if (m_facesetScalingHeight != DEFAULT_FACESET_SCALING_HEIGHT)
     {
         json[JSON_FACESET_SCALING_HEIGHT] = m_facesetScalingHeight;
+    }
+
+    // Icons
+    if (m_iconsSize != DEFAULT_ICONS_SIZE)
+    {
+        json[JSON_ICONS_SIZE] = m_iconsSize;
     }
 
     // Enter name options

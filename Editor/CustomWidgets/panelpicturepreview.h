@@ -45,6 +45,7 @@ public:
     void setIndexX(int i);
     int indexY() const;
     void setIndexY(int i);
+    void setIsLimitIndex(bool isLimitIndex);
     void setCurrentTexture(QRect& rect);
     void currentTexture(QRect &rect) const;
     void setPictureKind(PictureKind kind);

@@ -21,7 +21,8 @@
 
 DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
     PictureKind kind, PrimitiveValue *valueID, QStandardItemModel *properties,
-    QStandardItemModel *parameters, QWidget *parent) :
+    QStandardItemModel *parameters, int indexX, int indexY, bool isLimitIndex,
+    QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogPicturesPreview),
     m_kind(kind),
@@ -31,7 +32,9 @@ DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
     m_parameters(parameters)
 {
     ui->setupUi(this);
-
+    ui->widget->setIsLimitIndex(isLimitIndex);
+    this->setIndexX(indexX);
+    this->setIndexY(indexY);
     ui->widget->setChooseRect(true);
     ui->widget->setPictureKind(kind);
     ui->widget->changePicture(picture);

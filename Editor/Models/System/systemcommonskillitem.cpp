@@ -48,15 +48,15 @@ const AvailableKind SystemCommonSkillItem::DEFAULT_AVAILABLE_KIND = AvailableKin
 // -------------------------------------------------------
 
 SystemCommonSkillItem::SystemCommonSkillItem(int i, QString name, int
-    pictureID, int type, bool consumable, bool oneHand, SystemTranslatable
-    *description, TargetKind targetKind, PrimitiveValue *targetConditionFormula,
-    PrimitiveValue *conditionFormula, AvailableKind availableKind,
-    SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
-    *animationTargetID, PrimitiveValue *canBeSold, SystemTranslatable
-    *battleMessage, QStandardItemModel *modelPrice, QStandardItemModel
-    *modelCosts, QStandardItemModel*modelEffects, QStandardItemModel
+    pictureID, int pictureIndexX, int pictureIndexY, int type, bool consumable,
+    bool oneHand, SystemTranslatable *description, TargetKind targetKind,
+    PrimitiveValue *targetConditionFormula, PrimitiveValue *conditionFormula,
+    AvailableKind availableKind, SystemPlaySong *sound, PrimitiveValue
+    *animationUserID, PrimitiveValue *animationTargetID, PrimitiveValue *canBeSold,
+    SystemTranslatable *battleMessage, QStandardItemModel *modelPrice,
+    QStandardItemModel *modelCosts, QStandardItemModel*modelEffects, QStandardItemModel
     *modelCharacteristics) :
-    SystemIcon(i, name, pictureID),
+    SystemIcon(i, name, pictureID, pictureIndexX, pictureIndexY),
     m_type(type),
     m_consumable(consumable),
     m_oneHand(oneHand),

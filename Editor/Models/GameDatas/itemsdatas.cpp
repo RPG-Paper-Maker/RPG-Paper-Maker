@@ -62,8 +62,11 @@ void ItemsDatas::setDefault() {
         RPM::translate(Translations::PHOENIX_FEATHER),
         RPM::translate(Translations::KEY)
     };
-    int iconsID[] = {
-        16, 17, 18, 19, 20, 21, 22, 23, 24, -1, 25
+    int iconsX[] = {
+        10, 11, 12, 13, 14, 15, 0, 1, 2, 0, 9
+    };
+    int iconsY[] = {
+        1, 1, 1, 1, 1, 1, 2, 2, 2, 0, 1
     };
     int types[] = {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2
@@ -127,8 +130,8 @@ void ItemsDatas::setDefault() {
             PrimitiveValue(PrimitiveValueKind::DataBase, 1), new PrimitiveValue(
             PrimitiveValueKind::DataBase, 1), 1, new PrimitiveValue(QString
             ::number(prices[i]))))->getModelRow());
-        sys = new SystemItem(i + 1, names[i], iconsID[i], types[i], consumables[i],
-            new SystemTranslatable(-1, descriptions[i]), targetsKind[i],
+        sys = new SystemItem(i + 1, names[i], 1, iconsX[i], iconsY[i], types[i],
+            consumables[i], new SystemTranslatable(-1, descriptions[i]), targetsKind[i],
             targetConditionsFormulas[i].isEmpty() ? new PrimitiveValue(
             PrimitiveValueKind::None) : new PrimitiveValue(targetConditionsFormulas[i]),
             availablesKind[i], new SystemPlaySong(songsID[i], SongKind::Sound),

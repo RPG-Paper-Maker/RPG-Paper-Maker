@@ -53,8 +53,11 @@ void WeaponsDatas::setDefault() {
         RPM::translate(Translations::WOODEN_SWORD),
         RPM::translate(Translations::IRON_AXE)
     };
-    int iconsID[] = {
-        26, 27
+    int iconsX[] = {
+        5, 6
+    };
+    int iconsY[] = {
+        1, 1
     };
     int types[] = {
         1, 2
@@ -89,7 +92,7 @@ void WeaponsDatas::setDefault() {
             PrimitiveValue(PrimitiveValueKind::DataBase, 1), new PrimitiveValue(
             PrimitiveValueKind::DataBase, 1), 1, new PrimitiveValue(QString
             ::number(prices[i]))))->getModelRow());
-        weapon = new SystemWeapon(i + 1, names[i], iconsID[i], types[i],
+        weapon = new SystemWeapon(i + 1, names[i], 1, iconsX[i], iconsY[i], types[i],
             oneHands[i], new SystemTranslatable(-1, descriptions[i]), TargetKind::Enemy,
             new PrimitiveValue(targetConditionsFormulas[i]), new PrimitiveValue(
             PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind

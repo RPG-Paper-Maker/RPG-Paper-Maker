@@ -64,8 +64,11 @@ void SkillsDatas::setDefault(){
         RPM::translate(Translations::BANDAGE),
         RPM::translate(Translations::CONCENTRATION)
     };
-    int iconsID[] = {
-        3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+    int iconsX[] = {
+        0, 1, 2, 3, 4, 6, 13, 8, 9, 11, 12, 5, 7
+    };
+    int iconsY[] = {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
     QString descriptions[] = {
         RPM::translate(Translations::ATTACK_DESCRIPTION),
@@ -135,15 +138,15 @@ void SkillsDatas::setDefault(){
             modelEffects->appendRow(effects[i][j]->getModelRow());
         }
         modelEffects->appendRow(new QStandardItem);
-        skill = new SystemSkill(i + 1, names[i], iconsID[i], new SystemTranslatable(-1,
-            descriptions[i]), targetsKind[i], targetConditions[i].isEmpty() ?
-            new PrimitiveValue(PrimitiveValueKind::None) : new PrimitiveValue(
-            targetConditions[i]), new PrimitiveValue(PrimitiveValueKind::None),
-            availablesKind[i], new SystemPlaySong(songsID[i], SongKind::Sound),
-            new PrimitiveValue(PrimitiveValueKind::None), i == 0 ? new
-            PrimitiveValue(PrimitiveValueKind::DataBase, 1) : new PrimitiveValue(
-            PrimitiveValueKind::None), new SystemTranslatable(1, SystemSkill
-            ::DEFAULT_BATTLE_MESSAGE), modelCosts, modelEffects);
+        skill = new SystemSkill(i + 1, names[i], 1, iconsX[i], iconsY[i], new
+            SystemTranslatable(-1, descriptions[i]), targetsKind[i],
+            targetConditions[i].isEmpty() ? new PrimitiveValue(PrimitiveValueKind
+            ::None) : new PrimitiveValue(targetConditions[i]), new PrimitiveValue(
+            PrimitiveValueKind::None), availablesKind[i], new SystemPlaySong(
+            songsID[i], SongKind::Sound), new PrimitiveValue(PrimitiveValueKind
+            ::None), i == 0 ? new PrimitiveValue(PrimitiveValueKind::DataBase, 1) :
+            new PrimitiveValue(PrimitiveValueKind::None), new SystemTranslatable(
+            1, SystemSkill::DEFAULT_BATTLE_MESSAGE), modelCosts, modelEffects);
         m_model->appendRow(skill->getModelRow());
     }
 }

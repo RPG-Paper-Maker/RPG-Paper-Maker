@@ -22,6 +22,8 @@
 
 const QString SuperListItem::JSON_ID = "id";
 const QString SuperListItem::JSON_NAME = "name";
+const int SuperListItem::DEFAULT_ID = 1;
+const QString SuperListItem::DEFAULT_NAME = "";
 QString SuperListItem::pathIconRed = ":/icons/Ressources/point_r.png";
 QString SuperListItem::pathIconBlue = ":/icons/Ressources/point_b.png";
 QString SuperListItem::beginningText = "<>";

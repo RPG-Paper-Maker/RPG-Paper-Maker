@@ -25,16 +25,16 @@ SystemSkill::SystemSkill() :
     m_battleMessage->setAllNames(DEFAULT_BATTLE_MESSAGE);
 }
 
-SystemSkill::SystemSkill(int i, QString name, int pictureID, SystemTranslatable
-    *description, TargetKind targetKind, PrimitiveValue *targetConditionFormula,
-    PrimitiveValue *conditionFormula, AvailableKind availableKind, SystemPlaySong
-    *sound, PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
-    SystemTranslatable *battleMessage, QStandardItemModel *modelCosts,
-    QStandardItemModel *modelEffects) :
-    SystemCommonSkillItem(i, name, pictureID, SystemCommonSkillItem::DEFAULT_TYPE,
-        SystemCommonSkillItem::DEFAULT_CONSUMABLE, SystemCommonSkillItem
-        ::DEFAULT_ONE_HAND, description, targetKind, targetConditionFormula,
-        conditionFormula, availableKind, sound, animationUserID,
+SystemSkill::SystemSkill(int i, QString name, int pictureID, int pictureIndexX,
+    int pictureIndexY, SystemTranslatable *description, TargetKind targetKind,
+    PrimitiveValue *targetConditionFormula, PrimitiveValue *conditionFormula,
+    AvailableKind availableKind, SystemPlaySong *sound, PrimitiveValue
+    *animationUserID, PrimitiveValue *animationTargetID, SystemTranslatable
+    *battleMessage, QStandardItemModel *modelCosts, QStandardItemModel *modelEffects) :
+    SystemCommonSkillItem(i, name, pictureID, pictureIndexX, pictureIndexY,
+        SystemCommonSkillItem::DEFAULT_TYPE, SystemCommonSkillItem::DEFAULT_CONSUMABLE,
+        SystemCommonSkillItem::DEFAULT_ONE_HAND, description, targetKind,
+        targetConditionFormula, conditionFormula, availableKind, sound, animationUserID,
         animationTargetID, new PrimitiveValue(true), battleMessage, new
         QStandardItemModel, modelCosts, modelEffects, new QStandardItemModel)
 {

@@ -56,8 +56,11 @@ void ArmorsDatas::setDefault() {
         RPM::translate(Translations::SAPPHIRE_RING),
         RPM::translate(Translations::SAPPHIRE_NECKLACE)
     };
-    int iconsID[] = {
-        28, 29, 30, 31, 32, 33
+    int iconsX[] = {
+        2, 3, 1, 4, 7, 8
+    };
+    int iconsY[] = {
+        1, 1, 1, 1, 1, 1
     };
     int types[] = {
         1, 3, 5, 7, 9, 10
@@ -94,8 +97,8 @@ void ArmorsDatas::setDefault() {
             PrimitiveValue(PrimitiveValueKind::DataBase, 1), new PrimitiveValue(
             PrimitiveValueKind::DataBase, 1), 1, new PrimitiveValue(QString
             ::number(prices[i]))))->getModelRow());
-        armor = new SystemArmor(i + 1, names[i], iconsID[i], types[i], new
-            SystemTranslatable(-1, descriptions[i]), new PrimitiveValue(
+        armor = new SystemArmor(i + 1, names[i], 1, iconsX[i], iconsY[i], types[i],
+            new SystemTranslatable(-1, descriptions[i]), new PrimitiveValue(
             PrimitiveValueKind::None), modelPrice, modelCharacteristics);
         m_model->appendRow(armor->getModelRow());
     }

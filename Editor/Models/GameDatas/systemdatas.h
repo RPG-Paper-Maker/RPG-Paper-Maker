@@ -59,6 +59,7 @@ public:
     static const QString JSON_DIALOG_BOX_OPTIONS;
     static const QString JSON_FACESET_SCALING_WIDTH;
     static const QString JSON_FACESET_SCALING_HEIGHT;
+    static const QString JSON_ICONS_SIZE;
     static const QString JSON_SKY_BOXES;
     static const QString JSON_INITIAL_PARTY_MEMBERS;
     static const QString JSON_ANTIALIASING;
@@ -84,6 +85,7 @@ public:
     static const int DEFAULT_PORTION_RAY_INGAME;
     static const int DEFAULT_FACESET_SCALING_WIDTH;
     static const int DEFAULT_FACESET_SCALING_HEIGHT;
+    static const int DEFAULT_ICONS_SIZE;
     static const int DEFAULT_SAVE_SLOTS;
 
     SystemDatas();
@@ -161,6 +163,8 @@ public:
     void setFacesetScalingWidth(int facesetScalingWidth);
     int facesetScalingHeight() const;
     void setFacesetScalingHeight(int facesetScalingHeight);
+    int iconsSize() const;
+    void setIconsSize(int iconsSize);
     int saveSlots() const;
     void setSaveSlots(int saveSlots);
 
@@ -236,6 +240,7 @@ private:
     EventCommand *m_dialogBoxOptions;
     int m_facesetScalingWidth;
     int m_facesetScalingHeight;
+    int m_iconsSize;
     int m_saveSlots;
 };
 

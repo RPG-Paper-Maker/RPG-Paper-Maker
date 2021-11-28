@@ -25,7 +25,8 @@ WidgetPicturePreview::WidgetPicturePreview(QWidget *parent) :
     m_selectionRectangle(new WidgetSelectionRectangle),
     m_chooseRect(false),
     m_indexX(0),
-    m_indexY(0)
+    m_indexY(0),
+    m_isLimitIndex(true)
 {
 
 }
@@ -52,28 +53,37 @@ void WidgetPicturePreview::setChooseRect(bool b) { m_chooseRect = b; }
 int WidgetPicturePreview::indexX() const { return m_indexX; }
 
 void WidgetPicturePreview::setIndexX(int i) {
-    int frames = RPM::get()->project()->gameDatas()->systemDatas()
+    if (m_isLimitIndex)
+    {
+        int frames = RPM::get()->project()->gameDatas()->systemDatas()
             ->framesAnimation();
-    if (i >= frames)
-        i = frames - 1;
-
+        if (i >= frames)
+        {
+            i = frames - 1;
+        }
+    }
     m_indexX = i;
-
-    updateRectangle();
+    this->updateRectangle();
 }
 
 int WidgetPicturePreview::indexY() const { return m_indexY; }
 
 void WidgetPicturePreview::setIndexY(int i) {
-    int max = m_picture == nullptr ? 4 : m_picture->getRows();
-    if (i >= max - 1)
+    if (m_isLimitIndex)
     {
-        i = max - 1;
+        int max = m_picture == nullptr ? 4 : m_picture->getRows();
+        if (i >= max - 1)
+        {
+            i = max - 1;
+        }
     }
-
     m_indexY = i;
+    this->updateRectangle();
+}
 
-    updateRectangle();
+void WidgetPicturePreview::setIsLimitIndex(bool isLimitIndex)
+{
+    m_isLimitIndex = isLimitIndex;
 }
 
 // -------------------------------------------------------
@@ -111,7 +121,14 @@ void WidgetPicturePreview::updateImageSize(){
             m_selectionRectangle->setSquareWidth(m_image.width() * coef / frames);
             m_selectionRectangle->setSquareHeight(m_image.height() * coef/ (
                 m_picture == nullptr ? 4 : m_picture->getRows()));
-            updateRectangleCharacter();
+            this->updateRectangleCharacter();
+            break;
+        case PictureKind::Icons:
+            m_selectionRectangle->setSquareWidth(RPM::get()->project()->gameDatas()
+                ->systemDatas()->iconsSize());
+            m_selectionRectangle->setSquareHeight(RPM::get()->project()->gameDatas()
+                ->systemDatas()->iconsSize());
+            this->updateRectangleCharacter();
             break;
         default:
             break;
@@ -122,8 +139,7 @@ void WidgetPicturePreview::updateImageSize(){
     if (m_chooseRect && !m_image.isNull() &&
         (m_kind == PictureKind::Characters || m_kind == PictureKind::Tilesets))
     {
-        m_image = m_image.scaled(m_image.width() * coef,
-                                 m_image.height() * coef);
+        m_image = m_image.scaled(m_image.width() * coef, m_image.height() * coef);
     }
     this->setGeometry(0, 0, m_image.width(), m_image.height());
     setFixedSize(m_image.width(), m_image.height());
@@ -131,9 +147,11 @@ void WidgetPicturePreview::updateImageSize(){
 
 // -------------------------------------------------------
 
-void WidgetPicturePreview::updateRectangle(){
+void WidgetPicturePreview::updateRectangle()
+{
     switch (m_kind){
     case PictureKind::Characters:
+    case PictureKind::Icons:
         updateRectangleCharacter(); break;
     default:
         break;
@@ -174,6 +192,6 @@ void WidgetPicturePreview::paintEvent(QPaintEvent *){
                      RPM::COLOR_ALMOST_TRANSPARENT);
     painter.drawImage(0, 0, m_image);
 
-    if (m_chooseRect && m_kind == PictureKind::Characters)
+    if (m_chooseRect && (m_kind == PictureKind::Characters || m_kind == PictureKind::Icons))
         m_selectionRectangle->draw(painter);
 }

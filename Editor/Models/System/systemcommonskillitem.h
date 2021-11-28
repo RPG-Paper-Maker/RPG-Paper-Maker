@@ -59,9 +59,10 @@ public:
     static const AvailableKind DEFAULT_AVAILABLE_KIND;
 
     SystemCommonSkillItem(int i = DEFAULT_ID, QString name = DEFAULT_NAME, int
-        pictureID = DEFAULT_PICTURE_ID, int type = DEFAULT_TYPE, bool consumable
-        = DEFAULT_CONSUMABLE, bool oneHand = DEFAULT_ONE_HAND, SystemTranslatable
-        *description = new SystemTranslatable, TargetKind targetKind =
+        pictureID = DEFAULT_PICTURE_ID, int pictureIndexX = DEFAULT_PICTURE_INDEX_X,
+        int pictureIndexY = DEFAULT_PICTURE_INDEX_Y, int type = DEFAULT_TYPE,
+        bool consumable = DEFAULT_CONSUMABLE, bool oneHand = DEFAULT_ONE_HAND,
+        SystemTranslatable *description = new SystemTranslatable, TargetKind targetKind =
         DEFAULT_TARGET_KIND, PrimitiveValue *targetConditionFormula = new
         PrimitiveValue(PrimitiveValueKind::None), PrimitiveValue
         *conditionFormula = new PrimitiveValue(PrimitiveValueKind::None),

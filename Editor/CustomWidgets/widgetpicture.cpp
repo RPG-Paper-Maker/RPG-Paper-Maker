@@ -25,6 +25,9 @@ WidgetPicture::WidgetPicture(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::WidgetPicture),
     m_pictureID(nullptr),
+    m_pictureIndexX(0),
+    m_pictureIndexY(0),
+    m_isLimitIndex(true),
     m_valueID(nullptr),
     m_properties(nullptr),
     m_parameters(nullptr)
@@ -64,11 +67,38 @@ void WidgetPicture::setPicture(SystemPicture* picture) {
         ->toString());
 }
 
-void WidgetPicture::initialize(int i) {
+int WidgetPicture::pictureIndexX() const
+{
+    return m_pictureIndexX;
+}
+
+void WidgetPicture::setPictureIndexX(int pictureIndexX)
+{
+    m_pictureIndexX = pictureIndexX;
+}
+
+int WidgetPicture::pictureIndexY() const
+{
+    return m_pictureIndexY;
+}
+
+void WidgetPicture::setPictureIndexY(int pictureIndexY)
+{
+    m_pictureIndexY = pictureIndexY;
+}
+
+void WidgetPicture::setIsLimitIndex(bool isLimitIndex)
+{
+    m_isLimitIndex = isLimitIndex;
+}
+
+void WidgetPicture::initialize(int i, int indexX, int indexY) {
     SystemPicture *pic;
 
     // Graphic update
     m_picture = i;
+    m_pictureIndexX = indexX;
+    m_pictureIndexY = indexY;
     pic = this->picture();
     setPicture(pic);
 
@@ -103,11 +133,17 @@ void WidgetPicture::initializePrimitive(PrimitiveValue *value,
 
 void WidgetPicture::openDialog(){
     DialogPicturesPreview dialog(this->picture(), m_kind, m_valueID, m_properties,
-        m_parameters);
+        m_parameters, m_pictureIndexX, m_pictureIndexY, m_isLimitIndex);
     int previousPictureID = m_picture;
+    int previousIndexX = m_pictureIndexX;
+    int previousIndexY = m_pictureIndexY;
     SystemPicture *pic;
 
-    dialog.exec();
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        m_pictureIndexX = dialog.indexX();
+        m_pictureIndexY = dialog.indexY();
+    }
     if (m_valueID != nullptr)
     {
         if (m_valueID->isActivated())
@@ -127,6 +163,10 @@ void WidgetPicture::openDialog(){
     setPicture(pic);
     if (previousPictureID != m_picture) {
         emit pictureChanged(pic);
+    }
+    if (previousIndexX != m_pictureIndexX || previousIndexY != m_pictureIndexY)
+    {
+        emit indexChanged(m_pictureIndexX, m_pictureIndexY);
     }
 }
 

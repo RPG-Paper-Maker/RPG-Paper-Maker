@@ -31,7 +31,8 @@ public:
     static const QString JSON_EFFICIENCY;
 
     SystemElement();
-    SystemElement(int i, QString name, int ii);
+    SystemElement(int i, QString name, int ii, int pictureIndexX =
+        DEFAULT_PICTURE_INDEX_X, int pictureIndexY = DEFAULT_PICTURE_INDEX_Y);
     virtual ~SystemElement();
     QStandardItemModel* modelEfficiency() const;
 

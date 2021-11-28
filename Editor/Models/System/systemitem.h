@@ -28,7 +28,7 @@ public:
     static const QString DEFAULT_BATTLE_MESSAGE;
 
     SystemItem();
-    SystemItem(int i, QString name, int pictureID, int type, bool consumable,
+    SystemItem(int i, QString name, int pictureID, int pictureIndexX, int pictureIndexY, int type, bool consumable,
         SystemTranslatable *description, TargetKind targetKind, PrimitiveValue
         *conditionFormula, AvailableKind availableKind, SystemPlaySong *sound,
         PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,

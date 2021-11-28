@@ -25,6 +25,7 @@ WidgetShowPicture::WidgetShowPicture(QWidget *parent) :
     m_cover(false),
     m_coef(1.0f),
     m_rect(nullptr),
+    m_isSubImage(false),
     m_canDrawRect(false),
     m_firstPresure(true),
     m_width(-1),
@@ -53,6 +54,13 @@ void WidgetShowPicture::setRect(QRectF *rect) {
 
 void WidgetShowPicture::setDrawBackground(bool b) {
     m_drawBackgorund = b;
+}
+
+void WidgetShowPicture::setRectSubImage(const QRectF &rect)
+{
+    m_isSubImage = true;
+    m_rectSubImage = rect;
+    this->updateSizePosition();
 }
 
 // -------------------------------------------------------
@@ -138,12 +146,19 @@ void WidgetShowPicture::updateSizePosition() {
             m_height = this->geometry().height();
         }
         int width, height;
-        if (m_image.isNull()) {
-            width = m_width;
-            height = m_height;
-        } else {
-            width = m_image.width() < m_width ? m_width : m_image.width();
-            height = m_image.height() < m_height ? m_height : m_image.height();
+        if (m_isSubImage)
+        {
+            width = m_rectSubImage.width();
+            height = m_rectSubImage.height();
+        } else
+        {
+            if (m_image.isNull()) {
+                width = m_width;
+                height = m_height;
+            } else {
+                width = m_image.width() < m_width ? m_width : m_image.width();
+                height = m_image.height() < m_height ? m_height : m_image.height();
+            }
         }
         this->setGeometry(this->geometry().x(), this->geometry().y(), width,
             height);
@@ -157,14 +172,21 @@ void WidgetShowPicture::updateSizePosition() {
 //
 // -------------------------------------------------------
 
-void WidgetShowPicture::paintEvent(QPaintEvent *){
+void WidgetShowPicture::paintEvent(QPaintEvent *)
+{
     QPainter painter(this);
 
     if (m_drawBackgorund) {
         painter.fillRect(0, 0, m_image.width(), m_image.height(), RPM
             ::COLOR_ALMOST_TRANSPARENT);
     }
-    painter.drawImage(0, 0, m_image);
+    if (m_isSubImage)
+    {
+        painter.drawImage(QPoint(0, 0), m_image, m_rectSubImage);
+    } else
+    {
+        painter.drawImage(0, 0, m_image);
+    }
 
     if (m_rect != nullptr && m_rect->width() > 0 && m_rect->height() > 0) {
         painter.setPen(Qt::red);

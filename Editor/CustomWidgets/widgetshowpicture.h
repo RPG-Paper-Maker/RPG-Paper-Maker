@@ -34,6 +34,7 @@ public:
     void setCoef(float coef);
     void setRect(QRectF *rect);
     void setDrawBackground(bool b);
+    void setRectSubImage(const QRectF &rect);
 
     void updatePicture(SystemPicture* picture);
     void updatePictureByName(QString path);
@@ -51,6 +52,8 @@ protected:
     float m_coef;
     QRectF* m_rect;
     QRectF m_rectBefore;
+    QRectF m_rectSubImage;
+    bool m_isSubImage;
     bool m_canDrawRect;
     bool m_firstPresure;
     int m_width;

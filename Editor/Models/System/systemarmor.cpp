@@ -23,16 +23,16 @@ SystemArmor::SystemArmor() :
 
 }
 
-SystemArmor::SystemArmor(int i, QString name, int pictureID, int
-    type, SystemTranslatable *description, PrimitiveValue *conditionFormula,
-    QStandardItemModel *price, QStandardItemModel *modelCharacteristics) :
-    SystemCommonSkillItem(i, name, pictureID, type, false, true, description,
-        TargetKind::None, new PrimitiveValue(PrimitiveValueKind::None),
-        conditionFormula, AvailableKind::Never, new SystemPlaySong(-1, SongKind
-        ::Sound), new PrimitiveValue(PrimitiveValueKind::None), new
-        PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(true), new
-        SystemTranslatable, price, new QStandardItemModel, new QStandardItemModel,
-        modelCharacteristics)
+SystemArmor::SystemArmor(int i, QString name, int pictureID, int pictureIndexX,
+    int pictureIndexY, int type, SystemTranslatable *description, PrimitiveValue
+    *conditionFormula, QStandardItemModel *price, QStandardItemModel *modelCharacteristics) :
+    SystemCommonSkillItem(i, name, pictureID, pictureIndexX, pictureIndexY, type,
+        false, true, description, TargetKind::None, new PrimitiveValue(
+        PrimitiveValueKind::None), conditionFormula, AvailableKind::Never, new
+        SystemPlaySong(-1, SongKind::Sound), new PrimitiveValue(PrimitiveValueKind
+        ::None), new PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
+        true), new SystemTranslatable, price, new QStandardItemModel, new
+        QStandardItemModel, modelCharacteristics)
 {
 
 }

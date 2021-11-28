@@ -84,6 +84,11 @@ void PanelPicturePreview::setIndexY(int i) {
     ui->widgetPreview->setIndexY(i);
 }
 
+void PanelPicturePreview::setIsLimitIndex(bool isLimitIndex)
+{
+    ui->widgetPreview->setIsLimitIndex(isLimitIndex);
+}
+
 void PanelPicturePreview::setCurrentTexture(QRect& rect) {
     ui->widgetTileset->setCurrentTexture(rect);
 }

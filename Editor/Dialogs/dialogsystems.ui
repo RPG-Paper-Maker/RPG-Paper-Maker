@@ -64,9 +64,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-1073</y>
                 <width>252</width>
-                <height>1699</height>
+                <height>1754</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_13">
@@ -711,7 +711,7 @@
                    </property>
                    <layout class="QGridLayout" name="gridLayout_4">
                     <item row="0" column="0">
-                     <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,0,0,0,0,1,0,0,0,0">
+                     <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,0,0,0,0,0,0,1,0,0,0,0">
                       <property name="spacing">
                        <number>6</number>
                       </property>
@@ -760,6 +760,26 @@
                         </property>
                         <property name="value">
                          <number>128</number>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="labelIconsSize">
+                        <property name="text">
+                         <string>Icons size (px):</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QSpinBox" name="spinBoxIconsSize">
+                        <property name="minimum">
+                         <number>1</number>
+                        </property>
+                        <property name="maximum">
+                         <number>999999999</number>
+                        </property>
+                        <property name="value">
+                         <number>16</number>
                         </property>
                        </widget>
                       </item>
@@ -862,7 +882,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-518</y>
+                <y>0</y>
                 <width>624</width>
                 <height>1216</height>
                </rect>

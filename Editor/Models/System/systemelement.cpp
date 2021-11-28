@@ -27,8 +27,9 @@ SystemElement::SystemElement() :
 
 }
 
-SystemElement::SystemElement(int i, QString name, int ii) :
-    SystemIcon(i,name, ii),
+SystemElement::SystemElement(int i, QString name, int ii, int pictureIndexX, int
+    pictureIndexY) :
+    SystemIcon(i,name, ii, pictureIndexX, pictureIndexY),
     m_modelEfficiency(new QStandardItemModel)
 {
 

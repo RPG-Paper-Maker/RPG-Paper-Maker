@@ -27,12 +27,22 @@ class SystemIcon : public SystemTranslatable
 {
 public:
     static const QString JSON_PICTURE_ID;
+    static const QString JSON_PICTURE_INDEX_X;
+    static const QString JSON_PICTURE_INDEX_Y;
+    static const int DEFAULT_PICTURE_ID;
+    static const int DEFAULT_PICTURE_INDEX_X;
+    static const int DEFAULT_PICTURE_INDEX_Y;
 
-    SystemIcon();
-    SystemIcon(int i, QString name, int pictureID);
+    SystemIcon(int i = DEFAULT_ID, QString name = DEFAULT_NAME, int pictureID =
+        DEFAULT_PICTURE_ID, int pictureIndexX = DEFAULT_PICTURE_INDEX_X, int
+        pictureIndexY = DEFAULT_PICTURE_INDEX_Y);
     virtual ~SystemIcon();
     int pictureID() const;
     void setPictureID(int id);
+    int pictureIndexX() const;
+    void setPictureIndexX(int pictureIndexX);
+    int pictureIndexY() const;
+    void setPictureIndexY(int pictureIndexY);
 
     virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
@@ -40,6 +50,8 @@ public:
 
 protected:
     int m_pictureID;
+    int m_pictureIndexX;
+    int m_pictureIndexY;
 };
 
 Q_DECLARE_METATYPE(SystemIcon)

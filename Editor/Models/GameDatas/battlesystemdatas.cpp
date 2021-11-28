@@ -341,7 +341,8 @@ void BattleSystemDatas::setDefaultElements() {
         RPM::translate(Translations::WATER),
         RPM::translate(Translations::PLANT)
     };
-    int icons[] = { 11, 12, 34 };
+    int iconsX[] = { 9, 11, 10 };
+    int iconsY[] = { 0, 0, 0 };
     QVector<double> efficiencies[] = {
         QVector<double>({ 1.0, 0.5, 2.0 }), // Fire
         QVector<double>({ 2.0, 1.0, 0.5 }), // Water
@@ -353,7 +354,7 @@ void BattleSystemDatas::setDefaultElements() {
     // Create all the elements and add efficiencies
     for (i = 0; i < length; i++)
     {
-        sysElement = new SystemElement(i + 1, names[i], icons[i]);
+        sysElement = new SystemElement(i + 1, names[i], 1, iconsX[i], iconsY[i]);
         for (j = 0; j < length; j++)
         {
             sysElement->addEfficiencyDouble(j + 1, efficiencies[i][j]);

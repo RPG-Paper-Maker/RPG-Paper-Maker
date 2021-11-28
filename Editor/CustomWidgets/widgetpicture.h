@@ -40,7 +40,12 @@ public:
     SystemPicture* picture() const;
     void setKind(PictureKind kind);
     void setPicture(SystemPicture* picture);
-    void initialize(int i = 1);
+    int pictureIndexX() const;
+    void setPictureIndexX(int pictureIndexX);
+    int pictureIndexY() const;
+    void setPictureIndexY(int pictureIndexY);
+    void setIsLimitIndex(bool isLimitIndex);
+    void initialize(int i = 1, int indexX = 0, int indexY = 0);
     void initializeSuper(SuperListItem *super);
     void initializePrimitive(PrimitiveValue *value, QStandardItemModel *properties =
         nullptr, QStandardItemModel *parameters = nullptr);
@@ -51,6 +56,9 @@ private:
     PictureKind m_kind;
     int m_picture;
     SuperListItem *m_pictureID;
+    int m_pictureIndexX;
+    int m_pictureIndexY;
+    bool m_isLimitIndex;
     PrimitiveValue *m_valueID;
     QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
@@ -61,6 +69,7 @@ private slots:
 
 signals:
     void pictureChanged(SystemPicture* picture);
+    void indexChanged(int indexX, int indexY);
 };
 
 #endif // WIDGETPICTURE_H

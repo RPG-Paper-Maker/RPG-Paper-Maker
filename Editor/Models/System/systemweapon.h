@@ -26,13 +26,13 @@ class SystemWeapon : public SystemCommonSkillItem
 {
 public:
     SystemWeapon();
-    SystemWeapon(int i, QString name, int pictureID, int type, bool
-        oneHand, SystemTranslatable *description, TargetKind targetKind,
-        PrimitiveValue *targetConditionFormula, PrimitiveValue
-        *conditionFormula, PrimitiveValue *animationUserID, PrimitiveValue
-        *animationTargetID, QStandardItemModel *price, QStandardItemModel
-        *modelCosts, QStandardItemModel *modelEffects, QStandardItemModel
-        *modelCharacteristics);
+    SystemWeapon(int i, QString name, int pictureID, int pictureIndexX, int
+        pictureIndexY, int type, bool oneHand, SystemTranslatable *description,
+        TargetKind targetKind, PrimitiveValue *targetConditionFormula,
+        PrimitiveValue *conditionFormula, PrimitiveValue *animationUserID,
+        PrimitiveValue *animationTargetID, QStandardItemModel *price,
+        QStandardItemModel *modelCosts, QStandardItemModel *modelEffects,
+        QStandardItemModel *modelCharacteristics);
     virtual ~SystemWeapon();
 
     virtual void read(const QJsonObject &json);

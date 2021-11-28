@@ -33,6 +33,8 @@ class SuperListItem : public Serializable
 public:
     static const QString JSON_ID;
     static const QString JSON_NAME;
+    static const int DEFAULT_ID;
+    static const QString DEFAULT_NAME;
 
     SuperListItem();
     virtual ~SuperListItem();

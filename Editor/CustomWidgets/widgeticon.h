@@ -37,17 +37,16 @@ public:
     ~WidgetIcon();
 
     void initializeIcon(SystemIcon *icon);
+    void update();
+    void translate();
 
 private:
     Ui::WidgetIcon *ui;
-
-    void translate();
-
-protected:
     SystemIcon *m_icon;
 
 public slots:
-    void on_pictureChanged(SystemPicture *picture);
+    void on_pictureChanged(SystemPicture *);
+    void on_indexChanged(int, int);
 };
 
 #endif // WIDGETICON_H

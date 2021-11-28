@@ -41,12 +41,31 @@ WidgetIcon::~WidgetIcon()
 
 void WidgetIcon::initializeIcon(SystemIcon *icon) {
     m_icon = icon;
-
     connect(ui->widgetPicture, SIGNAL(pictureChanged(SystemPicture *)),
             this, SLOT(on_pictureChanged(SystemPicture *)));
+    connect(ui->widgetPicture, SIGNAL(indexChanged(int, int)), this, SLOT(
+        on_indexChanged(int, int)));
     ui->widgetShowPicture->setActivateCoef(false);
     ui->widgetPicture->setKind(PictureKind::Icons);
-    ui->widgetPicture->initialize(m_icon->pictureID());
+    ui->widgetPicture->setIsLimitIndex(false);
+    ui->widgetPicture->initialize(m_icon->pictureID(), m_icon->pictureIndexX(),
+        m_icon->pictureIndexY());
+}
+
+//-------------------------------------------------
+
+void WidgetIcon::update()
+{
+    ui->widgetShowPicture->updatePicture(ui->widgetPicture->picture());
+    m_icon->setPictureID(ui->widgetPicture->picture()->id());
+    m_icon->setPictureIndexX(ui->widgetPicture->pictureIndexX());
+    m_icon->setPictureIndexY(ui->widgetPicture->pictureIndexY());
+    ui->widgetShowPicture->setRectSubImage(QRectF(ui->widgetPicture->pictureIndexX() *
+        RPM::get()->project()->gameDatas()->systemDatas()->iconsSize(), ui
+        ->widgetPicture->pictureIndexY() * RPM::get()->project()->gameDatas()
+        ->systemDatas()->iconsSize(), RPM::get()->project()->gameDatas()
+        ->systemDatas()->iconsSize(), RPM::get()->project()->gameDatas()
+        ->systemDatas()->iconsSize()));
 }
 
 //-------------------------------------------------
@@ -62,7 +81,14 @@ void WidgetIcon::translate()
 //
 // -------------------------------------------------------
 
-void WidgetIcon::on_pictureChanged(SystemPicture *picture) {
-    ui->widgetShowPicture->updatePicture(picture);
-    m_icon->setPictureID(picture->id());
+void WidgetIcon::on_pictureChanged(SystemPicture *)
+{
+    this->update();
+}
+
+// -------------------------------------------------------
+
+void WidgetIcon::on_indexChanged(int, int)
+{
+    this->update();
 }

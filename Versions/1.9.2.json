@@ -1,0 +1,24 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Add choice between 64 and 32 bits for Windows games",
+	    "Change time event parameter interval to seconds"
+    ],
+    "bugs": [
+    	"Deleting command inside a condition branch is not selecting the good next command",
+    	"Command move object: pasting is removing selected command",
+        "Opening variable in editor is always selecting the ID 1",
+        "Wrong arrows position in fullscreen mode"
+    ],
+    "finished": [
+        2,
+        2,
+
+        2,
+        2,
+        2,
+        2
+    ]
+}

@@ -675,6 +675,9 @@ void DialogSystems::translate()
     ui->radioButtonVideoGameOver->setText(RPM::translate(Translations::VIDEO) + RPM::COLON);
     ui->labelMusicGameOver->setText(RPM::translate(Translations::MUSIC) + RPM::COLON);
     ui->groupBoxMenuCommandsGameOver->setTitle(RPM::translate(Translations::MENU_COMMANDS));
+    ui->labelIconsSize->setText(RPM::translate(Translations::ICONS_SIZE) + RPM
+        ::SPACE + RPM::PARENTHESIS_LEFT + RPM::translate(Translations::IN_PX) +
+        RPM::PARENTHESIS_RIGHT + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -827,6 +830,13 @@ void DialogSystems::on_spinBoxFacesetScalingWidth_valueChanged(int i)
 void DialogSystems::on_spinBoxFacesetScalingHeight_valueChanged(int i)
 {
     RPM::get()->project()->gameDatas()->systemDatas()->setFacesetScalingHeight(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxIconsSize_valueChanged(int i)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setIconsSize(i);
 }
 
 // -------------------------------------------------------

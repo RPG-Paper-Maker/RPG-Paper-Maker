@@ -24,8 +24,9 @@ SystemCurrency::SystemCurrency() :
 
 }
 
-SystemCurrency::SystemCurrency(int i, QString name, int pictureID) :
-    SystemIcon(i, name, pictureID)
+SystemCurrency::SystemCurrency(int i, QString name, int pictureID, int pictureIndexX,
+    int pictureIndexY) :
+    SystemIcon(i, name, pictureID, pictureIndexX, pictureIndexY)
 {
 
 }
