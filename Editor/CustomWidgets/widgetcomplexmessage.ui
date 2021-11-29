@@ -251,18 +251,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBoxIcon">
-           <property name="minimumSize">
-            <size>
-             <width>125</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>125</width>
-             <height>16777215</height>
-            </size>
+          <widget class="QPushButton" name="pushButtonIcon">
+           <property name="text">
+            <string>Icon...</string>
            </property>
           </widget>
          </item>

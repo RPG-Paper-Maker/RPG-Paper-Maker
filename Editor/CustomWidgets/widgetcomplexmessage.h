@@ -73,7 +73,7 @@ public slots:
     void on_comboBoxParameters_currentIndexChanged(int index);
     void on_comboBoxProperties_currentIndexChanged(int index);
     void on_comboBoxHeroName_currentIndexChanged(int index);
-    void on_comboBoxIcon_currentIndexChanged(int index);
+    void on_pushButtonIcon_clicked();
 };
 
 #endif // WIDGETCOMPLEXMESSAGE_H

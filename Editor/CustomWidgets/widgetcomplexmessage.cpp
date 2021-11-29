@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include "dialogpicturespreview.h"
 #include "widgetcomplexmessage.h"
 #include "ui_widgetcomplexmessage.h"
 #include "systemvariables.h"
@@ -106,8 +107,6 @@ void WidgetComplexMessage::initializeWidgets(QStandardItemModel *properties,
     {
         ui->comboBoxProperties->hide();
     }
-    SuperListItem::fillComboBox(ui->comboBoxIcon, RPM::get()->project()
-        ->picturesDatas()->model(PictureKind::Icons), true, false, true);
     ui->plainTextMessage->setFocus();
 }
 
@@ -144,8 +143,7 @@ void WidgetComplexMessage::insertNoValueTag(QString tag)
 
 void WidgetComplexMessage::translate()
 {
-    ui->comboBoxIcon->addItem(QIcon(":/icons/Ressources/picture.png"),
-        RPM::translate(Translations::ICON));
+    ui->pushButtonIcon->setText(RPM::translate(Translations::ICON) + RPM::DOT_DOT_DOT);
     ui->comboBoxFontName->addItem(RPM::translate(Translations::FONT_NAME));
     ui->comboBoxFontSize->addItem(RPM::translate(Translations::FONT_SIZE));
     ui->comboBoxHeroName->addItem(QIcon(":/icons/Ressources/datas.png"),
@@ -266,7 +264,15 @@ void WidgetComplexMessage::on_comboBoxHeroName_currentIndexChanged(int index) {
 
 // -------------------------------------------------------
 
-void WidgetComplexMessage::on_comboBoxIcon_currentIndexChanged(int index) {
-    this->insertTag(index, ui->comboBoxIcon, TAG_ICON, RPM::get()->project()
-        ->picturesDatas()->model(PictureKind::Icons), index - 1, false);
+void WidgetComplexMessage::on_pushButtonIcon_clicked()
+{
+    SystemPicture pic;
+    DialogPicturesPreview dialog(&pic, PictureKind::Icons);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        ui->plainTextMessage->insertPlainText("[" + TAG_ICON + "=" + QString
+            ::number(pic.id()) + ";" + QString::number(dialog.indexX())+ ";" +
+            QString::number(dialog.indexY()) + "]");
+    }
+    ui->plainTextMessage->setFocus();
 }
