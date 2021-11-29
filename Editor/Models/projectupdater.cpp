@@ -1445,3 +1445,40 @@ void ProjectUpdater::updateVersion_1_9_2_objects(SystemCommonObject *object)
         }
     }
 }
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_9_2_commands(QStandardItem *commands)
+{
+    EventCommand *command;
+    QVector<QString> list;
+    QString text;
+    int i, l;
+    if (commands->rowCount() == 0)
+    {
+        command = reinterpret_cast<EventCommand *>(commands->data().value<quintptr>());
+        list = command->commands();
+        if (command->kind() == EventCommandKind::ChangeVariables)
+        {
+            int index = 3;
+            if (list.at(0).toInt() == 1)
+            {
+                index++;
+            }
+            if (list.at(index++).toInt() == 0)
+            {
+                if (static_cast<PrimitiveValueKind>(list.at(index).toInt()) ==
+                    PrimitiveValueKind::Number)
+                {
+                    list.replace(index, QString::number(static_cast<int>(
+                        PrimitiveValueKind::NumberDouble)));
+                }
+            }
+            command->setCommands(list);
+        }
+    }
+    for (i = 0, l = commands->rowCount(); i < l; i++)
+    {
+        this->updateVersion_1_9_2_commands(commands->child(i));
+    }
+}

@@ -56,7 +56,7 @@ DialogCommandChangeVariables::~DialogCommandChangeVariables()
 void DialogCommandChangeVariables::initializePrimitives()
 {
     ui->widgetVariableOne->initialize();
-    ui->panelPrimitiveValueNumber->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveValueNumber->initializeNumber(m_parameters, m_properties, false);
     ui->panelPrimitiveValueRandom1->initializeNumber(m_parameters, m_properties);
     ui->panelPrimitiveValueRandom2->initializeNumber(m_parameters, m_properties);
     ui->panelPrimitiveMessage->initializeMessage(false, m_parameters, m_properties);
