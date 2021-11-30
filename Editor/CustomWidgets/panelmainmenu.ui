@@ -33,7 +33,7 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,2,1">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0">
        <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
@@ -247,10 +247,24 @@
         </layout>
        </item>
        <item>
-        <widget class="WidgetNews" name="widgetNews1" native="true"/>
+        <widget class="WidgetNews" name="widgetNews1" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="WidgetNews" name="widgetNews2" native="true"/>
+        <widget class="WidgetNews" name="widgetNews2" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
