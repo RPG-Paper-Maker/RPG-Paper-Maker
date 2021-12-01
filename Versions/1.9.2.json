@@ -8,7 +8,7 @@
     ],
 	"remove": [
         {
-            "target": "Engine/Content/winx64"
+            "target": "Engine/Content/win32"
         },
         {
             "repo": "Basic-Ressources",
