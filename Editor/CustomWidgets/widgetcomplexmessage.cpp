@@ -271,8 +271,8 @@ void WidgetComplexMessage::on_pushButtonIcon_clicked()
     if (dialog.exec() == QDialog::Accepted)
     {
         ui->plainTextMessage->insertPlainText("[" + TAG_ICON + "=" + QString
-            ::number(pic.id()) + ";" + QString::number(dialog.indexX())+ ";" +
-            QString::number(dialog.indexY()) + "]");
+            ::number(dialog.picture()->id()) + ";" + QString::number(dialog
+            .indexX())+ ";" + QString::number(dialog.indexY()) + "]");
     }
     ui->plainTextMessage->setFocus();
 }

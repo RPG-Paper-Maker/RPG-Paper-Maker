@@ -212,6 +212,7 @@ void ProjectUpdater::updateCommands() {
             }
             obj = QJsonObject();
             mapPortion->write(obj);
+            mapPortions->replace(j, obj);
             delete mapPortion;
             Common::writeOtherJSON(paths->at(j), obj);
         }
@@ -227,6 +228,7 @@ void ProjectUpdater::updateCommands() {
         }
         obj = QJsonObject();
         properties->write(obj);
+        m_listMapProperties.replace(i, obj);
         delete properties;
         Common::writeOtherJSON(m_listMapPropertiesPaths.at(i), obj);
     }
@@ -279,6 +281,7 @@ void ProjectUpdater::updateObjects() {
             }
             obj = QJsonObject();
             mapPortion->write(obj);
+            mapPortions->replace(j, obj);
             delete mapPortion;
             Common::writeOtherJSON(paths->at(j), obj);
         }
@@ -291,6 +294,7 @@ void ProjectUpdater::updateObjects() {
         emit updatingObject(properties->startupObject());
         obj = QJsonObject();
         properties->write(obj);
+        m_listMapProperties.replace(i, obj);
         delete properties;
         Common::writeOtherJSON(m_listMapPropertiesPaths.at(i), obj);
     }
@@ -1415,11 +1419,18 @@ void ProjectUpdater::updateVersion_1_9_1()
 void ProjectUpdater::updateVersion_1_9_2()
 {
     // Update time event parameter to seconds
-    connect(this, SIGNAL(updatingObjects(SystemCommonObject *)), this, SLOT(
-        updateVersion_1_9_2_commands(SystemCommonObject *)));
+    connect(this, SIGNAL(updatingObject(SystemCommonObject *)), this, SLOT(
+        updateVersion_1_9_2_objects(SystemCommonObject *)));
     this->updateObjects();
-    disconnect(this, SIGNAL(updatingObjects(SystemCommonObject *)), this, SLOT(
-        updateVersion_1_9_2_commands(SystemCommonObject *)));
+    disconnect(this, SIGNAL(updatingObject(SystemCommonObject *)), this, SLOT(
+        updateVersion_1_9_2_objects(SystemCommonObject *)));
+
+    // Change variables command deciaml
+    connect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_9_2_commands(QStandardItem *)));
+    this->updateCommands();
+    disconnect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_9_2_commands(QStandardItem *)));
 }
 
 // -------------------------------------------------------
@@ -1436,7 +1447,7 @@ void ProjectUpdater::updateVersion_1_9_2_objects(SystemCommonObject *object)
         if (event != nullptr && event->isSystem() && event->id() == 1)
         {
             parameter = reinterpret_cast<SystemParameter *>(SuperListItem
-                ::getItemModelAt(event->modelParameters(), i));
+                ::getItemModelAt(event->modelParameters(), 0));
             if (parameter != nullptr)
             {
                 parameter->value()->setNumberDoubleValue(parameter->value()
