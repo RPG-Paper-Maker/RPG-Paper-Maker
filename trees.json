@@ -4572,7 +4572,7 @@
                                                                     },
                                                                     {
                                                                         "exe": true,
-                                                                        "large": "Electron Framework",
+                                                                        "large": "Electron.Framework",
                                                                         "repo": "Dependencies",
                                                                         "source": "Game/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework",
                                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework"

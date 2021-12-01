@@ -8,6 +8,9 @@
     ],
 	"remove": [
         {
+            "target": "Engine/Content/winx64"
+        },
+        {
             "repo": "Basic-Ressources",
             "source": "Content/Images/HUD/Icons/superHPPotion.png",
             "target": "Engine/Content/BR/Content/Images/HUD/Icons/superHPPotion.png"
