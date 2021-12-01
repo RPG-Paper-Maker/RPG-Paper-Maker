@@ -769,178 +769,8 @@
                                 "files": [
                                     {
                                         "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/superHPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/superHPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/grass.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/grass.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/sapphireRing.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/sapphireRing.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/MPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/MPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/superTPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/superTPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/water.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/water.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/g.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/g.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/woodenSword.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/woodenSword.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/sapphireNecklace.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/sapphireNecklace.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/heal.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/heal.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/TPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/TPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/escape.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/escape.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/HPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/HPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/wind.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/wind.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/megaMPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/megaMPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/ironAxe.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/ironAxe.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/bronzeGreaves.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/bronzeGreaves.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/endTurn.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/endTurn.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/bronzeHelmet.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/bronzeHelmet.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/megaHPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/megaHPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/attack.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/attack.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/bandage.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/bandage.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/bronzeMail.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/bronzeMail.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/superMPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/superMPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/concentration.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/concentration.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/bronzeVambraces.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/bronzeVambraces.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/skill.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/skill.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/fire.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/fire.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/darkness.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/darkness.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/xcoin.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/xcoin.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/key.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/key.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/blazingSword.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/blazingSword.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/megaTPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/megaTPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/item.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/item.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Icons/light.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/light.png"
+                                        "source": "Content/Images/HUD/Icons/general.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/general.png"
                                     }
                                 ],
                                 "target": "Engine/Content/BR/Content/Images/HUD/Icons"
@@ -3181,7 +3011,7 @@
                     },
                     {
                         "exe": true,
-                        "large": "Game.exe",
+                        "large": "Gamex64.exe",
                         "repo": "Dependencies",
                         "source": "Game/winx64/Game.exe",
                         "target": "Engine/Content/winx64/Game.exe"
@@ -5085,7 +4915,7 @@
                     },
                     {
                         "exe": true,
-                        "large": "Game.exe",
+                        "large": "Gamex86.exe",
                         "repo": "Dependencies",
                         "source": "Game/winx86/Game.exe",
                         "target": "Engine/Content/winx86/Game.exe"
