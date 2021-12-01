@@ -8,6 +8,7 @@
     ],
 	"remove": [
         {
+            "files": [],
             "target": "Engine/Content/win32"
         },
         {
