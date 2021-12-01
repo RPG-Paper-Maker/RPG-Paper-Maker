@@ -1347,5 +1347,6 @@
     "on": "ON",
     "off": "OFF",
     "antialiasing": "Antialiasing",
-    "skyboxes": "Skyboxes"
+    "skyboxes": "Skyboxes",
+    "icons.size": "Розмір значка"
 }
