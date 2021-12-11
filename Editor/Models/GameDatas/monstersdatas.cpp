@@ -61,7 +61,7 @@ void MonstersDatas::setDefault(QStandardItem* ,
     QString names[] = {RPM::translate(Translations::WOOLY)};
     int classesIds[] = {5};
     int battlersIds[] = {5};
-    int facesetsIds[] = {5};
+    int facesetsIds[] = {4};
     int experiencesInitial[] = {5};
     int experiencesFinal[] = {5000};
     int experiencesEquation[] = {0};
@@ -122,7 +122,7 @@ void MonstersDatas::setDefault(QStandardItem* ,
         actions = new QStandardItemModel;
 
         monster = new SystemMonster(i+1, names[i], classesIds[i], battlersIds[i],
-            facesetsIds[i], SystemClass::createInheritanceClass(),
+            1, facesetsIds[i], 0, SystemClass::createInheritanceClass(),
             new SystemProgressionTable(new PrimitiveValue(experiencesInitial[i])
             , new PrimitiveValue(experiencesFinal[i]), experiencesEquation[i]),
             loots, actions);

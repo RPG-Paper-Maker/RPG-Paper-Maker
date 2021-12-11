@@ -130,6 +130,13 @@ void WidgetPicturePreview::updateImageSize(){
                 ->systemDatas()->iconsSize());
             this->updateRectangleCharacter();
             break;
+        case PictureKind::Facesets:
+            m_selectionRectangle->setSquareWidth(RPM::get()->project()->gameDatas()
+                ->systemDatas()->facesetsSize());
+            m_selectionRectangle->setSquareHeight(RPM::get()->project()->gameDatas()
+                ->systemDatas()->facesetsSize());
+            this->updateRectangleCharacter();
+            break;
         default:
             break;
         }
@@ -152,6 +159,7 @@ void WidgetPicturePreview::updateRectangle()
     switch (m_kind){
     case PictureKind::Characters:
     case PictureKind::Icons:
+    case PictureKind::Facesets:
         updateRectangleCharacter(); break;
     default:
         break;
@@ -188,10 +196,13 @@ void WidgetPicturePreview::mousePressEvent(QMouseEvent *event){
 void WidgetPicturePreview::paintEvent(QPaintEvent *){
     QPainter painter(this);
 
-    painter.fillRect(QRect(0, 0, m_image.width(), m_image.height()),
-                     RPM::COLOR_ALMOST_TRANSPARENT);
+    painter.fillRect(QRect(0, 0, m_image.width(), m_image.height()), RPM
+        ::COLOR_ALMOST_TRANSPARENT);
     painter.drawImage(0, 0, m_image);
 
-    if (m_chooseRect && (m_kind == PictureKind::Characters || m_kind == PictureKind::Icons))
+    if (m_chooseRect && (m_kind == PictureKind::Characters || m_kind == PictureKind
+        ::Icons || m_kind == PictureKind::Facesets))
+    {
         m_selectionRectangle->draw(painter);
+    }
 }

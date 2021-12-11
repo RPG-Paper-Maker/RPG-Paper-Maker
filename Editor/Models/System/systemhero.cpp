@@ -16,6 +16,8 @@
 const QString SystemHero::JSON_CLASS = "class";
 const QString SystemHero::JSON_BATTLER = "bid";
 const QString SystemHero::JSON_FACESET = "fid";
+const QString SystemHero::JSON_INDEX_X_FACESET = "indexXFaceset";
+const QString SystemHero::JSON_INDEX_Y_FACESET = "indexYFaceset";
 const QString SystemHero::JSON_CLASS_INHERIT = "ci";
 const QString SystemHero::JSON_DESCRIPTION = "description";
 const int SystemHero::DEFAULT_ID = 1;
@@ -23,6 +25,8 @@ const QString SystemHero::DEFAULT_NAME = "";
 const int SystemHero::DEFAULT_ID_CLASS = 1;
 const int SystemHero::DEFAULT_ID_BATTLER = 1;
 const int SystemHero::DEFAULT_ID_FACESET = 1;
+const int SystemHero::DEFAULT_INDEX_X_FACESET = 0;
+const int SystemHero::DEFAULT_INDEX_Y_FACESET = 0;
 
 // -------------------------------------------------------
 //
@@ -31,11 +35,14 @@ const int SystemHero::DEFAULT_ID_FACESET = 1;
 // -------------------------------------------------------
 
 SystemHero::SystemHero(int i, QString name, int idClass, int idBattler, int
-    idFaceset, SystemClass *classInherit, SystemTranslatable *description) :
+    idFaceset, int indexXFaceset, int indexYFaceset, SystemClass *classInherit,
+    SystemTranslatable *description) :
     SystemTranslatable(i, name),
     m_idClass(idClass),
     m_idBattlerPicture(idBattler),
     m_idFacesetPicture(idFaceset),
+    m_indexXFacesetPicture(indexXFaceset),
+    m_indexYFacesetPicture(indexYFaceset),
     m_classInherit(classInherit),
     m_description(description)
 {
@@ -76,6 +83,26 @@ int SystemHero::idFacesetPicture() const
 void SystemHero::setIdFacesetPicture(int id)
 {
     m_idFacesetPicture = id;
+}
+
+int SystemHero::indexXFacesetPicture() const
+{
+    return m_indexXFacesetPicture;
+}
+
+void SystemHero::setIndexXFacesetPicture(int indexXFacesetPicture)
+{
+    m_indexXFacesetPicture = indexXFacesetPicture;
+}
+
+int SystemHero::indexYFacesetPicture() const
+{
+    return m_indexYFacesetPicture;
+}
+
+void SystemHero::setIndexYFacesetPicture(int indexYFacesetPicture)
+{
+    m_indexYFacesetPicture = indexYFacesetPicture;
 }
 
 SystemClass * SystemHero::classInherit() const
@@ -151,6 +178,8 @@ void SystemHero::setCopy(const SuperListItem &super)
     m_idClass = hero->m_idClass;
     m_idBattlerPicture = hero->m_idBattlerPicture;
     m_idFacesetPicture = hero->m_idFacesetPicture;
+    m_indexXFacesetPicture = hero->m_indexXFacesetPicture;
+    m_indexYFacesetPicture = hero->m_indexYFacesetPicture;
     m_classInherit->setCopy(*hero->m_classInherit);
     m_description->setCopy(*hero->m_description);
 }
@@ -163,6 +192,14 @@ void SystemHero::read(const QJsonObject &json)
     m_idClass = json[JSON_CLASS].toInt();
     m_idBattlerPicture = json[JSON_BATTLER].toInt();
     m_idFacesetPicture = json[JSON_FACESET].toInt();
+    if (json.contains(JSON_INDEX_X_FACESET))
+    {
+        m_indexXFacesetPicture = json[JSON_INDEX_X_FACESET].toInt();
+    }
+    if (json.contains(JSON_INDEX_Y_FACESET))
+    {
+        m_indexYFacesetPicture = json[JSON_INDEX_Y_FACESET].toInt();
+    }
     m_classInherit->read(json[JSON_CLASS_INHERIT].toObject());
     m_description->read(json[JSON_DESCRIPTION].toObject());
 }
@@ -175,6 +212,14 @@ void SystemHero::write(QJsonObject &json) const
     json[JSON_CLASS] = m_idClass;
     json[JSON_BATTLER] = m_idBattlerPicture;
     json[JSON_FACESET] = m_idFacesetPicture;
+    if (m_indexXFacesetPicture != DEFAULT_INDEX_X_FACESET)
+    {
+        json[JSON_INDEX_X_FACESET] = m_indexXFacesetPicture;
+    }
+    if (m_indexYFacesetPicture != DEFAULT_INDEX_Y_FACESET)
+    {
+        json[JSON_INDEX_Y_FACESET] = m_indexYFacesetPicture;
+    }
     QJsonObject obj;
     m_classInherit->write(obj);
     json[JSON_CLASS_INHERIT] = obj;

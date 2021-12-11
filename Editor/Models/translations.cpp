@@ -1369,6 +1369,7 @@ const QString Translations::OFF = "off";
 const QString Translations::ANTIALIASING = "antialiasing";
 const QString Translations::SKYBOXES = "skyboxes";
 const QString Translations::ICONS_SIZE = "icons.size";
+const QString Translations::FACESETS_SIZE = "facesets.size";
 
 // -------------------------------------------------------
 //

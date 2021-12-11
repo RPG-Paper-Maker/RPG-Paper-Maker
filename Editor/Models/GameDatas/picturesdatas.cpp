@@ -89,7 +89,7 @@ void PicturesDatas::setDefaultBars(QList<QString>& names) {
 // -------------------------------------------------------
 
 void PicturesDatas::setDefaultFacesets(QList<QString>& names) {
-    names << "lucas" << "kate" << "bibi" << "shana" << "wooly";
+    names << "general1";
     setDefaultPictures(names, PictureKind::Facesets);
 }
 

@@ -519,7 +519,7 @@ QString EventCommand::strShowText(QStandardItemModel *properties, QStandardItemM
 {
     int i = 0;
     QString interlocutor = this->strProperty(i, properties, parameters);
-    i++;
+    i+=3;
     int id;
     QString text;
     while (i < this->commandsCount())

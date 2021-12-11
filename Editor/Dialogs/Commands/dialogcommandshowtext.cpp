@@ -48,6 +48,8 @@ DialogCommandShowText::~DialogCommandShowText()
     delete m_timer;
     delete ui;
     delete m_facesetID;
+    delete m_facesetIndexX;
+    delete m_facesetIndexY;
 }
 
 // -------------------------------------------------------
@@ -64,8 +66,10 @@ void DialogCommandShowText::initializeWidgets(QStandardItemModel *properties,
     ui->panelPrimitiveInterlocutor->initializeMessage(false, parameters,
         m_properties);
     m_facesetID = new SuperListItem(-1);
+    m_facesetIndexX = new SuperListItem(0);
+    m_facesetIndexY = new SuperListItem(0);
     ui->widgetPictureFaceset->setKind(PictureKind::Facesets);
-    ui->widgetPictureFaceset->initializeSuper(m_facesetID);
+    ui->widgetPictureFaceset->initializeSuper(m_facesetID, m_facesetIndexX, m_facesetIndexY);
     QStandardItemModel *model = RPM::get()->project()->langsDatas()->model();
     QWidget *widget;
     QGridLayout *layout;
@@ -113,6 +117,8 @@ EventCommand * DialogCommandShowText::getCommand() const
     QVector<QString> command;
     ui->panelPrimitiveInterlocutor->getCommand(command);
     command.append(QString::number(m_facesetID->id()));
+    command.append(QString::number(m_facesetIndexX->id()));
+    command.append(QString::number(m_facesetIndexY->id()));
     QHash<int, WidgetComplexMessage *>::const_iterator i;
     for (i = m_widgets.begin(); i != m_widgets.end(); i++)
     {
@@ -129,7 +135,10 @@ void DialogCommandShowText::initialize(EventCommand *command)
     int i = 0;
     ui->panelPrimitiveInterlocutor->initializeCommand(command, i);
     m_facesetID->setId(command->valueCommandAt(i++).toInt());
-    ui->widgetPictureFaceset->initializeSuper(m_facesetID);
+    m_facesetIndexX->setId(command->valueCommandAt(i++).toInt());
+    m_facesetIndexY->setId(command->valueCommandAt(i++).toInt());
+    ui->widgetPictureFaceset->initializeSuper(m_facesetID, m_facesetIndexX,
+        m_facesetIndexY);
     int id;
     QString text;
     WidgetComplexMessage *widget;

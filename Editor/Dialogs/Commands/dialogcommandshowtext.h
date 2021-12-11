@@ -44,6 +44,8 @@ public:
 
 protected:
     SuperListItem *m_facesetID;
+    SuperListItem *m_facesetIndexX;
+    SuperListItem *m_facesetIndexY;
     QStandardItemModel *m_parameters;
     QStandardItemModel *m_properties;
     QHash<int, WidgetComplexMessage *> m_widgets;

@@ -23,12 +23,13 @@
 #include "systemitem.h"
 #include "systemskill.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 25;
+const int ProjectUpdater::incompatibleVersionsCount = 26;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
      "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0", "1.6.2",
-    "1.6.3", "1.6.4", "1.7.0", "1.7.3", "1.8.0", "1.8.3", "1.9.0", "1.9.1", "1.9.2"};
+    "1.6.3", "1.6.4", "1.7.0", "1.7.3", "1.8.0", "1.8.3", "1.9.0", "1.9.1",
+    "1.9.2", "1.9.3"};
 
 // -------------------------------------------------------
 //
@@ -1491,5 +1492,42 @@ void ProjectUpdater::updateVersion_1_9_2_commands(QStandardItem *commands)
     for (i = 0, l = commands->rowCount(); i < l; i++)
     {
         this->updateVersion_1_9_2_commands(commands->child(i));
+    }
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_9_3()
+{
+    // Show text command changed with facesets in one file
+    connect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_9_3_commands(QStandardItem *)));
+    this->updateCommands();
+    disconnect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_9_3_commands(QStandardItem *)));
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_9_3_commands(QStandardItem *commands)
+{
+    EventCommand *command;
+    QVector<QString> list;
+    QString text;
+    int i, l;
+    if (commands->rowCount() == 0)
+    {
+        command = reinterpret_cast<EventCommand *>(commands->data().value<quintptr>());
+        list = command->commands();
+        if (command->kind() == EventCommandKind::ShowText)
+        {
+            list.insert(3, "0");
+            list.insert(4, "0");
+            command->setCommands(list);
+        }
+    }
+    for (i = 0, l = commands->rowCount(); i < l; i++)
+    {
+        this->updateVersion_1_9_3_commands(commands->child(i));
     }
 }

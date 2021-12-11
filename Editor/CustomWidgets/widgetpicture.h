@@ -46,7 +46,8 @@ public:
     void setPictureIndexY(int pictureIndexY);
     void setIsLimitIndex(bool isLimitIndex);
     void initialize(int i = 1, int indexX = 0, int indexY = 0);
-    void initializeSuper(SuperListItem *super);
+    void initializeSuper(SuperListItem *super, SuperListItem *indexX = nullptr,
+        SuperListItem *indexY = nullptr);
     void initializePrimitive(PrimitiveValue *value, QStandardItemModel *properties =
         nullptr, QStandardItemModel *parameters = nullptr);
     void openDialog();
@@ -57,7 +58,9 @@ private:
     int m_picture;
     SuperListItem *m_pictureID;
     int m_pictureIndexX;
+    SuperListItem *m_indexXID;
     int m_pictureIndexY;
+    SuperListItem *m_indexYID;
     bool m_isLimitIndex;
     PrimitiveValue *m_valueID;
     QStandardItemModel *m_properties;

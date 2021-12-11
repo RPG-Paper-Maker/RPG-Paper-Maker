@@ -44,13 +44,13 @@ QStandardItemModel* HeroesDatas::model() const { return m_model; }
 
 void HeroesDatas::setDefault() {
     SystemHero* heroes[] = {
-        new SystemHero(1, RPM::translate(Translations::LUCAS), 1, 1, 1,
+        new SystemHero(1, RPM::translate(Translations::LUCAS), 1, 1, 1, 0, 0,
             SystemClass::createInheritanceClass()),
-        new SystemHero(2, RPM::translate(Translations::KATE), 2, 2, 2,
+        new SystemHero(2, RPM::translate(Translations::KATE), 2, 2, 1, 1, 0,
             SystemClass::createInheritanceClass()),
-        new SystemHero(3, RPM::translate(Translations::BIBI), 3, 3, 3,
+        new SystemHero(3, RPM::translate(Translations::BIBI), 3, 3, 1, 2, 0,
             SystemClass::createInheritanceClass()),
-        new SystemHero(4, RPM::translate(Translations::SHANA), 4, 4, 4,
+        new SystemHero(4, RPM::translate(Translations::SHANA), 4, 4, 1, 3, 0,
             SystemClass::createInheritanceClass())
     };
     int length = (sizeof(heroes)/sizeof(*heroes));

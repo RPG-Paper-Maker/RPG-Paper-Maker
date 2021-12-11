@@ -1,0 +1,28 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Update change graphics to select graphics exactly like in object options (none, fix sprite, 3D obj etc) + checkbox don't change orientation (+ in change state)",
+	    "Display picture command: stretch option",
+	    "Facesets in one file",
+        "Command switch texture"
+    ],
+    "bugs": [
+    	"Command remove object: removing hero if object doesn't exists",
+    	"Necklace ring default icons reverted",
+        "Mountains collisions issues",
+        "(more fixes incoming)"
+    ],
+    "finished": [
+        0,
+        0,
+        0,
+        0,
+
+        0,
+        0,
+        0,
+        0
+    ]
+}

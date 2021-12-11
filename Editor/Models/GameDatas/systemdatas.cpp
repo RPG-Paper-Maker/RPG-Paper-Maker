@@ -53,6 +53,7 @@ const QString SystemDatas::JSON_SOUND_CONFIRMATION = "sco";
 const QString SystemDatas::JSON_SOUND_CANCEL = "sca";
 const QString SystemDatas::JSON_SOUND_IMPOSSIBLE = "si";
 const QString SystemDatas::JSON_DIALOG_BOX_OPTIONS = "dbo";
+const QString SystemDatas::JSON_FACESETS_SIZE = "facesetsSize";
 const QString SystemDatas::JSON_FACESET_SCALING_WIDTH = "facesetScalingWidth";
 const QString SystemDatas::JSON_FACESET_SCALING_HEIGHT = "facesetScalingHeight";
 const QString SystemDatas::JSON_ICONS_SIZE = "iconsSize";
@@ -79,6 +80,7 @@ const int SystemDatas::DEFAULT_AUTOTILES_FRAMES = 4;
 const int SystemDatas::DEFAULT_AUTOTILES_FRAME_DURATION = 150;
 const int SystemDatas::DEFAULT_PORTION_RAY_ENGINE = 6;
 const int SystemDatas::DEFAULT_PORTION_RAY_INGAME = 3;
+const int SystemDatas::DEFAULT_FACESETS_SIZE =128;
 const int SystemDatas::DEFAULT_FACESET_SCALING_WIDTH = 160;
 const int SystemDatas::DEFAULT_FACESET_SCALING_HEIGHT = 160;
 const int SystemDatas::DEFAULT_ICONS_SIZE = 16;
@@ -129,6 +131,7 @@ SystemDatas::SystemDatas() :
     m_soundCancel(new SystemPlaySong(-1, SongKind::Sound)),
     m_soundImpossible(new SystemPlaySong(-1, SongKind::Sound)),
     m_dialogBoxOptions(new EventCommand(EventCommandKind::SetDialogBoxOptions)),
+    m_facesetsSize(DEFAULT_FACESETS_SIZE),
     m_facesetScalingWidth(DEFAULT_FACESET_SCALING_WIDTH),
     m_facesetScalingHeight(DEFAULT_FACESET_SCALING_HEIGHT),
     m_iconsSize(DEFAULT_ICONS_SIZE),
@@ -437,6 +440,16 @@ EventCommand * SystemDatas::dialogBoxOptions() const {
 
 void SystemDatas::setDialogBoxOptions(EventCommand *command) {
     m_dialogBoxOptions = command;
+}
+
+int SystemDatas::facesetsSize() const
+{
+    return m_facesetsSize;
+}
+
+void SystemDatas::setFacesetsSize(int facesetSize)
+{
+    m_facesetsSize = facesetSize;
 }
 
 int SystemDatas::facesetScalingWidth() const
@@ -1027,6 +1040,10 @@ void SystemDatas::read(const QJsonObject &json){
     m_dialogBoxOptions->read(json[JSON_DIALOG_BOX_OPTIONS].toObject());
 
     // Faceset
+    if (json.contains(JSON_FACESETS_SIZE))
+    {
+        m_facesetsSize = json[JSON_FACESETS_SIZE].toInt();
+    }
     if (json.contains(JSON_FACESET_SCALING_WIDTH))
     {
         m_facesetScalingWidth = json[JSON_FACESET_SCALING_WIDTH].toInt();
@@ -1296,6 +1313,10 @@ void SystemDatas::write(QJsonObject &json) const{
     json[JSON_DIALOG_BOX_OPTIONS] = obj;
 
     // Faceset
+    if (m_facesetsSize != DEFAULT_FACESETS_SIZE)
+    {
+        json[JSON_FACESETS_SIZE] = m_facesetsSize;
+    }
     if (m_facesetScalingWidth != DEFAULT_FACESET_SCALING_WIDTH)
     {
         json[JSON_FACESET_SCALING_WIDTH] = m_facesetScalingWidth;

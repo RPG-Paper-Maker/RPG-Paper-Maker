@@ -45,6 +45,7 @@ public:
     SystemHero * currentHero();
     void updateClasses();
     void updateClass();
+    void updateFacesetIndex();
 
 private:
     Ui::PanelDatasCharacter *ui;
@@ -56,6 +57,7 @@ private slots:
     void on_comboBoxClass_currentIndexChanged(int index);
     void on_battlerPictureChanged(SystemPicture *picture);
     void on_facesetPictureChanged(SystemPicture* picture);
+    void on_facesetIndexChanged(int x, int y);
 };
 
 #endif // PANELDATASCHARACTER_H

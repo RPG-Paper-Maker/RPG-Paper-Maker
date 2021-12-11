@@ -26,7 +26,9 @@ WidgetPicture::WidgetPicture(QWidget *parent) :
     ui(new Ui::WidgetPicture),
     m_pictureID(nullptr),
     m_pictureIndexX(0),
+    m_indexXID(nullptr),
     m_pictureIndexY(0),
+    m_indexYID(nullptr),
     m_isLimitIndex(true),
     m_valueID(nullptr),
     m_properties(nullptr),
@@ -105,9 +107,14 @@ void WidgetPicture::initialize(int i, int indexX, int indexY) {
     emit pictureChanged(pic);
 }
 
-void WidgetPicture::initializeSuper(SuperListItem *super) {
+void WidgetPicture::initializeSuper(SuperListItem *super, SuperListItem *indexX,
+    SuperListItem *indexY)
+{
     m_pictureID = super;
-    initialize(m_pictureID->id());
+    m_indexXID = indexX;
+    m_indexYID = indexY;
+    initialize(m_pictureID->id(), indexX == nullptr ? 0 : indexX->id(), indexY
+        == nullptr ? 0 : indexY->id());
 }
 
 void WidgetPicture::initializePrimitive(PrimitiveValue *value,
@@ -161,6 +168,14 @@ void WidgetPicture::openDialog(){
         pic = dialog.picture();
     }
     setPicture(pic);
+    if (m_indexXID != nullptr)
+    {
+        m_indexXID->setId(m_pictureIndexX);
+    }
+    if (m_indexYID != nullptr)
+    {
+        m_indexYID->setId(m_pictureIndexY);
+    }
     if (previousPictureID != m_picture) {
         emit pictureChanged(pic);
     }

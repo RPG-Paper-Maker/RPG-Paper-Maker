@@ -154,6 +154,10 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->spinBoxAutotilesFrameDuration->setValue(systemDatas->autotilesFrameDuration());
     ui->panelPrimitiveMapFrameDuration->initializeNumberAndUpdate(systemDatas
         ->mapFrameDuration());
+    ui->spinBoxFacesetSize->setValue(systemDatas->facesetsSize());
+    ui->spinBoxFacesetScalingWidth->setValue(systemDatas->facesetScalingWidth());
+    ui->spinBoxFacesetScalingHeight->setValue(systemDatas->facesetScalingHeight());
+    ui->spinBoxIconsSize->setValue(systemDatas->iconsSize());
     ui->spinBoxSaveSlots->setValue(systemDatas->saveSlots());
     ui->primitiveValuePriceSoldItem->initializeNumberAndUpdate(systemDatas
         ->priceSoldItem(), false);
@@ -678,6 +682,9 @@ void DialogSystems::translate()
     ui->labelIconsSize->setText(RPM::translate(Translations::ICONS_SIZE) + RPM
         ::SPACE + RPM::PARENTHESIS_LEFT + RPM::translate(Translations::IN_PX) +
         RPM::PARENTHESIS_RIGHT + RPM::COLON);
+    ui->labelFacesetSize->setText(RPM::translate(Translations::FACESETS_SIZE) + RPM
+        ::SPACE + RPM::PARENTHESIS_LEFT + RPM::translate(Translations::IN_PX) +
+        RPM::PARENTHESIS_RIGHT + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -816,6 +823,13 @@ void DialogSystems::on_pushButtonDefaultDialogBoxOptions_clicked() {
         RPM::get()->project()->gameDatas()->systemDatas()->setDialogBoxOptions(
             command);
     }
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxFacesetSize_valueChanged(int i)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setFacesetsSize(i);
 }
 
 // -------------------------------------------------------

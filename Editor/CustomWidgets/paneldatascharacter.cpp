@@ -67,10 +67,12 @@ void PanelDatasCharacter::initialize() {
 
     // Faceset
     ui->widgetImageFaceset->setActivateCoef(false);
-    ui->widgetImageFaceset->setCoef(0.5f);
     ui->widgetPictureFaceset->setKind(PictureKind::Facesets);
+    ui->widgetPictureFaceset->setIsLimitIndex(false);
     connect(ui->widgetPictureFaceset, SIGNAL(pictureChanged(SystemPicture *)),
         this, SLOT(on_facesetPictureChanged(SystemPicture *)));
+    connect(ui->widgetPictureFaceset, SIGNAL(indexChanged(int, int)), this, SLOT(
+        on_facesetIndexChanged(int, int)));
 
     // Class
     ui->panelDatasClass->initialize(false);
@@ -85,9 +87,12 @@ void PanelDatasCharacter::update(SystemHero *hero, int classIndex) {
     ui->widgetPictureBattler->setPicture(picture);
     on_battlerPictureChanged(picture);
     picture = hero->getPictureFaceset();
+    ui->widgetPictureFaceset->initialize(picture->id(), hero->indexXFacesetPicture(),
+        hero->indexYFacesetPicture());
     ui->widgetPictureFaceset->setPicture(picture);
     on_facesetPictureChanged(picture);
     ui->widgetTextLangDescription->initializeNamesLang(hero->description());
+    this->updateFacesetIndex();
 
     // Class
     updateClass();
@@ -115,6 +120,18 @@ void PanelDatasCharacter::updateClasses() {
 void PanelDatasCharacter::updateClass() {
     SystemHero *hero = currentHero();
     ui->panelDatasClass->update(hero->classInherit(), hero->getClass());
+}
+
+// -------------------------------------------------------
+
+void PanelDatasCharacter::updateFacesetIndex()
+{
+    ui->widgetImageFaceset->setRectSubImage(QRectF(ui->widgetPictureFaceset
+        ->pictureIndexX() * RPM::get()->project()->gameDatas()->systemDatas()
+        ->facesetsSize(), ui->widgetPictureFaceset->pictureIndexY() * RPM::get()
+        ->project()->gameDatas()->systemDatas()->facesetsSize(), RPM::get()
+        ->project()->gameDatas()->systemDatas()->facesetsSize(), RPM::get()
+        ->project()->gameDatas()->systemDatas()->facesetsSize()));
 }
 
 //-------------------------------------------------
@@ -154,4 +171,13 @@ void PanelDatasCharacter::on_battlerPictureChanged(SystemPicture *picture) {
 void PanelDatasCharacter::on_facesetPictureChanged(SystemPicture *picture) {
     currentHero()->setIdFacesetPicture(picture->id());
     ui->widgetImageFaceset->updatePicture(picture);
+}
+
+// -------------------------------------------------------
+
+void PanelDatasCharacter::on_facesetIndexChanged(int x, int y)
+{
+    currentHero()->setIndexXFacesetPicture(x);
+    currentHero()->setIndexYFacesetPicture(y);
+    this->updateFacesetIndex();
 }

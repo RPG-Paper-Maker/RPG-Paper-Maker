@@ -1348,5 +1348,6 @@
     "off": "OFF",
     "antialiasing": "Antialiasing",
     "skyboxes": "Skyboxes",
-    "icons.size": "Taille des icones"
+    "icons.size": "Taille des icones",
+    "facesets.size": "Taille des facesets"
 }

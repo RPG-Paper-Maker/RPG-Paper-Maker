@@ -61,6 +61,7 @@ void WidgetShowPicture::setRectSubImage(const QRectF &rect)
     m_isSubImage = true;
     m_rectSubImage = rect;
     this->updateSizePosition();
+    this->repaint();
 }
 
 // -------------------------------------------------------

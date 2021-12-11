@@ -33,8 +33,9 @@ public:
 
     SystemMonster();
     SystemMonster(int i, QString name, int idClass, int idBattler, int idFaceset,
-        SystemClass *classInherit, SystemProgressionTable *exp, QStandardItemModel
-        *loots, QStandardItemModel *actions);
+        int indexXFaceset, int indexYFaceset, SystemClass *classInherit,
+        SystemProgressionTable *exp, QStandardItemModel *loots, QStandardItemModel
+        *actions);
     virtual ~SystemMonster();
     SystemProgressionTable * experience() const;
     QHash<int, SystemProgressionTable *> * currencies();

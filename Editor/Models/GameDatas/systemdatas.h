@@ -57,6 +57,7 @@ public:
     static const QString JSON_SOUND_CANCEL;
     static const QString JSON_SOUND_IMPOSSIBLE;
     static const QString JSON_DIALOG_BOX_OPTIONS;
+    static const QString JSON_FACESETS_SIZE;
     static const QString JSON_FACESET_SCALING_WIDTH;
     static const QString JSON_FACESET_SCALING_HEIGHT;
     static const QString JSON_ICONS_SIZE;
@@ -83,6 +84,7 @@ public:
     static const int DEFAULT_AUTOTILES_FRAME_DURATION;
     static const int DEFAULT_PORTION_RAY_ENGINE;
     static const int DEFAULT_PORTION_RAY_INGAME;
+    static const int DEFAULT_FACESETS_SIZE;
     static const int DEFAULT_FACESET_SCALING_WIDTH;
     static const int DEFAULT_FACESET_SCALING_HEIGHT;
     static const int DEFAULT_ICONS_SIZE;
@@ -159,6 +161,8 @@ public:
     SystemPlaySong * soundImpossible() const;
     EventCommand * dialogBoxOptions() const;
     void setDialogBoxOptions(EventCommand *command);
+    int facesetsSize() const;
+    void setFacesetsSize(int facesetSize);
     int facesetScalingWidth() const;
     void setFacesetScalingWidth(int facesetScalingWidth);
     int facesetScalingHeight() const;
@@ -238,6 +242,7 @@ private:
     SystemPlaySong *m_soundCancel;
     SystemPlaySong *m_soundImpossible;
     EventCommand *m_dialogBoxOptions;
+    int m_facesetsSize;
     int m_facesetScalingWidth;
     int m_facesetScalingHeight;
     int m_iconsSize;
