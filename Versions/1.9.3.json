@@ -12,15 +12,17 @@
     	"Command remove object: removing hero if object doesn't exists",
     	"Necklace ring default icons reverted",
         "Mountains collisions issues",
+        "Error ingame when initial party list empty",
         "(more fixes incoming)"
     ],
     "finished": [
         0,
         0,
-        0,
+        2,
         0,
 
         0,
+        2,
         0,
         0,
         0

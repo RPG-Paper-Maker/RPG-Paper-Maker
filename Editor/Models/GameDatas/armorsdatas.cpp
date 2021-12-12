@@ -57,7 +57,7 @@ void ArmorsDatas::setDefault() {
         RPM::translate(Translations::SAPPHIRE_NECKLACE)
     };
     int iconsX[] = {
-        2, 3, 1, 4, 7, 8
+        2, 3, 1, 4, 8, 7
     };
     int iconsY[] = {
         1, 1, 1, 1, 1, 1
