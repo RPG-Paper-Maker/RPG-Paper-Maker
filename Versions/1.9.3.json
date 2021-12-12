@@ -9,7 +9,6 @@
         "Command switch texture"
     ],
     "bugs": [
-    	"Command remove object: removing hero if object doesn't exists",
     	"Necklace ring default icons reverted",
         "Mountains collisions issues",
         "Error ingame when initial party list empty",
@@ -21,7 +20,6 @@
         2,
         0,
 
-        0,
         2,
         0,
         0,

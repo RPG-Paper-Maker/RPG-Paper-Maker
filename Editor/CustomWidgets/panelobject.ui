@@ -416,21 +416,7 @@
             </widget>
            </item>
            <item row="0" column="0">
-            <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0">
-             <item>
-              <widget class="QLabel" name="labelGraphics">
-               <property name="text">
-                <string>Graphics:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="WidgetGraphics" name="frameGraphics" native="true"/>
-             </item>
-             <item>
-              <widget class="QComboBox" name="comboBoxGraphics"/>
-             </item>
-            </layout>
+            <widget class="PanelGraphics" name="panelGraphics" native="true"/>
            </item>
           </layout>
          </item>
@@ -483,9 +469,9 @@
    <header>widgetsupertree.h</header>
   </customwidget>
   <customwidget>
-   <class>WidgetGraphics</class>
+   <class>PanelGraphics</class>
    <extends>QWidget</extends>
-   <header>widgetgraphics.h</header>
+   <header>panelgraphics.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

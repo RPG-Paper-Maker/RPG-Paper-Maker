@@ -58,8 +58,6 @@ public:
     void updateStateMoving(SystemState *state);
     void updateStateOptions(SystemState *state);
     void updateStateDetection(SystemState *state);
-    void passToSprite();
-    void passToNone();
 
 private:
     Ui::PanelObject *ui;
@@ -98,7 +96,6 @@ private slots:
     void on_checkBoxSetWithCamera_toggled(bool checked);
     void on_checkBoxPixelOffset_toggled(bool checked);
     void on_checkBoxKeepPosition_toggled(bool checked);
-    void on_comboBoxGraphics_currentIndexChanged(int index);
     void on_checkBoxDetection_toggled(bool checked);
     void on_checkBoxDetection_clicked();
     void on_pushButtonDetection_clicked();

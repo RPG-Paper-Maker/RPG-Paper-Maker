@@ -24,6 +24,7 @@ HEADERS += \
     CustomWidgets/comboboxwheel.h \
     CustomWidgets/panelcolorstransition.h \
     CustomWidgets/panelfonts.h \
+    CustomWidgets/panelgraphics.h \
     CustomWidgets/panelherotroopbattletest.h \
     CustomWidgets/panelplugindetails.h \
     CustomWidgets/panelposition.h \
@@ -469,6 +470,7 @@ SOURCES += \
     CustomWidgets/comboboxwheel.cpp \
     CustomWidgets/panelcolorstransition.cpp \
     CustomWidgets/panelfonts.cpp \
+    CustomWidgets/panelgraphics.cpp \
     CustomWidgets/panelherotroopbattletest.cpp \
     CustomWidgets/panelplugindetails.cpp \
     CustomWidgets/panelposition.cpp \
@@ -862,6 +864,7 @@ SOURCES += \
 FORMS += \
     CustomWidgets/panelcolorstransition.ui \
     CustomWidgets/panelfonts.ui \
+    CustomWidgets/panelgraphics.ui \
     CustomWidgets/panelherotroopbattletest.ui \
     CustomWidgets/panelplugindetails.ui \
     CustomWidgets/panelposition.ui \

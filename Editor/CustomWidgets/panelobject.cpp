@@ -52,8 +52,7 @@ PanelObject::PanelObject(QWidget *parent) :
     // Keep space when hiding widgets
     QSizePolicy sp_retain;
     QList<QWidget *> widgetList = QList<QWidget*>({ui->tabWidgetCommands,
-        ui->groupBoxMoving, ui->groupBoxOptions, ui->labelGraphics,
-        ui->frameGraphics, ui->comboBoxGraphics});
+        ui->groupBoxMoving, ui->groupBoxOptions, ui->panelGraphics});
     for (int i = 0; i < widgetList.size(); i++) {
         sp_retain = widgetList[i]->sizePolicy();
         sp_retain.setRetainSizeWhenHidden(true);
@@ -68,10 +67,6 @@ PanelObject::PanelObject(QWidget *parent) :
 
     // Comboboxes
     ui->comboBoxMovingType->addItems(RPM::ENUM_TO_STRING_OBJECT_MOVING_KIND);
-    ui->comboBoxGraphics->addItem(RPM::translate(Translations::NONE));
-    ui->comboBoxGraphics->addItem(RPM::translate(Translations::FIX_SPRITE));
-    ui->comboBoxGraphics->addItem(RPM::translate(Translations::FACE_SPRITE));
-    ui->comboBoxGraphics->addItem(RPM::translate(Translations::THREED_OBJECT));
 
     this->translate();
 }
@@ -209,9 +204,7 @@ void PanelObject::showStateWidgets(bool b) {
     ui->tabWidgetCommands->setVisible(b);
     ui->groupBoxMoving->setVisible(b);
     ui->groupBoxOptions->setVisible(b);
-    ui->labelGraphics->setVisible(b);
-    ui->frameGraphics->setVisible(b);
-    ui->comboBoxGraphics->setVisible(b);
+    ui->panelGraphics->setVisible(b);
     ui->checkBoxDetection->setVisible(b);
     ui->pushButtonDetection->setVisible(b);
 }
@@ -239,9 +232,7 @@ void PanelObject::showInvisible(bool b) {
     this->showID(!b);
     ui->groupBoxOptions->setEnabled(!b);
     ui->groupBoxMoving->setEnabled(!b);
-    ui->labelGraphics->setEnabled(!b);
-    ui->frameGraphics->setEnabled(!b);
-    ui->comboBoxGraphics->setEnabled(!b);
+    ui->panelGraphics->setEnabled(!b);
     ui->checkBoxDetection->setEnabled(!b);
     ui->pushButtonDetection->setEnabled(!b);
 }
@@ -359,18 +350,6 @@ void PanelObject::updateStateDetection(SystemState *state) {
     this->on_checkBoxDetection_toggled(state->eventCommandDetection() != nullptr);
 }
 
-// -------------------------------------------------------
-
-void PanelObject::passToSprite() {
-    ui->comboBoxGraphics->setCurrentIndex(2);
-}
-
-// -------------------------------------------------------
-
-void PanelObject::passToNone() {
-    ui->comboBoxGraphics->setCurrentIndex(0);
-}
-
 //-------------------------------------------------
 
 void PanelObject::translate()
@@ -382,8 +361,7 @@ void PanelObject::translate()
     ui->labelSpeed->setText(RPM::translate(Translations::SPEED) + RPM::COLON);
     ui->labelEvents->setText(RPM::translate(Translations::EVENTS) + RPM::COLON);
     ui->labelStates->setText(RPM::translate(Translations::STATES) + RPM::COLON);
-    ui->labelGraphics->setText(RPM::translate(Translations::GRAPHICS) + RPM
-        ::COLON);
+    ui->panelGraphics->translate();
     ui->labelProperties->setText(RPM::translate(Translations::PROPERTIES) + RPM
         ::COLON);
     ui->groupBoxMoving->setTitle(RPM::translate(Translations::MOVING));
@@ -483,33 +461,11 @@ void PanelObject::on_stateChanged(QModelIndex index, QModelIndex) {
 
         SystemState *super = reinterpret_cast<SystemState *>(selected->data()
             .value<quintptr>());
+        ui->panelGraphics->setState(super);
         if (super != nullptr) {
 
             // Graphics
-            ui->frameGraphics->setState(super);
-            int i = 0;
-            switch (super->graphicsKind()) {
-            case MapEditorSubSelectionKind::None:
-                i = 0; break;
-            case MapEditorSubSelectionKind::SpritesFix:
-                i = 1; break;
-            case MapEditorSubSelectionKind::SpritesFace:
-                i = 2; break;
-            case MapEditorSubSelectionKind::Object3D:
-                i = 3; break;
-            default:
-                break;
-            }
-            int id = super->graphicsId();
-            ui->comboBoxGraphics->setCurrentIndex(i);
-            super->setGraphicsId(id);
-            if (super->graphicsKind() == MapEditorSubSelectionKind::Object3D)
-            {
-                ui->frameGraphics->updateCurrentObject();
-            } else {
-                ui->frameGraphics->clearObject();
-            }
-            ui->frameGraphics->repaint();
+            ui->panelGraphics->updateState(super);
 
             // Events
             for (int i = 0; i < m_reactions.size(); i++) {
@@ -727,50 +683,6 @@ void PanelObject::on_checkBoxPixelOffset_toggled(bool checked) {
 void PanelObject::on_checkBoxKeepPosition_toggled(bool checked)
 {
     getSelectedState()->setKeepPosition(checked);
-}
-
-// -------------------------------------------------------
-
-void PanelObject::on_comboBoxGraphics_currentIndexChanged(int index) {
-    if (m_model == nullptr) {
-        return;
-    }
-    QStandardItem *selected = ui->treeViewStates->getSelected();
-
-    if (selected != nullptr) {
-        SystemState *super = reinterpret_cast<SystemState *>(selected->data()
-            .value<quintptr>());
-        if (super != nullptr) {
-            MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
-            switch (index) {
-            case 0:
-                kind = MapEditorSubSelectionKind::None; break;
-            case 1:
-                kind = MapEditorSubSelectionKind::SpritesFix;
-                if (super->graphicsKind() != MapEditorSubSelectionKind::SpritesFace)
-                {
-                    super->setGraphicsId(1);
-                }
-                ui->frameGraphics->clearObject();
-                break;
-            case 2:
-                kind = MapEditorSubSelectionKind::SpritesFace;
-                if (super->graphicsKind() != MapEditorSubSelectionKind::SpritesFix)
-                {
-                    super->setGraphicsId(1);
-                }
-                ui->frameGraphics->clearObject();
-                break;
-            case 3:
-                kind = MapEditorSubSelectionKind::Object3D;
-                super->setGraphicsId(1);
-                ui->frameGraphics->updateCurrentObject();
-                break;
-            }
-            super->setGraphicsKind(kind);
-            ui->frameGraphics->repaint();
-        }
-    }
 }
 
 // -------------------------------------------------------

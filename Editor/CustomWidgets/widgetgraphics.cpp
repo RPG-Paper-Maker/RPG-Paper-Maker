@@ -12,7 +12,7 @@
 #include "widgetgraphics.h"
 #include "dialogpicturespreview.h"
 #include "rpm.h"
-#include "panelobject.h"
+#include "panelgraphics.h"
 #include "dialogspecialelements.h"
 
 // -------------------------------------------------------
@@ -97,7 +97,7 @@ void WidgetGraphics::mouseDoubleClickEvent(QMouseEvent *) {
     if (m_state->graphicsKind() == MapEditorSubSelectionKind::None)
     {
         wasNone = true;
-        reinterpret_cast<PanelObject *>(this->parent())->passToSprite();
+        reinterpret_cast<PanelGraphics *>(this->parent())->passToSprite();
     }
 
     switch (m_state->graphicsKind())
@@ -132,7 +132,7 @@ void WidgetGraphics::mouseDoubleClickEvent(QMouseEvent *) {
         } else {
             RPM::get()->project()->readPicturesDatas();
             if (wasNone)
-                reinterpret_cast<PanelObject *>(this->parent())->passToNone();
+                reinterpret_cast<PanelGraphics *>(this->parent())->passToNone();
         }
         break;
     }
