@@ -226,6 +226,13 @@
                 </property>
                </widget>
               </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonSwitchTexture">
+                <property name="text">
+                 <string>Switch texture...</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </item>
            </layout>
