@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#include "dialogpicturespreview.h"
+#include "dialogchangegraphics.h"
 #include "dialogcommandmoveobject.h"
 #include "ui_dialogcommandmoveobject.h"
 #include "systemcommandmove.h"
@@ -513,28 +513,26 @@ void DialogCommandMoveObject::on_pushButtonKeepPosition_clicked()
 
 void DialogCommandMoveObject::on_pushButtonChangeGraphics_clicked()
 {
-    SystemPicture picture(-1, "", false, "", false, PictureKind::Characters);
     PrimitiveValue value(1);
-    DialogPicturesPreview dialog(&picture, PictureKind::Characters, &value,
-        m_properties, m_parameters);
+    DialogChangeGraphics dialog(&value, m_properties, m_parameters);
     if (dialog.exec() == QDialog::Accepted)
     {
         QVector<QString> commands = QVector<QString>({QString::number(static_cast
             <int>(CommandMoveKind::ChangeGraphics)), RPM::boolToString(ui
             ->checkBoxPermanent->isChecked())});
-        if (dialog.isIDValue())
+        commands.append(RPM::boolToString(dialog.dontChangeOrientation()));
+        commands.append(QString::number(dialog.getIndex()));
+        if (dialog.isValueID())
         {
-            value.getCommandParameter(commands);
+            value.getCommandParameter(commands, true);
         } else
         {
-            PrimitiveValue valueFix(PrimitiveValueKind::Number, dialog.picture()
-                ->id());
-            valueFix.getCommandParameter(commands);
+            PrimitiveValue valueFix(PrimitiveValueKind::Number, dialog.id());
+            valueFix.getCommandParameter(commands, true);
         }
-        if (!dialog.isIDValue() && dialog.picture()->id() == 0)
+        if (!dialog.isValueID() && dialog.id() == 0)
         {
-            QRect rect;
-            dialog.currentTexture(rect);
+            QRect rect = dialog.currentRect();
             commands.append(QString::number(rect.x()));
             commands.append(QString::number(rect.y()));
             commands.append(QString::number(rect.width()));

@@ -115,6 +115,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemtitlecommand.h \
     Dialogs/Systems/dialogsystemtranslatable.h \
     Dialogs/Systems/dialogsystemtroopreactionconditions.h \
+    Dialogs/dialogchangegraphics.h \
     Dialogs/dialogenternameoptions.h \
     Dialogs/dialogfonts.h \
     Dialogs/dialogjump.h \
@@ -560,6 +561,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemtitlecommand.cpp \
     Dialogs/Systems/dialogsystemtranslatable.cpp \
     Dialogs/Systems/dialogsystemtroopreactionconditions.cpp \
+    Dialogs/dialogchangegraphics.cpp \
     Dialogs/dialogenternameoptions.cpp \
     Dialogs/dialogfonts.cpp \
     Dialogs/dialogjump.cpp \
@@ -945,6 +947,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemtitlecommand.ui \
     Dialogs/Systems/dialogsystemtranslatable.ui \
     Dialogs/Systems/dialogsystemtroopreactionconditions.ui \
+    Dialogs/dialogchangegraphics.ui \
     Dialogs/dialogenternameoptions.ui \
     Dialogs/dialogfonts.ui \
     Dialogs/dialogjump.ui \

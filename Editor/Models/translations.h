@@ -1383,6 +1383,7 @@ public:
     static const QString SKYBOXES;
     static const QString ICONS_SIZE;
     static const QString FACESETS_SIZE;
+    static const QString DONT_CHANGE_ORIENTATION;
 
     Translations();
     virtual ~Translations();

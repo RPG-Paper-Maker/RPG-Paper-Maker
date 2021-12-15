@@ -32,7 +32,14 @@ public:
     explicit WidgetGraphics(QWidget *parent = nullptr);
     ~WidgetGraphics();
     void setState(SystemState *s);
+    bool isValueID() const;
+    int id() const;
+    int indexX() const;
+    int indexY() const;
+    QRect currentRect() const;
 
+    void initializeParametersProperties(PrimitiveValue *valueID, QStandardItemModel
+        *properties, QStandardItemModel *parameters);
     SystemPicture* getPicture(bool check = false);
     PictureKind getPictureKind(bool check = false);
     void updateCurrentObject();
@@ -41,6 +48,14 @@ protected:
     SystemState* m_state;
     bool m_selected;
     int m_borderOffset;
+    PrimitiveValue *m_valueID;
+    QStandardItemModel *m_properties;
+    QStandardItemModel *m_parameters;
+    bool m_isValueID;
+    int m_id;
+    int m_indexX;
+    int m_indexY;
+    QRect m_currentRect;
 
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseDoubleClickEvent(QMouseEvent*);

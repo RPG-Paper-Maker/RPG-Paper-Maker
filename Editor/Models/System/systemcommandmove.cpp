@@ -12,7 +12,7 @@
 #include "systemcommandmove.h"
 #include "dialogjump.h"
 #include "dialognumber.h"
-#include "dialogpicturespreview.h"
+#include "dialogchangegraphics.h"
 #include "dialogcommandwait.h"
 #include "dialogcommandplaysong.h"
 #include "dialogcommandscript.h"
@@ -80,7 +80,7 @@ void SystemCommandMove::initialize(const EventCommand *command, int &i)
     case CommandMoveKind::MoveBack:
         break;
     case CommandMoveKind::ChangeGraphics:
-        j = 7;
+        j = 10;
         break;
     case CommandMoveKind::Jump:
         j = 15;
@@ -199,23 +199,14 @@ QString SystemCommandMove::toString() const
             permanent = RPM::BRACKET_LEFT + RPM::translate(Translations
                 ::PERMANENT) + RPM::BRACKET_RIGHT;
         }
+        i+=2;
         PrimitiveValue value;
-        value.initializeCommands(m_command, i);
+        value.initializeCommands(m_command, i, true);
         value.setModelParameter(m_parameters);
         value.setModelProperties(m_properties);
-        QString strValue;
-        if (value.kind() == PrimitiveValueKind::Number)
-        {
-            strValue = reinterpret_cast<SystemPicture *>(SuperListItem::getById(
-                RPM::get()->project()->picturesDatas()->model(PictureKind
-                ::Characters)->invisibleRootItem(), value.numberValue()))
-                ->toString();
-        } else
-        {
-            strValue = value.toString();
-        }
         str += RPM::translate(Translations::CHANGE_GRAPHICS) + RPM::SPACE +
-            strValue + RPM::SPACE + permanent;
+            RPM::translate(Translations::ID) + RPM::COLON + value.toString() +
+            RPM::SPACE + permanent;
         break;
     }
     case CommandMoveKind::Jump:
@@ -415,33 +406,48 @@ bool SystemCommandMove::openDialog()
     case CommandMoveKind::ChangeGraphics:
     {
         int i = 2;
+        bool dontChangeOrientation = RPM::stringToBool(m_command.at(i++));
+        int indexKind = m_command.at(i++).toInt();
         PrimitiveValue id;
-        id.initializeCommands(m_command, i);
+        id.initializeCommands(m_command, i, true);
+        QRect rect;
+        int indexX = 0, indexY = 0;
+        if (!id.isActivated() && id.numberValue() == 0)
+        {
+            rect.setX(m_command.at(i++).toInt());
+            rect.setY(m_command.at(i++).toInt());
+            rect.setWidth(m_command.at(i++).toInt());
+            rect.setHeight(m_command.at(i++).toInt());
+        } else
+        {
+            indexX = m_command.at(i++).toInt();
+            indexY = m_command.at(i++).toInt();
+        }
         SystemPicture *picture = reinterpret_cast<SystemPicture *>(SuperListItem
             ::getById(RPM::get()->project()->picturesDatas()->model(PictureKind
             ::Characters)->invisibleRootItem(), id.kind() == PrimitiveValueKind
             ::Number ? id.numberValue() : -1));
-        DialogPicturesPreview dialog(picture, PictureKind::Characters, &id,
-            m_properties, m_parameters);
+        DialogChangeGraphics dialog(&id, m_properties, m_parameters, picture->id(),
+            indexKind, dontChangeOrientation, indexX, indexY, rect);
         if (dialog.exec() == QDialog::Accepted)
         {
             for (int i = m_command.size() - 1; i >= 2; i--)
             {
                 m_command.removeAt(i);
             }
-            if (dialog.isIDValue())
+            m_command.append(RPM::boolToString(dialog.dontChangeOrientation()));
+            m_command.append(QString::number(dialog.getIndex()));
+            if (dialog.isValueID())
             {
-                id.getCommandParameter(m_command);
+                id.getCommandParameter(m_command, true);
             } else
             {
-                PrimitiveValue valueFix(PrimitiveValueKind::Number, dialog.picture()
-                    ->id());
-                valueFix.getCommandParameter(m_command);
+                PrimitiveValue valueFix(PrimitiveValueKind::Number, dialog.id());
+                valueFix.getCommandParameter(m_command, true);
             }
-            if (!dialog.isIDValue() && dialog.picture()->id() == 0)
+            if (!dialog.isValueID() && dialog.id() == 0)
             {
-                QRect rect;
-                dialog.currentTexture(rect);
+                QRect rect = dialog.currentRect();
                 m_command.append(QString::number(rect.x()));
                 m_command.append(QString::number(rect.y()));
                 m_command.append(QString::number(rect.width()));

@@ -22,6 +22,7 @@
 #include "systemevent.h"
 #include "systemitem.h"
 #include "systemskill.h"
+#include "commandmovekind.h"
 
 const int ProjectUpdater::incompatibleVersionsCount = 26;
 
@@ -1523,6 +1524,73 @@ void ProjectUpdater::updateVersion_1_9_3_commands(QStandardItem *commands)
         {
             list.insert(3, "0");
             list.insert(4, "0");
+            command->setCommands(list);
+        } else if (command->kind() == EventCommandKind::MoveObject)
+        {
+            int j = 5;
+            while (j < list.size())
+            {
+                CommandMoveKind kind = static_cast<CommandMoveKind>(command
+                    ->valueCommandAt(j++).toInt());
+                switch (kind)
+                {
+                case CommandMoveKind::MoveNorth:
+                case CommandMoveKind::MoveSouth:
+                case CommandMoveKind::MoveWest:
+                case CommandMoveKind::MoveEast:
+                case CommandMoveKind::MoveNorthWest:
+                case CommandMoveKind::MoveNorthEast:
+                case CommandMoveKind::MoveSouthWest:
+                case CommandMoveKind::MoveSouthEast:
+                case CommandMoveKind::MoveRandom:
+                case CommandMoveKind::MoveHero:
+                case CommandMoveKind::MoveOppositeHero:
+                case CommandMoveKind::MoveFront:
+                case CommandMoveKind::MoveBack:
+                    break;
+                case CommandMoveKind::ChangeGraphics:
+                    list.insert(j + 1, RPM::boolToString(false));
+                    list.insert(j + 2, "2");
+                    j += 9;
+                    break;
+                case CommandMoveKind::Jump:
+                    j += 15;
+                    break;
+                case CommandMoveKind::TurnNorth:
+                case CommandMoveKind::TurnSouth:
+                case CommandMoveKind::TurnWest:
+                case CommandMoveKind::TurnEast:
+                case CommandMoveKind::Turn90Right:
+                case CommandMoveKind::Turn90Left:
+                case CommandMoveKind::LookAtHero:
+                case CommandMoveKind::LookAtHeroOpposite:
+                    j += 0;
+                    break;
+                case CommandMoveKind::ChangeSpeed:
+                case CommandMoveKind::ChangeFrequency:
+                    j += 3;
+                    break;
+                case CommandMoveKind::MoveAnimation:
+                case CommandMoveKind::StopAnimation:
+                case CommandMoveKind::ClimbAnimation:
+                case CommandMoveKind::FixDirection:
+                case CommandMoveKind::Through:
+                case CommandMoveKind::SetWithCamera:
+                case CommandMoveKind::PixelOffset:
+                case CommandMoveKind::KeepPosition:
+                    j += 2;
+                    break;
+                case CommandMoveKind::Wait:
+                    j += 2;
+                    break;
+                case CommandMoveKind::PlayASound:
+                    j += 12;
+                    break;
+                case CommandMoveKind::Script:
+                    j += RPM::stringToBool(command->valueCommandAt(1)) ? 3 : 2;
+                    break;
+                }
+            }
             command->setCommands(list);
         }
     }

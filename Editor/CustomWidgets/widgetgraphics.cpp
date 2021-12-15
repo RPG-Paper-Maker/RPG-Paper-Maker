@@ -25,7 +25,11 @@ WidgetGraphics::WidgetGraphics(QWidget *parent) :
     WidgetPreviewObject3D(parent),
     m_state(nullptr),
     m_selected(false),
-    m_borderOffset(5)
+    m_borderOffset(5),
+    m_valueID(nullptr),
+    m_properties(nullptr),
+    m_parameters(nullptr),
+    m_isValueID(false)
 {
 
 }
@@ -35,14 +39,50 @@ WidgetGraphics::~WidgetGraphics()
 
 }
 
-void WidgetGraphics::setState(SystemState* s) {
+void WidgetGraphics::setState(SystemState* s)
+{
     m_state = s;
+}
+
+bool WidgetGraphics::isValueID() const
+{
+    return m_isValueID;
+}
+
+int WidgetGraphics::id() const
+{
+    return m_id;
+}
+
+int WidgetGraphics::indexX() const
+{
+    return m_indexX;
+}
+
+int WidgetGraphics::indexY() const
+{
+    return m_indexY;
+}
+
+QRect WidgetGraphics::currentRect() const
+{
+    return m_currentRect;
 }
 
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void WidgetGraphics::initializeParametersProperties(PrimitiveValue *valueID,
+    QStandardItemModel *properties, QStandardItemModel *parameters)
+{
+    m_valueID = valueID;
+    m_properties = properties;
+    m_parameters = parameters;
+}
+
 // -------------------------------------------------------
 
 SystemPicture* WidgetGraphics::getPicture(bool check) {
@@ -113,7 +153,9 @@ void WidgetGraphics::mouseDoubleClickEvent(QMouseEvent *) {
         picture = getPicture();
 
         // Open dialog preview
-        DialogPicturesPreview dialog(picture, kind);
+        m_isValueID = false;
+        DialogPicturesPreview dialog(picture, kind, m_valueID, m_properties,
+            m_parameters);
         if (m_state->graphicsId() == 0) {
             dialog.setCurrentTexture(m_state->rectTileset());
         } else {
@@ -122,6 +164,10 @@ void WidgetGraphics::mouseDoubleClickEvent(QMouseEvent *) {
         }
 
         if (dialog.exec() == QDialog::Accepted) {
+            m_isValueID = dialog.isIDValue();
+            m_id = dialog.picture()->id();
+            m_indexX = dialog.indexX();
+            m_indexY = dialog.indexY();
             RPM::get()->project()->writePicturesDatas();
             m_state->setGraphicsId(dialog.picture()->id());
             m_state->setIndexX(dialog.indexX());
@@ -129,6 +175,7 @@ void WidgetGraphics::mouseDoubleClickEvent(QMouseEvent *) {
             QRect rect;
             dialog.currentTexture(rect);
             m_state->setRectTileset(rect);
+            m_currentRect = rect;
         } else {
             RPM::get()->project()->readPicturesDatas();
             if (wasNone)

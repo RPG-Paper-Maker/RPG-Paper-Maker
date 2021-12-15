@@ -47,10 +47,50 @@ void PanelGraphics::setState(SystemState *state)
     m_state = state;
 }
 
+bool PanelGraphics::isValueID() const
+{
+    return ui->frameGraphics->isValueID();
+}
+
+int PanelGraphics::id() const
+{
+    return ui->frameGraphics->id();
+}
+
+int PanelGraphics::indexX() const
+{
+    return ui->frameGraphics->indexX();
+}
+
+int PanelGraphics::indexY() const
+{
+    return ui->frameGraphics->indexY();
+}
+
+QRect PanelGraphics::currentRect() const
+{
+    return ui->frameGraphics->currentRect();
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+int PanelGraphics::getIndex() const
+{
+    return ui->comboBoxGraphics->currentIndex();
+}
+
+// -------------------------------------------------------
+
+void PanelGraphics::initializeParametersProperties(PrimitiveValue *valueID,
+    QStandardItemModel *properties, QStandardItemModel *parameters)
+{
+    ui->frameGraphics->initializeParametersProperties(valueID, properties, parameters);
+}
+
 // -------------------------------------------------------
 
 void PanelGraphics::passToSprite()

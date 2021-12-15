@@ -3,7 +3,7 @@
 	"remove": [],
 	"replace": [],
 	"features": [
-        "Update change graphics to select graphics exactly like in object options (none, fix sprite, 3D obj etc) + checkbox don't change orientation (+ in change state)",
+        "Update change graphics to select graphics exactly like in object options (none, fix sprite, 3D obj etc) + checkbox don't change orientation",
 	    "Display picture command: stretch option",
 	    "Facesets in one file",
         "Command switch texture"
@@ -12,10 +12,11 @@
     	"Necklace ring default icons reverted",
         "Mountains collisions issues",
         "Error ingame when initial party list empty",
+        "Game over error when using video as background",
         "(more fixes incoming)"
     ],
     "finished": [
-        0,
+        2,
         0,
         2,
         0,
@@ -23,6 +24,7 @@
         2,
         0,
         0,
+        2,
         0
     ]
 }

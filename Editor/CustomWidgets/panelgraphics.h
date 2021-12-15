@@ -28,7 +28,15 @@ public:
     ~PanelGraphics();
     SystemState * state() const;
     void setState(SystemState *state);
+    bool isValueID() const;
+    int id() const;
+    int indexX() const;
+    int indexY() const;
+    QRect currentRect() const;
 
+    int getIndex() const;
+    void initializeParametersProperties(PrimitiveValue *valueID, QStandardItemModel
+        *properties, QStandardItemModel *parameters);
     void passToSprite();
     void passToNone();
     void updateState(SystemState *state);

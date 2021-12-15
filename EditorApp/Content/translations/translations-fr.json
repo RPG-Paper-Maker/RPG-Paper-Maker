@@ -1349,5 +1349,6 @@
     "antialiasing": "Antialiasing",
     "skyboxes": "Skyboxes",
     "icons.size": "Taille des icones",
-    "facesets.size": "Taille des facesets"
+    "facesets.size": "Taille des facesets",
+    "dont.change.orientation": "Ne pas changer l'orientation"
 }
