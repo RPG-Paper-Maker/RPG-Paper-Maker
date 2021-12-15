@@ -1551,7 +1551,7 @@ void ProjectUpdater::updateVersion_1_9_3_commands(QStandardItem *commands)
                 case CommandMoveKind::ChangeGraphics:
                     list.insert(j + 1, RPM::boolToString(false));
                     list.insert(j + 2, "2");
-                    j += 9;
+                    j += 10;
                     break;
                 case CommandMoveKind::Jump:
                     j += 15;
@@ -1591,6 +1591,10 @@ void ProjectUpdater::updateVersion_1_9_3_commands(QStandardItem *commands)
                     break;
                 }
             }
+            command->setCommands(list);
+        } else if (command->kind() == EventCommandKind::DisplayAPicture)
+        {
+            list.append(RPM::FALSE_BOOL_STRING);
             command->setCommands(list);
         }
     }

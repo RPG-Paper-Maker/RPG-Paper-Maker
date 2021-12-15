@@ -82,6 +82,7 @@ void DialogCommandDisplayAPicture::translate()
     ui->labelOpacity->setText(RPM::translate(Translations::OPACITY) + RPM::COLON);
     ui->groupBoxEffects->setTitle(RPM::translate(Translations::EFFECTS));
     ui->groupBoxCoordinates->setTitle(RPM::translate(Translations::COORDINATES));
+    ui->checkBoxStretch->setText(RPM::translate(Translations::STRETCH));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -102,13 +103,13 @@ void DialogCommandDisplayAPicture::initialize(EventCommand *command) {
     ui->panelPrimitiveZoom->initializeCommand(command, i);
     ui->panelPrimitiveOpacity->initializeCommand(command, i);
     ui->panelPrimitiveAngle->initializeCommand(command, i);
+    ui->checkBoxStretch->setChecked(RPM::stringToBool(command->valueCommandAt(i++)));
 }
 
 // -------------------------------------------------------
 
 EventCommand * DialogCommandDisplayAPicture::getCommand() const {
     QVector<QString> command;
-
     m_valueID->getCommandParameter(command, true);
     ui->panelPrimitiveID->getCommand(command);
     command.append(ui->comboBoxOrigin->currentIndex() == 1 ? RPM
@@ -118,6 +119,6 @@ EventCommand * DialogCommandDisplayAPicture::getCommand() const {
     ui->panelPrimitiveZoom->getCommand(command);
     ui->panelPrimitiveOpacity->getCommand(command);
     ui->panelPrimitiveAngle->getCommand(command);
-
+    command.append(RPM::boolToString(ui->checkBoxStretch->isChecked()));
     return new EventCommand(EventCommandKind::DisplayAPicture, command);
 }

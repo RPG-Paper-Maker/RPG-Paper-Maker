@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>610</width>
-    <height>383</height>
+    <height>412</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -300,6 +300,13 @@
              </widget>
             </item>
            </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="checkBoxStretch">
+            <property name="text">
+             <string>Stretch</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
