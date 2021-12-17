@@ -1384,6 +1384,11 @@ public:
     static const QString ICONS_SIZE;
     static const QString FACESETS_SIZE;
     static const QString DONT_CHANGE_ORIENTATION;
+    static const QString SWITCH_TEXTURE;
+    static const QString AUTOTILE_ID;
+    static const QString WALL_ID;
+    static const QString OBJECT_3D_ID;
+    static const QString MOUNTAIN_ID;
 
     Translations();
     virtual ~Translations();

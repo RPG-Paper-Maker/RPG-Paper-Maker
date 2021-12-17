@@ -1371,6 +1371,11 @@ const QString Translations::SKYBOXES = "skyboxes";
 const QString Translations::ICONS_SIZE = "icons.size";
 const QString Translations::FACESETS_SIZE = "facesets.size";
 const QString Translations::DONT_CHANGE_ORIENTATION = "dont.change.orientation";
+const QString Translations::SWITCH_TEXTURE = "switch.texture";
+const QString Translations::AUTOTILE_ID = "autotile.id";
+const QString Translations::WALL_ID = "wall.id";
+const QString Translations::OBJECT_3D_ID = "object.3d.id";
+const QString Translations::MOUNTAIN_ID = "mountain.id";
 
 // -------------------------------------------------------
 //

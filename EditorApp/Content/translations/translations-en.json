@@ -1350,5 +1350,10 @@
     "skyboxes": "Skyboxes",
     "icons.size": "Icons size",
     "facesets.size": "Facesets size",
-    "dont.change.orientation": "Don't change orientation"
+    "dont.change.orientation": "Don't change orientation",
+    "switch.texture": "Switch texture",
+    "autotile.id": "Autotile ID",
+    "wall.id": "Wall ID",
+    "object.3d.id": "3D Object ID",
+    "mountain.id": "Mountain ID"
 }

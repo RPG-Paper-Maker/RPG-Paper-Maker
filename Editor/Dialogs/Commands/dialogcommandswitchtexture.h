@@ -13,6 +13,7 @@
 #define DIALOGCOMMANDSWITCHTEXTURE_H
 
 #include "dialogcommand.h"
+#include "primitivevalue.h"
 
 namespace Ui {
 class DialogCommandSwitchTexture;
@@ -38,6 +39,11 @@ private:
     Ui::DialogCommandSwitchTexture *ui;
     QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
+    PrimitiveValue *m_valueTilesetID;
+    PrimitiveValue *m_valueAutotileID;
+    PrimitiveValue *m_valueWallID;
+    PrimitiveValue *m_value3DObjectID;
+    PrimitiveValue *m_valueMountainID;
 };
 
 #endif // DIALOGCOMMANDSWITCHTEXTURE_H

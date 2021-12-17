@@ -202,7 +202,7 @@
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QCheckBox" name="checkBoxMoutainID">
+        <widget class="QCheckBox" name="checkBoxMountainID">
          <property name="text">
           <string>Mountain ID:</string>
          </property>
