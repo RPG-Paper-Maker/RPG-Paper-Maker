@@ -348,6 +348,8 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
         str += this->strChangeWeather(properties, parameters); break;
     case EventCommandKind::PlayAVideo:
         str += this->strPlayAVideo(properties, parameters); break;
+    case EventCommandKind::SwitchTextures:
+        str += this->strSwitchTexture(properties, parameters); break;
     default:
         break;
     }
@@ -2846,6 +2848,62 @@ QString EventCommand::strPlayAVideo(QStandardItemModel *properties,
     case 2:
         str += RPM::translate(Translations::STOP).toLower();
         break;
+    }
+    return str;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strSwitchTexture(QStandardItemModel *properties,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    QString str = RPM::translate(Translations::SWITCH_TEXTURE) + RPM::COLON + RPM
+        ::SPACE;
+    if (RPM::stringToBool(this->valueCommandAt(i++)))
+    {
+        str += RPM::NEW_LINE + RPM::translate(Translations::TILESET_ID) + RPM
+            ::SPACE;
+        str += this->strDataBaseId(i, properties, RPM::get()->project()
+            ->gameDatas()->tilesetsDatas()->model(), parameters) + RPM::SPACE +
+            RPM::translate(Translations::TO).toLower() + RPM::SPACE;
+        str += this->strProperty(i, properties, parameters, true);
+    }
+    if (RPM::stringToBool(this->valueCommandAt(i++)))
+    {
+        str += RPM::NEW_LINE + RPM::translate(Translations::AUTOTILE_ID) + RPM
+            ::SPACE;
+        str += this->strDataBaseId(i, properties, RPM::get()->project()
+            ->specialElementsDatas()->modelAutotiles(), parameters) + RPM::SPACE +
+            RPM::translate(Translations::TO).toLower() + RPM::SPACE;
+        str += this->strProperty(i, properties, parameters, true);
+    }
+    if (RPM::stringToBool(this->valueCommandAt(i++)))
+    {
+        str += RPM::NEW_LINE + RPM::translate(Translations::WALL_ID) + RPM
+            ::SPACE;
+        str += this->strDataBaseId(i, properties, RPM::get()->project()
+            ->specialElementsDatas()->modelSpriteWalls(), parameters) + RPM::SPACE +
+            RPM::translate(Translations::TO).toLower() + RPM::SPACE;
+        str += this->strProperty(i, properties, parameters, true);
+    }
+    if (RPM::stringToBool(this->valueCommandAt(i++)))
+    {
+        str += RPM::NEW_LINE + RPM::translate(Translations::OBJECT_3D_ID) + RPM
+            ::SPACE;
+        str += this->strDataBaseId(i, properties, RPM::get()->project()
+            ->specialElementsDatas()->modelObjects3D(), parameters) + RPM::SPACE +
+            RPM::translate(Translations::TO).toLower() + RPM::SPACE;
+        str += this->strProperty(i, properties, parameters, true);
+    }
+    if (RPM::stringToBool(this->valueCommandAt(i++)))
+    {
+        str += RPM::NEW_LINE + RPM::translate(Translations::MOUNTAIN_ID) + RPM
+            ::SPACE;
+        str += this->strDataBaseId(i, properties, RPM::get()->project()
+            ->specialElementsDatas()->modelMountains(), parameters) + RPM::SPACE +
+            RPM::translate(Translations::TO).toLower() + RPM::SPACE;
+        str += this->strProperty(i, properties, parameters, true);
     }
     return str;
 }

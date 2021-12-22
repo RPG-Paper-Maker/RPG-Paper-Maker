@@ -183,3 +183,41 @@ void DialogCommandSwitchTexture::initialize(EventCommand *command)
 //  SLOTS
 //
 // -------------------------------------------------------
+
+void DialogCommandSwitchTexture::on_checkBoxTilesetID_toggled(bool checked)
+{
+    ui->panelPrimitiveTilesetID->setEnabled(checked);
+    ui->widgetPictureTileset->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandSwitchTexture::on_checkBoxAutotileID_toggled(bool checked)
+{
+    ui->panelPrimitiveAutotileID->setEnabled(checked);
+    ui->widgetPictureAutotile->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandSwitchTexture::on_checkBoxWallID_toggled(bool checked)
+{
+    ui->panelPrimitiveWallID->setEnabled(checked);
+    ui->widgetPictureWall->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandSwitchTexture::on_checkBox3DObjectID_toggled(bool checked)
+{
+    ui->panelPrimitive3DObjectID->setEnabled(checked);
+    ui->widgetPicture3DObject->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandSwitchTexture::on_checkBoxMountainID_toggled(bool checked)
+{
+    ui->panelPrimitiveMountainID->setEnabled(checked);
+    ui->widgetPictureMountain->setEnabled(checked);
+}

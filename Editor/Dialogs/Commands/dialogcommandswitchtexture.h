@@ -44,6 +44,13 @@ private:
     PrimitiveValue *m_valueWallID;
     PrimitiveValue *m_value3DObjectID;
     PrimitiveValue *m_valueMountainID;
+
+public slots:
+    void on_checkBoxTilesetID_toggled(bool checked);
+    void on_checkBoxAutotileID_toggled(bool checked);
+    void on_checkBoxWallID_toggled(bool checked);
+    void on_checkBox3DObjectID_toggled(bool checked);
+    void on_checkBoxMountainID_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDSWITCHTEXTURE_H
