@@ -6,7 +6,8 @@
         "Update change graphics to select graphics exactly like in object options (none, fix sprite, 3D obj etc) + checkbox don't change orientation",
 	    "Display picture command: stretch option",
 	    "Facesets in one file",
-        "Command switch texture"
+        "Command switch texture",
+        "Add Deutsch translation"
     ],
     "bugs": [
     	"Necklace ring default icons reverted",
@@ -16,6 +17,7 @@
         "(more fixes incoming)"
     ],
     "finished": [
+        2,
         2,
         2,
         2,

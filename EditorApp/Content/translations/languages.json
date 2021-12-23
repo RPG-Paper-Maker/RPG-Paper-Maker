@@ -2,6 +2,7 @@
 	"names": [
 		"English",
 		"Français",
+		"Deutsch",
 		"Português - Brasil",
 		"Espanol",
 		"Polski",
@@ -14,6 +15,7 @@
 	"short": [
 		"en",
 		"fr",
+		"de",
 		"br",
 		"es",
 		"pl",

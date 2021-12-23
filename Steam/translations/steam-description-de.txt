@@ -1,0 +1,57 @@
+--------------------------------------------------------------------------
+
+[b]Dieses Werkzeug befindet sich unter einer harten, aktiven Entwicklung und ist in einem sehr frühen Stadium. Wir bitten um deine Geduld, während weiter fortgeschrittene und kommerzielle Funktionen implementiert werden. Sieh dir hier den Entwicklungsfortschritt an: [url]http://rpg-paper-maker.com/index.php/features[/url].[/b]
+
+[h2]3D-Spiele zu machen ist zu komplex? RPG Paper Maker wird deine Arbeiten vereinfachen![/h2]
+
+RPG Paper Maker ist eine kostenlose Spiele-Engine mit einfacher Schnittstelle für den nicht-kommerziellen Gebrauch, welche dir das Erstellen von einem eigenen 3D-Universum mit vielen 2D-Sprites für alle verfügbaren Plattformen ermöglicht: [b]Windows, Linux und MacOS[/b].
+
+RPG Paper Maker bietet dir viele Möglichkeiten, um eigene RPGs in einer [b]vollständigen 3D-Welt zu erschaffen und das auch noch so einfach, wie mit 2D zu arbeiten![/b] RPG Paper Maker kommt zudem mit coolen [b]Retro inspirierten Grafikinhalten[/b], welche du in deinen eigenen Projekten verwenden kannst.
+
+[h2]Geeignet für verschiedene Arten von Spielen[/h2]
+
+Diese Engine ist hauptsächlich zugeschnitten auf [b]J-RPGs[/b], jedoch kann man damit fast jede Art von Spiel erstellen, z.B. [b]Action-RPGs[/b], [b]Taktische RPGs[/b], u.s.w.
+
+[h2]Entwickelt für Anfänger...[/h2]
+
+Unsere Philosophie ist einfach: in der Lage zu sein, ein 3D-Videospiel zu erstellen, [b]ohne irgendwelche Kenntnisse[/b] in:
+
+[list]
+[*] [b]Programmierung[/b]
+[*] [b]3D-Modellierung[/b]
+[/list]
+
+Die benutzerfreundliche Schnittstelle lässt dich dein Spiel bauen, ohne dass du dir deinen Kopf über komplexe Algorithmen zerbrechen musst!
+
+[h2]... und für fortgeschrittene Nutzer![/h2]
+
+Wenn du bereits Erfahrungen im Programmieren oder 3D-Modellieren hast, wir haben an dich gedacht. Du wirst in der Lage dazu sein:
+
+[list]
+[*] [b]JavaScript Plugins[/b] zu erstellen oder modifizieren
+[*]  Importiere deine eigenen [b]3D-Modelle im .obj Format[/b]
+[/list]
+ 
+Dein Wissens in Kombination mit dem RPG Paper Maker kann deine Spiele viel spezieller machen!
+ 
+[h2]Veröffentliche und teile deine Spiele kostenlos...[/h2]
+
+Solang du keine Einnahmen damit erzielst, kannst du den RPG Paper Maker völlig umsonst benutzen! Wenn du also nur deine erstellten Spiele mit der Community teilen möchstest, keine Sorge, dass du kannst das kostenlos tun!
+ 
+[h2]... und vermarkte deine Spiele mit einer kleinen Gebühr![/h2]
+
+Jedes kommerzielle Spiel, was mit dem RPG Paper Maker erstellt wurde, benötigt eine Lizenz, welches an eine Person in einem Team verkauft wird und eine unlimitierte Anzahl an kommerziellen Spielen ermöglicht.
+
+
+
+--------------------------------------------------------------------------
+
+RPG Paper Maker ist eine kostenlose Spiele-Engine mit einfacher Schnittstelle für den nicht-kommerziellen Gebrauch, welche dir das Erstellen von einem eigenen 3D-Universum mit vielen 2D-Sprites für alle verfügbaren Plattformen ermöglicht: Windows, Linux und MacOS.
+
+--------------------------------------------------------------------------
+
+Dieses Produkt ist die kommerzielle Edition von RPG Paper Maker.
+
+[b]Es bestehen keine Unterschiede zwischen der kostenfreien und kommerziellen Version des RPG Paper Maker.[/b]
+
+Für das beigelete DLC erhältst du lediglich die Rechte zur Veröffentlichung kommerzieller Spiele, die mit dem with RPG Paper Maker erstellt wurden, dies kann auch eine Möglichkeit sein, das Projekt in irgendeiner Weise zu unterstützen!
