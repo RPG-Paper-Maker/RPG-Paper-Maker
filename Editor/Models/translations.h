@@ -1389,6 +1389,7 @@ public:
     static const QString WALL_ID;
     static const QString OBJECT_3D_ID;
     static const QString MOUNTAIN_ID;
+    static const QString MESSAGE_PATREON;
 
     Translations();
     virtual ~Translations();

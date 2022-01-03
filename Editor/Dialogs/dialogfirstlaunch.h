@@ -35,6 +35,7 @@ public:
     ~DialogFirstLaunch();
 
     void initialize();
+    void initializePatreon();
 
 private:
     Ui::DialogFirstLaunch *ui;

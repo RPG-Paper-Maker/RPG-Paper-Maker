@@ -11,10 +11,10 @@
     ],
     "bugs": [
     	"Necklace ring default icons reverted",
-        "Mountains collisions issues",
+    	"Wrong behavior with teleport object command with none graphics",
         "Error ingame when initial party list empty",
         "Game over error when using video as background",
-        "(more fixes incoming)"
+        "Wall picture cannot be empty"
     ],
     "finished": [
         2,
@@ -24,9 +24,9 @@
         2,
 
         2,
-        0,
-        0,
         2,
-        0
+        2,
+        2,
+        2
     ]
 }

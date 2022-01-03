@@ -37,12 +37,14 @@ const QString EngineSettings::THEME_DEFAULT = "defaulttheme";
 const QString EngineSettings::THEME_WHITE = "whitetheme";
 const QString EngineSettings::THEME_WHITE_MAC ="whitemactheme";
 const QString EngineSettings::THEME_DARK = "darktheme";
+const QString EngineSettings::JSON_PATREON_MESSAGE = "patreonMessage";
 const QString EngineSettings::PATH_THEMES = ":/stylesheets/Themes/";
 const bool EngineSettings::DEFAULT_FIRST_TIME_LANGUAGES = true;
 const QString EngineSettings::DEFAULT_CURRENT_LANGUAGE = "en";
 const int EngineSettings::DEFAULT_BATTLE_TROOP_TEST_BATTLE_MAP_ID = 1;
 const int EngineSettings::DEFAULT_TAB_INDEX_DATAS = 0;
 const int EngineSettings::DEFAULT_TAB_INDEX_SYSTEMS = 0;
+const bool EngineSettings::DEFAULT_PATREON_MESSAGE = true;
 
 // -------------------------------------------------------
 //
@@ -61,7 +63,8 @@ EngineSettings::EngineSettings() :
     m_currentLanguage(DEFAULT_CURRENT_LANGUAGE),
     m_battleTroopTestBattleMapID(DEFAULT_BATTLE_TROOP_TEST_BATTLE_MAP_ID),
     m_tabIndexDatas(DEFAULT_TAB_INDEX_DATAS),
-    m_tabIndexSystems(DEFAULT_TAB_INDEX_SYSTEMS)
+    m_tabIndexSystems(DEFAULT_TAB_INDEX_SYSTEMS),
+    m_patreonMessage(DEFAULT_PATREON_MESSAGE)
 {
     // Default mac theme should be white
     #ifdef Q_OS_MAC
@@ -222,6 +225,16 @@ int EngineSettings::tabIndexSystems() const
 void EngineSettings::setTabIndexSystems(int tabIndexSystems)
 {
     m_tabIndexSystems = tabIndexSystems;
+}
+
+bool EngineSettings::patreonMessage() const
+{
+    return m_patreonMessage;
+}
+
+void EngineSettings::setPatreonMessage(bool patreonMessage)
+{
+    m_patreonMessage = patreonMessage;
 }
 
 // -------------------------------------------------------
@@ -422,6 +435,10 @@ void EngineSettings::read(const QJsonObject &json) {
     {
         m_tabIndexSystems = json[JSON_TAB_INDEX_SYSTEMS].toInt();
     }
+    if (json.contains(JSON_PATREON_MESSAGE))
+    {
+        m_patreonMessage = json[JSON_PATREON_MESSAGE].toBool();
+    }
 }
 
 // -------------------------------------------------------
@@ -490,5 +507,9 @@ void EngineSettings::write(QJsonObject &json) const {
     if (m_tabIndexSystems != DEFAULT_TAB_INDEX_SYSTEMS)
     {
         json[JSON_TAB_INDEX_SYSTEMS] = m_tabIndexSystems;
+    }
+    if (m_patreonMessage != DEFAULT_PATREON_MESSAGE)
+    {
+        json[JSON_PATREON_MESSAGE] = m_patreonMessage;
     }
 }

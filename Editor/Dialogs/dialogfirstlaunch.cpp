@@ -40,7 +40,10 @@ DialogFirstLaunch::~DialogFirstLaunch() {
 //
 // -------------------------------------------------------
 
-void DialogFirstLaunch::initialize() {
+void DialogFirstLaunch::initialize()
+{
+    this->setWindowTitle(RPM::translate(Translations::WELCOME_FIRST_LAUNCH));
+
     // Picture
     ui->widgetShowPicture->setDrawBackground(false);
     ui->widgetShowPicture->setActivateCoef(false);
@@ -63,8 +66,19 @@ void DialogFirstLaunch::initialize() {
 
 // -------------------------------------------------------
 
+void DialogFirstLaunch::initializePatreon()
+{
+    this->setWindowTitle("Patreon");
+    ui->label->setText(RPM::translate(Translations::MESSAGE_PATREON).arg(
+        "<a href=\"https://www.patreon.com/rpgpapermaker\" style=\"color: tomato;\">Patreon</a>",
+        "<a href=\"https://www.paypal.com/donate?token=i3T2GlIaJxmvEUGBVT_XoVLYiP0AoxPrrfW8uudskRvlhEEVfuQPYZDpNU9k07VosMAnar71etRyzNzj\" style=\"color: tomato;\">Paypal</a>",
+        "<a href=\"https://store.steampowered.com/app/1118650/RPG_Paper_Maker__Commercial_edition/\" style=\"color: tomato;\">Steam</a>"
+    ));
+}
+
+// -------------------------------------------------------
+
 void DialogFirstLaunch::translate() {
-    this->setWindowTitle(RPM::translate(Translations::WELCOME_FIRST_LAUNCH));
     ui->pushButtonOK->setText(RPM::translate(Translations::OK));
 }
 

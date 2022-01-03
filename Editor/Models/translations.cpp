@@ -1376,6 +1376,7 @@ const QString Translations::AUTOTILE_ID = "autotile.id";
 const QString Translations::WALL_ID = "wall.id";
 const QString Translations::OBJECT_3D_ID = "object.3d.id";
 const QString Translations::MOUNTAIN_ID = "mountain.id";
+const QString Translations::MESSAGE_PATREON = "message.patreon";
 
 // -------------------------------------------------------
 //

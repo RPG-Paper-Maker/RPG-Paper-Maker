@@ -1355,5 +1355,6 @@
     "autotile.id": "Autotile ID",
     "wall.id": "Wall ID",
     "object.3d.id": "3D Object ID",
-    "mountain.id": "Mountain ID"
+    "mountain.id": "Mountain ID",
+    "message.patreon": "We hope you are enjoying RPG Paper Maker! If you want to support the project financially for the next coming major features, you can help reaching the Patreon goal here: %1, or donate on Paypal here: %2, or buy the commercial edition here: %3! Happy making!"
 }

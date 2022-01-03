@@ -46,6 +46,7 @@
 #include "dialoglanguages.h"
 #include "common.h"
 #include "dialogselectlanguage.h"
+#include "dialogfirstlaunch.h"
 
 int MainWindow::MAX_BACKUPS = 5;
 
@@ -61,7 +62,8 @@ MainWindow::MainWindow(QWidget *parent) :
     m_isMainMenu(true),
     m_dialogScripts(new DialogScripts),
     m_firstCrash(true),
-    m_timerBackup(new QTimer)
+    m_timerBackup(new QTimer),
+    m_timerPatreonMessage(new QTimer)
 {
     p_appName = "RPG Paper Maker";
     gameProcess = new QProcess(this);
@@ -70,6 +72,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Backup every 30 minutes
     connect(m_timerBackup, SIGNAL(timeout()), this, SLOT(updateBackup()));
+    connect(m_timerPatreonMessage, SIGNAL(timeout()), this, SLOT(updatePatreonMessage()));
+    m_timerPatreonMessage->start(1000 * 60 * 10);
+    m_timerPatreonMessage->setSingleShot(true);
 
     // Setting window title
     this->setWindowTitle(p_appName + " v." + Project::ENGINE_VERSION);
@@ -94,7 +99,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // Menu bar enabled actions
     enableNoGame();
 
-    this->translate();
+    // Translate
+    this->translate();    
 }
 
 MainWindow::~MainWindow()
@@ -105,6 +111,7 @@ MainWindow::~MainWindow()
     cleanRecentProjectsActions();
     delete m_dialogScripts;
     delete m_timerBackup;
+    delete m_timerPatreonMessage;
     delete ui;
     RPM::kill();
 }
@@ -1206,6 +1213,20 @@ void MainWindow::updateBackup() {
                 dir.rename(oldName, newName);
             }
         }
+    }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::updatePatreonMessage()
+{
+    if (RPM::get()->engineSettings()->patreonMessage())
+    {
+        DialogFirstLaunch dialog;
+        dialog.initializePatreon();
+        dialog.exec();
+        RPM::get()->engineSettings()->setPatreonMessage(false);
+        RPM::get()->engineSettings()->write();
     }
 }
 

@@ -78,6 +78,7 @@ private:
     DialogScripts *m_dialogScripts;
     bool m_firstCrash;
     QTimer *m_timerBackup;
+    QTimer *m_timerPatreonMessage;
 
 protected:
     virtual void closeEvent(QCloseEvent *event);
@@ -130,6 +131,7 @@ private slots:
     void openRecentProject(QString path);
     void on_gameErrorOccurred(QProcess::ProcessError);
     void updateBackup();
+    void updatePatreonMessage();
 };
 
 #endif // MAINWINDOW_H
