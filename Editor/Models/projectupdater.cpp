@@ -1530,8 +1530,8 @@ void ProjectUpdater::updateVersion_1_9_3_commands(QStandardItem *commands)
             int j = 5;
             while (j < list.size())
             {
-                CommandMoveKind kind = static_cast<CommandMoveKind>(command
-                    ->valueCommandAt(j++).toInt());
+                CommandMoveKind kind = static_cast<CommandMoveKind>(list.at(j++)
+                    .toInt());
                 switch (kind)
                 {
                 case CommandMoveKind::MoveNorth:
@@ -1551,6 +1551,8 @@ void ProjectUpdater::updateVersion_1_9_3_commands(QStandardItem *commands)
                 case CommandMoveKind::ChangeGraphics:
                     list.insert(j + 1, RPM::boolToString(false));
                     list.insert(j + 2, "2");
+                    list.insert(j + 5, RPM::boolToString(static_cast<PrimitiveValueKind>(
+                        list.at(j + 3).toInt()) != PrimitiveValueKind::Number));
                     j += 10;
                     break;
                 case CommandMoveKind::Jump:
