@@ -145,6 +145,7 @@ int main(int argc, char *argv[]) {
         ::PATH_EXAMPLE_GAME), RPM::PATH_APP), RPM::PATH_SCRIPTS_DIR));
     QDir(Common::pathCombine(Common::pathCombine(QDir::currentPath(), RPM
         ::PATH_EXAMPLE_GAME), RPM::PATH_APP)).mkpath(RPM::PATH_SAVES);
+    RPM::get()->setProject(nullptr);
     Project project;
     project.setPathCurrentProject(path);
     RPM::get()->setProject(&project);
