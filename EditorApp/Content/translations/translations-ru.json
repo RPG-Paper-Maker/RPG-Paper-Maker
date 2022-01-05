@@ -1348,5 +1348,13 @@
     "off": "OFF",
     "antialiasing": "Antialiasing",
     "skyboxes": "Skyboxes",
-    "icons.size": "Размер значка"
+    "icons.size": "Размер значка",
+    "facesets.size": "Размер Faceset",
+    "dont.change.orientation": "Не меняйте ориентацию",
+    "switch.texture": "Сменить текстуру",
+    "autotile.id": "ID autotile",
+    "wall.id": "Стена ID",
+    "object.3d.id": "3D объект ID",
+    "mountain.id": "Гора удостоверений личности",
+    "message.patreon": "Надеемся, вам понравится RPG Paper Maker! Если вы хотите поддержать проект финансово для следующих основных функций, вы можете помочь достичь цели Patreon здесь: %1, или сделать пожертвование Paypal здесь: %2, или приобрести коммерческую версию здесь: %3! Удачного создания!"
 }

@@ -1354,7 +1354,7 @@
     "switch.texture": "Changer de texture",
     "autotile.id": "Autotile d'ID",
     "wall.id": "Mur d'ID",
-    "object.3d.id": "Object 3D d'ID",
+    "object.3d.id": "Objet 3D d'ID",
     "mountain.id": "Montagne d'ID",
     "message.patreon": "Nous esperons que vous appréciez RPG Paper Maker! Si vous shoutaitez soutenir le projet financièrement pour les prochaines fonctionnalités majeures à venir, vous pouvez aider à atteindre le Patreon goal ici: %1, ou faire une donation sur Paypal ici: %2, ou acheter l'édition commerciale ici: %3! Joyeux making!"
 }

@@ -1348,5 +1348,13 @@
     "off": "OFF",
     "antialiasing": "Antialiasing",
     "skyboxes": "Skyboxes",
-    "icons.size": "Rozmiar ikony"
+    "icons.size": "Rozmiar ikony",
+    "facesets.size": "Rozmiar twarzy",
+    "dont.change.orientation": "Nie zmieniaj orientacji",
+    "switch.texture": "Zmień teksturę",
+    "autotile.id": "Autokafel ID",
+    "wall.id": "ID ściana",
+    "object.3d.id": "Obiekt 3D ID",
+    "mountain.id": "Góra dowodów",
+    "message.patreon": "Mamy nadzieję, że spodoba ci się RPG Paper Maker! Jeśli chcesz wesprzeć projekt finansowo dla kolejnych głównych funkcji, które nadejdą, możesz pomóc osiągnąć cel Patreon tutaj: %1 lub przekazać darowiznę na Paypal tutaj: %2 lub kupić wersję komercyjną tutaj: %3! Miłego robienia!"
 }

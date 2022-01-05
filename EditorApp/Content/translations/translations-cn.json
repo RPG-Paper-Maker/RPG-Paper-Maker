@@ -1348,5 +1348,13 @@
     "off": "OFF",
     "antialiasing": "Antialiasing",
     "skyboxes": "Skyboxes",
-    "icons.size": "圖標大小"
+    "icons.size": "圖標大小",
+    "facesets.size": "Facesets 大小",
+    "dont.change.orientation": "不要改變方向",
+    "switch.texture": "切換紋理",
+    "autotile.id": "自動拼貼ID",
+    "wall.id": "牆ID",
+    "object.3d.id": "3D 對象 ID",
+    "mountain.id": "山地身份證",
+    "message.patreon": "我們希望您喜歡 RPG Paper Maker！如果您想為接下來的主要功能提供資金支持，您可以在此處幫助實現 Patreon 目標：%1，或在此處通過 Paypal 捐款：%2，或在此處購買商業版：%3！快樂製作！"
 }

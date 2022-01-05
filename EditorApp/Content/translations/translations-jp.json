@@ -1348,5 +1348,13 @@
     "off": "OFF",
     "antialiasing": "Antialiasing",
     "skyboxes": "Skyboxes",
-    "icons.size": "アイコンのサイズ"
+    "icons.size": "アイコンのサイズ",
+    "facesets.size": "フェイスセットのサイズ",
+    "dont.change.orientation": "向きを変えないでください",
+    "switch.texture": "テクスチャを切り替える",
+    "autotile.id": "Autotile ID",
+    "wall.id": "壁ID",
+    "object.3d.id": "3DオブジェクトID",
+    "mountain.id": "マウンテンID",
+    "message.patreon": "RPGペーパーメーカーを楽しんでいただければ幸いです。次の主要な機能のためにプロジェクトを財政的に支援したい場合は、ここでPatreonの目標を達成するのを手伝うことができます：％1、またはここでPaypalに寄付する：％2、またはここで商用版を購入する：％3！幸せな作り！"
 }

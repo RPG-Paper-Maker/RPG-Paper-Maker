@@ -1348,5 +1348,13 @@
     "off": "OFF",
     "antialiasing": "Antialiasing",
     "skyboxes": "Skyboxes",
-    "icons.size": "아이콘 크기"
+    "icons.size": "아이콘 크기",
+    "facesets.size": "면 세트 크기",
+    "dont.change.orientation": "방향을 바꾸지 마십시오",
+    "switch.texture": "텍스처 전환",
+    "autotile.id": "Autotile ID",
+    "wall.id": "벽 ID",
+    "object.3d.id": "3D 개체 ID",
+    "mountain.id": "산 ID",
+    "message.patreon": "RPG Paper Maker를 즐기시기 바랍니다! 다음 주요 기능을 위해 프로젝트를 재정적으로 지원하려면 여기에서 Patreon 목표 달성을 돕거나: %1에서 Paypal %2에 기부하거나, 여기에서 상업판을 구입하세요: %3! 행복한 만들기!"
 }
