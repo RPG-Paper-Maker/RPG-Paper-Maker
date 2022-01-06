@@ -1,6 +1,38 @@
 {
-	"add": [],
-	"remove": [],
+	"add": [
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Facesets/general1.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Facesets/general1.png"
+        }
+    ],
+	"remove": [
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Facesets/lucas.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Facesets/lucas.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Facesets/kate.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Facesets/kate.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Facesets/shana.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Facesets/shana.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Facesets/bibi.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Facesets/bibi.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Facesets/wooly.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Facesets/wooly.png"
+        }
+    ],
 	"replace": [],
 	"features": [
         "Update change graphics to select graphics exactly like in object options (none, fix sprite, 3D obj etc) + checkbox don't change orientation",
