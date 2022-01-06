@@ -714,28 +714,8 @@
                                 "files": [
                                     {
                                         "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Facesets/lucas.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Facesets/lucas.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Facesets/kate.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Facesets/kate.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Facesets/shana.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Facesets/shana.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Facesets/bibi.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Facesets/bibi.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Images/HUD/Facesets/wooly.png",
-                                        "target": "Engine/Content/BR/Content/Images/HUD/Facesets/wooly.png"
+                                        "source": "Content/Images/HUD/Facesets/general1.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Facesets/general1.png"
                                     }
                                 ],
                                 "target": "Engine/Content/BR/Content/Images/HUD/Facesets"
@@ -1105,18 +1085,8 @@
                                 "files": [
                                     {
                                         "files": [
-                                        ],
-                                        "target": "Engine/Content/example/Datas/Maps/temp"
-                                    },
-                                    {
-                                        "files": [
                                             {
                                                 "files": [
-                                                    {
-                                                        "repo": "RPG-Paper-Maker",
-                                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0002/temp/objects.json",
-                                                        "target": "Engine/Content/example/Datas/Maps/MAP0002/temp/objects.json"
-                                                    }
                                                 ],
                                                 "target": "Engine/Content/example/Datas/Maps/MAP0002/temp"
                                             },
@@ -1167,11 +1137,6 @@
                                             },
                                             {
                                                 "files": [
-                                                    {
-                                                        "repo": "RPG-Paper-Maker",
-                                                        "source": "EditorApp/Content/example/Datas/Maps/MAP0001/tempUndoRedo/0.json",
-                                                        "target": "Engine/Content/example/Datas/Maps/MAP0001/tempUndoRedo/0.json"
-                                                    }
                                                 ],
                                                 "target": "Engine/Content/example/Datas/Maps/MAP0001/tempUndoRedo"
                                             },
@@ -1478,6 +1443,11 @@
                         "repo": "RPG-Paper-Maker",
                         "source": "EditorApp/Content/translations/languages.json",
                         "target": "Engine/Content/translations/languages.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/translations/translations-de.json",
+                        "target": "Engine/Content/translations/translations-de.json"
                     },
                     {
                         "repo": "RPG-Paper-Maker",
@@ -2597,18 +2567,8 @@
                         "files": [
                             {
                                 "files": [
-                                ],
-                                "target": "Engine/Content/example/Datas/Maps/temp"
-                            },
-                            {
-                                "files": [
                                     {
                                         "files": [
-                                            {
-                                                "repo": "RPG-Paper-Maker",
-                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0002/temp/objects.json",
-                                                "target": "Engine/Content/example/Datas/Maps/MAP0002/temp/objects.json"
-                                            }
                                         ],
                                         "target": "Engine/Content/example/Datas/Maps/MAP0002/temp"
                                     },
@@ -2659,11 +2619,6 @@
                                     },
                                     {
                                         "files": [
-                                            {
-                                                "repo": "RPG-Paper-Maker",
-                                                "source": "EditorApp/Content/example/Datas/Maps/MAP0001/tempUndoRedo/0.json",
-                                                "target": "Engine/Content/example/Datas/Maps/MAP0001/tempUndoRedo/0.json"
-                                            }
                                         ],
                                         "target": "Engine/Content/example/Datas/Maps/MAP0001/tempUndoRedo"
                                     },
@@ -8038,6 +7993,11 @@
                             },
                             {
                                 "repo": "Game-Scripts-Build",
+                                "source": "Scripts/System/EventCommand/SwitchTexture.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/SwitchTexture.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts-Build",
                                 "source": "Scripts/System/EventCommand/PlaySound.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/PlaySound.d.ts"
                             },
@@ -8388,6 +8348,11 @@
                             },
                             {
                                 "repo": "Game-Scripts-Build",
+                                "source": "Scripts/System/EventCommand/SwitchTexture.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/SwitchTexture.js"
+                            },
+                            {
+                                "repo": "Game-Scripts-Build",
                                 "source": "Scripts/System/EventCommand/Choice.js",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/EventCommand/Choice.js"
                             },
@@ -8691,6 +8656,11 @@
                 "repo": "RPG-Paper-Maker",
                 "source": "EditorApp/Content/translations/languages.json",
                 "target": "Engine/Content/translations/languages.json"
+            },
+            {
+                "repo": "RPG-Paper-Maker",
+                "source": "EditorApp/Content/translations/translations-de.json",
+                "target": "Engine/Content/translations/translations-de.json"
             },
             {
                 "repo": "RPG-Paper-Maker",
