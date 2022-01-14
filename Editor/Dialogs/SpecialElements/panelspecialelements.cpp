@@ -159,6 +159,16 @@ void PanelSpecialElements::update(SystemSpecialElement *sys) {
         ui->widgetTilesetSettings->updateImage(picture);
     }
 
+    // Object previewer
+    if (m_kind == PictureKind::Object3D) {
+        ui->widgetPreviewObject3D->loadObject(reinterpret_cast<SystemObject3D *>
+            (sys));
+        ui->widgetPreviewObject3D->updateObject();
+    }
+    if (m_kind == PictureKind::Mountains) {
+        ui->widgetShowPicture->updatePicture(picture);
+    }
+
     ui->comboBoxCollision->setCurrentIndex(static_cast<int>(sys->collisionKind()));
     ui->widgetShapeCollisions->initialize(sys->collisionCustomID());
     ui->doubleSpinBoxScale->setValue(sys->scale());
@@ -172,16 +182,6 @@ void PanelSpecialElements::update(SystemSpecialElement *sys) {
     ui->comboBoxCollisionMountains->setCurrentIndex(static_cast<int>(sys
         ->mountainCollisionKind()));
     ui->checkBoxAnimated->setChecked(sys->isAnimated());
-
-    // Object previewer
-    if (m_kind == PictureKind::Object3D) {
-        ui->widgetPreviewObject3D->loadObject(reinterpret_cast<SystemObject3D *>
-            (sys));
-        ui->widgetPreviewObject3D->updateObject();
-    }
-    if (m_kind == PictureKind::Mountains) {
-        ui->widgetShowPicture->updatePicture(picture);
-    }
 }
 
 // -------------------------------------------------------
