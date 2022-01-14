@@ -50,6 +50,8 @@ protected:
     SystemPlaySong *m_song;
 
     virtual void initialize(EventCommand *command);
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dropEvent(QDropEvent *event);
 
 private:
     Ui::DialogCommandPlaySong *ui;

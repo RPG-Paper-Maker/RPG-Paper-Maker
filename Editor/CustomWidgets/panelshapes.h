@@ -41,6 +41,7 @@ public:
 
     void setShapeKind(CustomShapeKind kind);
     void changeShape(SuperListItem *shape);
+    void dropFiles(QStringList &files);
 
 private:
     Ui::PanelShapes *ui;

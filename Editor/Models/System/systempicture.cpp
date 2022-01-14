@@ -154,7 +154,7 @@ QString SystemPicture::getLocalFolder(PictureKind kind) {
     case PictureKind::GameOver:
         return RPM::PATH_GAME_OVER;
     default:
-        throw std::invalid_argument("Kind of picture path not implemented");
+        return "";
     }
 }
 

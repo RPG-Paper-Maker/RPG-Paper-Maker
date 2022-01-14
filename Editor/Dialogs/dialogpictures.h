@@ -41,6 +41,10 @@ public:
                     QList<QString>& names,
                     QList<PictureKind>& enums) const;
 
+protected:
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dropEvent(QDropEvent *event);
+
 private:
     Ui::DialogPictures *ui;
 

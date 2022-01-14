@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QMimeData>
 #include "dialogcommandplaysong.h"
 #include "ui_dialogcommandplaysong.h"
 #include "rpm.h"
@@ -40,7 +41,7 @@ DialogCommandPlaySong::DialogCommandPlaySong(QString title, SongKind kind,
     if (command != nullptr) {
         initialize(command);
     }
-
+    this->setAcceptDrops(true);
     this->translate();
 }
 
@@ -117,6 +118,32 @@ EventCommand* DialogCommandPlaySong::getCommand() const {
     QVector<QString> command;
     this->getCommandList(command);
     return new EventCommand(getCommandKind(), command);
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogCommandPlaySong::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls()) {
+        event->acceptProposedAction();
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogCommandPlaySong::dropEvent(QDropEvent *event)
+{
+    QList<QUrl> urls = event->mimeData()->urls();
+    QStringList list;
+    for (int i = 0, l = urls.size(); i < l; i++)
+    {
+        list << urls.at(i).toLocalFile();
+    }
+    ui->widget->dropFiles(list);
 }
 
 // -------------------------------------------------------

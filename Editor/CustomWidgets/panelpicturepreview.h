@@ -53,6 +53,7 @@ public:
 
     void changePicture(SystemPicture *picture);
     void setChooseRect(bool b);
+    void dropFiles(QStringList &files);
 
 private:
     Ui::PanelPicturePreview *ui;

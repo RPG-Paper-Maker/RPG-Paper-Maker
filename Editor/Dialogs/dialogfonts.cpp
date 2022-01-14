@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QMimeData>
 #include "dialogfonts.h"
 #include "ui_dialogfonts.h"
 #include "rpm.h"
@@ -30,6 +31,7 @@ DialogFonts::DialogFonts(QWidget *parent) :
     ui->panelFonts->setKind();
     ui->panelFonts->showAvailableContent(RPM::get()->engineSettings()
         ->showAvailableContent());
+    this->setAcceptDrops(true);
     this->translate();
 }
 
@@ -65,4 +67,30 @@ void DialogFonts::translate()
     this->setWindowTitle(RPM::translate(Translations::FONTS_MANAGER) + RPM
         ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogFonts::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls()) {
+        event->acceptProposedAction();
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogFonts::dropEvent(QDropEvent *event)
+{
+    QList<QUrl> urls = event->mimeData()->urls();
+    QStringList list;
+    for (int i = 0, l = urls.size(); i < l; i++)
+    {
+        list << urls.at(i).toLocalFile();
+    }
+    ui->panelFonts->dropFiles(list);
 }

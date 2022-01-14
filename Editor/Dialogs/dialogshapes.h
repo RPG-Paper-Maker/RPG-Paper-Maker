@@ -39,6 +39,10 @@ public:
     void addfolders(QIcon& icon, QStandardItem* root, QList<QString>& names,
         QList<CustomShapeKind>& enums) const;
 
+protected:
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dropEvent(QDropEvent *event);
+
 private:
     Ui::DialogShapes *ui;
 

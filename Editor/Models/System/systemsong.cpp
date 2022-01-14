@@ -67,7 +67,7 @@ QString SystemSong::getLocalFolder(SongKind kind){
     case SongKind::MusicEffect:
         return RPM::PATH_MUSIC_EFFECTS;
     default:
-        throw std::invalid_argument("Kind of song path not implemented");
+        return "";
     }
 }
 

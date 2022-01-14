@@ -41,6 +41,7 @@ public:
 
     void setKind();
     void changeFont(SuperListItem *font);
+    void dropFiles(QStringList &files);
 
 private:
     Ui::PanelFonts *ui;

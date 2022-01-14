@@ -306,6 +306,29 @@ void PanelPicturePreview::showPictureWidget(bool b) {
 
 //-------------------------------------------------
 
+void PanelPicturePreview::dropFiles(QStringList &files)
+{
+    QString path;
+
+    // Copy all the selected files
+    for (int i = 0; i < files.size(); i++)
+    {
+        path = files.at(i);
+        if (!QFile::copy(path, Common::pathCombine(SystemPicture::getFolder(
+            m_pictureKind, false), QFileInfo(path).fileName())))
+        {
+            QMessageBox::warning(this, RPM::translate(Translations::WARNING),
+                RPM::translate(Translations::COULD_NOT_COPY_FILE_AT) + RPM
+                ::SPACE + path + RPM::DOT);
+        }
+    }
+
+    // Refresh content
+    loadAvailableContent();
+}
+
+//-------------------------------------------------
+
 void PanelPicturePreview::translate()
 {
     ui->checkBoxContent->setText(RPM::translate(Translations
@@ -372,27 +395,11 @@ void PanelPicturePreview::on_pushButtonDelete_clicked()
 
 // -------------------------------------------------------
 
-void PanelPicturePreview::on_pushButtonAdd_clicked() {
-
-    // Open dialog box
+void PanelPicturePreview::on_pushButtonAdd_clicked()
+{
     QStringList files = QFileDialog::getOpenFileNames(this, RPM::translate(
         Translations::ADD_NEW_CONTENTS), "", "Image (*.png *.jpg)");
-    QString path;
-
-    // Copy all the selected files
-    for (int i = 0; i < files.size(); i++) {
-        path = files.at(i);
-        if (!QFile::copy(path, Common::pathCombine(SystemPicture::getFolder(
-            m_pictureKind, false), QFileInfo(path).fileName())))
-        {
-            QMessageBox::warning(this, RPM::translate(Translations::WARNING),
-                RPM::translate(Translations::COULD_NOT_COPY_FILE_AT) + RPM
-                ::SPACE + path + RPM::DOT);
-        }
-    }
-
-    // Refresh content
-    loadAvailableContent();
+    this->dropFiles(files);
 }
 
 // -------------------------------------------------------

@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QMimeData>
 #include "dialogpicturespreview.h"
 #include "ui_dialogpicturespreview.h"
 #include "rpm.h"
@@ -56,7 +57,7 @@ DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
     connect(this, SIGNAL(rejected()), this, SLOT(on_rejected()));
     connect(this, SIGNAL(dialogIsClosing()), this, SLOT(on_rejected()));
-
+    this->setAcceptDrops(true);
     this->translate();
 }
 
@@ -123,6 +124,32 @@ void DialogPicturesPreview::translate()
     ui->checkBoxPictureID->setText(RPM::translate(Translations
         ::SELECT_PICTURE_ID) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogPicturesPreview::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls()) {
+        event->acceptProposedAction();
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogPicturesPreview::dropEvent(QDropEvent *event)
+{
+    QList<QUrl> urls = event->mimeData()->urls();
+    QStringList list;
+    for (int i = 0, l = urls.size(); i < l; i++)
+    {
+        list << urls.at(i).toLocalFile();
+    }
+    ui->widget->dropFiles(list);
 }
 
 // -------------------------------------------------------

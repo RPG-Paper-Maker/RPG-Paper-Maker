@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QMimeData>
 #include "dialogvideospreview.h"
 #include "ui_dialogvideospreview.h"
 #include "rpm.h"
@@ -29,11 +30,12 @@ DialogVideosPreview::DialogVideosPreview(SuperListItem *videoID, QWidget *parent
 
     ui->widget->setKind();
     ui->widget->changeVideo(videoID);
-    ui->widget->showAvailableContent(false);
+    ui->widget->showAvailableContent(RPM::get()->engineSettings()
+        ->showAvailableContent());
 
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
     connect(this, SIGNAL(rejected()), this, SLOT(on_rejected()));
-
+    this->setAcceptDrops(true);
     this->translate();
 }
 
@@ -49,6 +51,32 @@ void DialogVideosPreview::translate()
     this->setWindowTitle(RPM::translate(Translations::SELECT_VIDEO) + RPM
         ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogVideosPreview::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls()) {
+        event->acceptProposedAction();
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogVideosPreview::dropEvent(QDropEvent *event)
+{
+    QList<QUrl> urls = event->mimeData()->urls();
+    QStringList list;
+    for (int i = 0, l = urls.size(); i < l; i++)
+    {
+        list << urls.at(i).toLocalFile();
+    }
+    ui->widget->dropFiles(list);
 }
 
 // -------------------------------------------------------

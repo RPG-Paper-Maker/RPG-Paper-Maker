@@ -54,6 +54,7 @@ public:
     void initialize(EventCommand *command, int &i);
     void getCommand(QVector<QString> &command) const;
     void updatePlaySong(SystemPlaySong *song);
+    void dropFiles(QStringList &files);
 
 private:
     Ui::PanelSongs *ui;

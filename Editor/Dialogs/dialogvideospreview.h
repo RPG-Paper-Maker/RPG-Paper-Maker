@@ -38,6 +38,8 @@ public:
 
 protected:
     virtual void closeEvent(QCloseEvent *);
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dropEvent(QDropEvent *event);
 
 private:
     Ui::DialogVideosPreview *ui;

@@ -168,7 +168,8 @@ void WidgetPicturePreview::updateRectangle()
 
 // -------------------------------------------------------
 
-void WidgetPicturePreview::updateRectangleCharacter(){
+void WidgetPicturePreview::updateRectangleCharacter()
+{
     m_selectionRectangle->setRectangle(m_indexX, m_indexY, 1, 1);
 }
 

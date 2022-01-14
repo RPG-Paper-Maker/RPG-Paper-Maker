@@ -103,7 +103,7 @@ QString SystemCustomShape::getLocalFolder(CustomShapeKind kind) {
     case CustomShapeKind::Collisions:
         return RPM::PATH_COLLISIONS;
     default:
-        throw std::invalid_argument("Kind of shape path not implemented");
+        return "";
     }
 }
 

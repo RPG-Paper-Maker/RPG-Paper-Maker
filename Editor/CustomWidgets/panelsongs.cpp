@@ -463,6 +463,28 @@ void PanelSongs::setVisibleStartEnd(bool b) {
 
 //-------------------------------------------------
 
+void PanelSongs::dropFiles(QStringList &files)
+{
+    QString path;
+
+    // Copy all the selected files
+    for (int i = 0; i < files.size(); i++) {
+        path = files.at(i);
+        if (!QFile::copy(path, Common::pathCombine(SystemSong::getFolder(
+            m_songKind, false), QFileInfo(path).fileName())))
+        {
+            QMessageBox::warning(this, RPM::translate(Translations::WARNING),
+                RPM::translate(Translations::COULD_NOT_COPY_FILE_AT) + RPM
+                ::SPACE + path + RPM::DOT);
+        }
+    }
+
+    // Refresh content
+    loadAvailableContent();
+}
+
+//-------------------------------------------------
+
 void PanelSongs::translate()
 {
     ui->labelVolume->setText(RPM::translate(Translations::VOLUME) + RPM::COLON);
@@ -657,27 +679,11 @@ void PanelSongs::on_pushButtonDelete_clicked()
 
 // -------------------------------------------------------
 
-void PanelSongs::on_pushButtonAdd_clicked() {
-
-    // Open dialog box
+void PanelSongs::on_pushButtonAdd_clicked()
+{
     QStringList files = QFileDialog::getOpenFileNames(this, RPM::translate(
         Translations::ADD_NEW_CONTENTS), "", "Music (*.mp3 *.ogg *.wav)");
-    QString path;
-
-    // Copy all the selected files
-    for (int i = 0; i < files.size(); i++) {
-        path = files.at(i);
-        if (!QFile::copy(path, Common::pathCombine(SystemSong::getFolder(
-            m_songKind, false), QFileInfo(path).fileName())))
-        {
-            QMessageBox::warning(this, RPM::translate(Translations::WARNING),
-                RPM::translate(Translations::COULD_NOT_COPY_FILE_AT) + RPM
-                ::SPACE + path + RPM::DOT);
-        }
-    }
-
-    // Refresh content
-    loadAvailableContent();
+    this->dropFiles(files);
 }
 
 // -------------------------------------------------------

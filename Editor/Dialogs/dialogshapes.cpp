@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QMimeData>
 #include "dialogshapes.h"
 #include "ui_dialogshapes.h"
 #include "rpm.h"
@@ -40,7 +41,7 @@ DialogShapes::DialogShapes(QWidget *parent) :
     sp_retain = ui->panelShapes->sizePolicy();
     sp_retain.setRetainSizeWhenHidden(true);
     ui->panelShapes->setSizePolicy(sp_retain);
-
+    this->setAcceptDrops(true);
     this->translate();
 }
 
@@ -104,6 +105,33 @@ void DialogShapes::translate()
         ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogShapes::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls()) {
+        event->acceptProposedAction();
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogShapes::dropEvent(QDropEvent *event)
+{
+    QList<QUrl> urls = event->mimeData()->urls();
+    QStringList list;
+    for (int i = 0, l = urls.size(); i < l; i++)
+    {
+        list << urls.at(i).toLocalFile();
+    }
+    ui->panelShapes->dropFiles(list);
+}
+
 
 // -------------------------------------------------------
 //

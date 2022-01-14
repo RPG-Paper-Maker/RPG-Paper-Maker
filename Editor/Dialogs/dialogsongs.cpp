@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QMimeData>
 #include "dialogsongs.h"
 #include "ui_dialogsongs.h"
 #include "rpm.h"
@@ -43,7 +44,7 @@ DialogSongs::DialogSongs(QWidget *parent) :
     sp_retain = ui->widgetSongs->sizePolicy();
     sp_retain.setRetainSizeWhenHidden(true);
     ui->widgetSongs->setSizePolicy(sp_retain);
-
+    this->setAcceptDrops(true);
     this->translate();
 }
 
@@ -109,6 +110,32 @@ void DialogSongs::translate()
     this->setWindowTitle(RPM::translate(Translations::SONGS_MANAGER) + RPM
         ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogSongs::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls()) {
+        event->acceptProposedAction();
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogSongs::dropEvent(QDropEvent *event)
+{
+    QList<QUrl> urls = event->mimeData()->urls();
+    QStringList list;
+    for (int i = 0, l = urls.size(); i < l; i++)
+    {
+        list << urls.at(i).toLocalFile();
+    }
+    ui->widgetSongs->dropFiles(list);
 }
 
 // -------------------------------------------------------

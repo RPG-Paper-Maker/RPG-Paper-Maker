@@ -41,6 +41,9 @@ public:
                     QList<QString>& names,
                     QList<SongKind>& enums) const;
 
+protected:
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dropEvent(QDropEvent *event);
 
 private:
     Ui::DialogSongs *ui;

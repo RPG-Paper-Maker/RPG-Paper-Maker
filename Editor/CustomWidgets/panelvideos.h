@@ -42,6 +42,7 @@ public:
 
     void setKind();
     void changeVideo(SuperListItem *video);
+    void dropFiles(QStringList &files);
 
 private:
     Ui::PanelVideos *ui;
