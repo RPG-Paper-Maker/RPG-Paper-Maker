@@ -30,6 +30,7 @@
 namespace Ui {
 class PanelPicturePreview;
 }
+class PanelGuidePicturePreview;
 
 class PanelPicturePreview : public QWidget
 {
@@ -54,12 +55,17 @@ public:
     void changePicture(SystemPicture *picture);
     void setChooseRect(bool b);
     void dropFiles(QStringList &files);
+    void getAddButtonPosition(QPoint &point) const;
+    void getMoveButtonPosition(QPoint &point) const;
+    void getListIDsRect(QRect &rect) const;
+    void getListContentRect(QRect &rect) const;
 
 private:
     Ui::PanelPicturePreview *ui;
     PictureKind m_pictureKind;
     SystemPicture *m_picture;
     bool m_areNegIDsEnabled;
+    PanelGuidePicturePreview *m_guideWidget;
 
     void showPictures(bool b);
     void updateImage(QStandardItem *item);
@@ -84,6 +90,27 @@ public slots:
     void on_pushButtonDLC_clicked();
     void on_pushButtonExport_clicked();
     void on_checkBoxStopAnimation_toggled(bool checked);
+};
+
+class PanelGuidePicturePreview : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit PanelGuidePicturePreview(QWidget *parent = nullptr);
+    ~PanelGuidePicturePreview();
+    PanelPicturePreview * getParent() const;
+
+protected:
+    virtual void mousePressEvent(QMouseEvent *);
+    virtual void paintEvent(QPaintEvent *event);
+
+    QTimer *m_offsetTimer;
+    double m_offsetText;
+    bool m_offsetUp;
+
+public slots:
+    void updateOffset();
 };
 
 #endif // PANELPICTUREPREVIEW_H

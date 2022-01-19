@@ -14,6 +14,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QMessageBox>
+#include <QPainter>
 #include "common.h"
 
 // -------------------------------------------------------
@@ -531,4 +532,44 @@ QPoint Common::rotatePoint(int x, int y, int cx, int cy, double angle) {
       y = qRound(yNew + cy);
 
       return QPoint(x, y);
+}
+
+// -------------------------------------------------------
+
+void Common::paintRectWithOutline(QPainter &painter, QRect &rect, const QColor
+    &colorIn, const QColor &colorOut, int size)
+{
+    painter.setPen(QPen(colorOut, size / 2));
+    painter.drawRect(rect.x() + (size / 2), rect.y() + (size / 2), rect.width() - size,
+        rect.height() - size);
+    painter.drawRect(rect.x() - (size / 2), rect.y() - (size / 2), rect.width() + size,
+        rect.height() + size);
+    painter.setPen(QPen(colorIn, size));
+    painter.drawRect(rect);
+}
+
+// -------------------------------------------------------
+
+void Common::paintTextWithOutline(QPainter &painter, QString text, const QColor
+    &colorIn, const QColor &colorOut, int x, int y)
+{
+    painter.setPen(QPen(colorOut));
+    painter.drawText(x + 1, y + 1, text);
+    painter.drawText(x + 1, y - 1, text);
+    painter.drawText(x - 1, y + 1, text);
+    painter.drawText(x - 1, y - 1, text);
+    painter.setPen(QPen(colorIn));
+    painter.drawText(x, y, text);
+}
+
+// -------------------------------------------------------
+
+void Common::paintEllipseWithOutline(QPainter &painter, QPoint& point, const QColor
+    &colorIn, const QColor &colorOut, int w, int h, int size)
+{
+    painter.setPen(QPen(colorOut, size / 2));
+    painter.drawEllipse(point, w + (size / 2), h + (size / 2));
+    painter.drawEllipse(point, w - (size / 2), h - (size / 2));
+    painter.setPen(QPen(colorIn, size));
+    painter.drawEllipse(point, w, h);
 }

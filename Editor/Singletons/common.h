@@ -59,6 +59,12 @@ public:
     static bool isPressingEnter(QKeyEvent *event);
     static bool getMinDistance(float &finalDistance, float newDistance);
     static QPoint rotatePoint(int x, int y, int cx, int cy, double angle);
+    static void paintRectWithOutline(QPainter &painter, QRect &rect, const QColor
+        &colorIn, const QColor &colorOut, int size);
+    static void paintTextWithOutline(QPainter &painter, QString text, const QColor
+        &colorIn, const QColor &colorOut, int x, int y);
+    static void paintEllipseWithOutline(QPainter &painter, QPoint& point, const
+        QColor &colorIn, const QColor &colorOut, int w, int h, int size);
 };
 
 #endif // COMMON_H

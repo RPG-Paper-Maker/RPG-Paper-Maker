@@ -1356,5 +1356,8 @@
     "wall.id": "Wall ID",
     "object.3d.id": "3D Object ID",
     "mountain.id": "Mountain ID",
-    "message.patreon": "We hope you are enjoying RPG Paper Maker! If you want to support the project financially for the next coming major features, you can help reaching the Patreon goal here: %1, or donate on Paypal here: %2, or buy the commercial edition here: %3! Happy making!"
+    "message.patreon": "We hope you are enjoying RPG Paper Maker! If you want to support the project financially for the next coming major features, you can help reaching the Patreon goal here: %1, or donate on Paypal here: %2, or buy the commercial edition here: %3! Happy making!",
+    "guide.assets.1": "Here is the complete assets list with\nyour custom assets and BR (Basic Resources)!",
+    "guide.assets.2": "Add your own assets here (or drop files)!",
+    "guide.assets.3": "Transfer assets here to associate it\nto an ID and then use it in your game!"
 }

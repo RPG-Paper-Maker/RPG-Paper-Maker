@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QTimer>
 #include <QDirIterator>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -29,7 +30,8 @@ PanelPicturePreview::PanelPicturePreview(QWidget *parent) :
     ui(new Ui::PanelPicturePreview),
     m_pictureKind(PictureKind::None),
     m_picture(nullptr),
-    m_areNegIDsEnabled(true)
+    m_areNegIDsEnabled(true),
+    m_guideWidget(nullptr)
 {
     ui->setupUi(this);
 
@@ -51,12 +53,29 @@ PanelPicturePreview::PanelPicturePreview(QWidget *parent) :
     connect(ui->treeViewAvailableContent, SIGNAL(doubleClicked(QModelIndex)),
         this, SLOT(on_treeViewAvailableContentDoubleClicked(QModelIndex)));
 
+    if (RPM::get()->engineSettings()->guideStepPictures() >= 0 && RPM::get()
+        ->engineSettings()->showAvailableContent())
+    {
+        m_guideWidget = new PanelGuidePicturePreview(this);
+        m_guideWidget->resize(0, 0);
+    }
     this->translate();
 }
 
 PanelPicturePreview::~PanelPicturePreview()
 {
     SuperListItem::deleteModel(ui->treeViewAvailableContent->getModel());
+    if (m_guideWidget != nullptr)
+    {
+        delete m_guideWidget;
+        if (RPM::get()->engineSettings()->guideStepPictures() != -1)
+        {
+            RPM::get()->engineSettings()->setGuideStepPictures(0);
+        } else
+        {
+            RPM::get()->engineSettings()->write();
+        }
+    }
     delete ui;
 }
 
@@ -329,6 +348,42 @@ void PanelPicturePreview::dropFiles(QStringList &files)
 
 //-------------------------------------------------
 
+void PanelPicturePreview::getAddButtonPosition(QPoint &point) const
+{
+    point.setX(ui->pushButtonAdd->x() + (ui->pushButtonAdd->width() / 2));
+    point.setY(ui->pushButtonAdd->y() + (ui->pushButtonAdd->height() / 2));
+}
+
+//-------------------------------------------------
+
+void PanelPicturePreview::getMoveButtonPosition(QPoint &point) const
+{
+    point.setX(ui->pushButtonMove->x() + (ui->pushButtonMove->width() / 2));
+    point.setY(ui->pushButtonMove->y() + (ui->pushButtonMove->height() / 2));
+}
+
+//-------------------------------------------------
+
+void PanelPicturePreview::getListIDsRect(QRect &rect) const
+{
+    rect.setX(ui->widgetPanelIDs->x());
+    rect.setY(ui->widgetPanelIDs->y());
+    rect.setWidth(ui->widgetPanelIDs->width());
+    rect.setHeight(ui->widgetPanelIDs->height());
+}
+
+//-------------------------------------------------
+
+void PanelPicturePreview::getListContentRect(QRect &rect) const
+{
+    rect.setX(ui->treeViewAvailableContent->x());
+    rect.setY(ui->treeViewAvailableContent->y());
+    rect.setWidth(ui->treeViewAvailableContent->width());
+    rect.setHeight(ui->treeViewAvailableContent->height());
+}
+
+//-------------------------------------------------
+
 void PanelPicturePreview::translate()
 {
     ui->checkBoxContent->setText(RPM::translate(Translations
@@ -477,4 +532,128 @@ void PanelPicturePreview::on_checkBoxStopAnimation_toggled(bool checked)
         this->setIndexY(this->indexY());
         ui->widgetPreview->repaint();
     }
+}
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
+PanelGuidePicturePreview::PanelGuidePicturePreview(QWidget *parent) :
+    QWidget(parent),
+    m_offsetText(0),
+    m_offsetUp(true)
+{
+    m_offsetTimer = new QTimer(this);
+    connect(m_offsetTimer, SIGNAL(timeout()), this, SLOT(updateOffset()));
+    m_offsetTimer->start(1);
+}
+
+PanelGuidePicturePreview::~PanelGuidePicturePreview()
+{
+
+}
+
+PanelPicturePreview * PanelGuidePicturePreview::getParent() const
+{
+    return reinterpret_cast<PanelPicturePreview *>(this->parent());
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void PanelGuidePicturePreview::mousePressEvent(QMouseEvent *)
+{
+    if (RPM::get()->engineSettings()->guideStepPictures() == 2)
+    {
+        RPM::get()->engineSettings()->setGuideStepPictures(-1);
+        this->resize(0, 0);
+    } else
+    {
+        RPM::get()->engineSettings()->setGuideStepPictures(RPM::get()
+            ->engineSettings()->guideStepPictures() + 1);
+    }
+    this->repaint();
+}
+
+// -------------------------------------------------------
+
+void PanelGuidePicturePreview::paintEvent(QPaintEvent *event)
+{
+    QWidget::paintEvent(event);
+    QPainter p(this);
+    p.setFont(QFont("Verdana", 10, QFont::ExtraBold));
+    p.fillRect(QRect(0, 0, this->width(), this->height()),  QColor(0, 0, 0, 100));
+    const QColor &colorIn = Qt::white;
+    const QColor &colorOut = RPM::COLOR_ALMOST_BLACK;
+    if (RPM::get()->engineSettings()->guideStepPictures() == 0)
+    {
+        QRect rect;
+        this->getParent()->getListContentRect(rect);
+        Common::paintRectWithOutline(p, rect, colorIn, colorOut, 4);
+        QString text = RPM::translate(Translations::GUIDE_ASSETS_1);
+        QStringList list = text.split("\n");
+        Common::paintTextWithOutline(p, list.at(0), colorIn, colorOut, rect.x()
+            - 50, rect.y() + 100 + m_offsetText);
+        Common::paintTextWithOutline(p, list.at(1), colorIn, colorOut, rect.x()
+            - 50, rect.y() + 120 + m_offsetText);
+    }
+    if (RPM::get()->engineSettings()->guideStepPictures() == 1)
+    {
+        QPoint point;
+        this->getParent()->getAddButtonPosition(point);
+        Common::paintEllipseWithOutline(p, point, colorIn, colorOut, 20, 20, 4);
+        Common::paintTextWithOutline(p, RPM::translate(Translations::GUIDE_ASSETS_2),
+            colorIn, colorOut, point.x() - 200, point.y() - 30 + m_offsetText);
+    }
+    if (RPM::get()->engineSettings()->guideStepPictures() == 2)
+    {
+        QRect rect;
+        this->getParent()->getListIDsRect(rect);
+        Common::paintRectWithOutline(p, rect, colorIn, colorOut, 4);
+        QPoint point;
+        this->getParent()->getMoveButtonPosition(point);
+        Common::paintEllipseWithOutline(p, point, colorIn, colorOut, 20, 20, 4);
+        QString text = RPM::translate(Translations::GUIDE_ASSETS_3);
+        QStringList list = text.split("\n");
+        Common::paintTextWithOutline(p, list.at(0), colorIn, colorOut, point.x()
+            - 80, point.y() - 50 +m_offsetText);
+        Common::paintTextWithOutline(p, list.at(1), colorIn, colorOut, point.x()
+            - 80, point.y() - 30 + m_offsetText);
+    }
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void PanelGuidePicturePreview::updateOffset()
+{
+    if (RPM::get()->engineSettings()->guideStepPictures() == -1)
+    {
+        return;
+    }
+    if (m_offsetUp)
+    {
+        m_offsetText += 0.5;
+        if (m_offsetText == 3)
+        {
+            m_offsetUp = false;
+        }
+    } else
+    {
+        m_offsetText--;
+        if (m_offsetText == -3)
+        {
+            m_offsetUp = true;
+        }
+    }
+    this->resize(this->getParent()->width(), this->getParent()->height());
+    this->repaint();
 }

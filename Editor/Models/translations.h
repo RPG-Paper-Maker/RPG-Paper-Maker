@@ -1390,6 +1390,9 @@ public:
     static const QString OBJECT_3D_ID;
     static const QString MOUNTAIN_ID;
     static const QString MESSAGE_PATREON;
+    static const QString GUIDE_ASSETS_1;
+    static const QString GUIDE_ASSETS_2;
+    static const QString GUIDE_ASSETS_3;
 
     Translations();
     virtual ~Translations();

@@ -38,6 +38,7 @@ const QString EngineSettings::THEME_WHITE = "whitetheme";
 const QString EngineSettings::THEME_WHITE_MAC ="whitemactheme";
 const QString EngineSettings::THEME_DARK = "darktheme";
 const QString EngineSettings::JSON_PATREON_MESSAGE = "patreonMessage";
+const QString EngineSettings::JSON_GUIDE_STEP_PICTURES = "guideStepPictures";
 const QString EngineSettings::PATH_THEMES = ":/stylesheets/Themes/";
 const bool EngineSettings::DEFAULT_FIRST_TIME_LANGUAGES = true;
 const QString EngineSettings::DEFAULT_CURRENT_LANGUAGE = "en";
@@ -45,6 +46,7 @@ const int EngineSettings::DEFAULT_BATTLE_TROOP_TEST_BATTLE_MAP_ID = 1;
 const int EngineSettings::DEFAULT_TAB_INDEX_DATAS = 0;
 const int EngineSettings::DEFAULT_TAB_INDEX_SYSTEMS = 0;
 const bool EngineSettings::DEFAULT_PATREON_MESSAGE = true;
+const int EngineSettings::DEFAULT_GUIDE_STEP_PICTURES = 0;
 
 // -------------------------------------------------------
 //
@@ -64,7 +66,8 @@ EngineSettings::EngineSettings() :
     m_battleTroopTestBattleMapID(DEFAULT_BATTLE_TROOP_TEST_BATTLE_MAP_ID),
     m_tabIndexDatas(DEFAULT_TAB_INDEX_DATAS),
     m_tabIndexSystems(DEFAULT_TAB_INDEX_SYSTEMS),
-    m_patreonMessage(DEFAULT_PATREON_MESSAGE)
+    m_patreonMessage(DEFAULT_PATREON_MESSAGE),
+    m_guideStepPictures(DEFAULT_GUIDE_STEP_PICTURES)
 {
     // Default mac theme should be white
     #ifdef Q_OS_MAC
@@ -235,6 +238,16 @@ bool EngineSettings::patreonMessage() const
 void EngineSettings::setPatreonMessage(bool patreonMessage)
 {
     m_patreonMessage = patreonMessage;
+}
+
+int EngineSettings::guideStepPictures() const
+{
+    return m_guideStepPictures;
+}
+
+void EngineSettings::setGuideStepPictures(int guideStepPictures)
+{
+    m_guideStepPictures = guideStepPictures;
 }
 
 // -------------------------------------------------------
@@ -439,6 +452,10 @@ void EngineSettings::read(const QJsonObject &json) {
     {
         m_patreonMessage = json[JSON_PATREON_MESSAGE].toBool();
     }
+    if (json.contains(JSON_GUIDE_STEP_PICTURES))
+    {
+        m_guideStepPictures = json[JSON_GUIDE_STEP_PICTURES].toInt();
+    }
 }
 
 // -------------------------------------------------------
@@ -511,5 +528,9 @@ void EngineSettings::write(QJsonObject &json) const {
     if (m_patreonMessage != DEFAULT_PATREON_MESSAGE)
     {
         json[JSON_PATREON_MESSAGE] = m_patreonMessage;
+    }
+    if (m_guideStepPictures != DEFAULT_GUIDE_STEP_PICTURES)
+    {
+        json[JSON_GUIDE_STEP_PICTURES] = m_guideStepPictures;
     }
 }

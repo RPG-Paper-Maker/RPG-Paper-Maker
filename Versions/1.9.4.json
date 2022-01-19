@@ -1,0 +1,18 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Drop custom assets files from files explorer",
+        "Guide information for assets"
+    ],
+    "bugs": [
+    	"Using delete on 3D objects list making engine crash"
+    ],
+    "finished": [
+        2,
+        2,
+
+        2
+    ]
+}
