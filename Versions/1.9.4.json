@@ -8,13 +8,15 @@
         "Adding FPS camera to default camera properties"
     ],
     "bugs": [
-    	"Using delete on 3D objects list making engine crash"
+    	"Using delete on 3D objects list making engine crash",
+        "No translation for switch texture command"
     ],
     "finished": [
         2,
         2,
         2,
 
+        2,
         2
     ]
 }
