@@ -667,20 +667,18 @@ void SystemDatas::setDefaultWindowSkins() {
 
 // -------------------------------------------------------
 
-void SystemDatas::setDefaultCameraProperties() {
-    QList<QStandardItem *> row;
-    SystemCameraProperties *cameraProperties;
-
-    cameraProperties = new SystemCameraProperties(1, RPM::translate(Translations
-        ::OUTSIDE));
-    row = cameraProperties->getModelRow();
-    m_modelCameraProperties->appendRow(row);
-    cameraProperties = new SystemCameraProperties(2, RPM::translate(Translations
-        ::BATTLE), new PrimitiveValue(360.0), new PrimitiveValue(
-        SystemCameraProperties::DEFAULT_HORIZONTAL_ANGLE), new PrimitiveValue(
-        60.0));
-    row = cameraProperties->getModelRow();
-    m_modelCameraProperties->appendRow(row);
+void SystemDatas::setDefaultCameraProperties()
+{
+    m_modelCameraProperties->appendRow((new SystemCameraProperties(1, RPM
+        ::translate(Translations::OUTSIDE)))->getModelRow());
+    m_modelCameraProperties->appendRow((new SystemCameraProperties(2, RPM
+        ::translate(Translations::BATTLE), new PrimitiveValue(360.0), new
+        PrimitiveValue(SystemCameraProperties::DEFAULT_HORIZONTAL_ANGLE), new
+        PrimitiveValue(60.0)))->getModelRow());
+    m_modelCameraProperties->appendRow((new SystemCameraProperties(3, "FPS",
+        new PrimitiveValue(0.5), new PrimitiveValue(SystemCameraProperties
+        ::DEFAULT_HORIZONTAL_ANGLE), new PrimitiveValue(85.0), new PrimitiveValue(0),
+        new PrimitiveValue(1), new PrimitiveValue(0)))->getModelRow());
 }
 
 // -------------------------------------------------------
