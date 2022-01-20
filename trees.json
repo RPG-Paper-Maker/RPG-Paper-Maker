@@ -1085,11 +1085,11 @@
                                 "files": [
                                     {
                                         "files": [
-                                            {
-                                                "files": [
-                                                ],
-                                                "target": "Engine/Content/example/Datas/Maps/MAP0002/temp"
-                                            },
+                                        ],
+                                        "target": "Engine/Content/example/Datas/Maps/temp"
+                                    },
+                                    {
+                                        "files": [
                                             {
                                                 "repo": "RPG-Paper-Maker",
                                                 "source": "EditorApp/Content/example/Datas/Maps/MAP0002/0_0_0.json",
@@ -2567,11 +2567,11 @@
                         "files": [
                             {
                                 "files": [
-                                    {
-                                        "files": [
-                                        ],
-                                        "target": "Engine/Content/example/Datas/Maps/MAP0002/temp"
-                                    },
+                                ],
+                                "target": "Engine/Content/example/Datas/Maps/temp"
+                            },
+                            {
+                                "files": [
                                     {
                                         "repo": "RPG-Paper-Maker",
                                         "source": "EditorApp/Content/example/Datas/Maps/MAP0002/0_0_0.json",
