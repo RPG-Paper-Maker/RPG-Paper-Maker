@@ -1356,5 +1356,8 @@
     "wall.id": "Ausweiswand",
     "object.3d.id": "3D-Objekt von ID",
     "mountain.id": "Berg von Ausweisen",
-    "message.patreon": "Wir wünschen Ihnen viel Spaß mit RPG Paper Maker! Wenn Sie das Projekt finanziell für die nächsten wichtigen Features unterstützen möchten, können Sie hier helfen, das Patreon-Ziel zu erreichen: %1, oder hier an Paypal spenden: %2, oder die kommerzielle Ausgabe hier kaufen: %3! Viel Spaß beim Machen!"
+    "message.patreon": "Wir wünschen Ihnen viel Spaß mit RPG Paper Maker! Wenn Sie das Projekt finanziell für die nächsten wichtigen Features unterstützen möchten, können Sie hier helfen, das Patreon-Ziel zu erreichen: %1, oder hier an Paypal spenden: %2, oder die kommerzielle Ausgabe hier kaufen: %3! Viel Spaß beim Machen!",
+    "guide.assets.1": "Hier ist die Liste der Grafik-Assets mit Ihren\neigenen Assets und dem BR (Basic Resources)!",
+    "guide.assets.2": "Fügen Sie hier Ihre eigenen Assets hinzu (oder ziehen Sie Dateien)!",
+    "guide.assets.3": "Übertragen Sie hier Assets, um sie mit einer ID\nzu verknüpfen, und verwenden Sie sie dann in Ihrem Spiel!"
 }

@@ -1356,5 +1356,8 @@
     "wall.id": "벽 ID",
     "object.3d.id": "3D 개체 ID",
     "mountain.id": "산 ID",
-    "message.patreon": "RPG Paper Maker를 즐기시기 바랍니다! 다음 주요 기능을 위해 프로젝트를 재정적으로 지원하려면 여기에서 Patreon 목표 달성을 돕거나: %1에서 Paypal %2에 기부하거나, 여기에서 상업판을 구입하세요: %3! 행복한 만들기!"
+    "message.patreon": "RPG Paper Maker를 즐기시기 바랍니다! 다음 주요 기능을 위해 프로젝트를 재정적으로 지원하려면 여기에서 Patreon 목표 달성을 돕거나: %1에서 Paypal %2에 기부하거나, 여기에서 상업판을 구입하세요: %3! 행복한 만들기!",
+    "guide.assets.1": "다음은 사용자 정의 자산 및 BR(기본 리소스)이\n포함된 전체 자산 목록입니다!",
+    "guide.assets.2": "여기에 자신의 자산을 추가하거나 파일을 삭제하세요!",
+    "guide.assets.3": "여기로 자산을 전송하여 ID에 연결한 다음\n게임에서 사용하세요!"
 }

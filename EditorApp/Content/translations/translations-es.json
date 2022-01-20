@@ -1358,5 +1358,8 @@
     "wall.id": "Pared de ID",
     "object.3d.id": "Objeto 3D de ID",
     "mountain.id": "Montaña de ID",
-    "message.patreon": "¡Esperamos que disfrutes de RPG Paper Maker! Si desea apoyar financieramente el proyecto para las próximas funciones importantes, puede ayudar a alcanzar el objetivo de Patreon aquí: %1, o hacer una donación a Paypal aquí: %2, o comprar la edición comercial aquí: %3! ¡Feliz fabricación!"
+    "message.patreon": "¡Esperamos que disfrutes de RPG Paper Maker! Si desea apoyar financieramente el proyecto para las próximas funciones importantes, puede ayudar a alcanzar el objetivo de Patreon aquí: %1, o hacer una donación a Paypal aquí: %2, o comprar la edición comercial aquí: %3! ¡Feliz fabricación!",
+    "guide.assets.1": "¡Aquí está la lista de activos gráficos\ncon sus propios activos y los BR (Recursos básicos)!",
+    "guide.assets.2": "¡Agregue sus propios activos aquí (o arrastre archivos)!",
+    "guide.assets.3": "¡Transfiere activos aquí para asociarlos\ncon una ID y luego úsalos en tu juego!"
 }

@@ -1356,5 +1356,8 @@
     "wall.id": "牆ID",
     "object.3d.id": "3D 對象 ID",
     "mountain.id": "山地身份證",
-    "message.patreon": "我們希望您喜歡 RPG Paper Maker！如果您想為接下來的主要功能提供資金支持，您可以在此處幫助實現 Patreon 目標：%1，或在此處通過 Paypal 捐款：%2，或在此處購買商業版：%3！快樂製作！"
+    "message.patreon": "我們希望您喜歡 RPG Paper Maker！如果您想為接下來的主要功能提供資金支持，您可以在此處幫助實現 Patreon 目標：%1，或在此處通過 Paypal 捐款：%2，或在此處購買商業版：%3！快樂製作！",
+    "guide.assets.1": "這是包含您的自定義資產和 BR\n（基本資源）的完整資產列表！",
+    "guide.assets.2": "在此處添加您自己的資產（或刪除文件）！",
+    "guide.assets.3": "在此處轉移資產以將其\n關聯到一個 ID，然後在您的遊戲中使用它！"
 }
