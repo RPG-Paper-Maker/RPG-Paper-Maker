@@ -19,8 +19,8 @@
 #include <QApplication>
 #include <QThread>
 
-const QString Project::ENGINE_VERSION = "1.9.3";
-const QString Project::LAST_BUILD_DATE = "January 5 2022";
+const QString Project::ENGINE_VERSION = "1.9.4";
+const QString Project::LAST_BUILD_DATE = "January 20 2022";
 const int Project::MAX_PROJECTS_NUMBER = 6;
 
 // -------------------------------------------------------
