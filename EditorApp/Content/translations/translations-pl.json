@@ -1357,7 +1357,7 @@
     "object.3d.id": "Obiekt 3D ID",
     "mountain.id": "Góra ID",
     "message.patreon": "Mamy nadzieję, że spodoba ci się RPG Paper Maker! Jeśli chcesz wesprzeć projekt finansowo dla kolejnych głównych funkcji, które nadejdą, możesz pomóc osiągnąć cel Patreon tutaj: %1 lub przekazać darowiznę na Paypal tutaj: %2 lub kupić wersję komercyjną tutaj: %3! Miłego tworzenia!",
-    "guide.assets.1": "Oto lista zasobów graficznych z\nwłasnymi zasobami i BR (Zasoby podstawowe)!",
-    "guide.assets.2": "Dodaj tutaj własne zasoby (lub przeciągnij pliki)!",
-    "guide.assets.3": "Przenieś zasoby tutaj, aby powiązać je z\nidentyfikatorem, a następnie użyj ich w swojej grze!"
+    "guide.assets.1": "Oto lista dostępnych zasobów graficznych \nLista zawiera własne zasoby, oraz pakiet BR (zasoby podstawowe)!",
+    "guide.assets.2": "Kliknij tutaj, aby dodać własne zasoby do listy (lub przeciągnij pliki)!",
+    "guide.assets.3": "Następnie kliknij w strzałkę, aby zaznaczone zasoby przenieść do projektu.\nZasoby otrzymają identyfikator(ID), i będzie można użyć ich w twoim projekcie!"
 }
