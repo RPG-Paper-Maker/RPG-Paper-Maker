@@ -493,7 +493,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::SKILL_COST)
     });
     RPM::ENUM_TO_STRING_OS_KIND = QStringList({
-        "Windows", "Linux", "Mac"
+        "Windows 64bits", "Windows 32bits", "Linux", "Mac"
     });
 
     RPM::ENUM_TO_STRING_TEAM = QStringList({
