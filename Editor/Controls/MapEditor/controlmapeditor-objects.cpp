@@ -83,39 +83,46 @@ void ControlMapEditor::defineAsHero() {
             SystemMapObject *mapObject;
             Map *map = datas->idMapHero() == m_map->mapProperties()->id() ?
                 m_map : new Map(datas->idMapHero());
+            if (map->mapProperties()->id() == 0) {
+                delete map;
+                map = m_map;
+            }
             Position posPrevious;
             mapObject = reinterpret_cast<SystemMapObject *>(SuperListItem
                 ::getById(map->modelObjects()->invisibleRootItem(), datas
                 ->idObjectHero()));
-            posPrevious = mapObject->position();
-            Map::getGlobalPortion(posPrevious, globalPortion);
-            MapPortion *mapPortion = nullptr;
-            if (map == m_map)
+            if (mapObject != nullptr && mapObject->id() != -1)
             {
-                map->getLocalPortion(posPrevious, portion);
-                if (map->isInPortion(portion, 0))
+                posPrevious = mapObject->position();
+                Map::getGlobalPortion(posPrevious, globalPortion);
+                MapPortion *mapPortion = nullptr;
+                if (map == m_map)
                 {
-                    mapPortion = map->mapPortion(portion);
+                    map->getLocalPortion(posPrevious, portion);
+                    if (map->isInPortion(portion, 0))
+                    {
+                        mapPortion = map->mapPortion(portion);
+                    }
                 }
-            }
-            if (mapPortion == nullptr)
-            {
-                mapPortion = map->loadPortionMap(globalPortion.x(),
-                    globalPortion.y(), globalPortion.z());
-                QJsonObject previous;
-                MapEditorSubSelectionKind previousType = MapEditorSubSelectionKind::None;
-                map->deleteObject(posPrevious, mapPortion, previous, previousType);
-                map->savePortionMap(mapPortion);
-                map->writeObjects(true);
-                this->setToNotSaved(map);
-                delete mapPortion;
-            } else
-            {
-                this->eraseObject(posPrevious, false, false, true);
-            }
-            if (map != m_map)
-            {
-                delete map;
+                if (mapPortion == nullptr)
+                {
+                    mapPortion = map->loadPortionMap(globalPortion.x(),
+                        globalPortion.y(), globalPortion.z());
+                    QJsonObject previous;
+                    MapEditorSubSelectionKind previousType = MapEditorSubSelectionKind::None;
+                    map->deleteObject(posPrevious, mapPortion, previous, previousType);
+                    map->savePortionMap(mapPortion);
+                    map->writeObjects(true);
+                    this->setToNotSaved(map);
+                    delete mapPortion;
+                } else
+                {
+                    this->eraseObject(posPrevious, false, false, true);
+                }
+                if (map != m_map)
+                {
+                    delete map;
+                }
             }
         }
         m_selectedObject = new SystemCommonObject;
