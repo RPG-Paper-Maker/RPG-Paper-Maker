@@ -390,6 +390,7 @@ bool ControlMapEditor::isObjectInCursor(Position3D &p) {
 
 void ControlMapEditor::updateObjectEdition(MapPortion *mapPortion) {
     m_map->writeObjects(true);
+    mapPortion->updateEmpty();
     m_map->savePortionMap(mapPortion);
     m_needMapObjectsUpdate = true;
 }

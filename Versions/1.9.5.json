@@ -1,0 +1,22 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [],
+    "bugs": [
+    	"Autotiles not displaying ingame in some specific cases",
+        "Crash when jumping on borders of maps",
+        "Text error for OS name",
+        "Crash when defining as hero after some maps deleting",
+        "Objects not created in temp folder if adding it on empty map",
+        "New bug fixes coming soon..."
+    ],
+    "finished": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        0
+    ]
+}
