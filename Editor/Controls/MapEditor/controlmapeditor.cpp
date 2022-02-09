@@ -720,9 +720,7 @@ void ControlMapEditor::setToNotSaved(Map *map)
     }
     if (map != nullptr)
     {
-        map->setSaved(false);
-        RPM::mapsToSave.insert(map->mapProperties()->id());
-        map->getAssociatedMapItem()->setText(map->mapProperties()->name() + " *");
+        map->setToNotSaved();
     }
 }
 

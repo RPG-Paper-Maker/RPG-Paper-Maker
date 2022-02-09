@@ -9,9 +9,15 @@
         "Text error for OS name",
         "Crash when defining as hero after some maps deleting",
         "Objects not created in temp folder if adding it on empty map",
+        "Mountains collisions issues",
+        "Can trigger an invisible object from a top mountain",
+        "Auto-fix object linking issue",
         "New bug fixes coming soon..."
     ],
     "finished": [
+        2,
+        2,
+        2,
         2,
         2,
         2,

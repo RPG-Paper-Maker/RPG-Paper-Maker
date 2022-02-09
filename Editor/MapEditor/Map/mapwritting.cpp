@@ -359,6 +359,15 @@ void Map::saveObjects(QStandardItemModel* model, QString pathMap, bool temp) {
 
 // -------------------------------------------------------
 
+void Map::setToNotSaved()
+{
+    this->setSaved(false);
+    RPM::mapsToSave.insert(m_mapProperties->id());
+    this->getAssociatedMapItem()->setText(m_mapProperties->name() + " *");
+}
+
+// -------------------------------------------------------
+
 void Map::readJSONArray(QStandardItemModel *model, const QJsonArray & tab) {
     QStandardItem* item;
     SystemMapObject* super;

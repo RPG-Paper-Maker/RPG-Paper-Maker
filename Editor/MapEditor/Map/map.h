@@ -69,6 +69,7 @@ public:
     bool deleteObject(Position& p, MapPortion *mapPortion,
                       QJsonObject &previous,
                       MapEditorSubSelectionKind &previousType);
+    bool syncObjects(SystemCommonObject *object, Position &p);
     void addOverflowSprites(Position& p, Portion& portion);
     void removeOverflowSprites(Position& p, Portion& portion);
     void addOverflowObjects3D(Position& p, Portion& portion);
@@ -192,6 +193,7 @@ public:
     static bool isMapIdExisting(int id);
     static int generateMapId();
     static QString generateMapName(int id);
+    void setToNotSaved();
 
     void initializeGL();
     void paintFloors(QMatrix4x4 &modelviewProjection, int autotileFrame);

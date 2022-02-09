@@ -684,6 +684,37 @@ bool Map::deleteObject(Position &p, MapPortion *mapPortion, QJsonObject
 
 // -------------------------------------------------------
 
+bool Map::syncObjects(SystemCommonObject *object, Position &p)
+{
+    SystemMapObject *super;
+    int l = m_modelObjects->invisibleRootItem()->rowCount();
+    int row = l;
+    bool changed = true;
+    for (int i = l - 1; i >= 0; i--)
+    {
+        super = reinterpret_cast<SystemMapObject *>(m_modelObjects->item(i)->data()
+            .value<quintptr>());
+        if (super->id() == object->id())
+        {
+            m_modelObjects->removeRow(i);
+            delete super;
+            if (row == l)
+            {
+                changed = false;
+            } else
+            {
+                changed = true;
+            }
+            row = i;
+        }
+    }
+    m_modelObjects->insertRow(row, (new SystemMapObject(object->id(), object
+        ->name(), p))->getModelRow());
+    return changed;
+}
+
+// -------------------------------------------------------
+
 bool Map::isObjectIdExisting(int id) const {
     SystemMapObject* super;
     int i;
