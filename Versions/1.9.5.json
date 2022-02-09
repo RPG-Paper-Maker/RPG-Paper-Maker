@@ -11,8 +11,7 @@
         "Objects not created in temp folder if adding it on empty map",
         "Mountains collisions issues",
         "Can trigger an invisible object from a top mountain",
-        "Auto-fix object linking issue",
-        "New bug fixes coming soon..."
+        "Auto-fix object linking issue"
     ],
     "finished": [
         2,
@@ -22,7 +21,6 @@
         2,
         2,
         2,
-        2,
-        0
+        2
     ]
 }
