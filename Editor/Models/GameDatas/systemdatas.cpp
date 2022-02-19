@@ -94,15 +94,20 @@ const int SystemDatas::DEFAULT_SAVE_SLOTS = 4;
 
 SystemDatas::SystemDatas() :
     m_projectName(new SystemTranslatable(-1, RPM::translate(Translations::PROJECT_WITHOUT_NAME))),
+    m_screenWidth(640),
+    m_screenHeight(480),
+    m_isScreenWindow(false),
     m_isMouseControls(DEFAULT_IS_MOUSE_CONTROLS),
     m_portionsRayEditor(DEFAULT_PORTION_RAY_ENGINE),
     m_portionsRayIngame(DEFAULT_PORTION_RAY_INGAME),
+    m_squareSize(16),
     m_mountainCollisionHeight(new PrimitiveValue(4)),
     m_mountainCollisionAngle(new PrimitiveValue(45.0)),
     m_mapFrameDuration(new PrimitiveValue(DEFAULT_MAP_FRAME_DURATION)),
     m_priceSoldItem(new PrimitiveValue(DEFAULT_PRICE_SOLD_ITEM)),
     m_idMapHero(1),
     m_idObjectHero(1),
+    m_framesAnimation(4),
     m_battlersFrames(DEFAULT_BATTLERS_FRAMES),
     m_battlersColumns(DEFAULT_BATTLERS_COLUMNS),
     m_autotilesFrames(DEFAULT_AUTOTILES_FRAMES),
@@ -498,14 +503,9 @@ void SystemDatas::setSaveSlots(int saveSlots)
 //
 // -------------------------------------------------------
 
-void SystemDatas::setDefault() {
-    m_screenWidth = 640;
-    m_screenHeight = 480;
-    m_isScreenWindow = true;
-    m_squareSize = 16;
-    m_framesAnimation = 4;
+void SystemDatas::setDefault()
+{
     m_pathBR = Common::pathCombine(QDir::currentPath(), RPM::PATH_BR);
-
     this->setDefaultColors();
     this->setDefaultCurrencies();
     this->setDefaultItemsTypes();
@@ -524,14 +524,14 @@ void SystemDatas::setDefault() {
     this->setdefaultEnterNameOptions();
     this->setDefaultSkyBoxes();
     this->setDefaultInitialPartyMembers();
-
     m_lastMajorVersion = 1;
     m_lastMinorVersion = 0;
 }
 
 // -------------------------------------------------------
 
-void SystemDatas::setDefaultColors() {
+void SystemDatas::setDefaultColors()
+{
     QStandardItem *item;
     SystemColor *color;
     QString namesColors[] = {

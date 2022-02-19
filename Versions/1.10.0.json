@@ -1,0 +1,34 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Graphic assets (free) pack complete",
+        "Default data base with default assets",
+        "Draw mode: rectangle",
+        "Statistics: bars draw UI",
+        "Custom collision for 3D objects",
+        "Transformation mode translate",
+        "Transformation mode scale",
+        "Mode view on editor",
+        "Improve ingame perfs",
+        "Tooltips for every options",
+        "Event command syntax colors",
+        "Fullscreen by default"
+    ],
+    "bugs": [],
+    "finished": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+    ]
+}
