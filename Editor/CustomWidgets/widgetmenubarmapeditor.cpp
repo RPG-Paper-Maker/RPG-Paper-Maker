@@ -410,6 +410,9 @@ void WidgetMenuBarMapEditor::toggleSelection()
 
 void WidgetMenuBarMapEditor::updateSelection(QAction *action)
 {
+    // Unselect layer on every time you change selection
+    this->forceNoneLayer();
+
     MapEditorSubSelectionKind subSelectionBefore = subSelectionKind();
 
     // Deselect previous selected action
