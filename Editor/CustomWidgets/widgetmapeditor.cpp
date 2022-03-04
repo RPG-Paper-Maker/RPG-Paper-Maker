@@ -845,14 +845,15 @@ void WidgetMapEditor::mouseReleaseEvent(QMouseEvent *event)
             MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
             int specialID = m_panelTextures->getID();
             m_control.onMouseReleased(m_menuBar->selectionKind(), subSelection,
-                m_menuBar->drawKind(), tileset, specialID, event->pos(), button);
+                m_menuBar->drawKind(), tileset, specialID, event->pos(), m_menuBar
+                ->layerOn(), button);
         } else if (m_detection != nullptr)
         {
             tileset.setWidth(1);
             tileset.setHeight(1);
             m_control.onMouseReleased(MapEditorSelectionKind::Objects3D,
                 MapEditorSubSelectionKind::Object3D, DrawKind::Pencil, tileset,
-                1, event->pos(), button);
+                1, event->pos(), false, button);
         }
     }
     this->setFocus();

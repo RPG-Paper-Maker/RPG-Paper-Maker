@@ -14,10 +14,13 @@
         "Improve ingame perfs",
         "Tooltips for every options",
         "Event command syntax colors",
-        "Fullscreen by default"
+        "Fullscreen by default",
+        "When changing selection, always deselect layer on"
     ],
     "bugs": [],
     "finished": [
+        1,
+        0,
         1,
         0,
         0,
@@ -27,8 +30,7 @@
         0,
         0,
         0,
-        0,
-        0,
+        2,
         2
     ]
 }

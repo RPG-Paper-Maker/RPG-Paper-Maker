@@ -199,7 +199,12 @@ void ControlMapEditor::addLand(Position &p, MapEditorSubSelectionKind kind,
         break;
     }
     case DrawKind::Rectangle:
-        break; // TODO
+        // Define start point of rectangle
+        if (!m_isDrawingRectangle)
+        {
+            m_positionStartRectangle = p;
+        }
+        break;
     case DrawKind::Pin:
         paintPinLand(p, kind, specialID, tileset, up);
         break;
@@ -208,6 +213,54 @@ void ControlMapEditor::addLand(Position &p, MapEditorSubSelectionKind kind,
     }
 
     m_previousMouseCoords = p;
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::paintRectangleLand(MapEditorSubSelectionKind kind, int
+    specialID, QRect &texture, bool layerOn)
+{
+    Position p = m_positionOnLand;
+    bool up = m_camera->cameraUp();
+    int x = qMin(p.x(), m_positionStartRectangle.x());
+    int z = qMin(p.z(), m_positionStartRectangle.z());
+    int w = qAbs(p.x() - m_positionStartRectangle.x()) + 1;
+    int h = qAbs(p.z() - m_positionStartRectangle.z()) + 1;
+    LandDatas *element = nullptr;
+    for (int i = 0; i < w; i++)
+    {
+        if (x + i > m_map->mapProperties()->length())
+            break;
+
+        for (int j = 0; j < h; j++)
+        {
+            if (z + j > m_map->mapProperties()->width())
+                break;
+            Position shortPosition(x + i, p.y(), p.yPlus(), z + j, p.layer());
+            QRect *rect = new QRect(texture.x() + (i % texture.width()),
+                          texture.y() + (j % texture.height()), 1, 1);
+            switch (kind) {
+            case MapEditorSubSelectionKind::Floors:
+            {
+                element = new FloorDatas(rect, up);
+                break;
+            }
+            case MapEditorSubSelectionKind::Autotiles:
+            {
+                if (specialID == -1)
+                {
+                    element = nullptr;
+                    break;
+                }
+                element = new AutotileDatas(specialID, rect, up);
+                break;
+            }
+            default:
+                break;
+            }
+            this->stockLand(shortPosition, element, kind, layerOn);
+        }
+    }
 }
 
 // -------------------------------------------------------

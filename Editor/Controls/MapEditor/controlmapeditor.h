@@ -145,6 +145,8 @@ public:
         DrawKind drawKind, Position &p);
     void addLand(Position &p, MapEditorSubSelectionKind kind, DrawKind drawKind,
         bool layerOn, QRect &tileset, int specialID);
+    void paintRectangleLand(MapEditorSubSelectionKind kind, int
+        specialID, QRect &texture, bool layerOn);
     void paintPinLand(Position &p, MapEditorSubSelectionKind kindAfter,
         int specialIDAfter, QRect &textureAfter, bool up);
     LandDatas * getLand(Portion &portion, Position &p);
@@ -244,8 +246,9 @@ public:
         bool layerOn, QRect &tileset, int specialID, int widthSquares, double
         widthPixels, int heightSquares, double heightPixels, QRect
         &defaultFloorRect, QPoint point, Qt::MouseButton button);
-    void onMouseReleased(MapEditorSelectionKind, MapEditorSubSelectionKind,
-        DrawKind drawKind, QRect &, int specialID, QPoint, Qt::MouseButton button);
+    void onMouseReleased(MapEditorSelectionKind kind, MapEditorSubSelectionKind
+        subKind, DrawKind drawKind, QRect &tilset, int specialID, QPoint point,
+        bool layerOn, Qt::MouseButton button);
     void onKeyPressed(int k, double speed);
     void onKeyReleased(int);
 
@@ -313,6 +316,8 @@ protected:
     ContextMenuList *m_contextMenu;
     bool m_isDrawingWall;
     bool m_isDeletingWall;
+    bool m_isDrawingRectangle;
+    Position m_positionStartRectangle;
     bool m_isDeleting;
     bool m_isCtrlPressed;
     bool m_isShiftPressed;

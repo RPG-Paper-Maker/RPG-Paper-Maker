@@ -90,16 +90,22 @@ void ControlMapEditor::updatePreviewLands(MapEditorSelectionKind kind,
     MapEditorSubSelectionKind subKind, bool up, bool layerOn, QRect &tileset,
     int specialID, Position &position)
 {
-    for (int i = 0; i < tileset.width(); i++) {
-        if (position.x() + i > m_map->mapProperties()->length())
+    int x = m_isDrawingRectangle ? qMin(position.x(), m_positionStartRectangle.x()) : position.x();
+    int z = m_isDrawingRectangle ? qMin(position.z(), m_positionStartRectangle.z()) : position.z();
+    int w = qAbs(position.x() - m_positionStartRectangle.x()) + 1;
+    int h = qAbs(position.z() - m_positionStartRectangle.z()) + 1;
+    for (int i = 0; i < (m_isDrawingRectangle ? w : tileset.width()); i++)
+    {
+        if (x + i > m_map->mapProperties()->length())
             break;
 
-        for (int j = 0; j < tileset.height(); j++) {
-            if (position.z() + j > m_map->mapProperties()->width())
+        for (int j = 0; j < (m_isDrawingRectangle ? h : tileset.height()); j++)
+        {
+            if (z + j > m_map->mapProperties()->width())
                 break;
 
-            Position shortPosition(position.x() + i, position.y(), position
-                .yPlus(), position.z() + j, position.layer());
+            Position shortPosition(x + i, position.y(), position
+                .yPlus(), z + j, position.layer());
             Portion shortPortion;
             m_map->getLocalPortion(shortPosition, shortPortion);
 
@@ -111,7 +117,8 @@ void ControlMapEditor::updatePreviewLands(MapEditorSelectionKind kind,
                 int layer = getLayer(m_map->mapPortion(shortPortion),
                     m_distanceLand, shortPosition, layerOn, kind);
                 shortPosition.setLayer(layer);
-                QRect *rect = new QRect(tileset.x() + i, tileset.y() + j, 1, 1);
+                QRect *rect = new QRect(tileset.x() + (i % tileset.width()),
+                    tileset.y() + (j % tileset.height()), 1, 1);
 
                 switch (subKind) {
                 case MapEditorSubSelectionKind::Floors:

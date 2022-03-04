@@ -54,6 +54,7 @@ ControlMapEditor::ControlMapEditor() :
     m_displayCursor(true),
     m_isDrawingWall(false),
     m_isDeletingWall(false),
+    m_isDrawingRectangle(false),
     m_isDeleting(false),
     m_isCtrlPressed(false),
     m_isShiftPressed(false),
@@ -1610,6 +1611,12 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
                 specialID, widthSquares, widthPixels, heightSquares,
                 heightPixels, defaultFloorRect);
 
+            // Drawing rectangle check
+            if (drawKind == DrawKind::Rectangle)
+            {
+                m_isDrawingRectangle = true;
+            }
+
             // Wall sprite
             if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
                 if (button == Qt::MouseButton::LeftButton)
@@ -1623,14 +1630,18 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
-    MapEditorSubSelectionKind, DrawKind drawKind, QRect &, int specialID, QPoint,
-    Qt::MouseButton button)
+void ControlMapEditor::onMouseReleased(MapEditorSelectionKind kind,
+    MapEditorSubSelectionKind subKind, DrawKind drawKind, QRect &tilset, int
+    specialID, QPoint point, bool layerOn, Qt::MouseButton button)
 {
     if (button == Qt::MouseButton::LeftButton) {
         if (m_isDrawingWall) {
             m_isDrawingWall = false;
             addSpriteWall(drawKind, specialID);
+        }
+        if (m_isDrawingRectangle)
+        {
+            this->paintRectangleLand(subKind, specialID, tilset, layerOn);
         }
     }
     else if (button == Qt::MouseButton::RightButton) {
@@ -1639,6 +1650,8 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
             removeSpriteWall(drawKind);
         }
     }
+    m_isDrawingRectangle = false;
+    m_positionStartRectangle.setCoords(0, 0, 0, 0);
 
     // Force previous mouse coords to be different
     m_previousMouseCoords.setCoords(-500, 0, 0, -500);
@@ -1656,7 +1669,8 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
 // -------------------------------------------------------
 
 void ControlMapEditor::onKeyPressed(int k, double speed) {
-    if (!m_isDrawingWall && !m_isDeletingWall && !m_isMovingObject) {
+    if (!m_isDrawingWall && !m_isDeletingWall && !m_isMovingObject && !m_isDrawingRectangle)
+    {
         cursor()->onKeyPressed(k, m_camera->horizontalAngle(), m_map
             ->mapProperties()->length(), m_map->mapProperties()->width(), speed);
     }

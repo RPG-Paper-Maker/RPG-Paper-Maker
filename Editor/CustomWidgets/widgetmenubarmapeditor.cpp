@@ -360,8 +360,10 @@ void WidgetMenuBarMapEditor::initializeRightMenu(bool detection)
             on_actionDrawTriggered(bool)));
         m_actionRectangle = new QAction(QIcon(":/icons/Ressources/rectangle.png"),
             "Rectangle");
-        m_actionRectangle->setEnabled(false);
+        m_actionRectangle->setEnabled(true);
         m_actionRectangle->setProperty(PROPERTY_SELECTION, false);
+        this->connect(m_actionRectangle, SIGNAL(triggered(bool)), this, SLOT(
+            on_actionDrawTriggered(bool)));
         m_actionPin = new QAction(QIcon(":/icons/Ressources/pin.png"), "Pin of paint");
         m_actionPin->setProperty(PROPERTY_SELECTION, false);
         this->connect(m_actionPin, SIGNAL(triggered(bool)), this, SLOT(
@@ -437,9 +439,19 @@ void WidgetMenuBarMapEditor::updateSelection(QAction *action)
             m_selectionKind == MapEditorSelectionKind::Objects3D ||
             m_selectionKind == MapEditorSelectionKind::Mountains)
         {
-            forcePencil();
+            if (subSelectionAfter == MapEditorSubSelectionKind::SpritesWall)
+            {
+                this->forcePencil();
+            } else
+            {
+                actionRectangle()->setIcon(QIcon(":/icons/Ressources/rectangle.png"));
+                actionRectangle()->setEnabled(true);
+                actionPin()->setEnabled(false);
+                actionPin()->setIcon(QIcon(":/icons/Ressources/pin_disable.png"));
+            }
         } else
         {
+            actionRectangle()->setIcon(QIcon(":/icons/Ressources/rectangle.png"));
             actionPin()->setIcon(QIcon(":/icons/Ressources/pin.png"));
         }
         if (subSelectionAfter == MapEditorSubSelectionKind::Autotiles ||
@@ -489,12 +501,23 @@ void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu, QAction
     {
         this->actionLayerOn()->setIcon(QIcon(":/icons/Ressources/layer_on.png"));
     }
-    if (m_selectionKind == MapEditorSelectionKind::Sprites || m_selectionKind ==
-        MapEditorSelectionKind::Objects3D)
+    if (m_selectionKind == MapEditorSelectionKind::Sprites ||
+        m_selectionKind == MapEditorSelectionKind::Objects3D ||
+        m_selectionKind == MapEditorSelectionKind::Mountains)
     {
-        this->forcePencil();
+        if (subKind == MapEditorSubSelectionKind::SpritesWall)
+        {
+            this->forcePencil();
+        } else
+        {
+            actionRectangle()->setIcon(QIcon(":/icons/Ressources/rectangle.png"));
+            actionRectangle()->setEnabled(true);
+            actionPin()->setEnabled(false);
+            actionPin()->setIcon(QIcon(":/icons/Ressources/pin_disable.png"));
+        }
     } else {
         this->actionPin()->setIcon(QIcon(":/icons/Ressources/pin.png"));
+        actionRectangle()->setIcon(QIcon(":/icons/Ressources/rectangle.png"));
     }
     if (subKind == MapEditorSubSelectionKind::Autotiles || m_selectionKind ==
         MapEditorSelectionKind::Mountains || m_selectionKind ==
@@ -528,7 +551,8 @@ void WidgetMenuBarMapEditor::updateRight(QAction *action)
                  static_cast<int>(MapEditorModesKind::Pixel);
     listCenter << static_cast<int>(MapEditorModesKind::TransformRotate) <<
                 static_cast<int>(MapEditorModesKind::DrawPencil) <<
-                static_cast<int>(MapEditorModesKind::DrawPin);
+                  static_cast<int>(MapEditorModesKind::DrawRectangle) <<
+                  static_cast<int>(MapEditorModesKind::DrawPin);
     listRight << static_cast<int>(MapEditorModesKind::LayerNone) <<
                  static_cast<int>(MapEditorModesKind::LayerOn);
 
@@ -597,13 +621,16 @@ void WidgetMenuBarMapEditor::forceNoRotation()
 void WidgetMenuBarMapEditor::forcePencil()
 {
     WidgetMenuBarMapEditor *bar = getBarRight();
-    if (this->drawKind() == DrawKind::Pin)
+    if (this->drawKind() != DrawKind::Pencil)
     {
         this->forceRight(static_cast<int>(MapEditorModesKind::DrawPencil));
     }
     QAction *action = bar->actions().at(static_cast<int>(MapEditorModesKind::DrawPin));
     action->setEnabled(false);
     action->setIcon(QIcon(":/icons/Ressources/pin_disable.png"));
+    action = bar->actions().at(static_cast<int>(MapEditorModesKind::DrawRectangle));
+    action->setEnabled(false);
+    action->setIcon(QIcon(":/icons/Ressources/rectangle_disable.png"));
     this->on_actionDrawTriggered(false);
 }
 
@@ -622,6 +649,7 @@ void WidgetMenuBarMapEditor::enableAllRight()
     m_actionPixel->setEnabled(true);
     m_actionRotate->setEnabled(true);
     m_actionPencil->setEnabled(true);
+    m_actionRectangle->setEnabled(true);
     m_actionPin->setEnabled(true);
     m_actionLayerNone->setEnabled(true);
     m_actionLayerOn->setEnabled(true);
