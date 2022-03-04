@@ -21,7 +21,8 @@ void ControlMapEditor::updatePreviewElements(MapEditorSelectionKind kind,
 {
     if (drawKind == DrawKind::Translate || drawKind == DrawKind::Rotate ||
         drawKind == DrawKind::Scale || drawKind == DrawKind::Pin || (
-        m_isDeleting && !m_isDeletingWall) || m_isCtrlPressed)
+        m_isDeleting && !m_isDeletingWall && !m_isDeletingRectangle) ||
+        m_isCtrlPressed)
     {
         return;
     }
@@ -90,22 +91,28 @@ void ControlMapEditor::updatePreviewLands(MapEditorSelectionKind kind,
     MapEditorSubSelectionKind subKind, bool up, bool layerOn, QRect &tileset,
     int specialID, Position &position)
 {
-    int x = m_isDrawingRectangle ? qMin(position.x(), m_positionStartRectangle.x()) : position.x();
-    int z = m_isDrawingRectangle ? qMin(position.z(), m_positionStartRectangle.z()) : position.z();
+    bool drawing = m_isDrawingRectangle || m_isDeletingRectangle;
+    int x = drawing ? qMin(position.x(), m_positionStartRectangle.x()) : position.x();
+    int z = drawing ? qMin(position.z(), m_positionStartRectangle.z()) : position.z();
     int w = qAbs(position.x() - m_positionStartRectangle.x()) + 1;
     int h = qAbs(position.z() - m_positionStartRectangle.z()) + 1;
-    for (int i = 0; i < (m_isDrawingRectangle ? w : tileset.width()); i++)
+    if (m_isDeletingRectangle)
+    {
+        subKind = MapEditorSubSelectionKind::Floors;
+    }
+    for (int i = 0; i < (drawing ? w : tileset.width()); i++)
     {
         if (x + i > m_map->mapProperties()->length())
             break;
 
-        for (int j = 0; j < (m_isDrawingRectangle ? h : tileset.height()); j++)
+        for (int j = 0; j < (drawing ? h : tileset.height()); j++)
         {
             if (z + j > m_map->mapProperties()->width())
                 break;
 
             Position shortPosition(x + i, position.y(), position
-                .yPlus(), z + j, position.layer());
+                .yPlus(), z + j, drawing ? m_positionStartRectangle.layer() +
+                (layerOn && m_isDrawingRectangle ? 1 : 0) : position.layer());
             Portion shortPortion;
             m_map->getLocalPortion(shortPosition, shortPortion);
 
@@ -114,12 +121,17 @@ void ControlMapEditor::updatePreviewLands(MapEditorSelectionKind kind,
                 m_firstMouseCoords.y() == position.y() && qFuzzyCompare(
                 m_firstMouseCoords.yPlus(), position.yPlus()))))
             {
-                int layer = getLayer(m_map->mapPortion(shortPortion),
-                    m_distanceLand, shortPosition, layerOn, kind);
-                shortPosition.setLayer(layer);
+                if (!drawing)
+                {
+                    shortPosition.setLayer(getLayer(m_map->mapPortion(shortPortion),
+                        m_distanceLand, shortPosition, layerOn, kind));
+                }
                 QRect *rect = new QRect(tileset.x() + (i % tileset.width()),
                     tileset.y() + (j % tileset.height()), 1, 1);
-
+                if (m_isDeletingRectangle)
+                {
+                    rect->setRect(0, 0, 0, 0);
+                }
                 switch (subKind) {
                 case MapEditorSubSelectionKind::Floors:
                 {

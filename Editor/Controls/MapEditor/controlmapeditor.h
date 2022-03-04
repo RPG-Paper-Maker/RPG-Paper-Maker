@@ -159,7 +159,7 @@ public:
     void getLandTexture(QRect &rect, LandDatas *land);
     void stockLand(Position &p, LandDatas *landDatas,
         MapEditorSubSelectionKind kind, bool layerOn, bool undoRedo = false,
-        bool force = false);
+        bool force = false, bool updateLayer = true);
     void removeLand(Position &p, DrawKind drawKind);
     void eraseLand(Position &p, bool undoRedo = false, bool force = false, bool
         deletePtr = true);
@@ -247,7 +247,7 @@ public:
         widthPixels, int heightSquares, double heightPixels, QRect
         &defaultFloorRect, QPoint point, Qt::MouseButton button);
     void onMouseReleased(MapEditorSelectionKind kind, MapEditorSubSelectionKind
-        subKind, DrawKind drawKind, QRect &tilset, int specialID, QPoint point,
+        subKind, DrawKind drawKind, QRect &tilset, int specialID, QPoint,
         bool layerOn, Qt::MouseButton button);
     void onKeyPressed(int k, double speed);
     void onKeyReleased(int);
@@ -317,6 +317,7 @@ protected:
     bool m_isDrawingWall;
     bool m_isDeletingWall;
     bool m_isDrawingRectangle;
+    bool m_isDeletingRectangle;
     Position m_positionStartRectangle;
     bool m_isDeleting;
     bool m_isCtrlPressed;

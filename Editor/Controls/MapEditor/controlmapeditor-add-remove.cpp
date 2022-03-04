@@ -220,6 +220,7 @@ void ControlMapEditor::addLand(Position &p, MapEditorSubSelectionKind kind,
 void ControlMapEditor::paintRectangleLand(MapEditorSubSelectionKind kind, int
     specialID, QRect &texture, bool layerOn)
 {
+    bool drawing = m_isDrawingRectangle || m_isDeletingRectangle;
     Position p = m_positionOnLand;
     bool up = m_camera->cameraUp();
     int x = qMin(p.x(), m_positionStartRectangle.x());
@@ -236,29 +237,40 @@ void ControlMapEditor::paintRectangleLand(MapEditorSubSelectionKind kind, int
         {
             if (z + j > m_map->mapProperties()->width())
                 break;
-            Position shortPosition(x + i, p.y(), p.yPlus(), z + j, p.layer());
-            QRect *rect = new QRect(texture.x() + (i % texture.width()),
-                          texture.y() + (j % texture.height()), 1, 1);
-            switch (kind) {
-            case MapEditorSubSelectionKind::Floors:
+            Position shortPosition(x + i, p.y(), p.yPlus(), z + j, drawing ?
+                m_positionStartRectangle.layer() + (layerOn &&
+                m_isDrawingRectangle ? 1 : 0) : p.layer());
+            if (m_isDrawingRectangle)
             {
-                element = new FloorDatas(rect, up);
-                break;
-            }
-            case MapEditorSubSelectionKind::Autotiles:
-            {
-                if (specialID == -1)
+                QRect *rect = new QRect(texture.x() + (i % texture.width()),
+                              texture.y() + (j % texture.height()), 1, 1);
+                switch (kind) {
+                case MapEditorSubSelectionKind::Floors:
                 {
-                    element = nullptr;
+                    element = new FloorDatas(rect, up);
                     break;
                 }
-                element = new AutotileDatas(specialID, rect, up);
-                break;
+                case MapEditorSubSelectionKind::Autotiles:
+                {
+                    if (specialID == -1)
+                    {
+                        element = nullptr;
+                        break;
+                    }
+                    element = new AutotileDatas(specialID, rect, up);
+                    break;
+                }
+                default:
+                    element = nullptr;
+                    delete rect;
+                    break;
+                }
+                this->stockLand(shortPosition, element, kind, layerOn, false,
+                    false, false);
+            } else
+            {
+                this->eraseLand(shortPosition);
             }
-            default:
-                break;
-            }
-            this->stockLand(shortPosition, element, kind, layerOn);
         }
     }
 }
@@ -344,7 +356,8 @@ void ControlMapEditor::paintPinLand(Position &p, MapEditorSubSelectionKind kindA
 // -------------------------------------------------------
 
 void ControlMapEditor::stockLand(Position &p, LandDatas *landDatas,
-    MapEditorSubSelectionKind kind, bool layerOn, bool undoRedo, bool force)
+    MapEditorSubSelectionKind kind, bool layerOn, bool undoRedo, bool force, bool
+    updateLayer)
 {
     if (force || (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
         m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
@@ -356,7 +369,7 @@ void ControlMapEditor::stockLand(Position &p, LandDatas *landDatas,
         if (mapPortion != nullptr) {
 
             // Update layer
-            if (!undoRedo) {
+            if (updateLayer && !undoRedo) {
                 m_currentLayer = getLayer(mapPortion, m_distanceLand, p, layerOn,
                     MapEditorSelectionKind::Land);
                 p.setLayer(m_currentLayer);
@@ -406,6 +419,11 @@ void ControlMapEditor::removeLand(Position &p, DrawKind drawKind) {
             eraseLand(p);
             break;
         case DrawKind::Rectangle:
+            // Define start point of rectangle
+            if (!m_isDeletingRectangle)
+            {
+                m_positionStartRectangle = p;
+            }
             break;
         case DrawKind::Pin: {
             QRect tileset(0, 0, 1, 1);
