@@ -43,6 +43,8 @@ public:
     void setZOffset(int z);
     bool isHovered() const;
     void setIsHovered(bool b);
+    bool isInvisible() const;
+    void setIsInvisible(bool isInvisible);
 
     static QString jsonX;
     static QString jsonY;
@@ -66,6 +68,7 @@ protected:
     int m_yOffset;
     int m_zOffset;
     bool m_isHovered;
+    bool m_isInvisible;
 };
 
 #endif // MAPELEMENT_H

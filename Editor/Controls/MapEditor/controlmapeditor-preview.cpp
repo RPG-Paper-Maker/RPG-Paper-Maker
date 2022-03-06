@@ -128,14 +128,14 @@ void ControlMapEditor::updatePreviewLands(MapEditorSelectionKind kind,
                 }
                 QRect *rect = new QRect(tileset.x() + (i % tileset.width()),
                     tileset.y() + (j % tileset.height()), 1, 1);
-                if (m_isDeletingRectangle)
-                {
-                    rect->setRect(0, 0, 0, 0);
-                }
                 switch (subKind) {
                 case MapEditorSubSelectionKind::Floors:
                 {
                     FloorDatas *element = new FloorDatas(rect, up);
+                    if (m_isDeletingRectangle)
+                    {
+                        element->setIsInvisible(true);
+                    }
                     updatePreviewElement(shortPosition, shortPortion, element);
                     break;
                 }
@@ -145,6 +145,10 @@ void ControlMapEditor::updatePreviewLands(MapEditorSelectionKind kind,
                         break;
                     AutotileDatas *element = new AutotileDatas(specialID, rect,
                         up);
+                    if (m_isDeletingRectangle)
+                    {
+                        element->setIsInvisible(true);
+                    }
                     updatePreviewElement(shortPosition, shortPortion, element);
                     break;
                 }
@@ -221,10 +225,11 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
         == m_positionPreviousPreview.y() && qFuzzyCompare(m_firstMouseCoords
         .yPlus(), m_positionPreviousPreview.yPlus()))))
     {
-        int layer = getLayer(m_map->mapPortion(portion), m_distanceSprite,
-            m_positionPreviousPreview, layerOn, kind);
-        m_positionPreviousPreview.setLayer(layer);
         bool drawing = m_isDrawingRectangle || m_isDeletingRectangle;
+        int layer = getLayer(m_map->mapPortion(portion), m_distanceSprite,
+            drawing ? m_positionStartRectangle : m_positionPreviousPreview,
+            layerOn, kind);
+        m_positionPreviousPreview.setLayer(layer);
         int x = drawing ? qMin(m_positionPreviousPreview.x(),
             m_positionStartRectangle.x()) : m_positionPreviousPreview.x();
         int z = drawing ? qMin(m_positionPreviousPreview.z(),
@@ -273,14 +278,22 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
                         static_cast<int>(yPlus / 100));
                     topPosition.setYPlus(std::fmod(yPlus, 100));
                     topFloor = new FloorDatas(new QRect(defaultFloorRect));
+                    if (m_isDeletingRectangle)
+                    {
+                        topFloor->setIsInvisible(true);
+                    }
                     m_map->getLocalPortion(topPosition, topPortion);
                     updatePreviewElement(topPosition, topPortion, topFloor);
                     break;
                 default:
                     break;
                 }
-
+                qDebug() << QString::number(w) << QString::number(h);
                 if (element != nullptr) {
+                    if (m_isDeletingRectangle)
+                    {
+                        element->setIsInvisible(true);
+                    }
                     updatePreviewElement(position, portion, element);
 
                     if (kind == MapEditorSelectionKind::Mountains) {

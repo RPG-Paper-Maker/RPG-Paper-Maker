@@ -26,7 +26,8 @@ MapElement::MapElement() :
     m_xOffset(0),
     m_yOffset(0),
     m_zOffset(0),
-    m_isHovered(false)
+    m_isHovered(false),
+    m_isInvisible(false)
 {
 
 }
@@ -78,6 +79,16 @@ bool MapElement::isHovered() const {
 
 void MapElement::setIsHovered(bool b) {
     m_isHovered = b;
+}
+
+bool MapElement::isInvisible() const
+{
+    return m_isInvisible;
+}
+
+void MapElement::setIsInvisible(bool isInvisible)
+{
+    m_isInvisible = isInvisible;
 }
 
 MapEditorSelectionKind MapElement::getKind() const{

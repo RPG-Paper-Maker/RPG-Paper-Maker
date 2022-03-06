@@ -1645,13 +1645,9 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind kind,
     specialID, QPoint, bool layerOn, Qt::MouseButton button, int widthSquares,
     double widthPixels, int heightSquares, double heightPixels, QRect &defaultFloorRect)
 {
-    if (button == Qt::MouseButton::LeftButton)
+    if (button == Qt::MouseButton::LeftButton || button == Qt::MouseButton::RightButton)
     {
-        if (m_isDrawingWall) {
-            m_isDrawingWall = false;
-            addSpriteWall(drawKind, specialID);
-        }
-        if (m_isDrawingRectangle)
+        if (m_isDrawingRectangle || m_isDeletingRectangle)
         {
             switch (kind)
             {
@@ -1664,27 +1660,22 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind kind,
                     heightPixels, defaultFloorRect);
                 break;
             }
-            m_isDrawingRectangle = false;
         }
     }
-    else if (button == Qt::MouseButton::RightButton)
+    if (button == Qt::MouseButton::LeftButton)
+    {
+        if (m_isDrawingWall) {
+            m_isDrawingWall = false;
+            addSpriteWall(drawKind, specialID);
+        }
+        m_isDrawingRectangle = false;
+    } else if (button == Qt::MouseButton::RightButton)
     {
         if (m_isDeletingWall) {
             m_isDeletingWall = false;
             removeSpriteWall(drawKind);
         }
-        if (m_isDeletingRectangle)
-        {
-            switch (kind)
-            {
-            case MapEditorSelectionKind::Land:
-                this->paintRectangleLand(subKind, specialID, tileset, layerOn);
-                break;
-            default:
-                break;
-            }
-            m_isDeletingRectangle = false;
-        }
+        m_isDeletingRectangle = false;
     }
     m_positionStartRectangle.setCoords(0, 0, 0, 0);
 

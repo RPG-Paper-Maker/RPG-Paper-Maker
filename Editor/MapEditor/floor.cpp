@@ -71,6 +71,11 @@ void FloorDatas::initializeVertices(int squareSize, int width, int height,
                                    QVector<GLuint>& indexes, Position& position,
                                    int& count)
 {
+    if (m_isInvisible)
+    {
+        return;
+    }
+
     QVector3D pos, size, center;
     getPosSizeCenterLand(pos, size, center, squareSize, position);
 
@@ -78,10 +83,6 @@ void FloorDatas::initializeVertices(int squareSize, int width, int height,
     float y = (float)(textureRect()->y() * squareSize) / height;
     float w = (float)(textureRect()->width() * squareSize) / width;
     float h = (float)(textureRect()->height() * squareSize) / height;
-    if (w <= 0 || h <= 0)
-    {
-        return;
-    }
     float coefX = 0.1 / width;
     float coefY = 0.1 / height;
     x += coefX;

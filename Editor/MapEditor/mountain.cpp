@@ -353,6 +353,11 @@ void MountainDatas::initializeVertices(QVector<Vertex> &vertices,
     QVector<GLuint> &indexes, TextureSeveral *texture, Position &position,
     int &count)
 {
+    if (m_isInvisible)
+    {
+        return;
+    }
+
     QVector3D center, vecFrontA, vecBackA, vecFrontB, vecBackB;
     int squareSize, width, height, wp, hp;
     float yOffset, w, faceHeight, xLeft, xRight, yTop, yBot, zFront, zBack;

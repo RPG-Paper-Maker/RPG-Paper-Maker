@@ -158,16 +158,23 @@ MountainDatas* Mountains::tileExisting(Position &position, Portion &portion,
     MapPortion *mapPortion;
 
     RPM::get()->project()->currentMap()->getLocalPortion(position, newPortion);
+    MountainDatas * mountain = nullptr;
     if (portion == newPortion) {
-        return reinterpret_cast<MountainDatas *>(preview.value(position));
+        mountain = reinterpret_cast<MountainDatas *>(preview.value(position));
     } else { // If out of current portion
         mapPortion = RPM::get()->project()->currentMap()->mapPortion(newPortion);
-
-        return (mapPortion == nullptr) ? nullptr : reinterpret_cast<
-            MountainDatas *>(mapPortion->getMapElementAt(position,
-            MapEditorSelectionKind::Mountains, MapEditorSubSelectionKind
-            ::Mountains));
+        if (mapPortion == nullptr)
+        {
+            return nullptr;
+        } else
+        {
+            mountain = reinterpret_cast<MountainDatas *>(mapPortion
+                ->getMapElementAt(position, MapEditorSelectionKind::Mountains,
+                MapEditorSubSelectionKind::Mountains));
+        }
     }
+    return mountain == nullptr ? mountain : (mountain->isInvisible() ? nullptr :
+        mountain);
 }
 
 

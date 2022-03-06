@@ -329,6 +329,11 @@ int Object3DBoxDatas::minDistanceFromCenter() const {
 void Object3DBoxDatas::initializeVertices(QVector<Vertex> &vertices,
     QVector<GLuint> &indexes, Position &position, unsigned int &count)
 {
+    if (m_isInvisible)
+    {
+        return;
+    }
+
     QVector3D pos, size, center, vec;
     QVector2D tex;
     QList<float> textures;

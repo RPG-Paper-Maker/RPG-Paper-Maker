@@ -204,6 +204,11 @@ int Object3DCustomDatas::minDistanceFromCenter() const {
 void Object3DCustomDatas::initializeVertices(QVector<Vertex> &vertices,
     QVector<GLuint> &indexes, Position &position, unsigned int &count)
 {
+    if (m_isInvisible)
+    {
+        return;
+    }
+
     QVector3D positionOffset, size, center, vec, vecA, vecB;
     SystemCustomShape *shape;
     QPair<int, int> index;

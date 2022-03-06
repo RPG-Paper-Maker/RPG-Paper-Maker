@@ -173,6 +173,11 @@ void SpriteDatas::initializeVertices(int squareSize,
                                      Position& position, int& countStatic,
                                      int& countFace)
 {
+    if (m_isInvisible)
+    {
+        return;
+    }
+
     QVector3D pos, size, center, off;
 
     float x, y, w, h;

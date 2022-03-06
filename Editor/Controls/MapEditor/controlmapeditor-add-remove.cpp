@@ -1110,30 +1110,30 @@ void ControlMapEditor::removeMountain(Position &p, DrawKind drawKind) {
     switch (drawKind) {
     case DrawKind::Pencil:
     {
-        QList<Position> positions;
-        Position positionFloor;
-        int heightSquares;
-        double heightPixels;
-        bool isRemoved;
-
-        heightSquares = reinterpret_cast<MountainDatas *>(m_elementOnMountain)
+        int heightSquares = reinterpret_cast<MountainDatas *>(m_elementOnMountain)
             ->heightSquares();
-        heightPixels = reinterpret_cast<MountainDatas *>(m_elementOnMountain)
+        double heightPixels = reinterpret_cast<MountainDatas *>(m_elementOnMountain)
             ->heightPixels();
-        traceLine(m_previousMouseCoords, p, positions);
-        for (int i = 0; i < positions.size(); i++) {
-            isRemoved = eraseMountain(positions[i]);
-            if (isRemoved) {
+        QList<Position> positions;
+        this->traceLine(m_previousMouseCoords, p, positions);
+        bool isRemoved;
+        Position positionFloor;
+        for (int i = 0; i < positions.size(); i++)
+        {
+            isRemoved = this->eraseMountain(positions[i]);
+            if (isRemoved)
+            {
                 ControlMapEditor::getMountainTopFloorPosition(positionFloor,
                     positions[i], heightSquares, heightPixels);
-                eraseLand(positionFloor, false, true);
+                this->eraseLand(positionFloor, false, true);
             }
         }
-        isRemoved = eraseMountain(p);
-        if (isRemoved) {
+        isRemoved = this->eraseMountain(p);
+        if (isRemoved)
+        {
             ControlMapEditor::getMountainTopFloorPosition(positionFloor, p,
                 heightSquares, heightPixels);
-            eraseLand(positionFloor, false, true);
+            this->eraseLand(positionFloor, false, true);
         }
         break;
     }
@@ -1141,7 +1141,7 @@ void ControlMapEditor::removeMountain(Position &p, DrawKind drawKind) {
         break;
     case DrawKind::Rectangle:
         // Define start point of rectangle
-        if (!m_isDrawingRectangle)
+        if (!m_isDeletingRectangle)
         {
             m_positionStartRectangle = p;
         }
@@ -1211,7 +1211,6 @@ void ControlMapEditor::paintRectangleOthers(MapEditorSelectionKind kind,
     int z = qMin(p.z(), m_positionStartRectangle.z());
     int w = qAbs(p.x() - m_positionStartRectangle.x()) + 1;
     int h = qAbs(p.z() - m_positionStartRectangle.z()) + 1;
-    MapElement *element = nullptr;
     for (int i = 0; i < w; i++)
     {
         if (x + i > m_map->mapProperties()->length())
@@ -1235,7 +1234,6 @@ void ControlMapEditor::paintRectangleOthers(MapEditorSelectionKind kind,
                 }
                 case MapEditorSelectionKind::Mountains:
                 {
-                    element = new MountainDatas(specialID, ws, hs, wp, hp);
                     Position positionPreviousFloor = shortPosition;
                     bool isAdded = this->stockMountain(shortPosition, new MountainDatas(
                         specialID, ws, wp, hs, hp), positionPreviousFloor);
@@ -1255,12 +1253,48 @@ void ControlMapEditor::paintRectangleOthers(MapEditorSelectionKind kind,
                         ->invisibleRootItem(), specialID))));
                     break;
                 default:
-                    element = nullptr;
                     break;
                 }
             } else
             {
-
+                switch (kind) {
+                case MapEditorSelectionKind::Sprites:
+                {
+                    this->eraseSprite(shortPosition);
+                    break;
+                }
+                case MapEditorSelectionKind::Mountains:
+                {
+                    Portion portion;
+                    MapPortion *mapPortion = getMapPortion(shortPosition, portion, false);
+                    int heightSquares;
+                    double heightPixels;
+                    if (mapPortion != nullptr)
+                    {
+                        MountainDatas *mountain = reinterpret_cast<MountainDatas *>(
+                            mapPortion->getMapElementAt(shortPosition, kind, subKind));
+                        if (mountain != nullptr)
+                        {
+                            heightSquares = mountain->heightSquares();
+                            heightPixels = mountain->heightPixels();
+                        }
+                    }
+                    bool isRemoved = this->eraseMountain(shortPosition);
+                    Position positionFloor;
+                    if (isRemoved)
+                    {
+                        ControlMapEditor::getMountainTopFloorPosition(positionFloor,
+                            shortPosition, heightSquares, heightPixels);
+                        this->eraseLand(positionFloor, false, true);
+                    }
+                    break;
+                }
+                case MapEditorSelectionKind::Objects3D:
+                    this->eraseObject3D(shortPosition);
+                    break;
+                default:
+                    break;
+                }
             }
         }
     }
