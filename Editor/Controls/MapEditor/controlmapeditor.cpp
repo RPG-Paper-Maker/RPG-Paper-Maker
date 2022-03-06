@@ -1641,8 +1641,9 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
 // -------------------------------------------------------
 
 void ControlMapEditor::onMouseReleased(MapEditorSelectionKind kind,
-    MapEditorSubSelectionKind subKind, DrawKind drawKind, QRect &tilset, int
-    specialID, QPoint, bool layerOn, Qt::MouseButton button)
+    MapEditorSubSelectionKind subKind, DrawKind drawKind, QRect &tileset, int
+    specialID, QPoint, bool layerOn, Qt::MouseButton button, int widthSquares,
+    double widthPixels, int heightSquares, double heightPixels, QRect &defaultFloorRect)
 {
     if (button == Qt::MouseButton::LeftButton)
     {
@@ -1655,9 +1656,12 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind kind,
             switch (kind)
             {
             case MapEditorSelectionKind::Land:
-                this->paintRectangleLand(subKind, specialID, tilset, layerOn);
+                this->paintRectangleLand(subKind, specialID, tileset, layerOn);
                 break;
             default:
+                this->paintRectangleOthers(kind, subKind, specialID, tileset,
+                    layerOn, widthSquares, widthPixels, heightSquares,
+                    heightPixels, defaultFloorRect);
                 break;
             }
             m_isDrawingRectangle = false;
@@ -1674,7 +1678,7 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind kind,
             switch (kind)
             {
             case MapEditorSelectionKind::Land:
-                this->paintRectangleLand(subKind, specialID, tilset, layerOn);
+                this->paintRectangleLand(subKind, specialID, tileset, layerOn);
                 break;
             default:
                 break;

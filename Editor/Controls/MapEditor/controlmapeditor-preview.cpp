@@ -224,50 +224,72 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
         int layer = getLayer(m_map->mapPortion(portion), m_distanceSprite,
             m_positionPreviousPreview, layerOn, kind);
         m_positionPreviousPreview.setLayer(layer);
-
-        switch (kind) {
-        case MapEditorSelectionKind::Sprites:
-            element = getCompleteSprite(subKind, xOffset, yOffset, zOffset,
-                tileset, front, layerOn);
-            break;
-        case MapEditorSelectionKind::Objects3D:
-            if (specialID == -1) {
+        bool drawing = m_isDrawingRectangle || m_isDeletingRectangle;
+        int x = drawing ? qMin(m_positionPreviousPreview.x(),
+            m_positionStartRectangle.x()) : m_positionPreviousPreview.x();
+        int z = drawing ? qMin(m_positionPreviousPreview.z(),
+            m_positionStartRectangle.z()) : m_positionPreviousPreview.z();
+        int w = qAbs(m_positionPreviousPreview.x() - m_positionStartRectangle.x()) + 1;
+        int h = qAbs(m_positionPreviousPreview.z() - m_positionStartRectangle.z()) + 1;
+        for (int i = 0; i < (drawing ? w : 1); i++)
+        {
+            if (x + i > m_map->mapProperties()->length())
                 break;
-            }
-            element = Object3DDatas::instanciate(reinterpret_cast<
-                SystemObject3D *>(SuperListItem::getById(RPM::get()->project()
-                ->specialElementsDatas()->model(PictureKind::Object3D)
-                ->invisibleRootItem(), specialID)));
-            break;
-        case MapEditorSelectionKind::Mountains:
-            if (specialID == -1) {
-                break;
-            }
-            element = new MountainDatas(specialID, widthSquares, widthPixels,
-                heightSquares, heightPixels);
 
-            // Top floor adding
-            topPosition = m_positionPreviousPreview;
-            yPlus = m_positionPreviousPreview.yPlus() + heightPixels;
-            topPosition.setY(m_positionPreviousPreview.y() + heightSquares +
-                static_cast<int>(yPlus / 100));
-            topPosition.setYPlus(std::fmod(yPlus, 100));
-            topFloor = new FloorDatas(new QRect(defaultFloorRect));
-            m_map->getLocalPortion(topPosition, topPortion);
-            updatePreviewElement(topPosition, topPortion, topFloor);
-            break;
-        default:
-            break;
-        }
+            for (int j = 0; j < (drawing ? h : 1); j++)
+            {
+                if (z + j > m_map->mapProperties()->width())
+                    break;
+                Position position(x + i, m_positionPreviousPreview.y(),
+                    m_positionPreviousPreview.yPlus(), z + j, drawing ?
+                    m_positionStartRectangle.layer() + (layerOn &&
+                    m_isDrawingRectangle ? 1 : 0) : m_positionPreviousPreview
+                    .layer());
+                switch (kind) {
+                case MapEditorSelectionKind::Sprites:
+                    element = getCompleteSprite(subKind, xOffset, yOffset, zOffset,
+                        tileset, front, layerOn);
+                    break;
+                case MapEditorSelectionKind::Objects3D:
+                    if (specialID == -1) {
+                        break;
+                    }
+                    element = Object3DDatas::instanciate(reinterpret_cast<
+                        SystemObject3D *>(SuperListItem::getById(RPM::get()->project()
+                        ->specialElementsDatas()->model(PictureKind::Object3D)
+                        ->invisibleRootItem(), specialID)));
+                    break;
+                case MapEditorSelectionKind::Mountains:
+                    if (specialID == -1) {
+                        break;
+                    }
+                    element = new MountainDatas(specialID, widthSquares, widthPixels,
+                        heightSquares, heightPixels);
 
-        if (element != nullptr) {
-            updatePreviewElement(m_positionPreviousPreview, portion, element);
+                    // Top floor adding
+                    topPosition = position;
+                    yPlus = position.yPlus() + heightPixels;
+                    topPosition.setY(position.y() + heightSquares +
+                        static_cast<int>(yPlus / 100));
+                    topPosition.setYPlus(std::fmod(yPlus, 100));
+                    topFloor = new FloorDatas(new QRect(defaultFloorRect));
+                    m_map->getLocalPortion(topPosition, topPortion);
+                    updatePreviewElement(topPosition, topPortion, topFloor);
+                    break;
+                default:
+                    break;
+                }
 
-            if (kind == MapEditorSelectionKind::Mountains) {
-                mapPortion = m_map->mapPortion(portion);
-                mapPortion->updateMountains(m_positionPreviousPreview,
-                    m_portionsToUpdate, m_portionsToSave,
-                    m_portionsPreviousPreview);
+                if (element != nullptr) {
+                    updatePreviewElement(position, portion, element);
+
+                    if (kind == MapEditorSelectionKind::Mountains) {
+                        mapPortion = m_map->mapPortion(portion);
+                        mapPortion->updateMountains(position,
+                            m_portionsToUpdate, m_portionsToSave,
+                            m_portionsPreviousPreview);
+                    }
+                }
             }
         }
     }

@@ -839,21 +839,27 @@ void WidgetMapEditor::mouseReleaseEvent(QMouseEvent *event)
     {
         Qt::MouseButton button = event->button();
         QRect tileset;
+        QRect defaultFloorRect;
         if (m_menuBar != nullptr && m_detection == nullptr)
         {
             m_panelTextures->getTilesetTexture(tileset);
             MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
             int specialID = m_panelTextures->getID();
+            m_panelTextures->getDefaultFloorRect(defaultFloorRect);
             m_control.onMouseReleased(m_menuBar->selectionKind(), subSelection,
                 m_menuBar->drawKind(), tileset, specialID, event->pos(), m_menuBar
-                ->layerOn(), button);
+                ->layerOn(), button, m_panelTextures->getWidthSquares(),
+                m_panelTextures->getWidthPixels(), m_panelTextures->getHeightSquares(),
+                m_panelTextures->getHeightPixels(), defaultFloorRect);
         } else if (m_detection != nullptr)
         {
             tileset.setWidth(1);
             tileset.setHeight(1);
+            defaultFloorRect.setWidth(1);
+            defaultFloorRect.setWidth(1);
             m_control.onMouseReleased(MapEditorSelectionKind::Objects3D,
                 MapEditorSubSelectionKind::Object3D, DrawKind::Pencil, tileset,
-                1, event->pos(), false, button);
+                1, event->pos(), false, button, 0, 0, 1, 0, defaultFloorRect);
         }
     }
     this->setFocus();

@@ -71,11 +71,11 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
             addSprite(p, subSelection, drawKind, layerOn, tileset);
             break;
         case MapEditorSelectionKind::Objects3D:
-            addObject3D(p, specialID);
+            addObject3D(p, specialID, drawKind);
             break;
         case MapEditorSelectionKind::Mountains:
             addMountain(p, specialID, widthSquares, widthPixels, heightSquares,
-                heightPixels, defaultFloorRect);
+                heightPixels, defaultFloorRect, drawKind);
             break;
         default:
             break;
@@ -110,12 +110,12 @@ void ControlMapEditor::remove(MapElement *element, MapEditorSelectionKind
         break;
     case MapEditorSelectionKind::Objects3D:
         if (element != nullptr) {
-            removeObject3D(p);
+            removeObject3D(p, drawKind);
         }
         break;
     case MapEditorSelectionKind::Mountains:
         if (element != nullptr) {
-            removeMountain(p);
+            removeMountain(p, drawKind);
         }
         break;
     case MapEditorSelectionKind::Objects:
@@ -508,6 +508,11 @@ void ControlMapEditor::addSprite(Position &p, MapEditorSubSelectionKind kind,
     case DrawKind::Pin:
         break;
     case DrawKind::Rectangle:
+        // Define start point of rectangle
+        if (!m_isDrawingRectangle)
+        {
+            m_positionStartRectangle = p;
+        }
         break;
     default:
         break;
@@ -545,7 +550,7 @@ void ControlMapEditor::addSpriteWall(DrawKind drawKind, int specialID)
 // -------------------------------------------------------
 
 void ControlMapEditor::stockSprite(Position &p, SpriteDatas *sprite,
-    MapEditorSubSelectionKind kind, bool layerOn, bool undoRedo)
+    MapEditorSubSelectionKind kind, bool layerOn, bool undoRedo, bool updateLayer)
 {
     if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
         m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
@@ -557,7 +562,8 @@ void ControlMapEditor::stockSprite(Position &p, SpriteDatas *sprite,
         if (mapPortion != nullptr) {
 
             // Update layer
-            if (!undoRedo) {
+            if (updateLayer && !undoRedo)
+            {
                 m_currentLayer = getLayer(mapPortion, m_distanceSprite, p, layerOn,
                     MapEditorSelectionKind::Sprites);
                 p.setLayer(m_currentLayer);
@@ -677,6 +683,11 @@ void ControlMapEditor::removeSprite(Position &p, DrawKind drawKind) {
             eraseSprite(p);
             break;
         case DrawKind::Rectangle:
+            // Define start point of rectangle
+            if (!m_isDeletingRectangle)
+            {
+                m_positionStartRectangle = p;
+            }
             break;
         default:
             break;
@@ -798,28 +809,47 @@ void ControlMapEditor::eraseSpriteWall(Position &position, bool undoRedo)
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::addObject3D(Position &p, int specialID) {
+void ControlMapEditor::addObject3D(Position &p, int specialID, DrawKind drawKind) {
     if (specialID == -1) {
         return;
     }
 
-    QList<Position> positions;
-    Object3DDatas *object3D;
-    SystemObject3D *special;
+    // Pencil
+    switch (drawKind) {
+    case DrawKind::Pencil:
+    {
+        QList<Position> positions;
+        Object3DDatas *object3D;
+        SystemObject3D *special;
 
-    special = m_detection == nullptr ? reinterpret_cast<SystemObject3D *>(
-        SuperListItem::getById(RPM::get()->project()->specialElementsDatas()
-        ->model(PictureKind::Object3D)->invisibleRootItem(), specialID)) :
-        m_detection->instanciateObject();
-    object3D = Object3DDatas::instanciate(special);
-    stockObject3D(p, object3D);
-    if (m_detection == nullptr) {
-        traceLine(m_previousMouseCoords, p, positions);
-        for (int i = 0; i < positions.size(); i++) {
-            object3D = Object3DDatas::instanciate(special);
-            stockObject3D(positions[i], object3D);
+        special = m_detection == nullptr ? reinterpret_cast<SystemObject3D *>(
+            SuperListItem::getById(RPM::get()->project()->specialElementsDatas()
+            ->model(PictureKind::Object3D)->invisibleRootItem(), specialID)) :
+            m_detection->instanciateObject();
+        object3D = Object3DDatas::instanciate(special);
+        stockObject3D(p, object3D);
+        if (m_detection == nullptr) {
+            traceLine(m_previousMouseCoords, p, positions);
+            for (int i = 0; i < positions.size(); i++) {
+                object3D = Object3DDatas::instanciate(special);
+                stockObject3D(positions[i], object3D);
+            }
         }
+        break;
     }
+    case DrawKind::Pin:
+        break;
+    case DrawKind::Rectangle:
+        // Define start point of rectangle
+        if (!m_isDrawingRectangle)
+        {
+            m_positionStartRectangle = p;
+        }
+        break;
+    default:
+        break;
+    }
+
     m_previousMouseCoords = p;
 }
 
@@ -881,16 +911,34 @@ void ControlMapEditor::stockObject3D(Position &p, Object3DDatas *object3D, bool
 
 // -------------------------------------------------------
 
-void ControlMapEditor::removeObject3D(Position &p) {
+void ControlMapEditor::removeObject3D(Position &p, DrawKind drawKind) {
     QList<Position> positions;
 
-    if (m_detection == nullptr) {
-        traceLine(m_previousMouseCoords, p, positions);
-        for (int i = 0; i < positions.size(); i++) {
-            eraseObject3D(positions[i]);
+    // Pencil
+    switch (drawKind) {
+    case DrawKind::Pencil:
+    {
+        if (m_detection == nullptr) {
+            traceLine(m_previousMouseCoords, p, positions);
+            for (int i = 0; i < positions.size(); i++) {
+                eraseObject3D(positions[i]);
+            }
         }
+        eraseObject3D(p);
+        break;
     }
-    eraseObject3D(p);
+    case DrawKind::Pin:
+        break;
+    case DrawKind::Rectangle:
+        // Define start point of rectangle
+        if (!m_isDeletingRectangle)
+        {
+            m_positionStartRectangle = p;
+        }
+        break;
+    default:
+        break;
+    }
 
     m_previousMouseCoords = p;
 }
@@ -950,40 +998,59 @@ void ControlMapEditor::eraseObject3D(Position &p, bool undoRedo, bool deletePtr)
 
 void ControlMapEditor::addMountain(Position &p, int specialID, int widthSquares,
     double widthPixels, int heightSquares, double heightPixels, QRect
-    &defaultFloorRect)
+    &defaultFloorRect, DrawKind drawKind)
 {
     if (specialID == -1) {
         return;
     }
 
-    QList<Position> positions;
-    MountainDatas *mountain;
-    FloorDatas *topFloor;
-    Position positionFloor, positionPreviousFloor;
-    bool isAdded;
+    // Pencil
+    switch (drawKind) {
+    case DrawKind::Pencil:
+    {
+        QList<Position> positions;
+        MountainDatas *mountain;
+        FloorDatas *topFloor;
+        Position positionFloor, positionPreviousFloor;
+        bool isAdded;
 
-    positionPreviousFloor = p;
-    mountain = new MountainDatas(specialID, widthSquares, widthPixels,
-        heightSquares, heightPixels);
-    isAdded = stockMountain(p, mountain, positionPreviousFloor);
-    topFloor = new FloorDatas(new QRect(defaultFloorRect));
-    ControlMapEditor::getMountainTopFloorPosition(positionFloor, p,
-        heightSquares, heightPixels);
-    eraseLand(positionPreviousFloor, false, isAdded);
-    stockLand(positionFloor, topFloor, MapEditorSubSelectionKind::Floors, false,
-        false, isAdded);
-    traceLine(m_previousMouseCoords, p, positions);
-    for (int i = 0; i < positions.size(); i++) {
+        positionPreviousFloor = p;
         mountain = new MountainDatas(specialID, widthSquares, widthPixels,
             heightSquares, heightPixels);
-        isAdded = stockMountain(positions[i], mountain, positionPreviousFloor);
+        isAdded = stockMountain(p, mountain, positionPreviousFloor);
         topFloor = new FloorDatas(new QRect(defaultFloorRect));
-        ControlMapEditor::getMountainTopFloorPosition(positionFloor, positions[i
-            ], heightSquares, heightPixels);
+        ControlMapEditor::getMountainTopFloorPosition(positionFloor, p,
+            heightSquares, heightPixels);
         eraseLand(positionPreviousFloor, false, isAdded);
-        stockLand(positionFloor, topFloor, MapEditorSubSelectionKind::Floors,
-            false, false, isAdded);
+        stockLand(positionFloor, topFloor, MapEditorSubSelectionKind::Floors, false,
+            false, isAdded);
+        traceLine(m_previousMouseCoords, p, positions);
+        for (int i = 0; i < positions.size(); i++) {
+            mountain = new MountainDatas(specialID, widthSquares, widthPixels,
+                heightSquares, heightPixels);
+            isAdded = stockMountain(positions[i], mountain, positionPreviousFloor);
+            topFloor = new FloorDatas(new QRect(defaultFloorRect));
+            ControlMapEditor::getMountainTopFloorPosition(positionFloor, positions[i
+                ], heightSquares, heightPixels);
+            eraseLand(positionPreviousFloor, false, isAdded);
+            stockLand(positionFloor, topFloor, MapEditorSubSelectionKind::Floors,
+                false, false, isAdded);
+        }
+        break;
     }
+    case DrawKind::Pin:
+        break;
+    case DrawKind::Rectangle:
+        // Define start point of rectangle
+        if (!m_isDrawingRectangle)
+        {
+            m_positionStartRectangle = p;
+        }
+        break;
+    default:
+        break;
+    }
+
     m_previousMouseCoords = p;
 }
 
@@ -1038,31 +1105,49 @@ bool ControlMapEditor::stockMountain(Position &p, MountainDatas *mountain,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::removeMountain(Position &p) {
-    QList<Position> positions;
-    Position positionFloor;
-    int heightSquares;
-    double heightPixels;
-    bool isRemoved;
+void ControlMapEditor::removeMountain(Position &p, DrawKind drawKind) {
+    // Pencil
+    switch (drawKind) {
+    case DrawKind::Pencil:
+    {
+        QList<Position> positions;
+        Position positionFloor;
+        int heightSquares;
+        double heightPixels;
+        bool isRemoved;
 
-    heightSquares = reinterpret_cast<MountainDatas *>(m_elementOnMountain)
-        ->heightSquares();
-    heightPixels = reinterpret_cast<MountainDatas *>(m_elementOnMountain)
-        ->heightPixels();
-    traceLine(m_previousMouseCoords, p, positions);
-    for (int i = 0; i < positions.size(); i++) {
-        isRemoved = eraseMountain(positions[i]);
+        heightSquares = reinterpret_cast<MountainDatas *>(m_elementOnMountain)
+            ->heightSquares();
+        heightPixels = reinterpret_cast<MountainDatas *>(m_elementOnMountain)
+            ->heightPixels();
+        traceLine(m_previousMouseCoords, p, positions);
+        for (int i = 0; i < positions.size(); i++) {
+            isRemoved = eraseMountain(positions[i]);
+            if (isRemoved) {
+                ControlMapEditor::getMountainTopFloorPosition(positionFloor,
+                    positions[i], heightSquares, heightPixels);
+                eraseLand(positionFloor, false, true);
+            }
+        }
+        isRemoved = eraseMountain(p);
         if (isRemoved) {
-            ControlMapEditor::getMountainTopFloorPosition(positionFloor,
-                positions[i], heightSquares, heightPixels);
+            ControlMapEditor::getMountainTopFloorPosition(positionFloor, p,
+                heightSquares, heightPixels);
             eraseLand(positionFloor, false, true);
         }
+        break;
     }
-    isRemoved = eraseMountain(p);
-    if (isRemoved) {
-        ControlMapEditor::getMountainTopFloorPosition(positionFloor, p,
-            heightSquares, heightPixels);
-        eraseLand(positionFloor, false, true);
+    case DrawKind::Pin:
+        break;
+    case DrawKind::Rectangle:
+        // Define start point of rectangle
+        if (!m_isDrawingRectangle)
+        {
+            m_positionStartRectangle = p;
+        }
+        break;
+    default:
+        break;
     }
 
     m_previousMouseCoords = p;
@@ -1111,4 +1196,72 @@ bool ControlMapEditor::eraseMountain(Position &p, bool undoRedo) {
     }
 
     return false;
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::paintRectangleOthers(MapEditorSelectionKind kind,
+    MapEditorSubSelectionKind subKind, int specialID, QRect &texture, bool layerOn,
+    int ws, int wp, double hs, double hp, QRect &defaultFloorRect)
+{
+    bool drawing = m_isDrawingRectangle || m_isDeletingRectangle;
+    Position p = m_positionPreviousPreview;
+    bool front = m_camera->cameraFront(m_ray.direction(), p.angleY());
+    int x = qMin(p.x(), m_positionStartRectangle.x());
+    int z = qMin(p.z(), m_positionStartRectangle.z());
+    int w = qAbs(p.x() - m_positionStartRectangle.x()) + 1;
+    int h = qAbs(p.z() - m_positionStartRectangle.z()) + 1;
+    MapElement *element = nullptr;
+    for (int i = 0; i < w; i++)
+    {
+        if (x + i > m_map->mapProperties()->length())
+            break;
+
+        for (int j = 0; j < h; j++)
+        {
+            if (z + j > m_map->mapProperties()->width())
+                break;
+            Position shortPosition(x + i, p.y(), p.yPlus(), z + j, drawing ?
+                m_positionStartRectangle.layer() + (layerOn &&
+                m_isDrawingRectangle ? 1 : 0) : p.layer());
+            if (m_isDrawingRectangle)
+            {
+                switch (kind) {
+                case MapEditorSelectionKind::Sprites:
+                {
+                    this->stockSprite(shortPosition, new SpriteDatas(subKind,
+                        new QRect(texture), front), subKind, layerOn, false, false);
+                    break;
+                }
+                case MapEditorSelectionKind::Mountains:
+                {
+                    element = new MountainDatas(specialID, ws, hs, wp, hp);
+                    Position positionPreviousFloor = shortPosition;
+                    bool isAdded = this->stockMountain(shortPosition, new MountainDatas(
+                        specialID, ws, wp, hs, hp), positionPreviousFloor);
+                    Position positionFloor;
+                    ControlMapEditor::getMountainTopFloorPosition(positionFloor,
+                        shortPosition, hs, hp);
+                    this->eraseLand(positionPreviousFloor, false, isAdded);
+                    this->stockLand(positionFloor, new FloorDatas(new QRect(
+                        defaultFloorRect)), MapEditorSubSelectionKind::Floors,
+                        false, false, isAdded);
+                    break;
+                }
+                case MapEditorSelectionKind::Objects3D:
+                    this->stockObject3D(shortPosition, Object3DDatas::instanciate(
+                        reinterpret_cast<SystemObject3D *>(SuperListItem::getById(
+                        RPM::get()->project()->specialElementsDatas()->modelObjects3D()
+                        ->invisibleRootItem(), specialID))));
+                    break;
+                default:
+                    element = nullptr;
+                    break;
+                }
+            } else
+            {
+
+            }
+        }
+    }
 }

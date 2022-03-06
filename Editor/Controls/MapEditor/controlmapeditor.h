@@ -169,25 +169,29 @@ public:
         int yOffset, int zOffset, QRect &tileset, bool front, bool layerOn) const;
     void addSpriteWall(DrawKind drawKind, int specialID);
     void stockSprite(Position &p, SpriteDatas *sprite,
-        MapEditorSubSelectionKind kind, bool layerOn, bool undoRedo = false);
+        MapEditorSubSelectionKind kind, bool layerOn, bool undoRedo = false, bool
+        updateLayer = true);
     void stockSpriteWall(Position &position, SpriteWallDatas *sprite,
         bool undoRedo = false);
     void removeSprite(Position &p, DrawKind drawKind);
     void removeSpriteWall(DrawKind drawKind);
     void eraseSprite(Position &p, bool undoRedo = false, bool deletePtr = true);
     void eraseSpriteWall(Position &position, bool undoRedo = false);
-    void addObject3D(Position &p, int specialID);
+    void addObject3D(Position &p, int specialID, DrawKind drawKind);
     void stockObject3D(Position &p, Object3DDatas *object3D, bool undoRedo =
         false);
-    void removeObject3D(Position &p);
+    void removeObject3D(Position &p, DrawKind drawKind);
     void eraseObject3D(Position &p, bool undoRedo = false, bool deletePtr = true);
     void addMountain(Position &p, int specialID, int widthSquares, double
         widthPixels, int heightSquares, double heightPixels, QRect
-        &defaultFloorRect);
+        &defaultFloorRect, DrawKind drawKind);
     bool stockMountain(Position &p, MountainDatas *mountain, Position
         &positionPreviousFloor, bool undoRedo = false);
-    void removeMountain(Position &p);
+    void removeMountain(Position &p, DrawKind drawKind);
     bool eraseMountain(Position &p, bool undoRedo = false);
+    void paintRectangleOthers(MapEditorSelectionKind kind, MapEditorSubSelectionKind
+        subKind, int specialID, QRect &texture, bool layerOn, int ws,
+        int wp, double hs, double hp, QRect &defaultFloorRect);
     void setCursorObjectPosition(Position &p);
     void updateMenuContext();
     void showObjectMenuContext();
@@ -247,8 +251,9 @@ public:
         widthPixels, int heightSquares, double heightPixels, QRect
         &defaultFloorRect, QPoint point, Qt::MouseButton button);
     void onMouseReleased(MapEditorSelectionKind kind, MapEditorSubSelectionKind
-        subKind, DrawKind drawKind, QRect &tilset, int specialID, QPoint,
-        bool layerOn, Qt::MouseButton button);
+        subKind, DrawKind drawKind, QRect &tileset, int specialID, QPoint,
+        bool layerOn, Qt::MouseButton button, int widthSquares, double widthPixels,
+        int heightSquares, double heightPixels, QRect &defaultFloorRect);
     void onKeyPressed(int k, double speed);
     void onKeyReleased(int);
 
