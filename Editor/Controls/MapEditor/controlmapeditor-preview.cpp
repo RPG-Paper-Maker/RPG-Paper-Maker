@@ -236,11 +236,11 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
             m_positionStartRectangle.z()) : m_positionPreviousPreview.z();
         int w = qAbs(m_positionPreviousPreview.x() - m_positionStartRectangle.x()) + 1;
         int h = qAbs(m_positionPreviousPreview.z() - m_positionStartRectangle.z()) + 1;
+        Position p = drawing ? m_positionStartRectangle : m_positionPreviousPreview;
         for (int i = 0; i < (drawing ? w : 1); i++)
         {
             if (x + i > m_map->mapProperties()->length())
                 break;
-
             for (int j = 0; j < (drawing ? h : 1); j++)
             {
                 if (z + j > m_map->mapProperties()->width())
@@ -249,7 +249,9 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
                     m_positionPreviousPreview.yPlus(), z + j, drawing ?
                     m_positionStartRectangle.layer() + (layerOn &&
                     m_isDrawingRectangle ? 1 : 0) : m_positionPreviousPreview
-                    .layer());
+                    .layer(), p.centerX(),
+                    p.centerZ(), p
+                    .angleY());
                 switch (kind) {
                 case MapEditorSelectionKind::Sprites:
                     element = getCompleteSprite(subKind, xOffset, yOffset, zOffset,

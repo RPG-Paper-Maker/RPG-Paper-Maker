@@ -449,6 +449,10 @@ void WidgetMenuBarMapEditor::updateSelection(QAction *action)
             {
                 actionRectangle()->setIcon(QIcon(":/icons/Ressources/rectangle.png"));
                 actionRectangle()->setEnabled(true);
+                if (this->drawKind() == DrawKind::Pin)
+                {
+                    this->forceRight(static_cast<int>(MapEditorModesKind::DrawPencil));
+                }
                 actionPin()->setEnabled(false);
                 actionPin()->setIcon(QIcon(":/icons/Ressources/pin_disable.png"));
             }
@@ -515,6 +519,10 @@ void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu, QAction
         {
             actionRectangle()->setIcon(QIcon(":/icons/Ressources/rectangle.png"));
             actionRectangle()->setEnabled(true);
+            if (this->drawKind() == DrawKind::Pin)
+            {
+                this->forceRight(static_cast<int>(MapEditorModesKind::DrawPencil));
+            }
             actionPin()->setEnabled(false);
             actionPin()->setIcon(QIcon(":/icons/Ressources/pin_disable.png"));
         }
@@ -611,7 +619,11 @@ void WidgetMenuBarMapEditor::forceNoneLayer()
 void WidgetMenuBarMapEditor::forceNoRotation()
 {
     WidgetMenuBarMapEditor *bar = getBarRight();
-    this->forceRight(static_cast<int>(MapEditorModesKind::DrawPencil));
+    if (this->drawKind() == DrawKind::Pin && !bar->actions().at(static_cast<int>(
+        MapEditorModesKind::DrawPin))->isEnabled())
+    {
+        this->forceRight(static_cast<int>(MapEditorModesKind::DrawPencil));
+    }
     QAction *action = bar->actions().at(static_cast<int>(MapEditorModesKind
         ::TransformRotate));
     action->setEnabled(false);

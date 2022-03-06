@@ -1205,12 +1205,12 @@ void ControlMapEditor::paintRectangleOthers(MapEditorSelectionKind kind,
     int ws, int wp, double hs, double hp, QRect &defaultFloorRect)
 {
     bool drawing = m_isDrawingRectangle || m_isDeletingRectangle;
-    Position p = m_positionPreviousPreview;
-    bool front = m_camera->cameraFront(m_ray.direction(), p.angleY());
-    int x = qMin(p.x(), m_positionStartRectangle.x());
-    int z = qMin(p.z(), m_positionStartRectangle.z());
-    int w = qAbs(p.x() - m_positionStartRectangle.x()) + 1;
-    int h = qAbs(p.z() - m_positionStartRectangle.z()) + 1;
+    bool front = m_camera->cameraFront(m_ray.direction(), m_positionPreviousPreview.angleY());
+    int x = qMin(m_positionPreviousPreview.x(), m_positionStartRectangle.x());
+    int z = qMin(m_positionPreviousPreview.z(), m_positionStartRectangle.z());
+    int w = qAbs(m_positionPreviousPreview.x() - m_positionStartRectangle.x()) + 1;
+    int h = qAbs(m_positionPreviousPreview.z() - m_positionStartRectangle.z()) + 1;
+    Position p = drawing ? m_positionStartRectangle : m_positionPreviousPreview;
     for (int i = 0; i < w; i++)
     {
         if (x + i > m_map->mapProperties()->length())
@@ -1220,9 +1220,11 @@ void ControlMapEditor::paintRectangleOthers(MapEditorSelectionKind kind,
         {
             if (z + j > m_map->mapProperties()->width())
                 break;
-            Position shortPosition(x + i, p.y(), p.yPlus(), z + j, drawing ?
-                m_positionStartRectangle.layer() + (layerOn &&
-                m_isDrawingRectangle ? 1 : 0) : p.layer());
+            Position shortPosition(x + i, m_positionPreviousPreview.y(),
+                m_positionPreviousPreview.yPlus(), z + j, drawing ?
+                m_positionStartRectangle.layer() + (layerOn && m_isDrawingRectangle
+                ? 1 : 0) : m_positionPreviousPreview.layer(), p.centerX(), p.centerZ(),
+                p.angleY());
             if (m_isDrawingRectangle)
             {
                 switch (kind) {
