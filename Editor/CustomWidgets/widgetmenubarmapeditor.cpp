@@ -478,6 +478,8 @@ void WidgetMenuBarMapEditor::updateSelection(QAction *action)
             this->forceSquare();
         } else {
             m_actionPixel->setIcon(QIcon(":/icons/Ressources/pixel.png"));
+            m_actionTranslate->setEnabled(true);
+            m_actionTranslate->setIcon(QIcon(":/icons/Ressources/translate.png"));
         }
     }
 
@@ -547,6 +549,8 @@ void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu, QAction
         this->forceSquare();
     } else {
         m_actionPixel->setIcon(QIcon(":/icons/Ressources/pixel.png"));
+        m_actionTranslate->setEnabled(true);
+        m_actionTranslate->setIcon(QIcon(":/icons/Ressources/translate.png"));
     }
 }
 
@@ -560,7 +564,8 @@ void WidgetMenuBarMapEditor::updateRight(QAction *action)
     int index = bar->actions().indexOf(action);
     listLeft << static_cast<int>(MapEditorModesKind::Square) <<
                  static_cast<int>(MapEditorModesKind::Pixel);
-    listCenter << static_cast<int>(MapEditorModesKind::TransformRotate) <<
+    listCenter << static_cast<int>(MapEditorModesKind::TransformTranslate) <<
+                  static_cast<int>(MapEditorModesKind::TransformRotate) <<
                 static_cast<int>(MapEditorModesKind::DrawPencil) <<
                   static_cast<int>(MapEditorModesKind::DrawRectangle) <<
                   static_cast<int>(MapEditorModesKind::DrawPin);
@@ -568,7 +573,7 @@ void WidgetMenuBarMapEditor::updateRight(QAction *action)
                  static_cast<int>(MapEditorModesKind::LayerOn);
 
     // Deselect previous selected action
-    if (index >= static_cast<int>(MapEditorModesKind::TransformRotate))
+    if (index >= static_cast<int>(MapEditorModesKind::TransformTranslate))
     {
         if (index >= static_cast<int>(MapEditorModesKind::LayerNone))
         {
@@ -600,6 +605,11 @@ void WidgetMenuBarMapEditor::forceSquare()
     this->forceRight(static_cast<int>(MapEditorModesKind::Square));
     action->setEnabled(false);
     action->setIcon(QIcon(":/icons/Ressources/pixel_disable.png"));
+    action = bar->actions().at(static_cast<int>(MapEditorModesKind
+            ::TransformTranslate));
+    this->forceRight(static_cast<int>(MapEditorModesKind::DrawPencil));
+    action->setEnabled(false);
+    action->setIcon(QIcon(":/icons/Ressources/translate_disable.png"));
 }
 
 // -------------------------------------------------------
