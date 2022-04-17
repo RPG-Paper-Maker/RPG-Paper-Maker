@@ -120,8 +120,10 @@ void PanelTextures::hideAll() {
 void PanelTextures::showTileset() {
     m_kind = PictureKind::None;
 
-    if (m_drawKind == DrawKind::Rotate) {
-        this->showTransformations();
+    if (m_drawKind == DrawKind::Translate || m_drawKind == DrawKind::Rotate ||
+        m_drawKind == DrawKind::Scale)
+    {
+        this->showTransformations(m_drawKind);
     } else {
         hideAll();
         ui->widgetTilesetSelector->show();
@@ -335,8 +337,10 @@ void PanelTextures::showMountains(SystemTileset *tileset) {
 void PanelTextures::showObjects3D(SystemTileset *tileset) {
     m_kind = PictureKind::Object3D;
 
-    if (m_drawKind == DrawKind::Rotate) {
-        this->showTransformations();
+    if (m_drawKind == DrawKind::Translate || m_drawKind == DrawKind::Rotate ||
+        m_drawKind == DrawKind::Scale)
+    {
+        this->showTransformations(m_drawKind);
     } else {
         m_tileset = tileset;
         tileset->updateModel3DObjects();
@@ -347,11 +351,12 @@ void PanelTextures::showObjects3D(SystemTileset *tileset) {
 
 // -------------------------------------------------------
 
-void PanelTextures::showTransformations() {
+void PanelTextures::showTransformations(DrawKind drawKind) {
     int width, height;
-
-    m_drawKind = DrawKind::Rotate;
+    m_drawKind = drawKind;
     this->hideAll();
+    ui->panelTransformations->initialize(drawKind);
+    ui->panelTransformations->translate(drawKind);
     ui->panelTransformations->show();
     width = this->parentWidget()->width();
     this->setFixedSize(width, this->parentWidget()->height());
@@ -536,7 +541,7 @@ void PanelTextures::onSplitterMoved(int, int) {
     if (m_drawKind == DrawKind::Translate || m_drawKind == DrawKind::Rotate ||
         m_drawKind == DrawKind::Scale)
     {
-        this->showTransformations();
+        this->showTransformations(m_drawKind);
     } else {
         if (m_kind == PictureKind::None)
             updateTilesetImage();

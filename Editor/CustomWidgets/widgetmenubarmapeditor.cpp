@@ -860,7 +860,7 @@ void WidgetMenuBarMapEditor::on_menuEvents_triggered(QAction *action)
 
 void WidgetMenuBarMapEditor::on_actionRotateTriggered(bool)
 {
-    MainWindow::get()->panelTextures()->showTransformations();
+    MainWindow::get()->panelTextures()->showTransformations(DrawKind::Rotate);
 }
 
 // -------------------------------------------------------

@@ -1,4 +1,4 @@
-/*
+﻿/*
     RPG Paper Maker Copyright (C) 2017-2022 Wano
 
     RPG Paper Maker engine is under proprietary license.
@@ -23,7 +23,8 @@ PanelSubTransformation::PanelSubTransformation(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PanelSubTransformation),
     m_mapElementPosition(nullptr),
-    m_axisKind(AxisKind::X)
+    m_axisKind(AxisKind::X),
+    m_drawKind(DrawKind::Translate)
 {
     ui->setupUi(this);
 
@@ -50,7 +51,7 @@ bool PanelSubTransformation::operation() const {
 
 // -------------------------------------------------------
 
-double PanelSubTransformation::angle() const {
+double PanelSubTransformation::value() const {
     return ui->doubleSpinBoxAngle->value();
 }
 
@@ -62,7 +63,9 @@ bool PanelSubTransformation::applyLeftRightClick() const {
 
 // -------------------------------------------------------
 
-void PanelSubTransformation::initializeRotation(AxisKind ak) {
+void PanelSubTransformation::initialize(DrawKind drawKind, AxisKind ak)
+{
+    m_drawKind = drawKind;
     m_axisKind = ak;
     ui->comboBoxOperation->setCurrentIndex(RPM::get()->engineSettings()
         ->rotationOperation(ak) ? 1 : 0);
@@ -87,9 +90,32 @@ void PanelSubTransformation::updatePositionAuto() {
         Position previousPosition;
 
         previousPosition = *m_mapElementPosition;
-        m_mapElementPosition->setAngle(m_axisKind, this->angle());
-
-        if (*m_mapElementPosition != previousPosition) {
+        if (m_drawKind == DrawKind::Translate)
+        {
+            int value = qRound(this->value());
+            int squares = value / RPM::getSquareSize();
+            int pixels = value % RPM::getSquareSize() / 100.0;
+            switch (m_axisKind)
+            {
+            case AxisKind::X:
+                m_mapElementPosition->setX(squares);
+                m_mapElementPosition->setCenterX(pixels);
+                break;
+            case AxisKind::Y:
+                m_mapElementPosition->setY(squares);
+                m_mapElementPosition->setYPlus(pixels);
+                break;
+            case AxisKind::Z:
+                m_mapElementPosition->setZ(squares);
+                m_mapElementPosition->setCenterZ(pixels);
+                break;
+            }
+        } else if (m_drawKind == DrawKind::Rotate)
+        {
+            m_mapElementPosition->setAngle(m_axisKind, this->value());
+        }
+        if (*m_mapElementPosition != previousPosition)
+        {
             emit positionChanged(previousPosition);
         }
     }
@@ -102,13 +128,65 @@ void PanelSubTransformation::updatePositionClick(bool positive) {
         Position previousPosition;
 
         previousPosition = *m_mapElementPosition;
-        if (this->operation()) {
-            m_mapElementPosition->setAngle(m_axisKind, positive ? this->angle()
-                : -this->angle());
-        } else {
-            m_mapElementPosition->addAngle(m_axisKind, positive ? this->angle()
-                : -this->angle());
-
+        if (m_drawKind == DrawKind::Translate)
+        {
+            int value = qRound(this->value());
+            int squares = value / RPM::getSquareSize();
+            int pixels = value % RPM::getSquareSize() / 100.0;
+            squares = positive ? squares : -squares;
+            pixels = positive ? pixels : -pixels;
+            switch (m_axisKind)
+            {
+            case AxisKind::X:
+                if (this->operation())
+                {
+                    m_mapElementPosition->setX(squares);
+                    m_mapElementPosition->setCenterX(pixels);
+                } else
+                {
+                    m_mapElementPosition->addX(squares);
+                    m_mapElementPosition->addCenterX(pixels);
+                }
+                m_mapElementPosition->setX(qMax(qMin(0, m_mapElementPosition->x()),
+                    RPM::get()->project()->currentMap()->mapProperties()->length()));
+                break;
+            case AxisKind::Y:
+                if (this->operation())
+                {
+                    m_mapElementPosition->setY(squares);
+                    m_mapElementPosition->setYPlus(pixels);
+                } else
+                {
+                    m_mapElementPosition->addY(squares);
+                    m_mapElementPosition->addYPlus(pixels);
+                }
+                m_mapElementPosition->setY(qMax(qMin(-RPM::get()->project()
+                    ->currentMap()->mapProperties()->depth(), m_mapElementPosition->y()),
+                    RPM::get()->project()->currentMap()->mapProperties()->height()));
+                break;
+            case AxisKind::Z:
+                if (this->operation())
+                {
+                    m_mapElementPosition->setZ(squares);
+                    m_mapElementPosition->setCenterZ(pixels);
+                } else
+                {
+                    m_mapElementPosition->addZ(squares);
+                    m_mapElementPosition->addCenterZ(pixels);
+                }
+                m_mapElementPosition->setZ(qMax(qMin(0, m_mapElementPosition->z()),
+                    RPM::get()->project()->currentMap()->mapProperties()->width()));
+                break;
+            }
+        } else if (m_drawKind == DrawKind::Rotate)
+        {
+            if (this->operation()) {
+                m_mapElementPosition->setAngle(m_axisKind, positive ? this->value()
+                    : -this->value());
+            } else {
+                m_mapElementPosition->addAngle(m_axisKind, positive ? this->value()
+                    : -this->value());
+            }
         }
 
         if (*m_mapElementPosition != previousPosition) {
@@ -180,7 +258,7 @@ void PanelSubTransformation::on_checkBoxApplyLeftRightClick_toggled(bool checked
 // -------------------------------------------------------
 
 void PanelSubTransformation::on_pushButtonDefineDefault_clicked() {
-    RPM::get()->engineSettings()->setRotationAngle(m_axisKind, this->angle());
+    RPM::get()->engineSettings()->setRotationAngle(m_axisKind, this->value());
     RPM::get()->engineSettings()->write();
 }
 

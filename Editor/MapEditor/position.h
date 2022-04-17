@@ -45,8 +45,10 @@ public:
     void setLayer(int l);
     double centerX() const;
     void setCenterX(double x);
+    void addCenterX(double x);
     double centerZ() const;
     void setCenterZ(double z);
+    void addCenterZ(double z);
     double angleY() const;
     void setAngleY(double a);
     void addAngleY(double a);

@@ -23,22 +23,11 @@
 #include "wallindicator.h"
 #include "controlundoredo.h"
 
-// -------------------------------------------------------
-//
-//  CLASS ControlMapEditor
-//
-//  The controler of the map editor. This part is handling the mouse
-//  effects (adding/removing items from the map) and loading/saving
-//  map.
-//
-// -------------------------------------------------------
-
 class ControlMapEditor
 {
 public:
     ControlMapEditor();
     virtual ~ControlMapEditor();
-
     Map * map() const;
     Grid * grid() const;
     Cursor * cursor() const;
@@ -294,6 +283,7 @@ protected:
     MapElement *m_elementOnObject3D;
     MapElement *m_elementOnMountain;
     MapElement *m_elementOnObject;
+    Position m_positionTranslate;
     float m_distancePlane;
     float m_distanceLand;
     float m_distanceSprite;
@@ -328,6 +318,7 @@ protected:
     bool m_isCtrlPressed;
     bool m_isShiftPressed;
     bool m_isMovingObject;
+    bool m_isTranslating;
     int m_currentLayer = -1;
     QString m_lastSquareInfos;
     SystemCommonObject *m_copiedObject;

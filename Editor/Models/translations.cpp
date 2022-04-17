@@ -1380,6 +1380,7 @@ const QString Translations::MESSAGE_PATREON = "message.patreon";
 const QString Translations::GUIDE_ASSETS_1 = "guide.assets.1";
 const QString Translations::GUIDE_ASSETS_2 = "guide.assets.2";
 const QString Translations::GUIDE_ASSETS_3 = "guide.assets.3";
+const QString Translations::TRANSLATION = "translation";
 
 // -------------------------------------------------------
 //

@@ -33,6 +33,9 @@ public:
     static const QString JSON_PROJECT_NAMES;
     static const QString JSON_PROJECT_LINKS;
     static const QString JSON_FIRST_TIME;
+    static const QString JSON_TRANSLATION_OPERATIONS;
+    static const QString JSON_TRANSLATION_LEFT_RIGHT_CLICKS;
+    static const QString JSON_TRANSLATION_VALUES;
     static const QString JSON_ROTATION_OPERATIONS;
     static const QString JSON_ROTATION_LEFT_RIGHT_CLICKS;
     static const QString JSON_ROTATION_ANGLES;
@@ -72,6 +75,12 @@ public:
     QString projectAtLink(int i) const;
     bool firstTime() const;
     void setFirstTime(bool b);
+    bool translationOperation(AxisKind ak) const;
+    void setTranslationOperation(AxisKind ak, bool b);
+    bool translationLeftRightClick(AxisKind ak) const;
+    void setTranslationLeftRightClick(AxisKind ak, bool b);
+    double translationValue(AxisKind ak) const;
+    void setTranslationValue(AxisKind ak, double a);
     bool rotationOperation(AxisKind ak) const;
     void setRotationOperation(AxisKind ak, bool b);
     bool rotationLeftRightClick(AxisKind ak) const;
@@ -118,6 +127,9 @@ protected:
     QStringList m_projectNames;
     QStringList m_projectLinks;
     bool m_firstTime;
+    QList<bool> m_translationOperations;
+    QList<bool> m_translationLeftRightClicks;
+    QList<double> m_translationValues;
     QList<bool> m_rotationOperations;
     QList<bool> m_rotationLeftRightClicks;
     QList<double> m_rotationAngles;

@@ -44,6 +44,11 @@ double Position3D::yPlus() const { return m_y_plus; }
 
 void Position3D::setYPlus(double yPlus) { m_y_plus = yPlus; }
 
+void Position3D::addYPlus(double yPlus)
+{
+    m_y_plus += yPlus;
+}
+
 int Position3D::getY() const {
     return (m_y * RPM::getSquareSize()) + this->getYpx();
 }

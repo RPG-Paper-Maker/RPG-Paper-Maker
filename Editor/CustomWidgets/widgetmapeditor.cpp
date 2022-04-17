@@ -790,14 +790,12 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event)
                 layerOn, tileset, specialID, widthSquares, widthPixels,
                 heightSquares, heightPixels, defaultFloorRect, event->pos(), button);
 
-            // Rotations
+            // Transformations
             if (button != Qt::MouseButton::MiddleButton)
             {
-                if (drawKind == DrawKind::Rotate)
+                if (drawKind == DrawKind::Translate || drawKind == DrawKind::Rotate)
                 {
-                    Position *position;
-
-                    position = m_control.positionOnElement(selection, drawKind);
+                    Position *position = m_control.positionOnElement(selection, drawKind);
                     emit selectPositionTransformation(position, button == Qt
                         ::MouseButton::LeftButton);
                 }
@@ -845,9 +843,11 @@ void WidgetMapEditor::mouseReleaseEvent(QMouseEvent *event)
             m_panelTextures->getTilesetTexture(tileset);
             MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
             int specialID = m_panelTextures->getID();
+            DrawKind drawKind = m_menuBar->drawKind();
             m_panelTextures->getDefaultFloorRect(defaultFloorRect);
-            m_control.onMouseReleased(m_menuBar->selectionKind(), subSelection,
-                m_menuBar->drawKind(), tileset, specialID, event->pos(), m_menuBar
+            MapEditorSelectionKind selection = m_menuBar->selectionKind();
+            m_control.onMouseReleased(selection, subSelection,
+                drawKind, tileset, specialID, event->pos(), m_menuBar
                 ->layerOn(), button, m_panelTextures->getWidthSquares(),
                 m_panelTextures->getWidthPixels(), m_panelTextures->getHeightSquares(),
                 m_panelTextures->getHeightPixels(), defaultFloorRect);

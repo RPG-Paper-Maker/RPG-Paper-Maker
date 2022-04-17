@@ -25,6 +25,9 @@ const QString EngineSettings::JSON_FIRST_TIME = "ft";
 const QString EngineSettings::JSON_ROTATION_OPERATIONS = "ro";
 const QString EngineSettings::JSON_ROTATION_LEFT_RIGHT_CLICKS = "rlrc";
 const QString EngineSettings::JSON_ROTATION_ANGLES = "ra";
+const QString EngineSettings::JSON_TRANSLATION_OPERATIONS = "translationOperations";
+const QString EngineSettings::JSON_TRANSLATION_LEFT_RIGHT_CLICKS = "translationLeftRightClicks";
+const QString EngineSettings::JSON_TRANSLATION_VALUES = "translationValues";
 const QString EngineSettings::JSON_UPDATER = "updater";
 const QString EngineSettings::JSON_SHOW_AVAILABLE_CONTENT = "sac";
 const QString EngineSettings::JSON_FIRST_TIME_LANGUAGES = "ftl";
@@ -73,6 +76,17 @@ EngineSettings::EngineSettings() :
     #ifdef Q_OS_MAC
         m_theme = ThemeKind::White;
     #endif
+
+    // Translation
+    m_translationOperations.append(false);
+    m_translationOperations.append(false);
+    m_translationOperations.append(false);
+    m_translationLeftRightClicks.append(false);
+    m_translationLeftRightClicks.append(false);
+    m_translationLeftRightClicks.append(false);
+    m_translationValues.append(0);
+    m_translationValues.append(0);
+    m_translationValues.append(0);
 
     // Rotation
     m_rotationOperations.append(false);
@@ -131,27 +145,63 @@ void EngineSettings::setFirstTime(bool b) {
     m_firstTime = b;
 }
 
-bool EngineSettings::rotationOperation(AxisKind ak) const {
+bool EngineSettings::translationOperation(AxisKind ak) const
+{
+    return m_translationOperations.at(static_cast<int>(ak));
+}
+
+void EngineSettings::setTranslationOperation(AxisKind ak, bool b)
+{
+    m_translationOperations.replace(static_cast<int>(ak), b);
+}
+
+bool EngineSettings::translationLeftRightClick(AxisKind ak) const
+{
+    return m_translationLeftRightClicks.at(static_cast<int>(ak));
+}
+
+void EngineSettings::setTranslationLeftRightClick(AxisKind ak, bool b)
+{
+    m_translationLeftRightClicks.replace(static_cast<int>(ak), b);
+}
+
+double EngineSettings::translationValue(AxisKind ak) const
+{
+    return m_translationValues.at(static_cast<int>(ak));
+}
+
+void EngineSettings::setTranslationValue(AxisKind ak, double a)
+{
+    m_translationValues.replace(static_cast<int>(ak), a);
+}
+
+bool EngineSettings::rotationOperation(AxisKind ak) const
+{
     return m_rotationOperations.at(static_cast<int>(ak));
 }
 
-void EngineSettings::setRotationOperation(AxisKind ak, bool b) {
+void EngineSettings::setRotationOperation(AxisKind ak, bool b)
+{
     m_rotationOperations.replace(static_cast<int>(ak), b);
 }
 
-bool EngineSettings::rotationLeftRightClick(AxisKind ak) const {
+bool EngineSettings::rotationLeftRightClick(AxisKind ak) const
+{
     return m_rotationLeftRightClicks.at(static_cast<int>(ak));
 }
 
-void EngineSettings::setRotationLeftRightClick(AxisKind ak, bool b) {
+void EngineSettings::setRotationLeftRightClick(AxisKind ak, bool b)
+{
     m_rotationLeftRightClicks.replace(static_cast<int>(ak), b);
 }
 
-double EngineSettings::rotationAngle(AxisKind ak) const {
+double EngineSettings::rotationAngle(AxisKind ak) const
+{
     return m_rotationAngles.at(static_cast<int>(ak));
 }
 
-void EngineSettings::setRotationAngle(AxisKind ak, double a) {
+void EngineSettings::setRotationAngle(AxisKind ak, double a)
+{
     m_rotationAngles.replace(static_cast<int>(ak), a);
 }
 
@@ -409,6 +459,18 @@ void EngineSettings::read(const QJsonObject &json) {
     if (json.contains(JSON_FIRST_TIME)) {
         m_firstTime = json[JSON_FIRST_TIME].toBool();
     }
+    tab = json[JSON_TRANSLATION_OPERATIONS].toArray();
+    for (i = 0, l = tab.size(); i < l; i++) {
+        m_translationOperations.replace(i, tab.at(i).toBool());
+    }
+    tab = json[JSON_TRANSLATION_LEFT_RIGHT_CLICKS].toArray();
+    for (i = 0, l = tab.size(); i < l; i++) {
+        m_translationLeftRightClicks.replace(i, tab.at(i).toBool());
+    }
+    tab = json[JSON_TRANSLATION_VALUES].toArray();
+    for (i = 0, l = tab.size(); i < l; i++) {
+        m_translationValues.replace(i, tab.at(i).toDouble());
+    }
     tab = json[JSON_ROTATION_OPERATIONS].toArray();
     for (i = 0, l = tab.size(); i < l; i++) {
         m_rotationOperations.replace(i, tab.at(i).toBool());
@@ -484,17 +546,38 @@ void EngineSettings::write(QJsonObject &json) const {
         json[JSON_FIRST_TIME] = false;
     }
     tab = QJsonArray();
-    for (i = 0, l = m_rotationOperations.size(); i < l; i++) {
+    for (i = 0, l = m_translationOperations.size(); i < l; i++)
+    {
+        tab.append(m_translationOperations.at(i));
+    }
+    json[JSON_TRANSLATION_OPERATIONS] = tab;
+    tab = QJsonArray();
+    for (i = 0, l = m_translationLeftRightClicks.size(); i < l; i++)
+    {
+        tab.append(m_translationLeftRightClicks.at(i));
+    }
+    json[JSON_TRANSLATION_LEFT_RIGHT_CLICKS] = tab;
+    tab = QJsonArray();
+    for (i = 0, l = m_translationValues.size(); i < l; i++)
+    {
+        tab.append(m_translationValues.at(i));
+    }
+    json[JSON_TRANSLATION_VALUES] = tab;
+    tab = QJsonArray();
+    for (i = 0, l = m_rotationOperations.size(); i < l; i++)
+    {
         tab.append(m_rotationOperations.at(i));
     }
     json[JSON_ROTATION_OPERATIONS] = tab;
     tab = QJsonArray();
-    for (i = 0, l = m_rotationLeftRightClicks.size(); i < l; i++) {
+    for (i = 0, l = m_rotationLeftRightClicks.size(); i < l; i++)
+    {
         tab.append(m_rotationLeftRightClicks.at(i));
     }
     json[JSON_ROTATION_LEFT_RIGHT_CLICKS] = tab;
     tab = QJsonArray();
-    for (i = 0, l = m_rotationAngles.size(); i < l; i++) {
+    for (i = 0, l = m_rotationAngles.size(); i < l; i++)
+    {
         tab.append(m_rotationAngles.at(i));
     }
     json[JSON_ROTATION_ANGLES] = tab;

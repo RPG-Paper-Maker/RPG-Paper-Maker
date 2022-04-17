@@ -35,6 +35,7 @@ public:
     bool operator!=(const Position3D& other) const;
     double yPlus() const;
     void setYPlus(double yPlus);
+    void addYPlus(double yPlus);
     int getY() const;
     int getYpx() const;
     void setCoords(int x, int y, double yPlus, int z);

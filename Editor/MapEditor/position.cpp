@@ -93,9 +93,19 @@ double Position::centerX() const{ return m_centerX; }
 
 void Position::setCenterX(double x){ m_centerX = x; }
 
+void Position::addCenterX(double x)
+{
+    m_centerX += x;
+}
+
 double Position::centerZ() const{ return m_centerZ; }
 
 void Position::setCenterZ(double z){ m_centerZ = z; }
+
+void Position::addCenterZ(double z)
+{
+    m_centerZ += z;
+}
 
 double Position::angleY() const {
     return m_angleY;

@@ -15,6 +15,7 @@
 #include <QWidget>
 #include "axiskind.h"
 #include "position.h"
+#include "drawkind.h"
 
 // -------------------------------------------------------
 //
@@ -35,18 +36,20 @@ class PanelTransformations : public QWidget
 public:
     explicit PanelTransformations(QWidget *parent = nullptr);
     ~PanelTransformations();
+    DrawKind drawKind() const;
+    void setDrawKind(DrawKind drawKind);
 
     AxisKind currentAxisKind() const;
     void deletePosition();
-    void initialize();
+    void initialize(DrawKind drawKind);
+    void translate(DrawKind drawKind);
 
 private:
     Ui::PanelTransformations *ui;
 
-    void translate();
-
 protected:
     Position *m_mapElementPosition;
+    DrawKind m_drawKind;
 
     void updateText();
 

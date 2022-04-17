@@ -15,6 +15,7 @@
 #include <QWidget>
 #include "axiskind.h"
 #include "mapelement.h"
+#include "drawkind.h"
 
 // -------------------------------------------------------
 //
@@ -39,9 +40,9 @@ public:
     void setMapElementPosition(Position *p);
 
     bool operation() const;
-    double angle() const;
+    double value() const;
     bool applyLeftRightClick() const;
-    void initializeRotation(AxisKind ak);
+    void initialize(DrawKind drawKind, AxisKind ak);
     void updatePositionAuto();
     void updatePositionClick(bool positive = true);
 
@@ -53,6 +54,7 @@ private:
 protected:
     Position *m_mapElementPosition;
     AxisKind m_axisKind;
+    DrawKind m_drawKind;
 
 public slots:
     void on_comboBoxOperation_currentIndexChanged(int index);

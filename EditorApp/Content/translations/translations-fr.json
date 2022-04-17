@@ -1359,5 +1359,6 @@
     "message.patreon": "Nous esperons que vous appréciez RPG Paper Maker! Si vous shoutaitez soutenir le projet financièrement pour les prochaines fonctionnalités majeures à venir, vous pouvez aider à atteindre le Patreon goal ici: %1, ou faire une donation sur Paypal ici: %2, ou acheter l'édition commerciale ici: %3! Joyeux making!",
     "guide.assets.1": "Voici la liste des assets graphiques avec\nvos propres assets et les BR (Basic Resources)!",
     "guide.assets.2": "Ajoutez vos propres assets ici (ou faites glisser les fichiers)!",
-    "guide.assets.3": "Transférez des assets ici pour les associer à\nun ID et ensuite les utiliser dans votre jeu!"
+    "guide.assets.3": "Transférez des assets ici pour les associer à\nun ID et ensuite les utiliser dans votre jeu!",
+    "translation": "Translation"
 }

@@ -68,7 +68,7 @@ public:
     void showSpriteWalls(SystemTileset *tileset);
     void showMountains(SystemTileset *tileset);
     void showObjects3D(SystemTileset *tileset);
-    void showTransformations();
+    void showTransformations(DrawKind drawKind);
     void fillComboBox(SystemTileset *tileset, PictureKind kind);
     void updateWallsSize();
     void updateMountainsSize();

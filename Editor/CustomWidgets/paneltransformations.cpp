@@ -22,13 +22,10 @@
 PanelTransformations::PanelTransformations(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PanelTransformations),
-    m_mapElementPosition(nullptr)
+    m_mapElementPosition(nullptr),
+    m_drawKind(DrawKind::Translate)
 {
     ui->setupUi(this);
-
-    this->initialize();
-
-    this->translate();
 }
 
 PanelTransformations::~PanelTransformations()
@@ -37,23 +34,34 @@ PanelTransformations::~PanelTransformations()
     delete ui;
 }
 
+DrawKind PanelTransformations::drawKind() const
+{
+    return m_drawKind;
+}
+
+void PanelTransformations::setDrawKind(DrawKind drawKind)
+{
+    m_drawKind = drawKind;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
 
-AxisKind PanelTransformations::currentAxisKind() const {
+AxisKind PanelTransformations::currentAxisKind() const
+{
     return static_cast<AxisKind>(ui->tabWidget->currentIndex());
 }
 
 // -------------------------------------------------------
 
-void PanelTransformations::initialize() {
+void PanelTransformations::initialize(DrawKind drawKind) {
     this->on_positionSelected(nullptr, true);
-    ui->panelSubTransformationX->initializeRotation(AxisKind::X);
-    ui->panelSubTransformationY->initializeRotation(AxisKind::Y);
-    ui->panelSubTransformationZ->initializeRotation(AxisKind::Z);
+    ui->panelSubTransformationX->initialize(drawKind, AxisKind::X);
+    ui->panelSubTransformationY->initialize(drawKind, AxisKind::Y);
+    ui->panelSubTransformationZ->initialize(drawKind, AxisKind::Z);
     connect(ui->panelSubTransformationX, SIGNAL(positionChanged(Position &)),
         this, SLOT(on_positionChangedUI(Position &)));
     connect(ui->panelSubTransformationY, SIGNAL(positionChanged(Position &)),
@@ -83,12 +91,23 @@ void PanelTransformations::updateText() {
 
 //-------------------------------------------------
 
-void PanelTransformations::translate()
+void PanelTransformations::translate(DrawKind drawKind)
 {
     ui->labelSelectedObjectTitle->setText(RPM::BRACKET_LEFT + RPM::translate(
         Translations::SELECTED_OBJECT) + RPM::BRACKET_RIGHT);
-    ui->labelRotation->setText(RPM::translate(Translations::ROTATION) + RPM
-        ::COLON);
+    QString title;
+    switch (drawKind)
+    {
+    case DrawKind::Translate:
+        title = RPM::translate(Translations::TRANSLATION);
+        break;
+    case DrawKind::Rotate:
+        title = RPM::translate(Translations::ROTATION);
+        break;
+    default:
+        break;
+    }
+    ui->labelRotation->setText(title + RPM::COLON);
     ui->tabWidget->setTabText(0, RPM::translate(Translations::X));
     ui->tabWidget->setTabText(1, RPM::translate(Translations::Y));
     ui->tabWidget->setTabText(2, RPM::translate(Translations::Z));
@@ -110,13 +129,10 @@ void PanelTransformations::on_positionSelected(Position *p, bool positive) {
 
     switch (ui->tabWidget->currentIndex()) {
     case 0:
-        ui->panelSubTransformationX->updatePositionAuto();
         ui->panelSubTransformationX->updatePositionClick(positive); break;
     case 1:
-        ui->panelSubTransformationY->updatePositionAuto();
         ui->panelSubTransformationY->updatePositionClick(positive); break;
     case 2:
-        ui->panelSubTransformationZ->updatePositionAuto();
         ui->panelSubTransformationZ->updatePositionClick(positive); break;
     }
 }

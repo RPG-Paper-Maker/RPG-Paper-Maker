@@ -60,6 +60,7 @@ ControlMapEditor::ControlMapEditor() :
     m_isCtrlPressed(false),
     m_isShiftPressed(false),
     m_isMovingObject(false),
+    m_isTranslating(false),
     m_copiedObject(nullptr)
 {
 
@@ -413,6 +414,17 @@ void ControlMapEditor::update(MapEditorSelectionKind selectionKind, bool square,
 
     // Raycasting
     updateRaycasting(selectionKind, square, drawKind, layerOn);
+
+    // Translation
+    if (m_isTranslating)
+    {
+        Position *position = this->positionOnElement(MapEditorSelectionKind::Land, DrawKind::Pencil);
+        if (position != nullptr)
+        {
+            this->onTransformationPositionChanged(*position, m_positionOnTransformation, selectionKind);
+            m_positionOnTransformation = *position;
+        }
+    }
 
     // Mouse update
     m_mouseBeforeUpdate = m_mouseMove;
@@ -1506,6 +1518,7 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
                 FloorDatas *floor = reinterpret_cast<FloorDatas *>(element);
                 this->eraseLand(previousPosition, false, false, false);
                 this->stockLand(newPosition, floor, floor->getSubKind(), false);
+                floor->setIsHovered(true);
                 break;
             }
             case MapEditorSelectionKind::Sprites:
@@ -1513,6 +1526,7 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
                 SpriteDatas *sprite = reinterpret_cast<SpriteDatas *>(element);
                 this->eraseSprite(previousPosition, false, false);
                 this->stockSprite(newPosition, sprite, sprite->getSubKind(), false);
+                sprite->setIsHovered(true);
                 break;
             }
             case MapEditorSelectionKind::Objects3D:
@@ -1520,6 +1534,7 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
                 Object3DDatas *object3D = (reinterpret_cast<Object3DDatas *>(element));
                 this->eraseObject3D(previousPosition, false, false);
                 this->stockObject3D(newPosition, object3D);
+                object3D->setIsHovered(true);
                 break;
             }
             default:
@@ -1599,6 +1614,12 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
         m_isDeleting = button == Qt::MouseButton::RightButton;
         if (m_isDeleting) {
             removePreviewElements();
+        } else
+        {
+            if (drawKind == DrawKind::Translate)
+            {
+                m_isTranslating = true;
+            }
         }
         Position newPosition;
         bool b;
@@ -1634,6 +1655,9 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
                 else if (button == Qt::MouseButton::RightButton)
                     m_isDeletingWall = true;
             }
+
+            // Transformation
+            m_positionOnTransformation = *this->positionOnElement(selection, drawKind);
         }
     }
 }
@@ -1664,6 +1688,7 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind kind,
     }
     if (button == Qt::MouseButton::LeftButton)
     {
+        m_isTranslating = false;
         if (m_isDrawingWall) {
             m_isDrawingWall = false;
             addSpriteWall(drawKind, specialID);
