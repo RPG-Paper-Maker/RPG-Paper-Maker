@@ -44,6 +44,9 @@ ControlMapEditor::ControlMapEditor() :
     m_elementOnSprite(nullptr),
     m_elementOnObject3D(nullptr),
     m_elementOnMountain(nullptr),
+    m_elementOnSpriteTranslated(nullptr),
+    m_elementOnObject3DTranslated(nullptr),
+    m_translatedChanged(false),
     m_positionPreviousPreview(-1, 0, 0, -1, 0),
     m_previousMouseCoords(-500, 0, 0, -500),
     m_firstMouseCoords(-500, 0, 0, -500),
@@ -72,6 +75,10 @@ ControlMapEditor::~ControlMapEditor() {
     delete m_camera;
     if (m_copiedObject != nullptr) {
         delete m_copiedObject;
+    }
+    if (m_elementOnSpriteTranslated != nullptr)
+    {
+        delete m_elementOnSpriteTranslated;
     }
 }
 
@@ -419,7 +426,7 @@ void ControlMapEditor::update(MapEditorSelectionKind selectionKind, bool square,
     if (m_isTranslating)
     {
         Position *position = this->positionOnElement(MapEditorSelectionKind::Land, DrawKind::Pencil);
-        if (position != nullptr)
+        if (position != nullptr && *position != m_positionOnTransformation)
         {
             this->onTransformationPositionChanged(*position, m_positionOnTransformation, selectionKind);
             m_positionOnTransformation = *position;
@@ -758,6 +765,10 @@ MapElement * ControlMapEditor::getPositionSelected(Position &position,
         position = m_positionOnLand;
         return m_elementOnLand;
     case MapEditorSelectionKind::Sprites:
+        if (m_translatedChanged)
+        {
+            return m_elementOnSpriteTranslated;
+        }
         if ((m_isDeleting && subSelection != MapEditorSubSelectionKind::SpritesWall)
              || layerOn || isForDisplay)
         {
@@ -1524,9 +1535,28 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
             case MapEditorSelectionKind::Sprites:
             {
                 SpriteDatas *sprite = reinterpret_cast<SpriteDatas *>(element);
+                Portion portion;
+                MapPortion *mapPortion = this->getMapPortion(newPosition, portion, false);
+                SpriteDatas *deletedSprite = reinterpret_cast<SpriteDatas *>(
+                    mapPortion->getMapElementAt(newPosition, k,
+                    MapEditorSubSelectionKind::None));
                 this->eraseSprite(previousPosition, false, false);
+                this->eraseSprite(newPosition, false, false);
                 this->stockSprite(newPosition, sprite, sprite->getSubKind(), false);
                 sprite->setIsHovered(true);
+                if (m_translatedChanged)
+                {
+                    m_translatedChanged = false;
+                    this->stockSprite(previousPosition, m_elementOnSpriteTranslated,
+                        m_elementOnSpriteTranslated->getSubKind(), false);
+                    m_elementOnSpriteTranslated = nullptr;
+                }
+                if (deletedSprite != nullptr && sprite != deletedSprite)
+                {
+                    m_positionTranslated = previousPosition;
+                    m_elementOnSpriteTranslated = deletedSprite;
+                    m_translatedChanged = true;
+                }
                 break;
             }
             case MapEditorSelectionKind::Objects3D:
@@ -1657,7 +1687,11 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
             }
 
             // Transformation
-            m_positionOnTransformation = *this->positionOnElement(selection, drawKind);
+            Position *p = this->positionOnElement(selection, drawKind);
+            if (p != nullptr)
+            {
+                m_positionOnTransformation = *p;
+            }
         }
     }
 }
@@ -1689,6 +1723,15 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind kind,
     if (button == Qt::MouseButton::LeftButton)
     {
         m_isTranslating = false;
+        if (m_translatedChanged)
+        {
+            if (m_elementOnSpriteTranslated != nullptr)
+            {
+                delete m_elementOnSpriteTranslated;
+                m_elementOnSpriteTranslated = nullptr;
+            }
+        }
+        m_translatedChanged = false;
         if (m_isDrawingWall) {
             m_isDrawingWall = false;
             addSpriteWall(drawKind, specialID);

@@ -160,7 +160,7 @@ void ControlMapEditor::updateRaycasting(MapEditorSelectionKind selectionKind,
     }
 
     // Handle pre-selection for transformations
-    if (drawKind == DrawKind::Translate || drawKind == DrawKind::Rotate)
+    if (!m_isTranslating && (drawKind == DrawKind::Translate || drawKind == DrawKind::Rotate))
     {
         if (selectionKind == MapEditorSelectionKind::Land && m_elementOnLand !=
             elementLand)
@@ -198,6 +198,11 @@ void ControlMapEditor::updateRaycasting(MapEditorSelectionKind selectionKind,
             }
             m_portionsToUpdate += m_mapPortionObject3D;
         }
+    }
+    if (m_isTranslating)
+    {
+        m_elementOnSprite = elementSprite;
+        m_elementOnObject3D = elementObject3D;
     }
 }
 

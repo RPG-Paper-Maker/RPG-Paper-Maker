@@ -283,6 +283,10 @@ protected:
     MapElement *m_elementOnObject3D;
     MapElement *m_elementOnMountain;
     MapElement *m_elementOnObject;
+    SpriteDatas *m_elementOnSpriteTranslated;
+    MapElement *m_elementOnObject3DTranslated;
+    Position m_positionTranslated;
+    bool m_translatedChanged;
     Position m_positionTranslate;
     float m_distancePlane;
     float m_distanceLand;
