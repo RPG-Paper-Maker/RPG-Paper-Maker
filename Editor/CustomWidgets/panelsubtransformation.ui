@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,1">
+    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,1">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
        <item>
@@ -65,16 +65,6 @@
         </widget>
        </item>
       </layout>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkBoxApplyLeftRightClick">
-       <property name="text">
-        <string>Apply on left / right click</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButtonDefineDefault">

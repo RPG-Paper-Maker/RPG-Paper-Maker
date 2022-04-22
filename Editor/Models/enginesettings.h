@@ -15,6 +15,7 @@
 #include "keyboarddatas.h"
 #include "themekind.h"
 #include "axiskind.h"
+#include "drawkind.h"
 
 // -------------------------------------------------------
 //
@@ -34,10 +35,10 @@ public:
     static const QString JSON_PROJECT_LINKS;
     static const QString JSON_FIRST_TIME;
     static const QString JSON_TRANSLATION_OPERATIONS;
-    static const QString JSON_TRANSLATION_LEFT_RIGHT_CLICKS;
+    static const QString JSON_TRANSLATION_LEFT_RIGHT_CLICK;
     static const QString JSON_TRANSLATION_VALUES;
     static const QString JSON_ROTATION_OPERATIONS;
-    static const QString JSON_ROTATION_LEFT_RIGHT_CLICKS;
+    static const QString JSON_ROTATION_LEFT_RIGHT_CLICK;
     static const QString JSON_ROTATION_ANGLES;
     static const QString JSON_UPDATER;
     static const QString JSON_SHOW_AVAILABLE_CONTENT;
@@ -77,14 +78,14 @@ public:
     void setFirstTime(bool b);
     bool translationOperation(AxisKind ak) const;
     void setTranslationOperation(AxisKind ak, bool b);
-    bool translationLeftRightClick(AxisKind ak) const;
-    void setTranslationLeftRightClick(AxisKind ak, bool b);
+    bool translationLeftRightClick() const;
+    void setTranslationLeftRightClick(bool b);
     double translationValue(AxisKind ak) const;
     void setTranslationValue(AxisKind ak, double a);
     bool rotationOperation(AxisKind ak) const;
     void setRotationOperation(AxisKind ak, bool b);
-    bool rotationLeftRightClick(AxisKind ak) const;
-    void setRotationLeftRightClick(AxisKind ak, bool b);
+    bool rotationLeftRightClick() const;
+    void setRotationLeftRightClick(bool b);
     double rotationAngle(AxisKind ak) const;
     void setRotationAngle(AxisKind ak, double a);
     bool updater() const;
@@ -108,6 +109,8 @@ public:
     int guideStepPictures() const;
     void setGuideStepPictures(int guideStepPictures);
 
+    void setApplyLeftRightClick(DrawKind drawKind, bool applyLeftRightClick);
+    bool applyLeftRightClick(DrawKind drawKind) const;
     void setDefault();
     QString getThemeContent() const;
     void read();
@@ -128,10 +131,10 @@ protected:
     QStringList m_projectLinks;
     bool m_firstTime;
     QList<bool> m_translationOperations;
-    QList<bool> m_translationLeftRightClicks;
+    bool m_translationLeftRightClick;
     QList<double> m_translationValues;
     QList<bool> m_rotationOperations;
-    QList<bool> m_rotationLeftRightClicks;
+    bool m_rotationLeftRightClick;
     QList<double> m_rotationAngles;
     bool m_updater;
     bool m_showAvailableContent;

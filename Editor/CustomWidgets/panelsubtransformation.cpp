@@ -57,12 +57,6 @@ double PanelSubTransformation::value() const {
 
 // -------------------------------------------------------
 
-bool PanelSubTransformation::applyLeftRightClick() const {
-    return ui->checkBoxApplyLeftRightClick->isChecked();
-}
-
-// -------------------------------------------------------
-
 void PanelSubTransformation::initialize(DrawKind drawKind, AxisKind ak)
 {
     m_drawKind = drawKind;
@@ -71,8 +65,6 @@ void PanelSubTransformation::initialize(DrawKind drawKind, AxisKind ak)
         ->rotationOperation(ak) ? 1 : 0);
     ui->doubleSpinBoxAngle->setValue(RPM::get()->engineSettings()->rotationAngle
         (ak));
-    ui->checkBoxApplyLeftRightClick->setChecked(RPM::get()->engineSettings()
-        ->rotationLeftRightClick(ak));
     ui->pushButtonDefineDefault->setText(RPM::translate(Translations
         ::DEFINE_AS_DEFAULT) + RPM::SPACE + RPM::ENUM_TO_STRING_AXIS_KIND.at(
         static_cast<int>(ak)) + RPM::SPACE + RPM::translate(Translations
@@ -86,7 +78,9 @@ void PanelSubTransformation::initialize(DrawKind drawKind, AxisKind ak)
 // -------------------------------------------------------
 
 void PanelSubTransformation::updatePositionAuto() {
-    if (m_mapElementPosition != nullptr && !this->applyLeftRightClick()) {
+    if (m_mapElementPosition != nullptr && !RPM::get()->engineSettings()
+        ->applyLeftRightClick(m_drawKind))
+    {
         Position previousPosition;
 
         previousPosition = *m_mapElementPosition;
@@ -123,8 +117,11 @@ void PanelSubTransformation::updatePositionAuto() {
 
 // -------------------------------------------------------
 
-void PanelSubTransformation::updatePositionClick(bool positive) {
-    if (m_mapElementPosition != nullptr && this->applyLeftRightClick()) {
+void PanelSubTransformation::updatePositionClick(bool positive)
+{
+    if (m_mapElementPosition != nullptr && RPM::get()->engineSettings()
+            ->applyLeftRightClick(m_drawKind))
+    {
         Position previousPosition;
 
         previousPosition = *m_mapElementPosition;
@@ -197,11 +194,28 @@ void PanelSubTransformation::updatePositionClick(bool positive) {
 
 //-------------------------------------------------
 
+void PanelSubTransformation::updateApplyLeftRightEnabled(bool checked)
+{
+    QModelIndex modelIndex = ui->comboBoxOperation->model()->index(0, 0);
+    if (!checked)
+    {
+        QVariant vDisable(0);
+        ui->comboBoxOperation->setCurrentIndex(1);
+        ui->comboBoxOperation->model()->setData(modelIndex, vDisable, Qt
+            ::UserRole - 1);
+    } else
+    {
+        QVariant vEnable(1 | 32);
+        ui->comboBoxOperation->model()->setData(modelIndex, vEnable, Qt
+            ::UserRole - 1);
+    }
+}
+
+//-------------------------------------------------
+
 void PanelSubTransformation::translate()
 {
     ui->labelAngle->setText(RPM::translate(Translations::ANGLE) + RPM::COLON);
-    ui->checkBoxApplyLeftRightClick->setText(RPM::translate(Translations
-        ::APPLY_ON_LEFT_RIGHT_CLICK));
 }
 
 // -------------------------------------------------------
@@ -225,33 +239,6 @@ void PanelSubTransformation::on_comboBoxOperation_currentIndexChanged(int index)
 // -------------------------------------------------------
 
 void PanelSubTransformation::on_doubleSpinBoxAngle_valueChanged(double) {
-    this->updatePositionAuto();
-}
-
-// -------------------------------------------------------
-
-void PanelSubTransformation::on_checkBoxApplyLeftRightClick_toggled(bool checked)
-{
-    QModelIndex modelIndex;
-
-    RPM::get()->engineSettings()->setRotationLeftRightClick(m_axisKind, checked);
-    RPM::get()->engineSettings()->write();
-
-    // If not checked, impossible to select + operation
-    modelIndex = ui->comboBoxOperation->model()->index(0, 0);
-    if (!checked) {
-        QVariant vDisable(0);
-
-        ui->comboBoxOperation->setCurrentIndex(1);
-        ui->comboBoxOperation->model()->setData(modelIndex, vDisable, Qt
-            ::UserRole - 1);
-    } else {
-        QVariant vEnable(1 | 32);
-
-        ui->comboBoxOperation->model()->setData(modelIndex, vEnable, Qt
-            ::UserRole - 1);
-    }
-
     this->updatePositionAuto();
 }
 

@@ -23,10 +23,10 @@ const QString EngineSettings::JSON_PROJECT_NAMES = "pn";
 const QString EngineSettings::JSON_PROJECT_LINKS = "pl";
 const QString EngineSettings::JSON_FIRST_TIME = "ft";
 const QString EngineSettings::JSON_ROTATION_OPERATIONS = "ro";
-const QString EngineSettings::JSON_ROTATION_LEFT_RIGHT_CLICKS = "rlrc";
+const QString EngineSettings::JSON_ROTATION_LEFT_RIGHT_CLICK = "rlrc";
 const QString EngineSettings::JSON_ROTATION_ANGLES = "ra";
 const QString EngineSettings::JSON_TRANSLATION_OPERATIONS = "translationOperations";
-const QString EngineSettings::JSON_TRANSLATION_LEFT_RIGHT_CLICKS = "translationLeftRightClicks";
+const QString EngineSettings::JSON_TRANSLATION_LEFT_RIGHT_CLICK = "translationLeftRightClick";
 const QString EngineSettings::JSON_TRANSLATION_VALUES = "translationValues";
 const QString EngineSettings::JSON_UPDATER = "updater";
 const QString EngineSettings::JSON_SHOW_AVAILABLE_CONTENT = "sac";
@@ -81,9 +81,7 @@ EngineSettings::EngineSettings() :
     m_translationOperations.append(false);
     m_translationOperations.append(false);
     m_translationOperations.append(false);
-    m_translationLeftRightClicks.append(false);
-    m_translationLeftRightClicks.append(false);
-    m_translationLeftRightClicks.append(false);
+    m_translationLeftRightClick = false;
     m_translationValues.append(0);
     m_translationValues.append(0);
     m_translationValues.append(0);
@@ -92,9 +90,7 @@ EngineSettings::EngineSettings() :
     m_rotationOperations.append(false);
     m_rotationOperations.append(false);
     m_rotationOperations.append(false);
-    m_rotationLeftRightClicks.append(true);
-    m_rotationLeftRightClicks.append(true);
-    m_rotationLeftRightClicks.append(true);
+    m_rotationLeftRightClick = true;
     m_rotationAngles.append(90);
     m_rotationAngles.append(90);
     m_rotationAngles.append(90);
@@ -155,14 +151,14 @@ void EngineSettings::setTranslationOperation(AxisKind ak, bool b)
     m_translationOperations.replace(static_cast<int>(ak), b);
 }
 
-bool EngineSettings::translationLeftRightClick(AxisKind ak) const
+bool EngineSettings::translationLeftRightClick() const
 {
-    return m_translationLeftRightClicks.at(static_cast<int>(ak));
+    return m_translationLeftRightClick;
 }
 
-void EngineSettings::setTranslationLeftRightClick(AxisKind ak, bool b)
+void EngineSettings::setTranslationLeftRightClick(bool b)
 {
-    m_translationLeftRightClicks.replace(static_cast<int>(ak), b);
+    m_translationLeftRightClick = b;
 }
 
 double EngineSettings::translationValue(AxisKind ak) const
@@ -185,14 +181,14 @@ void EngineSettings::setRotationOperation(AxisKind ak, bool b)
     m_rotationOperations.replace(static_cast<int>(ak), b);
 }
 
-bool EngineSettings::rotationLeftRightClick(AxisKind ak) const
+bool EngineSettings::rotationLeftRightClick() const
 {
-    return m_rotationLeftRightClicks.at(static_cast<int>(ak));
+    return m_rotationLeftRightClick;
 }
 
-void EngineSettings::setRotationLeftRightClick(AxisKind ak, bool b)
+void EngineSettings::setRotationLeftRightClick(bool b)
 {
-    m_rotationLeftRightClicks.replace(static_cast<int>(ak), b);
+    m_rotationLeftRightClick = b;
 }
 
 double EngineSettings::rotationAngle(AxisKind ak) const
@@ -304,6 +300,39 @@ void EngineSettings::setGuideStepPictures(int guideStepPictures)
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+
+void EngineSettings::setApplyLeftRightClick(DrawKind drawKind, bool applyLeftRightClick)
+{
+    switch (drawKind)
+    {
+    case DrawKind::Translate:
+        m_translationLeftRightClick = applyLeftRightClick;
+        break;
+    case DrawKind::Rotate:
+        m_rotationLeftRightClick = applyLeftRightClick;
+        break;
+    default:
+        break;
+    }
+}
+
+// -------------------------------------------------------
+
+bool EngineSettings::applyLeftRightClick(DrawKind drawKind) const
+{
+    switch (drawKind)
+    {
+    case DrawKind::Translate:
+        return m_translationLeftRightClick;
+    case DrawKind::Rotate:
+        return m_rotationLeftRightClick;
+    default:
+        return false;
+    }
+}
+
 // -------------------------------------------------------
 
 void EngineSettings::setDefault() {
@@ -463,10 +492,7 @@ void EngineSettings::read(const QJsonObject &json) {
     for (i = 0, l = tab.size(); i < l; i++) {
         m_translationOperations.replace(i, tab.at(i).toBool());
     }
-    tab = json[JSON_TRANSLATION_LEFT_RIGHT_CLICKS].toArray();
-    for (i = 0, l = tab.size(); i < l; i++) {
-        m_translationLeftRightClicks.replace(i, tab.at(i).toBool());
-    }
+    m_translationLeftRightClick = json[JSON_TRANSLATION_LEFT_RIGHT_CLICK].toBool();
     tab = json[JSON_TRANSLATION_VALUES].toArray();
     for (i = 0, l = tab.size(); i < l; i++) {
         m_translationValues.replace(i, tab.at(i).toDouble());
@@ -475,10 +501,7 @@ void EngineSettings::read(const QJsonObject &json) {
     for (i = 0, l = tab.size(); i < l; i++) {
         m_rotationOperations.replace(i, tab.at(i).toBool());
     }
-    tab = json[JSON_ROTATION_LEFT_RIGHT_CLICKS].toArray();
-    for (i = 0, l = tab.size(); i < l; i++) {
-        m_rotationLeftRightClicks.replace(i, tab.at(i).toBool());
-    }
+    m_rotationLeftRightClick = json[JSON_ROTATION_LEFT_RIGHT_CLICK].toBool();
     tab = json[JSON_ROTATION_ANGLES].toArray();
     for (i = 0, l = tab.size(); i < l; i++) {
         m_rotationAngles.replace(i, tab.at(i).toDouble());
@@ -551,12 +574,7 @@ void EngineSettings::write(QJsonObject &json) const {
         tab.append(m_translationOperations.at(i));
     }
     json[JSON_TRANSLATION_OPERATIONS] = tab;
-    tab = QJsonArray();
-    for (i = 0, l = m_translationLeftRightClicks.size(); i < l; i++)
-    {
-        tab.append(m_translationLeftRightClicks.at(i));
-    }
-    json[JSON_TRANSLATION_LEFT_RIGHT_CLICKS] = tab;
+    json[JSON_TRANSLATION_LEFT_RIGHT_CLICK] = m_translationLeftRightClick;
     tab = QJsonArray();
     for (i = 0, l = m_translationValues.size(); i < l; i++)
     {
@@ -569,12 +587,7 @@ void EngineSettings::write(QJsonObject &json) const {
         tab.append(m_rotationOperations.at(i));
     }
     json[JSON_ROTATION_OPERATIONS] = tab;
-    tab = QJsonArray();
-    for (i = 0, l = m_rotationLeftRightClicks.size(); i < l; i++)
-    {
-        tab.append(m_rotationLeftRightClicks.at(i));
-    }
-    json[JSON_ROTATION_LEFT_RIGHT_CLICKS] = tab;
+    json[JSON_ROTATION_LEFT_RIGHT_CLICK] = m_rotationLeftRightClick;
     tab = QJsonArray();
     for (i = 0, l = m_rotationAngles.size(); i < l; i++)
     {

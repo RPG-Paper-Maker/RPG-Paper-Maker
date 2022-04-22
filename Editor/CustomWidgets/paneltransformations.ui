@@ -86,6 +86,16 @@
        </widget>
       </widget>
      </item>
+     <item>
+      <widget class="QCheckBox" name="checkBoxApplyLeftRightClick">
+       <property name="text">
+        <string>Apply on left / right click</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>

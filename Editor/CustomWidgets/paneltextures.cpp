@@ -49,6 +49,7 @@ PanelTransformations * PanelTextures::panelTransformations() const {
 
 void PanelTextures::setDrawKind(DrawKind dk) {
     m_drawKind = dk;
+    ui->panelTransformations->setDrawKind(dk);
 }
 
 // -------------------------------------------------------

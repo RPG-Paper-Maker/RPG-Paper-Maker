@@ -44,6 +44,12 @@ void PanelTransformations::setDrawKind(DrawKind drawKind)
     m_drawKind = drawKind;
 }
 
+bool PanelTransformations::applyLeftRightClick() const
+{
+    return ui->checkBoxApplyLeftRightClick->isChecked();
+}
+
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -58,6 +64,7 @@ AxisKind PanelTransformations::currentAxisKind() const
 // -------------------------------------------------------
 
 void PanelTransformations::initialize(DrawKind drawKind) {
+    m_drawKind = drawKind;
     this->on_positionSelected(nullptr, true);
     ui->panelSubTransformationX->initialize(drawKind, AxisKind::X);
     ui->panelSubTransformationY->initialize(drawKind, AxisKind::Y);
@@ -68,6 +75,7 @@ void PanelTransformations::initialize(DrawKind drawKind) {
         this, SLOT(on_positionChangedUI(Position &)));
     connect(ui->panelSubTransformationZ, SIGNAL(positionChanged(Position &)),
         this, SLOT(on_positionChangedUI(Position &)));
+    ui->checkBoxApplyLeftRightClick->setChecked(RPM::get()->engineSettings()->applyLeftRightClick(drawKind));
 }
 
 // -------------------------------------------------------
@@ -111,6 +119,8 @@ void PanelTransformations::translate(DrawKind drawKind)
     ui->tabWidget->setTabText(0, RPM::translate(Translations::X));
     ui->tabWidget->setTabText(1, RPM::translate(Translations::Y));
     ui->tabWidget->setTabText(2, RPM::translate(Translations::Z));
+    ui->checkBoxApplyLeftRightClick->setText(RPM::translate(Translations
+        ::APPLY_ON_LEFT_RIGHT_CLICK));
 }
 
 // -------------------------------------------------------
@@ -143,4 +153,21 @@ void PanelTransformations::on_positionChangedUI(Position &previousPosition) {
     this->updateText();
 
     emit positionChanged(*m_mapElementPosition, previousPosition);
+}
+
+// -------------------------------------------------------
+
+void PanelTransformations::on_checkBoxApplyLeftRightClick_toggled(bool checked)
+{
+
+    RPM::get()->engineSettings()->setApplyLeftRightClick(m_drawKind, checked);
+    RPM::get()->engineSettings()->write();
+
+    // If not checked, impossible to select + operation
+    ui->panelSubTransformationX->updateApplyLeftRightEnabled(checked);
+    ui->panelSubTransformationY->updateApplyLeftRightEnabled(checked);
+    ui->panelSubTransformationZ->updateApplyLeftRightEnabled(checked);
+    ui->panelSubTransformationX->updatePositionAuto();
+    ui->panelSubTransformationY->updatePositionAuto();
+    ui->panelSubTransformationZ->updatePositionAuto();
 }

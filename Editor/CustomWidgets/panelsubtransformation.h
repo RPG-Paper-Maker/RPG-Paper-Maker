@@ -41,10 +41,10 @@ public:
 
     bool operation() const;
     double value() const;
-    bool applyLeftRightClick() const;
     void initialize(DrawKind drawKind, AxisKind ak);
     void updatePositionAuto();
     void updatePositionClick(bool positive = true);
+    void updateApplyLeftRightEnabled(bool checked);
 
 private:
     Ui::PanelSubTransformation *ui;
@@ -59,7 +59,6 @@ protected:
 public slots:
     void on_comboBoxOperation_currentIndexChanged(int index);
     void on_doubleSpinBoxAngle_valueChanged(double);
-    void on_checkBoxApplyLeftRightClick_toggled(bool checked);
     void on_pushButtonDefineDefault_clicked();
     void on_pushButtonResetDefault_clicked();
 
