@@ -27,6 +27,7 @@ const QString EngineSettings::JSON_ROTATION_LEFT_RIGHT_CLICK = "rlrc";
 const QString EngineSettings::JSON_ROTATION_ANGLES = "ra";
 const QString EngineSettings::JSON_TRANSLATION_OPERATIONS = "translationOperations";
 const QString EngineSettings::JSON_TRANSLATION_LEFT_RIGHT_CLICK = "translationLeftRightClick";
+const QString EngineSettings::JSON_TRANSLATION_BY_SQUARE = "translationBySquare";
 const QString EngineSettings::JSON_TRANSLATION_VALUES = "translationValues";
 const QString EngineSettings::JSON_UPDATER = "updater";
 const QString EngineSettings::JSON_SHOW_AVAILABLE_CONTENT = "sac";
@@ -81,7 +82,8 @@ EngineSettings::EngineSettings() :
     m_translationOperations.append(false);
     m_translationOperations.append(false);
     m_translationOperations.append(false);
-    m_translationLeftRightClick = false;
+    m_translationLeftRightClick = true;
+    m_translationBySquare = true;
     m_translationValues.append(0);
     m_translationValues.append(0);
     m_translationValues.append(0);
@@ -161,6 +163,16 @@ void EngineSettings::setTranslationLeftRightClick(bool b)
     m_translationLeftRightClick = b;
 }
 
+bool EngineSettings::translationBySquare() const
+{
+    return m_translationBySquare;
+}
+
+void EngineSettings::setTranslationBySquare(bool b)
+{
+    m_translationBySquare = b;
+}
+
 double EngineSettings::translationValue(AxisKind ak) const
 {
     return m_translationValues.at(static_cast<int>(ak));
@@ -199,6 +211,112 @@ double EngineSettings::rotationAngle(AxisKind ak) const
 void EngineSettings::setRotationAngle(AxisKind ak, double a)
 {
     m_rotationAngles.replace(static_cast<int>(ak), a);
+}
+
+bool EngineSettings::applyLeftRightClick(DrawKind drawKind) const
+{
+    switch (drawKind)
+    {
+    case DrawKind::Translate:
+        return m_translationLeftRightClick;
+    case DrawKind::Rotate:
+        return m_rotationLeftRightClick;
+    default:
+        return false;
+    }
+}
+
+void EngineSettings::setApplyLeftRightClick(DrawKind drawKind, bool applyLeftRightClick)
+{
+    switch (drawKind)
+    {
+    case DrawKind::Translate:
+        m_translationLeftRightClick = applyLeftRightClick;
+        break;
+    case DrawKind::Rotate:
+        m_rotationLeftRightClick = applyLeftRightClick;
+        break;
+    default:
+        break;
+    }
+}
+
+bool EngineSettings::bySquare(DrawKind drawKind) const
+{
+    switch (drawKind)
+    {
+    case DrawKind::Translate:
+        return m_translationBySquare;
+    default:
+        return false;
+    }
+}
+
+void EngineSettings::setBySquare(DrawKind drawKind, bool bySquare)
+{
+    switch (drawKind)
+    {
+    case DrawKind::Translate:
+        m_translationBySquare = bySquare;
+        break;
+    default:
+        break;
+    }
+
+}
+bool EngineSettings::operation(DrawKind drawKind, AxisKind axisKind)
+{
+    switch (drawKind)
+    {
+    case DrawKind::Translate:
+        return this->translationOperation(axisKind);
+    case DrawKind::Rotate:
+        return this->rotationOperation(axisKind);
+    default:
+        return false;
+    }
+}
+
+void EngineSettings::setOperation(DrawKind drawKind, AxisKind axisKind, bool b)
+{
+    switch (drawKind)
+    {
+    case DrawKind::Translate:
+        this->setTranslationOperation(axisKind, b);
+        break;
+    case DrawKind::Rotate:
+        this->setRotationOperation(axisKind, b);
+        break;
+    default:
+        break;
+    }
+}
+
+double EngineSettings::value(DrawKind drawKind, AxisKind axisKind) const
+{
+    switch (drawKind)
+    {
+    case DrawKind::Translate:
+        return this->translationValue(axisKind);
+    case DrawKind::Rotate:
+        return this->rotationAngle(axisKind);
+    default:
+        return 0;
+    }
+}
+
+void EngineSettings::setValue(DrawKind drawKind, AxisKind axisKind, double value)
+{
+    switch (drawKind)
+    {
+    case DrawKind::Translate:
+        this->setTranslationValue(axisKind, value);
+    case DrawKind::Rotate:
+        this->setRotationAngle(axisKind, value);
+        break;
+    default:
+        break;
+    }
 }
 
 bool EngineSettings::updater() const {
@@ -300,39 +418,6 @@ void EngineSettings::setGuideStepPictures(int guideStepPictures)
 //
 //  INTERMEDIARY FUNCTIONS
 //
-// -------------------------------------------------------
-
-
-void EngineSettings::setApplyLeftRightClick(DrawKind drawKind, bool applyLeftRightClick)
-{
-    switch (drawKind)
-    {
-    case DrawKind::Translate:
-        m_translationLeftRightClick = applyLeftRightClick;
-        break;
-    case DrawKind::Rotate:
-        m_rotationLeftRightClick = applyLeftRightClick;
-        break;
-    default:
-        break;
-    }
-}
-
-// -------------------------------------------------------
-
-bool EngineSettings::applyLeftRightClick(DrawKind drawKind) const
-{
-    switch (drawKind)
-    {
-    case DrawKind::Translate:
-        return m_translationLeftRightClick;
-    case DrawKind::Rotate:
-        return m_rotationLeftRightClick;
-    default:
-        return false;
-    }
-}
-
 // -------------------------------------------------------
 
 void EngineSettings::setDefault() {
@@ -493,6 +578,7 @@ void EngineSettings::read(const QJsonObject &json) {
         m_translationOperations.replace(i, tab.at(i).toBool());
     }
     m_translationLeftRightClick = json[JSON_TRANSLATION_LEFT_RIGHT_CLICK].toBool();
+    m_translationBySquare = json[JSON_TRANSLATION_BY_SQUARE].toBool();
     tab = json[JSON_TRANSLATION_VALUES].toArray();
     for (i = 0, l = tab.size(); i < l; i++) {
         m_translationValues.replace(i, tab.at(i).toDouble());
@@ -575,6 +661,7 @@ void EngineSettings::write(QJsonObject &json) const {
     }
     json[JSON_TRANSLATION_OPERATIONS] = tab;
     json[JSON_TRANSLATION_LEFT_RIGHT_CLICK] = m_translationLeftRightClick;
+    json[JSON_TRANSLATION_BY_SQUARE] = m_translationBySquare;
     tab = QJsonArray();
     for (i = 0, l = m_translationValues.size(); i < l; i++)
     {

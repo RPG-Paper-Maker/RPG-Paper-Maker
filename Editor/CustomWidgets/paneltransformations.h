@@ -39,6 +39,7 @@ public:
     DrawKind drawKind() const;
     void setDrawKind(DrawKind drawKind);
     bool applyLeftRightClick() const;
+    bool bySquare() const;
 
     AxisKind currentAxisKind() const;
     void deletePosition();
@@ -58,6 +59,7 @@ public slots:
     void on_positionSelected(Position *p, bool positive);
     void on_positionChangedUI(Position &previousPosition);
     void on_checkBoxApplyLeftRightClick_toggled(bool checked);
+    void on_checkBoxBySquare_toggled(bool checked);
 
 signals:
     void positionChanged(Position &newPosition, Position &previousPosition);

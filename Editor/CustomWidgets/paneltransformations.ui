@@ -96,6 +96,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QCheckBox" name="checkBoxBySquare">
+       <property name="text">
+        <string>By square</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>

@@ -27,8 +27,6 @@ PanelSubTransformation::PanelSubTransformation(QWidget *parent) :
     m_drawKind(DrawKind::Translate)
 {
     ui->setupUi(this);
-
-    this->translate();
 }
 
 PanelSubTransformation::~PanelSubTransformation() {
@@ -61,18 +59,10 @@ void PanelSubTransformation::initialize(DrawKind drawKind, AxisKind ak)
 {
     m_drawKind = drawKind;
     m_axisKind = ak;
+    this->updateApplyLeftRightEnabled(RPM::get()->engineSettings()->applyLeftRightClick(drawKind));
     ui->comboBoxOperation->setCurrentIndex(RPM::get()->engineSettings()
-        ->rotationOperation(ak) ? 1 : 0);
-    ui->doubleSpinBoxAngle->setValue(RPM::get()->engineSettings()->rotationAngle
-        (ak));
-    ui->pushButtonDefineDefault->setText(RPM::translate(Translations
-        ::DEFINE_AS_DEFAULT) + RPM::SPACE + RPM::ENUM_TO_STRING_AXIS_KIND.at(
-        static_cast<int>(ak)) + RPM::SPACE + RPM::translate(Translations
-        ::ROTATION).toLower());
-    ui->pushButtonResetDefault->setText(RPM::translate(Translations
-        ::RESET_TO_DEFAULT) + RPM::SPACE + RPM::ENUM_TO_STRING_AXIS_KIND.at(
-        static_cast<int>(ak)) + RPM::SPACE + RPM::translate(Translations
-        ::ROTATION).toLower());
+        ->operation(drawKind, ak) ? 1 : 0);
+    ui->doubleSpinBoxAngle->setValue(RPM::get()->engineSettings()->value(drawKind, ak));
 }
 
 // -------------------------------------------------------
@@ -213,9 +203,32 @@ void PanelSubTransformation::updateApplyLeftRightEnabled(bool checked)
 
 //-------------------------------------------------
 
-void PanelSubTransformation::translate()
+void PanelSubTransformation::translate(DrawKind drawKind, AxisKind axisKind)
 {
-    ui->labelAngle->setText(RPM::translate(Translations::ANGLE) + RPM::COLON);
+    QString value;
+    QString transformation;
+    switch (drawKind)
+    {
+    case DrawKind::Translate:
+        value = Translations::VALUE;
+        transformation = Translations::TRANSLATION;
+        break;
+    case DrawKind::Rotate:
+        value = Translations::ANGLE;
+        transformation = Translations::ROTATION;
+        break;
+    default:
+        break;
+    }
+    ui->labelAngle->setText(RPM::translate(value) + RPM::COLON);
+    ui->pushButtonDefineDefault->setText(RPM::translate(Translations
+        ::DEFINE_AS_DEFAULT) + RPM::SPACE + RPM::ENUM_TO_STRING_AXIS_KIND.at(
+        static_cast<int>(axisKind)) + RPM::SPACE + RPM::translate(transformation)
+        .toLower());
+    ui->pushButtonResetDefault->setText(RPM::translate(Translations
+        ::RESET_TO_DEFAULT) + RPM::SPACE + RPM::ENUM_TO_STRING_AXIS_KIND.at(
+        static_cast<int>(axisKind)) + RPM::SPACE + RPM::translate(transformation)
+        .toLower());
 }
 
 // -------------------------------------------------------
@@ -226,32 +239,34 @@ void PanelSubTransformation::translate()
 
 void PanelSubTransformation::on_comboBoxOperation_currentIndexChanged(int index)
 {
-    bool equal;
-
-    equal = index == 1;
-    RPM::get()->engineSettings()->setRotationOperation(m_axisKind, equal);
+    bool equal = index == 1;
+    RPM::get()->engineSettings()->setOperation(m_drawKind, m_axisKind, equal);
     RPM::get()->engineSettings()->write();
-    if (equal) {
+    if (equal)
+    {
         this->updatePositionAuto();
     }
 }
 
 // -------------------------------------------------------
 
-void PanelSubTransformation::on_doubleSpinBoxAngle_valueChanged(double) {
+void PanelSubTransformation::on_doubleSpinBoxAngle_valueChanged(double)
+{
     this->updatePositionAuto();
 }
 
 // -------------------------------------------------------
 
-void PanelSubTransformation::on_pushButtonDefineDefault_clicked() {
-    RPM::get()->engineSettings()->setRotationAngle(m_axisKind, this->value());
+void PanelSubTransformation::on_pushButtonDefineDefault_clicked()
+{
+    RPM::get()->engineSettings()->setValue(m_drawKind, m_axisKind, this->value());
     RPM::get()->engineSettings()->write();
 }
 
 // -------------------------------------------------------
 
-void PanelSubTransformation::on_pushButtonResetDefault_clicked() {
+void PanelSubTransformation::on_pushButtonResetDefault_clicked()
+{
     ui->doubleSpinBoxAngle->setValue(RPM::get()->engineSettings()->rotationAngle
         (m_axisKind));
     this->updatePositionAuto();

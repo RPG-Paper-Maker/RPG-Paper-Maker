@@ -36,6 +36,7 @@ public:
     static const QString JSON_FIRST_TIME;
     static const QString JSON_TRANSLATION_OPERATIONS;
     static const QString JSON_TRANSLATION_LEFT_RIGHT_CLICK;
+    static const QString JSON_TRANSLATION_BY_SQUARE;
     static const QString JSON_TRANSLATION_VALUES;
     static const QString JSON_ROTATION_OPERATIONS;
     static const QString JSON_ROTATION_LEFT_RIGHT_CLICK;
@@ -80,6 +81,8 @@ public:
     void setTranslationOperation(AxisKind ak, bool b);
     bool translationLeftRightClick() const;
     void setTranslationLeftRightClick(bool b);
+    bool translationBySquare() const;
+    void setTranslationBySquare(bool b);
     double translationValue(AxisKind ak) const;
     void setTranslationValue(AxisKind ak, double a);
     bool rotationOperation(AxisKind ak) const;
@@ -88,6 +91,14 @@ public:
     void setRotationLeftRightClick(bool b);
     double rotationAngle(AxisKind ak) const;
     void setRotationAngle(AxisKind ak, double a);
+    bool applyLeftRightClick(DrawKind drawKind) const;
+    void setApplyLeftRightClick(DrawKind drawKind, bool applyLeftRightClick);
+    bool bySquare(DrawKind drawKind) const;
+    void setBySquare(DrawKind drawKind, bool bySquare);
+    bool operation(DrawKind drawKind, AxisKind axisKind);
+    void setOperation(DrawKind drawKind, AxisKind axisKind, bool b);
+    double value(DrawKind drawKind, AxisKind axisKind) const;
+    void setValue(DrawKind drawKind, AxisKind axisKind, double value);
     bool updater() const;
     void setUpdater(bool u);
     bool showAvailableContent() const;
@@ -109,8 +120,6 @@ public:
     int guideStepPictures() const;
     void setGuideStepPictures(int guideStepPictures);
 
-    void setApplyLeftRightClick(DrawKind drawKind, bool applyLeftRightClick);
-    bool applyLeftRightClick(DrawKind drawKind) const;
     void setDefault();
     QString getThemeContent() const;
     void read();
@@ -132,6 +141,7 @@ protected:
     bool m_firstTime;
     QList<bool> m_translationOperations;
     bool m_translationLeftRightClick;
+    bool m_translationBySquare;
     QList<double> m_translationValues;
     QList<bool> m_rotationOperations;
     bool m_rotationLeftRightClick;

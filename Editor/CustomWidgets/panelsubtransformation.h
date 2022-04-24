@@ -45,11 +45,10 @@ public:
     void updatePositionAuto();
     void updatePositionClick(bool positive = true);
     void updateApplyLeftRightEnabled(bool checked);
+    void translate(DrawKind drawKind, AxisKind axisKind);
 
 private:
     Ui::PanelSubTransformation *ui;
-
-    void translate();
 
 protected:
     Position *m_mapElementPosition;

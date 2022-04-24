@@ -1611,5 +1611,7 @@ void ProjectUpdater::updateVersion_1_9_3_commands(QStandardItem *commands)
 void ProjectUpdater::updateVersion_1_10_0()
 {
     RPM::get()->engineSettings()->setRotationLeftRightClick(true);
+    RPM::get()->engineSettings()->setTranslationLeftRightClick(true);
+    RPM::get()->engineSettings()->setTranslationBySquare(true);
     RPM::get()->engineSettings()->write();
 }

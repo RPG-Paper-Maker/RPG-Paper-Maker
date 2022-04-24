@@ -49,6 +49,10 @@ bool PanelTransformations::applyLeftRightClick() const
     return ui->checkBoxApplyLeftRightClick->isChecked();
 }
 
+bool PanelTransformations::bySquare() const
+{
+    return ui->checkBoxBySquare->isChecked();
+}
 
 // -------------------------------------------------------
 //
@@ -63,7 +67,8 @@ AxisKind PanelTransformations::currentAxisKind() const
 
 // -------------------------------------------------------
 
-void PanelTransformations::initialize(DrawKind drawKind) {
+void PanelTransformations::initialize(DrawKind drawKind)
+{
     m_drawKind = drawKind;
     this->on_positionSelected(nullptr, true);
     ui->panelSubTransformationX->initialize(drawKind, AxisKind::X);
@@ -75,7 +80,10 @@ void PanelTransformations::initialize(DrawKind drawKind) {
         this, SLOT(on_positionChangedUI(Position &)));
     connect(ui->panelSubTransformationZ, SIGNAL(positionChanged(Position &)),
         this, SLOT(on_positionChangedUI(Position &)));
-    ui->checkBoxApplyLeftRightClick->setChecked(RPM::get()->engineSettings()->applyLeftRightClick(drawKind));
+    ui->checkBoxApplyLeftRightClick->setChecked(RPM::get()->engineSettings()
+        ->applyLeftRightClick(drawKind));
+    ui->checkBoxBySquare->setChecked(RPM::get()->engineSettings()->bySquare(drawKind));
+    ui->checkBoxBySquare->setVisible(drawKind == DrawKind::Translate);
 }
 
 // -------------------------------------------------------
@@ -119,8 +127,12 @@ void PanelTransformations::translate(DrawKind drawKind)
     ui->tabWidget->setTabText(0, RPM::translate(Translations::X));
     ui->tabWidget->setTabText(1, RPM::translate(Translations::Y));
     ui->tabWidget->setTabText(2, RPM::translate(Translations::Z));
+    ui->panelSubTransformationX->translate(drawKind, AxisKind::X);
+    ui->panelSubTransformationY->translate(drawKind, AxisKind::Y);
+    ui->panelSubTransformationZ->translate(drawKind, AxisKind::Z);
     ui->checkBoxApplyLeftRightClick->setText(RPM::translate(Translations
         ::APPLY_ON_LEFT_RIGHT_CLICK));
+    ui->checkBoxBySquare->setText(RPM::translate(Translations::BY_SQUARE));
 }
 
 // -------------------------------------------------------
@@ -136,14 +148,17 @@ void PanelTransformations::on_positionSelected(Position *p, bool positive) {
     ui->panelSubTransformationY->setMapElementPosition(p);
     ui->panelSubTransformationZ->setMapElementPosition(p);
     this->updateText();
-
-    switch (ui->tabWidget->currentIndex()) {
+    switch (ui->tabWidget->currentIndex())
+    {
     case 0:
-        ui->panelSubTransformationX->updatePositionClick(positive); break;
+        ui->panelSubTransformationX->updatePositionClick(positive);
+        break;
     case 1:
-        ui->panelSubTransformationY->updatePositionClick(positive); break;
+        ui->panelSubTransformationY->updatePositionClick(positive);
+        break;
     case 2:
-        ui->panelSubTransformationZ->updatePositionClick(positive); break;
+        ui->panelSubTransformationZ->updatePositionClick(positive);
+        break;
     }
 }
 
@@ -167,7 +182,24 @@ void PanelTransformations::on_checkBoxApplyLeftRightClick_toggled(bool checked)
     ui->panelSubTransformationX->updateApplyLeftRightEnabled(checked);
     ui->panelSubTransformationY->updateApplyLeftRightEnabled(checked);
     ui->panelSubTransformationZ->updateApplyLeftRightEnabled(checked);
-    ui->panelSubTransformationX->updatePositionAuto();
-    ui->panelSubTransformationY->updatePositionAuto();
-    ui->panelSubTransformationZ->updatePositionAuto();
+    switch (ui->tabWidget->currentIndex())
+    {
+    case 0:
+        ui->panelSubTransformationX->updatePositionAuto();
+        break;
+    case 1:
+        ui->panelSubTransformationY->updatePositionAuto();
+        break;
+    case 2:
+        ui->panelSubTransformationZ->updatePositionAuto();
+        break;
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelTransformations::on_checkBoxBySquare_toggled(bool checked)
+{
+    RPM::get()->engineSettings()->setBySquare(m_drawKind, checked);
+    RPM::get()->engineSettings()->write();
 }
