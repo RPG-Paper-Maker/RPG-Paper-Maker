@@ -69,7 +69,8 @@ ControlMapEditor::ControlMapEditor() :
 
 }
 
-ControlMapEditor::~ControlMapEditor() {
+ControlMapEditor::~ControlMapEditor()
+{
     deleteMap(false);
 
     delete m_camera;
@@ -1619,8 +1620,9 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
     MapEditorSubSelectionKind subSelection, bool square, DrawKind drawKind, bool layerOn,
     QRect &tileset, int specialID, int widthSquares, double widthPixels, int
     heightSquares, double heightPixels, QRect &defaultFloorRect, QPoint point,
-    Qt::MouseButton button)
+    Qt::MouseButton button, AxisKind axisKind, bool applyLeftRight)
 {
+    m_selectedAxisTransformation = axisKind; // Will be used later for future translation improve
 
     // Update mouse
     updateMouse(point, selection, square, drawKind, layerOn);
@@ -1646,7 +1648,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
             removePreviewElements();
         } else
         {
-            if (drawKind == DrawKind::Translate)
+            if (drawKind == DrawKind::Translate && applyLeftRight)
             {
                 m_isTranslating = true;
             }

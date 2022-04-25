@@ -238,7 +238,7 @@ public:
         MapEditorSubSelectionKind subSelection, bool square, DrawKind drawKind,
         bool layerOn, QRect &tileset, int specialID, int widthSquares, double
         widthPixels, int heightSquares, double heightPixels, QRect
-        &defaultFloorRect, QPoint point, Qt::MouseButton button);
+        &defaultFloorRect, QPoint point, Qt::MouseButton button, AxisKind axisKind, bool applyLeftRight);
     void onMouseReleased(MapEditorSelectionKind kind, MapEditorSubSelectionKind
         subKind, DrawKind drawKind, QRect &tileset, int specialID, QPoint,
         bool layerOn, Qt::MouseButton button, int widthSquares, double widthPixels,
@@ -288,6 +288,7 @@ protected:
     Position m_positionTranslated;
     bool m_translatedChanged;
     Position m_positionTranslate;
+    AxisKind m_selectedAxisTransformation;
     float m_distancePlane;
     float m_distanceLand;
     float m_distanceSprite;

@@ -58,6 +58,21 @@ void PanelTextures::setDrawKind(DrawKind dk) {
 //
 // -------------------------------------------------------
 
+AxisKind PanelTextures::axisKind() const
+{
+    return ui->panelTransformations->currentAxisKind();
+}
+
+// -------------------------------------------------------
+
+bool PanelTextures::applyLeftRight() const
+{
+    return ui->panelTransformations->applyLeftRightClick();
+}
+
+// -------------------------------------------------------
+
+
 void PanelTextures::initializeWidgetTreeLocalMaps(WidgetTreeLocalMaps *w) {
     m_widgetTreeLocalMaps = w;
 }

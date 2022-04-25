@@ -45,6 +45,8 @@ public:
     PanelTransformations * panelTransformations() const;
     void setDrawKind(DrawKind dk);
 
+    AxisKind axisKind() const;
+    bool applyLeftRight() const;
     void initializeWidgetTreeLocalMaps(WidgetTreeLocalMaps *w);
     void getTilesetTexture(QRect &rect) const;
     void setTilesetImage(QString path);

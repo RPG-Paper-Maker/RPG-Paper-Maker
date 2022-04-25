@@ -788,7 +788,8 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event)
             m_panelTextures->getDefaultFloorRect(defaultFloorRect);
             m_control.onMousePressed(selection, subSelection, square, drawKind,
                 layerOn, tileset, specialID, widthSquares, widthPixels,
-                heightSquares, heightPixels, defaultFloorRect, event->pos(), button);
+                heightSquares, heightPixels, defaultFloorRect, event->pos(), button,
+                m_panelTextures->axisKind(), m_panelTextures->applyLeftRight());
 
             // Transformations
             if (button != Qt::MouseButton::MiddleButton)
@@ -816,7 +817,7 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event)
                         MapEditorSubSelectionKind::Object3D, m_menuBar
                         ->squareOn(true), DrawKind::Pencil, false,
                         defaultFloorRect, 1, 1, 0, 1, 0, defaultFloorRect, event
-                        ->pos(), button);
+                        ->pos(), button, AxisKind::X, false);
                 }
             } else
             {

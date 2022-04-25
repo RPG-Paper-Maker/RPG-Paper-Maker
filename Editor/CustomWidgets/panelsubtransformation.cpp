@@ -71,14 +71,13 @@ void PanelSubTransformation::updatePositionAuto() {
     if (m_mapElementPosition != nullptr && !RPM::get()->engineSettings()
         ->applyLeftRightClick(m_drawKind))
     {
-        Position previousPosition;
-
-        previousPosition = *m_mapElementPosition;
+        Position previousPosition = *m_mapElementPosition;
         if (m_drawKind == DrawKind::Translate)
         {
-            int value = qRound(this->value());
-            int squares = value / RPM::getSquareSize();
-            int pixels = value % RPM::getSquareSize() / 100.0;
+            double coef = RPM::get()->engineSettings()->translationBySquare() ? 1 : RPM::getSquareSize();
+            int squares = this->value() / coef;
+            double pixels = RPM::get()->engineSettings()->translationBySquare() ?
+                0 : (qRound(this->value()) % RPM::getSquareSize()) / 100.0;
             switch (m_axisKind)
             {
             case AxisKind::X:
@@ -109,74 +108,21 @@ void PanelSubTransformation::updatePositionAuto() {
 
 void PanelSubTransformation::updatePositionClick(bool positive)
 {
-    if (m_mapElementPosition != nullptr && RPM::get()->engineSettings()
-            ->applyLeftRightClick(m_drawKind))
+    if (m_drawKind == DrawKind::Rotate && m_mapElementPosition != nullptr && RPM
+        ::get()->engineSettings()->applyLeftRightClick(m_drawKind))
     {
-        Position previousPosition;
-
-        previousPosition = *m_mapElementPosition;
-        if (m_drawKind == DrawKind::Translate)
+        Position previousPosition = *m_mapElementPosition;
+        if (this->operation())
         {
-            int value = qRound(this->value());
-            int squares = value / RPM::getSquareSize();
-            int pixels = value % RPM::getSquareSize() / 100.0;
-            squares = positive ? squares : -squares;
-            pixels = positive ? pixels : -pixels;
-            switch (m_axisKind)
-            {
-            case AxisKind::X:
-                if (this->operation())
-                {
-                    m_mapElementPosition->setX(squares);
-                    m_mapElementPosition->setCenterX(pixels);
-                } else
-                {
-                    m_mapElementPosition->addX(squares);
-                    m_mapElementPosition->addCenterX(pixels);
-                }
-                m_mapElementPosition->setX(qMax(qMin(0, m_mapElementPosition->x()),
-                    RPM::get()->project()->currentMap()->mapProperties()->length()));
-                break;
-            case AxisKind::Y:
-                if (this->operation())
-                {
-                    m_mapElementPosition->setY(squares);
-                    m_mapElementPosition->setYPlus(pixels);
-                } else
-                {
-                    m_mapElementPosition->addY(squares);
-                    m_mapElementPosition->addYPlus(pixels);
-                }
-                m_mapElementPosition->setY(qMax(qMin(-RPM::get()->project()
-                    ->currentMap()->mapProperties()->depth(), m_mapElementPosition->y()),
-                    RPM::get()->project()->currentMap()->mapProperties()->height()));
-                break;
-            case AxisKind::Z:
-                if (this->operation())
-                {
-                    m_mapElementPosition->setZ(squares);
-                    m_mapElementPosition->setCenterZ(pixels);
-                } else
-                {
-                    m_mapElementPosition->addZ(squares);
-                    m_mapElementPosition->addCenterZ(pixels);
-                }
-                m_mapElementPosition->setZ(qMax(qMin(0, m_mapElementPosition->z()),
-                    RPM::get()->project()->currentMap()->mapProperties()->width()));
-                break;
-            }
-        } else if (m_drawKind == DrawKind::Rotate)
+            m_mapElementPosition->setAngle(m_axisKind, positive ? this->value()
+                : -this->value());
+        } else
         {
-            if (this->operation()) {
-                m_mapElementPosition->setAngle(m_axisKind, positive ? this->value()
-                    : -this->value());
-            } else {
-                m_mapElementPosition->addAngle(m_axisKind, positive ? this->value()
-                    : -this->value());
-            }
+            m_mapElementPosition->addAngle(m_axisKind, positive ? this->value()
+                : -this->value());
         }
-
-        if (*m_mapElementPosition != previousPosition) {
+        if (*m_mapElementPosition != previousPosition)
+        {
             emit positionChanged(previousPosition);
         }
     }
