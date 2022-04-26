@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QtMath>
 #include "panelsubtransformation.h"
 #include "ui_panelsubtransformation.h"
 #include "rpm.h"
@@ -74,11 +75,35 @@ void PanelSubTransformation::updatePositionAuto() {
         Position previousPosition = *m_mapElementPosition;
         if (m_drawKind == DrawKind::Translate)
         {
-            double coef = RPM::get()->engineSettings()->translationBySquare() ? 1 : RPM::getSquareSize();
-            int squares = this->value() / coef;
-            double pixels = RPM::get()->engineSettings()->translationBySquare() ?
-                0 : static_cast<double>(qRound(this->value()) % RPM::getSquareSize()) / RPM
-                ::getSquareSize() * 100.0;
+            int min, max;
+            switch (m_axisKind)
+            {
+            case AxisKind::X:
+                min = 0;
+                max = RPM::get()->project()->currentMap()->mapProperties()->length() - 1;
+                break;
+            case AxisKind::Y:
+                min = RPM::get()->project()->currentMap()->mapProperties()->depth();
+                max = RPM::get()->project()->currentMap()->mapProperties()->height() - 1;
+                break;
+            case AxisKind::Z:
+                min = 0;
+                max = RPM::get()->project()->currentMap()->mapProperties()->width() - 1;
+                break;
+            }
+            int value = qFloor(this->value() / (RPM::get()->engineSettings()
+                ->translationBySquare() ? 1 : RPM::getSquareSize()));
+            int squares = qMax(min, qMin(max, value));
+            double pixels = qMax(0.0, qMin(100.0, RPM::get()->engineSettings()
+                ->translationBySquare() ? 0 : static_cast<double>(qRound(this
+                ->value()) % RPM::getSquareSize()) / RPM::getSquareSize() * 100.0));
+            if (value < min)
+            {
+                pixels = 0.0;
+            } else if (value > max)
+            {
+                pixels = (RPM::getSquareSize() - 1.0) / RPM::getSquareSize() * 100.0;
+            }
             switch (m_axisKind)
             {
             case AxisKind::X:
