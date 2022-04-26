@@ -47,6 +47,8 @@ ControlMapEditor::ControlMapEditor() :
     m_elementOnSpriteTranslated(nullptr),
     m_elementOnObject3DTranslated(nullptr),
     m_translatedChanged(false),
+    m_applyLeftRight(false),
+    m_firstClick(false),
     m_positionPreviousPreview(-1, 0, 0, -1, 0),
     m_previousMouseCoords(-500, 0, 0, -500),
     m_firstMouseCoords(-500, 0, 0, -500),
@@ -403,7 +405,8 @@ void ControlMapEditor::updateCameraTreeNode() {
 // -------------------------------------------------------
 
 void ControlMapEditor::update(MapEditorSelectionKind selectionKind, bool square,
-    DrawKind drawKind, bool layerOn, bool needUpdatePortions)
+    DrawKind drawKind, bool layerOn, Position *positionSelectedTransformation,
+    bool needUpdatePortions)
 {
     // Update portions
     if (needUpdatePortions)
@@ -421,21 +424,31 @@ void ControlMapEditor::update(MapEditorSelectionKind selectionKind, bool square,
     m_camera->update(cursor(), m_map->squareSize());
 
     // Raycasting
-    updateRaycasting(selectionKind, square, drawKind, layerOn);
+    this->updateRaycasting(selectionKind, square, drawKind, layerOn);
 
     // Translation
-    if (m_isTranslating)
+    this->updateTransformations(selectionKind, drawKind, positionSelectedTransformation);
+
+    // Mouse update
+    m_mouseBeforeUpdate = m_mouseMove;
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKind,
+    DrawKind drawKind, Position *positionSelectedTransformation)
+{
+    if (!m_firstClick && (m_isTranslating || (positionSelectedTransformation !=
+        nullptr && drawKind == DrawKind::Translate)))
     {
-        Position *position = this->positionOnElement(MapEditorSelectionKind::Land, DrawKind::Pencil);
+        Position *position = m_isTranslating ? this->positionOnElement(MapEditorSelectionKind
+            ::Land, DrawKind::Pencil) : positionSelectedTransformation;
         if (position != nullptr && *position != m_positionOnTransformation)
         {
             this->onTransformationPositionChanged(*position, m_positionOnTransformation, selectionKind);
             m_positionOnTransformation = *position;
         }
     }
-
-    // Mouse update
-    m_mouseBeforeUpdate = m_mouseMove;
 }
 
 // -------------------------------------------------------
@@ -1520,7 +1533,7 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
         MapElement *element;
         QJsonObject obj;
 
-        element = mapPortion->updateElementPosition(previousPosition, k);
+        element = mapPortion->updateElementPosition(m_positionOnTransformation, k);
         if (element != nullptr)
         {
             m_firstMouseCoords = newPosition;
@@ -1541,8 +1554,8 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
                 SpriteDatas *deletedSprite = reinterpret_cast<SpriteDatas *>(
                     mapPortion->getMapElementAt(newPosition, k,
                     MapEditorSubSelectionKind::None));
-                this->eraseSprite(previousPosition, false, false);
-                this->eraseSprite(newPosition, false, false);
+                this->eraseSprite(previousPosition, false, false, true);
+                this->eraseSprite(newPosition, false, false, true);
                 this->stockSprite(newPosition, sprite, sprite->getSubKind(), false);
                 sprite->setIsHovered(true);
                 if (m_translatedChanged)
@@ -1601,6 +1614,7 @@ void ControlMapEditor::onMouseWheelMove(QWheelEvent *event, bool updateTree) {
 void ControlMapEditor::onMouseMove(QPoint point, Qt::MouseButton button,
     bool updateTree)
 {
+    m_firstClick = false;
     updateMousePosition(point);
     m_mouseMove = point;
 
@@ -1622,6 +1636,8 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
     heightSquares, double heightPixels, QRect &defaultFloorRect, QPoint point,
     Qt::MouseButton button, AxisKind axisKind, bool applyLeftRight)
 {
+    m_firstClick = true;
+    m_applyLeftRight = applyLeftRight;
     m_selectedAxisTransformation = axisKind; // Will be used later for future translation improve
 
     // Update mouse
@@ -1689,10 +1705,13 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
             }
 
             // Transformation
-            Position *p = this->positionOnElement(selection, drawKind);
-            if (p != nullptr)
+            if (drawKind == DrawKind::Translate && applyLeftRight)
             {
-                m_positionOnTransformation = *p;
+                Position *p = this->positionOnElement(selection, drawKind);
+                if (p != nullptr)
+                {
+                    m_positionOnTransformation = *p;
+                }
             }
         }
     }
@@ -1703,8 +1722,11 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
 void ControlMapEditor::onMouseReleased(MapEditorSelectionKind kind,
     MapEditorSubSelectionKind subKind, DrawKind drawKind, QRect &tileset, int
     specialID, QPoint, bool layerOn, Qt::MouseButton button, int widthSquares,
-    double widthPixels, int heightSquares, double heightPixels, QRect &defaultFloorRect)
+    double widthPixels, int heightSquares, double heightPixels, QRect
+    &defaultFloorRect)
 {
+    m_firstClick = false;
+    m_positionOnTransformation.setCoords(-500, 0, 0, -500);
     if (button == Qt::MouseButton::LeftButton || button == Qt::MouseButton::RightButton)
     {
         if (m_isDrawingRectangle || m_isDeletingRectangle)

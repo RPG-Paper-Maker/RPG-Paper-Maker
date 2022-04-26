@@ -34,6 +34,11 @@ PanelTransformations::~PanelTransformations()
     delete ui;
 }
 
+Position * PanelTransformations::mapElementPosition() const
+{
+    return m_mapElementPosition;
+}
+
 DrawKind PanelTransformations::drawKind() const
 {
     return m_drawKind;

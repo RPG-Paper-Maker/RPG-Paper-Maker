@@ -36,6 +36,7 @@ class PanelTransformations : public QWidget
 public:
     explicit PanelTransformations(QWidget *parent = nullptr);
     ~PanelTransformations();
+    Position * mapElementPosition() const;
     DrawKind drawKind() const;
     void setDrawKind(DrawKind drawKind);
     bool applyLeftRightClick() const;

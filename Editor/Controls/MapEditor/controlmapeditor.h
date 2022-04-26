@@ -61,7 +61,7 @@ public:
     void deleteMap(bool updateCamera = true);
     void onResize(int width, int height);
     void update(MapEditorSelectionKind selectionKind, bool square, DrawKind drawKind, bool
-        layerOn, bool needUpdatePortions = true);
+        layerOn, Position *positionSelectedTransformation, bool needUpdatePortions = true);
     void updateMouse(QPoint point, MapEditorSelectionKind selectionKind, bool
         square, DrawKind drawKind, bool layerOn);
     void updateMousePosition(QPoint point);
@@ -69,6 +69,8 @@ public:
     bool mousePositionChanged(QPoint point);
     void updateRaycasting(MapEditorSelectionKind selectionKind, bool square, DrawKind
         drawKind, bool layerOn);
+    void updateTransformations(MapEditorSelectionKind selectionKind, DrawKind
+        drawKind, Position *positionSelectedTransformation);
     void getPortionsInRay(QList<Portion> &portions);
     void updatePortionsInRay(QList<Portion> &portions,
                              QList<Portion> &adjacents);
@@ -164,7 +166,8 @@ public:
         bool undoRedo = false);
     void removeSprite(Position &p, DrawKind drawKind);
     void removeSpriteWall(DrawKind drawKind);
-    void eraseSprite(Position &p, bool undoRedo = false, bool deletePtr = true);
+    void eraseSprite(Position &p, bool undoRedo = false, bool deletePtr = true,
+        bool ignoreY = false);
     void eraseSpriteWall(Position &position, bool undoRedo = false);
     void addObject3D(Position &p, int specialID, DrawKind drawKind);
     void stockObject3D(Position &p, Object3DDatas *object3D, bool undoRedo =
@@ -238,7 +241,8 @@ public:
         MapEditorSubSelectionKind subSelection, bool square, DrawKind drawKind,
         bool layerOn, QRect &tileset, int specialID, int widthSquares, double
         widthPixels, int heightSquares, double heightPixels, QRect
-        &defaultFloorRect, QPoint point, Qt::MouseButton button, AxisKind axisKind, bool applyLeftRight);
+        &defaultFloorRect, QPoint point, Qt::MouseButton button, AxisKind axisKind,
+        bool applyLeftRight);
     void onMouseReleased(MapEditorSelectionKind kind, MapEditorSubSelectionKind
         subKind, DrawKind drawKind, QRect &tileset, int specialID, QPoint,
         bool layerOn, Qt::MouseButton button, int widthSquares, double widthPixels,
@@ -276,6 +280,7 @@ protected:
     Position m_positionRealOnSprite;
     Position m_positionOnObject;
     Position m_positionOnTransformation;
+    Position m_positionSelectedTransformation;
     QVector3D *m_positionStart;
     QVector3D *m_positionDetection;
     MapElement *m_elementOnLand;
@@ -287,6 +292,8 @@ protected:
     MapElement *m_elementOnObject3DTranslated;
     Position m_positionTranslated;
     bool m_translatedChanged;
+    bool m_applyLeftRight;
+    bool m_firstClick;
     Position m_positionTranslate;
     AxisKind m_selectedAxisTransformation;
     float m_distancePlane;

@@ -47,6 +47,7 @@ public:
 
     AxisKind axisKind() const;
     bool applyLeftRight() const;
+    Position * mapElementPosition() const;
     void initializeWidgetTreeLocalMaps(WidgetTreeLocalMaps *w);
     void getTilesetTexture(QRect &rect) const;
     void setTilesetImage(QString path);

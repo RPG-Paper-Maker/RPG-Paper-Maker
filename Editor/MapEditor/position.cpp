@@ -314,17 +314,19 @@ int Position::getCenterZPixels() const
 
 // -------------------------------------------------------
 
-void Position::getStringLayerYPlus(QString& infos) const {
+void Position::getStringLayerYPlus(QString& infos) const
+{
     int yPlus = this->getYpx();
-    if (yPlus > 0) {
-        infos += RPM::translate(Translations::Y) + "+ = " + QString::number(
-            yPlus) + RPM::translate(Translations::PX) + RPM::NEW_LINE;
+    if (yPlus > 0)
+    {
+        infos += RPM::translate(Translations::Y) + "+ = " + QString::number(yPlus) +
+            RPM::translate(Translations::PX);
     }
-    infos += RPM::translate(Translations::LAYER) + RPM::SPACE + RPM::EQUAL + RPM
-        ::SPACE + QString::number(m_layer) + RPM::NEW_LINE + RPM::translate(
-        Translations::ANGLES) + RPM::SPACE + RPM::EQUAL + RPM::SPACE + RPM
-        ::BRACKET_LEFT + RPM::SPACE + QString::number(m_angleX) + ", " + QString
-        ::number(m_angleY) + ", " + QString::number(m_angleZ) + RPM
+    infos += RPM::NEW_LINE +RPM::translate(Translations::LAYER) + RPM::SPACE +
+        RPM::EQUAL + RPM::SPACE + QString::number(m_layer) + RPM::NEW_LINE + RPM
+        ::translate(Translations::ANGLES) + RPM::SPACE + RPM::EQUAL + RPM::SPACE
+        + RPM::BRACKET_LEFT + RPM::SPACE + QString::number(m_angleX) + ", " +
+        QString::number(m_angleY) + ", " + QString::number(m_angleZ) + RPM
         ::BRACKET_RIGHT + RPM::NEW_LINE + RPM::translate(Translations::CENTER) +
         RPM::SPACE + RPM::translate(Translations::X) + RPM::SPACE + RPM::EQUAL +
         RPM::SPACE + QString::number(this->getCenterXPixels()) + "px" + RPM
@@ -337,16 +339,13 @@ void Position::getStringLayerYPlus(QString& infos) const {
 
 QString Position::toString() const
 {
-    QString infos;
-
-    infos = RPM::BRACKET_LEFT + RPM::translate(Translations::X) + RPM::SPACE +
+    QString infos = RPM::BRACKET_LEFT + RPM::translate(Translations::X) + RPM::SPACE +
         RPM::EQUAL + RPM::SPACE + QString::number(m_x) + "," + RPM::SPACE + RPM
         ::translate(Translations::Y) + RPM::SPACE + RPM::EQUAL + RPM::SPACE +
         QString::number(m_y) + "," + RPM::SPACE + RPM::translate(Translations::Z
         ) + RPM::SPACE + RPM::EQUAL + RPM::SPACE + QString::number(m_z) + RPM
-        ::BRACKET_RIGHT + RPM::NEW_LINE;
-    getStringLayerYPlus(infos);
-
+        ::BRACKET_RIGHT + RPM::SPACE;
+    this->getStringLayerYPlus(infos);
     return infos;
 }
 

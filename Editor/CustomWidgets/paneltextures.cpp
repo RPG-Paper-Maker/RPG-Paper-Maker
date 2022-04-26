@@ -72,6 +72,12 @@ bool PanelTextures::applyLeftRight() const
 
 // -------------------------------------------------------
 
+Position * PanelTextures::mapElementPosition() const
+{
+    return ui->panelTransformations->mapElementPosition();
+}
+
+// -------------------------------------------------------
 
 void PanelTextures::initializeWidgetTreeLocalMaps(WidgetTreeLocalMaps *w) {
     m_widgetTreeLocalMaps = w;

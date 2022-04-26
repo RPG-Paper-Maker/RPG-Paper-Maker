@@ -77,7 +77,8 @@ void PanelSubTransformation::updatePositionAuto() {
             double coef = RPM::get()->engineSettings()->translationBySquare() ? 1 : RPM::getSquareSize();
             int squares = this->value() / coef;
             double pixels = RPM::get()->engineSettings()->translationBySquare() ?
-                0 : (qRound(this->value()) % RPM::getSquareSize()) / 100.0;
+                0 : static_cast<double>(qRound(this->value()) % RPM::getSquareSize()) / RPM
+                ::getSquareSize() * 100.0;
             switch (m_axisKind)
             {
             case AxisKind::X:

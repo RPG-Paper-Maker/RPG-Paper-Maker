@@ -293,7 +293,9 @@ void WidgetMapEditor::paintGL() {
             // Update control
             bool mousePosChanged = m_control.mousePositionChanged(point);
             m_control.updateMousePosition(point);
-            m_control.update(kind, square, drawKind, layerOn);
+            m_control.update(kind, square, drawKind, layerOn, m_menuBar != nullptr
+                && m_detection == nullptr ? m_panelTextures->mapElementPosition() :
+                nullptr);
             if (m_menuBar != nullptr && m_detection == nullptr)
             {
                 QRect tileset;
@@ -823,7 +825,7 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event)
             {
                 m_control.updateMouseMove(event->pos());
                 m_control.update(MapEditorSelectionKind::None, true, DrawKind
-                    ::Pencil, false, false);
+                    ::Pencil, false, nullptr, false);
             }
         }
     }
