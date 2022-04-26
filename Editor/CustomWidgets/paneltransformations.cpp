@@ -85,6 +85,8 @@ void PanelTransformations::initialize(DrawKind drawKind)
         this, SLOT(on_positionChangedUI(Position &)));
     connect(ui->panelSubTransformationZ, SIGNAL(positionChanged(Position &)),
         this, SLOT(on_positionChangedUI(Position &)));
+    ui->tabWidget->setEnabled(drawKind != DrawKind::Translate || !ui
+        ->checkBoxApplyLeftRightClick->isChecked());
     ui->checkBoxApplyLeftRightClick->setChecked(RPM::get()->engineSettings()
         ->applyLeftRightClick(drawKind));
     ui->checkBoxBySquare->setChecked(RPM::get()->engineSettings()->bySquare(drawKind));
@@ -179,7 +181,7 @@ void PanelTransformations::on_positionChangedUI(Position &previousPosition) {
 
 void PanelTransformations::on_checkBoxApplyLeftRightClick_toggled(bool checked)
 {
-
+    ui->tabWidget->setEnabled(m_drawKind != DrawKind::Translate || !checked);
     RPM::get()->engineSettings()->setApplyLeftRightClick(m_drawKind, checked);
     RPM::get()->engineSettings()->write();
 

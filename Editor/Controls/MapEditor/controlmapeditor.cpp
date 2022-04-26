@@ -1662,12 +1662,10 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
         m_isDeleting = button == Qt::MouseButton::RightButton;
         if (m_isDeleting) {
             removePreviewElements();
-        } else
+        }
+        if (drawKind == DrawKind::Translate && applyLeftRight)
         {
-            if (drawKind == DrawKind::Translate && applyLeftRight)
-            {
-                m_isTranslating = true;
-            }
+            m_isTranslating = true;
         }
         Position newPosition;
         bool b;
@@ -1744,18 +1742,18 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind kind,
             }
         }
     }
+    m_isTranslating = false;
+    if (m_translatedChanged)
+    {
+        if (m_elementOnSpriteTranslated != nullptr)
+        {
+            delete m_elementOnSpriteTranslated;
+            m_elementOnSpriteTranslated = nullptr;
+        }
+    }
+    m_translatedChanged = false;
     if (button == Qt::MouseButton::LeftButton)
     {
-        m_isTranslating = false;
-        if (m_translatedChanged)
-        {
-            if (m_elementOnSpriteTranslated != nullptr)
-            {
-                delete m_elementOnSpriteTranslated;
-                m_elementOnSpriteTranslated = nullptr;
-            }
-        }
-        m_translatedChanged = false;
         if (m_isDrawingWall) {
             m_isDrawingWall = false;
             addSpriteWall(drawKind, specialID);
