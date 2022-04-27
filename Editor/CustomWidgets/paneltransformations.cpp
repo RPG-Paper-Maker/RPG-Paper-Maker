@@ -96,9 +96,12 @@ void PanelTransformations::initialize(DrawKind drawKind)
         ->checkBoxApplyLeftRightClick->isChecked());
     ui->checkBoxApplyLeftRightClick->setChecked(RPM::get()->engineSettings()
         ->applyLeftRightClick(drawKind));
-    ui->checkBoxBySquare->setChecked(RPM::get()->engineSettings()->bySquare(drawKind));
     ui->checkBoxBySquare->setVisible(drawKind == DrawKind::Translate);
-    emit transformationBySquare(ui->checkBoxBySquare->isChecked());
+    if (drawKind == DrawKind::Translate)
+    {
+        ui->checkBoxBySquare->setChecked(RPM::get()->engineSettings()->bySquare(drawKind));
+        emit transformationBySquare(ui->checkBoxBySquare->isChecked());
+    }
 }
 
 // -------------------------------------------------------
