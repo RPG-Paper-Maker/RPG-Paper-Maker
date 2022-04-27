@@ -349,6 +349,9 @@ void WidgetMenuBarMapEditor::initializeRightMenu(bool detection)
         m_actionRotate = new QAction(QIcon(":/icons/Ressources/rotate.png"), "Rotate");
         m_actionRotate->setProperty(PROPERTY_SELECTION, false);
         m_actionRotate->setEnabled(true);
+        m_actionScale = new QAction(QIcon(":/icons/Ressources/scale.png"), "Scale");
+        m_actionScale->setProperty(PROPERTY_SELECTION, false);
+        m_actionScale->setEnabled(true);
         connect(m_actionSquare, &QAction::triggered, [this](bool)
         {
            emit squarePixelSelected(true);
@@ -361,6 +364,8 @@ void WidgetMenuBarMapEditor::initializeRightMenu(bool detection)
             on_actionTranslateTriggered(bool)));
         this->connect(m_actionRotate, SIGNAL(triggered(bool)), this, SLOT(
             on_actionRotateTriggered(bool)));
+        this->connect(m_actionScale, SIGNAL(triggered(bool)), this, SLOT(
+            on_actionScaleTriggered(bool)));
         m_actionScale = new QAction(QIcon(":/icons/Ressources/scale_disable.png"), "Scale");
         m_actionScale->setProperty(PROPERTY_SELECTION, false);
         m_actionScale->setEnabled(false);
@@ -490,6 +495,8 @@ void WidgetMenuBarMapEditor::updateSelection(QAction *action)
             m_actionPixel->setIcon(QIcon(":/icons/Ressources/pixel.png"));
             m_actionTranslate->setEnabled(true);
             m_actionTranslate->setIcon(QIcon(":/icons/Ressources/translate.png"));
+            m_actionScale->setEnabled(true);
+            m_actionScale->setIcon(QIcon(":/icons/Ressources/scale.png"));
         }
     }
 
@@ -561,6 +568,8 @@ void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu, QAction
         m_actionPixel->setIcon(QIcon(":/icons/Ressources/pixel.png"));
         m_actionTranslate->setEnabled(true);
         m_actionTranslate->setIcon(QIcon(":/icons/Ressources/translate.png"));
+        m_actionScale->setEnabled(true);
+        m_actionScale->setIcon(QIcon(":/icons/Ressources/scale.png"));
     }
 }
 
@@ -576,6 +585,7 @@ void WidgetMenuBarMapEditor::updateRight(QAction *action)
                  static_cast<int>(MapEditorModesKind::Pixel);
     listCenter << static_cast<int>(MapEditorModesKind::TransformTranslate) <<
                   static_cast<int>(MapEditorModesKind::TransformRotate) <<
+                  static_cast<int>(MapEditorModesKind::TransformScale) <<
                 static_cast<int>(MapEditorModesKind::DrawPencil) <<
                   static_cast<int>(MapEditorModesKind::DrawRectangle) <<
                   static_cast<int>(MapEditorModesKind::DrawPin);
@@ -615,11 +625,15 @@ void WidgetMenuBarMapEditor::forceSquare()
     this->forceRight(static_cast<int>(MapEditorModesKind::Square));
     action->setEnabled(false);
     action->setIcon(QIcon(":/icons/Ressources/pixel_disable.png"));
+    this->forceRight(static_cast<int>(MapEditorModesKind::DrawPencil));
     action = bar->actions().at(static_cast<int>(MapEditorModesKind
             ::TransformTranslate));
-    this->forceRight(static_cast<int>(MapEditorModesKind::DrawPencil));
     action->setEnabled(false);
     action->setIcon(QIcon(":/icons/Ressources/translate_disable.png"));
+    action = bar->actions().at(static_cast<int>(MapEditorModesKind
+            ::TransformScale));
+    action->setEnabled(false);
+    action->setIcon(QIcon(":/icons/Ressources/scale_disable.png"));
 }
 
 // -------------------------------------------------------
@@ -690,7 +704,9 @@ void WidgetMenuBarMapEditor::enableAllRight()
 {
     m_actionSquare->setEnabled(true);
     m_actionPixel->setEnabled(true);
+    m_actionTranslate->setEnabled(true);
     m_actionRotate->setEnabled(true);
+    m_actionScale->setEnabled(true);
     m_actionPencil->setEnabled(true);
     m_actionRectangle->setEnabled(true);
     m_actionPin->setEnabled(true);
@@ -886,6 +902,13 @@ void WidgetMenuBarMapEditor::on_actionTranslateTriggered(bool)
 void WidgetMenuBarMapEditor::on_actionRotateTriggered(bool)
 {
     MainWindow::get()->panelTextures()->showTransformations(DrawKind::Rotate);
+}
+
+// -------------------------------------------------------
+
+void WidgetMenuBarMapEditor::on_actionScaleTriggered(bool)
+{
+    MainWindow::get()->panelTextures()->showTransformations(DrawKind::Scale);
 }
 
 // -------------------------------------------------------

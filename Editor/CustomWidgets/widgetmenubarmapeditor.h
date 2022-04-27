@@ -119,6 +119,7 @@ private slots:
     void on_menuEvents_triggered(QAction *action);
     void on_actionTranslateTriggered(bool);
     void on_actionRotateTriggered(bool);
+    void on_actionScaleTriggered(bool);
     void on_actionDrawTriggered(bool);
 
 signals:
