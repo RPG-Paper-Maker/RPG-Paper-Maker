@@ -197,18 +197,6 @@ void PanelTransformations::on_checkBoxApplyLeftRightClick_toggled(bool checked)
     ui->panelSubTransformationX->updateApplyLeftRightEnabled(checked);
     ui->panelSubTransformationY->updateApplyLeftRightEnabled(checked);
     ui->panelSubTransformationZ->updateApplyLeftRightEnabled(checked);
-    switch (ui->tabWidget->currentIndex())
-    {
-    case 0:
-        ui->panelSubTransformationX->updatePositionAuto();
-        break;
-    case 1:
-        ui->panelSubTransformationY->updatePositionAuto();
-        break;
-    case 2:
-        ui->panelSubTransformationZ->updatePositionAuto();
-        break;
-    }
 }
 
 // -------------------------------------------------------

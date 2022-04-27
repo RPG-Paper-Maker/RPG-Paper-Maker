@@ -83,6 +83,10 @@ ControlMapEditor::~ControlMapEditor()
     {
         delete m_elementOnSpriteTranslated;
     }
+    if (m_elementOnObject3DTranslated != nullptr)
+    {
+        delete m_elementOnObject3DTranslated;
+    }
 }
 
 Map * ControlMapEditor::map() const {
@@ -792,6 +796,10 @@ MapElement * ControlMapEditor::getPositionSelected(Position &position,
         position = m_positionOnLand;
         return nullptr;
     case MapEditorSelectionKind::Objects3D:
+        if (m_translatedChanged)
+        {
+            return m_elementOnObject3DTranslated;
+        }
         if (m_isDeleting || isForDisplay) {
             position = m_positionOnObject3D;
             return m_elementOnObject3D;
@@ -1576,9 +1584,27 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
             case MapEditorSelectionKind::Objects3D:
             {
                 Object3DDatas *object3D = (reinterpret_cast<Object3DDatas *>(element));
-                this->eraseObject3D(previousPosition, false, false);
+                Portion portion;
+                MapPortion *mapPortion = this->getMapPortion(newPosition, portion, false);
+                Object3DDatas *deletedObject3D = reinterpret_cast<Object3DDatas *>(
+                    mapPortion->getMapElementAt(newPosition, k,
+                    MapEditorSubSelectionKind::None));
+                this->eraseObject3D(previousPosition, false, false, true);
+                this->eraseObject3D(newPosition, false, false, true);
                 this->stockObject3D(newPosition, object3D);
                 object3D->setIsHovered(true);
+                if (m_translatedChanged)
+                {
+                    m_translatedChanged = false;
+                    this->stockObject3D(previousPosition, m_elementOnObject3DTranslated);
+                    m_elementOnObject3DTranslated = nullptr;
+                }
+                if (deletedObject3D != nullptr && object3D != deletedObject3D)
+                {
+                    m_positionTranslated = previousPosition;
+                    m_elementOnObject3DTranslated = deletedObject3D;
+                    m_translatedChanged = true;
+                }
                 break;
             }
             default:
@@ -1749,6 +1775,11 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind kind,
         {
             delete m_elementOnSpriteTranslated;
             m_elementOnSpriteTranslated = nullptr;
+        }
+        if (m_elementOnObject3DTranslated != nullptr)
+        {
+            delete m_elementOnObject3DTranslated;
+            m_elementOnObject3DTranslated = nullptr;
         }
     }
     m_translatedChanged = false;

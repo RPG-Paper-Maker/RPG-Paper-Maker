@@ -173,7 +173,8 @@ public:
     void stockObject3D(Position &p, Object3DDatas *object3D, bool undoRedo =
         false);
     void removeObject3D(Position &p, DrawKind drawKind);
-    void eraseObject3D(Position &p, bool undoRedo = false, bool deletePtr = true);
+    void eraseObject3D(Position &p, bool undoRedo = false, bool deletePtr = true,
+        bool ignoreY = false);
     void addMountain(Position &p, int specialID, int widthSquares, double
         widthPixels, int heightSquares, double heightPixels, QRect
         &defaultFloorRect, DrawKind drawKind);
@@ -289,7 +290,7 @@ protected:
     MapElement *m_elementOnMountain;
     MapElement *m_elementOnObject;
     SpriteDatas *m_elementOnSpriteTranslated;
-    MapElement *m_elementOnObject3DTranslated;
+    Object3DDatas *m_elementOnObject3DTranslated;
     Position m_positionTranslated;
     bool m_translatedChanged;
     bool m_applyLeftRight;

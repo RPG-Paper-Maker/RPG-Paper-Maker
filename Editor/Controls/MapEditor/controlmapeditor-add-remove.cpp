@@ -948,10 +948,12 @@ void ControlMapEditor::removeObject3D(Position &p, DrawKind drawKind) {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseObject3D(Position &p, bool undoRedo, bool deletePtr) {
+void ControlMapEditor::eraseObject3D(Position &p, bool undoRedo, bool deletePtr,
+    bool ignoreY)
+{
     if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
-        m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
-        .yPlus(), p.yPlus()))))
+        (ignoreY || (m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
+        .yPlus(), p.yPlus()))))))
     {
         Portion portion;
         MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
