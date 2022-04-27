@@ -320,10 +320,14 @@ void ControlMapEditor::updateRaycastingLand(MapPortion *mapPortion, bool square)
         m_distanceLand, m_positionOnLand, m_ray, m_firstMouseCoords);
     if (!square)
     {
-        m_positionOnLand.setCenterX(qFloor((m_camera->positionX() + (m_ray
-            .direction().x() * m_distanceLand)) / RPM::getSquareSize() * 100) % 100);
-        m_positionOnLand.setCenterZ(qFloor((m_camera->positionZ() + (m_ray
-            .direction().z() * m_distanceLand)) / RPM::getSquareSize() * 100) % 100);
+        m_positionOnLand.setCenterX(qFloor(qFloor((m_camera->positionX() + (m_ray
+            .direction().x() * m_distanceLand)) / RPM::getSquareSize() * 100) % 100
+            / 100.0 * RPM::getSquareSize()) / static_cast<double>(RPM::getSquareSize())
+            * 100);
+        m_positionOnLand.setCenterZ(qFloor(qFloor((m_camera->positionZ() + (m_ray
+            .direction().z() * m_distanceLand)) / RPM::getSquareSize() * 100) % 100
+            / 100.0 * RPM::getSquareSize()) / static_cast<double>(RPM::getSquareSize())
+            * 100);
     }
     if (m_elementOnLand != element)
     {

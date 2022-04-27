@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include "paneltransformations.h"
 #include "paneltextures.h"
 #include "ui_paneltextures.h"
 #include "systemspritewall.h"
@@ -35,7 +36,11 @@ PanelTextures::PanelTextures(QWidget *parent) :
     m_mountainsHeight(-1)
 {
     ui->setupUi(this);
-
+    connect(ui->panelTransformations, &PanelTransformations::transformationBySquare,
+        [this](bool checked)
+    {
+       emit transformationBySquare(checked);
+    });
     this->translate();
 }
 
@@ -75,6 +80,13 @@ bool PanelTextures::applyLeftRight() const
 Position * PanelTextures::mapElementPosition() const
 {
     return ui->panelTransformations->mapElementPosition();
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::setTransformationsBySquare(bool square)
+{
+    ui->panelTransformations->setBySquare(square);
 }
 
 // -------------------------------------------------------
@@ -374,16 +386,15 @@ void PanelTextures::showObjects3D(SystemTileset *tileset) {
 // -------------------------------------------------------
 
 void PanelTextures::showTransformations(DrawKind drawKind) {
-    int width, height;
     m_drawKind = drawKind;
     this->hideAll();
     ui->panelTransformations->initialize(drawKind);
     ui->panelTransformations->translate(drawKind);
     ui->panelTransformations->show();
-    width = this->parentWidget()->width();
+    int width = this->parentWidget()->width();
     this->setFixedSize(width, this->parentWidget()->height());
     this->updateGeometry();
-    height = ui->panelTransformations->height();
+    int height = ui->panelTransformations->height();
     this->setGeometry(0, 0, width, height);
     this->setFixedSize(width, height);
 }

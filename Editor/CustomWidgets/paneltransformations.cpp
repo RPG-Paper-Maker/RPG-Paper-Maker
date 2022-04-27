@@ -72,6 +72,13 @@ AxisKind PanelTransformations::currentAxisKind() const
 
 // -------------------------------------------------------
 
+void PanelTransformations::setBySquare(bool square)
+{
+    ui->checkBoxBySquare->setChecked(square);
+}
+
+// -------------------------------------------------------
+
 void PanelTransformations::initialize(DrawKind drawKind)
 {
     m_drawKind = drawKind;
@@ -91,6 +98,7 @@ void PanelTransformations::initialize(DrawKind drawKind)
         ->applyLeftRightClick(drawKind));
     ui->checkBoxBySquare->setChecked(RPM::get()->engineSettings()->bySquare(drawKind));
     ui->checkBoxBySquare->setVisible(drawKind == DrawKind::Translate);
+    emit transformationBySquare(ui->checkBoxBySquare->isChecked());
 }
 
 // -------------------------------------------------------
@@ -209,4 +217,5 @@ void PanelTransformations::on_checkBoxBySquare_toggled(bool checked)
 {
     RPM::get()->engineSettings()->setBySquare(m_drawKind, checked);
     RPM::get()->engineSettings()->write();
+    emit transformationBySquare(checked);
 }

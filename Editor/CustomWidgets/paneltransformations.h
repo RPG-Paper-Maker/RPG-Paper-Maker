@@ -43,6 +43,7 @@ public:
     bool bySquare() const;
 
     AxisKind currentAxisKind() const;
+    void setBySquare(bool square);
     void deletePosition();
     void initialize(DrawKind drawKind);
     void translate(DrawKind drawKind);
@@ -64,6 +65,7 @@ public slots:
 
 signals:
     void positionChanged(Position &newPosition, Position &previousPosition);
+    void transformationBySquare(bool checked);
 };
 
 #endif // PANELTRANSFORMATIONS_H

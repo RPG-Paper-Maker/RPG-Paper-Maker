@@ -22,6 +22,8 @@
 #include "systemcolor.h"
 #include "common.h"
 #include "systemskybox.h"
+#include "paneltextures.h"
+#include "widgetmenubarmapeditor.h"
 
 // -------------------------------------------------------
 //
@@ -89,14 +91,25 @@ WidgetMapEditor::~WidgetMapEditor()
     delete m_timerAutotileFrame;
 }
 
-void WidgetMapEditor::setMenuBar(WidgetMenuBarMapEditor *m)
+void WidgetMapEditor::setMenus(WidgetMenuBarMapEditor *m, PanelTextures *t)
 {
     m_menuBar = m;
-}
+    m_panelTextures = t;
 
-void WidgetMapEditor::setPanelTextures(PanelTextures *m)
-{
-    m_panelTextures = m;
+    // Transformations
+    if (m_panelTextures != nullptr)
+    {
+        connect(m_panelTextures, &PanelTextures::transformationBySquare, [this](
+            bool checked)
+        {
+           m_menuBar->selectSquarePixel(checked);
+        });
+        connect(m_menuBar, &WidgetMenuBarMapEditor::squarePixelSelected, [this](
+            bool square)
+        {
+           m_panelTextures->setTransformationsBySquare(square);
+        });
+    }
 }
 
 Map * WidgetMapEditor::getMap() const

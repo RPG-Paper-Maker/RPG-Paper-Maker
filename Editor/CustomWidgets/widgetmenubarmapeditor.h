@@ -80,6 +80,7 @@ public:
     void updateSubSelection(QMenu *menu, QAction *menuAction, QAction *action);
     void updateRight(QAction *action);
     void forceSquare();
+    void selectSquarePixel(bool square);
     void forceNoneLayer();
     void forceNoRotation();
     void forcePencil();
@@ -116,11 +117,13 @@ private slots:
     void on_menuMountain_triggered(QAction *action);
     void on_menu3D_object_triggered(QAction *action);
     void on_menuEvents_triggered(QAction *action);
+    void on_actionTranslateTriggered(bool);
     void on_actionRotateTriggered(bool);
     void on_actionDrawTriggered(bool);
 
 signals:
     void selectionChanged();
+    void squarePixelSelected(bool square);
 };
 
 #endif // WIDGETMENUBARMAPEDITOR_H

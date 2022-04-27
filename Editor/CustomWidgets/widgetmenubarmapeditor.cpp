@@ -349,6 +349,16 @@ void WidgetMenuBarMapEditor::initializeRightMenu(bool detection)
         m_actionRotate = new QAction(QIcon(":/icons/Ressources/rotate.png"), "Rotate");
         m_actionRotate->setProperty(PROPERTY_SELECTION, false);
         m_actionRotate->setEnabled(true);
+        connect(m_actionSquare, &QAction::triggered, [this](bool)
+        {
+           emit squarePixelSelected(true);
+        });
+        connect(m_actionPixel, &QAction::triggered, [this](bool)
+        {
+           emit squarePixelSelected(false);
+        });
+        this->connect(m_actionTranslate, SIGNAL(triggered(bool)), this, SLOT(
+            on_actionTranslateTriggered(bool)));
         this->connect(m_actionRotate, SIGNAL(triggered(bool)), this, SLOT(
             on_actionRotateTriggered(bool)));
         m_actionScale = new QAction(QIcon(":/icons/Ressources/scale_disable.png"), "Scale");
@@ -614,6 +624,14 @@ void WidgetMenuBarMapEditor::forceSquare()
 
 // -------------------------------------------------------
 
+void WidgetMenuBarMapEditor::selectSquarePixel(bool square)
+{
+    this->forceRight(static_cast<int>(square ? MapEditorModesKind::Square :
+        MapEditorModesKind::Pixel));
+}
+
+// -------------------------------------------------------
+
 void WidgetMenuBarMapEditor::forceNoneLayer()
 {
     WidgetMenuBarMapEditor *bar = getBarRight();
@@ -854,6 +872,13 @@ void WidgetMenuBarMapEditor::on_menuEvents_triggered(QAction *action)
 {
     this->updateSubSelection(ui->menuEvents, this->actions().at(static_cast<int>(
         MapEditorSelectionKind::Objects)), action);
+}
+
+// -------------------------------------------------------
+
+void WidgetMenuBarMapEditor::on_actionTranslateTriggered(bool)
+{
+    MainWindow::get()->panelTextures()->showTransformations(DrawKind::Translate);
 }
 
 // -------------------------------------------------------

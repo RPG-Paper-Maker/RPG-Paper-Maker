@@ -727,6 +727,7 @@ void ControlMapEditor::eraseSprite(Position &p, bool undoRedo, bool deletePtr,
         (ignoreY || (m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
         .yPlus(), p.yPlus()))))))
     {
+        //qDebug() << QString::number(p.centerX());
         Portion portion;
         MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
 

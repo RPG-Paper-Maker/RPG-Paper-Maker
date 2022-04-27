@@ -290,7 +290,6 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
                 default:
                     break;
                 }
-                qDebug() << QString::number(w) << QString::number(h);
                 if (element != nullptr) {
                     if (m_isDeletingRectangle)
                     {

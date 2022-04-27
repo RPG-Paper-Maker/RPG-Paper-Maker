@@ -34,7 +34,7 @@ DialogSystemDetection::DialogSystemDetection(SystemDetection &detection, QWidget
     m_first(true)
 {
     ui->setupUi(this);
-    ui->widgetMapEditor->setMenuBar(ui->widgetMenuBarMapEditor);
+    ui->widgetMapEditor->setMenus(ui->widgetMenuBarMapEditor, nullptr);
     ui->widgetMenuBarMapEditor->initializeRightMenu(true);
     ui->widgetMenuBarMapEditor->setDetection();
     ui->comboBoxAutomatic->addItem(RPM::translate(Translations::CIRCLE));

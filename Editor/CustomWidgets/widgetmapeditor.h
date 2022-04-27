@@ -36,8 +36,7 @@ class WidgetMapEditor : public QOpenGLWidget, protected QOpenGLFunctions
 public:
     explicit WidgetMapEditor(QWidget *parent = nullptr);
     ~WidgetMapEditor();
-    void setMenuBar(WidgetMenuBarMapEditor *m);
-    void setPanelTextures(PanelTextures *m);
+    void setMenus(WidgetMenuBarMapEditor *m, PanelTextures *t);
     Map * getMap() const;
     int cameraDistance() const;
     double cameraHorizontalAngle() const;

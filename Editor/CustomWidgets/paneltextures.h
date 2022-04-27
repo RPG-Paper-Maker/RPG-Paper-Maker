@@ -48,6 +48,7 @@ public:
     AxisKind axisKind() const;
     bool applyLeftRight() const;
     Position * mapElementPosition() const;
+    void setTransformationsBySquare(bool square);
     void initializeWidgetTreeLocalMaps(WidgetTreeLocalMaps *w);
     void getTilesetTexture(QRect &rect) const;
     void setTilesetImage(QString path);
@@ -100,6 +101,9 @@ private slots:
     void onSplitterMoved(int, int);
     void on_comboBox_currentIndexChanged(int);
     void on_pushButtonUpdateList_pressed();
+
+signals:
+    void transformationBySquare(bool checked);
 };
 
 #endif // PANELTEXTURES_H

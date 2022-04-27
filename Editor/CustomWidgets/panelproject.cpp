@@ -33,8 +33,7 @@ PanelProject::PanelProject(QWidget *parent) :
     QList<int> sizesHorizontal;
     sizesHorizontal << 250 << 200;
     ui->splitter->setSizes(sizesHorizontal);
-    ui->openGLWidget->setMenuBar(ui->widgetMenuBar);
-    ui->openGLWidget->setPanelTextures(ui->panelTextures);
+    ui->openGLWidget->setMenus(ui->widgetMenuBar, ui->panelTextures);
 
     // Timer
     m_timerUpdate->start(0);
