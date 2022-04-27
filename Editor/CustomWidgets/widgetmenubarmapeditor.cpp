@@ -477,6 +477,7 @@ void WidgetMenuBarMapEditor::updateSelection(QAction *action)
             actionPin()->setIcon(QIcon(":/icons/Ressources/pin.png"));
         }
         if (subSelectionAfter == MapEditorSubSelectionKind::Autotiles ||
+            subSelectionAfter == MapEditorSubSelectionKind::SpritesWall ||
             m_selectionKind == MapEditorSelectionKind::Mountains ||
             m_selectionKind == MapEditorSelectionKind::Objects)
         {
@@ -549,7 +550,8 @@ void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu, QAction
         this->actionPin()->setIcon(QIcon(":/icons/Ressources/pin.png"));
         actionRectangle()->setIcon(QIcon(":/icons/Ressources/rectangle.png"));
     }
-    if (subKind == MapEditorSubSelectionKind::Autotiles || m_selectionKind ==
+    if (subKind == MapEditorSubSelectionKind::Autotiles || subSelectionKind() ==
+        MapEditorSubSelectionKind::SpritesWall || m_selectionKind ==
         MapEditorSelectionKind::Mountains || m_selectionKind ==
         MapEditorSelectionKind::Objects)
     {
