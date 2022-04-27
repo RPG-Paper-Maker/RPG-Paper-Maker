@@ -449,6 +449,9 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
             ::Land, DrawKind::Pencil) : positionSelectedTransformation;
         if (position != nullptr && *position != m_positionOnTransformation)
         {
+            position->setAngleX(m_positionOnTransformation.angleX());
+            position->setAngleY(m_positionOnTransformation.angleY());
+            position->setAngleZ(m_positionOnTransformation.angleZ());
             this->onTransformationPositionChanged(*position, m_positionOnTransformation, selectionKind);
             m_positionOnTransformation = *position;
         }
@@ -1541,7 +1544,7 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
         MapElement *element;
         QJsonObject obj;
 
-        element = mapPortion->updateElementPosition(m_positionOnTransformation, k);
+        element = mapPortion->updateElementPosition(previousPosition, k);
         if (element != nullptr)
         {
             m_firstMouseCoords = newPosition;
