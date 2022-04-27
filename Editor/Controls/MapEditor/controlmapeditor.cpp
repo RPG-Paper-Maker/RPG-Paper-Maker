@@ -447,13 +447,21 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
     {
         Position *position = m_isTranslating ? this->positionOnElement(MapEditorSelectionKind
             ::Land, DrawKind::Pencil) : positionSelectedTransformation;
-        if (position != nullptr && *position != m_positionOnTransformation)
+        if (position != nullptr)
         {
-            position->setAngleX(m_positionOnTransformation.angleX());
-            position->setAngleY(m_positionOnTransformation.angleY());
-            position->setAngleZ(m_positionOnTransformation.angleZ());
-            this->onTransformationPositionChanged(*position, m_positionOnTransformation, selectionKind);
-            m_positionOnTransformation = *position;
+            if (*position != m_positionOnTransformation)
+            {
+                position->setAngleX(m_positionOnTransformation.angleX());
+                position->setAngleY(m_positionOnTransformation.angleY());
+                position->setAngleZ(m_positionOnTransformation.angleZ());
+                this->onTransformationPositionChanged(*position,
+                    m_positionOnTransformation, selectionKind);
+                m_positionOnTransformation = *position;
+            }
+            if (m_isTranslating)
+            {
+                delete position;
+            }
         }
     }
 }
@@ -1738,6 +1746,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
                 if (p != nullptr)
                 {
                     m_positionOnTransformation = *p;
+                    delete p;
                 }
             }
         }
