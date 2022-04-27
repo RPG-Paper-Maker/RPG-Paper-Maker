@@ -520,7 +520,7 @@ void ControlMapEditor::updatePortions(MapEditorSelectionKind selectionKind,
     QSet<MapPortion *>::iterator i;
     bool isTransforming;
 
-    isTransforming = drawKind == DrawKind::Translate || drawKind == DrawKind::Rotate;
+    isTransforming = drawKind >= DrawKind::Translate && drawKind <= DrawKind::Scale;
     for (i = m_portionsToUpdate.begin(); i != m_portionsToUpdate.end(); i++) {
         MapPortion *mapPortion = *i;
         m_map->updatePortion(mapPortion, isTransforming && selectionKind ==

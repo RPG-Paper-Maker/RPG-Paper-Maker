@@ -809,7 +809,7 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event)
             // Transformations
             if (button != Qt::MouseButton::MiddleButton)
             {
-                if (drawKind == DrawKind::Translate || drawKind == DrawKind::Rotate)
+                if (drawKind >= DrawKind::Translate && drawKind <= DrawKind::Scale)
                 {
                     Position *position = m_control.positionOnElement(selection, drawKind);
                     emit selectPositionTransformation(position, button == Qt

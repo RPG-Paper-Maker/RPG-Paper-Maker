@@ -19,10 +19,9 @@ void ControlMapEditor::updatePreviewElements(MapEditorSelectionKind kind,
     QRect &tileset, int specialID, int widthSquares, double widthPixels, int
     heightSquares, double heightPixels, QRect &defaultFloorRect)
 {
-    if (drawKind == DrawKind::Translate || drawKind == DrawKind::Rotate ||
-        drawKind == DrawKind::Scale || drawKind == DrawKind::Pin || (
-        m_isDeleting && !m_isDeletingWall && !m_isDeletingRectangle) ||
-        m_isCtrlPressed)
+    if ((drawKind >= DrawKind::Translate && drawKind <= DrawKind::Scale) ||
+        drawKind == DrawKind::Pin || (m_isDeleting && !m_isDeletingWall &&
+        !m_isDeletingRectangle) || m_isCtrlPressed)
     {
         return;
     }

@@ -154,8 +154,7 @@ void PanelTextures::hideAll() {
 void PanelTextures::showTileset() {
     m_kind = PictureKind::None;
 
-    if (m_drawKind == DrawKind::Translate || m_drawKind == DrawKind::Rotate ||
-        m_drawKind == DrawKind::Scale)
+    if (m_drawKind >= DrawKind::Translate && m_drawKind <= DrawKind::Scale)
     {
         this->showTransformations(m_drawKind);
     } else {
@@ -209,8 +208,7 @@ void PanelTextures::getDefaultFloorRect(QRect& rect) const {
 // -------------------------------------------------------
 
 QWidget * PanelTextures::getSpecialWidget() const {
-    if (m_drawKind == DrawKind::Translate || m_drawKind == DrawKind::Rotate ||
-        m_drawKind == DrawKind::Scale)
+    if (m_drawKind >= DrawKind::Translate && m_drawKind <= DrawKind::Scale)
     {
         return ui->panelTransformations;
     } else {
@@ -371,8 +369,7 @@ void PanelTextures::showMountains(SystemTileset *tileset) {
 void PanelTextures::showObjects3D(SystemTileset *tileset) {
     m_kind = PictureKind::Object3D;
 
-    if (m_drawKind == DrawKind::Translate || m_drawKind == DrawKind::Rotate ||
-        m_drawKind == DrawKind::Scale)
+    if (m_drawKind >= DrawKind::Translate && m_drawKind <= DrawKind::Scale)
     {
         this->showTransformations(m_drawKind);
     } else {
@@ -571,8 +568,7 @@ void PanelTextures::translate()
 // -------------------------------------------------------
 
 void PanelTextures::onSplitterMoved(int, int) {
-    if (m_drawKind == DrawKind::Translate || m_drawKind == DrawKind::Rotate ||
-        m_drawKind == DrawKind::Scale)
+    if (m_drawKind >= DrawKind::Translate && m_drawKind <= DrawKind::Scale)
     {
         this->showTransformations(m_drawKind);
     } else {

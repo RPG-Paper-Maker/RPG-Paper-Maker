@@ -160,7 +160,7 @@ void ControlMapEditor::updateRaycasting(MapEditorSelectionKind selectionKind,
     }
 
     // Handle pre-selection for transformations
-    if (!m_isTranslating && (drawKind == DrawKind::Translate || drawKind == DrawKind::Rotate))
+    if (!m_isTranslating && (drawKind >= DrawKind::Translate && drawKind <= DrawKind::Scale))
     {
         if (selectionKind == MapEditorSelectionKind::Land && m_elementOnLand !=
             elementLand)
