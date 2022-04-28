@@ -239,9 +239,9 @@ bool Position::isHorizontal() const
 
 // -------------------------------------------------------
 
-void Position::setAngle(AxisKind ak, double a)
+void Position::setAngle(AxisKind axisKind, double a)
 {
-    switch (ak)
+    switch (axisKind)
     {
     case AxisKind::X:
         this->setAngleX(a);
@@ -257,9 +257,9 @@ void Position::setAngle(AxisKind ak, double a)
 
 // -------------------------------------------------------
 
-void Position::addAngle(AxisKind ak, double a)
+void Position::addAngle(AxisKind axisKind, double a)
 {
-    switch (ak)
+    switch (axisKind)
     {
     case AxisKind::X:
         this->addAngleX(a);
@@ -269,6 +269,24 @@ void Position::addAngle(AxisKind ak, double a)
         break;
     case AxisKind::Z:
         this->addAngleZ(a);
+        break;
+    }
+}
+
+// -------------------------------------------------------
+
+void Position::setScale(AxisKind axisKind, double scale)
+{
+    switch (axisKind)
+    {
+    case AxisKind::X:
+        this->setScaleX(scale);
+        break;
+    case AxisKind::Y:
+        this->setScaleY(scale);
+        break;
+    case AxisKind::Z:
+        this->setScaleZ(scale);
         break;
     }
 }

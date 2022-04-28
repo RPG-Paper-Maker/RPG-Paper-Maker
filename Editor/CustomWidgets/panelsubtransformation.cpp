@@ -68,12 +68,15 @@ void PanelSubTransformation::initialize(DrawKind drawKind, AxisKind ak)
 
 // -------------------------------------------------------
 
-void PanelSubTransformation::updatePositionAuto() {
+void PanelSubTransformation::updatePositionAuto()
+{
     if (m_mapElementPosition != nullptr && !RPM::get()->engineSettings()
         ->applyLeftRightClick(m_drawKind))
     {
         Position previousPosition = *m_mapElementPosition;
-        if (m_drawKind == DrawKind::Translate)
+        switch (m_drawKind)
+        {
+        case DrawKind::Translate:
         {
             int min, max;
             switch (m_axisKind)
@@ -119,9 +122,16 @@ void PanelSubTransformation::updatePositionAuto() {
                 m_mapElementPosition->setCenterZ(pixels);
                 break;
             }
-        } else if (m_drawKind == DrawKind::Rotate)
-        {
+            break;
+        }
+        case DrawKind::Rotate:
             m_mapElementPosition->setAngle(m_axisKind, this->value());
+            break;
+        case DrawKind::Scale:
+            m_mapElementPosition->setScale(m_axisKind, this->value());
+            break;
+        default:
+            break;
         }
         if (*m_mapElementPosition != previousPosition)
         {

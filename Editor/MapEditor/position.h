@@ -69,8 +69,9 @@ public:
     static double filterAngle(double a);
 
     bool isHorizontal() const;
-    void setAngle(AxisKind ak, double a);
-    void addAngle(AxisKind ak, double a);
+    void setAngle(AxisKind axisKind, double a);
+    void addAngle(AxisKind axisKind, double a);
+    void setScale(AxisKind axisKind, double scale);
     void setHorizontal();
     void setVertical();
     void setCurrent(Position& position) const;
