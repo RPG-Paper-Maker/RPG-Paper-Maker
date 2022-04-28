@@ -66,6 +66,7 @@ ControlMapEditor::ControlMapEditor() :
     m_isShiftPressed(false),
     m_isMovingObject(false),
     m_isTranslating(false),
+    m_isScaling(false),
     m_copiedObject(nullptr)
 {
 
@@ -442,10 +443,10 @@ void ControlMapEditor::update(MapEditorSelectionKind selectionKind, bool square,
 void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKind,
     DrawKind drawKind, Position *positionSelectedTransformation)
 {
-    if (!m_firstClick && (m_isTranslating || (positionSelectedTransformation !=
+    if (!m_firstClick && (m_isTranslating || m_isScaling || (positionSelectedTransformation !=
         nullptr && drawKind == DrawKind::Translate)))
     {
-        Position *position = m_isTranslating ? this->positionOnElement(MapEditorSelectionKind
+        Position *position = m_isTranslating || m_isScaling ? this->positionOnElement(MapEditorSelectionKind
             ::Land, DrawKind::Pencil) : positionSelectedTransformation;
         if (position != nullptr)
         {
@@ -454,11 +455,44 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
                 position->setAngleX(m_positionOnTransformation.angleX());
                 position->setAngleY(m_positionOnTransformation.angleY());
                 position->setAngleZ(m_positionOnTransformation.angleZ());
+                position->setScaleX(m_positionOnTransformation.scaleX());
+                position->setScaleY(m_positionOnTransformation.scaleY());
+                position->setScaleZ(m_positionOnTransformation.scaleZ());
+                if (drawKind == DrawKind::Scale)
+                {
+                    MapPortion *mapPortion;
+                    Portion portion;
+                    m_map->getLocalPortion(m_positionOnTransformation, portion);
+                    mapPortion = m_map->mapPortion(portion);
+                    if (mapPortion != nullptr)
+                    {
+                        MapElement *element = mapPortion->updateElementPosition(
+                            m_positionOnTransformation, selectionKind);
+                        int offset = qAbs(position->x() + position->getCenterXPixels()
+                            - m_positionOnTransformation.x() - m_positionOnTransformation.getCenterXPixels());
+                        int length = 0, depth = 0, height = 0;
+                        switch (selectionKind)
+                        {
+                        case MapEditorSelectionKind::Sprites:
+                            length = reinterpret_cast<SpriteDatas *>(element)->textureRect()->width();
+                            depth = 0;
+                            height = reinterpret_cast<SpriteDatas *>(element)->textureRect()->height();
+                            break;
+                        default:
+                            break;
+                        }
+
+                        position->setScaleX((length + (offset * 2)) / length);
+                        position->setX(m_positionOnTransformation.x());
+                        position->setY(m_positionOnTransformation.y());
+                        position->setZ(m_positionOnTransformation.z());
+                    }
+                }
                 this->onTransformationPositionChanged(*position,
                     m_positionOnTransformation, selectionKind);
                 m_positionOnTransformation = *position;
             }
-            if (m_isTranslating)
+            if (m_isTranslating || m_isScaling)
             {
                 delete position;
             }
@@ -1704,6 +1738,10 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
         {
             m_isTranslating = true;
         }
+        if (drawKind == DrawKind::Scale && applyLeftRight)
+        {
+            m_isScaling = true;
+        }
         Position newPosition;
         bool b;
         getPositionSelected(newPosition, selection, subSelection, layerOn, b);
@@ -1740,7 +1778,8 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
             }
 
             // Transformation
-            if (drawKind == DrawKind::Translate && applyLeftRight)
+            if ((drawKind == DrawKind::Translate || drawKind == DrawKind::Scale)
+                && applyLeftRight)
             {
                 Position *p = this->positionOnElement(selection, drawKind);
                 if (p != nullptr)
@@ -1781,6 +1820,7 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind kind,
         }
     }
     m_isTranslating = false;
+    m_isScaling = false;
     if (m_translatedChanged)
     {
         if (m_elementOnSpriteTranslated != nullptr)

@@ -332,6 +332,7 @@ protected:
     bool m_isShiftPressed;
     bool m_isMovingObject;
     bool m_isTranslating;
+    bool m_isScaling;
     int m_currentLayer = -1;
     QString m_lastSquareInfos;
     SystemCommonObject *m_copiedObject;
