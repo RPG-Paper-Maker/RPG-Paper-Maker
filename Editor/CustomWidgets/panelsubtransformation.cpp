@@ -64,18 +64,6 @@ void PanelSubTransformation::initialize(DrawKind drawKind, AxisKind ak)
     ui->comboBoxOperation->setCurrentIndex(RPM::get()->engineSettings()
         ->operation(drawKind, ak) ? 1 : 0);
     ui->doubleSpinBoxAngle->setValue(RPM::get()->engineSettings()->value(drawKind, ak));
-    switch (drawKind)
-    {
-    case DrawKind::Translate:
-    case DrawKind::Rotate:
-        ui->comboBoxOperation->setItemText(1, "=");
-        break;
-    case DrawKind::Scale:
-        ui->comboBoxOperation->setItemText(1, "x");
-        break;
-    default:
-        break;
-    }
 }
 
 // -------------------------------------------------------

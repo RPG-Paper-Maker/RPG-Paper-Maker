@@ -32,7 +32,8 @@ public:
     Position(const Position &pos);
     Position(int x, int y, double y_plus, int z, int layer = 0);
     Position(int x, int y, double y_plus, int z, int layer, double centerX,
-             double centerZ, double angleY, double angleX = 0, double angleZ = 0);
+        double centerZ, double angleY, double angleX = 0, double angleZ = 0,
+        double scaleX = 1, double scaleY = 1, double scaleZ = 1);
     virtual ~Position();
 
     bool operator==(const Position& other) const;
@@ -58,6 +59,12 @@ public:
     double angleZ() const;
     void setAngleZ(double a);
     void addAngleZ(double a);
+    double scaleX() const;
+    void setScaleX(double scaleX);
+    double scaleY() const;
+    void setScaleY(double scaleY);
+    double scaleZ() const;
+    void setScaleZ(double scaleZ);
 
     static double filterAngle(double a);
 
@@ -88,6 +95,9 @@ protected:
     double m_angleY;
     double m_angleX;
     double m_angleZ;
+    double m_scaleX;
+    double m_scaleY;
+    double m_scaleZ;
 
     void getStringLayerYPlus(QString& infos) const;
 };
@@ -96,7 +106,7 @@ inline uint qHash(const Position& pos)
 {
    return (pos.x() + pos.y() + pos.yPlus() + pos.z() + pos.layer()
            + pos.centerX() + pos.centerZ() + pos.angleY() + pos.angleX() + pos
-           .angleZ());
+           .angleZ() + pos.scaleX() + pos.scaleY() + pos.scaleZ());
 }
 
 #endif // POSITION_H
