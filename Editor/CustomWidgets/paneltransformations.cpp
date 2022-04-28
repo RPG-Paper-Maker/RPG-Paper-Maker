@@ -139,7 +139,7 @@ void PanelTransformations::translate(DrawKind drawKind)
         title = RPM::translate(Translations::ROTATION);
         break;
     case DrawKind::Scale:
-        title = RPM::translate(Translations::SCALE);
+        title = RPM::translate(Translations::SCALING);
         break;
     default:
         break;

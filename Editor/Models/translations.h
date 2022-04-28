@@ -1395,6 +1395,7 @@ public:
     static const QString GUIDE_ASSETS_3;
     static const QString TRANSLATION;
     static const QString BY_SQUARE;
+    static const QString SCALING;
 
     Translations();
     virtual ~Translations();

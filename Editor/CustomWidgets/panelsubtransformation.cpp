@@ -201,6 +201,10 @@ void PanelSubTransformation::translate(DrawKind drawKind, AxisKind axisKind)
         value = Translations::ANGLE;
         transformation = Translations::ROTATION;
         break;
+    case DrawKind::Scale:
+        value = Translations::VALUE;
+        transformation = Translations::SCALING;
+        break;
     default:
         break;
     }

@@ -1613,5 +1613,13 @@ void ProjectUpdater::updateVersion_1_10_0()
     RPM::get()->engineSettings()->setRotationLeftRightClick(true);
     RPM::get()->engineSettings()->setTranslationLeftRightClick(true);
     RPM::get()->engineSettings()->setTranslationBySquare(true);
+    RPM::get()->engineSettings()->setTranslationValue(AxisKind::X, 0);
+    RPM::get()->engineSettings()->setTranslationValue(AxisKind::Y, 0);
+    RPM::get()->engineSettings()->setTranslationValue(AxisKind::Z, 0);
+    RPM::get()->engineSettings()->setScalingLeftRightClick(true);
+    RPM::get()->engineSettings()->setScalingBySquare(true);
+    RPM::get()->engineSettings()->setScalingValue(AxisKind::X, 1);
+    RPM::get()->engineSettings()->setScalingValue(AxisKind::Y, 1);
+    RPM::get()->engineSettings()->setScalingValue(AxisKind::Z, 1);
     RPM::get()->engineSettings()->write();
 }

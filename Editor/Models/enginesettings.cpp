@@ -22,13 +22,15 @@ const QString EngineSettings::JSON_THEME = "theme";
 const QString EngineSettings::JSON_PROJECT_NAMES = "pn";
 const QString EngineSettings::JSON_PROJECT_LINKS = "pl";
 const QString EngineSettings::JSON_FIRST_TIME = "ft";
-const QString EngineSettings::JSON_ROTATION_OPERATIONS = "ro";
-const QString EngineSettings::JSON_ROTATION_LEFT_RIGHT_CLICK = "rlrc";
-const QString EngineSettings::JSON_ROTATION_ANGLES = "ra";
-const QString EngineSettings::JSON_TRANSLATION_OPERATIONS = "translationOperations";
 const QString EngineSettings::JSON_TRANSLATION_LEFT_RIGHT_CLICK = "translationLeftRightClick";
 const QString EngineSettings::JSON_TRANSLATION_BY_SQUARE = "translationBySquare";
 const QString EngineSettings::JSON_TRANSLATION_VALUES = "translationValues";
+const QString EngineSettings::JSON_ROTATION_OPERATIONS = "ro";
+const QString EngineSettings::JSON_ROTATION_LEFT_RIGHT_CLICK = "rlrc";
+const QString EngineSettings::JSON_ROTATION_ANGLES = "ra";
+const QString EngineSettings::JSON_SCALING_LEFT_RIGHT_CLICK = "scalingLeftRightClick";
+const QString EngineSettings::JSON_SCALING_BY_SQUARE = "scalingBySquare";
+const QString EngineSettings::JSON_SCALING_VALUES = "scalingValues";
 const QString EngineSettings::JSON_UPDATER = "updater";
 const QString EngineSettings::JSON_SHOW_AVAILABLE_CONTENT = "sac";
 const QString EngineSettings::JSON_FIRST_TIME_LANGUAGES = "ftl";
@@ -79,9 +81,6 @@ EngineSettings::EngineSettings() :
     #endif
 
     // Translation
-    m_translationOperations.append(false);
-    m_translationOperations.append(false);
-    m_translationOperations.append(false);
     m_translationLeftRightClick = true;
     m_translationBySquare = true;
     m_translationValues.append(0);
@@ -96,6 +95,13 @@ EngineSettings::EngineSettings() :
     m_rotationAngles.append(90);
     m_rotationAngles.append(90);
     m_rotationAngles.append(90);
+
+    // Scaling
+    m_scalingLeftRightClick = true;
+    m_scalingBySquare = true;
+    m_scalingValues.append(1);
+    m_scalingValues.append(1);
+    m_scalingValues.append(1);
 }
 
 EngineSettings::~EngineSettings() {
@@ -143,16 +149,6 @@ void EngineSettings::setFirstTime(bool b) {
     m_firstTime = b;
 }
 
-bool EngineSettings::translationOperation(AxisKind ak) const
-{
-    return m_translationOperations.at(static_cast<int>(ak));
-}
-
-void EngineSettings::setTranslationOperation(AxisKind ak, bool b)
-{
-    m_translationOperations.replace(static_cast<int>(ak), b);
-}
-
 bool EngineSettings::translationLeftRightClick() const
 {
     return m_translationLeftRightClick;
@@ -173,14 +169,14 @@ void EngineSettings::setTranslationBySquare(bool b)
     m_translationBySquare = b;
 }
 
-double EngineSettings::translationValue(AxisKind ak) const
+double EngineSettings::translationValue(AxisKind axisKind) const
 {
-    return m_translationValues.at(static_cast<int>(ak));
+    return m_translationValues.at(static_cast<int>(axisKind));
 }
 
-void EngineSettings::setTranslationValue(AxisKind ak, double a)
+void EngineSettings::setTranslationValue(AxisKind axisKind, double a)
 {
-    m_translationValues.replace(static_cast<int>(ak), a);
+    m_translationValues.replace(static_cast<int>(axisKind), a);
 }
 
 bool EngineSettings::rotationOperation(AxisKind ak) const
@@ -213,6 +209,36 @@ void EngineSettings::setRotationAngle(AxisKind ak, double a)
     m_rotationAngles.replace(static_cast<int>(ak), a);
 }
 
+bool EngineSettings::scalingLeftRightClick() const
+{
+    return m_scalingLeftRightClick;
+}
+
+void EngineSettings::setScalingLeftRightClick(bool b)
+{
+    m_scalingLeftRightClick = b;
+}
+
+bool EngineSettings::scalingBySquare() const
+{
+    return m_scalingBySquare;
+}
+
+void EngineSettings::setScalingBySquare(bool b)
+{
+    m_scalingBySquare = b;
+}
+
+double EngineSettings::scalingValue(AxisKind axisKind) const
+{
+    return m_scalingValues.at(static_cast<int>(axisKind));
+}
+
+void EngineSettings::setScalingValue(AxisKind axisKind, double value)
+{
+    m_scalingValues.replace(static_cast<int>(axisKind), value);
+}
+
 bool EngineSettings::applyLeftRightClick(DrawKind drawKind) const
 {
     switch (drawKind)
@@ -221,6 +247,8 @@ bool EngineSettings::applyLeftRightClick(DrawKind drawKind) const
         return m_translationLeftRightClick;
     case DrawKind::Rotate:
         return m_rotationLeftRightClick;
+    case DrawKind::Scale:
+        return m_scalingLeftRightClick;
     default:
         return false;
     }
@@ -236,6 +264,8 @@ void EngineSettings::setApplyLeftRightClick(DrawKind drawKind, bool applyLeftRig
     case DrawKind::Rotate:
         m_rotationLeftRightClick = applyLeftRightClick;
         break;
+    case DrawKind::Scale:
+        m_scalingLeftRightClick = applyLeftRightClick;
     default:
         break;
     }
@@ -247,6 +277,8 @@ bool EngineSettings::bySquare(DrawKind drawKind) const
     {
     case DrawKind::Translate:
         return m_translationBySquare;
+    case DrawKind::Scale:
+        return m_scalingBySquare;
     default:
         return false;
     }
@@ -259,21 +291,23 @@ void EngineSettings::setBySquare(DrawKind drawKind, bool bySquare)
     case DrawKind::Translate:
         m_translationBySquare = bySquare;
         break;
+    case DrawKind::Scale:
+        m_scalingBySquare = bySquare;
+        break;
     default:
         break;
     }
 
 }
+
 bool EngineSettings::operation(DrawKind drawKind, AxisKind axisKind)
 {
     switch (drawKind)
     {
-    case DrawKind::Translate:
-        return this->translationOperation(axisKind);
     case DrawKind::Rotate:
         return this->rotationOperation(axisKind);
     default:
-        return false;
+        return true;
     }
 }
 
@@ -281,9 +315,6 @@ void EngineSettings::setOperation(DrawKind drawKind, AxisKind axisKind, bool b)
 {
     switch (drawKind)
     {
-    case DrawKind::Translate:
-        this->setTranslationOperation(axisKind, b);
-        break;
     case DrawKind::Rotate:
         this->setRotationOperation(axisKind, b);
         break;
@@ -300,6 +331,8 @@ double EngineSettings::value(DrawKind drawKind, AxisKind axisKind) const
         return this->translationValue(axisKind);
     case DrawKind::Rotate:
         return this->rotationAngle(axisKind);
+    case DrawKind::Scale:
+        return this->scalingValue(axisKind);
     default:
         return 0;
     }
@@ -313,6 +346,9 @@ void EngineSettings::setValue(DrawKind drawKind, AxisKind axisKind, double value
         this->setTranslationValue(axisKind, value);
     case DrawKind::Rotate:
         this->setRotationAngle(axisKind, value);
+        break;
+    case DrawKind::Scale:
+        this->setScalingValue(axisKind, value);
         break;
     default:
         break;
@@ -573,10 +609,6 @@ void EngineSettings::read(const QJsonObject &json) {
     if (json.contains(JSON_FIRST_TIME)) {
         m_firstTime = json[JSON_FIRST_TIME].toBool();
     }
-    tab = json[JSON_TRANSLATION_OPERATIONS].toArray();
-    for (i = 0, l = tab.size(); i < l; i++) {
-        m_translationOperations.replace(i, tab.at(i).toBool());
-    }
     m_translationLeftRightClick = json[JSON_TRANSLATION_LEFT_RIGHT_CLICK].toBool();
     m_translationBySquare = json[JSON_TRANSLATION_BY_SQUARE].toBool();
     tab = json[JSON_TRANSLATION_VALUES].toArray();
@@ -591,6 +623,12 @@ void EngineSettings::read(const QJsonObject &json) {
     tab = json[JSON_ROTATION_ANGLES].toArray();
     for (i = 0, l = tab.size(); i < l; i++) {
         m_rotationAngles.replace(i, tab.at(i).toDouble());
+    }
+    m_scalingLeftRightClick = json[JSON_SCALING_LEFT_RIGHT_CLICK].toBool();
+    m_scalingBySquare = json[JSON_SCALING_BY_SQUARE].toBool();
+    tab = json[JSON_SCALING_VALUES].toArray();
+    for (i = 0, l = tab.size(); i < l; i++) {
+        m_scalingValues.replace(i, tab.at(i).toDouble());
     }
     if (json.contains(JSON_UPDATER)) {
         m_updater = json[JSON_UPDATER].toBool();
@@ -654,12 +692,6 @@ void EngineSettings::write(QJsonObject &json) const {
     if (!m_firstTime) {
         json[JSON_FIRST_TIME] = false;
     }
-    tab = QJsonArray();
-    for (i = 0, l = m_translationOperations.size(); i < l; i++)
-    {
-        tab.append(m_translationOperations.at(i));
-    }
-    json[JSON_TRANSLATION_OPERATIONS] = tab;
     json[JSON_TRANSLATION_LEFT_RIGHT_CLICK] = m_translationLeftRightClick;
     json[JSON_TRANSLATION_BY_SQUARE] = m_translationBySquare;
     tab = QJsonArray();
@@ -681,6 +713,14 @@ void EngineSettings::write(QJsonObject &json) const {
         tab.append(m_rotationAngles.at(i));
     }
     json[JSON_ROTATION_ANGLES] = tab;
+    json[JSON_SCALING_LEFT_RIGHT_CLICK] = m_scalingLeftRightClick;
+    json[JSON_SCALING_BY_SQUARE] = m_scalingBySquare;
+    tab = QJsonArray();
+    for (i = 0, l = m_scalingValues.size(); i < l; i++)
+    {
+        tab.append(m_scalingValues.at(i));
+    }
+    json[JSON_SCALING_VALUES] = tab;
     if (!m_updater) {
         json[JSON_UPDATER] = m_updater;
     }
