@@ -32,10 +32,10 @@ QVector3D Sprite::verticesQuad[4]{
                                 };
 
 QVector3D Sprite::modelQuad[4]{
-    QVector3D(-0.5f, 0.5f, 0.0f),
-    QVector3D(0.5f, 0.5f, 0.0f),
-    QVector3D(0.5f, -0.5f, 0.0f),
-    QVector3D(-0.5f, -0.5f, 0.0f)
+    QVector3D(-0.5f, 1.0f, 0.0f),
+    QVector3D(0.5f, 1.0f, 0.0f),
+    QVector3D(0.5f, 0.0f, 0.0f),
+    QVector3D(-0.5f, 0.0f, 0.0f)
 };
 
 QVector3D Sprite::modelFaceQuad[4]{
