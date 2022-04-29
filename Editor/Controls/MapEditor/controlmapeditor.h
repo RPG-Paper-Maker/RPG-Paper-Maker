@@ -35,7 +35,7 @@ public:
     Cursor * cursorStart() const;
     Cursor * cursorDetection() const;
     Camera * camera() const;
-    Position * positionOnElement(MapEditorSelectionKind kind, DrawKind dk) const;
+    Position * positionOnElement(MapEditorSelectionKind kind, DrawKind dk, bool forceLand = false) const;
     bool isCtrlPressed() const;
     void setIsCtrlPressed(bool b);
     bool isShiftPressed() const;

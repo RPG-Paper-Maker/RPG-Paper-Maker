@@ -120,12 +120,12 @@ Camera * ControlMapEditor::camera() const {
 }
 
 Position *ControlMapEditor::positionOnElement(MapEditorSelectionKind kind,
-    DrawKind dk) const
+    DrawKind dk, bool forceLand) const
 {
     switch (kind) {
     case MapEditorSelectionKind::Land:
-        return m_elementOnLand == nullptr ? nullptr : new Position(
-            m_positionOnLand);
+        return m_elementOnLand == nullptr ? (forceLand ? new Position(
+            m_positionOnPlane) : nullptr) : new Position(m_positionOnLand);
     case MapEditorSelectionKind::Sprites:
         return m_elementOnSprite == nullptr || (dk == DrawKind::Rotate &&
             m_elementOnSprite->getSubKind() == MapEditorSubSelectionKind
@@ -448,7 +448,7 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
         nullptr && drawKind == DrawKind::Translate)))
     {
         Position *position = m_isTranslating || m_isScaling ? this->positionOnElement(MapEditorSelectionKind
-            ::Land, DrawKind::Pencil) : positionSelectedTransformation;
+            ::Land, DrawKind::Pencil, m_isScaling) : positionSelectedTransformation;
         if (position != nullptr)
         {
             if (*position != m_positionOnTransformation)
