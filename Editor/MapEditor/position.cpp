@@ -500,12 +500,13 @@ void Position::write(QJsonArray &json) const
     Position3D::write(json);
     json.append(m_layer);
     if (m_centerX != 50.0 || m_centerZ != 50.0 || m_angleY != 0.0 || m_angleX != 0.0
-        || m_angleZ != 0.0)
+        || m_angleZ != 0.0 || m_scaleX != 1.0 || m_scaleY != 1.0 || m_scaleZ != 1.0)
     {
         json.append(m_centerX);
         json.append(m_centerZ);
         json.append(m_angleY);
-        if (m_angleX != 0.0 || m_angleZ != 0.0)
+        if (m_angleX != 0.0 || m_angleZ != 0.0 || m_scaleX != 1.0 || m_scaleY !=
+            1.0 || m_scaleZ != 1.0)
         {
             json.append(m_angleX);
             json.append(m_angleZ);
