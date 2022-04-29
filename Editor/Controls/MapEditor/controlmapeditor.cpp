@@ -433,7 +433,8 @@ void ControlMapEditor::update(MapEditorSelectionKind selectionKind, bool square,
     this->updateRaycasting(selectionKind, square, drawKind, layerOn);
 
     // Translation
-    this->updateTransformations(selectionKind, drawKind, positionSelectedTransformation);
+    this->updateTransformations(selectionKind, drawKind, positionSelectedTransformation,
+        square);
 
     // Mouse update
     m_mouseBeforeUpdate = m_mouseMove;
@@ -442,7 +443,7 @@ void ControlMapEditor::update(MapEditorSelectionKind selectionKind, bool square,
 // -------------------------------------------------------
 
 void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKind,
-    DrawKind drawKind, Position *positionSelectedTransformation)
+    DrawKind drawKind, Position *positionSelectedTransformation, bool square)
 {
     if (!m_firstClick && (m_isTranslating || m_isScaling || (positionSelectedTransformation !=
         nullptr && drawKind == DrawKind::Translate)))
@@ -453,8 +454,6 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
         {
             if (*position != m_positionOnTransformation)
             {
-                position->setCenterX(m_positionOnTransformation.centerX());
-                position->setCenterZ(m_positionOnTransformation.centerZ());
                 position->setAngleX(m_positionOnTransformation.angleX());
                 position->setAngleY(m_positionOnTransformation.angleY());
                 position->setAngleZ(m_positionOnTransformation.angleZ());
@@ -482,36 +481,51 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
                         default:
                             break;
                         }
-                        int size, offset;
+                        int size;
+                        double offset;
                         switch (m_selectedAxisTransformation)
                         {
                         case AxisKind::X:
                             size = length;
-                            offset = qAbs(position->x() + position->getCenterXPixels()
-                                - m_positionOnTransformation.x() -
-                                m_positionOnTransformation.getCenterXPixels());
+                            offset = qAbs((position->x() * RPM::getSquareSize()) +
+                                position->getCenterXPixels() - (m_positionOnTransformation
+                                .x() * RPM::getSquareSize()) - m_positionOnTransformation
+                                .getCenterXPixels()) / (square ? RPM::getSquareSize() : 1);
                             break;
                         case AxisKind::Y:
+                        {
                             size = height;
-                            offset = qAbs((this->getYRaycasting(m_positionOnTransformation.x() * RPM::getSquareSize() + m_positionOnTransformation.getCenterXPixels(), m_positionOnTransformation.z() * RPM::getSquareSize() + m_positionOnTransformation.getCenterZPixels()) / RPM::getSquareSize())
-                                - m_positionOnTransformation.y() -
-                                m_positionOnTransformation.getYpx());
+                            offset = qAbs(this->getYRaycasting(m_positionOnTransformation
+                                .x() * RPM::getSquareSize() + m_positionOnTransformation
+                                .getCenterXPixels(), m_positionOnTransformation
+                                .z() * RPM::getSquareSize() + m_positionOnTransformation
+                                .getCenterZPixels()) - (m_positionOnTransformation
+                                .y() * RPM::getSquareSize()) - m_positionOnTransformation
+                                .getYpx()) / (square ? RPM::getSquareSize() : 1);
                             break;
+                        }
                         case AxisKind::Z:
                             size = depth;
-                            offset = qAbs(position->z() + position->getCenterZPixels()
-                                - m_positionOnTransformation.z() -
-                                m_positionOnTransformation.getCenterZPixels());
+                            offset = qAbs((position->z() * RPM::getSquareSize()) +
+                                position->getCenterZPixels() - (m_positionOnTransformation
+                                .z() * RPM::getSquareSize()) - m_positionOnTransformation
+                                .getCenterZPixels()) / (square ? RPM::getSquareSize() : 1);
                             break;
                         }
                         if (size > 0)
                         {
+                            if (!square)
+                            {
+                                size *= RPM::getSquareSize();
+                            }
                             position->setScale(m_selectedAxisTransformation,
                                 (size + (offset * 2)) / size);
                         }
                         position->setX(m_positionOnTransformation.x());
                         position->setY(m_positionOnTransformation.y());
                         position->setZ(m_positionOnTransformation.z());
+                        position->setCenterX(m_positionOnTransformation.centerX());
+                        position->setCenterZ(m_positionOnTransformation.centerZ());
                     }
                 }
                 this->onTransformationPositionChanged(*position,

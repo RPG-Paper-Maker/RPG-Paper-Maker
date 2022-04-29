@@ -70,7 +70,7 @@ public:
     void updateRaycasting(MapEditorSelectionKind selectionKind, bool square, DrawKind
         drawKind, bool layerOn);
     void updateTransformations(MapEditorSelectionKind selectionKind, DrawKind
-        drawKind, Position *positionSelectedTransformation);
+        drawKind, Position *positionSelectedTransformation, bool square);
     void getPortionsInRay(QList<Portion> &portions);
     void updatePortionsInRay(QList<Portion> &portions,
                              QList<Portion> &adjacents);

@@ -476,5 +476,5 @@ int ControlMapEditor::getYRaycasting(int x, int z) const
 {
     float dx = (x - m_camera->positionX()) / m_ray.direction().x();
     float dz = (z - m_camera->positionZ()) / m_ray.direction().z();
-    return qRound(m_camera->positionY() + qMin(dx, dz) * m_ray.direction().y());
+    return qRound(m_camera->positionY() + qMax(dx, dz) * m_ray.direction().y());
 }
