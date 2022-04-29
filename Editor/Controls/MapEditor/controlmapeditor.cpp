@@ -46,6 +46,7 @@ ControlMapEditor::ControlMapEditor() :
     m_elementOnMountain(nullptr),
     m_elementOnSpriteTranslated(nullptr),
     m_elementOnObject3DTranslated(nullptr),
+    m_elementOnSpriteScaled(nullptr),
     m_translatedChanged(false),
     m_applyLeftRight(false),
     m_firstClick(false),
@@ -452,6 +453,8 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
         {
             if (*position != m_positionOnTransformation)
             {
+                position->setCenterX(m_positionOnTransformation.centerX());
+                position->setCenterZ(m_positionOnTransformation.centerZ());
                 position->setAngleX(m_positionOnTransformation.angleX());
                 position->setAngleY(m_positionOnTransformation.angleY());
                 position->setAngleZ(m_positionOnTransformation.angleZ());
@@ -468,8 +471,6 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
                     {
                         MapElement *element = mapPortion->updateElementPosition(
                             m_positionOnTransformation, selectionKind);
-                        int offset = qAbs(position->x() + position->getCenterXPixels()
-                            - m_positionOnTransformation.x() - m_positionOnTransformation.getCenterXPixels());
                         int length = 0, depth = 0, height = 0;
                         switch (selectionKind)
                         {
@@ -481,8 +482,33 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
                         default:
                             break;
                         }
-
-                        position->setScaleX((length + (offset * 2)) / length);
+                        int size, offset;
+                        switch (m_selectedAxisTransformation)
+                        {
+                        case AxisKind::X:
+                            size = length;
+                            offset = qAbs(position->x() + position->getCenterXPixels()
+                                - m_positionOnTransformation.x() -
+                                m_positionOnTransformation.getCenterXPixels());
+                            break;
+                        case AxisKind::Y:
+                            size = height;
+                            offset = qAbs((this->getYRaycasting(m_positionOnTransformation.x() * RPM::getSquareSize() + m_positionOnTransformation.getCenterXPixels(), m_positionOnTransformation.z() * RPM::getSquareSize() + m_positionOnTransformation.getCenterZPixels()) / RPM::getSquareSize())
+                                - m_positionOnTransformation.y() -
+                                m_positionOnTransformation.getYpx());
+                            break;
+                        case AxisKind::Z:
+                            size = depth;
+                            offset = qAbs(position->z() + position->getCenterZPixels()
+                                - m_positionOnTransformation.z() -
+                                m_positionOnTransformation.getCenterZPixels());
+                            break;
+                        }
+                        if (size > 0)
+                        {
+                            position->setScale(m_selectedAxisTransformation,
+                                (size + (offset * 2)) / size);
+                        }
                         position->setX(m_positionOnTransformation.x());
                         position->setY(m_positionOnTransformation.y());
                         position->setZ(m_positionOnTransformation.z());
@@ -831,6 +857,10 @@ MapElement * ControlMapEditor::getPositionSelected(Position &position,
         if (m_translatedChanged)
         {
             return m_elementOnSpriteTranslated;
+        }
+        if (m_elementOnSpriteScaled != nullptr)
+        {
+            return m_elementOnSpriteScaled;
         }
         if ((m_isDeleting && subSelection != MapEditorSubSelectionKind::SpritesWall)
              || layerOn || isForDisplay)
@@ -1611,6 +1641,10 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
                 this->eraseSprite(newPosition, false, false, true);
                 this->stockSprite(newPosition, sprite, sprite->getSubKind(), false);
                 sprite->setIsHovered(true);
+                if (m_isScaling)
+                {
+                    m_elementOnSpriteScaled = sprite;
+                }
                 if (m_translatedChanged)
                 {
                     m_translatedChanged = false;
@@ -1709,7 +1743,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
 {
     m_firstClick = true;
     m_applyLeftRight = applyLeftRight;
-    m_selectedAxisTransformation = axisKind; // Will be used later for future translation improve
+    m_selectedAxisTransformation = axisKind;
 
     // Update mouse
     updateMouse(point, selection, square, drawKind, layerOn);
@@ -1835,6 +1869,7 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind kind,
         }
     }
     m_translatedChanged = false;
+    m_elementOnSpriteScaled = nullptr;
     if (button == Qt::MouseButton::LeftButton)
     {
         if (m_isDrawingWall) {

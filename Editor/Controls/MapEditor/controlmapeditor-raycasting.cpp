@@ -199,7 +199,7 @@ void ControlMapEditor::updateRaycasting(MapEditorSelectionKind selectionKind,
             m_portionsToUpdate += m_mapPortionObject3D;
         }
     }
-    if (m_isTranslating)
+    if (m_isTranslating || m_isScaling)
     {
         m_elementOnSprite = elementSprite;
         m_elementOnObject3D = elementObject3D;
@@ -468,4 +468,13 @@ void ControlMapEditor::getCorrectPositionOnRay(Position &position,
         position.setCenterX(50);
         position.setCenterZ(50);
     }
+}
+
+// -------------------------------------------------------
+
+int ControlMapEditor::getYRaycasting(int x, int z) const
+{
+    float dx = (x - m_camera->positionX()) / m_ray.direction().x();
+    float dz = (z - m_camera->positionZ()) / m_ray.direction().z();
+    return qRound(m_camera->positionY() + qMin(dx, dz) * m_ray.direction().y());
 }

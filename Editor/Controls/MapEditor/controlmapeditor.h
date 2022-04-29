@@ -79,6 +79,7 @@ public:
     void updateRaycastingObjects3D(MapPortion *mapPortion);
     void updateRaycastingMountains(MapPortion *mapPortion);
     void updateRaycastingObjects(MapPortion *mapPortion);
+    int getYRaycasting(int x, int z) const;
     QVector3D transformToNormalizedCoords(const QPoint &mouse);
     QVector4D transformToHomogeneousClip(QVector3D &normalized);
     QVector4D transformToEyeCoords(QVector4D &rayClip, QMatrix4x4 &projection);
@@ -291,6 +292,7 @@ protected:
     MapElement *m_elementOnObject;
     SpriteDatas *m_elementOnSpriteTranslated;
     Object3DDatas *m_elementOnObject3DTranslated;
+    SpriteDatas *m_elementOnSpriteScaled;
     Position m_positionTranslated;
     bool m_translatedChanged;
     bool m_applyLeftRight;

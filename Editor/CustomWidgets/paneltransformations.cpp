@@ -94,6 +94,12 @@ void PanelTransformations::initialize(DrawKind drawKind)
         this, SLOT(on_positionChangedUI(Position &)));
     ui->tabWidget->setEnabled(drawKind != DrawKind::Translate || !ui
         ->checkBoxApplyLeftRightClick->isChecked());
+    ui->panelSubTransformationX->setEnabled(drawKind != DrawKind::Scale || !ui
+        ->checkBoxApplyLeftRightClick->isChecked());
+    ui->panelSubTransformationY->setEnabled(drawKind != DrawKind::Scale || !ui
+        ->checkBoxApplyLeftRightClick->isChecked());
+    ui->panelSubTransformationZ->setEnabled(drawKind != DrawKind::Scale || !ui
+        ->checkBoxApplyLeftRightClick->isChecked());
     ui->checkBoxApplyLeftRightClick->setChecked(RPM::get()->engineSettings()
         ->applyLeftRightClick(drawKind));
     ui->checkBoxBySquare->setVisible(drawKind == DrawKind::Translate || drawKind == DrawKind::Scale);
@@ -196,6 +202,12 @@ void PanelTransformations::on_positionChangedUI(Position &previousPosition) {
 void PanelTransformations::on_checkBoxApplyLeftRightClick_toggled(bool checked)
 {
     ui->tabWidget->setEnabled(m_drawKind != DrawKind::Translate || !checked);
+    ui->panelSubTransformationX->setEnabled(m_drawKind != DrawKind::Scale || !ui
+        ->checkBoxApplyLeftRightClick->isChecked());
+    ui->panelSubTransformationY->setEnabled(m_drawKind != DrawKind::Scale || !ui
+        ->checkBoxApplyLeftRightClick->isChecked());
+    ui->panelSubTransformationZ->setEnabled(m_drawKind != DrawKind::Scale || !ui
+        ->checkBoxApplyLeftRightClick->isChecked());
     RPM::get()->engineSettings()->setApplyLeftRightClick(m_drawKind, checked);
     RPM::get()->engineSettings()->write();
 
