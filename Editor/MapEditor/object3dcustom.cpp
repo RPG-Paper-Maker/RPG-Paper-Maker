@@ -66,37 +66,37 @@ void Object3DCustomDatas::rotateVertex(QVector3D& vec, Position &position,
 // -------------------------------------------------------
 
 qreal Object3DCustomDatas::xMin() const {
-    return static_cast<qreal>(m_min.x()) / RPM::get()->getSquareSize();
+    return static_cast<qreal>(m_min.x());
 }
 
 // -------------------------------------------------------
 
 qreal Object3DCustomDatas::yMin() const {
-    return static_cast<qreal>(m_min.y()) / RPM::get()->getSquareSize();
+    return static_cast<qreal>(m_min.y());
 }
 
 // -------------------------------------------------------
 
 qreal Object3DCustomDatas::zMin() const {
-    return static_cast<qreal>(m_min.z()) / RPM::get()->getSquareSize();
+    return static_cast<qreal>(m_min.z());
 }
 
 // -------------------------------------------------------
 
 qreal Object3DCustomDatas::xMax() const {
-    return static_cast<qreal>(m_max.x()) / RPM::get()->getSquareSize();
+    return static_cast<qreal>(m_max.x());
 }
 
 // -------------------------------------------------------
 
 qreal Object3DCustomDatas::yMax() const {
-    return static_cast<qreal>(m_max.y()) / RPM::get()->getSquareSize();
+    return static_cast<qreal>(m_max.y());
 }
 
 // -------------------------------------------------------
 
 qreal Object3DCustomDatas::zMax() const {
-    return static_cast<qreal>(m_max.z()) / RPM::get()->getSquareSize();
+    return static_cast<qreal>(m_max.z());
 }
 
 // -------------------------------------------------------
