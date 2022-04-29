@@ -188,9 +188,9 @@ void Object3DBoxDatas::getPosSizeCenterInfos(QVector3D &pos, QVector3D &size,
     coef = 0.01f;
 
     // Size
-    size.setX(static_cast<float>(this->widthPixels()) - (2 * coef));
-    size.setY(static_cast<float>(this->heightPixels()) - (2 * coef));
-    size.setZ(static_cast<float>(this->depthPixels()) - (2 * coef));
+    size.setX((static_cast<float>(this->widthPixels()) - (2 * coef)) * position.scaleX());
+    size.setY((static_cast<float>(this->heightPixels()) - (2 * coef)) * position.scaleY());
+    size.setZ((static_cast<float>(this->depthPixels()) - (2 * coef)) * position.scaleZ());
 
     // Center
     center.setX(position.getCenterXPixels());
@@ -243,6 +243,27 @@ qreal Object3DBoxDatas::yMax() const {
 // -------------------------------------------------------
 
 qreal Object3DBoxDatas::zMax() const {
+    return this->depth();
+}
+
+// -------------------------------------------------------
+
+int Object3DBoxDatas::originWidth() const
+{
+    return this->width();
+}
+
+// -------------------------------------------------------
+
+int Object3DBoxDatas::originHeight() const
+{
+    return this->height();
+}
+
+// -------------------------------------------------------
+
+int Object3DBoxDatas::originDepth() const
+{
     return this->depth();
 }
 

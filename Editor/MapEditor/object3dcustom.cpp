@@ -101,6 +101,27 @@ qreal Object3DCustomDatas::zMax() const {
 
 // -------------------------------------------------------
 
+int Object3DCustomDatas::originWidth() const
+{
+    return qCeil((m_max.x() - m_min.x()) / RPM::getSquareSize());
+}
+
+// -------------------------------------------------------
+
+int Object3DCustomDatas::originHeight() const
+{
+    return qCeil((m_max.y() - m_min.y()) / RPM::getSquareSize());
+}
+
+// -------------------------------------------------------
+
+int Object3DCustomDatas::originDepth() const
+{
+    return qCeil((m_max.z() - m_min.z()) / RPM::getSquareSize());
+}
+
+// -------------------------------------------------------
+
 int Object3DCustomDatas::width() const {
     return Common::ceil(static_cast<qreal>(this->widthPixels()) / RPM::get()
         ->getSquareSize());
@@ -217,9 +238,9 @@ void Object3DCustomDatas::initializeVertices(QVector<Vertex> &vertices,
 
     scale = static_cast<float>(m_datas->scale());
     squareSize = RPM::get()->getSquareSize();
-    size.setX(scale * squareSize);
-    size.setY(scale * squareSize);
-    size.setZ(scale * squareSize);
+    size.setX(scale * position.scaleX() * squareSize);
+    size.setY(scale * position.scaleY() * squareSize);
+    size.setZ(scale * position.scaleZ() * squareSize);
     shape = m_datas->obj();
     positionOffset.setX((position.x() * squareSize) + position.getCenterXPixels());
     positionOffset.setY(position.getY());

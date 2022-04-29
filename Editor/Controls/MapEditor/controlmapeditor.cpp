@@ -470,13 +470,18 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
                     {
                         MapElement *element = mapPortion->updateElementPosition(
                             m_positionOnTransformation, selectionKind);
-                        int length = 0, depth = 0, height = 0;
+                        int width = 0, depth = 0, height = 0;
                         switch (selectionKind)
                         {
                         case MapEditorSelectionKind::Sprites:
-                            length = reinterpret_cast<SpriteDatas *>(element)->textureRect()->width();
+                            width = reinterpret_cast<SpriteDatas *>(element)->textureRect()->width();
                             depth = 0;
                             height = reinterpret_cast<SpriteDatas *>(element)->textureRect()->height();
+                            break;
+                        case MapEditorSelectionKind::Objects3D:
+                            width = reinterpret_cast<Object3DDatas *>(element)->originWidth();
+                            depth = reinterpret_cast<Object3DDatas *>(element)->originDepth();
+                            height = reinterpret_cast<Object3DDatas *>(element)->originHeight();
                             break;
                         default:
                             break;
@@ -486,7 +491,7 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
                         switch (m_selectedAxisTransformation)
                         {
                         case AxisKind::X:
-                            size = length;
+                            size = width;
                             offset = qAbs((position->x() * RPM::getSquareSize()) +
                                 position->getCenterXPixels() - (m_positionOnTransformation
                                 .x() * RPM::getSquareSize()) - m_positionOnTransformation
@@ -519,7 +524,10 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
                                 size *= RPM::getSquareSize();
                             }
                             position->setScale(m_selectedAxisTransformation,
-                                (size + (offset * 2)) / size);
+                                (size + (offset * (selectionKind == MapEditorSelectionKind
+                                ::Sprites || reinterpret_cast<Object3DDatas *>
+                                (element)->datas()->shapeKind() == ShapeKind
+                                ::Custom ? 2 : 1))) / size);
                         }
                         position->setX(m_positionOnTransformation.x());
                         position->setY(m_positionOnTransformation.y());

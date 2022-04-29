@@ -55,6 +55,9 @@ public:
     virtual qreal xMax() const = 0;
     virtual qreal yMax() const = 0;
     virtual qreal zMax() const = 0;
+    virtual int originWidth() const = 0;
+    virtual int originHeight() const = 0;
+    virtual int originDepth() const = 0;
     virtual int width() const = 0;
     virtual int height() const = 0;
     virtual int depth() const = 0;
