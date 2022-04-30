@@ -349,9 +349,9 @@ void WidgetMenuBarMapEditor::initializeRightMenu(bool detection)
         m_actionRotate = new QAction(QIcon(":/icons/Ressources/rotate.png"), "Rotate");
         m_actionRotate->setProperty(PROPERTY_SELECTION, false);
         m_actionRotate->setEnabled(true);
-        m_actionScale = new QAction(QIcon(":/icons/Ressources/scale.png"), "Scale");
+        m_actionScale = new QAction(QIcon(":/icons/Ressources/scale_disable.png"), "Scale");
         m_actionScale->setProperty(PROPERTY_SELECTION, false);
-        m_actionScale->setEnabled(true);
+        m_actionScale->setEnabled(false);
         connect(m_actionSquare, &QAction::triggered, [this](bool)
         {
            emit squarePixelSelected(true);
@@ -366,9 +366,6 @@ void WidgetMenuBarMapEditor::initializeRightMenu(bool detection)
             on_actionRotateTriggered(bool)));
         this->connect(m_actionScale, SIGNAL(triggered(bool)), this, SLOT(
             on_actionScaleTriggered(bool)));
-        m_actionScale = new QAction(QIcon(":/icons/Ressources/scale_disable.png"), "Scale");
-        m_actionScale->setProperty(PROPERTY_SELECTION, false);
-        m_actionScale->setEnabled(false);
         m_actionPencil = new QAction(QIcon(":/icons/Ressources/pencil.png"), "Pencil");
         m_actionPencil->setProperty(PROPERTY_SELECTION, true);
         this->connect(m_actionPencil, SIGNAL(triggered(bool)), this, SLOT(
