@@ -84,6 +84,7 @@
         <file>Ressources/pixel_disable.png</file>
         <file>Ressources/square.png</file>
         <file>Ressources/rectangle_disable.png</file>
+        <file>Ressources/view.png</file>
     </qresource>
     <qresource prefix="/">
         <file>Shaders/cursor.frag</file>

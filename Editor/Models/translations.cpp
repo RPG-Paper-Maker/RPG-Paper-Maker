@@ -1383,6 +1383,7 @@ const QString Translations::GUIDE_ASSETS_3 = "guide.assets.3";
 const QString Translations::TRANSLATION = "translation";
 const QString Translations::BY_SQUARE = "by.square";
 const QString Translations::SCALING = "scaling";
+const QString Translations::VIEW = "view";
 
 // -------------------------------------------------------
 //

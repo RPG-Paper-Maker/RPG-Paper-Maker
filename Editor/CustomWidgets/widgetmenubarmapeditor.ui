@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>430</width>
+    <width>478</width>
     <height>29</height>
    </rect>
   </property>
@@ -68,6 +68,12 @@
     <string>3D object</string>
    </property>
    <addaction name="action3D_object"/>
+  </widget>
+  <widget class="QMenu" name="menuView">
+   <property name="title">
+    <string>View</string>
+   </property>
+   <addaction name="actionView"/>
   </widget>
   <action name="actionFloors">
    <property name="icon">
@@ -220,11 +226,21 @@
     <string>Object</string>
    </property>
   </action>
+  <action name="actionView">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/view.png</normaloff>:/icons/Ressources/view.png</iconset>
+   </property>
+   <property name="text">
+    <string>View</string>
+   </property>
+  </action>
   <addaction name="menuFloors"/>
   <addaction name="menuFace_Sprite"/>
   <addaction name="menuMountain"/>
   <addaction name="menu3D_object"/>
   <addaction name="menuEvents"/>
+  <addaction name="menuView"/>
  </widget>
  <resources>
   <include location="../ressources.qrc"/>

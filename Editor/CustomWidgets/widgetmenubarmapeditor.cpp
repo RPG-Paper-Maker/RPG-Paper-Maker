@@ -227,6 +227,11 @@ QAction * WidgetMenuBarMapEditor::actionEvents() const
     return ui->actionEvents;
 }
 
+QAction * WidgetMenuBarMapEditor::actionView() const
+{
+    return ui->actionView;
+}
+
 QAction * WidgetMenuBarMapEditor::actionSquare() const
 {
     return m_actionSquare;
@@ -443,7 +448,8 @@ void WidgetMenuBarMapEditor::updateSelection(QAction *action)
         enableAllRight();
         if (subSelectionAfter == MapEditorSubSelectionKind::SpritesWall ||
             m_selectionKind == MapEditorSelectionKind::Objects3D ||
-            m_selectionKind == MapEditorSelectionKind::Mountains)
+            m_selectionKind == MapEditorSelectionKind::Mountains ||
+            m_selectionKind == MapEditorSelectionKind::None)
         {
             forceNoneLayer();
         } else
@@ -452,9 +458,11 @@ void WidgetMenuBarMapEditor::updateSelection(QAction *action)
         }
         if (m_selectionKind == MapEditorSelectionKind::Sprites ||
             m_selectionKind == MapEditorSelectionKind::Objects3D ||
-            m_selectionKind == MapEditorSelectionKind::Mountains)
+            m_selectionKind == MapEditorSelectionKind::Mountains ||
+            m_selectionKind == MapEditorSelectionKind::None)
         {
-            if (subSelectionAfter == MapEditorSubSelectionKind::SpritesWall)
+            if (subSelectionAfter == MapEditorSubSelectionKind::SpritesWall ||
+                m_selectionKind == MapEditorSelectionKind::None)
             {
                 this->forcePencil();
             } else
@@ -476,7 +484,8 @@ void WidgetMenuBarMapEditor::updateSelection(QAction *action)
         if (subSelectionAfter == MapEditorSubSelectionKind::Autotiles ||
             subSelectionAfter == MapEditorSubSelectionKind::SpritesWall ||
             m_selectionKind == MapEditorSelectionKind::Mountains ||
-            m_selectionKind == MapEditorSelectionKind::Objects)
+            m_selectionKind == MapEditorSelectionKind::Objects ||
+            m_selectionKind == MapEditorSelectionKind::None)
         {
             this->forceNoRotation();
         } else
@@ -486,7 +495,8 @@ void WidgetMenuBarMapEditor::updateSelection(QAction *action)
         if (m_selectionKind == MapEditorSelectionKind::Land ||
             subSelectionAfter == MapEditorSubSelectionKind::SpritesWall ||
             m_selectionKind == MapEditorSelectionKind::Mountains ||
-            m_selectionKind == MapEditorSelectionKind::Objects)
+            m_selectionKind == MapEditorSelectionKind::Objects ||
+            m_selectionKind == MapEditorSelectionKind::None)
         {
             this->forceSquare();
         } else {
@@ -518,7 +528,8 @@ void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu, QAction
     this->updateSelection(menuAction);
     this->enableAllRight();
     MapEditorSubSelectionKind subKind = this->subSelectionKind();
-    if (subKind == MapEditorSubSelectionKind::SpritesWall)
+    if (subKind == MapEditorSubSelectionKind::SpritesWall ||
+        m_selectionKind == MapEditorSelectionKind::None)
     {
         this->forceNoneLayer();
     } else
@@ -527,9 +538,11 @@ void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu, QAction
     }
     if (m_selectionKind == MapEditorSelectionKind::Sprites ||
         m_selectionKind == MapEditorSelectionKind::Objects3D ||
-        m_selectionKind == MapEditorSelectionKind::Mountains)
+        m_selectionKind == MapEditorSelectionKind::Mountains ||
+        m_selectionKind == MapEditorSelectionKind::None)
     {
-        if (subKind == MapEditorSubSelectionKind::SpritesWall)
+        if (subKind == MapEditorSubSelectionKind::SpritesWall ||
+            m_selectionKind == MapEditorSelectionKind::None)
         {
             this->forcePencil();
         } else
@@ -550,7 +563,7 @@ void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu, QAction
     if (subKind == MapEditorSubSelectionKind::Autotiles || subSelectionKind() ==
         MapEditorSubSelectionKind::SpritesWall || m_selectionKind ==
         MapEditorSelectionKind::Mountains || m_selectionKind ==
-        MapEditorSelectionKind::Objects)
+        MapEditorSelectionKind::Objects || m_selectionKind == MapEditorSelectionKind::None)
     {
         this->forceNoRotation();
     } else
@@ -560,7 +573,8 @@ void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu, QAction
     if (m_selectionKind == MapEditorSelectionKind::Land ||
         subKind == MapEditorSubSelectionKind::SpritesWall ||
         m_selectionKind == MapEditorSelectionKind::Mountains ||
-        m_selectionKind == MapEditorSelectionKind::Objects)
+        m_selectionKind == MapEditorSelectionKind::Objects ||
+        m_selectionKind == MapEditorSelectionKind::None)
     {
         this->forceSquare();
     } else {
@@ -733,6 +747,7 @@ void WidgetMenuBarMapEditor::translate()
     ui->menuMountain->setTitle(RPM::translate(Translations::MOUNTAIN));
     ui->menu3D_object->setTitle(RPM::translate(Translations::THREED_OBJECT));
     ui->menuFace_Sprite->setTitle(RPM::translate(Translations::FACE_SPRITE));
+    ui->menuView->setTitle(RPM::translate(Translations::VIEW));
     ui->actionSlope->setText(RPM::translate(Translations::SLOPE));
     ui->actionFloors->setText(RPM::translate(Translations::FLOOR));
     ui->actionObject->setText(RPM::translate(Translations::OBJECT));
@@ -745,6 +760,7 @@ void WidgetMenuBarMapEditor::translate()
     ui->actionDouble_Sprite->setText(RPM::translate(Translations::DOUBLE_SPRITE));
     ui->actionQuadra_Sprite->setText(RPM::translate(Translations::QUADRA_SPRITE));
     ui->actionAnimated_Autotile->setText(RPM::translate(Translations::ANIMATED_AUTOTILE));
+    ui->actionView->setText(RPM::translate(Translations::VIEW));
 }
 
 // -------------------------------------------------------
@@ -887,6 +903,14 @@ void WidgetMenuBarMapEditor::on_menuEvents_triggered(QAction *action)
 {
     this->updateSubSelection(ui->menuEvents, this->actions().at(static_cast<int>(
         MapEditorSelectionKind::Objects)), action);
+}
+
+// -------------------------------------------------------
+
+void WidgetMenuBarMapEditor::on_menuView_triggered(QAction *action)
+{
+    this->updateSubSelection(ui->menuView, this->actions().at(static_cast<int>(
+        MapEditorSelectionKind::None)), action);
 }
 
 // -------------------------------------------------------

@@ -1362,5 +1362,6 @@
     "guide.assets.3": "Transfer assets here to associate it\nto an ID and then use it in your game!",
     "translation": "Translation",
     "by.square": "By square",
-    "scaling": "Scaling"
+    "scaling": "Scaling",
+    "view": "View"
 }

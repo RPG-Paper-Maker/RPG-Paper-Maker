@@ -59,6 +59,7 @@ public:
     QAction * actionMountain() const;
     QAction * actionObject3D() const;
     QAction * actionEvents() const;
+    QAction * actionView() const;
     QAction * actionSquare() const;
     QAction * actionPixel() const;
     QAction * actionTranslate() const;
@@ -117,6 +118,7 @@ private slots:
     void on_menuMountain_triggered(QAction *action);
     void on_menu3D_object_triggered(QAction *action);
     void on_menuEvents_triggered(QAction *action);
+    void on_menuView_triggered(QAction *action);
     void on_actionTranslateTriggered(bool);
     void on_actionRotateTriggered(bool);
     void on_actionScaleTriggered(bool);

@@ -1396,6 +1396,7 @@ public:
     static const QString TRANSLATION;
     static const QString BY_SQUARE;
     static const QString SCALING;
+    static const QString VIEW;
 
     Translations();
     virtual ~Translations();

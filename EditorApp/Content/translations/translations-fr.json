@@ -1362,5 +1362,6 @@
     "guide.assets.3": "Transférez des assets ici pour les associer à\nun ID et ensuite les utiliser dans votre jeu!",
     "translation": "Translation",
     "by.square": "Par case",
-    "scaling": "Scaling"
+    "scaling": "Scaling",
+    "view": "Vue"
 }
