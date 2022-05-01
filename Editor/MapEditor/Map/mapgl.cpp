@@ -217,10 +217,9 @@ void Map::paintFloors(QMatrix4x4& modelviewProjection, int autotileFrame) {
 
 // -------------------------------------------------------
 
-void Map::paintOthers(QMatrix4x4 &modelviewProjection,
-                      QVector3D &cameraRightWorldSpace,
-                      QVector3D &cameraUpWorldSpace,
-                      QVector3D &cameraDeepWorldSpace)
+void Map::paintOthers(MapEditorSelectionKind selectionKind, QMatrix4x4
+    &modelviewProjection, QVector3D &cameraRightWorldSpace, QVector3D
+    &cameraUpWorldSpace, QVector3D &cameraDeepWorldSpace)
 {
     int totalSize = getMapPortionTotalSize();
     MapPortion* mapPortion;
@@ -360,13 +359,16 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     }
 
     // Objects squares
-    m_programStatic->bind();
-    m_textureObjectSquare->bind();
-    for (int i = 0; i < totalSize; i++) {
-        mapPortion = this->mapPortionBrut(i);
-        if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
-            mapPortion->paintObjectsSquares();
+    if (selectionKind != MapEditorSelectionKind::None)
+    {
+        m_programStatic->bind();
+        m_textureObjectSquare->bind();
+        for (int i = 0; i < totalSize; i++) {
+            mapPortion = this->mapPortionBrut(i);
+            if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
+                mapPortion->paintObjectsSquares();
+        }
+        m_textureObjectSquare->release();
+        m_programStatic->release();
     }
-    m_textureObjectSquare->release();
-    m_programStatic->release();
 }

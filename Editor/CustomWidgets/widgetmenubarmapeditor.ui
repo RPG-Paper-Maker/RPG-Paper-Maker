@@ -73,6 +73,10 @@
    <property name="title">
     <string>View</string>
    </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/view.png</normaloff>:/icons/Ressources/view.png</iconset>
+   </property>
    <addaction name="actionView"/>
   </widget>
   <action name="actionFloors">

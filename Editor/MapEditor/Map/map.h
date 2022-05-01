@@ -197,7 +197,7 @@ public:
 
     void initializeGL();
     void paintFloors(QMatrix4x4 &modelviewProjection, int autotileFrame);
-    void paintOthers(QMatrix4x4 &modelviewProjection,
+    void paintOthers(MapEditorSelectionKind selectionKind, QMatrix4x4 &modelviewProjection,
                      QVector3D& cameraRightWorldSpace,
                      QVector3D& cameraUpWorldSpace,
                      QVector3D &cameraDeepWorldSpace);

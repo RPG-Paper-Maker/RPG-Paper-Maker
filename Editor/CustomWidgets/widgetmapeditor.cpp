@@ -354,7 +354,8 @@ void WidgetMapEditor::paintGL() {
         p.end();
         // Draw additional text informations
         p.begin(this);
-        if (m_menuBar != nullptr) {
+        if (m_menuBar != nullptr && kind != MapEditorSelectionKind::None)
+        {
             QStringList listInfos;
             if (m_detection == nullptr)
             {
@@ -627,7 +628,8 @@ void WidgetMapEditor::zoom(int value)
 
 void WidgetMapEditor::updateCursor() {
     if (m_menuBar == nullptr || m_menuBar->selectionKind() ==
-        MapEditorSelectionKind::Objects || m_detection != nullptr)
+        MapEditorSelectionKind::Objects || m_menuBar->selectionKind() ==
+        MapEditorSelectionKind::None || m_detection != nullptr)
     {
         setCursor(Qt::ArrowCursor);
     } else

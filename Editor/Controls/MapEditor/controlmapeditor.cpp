@@ -1519,28 +1519,32 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     m_map->paintFloors(modelviewProjection, autotileFrame);
 
     // Drawing object cursor
-    if (selectionKind == MapEditorSelectionKind::Objects) {
+    if (selectionKind == MapEditorSelectionKind::Objects)
+    {
         if (isCursorObjectVisible()) {
             m_cursorObject->paintGL(modelviewProjection);
         }
     }
 
     // Drawing user cursor
-    if (m_displayCursor)
+    if (m_displayCursor && selectionKind != MapEditorSelectionKind::None)
     {
         m_map->cursor()->paintGL(modelviewProjection);
     }
 
     // Drawing start cursor
-    if (m_cursorStart != nullptr) {
+    if (m_cursorStart != nullptr && selectionKind != MapEditorSelectionKind::None)
+    {
         m_cursorStart->getPosition3D(position);
-        if (isVisible(position) && position.x() >= 0 && position.z() >= 0) {
+        if (isVisible(position) && position.x() >= 0 && position.z() >= 0)
+        {
             m_cursorStart->paintGL(modelviewProjection);
         }
     }
 
     // Drawing detection cursor
-    if (m_cursorDetection != nullptr) {
+    if (m_cursorDetection != nullptr)
+    {
         m_cursorDetection->getPosition3D(position);
         if (isVisible(position)) {
             m_cursorDetection->paintGL(modelviewProjection);
@@ -1548,7 +1552,7 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     }
 
     // Drawing other stuff
-    m_map->paintOthers(modelviewProjection, cameraRightWorldSpace,
+    m_map->paintOthers(selectionKind, modelviewProjection, cameraRightWorldSpace,
         cameraUpWorldSpace, cameraDeepWorldSpace);
 
     // Drawing wall indicator
@@ -1560,7 +1564,8 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     }
 
     // Drawing grid
-    if (m_displayGrid){
+    if (m_displayGrid && selectionKind != MapEditorSelectionKind::None)
+    {
         m_grid->paintGL(modelviewProjection, static_cast<int>(this->cursor()
             ->getY()));
     }
