@@ -36,6 +36,12 @@ public:
     static const QString JSON_KIND;
     static const QString JSON_COMMANDS;
     static const QString BEGINNING_COMMAND;
+    static const QString COLOR_ORANGE;
+    static const QString COLOR_BLUE;
+    static const QString COLOR_GREEN;
+    static const QString COLOR_YELLOW;
+    static const QString COLOR_GREY;
+    static const QString COLOR_COMMENT;
     static QVector<QString> emptyCommandList;
 
     EventCommand();

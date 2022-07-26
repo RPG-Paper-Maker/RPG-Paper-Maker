@@ -17,19 +17,22 @@
         "Fullscreen by default",
         "When changing selection, always deselect layer on"
     ],
-    "bugs": [],
+    "bugs": [
+        "Update project sometimes crashing"
+    ],
     "finished": [
         1,
         1,
         2,
-        0,
+        1,
         0,
         2,
         2,
         2,
         0,
         0,
-        0,
+        2,
+        2,
         2,
         2
     ]

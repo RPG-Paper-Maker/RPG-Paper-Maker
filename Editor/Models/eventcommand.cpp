@@ -26,6 +26,12 @@
 const QString EventCommand::JSON_KIND = "kind";
 const QString EventCommand::JSON_COMMANDS = "command";
 const QString EventCommand::BEGINNING_COMMAND = "> ";
+const QString EventCommand::COLOR_ORANGE = "#FF8C00";
+const QString EventCommand::COLOR_BLUE = "#569ae8";
+const QString EventCommand::COLOR_GREEN = "#35c452";
+const QString EventCommand::COLOR_YELLOW = "#eff531";
+const QString EventCommand::COLOR_GREY = "#7a7a7a";
+const QString EventCommand::COLOR_COMMENT = "#199406";
 QVector<QString> EventCommand::emptyCommandList = QVector<QString>();
 
 // -------------------------------------------------------
@@ -206,25 +212,33 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::ChangeVariables:
         str += this->strChangeVariables(properties, parameters, troopMonstersList); break;
     case EventCommandKind::EndGame:
-        str += RPM::translate(Translations::GAME_OVER); break;
+        str += "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+            Translations::GAME_OVER) + "</strong>"; break;
     case EventCommandKind::While:
-        str += RPM::translate(Translations::LOOP); break;
+        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+            Translations::LOOP) + "</strong>"; break;
     case EventCommandKind::EndWhile:
-        str += RPM::translate(Translations::END_LOOP); break;
+        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+            Translations::END_LOOP) + "</strong>"; break;
     case EventCommandKind::WhileBreak:
-        str += RPM::translate(Translations::BREAK_LOOP); break;
+        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+            Translations::BREAK_LOOP) + "</strong>"; break;
     case EventCommandKind::InputNumber:
         str += strInputNumber(properties, parameters); break;
     case EventCommandKind::If:
         str += strCondition(properties, parameters); break;
     case EventCommandKind::Else:
-        str += RPM::translate(Translations::ELSE); break;
+        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+            Translations::ELSE) + "</strong>"; break;
     case EventCommandKind::EndIf:
-        str += RPM::translate(Translations::END_IF); break;
+        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+            Translations::END_IF) + "</strong>"; break;
     case EventCommandKind::OpenMainMenu:
-        str += RPM::translate(Translations::OPEN_MAIN_MENU); break;
+        str += "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+            Translations::OPEN_MAIN_MENU) + "</strong>"; break;
     case EventCommandKind::OpenSavesMenu:
-        str += RPM::translate(Translations::OPEN_SAVES_MENU); break;
+        str += "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+            Translations::OPEN_SAVES_MENU) + "</strong>"; break;
     case EventCommandKind::ModifyInventory:
         str += this->strModifyInventory(properties, parameters); break;
     case EventCommandKind::ModifyTeam:
@@ -232,9 +246,11 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::StartBattle:
         str += this->strStartBattle(parameters); break;
     case EventCommandKind::IfWin:
-        str += RPM::translate(Translations::IF_WIN); break;
+        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM
+            ::translate(Translations::IF_WIN) + "</strong>"; break;
     case EventCommandKind::IfLose:
-        str += RPM::translate(Translations::IF_LOSE); break;
+        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM
+            ::translate(Translations::IF_LOSE) + "</strong>"; break;
     case EventCommandKind::ChangeState:
         str += this->strChangeState(properties, parameters); break;
     case EventCommandKind::SendEvent:
@@ -264,9 +280,11 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::DisplayChoice:
         str += this->strDisplayChoice(properties, parameters); break;
     case EventCommandKind::Choice:
-        str += this->strChoice(); break;
+        str += "<strong style=\"color:" + COLOR_GREY + "\">" + this
+            ->strChoice() + "</strong>"; break;
     case EventCommandKind::EndChoice:
-        str += RPM::translate(Translations::END_CHOICE); break;
+        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM
+            ::translate(Translations::END_CHOICE) + "</strong>"; break;
     case EventCommandKind::Script:
         str += this->strScript(properties, parameters); break;
     case EventCommandKind::DisplayAPicture:
@@ -278,13 +296,15 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::SetDialogBoxOptions:
         str += this->strSetDialogBoxOptions(properties, parameters); break;
     case EventCommandKind::TitleScreen:
-        str += RPM::translate(Translations::TITLE_SCREEN); break;
+        str += "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+            Translations::TITLE_SCREEN) + "</strong>"; break;
     case EventCommandKind::ChangeScreenTone:
         str += this->strChangeScreenTone(properties, parameters); break;
     case EventCommandKind::RemoveObjectFromMap:
         str += this->strRemoveObjectFromMap(properties, parameters); break;
     case EventCommandKind::StopReaction:
-        str += RPM::translate(Translations::STOP_REACTION); break;
+        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+            Translations::STOP_REACTION) + "</strong>"; break;
     case EventCommandKind::AllowForbidSaves:
         str += this->strAllowForbidSaves(properties, parameters); break;
     case EventCommandKind::AllowForbidMainMenu:
@@ -326,13 +346,15 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::ChangeStatus:
         str += this->strChangeStatus(properties, parameters); break;
     case EventCommandKind::ResetCamera:
-        str += RPM::translate(Translations::RESET_CAMERA); break;
+        str += "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+            Translations::RESET_CAMERA) + "</strong>"; break;
     case EventCommandKind::ChangeBattleMusic:
         str += this->strChangeBattleMusic(properties, parameters); break;
     case EventCommandKind::ChangeVictoryMusic:
         str += this->strChangeVictoryMusic(properties, parameters); break;
     case EventCommandKind::EndBattle:
-        str += RPM::translate(Translations::END_BATTLE); break;
+        str += "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+            Translations::END_BATTLE) + "</strong>"; break;
     case EventCommandKind::ForceAnAction:
         str += this->strForceAnAction(properties, parameters, troopMonstersList);
         break;
@@ -536,9 +558,10 @@ QString EventCommand::strShowText(QStandardItemModel *properties, QStandardItemM
             text = "";
         }
     }
-    return RPM::translate(Translations::SHOW_TEXT) + RPM::SPACE + RPM
-        ::BRACKET_LEFT + interlocutor + RPM::BRACKET_RIGHT + RPM::COLON + RPM
-        ::SPACE + text;
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::SHOW_TEXT) + "</strong>" + RPM::SPACE + RPM::COLON + RPM
+        ::SPACE + (interlocutor.isEmpty() ? "" : RPM::BRACKET_LEFT + interlocutor +
+        RPM::BRACKET_RIGHT) + text;
 }
 
 // -------------------------------------------------------
@@ -649,8 +672,9 @@ QString EventCommand::strChangeVariables(QStandardItemModel *properties,
             .at(this->valueCommandAt(i++).toInt());
         break;
     }
-    return RPM::translate(Translations::CHANGE_VARIABLES) + RPM::COLON + RPM
-        ::SPACE + selection + RPM::SPACE + operation + RPM::SPACE + value;
+    return "<strong style=\"color:" + COLOR_YELLOW + "\">" + RPM::translate(
+        Translations::CHANGE_VARIABLES) + "</strong>" + RPM::COLON + RPM::SPACE +
+        selection + RPM::SPACE + operation + RPM::SPACE + value;
 }
 
 // -------------------------------------------------------
@@ -684,7 +708,8 @@ QString EventCommand::strInputNumber(QStandardItemModel *properties,
     int i = 0;
     QString stockVariable = this->strProperty(i, properties, parameters);
     QString digits = this->strProperty(i, properties, parameters);
-    return RPM::translate(Translations::INPUT_NUMBER) + RPM::COLON + RPM::SPACE +
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::INPUT_NUMBER) + "</strong>" + RPM::COLON + RPM::SPACE +
         RPM::translate(Translations::STOCK_VALUE_IN_VARIABLE_ID) + RPM::SPACE +
         stockVariable + RPM::COMMA + RPM::SPACE + RPM::translate(Translations
         ::DIGITS) + RPM::SPACE + digits;
@@ -853,8 +878,9 @@ QString EventCommand::strCondition(QStandardItemModel *properties,
     default:
         break;
     }
-    return RPM::translate(Translations::IF) + RPM::SPACE + RPM::PARENTHESIS_LEFT
-        + condition + RPM::PARENTHESIS_RIGHT;
+    return "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+        Translations::IF) + RPM::SPACE + RPM::PARENTHESIS_LEFT + condition + RPM
+        ::PARENTHESIS_RIGHT + "</strong>";
 }
 
 // -------------------------------------------------------
@@ -889,7 +915,8 @@ QString EventCommand::strModifyInventory(QStandardItemModel *properties,
     operation = this->strChangeVariablesOperation(i);
     number = this->strNumberVariable(i);
 
-    return RPM::translate(Translations::MODIFY_INVENTORY) + RPM::COLON + RPM
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::MODIFY_INVENTORY) + "</strong>" + RPM::COLON + RPM
         ::SPACE + selection + RPM::SPACE + operation + RPM::SPACE + number;
 }
 
@@ -995,7 +1022,8 @@ QString EventCommand::strModifyTeam(QStandardItemModel *properties,
         }
         break;
     }
-    return RPM::translate(Translations::MODIFY_TEAM) + RPM::COLON + RPM::SPACE
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::MODIFY_TEAM) + "</strong>" + RPM::COLON + RPM::SPACE
         + operation;
 }
 
@@ -1011,10 +1039,11 @@ QString EventCommand::strStartBattle(QStandardItemModel *parameters) const {
     battleMap = this->strStartBattleMap(parameters, i);
     transition = this->strStartBattleTransition(parameters, i);
 
-    return RPM::translate(Translations::START_BATTLE) + RPM::COLON + RPM::SPACE
+    return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+        Translations::START_BATTLE) + "</strong>" + RPM::COLON + RPM::SPACE
         + RPM::translate(Translations::TROOP).toLower() + RPM::SPACE + troop +
         RPM::SPACE + RPM::translate(Translations::WITH_BATTLE_MAP).toLower() +
-        RPM::SPACE + battleMap + transition + RPM::NEW_LINE + RPM::NEW_LINE +
+        RPM::SPACE + battleMap + transition + "<br>" + "<br>" +
         options;
 }
 
@@ -1069,12 +1098,12 @@ QString EventCommand::strStartBattleMap(QStandardItemModel *parameters, int &i)
         break;
     }
 
-    return "\n\t" + RPM::translate(Translations::MAP_ID) + RPM::COLON + RPM
-        ::SPACE + id + RPM::NEW_LINE + "\t" + RPM::translate(Translations::X) +
-        RPM::COLON + RPM::SPACE + x + RPM::NEW_LINE + "\t" + RPM::translate(
-        Translations::Y) + RPM::COLON + RPM::SPACE + y + RPM::NEW_LINE + "\t" +
+    return "<br>" + RPM::translate(Translations::MAP_ID) + RPM::COLON + RPM
+        ::SPACE + id + "<br>" + RPM::translate(Translations::X) +
+        RPM::COLON + RPM::SPACE + x + "<br>" + RPM::translate(
+        Translations::Y) + RPM::COLON + RPM::SPACE + y + "<br>" +
         RPM::translate(Translations::Y_PLUS) + RPM::COLON + RPM::SPACE + yPlus +
-        RPM::NEW_LINE + "\t" + RPM::translate(Translations::Z)+ RPM::COLON + RPM
+        "<br>" + RPM::translate(Translations::Z)+ RPM::COLON + RPM
         ::SPACE + z;
 }
 
@@ -1180,10 +1209,11 @@ QString EventCommand::strChangeState(QStandardItemModel *properties,
         ->gameDatas()->commonEventsDatas()->modelStates(), parameters);
     QString operation = this->strChangeStateOperation(i);
 
-    return RPM::translate(Translations::CHANGE_STATE) + RPM::COLON + RPM::SPACE
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::CHANGE_STATE) + "</strong>" + RPM::COLON + RPM::SPACE
         + RPM::translate(Translations::MAP_ID) + RPM::SPACE + mapID + RPM::COMMA
         + RPM::SPACE + RPM::translate(Translations::OBJECT_ID) + RPM::SPACE +
-        objectID + RPM::NEW_LINE + operation + value;
+        objectID + "<br>" + operation + value;
 }
 
 // -------------------------------------------------------
@@ -1230,7 +1260,8 @@ QString EventCommand::strSendEvent(QStandardItemModel *properties,
     event = e->getLabelTab();
     delete e;
 
-    return RPM::translate(Translations::SEND_EVENT) + RPM::COLON + RPM::SPACE +
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::SEND_EVENT) + "</strong>" + RPM::COLON + RPM::SPACE +
         RPM::translate(Translations::TO).toLower() + RPM::SPACE + target + RPM
         ::SPACE + RPM::translate(Translations::WITH_EVENT).toLower() + RPM
         ::SPACE + event;
@@ -1286,10 +1317,10 @@ QString EventCommand::strTeleportObject(QStandardItemModel *properties,
     strPosition = this->strTeleportObjectPosition(properties, parameters, i);
     strOptions = this->strTeleportObjectOptions(i);
 
-    return RPM::translate(Translations::TELEPORT_OBJECT) + RPM::COLON + RPM
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::TELEPORT_OBJECT) + "</strong>" + RPM::COLON + RPM
         ::SPACE + strObj + RPM::SPACE + RPM::translate(Translations
-        ::TO_THE_COORDINATES).toLower() + RPM::NEW_LINE + strOptions + RPM
-        ::NEW_LINE + strPosition;
+        ::TO_THE_COORDINATES).toLower() + "<br>" + strOptions + "<br>" + strPosition;
 }
 
 // -------------------------------------------------------
@@ -1319,16 +1350,16 @@ QString EventCommand::strTeleportObjectPosition(QStandardItemModel *properties,
             break;
         }
 
-        return "\t" + RPM::translate(Translations::MAP_ID) + RPM::COLON + RPM
-            ::SPACE + id + RPM::NEW_LINE + "\t" + RPM::translate(Translations::X) +
-            RPM::COLON + RPM::SPACE + x + RPM::NEW_LINE + "\t" + RPM::translate(
-            Translations::Y) + RPM::COLON + RPM::SPACE + y + RPM::NEW_LINE + "\t" +
+        return RPM::translate(Translations::MAP_ID) + RPM::COLON + RPM
+            ::SPACE + id + "<br>" + RPM::translate(Translations::X) +
+            RPM::COLON + RPM::SPACE + x + "<br>" + RPM::translate(
+            Translations::Y) + RPM::COLON + RPM::SPACE + y + "<br>" +
             RPM::translate(Translations::Y_PLUS) + RPM::COLON + RPM::SPACE + yPlus +
-            RPM::NEW_LINE + "\t" + RPM::translate(Translations::Z)+ RPM::COLON + RPM
+            "<br>" + RPM::translate(Translations::Z)+ RPM::COLON + RPM
             ::SPACE + z;
     }
 
-    return "\t" + this->strMoveObjectID(properties, parameters, i) + RPM::SPACE +
+    return this->strMoveObjectID(properties, parameters, i) + RPM::SPACE +
         RPM::translate(Translations::COORDINATES).toLower();
 }
 
@@ -1370,8 +1401,9 @@ QString EventCommand::strMoveObject(QStandardItemModel *properties,
     strOptions = this->strMoveObjectOptions(i);
     strMoves = this->strMoveObjectMoves(i);
 
-    return RPM::translate(Translations::MOVE_OBJECT) + RPM::COLON + RPM::SPACE +
-        strObj + RPM::NEW_LINE + strOptions + strMoves;
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::MOVE_OBJECT) + "</strong>" + RPM::COLON + RPM::SPACE +
+        strObj + "<br>" + strOptions + strMoves;
 }
 
 // -------------------------------------------------------
@@ -1427,9 +1459,9 @@ QString EventCommand::strMoveObjectMoves(int &i) const
     QString strMoves;
     while(i < commandsCount()) {
         move = SystemCommandMove();
-        strMoves += "\n";
+        strMoves += "<br>";
         move.initialize(this, i);
-        strMoves += "\t" + move.toString();
+        strMoves += move.toString();
     }
 
     return strMoves;
@@ -1442,9 +1474,9 @@ QString EventCommand::strWait(QStandardItemModel *properties, QStandardItemModel
 {
     int i = 0;
 
-    return RPM::translate(Translations::WAIT) + RPM::COLON + RPM::SPACE + this
-        ->strProperty(i, properties, parameters) + RPM::SPACE + RPM::translate(
-        Translations::SECONDS);
+    return "<strong>" + RPM::translate(Translations::WAIT) + "</strong>" + RPM
+        ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters) +
+        RPM::SPACE + RPM::translate(Translations::SECONDS);
 }
 
 // -------------------------------------------------------
@@ -1463,13 +1495,14 @@ QString EventCommand::strMoveCamera(QStandardItemModel *properties,
     zoom = this->strMoveCameraZoom(parameters, i, operation);
     options = this->strMoveCameraOptions(parameters, i);
 
-    return RPM::translate(Translations::MOVE_CAMERA) + RPM::COLON +  RPM
-        ::NEW_LINE + RPM::translate(Translations::TARGET) + RPM::COLON + RPM
-        ::SPACE + target + RPM::NEW_LINE + RPM::translate(Translations::MOVE) +
-        RPM::COLON + RPM::SPACE + move + RPM::NEW_LINE + RPM::translate(
-        Translations::ROTATION) + RPM::COLON + RPM::SPACE + rotation + RPM
-        ::NEW_LINE + RPM::translate(Translations::ZOOM) + RPM::COLON + RPM
-        ::SPACE + zoom + RPM::NEW_LINE + options;
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::MOVE_CAMERA) + "</strong>" + RPM::COLON + "<br>" + RPM
+        ::translate(Translations::TARGET) + RPM::COLON + RPM::SPACE + target +
+        "<br>" + RPM::translate(Translations::MOVE) + RPM::COLON + RPM::SPACE +
+        move + "<br>" + RPM::translate(
+        Translations::ROTATION) + RPM::COLON + RPM::SPACE + rotation + "<br>" +
+        RPM::translate(Translations::ZOOM) + RPM::COLON + RPM
+        ::SPACE + zoom + "<br>" + options;
 }
 
 // -------------------------------------------------------
@@ -1598,8 +1631,8 @@ QString EventCommand::strPlaySong(QStandardItemModel *properties, QStandardItemM
     return (isIDNumber ? RPM::translate(Translations::WITH_ID).toLower() + RPM
         ::SPACE + idNumber : id) + RPM::SPACE + RPM::translate(Translations
         ::WITH_VOLUME).toLower() + RPM::COLON + RPM::SPACE + volume + (isStart ?
-        RPM::NEW_LINE + RPM::translate(Translations::START) + RPM::COLON + RPM
-        ::SPACE + start : "") + (isEnd ? RPM::NEW_LINE + RPM::translate(
+        "<br>" + RPM::translate(Translations::START) + RPM::COLON + RPM
+        ::SPACE + start : "") + (isEnd ? "<br>" + RPM::translate(
         Translations::END) + RPM::COLON + RPM::SPACE + end : "");
 }
 
@@ -1607,7 +1640,8 @@ QString EventCommand::strPlayMusic(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    return RPM::translate(Translations::PLAY_MUSIC) + RPM::COLON + RPM::SPACE +
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::PLAY_MUSIC) + "</strong>" + RPM::COLON + RPM::SPACE +
         this->strPlaySong(properties, parameters, SongKind::Music, i);
 }
 
@@ -1617,7 +1651,8 @@ QString EventCommand::strPlayBackgroundSound(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    return RPM::translate(Translations::PLAY_BACKGROUND_SOUND) + RPM::COLON +
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::PLAY_BACKGROUND_SOUND) + "</strong>" + RPM::COLON +
         RPM::SPACE + this->strPlaySong(properties, parameters, SongKind
         ::BackgroundSound, i);
 }
@@ -1628,7 +1663,8 @@ QString EventCommand::strPlaySound(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    return RPM::translate(Translations::PLAY_A_SOUND) + RPM::COLON + RPM::SPACE
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::PLAY_A_SOUND) + "</strong>" + RPM::COLON + RPM::SPACE
         + this->strPlaySong(properties, parameters, SongKind::Sound, i);
 }
 
@@ -1638,7 +1674,8 @@ QString EventCommand::strPlayMusicEffect(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    return RPM::translate(Translations::PLAY_MUSIC_EFFECT) + RPM::COLON + RPM
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::PLAY_MUSIC_EFFECT) + "</strong>" + RPM::COLON + RPM
         ::SPACE + this->strPlaySong(properties, parameters, SongKind::MusicEffect, i);
 }
 
@@ -1657,7 +1694,8 @@ QString EventCommand::strStopSong(QStandardItemModel *properties, QStandardItemM
 QString EventCommand::strStopMusic(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
-    return RPM::translate(Translations::STOP_MUSIC) + RPM::COLON + RPM::SPACE +
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::STOP_MUSIC) + "</strong>" + RPM::COLON + RPM::SPACE +
         this->strStopSong(properties, parameters);
 }
 
@@ -1666,7 +1704,8 @@ QString EventCommand::strStopMusic(QStandardItemModel *properties,
 QString EventCommand::strStopBackgroundSound(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
-    return RPM::translate(Translations::STOP_BACKGROUND_SOUND) + RPM::COLON +
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::STOP_BACKGROUND_SOUND) + "</strong>" + RPM::COLON +
         RPM::SPACE + this->strStopSong(properties, parameters);
 }
 
@@ -1683,7 +1722,8 @@ QString EventCommand::strChangeProperty(QStandardItemModel *properties,
     operation = this->strChangeVariablesOperation(i);
     newValue = this->strProperty(i, properties, parameters);
 
-    return RPM::translate(Translations::CHANGE_PROPERTY) + RPM::COLON + RPM
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::CHANGE_PROPERTY) + "</strong>" + RPM::COLON + RPM
         ::SPACE + RPM::translate(Translations::PROPERTY_ID).toLower() + RPM
         ::SPACE + propertyID + RPM::SPACE + operation + RPM::SPACE + newValue;
 }
@@ -1722,11 +1762,12 @@ QString EventCommand::strDisplayChoice(QStandardItemModel *properties,
         choices << lang->name();
         delete lang;
     }
-    return RPM::translate(Translations::DISPLAY_CHOICES) + RPM::COLON + RPM
-        ::SPACE + RPM::BRACKET_LEFT + RPM::translate(Translations
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::DISPLAY_CHOICES) + "</strong>" + RPM::SPACE + RPM::COLON +
+        RPM::SPACE + RPM::BRACKET_LEFT + RPM::translate(Translations
         ::CANCEL_AUTO_INDEX).toLower() + RPM::EQUAL + cancelIndex + RPM::COMMA +
         RPM::SPACE + RPM::translate(Translations::MAX_NUMBER_CHOICES_DISPLAY)
-        .toLower() + RPM::EQUAL + maxChoices + RPM::BRACKET_RIGHT + RPM::NEW_LINE +
+        .toLower() + RPM::EQUAL + maxChoices + RPM::BRACKET_RIGHT + "<br>" +
         choices.join(RPM::SPACE + "|" + RPM::SPACE);
 }
 
@@ -1752,8 +1793,8 @@ QString EventCommand::strScript(QStandardItemModel *properties, QStandardItemMod
         script = m_listCommand.at(i);
     }
 
-    return RPM::translate(Translations::SCRIPT) + RPM::COLON + RPM::SPACE +
-        script;
+    return "<strong style=\"color:" + COLOR_YELLOW + "\">" + RPM::translate(
+        Translations::SCRIPT) + "</strong>" + RPM::COLON + RPM::SPACE + script;
 }
 
 // -------------------------------------------------------
@@ -1775,10 +1816,11 @@ QString EventCommand::strDisplayAPicture(QStandardItemModel *properties,
     opacity = this->strProperty(i, properties, parameters);
     angle = this->strProperty(i, properties, parameters);
 
-    return RPM::translate(Translations::DISPLAY_A_PICTURE) + RPM::COLON + RPM
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::DISPLAY_A_PICTURE) + "</strong>" + RPM::COLON + RPM
         ::SPACE + RPM::translate(Translations::ID) + RPM::EQUAL + id + RPM
         ::SPACE + RPM::translate(Translations::INDEX).toLower() + RPM::EQUAL +
-        index + RPM::NEW_LINE + "    " + RPM::translate(Translations::ORIGIN) +
+        index + "<br>" + "    " + RPM::translate(Translations::ORIGIN) +
         RPM::EQUAL + origin + "," + RPM::SPACE + RPM::translate(Translations::X)
         + RPM::EQUAL + x + "," + RPM::SPACE + RPM::translate(Translations::Y) +
         RPM::EQUAL + y + "," + RPM::SPACE + RPM::translate(Translations::ZOOM) +
@@ -1800,38 +1842,39 @@ QString EventCommand::strSetMoveTurnAPicture(QStandardItemModel *properties,
     index = this->strProperty(i, properties, parameters);
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::IMAGE_ID) + RPM
+        options += "<br>" + RPM::translate(Translations::IMAGE_ID) + RPM
             ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters, true);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::ZOOM) + RPM::COLON +
+        options += "<br>" + RPM::translate(Translations::ZOOM) + RPM::COLON +
             RPM::SPACE + this->strProperty(i, properties, parameters) + "%";
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::OPACITY) + RPM::COLON
+        options += "<br>" + RPM::translate(Translations::OPACITY) + RPM::COLON
             + RPM::SPACE + this->strProperty(i, properties, parameters) + "%";
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::X) + RPM::COLON + RPM
+        options += "<br>" + RPM::translate(Translations::X) + RPM::COLON + RPM
             ::SPACE + this->strProperty(i, properties, parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::Y) + RPM::COLON + RPM
+        options += "<br>" + RPM::translate(Translations::Y) + RPM::COLON + RPM
             ::SPACE + this->strProperty(i, properties, parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::ANGLE) + RPM::COLON +
+        options += "<br>" + RPM::translate(Translations::ANGLE) + RPM::COLON +
             RPM::SPACE + this->strProperty(i, properties, parameters) + "°";
     }
     time = this->strProperty(i, properties, parameters);
     waitEnd = RPM::stringToBool(m_listCommand.at(i++));
 
-    return RPM::translate(Translations::SET_MOVE_TURN_A_PICTURE) + RPM::COLON +
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::SET_MOVE_TURN_A_PICTURE) + "</strong>" + RPM::COLON +
         RPM::SPACE + RPM::translate(Translations::INDEX).toLower() + RPM::EQUAL
         + index + RPM::SPACE + RPM::translate(Translations::WITH_TIME).toLower()
         + RPM::EQUAL + time + RPM::translate(Translations::SECONDS) + (waitEnd ?
@@ -1846,7 +1889,8 @@ QString EventCommand::strRemoveAPicture(QStandardItemModel *properties,
 {
     int i = 0;
 
-    return RPM::translate(Translations::REMOVE_A_PICTURE) + RPM::COLON + RPM
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::REMOVE_A_PICTURE) + "</strong>" + RPM::COLON + RPM
         ::SPACE + RPM::translate(Translations::INDEX).toLower() + RPM::EQUAL +
         this->strProperty(i, properties, parameters);
 }
@@ -1863,112 +1907,113 @@ QString EventCommand::strSetDialogBoxOptions(QStandardItemModel *properties,
     i = 0;
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::WINDOW_SKIN_ID) + RPM
+        options += "<br>" + RPM::translate(Translations::WINDOW_SKIN_ID) + RPM
             ::COLON + RPM::SPACE + this->strDataBaseId(i, properties, RPM::get()
             ->project()->gameDatas()->systemDatas()->modelWindowSkins(),
             parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::X) + RPM::COLON + RPM
+        options += "<br>" + RPM::translate(Translations::X) + RPM::COLON + RPM
             ::SPACE + this->strProperty(i, properties, parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::Y) + RPM::COLON + RPM
+        options += "<br>" + RPM::translate(Translations::Y) + RPM::COLON + RPM
             ::SPACE + this->strProperty(i, properties, parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::WIDTH) + RPM::COLON +
+        options += "<br>" + RPM::translate(Translations::WIDTH) + RPM::COLON +
             RPM::SPACE + this->strProperty(i, properties, parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::HEIGHT) + RPM::COLON
+        options += "<br>" + RPM::translate(Translations::HEIGHT) + RPM::COLON
             + RPM::SPACE + this->strProperty(i, properties, parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::PADDING_LEFT) + RPM
+        options += "<br>" + RPM::translate(Translations::PADDING_LEFT) + RPM
             ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::PADDING_TOP) + RPM
+        options += "<br>" + RPM::translate(Translations::PADDING_TOP) + RPM
             ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::PADDING_RIGHT) + RPM
+        options += "<br>" + RPM::translate(Translations::PADDING_RIGHT) + RPM
             ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::PADDING_BOTTOM) + RPM
+        options += "<br>" + RPM::translate(Translations::PADDING_BOTTOM) + RPM
             ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::FACESET_POSITION) +
+        options += "<br>" + RPM::translate(Translations::FACESET_POSITION) +
             RPM::COLON + RPM::SPACE + (RPM::stringToBool(m_listCommand.at(i++))
             ? RPM::translate(Translations::ABOVE) : RPM::translate(Translations
             ::BEHIND));
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::FACESET_X) + RPM
+        options += "<br>" + RPM::translate(Translations::FACESET_X) + RPM
             ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::FACESET_Y) + RPM
+        options += "<br>" + RPM::translate(Translations::FACESET_Y) + RPM
             ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::TEXT_OUTLINE) + RPM
+        options += "<br>" + RPM::translate(Translations::TEXT_OUTLINE) + RPM
             ::COLON + RPM::SPACE + (RPM::stringToBool(m_listCommand.at(i++)) ?
             RPM::translate(Translations::NO) : RPM::translate(Translations::YES));
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::TEXT_COLOR_ID_TEXT )
+        options += "<br>" + RPM::translate(Translations::TEXT_COLOR_ID_TEXT )
             + RPM::COLON + RPM::SPACE + this->strDataBaseId(i, properties, RPM
             ::get()->project()->gameDatas()->systemDatas()->modelColors(),
             parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::TEXT_COLOR_ID_OUTLINE
+        options += "<br>" + RPM::translate(Translations::TEXT_COLOR_ID_OUTLINE
             ) + RPM::COLON + RPM::SPACE + this->strDataBaseId(i, properties, RPM
             ::get()->project()->gameDatas()->systemDatas()->modelColors(),
             parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations
+        options += "<br>" + RPM::translate(Translations
             ::TEXT_COLOR_ID_BACKGROUND) + RPM::COLON + RPM::SPACE + this
             ->strDataBaseId(i, properties, RPM::get()->project()->gameDatas()
             ->systemDatas()->modelColors(), parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::TEXT_SIZE_ID) + RPM
+        options += "<br>" + RPM::translate(Translations::TEXT_SIZE_ID) + RPM
             ::COLON + RPM::SPACE + this->strDataBaseId(i, properties, RPM::get()
             ->project()->gameDatas()->systemDatas()->modelFontSizes(),
             parameters);
     }
     checked = RPM::stringToBool(m_listCommand.at(i++));
     if (checked) {
-        options += "\n    " + RPM::translate(Translations::TEXT_FONT_ID) + RPM
+        options += "<br>" + RPM::translate(Translations::TEXT_FONT_ID) + RPM
             ::COLON + RPM::SPACE + this->strDataBaseId(i, properties, RPM::get()
             ->project()->gameDatas()->systemDatas()->modelFontNames(),
             parameters);
     }
 
-    return RPM::translate(Translations::SET_DIALOG_BOX_OPTIONS) + RPM::COLON +
-        RPM::SPACE + options;
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::SET_DIALOG_BOX_OPTIONS) + "</strong>" + RPM::COLON + RPM
+        ::SPACE + options;
 }
 
 // -------------------------------------------------------
@@ -1989,7 +2034,7 @@ QString EventCommand::strChangeScreenTone(QStandardItemModel *properties,
         color = operation + RPM::SPACE + RPM::translate(Translations::COLOR)
             .toLower() + RPM::SPACE + this->strDataBaseId(i, properties, RPM::get()
             ->project()->gameDatas()->systemDatas()->modelColors(), parameters)
-            + RPM::NEW_LINE;
+            + "<br>";
     }
     if (RPM::stringToBool(m_listCommand.at(i++))) {
         time += RPM::BRACKET_LEFT + RPM::translate(Translations::WAIT_END) + RPM
@@ -1999,13 +2044,14 @@ QString EventCommand::strChangeScreenTone(QStandardItemModel *properties,
         ::SPACE + this->strProperty(i, properties, parameters) + RPM::SPACE + RPM
         ::translate(Translations::SECONDS);
 
-    return RPM::translate(Translations::CHANGE_SCREEN_TONE) + RPM::COLON + RPM
-        ::NEW_LINE + RPM::translate(Translations::RED_SHORT) + RPM::COLON + RPM
-        ::SPACE + red + RPM::NEW_LINE + RPM::translate(Translations::GREEN_SHORT
-        ) + RPM::COLON + RPM::SPACE + green + RPM::NEW_LINE + RPM::translate(
-        Translations::BLUE_SHORT) + RPM::COLON + RPM::SPACE + blue + RPM
-        ::NEW_LINE + RPM::translate(Translations::GREY) + RPM::COLON + RPM
-        ::SPACE + grey + RPM::NEW_LINE + color + time;
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::CHANGE_SCREEN_TONE) + "</strong>" + RPM::COLON + "<br>"
+        + RPM::translate(Translations::RED_SHORT) + RPM::COLON + RPM
+        ::SPACE + red + "<br>" + RPM::translate(Translations::GREEN_SHORT
+        ) + RPM::COLON + RPM::SPACE + green + "<br>" + RPM::translate(
+        Translations::BLUE_SHORT) + RPM::COLON + RPM::SPACE + blue + "<br>" +
+        RPM::translate(Translations::GREY) + RPM::COLON + RPM
+        ::SPACE + grey + "<br>" + color + time;
 }
 
 // -------------------------------------------------------
@@ -2030,7 +2076,8 @@ QString EventCommand::strRemoveObjectFromMap(QStandardItemModel *properties,
         SuperListItem::deleteModel(modelObjects);
     }
 
-    return RPM::translate(Translations::REMOVE_OBJECT_FROM_MAP) + RPM::COLON +
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::REMOVE_OBJECT_FROM_MAP) + "</strong>" + RPM::COLON +
         RPM::SPACE + RPM::translate(Translations::ID) + RPM::EQUAL + obj;
 }
 
@@ -2040,7 +2087,8 @@ QString EventCommand::strAllowForbidSaves(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    return RPM::translate(Translations::ALLOW_SAVES) + RPM::COLON + RPM::SPACE +
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::ALLOW_SAVES) + "</strong>" + RPM::COLON + RPM::SPACE +
         this->strProperty(i, properties, parameters);
 }
 
@@ -2050,8 +2098,9 @@ QString EventCommand::strAllowForbidMainMenu(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    return RPM::translate(Translations::ALLOW_MAIN_MENU) + RPM::COLON + RPM
-        ::SPACE + this->strProperty(i, properties, parameters);
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::ALLOW_MAIN_MENU) + "</strong>" + RPM::COLON + RPM::SPACE +
+        this->strProperty(i, properties, parameters);
 }
 
 // -------------------------------------------------------
@@ -2059,7 +2108,8 @@ QString EventCommand::strAllowForbidMainMenu(QStandardItemModel *properties,
 QString EventCommand::strCallACommonReaction() const {
     int i = 0;
 
-    return RPM::translate(Translations::CALL_A_COMMON_REACTION) + RPM::COLON +
+    return "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+        Translations::CALL_A_COMMON_REACTION) + "</strong>" + RPM::COLON +
         RPM::SPACE + reinterpret_cast<SystemCommonReaction *>(SuperListItem
         ::getById(RPM::get()->project()->gameDatas()->commonEventsDatas()
         ->modelCommonReactors()->invisibleRootItem(), m_listCommand.at(i++)
@@ -2072,16 +2122,17 @@ QString EventCommand::strLabel(bool jump, QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    return RPM::translate(jump ? Translations::JUMP_TO_LABEL : Translations
-        ::LABEL) + RPM::COLON + RPM::SPACE + this->strProperty(i, properties,
-        parameters);
+    return "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(jump ?
+        Translations::JUMP_TO_LABEL : Translations::LABEL) + "</strong>" + RPM
+        ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters);
 }
 
 // -------------------------------------------------------
 
 QString EventCommand::strComment() const
 {
-    return "# " + this->valueCommandAt(0);
+    return "<strong style=\"color:" + COLOR_COMMENT + "\"># " + this->valueCommandAt(0)
+        + "</strong>";
 }
 
 // -------------------------------------------------------
@@ -2124,13 +2175,13 @@ QString EventCommand::strChangeAStatistic(QStandardItemModel *properties,
     QString option;
     if (RPM::stringToBool(m_listCommand.at(i++)))
     {
-        option += RPM::NEW_LINE + RPM::BRACKET_LEFT + RPM::translate(
+        option += "<br>" + RPM::BRACKET_LEFT + RPM::translate(
             Translations::CAN_GO_ABOVE_MAXIMUM_VALUE) + RPM::BRACKET_RIGHT;
     }
 
-    return RPM::translate(Translations::CHANGE_A_STATISTIC) + RPM::NEW_LINE +
-        "\t" + statistic + RPM::SPACE + selection + RPM::SPACE + value + RPM
-        ::NEW_LINE + "\t" + option;
+    return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+        Translations::CHANGE_A_STATISTIC) + "</strong><br>" + statistic + RPM
+        ::SPACE + selection + RPM::SPACE + value + "<br>" + option;
 }
 
 // -------------------------------------------------------
@@ -2156,8 +2207,8 @@ QString EventCommand::strChangeASkill(QStandardItemModel *properties,
     }
     QString operation = this->strOperationLearnForget(i);
 
-    return RPM::translate(Translations::CHANGE_A_SKILL) + RPM::NEW_LINE +
-        "\t" + skill + RPM::SPACE + selection;
+    return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+        Translations::CHANGE_A_SKILL) + "<br>" + skill + RPM::SPACE + selection;
 }
 
 // -------------------------------------------------------
@@ -2216,8 +2267,9 @@ QString EventCommand::strChangeName(QStandardItemModel *properties,
         break;
     }
 
-    return RPM::translate(Translations::CHANGE_NAME) + RPM::COLON + RPM::SPACE +
-        selection + RPM::NEW_LINE + RPM::SPACE + name;
+    return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+        Translations::CHANGE_NAME) + "</strong>" + RPM::COLON + RPM::SPACE +
+        selection + "<br>" + RPM::SPACE + name;
 }
 
 // -------------------------------------------------------
@@ -2251,11 +2303,12 @@ QString EventCommand::strChangeEquipment(QStandardItemModel *properties,
     QString option;
     if (RPM::stringToBool(m_listCommand.at(i++)))
     {
-        option += RPM::NEW_LINE + RPM::BRACKET_LEFT + RPM::translate(
+        option += "<br>" + RPM::BRACKET_LEFT + RPM::translate(
             Translations::APPLY_ONLY_IF_IN_INVENTORY) + RPM::BRACKET_RIGHT;
     }
 
-    return RPM::translate(Translations::CHANGE_EQUIPMENT) + RPM::COLON + RPM
+    return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+        Translations::CHANGE_EQUIPMENT) + "</strong>" + RPM::COLON + RPM
         ::SPACE + equipment + RPM::SPACE + selection + option;
 }
 
@@ -2271,7 +2324,8 @@ QString EventCommand::strModifyCurrency(QStandardItemModel *properties,
     QString operation = this->strChangeVariablesOperation(i);
     QString value = this->strProperty(i, properties, parameters);
 
-    return RPM::translate(Translations::MODIFY_CURRENCY) + RPM::COLON + RPM
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::MODIFY_CURRENCY) + "</strong>" + RPM::COLON + RPM
         ::SPACE + currency + RPM::SPACE + operation + RPM::SPACE + value;
 }
 
@@ -2289,11 +2343,12 @@ QString EventCommand::strDisplayAnAnimation(QStandardItemModel *properties,
     QString option;
     if (RPM::stringToBool(m_listCommand.at(i++)))
     {
-        option += RPM::NEW_LINE + RPM::BRACKET_LEFT + RPM::translate(
+        option += "<br>" + RPM::BRACKET_LEFT + RPM::translate(
             Translations::WAIT_END) + RPM::BRACKET_RIGHT;
     }
 
-    return RPM::translate(Translations::DISPLAY_AN_ANIMATION) + RPM::COLON + RPM
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::DISPLAY_AN_ANIMATION) + "</strong>" + RPM::COLON + RPM
         ::SPACE + objectID + RPM::SPACE + animation + RPM::SPACE + option;
 }
 
@@ -2315,12 +2370,11 @@ QString EventCommand::strShakeScreen(QStandardItemModel *properties,
         ->strNumber(i, parameters) + RPM::SPACE + RPM::translate(Translations
         ::SECONDS);
 
-    return RPM::translate(Translations::SHAKE_SCREEN) + RPM::COLON + RPM
-        ::NEW_LINE + RPM::translate(Translations::OFFSET) + RPM::COLON + RPM
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::SHAKE_SCREEN) + "</strong>" + RPM::COLON + "<br>" + RPM::translate(Translations::OFFSET) + RPM::COLON + RPM
         ::SPACE + offset + RPM::SPACE + RPM::translate(Translations::PIXEL_S)
-        .toLower() + RPM::NEW_LINE + RPM::translate(Translations::SHAKES_NUMBER)
-        + RPM::COLON + RPM::SPACE + shakesNumber + RPM::NEW_LINE + option + RPM
-        ::NEW_LINE + time;
+        .toLower() + "<br>" + RPM::translate(Translations::SHAKES_NUMBER)
+        + RPM::COLON + RPM::SPACE + shakesNumber + "<br>" + option + "<br>" + time;
 }
 
 // -------------------------------------------------------
@@ -2341,9 +2395,9 @@ QString EventCommand::strFlashScreen(QStandardItemModel *properties,
         + this->strProperty(i, properties, parameters) + RPM::SPACE + RPM::translate
         (Translations::SECONDS);
 
-    return RPM::translate(Translations::FLASH_SCREEN) + RPM::COLON + RPM
-        ::NEW_LINE + RPM::translate(Translations::COLOR_ID) + RPM::COLON + RPM
-        ::SPACE + colorID + RPM::NEW_LINE + option + RPM::NEW_LINE + time;
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::FLASH_SCREEN) + "</strong>" + RPM::COLON + "<br>" + RPM::translate(Translations::COLOR_ID) + RPM::COLON + RPM
+        ::SPACE + colorID + "<br>" + option + "<br>" + time;
 }
 
 // -------------------------------------------------------
@@ -2398,9 +2452,9 @@ QString EventCommand::strPlugin(QStandardItemModel *properties, QStandardItemMod
             SuperListItem::deleteModel(currentParameters);
         }
     }
-    return RPM::translate(Translations::PLUGIN) + RPM::COLON + RPM::SPACE +
-        pluginName + RPM::SPACE + RPM::DASH + RPM::SPACE + commandName +
-        commandParameters;
+    return "<strong style=\"color:" + COLOR_YELLOW + "\">" + RPM::translate(Translations::PLUGIN) + "</strong>" + RPM
+        ::COLON + RPM::SPACE + pluginName + RPM::SPACE + RPM::DASH + RPM::SPACE
+        + commandName + commandParameters;
 }
 
 // -------------------------------------------------------
@@ -2423,11 +2477,12 @@ QString EventCommand::strStartShopMenu(QStandardItemModel *properties, QStandard
         itemPrice->initialize(this, i);
         list << itemPrice->toString();
     }
-    return (isRestock ? RPM::translate(Translations::RESTOCK_SHOP) : RPM
-        ::translate(Translations::START_SHOP_MENU)) + RPM::COLON + RPM::NEW_LINE
-        + list.join(RPM::NEW_LINE) + (isRestock ? "" : (RPM::NEW_LINE + RPM
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + (isRestock ? RPM
+        ::translate(Translations::RESTOCK_SHOP) : RPM::translate(Translations
+        ::START_SHOP_MENU)) + "</strong>" + RPM::COLON + "<br>"
+        + list.join("<br>") + (isRestock ? "" : ("<br>" + RPM
         ::translate(Translations::BUY_ONLY) + RPM::COLON + RPM::SPACE + buyOnly))
-        + RPM::NEW_LINE + RPM::translate(Translations::SHOP_ID) + RPM::COLON +
+        + "<br>" + RPM::translate(Translations::SHOP_ID) + RPM::COLON +
         RPM::SPACE + shopID;
 }
 
@@ -2439,9 +2494,10 @@ QString EventCommand::strEnterANameMenu(QStandardItemModel *properties,
     int i = 0;
     QString heroInstanceID = this->strProperty(i, properties, parameters);
     QString maxCharacters = this->strProperty(i, properties, parameters);
-    return RPM::translate(Translations::ENTER_A_NAME_MENU) + RPM::COLON + RPM
-        ::NEW_LINE + RPM::translate(Translations::HERO_WITH_INSTANCE_ID) + RPM
-        ::COLON + RPM::SPACE + heroInstanceID + RPM::NEW_LINE + RPM::translate(
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" +  RPM::translate(
+        Translations::ENTER_A_NAME_MENU) + "</strong>" + RPM::COLON + "<br>"
+         + RPM::translate(Translations::HERO_WITH_INSTANCE_ID) + RPM
+        ::COLON + RPM::SPACE + heroInstanceID + "<br>" + RPM::translate(
         Translations::MAX_CHARACTERS) + RPM::COLON + RPM::SPACE + maxCharacters;
 }
 
@@ -2460,10 +2516,11 @@ QString EventCommand::strCreateObjectInMap(QStandardItemModel *properties, QStan
             .toLower() + RPM::SPACE + this->strProperty(i, properties, parameters) +
             RPM::BRACKET_RIGHT + RPM::SPACE;
     }
-    return RPM::translate(Translations::CREATE_OBJECT_IN_MAP) + RPM::COLON + RPM
+    return "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM::translate(
+        Translations::CREATE_OBJECT_IN_MAP) + "</strong>" + RPM::COLON + RPM
         ::SPACE + RPM::translate(Translations::NEW_OBJECT_MODEL_ID) + RPM::COLON
         + RPM::SPACE + strModelID + RPM::SPACE + strStockID + RPM::translate(
-        Translations::TO_THE_COORDINATES).toLower() + RPM::NEW_LINE + strPosition;
+        Translations::TO_THE_COORDINATES).toLower() + "<br>" + strPosition;
 }
 
 // -------------------------------------------------------
@@ -2488,7 +2545,8 @@ QString EventCommand::strChangeStatus(QStandardItemModel *properties,
     QString status = RPM::translate(Translations::STATUS_ID) + RPM::SPACE
         + this->strDataBaseId(i, properties, RPM::get()->project()->gameDatas()
         ->statusDatas()->model(), parameters);
-    return RPM::translate(Translations::CHANGE_STATUS) + RPM::COLON + RPM::SPACE
+    return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+        Translations::CHANGE_STATUS) + "</strong>" + RPM::COLON + RPM::SPACE
         + operation + RPM::SPACE + status + RPM::SPACE + selection;
 }
 
@@ -2498,7 +2556,8 @@ QString EventCommand::strChangeBattleMusic(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    return RPM::translate(Translations::CHANGE_BATTLE_MUSIC) + RPM::COLON + RPM
+    return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+        Translations::CHANGE_BATTLE_MUSIC) + "</strong>" + RPM::COLON + RPM
         ::SPACE + this->strPlaySong(properties, parameters, SongKind::Music, i);
 }
 
@@ -2508,7 +2567,8 @@ QString EventCommand::strChangeVictoryMusic(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    return RPM::translate(Translations::CHANGE_VICTORY_MUSIC) + RPM::COLON + RPM
+    return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+        Translations::CHANGE_VICTORY_MUSIC) + "</strong>" + RPM::COLON + RPM
         ::SPACE + this->strPlaySong(properties, parameters, SongKind::Music, i);
 }
 
@@ -2577,7 +2637,8 @@ QString EventCommand::strForceAnAction(QStandardItemModel *properties,
         option += RPM::SPACE + RPM::BRACKET_LEFT + RPM::translate(Translations
             ::USE_BATTLER_TURN) + RPM::BRACKET_RIGHT;
     }
-    return RPM::translate(Translations::FORCE_AN_ACTION) + RPM::COLON + RPM::SPACE +
+    return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+        Translations::FORCE_AN_ACTION) + "</strong>" + RPM::COLON + RPM::SPACE +
         battler + RPM::SPACE + RPM::DASH + RPM::SPACE + action + RPM::SPACE + RPM
         ::DASH + RPM::SPACE + target + option;
 }
@@ -2588,7 +2649,8 @@ QString EventCommand::strChangeMapProperties(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    QString str = RPM::translate(Translations::CHANGE_MAP_PROPERTIES) + RPM
+    QString str = "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM
+        ::translate(Translations::CHANGE_MAP_PROPERTIES) + "</strong>" + RPM
         ::COLON + RPM::SPACE;
     switch (m_listCommand.at(i + 1).toInt())
     {
@@ -2642,7 +2704,7 @@ QString EventCommand::strChangeMapProperties(QStandardItemModel *properties,
         }
         list << sky;
     }
-    str += list.join(RPM::NEW_LINE);
+    str += list.join("<br>");
     return str;
 }
 
@@ -2652,7 +2714,8 @@ QString EventCommand::strChangeExperienceCurve(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    QString str = RPM::translate(Translations::CHANGE_EXPERIENCE_CURVE) + RPM
+    QString str = "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+        Translations::CHANGE_EXPERIENCE_CURVE) + "</strong>" + RPM
         ::COLON + RPM::SPACE;
     switch (m_listCommand.at(i++).toInt())
     {
@@ -2682,7 +2745,8 @@ QString EventCommand::strChangeClass(QStandardItemModel *properties, QStandardIt
     *parameters) const
 {
     int i = 0;
-    QString str = RPM::translate(Translations::CHANGE_CLASS) + RPM::COLON + RPM
+    QString str = "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+        Translations::CHANGE_CLASS) + "</strong>" + RPM::COLON + RPM
         ::SPACE + RPM::translate(Translations::CLASS_ID).toLower() + RPM::SPACE +
         this->strProperty(i, properties, parameters) + RPM::SPACE;
     switch (m_listCommand.at(i++).toInt())
@@ -2705,8 +2769,8 @@ QString EventCommand::strChangeChronometer(QStandardItemModel *properties, QStan
     *parameters) const
 {
     int i = 0;
-    QString str = RPM::translate(Translations::CHANGE_CHRONOMETER) + RPM::COLON
-        + RPM::SPACE;
+    QString str = "<strong>" + RPM::translate(Translations::CHANGE_CHRONOMETER) +
+        + "</strong>" + RPM::COLON + RPM::SPACE;
     QString id = this->strProperty(i, properties, parameters);
     int operation = this->valueCommandAt(i++).toInt();
     switch (operation)
@@ -2754,7 +2818,8 @@ QString EventCommand::strChangeWeather(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    QString str = RPM::translate(Translations::CHANGE_WEATHER) + RPM::COLON
+    QString str = "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM
+        ::translate(Translations::CHANGE_WEATHER) + "</strong>" + RPM::COLON
         + RPM::SPACE;
     switch (this->valueCommandAt(i++).toInt())
     {
@@ -2762,7 +2827,7 @@ QString EventCommand::strChangeWeather(QStandardItemModel *properties,
         str += RPM::translate(Translations::NONE);
         break;
     case 1:
-        str += RPM::translate(Translations::CUSTOM) + RPM::NEW_LINE;
+        str += RPM::translate(Translations::CUSTOM) + "<br>";
         QStringList list;
         QString texture = RPM::translate(Translations::TEXTURE) + RPM::COLON +
             RPM::SPACE;
@@ -2796,12 +2861,12 @@ QString EventCommand::strChangeWeather(QStandardItemModel *properties,
             RPM::SPACE + this->strProperty(i, properties, parameters);
         list << RPM::translate(Translations::Y_ROTATION_ADDITION) + RPM::COLON +
             RPM::SPACE + this->strProperty(i, properties, parameters);
-        str += list.join(RPM::NEW_LINE);
+        str += list.join("<br>");
         break;
     }
     if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
-        str += RPM::NEW_LINE + RPM::BRACKET_LEFT + RPM::translate(Translations
-        ::WAIT_END) + RPM::BRACKET_RIGHT + RPM::NEW_LINE + RPM::translate(
+        str += "<br>" + RPM::BRACKET_LEFT + RPM::translate(Translations
+        ::WAIT_END) + RPM::BRACKET_RIGHT + "<br>" + RPM::translate(
         Translations::TIME) + RPM::COLON + RPM::SPACE + this->strProperty(i,
         properties, parameters) + RPM::SPACE + RPM::translate(Translations::SECONDS);
     }
@@ -2814,7 +2879,8 @@ QString EventCommand::strPlayAVideo(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    QString str = RPM::translate(Translations::PLAY_A_VIDEO) + RPM::COLON + RPM
+    QString str = "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM
+        ::translate(Translations::PLAY_A_VIDEO) + "</strong>" + RPM::COLON + RPM
         ::SPACE;
     switch (this->valueCommandAt(i++).toInt())
     {
@@ -2837,7 +2903,7 @@ QString EventCommand::strPlayAVideo(QStandardItemModel *properties,
         }
         if (!options.isEmpty())
         {
-            str += RPM::NEW_LINE + RPM::BRACKET_LEFT + options.join(";") + RPM
+            str += "<br>" + RPM::BRACKET_LEFT + options.join(";") + RPM
                 ::BRACKET_RIGHT;
         }
         break;
@@ -2858,11 +2924,12 @@ QString EventCommand::strSwitchTexture(QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    QString str = RPM::translate(Translations::SWITCH_TEXTURE) + RPM::COLON + RPM
-        ::SPACE;
+    QString str = "<strong style=\"color:" + COLOR_ORANGE + "\">" + RPM
+        ::translate(Translations::SWITCH_TEXTURE) + "</strong>" + RPM::COLON +
+        RPM::SPACE;
     if (RPM::stringToBool(this->valueCommandAt(i++)))
     {
-        str += RPM::NEW_LINE + RPM::translate(Translations::TILESET_ID) + RPM
+        str += "<br>" + RPM::translate(Translations::TILESET_ID) + RPM
             ::SPACE;
         str += this->strDataBaseId(i, properties, RPM::get()->project()
             ->gameDatas()->tilesetsDatas()->model(), parameters) + RPM::SPACE +
@@ -2871,7 +2938,7 @@ QString EventCommand::strSwitchTexture(QStandardItemModel *properties,
     }
     if (RPM::stringToBool(this->valueCommandAt(i++)))
     {
-        str += RPM::NEW_LINE + RPM::translate(Translations::AUTOTILE_ID) + RPM
+        str += "<br>" + RPM::translate(Translations::AUTOTILE_ID) + RPM
             ::SPACE;
         str += this->strDataBaseId(i, properties, RPM::get()->project()
             ->specialElementsDatas()->modelAutotiles(), parameters) + RPM::SPACE +
@@ -2880,7 +2947,7 @@ QString EventCommand::strSwitchTexture(QStandardItemModel *properties,
     }
     if (RPM::stringToBool(this->valueCommandAt(i++)))
     {
-        str += RPM::NEW_LINE + RPM::translate(Translations::WALL_ID) + RPM
+        str += "<br>" + RPM::translate(Translations::WALL_ID) + RPM
             ::SPACE;
         str += this->strDataBaseId(i, properties, RPM::get()->project()
             ->specialElementsDatas()->modelSpriteWalls(), parameters) + RPM::SPACE +
@@ -2889,7 +2956,7 @@ QString EventCommand::strSwitchTexture(QStandardItemModel *properties,
     }
     if (RPM::stringToBool(this->valueCommandAt(i++)))
     {
-        str += RPM::NEW_LINE + RPM::translate(Translations::OBJECT_3D_ID) + RPM
+        str += "<br>" + RPM::translate(Translations::OBJECT_3D_ID) + RPM
             ::SPACE;
         str += this->strDataBaseId(i, properties, RPM::get()->project()
             ->specialElementsDatas()->modelObjects3D(), parameters) + RPM::SPACE +
@@ -2898,7 +2965,7 @@ QString EventCommand::strSwitchTexture(QStandardItemModel *properties,
     }
     if (RPM::stringToBool(this->valueCommandAt(i++)))
     {
-        str += RPM::NEW_LINE + RPM::translate(Translations::MOUNTAIN_ID) + RPM
+        str += "<br>" + RPM::translate(Translations::MOUNTAIN_ID) + RPM
             ::SPACE;
         str += this->strDataBaseId(i, properties, RPM::get()->project()
             ->specialElementsDatas()->modelMountains(), parameters) + RPM::SPACE +

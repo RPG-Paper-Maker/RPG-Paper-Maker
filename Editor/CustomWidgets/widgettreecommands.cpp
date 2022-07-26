@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include "htmldelegate.h"
 #include "widgettreecommands.h"
 #include "dialogcommands.h"
 #include "eventcommand.h"
@@ -42,6 +43,8 @@ WidgetTreeCommands::WidgetTreeCommands(QWidget *parent) :
     this->setHeaderHidden(true);
     this->setIndentation(15);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
+    HTMLDelegate* delegate = new HTMLDelegate();
+    this->setItemDelegate(delegate);
     connect(this,
                 SIGNAL(clicked(QModelIndex)),
                 this,
@@ -67,6 +70,7 @@ WidgetTreeCommands::WidgetTreeCommands(QWidget *parent) :
 WidgetTreeCommands::~WidgetTreeCommands()
 {
     delete m_contextMenuCommonCommands;
+    delete this->itemDelegate();
 }
 
 // -------------------------------------------------------
