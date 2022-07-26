@@ -266,8 +266,11 @@ QList<QStandardItem *> SystemCommonObject::getAllCommandsList() const {
                 state = reinterpret_cast<SystemState *>(m_states->item(j)
                     ->data().value<quintptr>());
                 if (state != nullptr) {
-                    list << event->reactionAt(state->id())->modelCommands()
-                        ->invisibleRootItem();
+                    SystemReaction *reaction = event->reactionAt(state->id());
+                    if (reaction != nullptr)
+                    {
+                        list << reaction->modelCommands()->invisibleRootItem();
+                    }
                     if (state->eventCommandDetection() != nullptr)
                     {
                         state->itemDetection()->setData(QVariant::fromValue(
@@ -275,7 +278,6 @@ QList<QStandardItem *> SystemCommonObject::getAllCommandsList() const {
                             ->eventCommandDetection())));
                         list << state->itemDetection();
                     }
-
                 }
             }
         }
