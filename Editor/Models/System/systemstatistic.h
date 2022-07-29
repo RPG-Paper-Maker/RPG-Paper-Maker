@@ -27,12 +27,14 @@ class SystemStatistic : public SystemTranslatable
 {
 public:
     SystemStatistic();
-    SystemStatistic(int i, QString name, QString abbreviation, bool isFix);
+    SystemStatistic(int i, QString name, QString abbreviation, bool isFix,
+        SuperListItem *pictureBarID = new SuperListItem(-1));
     virtual ~SystemStatistic();
     QString abbreviation() const;
     void setAbbreviation(QString s);
     bool isFix() const;
     void setIsFix(bool b);
+    SuperListItem * pictureBarID() const;
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);
@@ -42,6 +44,7 @@ public:
 protected:
     QString m_abbreviation;
     bool m_isFix;
+    SuperListItem *m_pictureBarID;
 };
 
 Q_DECLARE_METATYPE(SystemStatistic)

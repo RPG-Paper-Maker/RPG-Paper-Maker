@@ -48,14 +48,20 @@ SystemStatistic& DialogSystemStatistic::statistic() const {
 //
 // -------------------------------------------------------
 
-void DialogSystemStatistic::initialize(){
+void DialogSystemStatistic::initialize()
+{
     ui->widgetName->initializeNamesLang(&m_statistic);
     ui->lineEditAbbrevation->setText(m_statistic.abbreviation());
 
     if (m_statistic.isFix())
+    {
         ui->radioButtonFix->setChecked(true);
-    else
+    } else
+    {
         ui->radioButtonBar->setChecked(true);
+    }
+    ui->widgetPictureBar->setKind(PictureKind::Bars);
+    ui->widgetPictureBar->initializeSuper(statistic().pictureBarID());
 }
 
 //-------------------------------------------------
@@ -67,7 +73,7 @@ void DialogSystemStatistic::translate()
     ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
     ui->labelScriptAbbreviation->setText(RPM::translate(Translations
         ::SCRIPT_ABBREVIATION) + RPM::COLON);
-    ui->radioButtonBar->setText(RPM::translate(Translations::BAR));
+    ui->radioButtonBar->setText(RPM::translate(Translations::BAR) + RPM::COLON);
     ui->radioButtonFix->setText(RPM::translate(Translations::FIX));
     ui->groupBoxProperties->setTitle(RPM::translate(Translations::PROPERTIES));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);

@@ -12,25 +12,27 @@
         "Transformation mode scale",
         "Mode view on editor",
         "Improve ingame perfs",
-        "Tooltips for every options",
         "Event command syntax colors",
         "Fullscreen by default",
         "When changing selection, always deselect layer on"
     ],
     "bugs": [
-        "Update project sometimes crashing"
+        "Update project sometimes crashing",
+        "Full screen main menu",
+        "Issue with previous version save game"
     ],
     "finished": [
         1,
         1,
         2,
+        2,
         1,
-        0,
         2,
         2,
         2,
         0,
-        0,
+        2,
+        2,
         2,
         2,
         2,

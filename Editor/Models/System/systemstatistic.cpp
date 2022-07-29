@@ -19,22 +19,25 @@
 // -------------------------------------------------------
 
 SystemStatistic::SystemStatistic() :
-    SystemTranslatable()
+    SystemTranslatable(),
+    m_pictureBarID(new SuperListItem(-1))
 {
 
 }
 
 SystemStatistic::SystemStatistic(int i, QString name, QString abbreviation, bool
-    isFix) :
+    isFix, SuperListItem * pictureBarID) :
     SystemTranslatable(i, name),
     m_abbreviation(abbreviation),
-    m_isFix(isFix)
+    m_isFix(isFix),
+    m_pictureBarID(pictureBarID)
 {
 
 }
 
-SystemStatistic::~SystemStatistic(){
-
+SystemStatistic::~SystemStatistic()
+{
+    delete m_pictureBarID;
 }
 
 QString SystemStatistic::abbreviation() const { return m_abbreviation; }
@@ -44,6 +47,11 @@ void SystemStatistic::setAbbreviation(QString s) { m_abbreviation = s; }
 bool SystemStatistic::isFix() const { return m_isFix; }
 
 void SystemStatistic::setIsFix(bool b) { m_isFix = b; }
+
+SuperListItem * SystemStatistic::pictureBarID() const
+{
+    return m_pictureBarID;
+}
 
 // -------------------------------------------------------
 //
@@ -80,6 +88,7 @@ void SystemStatistic::setCopy(const SuperListItem &super) {
     statistic = reinterpret_cast<const SystemStatistic *>(&super);
     m_abbreviation = statistic->abbreviation();
     m_isFix = statistic->m_isFix;
+    m_pictureBarID->setId(statistic->m_pictureBarID->id());
 }
 
 // -------------------------------------------------------
@@ -92,6 +101,10 @@ void SystemStatistic::read(const QJsonObject &json){
     SystemTranslatable::read(json);
     m_abbreviation = json["abr"].toString();
     m_isFix = json["fix"].toBool();
+    if (json.contains("pid"))
+    {
+        m_pictureBarID->setId(json["pid"].toInt());
+    }
 }
 
 // -------------------------------------------------------
@@ -100,4 +113,8 @@ void SystemStatistic::write(QJsonObject &json) const{
     SystemTranslatable::write(json);
     json["abr"] = m_abbreviation;
     json["fix"] = m_isFix;
+    if (m_pictureBarID->id() != -1)
+    {
+        json["pid"] = m_pictureBarID->id();
+    }
 }
