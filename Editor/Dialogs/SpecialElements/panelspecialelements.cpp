@@ -86,8 +86,6 @@ void PanelSpecialElements::initialize(QStandardItemModel *model, PictureKind
         modelIndex = ui->comboBoxShape->model()->index(i, 0);
         ui->comboBoxShape->model()->setData(modelIndex, v, Qt::UserRole - 1);
     }
-    modelIndex = ui->comboBoxCollision->model()->index(3, 0);
-    ui->comboBoxCollision->model()->setData(modelIndex, v, Qt::UserRole - 1);
 
     // Update UI widgets visible according to kind
     if (m_kind == PictureKind::Object3D)
@@ -123,6 +121,7 @@ void PanelSpecialElements::initialize(QStandardItemModel *model, PictureKind
     ui->widgetPicture->setKind(kind);
     ui->widgetShapeObj->setKind(CustomShapeKind::OBJ);
     ui->widgetShapeMtl->setKind(CustomShapeKind::MTL);
+    ui->widgetShapeCollisions->setKind(CustomShapeKind::Collisions);
     ui->widgetTilesetSettings->setKind(kind);
     if (kind == PictureKind::Walls) {
         ui->widgetTilesetSettings->deleteDirectionTab();
@@ -169,6 +168,15 @@ void PanelSpecialElements::update(SystemSpecialElement *sys) {
         ui->widgetShowPicture->updatePicture(picture);
     }
 
+    if (sys->shapeKind() != ShapeKind::Custom) {
+        QVariant v(0);
+        QModelIndex modelIndex = ui->comboBoxCollision->model()->index(3, 0);
+        ui->comboBoxCollision->model()->setData(modelIndex, v, Qt::UserRole - 1);
+    } else {
+        QVariant v(1 | 32);
+        QModelIndex modelIndex = ui->comboBoxCollision->model()->index(3, 0);
+        ui->comboBoxCollision->model()->setData(modelIndex, v, Qt::UserRole - 1);
+    }
     ui->comboBoxCollision->setCurrentIndex(static_cast<int>(sys->collisionKind()));
     ui->widgetShapeCollisions->initialize(sys->collisionCustomID());
     ui->doubleSpinBoxScale->setValue(sys->scale());
@@ -270,7 +278,9 @@ void PanelSpecialElements::showBox() {
     modelIndex = ui->comboBoxCollision->model()->index(2, 0);
     ui->comboBoxCollision->model()->setData(modelIndex, vDisable, Qt::UserRole -
         1);
-    if (ui->comboBoxCollision->currentIndex() == 2) {
+    modelIndex = ui->comboBoxCollision->model()->index(3, 0);
+    ui->comboBoxCollision->model()->setData(modelIndex, vDisable, Qt::UserRole - 1);
+    if (ui->comboBoxCollision->currentIndex() == 2 || ui->comboBoxCollision->currentIndex() == 3) {
         ui->comboBoxCollision->setCurrentIndex(1);
     }
 }
@@ -303,6 +313,8 @@ void PanelSpecialElements::showCustomObject() {
     modelIndex = ui->comboBoxCollision->model()->index(2, 0);
     ui->comboBoxCollision->model()->setData(modelIndex, vEnable, Qt::UserRole -
         1);
+    modelIndex = ui->comboBoxCollision->model()->index(3, 0);
+    ui->comboBoxCollision->model()->setData(modelIndex, vEnable, Qt::UserRole - 1);
     if (ui->comboBoxCollision->currentIndex() == 1) {
         ui->comboBoxCollision->setCurrentIndex(2);
     }

@@ -220,8 +220,8 @@ void Project::readAll() {
     this->readGameDatas();
     this->readTreeMapDatas();
     this->readScriptsDatas();
-    this->readSpecialsDatas();
     this->readShapesDatas();
+    this->readSpecialsDatas();
 }
 
 // -------------------------------------------------------
