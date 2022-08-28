@@ -1384,6 +1384,8 @@ const QString Translations::TRANSLATION = "translation";
 const QString Translations::BY_SQUARE = "by.square";
 const QString Translations::SCALING = "scaling";
 const QString Translations::VIEW = "view";
+const QString Translations::CAMERA_MOVE_IN_BATTLE = "camera.move.in.battle";
+const QString Translations::SPLASH_SCREEN_ON_START = "splash.screen.on.start";
 
 // -------------------------------------------------------
 //

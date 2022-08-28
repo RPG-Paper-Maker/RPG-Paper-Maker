@@ -43,7 +43,9 @@ private:
 public slots:
     virtual void accept();
     virtual void reject();
+
     void on_comboBoxThemeCurrentIndexChanged(int index);
+    void on_checkBoxSplashScreenOnStart_toggled(bool checked);
 };
 
 #endif // DIALOGGENERALOPTIONS_H

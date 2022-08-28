@@ -47,7 +47,7 @@ void DialogGeneralOptions::initialize() {
     themes << RPM::translate(Translations::DARK) << RPM::translate(Translations
         ::WHITE);
     ui->comboBoxTheme->addItems(themes);
-
+    ui->checkBoxSplashScreenOnStart->setChecked(RPM::get()->engineSettings()->splashScreenOnStart());
     connect(ui->comboBoxTheme, SIGNAL(currentIndexChanged(int)), this,
         SLOT(on_comboBoxThemeCurrentIndexChanged(int)));
     ui->comboBoxTheme->setCurrentIndex(static_cast<int>(RPM::get()
@@ -62,6 +62,7 @@ void DialogGeneralOptions::translate() {
     ui->labelTheme->setText(RPM::translate(Translations::THEME) + RPM
         ::PARENTHESIS_LEFT + RPM::translate(Translations::NEED_RESTART) + RPM
         ::PARENTHESIS_RIGHT);
+    ui->checkBoxSplashScreenOnStart->setText(RPM::translate(Translations::SPLASH_SCREEN_ON_START));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -88,4 +89,11 @@ void DialogGeneralOptions::reject() {
 
 void DialogGeneralOptions::on_comboBoxThemeCurrentIndexChanged(int index) {
     RPM::get()->engineSettings()->setTheme(static_cast<ThemeKind>(index));
+}
+
+// -------------------------------------------------------
+
+void DialogGeneralOptions::on_checkBoxSplashScreenOnStart_toggled(bool checked)
+{
+    RPM::get()->engineSettings()->setSplashScreenOnStart(checked);
 }

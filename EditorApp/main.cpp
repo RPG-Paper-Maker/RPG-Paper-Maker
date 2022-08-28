@@ -69,6 +69,7 @@ int main(int argc, char *argv[]) {
     QDir::setCurrent(bin.absolutePath());
 
     // Splash screen
+    RPM::get()->readEngineSettings();
     QNetworkAccessManager manager;
     QNetworkReply *reply;
     QEventLoop loop;
@@ -88,9 +89,12 @@ int main(int argc, char *argv[]) {
     }
     QPixmap pixmap(Common::pathCombine(QDir::currentPath(), RPM::PATH_SPLASH));
     QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
-    splash.show();
-    qApp->processEvents();
-    QTimer::singleShot(1250, &splash, &QWidget::close);
+    if (RPM::get()->engineSettings()->splashScreenOnStart())
+    {
+        splash.show();
+        qApp->processEvents();
+        QTimer::singleShot(1250, &splash, &QWidget::close);
+    }
 
     // Detect if applciation name need to be changed according to OS
     #ifdef Q_OS_WIN
@@ -110,7 +114,6 @@ int main(int argc, char *argv[]) {
     }
 
     // Load RPM settings
-    RPM::get()->readEngineSettings();
     RPM::get()->readTranslations();
     RPM::get()->engineSettings()->keyBoardDatas()->updateHeader();
 

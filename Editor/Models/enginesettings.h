@@ -53,6 +53,7 @@ public:
     static const QString JSON_TAB_INDEX_SYSTEMS;
     static const QString JSON_PATREON_MESSAGE;
     static const QString JSON_GUIDE_STEP_PICTURES;
+    static const QString JSON_SPLASH_SCREEN_ON_START;
     static const QString THEME_DEFAULT;
     static const QString THEME_WHITE;
     static const QString THEME_WHITE_MAC;
@@ -65,6 +66,7 @@ public:
     static const int DEFAULT_TAB_INDEX_SYSTEMS;
     static const bool DEFAULT_PATREON_MESSAGE;
     static const int DEFAULT_GUIDE_STEP_PICTURES;
+    static const bool DEFAULT_SPLASH_SCREEN_ON_START;
 
     EngineSettings();
     virtual ~EngineSettings();
@@ -125,6 +127,8 @@ public:
     void setPatreonMessage(bool patreonMessage);
     int guideStepPictures() const;
     void setGuideStepPictures(int guideStepPictures);
+    bool splashScreenOnStart() const;
+    void setSplashScreenOnStart(bool b);
 
     void setDefault();
     QString getThemeContent() const;
@@ -164,6 +168,7 @@ protected:
     int m_tabIndexSystems;
     bool m_patreonMessage;
     int m_guideStepPictures;
+    bool m_splashScreenOnStart;
 
     QString readContent(QString name) const;
 };

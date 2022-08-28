@@ -1363,5 +1363,7 @@
     "translation": "Translation",
     "by.square": "Par case",
     "scaling": "Scaling",
-    "view": "Vue"
+    "view": "Vue",
+    "camera.move.in.battle": "Mouvement de camera en combat",
+    "splash.screen.on.start": "Splash screen au démarrage"
 }

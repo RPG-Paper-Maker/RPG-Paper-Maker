@@ -688,6 +688,7 @@ void DialogSystems::translate()
     ui->labelFacesetSize->setText(RPM::translate(Translations::FACESETS_SIZE) + RPM
         ::SPACE + RPM::PARENTHESIS_LEFT + RPM::translate(Translations::IN_PX) +
         RPM::PARENTHESIS_RIGHT + RPM::COLON);
+    ui->checkBoxCameraMoveInBattle->setText(RPM::translate(Translations::CAMERA_MOVE_IN_BATTLE));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

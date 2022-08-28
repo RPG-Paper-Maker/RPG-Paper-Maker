@@ -1397,6 +1397,8 @@ public:
     static const QString BY_SQUARE;
     static const QString SCALING;
     static const QString VIEW;
+    static const QString CAMERA_MOVE_IN_BATTLE;
+    static const QString SPLASH_SCREEN_ON_START;
 
     Translations();
     virtual ~Translations();

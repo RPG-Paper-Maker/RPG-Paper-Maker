@@ -1363,5 +1363,7 @@
     "translation": "Translation",
     "by.square": "By square",
     "scaling": "Scaling",
-    "view": "View"
+    "view": "View",
+    "camera.move.in.battle": "Camera move in battle",
+    "splash.screen.on.start": "Splash screen on start"
 }

@@ -39,6 +39,7 @@ const QString EngineSettings::JSON_BATTLE_TROOP_TEST_BATTLE_MAP_ID = "battleTroo
 const QString EngineSettings::JSON_BATTLE_TROOP_TEST_HEROES = "battleTroopTestHeroes";
 const QString EngineSettings::JSON_TAB_INDEX_DATAS = "tabIndexDatas";
 const QString EngineSettings::JSON_TAB_INDEX_SYSTEMS = "tabIndexSystems";
+const QString EngineSettings::JSON_SPLASH_SCREEN_ON_START = "ssos";
 const QString EngineSettings::THEME_DEFAULT = "defaulttheme";
 const QString EngineSettings::THEME_WHITE = "whitetheme";
 const QString EngineSettings::THEME_WHITE_MAC ="whitemactheme";
@@ -53,6 +54,7 @@ const int EngineSettings::DEFAULT_TAB_INDEX_DATAS = 0;
 const int EngineSettings::DEFAULT_TAB_INDEX_SYSTEMS = 0;
 const bool EngineSettings::DEFAULT_PATREON_MESSAGE = true;
 const int EngineSettings::DEFAULT_GUIDE_STEP_PICTURES = 0;
+const bool EngineSettings::DEFAULT_SPLASH_SCREEN_ON_START = true;
 
 // -------------------------------------------------------
 //
@@ -73,7 +75,8 @@ EngineSettings::EngineSettings() :
     m_tabIndexDatas(DEFAULT_TAB_INDEX_DATAS),
     m_tabIndexSystems(DEFAULT_TAB_INDEX_SYSTEMS),
     m_patreonMessage(DEFAULT_PATREON_MESSAGE),
-    m_guideStepPictures(DEFAULT_GUIDE_STEP_PICTURES)
+    m_guideStepPictures(DEFAULT_GUIDE_STEP_PICTURES),
+    m_splashScreenOnStart(DEFAULT_SPLASH_SCREEN_ON_START)
 {
     // Default mac theme should be white
     #ifdef Q_OS_MAC
@@ -450,6 +453,16 @@ void EngineSettings::setGuideStepPictures(int guideStepPictures)
     m_guideStepPictures = guideStepPictures;
 }
 
+bool EngineSettings::splashScreenOnStart() const
+{
+    return m_splashScreenOnStart;
+}
+
+void EngineSettings::setSplashScreenOnStart(bool b)
+{
+    m_splashScreenOnStart = b;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -665,6 +678,11 @@ void EngineSettings::read(const QJsonObject &json) {
     {
         m_guideStepPictures = json[JSON_GUIDE_STEP_PICTURES].toInt();
     }
+    m_splashScreenOnStart = DEFAULT_SPLASH_SCREEN_ON_START;
+    if (json.contains((JSON_SPLASH_SCREEN_ON_START)))
+    {
+        m_splashScreenOnStart = json[JSON_SPLASH_SCREEN_ON_START].toBool();
+    }
 }
 
 // -------------------------------------------------------
@@ -755,5 +773,9 @@ void EngineSettings::write(QJsonObject &json) const {
     if (m_guideStepPictures != DEFAULT_GUIDE_STEP_PICTURES)
     {
         json[JSON_GUIDE_STEP_PICTURES] = m_guideStepPictures;
+    }
+    if (m_splashScreenOnStart != DEFAULT_SPLASH_SCREEN_ON_START)
+    {
+        json[JSON_SPLASH_SCREEN_ON_START] = m_splashScreenOnStart;
     }
 }
