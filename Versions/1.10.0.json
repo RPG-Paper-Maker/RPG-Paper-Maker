@@ -14,7 +14,9 @@
         "Improve ingame perfs",
         "Event command syntax colors",
         "Fullscreen by default",
-        "When changing selection, always deselect layer on"
+        "When changing selection, always deselect layer on",
+        "Disable camera move in battle option",
+        "Disable splash screen option"
     ],
     "bugs": [
         "Update project sometimes crashing",
@@ -34,6 +36,8 @@
         2,
         2,
         2,
+        2,
+        1,
         2,
         2,
         2

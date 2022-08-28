@@ -46,10 +46,12 @@ public:
     static const QString JSON_HEROES_BATTLERS_OFFSET;
     static const QString JSON_TROOPS_BATTLERS_CENTER_OFFSET;
     static const QString JSON_TROOPS_BATTLERS_OFFSET;
+    static const QString JSON_CAMERA_MOVE_IN_BATTLE;
     static const QString DEFAULT_HEROES_BATTLERS_CENTER_OFFSET;
     static const QString DEFAULT_HEROES_BATTLERS_OFFSET;
     static const QString DEFAULT_TROOPS_BATTLERS_CENTER_OFFSET;
     static const QString DEFAULT_TROOPS_BATTLERS_OFFSET;
+    static const bool DEFAULT_CAMERA_MOVE_IN_BATTLE;
 
     BattleSystemDatas();
     virtual ~BattleSystemDatas();
@@ -77,6 +79,8 @@ public:
     QStandardItemModel * modelCommonEquipment() const;
     QStandardItemModel * modelCommonStatistics() const;
     QStandardItemModel * modelCommonBattleCommand() const;
+    bool cameraMoveInBattle() const;
+    void setCameraMoveInBattle(bool b);
 
     void getSortedStatistics(QVector<SystemStatistic*>& fixes,
                              QVector<SystemStatistic*>& bars) const;
@@ -113,6 +117,7 @@ private:
     QStandardItemModel *m_modelCommonEquipment;
     QStandardItemModel *m_modelCommonStatistics;
     QStandardItemModel *m_modelCommonBattleCommand;
+    bool m_cameraMoveInBattle;
 
     void updateEquipmentsKind(QStandardItemModel *model);
 };

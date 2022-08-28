@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -64,7 +64,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-1128</y>
+                <y>0</y>
                 <width>252</width>
                 <height>1809</height>
                </rect>
@@ -1248,9 +1248,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-271</y>
                 <width>304</width>
-                <height>882</height>
+                <height>911</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_52">
@@ -1564,6 +1564,16 @@
                   </widget>
                  </item>
                 </layout>
+               </item>
+               <item row="1" column="0">
+                <widget class="QCheckBox" name="checkBoxCameraMoveInBattle">
+                 <property name="text">
+                  <string>Camera move in battle</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>

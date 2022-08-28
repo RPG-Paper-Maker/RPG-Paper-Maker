@@ -87,6 +87,7 @@ private slots:
     void on_pushButtonEnterNameOptions_clicked();
     void on_statisticsUpdated();
     void on_equipmentUpdated();
+    void on_checkBoxCameraMoveInBattle_toggled(bool checked);
     void on_radioButtonImage_toggled(bool checked);
     void on_radioButtonVideo_toggled(bool checked);
     void on_radioButtonImageGameOver_toggled(bool checked);

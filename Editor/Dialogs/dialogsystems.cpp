@@ -303,6 +303,9 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas)
         ->battleSystemDatas()->modelCommonStatistics());
     ui->panelSuperListCommonStatistics->list()->initializeNewItemInstance(
         new SystemStatistic);
+
+    // Options
+    ui->checkBoxCameraMoveInBattle->setChecked(gameDatas->battleSystemDatas()->cameraMoveInBattle());
 }
 
 // -------------------------------------------------------
@@ -883,6 +886,13 @@ void DialogSystems::on_statisticsUpdated(){
 
 void DialogSystems::on_equipmentUpdated(){
     RPM::get()->project()->gameDatas()->battleSystemDatas()->updateEquipments();
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_checkBoxCameraMoveInBattle_toggled(bool checked)
+{
+    RPM::get()->project()->gameDatas()->battleSystemDatas()->setCameraMoveInBattle(checked);
 }
 
 // -------------------------------------------------------

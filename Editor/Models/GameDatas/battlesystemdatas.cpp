@@ -35,10 +35,12 @@ const QString BattleSystemDatas::JSON_HEROES_BATTLERS_CENTER_OFFSET = "heroesBat
 const QString BattleSystemDatas::JSON_HEROES_BATTLERS_OFFSET = "heroesBattlersOffset";
 const QString BattleSystemDatas::JSON_TROOPS_BATTLERS_CENTER_OFFSET = "troopsBattlersCenterOffset";
 const QString BattleSystemDatas::JSON_TROOPS_BATTLERS_OFFSET = "troopsBattlersOffset";
+const QString BattleSystemDatas::JSON_CAMERA_MOVE_IN_BATTLE = "cmib";
 const QString BattleSystemDatas::DEFAULT_HEROES_BATTLERS_CENTER_OFFSET = "new Core.Vector3(2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)";
 const QString BattleSystemDatas::DEFAULT_HEROES_BATTLERS_OFFSET = "new Core.Vector3(i * Datas.Systems.SQUARE_SIZE / 2, 0, i * Datas.Systems.SQUARE_SIZE)";
 const QString BattleSystemDatas::DEFAULT_TROOPS_BATTLERS_CENTER_OFFSET = "new Core.Vector3(-2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)";
 const QString BattleSystemDatas::DEFAULT_TROOPS_BATTLERS_OFFSET = "new Core.Vector3(-i * Datas.Systems.SQUARE_SIZE * 3 / 4, 0, i * Datas.Systems.SQUARE_SIZE)";
+const bool BattleSystemDatas::DEFAULT_CAMERA_MOVE_IN_BATTLE = true;
 
 // -------------------------------------------------------
 //
@@ -55,7 +57,8 @@ BattleSystemDatas::BattleSystemDatas() :
     m_troopsBattlersOffset(new PrimitiveValue(DEFAULT_TROOPS_BATTLERS_OFFSET)),
     m_music(new SystemPlaySong(-1, SongKind::Music)),
     m_levelup(new SystemPlaySong(-1, SongKind::Sound)),
-    m_victory(new SystemPlaySong(-1, SongKind::Music))
+    m_victory(new SystemPlaySong(-1, SongKind::Music)),
+    m_cameraMoveInBattle(DEFAULT_CAMERA_MOVE_IN_BATTLE)
 {
     m_modelCommonEquipment = new QStandardItemModel;
     m_modelWeaponsKind = new QStandardItemModel;
@@ -182,6 +185,16 @@ QStandardItemModel* BattleSystemDatas::modelCommonStatistics() const {
 
 QStandardItemModel* BattleSystemDatas::modelCommonBattleCommand() const {
     return m_modelCommonBattleCommand;
+}
+
+bool BattleSystemDatas::cameraMoveInBattle() const
+{
+    return m_cameraMoveInBattle;
+}
+
+void BattleSystemDatas::setCameraMoveInBattle(bool b)
+{
+    m_cameraMoveInBattle = b;
 }
 
 // -------------------------------------------------------
@@ -561,6 +574,12 @@ void BattleSystemDatas::read(const QJsonObject &json){
     // Battle commands
     SuperListItem::readTree(m_modelCommonBattleCommand, new SystemBattleCommand,
         json, jsonCommonBattleCommand);
+
+    // Options
+    m_cameraMoveInBattle = DEFAULT_CAMERA_MOVE_IN_BATTLE;
+    if (json.contains(JSON_CAMERA_MOVE_IN_BATTLE)) {
+        m_cameraMoveInBattle = json[JSON_CAMERA_MOVE_IN_BATTLE].toBool();
+    }
 }
 
 // -------------------------------------------------------
@@ -689,4 +708,10 @@ void BattleSystemDatas::write(QJsonObject &json) const{
     // Battle commands
     SuperListItem::writeTree(m_modelCommonBattleCommand, json,
         jsonCommonBattleCommand);
+
+    // Options
+    if (m_cameraMoveInBattle != DEFAULT_CAMERA_MOVE_IN_BATTLE)
+    {
+        json[JSON_CAMERA_MOVE_IN_BATTLE] = m_cameraMoveInBattle;
+    }
 }
