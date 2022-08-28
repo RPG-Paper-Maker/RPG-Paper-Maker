@@ -113,6 +113,7 @@ SystemDatas::SystemDatas() :
     m_autotilesFrames(DEFAULT_AUTOTILES_FRAMES),
     m_autotilesFrameDuration(DEFAULT_AUTOTILES_FRAME_DURATION),
     m_showBB(false),
+    m_showFPS(false),
     m_antialiasing(false),
     m_modelColors(new QStandardItemModel),
     m_modelCurrencies(new QStandardItemModel),
@@ -330,6 +331,16 @@ void SystemDatas::setAutotilesFrameDuration(int autotilesFrameDuration)
 bool SystemDatas::showBB() const { return m_showBB; }
 
 void SystemDatas::setShowBB(bool b) { m_showBB = b; }
+
+bool SystemDatas::showFPS() const
+{
+    return m_showFPS;
+}
+
+void SystemDatas::setShowFPS(bool b)
+{
+    m_showFPS = b;
+}
 
 bool SystemDatas::antialiasing() const
 {
@@ -918,6 +929,7 @@ void SystemDatas::read(const QJsonObject &json){
         m_autotilesFrameDuration = json[JSON_AUTOTILES_FRAME_DURATION].toInt();
     }
     m_showBB = json.contains("bb");
+    m_showFPS = json.contains("fps");
     if (json.contains(JSON_ANTIALIASING))
     {
         m_antialiasing = json[JSON_ANTIALIASING].toBool();
@@ -1155,6 +1167,8 @@ void SystemDatas::write(QJsonObject &json) const{
     }
     if (m_showBB)
         json["bb"] = m_showBB;
+    if (m_showFPS)
+        json["fps"] = m_showFPS;
     if (m_antialiasing != DEFAULT_ANTIALIASING)
     {
         json[JSON_ANTIALIASING] = m_antialiasing;

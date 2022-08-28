@@ -1365,5 +1365,6 @@
     "scaling": "Scaling",
     "view": "Vue",
     "camera.move.in.battle": "Mouvement de camera en combat",
-    "splash.screen.on.start": "Splash screen au démarrage"
+    "splash.screen.on.start": "Splash screen au démarrage",
+    "show.fps": "Afficher les FPS"
 }

@@ -134,6 +134,8 @@ public:
     void setAutotilesFrameDuration(int autotilesFrameDuration);
     bool showBB() const;
     void setShowBB(bool b);
+    bool showFPS() const;
+    void setShowFPS(bool b);
     bool antialiasing() const;
     void setAntialiasing(bool aa);
     QStandardItemModel * modelColors() const;
@@ -219,6 +221,7 @@ private:
     int m_autotilesFrames;
     int m_autotilesFrameDuration;
     bool m_showBB;
+    bool m_showFPS;
     bool m_antialiasing;
     QStandardItemModel *m_modelColors;
     QStandardItemModel *m_modelCurrencies;

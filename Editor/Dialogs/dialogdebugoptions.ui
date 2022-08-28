@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>271</width>
-    <height>85</height>
+    <height>123</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,6 +35,13 @@
       <widget class="QCheckBox" name="checkBoxBB">
        <property name="text">
         <string>Show collisions bounding boxes</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBoxShowFPS">
+       <property name="text">
+        <string>Show FPS</string>
        </property>
       </widget>
      </item>

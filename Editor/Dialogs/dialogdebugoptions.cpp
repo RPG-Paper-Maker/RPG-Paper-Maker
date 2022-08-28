@@ -24,10 +24,7 @@ DialogDebugOptions::DialogDebugOptions(QWidget *parent) :
     ui(new Ui::DialogDebugOptions)
 {
     ui->setupUi(this);
-    
-
     initialize();
-
     this->translate();
 }
 
@@ -43,8 +40,8 @@ DialogDebugOptions::~DialogDebugOptions()
 // -------------------------------------------------------
 
 void DialogDebugOptions::initialize() {
-    ui->checkBoxBB->setChecked(RPM::get()->project()->gameDatas()
-                               ->systemDatas()->showBB());
+    ui->checkBoxBB->setChecked(RPM::get()->project()->gameDatas()->systemDatas()->showBB());
+    ui->checkBoxShowFPS->setChecked(RPM::get()->project()->gameDatas()->systemDatas()->showFPS());
 }
 
 // -------------------------------------------------------
@@ -53,6 +50,7 @@ void DialogDebugOptions::translate() {
     this->setWindowTitle(RPM::translate(Translations::DEBUG_OPTIONS) + RPM
         ::DOT_DOT_DOT);
     ui->checkBoxBB->setText(RPM::translate(Translations::SHOW_COLLISIONS_BB));
+    ui->checkBoxShowFPS->setText(RPM::translate(Translations::SHOW_FPS));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -64,4 +62,11 @@ void DialogDebugOptions::translate() {
 
 void DialogDebugOptions::on_checkBoxBB_toggled(bool checked) {
     RPM::get()->project()->gameDatas()->systemDatas()->setShowBB(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogDebugOptions::on_checkBoxShowFPS_toggled(bool checked)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setShowFPS(checked);
 }

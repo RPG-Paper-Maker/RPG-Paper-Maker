@@ -16,7 +16,8 @@
         "Fullscreen by default",
         "When changing selection, always deselect layer on",
         "Disable camera move in battle option",
-        "Disable splash screen option"
+        "Disable splash screen option",
+        "Show FPS option"
     ],
     "bugs": [
         "Update project sometimes crashing",
@@ -33,6 +34,7 @@
         2,
         2,
         0,
+        2,
         2,
         2,
         2,

@@ -42,6 +42,7 @@ private:
 
 private slots:
     void on_checkBoxBB_toggled(bool checked);
+    void on_checkBoxShowFPS_toggled(bool checked);
 };
 
 #endif // DIALOGDEBUGOPTIONS_H

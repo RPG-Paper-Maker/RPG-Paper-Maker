@@ -1365,5 +1365,6 @@
     "scaling": "Scaling",
     "view": "View",
     "camera.move.in.battle": "Camera move in battle",
-    "splash.screen.on.start": "Splash screen on start"
+    "splash.screen.on.start": "Splash screen on start",
+    "show.fps": "Show FPS"
 }
