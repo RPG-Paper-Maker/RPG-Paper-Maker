@@ -517,26 +517,6 @@ void SystemDatas::setSaveSlots(int saveSlots)
 void SystemDatas::setDefault()
 {
     m_pathBR = Common::pathCombine(QDir::currentPath(), RPM::PATH_BR);
-    this->setDefaultColors();
-    this->setDefaultCurrencies();
-    this->setDefaultItemsTypes();
-    this->setDefaultInventoryFilters();
-    this->setDefaultMainMenuCommands();
-    this->setDefaultHeroesStatistics();
-    this->setDefaultWindowSkins();
-    this->setDefaultCameraProperties();
-    this->setDefaultDetections();
-    this->setDefaultSpeed();
-    this->setDefaultFrequencies();
-    this->setDefaultFontSizes();
-    this->setDefaultFontNames();
-    this->setDefaultSounds();
-    this->setDefaultDialogBoxOptions();
-    this->setdefaultEnterNameOptions();
-    this->setDefaultSkyBoxes();
-    this->setDefaultInitialPartyMembers();
-    m_lastMajorVersion = 1;
-    m_lastMinorVersion = 0;
 }
 
 // -------------------------------------------------------

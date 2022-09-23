@@ -163,19 +163,7 @@ QStandardItemModel * Project::currentObjectProperties() const {
 }
 
 void Project::setDefault(){
-    m_langsDatas->setDefault();
-    m_keyBoardDatas->setDefaultGame();
-    m_picturesDatas->setDefault();
-    m_videosDatas->setDefault();
-    m_songsDatas->setDefault();
-    m_shapesDatas->setDefault();
-    m_fontsDatas->setDefault();
     p_gameDatas->setDefault();
-    p_gameDatas->readAnimations(this->pathCurrentProjectApp());
-    p_gameDatas->animationsDatas()->setDefault();
-    m_treeMapDatas->setDefault();
-    m_scriptsDatas->setDefault();
-    m_specialElementsDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------

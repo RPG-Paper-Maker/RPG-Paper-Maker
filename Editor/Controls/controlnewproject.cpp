@@ -148,15 +148,15 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     dir.mkpath(RPM::PATH_SAVES);
 
     // Create the default datas
-    project->setDefault();
-    project->readCommonEvents();
-    project->gameDatas()->systemDatas()->projectName()->setAllNames(projectName);
-    project->write(pathDir);
     QString error = project->createRPMFile();
     if (error != nullptr)
     {
         return error;
     }
+    project->read(pathDir);
+    project->setDefault();
+    project->gameDatas()->systemDatas()->projectName()->setAllNames(projectName);
+    project->write(pathDir);
 
     // Creating first empty map
     dir.mkdir(RPM::PATH_MAPS);

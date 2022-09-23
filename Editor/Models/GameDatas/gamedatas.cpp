@@ -144,12 +144,7 @@ bool GameDatas::isDatasRead() const {
 // -------------------------------------------------------
 
 void GameDatas::setDefault(){
-    m_variablesDatas->setDefault();
     m_systemDatas->setDefault();
-    setDefaultItemsCharacters();
-    m_tilesetsDatas->setDefault();
-    m_statusDatas->setDefault();
-    m_titleScreenGameOverDatas->setDefault();
     m_dlcsDatas->setDefault();
 }
 
