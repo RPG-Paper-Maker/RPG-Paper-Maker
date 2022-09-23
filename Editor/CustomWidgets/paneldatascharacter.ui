@@ -76,8 +76,14 @@
           <string>Faceset</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
+          <property name="spacing">
+           <number>6</number>
+          </property>
           <item row="0" column="0">
            <layout class="QGridLayout" name="gridLayout_3">
+            <property name="spacing">
+             <number>0</number>
+            </property>
             <item row="0" column="0" colspan="3">
              <widget class="WidgetPicture" name="widgetPictureFaceset" native="true">
               <property name="minimumSize">
@@ -111,8 +117,8 @@
              <widget class="QScrollArea" name="scrollArea">
               <property name="minimumSize">
                <size>
-                <width>128</width>
-                <height>128</height>
+                <width>130</width>
+                <height>130</height>
                </size>
               </property>
               <property name="maximumSize">
@@ -129,8 +135,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>126</width>
-                 <height>126</height>
+                 <width>128</width>
+                 <height>128</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_2">
@@ -219,7 +225,7 @@
                  <x>0</x>
                  <y>0</y>
                  <width>225</width>
-                 <height>68</height>
+                 <height>72</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout">

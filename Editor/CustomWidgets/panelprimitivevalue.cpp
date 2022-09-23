@@ -788,7 +788,7 @@ void PanelPrimitiveValue::addParameter(QStandardItemModel *model) {
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addProperty(QStandardItemModel *model) {
-    if (model != nullptr && model->invisibleRootItem()->rowCount() > 1) {
+    if (model != nullptr && model->invisibleRootItem() && model->invisibleRootItem()->rowCount() > 1) {
         ui->comboBoxChoice->addItem(RPM::translate(Translations::PROPERTY),
             static_cast<int>(PrimitiveValueKind::Property));
         m_model->setModelProperties(model);
