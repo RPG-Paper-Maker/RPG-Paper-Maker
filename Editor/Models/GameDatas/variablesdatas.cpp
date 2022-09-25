@@ -58,6 +58,40 @@ void VariablesDatas::setDefault() {
 
 // -------------------------------------------------------
 
+void VariablesDatas::setDefaultTranslations()
+{
+    QStandardItem *item = p_model->item(0);
+    SystemVariables *page = reinterpret_cast<SystemVariables *>(item->data().value<quintptr>());
+    page->setName(RPM::translate(Translations::PAGE) + RPM::SPACE + "1");
+    item->setText(page->toString());
+    item = page->model()->item(0);
+    SuperListItem *variable = reinterpret_cast<SuperListItem *>(item->data().value<quintptr>());
+    variable->setName(RPM::translate(Translations::LUCAS_INSTANCE_ID));
+    item->setText(variable->toString());
+    item = p_model->item(1);
+    page = reinterpret_cast<SystemVariables *>(item->data().value<quintptr>());
+    page->setName(RPM::translate(Translations::PAGE) + RPM::SPACE + "2");
+    item->setText(page->toString());
+    item = p_model->item(2);
+    page = reinterpret_cast<SystemVariables *>(item->data().value<quintptr>());
+    page->setName(RPM::translate(Translations::PAGE) + RPM::SPACE + "3");
+    item->setText(page->toString());
+    item = p_model->item(3);
+    page = reinterpret_cast<SystemVariables *>(item->data().value<quintptr>());
+    page->setName(RPM::translate(Translations::PAGE) + RPM::SPACE + "4");
+    item->setText(page->toString());
+    item = p_model->item(4);
+    page = reinterpret_cast<SystemVariables *>(item->data().value<quintptr>());
+    page->setName(RPM::translate(Translations::PAGE) + RPM::SPACE + "5");
+    item->setText(page->toString());
+    item = page->model()->item(24);
+    variable = reinterpret_cast<SuperListItem *>(item->data().value<quintptr>());
+    variable->setName(RPM::translate(Translations::TEMP_VARIABLE));
+    item->setText(variable->toString());
+}
+
+// -------------------------------------------------------
+
 SuperListItem* VariablesDatas::getVariableById(int id) const{
     return getById(p_model, id);
 }

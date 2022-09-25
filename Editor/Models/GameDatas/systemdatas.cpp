@@ -822,6 +822,56 @@ void SystemDatas::setDefaultInitialPartyMembers()
 
 // -------------------------------------------------------
 
+void SystemDatas::setDefaultTranslations()
+{
+    SuperListItem::setModelItemName(m_modelColors, 0, RPM::translate(Translations::BLACK));
+    SuperListItem::setModelItemName(m_modelColors, 1, RPM::translate(Translations::WHITE));
+    SuperListItem::setModelItemName(m_modelColors, 2, RPM::translate(Translations::BLUE_SKY));
+    SuperListItem::setModelItemName(m_modelCurrencies, 0, RPM::translate(Translations::G));
+    SuperListItem::setModelItemName(m_modelCurrencies, 1, RPM::translate(Translations::XCOIN));
+    SuperListItem::setModelItemName(m_modelItemsTypes, 0, RPM::translate(Translations::INGREDIENT));
+    SuperListItem::setModelItemName(m_modelItemsTypes, 1, RPM::translate(Translations::KEY_ITEM));
+    SuperListItem::setModelItemName(m_modelInventoryFilters, 0, RPM::translate(Translations::ALL));
+    SuperListItem::setModelItemName(m_modelInventoryFilters, 1, RPM::translate(Translations::CONSUMABLES));
+    SuperListItem::setModelItemName(m_modelInventoryFilters, 2, RPM::translate(Translations::INGREDIENTS));
+    SuperListItem::setModelItemName(m_modelInventoryFilters, 3, RPM::translate(Translations::KEY_ITEMS));
+    SuperListItem::setModelItemName(m_modelInventoryFilters, 4, RPM::translate(Translations::WEAPONS));
+    SuperListItem::setModelItemName(m_modelInventoryFilters, 5, RPM::translate(Translations::ARMORS));
+    SuperListItem::setModelItemName(m_modelMainMenuCommands, 0, RPM::translate(Translations::INVENTORY));
+    SuperListItem::setModelItemName(m_modelMainMenuCommands, 1, RPM::translate(Translations::SKILLS));
+    SuperListItem::setModelItemName(m_modelMainMenuCommands, 2, RPM::translate(Translations::EQUIP));
+    SuperListItem::setModelItemName(m_modelMainMenuCommands, 3, RPM::translate(Translations::STATES));
+    SuperListItem::setModelItemName(m_modelMainMenuCommands, 4, RPM::translate(Translations::ORDER));
+    SuperListItem::setModelItemName(m_modelMainMenuCommands, 5, RPM::translate(Translations::SAVE));
+    SuperListItem::setModelItemName(m_modelMainMenuCommands, 6, RPM::translate(Translations::QUIT));
+    SuperListItem::setModelItemName(m_modelHeroesStatistics, 0, RPM::translate(Translations::HP));
+    SuperListItem::setModelItemName(m_modelHeroesStatistics, 1, RPM::translate(Translations::MP));
+    SuperListItem::setModelItemName(m_modelHeroesStatistics, 2, RPM::translate(Translations::TP));
+    SuperListItem::setModelItemName(m_modelWindowSkins, 0, RPM::translate(Translations::DEFAULT));
+    SuperListItem::setModelItemName(m_modelCameraProperties, 0, RPM::translate(Translations::OUTSIDE));
+    SuperListItem::setModelItemName(m_modelCameraProperties, 1, RPM::translate(Translations::BATTLE));
+    SuperListItem::setModelItemName(m_modelDetections, 0, RPM::translate(Translations::FRONT));
+    SuperListItem::setModelItemName(m_modelDetections, 1, RPM::translate(Translations::SELF));
+    SuperListItem::setModelItemName(m_modelSpeed, 0, RPM::translate(Translations::NORMAL));
+    SuperListItem::setModelItemName(m_modelSpeed, 1, RPM::translate(Translations::LOW));
+    SuperListItem::setModelItemName(m_modelSpeed, 2, RPM::translate(Translations::VERY_LOW));
+    SuperListItem::setModelItemName(m_modelSpeed, 3, RPM::translate(Translations::FAST));
+    SuperListItem::setModelItemName(m_modelSpeed, 4, RPM::translate(Translations::VERY_FAST));
+    SuperListItem::setModelItemName(m_modelFrequencies, 0, RPM::translate(Translations::INSTANTANEOUS));
+    SuperListItem::setModelItemName(m_modelFontSizes, 0, RPM::translate(Translations::NORMAL));
+    SuperListItem::setModelItemName(m_modelFontSizes, 1, RPM::translate(Translations::SMALL));
+    SuperListItem::setModelItemName(m_modelFontSizes, 2, RPM::translate(Translations::VERY_SMALL));
+    SuperListItem::setModelItemName(m_modelFontSizes, 3, RPM::translate(Translations::BIG));
+    SuperListItem::setModelItemName(m_modelFontSizes, 4, RPM::translate(Translations::VERY_BIG));
+    SuperListItem::setModelItemName(m_modelFontNames, 0, RPM::translate(Translations::DEFAULT));
+    SuperListItem::setModelItemName(m_modelSkyBoxes, 0, RPM::translate(Translations::CLOUDS));
+    SuperListItem::setModelItemName(m_modelSkyBoxes, 0, RPM::translate(Translations::EVENING));
+    SuperListItem::setModelItemName(m_modelSkyBoxes, 0, RPM::translate(Translations::NIGHT));
+
+}
+
+// -------------------------------------------------------
+
 void SystemDatas::updateModelsToString()
 {
     SuperListItem::updateModelToString(m_modelInitialPartyMembers);

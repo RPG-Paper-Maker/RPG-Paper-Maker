@@ -176,6 +176,23 @@ void KeyBoardDatas::setDefault(QVector<SystemKeyBoard *> &list){
     }
 }
 
+void KeyBoardDatas::setDefaultTranslations()
+{
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_HERO_UP));
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_HERO_DOWN));
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_HERO_LEFT));
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_HERO_RIGHT));
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_MENU_UP));
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_MENU_DOWN));
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_MENU_LEFT));
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_MENU_RIGHT));
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_CAMERA_LEFT));
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_CAMERA_RIGHT));
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::ACTION));
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::CANCEL));
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::OPEN_CLOSE_MAIN_MENU));
+}
+
 // -------------------------------------------------------
 
 bool KeyBoardDatas::isEqual(int key, KeyBoardEngineKind kind) const {

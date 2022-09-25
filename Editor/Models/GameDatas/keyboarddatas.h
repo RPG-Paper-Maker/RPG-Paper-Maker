@@ -47,6 +47,7 @@ public:
     void setKeyRight(int k);
     void setDefaultEngine();
     void setDefaultGame();
+    void setDefaultTranslations();
     void updateHeader();
 
     bool isEqual(int key, KeyBoardEngineKind kind) const;

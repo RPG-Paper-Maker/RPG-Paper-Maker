@@ -32,6 +32,7 @@ public:
     virtual ~VariablesDatas();
     void read(QString path);
     void setDefault();
+    void setDefaultTranslations();
     QStandardItemModel* model() const;
     virtual void read(const QJsonObject &json);
     void readCommand(const QJsonArray &json, QStandardItemModel* l);

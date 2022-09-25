@@ -94,6 +94,7 @@ public:
     void setDefaultCommonEquipment();
     void setDefaultCommonStatistics();
     void setDefaultCommonBattleCommand();
+    void setDefaultTranslations();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

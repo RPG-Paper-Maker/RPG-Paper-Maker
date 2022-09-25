@@ -102,6 +102,42 @@ void WeaponsDatas::setDefault() {
     }
 }
 
+void WeaponsDatas::setDefaultTranslations()
+{
+    SystemCommonSkillItem::setNameDescription(m_model, 0, RPM::translate(Translations::COPPER_SWORD), RPM::translate(Translations::COPPER_SWORD_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 1, RPM::translate(Translations::COPPER_AXE), RPM::translate(Translations::COPPER_AXE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 2, RPM::translate(Translations::COPPER_SPEAR), RPM::translate(Translations::COPPER_SPEAR_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 3, RPM::translate(Translations::COPPER_KNIFE), RPM::translate(Translations::COPPER_KNIFE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 4, RPM::translate(Translations::COPPER_STAFF), RPM::translate(Translations::COPPER_STAFF_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 5, RPM::translate(Translations::COPPER_ROD), RPM::translate(Translations::COPPER_ROD_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 6, RPM::translate(Translations::COPPER_FIREARM), RPM::translate(Translations::COPPER_FIREARM_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 7, RPM::translate(Translations::COPPER_BOW), RPM::translate(Translations::COPPER_BOW_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 8, RPM::translate(Translations::SILVER_SWORD), RPM::translate(Translations::SILVER_SWORD_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 9, RPM::translate(Translations::SILVER_AXE), RPM::translate(Translations::SILVER_AXE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 10, RPM::translate(Translations::SILVER_SPEAR), RPM::translate(Translations::SILVER_SPEAR_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 11, RPM::translate(Translations::SILVER_KNIFE), RPM::translate(Translations::SILVER_KNIFE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 12, RPM::translate(Translations::SILVER_STAFF), RPM::translate(Translations::SILVER_STAFF_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 13, RPM::translate(Translations::SILVER_ROD), RPM::translate(Translations::SILVER_ROD_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 14, RPM::translate(Translations::SILVER_FIREARM), RPM::translate(Translations::SILVER_FIREARM_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 15, RPM::translate(Translations::SILVER_BOW), RPM::translate(Translations::SILVER_BOW_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 16, RPM::translate(Translations::GOLD_SWORD), RPM::translate(Translations::GOLD_SWORD_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 17, RPM::translate(Translations::GOLD_AXE), RPM::translate(Translations::GOLD_AXE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 18, RPM::translate(Translations::GOLD_SPEAR), RPM::translate(Translations::GOLD_SPEAR_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 19, RPM::translate(Translations::GOLD_KNIFE), RPM::translate(Translations::GOLD_KNIFE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 20, RPM::translate(Translations::GOLD_STAFF), RPM::translate(Translations::GOLD_STAFF_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 21, RPM::translate(Translations::GOLD_ROD), RPM::translate(Translations::GOLD_ROD_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 22, RPM::translate(Translations::GOLD_FIREARM), RPM::translate(Translations::GOLD_FIREARM_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 23, RPM::translate(Translations::GOLD_BOW), RPM::translate(Translations::GOLD_BOW_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 24, RPM::translate(Translations::DIAMOND_SWORD), RPM::translate(Translations::DIAMOND_SWORD_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 25, RPM::translate(Translations::DIAMOND_AXE), RPM::translate(Translations::DIAMOND_AXE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 26, RPM::translate(Translations::DIAMOND_SPEAR), RPM::translate(Translations::DIAMOND_SPEAR_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 27, RPM::translate(Translations::DIAMOND_KNIFE), RPM::translate(Translations::DIAMOND_KNIFE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 28, RPM::translate(Translations::DIAMOND_STAFF), RPM::translate(Translations::DIAMOND_STAFF_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 29, RPM::translate(Translations::DIAMOND_ROD), RPM::translate(Translations::DIAMOND_ROD_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 30, RPM::translate(Translations::DIAMOND_FIREARM), RPM::translate(Translations::DIAMOND_FIREARM_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 31, RPM::translate(Translations::DIAMOND_BOW), RPM::translate(Translations::DIAMOND_BOW_DESCRIPTION));
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE

@@ -84,6 +84,7 @@ public:
     bool oneHand() const;
     void setOneHand(bool b);
     SystemTranslatable * description() const;
+    void setDescription(QString description);
     TargetKind targetKind() const;
     void setTargetKind(TargetKind k);
     PrimitiveValue * targetConditionFormula() const;
@@ -99,6 +100,8 @@ public:
     QStandardItemModel * modelCosts() const;
     QStandardItemModel * modelEffects() const;
     QStandardItemModel * modelCharacteristics() const;
+
+    static void setNameDescription(QStandardItemModel *model, int index, QString name, QString description);
 
     void initializeHeaders();
 

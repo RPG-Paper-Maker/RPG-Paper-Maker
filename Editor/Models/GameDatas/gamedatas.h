@@ -65,6 +65,7 @@ public:
 
     void setDefault();
     void setDefaultItemsCharacters();
+    void setDefaultTranslations();
     void read(QString path);
     void readVariablesSwitches(QString path);
     void readTilesets(QString path);

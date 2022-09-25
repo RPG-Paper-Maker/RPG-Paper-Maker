@@ -134,6 +134,30 @@ void MonstersDatas::setDefault(QStandardItem* ,
     }
 }
 
+void MonstersDatas::setDefaultTranslations()
+{
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::WOOLY));
+    SuperListItem::setModelItemName(m_model, 1, RPM::translate(Translations::MUSHROOMY));
+    SuperListItem::setModelItemName(m_model, 2, RPM::translate(Translations::SLIME_BLUE));
+    SuperListItem::setModelItemName(m_model, 3, RPM::translate(Translations::SLIME_BLACK));
+    SuperListItem::setModelItemName(m_model, 4, RPM::translate(Translations::SLIME_GOLD));
+    SuperListItem::setModelItemName(m_model, 5, RPM::translate(Translations::BAT));
+    SuperListItem::setModelItemName(m_model, 6, RPM::translate(Translations::RAT));
+    SuperListItem::setModelItemName(m_model, 7, RPM::translate(Translations::ZOMBIE));
+    SuperListItem::setModelItemName(m_model, 8, RPM::translate(Translations::GOBLIN));
+    SuperListItem::setModelItemName(m_model, 9, RPM::translate(Translations::SKELETON));
+    SuperListItem::setModelItemName(m_model, 10, RPM::translate(Translations::SPIDER));
+    SuperListItem::setModelItemName(m_model, 11, RPM::translate(Translations::FANTOM));
+    SuperListItem::setModelItemName(m_model, 12, RPM::translate(Translations::HARPY));
+    SuperListItem::setModelItemName(m_model, 13, RPM::translate(Translations::SQUID));
+    SuperListItem::setModelItemName(m_model, 14, RPM::translate(Translations::LAMIA));
+    SuperListItem::setModelItemName(m_model, 15, RPM::translate(Translations::KNIGHT));
+    SuperListItem::setModelItemName(m_model, 16, RPM::translate(Translations::MIMIC));
+    SuperListItem::setModelItemName(m_model, 17, RPM::translate(Translations::OGRE));
+    SuperListItem::setModelItemName(m_model, 18, RPM::translate(Translations::DEMON));
+    SuperListItem::setModelItemName(m_model, 19, RPM::translate(Translations::ANGEL));
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE

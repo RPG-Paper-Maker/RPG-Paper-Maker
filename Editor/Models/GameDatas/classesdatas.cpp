@@ -162,6 +162,19 @@ void ClassesDatas::setDefault(QStandardItem *modelSkills,
     }
 }
 
+void ClassesDatas::setDefaultTranslations()
+{
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::KNIGHT));
+    SuperListItem::setModelItemName(m_model, 1, RPM::translate(Translations::WARRIOR));
+    SuperListItem::setModelItemName(m_model, 2, RPM::translate(Translations::LANCER));
+    SuperListItem::setModelItemName(m_model, 3, RPM::translate(Translations::THIEF));
+    SuperListItem::setModelItemName(m_model, 4, RPM::translate(Translations::WHITE_MAGE));
+    SuperListItem::setModelItemName(m_model, 5, RPM::translate(Translations::BLACK_MAGE));
+    SuperListItem::setModelItemName(m_model, 6, RPM::translate(Translations::GUNNER));
+    SuperListItem::setModelItemName(m_model, 7, RPM::translate(Translations::ARCHER));
+    SuperListItem::setModelItemName(m_model, 8, RPM::translate(Translations::MONSTER));
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE

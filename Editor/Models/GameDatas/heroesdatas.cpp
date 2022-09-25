@@ -65,6 +65,18 @@ void HeroesDatas::setDefault() {
     }
 }
 
+void HeroesDatas::setDefaultTranslations()
+{
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::LUCAS));
+    SuperListItem::setModelItemName(m_model, 1, RPM::translate(Translations::KATE));
+    SuperListItem::setModelItemName(m_model, 2, RPM::translate(Translations::BIBI));
+    SuperListItem::setModelItemName(m_model, 3, RPM::translate(Translations::SHANA));
+    SuperListItem::setModelItemName(m_model, 4, RPM::translate(Translations::CHARLES));
+    SuperListItem::setModelItemName(m_model, 5, RPM::translate(Translations::FORTUNE));
+    SuperListItem::setModelItemName(m_model, 6, RPM::translate(Translations::CAITLYN));
+    SuperListItem::setModelItemName(m_model, 7, RPM::translate(Translations::LILY));
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE

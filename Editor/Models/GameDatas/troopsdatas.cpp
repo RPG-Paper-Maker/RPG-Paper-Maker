@@ -99,6 +99,49 @@ void TroopsDatas::setDefault(QStandardItem *modelMonsters){
     }
 }
 
+void TroopsDatas::setDefaultTranslations()
+{
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::WOOLY) + "[1]");
+    SuperListItem::setModelItemName(m_model, 1, RPM::translate(Translations::WOOLY) + "[2]");
+    SuperListItem::setModelItemName(m_model, 2, RPM::translate(Translations::MUSHROOMY) + "[1]");
+    SuperListItem::setModelItemName(m_model, 3, RPM::translate(Translations::MUSHROOMY) + "[2]");
+    SuperListItem::setModelItemName(m_model, 4, RPM::translate(Translations::SLIME_BLUE) + "[1]");
+    SuperListItem::setModelItemName(m_model, 5, RPM::translate(Translations::SLIME_BLUE) + "[2]");
+    SuperListItem::setModelItemName(m_model, 6, RPM::translate(Translations::SLIME_BLACK) + "[1]");
+    SuperListItem::setModelItemName(m_model, 7, RPM::translate(Translations::SLIME_BLACK) + "[2]");
+    SuperListItem::setModelItemName(m_model, 8, RPM::translate(Translations::SLIME_BLUE) + "[1]" + RPM::translate(Translations::SLIME_BLACK) + "[1]");
+    SuperListItem::setModelItemName(m_model, 9, RPM::translate(Translations::SLIME_GOLD) + "[1]");
+    SuperListItem::setModelItemName(m_model, 10, RPM::translate(Translations::BAT) + "[1]");
+    SuperListItem::setModelItemName(m_model, 11, RPM::translate(Translations::BAT) + "[2]");
+    SuperListItem::setModelItemName(m_model, 12, RPM::translate(Translations::RAT) + "[1]");
+    SuperListItem::setModelItemName(m_model, 13, RPM::translate(Translations::RAT) + "[2]");
+    SuperListItem::setModelItemName(m_model, 14, RPM::translate(Translations::BAT) + "[1]" + RPM::translate(Translations::RAT) + "[1]");
+    SuperListItem::setModelItemName(m_model, 15, RPM::translate(Translations::ZOMBIE) + "[1]");
+    SuperListItem::setModelItemName(m_model, 16, RPM::translate(Translations::ZOMBIE) + "[2]");
+    SuperListItem::setModelItemName(m_model, 17, RPM::translate(Translations::GOBLIN) + "[1]");
+    SuperListItem::setModelItemName(m_model, 18, RPM::translate(Translations::SKELETON) + "[1]");
+    SuperListItem::setModelItemName(m_model, 19, RPM::translate(Translations::SKELETON) + "[2]");
+    SuperListItem::setModelItemName(m_model, 20, RPM::translate(Translations::SKELETON) + "[1]" + RPM::translate(Translations::GOBLIN) + "[1]");
+    SuperListItem::setModelItemName(m_model, 21, RPM::translate(Translations::SPIDER) + "[1]");
+    SuperListItem::setModelItemName(m_model, 22, RPM::translate(Translations::SPIDER) + "[2]");
+    SuperListItem::setModelItemName(m_model, 23, RPM::translate(Translations::FANTOM) + "[1]");
+    SuperListItem::setModelItemName(m_model, 24, RPM::translate(Translations::FANTOM) + "[2]");
+    SuperListItem::setModelItemName(m_model, 25, RPM::translate(Translations::SKELETON) + "[1]" + RPM::translate(Translations::SPIDER) + "[1]" + RPM::translate(Translations::FANTOM) + "[1]");
+    SuperListItem::setModelItemName(m_model, 26, RPM::translate(Translations::HARPY) + "[1]");
+    SuperListItem::setModelItemName(m_model, 27, RPM::translate(Translations::HARPY) + "[2]");
+    SuperListItem::setModelItemName(m_model, 28, RPM::translate(Translations::SQUID) + "[1]");
+    SuperListItem::setModelItemName(m_model, 29, RPM::translate(Translations::SQUID) + "[2]");
+    SuperListItem::setModelItemName(m_model, 30, RPM::translate(Translations::LAMIA) + "[1]");
+    SuperListItem::setModelItemName(m_model, 31, RPM::translate(Translations::LAMIA) + "[2]");
+    SuperListItem::setModelItemName(m_model, 32, RPM::translate(Translations::KNIGHT) + "[1]");
+    SuperListItem::setModelItemName(m_model, 33, RPM::translate(Translations::KNIGHT) + "[2]");
+    SuperListItem::setModelItemName(m_model, 34, RPM::translate(Translations::MIMIC) + "[1]");
+    SuperListItem::setModelItemName(m_model, 35, RPM::translate(Translations::OGRE) + "[1]");
+    SuperListItem::setModelItemName(m_model, 36, RPM::translate(Translations::OGRE) + "[2]");
+    SuperListItem::setModelItemName(m_model, 37, RPM::translate(Translations::DEMON) + "[1]");
+    SuperListItem::setModelItemName(m_model, 38, RPM::translate(Translations::ANGEL) + "[1]");
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE

@@ -168,6 +168,24 @@ void GameDatas::setDefaultItemsCharacters() {
                                ->invisibleRootItem());
 }
 
+void GameDatas::setDefaultTranslations() {
+    m_variablesDatas->setDefaultTranslations();
+    m_systemDatas->setDefaultTranslations();
+    m_itemsDatas->setDefaultTranslations();
+    m_skillsDatas->setDefaultTranslations();
+    m_animationsDatas->setDefaultTranslations();
+    m_battleSystemDatas->setDefaultTranslations();
+    m_weaponsDatas->setDefaultTranslations();
+    m_armorsDatas->setDefaultTranslations();
+    m_heroesDatas->setDefaultTranslations();
+    m_monstersDatas->setDefaultTranslations();
+    m_troopsDatas->setDefaultTranslations();
+    m_classesDatas->setDefaultTranslations();
+    m_tilesetsDatas->setDefaultTranslations();
+    m_statusDatas->setDefaultTranslations();
+    m_titleScreenGameOverDatas->setDefaultTranslations();
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE

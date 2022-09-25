@@ -443,6 +443,63 @@ void BattleSystemDatas::setDefaultCommonBattleCommand()
     }
 }
 
+void BattleSystemDatas::setDefaultTranslations()
+{
+    SuperListItem::setModelItemName(m_modelElements, 0, RPM::translate(Translations::FIRE));
+    SuperListItem::setModelItemName(m_modelElements, 1, RPM::translate(Translations::EARTH));
+    SuperListItem::setModelItemName(m_modelElements, 2, RPM::translate(Translations::THUNDER));
+    SuperListItem::setModelItemName(m_modelElements, 3, RPM::translate(Translations::WATER));
+    SuperListItem::setModelItemName(m_modelElements, 4, RPM::translate(Translations::ICE));
+    SuperListItem::setModelItemName(m_modelElements, 5, RPM::translate(Translations::WIND));
+    SuperListItem::setModelItemName(m_modelElements, 6, RPM::translate(Translations::DARKNESS));
+    SuperListItem::setModelItemName(m_modelElements, 7, RPM::translate(Translations::LIGHT));
+    SuperListItem::setModelItemName(m_modelCommonBattleCommand, 0, RPM::translate(Translations::ATTACK));
+    SuperListItem::setModelItemName(m_modelCommonBattleCommand, 1, RPM::translate(Translations::SKILL));
+    SuperListItem::setModelItemName(m_modelCommonBattleCommand, 2, RPM::translate(Translations::ITEM));
+    SuperListItem::setModelItemName(m_modelCommonBattleCommand, 3, RPM::translate(Translations::ESCAPE));
+    SuperListItem::setModelItemName(m_modelCommonBattleCommand, 4, RPM::translate(Translations::END_TURN));
+    SuperListItem::setModelItemName(m_modelCommonStatistics, 0, RPM::translate(Translations::LV));
+    SuperListItem::setModelItemName(m_modelCommonStatistics, 1, RPM::translate(Translations::EXP));
+    SuperListItem::setModelItemName(m_modelCommonStatistics, 2, RPM::translate(Translations::HP));
+    SuperListItem::setModelItemName(m_modelCommonStatistics, 3, RPM::translate(Translations::MP));
+    SuperListItem::setModelItemName(m_modelCommonStatistics, 4, RPM::translate(Translations::TP));
+    SuperListItem::setModelItemName(m_modelCommonStatistics, 5, RPM::translate(Translations::ATTACK));
+    SuperListItem::setModelItemName(m_modelCommonStatistics, 6, RPM::translate(Translations::MAGIC));
+    SuperListItem::setModelItemName(m_modelCommonStatistics, 7, RPM::translate(Translations::STRENGTH));
+    SuperListItem::setModelItemName(m_modelCommonStatistics, 8, RPM::translate(Translations::INTELLIGENCE));
+    SuperListItem::setModelItemName(m_modelCommonStatistics, 9, RPM::translate(Translations::P_DEFENSE));
+    SuperListItem::setModelItemName(m_modelCommonStatistics, 10, RPM::translate(Translations::M_DEFENSE));
+    SuperListItem::setModelItemName(m_modelCommonStatistics, 11, RPM::translate(Translations::AGILITY));
+    SuperListItem::setModelItemName(m_modelCommonEquipment, 0, RPM::translate(Translations::LEFT_HAND));
+    SuperListItem::setModelItemName(m_modelCommonEquipment, 1, RPM::translate(Translations::RIGHT_HAND));
+    SuperListItem::setModelItemName(m_modelCommonEquipment, 2, RPM::translate(Translations::HEAD));
+    SuperListItem::setModelItemName(m_modelCommonEquipment, 3, RPM::translate(Translations::CHEST));
+    SuperListItem::setModelItemName(m_modelCommonEquipment, 4, RPM::translate(Translations::ARMS));
+    SuperListItem::setModelItemName(m_modelCommonEquipment, 5, RPM::translate(Translations::LEGS));
+    SuperListItem::setModelItemName(m_modelCommonEquipment, 6, RPM::translate(Translations::ACCESSORY));
+    SuperListItem::setModelItemName(m_modelWeaponsKind, 0, RPM::translate(Translations::SWORD));
+    SuperListItem::setModelItemName(m_modelWeaponsKind, 1, RPM::translate(Translations::AXE));
+    SuperListItem::setModelItemName(m_modelWeaponsKind, 2, RPM::translate(Translations::SPEAR));
+    SuperListItem::setModelItemName(m_modelWeaponsKind, 3, RPM::translate(Translations::KNIFE));
+    SuperListItem::setModelItemName(m_modelWeaponsKind, 4, RPM::translate(Translations::STAFF));
+    SuperListItem::setModelItemName(m_modelWeaponsKind, 5, RPM::translate(Translations::ROD));
+    SuperListItem::setModelItemName(m_modelWeaponsKind, 6, RPM::translate(Translations::FIREARM));
+    SuperListItem::setModelItemName(m_modelWeaponsKind, 7, RPM::translate(Translations::BOW));
+    SuperListItem::setModelItemName(m_modelArmorsKind, 0, RPM::translate(Translations::HELMET));
+    SuperListItem::setModelItemName(m_modelArmorsKind, 1, RPM::translate(Translations::HEADGEAR));
+    SuperListItem::setModelItemName(m_modelArmorsKind, 2, RPM::translate(Translations::MAIL));
+    SuperListItem::setModelItemName(m_modelArmorsKind, 3, RPM::translate(Translations::VEST));
+    SuperListItem::setModelItemName(m_modelArmorsKind, 4, RPM::translate(Translations::VAMBRACES));
+    SuperListItem::setModelItemName(m_modelArmorsKind, 5, RPM::translate(Translations::GLOVES));
+    SuperListItem::setModelItemName(m_modelArmorsKind, 6, RPM::translate(Translations::GREAVES));
+    SuperListItem::setModelItemName(m_modelArmorsKind, 7, RPM::translate(Translations::TROUSERS));
+    SuperListItem::setModelItemName(m_modelArmorsKind, 8, RPM::translate(Translations::RING));
+    SuperListItem::setModelItemName(m_modelArmorsKind, 9, RPM::translate(Translations::NECKLACE));
+    SuperListItem::setModelItemName(m_modelArmorsKind, 10, RPM::translate(Translations::BRACELET));
+    SuperListItem::setModelItemName(m_modelArmorsKind, 11, RPM::translate(Translations::EARRING));
+    SuperListItem::setModelItemName(m_modelBattleMaps, 0, RPM::translate(Translations::DEFAULT));
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE

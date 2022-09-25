@@ -66,6 +66,7 @@ public:
     void setDefaultTitleSettings();
     void setDefaultGameOver();
     void setDefaultGameOverCommands();
+    void setDefaultTranslations();
     void addTitleSetting(TitleSettingKind kind);
 
     virtual void read(const QJsonObject &json);

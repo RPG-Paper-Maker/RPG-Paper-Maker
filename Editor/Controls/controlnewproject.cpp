@@ -156,6 +156,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     project->read(pathDir);
     project->setDefault();
     project->gameDatas()->systemDatas()->projectName()->setAllNames(projectName);
+    project->setDefaultTranslations();
     project->write(pathDir);
 
     // Creating first empty map

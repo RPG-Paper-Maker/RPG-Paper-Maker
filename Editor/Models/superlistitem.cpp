@@ -638,6 +638,14 @@ void SuperListItem::updateModelToString(QStandardItemModel *model)
     }
 }
 
+void SuperListItem::setModelItemName(QStandardItemModel *model, int index, QString name)
+{
+    QStandardItem *item = model->item(index);
+    SuperListItem *super = reinterpret_cast<SuperListItem*>(item->data().value<quintptr>());
+    super->setName(name);
+    item->setText(super->toString());
+}
+
 // -------------------------------------------------------
 
 void SuperListItem::reset() {

@@ -44,6 +44,7 @@ public:
     static const QString LAST_BUILD_DATE;
     static const int MAX_PROJECTS_NUMBER;
     void setDefault();
+    void setDefaultTranslations();
     QString pathCurrentProject() const;
     QString pathCurrentProjectApp() const;
     void setPathCurrentProject(QString s);

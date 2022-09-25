@@ -56,6 +56,21 @@ void TilesetsDatas::setDefault(){
     m_model->appendRow(item);
 }
 
+void TilesetsDatas::setDefaultTranslations()
+{
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::PLAINS_WOODS));
+    SuperListItem::setModelItemName(m_model, 1, RPM::translate(Translations::HAUNTED_PLAINS_WOODS));
+    SuperListItem::setModelItemName(m_model, 2, RPM::translate(Translations::SNOW_PLAINS_WOODS));
+    SuperListItem::setModelItemName(m_model, 3, RPM::translate(Translations::BEACH_DESERT));
+    SuperListItem::setModelItemName(m_model, 4, RPM::translate(Translations::TOWN));
+    SuperListItem::setModelItemName(m_model, 5, RPM::translate(Translations::DESERT_TOWN));
+    SuperListItem::setModelItemName(m_model, 6, RPM::translate(Translations::SNOW_TOWN));
+    SuperListItem::setModelItemName(m_model, 7, RPM::translate(Translations::INSIDE));
+    SuperListItem::setModelItemName(m_model, 8, RPM::translate(Translations::SHOP));
+    SuperListItem::setModelItemName(m_model, 9, RPM::translate(Translations::SEWERS));
+    SuperListItem::setModelItemName(m_model, 10, RPM::translate(Translations::DUNGEON_MINES));
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE

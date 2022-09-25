@@ -63,6 +63,24 @@ void StatusDatas::setDefault()
         QStandardItemModel, new QStandardItemModel))->getModelRow());
 }
 
+void StatusDatas::setDefaultTranslations()
+{
+    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::KO));
+    SuperListItem::setModelItemName(m_model, 1, RPM::translate(Translations::POISONED));
+    SuperListItem::setModelItemName(m_model, 2, RPM::translate(Translations::BURNT));
+    SuperListItem::setModelItemName(m_model, 3, RPM::translate(Translations::PARALIZED));
+    SuperListItem::setModelItemName(m_model, 4, RPM::translate(Translations::CONFUSED));
+    SuperListItem::setModelItemName(m_model, 5, RPM::translate(Translations::MUTED));
+    SuperListItem::setModelItemName(m_model, 6, RPM::translate(Translations::SLEEPING));
+    SuperListItem::setModelItemName(m_model, 7, RPM::translate(Translations::BLIND));
+    SuperListItem::setModelItemName(m_model, 8, RPM::translate(Translations::POWER));
+    SuperListItem::setModelItemName(m_model, 9, RPM::translate(Translations::WAR_CRY));
+    SuperListItem::setModelItemName(m_model, 10, RPM::translate(Translations::CONCENTRATION));
+    SuperListItem::setModelItemName(m_model, 11, RPM::translate(Translations::WEAK_ENEMIES));
+    SuperListItem::setModelItemName(m_model, 12, RPM::translate(Translations::BROKEN));
+    SuperListItem::setModelItemName(m_model, 13, RPM::translate(Translations::BARRIER));
+}
+
 // -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS

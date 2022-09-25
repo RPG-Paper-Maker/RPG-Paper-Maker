@@ -33,6 +33,7 @@ public:
     QStandardItemModel* model() const;
     void setDefault(QStandardItem *modelCurrencies, QStandardItem *modelItems,
                     QStandardItem *modelWeapons, QStandardItem *modelArmors);
+    void setDefaultTranslations();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

@@ -43,6 +43,8 @@ public:
     QStandardItemModel* modelMountains() const;
     SystemObject3D * missingObject3D() const;
 
+    void setDefaultTranslations();
+
     virtual void read(const QJsonObject &json);
     void readSpecials(const QJsonObject &json, PictureKind kind,
                       QString jsonName);

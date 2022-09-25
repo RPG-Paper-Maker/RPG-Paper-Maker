@@ -35,6 +35,7 @@ public:
 
     void read(QString path);
     void setDefault();
+    void setDefaultTranslations();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

@@ -104,6 +104,54 @@ void ArmorsDatas::setDefault() {
     }
 }
 
+void ArmorsDatas::setDefaultTranslations()
+{
+    SystemCommonSkillItem::setNameDescription(m_model, 0, RPM::translate(Translations::COPPER_HELMET), RPM::translate(Translations::BRONZE_HELMET_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 1, RPM::translate(Translations::COPPER_MAIL), RPM::translate(Translations::BRONZE_MAIL_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 2, RPM::translate(Translations::COPPER_VAMBRACES), RPM::translate(Translations::BRONZE_VAMBRACES_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 3, RPM::translate(Translations::COPPER_GREAVES), RPM::translate(Translations::BRONZE_GREAVES_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 4, RPM::translate(Translations::COTTON_HEADGEAR), RPM::translate(Translations::COTTON_HEADGEAR_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 5, RPM::translate(Translations::COTTON_VEST), RPM::translate(Translations::COTTON_VEST_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 6, RPM::translate(Translations::COTTON_GLOVES), RPM::translate(Translations::COTTON_GLOVES_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 7, RPM::translate(Translations::COTTON_TROUSERS), RPM::translate(Translations::COTTON_TROUSERS_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 8, RPM::translate(Translations::SILVER_HELMET), RPM::translate(Translations::SILVER_HELMET_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 9, RPM::translate(Translations::SILVER_MAIL), RPM::translate(Translations::SILVER_MAIL_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 10, RPM::translate(Translations::SILVER_VAMBRACES), RPM::translate(Translations::SILVER_VAMBRACES_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 11, RPM::translate(Translations::SILVER_GREAVES), RPM::translate(Translations::SILVER_GREAVES_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 12, RPM::translate(Translations::LEATHER_HEADGEAR), RPM::translate(Translations::LEATHER_HEADGEAR_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 13, RPM::translate(Translations::LEATHER_VEST), RPM::translate(Translations::LEATHER_VEST_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 14, RPM::translate(Translations::LEATHER_GLOVES), RPM::translate(Translations::LEATHER_GLOVES_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 15, RPM::translate(Translations::LEATHER_TROUSERS), RPM::translate(Translations::LEATHER_TROUSERS_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 16, RPM::translate(Translations::GOLD_HELMET), RPM::translate(Translations::GOLD_HELMET_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 17, RPM::translate(Translations::GOLD_MAIL), RPM::translate(Translations::GOLD_MAIL_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 18, RPM::translate(Translations::GOLD_VAMBRACES), RPM::translate(Translations::GOLD_VAMBRACES_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 19, RPM::translate(Translations::GOLD_GREAVES), RPM::translate(Translations::GOLD_GREAVES_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 20, RPM::translate(Translations::LUXURIOUS_HEADGEAR), RPM::translate(Translations::LUXURIOUS_HEADGEAR_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 21, RPM::translate(Translations::LUXURIOUS_VEST), RPM::translate(Translations::LUXURIOUS_VEST_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 22, RPM::translate(Translations::LUXURIOUS_GLOVES), RPM::translate(Translations::LUXURIOUS_GLOVES_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 23, RPM::translate(Translations::LUXURIOUS_TROUSERS), RPM::translate(Translations::LUXURIOUS_TROUSERS_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 24, RPM::translate(Translations::DIAMOND_HELMET), RPM::translate(Translations::DIAMOND_HELMET_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 25, RPM::translate(Translations::DIAMOND_MAIL), RPM::translate(Translations::DIAMOND_MAIL_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 26, RPM::translate(Translations::DIAMOND_VAMBRACES), RPM::translate(Translations::DIAMOND_VAMBRACES_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 27, RPM::translate(Translations::DIAMOND_GREAVES), RPM::translate(Translations::DIAMOND_GREAVES_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 28, RPM::translate(Translations::MYSTIC_HEADGEAR), RPM::translate(Translations::MYSTIC_HEADGEAR_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 29, RPM::translate(Translations::MYSTIC_VEST), RPM::translate(Translations::MYSTIC_VEST_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 30, RPM::translate(Translations::MYSTIC_GLOVES), RPM::translate(Translations::MYSTIC_GLOVES_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 31, RPM::translate(Translations::MYSTIC_TROUSERS), RPM::translate(Translations::MYSTIC_TROUSERS_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 32, RPM::translate(Translations::SAPPHIRE_RING), RPM::translate(Translations::SAPPHIRE_RING_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 33, RPM::translate(Translations::SAPPHIRE_NECKLACE), RPM::translate(Translations::SAPPHIRE_NECKLACE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 34, RPM::translate(Translations::SAPPHIRE_BRACELET), RPM::translate(Translations::SAPPHIRE_BRACELET_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 35, RPM::translate(Translations::SAPPHIRE_EARRING), RPM::translate(Translations::SAPPHIRE_EARRING_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 36, RPM::translate(Translations::RUBY_RING), RPM::translate(Translations::RUBY_RING_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 37, RPM::translate(Translations::RUBY_NECKLACE), RPM::translate(Translations::RUBY_NECKLACE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 38, RPM::translate(Translations::RUBY_BRACELET), RPM::translate(Translations::RUBY_BRACELET_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 39, RPM::translate(Translations::RUBY_EARRING), RPM::translate(Translations::RUBY_EARRING_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 40, RPM::translate(Translations::EMERALD_RING), RPM::translate(Translations::EMERALD_RING_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 41, RPM::translate(Translations::EMERALD_NECKLACE), RPM::translate(Translations::EMERALD_NECKLACE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 42, RPM::translate(Translations::EMERALD_BRACELET), RPM::translate(Translations::EMERALD_BRACELET_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 43, RPM::translate(Translations::EMERALD_EARRING), RPM::translate(Translations::EMERALD_EARRING_DESCRIPTION));
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE

@@ -125,6 +125,11 @@ SystemTranslatable *SystemCommonSkillItem::description() const {
     return m_description;
 }
 
+void SystemCommonSkillItem::setDescription(QString description)
+{
+    m_description->setAllNames(description);
+}
+
 TargetKind SystemCommonSkillItem::targetKind() const {
     return m_targetKind;
 }
@@ -192,6 +197,15 @@ QStandardItemModel * SystemCommonSkillItem::modelCharacteristics() const {
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+void SystemCommonSkillItem::setNameDescription(QStandardItemModel *model, int index, QString name, QString description) {
+    QStandardItem *item = model->item(index);
+    SystemCommonSkillItem *skillItem = reinterpret_cast<SystemCommonSkillItem*>(
+        item->data().value<quintptr>());
+    skillItem->setName(name);
+    skillItem->setDescription(description);
+    item->setText(skillItem->toString());
+}
 
 void SystemCommonSkillItem::initializeHeaders() {
     m_modelPrice->setHorizontalHeaderLabels(QStringList({RPM::translate(

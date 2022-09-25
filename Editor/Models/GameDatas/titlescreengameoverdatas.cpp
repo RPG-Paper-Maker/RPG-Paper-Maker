@@ -220,6 +220,17 @@ void TitleScreenGameOverDatas::setDefaultGameOverCommands()
         ::translate(Translations::EXIT), GameOverCommandKind::Exit))->getModelRow());
 }
 
+void TitleScreenGameOverDatas::setDefaultTranslations()
+{
+    SuperListItem::setModelItemName(m_modelTitleCommands, 0, RPM::translate(Translations::NEW_GAME));
+    SuperListItem::setModelItemName(m_modelTitleCommands, 1, RPM::translate(Translations::LOAD_GAME));
+    SuperListItem::setModelItemName(m_modelTitleCommands, 2, RPM::translate(Translations::SETTINGS));
+    SuperListItem::setModelItemName(m_modelTitleCommands, 3, RPM::translate(Translations::EXIT));
+    SuperListItem::setModelItemName(m_modelGameOverCommands, 0, RPM::translate(Translations::CONTINUE));
+    SuperListItem::setModelItemName(m_modelGameOverCommands, 1, RPM::translate(Translations::TITLE_SCREEN));
+    SuperListItem::setModelItemName(m_modelGameOverCommands, 2, RPM::translate(Translations::EXIT));
+}
+
 // -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS

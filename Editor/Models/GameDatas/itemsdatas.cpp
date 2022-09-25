@@ -143,6 +143,52 @@ void ItemsDatas::setDefault() {
     }
 }
 
+void ItemsDatas::setDefaultTranslations()
+{
+    SystemCommonSkillItem::setNameDescription(m_model, 0, RPM::translate(Translations::HP_POTION), RPM::translate(Translations::HP_POTION_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 1, RPM::translate(Translations::SUPER_HP_POTION), RPM::translate(Translations::SUPER_HP_POTION_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 2, RPM::translate(Translations::MEGA_HP_POTION), RPM::translate(Translations::MEGA_HP_POTION_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 3, RPM::translate(Translations::MP_POTION), RPM::translate(Translations::MP_POTION_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 4, RPM::translate(Translations::SUPER_MP_POTION), RPM::translate(Translations::SUPER_MP_POTION_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 5, RPM::translate(Translations::MEGA_MP_POTION), RPM::translate(Translations::MEGA_MP_POTION_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 6, RPM::translate(Translations::TP_POTION), RPM::translate(Translations::TP_POTION_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 7, RPM::translate(Translations::SUPER_TP_POTION), RPM::translate(Translations::SUPER_TP_POTION_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 8, RPM::translate(Translations::MEGA_TP_POTION), RPM::translate(Translations::MEGA_TP_POTION_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 9, RPM::translate(Translations::PHOENIX_FEATHER), RPM::translate(Translations::PHOENIX_FEATHER_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 10, RPM::translate(Translations::REMEDY), RPM::translate(Translations::REMEDY_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 11, RPM::translate(Translations::REMEDY_POISONED), RPM::translate(Translations::REMEDY_POISONED_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 12, RPM::translate(Translations::REMEDY_BURNT), RPM::translate(Translations::REMEDY_BURNT_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 13, RPM::translate(Translations::REMEDY_PARALIZED), RPM::translate(Translations::REMEDY_PARALIZED_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 14, RPM::translate(Translations::REMEDY_CONFUSED), RPM::translate(Translations::REMEDY_CONFUSED_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 15, RPM::translate(Translations::REMEDY_MUTED), RPM::translate(Translations::REMEDY_MUTED_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 16, RPM::translate(Translations::REMEDY_SLEEPING), RPM::translate(Translations::REMEDY_SLEEPING_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 17, RPM::translate(Translations::REMEDY_BLIND), RPM::translate(Translations::REMEDY_BLIND_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 18, RPM::translate(Translations::KEY), RPM::translate(Translations::KEY_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 19, RPM::translate(Translations::BIG_KEY), RPM::translate(Translations::BIG_KEY_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 20, RPM::translate(Translations::MAP), RPM::translate(Translations::MAP_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 21, RPM::translate(Translations::PLUSH), RPM::translate(Translations::PLUSH_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 22, RPM::translate(Translations::ENVELOPE), RPM::translate(Translations::ENVELOPE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 23, RPM::translate(Translations::PAGE), RPM::translate(Translations::PAGE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 24, RPM::translate(Translations::BOOK), RPM::translate(Translations::BOOK_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 25, RPM::translate(Translations::BAG), RPM::translate(Translations::BAG_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 26, RPM::translate(Translations::PICKAXE), RPM::translate(Translations::PICKAXE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 27, RPM::translate(Translations::SHOVEL), RPM::translate(Translations::SHOVEL_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 28, RPM::translate(Translations::STRING), RPM::translate(Translations::STRING_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 29, RPM::translate(Translations::CRYSTAL), RPM::translate(Translations::CRYSTAL_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 30, RPM::translate(Translations::PEARL), RPM::translate(Translations::PEARL_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 31, RPM::translate(Translations::SAPPHIRE), RPM::translate(Translations::SAPPHIRE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 32, RPM::translate(Translations::RUBY), RPM::translate(Translations::RUBY_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 33, RPM::translate(Translations::EMERALD), RPM::translate(Translations::EMERALD_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 34, RPM::translate(Translations::ROOT_RED), RPM::translate(Translations::ROOT_RED_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 35, RPM::translate(Translations::ROOT_BLUE), RPM::translate(Translations::ROOT_BLUE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 36, RPM::translate(Translations::ROOT_GREEN), RPM::translate(Translations::ROOT_GREEN_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 37, RPM::translate(Translations::ROOT_BROWN), RPM::translate(Translations::ROOT_BROWN_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 38, RPM::translate(Translations::ROOT_PURPLE), RPM::translate(Translations::ROOT_PURPLE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 39, RPM::translate(Translations::ROOT_YELLOW), RPM::translate(Translations::ROOT_YELLOW_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 40, RPM::translate(Translations::ROOT_PINK), RPM::translate(Translations::ROOT_PINK_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 41, RPM::translate(Translations::ROOT_CYAN), RPM::translate(Translations::ROOT_CYAN_DESCRIPTION));
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE
