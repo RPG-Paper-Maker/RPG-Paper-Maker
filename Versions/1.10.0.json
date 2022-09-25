@@ -22,9 +22,11 @@
     "bugs": [
         "Update project sometimes crashing",
         "Full screen main menu",
-        "Issue with previous version save game"
+        "Issue with previous version save game",
+        "Icons issues with skills/items descriptions + status"
     ],
     "finished": [
+        2,
         2,
         2,
         2,

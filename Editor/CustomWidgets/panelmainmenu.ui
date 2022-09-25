@@ -142,6 +142,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="pushButtonExampleProject">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="minimumSize">
             <size>
              <width>200</width>

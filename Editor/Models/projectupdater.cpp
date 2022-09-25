@@ -1622,4 +1622,292 @@ void ProjectUpdater::updateVersion_1_10_0()
     RPM::get()->engineSettings()->setScalingValue(AxisKind::Y, 1);
     RPM::get()->engineSettings()->setScalingValue(AxisKind::Z, 1);
     RPM::get()->engineSettings()->write();
+
+    // Bars
+    QStandardItemModel *model = m_project->picturesDatas()->model(PictureKind::Bars);
+    SystemResource *super;
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SystemResource *>(SuperListItem::getItemModelAt(model, i));
+        if (super != nullptr && super->isBR()) {
+            if (super->name() == "spBar.png") {
+                super->setName("tpBar.png");
+            }
+        }
+    }
+    // Facesets
+    model = m_project->picturesDatas()->model(PictureKind::Facesets);
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SystemResource *>(SuperListItem::getItemModelAt(model, i));
+        if (super != nullptr && super->isBR()) {
+            if (super->name() == "general1.png") {
+                super->setName("heroes.png");
+            }
+        }
+    }
+    // Icons
+    model = m_project->picturesDatas()->model(PictureKind::Icons);
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SystemResource *>(SuperListItem::getItemModelAt(model, i));
+        if (super != nullptr && super->isBR()) {
+            if (super->name() == "general.png") {
+                super->setName("items.png");
+            }
+        }
+    }
+    // Titlescreen
+    model = m_project->picturesDatas()->model(PictureKind::TitleScreen);
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SystemResource *>(SuperListItem::getItemModelAt(model, i));
+        if (super != nullptr && super->isBR()) {
+            if (super->name() == "background.png") {
+                super->setName("background-logo.png");
+            }
+        }
+    }
+    // Windowskin
+    model = m_project->picturesDatas()->model(PictureKind::WindowSkins);
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SystemResource *>(SuperListItem::getItemModelAt(model, i));
+        if (super != nullptr && super->isBR()) {
+            if (super->name() == "default.png") {
+                super->setName("blue.png");
+            }
+        }
+    }
+    // Character
+    model = m_project->picturesDatas()->model(PictureKind::Characters);
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SystemResource *>(SuperListItem::getItemModelAt(model, i));
+        if (super != nullptr && super->isBR()) {
+            if (super->name() == "chicken.png") {
+                super->setName("chicken-white.png");
+            }
+            if (super->name() == "chicken2.png") {
+                super->setName("chicken-brown.png");
+            }
+            if (super->name() == "cow.png") {
+                super->setName("cow-white.png");
+            }
+            if (super->name() == "cow2.png") {
+                super->setName("cow-brown.png");
+            }
+            if (super->name() == "flames1.png") {
+                super->setName("fires.png");
+            }
+            if (super->name() == "gustav.png") {
+                super->setName("lucas.png");
+            }
+            if (super->name() == "keaton.png") {
+                super->setName("lucas.png");
+            }
+            if (super->name() == "plants1.png") {
+                super->setName("lucas.png");
+            }
+            if (super->name() == "slime.png") {
+                super->setName("slime-blue.png");
+            }
+        }
+    }
+    // Character
+    model = m_project->picturesDatas()->model(PictureKind::Mountains);
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SystemResource *>(SuperListItem::getItemModelAt(model, i));
+        if (super != nullptr && super->isBR()) {
+            if (super->name() == "blue-roof.png") {
+                super->setName("roof-blue.png");
+            }
+            if (super->name() == "cave1.png") {
+                super->setName("cave.png");
+            }
+            if (super->name() == "desert-noborders.png") {
+                super->setName("cave.png");
+            }
+            if (super->name() == "desert.png") {
+                super->setName("cave.png");
+            }
+            if (super->name() == "gray-roof.png") {
+                super->setName("roof-white.png");
+            }
+            if (super->name() == "green-roof.png") {
+                super->setName("roof-green.png");
+            }
+            if (super->name() == "halloween-noborders.png") {
+                super->setName("haunted.png");
+            }
+            if (super->name() == "halloween.png") {
+                super->setName("haunted.png");
+            }
+            if (super->name() == "ref-roof.png") {
+                super->setName("roof-red.png");
+            }
+            if (super->name() == "wood-stairs.png") {
+                super->setName("grass.png");
+            }
+        }
+    }
+    // Objects 3D
+    model = m_project->picturesDatas()->model(PictureKind::Object3D);
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SystemResource *>(SuperListItem::getItemModelAt(model, i));
+        if (super != nullptr && super->isBR()) {
+            if (super->name() == "bed.png") {
+                super->setName("bed-blue.png");
+            }
+            if (super->name() == "big-bed.png") {
+                super->setName("big-bed-green.png");
+            }
+            if (super->name() == "big-brick-building.png") {
+                super->setName("building-brick-big.png");
+            }
+            if (super->name() == "big-log.png") {
+                super->setName("log-big.png");
+            }
+            if (super->name() == "bottom-chair.png") {
+                super->setName("chest.png");
+            }
+            if (super->name() == "brick-building.png") {
+                super->setName("building-brick.png");
+            }
+            if (super->name() == "brick-chimney.png") {
+                super->setName("chimney-brick.png");
+            }
+            if (super->name() == "chair-back.png") {
+                super->setName("chest.png");
+            }
+            if (super->name() == "cobblestone-cube.png") {
+                super->setName("cube-cobblestone.png");
+            }
+            if (super->name() == "cube-table.png") {
+                super->setName("chest.png");
+            }
+            if (super->name() == "cupboard.png") {
+                super->setName("bookshelf.png");
+            }
+            if (super->name() == "dining-table.png") {
+                super->setName("chest.png");
+            }
+            if (super->name() == "fancy-house.png") {
+                super->setName("chest.png");
+            }
+            if (super->name() == "giant-wood-building.png") {
+                super->setName("building-wood-big.png");
+            }
+            if (super->name() == "green-building-with-door.png") {
+                super->setName("chest.png");
+            }
+            if (super->name() == "green-building.png") {
+                super->setName("chest.png");
+            }
+            if (super->name() == "macrowave.png") {
+                super->setName("chest.png");
+            }
+            if (super->name() == "roof-texture.png") {
+                super->setName("chest.png");
+            }
+            if (super->name() == "shop-stand1.png") {
+                super->setName("shop-stand-green.png");
+            }
+            if (super->name() == "shop-stand2.png") {
+                super->setName("shop-stand-red.png");
+            }
+            if (super->name() == "small-bookshelf.png") {
+                super->setName("bookshelf-small.png");
+            }
+            if (super->name() == "small-log.png") {
+                super->setName("log-small");
+            }
+            if (super->name() == "small-television.png") {
+                super->setName("tv-small.png");
+            }
+            if (super->name() == "small-wood-post.png") {
+                super->setName("chest.png");
+            }
+            if (super->name() == "stone-chimney.png") {
+                super->setName("chimney-stone.png");
+            }
+            if (super->name() == "television.png") {
+                super->setName("tv.png");
+            }
+            if (super->name() == "tiny-log.png") {
+                super->setName("log-small.png");
+            }
+            if (super->name() == "wood-building.png") {
+                super->setName("building-wood.png");
+            }
+            if (super->name() == "wood-deck.png") {
+                super->setName("chest.png");
+            }
+            if (super->name() == "wood-post.png") {
+                super->setName("chest.png");
+            }
+        }
+    }
+    // Objects 3D
+    model = m_project->picturesDatas()->model(PictureKind::Tilesets);
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SystemResource *>(SuperListItem::getItemModelAt(model, i));
+        if (super != nullptr && super->isBR()) {
+            if (super->name() == "beach.png") {
+                super->setName("beach-desert.png");
+            }
+            if (super->name() == "cave.png") {
+                super->setName("dungeon-mines.png");
+            }
+            if (super->name() == "dungeon.png") {
+                super->setName("dungeon-mines.png");
+            }
+            if (super->name() == "halloween.png") {
+                super->setName("plains-woods-haunted.png");
+            }
+            if (super->name() == "plains.png") {
+                super->setName("plains-woods.png");
+            }
+        }
+    }
+    // Walls
+    model = m_project->picturesDatas()->model(PictureKind::Walls);
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SystemResource *>(SuperListItem::getItemModelAt(model, i));
+        if (super != nullptr && super->isBR()) {
+            if (super->name() == "cave2.png") {
+                super->setName("cave1.png");
+            }
+            if (super->name() == "cave3.png") {
+                super->setName("cave1.png");
+            }
+            if (super->name() == "inside2.png") {
+                super->setName("inside1.png");
+            }
+            if (super->name() == "wood2.png") {
+                super->setName("wood.png");
+            }
+        }
+    }
+    // Shapes obj
+    model = m_project->shapesDatas()->model(CustomShapeKind::OBJ);
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SystemResource *>(SuperListItem::getItemModelAt(model, i));
+        if (super != nullptr && super->isBR()) {
+            if (super->name() == "Roof.obj") {
+                super->setName("tent.obj");
+            }
+        }
+    }
+    // Statistics bars
+    model = m_project->gameDatas()->battleSystemDatas()->modelCommonStatistics();
+    SystemStatistic *statistic;
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        statistic = reinterpret_cast<SystemStatistic *>(SuperListItem::getItemModelAt(model, i));
+        if (statistic != nullptr) {
+            if (statistic->abbreviation() == "hp") {
+                statistic->pictureBarID()->setId(1);
+            }
+            if (statistic->abbreviation() == "mp") {
+                statistic->pictureBarID()->setId(2);
+            }
+            if (statistic->abbreviation() == "tp") {
+                statistic->pictureBarID()->setId(3);
+            }
+        }
+    }
 }
