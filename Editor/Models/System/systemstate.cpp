@@ -34,7 +34,18 @@ SystemState::SystemState() :
         nullptr, 1, 1, false, false, false, false, false, false, false, false,
         nullptr)
 {
-
+    if (RPM::get()->project() != nullptr && RPM::get()->project()->gameDatas()->commonEventsDatas()) {
+        SystemCommonObject *basic = reinterpret_cast<SystemCommonObject *>(
+            SuperListItem::getItemModelAt(RPM::get()->project()->gameDatas()
+            ->commonEventsDatas()->modelCommonObjects(), 0));
+        if (basic != nullptr) {
+            SystemState *state = reinterpret_cast<SystemState *>(
+                SuperListItem::getItemModelAt(basic->modelStates(), 0));
+            if (state != nullptr) {
+                this->setCopy(*state);
+            }
+        }
+    }
 }
 
 SystemState::SystemState(SuperListItem *state, MapEditorSubSelectionKind gk, int
@@ -299,6 +310,7 @@ void SystemState::read(const QJsonObject &json) {
         m_indexX = json["x"].toInt();
         m_indexY = json["y"].toInt();
     }
+    m_objectMovingKind = ObjectMovingKind::Fix;
     if (json.contains(JSON_OBJECT_MOVING_KIND)) {
         m_objectMovingKind = static_cast<ObjectMovingKind>(json[
             JSON_OBJECT_MOVING_KIND].toInt());
@@ -309,9 +321,11 @@ void SystemState::read(const QJsonObject &json) {
     } else {
         m_eventCommandRoute = nullptr;
     }
+    m_speedID = 1;
     if (json.contains(JSON_SPEED_ID)) {
         m_speedID = json[JSON_SPEED_ID].toInt();
     }
+    m_frequencyID = 1;
     if (json.contains(JSON_FREQUENCY_ID)) {
         m_frequencyID = json[JSON_FREQUENCY_ID].toInt();
     }
