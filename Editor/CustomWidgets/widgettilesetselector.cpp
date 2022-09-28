@@ -21,7 +21,8 @@
 WidgetTilesetSelector::WidgetTilesetSelector(QWidget *parent) :
     QWidget(parent),
     m_isResizable(true),
-    m_selectionRectangle(new WidgetSelectionRectangle)
+    m_selectionRectangle(new WidgetSelectionRectangle),
+    m_path("")
 {
 
 }
@@ -33,6 +34,11 @@ WidgetTilesetSelector::~WidgetTilesetSelector()
 
 void WidgetTilesetSelector::setIsResizable(bool b) {
     m_isResizable = b;
+}
+
+QString WidgetTilesetSelector::path() const
+{
+    return m_path;
 }
 
 // -------------------------------------------------------
@@ -53,8 +59,8 @@ void WidgetTilesetSelector::currentTexture(QRect& rect) const{
 // -------------------------------------------------------
 
 void WidgetTilesetSelector::setImage(QString path){
-    m_textureTileset = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
-        QImage();
+    m_path = path;
+    m_textureTileset = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) : QImage();
     updateImage();
 }
 

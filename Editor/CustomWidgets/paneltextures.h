@@ -90,6 +90,7 @@ private:
     int m_currentMountainID;
     int m_currentObjects3DID;
     int m_mountainsHeight;
+    QString m_currentTilesetPath;
 
     void updateTilesetImage();
     int getCurrentID() const;

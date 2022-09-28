@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QScrollArea>
+#include <QScrollBar>
 #include "paneltransformations.h"
 #include "paneltextures.h"
 #include "ui_paneltextures.h"
@@ -33,7 +35,8 @@ PanelTextures::PanelTextures(QWidget *parent) :
     m_currentWallsID(-1),
     m_currentMountainID(-1),
     m_currentObjects3DID(-1),
-    m_mountainsHeight(-1)
+    m_mountainsHeight(-1),
+    m_currentTilesetPath("")
 {
     ui->setupUi(this);
     connect(ui->panelTransformations, &PanelTransformations::transformationBySquare,
@@ -127,8 +130,12 @@ void PanelTextures::updateTilesetImage() {
     if (m_drawKind != DrawKind::Translate && m_drawKind != DrawKind::Rotate &&
         m_drawKind != DrawKind::Scale)
     {
-        this->setGeometry(0, 0, ui->widgetTilesetSelector->width(), ui
-            ->widgetTilesetSelector->height());
+        if (m_currentTilesetPath != ui->widgetTilesetSelector->path()) {
+            this->setGeometry(0, 0, ui->widgetTilesetSelector->width(), ui
+                ->widgetTilesetSelector->height());
+            m_currentTilesetPath = ui->widgetTilesetSelector->path();
+            setFixedSize(0,0);
+        }
         setFixedSize(ui->widgetTilesetSelector->width(), ui
             ->widgetTilesetSelector->height());
     }
@@ -368,7 +375,6 @@ void PanelTextures::showMountains(SystemTileset *tileset) {
 
 void PanelTextures::showObjects3D(SystemTileset *tileset) {
     m_kind = PictureKind::Object3D;
-
     if (m_drawKind >= DrawKind::Translate && m_drawKind <= DrawKind::Scale)
     {
         this->showTransformations(m_drawKind);

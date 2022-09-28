@@ -36,11 +36,13 @@ public:
     void currentTexture(QRect &rect) const;
     void setImage(QString path);
     void setImageNone();
+    QString path() const;
 
 protected:
     bool m_isResizable;
     QImage m_textureTileset;
     WidgetSelectionRectangle* m_selectionRectangle;
+    QString m_path;
 
     void updateImage();
     void makeFirstSelection(int x, int y, float zoom = 1.0f);
