@@ -534,8 +534,10 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
                         position->setZ(m_positionOnTransformation.z());
                     }
                 }
-                position->setCenterX(m_positionOnTransformation.centerX());
-                position->setCenterZ(m_positionOnTransformation.centerZ());
+                if (square || !m_isTranslating) {
+                    position->setCenterX(m_positionOnTransformation.centerX());
+                    position->setCenterZ(m_positionOnTransformation.centerZ());
+                }
                 this->onTransformationPositionChanged(*position,
                     m_positionOnTransformation, selectionKind);
                 m_positionOnTransformation = *position;
