@@ -18,12 +18,14 @@
     	"Collisions not working with two following slopes down",
     	"Terrain value issue when teleporting object",
     	"Error when trying to change statistic of an enemy instance ID",
-    	"Translation / Scaling sprites with layer > 0 crashing"
+    	"Translation / Scaling sprites with layer > 0 crashing",
+    	"Command move object / battle effect: html balises visible in some cases"
     ],
     "finished": [
     	2,
     	2,
 
+    	2,
     	2,
     	2,
     	2,

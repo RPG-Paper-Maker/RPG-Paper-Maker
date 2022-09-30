@@ -549,7 +549,8 @@ QString SystemEffect::toString() const {
         break;
     case EffectKind::CommonReaction:
         text += m_commonReaction == nullptr ? RPM::translate(Translations
-            ::CALL_A_COMMON_REACTION) : m_commonReaction->toString();
+            ::CALL_A_COMMON_REACTION) : m_commonReaction->toString(nullptr,
+            nullptr, nullptr, false);
         break;
     case EffectKind::SpecialActions:
         text += RPM::translate(Translations::SPECIAL_ACTION) + RPM::COLON + RPM

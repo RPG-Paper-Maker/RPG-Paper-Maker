@@ -201,7 +201,7 @@ void EventCommand::setCopy(const EventCommand &copy) {
 // -------------------------------------------------------
 
 QString EventCommand::toString(QStandardItemModel *properties, QStandardItemModel
-    *parameters, QStandardItemModel *troopMonstersList) const
+    *parameters, QStandardItemModel *troopMonstersList, bool style) const
 {
     QString str;
 
@@ -260,7 +260,7 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::MoveObject:
         str += this->strMoveObject(properties, parameters); break;
     case EventCommandKind::Wait:
-        str += this->strWait(properties, parameters); break;
+        str += this->strWait(properties, parameters, style); break;
     case EventCommandKind::MoveCamera:
         str += this->strMoveCamera(properties, parameters); break;
     case EventCommandKind::PlayMusic:
@@ -272,7 +272,7 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::StopBackgroundSound:
         str += this->strStopBackgroundSound(properties, parameters); break;
     case EventCommandKind::PlayASound:
-        str += this->strPlaySound(properties, parameters); break;
+        str += this->strPlaySound(properties, parameters, style); break;
     case EventCommandKind::PlayMusicEffect:
         str += this->strPlayMusicEffect(properties, parameters); break;
     case EventCommandKind::ChangeProperty:
@@ -286,7 +286,7 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
         str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM
             ::translate(Translations::END_CHOICE) + "</strong>"; break;
     case EventCommandKind::Script:
-        str += this->strScript(properties, parameters); break;
+        str += this->strScript(properties, parameters, style); break;
     case EventCommandKind::DisplayAPicture:
         str += this->strDisplayAPicture(properties, parameters); break;
     case EventCommandKind::SetMoveTurnAPicture:
@@ -1470,13 +1470,13 @@ QString EventCommand::strMoveObjectMoves(int &i) const
 // -------------------------------------------------------
 
 QString EventCommand::strWait(QStandardItemModel *properties, QStandardItemModel
-    *parameters) const
+    *parameters, bool style) const
 {
     int i = 0;
 
-    return "<strong>" + RPM::translate(Translations::WAIT) + "</strong>" + RPM
-        ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters) +
-        RPM::SPACE + RPM::translate(Translations::SECONDS);
+    return (style ? "<strong>" : "") + RPM::translate(Translations::WAIT) + (style
+        ? "</strong>" : "") + RPM::COLON + RPM::SPACE + this->strProperty(i,
+        properties, parameters) + RPM::SPACE + RPM::translate(Translations::SECONDS);
 }
 
 // -------------------------------------------------------
@@ -1660,12 +1660,13 @@ QString EventCommand::strPlayBackgroundSound(QStandardItemModel *properties,
 // -------------------------------------------------------
 
 QString EventCommand::strPlaySound(QStandardItemModel *properties,
-    QStandardItemModel *parameters) const
+    QStandardItemModel *parameters, bool style) const
 {
     int i = 0;
-    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
-        Translations::PLAY_A_SOUND) + "</strong>" + RPM::COLON + RPM::SPACE
-        + this->strPlaySong(properties, parameters, SongKind::Sound, i);
+    return (style ? "<strong style=\"color:" + COLOR_BLUE + "\">" : "") + RPM
+        ::translate(Translations::PLAY_A_SOUND) + (style ? "</strong>" : "") +
+        RPM::COLON + RPM::SPACE + this->strPlaySong(properties, parameters,
+        SongKind::Sound, i);
 }
 
 // -------------------------------------------------------
@@ -1781,7 +1782,7 @@ QString EventCommand::strChoice() const {
 // -------------------------------------------------------
 
 QString EventCommand::strScript(QStandardItemModel *properties, QStandardItemModel
-    *parameters) const
+    *parameters, bool style) const
 {
     QString script;
     int i;
@@ -1793,8 +1794,9 @@ QString EventCommand::strScript(QStandardItemModel *properties, QStandardItemMod
         script = m_listCommand.at(i);
     }
 
-    return "<strong style=\"color:" + COLOR_YELLOW + "\">" + RPM::translate(
-        Translations::SCRIPT) + "</strong>" + RPM::COLON + RPM::SPACE + script;
+    return (style ? "<strong style=\"color:" + COLOR_YELLOW + "\">" : "") + RPM
+        ::translate(Translations::SCRIPT) + (style ? "</strong>" : "") + RPM
+        ::COLON + RPM::SPACE + script;
 }
 
 // -------------------------------------------------------
@@ -2105,13 +2107,13 @@ QString EventCommand::strAllowForbidMainMenu(QStandardItemModel *properties,
 
 // -------------------------------------------------------
 
-QString EventCommand::strCallACommonReaction() const {
+QString EventCommand::strCallACommonReaction(bool style) const {
     int i = 0;
 
-    return "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
-        Translations::CALL_A_COMMON_REACTION) + "</strong>" + RPM::COLON +
-        RPM::SPACE + reinterpret_cast<SystemCommonReaction *>(SuperListItem
-        ::getById(RPM::get()->project()->gameDatas()->commonEventsDatas()
+    return (style ? "<strong style=\"color:" + COLOR_GREY + "\">" : "") + RPM
+        ::translate(Translations::CALL_A_COMMON_REACTION) + (style ? "</strong>"
+        : "") + RPM::COLON + RPM::SPACE + reinterpret_cast<SystemCommonReaction *>(
+        SuperListItem::getById(RPM::get()->project()->gameDatas()->commonEventsDatas()
         ->modelCommonReactors()->invisibleRootItem(), m_listCommand.at(i++)
         .toInt()))->toString();
 }

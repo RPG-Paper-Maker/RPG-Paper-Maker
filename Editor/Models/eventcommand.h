@@ -68,7 +68,8 @@ public:
     void getChoicesIDs(QList<int> &list);
     void setCopy(const EventCommand &copy);
     QString toString(QStandardItemModel *properties = nullptr, QStandardItemModel
-        *parameters = nullptr, QStandardItemModel *troopMonstersList = nullptr) const;
+        *parameters = nullptr, QStandardItemModel *troopMonstersList = nullptr,
+        bool style = true) const;
     void read(const QJsonObject &json);
     QJsonObject getJSON() const;
 
@@ -125,7 +126,7 @@ private:
         *parameters, int &i) const;
     QString strMoveObjectOptions(int &i) const;
     QString strMoveObjectMoves(int &i) const;
-    QString strWait(QStandardItemModel *properties, QStandardItemModel *parameters)
+    QString strWait(QStandardItemModel *properties, QStandardItemModel *parameters, bool style = true)
         const;
     QString strMoveCamera(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
@@ -145,7 +146,7 @@ private:
     QString strPlayBackgroundSound(QStandardItemModel *properties,
         QStandardItemModel *parameters) const;
     QString strPlaySound(QStandardItemModel *properties, QStandardItemModel
-         *parameters) const;
+         *parameters, bool style = true) const;
     QString strPlayMusicEffect(QStandardItemModel *properties, QStandardItemModel
          *parameters) const;
     QString strStopSong(QStandardItemModel *properties, QStandardItemModel *parameters) const;
@@ -158,7 +159,7 @@ private:
     QString strDisplayChoice(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
     QString strScript(QStandardItemModel *properties, QStandardItemModel *parameters
-        ) const;
+        , bool style = true) const;
     QString strChoice() const;
     QString strDisplayAPicture(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
@@ -176,7 +177,7 @@ private:
         *parameters) const;
     QString strAllowForbidMainMenu(QStandardItemModel *properties,
         QStandardItemModel *parameters) const;
-    QString strCallACommonReaction() const;
+    QString strCallACommonReaction(bool style = true) const;
     QString strLabel(bool jump, QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
     QString strComment() const;

@@ -359,7 +359,7 @@ QString SystemCommandMove::toString() const
         QVector<QString> list = m_command;
         list.removeFirst();
         EventCommand command(EventCommandKind::Wait, list);
-        str += command.toString(m_properties, m_parameters);
+        str += command.toString(m_properties, m_parameters, nullptr, false);
         break;
     }
     case CommandMoveKind::PlayASound:
@@ -367,7 +367,7 @@ QString SystemCommandMove::toString() const
         QVector<QString> list = m_command;
         list.removeFirst();
         EventCommand command(EventCommandKind::PlayASound, list);
-        str += command.toString(m_properties, m_parameters);
+        str += command.toString(m_properties, m_parameters, nullptr, false);
         break;
     }
     case CommandMoveKind::Script:
@@ -375,7 +375,7 @@ QString SystemCommandMove::toString() const
         QVector<QString> list = m_command;
         list.removeFirst();
         EventCommand command(EventCommandKind::Script, list);
-        str += command.toString(m_properties, m_parameters);
+        str += command.toString(m_properties, m_parameters, nullptr, false);
         break;
     }
     }
