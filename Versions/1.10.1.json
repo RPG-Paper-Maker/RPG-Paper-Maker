@@ -7,7 +7,9 @@
 		"Main menu: confirm when quitting",
 		"Increase BoundingBox of empty object so it's a 16px cube",
 		"Commands: change grey syntax color to purple",
-		"Keypress / mouse events: small text warning that it can only be triggered by the Hero"
+		"Keypress / mouse events: small text warning that it can only be triggered by the Hero",
+		"Adding a clear message error when need to define as hero",
+		"System hero model: fusion of properties camera moving"
 	],
     "bugs": [
     	"Tileset picture not displayed correctly when switching selection",
@@ -25,6 +27,8 @@
     	"Command condition: if test variable < or >, text is not showing completely"
     ],
     "finished": [
+    	2,
+    	2,
     	2,
     	2,
     	2,
