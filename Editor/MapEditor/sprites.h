@@ -108,7 +108,7 @@ public:
             Position &position, SpriteWallDatas* wall,
             float &finalDistance, Position &finalPosition, QRay3D& ray);
     MapElement* getMapElementAt(Position& position,
-                                MapEditorSubSelectionKind subKind);
+                                MapEditorSubSelectionKind subKind, bool includeWalls = true);
     int getLastLayerAt(Position& position) const;
     void updateRemoveLayer(
             QSet<Portion> portionsOverflow, Position& position,

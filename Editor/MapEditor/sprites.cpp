@@ -548,7 +548,7 @@ bool Sprites::updateRaycastingWallAt(
 // -------------------------------------------------------
 
 MapElement* Sprites::getMapElementAt(Position& position,
-                                     MapEditorSubSelectionKind subKind)
+                                     MapEditorSubSelectionKind subKind, bool includeWalls)
 {
     MapElement* element;
 
@@ -557,7 +557,7 @@ MapElement* Sprites::getMapElementAt(Position& position,
         return getWallAtPosition(position);
     case MapEditorSubSelectionKind::None:
         element = spriteAt(position);
-        return element == nullptr ? getWallAtPosition(position) : element;
+        return element == nullptr && includeWalls ? getWallAtPosition(position) : element;
     default:
         return spriteAt(position);
     }

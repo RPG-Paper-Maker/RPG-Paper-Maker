@@ -523,13 +523,14 @@ MapElement * MapPortion::updateRaycastingOverflowMountain(Position &position,
 
 MapElement* MapPortion::getMapElementAt(Position& position,
                                         MapEditorSelectionKind kind,
-                                        MapEditorSubSelectionKind subKind)
+                                        MapEditorSubSelectionKind subKind,
+                                        bool includeWalls)
 {
     switch (kind) {
     case MapEditorSelectionKind::Land:
         return m_lands->getMapElementAt(position, subKind);
     case MapEditorSelectionKind::Sprites:
-        return m_sprites->getMapElementAt(position, subKind);
+        return m_sprites->getMapElementAt(position, subKind, includeWalls);
     case MapEditorSelectionKind::Objects3D:
         return m_objects3D->getMapElementAt(position);
     case MapEditorSelectionKind::Mountains:

@@ -139,7 +139,7 @@ public:
         &finalDistance, Position &finalPosition, QRay3D &ray, bool &remove);
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSelectionKind kind,
-                                MapEditorSubSelectionKind subKind);
+                                MapEditorSubSelectionKind subKind, bool includeWalls = true);
     int getLastLayerAt(Position& position, MapEditorSelectionKind kind) const;
     MapElement * updateElementPosition(Position &previousPosition,
         MapEditorSelectionKind kind);

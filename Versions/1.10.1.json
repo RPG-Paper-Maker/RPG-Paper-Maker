@@ -2,11 +2,38 @@
 	"add": [],
 	"remove": [],
 	"replace": [],
-	"features": [],
+	"features": [
+		"When adding a new state in an object, the state content will be the default common object first state",
+		"Main menu: confirm when quitting",
+		"Increase BoundingBox of empty object so it's a 16px cube"
+	],
     "bugs": [
-
+    	"Tileset picture not displayed correctly when switching selection",
+    	"Translation not working for pixel perfect",
+    	"Error window for pictures undefined in some specific cases",
+    	"Screen resolution: issue time currency window in main menu",
+    	"Screen resolution: icons issues for skills/items menus",
+    	"Enter a name wrong menu position",
+    	"Mountain issue blocked with high square blocks in particular situation",
+    	"Collisions not working with two following slopes down",
+    	"Terrain value issue when teleporting object",
+    	"Error when trying to change statistic of an enemy instance ID",
+    	"Translation / Scaling sprites with layer > 0 crashing"
     ],
     "finished": [
+    	2,
+    	2,
 
+    	2,
+    	2,
+    	2,
+    	2,
+    	2,
+    	2,
+    	2,
+    	2,
+    	2,
+    	2,
+    	2
     ]
 }

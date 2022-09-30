@@ -460,6 +460,7 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
                 position->setScaleX(m_positionOnTransformation.scaleX());
                 position->setScaleY(m_positionOnTransformation.scaleY());
                 position->setScaleZ(m_positionOnTransformation.scaleZ());
+                position->setLayer(m_positionOnTransformation.layer());
                 if (drawKind == DrawKind::Scale)
                 {
                     MapPortion *mapPortion;
@@ -1665,7 +1666,7 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
                 MapPortion *mapPortion = this->getMapPortion(newPosition, portion, false);
                 SpriteDatas *deletedSprite = reinterpret_cast<SpriteDatas *>(
                     mapPortion->getMapElementAt(newPosition, k,
-                    MapEditorSubSelectionKind::None));
+                    MapEditorSubSelectionKind::None, false));
                 this->eraseSprite(previousPosition, false, false, true);
                 this->eraseSprite(newPosition, false, false, true);
                 this->stockSprite(newPosition, sprite, sprite->getSubKind(), false);
