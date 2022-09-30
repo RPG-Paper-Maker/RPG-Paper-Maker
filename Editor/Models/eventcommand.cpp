@@ -894,6 +894,8 @@ QString EventCommand::strConditionPageVariables(QStandardItemModel *properties,
     case 0:
         condition = this->strProperty(i, properties, parameters);
         operation = RPM::ENUM_TO_STRING_OPERATION.at(m_listCommand.at(i++).toInt());
+        operation.replace("<", "&#60;");
+        operation.replace(">", "&#62;");
         condition += " " + operation + " ";
         condition += this->strProperty(i, properties, parameters);
         break;
