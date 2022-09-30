@@ -30,7 +30,7 @@ const QString EventCommand::COLOR_ORANGE = "#FF8C00";
 const QString EventCommand::COLOR_BLUE = "#569ae8";
 const QString EventCommand::COLOR_GREEN = "#35c452";
 const QString EventCommand::COLOR_YELLOW = "#eff531";
-const QString EventCommand::COLOR_GREY = "#7a7a7a";
+const QString EventCommand::COLOR_PURPLE = "#b830b1";
 const QString EventCommand::COLOR_COMMENT = "#199406";
 QVector<QString> EventCommand::emptyCommandList = QVector<QString>();
 
@@ -215,23 +215,23 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
         str += "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
             Translations::GAME_OVER) + "</strong>"; break;
     case EventCommandKind::While:
-        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+        str += "<strong style=\"color:" + COLOR_PURPLE + "\">" + RPM::translate(
             Translations::LOOP) + "</strong>"; break;
     case EventCommandKind::EndWhile:
-        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+        str += "<strong style=\"color:" + COLOR_PURPLE + "\">" + RPM::translate(
             Translations::END_LOOP) + "</strong>"; break;
     case EventCommandKind::WhileBreak:
-        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+        str += "<strong style=\"color:" + COLOR_PURPLE + "\">" + RPM::translate(
             Translations::BREAK_LOOP) + "</strong>"; break;
     case EventCommandKind::InputNumber:
         str += strInputNumber(properties, parameters); break;
     case EventCommandKind::If:
         str += strCondition(properties, parameters); break;
     case EventCommandKind::Else:
-        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+        str += "<strong style=\"color:" + COLOR_PURPLE + "\">" + RPM::translate(
             Translations::ELSE) + "</strong>"; break;
     case EventCommandKind::EndIf:
-        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+        str += "<strong style=\"color:" + COLOR_PURPLE + "\">" + RPM::translate(
             Translations::END_IF) + "</strong>"; break;
     case EventCommandKind::OpenMainMenu:
         str += "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
@@ -246,10 +246,10 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::StartBattle:
         str += this->strStartBattle(parameters); break;
     case EventCommandKind::IfWin:
-        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM
+        str += "<strong style=\"color:" + COLOR_PURPLE + "\">" + RPM
             ::translate(Translations::IF_WIN) + "</strong>"; break;
     case EventCommandKind::IfLose:
-        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM
+        str += "<strong style=\"color:" + COLOR_PURPLE + "\">" + RPM
             ::translate(Translations::IF_LOSE) + "</strong>"; break;
     case EventCommandKind::ChangeState:
         str += this->strChangeState(properties, parameters); break;
@@ -280,10 +280,10 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::DisplayChoice:
         str += this->strDisplayChoice(properties, parameters); break;
     case EventCommandKind::Choice:
-        str += "<strong style=\"color:" + COLOR_GREY + "\">" + this
+        str += "<strong style=\"color:" + COLOR_PURPLE + "\">" + this
             ->strChoice() + "</strong>"; break;
     case EventCommandKind::EndChoice:
-        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM
+        str += "<strong style=\"color:" + COLOR_PURPLE + "\">" + RPM
             ::translate(Translations::END_CHOICE) + "</strong>"; break;
     case EventCommandKind::Script:
         str += this->strScript(properties, parameters, style); break;
@@ -303,14 +303,14 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::RemoveObjectFromMap:
         str += this->strRemoveObjectFromMap(properties, parameters); break;
     case EventCommandKind::StopReaction:
-        str += "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+        str += "<strong style=\"color:" + COLOR_PURPLE + "\">" + RPM::translate(
             Translations::STOP_REACTION) + "</strong>"; break;
     case EventCommandKind::AllowForbidSaves:
         str += this->strAllowForbidSaves(properties, parameters); break;
     case EventCommandKind::AllowForbidMainMenu:
         str += this->strAllowForbidMainMenu(properties, parameters); break;
     case EventCommandKind::CallACommonReaction:
-        str += this->strCallACommonReaction(); break;
+        str += this->strCallACommonReaction(style); break;
     case EventCommandKind::Label:
         str += this->strLabel(false, properties, parameters); break;
     case EventCommandKind::JumpLabel:
@@ -878,7 +878,7 @@ QString EventCommand::strCondition(QStandardItemModel *properties,
     default:
         break;
     }
-    return "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(
+    return "<strong style=\"color:" + COLOR_PURPLE + "\">" + RPM::translate(
         Translations::IF) + RPM::SPACE + RPM::PARENTHESIS_LEFT + condition + RPM
         ::PARENTHESIS_RIGHT + "</strong>";
 }
@@ -2110,7 +2110,7 @@ QString EventCommand::strAllowForbidMainMenu(QStandardItemModel *properties,
 QString EventCommand::strCallACommonReaction(bool style) const {
     int i = 0;
 
-    return (style ? "<strong style=\"color:" + COLOR_GREY + "\">" : "") + RPM
+    return (style ? "<strong style=\"color:" + COLOR_PURPLE + "\">" : "") + RPM
         ::translate(Translations::CALL_A_COMMON_REACTION) + (style ? "</strong>"
         : "") + RPM::COLON + RPM::SPACE + reinterpret_cast<SystemCommonReaction *>(
         SuperListItem::getById(RPM::get()->project()->gameDatas()->commonEventsDatas()
@@ -2124,7 +2124,7 @@ QString EventCommand::strLabel(bool jump, QStandardItemModel *properties,
     QStandardItemModel *parameters) const
 {
     int i = 0;
-    return "<strong style=\"color:" + COLOR_GREY + "\">" + RPM::translate(jump ?
+    return "<strong style=\"color:" + COLOR_PURPLE + "\">" + RPM::translate(jump ?
         Translations::JUMP_TO_LABEL : Translations::LABEL) + "</strong>" + RPM
         ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters);
 }

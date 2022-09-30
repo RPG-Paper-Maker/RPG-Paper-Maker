@@ -40,7 +40,7 @@ public:
     static const QString COLOR_BLUE;
     static const QString COLOR_GREEN;
     static const QString COLOR_YELLOW;
-    static const QString COLOR_GREY;
+    static const QString COLOR_PURPLE;
     static const QString COLOR_COMMENT;
     static QVector<QString> emptyCommandList;
 
