@@ -46,6 +46,7 @@ private:
 
     void updateEvent(SystemEvent *ev);
     void updateParameters(SystemEvent *);
+    void updateWarning();
     void translate();
 
 private slots:

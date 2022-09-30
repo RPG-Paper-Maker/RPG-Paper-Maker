@@ -1926,5 +1926,6 @@
 	"dungeon.mines": "Donjon / mines",
 	"sapphire.ring.description": "Une belle bague de saphir",
 	"sapphire.necklace.description": "Un beau collier de saphir",
-	"key.description": "Une clé à utiliser sur une porte"
+	"key.description": "Une clé à utiliser sur une porte",
+	"this.event.only.triggered.hero": "cet évènement ne peut être déclenché que par le Héro"
 }

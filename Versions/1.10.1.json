@@ -6,7 +6,8 @@
 		"When adding a new state in an object, the state content will be the default common object first state",
 		"Main menu: confirm when quitting",
 		"Increase BoundingBox of empty object so it's a 16px cube",
-		"Commands: change grey syntax color to purple"
+		"Commands: change grey syntax color to purple",
+		"Keypress / mouse events: small text warning that it can only be triggered by the Hero"
 	],
     "bugs": [
     	"Tileset picture not displayed correctly when switching selection",
@@ -24,6 +25,9 @@
     	"Command condition: if test variable < or >, text is not showing completely"
     ],
     "finished": [
+    	2,
+    	2,
+    	2,
     	2,
     	2,
 

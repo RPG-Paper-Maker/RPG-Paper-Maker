@@ -1926,5 +1926,6 @@
     "dungeon.mines": "Dungeon / mines",
     "sapphire.ring.description": "A beautiful sapphire ring",
     "sapphire.necklace.description": "A beautiful sapphire necklace",
-    "key.description": "A key to use on a door"
+    "key.description": "A key to use on a door",
+    "this.event.only.triggered.hero": "this event can only be triggered by the Hero"
 }

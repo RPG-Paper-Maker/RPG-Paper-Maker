@@ -1960,6 +1960,7 @@ public:
     static const QString INSIDE;
     static const QString SHOP;
     static const QString DUNGEON_MINES;
+    static const QString THIS_EVENT_ONLY_TRIGGERED_HERO;
 
     Translations();
     virtual ~Translations();

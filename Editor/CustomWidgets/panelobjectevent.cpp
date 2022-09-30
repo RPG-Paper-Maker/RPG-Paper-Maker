@@ -26,6 +26,7 @@ PanelObjectEvent::PanelObjectEvent(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->labelWarning->setStyleSheet("QLabel { color : #FF8C00; }");
     ui->treeViewParameters->setHasContextMenu(false);
     ui->treeViewParameters->setCanMove(false);
 
@@ -147,6 +148,15 @@ void PanelObjectEvent::getCommandObjectEvent(QVector<QString> &command) const {
 
 //-------------------------------------------------
 
+void PanelObjectEvent::updateWarning()
+{
+    ui->labelWarning->setText(ui->comboBoxEventsSystem->currentIndex() != 0 && ui
+        ->radioButtonEventSystem->isChecked() ? QString("* ")+ RPM::translate(
+        Translations::THIS_EVENT_ONLY_TRIGGERED_HERO) + "." : "");
+}
+
+//-------------------------------------------------
+
 void PanelObjectEvent::translate()
 {
     ui->radioButtonEventUser->setText(RPM::translate(Translations::EVENT_USER) +
@@ -172,6 +182,7 @@ void PanelObjectEvent::on_comboBoxEventsSystemCurrentIndexChanged(int index) {
         updateEvent(super);
         updateParameters(super);
     }
+    this->updateWarning();
 }
 
 // -------------------------------------------------------
@@ -201,6 +212,7 @@ void PanelObjectEvent::on_radioButtonEventSystem_toggled(bool checked) {
         updateEvent(super);
         updateParameters(super);
     }
+    this->updateWarning();
 }
 
 // -------------------------------------------------------

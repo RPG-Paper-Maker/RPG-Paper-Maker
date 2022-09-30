@@ -29,8 +29,8 @@ const QString EventCommand::BEGINNING_COMMAND = "> ";
 const QString EventCommand::COLOR_ORANGE = "#FF8C00";
 const QString EventCommand::COLOR_BLUE = "#569ae8";
 const QString EventCommand::COLOR_GREEN = "#35c452";
-const QString EventCommand::COLOR_YELLOW = "#eff531";
-const QString EventCommand::COLOR_PURPLE = "#b830b1";
+const QString EventCommand::COLOR_YELLOW = "#e8dd48";
+const QString EventCommand::COLOR_PURPLE = "#911f8b";
 const QString EventCommand::COLOR_COMMENT = "#199406";
 QVector<QString> EventCommand::emptyCommandList = QVector<QString>();
 

@@ -1947,6 +1947,7 @@ const QString Translations::SNOW_TOWN = "snow.town";
 const QString Translations::INSIDE = "inside";
 const QString Translations::SHOP = "shop";
 const QString Translations::DUNGEON_MINES = "dungeon.mines";
+const QString Translations::THIS_EVENT_ONLY_TRIGGERED_HERO = "this.event.only.triggered.hero";
 
 // -------------------------------------------------------
 //
