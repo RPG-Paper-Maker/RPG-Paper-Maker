@@ -78,7 +78,7 @@ private slots:
     void on_checkBoxCanBeTriggeredAnotherObject_toggled(bool checked);
     void on_comboBoxInheritance_currentIndexChanged(int index);
     void on_updateJsonStates(SuperListItem *);
-    void on_updateJsonEvents(SuperListItem *);
+    void on_updateJsonEvents();
     void on_updateJsonProperties(SuperListItem *);
     void on_stateChanged(QModelIndex index, QModelIndex);
     void on_statePastingItem(SuperListItem *previous, SuperListItem *after, int);

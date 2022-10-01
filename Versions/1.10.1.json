@@ -27,7 +27,8 @@
     	"Translation / Scaling sprites with layer > 0 crashing",
     	"Command move object / battle effect: html balises visible in some cases",
     	"Command condition: if test variable < or >, text is not showing completely",
-    	"Missing collisions on some autotiles/walls/3D objects"
+    	"Missing collisions on some autotiles/walls/3D objects",
+    	"When moving an event in an object events list, the reaction tabs are not updated"
     ],
     "finished": [
     	2,
@@ -40,6 +41,8 @@
     	2,
     	2,
 
+    	2,
+    	2,
     	2,
     	2,
     	2,

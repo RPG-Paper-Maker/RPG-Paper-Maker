@@ -131,8 +131,8 @@ void PanelObject::updateModel() {
         connect(ui->treeViewEvents->selectionModel(), SIGNAL(currentChanged(
             QModelIndex, QModelIndex)), this, SLOT(on_eventChanged(QModelIndex,
             QModelIndex)));
-        connect(ui->treeViewEvents, SIGNAL(needsUpdateJson(SuperListItem *)),
-            this, SLOT(on_updateJsonEvents(SuperListItem *)));
+        connect(ui->treeViewEvents, SIGNAL(modelUpdated()),
+            this, SLOT(on_updateJsonEvents()));
         index = ui->treeViewEvents->getModel()->index(0,0);
         ui->treeViewEvents->setCurrentIndex(index);
 
@@ -438,7 +438,7 @@ void PanelObject::on_updateJsonStates(SuperListItem *) {
 
 // -------------------------------------------------------
 
-void PanelObject::on_updateJsonEvents(SuperListItem *) {
+void PanelObject::on_updateJsonEvents() {
     updateReactionsWidgets();
     on_updateJsonStates(nullptr);
 }
