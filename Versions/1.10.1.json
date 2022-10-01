@@ -9,7 +9,9 @@
 		"Commands: change grey syntax color to purple",
 		"Keypress / mouse events: small text warning that it can only be triggered by the Hero",
 		"Adding a clear message error when need to define as hero",
-		"System hero model: fusion of properties camera moving"
+		"System hero model: fusion of properties camera moving",
+		"Clear error message when a tileset pciture is not a size multiple of square size",
+		"Add troop in list Team/Reserve/Hidden (change statistics, status etc)"
 	],
     "bugs": [
     	"Tileset picture not displayed correctly when switching selection",
@@ -27,6 +29,8 @@
     	"Command condition: if test variable < or >, text is not showing completely"
     ],
     "finished": [
+    	2,
+    	2,
     	2,
     	2,
     	2,

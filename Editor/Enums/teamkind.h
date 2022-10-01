@@ -15,7 +15,8 @@
 enum class TeamKind {
     Team,
     Reserve,
-    Hidden
+    Hidden,
+    Troop
 };
 
 #endif // TEAMKIND_H

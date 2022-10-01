@@ -499,7 +499,8 @@ void RPM::readTranslations() {
     RPM::ENUM_TO_STRING_TEAM = QStringList({
         RPM::translate(Translations::TEAM),
         RPM::translate(Translations::RESERVE),
-        RPM::translate(Translations::HIDDEN)
+        RPM::translate(Translations::HIDDEN),
+        RPM::translate(Translations::TROOP)
     });
     RPM::ENUM_TO_STRING_OPERATION_SIMPLE = QStringList({
         "=", "!=", ">=", "<=", ">", "<"
