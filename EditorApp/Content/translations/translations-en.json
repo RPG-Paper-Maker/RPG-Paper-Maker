@@ -1927,5 +1927,6 @@
     "sapphire.ring.description": "A beautiful sapphire ring",
     "sapphire.necklace.description": "A beautiful sapphire necklace",
     "key.description": "A key to use on a door",
-    "this.event.only.triggered.hero": "this event can only be triggered by the Hero"
+    "this.event.only.triggered.hero": "this event can only be triggered by the Hero",
+    "open.br.folder": "Open BR folder"
 }

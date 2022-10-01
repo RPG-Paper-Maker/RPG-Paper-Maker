@@ -511,6 +511,8 @@ void MainWindow::translate() {
     ui->actionSave_all->setIconText(RPM::translate(Translations::SAVE_ALL_TOOL));
     ui->actionOpen_project_folder->setText(RPM::translate(Translations
         ::OPEN_PROJECT_FOLDER));
+    ui->actionOpen_BR_folder->setText(RPM::translate(Translations
+        ::OPEN_BR_FOLDER));
     ui->actionOpen_project_folder->setIconText(RPM::translate(Translations
         ::FOLDER));
     ui->actionExport_standalone->setText(RPM::translate(Translations
@@ -665,6 +667,12 @@ void MainWindow::on_actionSave_all_triggered(){
 void MainWindow::on_actionOpen_project_folder_triggered()
 {
     QDesktopServices::openUrl(QUrl::fromLocalFile(project->pathCurrentProject()));
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionOpen_BR_folder_triggered() {
+    QDesktopServices::openUrl(QUrl::fromLocalFile(project->gameDatas()->systemDatas()->pathBR()));
 }
 
 // -------------------------------------------------------

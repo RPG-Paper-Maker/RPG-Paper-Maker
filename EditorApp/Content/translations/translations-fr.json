@@ -1927,5 +1927,6 @@
 	"sapphire.ring.description": "Une belle bague de saphir",
 	"sapphire.necklace.description": "Un beau collier de saphir",
 	"key.description": "Une clé à utiliser sur une porte",
-	"this.event.only.triggered.hero": "cet évènement ne peut être déclenché que par le Héro"
+	"this.event.only.triggered.hero": "cet évènement ne peut être déclenché que par le Héro",
+	"open.br.folder": "Ouvrir le dossier BR"
 }

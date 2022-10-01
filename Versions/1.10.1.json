@@ -11,7 +11,9 @@
 		"Adding a clear message error when need to define as hero",
 		"System hero model: fusion of properties camera moving",
 		"Clear error message when a tileset pciture is not a size multiple of square size",
-		"Add troop in list Team/Reserve/Hidden (change statistics, status etc)"
+		"Add troop in list Team/Reserve/Hidden (change statistics, status etc)",
+		"Command move object:  1 to hero is also moving in diagonal if possible",
+		"File > Open BR folder"
 	],
     "bugs": [
     	"Tileset picture not displayed correctly when switching selection",
@@ -31,6 +33,7 @@
     	"When moving an event in an object events list, the reaction tabs are not updated"
     ],
     "finished": [
+    	2,
     	2,
     	2,
     	2,

@@ -64,6 +64,7 @@
     <addaction name="actionSave"/>
     <addaction name="actionSave_all"/>
     <addaction name="actionOpen_project_folder"/>
+    <addaction name="actionOpen_BR_folder"/>
     <addaction name="actionExport_standalone"/>
     <addaction name="actionClose_project"/>
     <addaction name="separator"/>
@@ -730,6 +731,15 @@
    </property>
    <property name="shortcut">
     <string>6</string>
+   </property>
+  </action>
+  <action name="actionOpen_BR_folder">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/dir.png</normaloff>:/icons/Ressources/dir.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open BR folder</string>
    </property>
   </action>
  </widget>

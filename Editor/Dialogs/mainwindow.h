@@ -90,6 +90,7 @@ private slots:
     void on_actionSave_triggered();
     void on_actionSave_all_triggered();
     void on_actionOpen_project_folder_triggered();
+    void on_actionOpen_BR_folder_triggered();
     void on_actionExport_standalone_triggered();
     void on_actionClose_project_triggered();
     void on_actionQuit_triggered();
