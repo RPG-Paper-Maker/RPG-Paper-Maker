@@ -684,33 +684,23 @@ bool Map::deleteObject(Position &p, MapPortion *mapPortion, QJsonObject
 
 // -------------------------------------------------------
 
-bool Map::syncObjects(SystemCommonObject *object, Position &p)
+void Map::syncObjects()
 {
-    SystemMapObject *super;
-    int l = m_modelObjects->invisibleRootItem()->rowCount();
-    int row = l;
-    bool changed = true;
-    for (int i = l - 1; i >= 0; i--)
-    {
-        super = reinterpret_cast<SystemMapObject *>(m_modelObjects->item(i)->data()
-            .value<quintptr>());
-        if (super->id() == object->id())
-        {
-            m_modelObjects->removeRow(i);
-            delete super;
-            if (row == l)
-            {
-                changed = false;
-            } else
-            {
-                changed = true;
+    int lx, ld, lh, lz;
+    m_mapProperties->getPortionsNumber(lx, ld, lh, lz);
+    MapPortion *mapPortion = nullptr;
+    SuperListItem::deleteModel(m_modelObjects, false);
+    for (int i = 0; i <= lx; i++) {
+        for (int j = -ld; j <= lh; j++) {
+            for (int k = 0; k <= lz; k++) {
+                mapPortion = this->loadPortionMap(i, j, k, true);
+                if (mapPortion != nullptr) {
+                    mapPortion->mapObjects()->setMapObjects(m_modelObjects);
+                }
             }
-            row = i;
         }
     }
-    m_modelObjects->insertRow(row, (new SystemMapObject(object->id(), object
-        ->name(), p))->getModelRow());
-    return changed;
+    this->writeObjects(true);
 }
 
 // -------------------------------------------------------

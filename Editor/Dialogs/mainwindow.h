@@ -83,7 +83,7 @@ private:
 protected:
     virtual void closeEvent(QCloseEvent *event);
 
-private slots:
+public slots:
     void on_actionNew_project_triggered();
     void on_actionBrowse_triggered();
     void on_actionClean_recent_projects_triggered();

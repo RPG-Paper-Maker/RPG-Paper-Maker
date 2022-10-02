@@ -51,6 +51,7 @@ public:
         MapEditorSubSelectionKind &previousType);
     void removeObjectsOut(QList<int> &listDeletedObjectsIDs, MapProperties& properties);
     QList<SystemCommonObject *> getObjects() const;
+    void setMapObjects(QStandardItemModel *model) const;
     void clear();
     void initializeVertices(int squareSize, QHash<int, QOpenGLTexture *>
         &characters, QOpenGLTexture *tileset);

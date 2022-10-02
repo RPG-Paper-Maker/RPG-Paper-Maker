@@ -13,7 +13,8 @@
 		"Clear error message when a tileset pciture is not a size multiple of square size",
 		"Add troop in list Team/Reserve/Hidden (change statistics, status etc)",
 		"Command move object:  1 to hero is also moving in diagonal if possible",
-		"File > Open BR folder"
+		"File > Open BR folder",
+        "Debug options: button to synchronize map objects if object linking issue still happening"
 	],
     "bugs": [
     	"Tileset picture not displayed correctly when switching selection",
@@ -45,6 +46,7 @@
     	2,
     	2,
     	2,
+        2,
 
     	2,
     	2,

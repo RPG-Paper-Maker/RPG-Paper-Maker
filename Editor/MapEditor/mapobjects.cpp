@@ -13,6 +13,7 @@
 #include "rpm.h"
 #include "common.h"
 #include "systemstate.h"
+#include "systemmapobject.h"
 
 // -------------------------------------------------------
 //
@@ -146,6 +147,19 @@ QList<SystemCommonObject *> MapObjects::getObjects() const
         list << i.value();
     }
     return list;
+}
+
+// -------------------------------------------------------
+
+void MapObjects::setMapObjects(QStandardItemModel *model) const
+{
+    QHash<Position, SystemCommonObject *>::const_iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++)
+    {
+        Position3D p = i.key();
+        model->appendRow((new SystemMapObject(i.value()->id(), i.value()->name(), p))
+            ->getModelRow());
+    }
 }
 
 // -------------------------------------------------------

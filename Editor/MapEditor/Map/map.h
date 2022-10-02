@@ -69,7 +69,7 @@ public:
     bool deleteObject(Position& p, MapPortion *mapPortion,
                       QJsonObject &previous,
                       MapEditorSubSelectionKind &previousType);
-    bool syncObjects(SystemCommonObject *object, Position &p);
+    void syncObjects();
     void addOverflowSprites(Position& p, Portion& portion);
     void removeOverflowSprites(Position& p, Portion& portion);
     void addOverflowObjects3D(Position& p, Portion& portion);

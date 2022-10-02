@@ -9,8 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QMessageBox>
 #include "dialogdebugoptions.h"
 #include "ui_dialogdebugoptions.h"
+#include "mainwindow.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -51,6 +53,7 @@ void DialogDebugOptions::translate() {
         ::DOT_DOT_DOT);
     ui->checkBoxBB->setText(RPM::translate(Translations::SHOW_COLLISIONS_BB));
     ui->checkBoxShowFPS->setText(RPM::translate(Translations::SHOW_FPS));
+    ui->pushButtonSyncMapObjects->setText(RPM::translate(Translations::SYNCHRONIZE_MAP_OBJECTS));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -69,4 +72,17 @@ void DialogDebugOptions::on_checkBoxBB_toggled(bool checked) {
 void DialogDebugOptions::on_checkBoxShowFPS_toggled(bool checked)
 {
     RPM::get()->project()->gameDatas()->systemDatas()->setShowFPS(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogDebugOptions::on_pushButtonSyncMapObjects_clicked() {
+    Map *map = RPM::get()->project()->currentMap(true);
+    if (map != nullptr) {
+        map->syncObjects();
+        MainWindow::get()->on_actionSave_triggered();
+        MainWindow::get()->updateTextures();
+        QMessageBox::information(nullptr, RPM::translate(Translations::SUCCESS),
+            RPM::translate(Translations::SUCCESS) + "!");
+    }
 }

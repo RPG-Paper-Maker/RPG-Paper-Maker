@@ -1928,5 +1928,6 @@
 	"sapphire.necklace.description": "Un beau collier de saphir",
 	"key.description": "Une clé à utiliser sur une porte",
 	"this.event.only.triggered.hero": "cet évènement ne peut être déclenché que par le Héro",
-	"open.br.folder": "Ouvrir le dossier BR"
+	"open.br.folder": "Ouvrir le dossier BR",
+	"synchronize.map.objects": "Synchroniser les objects de la carte"
 }
