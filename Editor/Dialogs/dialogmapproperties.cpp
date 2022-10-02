@@ -46,6 +46,9 @@ DialogMapProperties::~DialogMapProperties()
 
 void DialogMapProperties::initialize() {
 
+    // ID
+    ui->labelID->setText("ID: " + m_mapProperties.idToString());
+
     // Tileset
     SuperListItem::fillComboBox(ui->comboBoxTileset, RPM::get()->project()
         ->gameDatas()->tilesetsDatas()->model());
