@@ -117,6 +117,7 @@ void Common::writeOtherJSON(QString path, const QJsonObject &obj, QJsonDocument
 {
     QFile saveFile(path);
     if (!saveFile.open(QIODevice::WriteOnly)) {
+        Common::writeOtherJSON(path, obj, format);
         return;
     }
     QJsonDocument saveDoc(obj);
@@ -127,7 +128,8 @@ void Common::writeOtherJSON(QString path, const QJsonObject &obj, QJsonDocument
     QByteArray saveDatas;
     QFile loadFile(path);
     loadFile.open(QIODevice::ReadOnly);
-    bool ok = loadFile.readAll().startsWith('{');
+    saveDatas = loadFile.readAll();
+    bool ok = saveDatas.startsWith('{') && saveDatas.endsWith('}');
     loadFile.close();
     if (!ok)
     {

@@ -14,7 +14,8 @@
 		"Add troop in list Team/Reserve/Hidden (change statistics, status etc)",
 		"Command move object:  1 to hero is also moving in diagonal if possible",
 		"File > Open BR folder",
-        "Debug options: button to synchronize map objects if object linking issue still happening"
+        "Debug options: button to synchronize map objects if object linking issue still happening",
+        "Display ID of the map in map properties"
 	],
     "bugs": [
     	"Tileset picture not displayed correctly when switching selection",
@@ -32,7 +33,8 @@
     	"Command condition: if test variable < or >, text is not showing completely",
     	"Missing collisions on some autotiles/walls/3D objects",
     	"When moving an event in an object events list, the reaction tabs are not updated",
-        "Objects listing issue when using teleport command object on a not saved map"
+        "Objects listing issue when using teleport command object on a not saved map",
+        "Try fix rare corrupted JSON issue"
     ],
     "finished": [
     	2,
@@ -46,6 +48,7 @@
     	2,
     	2,
     	2,
+        2,
         2,
 
     	2,
@@ -63,6 +66,7 @@
     	2,
     	2,
     	2,
+        2,
         2
     ]
 }
