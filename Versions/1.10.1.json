@@ -21,7 +21,7 @@
     	"Error window for pictures undefined in some specific cases",
     	"Screen resolution: issue time currency window in main menu",
     	"Screen resolution: icons issues for skills/items menus",
-    	"Enter a name wrong menu position",
+    	"Command enter a name wrong menu position",
     	"Mountain issue blocked with high square blocks in particular situation",
     	"Collisions not working with two following slopes down",
     	"Terrain value issue when teleporting object",
@@ -30,9 +30,11 @@
     	"Command move object / battle effect: html balises visible in some cases",
     	"Command condition: if test variable < or >, text is not showing completely",
     	"Missing collisions on some autotiles/walls/3D objects",
-    	"When moving an event in an object events list, the reaction tabs are not updated"
+    	"When moving an event in an object events list, the reaction tabs are not updated",
+        "Objects listing issue when using teleport command object on a not saved map"
     ],
     "finished": [
+    	2,
     	2,
     	2,
     	2,
@@ -58,6 +60,7 @@
     	2,
     	2,
     	2,
-    	2
+    	2,
+        2
     ]
 }

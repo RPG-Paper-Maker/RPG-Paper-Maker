@@ -516,24 +516,13 @@ void MapObjects::paintSquares(){
 
 void MapObjects::read(const QJsonObject & json){
     QJsonArray tab = json["list"].toArray();
-    int changed = false;
-    Map *currentMap = RPM::get()->project()->currentMap(true);
     for (int i = 0; i < tab.size(); i++) {
         QJsonObject objHash = tab.at(i).toObject();
         Position p;
         p.read(objHash["k"].toArray());
         SystemCommonObject* o = new SystemCommonObject;
         o->read(objHash["v"].toObject());
-        if (currentMap != nullptr && (!RPM::isInConfig || RPM::isInObjectConfig))
-        {
-             changed |= currentMap->syncObjects(o, p);
-        }
         m_all.insert(p, o);
-    }
-    if (changed && currentMap != nullptr && (!RPM::isInConfig || RPM::isInObjectConfig))
-    {
-        currentMap->writeObjects(true);
-        currentMap->setToNotSaved();
     }
 }
 
