@@ -1197,12 +1197,12 @@ void MainWindow::updateBackup() {
         index = list.size();
 
         // Do backup
-        QString folderBackup = QString::number(index + 1) + "~" + Common
+        QString folderBackup = QString::number(index + 1) + "-" + Common
             ::getFormatNumber(QDateTime::currentDateTime().date().day(), 2) +
             RPM::DASH + Common::getFormatNumber(QDateTime::currentDateTime()
             .date().month(), 2) + RPM::DASH + Common::getFormatNumber(QDateTime
             ::currentDateTime().date().year()) + RPM::DASH + Common
-            ::getFormatNumber(QTime::currentTime().hour(), 2) + RPM::COLON +
+            ::getFormatNumber(QTime::currentTime().hour(), 2) + "h" +
             Common::getFormatNumber(QTime::currentTime().minute(), 2);
         dir.mkdir(folderBackup);
         Common::copyPath(Common::pathCombine(project->pathCurrentProjectApp(),
