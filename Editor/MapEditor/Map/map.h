@@ -33,7 +33,7 @@ class Map : protected QOpenGLFunctions, QObject
 {
 public:
     Map();
-    Map(int id);
+    Map(int id, bool needTextures = true);
     Map(MapProperties* properties, SystemDetection *detection);
     virtual ~Map();
     MapProperties* mapProperties() const;

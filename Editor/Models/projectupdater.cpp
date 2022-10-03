@@ -24,13 +24,13 @@
 #include "systemskill.h"
 #include "commandmovekind.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 27;
+const int ProjectUpdater::incompatibleVersionsCount = 28;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
      "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0", "1.6.2",
     "1.6.3", "1.6.4", "1.7.0", "1.7.3", "1.8.0", "1.8.3", "1.9.0", "1.9.1",
-    "1.9.2", "1.9.3", "1.10.0"};
+    "1.9.2", "1.9.3", "1.10.0", "1.10.1"};
 
 // -------------------------------------------------------
 //
@@ -1909,5 +1909,15 @@ void ProjectUpdater::updateVersion_1_10_0()
                 statistic->pictureBarID()->setId(3);
             }
         }
+    }
+}
+
+void ProjectUpdater::updateVersion_1_10_1()
+{
+    QJsonObject obj;
+    for (int i = 0, l = m_listMapProperties.size(); i < l; i++) {
+        Map map(m_listMapProperties.at(i)["id"].toInt(), false);
+        map.syncObjects();
+        map.writeObjects();
     }
 }

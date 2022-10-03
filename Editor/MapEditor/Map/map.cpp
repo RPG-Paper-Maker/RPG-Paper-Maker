@@ -41,7 +41,7 @@ Map::Map() :
 
 }
 
-Map::Map(int id) :
+Map::Map(int id, bool needTextures) :
     m_mapPortions(nullptr),
     m_cursor(nullptr),
     m_skybox(nullptr),
@@ -84,7 +84,9 @@ Map::Map(int id) :
     m_squareSize = RPM::get()->getSquareSize();
 
     // Loading textures
-    loadTextures();
+    if (needTextures) {
+        loadTextures();
+    }
 }
 
 Map::Map(MapProperties* properties, SystemDetection *detection) :
@@ -413,15 +415,17 @@ void Map::loadPortionThread(MapPortion* mapPortion, QString &path)
         mapPortion->setDetection(m_detection);
         mapPortion->initializeDetection();
     }
-    mapPortion->initializeVertices(m_squareSize, m_textureTileset,
-        m_texturesAutotiles, m_texturesMountains, m_texturesCharacters,
-        m_texturesSpriteWalls, nullptr, nullptr, nullptr);
-    mapPortion->updateEmpty();
-    if (!mapPortion->isEmpty()) {
-        mapPortion->initializeGL(m_programStatic, m_programFaceSprite);
-        if (m_programStatic != nullptr && m_programFaceSprite != nullptr)
-        {
-            mapPortion->updateGL();
+    if (m_textureTileset != nullptr) {
+        mapPortion->initializeVertices(m_squareSize, m_textureTileset,
+            m_texturesAutotiles, m_texturesMountains, m_texturesCharacters,
+            m_texturesSpriteWalls, nullptr, nullptr, nullptr);
+        mapPortion->updateEmpty();
+        if (!mapPortion->isEmpty()) {
+            mapPortion->initializeGL(m_programStatic, m_programFaceSprite);
+            if (m_programStatic != nullptr && m_programFaceSprite != nullptr)
+            {
+                mapPortion->updateGL();
+            }
         }
     }
 }
