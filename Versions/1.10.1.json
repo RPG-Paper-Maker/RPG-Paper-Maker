@@ -15,7 +15,8 @@
 		"Command move object:  1 to hero is also moving in diagonal if possible",
 		"File > Open BR folder",
         "Debug options: button to synchronize map objects if object linking issue still happening",
-        "Display ID of the map in map properties"
+        "Display ID of the map in map properties",
+        "BoundingBoxes: show detections"
 	],
     "bugs": [
     	"Tileset picture not displayed correctly when switching selection",
@@ -34,7 +35,9 @@
     	"Missing collisions on some autotiles/walls/3D objects",
     	"When moving an event in an object events list, the reaction tabs are not updated",
         "Objects listing issue when using teleport command object on a not saved map",
-        "Try fix rare corrupted JSON issue"
+        "Try fix rare corrupted JSON issue",
+        "Backups not working for Windows",
+        "Command delete object from map: if try to delete a deleted object, it deletes the hero"
     ],
     "finished": [
     	2,
@@ -48,6 +51,7 @@
     	2,
     	2,
     	2,
+        2,
         2,
         2,
 
@@ -66,6 +70,8 @@
     	2,
     	2,
     	2,
+        2,
+        2,
         2,
         2
     ]
