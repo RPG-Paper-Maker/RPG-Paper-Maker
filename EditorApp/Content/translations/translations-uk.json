@@ -1926,5 +1926,8 @@
     "dungeon.mines":"Підземелля / шахти",
     "sapphire.ring.description":"Красива каблучка з сапфіром",
     "sapphire.necklace.description":"Красиве намисто з сапфіром",
-    "key.description":"Ключ для дверей"
+    "key.description":"Ключ для дверей",
+    "this.event.only.triggered.hero": "цю подію може спровокувати лише Герой",
+	"open.br.folder": "Відкрийте папку BR",
+	"synchronize.map.objects": "Синхронізація об'єктів карти"
 }

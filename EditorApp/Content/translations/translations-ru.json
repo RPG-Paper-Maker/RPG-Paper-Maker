@@ -1926,5 +1926,8 @@
     "dungeon.mines":"Подземелье/шахты",
     "sapphire.ring.description":"Красивое сапфировое кольцо",
     "sapphire.necklace.description":"Красивое сапфировое колье",
-    "key.description":"Ключ для использования на двери"
+    "key.description":"Ключ для использования на двери",
+    "this.event.only.triggered.hero": "это событие может быть вызвано только героем",
+	"open.br.folder": "Откройте папку БР",
+	"synchronize.map.objects": "Синхронизировать объекты карты"
 }

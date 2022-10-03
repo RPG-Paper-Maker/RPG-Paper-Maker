@@ -1926,5 +1926,8 @@
     "dungeon.mines":"地牢/地雷",
     "sapphire.ring.description":"一個漂亮的藍寶石戒指",
     "sapphire.necklace.description":"一條美麗的藍寶石項鍊",
-    "key.description":"在門上使用的鑰匙"
+    "key.description":"在門上使用的鑰匙",
+    "this.event.only.triggered.hero": "此事件只能由英雄觸發",
+    "open.br.folder": "打開 BR 文件夾",
+    "synchronize.map.objects": "同步地圖對象"
 }

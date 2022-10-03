@@ -1926,5 +1926,8 @@
     "dungeon.mines":"Masmorra / minas",
     "sapphire.ring.description":"Um lindo anel de safira",
     "sapphire.necklace.description":"Um lindo colar de safira",
-    "key.description":"Uma chave para usar em uma porta"
+    "key.description":"Uma chave para usar em uma porta",
+    "this.event.only.triggered.hero": "este evento só pode ser acionado pelo Herói",
+	"open.br.folder": "Abra a pasta BR",
+	"synchronize.map.objects": "Sincronizar objetos de mapa"
 }

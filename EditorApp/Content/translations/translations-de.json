@@ -1926,5 +1926,8 @@
     "dungeon.mines":"Kerker / Minen",
     "sapphire.ring.description":"Ein wunderschöner Saphirring",
     "sapphire.necklace.description":"Eine wunderschöne Saphirkette",
-    "key.description":"Ein Schlüssel für eine Tür"
+    "key.description":"Ein Schlüssel für eine Tür",
+    "this.event.only.triggered.hero": "Dieses Ereignis kann nur vom Helden ausgelöst werden",
+	"open.br.folder": "Öffnen Sie den BR-Ordner",
+	"synchronize.map.objects": "Kartenobjekte synchronisieren"
 }

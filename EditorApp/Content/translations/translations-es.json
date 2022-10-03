@@ -1928,5 +1928,8 @@
     "dungeon.mines":"Mazmorra / minas",
     "sapphire.ring.description":"Un hermoso anillo de zafiro",
     "sapphire.necklace.description":"Un hermoso collar de zafiros.",
-    "key.description":"Una llave para usar en una puerta."
+    "key.description":"Una llave para usar en una puerta.",
+    "this.event.only.triggered.hero": "este evento solo puede ser activado por el héroe",
+	"open.br.folder": "Abrir carpeta BR",
+	"synchronize.map.objects": "Sincronizar objetos de mapa"
 }

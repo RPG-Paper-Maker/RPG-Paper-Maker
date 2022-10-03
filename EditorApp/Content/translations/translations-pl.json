@@ -1928,5 +1928,8 @@
     "dungeon.mines":"Lochy / kopalnie",
     "sapphire.ring.description":"Piękny pierścionek z szafirem",
     "sapphire.necklace.description":"Piękny szafirowy naszyjnik",
-    "key.description":"Klucz do użycia na drzwiach"
+    "key.description":"Klucz do użycia na drzwiach",
+    "this.event.only.triggered.hero": "to wydarzenie może być wywołane tylko przez Bohatera",
+	"open.br.folder": "Otwórz folder BR",
+	"synchronize.map.objects": "Synchronizuj obiekty mapy"
 }

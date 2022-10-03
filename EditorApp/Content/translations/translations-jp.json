@@ -1926,5 +1926,8 @@
     "dungeon.mines":"ダンジョン・鉱山",
     "sapphire.ring.description":"美しいサファイアリング",
     "sapphire.necklace.description":"美しいサファイアのネックレス",
-    "key.description":"ドアに使用する鍵"
+    "key.description":"ドアに使用する鍵",
+    "this.event.only.triggered.hero": "このイベントはヒーローのみがトリガーできます",
+    "open.br.folder": "BRフォルダを開く",
+    "synchronize.map.objects": "マップ オブジェクトの同期"
 }
