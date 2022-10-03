@@ -7118,6 +7118,11 @@
                             },
                             {
                                 "repo": "Game-Scripts-Build",
+                                "source": "Scripts/System/Scene/Confirm.js",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/Confirm.js"
+                            },
+                            {
+                                "repo": "Game-Scripts-Build",
                                 "source": "Scripts/System/Scene/SaveGame.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/SaveGame.d.ts"
                             },
@@ -7175,6 +7180,11 @@
                                 "repo": "Game-Scripts-Build",
                                 "source": "Scripts/System/Scene/Menu.d.ts",
                                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/Menu.d.ts"
+                            },
+                            {
+                                "repo": "Game-Scripts-Build",
+                                "source": "Scripts/System/Scene/Confirm.d.ts",
+                                "target": "Engine/Content/basic/Content/Datas/Scripts/System/Scene/Confirm.d.ts"
                             },
                             {
                                 "repo": "Game-Scripts-Build",

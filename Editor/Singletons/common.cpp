@@ -129,7 +129,7 @@ void Common::writeOtherJSON(QString path, const QJsonObject &obj, QJsonDocument
     QFile loadFile(path);
     loadFile.open(QIODevice::ReadOnly);
     saveDatas = loadFile.readAll();
-    bool ok = saveDatas.startsWith('{') && saveDatas.endsWith('}');
+    bool ok = saveDatas.startsWith('{');
     loadFile.close();
     if (!ok)
     {
