@@ -249,6 +249,7 @@ void MainWindow::enableAll(bool b){
     ui->actionSave->setEnabled(b);
     ui->actionSave_all->setEnabled(b);
     ui->actionOpen_project_folder->setEnabled(b);
+    ui->actionOpen_BR_folder->setEnabled(b);
     ui->actionExport_standalone->setEnabled(b);
     ui->actionClose_project->setEnabled(b);
     ui->actionUndo->setEnabled(b);
@@ -296,6 +297,7 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionSave->setEnabled(true);
     ui->actionSave_all->setEnabled(true);
     ui->actionOpen_project_folder->setEnabled(true);
+    ui->actionOpen_BR_folder->setEnabled(true);
     ui->actionExport_standalone->setEnabled(true);
     ui->actionClose_project->setEnabled(true);
     ui->actionUndo->setEnabled(true);
