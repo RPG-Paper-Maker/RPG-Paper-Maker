@@ -865,8 +865,8 @@ void SystemDatas::setDefaultTranslations()
     SuperListItem::setModelItemName(m_modelFontSizes, 4, RPM::translate(Translations::VERY_BIG));
     SuperListItem::setModelItemName(m_modelFontNames, 0, RPM::translate(Translations::DEFAULT));
     SuperListItem::setModelItemName(m_modelSkyBoxes, 0, RPM::translate(Translations::CLOUDS));
-    SuperListItem::setModelItemName(m_modelSkyBoxes, 0, RPM::translate(Translations::EVENING));
-    SuperListItem::setModelItemName(m_modelSkyBoxes, 0, RPM::translate(Translations::NIGHT));
+    SuperListItem::setModelItemName(m_modelSkyBoxes, 1, RPM::translate(Translations::EVENING));
+    SuperListItem::setModelItemName(m_modelSkyBoxes, 2, RPM::translate(Translations::NIGHT));
 
 }
 
