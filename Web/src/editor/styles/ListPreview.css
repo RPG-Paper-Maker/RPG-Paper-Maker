@@ -1,0 +1,37 @@
+#list-objects {
+    position: relative;
+}
+
+#list-shaders {
+    position: relative;
+}
+
+.list-objects-card:nth-child(2n) {
+    background-color: #36363648;
+}
+
+.list-objects-card:nth-child(2n+1) {
+    background-color: #6161613d;
+}
+
+.list-objects-card:hover {
+    background-color: #91919148;
+}
+
+.list-objects-canvas {
+    width: 100px;
+    height: 100px;
+}
+
+.list-objects-card > * {
+    z-index: 1;
+}
+
+.canvas-list-objects {
+    position: absolute;
+    top: 0;
+    z-index: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}

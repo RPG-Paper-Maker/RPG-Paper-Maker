@@ -1,0 +1,8 @@
+.tab-content {
+    height: 100%;
+    overflow: auto;
+    overflow-y: overlay;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}

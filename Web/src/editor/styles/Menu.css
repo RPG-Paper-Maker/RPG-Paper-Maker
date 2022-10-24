@@ -1,0 +1,15 @@
+.custom-menu {
+    background-color: var(--darker-bg-color);
+    color: var(--main-color);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.custom-menu-horizontal {
+    display: flex;
+    flex-direction: row;
+}

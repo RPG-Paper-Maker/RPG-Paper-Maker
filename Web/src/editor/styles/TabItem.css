@@ -1,0 +1,9 @@
+.tab-item {
+    cursor: pointer;
+    padding: 5px;
+    background-color: grey;
+}
+
+.tab-item-active {
+    background-color: darkgrey;
+}

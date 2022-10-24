@@ -56,3 +56,5 @@ compile_commands.json
 
 # RPG-Paper-Maker-specific
 /mods
+
+/Web/node_modules

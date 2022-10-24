@@ -1,0 +1,44 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Climbing system",
+        "3D objects: spheres, cones, cylinders, capsules",
+        "Objects 3D: choose location centered or grounded",
+        "Orthographic camera option",
+        "Command move object: draw a way preview",
+        "Command stop sound",
+        "Command display / hide an enemy",
+        "Command transform an enemy",
+        "Statistic: add option to display damage name + currency name + variable name",
+        "Loading bar while creating a project / loading map",
+        "Battle map: command start a battle option default battle map and add it in tileset",
+        "Characterisits: assign element",
+        "Languages: dictionary with all missing words in game",
+        "New example game",
+        "Monster: status in condition reaction monster",
+        "Objects: option to set centerX/centerZ/angle values"
+	],
+    "bugs": [
+
+    ],
+    "finished": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ]
+}
