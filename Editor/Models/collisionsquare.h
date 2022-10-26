@@ -14,6 +14,7 @@
 
 #include <QRect>
 #include "serializable.h"
+#include "picturekind.h"
 
 // -------------------------------------------------------
 //
@@ -32,7 +33,9 @@ public:
     static const QString JSON_TOP;
     static const QString JSON_BOT;
     static const QString JSON_TERRAIN;
+    static const QString JSON_CLIMBING;
     static const int DEFAULT_TERRAIN;
+    static const bool DEFAULT_CLIMBING;
     static const int MIN_TERRAIN;
     static const int MAX_TERRAIN;
 
@@ -47,8 +50,10 @@ public:
     bool top() const;
     bool bot() const;
     int terrain() const;
+    bool climbing() const;
 
     bool hasAllDirections() const;
+    bool checkStillExisting(QPoint& hovered, int pictureID, PictureKind pictureKind);
     void setDefaultPraticable();
     void revertAllDirections();
     void revertTop();
@@ -57,6 +62,7 @@ public:
     void revertLeft();
     void decreaseTerrain();
     void increaseTerrain();
+    void toggleClimbing();
     CollisionSquare * createCopy();
 
     virtual void read(const QJsonObject &json);
@@ -69,6 +75,7 @@ protected:
     bool m_top;
     bool m_bot;
     int m_terrain;
+    bool m_climbing;
 };
 
 inline uint qHash(const QPoint &key) {

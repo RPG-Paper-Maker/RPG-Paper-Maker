@@ -9,21 +9,20 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#ifndef WIDGETTILESETTERRAIN_H
-#define WIDGETTILESETTERRAIN_H
+#ifndef WIDGETTILESETCLIMBING_H
+#define WIDGETTILESETCLIMBING_H
 
 #include <QWidget>
 #include "systempicture.h"
 
-class WidgetTilesetTerrain : public QWidget
+class WidgetTilesetClimbing : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WidgetTilesetTerrain(QWidget *parent = nullptr);
+    explicit WidgetTilesetClimbing(QWidget *parent = nullptr);
 
     void updateImage(SystemPicture* picture, PictureKind kind);
-    void updateImageSpecial(QImage& editedImage, SystemPicture *picture,
-        PictureKind kind);
+    void updateImageSpecial(QImage& editedImage, SystemPicture *picture, PictureKind kind);
     void updateImageGeneral();
     void getMousePoint(QPoint& point, QMouseEvent *event);
     void getCenterRect(QRect& rect, int i, int j);
@@ -39,6 +38,9 @@ protected:
 
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *);
+
+signals:
+
 };
 
-#endif // WIDGETTILESETTERRAIN_H
+#endif // WIDGETTILESETCLIMBING_H

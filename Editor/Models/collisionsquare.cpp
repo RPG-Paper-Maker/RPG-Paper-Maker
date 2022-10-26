@@ -19,7 +19,9 @@ const QString CollisionSquare::JSON_RIGHT = "r";
 const QString CollisionSquare::JSON_TOP = "t";
 const QString CollisionSquare::JSON_BOT = "b";
 const QString CollisionSquare::JSON_TERRAIN = "terrain";
+const QString CollisionSquare::JSON_CLIMBING = "c";
 const int CollisionSquare::DEFAULT_TERRAIN = 0;
+const bool CollisionSquare::DEFAULT_CLIMBING = false;
 const int CollisionSquare::MIN_TERRAIN = 0;
 const int CollisionSquare::MAX_TERRAIN = 99;
 
@@ -41,7 +43,8 @@ CollisionSquare::CollisionSquare(QRectF *rect) :
     m_right(true),
     m_top(true),
     m_bot(true),
-    m_terrain(DEFAULT_TERRAIN)
+    m_terrain(DEFAULT_TERRAIN),
+    m_climbing(DEFAULT_CLIMBING)
 {
 
 }
@@ -92,6 +95,11 @@ int CollisionSquare::terrain() const
     return m_terrain;
 }
 
+bool CollisionSquare::climbing() const
+{
+    return m_climbing;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -101,6 +109,20 @@ int CollisionSquare::terrain() const
 bool CollisionSquare::hasAllDirections() const
 {
     return m_left && m_right && m_top && m_bot;
+}
+
+// -------------------------------------------------------
+
+bool CollisionSquare::checkStillExisting(QPoint& point, int pictureID, PictureKind pictureKind)
+{
+    if (this->hasAllDirections() && this->rect() == nullptr && this->terrain()
+        == DEFAULT_TERRAIN && this->climbing() == DEFAULT_CLIMBING)
+    {
+        SystemPicture::getByID(pictureID, pictureKind)->collisions()->remove(point);
+        delete this;
+        return true;
+    }
+    return false;
 }
 
 // -------------------------------------------------------
@@ -172,6 +194,11 @@ void CollisionSquare::increaseTerrain()
     }
 }
 
+void CollisionSquare::toggleClimbing()
+{
+    m_climbing = !m_climbing;
+}
+
 // -------------------------------------------------------
 
 CollisionSquare * CollisionSquare::createCopy()
@@ -188,6 +215,8 @@ CollisionSquare * CollisionSquare::createCopy()
     collision->m_right = m_right;
     collision->m_bot = m_bot;
     collision->m_left = m_left;
+    collision->m_terrain = m_terrain;
+    collision->m_climbing = m_climbing;
     return collision;
 }
 
@@ -241,6 +270,9 @@ void CollisionSquare::read(const QJsonObject &json)
     {
         m_terrain = json[JSON_TERRAIN].toInt();
     }
+    if (json.contains(JSON_CLIMBING)) {
+        m_climbing = json[JSON_CLIMBING].toBool();
+    }
 }
 
 // -------------------------------------------------------
@@ -279,5 +311,8 @@ void CollisionSquare::write(QJsonObject &json) const
     if (m_terrain != DEFAULT_TERRAIN)
     {
         json[JSON_TERRAIN] = m_terrain;
+    }
+    if (m_climbing != DEFAULT_CLIMBING) {
+        json[JSON_CLIMBING] = m_climbing;
     }
 }

@@ -45,6 +45,7 @@ HEADERS += \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgetpreviewtroop.h \
     CustomWidgets/widgetsliderprogression.h \
+    CustomWidgets/widgettilesetclimbing.h \
     CustomWidgets/widgettilesetterrain.h \
     CustomWidgets/widgettilesettexture.h \
     CustomWidgets/widgettreestructure.h \
@@ -493,6 +494,7 @@ SOURCES += \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgetpreviewtroop.cpp \
     CustomWidgets/widgetsliderprogression.cpp \
+    CustomWidgets/widgettilesetclimbing.cpp \
     CustomWidgets/widgettilesetterrain.cpp \
     CustomWidgets/widgettilesettexture.cpp \
     CustomWidgets/widgettreestructure.cpp \

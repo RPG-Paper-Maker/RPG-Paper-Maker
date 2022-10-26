@@ -55,6 +55,7 @@ void WidgetTilesetSettings::updateImage(SystemPicture* picture) {
     ui->widgetTilesetPraticable->updateImage(picture, m_kind);
     ui->widgetTilesetDirection->updateImage(picture, m_kind);
     ui->widgetTilesetTerrain->updateImage(picture, m_kind);
+    ui->widgetTilesetClimbing->updateImage(picture, m_kind);
     ui->checkBoxRepeat->setChecked(picture->repeatCollisions());
 }
 
@@ -67,6 +68,7 @@ void WidgetTilesetSettings::updateImageSpecial(QImage& editedImage,
     ui->widgetTilesetPraticable->updateImageSpecial(editedImage, picture, m_kind);
     ui->widgetTilesetDirection->updateImageSpecial(editedImage, picture, m_kind);
     ui->widgetTilesetTerrain->updateImageSpecial(editedImage, picture, m_kind);
+    ui->widgetTilesetClimbing->updateImageSpecial(editedImage, picture, m_kind);
     ui->checkBoxRepeat->setChecked(picture->repeatCollisions());
 }
 
@@ -123,6 +125,8 @@ void WidgetTilesetSettings::translate()
     ui->groupBoxZoom->setTitle(RPM::translate(Translations::ZOOM));
     ui->tabWidget->setTabText(0, RPM::translate(Translations::PRATICABLE));
     ui->tabWidget->setTabText(1, RPM::translate(Translations::DIRECTIONS));
+    ui->tabWidget->setTabText(2, RPM::translate(Translations::TERRAIN));
+    //ui->tabWidget->setTabText(1, RPM::translate(Translations::CLIMBING));
 }
 
 // -------------------------------------------------------

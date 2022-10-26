@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#include "widgettilesetterrain.h"
+#include "widgettilesetclimbing.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -18,7 +18,7 @@
 //
 // -------------------------------------------------------
 
-WidgetTilesetTerrain::WidgetTilesetTerrain(QWidget *parent) :
+WidgetTilesetClimbing::WidgetTilesetClimbing(QWidget *parent) :
     QWidget(parent),
     m_pictureID(-1),
     m_kind(PictureKind::Tilesets)
@@ -32,7 +32,7 @@ WidgetTilesetTerrain::WidgetTilesetTerrain(QWidget *parent) :
 //
 // -------------------------------------------------------
 
-void WidgetTilesetTerrain::updateImage(SystemPicture *picture, PictureKind kind)
+void WidgetTilesetClimbing::updateImage(SystemPicture *picture, PictureKind kind)
 {
     QString path = picture->getPath();
     m_image = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) : QImage();
@@ -43,7 +43,7 @@ void WidgetTilesetTerrain::updateImage(SystemPicture *picture, PictureKind kind)
 
 // -------------------------------------------------------
 
-void WidgetTilesetTerrain::updateImageSpecial(QImage &editedImage, SystemPicture
+void WidgetTilesetClimbing::updateImageSpecial(QImage &editedImage, SystemPicture
     *picture, PictureKind kind)
 {
     m_image = editedImage;
@@ -54,7 +54,7 @@ void WidgetTilesetTerrain::updateImageSpecial(QImage &editedImage, SystemPicture
 
 // -------------------------------------------------------
 
-void WidgetTilesetTerrain::updateImageGeneral()
+void WidgetTilesetClimbing::updateImageGeneral()
 {
     if (!m_image.isNull())
     {
@@ -68,7 +68,7 @@ void WidgetTilesetTerrain::updateImageGeneral()
 
 // -------------------------------------------------------
 
-void WidgetTilesetTerrain::getMousePoint(QPoint &point, QMouseEvent *event)
+void WidgetTilesetClimbing::getMousePoint(QPoint &point, QMouseEvent *event)
 {
     point = event->pos();
     point.setX((int)(point.x() / ((float) RPM::BASIC_SQUARE_SIZE)));
@@ -77,7 +77,7 @@ void WidgetTilesetTerrain::getMousePoint(QPoint &point, QMouseEvent *event)
 
 // -------------------------------------------------------
 
-void WidgetTilesetTerrain::getCenterRect(QRect &rect, int i, int j)
+void WidgetTilesetClimbing::getCenterRect(QRect &rect, int i, int j)
 {
     rect.setX((i * RPM::BASIC_SQUARE_SIZE) + (RPM::BASIC_SQUARE_SIZE / 2) - 3);
     rect.setY((j * RPM::BASIC_SQUARE_SIZE) + (RPM::BASIC_SQUARE_SIZE / 2) - 3);
@@ -87,7 +87,7 @@ void WidgetTilesetTerrain::getCenterRect(QRect &rect, int i, int j)
 
 // -------------------------------------------------------
 
-bool WidgetTilesetTerrain::isInsideRect(int dx, int dy, int x, int y, QPoint
+bool WidgetTilesetClimbing::isInsideRect(int dx, int dy, int x, int y, QPoint
     &mousePoint) const
 {
     QRect rect((RPM::BASIC_SQUARE_SIZE / 2) + dx + x - 3, (RPM::BASIC_SQUARE_SIZE
@@ -97,7 +97,7 @@ bool WidgetTilesetTerrain::isInsideRect(int dx, int dy, int x, int y, QPoint
 
 // -------------------------------------------------------
 
-void WidgetTilesetTerrain::updateHovered(QPoint &hovered, QPoint &point, int dx,
+void WidgetTilesetClimbing::updateHovered(QPoint &hovered, QPoint &point, int dx,
     int dy, int x, int y, QPoint &mousePoint)
 {
     hovered = this->isInsideRect(dx, dy, x, y, mousePoint) ? point : QPoint(-1, -1);
@@ -105,7 +105,7 @@ void WidgetTilesetTerrain::updateHovered(QPoint &hovered, QPoint &point, int dx,
 
 // -------------------------------------------------------
 
-CollisionSquare * WidgetTilesetTerrain::activateHovered(QPoint& hovered) {
+CollisionSquare * WidgetTilesetClimbing::activateHovered(QPoint& hovered) {
     if (hovered.x() != -1 && hovered.y() != -1) {
         QHash<QPoint, CollisionSquare*>* squares = SystemPicture::getByID(
             m_pictureID, m_kind)->collisions();
@@ -126,7 +126,7 @@ CollisionSquare * WidgetTilesetTerrain::activateHovered(QPoint& hovered) {
 //
 // -------------------------------------------------------
 
-void WidgetTilesetTerrain::mousePressEvent(QMouseEvent *event)
+void WidgetTilesetClimbing::mousePressEvent(QMouseEvent *event)
 {
     QPoint point;
     this->getMousePoint(point, event);
@@ -140,13 +140,7 @@ void WidgetTilesetTerrain::mousePressEvent(QMouseEvent *event)
             collision = new CollisionSquare;
             squares->insert(point, collision);
         }
-        if (event->button() == Qt::MouseButton::LeftButton)
-        {
-            collision->increaseTerrain();
-        } else if (event->button() == Qt::MouseButton::RightButton)
-        {
-            collision->decreaseTerrain();
-        }
+        collision->toggleClimbing();
         collision->checkStillExisting(point, m_pictureID, m_kind);
     }
     this->repaint();
@@ -154,7 +148,7 @@ void WidgetTilesetTerrain::mousePressEvent(QMouseEvent *event)
 
 // -------------------------------------------------------
 
-void WidgetTilesetTerrain::paintEvent(QPaintEvent *)
+void WidgetTilesetClimbing::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     QHash<QPoint, CollisionSquare*>* squares = SystemPicture::getByID(m_pictureID,
@@ -183,11 +177,11 @@ void WidgetTilesetTerrain::paintEvent(QPaintEvent *)
         for (int j = 0; j < m_image.height() / RPM::BASIC_SQUARE_SIZE; j++)
         {
             collision = squares->value(QPoint(i, j));
-            int terrain = CollisionSquare::DEFAULT_TERRAIN;
+            bool climbing = CollisionSquare::DEFAULT_CLIMBING;
             if (collision != nullptr) {
-                terrain = collision->terrain();
+                climbing = collision->climbing();
             }
-            text = QString::number(terrain);
+            text = climbing ? "O" : "X";
             x = i * RPM::BASIC_SQUARE_SIZE + (text.length() == 1 ? 12 : 7);
             y = j * RPM::BASIC_SQUARE_SIZE + 21;
             painter.setPen(penBlack);

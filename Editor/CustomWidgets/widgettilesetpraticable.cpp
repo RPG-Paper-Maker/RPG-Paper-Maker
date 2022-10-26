@@ -462,15 +462,11 @@ void WidgetTilesetPraticable::editCollision() {
 // -------------------------------------------------------
 
 void WidgetTilesetPraticable::deleteCollision() {
-    if (m_selectedCollision->hasAllDirections()) {
-        delete m_selectedCollision;
-        SystemPicture::getByID(m_pictureID, m_kind)->collisions()->remove(
-            m_selectedPoint);
+    m_selectedCollision->setRect(nullptr);
+    if (m_selectedCollision->checkStillExisting(m_selectedPoint, m_pictureID, m_kind)) {
         m_selectedCollision = nullptr;
         m_selectedPoint = QPoint(-1, -1);
     }
-    else
-        m_selectedCollision->setRect(nullptr);
 }
 
 // -------------------------------------------------------

@@ -138,17 +138,6 @@ CollisionSquare* WidgetTilesetDirection::activateHovered(QPoint& hovered) {
 
 // -------------------------------------------------------
 
-void WidgetTilesetDirection::checkStillExisting(QPoint& hovered,
-                                                CollisionSquare* collision)
-{
-    if (collision->hasAllDirections() && collision->rect() == nullptr) {
-        delete collision;
-        SystemPicture::getByID(m_pictureID, m_kind)->collisions()->remove(hovered);
-    }
-}
-
-// -------------------------------------------------------
-
 void WidgetTilesetDirection::drawArrow(QPainter &painter, QPoint& hoveredPoint,
                                        bool arrow, int angle, int dx, int dy,
                                        int i, int j)
@@ -190,27 +179,27 @@ void WidgetTilesetDirection::mousePressEvent(QMouseEvent*) {
     collision = activateHovered(m_hoveredPoint);
     if (collision != nullptr) {
         collision->revertAllDirections();
-        checkStillExisting(m_hoveredPoint, collision);
+        collision->checkStillExisting(m_hoveredPoint, m_pictureID, m_kind);
     }
     collision = activateHovered(m_hoveredTop);
     if (collision != nullptr) {
         collision->revertTop();
-        checkStillExisting(m_hoveredTop, collision);
+        collision->checkStillExisting(m_hoveredTop, m_pictureID, m_kind);
     }
     collision = activateHovered(m_hoveredRight);
     if (collision != nullptr) {
         collision->revertRight();
-        checkStillExisting(m_hoveredRight, collision);
+        collision->checkStillExisting(m_hoveredRight, m_pictureID, m_kind);
     }
     collision = activateHovered(m_hoveredBot);
     if (collision != nullptr) {
         collision->revertBot();
-        checkStillExisting(m_hoveredBot, collision);
+        collision->checkStillExisting(m_hoveredBot, m_pictureID, m_kind);
     }
     collision = activateHovered(m_hoveredLeft);
     if (collision != nullptr) {
         collision->revertLeft();
-        checkStillExisting(m_hoveredLeft, collision);
+        collision->checkStillExisting(m_hoveredLeft, m_pictureID, m_kind);
     }
 
     this->repaint();

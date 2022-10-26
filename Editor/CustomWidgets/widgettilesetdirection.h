@@ -38,7 +38,6 @@ public:
     void updateHovered(QPoint& hovered, QPoint& point, int dx, int dy, int x,
                        int y, QPoint& mousePoint);
     CollisionSquare* activateHovered(QPoint& hovered);
-    void checkStillExisting(QPoint& hovered, CollisionSquare* collision);
     void drawArrow(QPainter& painter, QPoint &hoveredPoint, bool arrow,
                    int angle, int dx, int dy, int i, int j);
 

@@ -155,6 +155,31 @@
          </item>
         </layout>
        </widget>
+       <widget class="QWidget" name="tab_3">
+        <attribute name="title">
+         <string>Climbing</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <widget class="QScrollArea" name="scrollArea_4">
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="WidgetTilesetClimbing" name="widgetTilesetClimbing">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>374</width>
+              <height>247</height>
+             </rect>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_6"/>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </item>
     </layout>
@@ -178,6 +203,12 @@
    <class>WidgetTilesetTerrain</class>
    <extends>QWidget</extends>
    <header>widgettilesetterrain.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetTilesetClimbing</class>
+   <extends>QWidget</extends>
+   <header>widgettilesetclimbing.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
