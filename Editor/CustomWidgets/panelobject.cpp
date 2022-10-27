@@ -336,6 +336,7 @@ void PanelObject::updateStateMoving(SystemState *state) {
 void PanelObject::updateStateOptions(SystemState *state) {
     ui->checkBoxMoveAnimation->setChecked(state->moveAnimation());
     ui->checkBoxStopAnimation->setChecked(state->stopAnimation());
+    ui->checkBoxClimbAnimation->setChecked(state->climbAnimation());
     ui->checkBoxDirectionFix->setChecked(state->directionFix());
     ui->checkBoxThrough->setChecked(state->through());
     ui->checkBoxSetWithCamera->setChecked(state->setWithCamera());
@@ -652,6 +653,12 @@ void PanelObject::on_checkBoxMoveAnimation_toggled(bool checked) {
 
 void PanelObject::on_checkBoxStopAnimation_toggled(bool checked) {
     getSelectedState()->setStopAnimation(checked);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_checkBoxClimbAnimation_toggled(bool checked) {
+    getSelectedState()->setClimbAnimation(checked);
 }
 
 // -------------------------------------------------------

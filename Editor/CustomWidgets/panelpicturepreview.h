@@ -90,6 +90,7 @@ public slots:
     void on_pushButtonDLC_clicked();
     void on_pushButtonExport_clicked();
     void on_checkBoxStopAnimation_toggled(bool checked);
+    void on_checkBoxClimbingAnimation_toggled(bool checked);
 };
 
 class PanelGuidePicturePreview : public QWidget

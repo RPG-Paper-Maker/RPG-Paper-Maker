@@ -35,7 +35,7 @@ public:
     SystemPicture();
     SystemPicture(int i, QString n, bool isBR = false, QString dlc = "", bool
         isMissing = false, PictureKind kind = PictureKind::None, bool
-        isStopAnimation = DEFAULT_IS_STOP_ANIMATION);
+        isStopAnimation = DEFAULT_IS_STOP_ANIMATION, bool isClimbAnimation = false);
     virtual ~SystemPicture();
     void setKind(PictureKind k);
     QHash<QPoint, CollisionSquare*> *collisions();
@@ -43,6 +43,8 @@ public:
     void setRepeatCollisions(bool b);
     bool isStopAnimation() const;
     void setIsStopAnimation(bool isStopAnimation);
+    bool isClimbAnimation() const;
+    void setIsClimbAnimation(bool isClimbAnimation);
 
     static SystemPicture * getByID(int id, PictureKind kind);
     static QString getFolder(PictureKind kind, bool isBR = false, QString dlc =
@@ -78,6 +80,7 @@ protected:
     bool m_repeatCollisions;
     bool m_isMissing;
     bool m_isStopAnimation;
+    bool m_isClimbAnimation;
 };
 
 Q_DECLARE_METATYPE(SystemPicture)

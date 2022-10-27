@@ -386,7 +386,7 @@
                 <item row="2" column="0">
                  <widget class="QCheckBox" name="checkBoxClimbAnimation">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Climb animation</string>

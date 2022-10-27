@@ -30,12 +30,13 @@ SystemPicture::SystemPicture() :
 }
 
 SystemPicture::SystemPicture(int i, QString n, bool isBR, QString dlc, bool
-    isMissing, PictureKind kind, bool isStopAnimation) :
+    isMissing, PictureKind kind, bool isStopAnimation, bool isClimbAnimation) :
     SystemResource(i, n, isBR, dlc),
     m_kind(kind),
     m_repeatCollisions(false),
     m_isMissing(isMissing),
-    m_isStopAnimation(isStopAnimation)
+    m_isStopAnimation(isStopAnimation),
+    m_isClimbAnimation(isClimbAnimation)
 {
 
 }
@@ -94,6 +95,14 @@ bool SystemPicture::isStopAnimation() const
 void SystemPicture::setIsStopAnimation(bool isStopAnimation)
 {
     m_isStopAnimation = isStopAnimation;
+}
+
+bool SystemPicture::isClimbAnimation() const {
+    return m_isClimbAnimation;
+}
+
+void SystemPicture::setIsClimbAnimation(bool isClimbAnimation) {
+    m_isClimbAnimation = isClimbAnimation;
 }
 
 // -------------------------------------------------------
@@ -196,7 +205,7 @@ int SystemPicture::getRows() const
     switch (m_kind)
     {
     case PictureKind::Characters:
-        return 4 + (m_isStopAnimation ? 4 : 0);
+        return 4 + (m_isStopAnimation ? 4 : 0) + (m_isClimbAnimation ? 4 : 0);
     default:
         return 1;
     }
@@ -223,31 +232,6 @@ QString SystemPicture::getLocalPath() const{
     QString folder = getLocalFolder(m_kind);
 
     return Common::pathCombine(folder, name());
-}
-
-// -------------------------------------------------------
-
-SuperListItem* SystemPicture::createCopy() const{
-    SystemPicture* super = new SystemPicture;
-    super->setCopy(*this);
-    return super;
-}
-
-// -------------------------------------------------------
-
-void SystemPicture::setCopy(const SuperListItem &super) {
-    const SystemPicture *picture;
-
-    SystemResource::setCopy(super);
-
-    picture = reinterpret_cast<const SystemPicture *>(&super);
-    m_kind = picture->m_kind;
-    QHash<QPoint, CollisionSquare*>::const_iterator i;
-    for (i = picture->m_collisions.begin(); i != picture->m_collisions.end(); i++) {
-        m_collisions.insert(i.key(), i.value()->createCopy());
-    }
-    m_repeatCollisions = picture->m_repeatCollisions;
-    m_isStopAnimation = picture->m_isStopAnimation;
 }
 
 // -------------------------------------------------------
@@ -375,6 +359,32 @@ void SystemPicture::getIcon(QIcon &icon) {
 
 // -------------------------------------------------------
 
+SuperListItem* SystemPicture::createCopy() const{
+    SystemPicture* super = new SystemPicture;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
+void SystemPicture::setCopy(const SuperListItem &super) {
+    const SystemPicture *picture;
+
+    SystemResource::setCopy(super);
+
+    picture = reinterpret_cast<const SystemPicture *>(&super);
+    m_kind = picture->m_kind;
+    QHash<QPoint, CollisionSquare*>::const_iterator i;
+    for (i = picture->m_collisions.begin(); i != picture->m_collisions.end(); i++) {
+        m_collisions.insert(i.key(), i.value()->createCopy());
+    }
+    m_repeatCollisions = picture->m_repeatCollisions;
+    m_isStopAnimation = picture->m_isStopAnimation;
+    m_isClimbAnimation = picture->m_isClimbAnimation;
+}
+
+// -------------------------------------------------------
+
 void SystemPicture::read(const QJsonObject &json){
     SystemResource::read(json);
 
@@ -396,6 +406,10 @@ void SystemPicture::read(const QJsonObject &json){
     if (json.contains(JSON_IS_STOP_ANIMATION))
     {
         m_isStopAnimation = json[JSON_IS_STOP_ANIMATION].toBool();
+    }
+    if (json.contains("ica"))
+    {
+        m_isClimbAnimation = json["ica"].toBool();
     }
 }
 
@@ -428,5 +442,9 @@ void SystemPicture::write(QJsonObject &json) const{
     if (m_isStopAnimation != DEFAULT_IS_STOP_ANIMATION)
     {
         json[JSON_IS_STOP_ANIMATION] = m_isStopAnimation;
+    }
+    if (m_isClimbAnimation)
+    {
+        json["ica"] = m_isClimbAnimation;
     }
 }

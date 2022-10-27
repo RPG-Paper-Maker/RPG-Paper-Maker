@@ -205,7 +205,7 @@
               <x>0</x>
               <y>0</y>
               <width>221</width>
-              <height>338</height>
+              <height>309</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_3">
@@ -271,6 +271,13 @@
              <widget class="QCheckBox" name="checkBoxStopAnimation">
               <property name="text">
                <string>Stop animation</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QCheckBox" name="checkBoxClimbingAnimation">
+              <property name="text">
+               <string>Climbing animation</string>
               </property>
              </widget>
             </item>

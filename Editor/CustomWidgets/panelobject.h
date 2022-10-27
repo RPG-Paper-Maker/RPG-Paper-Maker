@@ -91,6 +91,7 @@ private slots:
     void on_pushButtonEditRoute_clicked();
     void on_checkBoxMoveAnimation_toggled(bool checked);
     void on_checkBoxStopAnimation_toggled(bool checked);
+    void on_checkBoxClimbAnimation_toggled(bool checked);
     void on_checkBoxDirectionFix_toggled(bool checked);
     void on_checkBoxThrough_toggled(bool checked);
     void on_checkBoxSetWithCamera_toggled(bool checked);

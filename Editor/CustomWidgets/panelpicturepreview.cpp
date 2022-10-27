@@ -204,6 +204,7 @@ void PanelPicturePreview::updateImage(QStandardItem *item) {
             .value<qintptr>());
         if (m_picture != nullptr) {
             ui->checkBoxStopAnimation->setChecked(m_picture->isStopAnimation());
+            ui->checkBoxClimbingAnimation->setChecked(m_picture->isClimbAnimation());
             if (m_picture->id() == -1) {
                 showPictureWidget(true);
                 ui->widgetPreview->setNoneImage();
@@ -395,6 +396,7 @@ void PanelPicturePreview::translate()
     ui->pushButtonDLC->setText(RPM::translate(Translations::IMPORT_DLC_S) + RPM
         ::DOT_DOT_DOT);
     ui->checkBoxStopAnimation->setText(RPM::translate(Translations::STOP_ANIMATION));
+    ui->checkBoxClimbingAnimation->setText(RPM::translate(Translations::CLIMB_ANIMATION));
 }
 
 // -------------------------------------------------------
@@ -528,6 +530,19 @@ void PanelPicturePreview::on_checkBoxStopAnimation_toggled(bool checked)
     if (m_picture != nullptr && ui->groupBoxOptions->isVisible())
     {
         m_picture->setIsStopAnimation(checked);
+        ui->widgetPreview->setImage(m_picture->getPath());
+        this->setIndexY(this->indexY());
+        ui->widgetPreview->repaint();
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::on_checkBoxClimbingAnimation_toggled(bool checked)
+{
+    if (m_picture != nullptr && ui->groupBoxOptions->isVisible())
+    {
+        m_picture->setIsClimbAnimation(checked);
         ui->widgetPreview->setImage(m_picture->getPath());
         this->setIndexY(this->indexY());
         ui->widgetPreview->repaint();
