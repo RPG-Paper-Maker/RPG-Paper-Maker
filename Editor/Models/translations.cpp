@@ -1951,6 +1951,7 @@ const QString Translations::THIS_EVENT_ONLY_TRIGGERED_HERO = "this.event.only.tr
 const QString Translations::OPEN_BR_FOLDER = "open.br.folder";
 const QString Translations::SYNCHRONIZE_MAP_OBJECTS = "synchronize.map.objects";
 const QString Translations::CLIMBING = "climbing";
+const QString Translations::CENTERED = "centered";
 
 // -------------------------------------------------------
 //

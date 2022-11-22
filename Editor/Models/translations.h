@@ -1964,6 +1964,7 @@ public:
     static const QString OPEN_BR_FOLDER;
     static const QString SYNCHRONIZE_MAP_OBJECTS;
     static const QString CLIMBING;
+    static const QString CENTERED;
 
     Translations();
     virtual ~Translations();

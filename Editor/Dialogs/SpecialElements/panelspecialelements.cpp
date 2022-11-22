@@ -190,6 +190,7 @@ void PanelSpecialElements::update(SystemSpecialElement *sys) {
     ui->comboBoxCollisionMountains->setCurrentIndex(static_cast<int>(sys
         ->mountainCollisionKind()));
     ui->checkBoxAnimated->setChecked(sys->isAnimated());
+    ui->comboBoxPosition->setCurrentIndex(sys->isTopLeft() ? 0 : 1);
 }
 
 // -------------------------------------------------------
@@ -384,6 +385,9 @@ void PanelSpecialElements::translate()
     ui->groupBoxCompleteList->setTitle(RPM::translate(Translations
         ::COMPLETE_LIST));
     ui->checkBoxAnimated->setText(RPM::translate(Translations::ANIMATED));
+    ui->labelPosition->setText(RPM::translate(Translations::POSITION) + RPM::COLON);
+    ui->comboBoxPosition->addItem(RPM::translate(Translations::TOP_LEFT));
+    ui->comboBoxPosition->addItem(RPM::translate(Translations::CENTERED));
 }
 
 // -------------------------------------------------------
@@ -600,5 +604,20 @@ void PanelSpecialElements::on_checkBoxAnimated_toggled(bool checked)
     if (element != nullptr)
     {
         element->setIsAnimated(checked);
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelSpecialElements::on_comboBoxPosition_currentIndexChanged(int index)
+{
+    if (m_model == nullptr)
+    {
+        return;
+    }
+    SystemSpecialElement *element = this->currentElement();
+    if (element != nullptr)
+    {
+        element->setIsTopLeft(index == 0);
     }
 }

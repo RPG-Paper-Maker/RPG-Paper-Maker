@@ -78,6 +78,7 @@ private slots:
     void on_comboBoxStretch_currentIndexChanged(int index);
     void on_comboBoxCollisionMountains_currentIndexChanged(int index);
     void on_checkBoxAnimated_toggled(bool checked);
+    void on_comboBoxPosition_currentIndexChanged(int index);
 };
 
 #endif // PANELSPECIALELEMENTS_H

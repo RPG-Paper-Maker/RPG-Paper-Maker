@@ -1930,5 +1930,6 @@
     "this.event.only.triggered.hero": "this event can only be triggered by the Hero",
     "open.br.folder": "Open BR folder",
     "synchronize.map.objects": "Synchronize map objects",
-    "climbing": "Climbing"
+    "climbing": "Climbing",
+    "centered": "Centered"
 }

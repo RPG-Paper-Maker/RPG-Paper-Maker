@@ -28,6 +28,7 @@ const QString SystemSpecialElement::JSON_DEPTH_PIXEL = "dp";
 const QString SystemSpecialElement::JSON_STRETCH = "st";
 const QString SystemSpecialElement::JSON_MOUNTAIN_COLLISION_KIND = "mck";
 const QString SystemSpecialElement::JSON_IS_ANIMATED = "isAnimated";
+const QString SystemSpecialElement::JSON_IS_TOP_LEFT = "itl";
 
 // -------------------------------------------------------
 //
@@ -45,7 +46,7 @@ SystemSpecialElement::SystemSpecialElement(int i, QString n, ShapeKind shapeKind
     , int objID, int mtlID, int pictureID, ObjectCollisionKind collisionKind,
     int collisionCustomID, double scale, int wS, double wP, int hS, double hP,
     int dS, double dP, bool stretch, MountainCollisionKind
-    mountainCollisionKind, bool isAnimated) :
+    mountainCollisionKind, bool isAnimated, bool isTopLeft) :
     SuperListItem(i, n),
     m_shapeKind(shapeKind),
     m_objID(new SuperListItem(objID)),
@@ -62,7 +63,8 @@ SystemSpecialElement::SystemSpecialElement(int i, QString n, ShapeKind shapeKind
     m_depthPixel(dP),
     m_stretch(stretch),
     m_mountainCollisionKind(mountainCollisionKind),
-    m_isAnimated(isAnimated)
+    m_isAnimated(isAnimated),
+    m_isTopLeft(isTopLeft)
 {
     updateObjName();
     updateMtlName();
@@ -229,6 +231,16 @@ void SystemSpecialElement::setIsAnimated(bool isAnimated)
     m_isAnimated = isAnimated;
 }
 
+bool SystemSpecialElement::isTopLeft() const
+{
+    return m_isTopLeft;
+}
+
+void SystemSpecialElement::setIsTopLeft(bool isTopLeft)
+{
+    m_isTopLeft = isTopLeft;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -322,6 +334,7 @@ void SystemSpecialElement::setCopy(const SuperListItem &super) {
     m_stretch = special->m_stretch;
     m_mountainCollisionKind = special->m_mountainCollisionKind;
     m_isAnimated = special->m_isAnimated;
+    m_isTopLeft = special->m_isTopLeft;
 }
 
 // -------------------------------------------------------
@@ -382,6 +395,10 @@ void SystemSpecialElement::read(const QJsonObject &json){
     if (json.contains(JSON_IS_ANIMATED))
     {
         m_isAnimated = json[JSON_IS_ANIMATED].toBool();
+    }
+    if (json.contains(JSON_IS_TOP_LEFT))
+    {
+        m_isTopLeft = json[JSON_IS_TOP_LEFT].toBool();
     }
 }
 
@@ -447,5 +464,8 @@ void SystemSpecialElement::write(QJsonObject &json) const{
     if (m_isAnimated)
     {
         json[JSON_IS_ANIMATED] = m_isAnimated;
+    }
+    if (!m_isTopLeft) {
+        json[JSON_IS_TOP_LEFT] = m_isTopLeft;
     }
 }

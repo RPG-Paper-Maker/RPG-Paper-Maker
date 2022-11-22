@@ -46,6 +46,7 @@ public:
     const static QString JSON_STRETCH;
     const static QString JSON_MOUNTAIN_COLLISION_KIND;
     const static QString JSON_IS_ANIMATED;
+    const static QString JSON_IS_TOP_LEFT;
 
     SystemSpecialElement();
     SystemSpecialElement(int i, QString n, ShapeKind shapeKind = ShapeKind::Box,
@@ -54,7 +55,7 @@ public:
         double scale = 1.0, int wS = 1, double wP = 0, int hS = 1, double hP = 0
         , int dS = 1, double dP = 0, bool stretch = false, MountainCollisionKind
         mountainCollisionKind = MountainCollisionKind::Default, bool isAnimated
-        = false);
+        = false, bool isTopLeft = true);
     virtual ~SystemSpecialElement();
 
     ShapeKind shapeKind() const;
@@ -93,6 +94,8 @@ public:
     void setMountainCollisionKind(MountainCollisionKind mountainCollisionKind);
     bool isAnimated() const;
     void setIsAnimated(bool isAnimated);
+    bool isTopLeft() const;
+    void setIsTopLeft(bool isTopLeft);
 
     void updateObjName();
     void updateMtlName();
@@ -122,6 +125,7 @@ protected:
     bool m_stretch;
     MountainCollisionKind m_mountainCollisionKind;
     bool m_isAnimated;
+    bool m_isTopLeft;
 
     SystemPicture* pictureByKind(PictureKind kind) const;
 };
