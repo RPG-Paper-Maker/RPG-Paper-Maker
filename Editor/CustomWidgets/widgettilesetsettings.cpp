@@ -126,7 +126,7 @@ void WidgetTilesetSettings::translate()
     ui->tabWidget->setTabText(0, RPM::translate(Translations::PRATICABLE));
     ui->tabWidget->setTabText(1, RPM::translate(Translations::DIRECTIONS));
     ui->tabWidget->setTabText(2, RPM::translate(Translations::TERRAIN));
-    //ui->tabWidget->setTabText(1, RPM::translate(Translations::CLIMBING));
+    ui->tabWidget->setTabText(3, RPM::translate(Translations::CLIMBING));
 }
 
 // -------------------------------------------------------

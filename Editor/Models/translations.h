@@ -1963,6 +1963,7 @@ public:
     static const QString THIS_EVENT_ONLY_TRIGGERED_HERO;
     static const QString OPEN_BR_FOLDER;
     static const QString SYNCHRONIZE_MAP_OBJECTS;
+    static const QString CLIMBING;
 
     Translations();
     virtual ~Translations();

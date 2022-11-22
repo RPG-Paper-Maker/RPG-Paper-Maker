@@ -4,7 +4,6 @@
 	"replace": [],
 	"features": [
         "Climbing system",
-        "3D objects: spheres, cones, cylinders, capsules",
         "Objects 3D: choose location centered or grounded",
         "Orthographic camera option",
         "Command move object: draw a way preview",
@@ -18,14 +17,15 @@
         "Languages: dictionary with all missing words in game",
         "New example game",
         "Monster: status in condition reaction monster",
-        "Objects: option to set centerX/centerZ/angle values"
+        "Objects: option to set centerX/centerZ/angle values",
+        "3D models rotate with characters orientation"
 	],
     "bugs": [
 
     ],
     "finished": [
+        2,
         1,
-        0,
         0,
         0,
         0,

@@ -1950,6 +1950,7 @@ const QString Translations::DUNGEON_MINES = "dungeon.mines";
 const QString Translations::THIS_EVENT_ONLY_TRIGGERED_HERO = "this.event.only.triggered.hero";
 const QString Translations::OPEN_BR_FOLDER = "open.br.folder";
 const QString Translations::SYNCHRONIZE_MAP_OBJECTS = "synchronize.map.objects";
+const QString Translations::CLIMBING = "climbing";
 
 // -------------------------------------------------------
 //

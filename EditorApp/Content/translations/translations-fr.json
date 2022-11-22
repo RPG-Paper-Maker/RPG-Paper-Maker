@@ -1929,5 +1929,6 @@
 	"key.description": "Une clé à utiliser sur une porte",
 	"this.event.only.triggered.hero": "cet évènement ne peut être déclenché que par le Héro",
 	"open.br.folder": "Ouvrir le dossier BR",
-	"synchronize.map.objects": "Synchroniser les objets de la carte"
+	"synchronize.map.objects": "Synchroniser les objets de la carte",
+    "climbing": "Escalade"
 }
