@@ -224,21 +224,23 @@ void PanelSpecialElements::hideObject3D() {
     ui->doubleSpinBoxScale->hide();
     ui->groupBoxSize->hide();
     ui->widgetPreviewObject3D->hide();
-    ui->gridLayout_3->setRowStretch(8, 0);
+    ui->labelPosition->hide();
+    ui->comboBoxPosition->hide();
+    ui->gridLayout_3->setRowStretch(9, 0);
 }
 
 // -------------------------------------------------------
 
 void PanelSpecialElements::showObject3D() {
     ui->widgetTilesetSettings->hide();
-    ui->gridLayout_3->setRowStretch(7, 0);
+    ui->gridLayout_3->setRowStretch(8, 0);
 }
 
 // -------------------------------------------------------
 
 void PanelSpecialElements::hideMountain() {
     ui->scrollArea->hide();
-    ui->gridLayout_3->setRowStretch(9, 0);
+    ui->gridLayout_3->setRowStretch(10, 0);
     ui->labelCollisionMountains->hide();
     ui->comboBoxCollisionMountains->hide();
     ui->horizontalSpacer_7->changeSize(0, 0);
@@ -249,7 +251,7 @@ void PanelSpecialElements::hideMountain() {
 void PanelSpecialElements::showMountain() {
     ui->widgetTilesetSettings->hide();
     ui->scrollArea->show();
-    ui->gridLayout_3->setRowStretch(7, 0);
+    ui->gridLayout_3->setRowStretch(8, 0);
     ui->horizontalSpacer_7->changeSize(m_spacersSize.at(5).width(),
         m_spacersSize.at(5).height());
 }

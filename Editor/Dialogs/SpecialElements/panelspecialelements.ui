@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>684</width>
-    <height>546</height>
+    <width>616</width>
+    <height>710</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -66,9 +66,28 @@
       </widget>
      </item>
      <item>
-      <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,0,0,0,1,1,1,0,0,0">
-       <item row="4" column="2" colspan="2">
-        <widget class="WidgetShape" name="widgetShapeCollisions" native="true">
+      <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,0,0,0,0,1,1,1,0,0">
+       <item row="2" column="1" colspan="2">
+        <widget class="WidgetShape" name="widgetShapeMtl" native="true">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>27</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="2">
+        <widget class="WidgetPicture" name="widgetPicture" native="true">
          <property name="minimumSize">
           <size>
            <width>200</width>
@@ -90,15 +109,61 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2" colspan="3">
-        <spacer name="horizontalSpacer_4">
+       <item row="4" column="2" colspan="2">
+        <widget class="WidgetShape" name="widgetShapeCollisions" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>27</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="labelTexture">
+         <property name="text">
+          <string>Texture:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QComboBox" name="comboBoxPosition"/>
+       </item>
+       <item row="5" column="2" colspan="3">
+        <spacer name="horizontalSpacer_6">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>238</width>
+           <width>228</width>
            <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="11" column="0">
+        <widget class="QCheckBox" name="checkBoxAnimated">
+         <property name="text">
+          <string>Animated</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="1" colspan="4">
+        <spacer name="horizontalSpacer_8">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
           </size>
          </property>
         </spacer>
@@ -267,14 +332,18 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QComboBox" name="comboBoxShape"/>
-       </item>
        <item row="4" column="1">
         <widget class="QComboBox" name="comboBoxCollision"/>
        </item>
-       <item row="3" column="1" colspan="2">
-        <widget class="WidgetPicture" name="widgetPicture" native="true">
+       <item row="6" column="0">
+        <widget class="QLabel" name="labelPosition">
+         <property name="text">
+          <string>Location:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="2">
+        <widget class="WidgetShape" name="widgetShapeObj" native="true">
          <property name="minimumSize">
           <size>
            <width>200</width>
@@ -289,19 +358,6 @@
          </property>
         </widget>
        </item>
-       <item row="11" column="1" colspan="4">
-        <spacer name="horizontalSpacer_8">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="10" column="0" colspan="5">
         <widget class="QScrollArea" name="scrollArea">
          <property name="widgetResizable">
@@ -312,8 +368,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>473</width>
-            <height>68</height>
+            <width>405</width>
+            <height>73</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_5">
@@ -322,39 +378,6 @@
            </item>
           </layout>
          </widget>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="labelMtl">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>MTL:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2" colspan="3">
-        <spacer name="horizontalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>228</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="8" column="0" colspan="5">
-        <widget class="WidgetTilesetSettings" name="widgetTilesetSettings" native="true"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="labelObject">
-         <property name="text">
-          <string>Object:</string>
-         </property>
         </widget>
        </item>
        <item row="12" column="4">
@@ -377,6 +400,19 @@
          </property>
         </widget>
        </item>
+       <item row="5" column="1">
+        <widget class="QDoubleSpinBox" name="doubleSpinBoxScale">
+         <property name="decimals">
+          <number>4</number>
+         </property>
+         <property name="value">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0" colspan="5">
+        <widget class="WidgetTilesetSettings" name="widgetTilesetSettings" native="true"/>
+       </item>
        <item row="5" column="0">
         <widget class="QLabel" name="labelScale">
          <property name="text">
@@ -384,58 +420,13 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="labelTexture">
-         <property name="text">
-          <string>Texture:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3" rowspan="3" colspan="2">
-        <spacer name="horizontalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>118</width>
-           <height>78</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="1" colspan="2">
-        <widget class="WidgetShape" name="widgetShapeMtl" native="true">
+       <item row="2" column="0">
+        <widget class="QLabel" name="labelMtl">
          <property name="enabled">
           <bool>false</bool>
          </property>
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>27</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>27</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" colspan="2">
-        <widget class="WidgetShape" name="widgetShapeObj" native="true">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>27</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>27</height>
-          </size>
+         <property name="text">
+          <string>MTL:</string>
          </property>
         </widget>
        </item>
@@ -445,9 +436,6 @@
           <string>Shape:</string>
          </property>
         </widget>
-       </item>
-       <item row="9" column="0" colspan="5">
-        <widget class="WidgetPreviewObject3D" name="widgetPreviewObject3D" native="true"/>
        </item>
        <item row="4" column="4">
         <spacer name="horizontalSpacer">
@@ -462,35 +450,54 @@
          </property>
         </spacer>
        </item>
-       <item row="5" column="1">
-        <widget class="QDoubleSpinBox" name="doubleSpinBoxScale">
-         <property name="decimals">
-          <number>4</number>
+       <item row="0" column="2" colspan="3">
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="value">
-          <double>1.000000000000000</double>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>238</width>
+           <height>20</height>
+          </size>
          </property>
-        </widget>
+        </spacer>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="comboBoxShape"/>
+       </item>
+       <item row="1" column="3" rowspan="3" colspan="2">
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>118</width>
+           <height>78</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item row="12" column="1" colspan="3">
         <widget class="QComboBox" name="comboBoxCollisionMountains"/>
        </item>
-       <item row="11" column="0">
-        <widget class="QCheckBox" name="checkBoxAnimated">
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelObject">
          <property name="text">
-          <string>Animated</string>
+          <string>Object:</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="labelPosition">
-         <property name="text">
-          <string>Location:</string>
+       <item row="9" column="0" colspan="5">
+        <widget class="WidgetPreviewObject3D" name="widgetPreviewObject3D" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
          </property>
         </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QComboBox" name="comboBoxPosition"/>
        </item>
       </layout>
      </item>
