@@ -422,9 +422,13 @@ void PanelSpecialElements::on_comboBoxShape_currentIndexChanged(int index) {
         switch (element->shapeKind()) {
         case ShapeKind::Box:
             showBox();
+            ui->labelPosition->setEnabled(true);
+            ui->comboBoxPosition->setEnabled(true);
             break;
         case ShapeKind::Custom:
             showCustomObject();
+            ui->labelPosition->setEnabled(false);
+            ui->comboBoxPosition->setEnabled(false);
             break;
         default:
             break;
