@@ -1965,6 +1965,7 @@ public:
     static const QString SYNCHRONIZE_MAP_OBJECTS;
     static const QString CLIMBING;
     static const QString CENTERED;
+    static const QString ORTHOGRAPHIC;
 
     Translations();
     virtual ~Translations();

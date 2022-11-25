@@ -1931,5 +1931,6 @@
 	"open.br.folder": "Ouvrir le dossier BR",
 	"synchronize.map.objects": "Synchroniser les objets de la carte",
     "climbing": "Escalade",
-    "centered": "Centré"
+    "centered": "Centré",
+    "orthographic": "Orthographique"
 }

@@ -1952,6 +1952,7 @@ const QString Translations::OPEN_BR_FOLDER = "open.br.folder";
 const QString Translations::SYNCHRONIZE_MAP_OBJECTS = "synchronize.map.objects";
 const QString Translations::CLIMBING = "climbing";
 const QString Translations::CENTERED = "centered";
+const QString Translations::ORTHOGRAPHIC = "orthographic";
 
 // -------------------------------------------------------
 //

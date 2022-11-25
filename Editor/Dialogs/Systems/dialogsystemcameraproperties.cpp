@@ -73,13 +73,13 @@ void DialogSystemCameraProperties::initialize() {
     ui->comboBoxZ->addItem(RPM::translate(Translations::SQUARE_S));
     ui->comboBoxZ->addItem(RPM::translate(Translations::PIXEL_S));
     ui->comboBoxZ->setCurrentIndex(index);
-
     ui->panelPrimitiveFOV->initializeNumberAndUpdate(m_cameraProperties
         .fieldOfView(), false);
     ui->panelPrimitiveNear->initializeNumberAndUpdate(m_cameraProperties.nearCam(),
         false);
     ui->panelPrimitiveFar->initializeNumberAndUpdate(m_cameraProperties.farCam(),
         false);
+    ui->checkBoxOrthographic->setChecked(m_cameraProperties.orthographic());
 }
 
 //-------------------------------------------------
@@ -104,6 +104,7 @@ void DialogSystemCameraProperties::translate()
         ::HORIZONTAL_ANGLE) + RPM::COLON);
     ui->groupBoxTargetOffset->setTitle(RPM::translate(Translations
         ::TARGET_OFFSET));
+    ui->checkBoxOrthographic->setText(RPM::translate(Translations::ORTHOGRAPHIC));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -138,4 +139,11 @@ void DialogSystemCameraProperties::on_comboBoxY_currentIndexChanged(int index)
 void DialogSystemCameraProperties::on_comboBoxZ_currentIndexChanged(int index)
 {
     m_cameraProperties.setIsSquareTargetOffsetZ(index == 0);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCameraProperties::on_checkBoxOrthographic_toggled(bool checked)
+{
+    m_cameraProperties.setOrthographic(checked);
 }

@@ -48,6 +48,7 @@ private slots:
     void on_comboBoxX_currentIndexChanged(int index);
     void on_comboBoxY_currentIndexChanged(int index);
     void on_comboBoxZ_currentIndexChanged(int index);
+    void on_checkBoxOrthographic_toggled(bool checked);
 };
 
 #endif // DIALOGSYSTEMCAMERAPROPERTIES_H

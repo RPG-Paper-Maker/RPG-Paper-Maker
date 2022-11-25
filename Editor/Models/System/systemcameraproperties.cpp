@@ -24,6 +24,7 @@ const QString SystemCameraProperties::JSON_IS_SQUARE_TARGET_OFFSET_Z = "istoz";
 const QString SystemCameraProperties::JSON_FIELD_OF_VIEW = "fov";
 const QString SystemCameraProperties::JSON_NEAR = "n";
 const QString SystemCameraProperties::JSON_FAR = "f";
+const QString SystemCameraProperties::JSON_ORTHOGRAPHIC = "o";
 const double SystemCameraProperties::DEFAULT_DISTANCE = 300.0;
 const double SystemCameraProperties::DEFAULT_HORIZONTAL_ANGLE = -90.0;
 const double SystemCameraProperties::DEFAULT_VERTICAL_ANGLE = 65.0;
@@ -36,6 +37,7 @@ const bool SystemCameraProperties::DEFAULT_IS_SQUARE_TARGET_OFFSET_Z = true;
 const double SystemCameraProperties::DEFAULT_FIELD_OF_VIEW = 45.0;
 const double SystemCameraProperties::DEFAULT_NEAR = 1.0;
 const double SystemCameraProperties::DEFAULT_FAR = 100000.0;
+const bool SystemCameraProperties::DEFAULT_ORTHOGRAPHIC = false;
 
 // -------------------------------------------------------
 //
@@ -52,7 +54,7 @@ SystemCameraProperties::SystemCameraProperties() :
 SystemCameraProperties::SystemCameraProperties(int i, QString n, PrimitiveValue
     *d, PrimitiveValue *ha, PrimitiveValue *va, PrimitiveValue *tox,
     PrimitiveValue *toy, PrimitiveValue *toz, bool istox, bool istoy, bool istoz
-    , PrimitiveValue *fov, PrimitiveValue *ne, PrimitiveValue *f) :
+    , PrimitiveValue *fov, PrimitiveValue *ne, PrimitiveValue *f, bool orthographic) :
     SuperListItem(i, n),
     m_distance(d),
     m_horizontalAngle(ha),
@@ -65,7 +67,8 @@ SystemCameraProperties::SystemCameraProperties(int i, QString n, PrimitiveValue
     m_isSquareTargetOffsetZ(istoz),
     m_fieldOfView(fov),
     m_near(ne),
-    m_far(f)
+    m_far(f),
+    m_orthographic(orthographic)
 {
 
 }
@@ -148,6 +151,15 @@ void SystemCameraProperties::setIsSquareTargetOffsetZ(bool istoz)
     m_isSquareTargetOffsetZ = istoz;
 }
 
+bool SystemCameraProperties::orthographic() const {
+    return m_orthographic;
+}
+
+void SystemCameraProperties::setOrthographic(bool orthographic)
+{
+    m_orthographic = orthographic;
+}
+
 // -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
@@ -195,6 +207,7 @@ void SystemCameraProperties::setCopy(const SuperListItem &super) {
     m_fieldOfView->setCopy(*cameraProperties->m_fieldOfView);
     m_near->setCopy(*cameraProperties->m_near);
     m_far->setCopy(*cameraProperties->m_far);
+    m_orthographic = cameraProperties->m_orthographic;
 }
 
 // -------------------------------------------------------
@@ -237,6 +250,9 @@ void SystemCameraProperties::read(const QJsonObject &json) {
     }
     if (json.contains(JSON_FAR)) {
         m_far->read(json[JSON_FAR].toObject());
+    }
+    if (json.contains(JSON_ORTHOGRAPHIC)) {
+        m_orthographic = json[JSON_ORTHOGRAPHIC].toBool();
     }
 }
 
@@ -323,5 +339,8 @@ void SystemCameraProperties::write(QJsonObject &json) const {
         obj = QJsonObject();
         m_far->write(obj);
         json[JSON_FAR] = obj;
+    }
+    if (m_orthographic != DEFAULT_ORTHOGRAPHIC) {
+        json[JSON_ORTHOGRAPHIC] = m_orthographic;
     }
 }

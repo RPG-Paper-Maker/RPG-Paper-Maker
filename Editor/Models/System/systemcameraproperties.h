@@ -39,6 +39,7 @@ public:
     static const QString JSON_FIELD_OF_VIEW;
     static const QString JSON_NEAR;
     static const QString JSON_FAR;
+    static const QString JSON_ORTHOGRAPHIC;
     static const double DEFAULT_DISTANCE;
     static const double DEFAULT_HORIZONTAL_ANGLE;
     static const double DEFAULT_VERTICAL_ANGLE;
@@ -51,6 +52,7 @@ public:
     static const double DEFAULT_FIELD_OF_VIEW;
     static const double DEFAULT_NEAR;
     static const double DEFAULT_FAR;
+    static const bool DEFAULT_ORTHOGRAPHIC;
 
     SystemCameraProperties();
     SystemCameraProperties(int i, QString n, PrimitiveValue *d = new
@@ -65,7 +67,7 @@ public:
         DEFAULT_IS_SQUARE_TARGET_OFFSET_Z, PrimitiveValue *fov = new
         PrimitiveValue(DEFAULT_FIELD_OF_VIEW), PrimitiveValue *ne = new
         PrimitiveValue(DEFAULT_NEAR), PrimitiveValue *f = new PrimitiveValue(
-        DEFAULT_FAR));
+        DEFAULT_FAR), bool orthographic = DEFAULT_ORTHOGRAPHIC);
     virtual ~SystemCameraProperties();
 
     PrimitiveValue * distance() const;
@@ -83,6 +85,8 @@ public:
     PrimitiveValue * fieldOfView() const;
     PrimitiveValue * nearCam() const;
     PrimitiveValue * farCam() const;
+    bool orthographic() const;
+    void setOrthographic(bool orthographic);
 
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
@@ -103,6 +107,7 @@ protected:
     PrimitiveValue *m_fieldOfView;
     PrimitiveValue *m_near;
     PrimitiveValue *m_far;
+    bool m_orthographic;
 };
 
 Q_DECLARE_METATYPE(SystemCameraProperties)

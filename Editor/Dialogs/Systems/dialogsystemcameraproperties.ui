@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>428</width>
-    <height>460</height>
+    <height>489</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -318,6 +318,13 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBoxOrthographic">
+         <property name="text">
+          <string>Orthographic</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
