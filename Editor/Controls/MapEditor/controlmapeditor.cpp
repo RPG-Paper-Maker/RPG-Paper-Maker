@@ -37,6 +37,7 @@ ControlMapEditor::ControlMapEditor() :
     m_cursorObject(nullptr),
     m_cursorStart(nullptr),
     m_cursorDetection(nullptr),
+    m_wayPreview(nullptr),
     m_camera(new Camera),
     m_positionStart(nullptr),
     m_positionDetection(nullptr),
@@ -237,6 +238,12 @@ void ControlMapEditor::applyMap(Map *map, QVector3D *position, QVector3D
     m_map->initializeCursor(position);
     m_map->initializeGL();
 
+    // Way preview
+    m_wayPreview = new WayPreview;
+    m_wayPreview->initializeGL(m_map->programStatic());
+    m_wayPreview->initializeVertices();
+    m_wayPreview->updateGL();
+
     // Update current portion and load all the local portions
     m_currentPortion = cursor()->getPortion();
     m_map->loadPortions(m_currentPortion);
@@ -364,6 +371,10 @@ void ControlMapEditor::deleteMap(bool updateCamera) {
     if (m_positionDetection != nullptr) {
         delete m_positionDetection;
         m_positionDetection = nullptr;
+    }
+    if (m_wayPreview != nullptr) {
+        delete m_wayPreview;
+        m_wayPreview = nullptr;
     }
 
     // Grid
@@ -1565,6 +1576,9 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
         m_beginWallIndicator->paintGL(modelviewProjection);
         m_endWallIndicator->paintGL(modelviewProjection);
     }
+
+    // Drawing way preview
+    m_wayPreview->paintGL(modelviewProjection);
 
     // Drawing grid
     if (m_displayGrid && selectionKind != MapEditorSelectionKind::None)

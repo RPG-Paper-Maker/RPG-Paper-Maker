@@ -22,6 +22,7 @@
 #include "contextmenulist.h"
 #include "wallindicator.h"
 #include "controlundoredo.h"
+#include "waypreview.h"
 
 class ControlMapEditor
 {
@@ -264,6 +265,7 @@ protected:
     Cursor *m_cursorObject;
     Cursor *m_cursorStart;
     Cursor *m_cursorDetection;
+    WayPreview *m_wayPreview;
     Camera *m_camera;
 
     // Others

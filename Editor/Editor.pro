@@ -162,6 +162,7 @@ HEADERS += \
     Enums/variablemapobjectcharacteristickind.h \
     MapEditor/Map/map.h \
     Controls/controlmainwindow.h \
+    MapEditor/waypreview.h \
     MapEditor/battler.h \
     MapEditor/mountain.h \
     MapEditor/mountains.h \
@@ -587,6 +588,7 @@ SOURCES += \
     CustomWidgets/panelproject.cpp \
     MapEditor/Map/map.cpp \
     Controls/controlmainwindow.cpp \
+    MapEditor/waypreview.cpp \
     MapEditor/battler.cpp \
     MapEditor/mountain.cpp \
     MapEditor/mountains.cpp \

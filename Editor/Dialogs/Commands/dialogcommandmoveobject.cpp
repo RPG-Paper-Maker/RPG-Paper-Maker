@@ -37,6 +37,8 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
     m_idObjectFixed(idObjectFixed)
 {
     ui->setupUi(this);
+    connect(ui->treeView, SIGNAL(needsUpdateJson(SuperListItem *)),
+        this, SLOT(on_updateJsonMoves(SuperListItem *)));
     this->initializePrimitives();
     if (command != nullptr)
     {
@@ -45,6 +47,7 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
     ui->treeView->getModel()->appendRow(SuperListItem::getEmptyItem());
     ui->treeView->setCurrentIndex(ui->treeView->getModel()->index(0, 0));
     ui->treeView->setPasteBeforeSelected(true);
+
     this->translate();
 }
 
@@ -162,6 +165,7 @@ void DialogCommandMoveObject::addMoveStepSquare(CommandMoveKind kind)
         SystemCommandMove(-1, "", QVector<QString>({QString::number(static_cast<
         int>(kind)), QString::number(ui->comboBoxStepSquare->currentIndex())}),
         m_properties, m_parameters))->getModelRow());
+    this->on_updateJsonMoves(nullptr);
 }
 
 // -------------------------------------------------------
@@ -190,6 +194,7 @@ void DialogCommandMoveObject::addMove(QVector<QString> &commands)
     ui->treeView->getModel()->insertRow(ui->treeView->getSelected()->row(), (new
         SystemCommandMove(-1, "", commands, m_properties, m_parameters))
         ->getModelRow());
+    this->on_updateJsonMoves(nullptr);
 }
 
 // -------------------------------------------------------
@@ -588,5 +593,15 @@ void DialogCommandMoveObject::on_pushButtonScript_clicked()
            <int>(CommandMoveKind::Script))});
        dialog.getCommandList(commands);
        this->addMove(commands);
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_updateJsonMoves(SuperListItem *)
+{
+    Map *map = RPM::get()->project()->currentMap(true);
+    if (map != nullptr) {
+
     }
 }

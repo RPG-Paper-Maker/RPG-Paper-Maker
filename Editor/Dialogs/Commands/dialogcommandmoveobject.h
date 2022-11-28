@@ -91,6 +91,7 @@ private slots:
     void on_pushButtonWait_clicked();
     void on_pushButtonPlaySound_clicked();
     void on_pushButtonScript_clicked();
+    void on_updateJsonMoves(SuperListItem *);
 };
 
 #endif // DIALOGCOMMANDMOVEOBJECT_H

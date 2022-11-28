@@ -230,6 +230,11 @@ QOpenGLShaderProgram * Map::programFaceSprite() const
     return m_programFaceSprite;
 }
 
+QOpenGLShaderProgram * Map::programStatic() const
+{
+    return m_programStatic;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
