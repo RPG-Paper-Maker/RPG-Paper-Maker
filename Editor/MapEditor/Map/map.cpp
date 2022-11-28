@@ -683,6 +683,19 @@ int Map::removeObject(QStandardItemModel *model, Position3D &p) {
 
 // -------------------------------------------------------
 
+Position3D Map::getObjectPosition(int id) const {
+    SystemMapObject *super;
+    for (int i = 0, l = m_modelObjects->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SystemMapObject *>(SuperListItem::getItemModelAt(m_modelObjects, i));
+        if (super->id() == id) {
+            return super->position();
+        }
+    }
+    return Position();
+}
+
+// -------------------------------------------------------
+
 bool Map::deleteObject(Position &p, MapPortion *mapPortion, QJsonObject
     &previous, MapEditorSubSelectionKind &previousType)
 {

@@ -86,6 +86,8 @@ public:
     void heightPlusDown();
     void zoom(int value);
     void updateCursor();
+    void updateWayPreview(Position3D &pos);
+    void clearWayPreview();
 
 protected:
     WidgetMenuBarMapEditor *m_menuBar;

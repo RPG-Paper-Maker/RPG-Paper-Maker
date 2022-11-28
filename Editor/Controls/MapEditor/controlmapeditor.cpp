@@ -241,7 +241,6 @@ void ControlMapEditor::applyMap(Map *map, QVector3D *position, QVector3D
     // Way preview
     m_wayPreview = new WayPreview;
     m_wayPreview->initializeGL(m_map->programStatic());
-    m_wayPreview->initializeVertices();
     m_wayPreview->updateGL();
 
     // Update current portion and load all the local portions
@@ -1735,6 +1734,21 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
             }
         }
     }
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updateWayPreview(Position3D &pos)
+{
+    m_wayPreview->initializeVertices(pos);
+    m_wayPreview->updateGL();
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::clearWayPreview()
+{
+    m_wayPreview->clear();
 }
 
 // -------------------------------------------------------

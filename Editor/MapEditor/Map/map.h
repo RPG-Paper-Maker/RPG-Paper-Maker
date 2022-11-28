@@ -67,6 +67,7 @@ public:
                    SystemCommonObject* object, QJsonObject &previous,
                    MapEditorSubSelectionKind &previousType);
     static int removeObject(QStandardItemModel* model, Position3D &p);
+    Position3D getObjectPosition(int id) const;
     bool deleteObject(Position& p, MapPortion *mapPortion,
                       QJsonObject &previous,
                       MapEditorSubSelectionKind &previousType);

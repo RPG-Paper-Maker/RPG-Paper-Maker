@@ -635,7 +635,7 @@ void PanelObject::on_pushButtonEditRoute_clicked() {
 
         state = reinterpret_cast<SystemState *>(selected->data().value<quintptr>());
         DialogCommandMoveObject dialog(state->eventCommandRoute(), nullptr,
-            nullptr, true);
+            nullptr, nullptr, true);
         if (dialog.exec() == QDialog::Accepted) {
             state->removeRoute();
             state->setEventCommandRoute(dialog.getCommand());

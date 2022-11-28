@@ -213,6 +213,20 @@ void WidgetMapEditor::initializeSpinBoxesCoords(QSpinBox *x, QSpinBox *y,
 
 // -------------------------------------------------------
 
+void WidgetMapEditor::updateWayPreview(Position3D &pos)
+{
+    m_control.updateWayPreview(pos);
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::clearWayPreview()
+{
+    m_control.clearWayPreview();
+}
+
+// -------------------------------------------------------
+
 void WidgetMapEditor::initializeGL()
 {
     // Initialize OpenGL Backend

@@ -34,7 +34,8 @@ class DialogCommandMoveObject : public DialogCommand
 public:
     explicit DialogCommandMoveObject(EventCommand *command = nullptr,
         QStandardItemModel* properties = nullptr, QStandardItemModel* parameters
-        = nullptr, bool idObjectFixed = false, QWidget *parent = nullptr);
+        = nullptr, SystemCommonObject *object = nullptr, bool idObjectFixed = false,
+        QWidget *parent = nullptr);
     virtual ~DialogCommandMoveObject();
 
     void translate();
@@ -52,6 +53,7 @@ private:
     QStandardItemModel *m_modelObjects;
     QStandardItemModel *m_properties;
     QStandardItemModel *m_parameters;
+    SystemCommonObject *m_object;
     bool m_idObjectFixed;
 
 private slots:

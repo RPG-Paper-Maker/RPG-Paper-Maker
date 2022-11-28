@@ -28,7 +28,8 @@ public:
     void loadTexture();
     void initializeGL(QOpenGLShaderProgram *programStatic);
     void updateGL();
-    void initializeVertices();
+    void initializeVertices(Position3D &p);
+    void clear();
     void paintGL(QMatrix4x4& modelviewProjection);
 
 protected:

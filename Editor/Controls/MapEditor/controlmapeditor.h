@@ -234,6 +234,8 @@ public:
         heightSquares, double heightPixels);
     void onTransformationPositionChanged(Position &newPosition, Position
         &previousPosition, MapEditorSelectionKind k);
+    void updateWayPreview(Position3D &pos);
+    void clearWayPreview();
     void paintGL(QMatrix4x4 &modelviewProjection, QVector3D &cameraRightWorldSpace,
         QVector3D &cameraUpWorldSpace, QVector3D &cameraDeepWorldSpace,
         MapEditorSelectionKind selectionKind,

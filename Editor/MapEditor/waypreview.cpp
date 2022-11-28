@@ -47,11 +47,12 @@ void WayPreview::loadTexture() {
 
 // -------------------------------------------------------
 
-void WayPreview::initializeVertices(){
-    QVector3D pos(0.0f, RPM::getSquareSize() / 2, 0.0f);
+void WayPreview::initializeVertices(Position3D &p){
+    QVector3D pos(p.x() * RPM::getSquareSize(), (p.y() * RPM::getSquareSize()) +
+        (RPM::getSquareSize() / 2), p.z() * RPM::getSquareSize());
+    this->clear();
 
     // Vertices
-    m_vertices.clear();
     m_vertices.append(Vertex(Lands::verticesQuad[0] * RPM::getSquareSize() + pos,
                       QVector2D(0.0f, 0.0f)));
     m_vertices.append(Vertex(Lands::verticesQuad[1] * RPM::getSquareSize() + pos,
@@ -62,9 +63,15 @@ void WayPreview::initializeVertices(){
                       QVector2D(0.0f, 1.0f)));
 
     // indexes
-    m_indexes.clear();
     for (int i = 0; i < Lands::nbIndexesQuad; i++)
         m_indexes.append(Lands::indexesQuad[i]);
+}
+
+// -------------------------------------------------------
+
+void WayPreview::clear() {
+    m_vertices.clear();
+    m_indexes.clear();
 }
 
 // -------------------------------------------------------

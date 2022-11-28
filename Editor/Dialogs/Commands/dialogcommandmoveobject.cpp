@@ -19,6 +19,7 @@
 #include "dialogcommandscript.h"
 #include "dialognumber.h"
 #include "rpm.h"
+#include "mainwindow.h"
 
 // -------------------------------------------------------
 //
@@ -27,13 +28,14 @@
 // -------------------------------------------------------
 
 DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
-    QStandardItemModel *properties, QStandardItemModel *parameters, bool
-    idObjectFixed, QWidget *parent) :
+    QStandardItemModel *properties, QStandardItemModel *parameters,
+    SystemCommonObject *object, bool idObjectFixed, QWidget *parent) :
     DialogCommand(parent),
     ui(new Ui::DialogCommandMoveObject),
     m_modelObjects(nullptr),
     m_properties(properties),
     m_parameters(parameters),
+    m_object(object),
     m_idObjectFixed(idObjectFixed)
 {
     ui->setupUi(this);
@@ -47,6 +49,7 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
     ui->treeView->getModel()->appendRow(SuperListItem::getEmptyItem());
     ui->treeView->setCurrentIndex(ui->treeView->getModel()->index(0, 0));
     ui->treeView->setPasteBeforeSelected(true);
+    on_updateJsonMoves(nullptr);
 
     this->translate();
 }
@@ -601,7 +604,8 @@ void DialogCommandMoveObject::on_pushButtonScript_clicked()
 void DialogCommandMoveObject::on_updateJsonMoves(SuperListItem *)
 {
     Map *map = RPM::get()->project()->currentMap(true);
-    if (map != nullptr) {
-
+    if (map != nullptr && m_object != nullptr) {
+        Position3D pos = map->getObjectPosition(m_object->id());
+        MainWindow::get()->mapEditor()->updateWayPreview(pos);
     }
 }
