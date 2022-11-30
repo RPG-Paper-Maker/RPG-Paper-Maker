@@ -86,7 +86,7 @@ public:
     void heightPlusDown();
     void zoom(int value);
     void updateCursor();
-    void updateWayPreview(Position3D &pos);
+    void updateWayPreview(Position3D &pos, QList<OrientationKind> &orientations);
     void clearWayPreview();
 
 protected:

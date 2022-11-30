@@ -62,6 +62,7 @@ DialogCommandMoveObject::~DialogCommandMoveObject()
     {
         SuperListItem::deleteModel(m_modelObjects);
     }
+    MainWindow::get()->mapEditor()->clearWayPreview();
 }
 
 // -------------------------------------------------------
@@ -606,6 +607,50 @@ void DialogCommandMoveObject::on_updateJsonMoves(SuperListItem *)
     Map *map = RPM::get()->project()->currentMap(true);
     if (map != nullptr && m_object != nullptr) {
         Position3D pos = map->getObjectPosition(m_object->id());
-        MainWindow::get()->mapEditor()->updateWayPreview(pos);
+        QList<OrientationKind> orientations;
+        SystemCommandMove *move;
+        for (int i = 0, l = ui->treeView->getModel()->invisibleRootItem()->rowCount();
+            i < l; i++)
+        {
+            move = reinterpret_cast<SystemCommandMove *>(SuperListItem::getItemModelAt(
+                ui->treeView->getModel(), i));
+            if (move != nullptr)
+            {
+                CommandMoveKind kind = move->getKind();
+                switch (kind) {
+                case CommandMoveKind::MoveSouth:
+                    orientations.append(OrientationKind::South);
+                    break;
+                case CommandMoveKind::MoveWest:
+                    orientations.append(OrientationKind::West);
+                    break;
+                case CommandMoveKind::MoveNorth:
+                    orientations.append(OrientationKind::North);
+                    break;
+                case CommandMoveKind::MoveEast:
+                    orientations.append(OrientationKind::East);
+                    break;
+                case CommandMoveKind::MoveSouthWest:
+                    orientations.append(OrientationKind::South);
+                    orientations.append(OrientationKind::West);
+                    break;
+                case CommandMoveKind::MoveSouthEast:
+                    orientations.append(OrientationKind::South);
+                    orientations.append(OrientationKind::East);
+                    break;
+                case CommandMoveKind::MoveNorthWest:
+                    orientations.append(OrientationKind::North);
+                    orientations.append(OrientationKind::West);
+                    break;
+                case CommandMoveKind::MoveNorthEast:
+                    orientations.append(OrientationKind::North);
+                    orientations.append(OrientationKind::East);
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+        MainWindow::get()->mapEditor()->updateWayPreview(pos, orientations);
     }
 }

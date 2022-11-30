@@ -691,7 +691,7 @@ Position3D Map::getObjectPosition(int id) const {
             return super->position();
         }
     }
-    return Position();
+    return Position(-1, -1, -1, -1);
 }
 
 // -------------------------------------------------------

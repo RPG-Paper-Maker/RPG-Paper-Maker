@@ -1577,7 +1577,7 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     }
 
     // Drawing way preview
-    m_wayPreview->paintGL(modelviewProjection);
+    m_wayPreview->paintGL();
 
     // Drawing grid
     if (m_displayGrid && selectionKind != MapEditorSelectionKind::None)
@@ -1738,9 +1738,9 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updateWayPreview(Position3D &pos)
+void ControlMapEditor::updateWayPreview(Position3D &pos, QList<OrientationKind> &orientations)
 {
-    m_wayPreview->initializeVertices(pos);
+    m_wayPreview->initializeVertices(pos, orientations);
     m_wayPreview->updateGL();
 }
 
@@ -1749,6 +1749,7 @@ void ControlMapEditor::updateWayPreview(Position3D &pos)
 void ControlMapEditor::clearWayPreview()
 {
     m_wayPreview->clear();
+    m_wayPreview->updateGL();
 }
 
 // -------------------------------------------------------

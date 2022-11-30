@@ -213,15 +213,17 @@ void WidgetMapEditor::initializeSpinBoxesCoords(QSpinBox *x, QSpinBox *y,
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::updateWayPreview(Position3D &pos)
+void WidgetMapEditor::updateWayPreview(Position3D &pos, QList<OrientationKind> &orientations)
 {
-    m_control.updateWayPreview(pos);
+    makeCurrent();
+    m_control.updateWayPreview(pos, orientations);
 }
 
 // -------------------------------------------------------
 
 void WidgetMapEditor::clearWayPreview()
 {
+    makeCurrent();
     m_control.clearWayPreview();
 }
 

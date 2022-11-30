@@ -19,6 +19,7 @@
 #include <QOpenGLTexture>
 #include "position.h"
 #include "vertex.h"
+#include "orientationkind.h"
 
 class WayPreview : protected QOpenGLFunctions
 {
@@ -28,9 +29,15 @@ public:
     void loadTexture();
     void initializeGL(QOpenGLShaderProgram *programStatic);
     void updateGL();
-    void initializeVertices(Position3D &p);
+    void initializeVertices(Position3D &p, QList<OrientationKind> &orientations);
+    void addSquare(Position3D &p, OrientationKind orientation, float left,
+        float right, int &count);
+    void addSquareCorner(Position3D &p, OrientationKind orientation, int &count);
+    void addSquareSide(Position3D &p, OrientationKind orientation, int &count);
+    void addSquareStart(Position3D &p, OrientationKind orientation, int &count);
+    void addSquareEnd(Position3D &p, OrientationKind orientation, int &count);
     void clear();
-    void paintGL(QMatrix4x4& modelviewProjection);
+    void paintGL();
 
 protected:
     // OpenGL informations
@@ -42,8 +49,6 @@ protected:
     QVector<GLuint> m_indexes;
     QOpenGLTexture* m_texture;
     int u_modelviewProjection;
-    int u_cursorPosition;
-    int u_frameTex;
 };
 
 #endif // WAYPREVIEW_H
