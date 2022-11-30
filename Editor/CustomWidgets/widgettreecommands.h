@@ -43,6 +43,7 @@ public:
     void initializeLinkedObject(SystemCommonObject* object);
     void initializeParameters(QStandardItemModel* parameters);
     void initializeTroopMonstersList(QStandardItemModel *troopMonstersList);
+    void initializeDialog(QDialog *dialog);
     QStandardItem* getSelected() const;
     QStandardItemModel* getModel() const;
     QList<QStandardItem*> getAllSelected() const;
@@ -60,6 +61,7 @@ protected:
     QList<EventCommandKind> m_listCommands;
     QList<EventCommandKind> m_availableCommands;
     int m_indexSelectedCommand;
+    QDialog *m_dialog;
 
     QStandardItem* getRootOfCommand(QStandardItem* selected) const;
     void newCommand(QStandardItem *selected);

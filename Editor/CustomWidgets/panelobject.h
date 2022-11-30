@@ -16,6 +16,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QHBoxLayout>
+#include <QDialog>
 #include "systemcommonobject.h"
 #include "widgettreecommands.h"
 #include "systemstate.h"
@@ -44,6 +45,7 @@ public:
     void initializeList(QStandardItemModel *list);
     void updateList();
     void initializeModel(SystemCommonObject *object);
+    void initializeDialog(QDialog *dialog);
     void updateModel();
     void clear();
     void setInheritanceName(int index, QString name);
@@ -69,6 +71,7 @@ private:
     SystemReaction *m_copiedReaction;
     QLabel *m_labelDetection;
     QHBoxLayout *m_layoutDetection;
+    QDialog *m_dialog;
 
     void translate();
 

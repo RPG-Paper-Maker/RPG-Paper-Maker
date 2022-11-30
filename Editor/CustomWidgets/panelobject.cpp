@@ -32,7 +32,8 @@ PanelObject::PanelObject(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PanelObject),
     m_model(nullptr),
-    m_copiedReaction(nullptr)
+    m_copiedReaction(nullptr),
+    m_dialog(nullptr)
 {
     ui->setupUi(this);
 
@@ -104,6 +105,13 @@ void PanelObject::updateList() {
 void PanelObject::initializeModel(SystemCommonObject *object) {
     m_model = object;
     RPM::get()->project()->setCurrentObject(object);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::initializeDialog(QDialog *dialog)
+{
+    m_dialog = dialog;
 }
 
 // -------------------------------------------------------
@@ -291,6 +299,7 @@ void PanelObject::updateReactionsWidgets() {
             widget = new QWidget();
             layout = new QGridLayout(widget);
             tree = new WidgetTreeCommands();
+            tree->initializeDialog(m_dialog);
             m_reactions.append(tree);
             layout->addWidget(tree, 0, 0);
 
@@ -478,6 +487,7 @@ void PanelObject::on_stateChanged(QModelIndex index, QModelIndex) {
 
                     // Commands
                     WidgetTreeCommands *widget = m_reactions.at(i);
+                    widget->initializeDialog(m_dialog);
                     widget->initializeLinkedObject(m_model);
                     widget->initializeParameters(event->modelParameters());
                     widget->initializeModel(reaction->modelCommands());
@@ -635,7 +645,7 @@ void PanelObject::on_pushButtonEditRoute_clicked() {
 
         state = reinterpret_cast<SystemState *>(selected->data().value<quintptr>());
         DialogCommandMoveObject dialog(state->eventCommandRoute(), nullptr,
-            nullptr, nullptr, true);
+            nullptr, nullptr, true, m_dialog);
         if (dialog.exec() == QDialog::Accepted) {
             state->removeRoute();
             state->setEventCommandRoute(dialog.getCommand());
@@ -742,7 +752,7 @@ void PanelObject::on_pushButtonDetection_clicked() {
 
         state = reinterpret_cast<SystemState *>(selected->data().value<quintptr>());
         command = state->eventCommandDetection();
-        DialogCommandSendEvent dialog(command, nullptr, nullptr);
+        DialogCommandSendEvent dialog(command, nullptr, nullptr, m_dialog);
         if (dialog.exec() == QDialog::Accepted) {
             state->removeDetection();
             command = dialog.getCommand();

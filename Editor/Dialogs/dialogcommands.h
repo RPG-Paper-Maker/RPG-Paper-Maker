@@ -41,7 +41,7 @@ public:
     ~DialogCommands();
     static DialogCommand * getDialogCommand(EventCommandKind kind, EventCommand
         *command, SystemCommonObject *object, QStandardItemModel *parameters,
-        QStandardItemModel *troopMonstersList);
+        QStandardItemModel *troopMonstersList, QDialog *parent = nullptr);
     EventCommand * getCommand() const;
 
 private:

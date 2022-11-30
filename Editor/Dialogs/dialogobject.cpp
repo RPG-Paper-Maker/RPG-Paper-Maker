@@ -26,6 +26,7 @@ DialogObject::DialogObject(SystemCommonObject *object, QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->widget->initializeDialog(this);
     ui->widget->initializeList(RPM::get()->project()->gameDatas()
                                ->commonEventsDatas()->modelCommonObjects());
     ui->widget->initializeModel(object);

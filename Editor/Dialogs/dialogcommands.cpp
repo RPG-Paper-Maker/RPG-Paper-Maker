@@ -96,61 +96,64 @@ EventCommand* DialogCommands::getCommand() const{ return p_command; }
 
 DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
     EventCommand *command, SystemCommonObject *object, QStandardItemModel
-    *parameters, QStandardItemModel *troopMonstersList)
+    *parameters, QStandardItemModel *troopMonstersList, QDialog *parent)
 {
     QStandardItemModel *properties = object == nullptr ? nullptr : object
         ->modelProperties();
     switch(kind)
     {
     case EventCommandKind::ShowText:
-        return new DialogCommandShowText(command, properties, parameters);
+        return new DialogCommandShowText(command, properties, parameters, parent);
     case EventCommandKind::ChangeVariables:
         return new DialogCommandChangeVariables(command, properties, parameters,
-            troopMonstersList);
+            troopMonstersList, parent);
     case EventCommandKind::InputNumber:
-        return new DialogCommandInputNumber(command, properties, parameters);
+        return new DialogCommandInputNumber(command, properties, parameters, parent);
     case EventCommandKind::If:
-        return new DialogCommandConditions(command, properties, parameters);
+        return new DialogCommandConditions(command, properties, parameters, false, parent);
     case EventCommandKind::ModifyInventory:
-        return new DialogCommandModifyInventory(command, properties, parameters);
+        return new DialogCommandModifyInventory(command, properties, parameters, parent);
     case EventCommandKind::ModifyTeam:
-        return new DialogCommandModifyTeam(command);
+        return new DialogCommandModifyTeam(command, nullptr, nullptr, parent);
     case EventCommandKind::StartBattle:
-        return new DialogCommandStartBattle(command, properties, parameters);
+        return new DialogCommandStartBattle(command, properties, parameters, parent);
     case EventCommandKind::ChangeState:
-        return new DialogCommandChangeState(command, properties, parameters);
+        return new DialogCommandChangeState(command, properties, parameters, parent);
     case EventCommandKind::SendEvent:
-        return new DialogCommandSendEvent(command, properties, parameters);
+        return new DialogCommandSendEvent(command, properties, parameters, parent);
     case EventCommandKind::TeleportObject:
-        return new DialogCommandTeleportObject(command, properties, parameters);
+        return new DialogCommandTeleportObject(command, properties, parameters, parent);
     case EventCommandKind::MoveObject:
-        return new DialogCommandMoveObject(command, properties, parameters, object);
+        return new DialogCommandMoveObject(command, properties, parameters, object, false, parent);
     case EventCommandKind::Wait:
-        return new DialogCommandWait(command, properties, parameters);
+        return new DialogCommandWait(command, properties, parameters, parent);
     case EventCommandKind::MoveCamera:
-        return new DialogCommandMoveCamera(command, properties, parameters);
+        return new DialogCommandMoveCamera(command, properties, parameters, parent);
     case EventCommandKind::PlayMusic:
         return new DialogCommandPlaySong(RPM::translate(Translations::PLAY_MUSIC
-            ) + RPM::DOT_DOT_DOT, SongKind::Music, command, properties, parameters);
+            ) + RPM::DOT_DOT_DOT, SongKind::Music, command, properties, parameters,
+            EventCommandKind::None, parent);
     case EventCommandKind::StopMusic:
         return new DialogCommandStopSong(RPM::translate(Translations::STOP_MUSIC
-            ) + RPM::DOT_DOT_DOT, SongKind::Music, command, properties, parameters);
+            ) + RPM::DOT_DOT_DOT, SongKind::Music, command, properties, parameters,
+            parent);
     case EventCommandKind::PlayBackgroundSound:
         return new DialogCommandPlaySong(RPM::translate(Translations
             ::PLAY_BACKGROUND_SOUND) + RPM::DOT_DOT_DOT , SongKind
-            ::BackgroundSound, command, properties, parameters);
+            ::BackgroundSound, command, properties, parameters, EventCommandKind
+            ::None, parent);
     case EventCommandKind::StopBackgroundSound:
         return new DialogCommandStopSong(RPM::translate(Translations
             ::PLAY_BACKGROUND_SOUND) + RPM::DOT_DOT_DOT, SongKind
-            ::BackgroundSound, command, properties, parameters);
+            ::BackgroundSound, command, properties, parameters, parent);
     case EventCommandKind::PlayASound:
         return new DialogCommandPlaySong(RPM::translate(Translations
             ::PLAY_A_SOUND) + RPM::DOT_DOT_DOT, SongKind::Sound, command,
-            properties, parameters);
+            properties, parameters, EventCommandKind::None, parent);
     case EventCommandKind::PlayMusicEffect:
         return new DialogCommandPlaySong(RPM::translate(Translations
             ::PLAY_MUSIC_EFFECT) + RPM::DOT_DOT_DOT, SongKind::MusicEffect,
-            command, properties, parameters);
+            command, properties, parameters, EventCommandKind::None, parent);
     case EventCommandKind::ChangeProperty:
         // Warning if no property available
         if (properties == nullptr || properties->rowCount() == 1)
@@ -160,88 +163,88 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
                 + RPM::DOT);
             return nullptr;
         }
-        return new DialogCommandChangeProperty(command, properties, parameters);
+        return new DialogCommandChangeProperty(command, properties, parameters, parent);
     case EventCommandKind::DisplayChoice:
-        return new DialogCommandDisplayChoice(command, properties, parameters);
+        return new DialogCommandDisplayChoice(command, properties, parameters, parent);
     case EventCommandKind::Script:
-        return new DialogCommandScript(command, properties, parameters);
+        return new DialogCommandScript(command, properties, parameters, parent);
     case EventCommandKind::DisplayAPicture:
-        return new DialogCommandDisplayAPicture(command, properties, parameters);
+        return new DialogCommandDisplayAPicture(command, properties, parameters, parent);
     case EventCommandKind::SetMoveTurnAPicture:
-        return new DialogCommandSetMoveTurnAPicture(command, properties, parameters);
+        return new DialogCommandSetMoveTurnAPicture(command, properties, parameters, parent);
     case EventCommandKind::RemoveAPicture:
-        return new DialogCommandRemoveAPicture(command, properties, parameters);
+        return new DialogCommandRemoveAPicture(command, properties, parameters, parent);
     case EventCommandKind::SetDialogBoxOptions:
-        return new DialogCommandSetDialogBoxOptions(command, properties, parameters);
+        return new DialogCommandSetDialogBoxOptions(command, properties, parameters, parent);
     case EventCommandKind::ChangeScreenTone:
-        return new DialogCommandChangeScreenTone(command, properties, parameters);
+        return new DialogCommandChangeScreenTone(command, properties, parameters, parent);
     case EventCommandKind::RemoveObjectFromMap:
-        return new DialogCommandRemoveObjectFromMap(command, properties, parameters);
+        return new DialogCommandRemoveObjectFromMap(command, properties, parameters, parent);
     case EventCommandKind::AllowForbidSaves:
     case EventCommandKind::AllowForbidMainMenu:
         return new DialogCommandAllowForbidSavesMainMenu(kind, command, properties,
-            parameters);
+            parameters, parent);
     case EventCommandKind::CallACommonReaction:
-        return new DialogCommandCallACommonReaction(command);
+        return new DialogCommandCallACommonReaction(command, parent);
     case EventCommandKind::Label:
-        return new DialogCommandLabel(false, command, properties, parameters);
+        return new DialogCommandLabel(false, command, properties, parameters, parent);
     case EventCommandKind::JumpLabel:
-        return new DialogCommandLabel(true, command, properties, parameters);
+        return new DialogCommandLabel(true, command, properties, parameters, parent);
     case EventCommandKind::Comment:
-        return new DialogCommandComment(command);
+        return new DialogCommandComment(command, parent);
     case EventCommandKind::ChangeAStatistic:
-        return new DialogCommandChangeAStatistic(command, properties, parameters);
+        return new DialogCommandChangeAStatistic(command, properties, parameters, parent);
     case EventCommandKind::ChangeASkill:
-        return new DialogCommandChangeASkill(command, properties, parameters);
+        return new DialogCommandChangeASkill(command, properties, parameters, parent);
     case EventCommandKind::ChangeName:
-        return new DialogCommandChangeName(command, properties, parameters);
+        return new DialogCommandChangeName(command, properties, parameters, parent);
     case EventCommandKind::ChangeEquipment:
-        return new DialogCommandChangeEquipment(command, properties, parameters);
+        return new DialogCommandChangeEquipment(command, properties, parameters, parent);
     case EventCommandKind::ModifyCurrency:
-        return new DialogCommandChangeMoney(command, properties, parameters);
+        return new DialogCommandChangeMoney(command, properties, parameters, parent);
     case EventCommandKind::DisplayAnAnimation:
-        return new DialogCommandDisplayAnAnimation(command, properties, parameters);
+        return new DialogCommandDisplayAnAnimation(command, properties, parameters, parent);
     case EventCommandKind::ShakeScreen:
-        return new DialogCommandShakeScreen(command, properties, parameters);
+        return new DialogCommandShakeScreen(command, properties, parameters, parent);
     case EventCommandKind::FlashScreen:
-        return new DialogCommandFlashScreen(command, properties, parameters);
+        return new DialogCommandFlashScreen(command, properties, parameters, parent);
     case EventCommandKind::Plugin:
-        return new DialogCommandPlugin(command, properties, parameters);
+        return new DialogCommandPlugin(command, properties, parameters, parent);
     case EventCommandKind::StartShopMenu:
-        return new DialogCommandStartShopMenu(command, properties, parameters);
+        return new DialogCommandStartShopMenu(command, properties, parameters, false, parent);
     case EventCommandKind::RestockShop:
-        return new DialogCommandStartShopMenu(command, properties, parameters, true);
+        return new DialogCommandStartShopMenu(command, properties, parameters, true, parent);
     case EventCommandKind::EnterANameMenu:
-        return new DialogCommandEnterANameMenu(command, properties, parameters);
+        return new DialogCommandEnterANameMenu(command, properties, parameters, parent);
     case EventCommandKind::CreateObjectInMap:
-        return new DialogCommandCreateObjectInMap(command, properties, parameters);
+        return new DialogCommandCreateObjectInMap(command, properties, parameters, parent);
     case EventCommandKind::ChangeStatus:
-        return new DialogCommandChangeStatus(command, properties, parameters);
+        return new DialogCommandChangeStatus(command, properties, parameters, parent);
     case EventCommandKind::ChangeBattleMusic:
         return new DialogCommandPlaySong(RPM::translate(Translations
             ::CHANGE_BATTLE_MUSIC), SongKind::Music, command, properties,
-            parameters, EventCommandKind::ChangeBattleMusic);
+            parameters, EventCommandKind::ChangeBattleMusic, parent);
     case EventCommandKind::ChangeVictoryMusic:
         return new DialogCommandPlaySong(RPM::translate(Translations
             ::CHANGE_VICTORY_MUSIC), SongKind::Music, command, properties,
-            parameters, EventCommandKind::ChangeVictoryMusic);
+            parameters, EventCommandKind::ChangeVictoryMusic, parent);
     case EventCommandKind::ForceAnAction:
         return new DialogCommandForceAnAction(command, properties, parameters,
-            troopMonstersList);
+            troopMonstersList, parent);
     case EventCommandKind::ChangeMapProperties:
-        return new DialogCommandChangeMapProperties(command, properties, parameters);
+        return new DialogCommandChangeMapProperties(command, properties, parameters, parent);
     case EventCommandKind::ChangeExperienceCurve:
-        return new DialogCommandChangeExperienceCurve(command, properties, parameters);
+        return new DialogCommandChangeExperienceCurve(command, properties, parameters, parent);
     case EventCommandKind::ChangeClass:
-        return new DialogCommandChangeClass(command, properties, parameters);
+        return new DialogCommandChangeClass(command, properties, parameters, parent);
     case EventCommandKind::ChangeChronometer:
-        return new DialogCommandChangeChronometer(command, properties, parameters);
+        return new DialogCommandChangeChronometer(command, properties, parameters, parent);
     case EventCommandKind::ChangeWeather:
-        return new DialogCommandChangeWeather(command, properties, parameters);
+        return new DialogCommandChangeWeather(command, properties, parameters, parent);
     case EventCommandKind::PlayAVideo:
-        return new DialogCommandPlayAVideo(command, properties, parameters);
+        return new DialogCommandPlayAVideo(command, properties, parameters, parent);
     case EventCommandKind::SwitchTextures:
-        return new DialogCommandSwitchTexture(command, properties, parameters);
+        return new DialogCommandSwitchTexture(command, properties, parameters, parent);
     default:
         return nullptr;
     }
@@ -254,7 +257,7 @@ void DialogCommands::openDialogCommand(EventCommandKind kind, EventCommand *comm
     DialogCommand *dialog;
 
     dialog = this->getDialogCommand(kind, command, m_linkedObject, m_parameters,
-        m_troopMonstersList);
+        m_troopMonstersList, reinterpret_cast<QDialog *>(this->parent()));
     if (dialog != nullptr) {
         this->setWindowOpacity(0);
         if (dialog->exec() == QDialog::Accepted){

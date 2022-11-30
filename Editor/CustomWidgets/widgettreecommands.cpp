@@ -35,7 +35,8 @@ WidgetTreeCommands::WidgetTreeCommands(QWidget *parent) :
     m_linkedObject(nullptr),
     m_parameters(nullptr),
     m_troopMonstersList(nullptr),
-    m_displayEnterBar(true)
+    m_displayEnterBar(true),
+    m_dialog(nullptr)
 {
     this->setMouseTracking(true);
     this->setFocus();
@@ -110,6 +111,13 @@ void WidgetTreeCommands::initializeParameters(QStandardItemModel* parameters){
 void WidgetTreeCommands::initializeTroopMonstersList(QStandardItemModel *troopMonstersList)
 {
     m_troopMonstersList = troopMonstersList;
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeCommands::initializeDialog(QDialog *dialog)
+{
+    m_dialog = dialog;
 }
 
 // -------------------------------------------------------
@@ -193,13 +201,14 @@ void WidgetTreeCommands::newCommand(QStandardItem* selected) {
     int result = QDialog::Accepted;
 
     if (m_enteredCommand.isEmpty()) {
-        DialogCommands dialog(m_linkedObject, m_parameters, m_troopMonstersList);
+        DialogCommands dialog(m_linkedObject, m_parameters, m_troopMonstersList,
+            m_dialog);
         result = dialog.exec();
         command = dialog.getCommand();
     } else {
         EventCommandKind kind = m_availableCommands.at(m_indexSelectedCommand);
         DialogCommand *dialogCommand = DialogCommands::getDialogCommand(kind,
-            nullptr, m_linkedObject, m_parameters, m_troopMonstersList);
+            nullptr, m_linkedObject, m_parameters, m_troopMonstersList, m_dialog);
         m_enteredCommand = "";
         updateEnteredCommandText();
         if (dialogCommand == nullptr) {
@@ -257,7 +266,7 @@ void WidgetTreeCommands::editCommand(QStandardItem *selected,
     // An editable command has a dialog associated to it
     if (command->isEditable()){
         DialogCommand *dialog = DialogCommands::getDialogCommand(command->kind(),
-            command, m_linkedObject, m_parameters, m_troopMonstersList);
+            command, m_linkedObject, m_parameters, m_troopMonstersList, m_dialog);
         if (dialog == nullptr)
         {
             return;
