@@ -7,6 +7,7 @@
         "Objects 3D: choose location centered or grounded",
         "Orthographic camera option",
         "Command move object: draw a way preview",
+        "Create / Edit object: put window on a side so the object is still visible",
         "Command stop sound",
         "Command display / hide an enemy",
         "Command transform an enemy",

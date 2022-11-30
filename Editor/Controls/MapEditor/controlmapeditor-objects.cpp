@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include "controlmapeditor.h"
 #include "rpm.h"
 #include "dialogobject.h"
@@ -233,6 +235,17 @@ void ControlMapEditor::addObject(Position &p) {
     RPM::isInConfig = true;
     RPM::isInObjectConfig = true;
     DialogObject dialog(object);
+    // Put it in a place where the object could be visible
+    QPoint globalCursorPos = QCursor::pos();
+    int x = 0, y = 0, w = dialog.width();
+    if (globalCursorPos.x() - w > 0)
+    {
+        x = (globalCursorPos.x() - w) / 2;
+    } else {
+        x = globalCursorPos.x() + (w / 2);
+    }
+    y = (QApplication::desktop()->screenGeometry().height() - dialog.height()) / 4;
+    dialog.move(x, y);
     int result = dialog.exec();
     RPM::isInObjectConfig = false;
     RPM::isInConfig = false;
