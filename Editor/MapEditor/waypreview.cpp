@@ -39,6 +39,15 @@ WayPreview::~WayPreview()
 //
 // -------------------------------------------------------
 
+bool WayPreview::checkTwoOrientations(OrientationKind kind1, OrientationKind kind2,
+    OrientationKind possibleKind1, OrientationKind possibleKind2)
+{
+    return (kind1 == possibleKind1 && kind2 == possibleKind2) || (kind1 ==
+        possibleKind2 && kind2 == possibleKind1);
+}
+
+// -------------------------------------------------------
+
 void WayPreview::loadTexture() {
     m_texture = new QOpenGLTexture(QImage(":/textures/Ressources/arrow-preview.png"));
     m_texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
@@ -67,11 +76,26 @@ void WayPreview::initializeVertices(Position3D &p, QList<OrientationKind> &orien
             this->addSquareStart(newP, currentOrientation, count);
         } else
         {
-            if (currentOrientation == previousOrientation)
+            if (currentOrientation == previousOrientation || WayPreview
+                ::checkTwoOrientations(currentOrientation, previousOrientation,
+                OrientationKind::North, OrientationKind::South) || WayPreview
+                ::checkTwoOrientations(currentOrientation, previousOrientation,
+                OrientationKind::East, OrientationKind::West))
             {
                 this->addSquareSide(newP, currentOrientation, count);
             } else {
-                this->addSquareCorner(newP, currentOrientation, count);
+                this->addSquareCornerOrientation(newP, currentOrientation,
+                    previousOrientation, OrientationKind::South, OrientationKind
+                    ::West, count);
+                this->addSquareCornerOrientation(newP, currentOrientation,
+                    previousOrientation, OrientationKind::North, OrientationKind
+                    ::East, count);
+                this->addSquareCornerOrientation(newP, currentOrientation,
+                    previousOrientation, OrientationKind::West, OrientationKind
+                    ::North, count);
+                this->addSquareCornerOrientation(newP, currentOrientation,
+                    previousOrientation, OrientationKind::East, OrientationKind
+                    ::South, count);
             }
         }
         previousOrientation = currentOrientation;
@@ -165,6 +189,21 @@ void WayPreview::addSquareStart(Position3D &p, OrientationKind orientation, int 
 void WayPreview::addSquareEnd(Position3D &p, OrientationKind orientation, int &count)
 {
     this->addSquare(p, orientation, 0.75f, 1.0f, count);
+}
+
+// -------------------------------------------------------
+
+void WayPreview::addSquareCornerOrientation(Position3D &p, OrientationKind currentOrientation,
+    OrientationKind previousOrientation, OrientationKind orientation1,
+    OrientationKind orientation2, int &count)
+{
+    if (currentOrientation == orientation1) {
+        if (previousOrientation == orientation2) {
+            this->addSquareCorner(p, orientation1, count);
+        } else {
+            this->addSquareCorner(p, orientation2, count);
+        }
+    }
 }
 
 // -------------------------------------------------------

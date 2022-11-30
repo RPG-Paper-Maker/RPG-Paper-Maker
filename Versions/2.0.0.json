@@ -8,7 +8,7 @@
         "Orthographic camera option",
         "Command move object: draw a way preview",
         "Create / Edit object: put window on a side so the object is still visible",
-        "Hide commands window when editing one"
+        "Hide commands window when editing one",
         "Command stop sound",
         "Command display / hide an enemy",
         "Command transform an enemy",
@@ -29,7 +29,7 @@
         2,
         2,
         2,
-        1,
+        2,
         2,
         2,
         0,

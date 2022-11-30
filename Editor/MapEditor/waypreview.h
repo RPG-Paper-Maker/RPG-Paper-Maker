@@ -26,6 +26,10 @@ class WayPreview : protected QOpenGLFunctions
 public:
     WayPreview();
     ~WayPreview();
+
+    static bool checkTwoOrientations(OrientationKind kind1, OrientationKind kind2,
+        OrientationKind possibleKind1, OrientationKind possibleKind2);
+
     void loadTexture();
     void initializeGL(QOpenGLShaderProgram *programStatic);
     void updateGL();
@@ -36,6 +40,10 @@ public:
     void addSquareSide(Position3D &p, OrientationKind orientation, int &count);
     void addSquareStart(Position3D &p, OrientationKind orientation, int &count);
     void addSquareEnd(Position3D &p, OrientationKind orientation, int &count);
+    void addSquareCornerOrientation(Position3D &p, OrientationKind currentOrientation,
+        OrientationKind previousOrientation, OrientationKind orientation1,
+        OrientationKind orientation2, int &count);
+
     void clear();
     void paintGL();
 
