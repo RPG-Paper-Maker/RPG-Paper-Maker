@@ -256,11 +256,13 @@ void DialogCommands::openDialogCommand(EventCommandKind kind, EventCommand *comm
     dialog = this->getDialogCommand(kind, command, m_linkedObject, m_parameters,
         m_troopMonstersList);
     if (dialog != nullptr) {
+        this->setWindowOpacity(0);
         if (dialog->exec() == QDialog::Accepted){
             p_command = dialog->getCommand();
             accept();
         }
         delete dialog;
+        this->setWindowOpacity(1);
     }
 }
 
