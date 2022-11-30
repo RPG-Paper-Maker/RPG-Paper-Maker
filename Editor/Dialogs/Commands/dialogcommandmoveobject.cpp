@@ -56,14 +56,17 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
 
 DialogCommandMoveObject::~DialogCommandMoveObject()
 {
-    reinterpret_cast<QDialog *>(this->parent())->setWindowOpacity(1);
+    if (this->parent() != nullptr)
+    {
+        reinterpret_cast<QDialog *>(this->parent())->setWindowOpacity(1);
+        MainWindow::get()->mapEditor()->clearWayPreview();
+    }
     SuperListItem::deleteModel(ui->treeView->getModel());
     delete ui;
     if (RPM::isInConfig && !RPM::isInObjectConfig)
     {
         SuperListItem::deleteModel(m_modelObjects);
     }
-    MainWindow::get()->mapEditor()->clearWayPreview();
 }
 
 // -------------------------------------------------------
@@ -652,8 +655,11 @@ void DialogCommandMoveObject::on_updateJsonMoves(SuperListItem *)
                 }
             }
         }
-        MainWindow::get()->mapEditor()->updateWayPreview(pos, orientations);
-        this->setWindowOpacity(orientations.isEmpty() ? 1 : 0.75);
-        reinterpret_cast<QDialog *>(this->parent())->setWindowOpacity(orientations.isEmpty() ? 1 : 0);
+        if (this->parent() != nullptr)
+        {
+            MainWindow::get()->mapEditor()->updateWayPreview(pos, orientations);
+            this->setWindowOpacity(orientations.isEmpty() ? 1 : 0.75);
+            reinterpret_cast<QDialog *>(this->parent())->setWindowOpacity(orientations.isEmpty() ? 1 : 0);
+        }
     }
 }

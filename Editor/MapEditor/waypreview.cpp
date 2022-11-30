@@ -125,8 +125,7 @@ void WayPreview::initializeVertices(Position3D &p, QList<OrientationKind> &orien
 void WayPreview::addSquare(Position3D &p, OrientationKind orientation, float left,
     float right, int &count)
 {
-    QVector3D pos(p.x() * RPM::getSquareSize(), (p.y() * RPM::getSquareSize()) +
-        (RPM::getSquareSize() / 2), p.z() * RPM::getSquareSize());
+    QVector3D pos(p.x() * RPM::getSquareSize(), p.getY() + 1, p.z() * RPM::getSquareSize());
     QVector3D vecA = Lands::verticesQuad[0] * RPM::getSquareSize() + pos;
     QVector3D vecB = Lands::verticesQuad[1] * RPM::getSquareSize() + pos;
     QVector3D vecC = Lands::verticesQuad[2] * RPM::getSquareSize() + pos;
