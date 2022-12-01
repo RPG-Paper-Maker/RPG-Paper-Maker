@@ -1932,5 +1932,7 @@
     "synchronize.map.objects": "Synchronize map objects",
     "climbing": "Climbing",
     "centered": "Centered",
-    "orthographic": "Orthographic"
+    "orthographic": "Orthographic",
+    "stop.a.sound": "Stop a sound",
+    "sound.id": "Sound ID"
 }

@@ -245,6 +245,10 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandPlayAVideo(command, properties, parameters, parent);
     case EventCommandKind::SwitchTextures:
         return new DialogCommandSwitchTexture(command, properties, parameters, parent);
+    case EventCommandKind::StopASound:
+        return new DialogCommandStopSong(RPM::translate(Translations::STOP_A_SOUND)
+            + RPM::DOT_DOT_DOT, SongKind::Sound, command, properties, parameters,
+            parent);
     default:
         return nullptr;
     }
@@ -396,6 +400,7 @@ void DialogCommands::translate() {
     ui->pushButtonChangeWeather->setText(EventCommand::kindToString(EventCommandKind::ChangeWeather));
     ui->pushButtonPlayAVideo->setText(EventCommand::kindToString(EventCommandKind::PlayAVideo));
     ui->pushButtonSwitchTexture->setText(EventCommand::kindToString(EventCommandKind::SwitchTextures));
+    ui->pushButtonStopASound->setText(EventCommand::kindToString(EventCommandKind::StopASound));
     ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
     ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));
     ui->groupBoxMedia->setTitle(RPM::translate(Translations::MEDIA));
@@ -853,4 +858,11 @@ void DialogCommands::on_pushButtonPlayAVideo_clicked()
 void DialogCommands::on_pushButtonSwitchTexture_clicked()
 {
     this->openDialogCommand(EventCommandKind::SwitchTextures);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonStopASound_clicked()
+{
+    this->openDialogCommand(EventCommandKind::StopASound);
 }

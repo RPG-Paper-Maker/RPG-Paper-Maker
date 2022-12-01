@@ -1932,5 +1932,7 @@
 	"synchronize.map.objects": "Synchroniser les objets de la carte",
     "climbing": "Escalade",
     "centered": "Centré",
-    "orthographic": "Orthographique"
+    "orthographic": "Orthographique",
+    "stop.a.sound": "Stopper un son",
+    "sound.id": "Son d'ID"
 }

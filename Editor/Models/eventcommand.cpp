@@ -372,6 +372,8 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
         str += this->strPlayAVideo(properties, parameters); break;
     case EventCommandKind::SwitchTextures:
         str += this->strSwitchTexture(properties, parameters); break;
+    case EventCommandKind::StopASound:
+        str += this->strStopASound(properties, parameters); break;
     default:
         break;
     }
@@ -1688,8 +1690,16 @@ QString EventCommand::strStopSong(QStandardItemModel *properties, QStandardItemM
     *parameters) const
 {
     int i = 0;
-    return this->strProperty(i, properties, parameters) + RPM::SPACE + RPM
-        ::translate(Translations::SECONDS);
+    QString str = "";
+    QString seconds = this->strProperty(i, properties, parameters) + RPM::SPACE +
+        RPM::translate(Translations::SECONDS);
+    if (this->m_kind == EventCommandKind::StopASound)
+    {
+        str += RPM::translate(Translations::SOUND_ID) + RPM::EQUAL + this
+            ->strProperty(i, properties, parameters) + RPM::SPACE;
+    }
+    str += seconds;
+    return str;
 }
 
 // -------------------------------------------------------
@@ -2977,6 +2987,17 @@ QString EventCommand::strSwitchTexture(QStandardItemModel *properties,
         str += this->strProperty(i, properties, parameters, true);
     }
     return str;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strStopASound(QStandardItemModel *properties, QStandardItemModel
+    *parameters) const
+{
+
+    return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
+        Translations::STOP_A_SOUND) + "</strong>" + RPM::COLON +
+        RPM::SPACE + this->strStopSong(properties, parameters);
 }
 
 // -------------------------------------------------------

@@ -493,6 +493,13 @@
                  </widget>
                 </item>
                 <item>
+                 <widget class="QPushButton" name="pushButtonStopASound">
+                  <property name="text">
+                   <string>Stop a sound...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QPushButton" name="pushButtonPlayMusicEffect">
                   <property name="enabled">
                    <bool>true</bool>

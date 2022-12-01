@@ -29,6 +29,15 @@ DialogCommandStopSong::DialogCommandStopSong(QString title, SongKind kind,
     ui(new Ui::DialogCommandStopSong)
 {
     ui->setupUi(this);
+
+    if (kind == SongKind::Sound)
+    {
+        ui->panelPrimitiveSoundID->initializeNumber(parameters, properties);
+    } else {
+        ui->labelSoundID->hide();
+        ui->panelPrimitiveSoundID->hide();
+        ui->horizontalSpacer->changeSize(0, 0);
+    }
     
     this->setWindowTitle(title);
     ui->panelPrimitiveValueSeconds->initializeNumber(parameters, properties);
@@ -49,6 +58,8 @@ EventCommandKind DialogCommandStopSong::getCommandKind() const {
         return EventCommandKind::StopMusic;
     case SongKind::BackgroundSound:
         return EventCommandKind::StopBackgroundSound;
+    case SongKind::Sound:
+        return EventCommandKind::StopASound;
     default:
         break;
     }
@@ -66,16 +77,23 @@ EventCommandKind DialogCommandStopSong::getCommandKind() const {
 
 void DialogCommandStopSong::translate()
 {
+    ui->labelSoundID->setText(RPM::translate(Translations::SOUND_ID) + RPM::COLON);
     ui->labelDisappearWithTime->setText(RPM::translate(Translations
         ::DISAPPEAR_WITH_TIME) + RPM::COLON);
     ui->labelSeconds->setText(RPM::translate(Translations::SECONDS));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
+// -------------------------------------------------------
+
 void DialogCommandStopSong::initialize(EventCommand* command) {
     int i = 0;
 
     ui->panelPrimitiveValueSeconds->initializeCommand(command, i);
+    if (m_kind == SongKind::Sound)
+    {
+        ui->panelPrimitiveSoundID->initializeCommand(command, i);
+    }
 }
 
 // -------------------------------------------------------
@@ -83,6 +101,10 @@ void DialogCommandStopSong::initialize(EventCommand* command) {
 EventCommand* DialogCommandStopSong::getCommand() const {
     QVector<QString> command;
     ui->panelPrimitiveValueSeconds->getCommand(command);
+    if (m_kind == SongKind::Sound)
+    {
+        ui->panelPrimitiveSoundID->getCommand(command);
+    }
 
     return new EventCommand(getCommandKind(), command);
 }

@@ -124,6 +124,7 @@ private slots:
     void on_pushButtonChangeWeather_clicked();
     void on_pushButtonPlayAVideo_clicked();
     void on_pushButtonSwitchTexture_clicked();
+    void on_pushButtonStopASound_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

@@ -1953,6 +1953,8 @@ const QString Translations::SYNCHRONIZE_MAP_OBJECTS = "synchronize.map.objects";
 const QString Translations::CLIMBING = "climbing";
 const QString Translations::CENTERED = "centered";
 const QString Translations::ORTHOGRAPHIC = "orthographic";
+const QString Translations::STOP_A_SOUND = "stop.a.sound";
+const QString Translations::SOUND_ID = "sound.id";
 
 // -------------------------------------------------------
 //

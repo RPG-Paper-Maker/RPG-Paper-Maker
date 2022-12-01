@@ -663,6 +663,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::CHANGE_WEATHER) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::PLAY_A_VIDEO) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::SWITCH_TEXTURE) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::STOP_A_SOUND) + RPM::DOT_DOT_DOT,
         ""
     });
     RPM::ENUM_TO_STRING_TARGET_KIND = QStringList({

@@ -1966,6 +1966,8 @@ public:
     static const QString CLIMBING;
     static const QString CENTERED;
     static const QString ORTHOGRAPHIC;
+    static const QString STOP_A_SOUND;
+    static const QString SOUND_ID;
 
     Translations();
     virtual ~Translations();

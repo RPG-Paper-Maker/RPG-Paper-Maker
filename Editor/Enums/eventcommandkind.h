@@ -97,6 +97,7 @@ enum class EventCommandKind {
     ChangeWeather,
     PlayAVideo,
     SwitchTextures,
+    StopASound,
     Last
 };
 

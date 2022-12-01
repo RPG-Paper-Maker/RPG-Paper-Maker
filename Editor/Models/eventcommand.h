@@ -229,6 +229,8 @@ private:
         *parameters) const;
     QString strSwitchTexture(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
+    QString strStopASound(QStandardItemModel *properties, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)
