@@ -49,6 +49,7 @@ void DialogSystemMonsterTroop::initialize()
         ->gameDatas()->monstersDatas()->model());
     ui->comboBoxMonster->setCurrentIndex(index);
     ui->panelPrimitiveLevel->initializeNumberAndUpdate(m_monsterTroop.level());
+    ui->panelPrimitiveHidden->initializeSwitchAndUpdate(m_monsterTroop.hidden());
     ui->panelPrimitiveSpecificPosition->initializeMessage(true);
     if (m_monsterTroop.isSpecificPosition())
     {
@@ -65,6 +66,7 @@ void DialogSystemMonsterTroop::translate()
     this->setWindowTitle(RPM::translate(Translations::SET_MONSTER_TROOP) + RPM
         ::DOT_DOT_DOT);
     ui->labelLevel->setText(RPM::translate(Translations::LEVEL) + RPM::COLON);
+    ui->labelHidden->setText(RPM::translate(Translations::HIDDEN) + RPM::COLON);
     ui->labelMonster->setText(RPM::translate(Translations::MONSTER) + RPM::COLON);
     ui->checkBoxSpecificPosition->setText(RPM::translate(Translations::SPECIFIC_POSITION_ACCORDING_CENTER) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);

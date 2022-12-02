@@ -28,16 +28,20 @@ class SystemMonsterTroop : public SuperListItem
 {
 public:
     static const QString JSON_LEVEL;
+    static const QString JSON_HIDDEN;
     static const QString JSON_IS_SPECIFIC_POSITION;
     static const QString JSON_SPECIFIC_POSITION;
+    static const bool DEFAULT_HIDDEN;
     static const bool DEFAULT_IS_SPECIFIC_POSITION;
     static const QString DEFAULT_SPECIFIC_POSITION;
 
     SystemMonsterTroop(int i = 1, QString n = "", PrimitiveValue *level = new
-        PrimitiveValue(1), bool isSpecificPosition = DEFAULT_IS_SPECIFIC_POSITION,
-        PrimitiveValue *specificPosition = new PrimitiveValue(DEFAULT_SPECIFIC_POSITION));
+        PrimitiveValue(1), PrimitiveValue *hidden = new PrimitiveValue(DEFAULT_HIDDEN),
+        bool isSpecificPosition = DEFAULT_IS_SPECIFIC_POSITION, PrimitiveValue
+        *specificPosition = new PrimitiveValue(DEFAULT_SPECIFIC_POSITION));
     virtual ~SystemMonsterTroop();
     PrimitiveValue * level() const;
+    PrimitiveValue * hidden() const;
     bool isSpecificPosition() const;
     void setIsSpecificPosition(bool isSpecificPosition);
     PrimitiveValue * specificPosition() const;
@@ -53,6 +57,7 @@ public:
 
 protected:
     PrimitiveValue *m_level;
+    PrimitiveValue *m_hidden;
     bool m_isSpecificPosition;
     PrimitiveValue *m_specificPosition;
 };

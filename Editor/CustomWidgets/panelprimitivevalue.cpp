@@ -208,6 +208,15 @@ void PanelPrimitiveValue::initializeSwitch(QStandardItemModel *parameters,
 
 // -------------------------------------------------------
 
+void PanelPrimitiveValue::initializeSwitchAndUpdate(PrimitiveValue *m)
+{
+    initializeSwitch(m->modelParameter(), m->modelProperties());
+    initializeModel(m);
+    updateModel();
+}
+
+// -------------------------------------------------------
+
 void PanelPrimitiveValue::initializeProperty(QStandardItemModel *parameters,
     QStandardItemModel *properties, bool isInteger)
 {

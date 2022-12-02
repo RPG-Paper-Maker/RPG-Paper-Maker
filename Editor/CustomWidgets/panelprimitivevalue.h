@@ -61,6 +61,7 @@ public:
         true);
     void initializeSwitch(QStandardItemModel *parameters, QStandardItemModel
         *properties);
+    void initializeSwitchAndUpdate(PrimitiveValue *m);
     void initializeProperty(QStandardItemModel *parameters, QStandardItemModel
         *properties, bool isInteger = false);
     void initializeVariableParamProp(QStandardItemModel *parameters,
