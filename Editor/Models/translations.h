@@ -1968,6 +1968,7 @@ public:
     static const QString ORTHOGRAPHIC;
     static const QString STOP_A_SOUND;
     static const QString SOUND_ID;
+    static const QString DISPLAY_HIDE_A_BATTLER;
 
     Translations();
     virtual ~Translations();

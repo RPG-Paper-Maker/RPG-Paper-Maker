@@ -1934,5 +1934,6 @@
     "centered": "Centered",
     "orthographic": "Orthographic",
     "stop.a.sound": "Stop a sound",
-    "sound.id": "Sound ID"
+    "sound.id": "Sound ID",
+    "display.hide.a.battler": "Display / Hide a battler"
 }

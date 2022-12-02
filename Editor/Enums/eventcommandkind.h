@@ -98,6 +98,7 @@ enum class EventCommandKind {
     PlayAVideo,
     SwitchTextures,
     StopASound,
+    DisplayHideABattler,
     Last
 };
 

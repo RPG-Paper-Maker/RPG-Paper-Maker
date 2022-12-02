@@ -374,6 +374,9 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
         str += this->strSwitchTexture(properties, parameters); break;
     case EventCommandKind::StopASound:
         str += this->strStopASound(properties, parameters); break;
+    case EventCommandKind::DisplayHideABattler:
+        str += this->strDisplayHideABattler(properties, parameters, troopMonstersList);
+        break;
     default:
         break;
     }
@@ -386,6 +389,7 @@ QString EventCommand::strTroopMonstersList(QStandardItemModel *model, int &i) co
 {
     if (model == nullptr)
     {
+        i++;
         return "";
     }
      SuperListItem *super = SuperListItem::getByIndex(model, this->valueCommandAt(i++)
@@ -2998,6 +3002,31 @@ QString EventCommand::strStopASound(QStandardItemModel *properties, QStandardIte
     return "<strong style=\"color:" + COLOR_BLUE + "\">" + RPM::translate(
         Translations::STOP_A_SOUND) + "</strong>" + RPM::COLON +
         RPM::SPACE + this->strStopSong(properties, parameters);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strDisplayHideABattler(QStandardItemModel *properties, QStandardItemModel
+    *parameters, QStandardItemModel *troopMonstersList) const
+{
+    int i = 0;
+    QString battler = RPM::translate(Translations::BATTLER) + RPM::SPACE;
+    switch(this->valueCommandAt(i++).toInt())
+    {
+    case 0:
+        battler += RPM::translate(Translations::ENEMY) + RPM::COLON + RPM::SPACE
+            + this->strTroopMonstersList(troopMonstersList, i);
+        break;
+    case 1:
+        battler += RPM::translate(Translations::HERO_ENEMY_INSTANCE_ID) + RPM
+            ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters);
+        break;
+    }
+    QString hidden = RPM::translate(Translations::HIDDEN) + RPM::EQUAL + this
+        ->strProperty(i, properties, parameters);
+    return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+        Translations::DISPLAY_HIDE_A_BATTLER) + "</strong>" + RPM::COLON + RPM::SPACE +
+        battler + RPM::SPACE + hidden;
 }
 
 // -------------------------------------------------------

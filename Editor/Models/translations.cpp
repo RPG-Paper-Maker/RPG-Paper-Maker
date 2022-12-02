@@ -1955,6 +1955,7 @@ const QString Translations::CENTERED = "centered";
 const QString Translations::ORTHOGRAPHIC = "orthographic";
 const QString Translations::STOP_A_SOUND = "stop.a.sound";
 const QString Translations::SOUND_ID = "sound.id";
+const QString Translations::DISPLAY_HIDE_A_BATTLER = "display.hide.a.battler";
 
 // -------------------------------------------------------
 //

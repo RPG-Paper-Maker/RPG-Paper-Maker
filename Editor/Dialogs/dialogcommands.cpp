@@ -61,6 +61,7 @@
 #include "dialogcommandchangeweather.h"
 #include "dialogcommandplayavideo.h"
 #include "dialogcommandswitchtexture.h"
+#include "dialogcommanddisplayhideabattler.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -249,6 +250,9 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandStopSong(RPM::translate(Translations::STOP_A_SOUND)
             + RPM::DOT_DOT_DOT, SongKind::Sound, command, properties, parameters,
             parent);
+    case EventCommandKind::DisplayHideABattler:
+        return new DialogCommandDisplayHideABattler(command, properties, parameters,
+            troopMonstersList, parent);
     default:
         return nullptr;
     }
@@ -401,6 +405,7 @@ void DialogCommands::translate() {
     ui->pushButtonPlayAVideo->setText(EventCommand::kindToString(EventCommandKind::PlayAVideo));
     ui->pushButtonSwitchTexture->setText(EventCommand::kindToString(EventCommandKind::SwitchTextures));
     ui->pushButtonStopASound->setText(EventCommand::kindToString(EventCommandKind::StopASound));
+    ui->pushButtonDisplayHideABattler->setText(EventCommand::kindToString(EventCommandKind::DisplayHideABattler));
     ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
     ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));
     ui->groupBoxMedia->setTitle(RPM::translate(Translations::MEDIA));
@@ -865,4 +870,11 @@ void DialogCommands::on_pushButtonSwitchTexture_clicked()
 void DialogCommands::on_pushButtonStopASound_clicked()
 {
     this->openDialogCommand(EventCommandKind::StopASound);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonDisplayHideABattler_clicked()
+{
+    this->openDialogCommand(EventCommandKind::DisplayHideABattler);
 }

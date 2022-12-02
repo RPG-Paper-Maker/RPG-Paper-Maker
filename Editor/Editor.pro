@@ -74,6 +74,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommanddisplayananimation.h \
     Dialogs/Commands/dialogcommanddisplayapicture.h \
     Dialogs/Commands/dialogcommanddisplaychoice.h \
+    Dialogs/Commands/dialogcommanddisplayhideabattler.h \
     Dialogs/Commands/dialogcommandflashscreen.h \
     Dialogs/Commands/dialogcommandforceanaction.h \
     Dialogs/Commands/dialogcommandplayavideo.h \
@@ -524,6 +525,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommanddisplayananimation.cpp \
     Dialogs/Commands/dialogcommanddisplayapicture.cpp \
     Dialogs/Commands/dialogcommanddisplaychoice.cpp \
+    Dialogs/Commands/dialogcommanddisplayhideabattler.cpp \
     Dialogs/Commands/dialogcommandflashscreen.cpp \
     Dialogs/Commands/dialogcommandforceanaction.cpp \
     Dialogs/Commands/dialogcommandplayavideo.cpp \
@@ -912,6 +914,7 @@ FORMS += \
     Dialogs/Commands/dialogcommanddisplayananimation.ui \
     Dialogs/Commands/dialogcommanddisplayapicture.ui \
     Dialogs/Commands/dialogcommanddisplaychoice.ui \
+    Dialogs/Commands/dialogcommanddisplayhideabattler.ui \
     Dialogs/Commands/dialogcommandflashscreen.ui \
     Dialogs/Commands/dialogcommandforceanaction.ui \
     Dialogs/Commands/dialogcommandplayavideo.ui \

@@ -231,6 +231,8 @@ private:
         *parameters) const;
     QString strStopASound(QStandardItemModel *properties, QStandardItemModel
         *parameters) const;
+    QString strDisplayHideABattler(QStandardItemModel *properties, QStandardItemModel
+        *parameters, QStandardItemModel *troopMonstersList) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

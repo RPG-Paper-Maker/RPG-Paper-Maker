@@ -125,6 +125,7 @@ private slots:
     void on_pushButtonPlayAVideo_clicked();
     void on_pushButtonSwitchTexture_clicked();
     void on_pushButtonStopASound_clicked();
+    void on_pushButtonDisplayHideABattler_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

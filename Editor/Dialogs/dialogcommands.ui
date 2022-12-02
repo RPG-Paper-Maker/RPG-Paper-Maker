@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>510</width>
-    <height>600</height>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -680,12 +680,12 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButtonDisplayHideEnemy">
+               <widget class="QPushButton" name="pushButtonDisplayHideABattler">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
-                 <string>Display/Hide enemy...</string>
+                 <string>Display/Hide a battler...</string>
                 </property>
                </widget>
               </item>
