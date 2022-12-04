@@ -88,6 +88,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommandstartshopmenu.h \
     Dialogs/Commands/dialogcommandenteranamemenu.h \
     Dialogs/Commands/dialogcommandswitchtexture.h \
+    Dialogs/Commands/dialogcommandtransformabattler.h \
     Dialogs/Systems/dialogsystemanimationframeeffect.h \
     Dialogs/Systems/dialogsystemanimationframeelement.h \
     Dialogs/Systems/dialogsystembattlemap.h \
@@ -538,6 +539,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommandshakescreen.cpp \
     Dialogs/Commands/dialogcommandstartshopmenu.cpp \
     Dialogs/Commands/dialogcommandswitchtexture.cpp \
+    Dialogs/Commands/dialogcommandtransformabattler.cpp \
     Dialogs/Systems/dialogsystemanimationframeeffect.cpp \
     Dialogs/Systems/dialogsystemanimationframeelement.cpp \
     Dialogs/Systems/dialogsystembattlemap.cpp \
@@ -927,6 +929,7 @@ FORMS += \
     Dialogs/Commands/dialogcommandshakescreen.ui \
     Dialogs/Commands/dialogcommandstartshopmenu.ui \
     Dialogs/Commands/dialogcommandswitchtexture.ui \
+    Dialogs/Commands/dialogcommandtransformabattler.ui \
     Dialogs/Systems/dialogsystemanimationframeeffect.ui \
     Dialogs/Systems/dialogsystemanimationframeelement.ui \
     Dialogs/Systems/dialogsystembattlemap.ui \

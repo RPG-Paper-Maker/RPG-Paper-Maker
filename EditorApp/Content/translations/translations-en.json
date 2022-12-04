@@ -1935,5 +1935,6 @@
     "orthographic": "Orthographic",
     "stop.a.sound": "Stop a sound",
     "sound.id": "Sound ID",
-    "display.hide.a.battler": "Display / Hide a battler"
+    "display.hide.a.battler": "Display / Hide a battler",
+    "transform.a.battler": "Transform a battler"
 }

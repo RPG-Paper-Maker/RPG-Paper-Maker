@@ -377,6 +377,9 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::DisplayHideABattler:
         str += this->strDisplayHideABattler(properties, parameters, troopMonstersList);
         break;
+    case EventCommandKind::TransformABattler:
+        str += this->strTransformABattler(properties, parameters, troopMonstersList);
+        break;
     default:
         break;
     }
@@ -3027,6 +3030,33 @@ QString EventCommand::strDisplayHideABattler(QStandardItemModel *properties, QSt
     return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
         Translations::DISPLAY_HIDE_A_BATTLER) + "</strong>" + RPM::COLON + RPM::SPACE +
         battler + RPM::SPACE + hidden;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strTransformABattler(QStandardItemModel *properties,
+    QStandardItemModel *parameters, QStandardItemModel *troopMonstersList) const
+{
+    int i = 0;
+    QString battler = RPM::translate(Translations::BATTLER) + RPM::SPACE;
+    switch(this->valueCommandAt(i++).toInt())
+    {
+    case 0:
+        battler += RPM::translate(Translations::ENEMY) + RPM::COLON + RPM::SPACE
+            + this->strTroopMonstersList(troopMonstersList, i);
+        break;
+    case 1:
+        battler += RPM::translate(Translations::HERO_ENEMY_INSTANCE_ID) + RPM
+            ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters);
+        break;
+    }
+    QString monsterID = RPM::translate(Translations::MONSTER_ID) + RPM::EQUAL +
+        this->strProperty(i, properties, parameters);
+    QString level = RPM::translate(Translations::LEVEL) + RPM::EQUAL +
+        this->strProperty(i, properties, parameters);
+    return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+        Translations::TRANSFORME_A_BATTLER) + "</strong>" + RPM::COLON + RPM::SPACE +
+        battler + RPM::SPACE + monsterID + RPM::SPACE + level;
 }
 
 // -------------------------------------------------------

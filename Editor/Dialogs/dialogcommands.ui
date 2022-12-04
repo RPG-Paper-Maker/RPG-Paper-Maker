@@ -690,6 +690,13 @@
                </widget>
               </item>
               <item>
+               <widget class="QPushButton" name="pushButtonTransformABattler">
+                <property name="text">
+                 <string>Transform a battler...</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QPushButton" name="pushButtonForceAction">
                 <property name="enabled">
                  <bool>true</bool>

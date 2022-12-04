@@ -233,6 +233,8 @@ private:
         *parameters) const;
     QString strDisplayHideABattler(QStandardItemModel *properties, QStandardItemModel
         *parameters, QStandardItemModel *troopMonstersList) const;
+    QString strTransformABattler(QStandardItemModel *properties, QStandardItemModel
+        *parameters, QStandardItemModel *troopMonstersList) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

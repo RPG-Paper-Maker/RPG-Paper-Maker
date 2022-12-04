@@ -126,6 +126,7 @@ private slots:
     void on_pushButtonSwitchTexture_clicked();
     void on_pushButtonStopASound_clicked();
     void on_pushButtonDisplayHideABattler_clicked();
+    void on_pushButtonTransformABattler_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

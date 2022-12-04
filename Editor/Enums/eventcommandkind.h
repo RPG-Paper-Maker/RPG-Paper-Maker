@@ -99,6 +99,7 @@ enum class EventCommandKind {
     SwitchTextures,
     StopASound,
     DisplayHideABattler,
+    TransformABattler,
     Last
 };
 

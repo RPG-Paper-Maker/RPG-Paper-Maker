@@ -1969,6 +1969,7 @@ public:
     static const QString STOP_A_SOUND;
     static const QString SOUND_ID;
     static const QString DISPLAY_HIDE_A_BATTLER;
+    static const QString TRANSFORME_A_BATTLER;
 
     Translations();
     virtual ~Translations();

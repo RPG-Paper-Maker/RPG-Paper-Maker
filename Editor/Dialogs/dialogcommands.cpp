@@ -62,6 +62,7 @@
 #include "dialogcommandplayavideo.h"
 #include "dialogcommandswitchtexture.h"
 #include "dialogcommanddisplayhideabattler.h"
+#include "dialogcommandtransformabattler.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -253,6 +254,9 @@ DialogCommand * DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::DisplayHideABattler:
         return new DialogCommandDisplayHideABattler(command, properties, parameters,
             troopMonstersList, parent);
+    case EventCommandKind::TransformABattler:
+        return new DialogCommandTransformABattler(command, properties, parameters,
+            troopMonstersList, parent);
     default:
         return nullptr;
     }
@@ -406,6 +410,7 @@ void DialogCommands::translate() {
     ui->pushButtonSwitchTexture->setText(EventCommand::kindToString(EventCommandKind::SwitchTextures));
     ui->pushButtonStopASound->setText(EventCommand::kindToString(EventCommandKind::StopASound));
     ui->pushButtonDisplayHideABattler->setText(EventCommand::kindToString(EventCommandKind::DisplayHideABattler));
+    ui->pushButtonTransformABattler->setText(EventCommand::kindToString(EventCommandKind::TransformABattler));
     ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
     ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));
     ui->groupBoxMedia->setTitle(RPM::translate(Translations::MEDIA));
@@ -877,4 +882,11 @@ void DialogCommands::on_pushButtonStopASound_clicked()
 void DialogCommands::on_pushButtonDisplayHideABattler_clicked()
 {
     this->openDialogCommand(EventCommandKind::DisplayHideABattler);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonTransformABattler_clicked()
+{
+    this->openDialogCommand(EventCommandKind::TransformABattler);
 }
