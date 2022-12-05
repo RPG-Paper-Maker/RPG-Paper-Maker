@@ -33,6 +33,7 @@ const QString SystemEffect::JSON_IS_DAMAGE_PRECISION = "idp";
 const QString SystemEffect::JSON_DAMAGE_PRECISION_FORMULA = "dpf";
 const QString SystemEffect::JSON_IS_DAMAGE_STOCK_VARIABLE = "idsv";
 const QString SystemEffect::JSON_DAMAGE_STOCK_VARIABLE = "dsv";
+const QString SystemEffect::JSON_IS_DAMAGE_DISPLAY_NAME = "iddn";
 const QString SystemEffect::JSON_IS_ADD_STATUS = "iast";
 const QString SystemEffect::JSON_STATUS_ID = "sid";
 const QString SystemEffect::JSON_STATUS_PRECISION_FORMULA = "spf";
@@ -53,13 +54,15 @@ const QString SystemEffect::JSON_TEMPORARILY_CHANGE_TARGET_FORMULA = "tctf";
 
 SystemEffect::SystemEffect() :
     SystemEffect(EffectKind::Damages, DamagesKind::Stat, new PrimitiveValue(
-        PrimitiveValueKind::DataBase, RPM::get()->project()->gameDatas()->battleSystemDatas()->modelCommonStatistics()->invisibleRootItem()->rowCount() < 3 ? 1 : 3), PrimitiveValue
+        PrimitiveValueKind::DataBase, RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelCommonStatistics()->invisibleRootItem()
+        ->rowCount() < 3 ? 1 : 3), PrimitiveValue
         ::createDefaultDataBaseValue(), 1, PrimitiveValue
         ::createDefaultMessageValue(), true, new PrimitiveValue(QString("0")),
         false, new PrimitiveValue(QString("0")), false, PrimitiveValue
         ::createDefaultDataBaseValue(), false, new PrimitiveValue(QString("0")),
         false, new PrimitiveValue(QString("0")), false, new PrimitiveValue(
-        QString("100")), false, new SuperListItem(1), true, PrimitiveValue
+        QString("100")), false, new SuperListItem(1), false, true, PrimitiveValue
         ::createDefaultDataBaseValue(), new PrimitiveValue(QString("100")), true
         , PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
         ::createDefaultDataBaseValue(), nullptr, EffectSpecialActionKind
@@ -76,7 +79,7 @@ SystemEffect::SystemEffect(EffectKind kind, DamagesKind damageKind,
     , PrimitiveValue *damagesElementID, bool isDamageVariance, PrimitiveValue
     *damagesVarianceFormula, bool isDamageCritical, PrimitiveValue
     *damagesCriticalFormula, bool isDamagePrecision, PrimitiveValue
-    *damagesPrecisionFormula, bool idsv, SuperListItem *dsv, bool isAddStatus,
+    *damagesPrecisionFormula, bool idsv, SuperListItem *dsv, bool isDamageDisplayName, bool isAddStatus,
     PrimitiveValue *statusID, PrimitiveValue *statusPrecisionFormula, bool
     isAddSkill, PrimitiveValue *addSkillID, PrimitiveValue *performSkillID,
     EventCommand *commonReaction, EffectSpecialActionKind specialActionKind,
@@ -102,6 +105,7 @@ SystemEffect::SystemEffect(EffectKind kind, DamagesKind damageKind,
     m_damagesPrecisionFormula(damagesPrecisionFormula),
     m_isDamageStockVariable(idsv),
     m_damagesStockVariable(dsv),
+    m_isDamageDisplayName(isDamageDisplayName),
     m_isAddStatus(isAddStatus),
     m_statusID(statusID),
     m_statusPrecisionFormula(statusPrecisionFormula),
@@ -268,6 +272,16 @@ SuperListItem * SystemEffect::damagesStockVariable() const
     return m_damagesStockVariable;
 }
 
+bool SystemEffect::isDamageDisplayName() const
+{
+    return m_isDamageDisplayName;
+}
+
+void SystemEffect::setIsDamageDisplayName(bool isDamageDisplayName)
+{
+    m_isDamageDisplayName = isDamageDisplayName;
+}
+
 bool SystemEffect::isAddStatus() const {
     return m_isAddStatus;
 }
@@ -351,7 +365,7 @@ SystemEffect * SystemEffect::createSpecialAction(EffectSpecialActionKind action)
         PrimitiveValue(0),  false, PrimitiveValue
         ::createDefaultDataBaseValue(), false, new PrimitiveValue(QString("0")),
         false, new PrimitiveValue(QString("0")), false, new PrimitiveValue(
-        QString("100")), false, new SuperListItem(1), true, PrimitiveValue
+        QString("100")), false, new SuperListItem(1), false, true, PrimitiveValue
         ::createDefaultDataBaseValue(), new PrimitiveValue(QString("100")), true
         , PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
         ::createDefaultDataBaseValue(), nullptr, action, PrimitiveValue
@@ -373,7 +387,7 @@ SystemEffect * SystemEffect::createStat(int stat, QString formula, QString min,
         PrimitiveValue(variance.isEmpty() ? QString("0") : variance), !critical
         .isEmpty(), new PrimitiveValue(critical.isEmpty() ? QString("0") :
         critical), !precision.isEmpty(), new PrimitiveValue(precision.isEmpty()
-        ? QString("100") : precision), false, new SuperListItem(1), true,
+        ? QString("100") : precision), false, new SuperListItem(1), false, true,
         PrimitiveValue::createDefaultDataBaseValue(), new PrimitiveValue(QString
         ("100")), true, PrimitiveValue::createDefaultDataBaseValue(),
         PrimitiveValue::createDefaultDataBaseValue(), nullptr,
@@ -461,6 +475,7 @@ void SystemEffect::setCopy(const SuperListItem &super) {
     m_damagesPrecisionFormula->setCopy(*effect->m_damagesPrecisionFormula);
     m_isDamageStockVariable = effect->m_isDamageStockVariable;
     m_damagesStockVariable->setId(effect->m_damagesStockVariable->id());
+    m_isDamageDisplayName = effect->m_isDamageDisplayName;
     m_isAddStatus = effect->m_isAddStatus;
     m_statusID->setCopy(*effect->m_statusID);
     m_statusPrecisionFormula->setCopy(*effect->m_statusPrecisionFormula);
@@ -530,7 +545,9 @@ QString SystemEffect::toString() const {
             + m_damagesPrecisionFormula->toString() + "%" + RPM::BRACKET_RIGHT :
             "") + (m_isDamageStockVariable ? RPM::BRACKET_LEFT + RPM::translate(
             Translations::STOCK_VALUE_IN) + RPM::COLON + RPM::SPACE +
-            m_damagesStockVariable->toString() + "%" + RPM::BRACKET_RIGHT : "");
+            m_damagesStockVariable->toString() + "%" + RPM::BRACKET_RIGHT : "") +
+            (m_isDamageDisplayName ? RPM::BRACKET_LEFT + RPM::translate(Translations
+            ::DISPLAY_DAMAGE_TYPE_NAME) + RPM::BRACKET_RIGHT : "");
         break;
     }
     case EffectKind::Status:
@@ -650,6 +667,10 @@ void SystemEffect::read(const QJsonObject &json) {
                 m_damagesStockVariable->setId(json[JSON_DAMAGE_STOCK_VARIABLE]
                     .toInt());
             }
+        }
+        if (json.contains(JSON_IS_DAMAGE_DISPLAY_NAME))
+        {
+            m_isDamageDisplayName = json[JSON_IS_DAMAGE_DISPLAY_NAME].toBool();
         }
         break;
     case EffectKind::Status:
@@ -816,6 +837,10 @@ void SystemEffect::write(QJsonObject &json) const {
             {
                 json[JSON_DAMAGE_STOCK_VARIABLE] = m_damagesStockVariable->id();
             }
+        }
+        if (m_isDamageDisplayName)
+        {
+            json[JSON_IS_DAMAGE_DISPLAY_NAME] = m_isDamageDisplayName;
         }
         break;
     }

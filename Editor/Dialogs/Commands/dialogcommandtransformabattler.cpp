@@ -58,6 +58,7 @@ void DialogCommandTransformABattler::initializePrimitives()
     ui->panelPrimitiveMonsterID->initializeDataBaseCommandId(RPM::get()->project()
         ->gameDatas()->monstersDatas()->model(), m_parameters, m_properties);
     ui->panelPrimitiveLevel->initializeNumber(m_parameters, m_properties);
+    ui->panelPrimitiveLevel->setNumberValue(1);
 }
 
 // -------------------------------------------------------

@@ -475,7 +475,7 @@
 	"generate": "Générer",
 	"detection.description": "Clic gauche: ajouter une nouvelle boite de détection / Clic droit: supprimer une boite de détection existante",
 	"set.effect": "Modifier l'effet",
-	"damages.on": "Domages sur",
+	"damages.on": "Dommages sur",
 	"with.formula": "avec la formule",
 	"minimum": "Minimum",
 	"element.id": "Élément d'ID",
@@ -762,8 +762,8 @@
     "normal": "Normal",
     "end.message": "Fin du message",
     "target.selection": "Sélection de la cible",
-    "normal.damage": "Domages normaux",
-    "critical.damage": "Domages critiques",
+    "normal.damage": "Dommages normaux",
+    "critical.damage": "Dommages critiques",
     "heal.damage": "Soins",
     "this.option.not.available.yet": "Cette option n'est aps encore disponible",
     "select.element.to.apply": "Sélectionner un élément à appliquer",
@@ -1936,5 +1936,6 @@
     "stop.a.sound": "Stopper un son",
     "sound.id": "Son d'ID",
     "display.hide.a.battler": "Afficher / Cacher un battler",
-    "transform.a.battler": "Transformer un battler"
+    "transform.a.battler": "Transformer un battler",
+    "display.damage.type.name": "Afficher le nom du type de dommages"
 }

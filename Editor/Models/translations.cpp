@@ -1957,6 +1957,7 @@ const QString Translations::STOP_A_SOUND = "stop.a.sound";
 const QString Translations::SOUND_ID = "sound.id";
 const QString Translations::DISPLAY_HIDE_A_BATTLER = "display.hide.a.battler";
 const QString Translations::TRANSFORME_A_BATTLER = "transform.a.battler";
+const QString Translations::DISPLAY_DAMAGE_TYPE_NAME = "display.damage.type.name";
 
 // -------------------------------------------------------
 //

@@ -65,6 +65,7 @@ public slots:
     void on_checkBoxCritical_toggled(bool checked);
     void on_checkBoxPrecision_toggled(bool checked);
     void on_checkBoxStockValueIn_toggled(bool checked);
+    void on_checkBoxDisplayDamageTypeName_toggled(bool checked);
     void on_comboBoxAddRemoveStatus_currentIndexChanged(int index);
     void on_comboBoxAddRemoveSkill_currentIndexChanged(int index);
     void on_comboBoxSpecialAction_currentIndexChanged(int index);

@@ -50,6 +50,7 @@ public:
     static const QString JSON_DAMAGE_PRECISION_FORMULA;
     static const QString JSON_IS_DAMAGE_STOCK_VARIABLE;
     static const QString JSON_DAMAGE_STOCK_VARIABLE;
+    static const QString JSON_IS_DAMAGE_DISPLAY_NAME;
     static const QString JSON_IS_ADD_STATUS;
     static const QString JSON_STATUS_ID;
     static const QString JSON_STATUS_PRECISION_FORMULA;
@@ -71,7 +72,7 @@ public:
         , PrimitiveValue *damagesVarianceFormula, bool isDamageCritical,
         PrimitiveValue *damagesCriticalFormula, bool isDamagePrecision,
         PrimitiveValue *damagesPrecisionFormula, bool idsv, SuperListItem *dsv,
-        bool isAddStatus, PrimitiveValue *statusID, PrimitiveValue
+        bool isDamageDisplayName, bool isAddStatus, PrimitiveValue *statusID, PrimitiveValue
         *statusPrecisionFormula, bool isAddSkill, PrimitiveValue *addSkillID,
         PrimitiveValue *performSkillID, EventCommand *commonReaction,
         EffectSpecialActionKind specialActionKind, PrimitiveValue
@@ -105,6 +106,8 @@ public:
     bool isDamageStockVariable() const;
     void setIsDamageStockVariable(bool idsv);
     SuperListItem * damagesStockVariable() const;
+    bool isDamageDisplayName() const;
+    void setIsDamageDisplayName(bool isDamageDisplayName);
     bool isAddStatus() const;
     void setIsAddStatus(bool b);
     PrimitiveValue * statusID() const;
@@ -165,6 +168,7 @@ protected:
     PrimitiveValue *m_damagesPrecisionFormula;
     bool m_isDamageStockVariable;
     SuperListItem *m_damagesStockVariable;
+    bool m_isDamageDisplayName;
     bool m_isAddStatus;
     PrimitiveValue *m_statusID;
     PrimitiveValue *m_statusPrecisionFormula;

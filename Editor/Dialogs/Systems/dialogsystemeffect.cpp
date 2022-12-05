@@ -110,6 +110,7 @@ void DialogSystemEffect::initialize() {
     ui->checkBoxStockValueIn->setChecked(m_effect.isDamageStockVariable());
     ui->widgetVariableStockValueIn->initializeSuper(m_effect
         .damagesStockVariable());
+    ui->checkBoxDisplayDamageTypeName->setChecked(m_effect.isDamageDisplayName());
 
     // Status
     index = m_effect.isAddStatus() ? 0 : 1;
@@ -225,6 +226,7 @@ void DialogSystemEffect::translate()
     ui->checkBoxPrecision->setText(RPM::translate(Translations::PRECISION) + RPM::COLON);
     ui->checkBoxStockValueIn->setText(RPM::translate(Translations::STOCK_VALUE_IN) + RPM::COLON);
     ui->checkBoxTemporarilyChangeTarget->setText(RPM::translate(Translations::TEMPORARILY_CHANGE_TARGET) + RPM::COLON);
+    ui->checkBoxDisplayDamageTypeName->setText(RPM::translate(Translations::DISPLAY_DAMAGE_TYPE_NAME));
     ui->radioButtonStatus->setText(RPM::translate(Translations::STATUS) + RPM::COLON);
     ui->labelWithPrecision->setText(RPM::translate(Translations::WITH_PRECISION).toLower());
     ui->radioButtonCallCommonReaction->setText(RPM::translate(Translations::CALL_A_COMMON_REACTION) + RPM::COLON);
@@ -386,6 +388,13 @@ void DialogSystemEffect::on_checkBoxStockValueIn_toggled(bool checked)
 
     // Enable
     setStockVariableEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemEffect::on_checkBoxDisplayDamageTypeName_toggled(bool checked)
+{
+    m_effect.setIsDamageDisplayName(checked);
 }
 
 // -------------------------------------------------------
