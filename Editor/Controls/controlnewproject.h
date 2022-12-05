@@ -12,7 +12,9 @@
 #ifndef CONTROLNEWPROJECT_H
 #define CONTROLNEWPROJECT_H
 
+#include <QObject>
 #include <QChar>
+#include "dialogprogress.h"
 
 // -------------------------------------------------------
 //
@@ -24,16 +26,24 @@
 //
 // -------------------------------------------------------
 
-class ControlNewproject
+class ControlNewproject : public QObject
 {
+    Q_OBJECT
+
 public:
     ControlNewproject();
 
     static QChar forbiddenSymbols[];
 
     static QString filterDirectoryName(const QString &s, bool space = false);
-    static QString createNewProject(QString projectName, QString dirName, QString
+    QString createNewProject(QString projectName, QString dirName, QString
         location);
+
+private:
+    DialogProgress m_progress;
+
+signals:
+    void progress(int);
 };
 
 #endif // CONTROLNEWPROJECT_H

@@ -133,7 +133,8 @@ int main(int argc, char *argv[]) {
     // Erase example game and refresh it
     QString path = Common::pathCombine(QDir::currentPath(), RPM::PATH_EXAMPLE_GAME);
     QDir(path).removeRecursively();
-    ControlNewproject::createNewProject("Example", "Example", Common
+    ControlNewproject control;
+    control.createNewProject("Example", "Example", Common
         ::pathCombine(QDir::currentPath(), RPM::PATH_EXAMPLE));
     QDir(Common::pathCombine(Common::pathCombine(Common::pathCombine(QDir
         ::currentPath(), RPM::PATH_EXAMPLE_GAME), RPM::PATH_APP), RPM

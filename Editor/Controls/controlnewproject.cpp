@@ -14,6 +14,7 @@
 #include <QTextStream>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QThread>
 #include "controlnewproject.h"
 #include "rpm.h"
 #include "map.h"
@@ -69,8 +70,10 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
 
     // Checking if the project can be created
     if (dirName.count() == 0)
+    {
         return RPM::translate(Translations::DIRECTORY_NAME_CANT_EMPTY) + RPM
             ::DOT;
+    }
     if (!QDir::isAbsolutePath(location))
         return RPM::translate(Translations::THE_PATH_LOCATION) + RPM::SPACE +
             location + RPM::SPACE + RPM::translate(Translations
@@ -88,6 +91,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     // If all is ok, then let's fill the project folder
 
     // Copying a basic project content
+
     QString pathContent = Common::pathCombine(QDir::currentPath(), RPM
         ::FOLDER_CONTENT);
     QString pathBasicContent = Common::pathCombine(Common::pathCombine(
@@ -97,6 +101,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     Project *project = new Project();
     RPM::get()->setProject(project);
     project->setPathCurrentProject(pathDir);
+    emit progress(20);
 
     // Copying a basic project content
     if (!project->copyOSFiles()) {
@@ -104,6 +109,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
             + RPM::DOT + RPM::SPACE + RPM::translate(Translations
             ::PLEASE_RETRY_WITH_NEW_PROJECT);
     }
+    emit progress(25);
     if (!Common::copyPath(pathBasicContent, Common::pathCombine(pathApp,
         RPM::FOLDER_CONTENT)))
     {
@@ -112,6 +118,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
             ::PLEASE_VERIFY_IF) + RPM::SPACE + pathBasicContent + RPM::SPACE +
             RPM::translate(Translations::FOLDER_EXISTS);
     }
+    emit progress(30);
 
     // Create folders
     dir = QDir(pathApp);
@@ -153,21 +160,26 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     {
         return error;
     }
+    emit progress(40);
     project->read(pathDir);
     project->setDefault();
     project->gameDatas()->systemDatas()->projectName()->setAllNames(projectName);
     project->setDefaultTranslations();
     project->write(pathDir);
+    emit progress(60);
 
     // Creating first empty map
     dir.mkdir(RPM::PATH_MAPS);
     dir.mkdir(Common::pathCombine(RPM::PATH_MAPS, RPM::FOLDER_TEMP));
     Map::writeDefaultMap(pathApp);
+    emit progress(90);
     Map::writeDefaultBattleMap(pathApp);
+    emit progress(99);
 
     // Restoring project
     RPM::get()->setProject(previousProject);
     delete project;
+    emit progress(100);
 
     return nullptr; // return NULL for no errors
 }

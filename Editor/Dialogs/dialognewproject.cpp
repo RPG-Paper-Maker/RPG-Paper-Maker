@@ -14,6 +14,7 @@
 #include <QMessageBox>
 #include "dialognewproject.h"
 #include "ui_dialognewproject.h"
+#include "dialogprogress.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -27,6 +28,9 @@ DialogNewProject::DialogNewProject(QWidget *parent) :
     ui(new Ui::DialogNewProject)
 {
     ui->setupUi(this);
+    ui->progressBar->hide();
+
+    connect(&m_control, SIGNAL(progress(int)), this, SLOT(onProgress(int)));
     
     ui->lineEditProjectName->setFocus();
     ui->lineEditLocation->setText(RPM::PATH_GAMES);
@@ -130,10 +134,17 @@ void DialogNewProject::on_pushButtonLocation_clicked()
 
 // -------------------------------------------------------
 
+void DialogNewProject::onProgress(int p)
+{
+    ui->progressBar->setValue(p);
+}
+
+// -------------------------------------------------------
+
 void DialogNewProject::accept()
 {
+    ui->progressBar->show();
     QString message;
-
     message = m_control.createNewProject(ui->lineEditProjectName->text(), ui
         ->lineEditDirectoryName->text(), ui->lineEditLocation->text());
     if (message != nullptr)

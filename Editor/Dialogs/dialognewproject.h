@@ -50,6 +50,7 @@ private slots:
     void on_lineEditProjectName_textChanged(const QString &s);
     void on_lineEditDirectoryName_editingFinished();
     void on_pushButtonLocation_clicked();
+    void onProgress(int p);
     virtual void accept();
 };
 
