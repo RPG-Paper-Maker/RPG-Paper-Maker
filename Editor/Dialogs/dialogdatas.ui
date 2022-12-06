@@ -1217,7 +1217,7 @@
             </widget>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,1">
+            <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,1">
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_4">
                <item>
@@ -1240,6 +1240,36 @@
                    <width>200</width>
                    <height>27</height>
                   </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_15">
+               <item>
+                <widget class="QLabel" name="labelBattleMap">
+                 <property name="text">
+                  <string>Battle map:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="PanelPrimitiveValue" name="panelPrimitiveBattleMap" native="true">
+                 <property name="minimumSize">
+                  <size>
+                   <width>250</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>250</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                 <property name="acceptDrops">
+                  <bool>false</bool>
                  </property>
                 </widget>
                </item>
@@ -1636,6 +1666,12 @@
    <class>WidgetPreviewTroop</class>
    <extends>QWidget</extends>
    <header>widgetpreviewtroop.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -24,14 +24,19 @@ SystemTileset::SystemTileset() :
 
 }
 
-SystemTileset::SystemTileset(int i, QString n, int pictureID) :
+SystemTileset::SystemTileset(int i, QString n, int pictureID, PrimitiveValue *battleMap) :
     SuperListItem(i, n),
-    m_pictureID(pictureID)
+    m_pictureID(pictureID),
+    m_battleMap(battleMap)
 {
+    m_battleMap->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelBattleMaps());
     initializeModels();
 }
 
-SystemTileset::~SystemTileset(){
+SystemTileset::~SystemTileset()
+{
+    delete m_battleMap;
     SuperListItem::deleteModel(m_modelAutotiles);
     SuperListItem::deleteModel(m_modelSpriteWalls);
     SuperListItem::deleteModel(m_model3DObjects);
@@ -54,6 +59,11 @@ SystemPicture* SystemTileset::picture() const {
 
 void SystemTileset::setPictureID(int id) {
     m_pictureID = id;
+}
+
+PrimitiveValue * SystemTileset::battleMap() const
+{
+    return m_battleMap;
 }
 
 QStandardItemModel* SystemTileset::model(PictureKind kind) const {
@@ -217,6 +227,7 @@ void SystemTileset::setCopy(const SuperListItem &super) {
 
     tileset = reinterpret_cast<const SystemTileset *>(&super);
     m_pictureID = tileset->m_pictureID;
+    m_battleMap->setCopy(*tileset->m_battleMap);
 
     // Models
     SuperListItem::deleteModel(m_modelAutotiles, false);
@@ -239,6 +250,10 @@ void SystemTileset::read(const QJsonObject &json){
     SuperListItem::read(json);
 
     m_pictureID = json["pic"].toInt();
+    if (json.contains("bm"))
+    {
+        m_battleMap->read(json["bm"].toObject());
+    }
 
     // Special elements
     readModel(json, "auto", m_modelAutotiles);
@@ -276,6 +291,13 @@ void SystemTileset::write(QJsonObject &json) const{
     SuperListItem::write(json);
 
     json["pic"] = m_pictureID;
+    if (m_battleMap->kind() != PrimitiveValueKind::DataBase || m_battleMap
+        ->numberValue() != 1)
+    {
+        QJsonObject obj;
+        m_battleMap->write(obj);
+        json["bm"] = obj;
+    }
 
     // Special elements
     writeModel(json, "auto", m_modelAutotiles);

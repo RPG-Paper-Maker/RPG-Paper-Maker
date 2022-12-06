@@ -1389,6 +1389,11 @@
                                     },
                                     {
                                         "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Characters/lucas-full.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/lucas-full.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
                                         "source": "Content/Images/Textures2D/Characters/bibi.png",
                                         "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/bibi.png"
                                     },

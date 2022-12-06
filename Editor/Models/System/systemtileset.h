@@ -15,6 +15,7 @@
 #include <QMetaType>
 #include "systempicture.h"
 #include "collisionsquare.h"
+#include "primitivevalue.h"
 
 // -------------------------------------------------------
 //
@@ -29,9 +30,11 @@ class SystemTileset : public SuperListItem
 {
 public:
     SystemTileset();
-    SystemTileset(int i, QString n, int pictureID);
+    SystemTileset(int i, QString n, int pictureID, PrimitiveValue *battleMap =
+        new PrimitiveValue(PrimitiveValueKind::DataBase));
     virtual ~SystemTileset();
     SystemPicture* picture() const;
+    PrimitiveValue * battleMap() const;
     QStandardItemModel* model(PictureKind kind) const;
     QStandardItemModel* modelAutotiles() const;
     QStandardItemModel* modelSpriteWalls() const;
@@ -63,6 +66,7 @@ public:
 
 protected:
     int m_pictureID;
+    PrimitiveValue *m_battleMap;
     QStandardItemModel* m_modelAutotiles;
     QStandardItemModel* m_modelSpriteWalls;
     QStandardItemModel* m_model3DObjects;

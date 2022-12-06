@@ -389,6 +389,8 @@ void DialogDatas::initializeTilesets(GameDatas *gameDatas){
             SLOT(on_pageTilesetSelected(QModelIndex,QModelIndex)));
     ui->widgetPictureTileset->setKind(PictureKind::Tilesets);
     ui->widgetTilesetPictureSettings->setKind(PictureKind::Tilesets);
+    ui->panelPrimitiveBattleMap->initializeDataBaseCommandId(RPM::get()->project()
+        ->gameDatas()->battleSystemDatas()->modelBattleMaps());
     connect(ui->widgetPictureTileset, SIGNAL(pictureChanged(SystemPicture*)),
             this, SLOT(on_tilesetPictureChanged(SystemPicture*)));
 
@@ -419,6 +421,8 @@ void DialogDatas::updateTileset(SystemTileset *sysTileset){
     SystemPicture* picture = sysTileset->picture();
     ui->widgetPictureTileset->setPicture(picture);
     ui->widgetTilesetPictureSettings->updateImage(picture);
+    ui->panelPrimitiveBattleMap->initializeModel(sysTileset->battleMap());
+    ui->panelPrimitiveBattleMap->updateModel();
 
     // Initialize special models
     ui->panelSuperListTilesetAutotiles->initializeModel(
