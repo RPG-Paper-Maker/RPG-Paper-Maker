@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>775</width>
-    <height>275</height>
+    <height>278</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -299,11 +299,18 @@
           <rect>
            <x>10</x>
            <y>10</y>
-           <width>795</width>
-           <height>170</height>
+           <width>862</width>
+           <height>232</height>
           </rect>
          </property>
-         <layout class="QGridLayout" name="gridLayout_7">
+         <layout class="QGridLayout" name="gridLayout_7" rowstretch="0,0,0,0,0,1">
+          <item row="4" column="0">
+           <widget class="QRadioButton" name="radioButtonElementID">
+            <property name="text">
+             <string>Element ID:</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QRadioButton" name="radioButtonEquip">
             <property name="enabled">
@@ -314,7 +321,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="0" column="2">
            <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,0,0,1">
             <item>
              <widget class="QComboBox" name="comboBoxEquipAllowForbid">
@@ -393,17 +400,7 @@
             </item>
            </layout>
           </item>
-          <item row="1" column="0">
-           <widget class="QRadioButton" name="radioButtonEquipmentChange">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string>Equipment change:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
+          <item row="1" column="2">
            <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,0,1">
             <item>
              <widget class="QComboBox" name="comboBoxEquipmentChange">
@@ -446,17 +443,56 @@
             </item>
            </layout>
           </item>
-          <item row="2" column="0">
-           <widget class="QRadioButton" name="radioButtonBeginEquipment">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string>Begin equipment:</string>
-            </property>
-           </widget>
+          <item row="3" column="2">
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueBeginWeaponArmorID" native="true">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_9">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>248</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
-          <item row="2" column="1">
+          <item row="3" column="0">
+           <spacer name="horizontalSpacer_12">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>148</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="2">
            <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,0,0,1">
             <item>
              <widget class="PanelPrimitiveValue" name="panelPrimitiveValueBeginEquipmentID" native="true">
@@ -509,56 +545,17 @@
             </item>
            </layout>
           </item>
-          <item row="3" column="0">
-           <spacer name="horizontalSpacer_12">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+          <item row="2" column="0">
+           <widget class="QRadioButton" name="radioButtonBeginEquipment">
+            <property name="enabled">
+             <bool>true</bool>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>148</width>
-              <height>20</height>
-             </size>
+            <property name="text">
+             <string>Begin equipment:</string>
             </property>
-           </spacer>
+           </widget>
           </item>
-          <item row="3" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_7">
-            <item>
-             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueBeginWeaponArmorID" native="true">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>250</width>
-                <height>27</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>250</width>
-                <height>27</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_9">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>248</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item row="4" column="0" colspan="2">
+          <item row="5" column="0" colspan="3">
            <spacer name="horizontalSpacer_10">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -570,6 +567,35 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="radioButtonEquipmentChange">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Equipment change:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="PanelPrimitiveValue" name="panelPrimitiveElementID" native="true">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>250</width>
+              <height>27</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>250</width>
+              <height>27</height>
+             </size>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

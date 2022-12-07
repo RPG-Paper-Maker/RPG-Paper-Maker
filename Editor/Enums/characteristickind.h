@@ -25,7 +25,8 @@ enum class CharacteristicKind {
     Script,
     AllowForbidEquip,
     AllowForbidChange,
-    BeginEquipment
+    BeginEquipment,
+    Element
 };
 
 #endif // CHARACTERISTICKIND_H

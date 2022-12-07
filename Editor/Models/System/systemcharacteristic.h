@@ -51,6 +51,7 @@ public:
     static const QString JSON_BEGIN_EQUIPMENT_ID;
     static const QString JSON_IS_BEGIN_WEAPON;
     static const QString JSON_BEGIN_WEAPON_ARMOR_ID;
+    static const QString JSON_ELEMENT_ID;
 
     SystemCharacteristic();
     SystemCharacteristic(CharacteristicKind kind, bool isIncreaseDecrease,
@@ -62,7 +63,7 @@ public:
         isAllowEquipWeapon, PrimitiveValue *equipWeaponTypeID, PrimitiveValue
         *equipArmorTypeID, bool isAllowChangeEquipment, PrimitiveValue
         *changeEquipmentID, PrimitiveValue *beginEquipmentID, bool isBeginWeapon
-        , PrimitiveValue *beginWeaponArmorID);
+        , PrimitiveValue *beginWeaponArmorID, PrimitiveValue *elementID);
     virtual ~SystemCharacteristic();
     CharacteristicKind kind() const;
     void setKind(CharacteristicKind k);
@@ -97,6 +98,7 @@ public:
     void setIsBeginWeapon(bool b);
     QStandardItemModel * modelBeginWeaponArmor() const;
     PrimitiveValue * beginWeaponArmorID() const;
+    PrimitiveValue * elementID() const;
 
     static SystemCharacteristic * createBuff(int stat, int value, bool operation,
         bool unit);
@@ -134,6 +136,7 @@ protected:
     bool m_isBeginWeapon;
     QStandardItemModel *m_modelBeginWeaponArmor;
     PrimitiveValue *m_beginWeaponArmorID;
+    PrimitiveValue *m_elementID;
 
     void updateModelBeginSpecific(QStandardItemModel *modelKind,
         QStandardItemModel *model);

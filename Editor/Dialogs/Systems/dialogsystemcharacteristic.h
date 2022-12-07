@@ -51,6 +51,7 @@ public slots:
     void on_radioButtonEquip_toggled(bool checked);
     void on_radioButtonEquipmentChange_toggled(bool checked);
     void on_radioButtonBeginEquipment_toggled(bool checked);
+    void on_radioButtonElementID_toggled(bool checked);
     void on_radioButtonScript_toggled(bool checked);
     void on_comboBoxIncreaseDecreaseKind_currentIndexChanged(int index);
     void on_comboBoxIncreaseDecrease_currentIndexChanged(int index);

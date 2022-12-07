@@ -62,6 +62,10 @@ void DialogSystemCharacteristic::initialize() {
         ui->tabWidget->setCurrentIndex(1);
         ui->radioButtonBeginEquipment->setChecked(true);
         break;
+    case CharacteristicKind::Element:
+        ui->tabWidget->setCurrentIndex(1);
+        ui->radioButtonElementID->setChecked(true);
+        break;
     case CharacteristicKind::Script:
         ui->tabWidget->setCurrentIndex(2);
         ui->radioButtonScript->setChecked(true);
@@ -129,6 +133,7 @@ void DialogSystemCharacteristic::initialize() {
         m_characteristic.beginWeaponArmorID());
     connect(ui->panelPrimitiveValueBeginEquipmentID, SIGNAL(numberUpdated(int)),
         this, SLOT(on_beginWeaponArmorNumberChanged(int)));
+    ui->panelPrimitiveElementID->initializeDataBaseAndUpdate(m_characteristic.elementID());
 
     // Script
     ui->panelPrimitiveValueScript->initializeMessageAndUpdate(m_characteristic
@@ -148,12 +153,15 @@ void DialogSystemCharacteristic::uncheckAllRadiosCharacters() {
     ui->radioButtonEquip->setAutoExclusive(false);
     ui->radioButtonEquipmentChange->setAutoExclusive(false);
     ui->radioButtonBeginEquipment->setAutoExclusive(false);
+    ui->radioButtonElementID->setAutoExclusive(false);
     ui->radioButtonEquip->setChecked(false);
     ui->radioButtonEquipmentChange->setChecked(false);
     ui->radioButtonBeginEquipment->setChecked(false);
+    ui->radioButtonElementID->setChecked(false);
     ui->radioButtonEquip->setAutoExclusive(true);
     ui->radioButtonEquipmentChange->setAutoExclusive(true);
     ui->radioButtonBeginEquipment->setAutoExclusive(true);
+    ui->radioButtonElementID->setAutoExclusive(true);
 }
 
 //-------------------------------------------------
@@ -172,6 +180,7 @@ void DialogSystemCharacteristic::translate()
         ::CHANGE_EQUIPMENT) + RPM::COLON);
     ui->radioButtonBeginEquipment->setText(RPM::translate(Translations::BEGIN_EQUIPMENT)
         + RPM::COLON);
+    ui->radioButtonElementID->setText(RPM::translate(Translations::ELEMENT_ID) + RPM::COLON);
     ui->radioButtonScript->setText(RPM::translate(Translations::SCRIPT) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
@@ -250,6 +259,19 @@ void DialogSystemCharacteristic::on_radioButtonBeginEquipment_toggled(bool
     ui->labelWith->setEnabled(checked);
     ui->comboBoxBeginWeaponArmor->setEnabled(checked);
     ui->panelPrimitiveValueBeginWeaponArmorID->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCharacteristic::on_radioButtonElementID_toggled(bool checked)
+{
+    if (checked) {
+        m_characteristic.setKind(CharacteristicKind::Element);
+        setRadioCharacters();
+    }
+
+    // Enable
+    ui->panelPrimitiveElementID->setEnabled(checked);
 }
 
 // -------------------------------------------------------

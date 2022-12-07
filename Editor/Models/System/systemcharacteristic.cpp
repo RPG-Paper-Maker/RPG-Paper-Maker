@@ -39,6 +39,7 @@ const QString SystemCharacteristic::JSON_CHANGE_EQUIPMENT_ID = "ceid";
 const QString SystemCharacteristic::JSON_BEGIN_EQUIPMENT_ID = "beid";
 const QString SystemCharacteristic::JSON_IS_BEGIN_WEAPON = "ibw";
 const QString SystemCharacteristic::JSON_BEGIN_WEAPON_ARMOR_ID = "bwaid";
+const QString SystemCharacteristic::JSON_ELEMENT_ID = "eid";
 
 // -------------------------------------------------------
 //
@@ -60,6 +61,7 @@ SystemCharacteristic::SystemCharacteristic() :
         ::createDefaultDataBaseValue(), true, PrimitiveValue
         ::createDefaultDataBaseValue(), PrimitiveValue
         ::createDefaultDataBaseValue(), true, PrimitiveValue
+        ::createDefaultDataBaseValue(), PrimitiveValue
         ::createDefaultDataBaseValue())
 {
 
@@ -74,7 +76,7 @@ SystemCharacteristic::SystemCharacteristic(CharacteristicKind kind, bool
     isAllowEquipWeapon, PrimitiveValue *equipWeaponTypeID, PrimitiveValue
     *equipArmorTypeID, bool isAllowChangeEquipment, PrimitiveValue
     *changeEquipmentID, PrimitiveValue *beginEquipmentID, bool isBeginWeapon,
-    PrimitiveValue *beginWeaponArmorID) :
+    PrimitiveValue *beginWeaponArmorID, PrimitiveValue *elementID) :
     SuperListItem(-1, "", true),
     m_kind(kind),
     m_isIncreaseDecrease(isIncreaseDecrease),
@@ -100,7 +102,8 @@ SystemCharacteristic::SystemCharacteristic(CharacteristicKind kind, bool
     m_beginEquipmentID(beginEquipmentID),
     m_isBeginWeapon(isBeginWeapon),
     m_modelBeginWeaponArmor(new QStandardItemModel),
-    m_beginWeaponArmorID(beginWeaponArmorID)
+    m_beginWeaponArmorID(beginWeaponArmorID),
+    m_elementID(elementID)
 {
     m_statValueID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->battleSystemDatas()->modelCommonStatistics());
@@ -121,6 +124,8 @@ SystemCharacteristic::SystemCharacteristic(CharacteristicKind kind, bool
     m_beginEquipmentID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->battleSystemDatas()->modelCommonEquipment());
     m_beginWeaponArmorID->setModelDataBase(m_modelBeginWeaponArmor);
+    m_elementID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelElements());
 }
 
 SystemCharacteristic::~SystemCharacteristic() {
@@ -139,6 +144,7 @@ SystemCharacteristic::~SystemCharacteristic() {
     delete m_beginEquipmentID;
     delete m_modelBeginWeaponArmor;
     delete m_beginWeaponArmorID;
+    delete m_elementID;
 }
 
 CharacteristicKind SystemCharacteristic::kind() const {
@@ -273,6 +279,11 @@ PrimitiveValue * SystemCharacteristic::beginWeaponArmorID() const {
     return m_beginWeaponArmorID;
 }
 
+PrimitiveValue * SystemCharacteristic::elementID() const
+{
+    return m_elementID;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -293,7 +304,7 @@ SystemCharacteristic * SystemCharacteristic::createBuff(int stat, int value, boo
        ::createDefaultDataBaseValue(), true, PrimitiveValue
        ::createDefaultDataBaseValue(), PrimitiveValue
        ::createDefaultDataBaseValue(), true, PrimitiveValue
-       ::createDefaultDataBaseValue());
+       ::createDefaultDataBaseValue(), PrimitiveValue::createDefaultDataBaseValue());
 }
 
 // -------------------------------------------------------
@@ -401,6 +412,7 @@ void SystemCharacteristic::setCopy(const SuperListItem &super) {
     m_isBeginWeapon = characteristic->m_isBeginWeapon;
     m_beginWeaponArmorID->setCopy(*characteristic->m_beginWeaponArmorID);
     m_beginWeaponArmorID->setModelDataBase(m_modelBeginWeaponArmor);
+    m_elementID->setCopy(*characteristic->m_elementID);
 
     // Model weapon armor (begin)
     m_modelBeginWeaponArmor->clear();
@@ -478,6 +490,10 @@ QString SystemCharacteristic::toString() const {
     case CharacteristicKind::Script:
         text += RPM::translate(Translations::SCRIPT) + RPM::COLON + RPM::SPACE +
             m_script->toString();
+        break;
+    case CharacteristicKind::Element:
+        text += RPM::translate(Translations::ELEMENT_ID) + RPM::COLON + RPM::SPACE
+            + m_elementID->toString();
         break;
     }
 
@@ -594,6 +610,12 @@ void SystemCharacteristic::read(const QJsonObject &json) {
         if (json.contains(JSON_BEGIN_WEAPON_ARMOR_ID)) {
             m_beginWeaponArmorID->read(json[JSON_BEGIN_WEAPON_ARMOR_ID]
                 .toObject());
+        }
+        break;
+    case CharacteristicKind::Element:
+        if (json.contains(JSON_ELEMENT_ID))
+        {
+            m_elementID->read(json[JSON_ELEMENT_ID].toObject());
         }
         break;
     }
@@ -726,6 +748,14 @@ void SystemCharacteristic::write(QJsonObject &json) const {
             obj = QJsonObject();
             m_beginWeaponArmorID->write(obj);
             json[JSON_BEGIN_WEAPON_ARMOR_ID] = obj;
+        }
+        break;
+    case CharacteristicKind::Element:
+        if (!m_elementID->isDefaultDataBaseValue())
+        {
+            obj = QJsonObject();
+            m_elementID->write(obj);
+            json[JSON_ELEMENT_ID] = obj;
         }
         break;
     }
