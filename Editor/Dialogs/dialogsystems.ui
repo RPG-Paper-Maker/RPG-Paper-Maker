@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -1248,7 +1248,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-271</y>
+                <y>0</y>
                 <width>304</width>
                 <height>911</height>
                </rect>
@@ -2561,6 +2561,17 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
    <class>WidgetPicture</class>
    <extends>QWidget</extends>
    <header>widgetpicture.h</header>
@@ -2570,17 +2581,6 @@
    <class>PanelSuperList</class>
    <extends>QWidget</extends>
    <header>panelsuperlist.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
-   <class>PanelPrimitiveValue</class>
-   <extends>QWidget</extends>
-   <header>panelprimitivevalue.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
