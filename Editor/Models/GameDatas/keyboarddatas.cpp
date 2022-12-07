@@ -179,18 +179,18 @@ void KeyBoardDatas::setDefault(QVector<SystemKeyBoard *> &list){
 void KeyBoardDatas::setDefaultTranslations()
 {
     SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_HERO_UP));
-    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_HERO_DOWN));
-    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_HERO_LEFT));
-    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_HERO_RIGHT));
-    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_MENU_UP));
-    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_MENU_DOWN));
-    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_MENU_LEFT));
-    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_MENU_RIGHT));
-    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_CAMERA_LEFT));
-    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::MOVE_CAMERA_RIGHT));
-    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::ACTION));
-    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::CANCEL));
-    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::OPEN_CLOSE_MAIN_MENU));
+    SuperListItem::setModelItemName(m_model, 1, RPM::translate(Translations::MOVE_HERO_DOWN));
+    SuperListItem::setModelItemName(m_model, 2, RPM::translate(Translations::MOVE_HERO_LEFT));
+    SuperListItem::setModelItemName(m_model, 3, RPM::translate(Translations::MOVE_HERO_RIGHT));
+    SuperListItem::setModelItemName(m_model, 4, RPM::translate(Translations::MOVE_MENU_UP));
+    SuperListItem::setModelItemName(m_model, 5, RPM::translate(Translations::MOVE_MENU_DOWN));
+    SuperListItem::setModelItemName(m_model, 6, RPM::translate(Translations::MOVE_MENU_LEFT));
+    SuperListItem::setModelItemName(m_model, 7, RPM::translate(Translations::MOVE_MENU_RIGHT));
+    SuperListItem::setModelItemName(m_model, 8, RPM::translate(Translations::MOVE_CAMERA_LEFT));
+    SuperListItem::setModelItemName(m_model, 9, RPM::translate(Translations::MOVE_CAMERA_RIGHT));
+    SuperListItem::setModelItemName(m_model, 10, RPM::translate(Translations::ACTION));
+    SuperListItem::setModelItemName(m_model, 11, RPM::translate(Translations::CANCEL));
+    SuperListItem::setModelItemName(m_model, 12, RPM::translate(Translations::OPEN_CLOSE_MAIN_MENU));
 }
 
 // -------------------------------------------------------
