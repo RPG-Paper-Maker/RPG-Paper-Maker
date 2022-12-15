@@ -170,6 +170,7 @@ void Project::setDefaultTranslations() {
     p_gameDatas->setDefaultTranslations();
     m_specialElementsDatas->setDefaultTranslations();
     m_keyBoardDatas->setDefaultTranslations();
+    m_langsDatas->setDefaultTranslations();
 }
 
 // -------------------------------------------------------

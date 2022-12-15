@@ -65,7 +65,7 @@ void DialogCommandTransformABattler::initializePrimitives()
 
 void DialogCommandTransformABattler::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::DISPLAY_HIDE_A_BATTLER) + RPM::DOT_DOT_DOT);
+    this->setWindowTitle(RPM::translate(Translations::TRANSFORME_A_BATTLER) + RPM::DOT_DOT_DOT);
     ui->groupBoxBattler->setTitle(RPM::translate(Translations::BATTLER));
     ui->radioButtonEnemy->setText(RPM::translate(Translations::ENEMY) + RPM::COLON);
     ui->radioButtonHeroEnemyInstanceID->setText(RPM::translate(Translations
