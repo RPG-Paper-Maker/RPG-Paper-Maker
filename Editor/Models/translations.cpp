@@ -1958,6 +1958,35 @@ const QString Translations::SOUND_ID = "sound.id";
 const QString Translations::DISPLAY_HIDE_A_BATTLER = "display.hide.a.battler";
 const QString Translations::TRANSFORME_A_BATTLER = "transform.a.battler";
 const QString Translations::DISPLAY_DAMAGE_TYPE_NAME = "display.damage.type.name";
+const QString Translations::LOAD_GAME_DESCRIPTION = "load.game.description";
+const QString Translations::SLOT_NAME = "slot.name";
+const QString Translations::EMPTY = "empty";
+const QString Translations::SAVE_GAME = "save.game";
+const QString Translations::SAVE_GAME_DESCRIPTION = "save.game.description";
+const QString Translations::KEYBOARD_ASSIGNMENTS_DESCRIPTION = "keyboard.assignments.description";
+const QString Translations::KEYBOARD_ASSIGNMENTS_SELECTED_DESCRIPTION = "keyboard.assignments.selected.description";
+const QString Translations::LANGUAGE_DESCRIPTION = "language.description";
+const QString Translations::LANGUAGE_SELECTED_DESCRIPTION = "language.selected.description";
+const QString Translations::CONFIRM_QUESTION = "confirm.question";
+const QString Translations::BUY = "buy";
+const QString Translations::SELL = "sell";
+const QString Translations::DEFEAT = "defeat";
+const QString Translations::DAMAGE = "damage";
+const QString Translations::LABEL_LOAD_GAME_DESCRIPTION = "label.load.game.description";
+const QString Translations::LABEL_SAVE_GAME_DESCRIPTION = "label.save.game.description";
+const QString Translations::LABEL_KEYBOARD_ASSIGNMENTS_DESCRIPTION = "label.keyboard.assignments.description";
+const QString Translations::LABEL_KEYBOARD_ASSIGNMENTS_SELECTED_DESCRIPTION = "label.keyboard.assignments.selected.description";
+const QString Translations::LABEL_LANGUAGE_DESCRIPTION = "label.language.description";
+const QString Translations::LABEL_LANGUAGE_SELECTED_DESCRIPTION = "label.language.selected.desription";
+const QString Translations::LABEL_CONFIRM_QUESTION = "label.confirm.question";
+const QString Translations::EXTRA_WORDS = "extra.words";
+const QString Translations::SELECT_AN_ALLY = "select.an.ally";
+const QString Translations::LOADING = "loading";
+const QString Translations::EXTRA_LOADING = "extra.loading";
+const QString Translations::LABEL_EQUIP_QUESTION = "label.equip.question";
+const QString Translations::EQUIP_QUESTION = "equip.question";
+const QString Translations::LABEL_PRESS_ANY_KEYS = "label.press.any.keys";
+const QString Translations::PRESS_ANY_KEYS = "press.any.keys";
 
 // -------------------------------------------------------
 //

@@ -24,13 +24,13 @@
 #include "systemskill.h"
 #include "commandmovekind.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 28;
+const int ProjectUpdater::incompatibleVersionsCount = 29;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
      "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3", "1.5.6", "1.6.0", "1.6.2",
     "1.6.3", "1.6.4", "1.7.0", "1.7.3", "1.8.0", "1.8.3", "1.9.0", "1.9.1",
-    "1.9.2", "1.9.3", "1.10.0", "1.10.1"};
+    "1.9.2", "1.9.3", "1.10.0", "1.10.1", "2.0.0"};
 
 // -------------------------------------------------------
 //
@@ -1920,4 +1920,9 @@ void ProjectUpdater::updateVersion_1_10_1()
         map.syncObjects();
         map.writeObjects();
     }
+}
+
+void ProjectUpdater::updateVersion_2_0_0()
+{
+    m_project->langsDatas()->setDefaultTranslations();
 }

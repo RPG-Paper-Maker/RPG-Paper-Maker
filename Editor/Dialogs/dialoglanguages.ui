@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -64,9 +64,9 @@
             <property name="geometry">
              <rect>
               <x>0</x>
-              <y>-1181</y>
+              <y>0</y>
               <width>380</width>
-              <height>1750</height>
+              <height>2030</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_4">
@@ -645,6 +645,32 @@
                 </widget>
                </item>
                <item>
+                <widget class="QLabel" name="labelSelectAnAlly">
+                 <property name="text">
+                  <string>Select an ally:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="WidgetTextLang" name="widgetTextLangSelectAnAlly" native="true">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="QLabel" name="labelVictory">
                  <property name="text">
                   <string>Victory:</string>
@@ -853,6 +879,32 @@
                 </widget>
                </item>
                <item>
+                <widget class="QLabel" name="labelTarget">
+                 <property name="text">
+                  <string>Target:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="WidgetTextLang" name="widgetTextLangTarget" native="true">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="QLabel" name="labelPerformSkill">
                  <property name="text">
                   <string>Perform skill:</string>
@@ -861,6 +913,84 @@
                </item>
                <item>
                 <widget class="WidgetTextLang" name="widgetTextLangPerformSkill" native="true">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="labelEquipQuestion">
+                 <property name="text">
+                  <string>Equip question:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="WidgetTextLang" name="widgetTextLangEquipQuestion" native="true">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="labelPressAnyKeys">
+                 <property name="text">
+                  <string>Press any keys:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="WidgetTextLang" name="widgetTextLangPressAnyKeys" native="true">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="labelLoading">
+                 <property name="text">
+                  <string>Loading:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="WidgetTextLang" name="widgetTextLangLoading" native="true">
                  <property name="enabled">
                   <bool>true</bool>
                  </property>
