@@ -238,8 +238,43 @@ void MapObjects::initializeVertices(int squareSize, QHash<int, QOpenGLTexture *>
     for (i = m_all.begin(); i != m_all.end(); i++)
     {
         position = i.key();
+        Position drawingPosition = position;
         o = i.value();
         state = o->getFirstState();
+
+        // Update transformations
+        if (state->centerX()->kind() == PrimitiveValueKind::NumberDouble)
+        {
+            drawingPosition.setCenterX(state->centerX()->numberDoubleValue());
+        }
+        if (state->centerZ()->kind() == PrimitiveValueKind::NumberDouble)
+        {
+            drawingPosition.setCenterZ(state->centerZ()->numberDoubleValue());
+        }
+        if (state->angleX()->kind() == PrimitiveValueKind::NumberDouble)
+        {
+            drawingPosition.setAngleX(state->angleX()->numberDoubleValue());
+        }
+        if (state->angleY()->kind() == PrimitiveValueKind::NumberDouble)
+        {
+            drawingPosition.setAngleY(state->angleY()->numberDoubleValue());
+        }
+        if (state->angleZ()->kind() == PrimitiveValueKind::NumberDouble)
+        {
+            drawingPosition.setAngleZ(state->angleZ()->numberDoubleValue());
+        }
+        if (state->scaleX()->kind() == PrimitiveValueKind::NumberDouble)
+        {
+            drawingPosition.setScaleX(state->scaleX()->numberDoubleValue());
+        }
+        if (state->scaleY()->kind() == PrimitiveValueKind::NumberDouble)
+        {
+            drawingPosition.setScaleY(state->scaleY()->numberDoubleValue());
+        }
+        if (state->scaleZ()->kind() == PrimitiveValueKind::NumberDouble)
+        {
+            drawingPosition.setScaleZ(state->scaleZ()->numberDoubleValue());
+        }
 
         // Draw the first state graphics of the object
         if (state != nullptr)
@@ -283,7 +318,7 @@ void MapObjects::initializeVertices(int squareSize, QHash<int, QOpenGLTexture *>
                 sprite = new SpriteDatas(state->graphicsKind(), new QRect(x, y,
                     width, height));
                 spriteObject = new SpriteObject(*sprite, texture);
-                spriteObject->initializeVertices(squareSize, position);
+                spriteObject->initializeVertices(squareSize, drawingPosition);
 
                 // Adding the sprite to the GL list
                 QHash<int, QList<SpriteObject *> *>& hash = (state
@@ -303,7 +338,7 @@ void MapObjects::initializeVertices(int squareSize, QHash<int, QOpenGLTexture *>
                     ->project()->specialElementsDatas()->modelObjects3D()
                     ->invisibleRootItem(), state->graphicsId())));
                 object3DObject = new Object3DObject(*object3D);
-                object3DObject->initializeVertices(position);
+                object3DObject->initializeVertices(drawingPosition);
                 if (m_objects3DGL.value(graphicsId) == nullptr)
                 {
                    m_objects3DGL[graphicsId] = new QList<Object3DObject *>;

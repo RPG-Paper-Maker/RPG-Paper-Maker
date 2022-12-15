@@ -130,6 +130,7 @@ HEADERS += \
     Dialogs/dialogimportdlcs.h \
     Dialogs/dialogselectlanguage.h \
     Dialogs/dialogtilesettexture.h \
+    Dialogs/dialogtransformations.h \
     Dialogs/dialogtroopbattletest.h \
     Dialogs/dialogvideos.h \
     Dialogs/dialogvideospreview.h \
@@ -581,6 +582,7 @@ SOURCES += \
     Dialogs/dialogimportdlcs.cpp \
     Dialogs/dialogselectlanguage.cpp \
     Dialogs/dialogtilesettexture.cpp \
+    Dialogs/dialogtransformations.cpp \
     Dialogs/dialogtroopbattletest.cpp \
     Dialogs/dialogvideos.cpp \
     Dialogs/dialogvideospreview.cpp \
@@ -971,6 +973,7 @@ FORMS += \
     Dialogs/dialogimportdlcs.ui \
     Dialogs/dialogselectlanguage.ui \
     Dialogs/dialogtilesettexture.ui \
+    Dialogs/dialogtransformations.ui \
     Dialogs/dialogtroopbattletest.ui \
     Dialogs/dialogvideos.ui \
     Dialogs/dialogvideospreview.ui \

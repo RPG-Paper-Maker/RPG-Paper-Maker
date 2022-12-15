@@ -51,7 +51,9 @@ SystemState::SystemState() :
 SystemState::SystemState(SuperListItem *state, MapEditorSubSelectionKind gk, int
     gid, int x, int y, ObjectMovingKind omk, EventCommand *ecr, int sp, int fr,
     bool m, bool s, bool cl, bool d, bool t, bool c, bool p, bool k,
-    EventCommand *ecd) :
+    EventCommand *ecd, PrimitiveValue *centerX, PrimitiveValue *centerZ,
+    PrimitiveValue *angleX, PrimitiveValue *angleY, PrimitiveValue *angleZ,
+    PrimitiveValue *scaleX, PrimitiveValue *scaleY, PrimitiveValue *scaleZ) :
     SuperListItem(state->id(), state->name()),
     m_state(state),
     m_graphicsKind(gk),
@@ -71,7 +73,15 @@ SystemState::SystemState(SuperListItem *state, MapEditorSubSelectionKind gk, int
     m_pixelOffset(p),
     m_keepPosition(k),
     m_itemDetection(new QStandardItem),
-    m_eventCommandDetection(ecr)
+    m_eventCommandDetection(ecr),
+    m_centerX(centerX),
+    m_centerZ(centerZ),
+    m_angleX(angleX),
+    m_angleY(angleY),
+    m_angleZ(angleZ),
+    m_scaleX(scaleX),
+    m_scaleY(scaleY),
+    m_scaleZ(scaleZ)
 {
 
 }
@@ -80,6 +90,14 @@ SystemState::~SystemState() {
     this->removeRoute();
     this->removeDetection();
     delete m_itemDetection;
+    delete m_centerX;
+    delete m_centerZ;
+    delete m_angleX;
+    delete m_angleY;
+    delete m_angleZ;
+    delete m_scaleX;
+    delete m_scaleY;
+    delete m_scaleZ;
 }
 
 QString SystemState::name() const {
@@ -202,6 +220,46 @@ void SystemState::setEventCommandDetection(EventCommand *ecd) {
     m_eventCommandDetection = ecd;
 }
 
+PrimitiveValue * SystemState::centerX() const
+{
+    return m_centerX;
+}
+
+PrimitiveValue * SystemState::centerZ() const
+{
+    return m_centerZ;
+}
+
+PrimitiveValue * SystemState::angleX() const
+{
+    return m_angleX;
+}
+
+PrimitiveValue * SystemState::angleY() const
+{
+    return m_angleY;
+}
+
+PrimitiveValue * SystemState::angleZ() const
+{
+    return m_angleZ;
+}
+
+PrimitiveValue * SystemState::scaleX() const
+{
+    return m_scaleX;
+}
+
+PrimitiveValue * SystemState::scaleY() const
+{
+    return m_scaleY;
+}
+
+PrimitiveValue * SystemState::scaleZ() const
+{
+    return m_scaleZ;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -285,6 +343,14 @@ void SystemState::setCopy(const SuperListItem &super) {
         m_eventCommandDetection = new EventCommand;
         m_eventCommandDetection->setCopy(*state->m_eventCommandDetection);
     }
+    m_centerX->setCopy(*state->m_centerX);
+    m_centerZ->setCopy(*state->m_centerZ);
+    m_angleX->setCopy(*state->m_angleX);
+    m_angleY->setCopy(*state->m_angleY);
+    m_angleZ->setCopy(*state->m_angleZ);
+    m_scaleX->setCopy(*state->m_scaleX);
+    m_scaleY->setCopy(*state->m_scaleY);
+    m_scaleZ->setCopy(*state->m_scaleZ);
 }
 
 // -------------------------------------------------------
@@ -344,6 +410,38 @@ void SystemState::read(const QJsonObject &json) {
     } else {
         m_eventCommandDetection = nullptr;
     }
+    if (json.contains("cx"))
+    {
+        m_centerX->read(json["cx"].toObject());
+    }
+    if (json.contains("cz"))
+    {
+        m_centerZ->read(json["cz"].toObject());
+    }
+    if (json.contains("ax"))
+    {
+        m_angleX->read(json["ax"].toObject());
+    }
+    if (json.contains("ay"))
+    {
+        m_angleY->read(json["ay"].toObject());
+    }
+    if (json.contains("az"))
+    {
+        m_angleZ->read(json["az"].toObject());
+    }
+    if (json.contains("sx"))
+    {
+        m_scaleX->read(json["sx"].toObject());
+    }
+    if (json.contains("sy"))
+    {
+        m_scaleY->read(json["sy"].toObject());
+    }
+    if (json.contains("sz"))
+    {
+        m_scaleZ->read(json["sz"].toObject());
+    }
 }
 
 // -------------------------------------------------------
@@ -389,5 +487,61 @@ void SystemState::write(QJsonObject &json) const {
     if (m_eventCommandDetection != nullptr) {
         obj = m_eventCommandDetection->getJSON();
         json[JSON_EVENT_COMMAND_DETECTION] = obj;
+    }
+    if (m_centerX->kind() != PrimitiveValueKind::NumberDouble || m_centerX
+        ->numberDoubleValue() != 50.0)
+    {
+        obj = QJsonObject();
+        m_centerX->write(obj);
+        json["cx"] = obj;
+    }
+    if (m_centerZ->kind() != PrimitiveValueKind::NumberDouble || m_centerZ
+        ->numberDoubleValue() != 50.0)
+    {
+        obj = QJsonObject();
+        m_centerZ->write(obj);
+        json["cz"] = obj;
+    }
+    if (m_angleX->kind() != PrimitiveValueKind::NumberDouble || m_angleX
+        ->numberDoubleValue() != 0.0)
+    {
+        obj = QJsonObject();
+        m_angleX->write(obj);
+        json["ax"] = obj;
+    }
+    if (m_angleY->kind() != PrimitiveValueKind::NumberDouble || m_angleY
+        ->numberDoubleValue() != 0.0)
+    {
+        obj = QJsonObject();
+        m_angleY->write(obj);
+        json["ay"] = obj;
+    }
+    if (m_angleZ->kind() != PrimitiveValueKind::NumberDouble || m_angleZ
+        ->numberDoubleValue() != 0.0)
+    {
+        obj = QJsonObject();
+        m_angleZ->write(obj);
+        json["az"] = obj;
+    }
+    if (m_scaleX->kind() != PrimitiveValueKind::NumberDouble || m_scaleX
+        ->numberDoubleValue() != 0.0)
+    {
+        obj = QJsonObject();
+        m_scaleX->write(obj);
+        json["sx"] = obj;
+    }
+    if (m_scaleY->kind() != PrimitiveValueKind::NumberDouble || m_scaleY
+        ->numberDoubleValue() != 0.0)
+    {
+        obj = QJsonObject();
+        m_scaleY->write(obj);
+        json["sy"] = obj;
+    }
+    if (m_scaleZ->kind() != PrimitiveValueKind::NumberDouble || m_scaleZ
+        ->numberDoubleValue() != 0.0)
+    {
+        obj = QJsonObject();
+        m_scaleZ->write(obj);
+        json["sz"] = obj;
     }
 }

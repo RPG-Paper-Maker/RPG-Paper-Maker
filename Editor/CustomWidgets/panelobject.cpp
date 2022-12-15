@@ -21,6 +21,7 @@
 #include "objectmovingkind.h"
 #include "dialogcommandmoveobject.h"
 #include "dialogcommandsendevent.h"
+#include "dialogtransformations.h"
 
 // -------------------------------------------------------
 //
@@ -243,6 +244,7 @@ void PanelObject::showInvisible(bool b) {
     ui->panelGraphics->setEnabled(!b);
     ui->checkBoxDetection->setEnabled(!b);
     ui->pushButtonDetection->setEnabled(!b);
+    ui->pushButtonUpdateTransformations->setEnabled(!b);
 }
 
 // -------------------------------------------------------
@@ -396,6 +398,8 @@ void PanelObject::translate()
         ::CAN_BE_TRIGGERED_ANOTHER_OBJECT));
     ui->pushButtonEditRoute->setText(RPM::translate(Translations::EDIT_ROUTE) +
         RPM::DOT_DOT_DOT);
+    ui->pushButtonUpdateTransformations->setText(RPM::translate(Translations
+        ::UPDATE_TRANSFORMATIONS) + RPM::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------
@@ -816,6 +820,25 @@ void PanelObject::on_treeViewStates_idChanged(int previousID, int newID)
             {
                 event->addReaction(newID, reaction);
             }
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_pushButtonUpdateTransformations_clicked()
+{
+    QStandardItem *selected = ui->treeViewStates->getSelected();
+    if (selected != nullptr)
+    {
+        SystemState *state = reinterpret_cast<SystemState *>(selected->data().value<quintptr>());
+        SystemState *copy = reinterpret_cast<SystemState *>(state->createCopy());
+        DialogTransformations dialog(copy->centerX(), copy->centerZ(), copy
+            ->angleX(), copy->angleY(), copy->angleZ(), copy->scaleX(), copy
+            ->scaleY(), copy->scaleZ());
+        if (dialog.exec() == QDialog::Accepted)
+        {
+            state->setCopy(*copy);
         }
     }
 }

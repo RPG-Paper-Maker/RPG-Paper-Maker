@@ -2000,6 +2000,7 @@ public:
     static const QString EQUIP_QUESTION;
     static const QString LABEL_PRESS_ANY_KEYS;
     static const QString PRESS_ANY_KEYS;
+    static const QString UPDATE_TRANSFORMATIONS;
 
     Translations();
     virtual ~Translations();

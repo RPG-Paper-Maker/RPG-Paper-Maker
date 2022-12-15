@@ -18,7 +18,7 @@
         "Characteristics: assign element",
         "Languages: dictionary with all missing words in game",
         "New example game",
-        "Monster: status in condition reaction monster",
+        "Monster: status in condition action monster",
         "Objects: option to set centerX/centerZ/angle values",
         "3D models rotate with characters orientation"
 	],
@@ -41,8 +41,8 @@
         2,
         2,
         1,
-        1,
-        0,
-        0
+        2,
+        2,
+        1
     ]
 }

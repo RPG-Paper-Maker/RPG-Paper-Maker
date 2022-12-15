@@ -1966,5 +1966,6 @@
     "label.equip.question": "Question d'équipement",
     "equip.question": "Voulez-vous l'équiper ?",
     "label.press.any.keys": "Appuyez sur n'importe quelle touche",
-    "press.any.keys": "Appuyez sur n'importe quelle touche..."
+    "press.any.keys": "Appuyez sur n'importe quelle touche...",
+    "update.transformations": "Changer transformations"
 }

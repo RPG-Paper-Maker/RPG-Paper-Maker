@@ -39,7 +39,12 @@ public:
     SystemState(SuperListItem* state, MapEditorSubSelectionKind gk, int gid,
         int x, int y, ObjectMovingKind omk, EventCommand *ecr, int sp, int fr,
         bool m, bool s, bool cl, bool d, bool t, bool c, bool p, bool k,
-        EventCommand *ecd);
+        EventCommand *ecd, PrimitiveValue *centerX = new PrimitiveValue(50.0),
+        PrimitiveValue *centerZ = new PrimitiveValue(50.0), PrimitiveValue
+        *angleX = new PrimitiveValue(0.0), PrimitiveValue *angleY = new
+        PrimitiveValue(0.0), PrimitiveValue *angleZ = new PrimitiveValue(0.0),
+        PrimitiveValue *scaleX = new PrimitiveValue(1.0), PrimitiveValue *scaleY
+        = new PrimitiveValue(1.0), PrimitiveValue *scaleZ = new PrimitiveValue(1.0));
     virtual ~SystemState();
     virtual QString name() const;
     SuperListItem* state() const;
@@ -81,6 +86,14 @@ public:
     QStandardItem * itemDetection() const;
     EventCommand * eventCommandDetection() const;
     void setEventCommandDetection(EventCommand *ecd);
+    PrimitiveValue * centerX() const;
+    PrimitiveValue * centerZ() const;
+    PrimitiveValue * angleX() const;
+    PrimitiveValue * angleY() const;
+    PrimitiveValue * angleZ() const;
+    PrimitiveValue * scaleX() const;
+    PrimitiveValue * scaleY() const;
+    PrimitiveValue * scaleZ() const;
 
     void removeRoute();
     void removeDetection();
@@ -112,6 +125,14 @@ protected:
     bool m_keepPosition;
     QStandardItem *m_itemDetection;
     EventCommand *m_eventCommandDetection;
+    PrimitiveValue *m_centerX;
+    PrimitiveValue *m_centerZ;
+    PrimitiveValue *m_angleX;
+    PrimitiveValue *m_angleY;
+    PrimitiveValue *m_angleZ;
+    PrimitiveValue *m_scaleX;
+    PrimitiveValue *m_scaleY;
+    PrimitiveValue *m_scaleZ;
 };
 
 Q_DECLARE_METATYPE(SystemState)

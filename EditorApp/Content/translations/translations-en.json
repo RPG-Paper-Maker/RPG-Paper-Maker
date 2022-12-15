@@ -1966,5 +1966,6 @@
     "label.equip.question": "Equip question",
     "equip.question": "Would you like to equip it?",
     "label.press.any.keys": "Press any keys",
-    "press.any.keys": "Press any keys..."
+    "press.any.keys": "Press any keys...",
+    "update.transformations": "Update transformations"
 }
