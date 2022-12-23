@@ -1177,7 +1177,7 @@ void MainWindow::on_gameErrorOccurred(QProcess::ProcessError)
 // -------------------------------------------------------
 
 void MainWindow::updateBackup() {
-    if (project != nullptr) {
+    if (project != nullptr && project->gameDatas()->systemDatas()->backupsActivated()) {
         QString pathBackups = Common::pathCombine(project->pathCurrentProject(),
             RPM::FOLDER_BACKUPS);
         QDir dirProject(project->pathCurrentProject());

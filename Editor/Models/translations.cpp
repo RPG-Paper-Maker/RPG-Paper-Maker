@@ -1988,6 +1988,7 @@ const QString Translations::EQUIP_QUESTION = "equip.question";
 const QString Translations::LABEL_PRESS_ANY_KEYS = "label.press.any.keys";
 const QString Translations::PRESS_ANY_KEYS = "press.any.keys";
 const QString Translations::UPDATE_TRANSFORMATIONS = "update.transformations";
+const QString Translations::ACTIVATED = "activated";
 
 // -------------------------------------------------------
 //

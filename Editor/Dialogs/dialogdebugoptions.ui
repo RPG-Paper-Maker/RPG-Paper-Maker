@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>271</width>
-    <height>163</height>
+    <height>245</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,6 +43,22 @@
        <property name="text">
         <string>Show FPS</string>
        </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBoxBackups">
+       <property name="title">
+        <string>Backups</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="checkBoxBackupsActivated">
+          <property name="text">
+           <string>Activated</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>

@@ -74,6 +74,7 @@ public:
     static const QString JSON_PORTION_RAY_ENGINE;
     static const QString JSON_PORTION_RAY_INGAME;
     static const QString JSON_SAVE_SLOTS;
+    static const QString JSON_BACKUPS_ACTIVATED;
     static const bool DEFAULT_ANTIALIASING;
     static const bool DEFAULT_IS_MOUSE_CONTROLS;
     static const int DEFAULT_MAP_FRAME_DURATION;
@@ -89,6 +90,7 @@ public:
     static const int DEFAULT_FACESET_SCALING_HEIGHT;
     static const int DEFAULT_ICONS_SIZE;
     static const int DEFAULT_SAVE_SLOTS;
+    static const bool DEFAULT_BACKUPS_ACTIVATED;
 
     SystemDatas();
     virtual ~SystemDatas();
@@ -138,6 +140,8 @@ public:
     void setShowFPS(bool b);
     bool antialiasing() const;
     void setAntialiasing(bool aa);
+    bool backupsActivated() const;
+    void setBackupsActivated(bool backupsActivated);
     QStandardItemModel * modelColors() const;
     QStandardItemModel * modelCurrencies() const;
     QStandardItemModel * modelItemsTypes() const;
@@ -224,6 +228,7 @@ private:
     bool m_showBB;
     bool m_showFPS;
     bool m_antialiasing;
+    bool m_backupsActivated;
     QStandardItemModel *m_modelColors;
     QStandardItemModel *m_modelCurrencies;
     QStandardItemModel *m_modelItemsTypes;

@@ -2001,6 +2001,7 @@ public:
     static const QString LABEL_PRESS_ANY_KEYS;
     static const QString PRESS_ANY_KEYS;
     static const QString UPDATE_TRANSFORMATIONS;
+    static const QString ACTIVATED;
 
     Translations();
     virtual ~Translations();

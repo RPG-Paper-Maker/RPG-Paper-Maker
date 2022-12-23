@@ -70,6 +70,7 @@ const QString SystemDatas::JSON_AUTOTILES_FRAME_DURATION = "autotilesFrameDurati
 const QString SystemDatas::JSON_PORTION_RAY_ENGINE = "portionRayEngine";
 const QString SystemDatas::JSON_PORTION_RAY_INGAME = "portionRayIngame";
 const QString SystemDatas::JSON_SAVE_SLOTS = "saveSlots";
+const QString SystemDatas::JSON_BACKUPS_ACTIVATED = "be";
 const bool SystemDatas::DEFAULT_ANTIALIASING = false;
 const bool SystemDatas::DEFAULT_IS_MOUSE_CONTROLS = true;
 const int SystemDatas::DEFAULT_MAP_FRAME_DURATION = 150;
@@ -85,6 +86,7 @@ const int SystemDatas::DEFAULT_FACESET_SCALING_WIDTH = 160;
 const int SystemDatas::DEFAULT_FACESET_SCALING_HEIGHT = 160;
 const int SystemDatas::DEFAULT_ICONS_SIZE = 16;
 const int SystemDatas::DEFAULT_SAVE_SLOTS = 4;
+const bool SystemDatas::DEFAULT_BACKUPS_ACTIVATED = true;
 
 // -------------------------------------------------------
 //
@@ -115,6 +117,7 @@ SystemDatas::SystemDatas() :
     m_showBB(false),
     m_showFPS(false),
     m_antialiasing(false),
+    m_backupsActivated(DEFAULT_BACKUPS_ACTIVATED),
     m_modelColors(new QStandardItemModel),
     m_modelCurrencies(new QStandardItemModel),
     m_modelItemsTypes(new QStandardItemModel),
@@ -350,6 +353,16 @@ bool SystemDatas::antialiasing() const
 void SystemDatas::setAntialiasing(bool aa)
 {
     m_antialiasing = aa;
+}
+
+bool SystemDatas::backupsActivated() const
+{
+    return m_backupsActivated;
+}
+
+void SystemDatas::setBackupsActivated(bool backupsActivated)
+{
+    m_backupsActivated = backupsActivated;
 }
 
 QStandardItemModel * SystemDatas::modelColors() const {
@@ -964,6 +977,10 @@ void SystemDatas::read(const QJsonObject &json){
     {
         m_antialiasing = json[JSON_ANTIALIASING].toBool();
     }
+    if (json.contains(JSON_BACKUPS_ACTIVATED))
+    {
+        m_backupsActivated = json[JSON_BACKUPS_ACTIVATED].toBool();
+    }
 
     // Colors
     jsonList = json[JSON_COLORS].toArray();
@@ -1202,6 +1219,10 @@ void SystemDatas::write(QJsonObject &json) const{
     if (m_antialiasing != DEFAULT_ANTIALIASING)
     {
         json[JSON_ANTIALIASING] = m_antialiasing;
+    }
+    if (m_backupsActivated != DEFAULT_BACKUPS_ACTIVATED)
+    {
+        json[JSON_BACKUPS_ACTIVATED] = m_backupsActivated;
     }
 
     // Colors
