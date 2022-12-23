@@ -1208,8 +1208,8 @@ void MainWindow::updateBackup() {
             Common::getFormatNumber(QTime::currentTime().minute(), 2);
         dir.mkdir(folderBackup);
         Common::copyPath(Common::pathCombine(project->pathCurrentProjectApp(),
-            RPM::FOLDER_CONTENT), Common::pathCombine(Common::pathCombine(
-            pathBackups, folderBackup), RPM::FOLDER_CONTENT));
+            RPM::PATH_DATAS), Common::pathCombine(Common::pathCombine(
+            pathBackups, folderBackup), RPM::FOLDER_DATAS));
 
         // If max reached, remove first index and remove others
         if (index == MAX_BACKUPS) {

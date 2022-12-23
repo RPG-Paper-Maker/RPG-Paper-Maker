@@ -100,6 +100,7 @@ const QString RPM::FOLDER_APP = "app";
 #endif
 const QString RPM::FOLDER_EXAMPLE = "example";
 const QString RPM::FOLDER_BACKUPS = "backups";
+const QString RPM::FOLDER_DATAS = "Datas";
 
 // PATHS
 #ifdef Q_OS_MACOS
@@ -110,7 +111,7 @@ const QString RPM::FOLDER_BACKUPS = "backups";
 const QString RPM::PATH_APP = Common::pathCombine(PATH_RESOURCES, FOLDER_APP);
 const QString RPM::PATH_BASIC = Common::pathCombine(FOLDER_CONTENT, "basic");
 const QString RPM::PATH_BR = Common::pathCombine(FOLDER_CONTENT, "BR");
-const QString RPM::PATH_DATAS = Common::pathCombine(FOLDER_CONTENT, "Datas");
+const QString RPM::PATH_DATAS = Common::pathCombine(FOLDER_CONTENT, FOLDER_DATAS);
 const QString RPM::PATH_MAPS = Common::pathCombine(PATH_DATAS, "Maps");
 const QString RPM::PATH_SCRIPTS_DIR = Common::pathCombine(PATH_DATAS, "Scripts");
 const QString RPM::PATH_SAVES = Common::pathCombine(PATH_DATAS, "Saves");
