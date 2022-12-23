@@ -1925,4 +1925,6 @@ void ProjectUpdater::updateVersion_1_10_1()
 void ProjectUpdater::updateVersion_2_0_0()
 {
     m_project->langsDatas()->setDefaultTranslations();
+    QDir(Common::pathCombine(Common::pathCombine(m_project->pathCurrentProject(),
+        RPM::FOLDER_BACKUPS), RPM::FOLDER_DATAS)).removeRecursively();
 }
