@@ -25,10 +25,21 @@ SystemCurrency::SystemCurrency() :
 }
 
 SystemCurrency::SystemCurrency(int i, QString name, int pictureID, int pictureIndexX,
-    int pictureIndexY) :
-    SystemIcon(i, name, pictureID, pictureIndexX, pictureIndexY)
+    int pictureIndexY, PrimitiveValue *displayInMenu) :
+    SystemIcon(i, name, pictureID, pictureIndexX, pictureIndexY),
+    m_displayInMenu(displayInMenu)
 {
 
+}
+
+SystemCurrency::~SystemCurrency()
+{
+    delete m_displayInMenu;
+}
+
+PrimitiveValue * SystemCurrency::displayInMenu() const
+{
+    return m_displayInMenu;
 }
 
 // -------------------------------------------------------
@@ -61,17 +72,29 @@ SuperListItem* SystemCurrency::createCopy() const{
 // -------------------------------------------------------
 
 void SystemCurrency::setCopy(const SuperListItem &super) {
+    const SystemCurrency *currency = reinterpret_cast<const SystemCurrency *>(&super);
     SystemIcon::setCopy(super);
+    m_displayInMenu->setCopy(*currency->displayInMenu());
 }
 
 // -------------------------------------------------------
 
 void SystemCurrency::read(const QJsonObject &json){
     SystemIcon::read(json);
+    if (json.contains("dim"))
+    {
+        m_displayInMenu->read(json["dim"].toObject());
+    }
 }
 
 // -------------------------------------------------------
 
 void SystemCurrency::write(QJsonObject &json) const{
     SystemIcon::write(json);
+    if (m_displayInMenu->kind() != PrimitiveValueKind::Switch || !m_displayInMenu->switchValue())
+    {
+        QJsonObject obj;
+        m_displayInMenu->write(obj);
+        json["dim"] = obj;
+    }
 }

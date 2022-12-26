@@ -14,6 +14,7 @@
 
 #include <QMetaType>
 #include "systemicon.h"
+#include "primitivevalue.h"
 
 // -------------------------------------------------------
 //
@@ -28,13 +29,19 @@ class SystemCurrency : public SystemIcon
 public:
     SystemCurrency();
     SystemCurrency(int i, QString name, int pictureID, int pictureIndexX =
-        DEFAULT_PICTURE_INDEX_X, int pictureIndexY = DEFAULT_PICTURE_INDEX_Y);
+        DEFAULT_PICTURE_INDEX_X, int pictureIndexY = DEFAULT_PICTURE_INDEX_Y,
+        PrimitiveValue *displayInMenu = new PrimitiveValue(true));
+    ~SystemCurrency();
+    PrimitiveValue * displayInMenu() const;
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
+
+protected:
+    PrimitiveValue *m_displayInMenu;
 };
 
 Q_DECLARE_METATYPE(SystemCurrency)

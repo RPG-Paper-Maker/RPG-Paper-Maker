@@ -1989,6 +1989,7 @@ const QString Translations::LABEL_PRESS_ANY_KEYS = "label.press.any.keys";
 const QString Translations::PRESS_ANY_KEYS = "press.any.keys";
 const QString Translations::UPDATE_TRANSFORMATIONS = "update.transformations";
 const QString Translations::ACTIVATED = "activated";
+const QString Translations::DISPLAY_IN_MENU = "display.in.menu";
 
 // -------------------------------------------------------
 //

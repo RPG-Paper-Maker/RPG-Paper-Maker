@@ -46,6 +46,7 @@ DialogSystemCurrency::~DialogSystemCurrency()
 void DialogSystemCurrency::initialize(){
     ui->widgetName->initializeNamesLang(&m_currency);
     ui->widgetIcon->initializeIcon(&m_currency);
+    ui->panelPrimitiveDisplayInMenu->initializeSwitchAndUpdate(m_currency.displayInMenu());
 }
 
 //-------------------------------------------------
@@ -55,5 +56,6 @@ void DialogSystemCurrency::translate()
     this->setWindowTitle(RPM::translate(Translations::SET_CURRENCY) + RPM
         ::DOT_DOT_DOT);
     ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelDisplayInMenu->setText(RPM::translate(Translations::DISPLAY_IN_MENU) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

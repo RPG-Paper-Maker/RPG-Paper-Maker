@@ -2002,6 +2002,7 @@ public:
     static const QString PRESS_ANY_KEYS;
     static const QString UPDATE_TRANSFORMATIONS;
     static const QString ACTIVATED;
+    static const QString DISPLAY_IN_MENU;
 
     Translations();
     virtual ~Translations();

@@ -1968,5 +1968,6 @@
     "label.press.any.keys": "Press any keys",
     "press.any.keys": "Press any keys...",
     "update.transformations": "Update transformations",
-    "activated": "Activated"
+    "activated": "Activated",
+    "display.in.menu": "Display in menu"
 }

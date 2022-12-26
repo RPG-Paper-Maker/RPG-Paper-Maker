@@ -265,6 +265,7 @@ void DialogSystemEffect::on_radioButtonDamages_toggled(bool checked) {
     ui->checkBoxStockValueIn->setEnabled(checked);
     this->setStockVariableEnabled(checked ? m_effect.isDamageStockVariable() :
         false);
+    ui->checkBoxDisplayDamageTypeName->setEnabled(checked);
 }
 
 // -------------------------------------------------------
