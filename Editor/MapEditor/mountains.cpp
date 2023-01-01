@@ -305,7 +305,7 @@ void Mountains::setMountain(QSet<Portion> &portionsOverflow, Position &p,
 // -------------------------------------------------------
 
 void Mountains::addRemoveOverflow(QSet<Portion>& portionsOverflow, Position& p,
-                                bool add)
+    bool add, bool forceWrite)
 {
     Map* map = RPM::get()->project()->currentMap();
     for (QSet<Portion>::iterator i = portionsOverflow.begin(); i !=
@@ -314,9 +314,11 @@ void Mountains::addRemoveOverflow(QSet<Portion>& portionsOverflow, Position& p,
         Portion portion = *i;
         if (map->isPortionInGrid(portion)) {
             MapPortion* mapPortion = map->mapPortionFromGlobal(portion);
-            bool write = false;
+            bool write = forceWrite;
+            bool needDelete = false;
             if (mapPortion == nullptr) {
                 write = true;
+                needDelete = true;
                 mapPortion = map->loadPortionMap(portion.x(), portion.y(),
                     portion.z());
             }
@@ -327,7 +329,10 @@ void Mountains::addRemoveOverflow(QSet<Portion>& portionsOverflow, Position& p,
             }
             if (write) {
                 map->savePortionMap(mapPortion);
-                delete mapPortion;
+                if (needDelete)
+                {
+                    delete mapPortion;
+                }
             }
         }
         else {
@@ -343,7 +348,7 @@ void Mountains::addRemoveOverflow(QSet<Portion>& portionsOverflow, Position& p,
 // -------------------------------------------------------
 
 MountainDatas * Mountains::removeMountain(QSet<Portion> &portionsOverflow,
-    Position &p)
+    Position &p, bool forceWrite)
 {
     MountainDatas *mountain = m_all.value(p);
     if (mountain != nullptr){
@@ -353,7 +358,7 @@ MountainDatas * Mountains::removeMountain(QSet<Portion> &portionsOverflow,
         getSetPortionsOverflow(portionsOverflow, p, mountain);
 
         // Adding to overflowing
-        addRemoveOverflow(portionsOverflow, p, false);
+        addRemoveOverflow(portionsOverflow, p, false, forceWrite);
 
         return mountain;
     }
@@ -426,18 +431,18 @@ bool Mountains::deleteMountain(QSet<Portion> &portionsOverflow, Position &p,
 
 void Mountains::removeMountainsOut(MapProperties &properties) {
     QList<Position> list;
-
+    QSet<Portion> portionsOverflow;
     QHash<Position, MountainDatas *>::iterator i;
     for (i = m_all.begin(); i != m_all.end(); i++) {
         Position position = i.key();
 
         if (position.isOutMapPorperties(properties)) {
-            delete i.value();
             list.push_back(position);
         }
     }
     for (int k = 0; k < list.size(); k++) {
-        m_all.remove(list.at(k));
+        Position p = list.at(k);
+        delete this->removeMountain(portionsOverflow, p, true);
     }
 }
 
@@ -475,10 +480,12 @@ MapElement* Mountains::updateRaycasting(float &finalDistance, Position
         position = *i;
         map->getLocalPortion(position, portion);
         mapPortion = map->mapPortion(portion);
-        newElement = mapPortion->updateRaycastingOverflowMountain(position,
-            finalDistance, finalPosition, ray, remove);
-        if (newElement != nullptr) {
-            element = newElement;
+        if (mapPortion != nullptr) {
+            newElement = mapPortion->updateRaycastingOverflowMountain(position,
+                finalDistance, finalPosition, ray, remove);
+            if (newElement != nullptr) {
+                element = newElement;
+            }
         }
     }
 

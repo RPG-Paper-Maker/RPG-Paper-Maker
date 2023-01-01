@@ -97,8 +97,9 @@ public:
     void setMountain(QSet<Portion> &portionsOverflow, Position &p, MountainDatas
         *mountain);
     void addRemoveOverflow(QSet<Portion> &portionsOverflow, Position &p, bool
-        add);
-    MountainDatas * removeMountain(QSet<Portion> &portionsOverflow, Position &p);
+        add, bool forceWrite = false);
+    MountainDatas * removeMountain(QSet<Portion> &portionsOverflow, Position &p,
+        bool forceWrite = false);
     bool addMountain(QSet<Portion> &portionsOverflow, Position &p, MountainDatas
         *mountain, QJsonObject &previousObj, MapEditorSubSelectionKind
         &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save,
