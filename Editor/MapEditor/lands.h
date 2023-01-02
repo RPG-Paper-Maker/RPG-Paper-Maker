@@ -23,6 +23,8 @@ class Lands : public Serializable
 public:
     Lands();
     virtual ~Lands();
+    Autotiles * autotiles() const;
+
     static QVector3D verticesQuad[];
     static GLuint indexesQuad[];
     static int nbVerticesQuad;

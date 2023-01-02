@@ -50,7 +50,7 @@
         "Crash sometimes when resizing a map with mountains deleted",
         "Inputs initialized before running plugins",
         "Moutains portions crash if drawing with rectangle in preview",
-        "Collisions crashes",
+        "Autotiles and mountains portions drawing issues with rectangle in preview",
         "Status icons size issues in battle",
         "Enemy using skill attacking all targets not working"
     ],
@@ -100,7 +100,7 @@
         2,
         2,
         2,
-        0,
+        2,
         0,
         0
     ]

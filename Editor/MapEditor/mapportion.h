@@ -44,6 +44,7 @@ public:
 
     void setDetection(SystemDetection *detection);
     void getGlobalPortion(Portion& portion);
+    Lands * lands() const;
     MapObjects* mapObjects() const;
     Objects3D * objects3D();
 
@@ -53,6 +54,7 @@ public:
     bool isEmpty() const;
     void updateEmpty();
     void initializeDetection();
+    MapElement * getPreview(Position &p);
     LandDatas* getLand(Position& p);
     bool addLand(Position& p, LandDatas* land, QJsonObject &previous,
                  MapEditorSubSelectionKind &previousType,

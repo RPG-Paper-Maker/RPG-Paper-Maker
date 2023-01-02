@@ -217,6 +217,7 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
     Position topPosition;
     double yPlus;
     FloorDatas *topFloor;
+    QSet<QPair<Position, Portion>> moutainsToUpdate;
 
     m_map->getLocalPortion(m_positionPreviousPreview, portion);
     if (m_map->isInGrid(m_positionPreviousPreview) && m_map->isInPortion(
@@ -297,14 +298,23 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
                     updatePreviewElement(position, portion, element);
 
                     if (kind == MapEditorSelectionKind::Mountains) {
-                        mapPortion = m_map->mapPortion(portion);
-                        mapPortion->updateMountains(position,
-                            m_portionsToUpdate, m_portionsToSave,
-                            m_portionsPreviousPreview);
+                        moutainsToUpdate << QPair<Position, Portion>(position, portion);
                     }
                 }
             }
         }
+    }
+
+    // Update mountains
+    QSet<QPair<Position, Portion>>::iterator i;
+    for (i = moutainsToUpdate.begin(); i != moutainsToUpdate.end(); i++)
+    {
+        Position position = (*i).first;
+        Portion portion = (*i).second;
+        mapPortion = m_map->mapPortion(portion);
+        mapPortion->updateMountains(position,
+            m_portionsToUpdate, m_portionsToSave,
+            m_portionsPreviousPreview);
     }
 }
 

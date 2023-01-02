@@ -56,6 +56,11 @@ void MapPortion::getGlobalPortion(Portion& portion) {
     portion = m_globalPortion;
 }
 
+Lands * MapPortion::lands() const
+{
+    return m_lands;
+}
+
 MapObjects * MapPortion::mapObjects() const
 {
     return m_mapObjects;
@@ -103,6 +108,13 @@ void MapPortion::updateEmpty() {
 
 void MapPortion::initializeDetection() {
     m_detection->initializeObjects(m_objects3D, m_globalPortion);
+}
+
+// -------------------------------------------------------
+
+MapElement * MapPortion::getPreview(Position &p)
+{
+    return m_previewSquares.value(p);
 }
 
 // -------------------------------------------------------

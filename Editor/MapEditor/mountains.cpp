@@ -168,9 +168,17 @@ MountainDatas* Mountains::tileExisting(Position &position, Portion &portion,
             return nullptr;
         } else
         {
-            mountain = reinterpret_cast<MountainDatas *>(mapPortion
-                ->getMapElementAt(position, MapEditorSelectionKind::Mountains,
-                MapEditorSubSelectionKind::Mountains));
+            // Preview first
+            MapElement *element = mapPortion->getPreview(position);
+            if (element != nullptr)
+            {
+                mountain = reinterpret_cast<MountainDatas *>(element);
+            } else
+            {
+                mountain = reinterpret_cast<MountainDatas *>(mapPortion
+                    ->getMapElementAt(position, MapEditorSelectionKind::Mountains,
+                    MapEditorSubSelectionKind::Mountains));
+            }
         }
     }
     return mountain == nullptr ? mountain : (mountain->isInvisible() ? nullptr :

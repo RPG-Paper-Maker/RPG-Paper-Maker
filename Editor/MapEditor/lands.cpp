@@ -44,6 +44,11 @@ Lands::~Lands()
     delete m_autotiles;
 }
 
+Autotiles * Lands::autotiles() const
+{
+    return m_autotiles;
+}
+
 bool Lands::isEmpty() const {
     return m_floors->isEmpty() && m_autotiles->isEmpty();
 }

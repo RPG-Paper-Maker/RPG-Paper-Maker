@@ -205,10 +205,22 @@ AutotileDatas* Autotiles::tileExisting(Position& position, Portion& portion,
         return reinterpret_cast<AutotileDatas *>(preview.value(position));
     } else { // If out of current portion
         mapPortion = RPM::get()->project()->currentMap()->mapPortion(newPortion);
-
-        return (mapPortion == nullptr) ? nullptr : reinterpret_cast<
-            AutotileDatas *>(mapPortion->getMapElementAt(position,
-            MapEditorSelectionKind::Land, MapEditorSubSelectionKind::Autotiles));
+        if (mapPortion == nullptr)
+        {
+            return nullptr;
+        } else
+        {
+            // Preview first
+            MapElement *element = mapPortion->getPreview(position);
+            if (element != nullptr && element->getKind() == MapEditorSelectionKind
+                ::Land && element->getSubKind() == MapEditorSubSelectionKind::Autotiles)
+            {
+                return reinterpret_cast<AutotileDatas *>(element);
+            }
+            return reinterpret_cast<
+                AutotileDatas *>(mapPortion->getMapElementAt(position,
+                MapEditorSelectionKind::Land, MapEditorSubSelectionKind::Autotiles));
+        }
     }
 }
 
