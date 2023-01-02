@@ -594,7 +594,7 @@ void Mountains::updateAround(Position &position, QHash<Position, MountainDatas *
                     }
 
                     // If preview, add the autotile to it
-                    if (previousPreview != nullptr) {
+                    if (previousPreview != nullptr && previewMountain != nullptr && previewMountain != newMountain) {
                         RPM::get()->project()->currentMap()->mapPortion(
                             newPortion)->addPreview(newPosition,
                             previewMountain);

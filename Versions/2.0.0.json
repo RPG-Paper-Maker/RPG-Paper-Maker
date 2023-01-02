@@ -49,7 +49,7 @@
         "Custom 3D objects rotated and scaled not drawn at correct position in game",
         "Crash sometimes when resizing a map with mountains deleted",
         "Inputs initialized before running plugins",
-        "Autotiles portions issues if drawing with rectangle",
+        "Moutains portions crash if drawing with rectangle in preview",
         "Collisions crashes",
         "Status icons size issues in battle",
         "Enemy using skill attacking all targets not working"
@@ -98,9 +98,8 @@
         2,
         2,
         2,
-        0,
-        0,
-        0,
+        2,
+        2,
         0,
         0,
         0
