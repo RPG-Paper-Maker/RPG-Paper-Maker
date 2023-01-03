@@ -52,7 +52,8 @@
         "Moutains portions crash if drawing with rectangle in preview",
         "Autotiles and mountains portions drawing issues with rectangle in preview",
         "Enemy using skill attacking all targets not working",
-        "Skybox: clouds name replaced by day"
+        "Skybox: clouds name replaced by day",
+        "Copy conditions command with property in common reaction make crash"
     ],
     "finished": [
         2,
@@ -80,6 +81,7 @@
         0,
         0,
 
+        2,
         2,
         2,
         2,

@@ -509,6 +509,10 @@ QString EventCommand::strProperty(int &i, QStandardItemModel *properties,
         return RPM::translate(Translations::PARAMETER) + RPM::SPACE + (super ==
             nullptr ? "" : super->toString());
     case PrimitiveValueKind::Property:
+        if (properties == nullptr)
+        {
+            return RPM::translate(Translations::PROPERTY) + RPM::SPACE;
+        }
         super = SuperListItem::getById(properties->invisibleRootItem(), value.toInt());
         return RPM::translate(Translations::PROPERTY) + RPM::SPACE + (super ==
             nullptr ? "" : super->toString());
