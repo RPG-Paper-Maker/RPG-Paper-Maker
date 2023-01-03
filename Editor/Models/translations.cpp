@@ -1990,6 +1990,7 @@ const QString Translations::PRESS_ANY_KEYS = "press.any.keys";
 const QString Translations::UPDATE_TRANSFORMATIONS = "update.transformations";
 const QString Translations::ACTIVATED = "activated";
 const QString Translations::DISPLAY_IN_MENU = "display.in.menu";
+const QString Translations::DAY = "day";
 
 // -------------------------------------------------------
 //

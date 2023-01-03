@@ -51,8 +51,8 @@
         "Inputs initialized before running plugins",
         "Moutains portions crash if drawing with rectangle in preview",
         "Autotiles and mountains portions drawing issues with rectangle in preview",
-        "Status icons size issues in battle",
-        "Enemy using skill attacking all targets not working"
+        "Enemy using skill attacking all targets not working",
+        "Skybox: clouds name replaced by day"
     ],
     "finished": [
         2,
@@ -101,7 +101,9 @@
         2,
         2,
         2,
-        0,
-        0
+        2,
+        2,
+        2,
+        2
     ]
 }

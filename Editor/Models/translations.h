@@ -2003,6 +2003,7 @@ public:
     static const QString UPDATE_TRANSFORMATIONS;
     static const QString ACTIVATED;
     static const QString DISPLAY_IN_MENU;
+    static const QString DAY;
 
     Translations();
     virtual ~Translations();

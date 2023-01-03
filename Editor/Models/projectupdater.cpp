@@ -1927,4 +1927,30 @@ void ProjectUpdater::updateVersion_2_0_0()
     m_project->langsDatas()->setDefaultTranslations();
     QDir(Common::pathCombine(Common::pathCombine(m_project->pathCurrentProject(),
         RPM::FOLDER_BACKUPS), RPM::FOLDER_DATAS)).removeRecursively();
+    // SKybox name
+    QStandardItemModel *model = m_project->picturesDatas()->model(PictureKind::SkyBoxes);
+    SystemResource *super;
+    for (int i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SystemResource *>(SuperListItem::getItemModelAt(model, i));
+        if (super != nullptr && super->isBR()) {
+            if (super->name() == "clouds-back.png") {
+                super->setName("day-back.png");
+            }
+            if (super->name() == "clouds-bottom.png") {
+                super->setName("day-bottom.png");
+            }
+            if (super->name() == "clouds-front.png") {
+                super->setName("day-front.png");
+            }
+            if (super->name() == "clouds-left.png") {
+                super->setName("day-left.png");
+            }
+            if (super->name() == "clouds-right.png") {
+                super->setName("day-right.png");
+            }
+            if (super->name() == "clouds-top.png") {
+                super->setName("day-top.png");
+            }
+        }
+    }
 }
