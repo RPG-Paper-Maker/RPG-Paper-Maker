@@ -171,14 +171,6 @@ int main(int argc, char *argv[]) {
         RPM::get()->engineSettings()->write();
     }
 
-    // Show first launch window
-    DialogFirstLaunch dialogFirstLaunch;
-    if (RPM::get()->engineSettings()->firstTime()) {
-        dialogFirstLaunch.show();
-        RPM::get()->engineSettings()->setFirstTime(false);
-        RPM::get()->engineSettings()->write();
-    }
-
     // Executing
     int result = a.exec();
     delete w;
