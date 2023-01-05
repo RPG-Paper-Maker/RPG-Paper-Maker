@@ -100,6 +100,7 @@ enum class EventCommandKind {
     StopASound,
     DisplayHideABattler,
     TransformABattler,
+    ChangeBattlerGraphics,
     Last
 };
 

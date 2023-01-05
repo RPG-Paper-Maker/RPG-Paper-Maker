@@ -380,6 +380,9 @@ QString EventCommand::toString(QStandardItemModel *properties, QStandardItemMode
     case EventCommandKind::TransformABattler:
         str += this->strTransformABattler(properties, parameters, troopMonstersList);
         break;
+    case EventCommandKind::ChangeBattlerGraphics:
+        str += this->strChangeBattlerGraphics(properties, parameters, troopMonstersList);
+        break;
     default:
         break;
     }
@@ -3061,6 +3064,33 @@ QString EventCommand::strTransformABattler(QStandardItemModel *properties,
     return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
         Translations::TRANSFORME_A_BATTLER) + "</strong>" + RPM::COLON + RPM::SPACE +
         battler + RPM::SPACE + monsterID + RPM::SPACE + level;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChangeBattlerGraphics(QStandardItemModel *properties,
+    QStandardItemModel *parameters, QStandardItemModel *troopMonstersList) const
+{
+    int i = 0;
+    QString battler = RPM::translate(Translations::BATTLER) + RPM::SPACE;
+    switch(this->valueCommandAt(i++).toInt())
+    {
+    case 0:
+        battler += RPM::translate(Translations::ENEMY) + RPM::COLON + RPM::SPACE
+            + this->strTroopMonstersList(troopMonstersList, i);
+        break;
+    case 1:
+        battler += RPM::translate(Translations::HERO_ENEMY_INSTANCE_ID) + RPM
+            ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters);
+        break;
+    }
+    QString facesetPicture = RPM::SPACE + "ID=" + this->strProperty(i, properties, parameters, true);
+    facesetPicture += " x=" + QString::number(this->valueCommandAt(i++).toInt());
+    facesetPicture += " y=" + QString::number(this->valueCommandAt(i++).toInt());
+    QString battlerPicture = RPM::SPACE + "ID=" + this->strProperty(i, properties, parameters, true);
+    return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
+        Translations::CHANGE_BATTLER_GRAPHICS) + "</strong>" + RPM::COLON + RPM::SPACE +
+        battler + facesetPicture + battlerPicture;
 }
 
 // -------------------------------------------------------

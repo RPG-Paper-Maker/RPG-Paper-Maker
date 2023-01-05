@@ -667,6 +667,7 @@ void RPM::readTranslations() {
         RPM::translate(Translations::STOP_A_SOUND) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::DISPLAY_HIDE_A_BATTLER) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::TRANSFORME_A_BATTLER) + RPM::DOT_DOT_DOT,
+        RPM::translate(Translations::CHANGE_BATTLER_GRAPHICS) + RPM::DOT_DOT_DOT,
         ""
     });
     RPM::ENUM_TO_STRING_TARGET_KIND = QStringList({

@@ -25,8 +25,10 @@
         "Switch button to display a currency or not on the main menu / shop list",
         "Plugins: change to avoid the use of getValue() on complex objects",
         "New title screen and battle music!",
-        "Change graphics command",
-        "Facesets for other missing characters"
+        "Change battler graphics command",
+        "Facesets for other missing characters",
+        "Backup option select time between each save and max number backups",
+        "Warning message for basic and hero model"
 	],
     "bugs": [
         "Improve 3D objects objects position (wrong selft detection position)",
@@ -53,7 +55,8 @@
         "Autotiles and mountains portions drawing issues with rectangle in preview",
         "Enemy using skill attacking all targets not working",
         "Skybox: clouds name replaced by day",
-        "Copy conditions command with property in common reaction make crash"
+        "Copy conditions command with property in common reaction make crash",
+        "Temp files: erase only when saving or closing (and not when opening project)"
     ],
     "finished": [
         2,
@@ -77,7 +80,9 @@
         2,
         2,
         2,
-        0,
+        2,
+        2,
+        1,
         0,
         0,
 
@@ -106,6 +111,6 @@
         2,
         2,
         2,
-        2
+        0
     ]
 }

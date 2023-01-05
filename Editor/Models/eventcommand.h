@@ -235,6 +235,8 @@ private:
         *parameters, QStandardItemModel *troopMonstersList) const;
     QString strTransformABattler(QStandardItemModel *properties, QStandardItemModel
         *parameters, QStandardItemModel *troopMonstersList) const;
+    QString strChangeBattlerGraphics(QStandardItemModel *properties, QStandardItemModel
+        *parameters, QStandardItemModel *troopMonstersList) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

@@ -2004,6 +2004,7 @@ public:
     static const QString ACTIVATED;
     static const QString DISPLAY_IN_MENU;
     static const QString DAY;
+    static const QString CHANGE_BATTLER_GRAPHICS;
 
     Translations();
     virtual ~Translations();

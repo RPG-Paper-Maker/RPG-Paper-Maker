@@ -58,6 +58,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommandcallacommonreaction.h \
     Dialogs/Commands/dialogcommandchangeaskill.h \
     Dialogs/Commands/dialogcommandchangeastatistic.h \
+    Dialogs/Commands/dialogcommandchangebattlergraphics.h \
     Dialogs/Commands/dialogcommandchangechronometer.h \
     Dialogs/Commands/dialogcommandchangeclass.h \
     Dialogs/Commands/dialogcommandchangeequipment.h \
@@ -511,6 +512,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommandcallacommonreaction.cpp \
     Dialogs/Commands/dialogcommandchangeaskill.cpp \
     Dialogs/Commands/dialogcommandchangeastatistic.cpp \
+    Dialogs/Commands/dialogcommandchangebattlergraphics.cpp \
     Dialogs/Commands/dialogcommandchangechronometer.cpp \
     Dialogs/Commands/dialogcommandchangeclass.cpp \
     Dialogs/Commands/dialogcommandchangeequipment.cpp \
@@ -902,6 +904,7 @@ FORMS += \
     Dialogs/Commands/dialogcommandcallacommonreaction.ui \
     Dialogs/Commands/dialogcommandchangeaskill.ui \
     Dialogs/Commands/dialogcommandchangeastatistic.ui \
+    Dialogs/Commands/dialogcommandchangebattlergraphics.ui \
     Dialogs/Commands/dialogcommandchangechronometer.ui \
     Dialogs/Commands/dialogcommandchangeclass.ui \
     Dialogs/Commands/dialogcommandchangeequipment.ui \
