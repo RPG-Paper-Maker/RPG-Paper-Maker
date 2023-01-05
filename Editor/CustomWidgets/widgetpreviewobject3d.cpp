@@ -122,7 +122,10 @@ void WidgetPreviewObject3D::updateObject(bool missingTexture) {
         m_camera->setHorizontalAngle(-145.0);
         m_camera->setVerticalAngle(70);
         QVector3D center;
-        m_object->getCenter(center);
+        if (m_object->datas()->isTopLeft())
+        {
+            m_object->getCenter(center);
+        }
         m_camera->updateTarget(center);
     }
 }

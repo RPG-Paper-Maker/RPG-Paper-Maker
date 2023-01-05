@@ -387,7 +387,12 @@ int Object3DBoxDatas::minDistanceFromCenter() const {
     max = std::max(w, h);
     max = std::max(max, d);
 
-    return max + ((w + h + d) / 2);
+    if (m_datas->isTopLeft())
+    {
+        return max + ((w + h + d) / 2);
+    }
+
+    return max + (w + h + d);
 }
 
 // -------------------------------------------------------
