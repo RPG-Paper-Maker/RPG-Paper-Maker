@@ -87,6 +87,7 @@ const QString RPM::FILE_MAP_OBJECTS = "objects" + EXTENSION_JSON;
 const QString RPM::FILE_MAIN = "main" + EXTENSION_JS;
 const QString RPM::FILE_INDEX = "index" + EXTENSION_HTML;
 const QString RPM::FILE_PACKAGE = "package" + EXTENSION_JSON;
+const QString RPM::FILE_MAPS_SAVES = "maps-saves.json";
 const QString RPM::FOLDER_GAMES = "RPG Paper Maker Games";
 const QString RPM::FOLDER_DESKTOP = "desktop";
 const QString RPM::FOLDER_CONTENT = "Content";
@@ -317,7 +318,6 @@ QStringList RPM::ENUM_TO_STRING_ORIENTATION_KIND = {};
 QStringList RPM::ENUM_TO_STRING_CHANGE_VARIABLES_OTHER_CHARACTERISTICS = {};
 
 // OTHER STATIC VALUES
-QSet<int> RPM::mapsToSave;
 QSet<int> RPM::mapsUndoRedo;
 QString RPM::shadersExtension = "-3.0";
 bool RPM::isInConfig = false;

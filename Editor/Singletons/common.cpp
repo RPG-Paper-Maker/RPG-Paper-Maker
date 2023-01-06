@@ -173,14 +173,14 @@ void Common::writeArrayJSON(QString path, const QJsonArray &tab) {
 
 // -------------------------------------------------------
 
-void Common::readArrayJSON(QString path, QJsonDocument& loadDoc) {
+void Common::readArrayJSON(QString path, QJsonArray &tab) {
     QByteArray saveDatas;
 
     QFile loadFile(path);
     loadFile.open(QIODevice::ReadOnly);
     saveDatas = loadFile.readAll();
     loadFile.close();
-    loadDoc = QJsonDocument::fromJson(saveDatas);
+    tab = QJsonDocument::fromJson(saveDatas).array();
 }
 
 // -------------------------------------------------------

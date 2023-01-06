@@ -26,6 +26,7 @@
         "Plugins: change to avoid the use of getValue() on complex objects",
         "New title screen and battle music!",
         "Change battler graphics command",
+        "Saved maps are now in a temp file",
         "Facesets for other missing characters",
         "Backup option select time between each save and max number backups",
         "Warning message for basic and hero model"
@@ -55,10 +56,10 @@
         "Autotiles and mountains portions drawing issues with rectangle in preview",
         "Enemy using skill attacking all targets not working",
         "Skybox: clouds name replaced by day",
-        "Copy conditions command with property in common reaction make crash",
-        "Temp files: erase only when saving or closing (and not when opening project)"
+        "Copy conditions command with property in common reaction make crash"
     ],
     "finished": [
+        2,
         2,
         2,
         2,
@@ -110,7 +111,6 @@
         2,
         2,
         2,
-        2,
-        0
+        2
     ]
 }

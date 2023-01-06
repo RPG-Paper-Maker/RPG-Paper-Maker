@@ -77,6 +77,9 @@ public:
     bool readVersion();
     bool readOS();
     OSKind getProjectOS();
+    QString getPathMapsToSave() const;
+    void readMapsToSave(QSet<int> &mapsToSave) const;
+    void writeMapsToSave(QSet<int> &mapsToSave) const;
     static OSKind getComputerOS();
     bool copyOSFiles();
     void removeOSFiles();

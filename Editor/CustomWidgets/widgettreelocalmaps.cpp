@@ -86,6 +86,12 @@ void WidgetTreeLocalMaps::initializeModel(QStandardItemModel *m)
     }
     connect(m_model, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(removed(
         QModelIndex,int,int)));
+
+    // Set if saved
+    QSet<int> mapsToSave;
+    RPM::get()->project()->readMapsToSave(mapsToSave);
+    this->updateNotSaved(m->invisibleRootItem(), mapsToSave);
+
 }
 
 void WidgetTreeLocalMaps::initializeProject(Project *p)
@@ -246,6 +252,12 @@ void WidgetTreeLocalMaps::deleteMap(QStandardItem* item){
 
     QDir(Common::pathCombine(RPM::get()->project()->pathCurrentProjectApp(),
                             mapPath)).removeRecursively();
+
+    // Remove id from maps to save
+    QSet<int> mapsToSave;
+    RPM::get()->project()->readMapsToSave(mapsToSave);
+    mapsToSave.remove(tag->id());
+    RPM::get()->project()->writeMapsToSave(mapsToSave);
 
     // Remove from tree
     item->parent()->removeRow(item->row());
@@ -468,6 +480,28 @@ void WidgetTreeLocalMaps::updateSquareSizeCoefItem(float s, float ps, QStandardI
 }
 
 // -------------------------------------------------------
+
+void WidgetTreeLocalMaps::updateNotSaved(QStandardItem *item, QSet<int> mapsToSave)
+{
+    TreeMapTag *tag;
+    for (int i = 0, l = item->rowCount(); i < l; i++)
+    {
+        QStandardItem *child = item->child(i);
+        tag = reinterpret_cast<TreeMapTag *>(child->data().value<quintptr>());
+        if (tag->isDir())
+        {
+            this->updateNotSaved(child, mapsToSave);
+        } else
+        {
+            if (mapsToSave.contains(tag->id()))
+            {
+                child->setText(child->text() + " *");
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  CONTEXT MENU SLOTS
 //
@@ -642,10 +676,13 @@ void WidgetTreeLocalMaps::contextEditMap(){
         if (dialog.exec() == QDialog::Accepted){
             QString pathTemp = Common::pathCombine(path,
                                                   RPM::FOLDER_TEMP);
-            if (RPM::mapsToSave.contains(properties.id())) {
+            QSet<int> mapsToSave;
+            RPM::get()->project()->readMapsToSave(mapsToSave);
+            if (mapsToSave.contains(properties.id())) {
                 Common::copyAllFiles(pathTemp, path);
                 Common::deleteAllFiles(pathTemp);
-                RPM::mapsToSave.remove(properties.id());
+                mapsToSave.remove(properties.id());
+                RPM::get()->project()->writeMapsToSave(mapsToSave);
             }
             properties.save(path);
             Map::correctMap(path, previousProperties, properties);

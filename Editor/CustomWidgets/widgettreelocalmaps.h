@@ -62,6 +62,7 @@ public:
     void disableContextMenu();
     void updateSquareSizeCoef(float s, float ps);
     void updateSquareSizeCoefItem(float s, float ps, QStandardItem *item);
+    void updateNotSaved(QStandardItem *item, QSet<int> mapsToSave);
 
 protected:
     virtual void keyPressEvent(QKeyEvent *event);

@@ -362,7 +362,10 @@ void Map::saveObjects(QStandardItemModel* model, QString pathMap, bool temp) {
 void Map::setToNotSaved()
 {
     this->setSaved(false);
-    RPM::mapsToSave.insert(m_mapProperties->id());
+    QSet<int> mapsToSave;
+    RPM::get()->project()->readMapsToSave(mapsToSave);
+    mapsToSave.insert(m_mapProperties->id());
+    RPM::get()->project()->writeMapsToSave(mapsToSave);
     this->getAssociatedMapItem()->setText(m_mapProperties->name() + " *");
 }
 

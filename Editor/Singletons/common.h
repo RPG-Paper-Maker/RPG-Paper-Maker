@@ -38,7 +38,7 @@ public:
         QJsonDocument::JsonFormat format = QJsonDocument::Compact);
     static void readOtherJSON(QString path, QJsonDocument &loadDoc);
     static void writeArrayJSON(QString path, const QJsonArray &tab);
-    static void readArrayJSON(QString path, QJsonDocument &loadDoc);
+    static void readArrayJSON(QString path, QJsonArray &tab);
     static void write(QString path, QString content);
     static QString read(QString path);
     static void modifyJSONValue(QJsonObject &root, QString path, QJsonValue

@@ -356,6 +356,39 @@ OSKind Project::getProjectOS() {
 
 // -------------------------------------------------------
 
+QString Project::getPathMapsToSave() const
+{
+    return Common::pathCombine(Common::pathCombine(Common::pathCombine(this
+        ->pathCurrentProjectApp(), RPM::PATH_MAPS), RPM::FOLDER_TEMP), RPM
+        ::FILE_MAPS_SAVES);
+}
+
+// -------------------------------------------------------
+
+void Project::readMapsToSave(QSet<int> &mapsToSave) const
+{
+    QJsonArray jsonArray;
+    Common::readArrayJSON(RPM::get()->project()->getPathMapsToSave(), jsonArray);
+    for (int i = 0, l = jsonArray.size(); i < l; i++)
+    {
+        mapsToSave << jsonArray[i].toInt();
+    }
+}
+
+// -------------------------------------------------------
+
+void Project::writeMapsToSave(QSet<int> &mapsToSave) const
+{
+    QJsonArray jsonArray;
+    for (QSet<int>::const_iterator i = mapsToSave.begin(); i != mapsToSave.end(); i++)
+    {
+        jsonArray.append(*i);
+    }
+    Common::writeArrayJSON(RPM::get()->project()->getPathMapsToSave(), jsonArray);
+}
+
+// -------------------------------------------------------
+
 OSKind Project::getComputerOS() {
     #ifdef Q_OS_WIN
         return Common::isWindowsx64() ? OSKind::Windowsx64 : OSKind::Windowsx86;

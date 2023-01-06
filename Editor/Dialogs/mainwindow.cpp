@@ -210,7 +210,8 @@ bool MainWindow::closeProject()
     if (!close(false))
         return false;
 
-    RPM::mapsToSave.clear();
+    QSet<int> mapsToSave;
+    RPM::get()->project()->writeMapsToSave(mapsToSave);
     RPM::mapsUndoRedo.clear();
     enableNoGame();
     delete project;
@@ -335,14 +336,17 @@ void MainWindow::enableGame(){ // When a project is opened
 void MainWindow::saveAllMaps(){
 
     // Save all the maps
+    QSet<int> mapsToSave;
+    RPM::get()->project()->readMapsToSave(mapsToSave);
     QSet<int>::iterator i;
-    for (i = RPM::mapsToSave.begin(); i != RPM::mapsToSave.end(); i++){
+    for (i = mapsToSave.begin(); i != mapsToSave.end(); i++){
         Map map(*i);
         map.save();
     }
     if (project->currentMap() != nullptr)
         project->currentMap()->setSaved(true);
-    RPM::mapsToSave.clear();
+    mapsToSave.clear();
+    RPM::get()->project()->writeMapsToSave(mapsToSave);
 
     // Remove *
     ((PanelProject*)mainPanel)->widgetTreeLocalMaps()->updateAllNodesSaved();
@@ -369,7 +373,9 @@ bool MainWindow::close(bool example)
 {
     if (project != nullptr)
     {
-        if (RPM::mapsToSave.count() > 0)
+        QSet<int> mapsToSave;
+        RPM::get()->project()->readMapsToSave(mapsToSave);
+        if (mapsToSave.count() > 0)
         {
             QMessageBox box(QMessageBox::Question, RPM::translate(Translations
                 ::QUIT), RPM::translate(Translations::YOU_HAVE_MAPS_NOT_SAVED),
@@ -447,7 +453,9 @@ void MainWindow::cleanRecentProjectsActions() {
 
 void MainWindow::runGame() {
     if (RPM::get()->project()->isHeroDefined()) {
-        if (RPM::mapsToSave.count() > 0) {
+        QSet<int> mapsToSave;
+        RPM::get()->project()->readMapsToSave(mapsToSave);
+        if (mapsToSave.count() > 0) {
             QMessageBox box(QMessageBox::Question, RPM
                 ::translate(Translations::SAVE), RPM::translate(Translations
                 ::YOU_HAVE_MAPS_NOT_SAVED), QMessageBox::Yes |
@@ -653,7 +661,10 @@ void MainWindow::on_actionClean_recent_projects_triggered()
 void MainWindow::on_actionSave_triggered(){
     if (project->currentMap() != nullptr) {
         project->saveCurrentMap();
-        RPM::mapsToSave.remove(project->currentMap()->mapProperties()->id());
+        QSet<int> mapsToSave;
+        RPM::get()->project()->readMapsToSave(mapsToSave);
+        mapsToSave.remove(project->currentMap()->mapProperties()->id());
+        RPM::get()->project()->writeMapsToSave(mapsToSave);
         ((PanelProject*)mainPanel)->widgetMapEditor()->save();
     }
 }

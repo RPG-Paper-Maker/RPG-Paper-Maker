@@ -66,7 +66,9 @@ Map::Map(int id, bool needTextures) :
     QDir(m_pathMap).mkdir(RPM::FOLDER_UNDO_REDO_TEMP_MAP);
 
     // Temp map files
-    if (!RPM::mapsToSave.contains(id)) {
+    QSet<int> mapsToSave;
+    RPM::get()->project()->readMapsToSave(mapsToSave);
+    if (!mapsToSave.contains(id)) {
         QString pathTemp = Common::pathCombine(m_pathMap, RPM::FOLDER_TEMP);
         Common::deleteAllFiles(pathTemp);
         QFile(Common::pathCombine(m_pathMap, RPM::FILE_MAP_OBJECTS)).copy(
@@ -79,7 +81,7 @@ Map::Map(int id, bool needTextures) :
 
     m_mapProperties = new MapProperties(m_pathMap);
     readObjects();
-    m_saved = !RPM::mapsToSave.contains(id);
+    m_saved = !mapsToSave.contains(id);
     m_portionsRay = RPM::get()->getPortionsRay() + 1;
     m_squareSize = RPM::get()->getSquareSize();
 

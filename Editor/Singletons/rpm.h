@@ -100,6 +100,7 @@ public:
     static const QString FILE_MAIN;
     static const QString FILE_INDEX;
     static const QString FILE_PACKAGE;
+    static const QString FILE_MAPS_SAVES;
     static const QString FOLDER_GAMES;
     static const QString FOLDER_DESKTOP;
     static const QString FOLDER_CONTENT;
@@ -246,7 +247,6 @@ public:
     static QStringList ENUM_TO_STRING_CHANGE_VARIABLES_OTHER_CHARACTERISTICS;
 
     // OTHER STATIC VALUES
-    static QSet<int> mapsToSave;
     static QSet<int> mapsUndoRedo;
     static QString shadersExtension;
     static bool isInConfig;
@@ -281,6 +281,10 @@ public:
     static QString translate(const QString &key);
     static QString boolToString(const bool b);
     static bool stringToBool(const QString &s);
+    static void addMapsToSave(int id);
+    static void deleteMapsToSave(int id);
+    static void clearMapsToSave();
+    static void saveMapsToSave();
 
     void loadEngineSettings();
     void clearCommands();

@@ -171,6 +171,8 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     // Creating first empty map
     dir.mkdir(RPM::PATH_MAPS);
     dir.mkdir(Common::pathCombine(RPM::PATH_MAPS, RPM::FOLDER_TEMP));
+    QJsonArray jsonArray;
+    Common::writeArrayJSON(project->getPathMapsToSave(), jsonArray);
     Map::writeDefaultMap(pathApp);
     emit progress(90);
     Map::writeDefaultBattleMap(pathApp);
