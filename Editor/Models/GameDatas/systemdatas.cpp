@@ -71,6 +71,8 @@ const QString SystemDatas::JSON_PORTION_RAY_ENGINE = "portionRayEngine";
 const QString SystemDatas::JSON_PORTION_RAY_INGAME = "portionRayIngame";
 const QString SystemDatas::JSON_SAVE_SLOTS = "saveSlots";
 const QString SystemDatas::JSON_BACKUPS_ACTIVATED = "be";
+const QString SystemDatas::JSON_BACKUPS_INTERVAL = "bi";
+const QString SystemDatas::JSON_BACKUPS_MAX = "bm";
 const bool SystemDatas::DEFAULT_ANTIALIASING = false;
 const bool SystemDatas::DEFAULT_IS_MOUSE_CONTROLS = true;
 const int SystemDatas::DEFAULT_MAP_FRAME_DURATION = 150;
@@ -118,6 +120,8 @@ SystemDatas::SystemDatas() :
     m_showFPS(false),
     m_antialiasing(false),
     m_backupsActivated(DEFAULT_BACKUPS_ACTIVATED),
+    m_backupsInterval(30),
+    m_backupsMax(10),
     m_modelColors(new QStandardItemModel),
     m_modelCurrencies(new QStandardItemModel),
     m_modelItemsTypes(new QStandardItemModel),
@@ -363,6 +367,26 @@ bool SystemDatas::backupsActivated() const
 void SystemDatas::setBackupsActivated(bool backupsActivated)
 {
     m_backupsActivated = backupsActivated;
+}
+
+int SystemDatas::backupsInterval() const
+{
+    return m_backupsInterval;
+}
+
+void SystemDatas::setBackupsInterval(int backupsInterval)
+{
+    m_backupsInterval = backupsInterval;
+}
+
+int SystemDatas::backupsMax() const
+{
+    return m_backupsMax;
+}
+
+void SystemDatas::setBackupsMax(int backupsMax)
+{
+    m_backupsMax = backupsMax;
 }
 
 QStandardItemModel * SystemDatas::modelColors() const {
@@ -981,6 +1005,14 @@ void SystemDatas::read(const QJsonObject &json){
     {
         m_backupsActivated = json[JSON_BACKUPS_ACTIVATED].toBool();
     }
+    if (json.contains(JSON_BACKUPS_INTERVAL))
+    {
+        m_backupsInterval = json[JSON_BACKUPS_INTERVAL].toInt();
+    }
+    if (json.contains(JSON_BACKUPS_MAX))
+    {
+        m_backupsMax = json[JSON_BACKUPS_MAX].toInt();
+    }
 
     // Colors
     jsonList = json[JSON_COLORS].toArray();
@@ -1223,6 +1255,14 @@ void SystemDatas::write(QJsonObject &json) const{
     if (m_backupsActivated != DEFAULT_BACKUPS_ACTIVATED)
     {
         json[JSON_BACKUPS_ACTIVATED] = m_backupsActivated;
+    }
+    if (m_backupsInterval != 30)
+    {
+        json[JSON_BACKUPS_INTERVAL] = m_backupsInterval;
+    }
+    if (m_backupsMax != 10)
+    {
+        json[JSON_BACKUPS_MAX] = m_backupsMax;
     }
 
     // Colors

@@ -37,7 +37,6 @@ class MainWindow : public QMainWindow, public Singleton<MainWindow>
     Q_OBJECT
 
 public:
-    static int MAX_BACKUPS;
 
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -64,6 +63,7 @@ public:
     void cleanRecentProjectsActions();
     void runGame();
     void updateTextures();
+    void startBackupsTimer();
     void translate();
 
 private:

@@ -2005,6 +2005,8 @@ public:
     static const QString DISPLAY_IN_MENU;
     static const QString DAY;
     static const QString CHANGE_BATTLER_GRAPHICS;
+    static const QString MINUTE_S;
+    static const QString MAX;
 
     Translations();
     virtual ~Translations();

@@ -1992,6 +1992,8 @@ const QString Translations::ACTIVATED = "activated";
 const QString Translations::DISPLAY_IN_MENU = "display.in.menu";
 const QString Translations::DAY = "day";
 const QString Translations::CHANGE_BATTLER_GRAPHICS = "change.battler.graphics";
+const QString Translations::MINUTE_S = "minute.s";
+const QString Translations::MAX = "max";
 
 // -------------------------------------------------------
 //

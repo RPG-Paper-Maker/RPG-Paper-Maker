@@ -48,8 +48,6 @@
 #include "dialogselectlanguage.h"
 #include "dialogfirstlaunch.h"
 
-int MainWindow::MAX_BACKUPS = 5;
-
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -192,8 +190,7 @@ void MainWindow::openProject(QString pathProject) {
             m_dialogScripts->initialize();
 
             // Backup every 30 minutes
-            m_timerBackup->start(1000 * 60 * 30);
-            this->updateBackup();
+            this->startBackupsTimer();
         }
         else {
             delete project;
@@ -365,6 +362,13 @@ void MainWindow::updateTextures(){
             ->widgetTreeLocalMaps();
 
     treeMap->reload();
+}
+
+void MainWindow::startBackupsTimer()
+{
+    m_timerBackup->start(1000 * 60 * RPM::get()->project()->gameDatas()
+        ->systemDatas()->backupsInterval());
+    this->updateBackup();
 }
 
 // -------------------------------------------------------
@@ -1026,10 +1030,18 @@ void MainWindow::on_actionSet_DLC_s_path_folder_triggered()
 
 void MainWindow::on_actionDebug_options_triggered() {
     DialogDebugOptions dialog;
+    int interval = project->gameDatas()->systemDatas()->backupsInterval();
     if (openDialog(dialog) == QDialog::Accepted)
+    {
         project->writeSystemDatas();
-    else
+        if (interval != project->gameDatas()->systemDatas()->backupsInterval())
+        {
+            this->startBackupsTimer();
+        }
+    } else
+    {
         project->readSystemDatas();
+    }
 }
 
 // -------------------------------------------------------
@@ -1223,11 +1235,11 @@ void MainWindow::updateBackup() {
             pathBackups, folderBackup), RPM::FOLDER_DATAS));
 
         // If max reached, remove first index and remove others
-        if (index == MAX_BACKUPS) {
+        if (index == RPM::get()->project()->gameDatas()->systemDatas()->backupsMax()) {
             QDir(Common::pathCombine(pathBackups, list.at(0))).removeRecursively();
             QString oldName, newName;
             list << folderBackup;
-            for (int i = 1; i <= MAX_BACKUPS; i++) {
+            for (int i = 1; i <= RPM::get()->project()->gameDatas()->systemDatas()->backupsMax(); i++) {
                 oldName = list.at(i);
                 newName = oldName;
                 newName.replace(0, 1, QString::number(i));

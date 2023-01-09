@@ -45,6 +45,8 @@ void DialogDebugOptions::initialize() {
     ui->checkBoxBB->setChecked(RPM::get()->project()->gameDatas()->systemDatas()->showBB());
     ui->checkBoxShowFPS->setChecked(RPM::get()->project()->gameDatas()->systemDatas()->showFPS());
     ui->checkBoxBackupsActivated->setChecked(RPM::get()->project()->gameDatas()->systemDatas()->backupsActivated());
+    ui->spinBoxInterval->setValue(RPM::get()->project()->gameDatas()->systemDatas()->backupsInterval());
+    ui->spinBoxMax->setValue(RPM::get()->project()->gameDatas()->systemDatas()->backupsMax());
 }
 
 // -------------------------------------------------------
@@ -55,6 +57,9 @@ void DialogDebugOptions::translate() {
     ui->checkBoxBB->setText(RPM::translate(Translations::SHOW_COLLISIONS_BB));
     ui->checkBoxShowFPS->setText(RPM::translate(Translations::SHOW_FPS));
     ui->checkBoxBackupsActivated->setText(RPM::translate(Translations::ACTIVATED));
+    ui->labelInterval->setText(RPM::translate(Translations::INTERVAL) + RPM::COLON);
+    ui->labelMinutes->setText(RPM::translate(Translations::MINUTE_S));
+    ui->labelMax->setText(RPM::translate(Translations::MAX) + RPM::COLON);
     ui->pushButtonSyncMapObjects->setText(RPM::translate(Translations::SYNCHRONIZE_MAP_OBJECTS));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
@@ -81,6 +86,20 @@ void DialogDebugOptions::on_checkBoxShowFPS_toggled(bool checked)
 void DialogDebugOptions::on_checkBoxBackupsActivated_toggled(bool checked)
 {
     RPM::get()->project()->gameDatas()->systemDatas()->setBackupsActivated(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogDebugOptions::on_spinBoxBackupsInterval_valueChanged(int &value)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setBackupsInterval(value);
+}
+
+// -------------------------------------------------------
+
+void DialogDebugOptions::on_spinBoxBackupsMax_valueChanged(int &value)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setBackupsMax(value);
 }
 
 // -------------------------------------------------------

@@ -1971,5 +1971,7 @@
     "activated": "Activé",
     "display.in.menu": "Afficher dans le menu",
     "day": "Jour",
-    "change.battler.graphics": "Changer apparence battler"
+    "change.battler.graphics": "Changer apparence battler",
+    "minute.s": "Minute(s)",
+    "max": "Max"
 }

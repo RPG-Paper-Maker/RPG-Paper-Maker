@@ -75,6 +75,8 @@ public:
     static const QString JSON_PORTION_RAY_INGAME;
     static const QString JSON_SAVE_SLOTS;
     static const QString JSON_BACKUPS_ACTIVATED;
+    static const QString JSON_BACKUPS_INTERVAL;
+    static const QString JSON_BACKUPS_MAX;
     static const bool DEFAULT_ANTIALIASING;
     static const bool DEFAULT_IS_MOUSE_CONTROLS;
     static const int DEFAULT_MAP_FRAME_DURATION;
@@ -142,6 +144,10 @@ public:
     void setAntialiasing(bool aa);
     bool backupsActivated() const;
     void setBackupsActivated(bool backupsActivated);
+    int backupsInterval() const;
+    void setBackupsInterval(int backupsInterval);
+    int backupsMax() const;
+    void setBackupsMax(int backupsMax);
     QStandardItemModel * modelColors() const;
     QStandardItemModel * modelCurrencies() const;
     QStandardItemModel * modelItemsTypes() const;
@@ -229,6 +235,8 @@ private:
     bool m_showFPS;
     bool m_antialiasing;
     bool m_backupsActivated;
+    int m_backupsInterval;
+    int m_backupsMax;
     QStandardItemModel *m_modelColors;
     QStandardItemModel *m_modelCurrencies;
     QStandardItemModel *m_modelItemsTypes;
