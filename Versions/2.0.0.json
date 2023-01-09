@@ -56,7 +56,8 @@
         "Autotiles and mountains portions drawing issues with rectangle in preview",
         "Enemy using skill attacking all targets not working",
         "Skybox: clouds name replaced by day",
-        "Copy conditions command with property in common reaction make crash"
+        "Copy conditions command with property in common reaction make crash",
+        "Models might crash engine sometimes if trying to delete one"
     ],
     "finished": [
         2,
@@ -87,6 +88,7 @@
         2,
         0,
 
+        2,
         2,
         2,
         2,

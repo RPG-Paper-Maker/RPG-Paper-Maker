@@ -251,8 +251,8 @@ void WidgetSuperList::deleteClear(QStandardItem *selected) {
     row = selected->row();
     index = selected->index();
     id = super->id();
-    delete super;
     p_model->removeRow(row);
+    delete super;
     super = m_newItemInstance->createCopy();
     super->setId(id);
     super->setDefault();
