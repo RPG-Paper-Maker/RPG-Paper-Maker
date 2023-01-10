@@ -611,6 +611,14 @@ void DialogCommandMoveObject::on_updateJsonMoves(SuperListItem *)
     Map *map = RPM::get()->project()->currentMap(true);
     if (map != nullptr && m_object != nullptr) {
         Position3D pos = map->getObjectPosition(m_object->id());
+        // If not existing, use cursor position
+        if (pos.x() == -1 && RPM::get()->controlMapEditor() && RPM::get()->controlMapEditor()->cursorObject())
+        {
+            pos.setX(RPM::get()->controlMapEditor()->cursorObject()->getSquareX());
+            pos.setY(RPM::get()->controlMapEditor()->cursorObject()->getSquareY());
+            pos.setZ(RPM::get()->controlMapEditor()->cursorObject()->getSquareZ());
+            pos.setYPlus(RPM::get()->controlMapEditor()->cursorObject()->getYPlus());
+        }
         QList<OrientationKind> orientations;
         SystemCommandMove *move;
         for (int i = 0, l = ui->treeView->getModel()->invisibleRootItem()->rowCount();

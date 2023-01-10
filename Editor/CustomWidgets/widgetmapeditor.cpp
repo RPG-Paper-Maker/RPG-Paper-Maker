@@ -82,6 +82,7 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_contextMenu = ContextMenuList::createContextObject(this);
     m_control.setContextMenu(m_contextMenu);
     m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
+    RPM::get()->setControlMapEditor(&m_control);
 }
 
 WidgetMapEditor::~WidgetMapEditor()
@@ -89,6 +90,7 @@ WidgetMapEditor::~WidgetMapEditor()
     makeCurrent();
     delete m_timerFirstPressure;
     delete m_timerAutotileFrame;
+    RPM::get()->setControlMapEditor(nullptr);
 }
 
 void WidgetMapEditor::setMenus(WidgetMenuBarMapEditor *m, PanelTextures *t)

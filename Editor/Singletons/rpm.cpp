@@ -333,7 +333,8 @@ RPM::RPM() :
     m_project(nullptr),
     m_engineSettings(new EngineSettings),
     m_translations(new Translations),
-    m_copiedCustomElement(nullptr)
+    m_copiedCustomElement(nullptr),
+    m_controlMapEditor(nullptr)
 {
 
 }
@@ -405,6 +406,16 @@ QStandardItemModel * RPM::selectedList() const
 void RPM::setSelectedList(QStandardItemModel *model)
 {
     m_selectedList = model;
+}
+
+ControlMapEditor * RPM::controlMapEditor() const
+{
+    return m_controlMapEditor;
+}
+
+void RPM::setControlMapEditor(ControlMapEditor *controlMapEditor)
+{
+    m_controlMapEditor = controlMapEditor;
 }
 
 // -------------------------------------------------------

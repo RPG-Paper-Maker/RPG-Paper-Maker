@@ -21,6 +21,7 @@
 #include "enginesettings.h"
 #include "oskind.h"
 #include "translations.h"
+#include "controlmapeditor.h"
 
 // -------------------------------------------------------
 //
@@ -268,6 +269,8 @@ public:
     void setSelectedMonster(SuperListItem *si);
     QStandardItemModel * selectedList() const;
     void setSelectedList(QStandardItemModel *model);
+    ControlMapEditor * controlMapEditor() const;
+    void setControlMapEditor(ControlMapEditor *controlMapEditor);
 
     static void writeJSON(QString path, const Serializable &obj);
     static void readJSON(QString path, Serializable &obj);
@@ -297,6 +300,7 @@ protected:
     SystemCustomStructureElement *m_copiedCustomElement;
     SuperListItem *m_selectedMonster;
     QStandardItemModel *m_selectedList;
+    ControlMapEditor *m_controlMapEditor;
 };
 
 #endif // RPM_H
