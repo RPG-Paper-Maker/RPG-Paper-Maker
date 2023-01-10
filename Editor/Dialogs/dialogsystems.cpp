@@ -58,6 +58,8 @@ DialogSystems::DialogSystems(GameDatas *gameDatas, QWidget *parent) :
     initializeCommonReactors(gameDatas);
     initializeCommonObjects(gameDatas);
 
+    ui->labelWarningModels->setStyleSheet("QLabel { color : #FF8C00; font-size: 9px }");
+
     Q_FOREACH(QSpinBox * sp, findChildren<QSpinBox*>()) {
         sp->installEventFilter(this);
         sp->clearFocus();
@@ -532,6 +534,16 @@ void DialogSystems::initializeCommonObjects(GameDatas *gameDatas){
 void DialogSystems::updateCommonObjects(SystemCommonObject *sysCommonObject) {
     ui->widgetCommonObject->initializeModel(sysCommonObject);
     ui->widgetCommonObject->updateModel();
+    if (sysCommonObject->id() == 1 || sysCommonObject->id() == 2)
+    {
+        ui->labelWarningModels->show();
+        ui->labelWarningModels->setText(RPM::translate(sysCommonObject->id() == 1 ?
+            Translations::WARNING_MODELS_DEFAULT : Translations::WARNING_MODELS_HERO));
+    } else
+    {
+        ui->labelWarningModels->hide();
+    }
+
 }
 
 //-------------------------------------------------

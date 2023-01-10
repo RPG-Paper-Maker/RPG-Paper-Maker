@@ -1973,5 +1973,7 @@
     "day": "Day",
     "change.battler.graphics": "Change battler graphics",
     "minute.s": "Minute(s)",
-    "max": "Max"
+    "max": "Max",
+    "warning.models.default": "WARNING: THE MODEL ID 1 IS RESERVED FOR DEFAULT OBJECT (WHEN CREATING A NEW OBJECT). DO NOT USE FOR SOMETHING ELSE.",
+    "warning.models.hero": "WARNING: THE MODEL ID 2 IS RESERVED FOR HERO OBJECT (USED WHEN DEFINING AN OBJECT AS HERO). DO NOT USE FOR SOMETHING ELSE."
 }

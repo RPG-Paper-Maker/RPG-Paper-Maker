@@ -1973,5 +1973,7 @@
     "day": "Jour",
     "change.battler.graphics": "Changer apparence battler",
     "minute.s": "Minute(s)",
-    "max": "Max"
+    "max": "Max",
+    "warning.models.default": "ATTENTION: LE MODELE ID 1 EST RESERVE A L'OBJET DEFAUT (CREATION DE NOUVEL OBJET). NE PAS UTILISER POUR AUTRE CHOSE.",
+    "warning.models.hero": "ATTENTION: LE MODELE ID 2 EST RESERVE A L'OBJET HERO (POUR DEFINIR COMME HERO). NE PAS UTILISER POUR AUTRE CHOSE."
 }

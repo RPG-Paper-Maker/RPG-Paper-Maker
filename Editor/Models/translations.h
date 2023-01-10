@@ -2007,6 +2007,8 @@ public:
     static const QString CHANGE_BATTLER_GRAPHICS;
     static const QString MINUTE_S;
     static const QString MAX;
+    static const QString WARNING_MODELS_DEFAULT;
+    static const QString WARNING_MODELS_HERO;
 
     Translations();
     virtual ~Translations();

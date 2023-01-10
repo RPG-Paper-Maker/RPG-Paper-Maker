@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>6</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -2496,7 +2496,7 @@
         <attribute name="title">
          <string>Models</string>
         </attribute>
-        <layout class="QGridLayout" name="gridLayout">
+        <layout class="QGridLayout" name="gridLayout_57">
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,1">
            <item>
@@ -2537,7 +2537,40 @@
             </widget>
            </item>
            <item>
-            <widget class="PanelObject" name="widgetCommonObject" native="true"/>
+            <widget class="QScrollArea" name="scrollArea_4">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents_4">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>699</width>
+                <height>640</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout">
+               <item row="0" column="0">
+                <layout class="QVBoxLayout" name="verticalLayout_38" stretch="0,1">
+                 <item>
+                  <widget class="QLabel" name="labelWarningModels">
+                   <property name="text">
+                    <string>TextLabel</string>
+                   </property>
+                   <property name="textFormat">
+                    <enum>Qt::RichText</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="PanelObject" name="widgetCommonObject" native="true"/>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
            </item>
           </layout>
          </item>
@@ -2561,12 +2594,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PanelPrimitiveValue</class>
-   <extends>QWidget</extends>
-   <header>panelprimitivevalue.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>WidgetSuperTree</class>
    <extends>QTreeView</extends>
    <header>widgetsupertree.h</header>
@@ -2581,6 +2608,12 @@
    <class>PanelSuperList</class>
    <extends>QWidget</extends>
    <header>panelsuperlist.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
