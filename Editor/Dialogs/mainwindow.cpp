@@ -394,6 +394,8 @@ bool MainWindow::close(bool example)
             } else if (result == QMessageBox::No)
             {
                 deleteTempMaps();
+                mapsToSave.clear();
+                RPM::get()->project()->writeMapsToSave(mapsToSave);
             } else
             {
                 return false;
