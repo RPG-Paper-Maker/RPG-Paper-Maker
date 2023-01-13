@@ -90,8 +90,8 @@ void DialogExport::on_comboBoxOSDeploy_currentIndexChanged(int index)
         #if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
             QMessageBox::warning(this, RPM::translate(Translations::WARNING), RPM
                 ::translate(Translations::YOU_CANT_EXPORT_MACOS_WINDOWS) + RPM::DOT);
+            ui->comboBoxOSDeploy->setCurrentIndex(0);
         #endif
-        ui->comboBoxOSDeploy->setCurrentIndex(0);
     }
 }
 

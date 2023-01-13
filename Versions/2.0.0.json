@@ -240,7 +240,8 @@
         "Enemy using skill attacking all targets not working",
         "Skybox: clouds name replaced by day",
         "Copy conditions command with property in common reaction make crash",
-        "Models might crash engine sometimes if trying to delete one"
+        "Models might crash engine sometimes if trying to delete one",
+        "Impossible to export standalone on Mac OS when using Mac OS"
     ],
     "finished": [
         2,
@@ -271,6 +272,7 @@
         2,
         2,
 
+        2,
         2,
         2,
         2,
