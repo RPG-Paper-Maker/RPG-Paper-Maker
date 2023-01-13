@@ -98,6 +98,91 @@
             "repo": "Basic-Ressources",
             "source": "Content/Songs/Musics/Battle1.mp3",
             "target": "Engine/Content/BR/Content/Songs/Musics/Battle1.mp3"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/specialElements.json",
+            "target": "Engine/Content/basic/Content/Datas/specialElements.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/battleSystem.json",
+            "target": "Engine/Content/basic/Content/Datas/battleSystem.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/songs.json",
+            "target": "Engine/Content/basic/Content/Datas/songs.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/titlescreenGameover.json",
+            "target": "Engine/Content/basic/Content/Datas/titlescreenGameover.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/system.json",
+            "target": "Engine/Content/basic/Content/Datas/system.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/pictures.json",
+            "target": "Engine/Content/basic/Content/Datas/pictures.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/commonEvents.json",
+            "target": "Engine/Content/basic/Content/Datas/commonEvents.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/animations.json",
+            "target": "Engine/Content/basic/Content/Datas/animations.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/armors.json",
+            "target": "Engine/Content/basic/Content/Datas/armors.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/items.json",
+            "target": "Engine/Content/basic/Content/Datas/items.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/keyBoard.json",
+            "target": "Engine/Content/basic/Content/Datas/keyBoard.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/monsters.json",
+            "target": "Engine/Content/basic/Content/Datas/monsters.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/skills.json",
+            "target": "Engine/Content/basic/Content/Datas/skills.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/status.json",
+            "target": "Engine/Content/basic/Content/Datas/status.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/tilesets.json",
+            "target": "Engine/Content/basic/Content/Datas/tilesets.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/troops.json",
+            "target": "Engine/Content/basic/Content/Datas/troops.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/weapons.json",
+            "target": "Engine/Content/basic/Content/Datas/weapons.json"
         }
     ],
 	"features": [
