@@ -1,7 +1,105 @@
 {
-	"add": [],
-	"remove": [],
-	"replace": [],
+	"add": [
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/SkyBoxes/night-front.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/night-front.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/SkyBoxes/day-top.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/day-top.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/SkyBoxes/day-right.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/day-right.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/SkyBoxes/day-back.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/day-back.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/SkyBoxes/day-front.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/day-front.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/SkyBoxes/day-bottom.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/day-bottom.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/SkyBoxes/day-left.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/day-left.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Facesets/others.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Facesets/others.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Songs/Musics/Battle2.mp3",
+            "target": "Engine/Content/BR/Content/Songs/Musics/Battle2.mp3"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Songs/Musics/TitleScreen1.mp3",
+            "target": "Engine/Content/BR/Content/Songs/Musics/TitleScreen1.mp3"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Characters/lucas-full.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/lucas-full.png"
+        }
+    ],
+	"remove": [
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/SkyBoxes/clouds-back.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-back.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/SkyBoxes/night-front.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/night-front.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/SkyBoxes/clouds-left.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-left.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/SkyBoxes/clouds-right.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-right.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/SkyBoxes/clouds-bottom.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-bottom.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/SkyBoxes/clouds-front.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-front.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/SkyBoxes/clouds-top.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes/clouds-top.png"
+        }
+    ],
+	"replace": [
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Songs/Musics/Battle1.mp3",
+            "target": "Engine/Content/BR/Content/Songs/Musics/Battle1.mp3"
+        }
+    ],
 	"features": [
         "Climbing system",
         "Objects 3D: choose location centered or grounded",
