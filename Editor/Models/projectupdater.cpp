@@ -1953,6 +1953,4 @@ void ProjectUpdater::updateVersion_2_0_0()
             }
         }
     }
-    QJsonArray jsonArray;
-    Common::writeArrayJSON(m_project->getPathMapsToSave(), jsonArray);
 }
