@@ -15,6 +15,7 @@
 #include "rpm.h"
 #include "dialogobject.h"
 #include "systemmapobject.h"
+#include <QMessageBox>
 
 // -------------------------------------------------------
 
@@ -237,15 +238,26 @@ void ControlMapEditor::addObject(Position &p) {
     DialogObject dialog(object);
     // Put it in a place where the object could be visible
     QPoint globalCursorPos = QCursor::pos();
+    int mouseScreen = qApp->desktop()->screenNumber(globalCursorPos);
+    QRect mouseScreenGeometry = qApp->desktop()->screen(mouseScreen)->geometry();
+    QPoint localCursorPos = globalCursorPos - mouseScreenGeometry.topLeft();
     int x = 0, y = 0, w = dialog.width();
-    if (globalCursorPos.x() - w > 0)
+    bool move = true;
+    int offset = 64;
+    if (localCursorPos.x() - offset - w > 0)
     {
-        x = (globalCursorPos.x() - w) / 2;
-    } else {
-        x = globalCursorPos.x() + (w / 2);
+        x = localCursorPos.x() - offset - w;
+    } else if (localCursorPos.x() + offset + w < QApplication::desktop()->screenGeometry().width()) {
+        x = localCursorPos.x() + offset;
+    } else
+    {
+        move = false;
     }
-    y = (QApplication::desktop()->screenGeometry().height() - dialog.height()) / 4;
-    dialog.move(x, y);
+    if (move)
+    {
+        y = (QApplication::desktop()->screenGeometry().height() - dialog.height()) / 4;
+        dialog.move(x, y);
+    }
     int result = dialog.exec();
     RPM::isInObjectConfig = false;
     RPM::isInConfig = false;
