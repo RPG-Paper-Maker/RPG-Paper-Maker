@@ -362,7 +362,8 @@ QString ControlExport::generateDesktopStuff(QString path, OSKind os, int major,
         executableFolder = "osx";
         break;
     }
-    QString pathExecutable = Common::pathCombine("Content", executableFolder);
+    QString pathExecutable = Common::pathCombine(QDir::currentPath(),
+        Common::pathCombine("Content", executableFolder));
 
     if (!Common::copyPath(pathExecutable, path))
         return RPM::translate(Translations::COULD_NOT_COPY_IN) + RPM::SPACE +
