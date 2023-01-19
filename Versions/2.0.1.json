@@ -1,0 +1,14 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+
+	],
+    "bugs": [
+    	"Skills effects not all executed if battle ends after an effect"
+    ],
+    "finished": [
+    	2
+    ]
+}

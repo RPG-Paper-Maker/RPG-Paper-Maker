@@ -3084,10 +3084,18 @@ QString EventCommand::strChangeBattlerGraphics(QStandardItemModel *properties,
             ::COLON + RPM::SPACE + this->strProperty(i, properties, parameters);
         break;
     }
-    QString facesetPicture = RPM::SPACE + "ID=" + this->strProperty(i, properties, parameters, true);
-    facesetPicture += " x=" + QString::number(this->valueCommandAt(i++).toInt());
-    facesetPicture += " y=" + QString::number(this->valueCommandAt(i++).toInt());
-    QString battlerPicture = RPM::SPACE + "ID=" + this->strProperty(i, properties, parameters, true);
+    QString facesetPicture;
+    if (RPM::stringToBool(this->valueCommandAt(i++))) {
+        facesetPicture = RPM::SPACE + RPM::translate(Translations::FACESET) + "="
+            + this->strProperty(i, properties, parameters, true);
+        facesetPicture += " x=" + QString::number(this->valueCommandAt(i++).toInt());
+        facesetPicture += " y=" + QString::number(this->valueCommandAt(i++).toInt());
+    }
+    QString battlerPicture;
+    if (RPM::stringToBool(this->valueCommandAt(i++))) {
+        battlerPicture = RPM::SPACE + RPM::translate(Translations::BATTLER) + "="
+            + this->strProperty(i, properties, parameters, true);
+    }
     return "<strong style=\"color:" + COLOR_GREEN + "\">" + RPM::translate(
         Translations::CHANGE_BATTLER_GRAPHICS) + "</strong>" + RPM::COLON + RPM::SPACE +
         battler + facesetPicture + battlerPicture;
