@@ -69,7 +69,7 @@ void DialogTransformations::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::UPDATE_TRANSFORMATIONS) + RPM::DOT_DOT_DOT);
     ui->labelCenterX->setText(RPM::translate(Translations::CENTER) + RPM::SPACE + "X" + RPM::COLON);
-    ui->labelCenterY->setText(RPM::translate(Translations::CENTER) + RPM::SPACE + "Y" + RPM::COLON);
+    ui->labelCenterZ->setText(RPM::translate(Translations::CENTER) + RPM::SPACE + "Z" + RPM::COLON);
     ui->labelAngleX->setText(RPM::translate(Translations::ANGLE) + RPM::SPACE + "X" + RPM::COLON);
     ui->labelAngleY->setText(RPM::translate(Translations::ANGLE) + RPM::SPACE + "Y" + RPM::COLON);
     ui->labelAngleZ->setText(RPM::translate(Translations::ANGLE) + RPM::SPACE + "Z" + RPM::COLON);
