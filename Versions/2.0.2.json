@@ -1,0 +1,12 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [],
+    "bugs": [
+        "Quick fix ingame: objects always put at y = 0",
+    ],
+    "finished": [
+    	2
+    ]
+}
