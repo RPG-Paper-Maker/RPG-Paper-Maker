@@ -1,0 +1,26 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/pictures.json",
+            "target": "Engine/Content/basic/Content/Datas/pictures.json"
+        }
+    ],
+	"features": [],
+    "bugs": [
+        "Basic project remove praticable on some climbing elements",
+        "Command change map properties crashing if changing tileset without autotile ID",
+        "Cannot climb up with walls",
+        "When not climbing anymore, 1 frame wrong orientation character",
+        "Reduce speed in diagonal move + while diag climbing"
+    ],
+    "finished": [
+    	2,
+        2,
+        2,
+        2,
+        2
+    ]
+}
