@@ -265,7 +265,33 @@ void PanelObject::updateReactions() {
 
             // If missing a key, create a new one
             if (event->reactionAt(state->id()) == nullptr)
-                event->addReaction(state->id(), new SystemReaction);
+            {
+                SystemReaction *newReaction = new SystemReaction;
+                // Copy reaction from basic one
+                if (RPM::get()->project() != nullptr && RPM::get()->project()->gameDatas()->commonEventsDatas()) {
+                    QStandardItem * item = SuperListItem::getItemByID(RPM::get()->project()
+                        ->gameDatas()->commonEventsDatas()->modelCommonObjects()->invisibleRootItem(), 1);
+                    if (item != nullptr)
+                    {
+                        SystemCommonObject *basic = reinterpret_cast<SystemCommonObject *>(item->data().value<quintptr>());
+                        if (basic != nullptr) {
+                            item = SuperListItem::getItemByID(basic->modelEvents()
+                                ->invisibleRootItem(), event->id());
+                            if (item != nullptr)
+                            {
+                                SystemObjectEvent *basicEvent = reinterpret_cast<SystemObjectEvent *>(item->data().value<quintptr>());
+                                if (basicEvent != nullptr)
+                                {
+                                    SystemState *basicState = reinterpret_cast<SystemState *>(
+                                        SuperListItem::getItemModelAt(basic->modelStates(), 0));
+                                    newReaction->setCopy(*basicEvent->reactionAt(basicState->id()));
+                                }
+                            }
+                        }
+                    }
+                }
+                event->addReaction(state->id(), newReaction);
+            }
         }
 
         event->updateReactions(m_model->modelStates());

@@ -35,14 +35,17 @@ SystemState::SystemState() :
         nullptr)
 {
     if (RPM::get()->project() != nullptr && RPM::get()->project()->gameDatas()->commonEventsDatas()) {
-        SystemCommonObject *basic = reinterpret_cast<SystemCommonObject *>(
-            SuperListItem::getItemModelAt(RPM::get()->project()->gameDatas()
-            ->commonEventsDatas()->modelCommonObjects(), 0));
-        if (basic != nullptr) {
-            SystemState *state = reinterpret_cast<SystemState *>(
-                SuperListItem::getItemModelAt(basic->modelStates(), 0));
-            if (state != nullptr) {
-                this->setCopy(*state);
+        QStandardItem * item = SuperListItem::getItemByID(RPM::get()->project()
+            ->gameDatas()->commonEventsDatas()->modelCommonObjects()->invisibleRootItem(), 1);
+        if (item != nullptr)
+        {
+            SystemCommonObject *basic = reinterpret_cast<SystemCommonObject *>(item->data().value<quintptr>());
+            if (basic != nullptr) {
+                SystemState *state = reinterpret_cast<SystemState *>(
+                    SuperListItem::getItemModelAt(basic->modelStates(), 0));
+                if (state != nullptr) {
+                    this->setCopy(*state);
+                }
             }
         }
     }
