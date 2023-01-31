@@ -891,6 +891,12 @@ QString EventCommand::strCondition(QStandardItemModel *properties,
             RPM::translate(Translations::SECONDS).toLower();
         break;
     }
+    case 11: {
+        QString objectID = this->strMoveObjectID(properties, parameters, i);
+        condition += RPM::translate(Translations::OBJECT_ID) + RPM::SPACE +
+            objectID + RPM::SPACE + RPM::translate(Translations::IS_CLIMBING);
+        break;
+    }
     default:
         break;
     }

@@ -75,6 +75,7 @@ void DialogCommandConditions::initializePrimitives() {
     m_groupButtonMain->addButton(ui->radioButtonChronometerID);
     m_groupButtonMain->addButton(ui->radioButtonOthersScript);
     m_groupButtonMain->addButton(ui->radioButtonObjectIDLookingAt);
+    m_groupButtonMain->addButton(ui->radioButtonObjectIDClimbing);
     m_groupButtonHeroesMain = new QButtonGroup;
     m_groupButtonHeroesMain->addButton(ui->radioButtonHeroesNamed);
     m_groupButtonHeroesMain->addButton(ui->radioButtonHeroesInTeam);
@@ -172,6 +173,8 @@ void DialogCommandConditions::initializePrimitives() {
     }
     ui->panelPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
         m_parameters, m_properties);
+    ui->panelPrimitiveObjectIDClimbing->initializeDataBaseCommandId(m_modelObjects,
+        m_parameters, m_properties);
     ui->comboBoxObjectLookingAt->addItems(RPM::ENUM_TO_STRING_ORIENTATION_KIND);
     this->on_radioButtonHeroes_toggled(false);
 }
@@ -238,6 +241,9 @@ void DialogCommandConditions::translate()
     ui->labelIsLookingAt->setText(RPM::translate(Translations::IS_LOOKING_AT).toLower());
     ui->radioButtonChronometerID->setText(RPM::translate(Translations::CHRONOMETER_ID) + RPM::COLON);
     ui->labelSeconds->setText(RPM::translate(Translations::SECONDS).toLower());
+    ui->radioButtonObjectIDClimbing->setText(RPM::translate(Translations
+        ::OBJECT_ID) + RPM::COLON);
+    ui->labelIsClimbing->setText(RPM::translate(Translations::IS_CLIMBING));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -395,6 +401,12 @@ void DialogCommandConditions::initialize(EventCommand *command)
         tabIndex = 3;
         break;
     }
+    case 11: {
+        ui->radioButtonObjectIDClimbing->setChecked(true);
+        ui->panelPrimitiveObjectIDClimbing->initializeCommand(command, i);
+        tabIndex = 3;
+        break;
+    }
     default:
         break;
     }
@@ -495,6 +507,9 @@ EventCommand * DialogCommandConditions::getCommand() const {
         ui->panelPrimitiveChronometerID->getCommand(command);
         command.append(QString::number(ui->comboBoxChronometerOperation->currentIndex()));
         ui->panelPrimitiveChronometerSeconds->getCommand(command);
+    } else if (ui->radioButtonObjectIDClimbing->isChecked()) {
+        command.append("11");
+        ui->panelPrimitiveObjectIDClimbing->getCommand(command);
     }
     return new EventCommand(EventCommandKind::If, command);
 }
@@ -678,4 +693,12 @@ void DialogCommandConditions::on_radioButtonChronometerID_toggled(bool checked)
 
 void DialogCommandConditions::on_radioButtonOthersScript_toggled(bool checked) {
     ui->panelPrimitiveOthersScript->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandConditions::on_radioButtonObjectIDClimbing_toggled(bool checked)
+{
+    ui->panelPrimitiveObjectIDClimbing->setEnabled(checked);
+    ui->labelIsClimbing->setEnabled(checked);
 }

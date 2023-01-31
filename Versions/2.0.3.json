@@ -8,16 +8,48 @@
             "target": "Engine/Content/basic/Content/Datas/pictures.json"
         }
     ],
-	"features": [],
+	"features": [
+        "Adding italian translations",
+        "Improving switch texture command efficiency",
+        "Command conditions: adding is climbing condition"
+    ],
     "bugs": [
         "Basic project remove praticable on some climbing elements",
         "Command change map properties crashing if changing tileset without autotile ID",
         "Cannot climb up with walls",
         "When not climbing anymore, 1 frame wrong orientation character",
-        "Reduce speed in diagonal move + while diag climbing"
+        "Reduce speed in diagonal move + while diag climbing",
+        "Small french and polish translations update",
+        "Update example game issues",
+        "Create new state is not copying basic first state reaction",
+        "Character: remove tab terrain + climbing, autotiles remove climbing, walls terrain",
+        "Remove animated autotiles and slopes from tileset",
+        "Issue climbing not correctly going down",
+        "Incompatible saves for projects before 2.0.0",
+        "Possible to walk in no floor area",
+        "Adding a monster to your party puts them in backward",
+        "Some skills to learn from hero doesn't appear in skill list when added to team",
+        "Climbing directly on walls not working",
+        "Climbing: hero not always correctly facing climbing sprite"
     ],
     "finished": [
+        2,
+        2,
+        2,
+
     	2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
         2,
         2,
         2,

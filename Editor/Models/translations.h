@@ -2009,6 +2009,7 @@ public:
     static const QString MAX;
     static const QString WARNING_MODELS_DEFAULT;
     static const QString WARNING_MODELS_HERO;
+    static const QString IS_CLIMBING;
 
     Translations();
     virtual ~Translations();

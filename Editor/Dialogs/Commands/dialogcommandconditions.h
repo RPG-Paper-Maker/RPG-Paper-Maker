@@ -76,6 +76,7 @@ private slots:
     void on_radioButtonObjectIDLookingAt_toggled(bool checked);
     void on_radioButtonChronometerID_toggled(bool checked);
     void on_radioButtonOthersScript_toggled(bool checked);
+    void on_radioButtonObjectIDClimbing_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDCONDITIONS_H

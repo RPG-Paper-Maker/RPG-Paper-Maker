@@ -1157,7 +1157,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_6">
          <item row="0" column="0">
-          <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,0,0,0,0,1">
+          <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,0,0,0,0,0,1">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_23" stretch="0,0,0,1">
              <item>
@@ -1307,6 +1307,59 @@
              </item>
              <item>
               <spacer name="horizontalSpacer_31">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_30" stretch="0,0,0,1">
+             <item>
+              <widget class="QRadioButton" name="radioButtonObjectIDClimbing">
+               <property name="text">
+                <string>Object ID:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="PanelPrimitiveValue" name="panelPrimitiveObjectIDClimbing" native="true">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>250</width>
+                 <height>27</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>250</width>
+                 <height>27</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="labelIsClimbing">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>is climbing</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_35">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
