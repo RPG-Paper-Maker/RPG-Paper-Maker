@@ -397,16 +397,12 @@ void DialogDatas::initializeTilesets(GameDatas *gameDatas){
     // Initialize special elements
     ui->panelSuperListTilesetAutotiles->showButtonMax(false);
     ui->panelSuperListTilesetAutotiles->showEditName(false);
-    ui->panelSuperListTilesetAnimatedAutotiles->showButtonMax(false);
-    ui->panelSuperListTilesetAnimatedAutotiles->showEditName(false);
     ui->panelSuperListTilesetSpriteWalls->showButtonMax(false);
     ui->panelSuperListTilesetSpriteWalls->showEditName(false);
     ui->panelSuperListTileset3DObjects->showButtonMax(false);
     ui->panelSuperListTileset3DObjects->showEditName(false);
     ui->panelSuperListTilesetMountains->showButtonMax(false);
     ui->panelSuperListTilesetMountains->showEditName(false);
-    ui->panelSuperListTilesetSlopes->showButtonMax(false);
-    ui->panelSuperListTilesetSlopes->showEditName(false);
 
     // Select the first tileset
     QModelIndex index = ui->panelSuperListTilesets->list()->getModel()
@@ -583,7 +579,6 @@ void DialogDatas::translate() {
     ui->groupBoxAnimationFrames->setTitle(RPM::translate(Translations::FRAMES));
     ui->labelRows->setText(RPM::translate(Translations::ROWS) + RPM::COLON);
     ui->labelWalls->setText(RPM::translate(Translations::WALLS) + RPM::COLON);
-    ui->labelSlopes->setText(RPM::translate(Translations::SLOPES) + RPM::COLON);
     ui->labelColumns->setText(RPM::translate(Translations::COLUMNS) + RPM::COLON);
     ui->labelPosition->setText(RPM::translate(Translations::POSITION) + RPM
         ::COLON);
@@ -597,10 +592,6 @@ void DialogDatas::translate() {
         ::COLON);
     ui->labelAnimationPicture->setText(RPM::translate(Translations::PICTURE) +
         RPM::COLON);
-    ui->labelAnimatedAutotiles->setText(RPM::translate(Translations
-        ::ANIMATED_AUTOTILES) + RPM::COLON);
-    ui->pushButtonSlopes->setText(RPM::translate(Translations::CHOOSE) + RPM
-        ::DOT_DOT_DOT);
     ui->pushButtonPlayHit->setText(RPM::translate(Translations::PLAY_HIT));
     ui->pushButtonPlayCrit->setText(RPM::translate(Translations::PLAY_CRIT));
     ui->pushButtonPlayMiss->setText(RPM::translate(Translations::PLAY_MISS));
@@ -625,8 +616,6 @@ void DialogDatas::translate() {
         ::CHANGE_BATTLER) + RPM::DOT_DOT_DOT);
     ui->pushButtonCreateTransition->setText(RPM::translate(Translations
         ::CREATE_TRANSITION) + RPM::DOT_DOT_DOT);
-    ui->pushButtonAnimatedAutotiles->setText(RPM::translate(Translations::CHOOSE
-        ) + RPM::DOT_DOT_DOT);
     ui->pushButtonApply->setText(RPM::translate(Translations::APPLY));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

@@ -1292,7 +1292,7 @@
                   <x>0</x>
                   <y>0</y>
                   <width>245</width>
-                  <height>686</height>
+                  <height>462</height>
                  </rect>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_10">
@@ -1330,49 +1330,6 @@
                          <width>16777215</width>
                          <height>16777215</height>
                         </size>
-                       </property>
-                       <property name="text">
-                        <string>Choose...</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="labelAnimatedAutotiles">
-                     <property name="enabled">
-                      <bool>false</bool>
-                     </property>
-                     <property name="text">
-                      <string>Animated autotiles:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <layout class="QVBoxLayout" name="verticalLayout_11" stretch="1,0">
-                     <item>
-                      <widget class="PanelSuperList" name="panelSuperListTilesetAnimatedAutotiles" native="true">
-                       <property name="enabled">
-                        <bool>false</bool>
-                       </property>
-                       <property name="minimumSize">
-                        <size>
-                         <width>0</width>
-                         <height>50</height>
-                        </size>
-                       </property>
-                       <property name="maximumSize">
-                        <size>
-                         <width>16777215</width>
-                         <height>16777215</height>
-                        </size>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QPushButton" name="pushButtonAnimatedAutotiles">
-                       <property name="enabled">
-                        <bool>false</bool>
                        </property>
                        <property name="text">
                         <string>Choose...</string>
@@ -1484,49 +1441,6 @@
                       <widget class="QPushButton" name="pushButtonMountains">
                        <property name="enabled">
                         <bool>true</bool>
-                       </property>
-                       <property name="text">
-                        <string>Choose...</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="labelSlopes">
-                     <property name="enabled">
-                      <bool>false</bool>
-                     </property>
-                     <property name="text">
-                      <string>Slopes:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <layout class="QVBoxLayout" name="verticalLayout_12" stretch="1,0">
-                     <item>
-                      <widget class="PanelSuperList" name="panelSuperListTilesetSlopes" native="true">
-                       <property name="enabled">
-                        <bool>false</bool>
-                       </property>
-                       <property name="minimumSize">
-                        <size>
-                         <width>0</width>
-                         <height>50</height>
-                        </size>
-                       </property>
-                       <property name="maximumSize">
-                        <size>
-                         <width>16777215</width>
-                         <height>16777215</height>
-                        </size>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QPushButton" name="pushButtonSlopes">
-                       <property name="enabled">
-                        <bool>false</bool>
                        </property>
                        <property name="text">
                         <string>Choose...</string>
