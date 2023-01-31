@@ -100,8 +100,25 @@ void WidgetTilesetSettings::updateZoom(int zoom) {
 
 // -------------------------------------------------------
 
-void WidgetTilesetSettings::deleteDirectionTab() {
-    ui->tabWidget->removeTab(1);
+void WidgetTilesetSettings::updateTabs(PictureKind kind)
+{
+    switch (kind)
+    {
+        case PictureKind::Characters:
+            ui->tabWidget->removeTab(1);
+            ui->tabWidget->removeTab(1);
+            ui->tabWidget->removeTab(1);
+            break;
+        case PictureKind::Autotiles:
+            ui->tabWidget->removeTab(3);
+            break;
+        case PictureKind::Walls:
+            ui->tabWidget->removeTab(1);
+            ui->tabWidget->removeTab(1);
+            break;
+        default:
+            break;
+    }
 }
 
 // -------------------------------------------------------

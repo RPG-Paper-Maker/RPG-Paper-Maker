@@ -123,9 +123,7 @@ void PanelSpecialElements::initialize(QStandardItemModel *model, PictureKind
     ui->widgetShapeMtl->setKind(CustomShapeKind::MTL);
     ui->widgetShapeCollisions->setKind(CustomShapeKind::Collisions);
     ui->widgetTilesetSettings->setKind(kind);
-    if (kind == PictureKind::Walls) {
-        ui->widgetTilesetSettings->deleteDirectionTab();
-    }
+    ui->widgetTilesetSettings->updateTabs(kind);
 
     // Connections
     connect(ui->widgetPicture, SIGNAL(pictureChanged(SystemPicture *)), this,

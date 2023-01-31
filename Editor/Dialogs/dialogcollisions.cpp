@@ -100,7 +100,7 @@ void DialogCollisions::initializeCharacters() {
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_characterSelected(QModelIndex,QModelIndex)));
     ui->widgetCharacterPraticable->setKind(PictureKind::Characters);
-    ui->widgetCharacterPraticable->deleteDirectionTab();
+    ui->widgetCharacterPraticable->updateTabs(PictureKind::Characters);
     ui->widgetCharacterPraticable->showRepeat();
     disablePanelListEdition(ui->panelSuperListCharacters);
 
@@ -132,6 +132,7 @@ void DialogCollisions::initializeAutotiles() {
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_autotileSelected(QModelIndex,QModelIndex)));
     ui->widgetAutotilePictureSettings->setKind(PictureKind::Autotiles);
+    ui->widgetAutotilePictureSettings->updateTabs(PictureKind::Autotiles);
     disablePanelListEdition(ui->panelSuperListAutotiles);
 
     // Select the first tileset
@@ -163,7 +164,7 @@ void DialogCollisions::initializeWalls() {
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_wallSelected(QModelIndex,QModelIndex)));
     ui->widgetWallPraticable->setKind(PictureKind::Walls);
-    ui->widgetWallPraticable->deleteDirectionTab();
+    ui->widgetWallPraticable->updateTabs(PictureKind::Walls);
     disablePanelListEdition(ui->panelSuperListWalls);
 
     // Select the first tileset

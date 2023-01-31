@@ -41,7 +41,7 @@ public:
     PictureKind kind() const;
     void setKind(PictureKind kind);
     void updateZoom(int zoom);
-    void deleteDirectionTab();
+    void updateTabs(PictureKind kind);
     void showRepeat();
     void disableNone(bool b);
 
