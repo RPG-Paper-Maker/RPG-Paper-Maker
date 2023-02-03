@@ -30,7 +30,9 @@
         "Adding a monster to your party puts them in backward",
         "Some skills to learn from hero doesn't appear in skill list when added to team",
         "Climbing directly on walls not working",
-        "Climbing: hero not always correctly facing climbing sprite"
+        "Climbing: hero not always correctly facing climbing sprite",
+        "Animations not taking account of miss or crit sounds",
+        "If message for status heal for still affected is empty, remove small wait"
     ],
     "finished": [
         2,
@@ -38,6 +40,8 @@
         2,
 
     	2,
+        2,
+        2,
         2,
         2,
         2,
