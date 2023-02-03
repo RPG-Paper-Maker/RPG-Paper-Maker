@@ -32,7 +32,8 @@
         "Climbing directly on walls not working",
         "Climbing: hero not always correctly facing climbing sprite",
         "Animations not taking account of miss or crit sounds",
-        "If message for status heal for still affected is empty, remove small wait"
+        "If message for status heal for still affected is empty, remove small wait",
+        "Some collisions passing through according to character collisions"
     ],
     "finished": [
         2,
@@ -40,6 +41,7 @@
         2,
 
     	2,
+        2,
         2,
         2,
         2,
