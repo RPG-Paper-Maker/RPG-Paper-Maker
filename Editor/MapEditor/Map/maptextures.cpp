@@ -244,7 +244,7 @@ void Map::loadAutotiles() {
         picture = special == nullptr ? RPM::get()->project()->picturesDatas()
             ->missingPicture() : special->picture();
         textureAutotile = loadPictureAutotile(painter, textureAutotile, newImage
-            , picture, offset, id, special->isAnimated());
+            , picture, offset, id, special == nullptr ? false : special->isAnimated());
     }
     painter.end();
 
