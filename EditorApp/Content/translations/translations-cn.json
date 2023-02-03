@@ -1975,5 +1975,6 @@
     "minute.s":"分鐘）",
     "max":"最大限度",
     "warning.models.default":"警告：模型 ID 1 保留用於默認對象（創建新對象時）。請勿用於其他用途。",
-    "warning.models.hero":"警告：模型 ID 2 為英雄對象保留（在將對象定義為英雄時使用）。請勿用於其他用途。"
+    "warning.models.hero":"警告：模型 ID 2 為英雄對象保留（在將對象定義為英雄時使用）。請勿用於其他用途。",
+    "is.climbing": "正在攀登"
 }

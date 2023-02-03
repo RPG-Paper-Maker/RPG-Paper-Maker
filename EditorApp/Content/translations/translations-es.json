@@ -1977,5 +1977,6 @@
     "minute.s":"Minuto(s)",
     "max":"máx.",
     "warning.models.default":"ATENCIÓN: EL MODELO ID 1 ESTÁ RESERVADO PARA EL OBJETO POR DEFECTO (CREACIÓN DE NUEVO OBJETO). NO UTILIZAR PARA NADA MAS.",
-    "warning.models.hero":"ATENCIÓN: EL MODELO ID 2 ESTÁ RESERVADO PARA EL OBJETO HÉROE (A DEFINIR COMO HÉROE). NO UTILIZAR PARA NADA MAS."
+    "warning.models.hero":"ATENCIÓN: EL MODELO ID 2 ESTÁ RESERVADO PARA EL OBJETO HÉROE (A DEFINIR COMO HÉROE). NO UTILIZAR PARA NADA MAS.",
+    "is.climbing": "está subiendo"
 }

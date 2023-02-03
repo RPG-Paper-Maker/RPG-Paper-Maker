@@ -1975,5 +1975,6 @@
     "minute.s":"분)",
     "max":"최대",
     "warning.models.default":"경고: 모델 ID 1은 기본 객체용으로 예약되어 있습니다(새 객체를 생성할 때). 다른 용도로 사용하지 마십시오.",
-    "warning.models.hero":"경고: 모델 ID 2는 HERO 객체용으로 예약되어 있습니다(객체를 HERO로 정의할 때 사용됨). 다른 용도로 사용하지 마십시오."
+    "warning.models.hero":"경고: 모델 ID 2는 HERO 객체용으로 예약되어 있습니다(객체를 HERO로 정의할 때 사용됨). 다른 용도로 사용하지 마십시오.",
+    "is.climbing": "오르고 있다"
 }
