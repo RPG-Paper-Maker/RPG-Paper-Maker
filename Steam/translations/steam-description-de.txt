@@ -1,7 +1,5 @@
 --------------------------------------------------------------------------
 
-[b]Dieses Werkzeug befindet sich unter einer harten, aktiven Entwicklung und ist in einem sehr frühen Stadium. Wir bitten um deine Geduld, während weiter fortgeschrittene und kommerzielle Funktionen implementiert werden. Sieh dir hier den Entwicklungsfortschritt an: [url]http://rpg-paper-maker.com/index.php/features[/url].[/b]
-
 [h2]3D-Spiele zu machen ist zu komplex? RPG Paper Maker wird deine Arbeiten vereinfachen![/h2]
 
 RPG Paper Maker ist eine kostenlose Spiele-Engine mit einfacher Schnittstelle für den nicht-kommerziellen Gebrauch, welche dir das Erstellen von einem eigenen 3D-Universum mit vielen 2D-Sprites für alle verfügbaren Plattformen ermöglicht: [b]Windows, Linux und MacOS[/b].

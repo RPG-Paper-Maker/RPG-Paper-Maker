@@ -1,4 +1,4 @@
-[b]Program jest w trakcie intensywnego, aktywnego rozwoju. Aktualnie dostępny jest początkowy etap programu. Będziemy wdzięczni za Twoją cierpliwość i wyrozumiałość podczas wdrażania bardziej zaawansowanych funkcji o jakości komercyjnej. Sprawdź rozwój funkcji tutaj: [url]http://rpg-paper-maker.com/index.php/features[/url].[/b]
+--------------------------------------------------------------------------
 
 [h2]Tworzenie gier 3D jest zbyt skomplikowane? RPG Paper Maker uprości Twoją pracę![/h2] 
 

@@ -1,7 +1,5 @@
 --------------------------------------------------------------------------
 
-[b]Ce logiciel est sous un developpement lourd et actif, et est à ses débuts. Votre patience est appréciée le temps d'avoir des fonctionnalités avancées et de qualité implémentées. Prenez connaissance des fonctionnalités en développement ici : [url]http://rpg-paper-maker.com/index.php/features[/url].[/b]
-
 [h2]Faire des jeux en 3D est trop complexe ? RPG Paper Maker va simplifier le travail ![/h2]
 
 RPG Paper Maker est un logiciel de création de jeux vidéo, gratuit pour toute utilisation non commerciale, vous permettant de créer un univers 3D avec beaucoup de sprites 2D et mêmes des objets 3D à l'aide d'une interface simple pour les plateformes suivantes : [b]Windows, Linux, et MacOS[/b].

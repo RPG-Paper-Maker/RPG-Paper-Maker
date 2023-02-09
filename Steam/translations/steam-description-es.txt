@@ -1,4 +1,4 @@
-[b]Esta herramienta está bajo un estricto y constante desarrollo y se encuentra en estado anticipado. Se apreciará tu paciencia mientras implementamos características más avanzadas y de calidad comercial. Puedes consultar el desarrollo futuras características aquí: [url]http://rpg-paper-maker.com/index.php/features[/url].[/b]
+--------------------------------------------------------------------------
 
 [h2]¿Hacer juegos en 3D es demasiado complicado? ¡Con RPG Paper Maker la cosa cambia![/h2]
 
