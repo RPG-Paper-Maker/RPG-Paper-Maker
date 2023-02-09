@@ -266,7 +266,7 @@ const QString RPM::PATH_MAIN = Common::pathCombine(PATH_APP, FILE_MAIN);
 const QString RPM::PATH_INDEX = Common::pathCombine(PATH_APP, FILE_INDEX);
 const QString RPM::PATH_PACKAGE = Common::pathCombine(PATH_APP, FILE_PACKAGE);
 const QString RPM::PATH_DLCS = Common::pathCombine(FOLDER_CONTENT, "DLCs");
-const QString RPM::PATH_ICON_GREEN = ":/icons/Ressources/point_g.png";
+const QString RPM::PATH_ICON_PURPLE = ":/icons/Ressources/point_p.png";
 const QString RPM::PATH_EXAMPLE = Common::pathCombine(FOLDER_CONTENT,
     FOLDER_EXAMPLE);
 const QString RPM::PATH_EXAMPLE_GAME = Common::pathCombine(PATH_EXAMPLE,

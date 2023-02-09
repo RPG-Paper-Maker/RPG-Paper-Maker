@@ -44,9 +44,7 @@ SystemTileset::~SystemTileset()
 }
 
 SystemPicture* SystemTileset::picture() const {
-    SystemPicture *picture;
-
-    picture = reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM
+    SystemPicture *picture = reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM
         ::get()->project()->picturesDatas()->model(PictureKind::Tilesets)
         ->invisibleRootItem(), m_pictureID, false));
     if (picture == nullptr) {

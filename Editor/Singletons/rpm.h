@@ -199,7 +199,7 @@ public:
     static const QString PATH_INDEX;
     static const QString PATH_PACKAGE;
     static const QString PATH_DLCS;
-    static const QString PATH_ICON_GREEN;
+    static const QString PATH_ICON_PURPLE;
     static const QString PATH_EXAMPLE;
     static const QString PATH_EXAMPLE_GAME;
     static const QString PATH_EXAMPLE_DATAS;

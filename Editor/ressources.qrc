@@ -11,7 +11,6 @@
         <file>Ressources/inputs.png</file>
         <file>Ressources/big_arrow_left.png</file>
         <file>Ressources/point_b.png</file>
-        <file>Ressources/point_r.png</file>
         <file>Ressources/autotile.png</file>
         <file>Ressources/ev.png</file>
         <file>Ressources/height.png</file>
@@ -85,6 +84,7 @@
         <file>Ressources/square.png</file>
         <file>Ressources/rectangle_disable.png</file>
         <file>Ressources/view.png</file>
+        <file>Ressources/point_p.png</file>
     </qresource>
     <qresource prefix="/">
         <file>Shaders/cursor.frag</file>

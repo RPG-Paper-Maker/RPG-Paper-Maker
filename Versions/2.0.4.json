@@ -1,0 +1,16 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Changing custom resources red bullet to green bullet"
+    ],
+    "bugs": [
+        "After battle, map music is playing from beginning"
+    ],
+    "finished": [
+        2,
+        
+        2
+    ]
+}

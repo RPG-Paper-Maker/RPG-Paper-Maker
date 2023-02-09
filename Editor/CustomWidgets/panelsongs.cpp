@@ -376,7 +376,7 @@ void PanelSongs::loadContentFromFolder(QString path, bool isBR, QString dlc) {
     QDir dir(path);
     QStringList files = dir.entryList(QDir::Files);
     QIcon icon = QIcon(isBR ? SuperListItem::pathIconBlue : (dlc.isEmpty() ?
-        SuperListItem::pathIconRed : RPM::PATH_ICON_GREEN));
+        SuperListItem::pathIconGreen : RPM::PATH_ICON_PURPLE));
     QStandardItem *item;
     SystemSong *super;
 

@@ -121,7 +121,7 @@ QList<QStandardItem *> SystemResource::getModelRow() const{
     QList<QStandardItem*> row = QList<QStandardItem*>();
     QStandardItem* item = new QStandardItem;
     QIcon icon = QIcon(m_isBR ? SuperListItem::pathIconBlue : (m_dlc.isEmpty() ?
-        SuperListItem::pathIconRed : RPM::PATH_ICON_GREEN));
+        SuperListItem::pathIconGreen : RPM::PATH_ICON_PURPLE));
 
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
 

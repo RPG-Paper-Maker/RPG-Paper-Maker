@@ -51,7 +51,7 @@ public:
 
     virtual QString toString() const;
     virtual QString toStringName() const;
-    static QString pathIconRed;
+    static QString pathIconGreen;
     static QString pathIconBlue;
     static QString beginningText;
     virtual QString idToString() const;
