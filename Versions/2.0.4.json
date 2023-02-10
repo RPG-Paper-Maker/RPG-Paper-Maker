@@ -12,18 +12,22 @@
         "Changing custom resources red bullet to green bullet",
         "Command call a common reaction: this object in common reaction is now the command caller",
         "Adding each second frequency in default project",
-        "Adding climbing speed option in systems manager"
+        "Adding climbing speed option in systems manager",
+        "Adding state 1 to 10 in default project"
     ],
     "bugs": [
         "After battle, map music is playing from beginning",
-        "Characteristics elements crash sometimes with element damage"
+        "Characteristics elements crash sometimes with element damage",
+        "Wrong FR translations for weapons/armors"
     ],
     "finished": [
         2,
         2,
         2,
         2,
+        2,
         
+        2,
         2,
         2
     ]
