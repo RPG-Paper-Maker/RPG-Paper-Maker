@@ -24,7 +24,9 @@
         "Adding each second frequency in default project",
         "Adding climbing speed option in systems manager",
         "Adding state 1 to 10 in default project",
-        "Removing begin equipment for Lucas in default project"
+        "Removing begin equipment for Lucas in default project",
+        "Better message errors for wrong autotiles, walls, and mountains picture size",
+        "Command move object: remove transparency when drawing a way preview"
     ],
     "bugs": [
         "After battle, map music is playing from beginning",
@@ -32,6 +34,8 @@
         "Wrong FR translations for weapons/armors"
     ],
     "finished": [
+        2,
+        2,
         2,
         2,
         2,

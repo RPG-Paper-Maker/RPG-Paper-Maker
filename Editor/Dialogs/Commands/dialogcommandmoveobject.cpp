@@ -58,7 +58,6 @@ DialogCommandMoveObject::~DialogCommandMoveObject()
 {
     if (this->parent() != nullptr)
     {
-        reinterpret_cast<QDialog *>(this->parent())->setWindowOpacity(1);
         MainWindow::get()->mapEditor()->clearWayPreview();
     }
     SuperListItem::deleteModel(ui->treeView->getModel());
@@ -666,7 +665,6 @@ void DialogCommandMoveObject::on_updateJsonMoves(SuperListItem *)
         if (this->parent() != nullptr)
         {
             MainWindow::get()->mapEditor()->updateWayPreview(pos, orientations);
-            this->setWindowOpacity(orientations.isEmpty() ? 1 : 0.75);
             reinterpret_cast<QDialog *>(this->parent())->setWindowOpacity(orientations.isEmpty() ? 1 : 0);
         }
     }
