@@ -11,13 +11,15 @@
 	"features": [
         "Changing custom resources red bullet to green bullet",
         "Command call a common reaction: this object in common reaction is now the command caller",
-        "Adding each second frequency in default project"
+        "Adding each second frequency in default project",
+        "Adding climbing speed option in systems manager"
     ],
     "bugs": [
         "After battle, map music is playing from beginning",
         "Characteristics elements crash sometimes with element damage"
     ],
     "finished": [
+        2,
         2,
         2,
         2,

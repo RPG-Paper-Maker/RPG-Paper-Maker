@@ -1977,5 +1977,6 @@
     "warning.models.default": "ATTENTION: LE MODELE ID 1 EST RESERVE A L'OBJET DEFAUT (CREATION DE NOUVEL OBJET). NE PAS UTILISER POUR AUTRE CHOSE.",
     "warning.models.hero": "ATTENTION: LE MODELE ID 2 EST RESERVE A L'OBJET HERO (POUR DEFINIR COMME HERO). NE PAS UTILISER POUR AUTRE CHOSE.",
     "is.climbing": "est en train d'escalader",
-    "each.second": "Chaque seconde"
+    "each.second": "Chaque seconde",
+    "climbing.speed": "Vitesse d'escalade"
 }

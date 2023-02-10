@@ -149,6 +149,7 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
         ->mountainCollisionHeight());
     ui->widgetMountainCollisionAngle->initializeNumberAndUpdate(systemDatas
         ->mountainCollisionAngle(), false);
+    ui->panelPrimitiveClimbingSpeed->initializeNumberAndUpdate(systemDatas->climbingSpeed(), false);
     ui->spinBoxAnimationFrames->setValue(systemDatas->framesAnimation());
     ui->spinBoxBattlersFrames->setValue(systemDatas->battlersFrames());
     ui->spinBoxBattlersColumns->setValue(systemDatas->battlersColumns());
@@ -610,6 +611,7 @@ void DialogSystems::translate()
         ::MOUNTAIN_COLLISION_HEIGHT_LIMIT_1));
     ui->labelMountainsCollisionHeightLimit2->setText(RPM::translate(Translations
         ::MOUNTAIN_COLLISION_HEIGHT_LIMIT_2) + RPM::COLON);
+    ui->labelClimbingSpeed->setText(RPM::translate(Translations::CLIMBING_SPEED) + RPM::COLON);
     ui->labelMapFrameDuration->setText(RPM::translate(Translations
         ::MAP_FRAME_DURATION) + RPM::COLON);
     ui->radioButtonImage->setText(RPM::translate(Translations::IMAGE) + RPM

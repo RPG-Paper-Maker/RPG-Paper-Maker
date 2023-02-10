@@ -1998,6 +1998,7 @@ const QString Translations::WARNING_MODELS_DEFAULT = "warning.models.default";
 const QString Translations::WARNING_MODELS_HERO = "warning.models.hero";
 const QString Translations::IS_CLIMBING = "is.climbing";
 const QString Translations::EACH_SECOND = "each.second";
+const QString Translations::CLIMBING_SPEED = "climbing.speed";
 
 // -------------------------------------------------------
 //

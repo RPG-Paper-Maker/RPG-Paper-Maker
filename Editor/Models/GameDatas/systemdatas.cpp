@@ -46,6 +46,7 @@ const QString SystemDatas::JSON_LAST_MAJOR_VERSION = "lmva";
 const QString SystemDatas::JSON_LAST_MINOR_VERSION = "lmiv";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_HEIGHT = "mch";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_ANGLE = "mca";
+const QString SystemDatas::JSON_CLIMBING_SPEED = "cs";
 const QString SystemDatas::JSON_SPEED = "sf";
 const QString SystemDatas::JSON_FREQUENCIES = "f";
 const QString SystemDatas::JSON_SOUND_CURSOR = "scu";
@@ -107,6 +108,7 @@ SystemDatas::SystemDatas() :
     m_squareSize(16),
     m_mountainCollisionHeight(new PrimitiveValue(4)),
     m_mountainCollisionAngle(new PrimitiveValue(45.0)),
+    m_climbingSpeed(new PrimitiveValue(0.25)),
     m_mapFrameDuration(new PrimitiveValue(DEFAULT_MAP_FRAME_DURATION)),
     m_priceSoldItem(new PrimitiveValue(DEFAULT_PRICE_SOLD_ITEM)),
     m_idMapHero(1),
@@ -254,6 +256,11 @@ PrimitiveValue * SystemDatas::mountainCollisionHeight() const {
 
 PrimitiveValue * SystemDatas::mountainCollisionAngle() const {
     return m_mountainCollisionAngle;
+}
+
+PrimitiveValue * SystemDatas::climbingSpeed() const
+{
+    return m_climbingSpeed;
 }
 
 PrimitiveValue * SystemDatas::mapFrameDuration() const
@@ -961,12 +968,13 @@ void SystemDatas::read(const QJsonObject &json){
     }
     m_squareSize = json["ss"].toInt();
     if (json.contains(JSON_MOUNTAIN_COLLISION_HEIGHT)) {
-        m_mountainCollisionHeight->read(json[JSON_MOUNTAIN_COLLISION_HEIGHT]
-            .toObject());
+        m_mountainCollisionHeight->read(json[JSON_MOUNTAIN_COLLISION_HEIGHT].toObject());
     }
     if (json.contains(JSON_MOUNTAIN_COLLISION_ANGLE)) {
-        m_mountainCollisionAngle->read(json[JSON_MOUNTAIN_COLLISION_ANGLE]
-            .toObject());
+        m_mountainCollisionAngle->read(json[JSON_MOUNTAIN_COLLISION_ANGLE].toObject());
+    }
+    if (json.contains(JSON_CLIMBING_SPEED)) {
+        m_climbingSpeed->read(json[JSON_CLIMBING_SPEED].toObject());
     }
     if (json.contains(JSON_MAP_FRAME_DURATION))
     {
@@ -1211,6 +1219,13 @@ void SystemDatas::write(QJsonObject &json) const{
         obj = QJsonObject();
         m_mountainCollisionAngle->write(obj);
         json[JSON_MOUNTAIN_COLLISION_ANGLE] = obj;
+    }
+    if (m_climbingSpeed->kind() != PrimitiveValueKind::NumberDouble ||
+        m_climbingSpeed->numberDoubleValue() != 0.25)
+    {
+        obj = QJsonObject();
+        m_climbingSpeed->write(obj);
+        json[JSON_CLIMBING_SPEED] = obj;
     }
     if (m_mapFrameDuration->kind() != PrimitiveValueKind::Number ||
         m_mapFrameDuration->numberValue() != DEFAULT_MAP_FRAME_DURATION)

@@ -64,9 +64,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-356</y>
                 <width>252</width>
-                <height>1809</height>
+                <height>1861</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_13">
@@ -372,6 +372,39 @@
                         </item>
                         <item>
                          <widget class="PanelPrimitiveValue" name="widgetMountainCollisionAngle" native="true">
+                          <property name="minimumSize">
+                           <size>
+                            <width>200</width>
+                            <height>27</height>
+                           </size>
+                          </property>
+                          <property name="maximumSize">
+                           <size>
+                            <width>200</width>
+                            <height>16777215</height>
+                           </size>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                      <item>
+                       <layout class="QVBoxLayout" name="verticalLayout_39" stretch="0,0">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <widget class="QLabel" name="labelClimbingSpeed">
+                          <property name="enabled">
+                           <bool>true</bool>
+                          </property>
+                          <property name="text">
+                           <string>Climbing speed:</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="PanelPrimitiveValue" name="panelPrimitiveClimbingSpeed" native="true">
                           <property name="minimumSize">
                            <size>
                             <width>200</width>
