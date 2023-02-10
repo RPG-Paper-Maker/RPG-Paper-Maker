@@ -1,16 +1,28 @@
 {
 	"add": [],
 	"remove": [],
-	"replace": [],
+	"replace": [
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/system.json",
+            "target": "Engine/Content/basic/Content/Datas/system.json"
+        }
+    ],
 	"features": [
-        "Changing custom resources red bullet to green bullet"
+        "Changing custom resources red bullet to green bullet",
+        "Command call a common reaction: this object in common reaction is now the command caller",
+        "Adding each second frequency in default project"
     ],
     "bugs": [
-        "After battle, map music is playing from beginning"
+        "After battle, map music is playing from beginning",
+        "Characteristics elements crash sometimes with element damage"
     ],
     "finished": [
         2,
+        2,
+        2,
         
+        2,
         2
     ]
 }

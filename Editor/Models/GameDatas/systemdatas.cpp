@@ -895,6 +895,7 @@ void SystemDatas::setDefaultTranslations()
     SuperListItem::setModelItemName(m_modelSpeed, 3, RPM::translate(Translations::FAST));
     SuperListItem::setModelItemName(m_modelSpeed, 4, RPM::translate(Translations::VERY_FAST));
     SuperListItem::setModelItemName(m_modelFrequencies, 0, RPM::translate(Translations::INSTANTANEOUS));
+    SuperListItem::setModelItemName(m_modelFrequencies, 1, RPM::translate(Translations::EACH_SECOND));
     SuperListItem::setModelItemName(m_modelFontSizes, 0, RPM::translate(Translations::NORMAL));
     SuperListItem::setModelItemName(m_modelFontSizes, 1, RPM::translate(Translations::SMALL));
     SuperListItem::setModelItemName(m_modelFontSizes, 2, RPM::translate(Translations::VERY_SMALL));
