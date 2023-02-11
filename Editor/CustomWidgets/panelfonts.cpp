@@ -12,6 +12,7 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QDesktopServices>
 #include "panelfonts.h"
 #include "ui_panelfonts.h"
 #include "dialogimportdlcs.h"
@@ -98,10 +99,6 @@ void PanelFonts::setKind() {
     connect(ui->treeViewAvailableContent->selectionModel(), SIGNAL(
         currentChanged(QModelIndex,QModelIndex)), this, SLOT(on_listIndexChanged
         (QModelIndex,QModelIndex)));
-
-    // Update checkBox
-    ui->checkBoxContent->setText(RPM::translate(Translations
-        ::SHOW_AVAILABLE_CONTENT) + RPM::SPACE + SystemFont::getLocalFolder());
 }
 
 // -------------------------------------------------------
@@ -242,6 +239,8 @@ void PanelFonts::translate()
         ::DOT_DOT_DOT);
     ui->pushButtonDLC->setText(RPM::translate(Translations::IMPORT_DLC_S) + RPM
         ::DOT_DOT_DOT);
+    ui->pushButtonOpenDefaultFolder->setText(RPM::translate(Translations::OPEN_DEFAULT_FOLDER) + RPM::DOT_DOT_DOT);
+    ui->pushButtonOpenProjectFolder->setText(RPM::translate(Translations::OPEN_PROJECT_FOLDER) + RPM::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------
@@ -366,4 +365,20 @@ void PanelFonts::on_pushButtonExport_clicked()
                 font->name()));
         }
     }
+}
+
+// -------------------------------------------------------
+
+void PanelFonts::on_pushButtonOpenDefaultFolder_clicked()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(Common::pathCombine(RPM::get()
+        ->project()->gameDatas()->systemDatas()->pathBR(), RPM::PATH_FONTS)));
+}
+
+// -------------------------------------------------------
+
+void PanelFonts::on_pushButtonOpenProjectFolder_clicked()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(Common::pathCombine(RPM::get()
+        ->project()->pathCurrentProjectApp(), RPM::PATH_FONTS)));
 }

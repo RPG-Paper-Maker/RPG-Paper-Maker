@@ -13,6 +13,7 @@
 #include <QDirIterator>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QDesktopServices>
 #include "panelpicturepreview.h"
 #include "ui_panelpicturepreview.h"
 #include "rpm.h"
@@ -170,11 +171,6 @@ void PanelPicturePreview::setPictureKind(PictureKind kind) {
         connect(ui->treeViewAvailableContent->selectionModel(), SIGNAL(
             currentChanged(QModelIndex,QModelIndex)), this, SLOT(
             on_listIndexChanged(QModelIndex,QModelIndex)));
-
-        // Update checkBox
-        ui->checkBoxContent->setText(RPM::translate(Translations
-            ::SHOW_AVAILABLE_CONTENT) + RPM::SPACE + SystemPicture
-            ::getLocalFolder(kind));
     }
 }
 
@@ -395,6 +391,8 @@ void PanelPicturePreview::translate()
         ::DOT_DOT_DOT);
     ui->pushButtonDLC->setText(RPM::translate(Translations::IMPORT_DLC_S) + RPM
         ::DOT_DOT_DOT);
+    ui->pushButtonOpenDefaultFolder->setText(RPM::translate(Translations::OPEN_DEFAULT_FOLDER) + RPM::DOT_DOT_DOT);
+    ui->pushButtonOpenProjectFolder->setText(RPM::translate(Translations::OPEN_PROJECT_FOLDER) + RPM::DOT_DOT_DOT);
     ui->checkBoxStopAnimation->setText(RPM::translate(Translations::STOP_ANIMATION));
     ui->checkBoxClimbingAnimation->setText(RPM::translate(Translations::CLIMB_ANIMATION));
 }
@@ -547,6 +545,23 @@ void PanelPicturePreview::on_checkBoxClimbingAnimation_toggled(bool checked)
         this->setIndexY(this->indexY());
         ui->widgetPreview->repaint();
     }
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::on_pushButtonOpenDefaultFolder_clicked()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(Common::pathCombine(RPM::get()
+        ->project()->gameDatas()->systemDatas()->pathBR(), SystemPicture
+        ::getLocalFolder(m_pictureKind))));
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::on_pushButtonOpenProjectFolder_clicked()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(Common::pathCombine(RPM::get()
+        ->project()->pathCurrentProjectApp(), SystemPicture::getLocalFolder(m_pictureKind))));
 }
 
 // -------------------------------------------------------

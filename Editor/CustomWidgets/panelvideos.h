@@ -76,6 +76,8 @@ private slots:
     void on_pushButtonPause_clicked();
     void on_pushButtonDLC_clicked();
     void on_pushButtonExport_clicked();
+    void on_pushButtonOpenDefaultFolder_clicked();
+    void on_pushButtonOpenProjectFolder_clicked();
 };
 
 #endif // PANELVIDEOS_H

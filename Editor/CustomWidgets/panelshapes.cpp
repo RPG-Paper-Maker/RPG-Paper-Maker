@@ -12,6 +12,7 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QDesktopServices>
 #include "panelshapes.h"
 #include "ui_panelshapes.h"
 #include "dialogimportdlcs.h"
@@ -104,11 +105,6 @@ void PanelShapes::setShapeKind(CustomShapeKind kind) {
         connect(ui->treeViewAvailableContent->selectionModel(), SIGNAL(
             currentChanged(QModelIndex,QModelIndex)), this, SLOT(
             on_listIndexChanged(QModelIndex,QModelIndex)));
-
-        // Update checkBox
-        ui->checkBoxContent->setText(RPM::translate(Translations
-            ::SHOW_AVAILABLE_CONTENT) + RPM::SPACE + SystemCustomShape
-            ::getLocalFolder(kind));
     }
 }
 
@@ -268,6 +264,8 @@ void PanelShapes::translate()
         ::DOT_DOT_DOT);
     ui->pushButtonDLC->setText(RPM::translate(Translations::IMPORT_DLC_S) + RPM
         ::DOT_DOT_DOT);
+    ui->pushButtonOpenDefaultFolder->setText(RPM::translate(Translations::OPEN_DEFAULT_FOLDER) + RPM::DOT_DOT_DOT);
+    ui->pushButtonOpenProjectFolder->setText(RPM::translate(Translations::OPEN_PROJECT_FOLDER) + RPM::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------
@@ -393,4 +391,21 @@ void PanelShapes::on_pushButtonExport_clicked()
                 picture->name()));
         }
     }
+}
+
+// -------------------------------------------------------
+
+void PanelShapes::on_pushButtonOpenDefaultFolder_clicked()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(Common::pathCombine(RPM::get()
+        ->project()->gameDatas()->systemDatas()->pathBR(), SystemCustomShape
+        ::getLocalFolder(m_shapeKind))));
+}
+
+// -------------------------------------------------------
+
+void PanelShapes::on_pushButtonOpenProjectFolder_clicked()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(Common::pathCombine(RPM::get()
+        ->project()->pathCurrentProjectApp(), SystemCustomShape::getLocalFolder(m_shapeKind))));
 }

@@ -572,7 +572,7 @@
 	"keep.position": "Keep position",
 	"event.system": "Event system",
 	"event.user": "Event user",
-	"show.available.content": "Show available content of",
+	"show.available.content": "Show available content",
 	"refresh": "Refresh",
 	"table": "Table",
 	"graph": "Graph",
@@ -1978,5 +1978,6 @@
     "warning.models.hero": "WARNING: THE MODEL ID 2 IS RESERVED FOR HERO OBJECT (USED WHEN DEFINING AN OBJECT AS HERO). DO NOT USE FOR SOMETHING ELSE.",
     "is.climbing": "is climbing",
     "each.second": "Each second",
-    "climbing.speed": "Climbing speed"
+    "climbing.speed": "Climbing speed",
+    "open.default.folder": "Open default folder"
 }

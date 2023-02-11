@@ -12,6 +12,7 @@
 #include <QDirIterator>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QDesktopServices>
 #include "panelsongs.h"
 #include "ui_panelsongs.h"
 #include "dialogimportdlcs.h"
@@ -190,11 +191,6 @@ void PanelSongs::setSongKind(SongKind kind) {
         connect(ui->treeViewAvailableContent->selectionModel(), SIGNAL(
             currentChanged(QModelIndex,QModelIndex)), this, SLOT(
             on_listIndexChanged(QModelIndex,QModelIndex)));
-
-        // Update checkBox
-        ui->checkBoxContent->setText(RPM::translate(Translations
-            ::SHOW_AVAILABLE_CONTENT) + RPM::SPACE + SystemSong::getLocalFolder(
-            kind));
 
         // Buttons & volume according to state of song
         ui->pushButtonPlay->show();
@@ -488,7 +484,7 @@ void PanelSongs::dropFiles(QStringList &files)
 void PanelSongs::translate()
 {
     ui->labelVolume->setText(RPM::translate(Translations::VOLUME) + RPM::COLON);
-    ui->checkBoxContent->setText(RPM::translate(Translations::VOLUME));
+    ui->checkBoxContent->setText(RPM::translate(Translations::SHOW_AVAILABLE_CONTENT));
     ui->checkBoxEnd->setText(RPM::translate(Translations::END) + RPM::COLON);
     ui->checkBoxStart->setText(RPM::translate(Translations::START) + RPM::COLON);
     ui->groupBoxOptions->setTitle(RPM::translate(Translations::OPTIONS));
@@ -497,6 +493,8 @@ void PanelSongs::translate()
         ::DOT_DOT_DOT);
     ui->pushButtonDLC->setText(RPM::translate(Translations::IMPORT_DLC_S) + RPM
         ::DOT_DOT_DOT);
+    ui->pushButtonOpenDefaultFolder->setText(RPM::translate(Translations::OPEN_DEFAULT_FOLDER) + RPM::DOT_DOT_DOT);
+    ui->pushButtonOpenProjectFolder->setText(RPM::translate(Translations::OPEN_PROJECT_FOLDER) + RPM::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------
@@ -874,4 +872,21 @@ void PanelSongs::on_pushButtonExport_clicked()
                 picture->name()));
         }
     }
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_pushButtonOpenDefaultFolder_clicked()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(Common::pathCombine(RPM::get()
+        ->project()->gameDatas()->systemDatas()->pathBR(), SystemSong
+        ::getLocalFolder(m_songKind))));
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_pushButtonOpenProjectFolder_clicked()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(Common::pathCombine(RPM::get()
+        ->project()->pathCurrentProjectApp(), SystemSong::getLocalFolder(m_songKind))));
 }

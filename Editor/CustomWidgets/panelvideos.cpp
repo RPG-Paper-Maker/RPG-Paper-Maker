@@ -13,6 +13,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QGraphicsVideoItem>
+#include <QDesktopServices>
 #include "panelvideos.h"
 #include "ui_panelvideos.h"
 #include "dialogimportdlcs.h"
@@ -102,10 +103,6 @@ void PanelVideos::setKind() {
     connect(ui->treeViewAvailableContent->selectionModel(), SIGNAL(
         currentChanged(QModelIndex,QModelIndex)), this, SLOT(on_listIndexChanged
         (QModelIndex,QModelIndex)));
-
-    // Update checkBox
-    ui->checkBoxContent->setText(RPM::translate(Translations
-        ::SHOW_AVAILABLE_CONTENT) + RPM::SPACE + SystemVideo::getLocalFolder());
 
     // Player config
     m_player = new QMediaPlayer;
@@ -258,6 +255,8 @@ void PanelVideos::translate()
         ::DOT_DOT_DOT);
     ui->pushButtonDLC->setText(RPM::translate(Translations::IMPORT_DLC_S) + RPM
         ::DOT_DOT_DOT);
+    ui->pushButtonOpenDefaultFolder->setText(RPM::translate(Translations::OPEN_DEFAULT_FOLDER) + RPM::DOT_DOT_DOT);
+    ui->pushButtonOpenProjectFolder->setText(RPM::translate(Translations::OPEN_PROJECT_FOLDER) + RPM::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------
@@ -406,4 +405,20 @@ void PanelVideos::on_pushButtonExport_clicked()
                 picture->name()));
         }
     }
+}
+
+// -------------------------------------------------------
+
+void PanelVideos::on_pushButtonOpenDefaultFolder_clicked()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(Common::pathCombine(RPM::get()
+        ->project()->gameDatas()->systemDatas()->pathBR(), RPM::PATH_VIDEOS)));
+}
+
+// -------------------------------------------------------
+
+void PanelVideos::on_pushButtonOpenProjectFolder_clicked()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(Common::pathCombine(RPM::get()
+        ->project()->pathCurrentProjectApp(), RPM::PATH_VIDEOS)));
 }

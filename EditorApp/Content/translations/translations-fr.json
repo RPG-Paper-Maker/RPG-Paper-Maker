@@ -572,7 +572,7 @@
 	"keep.position": "Garder la position",
 	"event.system": "Événement du système",
 	"event.user": "Événement utilisateur",
-	"show.available.content": "Afficher le contenu disponible dans",
+	"show.available.content": "Afficher le contenu disponible",
 	"refresh": "Rafraichir",
 	"table": "Table",
 	"graph": "Graphique",
@@ -1978,5 +1978,6 @@
     "warning.models.hero": "ATTENTION: LE MODELE ID 2 EST RESERVE A L'OBJET HERO (POUR DEFINIR COMME HERO). NE PAS UTILISER POUR AUTRE CHOSE.",
     "is.climbing": "est en train d'escalader",
     "each.second": "Chaque seconde",
-    "climbing.speed": "Vitesse d'escalade"
+    "climbing.speed": "Vitesse d'escalade",
+    "open.default.folder": "Ouvrir le dossier par défaut"
 }

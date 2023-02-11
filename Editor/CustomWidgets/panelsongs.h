@@ -126,6 +126,8 @@ private slots:
     void positionMusicEffectChanged(qint64 pos);
     void on_pushButtonDLC_clicked();
     void on_pushButtonExport_clicked();
+    void on_pushButtonOpenDefaultFolder_clicked();
+    void on_pushButtonOpenProjectFolder_clicked();
 };
 
 #endif // PANELSONGS_H

@@ -29,9 +29,12 @@
         "Command move object: remove transparency when drawing a way preview"
     ],
     "bugs": [
+        "Engine might crash if non existing autotile in tileset",
         "After battle, map music is playing from beginning",
         "Characteristics elements crash sometimes with element damage",
-        "Wrong FR translations for weapons/armors"
+        "Wrong FR translations for weapons/armors",
+        "Formula statistics progression: u.lv undefined",
+        "Command teleport object: infinite event time loop if teleport from event time reaction"
     ],
     "finished": [
         2,
@@ -43,6 +46,8 @@
         2,
         2,
         
+        2,
+        2,
         2,
         2,
         2

@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1,0">
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1,0,0,0">
        <item>
         <widget class="QCheckBox" name="checkBoxContent">
          <property name="text">
@@ -52,6 +52,20 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonOpenDefaultFolder">
+         <property name="text">
+          <string>Open default folder...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonOpenProjectFolder">
+         <property name="text">
+          <string>Open project folder...</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pushButtonDLC">
@@ -209,15 +223,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
    <class>WidgetPreviewObject3D</class>
    <extends>QWidget</extends>
    <header>widgetpreviewobject3d.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
   </customwidget>
  </customwidgets>
  <resources>

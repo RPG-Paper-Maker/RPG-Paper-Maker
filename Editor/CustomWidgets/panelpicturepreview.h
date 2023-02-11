@@ -91,6 +91,8 @@ public slots:
     void on_pushButtonExport_clicked();
     void on_checkBoxStopAnimation_toggled(bool checked);
     void on_checkBoxClimbingAnimation_toggled(bool checked);
+    void on_pushButtonOpenDefaultFolder_clicked();
+    void on_pushButtonOpenProjectFolder_clicked();
 };
 
 class PanelGuidePicturePreview : public QWidget
