@@ -36,7 +36,8 @@
         "Wrong FR translations for weapons/armors",
         "Formula statistics progression: u.lv undefined",
         "Command teleport object: infinite event time loop if teleport from event time reaction",
-        "Missing transaltions in states/common reactions/models"
+        "Missing transaltions in states/common reactions/models",
+        "Messy behaviour in weapons/armors kind option if common equipment is disorderly"
     ],
     "finished": [
         2,
@@ -49,6 +50,8 @@
         2,
         2,
         
+        2,
+        2,
         2,
         2,
         2,

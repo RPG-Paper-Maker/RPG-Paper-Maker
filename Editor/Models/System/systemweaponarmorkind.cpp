@@ -93,23 +93,30 @@ void SystemWeaponArmorKind::updateEquipment(){
     SystemTranslatable* equipment;
     int index;
 
+    // Init all to false
     m_equipment.clear();
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
+        m_equipment.append(false);
+    }
+
+    // Set previous values
     for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
         equipment = (SystemTranslatable*) model->item(i)->data().value<qintptr>();
         index = equipment->id() - 1;
-
         if (index < previousEquipment.size())
-            m_equipment.append(previousEquipment.at(index));
-        else
-            m_equipment.append(false);
+        {
+            m_equipment[index] = previousEquipment.at(index);
+        }
     }
 }
 
 // -------------------------------------------------------
 
 void SystemWeaponArmorKind::updateByModel(QStandardItemModel *model) {
+    SystemTranslatable* equipment;
     for (int i = 0; i < model->rowCount(); i++) {
-        m_equipment.replace(i, model->item(i)->checkState() == Qt::Checked);
+        equipment = (SystemTranslatable*) model->item(i)->data().value<qintptr>();
+        m_equipment.replace(equipment->id() - 1, model->item(i)->checkState() == Qt::Checked);
     }
 }
 
