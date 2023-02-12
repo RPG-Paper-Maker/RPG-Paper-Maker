@@ -891,7 +891,10 @@ void SystemDatas::setDefaultTranslations()
     SuperListItem::setModelItemName(m_modelHeroesStatistics, 0, RPM::translate(Translations::HP));
     SuperListItem::setModelItemName(m_modelHeroesStatistics, 1, RPM::translate(Translations::MP));
     SuperListItem::setModelItemName(m_modelHeroesStatistics, 2, RPM::translate(Translations::TP));
-    SuperListItem::setModelItemName(m_modelWindowSkins, 0, RPM::translate(Translations::DEFAULT));
+    SuperListItem::setModelItemName(m_modelWindowSkins, 0, RPM::translate(Translations::BLUE));
+    SuperListItem::setModelItemName(m_modelWindowSkins, 1, RPM::translate(Translations::GREEN));
+    SuperListItem::setModelItemName(m_modelWindowSkins, 2, RPM::translate(Translations::RED));
+    SuperListItem::setModelItemName(m_modelWindowSkins, 3, RPM::translate(Translations::BLACK));
     SuperListItem::setModelItemName(m_modelCameraProperties, 0, RPM::translate(Translations::OUTSIDE));
     SuperListItem::setModelItemName(m_modelCameraProperties, 1, RPM::translate(Translations::BATTLE));
     SuperListItem::setModelItemName(m_modelDetections, 0, RPM::translate(Translations::FRONT));

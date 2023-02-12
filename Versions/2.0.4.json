@@ -27,7 +27,8 @@
         "Removing begin equipment for Lucas in default project",
         "Better message errors for wrong autotiles, walls, and mountains picture size",
         "Command move object: remove transparency when drawing a way preview",
-        "Adding open project/default folder in pictures/shapes/songs/videos manager"
+        "Adding open project/default folder in pictures/shapes/songs/videos manager",
+        "Adding window skin blue, green, red, black for default project"
     ],
     "bugs": [
         "Engine might crash if non existing autotile in tileset",
@@ -40,6 +41,7 @@
         "Messy behaviour in weapons/armors kind option if common equipment is disorderly"
     ],
     "finished": [
+        2,
         2,
         2,
         2,
