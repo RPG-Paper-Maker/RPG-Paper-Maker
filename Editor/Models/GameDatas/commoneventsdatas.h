@@ -38,6 +38,7 @@ public:
     QStandardItemModel * modelCommonObjects() const;
 
     void read(QString path);
+    void setDefaultTranslations();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

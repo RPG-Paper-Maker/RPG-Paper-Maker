@@ -26,7 +26,8 @@
         "Adding state 1 to 10 in default project",
         "Removing begin equipment for Lucas in default project",
         "Better message errors for wrong autotiles, walls, and mountains picture size",
-        "Command move object: remove transparency when drawing a way preview"
+        "Command move object: remove transparency when drawing a way preview",
+        "Adding open project/default folder in pictures/shapes/songs/videos manager"
     ],
     "bugs": [
         "Engine might crash if non existing autotile in tileset",
@@ -34,7 +35,8 @@
         "Characteristics elements crash sometimes with element damage",
         "Wrong FR translations for weapons/armors",
         "Formula statistics progression: u.lv undefined",
-        "Command teleport object: infinite event time loop if teleport from event time reaction"
+        "Command teleport object: infinite event time loop if teleport from event time reaction",
+        "Missing transaltions in states/common reactions/models"
     ],
     "finished": [
         2,
@@ -45,7 +47,9 @@
         2,
         2,
         2,
+        2,
         
+        2,
         2,
         2,
         2,

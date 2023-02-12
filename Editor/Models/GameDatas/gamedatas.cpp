@@ -184,6 +184,7 @@ void GameDatas::setDefaultTranslations() {
     m_tilesetsDatas->setDefaultTranslations();
     m_statusDatas->setDefaultTranslations();
     m_titleScreenGameOverDatas->setDefaultTranslations();
+    m_commonEventsDatas->setDefaultTranslations();
 }
 
 // -------------------------------------------------------

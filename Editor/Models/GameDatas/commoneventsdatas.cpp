@@ -66,6 +66,24 @@ void CommonEventsDatas::read(QString path){
     RPM::readJSON(Common::pathCombine(path, RPM::PATH_COMMON_EVENTS), *this);
 }
 
+void CommonEventsDatas::setDefaultTranslations()
+{
+    SuperListItem::setModelItemName(m_modelStates, 0, RPM::translate(Translations::STATE) + " 1");
+    SuperListItem::setModelItemName(m_modelStates, 1, RPM::translate(Translations::STATE) + " 2");
+    SuperListItem::setModelItemName(m_modelStates, 2, RPM::translate(Translations::STATE) + " 3");
+    SuperListItem::setModelItemName(m_modelStates, 3, RPM::translate(Translations::STATE) + " 4");
+    SuperListItem::setModelItemName(m_modelStates, 4, RPM::translate(Translations::STATE) + " 5");
+    SuperListItem::setModelItemName(m_modelStates, 5, RPM::translate(Translations::STATE) + " 6");
+    SuperListItem::setModelItemName(m_modelStates, 6, RPM::translate(Translations::STATE) + " 7");
+    SuperListItem::setModelItemName(m_modelStates, 7, RPM::translate(Translations::STATE) + " 8");
+    SuperListItem::setModelItemName(m_modelStates, 8, RPM::translate(Translations::STATE) + " 9");
+    SuperListItem::setModelItemName(m_modelStates, 9, RPM::translate(Translations::STATE) + " 10");
+    SuperListItem::setModelItemName(m_modelCommonObjects, 0, RPM::translate(Translations::EMPTY));
+    SuperListItem::setModelItemName(m_modelCommonObjects, 1, RPM::translate(Translations::HERO));
+    SuperListItem::setModelItemName(m_modelCommonReactors, 0, RPM::translate(Translations::INCREASE));
+    SuperListItem::setModelItemName(m_modelCommonReactors, 1, RPM::translate(Translations::STEEL));
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE
