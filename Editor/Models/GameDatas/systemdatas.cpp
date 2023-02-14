@@ -160,6 +160,7 @@ SystemDatas::~SystemDatas()
     delete m_projectName;
     delete m_mountainCollisionHeight;
     delete m_mountainCollisionAngle;
+    delete m_climbingSpeed;
     delete m_mapFrameDuration;
     delete m_priceSoldItem;
     SuperListItem::deleteModel(m_modelColors);
