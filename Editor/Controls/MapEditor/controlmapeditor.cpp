@@ -459,7 +459,7 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
         nullptr && drawKind == DrawKind::Translate)))
     {
         Position *position = m_isTranslating || m_isScaling ? this->positionOnElement(MapEditorSelectionKind
-            ::Land, DrawKind::Pencil, m_isScaling) : positionSelectedTransformation;
+            ::Land, DrawKind::Pencil, true) : positionSelectedTransformation;
         if (position != nullptr)
         {
             if (*position != m_positionOnTransformation)
@@ -545,13 +545,19 @@ void ControlMapEditor::updateTransformations(MapEditorSelectionKind selectionKin
                         position->setZ(m_positionOnTransformation.z());
                     }
                 }
-                if (square || !m_isTranslating) {
+                if (square || !m_isTranslating)
+                {
                     position->setCenterX(m_positionOnTransformation.centerX());
                     position->setCenterZ(m_positionOnTransformation.centerZ());
                 }
-                this->onTransformationPositionChanged(*position,
-                    m_positionOnTransformation, selectionKind);
-                m_positionOnTransformation = *position;
+                Portion portion;
+                MapPortion *mapPortion = this->getMapPortion(*position, portion, false);
+                if (m_map->isInGrid(*position) && mapPortion != nullptr)
+                {
+                    this->onTransformationPositionChanged(*position,
+                        m_positionOnTransformation, selectionKind);
+                    m_positionOnTransformation = *position;
+                }
             }
             if (m_isTranslating || m_isScaling)
             {
@@ -1655,11 +1661,11 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
         return;
     }
     MapPortion *mapPortion, *previousMapPortion;
-    Portion previousPortion;
-
+    Portion previousPortion, portion;
     m_map->getLocalPortion(previousPosition, previousPortion);
     previousMapPortion = m_map->mapPortion(previousPortion);
-    if (previousMapPortion != nullptr) {
+    mapPortion = this->getMapPortion(newPosition, portion, false);
+    if (previousMapPortion != nullptr && mapPortion != nullptr) {
         MapElement *element;
         QJsonObject obj;
 
@@ -1679,8 +1685,6 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
             case MapEditorSelectionKind::Sprites:
             {
                 SpriteDatas *sprite = reinterpret_cast<SpriteDatas *>(element);
-                Portion portion;
-                mapPortion = this->getMapPortion(newPosition, portion, false);
                 SpriteDatas *deletedSprite = reinterpret_cast<SpriteDatas *>(
                     mapPortion->getMapElementAt(newPosition, k,
                     MapEditorSubSelectionKind::None, false));
@@ -1710,8 +1714,6 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
             case MapEditorSelectionKind::Objects3D:
             {
                 Object3DDatas *object3D = (reinterpret_cast<Object3DDatas *>(element));
-                Portion portion;
-                mapPortion = this->getMapPortion(newPosition, portion, false);
                 Object3DDatas *deletedObject3D = reinterpret_cast<Object3DDatas *>(
                     mapPortion->getMapElementAt(newPosition, k,
                     MapEditorSubSelectionKind::None));
