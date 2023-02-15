@@ -44,8 +44,8 @@ private slots:
     void on_checkBoxBB_toggled(bool checked);
     void on_checkBoxShowFPS_toggled(bool checked);
     void on_checkBoxBackupsActivated_toggled(bool checked);
-    void on_spinBoxBackupsInterval_valueChanged(int &value);
-    void on_spinBoxBackupsMax_valueChanged(int &value);
+    void on_spinBoxBackupsInterval_valueChanged(int value);
+    void on_spinBoxBackupsMax_valueChanged(int value);
     void on_pushButtonSyncMapObjects_clicked();
 };
 

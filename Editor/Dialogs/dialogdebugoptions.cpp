@@ -45,8 +45,8 @@ void DialogDebugOptions::initialize() {
     ui->checkBoxBB->setChecked(RPM::get()->project()->gameDatas()->systemDatas()->showBB());
     ui->checkBoxShowFPS->setChecked(RPM::get()->project()->gameDatas()->systemDatas()->showFPS());
     ui->checkBoxBackupsActivated->setChecked(RPM::get()->project()->gameDatas()->systemDatas()->backupsActivated());
-    ui->spinBoxInterval->setValue(RPM::get()->project()->gameDatas()->systemDatas()->backupsInterval());
-    ui->spinBoxMax->setValue(RPM::get()->project()->gameDatas()->systemDatas()->backupsMax());
+    ui->spinBoxBackupsInterval->setValue(RPM::get()->project()->gameDatas()->systemDatas()->backupsInterval());
+    ui->spinBoxBackupsMax->setValue(RPM::get()->project()->gameDatas()->systemDatas()->backupsMax());
 }
 
 // -------------------------------------------------------
@@ -90,14 +90,14 @@ void DialogDebugOptions::on_checkBoxBackupsActivated_toggled(bool checked)
 
 // -------------------------------------------------------
 
-void DialogDebugOptions::on_spinBoxBackupsInterval_valueChanged(int &value)
+void DialogDebugOptions::on_spinBoxBackupsInterval_valueChanged(int value)
 {
     RPM::get()->project()->gameDatas()->systemDatas()->setBackupsInterval(value);
 }
 
 // -------------------------------------------------------
 
-void DialogDebugOptions::on_spinBoxBackupsMax_valueChanged(int &value)
+void DialogDebugOptions::on_spinBoxBackupsMax_valueChanged(int value)
 {
     RPM::get()->project()->gameDatas()->systemDatas()->setBackupsMax(value);
 }
