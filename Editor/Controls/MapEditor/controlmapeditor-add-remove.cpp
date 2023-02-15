@@ -558,9 +558,7 @@ void ControlMapEditor::stockSprite(Position &p, SpriteDatas *sprite,
     {
         Portion portion;
         MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
-
         if (mapPortion != nullptr) {
-
             // Update layer
             if (updateLayer && !undoRedo)
             {

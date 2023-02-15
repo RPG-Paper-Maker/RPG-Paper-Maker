@@ -1650,16 +1650,20 @@ void ControlMapEditor::getMountainTopFloorPosition(Position &topPosition,
 void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
     Position &previousPosition, MapEditorSelectionKind k)
 {
-    MapPortion *mapPortion;
-    Portion portion;
+    if (previousPosition.x() == -500)
+    {
+        return;
+    }
+    MapPortion *mapPortion, *previousMapPortion;
+    Portion previousPortion;
 
-    m_map->getLocalPortion(newPosition, portion);
-    mapPortion = m_map->mapPortion(portion);
-    if (mapPortion != nullptr) {
+    m_map->getLocalPortion(previousPosition, previousPortion);
+    previousMapPortion = m_map->mapPortion(previousPortion);
+    if (previousMapPortion != nullptr) {
         MapElement *element;
         QJsonObject obj;
 
-        element = mapPortion->updateElementPosition(previousPosition, k);
+        element = previousMapPortion->updateElementPosition(previousPosition, k);
         if (element != nullptr)
         {
             m_firstMouseCoords = newPosition;
@@ -1676,7 +1680,7 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
             {
                 SpriteDatas *sprite = reinterpret_cast<SpriteDatas *>(element);
                 Portion portion;
-                MapPortion *mapPortion = this->getMapPortion(newPosition, portion, false);
+                mapPortion = this->getMapPortion(newPosition, portion, false);
                 SpriteDatas *deletedSprite = reinterpret_cast<SpriteDatas *>(
                     mapPortion->getMapElementAt(newPosition, k,
                     MapEditorSubSelectionKind::None, false));
@@ -1688,7 +1692,7 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
                 {
                     m_elementOnSpriteScaled = sprite;
                 }
-                if (m_translatedChanged)
+                if (m_translatedChanged && newPosition != previousPosition)
                 {
                     m_translatedChanged = false;
                     this->stockSprite(previousPosition, m_elementOnSpriteTranslated,
@@ -1707,7 +1711,7 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
             {
                 Object3DDatas *object3D = (reinterpret_cast<Object3DDatas *>(element));
                 Portion portion;
-                MapPortion *mapPortion = this->getMapPortion(newPosition, portion, false);
+                mapPortion = this->getMapPortion(newPosition, portion, false);
                 Object3DDatas *deletedObject3D = reinterpret_cast<Object3DDatas *>(
                     mapPortion->getMapElementAt(newPosition, k,
                     MapEditorSubSelectionKind::None));

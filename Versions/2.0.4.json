@@ -28,7 +28,9 @@
         "Better message errors for wrong autotiles, walls, and mountains picture size",
         "Command move object: remove transparency when drawing a way preview",
         "Adding open project/default folder in pictures/shapes/songs/videos manager",
-        "Adding window skin blue, green, red, black for default project"
+        "Adding window skin blue, green, red, black for default project",
+        "Command move object: jump clear message error when peak < final position",
+        "Command change variables: adding error message when no object found for characteristics"
     ],
     "bugs": [
         "Engine might crash if non existing autotile in tileset",
@@ -38,7 +40,16 @@
         "Formula statistics progression: u.lv undefined",
         "Command teleport object: infinite event time loop if teleport from event time reaction",
         "Missing transaltions in states/common reactions/models",
-        "Messy behaviour in weapons/armors kind option if common equipment is disorderly"
+        "Messy behaviour in weapons/armors kind option if common equipment is disorderly",
+        "Menu equip: too much equipment slots making weapons/armors list hidden",
+        "Climbing down not properly working if using sprite with h > 1",
+        "Command call a common reaction: blocking hero may overwrite map object blocking options",
+        "Climbing collisions issue with objects on the way",
+        "Command change variables: object terrain not correct with floors layers",
+        "Command move object: change speed / frequency changing orientation",
+        "Incorrect detection rectangles values in game",
+        "Engine crash if translate sprite/3Dobject on another sprite/3Dobject",
+        "Cannot translate sprite/3Dobject when leaving portion"
     ],
     "finished": [
         2,
@@ -51,7 +62,18 @@
         2,
         2,
         2,
+        2,
+        2,
         
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
         2,
         2,
         2,
