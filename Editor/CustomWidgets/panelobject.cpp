@@ -284,7 +284,11 @@ void PanelObject::updateReactions() {
                                 {
                                     SystemState *basicState = reinterpret_cast<SystemState *>(
                                         SuperListItem::getItemModelAt(basic->modelStates(), 0));
-                                    newReaction->setCopy(*basicEvent->reactionAt(basicState->id()));
+                                    SystemReaction *basicReaction = basicEvent->reactionAt(basicState->id());
+                                    if (basicReaction != nullptr)
+                                    {
+                                        newReaction->setCopy(*basicReaction);
+                                    }
                                 }
                             }
                         }
