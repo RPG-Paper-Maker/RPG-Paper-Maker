@@ -216,6 +216,7 @@ void PanelObject::showStateWidgets(bool b) {
     ui->panelGraphics->setVisible(b);
     ui->checkBoxDetection->setVisible(b);
     ui->pushButtonDetection->setVisible(b);
+    ui->pushButtonUpdateTransformations->setVisible(b);
 }
 
 // -------------------------------------------------------

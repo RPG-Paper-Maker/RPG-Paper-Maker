@@ -67,7 +67,9 @@
         "Status weaked incorrect values for default proejct",
         "Command change a statistic: wrong behaviour when trying to add exp",
         "Non ordered autotile/mountain in tileset might not be displayed in map",
-        "Skills Heal 2 / 3 not healing in default project"
+        "Skills Heal 2 / 3 not healing in default project",
+        "Command set dialog box options: faceset Y not applied",
+        "Update transformations button visible if no state in object"
     ],
     "finished": [
         2,
@@ -83,6 +85,8 @@
         2,
         2,
         
+        2,
+        2,
         2,
         2,
         2,
