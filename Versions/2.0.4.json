@@ -60,6 +60,8 @@
         "Basic model sometimes crash when creating new reaction",
         "Status weaked incorrect name for default project",
         "Status weaked incorrect values for default proejct",
+        "Command change a statistic: wrong behaviour when trying to add exp",
+        "Non ordered autotile/mountain in tileset might not be displayed in map"
     ],
     "finished": [
         2,
@@ -75,6 +77,8 @@
         2,
         2,
         
+        2,
+        2,
         2,
         2,
         2,

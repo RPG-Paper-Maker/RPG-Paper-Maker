@@ -229,16 +229,28 @@ void Map::loadAutotiles() {
     QStandardItemModel* model = tileset->model(PictureKind::Autotiles);
     QStandardItemModel* modelSpecials = RPM::get()->project()
             ->specialElementsDatas()->model(PictureKind::Autotiles);
-    int id;
+    int i, j, l, m, id;
     QImage newImage(64 * m_squareSize, RPM::MAX_PIXEL_SIZE, QImage::Format_ARGB32);
     SystemPicture *picture;
     QPainter painter;
     painter.begin(&newImage);
     int offset = 0;
     TextureSeveral* textureAutotile = nullptr;
-    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
+    QList<int> list;
+    for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
         id = reinterpret_cast<SuperListItem *>(model->item(i)->data().value<
             qintptr>())->id();
+        for (j = 0, m = list.size(); j < m; j++)
+        {
+            if (id <= list.at(j))
+            {
+                break;
+            }
+        }
+        list.insert(j, id);
+    }
+    for (i = 0; i < list.size(); i++) {
+        id = list.at(i);
         special = reinterpret_cast<SystemSpecialElement *>(SuperListItem
             ::getById(modelSpecials->invisibleRootItem(), id, false));
         picture = special == nullptr ? RPM::get()->project()->picturesDatas()
@@ -444,7 +456,7 @@ void Map::loadMountains() {
     QStandardItemModel *model, *modelSpecials;
     QImage newImage;
     QPainter painter;
-    int i, l, id, offset;
+    int i, j, l, m, id, offset;
     TextureSeveral *textureMountain;
     SystemPicture *picture;
 
@@ -457,9 +469,22 @@ void Map::loadMountains() {
     painter.begin(&newImage);
     offset = 0;
     textureMountain = nullptr;
+    QList<int> list;
     for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
         id = reinterpret_cast<SuperListItem *>(model->item(i)->data().value<
             qintptr>())->id();
+        for (j = 0, m = list.size(); j < m; j++)
+        {
+            if (id <= list.at(j))
+            {
+                break;
+            }
+        }
+        list.insert(j, id);
+    }
+    for (i = 0, l = list.size(); i < l; i++)
+    {
+        id = list[i];
         special = reinterpret_cast<SystemSpecialElement *>(SuperListItem
             ::getById(modelSpecials->invisibleRootItem(), id, false));
         picture = special == nullptr ? RPM::get()->project()->picturesDatas()
@@ -467,6 +492,7 @@ void Map::loadMountains() {
         textureMountain = loadPictureMountain(painter, textureMountain,
             newImage, picture, offset, id);
     }
+
     painter.end();
 
     if (offset > 0) {
