@@ -21,6 +21,11 @@
             "repo": "RPG-Paper-Maker",
             "source": "EditorApp/Content/basic/Content/Datas/status.json",
             "target": "Engine/Content/basic/Content/Datas/status.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/skills.json",
+            "target": "Engine/Content/basic/Content/Datas/skills.json"
         }
     ],
 	"features": [
@@ -61,7 +66,8 @@
         "Status weaked incorrect name for default project",
         "Status weaked incorrect values for default proejct",
         "Command change a statistic: wrong behaviour when trying to add exp",
-        "Non ordered autotile/mountain in tileset might not be displayed in map"
+        "Non ordered autotile/mountain in tileset might not be displayed in map",
+        "Skills Heal 2 / 3 not healing in default project"
     ],
     "finished": [
         2,
@@ -77,6 +83,7 @@
         2,
         2,
         
+        2,
         2,
         2,
         2,
