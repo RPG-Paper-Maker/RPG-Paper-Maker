@@ -289,7 +289,7 @@ void DialogCommandChangeWeather::on_pushButtonSnow_clicked()
     ui->panelPrimitiveVelocityAddition->setKind(PrimitiveValueKind::Message);
     ui->panelPrimitiveVelocityAddition->setMessageValue("-Math.random() * 0.002");
     ui->panelPrimitiveInitialYRotation->setKind(PrimitiveValueKind::Message);
-    ui->panelPrimitiveInitialYRotation->setMessageValue("0");
+    ui->panelPrimitiveInitialYRotation->setMessageValue("0.001");
     ui->panelPrimitiveYRotationAddition->setKind(PrimitiveValueKind::Message);
-    ui->panelPrimitiveYRotationAddition->setMessageValue("0.001");
+    ui->panelPrimitiveYRotationAddition->setMessageValue("0");
 }

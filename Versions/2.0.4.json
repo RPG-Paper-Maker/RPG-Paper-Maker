@@ -40,7 +40,8 @@
         "Adding open project/default folder in pictures/shapes/songs/videos manager",
         "Adding window skin blue, green, red, black for default project",
         "Command move object: jump clear message error when peak < final position",
-        "Command change variables: adding error message when no object found for characteristics"
+        "Command change variables: adding error message when no object found for characteristics",
+        "Command change weathier: changing default snow y rotation / addition"
     ],
     "bugs": [
         "Engine might crash if non existing autotile in tileset",
@@ -70,7 +71,8 @@
         "Skills Heal 2 / 3 not healing in default project",
         "Command set dialog box options: faceset Y not applied",
         "Update transformations button visible if no state in object",
-        "3D objects overflow might make engine crash"
+        "3D objects overflow might make engine crash",
+        "Mountains collisions might block if going from -1 to 0 Y position"
     ],
     "finished": [
         2,
@@ -85,7 +87,9 @@
         2,
         2,
         2,
+        2,
         
+        2,
         2,
         2,
         2,
