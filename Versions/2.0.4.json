@@ -16,6 +16,11 @@
             "repo": "RPG-Paper-Maker",
             "source": "EditorApp/Content/basic/Content/Datas/heroes.json",
             "target": "Engine/Content/basic/Content/Datas/heroes.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/status.json",
+            "target": "Engine/Content/basic/Content/Datas/status.json"
         }
     ],
 	"features": [
