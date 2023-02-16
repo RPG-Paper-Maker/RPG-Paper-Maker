@@ -51,7 +51,10 @@
         "Engine crash if translate sprite/3Dobject on another sprite/3Dobject",
         "Cannot translate sprite/3Dobject when leaving portion",
         "Cannot translate on empty squares",
-        "Backups settings not changed when edited"
+        "Backups settings not changed when edited",
+        "Basic model sometimes crash when creating new reaction",
+        "Status weaked incorrect name for default project",
+        "Status weaked incorrect values for default proejct",
     ],
     "finished": [
         2,
@@ -67,6 +70,9 @@
         2,
         2,
         
+        2,
+        2,
+        2,
         2,
         2,
         2,

@@ -2000,6 +2000,7 @@ const QString Translations::IS_CLIMBING = "is.climbing";
 const QString Translations::EACH_SECOND = "each.second";
 const QString Translations::CLIMBING_SPEED = "climbing.speed";
 const QString Translations::OPEN_DEFAULT_FOLDER = "open.default.folder";
+const QString Translations::WEAKED = "weaked";
 
 // -------------------------------------------------------
 //

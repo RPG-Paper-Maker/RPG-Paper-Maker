@@ -1448,9 +1448,9 @@
 	"remedy.1.description": "Guéri tous les statuts d'un allié",
 	"remedy.2": "Remède 2",
 	"remedy.2.description": "Guéri tous les statuts de tous les alliés",
-	"weak.1": "Faible 1",
+	"weak.1": "Faiblesse 1",
 	"weak.1.description": "Ajouter le statut affaibli à un ennemi",
-	"weak.2": "Faible 2",
+	"weak.2": "Faiblesse 2",
 	"weak.2.description": "Ajouter un statut affaibli à tous les ennemis",
 	"poison.1": "Poison 1",
 	"poison.1.description": "Ajouter le statut empoisonné à un ennemi",
@@ -1979,5 +1979,6 @@
     "is.climbing": "est en train d'escalader",
     "each.second": "Chaque seconde",
     "climbing.speed": "Vitesse d'escalade",
-    "open.default.folder": "Ouvrir le dossier par défaut"
+    "open.default.folder": "Ouvrir le dossier par défaut",
+    "weaked": "Affaibli"
 }

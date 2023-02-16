@@ -2013,6 +2013,7 @@ public:
     static const QString EACH_SECOND;
     static const QString CLIMBING_SPEED;
     static const QString OPEN_DEFAULT_FOLDER;
+    static const QString WEAKED;
 
     Translations();
     virtual ~Translations();
