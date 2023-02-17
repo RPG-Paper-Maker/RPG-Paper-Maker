@@ -75,7 +75,8 @@
         "3D objects overflow might make engine crash",
         "Mountains collisions might block if going from -1 to 0 Y position",
         "Battlers might flicker if autotiles in battle map",
-        "Copying map several times remove copied map editings"
+        "Copying map several times remove copied map editings",
+        "Crash when start a battle in same mp with created object inside"
     ],
     "finished": [
         2,
@@ -93,6 +94,7 @@
         2,
         2,
         
+        2,
         2,
         2,
         2,
