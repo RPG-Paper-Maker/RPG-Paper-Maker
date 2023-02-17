@@ -1976,5 +1976,11 @@
     "max":"max",
     "warning.models.default":"ACHTUNG: MODELL-ID 1 IST FÜR DAS STANDARDOBJEKT RESERVIERT (ERSTELLUNG NEUES OBJEKT). NICHT FÜR ANDERE VERWENDEN.",
     "warning.models.hero":"ACHTUNG: MODELL-ID 2 IST FÜR DAS HERO-OBJEKT RESERVIERT (ALS HERO ZU DEFINIEREN). NICHT FÜR ANDERE VERWENDEN.",
-    "is.climbing": "klettert"
+    "is.climbing": "klettert",
+    "each.second": "Jede Sekunde",
+    "climbing.speed": "Klettergeschwindigkeit",
+    "open.default.folder": "Standardordner öffnen",
+    "weaked": "Geschwächt",
+    "battlers.frame.duration": "Duration-Frame-Kämpfer",
+    "battlers.frame.attacking.duration": "Duration-Frame-Kämpfer greifen an"
 }

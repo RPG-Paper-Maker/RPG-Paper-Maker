@@ -1976,5 +1976,11 @@
     "max":"最大限度",
     "warning.models.default":"警告：模型 ID 1 保留用於默認對象（創建新對象時）。請勿用於其他用途。",
     "warning.models.hero":"警告：模型 ID 2 為英雄對象保留（在將對象定義為英雄時使用）。請勿用於其他用途。",
-    "is.climbing": "正在攀登"
+    "is.climbing": "正在攀登",
+    "each.second": "每一秒",
+    "climbing.speed": "爬坡速度",
+    "open.default.folder": "打開默認文件夾",
+    "weaked": "虛弱的",
+    "battlers.frame.duration": "鬥士幀時長",
+    "battlers.frame.attacking.duration": "戰士幀攻擊持續時間"
 }

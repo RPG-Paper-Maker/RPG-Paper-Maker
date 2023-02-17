@@ -1978,5 +1978,11 @@
     "max":"Maks",
     "warning.models.default":"UWAGA: MODEL ID 1 ZAREZERWOWANY DLA OBIEKTU DOMYŚLNEGO (TWORZENIE NOWEGO OBIEKTU). NIE UŻYWAĆ, NIE MODYFIKOWAĆ.",
     "warning.models.hero":"UWAGA: MODEL ID 2 ZAREZERWOWANY DLA BOHATERA (DO ZDEFINIOWANIA JAKO BOHATERA). NIE UŻYWAĆ, NIE MODYFIKOWAĆ.",
-    "is.climbing": "wspina się"
+    "is.climbing": "wspina się",
+    "each.second": "Każda sekunda",
+    "climbing.speed": "Szybkość wspinaczki",
+    "open.default.folder": "Otwórz domyślny folder",
+    "weaked": "osłabiony",
+    "battlers.frame.duration": "Bitwy na klatki czasu trwania",
+    "battlers.frame.attacking.duration": "Atak walczących w ramce czasu trwania"
 }

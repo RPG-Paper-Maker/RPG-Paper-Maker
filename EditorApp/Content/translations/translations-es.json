@@ -1978,5 +1978,11 @@
     "max":"máx.",
     "warning.models.default":"ATENCIÓN: EL MODELO ID 1 ESTÁ RESERVADO PARA EL OBJETO POR DEFECTO (CREACIÓN DE NUEVO OBJETO). NO UTILIZAR PARA NADA MAS.",
     "warning.models.hero":"ATENCIÓN: EL MODELO ID 2 ESTÁ RESERVADO PARA EL OBJETO HÉROE (A DEFINIR COMO HÉROE). NO UTILIZAR PARA NADA MAS.",
-    "is.climbing": "está subiendo"
+    "is.climbing": "está subiendo",
+    "each.second": "Cada segundo",
+    "climbing.speed": "Velocidad de ascenso",
+    "open.default.folder": "Abrir carpeta predeterminada",
+    "weaked": "Debilitado",
+    "battlers.frame.duration": "Batalladores de cuadros de duración",
+    "battlers.frame.attacking.duration": "Batalladores de fotogramas de duración atacando"
 }

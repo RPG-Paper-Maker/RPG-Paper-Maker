@@ -1976,5 +1976,11 @@
     "max":"マックス",
     "warning.models.default":"警告: モデル ID 1 はデフォルト オブジェクト用に予約されています (新しいオブジェクトの作成時)。他の目的には使用しないでください。",
     "warning.models.hero":"警告: モデル ID 2 はヒーロー オブジェクト用に予約されています (オブジェクトをヒーローとして定義するときに使用されます)。他の目的には使用しないでください。",
-    "is.climbing": "登っている"
+    "is.climbing": "登っている",
+    "each.second": "毎秒",
+    "climbing.speed": "上昇速度",
+    "open.default.folder": "デフォルトのフォルダを開く",
+    "weaked": "弱った",
+    "battlers.frame.duration": "バトラーのフレーム持続時間",
+    "battlers.frame.attacking.duration": "バトラーのフレーム攻撃持続時間"
 }

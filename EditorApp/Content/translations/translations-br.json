@@ -1976,5 +1976,11 @@
     "max":"máx.",
     "warning.models.default":"CUIDADO: MODEL ID 1 ESTÁ RESERVADO PARA O OBJETO PADRÃO (CRIAÇÃO DE NOVO OBJETO). NÃO USE PARA MAIS NADA.",
     "warning.models.hero":"ATENÇÃO: MODELO ID 2 ESTÁ RESERVADO PARA O OBJETO HERÓI (PARA DEFINIR COMO HERÓI). NÃO USE PARA MAIS NADA.",
-    "is.climbing": "está escalando"
+    "is.climbing": "está escalando",
+    "each.second": "Cada segundo",
+    "climbing.speed": "Velocidade de escalada",
+    "open.default.folder": "Abra a pasta padrão",
+    "weaked": "Enfraquecido",
+    "battlers.frame.duration": "Batalhadores de quadro de duração",
+    "battlers.frame.attacking.duration": "Batalhadores de quadro de duração atacando"
 }
