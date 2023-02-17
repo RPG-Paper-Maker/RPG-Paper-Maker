@@ -64,9 +64,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-356</y>
+                <y>-641</y>
                 <width>252</width>
-                <height>1861</height>
+                <height>1973</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_13">
@@ -526,6 +526,42 @@
                       </item>
                       <item>
                        <layout class="QVBoxLayout" name="verticalLayout_27">
+                        <item>
+                         <layout class="QVBoxLayout" name="verticalLayout_40">
+                          <item>
+                           <widget class="QLabel" name="labelBattlersFrameDuration">
+                            <property name="text">
+                             <string>Battlers frame duration:</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLineEdit" name="lineEditBattlersFrameDuration">
+                            <property name="text">
+                             <string>Common.Mathf.random(250, 300)</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </item>
+                        <item>
+                         <layout class="QVBoxLayout" name="verticalLayout_41">
+                          <item>
+                           <widget class="QLabel" name="labelBattlersFrameAttackingDuration">
+                            <property name="text">
+                             <string>Battlers frame atk duration:</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLineEdit" name="lineEditBattlersFrameAttackingDuration">
+                            <property name="text">
+                             <string>250</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </item>
                         <item>
                          <widget class="QLabel" name="labelBattlersRows">
                           <property name="text">

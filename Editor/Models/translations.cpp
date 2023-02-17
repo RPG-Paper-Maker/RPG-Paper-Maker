@@ -2001,6 +2001,8 @@ const QString Translations::EACH_SECOND = "each.second";
 const QString Translations::CLIMBING_SPEED = "climbing.speed";
 const QString Translations::OPEN_DEFAULT_FOLDER = "open.default.folder";
 const QString Translations::WEAKED = "weaked";
+const QString Translations::BATTLERS_FRAME_DURATION = "battlers.frame.duration";
+const QString Translations::BATTLERS_FRAME_ATTACKING_DURATION = "battlers.frame.attacking.duration";
 
 // -------------------------------------------------------
 //

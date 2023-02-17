@@ -1980,5 +1980,7 @@
     "each.second": "Chaque seconde",
     "climbing.speed": "Vitesse d'escalade",
     "open.default.folder": "Ouvrir le dossier par défaut",
-    "weaked": "Affaibli"
+    "weaked": "Affaibli",
+    "battlers.frame.duration": "Durée frame battlers",
+    "battlers.frame.attacking.duration": "Durée frame battlers attaquant"
 }

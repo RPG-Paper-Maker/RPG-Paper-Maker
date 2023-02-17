@@ -152,6 +152,8 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->panelPrimitiveClimbingSpeed->initializeNumberAndUpdate(systemDatas->climbingSpeed(), false);
     ui->spinBoxAnimationFrames->setValue(systemDatas->framesAnimation());
     ui->spinBoxBattlersFrames->setValue(systemDatas->battlersFrames());
+    ui->lineEditBattlersFrameDuration->setText(systemDatas->battlersFrameDuration());
+    ui->lineEditBattlersFrameAttackingDuration->setText(systemDatas->battlersFrameAttackingDuration());
     ui->spinBoxBattlersColumns->setValue(systemDatas->battlersColumns());
     ui->spinBoxAutotilesFrames->setValue(systemDatas->autotilesFrames());
     ui->spinBoxAutotilesFrameDuration->setValue(systemDatas->autotilesFrameDuration());
@@ -667,6 +669,8 @@ void DialogSystems::translate()
         ::BACKGROUND));
     ui->groupBoxFrames->setTitle(RPM::translate(Translations::FRAMES));
     ui->labelBattlersFrames->setText(RPM::translate(Translations::BATTLERS_FRAMES) + RPM::COLON);
+    ui->labelBattlersFrameDuration->setText(RPM::translate(Translations::BATTLERS_FRAME_DURATION) + RPM::COLON);
+    ui->labelBattlersFrameAttackingDuration->setText(RPM::translate(Translations::BATTLERS_FRAME_ATTACKING_DURATION) + RPM::COLON);
     ui->labelBattlersRows->setText(RPM::translate(Translations::BATTLERS_ROWS) + RPM::COLON);
     ui->pushButtonEnterNameOptions->setText(RPM::translate(Translations
         ::ENTER_NAME_OPTIONS) + RPM::DOT_DOT_DOT);
@@ -778,6 +782,20 @@ void DialogSystems::on_spinBoxAnimationFrames_valueChanged(int i) {
 void DialogSystems::on_spinBoxBattlersFrames_valueChanged(int i)
 {
     RPM::get()->project()->gameDatas()->systemDatas()->setBattlersFrames(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_lineEditBattlersFrameDuration_textEdited(const QString &text)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setBattlersFrameDuration(text);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_lineEditBattlersFrameAttackingDuration_textEdited(const QString &text)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setBattlersFrameAttackingDuration(text);
 }
 
 // -------------------------------------------------------

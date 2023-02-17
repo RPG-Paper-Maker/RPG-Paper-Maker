@@ -67,6 +67,8 @@ public:
     static const QString JSON_ANTIALIASING;
     static const QString JSON_MAP_FRAME_DURATION;
     static const QString JSON_BATTLERS_FRAMES;
+    static const QString JSON_BATTLERS_FRAME_DURATION;
+    static const QString JSON_BATTLERS_FRAME_ATTACKING_DURATION;
     static const QString JSON_BATTLERS_COLUMNS;
     static const QString JSON_PRICE_SOLD_ITEM;
     static const QString JSON_ENTER_NAME_TABLE;
@@ -82,6 +84,8 @@ public:
     static const bool DEFAULT_IS_MOUSE_CONTROLS;
     static const int DEFAULT_MAP_FRAME_DURATION;
     static const int DEFAULT_BATTLERS_FRAMES;
+    static const QString DEFAULT_BATTLERS_FRAME_DURATION;
+    static const QString DEFAULT_BATTLERS_FRAME_ATTACKING_DURATION;
     static const int DEFAULT_BATTLERS_COLUMNS;
     static const double DEFAULT_PRICE_SOLD_ITEM;
     static const int DEFAULT_AUTOTILES_FRAMES;
@@ -132,6 +136,10 @@ public:
     void setFramesAnimation(int f);
     int battlersFrames() const;
     void setBattlersFrames(int battlersFrames);
+    QString battlersFrameDuration() const;
+    void setBattlersFrameDuration(QString battlersFrameDuration);
+    QString battlersFrameAttackingDuration() const;
+    void setBattlersFrameAttackingDuration(QString battlersFrameAttackingDuration);
     int battlersColumns() const;
     void setBattlersColumns(int battlersColumns);
     int autotilesFrames() const;
@@ -231,6 +239,8 @@ private:
     QString m_pathBR;
     int m_framesAnimation;
     int m_battlersFrames;
+    QString m_battlersFrameDuration;
+    QString m_battlersFrameAttackingDuration;
     int m_battlersColumns;
     int m_autotilesFrames;
     int m_autotilesFrameDuration;

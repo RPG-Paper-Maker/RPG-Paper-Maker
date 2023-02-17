@@ -1980,5 +1980,7 @@
     "each.second": "Each second",
     "climbing.speed": "Climbing speed",
     "open.default.folder": "Open default folder",
-    "weaked": "Weaked"
+    "weaked": "Weaked",
+    "battlers.frame.duration": "Battlers frame duration",
+    "battlers.frame.attacking.duration": "Battlers frame atk duration"
 }

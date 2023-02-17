@@ -73,6 +73,8 @@ private slots:
     void on_spinBoxRayIngame_valueChanged(int i);
     void on_spinBoxAnimationFrames_valueChanged(int i);
     void on_spinBoxBattlersFrames_valueChanged(int i);
+    void on_lineEditBattlersFrameDuration_textEdited(const QString &text);
+    void on_lineEditBattlersFrameAttackingDuration_textEdited(const QString &text);
     void on_spinBoxBattlersColumns_valueChanged(int i);
     void on_spinBoxAutotilesFrames_valueChanged(int i);
     void on_spinBoxAutotilesFrameDuration_valueChanged(int i);

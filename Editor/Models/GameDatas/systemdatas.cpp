@@ -63,6 +63,8 @@ const QString SystemDatas::JSON_INITIAL_PARTY_MEMBERS = "initialPartyMembers";
 const QString SystemDatas::JSON_ANTIALIASING = "aa";
 const QString SystemDatas::JSON_MAP_FRAME_DURATION = "mfd";
 const QString SystemDatas::JSON_BATTLERS_FRAMES = "battlersFrames";
+const QString SystemDatas::JSON_BATTLERS_FRAME_DURATION = "bfd";
+const QString SystemDatas::JSON_BATTLERS_FRAME_ATTACKING_DURATION = "bfad";
 const QString SystemDatas::JSON_BATTLERS_COLUMNS = "battlersColumns";
 const QString SystemDatas::JSON_PRICE_SOLD_ITEM = "priceSoldItem";
 const QString SystemDatas::JSON_ENTER_NAME_TABLE = "enterNameTable";
@@ -78,6 +80,8 @@ const bool SystemDatas::DEFAULT_ANTIALIASING = false;
 const bool SystemDatas::DEFAULT_IS_MOUSE_CONTROLS = true;
 const int SystemDatas::DEFAULT_MAP_FRAME_DURATION = 150;
 const int SystemDatas::DEFAULT_BATTLERS_FRAMES = 4;
+const QString SystemDatas::DEFAULT_BATTLERS_FRAME_DURATION = "Common.Mathf.random(250, 300)";
+const QString SystemDatas::DEFAULT_BATTLERS_FRAME_ATTACKING_DURATION = "250";
 const int SystemDatas::DEFAULT_BATTLERS_COLUMNS = 9;
 const double SystemDatas::DEFAULT_PRICE_SOLD_ITEM = 50.0;
 const int SystemDatas::DEFAULT_AUTOTILES_FRAMES = 4;
@@ -115,6 +119,8 @@ SystemDatas::SystemDatas() :
     m_idObjectHero(1),
     m_framesAnimation(4),
     m_battlersFrames(DEFAULT_BATTLERS_FRAMES),
+    m_battlersFrameDuration(DEFAULT_BATTLERS_FRAME_DURATION),
+    m_battlersFrameAttackingDuration(DEFAULT_BATTLERS_FRAME_ATTACKING_DURATION),
     m_battlersColumns(DEFAULT_BATTLERS_COLUMNS),
     m_autotilesFrames(DEFAULT_AUTOTILES_FRAMES),
     m_autotilesFrameDuration(DEFAULT_AUTOTILES_FRAME_DURATION),
@@ -311,6 +317,26 @@ int SystemDatas::battlersFrames() const
 void SystemDatas::setBattlersFrames(int battlersFrames)
 {
     m_battlersFrames = battlersFrames;
+}
+
+QString SystemDatas::battlersFrameDuration() const
+{
+    return m_battlersFrameDuration;
+}
+
+void SystemDatas::setBattlersFrameDuration(QString battlersFrameDuration)
+{
+    m_battlersFrameDuration = battlersFrameDuration;
+}
+
+QString SystemDatas::battlersFrameAttackingDuration() const
+{
+    return m_battlersFrameAttackingDuration;
+}
+
+void SystemDatas::setBattlersFrameAttackingDuration(QString battlersFrameAttackingDuration)
+{
+    m_battlersFrameAttackingDuration = battlersFrameAttackingDuration;
 }
 
 int SystemDatas::battlersColumns() const
@@ -996,6 +1022,14 @@ void SystemDatas::read(const QJsonObject &json){
     {
         m_battlersFrames = json[JSON_BATTLERS_FRAMES].toInt();
     }
+    if (json.contains(JSON_BATTLERS_FRAME_DURATION))
+    {
+        m_battlersFrameDuration = json[JSON_BATTLERS_FRAME_DURATION].toString();
+    }
+    if (json.contains(JSON_BATTLERS_FRAME_ATTACKING_DURATION))
+    {
+        m_battlersFrameAttackingDuration = json[JSON_BATTLERS_FRAME_ATTACKING_DURATION].toString();
+    }
     if (json.contains(JSON_BATTLERS_COLUMNS))
     {
         m_battlersColumns = json[JSON_BATTLERS_COLUMNS].toInt();
@@ -1251,6 +1285,14 @@ void SystemDatas::write(QJsonObject &json) const{
     if (m_battlersFrames != DEFAULT_BATTLERS_FRAMES)
     {
         json[JSON_BATTLERS_FRAMES] = m_battlersFrames;
+    }
+    if (m_battlersFrameDuration != DEFAULT_BATTLERS_FRAME_DURATION)
+    {
+        json[JSON_BATTLERS_FRAME_DURATION] = m_battlersFrameDuration;
+    }
+    if (m_battlersFrameAttackingDuration != DEFAULT_BATTLERS_FRAME_ATTACKING_DURATION)
+    {
+        json[JSON_BATTLERS_FRAME_ATTACKING_DURATION] = m_battlersFrameAttackingDuration;
     }
     if (m_battlersColumns != DEFAULT_BATTLERS_COLUMNS)
     {

@@ -41,7 +41,8 @@
         "Adding window skin blue, green, red, black for default project",
         "Command move object: jump clear message error when peak < final position",
         "Command change variables: adding error message when no object found for characteristics",
-        "Command change weathier: changing default snow y rotation / addition"
+        "Command change weathier: changing default snow y rotation / addition",
+        "Battler frame duration / frame attacking duration in systems"
     ],
     "bugs": [
         "Engine might crash if non existing autotile in tileset",
@@ -77,6 +78,7 @@
         "Copying map several times remove copied map editings"
     ],
     "finished": [
+        2,
         2,
         2,
         2,

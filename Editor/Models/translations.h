@@ -2014,6 +2014,8 @@ public:
     static const QString CLIMBING_SPEED;
     static const QString OPEN_DEFAULT_FOLDER;
     static const QString WEAKED;
+    static const QString BATTLERS_FRAME_DURATION;
+    static const QString BATTLERS_FRAME_ATTACKING_DURATION;
 
     Translations();
     virtual ~Translations();
