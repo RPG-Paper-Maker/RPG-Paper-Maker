@@ -135,16 +135,6 @@ void TreeMapTag::copyItem(const QStandardItem* from,
 
             // Copy content
             Common::copyPath(pathMapSource, pathMapTarget);
-
-            // Remove temp
-            QDir(Common::pathCombine(
-                     pathMapTarget,
-                     RPM::FOLDER_TEMP)).removeRecursively();
-            QDir(Common::pathCombine(
-                     pathMapTarget,
-                     RPM::FOLDER_UNDO_REDO_TEMP_MAP)).removeRecursively();
-            QDir(pathMapTarget).mkdir(RPM::FOLDER_TEMP);
-            QDir(pathMapTarget).mkdir(RPM::FOLDER_UNDO_REDO_TEMP_MAP);
         }
     }
 
@@ -189,9 +179,18 @@ void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
             copyTag->setId(newId);
             QString newPathMap = Common::pathCombine(pathMaps, newMapName);
             Common::copyPath(pathMap, newPathMap);
-            RPM::writeJSON(Common::pathCombine(newPathMap,
-                                                RPM::FILE_MAP_INFOS),
-                             properties);
+            RPM::writeJSON(Common::pathCombine(newPathMap, RPM::FILE_MAP_INFOS), properties);
+
+            // If new map contains temp, add it to list
+            if (QDir(Common::pathCombine(newPathMap, RPM::FOLDER_TEMP))
+                .entryInfoList(QDir::NoDotAndDotDot|QDir::AllEntries).count() > 0)
+            {
+                QSet<int> mapsToSave;
+                RPM::get()->project()->readMapsToSave(mapsToSave);
+                mapsToSave.insert(newId);
+                RPM::get()->project()->writeMapsToSave(mapsToSave);
+                RPM::mapsUndoRedo.insert(newId);
+            }
         }
     }
 

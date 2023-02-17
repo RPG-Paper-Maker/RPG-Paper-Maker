@@ -374,22 +374,28 @@ void WidgetTreeLocalMaps::copy(QStandardItem* item){
 void WidgetTreeLocalMaps::cleanCopy(){
     if (m_copied != nullptr){
         SuperListItem::deleteModelTree(m_copied);
-        delete reinterpret_cast<SuperListItem*>(m_copied->data().value
-            <qintptr>());
+        delete reinterpret_cast<SuperListItem*>(m_copied->data().value<qintptr>());
         delete m_copied;
         m_copied = nullptr;
 
-        // Remove files temp
-        QString pathMaps = Common::pathCombine(m_pathProject, RPM::PATH_MAPS);
-        QDir(Common::pathCombine(
-                 pathMaps, RPM::FOLDER_TEMP)).removeRecursively();
-        QDir(pathMaps).mkdir(RPM::FOLDER_TEMP);
+        // Remove maps temp
+        QString pathMaps = Common::pathCombine(Common::pathCombine(m_pathProject,
+            RPM::PATH_MAPS), RPM::FOLDER_TEMP);
+        QDir dirMaps(pathMaps);
+        foreach (QFileInfo id, dirMaps.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
+        {
+            QDir(id.filePath()).removeRecursively();
+        }
     }
 }
 
 // -------------------------------------------------------
 
 void WidgetTreeLocalMaps::paste(QStandardItem* item){
+    if (m_copied == nullptr)
+    {
+        return;
+    }
     QStandardItem* copy = new QStandardItem;
     QModelIndex index;
 

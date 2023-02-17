@@ -72,7 +72,9 @@
         "Command set dialog box options: faceset Y not applied",
         "Update transformations button visible if no state in object",
         "3D objects overflow might make engine crash",
-        "Mountains collisions might block if going from -1 to 0 Y position"
+        "Mountains collisions might block if going from -1 to 0 Y position",
+        "Battlers might flicker if autotiles in battle map",
+        "Copying map several times remove copied map editings"
     ],
     "finished": [
         2,
@@ -89,6 +91,8 @@
         2,
         2,
         
+        2,
+        2,
         2,
         2,
         2,
