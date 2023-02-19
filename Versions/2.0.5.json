@@ -1,0 +1,12 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [],
+    "bugs": [
+        "Command move object: if drawing a way path, the object window disappears"
+    ],
+    "finished": [
+        2
+    ]
+}

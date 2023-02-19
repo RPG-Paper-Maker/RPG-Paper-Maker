@@ -665,7 +665,6 @@ void DialogCommandMoveObject::on_updateJsonMoves(SuperListItem *)
         if (this->parent() != nullptr)
         {
             MainWindow::get()->mapEditor()->updateWayPreview(pos, orientations);
-            reinterpret_cast<QDialog *>(this->parent())->setWindowOpacity(orientations.isEmpty() ? 1 : 0);
         }
     }
 }
