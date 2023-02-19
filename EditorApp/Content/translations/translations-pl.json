@@ -1048,7 +1048,7 @@
     "you.have.maps.not.saved": "Posiadasz mapy, które nie zostały zapisane.\nCzy chcesz je zapisać?",
     "no.hero.defined": "Brak ustawionego bohatera (start drużyny)",
     "no.hero.defined.description": "Nie ma określonego bohatera. Należy ustawić bohatera przed ponownym uruchomieniem.\n Możesz zdefiniować obiekt jako bohatera, przejdź do trybu obiektów, zaznacz obiekt i prawym myszki wybierz opcję \"Ustaw bohatera (start drużyny)\"",
-    "copyright": "RPG Paper Maker jest darmowy do użytku niekomercyjnego. Nie musisz płacić żadnej opłaty, o ile nie planujesz publikować komercyjnych gier wykonanych za pomocą RPG Paper Maker\n- - -\nPolskie tłumaczenie: Reptile (reptile@o2.pl),\nWersja tłumaczenia: 1981-660127",
+    "copyright": "RPG Paper Maker jest darmowy do użytku niekomercyjnego. Nie musisz płacić żadnej opłaty, o ile nie planujesz publikować komercyjnych gier wykonanych za pomocą RPG Paper Maker\n- - -\nPolskie tłumaczenie: Reptile (reptile@o2.pl),\nWersja tłumaczenia: 1988-660219",
     "built.on": "Wydany",
     "thanks.patreon": "Wielkie podziękowania darczyńców Patreonu, w szczególności tym obecnym.",
     "thanks.patreon.previous": "Podziękowania dla wszystkich poprzednich darczyńców Patreon",
@@ -1980,9 +1980,9 @@
     "warning.models.hero":"UWAGA: MODEL ID 2 ZAREZERWOWANY DLA BOHATERA (DO ZDEFINIOWANIA JAKO BOHATERA). NIE UŻYWAĆ, NIE MODYFIKOWAĆ.",
     "is.climbing": "wspina się",
     "each.second": "Każda sekunda",
-    "climbing.speed": "Szybkość wspinaczki",
-    "open.default.folder": "Otwórz domyślny folder",
-    "weaked": "osłabiony",
-    "battlers.frame.duration": "Bitwy na klatki czasu trwania",
-    "battlers.frame.attacking.duration": "Atak walczących w ramce czasu trwania"
+    "climbing.speed": "Szybkość wspinania",
+    "open.default.folder": "Otwórz folder domyślny",
+    "weaked": "Słabość",
+    "battlers.frame.duration": "[Battlers] czas trwania klatki",
+    "battlers.frame.attacking.duration": "[Battlers] czas trwania klatki ataku"
 }
