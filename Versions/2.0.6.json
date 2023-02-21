@@ -1,0 +1,26 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/items.json",
+            "target": "Engine/Content/basic/Content/Datas/items.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/commonEvents.json",
+            "target": "Engine/Content/basic/Content/Datas/commonEvents.json"
+        }
+    ],
+	"features": [
+
+    ],
+    "bugs": [
+        "Default project roots items making game crash"
+    ],
+    "finished": [
+
+        2
+    ]
+}
