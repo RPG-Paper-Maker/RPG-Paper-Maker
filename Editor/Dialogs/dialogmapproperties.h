@@ -56,6 +56,7 @@ private slots:
     void on_radioButtonColor_toggled(bool checked);
     void on_radioButtonPicture_toggled(bool checked);
     void on_radioButtonSkybox_toggled(bool checked);
+    void on_checkBoxSunLight_toggled(bool checked);
     void on_treeViewRandomBattlesNeedsUpdateJson(SuperListItem *);
 };
 

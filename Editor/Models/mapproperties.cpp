@@ -35,8 +35,10 @@ const QString MapProperties::JSON_RANDOM_BATTLE_VARIANCE = "randomBattleVariance
 const QString MapProperties::JSON_OVERFLOW_SPRITES = "ofsprites";
 const QString MapProperties::JSON_OVERFLOW_OBJECTS3D = "of3d";
 const QString MapProperties::JSON_OVERFLOW_MOUNTAINS = "ofmoun";
+const QString MapProperties::JSON_IS_SUN_LIGHT = "isl";
 const int MapProperties::DEFAULT_RANDOM_BATTLE_NUMBER_STEP = 300;
 const int MapProperties::DEFAULT_RANDOM_BATTLE_VARIANCE = 20;
+const bool MapProperties::DEFAULT_IS_SUN_LIGHT = true;
 
 // -------------------------------------------------------
 //
@@ -76,7 +78,8 @@ MapProperties::MapProperties(int i, QString name, int l, int w, int h, int d,
     m_randomBattleMapID(PrimitiveValue::createDefaultDataBaseValue()),
     m_randomBattles(new QStandardItemModel),
     m_randomBattleNumberStep(new PrimitiveValue(DEFAULT_RANDOM_BATTLE_NUMBER_STEP)),
-    m_randomBattleVariance(new PrimitiveValue(DEFAULT_RANDOM_BATTLE_VARIANCE))
+    m_randomBattleVariance(new PrimitiveValue(DEFAULT_RANDOM_BATTLE_VARIANCE)),
+    m_isSunLight(DEFAULT_IS_SUN_LIGHT)
 {
     m_cameraProperties->setModelDataBase(RPM::get()->project()->gameDatas()
         ->systemDatas()->modelcameraProperties());
@@ -230,6 +233,16 @@ PrimitiveValue * MapProperties::randomBattleNumberStep() const
 PrimitiveValue * MapProperties::randomBattleVariance() const
 {
     return m_randomBattleVariance;
+}
+
+bool MapProperties::isSunLight() const
+{
+    return m_isSunLight;
+}
+
+void MapProperties::setIsSunLight(bool isSunLight)
+{
+    m_isSunLight = isSunLight;
 }
 
 // -------------------------------------------------------
@@ -443,6 +456,7 @@ void MapProperties::setCopy(const SuperListItem &super) {
         }
         m_outOverflowMountains.insert(i.key(), set);
     }
+    m_isSunLight = properties->m_isSunLight;
     this->initializeHeaders();
 }
 
@@ -781,6 +795,11 @@ void MapProperties::read(const QJsonObject &json){
         m_outOverflowObjects3D);
     this->readOverflow(json[JSON_OVERFLOW_MOUNTAINS].toArray(),
         m_outOverflowMountains);
+
+    if (json.contains(JSON_IS_SUN_LIGHT))
+    {
+        m_isSunLight = json[JSON_IS_SUN_LIGHT].toBool();
+    }
 }
 
 // -------------------------------------------------------
@@ -857,4 +876,9 @@ void MapProperties::write(QJsonObject &json) const {
     this->writeOverflow(json, m_outOverflowSprites, JSON_OVERFLOW_SPRITES);
     this->writeOverflow(json, m_outOverflowObjects3D, JSON_OVERFLOW_OBJECTS3D);
     this->writeOverflow(json, m_outOverflowMountains, JSON_OVERFLOW_MOUNTAINS);
+
+    if (m_isSunLight != DEFAULT_IS_SUN_LIGHT)
+    {
+        json[JSON_IS_SUN_LIGHT] = m_isSunLight;
+    }
 }

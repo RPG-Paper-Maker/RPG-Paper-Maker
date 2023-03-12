@@ -53,8 +53,10 @@ public:
     static const QString JSON_OVERFLOW_SPRITES;
     static const QString JSON_OVERFLOW_OBJECTS3D;
     static const QString JSON_OVERFLOW_MOUNTAINS;
+    static const QString JSON_IS_SUN_LIGHT;
     static const int DEFAULT_RANDOM_BATTLE_NUMBER_STEP;
     static const int DEFAULT_RANDOM_BATTLE_VARIANCE;
+    static const bool DEFAULT_IS_SUN_LIGHT;
 
     MapProperties();
     MapProperties(QString path);
@@ -90,6 +92,8 @@ public:
     QStandardItemModel * randomBattles() const;
     PrimitiveValue * randomBattleNumberStep() const;
     PrimitiveValue * randomBattleVariance() const;
+    bool isSunLight() const;
+    void setIsSunLight(bool isSunLight);
 
     QString realName() const;
     void initializeHeaders();
@@ -149,6 +153,7 @@ protected:
     QHash<Portion, QSet<Position> *> m_outOverflowSprites;
     QHash<Portion, QSet<Position> *> m_outOverflowObjects3D;
     QHash<Portion, QSet<Position> *> m_outOverflowMountains;
+    bool m_isSunLight;
 };
 
 #endif // MAPPROPERTIES_H

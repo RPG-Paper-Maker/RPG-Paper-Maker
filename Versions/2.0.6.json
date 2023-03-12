@@ -11,16 +11,26 @@
             "repo": "RPG-Paper-Maker",
             "source": "EditorApp/Content/basic/Content/Datas/commonEvents.json",
             "target": "Engine/Content/basic/Content/Datas/commonEvents.json"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/HUD/Facesets/others.png",
+            "target": "Engine/Content/BR/Content/Images/HUD/Facesets/others.png"
         }
     ],
 	"features": [
-
+        "Improve mountains performances in game",
+        "Sun light (in game only)"
     ],
     "bugs": [
-        "Default project roots items making game crash"
+        "Default project roots items making game crash",
+        "Can use skill on all even if target condition is wrong"
     ],
     "finished": [
-
+        2,
+        1,
+        
+        2,
         2
     ]
 }

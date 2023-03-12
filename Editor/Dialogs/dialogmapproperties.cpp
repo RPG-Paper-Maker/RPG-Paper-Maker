@@ -241,6 +241,13 @@ void DialogMapProperties::on_radioButtonSkybox_toggled(bool checked)
 
 // -------------------------------------------------------
 
+void DialogMapProperties::on_checkBoxSunLight_toggled(bool checked)
+{
+    m_mapProperties.setIsSunLight(checked);
+}
+
+// -------------------------------------------------------
+
 void DialogMapProperties::on_treeViewRandomBattlesNeedsUpdateJson(SuperListItem *)
 {
     ui->treeViewRandomBattles->updateAbsoluteAllNodesString();
