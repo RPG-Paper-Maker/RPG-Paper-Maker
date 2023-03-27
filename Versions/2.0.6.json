@@ -20,19 +20,23 @@
     ],
 	"features": [
         "Improve mountains performances in game",
-        "Sun light (in game only)"
+        "Sun light (in game only)",
+        "Default project page 5 only temp variables"
     ],
     "bugs": [
         "Default project roots items making game crash",
         "Can use skill on all even if target condition is wrong",
         "Wrong portions loading when moving camera far",
         "Improve collision FPS with lot of objects in map",
-        "Engine only: sometimes bug when at least one animated autotile in tileset"
+        "Engine only: sometimes bug when at least one animated autotile in tileset",
+        "Default project day skybox wrong front texture"
     ],
     "finished": [
         2,
         2,
+        2,
         
+        2,
         2,
         2,
         2,
