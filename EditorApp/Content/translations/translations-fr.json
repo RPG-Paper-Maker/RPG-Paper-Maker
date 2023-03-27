@@ -1982,5 +1982,6 @@
     "open.default.folder": "Ouvrir le dossier par défaut",
     "weaked": "Affaibli",
     "battlers.frame.duration": "Durée frame battlers",
-    "battlers.frame.attacking.duration": "Durée frame battlers attaquant"
+    "battlers.frame.attacking.duration": "Durée frame battlers attaquant",
+    "sun.light": "Lumière du soleil"
 }

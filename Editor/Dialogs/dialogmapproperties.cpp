@@ -95,6 +95,7 @@ void DialogMapProperties::initialize() {
     ui->widgetPictureSky->initializeSuper(m_mapProperties.skyPictureID());
     ui->panelPrimitiveValueSkyBoxID->initializeDataBaseAndUpdate(m_mapProperties
         .skyboxID());
+    ui->checkBoxSunLight->setChecked(m_mapProperties.isSunLight());
 
     // Random battles
     connect(ui->treeViewRandomBattles, SIGNAL(needsUpdateJson(SuperListItem *)),
@@ -144,6 +145,7 @@ void DialogMapProperties::translate()
     ui->labelNumberOfStepsAfter->setText(RPM::translate(Translations::NUMBER_OF_STEPS_AFTER_NEXT_BATTLE) + RPM::COLON);
     ui->labelWithVariationInPercent->setText(RPM::translate(Translations::VARIANCE) +
         RPM::SPACE + RPM::PARENTHESIS_LEFT + "%" + RPM::PARENTHESIS_RIGHT + RPM::COLON);
+    ui->checkBoxSunLight->setText(RPM::translate(Translations::SUN_LIGHT));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

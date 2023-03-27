@@ -2016,6 +2016,7 @@ public:
     static const QString WEAKED;
     static const QString BATTLERS_FRAME_DURATION;
     static const QString BATTLERS_FRAME_ATTACKING_DURATION;
+    static const QString SUN_LIGHT;
 
     Translations();
     virtual ~Translations();
