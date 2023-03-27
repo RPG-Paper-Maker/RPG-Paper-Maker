@@ -231,6 +231,7 @@ void Map::loadAutotiles() {
             ->specialElementsDatas()->model(PictureKind::Autotiles);
     int i, j, l, m, id;
     QImage newImage(64 * m_squareSize, RPM::MAX_PIXEL_SIZE, QImage::Format_ARGB32);
+    newImage.fill(Qt::GlobalColor::transparent);
     SystemPicture *picture;
     QPainter painter;
     painter.begin(&newImage);
@@ -324,12 +325,23 @@ TextureSeveral * Map::editPictureAutotile(QPainter &painter, TextureSeveral
         }
         textureAutotile->setEnd(id, point);
         textureAutotile->addToList(id, point);
-        if (!isAnimated && offset == 6) {
+        if (!isAnimated && offset == getMaxAutotilesOffsetTexture()) {
             textureAutotile = this->resetPictureAutotile(painter, textureAutotile,
                 newImage, offset);
         }
     }
+    if (isAnimated) {
+        textureAutotile = this->resetPictureAutotile(painter, textureAutotile,
+            newImage, offset);
+    }
     return textureAutotile;
+}
+
+// -------------------------------------------------------
+
+int Map::getMaxAutotilesOffsetTexture()
+{
+    return qFloor(4096 / (9 * RPM::getSquareSize()));
 }
 
 // -------------------------------------------------------

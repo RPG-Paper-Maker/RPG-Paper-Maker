@@ -136,6 +136,7 @@ public:
     void paintPictureAutotile(QPainter& painter,
                               QImage& image, int& offset, QPoint &point);
     static void editPictureAutotilePreview(QImage& image, QImage& refImage, bool isAnimated);
+    static int getMaxAutotilesOffsetTexture();
     void loadMountains();
     TextureSeveral *loadPictureMountain(QPainter &painter, TextureSeveral
         *textureSeveral, QImage &newImage, SystemPicture *picture, int &offset,

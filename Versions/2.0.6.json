@@ -24,12 +24,18 @@
     ],
     "bugs": [
         "Default project roots items making game crash",
-        "Can use skill on all even if target condition is wrong"
+        "Can use skill on all even if target condition is wrong",
+        "Wrong portions loading when moving camera far",
+        "Improve collision FPS with lot of objects in map",
+        "Engine only: sometimes bug when at least one animated autotile in tileset"
     ],
     "finished": [
         2,
-        1,
+        2,
         
+        2,
+        2,
+        2,
         2,
         2
     ]
