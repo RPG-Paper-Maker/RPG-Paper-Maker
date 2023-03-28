@@ -196,6 +196,22 @@ QStandardItemModel * SystemStatus::modelCharacteristics() const
 //
 // -------------------------------------------------------
 
+void SystemStatus::setNameMessages(QStandardItemModel *model, int index, QString
+    name, QString messageAllyAffected, QString messageEnemyAffected, QString
+    messageHealed, QString messageStillAffected)
+{
+    QStandardItem *item = model->item(index);
+    SystemStatus *status = reinterpret_cast<SystemStatus*>(item->data().value<quintptr>());
+    status->setName(name);
+    status->messageAllyAffected()->setMessageValue(messageAllyAffected);
+    status->messageEnemyAffected()->setMessageValue(messageEnemyAffected);
+    status->messageStatusHealed()->setMessageValue(messageHealed);
+    status->messageStatusStillAffected()->setMessageValue(messageStillAffected);
+    item->setText(status->toString());
+}
+
+// -------------------------------------------------------
+
 void SystemStatus::clearReleaseStartTurn()
 {
     SuperListItem::deleteModel(m_modelReleaseStartTurn, false);

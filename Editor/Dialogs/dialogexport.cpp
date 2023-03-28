@@ -56,7 +56,7 @@ void DialogExport::translate() {
     ui->labelDeployOS->setText(RPM::translate(Translations::OS) + RPM::COLON);
     ui->labelLocation->setText(RPM::translate(Translations::LOCATION) + RPM
         ::COLON);
-    ui->checkBoxProtect->setText(RPM::translate(Translations::PROTECT_DATAS));
+    ui->checkBoxProtect->setText(RPM::translate(Translations::PROTECT_DATA));
     ui->radioButtonBrowser->setText(RPM::translate(Translations::DEPLOY_WEB));
     ui->radioButtonDesktop->setText(RPM::translate(Translations::DEPLOY_DESKTOP));
     ui->groupBoxVersion->setTitle(RPM::translate(Translations::VERSION));

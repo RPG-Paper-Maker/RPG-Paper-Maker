@@ -154,9 +154,9 @@ void SkillsDatas::setDefault(){
 void SkillsDatas::setDefaultTranslations()
 {
     SystemCommonSkillItem::setNameDescription(m_model, 0, RPM::translate(Translations::ATTACK), RPM::translate(Translations::ATTACK_DESCRIPTION));
-    SystemCommonSkillItem::setNameDescription(m_model, 1, RPM::translate(Translations::SKILL), RPM::translate(Translations::ATTACK_DESCRIPTION));
-    SystemCommonSkillItem::setNameDescription(m_model, 2, RPM::translate(Translations::ITEM), RPM::translate(Translations::ATTACK_DESCRIPTION));
-    SystemCommonSkillItem::setNameDescription(m_model, 3, RPM::translate(Translations::ESCAPE), RPM::translate(Translations::ATTACK_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 1, RPM::translate(Translations::SKILL), RPM::translate(Translations::SKILL_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 2, RPM::translate(Translations::ITEM), RPM::translate(Translations::ITEM_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 3, RPM::translate(Translations::ESCAPE), RPM::translate(Translations::ESCAPE_DESCRIPTION));
     SystemCommonSkillItem::setNameDescription(m_model, 4, RPM::translate(Translations::END_TURN), RPM::translate(Translations::END_TURN_DESCRIPTION));
     SystemCommonSkillItem::setNameDescription(m_model, 5, RPM::translate(Translations::BLAZING_SWORD), RPM::translate(Translations::BLAZING_SWORD_DESCRIPTION));
     SystemCommonSkillItem::setNameDescription(m_model, 6, RPM::translate(Translations::POWER), RPM::translate(Translations::POWER_DESCRIPTION));
@@ -226,7 +226,19 @@ void SkillsDatas::setDefaultTranslations()
     SystemCommonSkillItem::setNameDescription(m_model, 70, RPM::translate(Translations::CUT), RPM::translate(Translations::CUT_DESCRIPTION));
     SystemCommonSkillItem::setNameDescription(m_model, 71, RPM::translate(Translations::CLAW), RPM::translate(Translations::CLAW_DESCRIPTION));
     SystemCommonSkillItem::setNameDescription(m_model, 72, RPM::translate(Translations::FANG), RPM::translate(Translations::FANG_DESCRIPTION));
-
+    SystemCommonSkillItem::setNameDescription(m_model, 73, RPM::translate(Translations::RESOLVE), RPM::translate(Translations::RESOLVE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 74, RPM::translate(Translations::SHINING_SLICE), RPM::translate(Translations::SHINING_SLICE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 75, RPM::translate(Translations::PRACTICED_THRUST), RPM::translate(Translations::PRACTICED_THRUST_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 76, RPM::translate(Translations::RAPID_STRIKES), RPM::translate(Translations::RAPID_STRIKES_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 77, RPM::translate(Translations::BLOODY_BRAWL), RPM::translate(Translations::BLOODY_BRAWL_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 78, RPM::translate(Translations::WIDE_AXE_SWING), RPM::translate(Translations::WIDE_AXE_SWING_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 79, RPM::translate(Translations::GAMBIT), RPM::translate(Translations::GAMBIT_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 80, RPM::translate(Translations::POISON_KNIFE), RPM::translate(Translations::POISON_KNIFE_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 81, RPM::translate(Translations::CALLED_SHOT), RPM::translate(Translations::CALLED_SHOT_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 82, RPM::translate(Translations::RICOCHET), RPM::translate(Translations::RICOCHET_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 83, RPM::translate(Translations::BLINDING_SHOT), RPM::translate(Translations::BLINDING_SHOT_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 84, RPM::translate(Translations::HIGH_NOON), RPM::translate(Translations::HIGH_NOON_DESCRIPTION));
+    SystemCommonSkillItem::setNameDescription(m_model, 85, RPM::translate(Translations::MAGIC_BLAST), RPM::translate(Translations::FANG_DESCRIPTION));
 }
 
 // -------------------------------------------------------

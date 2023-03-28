@@ -546,9 +546,9 @@ void MainWindow::translate() {
     ui->actionZoom_in->setText(RPM::translate(Translations::ZOOM_IN));
     ui->actionZoom_out->setText(RPM::translate(Translations::ZOOM_OUT));
     ui->actionDatas_manager->setText(RPM::translate(Translations
-        ::DATAS_MANAGER) + RPM::DOT_DOT_DOT);
+        ::DATA_MANAGER) + RPM::DOT_DOT_DOT);
     ui->actionDatas_manager->setIconText(RPM::translate(Translations
-        ::DATAS_MANAGER_TOOL));
+        ::DATA_MANAGER_TOOL));
     ui->actionSystems_manager->setText(RPM::translate(Translations
         ::SYSTEMS_MANAGER) + RPM::DOT_DOT_DOT);
     ui->actionSystems_manager->setIconText(RPM::translate(Translations

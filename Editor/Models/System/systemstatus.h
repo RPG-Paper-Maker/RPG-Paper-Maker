@@ -91,6 +91,10 @@ public:
     QStandardItemModel * modelEffects() const;
     QStandardItemModel * modelCharacteristics() const;
 
+    static void setNameMessages(QStandardItemModel *model, int index, QString name,
+        QString messageAllyAffected = "", QString messageEnemyAffected = "",
+        QString messageHealed = "", QString messageStillAffected = "");
+
     void clearReleaseStartTurn();
     void clearEffects();
     void clearCharacteristics();

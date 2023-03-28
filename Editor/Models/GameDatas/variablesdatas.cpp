@@ -84,10 +84,6 @@ void VariablesDatas::setDefaultTranslations()
     page = reinterpret_cast<SystemVariables *>(item->data().value<quintptr>());
     page->setName(RPM::translate(Translations::PAGE) + RPM::SPACE + "5");
     item->setText(page->toString());
-    item = page->model()->item(24);
-    variable = reinterpret_cast<SuperListItem *>(item->data().value<quintptr>());
-    variable->setName(RPM::translate(Translations::TEMP_VARIABLE));
-    item->setText(variable->toString());
 }
 
 // -------------------------------------------------------

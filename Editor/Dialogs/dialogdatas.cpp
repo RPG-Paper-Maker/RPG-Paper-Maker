@@ -546,7 +546,7 @@ void DialogDatas::updateTextures()
 // -------------------------------------------------------
 
 void DialogDatas::translate() {
-    this->setWindowTitle(RPM::translate(Translations::DATAS_MANAGER) + RPM
+    this->setWindowTitle(RPM::translate(Translations::DATA_MANAGER) + RPM
         ::DOT_DOT_DOT);
     ui->tabWidget->setTabText(0, RPM::translate(Translations::CLASSES));
     ui->tabWidget->setTabText(1, RPM::translate(Translations::HEROES));

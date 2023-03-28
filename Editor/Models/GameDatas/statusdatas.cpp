@@ -65,20 +65,20 @@ void StatusDatas::setDefault()
 
 void StatusDatas::setDefaultTranslations()
 {
-    SuperListItem::setModelItemName(m_model, 0, RPM::translate(Translations::KO));
-    SuperListItem::setModelItemName(m_model, 1, RPM::translate(Translations::POISONED));
-    SuperListItem::setModelItemName(m_model, 2, RPM::translate(Translations::BURNT));
-    SuperListItem::setModelItemName(m_model, 3, RPM::translate(Translations::PARALIZED));
-    SuperListItem::setModelItemName(m_model, 4, RPM::translate(Translations::CONFUSED));
-    SuperListItem::setModelItemName(m_model, 5, RPM::translate(Translations::MUTED));
-    SuperListItem::setModelItemName(m_model, 6, RPM::translate(Translations::SLEEPING));
-    SuperListItem::setModelItemName(m_model, 7, RPM::translate(Translations::BLIND));
-    SuperListItem::setModelItemName(m_model, 8, RPM::translate(Translations::POWER));
-    SuperListItem::setModelItemName(m_model, 9, RPM::translate(Translations::WAR_CRY));
-    SuperListItem::setModelItemName(m_model, 10, RPM::translate(Translations::CONCENTRATION));
-    SuperListItem::setModelItemName(m_model, 11, RPM::translate(Translations::WEAKED));
-    SuperListItem::setModelItemName(m_model, 12, RPM::translate(Translations::BROKEN));
-    SuperListItem::setModelItemName(m_model, 13, RPM::translate(Translations::BARRIER));
+    SystemStatus::setNameMessages(m_model, 0, RPM::translate(Translations::KO));
+    SystemStatus::setNameMessages(m_model, 1, RPM::translate(Translations::POISONED), RPM::translate(Translations::MESSAGE_POISONED), RPM::translate(Translations::MESSAGE_POISONED), RPM::translate(Translations::MESSAGE_POISONED_HEAL));
+    SystemStatus::setNameMessages(m_model, 2, RPM::translate(Translations::BURNT), RPM::translate(Translations::MESSAGE_BURNT), RPM::translate(Translations::MESSAGE_BURNT), RPM::translate(Translations::MESSAGE_BURNT_HEAL));
+    SystemStatus::setNameMessages(m_model, 3, RPM::translate(Translations::PARALIZED), RPM::translate(Translations::MESSAGE_PARALYZED), RPM::translate(Translations::MESSAGE_PARALYZED), RPM::translate(Translations::MESSAGE_PARALYZED_HEAL));
+    SystemStatus::setNameMessages(m_model, 4, RPM::translate(Translations::CONFUSED), RPM::translate(Translations::MESSAGE_CONFUSED), RPM::translate(Translations::MESSAGE_CONFUSED), RPM::translate(Translations::MESSAGE_CONFUSED_HEAL));
+    SystemStatus::setNameMessages(m_model, 5, RPM::translate(Translations::MUTED), RPM::translate(Translations::MESSAGE_MUTED), RPM::translate(Translations::MESSAGE_MUTED), RPM::translate(Translations::MESSAGE_MUTED_HEAL));
+    SystemStatus::setNameMessages(m_model, 6, RPM::translate(Translations::SLEEPING), RPM::translate(Translations::MESSAGE_SLEEPING), RPM::translate(Translations::MESSAGE_SLEEPING), RPM::translate(Translations::MESSAGE_SLEEPING_HEAL));
+    SystemStatus::setNameMessages(m_model, 7, RPM::translate(Translations::BLIND), RPM::translate(Translations::MESSAGE_BLIND), RPM::translate(Translations::MESSAGE_BLIND), RPM::translate(Translations::MESSAGE_BLIND_HEAL));
+    SystemStatus::setNameMessages(m_model, 8, RPM::translate(Translations::POWER));
+    SystemStatus::setNameMessages(m_model, 9, RPM::translate(Translations::WAR_CRY));
+    SystemStatus::setNameMessages(m_model, 10, RPM::translate(Translations::CONCENTRATION));
+    SystemStatus::setNameMessages(m_model, 11, RPM::translate(Translations::WEAKED), RPM::translate(Translations::MESSAGE_WEAKENED), RPM::translate(Translations::MESSAGE_WEAKENED));
+    SystemStatus::setNameMessages(m_model, 12, RPM::translate(Translations::BROKEN), RPM::translate(Translations::MESSAGE_BROKEN), RPM::translate(Translations::MESSAGE_BROKEN));
+    SystemStatus::setNameMessages(m_model, 13, RPM::translate(Translations::BARRIER));
 }
 
 // -------------------------------------------------------

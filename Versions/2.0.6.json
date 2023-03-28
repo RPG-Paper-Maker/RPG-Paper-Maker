@@ -13,6 +13,51 @@
             "target": "Engine/Content/basic/Content/Datas/commonEvents.json"
         },
         {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/armors.json",
+            "target": "Engine/Content/basic/Content/Datas/armors.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/classes.json",
+            "target": "Engine/Content/basic/Content/Datas/classes.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/monsters.json",
+            "target": "Engine/Content/basic/Content/Datas/monsters.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/skills.json",
+            "target": "Engine/Content/basic/Content/Datas/skills.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/status.json",
+            "target": "Engine/Content/basic/Content/Datas/status.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/troops.json",
+            "target": "Engine/Content/basic/Content/Datas/troops.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/weapons.json",
+            "target": "Engine/Content/basic/Content/Datas/weapons.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/variables.json",
+            "target": "Engine/Content/basic/Content/Datas/variables.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/system.json",
+            "target": "Engine/Content/basic/Content/Datas/system.json"
+        },
+        {
             "repo": "Basic-Ressources",
             "source": "Content/Images/HUD/Facesets/others.png",
             "target": "Engine/Content/BR/Content/Images/HUD/Facesets/others.png"
@@ -29,7 +74,9 @@
         "Wrong portions loading when moving camera far",
         "Improve collision FPS with lot of objects in map",
         "Engine only: sometimes bug when at least one animated autotile in tileset",
-        "Default project day skybox wrong front texture"
+        "Default project day skybox wrong front texture",
+        "Misspelled stuff in default project or engine",
+        "Some collisions issues"
     ],
     "finished": [
         2,
@@ -41,6 +88,8 @@
         2,
         2,
         2,
-        2
+        2,
+        2,
+        1
     ]
 }
