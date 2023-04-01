@@ -75,8 +75,7 @@
         "Improve collision FPS with lot of objects in map",
         "Engine only: sometimes bug when at least one animated autotile in tileset",
         "Default project day skybox wrong front texture",
-        "Misspelled stuff in default project or engine",
-        "Some collisions issues"
+        "Misspelled stuff in default project or engine"
     ],
     "finished": [
         2,
@@ -89,7 +88,6 @@
         2,
         2,
         2,
-        2,
-        1
+        2
     ]
 }
