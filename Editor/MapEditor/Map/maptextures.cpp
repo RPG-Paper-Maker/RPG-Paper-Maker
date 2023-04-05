@@ -350,8 +350,11 @@ TextureSeveral * Map::resetPictureAutotile(QPainter& painter, TextureSeveral
     *textureAutotile, QImage &newImage, int &offset)
 {
     painter.end();
-    textureAutotile->setTexture(createTexture(newImage));
-    m_texturesAutotiles.append(textureAutotile);
+    if (textureAutotile != nullptr)
+    {
+        textureAutotile->setTexture(createTexture(newImage));
+        m_texturesAutotiles.append(textureAutotile);
+    }
     newImage.fill(Qt::GlobalColor::transparent);
     painter.begin(&newImage);
     offset = 0;
