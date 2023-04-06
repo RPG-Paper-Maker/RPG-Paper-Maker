@@ -67,6 +67,23 @@ void SystemTroop::initializeHeaders()
 }
 
 // -------------------------------------------------------
+
+QList<QStandardItem *> SystemTroop::getAllCommandsList() const {
+    QList<QStandardItem *> list;
+    SystemTroopReaction *reaction;
+    for (int i = 0, l = m_reactions->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        reaction = reinterpret_cast<SystemTroopReaction *>(m_reactions->item(i)
+            ->data().value<quintptr>());
+        if (reaction != nullptr)
+        {
+            list << reaction->modelCommands()->invisibleRootItem();
+        }
+    }
+    return list;
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //

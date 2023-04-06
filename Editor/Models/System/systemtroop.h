@@ -39,6 +39,7 @@ public:
     QStandardItemModel * reactions() const;
 
     void initializeHeaders();
+    QList<QStandardItem *> getAllCommandsList() const;
 
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);

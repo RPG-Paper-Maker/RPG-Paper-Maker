@@ -1,0 +1,23 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/system.json",
+            "target": "Engine/Content/basic/Content/Datas/system.json"
+        }
+    ],
+	"features": [
+        
+    ],
+    "bugs": [
+        "Semi transparent textures not correctly displayed",
+        "Shaders not working with some GL versions"
+
+    ],
+    "finished": [
+        2,
+        2
+    ]
+}

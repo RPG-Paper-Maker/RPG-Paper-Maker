@@ -22,6 +22,7 @@
 #include "systemevent.h"
 #include "systemitem.h"
 #include "systemskill.h"
+#include "systemtroop.h"
 #include "commandmovekind.h"
 
 const int ProjectUpdater::incompatibleVersionsCount = 29;
@@ -252,8 +253,18 @@ void ProjectUpdater::updateCommands() {
             emit updatingCommands(list.at(j));
         }
     }
-
     m_project->writeCommonEvents();
+
+    // Troops
+    model = m_project->gameDatas()->troopsDatas()->model();
+    for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        list = reinterpret_cast<SystemTroop *>(model->item(i)->data()
+            .value<quintptr>())->getAllCommandsList();
+        for (j = 0, ll = list.size(); j < ll; j++) {
+            emit updatingCommands(list.at(j));
+        }
+    }
+    m_project->gameDatas()->writeTroops(m_project->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
