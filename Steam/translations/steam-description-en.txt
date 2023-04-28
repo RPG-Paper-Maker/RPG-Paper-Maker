@@ -53,3 +53,29 @@ This product is the commercial edition of RPG Paper Maker.
 [b]There are no feature differences between free and commercial versions of RPG Paper Maker.[/b]
 
 This DLC only provides you rights to publish commercial games made with RPG Paper Maker, this can also be a way to support the project by any way!
+
+--------------------------------------------------------------------------
+
+This product contains Graphics AND Musics resources for Harvest Seasons Pack. You can use it for RPG Paper Maker projects, but also for any other Game Software.
+
+This DLC contains:
+
+* 2 heroes characters with digging, watering, mining, woodcutting, and fishing animations (+ facesets / battlers)
+* 12 monsters characters (+ facesets / battlers)
+* 8 villagers characters (+ facesets)
+* 18 animals characters (+ facesets)
+* 8 tilesets for spring, summer, autumn, winter, plant mines, fire mines, water mines, and ice mines
+* 6 farming 3D objects (farmer house, chicken coop, barn, stable, bees house, stonefence)
+* 50+ icons with related characters (animal products, fruits, vegetables, tools, constructions, ...)
+* 2 WindowSkins
+* HUD elements (artworks of 2 heroes, arrows and seasons HUD)
+* Morning and evening musics for each 4 seasons
+* Music for each 4 mines types
+
+--------------------------------------------------------------------------
+
+This product contains ONLY Graphics resources for Harvest Seasons Pack. You can use it for RPG Paper Maker projects, but also for any other Game Software.
+
+--------------------------------------------------------------------------
+
+This product contains ONLY Musics resources for Harvest Seasons Pack. You can use it for RPG Paper Maker projects, but also for any other Game Software.
