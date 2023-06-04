@@ -1,0 +1,24 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Add DLC button on toolbar"
+    ],
+    "bugs": [
+        "Crash ingame for some collisions",
+        "Collisions detection not correctly working in specific cases",
+        "Sunlight sometimes making crash for walls",
+        "Sometimes saves are making crash when objects where moved",
+        "Change screen tone command not applying to skybox"
+    ],
+    "finished": [
+        2,
+
+        2,
+        2,
+        2,
+        2,
+        2
+    ]
+}

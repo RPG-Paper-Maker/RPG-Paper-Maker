@@ -47,6 +47,7 @@
 #include "common.h"
 #include "dialogselectlanguage.h"
 #include "dialogfirstlaunch.h"
+#include "dialogimportdlcs.h"
 
 // -------------------------------------------------------
 //
@@ -248,6 +249,7 @@ void MainWindow::enableAll(bool b){
     ui->actionSave_all->setEnabled(b);
     ui->actionOpen_project_folder->setEnabled(b);
     ui->actionOpen_BR_folder->setEnabled(b);
+    ui->actionDLCs_manager->setEnabled(b);
     ui->actionExport_standalone->setEnabled(b);
     ui->actionClose_project->setEnabled(b);
     ui->actionUndo->setEnabled(b);
@@ -296,6 +298,7 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionSave_all->setEnabled(true);
     ui->actionOpen_project_folder->setEnabled(true);
     ui->actionOpen_BR_folder->setEnabled(true);
+    ui->actionDLCs_manager->setEnabled(true);
     ui->actionExport_standalone->setEnabled(true);
     ui->actionClose_project->setEnabled(true);
     ui->actionUndo->setEnabled(true);
@@ -905,6 +908,19 @@ void MainWindow::on_actionScripts_manager_triggered()
     {
         m_dialogScripts->initialize();
         m_dialogScripts->show();
+    }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionDLCs_manager_triggered()
+{
+    DialogImportDLCs dialog;
+    if (dialog.exec() == QDialog::Accepted) {
+        RPM::get()->project()->writeDlcs();
+    } else
+    {
+        RPM::get()->project()->readDlcs();
     }
 }
 

@@ -52,7 +52,7 @@
       <string>Open project</string>
      </property>
      <property name="icon">
-      <iconset resource="../ressources.qrc">
+      <iconset>
        <normaloff>:/icons/Ressources/open_file.png</normaloff>:/icons/Ressources/open_file.png</iconset>
      </property>
      <addaction name="actionBrowse"/>
@@ -65,6 +65,7 @@
     <addaction name="actionSave_all"/>
     <addaction name="actionOpen_project_folder"/>
     <addaction name="actionOpen_BR_folder"/>
+    <addaction name="actionDLCs_manager"/>
     <addaction name="actionExport_standalone"/>
     <addaction name="actionClose_project"/>
     <addaction name="separator"/>
@@ -184,8 +185,9 @@
    <addaction name="actionVariables_manager"/>
    <addaction name="actionCollisions_manager"/>
    <addaction name="actionKeyboard_controls"/>
-   <addaction name="actionScripts_manager"/>
    <addaction name="actionLanguage_manager"/>
+   <addaction name="actionScripts_manager"/>
+   <addaction name="actionDLCs_manager"/>
    <addaction name="separator"/>
    <addaction name="actionPictures_manager"/>
    <addaction name="actionVideos_manager"/>
@@ -217,7 +219,7 @@
   </action>
   <action name="actionNew_project">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/new_file.png</normaloff>:/icons/Ressources/new_file.png</iconset>
    </property>
    <property name="text">
@@ -232,7 +234,7 @@
   </action>
   <action name="actionBrowse">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/open_file.png</normaloff>:/icons/Ressources/open_file.png</iconset>
    </property>
    <property name="text">
@@ -258,7 +260,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/save.png</normaloff>:/icons/Ressources/save.png</iconset>
    </property>
    <property name="text">
@@ -270,7 +272,7 @@
   </action>
   <action name="actionPlay">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/play.png</normaloff>:/icons/Ressources/play.png</iconset>
    </property>
    <property name="text">
@@ -285,7 +287,7 @@
   </action>
   <action name="actionDatas_manager">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
    </property>
    <property name="text">
@@ -303,7 +305,7 @@
   </action>
   <action name="actionVariables_manager">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/variables.png</normaloff>:/icons/Ressources/variables.png</iconset>
    </property>
    <property name="text">
@@ -318,7 +320,7 @@
   </action>
   <action name="actionSystems_manager">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/systems.png</normaloff>:/icons/Ressources/systems.png</iconset>
    </property>
    <property name="text">
@@ -333,7 +335,7 @@
   </action>
   <action name="actionKeyboard_controls">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/inputs.png</normaloff>:/icons/Ressources/inputs.png</iconset>
    </property>
    <property name="text">
@@ -348,7 +350,7 @@
   </action>
   <action name="actionSave_all">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/save.png</normaloff>:/icons/Ressources/save.png</iconset>
    </property>
    <property name="text">
@@ -371,7 +373,7 @@
   </action>
   <action name="actionPictures_manager">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/pictures.png</normaloff>:/icons/Ressources/pictures.png</iconset>
    </property>
    <property name="text">
@@ -394,7 +396,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/autotile_toolbar.png</normaloff>:/icons/Ressources/autotile_toolbar.png</iconset>
    </property>
    <property name="text">
@@ -409,7 +411,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/walls_toolbar.png</normaloff>:/icons/Ressources/walls_toolbar.png</iconset>
    </property>
    <property name="text">
@@ -427,7 +429,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/object_toolbar.png</normaloff>:/icons/Ressources/object_toolbar.png</iconset>
    </property>
    <property name="text">
@@ -445,7 +447,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/mountain_toolbar.png</normaloff>:/icons/Ressources/mountain_toolbar.png</iconset>
    </property>
    <property name="text">
@@ -492,7 +494,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/autotile_animated_toolbar.png</normaloff>:/icons/Ressources/autotile_animated_toolbar.png</iconset>
    </property>
    <property name="text">
@@ -510,7 +512,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/songs.png</normaloff>:/icons/Ressources/songs.png</iconset>
    </property>
    <property name="text">
@@ -525,7 +527,7 @@
   </action>
   <action name="actionCollisions_manager">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/collisions.png</normaloff>:/icons/Ressources/collisions.png</iconset>
    </property>
    <property name="text">
@@ -540,7 +542,7 @@
   </action>
   <action name="actionScripts_manager">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/scripts.png</normaloff>:/icons/Ressources/scripts.png</iconset>
    </property>
    <property name="text">
@@ -573,7 +575,7 @@
   </action>
   <action name="actionHeight_up">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/height.png</normaloff>:/icons/Ressources/height.png</iconset>
    </property>
    <property name="text">
@@ -585,7 +587,7 @@
   </action>
   <action name="actionHeight_plus_up">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/height_plus.png</normaloff>:/icons/Ressources/height_plus.png</iconset>
    </property>
    <property name="text">
@@ -597,7 +599,7 @@
   </action>
   <action name="actionHeight_down">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/height_down.png</normaloff>:/icons/Ressources/height_down.png</iconset>
    </property>
    <property name="text">
@@ -609,7 +611,7 @@
   </action>
   <action name="actionHeight_plus_down">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/height_down_plus.png</normaloff>:/icons/Ressources/height_down_plus.png</iconset>
    </property>
    <property name="text">
@@ -621,7 +623,7 @@
   </action>
   <action name="actionShapes_manager">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/object_toolbar.png</normaloff>:/icons/Ressources/object_toolbar.png</iconset>
    </property>
    <property name="text">
@@ -652,7 +654,7 @@
   </action>
   <action name="actionVideos_manager">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/play_song.png</normaloff>:/icons/Ressources/play_song.png</iconset>
    </property>
    <property name="text">
@@ -672,7 +674,7 @@
   </action>
   <action name="actionOpen_project_folder">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/dir.png</normaloff>:/icons/Ressources/dir.png</iconset>
    </property>
    <property name="text">
@@ -705,7 +707,7 @@
   </action>
   <action name="actionFonts_manager">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/fonts.png</normaloff>:/icons/Ressources/fonts.png</iconset>
    </property>
    <property name="text">
@@ -720,7 +722,7 @@
   </action>
   <action name="actionLanguage_manager">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/lang.png</normaloff>:/icons/Ressources/lang.png</iconset>
    </property>
    <property name="text">
@@ -735,17 +737,27 @@
   </action>
   <action name="actionOpen_BR_folder">
    <property name="icon">
-    <iconset resource="../ressources.qrc">
+    <iconset>
      <normaloff>:/icons/Ressources/dir.png</normaloff>:/icons/Ressources/dir.png</iconset>
    </property>
    <property name="text">
     <string>Open BR folder</string>
    </property>
   </action>
+  <action name="actionDLCs_manager">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/icons/Ressources/systems.png</normaloff>:/icons/Ressources/systems.png</iconset>
+   </property>
+   <property name="text">
+    <string>DLCs...</string>
+   </property>
+   <property name="iconText">
+    <string>DLCs</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="../ressources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
