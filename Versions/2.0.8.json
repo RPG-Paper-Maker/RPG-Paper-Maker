@@ -3,18 +3,24 @@
 	"remove": [],
 	"replace": [],
 	"features": [
-        "Add DLC button on toolbar"
+        "Add DLC button on toolbar",
+        "Temporarly disabling protect datas in export standalone"
     ],
     "bugs": [
         "Crash ingame for some collisions",
         "Collisions detection not correctly working in specific cases",
         "Sunlight sometimes making crash for walls",
         "Sometimes saves are making crash when objects where moved",
-        "Change screen tone command not applying to skybox"
+        "Change screen tone command not applying to skybox",
+        "Command move object change graphics not correctly updating index X when don't change orientation option",
+        "Export web not working anymore since shadows adding"
     ],
     "finished": [
         2,
+        2,
 
+        2,
+        2,
         2,
         2,
         2,
