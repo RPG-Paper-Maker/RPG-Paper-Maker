@@ -1130,7 +1130,7 @@ MapPortion * ControlMapEditor::getMapPortion(Position &p, Portion &portion,
 void ControlMapEditor::traceLine(Position &previousCoords, Position &coords,
     QList<Position> &positions)
 {
-    if (m_previousMouseCoords.x() == -1) {
+    if (m_previousMouseCoords.x() == -500) {
         return;
     }
 
@@ -1822,12 +1822,6 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
             return;
         }
 
-        // If shit pressed, do nothing
-        if (QApplication::keyboardModifiers() & Qt::ShiftModifier)
-        {
-            return;
-        }
-
         // Add/Remove something
         m_isDeleting = button == Qt::MouseButton::RightButton;
         if (m_isDeleting) {
@@ -1847,8 +1841,14 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
         if (static_cast<Position3D>(m_previousMouseCoords) !=
             static_cast<Position3D>(newPosition))
         {
-            m_previousMouseCoords = newPosition;
             m_firstMouseCoords = newPosition;
+
+            // If shit pressed, do nothing
+            if (QApplication::keyboardModifiers() & Qt::ShiftModifier)
+            {
+                return;
+            }
+            m_previousMouseCoords = newPosition;
             addRemove(selection, subSelection, drawKind, layerOn, tileset,
                 specialID, widthSquares, widthPixels, heightSquares,
                 heightPixels, defaultFloorRect);

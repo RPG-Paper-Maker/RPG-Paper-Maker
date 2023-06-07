@@ -13,12 +13,19 @@
         "Sometimes saves are making crash when objects where moved",
         "Change screen tone command not applying to skybox",
         "Command move object change graphics not correctly updating index X when don't change orientation option",
-        "Export web not working anymore since shadows adding"
+        "Export web not working anymore since shadows adding",
+        "Detection not always correctly sent according to orientation",
+        "Chronometer not displayed on correct position on different screen resolution",
+        "Several autotiles/mountains using same picture not correctly displaying ingame",
+        "SHIFT holding sometimes tracing a weird line in editor"
     ],
     "finished": [
         2,
         2,
 
+        2,
+        2,
+        2,
         2,
         2,
         2,
