@@ -407,11 +407,13 @@ void ControlMapEditor::onResize(int width, int height) {
 // -------------------------------------------------------
 
 void ControlMapEditor::updateCameraTreeNode() {
-    TreeMapTag *tag = reinterpret_cast<TreeMapTag *>(m_map->getAssociatedMapItem()
-        ->data().value<quintptr>());
-    tag->setCameraDistance(m_camera->distance());
-    tag->setCameraHorizontalAngle(m_camera->horizontalAngle());
-    tag->setCameraVerticalAngle(m_camera->verticalAngle());
+    QStandardItem *item = m_map->getAssociatedMapItem();
+    if (item != nullptr) {
+        TreeMapTag *tag = reinterpret_cast<TreeMapTag *>(item->data().value<quintptr>());
+        tag->setCameraDistance(m_camera->distance());
+        tag->setCameraHorizontalAngle(m_camera->horizontalAngle());
+        tag->setCameraVerticalAngle(m_camera->verticalAngle());
+    }
 }
 
 // -------------------------------------------------------
