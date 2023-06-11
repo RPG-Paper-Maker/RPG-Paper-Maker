@@ -2059,6 +2059,7 @@ public:
     static const QString MESSAGE_BLIND_HEAL;
     static const QString MESSAGE_WEAKENED;
     static const QString MESSAGE_BROKEN;
+    static const QString MOVE_CAMERA_ON_BLOCK_VIEW;
 
     Translations();
     virtual ~Translations();

@@ -53,6 +53,7 @@ public:
     static const QString JSON_MOUNTAIN_COLLISION_HEIGHT;
     static const QString JSON_MOUNTAIN_COLLISION_ANGLE;
     static const QString JSON_CLIMBING_SPEED;
+    static const QString JSON_MOVE_CAMERA_ON_BLOCK_VIEW;
     static const QString JSON_SOUND_CURSOR;
     static const QString JSON_SOUND_CONFIRMATION;
     static const QString JSON_SOUND_CANCEL;
@@ -98,6 +99,7 @@ public:
     static const int DEFAULT_ICONS_SIZE;
     static const int DEFAULT_SAVE_SLOTS;
     static const bool DEFAULT_BACKUPS_ACTIVATED;
+    static const bool DEFAULT_MOVE_CAMERA_ON_BLOCK_VIEW;
 
     SystemDatas();
     virtual ~SystemDatas();
@@ -122,6 +124,7 @@ public:
     PrimitiveValue * mountainCollisionHeight() const;
     PrimitiveValue * mountainCollisionAngle() const;
     PrimitiveValue * climbingSpeed() const;
+    PrimitiveValue * moveCameraOnBlockView() const;
     PrimitiveValue * mapFrameDuration() const;
     PrimitiveValue * priceSoldItem() const;
     QList<QList<QString>> enterNameTable() const;
@@ -231,6 +234,7 @@ private:
     PrimitiveValue *m_mountainCollisionHeight;
     PrimitiveValue *m_mountainCollisionAngle;
     PrimitiveValue *m_climbingSpeed;
+    PrimitiveValue *m_moveCameraOnBlockView;
     PrimitiveValue *m_mapFrameDuration;
     PrimitiveValue *m_priceSoldItem;
     QList<QList<QString>> m_enterNameTable;
