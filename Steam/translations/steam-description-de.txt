@@ -68,7 +68,7 @@ Dieser DLC enthält:
 * 6 landwirtschaftliche 3D-Objekte (Bauernhaus, Hühnerstall, Scheune, Kuhstall, Bienenhaus, Steinzaun)
 * Mehr als 50 Symbole mit zugehörigen Charas (tierische Produkte, Obst, Gemüse, Werkzeuge, Konstruktionen, ...)
 * 2 Fenster-Skins
-* HUD-Elemente (Kunstwerke von 2 Helden, Pfeilen und Jahreszeiten-HUD)
+* HUD-Elemente (Kunstwerke von 2 Helden, Pfeilen)
 * Morgen- und Abendmusik für jede der 4 Jahreszeiten
 * Musik für jeweils 4 Arten von Minen
 

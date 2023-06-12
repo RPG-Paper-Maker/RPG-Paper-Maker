@@ -66,7 +66,7 @@ Questo DLC contiene:
 * 6 oggetti agricoli 3D (casa del contadino, pollaio, fienile, stalla, casa delle api, recinzione in pietra)
 * Più di 50 icone con charas associati (prodotti animali, frutta, verdura, strumenti, costruzioni, ...)
 * 2 skin per finestre
-* Elementi HUD (artwork di 2 eroi, frecce e stagioni HUD)
+* Elementi HUD (artwork di 2 eroi, frecce)
 * Musica mattutina e serale per ciascuna delle 4 stagioni
 * Musica per ogni 4 tipi di mine
 

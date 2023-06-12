@@ -69,7 +69,7 @@ Este DLC contém:
 * 6 objetos agrícolas 3D (casa do fazendeiro, galinheiro, celeiro, estábulo, apicultura, cerca de pedra)
 * Mais de 50 ícones com charas associadas (produtos animais, frutas, legumes, ferramentas, construções, ...)
 * 2 capas de janela
-* Elementos HUD (artes de 2 heróis, flechas e estações HUD)
+* Elementos HUD (artes de 2 heróis, flechas)
 * Música matinal e noturna para cada uma das 4 estações
 * Música para cada 4 tipos de minas
 

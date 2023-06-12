@@ -66,7 +66,7 @@ Ce DLC contient :
 * 6 objets 3D agricoles (maison de fermier, poulailler, grange, étable, maison des abeilles, clôture en pierre)
 * Plus de 50 icônes avec des charas associés (produits animaux, fruits, légumes, outils, constructions, ...)
 * 2 WindowSkins
-* Éléments HUD (artworks de 2 héros, flèches et HUD de saisons)
+* Éléments HUD (artworks de 2 héros, flèches)
 * Musiques du matin et du soir pour chacune des 4 saisons
 * Musique pour chaque 4 types de mines
 

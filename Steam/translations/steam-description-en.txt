@@ -68,7 +68,7 @@ This DLC contains:
 * 6 farming 3D objects (farmer house, chicken coop, barn, stable, bees house, stonefence)
 * 50+ icons with related characters (animal products, fruits, vegetables, tools, constructions, ...)
 * 2 WindowSkins
-* HUD elements (artworks of 2 heroes, arrows and seasons HUD)
+* HUD elements (artworks of 2 heroes, arrows)
 * Morning and evening musics for each 4 seasons
 * Music for each 4 mines types
 
