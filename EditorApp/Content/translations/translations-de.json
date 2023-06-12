@@ -2024,5 +2024,6 @@
     "message.blind":"[target] ist blind!",
     "message.blind.heal":"Blindheit geheilt",
     "message.weakened":"[target] ist geschwächt!",
-    "message.broken":"[target] ist kaputt!"
+    "message.broken":"[target] ist kaputt!",
+    "move.camera.on.block.view": "Kamerablockansicht verschieben"
 }

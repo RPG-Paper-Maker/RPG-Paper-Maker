@@ -2026,5 +2026,6 @@
     "message.blind":"[target] posiada stan ślepota!",
     "message.blind.heal":"[target] wyleczono stan ślepoty",
     "message.weakened":"[target] posiada stan słabość!",
-    "message.broken":"[target] posiada stan depresja!"
+    "message.broken":"[target] posiada stan depresja!",
+    "move.camera.on.block.view": "Przesuń widok bloku kamery"
 }

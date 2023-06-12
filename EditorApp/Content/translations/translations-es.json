@@ -2026,5 +2026,6 @@
     "message.blind":"¡[target] es ciego!",
     "message.blind.heal":"ceguera curada",
     "message.weakened":"¡[target] está debilitado!",
-    "message.broken":"¡[target] está roto!"
+    "message.broken":"¡[target] está roto!",
+    "move.camera.on.block.view": "Mover vista bloque cámara"
 }

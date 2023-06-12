@@ -2024,5 +2024,6 @@
     "message.blind":"[target]瞎了！",
     "message.blind.heal":"盲目治愈",
     "message.weakened":"[target]被削弱了！",
-    "message.broken":"[target]破了！"
+    "message.broken":"[target]破了！",
+    "move.camera.on.block.view": "블록 보기에서 카메라 이동"
 }

@@ -2024,5 +2024,6 @@
     "message.blind":"[target]ブラインド！",
     "message.blind.heal":"盲目治癒",
     "message.weakened":"[target]弱体化！",
-    "message.broken":"[target]壊れた！"
+    "message.broken":"[target]壊れた！",
+    "move.camera.on.block.view": "ブロックビューでカメラを移動する"
 }

@@ -2024,5 +2024,6 @@
     "message.blind":"[target] è cieco!",
     "message.blind.heal":"cecità guarita",
     "message.weakened":"[target] è indebolito!",
-    "message.broken":"[target] è rotto!"
+    "message.broken":"[target] è rotto!",
+    "move.camera.on.block.view": "Sposta vista blocco telecamera"
 }

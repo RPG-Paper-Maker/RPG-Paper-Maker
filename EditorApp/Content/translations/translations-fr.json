@@ -2025,5 +2025,5 @@
     "message.blind.heal":"Aveuglement guéri",
     "message.weakened":"[target] est affaibli !",
     "message.broken":"[target] est cassé !",
-    "move.camera.on.block.view": "Bouger camera blocage vue"
+    "move.camera.on.block.view": "Bouger caméra blocage vue"
 }

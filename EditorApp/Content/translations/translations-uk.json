@@ -2024,5 +2024,6 @@
     "message.blind":"[target] сліпа!",
     "message.blind.heal":"вилікувалася сліпота",
     "message.weakened":"[target] ослаблена!",
-    "message.broken":"[target] зламана!"
+    "message.broken":"[target] зламана!",
+    "move.camera.on.block.view": "Перемістити блок камери"
 }

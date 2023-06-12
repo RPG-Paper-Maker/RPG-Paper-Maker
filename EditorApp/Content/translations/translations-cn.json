@@ -2024,5 +2024,6 @@
     "message.blind":"[target] 장님!",
     "message.blind.heal":"맹인 치유",
     "message.weakened":"[target] 약화!",
-    "message.broken":"[target] 망가졌다!"
+    "message.broken":"[target] 망가졌다!",
+    "move.camera.on.block.view": "在塊視圖上移動相機"
 }

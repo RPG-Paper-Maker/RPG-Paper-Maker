@@ -2025,5 +2025,5 @@
     "message.blind.heal":"Слепота вылечена",
     "message.weakened":"[target] ослаблен!",
     "message.broken":"[target] сломан!",
-    "move.camera.on.block.view": "Move camera on block view"
+    "move.camera.on.block.view": "Переместить вид блока камеры"
 }
