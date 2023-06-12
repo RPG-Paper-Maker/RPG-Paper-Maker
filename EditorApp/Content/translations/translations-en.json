@@ -2024,5 +2024,6 @@
     "message.blind": "[target]  blind!",
     "message.blind.heal": "Blind healed",
     "message.weakened": "[target] weakened!",
-    "message.broken": "[target] broken!"
+    "message.broken": "[target] broken!",
+    "move.camera.on.block.view": "Move camera on block view"
 }

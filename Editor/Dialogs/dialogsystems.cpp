@@ -150,6 +150,7 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->widgetMountainCollisionAngle->initializeNumberAndUpdate(systemDatas
         ->mountainCollisionAngle(), false);
     ui->panelPrimitiveClimbingSpeed->initializeNumberAndUpdate(systemDatas->climbingSpeed(), false);
+    ui->panelPrimitivelabelMoveCameraOnBlockView->initializeSwitchAndUpdate(systemDatas->moveCameraOnBlockView());
     ui->spinBoxAnimationFrames->setValue(systemDatas->framesAnimation());
     ui->spinBoxBattlersFrames->setValue(systemDatas->battlersFrames());
     ui->lineEditBattlersFrameDuration->setText(systemDatas->battlersFrameDuration());
@@ -614,6 +615,7 @@ void DialogSystems::translate()
     ui->labelMountainsCollisionHeightLimit2->setText(RPM::translate(Translations
         ::MOUNTAIN_COLLISION_HEIGHT_LIMIT_2) + RPM::COLON);
     ui->labelClimbingSpeed->setText(RPM::translate(Translations::CLIMBING_SPEED) + RPM::COLON);
+    ui->labelMoveCameraOnBlockView->setText(RPM::translate(Translations::MOVE_CAMERA_ON_BLOCK_VIEW) + RPM::COLON);
     ui->labelMapFrameDuration->setText(RPM::translate(Translations
         ::MAP_FRAME_DURATION) + RPM::COLON);
     ui->radioButtonImage->setText(RPM::translate(Translations::IMAGE) + RPM

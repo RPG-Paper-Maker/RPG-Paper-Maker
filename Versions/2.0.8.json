@@ -4,7 +4,10 @@
 	"replace": [],
 	"features": [
         "Add DLC button on toolbar",
-        "Temporarly disabling protect datas in export standalone"
+        "Temporarly disabling protect datas in export standalone",
+        "Reseting time events when changing a state of an object",
+        "Update default cameras Y offset for being 8px height (centered for hero)",
+        "Move camera closer to hero when camera facing wall or mountains"
     ],
     "bugs": [
         "Crash ingame for some collisions",
@@ -17,12 +20,21 @@
         "Detection not always correctly sent according to orientation",
         "Chronometer not displayed on correct position on different screen resolution",
         "Several autotiles/mountains using same picture not correctly displaying ingame",
-        "SHIFT holding sometimes tracing a weird line in editor"
+        "SHIFT holding sometimes tracing a weird line in editor",
+        "Map background image not working",
+        "Creating troop making crash if battle map was deleted",
+        "Change state in startup object not executing reactions in other state"
     ],
     "finished": [
         2,
         2,
+        2,
+        1,
+        1,
 
+        2,
+        2,
+        2,
         2,
         2,
         2,

@@ -47,6 +47,7 @@ const QString SystemDatas::JSON_LAST_MINOR_VERSION = "lmiv";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_HEIGHT = "mch";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_ANGLE = "mca";
 const QString SystemDatas::JSON_CLIMBING_SPEED = "cs";
+const QString SystemDatas::JSON_MOVE_CAMERA_ON_BLOCK_VIEW = "mcobv";
 const QString SystemDatas::JSON_SPEED = "sf";
 const QString SystemDatas::JSON_FREQUENCIES = "f";
 const QString SystemDatas::JSON_SOUND_CURSOR = "scu";
@@ -94,6 +95,7 @@ const int SystemDatas::DEFAULT_FACESET_SCALING_HEIGHT = 160;
 const int SystemDatas::DEFAULT_ICONS_SIZE = 16;
 const int SystemDatas::DEFAULT_SAVE_SLOTS = 4;
 const bool SystemDatas::DEFAULT_BACKUPS_ACTIVATED = true;
+const bool SystemDatas::DEFAULT_MOVE_CAMERA_ON_BLOCK_VIEW = true;
 
 // -------------------------------------------------------
 //
@@ -113,6 +115,7 @@ SystemDatas::SystemDatas() :
     m_mountainCollisionHeight(new PrimitiveValue(4)),
     m_mountainCollisionAngle(new PrimitiveValue(45.0)),
     m_climbingSpeed(new PrimitiveValue(0.25)),
+    m_moveCameraOnBlockView(new PrimitiveValue(DEFAULT_MOVE_CAMERA_ON_BLOCK_VIEW)),
     m_mapFrameDuration(new PrimitiveValue(DEFAULT_MAP_FRAME_DURATION)),
     m_priceSoldItem(new PrimitiveValue(DEFAULT_PRICE_SOLD_ITEM)),
     m_idMapHero(1),
@@ -167,6 +170,7 @@ SystemDatas::~SystemDatas()
     delete m_mountainCollisionHeight;
     delete m_mountainCollisionAngle;
     delete m_climbingSpeed;
+    delete m_moveCameraOnBlockView;
     delete m_mapFrameDuration;
     delete m_priceSoldItem;
     SuperListItem::deleteModel(m_modelColors);
@@ -268,6 +272,11 @@ PrimitiveValue * SystemDatas::mountainCollisionAngle() const {
 PrimitiveValue * SystemDatas::climbingSpeed() const
 {
     return m_climbingSpeed;
+}
+
+PrimitiveValue * SystemDatas::moveCameraOnBlockView() const
+{
+    return m_moveCameraOnBlockView;
 }
 
 PrimitiveValue * SystemDatas::mapFrameDuration() const
@@ -1006,6 +1015,9 @@ void SystemDatas::read(const QJsonObject &json){
     if (json.contains(JSON_CLIMBING_SPEED)) {
         m_climbingSpeed->read(json[JSON_CLIMBING_SPEED].toObject());
     }
+    if (json.contains(JSON_MOVE_CAMERA_ON_BLOCK_VIEW)) {
+        m_moveCameraOnBlockView->read(json[JSON_MOVE_CAMERA_ON_BLOCK_VIEW].toObject());
+    }
     if (json.contains(JSON_MAP_FRAME_DURATION))
     {
         m_mapFrameDuration->read(json[JSON_MAP_FRAME_DURATION].toObject());
@@ -1264,6 +1276,13 @@ void SystemDatas::write(QJsonObject &json) const{
         obj = QJsonObject();
         m_climbingSpeed->write(obj);
         json[JSON_CLIMBING_SPEED] = obj;
+    }
+    if (m_moveCameraOnBlockView->kind() != PrimitiveValueKind::Switch ||
+        m_moveCameraOnBlockView->switchValue() != DEFAULT_MOVE_CAMERA_ON_BLOCK_VIEW)
+    {
+        obj = QJsonObject();
+        m_moveCameraOnBlockView->write(obj);
+        json[JSON_MOVE_CAMERA_ON_BLOCK_VIEW] = obj;
     }
     if (m_mapFrameDuration->kind() != PrimitiveValueKind::Number ||
         m_mapFrameDuration->numberValue() != DEFAULT_MAP_FRAME_DURATION)

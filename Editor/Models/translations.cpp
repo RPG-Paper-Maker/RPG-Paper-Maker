@@ -2046,6 +2046,7 @@ const QString Translations::MESSAGE_BLIND = "message.blind";
 const QString Translations::MESSAGE_BLIND_HEAL = "message.blind.heal";
 const QString Translations::MESSAGE_WEAKENED = "message.weakened";
 const QString Translations::MESSAGE_BROKEN = "message.broken";
+const QString Translations::MOVE_CAMERA_ON_BLOCK_VIEW = "move.camera.on.block.view";
 
 // -------------------------------------------------------
 //
