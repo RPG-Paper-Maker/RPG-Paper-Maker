@@ -1,7 +1,18 @@
 {
 	"add": [],
 	"remove": [],
-	"replace": [],
+	"replace": [
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/system.json",
+            "target": "Engine/Content/basic/Content/Datas/system.json"
+        },
+        {
+            "repo": "Dependencies",
+            "source": "Game/web/three.js",
+            "target": "Engine/Content/web/three.js"
+        }
+    ],
 	"features": [
         "Add DLC button on toolbar",
         "Temporarly disabling protect datas in export standalone",
