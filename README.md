@@ -1,7 +1,5 @@
 # RPG Paper Maker
 
-[![Build](https://travis-ci.org/RPG-Paper-Maker/RPG-Paper-Maker.svg?branch=develop)](https://travis-ci.org/RPG-Paper-Maker/RPG-Paper-Maker)
-[![Build](https://ci.appveyor.com/api/projects/status/iee74loc36pu1r0t?svg=true)](https://ci.appveyor.com/project/Wano-k/rpg-paper-maker)
 [![Join to the community at https://discordapp.com/invite/QncEnCE](https://img.shields.io/badge/Discord-RPG%20Paper%20Maker%20Community-blueviolet?logo=discord)](https://discordapp.com/invite/QncEnCE)
 
 ## Overview
@@ -131,3 +129,20 @@ In order to ensure that the RPM community is welcoming to all, please review and
 Check out the [feathub](https://feathub.com/RPG-Paper-Maker/RPG-Paper-Maker) for voting for your favorite next coming soon feature or even proposing your own one!
 
 [![Feature Requests](http://feathub.com/RPG-Paper-Maker/RPG-Paper-Maker?format=svg)](http://feathub.com/RPG-Paper-Maker/RPG-Paper-Maker)
+
+
+### `npm start`
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
+
+### `npm run build`
+
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
