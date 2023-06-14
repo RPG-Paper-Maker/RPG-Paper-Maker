@@ -76,7 +76,7 @@ class Rectangle {
     write(json: any[]) {
         json[0] = this.x;
         json[1] = this.y;
-        if (this.width != 1 || this.height != 1) {
+        if (this.width !== 1 || this.height !== 1) {
             json[2] = this.width;
             json[3] = this.height;
         }

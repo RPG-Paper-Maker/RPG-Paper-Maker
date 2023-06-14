@@ -17,10 +17,6 @@ class CustomGeometryFace extends CustomGeometry {
     public b_size: number[] = [];
     public b_center: number[] = [];
 
-    constructor() {
-        super();
-    }
-
     pushQuadVerticesFace(vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3, 
         vecD: THREE.Vector3, size: THREE.Vector3, center: THREE.Vector3) {
         this.b_vertices.push(vecA.x, vecA.y, vecA.z);

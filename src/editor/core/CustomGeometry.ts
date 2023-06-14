@@ -17,10 +17,6 @@ class CustomGeometry extends THREE.BufferGeometry {
     public b_indices: number[] = [];
     public b_uvs: number[] = [];
 
-    constructor() {
-        super();
-    }
-
     static createBox(width: number, height: number, depth: number) {
         let geometry = new CustomGeometry();
         let w = width / 2;

@@ -147,17 +147,17 @@ class Position extends Position3D {
     write(json: any[]) {
         super.write(json);
         json.push(this.layer);
-        if (this.centerX != 50.0 || this.centerZ != 50.0 || this.angleY != 0.0 || 
-            this.angleX != 0.0 || this.angleZ != 0.0 || this.scaleX != 1.0 || this
-            .scaleY != 1.0 || this.scaleZ != 1.0) {
+        if (this.centerX !== 50.0 || this.centerZ !== 50.0 || this.angleY !== 0.0 || 
+            this.angleX !== 0.0 || this.angleZ !== 0.0 || this.scaleX !== 1.0 || this
+            .scaleY !== 1.0 || this.scaleZ !== 1.0) {
             json.push(this.centerX);
             json.push(this.centerZ);
             json.push(this.angleY);
-            if (this.angleX != 0.0 || this.angleZ != 0.0 || this.scaleX != 1.0 || 
-                this.scaleY != 1.0 || this.scaleZ != 1.0) {
+            if (this.angleX !== 0.0 || this.angleZ !== 0.0 || this.scaleX !== 1.0 || 
+                this.scaleY !== 1.0 || this.scaleZ !== 1.0) {
                 json.push(this.angleX);
                 json.push(this.angleZ);
-                if (this.scaleX != 1.0 || this.scaleY != 1.0 || this.scaleZ != 1.0) {
+                if (this.scaleX !== 1.0 || this.scaleY !== 1.0 || this.scaleZ !== 1.0) {
                     json.push(this.scaleX);
                     json.push(this.scaleY);
                     json.push(this.scaleZ);

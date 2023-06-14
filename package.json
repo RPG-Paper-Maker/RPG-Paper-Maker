@@ -21,8 +21,10 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "three": "^0.143.0",
-    "typescript": "^4.6.4",
-    "web-vitals": "^2.1.4"
+    "typescript": "^4.6.4"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   },
   "overrides": {
     "nth-check": "2.0.1"

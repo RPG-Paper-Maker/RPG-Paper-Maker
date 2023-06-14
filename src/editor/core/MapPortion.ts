@@ -46,7 +46,7 @@ class MapPortion extends Serializable {
     setLand(p: Position, land: MapElement.Land) {
         switch (land.kind) {
         case Enum.ElementMapKind.Floors:
-            this.setFloor(p, <MapElement.Floor>land);
+            this.setFloor(p, land as MapElement.Floor);
             break;
         case Enum.ElementMapKind.Autotiles:
             //todo
@@ -101,7 +101,7 @@ class MapPortion extends Serializable {
         const texture = Manager.GL.getMaterialTexture(material);
         const width = texture ? texture.image.width : 0;
         const height = texture ? texture.image.height : 0;
-        const geometry = <CustomGeometry>this.floorsMesh.geometry;
+        const geometry = this.floorsMesh.geometry as CustomGeometry;
         const layers: [Position, MapElement.Floor][] = [];
         let count = 0;
         let i: number, l: number, layer: number, p: Position, positionKey: string, 

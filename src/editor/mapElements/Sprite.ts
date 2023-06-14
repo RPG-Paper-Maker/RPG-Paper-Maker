@@ -170,7 +170,7 @@ class Sprite extends Base {
 
     createGeometry(width: number, height: number, tileset: boolean, position: 
         Position): [CustomGeometry, number] {
-        let geometry = new CustomGeometry;
+        let geometry = new CustomGeometry();
         let count = this.updateGeometry(geometry, width, height, position,
             0, tileset, null);
         geometry.updateAttributes();

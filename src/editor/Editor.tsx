@@ -22,22 +22,22 @@ Manager.GL.mapEditorContext = new Manager.GL();
 Manager.GL.extraContext = new Manager.GL();
 
 function Editor() {
-    const [currentProjectName, setCurrentProjectName] = React.useState<string>('');
-    
-    return (
-        <div className='flex-column fill-space'>
-            <MainMenuBar currentProjectName={currentProjectName} setCurrentProjectName={setCurrentProjectName} />
-            <ToolBar />
-            <PanelProject currentProjectName={currentProjectName} />
-        </div>
-    );
+	const [currentProjectName, setCurrentProjectName] = React.useState<string>('');
+
+	return (
+		<div className='flex-column fill-space'>
+			<MainMenuBar currentProjectName={currentProjectName} setCurrentProjectName={setCurrentProjectName} />
+			<ToolBar />
+			<PanelProject currentProjectName={currentProjectName} />
+		</div>
+	);
 }
 
 LocalFile.config();
-(async() => {
-    await Manager.GL.initializeShaders();
-    
-    /*
+(async () => {
+	await Manager.GL.initializeShaders();
+
+	/*
     let all = await LocalFile.allStorage();
     console.log(all);
     for (let path of all) {
