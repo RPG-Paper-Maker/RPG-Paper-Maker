@@ -1,0 +1,14 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [],
+    "bugs": [
+        "Crash ingame when using open saves menu command",
+        "Crash ingame when move camera blocking view option ON + hero no state/no texture"
+    ],
+    "finished": [
+        2,
+        2
+    ]
+}
