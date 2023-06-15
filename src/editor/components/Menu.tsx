@@ -12,16 +12,12 @@
 import '../styles/Menu.css';
 
 type Props = {
-    mode: string,
-    children: JSX.Element | JSX.Element[]
+	mode: string;
+	children: JSX.Element | JSX.Element[];
 };
 
 function Menu({ children, mode }: Props) {
-    return (
-        <div className={'custom-menu ' + (mode === 'horizontal' ? ' custom-menu-horizontal' : '')}>
-            {children}
-        </div>
-    );
+	return <div className={'custom-menu ' + (mode === 'horizontal' ? ' custom-menu-horizontal' : '')}>{children}</div>;
 }
 
 export default Menu;

@@ -10,12 +10,13 @@
 */
 
 :root {
-    --main-bg-color: #3a3a42;
+    --main-bg-color: #2e324a;
     --main-color: white;
-    --darker-bg-color: #343040;
-    --darkest-bg-color: #272130;
+    --darker-bg-color: #29273d;
+    --darkest-bg-color: #29253a;
     --lighter-bg-color: #5f5a8a;
     --lightest-bg-color: #6e709c;
+    --primary-color: #35A1FF;
 }
 
 body {

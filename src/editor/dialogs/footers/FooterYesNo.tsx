@@ -10,17 +10,17 @@
 */
 
 type Props = {
-    onYes: () => void,
-    onNo: () => void
+	onYes: () => void;
+	onNo: () => void;
 };
 
 function FooterOK({ onYes, onNo }: Props) {
-    return (
-        <div>
-            <button onClick={onYes}>Yes</button>
-            <button onClick={onNo}>No</button>
-        </div>
-    );
+	return (
+		<div>
+			<button onClick={onYes}>Yes</button>
+			<button onClick={onNo}>No</button>
+		</div>
+	);
 }
 
 export default FooterOK;

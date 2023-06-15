@@ -9,25 +9,33 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { IconType } from 'react-icons/lib';
 import '../styles/MenuItem.css';
 
 type Props = {
-    children?: any,
-    onClick?: (e:React.MouseEvent<HTMLElement, MouseEvent>) => void,
-    disabled?: boolean,
-    icon?: string
+	children?: any;
+	type?: string;
+	disabled?: boolean;
+	icon?: React.ReactNode;
+	onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 };
 
-function MenuItem({ children, onClick, disabled = false, icon }: Props) {
-    return (
-        <div onClick={(e) => {
-            if (onClick && !disabled) {
-                onClick(e)
-            }}} className={'custom-menu-item ' + (disabled ? 'custom-menu-item-disabled' : '')}>
-            {icon ? <img alt='menu icon' src={'/assets/icons/' + icon}></img> : null}
-            {children}
-        </div>
-    );
+function MenuItem({ children, type, disabled = false, icon, onClick }: Props) {
+	return (
+		<div
+			onClick={(e) => {
+				if (onClick && !disabled) {
+					onClick(e);
+				}
+			}}
+			className={`custom-menu-item ${disabled ? 'custom-menu-item-disabled' : ''} ${
+				type === 'separator' ? 'custom-menu-item-separator' : ''
+			}`}
+		>
+			{icon}
+			{children}
+		</div>
+	);
 }
 
 export default MenuItem;

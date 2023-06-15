@@ -1,5 +1,5 @@
 .custom-menu-item {
-    background-color: var(--darker-bg-color);
+    background-color: var(--main-bg-color);
     color: var(--main-color);
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -9,9 +9,16 @@
 }
 
 .custom-menu-item:hover {
-    background-color: var(--lighter-bg-color);
+    background-color: var(--lighter-bg-color) !important;
 }
 
 .custom-menu-item.custom-menu-item-disabled {
     color: #999999ce;
+}
+
+.custom-menu-item-separator {
+    background-color: var(--lighter-bg-color) !important;
+    padding: 0.5px;
+    margin-left: 5px;
+    margin-right: 5px;
 }

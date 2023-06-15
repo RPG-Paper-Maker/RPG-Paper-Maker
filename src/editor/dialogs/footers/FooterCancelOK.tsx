@@ -10,17 +10,17 @@
 */
 
 type Props = {
-    onOK: () => void,
-    onCancel: () => void
+	onOK: () => void;
+	onCancel: () => void;
 };
 
 function FooterOK({ onOK, onCancel }: Props) {
-    return (
-        <div>
-            <button onClick={onCancel}>Cancel</button>
-            <button onClick={onOK}>OK</button>
-        </div>
-    );
+	return (
+		<div>
+			<button onClick={onCancel}>Cancel</button>
+			<button onClick={onOK}>OK</button>
+		</div>
+	);
 }
 
 export default FooterOK;

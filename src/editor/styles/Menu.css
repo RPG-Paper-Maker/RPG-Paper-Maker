@@ -1,5 +1,5 @@
 .custom-menu {
-    background-color: var(--darker-bg-color);
+    background-color: var(--main-bg-color);
     color: var(--main-color);
     -webkit-user-select: none;
     -moz-user-select: none;

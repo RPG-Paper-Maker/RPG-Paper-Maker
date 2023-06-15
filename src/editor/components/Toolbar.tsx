@@ -12,42 +12,108 @@
 import React from 'react';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
+import {
+	AiFillFileAdd,
+	AiOutlineFileAdd,
+	AiOutlineFolderOpen,
+	AiOutlineFolder,
+	AiOutlineDatabase,
+	AiOutlinePicture,
+	AiOutlineFontSize,
+} from 'react-icons/ai';
+import { BiSave, BiPyramid, BiCube } from 'react-icons/bi';
+import { LuSaveAll, LuLanguages } from 'react-icons/lu';
+import { BsClipboardData, BsMusicNote, BsPlay } from 'react-icons/bs';
+import { TbNumbers } from 'react-icons/tb';
+import { FaArrowsAlt, FaRegKeyboard, FaPlug, FaMountain } from 'react-icons/fa';
+import { MdOutlineAddchart, MdAutoAwesomeMosaic } from 'react-icons/md';
+import { TfiVideoClapper } from 'react-icons/tfi';
+import { GiBrickWall } from 'react-icons/gi';
+
 import '../styles/ToolBar.css';
 
 function ToolBar() {
+	const handleFloor = () => {};
 
-    const handleFloor = () => {
-
-    };
-    
-    return (
-        <div className='toolbar'>
-            <Menu mode='horizontal'>
-                <MenuItem icon='new-file.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='open-file.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='save.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='save.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='dir.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='datas.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='systems.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='variables.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='collisions.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='inputs.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='scripts.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='lang.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='pictures.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='pause.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='songs.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='object-toolbar.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='fonts.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='autotiles-toolbar.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='walls-toolbar.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='object-toolbar.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='mountains-toolbar.png' onClick={handleFloor}></MenuItem>
-                <MenuItem icon='play.png' onClick={handleFloor}></MenuItem>
-            </Menu>
-        </div>
-    );
+	return (
+		<div className='toolbar'>
+			<Menu mode='horizontal'>
+				<MenuItem icon={<AiOutlineFileAdd />} onClick={handleFloor}>
+					New
+				</MenuItem>
+				<MenuItem icon={<AiOutlineFolderOpen />} onClick={handleFloor}>
+					Open
+				</MenuItem>
+				<MenuItem icon={<BiSave />} onClick={handleFloor}>
+					Save
+				</MenuItem>
+				<MenuItem icon={<LuSaveAll />} onClick={handleFloor}>
+					All
+				</MenuItem>
+				<MenuItem icon={<AiOutlineFolder />} onClick={handleFloor}>
+					Folder
+				</MenuItem>
+				<MenuItem type='separator'></MenuItem>
+				<MenuItem icon={<BsClipboardData />} onClick={handleFloor}>
+					Data
+				</MenuItem>
+				<MenuItem icon={<AiOutlineDatabase />} onClick={handleFloor}>
+					Systems
+				</MenuItem>
+				<MenuItem icon={<TbNumbers />} onClick={handleFloor}>
+					Variables
+				</MenuItem>
+				<MenuItem icon={<FaArrowsAlt />} onClick={handleFloor}>
+					Collisions
+				</MenuItem>
+				<MenuItem icon={<FaRegKeyboard />} onClick={handleFloor}>
+					Keyboard
+				</MenuItem>
+				<MenuItem icon={<LuLanguages />} onClick={handleFloor}>
+					Languages
+				</MenuItem>
+				<MenuItem icon={<FaPlug />} onClick={handleFloor}>
+					Plugins
+				</MenuItem>
+				<MenuItem icon={<MdOutlineAddchart />} onClick={handleFloor}>
+					DLCs
+				</MenuItem>
+				<MenuItem type='separator'></MenuItem>
+				<MenuItem icon={<AiOutlinePicture />} onClick={handleFloor}>
+					Pictures
+				</MenuItem>
+				<MenuItem icon={<TfiVideoClapper />} onClick={handleFloor}>
+					Videos
+				</MenuItem>
+				<MenuItem icon={<BsMusicNote />} onClick={handleFloor}>
+					Songs
+				</MenuItem>
+				<MenuItem icon={<BiPyramid />} onClick={handleFloor}>
+					Shapes
+				</MenuItem>
+				<MenuItem icon={<AiOutlineFontSize />} onClick={handleFloor}>
+					Fonts
+				</MenuItem>
+				<MenuItem type='separator'></MenuItem>
+				<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleFloor}>
+					Autotiles
+				</MenuItem>
+				<MenuItem icon={<GiBrickWall />} onClick={handleFloor}>
+					Walls
+				</MenuItem>
+				<MenuItem icon={<BiCube />} onClick={handleFloor}>
+					3D objects
+				</MenuItem>
+				<MenuItem icon={<FaMountain />} onClick={handleFloor}>
+					Mountains
+				</MenuItem>
+				<MenuItem type='separator'></MenuItem>
+				<MenuItem icon={<BsPlay />} onClick={handleFloor}>
+					Play
+				</MenuItem>
+			</Menu>
+		</div>
+	);
 }
 
 export default ToolBar;
