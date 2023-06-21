@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { IconType } from 'react-icons/lib';
 import '../styles/MenuItem.css';
 
 type Props = {

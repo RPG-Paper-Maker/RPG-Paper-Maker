@@ -1,6 +1,7 @@
 .custom-sub-menu {
     display: flex;
     flex-direction: column;
+    white-space: nowrap;
 }
 
 .custom-sub-menu-title {
@@ -30,6 +31,6 @@
     transform: rotate(-45deg);
     -webkit-transform: rotate(-45deg);
     position: absolute;
-    right: 10px;
-    top: 10px;
+    right: 7px;
+    top: 12px;
 }

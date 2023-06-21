@@ -23,7 +23,6 @@ function SubMenu({ children, title, icon }: Props) {
 	let [testVisible, setTestVisible] = useState<boolean>(false);
 	let [subVisible, setSubVisible] = useState<boolean>(false);
 	let [opened, setOpened] = useState<boolean>(false);
-	let [isClickingSub, setIsClickingSub] = useState<boolean>(false);
 	const refMain = useRef<HTMLHeadingElement>(null);
 	const refTitle = useRef<HTMLHeadingElement>(null);
 	const refArrow = useRef<HTMLHeadingElement>(null);
@@ -31,28 +30,16 @@ function SubMenu({ children, title, icon }: Props) {
 
 	const onMouseEnter = () => {
 		setSubVisible(true);
+		setOpened(true);
 	};
 
 	const onMouseLeave = () => {
 		setTestVisible(true);
+		setOpened(false);
 	};
 
 	const onMouseOver = () => {
 		setSubVisible(true);
-	};
-
-	const onClick = () => {
-		if (!isClickingSub) {
-			setOpened(false);
-			setSubVisible(false);
-		}
-		setIsClickingSub(false);
-	};
-
-	const onClickInSub = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-		setOpened(true);
-		setSubVisible(true);
-		setIsClickingSub(true);
 	};
 
 	useEffect(() => {
@@ -69,7 +56,7 @@ function SubMenu({ children, title, icon }: Props) {
 					left = rect.left;
 					top = rect.bottom;
 				} else {
-					left = rect.right;
+					left = refTitle.current.offsetWidth;
 					top = rect.top - rect.height;
 				}
 				refContent.current.setAttribute('style', 'top:' + top + 'px; left:' + left + 'px;');
@@ -84,15 +71,15 @@ function SubMenu({ children, title, icon }: Props) {
 				onMouseEnter={onMouseEnter}
 				onMouseLeave={onMouseLeave}
 				onMouseOver={onMouseOver}
-				onClick={onClickInSub}
 				className={'custom-sub-menu-title' + (opened ? ' custom-sub-menu-title-opened' : '')}
 			>
 				{icon ? <img alt='menu icon' src={'/assets/icons/' + icon}></img> : null}
 				{icon && title ? <label>&nbsp;</label> : null}
 				{title}
+				&nbsp;
 				<i ref={refArrow}></i>
 			</div>
-			<div className='absolute' ref={refContent} onClick={onClick}>
+			<div className='absolute' ref={refContent}>
 				<SubMenuContent
 					subVisible={subVisible}
 					setSubVisible={setSubVisible}

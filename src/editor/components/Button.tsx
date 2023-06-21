@@ -12,62 +12,68 @@
 import { useState, useEffect, useRef } from 'react';
 
 type Props = {
-    children?: any,
-    canHold?: boolean,
-    intervalHold?: number,
-    icon?: string,
-    activable?: boolean,
-    active?: boolean,
-    onClick?: () => void,
+	children?: any;
+	canHold?: boolean;
+	intervalHold?: number;
+	icon?: string;
+	activable?: boolean;
+	active?: boolean;
+	onClick?: () => void;
 };
 
-function Button({ children, canHold = false, intervalHold = 0, icon = '', 
-    activable = false, active = true, onClick }: Props) {
-    const [activeState, setActiveState] = useState<boolean>(active);
-    const ref = useRef<HTMLButtonElement>(null);
+function Button({
+	children,
+	canHold = false,
+	intervalHold = 0,
+	icon = '',
+	activable = false,
+	active = true,
+	onClick,
+}: Props) {
+	const [activeState, setActiveState] = useState<boolean>(active);
+	const ref = useRef<HTMLButtonElement>(null);
 
-    if (active !== activeState) {
-        setActiveState(active);
-    }
+	if (active !== activeState) {
+		setActiveState(active);
+	}
 
-    const handleClick = () => {
-        if (onClick) {
-            onClick();
-        }
-        if (activable) {
-            setActiveState(!activeState);
-        }
-    };
+	const handleClick = () => {
+		if (onClick) {
+			onClick();
+		}
+		if (activable) {
+			setActiveState(!activeState);
+		}
+	};
 
-    useEffect(() => {
-        if (canHold) {
-            ref.current?.addEventListener('pointerdown', (e) => {
-                let int = setInterval(() => {
-                    if (onClick) {
-                        onClick();
-                    }
-                }, intervalHold);
-                let f1 = function() {
-                    clearInterval(int);
-                    document.removeEventListener('mouseup', f1);
-                };
-                let f2 = function() {
-                    clearInterval(int);
-                    document.removeEventListener('touchend', f2);
-                };
-                document.addEventListener('mouseup', f1);
-                document.addEventListener('touchend', f2);
-            });
-        }
-        // eslint-disable-next-line
-    }, []);
-    
-    return (
-        <button ref={ref} className={(activeState ? '' : 'button-unactive')} 
-            onClick={handleClick}>
-            { icon !== '' ? <img alt='button icon' src={'/assets/icons/' + icon }></img> : null }{ children }
-        </button>
-    );
+	useEffect(() => {
+		if (canHold) {
+			ref.current?.addEventListener('pointerdown', (e) => {
+				let int = setInterval(() => {
+					if (onClick) {
+						onClick();
+					}
+				}, intervalHold);
+				let f1 = function () {
+					clearInterval(int);
+					document.removeEventListener('mouseup', f1);
+				};
+				let f2 = function () {
+					clearInterval(int);
+					document.removeEventListener('touchend', f2);
+				};
+				document.addEventListener('mouseup', f1);
+				document.addEventListener('touchend', f2);
+			});
+		}
+	}, []);
+
+	return (
+		<button ref={ref} className={activeState ? '' : 'button-unactive'} onClick={handleClick}>
+			{icon !== '' ? <img alt='button icon' src={'/assets/icons/' + icon}></img> : null}
+			{children}
+		</button>
+	);
 }
 
 export default Button;

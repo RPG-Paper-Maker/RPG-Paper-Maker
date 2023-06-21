@@ -10,27 +10,22 @@
 */
 
 class Mathf {
+	static clamp(value: number, min: number, max: number): number {
+		return value <= min ? min : value >= max ? max : value;
+	}
 
-    constructor() {
-        throw new Error('This is a static class!');
-    }
-    
-    static clamp(value: number, min: number, max: number): number {
-        return value <= min ? min : value >= max ? max : value;
-    }
+	static cos(v: number): number {
+		return parseFloat(Math.cos(v).toFixed(10));
+	}
 
-    static cos(v: number): number {
-        return parseFloat(Math.cos(v).toFixed(10));
-    }
+	static sin(v: number): number {
+		return parseFloat(Math.sin(v).toFixed(10));
+	}
 
-    static sin(v: number): number {
-        return parseFloat(Math.sin(v).toFixed(10));
-    }
-
-    static mod(x: number, m: number): number {
-        let r = x % m;
-        return r < 0 ? r + m : r;
-    }
+	static mod(x: number, m: number): number {
+		let r = x % m;
+		return r < 0 ? r + m : r;
+	}
 }
 
-export { Mathf }
+export { Mathf };

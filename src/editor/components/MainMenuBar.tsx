@@ -19,6 +19,7 @@ import { Enum } from '../common/Enum';
 import { Scene } from '../Editor';
 import { Project } from '../core/Project';
 import 'rc-dialog/assets/index.css';
+import '../styles/MainMenuBar.css';
 
 type Props = {
 	currentProjectName: string;
@@ -34,7 +35,7 @@ function MainMenuBar({ currentProjectName, setCurrentProjectName }: Props) {
 		setProjectNames(projects);
 	};
 
-	const newProject = () => {
+	const handleNewProject = () => {
 		let dialog = (
 			<DialogNewProject
 				setDialog={setDialog}
@@ -116,10 +117,11 @@ function MainMenuBar({ currentProjectName, setCurrentProjectName }: Props) {
 	}, []);
 
 	return (
-		<React.Fragment>
+		<div className='flex-center-vertically'>
+			<img className='main-menu-bar-logo' src={'/favicon.ico'} alt='logo' />
 			<Menu mode='horizontal'>
 				<SubMenu title='File'>
-					<MenuItem onClick={newProject}>New Project...</MenuItem>
+					<MenuItem onClick={handleNewProject}>New Project...</MenuItem>
 					<SubMenu title='Open existing project...'>
 						{projectNames.map((name) => {
 							return (
@@ -161,7 +163,7 @@ function MainMenuBar({ currentProjectName, setCurrentProjectName }: Props) {
 				<SubMenu title='Help'></SubMenu>
 			</Menu>
 			{dialog}
-		</React.Fragment>
+		</div>
 	);
 }
 

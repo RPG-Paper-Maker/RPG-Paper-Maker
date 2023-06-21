@@ -13,66 +13,60 @@ import { Model } from '../Editor';
 import { Constants } from './Constants';
 
 class Utils {
+	public static defaultValue<T>(value: T | undefined, defaultValue: T): T {
+		return value === undefined ? defaultValue : value;
+	}
 
-    constructor() {
-        throw new Error("This is a static class!");
-    }
+	public static writeDefaultValue<T>(json: any, jsonName: string, value: T, defaultValue: T) {
+		if (value !== defaultValue) {
+			json[jsonName] = value;
+		}
+	}
 
-    public static defaultValue<T>(value: T | undefined, defaultValue: T): T {
-        return value === undefined ? defaultValue : value;
-    }
+	public static writeDefaultValueArray(prop: any, propName: string, value: any[]) {
+		if (value.length > 0) {
+			prop[propName] = value;
+		}
+	}
 
-    public static writeDefaultValue<T>(json: any, jsonName: string, value: T, 
-        defaultValue: T) {
-        if (value !== defaultValue) {
-            json[jsonName] = value;
-        }
-    }
+	static isNumber(value: any): boolean {
+		return typeof value === Constants.NUMBER;
+	}
 
-    public static writeDefaultValueArray(prop: any, propName: string, value: any[]) {
-        if (value.length > 0) {
-            prop[propName] = value;
-        }
-    }
+	static isString(value: any): boolean {
+		return typeof value === Constants.STRING;
+	}
 
-    static isNumber(value: any): boolean {
-        return typeof value === Constants.NUMBER;
-    }
+	static readList(list: any[], json: Record<string, any>[], constructor: any) {
+		let model: Model.Base;
+		for (let jsonModel of json) {
+			model = new constructor();
+			model.read(jsonModel);
+			list.push(model);
+		}
+	}
 
-    static isString(value: any): boolean {
-        return typeof value === Constants.STRING;
-    }
-    
-    static readList(list: any[], json: Record<string, any>[], constructor: any) {
-        let model: Model.Base;
-        for (let jsonModel of json) {
-            model = new constructor();
-            model.read(jsonModel);
-            list.push(model);
-        }
-    }
+	static writeList(list: any[], json: Record<string, any>, jsonName: string) {
+		let jsonList: Record<string, any> = [];
+		for (let model of list) {
+			let jsonModel = {};
+			model.write(jsonModel);
+			jsonList.push(jsonModel);
+		}
+		json[jsonName] = jsonList;
+	}
 
-    static writeList(list: any[], json: Record<string, any>, jsonName: string) {
-        let jsonList: Record<string, any> = [];
-        for (let model of list) {
-            let jsonModel = {};
-            model.write(jsonModel);
-            jsonList.push(jsonModel);
-        }
-        json[jsonName] = jsonList;
-    }
+	static formatNumber(num: number, size: number): string {
+		return ('000000000' + num).substr(-size);
+	}
 
-    static formatNumber(num: number, size: number): string {
-        return ('000000000' + num).substr(-size);
-    }
+	static numToBool(n: number): boolean {
+		return n === Constants.NUM_BOOL_TRUE;
+	}
 
-    static numToBool(n: number): boolean {
-        return n === Constants.NUM_BOOL_TRUE;
-    }
-
-    static boolToNum(b: boolean): number {
-        return b ? Constants.NUM_BOOL_TRUE : Constants.NUM_BOOL_FALSE;
-    }
+	static boolToNum(b: boolean): number {
+		return b ? Constants.NUM_BOOL_TRUE : Constants.NUM_BOOL_FALSE;
+	}
 }
 
-export { Utils }
+export { Utils };

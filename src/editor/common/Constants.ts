@@ -10,18 +10,13 @@
 */
 
 class Constants {
-
-    public static readonly UNDEFINED = 'undefined';
-    public static readonly NUMBER = "number";
-    public static readonly STRING = "string";
-    public static readonly NUM_BOOL_TRUE = 1;
-    public static readonly NUM_BOOL_FALSE = 0;
-    public static readonly BASE_SQUARE_SIZE = 32;
-    public static readonly PORTION_SIZE = 16;
-
-    constructor() {
-        throw new Error("This is a static class!");
-    }
+	public static readonly UNDEFINED = 'undefined';
+	public static readonly NUMBER = 'number';
+	public static readonly STRING = 'string';
+	public static readonly NUM_BOOL_TRUE = 1;
+	public static readonly NUM_BOOL_FALSE = 0;
+	public static readonly BASE_SQUARE_SIZE = 32;
+	public static readonly PORTION_SIZE = 16;
 }
 
-export { Constants }
+export { Constants };

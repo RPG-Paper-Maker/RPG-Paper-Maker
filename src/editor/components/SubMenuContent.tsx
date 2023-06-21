@@ -13,40 +13,42 @@ import { useEffect } from 'react';
 import '../styles/SubMenuContent.css';
 
 type Props = {
-    children: any,
-    subVisible: boolean,
-    setSubVisible: React.Dispatch<React.SetStateAction<boolean>>,
-    testVisible: boolean,
-    setTestVisible: React.Dispatch<React.SetStateAction<boolean>>,
-    setOpened: React.Dispatch<React.SetStateAction<boolean>>
+	children: any;
+	subVisible: boolean;
+	setSubVisible: React.Dispatch<React.SetStateAction<boolean>>;
+	testVisible: boolean;
+	setTestVisible: React.Dispatch<React.SetStateAction<boolean>>;
+	setOpened: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function SubMenuContent({ children, subVisible, setSubVisible, testVisible, 
-    setTestVisible, setOpened }: Props) {
+function SubMenuContent({ children, subVisible, setSubVisible, testVisible, setTestVisible, setOpened }: Props) {
+	const onMouseLeave = (e: unknown) => {
+		setSubVisible(false);
+		setOpened(false);
+	};
 
-    const onMouseLeave = () => {
-        setSubVisible(false);
-        setOpened(false);
-    };
+	const onMouseEnter = () => {
+		setTestVisible(false);
+		setOpened(true);
+	};
 
-    const onMouseEnter = () => {
-        setTestVisible(false);
-        setOpened(true);
-    };
+	useEffect(() => {
+		if (testVisible) {
+			setTestVisible(false);
+			setSubVisible(false);
+		}
+	});
 
-    useEffect(() => {
-        if (testVisible) {
-            setTestVisible(false);
-            setSubVisible(false);
-        }
-    });
-    
-    return (
-        <div onMouseLeave={onMouseLeave} onMouseEnter={onMouseEnter}
-            className="custom-sub-menu-content" hidden={!subVisible}>
-            {children}
-        </div>
-    );
+	return (
+		<div
+			onMouseLeave={onMouseLeave}
+			onMouseEnter={onMouseEnter}
+			className='custom-sub-menu-content'
+			hidden={!subVisible}
+		>
+			{children}
+		</div>
+	);
 }
 
 export default SubMenuContent;

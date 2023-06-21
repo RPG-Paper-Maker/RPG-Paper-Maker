@@ -10,11 +10,13 @@
 */
 
 import React from 'react';
+import { Provider } from 'react-redux';
 import MainMenuBar from './components/MainMenuBar';
 import PanelProject from './components/PanelProject';
 import ToolBar from './components/Toolbar';
 import { LocalFile } from './core/LocalFile';
 import { Manager } from './Editor';
+import { store } from './store';
 import './styles/Editor.css';
 
 // Create GL contexts
@@ -25,11 +27,13 @@ function Editor() {
 	const [currentProjectName, setCurrentProjectName] = React.useState<string>('');
 
 	return (
-		<div className='flex-column fill-space'>
-			<MainMenuBar currentProjectName={currentProjectName} setCurrentProjectName={setCurrentProjectName} />
-			<ToolBar />
-			<PanelProject currentProjectName={currentProjectName} />
-		</div>
+		<Provider store={store}>
+			<div className='flex-column fill-space'>
+				<MainMenuBar currentProjectName={currentProjectName} setCurrentProjectName={setCurrentProjectName} />
+				<ToolBar />
+				<PanelProject currentProjectName={currentProjectName} />
+			</div>
+		</Provider>
 	);
 }
 

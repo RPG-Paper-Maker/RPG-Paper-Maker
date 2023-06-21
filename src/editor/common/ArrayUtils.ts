@@ -10,18 +10,13 @@
 */
 
 class ArrayUtils {
+	static removeAt(array: any[], index: number) {
+		array.splice(index, 1);
+	}
 
-    constructor() {
-        throw new Error("This is a static class!");
-    }
-
-    static removeAt(array: any[], index: number) {
-        array.splice(index, 1);
-    }
-
-    static removeElement<T>(array: T[], value: T) {
-        this.removeAt(array, array.indexOf(value));
-    }
+	static removeElement<T>(array: T[], value: T) {
+		this.removeAt(array, array.indexOf(value));
+	}
 }
 
-export { ArrayUtils }
+export { ArrayUtils };
