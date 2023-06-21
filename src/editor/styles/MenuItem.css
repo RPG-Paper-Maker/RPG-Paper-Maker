@@ -7,6 +7,7 @@
     margin: 0;
     padding: 5px 15px 5px 15px;
     white-space: nowrap;
+    transition: all 0.25s ease-out;
 }
 
 .custom-menu-item:hover {
@@ -22,4 +23,8 @@
     padding: 0.5px;
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.custom-menu-item svg {
+    margin-right: 0.5em;
 }

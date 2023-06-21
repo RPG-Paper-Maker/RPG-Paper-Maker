@@ -4,12 +4,15 @@
     white-space: nowrap;
 }
 
+.custom-sub-menu svg {
+    margin-right: 0.5em;
+}
+
 .custom-sub-menu-title {
     padding: 5px 15px 5px 15px;
     background-color: var(--main-bg-color);
     position: relative;
 }
-
 
 .map-editor-bar .custom-sub-menu-title {
     padding: 10px 15px 10px 15px;

@@ -9,14 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import SubMenuContent from './SubMenuContent';
 import '../styles/SubMenu.css';
 
 type Props = {
-	children?: any;
+	children?: React.ReactNode | React.ReactNode[];
 	title?: string;
-	icon?: string;
+	icon?: React.ReactNode;
 };
 
 function SubMenu({ children, title, icon }: Props) {
@@ -73,8 +73,7 @@ function SubMenu({ children, title, icon }: Props) {
 				onMouseOver={onMouseOver}
 				className={'custom-sub-menu-title' + (opened ? ' custom-sub-menu-title-opened' : '')}
 			>
-				{icon ? <img alt='menu icon' src={'/assets/icons/' + icon}></img> : null}
-				{icon && title ? <label>&nbsp;</label> : null}
+				{icon}
 				{title}
 				&nbsp;
 				<i ref={refArrow}></i>

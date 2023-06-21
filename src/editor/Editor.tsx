@@ -11,9 +11,8 @@
 
 import React from 'react';
 import { Provider } from 'react-redux';
-import MainMenuBar from './components/MainMenuBar';
+import MainMenuToolBar from './components/MainMenuToolBar';
 import PanelProject from './components/PanelProject';
-import ToolBar from './components/Toolbar';
 import { LocalFile } from './core/LocalFile';
 import { Manager } from './Editor';
 import { store } from './store';
@@ -29,8 +28,10 @@ function Editor() {
 	return (
 		<Provider store={store}>
 			<div className='flex-column fill-space'>
-				<MainMenuBar currentProjectName={currentProjectName} setCurrentProjectName={setCurrentProjectName} />
-				<ToolBar />
+				<MainMenuToolBar
+					currentProjectName={currentProjectName}
+					setCurrentProjectName={setCurrentProjectName}
+				/>
 				<PanelProject currentProjectName={currentProjectName} />
 			</div>
 		</Provider>
