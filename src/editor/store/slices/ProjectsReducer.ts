@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-
 interface ProjectState {
 	name: string;
 	location: string;
@@ -13,6 +12,9 @@ const projectsSlice = createSlice({
 		list: [] as ProjectState[],
 	},
 	reducers: {
+		setCurrentProjectName(state, action: PayloadAction<string>) {
+			state.current = action.payload;
+		},
 		addProject(state, action: PayloadAction<ProjectState>) {
 			state.list.push(action.payload);
 		},
@@ -22,5 +24,5 @@ const projectsSlice = createSlice({
 	},
 });
 
-export const { addProject, clearProjects } = projectsSlice.actions;
+export const { setCurrentProjectName, addProject, clearProjects } = projectsSlice.actions;
 export const ProjectsReducer = projectsSlice.reducer;

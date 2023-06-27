@@ -70,7 +70,7 @@ function Button({
 
 	return (
 		<button ref={ref} className={activeState ? '' : 'button-unactive'} onClick={handleClick}>
-			{icon !== '' ? <img alt='button icon' src={'/assets/icons/' + icon}></img> : null}
+			{icon !== '' ? <img alt='button icon' src={'./assets/icons/' + icon}></img> : null}
 			{children}
 		</button>
 	);

@@ -10,6 +10,8 @@
 */
 
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, setCurrentProjectName } from '../store';
 import DialogNewProject from '../dialogs/DialogNewProject';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
@@ -39,14 +41,11 @@ import { GiBrickWall } from 'react-icons/gi';
 import 'rc-dialog/assets/index.css';
 import '../styles/MainMenuToolBar.css';
 
-type Props = {
-	currentProjectName: string;
-	setCurrentProjectName: React.Dispatch<React.SetStateAction<string>>;
-};
-
-function MainMenuBar({ currentProjectName, setCurrentProjectName }: Props) {
+function MainMenuBar() {
 	const [dialog, setDialog] = React.useState(<React.Fragment></React.Fragment>);
 	const [projectNames, setProjectNames] = React.useState<string[]>([]);
+	const dispatch = useDispatch();
+	const currentProjectName = useSelector((state: RootState) => state.projects.current);
 
 	const loadProjects = async () => {
 		let projects = await LocalFile.getFolders(Enum.LocalForage.Projects);
@@ -74,7 +73,7 @@ function MainMenuBar({ currentProjectName, setCurrentProjectName }: Props) {
 		}
 		Scene.Map.current = new Scene.Map(1);
 		await Scene.Map.current.load();
-		setCurrentProjectName(name);
+		dispatch(setCurrentProjectName(name));
 	};
 
 	const closeProject = () => {
@@ -83,7 +82,7 @@ function MainMenuBar({ currentProjectName, setCurrentProjectName }: Props) {
 			Scene.Map.current = null;
 		}
 		Project.current = null;
-		setCurrentProjectName('');
+		dispatch(setCurrentProjectName(''));
 	};
 
 	const zoomIn = () => {
@@ -139,7 +138,7 @@ function MainMenuBar({ currentProjectName, setCurrentProjectName }: Props) {
 	return (
 		<>
 			<div className='flex-center-vertically'>
-				<img className='main-menu-bar-logo' src={'/favicon.ico'} alt='logo' />
+				<img className='main-menu-bar-logo' src={'./favicon.ico'} alt='logo' />
 				<Menu mode='horizontal'>
 					<SubMenu title='File'>
 						<MenuItem icon={<AiOutlineFileAdd />} onClick={handleNewProject}>

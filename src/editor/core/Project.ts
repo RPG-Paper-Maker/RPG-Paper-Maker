@@ -14,41 +14,32 @@ import { Paths } from '../common/Paths';
 import { Data } from '../Editor';
 
 class Project {
+	public static current: Project | null = null;
+	public systems: Data.System = new Data.System();
 
-    public static current: Project | null = null;
-    public systems: Data.System = new Data.System();
+	constructor(name: string) {
+		this.systems.projectName = name;
+	}
 
-    constructor(name: string) {
-        this.systems.projectName = name;
-    }
+	static getSquareSize(): number {
+		return this.current!.systems.SQUARE_SIZE;
+	}
 
-    static getSquareSize(): number {
-        return this.current!.systems.SQUARE_SIZE;
-    }
+	getPath(): string {
+		return Paths.join(Enum.LocalForage.Projects, this.systems.projectName); // Different web and desktop
+	}
 
-    getPath(): string {
-        return Enum.LocalForage.Projects + '/' + this.systems.projectName;
-    }
+	getPathMaps(): string {
+		return Paths.join(this.getPath(), Paths.MAPS);
+	}
 
-    getPathContent(): string {
-        return this.getPath() + Paths.getContent();
-    }
+	async load() {
+		await this.systems.load(Paths.join(this.getPath(), Paths.FILE_SYSTEM));
+	}
 
-    getPathDatas(): string {
-        return this.getPathContent() + '/' + Paths.DATAS;
-    }
-
-    getPathMaps(): string {
-        return this.getPathDatas() + '/' + Paths.MAPS;
-    }
-
-    async load() {
-        await this.systems.load(this.getPathDatas() + Paths.FILE_SYSTEM);
-    }
-
-    async save() {
-        await this.systems.save(this.getPathDatas() + Paths.FILE_SYSTEM);
-    }
+	async save() {
+		await this.systems.save(Paths.join(this.getPath(), Paths.FILE_SYSTEM));
+	}
 }
 
-export { Project }
+export { Project };

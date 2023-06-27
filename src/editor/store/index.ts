@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { ProjectsReducer } from './slices/ProjectsReducer';
-import { addProject, clearProjects } from './slices/ProjectsReducer';
+import { setCurrentProjectName, addProject, clearProjects } from './slices/ProjectsReducer';
 
 const store = configureStore({
 	reducer: {
@@ -8,4 +8,5 @@ const store = configureStore({
 	},
 });
 
-export { store, addProject, clearProjects };
+export { store, setCurrentProjectName, addProject, clearProjects };
+export type RootState = ReturnType<typeof store.getState>;

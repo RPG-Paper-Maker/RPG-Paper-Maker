@@ -23,16 +23,11 @@ Manager.GL.mapEditorContext = new Manager.GL();
 Manager.GL.extraContext = new Manager.GL();
 
 function Editor() {
-	const [currentProjectName, setCurrentProjectName] = React.useState<string>('');
-
 	return (
 		<Provider store={store}>
 			<div className='flex-column fill-space'>
-				<MainMenuToolBar
-					currentProjectName={currentProjectName}
-					setCurrentProjectName={setCurrentProjectName}
-				/>
-				<PanelProject currentProjectName={currentProjectName} />
+				<MainMenuToolBar />
+				<PanelProject />
 			</div>
 		</Provider>
 	);
@@ -42,13 +37,8 @@ LocalFile.config();
 (async () => {
 	await Manager.GL.initializeShaders();
 
-	/*
-    let all = await LocalFile.allStorage();
-    console.log(all);
-    for (let path of all) {
-        await LocalFile.brutRemove(path);
-    }
-    */
+	let all = await LocalFile.allStorage();
+	console.log(all);
 })();
 
 export * as Manager from './managers/index';
