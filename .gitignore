@@ -58,3 +58,6 @@ compile_commands.json
 /mods
 /node_modules
 package-lock.json
+/build
+/desktop/build
+/desktop/node_modules

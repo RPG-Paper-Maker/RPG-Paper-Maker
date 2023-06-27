@@ -14,10 +14,20 @@ import { Route, Routes } from 'react-router-dom';
 import Editor from './editor/Editor';
 
 function App() {
+	var userAgent = navigator.userAgent.toLowerCase();
+	const isDesktop = userAgent.indexOf(' electron/') > -1;
 	return (
-		<Routes>
-			<Route path='/' element={<Editor />} />
-		</Routes>
+		<>
+			{isDesktop ? (
+				<Editor />
+			) : (
+				<div>
+					<Routes>
+						<Route path='/' element={<Editor />} />
+					</Routes>
+				</div>
+			)}
+		</>
 	);
 }
 

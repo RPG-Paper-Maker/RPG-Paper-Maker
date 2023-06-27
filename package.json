@@ -1,7 +1,8 @@
 {
   "name": "RPG Paper Maker",
-  "homepage": "http://localhost:3000/",
+  "homepage": ".",
   "version": "0.1.0",
+  "author": "Marie Laporte",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",

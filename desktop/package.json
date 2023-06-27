@@ -1,0 +1,12 @@
+{
+  "name": "RPG Paper Maker",
+  "version": "1.0.0",
+  "author": "Marie Laporte",
+  "private": true,
+  "scripts": {
+    "start": "electron ./index.js"
+  },
+  "devDependencies": {
+    "electron": "^25.2.0"
+  }
+}
