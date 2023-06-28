@@ -9,82 +9,85 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react';
 import { Manager, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import '../styles/MapEditor.css';
 
 type Props = {
-    visible: boolean
+	visible: boolean;
 };
 
 function MapEditor({ visible }: Props) {
-    const refCanvas = useRef<HTMLHeadingElement>(null);
+	const refCanvas = useRef<HTMLHeadingElement>(null);
 
-    Manager.GL.mapEditorContext.visible = visible;
+	Manager.GL.mapEditorContext.visible = visible;
 
-    const initialize = async () => {
-        if (refCanvas.current) {
-            Inputs.initialize(refCanvas.current);
-            Manager.GL.mapEditorContext.initialize('canvas-map-editor');
-            resize();
-            window.addEventListener('resize', resize);
-        }
-    };
+	const initialize = async () => {
+		if (refCanvas.current) {
+			Inputs.initialize(refCanvas.current);
+			Manager.GL.mapEditorContext.initialize('canvas-map-editor');
+			resize();
+			window.addEventListener('resize', resize);
+		}
+	};
 
-    const loop = () => {
-        if (Manager.GL.mapEditorContext.visible) {
-            // Update if everything is loaded
-            if (!Scene.Map.current!.loading && (Manager.Inputs
-                .pointerLeftPressed || Manager.Inputs.pointerRightPressed)) {
-                Scene.Map.current!.onPointerDownRepeat(Inputs.pointerPosition.x, 
-                    Inputs.pointerPosition.y);
-                if (Inputs.pointerDownRepeat) {
-                    Scene.Map.current!.onCanvasOnlyPointerDownRepeat(Inputs
-                        .pointerPosition.x, Inputs.pointerPosition.y);
-                }
-            }
-            if (!Scene.Map.current!.loading) {
-                Scene.Map.current!.update(Manager.GL.mapEditorContext);
-            }
-            if (!Scene.Map.current!.loading) {
-                Scene.Map.current!.draw3D(Manager.GL.mapEditorContext);
-            }
+	const loop = () => {
+		if (Manager.GL.mapEditorContext.visible) {
+			// Update if everything is loaded
+			if (
+				!Scene.Map.current!.loading &&
+				(Manager.Inputs.pointerLeftPressed || Manager.Inputs.pointerRightPressed)
+			) {
+				Scene.Map.current!.onPointerDownRepeat(Inputs.pointerPosition.x, Inputs.pointerPosition.y);
+				if (Inputs.pointerDownRepeat) {
+					Scene.Map.current!.onCanvasOnlyPointerDownRepeat(
+						Inputs.pointerPosition.x,
+						Inputs.pointerPosition.y
+					);
+				}
+			}
+			if (!Scene.Map.current!.loading) {
+				Scene.Map.current!.update(Manager.GL.mapEditorContext);
+			}
+			if (!Scene.Map.current!.loading) {
+				Scene.Map.current!.draw3D(Manager.GL.mapEditorContext);
+			}
 
-            // Change cursor if needed
-            if (Scene.Map.current!.loading) {
-                refCanvas.current?.classList.add('loading');
-            } else {
-                refCanvas.current?.classList.remove('loading');
-            }
-        }
+			// Change cursor if needed
+			if (Scene.Map.current!.loading) {
+				refCanvas.current?.classList.add('loading');
+			} else {
+				refCanvas.current?.classList.remove('loading');
+			}
+		}
 
-        requestAnimationFrame(loop);
-    };
+		requestAnimationFrame(loop);
+	};
 
-    const resize = () => {
-        Manager.GL.mapEditorContext.resize();
-        if (Scene.Map.current) {
-            Scene.Map.current.camera.resizeGL(Manager.GL.mapEditorContext);
-        }
-    };
-    
-    useEffect(() => {
-        loop();
-        initialize();
-        // eslint-disable-next-line
-    }, []);
+	const resize = () => {
+		Manager.GL.mapEditorContext.resize();
+		if (Scene.Map.current) {
+			Scene.Map.current.camera.resizeGL(Manager.GL.mapEditorContext);
+		}
+	};
 
-    // Resize after rendering
-    useEffect(() => {
-        resize();
-    });
+	useEffect(() => {
+		loop();
+		initialize();
+		// eslint-disable-next-line
+	}, []);
 
-    return (
-        <div className='flex-grow-1 relative' hidden={!visible}>
-            <div className='fill-space' ref={refCanvas} id='canvas-map-editor'></div>
-        </div>
-    );
+	// Resize after rendering
+	useEffect(() => {
+		resize();
+	});
+
+	return (
+		<div className='flex-one relative' hidden={!visible}>
+			<div className='fill-space' ref={refCanvas} id='canvas-map-editor'></div>
+		</div>
+	);
 }
 
 export default MapEditor;

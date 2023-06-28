@@ -10,9 +10,11 @@
 */
 
 import { useState, useEffect, useRef } from 'react';
+import '../styles/Button.css';
 
 type Props = {
 	children?: any;
+	primary?: boolean;
 	canHold?: boolean;
 	intervalHold?: number;
 	icon?: string;
@@ -23,6 +25,7 @@ type Props = {
 
 function Button({
 	children,
+	primary = false,
 	canHold = false,
 	intervalHold = 0,
 	icon = '',
@@ -69,7 +72,11 @@ function Button({
 	}, []);
 
 	return (
-		<button ref={ref} className={activeState ? '' : 'button-unactive'} onClick={handleClick}>
+		<button
+			ref={ref}
+			className={`${activeState ? '' : 'button-unactive'} ${primary ? 'button-primary' : ''}`}
+			onClick={handleClick}
+		>
 			{icon !== '' ? <img alt='button icon' src={'./assets/icons/' + icon}></img> : null}
 			{children}
 		</button>

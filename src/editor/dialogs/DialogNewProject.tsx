@@ -17,6 +17,8 @@ import { Model, Scene } from '../Editor';
 import { Project } from '../core/Project';
 import Dialog from './Dialog';
 import { Paths } from '../common/Paths';
+import FooterCancelOK from './footers/FooterCancelOK';
+import Input from '../components/Input';
 
 type Props = {
 	isOpen: boolean;
@@ -26,15 +28,22 @@ type Props = {
 
 function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 	const [projectName, setProjectName] = useState('Project without name');
-	const [visibleDialogConfirm, setVisibleDialogConfirm] = useState(false);
+	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
 
-	const handleOnAccept = async (): Promise<boolean> => {
-		if (await checkValidAccept()) {
-			await createProject();
-			accept();
-			return true;
+	const checkValidAccept: () => Promise<boolean> = async () => {
+		let projects = await LocalFile.getFolders(Enum.LocalForage.Projects);
+		if (projects.length === 0) {
+			await LocalFile.createFolder(Enum.LocalForage.Projects);
 		}
-		return false;
+		if (
+			projects.find((name) => {
+				return name === projectName;
+			})
+		) {
+			setIsDialogConfirmOpen(true);
+			return false;
+		}
+		return true;
 	};
 
 	const accept = () => {
@@ -48,28 +57,12 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 	const replaceProject = async () => {
 		await LocalFile.removeFolder(Paths.join(Enum.LocalForage.Projects, projectName));
 		await createProject();
-		setVisibleDialogConfirm(false);
+		setIsDialogConfirmOpen(false);
 		accept();
 	};
 
 	const cancelCreation = () => {
-		setVisibleDialogConfirm(false);
-	};
-
-	const checkValidAccept: () => Promise<boolean> = async () => {
-		let projects = await LocalFile.getFolders(Enum.LocalForage.Projects);
-		if (projects.length === 0) {
-			await LocalFile.createFolder(Enum.LocalForage.Projects);
-		}
-		if (
-			projects.find((name) => {
-				return name === projectName;
-			})
-		) {
-			setVisibleDialogConfirm(true);
-			return false;
-		}
-		return true;
+		setIsDialogConfirmOpen(false);
 	};
 
 	const createProject = async () => {
@@ -85,28 +78,36 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 		await Project.current.save();
 	};
 
+	const handleChangeProjectName = (e: any) => {
+		setProjectName(e.target.value);
+	};
+
+	const handleAccept = async (): Promise<boolean> => {
+		if (await checkValidAccept()) {
+			await createProject();
+			accept();
+			return true;
+		}
+		return false;
+	};
+
 	return (
 		<>
 			<Dialog
 				title='New project...'
 				isOpen={isOpen}
-				footer={<FooterYesNo onYes={handleOnAccept} onNo={handleOnAccept} />}
+				footer={<FooterCancelOK onCancel={onReject} onOK={handleAccept} />}
 				onClose={onReject}
 			>
 				<div className='flex-center-vertically'>
 					<p className='label'>Name:</p>
-					<input
-						value={projectName}
-						onChange={(e) => {
-							setProjectName(e.target.value);
-						}}
-					></input>
+					<Input value={projectName} onChange={handleChangeProjectName} />
 				</div>
 			</Dialog>
 			<Dialog
 				title='Error'
-				isOpen={visibleDialogConfirm}
-				footer={<FooterYesNo onYes={replaceProject} onNo={cancelCreation} />}
+				isOpen={isDialogConfirmOpen}
+				footer={<FooterYesNo onNo={cancelCreation} onYes={replaceProject} />}
 			>
 				<p>This project name already exists. Would you like to replace it?</p>
 			</Dialog>

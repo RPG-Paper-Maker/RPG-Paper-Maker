@@ -9,8 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
+import { RxCross2 } from 'react-icons/rx';
 import '../styles/Dialog.css';
 
 type Props = {
@@ -22,6 +23,26 @@ type Props = {
 };
 
 function Dialog({ children, title, isOpen, footer, onClose }: Props) {
+	const [isClickedIn, setIsClickedIn] = useState(false); // Prevent mouse down on div + mouse up out to close
+
+	const handleMouseDown = () => {
+		setIsClickedIn(true);
+	};
+
+	const handleClose = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+		if (!isClickedIn) {
+			if (onClose) {
+				onClose();
+			}
+		} else {
+			setIsClickedIn(false);
+		}
+	};
+
+	const handleStopPropagation = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+		e.stopPropagation();
+	};
+
 	const root = document.getElementById('root');
 	if (!root) {
 		return null;
@@ -30,9 +51,12 @@ function Dialog({ children, title, isOpen, footer, onClose }: Props) {
 	return ReactDOM.createPortal(
 		<>
 			{isOpen && (
-				<div className='dialog-overlay' onClick={onClose}>
-					<div className='dialog' onClick={(event) => event.stopPropagation()}>
-						<div className='dialog-title'>{title}</div>
+				<div className='dialog-overlay' onClick={handleClose}>
+					<div className='dialog' onMouseDown={handleMouseDown} onClick={handleStopPropagation}>
+						<div className='dialog-title'>
+							<div className='flex-one'>{title}</div>
+							<RxCross2 className='dialog-close' onClick={onClose} />
+						</div>
 						<div className='dialog-content'>{children}</div>
 						<div className='dialog-footer'>{footer}</div>
 					</div>

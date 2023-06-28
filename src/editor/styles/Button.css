@@ -1,0 +1,16 @@
+button {
+	border: none;
+	padding: 2px 10px 2px 10px;
+	border-radius: 2px;
+	background-color: var(--lighter-bg-color);
+	color: white;
+	cursor: pointer;
+}
+
+.button-unactive {
+	opacity: 0.5;
+}
+
+.button-primary {
+	background-color: var(--primary-color);
+}

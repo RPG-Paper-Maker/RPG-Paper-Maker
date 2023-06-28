@@ -43,7 +43,7 @@ function PanelProject() {
 	}, []);
 
 	return (
-		<div className='flex-grow-1'>
+		<div className='flex-one'>
 			{currentProjectName === '' ? (
 				<div className='flex-center-vertically flex-center-horizontally fill-height'>
 					<h2>No project opened...</h2>
@@ -54,12 +54,12 @@ function PanelProject() {
 			{currentProjectName !== '' ? (
 				<Splitter vertical={false} className='fill-height'>
 					<Splitter vertical size={266}>
-						<div className='flex-grow-1 scrollable'>
+						<div className='flex-one scrollable'>
 							<canvas ref={refCanvas}></canvas>
 						</div>
-						<div className='flex-grow-1'></div>
+						<div className='flex-one'></div>
 					</Splitter>
-					<div className='flex-column flex-grow-1 map-editor-bar'>
+					<div className='flex-column flex-one map-editor-bar'>
 						<MapEditorMenuBar />
 						<MapEditor visible={currentProjectName !== ''} />
 					</div>

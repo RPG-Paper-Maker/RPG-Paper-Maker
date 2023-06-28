@@ -1,0 +1,5 @@
+.footer-buttons {
+	display: flex;
+	justify-content: end;
+	gap: 5px;
+}

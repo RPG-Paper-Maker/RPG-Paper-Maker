@@ -16,6 +16,7 @@
 	--darkest-bg-color: #29253a;
 	--lighter-bg-color: #5f5a8a;
 	--lightest-bg-color: #6e709c;
+	--grey-color: #878787;
 	--primary-color: #25bbb9;
 }
 
@@ -86,12 +87,12 @@ code {
 	height: 100%;
 }
 
-.flex-grow-1 {
+.flex-one {
 	flex-grow: 1;
 	flex-basis: 0;
 }
 
-.flex-grow-0 {
+.flex-zero {
 	flex-grow: 0;
 }
 
@@ -137,30 +138,8 @@ code {
 	cursor: nwse-resize !important;
 }
 
-.rc-dialog-content {
-	color: #666;
-}
-
 .absolute {
 	position: absolute;
-}
-
-button {
-	border: none;
-	background-color: #363636;
-	color: white;
-	cursor: pointer;
-}
-
-.button-unactive {
-	opacity: 0.5;
-}
-
-.rc-dialog-body {
-	padding: 20px;
-	overflow: auto;
-	overflow-y: overlay;
-	max-height: 300px;
 }
 
 /* width */

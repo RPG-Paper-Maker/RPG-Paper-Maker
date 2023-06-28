@@ -23,17 +23,23 @@
 }
 
 .dialog-title {
+	display: flex;
+	align-items: center;
 	background-color: var(--main-bg-color);
-	padding: 10px;
+	padding: 5px;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
 }
 
+.dialog-close {
+	cursor: pointer;
+}
+
 .dialog-content {
-	padding: 20px;
+	padding: 20px 20px 10px 20px;
 }
 
 .dialog-footer {
-	padding: 10px;
+	padding: 10px 20px 20px 20px;
 }

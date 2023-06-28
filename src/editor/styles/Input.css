@@ -1,0 +1,11 @@
+input {
+	background-color: var(--lighter-bg-color);
+	color: var(--main-color);
+	border: 2px solid var(--grey-color);
+	border-radius: 2px;
+}
+
+input:focus-visible {
+	border: 2px solid var(--primary-color);
+	outline-width: 0;
+}
