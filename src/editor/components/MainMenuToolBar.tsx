@@ -38,11 +38,10 @@ import { FaArrowsAlt, FaRegKeyboard, FaPlug, FaMountain } from 'react-icons/fa';
 import { MdOutlineAddchart, MdAutoAwesomeMosaic, MdClose } from 'react-icons/md';
 import { TfiVideoClapper } from 'react-icons/tfi';
 import { GiBrickWall } from 'react-icons/gi';
-import 'rc-dialog/assets/index.css';
 import '../styles/MainMenuToolBar.css';
 
 function MainMenuBar() {
-	const [dialog, setDialog] = React.useState(<React.Fragment></React.Fragment>);
+	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = React.useState(false);
 	const [projectNames, setProjectNames] = React.useState<string[]>([]);
 	const dispatch = useDispatch();
 	const currentProjectName = useSelector((state: RootState) => state.projects.current);
@@ -53,16 +52,16 @@ function MainMenuBar() {
 	};
 
 	const handleNewProject = () => {
-		let dialog = (
-			<DialogNewProject
-				setDialog={setDialog}
-				onAccept={(data: Record<string, any>) => {
-					loadProjects();
-					openProject(data.projectName);
-				}}
-			/>
-		);
-		setDialog(dialog);
+		setIsDialogNewProjectOpen(true);
+	};
+
+	const handleAcceptNewProject = (data: Record<string, any>) => {
+		loadProjects();
+		openProject(data.projectName);
+	};
+
+	const handleRejectNewProject = () => {
+		setIsDialogNewProjectOpen(false);
 	};
 
 	const openProject = async (name: string) => {
@@ -184,12 +183,11 @@ function MainMenuBar() {
 					</SubMenu>
 					<SubMenu title='Help'></SubMenu>
 				</Menu>
-				{dialog}
 			</div>
 
 			<div className='toolbar'>
 				<Menu mode='horizontal'>
-					<MenuItem icon={<AiOutlineFileAdd />} onClick={handleFloor}>
+					<MenuItem icon={<AiOutlineFileAdd />} onClick={handleNewProject}>
 						New
 					</MenuItem>
 					<MenuItem icon={<AiOutlineFolderOpen />} onClick={handleFloor}>
@@ -264,6 +262,12 @@ function MainMenuBar() {
 					</MenuItem>
 				</Menu>
 			</div>
+
+			<DialogNewProject
+				isOpen={isDialogNewProjectOpen}
+				onAccept={handleAcceptNewProject}
+				onReject={handleRejectNewProject}
+			/>
 		</>
 	);
 }

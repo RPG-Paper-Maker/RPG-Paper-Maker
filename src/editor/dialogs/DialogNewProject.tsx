@@ -9,25 +9,24 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React from 'react';
-import Dialog from 'rc-dialog';
+import React, { useState } from 'react';
 import FooterYesNo from './footers/FooterYesNo';
 import { Enum } from '../common/Enum';
 import { LocalFile } from '../core/LocalFile';
 import { Model, Scene } from '../Editor';
 import { Project } from '../core/Project';
-import DialogBase from './DialogBase';
-import 'rc-dialog/assets/index.css';
+import Dialog from './Dialog';
 import { Paths } from '../common/Paths';
 
 type Props = {
-	setDialog: React.Dispatch<React.SetStateAction<JSX.Element>>;
+	isOpen: boolean;
 	onAccept: (data: Record<string, any>) => void;
+	onReject: () => void;
 };
 
-function DialogNewProject({ setDialog, onAccept }: Props) {
-	const [projectName, setProjectName] = React.useState('Project without name');
-	const [visibleDialogConfirm, setVisibleDialogConfirm] = React.useState(false);
+function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
+	const [projectName, setProjectName] = useState('Project without name');
+	const [visibleDialogConfirm, setVisibleDialogConfirm] = useState(false);
 
 	const handleOnAccept = async (): Promise<boolean> => {
 		if (await checkValidAccept()) {
@@ -51,7 +50,6 @@ function DialogNewProject({ setDialog, onAccept }: Props) {
 		await createProject();
 		setVisibleDialogConfirm(false);
 		accept();
-		setDialog(<React.Fragment></React.Fragment>);
 	};
 
 	const cancelCreation = () => {
@@ -88,8 +86,13 @@ function DialogNewProject({ setDialog, onAccept }: Props) {
 	};
 
 	return (
-		<React.Fragment>
-			<DialogBase title='New project...' onAccept={handleOnAccept} setDialog={setDialog}>
+		<>
+			<Dialog
+				title='New project...'
+				isOpen={isOpen}
+				footer={<FooterYesNo onYes={handleOnAccept} onNo={handleOnAccept} />}
+				onClose={onReject}
+			>
 				<div className='flex-center-vertically'>
 					<p className='label'>Name:</p>
 					<input
@@ -99,15 +102,15 @@ function DialogNewProject({ setDialog, onAccept }: Props) {
 						}}
 					></input>
 				</div>
-			</DialogBase>
+			</Dialog>
 			<Dialog
 				title='Error'
-				visible={visibleDialogConfirm}
+				isOpen={visibleDialogConfirm}
 				footer={<FooterYesNo onYes={replaceProject} onNo={cancelCreation} />}
 			>
 				<p>This project name already exists. Would you like to replace it?</p>
 			</Dialog>
-		</React.Fragment>
+		</>
 	);
 }
 
