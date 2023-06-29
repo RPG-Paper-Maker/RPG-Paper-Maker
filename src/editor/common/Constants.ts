@@ -10,7 +10,6 @@
 */
 
 class Constants {
-	public static readonly UNDEFINED = 'undefined';
 	public static readonly NUMBER = 'number';
 	public static readonly STRING = 'string';
 	public static readonly NUM_BOOL_TRUE = 1;

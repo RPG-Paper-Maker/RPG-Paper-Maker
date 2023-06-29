@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Utils } from '../../common/Utils';
 import '../../styles/Menu.css';
 
 type Props = {
@@ -17,7 +18,9 @@ type Props = {
 };
 
 function Menu({ children, horizontal = false }: Props) {
-	return <div className={'custom-menu ' + (horizontal ? ' custom-menu-horizontal' : '')}>{children}</div>;
+	return (
+		<div className={Utils.getClassName([[horizontal, 'custom-menu-horizontal']], ['custom-menu'])}>{children}</div>
+	);
 }
 
 export default Menu;

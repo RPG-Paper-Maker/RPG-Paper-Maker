@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Utils } from '../../common/Utils';
 import '../../styles/MenuItem.css';
 
 type Props = {
@@ -29,9 +30,13 @@ function MenuItem({ children, type, disabled = false, icon, onClick }: Props) {
 	return (
 		<div
 			onClick={handleClick}
-			className={`custom-menu-item ${disabled ? 'custom-menu-item-disabled' : ''} ${
-				type === 'separator' ? 'custom-menu-item-separator' : ''
-			}`}
+			className={Utils.getClassName(
+				[
+					[disabled, 'custom-menu-item-disabled'],
+					[type === 'separator', 'custom-menu-item-separator'],
+				],
+				['custom-menu-item']
+			)}
 		>
 			{icon}
 			{children}

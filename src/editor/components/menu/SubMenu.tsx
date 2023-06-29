@@ -10,8 +10,8 @@
 */
 
 import React, { useState, useRef, useEffect, ReactNode } from 'react';
-import SubMenuContent from './SubMenuContent';
 import '../../styles/SubMenu.css';
+import { Utils } from '../../common/Utils';
 
 type Props = {
 	children?: ReactNode | ReactNode[];
@@ -65,29 +65,45 @@ function SubMenu({ children, title, icon }: Props) {
 		}
 	});
 
+	const onMouseLeave = (e: unknown) => {
+		setSubVisible(false);
+		setIsOpen(false);
+	};
+
+	const onMouseEnter = () => {
+		setTestVisible(false);
+		setIsOpen(true);
+	};
+
+	useEffect(() => {
+		if (testVisible) {
+			setTestVisible(false);
+			setSubVisible(false);
+		}
+	}, [testVisible]);
+
 	return (
 		<div ref={refMain} className='custom-sub-menu'>
 			<div
+				className={Utils.getClassName([[isOpen, 'custom-sub-menu-title-opened']], ['custom-sub-menu-title'])}
 				ref={refTitle}
 				onMouseEnter={onMouseEnterTitle}
 				onMouseLeave={onMouseLeaveTitle}
 				onMouseOver={onMouseOverTitle}
-				className={'custom-sub-menu-title' + (isOpen ? ' custom-sub-menu-title-opened' : '')}
 			>
 				{icon}
 				{title}
 				<i ref={refArrow}></i>
 			</div>
-			<div className='absolute' ref={refContent}>
-				<SubMenuContent
-					subVisible={subVisible}
-					setSubVisible={setSubVisible}
-					testVisible={testVisible}
-					setTestVisible={setTestVisible}
-					setOpened={setIsOpen}
+			<div ref={refContent} className='absolute'>
+				<div
+					className='custom-sub-menu-content'
+					onMouseLeave={onMouseLeave}
+					onMouseEnter={onMouseEnter}
+					hidden={!subVisible}
 				>
 					{children}
-				</SubMenuContent>
+				</div>
 			</div>
 		</div>
 	);

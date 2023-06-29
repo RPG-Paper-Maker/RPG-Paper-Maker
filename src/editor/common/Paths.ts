@@ -85,7 +85,7 @@ class Paths {
 	public static readonly FILE_PLUGIN_DETAILS = 'details.json';
 
 	static join(...args: any) {
-		return args.join('/'); // Depends on OS
+		return args.join('/'); // TODO: Depends on OS
 	}
 }
 
