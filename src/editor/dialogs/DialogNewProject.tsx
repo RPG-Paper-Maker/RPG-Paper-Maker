@@ -96,6 +96,7 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 			<Dialog
 				title='New project...'
 				isOpen={isOpen}
+				isDisabled={isDialogConfirmOpen}
 				footer={<FooterCancelOK onCancel={onReject} onOK={handleAccept} />}
 				onClose={onReject}
 			>

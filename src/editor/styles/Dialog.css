@@ -5,7 +5,6 @@
 	width: 100%;
 	height: 100%;
 	z-index: 999;
-	animation: fadeIn 0.25s;
 }
 
 .dialog {
@@ -19,6 +18,11 @@
 	box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px, rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
 		rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
 	z-index: 999;
+	animation: fadeIn 0.25s;
+}
+
+.dialog-disable {
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .dialog-title {
@@ -29,6 +33,11 @@
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
+	cursor: grab;
+}
+
+.dialog-title-grabbing {
+	cursor: grabbing;
 }
 
 .dialog-close {

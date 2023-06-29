@@ -67,6 +67,14 @@ class Utils {
 	static boolToNum(b: boolean): number {
 		return b ? Constants.NUM_BOOL_TRUE : Constants.NUM_BOOL_FALSE;
 	}
+
+	static getClassName(array: [boolean, string][], always: string[] = []) {
+		return array
+			.filter(([condition, className]) => condition)
+			.map(([condition, className]) => className)
+			.concat(always)
+			.join(' ');
+	}
 }
 
 export { Utils };

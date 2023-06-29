@@ -12,18 +12,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { RxCross2 } from 'react-icons/rx';
+import { Utils } from '../common/Utils';
 import '../styles/Dialog.css';
-import { Inputs } from '../common/Inputs';
 
 type Props = {
 	children: React.ReactNode;
 	title: string;
 	isOpen: boolean;
+	isDisabled?: boolean;
 	footer: React.ReactNode;
 	onClose: () => void;
 };
 
-function Dialog({ children, title, isOpen, footer, onClose }: Props) {
+function Dialog({ children, title, isOpen, isDisabled = false, footer, onClose }: Props) {
 	const [isClickedIn, setIsClickedIn] = useState(false); // Prevent mouse down on div + mouse up out to close
 	const [isDragging, setIsDragging] = useState(false);
 	const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
@@ -51,6 +52,10 @@ function Dialog({ children, title, isOpen, footer, onClose }: Props) {
 
 	const handleMouseDown = () => {
 		setIsClickedIn(true);
+	};
+
+	const handleMouseUp = () => {
+		setIsClickedIn(false);
 	};
 
 	const handleClose = () => {
@@ -99,11 +104,7 @@ function Dialog({ children, title, isOpen, footer, onClose }: Props) {
 				document.removeEventListener('mousemove', handleMouseMove);
 			};
 		}
-	}, [isDragging]);
-
-	useEffect(() => {
-		Inputs.initialize();
-	}, []);
+	});
 
 	const root = document.getElementById('root');
 	if (!root) {
@@ -118,10 +119,15 @@ function Dialog({ children, title, isOpen, footer, onClose }: Props) {
 						ref={dialogRef}
 						className='dialog'
 						onMouseDown={handleMouseDown}
+						onMouseUp={handleMouseUp}
 						onClick={handleStopPropagation}
 						style={isMoved ? {} : { transform: 'translate(-50%, -50%)' }}
 					>
-						<div className='dialog-title' onMouseDown={handleMouseDownTitle}>
+						{isDisabled && <div className='dialog-overlay dialog-disable' />}
+						<div
+							className={Utils.getClassName([[isDragging, 'dialog-title-grabbing']], ['dialog-title'])}
+							onMouseDown={handleMouseDownTitle}
+						>
 							<div className='flex-one'>{title}</div>
 							<RxCross2 className='dialog-close' onClick={handleClose} />
 						</div>

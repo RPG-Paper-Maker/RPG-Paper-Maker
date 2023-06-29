@@ -37,8 +37,8 @@ LocalFile.config();
 (async () => {
 	await Manager.GL.initializeShaders();
 
-	let all = await LocalFile.allStorage();
-	console.log(all);
+	//let all = await LocalFile.allStorage();
+	//console.log(all);
 })();
 
 export * as Manager from './managers/index';
