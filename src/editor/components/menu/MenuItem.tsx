@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import '../styles/MenuItem.css';
+import '../../styles/MenuItem.css';
 
 type Props = {
 	children?: any;
@@ -20,13 +20,15 @@ type Props = {
 };
 
 function MenuItem({ children, type, disabled = false, icon, onClick }: Props) {
+	const handleClick = (e: any) => {
+		if (onClick && !disabled) {
+			onClick(e);
+		}
+	};
+
 	return (
 		<div
-			onClick={(e) => {
-				if (onClick && !disabled) {
-					onClick(e);
-				}
-			}}
+			onClick={handleClick}
 			className={`custom-menu-item ${disabled ? 'custom-menu-item-disabled' : ''} ${
 				type === 'separator' ? 'custom-menu-item-separator' : ''
 			}`}

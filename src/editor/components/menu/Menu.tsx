@@ -9,15 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import '../styles/Menu.css';
+import '../../styles/Menu.css';
 
 type Props = {
-	mode: string;
+	horizontal?: boolean;
 	children: JSX.Element | JSX.Element[];
 };
 
-function Menu({ children, mode }: Props) {
-	return <div className={'custom-menu ' + (mode === 'horizontal' ? ' custom-menu-horizontal' : '')}>{children}</div>;
+function Menu({ children, horizontal = false }: Props) {
+	return <div className={'custom-menu ' + (horizontal ? ' custom-menu-horizontal' : '')}>{children}</div>;
 }
 
 export default Menu;

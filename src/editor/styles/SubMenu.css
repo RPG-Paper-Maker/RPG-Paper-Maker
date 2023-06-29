@@ -1,39 +1,39 @@
 .custom-sub-menu {
-    display: flex;
-    flex-direction: column;
-    white-space: nowrap;
+	display: flex;
+	flex-direction: column;
+	white-space: nowrap;
 }
 
 .custom-sub-menu svg {
-    margin-right: 0.5em;
+	margin-right: 0.5em;
 }
 
 .custom-sub-menu-title {
-    padding: 5px 15px 5px 15px;
-    background-color: var(--main-bg-color);
-    position: relative;
+	padding: 5px 15px 5px 15px;
+	background-color: var(--main-bg-color);
+	position: relative;
 }
 
 .map-editor-bar .custom-sub-menu-title {
-    padding: 10px 15px 10px 15px;
+	padding: 10px 15px 10px 15px;
 }
 
 .custom-sub-menu-title:hover {
-    background-color: var(--lighter-bg-color);
+	background-color: var(--lighter-bg-color);
 }
 
-.custom-sub-menu-title-opened {
-    background-color: var(--lighter-bg-color);
+.custom-sub-menu-title-open {
+	background-color: var(--lighter-bg-color);
 }
 
 .arrow-right {
-    border: solid #e8e8e8;
-    border-width: 0 2px 2px 0;
-    display: inline-block;
-    padding: 2px;
-    transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
-    position: absolute;
-    right: 7px;
-    top: 12px;
+	border: solid #e8e8e8;
+	border-width: 0 2px 2px 0;
+	display: inline-block;
+	padding: 2px;
+	transform: rotate(-45deg);
+	-webkit-transform: rotate(-45deg);
+	position: absolute;
+	right: 7px;
+	top: 12px;
 }

@@ -9,36 +9,36 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, ReactNode } from 'react';
 import SubMenuContent from './SubMenuContent';
-import '../styles/SubMenu.css';
+import '../../styles/SubMenu.css';
 
 type Props = {
-	children?: React.ReactNode | React.ReactNode[];
+	children?: ReactNode | ReactNode[];
 	title?: string;
-	icon?: React.ReactNode;
+	icon?: ReactNode;
 };
 
 function SubMenu({ children, title, icon }: Props) {
-	let [testVisible, setTestVisible] = useState<boolean>(false);
-	let [subVisible, setSubVisible] = useState<boolean>(false);
-	let [opened, setOpened] = useState<boolean>(false);
+	const [testVisible, setTestVisible] = useState(false);
+	const [subVisible, setSubVisible] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
 	const refMain = useRef<HTMLHeadingElement>(null);
 	const refTitle = useRef<HTMLHeadingElement>(null);
 	const refArrow = useRef<HTMLHeadingElement>(null);
 	const refContent = useRef<HTMLHeadingElement>(null);
 
-	const onMouseEnter = () => {
+	const onMouseEnterTitle = () => {
 		setSubVisible(true);
-		setOpened(true);
+		setIsOpen(true);
 	};
 
-	const onMouseLeave = () => {
+	const onMouseLeaveTitle = () => {
 		setTestVisible(true);
-		setOpened(false);
+		setIsOpen(false);
 	};
 
-	const onMouseOver = () => {
+	const onMouseOverTitle = () => {
 		setSubVisible(true);
 	};
 
@@ -59,7 +59,8 @@ function SubMenu({ children, title, icon }: Props) {
 					left = refTitle.current.offsetWidth;
 					top = rect.top - rect.height;
 				}
-				refContent.current.setAttribute('style', 'top:' + top + 'px; left:' + left + 'px;');
+				refContent.current.style.top = `${top}px`;
+				refContent.current.style.left = `${left}px`;
 			}
 		}
 	});
@@ -68,14 +69,13 @@ function SubMenu({ children, title, icon }: Props) {
 		<div ref={refMain} className='custom-sub-menu'>
 			<div
 				ref={refTitle}
-				onMouseEnter={onMouseEnter}
-				onMouseLeave={onMouseLeave}
-				onMouseOver={onMouseOver}
-				className={'custom-sub-menu-title' + (opened ? ' custom-sub-menu-title-opened' : '')}
+				onMouseEnter={onMouseEnterTitle}
+				onMouseLeave={onMouseLeaveTitle}
+				onMouseOver={onMouseOverTitle}
+				className={'custom-sub-menu-title' + (isOpen ? ' custom-sub-menu-title-opened' : '')}
 			>
 				{icon}
 				{title}
-				&nbsp;
 				<i ref={refArrow}></i>
 			</div>
 			<div className='absolute' ref={refContent}>
@@ -84,7 +84,7 @@ function SubMenu({ children, title, icon }: Props) {
 					setSubVisible={setSubVisible}
 					testVisible={testVisible}
 					setTestVisible={setTestVisible}
-					setOpened={setOpened}
+					setOpened={setIsOpen}
 				>
 					{children}
 				</SubMenuContent>

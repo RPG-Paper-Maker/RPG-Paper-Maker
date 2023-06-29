@@ -108,6 +108,7 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 				title='Error'
 				isOpen={isDialogConfirmOpen}
 				footer={<FooterYesNo onNo={cancelCreation} onYes={replaceProject} />}
+				onClose={cancelCreation}
 			>
 				<p>This project name already exists. Would you like to replace it?</p>
 			</Dialog>

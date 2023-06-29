@@ -10,7 +10,7 @@
 */
 
 import { useEffect } from 'react';
-import '../styles/SubMenuContent.css';
+import '../../styles/SubMenuContent.css';
 
 type Props = {
 	children: any;

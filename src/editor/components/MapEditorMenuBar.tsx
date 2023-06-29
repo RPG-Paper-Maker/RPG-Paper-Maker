@@ -10,44 +10,41 @@
 */
 
 import React from 'react';
-import Menu from './Menu';
-import MenuItem from './MenuItem';
-import SubMenu from './SubMenu';
+import Menu from './menu/Menu';
+import MenuItem from './menu/MenuItem';
+import SubMenu from './menu/SubMenu';
 
 type Props = {
-    kind?: number
+	kind?: number;
 };
 
 function MapEditorMenuBar({ kind }: Props) {
+	const handleFloor = () => {};
 
-    const handleFloor = () => {
-
-    };
-    
-    return (
-        <React.Fragment>
-            <Menu mode='horizontal'>
-                <SubMenu icon='floor.png'>
-                    <MenuItem onClick={handleFloor}>Floor</MenuItem>
-                </SubMenu>
-                <SubMenu icon='sprite-face.png'>
-                    <MenuItem onClick={handleFloor}>Floor</MenuItem>
-                </SubMenu>
-                <SubMenu icon='mountain.png'>
-                    <MenuItem onClick={handleFloor}>Floor</MenuItem>
-                </SubMenu>
-                <SubMenu icon='object.png'>
-                    <MenuItem onClick={handleFloor}>Floor</MenuItem>
-                </SubMenu>
-                <SubMenu icon='ev.png'>
-                    <MenuItem onClick={handleFloor}>Floor</MenuItem>
-                </SubMenu>
-                <SubMenu icon='view.png'>
-                    <MenuItem onClick={handleFloor}>Floor</MenuItem>
-                </SubMenu>
-            </Menu>
-        </React.Fragment>
-    );
+	return (
+		<React.Fragment>
+			<Menu horizontal>
+				<SubMenu icon='floor.png'>
+					<MenuItem onClick={handleFloor}>Floor</MenuItem>
+				</SubMenu>
+				<SubMenu icon='sprite-face.png'>
+					<MenuItem onClick={handleFloor}>Floor</MenuItem>
+				</SubMenu>
+				<SubMenu icon='mountain.png'>
+					<MenuItem onClick={handleFloor}>Floor</MenuItem>
+				</SubMenu>
+				<SubMenu icon='object.png'>
+					<MenuItem onClick={handleFloor}>Floor</MenuItem>
+				</SubMenu>
+				<SubMenu icon='ev.png'>
+					<MenuItem onClick={handleFloor}>Floor</MenuItem>
+				</SubMenu>
+				<SubMenu icon='view.png'>
+					<MenuItem onClick={handleFloor}>Floor</MenuItem>
+				</SubMenu>
+			</Menu>
+		</React.Fragment>
+	);
 }
 
 export default MapEditorMenuBar;

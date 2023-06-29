@@ -13,9 +13,9 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setCurrentProjectName } from '../store';
 import DialogNewProject from '../dialogs/DialogNewProject';
-import Menu from './Menu';
-import MenuItem from './MenuItem';
-import SubMenu from './SubMenu';
+import Menu from './menu/Menu';
+import MenuItem from './menu/MenuItem';
+import SubMenu from './menu/SubMenu';
 import { LocalFile } from '../core/LocalFile';
 import { Enum } from '../common/Enum';
 import { Scene } from '../Editor';
@@ -138,7 +138,7 @@ function MainMenuBar() {
 		<>
 			<div className='flex-center-vertically'>
 				<img className='main-menu-bar-logo' src={'./favicon.ico'} alt='logo' />
-				<Menu mode='horizontal'>
+				<Menu horizontal>
 					<SubMenu title='File'>
 						<MenuItem icon={<AiOutlineFileAdd />} onClick={handleNewProject}>
 							New Project...
@@ -186,7 +186,7 @@ function MainMenuBar() {
 			</div>
 
 			<div className='toolbar'>
-				<Menu mode='horizontal'>
+				<Menu horizontal>
 					<MenuItem icon={<AiOutlineFileAdd />} onClick={handleNewProject}>
 						New
 					</MenuItem>
