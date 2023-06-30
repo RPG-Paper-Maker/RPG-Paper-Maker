@@ -9,37 +9,31 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Provider } from 'react-redux';
 import MainMenuToolBar from './components/MainMenuToolBar';
 import PanelProject from './components/PanelProject';
-import { LocalFile } from './core/LocalFile';
-import { Manager } from './Editor';
 import { store } from './store';
+import Loader from './components/Loader';
 import './styles/Editor.css';
-
-// Create GL contexts
-Manager.GL.mapEditorContext = new Manager.GL();
-Manager.GL.extraContext = new Manager.GL();
+import PanelLoading from './components/PanelLoading';
 
 function Editor() {
+	const [loaded, setLoaded] = useState(false);
+
 	return (
 		<Provider store={store}>
-			<div className='flex-column fill-space'>
-				<MainMenuToolBar />
-				<PanelProject />
-			</div>
+			{loaded ? (
+				<div className='flex-column fill-space'>
+					<MainMenuToolBar />
+					<PanelProject />
+				</div>
+			) : (
+				<PanelLoading setLoaded={setLoaded} />
+			)}
 		</Provider>
 	);
 }
-
-LocalFile.config();
-(async () => {
-	await Manager.GL.initializeShaders();
-
-	//let all = await LocalFile.allStorage();
-	//console.log(all);
-})();
 
 export * as Manager from './managers/index';
 export * as Scene from './scenes/index';

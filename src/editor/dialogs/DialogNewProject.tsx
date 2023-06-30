@@ -15,7 +15,7 @@ import { Enum } from '../common/Enum';
 import { LocalFile } from '../core/LocalFile';
 import { Model, Scene } from '../Editor';
 import { Project } from '../core/Project';
-import Dialog from './Dialog';
+import Dialog from '../components/Dialog';
 import { Paths } from '../common/Paths';
 import FooterCancelOK from './footers/FooterCancelOK';
 import Input from '../components/Input';

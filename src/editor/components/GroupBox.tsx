@@ -12,20 +12,17 @@
 import '../styles/GroupBox.css';
 
 type Props = {
-    children?: any,
-    title?: string
+	children?: any;
+	title?: string;
 };
 
-function GroupBox({ children, title = '' }: Props) {
-
-    return (
-        <fieldset>
-            <legend>{title}</legend>
-            <div>
-                {children}
-            </div>
-        </fieldset>
-    );
+function Groupbox({ children, title = '' }: Props) {
+	return (
+		<fieldset>
+			<legend>{title}</legend>
+			<div>{children}</div>
+		</fieldset>
+	);
 }
 
-export default GroupBox;
+export default Groupbox;
