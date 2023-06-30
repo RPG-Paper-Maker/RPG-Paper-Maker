@@ -19,6 +19,7 @@ import Dialog from '../components/Dialog';
 import { Paths } from '../common/Paths';
 import FooterCancelOK from './footers/FooterCancelOK';
 import Input from '../components/Input';
+import Loader from '../components/Loader';
 
 type Props = {
 	isOpen: boolean;
@@ -29,6 +30,7 @@ type Props = {
 function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 	const [projectName, setProjectName] = useState('Project without name');
 	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const checkValidAccept: () => Promise<boolean> = async () => {
 		let projects = await LocalFile.getFolders(Enum.LocalForage.Projects);
@@ -55,9 +57,9 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 	};
 
 	const replaceProject = async () => {
+		setIsDialogConfirmOpen(false);
 		await LocalFile.removeFolder(Paths.join(Enum.LocalForage.Projects, projectName));
 		await createProject();
-		setIsDialogConfirmOpen(false);
 		accept();
 	};
 
@@ -66,6 +68,7 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 	};
 
 	const createProject = async () => {
+		setIsLoading(true);
 		if (Scene.Map.current) {
 			Scene.Map.current.close();
 		}
@@ -76,6 +79,7 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 		await LocalFile.createFolder(project.getPathMaps());
 		await Model.Map.createDefault();
 		await Project.current.save();
+		setIsLoading(false);
 	};
 
 	const handleChangeProjectName = (e: any) => {
@@ -96,10 +100,12 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 			<Dialog
 				title='New project...'
 				isOpen={isOpen}
+				isLoading={isLoading}
 				isDisabled={isDialogConfirmOpen}
 				footer={<FooterCancelOK onCancel={onReject} onOK={handleAccept} />}
 				onClose={onReject}
 			>
+				<Loader isLoading={isLoading} />
 				<div className='flex-center-vertically'>
 					<p className='label'>Name:</p>
 					<Input value={projectName} onChange={handleChangeProjectName} />

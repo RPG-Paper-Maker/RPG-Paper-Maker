@@ -77,6 +77,7 @@ function MainMenuBar() {
 
 	const handleAcceptNewProject = (data: Record<string, any>) => {
 		loadProjects();
+		setIsDialogNewProjectOpen(false);
 		handleOpenProject(data.projectName);
 	};
 
@@ -86,6 +87,7 @@ function MainMenuBar() {
 
 	const handleOpenProject = async (name: string) => {
 		dispatch(setLoading(true));
+		dispatch(setCurrentProjectName(name));
 		Project.current = new Project(name);
 		await Project.current.load();
 		if (Scene.Map.current) {
@@ -93,7 +95,6 @@ function MainMenuBar() {
 		}
 		Scene.Map.current = new Scene.Map(1);
 		await Scene.Map.current.load();
-		dispatch(setCurrentProjectName(name));
 		dispatch(setLoading(false));
 	};
 

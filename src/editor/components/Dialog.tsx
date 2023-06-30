@@ -20,11 +20,12 @@ type Props = {
 	title: string;
 	isOpen: boolean;
 	isDisabled?: boolean;
+	isLoading?: boolean;
 	footer: React.ReactNode;
 	onClose: () => void;
 };
 
-function Dialog({ children, title, isOpen, isDisabled = false, footer, onClose }: Props) {
+function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false, footer, onClose }: Props) {
 	const [isClickedIn, setIsClickedIn] = useState(false); // Prevent mouse down on div + mouse up out to close
 	const [isDragging, setIsDragging] = useState(false);
 	const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
@@ -66,7 +67,7 @@ function Dialog({ children, title, isOpen, isDisabled = false, footer, onClose }
 	};
 
 	const handleCloseOut = () => {
-		if (!isClickedIn) {
+		if (!isClickedIn && !isLoading) {
 			setIsMoved(false);
 			if (onClose) {
 				onClose();

@@ -8,12 +8,12 @@
 	width: 100%;
 	height: 100%;
 	z-index: 999;
-	background-color: rgba(255, 255, 255, 0.25);
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .loader-spinner {
-	border: 10px solid #f3f3f3;
-	border-top: 10px solid var(--primary-color);
+	border: 5px solid var(--grey-light-color);
+	border-top: 5px solid var(--primary-color);
 	border-radius: 50%;
 	animation: spin 1s linear infinite;
 	width: 20px;
@@ -23,6 +23,7 @@
 .loader-large .loader-spinner {
 	width: 150px;
 	height: 150px;
+	border-width: 10px;
 }
 
 .loader-text {
@@ -30,10 +31,6 @@
 	color: var(--darkest-bg-color);
 	font-weight: bold;
 	text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
-	font-size: 12px;
-}
-
-.loader-large .loader-text {
 	font-size: 20px;
 }
 

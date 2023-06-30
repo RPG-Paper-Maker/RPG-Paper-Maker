@@ -23,7 +23,7 @@ function Loader({ isLoading, large = false }: Props) {
 			{isLoading && (
 				<div className={Utils.getClassName([[large, 'loader-large']], ['loader'])}>
 					<div className='loader-spinner'></div>
-					<div className='loader-text'>Loading...</div>
+					{large && <div className='loader-text'>Loading...</div>}
 				</div>
 			)}
 		</>

@@ -14,7 +14,6 @@ import { Provider } from 'react-redux';
 import MainMenuToolBar from './components/MainMenuToolBar';
 import PanelProject from './components/PanelProject';
 import { store } from './store';
-import Loader from './components/Loader';
 import './styles/Editor.css';
 import PanelLoading from './components/PanelLoading';
 
