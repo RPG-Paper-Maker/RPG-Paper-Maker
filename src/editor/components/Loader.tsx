@@ -18,7 +18,6 @@ type Props = {
 };
 
 function Loader({ isLoading, large = false }: Props) {
-	large = true;
 	return (
 		<>
 			{isLoading && (

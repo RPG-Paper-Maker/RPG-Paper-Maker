@@ -11,7 +11,7 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setCurrentProjectName } from '../store';
+import { RootState, setCurrentProjectName, setLoading } from '../store';
 import DialogNewProject from '../dialogs/DialogNewProject';
 import Menu from './menu/Menu';
 import MenuItem from './menu/MenuItem';
@@ -85,6 +85,7 @@ function MainMenuBar() {
 	};
 
 	const handleOpenProject = async (name: string) => {
+		dispatch(setLoading(true));
 		Project.current = new Project(name);
 		await Project.current.load();
 		if (Scene.Map.current) {
@@ -93,6 +94,7 @@ function MainMenuBar() {
 		Scene.Map.current = new Scene.Map(1);
 		await Scene.Map.current.load();
 		dispatch(setCurrentProjectName(name));
+		dispatch(setLoading(false));
 	};
 
 	const handleCloseProject = () => {

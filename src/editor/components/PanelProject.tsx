@@ -16,11 +16,13 @@ import MapEditor from './MapEditor';
 import MapEditorMenuBar from './MapEditorMenuBar';
 import Splitter from './Splitter';
 import { RootState } from '../store';
+import Loader from './Loader';
 
 function PanelProject() {
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 	const [picture, setPicture] = useState<HTMLImageElement | null>(null);
 	const currentProjectName = useSelector((state: RootState) => state.projects.current);
+	const loading = useSelector((state: RootState) => state.projects.loading);
 
 	const initialize = async () => {
 		const picture = await Picture2D.loadImage('./assets/textures/plains-woods.png');
@@ -47,6 +49,7 @@ function PanelProject() {
 	// TODO: separate components empty project / project
 	return (
 		<div className='flex-one'>
+			<Loader large isLoading={loading} />
 			{currentProjectName === '' ? (
 				<div className='flex-center-vertically flex-center-horizontally fill-height'>
 					<h2>No project opened...</h2>
