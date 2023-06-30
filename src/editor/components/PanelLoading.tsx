@@ -25,8 +25,13 @@ function PanelLoading({ setLoaded }: Props) {
 		Manager.GL.extraContext = new Manager.GL();
 		await Manager.GL.initializeShaders();
 		LocalFile.config();
+
 		let all = await LocalFile.allStorage();
 		console.log(all);
+		/*
+		for (let path of all) {
+			await LocalFile.brutRemove(path);
+		}*/
 		setLoaded(true);
 	};
 

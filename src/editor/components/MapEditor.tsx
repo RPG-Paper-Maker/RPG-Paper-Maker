@@ -33,32 +33,20 @@ function MapEditor({ visible }: Props) {
 	};
 
 	const loop = () => {
-		if (Manager.GL.mapEditorContext.visible) {
+		const map = Scene.Map.current;
+		if (Manager.GL.mapEditorContext.visible && map) {
 			// Update if everything is loaded
-			if (
-				!Scene.Map.current!.loading &&
-				(Manager.Inputs.pointerLeftPressed || Manager.Inputs.pointerRightPressed)
-			) {
-				Scene.Map.current!.onPointerDownRepeat(Inputs.pointerPosition.x, Inputs.pointerPosition.y);
+			if (!map.loading && (Manager.Inputs.pointerLeftPressed || Manager.Inputs.pointerRightPressed)) {
+				map.onPointerDownRepeat(Inputs.pointerPosition.x, Inputs.pointerPosition.y);
 				if (Inputs.pointerDownRepeat) {
-					Scene.Map.current!.onCanvasOnlyPointerDownRepeat(
-						Inputs.pointerPosition.x,
-						Inputs.pointerPosition.y
-					);
+					map.onCanvasOnlyPointerDownRepeat(Inputs.pointerPosition.x, Inputs.pointerPosition.y);
 				}
 			}
-			if (!Scene.Map.current!.loading) {
-				Scene.Map.current!.update(Manager.GL.mapEditorContext);
+			if (!map.loading) {
+				map.update(Manager.GL.mapEditorContext);
 			}
-			if (!Scene.Map.current!.loading) {
-				Scene.Map.current!.draw3D(Manager.GL.mapEditorContext);
-			}
-
-			// Change cursor if needed
-			if (Scene.Map.current!.loading) {
-				refCanvas.current?.classList.add('loading');
-			} else {
-				refCanvas.current?.classList.remove('loading');
+			if (!map.loading) {
+				map.draw3D(Manager.GL.mapEditorContext);
 			}
 		}
 
