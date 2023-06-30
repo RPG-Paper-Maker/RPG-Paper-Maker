@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2022 Wano
+    RPG Paper Maker Copyright (C) 2017-2023 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -17,32 +17,36 @@ import { Rectangle } from '../core/Rectangle';
 import { Land } from './Land';
 
 class Floor extends Land {
+	constructor(json?: Record<string, any>) {
+		super();
 
-    constructor(json?: Record<string, any>) {
-        super();
+		if (json) {
+			this.read(json);
+		}
+	}
 
-        if (json) {
-            this.read(json);
-        }
-    }
+	static create(texture: Rectangle): Floor {
+		let floor = new Floor();
+		floor.kind = Enum.ElementMapKind.Floors;
+		floor.texture = texture;
+		return floor;
+	}
 
-    static create(texture: Rectangle): Floor {
-        let floor = new Floor();
-        floor.kind = Enum.ElementMapKind.Floors;
-        floor.texture = texture;
-        return floor;
-    }
-
-    updateGeometry(geometry: CustomGeometry, position: Position, width: number, 
-        height: number, count: number) {
-        if (width !== 0 && height !== 0) {
-            super.updateGeometryLand(geometry, position, width, height, (this
-            .texture.x * Project.getSquareSize()) / width, (this.texture.y * 
-            Project.getSquareSize()) / height, (this.texture.width * Project
-            .getSquareSize()) / width, (this.texture.height * Project
-            .getSquareSize()) / height, count);
-        }
-    }
+	updateGeometry(geometry: CustomGeometry, position: Position, width: number, height: number, count: number) {
+		if (width !== 0 && height !== 0) {
+			super.updateGeometryLand(
+				geometry,
+				position,
+				width,
+				height,
+				(this.texture.x * Project.getSquareSize()) / width,
+				(this.texture.y * Project.getSquareSize()) / height,
+				(this.texture.width * Project.getSquareSize()) / width,
+				(this.texture.height * Project.getSquareSize()) / height,
+				count
+			);
+		}
+	}
 }
 
-export { Floor }
+export { Floor };
