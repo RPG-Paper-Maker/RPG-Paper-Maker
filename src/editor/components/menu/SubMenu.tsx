@@ -28,18 +28,28 @@ function SubMenu({ children, title, icon }: Props) {
 	const refArrow = useRef<HTMLHeadingElement>(null);
 	const refContent = useRef<HTMLHeadingElement>(null);
 
-	const onMouseEnterTitle = () => {
+	const handleMouseEnterTitle = () => {
 		setSubVisible(true);
 		setIsOpen(true);
 	};
 
-	const onMouseLeaveTitle = () => {
+	const handleMouseLeaveTitle = () => {
 		setTestVisible(true);
 		setIsOpen(false);
 	};
 
-	const onMouseOverTitle = () => {
+	const handleMouseOverTitle = () => {
 		setSubVisible(true);
+	};
+
+	const handleMouseLeaveContent = (e: unknown) => {
+		setSubVisible(false);
+		setIsOpen(false);
+	};
+
+	const handleMouseEnterContent = () => {
+		setTestVisible(false);
+		setIsOpen(true);
 	};
 
 	useEffect(() => {
@@ -65,16 +75,6 @@ function SubMenu({ children, title, icon }: Props) {
 		}
 	});
 
-	const onMouseLeave = (e: unknown) => {
-		setSubVisible(false);
-		setIsOpen(false);
-	};
-
-	const onMouseEnter = () => {
-		setTestVisible(false);
-		setIsOpen(true);
-	};
-
 	useEffect(() => {
 		if (testVisible) {
 			setTestVisible(false);
@@ -87,9 +87,9 @@ function SubMenu({ children, title, icon }: Props) {
 			<div
 				className={Utils.getClassName([[isOpen, 'custom-sub-menu-title-opened']], ['custom-sub-menu-title'])}
 				ref={refTitle}
-				onMouseEnter={onMouseEnterTitle}
-				onMouseLeave={onMouseLeaveTitle}
-				onMouseOver={onMouseOverTitle}
+				onMouseEnter={handleMouseEnterTitle}
+				onMouseLeave={handleMouseLeaveTitle}
+				onMouseOver={handleMouseOverTitle}
 			>
 				{icon}
 				{title}
@@ -98,8 +98,8 @@ function SubMenu({ children, title, icon }: Props) {
 			<div ref={refContent} className='absolute'>
 				<div
 					className='custom-sub-menu-content'
-					onMouseLeave={onMouseLeave}
-					onMouseEnter={onMouseEnter}
+					onMouseLeave={handleMouseLeaveContent}
+					onMouseEnter={handleMouseEnterContent}
 					hidden={!subVisible}
 				>
 					{children}

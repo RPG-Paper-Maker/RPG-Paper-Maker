@@ -10,6 +10,7 @@
 */
 
 import { useState, useEffect, useRef } from 'react';
+import { Utils } from '../common/Utils';
 import '../styles/Button.css';
 
 type Props = {
@@ -33,7 +34,7 @@ function Button({
 	active = true,
 	onClick,
 }: Props) {
-	const [activeState, setActiveState] = useState<boolean>(active);
+	const [activeState, setActiveState] = useState(active);
 	const ref = useRef<HTMLButtonElement>(null);
 
 	if (active !== activeState) {
@@ -50,12 +51,11 @@ function Button({
 	};
 
 	useEffect(() => {
-		if (canHold) {
-			ref.current?.addEventListener('pointerdown', (e) => {
+		const current = ref.current;
+		if (canHold && current) {
+			const handle = (e: any) => {
 				let int = setInterval(() => {
-					if (onClick) {
-						onClick();
-					}
+					handleClick();
 				}, intervalHold);
 				let f1 = function () {
 					clearInterval(int);
@@ -67,17 +67,25 @@ function Button({
 				};
 				document.addEventListener('mouseup', f1);
 				document.addEventListener('touchend', f2);
-			});
+			};
+			current.addEventListener('pointerdown', handle);
+			return () => {
+				current.removeEventListener('pointerdown', handle);
+			};
 		}
+		// eslint-disable-next-line
 	}, []);
 
 	return (
 		<button
 			ref={ref}
-			className={`${activeState ? '' : 'button-unactive'} ${primary ? 'button-primary' : ''}`}
+			className={Utils.getClassName([
+				[!activeState, 'button-unactive'],
+				[primary, 'button-primary'],
+			])}
 			onClick={handleClick}
 		>
-			{icon !== '' ? <img alt='button icon' src={'./assets/icons/' + icon}></img> : null}
+			{icon !== '' && <img alt='button icon' src={'./assets/icons/' + icon} />}
 			{children}
 		</button>
 	);

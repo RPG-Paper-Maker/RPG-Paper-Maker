@@ -123,7 +123,7 @@ function Dialog({ children, title, isOpen, isDisabled = false, footer, onClose }
 						onClick={handleStopPropagation}
 						style={isMoved ? {} : { transform: 'translate(-50%, -50%)' }}
 					>
-						{isDisabled && <div className='dialog-overlay dialog-disable' />}
+						{isDisabled && <div className='dialog-disable' />}
 						<div
 							className={Utils.getClassName([[isDragging, 'dialog-title-grabbing']], ['dialog-title'])}
 							onMouseDown={handleMouseDownTitle}
