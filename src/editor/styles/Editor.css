@@ -19,6 +19,7 @@
 	--grey-color: #878787;
 	--grey-light-color: #cacaca;
 	--primary-color: #25bbb9;
+	--primary-dark-color: #218584;
 }
 
 @keyframes fadeIn {
@@ -147,6 +148,7 @@ code {
 /* width */
 ::-webkit-scrollbar {
 	width: 10px;
+	height: 10px;
 }
 
 /* Track */

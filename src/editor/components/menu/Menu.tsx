@@ -14,15 +14,25 @@ import { Utils } from '../../common/Utils';
 import '../../styles/Menu.css';
 
 type Props = {
-	horizontal?: boolean;
 	children: JSX.Element | JSX.Element[];
+	horizontal?: boolean;
+	isActivable?: boolean;
+	activeIndex?: number;
+	setActiveIndex?: (v: number) => void;
 };
 
-function Menu({ children, horizontal = false }: Props) {
+function Menu({ children, horizontal = false, isActivable = false, activeIndex = 0, setActiveIndex }: Props) {
 	const [triggerCloseAll, setTriggerCloseAll] = useState(false);
 
-	const items = Children.map(children, (child) =>
-		cloneElement(child, { triggerCloseAll: triggerCloseAll, setTriggerCloseAll: setTriggerCloseAll })
+	const items = Children.map(children, (child, index) =>
+		cloneElement(child, {
+			triggerCloseAll: triggerCloseAll,
+			setTriggerCloseAll: setTriggerCloseAll,
+			isActivable: isActivable,
+			active: isActivable && activeIndex === index,
+			setActiveIndex: setActiveIndex,
+			index: index,
+		})
 	);
 
 	useEffect(() => {

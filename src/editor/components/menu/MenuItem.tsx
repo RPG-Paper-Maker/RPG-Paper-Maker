@@ -15,18 +15,38 @@ import '../../styles/MenuItem.css';
 type Props = {
 	children?: any;
 	type?: string;
-	disabled?: boolean;
 	icon?: React.ReactNode;
+	isActivable?: boolean;
+	active?: boolean;
+	index?: number;
+	disabled?: boolean;
+	setActiveIndex?: (v: number) => void;
 	onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 	setTriggerCloseAll?: (v: boolean) => void;
 };
 
-function MenuItem({ children, type, disabled = false, icon, onClick, setTriggerCloseAll }: Props) {
+function MenuItem({
+	children,
+	type,
+	icon,
+	isActivable = false,
+	active = false,
+	index = 0,
+	disabled = false,
+	setActiveIndex,
+	onClick,
+	setTriggerCloseAll,
+}: Props) {
 	const handleClick = (e: any) => {
-		if (onClick && !disabled) {
-			onClick(e);
-			if (setTriggerCloseAll) {
-				setTriggerCloseAll(true);
+		if (!disabled) {
+			if (isActivable && setActiveIndex) {
+				setActiveIndex(index);
+			}
+			if (onClick) {
+				onClick(e);
+				if (setTriggerCloseAll) {
+					setTriggerCloseAll(true);
+				}
 			}
 		}
 	};
@@ -36,6 +56,7 @@ function MenuItem({ children, type, disabled = false, icon, onClick, setTriggerC
 			onClick={handleClick}
 			className={Utils.getClassName(
 				[
+					[active, 'custom-menu-item-active'],
 					[disabled, 'custom-menu-item-disabled'],
 					[type === 'separator', 'custom-menu-item-separator'],
 				],

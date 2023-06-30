@@ -24,15 +24,19 @@ function Splitter({ children, vertical, size, className }: Props) {
 
 	const update = () => {
 		//flex fill-height
-		requestAnimationFrame(update);
+		//requestAnimationFrame(update);
 	};
 
 	useEffect(() => {
 		if (size) {
 			if (vertical) {
-				ref.current!.style.width = size + 'px';
-			} else {
+				ref.current!.style.minHeight = size + 'px';
+				ref.current!.style.maxHeight = size + 'px';
 				ref.current!.style.height = size + 'px';
+			} else {
+				ref.current!.style.minWidth = size + 'px';
+				ref.current!.style.maxWidth = size + 'px';
+				ref.current!.style.width = size + 'px';
 			}
 		}
 		update();
@@ -40,10 +44,10 @@ function Splitter({ children, vertical, size, className }: Props) {
 	}, []);
 
 	return (
-		<div ref={ref} className={`splitter ${vertical ? 'flex-column' : 'flex'} ${className}`}>
-			{children[0]}
+		<div className={`splitter ${vertical ? 'flex-column' : 'flex'} ${className}`}>
+			<div ref={ref}>{children[0]}</div>
 			<div className={vertical ? 'splitter-button-vertical' : 'splitter-button-horizontal'}></div>
-			{children[1]}
+			<div className='flex flex-one'>{children[1]}</div>
 		</div>
 	);
 }

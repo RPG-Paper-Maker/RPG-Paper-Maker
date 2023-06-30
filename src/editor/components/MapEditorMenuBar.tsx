@@ -24,27 +24,27 @@ function MapEditorMenuBar() {
 				<MenuSub icon={<BiSolidRectangle />}>
 					<MenuItem onClick={handleFloor}>Floor</MenuItem>
 				</MenuSub>
-				<MenuSub icon='sprite-face.png'>
+				<MenuSub icon={<BiSolidRectangle />}>
 					<MenuItem onClick={handleFloor} disabled>
 						Floor
 					</MenuItem>
 				</MenuSub>
-				<MenuSub icon='mountain.png'>
+				<MenuSub icon={<BiSolidRectangle />}>
 					<MenuItem onClick={handleFloor} disabled>
 						Floor
 					</MenuItem>
 				</MenuSub>
-				<MenuSub icon='object.png'>
+				<MenuSub icon={<BiSolidRectangle />}>
 					<MenuItem onClick={handleFloor} disabled>
 						Floor
 					</MenuItem>
 				</MenuSub>
-				<MenuSub icon='ev.png'>
+				<MenuSub icon={<BiSolidRectangle />}>
 					<MenuItem onClick={handleFloor} disabled>
 						Floor
 					</MenuItem>
 				</MenuSub>
-				<MenuSub icon='view.png'>
+				<MenuSub icon={<BiSolidRectangle />}>
 					<MenuItem onClick={handleFloor} disabled>
 						Floor
 					</MenuItem>

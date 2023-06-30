@@ -17,10 +17,15 @@ import MapEditorMenuBar from './MapEditorMenuBar';
 import Splitter from './Splitter';
 import { RootState } from '../store';
 import Loader from './Loader';
+import Menu from './menu/Menu';
+import MenuItem from './menu/MenuItem';
+import { LuFolders } from 'react-icons/lu';
+import { MdOutlineWallpaper } from 'react-icons/md';
 
 function PanelProject() {
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 	const [picture, setPicture] = useState<HTMLImageElement | null>(null);
+	const [projectMenuIndex, setProjectMenuIndex] = useState(1);
 	const currentProjectName = useSelector((state: RootState) => state.projects.current);
 	const loading = useSelector((state: RootState) => state.projects.loading);
 
@@ -55,13 +60,27 @@ function PanelProject() {
 					<h2>No project opened...</h2>
 				</div>
 			) : (
-				<Splitter vertical={false} className='fill-height'>
-					<Splitter vertical size={266}>
-						<div className='flex-one scrollable'>
-							<canvas ref={refCanvas}></canvas>
-						</div>
-						<div className='flex-one'></div>
-					</Splitter>
+				<Splitter vertical={false} size={256} className='fill-height'>
+					<div>
+						<Menu
+							horizontal
+							isActivable
+							activeIndex={projectMenuIndex}
+							setActiveIndex={setProjectMenuIndex}
+						>
+							<MenuItem icon={<LuFolders />}></MenuItem>
+							<MenuItem active icon={<MdOutlineWallpaper />}></MenuItem>
+						</Menu>
+						{projectMenuIndex === 0 && <div>Maps</div>}
+						{projectMenuIndex === 1 && (
+							<>
+								<div className='flex-one scrollable'>
+									<canvas ref={refCanvas}></canvas>
+								</div>
+								<div className='flex'></div>
+							</>
+						)}
+					</div>
 					<div className='flex-column flex-one map-editor-bar'>
 						<MapEditorMenuBar />
 						<MapEditor visible={currentProjectName !== ''} />
