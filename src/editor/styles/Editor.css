@@ -41,6 +41,7 @@ body {
 	color: var(--main-color);
 	font-size: 14px;
 	touch-action: none;
+	image-rendering: pixelated;
 }
 
 code {

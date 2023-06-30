@@ -13,39 +13,39 @@ import { useEffect, useRef } from 'react';
 import '../styles/Splitter.css';
 
 type Props = {
-    children: [JSX.Element, JSX.Element],
-    vertical: boolean,
-    size?: number,
-    className?: string
+	children: [JSX.Element, JSX.Element];
+	vertical: boolean;
+	size?: number;
+	className?: string;
 };
 
 function Splitter({ children, vertical, size, className }: Props) {
-    const ref = useRef<HTMLHeadingElement>(null);
+	const ref = useRef<HTMLHeadingElement>(null);
 
-    const update = () => {
-        //flex fill-height
-        requestAnimationFrame(update);
-    };
-    
-    useEffect(() => {
-        if (size) {
-            if (vertical) {
-                ref.current!.style.width = size + 'px';
-            } else {
-                ref.current!.style.height = size + 'px';
-            }
-        }
-        update();
-        // eslint-disable-next-line
-    }, []);
+	const update = () => {
+		//flex fill-height
+		requestAnimationFrame(update);
+	};
 
-    return (
-        <div ref={ref} className={'splitter ' + (vertical ? 'flex-column' : 'flex') + ' ' + className}>
-            {children[0]}
-            <div className={vertical ? 'splitter-button-vertical' : 'splitter-button-horizontal'}></div>
-            {children[1]}
-        </div>
-    );
+	useEffect(() => {
+		if (size) {
+			if (vertical) {
+				ref.current!.style.width = size + 'px';
+			} else {
+				ref.current!.style.height = size + 'px';
+			}
+		}
+		update();
+		// eslint-disable-next-line
+	}, []);
+
+	return (
+		<div ref={ref} className={`splitter ${vertical ? 'flex-column' : 'flex'} ${className}`}>
+			{children[0]}
+			<div className={vertical ? 'splitter-button-vertical' : 'splitter-button-horizontal'}></div>
+			{children[1]}
+		</div>
+	);
 }
 
 export default Splitter;

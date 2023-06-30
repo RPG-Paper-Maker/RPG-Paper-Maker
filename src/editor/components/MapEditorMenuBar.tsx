@@ -13,37 +13,44 @@ import React from 'react';
 import Menu from './menu/Menu';
 import MenuItem from './menu/MenuItem';
 import SubMenu from './menu/SubMenu';
+import { BiSolidRectangle } from 'react-icons/bi';
 
-type Props = {
-	kind?: number;
-};
-
-function MapEditorMenuBar({ kind }: Props) {
+function MapEditorMenuBar() {
 	const handleFloor = () => {};
 
 	return (
-		<React.Fragment>
+		<>
 			<Menu horizontal>
-				<SubMenu icon='floor.png'>
+				<SubMenu icon={<BiSolidRectangle />}>
 					<MenuItem onClick={handleFloor}>Floor</MenuItem>
 				</SubMenu>
 				<SubMenu icon='sprite-face.png'>
-					<MenuItem onClick={handleFloor}>Floor</MenuItem>
+					<MenuItem onClick={handleFloor} disabled>
+						Floor
+					</MenuItem>
 				</SubMenu>
 				<SubMenu icon='mountain.png'>
-					<MenuItem onClick={handleFloor}>Floor</MenuItem>
+					<MenuItem onClick={handleFloor} disabled>
+						Floor
+					</MenuItem>
 				</SubMenu>
 				<SubMenu icon='object.png'>
-					<MenuItem onClick={handleFloor}>Floor</MenuItem>
+					<MenuItem onClick={handleFloor} disabled>
+						Floor
+					</MenuItem>
 				</SubMenu>
 				<SubMenu icon='ev.png'>
-					<MenuItem onClick={handleFloor}>Floor</MenuItem>
+					<MenuItem onClick={handleFloor} disabled>
+						Floor
+					</MenuItem>
 				</SubMenu>
 				<SubMenu icon='view.png'>
-					<MenuItem onClick={handleFloor}>Floor</MenuItem>
+					<MenuItem onClick={handleFloor} disabled>
+						Floor
+					</MenuItem>
 				</SubMenu>
 			</Menu>
-		</React.Fragment>
+		</>
 	);
 }
 

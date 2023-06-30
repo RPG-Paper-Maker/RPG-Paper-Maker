@@ -84,9 +84,13 @@ function MapEditor({ visible }: Props) {
 	});
 
 	return (
-		<div className='flex-one relative' hidden={!visible}>
-			<div className='fill-space' ref={refCanvas} id='canvas-map-editor'></div>
-		</div>
+		<>
+			{visible && (
+				<div className='flex-one relative'>
+					<div id='canvas-map-editor' className='fill-space' ref={refCanvas}></div>
+				</div>
+			)}
+		</>
 	);
 }
 

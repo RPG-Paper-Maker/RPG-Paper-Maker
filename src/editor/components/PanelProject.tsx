@@ -22,6 +22,11 @@ function PanelProject() {
 	const [picture, setPicture] = useState<HTMLImageElement | null>(null);
 	const currentProjectName = useSelector((state: RootState) => state.projects.current);
 
+	const initialize = async () => {
+		const picture = await Picture2D.loadImage('./assets/textures/plains-woods.png');
+		setPicture(picture);
+	};
+
 	useEffect(() => {
 		if (refCanvas.current && picture) {
 			const ctx = refCanvas.current.getContext('2d');
@@ -35,13 +40,11 @@ function PanelProject() {
 	});
 
 	useEffect(() => {
-		(async () => {
-			let picture = await Picture2D.loadImage('./assets/textures/plains-woods.png');
-			setPicture(picture);
-		})();
+		initialize();
 		// eslint-disable-next-line
 	}, []);
 
+	// TODO: separate components empty project / project
 	return (
 		<div className='flex-one'>
 			{currentProjectName === '' ? (
@@ -49,9 +52,6 @@ function PanelProject() {
 					<h2>No project opened...</h2>
 				</div>
 			) : (
-				<React.Fragment></React.Fragment>
-			)}
-			{currentProjectName !== '' ? (
 				<Splitter vertical={false} className='fill-height'>
 					<Splitter vertical size={266}>
 						<div className='flex-one scrollable'>
@@ -64,8 +64,6 @@ function PanelProject() {
 						<MapEditor visible={currentProjectName !== ''} />
 					</div>
 				</Splitter>
-			) : (
-				<React.Fragment></React.Fragment>
 			)}
 		</div>
 	);
