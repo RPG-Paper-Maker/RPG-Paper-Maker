@@ -9,17 +9,19 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState, useRef, useEffect, ReactNode } from 'react';
-import '../../styles/SubMenu.css';
+import React, { useState, useRef, useEffect, ReactNode, Children, cloneElement } from 'react';
+import '../../styles/MenuSub.css';
 import { Utils } from '../../common/Utils';
 
 type Props = {
-	children?: ReactNode | ReactNode[];
+	children: any;
 	title?: string;
 	icon?: ReactNode;
+	triggerCloseAll?: boolean;
+	setTriggerCloseAll?: (v: boolean) => void;
 };
 
-function SubMenu({ children, title, icon }: Props) {
+function MenuSub({ children, title, icon, triggerCloseAll, setTriggerCloseAll }: Props) {
 	const [testVisible, setTestVisible] = useState(false);
 	const [subVisible, setSubVisible] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
@@ -27,6 +29,8 @@ function SubMenu({ children, title, icon }: Props) {
 	const refTitle = useRef<HTMLHeadingElement>(null);
 	const refArrow = useRef<HTMLHeadingElement>(null);
 	const refContent = useRef<HTMLHeadingElement>(null);
+
+	const items = Children.map(children, (child) => cloneElement(child, { setTriggerCloseAll: setTriggerCloseAll }));
 
 	const handleMouseEnterTitle = () => {
 		setSubVisible(true);
@@ -42,7 +46,7 @@ function SubMenu({ children, title, icon }: Props) {
 		setSubVisible(true);
 	};
 
-	const handleMouseLeaveContent = (e: unknown) => {
+	const handleMouseLeaveContent = () => {
 		setSubVisible(false);
 		setIsOpen(false);
 	};
@@ -82,10 +86,18 @@ function SubMenu({ children, title, icon }: Props) {
 		}
 	}, [testVisible]);
 
+	useEffect(() => {
+		if (triggerCloseAll) {
+			setIsOpen(false);
+			setSubVisible(false);
+			setTestVisible(false);
+		}
+	}, [triggerCloseAll]);
+
 	return (
-		<div ref={refMain} className='custom-sub-menu'>
+		<div ref={refMain} className='custom-menu-sub'>
 			<div
-				className={Utils.getClassName([[isOpen, 'custom-sub-menu-title-opened']], ['custom-sub-menu-title'])}
+				className={Utils.getClassName([[isOpen, 'custom-menu-sub-title-opened']], ['custom-menu-sub-title'])}
 				ref={refTitle}
 				onMouseEnter={handleMouseEnterTitle}
 				onMouseLeave={handleMouseLeaveTitle}
@@ -97,16 +109,16 @@ function SubMenu({ children, title, icon }: Props) {
 			</div>
 			<div ref={refContent} className='absolute'>
 				<div
-					className='custom-sub-menu-content'
+					className='custom-menu-sub-content'
 					onMouseLeave={handleMouseLeaveContent}
 					onMouseEnter={handleMouseEnterContent}
 					hidden={!subVisible}
 				>
-					{children}
+					{items}
 				</div>
 			</div>
 		</div>
 	);
 }
 
-export default SubMenu;
+export default MenuSub;

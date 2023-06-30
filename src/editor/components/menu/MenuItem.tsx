@@ -18,12 +18,16 @@ type Props = {
 	disabled?: boolean;
 	icon?: React.ReactNode;
 	onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+	setTriggerCloseAll?: (v: boolean) => void;
 };
 
-function MenuItem({ children, type, disabled = false, icon, onClick }: Props) {
+function MenuItem({ children, type, disabled = false, icon, onClick, setTriggerCloseAll }: Props) {
 	const handleClick = (e: any) => {
 		if (onClick && !disabled) {
 			onClick(e);
+			if (setTriggerCloseAll) {
+				setTriggerCloseAll(true);
+			}
 		}
 	};
 

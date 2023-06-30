@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Children, cloneElement, useEffect, useState } from 'react';
 import { Utils } from '../../common/Utils';
 import '../../styles/Menu.css';
 
@@ -18,9 +19,19 @@ type Props = {
 };
 
 function Menu({ children, horizontal = false }: Props) {
-	return (
-		<div className={Utils.getClassName([[horizontal, 'custom-menu-horizontal']], ['custom-menu'])}>{children}</div>
+	const [triggerCloseAll, setTriggerCloseAll] = useState(false);
+
+	const items = Children.map(children, (child) =>
+		cloneElement(child, { triggerCloseAll: triggerCloseAll, setTriggerCloseAll: setTriggerCloseAll })
 	);
+
+	useEffect(() => {
+		if (triggerCloseAll) {
+			setTriggerCloseAll(false);
+		}
+	}, [triggerCloseAll]);
+
+	return <div className={Utils.getClassName([[horizontal, 'custom-menu-horizontal']], ['custom-menu'])}>{items}</div>;
 }
 
 export default Menu;

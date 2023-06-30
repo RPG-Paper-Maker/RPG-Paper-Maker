@@ -1,32 +1,32 @@
-.custom-sub-menu {
+.custom-menu-sub {
 	display: flex;
 	flex-direction: column;
 	white-space: nowrap;
 }
 
-.custom-sub-menu svg {
+.custom-menu-sub svg {
 	margin-right: 0.5em;
 }
 
-.custom-sub-menu-title {
+.custom-menu-sub-title {
 	padding: 5px 15px 5px 15px;
 	background-color: var(--main-bg-color);
 	position: relative;
 }
 
-.map-editor-bar .custom-sub-menu-title {
+.map-editor-bar .custom-menu-sub-title {
 	padding: 10px 15px 10px 15px;
 }
 
-.custom-sub-menu-title:hover {
+.custom-menu-sub-title:hover {
 	background-color: var(--lighter-bg-color);
 }
 
-.custom-sub-menu-title-open {
+.custom-menu-sub-title-open {
 	background-color: var(--lighter-bg-color);
 }
 
-.custom-sub-menu-content {
+.custom-menu-sub-content {
 	position: absolute;
 	z-index: 1;
 	box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px, rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,

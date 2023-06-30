@@ -15,7 +15,7 @@ import { RootState, setCurrentProjectName } from '../store';
 import DialogNewProject from '../dialogs/DialogNewProject';
 import Menu from './menu/Menu';
 import MenuItem from './menu/MenuItem';
-import SubMenu from './menu/SubMenu';
+import MenuSub from './menu/MenuSub';
 import { LocalFile } from '../core/LocalFile';
 import { Enum } from '../common/Enum';
 import { Scene } from '../Editor';
@@ -142,11 +142,11 @@ function MainMenuBar() {
 			<div className='flex-center-vertically'>
 				<img className='main-menu-bar-logo' src={'./favicon.ico'} alt='logo' />
 				<Menu horizontal>
-					<SubMenu title='File'>
+					<MenuSub title='File'>
 						<MenuItem icon={<AiOutlineFileAdd />} onClick={handleNewProject}>
 							New Project...
 						</MenuItem>
-						<SubMenu icon={<AiOutlineFolderOpen />} title='Open existing project...'>
+						<MenuSub icon={<AiOutlineFolderOpen />} title='Open existing project...'>
 							{projectNames.map((name) => {
 								return (
 									<MenuItem key={'project-' + name} onClick={() => handleOpenProject(name)}>
@@ -154,32 +154,42 @@ function MainMenuBar() {
 									</MenuItem>
 								);
 							})}
-						</SubMenu>
+						</MenuSub>
 						<MenuItem icon={<BiSave />} onClick={handleSave} disabled={!isProjectOpened()}>
 							Save
 						</MenuItem>
 						<MenuItem icon={<MdClose />} onClick={handleCloseProject} disabled={!isProjectOpened()}>
 							Close
 						</MenuItem>
-					</SubMenu>
-					<SubMenu title='Edition'>
+					</MenuSub>
+					<MenuSub title='Edition'>
 						<MenuItem icon={<AiOutlineZoomIn />} onClick={handleZoomIn} disabled={!isProjectOpened()}>
 							Zoom in
 						</MenuItem>
 						<MenuItem icon={<AiOutlineZoomOut />} onClick={handleZoomOut} disabled={!isProjectOpened()}>
 							Zoom out
 						</MenuItem>
-					</SubMenu>
-					<SubMenu title='Management'></SubMenu>
-					<SubMenu title='Special elements'></SubMenu>
-					<SubMenu title='Options'></SubMenu>
-					<SubMenu title='Display'></SubMenu>
-					<SubMenu title='Test'>
+					</MenuSub>
+					<MenuSub title='Management'>
+						<MenuItem>TODO</MenuItem>
+					</MenuSub>
+					<MenuSub title='Special elements'>
+						<MenuItem>TODO</MenuItem>
+					</MenuSub>
+					<MenuSub title='Options'>
+						<MenuItem>TODO</MenuItem>
+					</MenuSub>
+					<MenuSub title='Display'>
+						<MenuItem>TODO</MenuItem>
+					</MenuSub>
+					<MenuSub title='Test'>
 						<MenuItem icon={<BsPlay />} onClick={handlePlay} disabled={!isProjectOpened()}>
 							Play
 						</MenuItem>
-					</SubMenu>
-					<SubMenu title='Help'></SubMenu>
+					</MenuSub>
+					<MenuSub title='Help'>
+						<MenuItem>TODO</MenuItem>
+					</MenuSub>
 				</Menu>
 			</div>
 
