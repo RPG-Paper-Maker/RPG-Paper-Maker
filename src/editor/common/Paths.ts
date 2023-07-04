@@ -87,6 +87,10 @@ class Paths {
 	static join(...args: any) {
 		return args.join('/'); // TODO: Depends on OS
 	}
+
+	static getFileName(path: string) {
+		return path.split('/').pop();
+	}
 }
 
 export { Paths };

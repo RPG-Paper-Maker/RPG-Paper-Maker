@@ -12,6 +12,8 @@
 import localforage from 'localforage';
 import { Utils } from '../common/Utils';
 import { Serializable } from './Serializable';
+import JSZip from 'jszip';
+import { Paths } from '../common/Paths';
 
 class LocalFile extends Serializable {
 	public static readonly PATH_SYSTEMS = '/systems.json';
@@ -47,13 +49,18 @@ class LocalFile extends Serializable {
 	}
 
 	static async getFolders(path: string): Promise<string[]> {
+		return (await LocalFile.getFoldersFiles(path))[0];
+	}
+
+	static async getFoldersFiles(path: string): Promise<[string[], string[]]> {
 		let json: Record<string, any> | null = await localforage.getItem(path);
 		if (json) {
-			let folder = new LocalFile(false);
+			let folder = new LocalFile(true);
 			folder.read(json);
-			return folder.folderNames;
+			console.log(folder);
+			return [folder.folderNames, folder.fileNames];
 		}
-		return [];
+		return [[], []];
 	}
 
 	static async createFolder(path: string) {
@@ -163,6 +170,35 @@ class LocalFile extends Serializable {
 		if (json) {
 			console.info('remove file ' + path);
 			await localforage.removeItem(path);
+		}
+	}
+
+	static async downloadZip(path: string) {
+		const zip = new JSZip();
+		await LocalFile.getFolderZip(zip, path);
+		zip.generateAsync({ type: 'blob' }).then((blob) => {
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = Paths.getFileName(path) || '';
+			a.click();
+			URL.revokeObjectURL(url);
+		});
+	}
+
+	static async getFolderZip(zip: JSZip, path: string) {
+		const [folders, files] = await LocalFile.getFoldersFiles(path);
+		for (const folderName of folders) {
+			const folder = zip.folder(folderName);
+			if (folder) {
+				await LocalFile.getFolderZip(folder, Paths.join(path, folderName));
+			}
+		}
+		for (const fileName of files) {
+			const file = await LocalFile.getFile(Paths.join(path, fileName));
+			if (file) {
+				zip.file(fileName, file.content);
+			}
 		}
 	}
 

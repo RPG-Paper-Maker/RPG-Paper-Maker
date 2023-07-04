@@ -30,7 +30,7 @@ import {
 	AiOutlineZoomIn,
 	AiOutlineZoomOut,
 } from 'react-icons/ai';
-import { BiSave, BiPyramid, BiCube } from 'react-icons/bi';
+import { BiSave, BiPyramid, BiCube, BiExport, BiImport } from 'react-icons/bi';
 import { LuSaveAll, LuLanguages } from 'react-icons/lu';
 import { BsClipboardData, BsMusicNote, BsPlay } from 'react-icons/bs';
 import { TbNumbers } from 'react-icons/tb';
@@ -39,6 +39,7 @@ import { MdOutlineAddchart, MdAutoAwesomeMosaic, MdClose } from 'react-icons/md'
 import { TfiVideoClapper } from 'react-icons/tfi';
 import { GiBrickWall } from 'react-icons/gi';
 import '../styles/MainMenuToolBar.css';
+import { Paths } from '../common/Paths';
 
 function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = React.useState(false);
@@ -98,6 +99,18 @@ function MainMenuBar() {
 		dispatch(setLoading(false));
 	};
 
+	const handleSave = async () => {
+		if (Scene.Map.current) {
+			await Scene.Map.current.save();
+		}
+	};
+
+	const handleImport = () => {};
+
+	const handleExport = () => {
+		LocalFile.downloadZip(Paths.join('projects', currentProjectName));
+	};
+
 	const handleCloseProject = () => {
 		if (Scene.Map.current) {
 			Scene.Map.current.close();
@@ -116,12 +129,6 @@ function MainMenuBar() {
 	const handleZoomOut = () => {
 		if (Scene.Map.current) {
 			Scene.Map.current.zoomOut();
-		}
-	};
-
-	const handleSave = async () => {
-		if (Scene.Map.current) {
-			await Scene.Map.current.save();
 		}
 	};
 
@@ -163,6 +170,12 @@ function MainMenuBar() {
 						</MenuItem>
 						<MenuItem icon={<MdClose />} onClick={handleCloseProject} disabled={!isProjectOpened()}>
 							Close
+						</MenuItem>
+						<MenuItem icon={<BiImport />} onClick={handleImport} disabled={!isProjectOpened()}>
+							Import
+						</MenuItem>
+						<MenuItem icon={<BiExport />} onClick={handleExport} disabled={!isProjectOpened()}>
+							Export
 						</MenuItem>
 					</MenuSub>
 					<MenuSub title='Edition'>
