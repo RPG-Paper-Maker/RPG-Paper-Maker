@@ -112,7 +112,7 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 				</div>
 			</Dialog>
 			<Dialog
-				title='Error'
+				title='Warning'
 				isOpen={isDialogConfirmOpen}
 				footer={<FooterYesNo onNo={cancelCreation} onYes={replaceProject} />}
 				onClose={cancelCreation}

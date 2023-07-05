@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setCurrentProjectName, setLoading } from '../store';
 import DialogNewProject from '../dialogs/DialogNewProject';
@@ -40,12 +40,16 @@ import { TfiVideoClapper } from 'react-icons/tfi';
 import { GiBrickWall } from 'react-icons/gi';
 import '../styles/MainMenuToolBar.css';
 import { Paths } from '../common/Paths';
+import Dialog from './Dialog';
+import FooterYesNo from '../dialogs/footers/FooterYesNo';
 
 function MainMenuBar() {
-	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = React.useState(false);
+	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
+	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
 	const [projectNames, setProjectNames] = React.useState<string[]>([]);
 	const dispatch = useDispatch();
 	const currentProjectName = useSelector((state: RootState) => state.projects.current);
+	const importFileInputRef = useRef<HTMLInputElement>(null);
 
 	const isProjectOpened = () => {
 		return currentProjectName !== '';
@@ -105,10 +109,51 @@ function MainMenuBar() {
 		}
 	};
 
-	const handleImport = () => {};
+	const handleImport = () => {
+		importFileInputRef.current?.click();
+	};
+
+	const handleImportFileChange = async () => {
+		if (!importFileInputRef.current) {
+			return;
+		}
+		const file = Array.from(importFileInputRef.current.files || [])[0];
+		const projectName = file.name.substring(0, file.name.length - 4);
+		if (projectNames.indexOf(projectName) === -1) {
+			importFileInputRef.current.value = '';
+			dispatch(setLoading(true));
+			await LocalFile.loadZip(file, Enum.LocalForage.Projects);
+			await loadProjects();
+			await handleOpenProject(projectName);
+			dispatch(setLoading(false));
+		} else {
+			setIsDialogWarningImportOpen(true);
+		}
+	};
+
+	const handleAcceptImport = async () => {
+		if (!importFileInputRef.current) {
+			return;
+		}
+		setIsDialogWarningImportOpen(false);
+		dispatch(setLoading(true));
+		const file = Array.from(importFileInputRef.current.files || [])[0];
+		importFileInputRef.current.value = '';
+		const projectName = file.name.substring(0, file.name.length - 4);
+		await LocalFile.removeFolder(Paths.join(Enum.LocalForage.Projects, projectName));
+		await LocalFile.loadZip(file, Enum.LocalForage.Projects);
+		await handleOpenProject(projectName);
+	};
+
+	const handleRejectImport = () => {
+		setIsDialogWarningImportOpen(false);
+		if (importFileInputRef.current) {
+			importFileInputRef.current.value = '';
+		}
+	};
 
 	const handleExport = () => {
-		LocalFile.downloadZip(Paths.join('projects', currentProjectName));
+		LocalFile.downloadZip(Paths.join(Enum.LocalForage.Projects, currentProjectName));
 	};
 
 	const handleCloseProject = () => {
@@ -165,17 +210,26 @@ function MainMenuBar() {
 								);
 							})}
 						</MenuSub>
+						<MenuItem icon={<BiImport />} onClick={handleImport}>
+							<>
+								Import project
+								<input
+									ref={importFileInputRef}
+									type='file'
+									hidden
+									onChange={handleImportFileChange}
+									accept='.zip'
+								/>
+							</>
+						</MenuItem>
 						<MenuItem icon={<BiSave />} onClick={handleSave} disabled={!isProjectOpened()}>
 							Save
 						</MenuItem>
 						<MenuItem icon={<MdClose />} onClick={handleCloseProject} disabled={!isProjectOpened()}>
 							Close
 						</MenuItem>
-						<MenuItem icon={<BiImport />} onClick={handleImport} disabled={!isProjectOpened()}>
-							Import
-						</MenuItem>
 						<MenuItem icon={<BiExport />} onClick={handleExport} disabled={!isProjectOpened()}>
-							Export
+							Export project
 						</MenuItem>
 					</MenuSub>
 					<MenuSub title='Edition'>
@@ -292,6 +346,15 @@ function MainMenuBar() {
 				onAccept={handleAcceptNewProject}
 				onReject={handleRejectNewProject}
 			/>
+
+			<Dialog
+				title='Warning'
+				isOpen={isDialogWarningImportOpen}
+				footer={<FooterYesNo onNo={handleRejectImport} onYes={handleAcceptImport} />}
+				onClose={handleRejectImport}
+			>
+				<p>This project name already exists. Would you like to replace it?</p>
+			</Dialog>
 		</>
 	);
 }

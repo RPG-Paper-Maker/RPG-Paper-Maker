@@ -57,7 +57,6 @@ class LocalFile extends Serializable {
 		if (json) {
 			let folder = new LocalFile(true);
 			folder.read(json);
-			console.log(folder);
 			return [folder.folderNames, folder.fileNames];
 		}
 		return [[], []];
@@ -198,6 +197,25 @@ class LocalFile extends Serializable {
 			const file = await LocalFile.getFile(Paths.join(path, fileName));
 			if (file) {
 				zip.file(fileName, file.content);
+			}
+		}
+	}
+
+	static async loadZip(file: File, basePath: string) {
+		const zip = new JSZip();
+		const zipData = await zip.loadAsync(file);
+		const projectName = file.name.substring(0, file.name.length - 4);
+		basePath = Paths.join(basePath, projectName);
+		await LocalFile.createFolder(basePath);
+		const paths = Object.keys(zipData.files);
+		for (const path of paths) {
+			const f = zipData.files[path];
+			const p = Paths.join(basePath, path);
+			if (f.dir) {
+				await LocalFile.createFolder(p);
+			} else {
+				const content = await f.async('text');
+				await LocalFile.createFile(p, content);
 			}
 		}
 	}
