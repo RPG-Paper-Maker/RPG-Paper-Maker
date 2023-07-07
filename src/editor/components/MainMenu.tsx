@@ -28,28 +28,15 @@ import { LocalFile } from '../core/LocalFile';
 import { Enum } from '../common/Enum';
 import { Scene } from '../Editor';
 import { Project } from '../core/Project';
-import {
-	AiOutlineFileAdd,
-	AiOutlineFolderOpen,
-	AiOutlineFolder,
-	AiOutlineDatabase,
-	AiOutlinePicture,
-	AiOutlineFontSize,
-	AiOutlineZoomIn,
-	AiOutlineZoomOut,
-} from 'react-icons/ai';
-import { BiSave, BiPyramid, BiCube, BiExport, BiImport } from 'react-icons/bi';
-import { LuSaveAll, LuLanguages } from 'react-icons/lu';
-import { BsClipboardData, BsMusicNote, BsPlay } from 'react-icons/bs';
-import { TbNumbers } from 'react-icons/tb';
-import { FaArrowsAlt, FaRegKeyboard, FaPlug, FaMountain } from 'react-icons/fa';
-import { MdOutlineAddchart, MdAutoAwesomeMosaic, MdClose } from 'react-icons/md';
-import { TfiVideoClapper } from 'react-icons/tfi';
-import { GiBrickWall } from 'react-icons/gi';
-import '../styles/MainMenuToolBar.css';
+import { AiOutlineFileAdd, AiOutlineFolderOpen, AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai';
+import { BiSave, BiExport, BiImport } from 'react-icons/bi';
+import { BsPlay } from 'react-icons/bs';
+import { MdClose } from 'react-icons/md';
 import { Paths } from '../common/Paths';
 import Dialog from './dialogs/Dialog';
 import FooterYesNo from './dialogs/footers/FooterYesNo';
+import Toolbar from './Toolbar';
+import '../styles/MainMenu.css';
 
 function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
@@ -185,8 +172,6 @@ function MainMenuBar() {
 		window.open(window.location.origin + '/play/' + currentProjectName, '_blank')?.focus();
 	};
 
-	const handleFloor = () => {};
-
 	// Triggers handling
 	useEffect(() => {
 		if (triggers.newProject) {
@@ -280,83 +265,7 @@ function MainMenuBar() {
 				</Menu>
 			</div>
 
-			<div className='toolbar'>
-				<Menu horizontal>
-					<MenuItem icon={<AiOutlineFileAdd />} onClick={handleNewProject}>
-						New
-					</MenuItem>
-					<MenuItem icon={<AiOutlineFolderOpen />} onClick={handleFloor} disabled>
-						Open
-					</MenuItem>
-					<MenuItem icon={<BiSave />} onClick={handleFloor} disabled>
-						Save
-					</MenuItem>
-					<MenuItem icon={<LuSaveAll />} onClick={handleFloor} disabled>
-						All
-					</MenuItem>
-					<MenuItem icon={<AiOutlineFolder />} onClick={handleFloor} disabled>
-						Folder
-					</MenuItem>
-					<MenuItem type='separator'></MenuItem>
-					<MenuItem icon={<BsClipboardData />} onClick={handleFloor} disabled>
-						Data
-					</MenuItem>
-					<MenuItem icon={<AiOutlineDatabase />} onClick={handleFloor} disabled>
-						Systems
-					</MenuItem>
-					<MenuItem icon={<TbNumbers />} onClick={handleFloor} disabled>
-						Variables
-					</MenuItem>
-					<MenuItem icon={<FaArrowsAlt />} onClick={handleFloor} disabled>
-						Collisions
-					</MenuItem>
-					<MenuItem icon={<FaRegKeyboard />} onClick={handleFloor} disabled>
-						Keyboard
-					</MenuItem>
-					<MenuItem icon={<LuLanguages />} onClick={handleFloor} disabled>
-						Languages
-					</MenuItem>
-					<MenuItem icon={<FaPlug />} onClick={handleFloor} disabled>
-						Plugins
-					</MenuItem>
-					<MenuItem icon={<MdOutlineAddchart />} onClick={handleFloor} disabled>
-						DLCs
-					</MenuItem>
-					<MenuItem type='separator'></MenuItem>
-					<MenuItem icon={<AiOutlinePicture />} onClick={handleFloor} disabled>
-						Pictures
-					</MenuItem>
-					<MenuItem icon={<TfiVideoClapper />} onClick={handleFloor} disabled>
-						Videos
-					</MenuItem>
-					<MenuItem icon={<BsMusicNote />} onClick={handleFloor} disabled>
-						Songs
-					</MenuItem>
-					<MenuItem icon={<BiPyramid />} onClick={handleFloor} disabled>
-						Shapes
-					</MenuItem>
-					<MenuItem icon={<AiOutlineFontSize />} onClick={handleFloor} disabled>
-						Fonts
-					</MenuItem>
-					<MenuItem type='separator'></MenuItem>
-					<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleFloor} disabled>
-						Autotiles
-					</MenuItem>
-					<MenuItem icon={<GiBrickWall />} onClick={handleFloor} disabled>
-						Walls
-					</MenuItem>
-					<MenuItem icon={<BiCube />} onClick={handleFloor} disabled>
-						3D objects
-					</MenuItem>
-					<MenuItem icon={<FaMountain />} onClick={handleFloor} disabled>
-						Mountains
-					</MenuItem>
-					<MenuItem type='separator'></MenuItem>
-					<MenuItem icon={<BsPlay />} onClick={handleFloor} disabled>
-						Play
-					</MenuItem>
-				</Menu>
-			</div>
+			<Toolbar />
 
 			<DialogNewProject
 				isOpen={isDialogNewProjectOpen}
