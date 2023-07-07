@@ -9,23 +9,23 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import Button from '../../components/Button';
-import '../../styles/Footer.css';
+import Button from '../../Button';
+import '../../../styles/Footer.css';
 
 type Props = {
-	onYes: () => void;
-	onNo: () => void;
+	onOK: () => void;
+	onCancel: () => void;
 };
 
-function FooterOK({ onYes, onNo }: Props) {
+function FooterCancelOK({ onOK, onCancel }: Props) {
 	return (
 		<div className='footer-buttons'>
-			<Button onClick={onNo}>No</Button>
-			<Button primary onClick={onYes}>
-				Yes
+			<Button onClick={onCancel}>Cancel</Button>
+			<Button primary onClick={onOK}>
+				Ok
 			</Button>
 		</div>
 	);
 }
 
-export default FooterOK;
+export default FooterCancelOK;

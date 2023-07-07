@@ -10,18 +10,19 @@
 */
 
 import React, { useState, useRef, useEffect, ReactNode, Children, cloneElement } from 'react';
-import '../../styles/MenuSub.css';
-import { Utils } from '../../common/Utils';
+import { Utils } from '../common/Utils';
+import '../styles/MenuSub.css';
 
 type Props = {
 	children: any;
 	title?: string;
 	icon?: ReactNode;
+	disabled?: boolean;
 	triggerCloseAll?: boolean;
 	setTriggerCloseAll?: (v: boolean) => void;
 };
 
-function MenuSub({ children, title, icon, triggerCloseAll, setTriggerCloseAll }: Props) {
+function MenuSub({ children, title, icon, disabled = false, triggerCloseAll, setTriggerCloseAll }: Props) {
 	const [testVisible, setTestVisible] = useState(false);
 	const [subVisible, setSubVisible] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
@@ -33,8 +34,10 @@ function MenuSub({ children, title, icon, triggerCloseAll, setTriggerCloseAll }:
 	const items = Children.map(children, (child) => cloneElement(child, { setTriggerCloseAll: setTriggerCloseAll }));
 
 	const handleMouseEnterTitle = () => {
-		setSubVisible(true);
-		setIsOpen(true);
+		if (!disabled) {
+			setSubVisible(true);
+			setIsOpen(true);
+		}
 	};
 
 	const handleMouseLeaveTitle = () => {
@@ -43,7 +46,9 @@ function MenuSub({ children, title, icon, triggerCloseAll, setTriggerCloseAll }:
 	};
 
 	const handleMouseOverTitle = () => {
-		setSubVisible(true);
+		if (!disabled) {
+			setSubVisible(true);
+		}
 	};
 
 	const handleMouseLeaveContent = () => {
@@ -58,7 +63,7 @@ function MenuSub({ children, title, icon, triggerCloseAll, setTriggerCloseAll }:
 
 	useEffect(() => {
 		if (refMain.current && refArrow.current && refMain.current.parentElement) {
-			let isRoot = refMain.current.parentElement.classList.contains('custom-menu');
+			let isRoot = refMain.current.parentElement.classList.contains('menu');
 			if (!isRoot) {
 				refArrow.current.classList.add('arrow-right');
 			}
@@ -95,9 +100,15 @@ function MenuSub({ children, title, icon, triggerCloseAll, setTriggerCloseAll }:
 	}, [triggerCloseAll]);
 
 	return (
-		<div ref={refMain} className='custom-menu-sub'>
+		<div ref={refMain} className='menu-sub'>
 			<div
-				className={Utils.getClassName([[isOpen, 'custom-menu-sub-title-opened']], ['custom-menu-sub-title'])}
+				className={Utils.getClassName(
+					[
+						[isOpen, 'opened'],
+						[disabled, 'disabled'],
+					],
+					['menu-sub-title']
+				)}
 				ref={refTitle}
 				onMouseEnter={handleMouseEnterTitle}
 				onMouseLeave={handleMouseLeaveTitle}
@@ -109,7 +120,7 @@ function MenuSub({ children, title, icon, triggerCloseAll, setTriggerCloseAll }:
 			</div>
 			<div ref={refContent} className='absolute'>
 				<div
-					className='custom-menu-sub-content'
+					className='menu-sub-content'
 					onMouseLeave={handleMouseLeaveContent}
 					onMouseEnter={handleMouseEnterContent}
 					hidden={!subVisible}

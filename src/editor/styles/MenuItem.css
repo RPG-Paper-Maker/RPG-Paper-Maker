@@ -1,4 +1,4 @@
-.custom-menu-item {
+.menu-item {
 	display: flex;
 	align-items: center;
 	background-color: var(--main-bg-color);
@@ -12,24 +12,24 @@
 	transition: all 0.25s ease-out;
 }
 
-.custom-menu-item:not(.custom-menu-item-disabled):not(.custom-menu-item-active):hover {
-	background-color: var(--lighter-bg-color) !important;
+.menu-item:not(.menu-item-disabled):not(.menu-item-active):hover {
+	background-color: var(--hover-main-bg-color) !important;
 }
 
-.custom-menu-item-active {
+.menu-item-active {
 	background-color: var(--primary-dark-color);
 }
 
-.custom-menu-item-disabled {
+.menu-item-disabled {
 	color: #999999ce;
 	cursor: default;
 }
 
-.custom-menu-item-disabled svg {
+.menu-item-disabled svg {
 	color: #999999ce !important;
 }
 
-.custom-menu-item-separator {
+.menu-item-separator {
 	background-color: var(--lighter-bg-color) !important;
 	padding: 0.5px;
 	margin-left: 5px;

@@ -11,11 +11,19 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setCurrentProjectName, setLoading } from '../store';
-import DialogNewProject from '../dialogs/DialogNewProject';
-import Menu from './menu/Menu';
-import MenuItem from './menu/MenuItem';
-import MenuSub from './menu/MenuSub';
+import {
+	RootState,
+	addProject,
+	setCurrentProjectName,
+	setLoading,
+	triggerImportProject,
+	triggerNewProject,
+	triggerOpenProject,
+} from '../store';
+import DialogNewProject from './dialogs/DialogNewProject';
+import Menu from './Menu';
+import MenuItem from './MenuItem';
+import MenuSub from './MenuSub';
 import { LocalFile } from '../core/LocalFile';
 import { Enum } from '../common/Enum';
 import { Scene } from '../Editor';
@@ -40,24 +48,20 @@ import { TfiVideoClapper } from 'react-icons/tfi';
 import { GiBrickWall } from 'react-icons/gi';
 import '../styles/MainMenuToolBar.css';
 import { Paths } from '../common/Paths';
-import Dialog from './Dialog';
-import FooterYesNo from '../dialogs/footers/FooterYesNo';
+import Dialog from './dialogs/Dialog';
+import FooterYesNo from './dialogs/footers/FooterYesNo';
 
 function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
-	const [projectNames, setProjectNames] = React.useState<string[]>([]);
 	const dispatch = useDispatch();
 	const currentProjectName = useSelector((state: RootState) => state.projects.current);
+	const triggers = useSelector((state: RootState) => state.triggers.mainBar);
+	const projectNames = useSelector((state: RootState) => state.projects.list).map(({ name, location }) => name);
 	const importFileInputRef = useRef<HTMLInputElement>(null);
 
 	const isProjectOpened = () => {
 		return currentProjectName !== '';
-	};
-
-	const loadProjects = async () => {
-		let projects = await LocalFile.getFolders(Enum.LocalForage.Projects);
-		setProjectNames(projects);
 	};
 
 	const keypress = (event: KeyboardEvent) => {
@@ -81,7 +85,7 @@ function MainMenuBar() {
 	};
 
 	const handleAcceptNewProject = (data: Record<string, any>) => {
-		loadProjects();
+		dispatch(addProject({ name: data.projectName, location: '' }));
 		setIsDialogNewProjectOpen(false);
 		handleOpenProject(data.projectName);
 	};
@@ -123,9 +127,8 @@ function MainMenuBar() {
 			importFileInputRef.current.value = '';
 			dispatch(setLoading(true));
 			await LocalFile.loadZip(file, Enum.LocalForage.Projects);
-			await loadProjects();
+			dispatch(addProject({ name: projectName, location: '' }));
 			await handleOpenProject(projectName);
-			dispatch(setLoading(false));
 		} else {
 			setIsDialogWarningImportOpen(true);
 		}
@@ -142,6 +145,7 @@ function MainMenuBar() {
 		const projectName = file.name.substring(0, file.name.length - 4);
 		await LocalFile.removeFolder(Paths.join(Enum.LocalForage.Projects, projectName));
 		await LocalFile.loadZip(file, Enum.LocalForage.Projects);
+		dispatch(addProject({ name: projectName, location: '' }));
 		await handleOpenProject(projectName);
 	};
 
@@ -183,8 +187,21 @@ function MainMenuBar() {
 
 	const handleFloor = () => {};
 
+	// Triggers handling
 	useEffect(() => {
-		loadProjects();
+		if (triggers.newProject) {
+			dispatch(triggerNewProject(false));
+			handleNewProject();
+		} else if (triggers.importProject) {
+			dispatch(triggerImportProject(false));
+			handleImport();
+		} else if (triggers.openProject) {
+			dispatch(triggerOpenProject(''));
+			handleOpenProject(triggers.openProject);
+		}
+	});
+
+	useEffect(() => {
 		window.addEventListener('keydown', keypress);
 		return () => {
 			window.removeEventListener('keydown', keypress);
@@ -212,7 +229,7 @@ function MainMenuBar() {
 						</MenuSub>
 						<MenuItem icon={<BiImport />} onClick={handleImport}>
 							<>
-								Import project
+								Import project...
 								<input
 									ref={importFileInputRef}
 									type='file'
@@ -240,25 +257,25 @@ function MainMenuBar() {
 							Zoom out
 						</MenuItem>
 					</MenuSub>
-					<MenuSub title='Management'>
-						<MenuItem>TODO</MenuItem>
+					<MenuSub title='Management' disabled>
+						<MenuItem>Coming soon...</MenuItem>
 					</MenuSub>
-					<MenuSub title='Special elements'>
-						<MenuItem>TODO</MenuItem>
+					<MenuSub title='Special elements' disabled>
+						<MenuItem>Coming soon...</MenuItem>
 					</MenuSub>
-					<MenuSub title='Options'>
-						<MenuItem>TODO</MenuItem>
+					<MenuSub title='Options' disabled>
+						<MenuItem>Coming soon...</MenuItem>
 					</MenuSub>
-					<MenuSub title='Display'>
-						<MenuItem>TODO</MenuItem>
+					<MenuSub title='Display' disabled>
+						<MenuItem>Coming soon...</MenuItem>
 					</MenuSub>
 					<MenuSub title='Test'>
 						<MenuItem icon={<BsPlay />} onClick={handlePlay} disabled={!isProjectOpened()}>
 							Play
 						</MenuItem>
 					</MenuSub>
-					<MenuSub title='Help'>
-						<MenuItem>TODO</MenuItem>
+					<MenuSub title='Help' disabled>
+						<MenuItem>Coming soon...</MenuItem>
 					</MenuSub>
 				</Menu>
 			</div>

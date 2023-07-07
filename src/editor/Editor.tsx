@@ -11,11 +11,11 @@
 
 import React, { useState } from 'react';
 import { Provider } from 'react-redux';
-import MainMenuToolBar from './components/MainMenuToolBar';
-import PanelProject from './components/PanelProject';
 import { store } from './store';
+import MainMenuToolBar from './components/MainMenuToolBar';
+import PanelLoading from './components/panels/PanelLoading';
+import PanelMain from './components/panels/PanelMain';
 import './styles/Editor.css';
-import PanelLoading from './components/PanelLoading';
 
 function Editor() {
 	const [loaded, setLoaded] = useState(false);
@@ -25,7 +25,7 @@ function Editor() {
 			{loaded ? (
 				<div className='flex-column fill-space'>
 					<MainMenuToolBar />
-					<PanelProject />
+					<PanelMain />
 				</div>
 			) : (
 				<PanelLoading setLoaded={setLoaded} />

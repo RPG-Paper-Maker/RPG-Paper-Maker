@@ -5,12 +5,37 @@ button {
 	background-color: var(--lighter-bg-color);
 	color: white;
 	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
 }
 
-.button-unactive {
+button:hover {
+	background-color: var(--lightest-bg-color);
+}
+
+button.unactive {
 	opacity: 0.5;
 }
 
-.button-primary {
-	background-color: var(--primary-color);
+button.primary {
+	background-color: var(--primary-dark-color);
+}
+
+button.primary:hover {
+	background-color: var(--hover-primary-dark-color);
+}
+
+button.big {
+	padding: 15px 35px 15px 35px;
+	font-size: 17px;
+}
+
+button.patreon {
+	background-color: var(--patreon-color);
+}
+
+button.patreon:hover {
+	background-color: var(--hover-patreon-color);
 }

@@ -1,39 +1,39 @@
 .main-menu-bar-logo {
-    width: 24px;
-    height: 24px;
-    padding-left: 5px;
-    padding-right: 5px;
+	width: 24px;
+	height: 24px;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
 .toolbar {
-    padding-top: 0px;
-    padding-bottom: 0px;
-    background-color: var(--darkest-bg-color);
+	padding-top: 0px;
+	padding-bottom: 0px;
+	background-color: var(--darkest-bg-color);
 }
 
-.toolbar .custom-menu,
-.toolbar .custom-menu-item {
-    background-color: var(--darkest-bg-color);
+.toolbar .menu,
+.toolbar .menu-item {
+	background-color: var(--darkest-bg-color);
 }
 
-.toolbar .custom-menu-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 9px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    height: 36px;
+.toolbar .menu-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-size: 9px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	height: 36px;
 }
 
-.toolbar .custom-menu-item svg {
-    width: 24px;
-    height: 24px;
-    color: var(--primary-color);
-    margin-right: 0;
+.toolbar .menu-item svg {
+	width: 24px;
+	height: 24px;
+	color: var(--primary-color);
+	margin-right: 0;
 }
 
-.toolbar .custom-menu-item-separator {
-    height: 20px;
-    margin-top: 10px;
+.toolbar .menu-item-separator {
+	height: 20px;
+	margin-top: 10px;
 }

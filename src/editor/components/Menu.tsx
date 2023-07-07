@@ -10,8 +10,8 @@
 */
 
 import { Children, cloneElement, useEffect, useState } from 'react';
-import { Utils } from '../../common/Utils';
-import '../../styles/Menu.css';
+import { Utils } from '../common/Utils';
+import '../styles/Menu.css';
 
 type Props = {
 	children: JSX.Element | JSX.Element[];
@@ -41,7 +41,7 @@ function Menu({ children, horizontal = false, isActivable = false, activeIndex =
 		}
 	}, [triggerCloseAll]);
 
-	return <div className={Utils.getClassName([[horizontal, 'custom-menu-horizontal']], ['custom-menu'])}>{items}</div>;
+	return <div className={Utils.getClassName([[horizontal, 'menu-horizontal']], ['menu'])}>{items}</div>;
 }
 
 export default Menu;

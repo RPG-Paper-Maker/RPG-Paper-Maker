@@ -10,9 +10,9 @@
 */
 
 import React from 'react';
-import Menu from './menu/Menu';
-import MenuItem from './menu/MenuItem';
-import MenuSub from './menu/MenuSub';
+import Menu from './Menu';
+import MenuItem from './MenuItem';
+import MenuSub from './MenuSub';
 import { BiSolidRectangle } from 'react-icons/bi';
 
 function MapEditorMenuBar() {

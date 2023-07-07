@@ -11,14 +11,13 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Picture2D } from '../core/Picture2D';
-import MapEditor from './MapEditor';
-import MapEditorMenuBar from './MapEditorMenuBar';
-import Splitter from './Splitter';
-import { RootState } from '../store';
-import Loader from './Loader';
-import Menu from './menu/Menu';
-import MenuItem from './menu/MenuItem';
+import { Picture2D } from '../../core/Picture2D';
+import MapEditor from '../MapEditor';
+import MapEditorMenuBar from '../MapEditorMenuBar';
+import Splitter from '../Splitter';
+import { RootState } from '../../store';
+import Menu from '../Menu';
+import MenuItem from '../MenuItem';
 import { LuFolders } from 'react-icons/lu';
 import { MdOutlineWallpaper } from 'react-icons/md';
 
@@ -27,7 +26,6 @@ function PanelProject() {
 	const [picture, setPicture] = useState<HTMLImageElement | null>(null);
 	const [projectMenuIndex, setProjectMenuIndex] = useState(1);
 	const currentProjectName = useSelector((state: RootState) => state.projects.current);
-	const loading = useSelector((state: RootState) => state.projects.loading);
 
 	const initialize = async () => {
 		const picture = await Picture2D.loadImage('./assets/textures/plains-woods.png');
@@ -51,43 +49,28 @@ function PanelProject() {
 		// eslint-disable-next-line
 	}, []);
 
-	// TODO: separate components empty project / project
 	return (
-		<div className='flex-one'>
-			<Loader large isLoading={loading} />
-			{currentProjectName === '' ? (
-				<div className='flex-center-vertically flex-center-horizontally fill-height'>
-					<h2>No project opened...</h2>
-				</div>
-			) : (
-				<Splitter vertical={false} size={256} className='fill-height'>
-					<div>
-						<Menu
-							horizontal
-							isActivable
-							activeIndex={projectMenuIndex}
-							setActiveIndex={setProjectMenuIndex}
-						>
-							<MenuItem icon={<LuFolders />}></MenuItem>
-							<MenuItem active icon={<MdOutlineWallpaper />}></MenuItem>
-						</Menu>
-						{projectMenuIndex === 0 && <div>Maps</div>}
-						{projectMenuIndex === 1 && (
-							<>
-								<div className='flex-one scrollable'>
-									<canvas ref={refCanvas}></canvas>
-								</div>
-								<div className='flex'></div>
-							</>
-						)}
-					</div>
-					<div className='flex-column flex-one map-editor-bar'>
-						<MapEditorMenuBar />
-						<MapEditor visible={currentProjectName !== ''} />
-					</div>
-				</Splitter>
-			)}
-		</div>
+		<Splitter vertical={false} size={256} className='fill-height flex-one'>
+			<div>
+				<Menu horizontal isActivable activeIndex={projectMenuIndex} setActiveIndex={setProjectMenuIndex}>
+					<MenuItem icon={<LuFolders />}></MenuItem>
+					<MenuItem active icon={<MdOutlineWallpaper />}></MenuItem>
+				</Menu>
+				{projectMenuIndex === 0 && <div>Maps</div>}
+				{projectMenuIndex === 1 && (
+					<>
+						<div className='flex-one scrollable'>
+							<canvas ref={refCanvas}></canvas>
+						</div>
+						<div className='flex'></div>
+					</>
+				)}
+			</div>
+			<div className='flex-column flex-one map-editor-bar'>
+				<MapEditorMenuBar />
+				<MapEditor visible={currentProjectName !== ''} />
+			</div>
+		</Splitter>
 	);
 }
 

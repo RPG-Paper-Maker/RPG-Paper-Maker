@@ -10,6 +10,10 @@
 */
 
 class ArrayUtils {
+	static contains<T>(array: any[], value: T) {
+		array.indexOf(value) !== -1;
+	}
+
 	static removeAt(array: any[], index: number) {
 		array.splice(index, 1);
 	}

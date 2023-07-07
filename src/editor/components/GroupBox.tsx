@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import '../styles/GroupBox.css';
+import '../styles/Groupbox.css';
 
 type Props = {
 	children?: any;
@@ -20,7 +20,7 @@ function Groupbox({ children, title = '' }: Props) {
 	return (
 		<fieldset>
 			<legend>{title}</legend>
-			<div>{children}</div>
+			{children}
 		</fieldset>
 	);
 }

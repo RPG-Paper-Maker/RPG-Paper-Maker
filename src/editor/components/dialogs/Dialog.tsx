@@ -12,8 +12,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { RxCross2 } from 'react-icons/rx';
-import { Utils } from '../common/Utils';
-import '../styles/Dialog.css';
+import { Utils } from '../../common/Utils';
+import '../../styles/Dialog.css';
 
 type Props = {
 	children: React.ReactNode;

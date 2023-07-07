@@ -21,6 +21,8 @@ type Props = {
 	icon?: string;
 	activable?: boolean;
 	active?: boolean;
+	big?: boolean;
+	patreon?: boolean;
 	onClick?: () => void;
 };
 
@@ -32,6 +34,8 @@ function Button({
 	icon = '',
 	activable = false,
 	active = true,
+	big = false,
+	patreon = false,
 	onClick,
 }: Props) {
 	const [activeState, setActiveState] = useState(active);
@@ -80,8 +84,10 @@ function Button({
 		<button
 			ref={ref}
 			className={Utils.getClassName([
-				[!activeState, 'button-unactive'],
-				[primary, 'button-primary'],
+				[!activeState, 'unactive'],
+				[primary, 'primary'],
+				[big, 'big'],
+				[patreon, 'patreon'],
 			])}
 			onClick={handleClick}
 		>

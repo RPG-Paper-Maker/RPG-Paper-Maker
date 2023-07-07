@@ -1,0 +1,12 @@
+fieldset {
+	border: 1px solid var(--lighter-bg-color);
+	background-color: var(--darker-bg-color);
+	padding: 8px;
+	border-radius: 4px;
+	flex-grow: 1;
+}
+
+legend {
+	padding-left: 10px;
+	padding-right: 10px;
+}

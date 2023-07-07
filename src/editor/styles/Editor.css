@@ -14,12 +14,18 @@
 	--main-color: white;
 	--darker-bg-color: #29273d;
 	--darkest-bg-color: #29253a;
+	--hover-main-bg-color: #383c58;
 	--lighter-bg-color: #5f5a8a;
 	--lightest-bg-color: #6e709c;
 	--grey-color: #878787;
 	--grey-light-color: #cacaca;
 	--primary-color: #25bbb9;
 	--primary-dark-color: #218584;
+	--hover-primary-dark-color: #2a9896;
+	--orange-color: #f6b780;
+	--red-color: #de3a3c;
+	--patreon-color: #f96753;
+	--hover-patreon-color: #fe7765;
 }
 
 @keyframes fadeIn {
@@ -68,6 +74,26 @@ code {
 .flex-center-horizontally {
 	display: flex;
 	justify-content: center;
+}
+
+.gap-small {
+	gap: 5px;
+}
+
+.gap-medium {
+	gap: 10px;
+}
+
+.padding-small {
+	padding: 5px;
+}
+
+.padding-medium {
+	padding: 15px;
+}
+
+.padding-large {
+	padding: 30px;
 }
 
 .label {
@@ -169,4 +195,22 @@ code {
 .scrollable {
 	overflow: auto;
 	overflow-y: overlay;
+}
+
+.scrollable-flex-one {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	height: 0px;
+}
+
+.warning {
+	color: var(--orange-color);
+}
+
+.error {
+	color: var(--red-color);
+}
+
+.text-center {
+	text-align: center;
 }
