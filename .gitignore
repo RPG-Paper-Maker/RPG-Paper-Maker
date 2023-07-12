@@ -57,7 +57,6 @@ compile_commands.json
 # RPG-Paper-Maker-specific
 /mods
 /node_modules
-package-lock.json
 /build
 /desktop/build
 /desktop/node_modules
