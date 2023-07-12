@@ -14,7 +14,7 @@ import '../styles/MenuItem.css';
 
 type Props = {
 	children?: any;
-	type?: string;
+	separator?: boolean;
 	icon?: React.ReactNode;
 	isActivable?: boolean;
 	active?: boolean;
@@ -27,7 +27,7 @@ type Props = {
 
 function MenuItem({
 	children,
-	type,
+	separator = false,
 	icon,
 	isActivable = false,
 	active = false,
@@ -56,9 +56,9 @@ function MenuItem({
 			onClick={handleClick}
 			className={Utils.getClassName(
 				[
-					[active, 'menu-item-active'],
-					[disabled, 'menu-item-disabled'],
-					[type === 'separator', 'menu-item-separator'],
+					[active, 'active'],
+					[disabled, 'disabled'],
+					[separator, 'separator'],
 				],
 				['menu-item']
 			)}

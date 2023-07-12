@@ -54,7 +54,7 @@ function PanelProject() {
 			<div>
 				<Menu horizontal isActivable activeIndex={projectMenuIndex} setActiveIndex={setProjectMenuIndex}>
 					<MenuItem icon={<LuFolders />}></MenuItem>
-					<MenuItem active icon={<MdOutlineWallpaper />}></MenuItem>
+					<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
 				</Menu>
 				{projectMenuIndex === 0 && <div>Maps</div>}
 				{projectMenuIndex === 1 && (

@@ -17,12 +17,29 @@ type Props = {
 	children: any;
 	title?: string;
 	icon?: ReactNode;
+	isActivable?: boolean;
+	active?: boolean;
+	index?: number;
 	disabled?: boolean;
+	isRoot?: boolean;
+	setActiveIndex?: (v: number) => void;
 	triggerCloseAll?: boolean;
 	setTriggerCloseAll?: (v: boolean) => void;
 };
 
-function MenuSub({ children, title, icon, disabled = false, triggerCloseAll, setTriggerCloseAll }: Props) {
+function MenuSub({
+	children,
+	title,
+	icon,
+	isActivable = false,
+	active = false,
+	index = 0,
+	disabled = false,
+	isRoot = false,
+	setActiveIndex,
+	triggerCloseAll,
+	setTriggerCloseAll,
+}: Props) {
 	const [testVisible, setTestVisible] = useState(false);
 	const [subVisible, setSubVisible] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +48,19 @@ function MenuSub({ children, title, icon, disabled = false, triggerCloseAll, set
 	const refArrow = useRef<HTMLHeadingElement>(null);
 	const refContent = useRef<HTMLHeadingElement>(null);
 
-	const items = Children.map(children, (child) => cloneElement(child, { setTriggerCloseAll: setTriggerCloseAll }));
+	const items = Children.map(children, (child) =>
+		cloneElement(child, {
+			setTriggerCloseAll: setTriggerCloseAll,
+			onClick: (e: any) => {
+				if (child.props.onClick) {
+					child.props.onClick(e);
+				}
+				if (isActivable && setActiveIndex) {
+					setActiveIndex(index);
+				}
+			},
+		})
+	);
 
 	const handleMouseEnterTitle = () => {
 		if (!disabled) {
@@ -61,10 +90,17 @@ function MenuSub({ children, title, icon, disabled = false, triggerCloseAll, set
 		setIsOpen(true);
 	};
 
+	const handleClick = (e: any) => {
+		if (!disabled) {
+			if (isActivable && setActiveIndex) {
+				setActiveIndex(index);
+			}
+		}
+	};
+
 	useEffect(() => {
-		if (refMain.current && refArrow.current && refMain.current.parentElement) {
-			let isRoot = refMain.current.parentElement.classList.contains('menu');
-			if (!isRoot) {
+		if (refMain.current && refMain.current.parentElement) {
+			if (!isRoot && refArrow.current) {
 				refArrow.current.classList.add('arrow-right');
 			}
 			if (refTitle.current && refContent.current) {
@@ -104,6 +140,7 @@ function MenuSub({ children, title, icon, disabled = false, triggerCloseAll, set
 			<div
 				className={Utils.getClassName(
 					[
+						[active, 'active'],
 						[isOpen, 'opened'],
 						[disabled, 'disabled'],
 					],
@@ -113,10 +150,11 @@ function MenuSub({ children, title, icon, disabled = false, triggerCloseAll, set
 				onMouseEnter={handleMouseEnterTitle}
 				onMouseLeave={handleMouseLeaveTitle}
 				onMouseOver={handleMouseOverTitle}
+				onClick={handleClick}
 			>
 				{icon}
 				{title}
-				<i ref={refArrow}></i>
+				{!isRoot && <i ref={refArrow}></i>}
 			</div>
 			<div ref={refContent} className='absolute'>
 				<div

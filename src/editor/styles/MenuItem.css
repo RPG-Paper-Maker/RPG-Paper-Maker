@@ -10,26 +10,27 @@
 	padding: 5px 15px 5px 15px;
 	white-space: nowrap;
 	transition: all 0.25s ease-out;
+	gap: 10px;
 }
 
-.menu-item:not(.menu-item-disabled):not(.menu-item-active):hover {
+.menu-item:not(.menu-item.disabled):not(.menu-item.active):hover {
 	background-color: var(--hover-main-bg-color) !important;
 }
 
-.menu-item-active {
+.menu-item.active {
 	background-color: var(--primary-dark-color);
 }
 
-.menu-item-disabled {
+.menu-item.disabled {
 	color: #999999ce;
 	cursor: default;
 }
 
-.menu-item-disabled svg {
+.menu-item.disabled svg {
 	color: #999999ce !important;
 }
 
-.menu-item-separator {
+.menu-item.separator {
 	background-color: var(--lighter-bg-color) !important;
 	padding: 0.5px;
 	margin-left: 5px;

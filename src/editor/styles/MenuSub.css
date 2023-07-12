@@ -4,21 +4,15 @@
 	white-space: nowrap;
 }
 
-.menu-sub svg {
-	margin-right: 0.5em;
-}
-
 .menu-sub-title {
 	padding: 5px 15px 5px 15px;
 	background-color: var(--main-bg-color);
 	position: relative;
+	display: flex;
+	gap: 10px;
 }
 
-.map-editor-bar .menu-sub-title {
-	padding: 10px 15px 10px 15px;
-}
-
-.menu-sub-title:hover {
+.menu-sub-title:not(.disabled):not(.active):hover {
 	background-color: var(--hover-main-bg-color);
 }
 
@@ -28,6 +22,11 @@
 
 .menu-sub-title.disabled {
 	color: #999999ce !important;
+	cursor: default;
+}
+
+.menu-sub-title.active {
+	background-color: var(--primary-dark-color);
 }
 
 .menu-sub-content {

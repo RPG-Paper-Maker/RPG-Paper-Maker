@@ -12,7 +12,7 @@
 import React, { useState } from 'react';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import MainMenu from './components/MainMenu';
+import MainMenuBar from './components/MainMenuBar';
 import PanelLoading from './components/panels/PanelLoading';
 import PanelMain from './components/panels/PanelMain';
 import './styles/Editor.css';
@@ -24,7 +24,7 @@ function Editor() {
 		<Provider store={store}>
 			{loaded ? (
 				<div className='flex-column fill-space'>
-					<MainMenu />
+					<MainMenuBar />
 					<PanelMain />
 				</div>
 			) : (

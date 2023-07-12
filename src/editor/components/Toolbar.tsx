@@ -59,7 +59,7 @@ function Toolbar() {
 				<MenuItem icon={<AiOutlineFolder />} onClick={handleFloor} disabled>
 					Folder
 				</MenuItem>
-				<MenuItem type='separator'></MenuItem>
+				<MenuItem separator></MenuItem>
 				<MenuItem icon={<BsClipboardData />} onClick={handleFloor} disabled>
 					Data
 				</MenuItem>
@@ -84,7 +84,7 @@ function Toolbar() {
 				<MenuItem icon={<MdOutlineAddchart />} onClick={handleFloor} disabled>
 					DLCs
 				</MenuItem>
-				<MenuItem type='separator'></MenuItem>
+				<MenuItem separator></MenuItem>
 				<MenuItem icon={<AiOutlinePicture />} onClick={handleFloor} disabled>
 					Pictures
 				</MenuItem>
@@ -100,7 +100,7 @@ function Toolbar() {
 				<MenuItem icon={<AiOutlineFontSize />} onClick={handleFloor} disabled>
 					Fonts
 				</MenuItem>
-				<MenuItem type='separator'></MenuItem>
+				<MenuItem separator></MenuItem>
 				<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleFloor} disabled>
 					Autotiles
 				</MenuItem>
@@ -113,7 +113,7 @@ function Toolbar() {
 				<MenuItem icon={<FaMountain />} onClick={handleFloor} disabled>
 					Mountains
 				</MenuItem>
-				<MenuItem type='separator'></MenuItem>
+				<MenuItem separator></MenuItem>
 				<MenuItem icon={<BsPlay />} onClick={handleFloor} disabled>
 					Play
 				</MenuItem>
