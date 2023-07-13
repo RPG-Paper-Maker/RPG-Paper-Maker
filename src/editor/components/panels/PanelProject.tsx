@@ -20,12 +20,23 @@ import Menu from '../Menu';
 import MenuItem from '../MenuItem';
 import { LuFolders } from 'react-icons/lu';
 import { MdOutlineWallpaper } from 'react-icons/md';
+import Tabs from '../Tabs';
 
 function PanelProject() {
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 	const [picture, setPicture] = useState<HTMLImageElement | null>(null);
 	const [projectMenuIndex, setProjectMenuIndex] = useState(1);
+	const [currentTabIndex, setCurrentTabIndex] = useState(0);
 	const currentProjectName = useSelector((state: RootState) => state.projects.current);
+
+	const tabTitles = ['Plains/MAP0001'];
+
+	const tabContents = [
+		<>
+			<MapEditorMenuBar />
+			<MapEditor visible={currentProjectName !== ''} />
+		</>,
+	];
 
 	const initialize = async () => {
 		const picture = await Picture2D.loadImage('./assets/textures/plains-woods.png');
@@ -50,8 +61,8 @@ function PanelProject() {
 	}, []);
 
 	return (
-		<Splitter vertical={false} size={256} className='fill-height flex-one'>
-			<div>
+		<Splitter vertical={false} size={256} className='flex flex-one'>
+			<div className='bg-darker flex-one'>
 				<Menu horizontal isActivable activeIndex={projectMenuIndex} setActiveIndex={setProjectMenuIndex}>
 					<MenuItem icon={<LuFolders />}></MenuItem>
 					<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
@@ -62,13 +73,18 @@ function PanelProject() {
 						<div className='flex-one scrollable'>
 							<canvas ref={refCanvas}></canvas>
 						</div>
-						<div className='flex'></div>
+						<div className='flex'>OK</div>
 					</>
 				)}
 			</div>
 			<div className='flex-column flex-one map-editor-bar'>
-				<MapEditorMenuBar />
-				<MapEditor visible={currentProjectName !== ''} />
+				<Tabs
+					titles={tabTitles}
+					contents={tabContents}
+					currentIndex={currentTabIndex}
+					setCurrentIndex={setCurrentTabIndex}
+					isClosable
+				/>
 			</div>
 		</Splitter>
 	);

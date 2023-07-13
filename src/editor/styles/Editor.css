@@ -214,3 +214,7 @@ code {
 .text-center {
 	text-align: center;
 }
+
+.bg-darker {
+	background-color: var(--darker-bg-color);
+}

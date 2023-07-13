@@ -2,6 +2,7 @@
 	padding-top: 0px;
 	padding-bottom: 0px;
 	background-color: var(--darkest-bg-color);
+	border-bottom: 1px solid var(--main-bg-color);
 }
 
 .toolbar .menu,

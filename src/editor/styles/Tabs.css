@@ -1,0 +1,25 @@
+.tabs {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.tabs-titles {
+	display: flex;
+	background-color: var(--darkest-bg-color);
+}
+
+.tabs-content {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.tab-item {
+	display: flex;
+	align-items: center;
+	padding: 7px;
+	gap: 5px;
+	font-size: 12px;
+	background-color: var(--main-bg-color);
+}
