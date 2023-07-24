@@ -32,9 +32,9 @@ class Map extends Base {
 	public modelMap: Model.Map = new Model.Map();
 	public grid: Grid = new Grid();
 	public meshPlane: THREE.Object3D | null = null;
-	public light: THREE.DirectionalLight | null = null;
+	public sunLight!: THREE.DirectionalLight;
 	public mapPortion: MapPortion = new MapPortion(new Portion(0, 0, 0));
-	public materialTileset: THREE.ShaderMaterial = Manager.GL.MATERIAL_EMPTY;
+	public materialTileset!: THREE.MeshPhongMaterial;
 	public selectionOffset: THREE.Vector2 = new THREE.Vector2();
 
 	constructor(id: number) {
@@ -51,8 +51,8 @@ class Map extends Base {
 		this.loading = true;
 
 		// Tileset texture material
-		const texture = await Manager.GL.loadTexture('./assets/textures/plains-woods.png');
-		this.materialTileset = Manager.GL.createMaterial(texture, { depthWrite: false });
+		this.materialTileset = await Manager.GL.loadTexture('./assets/textures/plains-woods.png');
+		this.materialTileset.depthWrite = false;
 
 		// Load map model
 		const mapName = Model.Map.generateMapName(this.id);
@@ -80,17 +80,7 @@ class Map extends Base {
 		this.scene.add(this.meshPlane);
 
 		// Light
-		this.light = new THREE.DirectionalLight(0xffffff, 1.0);
-		this.light.position.set(200, 200, 200);
-		this.light.castShadow = true;
-		this.light.shadow.camera.left = -400;
-		this.light.shadow.camera.right = 400;
-		this.light.shadow.camera.top = 400;
-		this.light.shadow.camera.bottom = -400;
-		this.light.shadow.camera.far = 400;
-		this.light.shadow.mapSize.width = 2048;
-		this.light.shadow.mapSize.height = 2048;
-		this.scene.add(this.light);
+		this.initializeSunLight();
 
 		// Grid
 		this.grid.initialize(this.modelMap);
@@ -118,6 +108,26 @@ class Map extends Base {
 			await this.mapPortion.save(Paths.join(folderMap, this.mapPortion.getFileName()));
 		}
 		this.loading = false;
+	}
+
+	initializeSunLight() {
+		const ambient = new THREE.AmbientLight(0xffffff, 0.61);
+		this.scene.add(ambient);
+		this.sunLight = new THREE.DirectionalLight(0xffffff, 0.5);
+		this.sunLight.position.set(-1, 1.75, 1);
+		this.sunLight.position.multiplyScalar(16 * 10);
+		this.sunLight.target.position.set(0, 0, 0);
+		this.scene.add(this.sunLight);
+		this.sunLight.castShadow = true;
+		this.sunLight.shadow.mapSize.width = 2048;
+		this.sunLight.shadow.mapSize.height = 2048;
+		const d = 16 * 10;
+		this.sunLight.shadow.camera.left = -d;
+		this.sunLight.shadow.camera.right = d;
+		this.sunLight.shadow.camera.top = d;
+		this.sunLight.shadow.camera.bottom = -d;
+		this.sunLight.shadow.camera.far = 16 * 350;
+		this.sunLight.shadow.bias = -0.0003;
 	}
 
 	zoomIn(coef: number = 1) {

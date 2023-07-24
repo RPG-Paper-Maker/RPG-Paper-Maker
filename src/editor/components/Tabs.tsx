@@ -25,7 +25,7 @@ function Tabs({ titles, contents, currentIndex, setCurrentIndex, isClosable = fa
 	const getTitles = () =>
 		titles.map((title) => {
 			return (
-				<div className='tab-item'>
+				<div key={title} className='tab-item'>
 					{title}
 					{isClosable && <RxCross2 />}
 				</div>

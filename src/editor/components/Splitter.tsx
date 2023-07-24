@@ -27,25 +27,35 @@ function Splitter({ children, vertical, size, className }: Props) {
 		//requestAnimationFrame(update);
 	};
 
-	useEffect(() => {
+	const getStyle = () => {
 		if (size) {
+			const pxSize = `${size}px`;
 			if (vertical) {
-				ref.current!.style.minHeight = size + 'px';
-				ref.current!.style.maxHeight = size + 'px';
-				ref.current!.style.height = size + 'px';
+				return {
+					minHeight: pxSize,
+					maxHeight: pxSize,
+					height: pxSize,
+				};
 			} else {
-				ref.current!.style.minWidth = size + 'px';
-				ref.current!.style.maxWidth = size + 'px';
-				ref.current!.style.width = size + 'px';
+				return {
+					minWidth: pxSize,
+					maxWidth: pxSize,
+					width: pxSize,
+				};
 			}
 		}
+	};
+
+	useEffect(() => {
 		update();
 		// eslint-disable-next-line
 	}, []);
 
 	return (
 		<div className={`splitter ${vertical ? 'flex-column' : 'flex'} ${className}`}>
-			<div ref={ref}>{children[0]}</div>
+			<div className='flex' ref={ref} style={getStyle()}>
+				{children[0]}
+			</div>
 			<div className={vertical ? 'splitter-button-vertical' : 'splitter-button-horizontal'}></div>
 			<div className='flex flex-one'>{children[1]}</div>
 		</div>

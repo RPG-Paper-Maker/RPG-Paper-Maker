@@ -28,7 +28,6 @@ import { GiBrickWall } from 'react-icons/gi';
 import { RiPaintFill } from 'react-icons/ri';
 import { BsEyeFill } from 'react-icons/bs';
 import { LuMove3D, LuRotate3D, LuScale3D } from 'react-icons/lu';
-import { TbPointFilled } from 'react-icons/tb';
 
 function MapEditorMenuBar() {
 	const [selectionIndex, setSelectionIndex] = useState(0);
@@ -85,7 +84,7 @@ function MapEditorMenuBar() {
 			</div>
 			<Menu horizontal isActivable activeIndex={squarePixelIndex} setActiveIndex={setSquarePixelIndex}>
 				<MenuItem icon={<SquareIcon />} onClick={handleFloor}></MenuItem>
-				<MenuItem icon={<TbPointFilled />} onClick={handleFloor} disabled></MenuItem>
+				<MenuItem icon={<PixelIcon />} onClick={handleFloor} disabled></MenuItem>
 
 				<MenuItem separator />
 			</Menu>

@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Manager } from '../Editor';
+import { Manager, Scene } from '../Editor';
 import { Project } from './Project';
 
 class Camera {
@@ -76,6 +76,24 @@ class Camera {
 
 		// Update view
 		this.updateView();
+
+		// Update light
+		if (Scene.Map.current && Scene.Map.current.sunLight) {
+			Scene.Map.current.sunLight.target.position.copy(this.targetPosition);
+			Scene.Map.current.sunLight.target.updateMatrixWorld();
+			Scene.Map.current.sunLight.position
+				.set(-1, 1.75, 1)
+				.multiplyScalar(16 * 10)
+				.add(this.targetPosition);
+			const d = Math.max((16 * this.distance) / 10, 400);
+			if (d !== Scene.Map.current.sunLight.shadow.camera.right) {
+				Scene.Map.current.sunLight.shadow.camera.left = -d;
+				Scene.Map.current.sunLight.shadow.camera.right = d;
+				Scene.Map.current.sunLight.shadow.camera.top = d;
+				Scene.Map.current.sunLight.shadow.camera.bottom = -d;
+				Scene.Map.current.sunLight.shadow.camera.updateProjectionMatrix();
+			}
+		}
 	}
 
 	resizeGL(GL: Manager.GL, width?: number, height?: number) {

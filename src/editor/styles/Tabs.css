@@ -18,8 +18,9 @@
 .tab-item {
 	display: flex;
 	align-items: center;
-	padding: 7px;
+	padding: 10px;
 	gap: 5px;
 	font-size: 12px;
 	background-color: var(--main-bg-color);
+	border-radius: 0px 5px 0px 5px;
 }

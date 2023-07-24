@@ -50,6 +50,7 @@ body {
 	font-size: 14px;
 	touch-action: none;
 	image-rendering: pixelated;
+	image-rendering: crisp-edges;
 }
 
 code {
@@ -110,6 +111,10 @@ code {
 	position: absolute;
 	width: 100%;
 	height: 100%;
+}
+
+.fill-width {
+	width: 100%;
 }
 
 .fill-height {

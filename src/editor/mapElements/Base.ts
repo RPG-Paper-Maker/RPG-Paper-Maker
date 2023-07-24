@@ -14,6 +14,7 @@ import { Enum } from '../common/Enum';
 import { Utils } from '../common/Utils';
 import { Position } from '../core/Position';
 import { Project } from '../models';
+import { CustomGeometry } from '../core/CustomGeometry';
 
 class Base {
 	public static readonly JSON_X_OFFSET = 'xOff';
@@ -41,12 +42,6 @@ class Base {
 		this.front = true;
 	}
 
-	static rotateVertex(vec: THREE.Vector3, center: THREE.Vector3, angle: number, axis: THREE.Vector3) {
-		vec.sub(center);
-		vec.applyAxisAngle(axis, (angle * Math.PI) / 180.0);
-		vec.add(center);
-	}
-
 	static rotateQuad(
 		vecA: THREE.Vector3,
 		vecB: THREE.Vector3,
@@ -56,10 +51,10 @@ class Base {
 		angle: number,
 		axis: THREE.Vector3
 	) {
-		Base.rotateVertex(vecA, center, angle, axis);
-		Base.rotateVertex(vecB, center, angle, axis);
-		Base.rotateVertex(vecC, center, angle, axis);
-		Base.rotateVertex(vecD, center, angle, axis);
+		CustomGeometry.rotateVertex(vecA, center, angle, axis);
+		CustomGeometry.rotateVertex(vecB, center, angle, axis);
+		CustomGeometry.rotateVertex(vecC, center, angle, axis);
+		CustomGeometry.rotateVertex(vecD, center, angle, axis);
 	}
 
 	scale(

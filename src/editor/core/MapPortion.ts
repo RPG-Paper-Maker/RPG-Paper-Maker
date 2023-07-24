@@ -88,9 +88,7 @@ class MapPortion extends Serializable {
 
 	updateFloorsGeometry() {
 		const material = Scene.Map.current!.materialTileset;
-		const texture = Manager.GL.getMaterialTexture(material);
-		const width = texture ? texture.image.width : 0;
-		const height = texture ? texture.image.height : 0;
+		const { width, height } = Manager.GL.getMaterialTextureSize(material);
 		const geometry = this.floorsMesh.geometry as CustomGeometry;
 		const layers: [Position, MapElement.Floor][] = [];
 		let count = 0;

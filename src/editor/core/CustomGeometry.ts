@@ -61,9 +61,21 @@ class CustomGeometry extends THREE.BufferGeometry {
 		texD.set(x, y + h);
 	}
 
+	static rotateVertex(
+		vec: THREE.Vector3,
+		center: THREE.Vector3,
+		angle: number,
+		axis: THREE.Vector3,
+		isDegree: boolean = true
+	) {
+		vec.sub(center);
+		vec.applyAxisAngle(axis, isDegree ? (angle * Math.PI) / 180.0 : angle);
+		vec.add(center);
+	}
+
 	getVerticesVectors(): THREE.Vector3[] {
-		let vertices = [];
-		let array = this.getVertices();
+		const vertices = [];
+		const array = this.getVertices();
 		for (let i = 0, l = array.length; i < l; i += 3) {
 			vertices.push(new THREE.Vector3(array[i], array[i + 1], array[i + 2]));
 		}
@@ -85,6 +97,18 @@ class CustomGeometry extends THREE.BufferGeometry {
 
 	getNormals(): ArrayLike<number> {
 		return this.getAttribute('normal').array;
+	}
+
+	rotateA(angle: number, axis: THREE.Vector3, center: THREE.Vector3) {
+		const vertices = this.getVertices();
+		let vertex = new THREE.Vector3();
+		for (let i = 0, l = vertices.length; i < l; i += 3) {
+			vertex.set(vertices[i], vertices[i + 1], vertices[i + 2]);
+			CustomGeometry.rotateVertex(vertex, center, angle, axis);
+			this.b_vertices.push(vertex.x, vertex.y, vertex.z);
+		}
+		this.setAttribute('position', new THREE.Float32BufferAttribute(this.b_vertices, 3));
+		this.b_vertices = [];
 	}
 
 	pushTriangleVertices(vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3) {
