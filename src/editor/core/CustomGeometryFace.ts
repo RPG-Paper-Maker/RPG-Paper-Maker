@@ -13,8 +13,8 @@ import * as THREE from 'three';
 import { CustomGeometry } from './CustomGeometry';
 
 class CustomGeometryFace extends CustomGeometry {
-	public b_size: number[] = [];
-	public b_center: number[] = [];
+	public _size: number[] = [];
+	public _center: number[] = [];
 
 	pushQuadVerticesFace(
 		vecA: THREE.Vector3,
@@ -24,29 +24,29 @@ class CustomGeometryFace extends CustomGeometry {
 		size: THREE.Vector3,
 		center: THREE.Vector3
 	) {
-		this.b_vertices.push(vecA.x, vecA.y, vecA.z);
-		this.b_size.push(size.x, size.y, size.z);
-		this.b_center.push(center.x, center.y, center.z);
-		this.b_vertices.push(vecB.x, vecB.y, vecB.z);
-		this.b_size.push(size.x, size.y, size.z);
-		this.b_center.push(center.x, center.y, center.z);
-		this.b_vertices.push(vecC.x, vecC.y, vecC.z);
-		this.b_size.push(size.x, size.y, size.z);
-		this.b_center.push(center.x, center.y, center.z);
-		this.b_vertices.push(vecD.x, vecD.y, vecD.z);
-		this.b_size.push(size.x, size.y, size.z);
-		this.b_center.push(center.x, center.y, center.z);
+		this._vertices.push(vecA.x, vecA.y, vecA.z);
+		this._size.push(size.x, size.y, size.z);
+		this._center.push(center.x, center.y, center.z);
+		this._vertices.push(vecB.x, vecB.y, vecB.z);
+		this._size.push(size.x, size.y, size.z);
+		this._center.push(center.x, center.y, center.z);
+		this._vertices.push(vecC.x, vecC.y, vecC.z);
+		this._size.push(size.x, size.y, size.z);
+		this._center.push(center.x, center.y, center.z);
+		this._vertices.push(vecD.x, vecD.y, vecD.z);
+		this._size.push(size.x, size.y, size.z);
+		this._center.push(center.x, center.y, center.z);
 	}
 
 	updateAttributes() {
-		this.setAttribute('position', new THREE.Float32BufferAttribute(this.b_vertices, 3));
-		this.b_vertices = [];
-		this.setIndex(this.b_indices);
-		this.b_indices = [];
-		this.setAttribute('centerPosition', new THREE.Float32BufferAttribute(this.b_center, 3));
-		this.b_center = [];
-		this.setAttribute('size', new THREE.Float32BufferAttribute(this.b_size, 3));
-		this.b_size = [];
+		this.setAttribute('position', new THREE.Float32BufferAttribute(this._vertices, 3));
+		this._vertices = [];
+		this.setIndex(this._indices);
+		this._indices = [];
+		this.setAttribute('centerPosition', new THREE.Float32BufferAttribute(this._center, 3));
+		this._center = [];
+		this.setAttribute('size', new THREE.Float32BufferAttribute(this._size, 3));
+		this._size = [];
 		this.updateUVs();
 		this.computeVertexNormals();
 	}

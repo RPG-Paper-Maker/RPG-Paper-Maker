@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../common/Enum';
+import { ModelType } from '../common/Enum';
 import { Utils } from '../common/Utils';
 import { Serializable } from '../core/Serializable';
 
@@ -30,24 +30,26 @@ class Base extends Serializable {
 		}
 	}
 
-	static getModel(kind: Enum.ModelType): any {
+	static getModel(kind: ModelType): any {
 		switch (kind) {
 		}
 	}
 
-	static getDialog(kind: Enum.ModelType): any {
+	static getDialog(kind: ModelType): any {
 		switch (kind) {
 		}
 	}
 
-	setup(...args: any) {}
+	setup(...args: any) {
+		// Setup here
+	}
 
 	toStrings(): string[] {
 		return ['>'];
 	}
 
 	createCopy(): Base {
-		let model = new Base();
+		const model = new Base();
 		model.copy(this);
 		return model;
 	}

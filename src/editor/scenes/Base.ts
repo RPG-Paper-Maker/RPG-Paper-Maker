@@ -27,13 +27,21 @@ class Base {
 		this.camera.update();
 	}
 
-	onPointerDown(x: number, y: number) {}
+	onPointerDown(x: number, y: number) {
+		// TODO
+	}
 
-	onPointerDownRepeat(x: number, y: number) {}
+	onPointerDownRepeat(x: number, y: number) {
+		// TODO
+	}
 
-	onPointerMove(x: number, y: number) {}
+	onPointerMove(x: number, y: number) {
+		// TODO
+	}
 
-	onPointerUp(x: number, y: number) {}
+	onPointerUp(x: number, y: number) {
+		// TODO
+	}
 
 	draw3D(GL: Manager.GL) {
 		if (GL.renderer) {
@@ -43,11 +51,11 @@ class Base {
 	}
 
 	close() {
-		let meshes: THREE.Object3D[] = [];
+		const meshes: THREE.Object3D[] = [];
 		this.scene.traverse((object) => {
 			meshes.push(object);
 		});
-		for (let mesh of meshes) {
+		for (const mesh of meshes) {
 			if (mesh.parent) {
 				mesh.parent.remove(mesh);
 			}

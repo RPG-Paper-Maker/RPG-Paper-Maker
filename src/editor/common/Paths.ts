@@ -49,6 +49,7 @@ class Paths {
 	public static readonly SYSTEM = Paths.SCRIPTS + 'System';
 	public static readonly SHADERS = Paths.SCRIPTS + 'Shaders';
 	public static readonly SAVES = 'Saves';
+	public static readonly DEFAULT = 'default';
 	public static readonly TEMP = 'temp';
 	public static readonly TEMP_UNDO_REDO = 'temp-undo-redo';
 	public static readonly FILE_MAP_INFOS = 'infos.json';
@@ -83,6 +84,36 @@ class Paths {
 	public static readonly FILE_PROTECT = '.protect';
 	public static readonly FILE_PLUGIN_CODE = 'code.js';
 	public static readonly FILE_PLUGIN_DETAILS = 'details.json';
+
+	public static readonly ALL_JSON = [
+		Paths.FILE_PICTURES,
+		Paths.FILE_VIDEOS,
+		Paths.FILE_FONTS,
+		Paths.FILE_SONGS,
+		Paths.FILE_SHAPES,
+		Paths.FILE_COMMON_EVENTS,
+		Paths.FILE_ITEMS,
+		Paths.FILE_SKILLS,
+		Paths.FILE_WEAPONS,
+		Paths.FILE_ARMORS,
+		Paths.FILE_HEROES,
+		Paths.FILE_MONSTERS,
+		Paths.FILE_TROOPS,
+		Paths.FILE_BATTLE_SYSTEM,
+		Paths.FILE_TITLE_SCREEN_GAME_OVER,
+		Paths.FILE_KEYBOARD,
+		Paths.FILE_SYSTEM,
+		Paths.FILE_CLASSES,
+		Paths.FILE_TILESETS,
+		Paths.FILE_SPECIAL_ELEMENTS,
+		Paths.FILE_VARIABLES,
+		Paths.FILE_SETTINGS,
+		Paths.FILE_DLCS,
+		Paths.FILE_ANIMATIONS,
+		Paths.FILE_STATUS,
+		Paths.FILE_SCRIPTS,
+		Paths.FILE_LANGS,
+	];
 
 	static join(...args: any) {
 		return args.join('/'); // TODO: Depends on OS

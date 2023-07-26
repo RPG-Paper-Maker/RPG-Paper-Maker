@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Enum } from '../common/Enum';
+import { ElementMapKind } from '../common/Enum';
 import { Utils } from '../common/Utils';
 import { Position } from '../core/Position';
 import { Project } from '../models';
@@ -33,7 +33,7 @@ class Base {
 	public yOffset: number;
 	public zOffset: number;
 	public front: boolean;
-	public kind: Enum.ElementMapKind = Enum.ElementMapKind.None;
+	public kind: ElementMapKind = ElementMapKind.None;
 
 	constructor() {
 		this.xOffset = 0;
@@ -65,15 +65,15 @@ class Base {
 		center: THREE.Vector3,
 		position: Position,
 		size: THREE.Vector3,
-		kind: Enum.ElementMapKind
+		kind: ElementMapKind
 	) {
 		let zPlus = position.layer * 0.05;
 
 		// Apply an offset according to layer position
-		if (kind !== Enum.ElementMapKind.SpritesFace && !this.front) {
+		if (kind !== ElementMapKind.SpritesFace && !this.front) {
 			zPlus *= -1;
 		}
-		let offset = new THREE.Vector3(0, 0, zPlus);
+		const offset = new THREE.Vector3(0, 0, zPlus);
 
 		// Center
 		center.setX(this.xOffset * Project.getSquareSize());
@@ -81,7 +81,7 @@ class Base {
 		center.setZ(this.zOffset * Project.getSquareSize());
 
 		// Position
-		let pos = center.clone();
+		const pos = center.clone();
 		pos.add(offset);
 		center.setY(center.y + size.y / 2);
 		vecA.multiply(size);

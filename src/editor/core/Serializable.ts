@@ -13,14 +13,14 @@ import { LocalFile } from './LocalFile';
 
 abstract class Serializable {
 	async load(path: string) {
-		let json = await LocalFile.readJSON(path);
+		const json = await LocalFile.readJSON(path);
 		if (json) {
 			this.read(json);
 		}
 	}
 
 	async save(path: string) {
-		let json = {};
+		const json = {};
 		this.write(json);
 		await LocalFile.writeJSON(path, json);
 	}

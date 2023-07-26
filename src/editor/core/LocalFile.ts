@@ -14,13 +14,15 @@ import { Utils } from '../common/Utils';
 import { Serializable } from './Serializable';
 import JSZip from 'jszip';
 import { Paths } from '../common/Paths';
+import { IO } from '../common/IO';
+import { ArrayUtils } from '../common/ArrayUtils';
 
 class LocalFile extends Serializable {
 	public static readonly PATH_SYSTEMS = '/systems.json';
-	public static readonly JSON_FOLDER_NAMES = 'folderNames';
-	public static readonly JSON_FILE_NAMES = 'fileNames';
-	public static readonly JSON_CONTENT = 'content';
-	public static readonly JSON_IS_DIR = 'isDir';
+	public static readonly JSON_FOLDER_NAMES = 'fon';
+	public static readonly JSON_FILE_NAMES = 'fin';
+	public static readonly JSON_CONTENT = 'c';
+	public static readonly JSON_IS_DIR = 'id';
 	public static readonly DEFAULT_CONTENT = '';
 	public static readonly DEFAULT_IS_DIR = false;
 
@@ -39,8 +41,8 @@ class LocalFile extends Serializable {
 	}
 
 	static async getFile(path: string): Promise<LocalFile | null> {
-		let file = new LocalFile();
-		let json: Record<string, any> | null = await localforage.getItem(path);
+		const file = new LocalFile();
+		const json: Record<string, any> | null = await localforage.getItem(path);
 		if (json) {
 			file.read(json);
 			return file;
@@ -53,9 +55,9 @@ class LocalFile extends Serializable {
 	}
 
 	static async getFoldersFiles(path: string): Promise<[string[], string[]]> {
-		let json: Record<string, any> | null = await localforage.getItem(path);
+		const json: Record<string, any> | null = await localforage.getItem(path);
 		if (json) {
-			let folder = new LocalFile(true);
+			const folder = new LocalFile(true);
 			folder.read(json);
 			return [folder.folderNames, folder.fileNames];
 		}
@@ -64,14 +66,14 @@ class LocalFile extends Serializable {
 
 	static async createFolder(path: string) {
 		await this.removeFolder(path);
-		let dirs = path.split('/');
+		const dirs = path.split('/');
 		// Edit parent folder names
 		if (dirs.length > 1) {
-			let newDirName = dirs.pop();
-			let parentPath = dirs.join('/');
-			let parentJson: Record<string, any> | null = await localforage.getItem(parentPath);
+			const newDirName = dirs.pop();
+			const parentPath = dirs.join('/');
+			const parentJson: Record<string, any> | null = await localforage.getItem(parentPath);
 			if (parentJson && newDirName) {
-				let parent = new LocalFile(false);
+				const parent = new LocalFile(false);
 				parent.read(parentJson);
 				parent.folderNames.push(newDirName);
 				parent.write(parentJson);
@@ -79,65 +81,65 @@ class LocalFile extends Serializable {
 			}
 		}
 		// Create folder
-		let folder = new LocalFile(true);
-		let folderJson = {};
+		const folder = new LocalFile(true);
+		const folderJson = {};
 		folder.write(folderJson);
 		console.info('create folder ' + path);
 		await localforage.setItem(path, folderJson);
 	}
 
 	static async createFile(path: string, content: string) {
-		await this.removeFile(path, false);
-		let dirs = path.split('/');
+		const dirs = path.split('/');
 		// Edit parent files names
 		if (dirs.length > 1) {
-			let newFileName = dirs.pop();
-			let parentPath = dirs.join('/');
-			let parentJson: Record<string, any> | null = await localforage.getItem(parentPath);
+			const newFileName = dirs.pop();
+			const parentPath = dirs.join('/');
+			const parentJson: Record<string, any> | null = await localforage.getItem(parentPath);
 			if (parentJson && newFileName) {
-				let parent = new LocalFile(false);
+				const parent = new LocalFile(false);
 				parent.read(parentJson);
-				parent.fileNames.push(newFileName);
-				parent.write(parentJson);
-				await localforage.setItem(parentPath, parentJson);
+				if (!ArrayUtils.contains(parent.fileNames, newFileName)) {
+					parent.fileNames.push(newFileName);
+					parent.write(parentJson);
+					await localforage.setItem(parentPath, parentJson);
+				}
 			}
 		}
 		// Create file
-		let file = new LocalFile();
+		const file = new LocalFile();
 		file.content = content;
-		let fileJson = {};
+		const fileJson = {};
 		file.write(fileJson);
 		console.info('create file ' + path);
 		await localforage.setItem(path, fileJson);
 	}
 
 	static async removeFolder(path: string, editParent: boolean = true) {
-		let dirs = path.split('/');
+		const dirs = path.split('/');
 		// Edit parent folder names
 		if (editParent && dirs.length > 1) {
-			let folderName = dirs.pop();
-			let parentPath = dirs.join('/');
-			let parentJson: Record<string, any> | null = await localforage.getItem(parentPath);
+			const folderName = dirs.pop();
+			const parentPath = dirs.join('/');
+			const parentJson: Record<string, any> | null = await localforage.getItem(parentPath);
 			if (parentJson && folderName) {
-				let parent = new LocalFile(false);
+				const parent = new LocalFile(false);
 				parent.read(parentJson);
-				let index = parent.folderNames.indexOf(folderName);
-				if (index !== -1) {
-					parent.folderNames.splice(index, 1);
+				const removed = ArrayUtils.removeElement(parent.folderNames, folderName);
+				if (removed) {
+					parent.write(parentJson);
+					await localforage.setItem(parentPath, parentJson);
 				}
-				parent.write(parentJson);
-				await localforage.setItem(parentPath, parentJson);
 			}
 		}
 		// Remove children folders and files
-		let json: Record<string, any> | null = await localforage.getItem(path);
+		const json: Record<string, any> | null = await localforage.getItem(path);
 		if (json) {
-			let folder = new LocalFile(false);
+			const folder = new LocalFile(false);
 			folder.read(json);
-			for (let name of folder.folderNames) {
+			for (const name of folder.folderNames) {
 				await LocalFile.removeFolder(path + '/' + name, false);
 			}
-			for (let name of folder.fileNames) {
+			for (const name of folder.fileNames) {
 				await LocalFile.removeFile(path + '/' + name, false);
 			}
 			// Remove folder
@@ -147,25 +149,24 @@ class LocalFile extends Serializable {
 	}
 
 	static async removeFile(path: string, editParent: boolean = true) {
-		let dirs = path.split('/');
+		const dirs = path.split('/');
 		// Edit parent file names
 		if (editParent && dirs.length > 1) {
-			let fileName = dirs.pop();
-			let parentPath = dirs.join('/');
-			let parentJson: Record<string, any> | null = await localforage.getItem(parentPath);
+			const fileName = dirs.pop();
+			const parentPath = dirs.join('/');
+			const parentJson: Record<string, any> | null = await localforage.getItem(parentPath);
 			if (parentJson && fileName) {
-				let parent = new LocalFile(false);
+				const parent = new LocalFile(false);
 				parent.read(parentJson);
-				let index = parent.fileNames.indexOf(fileName);
-				if (index !== -1) {
-					parent.fileNames.splice(index, 1);
+				const removed = ArrayUtils.removeElement(parent.fileNames, fileName);
+				if (removed) {
+					parent.write(parentJson);
+					await localforage.setItem(parentPath, parentJson);
 				}
-				parent.write(parentJson);
-				await localforage.setItem(parentPath, parentJson);
 			}
 		}
 		// Remove file
-		let json: Record<string, any> | null = await localforage.getItem(path);
+		const json: Record<string, any> | null = await localforage.getItem(path);
 		if (json) {
 			console.info('remove file ' + path);
 			await localforage.removeItem(path);
@@ -175,14 +176,13 @@ class LocalFile extends Serializable {
 	static async downloadZip(path: string) {
 		const zip = new JSZip();
 		await LocalFile.getFolderZip(zip, path);
-		zip.generateAsync({ type: 'blob' }).then((blob) => {
-			const url = URL.createObjectURL(blob);
-			const a = document.createElement('a');
-			a.href = url;
-			a.download = Paths.getFileName(path) || '';
-			a.click();
-			URL.revokeObjectURL(url);
-		});
+		const blob = await zip.generateAsync({ type: 'blob' });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = Paths.getFileName(path) || '';
+		a.click();
+		URL.revokeObjectURL(url);
 	}
 
 	static async getFolderZip(zip: JSZip, path: string) {
@@ -220,8 +220,12 @@ class LocalFile extends Serializable {
 		}
 	}
 
+	static async copyPublicFile(publicPath: string, dst: string) {
+		await LocalFile.createFile(dst, await IO.openFile(publicPath));
+	}
+
 	static async allStorage() {
-		let values: string[] = [];
+		const values: string[] = [];
 		await localforage.iterate((value, key, iterationNumber) => {
 			values.push(key);
 		});
@@ -229,7 +233,7 @@ class LocalFile extends Serializable {
 	}
 
 	static async brutRemove(path: string) {
-		localforage.removeItem(path);
+		await localforage.removeItem(path);
 	}
 
 	static async config() {
@@ -237,7 +241,7 @@ class LocalFile extends Serializable {
 	}
 
 	static async readJSON(path: string): Promise<any> {
-		let file = await LocalFile.getFile(path);
+		const file = await LocalFile.getFile(path);
 		if (file) {
 			return JSON.parse(file.content);
 		}

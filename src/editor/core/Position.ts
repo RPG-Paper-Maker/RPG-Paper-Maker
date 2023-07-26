@@ -148,20 +148,20 @@ class Position extends Position3D {
 	}
 
 	fromKey(key: string) {
-		let values = key.split('+');
-		this.x = parseInt(values[0]);
-		this.y = parseInt(values[1]);
-		this.yPixels = parseInt(values[2]);
-		this.z = parseInt(values[3]);
-		this.layer = parseInt(values[4]);
-		this.centerX = parseInt(values[5]);
-		this.centerZ = parseInt(values[6]);
-		this.angleY = parseInt(values[7]);
-		this.angleX = parseInt(values[8]);
-		this.angleZ = parseInt(values[9]);
-		this.scaleX = parseInt(values[10]);
-		this.scaleY = parseInt(values[11]);
-		this.scaleZ = parseInt(values[12]);
+		const values = key.split('+');
+		this.x = parseInt(values[0], 10);
+		this.y = parseInt(values[1], 10);
+		this.yPixels = parseInt(values[2], 10);
+		this.z = parseInt(values[3], 10);
+		this.layer = parseInt(values[4], 10);
+		this.centerX = parseInt(values[5], 10);
+		this.centerZ = parseInt(values[6], 10);
+		this.angleY = parseInt(values[7], 10);
+		this.angleX = parseInt(values[8], 10);
+		this.angleZ = parseInt(values[9], 10);
+		this.scaleX = parseInt(values[10], 10);
+		this.scaleY = parseInt(values[11], 10);
+		this.scaleZ = parseInt(values[12], 10);
 	}
 
 	read(json: any[]) {

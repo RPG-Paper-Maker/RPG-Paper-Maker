@@ -88,7 +88,7 @@ function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false
 			const rect = dialogRef.current.getBoundingClientRect();
 			const x = e.clientX - rect.x;
 			const y = e.clientY - rect.y;
-			setInitialPosition({ x: x, y: y });
+			setInitialPosition({ x, y });
 			updatePosition(e.clientX - x, e.clientY - y);
 		}
 	};

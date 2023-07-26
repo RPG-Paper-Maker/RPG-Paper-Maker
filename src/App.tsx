@@ -12,9 +12,10 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Editor from './editor/Editor';
+import Game from './game/Game';
 
 function App() {
-	var userAgent = navigator.userAgent.toLowerCase();
+	const userAgent = navigator.userAgent.toLowerCase();
 	const isDesktop = userAgent.indexOf(' electron/') > -1;
 	return (
 		<>
@@ -24,6 +25,7 @@ function App() {
 				<div>
 					<Routes>
 						<Route path='/' element={<Editor />} />
+						<Route path='/play/:projectName' element={<Game />} />
 					</Routes>
 				</div>
 			)}

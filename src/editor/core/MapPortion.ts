@@ -11,13 +11,14 @@
 
 import * as THREE from 'three';
 import { Constants } from '../common/Constants';
-import { Enum } from '../common/Enum';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { CustomGeometry } from './CustomGeometry';
 import { Portion } from './Portion';
 import { Position } from './Position';
 import { Rectangle } from './Rectangle';
 import { Serializable } from './Serializable';
+import { ElementMapKind } from '../common/Enum';
+import { KeyValue } from '../common/Types';
 
 class MapPortion extends Serializable {
 	public static readonly JSON_FLOORS = 'floors';
@@ -38,15 +39,17 @@ class MapPortion extends Serializable {
 		return this.globalPortion.getFileName();
 	}
 
-	add(group: THREE.Group, model: Model.Base) {}
+	add(group: THREE.Group, model: Model.Base) {
+		// TODO
+	}
 
 	setLand(p: Position, land: MapElement.Land) {
 		switch (land.kind) {
-			case Enum.ElementMapKind.Floors:
+			case ElementMapKind.Floors:
 				this.setFloor(p, land as MapElement.Floor);
 				break;
-			case Enum.ElementMapKind.Autotiles:
-				//todo
+			case ElementMapKind.Autotiles:
+				// TODO
 				break;
 			default:
 				break;
@@ -57,15 +60,21 @@ class MapPortion extends Serializable {
 		this.floorsMapping.set(p.toKey(), floor);
 	}
 
-	stockObject(position: THREE.Vector3, scale: THREE.Vector3, model: Model.Base, group?: THREE.Group) {}
+	stockObject(position: THREE.Vector3, scale: THREE.Vector3, model: Model.Base, group?: THREE.Group) {
+		// TODO
+	}
 
-	remove(group: THREE.Group) {}
+	remove(group: THREE.Group) {
+		// TODO
+	}
 
-	removeMapElement(group: THREE.Group) {}
+	removeMapElement(group: THREE.Group) {
+		// TODO
+	}
 
 	fillDefaultFloor(map: Model.Map) {
-		let rect = new Rectangle(0, 0, 1, 1);
-		let p = new Position();
+		const rect = new Rectangle(0, 0, 1, 1);
+		const p = new Position();
 		for (let i = 0; i < Constants.PORTION_SIZE; i++) {
 			for (let j = 0; j < Constants.PORTION_SIZE; j++) {
 				p.x = this.globalPortion.x * Constants.PORTION_SIZE + i;
@@ -92,11 +101,12 @@ class MapPortion extends Serializable {
 		const geometry = this.floorsMesh.geometry as CustomGeometry;
 		const layers: [Position, MapElement.Floor][] = [];
 		let count = 0;
-		let i: number, l: number, layer: number, p: Position, positionKey: string, floor: MapElement.Floor;
-		for ([positionKey, floor] of this.floorsMapping) {
-			p = new Position();
+		let i: number;
+		let l: number;
+		for (const [positionKey, floor] of this.floorsMapping) {
+			const p = new Position();
 			p.fromKey(positionKey);
-			layer = p.layer;
+			const layer = p.layer;
 			if (layer > 0) {
 				for (i = 0, l = layers.length; i < l; i++) {
 					if (layer <= layers[i][0].layer) {
@@ -115,8 +125,8 @@ class MapPortion extends Serializable {
 
 		// Draw layers separatly
 		for (i = 0, l = layers.length; i < l; i++) {
-			p = layers[i][0];
-			floor = layers[i][1];
+			const p = layers[i][0];
+			const floor = layers[i][1];
 			floor.updateGeometry(geometry, p, width, height, count);
 			count++;
 		}
@@ -133,27 +143,28 @@ class MapPortion extends Serializable {
 		Scene.Map.current!.scene.add(this.floorsMesh);
 	}
 
-	update() {}
+	update() {
+		// TODO
+	}
 
 	read(json: any) {
-		let tab = json[MapPortion.JSON_FLOORS];
-		let p = new Position();
-		for (let objHash of tab) {
+		const tab = json[MapPortion.JSON_FLOORS];
+		const p = new Position();
+		for (const objHash of tab) {
 			p.read(objHash.k);
 			this.floorsMapping.set(p.toKey(), new MapElement.Floor(objHash.v));
 		}
 	}
 
 	write(json: any) {
-		let tab = [];
-		let p = new Position();
-		let objHash: any, tabKey: any[], objFloor: any;
-		for (let [positionKey, floor] of this.floorsMapping) {
-			objHash = {};
-			tabKey = [];
+		const tab = [];
+		const p = new Position();
+		for (const [positionKey, floor] of this.floorsMapping) {
+			const objHash: KeyValue = {};
+			const tabKey: number[] = [];
 			p.fromKey(positionKey);
 			p.write(tabKey);
-			objFloor = {};
+			const objFloor = {};
 			floor.write(objFloor);
 			objHash.k = tabKey;
 			objHash.v = objFloor;

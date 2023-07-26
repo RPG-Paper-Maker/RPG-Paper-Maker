@@ -26,12 +26,12 @@ function Menu({ children, horizontal = false, isActivable = false, activeIndex =
 
 	const items = Children.map(children, (child, index) =>
 		cloneElement(child, {
-			triggerCloseAll: triggerCloseAll,
-			setTriggerCloseAll: setTriggerCloseAll,
-			isActivable: isActivable,
+			triggerCloseAll,
+			setTriggerCloseAll,
+			isActivable,
 			active: isActivable && activeIndex === index,
-			setActiveIndex: setActiveIndex,
-			index: index,
+			setActiveIndex,
+			index,
 			isRoot: true,
 		})
 	);

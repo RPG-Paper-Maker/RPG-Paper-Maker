@@ -35,7 +35,9 @@ function MapEditorMenuBar() {
 	const [actionIndex, setActionIndex] = useState(3);
 	const [layersIndex, setLayersIndex] = useState(0);
 
-	const handleFloor = () => {};
+	const handleFloor = () => {
+		// TODO
+	};
 
 	return (
 		<div className='flex'>

@@ -41,23 +41,25 @@ class GL {
 	public canvasHeight: number = 0;
 
 	static async loadTexture(path: string): Promise<THREE.MeshPhongMaterial> {
-		let texture: THREE.Texture = await new Promise((resolve, reject) => {
+		const texture: THREE.Texture = await new Promise((resolve, reject) => {
 			this.textureLoader.load(
 				path,
 				(t: THREE.Texture) => {
 					resolve(t);
 				},
-				() => {},
 				() => {
-					let error = 'Could not load ' + path;
-					let t = new THREE.Texture();
+					// Nothing to do on progress
+				},
+				() => {
+					const error = 'Could not load ' + path;
+					const t = new THREE.Texture();
 					t.image = new Image();
-					console.log(error);
+					console.error(error);
 					resolve(t);
 				}
 			);
 		});
-		return this.createMaterial({ texture: texture });
+		return this.createMaterial({ texture });
 	}
 
 	static loadTextureEmpty(): THREE.MeshPhongMaterial {

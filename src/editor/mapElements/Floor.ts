@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../common/Enum';
+import { ElementMapKind } from '../common/Enum';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
@@ -26,8 +26,8 @@ class Floor extends Land {
 	}
 
 	static create(texture: Rectangle): Floor {
-		let floor = new Floor();
-		floor.kind = Enum.ElementMapKind.Floors;
+		const floor = new Floor();
+		floor.kind = ElementMapKind.Floors;
 		floor.texture = texture;
 		return floor;
 	}

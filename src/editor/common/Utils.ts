@@ -39,7 +39,7 @@ class Utils {
 
 	static readList(list: any[], json: Record<string, any>[], constructor: any) {
 		let model: Model.Base;
-		for (let jsonModel of json) {
+		for (const jsonModel of json) {
 			model = new constructor();
 			model.read(jsonModel);
 			list.push(model);
@@ -47,9 +47,9 @@ class Utils {
 	}
 
 	static writeList(list: any[], json: Record<string, any>, jsonName: string) {
-		let jsonList: Record<string, any> = [];
-		for (let model of list) {
-			let jsonModel = {};
+		const jsonList: Record<string, any> = [];
+		for (const model of list) {
+			const jsonModel = {};
 			model.write(jsonModel);
 			jsonList.push(jsonModel);
 		}

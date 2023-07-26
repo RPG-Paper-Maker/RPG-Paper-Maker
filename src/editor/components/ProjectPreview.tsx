@@ -20,8 +20,8 @@ import { useDispatch } from 'react-redux';
 import { triggerOpenProject } from '../store';
 import { LocalFile } from '../core/LocalFile';
 import { Paths } from '../common/Paths';
-import { Enum } from '../common/Enum';
 import { Utils } from '../common/Utils';
+import { LocalForage } from '../common/Enum';
 
 type Props = {
 	project: ProjectState;
@@ -47,7 +47,7 @@ function ProjectPreview({ project }: Props) {
 	const handleAcceptRemoveProject = async () => {
 		setIsDialogConfirmOpen(false);
 		dispatch(setLoading(true));
-		await LocalFile.removeFolder(Paths.join(Enum.LocalForage.Projects, project.name));
+		await LocalFile.removeFolder(Paths.join(LocalForage.Projects, project.name));
 		dispatch(removeProject(project.name));
 		dispatch(setLoading(false));
 	};
@@ -72,9 +72,9 @@ function ProjectPreview({ project }: Props) {
 				footer={<FooterYesNo onNo={handleRejectRemoveProject} onYes={handleAcceptRemoveProject} />}
 				onClose={handleRejectRemoveProject}
 			>
-				<p className='warning text-center'>
-					Are you sure that you want to delete <b>{project.name}</b>?<p>All will be lost forever.</p>
-				</p>
+				<div className='warning text-center'>
+					Are you sure that you want to delete <b>{project.name}</b>?<div>All will be lost forever.</div>
+				</div>
 			</Dialog>
 		</>
 	);

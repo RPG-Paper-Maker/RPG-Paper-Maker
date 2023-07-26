@@ -44,10 +44,10 @@ function PanelProject() {
 	];
 
 	const initialize = async () => {
-		let picture = await Picture2D.loadImage('./assets/textures/plains-woods.png');
-		setPicture(picture);
-		picture = await Picture2D.loadImage('./assets/textures/tileset-cursor.png');
-		setPictureCursor(picture);
+		let newPicture = await Picture2D.loadImage('./assets/textures/plains-woods.png');
+		setPicture(newPicture);
+		newPicture = await Picture2D.loadImage('./assets/textures/tileset-cursor.png');
+		setPictureCursor(newPicture);
 	};
 
 	useEffect(() => {
@@ -72,7 +72,7 @@ function PanelProject() {
 	});
 
 	useEffect(() => {
-		initialize();
+		initialize().catch(console.error);
 		// eslint-disable-next-line
 	}, []);
 

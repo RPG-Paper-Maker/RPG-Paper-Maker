@@ -58,14 +58,14 @@ function Button({
 		const current = ref.current;
 		if (canHold && current) {
 			const handle = (e: any) => {
-				let int = setInterval(() => {
+				const int = setInterval(() => {
 					handleClick();
 				}, intervalHold);
-				let f1 = function () {
+				const f1 = () => {
 					clearInterval(int);
 					document.removeEventListener('mouseup', f1);
 				};
-				let f2 = function () {
+				const f2 = () => {
 					clearInterval(int);
 					document.removeEventListener('touchend', f2);
 				};

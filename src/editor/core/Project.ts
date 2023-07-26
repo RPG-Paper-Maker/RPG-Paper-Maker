@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../common/Enum';
+import { LocalForage } from '../common/Enum';
 import { Paths } from '../common/Paths';
 import { Data } from '../Editor';
 
@@ -26,7 +26,7 @@ class Project {
 	}
 
 	getPath(): string {
-		return Paths.join(Enum.LocalForage.Projects, this.systems.projectName); // Different web and desktop
+		return Paths.join(LocalForage.Projects, this.systems.projectName); // Different web and desktop
 	}
 
 	getPathMaps(): string {
@@ -35,10 +35,11 @@ class Project {
 
 	async load() {
 		await this.systems.load(Paths.join(this.getPath(), Paths.FILE_SYSTEM));
+		this.systems.projectName = (this.systems.projectName as any).names[1]; // TODO
 	}
 
 	async save() {
-		await this.systems.save(Paths.join(this.getPath(), Paths.FILE_SYSTEM));
+		// await this.systems.save(Paths.join(this.getPath(), Paths.FILE_SYSTEM));
 	}
 }
 

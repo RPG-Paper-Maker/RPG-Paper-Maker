@@ -9,42 +9,38 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-namespace Enum {
-	export enum LocalForage {
-		Projects = 'projects',
-		EngineSettings = 'engineSettings',
-	}
-
-	export enum Object3DExtension {
-		None,
-		OBJ,
-		GLTF,
-	}
-
-	export enum PreviewerType {
-		Objects,
-		Shaders,
-	}
-
-	export enum ModelType {
-		Base,
-		EffectPeriod,
-	}
-
-	export enum ElementMapKind {
-		None,
-		Floors,
-		Autotiles,
-		Water,
-		SpritesFace,
-		SpritesFix,
-		SpritesDouble,
-		SpritesQuadra,
-		SpritesWall,
-		Object,
-		Object3D,
-		Mountains,
-	}
+export enum LocalForage {
+	Projects = 'projects',
+	EngineSettings = 'engineSettings',
 }
 
-export { Enum };
+export enum Object3DExtension {
+	None,
+	OBJ,
+	GLTF,
+}
+
+export enum PreviewerType {
+	Objects,
+	Shaders,
+}
+
+export enum ModelType {
+	Base,
+	EffectPeriod,
+}
+
+export enum ElementMapKind {
+	None,
+	Floors,
+	Autotiles,
+	Water,
+	SpritesFace,
+	SpritesFix,
+	SpritesDouble,
+	SpritesQuadra,
+	SpritesWall,
+	Object,
+	Object3D,
+	Mountains,
+}

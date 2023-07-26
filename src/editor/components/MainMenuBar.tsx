@@ -25,7 +25,6 @@ import Menu from './Menu';
 import MenuItem from './MenuItem';
 import MenuSub from './MenuSub';
 import { LocalFile } from '../core/LocalFile';
-import { Enum } from '../common/Enum';
 import { Scene } from '../Editor';
 import { Project } from '../core/Project';
 import { AiOutlineFileAdd, AiOutlineFolderOpen, AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai';
@@ -37,6 +36,7 @@ import Dialog from './dialogs/Dialog';
 import FooterYesNo from './dialogs/footers/FooterYesNo';
 import Toolbar from './Toolbar';
 import '../styles/MainMenu.css';
+import { LocalForage } from '../common/Enum';
 
 function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
@@ -51,18 +51,17 @@ function MainMenuBar() {
 		return currentProjectName !== '';
 	};
 
-	const keypress = (event: KeyboardEvent) => {
+	const keypress = async (event: KeyboardEvent) => {
 		const states = {
 			alt: event.altKey,
 			ctrl: event.ctrlKey,
 			meta: event.metaKey,
 			shift: event.shiftKey,
 		};
-		//const key = event.key;
 		const code = event.code;
 		if (states.ctrl && code === 'KeyS' && !isProjectOpened()) {
 			event.preventDefault();
-			handleSave();
+			await handleSave();
 			return false;
 		}
 	};
@@ -71,10 +70,10 @@ function MainMenuBar() {
 		setIsDialogNewProjectOpen(true);
 	};
 
-	const handleAcceptNewProject = (data: Record<string, any>) => {
+	const handleAcceptNewProject = async (data: Record<string, any>) => {
 		dispatch(addProject({ name: data.projectName, location: '' }));
 		setIsDialogNewProjectOpen(false);
-		handleOpenProject(data.projectName);
+		await handleOpenProject(data.projectName);
 	};
 
 	const handleRejectNewProject = () => {
@@ -113,7 +112,7 @@ function MainMenuBar() {
 		if (projectNames.indexOf(projectName) === -1) {
 			importFileInputRef.current.value = '';
 			dispatch(setLoading(true));
-			await LocalFile.loadZip(file, Enum.LocalForage.Projects);
+			await LocalFile.loadZip(file, LocalForage.Projects);
 			dispatch(addProject({ name: projectName, location: '' }));
 			await handleOpenProject(projectName);
 		} else {
@@ -130,8 +129,8 @@ function MainMenuBar() {
 		const file = Array.from(importFileInputRef.current.files || [])[0];
 		importFileInputRef.current.value = '';
 		const projectName = file.name.substring(0, file.name.length - 4);
-		await LocalFile.removeFolder(Paths.join(Enum.LocalForage.Projects, projectName));
-		await LocalFile.loadZip(file, Enum.LocalForage.Projects);
+		await LocalFile.removeFolder(Paths.join(LocalForage.Projects, projectName));
+		await LocalFile.loadZip(file, LocalForage.Projects);
 		dispatch(addProject({ name: projectName, location: '' }));
 		await handleOpenProject(projectName);
 	};
@@ -143,8 +142,8 @@ function MainMenuBar() {
 		}
 	};
 
-	const handleExport = () => {
-		LocalFile.downloadZip(Paths.join(Enum.LocalForage.Projects, currentProjectName));
+	const handleExport = async () => {
+		await LocalFile.downloadZip(Paths.join(LocalForage.Projects, currentProjectName));
 	};
 
 	const handleCloseProject = () => {
@@ -182,7 +181,7 @@ function MainMenuBar() {
 			handleImport();
 		} else if (triggers.openProject) {
 			dispatch(triggerOpenProject(''));
-			handleOpenProject(triggers.openProject);
+			handleOpenProject(triggers.openProject).catch(console.error);
 		}
 	});
 

@@ -15,7 +15,7 @@ import { LocalFile } from '../../core/LocalFile';
 import Loader from '../Loader';
 import { setProjects } from '../../store';
 import { useDispatch } from 'react-redux';
-import { Enum } from '../../common/Enum';
+import { LocalForage } from '../../common/Enum';
 
 type Props = {
 	setLoaded: (v: boolean) => void;
@@ -38,22 +38,24 @@ function PanelLoading({ setLoaded }: Props) {
 	};
 
 	const initializeLocalFiles = async () => {
-		LocalFile.config();
+		await LocalFile.config();
+		const all = await LocalFile.allStorage();
+		console.log(all);
 	};
 
 	// Used only for debug if something is fucked up in files system
 	/*
 	const clearLocalFiles = async () => {
-		let all = await LocalFile.allStorage();
-		for (let path of all) {
+		const all = await LocalFile.allStorage();
+		for (const path of all) {
 			await LocalFile.brutRemove(path);
 		}
 	};*/
 
 	const loadProjects = async () => {
-		let projects = (await LocalFile.getFolders(Enum.LocalForage.Projects)).map((name) => {
+		const projects = (await LocalFile.getFolders(LocalForage.Projects)).map((name) => {
 			return {
-				name: name,
+				name,
 				location: '',
 			};
 		});
@@ -61,7 +63,7 @@ function PanelLoading({ setLoaded }: Props) {
 	};
 
 	useEffect(() => {
-		initialize();
+		initialize().catch(console.error);
 		// eslint-disable-next-line
 	}, []);
 

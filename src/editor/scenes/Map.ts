@@ -43,9 +43,13 @@ class Map extends Base {
 		this.id = id;
 	}
 
-	add() {}
+	add() {
+		// TODO
+	}
 
-	remove() {}
+	remove() {
+		// TODO
+	}
 
 	async load() {
 		this.loading = true;
@@ -57,10 +61,9 @@ class Map extends Base {
 		// Load map model
 		const mapName = Model.Map.generateMapName(this.id);
 		const folderMap = Paths.join(Project.current!.getPathMaps(), mapName);
-		let file = await LocalFile.getFile(Paths.join(folderMap, Paths.FILE_MAP_INFOS));
+		const file = await LocalFile.getFile(Paths.join(folderMap, Paths.FILE_MAP_INFOS));
 		if (file) {
-			let json = JSON.parse(file.content);
-			this.modelMap.read(json);
+			this.modelMap.read(JSON.parse(file.content));
 		}
 
 		// Create grid plane
@@ -86,8 +89,8 @@ class Map extends Base {
 		this.grid.initialize(this.modelMap);
 
 		// Load portions
-		let globalPortion = new Portion(0, 0, 0);
-		let mapPortion = new MapPortion(globalPortion);
+		const globalPortion = new Portion(0, 0, 0);
+		const mapPortion = new MapPortion(globalPortion);
 		await mapPortion.load(Paths.join(folderMap, this.mapPortion.getFileName()));
 		mapPortion.updateMaterials();
 		mapPortion.updateGeometries();
@@ -143,10 +146,6 @@ class Map extends Base {
 		this.mapPortion.update();
 	}
 
-	onPointerDown(x: number, y: number) {}
-
-	onCanvasOnlyPointerDown(x: number, y: number) {}
-
 	onPointerDownRepeat(x: number, y: number) {
 		if (Inputs.pointerLeftPressed) {
 			this.remove();
@@ -154,11 +153,21 @@ class Map extends Base {
 		}
 	}
 
-	onCanvasOnlyPointerDownRepeat(x: number, y: number) {}
+	onCanvasOnlyPointerDown(x: number, y: number) {
+		// TODO
+	}
 
-	onPointerMove(x: number, y: number) {}
+	onCanvasOnlyPointerDownRepeat(x: number, y: number) {
+		// TODO
+	}
 
-	onPointerUp(x: number, y: number) {}
+	onPointerMove(x: number, y: number) {
+		// TODO
+	}
+
+	onPointerUp(x: number, y: number) {
+		// TODO
+	}
 
 	onMouseWheel(delta: number) {
 		if (delta < 0) {

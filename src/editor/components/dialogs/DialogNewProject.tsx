@@ -11,7 +11,6 @@
 
 import React, { useState } from 'react';
 import FooterYesNo from './footers/FooterYesNo';
-import { Enum } from '../../common/Enum';
 import { LocalFile } from '../../core/LocalFile';
 import { Model, Scene } from '../../Editor';
 import { Project } from '../../core/Project';
@@ -20,6 +19,9 @@ import { Paths } from '../../common/Paths';
 import FooterCancelOK from './footers/FooterCancelOK';
 import Input from '../Input';
 import Loader from '../Loader';
+import { useDispatch } from 'react-redux';
+import { removeProject } from '../../store';
+import { LocalForage } from '../../common/Enum';
 
 type Props = {
 	isOpen: boolean;
@@ -31,11 +33,12 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 	const [projectName, setProjectName] = useState('Project without name');
 	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const dispatch = useDispatch();
 
 	const checkValidAccept: () => Promise<boolean> = async () => {
-		let projects = await LocalFile.getFolders(Enum.LocalForage.Projects);
+		const projects = await LocalFile.getFolders(LocalForage.Projects);
 		if (projects.length === 0) {
-			await LocalFile.createFolder(Enum.LocalForage.Projects);
+			await LocalFile.createFolder(LocalForage.Projects);
 		}
 		if (
 			projects.find((name) => {
@@ -51,14 +54,15 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 	const accept = () => {
 		// Send data to parent
 		const data = {
-			projectName: projectName,
+			projectName,
 		};
 		onAccept(data);
 	};
 
 	const replaceProject = async () => {
 		setIsDialogConfirmOpen(false);
-		await LocalFile.removeFolder(Paths.join(Enum.LocalForage.Projects, projectName));
+		await LocalFile.removeFolder(Paths.join(LocalForage.Projects, projectName));
+		dispatch(removeProject(projectName));
 		await createProject();
 		accept();
 	};
@@ -73,11 +77,17 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 			Scene.Map.current.close();
 		}
 		Scene.Map.current = null;
-		let project = new Project(projectName);
+		const project = new Project(projectName);
 		Project.current = project;
 		await LocalFile.createFolder(project.getPath());
 		await LocalFile.createFolder(project.getPathMaps());
 		await Model.Map.createDefault();
+		for (const file of Paths.ALL_JSON) {
+			await LocalFile.copyPublicFile(
+				Paths.join(Paths.ROOT_DIRECTORY_LOCAL, Paths.DEFAULT, file),
+				Paths.join(project.getPath(), file)
+			);
+		}
 		await Project.current.save();
 		setIsLoading(false);
 	};

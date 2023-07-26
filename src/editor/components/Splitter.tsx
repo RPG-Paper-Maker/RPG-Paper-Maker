@@ -22,11 +22,6 @@ type Props = {
 function Splitter({ children, vertical, size, className }: Props) {
 	const ref = useRef<HTMLHeadingElement>(null);
 
-	const update = () => {
-		//flex fill-height
-		//requestAnimationFrame(update);
-	};
-
 	const getStyle = () => {
 		if (size) {
 			const pxSize = `${size}px`;
@@ -47,8 +42,7 @@ function Splitter({ children, vertical, size, className }: Props) {
 	};
 
 	useEffect(() => {
-		update();
-		// eslint-disable-next-line
+		// TODO
 	}, []);
 
 	return (

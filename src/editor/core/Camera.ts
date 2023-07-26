@@ -59,8 +59,8 @@ class Camera {
 	}
 
 	updateCameraPosition() {
-		let distance = this.getDistance();
-		let camera = this.getThreeCamera();
+		const distance = this.getDistance();
+		const camera = this.getThreeCamera();
 		camera.position.x = this.targetPosition.x - distance * Math.cos((this.horizontalAngle * Math.PI) / 180.0);
 		camera.position.y = this.targetPosition.y + this.getHeight();
 		camera.position.z = this.targetPosition.z - distance * Math.sin((this.horizontalAngle * Math.PI) / 180.0);

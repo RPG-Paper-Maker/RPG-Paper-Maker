@@ -60,3 +60,5 @@ compile_commands.json
 /build
 /desktop/build
 /desktop/node_modules
+/public/BR
+/public/scripts

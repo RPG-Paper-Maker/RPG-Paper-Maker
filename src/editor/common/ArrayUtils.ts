@@ -11,7 +11,7 @@
 
 class ArrayUtils {
 	static contains<T>(array: any[], value: T) {
-		array.indexOf(value) !== -1;
+		return array.indexOf(value) !== -1;
 	}
 
 	static removeAt(array: any[], index: number) {
@@ -19,7 +19,12 @@ class ArrayUtils {
 	}
 
 	static removeElement<T>(array: T[], value: T) {
-		this.removeAt(array, array.indexOf(value));
+		const index = array.indexOf(value);
+		if (index !== -1) {
+			this.removeAt(array, index);
+			return true;
+		}
+		return false;
 	}
 }
 

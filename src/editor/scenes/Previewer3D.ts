@@ -12,7 +12,6 @@
 import * as THREE from 'three';
 import { Manager, MapElement } from '../Editor';
 import { Base } from './Base';
-import { Floor } from '../mapElements';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
 import { Rectangle } from '../core/Rectangle';
@@ -24,7 +23,7 @@ class Previewer3D extends Base {
 	public canvas!: HTMLElement;
 	public material!: THREE.MeshPhongMaterial;
 	public sunLight!: THREE.DirectionalLight;
-	public mesh!: THREE.Mesh;
+	public mesh: THREE.Mesh | null = null;
 
 	constructor(id: string) {
 		super();
@@ -76,8 +75,11 @@ class Previewer3D extends Base {
 	}
 
 	updateCamera() {
-		let min = new THREE.Vector3(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY);
-		let max = new THREE.Vector3(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY);
+		if (this.mesh == null) {
+			return;
+		}
+		const min = new THREE.Vector3(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY);
+		const max = new THREE.Vector3(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY);
 		let w = 0;
 		let h = 0;
 		let d = 0;
@@ -105,7 +107,9 @@ class Previewer3D extends Base {
 	update(GL: Manager.GL) {
 		super.update(GL);
 
-		this.mesh.rotation.y += 0.01;
+		if (this.mesh) {
+			this.mesh.rotation.y += 0.01;
+		}
 	}
 
 	draw3D(GL: Manager.GL) {

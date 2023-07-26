@@ -8,12 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-
 class IO {
 	static async openFile(url: string): Promise<string> {
 		return await new Promise((resolve, reject) => {
-			let xhr = new XMLHttpRequest();
-			xhr.onreadystatechange = function () {
+			const xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = () => {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200 || xhr.status === 0) {
 						resolve(xhr.responseText);
@@ -26,7 +25,7 @@ class IO {
 	}
 
 	static async parseFileJSON(url: string): Promise<Record<string, any>> {
-		let content = await IO.openFile(url);
+		const content = await IO.openFile(url);
 		try {
 			return JSON.parse(content);
 		} catch (e) {

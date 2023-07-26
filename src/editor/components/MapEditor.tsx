@@ -62,7 +62,7 @@ function MapEditor({ visible }: Props) {
 
 	useEffect(() => {
 		loop();
-		initialize();
+		initialize().catch(console.error);
 		// eslint-disable-next-line
 	}, []);
 

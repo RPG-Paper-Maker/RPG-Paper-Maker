@@ -50,7 +50,7 @@ function MenuSub({
 
 	const items = Children.map(children, (child) =>
 		cloneElement(child, {
-			setTriggerCloseAll: setTriggerCloseAll,
+			setTriggerCloseAll,
 			onClick: (e: any) => {
 				if (child.props.onClick) {
 					child.props.onClick(e);
@@ -104,7 +104,7 @@ function MenuSub({
 				refArrow.current.classList.add('arrow-right');
 			}
 			if (refTitle.current && refContent.current) {
-				let rect = refTitle.current.getBoundingClientRect();
+				const rect = refTitle.current.getBoundingClientRect();
 				let left = 0;
 				let top = 0;
 				if (isRoot) {

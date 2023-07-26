@@ -21,7 +21,7 @@ function Previewer3D({ id }: Props) {
 
 	const initialize = async () => {
 		Manager.GL.extraContext.initialize(id, '#211d2b');
-		document.onselectstart = function () {
+		document.onselectstart = () => {
 			return false;
 		}; // prevent weird drag ghost picture
 		const scene = new Scene.Previewer3D(id);
@@ -31,11 +31,6 @@ function Previewer3D({ id }: Props) {
 		scene.loadFloor(Manager.GL.extraContext);
 		resize();
 		loop();
-	};
-
-	const update = () => {
-		Manager.GL.extraContext.resize(true);
-		Manager.GL.extraContext.parent.appendChild(Manager.GL.extraContext.renderer.domElement);
 	};
 
 	const loop = () => {
@@ -66,7 +61,7 @@ function Previewer3D({ id }: Props) {
 	});
 
 	useEffect(() => {
-		initialize();
+		initialize().catch(console.error);
 		window.addEventListener('resize', resize);
 		return () => window.removeEventListener('resize', resize);
 		// eslint-disable-next-line

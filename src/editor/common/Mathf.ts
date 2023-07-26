@@ -23,7 +23,7 @@ class Mathf {
 	}
 
 	static mod(x: number, m: number): number {
-		let r = x % m;
+		const r = x % m;
 		return r < 0 ? r + m : r;
 	}
 }

@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Enum } from '../common/Enum';
+import { ElementMapKind } from '../common/Enum';
 import { Utils } from '../common/Utils';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { CustomGeometryFace } from '../core/CustomGeometryFace';
@@ -39,8 +39,8 @@ class Sprite extends Base {
 		}
 	}
 
-	static create(kind: Enum.ElementMapKind, texture: Rectangle): Sprite {
-		let sprite = new Sprite();
+	static create(kind: ElementMapKind, texture: Rectangle): Sprite {
+		const sprite = new Sprite();
 		sprite.kind = kind;
 		sprite.texture = texture;
 		return sprite;
@@ -73,12 +73,12 @@ class Sprite extends Base {
 		tileset: boolean,
 		localPosition: THREE.Vector3 | null
 	): number {
-		let vecA = Sprite.MODEL[0].clone();
-		let vecB = Sprite.MODEL[1].clone();
-		let vecC = Sprite.MODEL[2].clone();
-		let vecD = Sprite.MODEL[3].clone();
-		let center = new THREE.Vector3(0, 0, 0);
-		let size = new THREE.Vector3(
+		const vecA = Sprite.MODEL[0].clone();
+		const vecB = Sprite.MODEL[1].clone();
+		const vecC = Sprite.MODEL[2].clone();
+		const vecD = Sprite.MODEL[3].clone();
+		const center = new THREE.Vector3(0, 0, 0);
+		const size = new THREE.Vector3(
 			this.texture.width * Project.getSquareSize() * position.scaleX,
 			this.texture.height * Project.getSquareSize() * position.scaleY,
 			1.0
@@ -96,10 +96,10 @@ class Sprite extends Base {
 			localPosition = tileset ? position.toVector3() : new THREE.Vector3();
 		}
 
-		let angleY = position.angleY;
-		let angleX = position.angleX;
-		let angleZ = position.angleZ;
-		if (this.kind !== Enum.ElementMapKind.SpritesFace) {
+		const angleY = position.angleY;
+		const angleX = position.angleX;
+		const angleZ = position.angleZ;
+		if (this.kind !== ElementMapKind.SpritesFace) {
 			if (angleY !== 0.0) {
 				Base.rotateQuad(vecA, vecB, vecC, vecD, center, angleY, Base.Y_AXIS);
 			}
@@ -116,16 +116,16 @@ class Sprite extends Base {
 		let y = (this.texture.y * Project.getSquareSize()) / height;
 		let w = (this.texture.width * Project.getSquareSize()) / width;
 		let h = (this.texture.height * Project.getSquareSize()) / height;
-		let coefX = Base.COEF_TEX / width;
-		let coefY = Base.COEF_TEX / height;
+		const coefX = Base.COEF_TEX / width;
+		const coefY = Base.COEF_TEX / height;
 		x += coefX;
 		y += coefY;
 		w -= coefX * 2;
 		h -= coefY * 2;
-		let texA = new THREE.Vector2();
-		let texB = new THREE.Vector2();
-		let texC = new THREE.Vector2();
-		let texD = new THREE.Vector2();
+		const texA = new THREE.Vector2();
+		const texB = new THREE.Vector2();
+		const texC = new THREE.Vector2();
+		const texD = new THREE.Vector2();
 		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 
 		if (geometry instanceof CustomGeometryFace) {
@@ -143,10 +143,10 @@ class Sprite extends Base {
 			count = count + 4;
 		} else {
 			// Simple sprite
-			let vecSimpleA = vecA.clone();
-			let vecSimpleB = vecB.clone();
-			let vecSimpleC = vecC.clone();
-			let vecSimpleD = vecD.clone();
+			const vecSimpleA = vecA.clone();
+			const vecSimpleB = vecB.clone();
+			const vecSimpleC = vecC.clone();
+			const vecSimpleD = vecD.clone();
 			count = Sprite.addStaticSpriteToGeometry(
 				geometry,
 				vecSimpleA,
@@ -162,11 +162,11 @@ class Sprite extends Base {
 		}
 
 		// Double sprite
-		if (this.kind === Enum.ElementMapKind.SpritesDouble || this.kind === Enum.ElementMapKind.SpritesQuadra) {
-			let vecDoubleA = vecA.clone();
-			let vecDoubleB = vecB.clone();
-			let vecDoubleC = vecC.clone();
-			let vecDoubleD = vecD.clone();
+		if (this.kind === ElementMapKind.SpritesDouble || this.kind === ElementMapKind.SpritesQuadra) {
+			const vecDoubleA = vecA.clone();
+			const vecDoubleB = vecB.clone();
+			const vecDoubleC = vecC.clone();
+			const vecDoubleD = vecD.clone();
 			Base.rotateQuad(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center, 90, Sprite.Y_AXIS);
 			count = Sprite.addStaticSpriteToGeometry(
 				geometry,
@@ -182,15 +182,15 @@ class Sprite extends Base {
 			);
 
 			// Quadra sprite
-			if (this.kind === Enum.ElementMapKind.SpritesQuadra) {
-				let vecQuadra1A = vecA.clone();
-				let vecQuadra1B = vecB.clone();
-				let vecQuadra1C = vecC.clone();
-				let vecQuadra1D = vecD.clone();
-				let vecQuadra2A = vecA.clone();
-				let vecQuadra2B = vecB.clone();
-				let vecQuadra2C = vecC.clone();
-				let vecQuadra2D = vecD.clone();
+			if (this.kind === ElementMapKind.SpritesQuadra) {
+				const vecQuadra1A = vecA.clone();
+				const vecQuadra1B = vecB.clone();
+				const vecQuadra1C = vecC.clone();
+				const vecQuadra1D = vecD.clone();
+				const vecQuadra2A = vecA.clone();
+				const vecQuadra2B = vecB.clone();
+				const vecQuadra2C = vecC.clone();
+				const vecQuadra2D = vecD.clone();
 				Base.rotateQuad(vecQuadra1A, vecQuadra1B, vecQuadra1C, vecQuadra1D, center, 45, Sprite.Y_AXIS);
 				Base.rotateQuad(vecQuadra2A, vecQuadra2B, vecQuadra2C, vecQuadra2D, center, -45, Sprite.Y_AXIS);
 				count = Sprite.addStaticSpriteToGeometry(
@@ -223,8 +223,8 @@ class Sprite extends Base {
 	}
 
 	createGeometry(width: number, height: number, tileset: boolean, position: Position): [CustomGeometry, number] {
-		let geometry = new CustomGeometry();
-		let count = this.updateGeometry(geometry, width, height, position, 0, tileset, null);
+		const geometry = new CustomGeometry();
+		const count = this.updateGeometry(geometry, width, height, position, 0, tileset, null);
 		geometry.updateAttributes();
 		return [geometry, count];
 	}

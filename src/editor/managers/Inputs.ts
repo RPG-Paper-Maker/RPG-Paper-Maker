@@ -33,7 +33,7 @@ class Inputs {
 		// Pointer down
 		document.addEventListener(
 			'pointerdown',
-			function (event) {
+			(event) => {
 				if (!Scene.Map.current) {
 					return;
 				}
@@ -49,7 +49,7 @@ class Inputs {
 				}
 				Inputs.pointerMap = Inputs.getPointer(event, Scene.Map.current.selectionOffset);
 				Inputs.pointerMapWithoutOffset = Inputs.getPointer(event, new THREE.Vector2(0, 0));
-				let y = event.pageY - Scene.Map.MENU_BAR_HEIGHT;
+				const y = event.pageY - Scene.Map.MENU_BAR_HEIGHT;
 				if (y >= 0) {
 					Inputs.pointerPosition.set(event.pageX, y);
 					Inputs.pointerPositionFirstPress.set(event.pageX, y);
@@ -64,7 +64,7 @@ class Inputs {
 		// Pointer down for canvas only
 		canvas.addEventListener(
 			'pointerdown',
-			function (event) {
+			(event) => {
 				if (!Scene.Map.current) {
 					return;
 				}
@@ -80,7 +80,7 @@ class Inputs {
 				}
 				Inputs.pointerMap = Inputs.getPointer(event, Scene.Map.current.selectionOffset);
 				Inputs.pointerMapWithoutOffset = Inputs.getPointer(event, new THREE.Vector2(0, 0));
-				let y = event.pageY - Scene.Map.MENU_BAR_HEIGHT;
+				const y = event.pageY - Scene.Map.MENU_BAR_HEIGHT;
 				if (y >= 0) {
 					Inputs.pointerPosition.set(event.pageX, y);
 					Inputs.pointerPositionFirstPress.set(event.pageX, y);
@@ -95,13 +95,13 @@ class Inputs {
 		// Mouse move
 		document.addEventListener(
 			'mousemove',
-			function (event) {
+			(event) => {
 				if (!Scene.Map.current) {
 					return;
 				}
-				let v = Inputs.getPointer(event, Scene.Map.current.selectionOffset);
-				let v2 = Inputs.getPointer(event, new THREE.Vector2(0, 0));
-				let y = event.clientY - Scene.Map.MENU_BAR_HEIGHT;
+				const v = Inputs.getPointer(event, Scene.Map.current.selectionOffset);
+				const v2 = Inputs.getPointer(event, new THREE.Vector2(0, 0));
+				const y = event.clientY - Scene.Map.MENU_BAR_HEIGHT;
 				if (y >= 0) {
 					Inputs.pointerPosition.set(event.clientX, y);
 					Scene.Map.current.onPointerMove(Inputs.pointerPosition.x, Inputs.pointerPosition.y);
@@ -115,13 +115,13 @@ class Inputs {
 		// Touch move
 		document.addEventListener(
 			'touchmove',
-			function (event) {
+			(event) => {
 				if (!Scene.Map.current) {
 					return;
 				}
-				let v = Inputs.getTouchPointer(event, Scene.Map.current.selectionOffset);
-				let v2 = Inputs.getTouchPointer(event, new THREE.Vector2(0, 0));
-				let y = event.touches[0].pageY - Scene.Map.MENU_BAR_HEIGHT;
+				const v = Inputs.getTouchPointer(event, Scene.Map.current.selectionOffset);
+				const v2 = Inputs.getTouchPointer(event, new THREE.Vector2(0, 0));
+				const y = event.touches[0].pageY - Scene.Map.MENU_BAR_HEIGHT;
 				if (y >= 0) {
 					Inputs.pointerPosition.set(event.touches[0].pageX, y);
 					Scene.Map.current.onPointerMove(Inputs.pointerPosition.x, Inputs.pointerPosition.y);
@@ -135,7 +135,7 @@ class Inputs {
 		// Mouse up
 		document.addEventListener(
 			'mouseup',
-			function (event) {
+			(event) => {
 				if (!Scene.Map.current) {
 					return;
 				}
@@ -158,7 +158,7 @@ class Inputs {
 		// Touch end
 		document.addEventListener(
 			'touchend',
-			function (event) {
+			(event) => {
 				if (!Scene.Map.current) {
 					return;
 				}
@@ -171,7 +171,7 @@ class Inputs {
 		);
 
 		// Mouse wheel
-		canvas.addEventListener('wheel', function (event) {
+		canvas.addEventListener('wheel', (event) => {
 			if (!Scene.Map.current) {
 				return;
 			}
@@ -194,7 +194,7 @@ class Inputs {
 	}
 
 	static getPointerCoord(x: number, y: number) {
-		let v = new THREE.Vector2();
+		const v = new THREE.Vector2();
 		if (Manager.GL.mapEditorContext.parent) {
 			v.x = (x / Manager.GL.mapEditorContext.parent.offsetWidth) * 2 - 1;
 			v.y = -(y / Manager.GL.mapEditorContext.parent.offsetHeight) * 2 + 1;

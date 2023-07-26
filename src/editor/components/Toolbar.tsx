@@ -39,7 +39,9 @@ function Toolbar() {
 		dispatch(triggerNewProject(true));
 	};
 
-	const handleFloor = () => {};
+	const handleFloor = () => {
+		// TODO
+	};
 
 	return (
 		<div className='toolbar'>

@@ -32,8 +32,8 @@ class Map extends Base {
 	}
 
 	static async createDefault() {
-		let jsonObject = {};
-		let mapModel = new Model.Map();
+		const jsonObject = {};
+		const mapModel = new Model.Map();
 		// TODO
 		/*
         Position position(7, 0, 0, 7, 0);
@@ -47,8 +47,8 @@ class Map extends Base {
 		const folderMap = await mapModel.createNewMap(jsonObject);
 
 		// Portion
-		let globalPortion = new Portion(0, 0, 0);
-		let mapPortion = new MapPortion(globalPortion);
+		const globalPortion = new Portion(0, 0, 0);
+		const mapPortion = new MapPortion(globalPortion);
 		mapPortion.fillDefaultFloor(mapModel);
 		/*
         SystemCommonObject* o = new SystemCommonObject(1, RPM::translate(
@@ -87,14 +87,14 @@ class Map extends Base {
 		await LocalFile.createFolder(folderMap);
 
 		// Write properties
-		this.save(Paths.join(folderMap, Paths.FILE_MAP_INFOS));
+		await this.save(Paths.join(folderMap, Paths.FILE_MAP_INFOS));
 
 		// Portions
 		const [lx, ld, lh, lz] = this.getPortionsNumbers();
 		for (let i = 0; i < lx; i++) {
 			for (let j = -ld; j < lh; j++) {
 				for (let k = 0; k < lz; k++) {
-					let json = {};
+					const json = {};
 					await LocalFile.writeJSON(Paths.join(folderMap, Portion.getFileName(i, j, k)), json);
 				}
 			}
