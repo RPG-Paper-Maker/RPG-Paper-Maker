@@ -34,11 +34,13 @@ function Previewer3D({ id }: Props) {
 	};
 
 	const loop = () => {
-		requestAnimationFrame(loop);
-		const scene = Scene.Previewer3D.scenes[id];
-		if (scene) {
-			scene.update(Manager.GL.extraContext);
-			scene.draw3D(Manager.GL.extraContext);
+		if (Scene.Previewer3D.scenes[id]) {
+			requestAnimationFrame(loop);
+			const scene = Scene.Previewer3D.scenes[id];
+			if (scene) {
+				scene.update(Manager.GL.extraContext);
+				scene.draw3D(Manager.GL.extraContext);
+			}
 		}
 	};
 
@@ -53,17 +55,20 @@ function Previewer3D({ id }: Props) {
 	};
 
 	useEffect(() => {
-		resize();
 		if (refCanvas.current) {
 			const width = refCanvas.current.getBoundingClientRect().width;
 			refCanvas.current.style.height = `${width}px`;
+			resize();
 		}
 	});
 
 	useEffect(() => {
 		initialize().catch(console.error);
 		window.addEventListener('resize', resize);
-		return () => window.removeEventListener('resize', resize);
+		return () => {
+			window.removeEventListener('resize', resize);
+			delete Scene.Previewer3D.scenes[id];
+		};
 		// eslint-disable-next-line
 	}, []);
 

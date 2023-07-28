@@ -175,6 +175,7 @@ class GL {
 		if (this.renderer && this.parent) {
 			this.canvasWidth = this.parent.getBoundingClientRect().width;
 			this.canvasHeight = scroll ? this.parent.scrollHeight : this.parent.getBoundingClientRect().height;
+			console.log(this.canvasWidth, this.canvasHeight);
 			this.renderer.setSize(this.canvasWidth, this.canvasHeight, true);
 		}
 	}

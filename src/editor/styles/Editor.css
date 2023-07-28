@@ -223,3 +223,7 @@ code {
 .bg-darker {
 	background-color: var(--darker-bg-color);
 }
+
+.hidden {
+	display: none !important;
+}

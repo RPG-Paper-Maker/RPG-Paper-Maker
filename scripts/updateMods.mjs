@@ -59,7 +59,12 @@ async function copyDirAndPrint(source, destination) {
 	if (await exists(destination)) {
 		await fs.rm(destination, { recursive: true });
 	}
-	await copyDir(`${destinationPaths.br}/Content`, destination);
+	await copyDir(source, destination);
+	console.log(`Generated ${destination}`);
+}
+
+async function copyFileAndPrint(source, destination) {
+	await fs.copyFile(source, destination);
 	console.log(`Generated ${destination}`);
 }
 
@@ -105,7 +110,13 @@ const main = async () => {
 		await downloadOrCopyRepo(gitUrls.br, destinationPaths.br, localPaths.br);
 		await downloadOrCopyRepo(gitUrls.dependencies, destinationPaths.dependencies, localPaths.dependencies);
 		await copyDirAndPrint(`${destinationPaths.br}/Content`, './public/BR');
-		await copyDirAndPrint(`${destinationPaths.scriptsBuild}/Scripts`, './public/scripts');
+		await copyDirAndPrint(`${destinationPaths.scriptsBuild}/Scripts`, './public/Scripts');
+		const webPath = `${destinationPaths.dependencies}/Game/web/`;
+		await copyFileAndPrint(`${webPath}Globals.js`, './public/Scripts/System/Globals.js');
+		await copyFileAndPrint(`${webPath}howler.js`, './public/Scripts/Libs/howler.js');
+		await copyFileAndPrint(`${webPath}three.js`, './public/Scripts/Libs/three.js');
+		await copyDirAndPrint(`${webPath}localforage`, './public/Scripts/Libs/localforage');
+		await copyFileAndPrint(`${webPath}Platform.js`, './public/Scripts/System/Common/Platform.js');
 		console.log('Download completed!');
 	} catch (error) {
 		console.error('Error during download:', error);

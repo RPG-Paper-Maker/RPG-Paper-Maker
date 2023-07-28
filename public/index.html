@@ -5,6 +5,48 @@
 		<link rel="icon" href="favicon.ico" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="theme-color" content="#000000" />
+
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+			#three-d {
+				margin: 0;
+				padding: 0;
+				overflow: auto;
+				position: absolute;
+			}
+			#video-container {
+				margin: 0;
+				padding: 0;
+				overflow: auto;
+				position: absolute;
+			}
+			#hud {
+				position: absolute;
+				margin: 0;
+				padding: 0;
+			}
+			#rendering {
+				display: none;
+				overflow: hidden;
+				background-color: green;
+			}
+			.hidden {
+				display: none;
+			}
+			canvas {
+				font-smooth: never;
+				-webkit-font-smoothing: none;
+				image-rendering: pixelated;
+			}
+			@font-face {
+				font-family: 'Default';
+				src: url('/BR/Fonts/Default.ttf');
+			}
+		</style>
 		<title>RPG Paper Maker</title>
 	</head>
 	<body>

@@ -10,8 +10,8 @@
 */
 
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { triggerNewProject } from '../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, triggerNewProject, triggerPlay } from '../store';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
 import {
@@ -34,9 +34,18 @@ import '../styles/Toolbar.css';
 
 function Toolbar() {
 	const dispatch = useDispatch();
+	const currentProjectName = useSelector((state: RootState) => state.projects.current);
+
+	const isProjectOpened = () => {
+		return currentProjectName !== '';
+	};
 
 	const handleNewProject = () => {
 		dispatch(triggerNewProject(true));
+	};
+
+	const handlePlay = () => {
+		dispatch(triggerPlay(true));
 	};
 
 	const handleFloor = () => {
@@ -116,7 +125,7 @@ function Toolbar() {
 					Mountains
 				</MenuItem>
 				<MenuItem separator></MenuItem>
-				<MenuItem icon={<BsPlay />} onClick={handleFloor} disabled>
+				<MenuItem icon={<BsPlay />} onClick={handlePlay} disabled={!isProjectOpened()}>
 					Play
 				</MenuItem>
 			</Menu>

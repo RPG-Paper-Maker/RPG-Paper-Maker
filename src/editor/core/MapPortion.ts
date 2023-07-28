@@ -148,7 +148,7 @@ class MapPortion extends Serializable {
 	}
 
 	read(json: any) {
-		const tab = json[MapPortion.JSON_FLOORS];
+		const tab = json.lands[MapPortion.JSON_FLOORS];
 		const p = new Position();
 		for (const objHash of tab) {
 			p.read(objHash.k);

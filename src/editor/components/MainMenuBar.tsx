@@ -19,6 +19,7 @@ import {
 	triggerImportProject,
 	triggerNewProject,
 	triggerOpenProject,
+	triggerPlay,
 } from '../store';
 import DialogNewProject from './dialogs/DialogNewProject';
 import Menu from './Menu';
@@ -182,6 +183,9 @@ function MainMenuBar() {
 		} else if (triggers.openProject) {
 			dispatch(triggerOpenProject(''));
 			handleOpenProject(triggers.openProject).catch(console.error);
+		} else if (triggers.play) {
+			dispatch(triggerPlay(false));
+			handlePlay();
 		}
 	});
 

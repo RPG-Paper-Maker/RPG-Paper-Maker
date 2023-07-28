@@ -57,7 +57,15 @@ class Map extends Base {
         QJsonObject previous;
         MapEditorSubSelectionKind previousType;
         mapPortion.addObject(position, o, previous, previousType);*/
-		await mapPortion.save(Paths.join(folderMap, globalPortion.getFileName()));
+		await LocalFile.writeJSON(Paths.join(folderMap, 'objects.json'), {
+			objs: [{ id: 1, name: 'Hero', p: [7, 0, 0, 7] }],
+		});
+		// TODO
+		await LocalFile.copyPublicFile(
+			Paths.join(Paths.ROOT_DIRECTORY_LOCAL, Paths.DEFAULT, globalPortion.getFileName()),
+			Paths.join(Paths.join(folderMap, globalPortion.getFileName()))
+		);
+		//await mapPortion.save(Paths.join(folderMap, globalPortion.getFileName()));
 	}
 
 	static generateMapName(id: number): string {
@@ -87,7 +95,64 @@ class Map extends Base {
 		await LocalFile.createFolder(folderMap);
 
 		// Write properties
-		await this.save(Paths.join(folderMap, Paths.FILE_MAP_INFOS));
+		// TODO
+		await LocalFile.writeJSON(Paths.join(folderMap, Paths.FILE_MAP_INFOS), {
+			bgs: { id: -1, ie: false, is: false, name: '', v: { k: 3, v: 100 } },
+			d: 0,
+			h: 16,
+			id: 1,
+			isi: false,
+			isky: false,
+			l: 16,
+			music: { id: -1, ie: false, is: false, name: '', v: { k: 3, v: 100 } },
+			names: { '1': 'MAP0001' },
+			of3d: [],
+			ofmoun: [],
+			ofsprites: [],
+			sbid: { k: 7, v: 1 },
+			so: {
+				events: [
+					{
+						id: 1,
+						name: 'Time',
+						p: [
+							{ id: 1, name: '', v: { k: 2, v: null } },
+							{ id: 2, name: '', v: { k: 10, v: false } },
+						],
+						r: { '1': { bh: true, c: [] } },
+						sys: true,
+					},
+				],
+				hId: -1,
+				id: 1,
+				name: '',
+				ooepf: false,
+				states: [
+					{
+						cam: false,
+						climb: false,
+						dir: false,
+						gid: -1,
+						gk: 0,
+						id: 1,
+						move: false,
+						name: 'State 1',
+						pix: false,
+						pos: false,
+						stop: false,
+						sx: { k: 12, v: 1 },
+						sy: { k: 12, v: 1 },
+						sz: { k: 12, v: 1 },
+						through: false,
+						x: 0,
+						y: 0,
+					},
+				],
+			},
+			tileset: 1,
+			w: 16,
+		});
+		// await this.save(Paths.join(folderMap, Paths.FILE_MAP_INFOS));
 
 		// Portions
 		const [lx, ld, lh, lz] = this.getPortionsNumbers();

@@ -12,6 +12,7 @@ const TriggersSlice = createSlice({
 			newProject: false,
 			importProject: false,
 			openProject: '',
+			play: false,
 		},
 	},
 	reducers: {
@@ -24,8 +25,11 @@ const TriggersSlice = createSlice({
 		triggerOpenProject(state, action: PayloadAction<string>) {
 			state.mainBar.openProject = action.payload;
 		},
+		triggerPlay(state, action: PayloadAction<boolean>) {
+			state.mainBar.play = action.payload;
+		},
 	},
 });
 
-export const { triggerNewProject, triggerImportProject, triggerOpenProject } = TriggersSlice.actions;
+export const { triggerNewProject, triggerImportProject, triggerOpenProject, triggerPlay } = TriggersSlice.actions;
 export const TriggersReducer = TriggersSlice.reducer;
