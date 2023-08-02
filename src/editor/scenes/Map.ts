@@ -171,9 +171,9 @@ class Map extends Base {
 
 	onMouseWheel(delta: number) {
 		if (delta < 0) {
-			this.zoomIn();
+			this.zoomIn(0.5);
 		} else {
-			this.zoomOut();
+			this.zoomOut(0.5);
 		}
 	}
 

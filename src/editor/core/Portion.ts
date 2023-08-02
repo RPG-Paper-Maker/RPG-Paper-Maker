@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Constants } from '../common/Constants';
-import { Project } from '../models';
+import { Project } from './Project';
 
 class Portion {
 	public x: number;

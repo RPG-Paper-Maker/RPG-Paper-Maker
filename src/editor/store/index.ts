@@ -3,6 +3,7 @@ import { ProjectsReducer } from './slices/ProjectsReducer';
 import { TriggersReducer } from './slices/TriggersReducer';
 import {
 	setCurrentProjectName,
+	setCurrentMapID,
 	setLoading,
 	setProjects,
 	addProject,
@@ -21,6 +22,7 @@ const store = configureStore({
 export {
 	store,
 	setCurrentProjectName,
+	setCurrentMapID,
 	setLoading,
 	setProjects,
 	addProject,

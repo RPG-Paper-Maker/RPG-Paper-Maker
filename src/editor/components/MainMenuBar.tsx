@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 	RootState,
 	addProject,
+	setCurrentMapID,
 	setCurrentProjectName,
 	setLoading,
 	triggerImportProject,
@@ -86,11 +87,7 @@ function MainMenuBar() {
 		dispatch(setCurrentProjectName(name));
 		Project.current = new Project(name);
 		await Project.current.load();
-		if (Scene.Map.current) {
-			Scene.Map.current.close();
-		}
-		Scene.Map.current = new Scene.Map(1);
-		await Scene.Map.current.load();
+		dispatch(setCurrentMapID(1));
 		dispatch(setLoading(false));
 	};
 

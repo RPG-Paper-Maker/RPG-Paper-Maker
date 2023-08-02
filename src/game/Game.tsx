@@ -4,35 +4,31 @@ import { useParams } from 'react-router-dom';
 function Game() {
 	const { projectName } = useParams();
 
-	var PIXEL_RATIO = (function () {
-		var ctx = document.createElement('canvas').getContext('2d') as any,
-			dpr = window.devicePixelRatio || 1,
-			bsr =
-				ctx.webkitBackingStorePixelRatio ||
-				ctx.mozBackingStorePixelRatio ||
-				ctx.msBackingStorePixelRatio ||
-				ctx.oBackingStorePixelRatio ||
-				ctx.backingStorePixelRatio ||
-				1;
-
+	const getPixelRatio = () => {
+		const ctx = document.createElement('canvas').getContext('2d') as any;
+		const dpr = window.devicePixelRatio || 1;
+		const bsr =
+			ctx.webkitBackingStorePixelRatio ||
+			ctx.mozBackingStorePixelRatio ||
+			ctx.msBackingStorePixelRatio ||
+			ctx.oBackingStorePixelRatio ||
+			ctx.backingStorePixelRatio ||
+			1;
 		return dpr / bsr;
-	})();
-
-	const createHiDPICanvas = function (w: any, h: any, ratio?: any) {
-		if (!ratio) {
-			ratio = PIXEL_RATIO;
-		}
-		var can = document.createElement('canvas');
-		can.width = w * ratio;
-		can.height = h * ratio;
-		can.style.width = w + 'px';
-		can.style.height = h + 'px';
-		can.getContext('2d')?.setTransform(ratio, 0, 0, ratio, 0, 0);
-		return can;
 	};
 
-	//Create canvas with the device resolution.
-	var myCanvas = createHiDPICanvas(500, 250);
+	const createHiDPICanvas = (w: any, h: any, ratio: number = 1) => {
+		if (!ratio) {
+			ratio = getPixelRatio();
+		}
+		const canvas = document.createElement('canvas');
+		canvas.width = w * ratio;
+		canvas.height = h * ratio;
+		canvas.style.width = w + 'px';
+		canvas.style.height = h + 'px';
+		canvas.getContext('2d')?.setTransform(ratio, 0, 0, ratio, 0, 0);
+		return canvas;
+	};
 
 	useEffect(() => {
 		const script = document.createElement('script');
@@ -42,13 +38,13 @@ function Game() {
 		const global: any = window;
 		global.rpgPaperMakerProjectName = projectName;
 		document.body.appendChild(script);
-
-		var myCanvas = createHiDPICanvas(window.innerWidth, window.innerHeight);
-		myCanvas.id = 'hud';
-		document.body.appendChild(myCanvas);
+		const canvas = createHiDPICanvas(window.innerWidth, window.innerHeight);
+		canvas.id = 'hud';
+		document.body.appendChild(canvas);
 
 		return () => {
 			document.body.removeChild(script);
+			document.body.removeChild(canvas);
 		};
 	}, []);
 

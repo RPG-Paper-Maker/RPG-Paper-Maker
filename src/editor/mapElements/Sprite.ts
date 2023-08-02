@@ -16,8 +16,8 @@ import { CustomGeometry } from '../core/CustomGeometry';
 import { CustomGeometryFace } from '../core/CustomGeometryFace';
 import { Position } from '../core/Position';
 import { Rectangle } from '../core/Rectangle';
-import { Project } from '../models';
 import { Base } from './Base';
+import { Project } from '../core/Project';
 
 class Sprite extends Base {
 	public static MODEL = [

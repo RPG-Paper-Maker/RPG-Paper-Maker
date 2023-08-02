@@ -9,20 +9,24 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useRef, useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { ReactNode, useRef, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Picture2D } from '../../core/Picture2D';
 import MapEditor from '../MapEditor';
 import MapEditorMenuBar from '../MapEditorMenuBar';
 import Splitter from '../Splitter';
-import { RootState } from '../../store';
 import Menu from '../Menu';
 import MenuItem from '../MenuItem';
 import { LuFolders } from 'react-icons/lu';
 import { MdOutlineWallpaper } from 'react-icons/md';
-import Tabs from '../Tabs';
+import Tab from '../Tab';
 import Previewer3D from '../Previewer3D';
 import { Utils } from '../../common/Utils';
+import Tree from '../Tree';
+import { Model } from '../../Editor';
+import { Node } from '../../core/Node';
+import { TreeMapTag } from '../../models';
+import { RootState, setCurrentMapID } from '../../store';
 
 function PanelProject() {
 	const refCanvas = useRef<HTMLCanvasElement>(null);
@@ -32,16 +36,20 @@ function PanelProject() {
 	const [picture, setPicture] = useState<HTMLImageElement | null>(null);
 	const [pictureCursor, setPictureCursor] = useState<HTMLImageElement | null>(null);
 	const [projectMenuIndex, setProjectMenuIndex] = useState(1);
-	const [currentTabIndex, setCurrentTabIndex] = useState(0);
-	const currentProjectName = useSelector((state: RootState) => state.projects.current);
+	const [mapsTabsTitles, setMapsTabsTitles] = useState<Model.Base[]>([]);
+	const [mapsTabsContents, setMapsTabsContents] = useState<ReactNode[]>([]);
+	const [mapForcedCurrentSelectedItemID, setMapForcedCurrentSelectedItemID] = useState<number | null>(null);
+	const [mapTabForcedCurrentIndex, setMapTabForcedCurrentIndex] = useState<number | null>(null);
 
-	const tabTitles = ['Plains/MAP0001'];
+	const dispatch = useDispatch();
 
-	const tabContents = [
-		<>
-			<MapEditorMenuBar />
-			<MapEditor visible={currentProjectName !== ''} />
-		</>,
+	const currentMapID = useSelector((state: RootState) => state.projects.currentMapID);
+
+	const mapNodes = [
+		new Node(new Model.TreeMapTag(-1, 'Maps'), [
+			new Node(new Model.TreeMapTag(-2, 'Introduction'), [new Node(new Model.TreeMapTag(1, 'Starting map'))]),
+			new Node(new Model.TreeMapTag(-3, 'Battle maps'), [new Node(new Model.TreeMapTag(2, 'Default battle'))]),
+		]),
 	];
 
 	const initialize = async () => {
@@ -49,6 +57,39 @@ function PanelProject() {
 		setPicture(newPicture);
 		newPicture = await Picture2D.loadImage('./assets/textures/tileset-cursor.png');
 		setPictureCursor(newPicture);
+	};
+
+	const handleSelectedMapItem = (node: Node | null, isClick: boolean) => {
+		if (node && !(node.content as TreeMapTag).isFolder()) {
+			let title = node.getPath();
+			title = title.substring(5, title.length);
+			if (!mapsTabsTitles.find((model) => model.id === node.content.id)) {
+				const newListTitles = [...mapsTabsTitles];
+				newListTitles.push(new Model.Base(node.content.id, title));
+				setMapsTabsTitles(newListTitles);
+				setMapsTabsContents([...mapsTabsContents, null]);
+				setMapTabForcedCurrentIndex(newListTitles.findIndex((model) => model.id === node.content.id));
+			} else {
+				setMapTabForcedCurrentIndex(mapsTabsTitles.findIndex((model) => model.id === node.content.id));
+			}
+
+			dispatch(setCurrentMapID(node.content.id));
+		} else {
+			setMapTabForcedCurrentIndex(-1);
+			dispatch(setCurrentMapID(-1));
+		}
+	};
+
+	const handleTabCurrentIndexChanged = (index: number, model: Model.Base, isClick: boolean) => {
+		if (isClick) {
+			if (index !== -1 && model) {
+				setMapForcedCurrentSelectedItemID(model.id);
+				dispatch(setCurrentMapID(model.id));
+			} else {
+				setMapForcedCurrentSelectedItemID(-1);
+				dispatch(setCurrentMapID(-1));
+			}
+		}
 	};
 
 	useEffect(() => {
@@ -87,7 +128,15 @@ function PanelProject() {
 					<MenuItem icon={<LuFolders />}></MenuItem>
 					<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
 				</Menu>
-				<div className={Utils.getClassName([[projectMenuIndex !== 0, 'hidden']], ['flex-one'])}>Maps</div>
+				<div className={Utils.getClassName([[projectMenuIndex !== 0, 'hidden']], ['flex', 'flex-one'])}>
+					<Tree
+						list={mapNodes}
+						defaultSelectedID={1}
+						onSelectedItem={handleSelectedMapItem}
+						forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
+						setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
+					/>
+				</div>
 				<div
 					ref={refTilesetPreviewDiv}
 					className={Utils.getClassName(
@@ -104,13 +153,23 @@ function PanelProject() {
 				</div>
 			</div>
 			<div className='flex-column flex-one map-editor-bar'>
-				<Tabs
-					titles={tabTitles}
-					contents={tabContents}
-					currentIndex={currentTabIndex}
-					setCurrentIndex={setCurrentTabIndex}
+				<Tab
+					titles={mapsTabsTitles}
+					setTitles={setMapsTabsTitles}
+					contents={mapsTabsContents}
+					setContents={setMapsTabsContents}
+					onCurrentIndexChanged={handleTabCurrentIndexChanged}
+					forcedCurrentIndex={mapTabForcedCurrentIndex}
+					setForcedCurrentIndex={setMapTabForcedCurrentIndex}
 					isClosable
 				/>
+				<div className={Utils.getClassName([[currentMapID < 0, 'hidden']], ['flex-column flex-one'])}>
+					<MapEditorMenuBar />
+					<MapEditor />
+				</div>
+				{currentMapID <= 0 && (
+					<div className='flex-one flex-center-vertically flex-center-horizontally'>Select a map...</div>
+				)}
 			</div>
 		</Splitter>
 	);

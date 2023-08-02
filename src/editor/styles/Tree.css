@@ -1,2 +1,7 @@
 .tree {
+	background-color: var(--darkest-containers-bg-color);
+	width: 100%;
+	border: 1px solid var(--lighter-bg-color);
+	border-radius: 2px;
+	margin: 5px;
 }

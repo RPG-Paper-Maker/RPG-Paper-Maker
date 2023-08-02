@@ -14,8 +14,8 @@ import { Utils } from '../common/Utils';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
 import { Rectangle } from '../core/Rectangle';
-import { Project } from '../models';
 import { Base } from './Base';
+import { Project } from '../core/Project';
 
 class Land extends Base {
 	public static readonly JSON_UP = 'up';

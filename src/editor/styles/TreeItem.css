@@ -1,0 +1,19 @@
+.tree-item {
+	display: flex;
+	gap: 5px;
+	align-items: center;
+	padding: 3px 5px 3px 5px;
+	cursor: pointer;
+}
+
+.tree-item:hover {
+	background-color: var(--hover-main-bg-color);
+}
+
+.tree-item.selected {
+	background-color: var(--primary-dark-color);
+}
+
+.tree-item.selected:hover {
+	background-color: var(--hover-primary-dark-color);
+}

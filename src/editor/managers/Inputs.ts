@@ -13,13 +13,14 @@ import * as THREE from 'three';
 import { Manager, Scene } from '../Editor';
 
 class Inputs {
-	static pointerLeftPressed: boolean = false;
-	static pointerRightPressed: boolean = false;
-	static pointerDownRepeat: boolean = false;
-	static pointerPositionFirstPress = new THREE.Vector2();
-	static pointerPosition = new THREE.Vector2();
-	static pointerMap = new THREE.Vector2();
-	static pointerMapWithoutOffset = new THREE.Vector2();
+	public static initialized: boolean = false;
+	public static pointerLeftPressed: boolean = false;
+	public static pointerRightPressed: boolean = false;
+	public static pointerDownRepeat: boolean = false;
+	public static pointerPositionFirstPress = new THREE.Vector2();
+	public static pointerPosition = new THREE.Vector2();
+	public static pointerMap = new THREE.Vector2();
+	public static pointerMapWithoutOffset = new THREE.Vector2();
 
 	constructor() {
 		throw new Error('This is a static class');
@@ -27,6 +28,7 @@ class Inputs {
 
 	static initialize(canvas: HTMLHeadingElement) {
 		this.initializeMouse(canvas);
+		this.initialized = true;
 	}
 
 	static initializeMouse(canvas: HTMLHeadingElement) {

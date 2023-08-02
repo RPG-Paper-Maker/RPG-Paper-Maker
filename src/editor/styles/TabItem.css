@@ -1,0 +1,21 @@
+.tab-item {
+	display: flex;
+	align-items: center;
+	padding: 10px;
+	gap: 5px;
+	font-size: 12px;
+	background-color: var(--main-bg-color);
+	border-radius: 5px 5px 0px 0px;
+	background-color: var(--darker-bg-color);
+	color: var(--grey-color);
+	cursor: pointer;
+}
+
+.tab-item:hover {
+	color: var(--light-bg-color);
+}
+
+.tab-item.selected {
+	background-color: var(--main-bg-color);
+	color: white;
+}

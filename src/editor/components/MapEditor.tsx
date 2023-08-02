@@ -9,32 +9,44 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Manager, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import '../styles/MapEditor.css';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
-type Props = {
-	visible: boolean;
-};
+function MapEditor() {
+	const [isLooping, setIsLooping] = useState(false);
 
-function MapEditor({ visible }: Props) {
+	const currentMapID = useSelector((state: RootState) => state.projects.currentMapID);
+
 	const refCanvas = useRef<HTMLHeadingElement>(null);
 
-	Manager.GL.mapEditorContext.visible = visible;
+	const clearMap = () => {
+		if (Scene.Map.current) {
+			Scene.Map.current.close();
+			Scene.Map.current = null;
+		}
+	};
 
-	const initialize = async () => {
-		if (refCanvas.current) {
-			Inputs.initialize(refCanvas.current);
-			Manager.GL.mapEditorContext.initialize('canvas-map-editor');
-			resize();
-			window.addEventListener('resize', resize);
+	const initializeMap = async () => {
+		clearMap();
+		if (currentMapID > 0) {
+			Scene.Map.current = new Scene.Map(currentMapID);
+			await Scene.Map.current.load();
+			if (!isLooping) {
+				loop();
+			}
 		}
 	};
 
 	const loop = () => {
 		const map = Scene.Map.current;
-		if (Manager.GL.mapEditorContext.visible && map) {
+		if (map) {
+			if (!isLooping) {
+				setIsLooping(true);
+			}
 			// Update if everything is loaded
 			if (!map.loading && (Manager.Inputs.pointerLeftPressed || Manager.Inputs.pointerRightPressed)) {
 				map.onPointerDownRepeat(Inputs.pointerPosition.x, Inputs.pointerPosition.y);
@@ -48,9 +60,10 @@ function MapEditor({ visible }: Props) {
 			if (!map.loading) {
 				map.draw3D(Manager.GL.mapEditorContext);
 			}
+			requestAnimationFrame(loop);
+		} else {
+			setIsLooping(false);
 		}
-
-		requestAnimationFrame(loop);
 	};
 
 	const resize = () => {
@@ -61,10 +74,23 @@ function MapEditor({ visible }: Props) {
 	};
 
 	useEffect(() => {
-		loop();
-		initialize().catch(console.error);
+		if (refCanvas.current) {
+			Inputs.initialize(refCanvas.current);
+			Manager.GL.mapEditorContext.initialize('canvas-map-editor');
+			resize();
+			window.addEventListener('resize', resize);
+			return () => {
+				window.removeEventListener('resize', resize);
+				clearMap();
+			};
+		}
 		// eslint-disable-next-line
 	}, []);
+
+	useEffect(() => {
+		initializeMap().catch(console.error);
+		// eslint-disable-next-line
+	}, [currentMapID]);
 
 	// Resize after rendering
 	useEffect(() => {
@@ -72,13 +98,9 @@ function MapEditor({ visible }: Props) {
 	});
 
 	return (
-		<>
-			{visible && (
-				<div className='flex-one relative'>
-					<div id='canvas-map-editor' className='fill-space' ref={refCanvas}></div>
-				</div>
-			)}
-		</>
+		<div className='flex-one relative'>
+			<div id='canvas-map-editor' className='fill-space' ref={refCanvas}></div>
+		</div>
 	);
 }
 

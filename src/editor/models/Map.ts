@@ -65,7 +65,7 @@ class Map extends Base {
 			Paths.join(Paths.ROOT_DIRECTORY_LOCAL, Paths.DEFAULT, globalPortion.getFileName()),
 			Paths.join(Paths.join(folderMap, globalPortion.getFileName()))
 		);
-		//await mapPortion.save(Paths.join(folderMap, globalPortion.getFileName()));
+		// await mapPortion.save(Paths.join(folderMap, globalPortion.getFileName()));
 	}
 
 	static generateMapName(id: number): string {

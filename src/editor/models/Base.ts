@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import react, { ReactNode } from 'react';
 import { ModelType } from '../common/Enum';
 import { Utils } from '../common/Utils';
 import { Serializable } from '../core/Serializable';
@@ -22,12 +23,10 @@ class Base extends Serializable {
 	public id: number = Base.DEFAULT_ID;
 	public name: string = Base.DEFAULT_NAME;
 
-	constructor(json?: Record<string, any>, ...args: any) {
+	constructor(id: number = Base.DEFAULT_ID, name: string = Base.DEFAULT_NAME) {
 		super();
-		this.setup(args);
-		if (json) {
-			this.read(json);
-		}
+		this.id = id;
+		this.name = name;
 	}
 
 	static getModel(kind: ModelType): any {
@@ -40,12 +39,20 @@ class Base extends Serializable {
 		}
 	}
 
-	setup(...args: any) {
-		// Setup here
+	getIcon(): ReactNode {
+		return null;
+	}
+
+	toStringNameID() {
+		return `${this.id < 0 ? '' : `${Utils.formatNumber(this.id, 4)}: `}${this.name}`;
+	}
+
+	toString(): string {
+		return this.toStringNameID();
 	}
 
 	toStrings(): string[] {
-		return ['>'];
+		return [this.toStringNameID()];
 	}
 
 	createCopy(): Base {

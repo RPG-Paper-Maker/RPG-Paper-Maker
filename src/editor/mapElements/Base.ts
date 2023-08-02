@@ -13,8 +13,8 @@ import * as THREE from 'three';
 import { ElementMapKind } from '../common/Enum';
 import { Utils } from '../common/Utils';
 import { Position } from '../core/Position';
-import { Project } from '../models';
 import { CustomGeometry } from '../core/CustomGeometry';
+import { Project } from '../core/Project';
 
 class Base {
 	public static readonly JSON_X_OFFSET = 'xOff';

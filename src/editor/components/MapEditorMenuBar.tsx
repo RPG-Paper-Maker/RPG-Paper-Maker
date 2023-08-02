@@ -44,7 +44,7 @@ function MapEditorMenuBar() {
 			<div className='flex-one'>
 				<Menu horizontal isActivable activeIndex={selectionIndex} setActiveIndex={setSelectionIndex}>
 					<MenuSub active icon={<FloorIcon />}>
-						<MenuItem icon={<FloorIcon />}>Floor</MenuItem>
+						<MenuItem icon={<FloorIcon />}>Floors</MenuItem>
 						<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleFloor} disabled>
 							Autotiles
 						</MenuItem>
