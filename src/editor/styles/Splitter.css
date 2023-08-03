@@ -1,13 +1,21 @@
 .splitter {
-    background-color: var(--main-bg-color);
+	background-color: var(--main-bg-color);
 }
 
-.splitter-button-vertical {
-    height: 4px;
-    border: 1px solid var(--darkest-bg-color);
+.splitter-button.vertical {
+	height: 4px;
+	border: 1px solid var(--darkest-bg-color);
 }
 
-.splitter-button-horizontal {
-    width: 4px;
-    border: 1px solid var(--darkest-bg-color);
+.splitter-button.horizontal {
+	width: 4px;
+	border: 1px solid var(--darkest-bg-color);
+}
+
+.splitter-button.vertical:hover {
+	cursor: row-resize;
+}
+
+.splitter-button.horizontal:hover {
+	cursor: col-resize;
 }

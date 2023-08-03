@@ -14,6 +14,7 @@ const TriggersSlice = createSlice({
 			openProject: '',
 			play: false,
 		},
+		splitting: false,
 	},
 	reducers: {
 		triggerNewProject(state, action: PayloadAction<boolean>) {
@@ -28,8 +29,12 @@ const TriggersSlice = createSlice({
 		triggerPlay(state, action: PayloadAction<boolean>) {
 			state.mainBar.play = action.payload;
 		},
+		triggerSplitting(state) {
+			state.splitting = !state.splitting;
+		},
 	},
 });
 
-export const { triggerNewProject, triggerImportProject, triggerOpenProject, triggerPlay } = TriggersSlice.actions;
+export const { triggerNewProject, triggerImportProject, triggerOpenProject, triggerPlay, triggerSplitting } =
+	TriggersSlice.actions;
 export const TriggersReducer = TriggersSlice.reducer;

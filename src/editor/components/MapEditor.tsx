@@ -20,6 +20,7 @@ function MapEditor() {
 	const [isLooping, setIsLooping] = useState(false);
 
 	const currentMapID = useSelector((state: RootState) => state.projects.currentMapID);
+	useSelector((state: RootState) => state.triggers.splitting);
 
 	const refCanvas = useRef<HTMLHeadingElement>(null);
 
@@ -74,8 +75,9 @@ function MapEditor() {
 	};
 
 	useEffect(() => {
-		if (refCanvas.current) {
-			Inputs.initialize(refCanvas.current);
+		const canvas = refCanvas.current;
+		if (canvas) {
+			Inputs.initialize(canvas);
 			Manager.GL.mapEditorContext.initialize('canvas-map-editor');
 			resize();
 			window.addEventListener('resize', resize);

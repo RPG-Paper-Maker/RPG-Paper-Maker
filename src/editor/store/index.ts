@@ -10,7 +10,13 @@ import {
 	removeProject,
 	clearProjects,
 } from './slices/ProjectsReducer';
-import { triggerNewProject, triggerImportProject, triggerOpenProject, triggerPlay } from './slices/TriggersReducer';
+import {
+	triggerNewProject,
+	triggerImportProject,
+	triggerOpenProject,
+	triggerPlay,
+	triggerSplitting,
+} from './slices/TriggersReducer';
 
 const store = configureStore({
 	reducer: {
@@ -32,5 +38,6 @@ export {
 	triggerImportProject,
 	triggerOpenProject,
 	triggerPlay,
+	triggerSplitting,
 };
 export type RootState = ReturnType<typeof store.getState>;

@@ -11,13 +11,18 @@
 
 import React, { useRef, useEffect } from 'react';
 import { Manager, Scene } from '../Editor';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 type Props = {
 	id: string;
+	onHeightUpdated: (height: number) => void;
 };
 
-function Previewer3D({ id }: Props) {
+function Previewer3D({ id, onHeightUpdated }: Props) {
 	const refCanvas = useRef<HTMLDivElement>(null);
+
+	useSelector((state: RootState) => state.triggers.splitting);
 
 	const initialize = async () => {
 		Manager.GL.extraContext.initialize(id, '#211d2b');
@@ -45,7 +50,11 @@ function Previewer3D({ id }: Props) {
 	};
 
 	const resize = () => {
-		Manager.GL.extraContext.resize(true);
+		resizeForced(-1, -1);
+	};
+
+	const resizeForced = (width = -1, height = -1) => {
+		Manager.GL.extraContext.resize(true, width, height);
 		const scene = Scene.Previewer3D.scenes[id];
 		if (scene) {
 			scene.camera.resizeGL(Manager.GL.extraContext);
@@ -58,7 +67,8 @@ function Previewer3D({ id }: Props) {
 		if (refCanvas.current) {
 			const width = refCanvas.current.getBoundingClientRect().width;
 			refCanvas.current.style.height = `${width}px`;
-			resize();
+			resizeForced(width, width);
+			onHeightUpdated(width);
 		}
 	});
 

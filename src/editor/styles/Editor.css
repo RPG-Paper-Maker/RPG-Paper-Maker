@@ -173,6 +173,14 @@ code {
 	cursor: nwse-resize !important;
 }
 
+.col-resize {
+	cursor: col-resize !important;
+}
+
+.row-resize {
+	cursor: row-resize !important;
+}
+
 .absolute {
 	position: absolute;
 }

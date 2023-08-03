@@ -173,10 +173,15 @@ class GL {
 		this.parent.appendChild(this.renderer.domElement);
 	}
 
-	resize(scroll: boolean = false) {
+	resize(scroll: boolean = false, forcedWidth = -1, forcedHeight = -1) {
 		if (this.renderer && this.parent) {
-			this.canvasWidth = this.parent.getBoundingClientRect().width;
-			this.canvasHeight = scroll ? this.parent.scrollHeight : this.parent.getBoundingClientRect().height;
+			this.canvasWidth = forcedWidth === -1 ? this.parent.getBoundingClientRect().width : forcedWidth;
+			this.canvasHeight =
+				forcedHeight === -1
+					? scroll
+						? this.parent.scrollHeight
+						: this.parent.getBoundingClientRect().height
+					: forcedHeight;
 			this.renderer.setSize(this.canvasWidth, this.canvasHeight, true);
 		}
 	}

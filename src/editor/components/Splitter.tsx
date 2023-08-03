@@ -9,48 +9,85 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import '../styles/Splitter.css';
+import { useDispatch } from 'react-redux';
+import { triggerSplitting } from '../store';
 
 type Props = {
 	children: [JSX.Element, JSX.Element];
 	vertical: boolean;
-	size?: number;
+	defaultLeftSize?: number;
 	className?: string;
 };
 
-function Splitter({ children, vertical, size, className }: Props) {
-	const ref = useRef<HTMLHeadingElement>(null);
+function Splitter({ children, vertical, defaultLeftSize, className }: Props) {
+	const [isResizing, setIsResizing] = useState(false);
+	const refLeft = useRef<HTMLDivElement>(null);
 
-	const getStyle = () => {
-		if (size) {
-			const pxSize = `${size}px`;
-			if (vertical) {
-				return {
-					minHeight: pxSize,
-					maxHeight: pxSize,
-					height: pxSize,
-				};
-			} else {
-				return {
-					minWidth: pxSize,
-					maxWidth: pxSize,
-					width: pxSize,
-				};
+	const dispatch = useDispatch();
+
+	const handleMouseDownSplitter = () => {
+		setIsResizing(true);
+	};
+
+	const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		if (isResizing) {
+			const leftDiv = refLeft.current;
+			if (leftDiv) {
+				if (vertical) {
+					const pxSize = `${e.clientY}px`;
+					leftDiv.style.minHeight = pxSize;
+					leftDiv.style.maxHeight = pxSize;
+					leftDiv.style.height = pxSize;
+				} else {
+					const pxSize = `${e.clientX}px`;
+					leftDiv.style.minWidth = pxSize;
+					leftDiv.style.maxWidth = pxSize;
+					leftDiv.style.width = pxSize;
+				}
 			}
+			dispatch(triggerSplitting());
 		}
 	};
 
 	useEffect(() => {
-		// TODO
+		const handleMouseUp = () => {
+			setIsResizing(false);
+		};
+
+		const leftDiv = refLeft.current;
+		if (leftDiv && defaultLeftSize) {
+			const pxSize = `${defaultLeftSize}px`;
+			if (vertical) {
+				leftDiv.style.minHeight = pxSize;
+				leftDiv.style.maxHeight = pxSize;
+				leftDiv.style.height = pxSize;
+			} else {
+				leftDiv.style.minWidth = pxSize;
+				leftDiv.style.maxWidth = pxSize;
+				leftDiv.style.width = pxSize;
+			}
+		}
+		document.body.addEventListener('mouseup', handleMouseUp);
+		return () => document.body.removeEventListener('mouseup', handleMouseUp);
+		// eslint-disable-next-line
 	}, []);
 
 	return (
-		<div className={`splitter ${vertical ? 'flex-column' : 'flex'} ${className}`}>
-			<div className='flex' ref={ref} style={getStyle()}>
+		<div
+			className={`splitter ${vertical ? 'flex-column' : 'flex'} ${className} ${
+				isResizing ? (vertical ? 'col-resize' : 'row-resize') : ''
+			}`}
+			onMouseMove={handleMouseMove}
+		>
+			<div className='flex' ref={refLeft}>
 				{children[0]}
 			</div>
-			<div className={vertical ? 'splitter-button-vertical' : 'splitter-button-horizontal'}></div>
+			<div
+				className={`splitter-button ${vertical ? 'vertical' : 'horizontal'}`}
+				onMouseDown={handleMouseDownSplitter}
+			></div>
 			<div className='flex flex-one'>{children[1]}</div>
 		</div>
 	);
