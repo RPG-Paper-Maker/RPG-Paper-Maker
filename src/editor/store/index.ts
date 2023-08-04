@@ -6,6 +6,7 @@ import { setCurrentMapID, setCurrentTilesetTexture } from './slices/MapEditorRed
 import {
 	setCurrentProjectName,
 	setLoading,
+	setOpenLoading,
 	setProjects,
 	addProject,
 	removeProject,
@@ -37,6 +38,7 @@ export {
 	setCurrentTilesetTexture,
 	setCurrentProjectName,
 	setLoading,
+	setOpenLoading,
 	setProjects,
 	addProject,
 	removeProject,

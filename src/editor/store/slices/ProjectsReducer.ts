@@ -21,7 +21,7 @@ const ProjectsSlice = createSlice({
 			state.loading = action.payload;
 		},
 		setOpenLoading(state, action: PayloadAction<boolean>) {
-			state.loading = action.payload;
+			state.openLoading = action.payload;
 		},
 		setProjects(state, action: PayloadAction<ProjectState[]>) {
 			state.list = action.payload;
@@ -38,6 +38,13 @@ const ProjectsSlice = createSlice({
 	},
 });
 
-export const { setCurrentProjectName, setLoading, setProjects, addProject, removeProject, clearProjects } =
-	ProjectsSlice.actions;
+export const {
+	setCurrentProjectName,
+	setLoading,
+	setOpenLoading,
+	setProjects,
+	addProject,
+	removeProject,
+	clearProjects,
+} = ProjectsSlice.actions;
 export const ProjectsReducer = ProjectsSlice.reducer;

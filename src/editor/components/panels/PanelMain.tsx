@@ -21,7 +21,7 @@ function PanelMain() {
 	const loading = useSelector((state: RootState) => state.projects.loading);
 
 	return (
-		<div className='flex-one flex'>
+		<div className='flex-one flex relative'>
 			<Loader large isLoading={loading} />
 			{currentProjectName.length === 0 ? <PanelNoProject /> : <PanelProject />}
 		</div>

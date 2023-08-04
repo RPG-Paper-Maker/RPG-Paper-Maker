@@ -26,6 +26,7 @@ import { Node } from '../../core/Node';
 import { TreeMapTag } from '../../models';
 import { RootState, setCurrentMapID } from '../../store';
 import PanelTextures from './PanelTextures';
+import Loader from '../Loader';
 
 function PanelProject() {
 	const [projectMenuIndex, setProjectMenuIndex] = useState(1);
@@ -37,6 +38,7 @@ function PanelProject() {
 	const dispatch = useDispatch();
 
 	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentID);
+	const openLoading = useSelector((state: RootState) => state.projects.openLoading);
 
 	const mapNodes = [
 		new Node(new Model.TreeMapTag(-1, 'Maps'), [
@@ -79,43 +81,46 @@ function PanelProject() {
 	};
 
 	return (
-		<Splitter vertical={false} defaultLeftSize={266} className='flex flex-one'>
-			<div className='bg-darker flex-column flex-one scrollable'>
-				<Menu horizontal isActivable activeIndex={projectMenuIndex} setActiveIndex={setProjectMenuIndex}>
-					<MenuItem icon={<LuFolders />}></MenuItem>
-					<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
-				</Menu>
-				<div className={Utils.getClassName([[projectMenuIndex !== 0, 'hidden']], ['flex', 'flex-one'])}>
-					<Tree
-						list={mapNodes}
-						defaultSelectedID={1}
-						onSelectedItem={handleSelectedMapItem}
-						forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
-						setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
+		<>
+			<Loader large isLoading={openLoading} isHidding={openLoading} />
+			<Splitter vertical={false} defaultLeftSize={266} className='flex flex-one'>
+				<div className='bg-darker flex-column flex-one scrollable'>
+					<Menu horizontal isActivable activeIndex={projectMenuIndex} setActiveIndex={setProjectMenuIndex}>
+						<MenuItem icon={<LuFolders />}></MenuItem>
+						<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
+					</Menu>
+					<div className={Utils.getClassName([[projectMenuIndex !== 0, 'hidden']], ['flex', 'flex-one'])}>
+						<Tree
+							list={mapNodes}
+							defaultSelectedID={1}
+							onSelectedItem={handleSelectedMapItem}
+							forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
+							setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
+						/>
+					</div>
+					<PanelTextures visible={projectMenuIndex === 1} />
+				</div>
+				<div className='flex-column flex-one map-editor-bar'>
+					<Tab
+						titles={mapsTabsTitles}
+						setTitles={setMapsTabsTitles}
+						contents={mapsTabsContents}
+						setContents={setMapsTabsContents}
+						onCurrentIndexChanged={handleTabCurrentIndexChanged}
+						forcedCurrentIndex={mapTabForcedCurrentIndex}
+						setForcedCurrentIndex={setMapTabForcedCurrentIndex}
+						isClosable
 					/>
+					<div className={Utils.getClassName([[currentMapID < 0, 'hidden']], ['flex-column flex-one'])}>
+						<MapEditorMenuBar />
+						<MapEditor />
+					</div>
+					{currentMapID <= 0 && (
+						<div className='flex-one flex-center-vertically flex-center-horizontally'>Select a map...</div>
+					)}
 				</div>
-				<PanelTextures visible={projectMenuIndex === 1} />
-			</div>
-			<div className='flex-column flex-one map-editor-bar'>
-				<Tab
-					titles={mapsTabsTitles}
-					setTitles={setMapsTabsTitles}
-					contents={mapsTabsContents}
-					setContents={setMapsTabsContents}
-					onCurrentIndexChanged={handleTabCurrentIndexChanged}
-					forcedCurrentIndex={mapTabForcedCurrentIndex}
-					setForcedCurrentIndex={setMapTabForcedCurrentIndex}
-					isClosable
-				/>
-				<div className={Utils.getClassName([[currentMapID < 0, 'hidden']], ['flex-column flex-one'])}>
-					<MapEditorMenuBar />
-					<MapEditor />
-				</div>
-				{currentMapID <= 0 && (
-					<div className='flex-one flex-center-vertically flex-center-horizontally'>Select a map...</div>
-				)}
-			</div>
-		</Splitter>
+			</Splitter>
+		</>
 	);
 }
 

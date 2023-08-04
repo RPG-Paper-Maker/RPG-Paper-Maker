@@ -14,17 +14,21 @@ import '../styles/Loader.css';
 
 type Props = {
 	isLoading: boolean;
+	isHidding?: boolean;
 	large?: boolean;
 };
 
-function Loader({ isLoading, large = false }: Props) {
+function Loader({ isLoading, isHidding = false, large = false }: Props) {
 	return (
 		<>
 			{isLoading && (
-				<div className={Utils.getClassName([[large, 'loader-large']], ['loader'])}>
-					<div className='loader-spinner'></div>
-					{large && <div className='loader-text'>Loading...</div>}
-				</div>
+				<>
+					<div className={Utils.getClassName([[large, 'loader-large']], ['loader'])}>
+						<div className='loader-spinner'></div>
+						{large && <div className='loader-text'>Loading...</div>}
+					</div>
+					{isHidding && <div className={'loader-hidder'} />}
+				</>
 			)}
 		</>
 	);

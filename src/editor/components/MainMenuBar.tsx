@@ -17,6 +17,7 @@ import {
 	setCurrentMapID,
 	setCurrentProjectName,
 	setLoading,
+	setOpenLoading,
 	triggerImportProject,
 	triggerNewProject,
 	triggerOpenProject,
@@ -83,12 +84,12 @@ function MainMenuBar() {
 	};
 
 	const handleOpenProject = async (name: string) => {
-		dispatch(setLoading(true));
+		dispatch(setOpenLoading(true));
 		dispatch(setCurrentProjectName(name));
 		Project.current = new Project(name);
 		await Project.current.load();
 		dispatch(setCurrentMapID(1));
-		dispatch(setLoading(false));
+		dispatch(setOpenLoading(false));
 	};
 
 	const handleSave = async () => {

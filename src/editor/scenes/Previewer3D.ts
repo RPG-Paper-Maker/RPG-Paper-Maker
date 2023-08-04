@@ -24,6 +24,7 @@ class Previewer3D extends Base {
 	public material!: THREE.MeshPhongMaterial;
 	public sunLight!: THREE.DirectionalLight;
 	public mesh: THREE.Mesh | null = null;
+	public currentRotation: number = 0;
 
 	constructor(id: string) {
 		super();
@@ -111,7 +112,8 @@ class Previewer3D extends Base {
 		super.update(GL);
 
 		if (this.mesh) {
-			this.mesh.rotation.y += 0.01;
+			this.currentRotation += 0.01;
+			this.mesh.rotation.y = this.currentRotation;
 		}
 	}
 
