@@ -61,12 +61,15 @@ class Previewer3D extends Base {
 		this.loading = false;
 	}
 
-	loadFloor(GL: Manager.GL) {
+	loadFloor(GL: Manager.GL, texture: Rectangle) {
 		const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
-		const floor = MapElement.Floor.create(new Rectangle(0, 0, 1, 1));
+		const floor = MapElement.Floor.create(texture);
 		const geometry = new CustomGeometry();
 		floor.updateGeometry(geometry, new Position(), width, height, 0);
 		geometry.updateAttributes();
+		if (this.mesh !== null) {
+			this.scene.remove(this.mesh);
+		}
 		this.mesh = new THREE.Mesh(geometry, this.material);
 		this.scene.add(this.mesh);
 		this.mesh.geometry.center();

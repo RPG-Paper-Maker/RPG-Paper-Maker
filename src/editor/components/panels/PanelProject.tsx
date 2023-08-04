@@ -36,7 +36,7 @@ function PanelProject() {
 
 	const dispatch = useDispatch();
 
-	const currentMapID = useSelector((state: RootState) => state.projects.currentMapID);
+	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentID);
 
 	const mapNodes = [
 		new Node(new Model.TreeMapTag(-1, 'Maps'), [

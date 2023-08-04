@@ -157,9 +157,6 @@ class GL {
 	}
 
 	initialize(id: string, clearColor: string = '#8cc3ed', colorAlpha: number = 1) {
-		if (this.renderer) {
-			return;
-		}
 		const parent = document.getElementById(id);
 		if (parent === null) {
 			throw new Error('No id ' + id + ' found in document for GL renderer.');

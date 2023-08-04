@@ -59,6 +59,10 @@ class Rectangle {
 		return x >= this.x && x <= this.x + this.width && y >= this.y && y <= this.y + this.height;
 	}
 
+	equals(rect: Rectangle) {
+		return this.x === rect.x && this.y === rect.y && this.width === rect.width && this.height === rect.height;
+	}
+
 	read(json: any) {
 		this.x = json[0];
 		this.y = json[1];

@@ -19,7 +19,7 @@ import { RootState } from '../store';
 function MapEditor() {
 	const [isLooping, setIsLooping] = useState(false);
 
-	const currentMapID = useSelector((state: RootState) => state.projects.currentMapID);
+	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentID);
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const refCanvas = useRef<HTMLHeadingElement>(null);

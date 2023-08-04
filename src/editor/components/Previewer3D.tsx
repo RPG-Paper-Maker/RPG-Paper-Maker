@@ -13,6 +13,7 @@ import React, { useRef, useEffect } from 'react';
 import { Manager, Scene } from '../Editor';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+import { Rectangle } from '../core/Rectangle';
 
 type Props = {
 	id: string;
@@ -22,6 +23,7 @@ type Props = {
 function Previewer3D({ id, onHeightUpdated }: Props) {
 	const refCanvas = useRef<HTMLDivElement>(null);
 
+	const currentTilesetTexture = useSelector((state: RootState) => state.mapEditor.currentTilesetTexture);
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const initialize = async () => {
@@ -33,9 +35,16 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		scene.canvas = Manager.GL.extraContext.parent;
 		Scene.Previewer3D.scenes[id] = scene;
 		await scene.load();
-		scene.loadFloor(Manager.GL.extraContext);
+		updateFloor(currentTilesetTexture);
 		resize();
 		loop();
+	};
+
+	const updateFloor = (texture: Rectangle) => {
+		const scene = Scene.Previewer3D.scenes[id];
+		if (scene) {
+			scene.loadFloor(Manager.GL.extraContext, texture);
+		}
 	};
 
 	const loop = () => {
@@ -71,6 +80,11 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 			onHeightUpdated(width);
 		}
 	});
+
+	useEffect(() => {
+		updateFloor(currentTilesetTexture);
+		// eslint-disable-next-line
+	}, [currentTilesetTexture]);
 
 	useEffect(() => {
 		initialize().catch(console.error);

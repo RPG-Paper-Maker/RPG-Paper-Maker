@@ -10,34 +10,23 @@
 */
 
 import React, { useRef, useState, useEffect } from 'react';
-import { Picture2D } from '../../core/Picture2D';
 import Previewer3D from '../Previewer3D';
 import { Utils } from '../../common/Utils';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import TilesetSelector from '../TilesetSelector';
 
 type Props = {
 	visible: boolean;
 };
 
 function PanelTextures({ visible }: Props) {
-	const refCanvas = useRef<HTMLCanvasElement>(null);
 	const refTilesetPreviewDiv = useRef<HTMLDivElement>(null);
 	const refTileset = useRef<HTMLDivElement>(null);
 	const refPreviewer = useRef<HTMLDivElement>(null);
-	const [picture, setPicture] = useState<HTMLImageElement | null>(null);
-	const [pictureCursor, setPictureCursor] = useState<HTMLImageElement | null>(null);
 	const [height, setHeight] = useState(0);
 
 	useSelector((state: RootState) => state.triggers.splitting);
-
-	const initialize = async () => {
-		let newPicture = await Picture2D.loadImage('./assets/textures/plains-woods.png');
-		setPicture(newPicture);
-		newPicture = await Picture2D.loadImage('./assets/textures/tileset-cursor.png');
-		setPictureCursor(newPicture);
-		updateHeight();
-	};
 
 	const updateHeight = () => {
 		if (refTilesetPreviewDiv.current) {
@@ -53,22 +42,7 @@ function PanelTextures({ visible }: Props) {
 	};
 
 	useEffect(() => {
-		if (refCanvas.current && picture && pictureCursor) {
-			const ctx = refCanvas.current.getContext('2d');
-			if (ctx) {
-				refCanvas.current!.width = picture.width * 2;
-				refCanvas.current!.height = picture.height * 2;
-				ctx.clearRect(0, 0, refCanvas.current.offsetWidth, refCanvas.current.offsetHeight);
-				ctx.lineWidth = 1;
-				ctx.imageSmoothingEnabled = false;
-				ctx.drawImage(picture, 0, 0, picture.width * 2, picture.height * 2);
-				ctx.drawImage(pictureCursor, 0, 0, pictureCursor.width, pictureCursor.height);
-			}
-		}
-	});
-
-	useEffect(() => {
-		initialize().catch(console.error);
+		updateHeight();
 		window.addEventListener('resize', updateHeight);
 		return () => window.removeEventListener('resize', updateHeight);
 		// eslint-disable-next-line
@@ -80,7 +54,7 @@ function PanelTextures({ visible }: Props) {
 			className={Utils.getClassName([[!visible, 'hidden']], ['flex-column', 'flex-one', 'gap-small'])}
 		>
 			<div ref={refTileset} className='scrollable'>
-				<canvas ref={refCanvas}></canvas>
+				<TilesetSelector />
 			</div>
 			<div ref={refPreviewer} className='flex'>
 				<Previewer3D id='texture-previewer' onHeightUpdated={handlePreviewer3DHeightUpdated} />

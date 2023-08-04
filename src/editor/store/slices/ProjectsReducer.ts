@@ -5,22 +5,22 @@ export interface ProjectState {
 	location: string;
 }
 
-const projectsSlice = createSlice({
+const ProjectsSlice = createSlice({
 	name: 'projects',
 	initialState: {
 		current: '',
-		currentMapID: -1,
 		loading: false,
+		openLoading: false,
 		list: [] as ProjectState[],
 	},
 	reducers: {
 		setCurrentProjectName(state, action: PayloadAction<string>) {
 			state.current = action.payload;
 		},
-		setCurrentMapID(state, action: PayloadAction<number>) {
-			state.currentMapID = action.payload;
-		},
 		setLoading(state, action: PayloadAction<boolean>) {
+			state.loading = action.payload;
+		},
+		setOpenLoading(state, action: PayloadAction<boolean>) {
 			state.loading = action.payload;
 		},
 		setProjects(state, action: PayloadAction<ProjectState[]>) {
@@ -38,13 +38,6 @@ const projectsSlice = createSlice({
 	},
 });
 
-export const {
-	setCurrentProjectName,
-	setCurrentMapID,
-	setLoading,
-	setProjects,
-	addProject,
-	removeProject,
-	clearProjects,
-} = projectsSlice.actions;
-export const ProjectsReducer = projectsSlice.reducer;
+export const { setCurrentProjectName, setLoading, setProjects, addProject, removeProject, clearProjects } =
+	ProjectsSlice.actions;
+export const ProjectsReducer = ProjectsSlice.reducer;

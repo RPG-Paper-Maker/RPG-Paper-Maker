@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { MapEditorReducer } from './slices/MapEditorReducer';
 import { ProjectsReducer } from './slices/ProjectsReducer';
 import { TriggersReducer } from './slices/TriggersReducer';
+import { setCurrentMapID, setCurrentTilesetTexture } from './slices/MapEditorReducer';
 import {
 	setCurrentProjectName,
-	setCurrentMapID,
 	setLoading,
 	setProjects,
 	addProject,
@@ -20,15 +21,21 @@ import {
 
 const store = configureStore({
 	reducer: {
+		mapEditor: MapEditorReducer,
 		projects: ProjectsReducer,
 		triggers: TriggersReducer,
 	},
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({
+			serializableCheck: false,
+		}),
 });
 
 export {
 	store,
-	setCurrentProjectName,
 	setCurrentMapID,
+	setCurrentTilesetTexture,
+	setCurrentProjectName,
 	setLoading,
 	setProjects,
 	addProject,
