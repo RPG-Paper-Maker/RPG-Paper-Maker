@@ -12,6 +12,7 @@
 import * as THREE from 'three';
 import { Manager, Scene } from '../Editor';
 import { Project } from './Project';
+import { Inputs } from '../managers';
 
 class Camera {
 	public static MIN_ZOOM = 20;
@@ -93,6 +94,17 @@ class Camera {
 				Scene.Map.current.sunLight.shadow.camera.bottom = -d;
 				Scene.Map.current.sunLight.shadow.camera.updateProjectionMatrix();
 			}
+		}
+	}
+
+	onMouseWheelUpdate() {
+		this.horizontalAngle += (Inputs.mouseX - Inputs.previousMouseX) / 2;
+		this.verticalAngle -= (Inputs.mouseY - Inputs.previousMouseY) / 2;
+		if (this.verticalAngle < 1) {
+			this.verticalAngle = 1;
+		}
+		if (this.verticalAngle > 179) {
+			this.verticalAngle = 179;
 		}
 	}
 

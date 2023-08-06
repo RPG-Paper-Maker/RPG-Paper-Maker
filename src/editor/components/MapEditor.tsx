@@ -48,12 +48,8 @@ function MapEditor() {
 			if (!isLooping) {
 				setIsLooping(true);
 			}
-			// Update if everything is loaded
-			if (!map.loading && (Manager.Inputs.pointerLeftPressed || Manager.Inputs.pointerRightPressed)) {
-				map.onPointerDownRepeat(Inputs.pointerPosition.x, Inputs.pointerPosition.y);
-				if (Inputs.pointerDownRepeat) {
-					map.onCanvasOnlyPointerDownRepeat(Inputs.pointerPosition.x, Inputs.pointerPosition.y);
-				}
+			if (!map.loading && (Manager.Inputs.isMouseLeftPressed || Manager.Inputs.isMouseRightPressed)) {
+				map.onMouseDownRepeat(Inputs.mouseX, Inputs.mouseY);
 			}
 			if (!map.loading) {
 				map.update(Manager.GL.mapEditorContext);
@@ -100,7 +96,7 @@ function MapEditor() {
 	});
 
 	return (
-		<div className='flex-one relative'>
+		<div className='map-editor'>
 			<div id='canvas-map-editor' className='fill-space' ref={refCanvas}></div>
 		</div>
 	);

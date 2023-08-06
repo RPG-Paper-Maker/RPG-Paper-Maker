@@ -146,26 +146,22 @@ class Map extends Base {
 		this.mapPortion.update();
 	}
 
-	onPointerDownRepeat(x: number, y: number) {
-		if (Inputs.pointerLeftPressed) {
-			this.remove();
-			this.add();
+	onMouseDown(x: number, y: number) {
+		console.log(x, y);
+	}
+
+	onMouseDownRepeat(x: number, y: number) {
+		this.remove();
+		this.add();
+	}
+
+	onMouseMove(x: number, y: number) {
+		if (Inputs.isMouseWheelPressed) {
+			this.camera.onMouseWheelUpdate();
 		}
 	}
 
-	onCanvasOnlyPointerDown(x: number, y: number) {
-		// TODO
-	}
-
-	onCanvasOnlyPointerDownRepeat(x: number, y: number) {
-		// TODO
-	}
-
-	onPointerMove(x: number, y: number) {
-		// TODO
-	}
-
-	onPointerUp(x: number, y: number) {
+	onMouseUp(x: number, y: number) {
 		// TODO
 	}
 

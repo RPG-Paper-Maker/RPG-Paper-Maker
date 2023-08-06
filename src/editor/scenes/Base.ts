@@ -27,19 +27,19 @@ class Base {
 		this.camera.update();
 	}
 
-	onPointerDown(x: number, y: number) {
+	onMouseDown(x: number, y: number) {
 		// TODO
 	}
 
-	onPointerDownRepeat(x: number, y: number) {
+	onMouseDownRepeat(x: number, y: number) {
 		// TODO
 	}
 
-	onPointerMove(x: number, y: number) {
+	onMouseMove(x: number, y: number) {
 		// TODO
 	}
 
-	onPointerUp(x: number, y: number) {
+	onMouseUp(x: number, y: number) {
 		// TODO
 	}
 

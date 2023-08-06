@@ -109,7 +109,7 @@ function MenuSub({
 				let top = 0;
 				if (isRoot) {
 					left = rect.left;
-					top = rect.bottom;
+					top = refTitle.current.offsetTop + refTitle.current.offsetHeight;
 				} else {
 					left = refTitle.current.offsetWidth;
 					top = rect.top - rect.height;

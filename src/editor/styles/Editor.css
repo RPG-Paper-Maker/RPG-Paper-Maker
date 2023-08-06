@@ -102,10 +102,6 @@ code {
 	margin-right: 0.5em;
 }
 
-.relative {
-	position: relative;
-}
-
 .fill-space {
 	margin: 0;
 	padding: 0;
@@ -183,6 +179,14 @@ code {
 
 .absolute {
 	position: absolute;
+}
+
+.fixed {
+	position: fixed;
+}
+
+.relative {
+	position: relative;
 }
 
 /* width */

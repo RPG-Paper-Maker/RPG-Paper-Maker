@@ -5,3 +5,11 @@
 .map-editor-bar .menu-item:not(.separator) {
 	padding: 10px 12px 10px 12px;
 }
+
+.map-editor {
+	flex-grow: 1;
+	flex-basis: 0;
+	cursor: url('../../assets/icons/pencil.svg'), auto;
+	position: relative;
+	color: white;
+}
