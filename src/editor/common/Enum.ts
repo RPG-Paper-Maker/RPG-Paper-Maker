@@ -44,3 +44,17 @@ export enum ElementMapKind {
 	Object3D,
 	Mountains,
 }
+
+export enum Direction {
+	South,
+	West,
+	North,
+	East,
+	SouthWest,
+	SouthEast,
+	NorthWest,
+	NorthEast,
+	Up,
+	Down,
+	None,
+}

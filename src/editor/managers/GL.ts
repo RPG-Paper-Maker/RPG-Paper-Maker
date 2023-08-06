@@ -70,10 +70,10 @@ class GL {
 	}
 
 	static async initializeShaders() {
-		this.SHADER_DEFAULT_VERTEX = await IO.openFile('./shaders/default.vert');
-		this.SHADER_DEFAULT_FRAGMENT = await IO.openFile('./shaders/default.frag');
-		this.SHADER_FACE_VERTEX = await IO.openFile('./shaders/face.vert');
-		this.SHADER_FACE_FRAGMENT = await IO.openFile('./shaders/face.frag');
+		this.SHADER_DEFAULT_VERTEX = await IO.openFile('./Scripts/Shaders/default.vert');
+		this.SHADER_DEFAULT_FRAGMENT = await IO.openFile('./Scripts/Shaders/default.frag');
+		this.SHADER_FACE_VERTEX = await IO.openFile('./Scripts/Shaders/face.vert');
+		this.SHADER_FACE_FRAGMENT = await IO.openFile('./Scripts/Shaders/face.frag');
 	}
 
 	static getMaterialTextureSize(material: THREE.MeshPhongMaterial): { width: number; height: number } {
@@ -163,8 +163,9 @@ class GL {
 		}
 		this.parent = parent;
 		this.renderer = new THREE.WebGLRenderer({ alpha: true });
+		this.renderer.setPixelRatio(window.devicePixelRatio);
 		this.renderer.autoClear = false;
-		this.renderer.setSize(this.parent.clientWidth, this.parent.clientHeight, true);
+		this.renderer.setSize(this.parent.clientWidth, this.parent.clientHeight);
 		this.renderer.setClearColor(clearColor, colorAlpha);
 		this.renderer.shadowMap.enabled = true;
 		this.parent.appendChild(this.renderer.domElement);
@@ -179,7 +180,7 @@ class GL {
 						? this.parent.scrollHeight
 						: this.parent.getBoundingClientRect().height
 					: forcedHeight;
-			this.renderer.setSize(this.canvasWidth, this.canvasHeight, true);
+			this.renderer.setSize(this.canvasWidth, this.canvasHeight);
 		}
 	}
 }

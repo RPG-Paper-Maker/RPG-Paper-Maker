@@ -48,8 +48,8 @@ function MapEditor() {
 			if (!isLooping) {
 				setIsLooping(true);
 			}
-			if (!map.loading && (Manager.Inputs.isMouseLeftPressed || Manager.Inputs.isMouseRightPressed)) {
-				map.onMouseDownRepeat(Inputs.mouseX, Inputs.mouseY);
+			if (!map.loading) {
+				map.onKeyDownImmediate();
 			}
 			if (!map.loading) {
 				map.update(Manager.GL.mapEditorContext);
@@ -73,13 +73,14 @@ function MapEditor() {
 	useEffect(() => {
 		const canvas = refCanvas.current;
 		if (canvas) {
-			Inputs.initialize(canvas);
+			const removeInputs = Inputs.initialize(canvas);
 			Manager.GL.mapEditorContext.initialize('canvas-map-editor');
 			resize();
 			window.addEventListener('resize', resize);
 			return () => {
 				window.removeEventListener('resize', resize);
 				clearMap();
+				removeInputs();
 			};
 		}
 		// eslint-disable-next-line

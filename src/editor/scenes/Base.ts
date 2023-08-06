@@ -31,10 +31,6 @@ class Base {
 		// TODO
 	}
 
-	onMouseDownRepeat(x: number, y: number) {
-		// TODO
-	}
-
 	onMouseMove(x: number, y: number) {
 		// TODO
 	}

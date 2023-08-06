@@ -19,6 +19,8 @@ import { MapPortion } from '../core/MapPortion';
 import { Portion } from '../core/Portion';
 import { Paths } from '../common/Paths';
 import { Grid } from '../core/Grid';
+import { Cursor } from '../core/Cursor';
+import { Position } from '../core/Position';
 
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
@@ -31,6 +33,7 @@ class Map extends Base {
 	public id: number;
 	public modelMap: Model.Map = new Model.Map();
 	public grid: Grid = new Grid();
+	public cursor: Cursor;
 	public meshPlane: THREE.Object3D | null = null;
 	public sunLight!: THREE.DirectionalLight;
 	public mapPortion: MapPortion = new MapPortion(new Portion(0, 0, 0));
@@ -41,6 +44,7 @@ class Map extends Base {
 		super();
 
 		this.id = id;
+		this.cursor = new Cursor(new Position());
 	}
 
 	add() {
@@ -81,6 +85,9 @@ class Map extends Base {
 		this.meshPlane.rotation.set(Math.PI / -2, 0, 0);
 		this.meshPlane.layers.enable(1);
 		this.scene.add(this.meshPlane);
+
+		// Cursor
+		await this.cursor.load();
 
 		// Light
 		this.initializeSunLight();
@@ -141,23 +148,20 @@ class Map extends Base {
 		this.camera.zoomOut(coef);
 	}
 
-	update(GL: Manager.GL) {
-		super.update(GL);
-		this.mapPortion.update();
+	onKeyDown(key: string) {}
+
+	onKeyDownImmediate() {
+		this.cursor.onKeyDownImmediate();
 	}
 
-	onMouseDown(x: number, y: number) {
-		console.log(x, y);
-	}
-
-	onMouseDownRepeat(x: number, y: number) {
-		this.remove();
-		this.add();
-	}
+	onMouseDown(x: number, y: number) {}
 
 	onMouseMove(x: number, y: number) {
 		if (Inputs.isMouseWheelPressed) {
 			this.camera.onMouseWheelUpdate();
+		} else {
+			this.remove();
+			this.add();
 		}
 	}
 
@@ -171,6 +175,15 @@ class Map extends Base {
 		} else {
 			this.zoomOut(0.5);
 		}
+	}
+
+	update(GL: Manager.GL) {
+		super.update(GL);
+		this.mapPortion.update();
+		this.cursor.update();
+		Scene.Map.elapsedTime = new Date().getTime() - Scene.Map.lastUpdateTime;
+		Scene.Map.averageElapsedTime = (Scene.Map.averageElapsedTime + Scene.Map.elapsedTime) / 2;
+		Scene.Map.lastUpdateTime = new Date().getTime();
 	}
 
 	draw3D(GL: Manager.GL) {

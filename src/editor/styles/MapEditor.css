@@ -9,7 +9,7 @@
 .map-editor {
 	flex-grow: 1;
 	flex-basis: 0;
-	cursor: url('../../assets/icons/pencil.svg'), auto;
+	cursor: url('../../assets/icons/pencil-cursor.svg') 16 16, pointer;
 	position: relative;
 	color: white;
 }
