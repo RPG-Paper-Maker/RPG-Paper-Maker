@@ -125,8 +125,6 @@ class Inputs {
 				default:
 					break;
 			}
-			Inputs.mouseX = -1;
-			Inputs.mouseY = -1;
 		};
 		document.addEventListener('mouseup', handleMouseUp, false);
 

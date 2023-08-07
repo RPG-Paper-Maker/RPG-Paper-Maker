@@ -21,11 +21,13 @@ import { Paths } from '../common/Paths';
 import { Grid } from '../core/Grid';
 import { Cursor } from '../core/Cursor';
 import { Position } from '../core/Position';
+import { Rectangle } from '../core/Rectangle';
 
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
 
 	public static current: Scene.Map | null;
+	public static currentSelectedTexture: Rectangle = new Rectangle(0, 0, 1, 1);
 	public static elapsedTime = 0;
 	public static averageElapsedTime = 0;
 	public static lastUpdateTime = new Date().getTime();
@@ -36,23 +38,17 @@ class Map extends Base {
 	public cursor: Cursor;
 	public meshPlane: THREE.Object3D | null = null;
 	public sunLight!: THREE.DirectionalLight;
-	public mapPortion: MapPortion = new MapPortion(new Portion(0, 0, 0));
+	public mapPortion!: MapPortion;
 	public materialTileset!: THREE.MeshPhongMaterial;
 	public selectionOffset: THREE.Vector2 = new THREE.Vector2();
+	public portionsToUpdate: Portion[] = [];
+	public lastPosition: Position | null = null;
 
 	constructor(id: number) {
 		super();
 
 		this.id = id;
 		this.cursor = new Cursor(new Position());
-	}
-
-	add() {
-		// TODO
-	}
-
-	remove() {
-		// TODO
 	}
 
 	async load() {
@@ -73,18 +69,26 @@ class Map extends Base {
 		// Create grid plane
 		const material = new THREE.Material();
 		material.visible = false;
+		const length = Project.getSquareSize() * this.modelMap.length;
+		const width = Project.getSquareSize() * this.modelMap.width;
+		const extremeSize = Project.getSquareSize() * 1000;
 		this.meshPlane = new THREE.Mesh(
-			new THREE.PlaneBufferGeometry(
-				Project.getSquareSize() * this.modelMap.length,
-				Project.getSquareSize() * this.modelMap.width,
-				1
-			),
+			new THREE.PlaneBufferGeometry(length + extremeSize, width + extremeSize, 1),
 			material
 		);
 		this.meshPlane.visible = false;
+		this.meshPlane.position.set(Math.floor(length / 2), 0, Math.floor(width / 2));
 		this.meshPlane.rotation.set(Math.PI / -2, 0, 0);
 		this.meshPlane.layers.enable(1);
 		this.scene.add(this.meshPlane);
+
+		// Load portions
+		const globalPortion = new Portion(0, 0, 0);
+		this.mapPortion = new MapPortion(globalPortion);
+		await this.mapPortion.load(Paths.join(folderMap, this.mapPortion.getFileName()));
+		this.mapPortion.updateMaterials();
+		this.mapPortion.updateGeometries();
+		this.mapPortion.addToScene();
 
 		// Cursor
 		await this.cursor.load();
@@ -94,14 +98,6 @@ class Map extends Base {
 
 		// Grid
 		this.grid.initialize(this.modelMap);
-
-		// Load portions
-		const globalPortion = new Portion(0, 0, 0);
-		const mapPortion = new MapPortion(globalPortion);
-		await mapPortion.load(Paths.join(folderMap, this.mapPortion.getFileName()));
-		mapPortion.updateMaterials();
-		mapPortion.updateGeometries();
-		mapPortion.addToScene();
 
 		this.loading = false;
 	}
@@ -140,6 +136,27 @@ class Map extends Base {
 		this.sunLight.shadow.bias = -0.0003;
 	}
 
+	add(position: Position, preview: boolean = false) {
+		if (this.lastPosition && !preview) {
+			const positions = this.traceLine(this.lastPosition, position);
+			for (const p of positions) {
+				if (p.isInMap(this.modelMap)) {
+					this.mapPortion.add(p);
+				}
+			}
+		} else {
+			if (position.isInMap(this.modelMap)) {
+				this.mapPortion.add(position, preview);
+			}
+		}
+	}
+
+	remove(position: Position) {
+		if (position.isInMap(this.modelMap)) {
+			this.mapPortion.remove(position);
+		}
+	}
+
 	zoomIn(coef: number = 1) {
 		this.camera.zoomIn(coef);
 	}
@@ -148,25 +165,271 @@ class Map extends Base {
 		this.camera.zoomOut(coef);
 	}
 
+	updateRaycasting() {
+		const pointer = new THREE.Vector2();
+		if (Manager.GL.mapEditorContext.parent) {
+			pointer.x = (Inputs.mouseX / Manager.GL.mapEditorContext.canvasWidth) * 2 - 1;
+			pointer.y = -(Inputs.mouseY / Manager.GL.mapEditorContext.canvasHeight) * 2 + 1;
+		}
+		Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
+		Manager.GL.raycaster.layers.set(1);
+		const intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
+		if (intersects.length > 0) {
+			const point = intersects[0].point;
+			const position = new Position(
+				Math.floor(point.x / Project.getSquareSize()),
+				0,
+				0,
+				Math.floor(point.z / Project.getSquareSize())
+			);
+			if (this.lastPosition === null || !this.lastPosition.equals(position)) {
+				if (!Inputs.isMouseLeftPressed && !Inputs.isMouseRightPressed) {
+					this.add(position, true);
+				} else if (Inputs.isMouseLeftPressed) {
+					this.add(position);
+				} else if (Inputs.isMouseRightPressed) {
+					this.remove(position);
+				}
+				this.lastPosition = position;
+			}
+		} else {
+			if (this.mapPortion) {
+				this.mapPortion.removeLastPreview();
+				this.lastPosition = null;
+			}
+		}
+	}
+
+	traceLine(previous: Position, current: Position) {
+		const positions: Position[] = [];
+		let x1 = previous.x;
+		let x2 = current.x;
+		const y = current.y;
+		const yPlus = current.yPixels;
+		let z1 = previous.z;
+		let z2 = current.z;
+		const l = current.layer;
+		let dx = x2 - x1;
+		let dz = z2 - z1;
+		const test = true;
+		if (dx != 0) {
+			if (dx > 0) {
+				if (dz != 0) {
+					if (dz > 0) {
+						if (dx >= dz) {
+							let e = dx;
+							dx = 2 * e;
+							dz = dz * 2;
+
+							while (test) {
+								positions.push(new Position(x1, y, yPlus, z1, l));
+								x1++;
+								if (x1 == x2) {
+									break;
+								}
+								e -= dz;
+								if (e < 0) {
+									z1++;
+									e += dx;
+								}
+							}
+						} else {
+							let e = dz;
+							dz = 2 * e;
+							dx = dx * 2;
+
+							while (test) {
+								positions.push(new Position(x1, y, yPlus, z1, l));
+								z1++;
+								if (z1 == z2) {
+									break;
+								}
+								e -= dx;
+								if (e < 0) {
+									x1++;
+									e += dz;
+								}
+							}
+						}
+					} else {
+						if (dx >= -dz) {
+							let e = dx;
+							dx = 2 * e;
+							dz = dz * 2;
+
+							while (test) {
+								positions.push(new Position(x1, y, yPlus, z1, l));
+								x1++;
+								if (x1 == x2) {
+									break;
+								}
+								e += dz;
+								if (e < 0) {
+									z1--;
+									e += dx;
+								}
+							}
+						} else {
+							let e = dz;
+							dz = 2 * e;
+							dx = dx * 2;
+
+							while (test) {
+								positions.push(new Position(x1, y, yPlus, z1, l));
+								z1--;
+								if (z1 == z2) {
+									break;
+								}
+								e += dx;
+								if (e > 0) {
+									x1++;
+									e += dz;
+								}
+							}
+						}
+					}
+				} else {
+					while (x1 != x2) {
+						positions.push(new Position(x1, y, yPlus, z1, l));
+						x1++;
+					}
+				}
+			} else {
+				dz = z2 - z1;
+				if (dz != 0) {
+					if (dz > 0) {
+						if (-dx >= dz) {
+							let e = dx;
+							dx = 2 * e;
+							dz = dz * 2;
+
+							while (test) {
+								positions.push(new Position(x1, y, yPlus, z1, l));
+								x1--;
+								if (x1 == x2) {
+									break;
+								}
+								e += dz;
+								if (e >= 0) {
+									z1++;
+									e += dx;
+								}
+							}
+						} else {
+							let e = dz;
+							dz = 2 * e;
+							dx = dx * 2;
+
+							while (test) {
+								positions.push(new Position(x1, y, yPlus, z1, l));
+								z1++;
+								if (z1 == z2) {
+									break;
+								}
+								e += dx;
+								if (e <= 0) {
+									x1--;
+									e += dz;
+								}
+							}
+						}
+					} else {
+						if (dx <= dz) {
+							let e = dx;
+							dx = 2 * e;
+							dz = dz * 2;
+
+							while (test) {
+								positions.push(new Position(x1, y, yPlus, z1, l));
+								x1--;
+								if (x1 == x2) break;
+								e -= dz;
+								if (e >= 0) {
+									z1--;
+									e += dx;
+								}
+							}
+						} else {
+							let e = dz;
+							dz = 2 * e;
+							dx = dx * 2;
+
+							while (test) {
+								positions.push(new Position(x1, y, yPlus, z1, l));
+								z1--;
+								if (z1 == z2) break;
+								e -= dx;
+								if (e >= 0) {
+									x1--;
+									e += dz;
+								}
+							}
+						}
+					}
+				} else {
+					while (x1 != x2) {
+						positions.push(new Position(x1, y, yPlus, z1, l));
+						x1--;
+					}
+				}
+			}
+		} else {
+			dz = z2 - z1;
+			if (dz != 0) {
+				if (dz > 0) {
+					while (z1 != z2) {
+						positions.push(new Position(x1, y, yPlus, z1, l));
+						z1++;
+					}
+				} else {
+					while (z1 != z2) {
+						positions.push(new Position(x1, y, yPlus, z1, l));
+						z1--;
+					}
+				}
+			}
+		}
+		return positions;
+	}
+
+	addPortionToUpdate(portion: Portion) {
+		for (const portionToUpdate of this.portionsToUpdate) {
+			if (portion.equals(portionToUpdate)) {
+				return;
+			}
+		}
+		this.portionsToUpdate.push(portion);
+	}
+
 	onKeyDown(key: string) {}
 
 	onKeyDownImmediate() {
 		this.cursor.onKeyDownImmediate();
+		this.updateRaycasting();
 	}
 
-	onMouseDown(x: number, y: number) {}
+	onMouseDown(x: number, y: number) {
+		if (this.lastPosition) {
+			if (Inputs.isMouseLeftPressed) {
+				this.add(this.lastPosition);
+			} else if (Inputs.isMouseRightPressed) {
+				this.remove(this.lastPosition);
+			}
+		}
+	}
 
 	onMouseMove(x: number, y: number) {
 		if (Inputs.isMouseWheelPressed) {
 			this.camera.onMouseWheelUpdate();
 		} else {
-			this.remove();
-			this.add();
+			this.updateRaycasting();
 		}
 	}
 
 	onMouseUp(x: number, y: number) {
-		// TODO
+		if (this.lastPosition) {
+			this.add(this.lastPosition, true);
+		}
 	}
 
 	onMouseWheel(delta: number) {
@@ -181,6 +444,10 @@ class Map extends Base {
 		super.update(GL);
 		this.mapPortion.update();
 		this.cursor.update();
+		for (const portion of this.portionsToUpdate) {
+			this.mapPortion.updateGeometries();
+		}
+		this.portionsToUpdate = [];
 		Scene.Map.elapsedTime = new Date().getTime() - Scene.Map.lastUpdateTime;
 		Scene.Map.averageElapsedTime = (Scene.Map.averageElapsedTime + Scene.Map.elapsedTime) / 2;
 		Scene.Map.lastUpdateTime = new Date().getTime();

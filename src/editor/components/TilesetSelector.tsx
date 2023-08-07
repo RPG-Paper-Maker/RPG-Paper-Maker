@@ -17,6 +17,7 @@ import { Constants } from '../common/Constants';
 import { Project } from '../core/Project';
 import { useDispatch } from 'react-redux';
 import { setCurrentTilesetTexture } from '../store';
+import { Scene } from '../Editor';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
@@ -161,6 +162,7 @@ function TilesetSelector() {
 				currentState.selectedRect = currentState.previewRect;
 				currentState.previewRect = null;
 				dispatch(setCurrentTilesetTexture(currentState.selectedRect));
+				Scene.Map.currentSelectedTexture = currentState.selectedRect;
 				update();
 			}
 			currentState.firstX = -1;

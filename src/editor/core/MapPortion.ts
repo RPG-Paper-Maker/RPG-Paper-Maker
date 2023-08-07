@@ -24,13 +24,14 @@ class MapPortion extends Serializable {
 	public static readonly JSON_FLOORS = 'floors';
 
 	public globalPortion: Portion;
-	public floorsMapping: Map<string, MapElement.Floor>;
+	public floors: Map<string, MapElement.Floor>;
 	public floorsMesh: THREE.Mesh;
+	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ElementMapKind] | null = null;
 
 	constructor(globalPortion: Portion) {
 		super();
 		this.globalPortion = globalPortion;
-		this.floorsMapping = new Map();
+		this.floors = new Map();
 		this.floorsMesh = new THREE.Mesh(new CustomGeometry(), Manager.GL.MATERIAL_EMPTY);
 		this.floorsMesh.renderOrder = 0;
 	}
@@ -39,37 +40,57 @@ class MapPortion extends Serializable {
 		return this.globalPortion.getFileName();
 	}
 
-	add(group: THREE.Group, model: Model.Base) {
-		// TODO
+	removeLastPreview() {
+		if (this.lastPreviewRemove !== null) {
+			const [position, element, kind] = this.lastPreviewRemove;
+			this.setMapElement(position, element, kind);
+			this.lastPreviewRemove = null;
+		}
 	}
 
-	setLand(p: Position, land: MapElement.Land) {
-		switch (land.kind) {
+	add(position: Position, preview: boolean = false) {
+		this.removeLastPreview();
+		const element = this.setMapElement(position, new MapElement.Floor(Scene.Map.currentSelectedTexture));
+		if (preview) {
+			this.lastPreviewRemove = [position, element, ElementMapKind.Floors];
+		}
+	}
+
+	setMapElement(p: Position, element: MapElement.Base | null, kind: ElementMapKind = ElementMapKind.None) {
+		if (element !== null) {
+			kind = element.kind;
+		}
+		switch (kind) {
 			case ElementMapKind.Floors:
-				this.setFloor(p, land as MapElement.Floor);
-				break;
+				return this.setFloor(p, element as MapElement.Floor);
 			case ElementMapKind.Autotiles:
 				// TODO
 				break;
 			default:
 				break;
 		}
+		return null;
 	}
 
-	setFloor(p: Position, floor: MapElement.Floor) {
-		this.floorsMapping.set(p.toKey(), floor);
+	setFloor(p: Position, floor: MapElement.Floor | null) {
+		const key = p.toKey();
+		let changed = false;
+		const previous = this.floors.get(key) || null;
+		if (floor === null) {
+			changed = this.floors.delete(key);
+		} else {
+			changed = previous ? !previous.equals(floor) : true;
+			this.floors.set(key, floor);
+		}
+		if (changed && Scene.Map.current) {
+			Scene.Map.current.addPortionToUpdate(this.globalPortion);
+		}
+		return previous;
 	}
 
-	stockObject(position: THREE.Vector3, scale: THREE.Vector3, model: Model.Base, group?: THREE.Group) {
-		// TODO
-	}
-
-	remove(group: THREE.Group) {
-		// TODO
-	}
-
-	removeMapElement(group: THREE.Group) {
-		// TODO
+	remove(position: Position) {
+		this.removeLastPreview();
+		this.setMapElement(position, null, ElementMapKind.Floors);
 	}
 
 	fillDefaultFloor(map: Model.Map) {
@@ -81,7 +102,7 @@ class MapPortion extends Serializable {
 				p.y = this.globalPortion.y * Constants.PORTION_SIZE;
 				p.z = this.globalPortion.z * Constants.PORTION_SIZE + j;
 				if (p.isInMap(map)) {
-					this.setLand(p, MapElement.Floor.create(rect));
+					this.setMapElement(p, new MapElement.Floor(rect));
 				}
 			}
 		}
@@ -103,7 +124,7 @@ class MapPortion extends Serializable {
 		let count = 0;
 		let i: number;
 		let l: number;
-		for (const [positionKey, floor] of this.floorsMapping) {
+		for (const [positionKey, floor] of this.floors) {
 			const p = new Position();
 			p.fromKey(positionKey);
 			const layer = p.layer;
@@ -152,14 +173,14 @@ class MapPortion extends Serializable {
 		const p = new Position();
 		for (const objHash of tab) {
 			p.read(objHash.k);
-			this.floorsMapping.set(p.toKey(), new MapElement.Floor(objHash.v));
+			this.floors.set(p.toKey(), MapElement.Floor.fromJSON(objHash.v));
 		}
 	}
 
 	write(json: any) {
 		const tab = [];
 		const p = new Position();
-		for (const [positionKey, floor] of this.floorsMapping) {
+		for (const [positionKey, floor] of this.floors) {
 			const objHash: KeyValue = {};
 			const tabKey: number[] = [];
 			p.fromKey(positionKey);

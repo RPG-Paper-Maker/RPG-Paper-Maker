@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { MapElement } from '../Editor';
 import { ElementMapKind } from '../common/Enum';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
@@ -17,19 +18,25 @@ import { Rectangle } from '../core/Rectangle';
 import { Land } from './Land';
 
 class Floor extends Land {
-	constructor(json?: Record<string, any>) {
-		super();
+	constructor(texture?: Rectangle) {
+		super(true, texture);
 
-		if (json) {
-			this.read(json);
-		}
+		this.kind = ElementMapKind.Floors;
 	}
 
-	static create(texture: Rectangle): Floor {
+	static fromJSON(json: Record<string, any>): Floor {
 		const floor = new Floor();
-		floor.kind = ElementMapKind.Floors;
-		floor.texture = texture;
+		floor.read(json);
 		return floor;
+	}
+
+	equals(mapElement: MapElement.Base) {
+		if (mapElement.kind === this.kind) {
+			const floor = mapElement as MapElement.Floor;
+			return floor.texture.equals(this.texture);
+		} else {
+			return false;
+		}
 	}
 
 	updateGeometry(geometry: CustomGeometry, position: Position, width: number, height: number, count: number) {

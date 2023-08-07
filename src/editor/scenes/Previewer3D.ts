@@ -64,7 +64,7 @@ class Previewer3D extends Base {
 
 	loadFloor(GL: Manager.GL, texture: Rectangle) {
 		const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
-		const floor = MapElement.Floor.create(texture);
+		const floor = new MapElement.Floor(texture);
 		const geometry = new CustomGeometry();
 		floor.updateGeometry(geometry, new Position(), width, height, 0);
 		geometry.updateAttributes();

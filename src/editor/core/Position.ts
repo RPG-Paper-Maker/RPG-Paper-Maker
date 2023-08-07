@@ -102,7 +102,14 @@ class Position extends Position3D {
 	}
 
 	isInMap(map: Model.Map) {
-		return this.x < map.length && this.y >= -map.depth && this.y < map.height && this.z < map.width;
+		return (
+			this.x >= 0 &&
+			this.x < map.length &&
+			this.y >= -map.depth &&
+			this.y < map.height &&
+			this.z >= 0 &&
+			this.z < map.width
+		);
 	}
 
 	toVector3(center: boolean = true): THREE.Vector3 {
@@ -118,33 +125,21 @@ class Position extends Position3D {
 	}
 
 	toKey(): string {
-		return (
-			this.x +
-			'+' +
-			this.y +
-			'+' +
-			this.yPixels +
-			'+' +
-			this.z +
-			'+' +
-			this.layer +
-			'+' +
-			this.centerX +
-			'+' +
-			this.centerZ +
-			'+' +
-			this.angleY +
-			'+' +
-			this.angleX +
-			'+' +
-			this.angleZ +
-			'+' +
-			this.scaleX +
-			'+' +
-			this.scaleY +
-			'+' +
-			this.scaleZ
-		);
+		return [
+			this.x,
+			this.y,
+			this.yPixels,
+			this.z,
+			this.layer,
+			this.centerX,
+			this.centerZ,
+			this.angleY,
+			this.angleX,
+			this.angleZ,
+			this.scaleX,
+			this.scaleY,
+			this.scaleZ,
+		].join('+');
 	}
 
 	fromKey(key: string) {
