@@ -50,7 +50,9 @@ class Floor extends Land {
 				(this.texture.y * Project.getSquareSize()) / height,
 				(this.texture.width * Project.getSquareSize()) / width,
 				(this.texture.height * Project.getSquareSize()) / height,
-				count
+				count,
+				this.texture.width,
+				this.texture.height
 			);
 		}
 	}
