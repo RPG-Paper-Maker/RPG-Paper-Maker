@@ -141,19 +141,30 @@ class Map extends Base {
 			const positions = this.traceLine(this.lastPosition, position);
 			for (const p of positions) {
 				if (p.isInMap(this.modelMap)) {
-					this.mapPortion.add(p);
+					this.mapPortion.add(p, preview);
+				} else {
+					this.mapPortion.removeLastPreview();
 				}
 			}
 		} else {
 			if (position.isInMap(this.modelMap)) {
 				this.mapPortion.add(position, preview);
+			} else {
+				this.mapPortion.removeLastPreview();
 			}
 		}
 	}
 
 	remove(position: Position) {
-		if (position.isInMap(this.modelMap)) {
-			this.mapPortion.remove(position);
+		if (this.lastPosition) {
+			const positions = this.traceLine(this.lastPosition, position);
+			for (const p of positions) {
+				if (p.isInMap(this.modelMap)) {
+					this.mapPortion.remove(p);
+				} else {
+					this.mapPortion.removeLastPreview();
+				}
+			}
 		}
 	}
 
@@ -388,6 +399,9 @@ class Map extends Base {
 					}
 				}
 			}
+		}
+		if (positions.length === 0) {
+			return [current];
 		}
 		return positions;
 	}
