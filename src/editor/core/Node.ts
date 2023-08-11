@@ -10,22 +10,25 @@
 */
 
 import { Model } from '../Editor';
+import { Utils } from '../common/Utils';
+import { Serializable } from './Serializable';
 
-class Node {
-	public children: Node[];
-	public content: Model.Base;
-	public parent: Node | null;
+class Node extends Serializable {
+	public static readonly JSON_CHILDREN = 'children';
+
+	public children: Node[] = [];
+	public content: Model.Base = new Model.Base();
+	public parent: Node | null = null;
 
 	constructor(content?: Model.Base, children: Node[] = [], parent: Node | null = null) {
+		super();
 		if (content === undefined) {
 			content = new Model.Base();
 		}
 		this.content = content;
 		this.children = children;
 		this.parent = parent;
-		for (const child of this.children) {
-			child.parent = this;
-		}
+		this.updateParents();
 	}
 
 	static getNodeByID(nodes: Node[], id: number): Node | null {
@@ -45,8 +48,10 @@ class Node {
 		return this.content.getIcon();
 	}
 
-	getPath(): string {
-		return `${this.parent ? `${this.parent.getPath()}/` : ''}${this.toString()}`;
+	getPath(includesRoot = true): string {
+		return `${
+			this.parent ? `${this.parent.getPath(includesRoot)}${this.parent.parent || includesRoot ? '/' : ''}` : ''
+		}${includesRoot || this.parent ? this.toString() : ''}`;
 	}
 
 	toString() {
@@ -55,6 +60,24 @@ class Node {
 
 	toStrings() {
 		return this.content.toStrings();
+	}
+
+	updateParents() {
+		for (const child of this.children) {
+			child.parent = this;
+			child.updateParents();
+		}
+	}
+
+	read(json: Record<string, any>) {
+		this.content.read(json);
+		Utils.readList(this.children, json[Node.JSON_CHILDREN], Node);
+		this.updateParents();
+	}
+
+	write(json: Record<string, any>) {
+		this.content.write(json);
+		Utils.writeList(this.children, json, Node.JSON_CHILDREN);
 	}
 }
 

@@ -12,17 +12,28 @@
 import { LocalFile } from './LocalFile';
 
 abstract class Serializable {
-	async load(path: string) {
-		const json = await LocalFile.readJSON(path);
+	getPath(temp: boolean = false) {
+		return '';
+	}
+
+	async load(temp: boolean = false) {
+		let json = await LocalFile.readJSON(this.getPath(temp));
 		if (json) {
 			this.read(json);
+		} else {
+			if (temp) {
+				json = await LocalFile.readJSON(this.getPath(false)); // If no temp files found, try with not temp
+				if (json) {
+					this.read(json);
+				}
+			}
 		}
 	}
 
-	async save(path: string) {
+	async save(temp: boolean = false) {
 		const json = {};
 		this.write(json);
-		await LocalFile.writeJSON(path, json);
+		await LocalFile.writeJSON(this.getPath(temp), json);
 	}
 
 	abstract read(json: any): void;

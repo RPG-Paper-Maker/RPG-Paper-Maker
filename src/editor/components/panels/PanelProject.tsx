@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import MapEditor from '../MapEditor';
 import MapEditorMenuBar from '../MapEditorMenuBar';
@@ -20,13 +20,14 @@ import { LuFolders } from 'react-icons/lu';
 import { MdOutlineWallpaper } from 'react-icons/md';
 import Tab from '../Tab';
 import { Utils } from '../../common/Utils';
-import Tree from '../Tree';
-import { Model } from '../../Editor';
+import { Data, Model } from '../../Editor';
 import { Node } from '../../core/Node';
 import { TreeMapTag } from '../../models';
-import { RootState, setCurrentMapID } from '../../store';
+import { RootState, setCurrentTreeMapTag } from '../../store';
 import PanelTextures from './PanelTextures';
 import Loader from '../Loader';
+import TreeMaps from '../TreeMaps';
+import { Project } from '../../core/Project';
 
 function PanelProject() {
 	const [projectMenuIndex, setProjectMenuIndex] = useState(1);
@@ -37,20 +38,13 @@ function PanelProject() {
 
 	const dispatch = useDispatch();
 
-	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentID);
+	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
 	const openLoading = useSelector((state: RootState) => state.projects.openLoading);
-
-	const mapNodes = [
-		new Node(new Model.TreeMapTag(-1, 'Maps'), [
-			new Node(new Model.TreeMapTag(-2, 'Introduction'), [new Node(new Model.TreeMapTag(1, 'Starting map'))]),
-			new Node(new Model.TreeMapTag(-3, 'Battle maps'), [new Node(new Model.TreeMapTag(2, 'Default battle'))]),
-		]),
-	];
+	const triggersTreeMap = useSelector((state: RootState) => state.triggers.treeMap);
 
 	const handleSelectedMapItem = (node: Node | null, isClick: boolean) => {
 		if (node && !(node.content as TreeMapTag).isFolder()) {
-			let title = node.getPath();
-			title = title.substring(5, title.length);
+			let title = node.getPath(false);
 			if (!mapsTabsTitles.find((model) => model.id === node.content.id)) {
 				const newListTitles = [...mapsTabsTitles];
 				newListTitles.push(new Model.Base(node.content.id, title));
@@ -61,10 +55,10 @@ function PanelProject() {
 				setMapTabForcedCurrentIndex(mapsTabsTitles.findIndex((model) => model.id === node.content.id));
 			}
 
-			dispatch(setCurrentMapID(node.content.id));
+			dispatch(setCurrentTreeMapTag(node.content as Model.TreeMapTag));
 		} else {
 			setMapTabForcedCurrentIndex(-1);
-			dispatch(setCurrentMapID(-1));
+			dispatch(setCurrentTreeMapTag(null));
 		}
 	};
 
@@ -72,13 +66,29 @@ function PanelProject() {
 		if (isClick) {
 			if (index !== -1 && model) {
 				setMapForcedCurrentSelectedItemID(model.id);
-				dispatch(setCurrentMapID(model.id));
+				dispatch(setCurrentTreeMapTag(model as Model.TreeMapTag));
 			} else {
 				setMapForcedCurrentSelectedItemID(-1);
-				dispatch(setCurrentMapID(-1));
+				dispatch(setCurrentTreeMapTag(null));
 			}
 		}
 	};
+
+	useEffect(() => {
+		if (Project.current) {
+			setMapsTabsTitles(
+				mapsTabsTitles.map((model) => {
+					if (Project.current) {
+						const node = Node.getNodeByID(Project.current.treeMaps.tree, model.id);
+						if (node) {
+							return new Model.Base(model.id, node.getPath(false));
+						}
+					}
+					return model;
+				})
+			);
+		}
+	}, [triggersTreeMap]);
 
 	return (
 		<>
@@ -90,9 +100,7 @@ function PanelProject() {
 						<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
 					</Menu>
 					<div className={Utils.getClassName([[projectMenuIndex !== 0, 'hidden']], ['flex', 'flex-one'])}>
-						<Tree
-							list={mapNodes}
-							defaultSelectedID={1}
+						<TreeMaps
 							onSelectedItem={handleSelectedMapItem}
 							forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
 							setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
@@ -111,11 +119,11 @@ function PanelProject() {
 						setForcedCurrentIndex={setMapTabForcedCurrentIndex}
 						isClosable
 					/>
-					<div className={Utils.getClassName([[currentMapID < 0, 'hidden']], ['flex-column flex-one'])}>
+					<div className={Utils.getClassName([[!currentMapID, 'hidden']], ['flex-column flex-one'])}>
 						<MapEditorMenuBar />
 						<MapEditor />
 					</div>
-					{currentMapID <= 0 && (
+					{!currentMapID && (
 						<div className='flex-one flex-center-vertically flex-center-horizontally'>Select a map...</div>
 					)}
 				</div>

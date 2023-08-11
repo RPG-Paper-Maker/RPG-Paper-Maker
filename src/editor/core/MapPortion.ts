@@ -20,6 +20,8 @@ import { Serializable } from './Serializable';
 import { ElementMapKind } from '../common/Enum';
 import { KeyValue } from '../common/Types';
 import { Floor } from '../mapElements';
+import { Paths } from '../common/Paths';
+import { Project } from './Project';
 
 class MapPortion extends Serializable {
 	public static readonly JSON_FLOORS = 'floors';
@@ -37,13 +39,24 @@ class MapPortion extends Serializable {
 		this.floorsMesh.renderOrder = 0;
 	}
 
+	getPath(temp: boolean = false): string {
+		if (!Project.current || !Scene.Map.current) {
+			return '';
+		}
+		let path = Paths.join(Project.current.getPathMaps(), Model.Map.generateMapName(Scene.Map.current.id));
+		if (temp) {
+			path = Paths.join(path, Paths.TEMP);
+		}
+		return Paths.join(path, this.getFileName());
+	}
+
 	getFileName(): string {
 		return this.globalPortion.getFileName();
 	}
 
 	removeLastPreview() {
 		for (const [position, element, kind] of this.lastPreviewRemove) {
-			this.updateMapElement(position, element, kind);
+			this.updateMapElement(position, element, kind, false, true);
 		}
 		this.lastPreviewRemove = [];
 	}
@@ -62,14 +75,15 @@ class MapPortion extends Serializable {
 		position: Position,
 		element: MapElement.Base | null,
 		kind: ElementMapKind = ElementMapKind.None,
-		preview: boolean = false
+		preview: boolean = false,
+		removingPreview: boolean = false
 	) {
 		if (element !== null) {
 			kind = element.kind;
 		}
 		switch (kind) {
 			case ElementMapKind.Floors:
-				this.updateFloor(position, element as MapElement.Floor, preview);
+				this.updateFloor(position, element as MapElement.Floor, preview, removingPreview);
 				break;
 			case ElementMapKind.Autotiles:
 				// TODO
@@ -79,30 +93,30 @@ class MapPortion extends Serializable {
 		}
 	}
 
-	updateFloor(position: Position, floor: MapElement.Floor | null, preview: boolean) {
-		const previousElements: MapElement.Base[] = [];
+	updateFloor(position: Position, floor: MapElement.Floor | null, preview: boolean, removingPreview: boolean) {
 		if (floor === null) {
-			const previous = this.setFloor(position, null);
-			if (previous) {
-				previousElements.push(previous);
-			}
+			this.setFloor(position, null, preview, removingPreview);
 		} else {
 			for (let i = 0; i < floor.texture.width; i++) {
 				for (let j = 0; j < floor.texture.height; j++) {
 					const newPosition = new Position(position.x + i, position.y, position.yPixels, position.z + j);
-					const previous = this.setFloor(
+					this.setFloor(
 						newPosition,
-						new Floor(new Rectangle(floor.texture.x + i, floor.texture.y + j, 1, 1))
+						new Floor(new Rectangle(floor.texture.x + i, floor.texture.y + j, 1, 1)),
+						preview,
+						removingPreview
 					);
-					if (preview) {
-						this.lastPreviewRemove.push([newPosition, previous, ElementMapKind.Floors]);
-					}
 				}
 			}
 		}
 	}
 
-	setFloor(p: Position, floor: MapElement.Floor | null) {
+	setFloor(
+		p: Position,
+		floor: MapElement.Floor | null,
+		preview: boolean,
+		removingPreview: boolean
+	): MapElement.Floor | null {
 		if (!Scene.Map.current || !p.isInMap(Scene.Map.current.modelMap)) {
 			return null;
 		}
@@ -117,6 +131,12 @@ class MapPortion extends Serializable {
 		}
 		if (changed && Scene.Map.current) {
 			Scene.Map.current.addPortionToUpdate(this.globalPortion);
+			if (!preview && !removingPreview) {
+				Scene.Map.current.addPortionToSave(this.globalPortion);
+			}
+		}
+		if (preview) {
+			this.lastPreviewRemove.push([p, previous, ElementMapKind.Floors]);
 		}
 		return previous;
 	}
@@ -152,7 +172,7 @@ class MapPortion extends Serializable {
 	updateFloorsGeometry() {
 		const material = Scene.Map.current!.materialTileset;
 		const { width, height } = Manager.GL.getMaterialTextureSize(material);
-		const geometry = this.floorsMesh.geometry as CustomGeometry;
+		const geometry = new CustomGeometry();
 		const layers: [Position, MapElement.Floor][] = [];
 		let count = 0;
 		let i: number;
@@ -187,6 +207,7 @@ class MapPortion extends Serializable {
 
 		// Update geometry attributes
 		geometry.updateAttributes();
+		this.floorsMesh.geometry = geometry;
 	}
 
 	updateMaterials() {
@@ -211,6 +232,7 @@ class MapPortion extends Serializable {
 	}
 
 	write(json: any) {
+		json.lands = {};
 		const tab = [];
 		const p = new Position();
 		for (const [positionKey, floor] of this.floors) {
@@ -224,7 +246,23 @@ class MapPortion extends Serializable {
 			objHash.v = objFloor;
 			tab.push(objHash);
 		}
-		json[MapPortion.JSON_FLOORS] = tab;
+		json.lands[MapPortion.JSON_FLOORS] = tab;
+		json.autotiles = [];
+		json.moun = { a: [], o: [] };
+		json.objs = {
+			list: [
+				{
+					k: [7, 0, 0, 7, 0],
+					v: { canBeTriggeredAnotherObject: false, hId: 2, id: 1, name: 'Hero', ooepf: false },
+				},
+			],
+		};
+		json.objs3d = { a: [], o: [] };
+		json.sprites = { list: [], overflow: [], walls: [] };
+	}
+
+	async load() {
+		await super.load(true); // Try to read temp files by default
 	}
 }
 

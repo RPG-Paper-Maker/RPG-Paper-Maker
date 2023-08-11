@@ -10,17 +10,21 @@
 */
 
 import { useEffect, useRef, useState } from 'react';
-import { Manager, Scene } from '../Editor';
+import { Manager, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import '../styles/MapEditor.css';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, triggerTreeMap } from '../store';
+import { LocalFile } from '../core/LocalFile';
+import { Project } from '../core/Project';
 
 function MapEditor() {
 	const [isLooping, setIsLooping] = useState(false);
 
-	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentID);
+	const currentMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
 	useSelector((state: RootState) => state.triggers.splitting);
+
+	const dispatch = useDispatch();
 
 	const refCanvas = useRef<HTMLHeadingElement>(null);
 
@@ -33,8 +37,8 @@ function MapEditor() {
 
 	const initializeMap = async () => {
 		clearMap();
-		if (currentMapID > 0) {
-			Scene.Map.current = new Scene.Map(currentMapID);
+		if (currentMapTag && currentMapTag.id) {
+			Scene.Map.current = new Scene.Map(currentMapTag);
 			await Scene.Map.current.load();
 			if (!isLooping) {
 				loop();
@@ -47,6 +51,13 @@ function MapEditor() {
 		if (map) {
 			if (!isLooping) {
 				setIsLooping(true);
+			}
+			if (map.needsUpdate) {
+				dispatch(triggerTreeMap());
+				if (Project.current) {
+					Project.current.treeMaps.save();
+				}
+				map.needsUpdate = false;
 			}
 			if (!map.loading) {
 				map.onKeyDownImmediate();
@@ -89,7 +100,7 @@ function MapEditor() {
 	useEffect(() => {
 		initializeMap().catch(console.error);
 		// eslint-disable-next-line
-	}, [currentMapID]);
+	}, [currentMapTag]);
 
 	// Resize after rendering
 	useEffect(() => {

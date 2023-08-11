@@ -80,6 +80,7 @@ class Paths {
 	public static readonly FILE_ANIMATIONS = 'animations.json';
 	public static readonly FILE_STATUS = 'status.json';
 	public static readonly FILE_SCRIPTS = 'scripts.json';
+	public static readonly FILE_TREE_MAPS = 'treeMaps.json';
 	public static readonly FILE_LANGS = 'langs.json';
 	public static readonly FILE_PROTECT = '.protect';
 	public static readonly FILE_PLUGIN_CODE = 'code.js';
@@ -113,6 +114,7 @@ class Paths {
 		Paths.FILE_STATUS,
 		Paths.FILE_SCRIPTS,
 		Paths.FILE_LANGS,
+		Paths.FILE_TREE_MAPS,
 	];
 
 	static join(...args: any) {

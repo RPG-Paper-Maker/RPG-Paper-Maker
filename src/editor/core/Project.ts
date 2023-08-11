@@ -16,6 +16,7 @@ import { Data } from '../Editor';
 class Project {
 	public static current: Project | null = null;
 	public systems: Data.System = new Data.System();
+	public treeMaps: Data.TreeMaps = new Data.TreeMaps();
 
 	constructor(name: string) {
 		this.systems.projectName = name;
@@ -34,8 +35,9 @@ class Project {
 	}
 
 	async load() {
-		await this.systems.load(Paths.join(this.getPath(), Paths.FILE_SYSTEM));
+		await this.systems.load();
 		this.systems.projectName = (this.systems.projectName as any).names[1]; // TODO
+		await this.treeMaps.load();
 	}
 
 	async save() {

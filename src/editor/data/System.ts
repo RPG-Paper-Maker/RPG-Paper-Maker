@@ -10,7 +10,9 @@
 */
 
 import { Constants } from '../common/Constants';
+import { Paths } from '../common/Paths';
 import { Utils } from '../common/Utils';
+import { Project } from '../core/Project';
 import { Serializable } from '../core/Serializable';
 
 class System extends Serializable {
@@ -18,7 +20,11 @@ class System extends Serializable {
 	public static readonly DEFAULT_PROJECT_NAME = 'Project without name';
 
 	public projectName: string = System.DEFAULT_PROJECT_NAME;
-	public SQUARE_SIZE = 16; // todo
+	public SQUARE_SIZE = 16; // TODO
+
+	getPath(): string {
+		return Paths.join(Project.current!.getPath(), Paths.FILE_SYSTEM);
+	}
 
 	getCoefSquareSize(): number {
 		return this.SQUARE_SIZE / Constants.BASE_SQUARE_SIZE;

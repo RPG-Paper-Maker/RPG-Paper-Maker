@@ -10,6 +10,7 @@
 */
 
 import { Model } from '../Editor';
+import { Serializable } from '../core/Serializable';
 import { Constants } from './Constants';
 
 class Utils {
@@ -37,16 +38,18 @@ class Utils {
 		return typeof value === Constants.STRING;
 	}
 
-	static readList(list: any[], json: Record<string, any>[], constructor: any) {
-		let model: Model.Base;
-		for (const jsonModel of json) {
-			model = new constructor();
-			model.read(jsonModel);
-			list.push(model);
+	static readList(list: Serializable[], json: Record<string, any>[], constructor: any) {
+		if (json) {
+			let model: Serializable;
+			for (const jsonModel of json) {
+				model = new constructor();
+				model.read(jsonModel);
+				list.push(model);
+			}
 		}
 	}
 
-	static writeList(list: any[], json: Record<string, any>, jsonName: string) {
+	static writeList(list: Serializable[], json: Record<string, any>, jsonName: string) {
 		const jsonList: Record<string, any> = [];
 		for (const model of list) {
 			const jsonModel = {};

@@ -31,6 +31,10 @@ class Map extends Base {
 		this.name = this.getRealName();
 	}
 
+	getPath() {
+		return Paths.join(Project.current!.getPathMaps(), Model.Map.generateMapName(this.id), Paths.FILE_MAP_INFOS);
+	}
+
 	static async createDefault() {
 		const jsonObject = {};
 		const mapModel = new Model.Map();
@@ -160,7 +164,7 @@ class Map extends Base {
 			for (let j = -ld; j < lh; j++) {
 				for (let k = 0; k < lz; k++) {
 					const json = {};
-					await LocalFile.writeJSON(Paths.join(folderMap, Portion.getFileName(i, j, k)), json);
+					// await LocalFile.writeJSON(Paths.join(folderMap, Portion.getFileName(i, j, k)), json);
 				}
 			}
 		}

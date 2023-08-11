@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 	RootState,
 	addProject,
-	setCurrentMapID,
 	setCurrentProjectName,
 	setLoading,
 	setOpenLoading,
@@ -22,6 +21,7 @@ import {
 	triggerNewProject,
 	triggerOpenProject,
 	triggerPlay,
+	triggerTreeMap,
 } from '../store';
 import DialogNewProject from './dialogs/DialogNewProject';
 import Menu from './Menu';
@@ -45,6 +45,7 @@ function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
 	const dispatch = useDispatch();
+	const currentTreeMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
 	const currentProjectName = useSelector((state: RootState) => state.projects.current);
 	const triggers = useSelector((state: RootState) => state.triggers.mainBar);
 	const projectNames = useSelector((state: RootState) => state.projects.list).map(({ name, location }) => name);
@@ -55,17 +56,19 @@ function MainMenuBar() {
 	};
 
 	const keypress = async (event: KeyboardEvent) => {
-		const states = {
-			alt: event.altKey,
-			ctrl: event.ctrlKey,
-			meta: event.metaKey,
-			shift: event.shiftKey,
-		};
-		const code = event.code;
-		if (states.ctrl && code === 'KeyS' && !isProjectOpened()) {
-			event.preventDefault();
-			await handleSave();
-			return false;
+		if (isProjectOpened()) {
+			const states = {
+				alt: event.altKey,
+				ctrl: event.ctrlKey,
+				meta: event.metaKey,
+				shift: event.shiftKey,
+			};
+			const key = event.key;
+			if (states.ctrl && key === 's') {
+				event.preventDefault();
+				await handleSave();
+				return false;
+			}
 		}
 	};
 
@@ -88,13 +91,14 @@ function MainMenuBar() {
 		dispatch(setCurrentProjectName(name));
 		Project.current = new Project(name);
 		await Project.current.load();
-		dispatch(setCurrentMapID(1));
 		dispatch(setOpenLoading(false));
 	};
 
 	const handleSave = async () => {
-		if (Scene.Map.current) {
-			await Scene.Map.current.save();
+		if (currentTreeMapTag) {
+			await currentTreeMapTag.saveFiles();
+			Project.current?.treeMaps.save();
+			dispatch(triggerTreeMap());
 		}
 	};
 
@@ -193,7 +197,7 @@ function MainMenuBar() {
 			window.removeEventListener('keydown', keypress);
 		};
 		// eslint-disable-next-line
-	}, []);
+	}, [currentProjectName, currentTreeMapTag]);
 
 	return (
 		<>

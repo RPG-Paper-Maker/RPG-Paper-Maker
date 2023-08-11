@@ -15,8 +15,8 @@ import { Utils } from '../common/Utils';
 import { Serializable } from '../core/Serializable';
 
 class Base extends Serializable {
-	public static readonly JSON_ID = 'i';
-	public static readonly JSON_NAME = 'n';
+	public static readonly JSON_ID = 'id';
+	public static readonly JSON_NAME = 'name';
 	public static readonly DEFAULT_ID = 0;
 	public static readonly DEFAULT_NAME = '';
 
@@ -52,7 +52,7 @@ class Base extends Serializable {
 	}
 
 	toStrings(): string[] {
-		return [this.toStringNameID()];
+		return [this.toString()];
 	}
 
 	createCopy(): Base {

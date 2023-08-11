@@ -54,6 +54,10 @@ class LocalFile extends Serializable {
 		return (await LocalFile.getFoldersFiles(path))[0];
 	}
 
+	static async getFiles(path: string): Promise<string[]> {
+		return (await LocalFile.getFoldersFiles(path))[1];
+	}
+
 	static async getFoldersFiles(path: string): Promise<[string[], string[]]> {
 		const json: Record<string, any> | null = await localforage.getItem(path);
 		if (json) {
@@ -170,6 +174,16 @@ class LocalFile extends Serializable {
 		if (json) {
 			console.info('remove file ' + path);
 			await localforage.removeItem(path);
+		}
+	}
+
+	static async copyFile(src: string, dst: string) {
+		const json = await localforage.getItem(src);
+		if (json) {
+			const file = new LocalFile(false);
+			file.read(json);
+			console.log(file.content);
+			LocalFile.createFile(dst, file.content);
 		}
 	}
 

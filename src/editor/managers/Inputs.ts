@@ -35,6 +35,9 @@ class Inputs {
 
 		// Key down
 		const handleKeyDown = (e: any) => {
+			if (e.ctrlKey && e.key === 's') {
+				return;
+			}
 			if (!Scene.Map.current) {
 				return;
 			}

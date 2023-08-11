@@ -22,6 +22,7 @@ import { Grid } from '../core/Grid';
 import { Cursor } from '../core/Cursor';
 import { Position } from '../core/Position';
 import { Rectangle } from '../core/Rectangle';
+import { TreeMapTag } from '../models';
 
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
@@ -33,6 +34,8 @@ class Map extends Base {
 	public static lastUpdateTime = new Date().getTime();
 
 	public id: number;
+	public tag: TreeMapTag;
+	public needsUpdate = false;
 	public modelMap: Model.Map = new Model.Map();
 	public grid: Grid = new Grid();
 	public cursor: Cursor;
@@ -42,12 +45,14 @@ class Map extends Base {
 	public materialTileset!: THREE.MeshPhongMaterial;
 	public selectionOffset: THREE.Vector2 = new THREE.Vector2();
 	public portionsToUpdate: Portion[] = [];
+	public portionsToSave: Portion[] = [];
+	public portionsSaving: Portion[] = [];
 	public lastPosition: Position | null = null;
 
-	constructor(id: number) {
+	constructor(tag: TreeMapTag) {
 		super();
-
-		this.id = id;
+		this.id = tag.id;
+		this.tag = tag;
 		this.cursor = new Cursor(new Position());
 	}
 
@@ -85,7 +90,7 @@ class Map extends Base {
 		// Load portions
 		const globalPortion = new Portion(0, 0, 0);
 		this.mapPortion = new MapPortion(globalPortion);
-		await this.mapPortion.load(Paths.join(folderMap, this.mapPortion.getFileName()));
+		await this.mapPortion.load();
 		this.mapPortion.updateMaterials();
 		this.mapPortion.updateGeometries();
 		this.mapPortion.addToScene();
@@ -104,16 +109,16 @@ class Map extends Base {
 
 	async save() {
 		this.loading = true;
-		if (Project.current) {
-			// Save model map
-			const mapName = Model.Map.generateMapName(this.id);
-			const folderMap = Paths.join(Project.current!.getPathMaps(), mapName);
-			await this.modelMap.save(Paths.join(folderMap, Paths.FILE_MAP_INFOS));
-
-			// Save portions
-			await this.mapPortion.save(Paths.join(folderMap, this.mapPortion.getFileName()));
-		}
+		await this.modelMap.save();
+		await this.mapPortion.save();
 		this.loading = false;
+	}
+
+	async savePortions() {
+		for (const portion of this.portionsSaving) {
+			await this.mapPortion.save(true);
+		}
+		this.portionsSaving = [];
 	}
 
 	initializeSunLight() {
@@ -223,9 +228,9 @@ class Map extends Base {
 		let dx = x2 - x1;
 		let dz = z2 - z1;
 		const test = true;
-		if (dx != 0) {
+		if (dx !== 0) {
 			if (dx > 0) {
-				if (dz != 0) {
+				if (dz !== 0) {
 					if (dz > 0) {
 						if (dx >= dz) {
 							let e = dx;
@@ -235,7 +240,7 @@ class Map extends Base {
 							while (test) {
 								positions.push(new Position(x1, y, yPlus, z1, l));
 								x1++;
-								if (x1 == x2) {
+								if (x1 === x2) {
 									break;
 								}
 								e -= dz;
@@ -252,7 +257,7 @@ class Map extends Base {
 							while (test) {
 								positions.push(new Position(x1, y, yPlus, z1, l));
 								z1++;
-								if (z1 == z2) {
+								if (z1 === z2) {
 									break;
 								}
 								e -= dx;
@@ -271,7 +276,7 @@ class Map extends Base {
 							while (test) {
 								positions.push(new Position(x1, y, yPlus, z1, l));
 								x1++;
-								if (x1 == x2) {
+								if (x1 === x2) {
 									break;
 								}
 								e += dz;
@@ -288,7 +293,7 @@ class Map extends Base {
 							while (test) {
 								positions.push(new Position(x1, y, yPlus, z1, l));
 								z1--;
-								if (z1 == z2) {
+								if (z1 === z2) {
 									break;
 								}
 								e += dx;
@@ -300,14 +305,14 @@ class Map extends Base {
 						}
 					}
 				} else {
-					while (x1 != x2) {
+					while (x1 !== x2) {
 						positions.push(new Position(x1, y, yPlus, z1, l));
 						x1++;
 					}
 				}
 			} else {
 				dz = z2 - z1;
-				if (dz != 0) {
+				if (dz !== 0) {
 					if (dz > 0) {
 						if (-dx >= dz) {
 							let e = dx;
@@ -317,7 +322,7 @@ class Map extends Base {
 							while (test) {
 								positions.push(new Position(x1, y, yPlus, z1, l));
 								x1--;
-								if (x1 == x2) {
+								if (x1 === x2) {
 									break;
 								}
 								e += dz;
@@ -334,7 +339,7 @@ class Map extends Base {
 							while (test) {
 								positions.push(new Position(x1, y, yPlus, z1, l));
 								z1++;
-								if (z1 == z2) {
+								if (z1 === z2) {
 									break;
 								}
 								e += dx;
@@ -353,7 +358,7 @@ class Map extends Base {
 							while (test) {
 								positions.push(new Position(x1, y, yPlus, z1, l));
 								x1--;
-								if (x1 == x2) break;
+								if (x1 === x2) break;
 								e -= dz;
 								if (e >= 0) {
 									z1--;
@@ -368,7 +373,7 @@ class Map extends Base {
 							while (test) {
 								positions.push(new Position(x1, y, yPlus, z1, l));
 								z1--;
-								if (z1 == z2) break;
+								if (z1 === z2) break;
 								e -= dx;
 								if (e >= 0) {
 									x1--;
@@ -378,7 +383,7 @@ class Map extends Base {
 						}
 					}
 				} else {
-					while (x1 != x2) {
+					while (x1 !== x2) {
 						positions.push(new Position(x1, y, yPlus, z1, l));
 						x1--;
 					}
@@ -386,23 +391,21 @@ class Map extends Base {
 			}
 		} else {
 			dz = z2 - z1;
-			if (dz != 0) {
+			if (dz !== 0) {
 				if (dz > 0) {
-					while (z1 != z2) {
+					while (z1 !== z2) {
 						positions.push(new Position(x1, y, yPlus, z1, l));
 						z1++;
 					}
 				} else {
-					while (z1 != z2) {
+					while (z1 !== z2) {
 						positions.push(new Position(x1, y, yPlus, z1, l));
 						z1--;
 					}
 				}
 			}
 		}
-		if (positions.length === 0) {
-			return [current];
-		}
+		positions.push(current);
 		return positions;
 	}
 
@@ -413,6 +416,15 @@ class Map extends Base {
 			}
 		}
 		this.portionsToUpdate.push(portion);
+	}
+
+	addPortionToSave(portion: Portion) {
+		for (const portionToSave of this.portionsToSave) {
+			if (portion.equals(portionToSave)) {
+				return;
+			}
+		}
+		this.portionsToSave.push(portion);
 	}
 
 	onKeyDown(key: string) {}
@@ -462,6 +474,16 @@ class Map extends Base {
 			this.mapPortion.updateGeometries();
 		}
 		this.portionsToUpdate = [];
+		if (this.portionsSaving.length === 0 && this.portionsToSave.length > 0) {
+			this.portionsSaving = [...this.portionsToSave];
+			this.savePortions();
+			this.portionsToSave = [];
+			if (this.tag.saved) {
+				this.needsUpdate = true;
+			}
+			this.tag.saved = false;
+		}
+
 		Scene.Map.elapsedTime = new Date().getTime() - Scene.Map.lastUpdateTime;
 		Scene.Map.averageElapsedTime = (Scene.Map.averageElapsedTime + Scene.Map.elapsedTime) / 2;
 		Scene.Map.lastUpdateTime = new Date().getTime();
