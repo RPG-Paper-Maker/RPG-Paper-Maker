@@ -12,6 +12,7 @@ const TriggersSlice = createSlice({
 			newProject: false,
 			importProject: false,
 			openProject: '',
+			save: false,
 			play: false,
 		},
 		splitting: false,
@@ -26,6 +27,9 @@ const TriggersSlice = createSlice({
 		},
 		triggerOpenProject(state, action: PayloadAction<string>) {
 			state.mainBar.openProject = action.payload;
+		},
+		triggerSave(state, action: PayloadAction<boolean>) {
+			state.mainBar.save = action.payload;
 		},
 		triggerPlay(state, action: PayloadAction<boolean>) {
 			state.mainBar.play = action.payload;
@@ -43,6 +47,7 @@ export const {
 	triggerNewProject,
 	triggerImportProject,
 	triggerOpenProject,
+	triggerSave,
 	triggerPlay,
 	triggerSplitting,
 	triggerTreeMap,

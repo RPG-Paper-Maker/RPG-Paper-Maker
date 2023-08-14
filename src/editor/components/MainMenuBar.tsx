@@ -21,6 +21,7 @@ import {
 	triggerNewProject,
 	triggerOpenProject,
 	triggerPlay,
+	triggerSave,
 	triggerTreeMap,
 } from '../store';
 import DialogNewProject from './dialogs/DialogNewProject';
@@ -185,6 +186,9 @@ function MainMenuBar() {
 		} else if (triggers.openProject) {
 			dispatch(triggerOpenProject(''));
 			handleOpenProject(triggers.openProject).catch(console.error);
+		} else if (triggers.save) {
+			dispatch(triggerSave(false));
+			handleSave();
 		} else if (triggers.play) {
 			dispatch(triggerPlay(false));
 			handlePlay();

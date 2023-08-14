@@ -11,7 +11,7 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, triggerNewProject, triggerPlay } from '../store';
+import { RootState, triggerNewProject, triggerPlay, triggerSave } from '../store';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
 import {
@@ -44,6 +44,10 @@ function Toolbar() {
 		dispatch(triggerNewProject(true));
 	};
 
+	const handleSave = () => {
+		dispatch(triggerSave(true));
+	};
+
 	const handlePlay = () => {
 		dispatch(triggerPlay(true));
 	};
@@ -61,7 +65,7 @@ function Toolbar() {
 				<MenuItem icon={<AiOutlineFolderOpen />} onClick={handleFloor} disabled>
 					Open
 				</MenuItem>
-				<MenuItem icon={<BiSave />} onClick={handleFloor} disabled>
+				<MenuItem icon={<BiSave />} onClick={handleSave} disabled={!isProjectOpened()}>
 					Save
 				</MenuItem>
 				<MenuItem icon={<LuSaveAll />} onClick={handleFloor} disabled>

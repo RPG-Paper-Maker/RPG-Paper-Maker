@@ -182,7 +182,6 @@ class LocalFile extends Serializable {
 		if (json) {
 			const file = new LocalFile(false);
 			file.read(json);
-			console.log(file.content);
 			LocalFile.createFile(dst, file.content);
 		}
 	}
