@@ -17,6 +17,7 @@ import {
 	setCurrentProjectName,
 	setLoading,
 	setOpenLoading,
+	setUndoRedoIndex,
 	triggerImportProject,
 	triggerNewProject,
 	triggerOpenProject,
@@ -29,12 +30,13 @@ import Menu from './Menu';
 import MenuItem from './MenuItem';
 import MenuSub from './MenuSub';
 import { LocalFile } from '../core/LocalFile';
-import { Scene } from '../Editor';
+import { Manager, Scene } from '../Editor';
 import { Project } from '../core/Project';
 import { AiOutlineFileAdd, AiOutlineFolderOpen, AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai';
 import { BiSave, BiExport, BiImport } from 'react-icons/bi';
 import { BsPlay } from 'react-icons/bs';
 import { MdClose } from 'react-icons/md';
+import { IoIosUndo, IoIosRedo } from 'react-icons/io';
 import { Paths } from '../common/Paths';
 import Dialog from './dialogs/Dialog';
 import FooterYesNo from './dialogs/footers/FooterYesNo';
@@ -45,29 +47,45 @@ import { LocalForage } from '../common/Enum';
 function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
+
+	const importFileInputRef = useRef<HTMLInputElement>(null);
+
 	const dispatch = useDispatch();
+
 	const currentTreeMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
 	const currentProjectName = useSelector((state: RootState) => state.projects.current);
 	const triggers = useSelector((state: RootState) => state.triggers.mainBar);
 	const projectNames = useSelector((state: RootState) => state.projects.list).map(({ name, location }) => name);
-	const importFileInputRef = useRef<HTMLInputElement>(null);
+	const undoRedoIndex = useSelector((state: RootState) => state.mapEditor.undoRedo.index);
+	const undoRedoLength = useSelector((state: RootState) => state.mapEditor.undoRedo.length);
 
-	const isProjectOpened = () => {
-		return currentProjectName !== '';
-	};
+	const isProjectOpened = currentProjectName !== '';
+	const isInMap = isProjectOpened && !!Scene.Map.current;
 
-	const keypress = async (event: KeyboardEvent) => {
-		if (isProjectOpened()) {
+	const canUndo = () => isInMap && undoRedoIndex > -1;
+
+	const canRedo = () => isInMap && undoRedoIndex < undoRedoLength - 1;
+
+	const handleKeyDown = async (event: KeyboardEvent) => {
+		if (isProjectOpened) {
 			const states = {
 				alt: event.altKey,
 				ctrl: event.ctrlKey,
 				meta: event.metaKey,
 				shift: event.shiftKey,
 			};
-			const key = event.key;
-			if (states.ctrl && key === 's') {
+			const key = event.key.toUpperCase();
+			if (states.ctrl && key === 'S' && isInMap) {
 				event.preventDefault();
 				await handleSave();
+				return false;
+			} else if (states.ctrl && states.shift && key === 'Z' && canRedo()) {
+				event.preventDefault();
+				handleRedo();
+				return false;
+			} else if (states.ctrl && !states.shift && key === 'Z' && canUndo()) {
+				event.preventDefault();
+				handleUndo();
 				return false;
 			}
 		}
@@ -159,6 +177,16 @@ function MainMenuBar() {
 		dispatch(setCurrentProjectName(''));
 	};
 
+	const handleUndo = () => {
+		Manager.UndoRedo.undo();
+		dispatch(setUndoRedoIndex(undoRedoIndex - 1));
+	};
+
+	const handleRedo = () => {
+		Manager.UndoRedo.redo();
+		dispatch(setUndoRedoIndex(undoRedoIndex + 1));
+	};
+
 	const handleZoomIn = () => {
 		if (Scene.Map.current) {
 			Scene.Map.current.zoomIn();
@@ -196,12 +224,12 @@ function MainMenuBar() {
 	});
 
 	useEffect(() => {
-		window.addEventListener('keydown', keypress);
+		window.addEventListener('keydown', handleKeyDown);
 		return () => {
-			window.removeEventListener('keydown', keypress);
+			window.removeEventListener('keydown', handleKeyDown);
 		};
 		// eslint-disable-next-line
-	}, [currentProjectName, currentTreeMapTag]);
+	});
 
 	return (
 		<>
@@ -233,21 +261,27 @@ function MainMenuBar() {
 								/>
 							</>
 						</MenuItem>
-						<MenuItem icon={<BiSave />} onClick={handleSave} disabled={!isProjectOpened()}>
+						<MenuItem icon={<BiSave />} onClick={handleSave} disabled={isInMap}>
 							Save
 						</MenuItem>
-						<MenuItem icon={<MdClose />} onClick={handleCloseProject} disabled={!isProjectOpened()}>
+						<MenuItem icon={<MdClose />} onClick={handleCloseProject} disabled={!isProjectOpened}>
 							Close
 						</MenuItem>
-						<MenuItem icon={<BiExport />} onClick={handleExport} disabled={!isProjectOpened()}>
+						<MenuItem icon={<BiExport />} onClick={handleExport} disabled={!isProjectOpened}>
 							Export project
 						</MenuItem>
 					</MenuSub>
 					<MenuSub title='Edition'>
-						<MenuItem icon={<AiOutlineZoomIn />} onClick={handleZoomIn} disabled={!isProjectOpened()}>
+						<MenuItem icon={<IoIosUndo />} onClick={handleUndo} disabled={!canUndo()}>
+							Undo
+						</MenuItem>
+						<MenuItem icon={<IoIosRedo />} onClick={handleRedo} disabled={!canRedo()}>
+							Redo
+						</MenuItem>
+						<MenuItem icon={<AiOutlineZoomIn />} onClick={handleZoomIn} disabled={isInMap}>
 							Zoom in
 						</MenuItem>
-						<MenuItem icon={<AiOutlineZoomOut />} onClick={handleZoomOut} disabled={!isProjectOpened()}>
+						<MenuItem icon={<AiOutlineZoomOut />} onClick={handleZoomOut} disabled={isInMap}>
 							Zoom out
 						</MenuItem>
 					</MenuSub>
@@ -264,7 +298,7 @@ function MainMenuBar() {
 						<MenuItem>Coming soon...</MenuItem>
 					</MenuSub>
 					<MenuSub title='Test'>
-						<MenuItem icon={<BsPlay />} onClick={handlePlay} disabled={!isProjectOpened()}>
+						<MenuItem icon={<BsPlay />} onClick={handlePlay} disabled={!isProjectOpened}>
 							Play
 						</MenuItem>
 					</MenuSub>
@@ -273,15 +307,12 @@ function MainMenuBar() {
 					</MenuSub>
 				</Menu>
 			</div>
-
 			<Toolbar />
-
 			<DialogNewProject
 				isOpen={isDialogNewProjectOpen}
 				onAccept={handleAcceptNewProject}
 				onReject={handleRejectNewProject}
 			/>
-
 			<Dialog
 				title='Warning'
 				isOpen={isDialogWarningImportOpen}

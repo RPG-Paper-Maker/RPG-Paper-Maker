@@ -14,8 +14,7 @@ import Menu from './Menu';
 import MenuItem from './MenuItem';
 import MenuSub from './MenuSub';
 import { BiCube, BiSolidPencil, BiSolidRectangle } from 'react-icons/bi';
-import { MdAutoAwesomeMosaic, MdOutlineRectangle } from 'react-icons/md';
-import { ReactComponent as FloorIcon } from '../../assets/icons/floor.svg';
+import { MdAutoAwesomeMosaic } from 'react-icons/md';
 import { ReactComponent as FaceSpriteIcon } from '../../assets/icons/face-sprite.svg';
 import { ReactComponent as FixSpriteIcon } from '../../assets/icons/fix-sprite.svg';
 import { ReactComponent as DoubleSpriteIcon } from '../../assets/icons/double-sprite.svg';
@@ -24,10 +23,14 @@ import { ReactComponent as LayersOffIcon } from '../../assets/icons/layers-off.s
 import { ReactComponent as SquareIcon } from '../../assets/icons/square.svg';
 import { ReactComponent as PixelIcon } from '../../assets/icons/pixel.svg';
 import { FaLayerGroup, FaMountain } from 'react-icons/fa';
-import { GiBrickWall } from 'react-icons/gi';
+import { GiBrickWall, GiEmptyChessboard } from 'react-icons/gi';
 import { RiPaintFill } from 'react-icons/ri';
 import { BsEyeFill } from 'react-icons/bs';
-import { LuMove3D, LuRotate3D, LuScale3D } from 'react-icons/lu';
+import { LuMountain, LuMove3D, LuRotate3D, LuScale3D } from 'react-icons/lu';
+import { TbRectangleFilled } from 'react-icons/tb';
+import { AiOutlineEye } from 'react-icons/ai';
+import { PiSelectionAllFill } from 'react-icons/pi';
+import { VscPaintcan } from 'react-icons/vsc';
 
 function MapEditorMenuBar() {
 	const [selectionIndex, setSelectionIndex] = useState(0);
@@ -43,14 +46,14 @@ function MapEditorMenuBar() {
 		<div className='flex'>
 			<div className='flex-one'>
 				<Menu horizontal isActivable activeIndex={selectionIndex} setActiveIndex={setSelectionIndex}>
-					<MenuSub active icon={<FloorIcon />}>
-						<MenuItem icon={<FloorIcon />}>Floors</MenuItem>
+					<MenuSub active icon={<TbRectangleFilled />}>
+						<MenuItem icon={<TbRectangleFilled />}>Floors</MenuItem>
 						<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleFloor} disabled>
 							Autotiles
 						</MenuItem>
 					</MenuSub>
-					<MenuSub icon={<FaceSpriteIcon />} disabled>
-						<MenuItem icon={<FaceSpriteIcon />} onClick={handleFloor} disabled>
+					<MenuSub icon={<FaceSpriteIcon />}>
+						<MenuItem icon={<FaceSpriteIcon />} onClick={handleFloor}>
 							Face sprite
 						</MenuItem>
 						<MenuItem icon={<FixSpriteIcon />} onClick={handleFloor} disabled>
@@ -66,7 +69,7 @@ function MapEditorMenuBar() {
 							Wall sprite
 						</MenuItem>
 					</MenuSub>
-					<MenuSub icon={<FaMountain />} disabled>
+					<MenuSub icon={<LuMountain />} disabled>
 						<MenuItem icon={<FaMountain />} onClick={handleFloor} disabled>
 							Mountain
 						</MenuItem>
@@ -76,12 +79,11 @@ function MapEditorMenuBar() {
 							3D objects
 						</MenuItem>
 					</MenuSub>
-					<MenuSub icon={<MdOutlineRectangle />} disabled>
-						<MenuItem icon={<MdOutlineRectangle />} onClick={handleFloor} disabled>
-							Object
+					<MenuSub icon={<GiEmptyChessboard />} disabled>
+						<MenuItem icon={<GiEmptyChessboard />} onClick={handleFloor}>
+							Object - 0001: Empty
 						</MenuItem>
 					</MenuSub>
-					<MenuItem icon={<BsEyeFill />} onClick={handleFloor} disabled></MenuItem>
 				</Menu>
 			</div>
 			<Menu horizontal isActivable activeIndex={squarePixelIndex} setActiveIndex={setSquarePixelIndex}>
@@ -95,8 +97,8 @@ function MapEditorMenuBar() {
 				<MenuItem icon={<LuRotate3D />} onClick={handleFloor} disabled></MenuItem>
 				<MenuItem icon={<LuScale3D />} onClick={handleFloor} disabled></MenuItem>
 				<MenuItem icon={<BiSolidPencil />} onClick={handleFloor}></MenuItem>
-				<MenuItem icon={<BiSolidRectangle />} onClick={handleFloor} disabled></MenuItem>
-				<MenuItem icon={<RiPaintFill />} onClick={handleFloor} disabled></MenuItem>
+				<MenuItem icon={<PiSelectionAllFill />} onClick={handleFloor} disabled></MenuItem>
+				<MenuItem icon={<VscPaintcan />} onClick={handleFloor} disabled></MenuItem>
 				<MenuItem separator />
 			</Menu>
 			<Menu horizontal isActivable activeIndex={layersIndex} setActiveIndex={setLayersIndex}>

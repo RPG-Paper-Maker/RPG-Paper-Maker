@@ -26,10 +26,6 @@ class Inputs {
 	public static isSHIFT: boolean = false;
 	public static keys: string[] = [];
 
-	constructor() {
-		throw new Error('This is a static class');
-	}
-
 	static initialize(canvas: HTMLHeadingElement) {
 		Inputs.keys = [];
 

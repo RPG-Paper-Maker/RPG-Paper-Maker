@@ -23,10 +23,11 @@ import {
 	AiOutlineFontSize,
 } from 'react-icons/ai';
 import { BiSave, BiPyramid, BiCube } from 'react-icons/bi';
-import { LuSaveAll, LuLanguages } from 'react-icons/lu';
+import { LuSaveAll, LuLanguages, LuMountain } from 'react-icons/lu';
 import { BsClipboardData, BsMusicNote, BsPlay } from 'react-icons/bs';
 import { TbNumbers } from 'react-icons/tb';
 import { FaArrowsAlt, FaRegKeyboard, FaPlug, FaMountain } from 'react-icons/fa';
+import { PiMountainsFill } from 'react-icons/pi';
 import { MdOutlineAddchart, MdAutoAwesomeMosaic } from 'react-icons/md';
 import { TfiVideoClapper } from 'react-icons/tfi';
 import { GiBrickWall } from 'react-icons/gi';
@@ -125,7 +126,7 @@ function Toolbar() {
 				<MenuItem icon={<BiCube />} onClick={handleFloor} disabled>
 					3D objects
 				</MenuItem>
-				<MenuItem icon={<FaMountain />} onClick={handleFloor} disabled>
+				<MenuItem icon={<LuMountain />} onClick={handleFloor} disabled>
 					Mountains
 				</MenuItem>
 				<MenuItem separator></MenuItem>

@@ -22,6 +22,7 @@ import { KeyValue } from '../common/Types';
 import { Floor } from '../mapElements';
 import { Paths } from '../common/Paths';
 import { Project } from './Project';
+import { UndoRedoState } from './UndoRedoState';
 
 class MapPortion extends Serializable {
 	public static readonly JSON_FLOORS = 'floors';
@@ -43,7 +44,7 @@ class MapPortion extends Serializable {
 		if (!Project.current || !Scene.Map.current) {
 			return '';
 		}
-		let path = Paths.join(Project.current.getPathMaps(), Model.Map.generateMapName(Scene.Map.current.id));
+		let path = Scene.Map.current.getPath();
 		if (temp) {
 			path = Paths.join(path, Paths.TEMP);
 		}
@@ -75,15 +76,16 @@ class MapPortion extends Serializable {
 		position: Position,
 		element: MapElement.Base | null,
 		kind: ElementMapKind = ElementMapKind.None,
-		preview: boolean = false,
-		removingPreview: boolean = false
+		preview = false,
+		removingPreview = false,
+		undoRedo = false
 	) {
 		if (element !== null) {
 			kind = element.kind;
 		}
 		switch (kind) {
 			case ElementMapKind.Floors:
-				this.updateFloor(position, element as MapElement.Floor, preview, removingPreview);
+				this.updateFloor(position, element as MapElement.Floor, preview, removingPreview, undoRedo);
 				break;
 			case ElementMapKind.Autotiles:
 				// TODO
@@ -93,9 +95,15 @@ class MapPortion extends Serializable {
 		}
 	}
 
-	updateFloor(position: Position, floor: MapElement.Floor | null, preview: boolean, removingPreview: boolean) {
+	updateFloor(
+		position: Position,
+		floor: MapElement.Floor | null,
+		preview: boolean,
+		removingPreview: boolean,
+		undoRedo: boolean
+	) {
 		if (floor === null) {
-			this.setFloor(position, null, preview, removingPreview);
+			this.setFloor(position, null, preview, removingPreview, undoRedo);
 		} else {
 			for (let i = 0; i < floor.texture.width; i++) {
 				for (let j = 0; j < floor.texture.height; j++) {
@@ -104,7 +112,8 @@ class MapPortion extends Serializable {
 						newPosition,
 						new Floor(new Rectangle(floor.texture.x + i, floor.texture.y + j, 1, 1)),
 						preview,
-						removingPreview
+						removingPreview,
+						undoRedo
 					);
 				}
 			}
@@ -112,15 +121,16 @@ class MapPortion extends Serializable {
 	}
 
 	setFloor(
-		p: Position,
+		position: Position,
 		floor: MapElement.Floor | null,
 		preview: boolean,
-		removingPreview: boolean
+		removingPreview: boolean,
+		undoRedo: boolean
 	): MapElement.Floor | null {
-		if (!Scene.Map.current || !p.isInMap(Scene.Map.current.modelMap)) {
+		if (!Scene.Map.current || !position.isInMap(Scene.Map.current.modelMap)) {
 			return null;
 		}
-		const key = p.toKey();
+		const key = position.toKey();
 		let changed = false;
 		const previous = this.floors.get(key) || null;
 		if (floor === null) {
@@ -133,10 +143,15 @@ class MapPortion extends Serializable {
 			Scene.Map.current.addPortionToUpdate(this.globalPortion);
 			if (!preview && !removingPreview) {
 				Scene.Map.current.addPortionToSave(this.globalPortion);
+				if (!undoRedo) {
+					Scene.Map.current.undoRedoStates.push(
+						UndoRedoState.create(position, previous, ElementMapKind.Floors, floor, ElementMapKind.Floors)
+					);
+				}
 			}
 		}
 		if (preview) {
-			this.lastPreviewRemove.push([p, previous, ElementMapKind.Floors]);
+			this.lastPreviewRemove.push([position, previous, ElementMapKind.Floors]);
 		}
 		return previous;
 	}

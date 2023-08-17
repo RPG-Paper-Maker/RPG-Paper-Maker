@@ -15,6 +15,7 @@ import { Utils } from '../common/Utils';
 import { Position } from '../core/Position';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Project } from '../core/Project';
+import { MapElement } from '../Editor';
 
 class Base {
 	public static readonly JSON_X_OFFSET = 'xOff';
@@ -40,6 +41,22 @@ class Base {
 		this.yOffset = 0;
 		this.zOffset = 0;
 		this.front = true;
+	}
+
+	static readMapElement(kind: ElementMapKind, json: Record<string, any>) {
+		if (json === null) {
+			return null;
+		}
+		let model: Base | null = null;
+		switch (kind) {
+			case ElementMapKind.Floors:
+				model = new MapElement.Floor();
+				break;
+		}
+		if (model) {
+			model.read(json);
+		}
+		return model;
 	}
 
 	static rotateQuad(

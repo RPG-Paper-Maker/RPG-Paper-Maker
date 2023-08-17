@@ -17,6 +17,7 @@ const TriggersSlice = createSlice({
 		},
 		splitting: false,
 		treeMap: false,
+		menu: false,
 	},
 	reducers: {
 		triggerNewProject(state, action: PayloadAction<boolean>) {
@@ -40,6 +41,9 @@ const TriggersSlice = createSlice({
 		triggerTreeMap(state) {
 			state.treeMap = !state.treeMap;
 		},
+		triggerMenu(state) {
+			state.menu = !state.menu;
+		},
 	},
 });
 
@@ -51,5 +55,6 @@ export const {
 	triggerPlay,
 	triggerSplitting,
 	triggerTreeMap,
+	triggerMenu,
 } = TriggersSlice.actions;
 export const TriggersReducer = TriggersSlice.reducer;

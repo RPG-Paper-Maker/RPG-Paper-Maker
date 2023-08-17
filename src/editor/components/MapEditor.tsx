@@ -10,12 +10,11 @@
 */
 
 import { useEffect, useRef, useState } from 'react';
-import { Manager, Model, Scene } from '../Editor';
+import { Manager, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import '../styles/MapEditor.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, triggerTreeMap } from '../store';
-import { LocalFile } from '../core/LocalFile';
+import { RootState, setUndoRedoIndex, setUndoRedoLength, triggerMenu, triggerTreeMap } from '../store';
 import { Project } from '../core/Project';
 
 function MapEditor() {
@@ -40,6 +39,10 @@ function MapEditor() {
 		if (currentMapTag && currentMapTag.id) {
 			Scene.Map.current = new Scene.Map(currentMapTag);
 			await Scene.Map.current.load();
+			const undoRedoIndex = await Manager.UndoRedo.getCurrentCurrentIndex();
+			const undoRedoLength = await Manager.UndoRedo.getStatesLength();
+			dispatch(setUndoRedoIndex(undoRedoIndex));
+			dispatch(setUndoRedoLength(undoRedoLength));
 			if (!isLooping) {
 				loop();
 			}
@@ -52,12 +55,17 @@ function MapEditor() {
 			if (!isLooping) {
 				setIsLooping(true);
 			}
-			if (map.needsUpdate) {
+			if (map.needsTreeMapUpdate) {
 				dispatch(triggerTreeMap());
-				if (Project.current) {
-					Project.current.treeMaps.save();
-				}
-				map.needsUpdate = false;
+				map.needsTreeMapUpdate = false;
+			}
+			if (map.needsUpdateIndex !== null) {
+				dispatch(setUndoRedoIndex(map.needsUpdateIndex));
+				map.needsUpdateIndex = null;
+			}
+			if (map.needsUpdateLength !== null) {
+				dispatch(setUndoRedoLength(map.needsUpdateLength));
+				map.needsUpdateLength = null;
 			}
 			if (!map.loading) {
 				map.onKeyDownImmediate();

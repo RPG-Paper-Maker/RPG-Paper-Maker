@@ -50,6 +50,10 @@ class Map extends Base {
         properties.skyboxID()->setNumberValue(1);*/
 		const folderMap = await mapModel.createNewMap(jsonObject);
 
+		if (!folderMap) {
+			return;
+		}
+
 		// Portion
 		const globalPortion = new Portion(0, 0, 0);
 		const mapPortion = new MapPortion(globalPortion);
@@ -182,6 +186,7 @@ class Map extends Base {
 		// Temp empty folders
 		await LocalFile.createFolder(Paths.join(folderMap, Paths.TEMP));
 		await LocalFile.createFolder(Paths.join(folderMap, Paths.TEMP_UNDO_REDO));
+		await LocalFile.createFile(Paths.join(folderMap, Paths.TEMP_UNDO_REDO, Paths.INDEX), '-1');
 
 		return folderMap;
 	}

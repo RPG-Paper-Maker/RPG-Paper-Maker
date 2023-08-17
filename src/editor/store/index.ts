@@ -2,7 +2,12 @@ import { configureStore } from '@reduxjs/toolkit';
 import { MapEditorReducer } from './slices/MapEditorReducer';
 import { ProjectsReducer } from './slices/ProjectsReducer';
 import { TriggersReducer } from './slices/TriggersReducer';
-import { setCurrentTreeMapTag, setCurrentTilesetTexture } from './slices/MapEditorReducer';
+import {
+	setCurrentTreeMapTag,
+	setCurrentTilesetTexture,
+	setUndoRedoIndex,
+	setUndoRedoLength,
+} from './slices/MapEditorReducer';
 import {
 	setCurrentProjectName,
 	setLoading,
@@ -20,6 +25,7 @@ import {
 	triggerPlay,
 	triggerSplitting,
 	triggerTreeMap,
+	triggerMenu,
 } from './slices/TriggersReducer';
 
 const store = configureStore({
@@ -38,6 +44,8 @@ export {
 	store,
 	setCurrentTreeMapTag,
 	setCurrentTilesetTexture,
+	setUndoRedoIndex,
+	setUndoRedoLength,
 	setCurrentProjectName,
 	setLoading,
 	setOpenLoading,
@@ -52,5 +60,6 @@ export {
 	triggerPlay,
 	triggerSplitting,
 	triggerTreeMap,
+	triggerMenu,
 };
 export type RootState = ReturnType<typeof store.getState>;

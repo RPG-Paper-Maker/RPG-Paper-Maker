@@ -23,6 +23,7 @@ import { Cursor } from '../core/Cursor';
 import { Position } from '../core/Position';
 import { Rectangle } from '../core/Rectangle';
 import { TreeMapTag } from '../models';
+import { UndoRedoState } from '../core/UndoRedoState';
 
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
@@ -35,7 +36,9 @@ class Map extends Base {
 
 	public id: number;
 	public tag: TreeMapTag;
-	public needsUpdate = false;
+	public needsTreeMapUpdate = false;
+	public needsUpdateIndex: number | null = null;
+	public needsUpdateLength: number | null = null;
 	public modelMap: Model.Map = new Model.Map();
 	public grid: Grid = new Grid();
 	public cursor: Cursor;
@@ -47,6 +50,8 @@ class Map extends Base {
 	public portionsToUpdate: Portion[] = [];
 	public portionsToSave: Portion[] = [];
 	public portionsSaving: Portion[] = [];
+	public undoRedoStates: UndoRedoState[] = [];
+	public undoRedoStatesSaving: UndoRedoState[] = [];
 	public lastPosition: Position | null = null;
 
 	constructor(tag: TreeMapTag) {
@@ -54,6 +59,10 @@ class Map extends Base {
 		this.id = tag.id;
 		this.tag = tag;
 		this.cursor = new Cursor(new Position());
+	}
+
+	getPath() {
+		return Paths.join(Project.current?.getPathMaps(), Model.Map.generateMapName(this.id));
 	}
 
 	async load() {
@@ -119,6 +128,20 @@ class Map extends Base {
 			await this.mapPortion.save(true);
 		}
 		this.portionsSaving = [];
+		if (this.tag.saved) {
+			this.tag.saved = false;
+			this.needsTreeMapUpdate = true;
+			if (Project.current) {
+				Project.current.treeMaps.save();
+			}
+		}
+	}
+
+	async saveUndoRedoStates() {
+		const { index, length } = await Manager.UndoRedo.createStates(this.undoRedoStatesSaving);
+		this.undoRedoStatesSaving = [];
+		this.needsUpdateIndex = index;
+		this.needsUpdateLength = length;
 	}
 
 	initializeSunLight() {
@@ -453,8 +476,10 @@ class Map extends Base {
 	}
 
 	onMouseUp(x: number, y: number) {
-		if (this.lastPosition) {
-			this.add(this.lastPosition, true);
+		if (this.undoRedoStatesSaving.length === 0 && this.undoRedoStates.length > 0) {
+			this.undoRedoStatesSaving = [...this.undoRedoStates];
+			this.saveUndoRedoStates();
+			this.undoRedoStates = [];
 		}
 	}
 
@@ -478,10 +503,6 @@ class Map extends Base {
 			this.portionsSaving = [...this.portionsToSave];
 			this.savePortions();
 			this.portionsToSave = [];
-			if (this.tag.saved) {
-				this.needsUpdate = true;
-			}
-			this.tag.saved = false;
 		}
 
 		Scene.Map.elapsedTime = new Date().getTime() - Scene.Map.lastUpdateTime;

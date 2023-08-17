@@ -51,6 +51,7 @@ class Paths {
 	public static readonly SAVES = 'Saves';
 	public static readonly DEFAULT = 'default';
 	public static readonly TEMP = 'temp';
+	public static readonly INDEX = 'index';
 	public static readonly TEMP_UNDO_REDO = 'temp-undo-redo';
 	public static readonly FILE_MAP_INFOS = 'infos.json';
 	public static readonly FILE_MAP_OBJECTS = 'objects.json';
@@ -117,7 +118,7 @@ class Paths {
 		Paths.FILE_TREE_MAPS,
 	];
 
-	static join(...args: any) {
+	static join(...args: (string | undefined | number)[]): string {
 		return args.join('/'); // TODO: Depends on OS
 	}
 
