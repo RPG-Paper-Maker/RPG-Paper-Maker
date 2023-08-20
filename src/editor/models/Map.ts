@@ -35,9 +35,10 @@ class Map extends Base {
 		return Paths.join(Project.current!.getPathMaps(), Model.Map.generateMapName(this.id), Paths.FILE_MAP_INFOS);
 	}
 
-	static async createDefault() {
+	static async createDefault(id: number) {
 		const jsonObject = {};
 		const mapModel = new Model.Map();
+		mapModel.id = id;
 		// TODO
 		/*
         Position position(7, 0, 0, 7, 0);
@@ -98,7 +99,6 @@ class Map extends Base {
 		if (!Project.current) {
 			return null;
 		}
-		this.id = 1;
 		const mapName = this.getRealName();
 		const folderMap = Paths.join(Project.current.getPathMaps(), mapName);
 		await LocalFile.createFolder(folderMap);

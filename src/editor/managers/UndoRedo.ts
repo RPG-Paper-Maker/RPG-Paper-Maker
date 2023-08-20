@@ -69,6 +69,7 @@ class UndoRedo {
 
 	private static async applyStates(index: number, before: boolean) {
 		const states = await this.getStatesAt(index);
+		console.log(states);
 		if (before) {
 			for (let i = states.length - 1; i >= 0; i--) {
 				const state = states[i];

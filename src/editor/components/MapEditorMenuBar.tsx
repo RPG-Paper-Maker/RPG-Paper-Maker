@@ -15,6 +15,7 @@ import MenuItem from './MenuItem';
 import MenuSub from './MenuSub';
 import { BiCube, BiSolidPencil, BiSolidRectangle } from 'react-icons/bi';
 import { MdAutoAwesomeMosaic } from 'react-icons/md';
+import { ReactComponent as FloorIcon } from '../../assets/icons/floor.svg';
 import { ReactComponent as FaceSpriteIcon } from '../../assets/icons/face-sprite.svg';
 import { ReactComponent as FixSpriteIcon } from '../../assets/icons/fix-sprite.svg';
 import { ReactComponent as DoubleSpriteIcon } from '../../assets/icons/double-sprite.svg';
@@ -31,6 +32,10 @@ import { TbRectangleFilled } from 'react-icons/tb';
 import { AiOutlineEye } from 'react-icons/ai';
 import { PiSelectionAllFill } from 'react-icons/pi';
 import { VscPaintcan } from 'react-icons/vsc';
+import { useDispatch } from 'react-redux';
+import { setCurrentMapElementKind } from '../store';
+import { ElementMapKind } from '../common/Enum';
+import { Scene } from '../Editor';
 
 function MapEditorMenuBar() {
 	const [selectionIndex, setSelectionIndex] = useState(0);
@@ -38,72 +43,80 @@ function MapEditorMenuBar() {
 	const [actionIndex, setActionIndex] = useState(3);
 	const [layersIndex, setLayersIndex] = useState(0);
 
-	const handleFloor = () => {
-		// TODO
+	const dispatch = useDispatch();
+
+	const handleFloors = () => {
+		dispatch(setCurrentMapElementKind(ElementMapKind.Floors));
+		Scene.Map.currentSelectedMapElementKind = ElementMapKind.Floors;
+	};
+
+	const handleFaceSprites = () => {
+		dispatch(setCurrentMapElementKind(ElementMapKind.SpritesFace));
+		Scene.Map.currentSelectedMapElementKind = ElementMapKind.SpritesFace;
 	};
 
 	return (
 		<div className='flex'>
 			<div className='flex-one'>
 				<Menu horizontal isActivable activeIndex={selectionIndex} setActiveIndex={setSelectionIndex}>
-					<MenuSub active icon={<TbRectangleFilled />}>
-						<MenuItem icon={<TbRectangleFilled />}>Floors</MenuItem>
-						<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleFloor} disabled>
+					<MenuSub active icon={<FloorIcon />} onClick={handleFloors}>
+						<MenuItem icon={<FloorIcon />}>Floors</MenuItem>
+						<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleFloors} disabled>
 							Autotiles
 						</MenuItem>
 					</MenuSub>
-					<MenuSub icon={<FaceSpriteIcon />}>
-						<MenuItem icon={<FaceSpriteIcon />} onClick={handleFloor}>
-							Face sprite
+					<MenuSub icon={<FaceSpriteIcon />} onClick={handleFaceSprites}>
+						<MenuItem icon={<FaceSpriteIcon />} onClick={handleFaceSprites}>
+							Face sprites
 						</MenuItem>
-						<MenuItem icon={<FixSpriteIcon />} onClick={handleFloor} disabled>
-							Fix sprite
+						<MenuItem icon={<FixSpriteIcon />} onClick={handleFloors} disabled>
+							Fix sprites
 						</MenuItem>
-						<MenuItem icon={<DoubleSpriteIcon />} onClick={handleFloor} disabled>
-							Double sprite
+						<MenuItem icon={<DoubleSpriteIcon />} onClick={handleFloors} disabled>
+							Double sprites
 						</MenuItem>
-						<MenuItem icon={<QuadraSpriteIcon />} onClick={handleFloor} disabled>
-							Quadra sprite
+						<MenuItem icon={<QuadraSpriteIcon />} onClick={handleFloors} disabled>
+							Quadra sprites
 						</MenuItem>
-						<MenuItem icon={<GiBrickWall />} onClick={handleFloor} disabled>
-							Wall sprite
+						<MenuItem icon={<GiBrickWall />} onClick={handleFloors} disabled>
+							Wall sprites
 						</MenuItem>
 					</MenuSub>
 					<MenuSub icon={<LuMountain />} disabled>
-						<MenuItem icon={<FaMountain />} onClick={handleFloor} disabled>
-							Mountain
+						<MenuItem icon={<FaMountain />} onClick={handleFloors} disabled>
+							Mountains
 						</MenuItem>
 					</MenuSub>
 					<MenuSub icon={<BiCube />} disabled>
-						<MenuItem icon={<BiCube />} onClick={handleFloor} disabled>
+						<MenuItem icon={<BiCube />} onClick={handleFloors} disabled>
 							3D objects
 						</MenuItem>
 					</MenuSub>
 					<MenuSub icon={<GiEmptyChessboard />} disabled>
-						<MenuItem icon={<GiEmptyChessboard />} onClick={handleFloor}>
-							Object - 0001: Empty
+						<MenuItem icon={<GiEmptyChessboard />} onClick={handleFloors}>
+							Objects - 0001: Empty
 						</MenuItem>
 					</MenuSub>
 				</Menu>
 			</div>
 			<Menu horizontal isActivable activeIndex={squarePixelIndex} setActiveIndex={setSquarePixelIndex}>
-				<MenuItem icon={<SquareIcon />} onClick={handleFloor}></MenuItem>
-				<MenuItem icon={<PixelIcon />} onClick={handleFloor} disabled></MenuItem>
+				<MenuItem icon={<SquareIcon />} onClick={handleFloors}></MenuItem>
+				<MenuItem icon={<PixelIcon />} onClick={handleFloors} disabled></MenuItem>
 
 				<MenuItem separator />
 			</Menu>
 			<Menu horizontal isActivable activeIndex={actionIndex} setActiveIndex={setActionIndex}>
-				<MenuItem icon={<LuMove3D />} onClick={handleFloor} disabled></MenuItem>
-				<MenuItem icon={<LuRotate3D />} onClick={handleFloor} disabled></MenuItem>
-				<MenuItem icon={<LuScale3D />} onClick={handleFloor} disabled></MenuItem>
-				<MenuItem icon={<BiSolidPencil />} onClick={handleFloor}></MenuItem>
-				<MenuItem icon={<PiSelectionAllFill />} onClick={handleFloor} disabled></MenuItem>
-				<MenuItem icon={<VscPaintcan />} onClick={handleFloor} disabled></MenuItem>
+				<MenuItem icon={<LuMove3D />} onClick={handleFloors} disabled></MenuItem>
+				<MenuItem icon={<LuRotate3D />} onClick={handleFloors} disabled></MenuItem>
+				<MenuItem icon={<LuScale3D />} onClick={handleFloors} disabled></MenuItem>
+				<MenuItem icon={<BiSolidPencil />} onClick={handleFloors}></MenuItem>
+				<MenuItem icon={<PiSelectionAllFill />} onClick={handleFloors} disabled></MenuItem>
+				<MenuItem icon={<VscPaintcan />} onClick={handleFloors} disabled></MenuItem>
 				<MenuItem separator />
 			</Menu>
 			<Menu horizontal isActivable activeIndex={layersIndex} setActiveIndex={setLayersIndex}>
-				<MenuItem icon={<LayersOffIcon />} onClick={handleFloor}></MenuItem>
-				<MenuItem icon={<FaLayerGroup />} onClick={handleFloor} disabled></MenuItem>
+				<MenuItem icon={<LayersOffIcon />} onClick={handleFloors}></MenuItem>
+				<MenuItem icon={<FaLayerGroup />} onClick={handleFloors} disabled></MenuItem>
 			</Menu>
 		</div>
 	);

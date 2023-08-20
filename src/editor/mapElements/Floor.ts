@@ -31,12 +31,7 @@ class Floor extends Land {
 	}
 
 	equals(mapElement: MapElement.Base) {
-		if (mapElement.kind === this.kind) {
-			const floor = mapElement as MapElement.Floor;
-			return floor.texture.equals(this.texture);
-		} else {
-			return false;
-		}
+		return super.equals(mapElement);
 	}
 
 	updateGeometry(geometry: CustomGeometry, position: Position, width: number, height: number, count: number) {

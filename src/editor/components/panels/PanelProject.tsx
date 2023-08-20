@@ -66,10 +66,8 @@ function PanelProject() {
 		if (isClick) {
 			if (index !== -1 && model) {
 				setMapForcedCurrentSelectedItemID(model.id);
-				dispatch(setCurrentTreeMapTag(model as Model.TreeMapTag));
 			} else {
 				setMapForcedCurrentSelectedItemID(-1);
-				dispatch(setCurrentTreeMapTag(null));
 			}
 		}
 	};

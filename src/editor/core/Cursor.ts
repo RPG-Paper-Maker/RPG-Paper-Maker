@@ -29,6 +29,8 @@ class Cursor {
 
 	async load() {
 		const material = await Manager.GL.loadTexture('./assets/textures/cursor.png');
+		material.depthTest = false;
+		material.depthWrite = false;
 		const localPosition = this.position.toVector3(false);
 		const a = localPosition.x;
 		const b = localPosition.y;
@@ -56,7 +58,7 @@ class Cursor {
 		geometry.pushQuadUVs(texA, texB, texC, texD);
 		geometry.updateAttributes();
 		this.mesh = new THREE.Mesh(geometry, material);
-		this.mesh.renderOrder = 3;
+		this.mesh.renderOrder = 2;
 		Scene.Map.current?.scene.add(this.mesh);
 	}
 

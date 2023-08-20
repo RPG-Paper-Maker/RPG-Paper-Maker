@@ -17,13 +17,16 @@ import { CustomGeometry } from '../core/CustomGeometry';
 import { Project } from '../core/Project';
 import { MapElement } from '../Editor';
 
-class Base {
+abstract class Base {
 	public static readonly JSON_X_OFFSET = 'xOff';
 	public static readonly JSON_Y_OFFSET = 'yOff';
 	public static readonly JSON_Z_OFFSET = 'zOff';
+	public static readonly JSON_FRONT = 'f';
+	public static readonly JSON_KIND = 'k';
 	public static readonly DEFAULT_X_OFFSET = 0;
 	public static readonly DEFAULT_Y_OFFSET = 0;
 	public static readonly DEFAULT_Z_OFFSET = 0;
+	public static readonly DEFAULT_FRONT = true;
 
 	public static readonly COEF_TEX = 0.2;
 	public static readonly Y_AXIS = new THREE.Vector3(0, 1, 0);
@@ -52,11 +55,26 @@ class Base {
 			case ElementMapKind.Floors:
 				model = new MapElement.Floor();
 				break;
+			case ElementMapKind.SpritesFace:
+				model = new MapElement.Sprite();
+				break;
 		}
 		if (model) {
 			model.read(json);
 		}
 		return model;
+	}
+
+	static rotateVertex(
+		vec: THREE.Vector3,
+		center: THREE.Vector3,
+		angle: number,
+		axis: THREE.Vector3,
+		isDegree: boolean = true
+	) {
+		vec.sub(center);
+		vec.applyAxisAngle(axis, isDegree ? (angle * Math.PI) / 180.0 : angle);
+		vec.add(center);
 	}
 
 	static rotateQuad(
@@ -122,6 +140,8 @@ class Base {
 		Utils.writeDefaultValue(json, Base.JSON_Y_OFFSET, this.yOffset, Base.DEFAULT_Y_OFFSET);
 		Utils.writeDefaultValue(json, Base.JSON_Z_OFFSET, this.zOffset, Base.DEFAULT_Z_OFFSET);
 	}
+
+	abstract equals(mapElement: MapElement.Base): boolean;
 }
 
 export { Base };

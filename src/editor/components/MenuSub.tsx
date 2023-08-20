@@ -25,6 +25,7 @@ type Props = {
 	setActiveIndex?: (v: number) => void;
 	triggerCloseAll?: boolean;
 	setTriggerCloseAll?: (v: boolean) => void;
+	onClick?: () => void;
 };
 
 function MenuSub({
@@ -39,6 +40,7 @@ function MenuSub({
 	setActiveIndex,
 	triggerCloseAll,
 	setTriggerCloseAll,
+	onClick,
 }: Props) {
 	const [testVisible, setTestVisible] = useState(false);
 	const [subVisible, setSubVisible] = useState(false);
@@ -95,6 +97,7 @@ function MenuSub({
 			if (isActivable && setActiveIndex) {
 				setActiveIndex(index);
 			}
+			onClick?.();
 		}
 	};
 

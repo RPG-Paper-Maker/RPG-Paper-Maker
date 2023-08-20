@@ -16,6 +16,7 @@ import { Position } from '../core/Position';
 import { Rectangle } from '../core/Rectangle';
 import { Base } from './Base';
 import { Project } from '../core/Project';
+import { MapElement } from '../Editor';
 
 class Land extends Base {
 	public static readonly JSON_UP = 'up';
@@ -30,6 +31,15 @@ class Land extends Base {
 
 		this.up = up;
 		this.texture = texture;
+	}
+
+	equals(mapElement: MapElement.Base) {
+		if (mapElement.kind === this.kind) {
+			const floor = mapElement as MapElement.Floor;
+			return floor.texture.equals(this.texture);
+		} else {
+			return false;
+		}
 	}
 
 	getIndex(width: number): number {

@@ -21,7 +21,7 @@ import Input from '../Input';
 import Loader from '../Loader';
 import { useDispatch } from 'react-redux';
 import { removeProject } from '../../store';
-import { LocalForage } from '../../common/Enum';
+import { ElementMapKind, LocalForage } from '../../common/Enum';
 
 type Props = {
 	isOpen: boolean;
@@ -81,7 +81,9 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 		Project.current = project;
 		await LocalFile.createFolder(project.getPath());
 		await LocalFile.createFolder(project.getPathMaps());
-		await Model.Map.createDefault();
+		await Model.Map.createDefault(1);
+		await Model.Map.createDefault(2);
+		Scene.Map.currentSelectedMapElementKind = ElementMapKind.Floors;
 		for (const file of Paths.ALL_JSON) {
 			await LocalFile.copyPublicFile(
 				Paths.join(Paths.ROOT_DIRECTORY_LOCAL, Paths.DEFAULT, file),

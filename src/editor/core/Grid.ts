@@ -18,11 +18,12 @@ class Grid {
 		const material = new THREE.LineBasicMaterial({
 			color: 0xffffff,
 			transparent: true,
-			opacity: 0.4,
+			opacity: 0.3,
 			polygonOffset: true,
 			polygonOffsetFactor: 1,
 			polygonOffsetUnits: 1,
 			depthWrite: false,
+			depthTest: false,
 		});
 		const points = [];
 		for (let i = 0, l = modelMap.length; i <= l; i++) {
@@ -35,7 +36,7 @@ class Grid {
 		}
 		const geometry = new THREE.BufferGeometry().setFromPoints(points);
 		const line = new THREE.LineSegments(geometry, material);
-		line.renderOrder = 2;
+		line.renderOrder = 1;
 		Scene.Map.current?.scene.add(line);
 	}
 }

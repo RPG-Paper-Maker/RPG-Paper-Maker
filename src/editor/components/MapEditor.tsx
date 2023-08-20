@@ -14,13 +14,13 @@ import { Manager, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import '../styles/MapEditor.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setUndoRedoIndex, setUndoRedoLength, triggerMenu, triggerTreeMap } from '../store';
-import { Project } from '../core/Project';
+import { RootState, setUndoRedoIndex, setUndoRedoLength, triggerTreeMap } from '../store';
 
 function MapEditor() {
 	const [isLooping, setIsLooping] = useState(false);
 
 	const currentMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
+	const curr = useSelector((state: RootState) => state.mapEditor.currentTilesetTexture);
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const dispatch = useDispatch();
@@ -35,8 +35,7 @@ function MapEditor() {
 	};
 
 	const initializeMap = async () => {
-		clearMap();
-		if (currentMapTag && currentMapTag.id) {
+		if (currentMapTag && currentMapTag.id > 0) {
 			Scene.Map.current = new Scene.Map(currentMapTag);
 			await Scene.Map.current.load();
 			const undoRedoIndex = await Manager.UndoRedo.getCurrentCurrentIndex();
@@ -106,6 +105,7 @@ function MapEditor() {
 	}, []);
 
 	useEffect(() => {
+		clearMap();
 		initializeMap().catch(console.error);
 		// eslint-disable-next-line
 	}, [currentMapTag]);

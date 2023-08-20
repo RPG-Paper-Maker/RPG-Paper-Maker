@@ -73,6 +73,10 @@ class CustomGeometry extends THREE.BufferGeometry {
 		vec.add(center);
 	}
 
+	isEmpty(): boolean {
+		return this._vertices.length === 0;
+	}
+
 	getVerticesVectors(): THREE.Vector3[] {
 		const vertices = [];
 		const array = this.getVertices();
@@ -83,7 +87,7 @@ class CustomGeometry extends THREE.BufferGeometry {
 	}
 
 	getVertices(): ArrayLike<number> {
-		return this.getAttribute('position').array;
+		return this.getAttribute('position')?.array || [];
 	}
 
 	getIndices(): ArrayLike<number> {

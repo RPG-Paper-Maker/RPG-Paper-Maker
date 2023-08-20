@@ -18,8 +18,10 @@ import { Position } from '../core/Position';
 import { Rectangle } from '../core/Rectangle';
 import { Base } from './Base';
 import { Project } from '../core/Project';
+import { MapElement } from '../Editor';
 
 class Sprite extends Base {
+	public static readonly JSON_TEXTURE = 't';
 	public static MODEL = [
 		new THREE.Vector3(-0.5, 1.0, 0.0),
 		new THREE.Vector3(0.5, 1.0, 0.0),
@@ -27,16 +29,14 @@ class Sprite extends Base {
 		new THREE.Vector3(-0.5, 0.0, 0.0),
 	];
 
-	public texture: Rectangle;
+	public texture!: Rectangle;
 
-	constructor(json?: Record<string, any>) {
-		super();
-
-		this.front = true;
-		this.texture = new Rectangle();
+	static fromJSON(json: Record<string, any>): Sprite {
+		const sprite = new Sprite();
 		if (json) {
-			this.read(json);
+			sprite.read(json);
 		}
+		return sprite;
 	}
 
 	static create(kind: ElementMapKind, texture: Rectangle): Sprite {
@@ -64,6 +64,15 @@ class Sprite extends Base {
 		return count + 4;
 	}
 
+	equals(mapElement: MapElement.Base) {
+		if (mapElement.kind === this.kind) {
+			const floor = mapElement as MapElement.Floor;
+			return floor.texture.equals(this.texture);
+		} else {
+			return false;
+		}
+	}
+
 	updateGeometry(
 		geometry: CustomGeometry | CustomGeometryFace,
 		width: number,
@@ -77,7 +86,7 @@ class Sprite extends Base {
 		const vecB = Sprite.MODEL[1].clone();
 		const vecC = Sprite.MODEL[2].clone();
 		const vecD = Sprite.MODEL[3].clone();
-		const center = new THREE.Vector3(0, 0, 0);
+		let center = new THREE.Vector3(0, 0, 0);
 		const size = new THREE.Vector3(
 			this.texture.width * Project.getSquareSize() * position.scaleX,
 			this.texture.height * Project.getSquareSize() * position.scaleY,
@@ -116,8 +125,8 @@ class Sprite extends Base {
 		let y = (this.texture.y * Project.getSquareSize()) / height;
 		let w = (this.texture.width * Project.getSquareSize()) / width;
 		let h = (this.texture.height * Project.getSquareSize()) / height;
-		const coefX = Base.COEF_TEX / width;
-		const coefY = Base.COEF_TEX / height;
+		let coefX = Base.COEF_TEX / width;
+		let coefY = Base.COEF_TEX / height;
 		x += coefX;
 		y += coefY;
 		w -= coefX * 2;
@@ -130,23 +139,23 @@ class Sprite extends Base {
 
 		if (geometry instanceof CustomGeometryFace) {
 			// Face sprite
+			const c = new THREE.Vector3(center.x, localPosition.y, center.z);
 			geometry.pushQuadVerticesFace(
-				Sprite.MODEL[0].clone(),
-				Sprite.MODEL[1].clone(),
-				Sprite.MODEL[2].clone(),
-				Sprite.MODEL[3].clone(),
-				size.clone(),
-				new THREE.Vector3(center.x, localPosition.y, center.z)
+				Sprite.MODEL[0].clone().multiply(size).add(c),
+				Sprite.MODEL[1].clone().multiply(size).add(c),
+				Sprite.MODEL[2].clone().multiply(size).add(c),
+				Sprite.MODEL[3].clone().multiply(size).add(c),
+				c
 			);
 			geometry.pushQuadIndices(count);
 			geometry.pushQuadUVs(texA, texB, texC, texD);
 			count = count + 4;
 		} else {
 			// Simple sprite
-			const vecSimpleA = vecA.clone();
-			const vecSimpleB = vecB.clone();
-			const vecSimpleC = vecC.clone();
-			const vecSimpleD = vecD.clone();
+			let vecSimpleA = vecA.clone();
+			let vecSimpleB = vecB.clone();
+			let vecSimpleC = vecC.clone();
+			let vecSimpleD = vecD.clone();
 			count = Sprite.addStaticSpriteToGeometry(
 				geometry,
 				vecSimpleA,
@@ -163,10 +172,10 @@ class Sprite extends Base {
 
 		// Double sprite
 		if (this.kind === ElementMapKind.SpritesDouble || this.kind === ElementMapKind.SpritesQuadra) {
-			const vecDoubleA = vecA.clone();
-			const vecDoubleB = vecB.clone();
-			const vecDoubleC = vecC.clone();
-			const vecDoubleD = vecD.clone();
+			let vecDoubleA = vecA.clone();
+			let vecDoubleB = vecB.clone();
+			let vecDoubleC = vecC.clone();
+			let vecDoubleD = vecD.clone();
 			Base.rotateQuad(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center, 90, Sprite.Y_AXIS);
 			count = Sprite.addStaticSpriteToGeometry(
 				geometry,
@@ -183,14 +192,14 @@ class Sprite extends Base {
 
 			// Quadra sprite
 			if (this.kind === ElementMapKind.SpritesQuadra) {
-				const vecQuadra1A = vecA.clone();
-				const vecQuadra1B = vecB.clone();
-				const vecQuadra1C = vecC.clone();
-				const vecQuadra1D = vecD.clone();
-				const vecQuadra2A = vecA.clone();
-				const vecQuadra2B = vecB.clone();
-				const vecQuadra2C = vecC.clone();
-				const vecQuadra2D = vecD.clone();
+				let vecQuadra1A = vecA.clone();
+				let vecQuadra1B = vecB.clone();
+				let vecQuadra1C = vecC.clone();
+				let vecQuadra1D = vecD.clone();
+				let vecQuadra2A = vecA.clone();
+				let vecQuadra2B = vecB.clone();
+				let vecQuadra2C = vecC.clone();
+				let vecQuadra2D = vecD.clone();
 				Base.rotateQuad(vecQuadra1A, vecQuadra1B, vecQuadra1C, vecQuadra1D, center, 45, Sprite.Y_AXIS);
 				Base.rotateQuad(vecQuadra2A, vecQuadra2B, vecQuadra2C, vecQuadra2D, center, -45, Sprite.Y_AXIS);
 				count = Sprite.addStaticSpriteToGeometry(
@@ -233,7 +242,17 @@ class Sprite extends Base {
 		super.read(json);
 		this.front = Utils.defaultValue(json.f, true);
 		this.kind = json.k;
+		this.texture = new Rectangle();
 		this.texture.read(json.t);
+	}
+
+	write(json: Record<string, any>) {
+		super.write(json);
+		Utils.writeDefaultValue(json, Base.JSON_FRONT, this.front, Base.DEFAULT_FRONT);
+		json[Base.JSON_KIND] = this.kind;
+		const array: any[] = [];
+		this.texture.write(array);
+		json[Sprite.JSON_TEXTURE] = array;
 	}
 }
 

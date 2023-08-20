@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" width="14" height="14">
   <rect width="14" height="14" fill="none" />
-  <line x1="7" y1="0" x2="7" y2="14" stroke="currentColor" stroke-width="2" />
+  <line x1="7" y1="1" x2="7" y2="13" stroke="currentColor" stroke-width="2" />
   <polyline points="0,7 2,5 2,9" fill="currentColor" />
   <line x1="0" y1="7" x2="4" y2="7" stroke="currentColor" stroke-width="1" />
   <polyline points="13,7 11,5 11,9" fill="currentColor" />

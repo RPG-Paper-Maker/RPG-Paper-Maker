@@ -5,6 +5,7 @@ import { TriggersReducer } from './slices/TriggersReducer';
 import {
 	setCurrentTreeMapTag,
 	setCurrentTilesetTexture,
+	setCurrentMapElementKind,
 	setUndoRedoIndex,
 	setUndoRedoLength,
 } from './slices/MapEditorReducer';
@@ -44,6 +45,7 @@ export {
 	store,
 	setCurrentTreeMapTag,
 	setCurrentTilesetTexture,
+	setCurrentMapElementKind,
 	setUndoRedoIndex,
 	setUndoRedoLength,
 	setCurrentProjectName,

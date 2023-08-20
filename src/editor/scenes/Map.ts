@@ -24,12 +24,14 @@ import { Position } from '../core/Position';
 import { Rectangle } from '../core/Rectangle';
 import { TreeMapTag } from '../models';
 import { UndoRedoState } from '../core/UndoRedoState';
+import { ElementMapKind } from '../common/Enum';
 
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
 
 	public static current: Scene.Map | null;
 	public static currentSelectedTexture: Rectangle = new Rectangle(0, 0, 1, 1);
+	public static currentSelectedMapElementKind: ElementMapKind = ElementMapKind.Floors;
 	public static elapsedTime = 0;
 	public static averageElapsedTime = 0;
 	public static lastUpdateTime = new Date().getTime();
@@ -70,7 +72,7 @@ class Map extends Base {
 
 		// Tileset texture material
 		this.materialTileset = await Manager.GL.loadTexture('./assets/textures/plains-woods.png');
-		this.materialTileset.depthWrite = false;
+		//this.materialTileset.depthWrite = false;
 
 		// Load map model
 		const mapName = Model.Map.generateMapName(this.id);
@@ -102,7 +104,6 @@ class Map extends Base {
 		await this.mapPortion.load();
 		this.mapPortion.updateMaterials();
 		this.mapPortion.updateGeometries();
-		this.mapPortion.addToScene();
 
 		// Cursor
 		await this.cursor.load();
@@ -504,6 +505,11 @@ class Map extends Base {
 			this.savePortions();
 			this.portionsToSave = [];
 		}
+
+		const vector = new THREE.Vector3();
+		this.camera.getThreeCamera().getWorldDirection(vector);
+		const angle = Math.atan2(vector.x, vector.z) + Math.PI;
+		this.mapPortion.updateFaceSprites(angle);
 
 		Scene.Map.elapsedTime = new Date().getTime() - Scene.Map.lastUpdateTime;
 		Scene.Map.averageElapsedTime = (Scene.Map.averageElapsedTime + Scene.Map.elapsedTime) / 2;
