@@ -58,3 +58,9 @@ export enum Direction {
 	Down,
 	None,
 }
+
+export enum RaycastingLayer {
+	Plane = 1,
+	Floors = 2,
+	Sprites = 3,
+}

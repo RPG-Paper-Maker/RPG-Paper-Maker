@@ -24,7 +24,8 @@ import { Position } from '../core/Position';
 import { Rectangle } from '../core/Rectangle';
 import { TreeMapTag } from '../models';
 import { UndoRedoState } from '../core/UndoRedoState';
-import { ElementMapKind } from '../common/Enum';
+import { ElementMapKind, RaycastingLayer } from '../common/Enum';
+import { CustomGeometry } from '../core/CustomGeometry';
 
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
@@ -95,7 +96,7 @@ class Map extends Base {
 		this.meshPlane.visible = false;
 		this.meshPlane.position.set(Math.floor(length / 2), 0, Math.floor(width / 2));
 		this.meshPlane.rotation.set(Math.PI / -2, 0, 0);
-		this.meshPlane.layers.enable(1);
+		this.meshPlane.layers.enable(RaycastingLayer.Plane);
 		this.scene.add(this.meshPlane);
 
 		// Load portions
@@ -149,7 +150,7 @@ class Map extends Base {
 		const ambient = new THREE.AmbientLight(0xffffff, 0.61);
 		this.scene.add(ambient);
 		this.sunLight = new THREE.DirectionalLight(0xffffff, 0.5);
-		this.sunLight.position.set(-1, 1.75, 1);
+		this.sunLight.position.set(1, 1.75, 1);
 		this.sunLight.position.multiplyScalar(16 * 10);
 		this.sunLight.target.position.set(0, 0, 0);
 		this.scene.add(this.sunLight);
@@ -166,7 +167,7 @@ class Map extends Base {
 	}
 
 	add(position: Position, preview: boolean = false) {
-		if (this.lastPosition && !preview) {
+		if (!preview) {
 			const positions = this.traceLine(this.lastPosition, position);
 			for (const p of positions) {
 				if (p.isInMap(this.modelMap)) {
@@ -185,14 +186,12 @@ class Map extends Base {
 	}
 
 	remove(position: Position) {
-		if (this.lastPosition) {
-			const positions = this.traceLine(this.lastPosition, position);
-			for (const p of positions) {
-				if (p.isInMap(this.modelMap)) {
-					this.mapPortion.remove(p);
-				} else {
-					this.mapPortion.removeLastPreview();
-				}
+		const positions = this.traceLine(this.lastPosition, position);
+		for (const p of positions) {
+			if (p.isInMap(this.modelMap)) {
+				this.mapPortion.remove(p);
+			} else {
+				this.mapPortion.removeLastPreview();
 			}
 		}
 	}
@@ -212,16 +211,33 @@ class Map extends Base {
 			pointer.y = -(Inputs.mouseY / Manager.GL.mapEditorContext.canvasHeight) * 2 + 1;
 		}
 		Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
-		Manager.GL.raycaster.layers.set(1);
+		let layer = RaycastingLayer.Plane;
+		if (Inputs.isMouseRightPressed) {
+			switch (Scene.Map.currentSelectedMapElementKind) {
+				case ElementMapKind.SpritesFace:
+					layer = RaycastingLayer.Sprites;
+					break;
+			}
+		}
+		Manager.GL.raycaster.layers.set(layer);
 		const intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		if (intersects.length > 0) {
-			const point = intersects[0].point;
-			const position = new Position(
-				Math.floor(point.x / Project.getSquareSize()),
+			const obj = intersects[0];
+			let position = new Position(
+				Math.floor(obj.point.x / Project.getSquareSize()),
 				0,
 				0,
-				Math.floor(point.z / Project.getSquareSize())
+				Math.floor(obj.point.z / Project.getSquareSize())
 			);
+			if (Inputs.isMouseRightPressed && obj.faceIndex !== undefined) {
+				const geometry = (obj.object as THREE.Mesh).geometry as CustomGeometry;
+				if (geometry) {
+					const newPosition = geometry.facePositions[obj.faceIndex];
+					if (newPosition) {
+						position = newPosition;
+					}
+				}
+			}
 			if (this.lastPosition === null || !this.lastPosition.equals(position)) {
 				if (!Inputs.isMouseLeftPressed && !Inputs.isMouseRightPressed) {
 					this.add(position, true);
@@ -240,7 +256,10 @@ class Map extends Base {
 		}
 	}
 
-	traceLine(previous: Position, current: Position) {
+	traceLine(previous: Position | null, current: Position) {
+		if (previous === null) {
+			return [current];
+		}
 		const positions: Position[] = [];
 		let x1 = previous.x;
 		let x2 = current.x;

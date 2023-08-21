@@ -66,7 +66,7 @@ function MapEditor() {
 				dispatch(setUndoRedoLength(map.needsUpdateLength));
 				map.needsUpdateLength = null;
 			}
-			if (!map.loading) {
+			if (!map.loading && Inputs.keys.length > 0) {
 				map.onKeyDownImmediate();
 			}
 			if (!map.loading) {

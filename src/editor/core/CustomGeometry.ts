@@ -10,40 +10,13 @@
 */
 
 import * as THREE from 'three';
+import { Position } from './Position';
 
 class CustomGeometry extends THREE.BufferGeometry {
 	public _vertices: number[] = [];
 	public _indices: number[] = [];
 	public _uvs: number[] = [];
-
-	static createBox(width: number, height: number, depth: number) {
-		const geometry = new CustomGeometry();
-		const w = width / 2;
-		const h = height / 2;
-		const d = depth / 2;
-		const vecA = new THREE.Vector3(-w, -h, -d);
-		const vecB = new THREE.Vector3(w, -h, -d);
-		const vecC = new THREE.Vector3(w, -h, d);
-		const vecD = new THREE.Vector3(-w, -h, d);
-		const vecE = new THREE.Vector3(-w, h, -d);
-		const vecF = new THREE.Vector3(w, h, -d);
-		const vecG = new THREE.Vector3(w, h, d);
-		const vecH = new THREE.Vector3(-w, h, d);
-		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
-		geometry.pushQuadVertices(vecE, vecF, vecG, vecH);
-		geometry.pushQuadVertices(vecE, vecH, vecD, vecA);
-		geometry.pushQuadVertices(vecF, vecG, vecC, vecB);
-		geometry.pushQuadVertices(vecE, vecF, vecB, vecA);
-		geometry.pushQuadVertices(vecH, vecG, vecC, vecD);
-		geometry.pushQuadIndices(0);
-		geometry.pushQuadIndices(4);
-		geometry.pushQuadIndices(8);
-		geometry.pushQuadIndices(12);
-		geometry.pushQuadIndices(16);
-		geometry.pushQuadIndices(20);
-		geometry.updateAttributes();
-		return geometry;
-	}
+	public facePositions: Position[] = [];
 
 	static uvsQuadToTex(
 		texA: THREE.Vector2,
@@ -121,8 +94,11 @@ class CustomGeometry extends THREE.BufferGeometry {
 		this._vertices.push(vecC.x, vecC.y, vecC.z);
 	}
 
-	pushTriangleIndices(count: number) {
+	pushTriangleIndices(count: number, position?: Position) {
 		this._indices.push(count, count + 1, count + 2);
+		if (position) {
+			this.facePositions.push(position);
+		}
 	}
 
 	pushTriangleUVs(texA: THREE.Vector2, texB: THREE.Vector2, texC: THREE.Vector2) {
@@ -138,9 +114,12 @@ class CustomGeometry extends THREE.BufferGeometry {
 		this._vertices.push(vecD.x, vecD.y, vecD.z);
 	}
 
-	pushQuadIndices(count: number) {
+	pushQuadIndices(count: number, position?: Position) {
 		this._indices.push(count, count + 1, count + 2);
 		this._indices.push(count, count + 2, count + 3);
+		if (position) {
+			this.facePositions.push(position, position);
+		}
 	}
 
 	pushQuadUVs(texA: THREE.Vector2, texB: THREE.Vector2, texC: THREE.Vector2, texD: THREE.Vector2) {

@@ -17,7 +17,7 @@ import { Portion } from './Portion';
 import { Position } from './Position';
 import { Rectangle } from './Rectangle';
 import { Serializable } from './Serializable';
-import { ElementMapKind } from '../common/Enum';
+import { ElementMapKind, RaycastingLayer } from '../common/Enum';
 import { KeyValue } from '../common/Types';
 import { Floor } from '../mapElements';
 import { Paths } from '../common/Paths';
@@ -343,6 +343,7 @@ class MapPortion extends Serializable {
 		if (!fixGeometry.isEmpty()) {
 			fixGeometry.updateAttributes();
 			this.spritesFixMesh.geometry = fixGeometry;
+			this.spritesFixMesh.layers.enable(RaycastingLayer.Sprites);
 			Scene.Map.current!.scene.add(this.spritesFixMesh);
 		} else {
 			Scene.Map.current!.scene.remove(this.spritesFixMesh);
@@ -351,6 +352,7 @@ class MapPortion extends Serializable {
 		if (!faceGeometry.isEmpty()) {
 			faceGeometry.updateAttributes();
 			this.spritesFaceMesh.geometry = faceGeometry;
+			this.spritesFaceMesh.layers.enable(RaycastingLayer.Sprites);
 			Scene.Map.current!.scene.add(this.spritesFaceMesh);
 		} else {
 			Scene.Map.current!.scene.remove(this.spritesFaceMesh);

@@ -147,7 +147,7 @@ class Sprite extends Base {
 				Sprite.MODEL[3].clone().multiply(size).add(c),
 				c
 			);
-			geometry.pushQuadIndices(count);
+			geometry.pushQuadIndices(count, position);
 			geometry.pushQuadUVs(texA, texB, texC, texD);
 			count = count + 4;
 		} else {

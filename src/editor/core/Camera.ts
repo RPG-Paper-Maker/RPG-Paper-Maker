@@ -83,7 +83,7 @@ class Camera {
 			Scene.Map.current.sunLight.target.position.copy(this.targetPosition);
 			Scene.Map.current.sunLight.target.updateMatrixWorld();
 			Scene.Map.current.sunLight.position
-				.set(-1, 1.75, 1)
+				.set(-0.5, 1.75, 1)
 				.multiplyScalar(16 * 10)
 				.add(this.targetPosition);
 			const d = Math.max((16 * this.distance) / 10, 400);
