@@ -233,6 +233,11 @@ code {
 	text-align: center;
 }
 
+.text-small-detail {
+	color: var(--grey-color);
+	font-size: 11px;
+}
+
 .bg-darker {
 	background-color: var(--darker-bg-color);
 }

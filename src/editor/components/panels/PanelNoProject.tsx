@@ -40,7 +40,11 @@ function PanelNoProject() {
 	};
 
 	const renderProjectsList = () => {
-		return projects.map((project) => <ProjectPreview key={project.name} project={project} />);
+		return projects.length === 0 ? (
+			<div className='text-small-detail'>No projects available.</div>
+		) : (
+			projects.map((project) => <ProjectPreview key={project.name} project={project} />)
+		);
 	};
 
 	return (
