@@ -22,6 +22,7 @@ import Loader from '../Loader';
 import { useDispatch } from 'react-redux';
 import { removeProject } from '../../store';
 import { ElementMapKind, LocalForage } from '../../common/Enum';
+import { Rectangle } from '../../core/Rectangle';
 
 type Props = {
 	isOpen: boolean;
@@ -83,6 +84,7 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 		await LocalFile.createFolder(project.getPathMaps());
 		await Model.Map.createDefault(1);
 		await Model.Map.createDefault(2);
+		Scene.Map.currentSelectedTexture = new Rectangle();
 		Scene.Map.currentSelectedMapElementKind = ElementMapKind.Floors;
 		for (const file of Paths.ALL_JSON) {
 			await LocalFile.copyPublicFile(
