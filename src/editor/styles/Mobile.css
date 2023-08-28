@@ -1,0 +1,52 @@
+@media (max-width: 1410px) {
+	.toolbar {
+		display: none;
+	}
+
+	.toolbar-mobile-separator {
+		border-top: 1px solid var(--darkest-bg-color);
+	}
+
+	.project-preview svg {
+		visibility: visible;
+	}
+
+	.project-preview {
+		background-color: var(--hover-main-bg-color);
+	}
+}
+
+@media (max-width: 1000px) {
+	.mobile-row {
+		flex-direction: row !important;
+	}
+	.mobile-column {
+		flex-direction: column;
+	}
+	.mobile-column-reverse {
+		flex-direction: column-reverse;
+	}
+	.mobile-hidden {
+		display: none;
+	}
+	.mobile-only {
+		display: block;
+	}
+	.mobile-one {
+		flex-grow: 1 !important;
+	}
+	.mobile-fill-width {
+		width: 100% !important;
+		max-width: 100% !important;
+	}
+	.project-preview .title {
+		text-align: center;
+	}
+}
+
+@media (min-width: 1001px) {
+	.main-menu-hamburger,
+	.main-menu-hamburger-open {
+		display: none !important;
+	}
+}

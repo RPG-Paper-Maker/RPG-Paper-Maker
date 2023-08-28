@@ -21,6 +21,7 @@
 .project-preview svg {
 	color: var(--lighter-bg-color);
 }
+
 .project-preview svg:hover {
 	color: var(--main-color);
 }

@@ -16,6 +16,7 @@ import MainMenuBar from './components/MainMenuBar';
 import PanelLoading from './components/panels/PanelLoading';
 import PanelMain from './components/panels/PanelMain';
 import './styles/Editor.css';
+import './styles/Mobile.css';
 
 function Editor() {
 	const [loaded, setLoaded] = useState(false);
@@ -23,7 +24,7 @@ function Editor() {
 	return (
 		<Provider store={store}>
 			{loaded ? (
-				<div className='flex-column fill-space' onContextMenu={(e) => e.preventDefault()}>
+				<div className='flex-column fill-space scrollable' onContextMenu={(e) => e.preventDefault()}>
 					<MainMenuBar />
 					<PanelMain />
 				</div>

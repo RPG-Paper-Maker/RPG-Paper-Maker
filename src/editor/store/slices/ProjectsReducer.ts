@@ -12,6 +12,7 @@ const ProjectsSlice = createSlice({
 		loading: false,
 		openLoading: false,
 		list: [] as ProjectState[],
+		menuIndex: 1,
 	},
 	reducers: {
 		setCurrentProjectName(state, action: PayloadAction<string>) {
@@ -35,6 +36,9 @@ const ProjectsSlice = createSlice({
 		clearProjects(state) {
 			state.list = [];
 		},
+		setProjectMenuIndex(state, action: PayloadAction<number>) {
+			state.menuIndex = action.payload;
+		},
 	},
 });
 
@@ -46,5 +50,6 @@ export const {
 	addProject,
 	removeProject,
 	clearProjects,
+	setProjectMenuIndex,
 } = ProjectsSlice.actions;
 export const ProjectsReducer = ProjectsSlice.reducer;

@@ -70,6 +70,16 @@ function TilesetSelector() {
 		return { x: 0, y: 0 };
 	};
 
+	const getCurrentPositionMobile = (e: any) => {
+		if (refCanvas.current) {
+			const rect = refCanvas.current.getBoundingClientRect();
+			const x = e.touches[0].pageX - rect.left;
+			const y = e.touches[0].pageY - rect.top;
+			return { x: Math.floor(x / Constants.BASE_SQUARE_SIZE), y: Math.floor(y / Constants.BASE_SQUARE_SIZE) };
+		}
+		return { x: 0, y: 0 };
+	};
+
 	const clear = (ctx: CanvasRenderingContext2D) => {
 		const canvas = refCanvas.current;
 		if (canvas) {
@@ -105,31 +115,10 @@ function TilesetSelector() {
 		}
 	};
 
-	const update = () => {
-		const ctx = getContext();
-		if (ctx && currentState.picture) {
-			clear(ctx);
-			ctx.lineWidth = 1;
-			ctx.imageSmoothingEnabled = false;
-			ctx.drawImage(currentState.picture, 0, 0, currentState.picture.width * 2, currentState.picture.height * 2);
-			drawSelection(ctx, currentState.selectedRect);
-			if (currentState.previewRect) {
-				drawSelection(ctx, currentState.previewRect, 0.5);
-			}
-		}
-	};
-
-	const handleMouseDown = (e: any) => {
-		const { x, y } = getCurrentPosition(e);
-		currentState.firstX = x;
-		currentState.firstY = y;
-	};
-
-	const handleMouseMove = (e: any) => {
-		if (!isVisible() || !currentState.picture) {
+	const updateMove = (x: number, y: number) => {
+		if (!currentState.picture) {
 			return;
 		}
-		let { x, y } = getCurrentPosition(e);
 		let width = 1;
 		let height = 1;
 		if (currentState.firstX !== -1 && currentState.firstY !== -1) {
@@ -156,6 +145,40 @@ function TilesetSelector() {
 		}
 	};
 
+	const update = () => {
+		const ctx = getContext();
+		if (ctx && currentState.picture) {
+			clear(ctx);
+			ctx.lineWidth = 1;
+			ctx.imageSmoothingEnabled = false;
+			ctx.drawImage(currentState.picture, 0, 0, currentState.picture.width * 2, currentState.picture.height * 2);
+			drawSelection(ctx, currentState.selectedRect);
+			if (currentState.previewRect) {
+				drawSelection(ctx, currentState.previewRect, 0.5);
+			}
+		}
+	};
+
+	const handleMouseDown = (e: any) => {
+		const { x, y } = getCurrentPosition(e);
+		currentState.firstX = x;
+		currentState.firstY = y;
+	};
+
+	const handlePointerDown = (e: any) => {
+		handleMouseDown(e);
+		const { x, y } = getCurrentPosition(e);
+		updateMove(x, y);
+	};
+
+	const handleMouseMove = (e: any) => {
+		if (!isVisible() || !currentState.picture) {
+			return;
+		}
+		const { x, y } = getCurrentPosition(e);
+		updateMove(x, y);
+	};
+
 	const handleMouseUp = (e: any) => {
 		if (isVisible() && currentState.firstX !== -1 && currentState.firstY !== -1) {
 			if (currentState.previewRect) {
@@ -170,17 +193,37 @@ function TilesetSelector() {
 		}
 	};
 
+	const handleTouchMove = (e: any) => {
+		if (!isVisible() || !currentState.picture) {
+			return;
+		}
+		let { x, y } = getCurrentPositionMobile(e);
+		updateMove(x, y);
+	};
+
 	useEffect(() => {
 		initialize().catch(console.error);
 		const canvas = refCanvas.current;
 		if (canvas) {
-			canvas.addEventListener('mousedown', handleMouseDown);
-			window.addEventListener('mousemove', handleMouseMove);
-			window.addEventListener('mouseup', handleMouseUp);
+			if (Constants.isMobile) {
+				canvas.addEventListener('pointerdown', handlePointerDown, false);
+				document.addEventListener('touchmove', handleTouchMove, false);
+				document.addEventListener('touchend', handleMouseUp, false);
+			} else {
+				canvas.addEventListener('mousedown', handleMouseDown);
+				window.addEventListener('mousemove', handleMouseMove);
+				window.addEventListener('mouseup', handleMouseUp);
+			}
 			return () => {
-				canvas.removeEventListener('mousedown', handleMouseDown);
-				window.removeEventListener('mousemove', handleMouseMove);
-				window.removeEventListener('mouseup', handleMouseUp);
+				if (Constants.isMobile) {
+					canvas.removeEventListener('pointerdown', handlePointerDown, false);
+					document.removeEventListener('touchmove', handleTouchMove, false);
+					document.removeEventListener('touchend', handleMouseUp, false);
+				} else {
+					canvas.removeEventListener('mousedown', handleMouseDown);
+					window.removeEventListener('mousemove', handleMouseMove);
+					window.removeEventListener('mouseup', handleMouseUp);
+				}
 			};
 		}
 		// eslint-disable-next-line

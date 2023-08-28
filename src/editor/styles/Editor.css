@@ -45,7 +45,6 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	padding: 0;
-	overflow: hidden;
 	background-color: var(--main-bg-color);
 	color: var(--main-color);
 	font-size: 14px;
@@ -76,6 +75,10 @@ code {
 .flex-center-horizontally {
 	display: flex;
 	justify-content: center;
+}
+
+.flex-wrap {
+	flex-wrap: wrap;
 }
 
 .gap-small {
@@ -219,6 +222,7 @@ code {
 	flex: 1 1 auto;
 	overflow-y: auto;
 	height: 0px;
+	min-height: 100px;
 }
 
 .warning {
@@ -244,4 +248,8 @@ code {
 
 .hidden {
 	display: none !important;
+}
+
+.mobile-only {
+	display: none;
 }

@@ -16,6 +16,9 @@ class Constants {
 	public static readonly NUM_BOOL_FALSE = 0;
 	public static readonly BASE_SQUARE_SIZE = 32;
 	public static readonly PORTION_SIZE = 16;
+	public static readonly MOBILE_WIDTH = 800;
+	public static readonly CURSOR_MOVE_MOBILE_PERCENT = 10;
+	public static isMobile = false;
 }
 
 export { Constants };

@@ -58,83 +58,86 @@ function Toolbar() {
 	};
 
 	return (
-		<div className='toolbar'>
-			<Menu horizontal>
-				<MenuItem icon={<AiOutlineFileAdd />} onClick={handleNewProject}>
-					New
-				</MenuItem>
-				<MenuItem icon={<AiOutlineFolderOpen />} onClick={handleFloor} disabled>
-					Open
-				</MenuItem>
-				<MenuItem icon={<BiSave />} onClick={handleSave} disabled={!isProjectOpened()}>
-					Save
-				</MenuItem>
-				<MenuItem icon={<LuSaveAll />} onClick={handleFloor} disabled>
-					All
-				</MenuItem>
-				<MenuItem icon={<AiOutlineFolder />} onClick={handleFloor} disabled>
-					Folder
-				</MenuItem>
-				<MenuItem separator></MenuItem>
-				<MenuItem icon={<BsClipboardData />} onClick={handleFloor} disabled>
-					Data
-				</MenuItem>
-				<MenuItem icon={<AiOutlineDatabase />} onClick={handleFloor} disabled>
-					Systems
-				</MenuItem>
-				<MenuItem icon={<TbNumbers />} onClick={handleFloor} disabled>
-					Variables
-				</MenuItem>
-				<MenuItem icon={<FaArrowsAlt />} onClick={handleFloor} disabled>
-					Collisions
-				</MenuItem>
-				<MenuItem icon={<FaRegKeyboard />} onClick={handleFloor} disabled>
-					Keyboard
-				</MenuItem>
-				<MenuItem icon={<LuLanguages />} onClick={handleFloor} disabled>
-					Languages
-				</MenuItem>
-				<MenuItem icon={<FaPlug />} onClick={handleFloor} disabled>
-					Plugins
-				</MenuItem>
-				<MenuItem icon={<MdOutlineAddchart />} onClick={handleFloor} disabled>
-					DLCs
-				</MenuItem>
-				<MenuItem separator></MenuItem>
-				<MenuItem icon={<AiOutlinePicture />} onClick={handleFloor} disabled>
-					Pictures
-				</MenuItem>
-				<MenuItem icon={<TfiVideoClapper />} onClick={handleFloor} disabled>
-					Videos
-				</MenuItem>
-				<MenuItem icon={<BsMusicNote />} onClick={handleFloor} disabled>
-					Songs
-				</MenuItem>
-				<MenuItem icon={<BiPyramid />} onClick={handleFloor} disabled>
-					Shapes
-				</MenuItem>
-				<MenuItem icon={<AiOutlineFontSize />} onClick={handleFloor} disabled>
-					Fonts
-				</MenuItem>
-				<MenuItem separator></MenuItem>
-				<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleFloor} disabled>
-					Autotiles
-				</MenuItem>
-				<MenuItem icon={<GiBrickWall />} onClick={handleFloor} disabled>
-					Walls
-				</MenuItem>
-				<MenuItem icon={<BiCube />} onClick={handleFloor} disabled>
-					3D objects
-				</MenuItem>
-				<MenuItem icon={<LuMountain />} onClick={handleFloor} disabled>
-					Mountains
-				</MenuItem>
-				<MenuItem separator></MenuItem>
-				<MenuItem icon={<BsPlay />} onClick={handlePlay} disabled={!isProjectOpened()}>
-					Play
-				</MenuItem>
-			</Menu>
-		</div>
+		<>
+			<div className='toolbar'>
+				<Menu horizontal>
+					<MenuItem icon={<AiOutlineFileAdd />} onClick={handleNewProject}>
+						New
+					</MenuItem>
+					<MenuItem icon={<AiOutlineFolderOpen />} onClick={handleFloor} disabled>
+						Open
+					</MenuItem>
+					<MenuItem icon={<BiSave />} onClick={handleSave} disabled={!isProjectOpened()}>
+						Save
+					</MenuItem>
+					<MenuItem icon={<LuSaveAll />} onClick={handleFloor} disabled>
+						All
+					</MenuItem>
+					<MenuItem icon={<AiOutlineFolder />} onClick={handleFloor} disabled>
+						Folder
+					</MenuItem>
+					<MenuItem separator></MenuItem>
+					<MenuItem icon={<BsClipboardData />} onClick={handleFloor} disabled>
+						Data
+					</MenuItem>
+					<MenuItem icon={<AiOutlineDatabase />} onClick={handleFloor} disabled>
+						Systems
+					</MenuItem>
+					<MenuItem icon={<TbNumbers />} onClick={handleFloor} disabled>
+						Variables
+					</MenuItem>
+					<MenuItem icon={<FaArrowsAlt />} onClick={handleFloor} disabled>
+						Collisions
+					</MenuItem>
+					<MenuItem icon={<FaRegKeyboard />} onClick={handleFloor} disabled>
+						Keyboard
+					</MenuItem>
+					<MenuItem icon={<LuLanguages />} onClick={handleFloor} disabled>
+						Languages
+					</MenuItem>
+					<MenuItem icon={<FaPlug />} onClick={handleFloor} disabled>
+						Plugins
+					</MenuItem>
+					<MenuItem icon={<MdOutlineAddchart />} onClick={handleFloor} disabled>
+						DLCs
+					</MenuItem>
+					<MenuItem separator></MenuItem>
+					<MenuItem icon={<AiOutlinePicture />} onClick={handleFloor} disabled>
+						Pictures
+					</MenuItem>
+					<MenuItem icon={<TfiVideoClapper />} onClick={handleFloor} disabled>
+						Videos
+					</MenuItem>
+					<MenuItem icon={<BsMusicNote />} onClick={handleFloor} disabled>
+						Songs
+					</MenuItem>
+					<MenuItem icon={<BiPyramid />} onClick={handleFloor} disabled>
+						Shapes
+					</MenuItem>
+					<MenuItem icon={<AiOutlineFontSize />} onClick={handleFloor} disabled>
+						Fonts
+					</MenuItem>
+					<MenuItem separator></MenuItem>
+					<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleFloor} disabled>
+						Autotiles
+					</MenuItem>
+					<MenuItem icon={<GiBrickWall />} onClick={handleFloor} disabled>
+						Walls
+					</MenuItem>
+					<MenuItem icon={<BiCube />} onClick={handleFloor} disabled>
+						3D objects
+					</MenuItem>
+					<MenuItem icon={<LuMountain />} onClick={handleFloor} disabled>
+						Mountains
+					</MenuItem>
+					<MenuItem separator></MenuItem>
+					<MenuItem icon={<BsPlay />} onClick={handlePlay} disabled={!isProjectOpened()}>
+						Play
+					</MenuItem>
+				</Menu>
+			</div>
+			<div className='toolbar-mobile-separator'></div>
+		</>
 	);
 }
 

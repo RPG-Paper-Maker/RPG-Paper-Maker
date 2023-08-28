@@ -16,6 +16,8 @@ import Loader from '../Loader';
 import { setProjects } from '../../store';
 import { useDispatch } from 'react-redux';
 import { LocalForage } from '../../common/Enum';
+import { Constants } from '../../common/Constants';
+import { Utils } from '../../common/Utils';
 
 type Props = {
 	setLoaded: (v: boolean) => void;
@@ -25,6 +27,7 @@ function PanelLoading({ setLoaded }: Props) {
 	const dispatch = useDispatch();
 
 	const initialize = async () => {
+		Constants.isMobile = Utils.isMobile();
 		await initializeGL();
 		await initializeLocalFiles();
 		await loadProjects(); // Desktop: load engine settings

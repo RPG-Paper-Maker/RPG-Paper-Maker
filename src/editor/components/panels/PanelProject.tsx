@@ -20,17 +20,16 @@ import { LuFolders } from 'react-icons/lu';
 import { MdOutlineWallpaper } from 'react-icons/md';
 import Tab from '../Tab';
 import { Utils } from '../../common/Utils';
-import { Data, Model } from '../../Editor';
+import { Model } from '../../Editor';
 import { Node } from '../../core/Node';
 import { TreeMapTag } from '../../models';
-import { RootState, setCurrentTreeMapTag } from '../../store';
+import { RootState, setCurrentTreeMapTag, setProjectMenuIndex } from '../../store';
 import PanelTextures from './PanelTextures';
 import Loader from '../Loader';
 import TreeMaps from '../TreeMaps';
 import { Project } from '../../core/Project';
 
 function PanelProject() {
-	const [projectMenuIndex, setProjectMenuIndex] = useState(1);
 	const [mapsTabsTitles, setMapsTabsTitles] = useState<Model.Base[]>([]);
 	const [mapsTabsContents, setMapsTabsContents] = useState<ReactNode[]>([]);
 	const [mapForcedCurrentSelectedItemID, setMapForcedCurrentSelectedItemID] = useState<number | null>(null);
@@ -41,6 +40,11 @@ function PanelProject() {
 	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
 	const openLoading = useSelector((state: RootState) => state.projects.openLoading);
 	const triggersTreeMap = useSelector((state: RootState) => state.triggers.treeMap);
+	const projectMenuIndex = useSelector((state: RootState) => state.projects.menuIndex);
+
+	const updateProjectMenuIndex = (index: number) => {
+		dispatch(setProjectMenuIndex(index));
+	};
 
 	const handleSelectedMapItem = (node: Node | null, isClick: boolean) => {
 		if (node && !(node.content as TreeMapTag).isFolder()) {
@@ -91,12 +95,24 @@ function PanelProject() {
 	return (
 		<>
 			<Loader large isLoading={openLoading} isHidding={openLoading} />
-			<Splitter vertical={false} defaultLeftSize={266} className='flex flex-one'>
+			<Splitter
+				vertical={false}
+				defaultLeftSize={266}
+				className='flex flex-one'
+				mobileHideFirst={projectMenuIndex === 2}
+			>
 				<div className='bg-darker flex-column flex-one scrollable'>
-					<Menu horizontal isActivable activeIndex={projectMenuIndex} setActiveIndex={setProjectMenuIndex}>
-						<MenuItem icon={<LuFolders />}></MenuItem>
-						<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
-					</Menu>
+					<div className='mobile-hidden'>
+						<Menu
+							horizontal
+							isActivable
+							activeIndex={projectMenuIndex}
+							setActiveIndex={updateProjectMenuIndex}
+						>
+							<MenuItem icon={<LuFolders />}></MenuItem>
+							<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
+						</Menu>
+					</div>
 					<div className={Utils.getClassName([[projectMenuIndex !== 0, 'hidden']], ['flex', 'flex-one'])}>
 						<TreeMaps
 							onSelectedItem={handleSelectedMapItem}
@@ -106,17 +122,21 @@ function PanelProject() {
 					</div>
 					<PanelTextures visible={projectMenuIndex === 1} />
 				</div>
-				<div className='flex-column flex-one map-editor-bar'>
-					<Tab
-						titles={mapsTabsTitles}
-						setTitles={setMapsTabsTitles}
-						contents={mapsTabsContents}
-						setContents={setMapsTabsContents}
-						onCurrentIndexChanged={handleTabCurrentIndexChanged}
-						forcedCurrentIndex={mapTabForcedCurrentIndex}
-						setForcedCurrentIndex={setMapTabForcedCurrentIndex}
-						isClosable
-					/>
+				<div
+					className={'flex-column flex-one map-editor-bar ' + (projectMenuIndex !== 2 ? 'mobile-hidden' : '')}
+				>
+					<div className='mobile-hidden'>
+						<Tab
+							titles={mapsTabsTitles}
+							setTitles={setMapsTabsTitles}
+							contents={mapsTabsContents}
+							setContents={setMapsTabsContents}
+							onCurrentIndexChanged={handleTabCurrentIndexChanged}
+							forcedCurrentIndex={mapTabForcedCurrentIndex}
+							setForcedCurrentIndex={setMapTabForcedCurrentIndex}
+							isClosable
+						/>
+					</div>
 					<div className={Utils.getClassName([[!currentMapID, 'hidden']], ['flex-column flex-one'])}>
 						<MapEditorMenuBar />
 						<MapEditor />

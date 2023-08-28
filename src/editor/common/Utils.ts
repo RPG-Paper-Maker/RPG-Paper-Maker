@@ -78,6 +78,10 @@ class Utils {
 			.concat(always)
 			.join(' ');
 	}
+
+	static isMobile() {
+		return 'ontouchstart' in window;
+	}
 }
 
 export { Utils };

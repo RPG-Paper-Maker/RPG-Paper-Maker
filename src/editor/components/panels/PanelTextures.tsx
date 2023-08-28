@@ -56,7 +56,7 @@ function PanelTextures({ visible }: Props) {
 			<div ref={refTileset} className='scrollable'>
 				<TilesetSelector />
 			</div>
-			<div ref={refPreviewer} className='flex'>
+			<div ref={refPreviewer} className='flex mobile-hidden'>
 				<Previewer3D id='texture-previewer' onHeightUpdated={handlePreviewer3DHeightUpdated} />
 			</div>
 		</div>

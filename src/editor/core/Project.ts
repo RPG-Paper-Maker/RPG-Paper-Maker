@@ -35,8 +35,10 @@ class Project {
 	}
 
 	async load() {
+		const projectName = this.systems.projectName;
 		await this.systems.load();
-		this.systems.projectName = (this.systems.projectName as any).names[1]; // TODO
+		this.systems.projectName = projectName;
+		// this.systems.projectName = (this.systems.projectName as any).names[1]; // TODO
 		await this.treeMaps.load();
 	}
 

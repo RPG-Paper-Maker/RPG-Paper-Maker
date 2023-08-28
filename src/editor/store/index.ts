@@ -17,6 +17,7 @@ import {
 	addProject,
 	removeProject,
 	clearProjects,
+	setProjectMenuIndex,
 } from './slices/ProjectsReducer';
 import {
 	triggerNewProject,
@@ -55,6 +56,7 @@ export {
 	addProject,
 	removeProject,
 	clearProjects,
+	setProjectMenuIndex,
 	triggerNewProject,
 	triggerImportProject,
 	triggerOpenProject,

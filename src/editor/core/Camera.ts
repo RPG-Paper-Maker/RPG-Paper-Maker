@@ -98,8 +98,8 @@ class Camera {
 	}
 
 	onMouseWheelUpdate() {
-		this.horizontalAngle += (Inputs.mouseX - Inputs.previousMouseX) / 2;
-		this.verticalAngle -= (Inputs.mouseY - Inputs.previousMouseY) / 2;
+		this.horizontalAngle += (Inputs.getPositionX() - Inputs.getPreviousPositionX()) / 2;
+		this.verticalAngle -= (Inputs.getPositionY() - Inputs.getPreviousPositionY()) / 2;
 		if (this.verticalAngle < 1) {
 			this.verticalAngle = 1;
 		}

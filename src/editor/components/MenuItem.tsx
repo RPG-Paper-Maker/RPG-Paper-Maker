@@ -38,7 +38,7 @@ function MenuItem({
 	setTriggerCloseAll,
 }: Props) {
 	const handleClick = (e: any) => {
-		if (!disabled) {
+		if (!disabled && !separator) {
 			if (isActivable && setActiveIndex) {
 				setActiveIndex(index);
 			}

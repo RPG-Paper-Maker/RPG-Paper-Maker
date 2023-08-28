@@ -17,6 +17,7 @@ import {
 	setCurrentProjectName,
 	setLoading,
 	setOpenLoading,
+	setProjectMenuIndex,
 	setUndoRedoIndex,
 	triggerImportProject,
 	triggerNewProject,
@@ -35,18 +36,23 @@ import { Project } from '../core/Project';
 import { AiOutlineFileAdd, AiOutlineFolderOpen, AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai';
 import { BiSave, BiExport, BiImport } from 'react-icons/bi';
 import { BsPlay } from 'react-icons/bs';
-import { MdClose } from 'react-icons/md';
-import { IoIosUndo, IoIosRedo } from 'react-icons/io';
+import { MdClose, MdOutlineWallpaper } from 'react-icons/md';
+import { IoIosUndo, IoIosRedo, IoMdArrowBack } from 'react-icons/io';
+import { FiMap } from 'react-icons/fi';
 import { Paths } from '../common/Paths';
 import Dialog from './dialogs/Dialog';
 import FooterYesNo from './dialogs/footers/FooterYesNo';
 import Toolbar from './Toolbar';
 import '../styles/MainMenu.css';
 import { LocalForage } from '../common/Enum';
+import { RxHamburgerMenu } from 'react-icons/rx';
+import { LuFolders } from 'react-icons/lu';
 
 function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
+	const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
+	const [hamburgerStates, setHamburgerStates] = useState<number[]>([]);
 
 	const importFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -58,13 +64,19 @@ function MainMenuBar() {
 	const projectNames = useSelector((state: RootState) => state.projects.list).map(({ name, location }) => name);
 	const undoRedoIndex = useSelector((state: RootState) => state.mapEditor.undoRedo.index);
 	const undoRedoLength = useSelector((state: RootState) => state.mapEditor.undoRedo.length);
+	const projectMenuIndex = useSelector((state: RootState) => state.projects.menuIndex);
 
 	const isProjectOpened = currentProjectName !== '';
+
 	const isInMap = isProjectOpened && !!Scene.Map.current;
 
 	const canUndo = () => isInMap && undoRedoIndex > -1;
 
 	const canRedo = () => isInMap && undoRedoIndex < undoRedoLength - 1;
+
+	const updateProjectMenuIndex = (index: number) => {
+		dispatch(setProjectMenuIndex(index));
+	};
 
 	const handleKeyDown = async (event: KeyboardEvent) => {
 		if (isProjectOpened) {
@@ -203,6 +215,19 @@ function MainMenuBar() {
 		window.open(window.location.origin + '/play/' + currentProjectName, '_blank')?.focus();
 	};
 
+	const handleClickHamburgerBack = () => {
+		setHamburgerStates((value) => {
+			const newList = [...value];
+			newList.pop();
+			return newList;
+		});
+	};
+
+	const handleClickHamburger = () => {
+		setIsHamburgerOpen((value) => !value);
+		setHamburgerStates([]);
+	};
+
 	// Triggers handling
 	useEffect(() => {
 		if (triggers.newProject) {
@@ -231,81 +256,192 @@ function MainMenuBar() {
 		// eslint-disable-next-line
 	});
 
+	const items: any = [
+		{
+			title: 'File',
+			children: [
+				{ title: 'New Project...', icon: <AiOutlineFileAdd />, onClick: handleNewProject },
+				{
+					title: 'Open existing project...',
+					icon: <AiOutlineFolderOpen />,
+					children: projectNames.map((name) => ({ title: name, onClick: () => handleOpenProject(name) })),
+				},
+				{
+					title: (
+						<>
+							Import project...
+							<input
+								ref={importFileInputRef}
+								type='file'
+								hidden
+								onChange={handleImportFileChange}
+								accept='.zip'
+							/>
+						</>
+					),
+					icon: <BiImport />,
+					onClick: handleImport,
+				},
+				{
+					title: 'Export',
+					icon: <BiExport />,
+					disabled: !isProjectOpened,
+					onClick: handleExport,
+				},
+				{
+					title: 'Save',
+					icon: <BiSave />,
+					disabled: !isInMap,
+					onClick: handleSave,
+				},
+				{
+					title: 'Close',
+					icon: <MdClose />,
+					disabled: !isProjectOpened,
+					onClick: handleCloseProject,
+				},
+			],
+		},
+		{
+			title: 'Edition',
+			children: [
+				{
+					title: 'Undo',
+					icon: <IoIosUndo />,
+					disabled: !canUndo(),
+					onClick: handleUndo,
+				},
+				{
+					title: 'Redo',
+					icon: <IoIosRedo />,
+					disabled: !canRedo(),
+					onClick: handleRedo,
+				},
+				{
+					title: 'Zoom in',
+					icon: <AiOutlineZoomIn />,
+					disabled: !isInMap,
+					onClick: handleZoomIn,
+				},
+				{
+					title: 'Zoom out',
+					icon: <AiOutlineZoomOut />,
+					disabled: !isInMap,
+					onClick: handleZoomOut,
+				},
+			],
+		},
+		{
+			title: 'Management',
+			disabled: true,
+		},
+		{
+			title: 'Special elements',
+			disabled: true,
+		},
+		{
+			title: 'Options',
+			disabled: true,
+		},
+		{
+			title: 'Display',
+			disabled: true,
+		},
+		{
+			title: 'Test',
+			children: [
+				{
+					title: 'Play',
+					icon: <BsPlay />,
+					disabled: !isProjectOpened,
+					onClick: handlePlay,
+				},
+			],
+		},
+		{
+			title: 'Help',
+			disabled: true,
+		},
+	];
+
+	const getMenuHamburger = () => {
+		let list = items;
+		for (let state of hamburgerStates) {
+			list = list[state].children;
+		}
+		return (
+			<Menu>
+				{list.map((item: any, index: number) => {
+					const handleClick = () => {
+						if (item.onClick) {
+							item.onClick();
+							setIsHamburgerOpen(false);
+							setHamburgerStates([]);
+						} else {
+							setHamburgerStates((value) => [...value, index]);
+						}
+					};
+					return (
+						<MenuItem key={index} icon={item.icon} disabled={item.disabled} onClick={handleClick}>
+							{item.title}
+						</MenuItem>
+					);
+				})}
+			</Menu>
+		);
+	};
+
+	const getMenuDesktop = (list: any[]) =>
+		list.map((item: any, index: number) => {
+			if (item.children) {
+				return (
+					<MenuSub key={index} title={item.title}>
+						{getMenuDesktop(item.children)}
+					</MenuSub>
+				);
+			}
+			return (
+				<MenuItem key={index} icon={item.icon} disabled={item.disabled} onClick={item.onClick}>
+					{item.title}
+				</MenuItem>
+			);
+		});
+
 	return (
 		<>
 			<div className='flex-center-vertically'>
 				<img className='main-menu-bar-logo' src={'./favicon.ico'} alt='logo' />
-				<Menu horizontal>
-					<MenuSub title='File'>
-						<MenuItem icon={<AiOutlineFileAdd />} onClick={handleNewProject}>
-							New Project...
-						</MenuItem>
-						<MenuSub icon={<AiOutlineFolderOpen />} title='Open existing project...'>
-							{projectNames.map((name) => {
-								return (
-									<MenuItem key={'project-' + name} onClick={() => handleOpenProject(name)}>
-										{name}
-									</MenuItem>
-								);
-							})}
-						</MenuSub>
-						<MenuItem icon={<BiImport />} onClick={handleImport}>
-							<>
-								Import project...
-								<input
-									ref={importFileInputRef}
-									type='file'
-									hidden
-									onChange={handleImportFileChange}
-									accept='.zip'
-								/>
-							</>
-						</MenuItem>
-						<MenuItem icon={<BiSave />} onClick={handleSave} disabled={isInMap}>
-							Save
-						</MenuItem>
-						<MenuItem icon={<MdClose />} onClick={handleCloseProject} disabled={!isProjectOpened}>
-							Close
-						</MenuItem>
-						<MenuItem icon={<BiExport />} onClick={handleExport} disabled={!isProjectOpened}>
-							Export project
-						</MenuItem>
-					</MenuSub>
-					<MenuSub title='Edition'>
-						<MenuItem icon={<IoIosUndo />} onClick={handleUndo} disabled={!canUndo()}>
-							Undo
-						</MenuItem>
-						<MenuItem icon={<IoIosRedo />} onClick={handleRedo} disabled={!canRedo()}>
-							Redo
-						</MenuItem>
-						<MenuItem icon={<AiOutlineZoomIn />} onClick={handleZoomIn} disabled={isInMap}>
-							Zoom in
-						</MenuItem>
-						<MenuItem icon={<AiOutlineZoomOut />} onClick={handleZoomOut} disabled={isInMap}>
-							Zoom out
-						</MenuItem>
-					</MenuSub>
-					<MenuSub title='Management' disabled>
-						<MenuItem>Coming soon...</MenuItem>
-					</MenuSub>
-					<MenuSub title='Special elements' disabled>
-						<MenuItem>Coming soon...</MenuItem>
-					</MenuSub>
-					<MenuSub title='Options' disabled>
-						<MenuItem>Coming soon...</MenuItem>
-					</MenuSub>
-					<MenuSub title='Display' disabled>
-						<MenuItem>Coming soon...</MenuItem>
-					</MenuSub>
-					<MenuSub title='Test'>
-						<MenuItem icon={<BsPlay />} onClick={handlePlay} disabled={!isProjectOpened}>
-							Play
-						</MenuItem>
-					</MenuSub>
-					<MenuSub title='Help' disabled>
-						<MenuItem>Coming soon...</MenuItem>
-					</MenuSub>
-				</Menu>
+				{isProjectOpened && (
+					<div className='mobile-only'>
+						<Menu
+							horizontal
+							isActivable
+							activeIndex={projectMenuIndex}
+							setActiveIndex={updateProjectMenuIndex}
+						>
+							<MenuItem icon={<LuFolders />}></MenuItem>
+							<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
+							<MenuItem icon={<FiMap />}></MenuItem>
+						</Menu>
+					</div>
+				)}
+				<div className='mobile-hidden'>
+					<Menu horizontal>{getMenuDesktop(items)}</Menu>
+				</div>
+				<div className='flex-one' />
+				{hamburgerStates.length > 0 && (
+					<div className='main-menu-hamburger' onClick={handleClickHamburgerBack}>
+						<IoMdArrowBack />
+					</div>
+				)}
+				<div className='main-menu-hamburger' onClick={handleClickHamburger}>
+					<RxHamburgerMenu />
+				</div>
+				{isHamburgerOpen && (
+					<div className='relative'>
+						<div className='main-menu-hamburger-open menu-sub-content'>{getMenuHamburger()}</div>
+					</div>
+				)}
 			</div>
 			<Toolbar />
 			<DialogNewProject

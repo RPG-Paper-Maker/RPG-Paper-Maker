@@ -25,20 +25,20 @@ import { ReactComponent as SquareIcon } from '../../assets/icons/square.svg';
 import { ReactComponent as PixelIcon } from '../../assets/icons/pixel.svg';
 import { FaLayerGroup, FaMountain } from 'react-icons/fa';
 import { GiBrickWall, GiEmptyChessboard } from 'react-icons/gi';
-import { RiPaintFill } from 'react-icons/ri';
-import { BsEyeFill } from 'react-icons/bs';
 import { LuMountain, LuMove3D, LuRotate3D, LuScale3D } from 'react-icons/lu';
-import { TbRectangleFilled } from 'react-icons/tb';
-import { AiOutlineEye } from 'react-icons/ai';
+import { TbHandMove } from 'react-icons/tb';
+import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
 import { PiSelectionAllFill } from 'react-icons/pi';
 import { VscPaintcan } from 'react-icons/vsc';
 import { useDispatch } from 'react-redux';
 import { setCurrentMapElementKind } from '../store';
-import { ElementMapKind } from '../common/Enum';
+import { ElementMapKind, MobileAction } from '../common/Enum';
 import { Scene } from '../Editor';
+import { Constants } from '../common/Constants';
 
 function MapEditorMenuBar() {
 	const [selectionIndex, setSelectionIndex] = useState(0);
+	const [mobileIndex, setMobileIndex] = useState(1);
 	const [squarePixelIndex, setSquarePixelIndex] = useState(0);
 	const [actionIndex, setActionIndex] = useState(3);
 	const [layersIndex, setLayersIndex] = useState(0);
@@ -55,9 +55,21 @@ function MapEditorMenuBar() {
 		Scene.Map.currentSelectedMapElementKind = ElementMapKind.SpritesFace;
 	};
 
+	const handleMobilePlus = () => {
+		Scene.Map.currentSelectedMobileAction = MobileAction.Plus;
+	};
+
+	const handleMobileMinus = () => {
+		Scene.Map.currentSelectedMobileAction = MobileAction.Minus;
+	};
+
+	const handleMobileMove = () => {
+		Scene.Map.currentSelectedMobileAction = MobileAction.Move;
+	};
+
 	return (
-		<div className='flex'>
-			<div className='flex-one'>
+		<div className='flex flex-wrap'>
+			<div className='flex flex-one'>
 				<Menu horizontal isActivable activeIndex={selectionIndex} setActiveIndex={setSelectionIndex}>
 					<MenuSub active icon={<FloorIcon />} onClick={handleFloors}>
 						<MenuItem icon={<FloorIcon />}>Floors</MenuItem>
@@ -98,26 +110,35 @@ function MapEditorMenuBar() {
 						</MenuItem>
 					</MenuSub>
 				</Menu>
+				{Constants.isMobile && (
+					<Menu horizontal isActivable activeIndex={mobileIndex} setActiveIndex={setMobileIndex}>
+						<MenuItem separator />
+						<MenuItem icon={<AiOutlinePlusSquare />} onClick={handleMobilePlus}></MenuItem>
+						<MenuItem icon={<AiOutlineMinusSquare />} onClick={handleMobileMinus}></MenuItem>
+						<MenuItem icon={<TbHandMove />} onClick={handleMobileMove}></MenuItem>
+					</Menu>
+				)}
 			</div>
-			<Menu horizontal isActivable activeIndex={squarePixelIndex} setActiveIndex={setSquarePixelIndex}>
-				<MenuItem icon={<SquareIcon />} onClick={handleFloors}></MenuItem>
-				<MenuItem icon={<PixelIcon />} onClick={handleFloors} disabled></MenuItem>
-
-				<MenuItem separator />
-			</Menu>
-			<Menu horizontal isActivable activeIndex={actionIndex} setActiveIndex={setActionIndex}>
-				<MenuItem icon={<LuMove3D />} onClick={handleFloors} disabled></MenuItem>
-				<MenuItem icon={<LuRotate3D />} onClick={handleFloors} disabled></MenuItem>
-				<MenuItem icon={<LuScale3D />} onClick={handleFloors} disabled></MenuItem>
-				<MenuItem icon={<BiSolidPencil />} onClick={handleFloors}></MenuItem>
-				<MenuItem icon={<PiSelectionAllFill />} onClick={handleFloors} disabled></MenuItem>
-				<MenuItem icon={<VscPaintcan />} onClick={handleFloors} disabled></MenuItem>
-				<MenuItem separator />
-			</Menu>
-			<Menu horizontal isActivable activeIndex={layersIndex} setActiveIndex={setLayersIndex}>
-				<MenuItem icon={<LayersOffIcon />} onClick={handleFloors}></MenuItem>
-				<MenuItem icon={<FaLayerGroup />} onClick={handleFloors} disabled></MenuItem>
-			</Menu>
+			<div className='flex'>
+				<Menu horizontal isActivable activeIndex={squarePixelIndex} setActiveIndex={setSquarePixelIndex}>
+					<MenuItem icon={<SquareIcon />} onClick={handleFloors}></MenuItem>
+					<MenuItem icon={<PixelIcon />} onClick={handleFloors} disabled></MenuItem>
+					<MenuItem separator />
+				</Menu>
+				<Menu horizontal isActivable activeIndex={actionIndex} setActiveIndex={setActionIndex}>
+					<MenuItem icon={<LuMove3D />} onClick={handleFloors} disabled></MenuItem>
+					<MenuItem icon={<LuRotate3D />} onClick={handleFloors} disabled></MenuItem>
+					<MenuItem icon={<LuScale3D />} onClick={handleFloors} disabled></MenuItem>
+					<MenuItem icon={<BiSolidPencil />} onClick={handleFloors}></MenuItem>
+					<MenuItem icon={<PiSelectionAllFill />} onClick={handleFloors} disabled></MenuItem>
+					<MenuItem icon={<VscPaintcan />} onClick={handleFloors} disabled></MenuItem>
+					<MenuItem separator />
+				</Menu>
+				<Menu horizontal isActivable activeIndex={layersIndex} setActiveIndex={setLayersIndex}>
+					<MenuItem icon={<LayersOffIcon />} onClick={handleFloors}></MenuItem>
+					<MenuItem icon={<FaLayerGroup />} onClick={handleFloors} disabled></MenuItem>
+				</Menu>
+			</div>
 		</div>
 	);
 }

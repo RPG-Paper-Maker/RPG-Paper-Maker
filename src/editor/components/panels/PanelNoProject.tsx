@@ -49,9 +49,10 @@ function PanelNoProject() {
 
 	return (
 		<div className='flex-column flex-one padding-large'>
-			<h2>Recent projects</h2>
-			<div className='flex flex-one gap-medium'>
+			<h2 className='mobile-hidden'>Recent projects</h2>
+			<div className='flex flex-one gap-medium mobile-column-reverse'>
 				<div className='flex-column flex-one'>
+					<h2 className='mobile-only text-center'>Recent projects</h2>
 					<div className='scrollable-flex-one'>{renderProjectsList()}</div>
 				</div>
 				<div className='flex-zero flex-column gap-small'>

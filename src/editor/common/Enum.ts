@@ -64,3 +64,9 @@ export enum RaycastingLayer {
 	Floors = 2,
 	Sprites = 3,
 }
+
+export enum MobileAction {
+	Plus = 1,
+	Minus = 2,
+	Move = 3,
+}

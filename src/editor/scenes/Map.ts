@@ -24,8 +24,10 @@ import { Position } from '../core/Position';
 import { Rectangle } from '../core/Rectangle';
 import { TreeMapTag } from '../models';
 import { UndoRedoState } from '../core/UndoRedoState';
-import { ElementMapKind, RaycastingLayer } from '../common/Enum';
+import { ElementMapKind, MobileAction, RaycastingLayer } from '../common/Enum';
 import { CustomGeometry } from '../core/CustomGeometry';
+import { Constants } from '../common/Constants';
+import Input from '../components/Input';
 
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
@@ -33,6 +35,7 @@ class Map extends Base {
 	public static current: Scene.Map | null;
 	public static currentSelectedTexture: Rectangle = new Rectangle(0, 0, 1, 1);
 	public static currentSelectedMapElementKind: ElementMapKind = ElementMapKind.Floors;
+	public static currentSelectedMobileAction: MobileAction = MobileAction.Plus;
 	public static elapsedTime = 0;
 	public static averageElapsedTime = 0;
 	public static lastUpdateTime = new Date().getTime();
@@ -56,12 +59,25 @@ class Map extends Base {
 	public undoRedoStates: UndoRedoState[] = [];
 	public undoRedoStatesSaving: UndoRedoState[] = [];
 	public lastPosition: Position | null = null;
+	public isMobileMovingCursor = false;
 
 	constructor(tag: TreeMapTag) {
 		super();
 		this.id = tag.id;
 		this.tag = tag;
 		this.cursor = new Cursor(new Position());
+	}
+
+	static isAdding() {
+		return Constants.isMobile
+			? Scene.Map.currentSelectedMobileAction === MobileAction.Plus && Inputs.isPointerPressed
+			: Inputs.isPointerPressed;
+	}
+
+	static isRemoving() {
+		return Constants.isMobile
+			? Scene.Map.currentSelectedMobileAction === MobileAction.Minus && Inputs.isPointerPressed
+			: Inputs.isMouseRightPressed;
 	}
 
 	getPath() {
@@ -207,8 +223,8 @@ class Map extends Base {
 	updateRaycasting() {
 		const pointer = new THREE.Vector2();
 		if (Manager.GL.mapEditorContext.parent) {
-			pointer.x = (Inputs.mouseX / Manager.GL.mapEditorContext.canvasWidth) * 2 - 1;
-			pointer.y = -(Inputs.mouseY / Manager.GL.mapEditorContext.canvasHeight) * 2 + 1;
+			pointer.x = (Inputs.getPositionX() / Manager.GL.mapEditorContext.canvasWidth) * 2 - 1;
+			pointer.y = -(Inputs.getPositionY() / Manager.GL.mapEditorContext.canvasHeight) * 2 + 1;
 		}
 		Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
 		let layer = RaycastingLayer.Plane;
@@ -229,21 +245,20 @@ class Map extends Base {
 				0,
 				Math.floor(obj.point.z / Project.getSquareSize())
 			);
-			if (Inputs.isMouseRightPressed && obj.faceIndex !== undefined) {
-				const geometry = (obj.object as THREE.Mesh).geometry as CustomGeometry;
-				if (geometry) {
-					const newPosition = geometry.facePositions[obj.faceIndex];
-					if (newPosition) {
-						position = newPosition;
-					}
+			if (Scene.Map.isRemoving() && obj.faceIndex !== undefined) {
+				const newPosition = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
+					obj.faceIndex
+				];
+				if (newPosition) {
+					position = newPosition;
 				}
 			}
 			if (this.lastPosition === null || !this.lastPosition.equals(position)) {
-				if (!Inputs.isMouseLeftPressed && !Inputs.isMouseRightPressed) {
+				if (!Inputs.isPointerPressed && !Inputs.isMouseRightPressed) {
 					this.add(position, true);
-				} else if (Inputs.isMouseLeftPressed) {
+				} else if (Scene.Map.isAdding()) {
 					this.add(position);
-				} else if (Inputs.isMouseRightPressed) {
+				} else if (Scene.Map.isRemoving()) {
 					this.remove(position);
 				}
 				this.lastPosition = position;
@@ -470,19 +485,52 @@ class Map extends Base {
 		this.portionsToSave.push(portion);
 	}
 
+	addMobileKeyMove() {
+		const offset =
+			((Constants.CURSOR_MOVE_MOBILE_PERCENT / 100) *
+				(Manager.GL.mapEditorContext.canvasWidth + Manager.GL.mapEditorContext.canvasHeight)) /
+			2;
+		if (Inputs.getPositionX() < offset) {
+			Inputs.keys.push('a');
+		}
+		if (Inputs.getPositionX() > Manager.GL.mapEditorContext.canvasWidth - offset) {
+			Inputs.keys.push('d');
+		}
+		if (Inputs.getPositionY() < offset) {
+			Inputs.keys.push('w');
+		}
+		if (Inputs.getPositionY() > Manager.GL.mapEditorContext.canvasHeight - offset) {
+			Inputs.keys.push('s');
+		}
+	}
+
 	onKeyDown(key: string) {}
 
 	onKeyDownImmediate() {
 		this.cursor.onKeyDownImmediate();
-		this.updateRaycasting();
 	}
 
 	onMouseDown(x: number, y: number) {
 		if (this.lastPosition) {
-			if (Inputs.isMouseLeftPressed) {
+			if (Inputs.isPointerPressed) {
 				this.add(this.lastPosition);
 			} else if (Inputs.isMouseRightPressed) {
 				this.remove(this.lastPosition);
+			}
+		}
+	}
+
+	onPointerDown(x: number, y: number) {
+		if (Inputs.previousTouchDistance === 0) {
+			this.addMobileKeyMove();
+			if (Inputs.keys.length > 0) {
+				this.cursor.onKeyDownImmediate();
+				this.isMobileMovingCursor = true;
+			} else {
+				if (Scene.Map.currentSelectedMobileAction !== MobileAction.Move) {
+					this.updateRaycasting();
+					this.onMouseDown(x, y);
+				}
 			}
 		}
 	}
@@ -495,12 +543,40 @@ class Map extends Base {
 		}
 	}
 
+	onPointerMove(x: number, y: number) {
+		if (this.isMobileMovingCursor) {
+			Inputs.keys = [];
+			this.addMobileKeyMove();
+			this.cursor.onKeyDownImmediate();
+		} else if (Inputs.previousTouchDistance !== 0) {
+			const zoomFactor = Inputs.touchDistance / Inputs.previousTouchDistance;
+			if (zoomFactor > 1) {
+				this.zoomIn(zoomFactor / 10);
+			} else {
+				this.zoomOut(zoomFactor / 10);
+			}
+		} else {
+			if (Scene.Map.currentSelectedMobileAction !== MobileAction.Move) {
+				this.updateRaycasting();
+			} else {
+				this.camera.onMouseWheelUpdate();
+			}
+		}
+	}
+
 	onMouseUp(x: number, y: number) {
 		if (this.undoRedoStatesSaving.length === 0 && this.undoRedoStates.length > 0) {
 			this.undoRedoStatesSaving = [...this.undoRedoStates];
 			this.saveUndoRedoStates();
 			this.undoRedoStates = [];
 		}
+	}
+
+	onTouchEnd(x: number, y: number) {
+		this.onMouseUp(x, y);
+		this.lastPosition = null;
+		Inputs.keys = [];
+		this.isMobileMovingCursor = false;
 	}
 
 	onMouseWheel(delta: number) {

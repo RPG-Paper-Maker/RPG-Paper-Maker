@@ -4,3 +4,27 @@
 	padding-left: 5px;
 	padding-right: 5px;
 }
+
+.main-menu-hamburger {
+	padding: 5px;
+	display: flex;
+	cursor: pointer;
+	position: relative;
+}
+
+.main-menu-hamburger svg {
+	width: 32px;
+	height: 32px;
+}
+
+.main-menu-hamburger-open {
+	position: absolute;
+	right: 0;
+	top: 22px;
+	z-index: 1;
+	animation: fadeIn 0.25s;
+}
+
+.main-menu-hamburger-open .menu-item {
+	padding: 10px;
+}
