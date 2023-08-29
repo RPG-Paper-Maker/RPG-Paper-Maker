@@ -186,6 +186,16 @@ class LocalFile extends Serializable {
 		}
 	}
 
+	static async renameFile(path: string, fileNameBefore: string, fileNameAfter: string) {
+		const pathBefore = Paths.join(path, fileNameBefore);
+		const json = await localforage.getItem(pathBefore);
+		if (json) {
+			const pathAfter = Paths.join(path, fileNameAfter);
+			await localforage.setItem(pathAfter, json);
+			await localforage.removeItem(pathBefore);
+		}
+	}
+
 	static async downloadZip(path: string) {
 		const zip = new JSZip();
 		await LocalFile.getFolderZip(zip, path);

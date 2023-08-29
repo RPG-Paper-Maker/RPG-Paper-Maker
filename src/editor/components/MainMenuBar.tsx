@@ -189,14 +189,18 @@ function MainMenuBar() {
 		dispatch(setCurrentProjectName(''));
 	};
 
-	const handleUndo = () => {
-		Manager.UndoRedo.undo();
-		dispatch(setUndoRedoIndex(undoRedoIndex - 1));
+	const handleUndo = async () => {
+		const update = await Manager.UndoRedo.undo();
+		if (update) {
+			dispatch(setUndoRedoIndex(undoRedoIndex - 1));
+		}
 	};
 
-	const handleRedo = () => {
-		Manager.UndoRedo.redo();
-		dispatch(setUndoRedoIndex(undoRedoIndex + 1));
+	const handleRedo = async () => {
+		const update = await Manager.UndoRedo.redo();
+		if (update) {
+			dispatch(setUndoRedoIndex(undoRedoIndex + 1));
+		}
 	};
 
 	const handleZoomIn = () => {

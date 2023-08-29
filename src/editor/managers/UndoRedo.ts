@@ -19,10 +19,19 @@ import { Project } from '../core/Project';
 import { UndoRedoState } from '../core/UndoRedoState';
 
 class UndoRedo {
+	public static readonly MAX_SAVES = 50;
 	public static isProcessing = false;
 
+	private static getPathStates(): string {
+		return Paths.join(Scene.Map.current?.getPath(), Paths.TEMP_UNDO_REDO);
+	}
+
+	private static getStateFilename(index: number): string {
+		return `${index}.json`;
+	}
+
 	private static getPathStatesAt(index: number): string {
-		return Paths.join(Scene.Map.current?.getPath(), Paths.TEMP_UNDO_REDO, `${index}.json`);
+		return Paths.join(this.getPathStates(), this.getStateFilename(index));
 	}
 
 	private static getPathIndex() {
@@ -61,8 +70,9 @@ class UndoRedo {
 		return states;
 	}
 
-	private static async apply(position: Position, element: MapElement.Base | null, kind: ElementMapKind) {
+	private static apply(position: Position, element: MapElement.Base | null, kind: ElementMapKind) {
 		if (Scene.Map.current) {
+			Scene.Map.current.mapPortion.removeLastPreview();
 			Scene.Map.current.mapPortion.updateMapElement(position, element, kind, false, false, true);
 		}
 	}
@@ -81,38 +91,56 @@ class UndoRedo {
 		}
 	}
 
+	private static async updateMaxFiles(index: number) {
+		const path = this.getPathStates();
+		for (let i = 1; i <= index; i++) {
+			await LocalFile.renameFile(path, this.getStateFilename(i), this.getStateFilename(i - 1));
+		}
+	}
+
 	private static async action(before: boolean, indexOffset: number) {
 		const length = await this.getStatesLength();
 		let index = await this.getCurrentCurrentIndex();
 		if (before) {
-			this.applyStates(index, true);
+			await this.applyStates(index, true);
 		}
 		index = Math.min(Math.max(-1, index + indexOffset), length - 1);
 		await this.saveCurrentCurrentIndex(index);
 		if (!before) {
-			this.applyStates(index, false);
+			await this.applyStates(index, false);
 		}
 		this.isProcessing = false;
 	}
 
-	static undo() {
+	static async undo() {
 		if (!this.isProcessing) {
 			this.isProcessing = true;
-			this.action(true, -1);
+			await this.action(true, -1);
+			return true;
+		} else {
+			return false;
 		}
 	}
 
-	static redo() {
+	static async redo() {
 		if (!this.isProcessing) {
 			this.isProcessing = true;
-			this.action(false, 1);
+			await this.action(false, 1);
+			return true;
+		} else {
+			return false;
 		}
 	}
 
 	static async createStates(states: UndoRedoState[]): Promise<{ index: number; length: number }> {
 		// Update current index
 		let index = (await this.getCurrentCurrentIndex()) + 1;
-		await this.saveCurrentCurrentIndex(index);
+		if (index === this.MAX_SAVES) {
+			index--;
+			await this.updateMaxFiles(index);
+		} else {
+			await this.saveCurrentCurrentIndex(index);
+		}
 
 		// Remove all existing states >= new index
 		const length = await this.getStatesLength();
