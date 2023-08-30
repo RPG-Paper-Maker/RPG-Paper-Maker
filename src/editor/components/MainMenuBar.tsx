@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 	RootState,
 	addProject,
+	clearProjects,
 	setCurrentProjectName,
 	setLoading,
 	setOpenLoading,
@@ -33,7 +34,13 @@ import MenuSub from './MenuSub';
 import { LocalFile } from '../core/LocalFile';
 import { Manager, Scene } from '../Editor';
 import { Project } from '../core/Project';
-import { AiOutlineFileAdd, AiOutlineFolderOpen, AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai';
+import {
+	AiOutlineClear,
+	AiOutlineFileAdd,
+	AiOutlineFolderOpen,
+	AiOutlineZoomIn,
+	AiOutlineZoomOut,
+} from 'react-icons/ai';
 import { BiSave, BiExport, BiImport } from 'react-icons/bi';
 import { BsPlay } from 'react-icons/bs';
 import { MdClose, MdOutlineWallpaper } from 'react-icons/md';
@@ -47,10 +54,13 @@ import '../styles/MainMenu.css';
 import { LocalForage } from '../common/Enum';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { LuFolders } from 'react-icons/lu';
+import Loader from './Loader';
 
 function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
+	const [isDialogWarningClearAllCacheOpen, setIsDialogWarningClearAllCacheOpen] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
 	const [hamburgerStates, setHamburgerStates] = useState<number[]>([]);
 
@@ -189,6 +199,26 @@ function MainMenuBar() {
 		dispatch(setCurrentProjectName(''));
 	};
 
+	const handleClearAllCache = () => {
+		setIsDialogWarningClearAllCacheOpen(true);
+	};
+
+	const handleRejectClearAllCache = () => {
+		setIsDialogWarningClearAllCacheOpen(false);
+	};
+
+	const handleAcceptClearAllCache = async () => {
+		setIsLoading(true);
+		handleCloseProject();
+		dispatch(clearProjects());
+		const all = await LocalFile.allStorage();
+		for (const path of all) {
+			await LocalFile.brutRemove(path);
+		}
+		setIsDialogWarningClearAllCacheOpen(false);
+		setIsLoading(false);
+	};
+
 	const handleUndo = async () => {
 		const update = await Manager.UndoRedo.undo();
 		if (update) {
@@ -303,6 +333,11 @@ function MainMenuBar() {
 					icon: <MdClose />,
 					disabled: !isProjectOpened,
 					onClick: handleCloseProject,
+				},
+				{
+					title: 'Clear all cache',
+					icon: <AiOutlineClear />,
+					onClick: handleClearAllCache,
 				},
 			],
 		},
@@ -460,6 +495,18 @@ function MainMenuBar() {
 				onClose={handleRejectImport}
 			>
 				<p>This project name already exists. Would you like to replace it?</p>
+			</Dialog>
+			<Dialog
+				title='Warning'
+				isOpen={isDialogWarningClearAllCacheOpen}
+				footer={<FooterYesNo onNo={handleRejectClearAllCache} onYes={handleAcceptClearAllCache} />}
+				onClose={handleRejectClearAllCache}
+			>
+				<Loader isLoading={isLoading} />
+				<div className='warning text-center'>
+					This action will delete all your projects, and every settings you changed. Are you sure that you
+					want to continue?
+				</div>
 			</Dialog>
 		</>
 	);

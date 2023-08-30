@@ -46,15 +46,6 @@ function PanelLoading({ setLoaded }: Props) {
 		console.log(all);
 	};
 
-	// Used only for debug if something is fucked up in files system
-	/*
-	const clearLocalFiles = async () => {
-		const all = await LocalFile.allStorage();
-		for (const path of all) {
-			await LocalFile.brutRemove(path);
-		}
-	};*/
-
 	const loadProjects = async () => {
 		const projects = (await LocalFile.getFolders(LocalForage.Projects)).map((name) => {
 			return {
