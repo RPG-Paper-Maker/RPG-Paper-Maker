@@ -27,7 +27,6 @@ import { UndoRedoState } from '../core/UndoRedoState';
 import { ElementMapKind, MobileAction, RaycastingLayer } from '../common/Enum';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Constants } from '../common/Constants';
-import Input from '../components/Input';
 
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
@@ -544,22 +543,24 @@ class Map extends Base {
 	}
 
 	onPointerMove(x: number, y: number) {
-		if (this.isMobileMovingCursor) {
-			Inputs.keys = [];
-			this.addMobileKeyMove();
-			this.cursor.onKeyDownImmediate();
-		} else if (Inputs.previousTouchDistance !== 0) {
-			const zoomFactor = Inputs.touchDistance / Inputs.previousTouchDistance;
-			if (zoomFactor > 1) {
-				this.zoomIn(zoomFactor / 10);
+		if (Inputs.isPointerPressed) {
+			if (this.isMobileMovingCursor) {
+				Inputs.keys = [];
+				this.addMobileKeyMove();
+				this.cursor.onKeyDownImmediate();
+			} else if (Inputs.previousTouchDistance !== 0) {
+				const zoomFactor = Inputs.touchDistance / Inputs.previousTouchDistance;
+				if (zoomFactor > 1) {
+					this.zoomIn(zoomFactor / 10);
+				} else {
+					this.zoomOut(zoomFactor / 10);
+				}
 			} else {
-				this.zoomOut(zoomFactor / 10);
-			}
-		} else {
-			if (Scene.Map.currentSelectedMobileAction !== MobileAction.Move) {
-				this.updateRaycasting();
-			} else {
-				this.camera.onMouseWheelUpdate();
+				if (Scene.Map.currentSelectedMobileAction !== MobileAction.Move) {
+					this.updateRaycasting();
+				} else {
+					this.camera.onMouseWheelUpdate();
+				}
 			}
 		}
 	}
