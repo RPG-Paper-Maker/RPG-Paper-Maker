@@ -510,11 +510,15 @@ class Map extends Base {
 	}
 
 	onMouseDown(x: number, y: number) {
-		if (this.lastPosition) {
-			if (Inputs.isPointerPressed) {
-				this.add(this.lastPosition);
-			} else if (Inputs.isMouseRightPressed) {
-				this.remove(this.lastPosition);
+		if (Inputs.isSHIFT) {
+			this.camera.onMouseWheelUpdate();
+		} else {
+			if (this.lastPosition) {
+				if (Inputs.isPointerPressed) {
+					this.add(this.lastPosition);
+				} else if (Inputs.isMouseRightPressed) {
+					this.remove(this.lastPosition);
+				}
 			}
 		}
 	}
@@ -535,7 +539,7 @@ class Map extends Base {
 	}
 
 	onMouseMove(x: number, y: number) {
-		if (Inputs.isMouseWheelPressed) {
+		if (Inputs.isMouseWheelPressed || (Inputs.isPointerPressed && Inputs.isSHIFT)) {
 			this.camera.onMouseWheelUpdate();
 		} else {
 			this.updateRaycasting();
