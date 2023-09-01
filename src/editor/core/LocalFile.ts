@@ -88,7 +88,7 @@ class LocalFile extends Serializable {
 		const folder = new LocalFile(true);
 		const folderJson = {};
 		folder.write(folderJson);
-		console.info('create folder ' + path);
+		// console.info('create folder ' + path);
 		await localforage.setItem(path, folderJson);
 	}
 
@@ -114,7 +114,7 @@ class LocalFile extends Serializable {
 		file.content = content;
 		const fileJson = {};
 		file.write(fileJson);
-		console.info('create file ' + path);
+		// console.info('create file ' + path);
 		await localforage.setItem(path, fileJson);
 	}
 
@@ -147,7 +147,7 @@ class LocalFile extends Serializable {
 				await LocalFile.removeFile(path + '/' + name, false);
 			}
 			// Remove folder
-			console.info('remove folder ' + path);
+			// console.info('remove folder ' + path);
 			await localforage.removeItem(path);
 		}
 	}
@@ -172,7 +172,7 @@ class LocalFile extends Serializable {
 		// Remove file
 		const json: Record<string, any> | null = await localforage.getItem(path);
 		if (json) {
-			console.info('remove file ' + path);
+			// console.info('remove file ' + path);
 			await localforage.removeItem(path);
 		}
 	}

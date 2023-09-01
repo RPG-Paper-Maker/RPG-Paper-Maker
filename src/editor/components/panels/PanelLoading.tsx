@@ -42,8 +42,6 @@ function PanelLoading({ setLoaded }: Props) {
 
 	const initializeLocalFiles = async () => {
 		await LocalFile.config();
-		const all = await LocalFile.allStorage();
-		console.log(all);
 	};
 
 	const loadProjects = async () => {
