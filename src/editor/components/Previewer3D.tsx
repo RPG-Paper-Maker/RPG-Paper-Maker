@@ -14,6 +14,7 @@ import { Manager, Scene } from '../Editor';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Rectangle } from '../core/Rectangle';
+import { ElementMapKind } from '../common/Enum';
 
 type Props = {
 	id: string;
@@ -24,6 +25,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	const refCanvas = useRef<HTMLDivElement>(null);
 
 	const currentTilesetTexture = useSelector((state: RootState) => state.mapEditor.currentTilesetTexture);
+	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const initialize = async () => {
@@ -35,15 +37,22 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		scene.canvas = Manager.GL.extraContext.parent;
 		Scene.Previewer3D.scenes[id] = scene;
 		await scene.load();
-		updateFloor(currentTilesetTexture);
+		update();
 		resize();
 		loop();
 	};
 
-	const updateFloor = (texture: Rectangle) => {
+	const update = () => {
 		const scene = Scene.Previewer3D.scenes[id];
 		if (scene) {
-			scene.loadFloor(Manager.GL.extraContext, texture);
+			switch (currentMapElementKind) {
+				case ElementMapKind.Floors:
+					scene.loadFloor(Manager.GL.extraContext, currentTilesetTexture);
+					break;
+				case ElementMapKind.SpritesFace:
+					scene.loadSprite(Manager.GL.extraContext, currentTilesetTexture, currentMapElementKind);
+					break;
+			}
 		}
 	};
 
@@ -82,9 +91,9 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	});
 
 	useEffect(() => {
-		updateFloor(currentTilesetTexture);
+		update();
 		// eslint-disable-next-line
-	}, [currentTilesetTexture]);
+	}, [currentTilesetTexture, currentMapElementKind]);
 
 	useEffect(() => {
 		initialize().catch(console.error);

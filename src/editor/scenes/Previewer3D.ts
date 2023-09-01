@@ -15,6 +15,8 @@ import { Base } from './Base';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
 import { Rectangle } from '../core/Rectangle';
+import { ElementMapKind } from '../common/Enum';
+import { CustomGeometryFace } from '../core/CustomGeometryFace';
 
 class Previewer3D extends Base {
 	public static scenes: Record<string, Previewer3D> = {}; // id canvas => scene
@@ -53,12 +55,8 @@ class Previewer3D extends Base {
 
 	async load() {
 		this.loading = true;
-
 		this.material = await Manager.GL.loadTexture('./assets/textures/plains-woods.png');
-
-		// Light
 		this.initializeSunLight();
-
 		this.loading = false;
 	}
 
@@ -67,6 +65,18 @@ class Previewer3D extends Base {
 		const floor = new MapElement.Floor(texture);
 		const geometry = new CustomGeometry();
 		floor.updateGeometry(geometry, new Position(), width, height, 0);
+		this.addToScene(GL, geometry);
+	}
+
+	loadSprite(GL: Manager.GL, texture: Rectangle, kind: ElementMapKind) {
+		const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
+		const sprite = MapElement.Sprite.create(kind, texture);
+		const geometry = new CustomGeometryFace();
+		sprite.updateGeometry(geometry, width, height, new Position(), 0, true, null);
+		this.addToScene(GL, geometry);
+	}
+
+	addToScene(GL: Manager.GL, geometry: CustomGeometry | CustomGeometryFace) {
 		geometry.updateAttributes();
 		if (this.mesh !== null) {
 			this.scene.remove(this.mesh);

@@ -20,7 +20,6 @@ function MapEditor() {
 	const [isLooping, setIsLooping] = useState(false);
 
 	const currentMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
-	const curr = useSelector((state: RootState) => state.mapEditor.currentTilesetTexture);
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const dispatch = useDispatch();
