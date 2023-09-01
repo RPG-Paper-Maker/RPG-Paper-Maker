@@ -21,7 +21,7 @@
 	position: absolute;
 	right: 0;
 	top: 22px;
-	z-index: 1;
+	z-index: 5;
 	animation: fadeIn 0.25s;
 }
 
