@@ -246,7 +246,7 @@ function MainMenuBar() {
 	};
 
 	const handlePlay = () => {
-		window.open(window.location.origin + '/play/' + currentProjectName, '_blank')?.focus();
+		window.open(window.location.pathname + '?project=' + currentProjectName, '_blank')?.focus();
 	};
 
 	const handleClickHamburgerBack = () => {
@@ -434,7 +434,7 @@ function MainMenuBar() {
 		list.map((item: any, index: number) => {
 			if (item.children) {
 				return (
-					<MenuSub key={index} title={item.title}>
+					<MenuSub key={index} title={item.title} icon={item.icon}>
 						{getMenuDesktop(item.children)}
 					</MenuSub>
 				);

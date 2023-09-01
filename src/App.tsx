@@ -15,22 +15,9 @@ import Editor from './editor/Editor';
 import Game from './game/Game';
 
 function App() {
-	const userAgent = navigator.userAgent.toLowerCase();
-	const isDesktop = userAgent.indexOf(' electron/') > -1;
-	return (
-		<>
-			{isDesktop ? (
-				<Editor />
-			) : (
-				<div>
-					<Routes>
-						<Route path='/' element={<Editor />} />
-						<Route path='/play/:projectName' element={<Game />} />
-					</Routes>
-				</div>
-			)}
-		</>
-	);
+	const queryParameters = new URLSearchParams(window.location.search);
+	const projectName = queryParameters.get('project');
+	return <>{projectName ? <Game projectName={projectName} /> : <Editor />}</>;
 }
 
 export default App;

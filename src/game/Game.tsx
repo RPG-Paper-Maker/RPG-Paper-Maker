@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 
-function Game() {
-	const { projectName } = useParams();
+type Props = {
+	projectName: string;
+};
 
+function Game({ projectName }: Props) {
 	const getPixelRatio = () => {
 		const ctx = document.createElement('canvas').getContext('2d') as any;
 		const dpr = window.devicePixelRatio || 1;
@@ -32,7 +33,7 @@ function Game() {
 
 	useEffect(() => {
 		const script = document.createElement('script');
-		script.src = '/Scripts/System/main.js';
+		script.src = './Scripts/System/main.js';
 		script.type = 'module';
 		script.async = true;
 		const global: any = window;
