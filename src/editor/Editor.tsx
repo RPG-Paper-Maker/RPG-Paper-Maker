@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import MainMenuBar from './components/MainMenuBar';
@@ -17,9 +17,13 @@ import PanelLoading from './components/panels/PanelLoading';
 import PanelMain from './components/panels/PanelMain';
 import './styles/Editor.css';
 import './styles/Mobile.css';
+import { Project } from './core/Project';
 
 function Editor() {
 	const [loaded, setLoaded] = useState(false);
+	useEffect(() => {
+		document.title = `RPG Paper Maker - ${Project.VERSION}`;
+	}, []);
 
 	return (
 		<Provider store={store}>
