@@ -9,6 +9,7 @@
 	background-color: var(--main-bg-color);
 	position: relative;
 	display: flex;
+	align-items: center;
 	gap: 10px;
 }
 
