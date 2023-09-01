@@ -103,11 +103,11 @@ function MainMenuBar() {
 				return false;
 			} else if (states.ctrl && states.shift && key === 'Z' && canRedo()) {
 				event.preventDefault();
-				handleRedo();
+				await handleRedo();
 				return false;
 			} else if (states.ctrl && !states.shift && key === 'Z' && canUndo()) {
 				event.preventDefault();
-				handleUndo();
+				await handleUndo();
 				return false;
 			}
 		}
@@ -275,7 +275,7 @@ function MainMenuBar() {
 			handleOpenProject(triggers.openProject).catch(console.error);
 		} else if (triggers.save) {
 			dispatch(triggerSave(false));
-			handleSave();
+			handleSave().catch(console.error);
 		} else if (triggers.play) {
 			dispatch(triggerPlay(false));
 			handlePlay();
@@ -405,7 +405,7 @@ function MainMenuBar() {
 
 	const getMenuHamburger = () => {
 		let list = items;
-		for (let state of hamburgerStates) {
+		for (const state of hamburgerStates) {
 			list = list[state].children;
 		}
 		return (

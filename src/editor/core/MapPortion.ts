@@ -372,7 +372,7 @@ class MapPortion extends Serializable {
 	}
 
 	updateFaceSprites(angle: number) {
-		(<CustomGeometryFace>this.spritesFaceMesh.geometry).rotate(angle, MapElement.Base.Y_AXIS);
+		(this.spritesFaceMesh.geometry as CustomGeometryFace).rotate(angle, MapElement.Base.Y_AXIS);
 	}
 
 	read(json: any) {

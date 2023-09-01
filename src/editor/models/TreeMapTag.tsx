@@ -43,8 +43,8 @@ class TreeMapTag extends Base {
 			for (const fileName of fileNames) {
 				const pathFileTemp = Paths.join(pathTemp, fileName);
 				const pathFile = Paths.join(path, fileName);
-				LocalFile.copyFile(pathFileTemp, pathFile);
-				LocalFile.removeFile(pathFileTemp);
+				await LocalFile.copyFile(pathFileTemp, pathFile);
+				await LocalFile.removeFile(pathFileTemp);
 			}
 			this.saved = true;
 		}

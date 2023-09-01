@@ -47,6 +47,7 @@ function Game({ projectName }: Props) {
 			document.body.removeChild(script);
 			document.body.removeChild(canvas);
 		};
+		// eslint-disable-next-line
 	}, []);
 
 	return (

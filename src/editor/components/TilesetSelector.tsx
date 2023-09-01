@@ -197,7 +197,7 @@ function TilesetSelector() {
 		if (!isVisible() || !currentState.picture) {
 			return;
 		}
-		let { x, y } = getCurrentPositionMobile(e);
+		const { x, y } = getCurrentPositionMobile(e);
 		updateMove(x, y);
 	};
 

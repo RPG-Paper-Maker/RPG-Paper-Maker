@@ -88,7 +88,6 @@ class Map extends Base {
 
 		// Tileset texture material
 		this.materialTileset = await Manager.GL.loadTexture('./assets/textures/plains-woods.png');
-		//this.materialTileset.depthWrite = false;
 
 		// Load map model
 		const mapName = Model.Map.generateMapName(this.id);
@@ -141,7 +140,7 @@ class Map extends Base {
 	}
 
 	async savePortions() {
-		for (const portion of this.portionsSaving) {
+		if (this.portionsSaving.length > 0) {
 			await this.mapPortion.save(true);
 		}
 		this.portionsSaving = [];
@@ -149,7 +148,7 @@ class Map extends Base {
 			this.tag.saved = false;
 			this.needsTreeMapUpdate = true;
 			if (Project.current) {
-				Project.current.treeMaps.save();
+				await Project.current.treeMaps.save();
 			}
 		}
 	}
@@ -276,11 +275,11 @@ class Map extends Base {
 		}
 		const positions: Position[] = [];
 		let x1 = previous.x;
-		let x2 = current.x;
+		const x2 = current.x;
 		const y = current.y;
 		const yPlus = current.yPixels;
 		let z1 = previous.z;
-		let z2 = current.z;
+		const z2 = current.z;
 		const l = current.layer;
 		let dx = x2 - x1;
 		let dz = z2 - z1;
@@ -503,7 +502,9 @@ class Map extends Base {
 		}
 	}
 
-	onKeyDown(key: string) {}
+	onKeyDown(key: string) {
+		// TODO
+	}
 
 	onKeyDownImmediate() {
 		this.cursor.onKeyDownImmediate();
@@ -572,7 +573,7 @@ class Map extends Base {
 	onMouseUp(x: number, y: number) {
 		if (this.undoRedoStatesSaving.length === 0 && this.undoRedoStates.length > 0) {
 			this.undoRedoStatesSaving = [...this.undoRedoStates];
-			this.saveUndoRedoStates();
+			this.saveUndoRedoStates().catch(console.error);
 			this.undoRedoStates = [];
 		}
 	}
@@ -596,13 +597,13 @@ class Map extends Base {
 		super.update(GL);
 		this.mapPortion.update();
 		this.cursor.update();
-		for (const portion of this.portionsToUpdate) {
+		if (this.portionsToUpdate.length > 0) {
 			this.mapPortion.updateGeometries();
 		}
 		this.portionsToUpdate = [];
 		if (this.portionsSaving.length === 0 && this.portionsToSave.length > 0) {
 			this.portionsSaving = [...this.portionsToSave];
-			this.savePortions();
+			this.savePortions().catch(console.error);
 			this.portionsToSave = [];
 		}
 

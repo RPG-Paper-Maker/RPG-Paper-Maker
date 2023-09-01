@@ -19,10 +19,6 @@ class CustomGeometryFace extends CustomGeometry {
 	public centerPoints: number[] = [];
 	public currentAngle: number = 0;
 
-	constructor() {
-		super();
-	}
-
 	pushQuadVerticesFace(
 		vecA: THREE.Vector3,
 		vecB: THREE.Vector3,
@@ -44,8 +40,8 @@ class CustomGeometryFace extends CustomGeometry {
 		}
 		this.currentAngle = angle;
 		const vertices = this.getVertices();
-		let vertex = new THREE.Vector3();
-		let center = new THREE.Vector3();
+		const vertex = new THREE.Vector3();
+		const center = new THREE.Vector3();
 		let ic = 0;
 		for (let i = 0, l = vertices.length; i < l; i += 3) {
 			ic = Math.floor(i / 12) * 3;

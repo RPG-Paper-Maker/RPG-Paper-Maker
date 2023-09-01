@@ -13,7 +13,6 @@ import React, { useRef, useEffect } from 'react';
 import { Manager, Scene } from '../Editor';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { Rectangle } from '../core/Rectangle';
 import { ElementMapKind } from '../common/Enum';
 
 type Props = {

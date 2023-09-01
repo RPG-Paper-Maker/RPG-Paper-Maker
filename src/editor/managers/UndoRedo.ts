@@ -51,7 +51,7 @@ class UndoRedo {
 		if (Project.current) {
 			const file = await LocalFile.getFile(UndoRedo.getPathIndex());
 			if (file) {
-				return parseInt(file.content);
+				return parseInt(file.content, 10);
 			}
 		}
 		return -1;

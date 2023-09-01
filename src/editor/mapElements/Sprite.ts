@@ -86,7 +86,7 @@ class Sprite extends Base {
 		const vecB = Sprite.MODEL[1].clone();
 		const vecC = Sprite.MODEL[2].clone();
 		const vecD = Sprite.MODEL[3].clone();
-		let center = new THREE.Vector3(0, 0, 0);
+		const center = new THREE.Vector3(0, 0, 0);
 		const size = new THREE.Vector3(
 			this.texture.width * Project.getSquareSize() * position.scaleX,
 			this.texture.height * Project.getSquareSize() * position.scaleY,
@@ -125,8 +125,8 @@ class Sprite extends Base {
 		let y = (this.texture.y * Project.getSquareSize()) / height;
 		let w = (this.texture.width * Project.getSquareSize()) / width;
 		let h = (this.texture.height * Project.getSquareSize()) / height;
-		let coefX = Base.COEF_TEX / width;
-		let coefY = Base.COEF_TEX / height;
+		const coefX = Base.COEF_TEX / width;
+		const coefY = Base.COEF_TEX / height;
 		x += coefX;
 		y += coefY;
 		w -= coefX * 2;
@@ -152,10 +152,10 @@ class Sprite extends Base {
 			count = count + 4;
 		} else {
 			// Simple sprite
-			let vecSimpleA = vecA.clone();
-			let vecSimpleB = vecB.clone();
-			let vecSimpleC = vecC.clone();
-			let vecSimpleD = vecD.clone();
+			const vecSimpleA = vecA.clone();
+			const vecSimpleB = vecB.clone();
+			const vecSimpleC = vecC.clone();
+			const vecSimpleD = vecD.clone();
 			count = Sprite.addStaticSpriteToGeometry(
 				geometry,
 				vecSimpleA,
@@ -172,10 +172,10 @@ class Sprite extends Base {
 
 		// Double sprite
 		if (this.kind === ElementMapKind.SpritesDouble || this.kind === ElementMapKind.SpritesQuadra) {
-			let vecDoubleA = vecA.clone();
-			let vecDoubleB = vecB.clone();
-			let vecDoubleC = vecC.clone();
-			let vecDoubleD = vecD.clone();
+			const vecDoubleA = vecA.clone();
+			const vecDoubleB = vecB.clone();
+			const vecDoubleC = vecC.clone();
+			const vecDoubleD = vecD.clone();
 			Base.rotateQuad(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center, 90, Sprite.Y_AXIS);
 			count = Sprite.addStaticSpriteToGeometry(
 				geometry,
@@ -192,14 +192,14 @@ class Sprite extends Base {
 
 			// Quadra sprite
 			if (this.kind === ElementMapKind.SpritesQuadra) {
-				let vecQuadra1A = vecA.clone();
-				let vecQuadra1B = vecB.clone();
-				let vecQuadra1C = vecC.clone();
-				let vecQuadra1D = vecD.clone();
-				let vecQuadra2A = vecA.clone();
-				let vecQuadra2B = vecB.clone();
-				let vecQuadra2C = vecC.clone();
-				let vecQuadra2D = vecD.clone();
+				const vecQuadra1A = vecA.clone();
+				const vecQuadra1B = vecB.clone();
+				const vecQuadra1C = vecC.clone();
+				const vecQuadra1D = vecD.clone();
+				const vecQuadra2A = vecA.clone();
+				const vecQuadra2B = vecB.clone();
+				const vecQuadra2C = vecC.clone();
+				const vecQuadra2D = vecD.clone();
 				Base.rotateQuad(vecQuadra1A, vecQuadra1B, vecQuadra1C, vecQuadra1D, center, 45, Sprite.Y_AXIS);
 				Base.rotateQuad(vecQuadra2A, vecQuadra2B, vecQuadra2C, vecQuadra2D, center, -45, Sprite.Y_AXIS);
 				count = Sprite.addStaticSpriteToGeometry(

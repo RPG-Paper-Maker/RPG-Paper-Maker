@@ -48,7 +48,7 @@ function PanelProject() {
 
 	const handleSelectedMapItem = (node: Node | null, isClick: boolean) => {
 		if (node && !(node.content as TreeMapTag).isFolder()) {
-			let title = node.getPath(false);
+			const title = node.getPath(false);
 			if (!mapsTabsTitles.find((model) => model.id === node.content.id)) {
 				const newListTitles = [...mapsTabsTitles];
 				newListTitles.push(new Model.Base(node.content.id, title));
@@ -90,6 +90,7 @@ function PanelProject() {
 				})
 			);
 		}
+		// eslint-disable-next-line
 	}, [triggersTreeMap]);
 
 	return (
