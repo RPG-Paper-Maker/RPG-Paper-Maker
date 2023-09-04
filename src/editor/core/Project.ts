@@ -15,7 +15,7 @@ import { Data } from '../Editor';
 
 class Project {
 	public static current: Project | null = null;
-	public static readonly VERSION = 'proto-3.0.0';
+	public static readonly VERSION = 'proto-3.0.1';
 	public systems: Data.System = new Data.System();
 	public treeMaps: Data.TreeMaps = new Data.TreeMaps();
 
