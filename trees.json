@@ -2371,19 +2371,9 @@
                                     {
                                         "files": [
                                             {
-                                                "files": [
-                                                ],
-                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/temp"
-                                            },
-                                            {
                                                 "repo": "RPG-Paper-Maker",
                                                 "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_0_0.json",
                                                 "target": "Engine/Content/example/Datas/Maps/MAP0003/0_0_0.json"
-                                            },
-                                            {
-                                                "files": [
-                                                ],
-                                                "target": "Engine/Content/example/Datas/Maps/MAP0003/tempUndoRedo"
                                             },
                                             {
                                                 "repo": "RPG-Paper-Maker",
@@ -3893,19 +3883,9 @@
                             {
                                 "files": [
                                     {
-                                        "files": [
-                                        ],
-                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/temp"
-                                    },
-                                    {
                                         "repo": "RPG-Paper-Maker",
                                         "source": "EditorApp/Content/example/Datas/Maps/MAP0003/0_0_0.json",
                                         "target": "Engine/Content/example/Datas/Maps/MAP0003/0_0_0.json"
-                                    },
-                                    {
-                                        "files": [
-                                        ],
-                                        "target": "Engine/Content/example/Datas/Maps/MAP0003/tempUndoRedo"
                                     },
                                     {
                                         "repo": "RPG-Paper-Maker",
