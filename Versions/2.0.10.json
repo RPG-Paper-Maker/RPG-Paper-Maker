@@ -1,0 +1,58 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Improve ingame performances",
+        "Add Inputs touch event",
+        "Remove F12 shortcut to quit game (use alt+F4 instead)",
+        "On level up, don't display statistics that doesn't apply to the hero",
+        "Level up window: diplay window always at the same Y position",
+        "No more wait when status effect doesn't apply in battle",
+        "No more wait when effect common reaction is instant commands in battles",
+        "Don't display affected status icon if it doesn't have any picture",
+        "Fusion status message into just one for every target affected"
+    ],
+    "bugs": [
+        "Engine crash if model hero map object set to none",
+        "Poison, burnt status should at least inflict 1 by default",
+        "Example game chest in tent not giving a potion",
+        "Weird camera small behaviour",
+        "Skills/Items description: no display decimals on damages",
+        "Centered Picture2D with reverse is not centered",
+        "Status effect skip only apply when trying to remove status",
+        "Battles miss damage repeated visually if several enemies target",
+        "Correct error message when wrong element res ID",
+        "Battle for ennemies selection, left and right arrow are reverted",
+        "Status issue when missing or not first effect",
+        "No sprite object cannot be triggered at 0,0",
+        "Try fix battler move not always correct on final position",
+        "Switch texture command: problem with empty textures"
+    ],
+    "finished": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+    ]
+}
