@@ -1,0 +1,13 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+    ],
+    "bugs": [
+        "Texturing of objects with 3D models not always displaying correctly"
+    ],
+    "finished": [
+        2
+    ]
+}

@@ -392,10 +392,12 @@ MapElement* Objects3D::updateRaycasting(float &finalDistance, Position
         if (map->isInPortion(portion))
         {
             MapPortion* mapPortion = map->mapPortion(portion);
-            MapElement* newElement = mapPortion->updateRaycastingOverflowObject3D(
-                position, finalDistance, finalPosition, ray, remove);
-            if (newElement != nullptr) {
-                element = newElement;
+            if (mapPortion != nullptr) {
+                MapElement* newElement = mapPortion->updateRaycastingOverflowObject3D(
+                    position, finalDistance, finalPosition, ray, remove);
+                if (newElement != nullptr) {
+                    element = newElement;
+                }
             }
         }
     }
