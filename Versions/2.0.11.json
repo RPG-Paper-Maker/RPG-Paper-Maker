@@ -5,9 +5,11 @@
 	"features": [
     ],
     "bugs": [
-        "Texturing of objects with 3D models not always displaying correctly"
+        "Texturing of objects with 3D models not always displaying correctly",
+        "Engine might crash when moving in map"
     ],
     "finished": [
+        2,
         2
     ]
 }
