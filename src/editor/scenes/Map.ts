@@ -518,7 +518,7 @@ class Map extends Base {
 				if (Inputs.isPointerPressed) {
 					this.add(this.lastPosition);
 				} else if (Inputs.isMouseRightPressed) {
-					this.remove(this.lastPosition);
+					this.updateRaycasting();
 				}
 			}
 		}
