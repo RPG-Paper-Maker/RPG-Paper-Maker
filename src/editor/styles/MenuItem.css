@@ -36,3 +36,12 @@
 	margin-left: 5px;
 	margin-right: 5px;
 }
+
+.menu-item .shortcut {
+	color: var(--grey-light-color);
+	font-size: 10px;
+}
+
+.menu-item.disabled .shortcut {
+	color: var(--grey-color);
+}

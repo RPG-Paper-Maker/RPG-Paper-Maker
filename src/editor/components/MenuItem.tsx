@@ -20,6 +20,7 @@ type Props = {
 	active?: boolean;
 	index?: number;
 	disabled?: boolean;
+	shortcut?: string[];
 	setActiveIndex?: (v: number) => void;
 	onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 	setTriggerCloseAll?: (v: boolean) => void;
@@ -33,6 +34,7 @@ function MenuItem({
 	active = false,
 	index = 0,
 	disabled = false,
+	shortcut = [],
 	setActiveIndex,
 	onClick,
 	setTriggerCloseAll,
@@ -51,6 +53,8 @@ function MenuItem({
 		}
 	};
 
+	const getShortcut = () => shortcut.join('+');
+
 	return (
 		<div
 			onClick={handleClick}
@@ -64,7 +68,14 @@ function MenuItem({
 			)}
 		>
 			{icon}
-			{children}
+			{shortcut.length > 0 ? (
+				<>
+					<div className='flex-one'>{children}</div>
+					<div className='shortcut'>{getShortcut()}</div>
+				</>
+			) : (
+				children
+			)}
 		</div>
 	);
 }

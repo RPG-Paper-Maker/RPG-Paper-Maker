@@ -70,3 +70,21 @@ export enum MobileAction {
 	Minus = 2,
 	Move = 3,
 }
+
+export enum SpecialKey {
+	CTRL = 'CTRL',
+	SHIFT = 'SHIFT',
+	ALT = 'ALT',
+}
+
+export enum Key {
+	N = 'N',
+	S = 'S',
+	I = 'I',
+	E = 'E',
+	Q = 'Q',
+	Z = 'Z',
+	P = 'P',
+	UP = 'UP',
+	DOWN = 'DOWN',
+}

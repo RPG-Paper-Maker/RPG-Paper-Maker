@@ -10,7 +10,6 @@
 */
 
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
 import Editor from './editor/Editor';
 import Game from './game/Game';
 

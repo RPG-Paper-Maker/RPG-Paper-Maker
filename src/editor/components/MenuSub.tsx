@@ -21,6 +21,7 @@ type Props = {
 	active?: boolean;
 	index?: number;
 	disabled?: boolean;
+	shortcut?: string[];
 	isRoot?: boolean;
 	setActiveIndex?: (v: number) => void;
 	triggerCloseAll?: boolean;
@@ -36,6 +37,7 @@ function MenuSub({
 	active = false,
 	index = 0,
 	disabled = false,
+	shortcut = [],
 	isRoot = false,
 	setActiveIndex,
 	triggerCloseAll,
@@ -138,6 +140,8 @@ function MenuSub({
 		}
 	}, [triggerCloseAll]);
 
+	const getShortcut = () => shortcut.join(' + ');
+
 	return (
 		<div ref={refMain} className='menu-sub'>
 			<div
@@ -157,6 +161,7 @@ function MenuSub({
 			>
 				{icon}
 				{title}
+				{getShortcut()}
 				{!isRoot && <i ref={refArrow}></i>}
 			</div>
 			<div ref={refContent} className='absolute'>

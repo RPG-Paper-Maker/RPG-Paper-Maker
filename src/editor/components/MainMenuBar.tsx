@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	RootState,
@@ -51,10 +51,19 @@ import Dialog from './dialogs/Dialog';
 import FooterYesNo from './dialogs/footers/FooterYesNo';
 import Toolbar from './Toolbar';
 import '../styles/MainMenu.css';
-import { LocalForage } from '../common/Enum';
+import { Key, LocalForage, SpecialKey } from '../common/Enum';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { LuFolders } from 'react-icons/lu';
 import Loader from './Loader';
+
+type MenuItemType = {
+	title: ReactNode | string;
+	icon?: JSX.Element;
+	disabled?: boolean;
+	onClick?: () => Promise<void>;
+	shortcut?: (SpecialKey | Key)[];
+	children?: MenuItemType[];
+};
 
 function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
@@ -88,32 +97,7 @@ function MainMenuBar() {
 		dispatch(setProjectMenuIndex(index));
 	};
 
-	const handleKeyDown = async (event: KeyboardEvent) => {
-		if (isProjectOpened) {
-			const states = {
-				alt: event.altKey,
-				ctrl: event.ctrlKey,
-				meta: event.metaKey,
-				shift: event.shiftKey,
-			};
-			const key = event.key.toUpperCase();
-			if (states.ctrl && key === 'S' && isInMap) {
-				event.preventDefault();
-				await handleSave();
-				return false;
-			} else if (states.ctrl && states.shift && key === 'Z' && canRedo()) {
-				event.preventDefault();
-				await handleRedo();
-				return false;
-			} else if (states.ctrl && !states.shift && key === 'Z' && canUndo()) {
-				event.preventDefault();
-				await handleUndo();
-				return false;
-			}
-		}
-	};
-
-	const handleNewProject = () => {
+	const handleNewProject = async () => {
 		setIsDialogNewProjectOpen(true);
 	};
 
@@ -123,7 +107,7 @@ function MainMenuBar() {
 		await handleOpenProject(data.projectName);
 	};
 
-	const handleRejectNewProject = () => {
+	const handleRejectNewProject = async () => {
 		setIsDialogNewProjectOpen(false);
 	};
 
@@ -143,7 +127,7 @@ function MainMenuBar() {
 		}
 	};
 
-	const handleImport = () => {
+	const handleImport = async () => {
 		importFileInputRef.current?.click();
 	};
 
@@ -179,7 +163,7 @@ function MainMenuBar() {
 		await handleOpenProject(projectName);
 	};
 
-	const handleRejectImport = () => {
+	const handleRejectImport = async () => {
 		setIsDialogWarningImportOpen(false);
 		if (importFileInputRef.current) {
 			importFileInputRef.current.value = '';
@@ -190,7 +174,7 @@ function MainMenuBar() {
 		await LocalFile.downloadZip(Paths.join(LocalForage.Projects, currentProjectName));
 	};
 
-	const handleCloseProject = () => {
+	const handleCloseProject = async () => {
 		if (Scene.Map.current) {
 			Scene.Map.current.close();
 			Scene.Map.current = null;
@@ -199,11 +183,11 @@ function MainMenuBar() {
 		dispatch(setCurrentProjectName(''));
 	};
 
-	const handleClearAllCache = () => {
+	const handleClearAllCache = async () => {
 		setIsDialogWarningClearAllCacheOpen(true);
 	};
 
-	const handleRejectClearAllCache = () => {
+	const handleRejectClearAllCache = async () => {
 		setIsDialogWarningClearAllCacheOpen(false);
 	};
 
@@ -233,19 +217,19 @@ function MainMenuBar() {
 		}
 	};
 
-	const handleZoomIn = () => {
+	const handleZoomIn = async () => {
 		if (Scene.Map.current) {
 			Scene.Map.current.zoomIn();
 		}
 	};
 
-	const handleZoomOut = () => {
+	const handleZoomOut = async () => {
 		if (Scene.Map.current) {
 			Scene.Map.current.zoomOut();
 		}
 	};
 
-	const handlePlay = () => {
+	const handlePlay = async () => {
 		window.open(window.location.pathname + '?project=' + currentProjectName, '_blank')?.focus();
 	};
 
@@ -260,6 +244,199 @@ function MainMenuBar() {
 	const handleClickHamburger = () => {
 		setIsHamburgerOpen((value) => !value);
 		setHamburgerStates([]);
+	};
+
+	const items: MenuItemType[] = [
+		{
+			title: 'File',
+			children: [
+				{
+					title: 'New Project...',
+					icon: <AiOutlineFileAdd />,
+					onClick: handleNewProject,
+					shortcut: [SpecialKey.CTRL, SpecialKey.ALT, Key.N],
+				},
+				{
+					title: 'Open existing project...',
+					icon: <AiOutlineFolderOpen />,
+					children: projectNames.map((name) => ({ title: name, onClick: () => handleOpenProject(name) })),
+				},
+				{
+					title: (
+						<>
+							Import project...
+							<input
+								ref={importFileInputRef}
+								type='file'
+								hidden
+								onChange={handleImportFileChange}
+								accept='.zip'
+							/>
+						</>
+					),
+					icon: <BiImport />,
+					onClick: handleImport,
+					shortcut: [SpecialKey.CTRL, Key.I],
+				},
+				{
+					title: 'Export project',
+					icon: <BiExport />,
+					disabled: !isProjectOpened,
+					onClick: handleExport,
+					shortcut: [SpecialKey.CTRL, Key.E],
+				},
+				{
+					title: 'Save',
+					icon: <BiSave />,
+					disabled: !isInMap,
+					onClick: handleSave,
+					shortcut: [SpecialKey.CTRL, Key.S],
+				},
+				{
+					title: 'Close',
+					icon: <MdClose />,
+					disabled: !isProjectOpened,
+					onClick: handleCloseProject,
+					shortcut: [SpecialKey.CTRL, Key.Q],
+				},
+				{
+					title: 'Clear all cache',
+					icon: <AiOutlineClear />,
+					onClick: handleClearAllCache,
+				},
+			],
+		},
+		{
+			title: 'Edition',
+			children: [
+				{
+					title: 'Undo',
+					icon: <IoIosUndo />,
+					disabled: !canUndo(),
+					onClick: handleUndo,
+					shortcut: [SpecialKey.CTRL, Key.Z],
+				},
+				{
+					title: 'Redo',
+					icon: <IoIosRedo />,
+					disabled: !canRedo(),
+					onClick: handleRedo,
+					shortcut: [SpecialKey.CTRL, SpecialKey.SHIFT, Key.Z],
+				},
+				{
+					title: 'Zoom in',
+					icon: <AiOutlineZoomIn />,
+					disabled: !isInMap,
+					onClick: handleZoomIn,
+					shortcut: [SpecialKey.SHIFT, Key.UP],
+				},
+				{
+					title: 'Zoom out',
+					icon: <AiOutlineZoomOut />,
+					disabled: !isInMap,
+					onClick: handleZoomOut,
+					shortcut: [SpecialKey.SHIFT, Key.DOWN],
+				},
+			],
+		},
+		{
+			title: 'Management',
+			disabled: true,
+		},
+		{
+			title: 'Special elements',
+			disabled: true,
+		},
+		{
+			title: 'Options',
+			disabled: true,
+		},
+		{
+			title: 'Display',
+			disabled: true,
+		},
+		{
+			title: 'Test',
+			children: [
+				{
+					title: 'Play',
+					icon: <BsPlay />,
+					disabled: !isProjectOpened,
+					onClick: handlePlay,
+					shortcut: [Key.P],
+				},
+			],
+		},
+		{
+			title: 'Help',
+			disabled: true,
+		},
+	];
+
+	const checkItemKeyDownShortcut = async (
+		itemList: MenuItemType[],
+		statesSpecialKeys: Map<SpecialKey, boolean>,
+		key: Key | SpecialKey,
+		specialKeys: SpecialKey[],
+		event: KeyboardEvent
+	) => {
+		for (const item of itemList) {
+			const { shortcut, disabled, onClick, children } = item;
+			if (!disabled && shortcut && onClick) {
+				// Check all special keys
+				let valid = true;
+				for (const specialKey of specialKeys) {
+					if (!statesSpecialKeys.get(specialKey) !== (shortcut.indexOf(specialKey) === -1)) {
+						if (children) {
+							if (await checkItemKeyDownShortcut(children, statesSpecialKeys, key, specialKeys, event)) {
+								return true;
+							}
+						}
+						valid = false;
+						break;
+					}
+				}
+				if (!valid) {
+					continue;
+				}
+				// Check key if not a specialKey
+				if (specialKeys.indexOf(key as SpecialKey) === -1 && shortcut.indexOf(key) !== -1) {
+					event.preventDefault();
+					await onClick();
+					return true;
+				}
+			} else {
+				if (children) {
+					if (await checkItemKeyDownShortcut(children, statesSpecialKeys, key, specialKeys, event)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	};
+
+	const translateKey = (key: string) => {
+		switch (key) {
+			case 'CONTROL':
+				return SpecialKey.CTRL;
+			case 'ARROWUP':
+				return Key.UP;
+			case 'ARROWDOWN':
+				return Key.DOWN;
+			default:
+				return key;
+		}
+	};
+
+	const handleKeyDown = async (event: KeyboardEvent) => {
+		const statesSpecialKeys: Map<SpecialKey, boolean> = new Map();
+		statesSpecialKeys.set(SpecialKey.CTRL, event.ctrlKey);
+		statesSpecialKeys.set(SpecialKey.ALT, event.altKey);
+		statesSpecialKeys.set(SpecialKey.SHIFT, event.shiftKey);
+		const key = translateKey(event.key.toUpperCase());
+		const specialKeys = Object.values(SpecialKey);
+		return !(await checkItemKeyDownShortcut(items, statesSpecialKeys, key as Key | SpecialKey, specialKeys, event));
 	};
 
 	// Triggers handling
@@ -290,123 +467,13 @@ function MainMenuBar() {
 		// eslint-disable-next-line
 	});
 
-	const items: any = [
-		{
-			title: 'File',
-			children: [
-				{ title: 'New Project...', icon: <AiOutlineFileAdd />, onClick: handleNewProject },
-				{
-					title: 'Open existing project...',
-					icon: <AiOutlineFolderOpen />,
-					children: projectNames.map((name) => ({ title: name, onClick: () => handleOpenProject(name) })),
-				},
-				{
-					title: (
-						<>
-							Import project...
-							<input
-								ref={importFileInputRef}
-								type='file'
-								hidden
-								onChange={handleImportFileChange}
-								accept='.zip'
-							/>
-						</>
-					),
-					icon: <BiImport />,
-					onClick: handleImport,
-				},
-				{
-					title: 'Export',
-					icon: <BiExport />,
-					disabled: !isProjectOpened,
-					onClick: handleExport,
-				},
-				{
-					title: 'Save',
-					icon: <BiSave />,
-					disabled: !isInMap,
-					onClick: handleSave,
-				},
-				{
-					title: 'Close',
-					icon: <MdClose />,
-					disabled: !isProjectOpened,
-					onClick: handleCloseProject,
-				},
-				{
-					title: 'Clear all cache',
-					icon: <AiOutlineClear />,
-					onClick: handleClearAllCache,
-				},
-			],
-		},
-		{
-			title: 'Edition',
-			children: [
-				{
-					title: 'Undo',
-					icon: <IoIosUndo />,
-					disabled: !canUndo(),
-					onClick: handleUndo,
-				},
-				{
-					title: 'Redo',
-					icon: <IoIosRedo />,
-					disabled: !canRedo(),
-					onClick: handleRedo,
-				},
-				{
-					title: 'Zoom in',
-					icon: <AiOutlineZoomIn />,
-					disabled: !isInMap,
-					onClick: handleZoomIn,
-				},
-				{
-					title: 'Zoom out',
-					icon: <AiOutlineZoomOut />,
-					disabled: !isInMap,
-					onClick: handleZoomOut,
-				},
-			],
-		},
-		{
-			title: 'Management',
-			disabled: true,
-		},
-		{
-			title: 'Special elements',
-			disabled: true,
-		},
-		{
-			title: 'Options',
-			disabled: true,
-		},
-		{
-			title: 'Display',
-			disabled: true,
-		},
-		{
-			title: 'Test',
-			children: [
-				{
-					title: 'Play',
-					icon: <BsPlay />,
-					disabled: !isProjectOpened,
-					onClick: handlePlay,
-				},
-			],
-		},
-		{
-			title: 'Help',
-			disabled: true,
-		},
-	];
-
 	const getMenuHamburger = () => {
 		let list = items;
 		for (const state of hamburgerStates) {
-			list = list[state].children;
+			const { children } = list[state];
+			if (children) {
+				list = children;
+			}
 		}
 		return (
 			<Menu>
@@ -434,13 +501,19 @@ function MainMenuBar() {
 		list.map((item: any, index: number) => {
 			if (item.children) {
 				return (
-					<MenuSub key={index} title={item.title} icon={item.icon}>
+					<MenuSub key={index} title={item.title} icon={item.icon} shortcut={item.shortcut}>
 						{getMenuDesktop(item.children)}
 					</MenuSub>
 				);
 			}
 			return (
-				<MenuItem key={index} icon={item.icon} disabled={item.disabled} onClick={item.onClick}>
+				<MenuItem
+					key={index}
+					icon={item.icon}
+					disabled={item.disabled}
+					shortcut={item.shortcut}
+					onClick={item.onClick}
+				>
 					{item.title}
 				</MenuItem>
 			);
