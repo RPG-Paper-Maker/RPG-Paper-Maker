@@ -31,7 +31,7 @@ import { Project } from '../../core/Project';
 
 function PanelProject() {
 	const [mapsTabsTitles, setMapsTabsTitles] = useState<Model.Base[]>([]);
-	const [mapsTabsContents, setMapsTabsContents] = useState<ReactNode[]>([]);
+	const [mapsTabsContents, setMapsTabsContents] = useState<(ReactNode | null)[]>([]);
 	const [mapForcedCurrentSelectedItemID, setMapForcedCurrentSelectedItemID] = useState<number | null>(null);
 	const [mapTabForcedCurrentIndex, setMapTabForcedCurrentIndex] = useState<number | null>(null);
 
@@ -42,56 +42,81 @@ function PanelProject() {
 	const triggersTreeMap = useSelector((state: RootState) => state.triggers.treeMap);
 	const projectMenuIndex = useSelector((state: RootState) => state.projects.menuIndex);
 
+	const getDefaultTabTitles = () =>
+		Project.current!.treeMaps.tabs.map((id) => {
+			const node = Node.getNodeByID(Project.current!.treeMaps.tree, id);
+			return new Model.Base(id, node ? node.getPath(false) : 'ERROR: Cannot find path');
+		});
+
+	const getDefaultTabContents = () => Project.current!.treeMaps.tabs.map(() => null);
+
 	const updateProjectMenuIndex = (index: number) => {
 		dispatch(setProjectMenuIndex(index));
 	};
 
 	const handleSelectedMapItem = (node: Node | null, isClick: boolean) => {
-		if (node && !(node.content as TreeMapTag).isFolder()) {
-			const title = node.getPath(false);
-			if (!mapsTabsTitles.find((model) => model.id === node.content.id)) {
-				const newListTitles = [...mapsTabsTitles];
-				newListTitles.push(new Model.Base(node.content.id, title));
-				setMapsTabsTitles(newListTitles);
-				setMapsTabsContents([...mapsTabsContents, null]);
-				setMapTabForcedCurrentIndex(newListTitles.findIndex((model) => model.id === node.content.id));
+		if (!openLoading) {
+			if (node && !(node.content as TreeMapTag).isFolder()) {
+				const id = node.content.id;
+				const title = node.getPath(false);
+				if (!mapsTabsTitles.find((model) => model.id === id)) {
+					const newListTitles = [...mapsTabsTitles];
+					newListTitles.push(new Model.Base(id, title));
+					setMapsTabsTitles(newListTitles);
+					setMapsTabsContents([...mapsTabsContents, null]);
+					setMapTabForcedCurrentIndex(newListTitles.findIndex((model) => model.id === id));
+				} else {
+					setMapTabForcedCurrentIndex(mapsTabsTitles.findIndex((model) => model.id === id));
+				}
+				dispatch(setCurrentTreeMapTag(node.content as Model.TreeMapTag));
 			} else {
-				setMapTabForcedCurrentIndex(mapsTabsTitles.findIndex((model) => model.id === node.content.id));
+				setMapTabForcedCurrentIndex(-1);
+				dispatch(setCurrentTreeMapTag(null));
 			}
-
-			dispatch(setCurrentTreeMapTag(node.content as Model.TreeMapTag));
-		} else {
-			setMapTabForcedCurrentIndex(-1);
-			dispatch(setCurrentTreeMapTag(null));
 		}
 	};
 
 	const handleTabCurrentIndexChanged = (index: number, model: Model.Base, isClick: boolean) => {
-		if (isClick) {
+		if (!openLoading) {
+			let id = -1;
 			if (index !== -1 && model) {
-				setMapForcedCurrentSelectedItemID(model.id);
-			} else {
-				setMapForcedCurrentSelectedItemID(-1);
+				id = model.id;
+			}
+			Project.current!.treeMaps.currentMap = id;
+			Project.current!.treeMaps.save();
+			if (isClick) {
+				setMapForcedCurrentSelectedItemID(id);
 			}
 		}
 	};
 
 	useEffect(() => {
-		if (Project.current) {
-			setMapsTabsTitles(
-				mapsTabsTitles.map((model) => {
-					if (Project.current) {
-						const node = Node.getNodeByID(Project.current.treeMaps.tree, model.id);
-						if (node) {
-							return new Model.Base(model.id, node.getPath(false));
-						}
-					}
-					return model;
-				})
-			);
-		}
+		setMapsTabsTitles(
+			mapsTabsTitles.map((model) => {
+				const node = Node.getNodeByID(Project.current!.treeMaps.tree, model.id);
+				if (node) {
+					return new Model.Base(model.id, node.getPath(false));
+				}
+				return model;
+			})
+		);
 		// eslint-disable-next-line
 	}, [triggersTreeMap]);
+
+	useEffect(() => {
+		if (!openLoading) {
+			Project.current!.treeMaps.tabs = mapsTabsTitles.map((model) => model.id);
+			Project.current!.treeMaps.save();
+		}
+	}, [mapsTabsTitles]);
+
+	useEffect(() => {
+		if (!openLoading) {
+			setMapsTabsTitles(getDefaultTabTitles());
+			setMapsTabsContents(getDefaultTabContents());
+			setMapForcedCurrentSelectedItemID(Project.current!.treeMaps.currentMap);
+		}
+	}, [openLoading]);
 
 	return (
 		<>

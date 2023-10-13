@@ -37,7 +37,7 @@ function Tab({
 	forcedCurrentIndex,
 	setForcedCurrentIndex,
 }: Props) {
-	const [currentIndex, setCurrentIndex] = useState(0);
+	const [currentIndex, setCurrentIndex] = useState(-1);
 
 	const handleClickClose = (e: React.MouseEvent<SVGElement, MouseEvent>, title: Model.Base) => {
 		e.stopPropagation();
@@ -69,7 +69,6 @@ function Tab({
 	useEffect(() => {
 		if (forcedCurrentIndex !== undefined && forcedCurrentIndex !== null && setForcedCurrentIndex) {
 			setCurrentIndex(forcedCurrentIndex);
-			setForcedCurrentIndex(null);
 			if (onCurrentIndexChanged) {
 				onCurrentIndexChanged(forcedCurrentIndex, titles[forcedCurrentIndex], false);
 			}

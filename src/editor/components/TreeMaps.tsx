@@ -33,7 +33,7 @@ function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurren
 	return (
 		<Tree
 			list={Project.current.treeMaps.tree}
-			defaultSelectedID={1}
+			defaultSelectedID={-1}
 			onSelectedItem={onSelectedItem}
 			forcedCurrentSelectedItemID={forcedCurrentSelectedItemID}
 			setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemID}
