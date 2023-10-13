@@ -25,6 +25,7 @@ import {
 	triggerOpenProject,
 	triggerPlay,
 	triggerSave,
+	triggerSaveAll,
 	triggerTreeMap,
 } from '../store';
 import DialogNewProject from './dialogs/DialogNewProject';
@@ -53,7 +54,7 @@ import Toolbar from './Toolbar';
 import '../styles/MainMenu.css';
 import { Key, LocalForage, SpecialKey } from '../common/Enum';
 import { RxHamburgerMenu } from 'react-icons/rx';
-import { LuFolders } from 'react-icons/lu';
+import { LuFolders, LuSaveAll } from 'react-icons/lu';
 import Loader from './Loader';
 
 type MenuItemType = {
@@ -84,14 +85,19 @@ function MainMenuBar() {
 	const undoRedoIndex = useSelector((state: RootState) => state.mapEditor.undoRedo.index);
 	const undoRedoLength = useSelector((state: RootState) => state.mapEditor.undoRedo.length);
 	const projectMenuIndex = useSelector((state: RootState) => state.projects.menuIndex);
+	useSelector((state: RootState) => state.triggers.treeMap); // Force to check can save all
 
 	const isProjectOpened = currentProjectName !== '';
 
-	const isInMap = isProjectOpened && !!Scene.Map.current;
+	const isInMap = isProjectOpened && currentTreeMapTag !== null;
 
-	const canUndo = () => isInMap && undoRedoIndex > -1;
+	const canUndo = isInMap && undoRedoIndex > -1;
 
-	const canRedo = () => isInMap && undoRedoIndex < undoRedoLength - 1;
+	const canRedo = isInMap && undoRedoIndex < undoRedoLength - 1;
+
+	const canSave = isInMap && !currentTreeMapTag.saved;
+
+	const canSaveAll = isProjectOpened && !Project.current?.treeMaps.isAllMapsSaved();
 
 	const updateProjectMenuIndex = (index: number) => {
 		dispatch(setProjectMenuIndex(index));
@@ -123,6 +129,13 @@ function MainMenuBar() {
 		if (currentTreeMapTag) {
 			await currentTreeMapTag.saveFiles();
 			Project.current?.treeMaps.save();
+			dispatch(triggerTreeMap());
+		}
+	};
+
+	const handleSaveAll = async () => {
+		if (Project.current) {
+			await Project.current?.treeMaps.saveAllTags();
 			dispatch(triggerTreeMap());
 		}
 	};
@@ -288,9 +301,16 @@ function MainMenuBar() {
 				{
 					title: 'Save',
 					icon: <BiSave />,
-					disabled: !isInMap,
+					disabled: !canSave,
 					onClick: handleSave,
 					shortcut: [SpecialKey.CTRL, Key.S],
+				},
+				{
+					title: 'Save all',
+					icon: <LuSaveAll />,
+					disabled: !canSaveAll,
+					onClick: handleSaveAll,
+					shortcut: [SpecialKey.CTRL, SpecialKey.SHIFT, Key.S],
 				},
 				{
 					title: 'Close',
@@ -312,14 +332,14 @@ function MainMenuBar() {
 				{
 					title: 'Undo',
 					icon: <IoIosUndo />,
-					disabled: !canUndo(),
+					disabled: !canUndo,
 					onClick: handleUndo,
 					shortcut: [SpecialKey.CTRL, Key.Z],
 				},
 				{
 					title: 'Redo',
 					icon: <IoIosRedo />,
-					disabled: !canRedo(),
+					disabled: !canRedo,
 					onClick: handleRedo,
 					shortcut: [SpecialKey.CTRL, SpecialKey.SHIFT, Key.Z],
 				},
@@ -453,6 +473,9 @@ function MainMenuBar() {
 		} else if (triggers.save) {
 			dispatch(triggerSave(false));
 			handleSave().catch(console.error);
+		} else if (triggers.saveAll) {
+			dispatch(triggerSaveAll(false));
+			handleSaveAll().catch(console.error);
 		} else if (triggers.play) {
 			dispatch(triggerPlay(false));
 			handlePlay();
