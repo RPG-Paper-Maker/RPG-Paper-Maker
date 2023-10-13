@@ -12,15 +12,16 @@
 import * as THREE from 'three';
 import { Manager } from '../Editor';
 import { Camera } from '../core/Camera';
+import { TreeMapTag } from '../models';
 
 class Base {
 	public scene: THREE.Scene;
 	public camera: Camera;
 	public loading: boolean = false;
 
-	constructor() {
+	constructor(tag?: TreeMapTag) {
 		this.scene = new THREE.Scene();
-		this.camera = new Camera();
+		this.camera = new Camera(tag);
 	}
 
 	update(GL: Manager.GL) {

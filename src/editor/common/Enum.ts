@@ -85,6 +85,9 @@ export enum Key {
 	Q = 'Q',
 	Z = 'Z',
 	P = 'P',
+	W = 'W',
+	A = 'A',
+	D = 'D',
 	UP = 'UP',
 	DOWN = 'DOWN',
 }

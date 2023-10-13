@@ -13,15 +13,28 @@ import { Model } from '../Editor';
 import { Paths } from '../common/Paths';
 import { Utils } from '../common/Utils';
 import { LocalFile } from '../core/LocalFile';
+import { Position } from '../core/Position';
 import { Project } from '../core/Project';
 import { Base } from './Base';
 import { FcFolder, FcFile } from 'react-icons/fc';
 
 class TreeMapTag extends Base {
 	public static readonly JSON_SAVED = 's';
+	public static readonly JSON_CAMERA_DISTANCE = 'cd';
+	public static readonly JSON_CAMERA_HORIZONTAL_ANGLE = 'cha';
+	public static readonly JSON_CAMERA_VERTICAL_ANGLE = 'cva';
+	public static readonly JSON_CURSOR_POSITION = 'cp';
 	public static readonly DEFAULT_SAVED = true;
+	public static readonly DEFAULT_CAMERA_DISTANCE = undefined;
+	public static readonly DEFAULT_CAMERA_HORIZONTAL_ANGLE = undefined;
+	public static readonly DEFAULT_CAMERA_VERTICAL_ANGLE = undefined;
+	public static readonly DEFAULT_CURSOR_POSITION = undefined;
 
-	public saved: boolean = TreeMapTag.DEFAULT_SAVED;
+	public saved = TreeMapTag.DEFAULT_SAVED;
+	public cameraDistance?: number;
+	public cameraHorizontalAngle?: number;
+	public cameraVerticalAngle?: number;
+	public cursorPosition?: Position;
 
 	isFolder() {
 		return this.id < 0;
@@ -53,11 +66,50 @@ class TreeMapTag extends Base {
 	read(json: Record<string, any>) {
 		super.read(json);
 		this.saved = Utils.defaultValue(json[TreeMapTag.JSON_SAVED], TreeMapTag.DEFAULT_SAVED);
+		this.cameraDistance = Utils.defaultValue(
+			json[TreeMapTag.JSON_CAMERA_DISTANCE],
+			TreeMapTag.DEFAULT_CAMERA_DISTANCE
+		);
+		this.cameraHorizontalAngle = Utils.defaultValue(
+			json[TreeMapTag.JSON_CAMERA_HORIZONTAL_ANGLE],
+			TreeMapTag.DEFAULT_CAMERA_HORIZONTAL_ANGLE
+		);
+		this.cameraVerticalAngle = Utils.defaultValue(
+			json[TreeMapTag.JSON_CAMERA_VERTICAL_ANGLE],
+			TreeMapTag.DEFAULT_CAMERA_VERTICAL_ANGLE
+		);
+		if (json[TreeMapTag.JSON_CURSOR_POSITION]) {
+			this.cursorPosition = new Position();
+			this.cursorPosition.read(json[TreeMapTag.JSON_CURSOR_POSITION]);
+		}
 	}
 
 	write(json: Record<string, any>) {
 		super.write(json);
 		Utils.writeDefaultValue(json, TreeMapTag.JSON_SAVED, this.saved, TreeMapTag.DEFAULT_SAVED);
+		Utils.writeDefaultValue(
+			json,
+			TreeMapTag.JSON_CAMERA_DISTANCE,
+			this.cameraDistance,
+			TreeMapTag.DEFAULT_CAMERA_DISTANCE
+		);
+		Utils.writeDefaultValue(
+			json,
+			TreeMapTag.JSON_CAMERA_HORIZONTAL_ANGLE,
+			this.cameraHorizontalAngle,
+			TreeMapTag.DEFAULT_CAMERA_HORIZONTAL_ANGLE
+		);
+		Utils.writeDefaultValue(
+			json,
+			TreeMapTag.JSON_CAMERA_VERTICAL_ANGLE,
+			this.cameraVerticalAngle,
+			TreeMapTag.DEFAULT_CAMERA_VERTICAL_ANGLE
+		);
+		if (this.cursorPosition) {
+			const jsonObject: any[] = [];
+			this.cursorPosition.write(jsonObject);
+			json[TreeMapTag.JSON_CURSOR_POSITION] = jsonObject;
+		}
 	}
 }
 

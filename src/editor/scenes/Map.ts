@@ -61,10 +61,10 @@ class Map extends Base {
 	public isMobileMovingCursor = false;
 
 	constructor(tag: TreeMapTag) {
-		super();
+		super(tag);
 		this.id = tag.id;
 		this.tag = tag;
-		this.cursor = new Cursor(new Position());
+		this.cursor = new Cursor(tag.cursorPosition || new Position());
 	}
 
 	static isAdding() {
@@ -506,8 +506,12 @@ class Map extends Base {
 		// TODO
 	}
 
-	onKeyDownImmediate() {
+	async onKeyDownImmediate() {
 		this.cursor.onKeyDownImmediate();
+		if (this.tag) {
+			this.tag.cursorPosition = this.cursor.position;
+			await Project.current!.treeMaps.save();
+		}
 	}
 
 	onMouseDown(x: number, y: number) {
@@ -547,7 +551,7 @@ class Map extends Base {
 		}
 	}
 
-	onPointerMove(x: number, y: number) {
+	async onPointerMove(x: number, y: number) {
 		if (Inputs.isPointerPressed) {
 			if (this.isMobileMovingCursor) {
 				Inputs.keys = [];
@@ -570,27 +574,30 @@ class Map extends Base {
 		}
 	}
 
-	onMouseUp(x: number, y: number) {
+	async onMouseUp(x: number, y: number) {
 		if (this.undoRedoStatesSaving.length === 0 && this.undoRedoStates.length > 0) {
 			this.undoRedoStatesSaving = [...this.undoRedoStates];
 			this.saveUndoRedoStates().catch(console.error);
 			this.undoRedoStates = [];
 		}
+		await Project.current!.treeMaps.save();
 	}
 
-	onTouchEnd(x: number, y: number) {
+	async onTouchEnd(x: number, y: number) {
 		this.onMouseUp(x, y);
 		this.lastPosition = null;
 		Inputs.keys = [];
 		this.isMobileMovingCursor = false;
+		await Project.current!.treeMaps.save();
 	}
 
-	onMouseWheel(delta: number) {
+	async onMouseWheel(delta: number) {
 		if (delta < 0) {
 			this.zoomIn(0.5);
 		} else {
 			this.zoomOut(0.5);
 		}
+		await Project.current!.treeMaps.save();
 	}
 
 	update(GL: Manager.GL) {

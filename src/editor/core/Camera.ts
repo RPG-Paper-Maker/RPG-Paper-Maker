@@ -13,6 +13,8 @@ import * as THREE from 'three';
 import { Manager, Scene } from '../Editor';
 import { Project } from './Project';
 import { Inputs } from '../managers';
+import { TreeMapTag } from '../models';
+import { Utils } from '../common/Utils';
 
 class Camera {
 	public static MIN_ZOOM = 20;
@@ -24,23 +26,34 @@ class Camera {
 	public horizontalAngle: number;
 	public verticalAngle: number;
 	public defaultCameraPosition: THREE.Vector3;
+	public tag?: TreeMapTag;
 
-	constructor() {
+	constructor(tag?: TreeMapTag) {
+		this.tag = tag;
 		this.perspectiveCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 100000);
-		this.distance = 800 * Project.current!.systems.getCoefSquareSize();
-		this.horizontalAngle = -90;
-		this.verticalAngle = 55;
-		this.targetPosition = new THREE.Vector3(Project.getSquareSize() / 2, 0, Project.getSquareSize() / 2);
+		this.distance = Utils.defaultValue(tag?.cameraDistance, 800 * Project.current!.systems.getCoefSquareSize());
+		this.horizontalAngle = Utils.defaultValue(tag?.cameraHorizontalAngle, -90);
+		this.verticalAngle = Utils.defaultValue(tag?.cameraVerticalAngle, 55);
+		this.targetPosition =
+			tag && tag.cursorPosition
+				? tag.cursorPosition.toVector3()
+				: new THREE.Vector3(Project.getSquareSize() / 2, 0, Project.getSquareSize() / 2);
 		this.update();
 		this.defaultCameraPosition = this.getThreeCamera().position.clone();
 	}
 
 	zoomIn(coef: number) {
 		this.distance = Math.max(Camera.MIN_ZOOM, this.distance - this.getZoom(coef));
+		if (this.tag) {
+			this.tag.cameraDistance = this.distance;
+		}
 	}
 
 	zoomOut(coef: number) {
 		this.distance = Math.min(Camera.MAX_ZOOM, this.distance + this.getZoom(coef));
+		if (this.tag) {
+			this.tag.cameraDistance = this.distance;
+		}
 	}
 
 	getZoom(coef: number): number {
@@ -105,6 +118,10 @@ class Camera {
 		}
 		if (this.verticalAngle > 179) {
 			this.verticalAngle = 179;
+		}
+		if (this.tag) {
+			this.tag.cameraHorizontalAngle = this.horizontalAngle;
+			this.tag.cameraVerticalAngle = this.verticalAngle;
 		}
 	}
 

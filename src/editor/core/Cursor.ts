@@ -16,6 +16,7 @@ import { CustomGeometry } from './CustomGeometry';
 import { Project } from './Project';
 import { Frame } from './Frame';
 import { Inputs } from '../managers';
+import { Key } from '../common/Enum';
 
 class Cursor {
 	public position: Position;
@@ -31,14 +32,10 @@ class Cursor {
 		const material = await Manager.GL.loadTexture('./assets/textures/cursor.png');
 		material.depthTest = false;
 		material.depthWrite = false;
-		const localPosition = this.position.toVector3(false);
-		const a = localPosition.x;
-		const b = localPosition.y;
-		const c = localPosition.z;
-		const vecA = new THREE.Vector3(a, b, c);
-		const vecB = new THREE.Vector3(a + Project.getSquareSize(), b, c);
-		const vecC = new THREE.Vector3(a + Project.getSquareSize(), b, c + Project.getSquareSize());
-		const vecD = new THREE.Vector3(a, b, c + Project.getSquareSize());
+		const vecA = new THREE.Vector3(0, 0, 0);
+		const vecB = new THREE.Vector3(Project.getSquareSize(), 0, 0);
+		const vecC = new THREE.Vector3(Project.getSquareSize(), 0, Project.getSquareSize());
+		const vecD = new THREE.Vector3(0, 0, Project.getSquareSize());
 		const geometry = new CustomGeometry();
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 		geometry.pushQuadIndices(0);
@@ -46,18 +43,20 @@ class Cursor {
 		const height = material.map?.image.height;
 		const coefX = MapElement.Base.COEF_TEX / width;
 		const coefY = MapElement.Base.COEF_TEX / height;
-		const x = coefX;
-		const y = coefY;
-		const w = width / 4 / width - coefX * 2;
-		const h = 1 - coefY * 2;
+		const tx = coefX;
+		const ty = coefY;
+		const tw = width / 4 / width - coefX * 2;
+		const th = 1 - coefY * 2;
 		const texA = new THREE.Vector2();
 		const texB = new THREE.Vector2();
 		const texC = new THREE.Vector2();
 		const texD = new THREE.Vector2();
-		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
+		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, tx, ty, tw, th);
 		geometry.pushQuadUVs(texA, texB, texC, texD);
 		geometry.updateAttributes();
 		this.mesh = new THREE.Mesh(geometry, material);
+		const { x, y, z } = this.position.toVector3(false);
+		this.mesh.position.set(x, y, z);
 		this.mesh.renderOrder = 2;
 		Scene.Map.current?.scene.add(this.mesh);
 	}
@@ -72,20 +71,20 @@ class Cursor {
 			for (const key of Inputs.keys) {
 				let xPlus = 0;
 				let zPlus = 0;
-				switch (key) {
-					case 'w': // UP
+				switch (key.toUpperCase()) {
+					case Key.W: // UP
 						xPlus = Math.round(Math.cos((angle * Math.PI) / 180.0));
 						zPlus = Math.round(Math.sin((angle * Math.PI) / 180.0));
 						break;
-					case 's': // DOWN
+					case Key.S: // DOWN
 						xPlus = -Math.round(Math.cos((angle * Math.PI) / 180.0));
 						zPlus = -Math.round(Math.sin((angle * Math.PI) / 180.0));
 						break;
-					case 'a': // LEFT
+					case Key.A: // LEFT
 						xPlus = Math.round(Math.cos(((angle - 90) * Math.PI) / 180.0));
 						zPlus = Math.round(Math.sin(((angle - 90) * Math.PI) / 180.0));
 						break;
-					case 'd': // RIGHT
+					case Key.D: // RIGHT
 						xPlus = -Math.round(Math.cos(((angle - 90) * Math.PI) / 180.0));
 						zPlus = -Math.round(Math.sin(((angle - 90) * Math.PI) / 180.0));
 						break;
@@ -95,7 +94,7 @@ class Cursor {
 			}
 			const vector = this.position.toVector3(false);
 			this.mesh.position.set(vector.x, vector.y, vector.z);
-			const vectorCenter = this.position.toVector3(true);
+			const vectorCenter = this.position.toVector3();
 			Scene.Map.current.camera.targetPosition.set(vectorCenter.x, vectorCenter.y, vectorCenter.z);
 		}
 	}
