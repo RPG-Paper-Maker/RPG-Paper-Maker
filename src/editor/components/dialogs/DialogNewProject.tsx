@@ -10,7 +10,7 @@
 */
 
 import React, { useState } from 'react';
-import FooterYesNo from './footers/FooterYesNo';
+import FooterNoYes from './footers/FooterNoYes';
 import { LocalFile } from '../../core/LocalFile';
 import { Model, Scene } from '../../Editor';
 import { Project } from '../../core/Project';
@@ -128,7 +128,7 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 			<Dialog
 				title='Warning'
 				isOpen={isDialogConfirmOpen}
-				footer={<FooterYesNo onNo={cancelCreation} onYes={replaceProject} />}
+				footer={<FooterNoYes onNo={cancelCreation} onYes={replaceProject} />}
 				onClose={cancelCreation}
 			>
 				<p>This project name already exists. Would you like to replace it?</p>

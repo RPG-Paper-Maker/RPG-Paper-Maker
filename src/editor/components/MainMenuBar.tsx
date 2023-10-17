@@ -49,13 +49,14 @@ import { IoIosUndo, IoIosRedo, IoMdArrowBack } from 'react-icons/io';
 import { FiMap } from 'react-icons/fi';
 import { Paths } from '../common/Paths';
 import Dialog from './dialogs/Dialog';
-import FooterYesNo from './dialogs/footers/FooterYesNo';
+import FooterNoYes from './dialogs/footers/FooterNoYes';
 import Toolbar from './Toolbar';
 import '../styles/MainMenu.css';
 import { Key, LocalForage, SpecialKey } from '../common/Enum';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { LuFolders, LuSaveAll } from 'react-icons/lu';
 import Loader from './Loader';
+import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
 
 type MenuItemType = {
 	title: ReactNode | string;
@@ -70,6 +71,7 @@ function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
 	const [isDialogWarningClearAllCacheOpen, setIsDialogWarningClearAllCacheOpen] = useState(false);
+	const [isDialogWarningSavePlayOpen, setIsDialogSavePlayOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
 	const [hamburgerStates, setHamburgerStates] = useState<number[]>([]);
@@ -242,8 +244,37 @@ function MainMenuBar() {
 		}
 	};
 
+	const getPlayURL = () => window.location.pathname + '?project=' + currentProjectName;
+
+	const play = () => window.open(getPlayURL(), '_blank');
+
 	const handlePlay = async () => {
-		window.open(window.location.pathname + '?project=' + currentProjectName, '_blank')?.focus();
+		if (canSaveAll) {
+			setIsDialogSavePlayOpen(true);
+		} else {
+			play();
+		}
+	};
+
+	const handleCancelSavePlay = async () => {
+		setIsDialogSavePlayOpen(false);
+	};
+
+	const handleRejectSavePlay = async () => {
+		setIsDialogSavePlayOpen(false);
+		play();
+	};
+
+	const handleAcceptSavePlay = async () => {
+		const w = window.open('', '_blank');
+		setIsLoading(true);
+		await handleSaveAll();
+		setIsLoading(false);
+		setIsDialogSavePlayOpen(false);
+		if (w) {
+			w.location = getPlayURL();
+			w.focus();
+		}
 	};
 
 	const handleClickHamburgerBack = () => {
@@ -587,7 +618,7 @@ function MainMenuBar() {
 			<Dialog
 				title='Warning'
 				isOpen={isDialogWarningImportOpen}
-				footer={<FooterYesNo onNo={handleRejectImport} onYes={handleAcceptImport} />}
+				footer={<FooterNoYes onNo={handleRejectImport} onYes={handleAcceptImport} />}
 				onClose={handleRejectImport}
 			>
 				<p>This project name already exists. Would you like to replace it?</p>
@@ -595,7 +626,7 @@ function MainMenuBar() {
 			<Dialog
 				title='Warning'
 				isOpen={isDialogWarningClearAllCacheOpen}
-				footer={<FooterYesNo onNo={handleRejectClearAllCache} onYes={handleAcceptClearAllCache} />}
+				footer={<FooterNoYes onNo={handleRejectClearAllCache} onYes={handleAcceptClearAllCache} />}
 				onClose={handleRejectClearAllCache}
 			>
 				<Loader isLoading={isLoading} />
@@ -603,6 +634,21 @@ function MainMenuBar() {
 					This action will delete all your projects, and every settings you changed. Are you sure that you
 					want to continue?
 				</div>
+			</Dialog>
+			<Dialog
+				title='Warning'
+				isOpen={isDialogWarningSavePlayOpen}
+				footer={
+					<FooterCancelNoYes
+						onCancel={handleCancelSavePlay}
+						onNo={handleRejectSavePlay}
+						onYes={handleAcceptSavePlay}
+					/>
+				}
+				onClose={handleRejectSavePlay}
+			>
+				<Loader isLoading={isLoading} />
+				<div className='text-center'>You have some maps that are not saved. Do you want to save all?</div>
 			</Dialog>
 		</>
 	);

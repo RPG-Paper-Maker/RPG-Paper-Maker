@@ -15,7 +15,7 @@ import { ProjectState, removeProject, setLoading } from '../store/slices/Project
 import '../styles/ProjectPreview.css';
 import { FaTrashAlt } from 'react-icons/fa';
 import Dialog from './dialogs/Dialog';
-import FooterYesNo from './dialogs/footers/FooterYesNo';
+import FooterNoYes from './dialogs/footers/FooterNoYes';
 import { useDispatch } from 'react-redux';
 import { triggerOpenProject } from '../store';
 import { LocalFile } from '../core/LocalFile';
@@ -69,7 +69,7 @@ function ProjectPreview({ project }: Props) {
 			<Dialog
 				title='Warning'
 				isOpen={isDialogConfirmOpen}
-				footer={<FooterYesNo onNo={handleRejectRemoveProject} onYes={handleAcceptRemoveProject} />}
+				footer={<FooterNoYes onNo={handleRejectRemoveProject} onYes={handleAcceptRemoveProject} />}
 				onClose={handleRejectRemoveProject}
 			>
 				<div className='warning text-center'>

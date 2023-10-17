@@ -13,13 +13,15 @@ import Button from '../../Button';
 import '../../../styles/Footer.css';
 
 type Props = {
-	onYes: () => void;
+	onCancel: () => void;
 	onNo: () => void;
+	onYes: () => void;
 };
 
-function FooterYesNo({ onYes, onNo }: Props) {
+function FooterCancelNoYes({ onCancel, onNo, onYes }: Props) {
 	return (
 		<div className='footer-buttons'>
+			<Button onClick={onCancel}>Cancel</Button>
 			<Button onClick={onNo}>No</Button>
 			<Button primary onClick={onYes}>
 				Yes
@@ -28,4 +30,4 @@ function FooterYesNo({ onYes, onNo }: Props) {
 	);
 }
 
-export default FooterYesNo;
+export default FooterCancelNoYes;
