@@ -16,8 +16,9 @@ import { Data } from '../Editor';
 class Project {
 	public static current: Project | null = null;
 	public static readonly VERSION = 'proto-3.0.1';
-	public systems: Data.System = new Data.System();
-	public treeMaps: Data.TreeMaps = new Data.TreeMaps();
+	public settings = new Data.Settings();
+	public systems = new Data.System();
+	public treeMaps = new Data.TreeMaps();
 
 	constructor(name: string) {
 		this.systems.projectName = name;
@@ -37,6 +38,7 @@ class Project {
 
 	async load() {
 		const projectName = this.systems.projectName;
+		await this.settings.load();
 		await this.systems.load();
 		this.systems.projectName = projectName;
 		// this.systems.projectName = (this.systems.projectName as any).names[1]; // TODO

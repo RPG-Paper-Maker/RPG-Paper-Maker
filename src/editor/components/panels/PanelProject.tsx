@@ -52,6 +52,8 @@ function PanelProject() {
 
 	const updateProjectMenuIndex = (index: number) => {
 		dispatch(setProjectMenuIndex(index));
+		Project.current!.settings.projectMenuIndex = index;
+		Project.current!.settings.save();
 	};
 
 	const handleSelectedMapItem = (node: Node | null, isClick: boolean) => {
@@ -110,11 +112,13 @@ function PanelProject() {
 		}
 	}, [mapsTabsTitles]);
 
+	// When first opening the project with all data loaded
 	useEffect(() => {
 		if (!openLoading) {
 			setMapsTabsTitles(getDefaultTabTitles());
 			setMapsTabsContents(getDefaultTabContents());
 			setMapForcedCurrentSelectedItemID(Project.current!.treeMaps.currentMap);
+			dispatch(setProjectMenuIndex(Project.current!.settings.projectMenuIndex));
 		}
 	}, [openLoading]);
 

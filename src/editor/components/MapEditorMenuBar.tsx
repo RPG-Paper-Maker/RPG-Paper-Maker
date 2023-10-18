@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
 import MenuSub from './MenuSub';
@@ -30,11 +30,12 @@ import { TbHandMove } from 'react-icons/tb';
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
 import { PiSelectionAllFill } from 'react-icons/pi';
 import { VscPaintcan } from 'react-icons/vsc';
-import { useDispatch } from 'react-redux';
-import { setCurrentMapElementKind } from '../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, setCurrentMapElementKind } from '../store';
 import { ElementMapKind, MobileAction } from '../common/Enum';
 import { Scene } from '../Editor';
 import { Constants } from '../common/Constants';
+import { Project } from '../core/Project';
 
 function MapEditorMenuBar() {
 	const [selectionIndex, setSelectionIndex] = useState(0);
@@ -45,14 +46,20 @@ function MapEditorMenuBar() {
 
 	const dispatch = useDispatch();
 
+	const openLoading = useSelector((state: RootState) => state.projects.openLoading);
+
 	const handleFloors = () => {
 		dispatch(setCurrentMapElementKind(ElementMapKind.Floors));
 		Scene.Map.currentSelectedMapElementKind = ElementMapKind.Floors;
+		Project.current!.settings.mapEditorMenuIndex = 0;
+		Project.current!.settings.save();
 	};
 
 	const handleFaceSprites = () => {
 		dispatch(setCurrentMapElementKind(ElementMapKind.SpritesFace));
 		Scene.Map.currentSelectedMapElementKind = ElementMapKind.SpritesFace;
+		Project.current!.settings.mapEditorMenuIndex = 1;
+		Project.current!.settings.save();
 	};
 
 	const handleMobilePlus = () => {
@@ -66,6 +73,14 @@ function MapEditorMenuBar() {
 	const handleMobileMove = () => {
 		Scene.Map.currentSelectedMobileAction = MobileAction.Move;
 	};
+
+	// When first opening the project with all data loaded
+	useEffect(() => {
+		if (!openLoading) {
+			setSelectionIndex(Project.current!.settings.mapEditorMenuIndex);
+			setMobileIndex(Project.current!.settings.projectMenuIndex);
+		}
+	}, [openLoading]);
 
 	return (
 		<div className='flex flex-wrap'>
