@@ -59,7 +59,7 @@ class TreeMaps extends Serializable {
 	}
 
 	read(json: any) {
-		const root = new Node(new Model.TreeMapTag(-1, 'Maps'));
+		const root = new Node(Model.TreeMapTag.create(-1, 'Maps', true));
 		this.readRoot(json[TreeMaps.JSON_TREE], root);
 		this.tree = [root];
 		if (json[TreeMaps.JSON_TABS] !== undefined) {

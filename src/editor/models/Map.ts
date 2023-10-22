@@ -35,7 +35,7 @@ class Map extends Base {
 		return Paths.join(Project.current!.getPathMaps(), Model.Map.generateMapName(this.id), Paths.FILE_MAP_INFOS);
 	}
 
-	static async createDefault(id: number) {
+	static async createDefaultMap(id: number) {
 		const jsonObject = {};
 		const mapModel = new Model.Map();
 		mapModel.id = id;

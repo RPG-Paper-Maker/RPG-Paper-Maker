@@ -22,7 +22,7 @@ import { MapElement } from '../Editor';
 
 class Sprite extends Base {
 	public static readonly JSON_TEXTURE = 't';
-	public static MODEL = [
+	public static readonly MODEL = [
 		new THREE.Vector3(-0.5, 1.0, 0.0),
 		new THREE.Vector3(0.5, 1.0, 0.0),
 		new THREE.Vector3(0.5, 0.0, 0.0),

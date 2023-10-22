@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { BindingType } from '../models';
 import { LocalFile } from './LocalFile';
 
 abstract class Serializable {
@@ -36,9 +37,9 @@ abstract class Serializable {
 		await LocalFile.writeJSON(this.getPath(temp), json);
 	}
 
-	abstract read(json: any): void;
+	abstract read(json: any, additionnalBinding?: BindingType[]): void;
 
-	abstract write(json: any): void;
+	abstract write(json: any, additionnalBinding?: BindingType[]): void;
 }
 
 export { Serializable };

@@ -13,20 +13,45 @@ import react, { ReactNode } from 'react';
 import { ModelType } from '../common/Enum';
 import { Utils } from '../common/Utils';
 import { Serializable } from '../core/Serializable';
+import { Position } from '../core/Position';
+import { KeyValue } from '../common/Types';
+
+export type BindingType = [string, string, any, BINDING, any?];
+
+export enum BINDING {
+	NUMBER,
+	STRING,
+	BOOLEAN,
+	OBJECT,
+	LIST,
+	POSITION,
+	MAP_POSITION,
+}
 
 class Base extends Serializable {
-	public static readonly JSON_ID = 'id';
-	public static readonly JSON_NAME = 'name';
-	public static readonly DEFAULT_ID = 0;
-	public static readonly DEFAULT_NAME = '';
+	public id!: number;
+	public name!: string;
 
-	public id: number = Base.DEFAULT_ID;
-	public name: string = Base.DEFAULT_NAME;
+	public static bindings: BindingType[] = [
+		['id', 'id', 0, BINDING.NUMBER],
+		['name', 'name', '', BINDING.STRING],
+	];
 
-	constructor(id: number = Base.DEFAULT_ID, name: string = Base.DEFAULT_NAME) {
-		super();
-		this.id = id;
-		this.name = name;
+	public static create(id: number, name: string) {
+		const base = new Base();
+		base.id = id;
+		base.name = name;
+		return base;
+	}
+
+	static createDefault(additionnalBinding: BindingType[] = []) {
+		const base = new Base();
+		base.applyDefault(additionnalBinding);
+		return base;
+	}
+
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...this.bindings, ...additionnalBinding];
 	}
 
 	static getModel(kind: ModelType): any {
@@ -36,6 +61,13 @@ class Base extends Serializable {
 
 	static getDialog(kind: ModelType): any {
 		switch (kind) {
+		}
+	}
+
+	applyDefault(additionnalBinding: BindingType[]) {
+		const bindings = Base.getBindings(additionnalBinding);
+		for (const [name, , defaultValue, ,] of bindings) {
+			(this as any)[name] = defaultValue;
 		}
 	}
 
@@ -66,14 +98,124 @@ class Base extends Serializable {
 		this.name = model.name;
 	}
 
-	read(json: Record<string, any>) {
-		this.id = Utils.defaultValue(json[Base.JSON_ID], Base.DEFAULT_ID);
-		this.name = json[Base.JSON_NAME];
+	isDefault(defaultValue?: Base) {
+		return false;
 	}
 
-	write(json: Record<string, any>) {
-		Utils.writeDefaultValue(json, Base.JSON_ID, this.id, Base.DEFAULT_ID);
-		json[Base.JSON_NAME] = this.name;
+	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		const bindings = Base.getBindings(additionnalBinding);
+		for (const [name, jsonName, defaultValue, type, constructor] of bindings) {
+			switch (type) {
+				case BINDING.NUMBER:
+				case BINDING.STRING:
+				case BINDING.BOOLEAN:
+					(this as any)[name] = Utils.defaultValue(json[jsonName], defaultValue);
+					break;
+				case BINDING.OBJECT: {
+					const jsonObj = json[jsonName];
+					if (jsonObj === undefined) {
+						(this as any)[name] = defaultValue;
+					} else {
+						const obj = new constructor();
+						obj.read(jsonObj);
+						(this as any)[name] = obj;
+					}
+					break;
+				}
+				case BINDING.POSITION: {
+					const jsonObj = json[jsonName];
+					if (jsonObj === undefined) {
+						(this as any)[name] = defaultValue;
+					} else {
+						const obj = new Position();
+						obj.read(jsonObj);
+						(this as any)[name] = obj;
+					}
+					break;
+				}
+				case BINDING.LIST:
+					const jsonTab = json[jsonName];
+					const tab: any[] = [];
+					for (const jsonElement of jsonTab) {
+						const obj = new constructor();
+						obj.read(jsonElement);
+						tab.push(obj);
+					}
+					(this as any)[name] = tab;
+					break;
+				case BINDING.MAP_POSITION:
+					const p = new Position();
+					const mapping = (this as any)[name];
+					for (const objHash of json[jsonName]) {
+						p.read(objHash.k);
+						mapping.set(p.toKey(), constructor.fromJSON(objHash.v));
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		const bindings = Base.getBindings(additionnalBinding);
+		for (const [name, jsonName, defaultValue, type, constructor] of bindings) {
+			switch (type) {
+				case BINDING.NUMBER:
+				case BINDING.STRING:
+				case BINDING.BOOLEAN:
+					Utils.writeDefaultValue(json, jsonName, (this as any)[name], defaultValue);
+					break;
+				case BINDING.OBJECT:
+					const obj = (this as any)[name];
+					if (obj && !obj.isDefault(defaultValue)) {
+						const jsonObj = {};
+						obj.write(jsonObj);
+						json[jsonName] = jsonObj;
+					}
+					break;
+				case BINDING.POSITION: {
+					const p = (this as any)[name];
+					if (p) {
+						const jsonTab: any[] = [];
+						p.write(jsonTab);
+						json[jsonName] = jsonTab;
+					}
+					break;
+				}
+				case BINDING.LIST: {
+					const tab = (this as any)[name];
+					const jsonTab: any[] = [];
+					for (const element of tab) {
+						const jsonObj = {};
+						element.write(jsonObj);
+						jsonTab.push(jsonObj);
+					}
+					json[jsonName] = jsonTab;
+					break;
+				}
+				case BINDING.MAP_POSITION: {
+					const mapping = (this as any)[name];
+					const jsonTab: any[] = [];
+					const p = new Position();
+					for (const [positionKey, element] of mapping) {
+						const objMap: KeyValue = {};
+						const tabKey: number[] = [];
+						p.fromKey(positionKey);
+						p.write(tabKey);
+						const objElement = {};
+						element.write(objElement);
+						objMap.k = tabKey;
+						objMap.v = objElement;
+						jsonTab.push(objMap);
+					}
+					json[jsonName] = jsonTab;
+					break;
+				}
+				default:
+					break;
+			}
+		}
 	}
 }
 

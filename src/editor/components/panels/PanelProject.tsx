@@ -45,7 +45,7 @@ function PanelProject() {
 	const getDefaultTabTitles = () =>
 		Project.current!.treeMaps.tabs.map((id) => {
 			const node = Node.getNodeByID(Project.current!.treeMaps.tree, id);
-			return new Model.Base(id, node ? node.getPath(false) : 'ERROR: Cannot find path');
+			return Model.Base.create(id, node ? node.getPath(false) : 'ERROR: Cannot find path');
 		});
 
 	const getDefaultTabContents = () => Project.current!.treeMaps.tabs.map(() => null);
@@ -63,7 +63,7 @@ function PanelProject() {
 				const title = node.getPath(false);
 				if (!mapsTabsTitles.find((model) => model.id === id)) {
 					const newListTitles = [...mapsTabsTitles];
-					newListTitles.push(new Model.Base(id, title));
+					newListTitles.push(Model.Base.create(id, title));
 					setMapsTabsTitles(newListTitles);
 					setMapsTabsContents([...mapsTabsContents, null]);
 					setMapTabForcedCurrentIndex(newListTitles.findIndex((model) => model.id === id));
@@ -97,7 +97,7 @@ function PanelProject() {
 			mapsTabsTitles.map((model) => {
 				const node = Node.getNodeByID(Project.current!.treeMaps.tree, model.id);
 				if (node) {
-					return new Model.Base(model.id, node.getPath(false));
+					return Model.Base.create(model.id, node.getPath(false));
 				}
 				return model;
 			})

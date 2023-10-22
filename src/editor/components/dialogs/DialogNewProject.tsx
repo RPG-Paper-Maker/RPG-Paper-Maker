@@ -82,8 +82,8 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 		Project.current = project;
 		await LocalFile.createFolder(project.getPath());
 		await LocalFile.createFolder(project.getPathMaps());
-		await Model.Map.createDefault(1);
-		await Model.Map.createDefault(2);
+		await Model.Map.createDefaultMap(1);
+		await Model.Map.createDefaultMap(2);
 		Scene.Map.currentSelectedTexture = new Rectangle();
 		Scene.Map.currentSelectedMapElementKind = ElementMapKind.Floors;
 		for (const file of Paths.ALL_JSON) {
