@@ -15,6 +15,7 @@ import { Utils } from '../common/Utils';
 import { Serializable } from '../core/Serializable';
 import { Position } from '../core/Position';
 import { KeyValue } from '../common/Types';
+import { Rectangle } from '../core/Rectangle';
 
 export type BindingType = [string, string, any, BINDING, any?];
 
@@ -26,6 +27,7 @@ export enum BINDING {
 	LIST,
 	POSITION,
 	MAP_POSITION,
+	RECTANGLE,
 }
 
 class Base extends Serializable {
@@ -109,7 +111,10 @@ class Base extends Serializable {
 				case BINDING.NUMBER:
 				case BINDING.STRING:
 				case BINDING.BOOLEAN:
-					(this as any)[name] = Utils.defaultValue(json[jsonName], defaultValue);
+					(this as any)[name] = Utils.defaultValue(
+						json[jsonName],
+						defaultValue === undefined ? (this as any)[name] : defaultValue
+					);
 					break;
 				case BINDING.OBJECT: {
 					const jsonObj = json[jsonName];
@@ -145,12 +150,20 @@ class Base extends Serializable {
 					break;
 				case BINDING.MAP_POSITION:
 					const p = new Position();
-					const mapping = (this as any)[name];
+					const mapping = new Map();
+					(this as any)[name] = mapping;
 					for (const objHash of json[jsonName]) {
 						p.read(objHash.k);
 						mapping.set(p.toKey(), constructor.fromJSON(objHash.v));
 					}
 					break;
+				case BINDING.RECTANGLE: {
+					const jsonObj = json[jsonName];
+					const rectangle = new Rectangle();
+					rectangle.read(jsonObj);
+					(this as any)[name] = rectangle;
+					break;
+				}
 				default:
 					break;
 			}
@@ -210,6 +223,12 @@ class Base extends Serializable {
 						jsonTab.push(objMap);
 					}
 					json[jsonName] = jsonTab;
+					break;
+				}
+				case BINDING.RECTANGLE: {
+					const tab: any[] = [];
+					(this as any)[name].write(tab);
+					json[jsonName] = tab;
 					break;
 				}
 				default:

@@ -9,17 +9,27 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Data } from '../Editor';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
 import { TextureBundle } from '../core/TextureBundle';
+import { BINDING, BindingType } from '../models';
 import { Land } from './Land';
 
+// @ts-expect-error
 class Autotile extends Land {
 	public static readonly JSON_AUTOTILE_ID = 'id';
 	public static readonly JSON_TILE_ID = 'tid';
 	public autotileID!: number;
 	public tileID!: number;
+
+	public static readonly bindings: BindingType[] = [
+		['autotileID', 'id', null, BINDING.NUMBER],
+		['tileID', 'tid', null, BINDING.NUMBER],
+	];
+
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...Autotile.bindings, ...additionnalBinding];
+	}
 
 	static fromJSON(json: Record<string, any>): Autotile {
 		const autotile = new Autotile();
@@ -63,16 +73,12 @@ class Autotile extends Land {
 		);*/
 	}
 
-	read(json: Record<string, any>) {
-		super.read(json);
-		this.autotileID = json[Autotile.JSON_AUTOTILE_ID];
-		this.tileID = json[Autotile.JSON_TILE_ID];
+	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.read(json, Autotile.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>) {
-		super.write(json);
-		json[Autotile.JSON_AUTOTILE_ID] = this.autotileID;
-		json[Autotile.JSON_TILE_ID] = this.tileID;
+	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.write(json, Autotile.getBindings(additionnalBinding));
 	}
 }
 

@@ -116,7 +116,7 @@ class Map extends Base {
 		// Load portions
 		const globalPortion = new Portion(0, 0, 0);
 		this.mapPortion = new MapPortion(globalPortion);
-		await this.mapPortion.load();
+		await this.mapPortion.model.load();
 		this.mapPortion.updateMaterials();
 		this.mapPortion.updateGeometries();
 
@@ -135,13 +135,13 @@ class Map extends Base {
 	async save() {
 		this.loading = true;
 		await this.modelMap.save();
-		await this.mapPortion.save();
+		await this.mapPortion.model.save();
 		this.loading = false;
 	}
 
 	async savePortions() {
 		if (this.portionsSaving.length > 0) {
-			await this.mapPortion.save(true);
+			await this.mapPortion.model.save(true);
 		}
 		this.portionsSaving = [];
 		if (this.tag.saved) {

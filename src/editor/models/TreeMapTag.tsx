@@ -27,8 +27,8 @@ class TreeMapTag extends Base {
 
 	public static readonly bindings: BindingType[] = [
 		['saved', 's', true, BINDING.BOOLEAN],
-		['cameraDistance', 'cd', 21, BINDING.NUMBER],
-		['cameraHorizontalAngle', 'cha', 23, BINDING.NUMBER],
+		['cameraDistance', 'cd', undefined, BINDING.NUMBER],
+		['cameraHorizontalAngle', 'cha', undefined, BINDING.NUMBER],
 		['cameraVerticalAngle', 'cva', undefined, BINDING.NUMBER],
 		['cursorPosition', 'cp', undefined, BINDING.POSITION],
 	];

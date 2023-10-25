@@ -11,23 +11,12 @@
 
 import * as THREE from 'three';
 import { ElementMapKind } from '../common/Enum';
-import { Utils } from '../common/Utils';
 import { Position } from '../core/Position';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Project } from '../core/Project';
-import { MapElement } from '../Editor';
-
-abstract class Base {
-	public static readonly JSON_X_OFFSET = 'xOff';
-	public static readonly JSON_Y_OFFSET = 'yOff';
-	public static readonly JSON_Z_OFFSET = 'zOff';
-	public static readonly JSON_FRONT = 'f';
-	public static readonly JSON_KIND = 'k';
-	public static readonly DEFAULT_X_OFFSET = 0;
-	public static readonly DEFAULT_Y_OFFSET = 0;
-	public static readonly DEFAULT_Z_OFFSET = 0;
-	public static readonly DEFAULT_FRONT = true;
-
+import { MapElement, Model } from '../Editor';
+import { BINDING, BindingType, Base as ModelBase } from '../models';
+abstract class Base extends ModelBase {
 	public static readonly COEF_TEX = 0.2;
 	public static readonly Y_AXIS = new THREE.Vector3(0, 1, 0);
 	public static readonly X_AXIS = new THREE.Vector3(1, 0, 0);
@@ -37,13 +26,23 @@ abstract class Base {
 	public yOffset: number;
 	public zOffset: number;
 	public front: boolean;
-	public kind: ElementMapKind = ElementMapKind.None;
+	public kind: ElementMapKind;
+
+	public static readonly bindings: BindingType[] = [
+		['xOffset', 'xOff', 0, BINDING.NUMBER],
+		['yOffset', 'yOff', 0, BINDING.NUMBER],
+		['zOffset', 'zOff', 0, BINDING.NUMBER],
+		['front', 'f', true, BINDING.BOOLEAN],
+		['kind', 'k', undefined, BINDING.NUMBER],
+	];
 
 	constructor() {
+		super();
 		this.xOffset = 0;
 		this.yOffset = 0;
 		this.zOffset = 0;
 		this.front = true;
+		this.kind = ElementMapKind.None;
 	}
 
 	static readMapElement(kind: ElementMapKind, json: Record<string, any>) {
@@ -129,16 +128,12 @@ abstract class Base {
 		vecD.add(pos);
 	}
 
-	read(json: any) {
-		this.xOffset = Utils.defaultValue(json[Base.JSON_X_OFFSET], Base.DEFAULT_X_OFFSET);
-		this.yOffset = Utils.defaultValue(json[Base.JSON_Y_OFFSET], Base.DEFAULT_Y_OFFSET);
-		this.zOffset = Utils.defaultValue(json[Base.JSON_Z_OFFSET], Base.DEFAULT_Z_OFFSET);
+	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.read(json, Base.getBindings(additionnalBinding));
 	}
 
-	write(json: any) {
-		Utils.writeDefaultValue(json, Base.JSON_X_OFFSET, this.xOffset, Base.DEFAULT_X_OFFSET);
-		Utils.writeDefaultValue(json, Base.JSON_Y_OFFSET, this.yOffset, Base.DEFAULT_Y_OFFSET);
-		Utils.writeDefaultValue(json, Base.JSON_Z_OFFSET, this.zOffset, Base.DEFAULT_Z_OFFSET);
+	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.write(json, Base.getBindings(additionnalBinding));
 	}
 
 	abstract equals(mapElement: MapElement.Base): boolean;

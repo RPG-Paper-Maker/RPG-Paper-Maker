@@ -10,27 +10,29 @@
 */
 
 import * as THREE from 'three';
-import { Utils } from '../common/Utils';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
 import { Rectangle } from '../core/Rectangle';
 import { Base } from './Base';
 import { Project } from '../core/Project';
 import { MapElement } from '../Editor';
+import { BINDING, BindingType } from '../models';
 
 class Land extends Base {
 	public static readonly JSON_UP = 'up';
 	public static readonly JSON_TEXTURE = 't';
 	public static readonly DEFAULT_UP = true;
 
-	public up: boolean;
-	public texture: Rectangle;
+	public up!: boolean;
+	public texture!: Rectangle;
 
-	constructor(up = true, texture = new Rectangle()) {
-		super();
+	public static readonly bindings: BindingType[] = [
+		['up', 'up', true, BINDING.BOOLEAN],
+		['texture', 't', undefined, BINDING.RECTANGLE],
+	];
 
-		this.up = up;
-		this.texture = texture;
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...Land.bindings, ...additionnalBinding];
 	}
 
 	equals(mapElement: MapElement.Base) {
@@ -109,18 +111,12 @@ class Land extends Base {
 		geometry.pushQuadUVs(texA, texB, texC, texD);
 	}
 
-	read(json: any) {
-		super.read(json);
-		this.up = Utils.defaultValue(json[Land.JSON_UP], Land.DEFAULT_UP);
-		this.texture.read(json[Land.JSON_TEXTURE]);
+	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.read(json, Land.getBindings(additionnalBinding));
 	}
 
-	write(json: any) {
-		super.write(json);
-		Utils.writeDefaultValue(json, Land.JSON_UP, this.up, Land.DEFAULT_UP);
-		const tab: any[] = [];
-		this.texture.write(tab);
-		json[Land.JSON_TEXTURE] = tab;
+	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.write(json, Land.getBindings(additionnalBinding));
 	}
 }
 

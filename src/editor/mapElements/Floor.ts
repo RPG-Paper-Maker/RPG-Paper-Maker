@@ -17,16 +17,22 @@ import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
 import { Land } from './Land';
 
+// @ts-expect-error
 class Floor extends Land {
-	constructor(texture?: Rectangle) {
-		super(true, texture);
-
+	constructor() {
+		super();
 		this.kind = ElementMapKind.Floors;
 	}
 
 	static fromJSON(json: Record<string, any>): Floor {
 		const floor = new Floor();
 		floor.read(json);
+		return floor;
+	}
+
+	static create(texture: Rectangle): Floor {
+		const floor = new Floor();
+		floor.texture = texture;
 		return floor;
 	}
 

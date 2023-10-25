@@ -19,9 +19,10 @@ import { Rectangle } from '../core/Rectangle';
 import { Base } from './Base';
 import { Project } from '../core/Project';
 import { MapElement } from '../Editor';
+import { BINDING, BindingType } from '../models';
 
+// @ts-expect-error
 class Sprite extends Base {
-	public static readonly JSON_TEXTURE = 't';
 	public static readonly MODEL = [
 		new THREE.Vector3(-0.5, 1.0, 0.0),
 		new THREE.Vector3(0.5, 1.0, 0.0),
@@ -30,6 +31,12 @@ class Sprite extends Base {
 	];
 
 	public texture!: Rectangle;
+
+	public static readonly bindings: BindingType[] = [['texture', 't', null, BINDING.RECTANGLE]];
+
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...Sprite.bindings, ...additionnalBinding];
+	}
 
 	static fromJSON(json: Record<string, any>): Sprite {
 		const sprite = new Sprite();
@@ -238,21 +245,12 @@ class Sprite extends Base {
 		return [geometry, count];
 	}
 
-	read(json: Record<string, any>) {
-		super.read(json);
-		this.front = Utils.defaultValue(json.f, true);
-		this.kind = json.k;
-		this.texture = new Rectangle();
-		this.texture.read(json.t);
+	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.read(json, Sprite.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>) {
-		super.write(json);
-		Utils.writeDefaultValue(json, Base.JSON_FRONT, this.front, Base.DEFAULT_FRONT);
-		json[Base.JSON_KIND] = this.kind;
-		const array: any[] = [];
-		this.texture.write(array);
-		json[Sprite.JSON_TEXTURE] = array;
+	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.write(json, Sprite.getBindings(additionnalBinding));
 	}
 }
 
