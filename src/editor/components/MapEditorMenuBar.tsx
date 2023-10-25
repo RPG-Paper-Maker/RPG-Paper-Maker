@@ -77,8 +77,17 @@ function MapEditorMenuBar() {
 	// When first opening the project with all data loaded
 	useEffect(() => {
 		if (!openLoading) {
-			setSelectionIndex(Project.current!.settings.mapEditorMenuIndex);
+			const menuIndex = Project.current!.settings.mapEditorMenuIndex;
+			setSelectionIndex(menuIndex);
 			setMobileIndex(Project.current!.settings.projectMenuIndex);
+			switch (menuIndex) {
+				case 0:
+					handleFloors();
+					break;
+				case 1:
+					handleFaceSprites();
+					break;
+			}
 		}
 	}, [openLoading]);
 
