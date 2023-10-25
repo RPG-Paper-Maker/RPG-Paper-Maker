@@ -17,7 +17,6 @@ import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
 import { Land } from './Land';
 
-// @ts-expect-error
 class Floor extends Land {
 	constructor() {
 		super();

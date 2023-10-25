@@ -10,11 +10,13 @@
 */
 
 import { Scene } from '../Editor';
+import { BINDING } from '../common/Enum';
 import { Paths } from '../common/Paths';
+import { BindingType } from '../common/Types';
 import { Portion } from '../core/Portion';
 import { Project } from '../core/Project';
 import { Floor, Sprite } from '../mapElements';
-import { BINDING, Base, BindingType } from './Base';
+import { Base } from './Base';
 
 class MapPortion extends Base {
 	public globalPortion: Portion;

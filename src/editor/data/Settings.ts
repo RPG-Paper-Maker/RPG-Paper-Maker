@@ -9,48 +9,36 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { BINDING } from '../common/Enum';
 import { Paths } from '../common/Paths';
+import { BindingType } from '../common/Types';
 import { Utils } from '../common/Utils';
 import { Project } from '../core/Project';
 import { Serializable } from '../core/Serializable';
 
 class Settings extends Serializable {
-	public static readonly JSON_PROJECT_MENU_INDEX = 'pmi';
-	public static readonly JSON_MAP_EDITOR_MENU_INDEX = 'memi';
-	public static readonly DEFAULT_PROJECT_MENU_INDEX = 1;
-	public static readonly DEFAULT_MAP_EDITOR_MENU_INDEX = 0;
-
 	public projectMenuIndex!: number;
 	public mapEditorMenuIndex!: number;
+
+	public static readonly bindings: BindingType[] = [
+		['projectMenuIndex', 'pmi', 1, BINDING.NUMBER],
+		['mapEditorMenuIndex', 'memi', 0, BINDING.NUMBER],
+	];
+
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...Settings.bindings, ...additionnalBinding];
+	}
 
 	getPath(): string {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_SETTINGS);
 	}
 
-	read(json: any) {
-		this.projectMenuIndex = Utils.defaultValue(
-			json[Settings.JSON_PROJECT_MENU_INDEX],
-			Settings.DEFAULT_PROJECT_MENU_INDEX
-		);
-		this.mapEditorMenuIndex = Utils.defaultValue(
-			json[Settings.JSON_MAP_EDITOR_MENU_INDEX],
-			Settings.DEFAULT_MAP_EDITOR_MENU_INDEX
-		);
+	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.read(json, Settings.getBindings(additionnalBinding));
 	}
 
-	write(json: any) {
-		Utils.writeDefaultValue(
-			json,
-			Settings.JSON_PROJECT_MENU_INDEX,
-			this.projectMenuIndex,
-			Settings.DEFAULT_PROJECT_MENU_INDEX
-		);
-		Utils.writeDefaultValue(
-			json,
-			Settings.JSON_MAP_EDITOR_MENU_INDEX,
-			this.mapEditorMenuIndex,
-			Settings.DEFAULT_MAP_EDITOR_MENU_INDEX
-		);
+	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.write(json, Settings.getBindings(additionnalBinding));
 	}
 }
 

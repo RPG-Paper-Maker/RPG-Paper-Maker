@@ -10,13 +10,14 @@
 */
 
 import * as THREE from 'three';
-import { ElementMapKind } from '../common/Enum';
+import { BINDING, ElementMapKind } from '../common/Enum';
 import { Position } from '../core/Position';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Project } from '../core/Project';
-import { MapElement, Model } from '../Editor';
-import { BINDING, BindingType, Base as ModelBase } from '../models';
-abstract class Base extends ModelBase {
+import { MapElement } from '../Editor';
+import { Serializable } from '../core/Serializable';
+import { BindingType } from '../common/Types';
+abstract class Base extends Serializable {
 	public static readonly COEF_TEX = 0.2;
 	public static readonly Y_AXIS = new THREE.Vector3(0, 1, 0);
 	public static readonly X_AXIS = new THREE.Vector3(1, 0, 0);
@@ -43,6 +44,10 @@ abstract class Base extends ModelBase {
 		this.zOffset = 0;
 		this.front = true;
 		this.kind = ElementMapKind.None;
+	}
+
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...Base.bindings, ...additionnalBinding];
 	}
 
 	static readMapElement(kind: ElementMapKind, json: Record<string, any>) {

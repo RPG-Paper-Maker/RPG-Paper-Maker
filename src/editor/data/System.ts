@@ -10,17 +10,22 @@
 */
 
 import { Constants } from '../common/Constants';
+import { BINDING } from '../common/Enum';
 import { Paths } from '../common/Paths';
+import { BindingType } from '../common/Types';
 import { Utils } from '../common/Utils';
 import { Project } from '../core/Project';
 import { Serializable } from '../core/Serializable';
 
 class System extends Serializable {
-	public static readonly JSON_PROJECT_NAME: string = 'pn';
-	public static readonly DEFAULT_PROJECT_NAME = 'Project without name';
-
-	public projectName: string = System.DEFAULT_PROJECT_NAME;
+	public projectName!: string;
 	public SQUARE_SIZE = 16; // TODO
+
+	public static readonly bindings: BindingType[] = [['projectName', 'pn', 'Project without name', BINDING.STRING]];
+
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...System.bindings, ...additionnalBinding];
+	}
 
 	getPath(): string {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_SYSTEM);
@@ -30,12 +35,12 @@ class System extends Serializable {
 		return this.SQUARE_SIZE / Constants.BASE_SQUARE_SIZE;
 	}
 
-	read(json: any) {
-		this.projectName = Utils.defaultValue(json[System.JSON_PROJECT_NAME], System.DEFAULT_PROJECT_NAME);
+	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.read(json, System.getBindings(additionnalBinding));
 	}
 
-	write(json: any) {
-		Utils.writeDefaultValue(json, System.JSON_PROJECT_NAME, this.projectName, System.DEFAULT_PROJECT_NAME);
+	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.write(json, System.getBindings(additionnalBinding));
 	}
 }
 

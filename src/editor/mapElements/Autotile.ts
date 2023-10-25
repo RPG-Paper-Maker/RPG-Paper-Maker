@@ -9,13 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { BINDING } from '../common/Enum';
+import { BindingType } from '../common/Types';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
 import { TextureBundle } from '../core/TextureBundle';
-import { BINDING, BindingType } from '../models';
 import { Land } from './Land';
 
-// @ts-expect-error
 class Autotile extends Land {
 	public static readonly JSON_AUTOTILE_ID = 'id';
 	public static readonly JSON_TILE_ID = 'tid';

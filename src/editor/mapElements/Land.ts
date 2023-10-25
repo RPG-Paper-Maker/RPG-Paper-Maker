@@ -16,7 +16,8 @@ import { Rectangle } from '../core/Rectangle';
 import { Base } from './Base';
 import { Project } from '../core/Project';
 import { MapElement } from '../Editor';
-import { BINDING, BindingType } from '../models';
+import { BindingType } from '../common/Types';
+import { BINDING } from '../common/Enum';
 
 class Land extends Base {
 	public static readonly JSON_UP = 'up';

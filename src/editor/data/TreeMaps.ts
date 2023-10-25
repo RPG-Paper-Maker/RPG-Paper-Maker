@@ -10,7 +10,9 @@
 */
 
 import { Model } from '../Editor';
+import { BINDING } from '../common/Enum';
 import { Paths } from '../common/Paths';
+import { BindingType } from '../common/Types';
 import { Utils } from '../common/Utils';
 import { Node } from '../core/Node';
 import { Project } from '../core/Project';
@@ -19,12 +21,19 @@ import { TreeMapTag } from '../models';
 
 class TreeMaps extends Serializable {
 	public static readonly JSON_TREE = 'tree';
-	public static readonly JSON_TABS = 'tabs';
-	public static readonly JSON_CURRENT_MAP = 'currentMap';
 
 	public tree: Node[] = [];
-	public tabs: number[] = [1];
-	public currentMap = 1;
+	public tabs!: number[];
+	public currentMap!: number;
+
+	public static readonly bindings: BindingType[] = [
+		['tabs', 'tabs', [1], BINDING.NUMBER],
+		['currentMap', 'currentMap', 1, BINDING.NUMBER],
+	];
+
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...TreeMaps.bindings, ...additionnalBinding];
+	}
 
 	getPath(): string {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_TREE_MAPS);
@@ -58,18 +67,6 @@ class TreeMaps extends Serializable {
 		await this.save();
 	}
 
-	read(json: any) {
-		const root = new Node(Model.TreeMapTag.create(-1, 'Maps', true));
-		this.readRoot(json[TreeMaps.JSON_TREE], root);
-		this.tree = [root];
-		if (json[TreeMaps.JSON_TABS] !== undefined) {
-			this.tabs = json[TreeMaps.JSON_TABS];
-		}
-		if (json[TreeMaps.JSON_CURRENT_MAP] !== undefined) {
-			this.currentMap = json[TreeMaps.JSON_CURRENT_MAP];
-		}
-	}
-
 	readRoot(json: Record<string, any>[], root: Node) {
 		const children: Node[] = [];
 		for (const obj of json) {
@@ -86,12 +83,16 @@ class TreeMaps extends Serializable {
 		root.children = children;
 	}
 
-	write(json: any) {
+	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.read(json, TreeMaps.getBindings(additionnalBinding));
+		const root = new Node(Model.TreeMapTag.create(-1, 'Maps', true));
+		this.readRoot(json[TreeMaps.JSON_TREE], root);
+		this.tree = [root];
+	}
+
+	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.write(json, TreeMaps.getBindings(additionnalBinding));
 		Utils.writeList(this.tree[0].children, json, TreeMaps.JSON_TREE);
-		json[TreeMaps.JSON_TABS] = this.tabs;
-		if (this.currentMap !== -1) {
-			json[TreeMaps.JSON_CURRENT_MAP] = this.currentMap;
-		}
 	}
 }
 

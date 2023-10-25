@@ -45,6 +45,14 @@ export enum ElementMapKind {
 	Mountains,
 }
 
+export enum MenuIndexMapEditor {
+	Lands,
+	Sprites,
+	Mountains,
+	Objects3D,
+	Objects,
+}
+
 export enum Direction {
 	South,
 	West,
@@ -90,4 +98,15 @@ export enum Key {
 	D = 'D',
 	UP = 'UP',
 	DOWN = 'DOWN',
+}
+
+export enum BINDING {
+	NUMBER,
+	STRING,
+	BOOLEAN,
+	OBJECT,
+	LIST,
+	POSITION,
+	MAP_POSITION,
+	RECTANGLE,
 }

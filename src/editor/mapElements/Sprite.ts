@@ -10,8 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { ElementMapKind } from '../common/Enum';
-import { Utils } from '../common/Utils';
+import { BINDING, ElementMapKind } from '../common/Enum';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { CustomGeometryFace } from '../core/CustomGeometryFace';
 import { Position } from '../core/Position';
@@ -19,9 +18,8 @@ import { Rectangle } from '../core/Rectangle';
 import { Base } from './Base';
 import { Project } from '../core/Project';
 import { MapElement } from '../Editor';
-import { BINDING, BindingType } from '../models';
+import { BindingType } from '../common/Types';
 
-// @ts-expect-error
 class Sprite extends Base {
 	public static readonly MODEL = [
 		new THREE.Vector3(-0.5, 1.0, 0.0),
