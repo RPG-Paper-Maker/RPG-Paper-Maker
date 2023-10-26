@@ -19,6 +19,8 @@ class Project {
 	public settings = new Data.Settings();
 	public systems = new Data.System();
 	public treeMaps = new Data.TreeMaps();
+	public pictures = new Data.Pictures();
+	public specialElements = new Data.SpecialElements();
 
 	constructor(name: string) {
 		this.systems.projectName = name;
@@ -38,11 +40,13 @@ class Project {
 
 	async load() {
 		const projectName = this.systems.projectName;
+		await this.pictures.load();
 		await this.settings.load();
 		await this.systems.load();
 		this.systems.projectName = projectName;
 		// this.systems.projectName = (this.systems.projectName as any).names[1]; // TODO
 		await this.treeMaps.load();
+		await this.specialElements.load();
 	}
 
 	async save() {

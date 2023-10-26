@@ -55,6 +55,13 @@ function MapEditorMenuBar() {
 		Project.current!.settings.save();
 	};
 
+	const handleAutotiles = () => {
+		dispatch(setCurrentMapElementKind(ElementMapKind.Autotiles));
+		Scene.Map.currentSelectedMapElementKind = ElementMapKind.Autotiles;
+		Project.current!.settings.mapEditorMenuIndex = 0;
+		Project.current!.settings.save();
+	};
+
 	const handleFaceSprites = () => {
 		dispatch(setCurrentMapElementKind(ElementMapKind.SpritesFace));
 		Scene.Map.currentSelectedMapElementKind = ElementMapKind.SpritesFace;
@@ -99,7 +106,7 @@ function MapEditorMenuBar() {
 						<MenuItem icon={<FloorIcon />} onClick={handleFloors}>
 							Floors
 						</MenuItem>
-						<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleFloors} disabled>
+						<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleAutotiles}>
 							Autotiles
 						</MenuItem>
 					</MenuSub>

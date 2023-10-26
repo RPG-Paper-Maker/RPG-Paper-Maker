@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Utils } from '../common/Utils';
+import { BINDING } from '../common/Enum';
+import { BindingType } from '../common/Types';
 import { Base } from './Base';
 
 class SpecialElement extends Base {
@@ -18,8 +19,18 @@ class SpecialElement extends Base {
 
 	public pictureID!: number;
 
-	read(json: Record<string, any>) {
-		this.pictureID = Utils.defaultValue(json.pic, -1);
+	public static readonly bindings: BindingType[] = [['pictureID', 'pic', -1, BINDING.NUMBER]];
+
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...SpecialElement.bindings, ...additionnalBinding];
+	}
+
+	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.read(json, SpecialElement.getBindings(additionnalBinding));
+	}
+
+	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.write(json, SpecialElement.getBindings(additionnalBinding));
 	}
 }
 

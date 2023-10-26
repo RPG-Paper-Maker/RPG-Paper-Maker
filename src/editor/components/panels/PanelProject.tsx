@@ -132,25 +132,34 @@ function PanelProject() {
 				mobileHideFirst={projectMenuIndex === 2}
 			>
 				<div className='bg-darker flex-column flex-one scrollable'>
-					<div className='mobile-hidden'>
-						<Menu
-							horizontal
-							isActivable
-							activeIndex={projectMenuIndex}
-							setActiveIndex={updateProjectMenuIndex}
-						>
-							<MenuItem icon={<LuFolders />}></MenuItem>
-							<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
-						</Menu>
-					</div>
-					<div className={Utils.getClassName([[projectMenuIndex !== 0, 'hidden']], ['flex', 'flex-one'])}>
-						<TreeMaps
-							onSelectedItem={handleSelectedMapItem}
-							forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
-							setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
-						/>
-					</div>
-					<PanelTextures visible={projectMenuIndex === 1} />
+					{!openLoading && (
+						<>
+							<div className='mobile-hidden'>
+								<Menu
+									horizontal
+									isActivable
+									activeIndex={projectMenuIndex}
+									setActiveIndex={updateProjectMenuIndex}
+								>
+									<MenuItem icon={<LuFolders />}></MenuItem>
+									<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
+								</Menu>
+							</div>
+							<div
+								className={Utils.getClassName(
+									[[projectMenuIndex !== 0, 'hidden']],
+									['flex', 'flex-one']
+								)}
+							>
+								<TreeMaps
+									onSelectedItem={handleSelectedMapItem}
+									forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
+									setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
+								/>
+							</div>
+							<PanelTextures visible={projectMenuIndex === 1} />
+						</>
+					)}
 				</div>
 				<div
 					className={'flex-column flex-one map-editor-bar ' + (projectMenuIndex !== 2 ? 'mobile-hidden' : '')}

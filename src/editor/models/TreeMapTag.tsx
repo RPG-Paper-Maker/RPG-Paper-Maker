@@ -35,16 +35,16 @@ class TreeMapTag extends Base {
 		['cursorPosition', 'cp', undefined, BINDING.POSITION],
 	];
 
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...TreeMapTag.bindings, ...additionnalBinding];
+	}
+
 	public static create(id: number, name: string, saved: boolean) {
 		const tag = new TreeMapTag();
 		tag.id = id;
 		tag.name = name;
 		tag.saved = saved;
 		return tag;
-	}
-
-	static getBindings(additionnalBinding: BindingType[]) {
-		return [...TreeMapTag.bindings, ...additionnalBinding];
 	}
 
 	isFolder() {

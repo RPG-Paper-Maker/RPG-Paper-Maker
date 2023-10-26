@@ -13,15 +13,20 @@ import { Constants } from '../common/Constants';
 import { BINDING } from '../common/Enum';
 import { Paths } from '../common/Paths';
 import { BindingType } from '../common/Types';
-import { Utils } from '../common/Utils';
 import { Project } from '../core/Project';
 import { Serializable } from '../core/Serializable';
 
 class System extends Serializable {
 	public projectName!: string;
-	public SQUARE_SIZE = 16; // TODO
+	public SQUARE_SIZE!: number;
+	public PATH_BR!: string;
+	public PATH_DLCS!: string;
 
-	public static readonly bindings: BindingType[] = [['projectName', 'pn', 'Project without name', BINDING.STRING]];
+	public static readonly bindings: BindingType[] = [
+		['projectName', 'pn', 'Project without name', BINDING.STRING],
+		['SQUARE_SIZE', 'ss', undefined, BINDING.NUMBER],
+		['PATH_BR', 'pathBR', undefined, BINDING.STRING],
+	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...System.bindings, ...additionnalBinding];

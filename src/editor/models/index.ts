@@ -2,5 +2,8 @@ export * from './Autotile';
 export * from './Base';
 export * from './Map';
 export * from './MapPortion';
+export * from './Mountain';
+export * from './Object3D';
+export * from './Picture';
 export * from './SpecialElement';
 export * from './TreeMapTag';

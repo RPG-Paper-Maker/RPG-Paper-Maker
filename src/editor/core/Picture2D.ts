@@ -13,15 +13,19 @@ class Picture2D {
 	static async loadImage(path: string): Promise<HTMLImageElement> {
 		return await new Promise((resolve, reject) => {
 			const image: any = new Image();
-			image.onload = () => {
+			if (path) {
+				image.onload = () => {
+					resolve(image);
+				};
+				image.onerror = () => {
+					image.width = 0;
+					image.height = 0;
+					resolve(image);
+				};
+				image.src = path;
+			} else {
 				resolve(image);
-			};
-			image.onerror = () => {
-				image.width = 0;
-				image.height = 0;
-				resolve(image);
-			};
-			image.src = path;
+			}
 		});
 	}
 }

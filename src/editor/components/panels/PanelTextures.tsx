@@ -14,7 +14,9 @@ import Previewer3D from '../Previewer3D';
 import { Utils } from '../../common/Utils';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import TilesetSelector from '../TilesetSelector';
+import TextureSquareSelector from '../TextureSquareSelector';
+import { ElementMapKind } from '../../common/Enum';
+import PanelAutotiles from './PanelAutotiles';
 
 type Props = {
 	visible: boolean;
@@ -26,6 +28,7 @@ function PanelTextures({ visible }: Props) {
 	const refPreviewer = useRef<HTMLDivElement>(null);
 	const [height, setHeight] = useState(0);
 
+	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const updateHeight = () => {
@@ -48,13 +51,22 @@ function PanelTextures({ visible }: Props) {
 		// eslint-disable-next-line
 	}, []);
 
+	const getMainContent = () => {
+		switch (currentMapElementKind) {
+			case ElementMapKind.Autotiles:
+				return <PanelAutotiles />;
+			default:
+				return <TextureSquareSelector texture='./assets/textures/plains-woods.png' />;
+		}
+	};
+
 	return (
 		<div
 			ref={refTilesetPreviewDiv}
 			className={Utils.getClassName([[!visible, 'hidden']], ['flex-column', 'flex-one', 'gap-small'])}
 		>
 			<div ref={refTileset} className='scrollable'>
-				<TilesetSelector />
+				{getMainContent()}
 			</div>
 			<div ref={refPreviewer} className='flex mobile-hidden'>
 				<Previewer3D id='texture-previewer' onHeightUpdated={handlePreviewer3DHeightUpdated} />

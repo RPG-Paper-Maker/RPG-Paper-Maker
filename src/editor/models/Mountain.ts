@@ -9,26 +9,28 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING } from '../common/Enum';
+import { BINDING, MountainCollisionKind } from '../common/Enum';
 import { BindingType } from '../common/Types';
 import { SpecialElement } from './SpecialElement';
 
-class Autotile extends SpecialElement {
-	public isAnimated!: boolean;
+class Mountain extends SpecialElement {
+	public collisionKind!: MountainCollisionKind;
 
-	public static readonly bindings: BindingType[] = [['isAnimated', 'isAnimated', false, BINDING.BOOLEAN]];
+	public static readonly bindings: BindingType[] = [
+		['collisionKind', 'mck', MountainCollisionKind.Default, BINDING.NUMBER],
+	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
-		return [...Autotile.bindings, ...additionnalBinding];
+		return [...Mountain.bindings, ...additionnalBinding];
 	}
 
 	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
-		super.read(json, Autotile.getBindings(additionnalBinding));
+		super.read(json, Mountain.getBindings(additionnalBinding));
 	}
 
 	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
-		super.write(json, Autotile.getBindings(additionnalBinding));
+		super.write(json, Mountain.getBindings(additionnalBinding));
 	}
 }
 
-export { Autotile };
+export { Mountain };

@@ -28,7 +28,11 @@ type CurrentStateProps = {
 	previewRect: Rectangle | null;
 };
 
-function TilesetSelector() {
+type Props = {
+	texture: string;
+};
+
+function TextureSquareSelector({ texture }: Props) {
 	const currentState = useState<CurrentStateProps>({
 		picture: null,
 		pictureCursor: null,
@@ -42,7 +46,7 @@ function TilesetSelector() {
 	const dispatch = useDispatch();
 
 	const initialize = async () => {
-		currentState.picture = await Picture2D.loadImage('./assets/textures/plains-woods.png');
+		currentState.picture = await Picture2D.loadImage(texture);
 		currentState.pictureCursor = await Picture2D.loadImage('./assets/textures/tileset-cursor.png');
 		if (refCanvas.current) {
 			refCanvas.current.width = currentState.picture.width * 2;
@@ -232,4 +236,4 @@ function TilesetSelector() {
 	return <canvas ref={refCanvas} className='pointer'></canvas>;
 }
 
-export default TilesetSelector;
+export default TextureSquareSelector;

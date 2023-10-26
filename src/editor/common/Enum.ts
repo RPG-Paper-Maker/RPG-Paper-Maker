@@ -110,3 +110,46 @@ export enum BINDING {
 	MAP_POSITION,
 	RECTANGLE,
 }
+
+export enum MountainCollisionKind {
+	Default,
+	Always,
+	Never,
+}
+
+export enum ShapeKind {
+	Box,
+	Sphere,
+	Cylinder,
+	Cone,
+	Capsule,
+	Custom,
+}
+
+export enum ObjectCollisionKind {
+	None,
+	Perfect,
+	Simplified,
+	Custom,
+}
+
+export enum PictureKind {
+	None,
+	Bars,
+	Icons,
+	Autotiles,
+	Characters,
+	Mountains,
+	Tilesets,
+	Walls,
+	Battlers,
+	Facesets,
+	WindowSkins,
+	TitleScreen,
+	Objects3D,
+	Pictures,
+	Animations,
+	Skyboxes,
+	Particles,
+	GameOver,
+}
