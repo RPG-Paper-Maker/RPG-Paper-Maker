@@ -11,19 +11,21 @@
 
 import { Model } from '../Editor';
 import { BINDING } from '../common/Enum';
+import { Paths } from '../common/Paths';
 import { BindingType } from '../common/Types';
+import { Project } from '../core/Project';
 import { Serializable } from '../core/Serializable';
 import { TextureBundle } from '../core/TextureBundle';
 
 class SpecialElements extends Serializable {
-	public static autotiles: Model.Autotile[];
-	public static walls: Model.SpecialElement[];
-	public static mountains: Model.Mountain[];
-	public static objects: Model.Object3D[];
-	public static texturesAutotiles: TextureBundle[][] = [];
-	public static texturesWalls: THREE.MeshPhongMaterial[] = [];
-	public static texturesObjects3D: THREE.MeshPhongMaterial[] = [];
-	public static texturesMountains: TextureBundle[] = [];
+	public autotiles!: Model.Autotile[];
+	public walls!: Model.SpecialElement[];
+	public mountains!: Model.Mountain[];
+	public objects!: Model.Object3D[];
+	public texturesAutotiles: TextureBundle[][] = [];
+	public texturesWalls: THREE.MeshPhongMaterial[] = [];
+	public texturesObjects3D: THREE.MeshPhongMaterial[] = [];
+	public texturesMountains: TextureBundle[] = [];
 
 	public static readonly bindings: BindingType[] = [
 		['autotiles', 'autotiles', undefined, BINDING.LIST, Model.Autotile],
@@ -34,6 +36,10 @@ class SpecialElements extends Serializable {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...SpecialElements.bindings, ...additionnalBinding];
+	}
+
+	getPath(): string {
+		return Paths.join(Project.current!.getPath(), Paths.FILE_SPECIAL_ELEMENTS);
 	}
 
 	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {

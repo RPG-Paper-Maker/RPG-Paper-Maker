@@ -11,22 +11,25 @@
 
 import { Model } from '../Editor';
 import { PictureKind } from '../common/Enum';
+import { Paths } from '../common/Paths';
+import { Project } from '../core/Project';
 import { Serializable } from '../core/Serializable';
 
 class Pictures extends Serializable {
-	private list!: Model.Picture[][];
+	public list!: Model.Picture[][];
 	private listIndexes!: number[][];
 
-	getByID(kind: PictureKind, index: number): Model.Picture {
-		return this.list[kind][index];
+	getPath(): string {
+		return Paths.join(Project.current!.getPath(), Paths.FILE_PICTURES);
 	}
 
-	getByIndex(kind: PictureKind, id: number): Model.Picture {
+	getByID(kind: PictureKind, id: number): Model.Picture {
 		return this.list[kind][this.listIndexes[kind][id]];
 	}
 
 	read(json: Record<string, any>) {
 		this.list = [];
+		this.listIndexes = [];
 		for (const { k, v } of json.list) {
 			const list: Model.Picture[] = [];
 			const listIndexes: number[] = [];

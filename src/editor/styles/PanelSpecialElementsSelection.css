@@ -1,0 +1,46 @@
+.panel-special-elements {
+	background-color: var(--darkest-containers-bg-color);
+	border: 1px solid var(--lighter-bg-color);
+	border-radius: 2px;
+	margin: 5px;
+}
+
+.panel-special-element {
+	display: flex;
+	flex-direction: column;
+}
+
+.panel-special-element .title {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 10px;
+	height: var(--special-elements-size);
+	cursor: pointer;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.panel-special-element:hover {
+	background-color: var(--hover-main-bg-color);
+}
+
+.panel-special-element.selected {
+	background-color: var(--primary-dark-color);
+}
+
+.panel-special-element .picture-container {
+	width: var(--special-elements-size);
+}
+
+.panel-special-element img {
+	display: block;
+	max-width: var(--special-elements-size);
+	max-height: var(--special-elements-size);
+	width: auto;
+	height: auto;
+}
+
+.panel-special-element .content {
+	background-color: var(--main-bg-color);
+}

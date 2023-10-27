@@ -77,10 +77,12 @@ abstract class Serializable {
 				case BINDING.LIST:
 					const jsonTab = json[jsonName];
 					const tab: any[] = [];
-					for (const jsonElement of jsonTab) {
-						const obj = new constructor();
-						obj.read(jsonElement);
-						tab.push(obj);
+					if (jsonTab) {
+						for (const jsonElement of jsonTab) {
+							const obj = new constructor();
+							obj.read(jsonElement);
+							tab.push(obj);
+						}
 					}
 					(this as any)[name] = tab;
 					break;
@@ -95,9 +97,13 @@ abstract class Serializable {
 					break;
 				case BINDING.RECTANGLE: {
 					const jsonObj = json[jsonName];
-					const rectangle = new Rectangle();
-					rectangle.read(jsonObj);
-					(this as any)[name] = rectangle;
+					if (!jsonObj && defaultValue === null) {
+						(this as any)[name] = null;
+					} else {
+						const rectangle = new Rectangle();
+						rectangle.read(jsonObj);
+						(this as any)[name] = rectangle;
+					}
 					break;
 				}
 				default:
@@ -161,9 +167,14 @@ abstract class Serializable {
 					break;
 				}
 				case BINDING.RECTANGLE: {
-					const tab: any[] = [];
-					(this as any)[name].write(tab);
-					json[jsonName] = tab;
+					const rectangle = (this as any)[name];
+					if (rectangle === null) {
+						json[jsonName] = null;
+					} else {
+						const tab: any[] = [];
+						rectangle.write(tab);
+						json[jsonName] = tab;
+					}
 					break;
 				}
 				default:

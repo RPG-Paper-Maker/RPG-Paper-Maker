@@ -13,7 +13,3 @@
 .tree-item.selected {
 	background-color: var(--primary-dark-color);
 }
-
-.tree-item.selected:hover {
-	background-color: var(--hover-primary-dark-color);
-}

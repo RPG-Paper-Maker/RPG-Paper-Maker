@@ -14,6 +14,7 @@ const MapEditorSlice = createSlice({
 	initialState: {
 		currentTreeMapTag: null as TreeMapTag | null,
 		currentTilesetTexture: new Rectangle(0, 0, 1, 1),
+		currentSpecialElementID: -1,
 		currentMapElementKind: ElementMapKind.Floors,
 		undoRedo: {
 			index: -1,
@@ -26,6 +27,9 @@ const MapEditorSlice = createSlice({
 		},
 		setCurrentTilesetTexture(state, action: PayloadAction<Rectangle>) {
 			state.currentTilesetTexture = action.payload;
+		},
+		setCurrentSpecialElementID(state, action: PayloadAction<number>) {
+			state.currentSpecialElementID = action.payload;
 		},
 		setCurrentMapElementKind(state, action: PayloadAction<ElementMapKind>) {
 			state.currentMapElementKind = action.payload;
@@ -42,6 +46,7 @@ const MapEditorSlice = createSlice({
 export const {
 	setCurrentTreeMapTag,
 	setCurrentTilesetTexture,
+	setCurrentSpecialElementID,
 	setCurrentMapElementKind,
 	setUndoRedoIndex,
 	setUndoRedoLength,

@@ -25,7 +25,7 @@ class CollisionSquare extends Serializable {
 	public climbing: boolean;
 
 	public static readonly bindings: BindingType[] = [
-		['rect', 'rec', undefined, BINDING.RECTANGLE],
+		['rect', 'rec', null, BINDING.RECTANGLE],
 		['left', 'l', true, BINDING.BOOLEAN],
 		['right', 'r', true, BINDING.BOOLEAN],
 		['top', 't', true, BINDING.BOOLEAN],

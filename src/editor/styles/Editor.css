@@ -27,6 +27,7 @@
 	--red-color: #de3a3c;
 	--patreon-color: #f96753;
 	--hover-patreon-color: #fe7765;
+	--special-elements-size: 30px;
 }
 
 @keyframes fadeIn {

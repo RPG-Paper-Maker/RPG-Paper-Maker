@@ -30,9 +30,12 @@ type CurrentStateProps = {
 
 type Props = {
 	texture: string;
+	divideWidth?: number;
+	divideHeight?: number;
+	canChangeSize?: boolean;
 };
 
-function TextureSquareSelector({ texture }: Props) {
+function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, canChangeSize = true }: Props) {
 	const currentState = useState<CurrentStateProps>({
 		picture: null,
 		pictureCursor: null,
@@ -49,9 +52,11 @@ function TextureSquareSelector({ texture }: Props) {
 		currentState.picture = await Picture2D.loadImage(texture);
 		currentState.pictureCursor = await Picture2D.loadImage('./assets/textures/tileset-cursor.png');
 		if (refCanvas.current) {
-			refCanvas.current.width = currentState.picture.width * 2;
-			refCanvas.current.height = currentState.picture.height * 2;
+			refCanvas.current.width = (currentState.picture.width * 2) / divideWidth;
+			refCanvas.current.height = (currentState.picture.height * 2) / divideHeight;
 		}
+		dispatch(setCurrentTilesetTexture(currentState.selectedRect));
+		Scene.Map.currentSelectedTexture = currentState.selectedRect;
 		update();
 	};
 
@@ -88,6 +93,40 @@ function TextureSquareSelector({ texture }: Props) {
 		const canvas = refCanvas.current;
 		if (canvas) {
 			ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+		}
+	};
+
+	const drawTexture = (ctx: CanvasRenderingContext2D) => {
+		if (currentState.picture) {
+			if (divideWidth === 1 && divideHeight === 1) {
+				ctx.drawImage(
+					currentState.picture,
+					0,
+					0,
+					currentState.picture.width * 2,
+					currentState.picture.height * 2
+				);
+			} else {
+				for (let i = 0, l = currentState.picture.width / Project.getSquareSize() / divideWidth; i < l; i++) {
+					for (
+						let j = 0, ll = currentState.picture.height / Project.getSquareSize() / divideHeight;
+						j < ll;
+						j++
+					) {
+						ctx.drawImage(
+							currentState.picture,
+							i * Project.getSquareSize() * divideWidth,
+							j * Project.getSquareSize() * divideHeight,
+							Project.getSquareSize(),
+							Project.getSquareSize(),
+							i * Project.getSquareSize() * 2,
+							j * Project.getSquareSize() * 2,
+							Project.getSquareSize() * 2,
+							Project.getSquareSize() * 2
+						);
+					}
+				}
+			}
 		}
 	};
 
@@ -128,20 +167,21 @@ function TextureSquareSelector({ texture }: Props) {
 		if (currentState.firstX !== -1 && currentState.firstY !== -1) {
 			x = Math.min(Math.max(x, 0), Math.floor(currentState.picture.width / Project.getSquareSize()) - 1);
 			y = Math.min(Math.max(y, 0), Math.floor(currentState.picture.height / Project.getSquareSize()) - 1);
-			if (x > currentState.firstX) {
-				width = x - currentState.firstX + 1;
-				x = currentState.firstX;
-			} else if (x < currentState.firstX) {
-				width = currentState.firstX - x + 1;
-			}
-			if (y > currentState.firstY) {
-				height = y - currentState.firstY + 1;
-				y = currentState.firstY;
-			} else if (y < currentState.firstY) {
-				height = currentState.firstY - y + 1;
+			if (canChangeSize) {
+				if (x > currentState.firstX) {
+					width = x - currentState.firstX + 1;
+					x = currentState.firstX;
+				} else if (x < currentState.firstX) {
+					width = currentState.firstX - x + 1;
+				}
+				if (y > currentState.firstY) {
+					height = y - currentState.firstY + 1;
+					y = currentState.firstY;
+				} else if (y < currentState.firstY) {
+					height = currentState.firstY - y + 1;
+				}
 			}
 		}
-
 		const rect = new Rectangle(x, y, width, height);
 		if (currentState.previewRect === null || !currentState.previewRect.equals(rect)) {
 			currentState.previewRect = rect;
@@ -155,7 +195,7 @@ function TextureSquareSelector({ texture }: Props) {
 			clear(ctx);
 			ctx.lineWidth = 1;
 			ctx.imageSmoothingEnabled = false;
-			ctx.drawImage(currentState.picture, 0, 0, currentState.picture.width * 2, currentState.picture.height * 2);
+			drawTexture(ctx);
 			drawSelection(ctx, currentState.selectedRect);
 			if (currentState.previewRect) {
 				drawSelection(ctx, currentState.previewRect, 0.5);
@@ -233,7 +273,7 @@ function TextureSquareSelector({ texture }: Props) {
 		// eslint-disable-next-line
 	}, []);
 
-	return <canvas ref={refCanvas} className='pointer'></canvas>;
+	return <canvas ref={refCanvas} className='pointer' width={'0'}></canvas>;
 }
 
 export default TextureSquareSelector;

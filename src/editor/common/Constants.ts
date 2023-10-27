@@ -18,6 +18,7 @@ class Constants {
 	public static readonly PORTION_SIZE = 16;
 	public static readonly MOBILE_WIDTH = 800;
 	public static readonly CURSOR_MOVE_MOBILE_PERCENT = 10;
+	public static readonly SPECIAL_ELEMENTS_IMAGE_SIZE = 100;
 	public static isMobile = false;
 }
 
