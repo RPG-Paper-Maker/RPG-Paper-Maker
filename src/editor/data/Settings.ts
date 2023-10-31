@@ -12,17 +12,18 @@
 import { BINDING } from '../common/Enum';
 import { Paths } from '../common/Paths';
 import { BindingType } from '../common/Types';
-import { Utils } from '../common/Utils';
 import { Project } from '../core/Project';
 import { Serializable } from '../core/Serializable';
 
 class Settings extends Serializable {
 	public projectMenuIndex!: number;
 	public mapEditorMenuIndex!: number;
+	public mapEditorLandsMenuIndex!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['projectMenuIndex', 'pmi', 1, BINDING.NUMBER],
 		['mapEditorMenuIndex', 'memi', 0, BINDING.NUMBER],
+		['mapEditorLandsMenuIndex', 'mlemi', 0, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

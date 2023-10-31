@@ -25,6 +25,8 @@ function MapEditor() {
 	const dispatch = useDispatch();
 
 	const refCanvas = useRef<HTMLHeadingElement>(null);
+	const refCanvasHUD = useRef<HTMLCanvasElement>(null);
+	const refCanvasRendering = useRef<HTMLCanvasElement>(null);
 
 	const clearMap = () => {
 		if (Scene.Map.current) {
@@ -89,7 +91,13 @@ function MapEditor() {
 
 	useEffect(() => {
 		const canvas = refCanvas.current;
-		if (canvas) {
+		const canvasHUD = refCanvasHUD.current;
+		const canvasRendering = refCanvasRendering.current;
+		if (canvas && canvasHUD && canvasRendering) {
+			Scene.Map.canvasHUD = canvasHUD;
+			Scene.Map.canvasRendering = canvasRendering;
+			Scene.Map.ctxHUD = canvasHUD.getContext('2d');
+			Scene.Map.ctxRendering = canvasRendering.getContext('2d');
 			const removeInputs = Inputs.initialize(canvas);
 			Manager.GL.mapEditorContext.initialize('canvas-map-editor');
 			resize();
@@ -116,7 +124,9 @@ function MapEditor() {
 
 	return (
 		<div className='map-editor'>
-			<div id='canvas-map-editor' className='fill-space' ref={refCanvas}></div>
+			<div ref={refCanvas} id='canvas-map-editor' className='fill-space'></div>
+			<canvas ref={refCanvasHUD} id='canvas-hud' width='640px' height='480px'></canvas>
+			<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px'></canvas>
 		</div>
 	);
 }

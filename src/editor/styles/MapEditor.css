@@ -13,3 +13,11 @@
 	position: relative;
 	color: white;
 }
+
+#canvas-rendering {
+	display: none;
+}
+
+#canvas-hud {
+	display: none;
+}

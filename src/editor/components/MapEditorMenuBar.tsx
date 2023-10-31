@@ -39,6 +39,7 @@ import { Project } from '../core/Project';
 
 function MapEditorMenuBar() {
 	const [selectionIndex, setSelectionIndex] = useState(0);
+	const [, setLandsIndex] = useState(0);
 	const [mobileIndex, setMobileIndex] = useState(1);
 	const [squarePixelIndex, setSquarePixelIndex] = useState(0);
 	const [actionIndex, setActionIndex] = useState(3);
@@ -48,18 +49,33 @@ function MapEditorMenuBar() {
 
 	const openLoading = useSelector((state: RootState) => state.projects.openLoading);
 
+	const handleLands = () => {
+		switch (Project.current!.settings.mapEditorLandsMenuIndex) {
+			case 0:
+				handleFloors();
+				break;
+			case 1:
+				handleAutotiles();
+				break;
+		}
+	};
+
 	const handleFloors = () => {
 		dispatch(setCurrentMapElementKind(ElementMapKind.Floors));
 		Scene.Map.currentSelectedMapElementKind = ElementMapKind.Floors;
 		Project.current!.settings.mapEditorMenuIndex = 0;
+		Project.current!.settings.mapEditorLandsMenuIndex = 0;
 		Project.current!.settings.save();
+		setLandsIndex(Project.current!.settings.mapEditorLandsMenuIndex);
 	};
 
 	const handleAutotiles = () => {
 		dispatch(setCurrentMapElementKind(ElementMapKind.Autotiles));
 		Scene.Map.currentSelectedMapElementKind = ElementMapKind.Autotiles;
 		Project.current!.settings.mapEditorMenuIndex = 0;
+		Project.current!.settings.mapEditorLandsMenuIndex = 1;
 		Project.current!.settings.save();
+		setLandsIndex(Project.current!.settings.mapEditorLandsMenuIndex);
 	};
 
 	const handleFaceSprites = () => {
@@ -84,12 +100,13 @@ function MapEditorMenuBar() {
 	// When first opening the project with all data loaded
 	useEffect(() => {
 		if (!openLoading) {
+			setLandsIndex(Project.current!.settings.mapEditorLandsMenuIndex);
 			const menuIndex = Project.current!.settings.mapEditorMenuIndex;
 			setSelectionIndex(menuIndex);
 			setMobileIndex(Project.current!.settings.projectMenuIndex);
 			switch (menuIndex) {
 				case 0:
-					handleFloors();
+					handleLands();
 					break;
 				case 1:
 					handleFaceSprites();
@@ -98,11 +115,22 @@ function MapEditorMenuBar() {
 		}
 	}, [openLoading]);
 
+	const getLandsIcon = () => {
+		switch (Project.current!.settings.mapEditorLandsMenuIndex) {
+			case 0:
+				return <FloorIcon />;
+			case 1:
+				return <MdAutoAwesomeMosaic />;
+			default:
+				return <FloorIcon />;
+		}
+	};
+
 	return (
 		<div className='flex flex-wrap'>
 			<div className='flex flex-one'>
 				<Menu horizontal isActivable activeIndex={selectionIndex} setActiveIndex={setSelectionIndex}>
-					<MenuSub active icon={<FloorIcon />} onClick={handleFloors}>
+					<MenuSub active icon={getLandsIcon()} onClick={handleLands}>
 						<MenuItem icon={<FloorIcon />} onClick={handleFloors}>
 							Floors
 						</MenuItem>

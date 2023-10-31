@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Rectangle } from './Rectangle';
+
 class TextureBundle {
 	public list: any[][];
 	public material: THREE.MeshPhongMaterial | null;
@@ -33,31 +35,31 @@ class TextureBundle {
 		this.endPoint = point;
 	}
 
-	isSup(rect: number[] | undefined, point: number[]): boolean {
+	isSup(rect: Rectangle | undefined, point: number[]): boolean {
 		if (!rect) {
 			return true;
 		}
-		if (rect[1] > point[1]) {
+		if (rect.y > point[1]) {
 			return true;
-		} else if (rect[1] === point[1]) {
-			return rect[0] >= point[0];
+		} else if (rect.y === point[1]) {
+			return rect.x >= point[0];
 		}
 		return false;
 	}
 
-	isInf(rect: number[] | undefined, point: number[]): boolean {
+	isInf(rect: Rectangle | undefined, point: number[]): boolean {
 		if (!rect) {
 			return true;
 		}
-		if (rect[1] < point[1]) {
+		if (rect.y < point[1]) {
 			return true;
-		} else if (rect[1] === point[1]) {
-			return rect[0] <= point[0];
+		} else if (rect.y === point[1]) {
+			return rect.x <= point[0];
 		}
 		return false;
 	}
 
-	isInTexture(id: number, rect?: number[]): boolean {
+	isInTexture(id: number, rect?: Rectangle): boolean {
 		if (id >= this.beginID && id <= this.endID) {
 			if (id === this.beginID) {
 				return id === this.endID
@@ -76,12 +78,12 @@ class TextureBundle {
 		this.list.push([id, point]);
 	}
 
-	getOffset(id: number, rect: number[]): number {
+	getOffset(id: number, rect?: Rectangle): number {
 		let pair: any, point: number[];
 		for (let i = 0, l = this.list.length; i < l; i++) {
 			pair = this.list[i];
 			point = pair[1];
-			if (id === pair[0] && (rect === null || (point[0] === rect[0] && point[1] === rect[1]))) {
+			if (id === pair[0] && (!rect || (point[0] === rect.x && point[1] === rect.y))) {
 				return i;
 			}
 		}

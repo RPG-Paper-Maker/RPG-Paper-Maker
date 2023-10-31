@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { PictureKind } from '../../common/Enum';
 import { Project } from '../../core/Project';
 import '../../styles/PanelSpecialElementsSelection.css';

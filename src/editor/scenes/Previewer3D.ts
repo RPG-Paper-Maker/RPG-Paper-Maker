@@ -10,13 +10,15 @@
 */
 
 import * as THREE from 'three';
-import { Manager, MapElement } from '../Editor';
+import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Base } from './Base';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
 import { Rectangle } from '../core/Rectangle';
 import { ElementMapKind } from '../common/Enum';
 import { CustomGeometryFace } from '../core/CustomGeometryFace';
+import { Project } from '../core/Project';
+import { TextureBundle } from '../core/TextureBundle';
 
 class Previewer3D extends Base {
 	public static scenes: Record<string, Previewer3D> = {}; // id canvas => scene
@@ -66,6 +68,25 @@ class Previewer3D extends Base {
 		const geometry = new CustomGeometry();
 		floor.updateGeometry(geometry, new Position(), width, height, 0);
 		this.addToScene(GL, geometry);
+	}
+
+	async loadAutotile(GL: Manager.GL, autotileID: number, texture: Rectangle) {
+		const texturesAutotile = Scene.Map.current!.texturesAutotiles[autotileID];
+		const autotile = Project.current!.specialElements.getAutotileByID(autotileID);
+		const pictureID = autotile.pictureID;
+		let includedTexture: TextureBundle | null = null;
+		for (let textureAutotile of texturesAutotile) {
+			if (textureAutotile.isInTexture(pictureID, texture)) {
+				includedTexture = textureAutotile;
+				break;
+			}
+		}
+		if (includedTexture !== null) {
+			const autotiles = new MapElement.Autotiles(includedTexture);
+
+			autotiles.updateGeometry(new Position(), MapElement.Autotile.create(autotileID, 2, texture));
+			this.addToScene(GL, autotiles.geometry);
+		}
 	}
 
 	loadSprite(GL: Manager.GL, texture: Rectangle, kind: ElementMapKind) {

@@ -74,7 +74,7 @@ abstract class Serializable {
 					}
 					break;
 				}
-				case BINDING.LIST:
+				case BINDING.LIST: {
 					const jsonTab = json[jsonName];
 					const tab: any[] = [];
 					if (jsonTab) {
@@ -86,13 +86,31 @@ abstract class Serializable {
 					}
 					(this as any)[name] = tab;
 					break;
+				}
+				case BINDING.LIST_WITH_INDEXES: {
+					const jsonTab = json[jsonName];
+					const tab: any[] = [];
+					const tabIndexes: number[] = [];
+					if (jsonTab) {
+						for (const [index, jsonElement] of jsonTab.entries()) {
+							const obj = new constructor();
+							obj.read(jsonElement);
+							tab.push(obj);
+							tabIndexes[obj.id] = index;
+						}
+					}
+					(this as any)[name] = tab;
+					(this as any)[`${name}Indexes`] = tabIndexes;
+					break;
+				}
 				case BINDING.MAP_POSITION:
 					const p = new Position();
 					const mapping = new Map();
 					(this as any)[name] = mapping;
 					for (const objHash of json[jsonName]) {
 						p.read(objHash.k);
-						mapping.set(p.toKey(), constructor.fromJSON(objHash.v));
+						const cons = constructor instanceof Function ? constructor(objHash.v) : constructor;
+						mapping.set(p.toKey(), cons.fromJSON(objHash.v));
 					}
 					break;
 				case BINDING.RECTANGLE: {
@@ -137,7 +155,8 @@ abstract class Serializable {
 					}
 					break;
 				}
-				case BINDING.LIST: {
+				case BINDING.LIST:
+				case BINDING.LIST_WITH_INDEXES: {
 					const tab = (this as any)[name];
 					const jsonTab: any[] = [];
 					for (const element of tab) {
@@ -167,7 +186,7 @@ abstract class Serializable {
 					break;
 				}
 				case BINDING.RECTANGLE: {
-					const rectangle = (this as any)[name];
+					let rectangle = (this as any)[name];
 					if (rectangle === null) {
 						json[jsonName] = null;
 					} else {

@@ -27,6 +27,7 @@ import { UndoRedoState } from '../core/UndoRedoState';
 import { ElementMapKind, MobileAction, RaycastingLayer } from '../common/Enum';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Constants } from '../common/Constants';
+import { TextureBundle } from '../core/TextureBundle';
 
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
@@ -38,6 +39,10 @@ class Map extends Base {
 	public static elapsedTime = 0;
 	public static averageElapsedTime = 0;
 	public static lastUpdateTime = new Date().getTime();
+	public static canvasHUD: HTMLCanvasElement | null = null;
+	public static canvasRendering: HTMLCanvasElement | null = null;
+	public static ctxHUD: CanvasRenderingContext2D | null = null;
+	public static ctxRendering: CanvasRenderingContext2D | null = null;
 
 	public id: number;
 	public tag: TreeMapTag;
@@ -59,6 +64,10 @@ class Map extends Base {
 	public undoRedoStatesSaving: UndoRedoState[] = [];
 	public lastPosition: Position | null = null;
 	public isMobileMovingCursor = false;
+	public texturesAutotiles: TextureBundle[][] = [];
+	public texturesWalls: THREE.MeshPhongMaterial[] = [];
+	public texturesObjects3D: THREE.MeshPhongMaterial[] = [];
+	public texturesMountains: TextureBundle[] = [];
 
 	constructor(tag: TreeMapTag) {
 		super(tag);
@@ -67,20 +76,29 @@ class Map extends Base {
 		this.cursor = new Cursor(tag.cursorPosition || new Position());
 	}
 
-	static isAdding() {
+	static isAdding(): boolean {
 		return Constants.isMobile
 			? Scene.Map.currentSelectedMobileAction === MobileAction.Plus && Inputs.isPointerPressed
 			: Inputs.isPointerPressed;
 	}
 
-	static isRemoving() {
+	static isRemoving(): boolean {
 		return Constants.isMobile
 			? Scene.Map.currentSelectedMobileAction === MobileAction.Minus && Inputs.isPointerPressed
 			: Inputs.isMouseRightPressed;
 	}
 
-	getPath() {
+	getPath(): string {
 		return Paths.join(Project.current?.getPathMaps(), Model.Map.generateMapName(this.id));
+	}
+
+	getLocalPortion(position: Position): Portion {
+		return new Portion(
+			position.x / Constants.PORTION_SIZE - this.cursor.position.x / Constants.PORTION_SIZE,
+			Math.floor(position.y / Constants.PORTION_SIZE) -
+				Math.floor(this.cursor.position.y / Constants.PORTION_SIZE),
+			position.z / Constants.PORTION_SIZE - this.cursor.position.z / Constants.PORTION_SIZE
+		);
 	}
 
 	async load() {

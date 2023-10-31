@@ -10,21 +10,27 @@
 */
 
 import { Scene } from '../Editor';
-import { BINDING } from '../common/Enum';
+import { BINDING, ElementMapKind } from '../common/Enum';
 import { Paths } from '../common/Paths';
 import { BindingType } from '../common/Types';
 import { Portion } from '../core/Portion';
 import { Project } from '../core/Project';
-import { Floor, Sprite } from '../mapElements';
-import { Base } from './Base';
+import { Serializable } from '../core/Serializable';
+import { Sprite, Floor, Autotile } from '../mapElements';
 
-class MapPortion extends Base {
+class MapPortion extends Serializable {
 	public globalPortion: Portion;
-	public floors: Map<string, Floor> = new Map();
+	public lands: Map<string, Floor | Autotile> = new Map();
 	public sprites: Map<string, Sprite> = new Map();
 
 	public static readonly bindings: BindingType[] = [
-		['floors', 'floors', null, BINDING.MAP_POSITION, Floor],
+		[
+			'lands',
+			'lands',
+			null,
+			BINDING.MAP_POSITION,
+			(json: Record<string, any>) => (json.k === ElementMapKind.Floors ? Floor : Autotile),
+		],
 		['sprites', 'sprites', null, BINDING.MAP_POSITION, Sprite],
 	];
 
@@ -62,7 +68,6 @@ class MapPortion extends Base {
 
 	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
 		super.write(json, MapPortion.getBindings(additionnalBinding));
-		json.autotiles = [];
 		json.moun = [];
 		json.walls = [];
 		json.objs3d = [];

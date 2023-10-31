@@ -19,12 +19,15 @@ import { Rectangle } from './Rectangle';
 import { ElementMapKind, RaycastingLayer } from '../common/Enum';
 import { UndoRedoState } from './UndoRedoState';
 import { CustomGeometryFace } from './CustomGeometryFace';
+import { Autotiles } from '../mapElements';
+import { Project } from './Project';
 
 class MapPortion {
 	public model: Model.MapPortion;
 	public floorsMesh: THREE.Mesh;
 	public spritesFaceMesh: THREE.Mesh;
 	public spritesFixMesh: THREE.Mesh;
+	public autotilesList: Autotiles[][];
 	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ElementMapKind][] = [];
 
 	constructor(globalPortion: Portion) {
@@ -41,6 +44,7 @@ class MapPortion {
 		this.spritesFixMesh.receiveShadow = true;
 		this.spritesFixMesh.castShadow = true;
 		this.spritesFixMesh.renderOrder = 3;
+		this.autotilesList = [];
 	}
 
 	removeLastPreview() {
@@ -58,6 +62,14 @@ class MapPortion {
 					position,
 					MapElement.Floor.create(Scene.Map.currentSelectedTexture),
 					ElementMapKind.Floors,
+					preview
+				);
+				break;
+			case ElementMapKind.Autotiles:
+				this.updateMapElement(
+					position,
+					MapElement.Autotile.create(1, 159, Scene.Map.currentSelectedTexture),
+					ElementMapKind.Autotiles,
 					preview
 				);
 				break;
@@ -93,7 +105,7 @@ class MapPortion {
 				this.updateFloor(position, element as MapElement.Floor, preview, removingPreview, undoRedo);
 				break;
 			case ElementMapKind.Autotiles:
-				// TODO
+				this.updateAutotile(position, element as MapElement.Autotile, preview, removingPreview, undoRedo);
 				break;
 			case ElementMapKind.SpritesFace:
 				this.updateSprite(position, element as MapElement.Sprite, kind, preview, removingPreview, undoRedo);
@@ -115,7 +127,7 @@ class MapPortion {
 				position,
 				null,
 				ElementMapKind.Floors,
-				this.model.floors,
+				this.model.lands,
 				preview,
 				removingPreview,
 				undoRedo
@@ -128,7 +140,7 @@ class MapPortion {
 						newPosition,
 						MapElement.Floor.create(new Rectangle(floor.texture.x + i, floor.texture.y + j, 1, 1)),
 						ElementMapKind.Floors,
-						this.model.floors,
+						this.model.lands,
 						preview,
 						removingPreview,
 						undoRedo
@@ -136,6 +148,24 @@ class MapPortion {
 				}
 			}
 		}
+	}
+
+	updateAutotile(
+		position: Position,
+		autotile: MapElement.Autotile | null,
+		preview: boolean,
+		removingPreview: boolean,
+		undoRedo: boolean
+	) {
+		this.setMapElement(
+			position,
+			autotile,
+			ElementMapKind.Autotiles,
+			this.model.lands,
+			preview,
+			removingPreview,
+			undoRedo
+		);
 	}
 
 	updateSprite(
@@ -176,13 +206,19 @@ class MapPortion {
 				Scene.Map.current.addPortionToSave(this.model.globalPortion);
 				if (!undoRedo) {
 					Scene.Map.current.undoRedoStates.push(
-						UndoRedoState.create(position, previous, kind, element, kind)
+						UndoRedoState.create(
+							position,
+							previous,
+							previous === null ? kind : previous.kind,
+							element,
+							kind
+						)
 					);
 				}
 			}
 		}
 		if (preview) {
-			this.lastPreviewRemove.push([position, previous, kind]);
+			this.lastPreviewRemove.push([position, previous, previous === null ? kind : previous.kind]);
 		}
 		return previous;
 	}
@@ -202,57 +238,157 @@ class MapPortion {
 		}
 	}
 
+	checkTextures() {
+		for (const [, land] of this.model.lands) {
+			if (land instanceof MapElement.Autotile) {
+				const texturesAutotile = Autotiles.getAutotileTexture(land.autotileID);
+				if (texturesAutotile === null) {
+					Scene.Map.current!.loading = true;
+					this.loadTexturesAndUpdateGeometries();
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	async loadTexturesAndUpdateGeometries() {
+		for (const [, land] of this.model.lands) {
+			if (land instanceof MapElement.Autotile) {
+				await Autotiles.loadAutotileTexture(land.autotileID);
+			}
+		}
+		this.updateGeometriesWithoutCheck();
+		Scene.Map.current!.loading = false;
+	}
+
 	updateGeometries() {
+		if (this.checkTextures()) {
+			this.updateGeometriesWithoutCheck();
+		}
+	}
+
+	updateGeometriesWithoutCheck() {
 		this.updateLandsGeometries();
 		this.updateSpritesGeometry();
 	}
 
 	updateLandsGeometries() {
-		this.updateFloorsGeometry();
-	}
-
-	updateFloorsGeometry() {
 		const material = Scene.Map.current!.materialTileset;
 		const { width, height } = Manager.GL.getMaterialTextureSize(material);
 		const geometry = new CustomGeometry();
 		const layers: [Position, MapElement.Floor][] = [];
 		let count = 0;
-		let i: number;
-		let l: number;
-		for (const [positionKey, floor] of this.model.floors) {
-			const p = new Position();
-			p.fromKey(positionKey);
-			const layer = p.layer;
-			if (layer > 0) {
-				for (i = 0, l = layers.length; i < l; i++) {
-					if (layer <= layers[i][0].layer) {
-						layers.splice(i, 0, [p, floor]);
-						break;
+		for (const list of this.autotilesList) {
+			if (list) {
+				for (const autotiles of list) {
+					if (autotiles.mesh) {
+						Scene.Map.current!.scene.remove(autotiles.mesh);
 					}
 				}
-				if (i === l) {
-					layers.push([p, floor]);
+			}
+		}
+		this.autotilesList = [];
+
+		// Create autotiles according to the textures
+		for (let i = 0, l = Scene.Map.current!.texturesAutotiles.length; i < l; i++) {
+			const texturesAutotile = Scene.Map.current!.texturesAutotiles[i];
+			if (texturesAutotile) {
+				for (let textureAutotile of texturesAutotile) {
+					if (!this.autotilesList[i]) {
+						this.autotilesList[i] = [];
+					}
+					this.autotilesList[i].push(new Autotiles(textureAutotile));
 				}
-			} else {
-				floor.updateGeometry(geometry, p, width, height, count);
-				count++;
 			}
 		}
 
-		// Draw layers separatly
-		for (i = 0, l = layers.length; i < l; i++) {
+		for (const [positionKey, land] of this.model.lands) {
+			const position = new Position();
+			position.fromKey(positionKey);
+			if (land instanceof MapElement.Floor) {
+				count = this.updateFloorGeometry(position, land, layers, geometry, width, height, count);
+			} else if (land instanceof MapElement.Autotile) {
+				this.updateAutotileGeometry(position, land);
+			}
+		}
+
+		// Floors: Draw layers separatly
+		for (let i = 0, l = layers.length; i < l; i++) {
 			const p = layers[i][0];
 			const floor = layers[i][1];
 			floor.updateGeometry(geometry, p, width, height, count);
 			count++;
 		}
-
 		if (!geometry.isEmpty()) {
 			geometry.updateAttributes();
 			this.floorsMesh.geometry = geometry;
 			Scene.Map.current!.scene.add(this.floorsMesh);
 		} else {
 			Scene.Map.current!.scene.remove(this.floorsMesh);
+		}
+
+		// Autotiles: update all the geometry uvs and put it in the scene
+		for (const list of this.autotilesList) {
+			if (list) {
+				for (const autotiles of list) {
+					if (autotiles.createMesh() && autotiles.mesh) {
+						autotiles.mesh.receiveShadow = true;
+						autotiles.mesh.castShadow = true;
+						autotiles.mesh.customDepthMaterial = autotiles.bundle!.material!.userData.customDepthMaterial;
+						Scene.Map.current!.scene.add(autotiles.mesh);
+					}
+				}
+			}
+		}
+	}
+
+	updateFloorGeometry(
+		position: Position,
+		floor: MapElement.Floor,
+		layers: [Position, MapElement.Floor][],
+		geometry: CustomGeometry,
+		width: number,
+		height: number,
+		count: number
+	) {
+		const layer = position.layer;
+		if (layer > 0) {
+			let i = 0,
+				l = layers.length;
+			for (; i < l; i++) {
+				if (layer <= layers[i][0].layer) {
+					layers.splice(i, 0, [position, floor]);
+					break;
+				}
+			}
+			if (i === l) {
+				layers.push([position, floor]);
+			}
+		} else {
+			floor.updateGeometry(geometry, position, width, height, count);
+			count++;
+		}
+		return count;
+	}
+
+	updateAutotileGeometry(position: Position, autotile: MapElement.Autotile) {
+		let texture = null;
+		const texturesAutotile = Autotiles.getAutotileTexture(autotile.autotileID);
+		let autotiles: Autotiles | null = null;
+		if (texturesAutotile) {
+			const pictureID = Project.current!.specialElements.getAutotileByID(autotile.autotileID).pictureID;
+			for (let j = 0, m = texturesAutotile.length; j < m; j++) {
+				const textureAutotile = texturesAutotile[j];
+				if (textureAutotile.isInTexture(pictureID, autotile.texture)) {
+					texture = textureAutotile;
+					autotiles = this.autotilesList[autotile.autotileID][j];
+					break;
+				}
+			}
+		}
+		if (texture !== null && texture.material !== null) {
+			autotiles!.updateGeometry(position, autotile);
 		}
 	}
 

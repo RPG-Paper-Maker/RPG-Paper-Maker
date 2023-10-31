@@ -76,10 +76,10 @@ class GL {
 		this.SHADER_FACE_FRAGMENT = await IO.openFile('./Scripts/Shaders/face.frag');
 	}
 
-	static getMaterialTextureSize(material: THREE.MeshPhongMaterial): { width: number; height: number } {
+	static getMaterialTextureSize(material: THREE.MeshPhongMaterial | null): { width: number; height: number } {
 		return {
-			width: material.map?.image.width || 0,
-			height: material.map?.image.height || 0,
+			width: material?.map?.image.width || 0,
+			height: material?.map?.image.height || 0,
 		};
 	}
 

@@ -273,7 +273,7 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 		// eslint-disable-next-line
 	}, []);
 
-	return <canvas ref={refCanvas} className='pointer' width={'0'}></canvas>;
+	return <canvas ref={refCanvas} className='pointer' width={'0'} height={'0'}></canvas>;
 }
 
 export default TextureSquareSelector;
