@@ -18,7 +18,7 @@ import { HiChevronDown, HiChevronLeft } from 'react-icons/hi';
 import TextureSquareSelector from '../TextureSquareSelector';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setCurrentSpecialElementID } from '../../store';
-import { Model } from '../../Editor';
+import { Model, Scene } from '../../Editor';
 
 type Props = {
 	kind: PictureKind;
@@ -45,6 +45,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 
 	const handleClick = (id: number) => {
 		dispatch(setCurrentSpecialElementID(id));
+		Scene.Map.currentSelectedSpecialElementID = id;
 	};
 
 	const listElements = list
@@ -80,7 +81,9 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		: [];
 
 	useEffect(() => {
-		dispatch(setCurrentSpecialElementID(list?.at(0)?.id || -1));
+		const id = list?.at(0)?.id || -1;
+		dispatch(setCurrentSpecialElementID(id));
+		Scene.Map.currentSelectedSpecialElementID = id;
 	}, []);
 
 	return <div className='panel-special-elements'>{listElements}</div>;

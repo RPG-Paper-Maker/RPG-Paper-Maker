@@ -105,21 +105,29 @@ class Autotiles {
 	static async loadAutotileTexture(id: number): Promise<TextureBundle[]> {
 		const autotile = Project.current!.specialElements.getAutotileByID(id);
 		const pictureID = autotile.pictureID;
-		let texturesAutotile = Scene.Map.current!.texturesAutotiles[pictureID];
-		if (!texturesAutotile && Scene.Map.canvasRendering && Scene.Map.ctxRendering) {
+		let texturesAutotile = Scene.Map.current ? Scene.Map.current.texturesAutotiles[pictureID] : null;
+		if (!texturesAutotile) {
 			let offset = 0;
 			let result = null;
 			let textureAutotile: TextureBundle | null = null;
 			let texture = new THREE.Texture();
-			texturesAutotile = new Array();
-			Scene.Map.current!.texturesAutotiles[pictureID] = texturesAutotile;
-			Scene.Map.ctxRendering.clearRect(0, 0, Scene.Map.canvasRendering.width, Scene.Map.canvasRendering.height);
-			Scene.Map.canvasRendering.width = 64 * Project.getSquareSize();
-			Scene.Map.canvasRendering.height = Constants.MAX_PICTURE_SIZE;
+			texturesAutotile = [];
+			if (Scene.Map.current) {
+				Scene.Map.current.texturesAutotiles[pictureID] = texturesAutotile;
+			}
+			Scene.Map.ctxRendering!.clearRect(
+				0,
+				0,
+				Scene.Map.canvasRendering!.width,
+				Scene.Map.canvasRendering!.height
+			);
+			Scene.Map.canvasRendering!.width = 64 * Project.getSquareSize();
+			Scene.Map.canvasRendering!.height = Constants.MAX_PICTURE_SIZE;
 			if (autotile) {
 				const picture = Project.current!.pictures.getByID(PictureKind.Autotiles, pictureID);
 				if (picture) {
 					result = await this.loadTextureAutotile(
+						texturesAutotile,
 						textureAutotile,
 						texture,
 						picture,
@@ -138,13 +146,14 @@ class Autotiles {
 				offset = result[2];
 			}
 			if (offset > 0 && textureAutotile) {
-				await this.updateTextureAutotile(textureAutotile, texture, pictureID);
+				await this.updateTextureAutotile(texturesAutotile, textureAutotile, texture);
 			}
 		}
 		return texturesAutotile;
 	}
 
 	static async loadTextureAutotile(
+		texturesAutotile: TextureBundle[],
 		textureAutotile: TextureBundle | null,
 		texture: THREE.Texture,
 		picture: Model.Picture,
@@ -163,7 +172,7 @@ class Autotiles {
 			point = [i % width, Math.floor(i / width)];
 			if (isAnimated) {
 				if (textureAutotile != null) {
-					await this.updateTextureAutotile(textureAutotile, texture, picture.id);
+					await this.updateTextureAutotile(texturesAutotile, textureAutotile, texture);
 					texture = new THREE.Texture();
 					Scene.Map.ctxRendering!.clearRect(
 						0,
@@ -189,7 +198,7 @@ class Autotiles {
 				textureAutotile.setEnd(picture.id, point);
 				textureAutotile.addToList(picture.id, point);
 				if (!isAnimated && offset === this.getMaxAutotilesOffsetTexture()) {
-					await this.updateTextureAutotile(textureAutotile, texture, picture.id);
+					await this.updateTextureAutotile(texturesAutotile, textureAutotile, texture);
 					texture = new THREE.Texture();
 					Scene.Map.ctxRendering!.clearRect(
 						0,
@@ -276,11 +285,15 @@ class Autotiles {
 		}
 	}
 
-	static async updateTextureAutotile(textureAutotile: TextureBundle, texture: THREE.Texture, id: number) {
+	static async updateTextureAutotile(
+		texturesAutotile: TextureBundle[],
+		textureAutotile: TextureBundle,
+		texture: THREE.Texture
+	) {
 		texture.image = await Picture2D.loadImage(Scene.Map.canvasRendering!.toDataURL());
 		texture.needsUpdate = true;
 		textureAutotile.material = Manager.GL.createMaterial({ texture: texture });
-		Scene.Map.current!.texturesAutotiles[id].push(textureAutotile);
+		texturesAutotile.push(textureAutotile);
 	}
 
 	static tileExisting(position: Position, portion: Portion): MapElement.Autotile | undefined {

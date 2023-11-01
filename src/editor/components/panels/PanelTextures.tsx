@@ -28,6 +28,7 @@ function PanelTextures({ visible }: Props) {
 	const refPreviewer = useRef<HTMLDivElement>(null);
 	const [height, setHeight] = useState(0);
 
+	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	useSelector((state: RootState) => state.triggers.splitting);
 
@@ -52,6 +53,9 @@ function PanelTextures({ visible }: Props) {
 	}, []);
 
 	const getMainContent = () => {
+		if (!currentMapID) {
+			return null;
+		}
 		switch (currentMapElementKind) {
 			case ElementMapKind.Autotiles:
 				return <PanelSpecialElementsSelection kind={PictureKind.Autotiles} />;

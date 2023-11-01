@@ -33,9 +33,10 @@ class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
 
 	public static current: Scene.Map | null;
-	public static currentSelectedTexture: Rectangle = new Rectangle(0, 0, 1, 1);
-	public static currentSelectedMapElementKind: ElementMapKind = ElementMapKind.Floors;
-	public static currentSelectedMobileAction: MobileAction = MobileAction.Plus;
+	public static currentSelectedSpecialElementID = -1;
+	public static currentSelectedTexture = new Rectangle(0, 0, 1, 1);
+	public static currentSelectedMapElementKind = ElementMapKind.Floors;
+	public static currentSelectedMobileAction = MobileAction.Plus;
 	public static elapsedTime = 0;
 	public static averageElapsedTime = 0;
 	public static lastUpdateTime = new Date().getTime();

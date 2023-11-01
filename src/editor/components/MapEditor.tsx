@@ -15,6 +15,7 @@ import { Inputs } from '../managers';
 import '../styles/MapEditor.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setUndoRedoIndex, setUndoRedoLength, triggerTreeMap } from '../store';
+import Loader from './Loader';
 
 function MapEditor() {
 	const [isLooping, setIsLooping] = useState(false);
@@ -123,11 +124,14 @@ function MapEditor() {
 	});
 
 	return (
-		<div className='map-editor'>
-			<div ref={refCanvas} id='canvas-map-editor' className='fill-space'></div>
-			<canvas ref={refCanvasHUD} id='canvas-hud' width='640px' height='480px'></canvas>
-			<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px'></canvas>
-		</div>
+		<>
+			<Loader isLoading={!!Scene.Map.current?.loading} />
+			<div className='map-editor'>
+				<div ref={refCanvas} id='canvas-map-editor' className='fill-space'></div>
+				<canvas ref={refCanvasHUD} id='canvas-hud' width='640px' height='480px'></canvas>
+				<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px'></canvas>
+			</div>
+		</>
 	);
 }
 

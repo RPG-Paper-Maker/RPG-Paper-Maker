@@ -68,7 +68,11 @@ class MapPortion {
 			case ElementMapKind.Autotiles:
 				this.updateMapElement(
 					position,
-					MapElement.Autotile.create(1, 159, Scene.Map.currentSelectedTexture),
+					MapElement.Autotile.create(
+						Scene.Map.currentSelectedSpecialElementID,
+						159,
+						Scene.Map.currentSelectedTexture
+					),
 					ElementMapKind.Autotiles,
 					preview
 				);
@@ -449,7 +453,7 @@ class MapPortion {
 	}
 
 	updateMaterials() {
-		const material = Scene.Map.current!.materialTileset;
+		const material = Scene.Map.current?.materialTileset;
 		if (material) {
 			this.floorsMesh.material = material;
 			this.spritesFaceMesh.material = material;

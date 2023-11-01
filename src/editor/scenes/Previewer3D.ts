@@ -19,6 +19,7 @@ import { ElementMapKind } from '../common/Enum';
 import { CustomGeometryFace } from '../core/CustomGeometryFace';
 import { Project } from '../core/Project';
 import { TextureBundle } from '../core/TextureBundle';
+import { Autotiles } from '../mapElements';
 
 class Previewer3D extends Base {
 	public static scenes: Record<string, Previewer3D> = {}; // id canvas => scene
@@ -71,21 +72,26 @@ class Previewer3D extends Base {
 	}
 
 	async loadAutotile(GL: Manager.GL, autotileID: number, texture: Rectangle) {
-		const texturesAutotile = Scene.Map.current!.texturesAutotiles[autotileID];
 		const autotile = Project.current!.specialElements.getAutotileByID(autotileID);
+		if (!autotile) {
+			this.clear();
+			return;
+		}
+		const texturesAutotile = await Autotiles.loadAutotileTexture(autotileID);
 		const pictureID = autotile.pictureID;
 		let includedTexture: TextureBundle | null = null;
-		for (let textureAutotile of texturesAutotile) {
-			if (textureAutotile.isInTexture(pictureID, texture)) {
-				includedTexture = textureAutotile;
-				break;
+		if (texturesAutotile) {
+			for (const textureAutotile of texturesAutotile) {
+				if (textureAutotile.isInTexture(pictureID, texture)) {
+					includedTexture = textureAutotile;
+					break;
+				}
 			}
 		}
 		if (includedTexture !== null) {
 			const autotiles = new MapElement.Autotiles(includedTexture);
-
-			autotiles.updateGeometry(new Position(), MapElement.Autotile.create(autotileID, 2, texture));
-			this.addToScene(GL, autotiles.geometry);
+			autotiles.updateGeometry(new Position(), MapElement.Autotile.create(autotileID, 159, texture));
+			this.addToScene(GL, autotiles.geometry, autotiles.bundle.material);
 		}
 	}
 
@@ -97,16 +103,27 @@ class Previewer3D extends Base {
 		this.addToScene(GL, geometry);
 	}
 
-	addToScene(GL: Manager.GL, geometry: CustomGeometry | CustomGeometryFace) {
-		geometry.updateAttributes();
+	addToScene(
+		GL: Manager.GL,
+		geometry: CustomGeometry | CustomGeometryFace,
+		material: THREE.MeshPhongMaterial | null = this.material
+	) {
+		this.clear();
+		if (!geometry.isEmpty() && material) {
+			geometry.updateAttributes();
+			this.mesh = new THREE.Mesh(geometry, material);
+			this.scene.add(this.mesh);
+			this.mesh.geometry.center();
+			this.updateCamera();
+			this.draw3D(GL);
+		}
+	}
+
+	clear() {
 		if (this.mesh !== null) {
 			this.scene.remove(this.mesh);
+			this.mesh = null;
 		}
-		this.mesh = new THREE.Mesh(geometry, this.material);
-		this.scene.add(this.mesh);
-		this.mesh.geometry.center();
-		this.updateCamera();
-		this.draw3D(GL);
 	}
 
 	updateCamera() {

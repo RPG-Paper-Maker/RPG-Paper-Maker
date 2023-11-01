@@ -23,6 +23,8 @@ type Props = {
 function Previewer3D({ id, onHeightUpdated }: Props) {
 	const refCanvas = useRef<HTMLDivElement>(null);
 
+	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
+	const currentSpecialElementID = useSelector((state: RootState) => state.mapEditor.currentSpecialElementID);
 	const currentTilesetTexture = useSelector((state: RootState) => state.mapEditor.currentTilesetTexture);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	useSelector((state: RootState) => state.triggers.splitting);
@@ -44,13 +46,20 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	const update = () => {
 		const scene = Scene.Previewer3D.scenes[id];
 		if (scene) {
-			switch (currentMapElementKind) {
-				case ElementMapKind.Floors:
-					scene.loadFloor(Manager.GL.extraContext, currentTilesetTexture);
-					break;
-				case ElementMapKind.SpritesFace:
-					scene.loadSprite(Manager.GL.extraContext, currentTilesetTexture, currentMapElementKind);
-					break;
+			if (currentMapID) {
+				switch (currentMapElementKind) {
+					case ElementMapKind.Floors:
+						scene.loadFloor(Manager.GL.extraContext, currentTilesetTexture);
+						break;
+					case ElementMapKind.Autotiles:
+						scene.loadAutotile(Manager.GL.extraContext, currentSpecialElementID, currentTilesetTexture);
+						break;
+					case ElementMapKind.SpritesFace:
+						scene.loadSprite(Manager.GL.extraContext, currentTilesetTexture, currentMapElementKind);
+						break;
+				}
+			} else {
+				scene.clear();
 			}
 		}
 	};
@@ -92,7 +101,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	useEffect(() => {
 		update();
 		// eslint-disable-next-line
-	}, [currentTilesetTexture, currentMapElementKind]);
+	}, [currentTilesetTexture, currentMapElementKind, currentMapID]);
 
 	useEffect(() => {
 		initialize().catch(console.error);
