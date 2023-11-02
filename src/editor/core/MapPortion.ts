@@ -241,7 +241,7 @@ class MapPortion {
 				p.y = this.model.globalPortion.y * Constants.PORTION_SIZE;
 				p.z = this.model.globalPortion.z * Constants.PORTION_SIZE + j;
 				if (p.isInMap(map)) {
-					this.updateMapElement(p, MapElement.Floor.create(rect));
+					this.model.lands.set(p.toKey(), MapElement.Floor.create(rect));
 				}
 			}
 		}

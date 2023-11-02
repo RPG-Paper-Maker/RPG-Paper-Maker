@@ -59,6 +59,9 @@ abstract class Base extends Serializable {
 			case ElementMapKind.Floors:
 				model = new MapElement.Floor();
 				break;
+			case ElementMapKind.Autotiles:
+				model = new MapElement.Autotile();
+				break;
 			case ElementMapKind.SpritesFace:
 				model = new MapElement.Sprite();
 				break;

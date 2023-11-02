@@ -149,7 +149,7 @@ class Map extends Base {
 		this.mapPortion = new MapPortion(globalPortion);
 		await this.mapPortion.model.load();
 		this.mapPortion.updateMaterials();
-		this.mapPortion.updateGeometries();
+		await this.mapPortion.loadTexturesAndUpdateGeometries();
 
 		// Cursor
 		await this.cursor.load();
