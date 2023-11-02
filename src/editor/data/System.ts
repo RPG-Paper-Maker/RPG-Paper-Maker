@@ -22,12 +22,14 @@ class System extends Serializable {
 	public PATH_BR!: string;
 	public PATH_DLCS!: string;
 	public autotilesFrames!: number;
+	public autotilesFrameDuration!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['projectName', 'pn', 'Project without name', BINDING.STRING],
 		['SQUARE_SIZE', 'ss', undefined, BINDING.NUMBER],
 		['PATH_BR', 'pathBR', undefined, BINDING.STRING],
 		['autotilesFrames', 'autotilesFrames', 4, BINDING.NUMBER],
+		['autotilesFrameDuration', 'autotilesFrameDuration', 150, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

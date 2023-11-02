@@ -293,6 +293,11 @@ class Autotiles {
 		texture.image = await Picture2D.loadImage(Scene.Map.canvasRendering!.toDataURL());
 		texture.needsUpdate = true;
 		textureAutotile.material = Manager.GL.createMaterial({ texture: texture });
+		if (Scene.Map.current) {
+			textureAutotile.material.userData.uniforms.offset.value = textureAutotile.isAnimated
+				? Scene.Map.current.autotilesOffset
+				: new THREE.Vector2();
+		}
 		texturesAutotile.push(textureAutotile);
 	}
 

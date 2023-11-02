@@ -28,6 +28,8 @@ import { ElementMapKind, MobileAction, RaycastingLayer } from '../common/Enum';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Constants } from '../common/Constants';
 import { TextureBundle } from '../core/TextureBundle';
+import { Autotiles } from '../mapElements';
+import { Frame } from '../core/Frame';
 
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
@@ -71,6 +73,10 @@ class Map extends Base {
 	public texturesWalls: THREE.MeshPhongMaterial[] = [];
 	public texturesObjects3D: THREE.MeshPhongMaterial[] = [];
 	public texturesMountains: TextureBundle[] = [];
+	public autotilesOffset = new THREE.Vector2();
+	public autotileFrame = new Frame(Project.current!.systems.autotilesFrameDuration, {
+		frames: Project.current!.systems.autotilesFrames,
+	});
 
 	constructor(tag: TreeMapTag) {
 		super(tag);
@@ -640,10 +646,19 @@ class Map extends Base {
 			this.portionsToSave = [];
 		}
 
+		// Update face sprites
 		const vector = new THREE.Vector3();
 		this.camera.getThreeCamera().getWorldDirection(vector);
 		const angle = Math.atan2(vector.x, vector.z) + Math.PI;
 		this.mapPortion.updateFaceSprites(angle);
+
+		// Update autotiles animated
+		if (this.autotileFrame.update()) {
+			this.autotilesOffset.setY(
+				(this.autotileFrame.value * Autotiles.COUNT_LIST * 2 * Project.getSquareSize()) /
+					Constants.MAX_PICTURE_SIZE
+			);
+		}
 
 		Scene.Map.elapsedTime = new Date().getTime() - Scene.Map.lastUpdateTime;
 		Scene.Map.averageElapsedTime = (Scene.Map.averageElapsedTime + Scene.Map.elapsedTime) / 2;
