@@ -29,6 +29,7 @@ class MapPortion extends Serializable {
 			'lands',
 			null,
 			BINDING.MAP_POSITION,
+			null,
 			(json: Record<string, any>) => (json.k === ElementMapKind.Floors ? Floor : Autotile),
 		],
 		['sprites', 'sprites', null, BINDING.MAP_POSITION, Sprite],

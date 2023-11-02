@@ -18,7 +18,7 @@ import { RootState, setUndoRedoIndex, setUndoRedoLength, triggerTreeMap } from '
 import Loader from './Loader';
 
 function MapEditor() {
-	const [isLooping, setIsLooping] = useState(false);
+	const [firstLoading, setFirstLoading] = useState(false);
 
 	const currentMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
 	useSelector((state: RootState) => state.triggers.splitting);
@@ -31,31 +31,29 @@ function MapEditor() {
 
 	const clearMap = () => {
 		if (Scene.Map.current) {
+			Scene.Map.current.needsClose = true;
 			Scene.Map.current.close();
+			Scene.Map.current.draw3D(Manager.GL.mapEditorContext);
 			Scene.Map.current = null;
 		}
 	};
 
 	const initializeMap = async () => {
 		if (currentMapTag && currentMapTag.id > 0) {
+			setFirstLoading(true);
 			Scene.Map.current = new Scene.Map(currentMapTag);
 			await Scene.Map.current.load();
 			const undoRedoIndex = await Manager.UndoRedo.getCurrentCurrentIndex();
 			const undoRedoLength = await Manager.UndoRedo.getStatesLength();
 			dispatch(setUndoRedoIndex(undoRedoIndex));
 			dispatch(setUndoRedoLength(undoRedoLength));
-			if (!isLooping) {
-				loop();
-			}
+			setFirstLoading(false);
 		}
 	};
 
 	const loop = () => {
 		const map = Scene.Map.current;
 		if (map) {
-			if (!isLooping) {
-				setIsLooping(true);
-			}
 			if (map.needsTreeMapUpdate) {
 				dispatch(triggerTreeMap());
 				map.needsTreeMapUpdate = false;
@@ -77,10 +75,8 @@ function MapEditor() {
 			if (!map.loading) {
 				map.draw3D(Manager.GL.mapEditorContext);
 			}
-			requestAnimationFrame(loop);
-		} else {
-			setIsLooping(false);
 		}
+		Scene.Map.animationFrameID = requestAnimationFrame(loop);
 	};
 
 	const resize = () => {
@@ -123,9 +119,14 @@ function MapEditor() {
 		resize();
 	});
 
+	useEffect(() => {
+		loop();
+		return () => cancelAnimationFrame(Scene.Map.animationFrameID);
+	}, []);
+
 	return (
 		<>
-			<Loader isLoading={!!Scene.Map.current?.loading} />
+			<Loader isLoading={firstLoading} />
 			<div className='map-editor'>
 				<div ref={refCanvas} id='canvas-map-editor' className='fill-space'></div>
 				<canvas ref={refCanvasHUD} id='canvas-hud' width='640px' height='480px'></canvas>

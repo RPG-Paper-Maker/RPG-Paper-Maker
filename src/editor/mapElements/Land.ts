@@ -38,8 +38,8 @@ class Land extends Base {
 
 	equals(mapElement: MapElement.Base) {
 		if (mapElement.kind === this.kind) {
-			const floor = mapElement as MapElement.Floor;
-			return floor.texture.equals(this.texture);
+			const land = mapElement as MapElement.Land;
+			return land.texture.equals(this.texture) && land.up === this.up;
 		} else {
 			return false;
 		}

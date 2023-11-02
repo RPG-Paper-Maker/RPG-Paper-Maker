@@ -5,4 +5,4 @@ export type KeyValue = {
 	v?: any;
 };
 
-export type BindingType = [string, string, any, BINDING, any?];
+export type BindingType = [string, string, any, BINDING, any?, any?];

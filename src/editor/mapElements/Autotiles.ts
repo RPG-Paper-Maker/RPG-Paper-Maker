@@ -298,7 +298,7 @@ class Autotiles {
 
 	static tileExisting(position: Position, portion: Portion): MapElement.Autotile | undefined {
 		const newPortion = Scene.Map.current!.getLocalPortion(position);
-		if (portion == newPortion) {
+		if (portion.equals(newPortion)) {
 			const land = Scene.Map.current!.mapPortion.model.lands.get(position.toKey()); // TODO
 			if (land && land instanceof MapElement.Autotile) {
 				return land;
@@ -443,11 +443,10 @@ class Autotiles {
 				const newAutotile = this.tileExisting(newPosition, portion);
 				if (newAutotile) {
 					// Update the current autotile
-					let previewAutotile: MapElement.Autotile | null = null;
 					if (newAutotile.update(newPosition, portion)) {
 						const newPortion = Scene.Map.current!.getLocalPortion(newPosition);
 						// Update view in different portion
-						if (portion !== newPortion) {
+						if (!portion.equals(newPortion)) {
 							// TODO
 							/*
 							mapPortion = RPM::get()->project()->currentMap()

@@ -152,6 +152,7 @@ class MapPortion {
 				}
 			}
 		}
+		Autotiles.updateAround(position, Scene.Map.current!.portionsToUpdate, Scene.Map.current!.portionsToSave);
 	}
 
 	updateAutotile(
@@ -170,6 +171,10 @@ class MapPortion {
 			removingPreview,
 			undoRedo
 		);
+		if (autotile) {
+			autotile.update(position, this.model.globalPortion);
+		}
+		Autotiles.updateAround(position, Scene.Map.current!.portionsToUpdate, Scene.Map.current!.portionsToSave);
 	}
 
 	updateSprite(
@@ -256,14 +261,16 @@ class MapPortion {
 		return true;
 	}
 
-	async loadTexturesAndUpdateGeometries() {
+	async loadTexturesAndUpdateGeometries(updateLoading = true) {
 		for (const [, land] of this.model.lands) {
 			if (land instanceof MapElement.Autotile) {
 				await Autotiles.loadAutotileTexture(land.autotileID);
 			}
 		}
 		this.updateGeometriesWithoutCheck();
-		Scene.Map.current!.loading = false;
+		if (updateLoading) {
+			Scene.Map.current!.loading = false;
+		}
 	}
 
 	updateGeometries() {

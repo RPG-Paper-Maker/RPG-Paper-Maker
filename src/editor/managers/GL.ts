@@ -156,7 +156,7 @@ class GL {
 		return material;
 	}
 
-	initialize(id: string, clearColor: string = '#8cc3ed', colorAlpha: number = 1) {
+	initialize(id: string, clearColor: string = '#211d2b', colorAlpha: number = 1) {
 		const parent = document.getElementById(id);
 		if (parent === null) {
 			throw new Error('No id ' + id + ' found in document for GL renderer.');

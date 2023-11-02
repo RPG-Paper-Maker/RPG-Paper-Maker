@@ -18,13 +18,12 @@ import {
 	AiOutlineFileAdd,
 	AiOutlineFolderOpen,
 	AiOutlineFolder,
-	AiOutlineDatabase,
 	AiOutlinePicture,
 	AiOutlineFontSize,
 } from 'react-icons/ai';
 import { BiSave, BiPyramid, BiCube } from 'react-icons/bi';
 import { LuSaveAll, LuLanguages, LuMountain } from 'react-icons/lu';
-import { BsClipboardData, BsMusicNote, BsPlay } from 'react-icons/bs';
+import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs';
 import { TbNumbers } from 'react-icons/tb';
 import { FaArrowsAlt, FaRegKeyboard, FaPlug } from 'react-icons/fa';
 import { MdOutlineAddchart, MdAutoAwesomeMosaic } from 'react-icons/md';
@@ -91,7 +90,7 @@ function Toolbar() {
 					<MenuItem icon={<BsClipboardData />} onClick={handleFloor} disabled>
 						Data
 					</MenuItem>
-					<MenuItem icon={<AiOutlineDatabase />} onClick={handleFloor} disabled>
+					<MenuItem icon={<BsDatabase />} onClick={handleFloor} disabled>
 						Systems
 					</MenuItem>
 					<MenuItem icon={<TbNumbers />} onClick={handleFloor} disabled>

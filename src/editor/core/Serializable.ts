@@ -42,7 +42,7 @@ abstract class Serializable {
 	}
 
 	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
-		for (const [name, jsonName, defaultValue, type, constructor] of additionnalBinding) {
+		for (const [name, jsonName, defaultValue, type, constructor, additionalFunction] of additionnalBinding) {
 			switch (type) {
 				case BINDING.NUMBER:
 				case BINDING.STRING:
@@ -109,7 +109,7 @@ abstract class Serializable {
 					(this as any)[name] = mapping;
 					for (const objHash of json[jsonName]) {
 						p.read(objHash.k);
-						const cons = constructor instanceof Function ? constructor(objHash.v) : constructor;
+						let cons = additionalFunction ? additionalFunction(objHash.v) : constructor;
 						mapping.set(p.toKey(), cons.fromJSON(objHash.v));
 					}
 					break;

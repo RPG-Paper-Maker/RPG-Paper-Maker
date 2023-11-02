@@ -44,12 +44,14 @@ class Map extends Base {
 	public static canvasRendering: HTMLCanvasElement | null = null;
 	public static ctxHUD: CanvasRenderingContext2D | null = null;
 	public static ctxRendering: CanvasRenderingContext2D | null = null;
+	public static animationFrameID: number;
 
 	public id: number;
 	public tag: TreeMapTag;
 	public needsTreeMapUpdate = false;
 	public needsUpdateIndex: number | null = null;
 	public needsUpdateLength: number | null = null;
+	public needsClose = false;
 	public modelMap: Model.Map = new Model.Map();
 	public grid: Grid = new Grid();
 	public cursor: Cursor;
@@ -95,15 +97,19 @@ class Map extends Base {
 
 	getLocalPortion(position: Position): Portion {
 		return new Portion(
-			position.x / Constants.PORTION_SIZE - this.cursor.position.x / Constants.PORTION_SIZE,
+			Math.floor(position.x / Constants.PORTION_SIZE) -
+				Math.floor(this.cursor.position.x / Constants.PORTION_SIZE),
 			Math.floor(position.y / Constants.PORTION_SIZE) -
 				Math.floor(this.cursor.position.y / Constants.PORTION_SIZE),
-			position.z / Constants.PORTION_SIZE - this.cursor.position.z / Constants.PORTION_SIZE
+			Math.floor(position.z / Constants.PORTION_SIZE) -
+				Math.floor(this.cursor.position.z / Constants.PORTION_SIZE)
 		);
 	}
 
 	async load() {
 		this.loading = true;
+
+		Manager.GL.mapEditorContext.renderer.setClearColor('#8cc3ed');
 
 		// Tileset texture material
 		this.materialTileset = await Manager.GL.loadTexture('./assets/textures/plains-woods.png');
@@ -541,6 +547,7 @@ class Map extends Base {
 				if (Inputs.isPointerPressed) {
 					this.add(this.lastPosition);
 				} else if (Inputs.isMouseRightPressed) {
+					this.lastPosition = null;
 					this.updateRaycasting();
 				}
 			}
@@ -644,6 +651,9 @@ class Map extends Base {
 	}
 
 	draw3D(GL: Manager.GL) {
+		if (this.needsClose) {
+			Manager.GL.mapEditorContext.renderer.setClearColor('#2e324a');
+		}
 		super.draw3D(GL);
 	}
 

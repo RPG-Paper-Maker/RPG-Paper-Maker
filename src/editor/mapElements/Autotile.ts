@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Data } from '../Editor';
+import { Data, MapElement } from '../Editor';
 import { BINDING, ElementMapKind } from '../common/Enum';
 import { BindingType } from '../common/Types';
 import { CustomGeometry } from '../core/CustomGeometry';
@@ -53,6 +53,14 @@ class Autotile extends Land {
 		autotile.tileID = tileID;
 		autotile.texture = texture;
 		return autotile;
+	}
+
+	equals(mapElement: MapElement.Base) {
+		if (!super.equals(mapElement)) {
+			return false;
+		}
+		const autotile = mapElement as MapElement.Autotile;
+		return autotile.autotileID === this.autotileID;
 	}
 
 	update(position: Position, portion: Portion) {

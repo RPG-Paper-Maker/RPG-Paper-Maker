@@ -30,7 +30,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const initialize = async () => {
-		Manager.GL.extraContext.initialize(id, '#211d2b');
+		Manager.GL.extraContext.initialize(id);
 		document.onselectstart = () => {
 			return false;
 		}; // prevent weird drag ghost picture

@@ -9,25 +9,19 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Anchor2D } from './Anchor2D';
-
 class Rectangle {
 	public x: number = 0;
 	public y: number = 0;
 	public width: number = 1;
 	public height: number = 1;
-	public anchor: Anchor2D;
 
 	constructor(x = 0, y = 0, width = 1, height = 1) {
-		this.setCoords(x, y, width, height);
-		const anchorX = Anchor2D.MIDDLE_BOTTOM.x;
-		const anchorY = Anchor2D.MIDDLE_BOTTOM.y;
-		this.anchor = new Anchor2D(anchorX, anchorY);
+		this.set(x, y, width, height);
 	}
 
 	move(x: number, y: number) {
-		this.x = x + this.width * this.anchor.x;
-		this.y = y + this.height * this.anchor.y;
+		this.x = x;
+		this.y = y;
 	}
 
 	resize(width: number, height: number) {
@@ -38,21 +32,6 @@ class Rectangle {
 	set(x: number, y: number, width: number, height: number) {
 		this.move(x, y);
 		this.resize(width, height);
-	}
-
-	setCoords(x: number, y: number, width: number, height: number) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-	}
-
-	setAnchor(x: number, y: number) {
-		this.anchor.set({ x, y });
-	}
-
-	presetAnchor(anchorPreset: { x: number; y: number }) {
-		this.anchor.set(anchorPreset);
 	}
 
 	isInside(x: number, y: number): boolean {
