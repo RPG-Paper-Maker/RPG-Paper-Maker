@@ -10,7 +10,7 @@
 */
 
 import { MapElement, Scene } from '../Editor';
-import { ElementMapKind, Paths, Utils } from '../common';
+import { ELEMENT_MAP_KIND, Paths, Utils } from '../common';
 import { LocalFile, Position, Project, UndoRedoState } from '../core';
 
 class UndoRedo {
@@ -65,7 +65,7 @@ class UndoRedo {
 		return states;
 	}
 
-	private static apply(position: Position, element: MapElement.Base | null, kind: ElementMapKind) {
+	private static apply(position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND) {
 		if (Scene.Map.current) {
 			Scene.Map.current.mapPortion.removeLastPreview();
 			Scene.Map.current.mapPortion.updateMapElement(position, element, kind, false, false, true);

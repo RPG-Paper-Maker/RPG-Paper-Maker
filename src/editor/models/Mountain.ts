@@ -10,13 +10,13 @@
 */
 
 import { SpecialElement } from './SpecialElement';
-import { BINDING, BindingType, MountainCollisionKind } from '../common';
+import { BINDING, BindingType, MOUNTAIN_COLLISION_KIND } from '../common';
 
 class Mountain extends SpecialElement {
-	public collisionKind!: MountainCollisionKind;
+	public collisionKind!: MOUNTAIN_COLLISION_KIND;
 
 	public static readonly bindings: BindingType[] = [
-		['collisionKind', 'mck', MountainCollisionKind.Default, BINDING.NUMBER],
+		['collisionKind', 'mck', MOUNTAIN_COLLISION_KIND.DEFAULT, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

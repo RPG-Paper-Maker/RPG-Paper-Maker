@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { Manager, MapElement } from '../Editor';
 import { Base } from '.';
 import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle, TextureBundle } from '../core';
-import { ElementMapKind } from '../common';
+import { ELEMENT_MAP_KIND } from '../common';
 
 class Previewer3D extends Base {
 	public static scenes: Record<string, Previewer3D> = {}; // id canvas => scene
@@ -89,7 +89,7 @@ class Previewer3D extends Base {
 		}
 	}
 
-	loadSprite(GL: Manager.GL, texture: Rectangle, kind: ElementMapKind) {
+	loadSprite(GL: Manager.GL, texture: Rectangle, kind: ELEMENT_MAP_KIND) {
 		const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
 		const sprite = MapElement.Sprite.create(kind, texture);
 		const geometry = new CustomGeometryFace();

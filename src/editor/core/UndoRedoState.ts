@@ -12,7 +12,7 @@
 import { MapElement } from '../Editor';
 import { Serializable } from './Serializable';
 import { Position } from '.';
-import { ElementMapKind } from '../common';
+import { ELEMENT_MAP_KIND } from '../common';
 
 class UndoRedoState extends Serializable {
 	public static readonly JSON_POSITION = 'p';
@@ -23,16 +23,16 @@ class UndoRedoState extends Serializable {
 
 	public position!: Position;
 	public elementBefore!: MapElement.Base | null;
-	public kindBefore!: ElementMapKind;
+	public kindBefore!: ELEMENT_MAP_KIND;
 	public elementAfter!: MapElement.Base | null;
-	public kindAfter!: ElementMapKind;
+	public kindAfter!: ELEMENT_MAP_KIND;
 
 	static create(
 		position: Position,
 		elementBefore: MapElement.Base | null,
-		kindBefore: ElementMapKind,
+		kindBefore: ELEMENT_MAP_KIND,
 		elementAfter: MapElement.Base | null,
-		kindAfter: ElementMapKind
+		kindAfter: ELEMENT_MAP_KIND
 	) {
 		const state = new UndoRedoState();
 		state.position = position;

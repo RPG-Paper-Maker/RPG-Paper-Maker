@@ -11,13 +11,13 @@
 
 import { MapElement } from '../Editor';
 import { Land } from './Land';
-import { ElementMapKind } from '../common';
+import { ELEMENT_MAP_KIND } from '../common';
 import { CustomGeometry, Position, Project, Rectangle } from '../core';
 
 class Floor extends Land {
 	constructor() {
 		super();
-		this.kind = ElementMapKind.Floors;
+		this.kind = ELEMENT_MAP_KIND.FLOOR;
 	}
 
 	static fromJSON(json: Record<string, any>): Floor {

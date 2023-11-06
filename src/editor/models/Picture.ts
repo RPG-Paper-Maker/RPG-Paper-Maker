@@ -10,11 +10,11 @@
 */
 
 import { Base } from './Base';
-import { BINDING, BindingType, Paths, PictureKind } from '../common';
+import { BINDING, BindingType, Paths, PICTURE_KIND } from '../common';
 import { CollisionSquare, Picture2D, Project } from '../core';
 
 class Picture extends Base {
-	public kind!: PictureKind;
+	public kind!: PICTURE_KIND;
 	public isBR!: boolean;
 	public dlc!: string;
 	public jsonCollisions!: Record<string, any>[];
@@ -28,7 +28,7 @@ class Picture extends Base {
 	public borderLeft!: number;
 	public borderRight!: number;
 
-	constructor(kind: PictureKind) {
+	constructor(kind: PICTURE_KIND) {
 		super();
 		this.kind = kind;
 	}
@@ -46,45 +46,7 @@ class Picture extends Base {
 		return [...Picture.bindings, ...additionnalBinding];
 	}
 
-	static pictureKindToString(kind: PictureKind): string {
-		switch (kind) {
-			case PictureKind.Bars:
-				return 'bar';
-			case PictureKind.Icons:
-				return 'icon';
-			case PictureKind.Autotiles:
-				return 'autotile';
-			case PictureKind.Characters:
-				return 'character';
-			case PictureKind.Mountains:
-				return 'mountain';
-			case PictureKind.Tilesets:
-				return 'tileset';
-			case PictureKind.Walls:
-				return 'wall';
-			case PictureKind.Battlers:
-				return 'battler';
-			case PictureKind.Facesets:
-				return 'faceset';
-			case PictureKind.WindowSkins:
-				return 'window skin';
-			case PictureKind.TitleScreen:
-				return 'title screen';
-			case PictureKind.Objects3D:
-				return 'object 3D';
-			case PictureKind.Pictures:
-				return 'picture';
-			case PictureKind.Animations:
-				return 'animation';
-			case PictureKind.Skyboxes:
-				return 'skybox';
-			case PictureKind.Particles:
-				return 'particles';
-		}
-		return '';
-	}
-
-	static getFolder(kind: PictureKind, isBR: boolean, dlc: string): string {
+	static getFolder(kind: PICTURE_KIND, isBR: boolean, dlc: string): string {
 		return (
 			(isBR
 				? Project.current!.systems.PATH_BR
@@ -94,41 +56,41 @@ class Picture extends Base {
 		);
 	}
 
-	static getLocalFolder(kind: PictureKind): string {
+	static getLocalFolder(kind: PICTURE_KIND): string {
 		switch (kind) {
-			case PictureKind.Bars:
+			case PICTURE_KIND.BARS:
 				return Paths.BARS;
-			case PictureKind.Icons:
+			case PICTURE_KIND.ICONS:
 				return Paths.ICONS;
-			case PictureKind.Autotiles:
+			case PICTURE_KIND.AUTOTILES:
 				return Paths.AUTOTILES;
-			case PictureKind.Characters:
+			case PICTURE_KIND.CHARACTERS:
 				return Paths.CHARACTERS;
-			case PictureKind.Mountains:
+			case PICTURE_KIND.MOUNTAINS:
 				return Paths.MOUNTAINS;
-			case PictureKind.Tilesets:
+			case PICTURE_KIND.TILESETS:
 				return Paths.TILESETS;
-			case PictureKind.Walls:
+			case PICTURE_KIND.WALLS:
 				return Paths.WALLS;
-			case PictureKind.Battlers:
+			case PICTURE_KIND.BATTLERS:
 				return Paths.BATTLERS;
-			case PictureKind.Facesets:
+			case PICTURE_KIND.FACESETS:
 				return Paths.FACESETS;
-			case PictureKind.WindowSkins:
+			case PICTURE_KIND.WINDOW_SKINS:
 				return Paths.WINDOW_SKINS;
-			case PictureKind.TitleScreen:
+			case PICTURE_KIND.TITLE_SCREENS:
 				return Paths.TITLE_SCREEN;
-			case PictureKind.Objects3D:
+			case PICTURE_KIND.OBJECTS_3D:
 				return Paths.OBJECTS_3D;
-			case PictureKind.Pictures:
+			case PICTURE_KIND.PICTURES:
 				return Paths.HUD_PICTURES;
-			case PictureKind.Animations:
+			case PICTURE_KIND.ANIMATIONS:
 				return Paths.ANIMATIONS;
-			case PictureKind.Skyboxes:
+			case PICTURE_KIND.SKYBOXES:
 				return Paths.SKYBOXES;
-			case PictureKind.Particles:
+			case PICTURE_KIND.PARTICLES:
 				return Paths.PARTICLES;
-			case PictureKind.GameOver:
+			case PICTURE_KIND.GAME_OVERS:
 				return Paths.GAME_OVER;
 		}
 		return '';

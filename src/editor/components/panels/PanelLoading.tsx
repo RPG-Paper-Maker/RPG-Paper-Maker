@@ -14,7 +14,7 @@ import { Manager } from '../../Editor';
 import Loader from '../Loader';
 import { setProjects } from '../../store';
 import { useDispatch } from 'react-redux';
-import { Constants, LocalForage, Utils } from '../../common';
+import { Constants, LOCAL_FORAGE, Utils } from '../../common';
 import { LocalFile } from '../../core';
 
 type Props = {
@@ -43,7 +43,7 @@ function PanelLoading({ setLoaded }: Props) {
 	};
 
 	const loadProjects = async () => {
-		const projects = (await LocalFile.getFolders(LocalForage.Projects)).map((name) => {
+		const projects = (await LocalFile.getFolders(LOCAL_FORAGE.PROJECTS)).map((name) => {
 			return {
 				name,
 				location: '',

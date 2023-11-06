@@ -12,7 +12,7 @@
 import { MapElement } from '../Editor';
 import { CustomGeometry, Portion, Position, Project, Rectangle, TextureBundle } from '../core';
 import { Land } from './Land';
-import { BINDING, BindingType, ElementMapKind } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND } from '../common';
 
 class Autotile extends Land {
 	public autotileID!: number;
@@ -25,7 +25,7 @@ class Autotile extends Land {
 
 	constructor() {
 		super();
-		this.kind = ElementMapKind.Autotiles;
+		this.kind = ELEMENT_MAP_KIND.AUTOTILE;
 	}
 
 	static getBindings(additionnalBinding: BindingType[]) {

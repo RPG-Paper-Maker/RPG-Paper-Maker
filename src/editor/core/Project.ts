@@ -10,7 +10,7 @@
 */
 
 import { Data } from '../Editor';
-import { LocalForage, Paths } from '../common';
+import { LOCAL_FORAGE, Paths } from '../common';
 
 class Project {
 	public static current: Project | null = null;
@@ -30,7 +30,7 @@ class Project {
 	}
 
 	getPath(): string {
-		return Paths.join(LocalForage.Projects, this.systems.projectName); // Different web and desktop
+		return Paths.join(LOCAL_FORAGE.PROJECTS, this.systems.projectName); // Different web and desktop
 	}
 
 	getPathMaps(): string {

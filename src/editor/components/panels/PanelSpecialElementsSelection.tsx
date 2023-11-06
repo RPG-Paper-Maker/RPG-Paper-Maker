@@ -16,23 +16,23 @@ import TextureSquareSelector from '../TextureSquareSelector';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setCurrentSpecialElementID } from '../../store';
 import { Model, Scene } from '../../Editor';
-import { PictureKind, Utils } from '../../common';
+import { PICTURE_KIND, Utils } from '../../common';
 import { Project } from '../../core';
 
 type Props = {
-	kind: PictureKind;
+	kind: PICTURE_KIND;
 };
 
 function PanelSpecialElementsSelection({ kind }: Props) {
 	const dispatch = useDispatch();
 	const list =
-		kind === PictureKind.Autotiles
+		kind === PICTURE_KIND.AUTOTILES
 			? Project.current!.specialElements.autotiles
 			: Project.current!.specialElements.walls;
 
 	const currentSpecialElementID = useSelector((state: RootState) => state.mapEditor.currentSpecialElementID);
 
-	const canExpand = kind === PictureKind.Autotiles;
+	const canExpand = kind === PICTURE_KIND.AUTOTILES;
 
 	const getChevron = (selected: boolean) => {
 		if (canExpand) {

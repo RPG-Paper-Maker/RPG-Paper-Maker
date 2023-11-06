@@ -10,7 +10,7 @@
 */
 
 import { Model } from '../Editor';
-import { Paths, PictureKind } from '../common';
+import { Paths, PICTURE_KIND } from '../common';
 import { Project, Serializable } from '../core';
 
 class Pictures extends Serializable {
@@ -21,7 +21,7 @@ class Pictures extends Serializable {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_PICTURES);
 	}
 
-	getByID(kind: PictureKind, id: number): Model.Picture {
+	getByID(kind: PICTURE_KIND, id: number): Model.Picture {
 		return this.list[kind][this.listIndexes[kind][id]];
 	}
 

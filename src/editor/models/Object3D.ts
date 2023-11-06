@@ -10,13 +10,13 @@
 */
 
 import { SpecialElement } from './SpecialElement';
-import { BINDING, BindingType, ObjectCollisionKind, ShapeKind } from '../common';
+import { BINDING, BindingType, OBJECT_COLLISION_KIND, SHAPE_KIND } from '../common';
 
 class Object3D extends SpecialElement {
-	public shapeKind!: ShapeKind;
+	public shapeKind!: SHAPE_KIND;
 	public objID!: number;
 	public mtlID!: number;
-	public collisionKind!: ObjectCollisionKind;
+	public collisionKind!: OBJECT_COLLISION_KIND;
 	public collisionCustomID!: number;
 	public scale!: number;
 	public widthSquare!: number;
@@ -29,10 +29,10 @@ class Object3D extends SpecialElement {
 	public isTopLeft!: boolean;
 
 	public static readonly bindings: BindingType[] = [
-		['shapeKind', 'sk', ShapeKind.Box, BINDING.NUMBER],
+		['shapeKind', 'sk', SHAPE_KIND.BOX, BINDING.NUMBER],
 		['objID', 'oid', -1, BINDING.NUMBER],
 		['mtlID', 'mid', -1, BINDING.NUMBER],
-		['collisionKind', 'ck', ObjectCollisionKind.None, BINDING.NUMBER],
+		['collisionKind', 'ck', OBJECT_COLLISION_KIND.NONE, BINDING.NUMBER],
 		['collisionsCustomID', 'ccid', -1, BINDING.NUMBER],
 		['scale', 's', 1, BINDING.NUMBER],
 		['widthSquare', 'ws', 1, BINDING.NUMBER],

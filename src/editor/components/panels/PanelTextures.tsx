@@ -15,7 +15,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import TextureSquareSelector from '../TextureSquareSelector';
 import PanelSpecialElementsSelection from './PanelSpecialElementsSelection';
-import { ElementMapKind, PictureKind, Utils } from '../../common';
+import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
 
 type Props = {
 	visible: boolean;
@@ -56,10 +56,10 @@ function PanelTextures({ visible }: Props) {
 			return null;
 		}
 		switch (currentMapElementKind) {
-			case ElementMapKind.Autotiles:
-				return <PanelSpecialElementsSelection kind={PictureKind.Autotiles} />;
-			case ElementMapKind.SpritesWall:
-				return <PanelSpecialElementsSelection kind={PictureKind.Walls} />;
+			case ELEMENT_MAP_KIND.AUTOTILE:
+				return <PanelSpecialElementsSelection kind={PICTURE_KIND.AUTOTILES} />;
+			case ELEMENT_MAP_KIND.SPRITE_WALL:
+				return <PanelSpecialElementsSelection kind={PICTURE_KIND.WALLS} />;
 			default:
 				return <TextureSquareSelector texture='./assets/textures/plains-woods.png' />;
 		}

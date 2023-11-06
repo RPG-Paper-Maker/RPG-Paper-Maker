@@ -10,7 +10,7 @@
 */
 
 import { Scene } from '../Editor';
-import { BINDING, BindingType, ElementMapKind, Paths } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, Paths } from '../common';
 import { Serializable } from '../core/Serializable';
 import { Portion, Project } from '../core';
 import { Autotile, Floor, Sprite } from '../mapElements';
@@ -27,7 +27,7 @@ class MapPortion extends Serializable {
 			null,
 			BINDING.MAP_POSITION,
 			null,
-			(json: Record<string, any>) => (json.k === ElementMapKind.Floors ? Floor : Autotile),
+			(json: Record<string, any>) => (json.k === ELEMENT_MAP_KIND.FLOOR ? Floor : Autotile),
 		],
 		['sprites', 'sprites', null, BINDING.MAP_POSITION, Sprite],
 	];

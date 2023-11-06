@@ -27,15 +27,15 @@ import {
 	TextureBundle,
 	UndoRedoState,
 } from '../core';
-import { Constants, ElementMapKind, MobileAction, Paths, RaycastingLayer } from '../common';
+import { Constants, ELEMENT_MAP_KIND, MOBILE_ACTION, RAYCASTING_LAYER, Paths } from '../common';
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
 
 	public static current: Scene.Map | null;
 	public static currentSelectedSpecialElementID = -1;
 	public static currentSelectedTexture = new Rectangle(0, 0, 1, 1);
-	public static currentSelectedMapElementKind = ElementMapKind.Floors;
-	public static currentSelectedMobileAction = MobileAction.Plus;
+	public static currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
+	public static currentSelectedMobileAction = MOBILE_ACTION.PLUS;
 	public static elapsedTime = 0;
 	public static averageElapsedTime = 0;
 	public static lastUpdateTime = new Date().getTime();
@@ -84,13 +84,13 @@ class Map extends Base {
 
 	static isAdding(): boolean {
 		return Constants.isMobile
-			? Scene.Map.currentSelectedMobileAction === MobileAction.Plus && Inputs.isPointerPressed
+			? Scene.Map.currentSelectedMobileAction === MOBILE_ACTION.PLUS && Inputs.isPointerPressed
 			: Inputs.isPointerPressed;
 	}
 
 	static isRemoving(): boolean {
 		return Constants.isMobile
-			? Scene.Map.currentSelectedMobileAction === MobileAction.Minus && Inputs.isPointerPressed
+			? Scene.Map.currentSelectedMobileAction === MOBILE_ACTION.MINUS && Inputs.isPointerPressed
 			: Inputs.isMouseRightPressed;
 	}
 
@@ -138,7 +138,7 @@ class Map extends Base {
 		this.meshPlane.visible = false;
 		this.meshPlane.position.set(Math.floor(length / 2), 0, Math.floor(width / 2));
 		this.meshPlane.rotation.set(Math.PI / -2, 0, 0);
-		this.meshPlane.layers.enable(RaycastingLayer.Plane);
+		this.meshPlane.layers.enable(RAYCASTING_LAYER.PLANE);
 		this.scene.add(this.meshPlane);
 
 		// Load portions
@@ -253,11 +253,11 @@ class Map extends Base {
 			pointer.y = -(Inputs.getPositionY() / Manager.GL.mapEditorContext.canvasHeight) * 2 + 1;
 		}
 		Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
-		let layer = RaycastingLayer.Plane;
+		let layer = RAYCASTING_LAYER.PLANE;
 		if (Inputs.isMouseRightPressed) {
 			switch (Scene.Map.currentSelectedMapElementKind) {
-				case ElementMapKind.SpritesFace:
-					layer = RaycastingLayer.Sprites;
+				case ELEMENT_MAP_KIND.SPRITE_FACE:
+					layer = RAYCASTING_LAYER.SPRITES;
 					break;
 			}
 		}
@@ -564,7 +564,7 @@ class Map extends Base {
 				this.cursor.onKeyDownImmediate();
 				this.isMobileMovingCursor = true;
 			} else {
-				if (Scene.Map.currentSelectedMobileAction !== MobileAction.Move) {
+				if (Scene.Map.currentSelectedMobileAction !== MOBILE_ACTION.MOVE) {
 					this.updateRaycasting();
 					this.onMouseDown(x, y);
 				}
@@ -594,7 +594,7 @@ class Map extends Base {
 					this.zoomOut(zoomFactor / 10);
 				}
 			} else {
-				if (Scene.Map.currentSelectedMobileAction !== MobileAction.Move) {
+				if (Scene.Map.currentSelectedMobileAction !== MOBILE_ACTION.MOVE) {
 					this.updateRaycasting();
 				} else {
 					this.camera.onMouseWheelUpdate();

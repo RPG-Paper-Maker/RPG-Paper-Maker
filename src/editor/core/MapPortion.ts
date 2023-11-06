@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { CustomGeometry, CustomGeometryFace, Portion, Position, Project, Rectangle, UndoRedoState } from '.';
-import { Constants, ElementMapKind, RaycastingLayer } from '../common';
+import { Constants, ELEMENT_MAP_KIND, RAYCASTING_LAYER } from '../common';
 
 class MapPortion {
 	public model: Model.MapPortion;
@@ -20,7 +20,7 @@ class MapPortion {
 	public spritesFaceMesh: THREE.Mesh;
 	public spritesFixMesh: THREE.Mesh;
 	public autotilesList: MapElement.Autotiles[][];
-	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ElementMapKind][] = [];
+	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND][] = [];
 
 	constructor(globalPortion: Portion) {
 		this.model = new Model.MapPortion(globalPortion);
@@ -49,15 +49,15 @@ class MapPortion {
 	add(position: Position, preview: boolean = false) {
 		this.removeLastPreview();
 		switch (Scene.Map.currentSelectedMapElementKind) {
-			case ElementMapKind.Floors:
+			case ELEMENT_MAP_KIND.FLOOR:
 				this.updateMapElement(
 					position,
 					MapElement.Floor.create(Scene.Map.currentSelectedTexture),
-					ElementMapKind.Floors,
+					ELEMENT_MAP_KIND.FLOOR,
 					preview
 				);
 				break;
-			case ElementMapKind.Autotiles:
+			case ELEMENT_MAP_KIND.AUTOTILE:
 				this.updateMapElement(
 					position,
 					MapElement.Autotile.create(
@@ -65,11 +65,11 @@ class MapPortion {
 						159,
 						Scene.Map.currentSelectedTexture
 					),
-					ElementMapKind.Autotiles,
+					ELEMENT_MAP_KIND.AUTOTILE,
 					preview
 				);
 				break;
-			case ElementMapKind.SpritesFace:
+			case ELEMENT_MAP_KIND.SPRITE_FACE:
 				this.updateMapElement(
 					position,
 					MapElement.Sprite.create(Scene.Map.currentSelectedMapElementKind, Scene.Map.currentSelectedTexture),
@@ -88,7 +88,7 @@ class MapPortion {
 	updateMapElement(
 		position: Position,
 		element: MapElement.Base | null,
-		kind: ElementMapKind = ElementMapKind.None,
+		kind: ELEMENT_MAP_KIND = ELEMENT_MAP_KIND.NONE,
 		preview = false,
 		removingPreview = false,
 		undoRedo = false
@@ -97,13 +97,13 @@ class MapPortion {
 			kind = element.kind;
 		}
 		switch (kind) {
-			case ElementMapKind.Floors:
+			case ELEMENT_MAP_KIND.FLOOR:
 				this.updateFloor(position, element as MapElement.Floor, preview, removingPreview, undoRedo);
 				break;
-			case ElementMapKind.Autotiles:
+			case ELEMENT_MAP_KIND.AUTOTILE:
 				this.updateAutotile(position, element as MapElement.Autotile, preview, removingPreview, undoRedo);
 				break;
-			case ElementMapKind.SpritesFace:
+			case ELEMENT_MAP_KIND.SPRITE_FACE:
 				this.updateSprite(position, element as MapElement.Sprite, kind, preview, removingPreview, undoRedo);
 				break;
 			default:
@@ -122,7 +122,7 @@ class MapPortion {
 			this.setMapElement(
 				position,
 				null,
-				ElementMapKind.Floors,
+				ELEMENT_MAP_KIND.FLOOR,
 				this.model.lands,
 				preview,
 				removingPreview,
@@ -135,7 +135,7 @@ class MapPortion {
 					this.setMapElement(
 						newPosition,
 						MapElement.Floor.create(new Rectangle(floor.texture.x + i, floor.texture.y + j, 1, 1)),
-						ElementMapKind.Floors,
+						ELEMENT_MAP_KIND.FLOOR,
 						this.model.lands,
 						preview,
 						removingPreview,
@@ -161,7 +161,7 @@ class MapPortion {
 		this.setMapElement(
 			position,
 			autotile,
-			ElementMapKind.Autotiles,
+			ELEMENT_MAP_KIND.AUTOTILE,
 			this.model.lands,
 			preview,
 			removingPreview,
@@ -180,7 +180,7 @@ class MapPortion {
 	updateSprite(
 		position: Position,
 		sprite: MapElement.Sprite | null,
-		kind: ElementMapKind,
+		kind: ELEMENT_MAP_KIND,
 		preview: boolean,
 		removingPreview: boolean,
 		undoRedo: boolean
@@ -191,7 +191,7 @@ class MapPortion {
 	setMapElement(
 		position: Position,
 		element: MapElement.Base | null,
-		kind: ElementMapKind,
+		kind: ELEMENT_MAP_KIND,
 		elements: Map<string, MapElement.Base>,
 		preview: boolean,
 		removingPreview: boolean,
@@ -414,7 +414,7 @@ class MapPortion {
 			const position = new Position();
 			position.fromKey(positionKey);
 			const localPosition = position.toVector3();
-			if (sprite.kind === ElementMapKind.SpritesFace) {
+			if (sprite.kind === ELEMENT_MAP_KIND.SPRITE_FACE) {
 				faceCount = sprite.updateGeometry(
 					faceGeometry,
 					width,
@@ -443,7 +443,7 @@ class MapPortion {
 		if (!fixGeometry.isEmpty()) {
 			fixGeometry.updateAttributes();
 			this.spritesFixMesh.geometry = fixGeometry;
-			this.spritesFixMesh.layers.enable(RaycastingLayer.Sprites);
+			this.spritesFixMesh.layers.enable(RAYCASTING_LAYER.SPRITES);
 			Scene.Map.current!.scene.add(this.spritesFixMesh);
 		} else {
 			Scene.Map.current!.scene.remove(this.spritesFixMesh);
@@ -452,7 +452,7 @@ class MapPortion {
 		if (!faceGeometry.isEmpty()) {
 			faceGeometry.updateAttributes();
 			this.spritesFaceMesh.geometry = faceGeometry;
-			this.spritesFaceMesh.layers.enable(RaycastingLayer.Sprites);
+			this.spritesFaceMesh.layers.enable(RAYCASTING_LAYER.SPRITES);
 			Scene.Map.current!.scene.add(this.spritesFaceMesh);
 		} else {
 			Scene.Map.current!.scene.remove(this.spritesFaceMesh);

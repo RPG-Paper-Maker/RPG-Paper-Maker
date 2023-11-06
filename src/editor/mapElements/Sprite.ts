@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { MapElement } from '../Editor';
 import { Base } from './Base';
 import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle } from '../core';
-import { BINDING, BindingType, ElementMapKind } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND } from '../common';
 
 class Sprite extends Base {
 	public static readonly MODEL = [
@@ -39,7 +39,7 @@ class Sprite extends Base {
 		return sprite;
 	}
 
-	static create(kind: ElementMapKind, texture: Rectangle): Sprite {
+	static create(kind: ELEMENT_MAP_KIND, texture: Rectangle): Sprite {
 		const sprite = new Sprite();
 		sprite.kind = kind;
 		sprite.texture = texture;
@@ -108,7 +108,7 @@ class Sprite extends Base {
 		const angleY = position.angleY;
 		const angleX = position.angleX;
 		const angleZ = position.angleZ;
-		if (this.kind !== ElementMapKind.SpritesFace) {
+		if (this.kind !== ELEMENT_MAP_KIND.SPRITE_FACE) {
 			if (angleY !== 0.0) {
 				Base.rotateQuad(vecA, vecB, vecC, vecD, center, angleY, Base.Y_AXIS);
 			}
@@ -171,7 +171,7 @@ class Sprite extends Base {
 		}
 
 		// Double sprite
-		if (this.kind === ElementMapKind.SpritesDouble || this.kind === ElementMapKind.SpritesQuadra) {
+		if (this.kind === ELEMENT_MAP_KIND.SPRITE_DOUBLE || this.kind === ELEMENT_MAP_KIND.SPRITE_QUADRA) {
 			const vecDoubleA = vecA.clone();
 			const vecDoubleB = vecB.clone();
 			const vecDoubleC = vecC.clone();
@@ -191,7 +191,7 @@ class Sprite extends Base {
 			);
 
 			// Quadra sprite
-			if (this.kind === ElementMapKind.SpritesQuadra) {
+			if (this.kind === ELEMENT_MAP_KIND.SPRITE_QUADRA) {
 				const vecQuadra1A = vecA.clone();
 				const vecQuadra1B = vecB.clone();
 				const vecQuadra1C = vecC.clone();

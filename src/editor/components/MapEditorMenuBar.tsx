@@ -33,7 +33,7 @@ import { VscPaintcan } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setCurrentMapElementKind } from '../store';
 import { Scene } from '../Editor';
-import { Constants, ElementMapKind, MobileAction } from '../common';
+import { Constants, ELEMENT_MAP_KIND, MOBILE_ACTION } from '../common';
 import { Project } from '../core';
 
 function MapEditorMenuBar() {
@@ -60,8 +60,8 @@ function MapEditorMenuBar() {
 	};
 
 	const handleFloors = async () => {
-		dispatch(setCurrentMapElementKind(ElementMapKind.Floors));
-		Scene.Map.currentSelectedMapElementKind = ElementMapKind.Floors;
+		dispatch(setCurrentMapElementKind(ELEMENT_MAP_KIND.FLOOR));
+		Scene.Map.currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
 		Project.current!.settings.mapEditorMenuIndex = 0;
 		Project.current!.settings.mapEditorLandsMenuIndex = 0;
 		await Project.current!.settings.save();
@@ -69,8 +69,8 @@ function MapEditorMenuBar() {
 	};
 
 	const handleAutotiles = async () => {
-		dispatch(setCurrentMapElementKind(ElementMapKind.Autotiles));
-		Scene.Map.currentSelectedMapElementKind = ElementMapKind.Autotiles;
+		dispatch(setCurrentMapElementKind(ELEMENT_MAP_KIND.AUTOTILE));
+		Scene.Map.currentSelectedMapElementKind = ELEMENT_MAP_KIND.AUTOTILE;
 		Project.current!.settings.mapEditorMenuIndex = 0;
 		Project.current!.settings.mapEditorLandsMenuIndex = 1;
 		await Project.current!.settings.save();
@@ -78,22 +78,22 @@ function MapEditorMenuBar() {
 	};
 
 	const handleFaceSprites = async () => {
-		dispatch(setCurrentMapElementKind(ElementMapKind.SpritesFace));
-		Scene.Map.currentSelectedMapElementKind = ElementMapKind.SpritesFace;
+		dispatch(setCurrentMapElementKind(ELEMENT_MAP_KIND.SPRITE_FACE));
+		Scene.Map.currentSelectedMapElementKind = ELEMENT_MAP_KIND.SPRITE_FACE;
 		Project.current!.settings.mapEditorMenuIndex = 1;
 		await Project.current!.settings.save();
 	};
 
 	const handleMobilePlus = () => {
-		Scene.Map.currentSelectedMobileAction = MobileAction.Plus;
+		Scene.Map.currentSelectedMobileAction = MOBILE_ACTION.PLUS;
 	};
 
 	const handleMobileMinus = () => {
-		Scene.Map.currentSelectedMobileAction = MobileAction.Minus;
+		Scene.Map.currentSelectedMobileAction = MOBILE_ACTION.MINUS;
 	};
 
 	const handleMobileMove = () => {
-		Scene.Map.currentSelectedMobileAction = MobileAction.Move;
+		Scene.Map.currentSelectedMobileAction = MOBILE_ACTION.MOVE;
 	};
 
 	// When first opening the project with all data loaded

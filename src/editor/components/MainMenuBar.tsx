@@ -51,7 +51,7 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 import { LuFolders, LuSaveAll } from 'react-icons/lu';
 import Loader from './Loader';
 import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
-import { Key, LocalForage, Paths, SpecialKey } from '../common';
+import { KEY, SPECIAL_KEY, LOCAL_FORAGE, Paths } from '../common';
 import { LocalFile, Project } from '../core';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
@@ -61,7 +61,7 @@ type MenuItemType = {
 	icon?: JSX.Element;
 	disabled?: boolean;
 	onClick?: () => Promise<void>;
-	shortcut?: (SpecialKey | Key)[];
+	shortcut?: (SPECIAL_KEY | KEY)[];
 	children?: MenuItemType[];
 };
 
@@ -153,7 +153,7 @@ function MainMenuBar() {
 		if (projectNames.indexOf(projectName) === -1) {
 			importFileInputRef.current.value = '';
 			dispatch(setLoading(true));
-			await LocalFile.loadZip(file, LocalForage.Projects);
+			await LocalFile.loadZip(file, LOCAL_FORAGE.PROJECTS);
 			dispatch(addProject({ name: projectName, location: '' }));
 			await handleOpenProject(projectName);
 		} else {
@@ -170,8 +170,8 @@ function MainMenuBar() {
 		const file = Array.from(importFileInputRef.current.files || [])[0];
 		importFileInputRef.current.value = '';
 		const projectName = file.name.substring(0, file.name.length - 4);
-		await LocalFile.removeFolder(Paths.join(LocalForage.Projects, projectName));
-		await LocalFile.loadZip(file, LocalForage.Projects);
+		await LocalFile.removeFolder(Paths.join(LOCAL_FORAGE.PROJECTS, projectName));
+		await LocalFile.loadZip(file, LOCAL_FORAGE.PROJECTS);
 		dispatch(addProject({ name: projectName, location: '' }));
 		await handleOpenProject(projectName);
 	};
@@ -184,7 +184,7 @@ function MainMenuBar() {
 	};
 
 	const handleExport = async () => {
-		await LocalFile.downloadZip(Paths.join(LocalForage.Projects, currentProjectName));
+		await LocalFile.downloadZip(Paths.join(LOCAL_FORAGE.PROJECTS, currentProjectName));
 	};
 
 	const handleCloseProject = async () => {
@@ -296,7 +296,7 @@ function MainMenuBar() {
 					title: 'New Project...',
 					icon: <AiOutlineFileAdd />,
 					onClick: handleNewProject,
-					shortcut: [SpecialKey.CTRL, SpecialKey.ALT, Key.N],
+					shortcut: [SPECIAL_KEY.CTRL, SPECIAL_KEY.ALT, KEY.N],
 				},
 				{
 					title: 'Open existing project...',
@@ -318,35 +318,35 @@ function MainMenuBar() {
 					),
 					icon: <BiImport />,
 					onClick: handleImport,
-					shortcut: [SpecialKey.CTRL, Key.I],
+					shortcut: [SPECIAL_KEY.CTRL, KEY.I],
 				},
 				{
 					title: 'Export project',
 					icon: <BiExport />,
 					disabled: !isProjectOpened,
 					onClick: handleExport,
-					shortcut: [SpecialKey.CTRL, Key.E],
+					shortcut: [SPECIAL_KEY.CTRL, KEY.E],
 				},
 				{
 					title: 'Save',
 					icon: <BiSave />,
 					disabled: !canSave,
 					onClick: handleSave,
-					shortcut: [SpecialKey.CTRL, Key.S],
+					shortcut: [SPECIAL_KEY.CTRL, KEY.S],
 				},
 				{
 					title: 'Save all',
 					icon: <LuSaveAll />,
 					disabled: !canSaveAll,
 					onClick: handleSaveAll,
-					shortcut: [SpecialKey.CTRL, SpecialKey.SHIFT, Key.S],
+					shortcut: [SPECIAL_KEY.CTRL, SPECIAL_KEY.SHIFT, KEY.S],
 				},
 				{
 					title: 'Close',
 					icon: <MdClose />,
 					disabled: !isProjectOpened,
 					onClick: handleCloseProject,
-					shortcut: [SpecialKey.CTRL, Key.Q],
+					shortcut: [SPECIAL_KEY.CTRL, KEY.Q],
 				},
 				{
 					title: 'Clear all cache',
@@ -363,28 +363,28 @@ function MainMenuBar() {
 					icon: <IoIosUndo />,
 					disabled: !canUndo,
 					onClick: handleUndo,
-					shortcut: [SpecialKey.CTRL, Key.Z],
+					shortcut: [SPECIAL_KEY.CTRL, KEY.Z],
 				},
 				{
 					title: 'Redo',
 					icon: <IoIosRedo />,
 					disabled: !canRedo,
 					onClick: handleRedo,
-					shortcut: [SpecialKey.CTRL, SpecialKey.SHIFT, Key.Z],
+					shortcut: [SPECIAL_KEY.CTRL, SPECIAL_KEY.SHIFT, KEY.Z],
 				},
 				{
 					title: 'Zoom in',
 					icon: <AiOutlineZoomIn />,
 					disabled: !isInMap,
 					onClick: handleZoomIn,
-					shortcut: [SpecialKey.SHIFT, Key.UP],
+					shortcut: [SPECIAL_KEY.SHIFT, KEY.UP],
 				},
 				{
 					title: 'Zoom out',
 					icon: <AiOutlineZoomOut />,
 					disabled: !isInMap,
 					onClick: handleZoomOut,
-					shortcut: [SpecialKey.SHIFT, Key.DOWN],
+					shortcut: [SPECIAL_KEY.SHIFT, KEY.DOWN],
 				},
 			],
 		},
@@ -412,7 +412,7 @@ function MainMenuBar() {
 					icon: <BsPlay />,
 					disabled: !isProjectOpened,
 					onClick: handlePlay,
-					shortcut: [Key.P],
+					shortcut: [KEY.P],
 				},
 			],
 		},
@@ -424,9 +424,9 @@ function MainMenuBar() {
 
 	const checkItemKeyDownShortcut = async (
 		itemList: MenuItemType[],
-		statesSpecialKeys: Map<SpecialKey, boolean>,
-		key: Key | SpecialKey,
-		specialKeys: SpecialKey[],
+		statesSpecialKeys: Map<SPECIAL_KEY, boolean>,
+		key: KEY | SPECIAL_KEY,
+		specialKeys: SPECIAL_KEY[],
 		event: KeyboardEvent
 	) => {
 		for (const item of itemList) {
@@ -449,7 +449,7 @@ function MainMenuBar() {
 					continue;
 				}
 				// Check key if not a specialKey
-				if (specialKeys.indexOf(key as SpecialKey) === -1 && shortcut.indexOf(key) !== -1) {
+				if (specialKeys.indexOf(key as SPECIAL_KEY) === -1 && shortcut.indexOf(key) !== -1) {
 					event.preventDefault();
 					await onClick();
 					return true;
@@ -468,24 +468,30 @@ function MainMenuBar() {
 	const translateKey = (key: string) => {
 		switch (key) {
 			case 'CONTROL':
-				return SpecialKey.CTRL;
+				return SPECIAL_KEY.CTRL;
 			case 'ARROWUP':
-				return Key.UP;
+				return KEY.UP;
 			case 'ARROWDOWN':
-				return Key.DOWN;
+				return KEY.DOWN;
 			default:
 				return key;
 		}
 	};
 
 	const handleKeyDown = async (event: KeyboardEvent) => {
-		const statesSpecialKeys: Map<SpecialKey, boolean> = new Map();
-		statesSpecialKeys.set(SpecialKey.CTRL, event.ctrlKey);
-		statesSpecialKeys.set(SpecialKey.ALT, event.altKey);
-		statesSpecialKeys.set(SpecialKey.SHIFT, event.shiftKey);
+		const statesSpecialKeys: Map<SPECIAL_KEY, boolean> = new Map();
+		statesSpecialKeys.set(SPECIAL_KEY.CTRL, event.ctrlKey);
+		statesSpecialKeys.set(SPECIAL_KEY.ALT, event.altKey);
+		statesSpecialKeys.set(SPECIAL_KEY.SHIFT, event.shiftKey);
 		const key = translateKey(event.key.toUpperCase());
-		const specialKeys = Object.values(SpecialKey);
-		return !(await checkItemKeyDownShortcut(items, statesSpecialKeys, key as Key | SpecialKey, specialKeys, event));
+		const specialKeys = Object.values(SPECIAL_KEY);
+		return !(await checkItemKeyDownShortcut(
+			items,
+			statesSpecialKeys,
+			key as KEY | SPECIAL_KEY,
+			specialKeys,
+			event
+		));
 	};
 
 	// Triggers handling

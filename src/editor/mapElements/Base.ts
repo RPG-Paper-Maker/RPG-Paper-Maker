@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { MapElement } from '../Editor';
 import { Serializable } from '../core/Serializable';
 import { CustomGeometry, Position, Project } from '../core';
-import { BINDING, BindingType, ElementMapKind } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND } from '../common';
 
 abstract class Base extends Serializable {
 	public static readonly COEF_TEX = 0.2;
@@ -25,7 +25,7 @@ abstract class Base extends Serializable {
 	public yOffset: number;
 	public zOffset: number;
 	public front: boolean;
-	public kind: ElementMapKind;
+	public kind: ELEMENT_MAP_KIND;
 
 	public static readonly bindings: BindingType[] = [
 		['xOffset', 'xOff', 0, BINDING.NUMBER],
@@ -41,26 +41,26 @@ abstract class Base extends Serializable {
 		this.yOffset = 0;
 		this.zOffset = 0;
 		this.front = true;
-		this.kind = ElementMapKind.None;
+		this.kind = ELEMENT_MAP_KIND.NONE;
 	}
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...Base.bindings, ...additionnalBinding];
 	}
 
-	static readMapElement(kind: ElementMapKind, json: Record<string, any>) {
+	static readMapElement(kind: ELEMENT_MAP_KIND, json: Record<string, any>) {
 		if (json === null) {
 			return null;
 		}
 		let model: Base | null = null;
 		switch (kind) {
-			case ElementMapKind.Floors:
+			case ELEMENT_MAP_KIND.FLOOR:
 				model = new MapElement.Floor();
 				break;
-			case ElementMapKind.Autotiles:
+			case ELEMENT_MAP_KIND.AUTOTILE:
 				model = new MapElement.Autotile();
 				break;
-			case ElementMapKind.SpritesFace:
+			case ELEMENT_MAP_KIND.SPRITE_FACE:
 				model = new MapElement.Sprite();
 				break;
 		}
@@ -105,12 +105,12 @@ abstract class Base extends Serializable {
 		center: THREE.Vector3,
 		position: Position,
 		size: THREE.Vector3,
-		kind: ElementMapKind
+		kind: ELEMENT_MAP_KIND
 	) {
 		let zPlus = position.layer * 0.05;
 
 		// Apply an offset according to layer position
-		if (kind !== ElementMapKind.SpritesFace && !this.front) {
+		if (kind !== ELEMENT_MAP_KIND.SPRITE_FACE && !this.front) {
 			zPlus *= -1;
 		}
 		const offset = new THREE.Vector3(0, 0, zPlus);

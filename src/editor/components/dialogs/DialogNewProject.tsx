@@ -19,7 +19,7 @@ import Loader from '../Loader';
 import { useDispatch } from 'react-redux';
 import { removeProject } from '../../store';
 import { LocalFile, Project, Rectangle } from '../../core';
-import { ElementMapKind, LocalForage, Paths } from '../../common';
+import { ELEMENT_MAP_KIND, LOCAL_FORAGE, Paths } from '../../common';
 
 type Props = {
 	isOpen: boolean;
@@ -34,9 +34,9 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 	const dispatch = useDispatch();
 
 	const checkValidAccept: () => Promise<boolean> = async () => {
-		const projects = await LocalFile.getFolders(LocalForage.Projects);
+		const projects = await LocalFile.getFolders(LOCAL_FORAGE.PROJECTS);
 		if (projects.length === 0) {
-			await LocalFile.createFolder(LocalForage.Projects);
+			await LocalFile.createFolder(LOCAL_FORAGE.PROJECTS);
 		}
 		if (
 			projects.find((name) => {
@@ -59,7 +59,7 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 
 	const replaceProject = async () => {
 		setIsDialogConfirmOpen(false);
-		await LocalFile.removeFolder(Paths.join(LocalForage.Projects, projectName));
+		await LocalFile.removeFolder(Paths.join(LOCAL_FORAGE.PROJECTS, projectName));
 		dispatch(removeProject(projectName));
 		await createProject();
 		accept();
@@ -82,7 +82,7 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 		await Model.Map.createDefaultMap(1);
 		await Model.Map.createDefaultMap(2);
 		Scene.Map.currentSelectedTexture = new Rectangle();
-		Scene.Map.currentSelectedMapElementKind = ElementMapKind.Floors;
+		Scene.Map.currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
 		for (const file of Paths.ALL_JSON) {
 			await LocalFile.copyPublicFile(
 				Paths.join(Paths.ROOT_DIRECTORY_LOCAL, Paths.DEFAULT, file),

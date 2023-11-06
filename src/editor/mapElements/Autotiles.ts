@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { CustomGeometry, Picture2D, Portion, Position, Project, Rectangle, TextureBundle } from '../core';
-import { AUTOTILE_TILE_NAMES, Constants, PictureKind } from '../common';
+import { AUTOTILE_TILE_NAMES, Constants, PICTURE_KIND } from '../common';
 
 class Autotiles {
 	public static COUNT_LIST = 5;
@@ -116,7 +116,7 @@ class Autotiles {
 			Scene.Map.canvasRendering!.width = 64 * Project.getSquareSize();
 			Scene.Map.canvasRendering!.height = Constants.MAX_PICTURE_SIZE;
 			if (autotile) {
-				const picture = Project.current!.pictures.getByID(PictureKind.Autotiles, pictureID);
+				const picture = Project.current!.pictures.getByID(PICTURE_KIND.AUTOTILES, pictureID);
 				if (picture) {
 					result = await this.loadTextureAutotile(
 						texturesAutotile,

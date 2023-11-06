@@ -19,7 +19,7 @@ import FooterNoYes from './dialogs/footers/FooterNoYes';
 import { useDispatch } from 'react-redux';
 import { triggerOpenProject } from '../store';
 import { LocalFile } from '../core';
-import { LocalForage, Paths, Utils } from '../common';
+import { LOCAL_FORAGE, Paths, Utils } from '../common';
 
 type Props = {
 	project: ProjectState;
@@ -45,7 +45,7 @@ function ProjectPreview({ project }: Props) {
 	const handleAcceptRemoveProject = async () => {
 		setIsDialogConfirmOpen(false);
 		dispatch(setLoading(true));
-		await LocalFile.removeFolder(Paths.join(LocalForage.Projects, project.name));
+		await LocalFile.removeFolder(Paths.join(LOCAL_FORAGE.PROJECTS, project.name));
 		dispatch(removeProject(project.name));
 		dispatch(setLoading(false));
 	};

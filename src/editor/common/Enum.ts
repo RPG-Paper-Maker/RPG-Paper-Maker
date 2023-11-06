@@ -9,83 +9,82 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-export enum LocalForage {
-	Projects = 'projects',
-	EngineSettings = 'engineSettings',
+export enum LOCAL_FORAGE {
+	PROJECTS = 'projects',
+	ENGINE_SETTINGS = 'engineSettings',
 }
 
-export enum Object3DExtension {
-	None,
+export enum OBJECT_3D_EXTENSION {
+	NONE,
 	OBJ,
 	GLTF,
 }
 
-export enum PreviewerType {
-	Objects,
-	Shaders,
+export enum PREVIEWER_TYPE {
+	OBJECTS,
+	SHADERS,
 }
 
-export enum ModelType {
-	Base,
-	EffectPeriod,
+export enum MODEL_TYPE {
+	BASE,
 }
 
-export enum ElementMapKind {
-	None,
-	Floors,
-	Autotiles,
-	Water,
-	SpritesFace,
-	SpritesFix,
-	SpritesDouble,
-	SpritesQuadra,
-	SpritesWall,
-	Object,
-	Object3D,
-	Mountains,
+export enum ELEMENT_MAP_KIND {
+	NONE,
+	FLOOR,
+	AUTOTILE,
+	WATER,
+	SPRITE_FACE,
+	SPRITE_FIX,
+	SPRITE_DOUBLE,
+	SPRITE_QUADRA,
+	SPRITE_WALL,
+	OBJECT,
+	OBJECT3D,
+	MOUNTAIN,
 }
 
-export enum MenuIndexMapEditor {
-	Lands,
-	Sprites,
-	Mountains,
-	Objects3D,
-	Objects,
+export enum MENU_INDEX_MAP_EDITOR {
+	LANDS,
+	SPRITES,
+	MOUNTAINS,
+	OBJECTS3D,
+	OBJECTS,
 }
 
-export enum Direction {
-	South,
-	West,
-	North,
-	East,
-	SouthWest,
-	SouthEast,
-	NorthWest,
-	NorthEast,
-	Up,
-	Down,
-	None,
+export enum DIRECTION {
+	SOUTH,
+	WEST,
+	NORTH,
+	EAST,
+	SOUTH_WEST,
+	SOUTH_EAST,
+	NORTH_WEST,
+	NORTH_EAST,
+	UP,
+	DOWN,
+	NONE,
 }
 
-export enum RaycastingLayer {
-	Plane = 1,
-	Floors = 2,
-	Sprites = 3,
+export enum RAYCASTING_LAYER {
+	PLANE = 1,
+	FLOORS = 2,
+	SPRITES = 3,
 }
 
-export enum MobileAction {
-	Plus = 1,
-	Minus = 2,
-	Move = 3,
+export enum MOBILE_ACTION {
+	PLUS = 1,
+	MINUS = 2,
+	MOVE = 3,
 }
 
-export enum SpecialKey {
+export enum SPECIAL_KEY {
 	CTRL = 'CTRL',
 	SHIFT = 'SHIFT',
 	ALT = 'ALT',
 }
 
-export enum Key {
+export enum KEY {
 	N = 'N',
 	S = 'S',
 	I = 'I',
@@ -112,47 +111,47 @@ export enum BINDING {
 	RECTANGLE,
 }
 
-export enum MountainCollisionKind {
-	Default,
-	Always,
-	Never,
+export enum MOUNTAIN_COLLISION_KIND {
+	DEFAULT,
+	ALWAYS,
+	NEVER,
 }
 
-export enum ShapeKind {
-	Box,
-	Sphere,
-	Cylinder,
-	Cone,
-	Capsule,
-	Custom,
+export enum SHAPE_KIND {
+	BOX,
+	SPHERE,
+	CYLINDER,
+	CONE,
+	CAPSULE,
+	CUSTOM,
 }
 
-export enum ObjectCollisionKind {
-	None,
-	Perfect,
-	Simplified,
-	Custom,
+export enum OBJECT_COLLISION_KIND {
+	NONE,
+	PERFECT,
+	SIMPLIFIED,
+	CUSTOM,
 }
 
-export enum PictureKind {
-	None,
-	Bars,
-	Icons,
-	Autotiles,
-	Characters,
-	Mountains,
-	Tilesets,
-	Walls,
-	Battlers,
-	Facesets,
-	WindowSkins,
-	TitleScreen,
-	Objects3D,
-	Pictures,
-	Animations,
-	Skyboxes,
-	Particles,
-	GameOver,
+export enum PICTURE_KIND {
+	NONE,
+	BARS,
+	ICONS,
+	AUTOTILES,
+	CHARACTERS,
+	MOUNTAINS,
+	TILESETS,
+	WALLS,
+	BATTLERS,
+	FACESETS,
+	WINDOW_SKINS,
+	TITLE_SCREENS,
+	OBJECTS_3D,
+	PICTURES,
+	ANIMATIONS,
+	SKYBOXES,
+	PARTICLES,
+	GAME_OVERS,
 }
 
 export enum AUTOTILE_TILE_NAMES {

@@ -11,7 +11,7 @@
 
 import { ReactNode } from 'react';
 import { Serializable } from '../core/Serializable';
-import { BINDING, BindingType, ModelType, Utils } from '../common';
+import { BINDING, BindingType, MODEL_TYPE, Utils } from '../common';
 
 class Base extends Serializable {
 	public id!: number;
@@ -39,12 +39,12 @@ class Base extends Serializable {
 		return base;
 	}
 
-	static getModel(kind: ModelType): any {
+	static getModel(kind: MODEL_TYPE): any {
 		switch (kind) {
 		}
 	}
 
-	static getDialog(kind: ModelType): any {
+	static getDialog(kind: MODEL_TYPE): any {
 		switch (kind) {
 		}
 	}

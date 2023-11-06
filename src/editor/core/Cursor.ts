@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { Manager, MapElement, Scene } from '../Editor';
 import { CustomGeometry, Frame, Position, Project } from '.';
 import { Inputs } from '../managers';
-import { Key } from '../common';
+import { KEY } from '../common';
 
 class Cursor {
 	public position: Position;
@@ -69,19 +69,19 @@ class Cursor {
 				let xPlus = 0;
 				let zPlus = 0;
 				switch (key.toUpperCase()) {
-					case Key.W: // UP
+					case KEY.W: // UP
 						xPlus = Math.round(Math.cos((angle * Math.PI) / 180.0));
 						zPlus = Math.round(Math.sin((angle * Math.PI) / 180.0));
 						break;
-					case Key.S: // DOWN
+					case KEY.S: // DOWN
 						xPlus = -Math.round(Math.cos((angle * Math.PI) / 180.0));
 						zPlus = -Math.round(Math.sin((angle * Math.PI) / 180.0));
 						break;
-					case Key.A: // LEFT
+					case KEY.A: // LEFT
 						xPlus = Math.round(Math.cos(((angle - 90) * Math.PI) / 180.0));
 						zPlus = Math.round(Math.sin(((angle - 90) * Math.PI) / 180.0));
 						break;
-					case Key.D: // RIGHT
+					case KEY.D: // RIGHT
 						xPlus = -Math.round(Math.cos(((angle - 90) * Math.PI) / 180.0));
 						zPlus = -Math.round(Math.sin(((angle - 90) * Math.PI) / 180.0));
 						break;

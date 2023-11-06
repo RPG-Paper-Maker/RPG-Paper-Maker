@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { Model } from '../../Editor';
 import { Rectangle } from '../../core';
-import { ElementMapKind } from '../../common';
+import { ELEMENT_MAP_KIND } from '../../common';
 
 export interface ProjectState {
 	name: string;
@@ -15,7 +15,7 @@ const MapEditorSlice = createSlice({
 		currentTreeMapTag: null as Model.TreeMapTag | null,
 		currentTilesetTexture: new Rectangle(0, 0, 1, 1),
 		currentSpecialElementID: -1,
-		currentMapElementKind: ElementMapKind.Floors,
+		currentMapElementKind: ELEMENT_MAP_KIND.FLOOR,
 		undoRedo: {
 			index: -1,
 			length: 0,
@@ -31,7 +31,7 @@ const MapEditorSlice = createSlice({
 		setCurrentSpecialElementID(state, action: PayloadAction<number>) {
 			state.currentSpecialElementID = action.payload;
 		},
-		setCurrentMapElementKind(state, action: PayloadAction<ElementMapKind>) {
+		setCurrentMapElementKind(state, action: PayloadAction<ELEMENT_MAP_KIND>) {
 			state.currentMapElementKind = action.payload;
 		},
 		setUndoRedoIndex(state, action: PayloadAction<number>) {
