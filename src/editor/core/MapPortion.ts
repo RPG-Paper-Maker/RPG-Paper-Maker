@@ -10,24 +10,16 @@
 */
 
 import * as THREE from 'three';
-import { Constants } from '../common/Constants';
 import { Manager, MapElement, Model, Scene } from '../Editor';
-import { CustomGeometry } from './CustomGeometry';
-import { Portion } from './Portion';
-import { Position } from './Position';
-import { Rectangle } from './Rectangle';
-import { ElementMapKind, RaycastingLayer } from '../common/Enum';
-import { UndoRedoState } from './UndoRedoState';
-import { CustomGeometryFace } from './CustomGeometryFace';
-import { Autotiles } from '../mapElements';
-import { Project } from './Project';
+import { CustomGeometry, CustomGeometryFace, Portion, Position, Project, Rectangle, UndoRedoState } from '.';
+import { Constants, ElementMapKind, RaycastingLayer } from '../common';
 
 class MapPortion {
 	public model: Model.MapPortion;
 	public floorsMesh: THREE.Mesh;
 	public spritesFaceMesh: THREE.Mesh;
 	public spritesFixMesh: THREE.Mesh;
-	public autotilesList: Autotiles[][];
+	public autotilesList: MapElement.Autotiles[][];
 	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ElementMapKind][] = [];
 
 	constructor(globalPortion: Portion) {
@@ -152,7 +144,11 @@ class MapPortion {
 				}
 			}
 		}
-		Autotiles.updateAround(position, Scene.Map.current!.portionsToUpdate, Scene.Map.current!.portionsToSave);
+		MapElement.Autotiles.updateAround(
+			position,
+			Scene.Map.current!.portionsToUpdate,
+			Scene.Map.current!.portionsToSave
+		);
 	}
 
 	updateAutotile(
@@ -174,7 +170,11 @@ class MapPortion {
 		if (autotile) {
 			autotile.update(position, this.model.globalPortion);
 		}
-		Autotiles.updateAround(position, Scene.Map.current!.portionsToUpdate, Scene.Map.current!.portionsToSave);
+		MapElement.Autotiles.updateAround(
+			position,
+			Scene.Map.current!.portionsToUpdate,
+			Scene.Map.current!.portionsToSave
+		);
 	}
 
 	updateSprite(
@@ -250,10 +250,10 @@ class MapPortion {
 	checkTextures() {
 		for (const [, land] of this.model.lands) {
 			if (land instanceof MapElement.Autotile) {
-				const texturesAutotile = Autotiles.getAutotileTexture(land.autotileID);
+				const texturesAutotile = MapElement.Autotiles.getAutotileTexture(land.autotileID);
 				if (texturesAutotile === null) {
 					Scene.Map.current!.loading = true;
-					this.loadTexturesAndUpdateGeometries();
+					this.loadTexturesAndUpdateGeometries().catch(console.error);
 					return false;
 				}
 			}
@@ -264,7 +264,7 @@ class MapPortion {
 	async loadTexturesAndUpdateGeometries(updateLoading = true) {
 		for (const [, land] of this.model.lands) {
 			if (land instanceof MapElement.Autotile) {
-				await Autotiles.loadAutotileTexture(land.autotileID);
+				await MapElement.Autotiles.loadAutotileTexture(land.autotileID);
 			}
 		}
 		this.updateGeometriesWithoutCheck();
@@ -305,11 +305,11 @@ class MapPortion {
 		for (let i = 0, l = Scene.Map.current!.texturesAutotiles.length; i < l; i++) {
 			const texturesAutotile = Scene.Map.current!.texturesAutotiles[i];
 			if (texturesAutotile) {
-				for (let textureAutotile of texturesAutotile) {
+				for (const textureAutotile of texturesAutotile) {
 					if (!this.autotilesList[i]) {
 						this.autotilesList[i] = [];
 					}
-					this.autotilesList[i].push(new Autotiles(textureAutotile));
+					this.autotilesList[i].push(new MapElement.Autotiles(textureAutotile));
 				}
 			}
 		}
@@ -365,8 +365,8 @@ class MapPortion {
 	) {
 		const layer = position.layer;
 		if (layer > 0) {
-			let i = 0,
-				l = layers.length;
+			let i = 0;
+			const l = layers.length;
 			for (; i < l; i++) {
 				if (layer <= layers[i][0].layer) {
 					layers.splice(i, 0, [position, floor]);
@@ -385,8 +385,8 @@ class MapPortion {
 
 	updateAutotileGeometry(position: Position, autotile: MapElement.Autotile) {
 		let texture = null;
-		const texturesAutotile = Autotiles.getAutotileTexture(autotile.autotileID);
-		let autotiles: Autotiles | null = null;
+		const texturesAutotile = MapElement.Autotiles.getAutotileTexture(autotile.autotileID);
+		let autotiles: MapElement.Autotiles | null = null;
 		if (texturesAutotile) {
 			const pictureID = Project.current!.specialElements.getAutotileByID(autotile.autotileID).pictureID;
 			for (let j = 0, m = texturesAutotile.length; j < m; j++) {

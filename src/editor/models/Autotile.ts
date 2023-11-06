@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING } from '../common/Enum';
-import { BindingType } from '../common/Types';
 import { SpecialElement } from './SpecialElement';
+import { BINDING, BindingType } from '../common';
 
 class Autotile extends SpecialElement {
 	public isAnimated!: boolean;

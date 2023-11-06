@@ -10,11 +10,10 @@
 */
 
 import * as THREE from 'three';
-import { Constants } from '../common/Constants';
 import { Model } from '../Editor';
-import { Portion } from './Portion';
 import { Position3D } from './Position3D';
-import { Project } from './Project';
+import { Portion, Project } from '.';
+import { Constants } from '../common';
 
 class Position extends Position3D {
 	public layer: number;

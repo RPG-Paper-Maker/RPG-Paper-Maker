@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING } from '../common/Enum';
-import { BindingType } from '../common/Types';
 import { Base } from './Base';
+import { BINDING, BindingType } from '../common';
 
 class SpecialElement extends Base {
 	public static readonly JSON_PICTURE_ID = 'pic';

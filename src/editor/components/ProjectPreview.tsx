@@ -18,10 +18,8 @@ import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import { useDispatch } from 'react-redux';
 import { triggerOpenProject } from '../store';
-import { LocalFile } from '../core/LocalFile';
-import { Paths } from '../common/Paths';
-import { Utils } from '../common/Utils';
-import { LocalForage } from '../common/Enum';
+import { LocalFile } from '../core';
+import { LocalForage, Paths, Utils } from '../common';
 
 type Props = {
 	project: ProjectState;

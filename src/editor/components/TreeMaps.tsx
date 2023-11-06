@@ -10,12 +10,11 @@
 */
 
 import React from 'react';
-import { Node } from '../core/Node';
 import '../styles/Tree.css';
 import Tree from './Tree';
-import { Project } from '../core/Project';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+import { Node, Project } from '../core';
 
 type Props = {
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;

@@ -9,13 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, PictureKind } from '../common/Enum';
-import { Paths } from '../common/Paths';
-import { BindingType } from '../common/Types';
-import { CollisionSquare } from '../core/CollisionSquare';
-import { Picture2D } from '../core/Picture2D';
-import { Project } from '../core/Project';
 import { Base } from './Base';
+import { BINDING, BindingType, Paths, PictureKind } from '../common';
+import { CollisionSquare, Picture2D, Project } from '../core';
 
 class Picture extends Base {
 	public kind!: PictureKind;

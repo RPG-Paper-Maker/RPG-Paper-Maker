@@ -11,13 +11,11 @@
 
 import React, { useEffect } from 'react';
 import { Manager } from '../../Editor';
-import { LocalFile } from '../../core/LocalFile';
 import Loader from '../Loader';
 import { setProjects } from '../../store';
 import { useDispatch } from 'react-redux';
-import { LocalForage } from '../../common/Enum';
-import { Constants } from '../../common/Constants';
-import { Utils } from '../../common/Utils';
+import { Constants, LocalForage, Utils } from '../../common';
+import { LocalFile } from '../../core';
 
 type Props = {
 	setLoaded: (v: boolean) => void;

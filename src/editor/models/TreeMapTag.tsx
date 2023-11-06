@@ -10,14 +10,10 @@
 */
 
 import { Model } from '../Editor';
-import { Paths } from '../common/Paths';
-import { LocalFile } from '../core/LocalFile';
-import { Position } from '../core/Position';
-import { Project } from '../core/Project';
 import { FcFolder, FcFile } from 'react-icons/fc';
 import { Base } from './Base';
-import { BindingType } from '../common/Types';
-import { BINDING } from '../common/Enum';
+import { LocalFile, Position, Project } from '../core';
+import { BINDING, BindingType, Paths } from '../common';
 
 // @ts-expect-error
 class TreeMapTag extends Base {

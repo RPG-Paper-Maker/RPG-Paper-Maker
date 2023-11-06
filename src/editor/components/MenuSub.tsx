@@ -10,8 +10,8 @@
 */
 
 import React, { useState, useRef, useEffect, ReactNode, Children, cloneElement } from 'react';
-import { Utils } from '../common/Utils';
 import '../styles/MenuSub.css';
+import { Utils } from '../common';
 
 type Props = {
 	children: any;

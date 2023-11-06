@@ -13,7 +13,6 @@ import { useState, useEffect, useRef } from 'react';
 import '../styles/Splitter.css';
 import { useDispatch } from 'react-redux';
 import { triggerSplitting } from '../store';
-import { Utils } from '../common/Utils';
 
 type Props = {
 	children: [JSX.Element, JSX.Element];

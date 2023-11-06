@@ -11,10 +11,9 @@
 
 import React, { ReactNode, useEffect, useState } from 'react';
 import { RxCross2 } from 'react-icons/rx';
-import { ArrayUtils } from '../common/ArrayUtils';
 import '../styles/Tab.css';
-import { Utils } from '../common/Utils';
 import { Model } from '../Editor';
+import { ArrayUtils, Utils } from '../common';
 
 type Props = {
 	titles: Model.Base[];

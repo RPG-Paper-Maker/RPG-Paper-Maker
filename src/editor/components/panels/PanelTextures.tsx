@@ -11,12 +11,11 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import Previewer3D from '../Previewer3D';
-import { Utils } from '../../common/Utils';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import TextureSquareSelector from '../TextureSquareSelector';
-import { ElementMapKind, PictureKind } from '../../common/Enum';
 import PanelSpecialElementsSelection from './PanelSpecialElementsSelection';
+import { ElementMapKind, PictureKind, Utils } from '../../common';
 
 type Props = {
 	visible: boolean;

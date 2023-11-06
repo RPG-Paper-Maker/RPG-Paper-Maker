@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, ObjectCollisionKind, ShapeKind } from '../common/Enum';
-import { BindingType } from '../common/Types';
 import { SpecialElement } from './SpecialElement';
+import { BINDING, BindingType, ObjectCollisionKind, ShapeKind } from '../common';
 
 class Object3D extends SpecialElement {
 	public shapeKind!: ShapeKind;

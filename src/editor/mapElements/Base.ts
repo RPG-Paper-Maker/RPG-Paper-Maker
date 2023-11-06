@@ -10,13 +10,11 @@
 */
 
 import * as THREE from 'three';
-import { BINDING, ElementMapKind } from '../common/Enum';
-import { Position } from '../core/Position';
-import { CustomGeometry } from '../core/CustomGeometry';
-import { Project } from '../core/Project';
 import { MapElement } from '../Editor';
 import { Serializable } from '../core/Serializable';
-import { BindingType } from '../common/Types';
+import { CustomGeometry, Position, Project } from '../core';
+import { BINDING, BindingType, ElementMapKind } from '../common';
+
 abstract class Base extends Serializable {
 	public static readonly COEF_TEX = 0.2;
 	public static readonly Y_AXIS = new THREE.Vector3(0, 1, 0);

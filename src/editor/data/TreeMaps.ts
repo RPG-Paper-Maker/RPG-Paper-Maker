@@ -10,14 +10,8 @@
 */
 
 import { Model } from '../Editor';
-import { BINDING } from '../common/Enum';
-import { Paths } from '../common/Paths';
-import { BindingType } from '../common/Types';
-import { Utils } from '../common/Utils';
-import { Node } from '../core/Node';
-import { Project } from '../core/Project';
-import { Serializable } from '../core/Serializable';
-import { TreeMapTag } from '../models';
+import { BINDING, BindingType, Paths, Utils } from '../common';
+import { Project, Serializable, Node } from '../core';
 
 class TreeMaps extends Serializable {
 	public static readonly JSON_TREE = 'tree';
@@ -41,7 +35,7 @@ class TreeMaps extends Serializable {
 
 	private isAllMapsSavedRecursive(nodes: Node[]): boolean {
 		for (const node of nodes) {
-			if (!(node.content as TreeMapTag).saved) {
+			if (!(node.content as Model.TreeMapTag).saved) {
 				return false;
 			}
 			if (!this.isAllMapsSavedRecursive(node.children)) {
@@ -57,7 +51,7 @@ class TreeMaps extends Serializable {
 
 	private async saveAllTagsRecursive(nodes: Node[]) {
 		for (const node of nodes) {
-			await (node.content as TreeMapTag).saveFiles();
+			await (node.content as Model.TreeMapTag).saveFiles();
 			await this.saveAllTagsRecursive(node.children);
 		}
 	}
@@ -70,7 +64,7 @@ class TreeMaps extends Serializable {
 	readRoot(json: Record<string, any>[], root: Node) {
 		const children: Node[] = [];
 		for (const obj of json) {
-			const tag = new TreeMapTag();
+			const tag = new Model.TreeMapTag();
 			tag.read(obj);
 			const node = new Node(tag);
 			node.parent = root;

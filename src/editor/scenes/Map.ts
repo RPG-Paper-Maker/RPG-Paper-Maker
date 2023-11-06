@@ -10,27 +10,24 @@
 */
 
 import * as THREE from 'three';
-import { Manager, Model, Scene } from '../Editor';
-import { LocalFile } from '../core/LocalFile';
+import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
-import { Project } from '../core/Project';
-import { Base } from './Base';
-import { MapPortion } from '../core/MapPortion';
-import { Portion } from '../core/Portion';
-import { Paths } from '../common/Paths';
-import { Grid } from '../core/Grid';
-import { Cursor } from '../core/Cursor';
-import { Position } from '../core/Position';
-import { Rectangle } from '../core/Rectangle';
-import { TreeMapTag } from '../models';
-import { UndoRedoState } from '../core/UndoRedoState';
-import { ElementMapKind, MobileAction, RaycastingLayer } from '../common/Enum';
-import { CustomGeometry } from '../core/CustomGeometry';
-import { Constants } from '../common/Constants';
-import { TextureBundle } from '../core/TextureBundle';
-import { Autotiles } from '../mapElements';
-import { Frame } from '../core/Frame';
-
+import { Base } from '.';
+import {
+	Cursor,
+	CustomGeometry,
+	Frame,
+	Grid,
+	LocalFile,
+	MapPortion,
+	Portion,
+	Position,
+	Project,
+	Rectangle,
+	TextureBundle,
+	UndoRedoState,
+} from '../core';
+import { Constants, ElementMapKind, MobileAction, Paths, RaycastingLayer } from '../common';
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
 
@@ -49,7 +46,7 @@ class Map extends Base {
 	public static animationFrameID: number;
 
 	public id: number;
-	public tag: TreeMapTag;
+	public tag: Model.TreeMapTag;
 	public needsTreeMapUpdate = false;
 	public needsUpdateIndex: number | null = null;
 	public needsUpdateLength: number | null = null;
@@ -78,7 +75,7 @@ class Map extends Base {
 		frames: Project.current!.systems.autotilesFrames,
 	});
 
-	constructor(tag: TreeMapTag) {
+	constructor(tag: Model.TreeMapTag) {
 		super(tag);
 		this.id = tag.id;
 		this.tag = tag;
@@ -537,11 +534,11 @@ class Map extends Base {
 		// TODO
 	}
 
-	async onKeyDownImmediate() {
+	onKeyDownImmediate() {
 		this.cursor.onKeyDownImmediate();
 		if (this.tag) {
 			this.tag.cursorPosition = this.cursor.position;
-			await Project.current!.treeMaps.save();
+			Project.current!.treeMaps.save().catch(console.error);
 		}
 	}
 
@@ -583,7 +580,7 @@ class Map extends Base {
 		}
 	}
 
-	async onPointerMove(x: number, y: number) {
+	onPointerMove(x: number, y: number) {
 		if (Inputs.isPointerPressed) {
 			if (this.isMobileMovingCursor) {
 				Inputs.keys = [];
@@ -616,7 +613,7 @@ class Map extends Base {
 	}
 
 	async onTouchEnd(x: number, y: number) {
-		this.onMouseUp(x, y);
+		await this.onMouseUp(x, y);
 		this.lastPosition = null;
 		Inputs.keys = [];
 		this.isMobileMovingCursor = false;
@@ -655,7 +652,7 @@ class Map extends Base {
 		// Update autotiles animated
 		if (this.autotileFrame.update()) {
 			this.autotilesOffset.setY(
-				(this.autotileFrame.value * Autotiles.COUNT_LIST * 2 * Project.getSquareSize()) /
+				(this.autotileFrame.value * MapElement.Autotiles.COUNT_LIST * 2 * Project.getSquareSize()) /
 					Constants.MAX_PICTURE_SIZE
 			);
 		}

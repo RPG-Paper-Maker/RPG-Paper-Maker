@@ -13,7 +13,7 @@ import React, { useRef, useEffect } from 'react';
 import { Manager, Scene } from '../Editor';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { ElementMapKind } from '../common/Enum';
+import { ElementMapKind } from '../common';
 
 type Props = {
 	id: string;
@@ -52,7 +52,9 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 						scene.loadFloor(Manager.GL.extraContext, currentTilesetTexture);
 						break;
 					case ElementMapKind.Autotiles:
-						scene.loadAutotile(Manager.GL.extraContext, currentSpecialElementID, currentTilesetTexture);
+						scene
+							.loadAutotile(Manager.GL.extraContext, currentSpecialElementID, currentTilesetTexture)
+							.catch(console.error);
 						break;
 					case ElementMapKind.SpritesFace:
 						scene.loadSprite(Manager.GL.extraContext, currentTilesetTexture, currentMapElementKind);

@@ -13,7 +13,7 @@ import React, { useState, useEffect } from 'react';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
 import MenuSub from './MenuSub';
-import { BiCube, BiSolidPencil, BiSolidRectangle } from 'react-icons/bi';
+import { BiCube, BiSolidPencil } from 'react-icons/bi';
 import { MdAutoAwesomeMosaic } from 'react-icons/md';
 import { ReactComponent as FloorIcon } from '../../assets/icons/floor.svg';
 import { ReactComponent as FaceSpriteIcon } from '../../assets/icons/face-sprite.svg';
@@ -32,10 +32,9 @@ import { PiSelectionAllFill } from 'react-icons/pi';
 import { VscPaintcan } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setCurrentMapElementKind } from '../store';
-import { ElementMapKind, MobileAction } from '../common/Enum';
 import { Scene } from '../Editor';
-import { Constants } from '../common/Constants';
-import { Project } from '../core/Project';
+import { Constants, ElementMapKind, MobileAction } from '../common';
+import { Project } from '../core';
 
 function MapEditorMenuBar() {
 	const [selectionIndex, setSelectionIndex] = useState(0);
@@ -49,40 +48,40 @@ function MapEditorMenuBar() {
 
 	const openLoading = useSelector((state: RootState) => state.projects.openLoading);
 
-	const handleLands = () => {
+	const handleLands = async () => {
 		switch (Project.current!.settings.mapEditorLandsMenuIndex) {
 			case 0:
-				handleFloors();
+				await handleFloors();
 				break;
 			case 1:
-				handleAutotiles();
+				await handleAutotiles();
 				break;
 		}
 	};
 
-	const handleFloors = () => {
+	const handleFloors = async () => {
 		dispatch(setCurrentMapElementKind(ElementMapKind.Floors));
 		Scene.Map.currentSelectedMapElementKind = ElementMapKind.Floors;
 		Project.current!.settings.mapEditorMenuIndex = 0;
 		Project.current!.settings.mapEditorLandsMenuIndex = 0;
-		Project.current!.settings.save();
+		await Project.current!.settings.save();
 		setLandsIndex(Project.current!.settings.mapEditorLandsMenuIndex);
 	};
 
-	const handleAutotiles = () => {
+	const handleAutotiles = async () => {
 		dispatch(setCurrentMapElementKind(ElementMapKind.Autotiles));
 		Scene.Map.currentSelectedMapElementKind = ElementMapKind.Autotiles;
 		Project.current!.settings.mapEditorMenuIndex = 0;
 		Project.current!.settings.mapEditorLandsMenuIndex = 1;
-		Project.current!.settings.save();
+		await Project.current!.settings.save();
 		setLandsIndex(Project.current!.settings.mapEditorLandsMenuIndex);
 	};
 
-	const handleFaceSprites = () => {
+	const handleFaceSprites = async () => {
 		dispatch(setCurrentMapElementKind(ElementMapKind.SpritesFace));
 		Scene.Map.currentSelectedMapElementKind = ElementMapKind.SpritesFace;
 		Project.current!.settings.mapEditorMenuIndex = 1;
-		Project.current!.settings.save();
+		await Project.current!.settings.save();
 	};
 
 	const handleMobilePlus = () => {
@@ -106,10 +105,10 @@ function MapEditorMenuBar() {
 			setMobileIndex(Project.current!.settings.projectMenuIndex);
 			switch (menuIndex) {
 				case 0:
-					handleLands();
+					handleLands().catch(console.error);
 					break;
 				case 1:
-					handleFaceSprites();
+					handleFaceSprites().catch(console.error);
 					break;
 			}
 		}

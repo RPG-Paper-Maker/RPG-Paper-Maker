@@ -10,10 +10,10 @@
 */
 
 import { ReactNode, useState, useEffect } from 'react';
-import { Node } from '../core/Node';
 import '../styles/Tree.css';
 import TreeItem from './TreeItem';
-import { ArrayUtils } from '../common/ArrayUtils';
+import { ArrayUtils } from '../common';
+import { Node } from '../core';
 
 type Props = {
 	list: Node[];

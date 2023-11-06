@@ -10,8 +10,7 @@
 */
 
 import { Scene } from '../Editor';
-import { ArrayUtils } from '../common/ArrayUtils';
-import { Constants } from '../common/Constants';
+import { ArrayUtils, Constants } from '../common';
 
 class Inputs {
 	public static isInitialized: boolean = false;
@@ -110,14 +109,14 @@ class Inputs {
 			document.addEventListener('touchmove', handleTouchMove, false);
 
 			// Touch end
-			const handleTouchEnd = (e: any) => {
+			const handleTouchEnd = async (e: any) => {
 				if (!Scene.Map.current) {
 					return;
 				}
 				Inputs.isPointerPressed = false;
 				Inputs.previousTouchDistance = 0;
 				Inputs.touchDistance = 0;
-				Scene.Map.current.onTouchEnd(Inputs.pointerX, Inputs.pointerY);
+				await Scene.Map.current.onTouchEnd(Inputs.pointerX, Inputs.pointerY);
 			};
 			document.addEventListener('touchend', handleTouchEnd, false);
 
@@ -202,14 +201,14 @@ class Inputs {
 			document.addEventListener('mousemove', handleMouseMove, false);
 
 			// Mouse up
-			const handleMouseUp = (e: any) => {
+			const handleMouseUp = async (e: any) => {
 				if (!Scene.Map.current) {
 					return;
 				}
 				const rect = canvas.getBoundingClientRect();
 				const x = e.clientX - rect.left;
 				const y = e.clientY - rect.top;
-				Scene.Map.current.onMouseUp(x, y);
+				await Scene.Map.current.onMouseUp(x, y);
 				switch (e.button) {
 					case 0:
 						Inputs.isPointerPressed = false;
@@ -227,11 +226,11 @@ class Inputs {
 			document.addEventListener('mouseup', handleMouseUp, false);
 
 			// Mouse wheel
-			const handleWheel = (e: any) => {
+			const handleWheel = async (e: any) => {
 				if (!Scene.Map.current) {
 					return;
 				}
-				Scene.Map.current.onMouseWheel(e.deltaY);
+				await Scene.Map.current.onMouseWheel(e.deltaY);
 			};
 			canvas.addEventListener('wheel', handleWheel);
 

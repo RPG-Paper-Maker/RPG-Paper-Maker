@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Utils } from '../common/Utils';
+import { Utils } from '../common';
 import '../styles/MenuItem.css';
 
 type Props = {

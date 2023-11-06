@@ -10,8 +10,8 @@
 */
 
 import { Model } from '../Editor';
-import { Utils } from '../common/Utils';
 import { Serializable } from './Serializable';
+import { Utils } from '../common';
 
 class Node extends Serializable {
 	public static readonly JSON_CHILDREN = 'children';

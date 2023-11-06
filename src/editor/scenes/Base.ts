@@ -10,16 +10,15 @@
 */
 
 import * as THREE from 'three';
-import { Manager } from '../Editor';
-import { Camera } from '../core/Camera';
-import { TreeMapTag } from '../models';
+import { Manager, Model } from '../Editor';
+import { Camera } from '../core';
 
 class Base {
 	public scene: THREE.Scene;
 	public camera: Camera;
 	public loading: boolean = false;
 
-	constructor(tag?: TreeMapTag) {
+	constructor(tag?: Model.TreeMapTag) {
 		this.scene = new THREE.Scene();
 		this.camera = new Camera(tag);
 	}

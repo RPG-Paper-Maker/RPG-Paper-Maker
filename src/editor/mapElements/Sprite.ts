@@ -10,15 +10,10 @@
 */
 
 import * as THREE from 'three';
-import { BINDING, ElementMapKind } from '../common/Enum';
-import { CustomGeometry } from '../core/CustomGeometry';
-import { CustomGeometryFace } from '../core/CustomGeometryFace';
-import { Position } from '../core/Position';
-import { Rectangle } from '../core/Rectangle';
-import { Base } from './Base';
-import { Project } from '../core/Project';
 import { MapElement } from '../Editor';
-import { BindingType } from '../common/Types';
+import { Base } from './Base';
+import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle } from '../core';
+import { BINDING, BindingType, ElementMapKind } from '../common';
 
 class Sprite extends Base {
 	public static readonly MODEL = [

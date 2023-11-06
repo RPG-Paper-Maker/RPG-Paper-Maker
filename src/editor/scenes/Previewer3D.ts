@@ -10,16 +10,10 @@
 */
 
 import * as THREE from 'three';
-import { Manager, MapElement, Model, Scene } from '../Editor';
-import { Base } from './Base';
-import { CustomGeometry } from '../core/CustomGeometry';
-import { Position } from '../core/Position';
-import { Rectangle } from '../core/Rectangle';
-import { ElementMapKind } from '../common/Enum';
-import { CustomGeometryFace } from '../core/CustomGeometryFace';
-import { Project } from '../core/Project';
-import { TextureBundle } from '../core/TextureBundle';
-import { Autotiles } from '../mapElements';
+import { Manager, MapElement } from '../Editor';
+import { Base } from '.';
+import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle, TextureBundle } from '../core';
+import { ElementMapKind } from '../common';
 
 class Previewer3D extends Base {
 	public static scenes: Record<string, Previewer3D> = {}; // id canvas => scene
@@ -77,7 +71,7 @@ class Previewer3D extends Base {
 			this.clear();
 			return;
 		}
-		const texturesAutotile = await Autotiles.loadAutotileTexture(autotileID);
+		const texturesAutotile = await MapElement.Autotiles.loadAutotileTexture(autotileID);
 		const pictureID = autotile.pictureID;
 		let includedTexture: TextureBundle | null = null;
 		if (texturesAutotile) {

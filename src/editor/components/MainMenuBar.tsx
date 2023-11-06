@@ -32,9 +32,7 @@ import DialogNewProject from './dialogs/DialogNewProject';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
 import MenuSub from './MenuSub';
-import { LocalFile } from '../core/LocalFile';
 import { Manager, Scene } from '../Editor';
-import { Project } from '../core/Project';
 import {
 	AiOutlineClear,
 	AiOutlineFileAdd,
@@ -47,16 +45,16 @@ import { BsPlay } from 'react-icons/bs';
 import { MdClose, MdOutlineWallpaper } from 'react-icons/md';
 import { IoIosUndo, IoIosRedo, IoMdArrowBack } from 'react-icons/io';
 import { FiMap } from 'react-icons/fi';
-import { Paths } from '../common/Paths';
-import Dialog from './dialogs/Dialog';
-import FooterNoYes from './dialogs/footers/FooterNoYes';
 import Toolbar from './Toolbar';
 import '../styles/MainMenu.css';
-import { Key, LocalForage, SpecialKey } from '../common/Enum';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { LuFolders, LuSaveAll } from 'react-icons/lu';
 import Loader from './Loader';
 import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
+import { Key, LocalForage, Paths, SpecialKey } from '../common';
+import { LocalFile, Project } from '../core';
+import Dialog from './dialogs/Dialog';
+import FooterNoYes from './dialogs/footers/FooterNoYes';
 
 type MenuItemType = {
 	title: ReactNode | string;
@@ -208,7 +206,7 @@ function MainMenuBar() {
 
 	const handleAcceptClearAllCache = async () => {
 		setIsLoading(true);
-		handleCloseProject();
+		await handleCloseProject();
 		dispatch(clearProjects());
 		const all = await LocalFile.allStorage();
 		for (const path of all) {
@@ -494,10 +492,10 @@ function MainMenuBar() {
 	useEffect(() => {
 		if (triggers.newProject) {
 			dispatch(triggerNewProject(false));
-			handleNewProject();
+			handleNewProject().catch(console.error);
 		} else if (triggers.importProject) {
 			dispatch(triggerImportProject(false));
-			handleImport();
+			handleImport().catch(console.error);
 		} else if (triggers.openProject) {
 			dispatch(triggerOpenProject(''));
 			handleOpenProject(triggers.openProject).catch(console.error);
@@ -509,7 +507,7 @@ function MainMenuBar() {
 			handleSaveAll().catch(console.error);
 		} else if (triggers.play) {
 			dispatch(triggerPlay(false));
-			handlePlay();
+			handlePlay().catch(console.error);
 		}
 	});
 

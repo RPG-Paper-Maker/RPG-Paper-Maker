@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Model, Scene } from '../Editor';
-import { Project } from './Project';
+import { Project } from '.';
 
 class Grid {
 	initialize(modelMap: Model.Map) {

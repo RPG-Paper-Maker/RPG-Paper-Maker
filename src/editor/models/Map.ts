@@ -9,15 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants } from '../common/Constants';
-import { Paths } from '../common/Paths';
-import { Utils } from '../common/Utils';
-import { LocalFile } from '../core/LocalFile';
-import { MapPortion } from '../core/MapPortion';
-import { Portion } from '../core/Portion';
-import { Project } from '../core/Project';
 import { Model } from '../Editor';
 import { Base } from './Base';
+import { Constants, Paths, Utils } from '../common';
+import { LocalFile, MapPortion, Portion, Project } from '../core';
 
 class Map extends Base {
 	public tilesetID: number = 1;
@@ -164,6 +159,7 @@ class Map extends Base {
 		// await this.save(Paths.join(folderMap, Paths.FILE_MAP_INFOS));
 
 		// Portions
+		/*
 		const [lx, ld, lh, lz] = this.getPortionsNumbers();
 		for (let i = 0; i < lx; i++) {
 			for (let j = -ld; j < lh; j++) {
@@ -172,7 +168,7 @@ class Map extends Base {
 					// await LocalFile.writeJSON(Paths.join(folderMap, Portion.getFileName(i, j, k)), json);
 				}
 			}
-		}
+		}*/
 
 		// Objects
 		// TODO

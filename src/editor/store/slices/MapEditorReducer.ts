@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { Rectangle } from '../../core/Rectangle';
 import { Model } from '../../Editor';
-import { TreeMapTag } from '../../models';
-import { ElementMapKind } from '../../common/Enum';
+import { Rectangle } from '../../core';
+import { ElementMapKind } from '../../common';
+
 export interface ProjectState {
 	name: string;
 	location: string;
@@ -12,7 +12,7 @@ export interface ProjectState {
 const MapEditorSlice = createSlice({
 	name: 'mapEditor',
 	initialState: {
-		currentTreeMapTag: null as TreeMapTag | null,
+		currentTreeMapTag: null as Model.TreeMapTag | null,
 		currentTilesetTexture: new Rectangle(0, 0, 1, 1),
 		currentSpecialElementID: -1,
 		currentMapElementKind: ElementMapKind.Floors,

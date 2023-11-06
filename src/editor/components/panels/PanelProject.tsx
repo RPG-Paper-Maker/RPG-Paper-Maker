@@ -19,15 +19,13 @@ import MenuItem from '../MenuItem';
 import { LuFolders } from 'react-icons/lu';
 import { MdOutlineWallpaper } from 'react-icons/md';
 import Tab from '../Tab';
-import { Utils } from '../../common/Utils';
 import { Model } from '../../Editor';
-import { Node } from '../../core/Node';
-import { TreeMapTag } from '../../models';
 import { RootState, setCurrentTreeMapTag, setProjectMenuIndex } from '../../store';
 import PanelTextures from './PanelTextures';
 import Loader from '../Loader';
 import TreeMaps from '../TreeMaps';
-import { Project } from '../../core/Project';
+import { Node, Project } from '../../core';
+import { Utils } from '../../common';
 
 function PanelProject() {
 	const [mapsTabsTitles, setMapsTabsTitles] = useState<Model.Base[]>([]);
@@ -50,15 +48,15 @@ function PanelProject() {
 
 	const getDefaultTabContents = () => Project.current!.treeMaps.tabs.map(() => null);
 
-	const updateProjectMenuIndex = (index: number) => {
+	const updateProjectMenuIndex = async (index: number) => {
 		dispatch(setProjectMenuIndex(index));
 		Project.current!.settings.projectMenuIndex = index;
-		Project.current!.settings.save();
+		await Project.current!.settings.save();
 	};
 
 	const handleSelectedMapItem = (node: Node | null, isClick: boolean) => {
 		if (!openLoading) {
-			if (node && !(node.content as TreeMapTag).isFolder()) {
+			if (node && !(node.content as Model.TreeMapTag).isFolder()) {
 				const id = node.content.id;
 				const title = node.getPath(false);
 				if (!mapsTabsTitles.find((model) => model.id === id)) {
@@ -78,14 +76,14 @@ function PanelProject() {
 		}
 	};
 
-	const handleTabCurrentIndexChanged = (index: number, model: Model.Base, isClick: boolean) => {
+	const handleTabCurrentIndexChanged = async (index: number, model: Model.Base, isClick: boolean) => {
 		if (!openLoading) {
 			let id = -1;
 			if (index !== -1 && model) {
 				id = model.id;
 			}
 			Project.current!.treeMaps.currentMap = id;
-			Project.current!.treeMaps.save();
+			await Project.current!.treeMaps.save();
 			if (isClick) {
 				setMapForcedCurrentSelectedItemID(id);
 			}
@@ -108,7 +106,7 @@ function PanelProject() {
 	useEffect(() => {
 		if (!openLoading) {
 			Project.current!.treeMaps.tabs = mapsTabsTitles.map((model) => model.id);
-			Project.current!.treeMaps.save();
+			Project.current!.treeMaps.save().catch(console.error);
 		}
 	}, [mapsTabsTitles]);
 

@@ -10,11 +10,10 @@
 */
 
 import * as THREE from 'three';
-import { Manager, Scene } from '../Editor';
-import { Project } from './Project';
+import { Manager, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
-import { TreeMapTag } from '../models';
-import { Utils } from '../common/Utils';
+import { Utils } from '../common';
+import { Project } from './Project';
 
 class Camera {
 	public static MIN_ZOOM = 20;
@@ -26,9 +25,9 @@ class Camera {
 	public horizontalAngle: number;
 	public verticalAngle: number;
 	public defaultCameraPosition: THREE.Vector3;
-	public tag?: TreeMapTag;
+	public tag?: Model.TreeMapTag;
 
-	constructor(tag?: TreeMapTag) {
+	constructor(tag?: Model.TreeMapTag) {
 		this.tag = tag;
 		this.perspectiveCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 100000);
 		this.distance = Utils.defaultValue(tag?.cameraDistance, 800 * Project.current!.systems.getCoefSquareSize());

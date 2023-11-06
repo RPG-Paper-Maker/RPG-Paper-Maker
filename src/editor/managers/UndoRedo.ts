@@ -10,13 +10,8 @@
 */
 
 import { MapElement, Scene } from '../Editor';
-import { ElementMapKind } from '../common/Enum';
-import { Paths } from '../common/Paths';
-import { Utils } from '../common/Utils';
-import { LocalFile } from '../core/LocalFile';
-import { Position } from '../core/Position';
-import { Project } from '../core/Project';
-import { UndoRedoState } from '../core/UndoRedoState';
+import { ElementMapKind, Paths, Utils } from '../common';
+import { LocalFile, Position, Project, UndoRedoState } from '../core';
 
 class UndoRedo {
 	public static readonly MAX_SAVES = 50;

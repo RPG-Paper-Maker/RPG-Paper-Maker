@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { LocalForage } from '../common/Enum';
-import { Paths } from '../common/Paths';
 import { Data } from '../Editor';
+import { LocalForage, Paths } from '../common';
 
 class Project {
 	public static current: Project | null = null;

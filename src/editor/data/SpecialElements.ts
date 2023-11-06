@@ -10,11 +10,8 @@
 */
 
 import { Model } from '../Editor';
-import { BINDING } from '../common/Enum';
-import { Paths } from '../common/Paths';
-import { BindingType } from '../common/Types';
-import { Project } from '../core/Project';
-import { Serializable } from '../core/Serializable';
+import { BINDING, BindingType, Paths } from '../common';
+import { Project, Serializable } from '../core';
 
 class SpecialElements extends Serializable {
 	public autotiles!: Model.Autotile[];

@@ -10,12 +10,9 @@
 */
 
 import localforage from 'localforage';
-import { Utils } from '../common/Utils';
 import { Serializable } from './Serializable';
 import JSZip from 'jszip';
-import { Paths } from '../common/Paths';
-import { IO } from '../common/IO';
-import { ArrayUtils } from '../common/ArrayUtils';
+import { ArrayUtils, IO, Paths, Utils } from '../common';
 
 class LocalFile extends Serializable {
 	public static readonly PATH_SYSTEMS = '/systems.json';

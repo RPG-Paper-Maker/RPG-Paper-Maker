@@ -9,11 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import react, { ReactNode } from 'react';
-import { BINDING, ModelType } from '../common/Enum';
-import { Utils } from '../common/Utils';
+import { ReactNode } from 'react';
 import { Serializable } from '../core/Serializable';
-import { BindingType } from '../common/Types';
+import { BINDING, BindingType, ModelType, Utils } from '../common';
 
 class Base extends Serializable {
 	public id!: number;

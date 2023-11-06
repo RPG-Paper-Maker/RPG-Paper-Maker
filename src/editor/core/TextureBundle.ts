@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Rectangle } from './Rectangle';
+import { Rectangle } from '.';
 
 class TextureBundle {
 	public list: any[][];
@@ -79,12 +79,9 @@ class TextureBundle {
 	}
 
 	getOffset(id: number, rect?: Rectangle): number {
-		let pair: any, point: number[];
-		for (let i = 0, l = this.list.length; i < l; i++) {
-			pair = this.list[i];
-			point = pair[1];
-			if (id === pair[0] && (!rect || (point[0] === rect.x && point[1] === rect.y))) {
-				return i;
+		for (const [index, [currentID, point]] of this.list.entries()) {
+			if (id === currentID && (!rect || (point[0] === rect.x && point[1] === rect.y))) {
+				return index;
 			}
 		}
 		return -1;

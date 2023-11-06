@@ -15,9 +15,9 @@ import { store } from './store';
 import MainMenuBar from './components/MainMenuBar';
 import PanelLoading from './components/panels/PanelLoading';
 import PanelMain from './components/panels/PanelMain';
+import { Project } from './core';
 import './styles/Editor.css';
 import './styles/Mobile.css';
-import { Project } from './core/Project';
 
 function Editor() {
 	const [loaded, setLoaded] = useState(false);

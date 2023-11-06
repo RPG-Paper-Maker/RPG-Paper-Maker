@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { CustomGeometry } from './CustomGeometry';
+import { CustomGeometry } from '.';
 import { MapElement } from '../Editor';
 
 class CustomGeometryFace extends CustomGeometry {

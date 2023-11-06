@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Model } from '../Editor';
-import { Serializable } from '../core/Serializable';
-import { Constants } from './Constants';
+import { Serializable } from '../core';
+import { Constants } from '.';
 
 class Utils {
 	public static defaultValue<T>(value: T | undefined, defaultValue: T): T {

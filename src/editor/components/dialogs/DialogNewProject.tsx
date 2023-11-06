@@ -11,18 +11,15 @@
 
 import React, { useState } from 'react';
 import FooterNoYes from './footers/FooterNoYes';
-import { LocalFile } from '../../core/LocalFile';
 import { Model, Scene } from '../../Editor';
-import { Project } from '../../core/Project';
 import Dialog from './Dialog';
-import { Paths } from '../../common/Paths';
 import FooterCancelOK from './footers/FooterCancelOK';
 import Input from '../Input';
 import Loader from '../Loader';
 import { useDispatch } from 'react-redux';
 import { removeProject } from '../../store';
-import { ElementMapKind, LocalForage } from '../../common/Enum';
-import { Rectangle } from '../../core/Rectangle';
+import { LocalFile, Project, Rectangle } from '../../core';
+import { ElementMapKind, LocalForage, Paths } from '../../common';
 
 type Props = {
 	isOpen: boolean;

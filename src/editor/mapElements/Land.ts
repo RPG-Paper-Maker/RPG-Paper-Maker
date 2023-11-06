@@ -10,14 +10,10 @@
 */
 
 import * as THREE from 'three';
-import { CustomGeometry } from '../core/CustomGeometry';
-import { Position } from '../core/Position';
-import { Rectangle } from '../core/Rectangle';
-import { Base } from './Base';
-import { Project } from '../core/Project';
 import { MapElement } from '../Editor';
-import { BindingType } from '../common/Types';
-import { BINDING } from '../common/Enum';
+import { Base } from './Base';
+import { CustomGeometry, Position, Project, Rectangle } from '../core';
+import { BINDING, BindingType } from '../common';
 
 class Land extends Base {
 	public static readonly JSON_UP = 'up';

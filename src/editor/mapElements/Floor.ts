@@ -10,12 +10,9 @@
 */
 
 import { MapElement } from '../Editor';
-import { ElementMapKind } from '../common/Enum';
-import { CustomGeometry } from '../core/CustomGeometry';
-import { Position } from '../core/Position';
-import { Project } from '../core/Project';
-import { Rectangle } from '../core/Rectangle';
 import { Land } from './Land';
+import { ElementMapKind } from '../common';
+import { CustomGeometry, Position, Project, Rectangle } from '../core';
 
 class Floor extends Land {
 	constructor() {

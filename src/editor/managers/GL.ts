@@ -15,8 +15,7 @@ import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
-import { IO } from '../common/IO';
-import { Utils } from '../common/Utils';
+import { IO, Utils } from '../common';
 
 class GL {
 	public static SHADER_DEFAULT_VERTEX: string;

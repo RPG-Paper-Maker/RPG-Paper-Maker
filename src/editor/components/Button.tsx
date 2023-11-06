@@ -10,8 +10,8 @@
 */
 
 import { useState, useEffect, useRef } from 'react';
-import { Utils } from '../common/Utils';
 import '../styles/Button.css';
+import { Utils } from '../common';
 
 type Props = {
 	children?: any;

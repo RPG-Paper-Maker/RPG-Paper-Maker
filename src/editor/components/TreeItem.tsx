@@ -11,10 +11,10 @@
 
 import { useState } from 'react';
 import { Model } from '../Editor';
-import { Utils } from '../common/Utils';
-import { Node } from '../core/Node';
 import { HiChevronDown, HiChevronRight } from 'react-icons/hi';
 import '../styles/TreeItem.css';
+import { Node } from '../core';
+import { Utils } from '../common';
 
 type Props = {
 	node: Node;

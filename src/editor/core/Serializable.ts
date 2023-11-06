@@ -9,12 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING } from '../common/Enum';
-import { BindingType, KeyValue } from '../common/Types';
-import { Utils } from '../common/Utils';
-import { LocalFile } from './LocalFile';
-import { Position } from './Position';
-import { Rectangle } from './Rectangle';
+import { LocalFile, Position, Rectangle } from '.';
+import { BINDING, BindingType, KeyValue, Utils } from '../common';
 
 abstract class Serializable {
 	getPath(temp: boolean = false) {
@@ -109,7 +105,7 @@ abstract class Serializable {
 					(this as any)[name] = mapping;
 					for (const objHash of json[jsonName]) {
 						p.read(objHash.k);
-						let cons = additionalFunction ? additionalFunction(objHash.v) : constructor;
+						const cons = additionalFunction ? additionalFunction(objHash.v) : constructor;
 						mapping.set(p.toKey(), cons.fromJSON(objHash.v));
 					}
 					break;
@@ -186,7 +182,7 @@ abstract class Serializable {
 					break;
 				}
 				case BINDING.RECTANGLE: {
-					let rectangle = (this as any)[name];
+					const rectangle = (this as any)[name];
 					if (rectangle === null) {
 						json[jsonName] = null;
 					} else {

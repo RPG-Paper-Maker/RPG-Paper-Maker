@@ -9,11 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING } from '../common/Enum';
-import { Paths } from '../common/Paths';
-import { BindingType } from '../common/Types';
-import { Project } from '../core/Project';
-import { Serializable } from '../core/Serializable';
+import { BINDING, BindingType, Paths } from '../common';
+import { Project, Serializable } from '../core';
 
 class Settings extends Serializable {
 	public projectMenuIndex!: number;

@@ -10,19 +10,16 @@
 */
 
 import * as THREE from 'three';
-import { Position } from './Position';
 import { Manager, MapElement, Scene } from '../Editor';
-import { CustomGeometry } from './CustomGeometry';
-import { Project } from './Project';
-import { Frame } from './Frame';
+import { CustomGeometry, Frame, Position, Project } from '.';
 import { Inputs } from '../managers';
-import { Key } from '../common/Enum';
+import { Key } from '../common';
 
 class Cursor {
 	public position: Position;
 	public mesh: THREE.Mesh<CustomGeometry, THREE.MeshPhongMaterial> | null = null;
-	public frame: Frame = new Frame(200);
-	public frameMove: Frame = new Frame(20);
+	public frame = new Frame(200);
+	public frameMove = new Frame(20);
 
 	constructor(position: Position) {
 		this.position = position;

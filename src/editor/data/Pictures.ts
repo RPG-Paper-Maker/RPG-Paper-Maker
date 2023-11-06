@@ -10,10 +10,8 @@
 */
 
 import { Model } from '../Editor';
-import { PictureKind } from '../common/Enum';
-import { Paths } from '../common/Paths';
-import { Project } from '../core/Project';
-import { Serializable } from '../core/Serializable';
+import { Paths, PictureKind } from '../common';
+import { Project, Serializable } from '../core';
 
 class Pictures extends Serializable {
 	public list!: Model.Picture[][];

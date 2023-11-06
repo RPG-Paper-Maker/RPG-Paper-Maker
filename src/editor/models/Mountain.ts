@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, MountainCollisionKind } from '../common/Enum';
-import { BindingType } from '../common/Types';
 import { SpecialElement } from './SpecialElement';
+import { BINDING, BindingType, MountainCollisionKind } from '../common';
 
 class Mountain extends SpecialElement {
 	public collisionKind!: MountainCollisionKind;

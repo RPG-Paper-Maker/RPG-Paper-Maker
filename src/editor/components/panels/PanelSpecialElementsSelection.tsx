@@ -10,15 +10,14 @@
 */
 
 import React, { useEffect } from 'react';
-import { PictureKind } from '../../common/Enum';
-import { Project } from '../../core/Project';
 import '../../styles/PanelSpecialElementsSelection.css';
-import { Utils } from '../../common/Utils';
 import { HiChevronDown, HiChevronLeft } from 'react-icons/hi';
 import TextureSquareSelector from '../TextureSquareSelector';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setCurrentSpecialElementID } from '../../store';
 import { Model, Scene } from '../../Editor';
+import { PictureKind, Utils } from '../../common';
+import { Project } from '../../core';
 
 type Props = {
 	kind: PictureKind;

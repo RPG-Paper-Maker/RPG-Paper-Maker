@@ -10,13 +10,10 @@
 */
 
 import { Scene } from '../Editor';
-import { BINDING, ElementMapKind } from '../common/Enum';
-import { Paths } from '../common/Paths';
-import { BindingType } from '../common/Types';
-import { Portion } from '../core/Portion';
-import { Project } from '../core/Project';
+import { BINDING, BindingType, ElementMapKind, Paths } from '../common';
 import { Serializable } from '../core/Serializable';
-import { Sprite, Floor, Autotile } from '../mapElements';
+import { Portion, Project } from '../core';
+import { Autotile, Floor, Sprite } from '../mapElements';
 
 class MapPortion extends Serializable {
 	public globalPortion: Portion;

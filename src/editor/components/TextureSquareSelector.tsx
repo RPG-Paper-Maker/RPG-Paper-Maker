@@ -11,13 +11,11 @@
 
 import { useState, useRef, useEffect } from 'react';
 import '../styles/Tree.css';
-import { Picture2D } from '../core/Picture2D';
-import { Rectangle } from '../core/Rectangle';
-import { Constants } from '../common/Constants';
-import { Project } from '../core/Project';
 import { useDispatch } from 'react-redux';
 import { setCurrentTilesetTexture } from '../store';
 import { Scene } from '../Editor';
+import { Picture2D, Project, Rectangle } from '../core';
+import { Constants } from '../common';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;

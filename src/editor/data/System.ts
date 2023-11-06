@@ -9,12 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants } from '../common/Constants';
-import { BINDING } from '../common/Enum';
-import { Paths } from '../common/Paths';
-import { BindingType } from '../common/Types';
-import { Project } from '../core/Project';
-import { Serializable } from '../core/Serializable';
+import { BINDING, BindingType, Constants, Paths } from '../common';
+import { Project, Serializable } from '../core';
 
 class System extends Serializable {
 	public projectName!: string;

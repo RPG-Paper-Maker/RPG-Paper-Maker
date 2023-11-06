@@ -30,7 +30,7 @@ import { MdOutlineAddchart, MdAutoAwesomeMosaic } from 'react-icons/md';
 import { TfiVideoClapper } from 'react-icons/tfi';
 import { GiBrickWall } from 'react-icons/gi';
 import '../styles/Toolbar.css';
-import { Project } from '../core/Project';
+import { Project } from '../core';
 
 function Toolbar() {
 	const dispatch = useDispatch();
@@ -87,10 +87,10 @@ function Toolbar() {
 						Folder
 					</MenuItem>
 					<MenuItem separator></MenuItem>
-					<MenuItem icon={<BsClipboardData />} onClick={handleFloor} disabled>
+					<MenuItem icon={<BsDatabase />} onClick={handleFloor} disabled>
 						Data
 					</MenuItem>
-					<MenuItem icon={<BsDatabase />} onClick={handleFloor} disabled>
+					<MenuItem icon={<BsClipboardData />} onClick={handleFloor} disabled>
 						Systems
 					</MenuItem>
 					<MenuItem icon={<TbNumbers />} onClick={handleFloor} disabled>

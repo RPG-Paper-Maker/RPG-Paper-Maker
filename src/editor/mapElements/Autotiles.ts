@@ -11,16 +11,8 @@
 
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
-import { CustomGeometry } from '../core/CustomGeometry';
-import { Position } from '../core/Position';
-import { TextureBundle } from '../core/TextureBundle';
-import { Autotile } from './Autotile';
-import { Constants } from '../common/Constants';
-import { Project } from '../core/Project';
-import { AUTOTILE_TILE_NAMES, PictureKind } from '../common/Enum';
-import { Picture2D } from '../core/Picture2D';
-import { Portion } from '../core/Portion';
-import { Rectangle } from '../core/Rectangle';
+import { CustomGeometry, Picture2D, Portion, Position, Project, Rectangle, TextureBundle } from '../core';
+import { AUTOTILE_TILE_NAMES, Constants, PictureKind } from '../common';
 
 class Autotiles {
 	public static COUNT_LIST = 5;
@@ -167,9 +159,8 @@ class Autotiles {
 		const size = width * height;
 		picture.width = width;
 		picture.height = height;
-		let j: number, point: number[], p: number[];
 		for (let i = 0; i < size; i++) {
-			point = [i % width, Math.floor(i / width)];
+			const point = [i % width, Math.floor(i / width)];
 			if (isAnimated) {
 				if (textureAutotile != null) {
 					await this.updateTextureAutotile(texturesAutotile, textureAutotile, texture);
@@ -189,8 +180,8 @@ class Autotiles {
 				textureAutotile.setBegin(picture.id, point);
 				textureAutotile.isAnimated = isAnimated;
 			}
-			for (j = 0; j < frames; j++) {
-				p = [point[0] * frames + j, point[1]];
+			for (let j = 0; j < frames; j++) {
+				const p = [point[0] * frames + j, point[1]];
 				this.paintPictureAutotile(image, offset, p);
 				offset++;
 			}
@@ -216,10 +207,10 @@ class Autotiles {
 
 	static paintPictureAutotile(img: HTMLImageElement, offset: number, point: number[]) {
 		let row = -1;
-		let offsetX = point[0] * 2 * Project.getSquareSize();
-		let offsetY = point[1] * 3 * Project.getSquareSize();
-		let sDiv = Math.floor(Project.getSquareSize() / 2);
-		let y = offset * Autotiles.COUNT_LIST * 2;
+		const offsetX = point[0] * 2 * Project.getSquareSize();
+		const offsetY = point[1] * 3 * Project.getSquareSize();
+		const sDiv = Math.floor(Project.getSquareSize() / 2);
+		const y = offset * Autotiles.COUNT_LIST * 2;
 		for (let a = 0; a < Autotiles.COUNT_LIST; a++) {
 			const lA = this.AUTOTILE_BORDER[Autotiles.LIST_A[a]];
 			let count = 0;
@@ -292,7 +283,7 @@ class Autotiles {
 	) {
 		texture.image = await Picture2D.loadImage(Scene.Map.canvasRendering!.toDataURL());
 		texture.needsUpdate = true;
-		textureAutotile.material = Manager.GL.createMaterial({ texture: texture });
+		textureAutotile.material = Manager.GL.createMaterial({ texture });
 		if (Scene.Map.current) {
 			textureAutotile.material.userData.uniforms.offset.value = textureAutotile.isAnimated
 				? Scene.Map.current.autotilesOffset
@@ -469,7 +460,7 @@ class Autotiles {
 		}
 	}
 
-	updateGeometry(position: Position, autotile: Autotile) {
+	updateGeometry(position: Position, autotile: MapElement.Autotile) {
 		return this.width === null || this.height === 0
 			? null
 			: autotile.updateGeometryAutotile(
