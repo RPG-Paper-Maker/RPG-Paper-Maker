@@ -127,7 +127,7 @@ abstract class Serializable {
 	}
 
 	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
-		for (const [name, jsonName, defaultValue, type, constructor] of additionnalBinding) {
+		for (const [name, jsonName, defaultValue, type] of additionnalBinding) {
 			switch (type) {
 				case BINDING.NUMBER:
 				case BINDING.STRING:

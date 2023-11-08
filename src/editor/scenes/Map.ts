@@ -110,8 +110,6 @@ class Map extends Base {
 	}
 
 	async load() {
-		this.loading = true;
-
 		Manager.GL.mapEditorContext.renderer.setClearColor('#8cc3ed');
 
 		// Tileset texture material
@@ -132,7 +130,7 @@ class Map extends Base {
 		const width = Project.getSquareSize() * this.modelMap.width;
 		const extremeSize = Project.getSquareSize() * 1000;
 		this.meshPlane = new THREE.Mesh(
-			new THREE.PlaneBufferGeometry(length + extremeSize, width + extremeSize, 1),
+			new THREE.PlaneGeometry(length + extremeSize, width + extremeSize, 1),
 			material
 		);
 		this.meshPlane.visible = false;
@@ -189,9 +187,9 @@ class Map extends Base {
 	}
 
 	initializeSunLight() {
-		const ambient = new THREE.AmbientLight(0xffffff, 0.61);
+		const ambient = new THREE.AmbientLight(0xffffff, 1.2);
 		this.scene.add(ambient);
-		this.sunLight = new THREE.DirectionalLight(0xffffff, 0.5);
+		this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
 		this.sunLight.position.set(1, 1.75, 1);
 		this.sunLight.position.multiplyScalar(16 * 10);
 		this.sunLight.target.position.set(0, 0, 0);

@@ -42,6 +42,7 @@ function MapEditor() {
 		if (currentMapTag && currentMapTag.id > 0) {
 			setFirstLoading(true);
 			Scene.Map.current = new Scene.Map(currentMapTag);
+			Scene.Map.current.loading = true;
 			await Scene.Map.current.load();
 			const undoRedoIndex = await Manager.UndoRedo.getCurrentCurrentIndex();
 			const undoRedoLength = await Manager.UndoRedo.getStatesLength();

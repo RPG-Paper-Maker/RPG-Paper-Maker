@@ -37,6 +37,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		const scene = new Scene.Previewer3D(id);
 		scene.canvas = Manager.GL.extraContext.parent;
 		Scene.Previewer3D.scenes[id] = scene;
+		scene.loading = true;
 		await scene.load();
 		update();
 		resize();

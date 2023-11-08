@@ -16,6 +16,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { IO, Utils } from '../common';
+import { Scene } from '../Editor';
 
 class GL {
 	public static SHADER_DEFAULT_VERTEX: string;
@@ -87,7 +88,7 @@ class GL {
 		flipX?: boolean;
 		flipY?: boolean;
 		uniforms?: Record<string, any>;
-		side?: number;
+		side?: THREE.Side;
 		repeat?: number;
 		opacity?: number;
 		shadows?: boolean;
@@ -99,10 +100,10 @@ class GL {
 		opts.texture.magFilter = THREE.NearestFilter;
 		opts.texture.minFilter = THREE.NearestFilter;
 		opts.texture.flipY = opts.flipY ? true : false;
-		opts.repeat = Utils.defaultValue(opts.repeat, 1.0);
-		opts.opacity = Utils.defaultValue(opts.opacity, 1.0);
-		opts.shadows = Utils.defaultValue(opts.shadows, true);
-		opts.side = Utils.defaultValue(opts.side, THREE.DoubleSide);
+		const repeat = Utils.defaultValue(opts.repeat, 1.0);
+		const opacity = Utils.defaultValue(opts.opacity, 1.0);
+		const shadows = Utils.defaultValue(opts.shadows, true);
+		const side = Utils.defaultValue(opts.side, THREE.DoubleSide);
 		const fragment = this.SHADER_DEFAULT_FRAGMENT;
 		const vertex = this.SHADER_DEFAULT_VERTEX;
 		const screenTone = this.screenTone;
@@ -111,8 +112,8 @@ class GL {
 			: {
 					offset: { value: new THREE.Vector2() },
 					colorD: { value: screenTone },
-					repeat: { value: opts.repeat },
-					enableShadows: { value: opts.shadows },
+					repeat: { value: repeat },
+					enableShadows: { value: shadows },
 			  };
 
 		// Program cache key for multiple shader programs
@@ -121,13 +122,14 @@ class GL {
 		// Create material
 		const material = new THREE.MeshPhongMaterial({
 			map: opts.texture,
-			side: opts.side,
+			side,
 			transparent: true,
 			alphaTest: 0.5,
 			depthWrite: Utils.defaultValue(opts.depthWrite, true),
-			opacity: opts.opacity,
+			opacity,
 		});
 		material.userData.uniforms = uniforms;
+		material.forceSinglePass = true;
 		material.userData.customDepthMaterial = new THREE.MeshDepthMaterial({
 			depthPacking: THREE.RGBADepthPacking,
 			map: opts.texture,
@@ -140,9 +142,9 @@ class GL {
 			shader.vertexShader = vertex;
 			shader.uniforms.colorD = uniforms.colorD;
 			shader.uniforms.reverseH = { value: opts.flipX };
-			shader.uniforms.repeat = { value: opts.repeat };
+			shader.uniforms.repeat = { value: repeat };
 			shader.uniforms.offset = uniforms.offset;
-			shader.uniforms.enableShadows = { value: opts.shadows };
+			shader.uniforms.enableShadows = { value: shadows };
 			material.userData.uniforms = shader.uniforms;
 
 			// Important to run a unique shader only once and be able to use

@@ -31,9 +31,9 @@ class Previewer3D extends Base {
 	}
 
 	initializeSunLight() {
-		const ambient = new THREE.AmbientLight(0xffffff, 0.61);
+		const ambient = new THREE.AmbientLight(0xffffff, 1.2);
 		this.scene.add(ambient);
-		this.sunLight = new THREE.DirectionalLight(0xffffff, 0.5);
+		this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
 		this.sunLight.position.set(-1, 1.75, 1);
 		this.sunLight.position.multiplyScalar(16 * 10);
 		this.sunLight.target.position.set(0, 0, 0);
@@ -51,7 +51,6 @@ class Previewer3D extends Base {
 	}
 
 	async load() {
-		this.loading = true;
 		this.material = await Manager.GL.loadTexture('./assets/textures/plains-woods.png');
 		this.initializeSunLight();
 		this.loading = false;

@@ -112,6 +112,7 @@ function MapEditorMenuBar() {
 					break;
 			}
 		}
+		// eslint-disable-next-line
 	}, [openLoading]);
 
 	const getLandsIcon = () => {

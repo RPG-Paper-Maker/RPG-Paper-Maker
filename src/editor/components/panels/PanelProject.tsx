@@ -108,6 +108,7 @@ function PanelProject() {
 			Project.current!.treeMaps.tabs = mapsTabsTitles.map((model) => model.id);
 			Project.current!.treeMaps.save().catch(console.error);
 		}
+		// eslint-disable-next-line
 	}, [mapsTabsTitles]);
 
 	// When first opening the project with all data loaded
@@ -118,6 +119,7 @@ function PanelProject() {
 			setMapForcedCurrentSelectedItemID(Project.current!.treeMaps.currentMap);
 			dispatch(setProjectMenuIndex(Project.current!.settings.projectMenuIndex));
 		}
+		// eslint-disable-next-line
 	}, [openLoading]);
 
 	return (

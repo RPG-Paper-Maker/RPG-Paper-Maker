@@ -83,6 +83,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		const id = list?.at(0)?.id || -1;
 		dispatch(setCurrentSpecialElementID(id));
 		Scene.Map.currentSelectedSpecialElementID = id;
+		// eslint-disable-next-line
 	}, []);
 
 	return <div className='panel-special-elements'>{listElements}</div>;
