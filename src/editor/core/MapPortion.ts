@@ -62,7 +62,7 @@ class MapPortion {
 					position,
 					MapElement.Autotile.create(
 						Scene.Map.currentSelectedSpecialElementID,
-						159,
+						MapElement.Autotiles.PREVIEW_TILE,
 						Scene.Map.currentSelectedTexture
 					),
 					ELEMENT_MAP_KIND.AUTOTILE,

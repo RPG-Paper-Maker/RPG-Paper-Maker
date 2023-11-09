@@ -16,6 +16,7 @@ import { AUTOTILE_TILE_NAMES, Constants, PICTURE_KIND } from '../common';
 
 class Autotiles {
 	public static COUNT_LIST = 5;
+	public static PREVIEW_TILE = 159;
 	public static LIST_A = [
 		AUTOTILE_TILE_NAMES.A1,
 		AUTOTILE_TILE_NAMES.A2,
