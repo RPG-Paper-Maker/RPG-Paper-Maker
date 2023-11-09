@@ -113,7 +113,7 @@ class Map extends Base {
 		Manager.GL.mapEditorContext.renderer.setClearColor('#8cc3ed');
 
 		// Tileset texture material
-		this.materialTileset = await Manager.GL.loadTexture('./assets/textures/plains-woods.png');
+		this.materialTileset = await Manager.GL.loadTexture('./Assets/plains-woods.png');
 
 		// Load map model
 		const mapName = Model.Map.generateMapName(this.id);

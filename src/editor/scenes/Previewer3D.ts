@@ -51,7 +51,7 @@ class Previewer3D extends Base {
 	}
 
 	async load() {
-		this.material = await Manager.GL.loadTexture('./assets/textures/plains-woods.png');
+		this.material = await Manager.GL.loadTexture('./Assets/plains-woods.png');
 		this.initializeSunLight();
 		this.loading = false;
 	}

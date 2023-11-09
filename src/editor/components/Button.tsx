@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ReactNode } from 'react';
 import '../styles/Button.css';
 import { Utils } from '../common';
 
@@ -18,7 +18,7 @@ type Props = {
 	primary?: boolean;
 	canHold?: boolean;
 	intervalHold?: number;
-	icon?: string;
+	icon?: ReactNode;
 	activable?: boolean;
 	active?: boolean;
 	big?: boolean;
@@ -31,7 +31,7 @@ function Button({
 	primary = false,
 	canHold = false,
 	intervalHold = 0,
-	icon = '',
+	icon,
 	activable = false,
 	active = true,
 	big = false,
@@ -91,7 +91,7 @@ function Button({
 			])}
 			onClick={handleClick}
 		>
-			{icon !== '' && <img alt='button icon' src={'./assets/icons/' + icon} />}
+			{icon}
 			{children}
 		</button>
 	);

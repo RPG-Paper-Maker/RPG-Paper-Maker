@@ -61,7 +61,7 @@ function PanelTextures({ visible }: Props) {
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
 				return <PanelSpecialElementsSelection kind={PICTURE_KIND.WALLS} />;
 			default:
-				return <TextureSquareSelector texture='./assets/textures/plains-woods.png' />;
+				return <TextureSquareSelector texture='./Assets/plains-woods.png' />;
 		}
 	};
 

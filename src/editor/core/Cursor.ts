@@ -26,7 +26,7 @@ class Cursor {
 	}
 
 	async load() {
-		const material = await Manager.GL.loadTexture('./assets/textures/cursor.png');
+		const material = await Manager.GL.loadTexture('./Assets/cursor.png');
 		material.depthTest = false;
 		material.depthWrite = false;
 		const vecA = new THREE.Vector3(0, 0, 0);

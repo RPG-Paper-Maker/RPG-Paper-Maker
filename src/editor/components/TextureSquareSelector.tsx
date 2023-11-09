@@ -48,7 +48,7 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 
 	const initialize = async () => {
 		currentState.picture = await Picture2D.loadImage(texture);
-		currentState.pictureCursor = await Picture2D.loadImage('./assets/textures/tileset-cursor.png');
+		currentState.pictureCursor = await Picture2D.loadImage('./Assets/tileset-cursor.png');
 		if (refCanvas.current) {
 			refCanvas.current.width = (currentState.picture.width * 2) / divideWidth;
 			refCanvas.current.height = (currentState.picture.height * 2) / divideHeight;
