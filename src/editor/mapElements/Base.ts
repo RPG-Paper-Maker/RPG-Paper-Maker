@@ -61,6 +61,9 @@ abstract class Base extends Serializable {
 				model = new MapElement.Autotile();
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_FACE:
+			case ELEMENT_MAP_KIND.SPRITE_FIX:
+			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 				model = new MapElement.Sprite();
 				break;
 		}

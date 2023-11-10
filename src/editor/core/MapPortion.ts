@@ -70,6 +70,9 @@ class MapPortion {
 				);
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_FACE:
+			case ELEMENT_MAP_KIND.SPRITE_FIX:
+			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 				this.updateMapElement(
 					position,
 					MapElement.Sprite.create(Scene.Map.currentSelectedMapElementKind, Scene.Map.currentSelectedTexture),
@@ -104,6 +107,9 @@ class MapPortion {
 				this.updateAutotile(position, element as MapElement.Autotile, preview, removingPreview, undoRedo);
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_FACE:
+			case ELEMENT_MAP_KIND.SPRITE_FIX:
+			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 				this.updateSprite(position, element as MapElement.Sprite, kind, preview, removingPreview, undoRedo);
 				break;
 			default:

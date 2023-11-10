@@ -58,6 +58,9 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 							.catch(console.error);
 						break;
 					case ELEMENT_MAP_KIND.SPRITE_FACE:
+					case ELEMENT_MAP_KIND.SPRITE_FIX:
+					case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+					case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 						scene.loadSprite(Manager.GL.extraContext, currentTilesetTexture, currentMapElementKind);
 						break;
 				}

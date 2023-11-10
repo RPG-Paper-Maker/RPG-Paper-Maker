@@ -27,7 +27,7 @@ import {
 	TextureBundle,
 	UndoRedoState,
 } from '../core';
-import { Constants, ELEMENT_MAP_KIND, MOBILE_ACTION, RAYCASTING_LAYER, Paths } from '../common';
+import { Constants, ELEMENT_MAP_KIND, MOBILE_ACTION, RAYCASTING_LAYER, Paths, Mathf } from '../common';
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
 
@@ -208,7 +208,7 @@ class Map extends Base {
 
 	add(position: Position, preview: boolean = false) {
 		if (!preview) {
-			const positions = this.traceLine(this.lastPosition, position);
+			const positions = Mathf.traceLine(this.lastPosition, position);
 			for (const p of positions) {
 				if (p.isInMap(this.modelMap)) {
 					this.mapPortion.add(p, preview);
@@ -226,7 +226,7 @@ class Map extends Base {
 	}
 
 	remove(position: Position) {
-		const positions = this.traceLine(this.lastPosition, position);
+		const positions = Mathf.traceLine(this.lastPosition, position);
 		for (const p of positions) {
 			if (p.isInMap(this.modelMap)) {
 				this.mapPortion.remove(p);
@@ -255,6 +255,9 @@ class Map extends Base {
 		if (Inputs.isMouseRightPressed) {
 			switch (Scene.Map.currentSelectedMapElementKind) {
 				case ELEMENT_MAP_KIND.SPRITE_FACE:
+				case ELEMENT_MAP_KIND.SPRITE_FIX:
+				case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+				case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 					layer = RAYCASTING_LAYER.SPRITES;
 					break;
 			}
@@ -293,202 +296,6 @@ class Map extends Base {
 				this.lastPosition = null;
 			}
 		}
-	}
-
-	traceLine(previous: Position | null, current: Position) {
-		if (previous === null) {
-			return [current];
-		}
-		const positions: Position[] = [];
-		let x1 = previous.x;
-		const x2 = current.x;
-		const y = current.y;
-		const yPlus = current.yPixels;
-		let z1 = previous.z;
-		const z2 = current.z;
-		const l = current.layer;
-		let dx = x2 - x1;
-		let dz = z2 - z1;
-		const test = true;
-		if (dx !== 0) {
-			if (dx > 0) {
-				if (dz !== 0) {
-					if (dz > 0) {
-						if (dx >= dz) {
-							let e = dx;
-							dx = 2 * e;
-							dz = dz * 2;
-
-							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
-								x1++;
-								if (x1 === x2) {
-									break;
-								}
-								e -= dz;
-								if (e < 0) {
-									z1++;
-									e += dx;
-								}
-							}
-						} else {
-							let e = dz;
-							dz = 2 * e;
-							dx = dx * 2;
-
-							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
-								z1++;
-								if (z1 === z2) {
-									break;
-								}
-								e -= dx;
-								if (e < 0) {
-									x1++;
-									e += dz;
-								}
-							}
-						}
-					} else {
-						if (dx >= -dz) {
-							let e = dx;
-							dx = 2 * e;
-							dz = dz * 2;
-
-							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
-								x1++;
-								if (x1 === x2) {
-									break;
-								}
-								e += dz;
-								if (e < 0) {
-									z1--;
-									e += dx;
-								}
-							}
-						} else {
-							let e = dz;
-							dz = 2 * e;
-							dx = dx * 2;
-
-							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
-								z1--;
-								if (z1 === z2) {
-									break;
-								}
-								e += dx;
-								if (e > 0) {
-									x1++;
-									e += dz;
-								}
-							}
-						}
-					}
-				} else {
-					while (x1 !== x2) {
-						positions.push(new Position(x1, y, yPlus, z1, l));
-						x1++;
-					}
-				}
-			} else {
-				dz = z2 - z1;
-				if (dz !== 0) {
-					if (dz > 0) {
-						if (-dx >= dz) {
-							let e = dx;
-							dx = 2 * e;
-							dz = dz * 2;
-
-							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
-								x1--;
-								if (x1 === x2) {
-									break;
-								}
-								e += dz;
-								if (e >= 0) {
-									z1++;
-									e += dx;
-								}
-							}
-						} else {
-							let e = dz;
-							dz = 2 * e;
-							dx = dx * 2;
-
-							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
-								z1++;
-								if (z1 === z2) {
-									break;
-								}
-								e += dx;
-								if (e <= 0) {
-									x1--;
-									e += dz;
-								}
-							}
-						}
-					} else {
-						if (dx <= dz) {
-							let e = dx;
-							dx = 2 * e;
-							dz = dz * 2;
-
-							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
-								x1--;
-								if (x1 === x2) break;
-								e -= dz;
-								if (e >= 0) {
-									z1--;
-									e += dx;
-								}
-							}
-						} else {
-							let e = dz;
-							dz = 2 * e;
-							dx = dx * 2;
-
-							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
-								z1--;
-								if (z1 === z2) break;
-								e -= dx;
-								if (e >= 0) {
-									x1--;
-									e += dz;
-								}
-							}
-						}
-					}
-				} else {
-					while (x1 !== x2) {
-						positions.push(new Position(x1, y, yPlus, z1, l));
-						x1--;
-					}
-				}
-			}
-		} else {
-			dz = z2 - z1;
-			if (dz !== 0) {
-				if (dz > 0) {
-					while (z1 !== z2) {
-						positions.push(new Position(x1, y, yPlus, z1, l));
-						z1++;
-					}
-				} else {
-					while (z1 !== z2) {
-						positions.push(new Position(x1, y, yPlus, z1, l));
-						z1--;
-					}
-				}
-			}
-		}
-		positions.push(current);
-		return positions;
 	}
 
 	addPortionToUpdate(portion: Portion) {

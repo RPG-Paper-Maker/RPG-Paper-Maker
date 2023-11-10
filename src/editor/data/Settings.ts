@@ -16,11 +16,13 @@ class Settings extends Serializable {
 	public projectMenuIndex!: number;
 	public mapEditorMenuIndex!: number;
 	public mapEditorLandsMenuIndex!: number;
+	public mapEditorSpritesMenuIndex!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['projectMenuIndex', 'pmi', 1, BINDING.NUMBER],
 		['mapEditorMenuIndex', 'memi', 0, BINDING.NUMBER],
-		['mapEditorLandsMenuIndex', 'mlemi', 0, BINDING.NUMBER],
+		['mapEditorLandsMenuIndex', 'melmi', 0, BINDING.NUMBER],
+		['mapEditorSpritesMenuIndex', 'mesmi', 0, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
