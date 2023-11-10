@@ -190,19 +190,19 @@ class Map extends Base {
 		const ambient = new THREE.AmbientLight(0xffffff, 1.2);
 		this.scene.add(ambient);
 		this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
-		this.sunLight.position.set(1, 1.75, 1);
-		this.sunLight.position.multiplyScalar(16 * 10);
+		this.sunLight.position.set(-1, 1.75, 1);
+		this.sunLight.position.multiplyScalar(Project.getSquareSize() * 10);
 		this.sunLight.target.position.set(0, 0, 0);
 		this.scene.add(this.sunLight);
 		this.sunLight.castShadow = true;
 		this.sunLight.shadow.mapSize.width = 2048;
 		this.sunLight.shadow.mapSize.height = 2048;
-		const d = 16 * 10;
+		const d = Project.getSquareSize() * 10;
 		this.sunLight.shadow.camera.left = -d;
 		this.sunLight.shadow.camera.right = d;
 		this.sunLight.shadow.camera.top = d;
 		this.sunLight.shadow.camera.bottom = -d;
-		this.sunLight.shadow.camera.far = 16 * 350;
+		this.sunLight.shadow.camera.far = Project.getSquareSize() * 350;
 		this.sunLight.shadow.bias = -0.0003;
 	}
 
