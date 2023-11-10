@@ -431,7 +431,7 @@ function MainMenuBar() {
 	) => {
 		for (const item of itemList) {
 			const { shortcut, disabled, onClick, children } = item;
-			if (!disabled && shortcut && onClick) {
+			if (shortcut && onClick) {
 				// Check all special keys
 				let valid = true;
 				for (const specialKey of specialKeys) {
@@ -451,8 +451,12 @@ function MainMenuBar() {
 				// Check key if not a specialKey
 				if (specialKeys.indexOf(key as SPECIAL_KEY) === -1 && shortcut.indexOf(key) !== -1) {
 					event.preventDefault();
-					await onClick();
-					return true;
+					if (disabled) {
+						return false;
+					} else {
+						await onClick();
+						return true;
+					}
 				}
 			} else {
 				if (children) {
