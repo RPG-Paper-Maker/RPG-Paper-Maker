@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { Manager, MapElement, Scene } from '../Editor';
 import { Base } from '.';
 import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle, TextureBundle } from '../core';
-import { ELEMENT_MAP_KIND } from '../common';
+import { ELEMENT_MAP_KIND, SPRITE_WALL_TYPE } from '../common';
 
 class Previewer3D extends Base {
 	public static scenes: Record<string, Previewer3D> = {}; // id canvas => scene
@@ -105,6 +105,27 @@ class Previewer3D extends Base {
 		const geometry = new CustomGeometryFace();
 		sprite.updateGeometry(geometry, width, height, new Position(), 0, true, null);
 		this.addToScene(GL, geometry);
+	}
+
+	async loadWall(GL: Manager.GL, wallID: number) {
+		const wall = Project.current!.specialElements.getWallByID(wallID);
+		if (!wall) {
+			this.clear();
+			return;
+		}
+		const textureWall = await MapElement.SpriteWall.loadWallTexture(wallID);
+		if (textureWall) {
+			const { width, height } = Manager.GL.getMaterialTextureSize(textureWall);
+			const spriteLeft = MapElement.SpriteWall.create(wallID, SPRITE_WALL_TYPE.LEFT);
+			const spriteMiddle = MapElement.SpriteWall.create(wallID, SPRITE_WALL_TYPE.MIDDLE);
+			const spriteRight = MapElement.SpriteWall.create(wallID, SPRITE_WALL_TYPE.RIGHT);
+			const geometry = new CustomGeometry();
+			let count = 0;
+			count = spriteLeft.updateGeometry(geometry, new Position(), width, height, count);
+			count = spriteMiddle.updateGeometry(geometry, new Position(1), width, height, count);
+			count = spriteRight.updateGeometry(geometry, new Position(2), width, height, count);
+			this.addToScene(GL, geometry, textureWall);
+		}
 	}
 
 	addToScene(

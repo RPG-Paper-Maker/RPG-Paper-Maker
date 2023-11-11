@@ -12,7 +12,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Manager, Scene } from '../Editor';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { RootState, setCurrentWallID } from '../store';
 import { ELEMENT_MAP_KIND } from '../common';
 
 type Props = {
@@ -27,6 +27,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	const currentTilesetTexture = useSelector((state: RootState) => state.mapEditor.currentTilesetTexture);
 	const currentAutotileID = useSelector((state: RootState) => state.mapEditor.currentAutotileID);
 	const currentAutotileTexture = useSelector((state: RootState) => state.mapEditor.currentAutotileTexture);
+	const currentWallID = useSelector((state: RootState) => state.mapEditor.currentWallID);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	useSelector((state: RootState) => state.triggers.splitting);
 
@@ -63,6 +64,9 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 					case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
 					case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 						await scene.loadSprite(Manager.GL.extraContext, currentTilesetTexture, currentMapElementKind);
+						break;
+					case ELEMENT_MAP_KIND.SPRITE_WALL:
+						await scene.loadWall(Manager.GL.extraContext, currentWallID);
 						break;
 				}
 			} else {
@@ -108,7 +112,14 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	useEffect(() => {
 		update().catch(console.error);
 		// eslint-disable-next-line
-	}, [currentTilesetTexture, currentAutotileID, currentAutotileTexture, currentMapElementKind, currentMapID]);
+	}, [
+		currentTilesetTexture,
+		currentAutotileID,
+		currentAutotileTexture,
+		currentWallID,
+		currentMapElementKind,
+		currentMapID,
+	]);
 
 	useEffect(() => {
 		initialize().catch(console.error);

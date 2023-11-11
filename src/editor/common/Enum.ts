@@ -189,3 +189,10 @@ export enum AUTOTILE_TILE_NAMES {
 	D4 = 'D4',
 	D5 = 'D5',
 }
+
+export enum SPRITE_WALL_TYPE {
+	LEFT,
+	MIDDLE,
+	RIGHT,
+	LEFTRIGHT,
+}
