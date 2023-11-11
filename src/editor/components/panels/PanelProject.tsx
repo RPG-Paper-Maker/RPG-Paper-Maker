@@ -19,8 +19,15 @@ import MenuItem from '../MenuItem';
 import { LuFolders } from 'react-icons/lu';
 import { MdOutlineWallpaper } from 'react-icons/md';
 import Tab from '../Tab';
-import { Model } from '../../Editor';
-import { RootState, setCurrentTreeMapTag, setProjectMenuIndex } from '../../store';
+import { Model, Scene } from '../../Editor';
+import {
+	RootState,
+	setCurrentAutotileID,
+	setCurrentAutotileTexture,
+	setCurrentTilesetTexture,
+	setCurrentTreeMapTag,
+	setProjectMenuIndex,
+} from '../../store';
 import PanelTextures from './PanelTextures';
 import Loader from '../Loader';
 import TreeMaps from '../TreeMaps';
@@ -118,6 +125,12 @@ function PanelProject() {
 			setMapsTabsContents(getDefaultTabContents());
 			setMapForcedCurrentSelectedItemID(Project.current!.treeMaps.currentMap);
 			dispatch(setProjectMenuIndex(Project.current!.settings.projectMenuIndex));
+			dispatch(setCurrentTilesetTexture(Project.current!.settings.mapEditorCurrentTilesetTexture));
+			dispatch(setCurrentAutotileID(Project.current!.settings.mapEditorCurrentAutotileID));
+			dispatch(setCurrentAutotileTexture(Project.current!.settings.mapEditorCurrentAutotileTexture));
+			Scene.Map.currentSelectedTilesetTexture = Project.current!.settings.mapEditorCurrentTilesetTexture;
+			Scene.Map.currentSelectedAutotileID = Project.current!.settings.mapEditorCurrentAutotileID;
+			Scene.Map.currentSelectedAutotileTexture = Project.current!.settings.mapEditorCurrentAutotileTexture;
 		}
 		// eslint-disable-next-line
 	}, [openLoading]);

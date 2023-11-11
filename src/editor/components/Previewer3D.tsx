@@ -24,8 +24,9 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	const refCanvas = useRef<HTMLDivElement>(null);
 
 	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
-	const currentSpecialElementID = useSelector((state: RootState) => state.mapEditor.currentSpecialElementID);
 	const currentTilesetTexture = useSelector((state: RootState) => state.mapEditor.currentTilesetTexture);
+	const currentAutotileID = useSelector((state: RootState) => state.mapEditor.currentAutotileID);
+	const currentAutotileTexture = useSelector((state: RootState) => state.mapEditor.currentAutotileTexture);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	useSelector((state: RootState) => state.triggers.splitting);
 
@@ -39,29 +40,29 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		Scene.Previewer3D.scenes[id] = scene;
 		scene.loading = true;
 		await scene.load();
-		update();
+		await update();
 		resize();
 		loop();
 	};
 
-	const update = () => {
+	const update = async () => {
 		const scene = Scene.Previewer3D.scenes[id];
 		if (scene) {
 			if (currentMapID) {
 				switch (currentMapElementKind) {
 					case ELEMENT_MAP_KIND.FLOOR:
-						scene.loadFloor(Manager.GL.extraContext, currentTilesetTexture);
+						await scene.loadFloor(Manager.GL.extraContext, currentTilesetTexture);
 						break;
 					case ELEMENT_MAP_KIND.AUTOTILE:
-						scene
-							.loadAutotile(Manager.GL.extraContext, currentSpecialElementID, currentTilesetTexture)
+						await scene
+							.loadAutotile(Manager.GL.extraContext, currentAutotileID, currentAutotileTexture)
 							.catch(console.error);
 						break;
 					case ELEMENT_MAP_KIND.SPRITE_FACE:
 					case ELEMENT_MAP_KIND.SPRITE_FIX:
 					case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
 					case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-						scene.loadSprite(Manager.GL.extraContext, currentTilesetTexture, currentMapElementKind);
+						await scene.loadSprite(Manager.GL.extraContext, currentTilesetTexture, currentMapElementKind);
 						break;
 				}
 			} else {
@@ -105,9 +106,9 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	});
 
 	useEffect(() => {
-		update();
+		update().catch(console.error);
 		// eslint-disable-next-line
-	}, [currentTilesetTexture, currentMapElementKind, currentMapID]);
+	}, [currentTilesetTexture, currentAutotileID, currentAutotileTexture, currentMapElementKind, currentMapID]);
 
 	useEffect(() => {
 		initialize().catch(console.error);

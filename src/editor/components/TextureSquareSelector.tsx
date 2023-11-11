@@ -12,10 +12,10 @@
 import { useState, useRef, useEffect } from 'react';
 import '../styles/Tree.css';
 import { useDispatch } from 'react-redux';
-import { setCurrentTilesetTexture } from '../store';
+import { setCurrentAutotileTexture, setCurrentTilesetTexture } from '../store';
 import { Scene } from '../Editor';
 import { Picture2D, Project, Rectangle } from '../core';
-import { Constants } from '../common';
+import { Constants, ELEMENT_MAP_KIND } from '../common';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
@@ -34,17 +34,53 @@ type Props = {
 };
 
 function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, canChangeSize = true }: Props) {
+	const getDefaultRectangle = () => {
+		switch (Scene.Map.currentSelectedMapElementKind) {
+			case ELEMENT_MAP_KIND.FLOOR:
+			case ELEMENT_MAP_KIND.SPRITE_FACE:
+			case ELEMENT_MAP_KIND.SPRITE_FIX:
+			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
+				return Scene.Map.currentSelectedTilesetTexture;
+			case ELEMENT_MAP_KIND.AUTOTILE:
+				return Scene.Map.currentSelectedAutotileTexture;
+			default:
+				return new Rectangle(0, 0, 1, 1);
+		}
+	};
+
 	const currentState = useState<CurrentStateProps>({
 		picture: null,
 		pictureCursor: null,
 		firstX: -1,
 		firstY: -1,
-		selectedRect: new Rectangle(0, 0, 1, 1),
+		selectedRect: getDefaultRectangle(),
 		previewRect: null,
 	})[0];
+
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 
 	const dispatch = useDispatch();
+
+	const updateRectangle = async () => {
+		switch (Scene.Map.currentSelectedMapElementKind) {
+			case ELEMENT_MAP_KIND.FLOOR:
+			case ELEMENT_MAP_KIND.SPRITE_FACE:
+			case ELEMENT_MAP_KIND.SPRITE_FIX:
+			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
+				dispatch(setCurrentTilesetTexture(currentState.selectedRect));
+				Scene.Map.currentSelectedTilesetTexture = currentState.selectedRect;
+				Project.current!.settings.mapEditorCurrentTilesetTexture = currentState.selectedRect;
+				break;
+			case ELEMENT_MAP_KIND.AUTOTILE:
+				dispatch(setCurrentAutotileTexture(currentState.selectedRect));
+				Scene.Map.currentSelectedAutotileTexture = currentState.selectedRect;
+				Project.current!.settings.mapEditorCurrentAutotileTexture = currentState.selectedRect;
+				break;
+		}
+		await Project.current!.settings!.save();
+	};
 
 	const initialize = async () => {
 		currentState.picture = await Picture2D.loadImage(texture);
@@ -53,8 +89,7 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 			refCanvas.current.width = (currentState.picture.width * 2) / divideWidth;
 			refCanvas.current.height = (currentState.picture.height * 2) / divideHeight;
 		}
-		dispatch(setCurrentTilesetTexture(currentState.selectedRect));
-		Scene.Map.currentSelectedTexture = currentState.selectedRect;
+		await updateRectangle();
 		update();
 	};
 
@@ -221,13 +256,12 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 		updateMove(x, y);
 	};
 
-	const handleMouseUp = (e: any) => {
+	const handleMouseUp = async (e: any) => {
 		if (isVisible() && currentState.firstX !== -1 && currentState.firstY !== -1) {
 			if (currentState.previewRect) {
 				currentState.selectedRect = currentState.previewRect;
 				currentState.previewRect = null;
-				dispatch(setCurrentTilesetTexture(currentState.selectedRect));
-				Scene.Map.currentSelectedTexture = currentState.selectedRect;
+				await updateRectangle();
 				update();
 			}
 			currentState.firstX = -1;

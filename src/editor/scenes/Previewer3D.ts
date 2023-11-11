@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Manager, MapElement } from '../Editor';
+import { Manager, MapElement, Scene } from '../Editor';
 import { Base } from '.';
 import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle, TextureBundle } from '../core';
 import { ELEMENT_MAP_KIND } from '../common';
@@ -20,7 +20,7 @@ class Previewer3D extends Base {
 
 	public id: string;
 	public canvas!: HTMLElement;
-	public material!: THREE.MeshPhongMaterial;
+	public material: THREE.MeshPhongMaterial | null = null;
 	public sunLight!: THREE.DirectionalLight;
 	public mesh: THREE.Mesh | null = null;
 	public currentRotation: number = 0;
@@ -51,12 +51,19 @@ class Previewer3D extends Base {
 	}
 
 	async load() {
-		this.material = await Manager.GL.loadTexture('./Assets/plains-woods.png');
 		this.initializeSunLight();
 		this.loading = false;
 	}
 
-	loadFloor(GL: Manager.GL, texture: Rectangle) {
+	async loadMaterial() {
+		if (this.material === null) {
+			this.material =
+				Scene.Map.current?.materialTileset || (await Manager.GL.loadTexture('./Assets/plains-woods.png'));
+		}
+	}
+
+	async loadFloor(GL: Manager.GL, texture: Rectangle) {
+		await this.loadMaterial();
 		const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
 		const floor = MapElement.Floor.create(texture);
 		const geometry = new CustomGeometry();
@@ -91,7 +98,8 @@ class Previewer3D extends Base {
 		}
 	}
 
-	loadSprite(GL: Manager.GL, texture: Rectangle, kind: ELEMENT_MAP_KIND) {
+	async loadSprite(GL: Manager.GL, texture: Rectangle, kind: ELEMENT_MAP_KIND) {
+		await this.loadMaterial();
 		const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
 		const sprite = MapElement.Sprite.create(kind, texture);
 		const geometry = new CustomGeometryFace();

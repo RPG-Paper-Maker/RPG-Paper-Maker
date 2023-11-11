@@ -14,10 +14,10 @@ import '../../styles/PanelSpecialElementsSelection.css';
 import { HiChevronDown, HiChevronLeft } from 'react-icons/hi';
 import TextureSquareSelector from '../TextureSquareSelector';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setCurrentSpecialElementID } from '../../store';
+import { RootState, setCurrentAutotileID, setCurrentAutotileTexture } from '../../store';
 import { Model, Scene } from '../../Editor';
-import { PICTURE_KIND, Utils } from '../../common';
-import { Project } from '../../core';
+import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
+import { Project, Rectangle } from '../../core';
 
 type Props = {
 	kind: PICTURE_KIND;
@@ -30,7 +30,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 			? Project.current!.specialElements.autotiles
 			: Project.current!.specialElements.walls;
 
-	const currentSpecialElementID = useSelector((state: RootState) => state.mapEditor.currentSpecialElementID);
+	const currentAutotileID = useSelector((state: RootState) => state.mapEditor.currentAutotileID);
 
 	const canExpand = kind === PICTURE_KIND.AUTOTILES;
 
@@ -42,15 +42,29 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		}
 	};
 
-	const handleClick = (id: number) => {
-		dispatch(setCurrentSpecialElementID(id));
-		Scene.Map.currentSelectedSpecialElementID = id;
+	const handleClick = async (id: number) => {
+		const rectangle = new Rectangle();
+		switch (Scene.Map.currentSelectedMapElementKind) {
+			case ELEMENT_MAP_KIND.AUTOTILE:
+				if (id !== currentAutotileID) {
+					dispatch(setCurrentAutotileID(id));
+					Scene.Map.currentSelectedAutotileID = id;
+					Project.current!.settings.mapEditorCurrentAutotileID = id;
+					dispatch(setCurrentAutotileTexture(rectangle));
+					Scene.Map.currentSelectedAutotileTexture = rectangle;
+					Project.current!.settings.mapEditorCurrentAutotileTexture = rectangle;
+				}
+				break;
+			default:
+				break;
+		}
+		Project.current!.settings!.save();
 	};
 
 	const listElements = list
 		? list.map((element) => {
 				const picture = Project.current!.pictures.getByID(kind, element.pictureID);
-				const selected = currentSpecialElementID === element.id;
+				const selected = currentAutotileID === element.id;
 				return (
 					<div
 						className={Utils.getClassName([[selected, 'selected']], ['panel-special-element'])}
@@ -78,13 +92,6 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 				);
 		  })
 		: [];
-
-	useEffect(() => {
-		const id = list?.at(0)?.id || -1;
-		dispatch(setCurrentSpecialElementID(id));
-		Scene.Map.currentSelectedSpecialElementID = id;
-		// eslint-disable-next-line
-	}, []);
 
 	return <div className='panel-special-elements'>{listElements}</div>;
 }

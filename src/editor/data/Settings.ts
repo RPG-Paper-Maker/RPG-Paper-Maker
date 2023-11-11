@@ -10,19 +10,25 @@
 */
 
 import { BINDING, BindingType, Paths } from '../common';
-import { Project, Serializable } from '../core';
+import { Project, Rectangle, Serializable } from '../core';
 
 class Settings extends Serializable {
 	public projectMenuIndex!: number;
 	public mapEditorMenuIndex!: number;
 	public mapEditorLandsMenuIndex!: number;
 	public mapEditorSpritesMenuIndex!: number;
+	public mapEditorCurrentTilesetTexture!: Rectangle;
+	public mapEditorCurrentAutotileID!: number;
+	public mapEditorCurrentAutotileTexture!: Rectangle;
 
 	public static readonly bindings: BindingType[] = [
 		['projectMenuIndex', 'pmi', 1, BINDING.NUMBER],
 		['mapEditorMenuIndex', 'memi', 0, BINDING.NUMBER],
 		['mapEditorLandsMenuIndex', 'melmi', 0, BINDING.NUMBER],
 		['mapEditorSpritesMenuIndex', 'mesmi', 0, BINDING.NUMBER],
+		['mapEditorCurrentTilesetTexture', 'mectt', undefined, BINDING.RECTANGLE],
+		['mapEditorCurrentAutotileID', 'mecaid', 1, BINDING.NUMBER],
+		['mapEditorCurrentAutotileTexture', 'mecat', undefined, BINDING.RECTANGLE],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

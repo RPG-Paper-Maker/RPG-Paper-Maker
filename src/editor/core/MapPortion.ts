@@ -52,7 +52,7 @@ class MapPortion {
 			case ELEMENT_MAP_KIND.FLOOR:
 				this.updateMapElement(
 					position,
-					MapElement.Floor.create(Scene.Map.currentSelectedTexture),
+					MapElement.Floor.create(Scene.Map.currentSelectedTilesetTexture),
 					ELEMENT_MAP_KIND.FLOOR,
 					preview
 				);
@@ -61,9 +61,9 @@ class MapPortion {
 				this.updateMapElement(
 					position,
 					MapElement.Autotile.create(
-						Scene.Map.currentSelectedSpecialElementID,
+						Scene.Map.currentSelectedAutotileID,
 						MapElement.Autotiles.PREVIEW_TILE,
-						Scene.Map.currentSelectedTexture
+						Scene.Map.currentSelectedAutotileTexture
 					),
 					ELEMENT_MAP_KIND.AUTOTILE,
 					preview
@@ -75,7 +75,10 @@ class MapPortion {
 			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 				this.updateMapElement(
 					position,
-					MapElement.Sprite.create(Scene.Map.currentSelectedMapElementKind, Scene.Map.currentSelectedTexture),
+					MapElement.Sprite.create(
+						Scene.Map.currentSelectedMapElementKind,
+						Scene.Map.currentSelectedTilesetTexture
+					),
 					Scene.Map.currentSelectedMapElementKind,
 					preview
 				);

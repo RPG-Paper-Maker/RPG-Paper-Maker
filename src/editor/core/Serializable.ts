@@ -115,7 +115,9 @@ abstract class Serializable {
 						(this as any)[name] = null;
 					} else {
 						const rectangle = new Rectangle();
-						rectangle.read(jsonObj);
+						if (jsonObj) {
+							rectangle.read(jsonObj);
+						}
 						(this as any)[name] = rectangle;
 					}
 					break;
