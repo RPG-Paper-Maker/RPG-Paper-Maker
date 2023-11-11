@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import '../../styles/PanelSpecialElementsSelection.css';
 import { HiChevronDown, HiChevronLeft } from 'react-icons/hi';
 import TextureSquareSelector from '../TextureSquareSelector';

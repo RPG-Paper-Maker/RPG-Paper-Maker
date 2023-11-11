@@ -45,6 +45,7 @@ class Map extends Base {
 	public static ctxHUD: CanvasRenderingContext2D | null = null;
 	public static ctxRendering: CanvasRenderingContext2D | null = null;
 	public static animationFrameID: number;
+	public static pictureTilesetCursor: HTMLImageElement;
 
 	public id: number;
 	public tag: Model.TreeMapTag;

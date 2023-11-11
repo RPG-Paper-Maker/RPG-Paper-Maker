@@ -19,7 +19,6 @@ import { Constants, ELEMENT_MAP_KIND } from '../common';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
-	pictureCursor: HTMLImageElement | null;
 	firstX: number;
 	firstY: number;
 	selectedRect: Rectangle;
@@ -51,7 +50,6 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 
 	const currentState = useState<CurrentStateProps>({
 		picture: null,
-		pictureCursor: null,
 		firstX: -1,
 		firstY: -1,
 		selectedRect: getDefaultRectangle(),
@@ -84,7 +82,6 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 
 	const initialize = async () => {
 		currentState.picture = await Picture2D.loadImage(texture);
-		currentState.pictureCursor = await Picture2D.loadImage('./Assets/tileset-cursor.png');
 		if (refCanvas.current) {
 			refCanvas.current.width = (currentState.picture.width * 2) / divideWidth;
 			refCanvas.current.height = (currentState.picture.height * 2) / divideHeight;
@@ -164,31 +161,29 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 	};
 
 	const drawSelection = (ctx: CanvasRenderingContext2D, rect: Rectangle, opacity = 1) => {
-		if (currentState.pictureCursor) {
-			ctx.globalAlpha = opacity;
-			const x = rect.x * Constants.BASE_SQUARE_SIZE;
-			const y = rect.y * Constants.BASE_SQUARE_SIZE;
-			const w = rect.width * Constants.BASE_SQUARE_SIZE;
-			const h = rect.height * Constants.BASE_SQUARE_SIZE;
-			if (rect.width === 1 && rect.height === 1) {
-				ctx.drawImage(currentState.pictureCursor, x, y, w, h);
-			} else {
-				const s = Constants.BASE_SQUARE_SIZE / 2;
-				const xCorner = x + w - s;
-				const yCorner = y + h - s;
-				const lineW = w - 2 * s;
-				const lineH = h - 2 * s;
-				ctx.drawImage(currentState.pictureCursor, 0, 0, s, s, x, y, s, s); // Top Left
-				ctx.drawImage(currentState.pictureCursor, s, 0, s, s, xCorner, y, s, s); // Top Right
-				ctx.drawImage(currentState.pictureCursor, s, s, s, s, xCorner, yCorner, s, s); // Bottom Right
-				ctx.drawImage(currentState.pictureCursor, 0, s, s, s, x, yCorner, s, s); // Bottom Left
-				ctx.drawImage(currentState.pictureCursor, s / 2, 0, 1, s, x + s, y, lineW, s); // Top
-				ctx.drawImage(currentState.pictureCursor, s / 2, s, 1, s, x + s, yCorner, lineW, s); // Bottom
-				ctx.drawImage(currentState.pictureCursor, 0, s / 2, s, 1, x, y + s, s, lineH); // Left
-				ctx.drawImage(currentState.pictureCursor, s, s / 2, s, 1, xCorner, y + s, s, lineH); // Right
-			}
-			ctx.globalAlpha = 1;
+		ctx.globalAlpha = opacity;
+		const x = rect.x * Constants.BASE_SQUARE_SIZE;
+		const y = rect.y * Constants.BASE_SQUARE_SIZE;
+		const w = rect.width * Constants.BASE_SQUARE_SIZE;
+		const h = rect.height * Constants.BASE_SQUARE_SIZE;
+		if (rect.width === 1 && rect.height === 1) {
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, x, y, w, h);
+		} else {
+			const s = Constants.BASE_SQUARE_SIZE / 2;
+			const xCorner = x + w - s;
+			const yCorner = y + h - s;
+			const lineW = w - 2 * s;
+			const lineH = h - 2 * s;
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, 0, 0, s, s, x, y, s, s); // Top Left
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, s, 0, s, s, xCorner, y, s, s); // Top Right
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, s, s, s, s, xCorner, yCorner, s, s); // Bottom Right
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, 0, s, s, s, x, yCorner, s, s); // Bottom Left
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, s / 2, 0, 1, s, x + s, y, lineW, s); // Top
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, s / 2, s, 1, s, x + s, yCorner, lineW, s); // Bottom
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, 0, s / 2, s, 1, x, y + s, s, lineH); // Left
+			ctx.drawImage(Scene.Map.pictureTilesetCursor, s, s / 2, s, 1, xCorner, y + s, s, lineH); // Right
 		}
+		ctx.globalAlpha = 1;
 	};
 
 	const updateMove = (x: number, y: number) => {

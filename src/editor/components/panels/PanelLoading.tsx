@@ -10,12 +10,12 @@
 */
 
 import React, { useEffect } from 'react';
-import { Manager } from '../../Editor';
+import { Manager, Scene } from '../../Editor';
 import Loader from '../Loader';
 import { setProjects } from '../../store';
 import { useDispatch } from 'react-redux';
 import { Constants, LOCAL_FORAGE, Utils } from '../../common';
-import { LocalFile } from '../../core';
+import { LocalFile, Picture2D } from '../../core';
 
 type Props = {
 	setLoaded: (v: boolean) => void;
@@ -26,10 +26,15 @@ function PanelLoading({ setLoaded }: Props) {
 
 	const initialize = async () => {
 		Constants.isMobile = Utils.isMobile();
+		await initializeTextures();
 		await initializeGL();
 		await initializeLocalFiles();
 		await loadProjects(); // Desktop: load engine settings
 		setLoaded(true);
+	};
+
+	const initializeTextures = async () => {
+		Scene.Map.pictureTilesetCursor = await Picture2D.loadImage('./Assets/tileset-cursor.png');
 	};
 
 	const initializeGL = async () => {
