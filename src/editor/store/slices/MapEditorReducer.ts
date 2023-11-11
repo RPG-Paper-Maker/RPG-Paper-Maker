@@ -16,6 +16,7 @@ const MapEditorSlice = createSlice({
 		currentTilesetTexture: new Rectangle(0, 0, 1, 1),
 		currentAutotileID: 1,
 		currentAutotileTexture: new Rectangle(0, 0, 1, 1),
+		currentWallID: 1,
 		currentMapElementKind: ELEMENT_MAP_KIND.FLOOR,
 		undoRedo: {
 			index: -1,
@@ -35,6 +36,9 @@ const MapEditorSlice = createSlice({
 		setCurrentAutotileTexture(state, action: PayloadAction<Rectangle>) {
 			state.currentAutotileTexture = action.payload;
 		},
+		setCurrentWallID(state, action: PayloadAction<number>) {
+			state.currentWallID = action.payload;
+		},
 		setCurrentMapElementKind(state, action: PayloadAction<ELEMENT_MAP_KIND>) {
 			state.currentMapElementKind = action.payload;
 		},
@@ -52,6 +56,7 @@ export const {
 	setCurrentTilesetTexture,
 	setCurrentAutotileID,
 	setCurrentAutotileTexture,
+	setCurrentWallID,
 	setCurrentMapElementKind,
 	setUndoRedoIndex,
 	setUndoRedoLength,

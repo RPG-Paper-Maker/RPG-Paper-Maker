@@ -64,10 +64,10 @@ function MapEditorMenuBar() {
 
 	const handleLands = async () => {
 		switch (Project.current!.settings.mapEditorLandsMenuIndex) {
-			case 0:
+			case MENU_INDEX_LANDS_MAP_EDITOR.FLOOR:
 				await handleFloors();
 				break;
-			case 1:
+			case MENU_INDEX_LANDS_MAP_EDITOR.AUTOTILE:
 				await handleAutotiles();
 				break;
 		}
@@ -90,17 +90,20 @@ function MapEditorMenuBar() {
 
 	const handleSprites = async () => {
 		switch (Project.current!.settings.mapEditorSpritesMenuIndex) {
-			case 0:
+			case MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_FACE:
 				await handleFaceSprites();
 				break;
-			case 1:
+			case MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_FIX:
 				await handleFixSprites();
 				break;
-			case 2:
+			case MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_DOUBLE:
 				await handleDoubleSprites();
 				break;
-			case 3:
+			case MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_QUADRA:
 				await handleQuadraSprites();
+				break;
+			case MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_WALL:
+				await handleWallSprites();
 				break;
 		}
 	};
@@ -126,6 +129,10 @@ function MapEditorMenuBar() {
 
 	const handleQuadraSprites = async () => {
 		await handleGenericSprites(ELEMENT_MAP_KIND.SPRITE_QUADRA, MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_QUADRA);
+	};
+
+	const handleWallSprites = async () => {
+		await handleGenericSprites(ELEMENT_MAP_KIND.SPRITE_WALL, MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_WALL);
 	};
 
 	const handleMobilePlus = () => {
@@ -181,6 +188,8 @@ function MapEditorMenuBar() {
 				return <DoubleSpriteIcon />;
 			case MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_QUADRA:
 				return <QuadraSpriteIcon />;
+			case MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_WALL:
+				return <GiBrickWall />;
 			default:
 				return <FaceSpriteIcon />;
 		}
@@ -211,7 +220,7 @@ function MapEditorMenuBar() {
 						<MenuItem icon={<QuadraSpriteIcon />} onClick={handleQuadraSprites}>
 							Quadra sprites
 						</MenuItem>
-						<MenuItem icon={<GiBrickWall />} onClick={handleFloors} disabled>
+						<MenuItem icon={<GiBrickWall />} onClick={handleWallSprites}>
 							Wall sprites
 						</MenuItem>
 					</MenuSub>

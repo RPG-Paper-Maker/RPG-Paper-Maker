@@ -26,6 +26,7 @@ import {
 	setCurrentAutotileTexture,
 	setCurrentTilesetTexture,
 	setCurrentTreeMapTag,
+	setCurrentWallID,
 	setProjectMenuIndex,
 } from '../../store';
 import PanelTextures from './PanelTextures';
@@ -128,9 +129,11 @@ function PanelProject() {
 			dispatch(setCurrentTilesetTexture(Project.current!.settings.mapEditorCurrentTilesetTexture));
 			dispatch(setCurrentAutotileID(Project.current!.settings.mapEditorCurrentAutotileID));
 			dispatch(setCurrentAutotileTexture(Project.current!.settings.mapEditorCurrentAutotileTexture));
+			dispatch(setCurrentWallID(Project.current!.settings.mapEditorCurrentWallID));
 			Scene.Map.currentSelectedTilesetTexture = Project.current!.settings.mapEditorCurrentTilesetTexture;
 			Scene.Map.currentSelectedAutotileID = Project.current!.settings.mapEditorCurrentAutotileID;
 			Scene.Map.currentSelectedAutotileTexture = Project.current!.settings.mapEditorCurrentAutotileTexture;
+			Scene.Map.currentSelectedWallID = Project.current!.settings.mapEditorCurrentWallID;
 		}
 		// eslint-disable-next-line
 	}, [openLoading]);

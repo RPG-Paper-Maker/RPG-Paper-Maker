@@ -33,8 +33,9 @@ class Map extends Base {
 
 	public static current: Scene.Map | null;
 	public static currentSelectedTilesetTexture = new Rectangle(0, 0, 1, 1);
-	public static currentSelectedAutotileID = -1;
+	public static currentSelectedAutotileID = 1;
 	public static currentSelectedAutotileTexture = new Rectangle(0, 0, 1, 1);
+	public static currentSelectedWallID = 1;
 	public static currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
 	public static currentSelectedMobileAction = MOBILE_ACTION.PLUS;
 	public static elapsedTime = 0;

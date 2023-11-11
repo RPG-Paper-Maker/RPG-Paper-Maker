@@ -14,7 +14,7 @@ import '../../styles/PanelSpecialElementsSelection.css';
 import { HiChevronDown, HiChevronLeft } from 'react-icons/hi';
 import TextureSquareSelector from '../TextureSquareSelector';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setCurrentAutotileID, setCurrentAutotileTexture } from '../../store';
+import { RootState, setCurrentAutotileID, setCurrentAutotileTexture, setCurrentWallID } from '../../store';
 import { Model, Scene } from '../../Editor';
 import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
 import { Project, Rectangle } from '../../core';
@@ -31,6 +31,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 			: Project.current!.specialElements.walls;
 
 	const currentAutotileID = useSelector((state: RootState) => state.mapEditor.currentAutotileID);
+	const currentWallID = useSelector((state: RootState) => state.mapEditor.currentWallID);
 
 	const canExpand = kind === PICTURE_KIND.AUTOTILES;
 
@@ -43,16 +44,23 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	};
 
 	const handleClick = async (id: number) => {
-		const rectangle = new Rectangle();
 		switch (Scene.Map.currentSelectedMapElementKind) {
 			case ELEMENT_MAP_KIND.AUTOTILE:
 				if (id !== currentAutotileID) {
 					dispatch(setCurrentAutotileID(id));
 					Scene.Map.currentSelectedAutotileID = id;
 					Project.current!.settings.mapEditorCurrentAutotileID = id;
+					const rectangle = new Rectangle();
 					dispatch(setCurrentAutotileTexture(rectangle));
 					Scene.Map.currentSelectedAutotileTexture = rectangle;
 					Project.current!.settings.mapEditorCurrentAutotileTexture = rectangle;
+				}
+				break;
+			case ELEMENT_MAP_KIND.SPRITE_WALL:
+				if (id !== currentWallID) {
+					dispatch(setCurrentWallID(id));
+					Scene.Map.currentSelectedWallID = id;
+					Project.current!.settings.mapEditorCurrentWallID = id;
 				}
 				break;
 			default:
@@ -61,10 +69,12 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		Project.current!.settings!.save();
 	};
 
+	const currentID = kind === PICTURE_KIND.AUTOTILES ? currentAutotileID : currentWallID;
+
 	const listElements = list
 		? list.map((element) => {
 				const picture = Project.current!.pictures.getByID(kind, element.pictureID);
-				const selected = currentAutotileID === element.id;
+				const selected = currentID === element.id;
 				return (
 					<div
 						className={Utils.getClassName([[selected, 'selected']], ['panel-special-element'])}
