@@ -158,6 +158,28 @@ class Position extends Position3D {
 		this.scaleZ = parseInt(values[12], 10);
 	}
 
+	copy(position: Position) {
+		this.x = position.x;
+		this.y = position.y;
+		this.yPixels = position.yPixels;
+		this.z = position.z;
+		this.layer = position.layer;
+		this.centerX = position.centerX;
+		this.centerZ = position.centerZ;
+		this.angleY = position.angleY;
+		this.angleX = position.angleX;
+		this.angleZ = position.angleZ;
+		this.scaleX = position.scaleX;
+		this.scaleY = position.scaleY;
+		this.scaleZ = position.scaleZ;
+	}
+
+	clone() {
+		const position = new Position();
+		position.copy(this);
+		return position;
+	}
+
 	read(json: any[]) {
 		super.read(json);
 		this.layer = json[4];

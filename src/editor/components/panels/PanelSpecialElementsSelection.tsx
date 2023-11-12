@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../../styles/PanelSpecialElementsSelection.css';
 import { HiChevronDown, HiChevronLeft } from 'react-icons/hi';
 import TextureSquareSelector from '../TextureSquareSelector';
@@ -24,7 +24,12 @@ type Props = {
 };
 
 function PanelSpecialElementsSelection({ kind }: Props) {
+	const [firstScroll, setFirstScroll] = useState(false);
+	const selectedElementRef = useRef<HTMLDivElement>(null);
+	const contentRef = useRef<HTMLDivElement>(null);
+
 	const dispatch = useDispatch();
+
 	const list =
 		kind === PICTURE_KIND.AUTOTILES
 			? Project.current!.specialElements.autotiles
@@ -32,6 +37,18 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 
 	const currentAutotileID = useSelector((state: RootState) => state.mapEditor.currentAutotileID);
 	const currentWallID = useSelector((state: RootState) => state.mapEditor.currentWallID);
+
+	const getIndex = () => {
+		switch (kind) {
+			case PICTURE_KIND.AUTOTILES:
+				return Project.current!.specialElements.autotilesIndexes[currentAutotileID];
+			case PICTURE_KIND.WALLS:
+				return Project.current!.specialElements.wallsIndexes[currentWallID];
+		}
+		return 0;
+	};
+
+	const [firstIndex] = useState(getIndex());
 
 	const canExpand = kind === PICTURE_KIND.AUTOTILES;
 
@@ -69,7 +86,28 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		Project.current!.settings!.save();
 	};
 
+	const scrollToSelectedCapsule = () => {
+		const content = contentRef.current?.parentElement;
+		const selected = selectedElementRef.current;
+		if (content && selected) {
+			if (content.clientHeight) {
+				content.scrollTop = selected.offsetTop - 30;
+				setFirstScroll(true);
+			}
+		}
+	};
+
+	const updateFirstScroll = () => {
+		if (!firstScroll && firstIndex > 0) {
+			scrollToSelectedCapsule();
+		}
+	};
+
 	const currentID = kind === PICTURE_KIND.AUTOTILES ? currentAutotileID : currentWallID;
+
+	useEffect(() => {
+		updateFirstScroll();
+	});
 
 	const listElements = list
 		? list.map((element) => {
@@ -77,6 +115,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 				const selected = currentID === element.id;
 				return (
 					<div
+						ref={selected ? selectedElementRef : null}
 						className={Utils.getClassName([[selected, 'selected']], ['panel-special-element'])}
 						key={element.id}
 						onClick={() => handleClick(element.id)}
@@ -103,7 +142,11 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		  })
 		: [];
 
-	return <div className='panel-special-elements'>{listElements}</div>;
+	return (
+		<div ref={contentRef} className='panel-special-elements'>
+			{listElements}
+		</div>
+	);
 }
 
 export default PanelSpecialElementsSelection;

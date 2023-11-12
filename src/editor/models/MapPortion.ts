@@ -13,12 +13,13 @@ import { Scene } from '../Editor';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, Paths } from '../common';
 import { Serializable } from '../core/Serializable';
 import { Portion, Project } from '../core';
-import { Autotile, Floor, Sprite } from '../mapElements';
+import { Autotile, Floor, Sprite, SpriteWall } from '../mapElements';
 
 class MapPortion extends Serializable {
 	public globalPortion: Portion;
 	public lands: Map<string, Floor | Autotile> = new Map();
 	public sprites: Map<string, Sprite> = new Map();
+	public walls: Map<string, SpriteWall> = new Map();
 
 	public static readonly bindings: BindingType[] = [
 		[
@@ -30,6 +31,7 @@ class MapPortion extends Serializable {
 			(json: Record<string, any>) => (json.k === ELEMENT_MAP_KIND.FLOOR ? Floor : Autotile),
 		],
 		['sprites', 'sprites', null, BINDING.MAP_POSITION, Sprite],
+		['walls', 'walls', null, BINDING.MAP_POSITION, SpriteWall],
 	];
 
 	constructor(globalPortion: Portion) {
@@ -67,7 +69,6 @@ class MapPortion extends Serializable {
 	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
 		super.write(json, MapPortion.getBindings(additionnalBinding));
 		json.moun = [];
-		json.walls = [];
 		json.objs3d = [];
 		json.objs = [
 			{

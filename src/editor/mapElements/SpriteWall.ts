@@ -162,6 +162,117 @@ class SpriteWall extends Base {
 		Base.rotateQuad(vecA, vecB, vecC, vecD, center, angle, Sprite.Y_AXIS);
 		return Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD, texA, texB, texC, texD, count);
 	}
+
+	getWall(position: Position) {
+		//const portion = Scene.Map.current!.getLocalPortion(position);
+		// TODO
+		//MapPortion* mapPortion = map->mapPortion(portion);
+		const mapPortion = Scene.Map.current!.mapPortion;
+
+		return mapPortion !== null ? mapPortion.model.walls.get(position.toKey()) : null;
+	}
+
+	getLeft(position: Position) {
+		const newPosition = position.clone();
+		newPosition.x = newPosition.x - 1;
+		return this.getWall(newPosition);
+	}
+
+	getRight(position: Position) {
+		const newPosition = position.clone();
+		newPosition.x = newPosition.x + 1;
+		return this.getWall(newPosition);
+	}
+	/*
+	
+    update(position: Position) {
+        // Getting all sprites
+        const leftSprite = this.getLeft(position);
+        const rightSprite = this.getRight(position);
+        const topLeftSprite = this.getTopLeft(position);
+        const topRightSprite = this.getTopRight(position);
+        const botLeftSprite = this.getBotLeft(position);
+        const botRightSprite = this.getBotRight(position);
+    
+        // Borders
+        let ta: SPRITE_WALL_TYPE;
+        if (!this.isWallHere(leftSprite) && !this.isWallHere(rightSprite)) {
+            tA = SpriteWallKind::LeftRight;
+        } else if (!this.isWallHere(leftSprite)) {
+            tA = SpriteWallKind::Left;
+        } else if (!this.isWallHere(rightSprite)) {
+            tA = SpriteWallKind::Right;
+    } else {
+            tA = SpriteWallKind::Middle;
+    }
+    
+        // Diagonals
+        const diagLeft = this.isWallHere(topLeftSprite) ||
+                this.isWallHere(botLeftSprite);
+        const diagRight = this.isWallHere(topRightSprite) ||
+                this.isWallHere(botRightSprite);
+                let kb: SPRITE_WALL_TYPE;
+        if (diagLeft && diagRight)
+            kB = SpriteWallKind::LeftRight;
+        else if (diagLeft)
+            kB = SpriteWallKind::Left;
+        else if (diagRight)
+            kB = SpriteWallKind::Right;
+        else
+            kB = SpriteWallKind::Middle;
+    
+        this.type = this.addType(tA, tB);
+    }
+    
+    isWallHere(sprite: SpriteWall) {
+        return (sprite != nullptr && sprite->wallID() == m_wallID);
+    }
+
+    addType(tA: SPRITE_WALL_TYPE, tB: SPRITE_WALL_TYPE) {
+        if (tA === SPRITE_WALL_TYPE.MIDDLE)
+            return kB;
+        if (kB == SpriteWallKind::Middle)
+            return kA;
+    
+        return kA == kB ? kA : SpriteWallKind::LeftRight;
+    }
+    
+    // -------------------------------------------------------
+    
+    SpriteWallDatas* SpriteWallDatas::getTopLeft(Position &position) {
+        Position newPosition;
+        position.getTopLeft(newPosition);
+    
+        return getWall(newPosition);
+    }
+    
+    // -------------------------------------------------------
+    
+    SpriteWallDatas* SpriteWallDatas::getTopRight(Position &position) {
+        Position newPosition;
+        position.getTopRight(newPosition);
+    
+        return getWall(newPosition);
+    }
+    
+    // -------------------------------------------------------
+    
+    SpriteWallDatas* SpriteWallDatas::getBotLeft(Position &position) {
+        Position newPosition;
+        position.getBotLeft(newPosition);
+    
+        return getWall(newPosition);
+    }
+    
+    // -------------------------------------------------------
+  
+    SpriteWallDatas* SpriteWallDatas::getBotRight(Position &position)
+    {
+        Position newPosition;
+        position.getBotRight(newPosition);
+    
+        return getWall(newPosition);
+    }*/
 }
 
 export { SpriteWall };
