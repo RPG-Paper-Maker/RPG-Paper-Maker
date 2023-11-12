@@ -28,6 +28,7 @@ import {
 	UndoRedoState,
 } from '../core';
 import { Constants, ELEMENT_MAP_KIND, MOBILE_ACTION, RAYCASTING_LAYER, Paths, Mathf } from '../common';
+import { CursorWall } from '../core/CursorWall';
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
 
@@ -55,8 +56,9 @@ class Map extends Base {
 	public needsUpdateLength: number | null = null;
 	public needsClose = false;
 	public modelMap: Model.Map = new Model.Map();
-	public grid: Grid = new Grid();
+	public grid = new Grid();
 	public cursor: Cursor;
+	public cursorWall = new CursorWall();
 	public meshPlane: THREE.Object3D | null = null;
 	public sunLight!: THREE.DirectionalLight;
 	public mapPortion!: MapPortion;
@@ -149,8 +151,9 @@ class Map extends Base {
 		this.mapPortion.updateMaterials();
 		await this.mapPortion.loadTexturesAndUpdateGeometries(false);
 
-		// Cursor
+		// Cursors
 		await this.cursor.load();
+		this.cursorWall.initialize();
 
 		// Light
 		this.initializeSunLight();
@@ -440,7 +443,22 @@ class Map extends Base {
 	update(GL: Manager.GL) {
 		super.update(GL);
 		this.mapPortion.update();
+
+		// Cursors
 		this.cursor.update();
+		if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
+			if (
+				this.lastPosition !== null &&
+				this.lastPosition.isInMap(this.modelMap, true) &&
+				(this.cursorWall.position === null || !this.lastPosition.equals(this.cursorWall.position))
+			) {
+				this.cursorWall.update(this.lastPosition);
+			}
+		} else {
+			this.cursorWall.remove();
+		}
+
+		// Update portions
 		if (this.portionsToUpdate.length > 0) {
 			this.mapPortion.updateGeometries();
 		}

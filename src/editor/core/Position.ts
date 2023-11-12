@@ -100,14 +100,14 @@ class Position extends Position3D {
 		);
 	}
 
-	isInMap(map: Model.Map) {
+	isInMap(map: Model.Map, allowBorders = false) {
 		return (
 			this.x >= 0 &&
-			this.x < map.length &&
+			this.x < map.length + (allowBorders ? 1 : 0) &&
 			this.y >= -map.depth &&
 			this.y < map.height &&
 			this.z >= 0 &&
-			this.z < map.width
+			this.z < map.width + (allowBorders ? 1 : 0)
 		);
 	}
 
