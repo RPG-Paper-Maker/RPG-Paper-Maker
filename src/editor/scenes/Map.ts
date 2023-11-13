@@ -360,6 +360,9 @@ class Map extends Base {
 			if (this.lastPosition) {
 				if (Inputs.isPointerPressed) {
 					this.add(this.lastPosition);
+					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
+						this.cursorWall.onMouseDown();
+					}
 				} else if (Inputs.isMouseRightPressed) {
 					this.lastPosition = null;
 					this.updateRaycasting();
@@ -415,6 +418,7 @@ class Map extends Base {
 	}
 
 	async onMouseUp(x: number, y: number) {
+		this.cursorWall.onMouseUp();
 		if (this.undoRedoStatesSaving.length === 0 && this.undoRedoStates.length > 0) {
 			this.undoRedoStatesSaving = [...this.undoRedoStates];
 			this.saveUndoRedoStates().catch(console.error);
@@ -450,7 +454,7 @@ class Map extends Base {
 			if (
 				this.lastPosition !== null &&
 				this.lastPosition.isInMap(this.modelMap, true) &&
-				(this.cursorWall.position === null || !this.lastPosition.equals(this.cursorWall.position))
+				this.cursorWall.needsUpdate(this.lastPosition)
 			) {
 				this.cursorWall.update(this.lastPosition);
 			}

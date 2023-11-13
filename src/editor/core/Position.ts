@@ -111,6 +111,91 @@ class Position extends Position3D {
 		);
 	}
 
+	isHorizontal() {
+		return this.angleY === 0;
+	}
+
+	setHorizontal() {
+		this.centerX = 50;
+		this.centerZ = 0;
+		this.angleY = 0;
+	}
+
+	setVertical() {
+		this.centerX = 0;
+		this.centerZ = 50;
+		this.angleY = 90;
+	}
+
+	getLeft() {
+		const position = this.clone();
+		if (position.isHorizontal()) {
+			position.x--;
+		} else {
+			position.z++;
+		}
+		return position;
+	}
+
+	getRight() {
+		const position = this.clone();
+		if (position.isHorizontal()) {
+			position.x++;
+		} else {
+			position.z--;
+		}
+		return position;
+	}
+
+	getTopLeft() {
+		const position = this.clone();
+		if (position.isHorizontal()) {
+			position.z--;
+			position.setVertical();
+		} else {
+			position.x--;
+			position.z++;
+			position.setHorizontal();
+		}
+		return position;
+	}
+
+	getTopRight() {
+		const position = this.clone();
+		if (position.isHorizontal()) {
+			position.x++;
+			position.z--;
+			position.setVertical();
+		} else {
+			position.x--;
+			position.setHorizontal();
+		}
+		return position;
+	}
+
+	getBotLeft() {
+		const position = this.clone();
+		if (position.isHorizontal()) {
+			position.setVertical();
+		} else {
+			position.z++;
+			position.setHorizontal();
+		}
+		return position;
+	}
+
+	getBotRight() {
+		const position = this.clone();
+		position.copy(position);
+		if (position.isHorizontal()) {
+			position.x++;
+			position.setVertical();
+		} else {
+			position.setHorizontal();
+		}
+		return position;
+	}
+
 	toVector3(center: boolean = true): THREE.Vector3 {
 		return new THREE.Vector3(
 			this.x * Project.getSquareSize() + (center ? (this.centerX / 100) * Project.getSquareSize() : 0),
