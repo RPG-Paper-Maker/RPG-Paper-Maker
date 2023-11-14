@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Base } from './Base';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, PICTURE_KIND, SPRITE_WALL_TYPE } from '../common';
-import { CustomGeometry, Picture2D, Position, Project } from '../core';
+import { CustomGeometry, Picture2D, Position, Project, TextureBundle } from '../core';
 import { Sprite } from './Sprite';
 
 class SpriteWall extends Base {
@@ -42,12 +42,17 @@ class SpriteWall extends Base {
 		return wall;
 	}
 
-	static create(id: number, type: number): SpriteWall {
+	static create(id: number, type: SPRITE_WALL_TYPE): SpriteWall {
 		const wall = new SpriteWall();
-		wall.kind = ELEMENT_MAP_KIND.SPRITE_WALL;
 		wall.wallID = id;
 		wall.type = type;
 		return wall;
+	}
+
+	static getWallTexture(id: number): THREE.MeshPhongMaterial | null {
+		const textureWall =
+			Scene.Map.current!.texturesWalls[Project.current!.specialElements.getWallByID(id).pictureID];
+		return textureWall || null;
 	}
 
 	static async loadWallTexture(id: number): Promise<THREE.MeshPhongMaterial> {
@@ -108,6 +113,51 @@ class SpriteWall extends Base {
 		return Manager.GL.createMaterial({ texture: texture });
 	}
 
+	static getWall(position: Position) {
+		//const portion = Scene.Map.current!.getLocalPortion(position);
+		// TODO
+		//MapPortion* mapPortion = map->mapPortion(portion);
+		const mapPortion = Scene.Map.current!.mapPortion;
+		return mapPortion !== null ? mapPortion.model.walls.get(position.toKey()) || null : null;
+	}
+
+	static addType(tA: SPRITE_WALL_TYPE, tB: SPRITE_WALL_TYPE) {
+		if (tA === SPRITE_WALL_TYPE.MIDDLE) {
+			return tB;
+		}
+		if (tB == SPRITE_WALL_TYPE.MIDDLE) {
+			return tA;
+		}
+		return tA === tB ? tA : SPRITE_WALL_TYPE.LEFT_RIGHT;
+	}
+
+	static isWallHere(sprite: SpriteWall | null, id: number) {
+		return sprite !== null && sprite.wallID === id;
+	}
+
+	static updateAround(position: Position) {
+		const positionLeft = position.getLeft();
+		const positionRight = position.getRight();
+		const positionTopLeft = position.getTopLeft();
+		const positionTopRight = position.getTopRight();
+		const positionBotLeft = position.getBotLeft();
+		const positionBotRight = position.getBotRight();
+		const sprite = this.getWall(position);
+		const spriteLeft = this.getWall(positionLeft);
+		const spriteRight = this.getWall(positionRight);
+		const spriteTopLeft = this.getWall(positionTopLeft);
+		const spriteTopRight = this.getWall(positionTopRight);
+		const spriteBotLeft = this.getWall(positionBotLeft);
+		const spriteBotRight = this.getWall(positionBotRight);
+		sprite?.update(position);
+		spriteLeft?.update(positionLeft);
+		spriteRight?.update(positionRight);
+		spriteTopLeft?.update(positionTopLeft);
+		spriteTopRight?.update(positionTopRight);
+		spriteBotLeft?.update(positionBotLeft);
+		spriteBotRight?.update(positionBotRight);
+	}
+
 	equals(mapElement: MapElement.Base) {
 		if (mapElement.kind === this.kind) {
 			const wall = mapElement as MapElement.SpriteWall;
@@ -163,52 +213,32 @@ class SpriteWall extends Base {
 		return Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD, texA, texB, texC, texD, count);
 	}
 
-	getWall(position: Position) {
-		//const portion = Scene.Map.current!.getLocalPortion(position);
-		// TODO
-		//MapPortion* mapPortion = map->mapPortion(portion);
-		const mapPortion = Scene.Map.current!.mapPortion;
-		return mapPortion !== null ? mapPortion.model.walls.get(position.toKey()) || null : null;
-	}
-
-	isWallHere(sprite: SpriteWall | null) {
-		return sprite !== null && sprite.wallID === this.wallID;
-	}
-
-	addType(tA: SPRITE_WALL_TYPE, tB: SPRITE_WALL_TYPE) {
-		if (tA === SPRITE_WALL_TYPE.MIDDLE) {
-			return tB;
-		}
-		if (tB == SPRITE_WALL_TYPE.MIDDLE) {
-			return tA;
-		}
-		return tA === tB ? tA : SPRITE_WALL_TYPE.LEFT_RIGHT;
-	}
-
 	update(position: Position) {
 		// Getting all sprites
-		const leftSprite = this.getWall(position.getLeft());
-		const rightSprite = this.getWall(position.getRight());
-		const topLeftSprite = this.getWall(position.getTopLeft());
-		const topRightSprite = this.getWall(position.getTopRight());
-		const botLeftSprite = this.getWall(position.getBotLeft());
-		const botRightSprite = this.getWall(position.getBotRight());
+		const spriteLeft = SpriteWall.getWall(position.getLeft());
+		const spriteRight = SpriteWall.getWall(position.getRight());
+		const spriteTopLeft = SpriteWall.getWall(position.getTopLeft());
+		const spriteTopRight = SpriteWall.getWall(position.getTopRight());
+		const spriteBotLeft = SpriteWall.getWall(position.getBotLeft());
+		const spriteBotRight = SpriteWall.getWall(position.getBotRight());
 
 		// Borders
 		let tA: SPRITE_WALL_TYPE;
-		if (!this.isWallHere(leftSprite) && !this.isWallHere(rightSprite)) {
+		if (!SpriteWall.isWallHere(spriteLeft, this.wallID) && !SpriteWall.isWallHere(spriteRight, this.wallID)) {
 			tA = SPRITE_WALL_TYPE.LEFT_RIGHT;
-		} else if (!this.isWallHere(leftSprite)) {
+		} else if (!SpriteWall.isWallHere(spriteLeft, this.wallID)) {
 			tA = SPRITE_WALL_TYPE.LEFT;
-		} else if (!this.isWallHere(rightSprite)) {
+		} else if (!SpriteWall.isWallHere(spriteRight, this.wallID)) {
 			tA = SPRITE_WALL_TYPE.RIGHT;
 		} else {
 			tA = SPRITE_WALL_TYPE.MIDDLE;
 		}
 
 		// Diagonals
-		const diagLeft = this.isWallHere(topLeftSprite) || this.isWallHere(botLeftSprite);
-		const diagRight = this.isWallHere(topRightSprite) || this.isWallHere(botRightSprite);
+		const diagLeft =
+			SpriteWall.isWallHere(spriteTopLeft, this.wallID) || SpriteWall.isWallHere(spriteBotLeft, this.wallID);
+		const diagRight =
+			SpriteWall.isWallHere(spriteTopRight, this.wallID) || SpriteWall.isWallHere(spriteBotRight, this.wallID);
 		let tB: SPRITE_WALL_TYPE;
 		if (diagLeft && diagRight) {
 			tB = SPRITE_WALL_TYPE.LEFT_RIGHT;
@@ -220,7 +250,15 @@ class SpriteWall extends Base {
 			tB = SPRITE_WALL_TYPE.MIDDLE;
 		}
 
-		this.type = this.addType(tA, tB);
+		this.type = SpriteWall.addType(tA, tB);
+	}
+
+	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.read(json, SpriteWall.getBindings(additionnalBinding));
+	}
+
+	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.write(json, SpriteWall.getBindings(additionnalBinding));
 	}
 }
 

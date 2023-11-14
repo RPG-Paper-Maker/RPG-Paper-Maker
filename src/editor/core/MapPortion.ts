@@ -12,7 +12,8 @@
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { CustomGeometry, CustomGeometryFace, Portion, Position, Project, Rectangle, UndoRedoState } from '.';
-import { Constants, ELEMENT_MAP_KIND, RAYCASTING_LAYER } from '../common';
+import { Constants, ELEMENT_MAP_KIND, RAYCASTING_LAYER, SPRITE_WALL_TYPE } from '../common';
+import { SpriteWall } from '../mapElements';
 
 class MapPortion {
 	public model: Model.MapPortion;
@@ -20,6 +21,7 @@ class MapPortion {
 	public spritesFaceMesh: THREE.Mesh;
 	public spritesFixMesh: THREE.Mesh;
 	public autotilesList: MapElement.Autotiles[][];
+	public wallsMeshes: THREE.Mesh[];
 	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND][] = [];
 
 	constructor(globalPortion: Portion) {
@@ -37,6 +39,7 @@ class MapPortion {
 		this.spritesFixMesh.castShadow = true;
 		this.spritesFixMesh.renderOrder = 3;
 		this.autotilesList = [];
+		this.wallsMeshes = [];
 	}
 
 	removeLastPreview() {
@@ -83,6 +86,9 @@ class MapPortion {
 					preview
 				);
 				break;
+			case ELEMENT_MAP_KIND.SPRITE_WALL:
+				this.updateWallFromCursor(Scene.Map.currentSelectedWallID, preview);
+				break;
 		}
 	}
 
@@ -114,6 +120,9 @@ class MapPortion {
 			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
 			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 				this.updateSprite(position, element as MapElement.Sprite, kind, preview, removingPreview, undoRedo);
+				break;
+			case ELEMENT_MAP_KIND.SPRITE_WALL:
+				this.updateWall(position, element as MapElement.SpriteWall, preview, removingPreview, undoRedo);
 				break;
 			default:
 				break;
@@ -176,9 +185,6 @@ class MapPortion {
 			removingPreview,
 			undoRedo
 		);
-		if (autotile) {
-			autotile.update(position, this.model.globalPortion);
-		}
 		MapElement.Autotiles.updateAround(
 			position,
 			Scene.Map.current!.portionsToUpdate,
@@ -195,6 +201,43 @@ class MapPortion {
 		undoRedo: boolean
 	) {
 		this.setMapElement(position, sprite, kind, this.model.sprites, preview, removingPreview, undoRedo);
+	}
+
+	updateWallFromCursor(id: number, preview: boolean) {
+		const positions = Scene.Map.current!.cursorWall.getPositions();
+		for (const position of positions) {
+			this.setMapElement(
+				position,
+				MapElement.SpriteWall.create(id, SPRITE_WALL_TYPE.MIDDLE),
+				ELEMENT_MAP_KIND.SPRITE_WALL,
+				this.model.walls,
+				preview,
+				false,
+				false
+			);
+		}
+		for (const position of positions) {
+			SpriteWall.updateAround(position);
+		}
+	}
+
+	updateWall(
+		position: Position,
+		wall: MapElement.SpriteWall | null,
+		preview: boolean,
+		removingPreview: boolean,
+		undoRedo: boolean
+	) {
+		this.setMapElement(
+			position,
+			wall,
+			ELEMENT_MAP_KIND.SPRITE_WALL,
+			this.model.walls,
+			preview,
+			removingPreview,
+			undoRedo
+		);
+		MapElement.SpriteWall.updateAround(position);
 	}
 
 	setMapElement(
@@ -267,6 +310,14 @@ class MapPortion {
 				}
 			}
 		}
+		for (const [, wall] of this.model.walls) {
+			const textureWall = MapElement.SpriteWall.getWallTexture(wall.wallID);
+			if (textureWall === null) {
+				Scene.Map.current!.loading = true;
+				this.loadTexturesAndUpdateGeometries().catch(console.error);
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -275,6 +326,9 @@ class MapPortion {
 			if (land instanceof MapElement.Autotile) {
 				await MapElement.Autotiles.loadAutotileTexture(land.autotileID);
 			}
+		}
+		for (const [, wall] of this.model.walls) {
+			await MapElement.SpriteWall.loadWallTexture(wall.wallID);
 		}
 		this.updateGeometriesWithoutCheck();
 		if (updateLoading) {
@@ -291,6 +345,7 @@ class MapPortion {
 	updateGeometriesWithoutCheck() {
 		this.updateLandsGeometries();
 		this.updateSpritesGeometry();
+		this.updateWallsGeometry();
 	}
 
 	updateLandsGeometries() {
@@ -465,6 +520,56 @@ class MapPortion {
 			Scene.Map.current!.scene.add(this.spritesFaceMesh);
 		} else {
 			Scene.Map.current!.scene.remove(this.spritesFaceMesh);
+		}
+	}
+
+	updateWallsGeometry() {
+		for (const mesh of this.wallsMeshes) {
+			Scene.Map.current!.scene.remove(mesh);
+		}
+		this.wallsMeshes = [];
+		const hash = new Map<number, any>();
+		for (const [positionKey, wall] of this.model.walls) {
+			const position = new Position();
+			position.fromKey(positionKey);
+			let obj = hash.get(wall.wallID);
+			let material: THREE.MeshPhongMaterial | null;
+			let geometry: CustomGeometry;
+			let count: number;
+			if (obj) {
+				geometry = obj.geometry;
+				material = obj.material;
+				count = obj.c;
+			} else {
+				material = MapElement.SpriteWall.getWallTexture(wall.wallID);
+				geometry = new CustomGeometry();
+				count = 0;
+				obj = {
+					geometry: geometry,
+					material: material,
+					c: count,
+				};
+				hash.set(wall.wallID, obj);
+			}
+			const { width, height } = Manager.GL.getMaterialTextureSize(material);
+			obj.c = wall.updateGeometry(geometry, position, width, height, count);
+		}
+		// Add to scene
+		for (const [, obj] of hash) {
+			if (obj !== null) {
+				const geometry = obj.geometry;
+				if (!geometry.isEmpty()) {
+					geometry.updateAttributes();
+					const mesh = new THREE.Mesh(geometry, obj.material);
+					mesh.receiveShadow = true;
+					mesh.castShadow = true;
+					mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
+					mesh.layers.enable(RAYCASTING_LAYER.WALLS);
+					mesh.renderOrder = 3;
+					this.wallsMeshes.push(mesh);
+					Scene.Map.current!.scene.add(mesh);
+				}
+			}
 		}
 	}
 

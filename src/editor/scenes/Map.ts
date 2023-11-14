@@ -287,12 +287,19 @@ class Map extends Base {
 				}
 			}
 			if (this.lastPosition === null || !this.lastPosition.equals(position)) {
-				if (!Inputs.isPointerPressed && !Inputs.isMouseRightPressed) {
-					this.add(position, true);
-				} else if (Scene.Map.isAdding()) {
-					this.add(position);
-				} else if (Scene.Map.isRemoving()) {
-					this.remove(position);
+				if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
+					if (this.cursorWall.isMouseDown) {
+						this.cursorWall.update(position);
+						this.add(position, true);
+					}
+				} else {
+					if (!Inputs.isPointerPressed && !Inputs.isMouseRightPressed) {
+						this.add(position, true);
+					} else if (Scene.Map.isAdding()) {
+						this.add(position);
+					} else if (Scene.Map.isRemoving()) {
+						this.remove(position);
+					}
 				}
 				this.lastPosition = position;
 			}
@@ -359,9 +366,10 @@ class Map extends Base {
 		} else {
 			if (this.lastPosition) {
 				if (Inputs.isPointerPressed) {
-					this.add(this.lastPosition);
 					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
 						this.cursorWall.onMouseDown();
+					} else {
+						this.add(this.lastPosition);
 					}
 				} else if (Inputs.isMouseRightPressed) {
 					this.lastPosition = null;

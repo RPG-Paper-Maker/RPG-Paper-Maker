@@ -40,12 +40,61 @@ class CursorWall {
 	}
 
 	arePositionsAligned() {
-		return (
-			!this.isMouseDown ||
-			(this.positionStart &&
-				this.positionEnd &&
-				(this.positionStart.x === this.positionEnd.x || this.positionStart.z === this.positionEnd.z))
-		);
+		return !this.isMouseDown || this.isHorizontal() || this.isVertical();
+	}
+
+	isHorizontal() {
+		return this.positionStart && this.positionEnd && this.positionStart.z === this.positionEnd.z;
+	}
+
+	isVertical() {
+		return this.positionStart && this.positionEnd && this.positionStart.x === this.positionEnd.x;
+	}
+
+	getPositions() {
+		const positions = [];
+		if (
+			this.arePositionsAligned() &&
+			this.positionStart &&
+			this.positionEnd &&
+			!this.positionStart.equals(this.positionEnd)
+		) {
+			if (this.isHorizontal()) {
+				const start = Math.min(this.positionStart.x, this.positionEnd.x);
+				const end = Math.max(this.positionStart.x, this.positionEnd.x);
+				for (let i = start; i < end; i++) {
+					positions.push(
+						new Position(
+							i,
+							this.positionStart.y,
+							this.positionStart.yPixels,
+							this.positionStart.z,
+							this.positionStart.layer,
+							50,
+							0
+						)
+					);
+				}
+			} else {
+				const start = Math.min(this.positionStart.z, this.positionEnd.z);
+				const end = Math.max(this.positionStart.z, this.positionEnd.z);
+				for (let i = start; i < end; i++) {
+					positions.push(
+						new Position(
+							this.positionStart.x,
+							this.positionStart.y,
+							this.positionStart.yPixels,
+							i,
+							this.positionStart.layer,
+							0,
+							50,
+							90
+						)
+					);
+				}
+			}
+		}
+		return positions;
 	}
 
 	onMouseDown() {
@@ -53,16 +102,23 @@ class CursorWall {
 	}
 
 	onMouseUp() {
+		if (this.positionStart !== null && this.positionEnd !== null) {
+			Scene.Map.current!.mapPortion.add(this.positionStart);
+		}
 		this.isMouseDown = false;
 		this.positionEnd = null;
 	}
 
-	update(position: Position) {
+	updatePositions(position: Position) {
 		if (this.isMouseDown) {
 			this.positionEnd = position.clone();
 		} else {
 			this.positionStart = position.clone();
 		}
+	}
+
+	update(position: Position) {
+		this.updatePositions(position);
 		const points = [];
 		const additionVector = new THREE.Vector3(0, Project.getSquareSize() * 3, 0);
 		if (this.positionStart) {

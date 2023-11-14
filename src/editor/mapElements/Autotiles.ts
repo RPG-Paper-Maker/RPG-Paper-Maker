@@ -92,7 +92,7 @@ class Autotiles {
 	static getAutotileTexture(id: number): TextureBundle[] | null {
 		const texturesAutotile =
 			Scene.Map.current!.texturesAutotiles[Project.current!.specialElements.getAutotileByID(id).pictureID];
-		return texturesAutotile ? texturesAutotile : null;
+		return texturesAutotile || null;
 	}
 
 	static async loadAutotileTexture(id: number): Promise<TextureBundle[]> {
