@@ -92,9 +92,13 @@ class MapPortion {
 		}
 	}
 
-	remove(position: Position) {
+	remove(position: Position, preview = false) {
 		this.removeLastPreview();
-		this.updateMapElement(position, null, Scene.Map.currentSelectedMapElementKind);
+		if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
+			this.updateWallFromCursor(-1, preview);
+		} else {
+			this.updateMapElement(position, null, Scene.Map.currentSelectedMapElementKind);
+		}
 	}
 
 	updateMapElement(
@@ -208,12 +212,13 @@ class MapPortion {
 		for (const position of positions) {
 			this.setMapElement(
 				position,
-				MapElement.SpriteWall.create(id, SPRITE_WALL_TYPE.MIDDLE),
+				id === -1 ? null : MapElement.SpriteWall.create(id, SPRITE_WALL_TYPE.MIDDLE),
 				ELEMENT_MAP_KIND.SPRITE_WALL,
 				this.model.walls,
 				preview,
 				false,
-				false
+				false,
+				true
 			);
 		}
 		for (const position of positions) {
@@ -235,7 +240,8 @@ class MapPortion {
 			this.model.walls,
 			preview,
 			removingPreview,
-			undoRedo
+			undoRedo,
+			true
 		);
 		MapElement.SpriteWall.updateAround(position);
 	}
@@ -247,9 +253,10 @@ class MapPortion {
 		elements: Map<string, MapElement.Base>,
 		preview: boolean,
 		removingPreview: boolean,
-		undoRedo: boolean
+		undoRedo: boolean,
+		allowBorders = false
 	): MapElement.Base | null {
-		if (!Scene.Map.current || !position.isInMap(Scene.Map.current.modelMap)) {
+		if (!Scene.Map.current || !position.isInMap(Scene.Map.current.modelMap, allowBorders)) {
 			return null;
 		}
 		const key = position.toKey();

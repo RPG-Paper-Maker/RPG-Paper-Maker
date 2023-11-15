@@ -212,7 +212,7 @@ class Map extends Base {
 		this.sunLight.shadow.bias = -0.0003;
 	}
 
-	add(position: Position, preview: boolean = false) {
+	add(position: Position, preview = false) {
 		if (!preview) {
 			const positions = Mathf.traceLine(this.lastPosition, position);
 			for (const p of positions) {
@@ -223,7 +223,12 @@ class Map extends Base {
 				}
 			}
 		} else {
-			if (position.isInMap(this.modelMap)) {
+			if (
+				position.isInMap(
+					this.modelMap,
+					Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL
+				)
+			) {
 				this.mapPortion.add(position, preview);
 			} else {
 				this.mapPortion.removeLastPreview();
@@ -231,11 +236,11 @@ class Map extends Base {
 		}
 	}
 
-	remove(position: Position) {
+	remove(position: Position, preview = false) {
 		const positions = Mathf.traceLine(this.lastPosition, position);
 		for (const p of positions) {
-			if (p.isInMap(this.modelMap)) {
-				this.mapPortion.remove(p);
+			if (p.isInMap(this.modelMap, Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL)) {
+				this.mapPortion.remove(p, preview);
 			} else {
 				this.mapPortion.removeLastPreview();
 			}
@@ -288,9 +293,12 @@ class Map extends Base {
 			}
 			if (this.lastPosition === null || !this.lastPosition.equals(position)) {
 				if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
-					if (this.cursorWall.isMouseDown) {
+					if (Scene.Map.isAdding()) {
 						this.cursorWall.update(position);
 						this.add(position, true);
+					} else if (Scene.Map.isRemoving()) {
+						this.cursorWall.update(position);
+						this.remove(position, true);
 					}
 				} else {
 					if (!Inputs.isPointerPressed && !Inputs.isMouseRightPressed) {
@@ -372,8 +380,12 @@ class Map extends Base {
 						this.add(this.lastPosition);
 					}
 				} else if (Inputs.isMouseRightPressed) {
-					this.lastPosition = null;
-					this.updateRaycasting();
+					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
+						this.cursorWall.onMouseDown();
+					} else {
+						this.lastPosition = null;
+						this.updateRaycasting();
+					}
 				}
 			}
 		}
