@@ -17,7 +17,7 @@ import { KEY } from '../common';
 
 class Cursor {
 	public position: Position;
-	public mesh: THREE.Mesh<CustomGeometry, THREE.MeshPhongMaterial> | null = null;
+	public mesh!: THREE.Mesh<CustomGeometry, THREE.MeshPhongMaterial>;
 	public frame = new Frame(200);
 	public frameMove = new Frame(20);
 
@@ -27,8 +27,6 @@ class Cursor {
 
 	async load() {
 		const material = await Manager.GL.loadTexture('./Assets/cursor.png');
-		material.depthTest = false;
-		material.depthWrite = false;
 		const vecA = new THREE.Vector3(0, 0, 0);
 		const vecB = new THREE.Vector3(Project.getSquareSize(), 0, 0);
 		const vecC = new THREE.Vector3(Project.getSquareSize(), 0, Project.getSquareSize());
@@ -59,8 +57,8 @@ class Cursor {
 	}
 
 	onKeyDownImmediate() {
-		if (Scene.Map.current && this.mesh && this.frameMove.update()) {
-			const angle = Scene.Map.current?.camera.horizontalAngle;
+		if (this.frameMove.update()) {
+			const angle = Scene.Map.current!.camera.horizontalAngle;
 			const minX = 0;
 			const minZ = 0;
 			const maxX = 15;
@@ -89,15 +87,23 @@ class Cursor {
 				this.position.x = Math.min(Math.max(this.position.x + xPlus, minX), maxX);
 				this.position.z = Math.min(Math.max(this.position.z + zPlus, minZ), maxZ);
 			}
-			const vector = this.position.toVector3(false);
-			this.mesh.position.set(vector.x, vector.y, vector.z);
-			const vectorCenter = this.position.toVector3();
-			Scene.Map.current.camera.targetPosition.set(vectorCenter.x, vectorCenter.y, vectorCenter.z);
+			this.syncWithCameraTargetPosition();
 		}
 	}
 
+	updateMeshPosition() {
+		const vector = this.position.toVector3(false);
+		this.mesh.position.set(vector.x, vector.y + Scene.Map.current!.camera.getYOffsetDepth(), vector.z);
+	}
+
+	syncWithCameraTargetPosition() {
+		this.updateMeshPosition();
+		const vectorCenter = this.position.toVector3();
+		Scene.Map.current!.camera.targetPosition.set(vectorCenter.x, vectorCenter.y, vectorCenter.z);
+	}
+
 	update() {
-		if (this.mesh && this.frame.update()) {
+		if (this.frame.update()) {
 			this.mesh.material.userData.uniforms.offset.value = new THREE.Vector2(
 				this.frame.value / this.frame.frames,
 				0

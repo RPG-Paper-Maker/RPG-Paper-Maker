@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Manager, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
-import { Utils } from '../common';
+import { Constants, Utils } from '../common';
 import { Project } from './Project';
 
 class Camera {
@@ -69,6 +69,10 @@ class Camera {
 
 	getThreeCamera(): THREE.Camera {
 		return this.perspectiveCamera;
+	}
+
+	getYOffsetDepth() {
+		return Math.max(Math.min(this.distance * 0.001, 4), 0.03);
 	}
 
 	updateCameraPosition() {

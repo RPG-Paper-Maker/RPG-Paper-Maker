@@ -14,16 +14,13 @@ import { Model, Scene } from '../Editor';
 import { Project } from '.';
 
 class Grid {
+	public line!: THREE.LineSegments;
+
 	initialize(modelMap: Model.Map) {
 		const material = new THREE.LineBasicMaterial({
 			color: 0xffffff,
 			transparent: true,
 			opacity: 0.3,
-			polygonOffset: true,
-			polygonOffsetFactor: 1,
-			polygonOffsetUnits: 1,
-			depthWrite: false,
-			depthTest: false,
 		});
 		const points = [];
 		for (let i = 0, l = modelMap.length; i <= l; i++) {
@@ -35,9 +32,9 @@ class Grid {
 			points.push(new THREE.Vector3(modelMap.length * Project.getSquareSize(), 0, i * Project.getSquareSize()));
 		}
 		const geometry = new THREE.BufferGeometry().setFromPoints(points);
-		const line = new THREE.LineSegments(geometry, material);
-		line.renderOrder = 1;
-		Scene.Map.current?.scene.add(line);
+		this.line = new THREE.LineSegments(geometry, material);
+		this.line.renderOrder = 5;
+		Scene.Map.current?.scene.add(this.line);
 	}
 }
 

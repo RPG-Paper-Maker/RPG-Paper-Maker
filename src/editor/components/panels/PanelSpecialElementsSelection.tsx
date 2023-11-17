@@ -83,7 +83,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 			default:
 				break;
 		}
-		Project.current!.settings!.save();
+		await Project.current!.settings!.save();
 	};
 
 	const scrollToSelectedCapsule = () => {

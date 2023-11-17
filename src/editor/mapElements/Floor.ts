@@ -37,7 +37,7 @@ class Floor extends Land {
 	}
 
 	toString(): string {
-		return `FLOOR - ${this.texture.toString(true)}`;
+		return `FLOOR | ${this.texture.toString(true)}`;
 	}
 
 	updateGeometry(geometry: CustomGeometry, position: Position, width: number, height: number, count: number) {

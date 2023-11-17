@@ -90,7 +90,7 @@ class Sprite extends Base {
 				type = 'QUADRA SPRITE';
 				break;
 		}
-		return `${type} - ${this.texture.toString()}`;
+		return `${type} | ${this.texture.toString()}`;
 	}
 
 	updateGeometry(

@@ -79,9 +79,9 @@ class SpriteWall extends Base {
 
 	static async loadTextureWall(picture: Model.Picture, id: number): Promise<THREE.MeshPhongMaterial> {
 		const image = await Picture2D.loadImage(picture.getPath());
-		let texture = new THREE.Texture();
-		let w = image.width;
-		let h = image.height;
+		const texture = new THREE.Texture();
+		const w = image.width;
+		const h = image.height;
 		if (w === 0 || h === 0) {
 			return Manager.GL.loadTextureEmpty();
 		}
@@ -93,8 +93,8 @@ class SpriteWall extends Base {
 		Scene.Map.canvasRendering!.width = w + Project.getSquareSize();
 		Scene.Map.canvasRendering!.height = h;
 		Scene.Map.ctxRendering!.drawImage(image, 0, 0);
-		let left = Scene.Map.ctxRendering!.getImageData(0, 0, Math.floor(Project.getSquareSize() / 2), h);
-		let right = Scene.Map.ctxRendering!.getImageData(
+		const left = Scene.Map.ctxRendering!.getImageData(0, 0, Math.floor(Project.getSquareSize() / 2), h);
+		const right = Scene.Map.ctxRendering!.getImageData(
 			w - Math.floor(Project.getSquareSize() / 2),
 			0,
 			Math.floor(Project.getSquareSize() / 2),
@@ -110,13 +110,13 @@ class SpriteWall extends Base {
 		}
 		texture.image = await Picture2D.loadImage(Scene.Map.canvasRendering!.toDataURL());
 		texture.needsUpdate = true;
-		return Manager.GL.createMaterial({ texture: texture });
+		return Manager.GL.createMaterial({ texture });
 	}
 
 	static getWall(position: Position) {
-		//const portion = Scene.Map.current!.getLocalPortion(position);
+		// const portion = Scene.Map.current!.getLocalPortion(position);
 		// TODO
-		//MapPortion* mapPortion = map->mapPortion(portion);
+		// MapPortion* mapPortion = map->mapPortion(portion);
 		const mapPortion = Scene.Map.current!.mapPortion;
 		return mapPortion !== null ? mapPortion.model.walls.get(position.toKey()) || null : null;
 	}
@@ -125,7 +125,7 @@ class SpriteWall extends Base {
 		if (tA === SPRITE_WALL_TYPE.MIDDLE) {
 			return tB;
 		}
-		if (tB == SPRITE_WALL_TYPE.MIDDLE) {
+		if (tB === SPRITE_WALL_TYPE.MIDDLE) {
 			return tA;
 		}
 		return tA === tB ? tA : SPRITE_WALL_TYPE.LEFT_RIGHT;
@@ -168,7 +168,7 @@ class SpriteWall extends Base {
 	}
 
 	toString(): string {
-		return `WALL - ID: ${Utils.formatNumberID(this.wallID)}`;
+		return `WALL | ID: ${Utils.formatNumberID(this.wallID)}`;
 	}
 
 	updateGeometry(geometry: CustomGeometry, position: Position, width: number, height: number, count: number): number {

@@ -557,8 +557,8 @@ class MapPortion {
 				geometry = new CustomGeometry();
 				count = 0;
 				obj = {
-					geometry: geometry,
-					material: material,
+					geometry,
+					material,
 					c: count,
 				};
 				hash.set(wall.wallID, obj);

@@ -85,7 +85,7 @@ class Position extends Position3D {
 	}
 
 	getTotalYPixels(): number {
-		return (this.yPixels * Project.getSquareSize()) / 100;
+		return Math.floor((this.yPixels * Project.getSquareSize()) / 100);
 	}
 
 	getPixelsCenterX(): number {
@@ -113,6 +113,10 @@ class Position extends Position3D {
 			this.z >= 0 &&
 			this.z < map.width + (allowBorders ? 1 : 0)
 		);
+	}
+
+	updateYPixels(pixels: number) {
+		this.yPixels = (Math.max(Math.min(pixels, Project.getSquareSize() - 1), 0) / Project.getSquareSize()) * 100;
 	}
 
 	isHorizontal() {
@@ -200,19 +204,24 @@ class Position extends Position3D {
 		return position;
 	}
 
+	toStringCoords() {
+		const yPixels = this.getTotalYPixels();
+		return `X = ${this.x}\nY = ${this.y}${yPixels === 0 ? '' : ` (+${yPixels}px)`}\nZ = ${this.z}`;
+	}
+
 	toString() {
-		return `[X = ${this.x}, Y = ${this.y}, Z = ${this.z}]\nY+ = ${this.getTotalYPixels()}px\nLayer = ${
-			this.layer
-		}\nAngles = [${this.angleX}, ${this.angleY}, ${this.angleZ}]\nScales = [${this.scaleX}, ${this.scaleY}, ${
+		return `${this.toStringCoords()}\nLayer = ${this.layer}\nAngles = [${this.angleX}, ${this.angleY}, ${
+			this.angleZ
+		}]\nScales = [${this.scaleX}, ${this.scaleY}, ${
 			this.scaleZ
 		}]\nCenter X = ${this.getPixelsCenterX()}px\nCenter Z = ${this.getPixelsCenterZ()}px`;
 	}
 
 	toVector3(center: boolean = true): THREE.Vector3 {
 		return new THREE.Vector3(
-			this.x * Project.getSquareSize() + (center ? (this.centerX / 100) * Project.getSquareSize() : 0),
-			this.y * Project.getSquareSize() + (this.yPixels * Project.getSquareSize()) / 100,
-			this.z * Project.getSquareSize() + (center ? (this.centerZ / 100) * Project.getSquareSize() : 0)
+			this.x * Project.getSquareSize() + (center ? this.getPixelsCenterX() : 0),
+			this.y * Project.getSquareSize() + this.getTotalYPixels(),
+			this.z * Project.getSquareSize() + (center ? this.getPixelsCenterZ() : 0)
 		);
 	}
 
@@ -236,6 +245,21 @@ class Position extends Position3D {
 			this.scaleY,
 			this.scaleZ,
 		].join('+');
+	}
+
+	equals(position: Position): boolean {
+		return (
+			super.equals(position) &&
+			this.layer === position.layer &&
+			this.centerX === position.centerX &&
+			this.centerZ === position.centerZ &&
+			this.angleY === position.angleY &&
+			this.angleX === position.angleX &&
+			this.angleZ === position.angleZ &&
+			this.scaleX === position.scaleX &&
+			this.scaleY === position.scaleY &&
+			this.scaleZ === position.scaleZ
+		);
 	}
 
 	fromKey(key: string) {

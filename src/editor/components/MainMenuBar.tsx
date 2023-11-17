@@ -34,6 +34,8 @@ import MenuItem from './MenuItem';
 import MenuSub from './MenuSub';
 import { Manager, Scene } from '../Editor';
 import {
+	AiOutlineArrowDown,
+	AiOutlineArrowUp,
 	AiOutlineClear,
 	AiOutlineFileAdd,
 	AiOutlineFolderOpen,
@@ -55,6 +57,7 @@ import { KEY, SPECIAL_KEY, LOCAL_FORAGE, Paths } from '../common';
 import { LocalFile, Project } from '../core';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 
 type MenuItemType = {
 	title: ReactNode | string;
@@ -230,16 +233,32 @@ function MainMenuBar() {
 		}
 	};
 
+	const handleMoveCursorSquareUp = async () => {
+		Scene.Map.current!.loading = true;
+		await Scene.Map.current!.moveCursorSquareUp();
+		Scene.Map.current!.loading = false;
+	};
+
+	const handleMoveCursorPixelUp = async () => {
+		await Scene.Map.current!.moveCursorPixelUp();
+	};
+
+	const handleMoveCursorSquareDown = async () => {
+		Scene.Map.current!.loading = true;
+		await Scene.Map.current!.moveCursorSquareDown();
+		Scene.Map.current!.loading = false;
+	};
+
+	const handleMoveCursorPixelDown = async () => {
+		await Scene.Map.current!.moveCursorPixelDown();
+	};
+
 	const handleZoomIn = async () => {
-		if (Scene.Map.current) {
-			Scene.Map.current.zoomIn();
-		}
+		Scene.Map.current!.zoomIn();
 	};
 
 	const handleZoomOut = async () => {
-		if (Scene.Map.current) {
-			Scene.Map.current.zoomOut();
-		}
+		Scene.Map.current!.zoomOut();
 	};
 
 	const getPlayURL = () => window.location.pathname + '?project=' + currentProjectName;
@@ -371,6 +390,34 @@ function MainMenuBar() {
 					disabled: !canRedo,
 					onClick: handleRedo,
 					shortcut: [SPECIAL_KEY.CTRL, SPECIAL_KEY.SHIFT, KEY.Z],
+				},
+				{
+					title: 'Move cursor square up',
+					icon: <FaArrowUp />,
+					disabled: !isInMap,
+					onClick: handleMoveCursorSquareUp,
+					shortcut: [SPECIAL_KEY.CTRL, KEY.UP],
+				},
+				{
+					title: 'Move cursor pixel up',
+					icon: <AiOutlineArrowUp />,
+					disabled: !isInMap,
+					onClick: handleMoveCursorPixelUp,
+					shortcut: [SPECIAL_KEY.CTRL, SPECIAL_KEY.SHIFT, KEY.UP],
+				},
+				{
+					title: 'Move cursor square down',
+					icon: <FaArrowDown />,
+					disabled: !isInMap,
+					onClick: handleMoveCursorSquareDown,
+					shortcut: [SPECIAL_KEY.CTRL, KEY.DOWN],
+				},
+				{
+					title: 'Move cursor pixel down',
+					icon: <AiOutlineArrowDown />,
+					disabled: !isInMap,
+					onClick: handleMoveCursorPixelDown,
+					shortcut: [SPECIAL_KEY.CTRL, SPECIAL_KEY.SHIFT, KEY.DOWN],
 				},
 				{
 					title: 'Zoom in',

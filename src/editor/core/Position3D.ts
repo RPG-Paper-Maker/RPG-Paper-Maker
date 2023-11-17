@@ -20,6 +20,10 @@ class Position3D extends Portion {
 		this.yPixels = yPixels;
 	}
 
+	equals(position: Position3D): boolean {
+		return super.equals(position) && this.yPixels === position.yPixels;
+	}
+
 	read(json: any[]) {
 		this.x = json[0];
 		this.y = json[1];

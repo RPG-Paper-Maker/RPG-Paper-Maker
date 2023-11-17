@@ -146,10 +146,14 @@ class Inputs {
 
 			// Key up
 			const handleKeyUp = (e: any) => {
+				if (!Scene.Map.current || Scene.Map.current.loading) {
+					return;
+				}
 				Inputs.isALT = e.altKey;
 				Inputs.isCTRL = e.ctrlKey;
 				Inputs.isSHIFT = e.shiftKey;
 				ArrayUtils.removeElement(Inputs.keys, e.key);
+				Scene.Map.current.onKeyUp(e.key);
 			};
 			window.addEventListener('keyup', handleKeyUp);
 
@@ -227,6 +231,7 @@ class Inputs {
 
 			// Mouse wheel
 			const handleWheel = async (e: any) => {
+				e.preventDefault();
 				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}

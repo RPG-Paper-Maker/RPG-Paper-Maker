@@ -57,7 +57,7 @@ class Autotile extends Land {
 	}
 
 	toString(): string {
-		return `AUTOTILE - ID: ${Utils.formatNumberID(this.autotileID)} - ${this.texture.toString(true)}`;
+		return `AUTOTILE | ID: ${Utils.formatNumberID(this.autotileID)} | ${this.texture.toString(true)}`;
 	}
 
 	update(position: Position, portion: Portion) {

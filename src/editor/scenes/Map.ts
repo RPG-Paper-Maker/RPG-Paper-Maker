@@ -91,6 +91,8 @@ class Map extends Base {
 	public autotileFrame = new Frame(Project.current!.systems.autotilesFrameDuration, {
 		frames: Project.current!.systems.autotilesFrames,
 	});
+	public lockedY: number | null = null;
+	public lockedYPixels: number | null = null;
 	public requestPaintHUD = false;
 
 	constructor(tag: Model.TreeMapTag) {
@@ -144,6 +146,7 @@ class Map extends Base {
 		// Create grid plane
 		const material = new THREE.Material();
 		material.visible = false;
+		material.side = THREE.DoubleSide;
 		const length = Project.getSquareSize() * this.modelMap.length;
 		const width = Project.getSquareSize() * this.modelMap.width;
 		const extremeSize = Project.getSquareSize() * 1000;
@@ -173,6 +176,7 @@ class Map extends Base {
 
 		// Grid
 		this.grid.initialize(this.modelMap);
+		this.syncCursorGrid();
 
 		this.loading = false;
 	}
@@ -260,12 +264,71 @@ class Map extends Base {
 		}
 	}
 
-	zoomIn(coef: number = 1) {
-		this.camera.zoomIn(coef);
+	syncCursorGrid() {
+		const totalY = this.cursor.position.getTotalY();
+		this.meshPlane!.position.setY(totalY);
+		this.grid.line.position.setY(totalY + this.camera.getYOffsetDepth());
+		this.cursor.syncWithCameraTargetPosition();
+		this.camera.update();
 	}
 
-	zoomOut(coef: number = 1) {
-		this.camera.zoomOut(coef);
+	async moveCursorHeight(square: boolean, up: boolean) {
+		const addition = up ? 1 : -1;
+		if (square) {
+			const newY = this.cursor.position.y + addition;
+			if (newY >= -this.modelMap.depth && newY < this.modelMap.height) {
+				this.cursor.position.y = newY;
+			}
+		} else {
+			this.cursor.position.updateYPixels(this.cursor.position.getTotalYPixels() + addition);
+		}
+		this.syncCursorGrid();
+		this.requestPaintHUD = true;
+		if (this.tag) {
+			this.tag.cursorPosition = this.cursor.position;
+			await Project.current!.treeMaps.save();
+		}
+	}
+
+	async moveCursorSquareUp() {
+		await this.moveCursorHeight(true, true);
+	}
+
+	async moveCursorPixelUp() {
+		await this.moveCursorHeight(false, true);
+	}
+
+	async moveCursorSquareDown() {
+		await this.moveCursorHeight(true, false);
+	}
+
+	async moveCursorPixelDown() {
+		await this.moveCursorHeight(false, false);
+	}
+
+	zoom(isIn: boolean, coef = 1) {
+		this.grid.line.position.setY(this.cursor.position.getTotalY() + this.camera.getYOffsetDepth());
+		this.cursor.updateMeshPosition();
+		if (isIn) {
+			this.camera.zoomIn(coef);
+		} else {
+			this.camera.zoomOut(coef);
+		}
+	}
+
+	zoomIn(coef = 1) {
+		this.zoom(true, coef);
+	}
+
+	zoomOut(coef = 1) {
+		this.zoom(false, coef);
+	}
+
+	updateLockedY(position: Position) {
+		if (this.lockedY === null) {
+			this.lockedY = position.y;
+			this.lockedYPixels = position.yPixels;
+		}
 	}
 
 	updateRaycasting() {
@@ -275,7 +338,7 @@ class Map extends Base {
 			pointer.y = -(Inputs.getPositionY() / Manager.GL.mapEditorContext.canvasHeight) * 2 + 1;
 		}
 		Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
-		let layer = RAYCASTING_LAYER.PLANE;
+		let layer = RAYCASTING_LAYER.LANDS;
 		if (Inputs.isMouseRightPressed) {
 			switch (Scene.Map.currentSelectedMapElementKind) {
 				case ELEMENT_MAP_KIND.SPRITE_FACE:
@@ -289,29 +352,44 @@ class Map extends Base {
 		Manager.GL.raycaster.layers.set(layer);
 		const previousPointedMapElementPosition = this.pointedMapElementPosition;
 		const previousPointedMapElement = this.pointedMapElement;
+		const previousPlaneY = this.meshPlane!.position.y;
+		if (this.lockedY !== null && this.lockedYPixels !== null) {
+			this.meshPlane!.position.setY(this.lockedY * Project.getSquareSize());
+			this.meshPlane!.updateMatrixWorld();
+		}
 		let intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
+		Manager.GL.raycaster.layers.set(RAYCASTING_LAYER.PLANE);
+		const intersectsPlane = Manager.GL.raycaster.intersectObjects(this.scene.children);
+		const dist = intersects.length > 0 ? intersects[0].distance : Number.POSITIVE_INFINITY;
+		const distPlane = intersectsPlane.length > 0 ? intersectsPlane[0].distance : Number.POSITIVE_INFINITY;
+		if (distPlane < dist) {
+			intersects = intersectsPlane;
+			layer = RAYCASTING_LAYER.PLANE;
+		}
 		if (intersects.length > 0) {
 			const obj = intersects[0];
 			let position = new Position(
 				Math.floor(obj.point.x / Project.getSquareSize()),
-				0,
-				0,
+				this.lockedY === null ? this.cursor.position.y : this.lockedY,
+				this.lockedYPixels === null ? this.cursor.position.yPixels : this.lockedYPixels,
 				Math.floor(obj.point.z / Project.getSquareSize())
 			);
-			if (obj.faceIndex !== undefined) {
+			if (this.lockedY === null && this.lockedYPixels === null && obj.faceIndex !== undefined) {
 				const newPosition = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
 					obj.faceIndex
 				];
-				if (newPosition && Scene.Map.isRemoving()) {
+				if (newPosition && (Scene.Map.isRemoving() || layer === RAYCASTING_LAYER.LANDS)) {
 					position = newPosition;
 				}
 			}
 			if (this.lastPosition === null || !this.lastPosition.equals(position)) {
 				if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
 					if (Scene.Map.isAdding()) {
+						this.updateLockedY(position);
 						this.cursorWall.update(position);
 						this.add(position, true);
 					} else if (Scene.Map.isRemoving()) {
+						this.updateLockedY(position);
 						this.cursorWall.update(position);
 						this.remove(position, true);
 					}
@@ -319,8 +397,10 @@ class Map extends Base {
 					if (!Inputs.isPointerPressed && !Inputs.isMouseRightPressed) {
 						this.add(position, true);
 					} else if (Scene.Map.isAdding()) {
+						this.updateLockedY(position);
 						this.add(position);
 					} else if (Scene.Map.isRemoving()) {
+						this.updateLockedY(position);
 						this.remove(position);
 					}
 				}
@@ -366,7 +446,9 @@ class Map extends Base {
 						newPosition,
 						Scene.Map.currentSelectedMapElementKind
 					);
-					this.pointedMapElementPosition = newPosition;
+					if (this.pointedMapElement) {
+						this.pointedMapElementPosition = newPosition;
+					}
 				}
 			}
 		}
@@ -387,6 +469,7 @@ class Map extends Base {
 		) {
 			this.requestPaintHUD = true;
 		}
+		this.meshPlane!.position.setY(previousPlaneY);
 	}
 
 	addPortionToUpdate(portion: Portion) {
@@ -432,6 +515,10 @@ class Map extends Base {
 
 	onKeyDownImmediate() {
 		this.cursor.onKeyDownImmediate();
+		this.requestPaintHUD = true;
+	}
+
+	onKeyUp(key: string) {
 		if (this.tag) {
 			this.tag.cursorPosition = this.cursor.position;
 			Project.current!.treeMaps.save().catch(console.error);
@@ -508,6 +595,8 @@ class Map extends Base {
 	}
 
 	async onMouseUp(x: number, y: number) {
+		this.lockedY = null;
+		this.lockedYPixels = null;
 		this.cursorWall.onMouseUp();
 		if (this.undoRedoStatesSaving.length === 0 && this.undoRedoStates.length > 0) {
 			this.undoRedoStatesSaving = [...this.undoRedoStates];
@@ -526,12 +615,28 @@ class Map extends Base {
 	}
 
 	async onMouseWheel(delta: number) {
-		if (delta < 0) {
-			this.zoomIn(0.5);
+		if (Inputs.isCTRL) {
+			if (delta < 0) {
+				if (Inputs.isSHIFT) {
+					await this.moveCursorPixelUp();
+				} else {
+					await this.moveCursorSquareUp();
+				}
+			} else {
+				if (Inputs.isSHIFT) {
+					await this.moveCursorPixelDown();
+				} else {
+					await this.moveCursorSquareDown();
+				}
+			}
 		} else {
-			this.zoomOut(0.5);
+			if (delta < 0) {
+				this.zoomIn(0.5);
+			} else {
+				this.zoomOut(0.5);
+			}
+			await Project.current!.treeMaps.save();
 		}
-		await Project.current!.treeMaps.save();
 	}
 
 	update() {
@@ -589,23 +694,38 @@ class Map extends Base {
 		super.draw3D(Manager.GL.mapEditorContext);
 	}
 
+	drawCursorCoords() {
+		const space = 18;
+		const padding = 10;
+		const lines = this.cursor.position.toStringCoords().split('\n');
+		Scene.Map.ctxHUD!.textBaseline = 'top';
+		for (const [index, line] of lines.entries()) {
+			Utils.drawStrokedText(Scene.Map.ctxHUD!, line, padding, padding + index * space);
+		}
+	}
+
+	drawPointedCoords() {
+		if (this.pointedMapElementPosition && this.pointedMapElementPosition.isInMap(this.modelMap)) {
+			const lines = this.pointedMapElementPosition.toString().split('\n');
+			ArrayUtils.insertFirst(
+				lines,
+				`[${this.pointedMapElement === null ? 'NONE' : this.pointedMapElement.toString()}]`
+			);
+			Scene.Map.ctxHUD!.textBaseline = 'bottom';
+			const space = 18;
+			const padding = 10;
+			const y = Manager.GL.mapEditorContext.canvasHeight - (lines.length - 1) * space - padding;
+			for (const [index, line] of lines.entries()) {
+				Utils.drawStrokedText(Scene.Map.ctxHUD!, line, padding, y + index * space);
+			}
+		}
+	}
+
 	drawHUD() {
 		if (this.requestPaintHUD) {
 			this.clearHUD();
-			if (this.pointedMapElementPosition && this.pointedMapElementPosition.isInMap(this.modelMap)) {
-				const lines = this.pointedMapElementPosition.toString().split('\n');
-				ArrayUtils.insertFirst(
-					lines,
-					`[${this.pointedMapElement === null ? 'NONE' : this.pointedMapElement.toString()}]`
-				);
-				Scene.Map.ctxHUD!.textBaseline = 'top';
-				const space = 20;
-				const padding = 10;
-				const y = Manager.GL.mapEditorContext.canvasHeight - lines.length * space - padding;
-				for (let [index, line] of lines.entries()) {
-					Utils.drawStrokedText(Scene.Map.ctxHUD!, line, padding, y + index * space);
-				}
-			}
+			this.drawCursorCoords();
+			this.drawPointedCoords();
 			this.requestPaintHUD = false;
 		}
 	}
@@ -617,7 +737,7 @@ class Map extends Base {
 	clearHUD() {
 		Scene.Map.ctxHUD!.clearRect(0, 0, Scene.Map.canvasHUD!.width, Scene.Map.canvasHUD!.height);
 		Scene.Map.ctxHUD!.imageSmoothingEnabled = false;
-		Scene.Map.ctxHUD!.font = '14px sans-serif';
+		Scene.Map.ctxHUD!.font = '12px sans-serif';
 		Scene.Map.ctxHUD!.fillStyle = 'white';
 		Scene.Map.ctxHUD!.strokeStyle = '#29273d';
 		Scene.Map.ctxHUD!.lineJoin = 'round';
