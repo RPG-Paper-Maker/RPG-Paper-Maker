@@ -221,7 +221,7 @@ function MapEditorMenuBar() {
 							Quadra sprites
 						</MenuItem>
 						<MenuItem icon={<GiBrickWall />} onClick={handleWallSprites}>
-							Wall sprites
+							Walls
 						</MenuItem>
 					</MenuSub>
 					<MenuSub icon={<LuMountain />} disabled>

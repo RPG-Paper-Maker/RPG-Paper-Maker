@@ -41,6 +41,10 @@ class Land extends Base {
 		}
 	}
 
+	toString(): string {
+		return 'LAND';
+	}
+
 	getIndex(width: number): number {
 		return this.texture.x + this.texture.y * width;
 	}
@@ -91,7 +95,7 @@ class Land extends Base {
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 
 		// Indices
-		geometry.pushQuadIndices(count * 4);
+		geometry.pushQuadIndices(count * 4, position);
 
 		// UVs
 		const coefX = Base.COEF_TEX / width;

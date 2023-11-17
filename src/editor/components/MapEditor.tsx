@@ -33,7 +33,7 @@ function MapEditor() {
 		if (Scene.Map.current) {
 			Scene.Map.current.needsClose = true;
 			Scene.Map.current.close();
-			Scene.Map.current.draw3D(Manager.GL.mapEditorContext);
+			Scene.Map.current.draw3D();
 			Scene.Map.current = null;
 		}
 	};
@@ -71,10 +71,13 @@ function MapEditor() {
 				map.onKeyDownImmediate();
 			}
 			if (!map.loading) {
-				map.update(Manager.GL.mapEditorContext);
+				map.update();
 			}
 			if (!map.loading) {
-				map.draw3D(Manager.GL.mapEditorContext);
+				map.draw3D();
+			}
+			if (!map.loading) {
+				map.drawHUD();
 			}
 		}
 		Scene.Map.animationFrameID = requestAnimationFrame(loop);
@@ -84,6 +87,16 @@ function MapEditor() {
 		Manager.GL.mapEditorContext.resize();
 		if (Scene.Map.current) {
 			Scene.Map.current.camera.resizeGL(Manager.GL.mapEditorContext);
+		}
+		const canvas = refCanvas.current;
+		const canvasHUD = refCanvasHUD.current;
+		if (canvas && canvasHUD) {
+			const ratio = window.devicePixelRatio;
+			canvasHUD.width = Manager.GL.mapEditorContext.canvasWidth * ratio;
+			canvasHUD.height = Manager.GL.mapEditorContext.canvasHeight * ratio;
+			canvasHUD.style.width = `${Manager.GL.mapEditorContext.canvasWidth}px`;
+			canvasHUD.style.height = `${Manager.GL.mapEditorContext.canvasHeight}px`;
+			Scene.Map.ctxHUD!.setTransform(ratio, 0, 0, ratio, 0, 0);
 		}
 	};
 
@@ -95,8 +108,8 @@ function MapEditor() {
 			Scene.Map.canvasHUD = canvasHUD;
 			Scene.Map.canvasRendering = canvasRendering;
 			Scene.Map.ctxHUD = canvasHUD.getContext('2d');
-			Scene.Map.ctxRendering = canvasRendering.getContext('2d');
-			const removeInputs = Inputs.initialize(canvas);
+			Scene.Map.ctxRendering = canvasRendering.getContext('2d', { willReadFrequently: true });
+			const removeInputs = Inputs.initialize(canvasHUD);
 			Manager.GL.mapEditorContext.initialize('canvas-map-editor');
 			resize();
 			window.addEventListener('resize', resize);
@@ -129,9 +142,9 @@ function MapEditor() {
 		<>
 			<Loader isLoading={firstLoading} />
 			<div className='map-editor'>
-				<div ref={refCanvas} id='canvas-map-editor' className='fill-space'></div>
-				<canvas ref={refCanvasHUD} id='canvas-hud' width='640px' height='480px'></canvas>
-				<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px'></canvas>
+				<div ref={refCanvas} id='canvas-map-editor' className='fill-space' />
+				<canvas ref={refCanvasHUD} id='canvas-hud' />
+				<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px' />
 			</div>
 		</>
 	);

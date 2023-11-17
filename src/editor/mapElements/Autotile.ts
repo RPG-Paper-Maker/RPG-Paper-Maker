@@ -12,7 +12,7 @@
 import { MapElement } from '../Editor';
 import { CustomGeometry, Portion, Position, Project, Rectangle, TextureBundle } from '../core';
 import { Land } from './Land';
-import { BINDING, BindingType, ELEMENT_MAP_KIND } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, Utils } from '../common';
 
 class Autotile extends Land {
 	public autotileID!: number;
@@ -54,6 +54,10 @@ class Autotile extends Land {
 		}
 		const autotile = mapElement as MapElement.Autotile;
 		return autotile.autotileID === this.autotileID;
+	}
+
+	toString(): string {
+		return `AUTOTILE - ID: ${Utils.formatNumberID(this.autotileID)} - ${this.texture.toString(true)}`;
 	}
 
 	update(position: Position, portion: Portion) {

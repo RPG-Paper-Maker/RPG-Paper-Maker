@@ -80,7 +80,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 			requestAnimationFrame(loop);
 			const scene = Scene.Previewer3D.scenes[id];
 			if (scene) {
-				scene.update(Manager.GL.extraContext);
+				scene.update();
 				scene.draw3D(Manager.GL.extraContext);
 			}
 		}
@@ -95,7 +95,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		const scene = Scene.Previewer3D.scenes[id];
 		if (scene) {
 			scene.camera.resizeGL(Manager.GL.extraContext);
-			scene.update(Manager.GL.extraContext);
+			scene.update();
 			scene.draw3D(Manager.GL.extraContext);
 		}
 	};

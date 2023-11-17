@@ -10,6 +10,14 @@
 */
 
 class ArrayUtils {
+	static insertFirst(array: any[], value: any) {
+		array.unshift(value);
+	}
+
+	static insertAt<T>(array: T[], index: number, value: T) {
+		array.splice(index, 0, value);
+	}
+
 	static contains<T>(array: any[], value: T) {
 		return array.indexOf(value) !== -1;
 	}

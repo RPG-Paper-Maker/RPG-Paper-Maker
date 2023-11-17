@@ -30,14 +30,17 @@ class MapPortion {
 		this.floorsMesh.receiveShadow = true;
 		this.floorsMesh.castShadow = true;
 		this.floorsMesh.renderOrder = 0;
+		this.floorsMesh.layers.enable(RAYCASTING_LAYER.LANDS);
 		this.spritesFaceMesh = new THREE.Mesh(new CustomGeometryFace(), Manager.GL.MATERIAL_EMPTY);
 		this.spritesFaceMesh.receiveShadow = true;
 		this.spritesFaceMesh.castShadow = true;
 		this.spritesFaceMesh.renderOrder = 3;
+		this.spritesFaceMesh.layers.enable(RAYCASTING_LAYER.SPRITES);
 		this.spritesFixMesh = new THREE.Mesh(new CustomGeometry(), Manager.GL.MATERIAL_EMPTY);
 		this.spritesFixMesh.receiveShadow = true;
 		this.spritesFixMesh.castShadow = true;
 		this.spritesFixMesh.renderOrder = 3;
+		this.spritesFixMesh.layers.enable(RAYCASTING_LAYER.SPRITES);
 		this.autotilesList = [];
 		this.wallsMeshes = [];
 	}
@@ -262,6 +265,9 @@ class MapPortion {
 		const key = position.toKey();
 		let changed = false;
 		const previous = elements.get(key) || null;
+		if (preview && !removingPreview && Scene.Map.current.lastPosition !== null) {
+			Scene.Map.current.lastMapElement = previous;
+		}
 		if (element === null) {
 			changed = elements.delete(key);
 		} else {
@@ -285,7 +291,7 @@ class MapPortion {
 				}
 			}
 		}
-		if (preview) {
+		if (preview && changed) {
 			this.lastPreviewRemove.push([position, previous, previous === null ? kind : previous.kind]);
 		}
 		return previous;
@@ -418,6 +424,7 @@ class MapPortion {
 						autotiles.mesh.receiveShadow = true;
 						autotiles.mesh.castShadow = true;
 						autotiles.mesh.customDepthMaterial = autotiles.bundle!.material!.userData.customDepthMaterial;
+						autotiles.mesh.layers.enable(RAYCASTING_LAYER.LANDS);
 						Scene.Map.current!.scene.add(autotiles.mesh);
 					}
 				}
@@ -514,7 +521,6 @@ class MapPortion {
 		if (!fixGeometry.isEmpty()) {
 			fixGeometry.updateAttributes();
 			this.spritesFixMesh.geometry = fixGeometry;
-			this.spritesFixMesh.layers.enable(RAYCASTING_LAYER.SPRITES);
 			Scene.Map.current!.scene.add(this.spritesFixMesh);
 		} else {
 			Scene.Map.current!.scene.remove(this.spritesFixMesh);
@@ -523,7 +529,6 @@ class MapPortion {
 		if (!faceGeometry.isEmpty()) {
 			faceGeometry.updateAttributes();
 			this.spritesFaceMesh.geometry = faceGeometry;
-			this.spritesFaceMesh.layers.enable(RAYCASTING_LAYER.SPRITES);
 			Scene.Map.current!.scene.add(this.spritesFaceMesh);
 		} else {
 			Scene.Map.current!.scene.remove(this.spritesFaceMesh);

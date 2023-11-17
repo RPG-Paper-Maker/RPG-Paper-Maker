@@ -81,7 +81,7 @@ export enum DIRECTION {
 
 export enum RAYCASTING_LAYER {
 	PLANE = 1,
-	FLOORS = 2,
+	LANDS = 2,
 	SPRITES = 3,
 	WALLS = 4,
 }

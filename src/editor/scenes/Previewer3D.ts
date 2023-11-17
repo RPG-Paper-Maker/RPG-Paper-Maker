@@ -181,8 +181,8 @@ class Previewer3D extends Base {
 		this.camera.targetPosition.set(w / 2 + min.x, h / 2 + min.y, d / 2 + min.z);
 	}
 
-	update(GL: Manager.GL) {
-		super.update(GL);
+	update() {
+		super.update();
 
 		if (this.mesh) {
 			this.currentRotation += 0.01;

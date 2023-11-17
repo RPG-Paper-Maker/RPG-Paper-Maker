@@ -27,7 +27,16 @@ import {
 	TextureBundle,
 	UndoRedoState,
 } from '../core';
-import { Constants, ELEMENT_MAP_KIND, MOBILE_ACTION, RAYCASTING_LAYER, Paths, Mathf } from '../common';
+import {
+	Constants,
+	ELEMENT_MAP_KIND,
+	MOBILE_ACTION,
+	RAYCASTING_LAYER,
+	Paths,
+	Mathf,
+	Utils,
+	ArrayUtils,
+} from '../common';
 import { CursorWall } from '../core/CursorWall';
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
@@ -70,6 +79,9 @@ class Map extends Base {
 	public undoRedoStates: UndoRedoState[] = [];
 	public undoRedoStatesSaving: UndoRedoState[] = [];
 	public lastPosition: Position | null = null;
+	public lastMapElement: MapElement.Base | null = null;
+	public pointedMapElementPosition: Position | null = null;
+	public pointedMapElement: MapElement.Base | null = null;
 	public isMobileMovingCursor = false;
 	public texturesAutotiles: TextureBundle[][] = [];
 	public texturesWalls: THREE.MeshPhongMaterial[] = [];
@@ -79,6 +91,7 @@ class Map extends Base {
 	public autotileFrame = new Frame(Project.current!.systems.autotilesFrameDuration, {
 		frames: Project.current!.systems.autotilesFrames,
 	});
+	public requestPaintHUD = false;
 
 	constructor(tag: Model.TreeMapTag) {
 		super(tag);
@@ -274,7 +287,9 @@ class Map extends Base {
 			}
 		}
 		Manager.GL.raycaster.layers.set(layer);
-		const intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
+		const previousPointedMapElementPosition = this.pointedMapElementPosition;
+		const previousPointedMapElement = this.pointedMapElement;
+		let intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		if (intersects.length > 0) {
 			const obj = intersects[0];
 			let position = new Position(
@@ -283,11 +298,11 @@ class Map extends Base {
 				0,
 				Math.floor(obj.point.z / Project.getSquareSize())
 			);
-			if (Scene.Map.isRemoving() && obj.faceIndex !== undefined) {
+			if (obj.faceIndex !== undefined) {
 				const newPosition = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
 					obj.faceIndex
 				];
-				if (newPosition) {
+				if (newPosition && Scene.Map.isRemoving()) {
 					position = newPosition;
 				}
 			}
@@ -310,12 +325,67 @@ class Map extends Base {
 					}
 				}
 				this.lastPosition = position;
+				this.pointedMapElementPosition = position;
+				this.pointedMapElement = null;
 			}
 		} else {
-			if (this.mapPortion) {
-				this.mapPortion.removeLastPreview();
-				this.lastPosition = null;
+			this.mapPortion.removeLastPreview();
+			this.lastPosition = null;
+			this.pointedMapElementPosition = null;
+			this.pointedMapElement = null;
+		}
+		// For displaying information on left bottom corner
+		switch (Scene.Map.currentSelectedMapElementKind) {
+			case ELEMENT_MAP_KIND.FLOOR:
+			case ELEMENT_MAP_KIND.AUTOTILE:
+				layer = RAYCASTING_LAYER.LANDS;
+				break;
+			case ELEMENT_MAP_KIND.SPRITE_FACE:
+			case ELEMENT_MAP_KIND.SPRITE_FIX:
+			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
+				layer = RAYCASTING_LAYER.SPRITES;
+				break;
+			case ELEMENT_MAP_KIND.SPRITE_WALL:
+				layer = RAYCASTING_LAYER.WALLS;
+				break;
+			default:
+				layer = RAYCASTING_LAYER.PLANE;
+				break;
+		}
+		Manager.GL.raycaster.layers.set(layer);
+		intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
+		if (intersects.length > 0) {
+			const obj = intersects[0];
+			if (obj.faceIndex !== undefined) {
+				const newPosition = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
+					obj.faceIndex
+				];
+				if (newPosition && (this.lastPosition === null || !newPosition.equals(this.lastPosition))) {
+					this.pointedMapElement = this.mapPortion.model.getMapElement(
+						newPosition,
+						Scene.Map.currentSelectedMapElementKind
+					);
+					this.pointedMapElementPosition = newPosition;
+				}
 			}
+		}
+		if (
+			this.lastPosition !== null &&
+			this.pointedMapElementPosition !== null &&
+			this.lastPosition.equals(this.pointedMapElementPosition)
+		) {
+			this.pointedMapElement = this.lastMapElement;
+		}
+		if (
+			previousPointedMapElement !== this.pointedMapElement ||
+			(previousPointedMapElementPosition === null && this.pointedMapElementPosition !== null) ||
+			(previousPointedMapElementPosition !== null && this.pointedMapElementPosition === null) ||
+			(previousPointedMapElementPosition !== null &&
+				this.pointedMapElementPosition !== null &&
+				!previousPointedMapElementPosition.equals(this.pointedMapElementPosition))
+		) {
+			this.requestPaintHUD = true;
 		}
 	}
 
@@ -464,8 +534,8 @@ class Map extends Base {
 		await Project.current!.treeMaps.save();
 	}
 
-	update(GL: Manager.GL) {
-		super.update(GL);
+	update() {
+		super.update();
 		this.mapPortion.update();
 
 		// Cursors
@@ -512,15 +582,46 @@ class Map extends Base {
 		Scene.Map.lastUpdateTime = new Date().getTime();
 	}
 
-	draw3D(GL: Manager.GL) {
+	draw3D() {
 		if (this.needsClose) {
 			Manager.GL.mapEditorContext.renderer.setClearColor('#2e324a');
 		}
-		super.draw3D(GL);
+		super.draw3D(Manager.GL.mapEditorContext);
+	}
+
+	drawHUD() {
+		if (this.requestPaintHUD) {
+			this.clearHUD();
+			if (this.pointedMapElementPosition && this.pointedMapElementPosition.isInMap(this.modelMap)) {
+				const lines = this.pointedMapElementPosition.toString().split('\n');
+				ArrayUtils.insertFirst(
+					lines,
+					`[${this.pointedMapElement === null ? 'NONE' : this.pointedMapElement.toString()}]`
+				);
+				Scene.Map.ctxHUD!.textBaseline = 'top';
+				const space = 20;
+				const padding = 10;
+				const y = Manager.GL.mapEditorContext.canvasHeight - lines.length * space - padding;
+				for (let [index, line] of lines.entries()) {
+					Utils.drawStrokedText(Scene.Map.ctxHUD!, line, padding, y + index * space);
+				}
+			}
+			this.requestPaintHUD = false;
+		}
 	}
 
 	close() {
 		super.close();
+	}
+
+	clearHUD() {
+		Scene.Map.ctxHUD!.clearRect(0, 0, Scene.Map.canvasHUD!.width, Scene.Map.canvasHUD!.height);
+		Scene.Map.ctxHUD!.imageSmoothingEnabled = false;
+		Scene.Map.ctxHUD!.font = '14px sans-serif';
+		Scene.Map.ctxHUD!.fillStyle = 'white';
+		Scene.Map.ctxHUD!.strokeStyle = '#29273d';
+		Scene.Map.ctxHUD!.lineJoin = 'round';
+		Scene.Map.ctxHUD!.lineWidth = 4;
 	}
 }
 

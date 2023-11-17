@@ -12,7 +12,7 @@
 import { Scene } from '../Editor';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, Paths } from '../common';
 import { Serializable } from '../core/Serializable';
-import { Portion, Project } from '../core';
+import { Portion, Position, Project } from '../core';
 import { Autotile, Floor, Sprite, SpriteWall } from '../mapElements';
 
 class MapPortion extends Serializable {
@@ -56,6 +56,23 @@ class MapPortion extends Serializable {
 			path = Paths.join(path, Paths.TEMP);
 		}
 		return Paths.join(path, this.getFileName());
+	}
+
+	getMapElement(position: Position, kind: ELEMENT_MAP_KIND) {
+		const key = position.toKey();
+		switch (kind) {
+			case ELEMENT_MAP_KIND.FLOOR:
+			case ELEMENT_MAP_KIND.AUTOTILE:
+				return this.lands.get(key) || null;
+			case ELEMENT_MAP_KIND.SPRITE_FACE:
+			case ELEMENT_MAP_KIND.SPRITE_FIX:
+			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
+				return this.sprites.get(key) || null;
+			case ELEMENT_MAP_KIND.SPRITE_WALL:
+				return this.walls.get(key) || null;
+		}
+		return null;
 	}
 
 	async load() {

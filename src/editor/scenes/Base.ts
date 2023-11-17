@@ -16,14 +16,14 @@ import { Camera } from '../core';
 class Base {
 	public scene: THREE.Scene;
 	public camera: Camera;
-	public loading: boolean = false;
+	public loading = true;
 
 	constructor(tag?: Model.TreeMapTag) {
 		this.scene = new THREE.Scene();
 		this.camera = new Camera(tag);
 	}
 
-	update(GL: Manager.GL) {
+	update() {
 		this.camera.update();
 	}
 

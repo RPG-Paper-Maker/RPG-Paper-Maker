@@ -81,7 +81,11 @@ class Position extends Position3D {
 	}
 
 	getTotalY(): number {
-		return this.y * Project.getSquareSize() + (this.yPixels * Project.getSquareSize()) / 100;
+		return this.y * Project.getSquareSize() + this.getTotalYPixels();
+	}
+
+	getTotalYPixels(): number {
+		return (this.yPixels * Project.getSquareSize()) / 100;
 	}
 
 	getPixelsCenterX(): number {
@@ -194,6 +198,14 @@ class Position extends Position3D {
 			position.setHorizontal();
 		}
 		return position;
+	}
+
+	toString() {
+		return `[X = ${this.x}, Y = ${this.y}, Z = ${this.z}]\nY+ = ${this.getTotalYPixels()}px\nLayer = ${
+			this.layer
+		}\nAngles = [${this.angleX}, ${this.angleY}, ${this.angleZ}]\nScales = [${this.scaleX}, ${this.scaleY}, ${
+			this.scaleZ
+		}]\nCenter X = ${this.getPixelsCenterX()}px\nCenter Z = ${this.getPixelsCenterZ()}px`;
 	}
 
 	toVector3(center: boolean = true): THREE.Vector3 {

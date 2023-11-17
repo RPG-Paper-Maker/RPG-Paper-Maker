@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Base } from './Base';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, PICTURE_KIND, SPRITE_WALL_TYPE } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, PICTURE_KIND, SPRITE_WALL_TYPE, Utils } from '../common';
 import { CustomGeometry, Picture2D, Position, Project, TextureBundle } from '../core';
 import { Sprite } from './Sprite';
 
@@ -167,6 +167,10 @@ class SpriteWall extends Base {
 		}
 	}
 
+	toString(): string {
+		return `WALL - ID: ${Utils.formatNumberID(this.wallID)}`;
+	}
+
 	updateGeometry(geometry: CustomGeometry, position: Position, width: number, height: number, count: number): number {
 		const vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
 		const vecB = new THREE.Vector3(0.5, 1.0, 0.0);
@@ -210,7 +214,19 @@ class SpriteWall extends Base {
 
 		// Add sprite to geometry
 		Base.rotateQuad(vecA, vecB, vecC, vecD, center, angle, Sprite.Y_AXIS);
-		return Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD, texA, texB, texC, texD, count);
+		return Sprite.addStaticSpriteToGeometry(
+			geometry,
+			vecA,
+			vecB,
+			vecC,
+			vecD,
+			texA,
+			texB,
+			texC,
+			texD,
+			count,
+			position
+		);
 	}
 
 	update(position: Position) {

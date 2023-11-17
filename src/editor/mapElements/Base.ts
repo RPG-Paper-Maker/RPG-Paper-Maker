@@ -149,6 +149,8 @@ abstract class Base extends Serializable {
 	}
 
 	abstract equals(mapElement: MapElement.Base): boolean;
+
+	abstract toString(): string;
 }
 
 export { Base };

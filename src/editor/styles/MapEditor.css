@@ -14,10 +14,15 @@
 	color: white;
 }
 
-#canvas-rendering {
-	display: none;
+#canvas-hud {
+	position: absolute;
+	margin: 0;
+	padding: 0;
+	image-rendering: pixelated;
+	font-smooth: never;
+	-webkit-font-smoothing: none;
 }
 
-#canvas-hud {
+#canvas-rendering {
 	display: none;
 }

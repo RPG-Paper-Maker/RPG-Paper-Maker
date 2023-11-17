@@ -56,10 +56,11 @@ class Sprite extends Base {
 		texB: THREE.Vector2,
 		texC: THREE.Vector2,
 		texD: THREE.Vector2,
-		count: number
+		count: number,
+		position: Position
 	): number {
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
-		geometry.pushQuadIndices(count);
+		geometry.pushQuadIndices(count, position);
 		geometry.pushQuadUVs(texA, texB, texC, texD);
 		return count + 4;
 	}
@@ -71,6 +72,25 @@ class Sprite extends Base {
 		} else {
 			return false;
 		}
+	}
+
+	toString(): string {
+		let type = '';
+		switch (this.kind) {
+			case ELEMENT_MAP_KIND.SPRITE_FACE:
+				type = 'FACE SPRITE';
+				break;
+			case ELEMENT_MAP_KIND.SPRITE_FIX:
+				type = 'FIX SPRITE';
+				break;
+			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+				type = 'DOUBLE SPRITE';
+				break;
+			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
+				type = 'QUADRA SPRITE';
+				break;
+		}
+		return `${type} - ${this.texture.toString()}`;
 	}
 
 	updateGeometry(
@@ -166,7 +186,8 @@ class Sprite extends Base {
 				texB,
 				texC,
 				texD,
-				count
+				count,
+				position
 			);
 		}
 
@@ -187,7 +208,8 @@ class Sprite extends Base {
 				texB,
 				texC,
 				texD,
-				count
+				count,
+				position
 			);
 
 			// Quadra sprite
@@ -212,7 +234,8 @@ class Sprite extends Base {
 					texB,
 					texC,
 					texD,
-					count
+					count,
+					position
 				);
 				count = Sprite.addStaticSpriteToGeometry(
 					geometry,
@@ -224,7 +247,8 @@ class Sprite extends Base {
 					texB,
 					texC,
 					texD,
-					count
+					count,
+					position
 				);
 			}
 		}

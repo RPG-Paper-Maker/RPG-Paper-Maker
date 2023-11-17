@@ -48,13 +48,13 @@ class Inputs {
 		return Constants.isMobile ? this.previousPointerY : this.previousMouseY;
 	}
 
-	static initialize(canvas: HTMLHeadingElement) {
+	static initialize(canvas: HTMLCanvasElement) {
 		Inputs.keys = [];
 
 		if (Constants.isMobile) {
 			// Pointer down
 			const handlePointerDown = (e: any) => {
-				if (!Scene.Map.current) {
+				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
 				Inputs.isPointerPressed = true;
@@ -82,7 +82,7 @@ class Inputs {
 
 			// Touch move
 			const handleTouchMove = (e: any) => {
-				if (!Scene.Map.current) {
+				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
 				const rect = canvas.getBoundingClientRect();
@@ -110,7 +110,7 @@ class Inputs {
 
 			// Touch end
 			const handleTouchEnd = async (e: any) => {
-				if (!Scene.Map.current) {
+				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
 				Inputs.isPointerPressed = false;
@@ -131,7 +131,7 @@ class Inputs {
 				if (e.ctrlKey && e.key === 's') {
 					return;
 				}
-				if (!Scene.Map.current) {
+				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
 				Inputs.isALT = e.altKey;
@@ -155,7 +155,7 @@ class Inputs {
 
 			// Mouse down
 			const handleMouseDown = (e: any) => {
-				if (!Scene.Map.current) {
+				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
 				switch (e.button) {
@@ -186,7 +186,7 @@ class Inputs {
 
 			// Mouse move
 			const handleMouseMove = (e: any) => {
-				if (!Scene.Map.current) {
+				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
 				const rect = canvas.getBoundingClientRect();
@@ -202,7 +202,7 @@ class Inputs {
 
 			// Mouse up
 			const handleMouseUp = async (e: any) => {
-				if (!Scene.Map.current) {
+				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
 				const rect = canvas.getBoundingClientRect();
@@ -227,7 +227,7 @@ class Inputs {
 
 			// Mouse wheel
 			const handleWheel = async (e: any) => {
-				if (!Scene.Map.current) {
+				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
 				await Scene.Map.current.onMouseWheel(e.deltaY);

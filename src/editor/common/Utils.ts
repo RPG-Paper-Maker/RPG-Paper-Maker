@@ -62,6 +62,10 @@ class Utils {
 		return ('000000000' + num).substr(-size);
 	}
 
+	static formatNumberID(num: number): string {
+		return this.formatNumber(num, 4);
+	}
+
 	static numToBool(n: number): boolean {
 		return n === Constants.NUM_BOOL_TRUE;
 	}
@@ -80,6 +84,11 @@ class Utils {
 
 	static isMobile() {
 		return 'ontouchstart' in window;
+	}
+
+	static drawStrokedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
+		ctx.strokeText(text, x, y);
+		ctx.fillText(text, x, y);
 	}
 }
 

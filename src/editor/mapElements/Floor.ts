@@ -36,6 +36,10 @@ class Floor extends Land {
 		return super.equals(mapElement);
 	}
 
+	toString(): string {
+		return `FLOOR - ${this.texture.toString(true)}`;
+	}
+
 	updateGeometry(geometry: CustomGeometry, position: Position, width: number, height: number, count: number) {
 		if (width !== 0 && height !== 0) {
 			super.updateGeometryLand(
