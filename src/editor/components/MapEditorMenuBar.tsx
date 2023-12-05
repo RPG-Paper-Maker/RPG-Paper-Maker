@@ -112,7 +112,7 @@ function MapEditorMenuBar() {
 		handleGeneric(kind, MENU_INDEX_MAP_EDITOR.SPRITES);
 		Project.current!.settings.mapEditorSpritesMenuIndex = menuIndex;
 		await Project.current!.settings.save();
-		setLandsIndex(Project.current!.settings.mapEditorSpritesMenuIndex);
+		setSpritesIndex(Project.current!.settings.mapEditorSpritesMenuIndex);
 	};
 
 	const handleFaceSprites = async () => {
@@ -133,6 +133,11 @@ function MapEditorMenuBar() {
 
 	const handleWallSprites = async () => {
 		await handleGenericSprites(ELEMENT_MAP_KIND.SPRITE_WALL, MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_WALL);
+	};
+
+	const handleMountains = async () => {
+		handleGeneric(ELEMENT_MAP_KIND.MOUNTAIN, MENU_INDEX_MAP_EDITOR.MOUNTAINS);
+		await Project.current!.settings.save();
 	};
 
 	const handleMobilePlus = () => {
@@ -161,6 +166,9 @@ function MapEditorMenuBar() {
 					break;
 				case MENU_INDEX_MAP_EDITOR.SPRITES:
 					handleSprites().catch(console.error);
+					break;
+				case MENU_INDEX_MAP_EDITOR.MOUNTAINS:
+					handleMountains().catch(console.error);
 					break;
 			}
 		}
@@ -224,8 +232,8 @@ function MapEditorMenuBar() {
 							Walls
 						</MenuItem>
 					</MenuSub>
-					<MenuSub icon={<LuMountain />} disabled>
-						<MenuItem icon={<FaMountain />} onClick={handleFloors} disabled>
+					<MenuSub icon={<LuMountain />} onClick={handleMountains}>
+						<MenuItem icon={<FaMountain />} onClick={handleMountains}>
 							Mountains
 						</MenuItem>
 					</MenuSub>

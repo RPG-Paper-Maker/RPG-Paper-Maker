@@ -12,8 +12,8 @@
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Base } from './Base';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, PICTURE_KIND, SPRITE_WALL_TYPE, Utils } from '../common';
-import { CustomGeometry, Picture2D, Position, Project, TextureBundle } from '../core';
+import { BINDING, BindingType, Constants, ELEMENT_MAP_KIND, PICTURE_KIND, SPRITE_WALL_TYPE, Utils } from '../common';
+import { CustomGeometry, Picture2D, Position, Project } from '../core';
 import { Sprite } from './Sprite';
 
 class SpriteWall extends Base {

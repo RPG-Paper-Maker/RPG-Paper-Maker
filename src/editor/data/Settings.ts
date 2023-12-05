@@ -21,6 +21,7 @@ class Settings extends Serializable {
 	public mapEditorCurrentAutotileID!: number;
 	public mapEditorCurrentAutotileTexture!: Rectangle;
 	public mapEditorCurrentWallID!: number;
+	public mapEditorCurrentMountainID!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['projectMenuIndex', 'pmi', 1, BINDING.NUMBER],
@@ -31,6 +32,7 @@ class Settings extends Serializable {
 		['mapEditorCurrentAutotileID', 'mecaid', 1, BINDING.NUMBER],
 		['mapEditorCurrentAutotileTexture', 'mecat', undefined, BINDING.RECTANGLE],
 		['mapEditorCurrentWallID', 'mecwid', 1, BINDING.NUMBER],
+		['mapEditorCurrentMountainID', 'mecmid', 1, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

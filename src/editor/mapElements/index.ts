@@ -3,5 +3,7 @@ export * from './Autotiles';
 export * from './Base';
 export * from './Floor';
 export * from './Land';
+export * from './Mountain';
+export * from './Mountains';
 export * from './Sprite';
 export * from './SpriteWall';

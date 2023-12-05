@@ -22,7 +22,7 @@ class Previewer3D extends Base {
 	public canvas!: HTMLElement;
 	public material: THREE.MeshPhongMaterial | null = null;
 	public sunLight!: THREE.DirectionalLight;
-	public mesh: THREE.Mesh | null = null;
+	public meshes: THREE.Mesh[] = [];
 	public currentRotation: number = 0;
 
 	constructor(id: string) {
@@ -128,31 +128,60 @@ class Previewer3D extends Base {
 		}
 	}
 
+	async loadMountain(GL: Manager.GL, mountainID: number, textureFloor: Rectangle) {
+		const wall = Project.current!.specialElements.getMountainByID(mountainID);
+		if (!wall) {
+			this.clear();
+			return;
+		}
+		const textureMountain = await MapElement.Mountains.loadMountainTexture(mountainID);
+		if (textureMountain) {
+			const mountainElement = MapElement.Mountain.create(mountainID, 1, 0, 1, 0);
+			let geometry = new CustomGeometry();
+			mountainElement.updateGeometry(geometry, new Position(), 0);
+			this.addToScene(GL, geometry, textureMountain);
+			await this.loadMaterial();
+			const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
+			const floor = MapElement.Floor.create(new Rectangle(textureFloor.x, textureFloor.y, 1, 1));
+			geometry = new CustomGeometry();
+			floor.updateGeometry(geometry, new Position(), width, height, 0);
+			this.addToScene(GL, geometry, this.material, false, new THREE.Vector3(0, Project.getSquareSize() / 2));
+		}
+	}
+
 	addToScene(
 		GL: Manager.GL,
 		geometry: CustomGeometry | CustomGeometryFace,
-		material: THREE.MeshPhongMaterial | null = this.material
+		material: THREE.MeshPhongMaterial | null = this.material,
+		needsClear = true,
+		position: THREE.Vector3 | null = null
 	) {
-		this.clear();
+		if (needsClear) {
+			this.clear();
+		}
 		if (!geometry.isEmpty() && material) {
 			geometry.updateAttributes();
-			this.mesh = new THREE.Mesh(geometry, material);
-			this.scene.add(this.mesh);
-			this.mesh.geometry.center();
+			const mesh = new THREE.Mesh(geometry, material);
+			this.meshes.push(mesh);
+			this.scene.add(mesh);
+			mesh.geometry.center();
+			if (position) {
+				mesh.position.set(position.x, position.y, position.z);
+			}
 			this.updateCamera();
 			this.draw3D(GL);
 		}
 	}
 
 	clear() {
-		if (this.mesh !== null) {
-			this.scene.remove(this.mesh);
-			this.mesh = null;
+		for (const mesh of this.meshes) {
+			this.scene.remove(mesh);
 		}
+		this.meshes = [];
 	}
 
 	updateCamera() {
-		if (this.mesh == null) {
+		if (this.meshes.length === 0) {
 			return;
 		}
 		const min = new THREE.Vector3(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY);
@@ -160,22 +189,25 @@ class Previewer3D extends Base {
 		let w = 0;
 		let h = 0;
 		let d = 0;
-		this.mesh.scale.set(32, 32, 32);
-		let bb = this.mesh.geometry.boundingBox;
-		let m: THREE.Vector3;
-		if (bb === null) {
-			this.mesh.geometry.computeBoundingBox();
-			bb = this.mesh.geometry.boundingBox;
+		for (const mesh of this.meshes) {
+			//mesh.scale.set(32, 32, 32);
+			let bb = mesh.geometry.boundingBox;
+			let m: THREE.Vector3;
+			if (bb === null) {
+				mesh.geometry.computeBoundingBox();
+				bb = mesh.geometry.boundingBox;
+			}
+			if (bb) {
+				m = bb.min.clone();
+				min.set(Math.min(min.x, m.x), Math.min(min.y, m.y), Math.min(min.z, m.z));
+				m = bb.max.clone();
+				max.set(Math.max(max.x, m.x), Math.max(max.y, m.y), Math.max(max.z, m.z));
+				w = max.x - min.x;
+				h = max.y - min.y;
+				d = max.z - min.z;
+			}
 		}
-		if (bb) {
-			m = bb.min.multiplyScalar(32);
-			min.set(Math.min(min.x, m.x), Math.min(min.y, m.y), Math.min(min.z, m.z));
-			m = bb.max.multiplyScalar(32);
-			max.set(Math.max(max.x, m.x), Math.max(max.y, m.y), Math.max(max.z, m.z));
-			w = max.x - min.x;
-			h = max.y - min.y;
-			d = max.z - min.z;
-		}
+
 		this.camera.distance = Math.max(Math.max(w, h), d) + (w + h + d) / 2;
 		this.camera.verticalAngle = 55;
 		this.camera.targetPosition.set(w / 2 + min.x, h / 2 + min.y, d / 2 + min.z);
@@ -184,9 +216,9 @@ class Previewer3D extends Base {
 	update() {
 		super.update();
 
-		if (this.mesh) {
-			this.currentRotation += 0.01;
-			this.mesh.rotation.y = this.currentRotation;
+		this.currentRotation += 0.01;
+		for (const mesh of this.meshes) {
+			mesh.rotation.y = this.currentRotation;
 		}
 	}
 

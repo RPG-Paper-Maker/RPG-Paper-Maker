@@ -24,6 +24,7 @@ import {
 	RootState,
 	setCurrentAutotileID,
 	setCurrentAutotileTexture,
+	setCurrentMountainID,
 	setCurrentTilesetTexture,
 	setCurrentTreeMapTag,
 	setCurrentWallID,
@@ -130,10 +131,12 @@ function PanelProject() {
 			dispatch(setCurrentAutotileID(Project.current!.settings.mapEditorCurrentAutotileID));
 			dispatch(setCurrentAutotileTexture(Project.current!.settings.mapEditorCurrentAutotileTexture));
 			dispatch(setCurrentWallID(Project.current!.settings.mapEditorCurrentWallID));
+			dispatch(setCurrentMountainID(Project.current!.settings.mapEditorCurrentMountainID));
 			Scene.Map.currentSelectedTilesetTexture = Project.current!.settings.mapEditorCurrentTilesetTexture;
 			Scene.Map.currentSelectedAutotileID = Project.current!.settings.mapEditorCurrentAutotileID;
 			Scene.Map.currentSelectedAutotileTexture = Project.current!.settings.mapEditorCurrentAutotileTexture;
 			Scene.Map.currentSelectedWallID = Project.current!.settings.mapEditorCurrentWallID;
+			Scene.Map.currentSelectedMountainID = Project.current!.settings.mapEditorCurrentMountainID;
 		}
 		// eslint-disable-next-line
 	}, [openLoading]);

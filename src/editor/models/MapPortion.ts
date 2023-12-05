@@ -13,13 +13,14 @@ import { Scene } from '../Editor';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, Paths } from '../common';
 import { Serializable } from '../core/Serializable';
 import { Portion, Position, Project } from '../core';
-import { Autotile, Floor, Sprite, SpriteWall } from '../mapElements';
+import { Autotile, Floor, Mountain, Sprite, SpriteWall } from '../mapElements';
 
 class MapPortion extends Serializable {
 	public globalPortion: Portion;
 	public lands: Map<string, Floor | Autotile> = new Map();
 	public sprites: Map<string, Sprite> = new Map();
 	public walls: Map<string, SpriteWall> = new Map();
+	public mountains: Map<string, Mountain> = new Map();
 
 	public static readonly bindings: BindingType[] = [
 		[
@@ -32,6 +33,7 @@ class MapPortion extends Serializable {
 		],
 		['sprites', 'sprites', null, BINDING.MAP_POSITION, Sprite],
 		['walls', 'walls', null, BINDING.MAP_POSITION, SpriteWall],
+		['mountains', 'moun', null, BINDING.MAP_POSITION, Mountain],
 	];
 
 	constructor(globalPortion: Portion) {
@@ -71,6 +73,8 @@ class MapPortion extends Serializable {
 				return this.sprites.get(key) || null;
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
 				return this.walls.get(key) || null;
+			case ELEMENT_MAP_KIND.MOUNTAIN:
+				return this.mountains.get(key) || null;
 		}
 		return null;
 	}
@@ -85,7 +89,6 @@ class MapPortion extends Serializable {
 
 	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
 		super.write(json, MapPortion.getBindings(additionnalBinding));
-		json.moun = [];
 		json.objs3d = [];
 		json.objs = [
 			{

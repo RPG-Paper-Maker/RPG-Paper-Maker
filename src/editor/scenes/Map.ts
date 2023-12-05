@@ -46,6 +46,7 @@ class Map extends Base {
 	public static currentSelectedAutotileID = 1;
 	public static currentSelectedAutotileTexture = new Rectangle(0, 0, 1, 1);
 	public static currentSelectedWallID = 1;
+	public static currentSelectedMountainID = 1;
 	public static currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
 	public static currentSelectedMobileAction = MOBILE_ACTION.PLUS;
 	public static elapsedTime = 0;
@@ -86,7 +87,7 @@ class Map extends Base {
 	public texturesAutotiles: TextureBundle[][] = [];
 	public texturesWalls: THREE.MeshPhongMaterial[] = [];
 	public texturesObjects3D: THREE.MeshPhongMaterial[] = [];
-	public texturesMountains: TextureBundle[] = [];
+	public texturesMountains: globalThis.Map<number, THREE.MeshPhongMaterial> = new globalThis.Map();
 	public autotilesOffset = new THREE.Vector2();
 	public autotileFrame = new Frame(Project.current!.systems.autotilesFrameDuration, {
 		frames: Project.current!.systems.autotilesFrames,
@@ -428,6 +429,9 @@ class Map extends Base {
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
 				layer = RAYCASTING_LAYER.WALLS;
+				break;
+			case ELEMENT_MAP_KIND.MOUNTAIN:
+				layer = RAYCASTING_LAYER.MOUNTAINS;
 				break;
 			default:
 				layer = RAYCASTING_LAYER.PLANE;

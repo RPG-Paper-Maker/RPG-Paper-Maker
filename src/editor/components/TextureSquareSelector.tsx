@@ -76,6 +76,8 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 				Scene.Map.currentSelectedAutotileTexture = currentState.selectedRect;
 				Project.current!.settings.mapEditorCurrentAutotileTexture = currentState.selectedRect;
 				break;
+			default:
+				break;
 		}
 		await Project.current!.settings!.save();
 	};

@@ -22,6 +22,7 @@ class MapPortion {
 	public spritesFixMesh: THREE.Mesh;
 	public autotilesList: MapElement.Autotiles[][];
 	public wallsMeshes: THREE.Mesh[];
+	public mountainsList: Map<number, MapElement.Mountains>;
 	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND][] = [];
 
 	constructor(globalPortion: Portion) {
@@ -43,6 +44,7 @@ class MapPortion {
 		this.spritesFixMesh.layers.enable(RAYCASTING_LAYER.SPRITES);
 		this.autotilesList = [];
 		this.wallsMeshes = [];
+		this.mountainsList = new Map();
 	}
 
 	removeLastPreview() {
@@ -92,6 +94,14 @@ class MapPortion {
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
 				this.updateWallFromCursor(Scene.Map.currentSelectedWallID, preview);
 				break;
+			case ELEMENT_MAP_KIND.MOUNTAIN:
+				this.updateMapElement(
+					position,
+					MapElement.Mountain.create(Scene.Map.currentSelectedMountainID, 0, 0, 1, 0),
+					Scene.Map.currentSelectedMapElementKind,
+					preview
+				);
+				break;
 		}
 	}
 
@@ -130,6 +140,9 @@ class MapPortion {
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
 				this.updateWall(position, element as MapElement.SpriteWall, preview, removingPreview, undoRedo);
+				break;
+			case ELEMENT_MAP_KIND.MOUNTAIN:
+				this.updateMountain(position, element as MapElement.Mountain, preview, removingPreview, undoRedo);
 				break;
 			default:
 				break;
@@ -249,6 +262,29 @@ class MapPortion {
 		MapElement.SpriteWall.updateAround(position);
 	}
 
+	updateMountain(
+		position: Position,
+		mountain: MapElement.Mountain | null,
+		preview: boolean,
+		removingPreview: boolean,
+		undoRedo: boolean
+	) {
+		this.setMapElement(
+			position,
+			mountain,
+			ELEMENT_MAP_KIND.MOUNTAIN,
+			this.model.mountains,
+			preview,
+			removingPreview,
+			undoRedo
+		);
+		MapElement.Mountains.updateAround(
+			position,
+			Scene.Map.current!.portionsToUpdate,
+			Scene.Map.current!.portionsToSave
+		);
+	}
+
 	setMapElement(
 		position: Position,
 		element: MapElement.Base | null,
@@ -343,6 +379,9 @@ class MapPortion {
 		for (const [, wall] of this.model.walls) {
 			await MapElement.SpriteWall.loadWallTexture(wall.wallID);
 		}
+		for (const [, mountain] of this.model.mountains) {
+			await MapElement.Mountains.loadMountainTexture(mountain.mountainID);
+		}
 		this.updateGeometriesWithoutCheck();
 		if (updateLoading) {
 			Scene.Map.current!.loading = false;
@@ -359,6 +398,7 @@ class MapPortion {
 		this.updateLandsGeometries();
 		this.updateSpritesGeometry();
 		this.updateWallsGeometry();
+		this.updateMountainsGeometry();
 	}
 
 	updateLandsGeometries() {
@@ -581,6 +621,36 @@ class MapPortion {
 					this.wallsMeshes.push(mesh);
 					Scene.Map.current!.scene.add(mesh);
 				}
+			}
+		}
+	}
+
+	updateMountainsGeometry() {
+		for (const [, mountains] of this.mountainsList) {
+			if (mountains.mesh) {
+				Scene.Map.current!.scene.remove(mountains.mesh);
+			}
+		}
+		this.mountainsList = new Map();
+		for (const [positionKey, mountain] of this.model.mountains) {
+			const position = new Position();
+			position.fromKey(positionKey);
+			const pictureID = Project.current!.specialElements.getMountainByID(mountain.mountainID).pictureID;
+			let mountains = this.mountainsList.get(pictureID);
+			if (!mountains) {
+				mountains = new MapElement.Mountains(pictureID, Scene.Map.current!.texturesMountains.get(pictureID)!);
+				this.mountainsList.set(pictureID, mountains);
+			}
+			mountains.updateGeometry(position, mountain);
+		}
+		// Update all the geometry uvs and put it in the scene
+		for (const [, mountains] of this.mountainsList) {
+			if (mountains.createMesh()) {
+				mountains.mesh!.receiveShadow = true;
+				mountains.mesh!.castShadow = true;
+				mountains.mesh!.customDepthMaterial = mountains.material.userData.customDepthMaterial;
+				mountains.mesh!.layers.enable(RAYCASTING_LAYER.MOUNTAINS);
+				Scene.Map.current!.scene.add(mountains.mesh!);
 			}
 		}
 	}

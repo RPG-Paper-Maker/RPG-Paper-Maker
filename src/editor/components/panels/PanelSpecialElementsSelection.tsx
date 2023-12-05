@@ -14,7 +14,13 @@ import '../../styles/PanelSpecialElementsSelection.css';
 import { HiChevronDown, HiChevronLeft } from 'react-icons/hi';
 import TextureSquareSelector from '../TextureSquareSelector';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setCurrentAutotileID, setCurrentAutotileTexture, setCurrentWallID } from '../../store';
+import {
+	RootState,
+	setCurrentAutotileID,
+	setCurrentAutotileTexture,
+	setCurrentMountainID,
+	setCurrentWallID,
+} from '../../store';
 import { Model, Scene } from '../../Editor';
 import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
 import { Project, Rectangle } from '../../core';
@@ -30,13 +36,22 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 
 	const dispatch = useDispatch();
 
-	const list =
-		kind === PICTURE_KIND.AUTOTILES
-			? Project.current!.specialElements.autotiles
-			: Project.current!.specialElements.walls;
+	let list: Model.SpecialElement[] = [];
+	switch (kind) {
+		case PICTURE_KIND.AUTOTILES:
+			list = Project.current!.specialElements.autotiles;
+			break;
+		case PICTURE_KIND.WALLS:
+			list = Project.current!.specialElements.walls;
+			break;
+		case PICTURE_KIND.MOUNTAINS:
+			list = Project.current!.specialElements.mountains;
+			break;
+	}
 
 	const currentAutotileID = useSelector((state: RootState) => state.mapEditor.currentAutotileID);
 	const currentWallID = useSelector((state: RootState) => state.mapEditor.currentWallID);
+	const currentMountainID = useSelector((state: RootState) => state.mapEditor.currentMountainID);
 
 	const getIndex = () => {
 		switch (kind) {
@@ -44,6 +59,8 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 				return Project.current!.specialElements.autotilesIndexes[currentAutotileID];
 			case PICTURE_KIND.WALLS:
 				return Project.current!.specialElements.wallsIndexes[currentWallID];
+			case PICTURE_KIND.MOUNTAINS:
+				return Project.current!.specialElements.mountainsIndexes[currentMountainID];
 		}
 		return 0;
 	};
@@ -80,6 +97,13 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 					Project.current!.settings.mapEditorCurrentWallID = id;
 				}
 				break;
+			case ELEMENT_MAP_KIND.MOUNTAIN:
+				if (id !== currentMountainID) {
+					dispatch(setCurrentMountainID(id));
+					Scene.Map.currentSelectedMountainID = id;
+					Project.current!.settings.mapEditorCurrentMountainID = id;
+				}
+				break;
 			default:
 				break;
 		}
@@ -103,7 +127,18 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		}
 	};
 
-	const currentID = kind === PICTURE_KIND.AUTOTILES ? currentAutotileID : currentWallID;
+	let currentID: number;
+	switch (kind) {
+		case PICTURE_KIND.AUTOTILES:
+			currentID = currentAutotileID;
+			break;
+		case PICTURE_KIND.WALLS:
+			currentID = currentWallID;
+			break;
+		case PICTURE_KIND.MOUNTAINS:
+			currentID = currentMountainID;
+			break;
+	}
 
 	useEffect(() => {
 		updateFirstScroll();

@@ -69,6 +69,9 @@ abstract class Base extends Serializable {
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
 				model = new MapElement.SpriteWall();
 				break;
+			case ELEMENT_MAP_KIND.MOUNTAIN:
+				model = new MapElement.Mountain();
+				break;
 		}
 		if (model) {
 			model.read(json);

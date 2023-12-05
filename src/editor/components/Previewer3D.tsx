@@ -12,7 +12,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Manager, Scene } from '../Editor';
 import { useSelector } from 'react-redux';
-import { RootState, setCurrentWallID } from '../store';
+import { RootState } from '../store';
 import { ELEMENT_MAP_KIND } from '../common';
 
 type Props = {
@@ -28,6 +28,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	const currentAutotileID = useSelector((state: RootState) => state.mapEditor.currentAutotileID);
 	const currentAutotileTexture = useSelector((state: RootState) => state.mapEditor.currentAutotileTexture);
 	const currentWallID = useSelector((state: RootState) => state.mapEditor.currentWallID);
+	const currentMountainID = useSelector((state: RootState) => state.mapEditor.currentMountainID);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	useSelector((state: RootState) => state.triggers.splitting);
 
@@ -67,6 +68,9 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 						break;
 					case ELEMENT_MAP_KIND.SPRITE_WALL:
 						await scene.loadWall(Manager.GL.extraContext, currentWallID);
+						break;
+					case ELEMENT_MAP_KIND.MOUNTAIN:
+						await scene.loadMountain(Manager.GL.extraContext, currentMountainID, currentTilesetTexture);
 						break;
 				}
 			} else {
@@ -117,6 +121,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		currentAutotileID,
 		currentAutotileTexture,
 		currentWallID,
+		currentMountainID,
 		currentMapElementKind,
 		currentMapID,
 	]);

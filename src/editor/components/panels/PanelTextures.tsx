@@ -60,6 +60,8 @@ function PanelTextures({ visible }: Props) {
 				return <PanelSpecialElementsSelection kind={PICTURE_KIND.AUTOTILES} />;
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
 				return <PanelSpecialElementsSelection kind={PICTURE_KIND.WALLS} />;
+			case ELEMENT_MAP_KIND.MOUNTAIN:
+				return <PanelSpecialElementsSelection kind={PICTURE_KIND.MOUNTAINS} />;
 			default:
 				return <TextureSquareSelector texture='./Assets/plains-woods.png' />;
 		}
