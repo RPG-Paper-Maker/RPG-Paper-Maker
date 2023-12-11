@@ -20,15 +20,15 @@ class SpriteWall extends Base {
 	public wallID!: number;
 	public type!: SPRITE_WALL_TYPE;
 
-	constructor() {
-		super();
-		this.kind = ELEMENT_MAP_KIND.SPRITE_WALL;
-	}
-
 	public static readonly bindings: BindingType[] = [
 		['wallID', 'w', undefined, BINDING.NUMBER],
 		['type', 't', undefined, BINDING.NUMBER],
 	];
+
+	constructor() {
+		super();
+		this.kind = ELEMENT_MAP_KIND.SPRITE_WALL;
+	}
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...SpriteWall.bindings, ...additionnalBinding];

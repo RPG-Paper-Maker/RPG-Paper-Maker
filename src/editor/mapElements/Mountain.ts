@@ -11,9 +11,10 @@
 
 import * as THREE from 'three';
 import { MapElement, Model } from '../Editor';
-import { BINDING, BindingType, Constants, Utils } from '../common';
-import { CustomGeometry, Position, Project, TextureBundle } from '../core';
+import { BINDING, BindingType, Constants, ELEMENT_MAP_KIND, Utils } from '../common';
+import { CustomGeometry, Portion, Position, Project, TextureBundle } from '../core';
 import { Base } from './Base';
+import { Mountains } from './Mountains';
 
 class Mountain extends Base {
 	public static X_LEFT_OFFSET = 0;
@@ -48,8 +49,13 @@ class Mountain extends Base {
 		['right', 'r', false, BINDING.BOOLEAN],
 	];
 
+	constructor() {
+		super();
+		this.kind = ELEMENT_MAP_KIND.MOUNTAIN;
+	}
+
 	static getBindings(additionnalBinding: BindingType[]): BindingType[] {
-		return [...Base.bindings, ...additionnalBinding];
+		return [...Mountain.bindings, ...additionnalBinding];
 	}
 
 	static fromJSON(json: Record<string, any>): MapElement.Mountain {
@@ -94,7 +100,7 @@ class Mountain extends Base {
 	toString(): string {
 		return `MOUNTAIN | ID: ${Utils.formatNumberID(
 			this.mountainID
-		)} | WIDTH:${this.getWidthTotalPixels()}px | HEIGHT:${this.getHeightTotalPixels()}px`;
+		)} | W:${this.getWidthTotalPixels()}px | H:${this.getHeightTotalPixels()}px`;
 	}
 
 	getTotalSquaresWidth(): number {
@@ -553,12 +559,51 @@ class Mountain extends Base {
 		return count;
 	}
 
+	drawFakeTopFloor(
+		localPosition: THREE.Vector3,
+		position: Position,
+		yTop: number,
+		geometry: CustomGeometry,
+		width: number,
+		height: number,
+		count: number
+	) {
+		const vecA = new THREE.Vector3(localPosition.x, yTop, localPosition.z);
+		const vecB = new THREE.Vector3(localPosition.x + Project.getSquareSize(), yTop, localPosition.z);
+		const vecC = new THREE.Vector3(
+			localPosition.x + Project.getSquareSize(),
+			yTop,
+			localPosition.z + Project.getSquareSize()
+		);
+		const vecD = new THREE.Vector3(localPosition.x, yTop, localPosition.z + Project.getSquareSize());
+		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
+		geometry.pushQuadIndices(count, position);
+		count += 4;
+		const coefX = Base.COEF_TEX / width;
+		const coefY = Base.COEF_TEX / height;
+		let texX = 0;
+		let texY = (4 * Project.getSquareSize()) / height;
+		let texW = Project.getSquareSize() / width;
+		let texH = Project.getSquareSize() / height;
+		texX += coefX;
+		texY += coefY;
+		texW -= coefX * 2;
+		texH -= coefY * 2;
+		const texA = new THREE.Vector2();
+		const texB = new THREE.Vector2();
+		const texC = new THREE.Vector2();
+		const texD = new THREE.Vector2();
+		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, texX, texY, texW, texH);
+		geometry.pushQuadUVs(texA, texB, texC, texD);
+		return count;
+	}
+
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): number {
 		// General configurations
 		const wp = this.getWidthTotalPixels();
 		const hp = this.getHeightTotalPixels();
 		const width = 4 * Project.getSquareSize();
-		const height = 4 * Project.getSquareSize();
+		const height = 5 * Project.getSquareSize();
 		const faceHeight = Math.sqrt(wp * wp + hp * hp);
 		const w = Project.getSquareSize() / width;
 		const localPosition = position.toVector3(false);
@@ -686,7 +731,27 @@ class Mountain extends Base {
 				count
 			);
 		}
+		// Fake transparent top floor for intersect raycasting purposes
+		count = this.drawFakeTopFloor(localPosition, position, yTop, geometry, width, height, count);
+
 		return count;
+	}
+
+	update(position: Position, portion: Portion): boolean {
+		const previousLeft = this.left;
+		const previousRight = this.right;
+		const previousTop = this.top;
+		const previousBot = this.bot;
+		this.left = !!Mountains.getMountainHere(position.getSquareLeft(), portion);
+		this.right = !!Mountains.getMountainHere(position.getSquareRight(), portion);
+		this.top = !!Mountains.getMountainHere(position.getSquareTop(), portion);
+		this.bot = !!Mountains.getMountainHere(position.getSquareBot(), portion);
+		return (
+			this.left !== previousLeft ||
+			this.right !== previousRight ||
+			this.top !== previousTop ||
+			this.bot !== previousBot
+		);
 	}
 
 	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {

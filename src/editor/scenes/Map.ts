@@ -95,6 +95,8 @@ class Map extends Base {
 	public lockedY: number | null = null;
 	public lockedYPixels: number | null = null;
 	public requestPaintHUD = false;
+	public needsUpdateRaycasting = false;
+	public mouseUp = false;
 
 	constructor(tag: Model.TreeMapTag) {
 		super(tag);
@@ -163,7 +165,8 @@ class Map extends Base {
 
 		// Load portions
 		const globalPortion = new Portion(0, 0, 0);
-		this.mapPortion = new MapPortion(globalPortion);
+		this.mapPortion = new MapPortion();
+		this.mapPortion.initialize(globalPortion);
 		await this.mapPortion.model.load();
 		this.mapPortion.updateMaterials();
 		await this.mapPortion.loadTexturesAndUpdateGeometries(false);
@@ -348,6 +351,9 @@ class Map extends Base {
 				case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 					layer = RAYCASTING_LAYER.SPRITES;
 					break;
+				case ELEMENT_MAP_KIND.MOUNTAIN:
+					layer = RAYCASTING_LAYER.MOUNTAINS;
+					break;
 			}
 		}
 		Manager.GL.raycaster.layers.set(layer);
@@ -355,7 +361,10 @@ class Map extends Base {
 		const previousPointedMapElement = this.pointedMapElement;
 		const previousPlaneY = this.meshPlane!.position.y;
 		if (this.lockedY !== null && this.lockedYPixels !== null) {
-			this.meshPlane!.position.setY(this.lockedY * Project.getSquareSize());
+			this.meshPlane!.position.setY(
+				this.lockedY * Project.getSquareSize() +
+					Math.floor((this.lockedYPixels * Project.getSquareSize()) / 100)
+			);
 			this.meshPlane!.updateMatrixWorld();
 		}
 		let intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
@@ -367,19 +376,46 @@ class Map extends Base {
 			intersects = intersectsPlane;
 			layer = RAYCASTING_LAYER.PLANE;
 		}
-		if (intersects.length > 0) {
-			const obj = intersects[0];
+		// Intersection for deleting or adding stuff
+		for (const obj of intersects) {
 			let position = new Position(
 				Math.floor(obj.point.x / Project.getSquareSize()),
 				this.lockedY === null ? this.cursor.position.y : this.lockedY,
 				this.lockedYPixels === null ? this.cursor.position.yPixels : this.lockedYPixels,
 				Math.floor(obj.point.z / Project.getSquareSize())
 			);
-			if (this.lockedY === null && this.lockedYPixels === null && obj.faceIndex !== undefined) {
-				const newPosition = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
+			if (
+				obj.faceIndex !== undefined &&
+				(Scene.Map.isRemoving() || (this.lockedY === null && this.lockedYPixels === null))
+			) {
+				const newPositionKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
 					obj.faceIndex
 				];
-				if (newPosition && (Scene.Map.isRemoving() || layer === RAYCASTING_LAYER.LANDS)) {
+				if (newPositionKey && (Scene.Map.isRemoving() || layer === RAYCASTING_LAYER.LANDS)) {
+					const newPosition = new Position();
+					newPosition.fromKey(newPositionKey);
+					if (Scene.Map.isRemoving()) {
+						const element = this.mapPortion.model.getMapElement(
+							newPosition,
+							Scene.Map.currentSelectedMapElementKind
+						);
+						if (element && element.isPreview) {
+							continue;
+						}
+					}
+					if (layer === RAYCASTING_LAYER.LANDS) {
+						const element = this.mapPortion.model.getMapElement(newPosition, ELEMENT_MAP_KIND.FLOOR);
+						if (element && element.isPreview) {
+							continue;
+						}
+					} else if (
+						this.lockedY !== null &&
+						this.lockedYPixels !== null &&
+						Scene.Map.isRemoving() &&
+						(newPosition.y !== this.lockedY || newPosition.yPixels !== this.lockedYPixels)
+					) {
+						continue;
+					}
 					position = newPosition;
 				}
 			}
@@ -409,7 +445,9 @@ class Map extends Base {
 				this.pointedMapElementPosition = position;
 				this.pointedMapElement = null;
 			}
-		} else {
+			break;
+		}
+		if (intersects.length === 0) {
 			this.mapPortion.removeLastPreview();
 			this.lastPosition = null;
 			this.pointedMapElementPosition = null;
@@ -439,22 +477,27 @@ class Map extends Base {
 		}
 		Manager.GL.raycaster.layers.set(layer);
 		intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
-		if (intersects.length > 0) {
-			const obj = intersects[0];
+		for (const obj of intersects) {
 			if (obj.faceIndex !== undefined) {
-				const newPosition = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
+				const newPositionKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
 					obj.faceIndex
 				];
-				if (newPosition && (this.lastPosition === null || !newPosition.equals(this.lastPosition))) {
-					this.pointedMapElement = this.mapPortion.model.getMapElement(
+				if (newPositionKey) {
+					const newPosition = new Position();
+					newPosition.fromKey(newPositionKey);
+					const element = this.mapPortion.model.getMapElement(
 						newPosition,
 						Scene.Map.currentSelectedMapElementKind
 					);
-					if (this.pointedMapElement) {
+					if (element && !element.isPreview) {
+						this.pointedMapElement = element;
 						this.pointedMapElementPosition = newPosition;
+					} else {
+						continue;
 					}
 				}
 			}
+			break;
 		}
 		if (
 			this.lastPosition !== null &&
@@ -533,20 +576,19 @@ class Map extends Base {
 		if (Inputs.isSHIFT) {
 			this.camera.onMouseWheelUpdate();
 		} else {
-			if (this.lastPosition) {
-				if (Inputs.isPointerPressed) {
-					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
-						this.cursorWall.onMouseDown();
-					} else {
-						this.add(this.lastPosition);
-					}
-				} else if (Inputs.isMouseRightPressed) {
-					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
-						this.cursorWall.onMouseDown();
-					} else {
-						this.lastPosition = null;
-						this.updateRaycasting();
-					}
+			if (Inputs.isPointerPressed && this.lastPosition) {
+				if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
+					this.cursorWall.onMouseDown();
+				} else {
+					this.updateLockedY(this.lastPosition);
+					this.add(this.lastPosition);
+				}
+			} else if (Inputs.isMouseRightPressed) {
+				if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
+					this.cursorWall.onMouseDown();
+				} else {
+					this.lastPosition = null;
+					this.needsUpdateRaycasting = true;
 				}
 			}
 		}
@@ -560,7 +602,7 @@ class Map extends Base {
 				this.isMobileMovingCursor = true;
 			} else {
 				if (Scene.Map.currentSelectedMobileAction !== MOBILE_ACTION.MOVE) {
-					this.updateRaycasting();
+					this.needsUpdateRaycasting = true;
 					this.onMouseDown(x, y);
 				}
 			}
@@ -571,7 +613,12 @@ class Map extends Base {
 		if (Inputs.isMouseWheelPressed || (Inputs.isPointerPressed && Inputs.isSHIFT)) {
 			this.camera.onMouseWheelUpdate();
 		} else {
-			this.updateRaycasting();
+			// Avoid to draw undesired new preview
+			if (this.mouseUp) {
+				this.mouseUp = false;
+			} else {
+				this.needsUpdateRaycasting = true;
+			}
 		}
 	}
 
@@ -590,7 +637,7 @@ class Map extends Base {
 				}
 			} else {
 				if (Scene.Map.currentSelectedMobileAction !== MOBILE_ACTION.MOVE) {
-					this.updateRaycasting();
+					this.needsUpdateRaycasting = true;
 				} else {
 					this.camera.onMouseWheelUpdate();
 				}
@@ -599,6 +646,8 @@ class Map extends Base {
 	}
 
 	async onMouseUp(x: number, y: number) {
+		this.mouseUp = true;
+		this.needsUpdateRaycasting = false;
 		this.lockedY = null;
 		this.lockedYPixels = null;
 		this.cursorWall.onMouseUp();
@@ -645,7 +694,11 @@ class Map extends Base {
 
 	update() {
 		super.update();
-		this.mapPortion.update();
+
+		if (this.needsUpdateRaycasting) {
+			this.updateRaycasting();
+			this.needsUpdateRaycasting = false;
+		}
 
 		// Cursors
 		this.cursor.update();

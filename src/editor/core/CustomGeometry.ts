@@ -16,7 +16,7 @@ class CustomGeometry extends THREE.BufferGeometry {
 	public _vertices: number[] = [];
 	public _indices: number[] = [];
 	public _uvs: number[] = [];
-	public facePositions: Position[] = [];
+	public facePositions: string[] = [];
 
 	static uvsQuadToTex(
 		texA: THREE.Vector2,
@@ -94,11 +94,9 @@ class CustomGeometry extends THREE.BufferGeometry {
 		this._vertices.push(vecC.x, vecC.y, vecC.z);
 	}
 
-	pushTriangleIndices(count: number, position?: Position) {
+	pushTriangleIndices(count: number, position: Position) {
 		this._indices.push(count, count + 1, count + 2);
-		if (position) {
-			this.facePositions.push(position);
-		}
+		this.facePositions.push(position.toKey());
 	}
 
 	pushTriangleUVs(texA: THREE.Vector2, texB: THREE.Vector2, texC: THREE.Vector2) {
@@ -118,7 +116,8 @@ class CustomGeometry extends THREE.BufferGeometry {
 		this._indices.push(count, count + 1, count + 2);
 		this._indices.push(count, count + 2, count + 3);
 		if (position) {
-			this.facePositions.push(position, position);
+			const key = position.toKey();
+			this.facePositions.push(key, key);
 		}
 	}
 

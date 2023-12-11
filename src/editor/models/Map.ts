@@ -52,7 +52,8 @@ class Map extends Base {
 
 		// Portion
 		const globalPortion = new Portion(0, 0, 0);
-		const mapPortion = new MapPortion(globalPortion);
+		const mapPortion = new MapPortion();
+		mapPortion.initialize(globalPortion);
 		mapPortion.fillDefaultFloor(mapModel);
 		/*
         SystemCommonObject* o = new SystemCommonObject(1, RPM::translate(

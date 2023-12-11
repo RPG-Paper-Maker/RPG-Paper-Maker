@@ -135,6 +135,30 @@ class Position extends Position3D {
 		this.angleY = 90;
 	}
 
+	getSquareLeft() {
+		const position = this.clone();
+		position.x--;
+		return position;
+	}
+
+	getSquareRight() {
+		const position = this.clone();
+		position.x++;
+		return position;
+	}
+
+	getSquareTop() {
+		const position = this.clone();
+		position.z--;
+		return position;
+	}
+
+	getSquareBot() {
+		const position = this.clone();
+		position.z++;
+		return position;
+	}
+
 	getLeft() {
 		const position = this.clone();
 		if (position.isHorizontal()) {

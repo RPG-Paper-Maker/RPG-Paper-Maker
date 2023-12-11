@@ -16,16 +16,16 @@ import { Constants, ELEMENT_MAP_KIND, RAYCASTING_LAYER, SPRITE_WALL_TYPE } from 
 import { SpriteWall } from '../mapElements';
 
 class MapPortion {
-	public model: Model.MapPortion;
-	public floorsMesh: THREE.Mesh;
-	public spritesFaceMesh: THREE.Mesh;
-	public spritesFixMesh: THREE.Mesh;
-	public autotilesList: MapElement.Autotiles[][];
-	public wallsMeshes: THREE.Mesh[];
-	public mountainsList: Map<number, MapElement.Mountains>;
+	public model!: Model.MapPortion;
+	public floorsMesh!: THREE.Mesh;
+	public spritesFaceMesh!: THREE.Mesh;
+	public spritesFixMesh!: THREE.Mesh;
+	public autotilesList!: MapElement.Autotiles[][];
+	public wallsMeshes!: THREE.Mesh[];
+	public mountainsList!: Map<number, MapElement.Mountains>;
 	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND][] = [];
 
-	constructor(globalPortion: Portion) {
+	initialize(globalPortion: Portion) {
 		this.model = new Model.MapPortion(globalPortion);
 		this.floorsMesh = new THREE.Mesh(new CustomGeometry(), Manager.GL.MATERIAL_EMPTY);
 		this.floorsMesh.receiveShadow = true;
@@ -95,9 +95,22 @@ class MapPortion {
 				this.updateWallFromCursor(Scene.Map.currentSelectedWallID, preview);
 				break;
 			case ELEMENT_MAP_KIND.MOUNTAIN:
+				const floorPosition = position.clone();
+				floorPosition.y = position.y + 1;
+				this.updateMapElement(
+					floorPosition,
+					MapElement.Floor.create(
+						new Rectangle(
+							Scene.Map.currentSelectedTilesetTexture.x,
+							Scene.Map.currentSelectedTilesetTexture.y
+						)
+					),
+					ELEMENT_MAP_KIND.FLOOR,
+					preview
+				);
 				this.updateMapElement(
 					position,
-					MapElement.Mountain.create(Scene.Map.currentSelectedMountainID, 0, 0, 1, 0),
+					MapElement.Mountain.create(Scene.Map.currentSelectedMountainID, 1, 0, 1, 0),
 					Scene.Map.currentSelectedMapElementKind,
 					preview
 				);
@@ -110,6 +123,11 @@ class MapPortion {
 		if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
 			this.updateWallFromCursor(-1, preview);
 		} else {
+			if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.MOUNTAIN) {
+				const floorPosition = position.clone();
+				floorPosition.y = position.y + 1;
+				this.updateMapElement(floorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
+			}
 			this.updateMapElement(position, null, Scene.Map.currentSelectedMapElementKind);
 		}
 	}
@@ -301,7 +319,15 @@ class MapPortion {
 		const key = position.toKey();
 		let changed = false;
 		const previous = elements.get(key) || null;
-		if (preview && !removingPreview && Scene.Map.current.lastPosition !== null) {
+		if (element && preview && !removingPreview && previous === null) {
+			element.isPreview = true;
+		}
+		if (
+			preview &&
+			!removingPreview &&
+			Scene.Map.current.lastPosition !== null &&
+			(previous === null || !previous.isPreview)
+		) {
 			Scene.Map.current.lastMapElement = previous;
 		}
 		if (element === null) {
@@ -663,10 +689,6 @@ class MapPortion {
 			this.spritesFixMesh.material = material;
 			this.spritesFaceMesh.customDepthMaterial = material.userData.customDepthMaterial;
 		}
-	}
-
-	update() {
-		// TODO
 	}
 
 	updateFaceSprites(angle: number) {

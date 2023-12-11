@@ -68,7 +68,7 @@ class Mountains {
 		// Draw original image
 		Scene.Map.ctxRendering!.clearRect(0, 0, Scene.Map.canvasRendering!.width, Scene.Map.canvasRendering!.height);
 		Scene.Map.canvasRendering!.width = 4 * Project.getSquareSize();
-		Scene.Map.canvasRendering!.height = 4 * Project.getSquareSize();
+		Scene.Map.canvasRendering!.height = 5 * Project.getSquareSize();
 		Scene.Map.ctxRendering!.drawImage(image, 0, 0);
 
 		// Add left/right autos
@@ -176,8 +176,35 @@ class Mountains {
 		return material;
 	}
 
+	static getMountainHere(position: Position, portion: Portion) {
+		const newPortion = Scene.Map.current!.getLocalPortion(position);
+		if (portion.equals(newPortion)) {
+			return Scene.Map.current!.mapPortion.model.mountains.get(position.toKey()); // TODO
+		} else {
+			// If out of current portion
+		}
+	}
+
 	static updateAround(position: Position, portionsToUpdate: Portion[], portionsToSave: Portion[]) {
-		// TODO
+		const portion = Scene.Map.current!.getLocalPortion(position);
+		const positions = [
+			position.getSquareLeft(),
+			position.getSquareRight(),
+			position.getSquareTop(),
+			position.getSquareBot(),
+		];
+		Mountains.getMountainHere(position, portion)?.update(position, portion);
+		for (const aroundPosition of positions) {
+			const newPortion = Scene.Map.current!.getLocalPortion(aroundPosition);
+			const mountain = Mountains.getMountainHere(aroundPosition, newPortion);
+			if (mountain) {
+				if (mountain.update(aroundPosition, newPortion)) {
+					if (!portion.equals(newPortion)) {
+						// TODO
+					}
+				}
+			}
+		}
 	}
 
 	updateGeometry(position: Position, mountain: MapElement.Mountain) {

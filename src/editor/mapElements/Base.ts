@@ -26,6 +26,7 @@ abstract class Base extends Serializable {
 	public zOffset: number;
 	public front: boolean;
 	public kind: ELEMENT_MAP_KIND;
+	public isPreview = false;
 
 	public static readonly bindings: BindingType[] = [
 		['xOffset', 'xOff', 0, BINDING.NUMBER],

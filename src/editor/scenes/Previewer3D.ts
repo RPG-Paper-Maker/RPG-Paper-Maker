@@ -123,7 +123,7 @@ class Previewer3D extends Base {
 			let count = 0;
 			count = spriteLeft.updateGeometry(geometry, new Position(), width, height, count);
 			count = spriteMiddle.updateGeometry(geometry, new Position(1), width, height, count);
-			count = spriteRight.updateGeometry(geometry, new Position(2), width, height, count);
+			spriteRight.updateGeometry(geometry, new Position(2), width, height, count);
 			this.addToScene(GL, geometry, textureWall);
 		}
 	}
