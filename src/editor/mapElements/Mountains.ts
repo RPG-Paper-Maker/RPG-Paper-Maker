@@ -62,13 +62,13 @@ class Mountains {
 	static async loadTextureMountain(picture: Model.Picture): Promise<THREE.MeshPhongMaterial> {
 		const image = await Picture2D.loadImage(picture.getPath());
 
-		let sourceSize = 3 * Project.getSquareSize();
-		let sDiv = Math.round(Project.getSquareSize() / 2);
+		let sourceSize = 3 * Project.SQUARE_SIZE;
+		let sDiv = Math.round(Project.SQUARE_SIZE / 2);
 
 		// Draw original image
 		Scene.Map.ctxRendering!.clearRect(0, 0, Scene.Map.canvasRendering!.width, Scene.Map.canvasRendering!.height);
-		Scene.Map.canvasRendering!.width = 4 * Project.getSquareSize();
-		Scene.Map.canvasRendering!.height = 5 * Project.getSquareSize();
+		Scene.Map.canvasRendering!.width = 4 * Project.SQUARE_SIZE;
+		Scene.Map.canvasRendering!.height = 5 * Project.SQUARE_SIZE;
 		Scene.Map.ctxRendering!.drawImage(image, 0, 0);
 
 		// Add left/right autos
@@ -77,24 +77,24 @@ class Mountains {
 				Scene.Map.ctxRendering!.drawImage(
 					image,
 					0,
-					i * Project.getSquareSize(),
+					i * Project.SQUARE_SIZE,
 					sDiv,
-					Project.getSquareSize(),
+					Project.SQUARE_SIZE,
 					sourceSize,
-					i * Project.getSquareSize(),
+					i * Project.SQUARE_SIZE,
 					sDiv,
-					Project.getSquareSize()
+					Project.SQUARE_SIZE
 				);
 				Scene.Map.ctxRendering!.drawImage(
 					image,
 					sourceSize - sDiv,
-					i * Project.getSquareSize(),
+					i * Project.SQUARE_SIZE,
 					sDiv,
-					Project.getSquareSize(),
+					Project.SQUARE_SIZE,
 					sourceSize + sDiv,
-					i * Project.getSquareSize(),
+					i * Project.SQUARE_SIZE,
 					sDiv,
-					Project.getSquareSize()
+					Project.SQUARE_SIZE
 				);
 			}
 
@@ -102,24 +102,24 @@ class Mountains {
 			for (let i = 0, l = 3; i < l; i++) {
 				Scene.Map.ctxRendering!.drawImage(
 					image,
-					i * Project.getSquareSize(),
+					i * Project.SQUARE_SIZE,
 					0,
-					Project.getSquareSize(),
+					Project.SQUARE_SIZE,
 					sDiv,
-					i * Project.getSquareSize(),
+					i * Project.SQUARE_SIZE,
 					sourceSize,
-					Project.getSquareSize(),
+					Project.SQUARE_SIZE,
 					sDiv
 				);
 				Scene.Map.ctxRendering!.drawImage(
 					image,
-					i * Project.getSquareSize(),
+					i * Project.SQUARE_SIZE,
 					sourceSize - sDiv,
-					Project.getSquareSize(),
+					Project.SQUARE_SIZE,
 					sDiv,
-					i * Project.getSquareSize(),
+					i * Project.SQUARE_SIZE,
 					sourceSize + sDiv,
-					Project.getSquareSize(),
+					Project.SQUARE_SIZE,
 					sDiv
 				);
 			}

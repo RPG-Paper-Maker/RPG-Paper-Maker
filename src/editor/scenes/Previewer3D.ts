@@ -145,7 +145,7 @@ class Previewer3D extends Base {
 			const floor = MapElement.Floor.create(new Rectangle(textureFloor.x, textureFloor.y, 1, 1));
 			geometry = new CustomGeometry();
 			floor.updateGeometry(geometry, new Position(), width, height, 0);
-			this.addToScene(GL, geometry, this.material, false, new THREE.Vector3(0, Project.getSquareSize() / 2));
+			this.addToScene(GL, geometry, this.material, false, new THREE.Vector3(0, Project.SQUARE_SIZE / 2));
 		}
 	}
 

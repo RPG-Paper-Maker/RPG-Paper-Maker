@@ -74,26 +74,26 @@ class Position extends Position3D {
 
 	static createFromVector3(position: THREE.Vector3): Position {
 		return new Position(
-			Math.floor(position.x / Project.getSquareSize()),
-			Math.floor(position.y / Project.getSquareSize()),
-			Math.floor(position.z / Project.getSquareSize())
+			Math.floor(position.x / Project.SQUARE_SIZE),
+			Math.floor(position.y / Project.SQUARE_SIZE),
+			Math.floor(position.z / Project.SQUARE_SIZE)
 		);
 	}
 
 	getTotalY(): number {
-		return this.y * Project.getSquareSize() + this.getTotalYPixels();
+		return this.y * Project.SQUARE_SIZE + this.getTotalYPixels();
 	}
 
 	getTotalYPixels(): number {
-		return Math.floor((this.yPixels * Project.getSquareSize()) / 100);
+		return Math.floor((this.yPixels * Project.SQUARE_SIZE) / 100);
 	}
 
 	getPixelsCenterX(): number {
-		return Math.floor((this.centerX * Project.getSquareSize()) / 100);
+		return Math.floor((this.centerX * Project.SQUARE_SIZE) / 100);
 	}
 
 	getPixelsCenterZ(): number {
-		return Math.floor((this.centerZ * Project.getSquareSize()) / 100);
+		return Math.floor((this.centerZ * Project.SQUARE_SIZE) / 100);
 	}
 
 	getGlobalPortion(): Portion {
@@ -116,7 +116,7 @@ class Position extends Position3D {
 	}
 
 	updateYPixels(pixels: number) {
-		this.yPixels = (Math.max(Math.min(pixels, Project.getSquareSize() - 1), 0) / Project.getSquareSize()) * 100;
+		this.yPixels = (Math.max(Math.min(pixels, Project.SQUARE_SIZE - 1), 0) / Project.SQUARE_SIZE) * 100;
 	}
 
 	isHorizontal() {
@@ -243,9 +243,9 @@ class Position extends Position3D {
 
 	toVector3(center: boolean = true): THREE.Vector3 {
 		return new THREE.Vector3(
-			this.x * Project.getSquareSize() + (center ? this.getPixelsCenterX() : 0),
-			this.y * Project.getSquareSize() + this.getTotalYPixels(),
-			this.z * Project.getSquareSize() + (center ? this.getPixelsCenterZ() : 0)
+			this.x * Project.SQUARE_SIZE + (center ? this.getPixelsCenterX() : 0),
+			this.y * Project.SQUARE_SIZE + this.getTotalYPixels(),
+			this.z * Project.SQUARE_SIZE + (center ? this.getPixelsCenterZ() : 0)
 		);
 	}
 

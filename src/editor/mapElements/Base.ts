@@ -126,9 +126,9 @@ abstract class Base extends Serializable {
 		const offset = new THREE.Vector3(0, 0, zPlus);
 
 		// Center
-		center.setX(this.xOffset * Project.getSquareSize());
-		center.setY(this.yOffset * Project.getSquareSize());
-		center.setZ(this.zOffset * Project.getSquareSize());
+		center.setX(this.xOffset * Project.SQUARE_SIZE);
+		center.setY(this.yOffset * Project.SQUARE_SIZE);
+		center.setZ(this.zOffset * Project.SQUARE_SIZE);
 
 		// Position
 		const pos = center.clone();

@@ -124,7 +124,7 @@ class CursorWall {
 	update(position: Position) {
 		this.updatePositions(position);
 		const points = [];
-		const additionVector = new THREE.Vector3(0, Project.getSquareSize() * 3, 0);
+		const additionVector = new THREE.Vector3(0, Project.SQUARE_SIZE * 3, 0);
 		if (this.positionStart) {
 			const vStartA = this.positionStart.toVector3(false);
 			const vStartB = vStartA.clone().add(additionVector);

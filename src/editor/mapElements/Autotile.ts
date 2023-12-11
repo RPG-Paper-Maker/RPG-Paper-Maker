@@ -188,12 +188,12 @@ class Autotile extends Land {
 			position,
 			width,
 			height,
-			((this.tileID % 64) * Project.getSquareSize()) / width,
+			((this.tileID % 64) * Project.SQUARE_SIZE) / width,
 			((Math.floor(this.tileID / 64) + 10 * texture.getOffset(autotile.pictureID, this.texture)) *
-				Project.getSquareSize()) /
+				Project.SQUARE_SIZE) /
 				height,
-			Project.getSquareSize() / width,
-			Project.getSquareSize() / height,
+			Project.SQUARE_SIZE / width,
+			Project.SQUARE_SIZE / height,
 			count
 		);
 	}

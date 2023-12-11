@@ -15,6 +15,7 @@ import { LOCAL_FORAGE, Paths } from '../common';
 class Project {
 	public static current: Project | null = null;
 	public static readonly VERSION = 'proto-3.0.1';
+	public static SQUARE_SIZE = 16;
 	public settings = new Data.Settings();
 	public systems = new Data.System();
 	public treeMaps = new Data.TreeMaps();
@@ -23,10 +24,6 @@ class Project {
 
 	constructor(name: string) {
 		this.systems.projectName = name;
-	}
-
-	static getSquareSize(): number {
-		return this.current!.systems.SQUARE_SIZE;
 	}
 
 	getPath(): string {
@@ -43,6 +40,7 @@ class Project {
 		await this.settings.load();
 		await this.systems.load();
 		this.systems.projectName = projectName;
+		Project.SQUARE_SIZE = this.systems.SQUARE_SIZE;
 		// this.systems.projectName = (this.systems.projectName as any).names[1]; // TODO
 		await this.treeMaps.load();
 		await this.specialElements.load();

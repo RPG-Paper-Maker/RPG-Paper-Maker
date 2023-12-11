@@ -87,22 +87,22 @@ class SpriteWall extends Base {
 		}
 
 		// Update picture infos for collisions
-		picture.width = Math.floor(w / Project.getSquareSize());
-		picture.height = Math.floor(h / Project.getSquareSize());
+		picture.width = Math.floor(w / Project.SQUARE_SIZE);
+		picture.height = Math.floor(h / Project.SQUARE_SIZE);
 		Scene.Map.ctxRendering!.clearRect(0, 0, Scene.Map.canvasRendering!.width, Scene.Map.canvasRendering!.height);
-		Scene.Map.canvasRendering!.width = w + Project.getSquareSize();
+		Scene.Map.canvasRendering!.width = w + Project.SQUARE_SIZE;
 		Scene.Map.canvasRendering!.height = h;
 		Scene.Map.ctxRendering!.drawImage(image, 0, 0);
-		const left = Scene.Map.ctxRendering!.getImageData(0, 0, Math.floor(Project.getSquareSize() / 2), h);
+		const left = Scene.Map.ctxRendering!.getImageData(0, 0, Math.floor(Project.SQUARE_SIZE / 2), h);
 		const right = Scene.Map.ctxRendering!.getImageData(
-			w - Math.floor(Project.getSquareSize() / 2),
+			w - Math.floor(Project.SQUARE_SIZE / 2),
 			0,
-			Math.floor(Project.getSquareSize() / 2),
+			Math.floor(Project.SQUARE_SIZE / 2),
 			image.height
 		);
 		try {
 			Scene.Map.ctxRendering!.putImageData(left, w, 0);
-			Scene.Map.ctxRendering!.putImageData(right, w + Math.floor(Project.getSquareSize() / 2), 0);
+			Scene.Map.ctxRendering!.putImageData(right, w + Math.floor(Project.SQUARE_SIZE / 2), 0);
 		} catch (e) {
 			console.error(
 				'Error: Wrong wall (with ID:' + id + ') parsing. Please verify that you have a 3 x 3 picture.'
@@ -177,7 +177,7 @@ class SpriteWall extends Base {
 		const vecC = new THREE.Vector3(0.5, 0.0, 0.0);
 		const vecD = new THREE.Vector3(-0.5, 0.0, 0.0);
 		const center = new THREE.Vector3();
-		const size = new THREE.Vector3(Project.getSquareSize(), height, 0);
+		const size = new THREE.Vector3(Project.SQUARE_SIZE, height, 0);
 		const angle = position.angleY;
 		const localPosition = position.toVector3();
 
@@ -195,10 +195,10 @@ class SpriteWall extends Base {
 		center.add(localPosition);
 
 		// Getting UV coordinates
-		const textureRect = [this.type, 0, 1, Math.floor(height / Project.getSquareSize())];
-		let x = (textureRect[0] * Project.getSquareSize()) / width;
+		const textureRect = [this.type, 0, 1, Math.floor(height / Project.SQUARE_SIZE)];
+		let x = (textureRect[0] * Project.SQUARE_SIZE) / width;
 		let y = textureRect[1];
-		let w = Project.getSquareSize() / width;
+		let w = Project.SQUARE_SIZE / width;
 		let h = 1.0;
 		const coefX: number = Base.COEF_TEX / width;
 		const coefY: number = Base.COEF_TEX / height;

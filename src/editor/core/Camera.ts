@@ -36,7 +36,7 @@ class Camera {
 		this.targetPosition =
 			tag && tag.cursorPosition
 				? tag.cursorPosition.toVector3()
-				: new THREE.Vector3(Project.getSquareSize() / 2, 0, Project.getSquareSize() / 2);
+				: new THREE.Vector3(Project.SQUARE_SIZE / 2, 0, Project.SQUARE_SIZE / 2);
 		this.update();
 		this.defaultCameraPosition = this.getThreeCamera().position.clone();
 	}
@@ -56,7 +56,7 @@ class Camera {
 	}
 
 	getZoom(coef: number): number {
-		return (50 + this.distance / Project.getSquareSize()) * coef;
+		return (50 + this.distance / Project.SQUARE_SIZE) * coef;
 	}
 
 	getDistance(): number {
@@ -100,9 +100,9 @@ class Camera {
 			Scene.Map.current.sunLight.target.updateMatrixWorld();
 			Scene.Map.current.sunLight.position
 				.set(-1, 1.75, 1)
-				.multiplyScalar(Project.getSquareSize() * 10)
+				.multiplyScalar(Project.SQUARE_SIZE * 10)
 				.add(this.targetPosition);
-			const d = Math.max((Project.getSquareSize() * this.distance) / 10, 400);
+			const d = Math.max((Project.SQUARE_SIZE * this.distance) / 10, 400);
 			if (d !== Scene.Map.current.sunLight.shadow.camera.right) {
 				Scene.Map.current.sunLight.shadow.camera.left = -d;
 				Scene.Map.current.sunLight.shadow.camera.right = d;

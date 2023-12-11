@@ -24,12 +24,12 @@ class Grid {
 		});
 		const points = [];
 		for (let i = 0, l = modelMap.length; i <= l; i++) {
-			points.push(new THREE.Vector3(i * Project.getSquareSize(), 0, 0));
-			points.push(new THREE.Vector3(i * Project.getSquareSize(), 0, modelMap.width * Project.getSquareSize()));
+			points.push(new THREE.Vector3(i * Project.SQUARE_SIZE, 0, 0));
+			points.push(new THREE.Vector3(i * Project.SQUARE_SIZE, 0, modelMap.width * Project.SQUARE_SIZE));
 		}
 		for (let i = 0, l = modelMap.width; i <= l; i++) {
-			points.push(new THREE.Vector3(0, 0, i * Project.getSquareSize()));
-			points.push(new THREE.Vector3(modelMap.length * Project.getSquareSize(), 0, i * Project.getSquareSize()));
+			points.push(new THREE.Vector3(0, 0, i * Project.SQUARE_SIZE));
+			points.push(new THREE.Vector3(modelMap.length * Project.SQUARE_SIZE, 0, i * Project.SQUARE_SIZE));
 		}
 		const geometry = new THREE.BufferGeometry().setFromPoints(points);
 		this.line = new THREE.LineSegments(geometry, material);

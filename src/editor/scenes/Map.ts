@@ -150,9 +150,9 @@ class Map extends Base {
 		const material = new THREE.Material();
 		material.visible = false;
 		material.side = THREE.DoubleSide;
-		const length = Project.getSquareSize() * this.modelMap.length;
-		const width = Project.getSquareSize() * this.modelMap.width;
-		const extremeSize = Project.getSquareSize() * 1000;
+		const length = Project.SQUARE_SIZE * this.modelMap.length;
+		const width = Project.SQUARE_SIZE * this.modelMap.width;
+		const extremeSize = Project.SQUARE_SIZE * 1000;
 		this.meshPlane = new THREE.Mesh(
 			new THREE.PlaneGeometry(length + extremeSize, width + extremeSize, 1),
 			material
@@ -218,18 +218,18 @@ class Map extends Base {
 		this.scene.add(ambient);
 		this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
 		this.sunLight.position.set(-1, 1.75, 1);
-		this.sunLight.position.multiplyScalar(Project.getSquareSize() * 10);
+		this.sunLight.position.multiplyScalar(Project.SQUARE_SIZE * 10);
 		this.sunLight.target.position.set(0, 0, 0);
 		this.scene.add(this.sunLight);
 		this.sunLight.castShadow = true;
 		this.sunLight.shadow.mapSize.width = 2048;
 		this.sunLight.shadow.mapSize.height = 2048;
-		const d = Project.getSquareSize() * 10;
+		const d = Project.SQUARE_SIZE * 10;
 		this.sunLight.shadow.camera.left = -d;
 		this.sunLight.shadow.camera.right = d;
 		this.sunLight.shadow.camera.top = d;
 		this.sunLight.shadow.camera.bottom = -d;
-		this.sunLight.shadow.camera.far = Project.getSquareSize() * 350;
+		this.sunLight.shadow.camera.far = Project.SQUARE_SIZE * 350;
 		this.sunLight.shadow.bias = -0.0003;
 	}
 
@@ -362,8 +362,7 @@ class Map extends Base {
 		const previousPlaneY = this.meshPlane!.position.y;
 		if (this.lockedY !== null && this.lockedYPixels !== null) {
 			this.meshPlane!.position.setY(
-				this.lockedY * Project.getSquareSize() +
-					Math.floor((this.lockedYPixels * Project.getSquareSize()) / 100)
+				this.lockedY * Project.SQUARE_SIZE + Math.floor((this.lockedYPixels * Project.SQUARE_SIZE) / 100)
 			);
 			this.meshPlane!.updateMatrixWorld();
 		}
@@ -379,10 +378,10 @@ class Map extends Base {
 		// Intersection for deleting or adding stuff
 		for (const obj of intersects) {
 			let position = new Position(
-				Math.floor(obj.point.x / Project.getSquareSize()),
+				Math.floor(obj.point.x / Project.SQUARE_SIZE),
 				this.lockedY === null ? this.cursor.position.y : this.lockedY,
 				this.lockedYPixels === null ? this.cursor.position.yPixels : this.lockedYPixels,
-				Math.floor(obj.point.z / Project.getSquareSize())
+				Math.floor(obj.point.z / Project.SQUARE_SIZE)
 			);
 			if (
 				obj.faceIndex !== undefined &&
@@ -734,7 +733,7 @@ class Map extends Base {
 		// Update autotiles animated
 		if (this.autotileFrame.update()) {
 			this.autotilesOffset.setY(
-				(this.autotileFrame.value * MapElement.Autotiles.COUNT_LIST * 2 * Project.getSquareSize()) /
+				(this.autotileFrame.value * MapElement.Autotiles.COUNT_LIST * 2 * Project.SQUARE_SIZE) /
 					Constants.MAX_PICTURE_SIZE
 			);
 		}

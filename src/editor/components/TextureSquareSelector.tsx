@@ -139,22 +139,22 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 					currentState.picture.height * 2
 				);
 			} else {
-				for (let i = 0, l = currentState.picture.width / Project.getSquareSize() / divideWidth; i < l; i++) {
+				for (let i = 0, l = currentState.picture.width / Project.SQUARE_SIZE / divideWidth; i < l; i++) {
 					for (
-						let j = 0, ll = currentState.picture.height / Project.getSquareSize() / divideHeight;
+						let j = 0, ll = currentState.picture.height / Project.SQUARE_SIZE / divideHeight;
 						j < ll;
 						j++
 					) {
 						ctx.drawImage(
 							currentState.picture,
-							i * Project.getSquareSize() * divideWidth,
-							j * Project.getSquareSize() * divideHeight,
-							Project.getSquareSize(),
-							Project.getSquareSize(),
-							i * Project.getSquareSize() * 2,
-							j * Project.getSquareSize() * 2,
-							Project.getSquareSize() * 2,
-							Project.getSquareSize() * 2
+							i * Project.SQUARE_SIZE * divideWidth,
+							j * Project.SQUARE_SIZE * divideHeight,
+							Project.SQUARE_SIZE,
+							Project.SQUARE_SIZE,
+							i * Project.SQUARE_SIZE * 2,
+							j * Project.SQUARE_SIZE * 2,
+							Project.SQUARE_SIZE * 2,
+							Project.SQUARE_SIZE * 2
 						);
 					}
 				}
@@ -195,8 +195,8 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 		let width = 1;
 		let height = 1;
 		if (currentState.firstX !== -1 && currentState.firstY !== -1) {
-			x = Math.min(Math.max(x, 0), Math.floor(currentState.picture.width / Project.getSquareSize()) - 1);
-			y = Math.min(Math.max(y, 0), Math.floor(currentState.picture.height / Project.getSquareSize()) - 1);
+			x = Math.min(Math.max(x, 0), Math.floor(currentState.picture.width / Project.SQUARE_SIZE) - 1);
+			y = Math.min(Math.max(y, 0), Math.floor(currentState.picture.height / Project.SQUARE_SIZE) - 1);
 			if (canChangeSize) {
 				if (x > currentState.firstX) {
 					width = x - currentState.firstX + 1;

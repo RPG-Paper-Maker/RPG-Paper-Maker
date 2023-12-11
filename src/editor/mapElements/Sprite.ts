@@ -108,8 +108,8 @@ class Sprite extends Base {
 		const vecD = Sprite.MODEL[3].clone();
 		const center = new THREE.Vector3(0, 0, 0);
 		const size = new THREE.Vector3(
-			this.texture.width * Project.getSquareSize() * position.scaleX,
-			this.texture.height * Project.getSquareSize() * position.scaleY,
+			this.texture.width * Project.SQUARE_SIZE * position.scaleX,
+			this.texture.height * Project.SQUARE_SIZE * position.scaleY,
 			1.0
 		);
 
@@ -141,10 +141,10 @@ class Sprite extends Base {
 		}
 
 		// Getting UV coordinates
-		let x = (this.texture.x * Project.getSquareSize()) / width;
-		let y = (this.texture.y * Project.getSquareSize()) / height;
-		let w = (this.texture.width * Project.getSquareSize()) / width;
-		let h = (this.texture.height * Project.getSquareSize()) / height;
+		let x = (this.texture.x * Project.SQUARE_SIZE) / width;
+		let y = (this.texture.y * Project.SQUARE_SIZE) / height;
+		let w = (this.texture.width * Project.SQUARE_SIZE) / width;
+		let h = (this.texture.height * Project.SQUARE_SIZE) / height;
 		const coefX = Base.COEF_TEX / width;
 		const coefY = Base.COEF_TEX / height;
 		x += coefX;

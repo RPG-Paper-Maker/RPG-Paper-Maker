@@ -73,14 +73,14 @@ class Land extends Base {
 
 		// Vertices
 		const vecA = new THREE.Vector3(a, b, c);
-		const vecB = new THREE.Vector3(a + Project.getSquareSize() * squareWidth, b, c);
+		const vecB = new THREE.Vector3(a + Project.SQUARE_SIZE * squareWidth, b, c);
 		const vecC = new THREE.Vector3(
-			a + Project.getSquareSize() * squareWidth,
+			a + Project.SQUARE_SIZE * squareWidth,
 			b,
-			c + Project.getSquareSize() * squareHeight
+			c + Project.SQUARE_SIZE * squareHeight
 		);
-		const vecD = new THREE.Vector3(a, b, c + Project.getSquareSize() * squareHeight);
-		const center = new THREE.Vector3(a + Project.getSquareSize() / 2, b, c + Project.getSquareSize() / 2);
+		const vecD = new THREE.Vector3(a, b, c + Project.SQUARE_SIZE * squareHeight);
+		const center = new THREE.Vector3(a + Project.SQUARE_SIZE / 2, b, c + Project.SQUARE_SIZE / 2);
 		if (position.angleY !== 0.0) {
 			Base.rotateQuad(vecA, vecB, vecC, vecD, center, position.angleY, Base.Y_AXIS);
 		}

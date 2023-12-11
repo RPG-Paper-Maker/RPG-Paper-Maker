@@ -86,7 +86,7 @@ class Autotiles {
 	}
 
 	static getMaxAutotilesOffsetTexture(): number {
-		return Math.floor(Constants.MAX_PICTURE_SIZE / (9 * Project.getSquareSize()));
+		return Math.floor(Constants.MAX_PICTURE_SIZE / (9 * Project.SQUARE_SIZE));
 	}
 
 	static getAutotileTexture(id: number): TextureBundle[] | null {
@@ -114,7 +114,7 @@ class Autotiles {
 				Scene.Map.canvasRendering!.width,
 				Scene.Map.canvasRendering!.height
 			);
-			Scene.Map.canvasRendering!.width = 64 * Project.getSquareSize();
+			Scene.Map.canvasRendering!.width = 64 * Project.SQUARE_SIZE;
 			Scene.Map.canvasRendering!.height = Constants.MAX_PICTURE_SIZE;
 			if (autotile) {
 				const picture = Project.current!.pictures.getByID(PICTURE_KIND.AUTOTILES, pictureID);
@@ -155,8 +155,8 @@ class Autotiles {
 	): Promise<any[]> {
 		const frames = isAnimated ? Project.current!.systems.autotilesFrames : 1;
 		const image = await Picture2D.loadImage(picture.getPath());
-		const width = Math.floor(image.width / 2 / Project.getSquareSize()) / frames;
-		const height = Math.floor(image.height / 3 / Project.getSquareSize());
+		const width = Math.floor(image.width / 2 / Project.SQUARE_SIZE) / frames;
+		const height = Math.floor(image.height / 3 / Project.SQUARE_SIZE);
 		const size = width * height;
 		picture.width = width;
 		picture.height = height;
@@ -208,9 +208,9 @@ class Autotiles {
 
 	static paintPictureAutotile(img: HTMLImageElement, offset: number, point: number[]) {
 		let row = -1;
-		const offsetX = point[0] * 2 * Project.getSquareSize();
-		const offsetY = point[1] * 3 * Project.getSquareSize();
-		const sDiv = Math.floor(Project.getSquareSize() / 2);
+		const offsetX = point[0] * 2 * Project.SQUARE_SIZE;
+		const offsetY = point[1] * 3 * Project.SQUARE_SIZE;
+		const sDiv = Math.floor(Project.SQUARE_SIZE / 2);
 		const y = offset * Autotiles.COUNT_LIST * 2;
 		for (let a = 0; a < Autotiles.COUNT_LIST; a++) {
 			const lA = this.AUTOTILE_BORDER[Autotiles.LIST_A[a]];
@@ -228,8 +228,8 @@ class Autotiles {
 							Math.floor(lA / 4) * sDiv + offsetY,
 							sDiv,
 							sDiv,
-							count * Project.getSquareSize(),
-							(row + y) * Project.getSquareSize(),
+							count * Project.SQUARE_SIZE,
+							(row + y) * Project.SQUARE_SIZE,
 							sDiv,
 							sDiv
 						);
@@ -239,8 +239,8 @@ class Autotiles {
 							Math.floor(lB / 4) * sDiv + offsetY,
 							sDiv,
 							sDiv,
-							count * Project.getSquareSize() + sDiv,
-							(row + y) * Project.getSquareSize(),
+							count * Project.SQUARE_SIZE + sDiv,
+							(row + y) * Project.SQUARE_SIZE,
 							sDiv,
 							sDiv
 						);
@@ -250,8 +250,8 @@ class Autotiles {
 							Math.floor(lC / 4) * sDiv + offsetY,
 							sDiv,
 							sDiv,
-							count * Project.getSquareSize(),
-							(row + y) * Project.getSquareSize() + sDiv,
+							count * Project.SQUARE_SIZE,
+							(row + y) * Project.SQUARE_SIZE + sDiv,
 							sDiv,
 							sDiv
 						);
@@ -261,8 +261,8 @@ class Autotiles {
 							Math.floor(lD / 4) * sDiv + offsetY,
 							sDiv,
 							sDiv,
-							count * Project.getSquareSize() + sDiv,
-							(row + y) * Project.getSquareSize() + sDiv,
+							count * Project.SQUARE_SIZE + sDiv,
+							(row + y) * Project.SQUARE_SIZE + sDiv,
 							sDiv,
 							sDiv
 						);

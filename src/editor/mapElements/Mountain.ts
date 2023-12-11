@@ -112,19 +112,19 @@ class Mountain extends Base {
 	}
 
 	getWidthOnlyPixels(): number {
-		return Math.round((this.widthPixels * Project.getSquareSize()) / 100);
+		return Math.round((this.widthPixels * Project.SQUARE_SIZE) / 100);
 	}
 
 	getHeightOnlyPixels(): number {
-		return Math.round((this.heightPixels * Project.getSquareSize()) / 100);
+		return Math.round((this.heightPixels * Project.SQUARE_SIZE) / 100);
 	}
 
 	getWidthTotalPixels(): number {
-		return this.widthSquares * Project.getSquareSize() + this.getWidthOnlyPixels();
+		return this.widthSquares * Project.SQUARE_SIZE + this.getWidthOnlyPixels();
 	}
 
 	getHeightTotalPixels(): number {
-		return this.heightSquares * Project.getSquareSize() + this.getHeightOnlyPixels();
+		return this.heightSquares * Project.SQUARE_SIZE + this.getHeightOnlyPixels();
 	}
 
 	getModel(): Model.Mountain {
@@ -156,7 +156,7 @@ class Mountain extends Base {
 		count: number
 	): number {
 		let xKind = Mountain.X_LEFT_OFFSET;
-		const nbSteps = Math.ceil(faceHeight / Project.getSquareSize());
+		const nbSteps = Math.ceil(faceHeight / Project.SQUARE_SIZE);
 		const vecCenterA = vecFrontA.clone().addScaledVector(vecBackA.clone().sub(vecFrontA), 0.5);
 		const vecCenterB = vecFrontB.clone().addScaledVector(vecBackB.clone().sub(vecFrontB), 0.5);
 
@@ -172,7 +172,7 @@ class Mountain extends Base {
 		}
 
 		// Draw all faces
-		if (faceHeight === Project.getSquareSize()) {
+		if (faceHeight === Project.SQUARE_SIZE) {
 			// 1 Mix sprite
 			// Mix
 			count = this.drawSideCorner(
@@ -205,7 +205,7 @@ class Mountain extends Base {
 				0,
 				vecFrontA.distanceTo(vecFrontB)
 			);
-		} else if (faceHeight <= 2 * Project.getSquareSize()) {
+		} else if (faceHeight <= 2 * Project.SQUARE_SIZE) {
 			// 2 B / T sprites
 			// Bottom
 			count = this.drawSideCorner(
@@ -495,10 +495,9 @@ class Mountain extends Base {
 		isCorner: boolean
 	): number {
 		// Textures coordinates
-		let x = (xKind * Project.getSquareSize()) / width;
+		let x = (xKind * Project.SQUARE_SIZE) / width;
 		let y =
-			(yKind * Project.getSquareSize() +
-				(yKind === Mountain.Y_BOT_OFFSET ? Project.getSquareSize() - faceHeight : 0)) /
+			(yKind * Project.SQUARE_SIZE + (yKind === Mountain.Y_BOT_OFFSET ? Project.SQUARE_SIZE - faceHeight : 0)) /
 			height;
 		let h = faceHeight / height;
 		const coefX = MapElement.Base.COEF_TEX / width;
@@ -512,21 +511,19 @@ class Mountain extends Base {
 		let texA: THREE.Vector2, texB: THREE.Vector2, texC: THREE.Vector2, texD: THREE.Vector2;
 		if (isCorner) {
 			texA = new THREE.Vector2(
-				(xKind * Project.getSquareSize() + (Project.getSquareSize() - xCornerOffsetTop) / 2) / width + coefX,
+				(xKind * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - xCornerOffsetTop) / 2) / width + coefX,
 				y
 			);
 			texB = new THREE.Vector2(
-				((xKind + 1) * Project.getSquareSize() - (Project.getSquareSize() - xCornerOffsetTop) / 2) / width -
-					coefX,
+				((xKind + 1) * Project.SQUARE_SIZE - (Project.SQUARE_SIZE - xCornerOffsetTop) / 2) / width - coefX,
 				y
 			);
 			texC = new THREE.Vector2(
-				((xKind + 1) * Project.getSquareSize() - (Project.getSquareSize() - xCornerOffsetBot) / 2) / width -
-					coefX,
+				((xKind + 1) * Project.SQUARE_SIZE - (Project.SQUARE_SIZE - xCornerOffsetBot) / 2) / width - coefX,
 				y + h
 			);
 			texD = new THREE.Vector2(
-				(xKind * Project.getSquareSize() + (Project.getSquareSize() - xCornerOffsetBot) / 2) / width + coefX,
+				(xKind * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - xCornerOffsetBot) / 2) / width + coefX,
 				y + h
 			);
 		} else {
@@ -569,22 +566,22 @@ class Mountain extends Base {
 		count: number
 	) {
 		const vecA = new THREE.Vector3(localPosition.x, yTop, localPosition.z);
-		const vecB = new THREE.Vector3(localPosition.x + Project.getSquareSize(), yTop, localPosition.z);
+		const vecB = new THREE.Vector3(localPosition.x + Project.SQUARE_SIZE, yTop, localPosition.z);
 		const vecC = new THREE.Vector3(
-			localPosition.x + Project.getSquareSize(),
+			localPosition.x + Project.SQUARE_SIZE,
 			yTop,
-			localPosition.z + Project.getSquareSize()
+			localPosition.z + Project.SQUARE_SIZE
 		);
-		const vecD = new THREE.Vector3(localPosition.x, yTop, localPosition.z + Project.getSquareSize());
+		const vecD = new THREE.Vector3(localPosition.x, yTop, localPosition.z + Project.SQUARE_SIZE);
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 		geometry.pushQuadIndices(count, position);
 		count += 4;
 		const coefX = Base.COEF_TEX / width;
 		const coefY = Base.COEF_TEX / height;
 		let texX = 0;
-		let texY = (4 * Project.getSquareSize()) / height;
-		let texW = Project.getSquareSize() / width;
-		let texH = Project.getSquareSize() / height;
+		let texY = (4 * Project.SQUARE_SIZE) / height;
+		let texW = Project.SQUARE_SIZE / width;
+		let texH = Project.SQUARE_SIZE / height;
 		texX += coefX;
 		texY += coefY;
 		texW -= coefX * 2;
@@ -602,21 +599,21 @@ class Mountain extends Base {
 		// General configurations
 		const wp = this.getWidthTotalPixels();
 		const hp = this.getHeightTotalPixels();
-		const width = 4 * Project.getSquareSize();
-		const height = 5 * Project.getSquareSize();
+		const width = 4 * Project.SQUARE_SIZE;
+		const height = 5 * Project.SQUARE_SIZE;
 		const faceHeight = Math.sqrt(wp * wp + hp * hp);
-		const w = Project.getSquareSize() / width;
+		const w = Project.SQUARE_SIZE / width;
 		const localPosition = position.toVector3(false);
 		const center = new THREE.Vector3(
-			localPosition.x + Project.getSquareSize() / 2,
-			localPosition.y + Project.getSquareSize() / 2,
-			localPosition.z + Project.getSquareSize() / 2
+			localPosition.x + Project.SQUARE_SIZE / 2,
+			localPosition.y + Project.SQUARE_SIZE / 2,
+			localPosition.z + Project.SQUARE_SIZE / 2
 		);
 		const xLeft = localPosition.x;
-		const xRight = localPosition.x + Project.getSquareSize();
+		const xRight = localPosition.x + Project.SQUARE_SIZE;
 		const yTop = localPosition.y + hp;
 		const yBot = localPosition.y;
-		const zFront = localPosition.z + Project.getSquareSize() + wp;
+		const zFront = localPosition.z + Project.SQUARE_SIZE + wp;
 		const zBack = zFront - wp;
 		const vecFrontB = new THREE.Vector3(xLeft, yBot, zFront);
 		const vecBackB = new THREE.Vector3(xLeft, yTop, zBack);

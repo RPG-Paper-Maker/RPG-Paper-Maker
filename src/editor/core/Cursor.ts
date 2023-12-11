@@ -28,9 +28,9 @@ class Cursor {
 	async load() {
 		const material = await Manager.GL.loadTexture('./Assets/cursor.png');
 		const vecA = new THREE.Vector3(0, 0, 0);
-		const vecB = new THREE.Vector3(Project.getSquareSize(), 0, 0);
-		const vecC = new THREE.Vector3(Project.getSquareSize(), 0, Project.getSquareSize());
-		const vecD = new THREE.Vector3(0, 0, Project.getSquareSize());
+		const vecB = new THREE.Vector3(Project.SQUARE_SIZE, 0, 0);
+		const vecC = new THREE.Vector3(Project.SQUARE_SIZE, 0, Project.SQUARE_SIZE);
+		const vecD = new THREE.Vector3(0, 0, Project.SQUARE_SIZE);
 		const geometry = new CustomGeometry();
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 		geometry.pushQuadIndices(0);
