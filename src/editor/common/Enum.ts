@@ -198,3 +198,10 @@ export enum SPRITE_WALL_TYPE {
 	RIGHT,
 	LEFT_RIGHT,
 }
+
+export enum INPUT_TYPE_WIDTH {
+	FILL,
+	SMALL,
+	NORMAL,
+	LARGE,
+}

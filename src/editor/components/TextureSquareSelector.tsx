@@ -40,9 +40,9 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 			case ELEMENT_MAP_KIND.SPRITE_FIX:
 			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
 			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-				return Scene.Map.currentSelectedTilesetTexture;
+				return Project.current!.settings.mapEditorCurrentTilesetTexture;
 			case ELEMENT_MAP_KIND.AUTOTILE:
-				return Scene.Map.currentSelectedAutotileTexture;
+				return Project.current!.settings.mapEditorCurrentAutotileTexture;
 			default:
 				return new Rectangle(0, 0, 1, 1);
 		}
@@ -68,12 +68,10 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
 			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 				dispatch(setCurrentTilesetTexture(currentState.selectedRect));
-				Scene.Map.currentSelectedTilesetTexture = currentState.selectedRect;
 				Project.current!.settings.mapEditorCurrentTilesetTexture = currentState.selectedRect;
 				break;
 			case ELEMENT_MAP_KIND.AUTOTILE:
 				dispatch(setCurrentAutotileTexture(currentState.selectedRect));
-				Scene.Map.currentSelectedAutotileTexture = currentState.selectedRect;
 				Project.current!.settings.mapEditorCurrentAutotileTexture = currentState.selectedRect;
 				break;
 			default:

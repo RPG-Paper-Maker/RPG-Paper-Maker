@@ -10,14 +10,24 @@
 */
 
 import { Portion } from './Portion';
+import { Project } from './Project';
 
 class Position3D extends Portion {
 	public yPixels: number;
 
 	constructor(x: number = 0, y: number = 0, z: number = 0, yPixels: number = 0) {
 		super(x, y, z);
-
 		this.yPixels = yPixels;
+	}
+
+	static getPercentOfPixels(pixels: number) {
+		return (pixels / Project.SQUARE_SIZE) * 100;
+	}
+
+	addY(y: number, yPixels: number) {
+		const sumPixels = this.yPixels + yPixels;
+		this.yPixels = sumPixels % 100;
+		this.y += y + Math.floor(sumPixels / 100);
 	}
 
 	equals(position: Position3D): boolean {

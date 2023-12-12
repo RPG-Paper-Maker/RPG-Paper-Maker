@@ -3,9 +3,15 @@ input {
 	color: var(--main-color);
 	border: 2px solid var(--grey-color);
 	border-radius: 2px;
+	flex-grow: 1;
 }
 
 input:focus-visible {
 	border: 2px solid var(--primary-color);
 	outline-width: 0;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+	opacity: 1;
 }

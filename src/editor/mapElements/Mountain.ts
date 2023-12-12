@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { MapElement, Model } from '../Editor';
+import { MapElement, Model, Scene } from '../Editor';
 import { BINDING, BindingType, Constants, ELEMENT_MAP_KIND, Utils } from '../common';
 import { CustomGeometry, Portion, Position, Project, TextureBundle } from '../core';
 import { Base } from './Base';
@@ -734,15 +734,20 @@ class Mountain extends Base {
 		return count;
 	}
 
+	getMountainHere(position: Position, portion: Portion) {
+		const mountain = Mountains.getMountainHere(position, portion);
+		return mountain && mountain.equals(this);
+	}
+
 	update(position: Position, portion: Portion): boolean {
 		const previousLeft = this.left;
 		const previousRight = this.right;
 		const previousTop = this.top;
 		const previousBot = this.bot;
-		this.left = !!Mountains.getMountainHere(position.getSquareLeft(), portion);
-		this.right = !!Mountains.getMountainHere(position.getSquareRight(), portion);
-		this.top = !!Mountains.getMountainHere(position.getSquareTop(), portion);
-		this.bot = !!Mountains.getMountainHere(position.getSquareBot(), portion);
+		this.left = !!this.getMountainHere(position.getSquareLeft(), portion);
+		this.right = !!this.getMountainHere(position.getSquareRight(), portion);
+		this.top = !!this.getMountainHere(position.getSquareTop(), portion);
+		this.bot = !!this.getMountainHere(position.getSquareBot(), portion);
 		return (
 			this.left !== previousLeft ||
 			this.right !== previousRight ||
@@ -753,10 +758,7 @@ class Mountain extends Base {
 
 	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
 		super.read(json, Mountain.getBindings(additionnalBinding));
-
-		// Calculate angle
-		const width = this.getWidthTotalPixels();
-		this.angle = width === 0 ? 90 : (Math.atan(this.getHeightTotalPixels() / width) * 180) / Math.PI;
+		this.angle = MapElement.Mountains.calculateAngle(this.getWidthTotalPixels(), this.getHeightTotalPixels());
 	}
 
 	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {

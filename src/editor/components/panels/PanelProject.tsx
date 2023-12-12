@@ -24,7 +24,11 @@ import {
 	RootState,
 	setCurrentAutotileID,
 	setCurrentAutotileTexture,
+	setCurrentMountainHeightPixels,
+	setCurrentMountainHeightSquares,
 	setCurrentMountainID,
+	setCurrentMountainWidthPixels,
+	setCurrentMountainWidthSquares,
 	setCurrentTilesetTexture,
 	setCurrentTreeMapTag,
 	setCurrentWallID,
@@ -132,11 +136,10 @@ function PanelProject() {
 			dispatch(setCurrentAutotileTexture(Project.current!.settings.mapEditorCurrentAutotileTexture));
 			dispatch(setCurrentWallID(Project.current!.settings.mapEditorCurrentWallID));
 			dispatch(setCurrentMountainID(Project.current!.settings.mapEditorCurrentMountainID));
-			Scene.Map.currentSelectedTilesetTexture = Project.current!.settings.mapEditorCurrentTilesetTexture;
-			Scene.Map.currentSelectedAutotileID = Project.current!.settings.mapEditorCurrentAutotileID;
-			Scene.Map.currentSelectedAutotileTexture = Project.current!.settings.mapEditorCurrentAutotileTexture;
-			Scene.Map.currentSelectedWallID = Project.current!.settings.mapEditorCurrentWallID;
-			Scene.Map.currentSelectedMountainID = Project.current!.settings.mapEditorCurrentMountainID;
+			dispatch(setCurrentMountainWidthSquares(Project.current!.settings.mapEditorCurrentMountainWidthSquares));
+			dispatch(setCurrentMountainWidthPixels(Project.current!.settings.mapEditorCurrentMountainWidthPixels));
+			dispatch(setCurrentMountainHeightSquares(Project.current!.settings.mapEditorCurrentMountainHeightSquares));
+			dispatch(setCurrentMountainHeightPixels(Project.current!.settings.mapEditorCurrentMountainHeightPixels));
 		}
 		// eslint-disable-next-line
 	}, [openLoading]);

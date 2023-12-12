@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Manager, MapElement, Scene } from '../Editor';
 import { Base } from '.';
-import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle, TextureBundle } from '../core';
+import { CustomGeometry, CustomGeometryFace, Position, Position3D, Project, Rectangle, TextureBundle } from '../core';
 import { ELEMENT_MAP_KIND, SPRITE_WALL_TYPE } from '../common';
 
 class Previewer3D extends Base {
@@ -128,7 +128,15 @@ class Previewer3D extends Base {
 		}
 	}
 
-	async loadMountain(GL: Manager.GL, mountainID: number, textureFloor: Rectangle) {
+	async loadMountain(
+		GL: Manager.GL,
+		mountainID: number,
+		textureFloor: Rectangle,
+		ws: number,
+		wp: number,
+		hs: number,
+		hp: number
+	) {
 		const wall = Project.current!.specialElements.getMountainByID(mountainID);
 		if (!wall) {
 			this.clear();
@@ -136,7 +144,9 @@ class Previewer3D extends Base {
 		}
 		const textureMountain = await MapElement.Mountains.loadMountainTexture(mountainID);
 		if (textureMountain) {
-			const mountainElement = MapElement.Mountain.create(mountainID, 1, 0, 1, 0);
+			const wpercent = Position3D.getPercentOfPixels(wp);
+			const hpercent = Position3D.getPercentOfPixels(hp);
+			const mountainElement = MapElement.Mountain.create(mountainID, ws, wpercent, hs, hpercent);
 			let geometry = new CustomGeometry();
 			mountainElement.updateGeometry(geometry, new Position(), 0);
 			this.addToScene(GL, geometry, textureMountain);
@@ -144,8 +154,9 @@ class Previewer3D extends Base {
 			const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
 			const floor = MapElement.Floor.create(new Rectangle(textureFloor.x, textureFloor.y, 1, 1));
 			geometry = new CustomGeometry();
-			floor.updateGeometry(geometry, new Position(), width, height, 0);
-			this.addToScene(GL, geometry, this.material, false, new THREE.Vector3(0, Project.SQUARE_SIZE / 2));
+			const floorPosition = new Position(0, hs, hpercent);
+			floor.updateGeometry(geometry, floorPosition, width, height, 0);
+			this.addToScene(GL, geometry, this.material, false, new THREE.Vector3(0, floorPosition.getTotalY() / 2));
 		}
 	}
 

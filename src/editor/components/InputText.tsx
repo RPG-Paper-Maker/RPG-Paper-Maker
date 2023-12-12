@@ -16,7 +16,7 @@ type Props = {
 	onChange: (e: any) => void;
 };
 
-function Input({ value, onChange }: Props) {
+function InputText({ value, onChange }: Props) {
 	return (
 		<input
 			value={value}
@@ -29,4 +29,4 @@ function Input({ value, onChange }: Props) {
 	);
 }
 
-export default Input;
+export default InputText;

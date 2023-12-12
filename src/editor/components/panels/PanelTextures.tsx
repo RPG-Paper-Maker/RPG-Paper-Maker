@@ -16,6 +16,7 @@ import { RootState } from '../../store';
 import TextureSquareSelector from '../TextureSquareSelector';
 import PanelSpecialElementsSelection from './PanelSpecialElementsSelection';
 import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
+import PanelSettingsMountains from './PanelSettingsMountains';
 
 type Props = {
 	visible: boolean;
@@ -61,7 +62,16 @@ function PanelTextures({ visible }: Props) {
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
 				return <PanelSpecialElementsSelection kind={PICTURE_KIND.WALLS} />;
 			case ELEMENT_MAP_KIND.MOUNTAIN:
-				return <PanelSpecialElementsSelection kind={PICTURE_KIND.MOUNTAINS} />;
+				return (
+					<>
+						<div className='flex-one scrollable'>
+							<PanelSpecialElementsSelection kind={PICTURE_KIND.MOUNTAINS} />
+						</div>
+						<div className='flex'>
+							<PanelSettingsMountains />
+						</div>
+					</>
+				);
 			default:
 				return <TextureSquareSelector texture='./Assets/plains-woods.png' />;
 		}
@@ -72,7 +82,7 @@ function PanelTextures({ visible }: Props) {
 			ref={refTilesetPreviewDiv}
 			className={Utils.getClassName([[!visible, 'hidden']], ['flex-column', 'flex-one', 'gap-small'])}
 		>
-			<div ref={refTileset} className='scrollable'>
+			<div ref={refTileset} className='scrollable flex-column flex-one gap-small'>
 				{getMainContent()}
 			</div>
 			<div ref={refPreviewer} className='flex mobile-hidden'>

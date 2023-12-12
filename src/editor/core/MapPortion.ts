@@ -11,7 +11,16 @@
 
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
-import { CustomGeometry, CustomGeometryFace, Portion, Position, Project, Rectangle, UndoRedoState } from '.';
+import {
+	CustomGeometry,
+	CustomGeometryFace,
+	Portion,
+	Position,
+	Position3D,
+	Project,
+	Rectangle,
+	UndoRedoState,
+} from '.';
 import { Constants, ELEMENT_MAP_KIND, RAYCASTING_LAYER, SPRITE_WALL_TYPE } from '../common';
 import { SpriteWall } from '../mapElements';
 
@@ -60,7 +69,7 @@ class MapPortion {
 			case ELEMENT_MAP_KIND.FLOOR:
 				this.updateMapElement(
 					position,
-					MapElement.Floor.create(Scene.Map.currentSelectedTilesetTexture),
+					MapElement.Floor.create(Project.current!.settings.mapEditorCurrentTilesetTexture),
 					ELEMENT_MAP_KIND.FLOOR,
 					preview
 				);
@@ -69,9 +78,9 @@ class MapPortion {
 				this.updateMapElement(
 					position,
 					MapElement.Autotile.create(
-						Scene.Map.currentSelectedAutotileID,
+						Project.current!.settings.mapEditorCurrentAutotileID,
 						MapElement.Autotiles.PREVIEW_TILE,
-						Scene.Map.currentSelectedAutotileTexture
+						Project.current!.settings.mapEditorCurrentAutotileTexture
 					),
 					ELEMENT_MAP_KIND.AUTOTILE,
 					preview
@@ -85,35 +94,50 @@ class MapPortion {
 					position,
 					MapElement.Sprite.create(
 						Scene.Map.currentSelectedMapElementKind,
-						Scene.Map.currentSelectedTilesetTexture
+						Project.current!.settings.mapEditorCurrentTilesetTexture
 					),
 					Scene.Map.currentSelectedMapElementKind,
 					preview
 				);
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
-				this.updateWallFromCursor(Scene.Map.currentSelectedWallID, preview);
+				this.updateWallFromCursor(Project.current!.settings.mapEditorCurrentWallID, preview);
 				break;
 			case ELEMENT_MAP_KIND.MOUNTAIN:
+				const y = Project.current!.settings.mapEditorCurrentMountainHeightSquares;
+				const yPixels = Position3D.getPercentOfPixels(
+					Project.current!.settings.mapEditorCurrentMountainHeightPixels
+				);
 				const floorPosition = position.clone();
-				floorPosition.y = position.y + 1;
+				floorPosition.addY(y, yPixels);
 				this.updateMapElement(
 					floorPosition,
 					MapElement.Floor.create(
 						new Rectangle(
-							Scene.Map.currentSelectedTilesetTexture.x,
-							Scene.Map.currentSelectedTilesetTexture.y
+							Project.current!.settings.mapEditorCurrentTilesetTexture.x,
+							Project.current!.settings.mapEditorCurrentTilesetTexture.y
 						)
 					),
 					ELEMENT_MAP_KIND.FLOOR,
 					preview
 				);
-				this.updateMapElement(
-					position,
-					MapElement.Mountain.create(Scene.Map.currentSelectedMountainID, 1, 0, 1, 0),
-					Scene.Map.currentSelectedMapElementKind,
-					preview
+				const newMountain = MapElement.Mountain.create(
+					Project.current!.settings.mapEditorCurrentMountainID,
+					Project.current!.settings.mapEditorCurrentMountainWidthSquares,
+					Position3D.getPercentOfPixels(Project.current!.settings.mapEditorCurrentMountainWidthPixels),
+					y,
+					yPixels
 				);
+				const previousMountain = this.model.getMapElement(
+					position,
+					ELEMENT_MAP_KIND.MOUNTAIN
+				) as MapElement.Mountain | null;
+				if (previousMountain && !previousMountain.equals(newMountain)) {
+					const floorPosition = position.clone();
+					floorPosition.addY(previousMountain.heightSquares, previousMountain.heightPixels);
+					this.updateMapElement(floorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
+				}
+				this.updateMapElement(position, newMountain, Scene.Map.currentSelectedMapElementKind, preview);
 				break;
 		}
 	}
@@ -124,9 +148,16 @@ class MapPortion {
 			this.updateWallFromCursor(-1, preview);
 		} else {
 			if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.MOUNTAIN) {
-				const floorPosition = position.clone();
-				floorPosition.y = position.y + 1;
-				this.updateMapElement(floorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
+				const previous = this.model.getMapElement(
+					position,
+					ELEMENT_MAP_KIND.MOUNTAIN
+				) as MapElement.Mountain | null;
+				if (previous) {
+					const mountain = previous as MapElement.Mountain;
+					const floorPosition = position.clone();
+					floorPosition.addY(mountain.heightSquares, mountain.heightPixels);
+					this.updateMapElement(floorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
+				}
 			}
 			this.updateMapElement(position, null, Scene.Map.currentSelectedMapElementKind);
 		}

@@ -34,6 +34,10 @@ class Mountains {
 		this.mesh = null;
 	}
 
+	static calculateAngle(width: number, height: number) {
+		return width === 0 ? 90 : (Math.atan(height / width) * 180) / Math.PI;
+	}
+
 	static getMountainTexture(id: number): THREE.MeshPhongMaterial | null {
 		return (
 			Scene.Map.current!.texturesMountains.get(Project.current!.specialElements.getMountainByID(id).pictureID) ||

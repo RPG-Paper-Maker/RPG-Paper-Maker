@@ -85,7 +85,7 @@ class Position extends Position3D {
 	}
 
 	getTotalYPixels(): number {
-		return Math.floor((this.yPixels * Project.SQUARE_SIZE) / 100);
+		return Math.round((this.yPixels * Project.SQUARE_SIZE) / 100);
 	}
 
 	getPixelsCenterX(): number {
@@ -288,19 +288,19 @@ class Position extends Position3D {
 
 	fromKey(key: string) {
 		const values = key.split('+');
-		this.x = parseInt(values[0], 10);
-		this.y = parseInt(values[1], 10);
-		this.yPixels = parseInt(values[2], 10);
-		this.z = parseInt(values[3], 10);
-		this.layer = parseInt(values[4], 10);
-		this.centerX = parseInt(values[5], 10);
-		this.centerZ = parseInt(values[6], 10);
-		this.angleY = parseInt(values[7], 10);
-		this.angleX = parseInt(values[8], 10);
-		this.angleZ = parseInt(values[9], 10);
-		this.scaleX = parseInt(values[10], 10);
-		this.scaleY = parseInt(values[11], 10);
-		this.scaleZ = parseInt(values[12], 10);
+		this.x = Number(values[0]);
+		this.y = Number(values[1]);
+		this.yPixels = Number(values[2]);
+		this.z = Number(values[3]);
+		this.layer = Number(values[4]);
+		this.centerX = Number(values[5]);
+		this.centerZ = Number(values[6]);
+		this.angleY = Number(values[7]);
+		this.angleX = Number(values[8]);
+		this.angleZ = Number(values[9]);
+		this.scaleX = Number(values[10]);
+		this.scaleY = Number(values[11]);
+		this.scaleZ = Number(values[12]);
 	}
 
 	copy(position: Position) {

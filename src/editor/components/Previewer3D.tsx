@@ -29,6 +29,12 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	const currentAutotileTexture = useSelector((state: RootState) => state.mapEditor.currentAutotileTexture);
 	const currentWallID = useSelector((state: RootState) => state.mapEditor.currentWallID);
 	const currentMountainID = useSelector((state: RootState) => state.mapEditor.currentMountainID);
+	const currentMountainWidthSquares = useSelector((state: RootState) => state.mapEditor.currentMountainWidthSquares);
+	const currentMountainWidthPixels = useSelector((state: RootState) => state.mapEditor.currentMountainWidthPixels);
+	const currentMountainHeightSquares = useSelector(
+		(state: RootState) => state.mapEditor.currentMountainHeightSquares
+	);
+	const currentMountainHeightPixels = useSelector((state: RootState) => state.mapEditor.currentMountainHeightPixels);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	useSelector((state: RootState) => state.triggers.splitting);
 
@@ -70,7 +76,15 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 						await scene.loadWall(Manager.GL.extraContext, currentWallID);
 						break;
 					case ELEMENT_MAP_KIND.MOUNTAIN:
-						await scene.loadMountain(Manager.GL.extraContext, currentMountainID, currentTilesetTexture);
+						await scene.loadMountain(
+							Manager.GL.extraContext,
+							currentMountainID,
+							currentTilesetTexture,
+							currentMountainWidthSquares,
+							currentMountainWidthPixels,
+							currentMountainHeightSquares,
+							currentMountainHeightPixels
+						);
 						break;
 				}
 			} else {
@@ -122,6 +136,10 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		currentAutotileTexture,
 		currentWallID,
 		currentMountainID,
+		currentMountainWidthSquares,
+		currentMountainWidthPixels,
+		currentMountainHeightSquares,
+		currentMountainHeightPixels,
 		currentMapElementKind,
 		currentMapID,
 	]);

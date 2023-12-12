@@ -14,12 +14,12 @@ import FooterNoYes from './footers/FooterNoYes';
 import { Model, Scene } from '../../Editor';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import Input from '../Input';
 import Loader from '../Loader';
 import { useDispatch } from 'react-redux';
 import { removeProject } from '../../store';
 import { LocalFile, Project, Rectangle } from '../../core';
 import { ELEMENT_MAP_KIND, LOCAL_FORAGE, Paths } from '../../common';
+import InputText from '../InputText';
 
 type Props = {
 	isOpen: boolean;
@@ -81,7 +81,6 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 		await LocalFile.createFolder(project.getPathMaps());
 		await Model.Map.createDefaultMap(1);
 		await Model.Map.createDefaultMap(2);
-		Scene.Map.currentSelectedTilesetTexture = new Rectangle();
 		Scene.Map.currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
 		for (const file of Paths.ALL_JSON) {
 			await LocalFile.copyPublicFile(
@@ -119,7 +118,7 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 				<Loader isLoading={isLoading} />
 				<div className='flex-center-vertically'>
 					<p className='label'>Name:</p>
-					<Input value={projectName} onChange={handleChangeProjectName} />
+					<InputText value={projectName} onChange={handleChangeProjectName} />
 				</div>
 			</Dialog>
 			<Dialog

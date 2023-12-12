@@ -18,6 +18,10 @@ const MapEditorSlice = createSlice({
 		currentAutotileTexture: new Rectangle(0, 0, 1, 1),
 		currentWallID: 1,
 		currentMountainID: 1,
+		currentMountainWidthSquares: 0,
+		currentMountainWidthPixels: 0,
+		currentMountainHeightSquares: 1,
+		currentMountainHeightPixels: 0,
 		currentMapElementKind: ELEMENT_MAP_KIND.FLOOR,
 		undoRedo: {
 			index: -1,
@@ -43,6 +47,18 @@ const MapEditorSlice = createSlice({
 		setCurrentMountainID(state, action: PayloadAction<number>) {
 			state.currentMountainID = action.payload;
 		},
+		setCurrentMountainWidthSquares(state, action: PayloadAction<number>) {
+			state.currentMountainWidthSquares = action.payload;
+		},
+		setCurrentMountainWidthPixels(state, action: PayloadAction<number>) {
+			state.currentMountainWidthPixels = action.payload;
+		},
+		setCurrentMountainHeightSquares(state, action: PayloadAction<number>) {
+			state.currentMountainHeightSquares = action.payload;
+		},
+		setCurrentMountainHeightPixels(state, action: PayloadAction<number>) {
+			state.currentMountainHeightPixels = action.payload;
+		},
 		setCurrentMapElementKind(state, action: PayloadAction<ELEMENT_MAP_KIND>) {
 			state.currentMapElementKind = action.payload;
 		},
@@ -62,6 +78,10 @@ export const {
 	setCurrentAutotileTexture,
 	setCurrentWallID,
 	setCurrentMountainID,
+	setCurrentMountainWidthSquares,
+	setCurrentMountainWidthPixels,
+	setCurrentMountainHeightSquares,
+	setCurrentMountainHeightPixels,
 	setCurrentMapElementKind,
 	setUndoRedoIndex,
 	setUndoRedoLength,

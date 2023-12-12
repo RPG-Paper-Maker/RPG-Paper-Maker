@@ -82,25 +82,21 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 			case ELEMENT_MAP_KIND.AUTOTILE:
 				if (id !== currentAutotileID) {
 					dispatch(setCurrentAutotileID(id));
-					Scene.Map.currentSelectedAutotileID = id;
 					Project.current!.settings.mapEditorCurrentAutotileID = id;
 					const rectangle = new Rectangle();
 					dispatch(setCurrentAutotileTexture(rectangle));
-					Scene.Map.currentSelectedAutotileTexture = rectangle;
 					Project.current!.settings.mapEditorCurrentAutotileTexture = rectangle;
 				}
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
 				if (id !== currentWallID) {
 					dispatch(setCurrentWallID(id));
-					Scene.Map.currentSelectedWallID = id;
 					Project.current!.settings.mapEditorCurrentWallID = id;
 				}
 				break;
 			case ELEMENT_MAP_KIND.MOUNTAIN:
 				if (id !== currentMountainID) {
 					dispatch(setCurrentMountainID(id));
-					Scene.Map.currentSelectedMountainID = id;
 					Project.current!.settings.mapEditorCurrentMountainID = id;
 				}
 				break;
