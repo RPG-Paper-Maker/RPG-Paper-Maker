@@ -24,7 +24,8 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	const refCanvas = useRef<HTMLDivElement>(null);
 
 	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
-	const currentTilesetTexture = useSelector((state: RootState) => state.mapEditor.currentTilesetTexture);
+	const currentTilesetFloorTexture = useSelector((state: RootState) => state.mapEditor.currentTilesetFloorTexture);
+	const currentTilesetSpriteTexture = useSelector((state: RootState) => state.mapEditor.currentTilesetSpriteTexture);
 	const currentAutotileID = useSelector((state: RootState) => state.mapEditor.currentAutotileID);
 	const currentAutotileTexture = useSelector((state: RootState) => state.mapEditor.currentAutotileTexture);
 	const currentWallID = useSelector((state: RootState) => state.mapEditor.currentWallID);
@@ -59,7 +60,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 			if (currentMapID) {
 				switch (currentMapElementKind) {
 					case ELEMENT_MAP_KIND.FLOOR:
-						await scene.loadFloor(Manager.GL.extraContext, currentTilesetTexture);
+						await scene.loadFloor(Manager.GL.extraContext, currentTilesetFloorTexture);
 						break;
 					case ELEMENT_MAP_KIND.AUTOTILE:
 						await scene
@@ -70,7 +71,11 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 					case ELEMENT_MAP_KIND.SPRITE_FIX:
 					case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
 					case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-						await scene.loadSprite(Manager.GL.extraContext, currentTilesetTexture, currentMapElementKind);
+						await scene.loadSprite(
+							Manager.GL.extraContext,
+							currentTilesetSpriteTexture,
+							currentMapElementKind
+						);
 						break;
 					case ELEMENT_MAP_KIND.SPRITE_WALL:
 						await scene.loadWall(Manager.GL.extraContext, currentWallID);
@@ -79,7 +84,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 						await scene.loadMountain(
 							Manager.GL.extraContext,
 							currentMountainID,
-							currentTilesetTexture,
+							currentTilesetFloorTexture,
 							currentMountainWidthSquares,
 							currentMountainWidthPixels,
 							currentMountainHeightSquares,
@@ -131,7 +136,8 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		update().catch(console.error);
 		// eslint-disable-next-line
 	}, [
-		currentTilesetTexture,
+		currentTilesetFloorTexture,
+		currentTilesetSpriteTexture,
 		currentAutotileID,
 		currentAutotileTexture,
 		currentWallID,

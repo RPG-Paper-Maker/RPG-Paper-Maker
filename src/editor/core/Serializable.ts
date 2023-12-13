@@ -114,9 +114,14 @@ abstract class Serializable {
 					if (!jsonObj && defaultValue === null) {
 						(this as any)[name] = null;
 					} else {
-						const rectangle = new Rectangle();
-						if (jsonObj) {
-							rectangle.read(jsonObj);
+						let rectangle: Rectangle;
+						if (defaultValue) {
+							rectangle = (defaultValue as Rectangle).clone();
+						} else {
+							rectangle = new Rectangle();
+							if (jsonObj) {
+								rectangle.read(jsonObj);
+							}
 						}
 						(this as any)[name] = rectangle;
 					}

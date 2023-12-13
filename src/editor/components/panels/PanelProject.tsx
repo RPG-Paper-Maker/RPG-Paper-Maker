@@ -19,7 +19,7 @@ import MenuItem from '../MenuItem';
 import { LuFolders } from 'react-icons/lu';
 import { MdOutlineWallpaper } from 'react-icons/md';
 import Tab from '../Tab';
-import { Model, Scene } from '../../Editor';
+import { Model } from '../../Editor';
 import {
 	RootState,
 	setCurrentAutotileID,
@@ -29,7 +29,8 @@ import {
 	setCurrentMountainID,
 	setCurrentMountainWidthPixels,
 	setCurrentMountainWidthSquares,
-	setCurrentTilesetTexture,
+	setCurrentTilesetFloorTexture,
+	setCurrentTilesetSpriteTexture,
 	setCurrentTreeMapTag,
 	setCurrentWallID,
 	setProjectMenuIndex,
@@ -131,7 +132,8 @@ function PanelProject() {
 			setMapsTabsContents(getDefaultTabContents());
 			setMapForcedCurrentSelectedItemID(Project.current!.treeMaps.currentMap);
 			dispatch(setProjectMenuIndex(Project.current!.settings.projectMenuIndex));
-			dispatch(setCurrentTilesetTexture(Project.current!.settings.mapEditorCurrentTilesetTexture));
+			dispatch(setCurrentTilesetFloorTexture(Project.current!.settings.mapEditorCurrentTilesetFloorTexture));
+			dispatch(setCurrentTilesetSpriteTexture(Project.current!.settings.mapEditorCurrentTilesetSpriteTexture));
 			dispatch(setCurrentAutotileID(Project.current!.settings.mapEditorCurrentAutotileID));
 			dispatch(setCurrentAutotileTexture(Project.current!.settings.mapEditorCurrentAutotileTexture));
 			dispatch(setCurrentWallID(Project.current!.settings.mapEditorCurrentWallID));

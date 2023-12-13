@@ -42,6 +42,10 @@ class Rectangle {
 		return this.x === rect.x && this.y === rect.y && this.width === rect.width && this.height === rect.height;
 	}
 
+	clone() {
+		return new Rectangle(this.x, this.y, this.width, this.height);
+	}
+
 	toString(positionOnly = false): string {
 		return `[${this.x}, ${this.y}${positionOnly ? '' : `,${this.width}, ${this.height}`}]`;
 	}

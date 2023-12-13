@@ -11,8 +11,13 @@
 
 import { useState, useRef, useEffect } from 'react';
 import '../styles/Tree.css';
-import { useDispatch } from 'react-redux';
-import { setCurrentAutotileTexture, setCurrentTilesetTexture } from '../store';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	RootState,
+	setCurrentAutotileTexture,
+	setCurrentTilesetFloorTexture,
+	setCurrentTilesetSpriteTexture,
+} from '../store';
 import { Scene } from '../Editor';
 import { Picture2D, Project, Rectangle } from '../core';
 import { Constants, ELEMENT_MAP_KIND } from '../common';
@@ -33,16 +38,19 @@ type Props = {
 };
 
 function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, canChangeSize = true }: Props) {
+	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
+
 	const getDefaultRectangle = () => {
 		switch (Scene.Map.currentSelectedMapElementKind) {
 			case ELEMENT_MAP_KIND.FLOOR:
+				return Project.current!.settings.mapEditorCurrentTilesetFloorTexture;
+			case ELEMENT_MAP_KIND.AUTOTILE:
+				return Project.current!.settings.mapEditorCurrentAutotileTexture;
 			case ELEMENT_MAP_KIND.SPRITE_FACE:
 			case ELEMENT_MAP_KIND.SPRITE_FIX:
 			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
 			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-				return Project.current!.settings.mapEditorCurrentTilesetTexture;
-			case ELEMENT_MAP_KIND.AUTOTILE:
-				return Project.current!.settings.mapEditorCurrentAutotileTexture;
+				return Project.current!.settings.mapEditorCurrentTilesetSpriteTexture;
 			default:
 				return new Rectangle(0, 0, 1, 1);
 		}
@@ -63,16 +71,19 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 	const updateRectangle = async () => {
 		switch (Scene.Map.currentSelectedMapElementKind) {
 			case ELEMENT_MAP_KIND.FLOOR:
-			case ELEMENT_MAP_KIND.SPRITE_FACE:
-			case ELEMENT_MAP_KIND.SPRITE_FIX:
-			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
-			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-				dispatch(setCurrentTilesetTexture(currentState.selectedRect));
-				Project.current!.settings.mapEditorCurrentTilesetTexture = currentState.selectedRect;
+				dispatch(setCurrentTilesetFloorTexture(currentState.selectedRect));
+				Project.current!.settings.mapEditorCurrentTilesetFloorTexture = currentState.selectedRect;
 				break;
 			case ELEMENT_MAP_KIND.AUTOTILE:
 				dispatch(setCurrentAutotileTexture(currentState.selectedRect));
 				Project.current!.settings.mapEditorCurrentAutotileTexture = currentState.selectedRect;
+				break;
+			case ELEMENT_MAP_KIND.SPRITE_FACE:
+			case ELEMENT_MAP_KIND.SPRITE_FIX:
+			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
+				dispatch(setCurrentTilesetSpriteTexture(currentState.selectedRect));
+				Project.current!.settings.mapEditorCurrentTilesetSpriteTexture = currentState.selectedRect;
 				break;
 			default:
 				break;
@@ -271,6 +282,12 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 		const { x, y } = getCurrentPositionMobile(e);
 		updateMove(x, y);
 	};
+
+	useEffect(() => {
+		currentState.selectedRect = getDefaultRectangle();
+		update();
+		// eslint-disable-next-line
+	}, [currentMapElementKind]);
 
 	useEffect(() => {
 		initialize().catch(console.error);

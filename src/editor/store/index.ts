@@ -4,7 +4,8 @@ import { ProjectsReducer } from './slices/ProjectsReducer';
 import { TriggersReducer } from './slices/TriggersReducer';
 import {
 	setCurrentTreeMapTag,
-	setCurrentTilesetTexture,
+	setCurrentTilesetFloorTexture,
+	setCurrentTilesetSpriteTexture,
 	setCurrentAutotileID,
 	setCurrentAutotileTexture,
 	setCurrentWallID,
@@ -54,7 +55,8 @@ const store = configureStore({
 export {
 	store,
 	setCurrentTreeMapTag,
-	setCurrentTilesetTexture,
+	setCurrentTilesetFloorTexture,
+	setCurrentTilesetSpriteTexture,
 	setCurrentAutotileID,
 	setCurrentAutotileTexture,
 	setCurrentWallID,

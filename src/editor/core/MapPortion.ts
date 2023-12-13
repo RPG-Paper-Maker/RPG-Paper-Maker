@@ -69,7 +69,7 @@ class MapPortion {
 			case ELEMENT_MAP_KIND.FLOOR:
 				this.updateMapElement(
 					position,
-					MapElement.Floor.create(Project.current!.settings.mapEditorCurrentTilesetTexture),
+					MapElement.Floor.create(Project.current!.settings.mapEditorCurrentTilesetFloorTexture),
 					ELEMENT_MAP_KIND.FLOOR,
 					preview
 				);
@@ -94,7 +94,7 @@ class MapPortion {
 					position,
 					MapElement.Sprite.create(
 						Scene.Map.currentSelectedMapElementKind,
-						Project.current!.settings.mapEditorCurrentTilesetTexture
+						Project.current!.settings.mapEditorCurrentTilesetSpriteTexture
 					),
 					Scene.Map.currentSelectedMapElementKind,
 					preview
@@ -114,8 +114,8 @@ class MapPortion {
 					floorPosition,
 					MapElement.Floor.create(
 						new Rectangle(
-							Project.current!.settings.mapEditorCurrentTilesetTexture.x,
-							Project.current!.settings.mapEditorCurrentTilesetTexture.y
+							Project.current!.settings.mapEditorCurrentTilesetFloorTexture.x,
+							Project.current!.settings.mapEditorCurrentTilesetFloorTexture.y
 						)
 					),
 					ELEMENT_MAP_KIND.FLOOR,
