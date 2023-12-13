@@ -66,8 +66,8 @@ class Mountains {
 	static async loadTextureMountain(picture: Model.Picture): Promise<THREE.MeshPhongMaterial> {
 		const image = await Picture2D.loadImage(picture.getPath());
 
-		let sourceSize = 3 * Project.SQUARE_SIZE;
-		let sDiv = Math.round(Project.SQUARE_SIZE / 2);
+		const sourceSize = 3 * Project.SQUARE_SIZE;
+		const sDiv = Math.round(Project.SQUARE_SIZE / 2);
 
 		// Draw original image
 		Scene.Map.ctxRendering!.clearRect(0, 0, Scene.Map.canvasRendering!.width, Scene.Map.canvasRendering!.height);
@@ -173,7 +173,7 @@ class Mountains {
 		const texture = new THREE.Texture();
 		texture.image = await Picture2D.loadImage(Scene.Map.canvasRendering!.toDataURL());
 		texture.needsUpdate = true;
-		const material = Manager.GL.createMaterial({ texture: texture, side: THREE.BackSide });
+		const material = Manager.GL.createMaterial({ texture, side: THREE.BackSide });
 		if (Scene.Map.current) {
 			Scene.Map.current.texturesMountains.set(picture.id, material);
 		}

@@ -201,7 +201,6 @@ class Previewer3D extends Base {
 		let h = 0;
 		let d = 0;
 		for (const mesh of this.meshes) {
-			//mesh.scale.set(32, 32, 32);
 			let bb = mesh.geometry.boundingBox;
 			let m: THREE.Vector3;
 			if (bb === null) {

@@ -508,7 +508,10 @@ class Mountain extends Base {
 		h -= coefY * 2;
 
 		// Textures and vertices
-		let texA: THREE.Vector2, texB: THREE.Vector2, texC: THREE.Vector2, texD: THREE.Vector2;
+		let texA: THREE.Vector2;
+		let texB: THREE.Vector2;
+		let texC: THREE.Vector2;
+		let texD: THREE.Vector2;
 		if (isCorner) {
 			texA = new THREE.Vector2(
 				(xKind * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - xCornerOffsetTop) / 2) / width + coefX,
@@ -533,10 +536,10 @@ class Mountain extends Base {
 			texC = new THREE.Vector2(x + w, y + h);
 			texD = new THREE.Vector2(x, y + h);
 		}
-		let vecA = new THREE.Vector3(xLeftTop, yTop, zBackLeft);
-		let vecB = new THREE.Vector3(xRightTop, yTop, zBackRight);
-		let vecC = new THREE.Vector3(xRightBot, yBot, zFrontRight);
-		let vecD = new THREE.Vector3(xLeftBot, yBot, zFrontLeft);
+		const vecA = new THREE.Vector3(xLeftTop, yTop, zBackLeft);
+		const vecB = new THREE.Vector3(xRightTop, yTop, zBackRight);
+		const vecC = new THREE.Vector3(xRightBot, yBot, zFrontRight);
+		const vecD = new THREE.Vector3(xLeftBot, yBot, zFrontLeft);
 
 		// Rotate and draw sprite side
 		MapElement.Base.rotateQuad(vecA, vecB, vecC, vecD, center, angle, MapElement.Base.Y_AXIS);

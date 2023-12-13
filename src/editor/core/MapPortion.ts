@@ -108,7 +108,7 @@ class MapPortion {
 				const yPixels = Position3D.getPercentOfPixels(
 					Project.current!.settings.mapEditorCurrentMountainHeightPixels
 				);
-				const floorPosition = position.clone();
+				let floorPosition = position.clone();
 				floorPosition.addY(y, yPixels);
 				this.updateMapElement(
 					floorPosition,
@@ -133,7 +133,7 @@ class MapPortion {
 					ELEMENT_MAP_KIND.MOUNTAIN
 				) as MapElement.Mountain | null;
 				if (previousMountain && !previousMountain.equals(newMountain)) {
-					const floorPosition = position.clone();
+					floorPosition = position.clone();
 					floorPosition.addY(previousMountain.heightSquares, previousMountain.heightPixels);
 					this.updateMapElement(floorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
 				}
