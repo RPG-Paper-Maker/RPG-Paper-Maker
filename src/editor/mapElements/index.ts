@@ -5,5 +5,8 @@ export * from './Floor';
 export * from './Land';
 export * from './Mountain';
 export * from './Mountains';
+export * from './Object3D';
+export * from './Object3DBox';
+export * from './Object3DCustom';
 export * from './Sprite';
 export * from './SpriteWall';

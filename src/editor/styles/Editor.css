@@ -68,6 +68,16 @@ code {
 	flex-direction: column;
 }
 
+.flex-one {
+	display: flex;
+	flex-grow: 1;
+	flex-basis: 0;
+}
+
+.flex-zero {
+	flex-grow: 0;
+}
+
 .flex-center-vertically {
 	display: flex;
 	align-items: center;
@@ -120,15 +130,6 @@ code {
 
 .fill-height {
 	height: 100%;
-}
-
-.flex-one {
-	flex-grow: 1;
-	flex-basis: 0;
-}
-
-.flex-zero {
-	flex-grow: 0;
 }
 
 .no-select-text {
@@ -241,6 +242,14 @@ code {
 .text-small-detail {
 	color: var(--grey-color);
 	font-size: 11px;
+}
+
+.text-ellipsis {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 0px;
+	flex: 1;
 }
 
 .bg-darker {

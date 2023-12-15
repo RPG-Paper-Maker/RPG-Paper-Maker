@@ -12,7 +12,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Manager, Scene } from '../Editor';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { RootState, setCurrentObject3DID } from '../store';
 import { ELEMENT_MAP_KIND } from '../common';
 
 type Props = {
@@ -36,6 +36,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		(state: RootState) => state.mapEditor.currentMountainHeightSquares
 	);
 	const currentMountainHeightPixels = useSelector((state: RootState) => state.mapEditor.currentMountainHeightPixels);
+	const currentObject3DID = useSelector((state: RootState) => state.mapEditor.currentObject3DID);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	useSelector((state: RootState) => state.triggers.splitting);
 
@@ -90,6 +91,9 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 							currentMountainHeightSquares,
 							currentMountainHeightPixels
 						);
+						break;
+					case ELEMENT_MAP_KIND.OBJECT3D:
+						await scene.loadObject3D(Manager.GL.extraContext, currentObject3DID);
 						break;
 				}
 			} else {
@@ -146,6 +150,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		currentMountainWidthPixels,
 		currentMountainHeightSquares,
 		currentMountainHeightPixels,
+		currentObject3DID,
 		currentMapElementKind,
 		currentMapID,
 	]);

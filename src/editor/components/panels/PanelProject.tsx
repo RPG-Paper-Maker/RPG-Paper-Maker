@@ -29,6 +29,7 @@ import {
 	setCurrentMountainID,
 	setCurrentMountainWidthPixels,
 	setCurrentMountainWidthSquares,
+	setCurrentObject3DID,
 	setCurrentTilesetFloorTexture,
 	setCurrentTilesetSpriteTexture,
 	setCurrentTreeMapTag,
@@ -142,6 +143,7 @@ function PanelProject() {
 			dispatch(setCurrentMountainWidthPixels(Project.current!.settings.mapEditorCurrentMountainWidthPixels));
 			dispatch(setCurrentMountainHeightSquares(Project.current!.settings.mapEditorCurrentMountainHeightSquares));
 			dispatch(setCurrentMountainHeightPixels(Project.current!.settings.mapEditorCurrentMountainHeightPixels));
+			dispatch(setCurrentObject3DID(Project.current!.settings.mapEditorCurrentObject3DID));
 		}
 		// eslint-disable-next-line
 	}, [openLoading]);

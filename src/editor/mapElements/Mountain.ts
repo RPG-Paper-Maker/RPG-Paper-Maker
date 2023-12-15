@@ -10,9 +10,9 @@
 */
 
 import * as THREE from 'three';
-import { MapElement, Model, Scene } from '../Editor';
-import { BINDING, BindingType, Constants, ELEMENT_MAP_KIND, Utils } from '../common';
-import { CustomGeometry, Portion, Position, Project, TextureBundle } from '../core';
+import { MapElement, Model } from '../Editor';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, Utils } from '../common';
+import { CustomGeometry, Portion, Position, Project } from '../core';
 import { Base } from './Base';
 import { Mountains } from './Mountains';
 

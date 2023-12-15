@@ -9,8 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { SpecialElement } from './SpecialElement';
 import { BINDING, BindingType, OBJECT_COLLISION_KIND, SHAPE_KIND } from '../common';
+import { Project } from '../core';
 
 class Object3D extends SpecialElement {
 	public shapeKind!: SHAPE_KIND;
@@ -47,6 +49,22 @@ class Object3D extends SpecialElement {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...Object3D.bindings, ...additionnalBinding];
+	}
+
+	getTotalWidthPixels(): number {
+		return this.widthSquare * Project.SQUARE_SIZE + (this.widthPixel * Project.SQUARE_SIZE) / 100;
+	}
+
+	getTotalHeightPixels(): number {
+		return this.heightSquare * Project.SQUARE_SIZE + (this.heightPixel * Project.SQUARE_SIZE) / 100;
+	}
+
+	getTotalDepthPixels(): number {
+		return this.depthSquare * Project.SQUARE_SIZE + (this.depthPixel * Project.SQUARE_SIZE) / 100;
+	}
+
+	getSizeVector(): THREE.Vector3 {
+		return new THREE.Vector3(this.getTotalWidthPixels(), this.getTotalHeightPixels(), this.getTotalDepthPixels());
 	}
 
 	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {

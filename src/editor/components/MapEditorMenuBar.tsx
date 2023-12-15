@@ -140,6 +140,11 @@ function MapEditorMenuBar() {
 		await Project.current!.settings.save();
 	};
 
+	const handleObjects3D = async () => {
+		handleGeneric(ELEMENT_MAP_KIND.OBJECT3D, MENU_INDEX_MAP_EDITOR.OBJECTS3D);
+		await Project.current!.settings.save();
+	};
+
 	const handleMobilePlus = () => {
 		Scene.Map.currentSelectedMobileAction = MOBILE_ACTION.PLUS;
 	};
@@ -169,6 +174,9 @@ function MapEditorMenuBar() {
 					break;
 				case MENU_INDEX_MAP_EDITOR.MOUNTAINS:
 					handleMountains().catch(console.error);
+					break;
+				case MENU_INDEX_MAP_EDITOR.OBJECTS3D:
+					handleObjects3D().catch(console.error);
 					break;
 			}
 		}
@@ -237,8 +245,8 @@ function MapEditorMenuBar() {
 							Mountains
 						</MenuItem>
 					</MenuSub>
-					<MenuSub icon={<BiCube />} disabled>
-						<MenuItem icon={<BiCube />} onClick={handleFloors} disabled>
+					<MenuSub icon={<BiCube />} onClick={handleObjects3D}>
+						<MenuItem icon={<BiCube />} onClick={handleObjects3D}>
 							3D objects
 						</MenuItem>
 					</MenuSub>

@@ -205,3 +205,10 @@ export enum INPUT_TYPE_WIDTH {
 	NORMAL,
 	LARGE,
 }
+
+export enum CUSTOM_SHAPE_KIND {
+	NONE,
+	OBJ,
+	MTL,
+	COLLISIONS,
+}

@@ -20,13 +20,14 @@ class SpecialElements extends Serializable {
 	public wallsIndexes!: number[];
 	public mountains!: Model.Mountain[];
 	public mountainsIndexes!: number[];
-	public objects!: Model.Object3D[];
+	public objects3D!: Model.Object3D[];
+	public objects3DIndexes!: number[];
 
 	public static readonly bindings: BindingType[] = [
 		['autotiles', 'autotiles', undefined, BINDING.LIST_WITH_INDEXES, Model.Autotile],
 		['walls', 'walls', undefined, BINDING.LIST_WITH_INDEXES, Model.SpecialElement],
 		['mountains', 'm', undefined, BINDING.LIST_WITH_INDEXES, Model.Mountain],
-		['objetcs', 'o', undefined, BINDING.LIST, Model.Object3D],
+		['objects3D', 'o', undefined, BINDING.LIST_WITH_INDEXES, Model.Object3D],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -47,6 +48,10 @@ class SpecialElements extends Serializable {
 
 	getMountainByID(id: number): Model.Mountain {
 		return this.mountains[this.mountainsIndexes[id]];
+	}
+
+	getObject3DByID(id: number): Model.Object3D {
+		return this.objects3D[this.objects3DIndexes[id]];
 	}
 
 	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {

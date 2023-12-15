@@ -23,6 +23,7 @@ const MapEditorSlice = createSlice({
 		currentMountainWidthPixels: 0,
 		currentMountainHeightSquares: 1,
 		currentMountainHeightPixels: 0,
+		currentObject3DID: 1,
 		currentMapElementKind: ELEMENT_MAP_KIND.FLOOR,
 		undoRedo: {
 			index: -1,
@@ -63,6 +64,9 @@ const MapEditorSlice = createSlice({
 		setCurrentMountainHeightPixels(state, action: PayloadAction<number>) {
 			state.currentMountainHeightPixels = action.payload;
 		},
+		setCurrentObject3DID(state, action: PayloadAction<number>) {
+			state.currentObject3DID = action.payload;
+		},
 		setCurrentMapElementKind(state, action: PayloadAction<ELEMENT_MAP_KIND>) {
 			state.currentMapElementKind = action.payload;
 		},
@@ -87,6 +91,7 @@ export const {
 	setCurrentMountainWidthPixels,
 	setCurrentMountainHeightSquares,
 	setCurrentMountainHeightPixels,
+	setCurrentObject3DID,
 	setCurrentMapElementKind,
 	setUndoRedoIndex,
 	setUndoRedoLength,

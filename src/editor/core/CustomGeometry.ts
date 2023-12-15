@@ -94,9 +94,11 @@ class CustomGeometry extends THREE.BufferGeometry {
 		this._vertices.push(vecC.x, vecC.y, vecC.z);
 	}
 
-	pushTriangleIndices(count: number, position: Position) {
+	pushTriangleIndices(count: number, position?: Position) {
 		this._indices.push(count, count + 1, count + 2);
-		this.facePositions.push(position.toKey());
+		if (position) {
+			this.facePositions.push(position.toKey());
+		}
 	}
 
 	pushTriangleUVs(texA: THREE.Vector2, texB: THREE.Vector2, texC: THREE.Vector2) {

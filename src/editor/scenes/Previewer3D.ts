@@ -13,7 +13,8 @@ import * as THREE from 'three';
 import { Manager, MapElement, Scene } from '../Editor';
 import { Base } from '.';
 import { CustomGeometry, CustomGeometryFace, Position, Position3D, Project, Rectangle, TextureBundle } from '../core';
-import { ELEMENT_MAP_KIND, SPRITE_WALL_TYPE } from '../common';
+import { CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
+import { Object3D } from '../mapElements';
 
 class Previewer3D extends Base {
 	public static scenes: Record<string, Previewer3D> = {}; // id canvas => scene
@@ -157,6 +158,32 @@ class Previewer3D extends Base {
 			const floorPosition = new Position(0, hs, hpercent);
 			floor.updateGeometry(geometry, floorPosition, width, height, 0);
 			this.addToScene(GL, geometry, this.material, false, new THREE.Vector3(0, floorPosition.getTotalY() / 2));
+		}
+	}
+
+	async loadObject3D(GL: Manager.GL, object3DID: number) {
+		const object = Project.current!.specialElements.getObject3DByID(object3DID);
+		if (!object) {
+			this.clear();
+			return;
+		}
+		const texture = await Object3D.loadObject3DTexture(object.id);
+		let geometry = new CustomGeometry();
+		let object3DElement: MapElement.Object3D | null = null;
+		switch (object.shapeKind) {
+			case SHAPE_KIND.BOX:
+				object3DElement = MapElement.Object3DBox.create(object);
+				break;
+			case SHAPE_KIND.CUSTOM:
+				object3DElement = MapElement.Object3DCustom.create(object);
+				await (object3DElement as MapElement.Object3DCustom).loadShape();
+				break;
+			default:
+				break;
+		}
+		if (object3DElement) {
+			object3DElement.updateGeometry(geometry, new Position(), 0);
+			this.addToScene(GL, geometry, texture);
 		}
 	}
 

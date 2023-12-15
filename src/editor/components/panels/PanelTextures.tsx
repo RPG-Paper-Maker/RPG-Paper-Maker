@@ -72,6 +72,8 @@ function PanelTextures({ visible }: Props) {
 						</div>
 					</>
 				);
+			case ELEMENT_MAP_KIND.OBJECT3D:
+				return <PanelSpecialElementsSelection kind={PICTURE_KIND.OBJECTS_3D} />;
 			default:
 				return <TextureSquareSelector texture='./Assets/plains-woods.png' />;
 		}

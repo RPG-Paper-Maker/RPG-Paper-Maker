@@ -5,5 +5,6 @@ export * from './MapPortion';
 export * from './Mountain';
 export * from './Object3D';
 export * from './Picture';
+export * from './Shape';
 export * from './SpecialElement';
 export * from './TreeMapTag';
