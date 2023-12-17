@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { MapElement } from '../Editor';
 import { Serializable } from '../core/Serializable';
 import { CustomGeometry, Position, Project } from '../core';
-import { BINDING, BindingType, ELEMENT_MAP_KIND } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, SHAPE_KIND } from '../common';
 
 abstract class Base extends Serializable {
 	public static readonly COEF_TEX = 0.2;
@@ -72,6 +72,17 @@ abstract class Base extends Serializable {
 				break;
 			case ELEMENT_MAP_KIND.MOUNTAIN:
 				model = new MapElement.Mountain();
+				break;
+			case ELEMENT_MAP_KIND.OBJECT3D:
+				const data = Project.current!.specialElements.getObject3DByID(json.did);
+				switch (data.shapeKind) {
+					case SHAPE_KIND.BOX:
+						model = MapElement.Object3DBox.create(data);
+						break;
+					case SHAPE_KIND.CUSTOM:
+						model = MapElement.Object3DCustom.create(data);
+						break;
+				}
 				break;
 		}
 		if (model) {

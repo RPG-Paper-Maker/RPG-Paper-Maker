@@ -21,7 +21,6 @@ class Shape extends Base {
 	public isBR!: boolean;
 	public dlc!: string;
 	public geometryData!: Record<string, any>;
-	public geometry!: CustomGeometry;
 
 	public static readonly bindings: BindingType[] = [
 		['isBR', 'br', false, BINDING.BOOLEAN],
@@ -157,25 +156,15 @@ class Shape extends Base {
 		return '';
 	}
 
+	isShapeLoaded() {
+		return !!this.geometryData;
+	}
+
 	async loadShape() {
-		if (this.id !== -1 && !this.geometry) {
+		if (this.id !== -1 && !this.isShapeLoaded()) {
 			const content = await IO.openFile(this.getPath());
 			if (content) {
 				this.geometryData = Shape.parse(content);
-				this.geometry = new CustomGeometry();
-				const vertices = this.geometryData.vertices;
-				const uvs = this.geometryData.uvs;
-				let count = 0;
-				for (let i = 0, l = vertices.length; i < l; i += 3) {
-					const vecA = vertices[i].clone();
-					const vecB = vertices[i + 1].clone();
-					const vecC = vertices[i + 2].clone();
-					this.geometry.pushTriangleVertices(vecA, vecB, vecC);
-					this.geometry.pushTriangleIndices(count);
-					this.geometry.pushTriangleUVs(uvs[i].clone(), uvs[i + 1].clone(), uvs[i + 2].clone());
-					count += 3;
-				}
-				this.geometry.updateAttributes();
 			}
 		}
 	}

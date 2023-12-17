@@ -10,10 +10,10 @@
 */
 
 import { Scene } from '../Editor';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, Paths } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, Paths, SHAPE_KIND } from '../common';
 import { Serializable } from '../core/Serializable';
 import { Portion, Position, Project } from '../core';
-import { Autotile, Floor, Mountain, Sprite, SpriteWall } from '../mapElements';
+import { Autotile, Floor, Mountain, Object3D, Object3DBox, Object3DCustom, Sprite, SpriteWall } from '../mapElements';
 
 class MapPortion extends Serializable {
 	public globalPortion: Portion;
@@ -21,19 +21,14 @@ class MapPortion extends Serializable {
 	public sprites: Map<string, Sprite> = new Map();
 	public walls: Map<string, SpriteWall> = new Map();
 	public mountains: Map<string, Mountain> = new Map();
+	public objects3D: Map<string, Object3D> = new Map();
 
 	public static readonly bindings: BindingType[] = [
-		[
-			'lands',
-			'lands',
-			null,
-			BINDING.MAP_POSITION,
-			null,
-			(json: Record<string, any>) => (json.k === ELEMENT_MAP_KIND.FLOOR ? Floor : Autotile),
-		],
+		['lands', 'lands', null, BINDING.MAP_POSITION, null, this.getBindingJsonLands],
 		['sprites', 'sprites', null, BINDING.MAP_POSITION, Sprite],
 		['walls', 'walls', null, BINDING.MAP_POSITION, SpriteWall],
 		['mountains', 'moun', null, BINDING.MAP_POSITION, Mountain],
+		['objects3D', 'objs3d', null, BINDING.MAP_POSITION, null, this.getBindingJsonObjects3D],
 	];
 
 	constructor(globalPortion: Portion) {
@@ -43,6 +38,20 @@ class MapPortion extends Serializable {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...MapPortion.bindings, ...additionnalBinding];
+	}
+
+	static getBindingJsonLands(json: Record<string, any>) {
+		return json.k === ELEMENT_MAP_KIND.FLOOR ? Floor : Autotile;
+	}
+
+	static getBindingJsonObjects3D(json: Record<string, any>) {
+		const data = Project.current!.specialElements.getObject3DByID(json.did);
+		switch (data.shapeKind) {
+			case SHAPE_KIND.BOX:
+				return Object3DBox;
+			case SHAPE_KIND.CUSTOM:
+				return Object3DCustom;
+		}
 	}
 
 	getFileName(): string {
@@ -75,6 +84,8 @@ class MapPortion extends Serializable {
 				return this.walls.get(key) || null;
 			case ELEMENT_MAP_KIND.MOUNTAIN:
 				return this.mountains.get(key) || null;
+			case ELEMENT_MAP_KIND.OBJECT3D:
+				return this.objects3D.get(key) || null;
 		}
 		return null;
 	}
@@ -89,7 +100,6 @@ class MapPortion extends Serializable {
 
 	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
 		super.write(json, MapPortion.getBindings(additionnalBinding));
-		json.objs3d = [];
 		json.objs = [
 			{
 				k: [7, 0, 0, 7, 0],

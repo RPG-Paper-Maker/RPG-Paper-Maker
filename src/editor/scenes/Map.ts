@@ -349,6 +349,9 @@ class Map extends Base {
 				case ELEMENT_MAP_KIND.MOUNTAIN:
 					layer = RAYCASTING_LAYER.MOUNTAINS;
 					break;
+				case ELEMENT_MAP_KIND.OBJECT3D:
+					layer = RAYCASTING_LAYER.OBJECTS3D;
+					break;
 			}
 		}
 		Manager.GL.raycaster.layers.set(layer);
@@ -464,6 +467,9 @@ class Map extends Base {
 				break;
 			case ELEMENT_MAP_KIND.MOUNTAIN:
 				layer = RAYCASTING_LAYER.MOUNTAINS;
+				break;
+			case ELEMENT_MAP_KIND.OBJECT3D:
+				layer = RAYCASTING_LAYER.OBJECTS3D;
 				break;
 			default:
 				layer = RAYCASTING_LAYER.PLANE;

@@ -169,22 +169,12 @@ class Previewer3D extends Base {
 		}
 		const texture = await Object3D.loadObject3DTexture(object.id);
 		let geometry = new CustomGeometry();
-		let object3DElement: MapElement.Object3D | null = null;
-		switch (object.shapeKind) {
-			case SHAPE_KIND.BOX:
-				object3DElement = MapElement.Object3DBox.create(object);
-				break;
-			case SHAPE_KIND.CUSTOM:
-				object3DElement = MapElement.Object3DCustom.create(object);
-				await (object3DElement as MapElement.Object3DCustom).loadShape();
-				break;
-			default:
-				break;
+		const object3DElement = MapElement.Object3D.create(object);
+		if (object.shapeKind === SHAPE_KIND.CUSTOM) {
+			await (object3DElement as MapElement.Object3DCustom).loadShape();
 		}
-		if (object3DElement) {
-			object3DElement.updateGeometry(geometry, new Position(), 0);
-			this.addToScene(GL, geometry, texture);
-		}
+		object3DElement.updateGeometry(geometry, new Position(), 0);
+		this.addToScene(GL, geometry, texture);
 	}
 
 	addToScene(

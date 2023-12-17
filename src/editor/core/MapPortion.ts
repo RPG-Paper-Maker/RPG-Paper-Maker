@@ -21,7 +21,7 @@ import {
 	Rectangle,
 	UndoRedoState,
 } from '.';
-import { Constants, ELEMENT_MAP_KIND, RAYCASTING_LAYER, SPRITE_WALL_TYPE } from '../common';
+import { Constants, ELEMENT_MAP_KIND, RAYCASTING_LAYER, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
 import { SpriteWall } from '../mapElements';
 
 class MapPortion {
@@ -32,6 +32,7 @@ class MapPortion {
 	public autotilesList!: MapElement.Autotiles[][];
 	public wallsMeshes!: THREE.Mesh[];
 	public mountainsList!: Map<number, MapElement.Mountains>;
+	public objects3DMeshes!: THREE.Mesh[];
 	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND][] = [];
 
 	initialize(globalPortion: Portion) {
@@ -54,6 +55,7 @@ class MapPortion {
 		this.autotilesList = [];
 		this.wallsMeshes = [];
 		this.mountainsList = new Map();
+		this.objects3DMeshes = [];
 	}
 
 	removeLastPreview() {
@@ -139,6 +141,18 @@ class MapPortion {
 				}
 				this.updateMapElement(position, newMountain, Scene.Map.currentSelectedMapElementKind, preview);
 				break;
+			case ELEMENT_MAP_KIND.OBJECT3D:
+				this.updateMapElement(
+					position,
+					MapElement.Object3D.create(
+						Project.current!.specialElements.getObject3DByID(
+							Project.current!.settings.mapEditorCurrentObject3DID
+						)
+					),
+					Scene.Map.currentSelectedMapElementKind,
+					preview
+				);
+				break;
 		}
 	}
 
@@ -192,6 +206,9 @@ class MapPortion {
 				break;
 			case ELEMENT_MAP_KIND.MOUNTAIN:
 				this.updateMountain(position, element as MapElement.Mountain, preview, removingPreview, undoRedo);
+				break;
+			case ELEMENT_MAP_KIND.OBJECT3D:
+				this.updateObject3D(position, element as MapElement.Object3D, preview, removingPreview, undoRedo);
 				break;
 			default:
 				break;
@@ -334,6 +351,24 @@ class MapPortion {
 		);
 	}
 
+	updateObject3D(
+		position: Position,
+		object: MapElement.Object3D | null,
+		preview: boolean,
+		removingPreview: boolean,
+		undoRedo: boolean
+	) {
+		this.setMapElement(
+			position,
+			object,
+			ELEMENT_MAP_KIND.OBJECT3D,
+			this.model.objects3D,
+			preview,
+			removingPreview,
+			undoRedo
+		);
+	}
+
 	setMapElement(
 		position: Position,
 		element: MapElement.Base | null,
@@ -424,6 +459,22 @@ class MapPortion {
 				return false;
 			}
 		}
+		for (const [, mountain] of this.model.mountains) {
+			const textureMountain = MapElement.Mountains.getMountainTexture(mountain.mountainID);
+			if (textureMountain === null) {
+				Scene.Map.current!.loading = true;
+				this.loadTexturesAndUpdateGeometries().catch(console.error);
+				return false;
+			}
+		}
+		for (const [, object3D] of this.model.objects3D) {
+			const textureObject3D = MapElement.Object3D.getObject3DTexture(object3D.id);
+			if (textureObject3D === null || !MapElement.Object3D.isShapeLoaded(object3D.id)) {
+				Scene.Map.current!.loading = true;
+				this.loadTexturesAndUpdateGeometries().catch(console.error);
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -438,6 +489,10 @@ class MapPortion {
 		}
 		for (const [, mountain] of this.model.mountains) {
 			await MapElement.Mountains.loadMountainTexture(mountain.mountainID);
+		}
+		for (const [, object3D] of this.model.objects3D) {
+			await MapElement.Object3D.loadObject3DTexture(object3D.id);
+			await MapElement.Object3D.loadShapeOBJ(object3D.id);
 		}
 		this.updateGeometriesWithoutCheck();
 		if (updateLoading) {
@@ -456,6 +511,7 @@ class MapPortion {
 		this.updateSpritesGeometry();
 		this.updateWallsGeometry();
 		this.updateMountainsGeometry();
+		this.updateObjects3DGeometry();
 	}
 
 	updateLandsGeometries() {
@@ -665,19 +721,17 @@ class MapPortion {
 		}
 		// Add to scene
 		for (const [, obj] of hash) {
-			if (obj !== null) {
-				const geometry = obj.geometry;
-				if (!geometry.isEmpty()) {
-					geometry.updateAttributes();
-					const mesh = new THREE.Mesh(geometry, obj.material);
-					mesh.receiveShadow = true;
-					mesh.castShadow = true;
-					mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
-					mesh.layers.enable(RAYCASTING_LAYER.WALLS);
-					mesh.renderOrder = 3;
-					this.wallsMeshes.push(mesh);
-					Scene.Map.current!.scene.add(mesh);
-				}
+			const geometry = obj.geometry;
+			if (!geometry.isEmpty()) {
+				geometry.updateAttributes();
+				const mesh = new THREE.Mesh(geometry, obj.material);
+				mesh.receiveShadow = true;
+				mesh.castShadow = true;
+				mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
+				mesh.layers.enable(RAYCASTING_LAYER.WALLS);
+				mesh.renderOrder = 3;
+				this.wallsMeshes.push(mesh);
+				Scene.Map.current!.scene.add(mesh);
 			}
 		}
 	}
@@ -708,6 +762,73 @@ class MapPortion {
 				mountains.mesh!.customDepthMaterial = mountains.material.userData.customDepthMaterial;
 				mountains.mesh!.layers.enable(RAYCASTING_LAYER.MOUNTAINS);
 				Scene.Map.current!.scene.add(mountains.mesh!);
+			}
+		}
+	}
+
+	updateObjects3DGeometry() {
+		for (const mesh of this.objects3DMeshes) {
+			Scene.Map.current!.scene.remove(mesh);
+		}
+		this.objects3DMeshes = [];
+		const hash = new Map<number, any>();
+		for (const [positionKey, objects3D] of this.model.objects3D) {
+			const position = new Position();
+			position.fromKey(positionKey);
+			const data = Project.current!.specialElements.getObject3DByID(objects3D.id);
+			if (data) {
+				let obj3D: MapElement.Object3D | null = null;
+				switch (data.shapeKind) {
+					case SHAPE_KIND.BOX:
+						obj3D = MapElement.Object3DBox.create(data);
+						break;
+					case SHAPE_KIND.CUSTOM:
+						obj3D = MapElement.Object3DCustom.create(data);
+						break;
+					default:
+						break;
+				}
+
+				// Constructing the geometry
+				let obj = hash.get(data.pictureID);
+				let material: THREE.MeshPhongMaterial | null;
+				let geometry: CustomGeometry | null = null;
+				let count = 0;
+				if (obj) {
+					geometry = obj.geometry;
+					material = obj.material;
+					count = obj.c;
+				} else {
+					material = MapElement.Object3D.getObject3DTexture(data.id);
+					if (material) {
+						geometry = new CustomGeometry();
+						obj = {
+							geometry: geometry,
+							material: material,
+							c: count,
+						};
+						hash.set(data.pictureID, obj);
+					}
+				}
+				if (obj3D && geometry) {
+					obj.c = obj3D.updateGeometry(geometry, position, count);
+				}
+			}
+		}
+
+		// Add meshes
+		for (const [, obj] of hash) {
+			const geometry = obj.geometry;
+			if (!geometry.isEmpty()) {
+				geometry.updateAttributes();
+				const mesh = new THREE.Mesh(geometry, obj.material);
+				this.objects3DMeshes.push(mesh);
+				mesh.renderOrder = 999;
+				mesh.receiveShadow = true;
+				mesh.castShadow = true;
+				mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
+				mesh.layers.enable(RAYCASTING_LAYER.OBJECTS3D);
+				Scene.Map.current!.scene.add(mesh);
 			}
 		}
 	}

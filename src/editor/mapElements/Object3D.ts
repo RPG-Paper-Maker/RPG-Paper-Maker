@@ -10,7 +10,7 @@
 */
 
 import { Manager, MapElement, Model, Scene } from '../Editor';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../common';
+import { BINDING, BindingType, CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, PICTURE_KIND, SHAPE_KIND, Utils } from '../common';
 import { CustomGeometry, Position, Project } from '../core';
 import { Base } from './Base';
 
@@ -29,6 +29,37 @@ abstract class Object3D extends Base {
 		return [...Object3D.bindings, ...additionnalBinding];
 	}
 
+	static create(data: Model.Object3D): MapElement.Object3D {
+		let object: MapElement.Object3D;
+		switch (data.shapeKind) {
+			case SHAPE_KIND.BOX:
+				object = MapElement.Object3DBox.create(data);
+				break;
+			case SHAPE_KIND.CUSTOM:
+				object = MapElement.Object3DCustom.create(data);
+				break;
+			default:
+				throw new Error('Shape kind not handled yet.');
+		}
+		object.id = data.id;
+		object.data = data;
+		return object;
+	}
+
+	static getObject3DTexture(id: number): THREE.MeshPhongMaterial | null {
+		return (
+			Scene.Map.current!.texturesObjects3D[Project.current!.specialElements.getObject3DByID(id).pictureID] || null
+		);
+	}
+
+	static isShapeLoaded(objectID: number): boolean {
+		const object = Project.current!.specialElements.getObject3DByID(objectID);
+		if (object.shapeKind === SHAPE_KIND.CUSTOM) {
+			return Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, object.objID).isShapeLoaded();
+		}
+		return true;
+	}
+
 	static async loadObject3DTexture(id: number): Promise<THREE.MeshPhongMaterial> {
 		const object3D = Project.current!.specialElements.getObject3DByID(id);
 		const pictureID = object3D.pictureID;
@@ -44,6 +75,13 @@ abstract class Object3D extends Base {
 			Scene.Map.current!.texturesObjects3D[pictureID] = textureObject3D;
 		}
 		return textureObject3D;
+	}
+
+	static async loadShapeOBJ(objectID: number) {
+		const object = Project.current!.specialElements.getObject3DByID(objectID);
+		if (object.shapeKind === SHAPE_KIND.CUSTOM) {
+			await Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, object.objID).loadShape();
+		}
 	}
 
 	equals(mapElement: MapElement.Base): boolean {

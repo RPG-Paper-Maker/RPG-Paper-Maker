@@ -17,6 +17,14 @@ import { Sprite } from './Sprite';
 import { MapElement, Model } from '../Editor';
 
 class Object3DCustom extends Object3D {
+	static fromJSON(json: Record<string, any>): MapElement.Object3DCustom {
+		const object = new MapElement.Object3DCustom();
+		if (json) {
+			object.read(json);
+		}
+		return object;
+	}
+
 	static create(data: Model.Object3D): MapElement.Object3DCustom {
 		const object = new MapElement.Object3DCustom();
 		object.id = data.id;
@@ -66,7 +74,7 @@ class Object3DCustom extends Object3D {
 			vecB.add(localPosition);
 			vecC.add(localPosition);
 			geometry.pushTriangleVertices(vecA, vecB, vecC);
-			geometry.pushTriangleIndices(count);
+			geometry.pushTriangleIndices(count, position);
 			geometry.pushTriangleUVs(uvs[i].clone(), uvs[i + 1].clone(), uvs[i + 2].clone());
 			count += 3;
 		}
@@ -82,7 +90,7 @@ class Object3DCustom extends Object3D {
 
 	async loadShape() {
 		const shape = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID);
-		if (!shape.geometry) {
+		if (!shape.geometryData) {
 			await shape.loadShape();
 		}
 	}
