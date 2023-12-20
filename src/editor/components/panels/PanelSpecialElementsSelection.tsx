@@ -22,7 +22,7 @@ import {
 	setCurrentObject3DID,
 	setCurrentWallID,
 } from '../../store';
-import { Model, Scene } from '../../Editor';
+import { Manager, Model, Scene } from '../../Editor';
 import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
 import { Project, Rectangle } from '../../core';
 
@@ -32,6 +32,8 @@ type Props = {
 
 const DISPLAY_INCREMENT = 30;
 const ELEMENT_HEIGHT = 30;
+
+const getCanvasID = (id: number) => `canvas-${id}`;
 
 function PanelSpecialElementsSelection({ kind }: Props) {
 	const [firstScroll, setFirstScroll] = useState(false);
@@ -59,6 +61,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 			list = Project.current!.specialElements.objects3D;
 			break;
 	}
+	const filteredList = list.slice(minToDisplay, maxToDisplay);
 
 	const currentAutotileID = useSelector((state: RootState) => state.mapEditor.currentAutotileID);
 	const currentWallID = useSelector((state: RootState) => state.mapEditor.currentWallID);
@@ -83,11 +86,80 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 
 	const canExpand = kind === PICTURE_KIND.AUTOTILES;
 
+	const displayCanvas = kind === PICTURE_KIND.OBJECTS_3D;
+
 	const getChevron = (selected: boolean) => {
 		if (canExpand) {
 			return selected ? <HiChevronDown /> : <HiChevronLeft />;
 		} else {
 			return null;
+		}
+	};
+
+	const initializeCanvas = async () => {
+		const content = contentRef.current;
+		if (content) {
+			const isRendered = !!Manager.GL.listPreviewerContext.renderer;
+			Manager.GL.listPreviewerContext.initialize('list-previewer');
+			Manager.GL.listPreviewerContext.renderer.setSize(30, filteredList.length * ELEMENT_HEIGHT, true);
+
+			if (!isRendered) {
+				document.onselectstart = function () {
+					return false;
+				}; // prevent weird drag ghost picture
+				Manager.GL.listPreviewerContext.renderer.autoClear = false;
+				Manager.GL.listPreviewerContext.renderer.domElement.classList.add('canvas-list-previewer');
+				Manager.GL.listPreviewerContext.renderer.setScissorTest(false);
+				Manager.GL.listPreviewerContext.renderer.setClearColor(0xffffff, 0);
+				Manager.GL.listPreviewerContext.renderer.clear(true, true);
+				Manager.GL.listPreviewerContext.renderer.setScissorTest(true);
+			}
+			await updateCanvas();
+			loop();
+		}
+	};
+
+	const loop = () => {
+		if (Scene.Previewer3D.canDrawList) {
+			Manager.GL.listPreviewerContext.renderer.clear();
+			if (Scene.Previewer3D.listScenes.size > 0) {
+				for (const [, scene] of Scene.Previewer3D.listScenes) {
+					scene.camera.perspectiveCamera.aspect = 1;
+					scene.camera.perspectiveCamera.updateProjectionMatrix();
+					if (!Scene.Previewer3D.canDrawList) {
+						break;
+					}
+					scene.draw3DCut(Manager.GL.listPreviewerContext);
+				}
+				requestAnimationFrame(loop);
+			}
+		}
+	};
+
+	const updateCanvas = async () => {
+		for (const element of filteredList) {
+			const id = getCanvasID(element.id);
+			const canvas = document.getElementById(id);
+			let scene = Scene.Previewer3D.listScenes.get(id);
+			if (scene) {
+				if (canvas) {
+					scene.canvas = canvas;
+				}
+			} else {
+				const scene = new Scene.Previewer3D(id);
+				if (canvas) {
+					scene.canvas = canvas;
+					scene.isCut = true;
+					await scene.load();
+					Scene.Previewer3D.listScenes.set(scene.id, scene);
+					await scene.loadObject3D(Manager.GL.listPreviewerContext, element.id);
+					scene.camera.resizeGL(
+						Manager.GL.listPreviewerContext,
+						scene.canvas.clientWidth,
+						scene.canvas.clientHeight
+					);
+				}
+			}
 		}
 	};
 
@@ -201,8 +273,18 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	});
 
 	useEffect(() => {
+		if (firstScroll && displayCanvas) {
+			initializeCanvas();
+		}
+	}, [firstScroll]);
+
+	useEffect(() => {
 		const content = contentRef.current;
 		if (content) {
+			if (displayCanvas && Manager.GL.listPreviewerContext.renderer) {
+				Manager.GL.listPreviewerContext.renderer.setSize(30, filteredList.length * ELEMENT_HEIGHT, true);
+				updateCanvas();
+			}
 			content.addEventListener('scroll', handleScroll);
 			return () => {
 				content.removeEventListener('scroll', handleScroll);
@@ -219,8 +301,26 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		}
 	}, [minToDisplay, previousMinToDisplay]);
 
+	const getPictureOrCanvas = (id: number, picture: Model.Picture) => {
+		return displayCanvas ? (
+			<div id={getCanvasID(id)} className='icon-canvas' />
+		) : (
+			<img src={picture.getPath()} alt={'icon'} />
+		);
+	};
+
+	useEffect(() => {
+		if (displayCanvas) {
+			Scene.Previewer3D.canDrawList = true;
+		}
+
+		return () => {
+			Scene.Previewer3D.canDrawList = false;
+		};
+	}, []);
+
 	const listElements = list
-		? list.slice(minToDisplay, maxToDisplay).map((element) => {
+		? filteredList.map((element) => {
 				const picture = Project.current!.pictures.getByID(kind, element.pictureID);
 				const selected = currentID === element.id;
 				return (
@@ -231,9 +331,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 						onClick={() => handleClick(element.id)}
 					>
 						<div className='title'>
-							<div className='picture-container'>
-								<img src={picture.getPath()} alt={'icon'} />
-							</div>
+							<div className='picture-container'>{getPictureOrCanvas(element.id, picture)}</div>
 							<div className='flex-one text-ellipsis'>{element.toStringNameID()}</div>
 							{getChevron(selected)}
 						</div>
@@ -253,7 +351,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		: [];
 
 	return (
-		<div ref={contentRef} className='panel-special-elements'>
+		<div ref={contentRef} id='list-previewer' className={'panel-special-elements '}>
 			{listElements}
 		</div>
 	);

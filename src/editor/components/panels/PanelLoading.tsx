@@ -39,7 +39,8 @@ function PanelLoading({ setLoaded }: Props) {
 
 	const initializeGL = async () => {
 		Manager.GL.mapEditorContext = new Manager.GL();
-		Manager.GL.extraContext = new Manager.GL();
+		Manager.GL.mainPreviewerContext = new Manager.GL();
+		Manager.GL.listPreviewerContext = new Manager.GL();
 		await Manager.GL.initializeShaders();
 	};
 

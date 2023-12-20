@@ -8,6 +8,19 @@
 	margin: 5px;
 	overflow: auto;
 	overflow-y: overlay;
+	overflow-x: hidden;
+	position: relative;
+}
+
+.panel-special-elements .canvas-list-previewer {
+	position: absolute;
+	left: 5px;
+	top: 0;
+	z-index: 0;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	pointer-events: none;
 }
 
 .panel-special-element {
@@ -44,6 +57,11 @@
 	max-height: var(--special-elements-size);
 	width: auto;
 	height: auto;
+}
+
+.panel-special-element .icon-canvas {
+	width: var(--special-elements-size);
+	height: var(--special-elements-size);
 }
 
 .panel-special-element .content {

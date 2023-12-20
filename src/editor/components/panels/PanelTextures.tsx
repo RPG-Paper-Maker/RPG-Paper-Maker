@@ -58,14 +58,14 @@ function PanelTextures({ visible }: Props) {
 		}
 		switch (currentMapElementKind) {
 			case ELEMENT_MAP_KIND.AUTOTILE:
-				return <PanelSpecialElementsSelection kind={PICTURE_KIND.AUTOTILES} />;
+				return <PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.AUTOTILES} />;
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
-				return <PanelSpecialElementsSelection kind={PICTURE_KIND.WALLS} />;
+				return <PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.WALLS} />;
 			case ELEMENT_MAP_KIND.MOUNTAIN:
 				return (
 					<>
 						<div className='flex-one scrollable'>
-							<PanelSpecialElementsSelection kind={PICTURE_KIND.MOUNTAINS} />
+							<PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.MOUNTAINS} />
 						</div>
 						<div className='flex'>
 							<PanelSettingsMountains />
@@ -73,7 +73,7 @@ function PanelTextures({ visible }: Props) {
 					</>
 				);
 			case ELEMENT_MAP_KIND.OBJECT3D:
-				return <PanelSpecialElementsSelection kind={PICTURE_KIND.OBJECTS_3D} />;
+				return <PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.OBJECTS_3D} />;
 			default:
 				return <TextureSquareSelector texture='./Assets/plains-woods.png' />;
 		}

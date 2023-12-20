@@ -41,13 +41,13 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const initialize = async () => {
-		Manager.GL.extraContext.initialize(id);
+		Manager.GL.mainPreviewerContext.initialize(id);
 		document.onselectstart = () => {
 			return false;
 		}; // prevent weird drag ghost picture
 		const scene = new Scene.Previewer3D(id);
-		scene.canvas = Manager.GL.extraContext.parent;
-		Scene.Previewer3D.scenes[id] = scene;
+		scene.canvas = Manager.GL.mainPreviewerContext.parent;
+		Scene.Previewer3D.mainPreviewerScene = scene;
 		scene.loading = true;
 		await scene.load();
 		await update();
@@ -56,16 +56,16 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	};
 
 	const update = async () => {
-		const scene = Scene.Previewer3D.scenes[id];
+		const scene = Scene.Previewer3D.mainPreviewerScene;
 		if (scene) {
 			if (currentMapID) {
 				switch (currentMapElementKind) {
 					case ELEMENT_MAP_KIND.FLOOR:
-						await scene.loadFloor(Manager.GL.extraContext, currentTilesetFloorTexture);
+						await scene.loadFloor(Manager.GL.mainPreviewerContext, currentTilesetFloorTexture);
 						break;
 					case ELEMENT_MAP_KIND.AUTOTILE:
 						await scene
-							.loadAutotile(Manager.GL.extraContext, currentAutotileID, currentAutotileTexture)
+							.loadAutotile(Manager.GL.mainPreviewerContext, currentAutotileID, currentAutotileTexture)
 							.catch(console.error);
 						break;
 					case ELEMENT_MAP_KIND.SPRITE_FACE:
@@ -73,17 +73,17 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 					case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
 					case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 						await scene.loadSprite(
-							Manager.GL.extraContext,
+							Manager.GL.mainPreviewerContext,
 							currentTilesetSpriteTexture,
 							currentMapElementKind
 						);
 						break;
 					case ELEMENT_MAP_KIND.SPRITE_WALL:
-						await scene.loadWall(Manager.GL.extraContext, currentWallID);
+						await scene.loadWall(Manager.GL.mainPreviewerContext, currentWallID);
 						break;
 					case ELEMENT_MAP_KIND.MOUNTAIN:
 						await scene.loadMountain(
-							Manager.GL.extraContext,
+							Manager.GL.mainPreviewerContext,
 							currentMountainID,
 							currentTilesetFloorTexture,
 							currentMountainWidthSquares,
@@ -93,7 +93,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 						);
 						break;
 					case ELEMENT_MAP_KIND.OBJECT3D:
-						await scene.loadObject3D(Manager.GL.extraContext, currentObject3DID);
+						await scene.loadObject3D(Manager.GL.mainPreviewerContext, currentObject3DID);
 						break;
 				}
 			} else {
@@ -103,13 +103,11 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	};
 
 	const loop = () => {
-		if (Scene.Previewer3D.scenes[id]) {
+		const scene = Scene.Previewer3D.mainPreviewerScene;
+		if (scene) {
 			requestAnimationFrame(loop);
-			const scene = Scene.Previewer3D.scenes[id];
-			if (scene) {
-				scene.update();
-				scene.draw3D(Manager.GL.extraContext);
-			}
+			scene.update();
+			scene.draw3D(Manager.GL.mainPreviewerContext);
 		}
 	};
 
@@ -118,12 +116,12 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	};
 
 	const resizeForced = (width = -1, height = -1) => {
-		Manager.GL.extraContext.resize(true, width, height);
-		const scene = Scene.Previewer3D.scenes[id];
+		Manager.GL.mainPreviewerContext.resize(true, width, height);
+		const scene = Scene.Previewer3D.mainPreviewerScene;
 		if (scene) {
-			scene.camera.resizeGL(Manager.GL.extraContext);
+			scene.camera.resizeGL(Manager.GL.mainPreviewerContext);
 			scene.update();
-			scene.draw3D(Manager.GL.extraContext);
+			scene.draw3D(Manager.GL.mainPreviewerContext);
 		}
 	};
 
@@ -160,7 +158,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		window.addEventListener('resize', resize);
 		return () => {
 			window.removeEventListener('resize', resize);
-			delete Scene.Previewer3D.scenes[id];
+			Scene.Previewer3D.mainPreviewerScene = null;
 		};
 		// eslint-disable-next-line
 	}, []);

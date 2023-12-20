@@ -260,6 +260,10 @@ code {
 	display: none !important;
 }
 
+.visibility-hidden {
+	visibility: hidden;
+}
+
 .mobile-only {
 	display: none;
 }

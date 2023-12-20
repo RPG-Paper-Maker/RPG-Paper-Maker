@@ -32,7 +32,7 @@ import { PiSelectionAllFill } from 'react-icons/pi';
 import { VscPaintcan } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setCurrentMapElementKind } from '../store';
-import { Scene } from '../Editor';
+import { Manager, Scene } from '../Editor';
 import {
 	Constants,
 	ELEMENT_MAP_KIND,

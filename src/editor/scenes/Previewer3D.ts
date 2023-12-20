@@ -13,11 +13,13 @@ import * as THREE from 'three';
 import { Manager, MapElement, Scene } from '../Editor';
 import { Base } from '.';
 import { CustomGeometry, CustomGeometryFace, Position, Position3D, Project, Rectangle, TextureBundle } from '../core';
-import { CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
+import { ELEMENT_MAP_KIND, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
 import { Object3D } from '../mapElements';
 
 class Previewer3D extends Base {
-	public static scenes: Record<string, Previewer3D> = {}; // id canvas => scene
+	public static mainPreviewerScene: Scene.Previewer3D | null = null;
+	public static listScenes: Map<string, Scene.Previewer3D> = new Map(); // id canvas => scene
+	public static canDrawList = false;
 
 	public id: string;
 	public canvas!: HTMLElement;
@@ -25,6 +27,7 @@ class Previewer3D extends Base {
 	public sunLight!: THREE.DirectionalLight;
 	public meshes: THREE.Mesh[] = [];
 	public currentRotation: number = 0;
+	public isCut = false;
 
 	constructor(id: string) {
 		super();
@@ -157,7 +160,13 @@ class Previewer3D extends Base {
 			geometry = new CustomGeometry();
 			const floorPosition = new Position(0, hs, hpercent);
 			floor.updateGeometry(geometry, floorPosition, width, height, 0);
-			this.addToScene(GL, geometry, this.material, false, new THREE.Vector3(0, floorPosition.getTotalY() / 2));
+			this.addToScene(
+				GL,
+				geometry,
+				this.material,
+				false,
+				new THREE.Vector3(0, (floorPosition.getTotalY() / 2) * 16)
+			);
 		}
 	}
 
@@ -192,6 +201,9 @@ class Previewer3D extends Base {
 			const mesh = new THREE.Mesh(geometry, material);
 			this.meshes.push(mesh);
 			this.scene.add(mesh);
+			if (this.isCut) {
+				mesh.rotation.y = (45 * Math.PI) / 180;
+			}
 			mesh.geometry.center();
 			if (position) {
 				mesh.position.set(position.x, position.y, position.z);
@@ -217,7 +229,9 @@ class Previewer3D extends Base {
 		let w = 0;
 		let h = 0;
 		let d = 0;
+		const resize = Project.SQUARE_SIZE;
 		for (const mesh of this.meshes) {
+			mesh.scale.set(resize, resize, resize);
 			let bb = mesh.geometry.boundingBox;
 			let m: THREE.Vector3;
 			if (bb === null) {
@@ -225,24 +239,28 @@ class Previewer3D extends Base {
 				bb = mesh.geometry.boundingBox;
 			}
 			if (bb) {
-				m = bb.min.clone();
+				m = bb.min.clone().multiplyScalar(resize);
 				min.set(Math.min(min.x, m.x), Math.min(min.y, m.y), Math.min(min.z, m.z));
-				m = bb.max.clone();
+				m = bb.max.clone().multiplyScalar(resize);
 				max.set(Math.max(max.x, m.x), Math.max(max.y, m.y), Math.max(max.z, m.z));
 				w = max.x - min.x;
 				h = max.y - min.y;
 				d = max.z - min.z;
 			}
 		}
-
-		this.camera.distance = Math.max(Math.max(w, h), d) + (w + h + d) / 2;
+		this.camera.distance = Math.max(Math.max(w, h), d) + resize * resize + (w + h + d) / 3;
+		if (this.isCut) {
+			const s = resize * ((resize * resize * 2) / this.camera.distance);
+			for (const mesh of this.meshes) {
+				mesh.scale.set(s, s, s);
+			}
+		}
 		this.camera.verticalAngle = 55;
 		this.camera.targetPosition.set(w / 2 + min.x, h / 2 + min.y, d / 2 + min.z);
 	}
 
 	update() {
 		super.update();
-
 		this.currentRotation += 0.01;
 		for (const mesh of this.meshes) {
 			mesh.rotation.y = this.currentRotation;
@@ -250,7 +268,19 @@ class Previewer3D extends Base {
 	}
 
 	draw3D(GL: Manager.GL) {
-		super.draw3D(GL);
+		if (!this.isCut) {
+			super.draw3D(GL);
+		}
+	}
+
+	draw3DCut(GL: Manager.GL) {
+		if (GL.renderer && this.canvas) {
+			const { bottom, width, height } = this.canvas.getBoundingClientRect();
+			const domRect = GL.renderer.domElement.getBoundingClientRect();
+			GL.renderer.setViewport(0, domRect.height - bottom + domRect.top, width, height);
+			GL.renderer.setScissor(0, domRect.height - bottom + domRect.top, width, height);
+			GL.renderer.render(this.scene, this.camera.getThreeCamera());
+		}
 	}
 }
 

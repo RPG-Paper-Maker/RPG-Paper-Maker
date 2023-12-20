@@ -16,7 +16,6 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { IO, Utils } from '../common';
-import { Scene } from '../Editor';
 
 class GL {
 	public static SHADER_DEFAULT_VERTEX: string;
@@ -31,7 +30,8 @@ class GL {
 	public static GLTFExporter = new GLTFExporter();
 	public static raycaster = new THREE.Raycaster();
 	public static mapEditorContext: GL;
-	public static extraContext: GL;
+	public static mainPreviewerContext: GL;
+	public static listPreviewerContext: GL;
 	public static MATERIAL_EMPTY = this.loadTextureEmpty();
 	public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 	public parent!: HTMLElement;
@@ -163,16 +163,18 @@ class GL {
 			throw new Error('No id ' + id + ' found in document for GL renderer.');
 		}
 		this.parent = parent;
-		this.renderer = new THREE.WebGLRenderer({ alpha: true });
-		this.renderer.setPixelRatio(window.devicePixelRatio);
-		this.renderer.autoClear = false;
-		this.renderer.setSize(this.parent.clientWidth, this.parent.clientHeight);
-		this.renderer.setClearColor(clearColor, colorAlpha);
-		this.renderer.shadowMap.enabled = true;
+		if (!this.renderer) {
+			this.renderer = new THREE.WebGLRenderer({ alpha: true });
+			this.renderer.setPixelRatio(window.devicePixelRatio);
+			this.renderer.autoClear = false;
+			this.renderer.setSize(this.parent.clientWidth, this.parent.clientHeight);
+			this.renderer.setClearColor(clearColor, colorAlpha);
+			this.renderer.shadowMap.enabled = true;
+		}
 		this.parent.appendChild(this.renderer.domElement);
 	}
 
-	resize(scroll: boolean = false, forcedWidth = -1, forcedHeight = -1) {
+	resize(scroll: boolean = false, forcedWidth = -1, forcedHeight = -1, updateStyle?: boolean) {
 		if (this.renderer && this.parent) {
 			this.canvasWidth = forcedWidth === -1 ? this.parent.getBoundingClientRect().width : forcedWidth;
 			this.canvasHeight =
@@ -181,7 +183,7 @@ class GL {
 						? this.parent.scrollHeight
 						: this.parent.getBoundingClientRect().height
 					: forcedHeight;
-			this.renderer.setSize(this.canvasWidth, this.canvasHeight);
+			this.renderer.setSize(this.canvasWidth, this.canvasHeight, updateStyle);
 		}
 	}
 }
