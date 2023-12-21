@@ -32,10 +32,11 @@ import { PiSelectionAllFill } from 'react-icons/pi';
 import { VscPaintcan } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setCurrentMapElementKind } from '../store';
-import { Manager, Scene } from '../Editor';
+import { Scene } from '../Editor';
 import {
 	Constants,
 	ELEMENT_MAP_KIND,
+	ELEMENT_POSITION_KIND,
 	MENU_INDEX_LANDS_MAP_EDITOR,
 	MENU_INDEX_MAP_EDITOR,
 	MENU_INDEX_SPRITES_MAP_EDITOR,
@@ -44,11 +45,11 @@ import {
 import { Project } from '../core';
 
 function MapEditorMenuBar() {
-	const [selectionIndex, setSelectionIndex] = useState(0);
-	const [, setLandsIndex] = useState(0);
-	const [, setSpritesIndex] = useState(0);
-	const [mobileIndex, setMobileIndex] = useState(1);
-	const [squarePixelIndex, setSquarePixelIndex] = useState(0);
+	const [selectionIndex, setSelectionIndex] = useState(MENU_INDEX_MAP_EDITOR.LANDS);
+	const [, setLandsIndex] = useState(MENU_INDEX_LANDS_MAP_EDITOR.FLOOR);
+	const [, setSpritesIndex] = useState(MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_FACE);
+	const [mobileIndex, setMobileIndex] = useState(MOBILE_ACTION.PLUS);
+	const [elementPositionIndex, setElementPositionIndex] = useState(ELEMENT_POSITION_KIND.SQUARE);
 	const [actionIndex, setActionIndex] = useState(3);
 	const [layersIndex, setLayersIndex] = useState(0);
 
@@ -56,10 +57,23 @@ function MapEditorMenuBar() {
 
 	const openLoading = useSelector((state: RootState) => state.projects.openLoading);
 
+	const isPixelDisabled = () =>
+		[
+			ELEMENT_MAP_KIND.FLOOR,
+			ELEMENT_MAP_KIND.AUTOTILE,
+			ELEMENT_MAP_KIND.SPRITE_WALL,
+			ELEMENT_MAP_KIND.MOUNTAIN,
+			ELEMENT_MAP_KIND.OBJECT,
+		].includes(Scene.Map.currentSelectedMapElementKind);
+
 	const handleGeneric = (kind: ELEMENT_MAP_KIND, menuIndex: MENU_INDEX_MAP_EDITOR) => {
 		dispatch(setCurrentMapElementKind(kind));
 		Scene.Map.currentSelectedMapElementKind = kind;
 		Project.current!.settings.mapEditorMenuIndex = menuIndex;
+		if (isPixelDisabled()) {
+			Project.current!.settings.mapEditorCurrentElementPositionIndex = ELEMENT_POSITION_KIND.SQUARE;
+			setElementPositionIndex(ELEMENT_POSITION_KIND.SQUARE);
+		}
 	};
 
 	const handleLands = async () => {
@@ -157,6 +171,16 @@ function MapEditorMenuBar() {
 		Scene.Map.currentSelectedMobileAction = MOBILE_ACTION.MOVE;
 	};
 
+	const handleSquare = async () => {
+		Project.current!.settings.mapEditorCurrentElementPositionIndex = ELEMENT_POSITION_KIND.SQUARE;
+		await Project.current!.settings.save();
+	};
+
+	const handlePixel = async () => {
+		Project.current!.settings.mapEditorCurrentElementPositionIndex = ELEMENT_POSITION_KIND.PIXEL;
+		await Project.current!.settings.save();
+	};
+
 	// When first opening the project with all data loaded
 	useEffect(() => {
 		if (!openLoading) {
@@ -179,6 +203,7 @@ function MapEditorMenuBar() {
 					handleObjects3D().catch(console.error);
 					break;
 			}
+			setElementPositionIndex(Project.current!.settings.mapEditorCurrentElementPositionIndex);
 		}
 		// eslint-disable-next-line
 	}, [openLoading]);
@@ -266,9 +291,14 @@ function MapEditorMenuBar() {
 				)}
 			</div>
 			<div className='flex'>
-				<Menu horizontal isActivable activeIndex={squarePixelIndex} setActiveIndex={setSquarePixelIndex}>
-					<MenuItem icon={<SquareIcon />} onClick={handleFloors}></MenuItem>
-					<MenuItem icon={<PixelIcon />} onClick={handleFloors} disabled></MenuItem>
+				<Menu
+					horizontal
+					isActivable
+					activeIndex={elementPositionIndex}
+					setActiveIndex={setElementPositionIndex}
+				>
+					<MenuItem icon={<SquareIcon />} onClick={handleSquare}></MenuItem>
+					<MenuItem icon={<PixelIcon />} onClick={handlePixel} disabled={isPixelDisabled()}></MenuItem>
 					<MenuItem separator />
 				</Menu>
 				<Menu horizontal isActivable activeIndex={actionIndex} setActiveIndex={setActionIndex}>

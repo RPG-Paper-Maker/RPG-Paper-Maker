@@ -65,6 +65,23 @@ export enum MENU_INDEX_SPRITES_MAP_EDITOR {
 	SPRITE_WALL,
 }
 
+export enum ELEMENT_POSITION_KIND {
+	SQUARE,
+	PIXEL,
+}
+
+export enum TRANSFORM_KIND {
+	TRANSLATE,
+	ROTATE,
+	SCALE,
+}
+
+export enum DRAW_KIND {
+	PENCIL,
+	RECTANGLE,
+	PIN,
+}
+
 export enum DIRECTION {
 	SOUTH,
 	WEST,

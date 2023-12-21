@@ -28,6 +28,7 @@ class Settings extends Serializable {
 	public mapEditorCurrentMountainHeightSquares!: number;
 	public mapEditorCurrentMountainHeightPixels!: number;
 	public mapEditorCurrentObject3DID!: number;
+	public mapEditorCurrentElementPositionIndex!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['projectMenuIndex', 'pmi', 1, BINDING.NUMBER],
@@ -45,6 +46,7 @@ class Settings extends Serializable {
 		['mapEditorCurrentMountainHeightSquares', 'mecmhs', 1, BINDING.NUMBER],
 		['mapEditorCurrentMountainHeightPixels', 'mecmhp', 0, BINDING.NUMBER],
 		['mapEditorCurrentObject3DID', 'mecoid', 1, BINDING.NUMBER],
+		['mapEditorCurrentElementPositionIndex', 'mecepi', 0, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

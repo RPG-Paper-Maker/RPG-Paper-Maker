@@ -36,6 +36,7 @@ import {
 	Mathf,
 	Utils,
 	ArrayUtils,
+	ELEMENT_POSITION_KIND,
 } from '../common';
 import { CursorWall } from '../core/CursorWall';
 class Map extends Base {
@@ -415,6 +416,13 @@ class Map extends Base {
 					}
 					position = newPosition;
 				}
+			}
+			if (
+				!Scene.Map.isRemoving() &&
+				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.PIXEL
+			) {
+				position.centerX = ((Math.floor(obj.point.x) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+				position.centerZ = ((Math.floor(obj.point.z) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
 			}
 			if (this.lastPosition === null || !this.lastPosition.equals(position)) {
 				if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
