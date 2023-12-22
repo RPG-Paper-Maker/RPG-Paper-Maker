@@ -9,9 +9,16 @@
 .map-editor {
 	flex-grow: 1;
 	flex-basis: 0;
-	cursor: url('../../assets/icons/pencil-cursor.svg') 3 20, pointer;
 	position: relative;
 	color: white;
+}
+
+.map-editor.cursor-pencil {
+	cursor: url('../../assets/icons/cursor-pencil.svg') 3 20, pointer;
+}
+
+.map-editor.cursor-translate {
+	cursor: url('../../assets/icons/cursor-translate.svg') 3 20, pointer;
 }
 
 #canvas-hud {
@@ -21,6 +28,7 @@
 	image-rendering: pixelated;
 	font-smooth: never;
 	-webkit-font-smoothing: none;
+	pointer-events: none;
 }
 
 #canvas-rendering {

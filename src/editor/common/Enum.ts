@@ -70,13 +70,10 @@ export enum ELEMENT_POSITION_KIND {
 	PIXEL,
 }
 
-export enum TRANSFORM_KIND {
+export enum ACTION_KIND {
 	TRANSLATE,
 	ROTATE,
 	SCALE,
-}
-
-export enum DRAW_KIND {
 	PENCIL,
 	RECTANGLE,
 	PIN,

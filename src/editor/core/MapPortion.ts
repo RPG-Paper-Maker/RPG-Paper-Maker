@@ -33,6 +33,7 @@ class MapPortion {
 	public wallsMeshes!: THREE.Mesh[];
 	public mountainsList!: Map<number, MapElement.Mountains>;
 	public objects3DMeshes!: THREE.Mesh[];
+	public hoveredMesh!: THREE.Mesh;
 	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND][] = [];
 
 	initialize(globalPortion: Portion) {
@@ -56,6 +57,9 @@ class MapPortion {
 		this.wallsMeshes = [];
 		this.mountainsList = new Map();
 		this.objects3DMeshes = [];
+		this.hoveredMesh = new THREE.Mesh(new CustomGeometry(), Manager.GL.MATERIAL_EMPTY);
+		this.hoveredMesh.receiveShadow = true;
+		this.hoveredMesh.castShadow = true;
 	}
 
 	removeLastPreview() {
@@ -507,6 +511,7 @@ class MapPortion {
 	}
 
 	updateGeometriesWithoutCheck() {
+		Scene.Map.current!.scene.remove(this.hoveredMesh);
 		this.updateLandsGeometries();
 		this.updateSpritesGeometry();
 		this.updateWallsGeometry();
@@ -515,6 +520,8 @@ class MapPortion {
 	}
 
 	updateLandsGeometries() {
+		const isPointedFloor =
+			Scene.Map.isTransforming() && Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR;
 		const material = Scene.Map.current!.materialTileset;
 		const { width, height } = Manager.GL.getMaterialTextureSize(material);
 		const geometry = new CustomGeometry();
@@ -548,7 +555,16 @@ class MapPortion {
 			const position = new Position();
 			position.fromKey(positionKey);
 			if (land instanceof MapElement.Floor) {
-				count = this.updateFloorGeometry(position, land, layers, geometry, width, height, count);
+				count = this.updateFloorGeometry(
+					position,
+					land,
+					layers,
+					geometry,
+					width,
+					height,
+					isPointedFloor,
+					count
+				);
 			} else if (land instanceof MapElement.Autotile) {
 				this.updateAutotileGeometry(position, land);
 			}
@@ -556,10 +572,15 @@ class MapPortion {
 
 		// Floors: Draw layers separatly
 		for (let i = 0, l = layers.length; i < l; i++) {
-			const p = layers[i][0];
+			const position = layers[i][0];
 			const floor = layers[i][1];
-			floor.updateGeometry(geometry, p, width, height, count);
-			count++;
+			if (isPointedFloor && Scene.Map.current!.pointedMapElementPosition?.equals(position)) {
+				this.hoveredMesh.geometry = new CustomGeometry();
+				floor.updateGeometry(this.hoveredMesh.geometry as CustomGeometry, position, width, height, 0);
+			} else {
+				floor.updateGeometry(geometry, position, width, height, count);
+				count++;
+			}
 		}
 		if (!geometry.isEmpty()) {
 			geometry.updateAttributes();
@@ -567,6 +588,16 @@ class MapPortion {
 			Scene.Map.current!.scene.add(this.floorsMesh);
 		} else {
 			Scene.Map.current!.scene.remove(this.floorsMesh);
+		}
+
+		if (isPointedFloor) {
+			const hoveredGeometry = this.hoveredMesh.geometry as CustomGeometry;
+			if (!hoveredGeometry.isEmpty()) {
+				hoveredGeometry.updateAttributes();
+				this.hoveredMesh.renderOrder = 0;
+				this.hoveredMesh.layers.enable(RAYCASTING_LAYER.LANDS);
+				Scene.Map.current!.scene.add(this.hoveredMesh);
+			}
 		}
 
 		// Autotiles: update all the geometry uvs and put it in the scene
@@ -592,6 +623,7 @@ class MapPortion {
 		geometry: CustomGeometry,
 		width: number,
 		height: number,
+		isPointedFloor: boolean,
 		count: number
 	) {
 		const layer = position.layer;
@@ -608,8 +640,13 @@ class MapPortion {
 				layers.push([position, floor]);
 			}
 		} else {
-			floor.updateGeometry(geometry, position, width, height, count);
-			count++;
+			if (isPointedFloor && Scene.Map.current!.pointedMapElementPosition?.equals(position)) {
+				this.hoveredMesh.geometry = new CustomGeometry();
+				floor.updateGeometry(this.hoveredMesh.geometry as CustomGeometry, position, width, height, 0);
+			} else {
+				floor.updateGeometry(geometry, position, width, height, count);
+				count++;
+			}
 		}
 		return count;
 	}
@@ -635,6 +672,10 @@ class MapPortion {
 	}
 
 	updateSpritesGeometry() {
+		const isPointedSprite =
+			Scene.Map.isTransforming() &&
+			Scene.Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
+			Scene.Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_QUADRA;
 		const material = Scene.Map.current!.materialTileset;
 		const { width, height } = Manager.GL.getMaterialTextureSize(material);
 		const fixGeometry = new CustomGeometry();
@@ -646,25 +687,37 @@ class MapPortion {
 			position.fromKey(positionKey);
 			const localPosition = position.toVector3();
 			if (sprite.kind === ELEMENT_MAP_KIND.SPRITE_FACE) {
-				faceCount = sprite.updateGeometry(
-					faceGeometry,
-					width,
-					height,
-					position,
-					faceCount,
-					true,
-					localPosition
-				);
+				if (isPointedSprite && Scene.Map.current!.pointedMapElementPosition?.equals(position)) {
+					const hoveredGeometry = new CustomGeometryFace();
+					this.hoveredMesh.geometry = hoveredGeometry;
+					sprite.updateGeometry(hoveredGeometry, width, height, position, 0, true, localPosition);
+				} else {
+					faceCount = sprite.updateGeometry(
+						faceGeometry,
+						width,
+						height,
+						position,
+						faceCount,
+						true,
+						localPosition
+					);
+				}
 			} else {
-				staticCount = sprite.updateGeometry(
-					fixGeometry,
-					width,
-					height,
-					position,
-					staticCount,
-					true,
-					localPosition
-				);
+				if (isPointedSprite && Scene.Map.current!.pointedMapElementPosition?.equals(position)) {
+					const hoveredGeometry = new CustomGeometry();
+					this.hoveredMesh.geometry = hoveredGeometry;
+					sprite.updateGeometry(hoveredGeometry, width, height, position, 0, true, localPosition);
+				} else {
+					staticCount = sprite.updateGeometry(
+						fixGeometry,
+						width,
+						height,
+						position,
+						staticCount,
+						true,
+						localPosition
+					);
+				}
 			}
 			position.x += sprite.xOffset;
 			position.y += sprite.yOffset;
@@ -685,6 +738,16 @@ class MapPortion {
 			Scene.Map.current!.scene.add(this.spritesFaceMesh);
 		} else {
 			Scene.Map.current!.scene.remove(this.spritesFaceMesh);
+		}
+
+		if (isPointedSprite) {
+			const hoveredGeometry = this.hoveredMesh.geometry as CustomGeometry;
+			if (!hoveredGeometry.isEmpty()) {
+				hoveredGeometry.updateAttributes();
+				this.hoveredMesh.renderOrder = 3;
+				this.hoveredMesh.layers.enable(RAYCASTING_LAYER.SPRITES);
+				Scene.Map.current!.scene.add(this.hoveredMesh);
+			}
 		}
 	}
 
@@ -767,6 +830,8 @@ class MapPortion {
 	}
 
 	updateObjects3DGeometry() {
+		const isPointedObject3D =
+			Scene.Map.isTransforming() && Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT3D;
 		for (const mesh of this.objects3DMeshes) {
 			Scene.Map.current!.scene.remove(mesh);
 		}
@@ -794,24 +859,37 @@ class MapPortion {
 				let material: THREE.MeshPhongMaterial | null;
 				let geometry: CustomGeometry | null = null;
 				let count = 0;
-				if (obj) {
-					geometry = obj.geometry;
-					material = obj.material;
-					count = obj.c;
-				} else {
-					material = MapElement.Object3D.getObject3DTexture(data.id);
-					if (material) {
-						geometry = new CustomGeometry();
+				if (isPointedObject3D && Scene.Map.current!.pointedMapElementPosition?.equals(position)) {
+					material = MapElement.Object3D.getObject3DTexture(data.id, true);
+					geometry = new CustomGeometry();
+					if (obj3D) {
+						obj3D.updateGeometry(geometry, position, 0);
 						obj = {
 							geometry: geometry,
 							material: material,
-							c: count,
 						};
-						hash.set(data.pictureID, obj);
+						hash.set(0, obj);
 					}
-				}
-				if (obj3D && geometry) {
-					obj.c = obj3D.updateGeometry(geometry, position, count);
+				} else {
+					if (obj) {
+						geometry = obj.geometry;
+						material = obj.material;
+						count = obj.c;
+					} else {
+						material = MapElement.Object3D.getObject3DTexture(data.id);
+						if (material) {
+							geometry = new CustomGeometry();
+							obj = {
+								geometry: geometry,
+								material: material,
+								c: count,
+							};
+							hash.set(data.pictureID, obj);
+						}
+					}
+					if (obj3D && geometry) {
+						obj.c = obj3D.updateGeometry(geometry, position, count);
+					}
 				}
 			}
 		}
@@ -835,16 +913,22 @@ class MapPortion {
 
 	updateMaterials() {
 		const material = Scene.Map.current?.materialTileset;
-		if (material) {
+		const materialHover = Scene.Map.current?.materialTilesetHover;
+		if (material && materialHover) {
 			this.floorsMesh.material = material;
 			this.spritesFaceMesh.material = material;
 			this.spritesFixMesh.material = material;
 			this.spritesFaceMesh.customDepthMaterial = material.userData.customDepthMaterial;
+			this.hoveredMesh.material = materialHover;
+			this.hoveredMesh.customDepthMaterial = materialHover.userData.customDepthMaterial;
 		}
 	}
 
 	updateFaceSprites(angle: number) {
 		(this.spritesFaceMesh.geometry as CustomGeometryFace).rotate(angle, MapElement.Base.Y_AXIS);
+		if (this.hoveredMesh.geometry instanceof CustomGeometryFace) {
+			this.hoveredMesh.geometry.rotate(angle, MapElement.Base.Y_AXIS);
+		}
 	}
 }
 

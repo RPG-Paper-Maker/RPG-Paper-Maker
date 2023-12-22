@@ -31,9 +31,10 @@ import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
 import { PiSelectionAllFill } from 'react-icons/pi';
 import { VscPaintcan } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setCurrentMapElementKind } from '../store';
+import { RootState, setCurrentActionKind, setCurrentMapElementKind } from '../store';
 import { Scene } from '../Editor';
 import {
+	ACTION_KIND,
 	Constants,
 	ELEMENT_MAP_KIND,
 	ELEMENT_POSITION_KIND,
@@ -50,7 +51,7 @@ function MapEditorMenuBar() {
 	const [, setSpritesIndex] = useState(MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_FACE);
 	const [mobileIndex, setMobileIndex] = useState(MOBILE_ACTION.PLUS);
 	const [elementPositionIndex, setElementPositionIndex] = useState(ELEMENT_POSITION_KIND.SQUARE);
-	const [actionIndex, setActionIndex] = useState(3);
+	const [actionIndex, setActionIndex] = useState(ACTION_KIND.PENCIL);
 	const [layersIndex, setLayersIndex] = useState(0);
 
 	const dispatch = useDispatch();
@@ -66,6 +67,14 @@ function MapEditorMenuBar() {
 			ELEMENT_MAP_KIND.OBJECT,
 		].includes(Scene.Map.currentSelectedMapElementKind);
 
+	const isTranslateDisabled = () =>
+		[
+			ELEMENT_MAP_KIND.AUTOTILE,
+			ELEMENT_MAP_KIND.SPRITE_WALL,
+			ELEMENT_MAP_KIND.MOUNTAIN,
+			ELEMENT_MAP_KIND.OBJECT,
+		].includes(Scene.Map.currentSelectedMapElementKind);
+
 	const handleGeneric = (kind: ELEMENT_MAP_KIND, menuIndex: MENU_INDEX_MAP_EDITOR) => {
 		dispatch(setCurrentMapElementKind(kind));
 		Scene.Map.currentSelectedMapElementKind = kind;
@@ -73,6 +82,11 @@ function MapEditorMenuBar() {
 		if (isPixelDisabled()) {
 			Project.current!.settings.mapEditorCurrentElementPositionIndex = ELEMENT_POSITION_KIND.SQUARE;
 			setElementPositionIndex(ELEMENT_POSITION_KIND.SQUARE);
+		}
+		if (isTranslateDisabled()) {
+			Project.current!.settings.mapEditorCurrentActionIndex = ACTION_KIND.PENCIL;
+			setActionIndex(ACTION_KIND.PENCIL);
+			dispatch(setCurrentActionKind(ACTION_KIND.PENCIL));
 		}
 	};
 
@@ -181,6 +195,36 @@ function MapEditorMenuBar() {
 		await Project.current!.settings.save();
 	};
 
+	const handleActionGeneric = async (kind: ACTION_KIND) => {
+		dispatch(setCurrentActionKind(kind));
+		Project.current!.settings.mapEditorCurrentActionIndex = kind;
+		await Project.current!.settings.save();
+	};
+
+	const handleActionTranslate = async () => {
+		await handleActionGeneric(ACTION_KIND.TRANSLATE);
+	};
+
+	const handleActionRotate = async () => {
+		await handleActionGeneric(ACTION_KIND.ROTATE);
+	};
+
+	const handleActionScale = async () => {
+		await handleActionGeneric(ACTION_KIND.SCALE);
+	};
+
+	const handleActionPencil = async () => {
+		await handleActionGeneric(ACTION_KIND.PENCIL);
+	};
+
+	const handleActionRectangle = async () => {
+		await handleActionGeneric(ACTION_KIND.RECTANGLE);
+	};
+
+	const handleActionPin = async () => {
+		await handleActionGeneric(ACTION_KIND.PIN);
+	};
+
 	// When first opening the project with all data loaded
 	useEffect(() => {
 		if (!openLoading) {
@@ -204,6 +248,8 @@ function MapEditorMenuBar() {
 					break;
 			}
 			setElementPositionIndex(Project.current!.settings.mapEditorCurrentElementPositionIndex);
+			setActionIndex(Project.current!.settings.mapEditorCurrentActionIndex);
+			dispatch(setCurrentActionKind(Project.current!.settings.mapEditorCurrentActionIndex));
 		}
 		// eslint-disable-next-line
 	}, [openLoading]);
@@ -284,9 +330,9 @@ function MapEditorMenuBar() {
 				{Constants.isMobile && (
 					<Menu horizontal isActivable activeIndex={mobileIndex} setActiveIndex={setMobileIndex}>
 						<MenuItem separator />
-						<MenuItem icon={<AiOutlinePlusSquare />} onClick={handleMobilePlus}></MenuItem>
-						<MenuItem icon={<AiOutlineMinusSquare />} onClick={handleMobileMinus}></MenuItem>
-						<MenuItem icon={<TbHandMove />} onClick={handleMobileMove}></MenuItem>
+						<MenuItem icon={<AiOutlinePlusSquare />} onClick={handleMobilePlus} />
+						<MenuItem icon={<AiOutlineMinusSquare />} onClick={handleMobileMinus} />
+						<MenuItem icon={<TbHandMove />} onClick={handleMobileMove} />
 					</Menu>
 				)}
 			</div>
@@ -297,22 +343,22 @@ function MapEditorMenuBar() {
 					activeIndex={elementPositionIndex}
 					setActiveIndex={setElementPositionIndex}
 				>
-					<MenuItem icon={<SquareIcon />} onClick={handleSquare}></MenuItem>
-					<MenuItem icon={<PixelIcon />} onClick={handlePixel} disabled={isPixelDisabled()}></MenuItem>
+					<MenuItem icon={<SquareIcon />} onClick={handleSquare} />
+					<MenuItem icon={<PixelIcon />} onClick={handlePixel} disabled={isPixelDisabled()} />
 					<MenuItem separator />
 				</Menu>
 				<Menu horizontal isActivable activeIndex={actionIndex} setActiveIndex={setActionIndex}>
-					<MenuItem icon={<LuMove3D />} onClick={handleFloors} disabled></MenuItem>
-					<MenuItem icon={<LuRotate3D />} onClick={handleFloors} disabled></MenuItem>
-					<MenuItem icon={<LuScale3D />} onClick={handleFloors} disabled></MenuItem>
-					<MenuItem icon={<BiSolidPencil />} onClick={handleFloors}></MenuItem>
-					<MenuItem icon={<PiSelectionAllFill />} onClick={handleFloors} disabled></MenuItem>
-					<MenuItem icon={<VscPaintcan />} onClick={handleFloors} disabled></MenuItem>
+					<MenuItem icon={<LuMove3D />} onClick={handleActionTranslate} disabled={isTranslateDisabled()} />
+					<MenuItem icon={<LuRotate3D />} onClick={handleActionRotate} disabled />
+					<MenuItem icon={<LuScale3D />} onClick={handleActionScale} disabled />
+					<MenuItem icon={<BiSolidPencil />} onClick={handleActionPencil} />
+					<MenuItem icon={<PiSelectionAllFill />} onClick={handleActionRectangle} disabled />
+					<MenuItem icon={<VscPaintcan />} onClick={handleActionPin} disabled />
 					<MenuItem separator />
 				</Menu>
 				<Menu horizontal isActivable activeIndex={layersIndex} setActiveIndex={setLayersIndex}>
-					<MenuItem icon={<LayersOffIcon />} onClick={handleFloors}></MenuItem>
-					<MenuItem icon={<FaLayerGroup />} onClick={handleFloors} disabled></MenuItem>
+					<MenuItem icon={<LayersOffIcon />} onClick={handleFloors} />
+					<MenuItem icon={<FaLayerGroup />} onClick={handleFloors} disabled />
 				</Menu>
 			</div>
 		</div>

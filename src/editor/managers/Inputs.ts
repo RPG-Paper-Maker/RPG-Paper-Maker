@@ -48,7 +48,7 @@ class Inputs {
 		return Constants.isMobile ? this.previousPointerY : this.previousMouseY;
 	}
 
-	static initialize(canvas: HTMLCanvasElement) {
+	static initialize(canvas: HTMLDivElement) {
 		Inputs.keys = [];
 
 		if (Constants.isMobile) {

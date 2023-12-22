@@ -15,8 +15,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import TextureSquareSelector from '../TextureSquareSelector';
 import PanelSpecialElementsSelection from './PanelSpecialElementsSelection';
-import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
+import { ACTION_KIND, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
 import PanelSettingsMountains from './PanelSettingsMountains';
+import PanelTransform from './PanelTransform';
 
 type Props = {
 	visible: boolean;
@@ -30,6 +31,7 @@ function PanelTextures({ visible }: Props) {
 
 	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
+	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const updateHeight = () => {
@@ -56,26 +58,37 @@ function PanelTextures({ visible }: Props) {
 		if (!currentMapID) {
 			return null;
 		}
-		switch (currentMapElementKind) {
-			case ELEMENT_MAP_KIND.AUTOTILE:
-				return <PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.AUTOTILES} />;
-			case ELEMENT_MAP_KIND.SPRITE_WALL:
-				return <PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.WALLS} />;
-			case ELEMENT_MAP_KIND.MOUNTAIN:
-				return (
-					<>
-						<div className='flex-one scrollable'>
-							<PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.MOUNTAINS} />
-						</div>
-						<div className='flex'>
-							<PanelSettingsMountains />
-						</div>
-					</>
-				);
-			case ELEMENT_MAP_KIND.OBJECT3D:
-				return <PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.OBJECTS_3D} />;
-			default:
-				return <TextureSquareSelector texture='./Assets/plains-woods.png' />;
+		if (
+			currentActionKind === ACTION_KIND.PENCIL ||
+			currentActionKind === ACTION_KIND.RECTANGLE ||
+			currentActionKind === ACTION_KIND.PIN
+		) {
+			switch (currentMapElementKind) {
+				case ELEMENT_MAP_KIND.AUTOTILE:
+					return <PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.AUTOTILES} />;
+				case ELEMENT_MAP_KIND.SPRITE_WALL:
+					return <PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.WALLS} />;
+				case ELEMENT_MAP_KIND.MOUNTAIN:
+					return (
+						<>
+							<div className='flex-one scrollable'>
+								<PanelSpecialElementsSelection
+									key={currentMapElementKind}
+									kind={PICTURE_KIND.MOUNTAINS}
+								/>
+							</div>
+							<div className='flex'>
+								<PanelSettingsMountains />
+							</div>
+						</>
+					);
+				case ELEMENT_MAP_KIND.OBJECT3D:
+					return <PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.OBJECTS_3D} />;
+				default:
+					return <TextureSquareSelector texture='./Assets/plains-woods.png' />;
+			}
+		} else {
+			return <PanelTransform kind={currentActionKind} />;
 		}
 	};
 

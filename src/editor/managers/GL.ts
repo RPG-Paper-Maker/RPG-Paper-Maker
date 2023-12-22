@@ -93,6 +93,7 @@ class GL {
 		opacity?: number;
 		shadows?: boolean;
 		depthWrite?: boolean;
+		hovered?: boolean;
 	}): THREE.MeshPhongMaterial {
 		if (!opts.texture) {
 			opts.texture = new THREE.Texture();
@@ -104,6 +105,7 @@ class GL {
 		const opacity = Utils.defaultValue(opts.opacity, 1.0);
 		const shadows = Utils.defaultValue(opts.shadows, true);
 		const side = Utils.defaultValue(opts.side, THREE.DoubleSide);
+		const hovered = Utils.defaultValue(opts.hovered, false);
 		const fragment = this.SHADER_DEFAULT_FRAGMENT;
 		const vertex = this.SHADER_DEFAULT_VERTEX;
 		const screenTone = this.screenTone;
@@ -114,6 +116,7 @@ class GL {
 					colorD: { value: screenTone },
 					repeat: { value: repeat },
 					enableShadows: { value: shadows },
+					hovered: { value: hovered },
 			  };
 
 		// Program cache key for multiple shader programs
@@ -145,6 +148,7 @@ class GL {
 			shader.uniforms.repeat = { value: repeat };
 			shader.uniforms.offset = uniforms.offset;
 			shader.uniforms.enableShadows = { value: shadows };
+			shader.uniforms.hovered = { value: hovered };
 			material.userData.uniforms = shader.uniforms;
 
 			// Important to run a unique shader only once and be able to use

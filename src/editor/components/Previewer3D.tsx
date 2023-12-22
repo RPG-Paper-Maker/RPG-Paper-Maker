@@ -12,8 +12,8 @@
 import React, { useRef, useEffect } from 'react';
 import { Manager, Scene } from '../Editor';
 import { useSelector } from 'react-redux';
-import { RootState, setCurrentObject3DID } from '../store';
-import { ELEMENT_MAP_KIND } from '../common';
+import { RootState } from '../store';
+import { ACTION_KIND, ELEMENT_MAP_KIND } from '../common';
 
 type Props = {
 	id: string;
@@ -38,6 +38,8 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	const currentMountainHeightPixels = useSelector((state: RootState) => state.mapEditor.currentMountainHeightPixels);
 	const currentObject3DID = useSelector((state: RootState) => state.mapEditor.currentObject3DID);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
+	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
+	const selected = useSelector((state: RootState) => state.mapEditor.selected);
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const initialize = async () => {
@@ -58,7 +60,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	const update = async () => {
 		const scene = Scene.Previewer3D.mainPreviewerScene;
 		if (scene) {
-			if (currentMapID) {
+			if (currentMapID && currentActionKind >= ACTION_KIND.PENCIL && currentActionKind <= ACTION_KIND.PIN) {
 				switch (currentMapElementKind) {
 					case ELEMENT_MAP_KIND.FLOOR:
 						await scene.loadFloor(Manager.GL.mainPreviewerContext, currentTilesetFloorTexture);
@@ -151,6 +153,8 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		currentObject3DID,
 		currentMapElementKind,
 		currentMapID,
+		currentActionKind,
+		selected,
 	]);
 
 	useEffect(() => {

@@ -14,20 +14,47 @@ import { Manager, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import '../styles/MapEditor.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setUndoRedoIndex, setUndoRedoLength, triggerTreeMap } from '../store';
+import { RootState, setSelected, setUndoRedoIndex, setUndoRedoLength, triggerTreeMap } from '../store';
 import Loader from './Loader';
+import { ACTION_KIND } from '../common';
 
 function MapEditor() {
 	const [firstLoading, setFirstLoading] = useState(false);
 
 	const currentMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
+	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const dispatch = useDispatch();
 
-	const refCanvas = useRef<HTMLHeadingElement>(null);
+	const refCanvas = useRef<HTMLDivElement>(null);
 	const refCanvasHUD = useRef<HTMLCanvasElement>(null);
 	const refCanvasRendering = useRef<HTMLCanvasElement>(null);
+
+	const cursorClass = () => {
+		let name = 'cursor-';
+		switch (currentActionKind) {
+			case ACTION_KIND.TRANSLATE:
+				name += 'translate';
+				break;
+			case ACTION_KIND.ROTATE:
+				name += 'rotate';
+				break;
+			case ACTION_KIND.SCALE:
+				name += 'scale';
+				break;
+			case ACTION_KIND.PENCIL:
+				name += 'pencil';
+				break;
+			case ACTION_KIND.RECTANGLE:
+				name += 'rectangle';
+				break;
+			case ACTION_KIND.PIN:
+				name += 'pin';
+				break;
+		}
+		return name;
+	};
 
 	const clearMap = () => {
 		if (Scene.Map.current) {
@@ -66,6 +93,15 @@ function MapEditor() {
 			if (map.needsUpdateLength !== null) {
 				dispatch(setUndoRedoLength(map.needsUpdateLength));
 				map.needsUpdateLength = null;
+			}
+			if (map.needsUpdateSelected) {
+				dispatch(
+					setSelected({
+						position: map.selectedPosition,
+						mapElement: map.selectedElement,
+					})
+				);
+				map.needsUpdateSelected = false;
 			}
 			if (!map.loading && Inputs.keys.length > 0) {
 				map.onKeyDownImmediate();
@@ -109,7 +145,7 @@ function MapEditor() {
 			Scene.Map.canvasRendering = canvasRendering;
 			Scene.Map.ctxHUD = canvasHUD.getContext('2d');
 			Scene.Map.ctxRendering = canvasRendering.getContext('2d', { willReadFrequently: true });
-			const removeInputs = Inputs.initialize(canvasHUD);
+			const removeInputs = Inputs.initialize(canvas);
 			Manager.GL.mapEditorContext.initialize('canvas-map-editor');
 			resize();
 			window.addEventListener('resize', resize);
@@ -141,7 +177,7 @@ function MapEditor() {
 	return (
 		<>
 			<Loader isLoading={firstLoading} />
-			<div className='map-editor'>
+			<div className={`map-editor ${cursorClass()}`}>
 				<div ref={refCanvas} id='canvas-map-editor' className='fill-space' />
 				<canvas ref={refCanvasHUD} id='canvas-hud' />
 				<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px' />

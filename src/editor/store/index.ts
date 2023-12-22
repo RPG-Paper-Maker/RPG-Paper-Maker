@@ -16,6 +16,8 @@ import {
 	setCurrentMountainHeightPixels,
 	setCurrentObject3DID,
 	setCurrentMapElementKind,
+	setCurrentActionKind,
+	setSelected,
 	setUndoRedoIndex,
 	setUndoRedoLength,
 } from './slices/MapEditorReducer';
@@ -68,6 +70,8 @@ export {
 	setCurrentMountainHeightPixels,
 	setCurrentObject3DID,
 	setCurrentMapElementKind,
+	setCurrentActionKind,
+	setSelected,
 	setUndoRedoIndex,
 	setUndoRedoLength,
 	setCurrentProjectName,

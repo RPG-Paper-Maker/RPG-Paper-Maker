@@ -1,12 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { Model } from '../../Editor';
-import { Rectangle } from '../../core';
-import { ELEMENT_MAP_KIND } from '../../common';
+import { MapElement, Model } from '../../Editor';
+import { Position, Rectangle } from '../../core';
+import { ACTION_KIND, ELEMENT_MAP_KIND } from '../../common';
 
 export interface ProjectState {
 	name: string;
 	location: string;
+}
+
+export interface SelectedTransform {
+	position: Position | null;
+	mapElement: MapElement.Base | null;
 }
 
 const MapEditorSlice = createSlice({
@@ -25,6 +30,11 @@ const MapEditorSlice = createSlice({
 		currentMountainHeightPixels: 0,
 		currentObject3DID: 1,
 		currentMapElementKind: ELEMENT_MAP_KIND.FLOOR,
+		currentActionKind: ACTION_KIND.PENCIL,
+		selected: {
+			position: null,
+			mapElement: null,
+		} as SelectedTransform,
 		undoRedo: {
 			index: -1,
 			length: 0,
@@ -70,6 +80,12 @@ const MapEditorSlice = createSlice({
 		setCurrentMapElementKind(state, action: PayloadAction<ELEMENT_MAP_KIND>) {
 			state.currentMapElementKind = action.payload;
 		},
+		setCurrentActionKind(state, action: PayloadAction<ACTION_KIND>) {
+			state.currentActionKind = action.payload;
+		},
+		setSelected(state, action: PayloadAction<SelectedTransform>) {
+			state.selected = action.payload;
+		},
 		setUndoRedoIndex(state, action: PayloadAction<number>) {
 			state.undoRedo.index = action.payload;
 		},
@@ -93,6 +109,8 @@ export const {
 	setCurrentMountainHeightPixels,
 	setCurrentObject3DID,
 	setCurrentMapElementKind,
+	setCurrentActionKind,
+	setSelected,
 	setUndoRedoIndex,
 	setUndoRedoLength,
 } = MapEditorSlice.actions;

@@ -46,10 +46,9 @@ abstract class Object3D extends Base {
 		return object;
 	}
 
-	static getObject3DTexture(id: number): THREE.MeshPhongMaterial | null {
-		return (
-			Scene.Map.current!.texturesObjects3D[Project.current!.specialElements.getObject3DByID(id).pictureID] || null
-		);
+	static getObject3DTexture(id: number, hovered = false): THREE.MeshPhongMaterial | null {
+		const array = hovered ? Scene.Map.current!.texturesObjects3DHover : Scene.Map.current!.texturesObjects3D;
+		return array[Project.current!.specialElements.getObject3DByID(id).pictureID] || null;
 	}
 
 	static isShapeLoaded(objectID: number): boolean {
@@ -73,6 +72,10 @@ abstract class Object3D extends Base {
 				textureObject3D = Manager.GL.loadTextureEmpty();
 			}
 			Scene.Map.current!.texturesObjects3D[pictureID] = textureObject3D;
+			Scene.Map.current!.texturesObjects3DHover[pictureID] = Manager.GL.createMaterial({
+				texture: textureObject3D.map,
+				hovered: true,
+			});
 		}
 		return textureObject3D;
 	}

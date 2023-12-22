@@ -23,12 +23,10 @@ import {
 	setCurrentMountainWidthSquares,
 } from '../../store';
 
-type Props = {};
-
 const MIN_VALUE = 0;
 const MAX_VALUE_SQUARES = 999;
 
-function PanelSettingsMountains({}: Props) {
+function PanelSettingsMountains() {
 	const widthSquares = useSelector((state: RootState) => state.mapEditor.currentMountainWidthSquares);
 	const widthPixels = useSelector((state: RootState) => state.mapEditor.currentMountainWidthPixels);
 	const heightSquares = useSelector((state: RootState) => state.mapEditor.currentMountainHeightSquares);
