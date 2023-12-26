@@ -76,12 +76,24 @@ class Position extends Position3D {
 		return new Position(
 			Math.floor(position.x / Project.SQUARE_SIZE),
 			Math.floor(position.y / Project.SQUARE_SIZE),
-			Math.floor(position.z / Project.SQUARE_SIZE)
+			((Math.round(position.y) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100,
+			Math.floor(position.z / Project.SQUARE_SIZE),
+			0,
+			(Math.round(position.x % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100,
+			(Math.round(position.z % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100
 		);
+	}
+
+	getTotalX(): number {
+		return this.x * Project.SQUARE_SIZE + this.getPixelsCenterX();
 	}
 
 	getTotalY(): number {
 		return this.y * Project.SQUARE_SIZE + this.getTotalYPixels();
+	}
+
+	getTotalZ(): number {
+		return this.z * Project.SQUARE_SIZE + this.getPixelsCenterZ();
 	}
 
 	getTotalYPixels(): number {
@@ -230,7 +242,7 @@ class Position extends Position3D {
 
 	toStringCoords() {
 		const yPixels = this.getTotalYPixels();
-		return `X = ${this.x}\nY = ${this.y}${yPixels === 0 ? '' : ` (+${yPixels}px)`}\nZ = ${this.z}`;
+		return `[X = ${this.x}, Y = ${this.y}${yPixels === 0 ? '' : ` (+${yPixels}px)`}, Z = ${this.z}]`;
 	}
 
 	toString() {

@@ -31,7 +31,7 @@ import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
 import { PiSelectionAllFill } from 'react-icons/pi';
 import { VscPaintcan } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setCurrentActionKind, setCurrentMapElementKind } from '../store';
+import { RootState, setCurrentActionKind, setCurrentElementPositionKind, setCurrentMapElementKind } from '../store';
 import { Scene } from '../Editor';
 import {
 	ACTION_KIND,
@@ -185,18 +185,23 @@ function MapEditorMenuBar() {
 		Scene.Map.currentSelectedMobileAction = MOBILE_ACTION.MOVE;
 	};
 
-	const handleSquare = async () => {
-		Project.current!.settings.mapEditorCurrentElementPositionIndex = ELEMENT_POSITION_KIND.SQUARE;
+	const handleGenericSquarePixel = async (kind: ELEMENT_POSITION_KIND) => {
+		dispatch(setCurrentElementPositionKind(kind));
+		Project.current!.settings.mapEditorCurrentElementPositionIndex = kind;
 		await Project.current!.settings.save();
 	};
 
+	const handleSquare = async () => {
+		await handleGenericSquarePixel(ELEMENT_POSITION_KIND.SQUARE);
+	};
+
 	const handlePixel = async () => {
-		Project.current!.settings.mapEditorCurrentElementPositionIndex = ELEMENT_POSITION_KIND.PIXEL;
-		await Project.current!.settings.save();
+		await handleGenericSquarePixel(ELEMENT_POSITION_KIND.PIXEL);
 	};
 
 	const handleActionGeneric = async (kind: ACTION_KIND) => {
 		dispatch(setCurrentActionKind(kind));
+		Scene.Map.current!.removeTransform();
 		Project.current!.settings.mapEditorCurrentActionIndex = kind;
 		await Project.current!.settings.save();
 	};
@@ -250,6 +255,7 @@ function MapEditorMenuBar() {
 			setElementPositionIndex(Project.current!.settings.mapEditorCurrentElementPositionIndex);
 			setActionIndex(Project.current!.settings.mapEditorCurrentActionIndex);
 			dispatch(setCurrentActionKind(Project.current!.settings.mapEditorCurrentActionIndex));
+			dispatch(setCurrentElementPositionKind(Project.current!.settings.mapEditorCurrentElementPositionIndex));
 		}
 		// eslint-disable-next-line
 	}, [openLoading]);

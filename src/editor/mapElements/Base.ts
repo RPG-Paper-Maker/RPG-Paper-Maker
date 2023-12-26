@@ -155,6 +155,26 @@ abstract class Base extends Serializable {
 		vecD.add(pos);
 	}
 
+	getLocalPosition(position: Position): THREE.Vector3 {
+		return position.toVector3();
+	}
+
+	getPositionFromVec3(vec: THREE.Vector3): Position {
+		return Position.createFromVector3(vec);
+	}
+
+	getAdditionalX(): number {
+		return 0;
+	}
+
+	getAdditionalY(): number {
+		return 0;
+	}
+
+	getAdditionalZ(): number {
+		return 0;
+	}
+
 	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
 		super.read(json, Base.getBindings(additionnalBinding));
 	}

@@ -10,7 +10,7 @@
 */
 
 import React, { useRef, useEffect } from 'react';
-import { Manager, Scene } from '../Editor';
+import { Manager, MapElement, Scene } from '../Editor';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { ACTION_KIND, ELEMENT_MAP_KIND } from '../common';
@@ -39,7 +39,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	const currentObject3DID = useSelector((state: RootState) => state.mapEditor.currentObject3DID);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
-	const selected = useSelector((state: RootState) => state.mapEditor.selected);
+	const selectedMapElement = useSelector((state: RootState) => state.mapEditor.selectedMapElement);
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const initialize = async () => {
@@ -60,7 +60,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	const update = async () => {
 		const scene = Scene.Previewer3D.mainPreviewerScene;
 		if (scene) {
-			if (currentMapID && currentActionKind >= ACTION_KIND.PENCIL && currentActionKind <= ACTION_KIND.PIN) {
+			if (currentMapID && Scene.Map.isDrawing()) {
 				switch (currentMapElementKind) {
 					case ELEMENT_MAP_KIND.FLOOR:
 						await scene.loadFloor(Manager.GL.mainPreviewerContext, currentTilesetFloorTexture);
@@ -99,7 +99,34 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 						break;
 				}
 			} else {
-				scene.clear();
+				if (selectedMapElement) {
+					switch (selectedMapElement.kind) {
+						case ELEMENT_MAP_KIND.FLOOR:
+							await scene.loadFloor(
+								Manager.GL.mainPreviewerContext,
+								(selectedMapElement as MapElement.Floor).texture
+							);
+							break;
+						case ELEMENT_MAP_KIND.SPRITE_FACE:
+						case ELEMENT_MAP_KIND.SPRITE_FIX:
+						case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+						case ELEMENT_MAP_KIND.SPRITE_QUADRA:
+							await scene.loadSprite(
+								Manager.GL.mainPreviewerContext,
+								(selectedMapElement as MapElement.Sprite).texture,
+								selectedMapElement.kind
+							);
+							break;
+						case ELEMENT_MAP_KIND.OBJECT3D:
+							await scene.loadObject3D(
+								Manager.GL.mainPreviewerContext,
+								(selectedMapElement as MapElement.Object3D).id
+							);
+							break;
+					}
+				} else {
+					scene.clear();
+				}
 			}
 		}
 	};
@@ -154,7 +181,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		currentMapElementKind,
 		currentMapID,
 		currentActionKind,
-		selected,
+		selectedMapElement,
 	]);
 
 	useEffect(() => {

@@ -36,8 +36,16 @@ class Object3DCustom extends Object3D {
 		return Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID).geometryData.center.clone();
 	}
 
+	getAdditionalX(): number {
+		return Math.floor(Project.SQUARE_SIZE / 2);
+	}
+
+	getAdditionalZ(): number {
+		return Math.floor(Project.SQUARE_SIZE / 2);
+	}
+
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): number {
-		const localPosition = position.toVector3();
+		const localPosition = this.getLocalPosition(position);
 		const modelGeometry = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID).geometryData;
 		const vertices = modelGeometry.vertices;
 		const uvs = modelGeometry.uvs;

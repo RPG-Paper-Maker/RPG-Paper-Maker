@@ -21,7 +21,7 @@ import {
 	Rectangle,
 	UndoRedoState,
 } from '.';
-import { Constants, ELEMENT_MAP_KIND, RAYCASTING_LAYER, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
+import { Constants, ELEMENT_MAP_KIND, RAYCASTING_LAYER, SPRITE_WALL_TYPE } from '../common';
 import { SpriteWall } from '../mapElements';
 
 class MapPortion {
@@ -429,6 +429,45 @@ class MapPortion {
 		return previous;
 	}
 
+	removeSelected() {
+		if (Scene.Map.current!.selectedPosition && Scene.Map.current!.selectedElement) {
+			const position = Scene.Map.current!.selectedPosition;
+			const models = this.model.getModelsByKind(Scene.Map.current!.selectedElement.kind);
+			if (models) {
+				this.setMapElement(
+					position,
+					null,
+					Scene.Map.current!.selectedElement.kind,
+					models,
+					false,
+					false,
+					false
+				);
+			}
+		}
+	}
+
+	addSelected() {
+		if (Scene.Map.current!.selectedElement) {
+			const position = Scene.Map.current!.selectedElement.getPositionFromVec3(
+				Scene.Map.current!.selectedMesh.position
+			);
+			const models = this.model.getModelsByKind(Scene.Map.current!.selectedElement.kind);
+			if (models) {
+				this.setMapElement(
+					position,
+					Scene.Map.current!.selectedElement,
+					Scene.Map.current!.selectedElement.kind,
+					models,
+					false,
+					false,
+					false
+				);
+				Scene.Map.current!.selectedPosition = position;
+			}
+		}
+	}
+
 	fillDefaultFloor(map: Model.Map) {
 		const rect = new Rectangle(0, 0, 1, 1);
 		const p = new Position();
@@ -512,6 +551,7 @@ class MapPortion {
 
 	updateGeometriesWithoutCheck() {
 		Scene.Map.current!.scene.remove(this.hoveredMesh);
+		Scene.Map.current!.scene.remove(Scene.Map.current!.selectedMesh);
 		this.updateLandsGeometries();
 		this.updateSpritesGeometry();
 		this.updateWallsGeometry();
@@ -574,7 +614,7 @@ class MapPortion {
 		for (let i = 0, l = layers.length; i < l; i++) {
 			const position = layers[i][0];
 			const floor = layers[i][1];
-			if (isPointedFloor && Scene.Map.current!.pointedMapElementPosition?.equals(position)) {
+			if (isPointedFloor && Scene.Map.current!.pointedMapElement === floor) {
 				this.hoveredMesh.geometry = new CustomGeometry();
 				floor.updateGeometry(this.hoveredMesh.geometry as CustomGeometry, position, width, height, 0);
 			} else {
@@ -640,7 +680,7 @@ class MapPortion {
 				layers.push([position, floor]);
 			}
 		} else {
-			if (isPointedFloor && Scene.Map.current!.pointedMapElementPosition?.equals(position)) {
+			if (isPointedFloor && Scene.Map.current!.pointedMapElement === floor) {
 				this.hoveredMesh.geometry = new CustomGeometry();
 				floor.updateGeometry(this.hoveredMesh.geometry as CustomGeometry, position, width, height, 0);
 			} else {
@@ -687,7 +727,7 @@ class MapPortion {
 			position.fromKey(positionKey);
 			const localPosition = position.toVector3();
 			if (sprite.kind === ELEMENT_MAP_KIND.SPRITE_FACE) {
-				if (isPointedSprite && Scene.Map.current!.pointedMapElementPosition?.equals(position)) {
+				if (isPointedSprite && Scene.Map.current!.pointedMapElement === sprite) {
 					const hoveredGeometry = new CustomGeometryFace();
 					this.hoveredMesh.geometry = hoveredGeometry;
 					sprite.updateGeometry(hoveredGeometry, width, height, position, 0, true, localPosition);
@@ -703,7 +743,7 @@ class MapPortion {
 					);
 				}
 			} else {
-				if (isPointedSprite && Scene.Map.current!.pointedMapElementPosition?.equals(position)) {
+				if (isPointedSprite && Scene.Map.current!.pointedMapElement === sprite) {
 					const hoveredGeometry = new CustomGeometry();
 					this.hoveredMesh.geometry = hoveredGeometry;
 					sprite.updateGeometry(hoveredGeometry, width, height, position, 0, true, localPosition);
@@ -837,38 +877,45 @@ class MapPortion {
 		}
 		this.objects3DMeshes = [];
 		const hash = new Map<number, any>();
-		for (const [positionKey, objects3D] of this.model.objects3D) {
+		for (const [positionKey, object3D] of this.model.objects3D) {
 			const position = new Position();
 			position.fromKey(positionKey);
-			const data = Project.current!.specialElements.getObject3DByID(objects3D.id);
-			if (data) {
-				let obj3D: MapElement.Object3D | null = null;
-				switch (data.shapeKind) {
-					case SHAPE_KIND.BOX:
-						obj3D = MapElement.Object3DBox.create(data);
-						break;
-					case SHAPE_KIND.CUSTOM:
-						obj3D = MapElement.Object3DCustom.create(data);
-						break;
-					default:
-						break;
-				}
-
+			if (!object3D.data) {
+				object3D.data = Project.current!.specialElements.getObject3DByID(object3D.id);
+			}
+			if (object3D.data) {
 				// Constructing the geometry
-				let obj = hash.get(data.pictureID);
+				let obj = hash.get(object3D.data.pictureID);
 				let material: THREE.MeshPhongMaterial | null;
 				let geometry: CustomGeometry | null = null;
 				let count = 0;
-				if (isPointedObject3D && Scene.Map.current!.pointedMapElementPosition?.equals(position)) {
-					material = MapElement.Object3D.getObject3DTexture(data.id, true);
+				if (
+					(isPointedObject3D && Scene.Map.current!.pointedMapElement === object3D) ||
+					Scene.Map.current!.selectedElement === object3D
+				) {
+					material = MapElement.Object3D.getObject3DTexture(object3D.id, true);
 					geometry = new CustomGeometry();
-					if (obj3D) {
-						obj3D.updateGeometry(geometry, position, 0);
-						obj = {
-							geometry: geometry,
-							material: material,
-						};
-						hash.set(0, obj);
+					if (object3D && material) {
+						if (Scene.Map.current!.selectedElement === object3D) {
+							object3D.updateGeometry(geometry, new Position(0, 0, 0, 0, 0, 0, 0), 0);
+							geometry.updateAttributes();
+							Scene.Map.current!.selectedMesh.geometry = geometry;
+							Scene.Map.current!.selectedMesh.material = material;
+							if (!Scene.Map.current!.transformControls.dragging) {
+								Scene.Map.current!.selectedMesh.position.copy(
+									Scene.Map.current!.selectedElement.getLocalPosition(position)
+								);
+							}
+							Scene.Map.current!.scene.add(Scene.Map.current!.selectedMesh);
+							Scene.Map.current!.transformControls.attach(Scene.Map.current!.selectedMesh);
+						} else {
+							object3D.updateGeometry(geometry, position, 0);
+							obj = {
+								geometry: geometry,
+								material: material,
+							};
+							hash.set(0, obj);
+						}
 					}
 				} else {
 					if (obj) {
@@ -876,7 +923,7 @@ class MapPortion {
 						material = obj.material;
 						count = obj.c;
 					} else {
-						material = MapElement.Object3D.getObject3DTexture(data.id);
+						material = MapElement.Object3D.getObject3DTexture(object3D.id);
 						if (material) {
 							geometry = new CustomGeometry();
 							obj = {
@@ -884,11 +931,11 @@ class MapPortion {
 								material: material,
 								c: count,
 							};
-							hash.set(data.pictureID, obj);
+							hash.set(object3D.data.pictureID, obj);
 						}
 					}
-					if (obj3D && geometry) {
-						obj.c = obj3D.updateGeometry(geometry, position, count);
+					if (object3D && geometry) {
+						obj.c = object3D.updateGeometry(geometry, position, count);
 					}
 				}
 			}

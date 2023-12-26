@@ -16,6 +16,7 @@ import { CustomGeometry, Position, Project } from '../core';
 import { Sprite } from './Sprite';
 
 class Object3DBox extends Object3D {
+	public static COEF = 0.01;
 	public static VERTICES = [
 		// Front
 		new THREE.Vector3(0.0, 1.0, 1.0),
@@ -157,21 +158,46 @@ class Object3DBox extends Object3D {
 		);
 	}
 
-	updateGeometry(geometry: CustomGeometry, position: Position, count: number): number {
-		const coef = 0.01;
+	getLocalPosition(position: Position): THREE.Vector3 {
 		const localPosition = position.toVector3(false);
 		if (this.data.isTopLeft) {
 			localPosition.setX(
-				localPosition.x - Math.floor(Project.SQUARE_SIZE / 2) + position.getPixelsCenterX() + coef
+				localPosition.x - Math.floor(Project.SQUARE_SIZE / 2) + position.getPixelsCenterX() + Object3DBox.COEF
 			);
 			localPosition.setZ(
-				localPosition.z - Math.floor(Project.SQUARE_SIZE / 2) + position.getPixelsCenterZ() + coef
+				localPosition.z - Math.floor(Project.SQUARE_SIZE / 2) + position.getPixelsCenterZ() + Object3DBox.COEF
 			);
 		} else {
-			localPosition.setX(localPosition.x + position.getPixelsCenterX() + coef);
-			localPosition.setZ(localPosition.z + position.getPixelsCenterZ() + coef);
+			localPosition.setX(localPosition.x + position.getPixelsCenterX() + Object3DBox.COEF);
+			localPosition.setZ(localPosition.z + position.getPixelsCenterZ() + Object3DBox.COEF);
 		}
-		localPosition.setY(localPosition.y + coef);
+		localPosition.setY(localPosition.y + Object3DBox.COEF);
+		return localPosition;
+	}
+
+	getPositionFromVec3(vec: THREE.Vector3): Position {
+		const v = vec.clone();
+		if (this.data.isTopLeft) {
+			v.setX(v.x + Math.floor(Project.SQUARE_SIZE / 2) - Object3DBox.COEF);
+			v.setZ(v.z + Math.floor(Project.SQUARE_SIZE / 2) - Object3DBox.COEF);
+		} else {
+			v.setX(v.x - Object3DBox.COEF);
+			v.setZ(v.z - Object3DBox.COEF);
+		}
+		v.setY(v.y + Object3DBox.COEF);
+		return Position.createFromVector3(vec);
+	}
+
+	getAdditionalX(): number {
+		return this.data.isTopLeft ? Math.floor(Project.SQUARE_SIZE / 2) : 0;
+	}
+
+	getAdditionalZ(): number {
+		return this.data.isTopLeft ? Math.floor(Project.SQUARE_SIZE / 2) : 0;
+	}
+
+	updateGeometry(geometry: CustomGeometry, position: Position, count: number): number {
+		const localPosition = this.getLocalPosition(position);
 		const angleY = position.angleY;
 		const angleX = position.angleX;
 		const angleZ = position.angleZ;
@@ -193,9 +219,9 @@ class Object3DBox extends Object3D {
 		Sprite.rotateVertex(centerReal, center, angleY, Sprite.Y_AXIS);
 		Sprite.rotateVertex(centerReal, center, angleX, Sprite.X_AXIS);
 		Sprite.rotateVertex(centerReal, center, angleZ, Sprite.Z_AXIS);
-		size.setX(size.x - 2 * coef);
-		size.setY(size.y - 2 * coef);
-		size.setZ(size.z - 2 * coef);
+		size.setX(size.x - 2 * Object3DBox.COEF);
+		size.setY(size.y - 2 * Object3DBox.COEF);
+		size.setZ(size.z - 2 * Object3DBox.COEF);
 		const w = this.data.getTotalWidthPixels();
 		const h = this.data.getTotalHeightPixels();
 		const d = this.data.getTotalDepthPixels();

@@ -2,16 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { MapElement, Model } from '../../Editor';
 import { Position, Rectangle } from '../../core';
-import { ACTION_KIND, ELEMENT_MAP_KIND } from '../../common';
+import { ACTION_KIND, ELEMENT_MAP_KIND, ELEMENT_POSITION_KIND } from '../../common';
 
 export interface ProjectState {
 	name: string;
 	location: string;
-}
-
-export interface SelectedTransform {
-	position: Position | null;
-	mapElement: MapElement.Base | null;
 }
 
 const MapEditorSlice = createSlice({
@@ -31,10 +26,9 @@ const MapEditorSlice = createSlice({
 		currentObject3DID: 1,
 		currentMapElementKind: ELEMENT_MAP_KIND.FLOOR,
 		currentActionKind: ACTION_KIND.PENCIL,
-		selected: {
-			position: null,
-			mapElement: null,
-		} as SelectedTransform,
+		currentElementPositionKind: ELEMENT_POSITION_KIND.SQUARE,
+		selectedPosition: null as Position | null,
+		selectedMapElement: null as MapElement.Base | null,
 		undoRedo: {
 			index: -1,
 			length: 0,
@@ -83,8 +77,14 @@ const MapEditorSlice = createSlice({
 		setCurrentActionKind(state, action: PayloadAction<ACTION_KIND>) {
 			state.currentActionKind = action.payload;
 		},
-		setSelected(state, action: PayloadAction<SelectedTransform>) {
-			state.selected = action.payload;
+		setCurrentElementPositionKind(state, action: PayloadAction<ELEMENT_POSITION_KIND>) {
+			state.currentElementPositionKind = action.payload;
+		},
+		setSelectedPosition(state, action: PayloadAction<Position | null>) {
+			state.selectedPosition = action.payload;
+		},
+		setSelectedMapElement(state, action: PayloadAction<MapElement.Base | null>) {
+			state.selectedMapElement = action.payload;
 		},
 		setUndoRedoIndex(state, action: PayloadAction<number>) {
 			state.undoRedo.index = action.payload;
@@ -110,7 +110,9 @@ export const {
 	setCurrentObject3DID,
 	setCurrentMapElementKind,
 	setCurrentActionKind,
-	setSelected,
+	setCurrentElementPositionKind,
+	setSelectedPosition,
+	setSelectedMapElement,
 	setUndoRedoIndex,
 	setUndoRedoLength,
 } = MapEditorSlice.actions;

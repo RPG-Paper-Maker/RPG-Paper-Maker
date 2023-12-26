@@ -13,7 +13,17 @@ import { Scene } from '../Editor';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, Paths, SHAPE_KIND } from '../common';
 import { Serializable } from '../core/Serializable';
 import { Portion, Position, Project } from '../core';
-import { Autotile, Floor, Mountain, Object3D, Object3DBox, Object3DCustom, Sprite, SpriteWall } from '../mapElements';
+import {
+	Autotile,
+	Base,
+	Floor,
+	Mountain,
+	Object3D,
+	Object3DBox,
+	Object3DCustom,
+	Sprite,
+	SpriteWall,
+} from '../mapElements';
 
 class MapPortion extends Serializable {
 	public globalPortion: Portion;
@@ -51,6 +61,27 @@ class MapPortion extends Serializable {
 				return Object3DBox;
 			case SHAPE_KIND.CUSTOM:
 				return Object3DCustom;
+		}
+	}
+
+	getModelsByKind(kind: ELEMENT_MAP_KIND): Map<string, Base> | null {
+		switch (kind) {
+			case ELEMENT_MAP_KIND.FLOOR:
+			case ELEMENT_MAP_KIND.AUTOTILE:
+				return this.lands;
+			case ELEMENT_MAP_KIND.SPRITE_FACE:
+			case ELEMENT_MAP_KIND.SPRITE_FIX:
+			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
+				return this.sprites;
+			case ELEMENT_MAP_KIND.SPRITE_WALL:
+				return this.walls;
+			case ELEMENT_MAP_KIND.MOUNTAIN:
+				return this.mountains;
+			case ELEMENT_MAP_KIND.OBJECT3D:
+				return this.objects3D;
+			default:
+				return null;
 		}
 	}
 

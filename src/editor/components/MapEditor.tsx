@@ -14,7 +14,14 @@ import { Manager, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import '../styles/MapEditor.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setSelected, setUndoRedoIndex, setUndoRedoLength, triggerTreeMap } from '../store';
+import {
+	RootState,
+	setSelectedMapElement,
+	setSelectedPosition,
+	setUndoRedoIndex,
+	setUndoRedoLength,
+	triggerTreeMap,
+} from '../store';
 import Loader from './Loader';
 import { ACTION_KIND } from '../common';
 
@@ -94,14 +101,13 @@ function MapEditor() {
 				dispatch(setUndoRedoLength(map.needsUpdateLength));
 				map.needsUpdateLength = null;
 			}
-			if (map.needsUpdateSelected) {
-				dispatch(
-					setSelected({
-						position: map.selectedPosition,
-						mapElement: map.selectedElement,
-					})
-				);
-				map.needsUpdateSelected = false;
+			if (map.needsUpdateSelectedPosition || map.needsUpdateSelectedPosition === null) {
+				dispatch(setSelectedPosition(map.needsUpdateSelectedPosition));
+				map.needsUpdateSelectedPosition = undefined;
+			}
+			if (map.needsUpdateSelectedMapElement) {
+				dispatch(setSelectedMapElement(Scene.Map.current!.selectedElement));
+				map.needsUpdateSelectedMapElement = false;
 			}
 			if (!map.loading && Inputs.keys.length > 0) {
 				map.onKeyDownImmediate();

@@ -94,6 +94,7 @@ class UndoRedo {
 	}
 
 	private static async action(before: boolean, indexOffset: number) {
+		Scene.Map.current!.removeTransform();
 		const length = await this.getStatesLength();
 		let index = await this.getCurrentCurrentIndex();
 		if (before) {

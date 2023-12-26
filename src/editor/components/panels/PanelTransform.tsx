@@ -12,19 +12,25 @@
 import React from 'react';
 import Groupbox from '../Groupbox';
 import InputNumber from '../InputNumber';
-import { ACTION_KIND } from '../../common';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { ACTION_KIND, ELEMENT_POSITION_KIND } from '../../common';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, setSelectedPosition } from '../../store';
 import Button from '../Button';
+import { Position, Project } from '../../core';
+import { Scene } from '../../Editor';
 
 type Props = {
 	kind: ACTION_KIND;
 };
 
 function PanelTransform({ kind }: Props) {
-	const selected = useSelector((state: RootState) => state.mapEditor.selected);
+	const selectedPosition = useSelector((state: RootState) => state.mapEditor.selectedPosition);
+	const selectedMapElement = useSelector((state: RootState) => state.mapEditor.selectedMapElement);
+	const currentElementPositionKind = useSelector((state: RootState) => state.mapEditor.currentElementPositionKind);
 
-	const isSelected = selected.position !== null;
+	const dispatch = useDispatch();
+
+	const isSelected = selectedPosition !== null;
 
 	let kindText = '';
 	switch (kind) {
@@ -41,15 +47,72 @@ function PanelTransform({ kind }: Props) {
 
 	const title = `${kindText} options`;
 
-	const handleChangeCurrentX = () => {};
-
-	const handleChangeCurrentY = () => {};
-
 	const getPositionText = () =>
-		selected.position
+		selectedPosition
 			?.toString()
 			.split('\n')
 			.map((line: string, index: number) => <div key={index}>{line}</div>);
+
+	const units =
+		kind === ACTION_KIND.ROTATE
+			? '°'
+			: currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+			? 'square(s)'
+			: 'pixel(s)';
+
+	const getCurrentX = () =>
+		currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+			? selectedPosition!.x
+			: selectedPosition!.getTotalX();
+
+	const getCurrentY = () =>
+		currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+			? selectedPosition!.y
+			: selectedPosition!.getTotalY();
+
+	const getCurrentZ = () =>
+		currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+			? selectedPosition!.z
+			: selectedPosition!.getTotalZ();
+
+	const updatePosition = (position: Position) => {
+		dispatch(setSelectedPosition(position));
+		Scene.Map.current!.selectedMesh.position.copy(position.toVector3());
+		Scene.Map.current!.updateTransform();
+	};
+
+	const handleChangeCurrentX = (value: number) => {
+		const position = selectedPosition!.clone();
+		if (currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE) {
+			position.x = value;
+		} else {
+			position.x = Math.floor(value / Project.SQUARE_SIZE);
+			position.centerX = ((value % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+		}
+		updatePosition(position);
+	};
+
+	const handleChangeCurrentY = (value: number) => {
+		const position = selectedPosition!.clone();
+		if (currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE) {
+			position.y = value;
+		} else {
+			position.y = Math.floor(value / Project.SQUARE_SIZE);
+			position.yPixels = ((value % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+		}
+		updatePosition(position);
+	};
+
+	const handleChangeCurrentZ = (value: number) => {
+		const position = selectedPosition!.clone();
+		if (currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE) {
+			position.z = value;
+		} else {
+			position.z = Math.floor(value / Project.SQUARE_SIZE);
+			position.centerZ = ((value % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+		}
+		updatePosition(position);
+	};
 
 	return (
 		<Groupbox title={title}>
@@ -60,23 +123,23 @@ function PanelTransform({ kind }: Props) {
 						<div className='flex flex-column gap-small'>
 							<div className='flex gap-small'>
 								X:
-								<InputNumber value={0} onChange={handleChangeCurrentX} />
-								square(s)
+								<InputNumber value={getCurrentX()} onChange={handleChangeCurrentX} />
+								{units}
 							</div>
 							<div className='flex gap-small'>
-								Y: <InputNumber value={0} onChange={handleChangeCurrentY} />
-								square(s)
+								Y: <InputNumber value={getCurrentY()} onChange={handleChangeCurrentY} />
+								{units}
 							</div>
 							<div className='flex gap-small'>
-								Z: <InputNumber value={0} onChange={handleChangeCurrentY} />
-								square(s)
+								Z: <InputNumber value={getCurrentZ()} onChange={handleChangeCurrentZ} />
+								{units}
 							</div>
 						</div>
 					</Groupbox>
 				)}
 				{isSelected ? (
 					<>
-						<div>{selected.mapElement?.toString()}</div>
+						<div>{selectedMapElement?.toString()}</div>
 						<div>{getPositionText()}</div>
 					</>
 				) : (

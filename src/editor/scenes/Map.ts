@@ -61,7 +61,8 @@ class Map extends Base {
 	public needsTreeMapUpdate = false;
 	public needsUpdateIndex: number | null = null;
 	public needsUpdateLength: number | null = null;
-	public needsUpdateSelected = false;
+	public needsUpdateSelectedPosition?: Position | null;
+	public needsUpdateSelectedMapElement = false;
 	public needsClose = false;
 	public modelMap: Model.Map = new Model.Map();
 	public grid = new Grid();
@@ -69,6 +70,7 @@ class Map extends Base {
 	public cursorWall = new CursorWall();
 	public meshPlane: THREE.Object3D | null = null;
 	public sunLight!: THREE.DirectionalLight;
+	public transformControls!: TransformControls;
 	public mapPortion!: MapPortion;
 	public materialTileset!: THREE.MeshPhongMaterial;
 	public materialTilesetHover!: THREE.MeshPhongMaterial;
@@ -92,14 +94,17 @@ class Map extends Base {
 	public autotileFrame = new Frame(Project.current!.systems.autotilesFrameDuration, {
 		frames: Project.current!.systems.autotilesFrames,
 	});
-	public selectedMesh: THREE.Mesh | null = null;
+	public selectedMesh!: THREE.Mesh;
 	public selectedElement: MapElement.Base | null = null;
 	public selectedPosition: Position | null = null;
+	public selectedFirstVector: THREE.Vector3 | null = null;
 	public lockedY: number | null = null;
 	public lockedYPixels: number | null = null;
 	public requestPaintHUD = false;
 	public needsUpdateRaycasting = false;
 	public mouseUp = false;
+	public isTransforming = false;
+	public isDraggingTransforming = false;
 
 	constructor(tag: Model.TreeMapTag) {
 		super(tag);
@@ -201,15 +206,13 @@ class Map extends Base {
 		this.syncCursorGrid();
 
 		// Transform controls
-		Manager.GL.mapEditorContext.renderer.domElement.ondragstart = function (event) {
-			event.preventDefault();
-			return false;
-		};
-		const controls = new TransformControls(
+		this.transformControls = new TransformControls(
 			this.camera.getThreeCamera(),
 			Manager.GL.mapEditorContext.renderer.domElement
 		);
-		this.scene.add(controls);
+		this.transformControls.setTranslationSnap(1);
+		this.scene.add(this.transformControls);
+		this.selectedMesh = new THREE.Mesh(new CustomGeometry(), this.materialTilesetHover);
 
 		this.loading = false;
 	}
@@ -355,6 +358,64 @@ class Map extends Base {
 
 	zoomOut(coef = 1) {
 		this.zoom(false, coef);
+	}
+
+	updateTransform() {
+		this.updateTransformPosition();
+		this.mapPortion.removeSelected();
+		this.mapPortion.addSelected();
+		this.addPortionToUpdate(this.mapPortion.model.globalPortion);
+	}
+
+	updateTransformPosition() {
+		if (
+			this.selectedFirstVector &&
+			this.selectedElement &&
+			Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
+		) {
+			this.selectedMesh.position.setX(
+				this.selectedMesh.position.x -
+					(this.selectedMesh.position.x % Project.SQUARE_SIZE) +
+					this.selectedElement.getAdditionalX()
+			);
+			this.selectedMesh.position.setY(
+				this.selectedMesh.position.y -
+					(this.selectedMesh.position.y % Project.SQUARE_SIZE) +
+					this.selectedElement.getAdditionalY()
+			);
+			this.selectedMesh.position.setZ(
+				this.selectedMesh.position.z -
+					(this.selectedMesh.position.z % Project.SQUARE_SIZE) +
+					this.selectedElement.getAdditionalZ()
+			);
+		}
+		if (this.selectedMesh.position.x < 0) {
+			this.selectedMesh.position.setX(0);
+		} else if (this.selectedMesh.position.x > (this.modelMap.width - 1) * Project.SQUARE_SIZE) {
+			this.selectedMesh.position.setX((this.modelMap.width - 1) * Project.SQUARE_SIZE);
+		}
+		if (this.selectedMesh.position.y < this.modelMap.depth * Project.SQUARE_SIZE) {
+			this.selectedMesh.position.setY(this.modelMap.depth * Project.SQUARE_SIZE);
+		} else if (this.selectedMesh.position.y > (this.modelMap.height - 1) * Project.SQUARE_SIZE) {
+			this.selectedMesh.position.setY((this.modelMap.height - 1) * Project.SQUARE_SIZE);
+		}
+		if (this.selectedMesh.position.z < 0) {
+			this.selectedMesh.position.setZ(0);
+		} else if (this.selectedMesh.position.z > (this.modelMap.length - 1) * Project.SQUARE_SIZE) {
+			this.selectedMesh.position.setZ((this.modelMap.length - 1) * Project.SQUARE_SIZE);
+		}
+	}
+
+	removeTransform() {
+		if (this.selectedElement) {
+			this.transformControls.detach();
+			this.addPortionToUpdate(this.mapPortion.model.globalPortion);
+			this.selectedPosition = null;
+			this.selectedElement = null;
+			this.scene.remove(this.selectedMesh);
+			this.needsUpdateSelectedPosition = null;
+			this.needsUpdateSelectedMapElement = true;
+		}
 	}
 
 	updateLockedY(position: Position) {
@@ -646,10 +707,20 @@ class Map extends Base {
 						this.needsUpdateRaycasting = true;
 					}
 				}
-			} else {
-				this.needsUpdateSelected = true;
+			} else if (!this.transformControls.dragging && Scene.Map.isAdding()) {
 				this.selectedElement = this.pointedMapElement;
+				if (this.selectedElement === null) {
+					this.scene.remove(this.selectedMesh);
+				}
 				this.selectedPosition = this.selectedElement === null ? null : this.pointedMapElementPosition;
+				this.transformControls.detach();
+				this.addPortionToUpdate(this.mapPortion.model.globalPortion);
+				this.needsUpdateSelectedPosition = this.selectedPosition;
+				this.needsUpdateSelectedMapElement = true;
+			}
+			if (this.transformControls.dragging && Scene.Map.isAdding()) {
+				this.isDraggingTransforming = true;
+				this.selectedFirstVector = this.selectedMesh.position.clone();
 			}
 		}
 	}
@@ -678,6 +749,14 @@ class Map extends Base {
 				this.mouseUp = false;
 			} else {
 				this.needsUpdateRaycasting = true;
+			}
+			if (this.isDraggingTransforming) {
+				this.updateTransformPosition();
+				if (this.selectedElement) {
+					this.needsUpdateSelectedPosition = this.selectedElement.getPositionFromVec3(
+						this.selectedMesh.position
+					);
+				}
 			}
 		}
 	}
@@ -711,12 +790,17 @@ class Map extends Base {
 		this.lockedY = null;
 		this.lockedYPixels = null;
 		this.cursorWall.onMouseUp();
+		if (this.isDraggingTransforming) {
+			this.updateTransform();
+		}
 		if (this.undoRedoStatesSaving.length === 0 && this.undoRedoStates.length > 0) {
 			this.undoRedoStatesSaving = [...this.undoRedoStates];
 			this.saveUndoRedoStates().catch(console.error);
 			this.undoRedoStates = [];
 		}
 		await Project.current!.treeMaps.save();
+		this.isDraggingTransforming = false;
+		this.selectedFirstVector = null;
 	}
 
 	async onTouchEnd(x: number, y: number) {
