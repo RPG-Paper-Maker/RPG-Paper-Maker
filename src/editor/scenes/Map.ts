@@ -17,6 +17,7 @@ import { Base } from '.';
 import {
 	Cursor,
 	CustomGeometry,
+	CustomGeometryFace,
 	Frame,
 	Grid,
 	LocalFile,
@@ -364,7 +365,6 @@ class Map extends Base {
 		this.updateTransformPosition();
 		this.mapPortion.removeSelected();
 		this.mapPortion.addSelected();
-		this.addPortionToUpdate(this.mapPortion.model.globalPortion);
 	}
 
 	updateTransformPosition() {
@@ -415,6 +415,14 @@ class Map extends Base {
 			this.scene.remove(this.selectedMesh);
 			this.needsUpdateSelectedPosition = null;
 			this.needsUpdateSelectedMapElement = true;
+		}
+	}
+
+	updateUndoRedoSave() {
+		if (this.undoRedoStatesSaving.length === 0 && this.undoRedoStates.length > 0) {
+			this.undoRedoStatesSaving = [...this.undoRedoStates];
+			this.saveUndoRedoStates().catch(console.error);
+			this.undoRedoStates = [];
 		}
 	}
 
@@ -793,11 +801,7 @@ class Map extends Base {
 		if (this.isDraggingTransforming) {
 			this.updateTransform();
 		}
-		if (this.undoRedoStatesSaving.length === 0 && this.undoRedoStates.length > 0) {
-			this.undoRedoStatesSaving = [...this.undoRedoStates];
-			this.saveUndoRedoStates().catch(console.error);
-			this.undoRedoStates = [];
-		}
+		this.updateUndoRedoSave();
 		await Project.current!.treeMaps.save();
 		this.isDraggingTransforming = false;
 		this.selectedFirstVector = null;
@@ -874,6 +878,9 @@ class Map extends Base {
 		this.camera.getThreeCamera().getWorldDirection(vector);
 		const angle = Math.atan2(vector.x, vector.z) + Math.PI;
 		this.mapPortion.updateFaceSprites(angle);
+		if (this.selectedElement && this.selectedElement.kind === ELEMENT_MAP_KIND.SPRITE_FACE) {
+			(this.selectedMesh.geometry as CustomGeometryFace).rotate(angle, MapElement.Base.Y_AXIS);
+		}
 
 		// Update autotiles animated
 		if (this.autotileFrame.update()) {

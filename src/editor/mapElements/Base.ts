@@ -164,7 +164,7 @@ abstract class Base extends Serializable {
 	}
 
 	getAdditionalX(): number {
-		return 0;
+		return Math.floor(Project.SQUARE_SIZE / 2);
 	}
 
 	getAdditionalY(): number {
@@ -172,7 +172,7 @@ abstract class Base extends Serializable {
 	}
 
 	getAdditionalZ(): number {
-		return 0;
+		return Math.floor(Project.SQUARE_SIZE / 2);
 	}
 
 	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {

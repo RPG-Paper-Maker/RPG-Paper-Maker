@@ -32,6 +32,10 @@ class Object3DCustom extends Object3D {
 		return object;
 	}
 
+	isCentered(): boolean {
+		return true;
+	}
+
 	getCenterVector(): THREE.Vector3 {
 		return Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID).geometryData.center.clone();
 	}

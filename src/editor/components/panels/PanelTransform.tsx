@@ -75,10 +75,34 @@ function PanelTransform({ kind }: Props) {
 			? selectedPosition!.z
 			: selectedPosition!.getTotalZ();
 
+	const getMinY = () => {
+		const min = -Scene.Map.current!.modelMap.depth;
+		return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE ? min : min * Project.SQUARE_SIZE;
+	};
+
+	const getMaxX = () => {
+		return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+			? Scene.Map.current!.modelMap.width - 1
+			: Scene.Map.current!.modelMap.width * Project.SQUARE_SIZE - 1;
+	};
+
+	const getMaxY = () => {
+		return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+			? Scene.Map.current!.modelMap.height - 1
+			: Scene.Map.current!.modelMap.height * Project.SQUARE_SIZE - 1;
+	};
+
+	const getMaxZ = () => {
+		return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+			? Scene.Map.current!.modelMap.length - 1
+			: Scene.Map.current!.modelMap.length * Project.SQUARE_SIZE - 1;
+	};
+
 	const updatePosition = (position: Position) => {
 		dispatch(setSelectedPosition(position));
-		Scene.Map.current!.selectedMesh.position.copy(position.toVector3());
+		Scene.Map.current!.selectedMesh.position.copy(Scene.Map.current!.selectedElement!.getLocalPosition(position));
 		Scene.Map.current!.updateTransform();
+		Scene.Map.current!.updateUndoRedoSave();
 	};
 
 	const handleChangeCurrentX = (value: number) => {
@@ -123,15 +147,32 @@ function PanelTransform({ kind }: Props) {
 						<div className='flex flex-column gap-small'>
 							<div className='flex gap-small'>
 								X:
-								<InputNumber value={getCurrentX()} onChange={handleChangeCurrentX} />
+								<InputNumber
+									min={0}
+									max={getMaxX()}
+									value={getCurrentX()}
+									onChange={handleChangeCurrentX}
+								/>
 								{units}
 							</div>
 							<div className='flex gap-small'>
-								Y: <InputNumber value={getCurrentY()} onChange={handleChangeCurrentY} />
+								Y:{' '}
+								<InputNumber
+									min={getMinY()}
+									max={getMaxY()}
+									value={getCurrentY()}
+									onChange={handleChangeCurrentY}
+								/>
 								{units}
 							</div>
 							<div className='flex gap-small'>
-								Z: <InputNumber value={getCurrentZ()} onChange={handleChangeCurrentZ} />
+								Z:{' '}
+								<InputNumber
+									min={0}
+									max={getMaxZ()}
+									value={getCurrentZ()}
+									onChange={handleChangeCurrentZ}
+								/>
 								{units}
 							</div>
 						</div>

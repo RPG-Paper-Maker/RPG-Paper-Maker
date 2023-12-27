@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, Paths } from '../common';
+import { ACTION_KIND, BINDING, BindingType, Paths } from '../common';
 import { Project, Rectangle, Serializable } from '../core';
 
 class Settings extends Serializable {
@@ -48,7 +48,7 @@ class Settings extends Serializable {
 		['mapEditorCurrentMountainHeightPixels', 'mecmhp', 0, BINDING.NUMBER],
 		['mapEditorCurrentObject3DID', 'mecoid', 1, BINDING.NUMBER],
 		['mapEditorCurrentElementPositionIndex', 'mecepi', 0, BINDING.NUMBER],
-		['mapEditorCurrentActionIndex', 'mecai', 0, BINDING.NUMBER],
+		['mapEditorCurrentActionIndex', 'mecai', ACTION_KIND.PENCIL, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

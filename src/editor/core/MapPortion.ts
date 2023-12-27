@@ -22,7 +22,7 @@ import {
 	UndoRedoState,
 } from '.';
 import { Constants, ELEMENT_MAP_KIND, RAYCASTING_LAYER, SPRITE_WALL_TYPE } from '../common';
-import { SpriteWall } from '../mapElements';
+import { Object3DCustom, SpriteWall } from '../mapElements';
 
 class MapPortion {
 	public model!: Model.MapPortion;
@@ -435,7 +435,7 @@ class MapPortion {
 			const models = this.model.getModelsByKind(Scene.Map.current!.selectedElement.kind);
 			if (models) {
 				this.setMapElement(
-					position,
+					position.clone(),
 					null,
 					Scene.Map.current!.selectedElement.kind,
 					models,
@@ -455,7 +455,7 @@ class MapPortion {
 			const models = this.model.getModelsByKind(Scene.Map.current!.selectedElement.kind);
 			if (models) {
 				this.setMapElement(
-					position,
+					position.clone(),
 					Scene.Map.current!.selectedElement,
 					Scene.Map.current!.selectedElement.kind,
 					models,
@@ -466,6 +466,21 @@ class MapPortion {
 				Scene.Map.current!.selectedPosition = position;
 			}
 		}
+	}
+
+	updateSelected(
+		geometry: CustomGeometry,
+		material: THREE.Material | THREE.Material[],
+		localPosition: THREE.Vector3
+	) {
+		geometry.updateAttributes();
+		Scene.Map.current!.selectedMesh.geometry = geometry;
+		Scene.Map.current!.selectedMesh.material = material;
+		if (!Scene.Map.current!.transformControls.dragging) {
+			Scene.Map.current!.selectedMesh.position.copy(localPosition);
+		}
+		Scene.Map.current!.scene.add(Scene.Map.current!.selectedMesh);
+		Scene.Map.current!.transformControls.attach(Scene.Map.current!.selectedMesh);
 	}
 
 	fillDefaultFloor(map: Model.Map) {
@@ -561,7 +576,9 @@ class MapPortion {
 
 	updateLandsGeometries() {
 		const isPointedFloor =
-			Scene.Map.isTransforming() && Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR;
+			Scene.Map.isTransforming() &&
+			!Scene.Map.current!.isDraggingTransforming &&
+			Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR;
 		const material = Scene.Map.current!.materialTileset;
 		const { width, height } = Manager.GL.getMaterialTextureSize(material);
 		const geometry = new CustomGeometry();
@@ -614,7 +631,15 @@ class MapPortion {
 		for (let i = 0, l = layers.length; i < l; i++) {
 			const position = layers[i][0];
 			const floor = layers[i][1];
-			if (isPointedFloor && Scene.Map.current!.pointedMapElement === floor) {
+			if (Scene.Map.current!.selectedElement === floor) {
+				const geometry = new CustomGeometry();
+				floor.updateGeometry(geometry as CustomGeometry, new Position(), width, height, 0);
+				this.updateSelected(
+					geometry,
+					this.hoveredMesh.material,
+					Scene.Map.current!.selectedElement.getLocalPosition(position)
+				);
+			} else if (isPointedFloor && Scene.Map.current!.pointedMapElement === floor) {
 				this.hoveredMesh.geometry = new CustomGeometry();
 				floor.updateGeometry(this.hoveredMesh.geometry as CustomGeometry, position, width, height, 0);
 			} else {
@@ -680,7 +705,15 @@ class MapPortion {
 				layers.push([position, floor]);
 			}
 		} else {
-			if (isPointedFloor && Scene.Map.current!.pointedMapElement === floor) {
+			if (Scene.Map.current!.selectedElement === floor) {
+				const geometry = new CustomGeometry();
+				floor.updateGeometry(geometry as CustomGeometry, new Position(0, 0, 0, 0, 0, 0, 0), width, height, 0);
+				this.updateSelected(
+					geometry,
+					this.hoveredMesh.material,
+					Scene.Map.current!.selectedElement.getLocalPosition(position)
+				);
+			} else if (isPointedFloor && Scene.Map.current!.pointedMapElement === floor) {
 				this.hoveredMesh.geometry = new CustomGeometry();
 				floor.updateGeometry(this.hoveredMesh.geometry as CustomGeometry, position, width, height, 0);
 			} else {
@@ -714,6 +747,7 @@ class MapPortion {
 	updateSpritesGeometry() {
 		const isPointedSprite =
 			Scene.Map.isTransforming() &&
+			!Scene.Map.current!.isDraggingTransforming &&
 			Scene.Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
 			Scene.Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_QUADRA;
 		const material = Scene.Map.current!.materialTileset;
@@ -727,7 +761,11 @@ class MapPortion {
 			position.fromKey(positionKey);
 			const localPosition = position.toVector3();
 			if (sprite.kind === ELEMENT_MAP_KIND.SPRITE_FACE) {
-				if (isPointedSprite && Scene.Map.current!.pointedMapElement === sprite) {
+				if (Scene.Map.current!.selectedElement === sprite) {
+					const geometry = new CustomGeometryFace();
+					sprite.updateGeometry(geometry, width, height, new Position(), 0, true, new THREE.Vector3());
+					this.updateSelected(geometry, this.hoveredMesh.material, localPosition);
+				} else if (isPointedSprite && Scene.Map.current!.pointedMapElement === sprite) {
 					const hoveredGeometry = new CustomGeometryFace();
 					this.hoveredMesh.geometry = hoveredGeometry;
 					sprite.updateGeometry(hoveredGeometry, width, height, position, 0, true, localPosition);
@@ -743,7 +781,11 @@ class MapPortion {
 					);
 				}
 			} else {
-				if (isPointedSprite && Scene.Map.current!.pointedMapElement === sprite) {
+				if (Scene.Map.current!.selectedElement === sprite) {
+					const geometry = new CustomGeometry();
+					sprite.updateGeometry(geometry, width, height, new Position(), 0, true, new THREE.Vector3());
+					this.updateSelected(geometry, this.hoveredMesh.material, localPosition);
+				} else if (isPointedSprite && Scene.Map.current!.pointedMapElement === sprite) {
 					const hoveredGeometry = new CustomGeometry();
 					this.hoveredMesh.geometry = hoveredGeometry;
 					sprite.updateGeometry(hoveredGeometry, width, height, position, 0, true, localPosition);
@@ -871,7 +913,9 @@ class MapPortion {
 
 	updateObjects3DGeometry() {
 		const isPointedObject3D =
-			Scene.Map.isTransforming() && Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT3D;
+			Scene.Map.isTransforming() &&
+			!Scene.Map.current!.isDraggingTransforming &&
+			Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT3D;
 		for (const mesh of this.objects3DMeshes) {
 			Scene.Map.current!.scene.remove(mesh);
 		}
@@ -897,17 +941,24 @@ class MapPortion {
 					geometry = new CustomGeometry();
 					if (object3D && material) {
 						if (Scene.Map.current!.selectedElement === object3D) {
-							object3D.updateGeometry(geometry, new Position(0, 0, 0, 0, 0, 0, 0), 0);
-							geometry.updateAttributes();
-							Scene.Map.current!.selectedMesh.geometry = geometry;
-							Scene.Map.current!.selectedMesh.material = material;
-							if (!Scene.Map.current!.transformControls.dragging) {
-								Scene.Map.current!.selectedMesh.position.copy(
-									Scene.Map.current!.selectedElement.getLocalPosition(position)
-								);
-							}
-							Scene.Map.current!.scene.add(Scene.Map.current!.selectedMesh);
-							Scene.Map.current!.transformControls.attach(Scene.Map.current!.selectedMesh);
+							object3D.updateGeometry(
+								geometry,
+								new Position(
+									0,
+									0,
+									0,
+									0,
+									0,
+									object3D.isCentered() ? 0 : 50,
+									object3D.isCentered() ? 0 : 50
+								),
+								0
+							);
+							this.updateSelected(
+								geometry,
+								material,
+								Scene.Map.current!.selectedElement.getLocalPosition(position)
+							);
 						} else {
 							object3D.updateGeometry(geometry, position, 0);
 							obj = {

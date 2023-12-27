@@ -100,6 +100,8 @@ abstract class Object3D extends Base {
 		return `3D OBJECT | ID: ${Utils.formatNumberID(this.id)}`;
 	}
 
+	abstract isCentered(): boolean;
+
 	abstract getCenterVector(): THREE.Vector3;
 
 	abstract updateGeometry(geometry: CustomGeometry, position: Position, count: number): number;

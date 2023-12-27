@@ -158,6 +158,10 @@ class Object3DBox extends Object3D {
 		);
 	}
 
+	isCentered(): boolean {
+		return !this.data.isTopLeft;
+	}
+
 	getLocalPosition(position: Position): THREE.Vector3 {
 		const localPosition = position.toVector3(false);
 		if (this.data.isTopLeft) {
@@ -178,22 +182,18 @@ class Object3DBox extends Object3D {
 	getPositionFromVec3(vec: THREE.Vector3): Position {
 		const v = vec.clone();
 		if (this.data.isTopLeft) {
-			v.setX(v.x + Math.floor(Project.SQUARE_SIZE / 2) - Object3DBox.COEF);
-			v.setZ(v.z + Math.floor(Project.SQUARE_SIZE / 2) - Object3DBox.COEF);
-		} else {
-			v.setX(v.x - Object3DBox.COEF);
-			v.setZ(v.z - Object3DBox.COEF);
+			v.setX(v.x + Math.floor(Project.SQUARE_SIZE / 2));
+			v.setZ(v.z + Math.floor(Project.SQUARE_SIZE / 2));
 		}
-		v.setY(v.y + Object3DBox.COEF);
-		return Position.createFromVector3(vec);
+		return Position.createFromVector3(v);
 	}
 
 	getAdditionalX(): number {
-		return this.data.isTopLeft ? Math.floor(Project.SQUARE_SIZE / 2) : 0;
+		return this.data.isTopLeft ? 0 : Math.floor(Project.SQUARE_SIZE / 2);
 	}
 
 	getAdditionalZ(): number {
-		return this.data.isTopLeft ? Math.floor(Project.SQUARE_SIZE / 2) : 0;
+		return this.data.isTopLeft ? 0 : Math.floor(Project.SQUARE_SIZE / 2);
 	}
 
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): number {

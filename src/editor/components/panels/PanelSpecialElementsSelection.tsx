@@ -187,7 +187,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	};
 
 	const updateFirstScroll = () => {
-		if (!firstScroll && firstIndex > 0) {
+		if (!firstScroll) {
 			if (!testOffset) {
 				updateMinMax();
 			} else {
@@ -313,7 +313,6 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		if (displayCanvas) {
 			Scene.Previewer3D.canDrawList = true;
 		}
-
 		return () => {
 			Scene.Previewer3D.canDrawList = false;
 		};

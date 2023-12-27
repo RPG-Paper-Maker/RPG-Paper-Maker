@@ -62,7 +62,7 @@ class Land extends Base {
 		squareWidth = 1,
 		squareHeight = 1
 	) {
-		const localPosition = position.toVector3(false);
+		const localPosition = position.toVector3();
 		const a = localPosition.x;
 		let yLayerOffset = position.layer * 0.05;
 		if (!this.up) {
@@ -72,15 +72,15 @@ class Land extends Base {
 		const c = localPosition.z;
 
 		// Vertices
-		const vecA = new THREE.Vector3(a, b, c);
-		const vecB = new THREE.Vector3(a + Project.SQUARE_SIZE * squareWidth, b, c);
+		const vecA = new THREE.Vector3(a - Project.SQUARE_SIZE / 2, b, c - Project.SQUARE_SIZE / 2);
+		const vecB = new THREE.Vector3(a + (Project.SQUARE_SIZE / 2) * squareWidth, b, c - Project.SQUARE_SIZE / 2);
 		const vecC = new THREE.Vector3(
-			a + Project.SQUARE_SIZE * squareWidth,
+			a + (Project.SQUARE_SIZE / 2) * squareWidth,
 			b,
-			c + Project.SQUARE_SIZE * squareHeight
+			c + (Project.SQUARE_SIZE / 2) * squareHeight
 		);
-		const vecD = new THREE.Vector3(a, b, c + Project.SQUARE_SIZE * squareHeight);
-		const center = new THREE.Vector3(a + Project.SQUARE_SIZE / 2, b, c + Project.SQUARE_SIZE / 2);
+		const vecD = new THREE.Vector3(a - Project.SQUARE_SIZE / 2, b, c + (Project.SQUARE_SIZE / 2) * squareHeight);
+		const center = new THREE.Vector3(a, b, c);
 		if (position.angleY !== 0.0) {
 			Base.rotateQuad(vecA, vecB, vecC, vecD, center, position.angleY, Base.Y_AXIS);
 		}
