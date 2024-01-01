@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { INPUT_TYPE_WIDTH } from '../common';
+import { INPUT_TYPE_WIDTH, Mathf } from '../common';
 import '../styles/Input.css';
 
 type Props = {
@@ -18,6 +18,7 @@ type Props = {
 	widthType?: INPUT_TYPE_WIDTH;
 	max?: number;
 	min?: number;
+	decimals?: boolean;
 };
 
 function InputNumber({
@@ -26,7 +27,10 @@ function InputNumber({
 	widthType = INPUT_TYPE_WIDTH.NORMAL,
 	min = -999999999,
 	max = 999999999,
+	decimals = false,
 }: Props) {
+	const transformValue = (v: number) => (decimals ? Mathf.forceDecimals(v) : Mathf.forceInteger(v));
+
 	const getMaxWidth = () => {
 		switch (widthType) {
 			case INPUT_TYPE_WIDTH.FILL:
@@ -40,13 +44,18 @@ function InputNumber({
 		}
 	};
 
+	const handleChange = (e: any) => {
+		onChange(transformValue(Number(e.target.value)));
+	};
+
 	return (
 		<input
 			type='number'
-			value={value}
+			value={transformValue(value)}
 			min={min}
 			max={max}
-			onChange={(e) => onChange(Number(e.target.value))}
+			onChange={handleChange}
+			step='any'
 			style={{ maxWidth: getMaxWidth() }}
 		/>
 	);

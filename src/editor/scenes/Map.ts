@@ -212,8 +212,13 @@ class Map extends Base {
 			Manager.GL.mapEditorContext.renderer.domElement
 		);
 		this.transformControls.setTranslationSnap(1);
+		if (Scene.Map.isTransforming()) {
+			Scene.Map.current!.setTransformMode(Project.current!.settings.mapEditorCurrentActionIndex);
+		}
 		this.scene.add(this.transformControls);
 		this.selectedMesh = new THREE.Mesh(new CustomGeometry(), this.materialTilesetHover);
+		this.selectedMesh.receiveShadow = true;
+		this.selectedMesh.castShadow = true;
 
 		this.loading = false;
 	}
@@ -416,6 +421,23 @@ class Map extends Base {
 			this.needsUpdateSelectedPosition = null;
 			this.needsUpdateSelectedMapElement = true;
 		}
+	}
+
+	getTransformMode(action: ACTION_KIND) {
+		switch (action) {
+			case ACTION_KIND.TRANSLATE:
+				return 'translate';
+			case ACTION_KIND.ROTATE:
+				return 'rotate';
+			case ACTION_KIND.SCALE:
+				return 'scale';
+			default:
+				throw Error('Not a transformation');
+		}
+	}
+
+	setTransformMode(action: ACTION_KIND) {
+		this.transformControls.setMode(this.getTransformMode(action));
 	}
 
 	updateUndoRedoSave() {
@@ -716,7 +738,10 @@ class Map extends Base {
 					}
 				}
 			} else if (!this.transformControls.dragging && Scene.Map.isAdding()) {
-				this.selectedElement = this.pointedMapElement;
+				this.selectedElement =
+					this.pointedMapElement === null || this.pointedMapElement.kind === ELEMENT_MAP_KIND.SPRITE_FACE
+						? null
+						: this.pointedMapElement;
 				if (this.selectedElement === null) {
 					this.scene.remove(this.selectedMesh);
 				}
@@ -759,10 +784,11 @@ class Map extends Base {
 				this.needsUpdateRaycasting = true;
 			}
 			if (this.isDraggingTransforming) {
-				this.updateTransformPosition();
 				if (this.selectedElement) {
+					this.updateTransformPosition();
 					this.needsUpdateSelectedPosition = this.selectedElement.getPositionFromVec3(
-						this.selectedMesh.position
+						this.selectedMesh.position,
+						this.selectedMesh.rotation
 					);
 				}
 			}

@@ -125,21 +125,6 @@ class Sprite extends Base {
 			localPosition = tileset ? position.toVector3() : new THREE.Vector3();
 		}
 
-		const angleY = position.angleY;
-		const angleX = position.angleX;
-		const angleZ = position.angleZ;
-		if (this.kind !== ELEMENT_MAP_KIND.SPRITE_FACE) {
-			if (angleY !== 0.0) {
-				Base.rotateQuad(vecA, vecB, vecC, vecD, center, angleY, Base.Y_AXIS);
-			}
-			if (angleX !== 0.0) {
-				Base.rotateQuad(vecA, vecB, vecC, vecD, center, angleX, Base.X_AXIS);
-			}
-			if (angleZ !== 0.0) {
-				Base.rotateQuad(vecA, vecB, vecC, vecD, center, angleZ, Base.Z_AXIS);
-			}
-		}
-
 		// Getting UV coordinates
 		let x = (this.texture.x * Project.SQUARE_SIZE) / width;
 		let y = (this.texture.y * Project.SQUARE_SIZE) / height;
@@ -176,6 +161,7 @@ class Sprite extends Base {
 			const vecSimpleB = vecB.clone();
 			const vecSimpleC = vecC.clone();
 			const vecSimpleD = vecD.clone();
+			Base.rotateQuadEuler(vecSimpleA, vecSimpleB, vecSimpleC, vecSimpleD, center, position.toRotationEuler());
 			count = Sprite.addStaticSpriteToGeometry(
 				geometry,
 				vecSimpleA,
@@ -198,6 +184,7 @@ class Sprite extends Base {
 			const vecDoubleC = vecC.clone();
 			const vecDoubleD = vecD.clone();
 			Base.rotateQuad(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center, 90, Sprite.Y_AXIS);
+			Base.rotateQuadEuler(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center, position.toRotationEuler());
 			count = Sprite.addStaticSpriteToGeometry(
 				geometry,
 				vecDoubleA,
@@ -223,7 +210,23 @@ class Sprite extends Base {
 				const vecQuadra2C = vecC.clone();
 				const vecQuadra2D = vecD.clone();
 				Base.rotateQuad(vecQuadra1A, vecQuadra1B, vecQuadra1C, vecQuadra1D, center, 45, Sprite.Y_AXIS);
+				Base.rotateQuadEuler(
+					vecQuadra1A,
+					vecQuadra1B,
+					vecQuadra1C,
+					vecQuadra1D,
+					center,
+					position.toRotationEuler()
+				);
 				Base.rotateQuad(vecQuadra2A, vecQuadra2B, vecQuadra2C, vecQuadra2D, center, -45, Sprite.Y_AXIS);
+				Base.rotateQuadEuler(
+					vecQuadra2A,
+					vecQuadra2B,
+					vecQuadra2C,
+					vecQuadra2D,
+					center,
+					position.toRotationEuler()
+				);
 				count = Sprite.addStaticSpriteToGeometry(
 					geometry,
 					vecQuadra1A,

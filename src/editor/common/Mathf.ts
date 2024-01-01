@@ -29,6 +29,22 @@ class Mathf {
 		return r < 0 ? r + m : r;
 	}
 
+	static radiansToDegrees(radians: number): number {
+		return radians * (180 / Math.PI);
+	}
+
+	static degreesToRadians(degrees: number): number {
+		return degrees * (Math.PI / 180);
+	}
+
+	static forceDecimals(num: number, decimals = 4): number {
+		return parseFloat(num.toFixed(decimals));
+	}
+
+	static forceInteger(num: number): number {
+		return Math.floor(num);
+	}
+
 	static traceLine(previous: Position | null, current: Position) {
 		if (previous === null) {
 			return [current];

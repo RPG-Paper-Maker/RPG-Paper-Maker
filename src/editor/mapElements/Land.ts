@@ -81,15 +81,7 @@ class Land extends Base {
 		);
 		const vecD = new THREE.Vector3(a - Project.SQUARE_SIZE / 2, b, c + (Project.SQUARE_SIZE / 2) * squareHeight);
 		const center = new THREE.Vector3(a, b, c);
-		if (position.angleY !== 0.0) {
-			Base.rotateQuad(vecA, vecB, vecC, vecD, center, position.angleY, Base.Y_AXIS);
-		}
-		if (position.angleX !== 0.0) {
-			Base.rotateQuad(vecA, vecB, vecC, vecD, center, position.angleX, Base.X_AXIS);
-		}
-		if (position.angleZ !== 0.0) {
-			Base.rotateQuad(vecA, vecB, vecC, vecD, center, position.angleZ, Base.Z_AXIS);
-		}
+		Base.rotateQuadEuler(vecA, vecB, vecC, vecD, center, position.toRotationEuler());
 
 		// Vertices
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);

@@ -18,7 +18,11 @@
 }
 
 .map-editor.cursor-translate {
-	cursor: url('../../assets/icons/cursor-translate.svg') 3 20, pointer;
+	cursor: url('../../assets/icons/cursor-translate.svg') 5 25, pointer;
+}
+
+.map-editor.cursor-rotate {
+	cursor: url('../../assets/icons/cursor-rotate.svg') 10 10, pointer;
 }
 
 #canvas-hud {

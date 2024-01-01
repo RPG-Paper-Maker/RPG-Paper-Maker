@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { Model } from '../Editor';
 import { Position3D } from './Position3D';
 import { Portion, Project } from '.';
-import { Constants } from '../common';
+import { Constants, Mathf } from '../common';
 
 class Position extends Position3D {
 	public layer: number;
@@ -72,7 +72,7 @@ class Position extends Position3D {
 		);
 	}
 
-	static createFromVector3(position: THREE.Vector3): Position {
+	static createFromVector3(position: THREE.Vector3, rotation?: THREE.Euler): Position {
 		return new Position(
 			Math.floor(position.x / Project.SQUARE_SIZE),
 			Math.floor(position.y / Project.SQUARE_SIZE),
@@ -80,7 +80,10 @@ class Position extends Position3D {
 			Math.floor(position.z / Project.SQUARE_SIZE),
 			0,
 			(Math.round(position.x % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100,
-			(Math.round(position.z % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100
+			(Math.round(position.z % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100,
+			rotation ? Mathf.forceDecimals(Mathf.radiansToDegrees(rotation.y)) : undefined,
+			rotation ? Mathf.forceDecimals(Mathf.radiansToDegrees(rotation.x)) : undefined,
+			rotation ? Mathf.forceDecimals(Mathf.radiansToDegrees(rotation.z)) : undefined
 		);
 	}
 
@@ -250,7 +253,7 @@ class Position extends Position3D {
 			this.angleZ
 		}]\nScales = [${this.scaleX}, ${this.scaleY}, ${
 			this.scaleZ
-		}]\nCenter X = ${this.getPixelsCenterX()}px\nCenter Z = ${this.getPixelsCenterZ()}px`;
+		}]\nCenter = [X = ${this.getPixelsCenterX()}px, Z = ${this.getPixelsCenterZ()}px]`;
 	}
 
 	toVector3(center: boolean = true): THREE.Vector3 {
@@ -258,6 +261,14 @@ class Position extends Position3D {
 			this.x * Project.SQUARE_SIZE + (center ? this.getPixelsCenterX() : 0),
 			this.y * Project.SQUARE_SIZE + this.getTotalYPixels(),
 			this.z * Project.SQUARE_SIZE + (center ? this.getPixelsCenterZ() : 0)
+		);
+	}
+
+	toRotationEuler(): THREE.Euler {
+		return new THREE.Euler(
+			Mathf.degreesToRadians(this.angleX),
+			Mathf.degreesToRadians(this.angleY),
+			Mathf.degreesToRadians(this.angleZ)
 		);
 	}
 

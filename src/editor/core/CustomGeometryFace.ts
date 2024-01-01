@@ -47,7 +47,7 @@ class CustomGeometryFace extends CustomGeometry {
 			ic = Math.floor(i / 12) * 3;
 			vertex.set(vertices[i], vertices[i + 1], vertices[i + 2]);
 			center.set(this.centerPoints[ic], this.centerPoints[ic + 1], this.centerPoints[ic + 2]);
-			MapElement.Base.rotateVertex(vertex, center, a, axis, false);
+			CustomGeometry.rotateVertex(vertex, center, a, axis, false);
 			this._vertices.push(vertex.x, vertex.y, vertex.z);
 		}
 		this.setAttribute('position', new THREE.Float32BufferAttribute(this._vertices, 3));

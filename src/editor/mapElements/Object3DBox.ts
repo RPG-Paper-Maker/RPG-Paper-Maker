@@ -14,6 +14,7 @@ import { Object3D } from './Object3D';
 import { MapElement, Model } from '../Editor';
 import { CustomGeometry, Position, Project } from '../core';
 import { Sprite } from './Sprite';
+import { Base } from './Base';
 
 class Object3DBox extends Object3D {
 	public static COEF = 0.01;
@@ -179,13 +180,13 @@ class Object3DBox extends Object3D {
 		return localPosition;
 	}
 
-	getPositionFromVec3(vec: THREE.Vector3): Position {
+	getPositionFromVec3(vec: THREE.Vector3, rotation: THREE.Euler): Position {
 		const v = vec.clone();
 		if (this.data.isTopLeft) {
 			v.setX(v.x + Math.floor(Project.SQUARE_SIZE / 2));
 			v.setZ(v.z + Math.floor(Project.SQUARE_SIZE / 2));
 		}
-		return Position.createFromVector3(v);
+		return Position.createFromVector3(v, rotation);
 	}
 
 	getAdditionalX(): number {
@@ -198,27 +199,7 @@ class Object3DBox extends Object3D {
 
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): number {
 		const localPosition = this.getLocalPosition(position);
-		const angleY = position.angleY;
-		const angleX = position.angleX;
-		const angleZ = position.angleZ;
 		const size = this.data.getSizeVector().multiply(position.toScaleVector());
-		const center = this.data.isTopLeft
-			? new THREE.Vector3(
-					localPosition.x + Math.floor(Project.SQUARE_SIZE / 2),
-					localPosition.y + size.y / 2,
-					localPosition.z + Math.floor(Project.SQUARE_SIZE / 2)
-			  )
-			: new THREE.Vector3(localPosition.x, localPosition.y + size.y / 2, localPosition.z);
-		const centerReal = this.data.isTopLeft
-			? new THREE.Vector3(
-					localPosition.x + Math.floor(size.x / 2),
-					localPosition.y + size.y / 2,
-					localPosition.z + Math.floor(size.z / 2)
-			  )
-			: new THREE.Vector3(localPosition.x, localPosition.y + size.y / 2, localPosition.z);
-		Sprite.rotateVertex(centerReal, center, angleY, Sprite.Y_AXIS);
-		Sprite.rotateVertex(centerReal, center, angleX, Sprite.X_AXIS);
-		Sprite.rotateVertex(centerReal, center, angleZ, Sprite.Z_AXIS);
 		size.setX(size.x - 2 * Object3DBox.COEF);
 		size.setY(size.y - 2 * Object3DBox.COEF);
 		size.setZ(size.z - 2 * Object3DBox.COEF);
@@ -261,15 +242,7 @@ class Object3DBox extends Object3D {
 			const texB = new THREE.Vector2(textures[tB[0]], textures[tB[1]]);
 			const texC = new THREE.Vector2(textures[tC[0]], textures[tC[1]]);
 			const texD = new THREE.Vector2(textures[tD[0]], textures[tD[1]]);
-			if (angleY !== 0.0) {
-				Sprite.rotateQuad(vecA, vecB, vecC, vecD, center, angleY, Sprite.Y_AXIS);
-			}
-			if (angleX !== 0.0) {
-				Sprite.rotateQuad(vecA, vecB, vecC, vecD, center, angleX, Sprite.X_AXIS);
-			}
-			if (angleZ !== 0.0) {
-				Sprite.rotateQuad(vecA, vecB, vecC, vecD, center, angleZ, Sprite.Z_AXIS);
-			}
+			Base.rotateQuadEuler(vecA, vecB, vecC, vecD, localPosition, position.toRotationEuler());
 			count = Sprite.addStaticSpriteToGeometry(
 				geometry,
 				vecA,

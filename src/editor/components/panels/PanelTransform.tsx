@@ -47,6 +47,8 @@ function PanelTransform({ kind }: Props) {
 
 	const title = `${kindText} options`;
 
+	const isDecimal = kind !== ACTION_KIND.TRANSLATE;
+
 	const getPositionText = () =>
 		selectedPosition
 			?.toString()
@@ -60,80 +62,164 @@ function PanelTransform({ kind }: Props) {
 			? 'square(s)'
 			: 'pixel(s)';
 
-	const getCurrentX = () =>
-		currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
-			? selectedPosition!.x
-			: selectedPosition!.getTotalX();
+	const getCurrentX = () => {
+		switch (kind) {
+			case ACTION_KIND.TRANSLATE:
+				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+					? selectedPosition!.x
+					: selectedPosition!.getTotalX();
+			case ACTION_KIND.ROTATE:
+				return selectedPosition!.angleX;
+			default:
+				return 0;
+		}
+	};
 
-	const getCurrentY = () =>
-		currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
-			? selectedPosition!.y
-			: selectedPosition!.getTotalY();
+	const getCurrentY = () => {
+		switch (kind) {
+			case ACTION_KIND.TRANSLATE:
+				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+					? selectedPosition!.y
+					: selectedPosition!.getTotalY();
+			case ACTION_KIND.ROTATE:
+				return selectedPosition!.angleY;
+			default:
+				return 0;
+		}
+	};
 
-	const getCurrentZ = () =>
-		currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
-			? selectedPosition!.z
-			: selectedPosition!.getTotalZ();
+	const getCurrentZ = () => {
+		switch (kind) {
+			case ACTION_KIND.TRANSLATE:
+				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+					? selectedPosition!.z
+					: selectedPosition!.getTotalZ();
+			case ACTION_KIND.ROTATE:
+				return selectedPosition!.angleZ;
+			default:
+				return 0;
+		}
+	};
 
-	const getMinY = () => {
-		const min = -Scene.Map.current!.modelMap.depth;
-		return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE ? min : min * Project.SQUARE_SIZE;
+	const getMinX = () => {
+		switch (kind) {
+			case ACTION_KIND.TRANSLATE:
+				return 0;
+			default:
+				return undefined;
+		}
 	};
 
 	const getMaxX = () => {
-		return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
-			? Scene.Map.current!.modelMap.width - 1
-			: Scene.Map.current!.modelMap.width * Project.SQUARE_SIZE - 1;
+		switch (kind) {
+			case ACTION_KIND.TRANSLATE:
+				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+					? Scene.Map.current!.modelMap.width - 1
+					: Scene.Map.current!.modelMap.width * Project.SQUARE_SIZE - 1;
+			default:
+				return undefined;
+		}
+	};
+
+	const getMinY = () => {
+		switch (kind) {
+			case ACTION_KIND.TRANSLATE:
+				const min = -Scene.Map.current!.modelMap.depth;
+				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE ? min : min * Project.SQUARE_SIZE;
+			default:
+				return undefined;
+		}
 	};
 
 	const getMaxY = () => {
-		return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
-			? Scene.Map.current!.modelMap.height - 1
-			: Scene.Map.current!.modelMap.height * Project.SQUARE_SIZE - 1;
+		switch (kind) {
+			case ACTION_KIND.TRANSLATE:
+				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+					? Scene.Map.current!.modelMap.height - 1
+					: Scene.Map.current!.modelMap.height * Project.SQUARE_SIZE - 1;
+			default:
+				return undefined;
+		}
+	};
+
+	const getMinZ = () => {
+		switch (kind) {
+			case ACTION_KIND.TRANSLATE:
+				return 0;
+			default:
+				return undefined;
+		}
 	};
 
 	const getMaxZ = () => {
-		return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
-			? Scene.Map.current!.modelMap.length - 1
-			: Scene.Map.current!.modelMap.length * Project.SQUARE_SIZE - 1;
+		switch (kind) {
+			case ACTION_KIND.TRANSLATE:
+				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
+					? Scene.Map.current!.modelMap.length - 1
+					: Scene.Map.current!.modelMap.length * Project.SQUARE_SIZE - 1;
+			default:
+				return undefined;
+		}
 	};
 
 	const updatePosition = (position: Position) => {
 		dispatch(setSelectedPosition(position));
 		Scene.Map.current!.selectedMesh.position.copy(Scene.Map.current!.selectedElement!.getLocalPosition(position));
+		Scene.Map.current!.selectedMesh.rotation.copy(Scene.Map.current!.selectedElement!.getLocalRotation(position));
 		Scene.Map.current!.updateTransform();
 		Scene.Map.current!.updateUndoRedoSave();
 	};
 
 	const handleChangeCurrentX = (value: number) => {
 		const position = selectedPosition!.clone();
-		if (currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE) {
-			position.x = value;
-		} else {
-			position.x = Math.floor(value / Project.SQUARE_SIZE);
-			position.centerX = ((value % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+		switch (kind) {
+			case ACTION_KIND.TRANSLATE:
+				if (currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE) {
+					position.x = value;
+				} else {
+					position.x = Math.floor(value / Project.SQUARE_SIZE);
+					position.centerX = ((value % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+				}
+				break;
+			case ACTION_KIND.ROTATE:
+				position.angleX = value;
+				break;
 		}
 		updatePosition(position);
 	};
 
 	const handleChangeCurrentY = (value: number) => {
 		const position = selectedPosition!.clone();
-		if (currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE) {
-			position.y = value;
-		} else {
-			position.y = Math.floor(value / Project.SQUARE_SIZE);
-			position.yPixels = ((value % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+		switch (kind) {
+			case ACTION_KIND.TRANSLATE:
+				if (currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE) {
+					position.y = value;
+				} else {
+					position.y = Math.floor(value / Project.SQUARE_SIZE);
+					position.yPixels = ((value % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+				}
+				break;
+			case ACTION_KIND.ROTATE:
+				position.angleY = value;
+				break;
 		}
 		updatePosition(position);
 	};
 
 	const handleChangeCurrentZ = (value: number) => {
 		const position = selectedPosition!.clone();
-		if (currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE) {
-			position.z = value;
-		} else {
-			position.z = Math.floor(value / Project.SQUARE_SIZE);
-			position.centerZ = ((value % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+		switch (kind) {
+			case ACTION_KIND.TRANSLATE:
+				if (currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE) {
+					position.z = value;
+				} else {
+					position.z = Math.floor(value / Project.SQUARE_SIZE);
+					position.centerZ = ((value % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+				}
+				break;
+			case ACTION_KIND.ROTATE:
+				position.angleZ = value;
+				break;
 		}
 		updatePosition(position);
 	};
@@ -148,30 +234,33 @@ function PanelTransform({ kind }: Props) {
 							<div className='flex gap-small'>
 								X:
 								<InputNumber
-									min={0}
+									min={getMinX()}
 									max={getMaxX()}
 									value={getCurrentX()}
 									onChange={handleChangeCurrentX}
+									decimals={isDecimal}
 								/>
 								{units}
 							</div>
 							<div className='flex gap-small'>
-								Y:{' '}
+								Y:
 								<InputNumber
 									min={getMinY()}
 									max={getMaxY()}
 									value={getCurrentY()}
 									onChange={handleChangeCurrentY}
+									decimals={isDecimal}
 								/>
 								{units}
 							</div>
 							<div className='flex gap-small'>
-								Z:{' '}
+								Z:
 								<InputNumber
-									min={0}
+									min={getMinZ()}
 									max={getMaxZ()}
 									value={getCurrentZ()}
 									onChange={handleChangeCurrentZ}
+									decimals={isDecimal}
 								/>
 								{units}
 							</div>

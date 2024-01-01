@@ -11,6 +11,7 @@
 
 import * as THREE from 'three';
 import { Position } from '.';
+import { Mathf } from '../common';
 
 class CustomGeometry extends THREE.BufferGeometry {
 	public _vertices: number[] = [];
@@ -42,7 +43,13 @@ class CustomGeometry extends THREE.BufferGeometry {
 		isDegree: boolean = true
 	) {
 		vec.sub(center);
-		vec.applyAxisAngle(axis, isDegree ? (angle * Math.PI) / 180.0 : angle);
+		vec.applyAxisAngle(axis, isDegree ? Mathf.degreesToRadians(angle) : angle);
+		vec.add(center);
+	}
+
+	static rotateVertexEuler(vec: THREE.Vector3, center: THREE.Vector3, euler: THREE.Euler) {
+		vec.sub(center);
+		vec.applyEuler(euler);
 		vec.add(center);
 	}
 

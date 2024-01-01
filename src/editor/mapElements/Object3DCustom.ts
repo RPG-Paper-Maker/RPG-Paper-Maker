@@ -55,11 +55,7 @@ class Object3DCustom extends Object3D {
 		const uvs = modelGeometry.uvs;
 		const scale = this.data.scale;
 		const scaleVec = new THREE.Vector3(scale * position.scaleX, scale * position.scaleY, scale * position.scaleZ);
-		const center = modelGeometry.center.clone();
-		center.multiply(scaleVec);
-		const angleY = position.angleY;
-		const angleX = position.angleX;
-		const angleZ = position.angleZ;
+		const center = new THREE.Vector3();
 		for (let i = 0, l = modelGeometry.vertices.length; i < l; i += 3) {
 			const vecA = vertices[i].clone();
 			const vecB = vertices[i + 1].clone();
@@ -67,21 +63,9 @@ class Object3DCustom extends Object3D {
 			vecA.multiply(scaleVec);
 			vecB.multiply(scaleVec);
 			vecC.multiply(scaleVec);
-			if (angleY !== 0) {
-				Sprite.rotateVertex(vecA, center, angleY, Sprite.Y_AXIS);
-				Sprite.rotateVertex(vecB, center, angleY, Sprite.Y_AXIS);
-				Sprite.rotateVertex(vecC, center, angleY, Sprite.Y_AXIS);
-			}
-			if (angleX !== 0) {
-				Sprite.rotateVertex(vecA, center, angleX, Sprite.X_AXIS);
-				Sprite.rotateVertex(vecB, center, angleX, Sprite.X_AXIS);
-				Sprite.rotateVertex(vecC, center, angleX, Sprite.X_AXIS);
-			}
-			if (angleZ !== 0) {
-				Sprite.rotateVertex(vecA, center, angleZ, Sprite.Z_AXIS);
-				Sprite.rotateVertex(vecB, center, angleZ, Sprite.Z_AXIS);
-				Sprite.rotateVertex(vecC, center, angleZ, Sprite.Z_AXIS);
-			}
+			CustomGeometry.rotateVertexEuler(vecA, center, position.toRotationEuler());
+			CustomGeometry.rotateVertexEuler(vecB, center, position.toRotationEuler());
+			CustomGeometry.rotateVertexEuler(vecC, center, position.toRotationEuler());
 			vecA.add(localPosition);
 			vecB.add(localPosition);
 			vecC.add(localPosition);

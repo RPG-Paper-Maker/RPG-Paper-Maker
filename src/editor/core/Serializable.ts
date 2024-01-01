@@ -100,10 +100,10 @@ abstract class Serializable {
 					break;
 				}
 				case BINDING.MAP_POSITION:
-					const p = new Position();
 					const mapping = new Map();
 					(this as any)[name] = mapping;
 					for (const objHash of json[jsonName]) {
+						const p = new Position();
 						p.read(objHash.k);
 						const cons = additionalFunction ? additionalFunction(objHash.v) : constructor;
 						mapping.set(p.toKey(), cons.fromJSON(objHash.v));
@@ -173,10 +173,10 @@ abstract class Serializable {
 				case BINDING.MAP_POSITION: {
 					const mapping = (this as any)[name];
 					const jsonTab: any[] = [];
-					const p = new Position();
 					for (const [positionKey, element] of mapping) {
 						const objMap: KeyValue = {};
 						const tabKey: number[] = [];
+						const p = new Position();
 						p.fromKey(positionKey);
 						p.write(tabKey);
 						const objElement = {};

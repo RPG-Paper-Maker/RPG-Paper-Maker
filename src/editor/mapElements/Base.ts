@@ -91,18 +91,6 @@ abstract class Base extends Serializable {
 		return model;
 	}
 
-	static rotateVertex(
-		vec: THREE.Vector3,
-		center: THREE.Vector3,
-		angle: number,
-		axis: THREE.Vector3,
-		isDegree: boolean = true
-	) {
-		vec.sub(center);
-		vec.applyAxisAngle(axis, isDegree ? (angle * Math.PI) / 180.0 : angle);
-		vec.add(center);
-	}
-
 	static rotateQuad(
 		vecA: THREE.Vector3,
 		vecB: THREE.Vector3,
@@ -116,6 +104,20 @@ abstract class Base extends Serializable {
 		CustomGeometry.rotateVertex(vecB, center, angle, axis);
 		CustomGeometry.rotateVertex(vecC, center, angle, axis);
 		CustomGeometry.rotateVertex(vecD, center, angle, axis);
+	}
+
+	static rotateQuadEuler(
+		vecA: THREE.Vector3,
+		vecB: THREE.Vector3,
+		vecC: THREE.Vector3,
+		vecD: THREE.Vector3,
+		center: THREE.Vector3,
+		euler: THREE.Euler
+	) {
+		CustomGeometry.rotateVertexEuler(vecA, center, euler);
+		CustomGeometry.rotateVertexEuler(vecB, center, euler);
+		CustomGeometry.rotateVertexEuler(vecC, center, euler);
+		CustomGeometry.rotateVertexEuler(vecD, center, euler);
 	}
 
 	scale(
@@ -144,7 +146,6 @@ abstract class Base extends Serializable {
 		// Position
 		const pos = center.clone();
 		pos.add(offset);
-		center.setY(center.y + size.y / 2);
 		vecA.multiply(size);
 		vecB.multiply(size);
 		vecC.multiply(size);
@@ -159,8 +160,12 @@ abstract class Base extends Serializable {
 		return position.toVector3();
 	}
 
-	getPositionFromVec3(vec: THREE.Vector3): Position {
-		return Position.createFromVector3(vec);
+	getLocalRotation(position: Position): THREE.Euler {
+		return position.toRotationEuler();
+	}
+
+	getPositionFromVec3(vec: THREE.Vector3, rotation: THREE.Euler): Position {
+		return Position.createFromVector3(vec, rotation);
 	}
 
 	getAdditionalX(): number {
