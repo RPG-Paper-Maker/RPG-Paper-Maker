@@ -72,7 +72,7 @@ class Position extends Position3D {
 		);
 	}
 
-	static createFromVector3(position: THREE.Vector3, rotation?: THREE.Euler): Position {
+	static createFromVector3(position: THREE.Vector3, rotation?: THREE.Euler, scale?: THREE.Vector3): Position {
 		return new Position(
 			Math.floor(position.x / Project.SQUARE_SIZE),
 			Math.floor(position.y / Project.SQUARE_SIZE),
@@ -83,7 +83,10 @@ class Position extends Position3D {
 			(Math.round(position.z % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100,
 			rotation ? Mathf.forceDecimals(Mathf.radiansToDegrees(rotation.y)) : undefined,
 			rotation ? Mathf.forceDecimals(Mathf.radiansToDegrees(rotation.x)) : undefined,
-			rotation ? Mathf.forceDecimals(Mathf.radiansToDegrees(rotation.z)) : undefined
+			rotation ? Mathf.forceDecimals(Mathf.radiansToDegrees(rotation.z)) : undefined,
+			scale ? Mathf.forceDecimals(scale.x) : undefined,
+			scale ? Mathf.forceDecimals(scale.y) : undefined,
+			scale ? Mathf.forceDecimals(scale.z) : undefined
 		);
 	}
 

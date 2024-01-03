@@ -98,7 +98,6 @@ class Map extends Base {
 	public selectedMesh!: THREE.Mesh;
 	public selectedElement: MapElement.Base | null = null;
 	public selectedPosition: Position | null = null;
-	public selectedFirstVector: THREE.Vector3 | null = null;
 	public lockedY: number | null = null;
 	public lockedYPixels: number | null = null;
 	public requestPaintHUD = false;
@@ -374,7 +373,6 @@ class Map extends Base {
 
 	updateTransformPosition() {
 		if (
-			this.selectedFirstVector &&
 			this.selectedElement &&
 			Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
 		) {
@@ -393,6 +391,9 @@ class Map extends Base {
 					(this.selectedMesh.position.z % Project.SQUARE_SIZE) +
 					this.selectedElement.getAdditionalZ()
 			);
+			this.selectedMesh.scale.setX(Math.max(1, this.selectedMesh.scale.x - (this.selectedMesh.scale.x % 1)));
+			this.selectedMesh.scale.setY(Math.max(1, this.selectedMesh.scale.y - (this.selectedMesh.scale.y % 1)));
+			this.selectedMesh.scale.setZ(Math.max(1, this.selectedMesh.scale.z - (this.selectedMesh.scale.z % 1)));
 		}
 		if (this.selectedMesh.position.x < 0) {
 			this.selectedMesh.position.setX(0);
@@ -409,6 +410,14 @@ class Map extends Base {
 		} else if (this.selectedMesh.position.z > (this.modelMap.length - 1) * Project.SQUARE_SIZE) {
 			this.selectedMesh.position.setZ((this.modelMap.length - 1) * Project.SQUARE_SIZE);
 		}
+		if (this.transformControls.axis === null || this.transformControls.axis.includes('X')) {
+			this.selectedMesh.scale.setX(this.selectedMesh.scale.x <= 0 ? 0.001 : this.selectedMesh.scale.x);
+			this.selectedMesh.scale.setZ(this.selectedMesh.scale.x);
+		} else {
+			this.selectedMesh.scale.setZ(this.selectedMesh.scale.z <= 0 ? 0.001 : this.selectedMesh.scale.z);
+			this.selectedMesh.scale.setX(this.selectedMesh.scale.z);
+		}
+		this.selectedMesh.scale.setY(this.selectedMesh.scale.y <= 0 ? 0.001 : this.selectedMesh.scale.y);
 	}
 
 	removeTransform() {
@@ -739,7 +748,9 @@ class Map extends Base {
 				}
 			} else if (!this.transformControls.dragging && Scene.Map.isAdding()) {
 				this.selectedElement =
-					this.pointedMapElement === null || this.pointedMapElement.kind === ELEMENT_MAP_KIND.SPRITE_FACE
+					this.pointedMapElement === null ||
+					(Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.ROTATE &&
+						this.pointedMapElement.kind === ELEMENT_MAP_KIND.SPRITE_FACE)
 						? null
 						: this.pointedMapElement;
 				if (this.selectedElement === null) {
@@ -753,7 +764,6 @@ class Map extends Base {
 			}
 			if (this.transformControls.dragging && Scene.Map.isAdding()) {
 				this.isDraggingTransforming = true;
-				this.selectedFirstVector = this.selectedMesh.position.clone();
 			}
 		}
 	}
@@ -786,10 +796,13 @@ class Map extends Base {
 			if (this.isDraggingTransforming) {
 				if (this.selectedElement) {
 					this.updateTransformPosition();
+					console.log(this.selectedMesh.scale.clone());
 					this.needsUpdateSelectedPosition = this.selectedElement.getPositionFromVec3(
 						this.selectedMesh.position,
-						this.selectedMesh.rotation
+						this.selectedMesh.rotation,
+						this.selectedMesh.scale
 					);
+					console.log(this.needsUpdateSelectedPosition ? this.needsUpdateSelectedPosition.clone() : null);
 				}
 			}
 		}
@@ -830,7 +843,6 @@ class Map extends Base {
 		this.updateUndoRedoSave();
 		await Project.current!.treeMaps.save();
 		this.isDraggingTransforming = false;
-		this.selectedFirstVector = null;
 	}
 
 	async onTouchEnd(x: number, y: number) {
@@ -904,8 +916,12 @@ class Map extends Base {
 		this.camera.getThreeCamera().getWorldDirection(vector);
 		const angle = Math.atan2(vector.x, vector.z) + Math.PI;
 		this.mapPortion.updateFaceSprites(angle);
-		if (this.selectedElement && this.selectedElement.kind === ELEMENT_MAP_KIND.SPRITE_FACE) {
-			(this.selectedMesh.geometry as CustomGeometryFace).rotate(angle, MapElement.Base.Y_AXIS);
+		if (this.selectedElement?.kind === ELEMENT_MAP_KIND.SPRITE_FACE) {
+			(this.selectedMesh.geometry as CustomGeometryFace).rotate(
+				angle,
+				MapElement.Base.Y_AXIS,
+				this.selectedMesh.scale
+			);
 		}
 
 		// Update autotiles animated

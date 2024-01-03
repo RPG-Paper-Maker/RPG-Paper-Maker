@@ -1,1 +1,13 @@
-<svg stroke="currentColor" fill="white" stroke-width="1" viewBox="0 0 24 24" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg"><path d="M8.707 19.707 18 10.414 13.586 6l-9.293 9.293a1.003 1.003 0 0 0-.263.464L3 21l5.242-1.03c.176-.044.337-.135.465-.263zM21 7.414a2 2 0 0 0 0-2.828L19.414 3a2 2 0 0 0-2.828 0L15 4.586 19.414 9 21 7.414z"></path></svg>
+<svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg">
+	<!-- Black outline -->
+	<circle cx="19" cy="19" r="2" stroke-width="4" stroke="black"></circle>
+	<circle cx="5" cy="5" r="2" stroke-width="4" stroke="black"></circle>
+	<path d="M5 7v12h12" stroke-width="4" stroke="black"></path>
+	<path d="m5 19 6-6" stroke-width="4" stroke="black"></path>
+
+	<!-- White fill -->
+	<circle cx="19" cy="19" r="2" stroke="white" fill="none"></circle>
+	<circle cx="5" cy="5" r="2" stroke="white" fill="none"></circle>
+	<path d="M5 7v12h12" stroke="white" fill="none"></path>
+	<path d="m5 19 6-6" stroke="white" fill="none"></path>
+</svg>

@@ -11,7 +11,6 @@
 
 import * as THREE from 'three';
 import { CustomGeometry } from '.';
-import { MapElement } from '../Editor';
 
 class CustomGeometryFace extends CustomGeometry {
 	public _size: number[] = [];
@@ -33,7 +32,7 @@ class CustomGeometryFace extends CustomGeometry {
 		this._center.push(center.x, center.y, center.z);
 	}
 
-	rotate(angle: number, axis: THREE.Vector3) {
+	rotate(angle: number, axis: THREE.Vector3, scaled?: THREE.Vector3) {
 		const a = angle - this.currentAngle;
 		if (a === 0) {
 			return;
@@ -47,7 +46,15 @@ class CustomGeometryFace extends CustomGeometry {
 			ic = Math.floor(i / 12) * 3;
 			vertex.set(vertices[i], vertices[i + 1], vertices[i + 2]);
 			center.set(this.centerPoints[ic], this.centerPoints[ic + 1], this.centerPoints[ic + 2]);
+			if (scaled) {
+				vertex.multiply(scaled);
+				center.multiply(scaled);
+			}
 			CustomGeometry.rotateVertex(vertex, center, a, axis, false);
+			if (scaled) {
+				vertex.divide(scaled);
+				center.divide(scaled);
+			}
 			this._vertices.push(vertex.x, vertex.y, vertex.z);
 		}
 		this.setAttribute('position', new THREE.Float32BufferAttribute(this._vertices, 3));

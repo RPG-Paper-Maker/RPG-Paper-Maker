@@ -180,13 +180,13 @@ class Object3DBox extends Object3D {
 		return localPosition;
 	}
 
-	getPositionFromVec3(vec: THREE.Vector3, rotation: THREE.Euler): Position {
+	getPositionFromVec3(vec: THREE.Vector3, rotation: THREE.Euler, scale: THREE.Vector3): Position {
 		const v = vec.clone();
 		if (this.data.isTopLeft) {
 			v.setX(v.x + Math.floor(Project.SQUARE_SIZE / 2));
 			v.setZ(v.z + Math.floor(Project.SQUARE_SIZE / 2));
 		}
-		return Position.createFromVector3(v, rotation);
+		return Position.createFromVector3(v, rotation, scale);
 	}
 
 	getAdditionalX(): number {

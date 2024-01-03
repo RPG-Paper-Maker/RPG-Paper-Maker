@@ -164,8 +164,12 @@ abstract class Base extends Serializable {
 		return position.toRotationEuler();
 	}
 
-	getPositionFromVec3(vec: THREE.Vector3, rotation: THREE.Euler): Position {
-		return Position.createFromVector3(vec, rotation);
+	getLocalScale(position: Position): THREE.Vector3 {
+		return position.toScaleVector();
+	}
+
+	getPositionFromVec3(vec: THREE.Vector3, rotation: THREE.Euler, scale: THREE.Vector3): Position {
+		return Position.createFromVector3(vec, rotation, scale);
 	}
 
 	getAdditionalX(): number {

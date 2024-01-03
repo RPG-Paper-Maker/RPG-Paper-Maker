@@ -83,6 +83,15 @@ function MapEditorMenuBar() {
 			ELEMENT_MAP_KIND.OBJECT,
 		].includes(Scene.Map.currentSelectedMapElementKind);
 
+	const isScaleDisabled = () =>
+		[
+			ELEMENT_MAP_KIND.FLOOR,
+			ELEMENT_MAP_KIND.AUTOTILE,
+			ELEMENT_MAP_KIND.SPRITE_WALL,
+			ELEMENT_MAP_KIND.MOUNTAIN,
+			ELEMENT_MAP_KIND.OBJECT,
+		].includes(Scene.Map.currentSelectedMapElementKind);
+
 	const handleGeneric = (kind: ELEMENT_MAP_KIND, menuIndex: MENU_INDEX_MAP_EDITOR) => {
 		dispatch(setCurrentMapElementKind(kind));
 		Scene.Map.currentSelectedMapElementKind = kind;
@@ -91,7 +100,7 @@ function MapEditorMenuBar() {
 			Project.current!.settings.mapEditorCurrentElementPositionIndex = ELEMENT_POSITION_KIND.SQUARE;
 			setElementPositionIndex(ELEMENT_POSITION_KIND.SQUARE);
 		}
-		if (isTranslateDisabled()) {
+		if (isTranslateDisabled() || isRotateDisabled() || isScaleDisabled()) {
 			Project.current!.settings.mapEditorCurrentActionIndex = ACTION_KIND.PENCIL;
 			setActionIndex(ACTION_KIND.PENCIL);
 			dispatch(setCurrentActionKind(ACTION_KIND.PENCIL));
@@ -209,7 +218,11 @@ function MapEditorMenuBar() {
 
 	const handleActionGeneric = async (kind: ACTION_KIND) => {
 		dispatch(setCurrentActionKind(kind));
-		if (kind > ACTION_KIND.SCALE) {
+		if (
+			kind > ACTION_KIND.SCALE ||
+			(Scene.Map.current!.selectedElement &&
+				Scene.Map.current!.selectedElement.kind === ELEMENT_MAP_KIND.SPRITE_FACE)
+		) {
 			Scene.Map.current!.removeTransform();
 		}
 		Project.current!.settings.mapEditorCurrentActionIndex = kind;
@@ -369,7 +382,7 @@ function MapEditorMenuBar() {
 				<Menu horizontal isActivable activeIndex={actionIndex} setActiveIndex={setActionIndex}>
 					<MenuItem icon={<LuMove3D />} onClick={handleActionTranslate} disabled={isTranslateDisabled()} />
 					<MenuItem icon={<LuRotate3D />} onClick={handleActionRotate} disabled={isRotateDisabled()} />
-					<MenuItem icon={<LuScale3D />} onClick={handleActionScale} disabled />
+					<MenuItem icon={<LuScale3D />} onClick={handleActionScale} disabled={isScaleDisabled()} />
 					<MenuItem icon={<BiSolidPencil />} onClick={handleActionPencil} />
 					<MenuItem icon={<PiSelectionAllFill />} onClick={handleActionRectangle} disabled />
 					<MenuItem icon={<VscPaintcan />} onClick={handleActionPin} disabled />

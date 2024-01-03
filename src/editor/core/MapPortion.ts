@@ -21,7 +21,7 @@ import {
 	Rectangle,
 	UndoRedoState,
 } from '.';
-import { Constants, ELEMENT_MAP_KIND, RAYCASTING_LAYER, SPRITE_WALL_TYPE } from '../common';
+import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, RAYCASTING_LAYER, SPRITE_WALL_TYPE } from '../common';
 import { SpriteWall } from '../mapElements';
 
 class MapPortion {
@@ -453,7 +453,8 @@ class MapPortion {
 		if (Scene.Map.current!.selectedElement) {
 			const position = Scene.Map.current!.selectedElement.getPositionFromVec3(
 				Scene.Map.current!.selectedMesh.position,
-				Scene.Map.current!.selectedMesh.rotation
+				Scene.Map.current!.selectedMesh.rotation,
+				Scene.Map.current!.selectedMesh.scale
 			);
 			const models = this.model.getModelsByKind(Scene.Map.current!.selectedElement.kind);
 			if (models) {
@@ -485,6 +486,7 @@ class MapPortion {
 			Scene.Map.current!.selectedMesh.rotation.copy(
 				Scene.Map.current!.selectedElement!.getLocalRotation(position)
 			);
+			Scene.Map.current!.selectedMesh.scale.copy(Scene.Map.current!.selectedElement!.getLocalScale(position));
 		}
 		Scene.Map.current!.scene.add(Scene.Map.current!.selectedMesh);
 		Scene.Map.current!.transformControls.attach(Scene.Map.current!.selectedMesh);
@@ -770,15 +772,29 @@ class MapPortion {
 			position.fromKey(positionKey);
 			const localPosition = position.toVector3();
 			if (sprite.kind === ELEMENT_MAP_KIND.SPRITE_FACE) {
-				faceCount = sprite.updateGeometry(
-					faceGeometry,
-					width,
-					height,
-					position,
-					faceCount,
-					true,
-					localPosition
-				);
+				if (Scene.Map.current!.selectedElement === sprite) {
+					const geometry = new CustomGeometryFace();
+					sprite.updateGeometry(geometry, width, height, new Position(), 0, true, new THREE.Vector3());
+					this.updateSelected(geometry, this.hoveredMesh.material, localPosition, position);
+				} else if (
+					Project.current!.settings.mapEditorCurrentActionIndex !== ACTION_KIND.ROTATE &&
+					isPointedSprite &&
+					Scene.Map.current!.pointedMapElement === sprite
+				) {
+					const hoveredGeometry = new CustomGeometryFace();
+					this.hoveredMesh.geometry = hoveredGeometry;
+					sprite.updateGeometry(hoveredGeometry, width, height, position, 0, true, localPosition);
+				} else {
+					faceCount = sprite.updateGeometry(
+						faceGeometry,
+						width,
+						height,
+						position,
+						faceCount,
+						true,
+						localPosition
+					);
+				}
 			} else {
 				if (Scene.Map.current!.selectedElement === sprite) {
 					const geometry = new CustomGeometry();

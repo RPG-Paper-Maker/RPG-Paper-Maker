@@ -55,12 +55,15 @@ function PanelTransform({ kind }: Props) {
 			.split('\n')
 			.map((line: string, index: number) => <div key={index}>{line}</div>);
 
-	const units =
-		kind === ACTION_KIND.ROTATE
-			? '°'
-			: currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
-			? 'square(s)'
-			: 'pixel(s)';
+	let units = '';
+	switch (kind) {
+		case ACTION_KIND.TRANSLATE:
+			units = currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE ? 'square(s)' : 'pixel(s)';
+			break;
+		case ACTION_KIND.ROTATE:
+			units = '°';
+			break;
+	}
 
 	const getCurrentX = () => {
 		switch (kind) {
@@ -70,6 +73,8 @@ function PanelTransform({ kind }: Props) {
 					: selectedPosition!.getTotalX();
 			case ACTION_KIND.ROTATE:
 				return selectedPosition!.angleX;
+			case ACTION_KIND.SCALE:
+				return selectedPosition!.scaleX;
 			default:
 				return 0;
 		}
@@ -83,6 +88,8 @@ function PanelTransform({ kind }: Props) {
 					: selectedPosition!.getTotalY();
 			case ACTION_KIND.ROTATE:
 				return selectedPosition!.angleY;
+			case ACTION_KIND.SCALE:
+				return selectedPosition!.scaleY;
 			default:
 				return 0;
 		}
@@ -96,6 +103,8 @@ function PanelTransform({ kind }: Props) {
 					: selectedPosition!.getTotalZ();
 			case ACTION_KIND.ROTATE:
 				return selectedPosition!.angleZ;
+			case ACTION_KIND.SCALE:
+				return selectedPosition!.scaleZ;
 			default:
 				return 0;
 		}
@@ -105,6 +114,8 @@ function PanelTransform({ kind }: Props) {
 		switch (kind) {
 			case ACTION_KIND.TRANSLATE:
 				return 0;
+			case ACTION_KIND.SCALE:
+				return 0.0001;
 			default:
 				return undefined;
 		}
@@ -126,6 +137,8 @@ function PanelTransform({ kind }: Props) {
 			case ACTION_KIND.TRANSLATE:
 				const min = -Scene.Map.current!.modelMap.depth;
 				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE ? min : min * Project.SQUARE_SIZE;
+			case ACTION_KIND.SCALE:
+				return 0.0001;
 			default:
 				return undefined;
 		}
@@ -146,6 +159,8 @@ function PanelTransform({ kind }: Props) {
 		switch (kind) {
 			case ACTION_KIND.TRANSLATE:
 				return 0;
+			case ACTION_KIND.SCALE:
+				return 0.0001;
 			default:
 				return undefined;
 		}
@@ -166,6 +181,7 @@ function PanelTransform({ kind }: Props) {
 		dispatch(setSelectedPosition(position));
 		Scene.Map.current!.selectedMesh.position.copy(Scene.Map.current!.selectedElement!.getLocalPosition(position));
 		Scene.Map.current!.selectedMesh.rotation.copy(Scene.Map.current!.selectedElement!.getLocalRotation(position));
+		Scene.Map.current!.selectedMesh.scale.copy(Scene.Map.current!.selectedElement!.getLocalScale(position));
 		Scene.Map.current!.updateTransform();
 		Scene.Map.current!.updateUndoRedoSave();
 	};
@@ -183,6 +199,10 @@ function PanelTransform({ kind }: Props) {
 				break;
 			case ACTION_KIND.ROTATE:
 				position.angleX = value;
+				break;
+			case ACTION_KIND.SCALE:
+				position.scaleX = value;
+				position.scaleZ = value;
 				break;
 		}
 		updatePosition(position);
@@ -202,6 +222,9 @@ function PanelTransform({ kind }: Props) {
 			case ACTION_KIND.ROTATE:
 				position.angleY = value;
 				break;
+			case ACTION_KIND.SCALE:
+				position.scaleY = value;
+				break;
 		}
 		updatePosition(position);
 	};
@@ -219,6 +242,10 @@ function PanelTransform({ kind }: Props) {
 				break;
 			case ACTION_KIND.ROTATE:
 				position.angleZ = value;
+				break;
+			case ACTION_KIND.SCALE:
+				position.scaleZ = value;
+				position.scaleX = value;
 				break;
 		}
 		updatePosition(position);
