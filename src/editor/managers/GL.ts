@@ -20,8 +20,6 @@ import { IO, Utils } from '../common';
 class GL {
 	public static SHADER_DEFAULT_VERTEX: string;
 	public static SHADER_DEFAULT_FRAGMENT: string;
-	public static SHADER_FACE_VERTEX: string;
-	public static SHADER_FACE_FRAGMENT: string;
 	public static textureLoader = new THREE.TextureLoader();
 	public static OBJLoader = new OBJLoader();
 	public static MTLLoader = new MTLLoader();
@@ -72,8 +70,6 @@ class GL {
 	static async initializeShaders() {
 		this.SHADER_DEFAULT_VERTEX = await IO.openFile('./Scripts/Shaders/default.vert');
 		this.SHADER_DEFAULT_FRAGMENT = await IO.openFile('./Scripts/Shaders/default.frag');
-		this.SHADER_FACE_VERTEX = await IO.openFile('./Scripts/Shaders/face.vert');
-		this.SHADER_FACE_FRAGMENT = await IO.openFile('./Scripts/Shaders/face.frag');
 	}
 
 	static getMaterialTextureSize(material: THREE.MeshPhongMaterial | null): { width: number; height: number } {
