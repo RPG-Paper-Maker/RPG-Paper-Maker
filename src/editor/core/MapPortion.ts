@@ -21,7 +21,7 @@ import {
 	Rectangle,
 	UndoRedoState,
 } from '.';
-import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, RAYCASTING_LAYER, SPRITE_WALL_TYPE } from '../common';
+import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, Mathf, RAYCASTING_LAYER, SPRITE_WALL_TYPE } from '../common';
 import { SpriteWall } from '../mapElements';
 
 class MapPortion {
@@ -69,8 +69,10 @@ class MapPortion {
 		this.lastPreviewRemove = [];
 	}
 
-	add(position: Position, preview: boolean = false) {
-		this.removeLastPreview();
+	add(position: Position, preview: boolean = false, removePreview = true) {
+		if (removePreview) {
+			this.removeLastPreview();
+		}
 		switch (Scene.Map.currentSelectedMapElementKind) {
 			case ELEMENT_MAP_KIND.FLOOR:
 				this.updateMapElement(
@@ -160,8 +162,10 @@ class MapPortion {
 		}
 	}
 
-	remove(position: Position, preview = false) {
-		this.removeLastPreview();
+	remove(position: Position, preview = false, removePreview = true) {
+		if (removePreview) {
+			this.removeLastPreview();
+		}
 		if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
 			this.updateWallFromCursor(-1, preview);
 		} else {
@@ -177,7 +181,7 @@ class MapPortion {
 					this.updateMapElement(floorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
 				}
 			}
-			this.updateMapElement(position, null, Scene.Map.currentSelectedMapElementKind);
+			this.updateMapElement(position, null, Scene.Map.currentSelectedMapElementKind, preview);
 		}
 	}
 
@@ -237,21 +241,45 @@ class MapPortion {
 				undoRedo
 			);
 		} else {
-			for (let i = 0; i < floor.texture.width; i++) {
-				for (let j = 0; j < floor.texture.height; j++) {
-					const newPosition = position.clone();
-					newPosition.x = position.x + i;
-					newPosition.z = position.z + j;
+			switch (Project.current!.settings.mapEditorCurrentActionIndex) {
+				case ACTION_KIND.PENCIL:
+					for (let i = 0; i < floor.texture.width; i++) {
+						for (let j = 0; j < floor.texture.height; j++) {
+							const newPosition = position.clone();
+							newPosition.x = position.x + i;
+							newPosition.z = position.z + j;
+							this.setMapElement(
+								newPosition,
+								MapElement.Floor.create(new Rectangle(floor.texture.x + i, floor.texture.y + j, 1, 1)),
+								ELEMENT_MAP_KIND.FLOOR,
+								this.model.lands,
+								preview,
+								removingPreview,
+								undoRedo
+							);
+						}
+					}
+					break;
+				case ACTION_KIND.RECTANGLE:
+					const x = Scene.Map.current!.rectangleStartPosition
+						? Mathf.mod(position.x - Scene.Map.current!.rectangleStartPosition.x, floor.texture.width)
+						: 0;
+					const y = Scene.Map.current!.rectangleStartPosition
+						? Mathf.mod(position.z - Scene.Map.current!.rectangleStartPosition.z, floor.texture.height)
+						: 0;
 					this.setMapElement(
-						newPosition,
-						MapElement.Floor.create(new Rectangle(floor.texture.x + i, floor.texture.y + j, 1, 1)),
+						position,
+						MapElement.Floor.create(new Rectangle(floor.texture.x + x, floor.texture.y + y, 1, 1)),
 						ELEMENT_MAP_KIND.FLOOR,
 						this.model.lands,
 						preview,
 						removingPreview,
 						undoRedo
 					);
-				}
+
+					break;
+				default:
+					break;
 			}
 		}
 		MapElement.Autotiles.updateAround(

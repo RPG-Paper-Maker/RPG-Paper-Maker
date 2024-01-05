@@ -24,10 +24,6 @@
 	color: white;
 }
 
-.map-editor.cursor-pencil {
-	cursor: url('../../assets/icons/cursor-pencil.svg') 3 20, pointer;
-}
-
 .map-editor.cursor-translate {
 	cursor: url('../../assets/icons/cursor-translate.svg') 10 10, pointer;
 }
@@ -38,6 +34,18 @@
 
 .map-editor.cursor-scale {
 	cursor: url('../../assets/icons/cursor-scale.svg') 10 10, pointer;
+}
+
+.map-editor.cursor-pencil {
+	cursor: url('../../assets/icons/cursor-pencil.svg') 3 20, pointer;
+}
+
+.map-editor.cursor-rectangle {
+	cursor: url('../../assets/icons/cursor-rectangle.svg') 10 10, pointer;
+}
+
+.map-editor.cursor-pin {
+	cursor: url('../../assets/icons/cursor-pin.svg') 10 10, pointer;
 }
 
 #canvas-hud {

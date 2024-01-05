@@ -246,6 +246,19 @@ class Position extends Position3D {
 		return position;
 	}
 
+	getPositionsRectangle(position: Position) {
+		const positions = [];
+		for (let x = Math.min(this.x, position.x), endX = Math.max(this.x, position.x); x <= endX; x++) {
+			for (let z = Math.min(this.z, position.z), endZ = Math.max(this.z, position.z); z <= endZ; z++) {
+				const p = this.clone();
+				p.x = x;
+				p.z = z;
+				positions.push(p);
+			}
+		}
+		return positions;
+	}
+
 	toStringCoords() {
 		const yPixels = this.getTotalYPixels();
 		return `[X = ${this.x}, Y = ${this.y}${yPixels === 0 ? '' : ` (+${yPixels}px)`}, Z = ${this.z}]`;

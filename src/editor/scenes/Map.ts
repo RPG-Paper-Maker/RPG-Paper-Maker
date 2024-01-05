@@ -98,6 +98,7 @@ class Map extends Base {
 	public selectedMesh!: THREE.Mesh;
 	public selectedElement: MapElement.Base | null = null;
 	public selectedPosition: Position | null = null;
+	public rectangleStartPosition: Position | null = null;
 	public lockedY: number | null = null;
 	public lockedYPixels: number | null = null;
 	public requestPaintHUD = false;
@@ -270,14 +271,16 @@ class Map extends Base {
 		this.sunLight.shadow.bias = -0.0003;
 	}
 
-	add(position: Position, preview = false) {
+	add(position: Position, preview = false, removePreview = true) {
 		if (!preview) {
 			const positions = Mathf.traceLine(this.lastPosition, position);
 			for (const p of positions) {
 				if (p.isInMap(this.modelMap)) {
-					this.mapPortion.add(p, preview);
+					this.mapPortion.add(p, preview, removePreview);
 				} else {
-					this.mapPortion.removeLastPreview();
+					if (removePreview) {
+						this.mapPortion.removeLastPreview();
+					}
 				}
 			}
 		} else {
@@ -287,20 +290,41 @@ class Map extends Base {
 					Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL
 				)
 			) {
-				this.mapPortion.add(position, preview);
+				this.mapPortion.add(position, preview, removePreview);
 			} else {
-				this.mapPortion.removeLastPreview();
+				if (removePreview) {
+					this.mapPortion.removeLastPreview();
+				}
 			}
 		}
 	}
 
-	remove(position: Position, preview = false) {
-		const positions = Mathf.traceLine(this.lastPosition, position);
-		for (const p of positions) {
-			if (p.isInMap(this.modelMap, Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL)) {
-				this.mapPortion.remove(p, preview);
+	remove(position: Position, preview = false, removePreview = true) {
+		if (!preview) {
+			const positions = Mathf.traceLine(this.lastPosition, position);
+			for (const p of positions) {
+				if (
+					p.isInMap(this.modelMap, Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL)
+				) {
+					this.mapPortion.remove(p, preview, removePreview);
+				} else {
+					if (removePreview) {
+						this.mapPortion.removeLastPreview();
+					}
+				}
+			}
+		} else {
+			if (
+				position.isInMap(
+					this.modelMap,
+					Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL
+				)
+			) {
+				this.mapPortion.remove(position, preview, removePreview);
 			} else {
-				this.mapPortion.removeLastPreview();
+				if (removePreview) {
+					this.mapPortion.removeLastPreview();
+				}
 			}
 		}
 	}
@@ -472,7 +496,7 @@ class Map extends Base {
 		}
 		Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
 		let layer = RAYCASTING_LAYER.LANDS;
-		if (Inputs.isMouseRightPressed) {
+		if (Inputs.isMouseRightPressed && this.rectangleStartPosition === null) {
 			switch (Scene.Map.currentSelectedMapElementKind) {
 				case ELEMENT_MAP_KIND.SPRITE_FACE:
 				case ELEMENT_MAP_KIND.SPRITE_FIX:
@@ -503,7 +527,7 @@ class Map extends Base {
 		const intersectsPlane = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		const dist = intersects.length > 0 ? intersects[0].distance : Number.POSITIVE_INFINITY;
 		const distPlane = intersectsPlane.length > 0 ? intersectsPlane[0].distance : Number.POSITIVE_INFINITY;
-		if (distPlane < dist) {
+		if (distPlane < dist || this.rectangleStartPosition) {
 			intersects = intersectsPlane;
 			layer = RAYCASTING_LAYER.PLANE;
 		}
@@ -558,6 +582,14 @@ class Map extends Base {
 				position.centerZ = ((Math.floor(obj.point.z) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
 			}
 			if (this.lastPosition === null || !this.lastPosition.equals(position)) {
+				if (
+					Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.RECTANGLE &&
+					this.rectangleStartPosition === null &&
+					Scene.Map.isRemoving() &&
+					this.lastPosition === null
+				) {
+					this.rectangleStartPosition = position.clone();
+				}
 				if (Scene.Map.isDrawing()) {
 					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
 						if (Scene.Map.isAdding()) {
@@ -574,10 +606,26 @@ class Map extends Base {
 							this.add(position, true);
 						} else if (Scene.Map.isAdding()) {
 							this.updateLockedY(position);
-							this.add(position);
+							if (this.rectangleStartPosition) {
+								const positions = this.rectangleStartPosition.getPositionsRectangle(position);
+								this.mapPortion.removeLastPreview();
+								for (const rectanglePosition of positions) {
+									this.add(rectanglePosition, true, false);
+								}
+							} else {
+								this.add(position);
+							}
 						} else if (Scene.Map.isRemoving()) {
 							this.updateLockedY(position);
-							this.remove(position);
+							if (this.rectangleStartPosition) {
+								const positions = this.rectangleStartPosition.getPositionsRectangle(position);
+								this.mapPortion.removeLastPreview();
+								for (const rectanglePosition of positions) {
+									this.remove(rectanglePosition, true, false);
+								}
+							} else {
+								this.remove(position);
+							}
 						}
 					}
 				}
@@ -715,8 +763,10 @@ class Map extends Base {
 	}
 
 	onKeyDownImmediate() {
-		this.cursor.onKeyDownImmediate();
-		this.requestPaintHUD = true;
+		if (this.rectangleStartPosition === null) {
+			this.cursor.onKeyDownImmediate();
+			this.requestPaintHUD = true;
+		}
 	}
 
 	onKeyUp(key: string) {
@@ -736,7 +786,11 @@ class Map extends Base {
 						this.cursorWall.onMouseDown();
 					} else {
 						this.updateLockedY(this.lastPosition);
-						this.add(this.lastPosition);
+						if (Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.RECTANGLE) {
+							this.rectangleStartPosition = this.lastPosition.clone();
+						} else {
+							this.add(this.lastPosition);
+						}
 					}
 				} else if (Inputs.isMouseRightPressed) {
 					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
@@ -769,7 +823,7 @@ class Map extends Base {
 	}
 
 	onPointerDown(x: number, y: number) {
-		if (Inputs.previousTouchDistance === 0) {
+		if (Inputs.previousTouchDistance === 0 && this.rectangleStartPosition === null) {
 			this.addMobileKeyMove();
 			if (Inputs.keys.length > 0) {
 				this.cursor.onKeyDownImmediate();
@@ -796,13 +850,11 @@ class Map extends Base {
 			if (this.isDraggingTransforming) {
 				if (this.selectedElement) {
 					this.updateTransformPosition();
-					console.log(this.selectedMesh.scale.clone());
 					this.needsUpdateSelectedPosition = this.selectedElement.getPositionFromVec3(
 						this.selectedMesh.position,
 						this.selectedMesh.rotation,
 						this.selectedMesh.scale
 					);
-					console.log(this.needsUpdateSelectedPosition ? this.needsUpdateSelectedPosition.clone() : null);
 				}
 			}
 		}
@@ -840,9 +892,23 @@ class Map extends Base {
 		if (this.isDraggingTransforming) {
 			this.updateTransform();
 		}
+		this.isDraggingTransforming = false;
+		if (this.rectangleStartPosition && this.lastPosition) {
+			const positions = this.rectangleStartPosition.getPositionsRectangle(this.lastPosition);
+			this.mapPortion.removeLastPreview();
+			if (Scene.Map.isAdding()) {
+				for (const p of positions) {
+					this.add(p);
+				}
+			} else if (Scene.Map.isRemoving()) {
+				for (const p of positions) {
+					this.remove(p);
+				}
+			}
+		}
+		this.rectangleStartPosition = null;
 		this.updateUndoRedoSave();
 		await Project.current!.treeMaps.save();
-		this.isDraggingTransforming = false;
 	}
 
 	async onTouchEnd(x: number, y: number) {

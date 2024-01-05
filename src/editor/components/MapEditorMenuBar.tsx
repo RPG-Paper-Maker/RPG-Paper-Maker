@@ -65,7 +65,8 @@ function MapEditorMenuBar() {
 			ELEMENT_MAP_KIND.SPRITE_WALL,
 			ELEMENT_MAP_KIND.MOUNTAIN,
 			ELEMENT_MAP_KIND.OBJECT,
-		].includes(Scene.Map.currentSelectedMapElementKind);
+		].includes(Scene.Map.currentSelectedMapElementKind) ||
+		[ACTION_KIND.RECTANGLE, ACTION_KIND.PIN].includes(actionIndex);
 
 	const isTranslateDisabled = () =>
 		[
@@ -92,6 +93,21 @@ function MapEditorMenuBar() {
 			ELEMENT_MAP_KIND.OBJECT,
 		].includes(Scene.Map.currentSelectedMapElementKind);
 
+	const isRectangleDisabled = () =>
+		[ELEMENT_MAP_KIND.SPRITE_WALL, ELEMENT_MAP_KIND.OBJECT].includes(Scene.Map.currentSelectedMapElementKind);
+
+	const isPinDisabled = () =>
+		[
+			ELEMENT_MAP_KIND.SPRITE_FACE,
+			ELEMENT_MAP_KIND.SPRITE_FIX,
+			ELEMENT_MAP_KIND.SPRITE_DOUBLE,
+			ELEMENT_MAP_KIND.SPRITE_QUADRA,
+			ELEMENT_MAP_KIND.SPRITE_WALL,
+			ELEMENT_MAP_KIND.MOUNTAIN,
+			ELEMENT_MAP_KIND.OBJECT3D,
+			ELEMENT_MAP_KIND.OBJECT,
+		].includes(Scene.Map.currentSelectedMapElementKind);
+
 	const handleGeneric = (kind: ELEMENT_MAP_KIND, menuIndex: MENU_INDEX_MAP_EDITOR) => {
 		dispatch(setCurrentMapElementKind(kind));
 		Scene.Map.currentSelectedMapElementKind = kind;
@@ -100,7 +116,13 @@ function MapEditorMenuBar() {
 			Project.current!.settings.mapEditorCurrentElementPositionIndex = ELEMENT_POSITION_KIND.SQUARE;
 			setElementPositionIndex(ELEMENT_POSITION_KIND.SQUARE);
 		}
-		if (isTranslateDisabled() || isRotateDisabled() || isScaleDisabled()) {
+		if (
+			(isTranslateDisabled() && actionIndex === ACTION_KIND.TRANSLATE) ||
+			(isRotateDisabled() && actionIndex === ACTION_KIND.ROTATE) ||
+			(isScaleDisabled() && actionIndex === ACTION_KIND.SCALE) ||
+			(isRectangleDisabled() && actionIndex === ACTION_KIND.RECTANGLE) ||
+			(isPinDisabled() && actionIndex === ACTION_KIND.PIN)
+		) {
 			Project.current!.settings.mapEditorCurrentActionIndex = ACTION_KIND.PENCIL;
 			setActionIndex(ACTION_KIND.PENCIL);
 			dispatch(setCurrentActionKind(ACTION_KIND.PENCIL));
@@ -226,6 +248,11 @@ function MapEditorMenuBar() {
 			Scene.Map.current!.removeTransform();
 		}
 		Project.current!.settings.mapEditorCurrentActionIndex = kind;
+		if (kind > ACTION_KIND.PENCIL) {
+			dispatch(setCurrentElementPositionKind(ELEMENT_POSITION_KIND.SQUARE));
+			setElementPositionIndex(ELEMENT_POSITION_KIND.SQUARE);
+			Project.current!.settings.mapEditorCurrentElementPositionIndex = ELEMENT_POSITION_KIND.SQUARE;
+		}
 		await Project.current!.settings.save();
 	};
 
@@ -264,6 +291,7 @@ function MapEditorMenuBar() {
 			const menuIndex = Project.current!.settings.mapEditorMenuIndex;
 			setSelectionIndex(menuIndex);
 			setMobileIndex(Project.current!.settings.projectMenuIndex);
+			const actionIndexBefore = Project.current!.settings.mapEditorCurrentActionIndex;
 			switch (menuIndex) {
 				case MENU_INDEX_MAP_EDITOR.LANDS:
 					handleLands().catch(console.error);
@@ -279,6 +307,7 @@ function MapEditorMenuBar() {
 					break;
 			}
 			setElementPositionIndex(Project.current!.settings.mapEditorCurrentElementPositionIndex);
+			Project.current!.settings.mapEditorCurrentActionIndex = actionIndexBefore;
 			setActionIndex(Project.current!.settings.mapEditorCurrentActionIndex);
 			dispatch(setCurrentActionKind(Project.current!.settings.mapEditorCurrentActionIndex));
 			dispatch(setCurrentElementPositionKind(Project.current!.settings.mapEditorCurrentElementPositionIndex));
@@ -384,7 +413,11 @@ function MapEditorMenuBar() {
 					<MenuItem icon={<LuRotate3D />} onClick={handleActionRotate} disabled={isRotateDisabled()} />
 					<MenuItem icon={<LuScale3D />} onClick={handleActionScale} disabled={isScaleDisabled()} />
 					<MenuItem icon={<BiSolidPencil />} onClick={handleActionPencil} />
-					<MenuItem icon={<PiSelectionAllFill />} onClick={handleActionRectangle} disabled />
+					<MenuItem
+						icon={<PiSelectionAllFill />}
+						onClick={handleActionRectangle}
+						disabled={isRectangleDisabled()}
+					/>
 					<MenuItem icon={<VscPaintcan />} onClick={handleActionPin} disabled />
 					<MenuItem separator />
 				</Menu>
