@@ -13,7 +13,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { MapElement, Model } from '../../Editor';
 import { Position, Rectangle } from '../../core';
-import { ACTION_KIND, ELEMENT_MAP_KIND, ELEMENT_POSITION_KIND } from '../../common';
+import { ACTION_KIND, ELEMENT_MAP_KIND, ELEMENT_POSITION_KIND, LAYER_KIND } from '../../common';
 
 export interface ProjectState {
 	name: string;
@@ -38,6 +38,7 @@ const MapEditorSlice = createSlice({
 		currentMapElementKind: ELEMENT_MAP_KIND.FLOOR,
 		currentActionKind: ACTION_KIND.PENCIL,
 		currentElementPositionKind: ELEMENT_POSITION_KIND.SQUARE,
+		currentLayerKind: LAYER_KIND.OFF,
 		selectedPosition: null as Position | null,
 		selectedMapElement: null as MapElement.Base | null,
 		undoRedo: {
@@ -91,6 +92,9 @@ const MapEditorSlice = createSlice({
 		setCurrentElementPositionKind(state, action: PayloadAction<ELEMENT_POSITION_KIND>) {
 			state.currentElementPositionKind = action.payload;
 		},
+		setCurrentLayerKind(state, action: PayloadAction<LAYER_KIND>) {
+			state.currentLayerKind = action.payload;
+		},
 		setSelectedPosition(state, action: PayloadAction<Position | null>) {
 			state.selectedPosition = action.payload;
 		},
@@ -122,6 +126,7 @@ export const {
 	setCurrentMapElementKind,
 	setCurrentActionKind,
 	setCurrentElementPositionKind,
+	setCurrentLayerKind,
 	setSelectedPosition,
 	setSelectedMapElement,
 	setUndoRedoIndex,

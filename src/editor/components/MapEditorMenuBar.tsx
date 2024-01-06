@@ -31,13 +31,20 @@ import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
 import { PiSelectionAllFill } from 'react-icons/pi';
 import { VscPaintcan } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setCurrentActionKind, setCurrentElementPositionKind, setCurrentMapElementKind } from '../store';
+import {
+	RootState,
+	setCurrentActionKind,
+	setCurrentElementPositionKind,
+	setCurrentLayerKind,
+	setCurrentMapElementKind,
+} from '../store';
 import { Scene } from '../Editor';
 import {
 	ACTION_KIND,
 	Constants,
 	ELEMENT_MAP_KIND,
 	ELEMENT_POSITION_KIND,
+	LAYER_KIND,
 	MENU_INDEX_LANDS_MAP_EDITOR,
 	MENU_INDEX_MAP_EDITOR,
 	MENU_INDEX_SPRITES_MAP_EDITOR,
@@ -52,7 +59,7 @@ function MapEditorMenuBar() {
 	const [mobileIndex, setMobileIndex] = useState(MOBILE_ACTION.PLUS);
 	const [elementPositionIndex, setElementPositionIndex] = useState(ELEMENT_POSITION_KIND.SQUARE);
 	const [actionIndex, setActionIndex] = useState(ACTION_KIND.PENCIL);
-	const [layersIndex, setLayersIndex] = useState(0);
+	const [layersIndex, setLayersIndex] = useState(LAYER_KIND.OFF);
 
 	const dispatch = useDispatch();
 
@@ -108,6 +115,14 @@ function MapEditorMenuBar() {
 			ELEMENT_MAP_KIND.OBJECT,
 		].includes(Scene.Map.currentSelectedMapElementKind);
 
+	const isLayersOnDisabled = () =>
+		[
+			ELEMENT_MAP_KIND.SPRITE_WALL,
+			ELEMENT_MAP_KIND.MOUNTAIN,
+			ELEMENT_MAP_KIND.OBJECT3D,
+			ELEMENT_MAP_KIND.OBJECT,
+		].includes(Scene.Map.currentSelectedMapElementKind);
+
 	const handleGeneric = (kind: ELEMENT_MAP_KIND, menuIndex: MENU_INDEX_MAP_EDITOR) => {
 		dispatch(setCurrentMapElementKind(kind));
 		Scene.Map.currentSelectedMapElementKind = kind;
@@ -126,6 +141,11 @@ function MapEditorMenuBar() {
 			Project.current!.settings.mapEditorCurrentActionIndex = ACTION_KIND.PENCIL;
 			setActionIndex(ACTION_KIND.PENCIL);
 			dispatch(setCurrentActionKind(ACTION_KIND.PENCIL));
+		}
+		if (isLayersOnDisabled() && layersIndex === LAYER_KIND.ON) {
+			Project.current!.settings.mapEditorCurrentLayerIndex = LAYER_KIND.OFF;
+			setLayersIndex(LAYER_KIND.OFF);
+			dispatch(setCurrentLayerKind(LAYER_KIND.OFF));
 		}
 	};
 
@@ -423,7 +443,7 @@ function MapEditorMenuBar() {
 				</Menu>
 				<Menu horizontal isActivable activeIndex={layersIndex} setActiveIndex={setLayersIndex}>
 					<MenuItem icon={<LayersOffIcon />} onClick={handleFloors} />
-					<MenuItem icon={<FaLayerGroup />} onClick={handleFloors} disabled />
+					<MenuItem icon={<FaLayerGroup />} onClick={handleFloors} disabled={isLayersOnDisabled()} />
 				</Menu>
 			</div>
 		</div>

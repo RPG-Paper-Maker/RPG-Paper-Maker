@@ -345,7 +345,7 @@ class Map extends Base {
 		}
 	}
 
-	paintPin(p: Position, kindAfter: ELEMENT_MAP_KIND, autotileID: number, textureAfter: Rectangle, up: boolean) {
+	paintPin(p: Position, kindAfter: ELEMENT_MAP_KIND, autotileID: number, textureAfter: Rectangle) {
 		this.mapPortion.removeLastPreview();
 		if (p.isInMap(this.modelMap)) {
 			let portion = this.getLocalPortion(p);
@@ -403,8 +403,12 @@ class Map extends Base {
 											kindBefore
 										)
 									) {
-										if (kindAfter === ELEMENT_MAP_KIND.NONE) {
-											this.remove(adjacentPosition);
+										if (kindAfter === ELEMENT_MAP_KIND.NONE && landHere) {
+											if (landHere.kind === ELEMENT_MAP_KIND.FLOOR) {
+												mapPortionBefore.updateFloor(adjacentPosition, null);
+											} else {
+												mapPortionBefore.updateAutotile(adjacentPosition, null);
+											}
 										} else {
 											if (kindAfter === ELEMENT_MAP_KIND.FLOOR) {
 												mapPortionBefore.updateFloor(
@@ -900,8 +904,7 @@ class Map extends Base {
 									Project.current!.settings.mapEditorCurrentAutotileID,
 									Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR
 										? Project.current!.settings.mapEditorCurrentTilesetFloorTexture
-										: Project.current!.settings.mapEditorCurrentAutotileTexture,
-									true
+										: Project.current!.settings.mapEditorCurrentAutotileTexture
 								);
 								break;
 						}
@@ -910,6 +913,13 @@ class Map extends Base {
 					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
 						this.cursorWall.onMouseDown();
 					} else {
+						switch (Project.current!.settings.mapEditorCurrentActionIndex) {
+							case ACTION_KIND.PIN:
+								if (this.lastPosition) {
+									this.paintPin(this.lastPosition, ELEMENT_MAP_KIND.NONE, -1, new Rectangle());
+								}
+								break;
+						}
 						this.lastPosition = null;
 						this.needsUpdateRaycasting = true;
 					}

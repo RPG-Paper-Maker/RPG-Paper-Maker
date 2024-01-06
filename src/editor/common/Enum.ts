@@ -79,6 +79,11 @@ export enum ACTION_KIND {
 	PIN,
 }
 
+export enum LAYER_KIND {
+	OFF,
+	ON,
+}
+
 export enum DIRECTION {
 	SOUTH,
 	WEST,
