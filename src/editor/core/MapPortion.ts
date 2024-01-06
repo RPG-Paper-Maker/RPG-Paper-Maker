@@ -226,9 +226,9 @@ class MapPortion {
 	updateFloor(
 		position: Position,
 		floor: MapElement.Floor | null,
-		preview: boolean,
-		removingPreview: boolean,
-		undoRedo: boolean
+		preview = false,
+		removingPreview = false,
+		undoRedo = false
 	) {
 		if (floor === null) {
 			this.setMapElement(
@@ -276,7 +276,17 @@ class MapPortion {
 						removingPreview,
 						undoRedo
 					);
-
+					break;
+				case ACTION_KIND.PIN:
+					this.setMapElement(
+						position,
+						MapElement.Floor.create(new Rectangle(floor.texture.x, floor.texture.y, 1, 1)),
+						ELEMENT_MAP_KIND.FLOOR,
+						this.model.lands,
+						preview,
+						removingPreview,
+						undoRedo
+					);
 					break;
 				default:
 					break;
@@ -292,9 +302,9 @@ class MapPortion {
 	updateAutotile(
 		position: Position,
 		autotile: MapElement.Autotile | null,
-		preview: boolean,
-		removingPreview: boolean,
-		undoRedo: boolean
+		preview = false,
+		removingPreview = false,
+		undoRedo = false
 	) {
 		this.setMapElement(
 			position,
@@ -316,9 +326,9 @@ class MapPortion {
 		position: Position,
 		sprite: MapElement.Sprite | null,
 		kind: ELEMENT_MAP_KIND,
-		preview: boolean,
-		removingPreview: boolean,
-		undoRedo: boolean
+		preview = false,
+		removingPreview = false,
+		undoRedo = false
 	) {
 		this.setMapElement(position, sprite, kind, this.model.sprites, preview, removingPreview, undoRedo);
 	}
@@ -345,9 +355,9 @@ class MapPortion {
 	updateWall(
 		position: Position,
 		wall: MapElement.SpriteWall | null,
-		preview: boolean,
-		removingPreview: boolean,
-		undoRedo: boolean
+		preview = false,
+		removingPreview = false,
+		undoRedo = false
 	) {
 		this.setMapElement(
 			position,
@@ -365,9 +375,9 @@ class MapPortion {
 	updateMountain(
 		position: Position,
 		mountain: MapElement.Mountain | null,
-		preview: boolean,
-		removingPreview: boolean,
-		undoRedo: boolean
+		preview = false,
+		removingPreview = false,
+		undoRedo = false
 	) {
 		this.setMapElement(
 			position,
@@ -388,9 +398,9 @@ class MapPortion {
 	updateObject3D(
 		position: Position,
 		object: MapElement.Object3D | null,
-		preview: boolean,
-		removingPreview: boolean,
-		undoRedo: boolean
+		preview = false,
+		removingPreview = false,
+		undoRedo = false
 	) {
 		this.setMapElement(
 			position,
@@ -408,9 +418,9 @@ class MapPortion {
 		element: MapElement.Base | null,
 		kind: ELEMENT_MAP_KIND,
 		elements: Map<string, MapElement.Base>,
-		preview: boolean,
-		removingPreview: boolean,
-		undoRedo: boolean,
+		preview = false,
+		removingPreview = false,
+		undoRedo = false,
 		allowBorders = false
 	): MapElement.Base | null {
 		if (!Scene.Map.current || !position.isInMap(Scene.Map.current.modelMap, allowBorders)) {

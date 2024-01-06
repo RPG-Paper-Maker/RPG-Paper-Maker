@@ -418,7 +418,7 @@ function MapEditorMenuBar() {
 						onClick={handleActionRectangle}
 						disabled={isRectangleDisabled()}
 					/>
-					<MenuItem icon={<VscPaintcan />} onClick={handleActionPin} disabled />
+					<MenuItem icon={<VscPaintcan />} onClick={handleActionPin} disabled={isPinDisabled()} />
 					<MenuItem separator />
 				</Menu>
 				<Menu horizontal isActivable activeIndex={layersIndex} setActiveIndex={setLayersIndex}>

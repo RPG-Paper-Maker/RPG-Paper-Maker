@@ -15,6 +15,7 @@ import { Project, Serializable } from '../core';
 class System extends Serializable {
 	public projectName!: string;
 	public SQUARE_SIZE!: number;
+	public PORTIONS_RAY!: number;
 	public PATH_BR!: string;
 	public PATH_DLCS!: string;
 	public autotilesFrames!: number;
@@ -23,6 +24,7 @@ class System extends Serializable {
 	public static readonly bindings: BindingType[] = [
 		['projectName', 'pn', 'Project without name', BINDING.STRING],
 		['SQUARE_SIZE', 'ss', undefined, BINDING.NUMBER],
+		['PORTIONS_RAY', 'portionRayIngame', 3, BINDING.NUMBER],
 		['PATH_BR', 'pathBR', undefined, BINDING.STRING],
 		['autotilesFrames', 'autotilesFrames', 4, BINDING.NUMBER],
 		['autotilesFrameDuration', 'autotilesFrameDuration', 150, BINDING.NUMBER],

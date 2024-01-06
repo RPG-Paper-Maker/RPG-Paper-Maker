@@ -11,7 +11,7 @@
 
 import { MapElement } from '../Editor';
 import { Land } from './Land';
-import { ELEMENT_MAP_KIND } from '../common';
+import { ELEMENT_MAP_KIND, Mathf } from '../common';
 import { CustomGeometry, Position, Project, Rectangle } from '../core';
 
 class Floor extends Land {
@@ -30,6 +30,13 @@ class Floor extends Land {
 		const floor = new Floor();
 		floor.texture = texture;
 		return floor;
+	}
+
+	static getTextureReduced(texture: Rectangle, x: number, z: number): Rectangle {
+		const rect = new Rectangle();
+		rect.x = texture.x + Mathf.mod(x, texture.width);
+		rect.y = texture.y + Mathf.mod(z, texture.height);
+		return rect;
 	}
 
 	equals(mapElement: MapElement.Base) {

@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { MapElement } from '../Editor';
 import { Base } from './Base';
 import { CustomGeometry, Position, Project, Rectangle } from '../core';
-import { BINDING, BindingType } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND } from '../common';
 
 class Land extends Base {
 	public static readonly JSON_UP = 'up';
@@ -30,6 +30,27 @@ class Land extends Base {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...Land.bindings, ...additionnalBinding];
+	}
+
+	static areLandsEquals(
+		landBefore: Land | null,
+		autotileAfter: number,
+		textureAfter: Rectangle,
+		kindAfter: ELEMENT_MAP_KIND
+	) {
+		if (landBefore === null) {
+			return kindAfter === ELEMENT_MAP_KIND.NONE;
+		} else {
+			if (landBefore.kind === kindAfter) {
+				if (landBefore instanceof MapElement.Autotile) {
+					return landBefore.autotileID === autotileAfter && landBefore.texture.equals(textureAfter);
+				} else {
+					return landBefore.texture.equals(textureAfter);
+				}
+			} else {
+				return false;
+			}
+		}
 	}
 
 	equals(mapElement: MapElement.Base) {

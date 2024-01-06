@@ -25,6 +25,7 @@ import {
 	Portion,
 	Position,
 	Project,
+	Rectangle,
 	TextureBundle,
 	UndoRedoState,
 } from '../core';
@@ -153,6 +154,21 @@ class Map extends Base {
 			Math.floor(position.z / Constants.PORTION_SIZE) -
 				Math.floor(this.cursor.position.z / Constants.PORTION_SIZE)
 		);
+	}
+
+	isInPortion(portion: Portion, offset = 0): boolean {
+		return (
+			portion.x <= +offset &&
+			portion.x >= -(Project.current!.systems.PORTIONS_RAY + offset) &&
+			portion.y <= Project.current!.systems.PORTIONS_RAY + offset &&
+			portion.y >= -(Project.current!.systems.PORTIONS_RAY + offset) &&
+			portion.z <= Project.current!.systems.PORTIONS_RAY + offset &&
+			portion.z >= -(Project.current!.systems.PORTIONS_RAY + offset)
+		);
+	}
+
+	getMapPortion(portion: Portion): MapPortion {
+		return this.mapPortion;
 	}
 
 	async load() {
@@ -324,6 +340,90 @@ class Map extends Base {
 			} else {
 				if (removePreview) {
 					this.mapPortion.removeLastPreview();
+				}
+			}
+		}
+	}
+
+	paintPin(p: Position, kindAfter: ELEMENT_MAP_KIND, autotileID: number, textureAfter: Rectangle, up: boolean) {
+		this.mapPortion.removeLastPreview();
+		if (p.isInMap(this.modelMap)) {
+			let portion = this.getLocalPortion(p);
+			if (this.isInPortion(portion)) {
+				const mapPortionBefore = this.getMapPortion(portion);
+				const landBefore = mapPortionBefore.model.lands.get(p.toKey()) || null;
+				const autotileBefore =
+					landBefore && landBefore instanceof MapElement.Autotile ? landBefore.autotileID : 0;
+				const textureBefore = landBefore ? landBefore.texture.clone() : new Rectangle();
+				const kindBefore = landBefore ? landBefore.kind : ELEMENT_MAP_KIND.NONE;
+				let textureAfterReduced = MapElement.Floor.getTextureReduced(textureAfter, 0, 0);
+
+				// If the texture is different, start the algorithm
+				if (!MapElement.Land.areLandsEquals(landBefore, autotileID, textureAfterReduced, kindAfter)) {
+					const array = [p];
+					if (kindAfter === ELEMENT_MAP_KIND.NONE) {
+						this.remove(p);
+					} else {
+						if (kindAfter === ELEMENT_MAP_KIND.FLOOR) {
+							mapPortionBefore.updateFloor(p, MapElement.Floor.create(textureAfterReduced));
+						} else {
+							mapPortionBefore.updateAutotile(p, MapElement.Autotile.create(autotileID, 0, textureAfter));
+						}
+					}
+					while (array.length > 0) {
+						const adjacent: Position[] = [];
+						const firstPosition = array[0];
+						const x = firstPosition.x;
+						const y = firstPosition.y;
+						const yPlus = firstPosition.yPixels;
+						const z = firstPosition.z;
+						const layer = firstPosition.layer;
+
+						// Getting all the adjacent squares
+						adjacent.push(new Position(x - 1, y, yPlus, z, layer));
+						adjacent.push(new Position(x + 1, y, yPlus, z, layer));
+						adjacent.push(new Position(x, y, yPlus, z + 1, layer));
+						adjacent.push(new Position(x, y, yPlus, z - 1, layer));
+
+						ArrayUtils.removeAt(array, 0);
+						for (const adjacentPosition of adjacent) {
+							const localX = adjacentPosition.x - p.x;
+							const localZ = adjacentPosition.z - p.z;
+							textureAfterReduced = MapElement.Floor.getTextureReduced(textureAfter, localX, localZ);
+							if (adjacentPosition.isInMap(this.modelMap)) {
+								portion = this.getLocalPortion(adjacentPosition);
+								if (this.isInPortion(portion)) {
+									const mapPortionHere = this.getMapPortion(portion);
+									const landHere = mapPortionHere.model.lands.get(adjacentPosition.toKey()) || null;
+									if (
+										MapElement.Land.areLandsEquals(
+											landHere,
+											autotileBefore,
+											textureBefore,
+											kindBefore
+										)
+									) {
+										if (kindAfter === ELEMENT_MAP_KIND.NONE) {
+											this.remove(adjacentPosition);
+										} else {
+											if (kindAfter === ELEMENT_MAP_KIND.FLOOR) {
+												mapPortionBefore.updateFloor(
+													adjacentPosition,
+													MapElement.Floor.create(textureAfterReduced)
+												);
+											} else {
+												mapPortionBefore.updateAutotile(
+													adjacentPosition,
+													MapElement.Autotile.create(autotileID, 0, textureAfter)
+												);
+											}
+										}
+										array.push(adjacentPosition);
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -786,10 +886,24 @@ class Map extends Base {
 						this.cursorWall.onMouseDown();
 					} else {
 						this.updateLockedY(this.lastPosition);
-						if (Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.RECTANGLE) {
-							this.rectangleStartPosition = this.lastPosition.clone();
-						} else {
-							this.add(this.lastPosition);
+						switch (Project.current!.settings.mapEditorCurrentActionIndex) {
+							case ACTION_KIND.PENCIL:
+								this.add(this.lastPosition);
+								break;
+							case ACTION_KIND.RECTANGLE:
+								this.rectangleStartPosition = this.lastPosition.clone();
+								break;
+							case ACTION_KIND.PIN:
+								this.paintPin(
+									this.lastPosition,
+									Scene.Map.currentSelectedMapElementKind,
+									Project.current!.settings.mapEditorCurrentAutotileID,
+									Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR
+										? Project.current!.settings.mapEditorCurrentTilesetFloorTexture
+										: Project.current!.settings.mapEditorCurrentAutotileTexture,
+									true
+								);
+								break;
 						}
 					}
 				} else if (Inputs.isMouseRightPressed) {
