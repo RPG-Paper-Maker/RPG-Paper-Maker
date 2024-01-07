@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { MapElement } from '../Editor';
+import { MapElement, Scene } from '../Editor';
 import { Base } from './Base';
 import { CustomGeometry, Position, Project, Rectangle } from '../core';
 import { BINDING, BindingType, ELEMENT_MAP_KIND } from '../common';
@@ -85,7 +85,7 @@ class Land extends Base {
 	) {
 		const localPosition = position.toVector3();
 		const a = localPosition.x;
-		let yLayerOffset = position.layer * 0.05;
+		let yLayerOffset = position.layer * Scene.Map.current!.camera.getYOffsetDepth();
 		if (!this.up) {
 			yLayerOffset *= -1;
 		}

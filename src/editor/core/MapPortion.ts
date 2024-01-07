@@ -77,7 +77,10 @@ class MapPortion {
 			case ELEMENT_MAP_KIND.FLOOR:
 				this.updateMapElement(
 					position,
-					MapElement.Floor.create(Project.current!.settings.mapEditorCurrentTilesetFloorTexture),
+					MapElement.Floor.create(
+						Project.current!.settings.mapEditorCurrentTilesetFloorTexture,
+						Scene.Map.current!.camera.getUp()
+					),
 					ELEMENT_MAP_KIND.FLOOR,
 					preview
 				);
@@ -88,7 +91,8 @@ class MapPortion {
 					MapElement.Autotile.create(
 						Project.current!.settings.mapEditorCurrentAutotileID,
 						MapElement.Autotiles.PREVIEW_TILE,
-						Project.current!.settings.mapEditorCurrentAutotileTexture
+						Project.current!.settings.mapEditorCurrentAutotileTexture,
+						Scene.Map.current!.camera.getUp()
 					),
 					ELEMENT_MAP_KIND.AUTOTILE,
 					preview
@@ -230,10 +234,10 @@ class MapPortion {
 		removingPreview = false,
 		undoRedo = false
 	) {
-		if (floor === null) {
+		if (floor === null || undoRedo) {
 			this.setMapElement(
 				position,
-				null,
+				floor,
 				ELEMENT_MAP_KIND.FLOOR,
 				this.model.lands,
 				preview,
@@ -250,7 +254,10 @@ class MapPortion {
 							newPosition.z = position.z + j;
 							this.setMapElement(
 								newPosition,
-								MapElement.Floor.create(new Rectangle(floor.texture.x + i, floor.texture.y + j, 1, 1)),
+								MapElement.Floor.create(
+									new Rectangle(floor.texture.x + i, floor.texture.y + j, 1, 1),
+									floor.up
+								),
 								ELEMENT_MAP_KIND.FLOOR,
 								this.model.lands,
 								preview,
@@ -269,7 +276,10 @@ class MapPortion {
 						: 0;
 					this.setMapElement(
 						position,
-						MapElement.Floor.create(new Rectangle(floor.texture.x + x, floor.texture.y + y, 1, 1)),
+						MapElement.Floor.create(
+							new Rectangle(floor.texture.x + x, floor.texture.y + y, 1, 1),
+							floor.up
+						),
 						ELEMENT_MAP_KIND.FLOOR,
 						this.model.lands,
 						preview,
@@ -280,7 +290,7 @@ class MapPortion {
 				case ACTION_KIND.PIN:
 					this.setMapElement(
 						position,
-						MapElement.Floor.create(new Rectangle(floor.texture.x, floor.texture.y, 1, 1)),
+						MapElement.Floor.create(new Rectangle(floor.texture.x, floor.texture.y, 1, 1), floor.up),
 						ELEMENT_MAP_KIND.FLOOR,
 						this.model.lands,
 						preview,
@@ -488,12 +498,13 @@ class MapPortion {
 	}
 
 	addSelected() {
-		if (Scene.Map.current!.selectedElement) {
+		if (Scene.Map.current!.selectedElement && Scene.Map.current!.selectedPosition) {
 			const position = Scene.Map.current!.selectedElement.getPositionFromVec3(
 				Scene.Map.current!.selectedMesh.position,
 				Scene.Map.current!.selectedMesh.rotation,
 				Scene.Map.current!.selectedMesh.scale
 			);
+			position.layer = Scene.Map.current!.selectedPosition.layer;
 			const models = this.model.getModelsByKind(Scene.Map.current!.selectedElement.kind);
 			if (models) {
 				this.setMapElement(
@@ -545,7 +556,7 @@ class MapPortion {
 		}
 	}
 
-	checkTextures() {
+	checkTextures(layersPartOnly = false) {
 		for (const [, land] of this.model.lands) {
 			if (land instanceof MapElement.Autotile) {
 				const texturesAutotile = MapElement.Autotiles.getAutotileTexture(land.autotileID);
@@ -556,28 +567,30 @@ class MapPortion {
 				}
 			}
 		}
-		for (const [, wall] of this.model.walls) {
-			const textureWall = MapElement.SpriteWall.getWallTexture(wall.wallID);
-			if (textureWall === null) {
-				Scene.Map.current!.loading = true;
-				this.loadTexturesAndUpdateGeometries().catch(console.error);
-				return false;
+		if (!layersPartOnly) {
+			for (const [, wall] of this.model.walls) {
+				const textureWall = MapElement.SpriteWall.getWallTexture(wall.wallID);
+				if (textureWall === null) {
+					Scene.Map.current!.loading = true;
+					this.loadTexturesAndUpdateGeometries().catch(console.error);
+					return false;
+				}
 			}
-		}
-		for (const [, mountain] of this.model.mountains) {
-			const textureMountain = MapElement.Mountains.getMountainTexture(mountain.mountainID);
-			if (textureMountain === null) {
-				Scene.Map.current!.loading = true;
-				this.loadTexturesAndUpdateGeometries().catch(console.error);
-				return false;
+			for (const [, mountain] of this.model.mountains) {
+				const textureMountain = MapElement.Mountains.getMountainTexture(mountain.mountainID);
+				if (textureMountain === null) {
+					Scene.Map.current!.loading = true;
+					this.loadTexturesAndUpdateGeometries().catch(console.error);
+					return false;
+				}
 			}
-		}
-		for (const [, object3D] of this.model.objects3D) {
-			const textureObject3D = MapElement.Object3D.getObject3DTexture(object3D.id);
-			if (textureObject3D === null || !MapElement.Object3D.isShapeLoaded(object3D.id)) {
-				Scene.Map.current!.loading = true;
-				this.loadTexturesAndUpdateGeometries().catch(console.error);
-				return false;
+			for (const [, object3D] of this.model.objects3D) {
+				const textureObject3D = MapElement.Object3D.getObject3DTexture(object3D.id);
+				if (textureObject3D === null || !MapElement.Object3D.isShapeLoaded(object3D.id)) {
+					Scene.Map.current!.loading = true;
+					this.loadTexturesAndUpdateGeometries().catch(console.error);
+					return false;
+				}
 			}
 		}
 		return true;
@@ -605,20 +618,24 @@ class MapPortion {
 		}
 	}
 
-	updateGeometries() {
-		if (this.checkTextures()) {
-			this.updateGeometriesWithoutCheck();
+	updateGeometries(layersPartOnly = false) {
+		if (this.checkTextures(layersPartOnly)) {
+			this.updateGeometriesWithoutCheck(layersPartOnly);
 		}
 	}
 
-	updateGeometriesWithoutCheck() {
-		Scene.Map.current!.scene.remove(this.hoveredMesh);
-		Scene.Map.current!.scene.remove(Scene.Map.current!.selectedMesh);
+	updateGeometriesWithoutCheck(layersPartOnly = false) {
+		if (!layersPartOnly) {
+			Scene.Map.current!.scene.remove(this.hoveredMesh);
+			Scene.Map.current!.scene.remove(Scene.Map.current!.selectedMesh);
+		}
 		this.updateLandsGeometries();
 		this.updateSpritesGeometry();
-		this.updateWallsGeometry();
-		this.updateMountainsGeometry();
-		this.updateObjects3DGeometry();
+		if (!layersPartOnly) {
+			this.updateWallsGeometry();
+			this.updateMountainsGeometry();
+			this.updateObjects3DGeometry();
+		}
 	}
 
 	updateLandsGeometries() {
@@ -680,7 +697,13 @@ class MapPortion {
 			const floor = layers[i][1];
 			if (Scene.Map.current!.selectedElement === floor) {
 				const geometry = new CustomGeometry();
-				floor.updateGeometry(geometry as CustomGeometry, new Position(), width, height, 0);
+				floor.updateGeometry(
+					geometry as CustomGeometry,
+					new Position(0, 0, 0, 0, position.layer, 0, 0),
+					width,
+					height,
+					0
+				);
 				this.updateSelected(
 					geometry,
 					this.hoveredMesh.material,

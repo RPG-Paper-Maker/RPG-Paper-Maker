@@ -303,6 +303,20 @@ function MapEditorMenuBar() {
 		await handleActionGeneric(ACTION_KIND.PIN);
 	};
 
+	const handleGenericLayers = async (kind: LAYER_KIND) => {
+		dispatch(setCurrentLayerKind(kind));
+		Project.current!.settings.mapEditorCurrentLayerIndex = kind;
+		await Project.current!.settings.save();
+	};
+
+	const handleLayersOff = async () => {
+		await handleGenericLayers(LAYER_KIND.OFF);
+	};
+
+	const handleLayersOn = async () => {
+		await handleGenericLayers(LAYER_KIND.ON);
+	};
+
 	// When first opening the project with all data loaded
 	useEffect(() => {
 		if (!openLoading) {
@@ -331,6 +345,8 @@ function MapEditorMenuBar() {
 			setActionIndex(Project.current!.settings.mapEditorCurrentActionIndex);
 			dispatch(setCurrentActionKind(Project.current!.settings.mapEditorCurrentActionIndex));
 			dispatch(setCurrentElementPositionKind(Project.current!.settings.mapEditorCurrentElementPositionIndex));
+			setLayersIndex(Project.current!.settings.mapEditorCurrentLayerIndex);
+			dispatch(setCurrentLayerKind(Project.current!.settings.mapEditorCurrentLayerIndex));
 		}
 		// eslint-disable-next-line
 	}, [openLoading]);
@@ -442,8 +458,8 @@ function MapEditorMenuBar() {
 					<MenuItem separator />
 				</Menu>
 				<Menu horizontal isActivable activeIndex={layersIndex} setActiveIndex={setLayersIndex}>
-					<MenuItem icon={<LayersOffIcon />} onClick={handleFloors} />
-					<MenuItem icon={<FaLayerGroup />} onClick={handleFloors} disabled={isLayersOnDisabled()} />
+					<MenuItem icon={<LayersOffIcon />} onClick={handleLayersOff} />
+					<MenuItem icon={<FaLayerGroup />} onClick={handleLayersOn} disabled={isLayersOnDisabled()} />
 				</Menu>
 			</div>
 		</div>

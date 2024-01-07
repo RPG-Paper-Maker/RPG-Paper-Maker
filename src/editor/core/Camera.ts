@@ -10,9 +10,9 @@
 */
 
 import * as THREE from 'three';
-import { Manager, Model, Scene } from '../Editor';
+import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
-import { Constants, Utils } from '../common';
+import { Constants, Mathf, Utils } from '../common';
 import { Project } from './Project';
 
 class Camera {
@@ -73,6 +73,10 @@ class Camera {
 
 	getYOffsetDepth() {
 		return Math.max(Math.min(this.distance * 0.001, 4), 0.03);
+	}
+
+	getUp() {
+		return this.verticalAngle < 90;
 	}
 
 	updateCameraPosition() {

@@ -40,6 +40,7 @@ import {
 	ArrayUtils,
 	ELEMENT_POSITION_KIND,
 	ACTION_KIND,
+	LAYER_KIND,
 } from '../common';
 import { CursorWall } from '../core/CursorWall';
 class Map extends Base {
@@ -102,6 +103,7 @@ class Map extends Base {
 	public rectangleStartPosition: Position | null = null;
 	public lockedY: number | null = null;
 	public lockedYPixels: number | null = null;
+	public lockedLayer: number | null = null;
 	public requestPaintHUD = false;
 	public needsUpdateRaycasting = false;
 	public mouseUp = false;
@@ -346,6 +348,7 @@ class Map extends Base {
 	}
 
 	paintPin(p: Position, kindAfter: ELEMENT_MAP_KIND, autotileID: number, textureAfter: Rectangle) {
+		const up = Scene.Map.current!.camera.getUp();
 		this.mapPortion.removeLastPreview();
 		if (p.isInMap(this.modelMap)) {
 			let portion = this.getLocalPortion(p);
@@ -365,9 +368,12 @@ class Map extends Base {
 						this.remove(p);
 					} else {
 						if (kindAfter === ELEMENT_MAP_KIND.FLOOR) {
-							mapPortionBefore.updateFloor(p, MapElement.Floor.create(textureAfterReduced));
+							mapPortionBefore.updateFloor(p, MapElement.Floor.create(textureAfterReduced, up));
 						} else {
-							mapPortionBefore.updateAutotile(p, MapElement.Autotile.create(autotileID, 0, textureAfter));
+							mapPortionBefore.updateAutotile(
+								p,
+								MapElement.Autotile.create(autotileID, 0, textureAfter, up)
+							);
 						}
 					}
 					while (array.length > 0) {
@@ -413,12 +419,12 @@ class Map extends Base {
 											if (kindAfter === ELEMENT_MAP_KIND.FLOOR) {
 												mapPortionBefore.updateFloor(
 													adjacentPosition,
-													MapElement.Floor.create(textureAfterReduced)
+													MapElement.Floor.create(textureAfterReduced, up)
 												);
 											} else {
 												mapPortionBefore.updateAutotile(
 													adjacentPosition,
-													MapElement.Autotile.create(autotileID, 0, textureAfter)
+													MapElement.Autotile.create(autotileID, 0, textureAfter, up)
 												);
 											}
 										}
@@ -483,6 +489,7 @@ class Map extends Base {
 		} else {
 			this.camera.zoomOut(coef);
 		}
+		this.mapPortion.updateGeometries(true);
 	}
 
 	zoomIn(coef = 1) {
@@ -589,6 +596,7 @@ class Map extends Base {
 		if (this.lockedY === null) {
 			this.lockedY = position.y;
 			this.lockedYPixels = position.yPixels;
+			this.lockedLayer = position.layer;
 		}
 	}
 
@@ -645,7 +653,8 @@ class Map extends Base {
 			);
 			if (
 				obj.faceIndex !== undefined &&
-				(Scene.Map.isRemoving() || (this.lockedY === null && this.lockedYPixels === null))
+				(Scene.Map.isRemoving() ||
+					(this.lockedY === null && this.lockedYPixels === null && this.lockedLayer === null))
 			) {
 				const newPositionKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
 					obj.faceIndex
@@ -670,8 +679,11 @@ class Map extends Base {
 					} else if (
 						this.lockedY !== null &&
 						this.lockedYPixels !== null &&
+						this.lockedLayer !== null &&
 						Scene.Map.isRemoving() &&
-						(newPosition.y !== this.lockedY || newPosition.yPixels !== this.lockedYPixels)
+						(newPosition.y !== this.lockedY ||
+							newPosition.yPixels !== this.lockedYPixels ||
+							newPosition.layer !== this.lockedLayer)
 					) {
 						continue;
 					}
@@ -684,6 +696,12 @@ class Map extends Base {
 			) {
 				position.centerX = ((Math.floor(obj.point.x) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
 				position.centerZ = ((Math.floor(obj.point.z) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+			}
+			if (!Scene.Map.isRemoving() && Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON) {
+				position.layer = position.layer + 1;
+			}
+			if (this.lockedLayer !== null) {
+				position.layer = this.lockedLayer;
 			}
 			if (this.lastPosition === null || !this.lastPosition.equals(position)) {
 				if (
@@ -972,13 +990,14 @@ class Map extends Base {
 				this.needsUpdateRaycasting = true;
 			}
 			if (this.isDraggingTransforming) {
-				if (this.selectedElement) {
+				if (this.selectedElement && this.selectedPosition) {
 					this.updateTransformPosition();
 					this.needsUpdateSelectedPosition = this.selectedElement.getPositionFromVec3(
 						this.selectedMesh.position,
 						this.selectedMesh.rotation,
 						this.selectedMesh.scale
 					);
+					this.needsUpdateSelectedPosition.layer = this.selectedPosition.layer;
 				}
 			}
 		}
@@ -1012,6 +1031,7 @@ class Map extends Base {
 		this.needsUpdateRaycasting = false;
 		this.lockedY = null;
 		this.lockedYPixels = null;
+		this.lockedLayer = null;
 		this.cursorWall.onMouseUp();
 		if (this.isDraggingTransforming) {
 			this.updateTransform();

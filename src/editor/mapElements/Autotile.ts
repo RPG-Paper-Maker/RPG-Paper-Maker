@@ -40,11 +40,12 @@ class Autotile extends Land {
 		return autotile;
 	}
 
-	static create(autotileID: number, tileID: number, texture: Rectangle): Autotile {
+	static create(autotileID: number, tileID: number, texture: Rectangle, up = true): Autotile {
 		const autotile = new Autotile();
 		autotile.autotileID = autotileID;
 		autotile.tileID = tileID;
 		autotile.texture = texture;
+		autotile.up = up;
 		return autotile;
 	}
 

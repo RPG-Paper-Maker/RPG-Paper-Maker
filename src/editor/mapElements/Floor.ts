@@ -26,9 +26,10 @@ class Floor extends Land {
 		return floor;
 	}
 
-	static create(texture: Rectangle): Floor {
+	static create(texture: Rectangle, up = true): Floor {
 		const floor = new Floor();
 		floor.texture = texture;
+		floor.up = up;
 		return floor;
 	}
 
