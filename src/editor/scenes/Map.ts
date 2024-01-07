@@ -58,6 +58,7 @@ class Map extends Base {
 	public static ctxRendering: CanvasRenderingContext2D | null = null;
 	public static animationFrameID: number;
 	public static pictureTilesetCursor: HTMLImageElement;
+	public static pictureLayersOnCursor: HTMLImageElement;
 
 	public id: number;
 	public tag: Model.TreeMapTag;
@@ -980,6 +981,9 @@ class Map extends Base {
 	}
 
 	onMouseMove(x: number, y: number) {
+		if (Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON) {
+			this.requestPaintHUD = true;
+		}
 		if (Inputs.isMouseWheelPressed || (Inputs.isPointerPressed && Inputs.isSHIFT)) {
 			this.camera.onMouseWheelUpdate();
 		} else {
@@ -1181,11 +1185,18 @@ class Map extends Base {
 		}
 	}
 
+	drawLayersOnCursor() {
+		if (Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON) {
+			Scene.Map.ctxHUD!.drawImage(Scene.Map.pictureLayersOnCursor, Inputs.mouseX + 20, Inputs.mouseY - 20);
+		}
+	}
+
 	drawHUD() {
 		if (this.requestPaintHUD) {
 			this.clearHUD();
 			this.drawCursorCoords();
 			this.drawPointedCoords();
+			this.drawLayersOnCursor();
 			this.requestPaintHUD = false;
 		}
 	}

@@ -45,7 +45,7 @@
 }
 
 .map-editor.cursor-pin {
-	cursor: url('../../assets/icons/cursor-pin.svg') 10 10, pointer;
+	cursor: url('../../assets/icons/cursor-pin.svg') 20 20, pointer;
 }
 
 #canvas-hud {
