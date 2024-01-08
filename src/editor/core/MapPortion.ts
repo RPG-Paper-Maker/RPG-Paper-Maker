@@ -106,7 +106,11 @@ class MapPortion {
 					position,
 					MapElement.Sprite.create(
 						Scene.Map.currentSelectedMapElementKind,
-						Project.current!.settings.mapEditorCurrentTilesetSpriteTexture
+						Project.current!.settings.mapEditorCurrentTilesetSpriteTexture,
+						Scene.Map.current!.camera.getFront(Manager.GL.raycaster.ray.direction, position.angleY),
+						Scene.Map.current!.layerRayPosition ? Scene.Map.current!.layerRayPosition.x - position.x : 0,
+						Scene.Map.current!.layerRayPosition ? Scene.Map.current!.layerRayPosition.y - position.y : 0,
+						Scene.Map.current!.layerRayPosition ? Scene.Map.current!.layerRayPosition.z - position.z : 0
 					),
 					Scene.Map.currentSelectedMapElementKind,
 					preview
@@ -877,9 +881,6 @@ class MapPortion {
 					);
 				}
 			}
-			position.x += sprite.xOffset;
-			position.y += sprite.yOffset;
-			position.z += sprite.zOffset;
 		}
 
 		if (!fixGeometry.isEmpty()) {

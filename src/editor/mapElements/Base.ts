@@ -120,42 +120,6 @@ abstract class Base extends Serializable {
 		CustomGeometry.rotateVertexEuler(vecD, center, euler);
 	}
 
-	scale(
-		vecA: THREE.Vector3,
-		vecB: THREE.Vector3,
-		vecC: THREE.Vector3,
-		vecD: THREE.Vector3,
-		center: THREE.Vector3,
-		position: Position,
-		size: THREE.Vector3,
-		kind: ELEMENT_MAP_KIND
-	) {
-		let zPlus = position.layer * 0.05;
-
-		// Apply an offset according to layer position
-		if (kind !== ELEMENT_MAP_KIND.SPRITE_FACE && !this.front) {
-			zPlus *= -1;
-		}
-		const offset = new THREE.Vector3(0, 0, zPlus);
-
-		// Center
-		center.setX(this.xOffset * Project.SQUARE_SIZE);
-		center.setY(this.yOffset * Project.SQUARE_SIZE);
-		center.setZ(this.zOffset * Project.SQUARE_SIZE);
-
-		// Position
-		const pos = center.clone();
-		pos.add(offset);
-		vecA.multiply(size);
-		vecB.multiply(size);
-		vecC.multiply(size);
-		vecD.multiply(size);
-		vecA.add(pos);
-		vecB.add(pos);
-		vecC.add(pos);
-		vecD.add(pos);
-	}
-
 	getLocalPosition(position: Position): THREE.Vector3 {
 		return position.toVector3();
 	}

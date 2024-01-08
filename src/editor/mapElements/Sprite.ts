@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { MapElement } from '../Editor';
+import { MapElement, Scene } from '../Editor';
 import { Base } from './Base';
 import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle } from '../core';
 import { BINDING, BindingType, ELEMENT_MAP_KIND } from '../common';
@@ -39,10 +39,21 @@ class Sprite extends Base {
 		return sprite;
 	}
 
-	static create(kind: ELEMENT_MAP_KIND, texture: Rectangle): Sprite {
+	static create(
+		kind: ELEMENT_MAP_KIND,
+		texture: Rectangle,
+		front = true,
+		xOffset = 0,
+		yOffset = 0,
+		zOffset = 0
+	): Sprite {
 		const sprite = new Sprite();
 		sprite.kind = kind;
 		sprite.texture = texture;
+		sprite.front = front;
+		sprite.xOffset = xOffset;
+		sprite.yOffset = yOffset;
+		sprite.zOffset = zOffset;
 		return sprite;
 	}
 
@@ -93,6 +104,34 @@ class Sprite extends Base {
 		return `${type} | ${this.texture.toString()}`;
 	}
 
+	getVectors(
+		vecA: THREE.Vector3,
+		vecB: THREE.Vector3,
+		vecC: THREE.Vector3,
+		vecD: THREE.Vector3,
+		pos: THREE.Vector3,
+		position: Position,
+		size: THREE.Vector3
+	) {
+		let zPlus = position.layer * Scene.Map.current!.camera.getYOffsetDepth();
+
+		// Apply an offset according to layer position
+		if (this.kind !== ELEMENT_MAP_KIND.SPRITE_FACE && !this.front) {
+			zPlus *= -1;
+		}
+		pos.setX(this.xOffset * Project.SQUARE_SIZE);
+		pos.setY(this.yOffset * Project.SQUARE_SIZE);
+		pos.setZ(this.zOffset * Project.SQUARE_SIZE + zPlus);
+		vecA.multiply(size);
+		vecB.multiply(size);
+		vecC.multiply(size);
+		vecD.multiply(size);
+		vecA.add(pos);
+		vecB.add(pos);
+		vecC.add(pos);
+		vecD.add(pos);
+	}
+
 	updateGeometry(
 		geometry: CustomGeometry | CustomGeometryFace,
 		width: number,
@@ -106,7 +145,8 @@ class Sprite extends Base {
 		const vecB = Sprite.MODEL[1].clone();
 		const vecC = Sprite.MODEL[2].clone();
 		const vecD = Sprite.MODEL[3].clone();
-		const center = new THREE.Vector3(0, 0, 0);
+		const center = new THREE.Vector3();
+		const pos = new THREE.Vector3();
 		const size = new THREE.Vector3(
 			this.texture.width * Project.SQUARE_SIZE * position.scaleX,
 			this.texture.height * Project.SQUARE_SIZE * position.scaleY,
@@ -114,13 +154,14 @@ class Sprite extends Base {
 		);
 
 		// For static sprites
-		super.scale(vecA, vecB, vecC, vecD, center, position, size, this.kind);
+		this.getVectors(vecA, vecB, vecC, vecD, pos, position, size);
 		if (localPosition !== null) {
 			vecA.add(localPosition);
 			vecB.add(localPosition);
 			vecC.add(localPosition);
 			vecD.add(localPosition);
 			center.add(localPosition);
+			pos.add(localPosition);
 		} else {
 			localPosition = tileset ? position.toVector3() : new THREE.Vector3();
 		}
@@ -144,12 +185,13 @@ class Sprite extends Base {
 
 		if (geometry instanceof CustomGeometryFace) {
 			// Face sprite
-			const c = new THREE.Vector3(center.x, localPosition.y, center.z);
+			const p = new THREE.Vector3(pos.x, localPosition.y + this.yOffset * Project.SQUARE_SIZE, pos.z);
+			const c = new THREE.Vector3(center.x, localPosition.y + this.yOffset * Project.SQUARE_SIZE, center.z);
 			geometry.pushQuadVerticesFace(
-				Sprite.MODEL[0].clone().multiply(size).add(c),
-				Sprite.MODEL[1].clone().multiply(size).add(c),
-				Sprite.MODEL[2].clone().multiply(size).add(c),
-				Sprite.MODEL[3].clone().multiply(size).add(c),
+				Sprite.MODEL[0].clone().multiply(size).add(p),
+				Sprite.MODEL[1].clone().multiply(size).add(p),
+				Sprite.MODEL[2].clone().multiply(size).add(p),
+				Sprite.MODEL[3].clone().multiply(size).add(p),
 				c
 			);
 			geometry.pushQuadIndices(count, position);

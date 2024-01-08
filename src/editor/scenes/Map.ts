@@ -85,6 +85,7 @@ class Map extends Base {
 	public undoRedoStates: UndoRedoState[] = [];
 	public undoRedoStatesSaving: UndoRedoState[] = [];
 	public lastPosition: Position | null = null;
+	public layerRayPosition: Portion | null = null;
 	public lastMapElement: MapElement.Base | null = null;
 	public pointedMapElementPosition: Position | null = null;
 	public pointedMapElement: MapElement.Base | null = null;
@@ -602,6 +603,10 @@ class Map extends Base {
 	}
 
 	updateRaycasting() {
+		const isLayerOn = Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON;
+		const isSpriteOptionSelected =
+			Scene.Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
+			Scene.Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_WALL;
 		const pointer = new THREE.Vector2();
 		if (Manager.GL.mapEditorContext.parent) {
 			pointer.x = (Inputs.getPositionX() / Manager.GL.mapEditorContext.canvasWidth) * 2 - 1;
@@ -626,6 +631,9 @@ class Map extends Base {
 			}
 		}
 		Manager.GL.raycaster.layers.set(layer);
+		if (isLayerOn && isSpriteOptionSelected) {
+			Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.SPRITES);
+		}
 		const previousPointedMapElementPosition = this.pointedMapElementPosition;
 		const previousPointedMapElement = this.pointedMapElement;
 		const previousPlaneY = this.meshPlane!.position.y;
@@ -663,7 +671,7 @@ class Map extends Base {
 				if (newPositionKey && (Scene.Map.isRemoving() || layer === RAYCASTING_LAYER.LANDS)) {
 					const newPosition = new Position();
 					newPosition.fromKey(newPositionKey);
-					if (Scene.Map.isRemoving()) {
+					if (Scene.Map.isRemoving() || isLayerOn) {
 						const element = this.mapPortion.model.getMapElement(
 							newPosition,
 							Scene.Map.currentSelectedMapElementKind
@@ -698,13 +706,24 @@ class Map extends Base {
 				position.centerX = ((Math.floor(obj.point.x) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
 				position.centerZ = ((Math.floor(obj.point.z) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
 			}
-			if (!Scene.Map.isRemoving() && Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON) {
-				position.layer = position.layer + 1;
+			if (!Scene.Map.isRemoving() && isLayerOn) {
+				position.layer =
+					(isSpriteOptionSelected ? this.mapPortion.model.getLastSpriteLayerAt(position) : position.layer) +
+					1;
 			}
 			if (this.lockedLayer !== null) {
 				position.layer = this.lockedLayer;
 			}
-			if (this.lastPosition === null || !this.lastPosition.equals(position)) {
+			const newLayerRayPosition = new Portion(
+				Math.floor(obj.point.x / Project.SQUARE_SIZE),
+				Math.floor(obj.point.y / Project.SQUARE_SIZE),
+				Math.floor(obj.point.z / Project.SQUARE_SIZE)
+			);
+			if (
+				this.lastPosition === null ||
+				!this.lastPosition.equals(position) ||
+				(isLayerOn && (this.layerRayPosition === null || !newLayerRayPosition.equals(this.layerRayPosition)))
+			) {
 				if (
 					Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.RECTANGLE &&
 					this.rectangleStartPosition === null &&
@@ -713,6 +732,7 @@ class Map extends Base {
 				) {
 					this.rectangleStartPosition = position.clone();
 				}
+				this.layerRayPosition = newLayerRayPosition;
 				if (Scene.Map.isDrawing()) {
 					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
 						if (Scene.Map.isAdding()) {
@@ -761,6 +781,7 @@ class Map extends Base {
 		if (intersects.length === 0) {
 			this.mapPortion.removeLastPreview();
 			this.lastPosition = null;
+			this.layerRayPosition = null;
 			this.pointedMapElementPosition = null;
 			this.pointedMapElement = null;
 		}

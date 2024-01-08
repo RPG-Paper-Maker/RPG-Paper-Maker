@@ -115,12 +115,14 @@ abstract class Serializable {
 						(this as any)[name] = null;
 					} else {
 						let rectangle: Rectangle;
-						if (defaultValue) {
-							rectangle = (defaultValue as Rectangle).clone();
-						} else {
+						if (jsonObj) {
 							rectangle = new Rectangle();
-							if (jsonObj) {
-								rectangle.read(jsonObj);
+							rectangle.read(jsonObj);
+						} else {
+							if (defaultValue instanceof Rectangle) {
+								rectangle = defaultValue.clone();
+							} else {
+								rectangle = defaultValue;
 							}
 						}
 						(this as any)[name] = rectangle;

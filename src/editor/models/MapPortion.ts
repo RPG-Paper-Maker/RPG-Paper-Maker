@@ -121,6 +121,21 @@ class MapPortion extends Serializable {
 		return null;
 	}
 
+	getSprite(position: Position): Sprite | null {
+		return this.sprites.get(position.toKey()) || null;
+	}
+
+	getLastSpriteLayerAt(position: Position): number {
+		const p = position.clone();
+		let count = p.layer;
+		let sprite: Sprite | null = null;
+		do {
+			p.layer = ++count;
+			sprite = this.getSprite(p);
+		} while (sprite !== null && !sprite.isPreview);
+		return count - 1;
+	}
+
 	async load() {
 		await super.load(true); // Try to read temp files by default
 	}

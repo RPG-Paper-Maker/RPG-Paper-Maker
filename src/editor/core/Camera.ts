@@ -79,6 +79,14 @@ class Camera {
 		return this.verticalAngle < 90;
 	}
 
+	getFront(direction: THREE.Vector3, angle: number) {
+		const planeDirection = new THREE.Vector3(0, 0, 1);
+		const m = new THREE.Matrix4();
+		m.makeRotationAxis(MapElement.Sprite.Y_AXIS, -Mathf.degreesToRadians(angle));
+		planeDirection.applyMatrix4(m);
+		return direction.dot(planeDirection) < 0;
+	}
+
 	updateCameraPosition() {
 		const distance = this.getDistance();
 		const camera = this.getThreeCamera();
