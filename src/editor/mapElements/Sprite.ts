@@ -199,6 +199,8 @@ class Sprite extends Base {
 			count = count + 4;
 		} else {
 			// Simple sprite
+			center.setX(center.x + this.xOffset * Project.SQUARE_SIZE);
+			center.setZ(center.z + this.zOffset * Project.SQUARE_SIZE);
 			const vecSimpleA = vecA.clone();
 			const vecSimpleB = vecB.clone();
 			const vecSimpleC = vecC.clone();

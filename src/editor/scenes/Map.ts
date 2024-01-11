@@ -292,30 +292,18 @@ class Map extends Base {
 	}
 
 	add(position: Position, preview = false, removePreview = true) {
+		const spriteLayer =
+			Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON &&
+			Scene.Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
+			Scene.Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_QUADRA;
+		const allowBorders = Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL || spriteLayer;
 		if (!preview) {
-			const positions = Mathf.traceLine(this.lastPosition, position);
+			const positions = spriteLayer ? [position] : Mathf.traceLine(this.lastPosition, position);
 			for (const p of positions) {
-				if (p.isInMap(this.modelMap)) {
-					this.mapPortion.add(p, preview, removePreview);
-				} else {
-					if (removePreview) {
-						this.mapPortion.removeLastPreview();
-					}
-				}
+				this.mapPortion.add(p, preview, removePreview, allowBorders);
 			}
 		} else {
-			if (
-				position.isInMap(
-					this.modelMap,
-					Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL
-				)
-			) {
-				this.mapPortion.add(position, preview, removePreview);
-			} else {
-				if (removePreview) {
-					this.mapPortion.removeLastPreview();
-				}
-			}
+			this.mapPortion.add(position, preview, removePreview, allowBorders);
 		}
 	}
 
@@ -323,29 +311,10 @@ class Map extends Base {
 		if (!preview) {
 			const positions = Mathf.traceLine(this.lastPosition, position);
 			for (const p of positions) {
-				if (
-					p.isInMap(this.modelMap, Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL)
-				) {
-					this.mapPortion.remove(p, preview, removePreview);
-				} else {
-					if (removePreview) {
-						this.mapPortion.removeLastPreview();
-					}
-				}
+				this.mapPortion.remove(p, preview, removePreview);
 			}
 		} else {
-			if (
-				position.isInMap(
-					this.modelMap,
-					Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL
-				)
-			) {
-				this.mapPortion.remove(position, preview, removePreview);
-			} else {
-				if (removePreview) {
-					this.mapPortion.removeLastPreview();
-				}
-			}
+			this.mapPortion.remove(position, preview, removePreview);
 		}
 	}
 
@@ -630,9 +599,12 @@ class Map extends Base {
 					break;
 			}
 		}
-		Manager.GL.raycaster.layers.set(layer);
 		if (isLayerOn && isSpriteOptionSelected) {
+			Manager.GL.raycaster.layers.enable(layer);
 			Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.SPRITES);
+			Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.WALLS);
+		} else {
+			Manager.GL.raycaster.layers.set(layer);
 		}
 		const previousPointedMapElementPosition = this.pointedMapElementPosition;
 		const previousPointedMapElement = this.pointedMapElement;
@@ -713,11 +685,19 @@ class Map extends Base {
 			}
 			if (this.lockedLayer !== null) {
 				position.layer = this.lockedLayer;
+				if (isLayerOn && isSpriteOptionSelected && this.lastPosition) {
+					position.angleX = this.lastPosition.angleX;
+					position.angleY = this.lastPosition.angleY;
+					position.angleZ = this.lastPosition.angleZ;
+					position.centerX = this.lastPosition.centerX;
+					position.centerZ = this.lastPosition.centerZ;
+				}
 			}
+			let zPlus = position.layer * Scene.Map.current!.camera.getYOffsetDepth();
 			const newLayerRayPosition = new Portion(
-				Math.floor(obj.point.x / Project.SQUARE_SIZE),
-				Math.floor(obj.point.y / Project.SQUARE_SIZE),
-				Math.floor(obj.point.z / Project.SQUARE_SIZE)
+				Math.floor((obj.point.x + Constants.PRECISION_POSITION + zPlus) / Project.SQUARE_SIZE),
+				Math.floor((obj.point.y + Constants.PRECISION_POSITION) / Project.SQUARE_SIZE),
+				Math.floor((obj.point.z + Constants.PRECISION_POSITION + zPlus) / Project.SQUARE_SIZE)
 			);
 			if (
 				this.lastPosition === null ||
@@ -811,7 +791,13 @@ class Map extends Base {
 				layer = RAYCASTING_LAYER.PLANE;
 				break;
 		}
-		Manager.GL.raycaster.layers.set(layer);
+		if (isLayerOn && isSpriteOptionSelected) {
+			Manager.GL.raycaster.layers.enable(layer);
+			Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.SPRITES);
+			Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.WALLS);
+		} else {
+			Manager.GL.raycaster.layers.set(layer);
+		}
 		intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		for (const obj of intersects) {
 			if (obj.faceIndex !== undefined) {
@@ -821,10 +807,13 @@ class Map extends Base {
 				if (newPositionKey) {
 					const newPosition = new Position();
 					newPosition.fromKey(newPositionKey);
-					const element = this.mapPortion.model.getMapElement(
+					let element = this.mapPortion.model.getMapElement(
 						newPosition,
 						Scene.Map.currentSelectedMapElementKind
 					);
+					if (isLayerOn && isSpriteOptionSelected && (!element || element.isPreview)) {
+						element = this.mapPortion.model.getMapElement(newPosition, ELEMENT_MAP_KIND.SPRITE_WALL);
+					}
 					if (element && !element.isPreview) {
 						this.pointedMapElement = element;
 						this.pointedMapElementPosition = newPosition;

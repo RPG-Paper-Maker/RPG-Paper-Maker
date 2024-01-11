@@ -68,7 +68,7 @@ class UndoRedo {
 	private static apply(position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND) {
 		if (Scene.Map.current) {
 			Scene.Map.current.mapPortion.removeLastPreview();
-			Scene.Map.current.mapPortion.updateMapElement(position, element, kind, false, false, true);
+			Scene.Map.current.mapPortion.updateMapElement(position, element, kind, false, false, true, true);
 		}
 	}
 

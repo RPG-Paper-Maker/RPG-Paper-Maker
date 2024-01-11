@@ -64,12 +64,12 @@ class MapPortion {
 
 	removeLastPreview() {
 		for (const [position, element, kind] of this.lastPreviewRemove) {
-			this.updateMapElement(position, element, kind, false, true);
+			this.updateMapElement(position, element, kind, false, true, false, true);
 		}
 		this.lastPreviewRemove = [];
 	}
 
-	add(position: Position, preview: boolean = false, removePreview = true) {
+	add(position: Position, preview: boolean = false, removePreview = true, allowBorders = false) {
 		if (removePreview) {
 			this.removeLastPreview();
 		}
@@ -113,7 +113,10 @@ class MapPortion {
 						Scene.Map.current!.layerRayPosition ? Scene.Map.current!.layerRayPosition.z - position.z : 0
 					),
 					Scene.Map.currentSelectedMapElementKind,
-					preview
+					preview,
+					false,
+					false,
+					allowBorders
 				);
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
@@ -199,7 +202,8 @@ class MapPortion {
 		kind: ELEMENT_MAP_KIND = ELEMENT_MAP_KIND.NONE,
 		preview = false,
 		removingPreview = false,
-		undoRedo = false
+		undoRedo = false,
+		allowBorders = false
 	) {
 		if (element !== null) {
 			kind = element.kind;
@@ -215,7 +219,15 @@ class MapPortion {
 			case ELEMENT_MAP_KIND.SPRITE_FIX:
 			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
 			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-				this.updateSprite(position, element as MapElement.Sprite, kind, preview, removingPreview, undoRedo);
+				this.updateSprite(
+					position,
+					element as MapElement.Sprite,
+					kind,
+					preview,
+					removingPreview,
+					undoRedo,
+					allowBorders
+				);
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
 				this.updateWall(position, element as MapElement.SpriteWall, preview, removingPreview, undoRedo);
@@ -342,9 +354,19 @@ class MapPortion {
 		kind: ELEMENT_MAP_KIND,
 		preview = false,
 		removingPreview = false,
-		undoRedo = false
+		undoRedo = false,
+		allowBorders = false
 	) {
-		this.setMapElement(position, sprite, kind, this.model.sprites, preview, removingPreview, undoRedo);
+		this.setMapElement(
+			position,
+			sprite,
+			kind,
+			this.model.sprites,
+			preview,
+			removingPreview,
+			undoRedo,
+			allowBorders
+		);
 	}
 
 	updateWallFromCursor(id: number, preview: boolean) {
@@ -437,7 +459,7 @@ class MapPortion {
 		undoRedo = false,
 		allowBorders = false
 	): MapElement.Base | null {
-		if (!Scene.Map.current || !position.isInMap(Scene.Map.current.modelMap, allowBorders)) {
+		if (!Scene.Map.current || (element && !position.isInMap(Scene.Map.current.modelMap, allowBorders))) {
 			return null;
 		}
 		const key = position.toKey();
