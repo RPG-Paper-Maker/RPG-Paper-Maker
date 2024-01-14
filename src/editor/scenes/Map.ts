@@ -145,6 +145,25 @@ class Map extends Base {
 		);
 	}
 
+	static isRotateDisabled(): boolean {
+		return [
+			ELEMENT_MAP_KIND.AUTOTILE,
+			ELEMENT_MAP_KIND.SPRITE_WALL,
+			ELEMENT_MAP_KIND.MOUNTAIN,
+			ELEMENT_MAP_KIND.OBJECT,
+		].includes(Scene.Map.currentSelectedMapElementKind);
+	}
+
+	static isScaleDisabled(): boolean {
+		return [
+			ELEMENT_MAP_KIND.FLOOR,
+			ELEMENT_MAP_KIND.AUTOTILE,
+			ELEMENT_MAP_KIND.SPRITE_WALL,
+			ELEMENT_MAP_KIND.MOUNTAIN,
+			ELEMENT_MAP_KIND.OBJECT,
+		].includes(Scene.Map.currentSelectedMapElementKind);
+	}
+
 	getPath(): string {
 		return Paths.join(Project.current?.getPathMaps(), Model.Map.generateMapName(this.id));
 	}
@@ -671,17 +690,28 @@ class Map extends Base {
 					position = newPosition;
 				}
 			}
-			if (
-				!Scene.Map.isRemoving() &&
-				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.PIXEL
-			) {
-				position.centerX = ((Math.floor(obj.point.x) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
-				position.centerZ = ((Math.floor(obj.point.z) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
-			}
-			if (!Scene.Map.isRemoving() && isLayerOn) {
-				position.layer =
-					(isSpriteOptionSelected ? this.mapPortion.model.getLastSpriteLayerAt(position) : position.layer) +
-					1;
+			if (!Scene.Map.isRemoving()) {
+				if (Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.PIXEL) {
+					position.centerX = ((Math.floor(obj.point.x) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+					position.centerZ = ((Math.floor(obj.point.z) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
+				}
+				if (isLayerOn) {
+					position.layer =
+						(isSpriteOptionSelected
+							? this.mapPortion.model.getLastSpriteLayerAt(position)
+							: position.layer) + 1;
+				} else {
+					if (!Scene.Map.isRotateDisabled()) {
+						position.angleX = Project.current!.settings.mapEditorDefaultRotateX;
+						position.angleY = Project.current!.settings.mapEditorDefaultRotateY;
+						position.angleZ = Project.current!.settings.mapEditorDefaultRotateZ;
+					}
+					if (!Scene.Map.isScaleDisabled()) {
+						position.scaleX = Project.current!.settings.mapEditorDefaultScaleX;
+						position.scaleY = Project.current!.settings.mapEditorDefaultScaleY;
+						position.scaleZ = Project.current!.settings.mapEditorDefaultScaleZ;
+					}
+				}
 			}
 			if (this.lockedLayer !== null) {
 				position.layer = this.lockedLayer;

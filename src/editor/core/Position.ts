@@ -133,6 +133,14 @@ class Position extends Position3D {
 		);
 	}
 
+	applyCoords(x: number, y: number, yPixels: number, z: number): Position {
+		this.x = x;
+		this.y = y;
+		this.yPixels = yPixels;
+		this.z = z;
+		return this;
+	}
+
 	updateYPixels(pixels: number) {
 		this.yPixels = (Math.max(Math.min(pixels, Project.SQUARE_SIZE - 1), 0) / Project.SQUARE_SIZE) * 100;
 	}

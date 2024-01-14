@@ -83,23 +83,6 @@ function MapEditorMenuBar() {
 			ELEMENT_MAP_KIND.OBJECT,
 		].includes(Scene.Map.currentSelectedMapElementKind);
 
-	const isRotateDisabled = () =>
-		[
-			ELEMENT_MAP_KIND.AUTOTILE,
-			ELEMENT_MAP_KIND.SPRITE_WALL,
-			ELEMENT_MAP_KIND.MOUNTAIN,
-			ELEMENT_MAP_KIND.OBJECT,
-		].includes(Scene.Map.currentSelectedMapElementKind);
-
-	const isScaleDisabled = () =>
-		[
-			ELEMENT_MAP_KIND.FLOOR,
-			ELEMENT_MAP_KIND.AUTOTILE,
-			ELEMENT_MAP_KIND.SPRITE_WALL,
-			ELEMENT_MAP_KIND.MOUNTAIN,
-			ELEMENT_MAP_KIND.OBJECT,
-		].includes(Scene.Map.currentSelectedMapElementKind);
-
 	const isRectangleDisabled = () =>
 		[ELEMENT_MAP_KIND.SPRITE_WALL, ELEMENT_MAP_KIND.OBJECT].includes(Scene.Map.currentSelectedMapElementKind);
 
@@ -133,8 +116,8 @@ function MapEditorMenuBar() {
 		}
 		if (
 			(isTranslateDisabled() && actionIndex === ACTION_KIND.TRANSLATE) ||
-			(isRotateDisabled() && actionIndex === ACTION_KIND.ROTATE) ||
-			(isScaleDisabled() && actionIndex === ACTION_KIND.SCALE) ||
+			(Scene.Map.isRotateDisabled() && actionIndex === ACTION_KIND.ROTATE) ||
+			(Scene.Map.isScaleDisabled() && actionIndex === ACTION_KIND.SCALE) ||
 			(isRectangleDisabled() && actionIndex === ACTION_KIND.RECTANGLE) ||
 			(isPinDisabled() && actionIndex === ACTION_KIND.PIN)
 		) {
@@ -446,8 +429,12 @@ function MapEditorMenuBar() {
 				</Menu>
 				<Menu horizontal isActivable activeIndex={actionIndex} setActiveIndex={setActionIndex}>
 					<MenuItem icon={<LuMove3D />} onClick={handleActionTranslate} disabled={isTranslateDisabled()} />
-					<MenuItem icon={<LuRotate3D />} onClick={handleActionRotate} disabled={isRotateDisabled()} />
-					<MenuItem icon={<LuScale3D />} onClick={handleActionScale} disabled={isScaleDisabled()} />
+					<MenuItem
+						icon={<LuRotate3D />}
+						onClick={handleActionRotate}
+						disabled={Scene.Map.isRotateDisabled()}
+					/>
+					<MenuItem icon={<LuScale3D />} onClick={handleActionScale} disabled={Scene.Map.isScaleDisabled()} />
 					<MenuItem icon={<BiSolidPencil />} onClick={handleActionPencil} />
 					<MenuItem
 						icon={<PiSelectionAllFill />}

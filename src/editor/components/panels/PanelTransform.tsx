@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React from 'react';
+import React, { useState } from 'react';
 import Groupbox from '../Groupbox';
 import InputNumber from '../InputNumber';
 import { ACTION_KIND, ELEMENT_POSITION_KIND } from '../../common';
@@ -18,12 +18,15 @@ import { RootState, setSelectedPosition } from '../../store';
 import Button from '../Button';
 import { Position, Project } from '../../core';
 import { Scene } from '../../Editor';
+import DialogTransformDefaultValues from '../dialogs/DialogTransformDefaultValues';
 
 type Props = {
 	kind: ACTION_KIND;
 };
 
 function PanelTransform({ kind }: Props) {
+	const [needDefaultDialogOpen, setNeedDefaultDialogOpen] = useState(false);
+
 	const selectedPosition = useSelector((state: RootState) => state.mapEditor.selectedPosition);
 	const selectedMapElement = useSelector((state: RootState) => state.mapEditor.selectedMapElement);
 	const currentElementPositionKind = useSelector((state: RootState) => state.mapEditor.currentElementPositionKind);
@@ -64,6 +67,8 @@ function PanelTransform({ kind }: Props) {
 			units = '°';
 			break;
 	}
+
+	const canEditDefaultValues = kind !== ACTION_KIND.TRANSLATE;
 
 	const getCurrentX = () => {
 		switch (kind) {
@@ -251,59 +256,83 @@ function PanelTransform({ kind }: Props) {
 		updatePosition(position);
 	};
 
+	const handleClickDefaultValues = () => {
+		setNeedDefaultDialogOpen(true);
+	};
+
 	return (
-		<Groupbox title={title}>
-			<div className='flex flex-column gap-medium'>
-				<Button>{`Set default ${kindText.toLowerCase()} for new elements...`}</Button>
-				{isSelected && (
-					<Groupbox title='Current values'>
-						<div className='flex flex-column gap-small'>
-							<div className='flex gap-small'>
-								X:
-								<InputNumber
-									min={getMinX()}
-									max={getMaxX()}
-									value={getCurrentX()}
-									onChange={handleChangeCurrentX}
-									decimals={isDecimal}
-								/>
-								{units}
+		<>
+			<Groupbox title={title}>
+				<div className='flex flex-column gap-medium'>
+					{canEditDefaultValues && (
+						<Button
+							onClick={handleClickDefaultValues}
+						>{`Set default ${kindText.toLowerCase()} for new elements...`}</Button>
+					)}
+					{isSelected && (
+						<Groupbox title='Current values'>
+							<div className='flex flex-column gap-small'>
+								<div className='flex gap-medium'>
+									X:
+									<InputNumber
+										min={getMinX()}
+										max={getMaxX()}
+										value={getCurrentX()}
+										onChange={handleChangeCurrentX}
+										decimals={isDecimal}
+									/>
+									{units}
+								</div>
+								<div className='flex gap-medium'>
+									Y:
+									<InputNumber
+										min={getMinY()}
+										max={getMaxY()}
+										value={getCurrentY()}
+										onChange={handleChangeCurrentY}
+										decimals={isDecimal}
+									/>
+									{units}
+								</div>
+								<div className='flex gap-medium'>
+									Z:
+									<InputNumber
+										min={getMinZ()}
+										max={getMaxZ()}
+										value={getCurrentZ()}
+										onChange={handleChangeCurrentZ}
+										decimals={isDecimal}
+									/>
+									{units}
+								</div>
 							</div>
-							<div className='flex gap-small'>
-								Y:
-								<InputNumber
-									min={getMinY()}
-									max={getMaxY()}
-									value={getCurrentY()}
-									onChange={handleChangeCurrentY}
-									decimals={isDecimal}
-								/>
-								{units}
-							</div>
-							<div className='flex gap-small'>
-								Z:
-								<InputNumber
-									min={getMinZ()}
-									max={getMaxZ()}
-									value={getCurrentZ()}
-									onChange={handleChangeCurrentZ}
-									decimals={isDecimal}
-								/>
-								{units}
-							</div>
-						</div>
-					</Groupbox>
-				)}
-				{isSelected ? (
-					<>
-						<div>{selectedMapElement?.toString()}</div>
-						<div>{getPositionText()}</div>
-					</>
-				) : (
-					<div className='text-center text-small-detail'>No map element selected.</div>
-				)}
-			</div>
-		</Groupbox>
+						</Groupbox>
+					)}
+					{isSelected ? (
+						<>
+							<div>{selectedMapElement?.toString()}</div>
+							<div>{getPositionText()}</div>
+						</>
+					) : (
+						<div className='text-center text-small-detail'>No map element selected.</div>
+					)}
+				</div>
+			</Groupbox>
+			<DialogTransformDefaultValues
+				needOpen={needDefaultDialogOpen}
+				setNeedOpen={setNeedDefaultDialogOpen}
+				getMinX={getMinX}
+				getMaxX={getMaxX}
+				getMinY={getMinY}
+				getMaxY={getMaxY}
+				getMinZ={getMinZ}
+				getMaxZ={getMaxZ}
+				isDecimal={isDecimal}
+				units={units}
+				kind={kind}
+				kindText={kindText}
+			/>
+		</>
 	);
 }
 

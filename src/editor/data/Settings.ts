@@ -31,6 +31,12 @@ class Settings extends Serializable {
 	public mapEditorCurrentElementPositionIndex!: number;
 	public mapEditorCurrentActionIndex!: number;
 	public mapEditorCurrentLayerIndex!: number;
+	public mapEditorDefaultRotateX!: number;
+	public mapEditorDefaultRotateY!: number;
+	public mapEditorDefaultRotateZ!: number;
+	public mapEditorDefaultScaleX!: number;
+	public mapEditorDefaultScaleY!: number;
+	public mapEditorDefaultScaleZ!: number;
 
 	public static readonly bindings: BindingType[] = [
 		['projectMenuIndex', 'pmi', 1, BINDING.NUMBER],
@@ -51,6 +57,12 @@ class Settings extends Serializable {
 		['mapEditorCurrentElementPositionIndex', 'mecepi', 0, BINDING.NUMBER],
 		['mapEditorCurrentActionIndex', 'mecai', ACTION_KIND.PENCIL, BINDING.NUMBER],
 		['mapEditorCurrentLayerIndex', 'mecli', LAYER_KIND.OFF, BINDING.NUMBER],
+		['mapEditorDefaultRotateX', 'medrx', 0, BINDING.NUMBER],
+		['mapEditorDefaultRotateY', 'medry', 0, BINDING.NUMBER],
+		['mapEditorDefaultRotateZ', 'medrz', 0, BINDING.NUMBER],
+		['mapEditorDefaultScaleX', 'medsx', 1, BINDING.NUMBER],
+		['mapEditorDefaultScaleY', 'medsy', 1, BINDING.NUMBER],
+		['mapEditorDefaultScaleZ', 'medsz', 1, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

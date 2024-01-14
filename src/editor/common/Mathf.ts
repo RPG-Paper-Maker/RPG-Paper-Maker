@@ -56,7 +56,6 @@ class Mathf {
 		const yPlus = current.yPixels;
 		let z1 = previous.z;
 		const z2 = current.z;
-		const l = current.layer;
 		let dx = x2 - x1;
 		let dz = z2 - z1;
 		const test = true;
@@ -70,7 +69,7 @@ class Mathf {
 							dz = dz * 2;
 
 							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
+								positions.push(current.clone().applyCoords(x1, y, yPlus, z1));
 								x1++;
 								if (x1 === x2) {
 									break;
@@ -87,7 +86,7 @@ class Mathf {
 							dx = dx * 2;
 
 							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
+								positions.push(current.clone().applyCoords(x1, y, yPlus, z1));
 								z1++;
 								if (z1 === z2) {
 									break;
@@ -106,7 +105,7 @@ class Mathf {
 							dz = dz * 2;
 
 							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
+								positions.push(current.clone().applyCoords(x1, y, yPlus, z1));
 								x1++;
 								if (x1 === x2) {
 									break;
@@ -123,7 +122,7 @@ class Mathf {
 							dx = dx * 2;
 
 							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
+								positions.push(current.clone().applyCoords(x1, y, yPlus, z1));
 								z1--;
 								if (z1 === z2) {
 									break;
@@ -138,7 +137,7 @@ class Mathf {
 					}
 				} else {
 					while (x1 !== x2) {
-						positions.push(new Position(x1, y, yPlus, z1, l));
+						positions.push(current.clone().applyCoords(x1, y, yPlus, z1));
 						x1++;
 					}
 				}
@@ -152,7 +151,7 @@ class Mathf {
 							dz = dz * 2;
 
 							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
+								positions.push(current.clone().applyCoords(x1, y, yPlus, z1));
 								x1--;
 								if (x1 === x2) {
 									break;
@@ -169,7 +168,7 @@ class Mathf {
 							dx = dx * 2;
 
 							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
+								positions.push(current.clone().applyCoords(x1, y, yPlus, z1));
 								z1++;
 								if (z1 === z2) {
 									break;
@@ -188,7 +187,7 @@ class Mathf {
 							dz = dz * 2;
 
 							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
+								positions.push(current.clone().applyCoords(x1, y, yPlus, z1));
 								x1--;
 								if (x1 === x2) break;
 								e -= dz;
@@ -203,7 +202,7 @@ class Mathf {
 							dx = dx * 2;
 
 							while (test) {
-								positions.push(new Position(x1, y, yPlus, z1, l));
+								positions.push(current.clone().applyCoords(x1, y, yPlus, z1));
 								z1--;
 								if (z1 === z2) break;
 								e -= dx;
@@ -216,7 +215,7 @@ class Mathf {
 					}
 				} else {
 					while (x1 !== x2) {
-						positions.push(new Position(x1, y, yPlus, z1, l));
+						positions.push(current.clone().applyCoords(x1, y, yPlus, z1));
 						x1--;
 					}
 				}
@@ -226,12 +225,12 @@ class Mathf {
 			if (dz !== 0) {
 				if (dz > 0) {
 					while (z1 !== z2) {
-						positions.push(new Position(x1, y, yPlus, z1, l));
+						positions.push(current.clone().applyCoords(x1, y, yPlus, z1));
 						z1++;
 					}
 				} else {
 					while (z1 !== z2) {
-						positions.push(new Position(x1, y, yPlus, z1, l));
+						positions.push(current.clone().applyCoords(x1, y, yPlus, z1));
 						z1--;
 					}
 				}

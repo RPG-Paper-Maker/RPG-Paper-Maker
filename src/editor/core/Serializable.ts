@@ -122,7 +122,11 @@ abstract class Serializable {
 							if (defaultValue instanceof Rectangle) {
 								rectangle = defaultValue.clone();
 							} else {
-								rectangle = defaultValue;
+								if (defaultValue) {
+									rectangle = defaultValue;
+								} else {
+									rectangle = new Rectangle();
+								}
 							}
 						}
 						(this as any)[name] = rectangle;
@@ -194,7 +198,7 @@ abstract class Serializable {
 					const rectangle = (this as any)[name];
 					if (rectangle === null) {
 						json[jsonName] = null;
-					} else {
+					} else if (rectangle) {
 						const tab: any[] = [];
 						rectangle.write(tab);
 						json[jsonName] = tab;
