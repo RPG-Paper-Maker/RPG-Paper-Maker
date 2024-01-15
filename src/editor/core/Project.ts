@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Data } from '../Editor';
+import { Data, Model } from '../Editor';
 import { LOCAL_FORAGE, Paths } from '../common';
 
 class Project {
@@ -24,11 +24,11 @@ class Project {
 	public specialElements = new Data.SpecialElements();
 
 	constructor(name: string) {
-		this.systems.projectName = name;
+		this.systems.projectName = Model.Localization.create(name);
 	}
 
 	getPath(): string {
-		return Paths.join(LOCAL_FORAGE.PROJECTS, this.systems.projectName); // Different web and desktop
+		return Paths.join(LOCAL_FORAGE.PROJECTS, this.systems.projectName.name()); // Different web and desktop
 	}
 
 	getPathMaps(): string {
@@ -36,14 +36,13 @@ class Project {
 	}
 
 	async load() {
-		const projectName = this.systems.projectName;
+		const projectName = this.systems.projectName.name();
 		await this.pictures.load();
 		await this.shapes.load();
 		await this.settings.load();
 		await this.systems.load();
-		this.systems.projectName = projectName;
+		this.systems.projectName.names.set(1, projectName);
 		Project.SQUARE_SIZE = this.systems.SQUARE_SIZE;
-		// this.systems.projectName = (this.systems.projectName as any).names[1]; // TODO
 		await this.treeMaps.load();
 		await this.specialElements.load();
 	}

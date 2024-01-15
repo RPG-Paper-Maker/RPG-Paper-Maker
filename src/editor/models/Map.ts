@@ -63,7 +63,7 @@ class Map extends Base {
         MapEditorSubSelectionKind previousType;
         mapPortion.addObject(position, o, previous, previousType);*/
 		await LocalFile.writeJSON(Paths.join(folderMap, 'objects.json'), {
-			objs: [{ id: 1, name: 'Hero', p: [7, 0, 0, 7] }],
+			objs: [],
 		});
 		// TODO
 		await LocalFile.copyPublicFile(

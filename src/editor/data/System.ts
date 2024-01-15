@@ -9,25 +9,32 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Model } from '../Editor';
 import { BINDING, BindingType, Constants, Paths } from '../common';
-import { Project, Serializable } from '../core';
+import { Position, Project, Serializable } from '../core';
 
 class System extends Serializable {
-	public projectName!: string;
+	public projectName!: Model.Localization;
 	public SQUARE_SIZE!: number;
 	public PORTIONS_RAY!: number;
 	public PATH_BR!: string;
 	public PATH_DLCS!: string;
+	public FRAMES!: number;
 	public autotilesFrames!: number;
 	public autotilesFrameDuration!: number;
+	public heroMapID!: number;
+	public heroMapPosition!: Position;
+	public json: any; // TEMP, will be removed later
 
 	public static readonly bindings: BindingType[] = [
-		['projectName', 'pn', 'Project without name', BINDING.STRING],
+		['projectName', 'pn', 'Project without name', BINDING.OBJECT, Model.Localization],
 		['SQUARE_SIZE', 'ss', undefined, BINDING.NUMBER],
 		['PORTIONS_RAY', 'portionRayIngame', 3, BINDING.NUMBER],
 		['PATH_BR', 'pathBR', undefined, BINDING.STRING],
 		['autotilesFrames', 'autotilesFrames', 4, BINDING.NUMBER],
 		['autotilesFrameDuration', 'autotilesFrameDuration', 150, BINDING.NUMBER],
+		['heroMapID', 'idMapHero', 1, BINDING.NUMBER],
+		['heroMapPosition', 'hmp', new Position(7, 0, 0, 7), BINDING.POSITION],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -44,10 +51,12 @@ class System extends Serializable {
 
 	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
 		super.read(json, System.getBindings(additionnalBinding));
+		this.json = json;
 		this.PATH_BR = './BR/';
 	}
 
 	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		Object.assign(json, this.json);
 		super.write(json, System.getBindings(additionnalBinding));
 	}
 }

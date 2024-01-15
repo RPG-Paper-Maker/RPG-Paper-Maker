@@ -83,10 +83,6 @@ class Base extends Serializable {
 		this.name = model.name;
 	}
 
-	isDefault(defaultValue?: Base) {
-		return false;
-	}
-
 	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
 		super.read(json, Base.getBindings(additionnalBinding));
 	}

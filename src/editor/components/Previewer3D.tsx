@@ -97,6 +97,9 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 					case ELEMENT_MAP_KIND.OBJECT3D:
 						await scene.loadObject3D(Manager.GL.mainPreviewerContext, currentObject3DID);
 						break;
+					default:
+						scene.clear();
+						break;
 				}
 			} else {
 				if (selectedMapElement) {

@@ -23,7 +23,7 @@ import { ReactComponent as QuadraSpriteIcon } from '../../assets/icons/quadra-sp
 import { ReactComponent as LayersOffIcon } from '../../assets/icons/layers-off.svg';
 import { ReactComponent as SquareIcon } from '../../assets/icons/square.svg';
 import { ReactComponent as PixelIcon } from '../../assets/icons/pixel.svg';
-import { FaLayerGroup, FaMountain } from 'react-icons/fa';
+import { FaFlagCheckered, FaLayerGroup, FaMountain } from 'react-icons/fa';
 import { GiBrickWall, GiEmptyChessboard } from 'react-icons/gi';
 import { LuMountain, LuMove3D, LuRotate3D, LuScale3D } from 'react-icons/lu';
 import { TbHandMove } from 'react-icons/tb';
@@ -72,6 +72,7 @@ function MapEditorMenuBar() {
 			ELEMENT_MAP_KIND.SPRITE_WALL,
 			ELEMENT_MAP_KIND.MOUNTAIN,
 			ELEMENT_MAP_KIND.OBJECT,
+			ELEMENT_MAP_KIND.START_POSITION,
 		].includes(Scene.Map.currentSelectedMapElementKind) ||
 		[ACTION_KIND.RECTANGLE, ACTION_KIND.PIN].includes(actionIndex);
 
@@ -81,6 +82,7 @@ function MapEditorMenuBar() {
 			ELEMENT_MAP_KIND.SPRITE_WALL,
 			ELEMENT_MAP_KIND.MOUNTAIN,
 			ELEMENT_MAP_KIND.OBJECT,
+			ELEMENT_MAP_KIND.START_POSITION,
 		].includes(Scene.Map.currentSelectedMapElementKind);
 
 	const isRectangleDisabled = () =>
@@ -96,6 +98,7 @@ function MapEditorMenuBar() {
 			ELEMENT_MAP_KIND.MOUNTAIN,
 			ELEMENT_MAP_KIND.OBJECT3D,
 			ELEMENT_MAP_KIND.OBJECT,
+			ELEMENT_MAP_KIND.START_POSITION,
 		].includes(Scene.Map.currentSelectedMapElementKind);
 
 	const isLayersOnDisabled = () =>
@@ -104,6 +107,7 @@ function MapEditorMenuBar() {
 			ELEMENT_MAP_KIND.MOUNTAIN,
 			ELEMENT_MAP_KIND.OBJECT3D,
 			ELEMENT_MAP_KIND.OBJECT,
+			ELEMENT_MAP_KIND.START_POSITION,
 		].includes(Scene.Map.currentSelectedMapElementKind);
 
 	const handleGeneric = (kind: ELEMENT_MAP_KIND, menuIndex: MENU_INDEX_MAP_EDITOR) => {
@@ -215,6 +219,11 @@ function MapEditorMenuBar() {
 		await Project.current!.settings.save();
 	};
 
+	const handleStartPosition = async () => {
+		handleGeneric(ELEMENT_MAP_KIND.START_POSITION, MENU_INDEX_MAP_EDITOR.START_POSITION);
+		await Project.current!.settings.save();
+	};
+
 	const handleMobilePlus = () => {
 		Scene.Map.currentSelectedMobileAction = MOBILE_ACTION.PLUS;
 	};
@@ -322,6 +331,9 @@ function MapEditorMenuBar() {
 				case MENU_INDEX_MAP_EDITOR.OBJECTS3D:
 					handleObjects3D().catch(console.error);
 					break;
+				case MENU_INDEX_MAP_EDITOR.START_POSITION:
+					handleStartPosition().catch(console.error);
+					break;
 			}
 			setElementPositionIndex(Project.current!.settings.mapEditorCurrentElementPositionIndex);
 			Project.current!.settings.mapEditorCurrentActionIndex = actionIndexBefore;
@@ -404,6 +416,11 @@ function MapEditorMenuBar() {
 					<MenuSub icon={<GiEmptyChessboard />} disabled>
 						<MenuItem icon={<GiEmptyChessboard />} onClick={handleFloors}>
 							Objects - 0001: Empty
+						</MenuItem>
+					</MenuSub>
+					<MenuSub icon={<FaFlagCheckered />} onClick={handleStartPosition}>
+						<MenuItem icon={<FaFlagCheckered />} onClick={handleStartPosition}>
+							Start position
 						</MenuItem>
 					</MenuSub>
 				</Menu>

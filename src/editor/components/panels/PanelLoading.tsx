@@ -26,16 +26,18 @@ function PanelLoading({ setLoaded }: Props) {
 
 	const initialize = async () => {
 		Constants.isMobile = Utils.isMobile();
-		await initializeTextures();
 		await initializeGL();
+		await initializeTextures();
 		await initializeLocalFiles();
 		await loadProjects(); // Desktop: load engine settings
 		setLoaded(true);
 	};
 
 	const initializeTextures = async () => {
+		Scene.Map.materialCursor = await Manager.GL.loadTexture('./Assets/cursor.png');
 		Scene.Map.pictureTilesetCursor = await Picture2D.loadImage('./Assets/tileset-cursor.png');
 		Scene.Map.pictureLayersOnCursor = await Picture2D.loadImage('./Assets/cursor-layers-on.svg');
+		Scene.Map.materialStartPosition = await Manager.GL.loadTexture('./Assets/start-position.png');
 	};
 
 	const initializeGL = async () => {

@@ -146,12 +146,7 @@ class MapPortion extends Serializable {
 
 	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
 		super.write(json, MapPortion.getBindings(additionnalBinding));
-		json.objs = [
-			{
-				k: [7, 0, 0, 7, 0],
-				v: { canBeTriggeredAnotherObject: false, hId: 2, id: 1, name: 'Hero', ooepf: false },
-			},
-		];
+		json.objs = [];
 	}
 }
 

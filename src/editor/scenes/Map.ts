@@ -57,8 +57,10 @@ class Map extends Base {
 	public static ctxHUD: CanvasRenderingContext2D | null = null;
 	public static ctxRendering: CanvasRenderingContext2D | null = null;
 	public static animationFrameID: number;
+	public static materialCursor: THREE.MeshPhongMaterial;
 	public static pictureTilesetCursor: HTMLImageElement;
 	public static pictureLayersOnCursor: HTMLImageElement;
+	public static materialStartPosition: THREE.MeshPhongMaterial;
 
 	public id: number;
 	public tag: Model.TreeMapTag;
@@ -71,6 +73,7 @@ class Map extends Base {
 	public modelMap: Model.Map = new Model.Map();
 	public grid = new Grid();
 	public cursor: Cursor;
+	public cursorStartPosition!: Cursor;
 	public cursorWall = new CursorWall();
 	public meshPlane: THREE.Object3D | null = null;
 	public sunLight!: THREE.DirectionalLight;
@@ -108,6 +111,7 @@ class Map extends Base {
 	public lockedLayer: number | null = null;
 	public requestPaintHUD = false;
 	public needsUpdateRaycasting = false;
+	public needsSaveSystems = false;
 	public mouseUp = false;
 	public isTransforming = false;
 	public isDraggingTransforming = false;
@@ -151,6 +155,7 @@ class Map extends Base {
 			ELEMENT_MAP_KIND.SPRITE_WALL,
 			ELEMENT_MAP_KIND.MOUNTAIN,
 			ELEMENT_MAP_KIND.OBJECT,
+			ELEMENT_MAP_KIND.START_POSITION,
 		].includes(Scene.Map.currentSelectedMapElementKind);
 	}
 
@@ -161,6 +166,7 @@ class Map extends Base {
 			ELEMENT_MAP_KIND.SPRITE_WALL,
 			ELEMENT_MAP_KIND.MOUNTAIN,
 			ELEMENT_MAP_KIND.OBJECT,
+			ELEMENT_MAP_KIND.START_POSITION,
 		].includes(Scene.Map.currentSelectedMapElementKind);
 	}
 
@@ -235,7 +241,7 @@ class Map extends Base {
 		await this.mapPortion.loadTexturesAndUpdateGeometries(false);
 
 		// Cursors
-		await this.cursor.load();
+		this.cursor.initialize(Scene.Map.materialCursor);
 		this.cursorWall.initialize();
 
 		// Light
@@ -258,6 +264,12 @@ class Map extends Base {
 		this.selectedMesh = new THREE.Mesh(new CustomGeometry(), this.materialTilesetHover);
 		this.selectedMesh.receiveShadow = true;
 		this.selectedMesh.castShadow = true;
+
+		// Start position
+		const isStartInMap = this.id === Project.current!.systems.heroMapID;
+		this.cursorStartPosition = new Cursor(isStartInMap ? Project.current!.systems.heroMapPosition : new Position());
+		this.cursorStartPosition.initialize(Scene.Map.materialStartPosition, 1, isStartInMap);
+		this.cursorStartPosition.updateMeshPosition();
 
 		this.loading = false;
 	}
@@ -590,6 +602,15 @@ class Map extends Base {
 		}
 	}
 
+	updateStartPosition(position: Position) {
+		Project.current!.systems.heroMapID = this.id;
+		Project.current!.systems.heroMapPosition = position;
+		this.cursorStartPosition.position = position;
+		this.cursorStartPosition.updateMeshPosition();
+		this.scene.add(this.cursorStartPosition.mesh);
+		this.needsSaveSystems = true;
+	}
+
 	updateRaycasting() {
 		const isLayerOn = Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON;
 		const isSpriteOptionSelected =
@@ -744,42 +765,50 @@ class Map extends Base {
 				}
 				this.layerRayPosition = newLayerRayPosition;
 				if (Scene.Map.isDrawing()) {
-					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
-						if (Scene.Map.isAdding()) {
-							this.updateLockedY(position);
-							this.cursorWall.update(position);
-							this.add(position, true);
-						} else if (Scene.Map.isRemoving()) {
-							this.updateLockedY(position);
-							this.cursorWall.update(position);
-							this.remove(position, true);
-						}
-					} else {
-						if (!Inputs.isPointerPressed && !Inputs.isMouseRightPressed) {
-							this.add(position, true);
-						} else if (Scene.Map.isAdding()) {
-							this.updateLockedY(position);
-							if (this.rectangleStartPosition) {
-								const positions = this.rectangleStartPosition.getPositionsRectangle(position);
-								this.mapPortion.removeLastPreview();
-								for (const rectanglePosition of positions) {
-									this.add(rectanglePosition, true, false);
-								}
-							} else {
-								this.add(position);
+					switch (Scene.Map.currentSelectedMapElementKind) {
+						case ELEMENT_MAP_KIND.START_POSITION:
+							if (Scene.Map.isAdding()) {
+								this.updateStartPosition(position);
 							}
-						} else if (Scene.Map.isRemoving()) {
-							this.updateLockedY(position);
-							if (this.rectangleStartPosition) {
-								const positions = this.rectangleStartPosition.getPositionsRectangle(position);
-								this.mapPortion.removeLastPreview();
-								for (const rectanglePosition of positions) {
-									this.remove(rectanglePosition, true, false);
-								}
-							} else {
-								this.remove(position);
+							break;
+						case ELEMENT_MAP_KIND.SPRITE_WALL:
+							if (Scene.Map.isAdding()) {
+								this.updateLockedY(position);
+								this.cursorWall.update(position);
+								this.add(position, true);
+							} else if (Scene.Map.isRemoving()) {
+								this.updateLockedY(position);
+								this.cursorWall.update(position);
+								this.remove(position, true);
 							}
-						}
+							break;
+						default:
+							if (!Inputs.isPointerPressed && !Inputs.isMouseRightPressed) {
+								this.add(position, true);
+							} else if (Scene.Map.isAdding()) {
+								this.updateLockedY(position);
+								if (this.rectangleStartPosition) {
+									const positions = this.rectangleStartPosition.getPositionsRectangle(position);
+									this.mapPortion.removeLastPreview();
+									for (const rectanglePosition of positions) {
+										this.add(rectanglePosition, true, false);
+									}
+								} else {
+									this.add(position);
+								}
+							} else if (Scene.Map.isRemoving()) {
+								this.updateLockedY(position);
+								if (this.rectangleStartPosition) {
+									const positions = this.rectangleStartPosition.getPositionsRectangle(position);
+									this.mapPortion.removeLastPreview();
+									for (const rectanglePosition of positions) {
+										this.remove(rectanglePosition, true, false);
+									}
+								} else {
+									this.remove(position);
+								}
+							}
+							break;
 					}
 				}
 				this.lastPosition = position;
@@ -945,28 +974,34 @@ class Map extends Base {
 		} else {
 			if (Scene.Map.isDrawing()) {
 				if (Inputs.isPointerPressed && this.lastPosition) {
-					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
-						this.cursorWall.onMouseDown();
-					} else {
-						this.updateLockedY(this.lastPosition);
-						switch (Project.current!.settings.mapEditorCurrentActionIndex) {
-							case ACTION_KIND.PENCIL:
-								this.add(this.lastPosition);
-								break;
-							case ACTION_KIND.RECTANGLE:
-								this.rectangleStartPosition = this.lastPosition.clone();
-								break;
-							case ACTION_KIND.PIN:
-								this.paintPin(
-									this.lastPosition,
-									Scene.Map.currentSelectedMapElementKind,
-									Project.current!.settings.mapEditorCurrentAutotileID,
-									Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR
-										? Project.current!.settings.mapEditorCurrentTilesetFloorTexture
-										: Project.current!.settings.mapEditorCurrentAutotileTexture
-								);
-								break;
-						}
+					switch (Scene.Map.currentSelectedMapElementKind) {
+						case ELEMENT_MAP_KIND.START_POSITION:
+							this.updateStartPosition(this.lastPosition);
+							break;
+						case ELEMENT_MAP_KIND.SPRITE_WALL:
+							this.cursorWall.onMouseDown();
+							break;
+						default:
+							this.updateLockedY(this.lastPosition);
+							switch (Project.current!.settings.mapEditorCurrentActionIndex) {
+								case ACTION_KIND.PENCIL:
+									this.add(this.lastPosition);
+									break;
+								case ACTION_KIND.RECTANGLE:
+									this.rectangleStartPosition = this.lastPosition.clone();
+									break;
+								case ACTION_KIND.PIN:
+									this.paintPin(
+										this.lastPosition,
+										Scene.Map.currentSelectedMapElementKind,
+										Project.current!.settings.mapEditorCurrentAutotileID,
+										Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR
+											? Project.current!.settings.mapEditorCurrentTilesetFloorTexture
+											: Project.current!.settings.mapEditorCurrentAutotileTexture
+									);
+									break;
+							}
+							break;
 					}
 				} else if (Inputs.isMouseRightPressed) {
 					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
@@ -1097,6 +1132,9 @@ class Map extends Base {
 		this.rectangleStartPosition = null;
 		this.updateUndoRedoSave();
 		await Project.current!.treeMaps.save();
+		if (this.needsSaveSystems) {
+			await Project.current!.systems.save();
+		}
 	}
 
 	async onTouchEnd(x: number, y: number) {

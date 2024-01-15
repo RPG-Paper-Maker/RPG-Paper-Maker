@@ -99,7 +99,7 @@ abstract class Serializable {
 					(this as any)[`${name}Indexes`] = tabIndexes;
 					break;
 				}
-				case BINDING.MAP_POSITION:
+				case BINDING.MAP_POSITION: {
 					const mapping = new Map();
 					(this as any)[name] = mapping;
 					for (const objHash of json[jsonName]) {
@@ -109,6 +109,16 @@ abstract class Serializable {
 						mapping.set(p.toKey(), cons.fromJSON(objHash.v));
 					}
 					break;
+				}
+				case BINDING.MAP: {
+					const mapping = new Map();
+					(this as any)[name] = mapping;
+					const jsonObj = json[jsonName];
+					for (const key in jsonObj) {
+						mapping.set(key, jsonObj[key]);
+					}
+					break;
+				}
 				case BINDING.RECTANGLE: {
 					const jsonObj = json[jsonName];
 					if (!jsonObj && defaultValue === null) {
@@ -149,7 +159,7 @@ abstract class Serializable {
 					break;
 				case BINDING.OBJECT:
 					const obj = (this as any)[name];
-					if (obj && !obj.isDefault(defaultValue)) {
+					if (obj) {
 						const jsonObj = {};
 						obj.write(jsonObj);
 						json[jsonName] = jsonObj;
@@ -192,6 +202,15 @@ abstract class Serializable {
 						jsonTab.push(objMap);
 					}
 					json[jsonName] = jsonTab;
+					break;
+				}
+				case BINDING.MAP: {
+					const mapping = (this as any)[name];
+					const jsonMap: any = {};
+					for (const [k, v] of mapping) {
+						jsonMap[k] = v;
+					}
+					json[jsonName] = jsonMap;
 					break;
 				}
 				case BINDING.RECTANGLE: {

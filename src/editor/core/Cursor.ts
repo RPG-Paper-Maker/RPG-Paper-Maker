@@ -25,8 +25,7 @@ class Cursor {
 		this.position = position;
 	}
 
-	async load() {
-		const material = await Manager.GL.loadTexture('./Assets/cursor.png');
+	initialize(material: THREE.MeshPhongMaterial, frames = 4, addToScene = true) {
 		const vecA = new THREE.Vector3(0, 0, 0);
 		const vecB = new THREE.Vector3(Project.SQUARE_SIZE, 0, 0);
 		const vecC = new THREE.Vector3(Project.SQUARE_SIZE, 0, Project.SQUARE_SIZE);
@@ -34,13 +33,13 @@ class Cursor {
 		const geometry = new CustomGeometry();
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 		geometry.pushQuadIndices(0);
-		const width = material.map?.image.width;
-		const height = material.map?.image.height;
+		const width = material.map!.image.width;
+		const height = material.map!.image.height;
 		const coefX = MapElement.Base.COEF_TEX / width;
 		const coefY = MapElement.Base.COEF_TEX / height;
 		const tx = coefX;
 		const ty = coefY;
-		const tw = width / 4 / width - coefX * 2;
+		const tw = 1 / frames - coefX * 2;
 		const th = 1 - coefY * 2;
 		const texA = new THREE.Vector2();
 		const texB = new THREE.Vector2();
@@ -53,7 +52,9 @@ class Cursor {
 		const { x, y, z } = this.position.toVector3(false);
 		this.mesh.position.set(x, y, z);
 		this.mesh.renderOrder = 2;
-		Scene.Map.current?.scene.add(this.mesh);
+		if (addToScene) {
+			Scene.Map.current!.scene.add(this.mesh);
+		}
 	}
 
 	onKeyDownImmediate() {

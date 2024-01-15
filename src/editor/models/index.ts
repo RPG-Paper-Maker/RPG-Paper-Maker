@@ -1,5 +1,7 @@
 export * from './Autotile';
 export * from './Base';
+export * from './DynamicValue';
+export * from './Localization';
 export * from './Map';
 export * from './MapPortion';
 export * from './Mountain';
