@@ -102,8 +102,10 @@ function MainMenuBar() {
 
 	const canSaveAll = isProjectOpened && !Project.current?.treeMaps.isAllMapsSaved();
 
-	const updateProjectMenuIndex = (index: number) => {
+	const updateProjectMenuIndex = async (index: number) => {
 		dispatch(setProjectMenuIndex(index));
+		Project.current!.settings.projectMenuIndex = index;
+		await Project.current!.settings.save();
 	};
 
 	const handleNewProject = async () => {

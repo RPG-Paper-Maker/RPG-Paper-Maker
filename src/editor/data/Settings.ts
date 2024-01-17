@@ -9,11 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ACTION_KIND, BINDING, BindingType, LAYER_KIND, Paths } from '../common';
+import { ACTION_KIND, BINDING, BindingType, LAYER_KIND, MOBILE_ACTION, Paths } from '../common';
 import { Project, Rectangle, Serializable } from '../core';
 
 class Settings extends Serializable {
 	public projectMenuIndex!: number;
+	public mapEditorMobileActionIndex!: number;
 	public mapEditorMenuIndex!: number;
 	public mapEditorLandsMenuIndex!: number;
 	public mapEditorSpritesMenuIndex!: number;
@@ -40,6 +41,7 @@ class Settings extends Serializable {
 
 	public static readonly bindings: BindingType[] = [
 		['projectMenuIndex', 'pmi', 1, BINDING.NUMBER],
+		['mapEditorMobileActionIndex', 'memai', MOBILE_ACTION.PLUS, BINDING.NUMBER],
 		['mapEditorMenuIndex', 'memi', 0, BINDING.NUMBER],
 		['mapEditorLandsMenuIndex', 'melmi', 0, BINDING.NUMBER],
 		['mapEditorSpritesMenuIndex', 'mesmi', 0, BINDING.NUMBER],

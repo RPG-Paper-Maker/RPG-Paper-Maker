@@ -260,6 +260,10 @@ function PanelTransform({ kind }: Props) {
 		setNeedDefaultDialogOpen(true);
 	};
 
+	if (!Scene.Map.current) {
+		return null;
+	}
+
 	return (
 		<>
 			<Groupbox title={title}>

@@ -123,16 +123,21 @@ function MapEditorMenuBar() {
 			(Scene.Map.isRotateDisabled() && actionIndex === ACTION_KIND.ROTATE) ||
 			(Scene.Map.isScaleDisabled() && actionIndex === ACTION_KIND.SCALE) ||
 			(isRectangleDisabled() && actionIndex === ACTION_KIND.RECTANGLE) ||
-			(isPinDisabled() && actionIndex === ACTION_KIND.PIN)
+			(isPinDisabled() && actionIndex === ACTION_KIND.PIN) ||
+			Constants.isMobile
 		) {
 			Project.current!.settings.mapEditorCurrentActionIndex = ACTION_KIND.PENCIL;
 			setActionIndex(ACTION_KIND.PENCIL);
 			dispatch(setCurrentActionKind(ACTION_KIND.PENCIL));
 		}
-		if (isLayersOnDisabled() && layersIndex === LAYER_KIND.ON) {
+		if ((isLayersOnDisabled() && layersIndex === LAYER_KIND.ON) || Constants.isMobile) {
 			Project.current!.settings.mapEditorCurrentLayerIndex = LAYER_KIND.OFF;
 			setLayersIndex(LAYER_KIND.OFF);
 			dispatch(setCurrentLayerKind(LAYER_KIND.OFF));
+		}
+		if (Constants.isMobile) {
+			Scene.Map.currentSelectedMobileAction = MOBILE_ACTION.PLUS;
+			setMobileIndex(MOBILE_ACTION.PLUS);
 		}
 	};
 
@@ -236,6 +241,12 @@ function MapEditorMenuBar() {
 		Scene.Map.currentSelectedMobileAction = MOBILE_ACTION.MOVE;
 	};
 
+	const updateMobileIndex = async (index: number) => {
+		setMobileIndex(index);
+		Project.current!.settings.mapEditorMobileActionIndex = index;
+		await Project.current!.settings.save();
+	};
+
 	const handleGenericSquarePixel = async (kind: ELEMENT_POSITION_KIND) => {
 		dispatch(setCurrentElementPositionKind(kind));
 		Project.current!.settings.mapEditorCurrentElementPositionIndex = kind;
@@ -316,7 +327,6 @@ function MapEditorMenuBar() {
 			setSpritesIndex(Project.current!.settings.mapEditorSpritesMenuIndex);
 			const menuIndex = Project.current!.settings.mapEditorMenuIndex;
 			setSelectionIndex(menuIndex);
-			setMobileIndex(Project.current!.settings.projectMenuIndex);
 			const actionIndexBefore = Project.current!.settings.mapEditorCurrentActionIndex;
 			switch (menuIndex) {
 				case MENU_INDEX_MAP_EDITOR.LANDS:
@@ -342,6 +352,7 @@ function MapEditorMenuBar() {
 			dispatch(setCurrentElementPositionKind(Project.current!.settings.mapEditorCurrentElementPositionIndex));
 			setLayersIndex(Project.current!.settings.mapEditorCurrentLayerIndex);
 			dispatch(setCurrentLayerKind(Project.current!.settings.mapEditorCurrentLayerIndex));
+			setMobileIndex(Project.current!.settings.mapEditorMobileActionIndex);
 		}
 		// eslint-disable-next-line
 	}, [openLoading]);
@@ -425,7 +436,7 @@ function MapEditorMenuBar() {
 					</MenuSub>
 				</Menu>
 				{Constants.isMobile && (
-					<Menu horizontal isActivable activeIndex={mobileIndex} setActiveIndex={setMobileIndex}>
+					<Menu horizontal isActivable activeIndex={mobileIndex} setActiveIndex={updateMobileIndex}>
 						<MenuItem separator />
 						<MenuItem icon={<AiOutlinePlusSquare />} onClick={handleMobilePlus} />
 						<MenuItem icon={<AiOutlineMinusSquare />} onClick={handleMobileMinus} />

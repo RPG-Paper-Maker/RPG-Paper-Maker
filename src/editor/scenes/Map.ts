@@ -111,6 +111,7 @@ class Map extends Base {
 	public lockedLayer: number | null = null;
 	public requestPaintHUD = false;
 	public needsUpdateRaycasting = false;
+	public needsMouseDown = false;
 	public needsSaveSystems = false;
 	public mouseUp = false;
 	public isTransforming = false;
@@ -362,7 +363,6 @@ class Map extends Base {
 				const textureBefore = landBefore ? landBefore.texture.clone() : new Rectangle();
 				const kindBefore = landBefore ? landBefore.kind : ELEMENT_MAP_KIND.NONE;
 				let textureAfterReduced = MapElement.Floor.getTextureReduced(textureAfter, 0, 0);
-
 				// If the texture is different, start the algorithm
 				if (!MapElement.Land.areLandsEquals(landBefore, autotileID, textureAfterReduced, kindAfter)) {
 					const array = [p];
@@ -502,6 +502,20 @@ class Map extends Base {
 		this.zoom(false, coef);
 	}
 
+	updateMoveTransformDragging() {
+		if (this.isDraggingTransforming) {
+			if (this.selectedElement && this.selectedPosition) {
+				this.updateTransformPosition();
+				this.needsUpdateSelectedPosition = this.selectedElement.getPositionFromVec3(
+					this.selectedMesh.position,
+					this.selectedMesh.rotation,
+					this.selectedMesh.scale
+				);
+				this.needsUpdateSelectedPosition.layer = this.selectedPosition.layer;
+			}
+		}
+	}
+
 	updateTransform() {
 		this.updateTransformPosition();
 		this.mapPortion.removeSelected();
@@ -623,7 +637,7 @@ class Map extends Base {
 		}
 		Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
 		let layer = RAYCASTING_LAYER.LANDS;
-		if (Inputs.isMouseRightPressed && this.rectangleStartPosition === null) {
+		if (Scene.Map.isRemoving() && this.rectangleStartPosition === null) {
 			switch (Scene.Map.currentSelectedMapElementKind) {
 				case ELEMENT_MAP_KIND.SPRITE_FACE:
 				case ELEMENT_MAP_KIND.SPRITE_FIX:
@@ -763,7 +777,7 @@ class Map extends Base {
 				) {
 					this.rectangleStartPosition = position.clone();
 				}
-				this.layerRayPosition = newLayerRayPosition;
+				this.layerRayPosition = isLayerOn ? newLayerRayPosition : null;
 				if (Scene.Map.isDrawing()) {
 					switch (Scene.Map.currentSelectedMapElementKind) {
 						case ELEMENT_MAP_KIND.START_POSITION:
@@ -785,7 +799,11 @@ class Map extends Base {
 						default:
 							if (!Inputs.isPointerPressed && !Inputs.isMouseRightPressed) {
 								this.add(position, true);
-							} else if (Scene.Map.isAdding()) {
+							} else if (
+								Scene.Map.isAdding() &&
+								(!Constants.isMobile ||
+									Project.current!.settings.mapEditorCurrentActionIndex !== ACTION_KIND.PIN)
+							) {
 								this.updateLockedY(position);
 								if (this.rectangleStartPosition) {
 									const positions = this.rectangleStartPosition.getPositionsRectangle(position);
@@ -796,7 +814,11 @@ class Map extends Base {
 								} else {
 									this.add(position);
 								}
-							} else if (Scene.Map.isRemoving()) {
+							} else if (
+								Scene.Map.isRemoving() &&
+								(!Constants.isMobile ||
+									Project.current!.settings.mapEditorCurrentActionIndex !== ACTION_KIND.PIN)
+							) {
 								this.updateLockedY(position);
 								if (this.rectangleStartPosition) {
 									const positions = this.rectangleStartPosition.getPositionsRectangle(position);
@@ -911,6 +933,10 @@ class Map extends Base {
 			}
 		}
 		this.meshPlane!.position.setY(previousPlaneY);
+		if (this.needsMouseDown) {
+			this.onMouseDown();
+			this.needsMouseDown = false;
+		}
 	}
 
 	addPortionToUpdate(portion: Portion) {
@@ -968,18 +994,18 @@ class Map extends Base {
 		}
 	}
 
-	onMouseDown(x: number, y: number) {
+	onMouseDown() {
 		if (Inputs.isSHIFT) {
 			this.camera.onMouseWheelUpdate();
 		} else {
 			if (Scene.Map.isDrawing()) {
-				if (Inputs.isPointerPressed && this.lastPosition) {
+				if (Scene.Map.isAdding() && this.lastPosition) {
 					switch (Scene.Map.currentSelectedMapElementKind) {
 						case ELEMENT_MAP_KIND.START_POSITION:
 							this.updateStartPosition(this.lastPosition);
 							break;
 						case ELEMENT_MAP_KIND.SPRITE_WALL:
-							this.cursorWall.onMouseDown();
+							this.cursorWall.onMouseDown(this.lastPosition);
 							break;
 						default:
 							this.updateLockedY(this.lastPosition);
@@ -1003,9 +1029,9 @@ class Map extends Base {
 							}
 							break;
 					}
-				} else if (Inputs.isMouseRightPressed) {
-					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
-						this.cursorWall.onMouseDown();
+				} else if (Scene.Map.isRemoving()) {
+					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL && this.lastPosition) {
+						this.cursorWall.onMouseDown(this.lastPosition);
 					} else {
 						switch (Project.current!.settings.mapEditorCurrentActionIndex) {
 							case ACTION_KIND.PIN:
@@ -1018,7 +1044,7 @@ class Map extends Base {
 						this.needsUpdateRaycasting = true;
 					}
 				}
-			} else if (!this.transformControls.dragging && Scene.Map.isAdding()) {
+			} else if (!this.transformControls.dragging && Inputs.isPointerPressed) {
 				this.selectedElement =
 					this.pointedMapElement === null ||
 					(Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.ROTATE &&
@@ -1034,7 +1060,7 @@ class Map extends Base {
 				this.needsUpdateSelectedPosition = this.selectedPosition;
 				this.needsUpdateSelectedMapElement = true;
 			}
-			if (this.transformControls.dragging && Scene.Map.isAdding()) {
+			if (this.transformControls.dragging && Inputs.isPointerPressed) {
 				this.isDraggingTransforming = true;
 			}
 		}
@@ -1049,7 +1075,7 @@ class Map extends Base {
 			} else {
 				if (Scene.Map.currentSelectedMobileAction !== MOBILE_ACTION.MOVE) {
 					this.needsUpdateRaycasting = true;
-					this.onMouseDown(x, y);
+					this.needsMouseDown = true;
 				}
 			}
 		}
@@ -1068,21 +1094,11 @@ class Map extends Base {
 			} else {
 				this.needsUpdateRaycasting = true;
 			}
-			if (this.isDraggingTransforming) {
-				if (this.selectedElement && this.selectedPosition) {
-					this.updateTransformPosition();
-					this.needsUpdateSelectedPosition = this.selectedElement.getPositionFromVec3(
-						this.selectedMesh.position,
-						this.selectedMesh.rotation,
-						this.selectedMesh.scale
-					);
-					this.needsUpdateSelectedPosition.layer = this.selectedPosition.layer;
-				}
-			}
+			this.updateMoveTransformDragging();
 		}
 	}
 
-	onPointerMove(x: number, y: number) {
+	onPointerMove() {
 		if (Inputs.isPointerPressed) {
 			if (this.isMobileMovingCursor) {
 				Inputs.keys = [];
@@ -1098,12 +1114,15 @@ class Map extends Base {
 			} else {
 				if (Scene.Map.currentSelectedMobileAction !== MOBILE_ACTION.MOVE) {
 					this.needsUpdateRaycasting = true;
+					this.updateMoveTransformDragging();
 				} else {
 					this.camera.onMouseWheelUpdate();
 				}
 			}
 		}
 	}
+
+	onTouchMove() {}
 
 	async onMouseUp(x: number, y: number) {
 		this.mouseUp = true;
@@ -1142,7 +1161,6 @@ class Map extends Base {
 		this.lastPosition = null;
 		Inputs.keys = [];
 		this.isMobileMovingCursor = false;
-		await Project.current!.treeMaps.save();
 	}
 
 	async onMouseWheel(delta: number) {

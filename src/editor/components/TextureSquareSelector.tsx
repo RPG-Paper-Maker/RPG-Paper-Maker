@@ -94,8 +94,12 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 	const initialize = async () => {
 		currentState.picture = await Picture2D.loadImage(texture);
 		if (refCanvas.current) {
-			refCanvas.current.width = (currentState.picture.width * 2) / divideWidth;
-			refCanvas.current.height = (currentState.picture.height * 2) / divideHeight;
+			const w = (currentState.picture.width * 2) / divideWidth;
+			const h = (currentState.picture.height * 2) / divideHeight;
+			refCanvas.current.width = w;
+			refCanvas.current.height = h;
+			refCanvas.current.style.maxWidth = `${w}px`;
+			refCanvas.current.style.maxHeight = `${h}px`;
 		}
 		await updateRectangle();
 		update();
@@ -248,9 +252,10 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 		currentState.firstY = y;
 	};
 
-	const handlePointerDown = (e: any) => {
-		handleMouseDown(e);
-		const { x, y } = getCurrentPosition(e);
+	const handleTouchStart = (e: any) => {
+		const { x, y } = getCurrentPositionMobile(e);
+		currentState.firstX = x;
+		currentState.firstY = y;
 		updateMove(x, y);
 	};
 
@@ -294,7 +299,7 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 		const canvas = refCanvas.current;
 		if (canvas) {
 			if (Constants.isMobile) {
-				canvas.addEventListener('pointerdown', handlePointerDown, false);
+				canvas.addEventListener('touchstart', handleTouchStart);
 				document.addEventListener('touchmove', handleTouchMove, false);
 				document.addEventListener('touchend', handleMouseUp, false);
 			} else {
@@ -304,7 +309,7 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 			}
 			return () => {
 				if (Constants.isMobile) {
-					canvas.removeEventListener('pointerdown', handlePointerDown, false);
+					canvas.removeEventListener('touchstart', handleTouchStart);
 					document.removeEventListener('touchmove', handleTouchMove, false);
 					document.removeEventListener('touchend', handleMouseUp, false);
 				} else {

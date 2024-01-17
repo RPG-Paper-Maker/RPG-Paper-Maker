@@ -18,7 +18,7 @@ import Loader from '../Loader';
 import { useDispatch } from 'react-redux';
 import { removeProject } from '../../store';
 import { LocalFile, Project, Rectangle } from '../../core';
-import { ELEMENT_MAP_KIND, LOCAL_FORAGE, Paths } from '../../common';
+import { Constants, ELEMENT_MAP_KIND, LOCAL_FORAGE, Paths } from '../../common';
 import InputText from '../InputText';
 
 type Props = {
@@ -87,6 +87,10 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 				Paths.join(Paths.ROOT_DIRECTORY_LOCAL, Paths.DEFAULT, file),
 				Paths.join(project.getPath(), file)
 			);
+		}
+		if (Constants.isMobile) {
+			project.settings.projectMenuIndex = 2;
+			await project.settings.save();
 		}
 		await Project.current.save();
 		setIsLoading(false);

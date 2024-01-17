@@ -69,6 +69,23 @@ class Inputs {
 			};
 			canvas.addEventListener('pointerdown', handlePointerDown, false);
 
+			// Pointer move
+			const handlePointerMove = (e: any) => {
+				if (!Scene.Map.current || Scene.Map.current.loading) {
+					return;
+				}
+				Inputs.isPointerPressed = true;
+				const rect = canvas.getBoundingClientRect();
+				const x = e.clientX - rect.left;
+				const y = e.clientY - rect.top;
+				Inputs.previousPointerX = Inputs.pointerX;
+				Inputs.previousPointerY = Inputs.pointerY;
+				Inputs.pointerX = x;
+				Inputs.pointerY = y;
+				Scene.Map.current.onPointerMove();
+			};
+			canvas.addEventListener('pointermove', handlePointerMove, false);
+
 			// Touch start
 			const handleTouchStart = (e: any) => {
 				if (e.touches.length === 2) {
@@ -85,13 +102,6 @@ class Inputs {
 				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
-				const rect = canvas.getBoundingClientRect();
-				const x = e.touches[0].pageX - rect.left;
-				const y = e.touches[0].pageY - rect.top;
-				Inputs.previousPointerX = Inputs.pointerX;
-				Inputs.previousPointerY = Inputs.pointerY;
-				Inputs.pointerX = x;
-				Inputs.pointerY = y;
 				if (e.touches.length === 2) {
 					const touch1 = e.touches[0];
 					const touch2 = e.touches[1];
@@ -104,7 +114,7 @@ class Inputs {
 					Inputs.previousTouchDistance = 0;
 					Inputs.touchDistance = 0;
 				}
-				Scene.Map.current.onPointerMove(Inputs.pointerX, Inputs.pointerY);
+				Scene.Map.current.onTouchMove();
 			};
 			document.addEventListener('touchmove', handleTouchMove, false);
 
@@ -113,15 +123,16 @@ class Inputs {
 				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
-				Inputs.isPointerPressed = false;
 				Inputs.previousTouchDistance = 0;
 				Inputs.touchDistance = 0;
 				await Scene.Map.current.onTouchEnd(Inputs.pointerX, Inputs.pointerY);
+				Inputs.isPointerPressed = false;
 			};
 			document.addEventListener('touchend', handleTouchEnd, false);
 
 			return () => {
 				canvas.removeEventListener('pointerdown', handlePointerDown, false);
+				canvas.removeEventListener('pointermove', handlePointerMove, false);
 				document.removeEventListener('touchmove', handleTouchMove, false);
 				document.removeEventListener('touchend', handleTouchEnd, false);
 			};
@@ -180,7 +191,7 @@ class Inputs {
 				const rect = canvas.getBoundingClientRect();
 				const x = e.clientX - rect.left;
 				const y = e.clientY - rect.top;
-				Scene.Map.current.onMouseDown(x, y);
+				Scene.Map.current.onMouseDown();
 				Inputs.mouseX = x;
 				Inputs.mouseY = y;
 				Inputs.previousMouseX = x;

@@ -12,6 +12,7 @@
 import * as THREE from 'three';
 import { Scene } from '../Editor';
 import { Position, Project } from '.';
+import { Constants } from '../common';
 
 class CursorWall {
 	public lines!: THREE.LineSegments;
@@ -97,8 +98,11 @@ class CursorWall {
 		return positions;
 	}
 
-	onMouseDown() {
+	onMouseDown(position: Position) {
 		this.isMouseDown = true;
+		if (Constants.isMobile) {
+			this.positionStart = position;
+		}
 	}
 
 	onMouseUp() {
