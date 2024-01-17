@@ -122,14 +122,16 @@ class Position extends Position3D {
 		);
 	}
 
-	isInMap(map: Model.Map, allowBorders = false) {
+	isInMap(map: Model.Map, allowBorders = false, isCursor = false) {
 		return (
 			this.x >= 0 &&
-			this.x < map.length + (allowBorders ? 1 : 0) &&
+			(this.x < map.length + (isCursor ? 1 : 0) ||
+				(allowBorders && this.x >= map.length && this.angleY === 90 && this.centerX === 0)) &&
 			this.y >= -map.depth &&
 			this.y < map.height &&
 			this.z >= 0 &&
-			this.z < map.width + (allowBorders ? 1 : 0)
+			(this.z < map.width + (isCursor ? 1 : 0) ||
+				(allowBorders && this.z >= map.width && this.angleY === 0 && this.centerZ === 0))
 		);
 	}
 

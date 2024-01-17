@@ -1201,7 +1201,7 @@ class Map extends Base {
 		if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
 			if (
 				this.lastPosition !== null &&
-				this.lastPosition.isInMap(this.modelMap, true) &&
+				this.lastPosition.isInMap(this.modelMap, false, true) &&
 				this.cursorWall.needsUpdate(this.lastPosition)
 			) {
 				this.cursorWall.update(this.lastPosition);
