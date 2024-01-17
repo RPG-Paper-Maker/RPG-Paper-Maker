@@ -617,12 +617,14 @@ class Map extends Base {
 	}
 
 	updateStartPosition(position: Position) {
-		Project.current!.systems.heroMapID = this.id;
-		Project.current!.systems.heroMapPosition = position;
-		this.cursorStartPosition.position = position;
-		this.cursorStartPosition.updateMeshPosition();
-		this.scene.add(this.cursorStartPosition.mesh);
-		this.needsSaveSystems = true;
+		if (position.isInMap(this.modelMap)) {
+			Project.current!.systems.heroMapID = this.id;
+			Project.current!.systems.heroMapPosition = position;
+			this.cursorStartPosition.position = position;
+			this.cursorStartPosition.updateMeshPosition();
+			this.scene.add(this.cursorStartPosition.mesh);
+			this.needsSaveSystems = true;
+		}
 	}
 
 	updateRaycasting() {
