@@ -269,6 +269,33 @@ class Position extends Position3D {
 		return positions;
 	}
 
+	addPositionRectOutline(positions: Position[], position: Position) {
+		const minX = Math.min(this.x, position.x);
+		const minZ = Math.min(this.z, position.z);
+		const maxX = Math.max(this.x, position.x);
+		const maxZ = Math.max(this.z, position.z);
+		for (let i = minX - 1, l = maxX + 1; i <= l; i++) {
+			let p = this.clone();
+			p.x = i;
+			p.z = minZ - 1;
+			positions.push(p);
+			p = this.clone();
+			p.x = i;
+			p.z = maxZ + 1;
+			positions.push(p);
+		}
+		for (let i = minZ, l = maxZ; i <= l; i++) {
+			let p = this.clone();
+			p.x = minX - 1;
+			p.z = i;
+			positions.push(p);
+			p = this.clone();
+			p.x = maxX + 1;
+			p.z = i;
+			positions.push(p);
+		}
+	}
+
 	toStringCoords() {
 		const yPixels = this.getTotalYPixels();
 		return `[X = ${this.x}, Y = ${this.y}${yPixels === 0 ? '' : ` (+${yPixels}px)`}, Z = ${this.z}]`;

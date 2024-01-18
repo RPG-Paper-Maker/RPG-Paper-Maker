@@ -69,7 +69,13 @@ class MapPortion {
 		this.lastPreviewRemove = [];
 	}
 
-	add(position: Position, preview: boolean = false, removePreview = true, allowBorders = false) {
+	add(
+		position: Position,
+		preview: boolean = false,
+		removePreview = true,
+		allowBorders = false,
+		updateAutotiles = true
+	) {
 		if (removePreview) {
 			this.removeLastPreview();
 		}
@@ -82,7 +88,11 @@ class MapPortion {
 						Scene.Map.current!.camera.getUp()
 					),
 					ELEMENT_MAP_KIND.FLOOR,
-					preview
+					preview,
+					false,
+					false,
+					false,
+					updateAutotiles
 				);
 				break;
 			case ELEMENT_MAP_KIND.AUTOTILE:
@@ -95,7 +105,11 @@ class MapPortion {
 						Scene.Map.current!.camera.getUp()
 					),
 					ELEMENT_MAP_KIND.AUTOTILE,
-					preview
+					preview,
+					false,
+					false,
+					false,
+					updateAutotiles
 				);
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_FACE:
@@ -173,7 +187,7 @@ class MapPortion {
 		}
 	}
 
-	remove(position: Position, preview = false, removePreview = true) {
+	remove(position: Position, preview = false, removePreview = true, updateAutotiles = true) {
 		if (removePreview) {
 			this.removeLastPreview();
 		}
@@ -189,10 +203,28 @@ class MapPortion {
 					const mountain = previous as MapElement.Mountain;
 					const floorPosition = position.clone();
 					floorPosition.addY(mountain.heightSquares, mountain.heightPixels);
-					this.updateMapElement(floorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
+					this.updateMapElement(
+						floorPosition,
+						null,
+						ELEMENT_MAP_KIND.FLOOR,
+						preview,
+						false,
+						false,
+						false,
+						updateAutotiles
+					);
 				}
 			}
-			this.updateMapElement(position, null, Scene.Map.currentSelectedMapElementKind, preview);
+			this.updateMapElement(
+				position,
+				null,
+				Scene.Map.currentSelectedMapElementKind,
+				preview,
+				false,
+				false,
+				false,
+				updateAutotiles
+			);
 		}
 	}
 
@@ -203,17 +235,32 @@ class MapPortion {
 		preview = false,
 		removingPreview = false,
 		undoRedo = false,
-		allowBorders = false
+		allowBorders = false,
+		updateAutotiles = true
 	) {
 		if (element !== null) {
 			kind = element.kind;
 		}
 		switch (kind) {
 			case ELEMENT_MAP_KIND.FLOOR:
-				this.updateFloor(position, element as MapElement.Floor, preview, removingPreview, undoRedo);
+				this.updateFloor(
+					position,
+					element as MapElement.Floor,
+					preview,
+					removingPreview,
+					undoRedo,
+					updateAutotiles
+				);
 				break;
 			case ELEMENT_MAP_KIND.AUTOTILE:
-				this.updateAutotile(position, element as MapElement.Autotile, preview, removingPreview, undoRedo);
+				this.updateAutotile(
+					position,
+					element as MapElement.Autotile,
+					preview,
+					removingPreview,
+					undoRedo,
+					updateAutotiles
+				);
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_FACE:
 			case ELEMENT_MAP_KIND.SPRITE_FIX:
@@ -248,7 +295,8 @@ class MapPortion {
 		floor: MapElement.Floor | null,
 		preview = false,
 		removingPreview = false,
-		undoRedo = false
+		undoRedo = false,
+		updateAutotiles = true
 	) {
 		if (floor === null || undoRedo) {
 			this.setMapElement(
@@ -318,11 +366,13 @@ class MapPortion {
 					break;
 			}
 		}
-		MapElement.Autotiles.updateAround(
-			position,
-			Scene.Map.current!.portionsToUpdate,
-			Scene.Map.current!.portionsToSave
-		);
+		if (updateAutotiles) {
+			MapElement.Autotiles.updateAround(
+				position,
+				Scene.Map.current!.portionsToUpdate,
+				Scene.Map.current!.portionsToSave
+			);
+		}
 	}
 
 	updateAutotile(
@@ -330,7 +380,8 @@ class MapPortion {
 		autotile: MapElement.Autotile | null,
 		preview = false,
 		removingPreview = false,
-		undoRedo = false
+		undoRedo = false,
+		updateAutotiles = true
 	) {
 		this.setMapElement(
 			position,
@@ -341,11 +392,13 @@ class MapPortion {
 			removingPreview,
 			undoRedo
 		);
-		MapElement.Autotiles.updateAround(
-			position,
-			Scene.Map.current!.portionsToUpdate,
-			Scene.Map.current!.portionsToSave
-		);
+		if (updateAutotiles) {
+			MapElement.Autotiles.updateAround(
+				position,
+				Scene.Map.current!.portionsToUpdate,
+				Scene.Map.current!.portionsToSave
+			);
+		}
 	}
 
 	updateSprite(

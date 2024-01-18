@@ -139,7 +139,7 @@ function MapEditorMenuBar() {
 			Scene.Map.currentSelectedMobileAction = MOBILE_ACTION.PLUS;
 			setMobileIndex(MOBILE_ACTION.PLUS);
 		}
-		Scene.Map.current!.removeTransform();
+		Scene.Map.current?.removeTransform();
 	};
 
 	const handleLands = async () => {

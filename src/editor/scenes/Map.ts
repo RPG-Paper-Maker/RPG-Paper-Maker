@@ -43,6 +43,7 @@ import {
 	LAYER_KIND,
 } from '../common';
 import { CursorWall } from '../core/CursorWall';
+
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
 
@@ -323,7 +324,7 @@ class Map extends Base {
 		this.sunLight.shadow.bias = -0.0003;
 	}
 
-	add(position: Position, preview = false, removePreview = true) {
+	add(position: Position, preview = false, removePreview = true, updateAutotiles = true) {
 		const spriteLayer =
 			Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON &&
 			Scene.Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
@@ -332,21 +333,21 @@ class Map extends Base {
 		if (!preview) {
 			const positions = spriteLayer ? [position] : Mathf.traceLine(this.lastPosition, position);
 			for (const p of positions) {
-				this.mapPortion.add(p, preview, removePreview, allowBorders);
+				this.mapPortion.add(p, preview, removePreview, allowBorders, updateAutotiles);
 			}
 		} else {
-			this.mapPortion.add(position, preview, removePreview, allowBorders);
+			this.mapPortion.add(position, preview, removePreview, allowBorders, updateAutotiles);
 		}
 	}
 
-	remove(position: Position, preview = false, removePreview = true) {
+	remove(position: Position, preview = false, removePreview = true, updateAutotiles = true) {
 		if (!preview) {
 			const positions = Mathf.traceLine(this.lastPosition, position);
 			for (const p of positions) {
-				this.mapPortion.remove(p, preview, removePreview);
+				this.mapPortion.remove(p, preview, removePreview, updateAutotiles);
 			}
 		} else {
-			this.mapPortion.remove(position, preview, removePreview);
+			this.mapPortion.remove(position, preview, removePreview, updateAutotiles);
 		}
 	}
 
@@ -811,7 +812,14 @@ class Map extends Base {
 									const positions = this.rectangleStartPosition.getPositionsRectangle(position);
 									this.mapPortion.removeLastPreview();
 									for (const rectanglePosition of positions) {
-										this.add(rectanglePosition, true, false);
+										this.add(rectanglePosition, true, false, false);
+									}
+									this.rectangleStartPosition.addPositionRectOutline(positions, position);
+									for (const rectanglePosition of positions) {
+										const land = this.mapPortion.model.lands.get(rectanglePosition.toKey());
+										if (land instanceof MapElement.Autotile) {
+											land.update(rectanglePosition, this.getLocalPortion(rectanglePosition));
+										}
 									}
 								} else {
 									this.add(position);
@@ -826,7 +834,14 @@ class Map extends Base {
 									const positions = this.rectangleStartPosition.getPositionsRectangle(position);
 									this.mapPortion.removeLastPreview();
 									for (const rectanglePosition of positions) {
-										this.remove(rectanglePosition, true, false);
+										this.remove(rectanglePosition, true, false, false);
+									}
+									this.rectangleStartPosition.addPositionRectOutline(positions, position);
+									for (const rectanglePosition of positions) {
+										const land = this.mapPortion.model.lands.get(rectanglePosition.toKey());
+										if (land instanceof MapElement.Autotile) {
+											land.update(rectanglePosition, this.getLocalPortion(rectanglePosition));
+										}
 									}
 								} else {
 									this.remove(position);
@@ -1091,9 +1106,7 @@ class Map extends Base {
 			this.camera.onMouseWheelUpdate();
 		} else {
 			// Avoid to draw undesired new preview
-			if (this.mouseUp) {
-				this.mouseUp = false;
-			} else {
+			if (!this.mouseUp) {
 				this.needsUpdateRaycasting = true;
 			}
 			this.updateMoveTransformDragging();
@@ -1156,6 +1169,7 @@ class Map extends Base {
 		if (this.needsSaveSystems) {
 			await Project.current!.systems.save();
 		}
+		this.mouseUp = false;
 	}
 
 	async onTouchEnd(x: number, y: number) {
