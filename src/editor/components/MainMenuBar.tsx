@@ -58,6 +58,7 @@ import { LocalFile, Project } from '../core';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
+import FooterOK from './dialogs/footers/FooterOK';
 
 type MenuItemType = {
 	title: ReactNode | string;
@@ -70,6 +71,7 @@ type MenuItemType = {
 
 function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
+	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
 	const [isDialogWarningClearAllCacheOpen, setIsDialogWarningClearAllCacheOpen] = useState(false);
 	const [isDialogWarningSavePlayOpen, setIsDialogSavePlayOpen] = useState(false);
@@ -124,10 +126,19 @@ function MainMenuBar() {
 
 	const handleOpenProject = async (name: string) => {
 		dispatch(setOpenLoading(true));
-		dispatch(setCurrentProjectName(name));
 		Project.current = new Project(name);
 		await Project.current.load();
+		if (Project.current.settings.projectVersion !== Project.VERSION) {
+			setIsDialogWarningProjectVersionOpen(true);
+			Project.current = null;
+		} else {
+			dispatch(setCurrentProjectName(name));
+		}
 		dispatch(setOpenLoading(false));
+	};
+
+	const handleCloseWarningProjectVersionOpen = () => {
+		setIsDialogWarningProjectVersionOpen(false);
 	};
 
 	const handleSave = async () => {
@@ -672,6 +683,17 @@ function MainMenuBar() {
 				onAccept={handleAcceptNewProject}
 				onReject={handleRejectNewProject}
 			/>
+			<Dialog
+				title='Warning'
+				isOpen={isDialogWarningProjectVersionOpen}
+				footer={<FooterOK onOK={handleCloseWarningProjectVersionOpen} />}
+				onClose={handleCloseWarningProjectVersionOpen}
+			>
+				<p>
+					This project version is from a previous version. Retro versions compatibility is not handled yet for
+					this proto web version. Please create a new project.
+				</p>
+			</Dialog>
 			<Dialog
 				title='Warning'
 				isOpen={isDialogWarningImportOpen}

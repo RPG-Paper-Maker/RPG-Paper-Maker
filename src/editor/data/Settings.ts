@@ -13,6 +13,7 @@ import { ACTION_KIND, BINDING, BindingType, LAYER_KIND, MOBILE_ACTION, Paths } f
 import { Project, Rectangle, Serializable } from '../core';
 
 class Settings extends Serializable {
+	public projectVersion!: string;
 	public projectMenuIndex!: number;
 	public mapEditorMobileActionIndex!: number;
 	public mapEditorMenuIndex!: number;
@@ -40,6 +41,7 @@ class Settings extends Serializable {
 	public mapEditorDefaultScaleZ!: number;
 
 	public static readonly bindings: BindingType[] = [
+		['projectVersion', 'pv', undefined, BINDING.STRING],
 		['projectMenuIndex', 'pmi', 1, BINDING.NUMBER],
 		['mapEditorMobileActionIndex', 'memai', MOBILE_ACTION.PLUS, BINDING.NUMBER],
 		['mapEditorMenuIndex', 'memi', 0, BINDING.NUMBER],

@@ -88,10 +88,11 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 				Paths.join(project.getPath(), file)
 			);
 		}
+		project.settings.projectVersion = Project.VERSION;
 		if (Constants.isMobile) {
 			project.settings.projectMenuIndex = 2;
-			await project.settings.save();
 		}
+		await project.settings.save();
 		await Project.current.save();
 		setIsLoading(false);
 	};
