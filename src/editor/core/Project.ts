@@ -14,7 +14,7 @@ import { LOCAL_FORAGE, Paths } from '../common';
 
 class Project {
 	public static current: Project | null = null;
-	public static readonly VERSION = 'proto-3.1.0';
+	public static readonly VERSION = 'proto-3.1.1';
 	public static SQUARE_SIZE = 16;
 	public settings = new Data.Settings();
 	public systems = new Data.System();
