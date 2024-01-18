@@ -49,7 +49,7 @@ class Paths {
 	public static readonly SYSTEM = Paths.join(Paths.SCRIPTS, 'System');
 	public static readonly SHADERS = Paths.join(Paths.SCRIPTS, 'Shaders');
 	public static readonly SAVES = 'Saves';
-	public static readonly DEFAULT = 'default';
+	public static readonly DEFAULT = 'Default';
 	public static readonly TEMP = 'temp';
 	public static readonly INDEX = 'index';
 	public static readonly TEMP_UNDO_REDO = 'temp-undo-redo';
