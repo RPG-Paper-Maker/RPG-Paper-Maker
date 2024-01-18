@@ -41,7 +41,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "tslint": " tslint --project tsconfig.json",
-    "update-mods": "node scripts/updateMods.mjs"
+    "update-mods": "node scripts/update-mods.mjs"
   },
   "eslintConfig": {
     "extends": [
