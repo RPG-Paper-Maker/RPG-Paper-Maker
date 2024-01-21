@@ -1148,6 +1148,9 @@ class Map extends Base {
 		if (this.rectangleStartPosition && this.lastPosition) {
 			for (const [position, previous, kind] of this.mapPortion.lastPreviewRemove) {
 				const element = this.mapPortion.model.getMapElement(position, kind);
+				if (element) {
+					element.isPreview = false;
+				}
 				this.undoRedoStates.push(
 					UndoRedoState.create(
 						position,
