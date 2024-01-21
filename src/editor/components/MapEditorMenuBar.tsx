@@ -124,7 +124,7 @@ function MapEditorMenuBar() {
 			(Scene.Map.isScaleDisabled() && actionIndex === ACTION_KIND.SCALE) ||
 			(isRectangleDisabled() && actionIndex === ACTION_KIND.RECTANGLE) ||
 			(isPinDisabled() && actionIndex === ACTION_KIND.PIN) ||
-			Constants.isMobile
+			(Constants.isMobile && Scene.Map.isTransforming())
 		) {
 			Project.current!.settings.mapEditorCurrentActionIndex = ACTION_KIND.PENCIL;
 			setActionIndex(ACTION_KIND.PENCIL);
@@ -134,10 +134,6 @@ function MapEditorMenuBar() {
 			Project.current!.settings.mapEditorCurrentLayerIndex = LAYER_KIND.OFF;
 			setLayersIndex(LAYER_KIND.OFF);
 			dispatch(setCurrentLayerKind(LAYER_KIND.OFF));
-		}
-		if (Constants.isMobile) {
-			Scene.Map.currentSelectedMobileAction = MOBILE_ACTION.PLUS;
-			setMobileIndex(MOBILE_ACTION.PLUS);
 		}
 		Scene.Map.current?.removeTransform();
 	};
