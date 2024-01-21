@@ -1147,14 +1147,14 @@ class Map extends Base {
 		this.isDraggingTransforming = false;
 		if (this.rectangleStartPosition && this.lastPosition) {
 			for (const [position, previous, kind] of this.mapPortion.lastPreviewRemove) {
-				const element = this.mapPortion.model.getMapElement(position, ELEMENT_MAP_KIND.AUTOTILE);
+				const element = this.mapPortion.model.getMapElement(position, kind);
 				this.undoRedoStates.push(
 					UndoRedoState.create(
 						position,
 						previous,
 						previous === null ? kind : previous.kind,
 						element,
-						element?.kind || ELEMENT_MAP_KIND.FLOOR
+						element?.kind || kind
 					)
 				);
 			}
