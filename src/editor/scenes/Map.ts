@@ -107,6 +107,7 @@ class Map extends Base {
 	public selectedElement: MapElement.Base | null = null;
 	public selectedPosition: Position | null = null;
 	public rectangleStartPosition: Position | null = null;
+	public lastRectangleEndPosition: Position | null = null;
 	public lockedY: number | null = null;
 	public lockedYPixels: number | null = null;
 	public lockedLayer: number | null = null;
@@ -779,6 +780,7 @@ class Map extends Base {
 					this.lastPosition === null
 				) {
 					this.rectangleStartPosition = position.clone();
+					this.lastRectangleEndPosition = position.clone();
 				}
 				this.layerRayPosition = isLayerOn ? newLayerRayPosition : null;
 				if (Scene.Map.isDrawing()) {
@@ -802,50 +804,39 @@ class Map extends Base {
 						default:
 							if (!Inputs.isPointerPressed && !Inputs.isMouseRightPressed) {
 								this.add(position, true);
+							} else if (this.rectangleStartPosition && this.lastRectangleEndPosition) {
+								this.updateLockedY(position);
+								const positions = this.rectangleStartPosition.getPositionsRectangle(position);
+								this.mapPortion.removeLastPreview();
+								const adding = Scene.Map.isAdding();
+								for (const rectanglePosition of positions) {
+									if (adding) {
+										this.add(rectanglePosition, true, false, false);
+									} else {
+										this.remove(rectanglePosition, true, false, false);
+									}
+								}
+								this.rectangleStartPosition.addPositionRectOutline(positions, position);
+								for (const rectanglePosition of positions) {
+									const land = this.mapPortion.model.lands.get(rectanglePosition.toKey());
+									if (land instanceof MapElement.Autotile) {
+										land.update(rectanglePosition, this.getLocalPortion(rectanglePosition));
+									}
+								}
 							} else if (
 								Scene.Map.isAdding() &&
 								(!Constants.isMobile ||
 									Project.current!.settings.mapEditorCurrentActionIndex !== ACTION_KIND.PIN)
 							) {
 								this.updateLockedY(position);
-								if (this.rectangleStartPosition) {
-									const positions = this.rectangleStartPosition.getPositionsRectangle(position);
-									this.mapPortion.removeLastPreview();
-									for (const rectanglePosition of positions) {
-										this.add(rectanglePosition, true, false, false);
-									}
-									this.rectangleStartPosition.addPositionRectOutline(positions, position);
-									for (const rectanglePosition of positions) {
-										const land = this.mapPortion.model.lands.get(rectanglePosition.toKey());
-										if (land instanceof MapElement.Autotile) {
-											land.update(rectanglePosition, this.getLocalPortion(rectanglePosition));
-										}
-									}
-								} else {
-									this.add(position);
-								}
+								this.add(position);
 							} else if (
 								Scene.Map.isRemoving() &&
 								(!Constants.isMobile ||
 									Project.current!.settings.mapEditorCurrentActionIndex !== ACTION_KIND.PIN)
 							) {
 								this.updateLockedY(position);
-								if (this.rectangleStartPosition) {
-									const positions = this.rectangleStartPosition.getPositionsRectangle(position);
-									this.mapPortion.removeLastPreview();
-									for (const rectanglePosition of positions) {
-										this.remove(rectanglePosition, true, false, false);
-									}
-									this.rectangleStartPosition.addPositionRectOutline(positions, position);
-									for (const rectanglePosition of positions) {
-										const land = this.mapPortion.model.lands.get(rectanglePosition.toKey());
-										if (land instanceof MapElement.Autotile) {
-											land.update(rectanglePosition, this.getLocalPortion(rectanglePosition));
-										}
-									}
-								} else {
-									this.remove(position);
-								}
+								this.remove(position);
 							}
 							break;
 					}
@@ -853,6 +844,9 @@ class Map extends Base {
 				this.lastPosition = position;
 				this.pointedMapElementPosition = position;
 				this.pointedMapElement = null;
+				if (this.rectangleStartPosition) {
+					this.lastRectangleEndPosition = position.clone();
+				}
 			}
 			break;
 		}
@@ -1032,6 +1026,7 @@ class Map extends Base {
 									break;
 								case ACTION_KIND.RECTANGLE:
 									this.rectangleStartPosition = this.lastPosition.clone();
+									this.lastRectangleEndPosition = this.lastPosition.clone();
 									break;
 								case ACTION_KIND.PIN:
 									this.paintPin(
@@ -1151,19 +1146,23 @@ class Map extends Base {
 		}
 		this.isDraggingTransforming = false;
 		if (this.rectangleStartPosition && this.lastPosition) {
-			const positions = this.rectangleStartPosition.getPositionsRectangle(this.lastPosition);
-			this.mapPortion.removeLastPreview();
-			if (Scene.Map.isAdding()) {
-				for (const p of positions) {
-					this.add(p);
-				}
-			} else if (Scene.Map.isRemoving()) {
-				for (const p of positions) {
-					this.remove(p);
-				}
+			for (const [position, previous, kind] of this.mapPortion.lastPreviewRemove) {
+				const element = this.mapPortion.model.getMapElement(position, ELEMENT_MAP_KIND.AUTOTILE);
+				this.undoRedoStates.push(
+					UndoRedoState.create(
+						position,
+						previous,
+						previous === null ? kind : previous.kind,
+						element,
+						element?.kind || ELEMENT_MAP_KIND.FLOOR
+					)
+				);
 			}
+			this.mapPortion.lastPreviewRemove = [];
+			this.addPortionToSave(this.mapPortion.model.globalPortion);
 		}
 		this.rectangleStartPosition = null;
+		this.lastRectangleEndPosition = null;
 		this.updateUndoRedoSave();
 		await Project.current!.treeMaps.save();
 		if (this.needsSaveSystems) {
