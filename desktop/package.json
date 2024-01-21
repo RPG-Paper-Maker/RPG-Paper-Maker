@@ -7,6 +7,6 @@
     "start": "electron ./index.js"
   },
   "devDependencies": {
-    "electron": "^25.2.0"
+    "electron": "^28.1.4"
   }
 }
