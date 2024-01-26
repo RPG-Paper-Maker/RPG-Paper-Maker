@@ -21,7 +21,8 @@ class Constants {
 	public static readonly SPECIAL_ELEMENTS_IMAGE_SIZE = 100;
 	public static readonly MAX_PICTURE_SIZE = 4096;
 	public static readonly PRECISION_POSITION = 0.000000001;
-	public static isMobile = false;
+	public static IS_MOBILE = false;
+	public static IS_DESKTOP = false;
 }
 
 export { Constants };

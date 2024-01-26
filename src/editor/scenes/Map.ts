@@ -127,13 +127,13 @@ class Map extends Base {
 	}
 
 	static isAdding(): boolean {
-		return Constants.isMobile
+		return Constants.IS_MOBILE
 			? Scene.Map.currentSelectedMobileAction === MOBILE_ACTION.PLUS && Inputs.isPointerPressed
 			: Inputs.isPointerPressed;
 	}
 
 	static isRemoving(): boolean {
-		return Constants.isMobile
+		return Constants.IS_MOBILE
 			? Scene.Map.currentSelectedMobileAction === MOBILE_ACTION.MINUS && Inputs.isPointerPressed
 			: Inputs.isMouseRightPressed;
 	}
@@ -825,14 +825,14 @@ class Map extends Base {
 								}
 							} else if (
 								Scene.Map.isAdding() &&
-								(!Constants.isMobile ||
+								(!Constants.IS_MOBILE ||
 									Project.current!.settings.mapEditorCurrentActionIndex !== ACTION_KIND.PIN)
 							) {
 								this.updateLockedY(position);
 								this.add(position);
 							} else if (
 								Scene.Map.isRemoving() &&
-								(!Constants.isMobile ||
+								(!Constants.IS_MOBILE ||
 									Project.current!.settings.mapEditorCurrentActionIndex !== ACTION_KIND.PIN)
 							) {
 								this.updateLockedY(position);

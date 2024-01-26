@@ -298,7 +298,7 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 		initialize().catch(console.error);
 		const canvas = refCanvas.current;
 		if (canvas) {
-			if (Constants.isMobile) {
+			if (Constants.IS_MOBILE) {
 				canvas.addEventListener('touchstart', handleTouchStart);
 				document.addEventListener('touchmove', handleTouchMove, false);
 				document.addEventListener('touchend', handleMouseUp, false);
@@ -308,7 +308,7 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 				window.addEventListener('mouseup', handleMouseUp);
 			}
 			return () => {
-				if (Constants.isMobile) {
+				if (Constants.IS_MOBILE) {
 					canvas.removeEventListener('touchstart', handleTouchStart);
 					document.removeEventListener('touchmove', handleTouchMove, false);
 					document.removeEventListener('touchend', handleMouseUp, false);

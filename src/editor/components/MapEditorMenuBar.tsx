@@ -124,13 +124,13 @@ function MapEditorMenuBar() {
 			(Scene.Map.isScaleDisabled() && actionIndex === ACTION_KIND.SCALE) ||
 			(isRectangleDisabled() && actionIndex === ACTION_KIND.RECTANGLE) ||
 			(isPinDisabled() && actionIndex === ACTION_KIND.PIN) ||
-			(Constants.isMobile && Scene.Map.isTransforming())
+			(Constants.IS_MOBILE && Scene.Map.isTransforming())
 		) {
 			Project.current!.settings.mapEditorCurrentActionIndex = ACTION_KIND.PENCIL;
 			setActionIndex(ACTION_KIND.PENCIL);
 			dispatch(setCurrentActionKind(ACTION_KIND.PENCIL));
 		}
-		if ((isLayersOnDisabled() && layersIndex === LAYER_KIND.ON) || Constants.isMobile) {
+		if ((isLayersOnDisabled() && layersIndex === LAYER_KIND.ON) || Constants.IS_MOBILE) {
 			Project.current!.settings.mapEditorCurrentLayerIndex = LAYER_KIND.OFF;
 			setLayersIndex(LAYER_KIND.OFF);
 			dispatch(setCurrentLayerKind(LAYER_KIND.OFF));
@@ -432,7 +432,7 @@ function MapEditorMenuBar() {
 						</MenuItem>
 					</MenuSub>
 				</Menu>
-				{Constants.isMobile && (
+				{Constants.IS_MOBILE && (
 					<Menu horizontal isActivable activeIndex={mobileIndex} setActiveIndex={updateMobileIndex}>
 						<MenuItem separator />
 						<MenuItem icon={<AiOutlinePlusSquare />} onClick={handleMobilePlus} />

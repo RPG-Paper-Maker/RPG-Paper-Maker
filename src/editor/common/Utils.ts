@@ -82,8 +82,12 @@ class Utils {
 			.join(' ');
 	}
 
-	static isMobile() {
+	static isMobile(): boolean {
 		return 'ontouchstart' in window;
+	}
+
+	static isDesktop(): boolean {
+		return !!window?.process?.versions?.electron;
 	}
 
 	static drawStrokedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {

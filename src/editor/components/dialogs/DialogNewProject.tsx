@@ -89,7 +89,7 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 			);
 		}
 		project.settings.projectVersion = Project.VERSION;
-		if (Constants.isMobile) {
+		if (Constants.IS_MOBILE) {
 			project.settings.projectMenuIndex = 2;
 		}
 		await project.settings.save();

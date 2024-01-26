@@ -100,7 +100,7 @@ class CursorWall {
 
 	onMouseDown(position: Position) {
 		this.isMouseDown = true;
-		if (Constants.isMobile) {
+		if (Constants.IS_MOBILE) {
 			this.positionStart = position;
 		}
 	}

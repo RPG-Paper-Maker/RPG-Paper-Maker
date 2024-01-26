@@ -33,25 +33,25 @@ class Inputs {
 	public static touchDistance = 0;
 
 	static getPositionX() {
-		return Constants.isMobile ? this.pointerX : this.mouseX;
+		return Constants.IS_MOBILE ? this.pointerX : this.mouseX;
 	}
 
 	static getPositionY() {
-		return Constants.isMobile ? this.pointerY : this.mouseY;
+		return Constants.IS_MOBILE ? this.pointerY : this.mouseY;
 	}
 
 	static getPreviousPositionX() {
-		return Constants.isMobile ? this.previousPointerX : this.previousMouseX;
+		return Constants.IS_MOBILE ? this.previousPointerX : this.previousMouseX;
 	}
 
 	static getPreviousPositionY() {
-		return Constants.isMobile ? this.previousPointerY : this.previousMouseY;
+		return Constants.IS_MOBILE ? this.previousPointerY : this.previousMouseY;
 	}
 
 	static initialize(canvas: HTMLDivElement) {
 		Inputs.keys = [];
 
-		if (Constants.isMobile) {
+		if (Constants.IS_MOBILE) {
 			// Pointer down
 			const handlePointerDown = (e: any) => {
 				if (!Scene.Map.current || Scene.Map.current.loading) {

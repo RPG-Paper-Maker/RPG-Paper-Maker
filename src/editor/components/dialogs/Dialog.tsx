@@ -21,8 +21,8 @@ type Props = {
 	isOpen: boolean;
 	isDisabled?: boolean;
 	isLoading?: boolean;
-	footer: React.ReactNode;
-	onClose: () => void;
+	footer?: React.ReactNode;
+	onClose?: () => void;
 };
 
 function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false, footer, onClose }: Props) {
@@ -130,7 +130,7 @@ function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false
 							onMouseDown={handleMouseDownTitle}
 						>
 							<div className='flex-one'>{title}</div>
-							<RxCross2 className='dialog-close' onClick={handleClose} />
+							{onClose && <RxCross2 className='dialog-close' onClick={handleClose} />}
 						</div>
 						<div className='dialog-content'>{children}</div>
 						<div className='dialog-footer'>{footer}</div>

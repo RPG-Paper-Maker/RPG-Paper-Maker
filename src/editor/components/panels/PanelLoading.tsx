@@ -12,10 +12,10 @@
 import React, { useEffect } from 'react';
 import { Manager, Scene } from '../../Editor';
 import Loader from '../Loader';
-import { setProjects } from '../../store';
+import { setNeedsReloadPage, setProjects } from '../../store';
 import { useDispatch } from 'react-redux';
-import { Constants, LOCAL_FORAGE, Utils } from '../../common';
-import { LocalFile, Picture2D } from '../../core';
+import { Constants, IO, LOCAL_FORAGE, Paths, Utils } from '../../common';
+import { LocalFile, Picture2D, Project } from '../../core';
 
 type Props = {
 	setLoaded: (v: boolean) => void;
@@ -25,10 +25,12 @@ function PanelLoading({ setLoaded }: Props) {
 	const dispatch = useDispatch();
 
 	const initialize = async () => {
-		Constants.isMobile = Utils.isMobile();
+		Constants.IS_MOBILE = Utils.isMobile();
+		Constants.IS_DESKTOP = Utils.isDesktop();
 		await initializeGL();
 		await initializeTextures();
 		await initializeLocalFiles();
+		await initializeEngineVersion();
 		await loadProjects(); // Desktop: load engine settings
 		setLoaded(true);
 	};
@@ -49,6 +51,22 @@ function PanelLoading({ setLoaded }: Props) {
 
 	const initializeLocalFiles = async () => {
 		await LocalFile.config();
+	};
+
+	const initializeEngineVersion = async () => {
+		const updateVersion = async () => {
+			const newVersion = await IO.openFile(Paths.join(Paths.ROOT_DIRECTORY_LOCAL, Paths.FILE_VERSION));
+			if (Project.VERSION.length === 0) {
+				Project.VERSION = newVersion;
+			} else if (Project.VERSION !== newVersion) {
+				dispatch(setNeedsReloadPage());
+			}
+		};
+		await updateVersion();
+		document.title = `RPG Paper Maker - ${Project.VERSION}`;
+		if (!Constants.IS_DESKTOP) {
+			setInterval(updateVersion, 10000); // Check version every 10 seconds (for web version)
+		}
 	};
 
 	const loadProjects = async () => {
