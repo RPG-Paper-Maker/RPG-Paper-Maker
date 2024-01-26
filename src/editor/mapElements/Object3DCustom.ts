@@ -13,7 +13,6 @@ import * as THREE from 'three';
 import { Object3D } from './Object3D';
 import { CustomGeometry, Position, Project } from '../core';
 import { CUSTOM_SHAPE_KIND } from '../common';
-import { Sprite } from './Sprite';
 import { MapElement, Model } from '../Editor';
 
 class Object3DCustom extends Object3D {

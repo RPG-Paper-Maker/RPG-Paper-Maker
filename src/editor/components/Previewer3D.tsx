@@ -13,7 +13,7 @@ import React, { useRef, useEffect } from 'react';
 import { Manager, MapElement, Scene } from '../Editor';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { ACTION_KIND, ELEMENT_MAP_KIND } from '../common';
+import { ELEMENT_MAP_KIND } from '../common';
 
 type Props = {
 	id: string;

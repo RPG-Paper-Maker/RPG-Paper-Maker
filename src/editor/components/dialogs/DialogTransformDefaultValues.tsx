@@ -94,6 +94,7 @@ function DialogTransformDefaultValues({
 			reset();
 			setIsOpen(true);
 		}
+		// eslint-disable-next-line
 	}, [needOpen]);
 
 	return (

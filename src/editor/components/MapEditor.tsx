@@ -178,6 +178,7 @@ function MapEditor() {
 	useEffect(() => {
 		loop();
 		return () => cancelAnimationFrame(Scene.Map.animationFrameID);
+		// eslint-disable-next-line
 	}, []);
 
 	return (

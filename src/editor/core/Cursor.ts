@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Manager, MapElement, Scene } from '../Editor';
+import { MapElement, Scene } from '../Editor';
 import { CustomGeometry, Frame, Position, Project } from '.';
 import { Inputs } from '../managers';
 import { KEY } from '../common';

@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
-import { Constants, Mathf, Utils } from '../common';
+import { Mathf, Utils } from '../common';
 import { Project } from './Project';
 
 class Camera {

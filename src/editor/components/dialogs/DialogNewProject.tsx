@@ -17,7 +17,7 @@ import FooterCancelOK from './footers/FooterCancelOK';
 import Loader from '../Loader';
 import { useDispatch } from 'react-redux';
 import { removeProject } from '../../store';
-import { LocalFile, Project, Rectangle } from '../../core';
+import { LocalFile, Project } from '../../core';
 import { Constants, ELEMENT_MAP_KIND, LOCAL_FORAGE, Paths } from '../../common';
 import InputText from '../InputText';
 

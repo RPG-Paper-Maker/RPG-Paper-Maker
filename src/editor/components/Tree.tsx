@@ -77,6 +77,7 @@ function Tree({
 				onSelectedItem(node, false);
 			}
 		}
+		// eslint-disable-next-line
 	}, []);
 
 	const getTreeItems = (nodes: Node[], level = 0, items: ReactNode[] = []) => {

@@ -72,6 +72,7 @@ function Tab({
 				onCurrentIndexChanged(forcedCurrentIndex, titles[forcedCurrentIndex], false);
 			}
 		}
+		// eslint-disable-next-line
 	}, [forcedCurrentIndex, setForcedCurrentIndex]);
 
 	const getTitles = () =>
