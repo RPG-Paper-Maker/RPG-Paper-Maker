@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Base } from './Base';
 import { BINDING, BindingType, CUSTOM_SHAPE_KIND, IO, Paths } from '../common';
-import { CustomGeometry, LocalFile, Project } from '../core';
+import { Project } from '../core';
 
 class Shape extends Base {
 	public static loader = new THREE.FileLoader();
@@ -53,10 +53,14 @@ class Shape extends Base {
 		let minVertex = new THREE.Vector3();
 		let maxVertex = new THREE.Vector3();
 		let firstVertex = true;
-		const vertex_pattern = /^v\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
-		const normal_pattern = /^vn\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
-		const uv_pattern = /^vt\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
-		const face_pattern =
+		// eslint-disable-next-line
+		const vertexPattern = /^v\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
+		// eslint-disable-next-line
+		const normalPattern = /^vn\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
+		// eslint-disable-next-line
+		const uvPattern = /^vt\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
+		// eslint-disable-next-line
+		const facePattern =
 			/^f\s+((-?\d+)\/(-?\d+)\/(-?\d+))\s+((-?\d+)\/(-?\d+)\/(-?\d+))\s+((-?\d+)\/(-?\d+)\/(-?\d+))(?:\s+((-?\d+)\/(-?\d+)\/(-?\d+)))?/;
 		const lines = text.split('\n');
 		for (let line of lines) {
@@ -64,7 +68,9 @@ class Shape extends Base {
 			line = line.trim();
 			if (line.length === 0 || line.charAt(0) === '#') {
 				continue;
-			} else if ((result = vertex_pattern.exec(line)) !== null) {
+			}
+			result = vertexPattern.exec(line);
+			if (result !== null) {
 				// ["v 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
 				const temp3D = new THREE.Vector3(
 					parseFloat(result[1]) * Project.SQUARE_SIZE,
@@ -96,13 +102,22 @@ class Shape extends Base {
 						maxVertex.setZ(temp3D.z);
 					}
 				}
-			} else if ((result = normal_pattern.exec(line)) !== null) {
+				continue;
+			}
+			result = normalPattern.exec(line);
+			if (result !== null) {
 				// ["vn 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
 				normals.push(parseFloat(result[1]), parseFloat(result[2]), parseFloat(result[3]));
-			} else if ((result = uv_pattern.exec(line)) !== null) {
+				continue;
+			}
+			result = uvPattern.exec(line);
+			if (result !== null) {
 				// ["vt 0.1 0.2", "0.1", "0.2"]
 				t.push(new THREE.Vector2(parseFloat(result[1]), 1.0 - parseFloat(result[2])));
-			} else if ((result = face_pattern.exec(line)) !== null) {
+				continue;
+			}
+			result = facePattern.exec(line);
+			if (result !== null) {
 				// ["f 1/1/1 2/2/2 3/3/3", " 1/1/1", "1", "1", "1", " 2/2/2", "2", "2", "2", " 3/3/3", "3", "3", "3", undefined, undefined, undefined, undefined]
 				const lineList = line.split(' ');
 				const n = lineList.length - 1;
@@ -110,12 +125,12 @@ class Shape extends Base {
 				for (let j = 1; j < n - 1; j++) {
 					const arg2 = lineList[1 + j].split('/');
 					const arg3 = lineList[2 + j].split('/');
-					vertices.push(v[parseInt(arg1[0]) - 1]);
-					uvs.push(t[parseInt(arg1[1]) - 1]);
-					vertices.push(v[parseInt(arg2[0]) - 1]);
-					uvs.push(t[parseInt(arg2[1]) - 1]);
-					vertices.push(v[parseInt(arg3[0]) - 1]);
-					uvs.push(t[parseInt(arg3[1]) - 1]);
+					vertices.push(v[Number(arg1[0]) - 1]);
+					uvs.push(t[Number(arg1[1]) - 1]);
+					vertices.push(v[Number(arg2[0]) - 1]);
+					uvs.push(t[Number(arg2[1]) - 1]);
+					vertices.push(v[Number(arg3[0]) - 1]);
+					uvs.push(t[Number(arg3[1]) - 1]);
 				}
 			}
 		}

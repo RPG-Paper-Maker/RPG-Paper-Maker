@@ -762,7 +762,7 @@ class Map extends Base {
 					position.centerZ = this.lastPosition.centerZ;
 				}
 			}
-			let zPlus = position.layer * Scene.Map.current!.camera.getYOffsetDepth();
+			const zPlus = position.layer * Scene.Map.current!.camera.getYOffsetDepth();
 			const newLayerRayPosition = new Portion(
 				Math.floor((obj.point.x + Constants.PRECISION_POSITION + zPlus) / Project.SQUARE_SIZE),
 				Math.floor((obj.point.y + Constants.PRECISION_POSITION) / Project.SQUARE_SIZE),
@@ -1132,7 +1132,9 @@ class Map extends Base {
 		}
 	}
 
-	onTouchMove() {}
+	onTouchMove() {
+		// TODO
+	}
 
 	async onMouseUp(x: number, y: number) {
 		this.mouseUp = true;

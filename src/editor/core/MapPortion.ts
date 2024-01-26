@@ -775,16 +775,16 @@ class MapPortion {
 			const position = layers[i][0];
 			const floor = layers[i][1];
 			if (Scene.Map.current!.selectedElement === floor) {
-				const geometry = new CustomGeometry();
+				const selectedGeometry = new CustomGeometry();
 				floor.updateGeometry(
-					geometry as CustomGeometry,
+					selectedGeometry,
 					new Position(0, 0, 0, 0, position.layer, 0, 0),
 					width,
 					height,
 					0
 				);
 				this.updateSelected(
-					geometry,
+					selectedGeometry,
 					this.hoveredMesh.material,
 					Scene.Map.current!.selectedElement.getLocalPosition(position),
 					position
@@ -856,10 +856,10 @@ class MapPortion {
 			}
 		} else {
 			if (Scene.Map.current!.selectedElement === floor) {
-				const geometry = new CustomGeometry();
-				floor.updateGeometry(geometry as CustomGeometry, new Position(0, 0, 0, 0, 0, 0, 0), width, height, 0);
+				const selectedGeometry = new CustomGeometry();
+				floor.updateGeometry(selectedGeometry, new Position(0, 0, 0, 0, 0, 0, 0), width, height, 0);
 				this.updateSelected(
-					geometry,
+					selectedGeometry,
 					this.hoveredMesh.material,
 					Scene.Map.current!.selectedElement.getLocalPosition(position),
 					position
@@ -1115,8 +1115,8 @@ class MapPortion {
 						} else {
 							object3D.updateGeometry(geometry, position, 0);
 							obj = {
-								geometry: geometry,
-								material: material,
+								geometry,
+								material,
 							};
 							hash.set(0, obj);
 						}
@@ -1125,15 +1125,15 @@ class MapPortion {
 					if (obj) {
 						geometry = obj.geometry;
 						material = obj.material;
-						count = obj.c;
+						count = obj.count;
 					} else {
 						material = MapElement.Object3D.getObject3DTexture(object3D.id);
 						if (material) {
 							geometry = new CustomGeometry();
 							obj = {
-								geometry: geometry,
-								material: material,
-								c: count,
+								geometry,
+								material,
+								count,
 							};
 							hash.set(object3D.data.pictureID, obj);
 						}

@@ -221,7 +221,7 @@ class Object3DBox extends Object3D {
 
 		// Vertices + faces / indexes
 		for (let i = 0; i < Object3DBox.NB_VERTICES; i += 4) {
-			let vertices = this.data.isTopLeft ? Object3DBox.VERTICES : Object3DBox.VERTICES_CENTER;
+			const vertices = this.data.isTopLeft ? Object3DBox.VERTICES : Object3DBox.VERTICES_CENTER;
 			const vecA = vertices[i].clone();
 			const vecB = vertices[i + 1].clone();
 			const vecC = vertices[i + 2].clone();

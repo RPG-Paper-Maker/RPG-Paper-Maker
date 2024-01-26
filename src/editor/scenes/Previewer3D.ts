@@ -177,7 +177,7 @@ class Previewer3D extends Base {
 			return;
 		}
 		const texture = await Object3D.loadObject3DTexture(object.id);
-		let geometry = new CustomGeometry();
+		const geometry = new CustomGeometry();
 		const object3DElement = MapElement.Object3D.create(object);
 		if (object.shapeKind === SHAPE_KIND.CUSTOM) {
 			await (object3DElement as MapElement.Object3DCustom).loadShape();

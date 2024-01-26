@@ -104,7 +104,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 			Manager.GL.listPreviewerContext.renderer.setSize(30, filteredList.length * ELEMENT_HEIGHT, true);
 
 			if (!isRendered) {
-				document.onselectstart = function () {
+				document.onselectstart = () => {
 					return false;
 				}; // prevent weird drag ghost picture
 				Manager.GL.listPreviewerContext.renderer.autoClear = false;
@@ -146,7 +146,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 					scene.canvas = canvas;
 				}
 			} else {
-				const scene = new Scene.Previewer3D(id);
+				scene = new Scene.Previewer3D(id);
 				if (canvas) {
 					scene.canvas = canvas;
 					scene.isCut = true;
@@ -274,8 +274,9 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 
 	useEffect(() => {
 		if (firstScroll && displayCanvas) {
-			initializeCanvas();
+			initializeCanvas().catch(console.error);
 		}
+		// eslint-disable-next-line
 	}, [firstScroll]);
 
 	useEffect(() => {
@@ -283,13 +284,14 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		if (content) {
 			if (displayCanvas && Manager.GL.listPreviewerContext.renderer) {
 				Manager.GL.listPreviewerContext.renderer.setSize(30, filteredList.length * ELEMENT_HEIGHT, true);
-				updateCanvas();
+				updateCanvas().catch(console.error);
 			}
 			content.addEventListener('scroll', handleScroll);
 			return () => {
 				content.removeEventListener('scroll', handleScroll);
 			};
 		}
+		// eslint-disable-next-line
 	}, [minToDisplay, maxToDisplay]);
 
 	useEffect(() => {
@@ -301,14 +303,6 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		}
 	}, [minToDisplay, previousMinToDisplay]);
 
-	const getPictureOrCanvas = (id: number, picture: Model.Picture) => {
-		return displayCanvas ? (
-			<div id={getCanvasID(id)} className='icon-canvas' />
-		) : (
-			<img src={picture.getPath()} alt={'icon'} />
-		);
-	};
-
 	useEffect(() => {
 		if (displayCanvas) {
 			Scene.Previewer3D.canDrawList = true;
@@ -316,7 +310,16 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		return () => {
 			Scene.Previewer3D.canDrawList = false;
 		};
+		// eslint-disable-next-line
 	}, []);
+
+	const getPictureOrCanvas = (id: number, picture: Model.Picture) => {
+		return displayCanvas ? (
+			<div id={getCanvasID(id)} className='icon-canvas' />
+		) : (
+			<img src={picture.getPath()} alt={'icon'} />
+		);
+	};
 
 	const listElements = list
 		? filteredList.map((element) => {

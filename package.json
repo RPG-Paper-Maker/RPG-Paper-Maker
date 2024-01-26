@@ -1,67 +1,67 @@
 {
-  "name": "RPG Paper Maker",
-  "homepage": ".",
-  "version": "0.1.0",
-  "author": "Marie Laporte",
-  "private": true,
-  "dependencies": {
-    "@reduxjs/toolkit": "^1.9.5",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.2.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.1",
-    "@types/node": "^16.11.36",
-    "@types/react": "^18.0.9",
-    "@types/react-dom": "^18.0.4",
-    "@types/react-router-dom": "^5.3.3",
-    "@types/stats": "^0.16.30",
-    "@types/three": "^0.158.1",
-    "jszip": "^3.10.1",
-    "localforage": "^1.10.0",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-icons": "^4.9.0",
-    "react-redux": "^8.1.0",
-    "react-router-dom": "^6.3.0",
-    "react-scripts": "^5.0.1",
-    "three": "^0.158.0",
-    "typescript": "^4.6.4"
-  },
-  "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "simple-git": "^3.19.1"
-  },
-  "overrides": {
-    "nth-check": "2.0.1",
-    "semver": "^7.5.3"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "tslint": " tslint --project tsconfig.json",
-    "update-mods": "node scripts/update-mods.mjs"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all",
-      "not IE <= 11",
-      "not Safari <= 8",
-      "not Android <= 4.4"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+	"name": "RPG Paper Maker",
+	"homepage": ".",
+	"version": "0.1.0",
+	"author": "Marie Laporte",
+	"private": true,
+	"dependencies": {
+		"@reduxjs/toolkit": "^1.9.5",
+		"@testing-library/jest-dom": "^5.16.4",
+		"@testing-library/react": "^13.2.0",
+		"@testing-library/user-event": "^13.5.0",
+		"@types/jest": "^27.5.1",
+		"@types/node": "^16.11.36",
+		"@types/react": "^18.0.9",
+		"@types/react-dom": "^18.0.4",
+		"@types/react-router-dom": "^5.3.3",
+		"@types/stats": "^0.16.30",
+		"@types/three": "^0.158.1",
+		"jszip": "^3.10.1",
+		"localforage": "^1.10.0",
+		"react": "^18.1.0",
+		"react-dom": "^18.1.0",
+		"react-icons": "^4.9.0",
+		"react-redux": "^8.1.0",
+		"react-router-dom": "^6.3.0",
+		"react-scripts": "^5.0.1",
+		"three": "^0.158.0",
+		"typescript": "^4.6.4"
+	},
+	"devDependencies": {
+		"@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+		"simple-git": "^3.19.1"
+	},
+	"overrides": {
+		"nth-check": "2.0.1",
+		"semver": "^7.5.3"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject",
+		"tslint": " tslint --project tsconfig.json",
+		"update-mods": "node scripts/update-mods.mjs"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all",
+			"not IE <= 11",
+			"not Safari <= 8",
+			"not Android <= 4.4"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	}
 }

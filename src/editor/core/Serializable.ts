@@ -114,7 +114,7 @@ abstract class Serializable {
 					const mapping = new Map();
 					(this as any)[name] = mapping;
 					const jsonObj = json[jsonName];
-					for (const key in jsonObj) {
+					for (const key of Object.keys(jsonObj)) {
 						mapping.set(key, jsonObj[key]);
 					}
 					break;
