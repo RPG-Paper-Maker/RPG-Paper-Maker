@@ -42,49 +42,62 @@ function getModel(id)
 	return null;
 }
 
-RPM.Manager.Plugins.registerCommand(pluginName, "Load model", (id, filename) =>
+RPM.Manager.Plugins.registerCommand(pluginName, "Load model",
+function loadModel(id, filename)
 {
 	if (id == -1)
 		id = RPM.Core.ReactionInterpreter.currentObject.id;
-	busy = true;
-	loader.load(
-		filename,
-		function (model)
-		{
-			for (var i = 0; i < model.children.length; i++)
-				if (model.children[i].isLight)
-					model.remove(model.children[i--]);
-			enableCastShadows(model, true);
-			RPM.Core.MapObject.search(id, (result) =>
+	if (busy)
+		setTimeout(loadModel, 16, id, filename);
+	else
+	{
+		busy = true;
+		loader.load(
+			filename,
+			function (model)
 			{
-				if (!!result)
+				for (var i = 0; i < model.children.length; i++)
+					if (model.children[i].isLight)
+						model.remove(model.children[i--]);
+				enableCastShadows(model, true);
+				RPM.Core.MapObject.search(id, (result) =>
 				{
-					result.object.currentStateInstance.graphicID = 0;
-					result.object.currentStateInstance.graphicKind = 10;
-					RPM.Scene.Map.current.scene.remove(result.object.mesh);
-					result.object.mesh = new THREE.Group().add(model);
-					RPM.Scene.Map.current.scene.add(result.object.mesh);
-					while (mixerList.length < id + 1)
-						mixerList.push(null);
-					if (model.animations.length > 0)
-						mixerList[id] = new THREE.AnimationMixer(model);
-					console.log("Loaded JSON model \"" + filename + "\"!");
-				}
-				else
-					console.log("Couldn't find map object with ID " + id.toString());
-			}, RPM.Core.ReactionInterpreter.currentObject);
-			busy = false;
-		},
-		function (xhr)
-		{
-			console.log("Loading JSON model \"" + filename + "\"...");
-		},
-		function (error)
-		{
-			console.log("Error loading JSON model \"" + filename + "\": " + error.toString());
-			busy = false;
-		}
-	);
+					if (!!result)
+					{
+						result.object.currentState.graphicID = 0;
+						result.object.currentState.graphicKind = 10;
+						result.object.currentStateInstance = null;
+						result.object.changeState();
+						RPM.Scene.Map.current.scene.remove(result.object.mesh);
+						result.object.mesh = new THREE.Mesh().add(model);
+						RPM.Scene.Map.current.scene.add(result.object.mesh);
+						id = result.object.id;
+						while (mixerList.length < id + 1)
+							mixerList.push(null);
+						if (model.animations.length > 0)
+						{
+							mixerList[id] = new THREE.AnimationMixer(model);
+							if (result.object.isHero)
+								mixerList[0] = mixerList[id];
+						}
+						console.log("Loaded JSON model \"" + filename + "\"!");
+					}
+					else
+						console.log("Couldn't change mesh of map object with ID " + id.toString());
+				}, RPM.Core.ReactionInterpreter.currentObject);
+				busy = false;
+			},
+			function (xhr)
+			{
+				console.log("Loading JSON model \"" + filename + "\"...");
+			},
+			function (error)
+			{
+				console.log("Error loading JSON model \"" + filename + "\": " + error.toString());
+				busy = false;
+			}
+		);
+	}
 });
 
 RPM.Manager.Plugins.registerCommand(pluginName, "Toggle cast shadows", 
