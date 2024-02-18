@@ -12,11 +12,15 @@
 import { ReactNode, useState, useEffect } from 'react';
 import '../styles/Tree.css';
 import TreeItem from './TreeItem';
-import { ArrayUtils } from '../common';
+import { ArrayUtils, CONTEXT_MENU_ITEM_KIND, KEY, MenuItemType, SPECIAL_KEY } from '../common';
 import { Node } from '../core';
+import ContextMenu from './ContextMenu';
+import { Model } from '../Editor';
 
 type Props = {
 	list: Node[];
+	constructorType?: any;
+	contextMenuItems?: (CONTEXT_MENU_ITEM_KIND | MenuItemType)[];
 	defaultSelectedID?: number;
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
 	forcedCurrentSelectedItemID?: number | null;
@@ -25,6 +29,14 @@ type Props = {
 
 function Tree({
 	list,
+	constructorType = Model.Base,
+	contextMenuItems = [
+		CONTEXT_MENU_ITEM_KIND.NEW,
+		CONTEXT_MENU_ITEM_KIND.EDIT,
+		CONTEXT_MENU_ITEM_KIND.COPY,
+		CONTEXT_MENU_ITEM_KIND.PASTE,
+		CONTEXT_MENU_ITEM_KIND.DELETE,
+	],
 	defaultSelectedID,
 	onSelectedItem,
 	forcedCurrentSelectedItemID,
@@ -32,10 +44,13 @@ function Tree({
 }: Props) {
 	const defaultID =
 		defaultSelectedID === undefined ? (list && list.length && list[0].content.id) || -1 : defaultSelectedID;
-	const [currentSelectedItemID, setCurrentSelectedItemID] = useState(defaultID);
+
+	const [currentSelectedItemNode, setCurrentSelectedItemNode] = useState(Node.getNodeByID(list, defaultID));
 	const [notExpandedItemsList, setNotExpandedItemsList] = useState<number[]>([]);
 
-	const isSelected = (id: number) => id === currentSelectedItemID;
+	const getNodeID = () => currentSelectedItemNode?.content?.id || -1;
+
+	const isSelected = (id: number) => id === getNodeID();
 
 	const handleSwitchExpandedItem = (id: number, expanded: boolean) => {
 		const newList = [...notExpandedItemsList];
@@ -47,12 +62,22 @@ function Tree({
 		setNotExpandedItemsList(newList);
 	};
 
-	const handleClickItem = (node: Node) => {
-		setCurrentSelectedItemID(node.content.id);
+	const handleMouseDownItem = (node: Node) => {
+		setCurrentSelectedItemNode(node);
 		if (onSelectedItem) {
 			onSelectedItem(node, true);
 		}
 	};
+
+	const handleNewItem = async () => {};
+
+	const handleEditItem = async () => {};
+
+	const handleCopyItem = async () => {};
+
+	const handlePasteItem = async () => {};
+
+	const handleDeleteItem = async () => {};
 
 	useEffect(() => {
 		if (
@@ -60,21 +85,21 @@ function Tree({
 			forcedCurrentSelectedItemID !== null &&
 			setForcedCurrentSelectedItemID
 		) {
-			setCurrentSelectedItemID(forcedCurrentSelectedItemID);
+			const node = Node.getNodeByID(list, forcedCurrentSelectedItemID);
+			setCurrentSelectedItemNode(node);
 			setForcedCurrentSelectedItemID(null);
 			if (onSelectedItem) {
-				onSelectedItem(Node.getNodeByID(list, forcedCurrentSelectedItemID), false);
+				onSelectedItem(node, false);
 			}
 		}
 		// eslint-disable-next-line
 	}, [forcedCurrentSelectedItemID, setForcedCurrentSelectedItemID]);
 
 	useEffect(() => {
-		const node = Node.getNodeByID(list, currentSelectedItemID);
-		if (node) {
-			setCurrentSelectedItemID(node.content.id);
+		if (currentSelectedItemNode) {
+			setCurrentSelectedItemNode(currentSelectedItemNode);
 			if (onSelectedItem) {
-				onSelectedItem(node, false);
+				onSelectedItem(currentSelectedItemNode, false);
 			}
 		}
 		// eslint-disable-next-line
@@ -89,7 +114,7 @@ function Tree({
 					level={level}
 					selected={isSelected(node.content.id)}
 					onSwitchExpanded={handleSwitchExpandedItem}
-					onClick={handleClickItem}
+					onMouseDown={handleMouseDownItem}
 				/>
 			);
 			if (!ArrayUtils.contains(notExpandedItemsList, node.content.id)) {
@@ -99,7 +124,51 @@ function Tree({
 		return items;
 	};
 
-	return <div className='tree'>{getTreeItems(list)}</div>;
+	const getContextMenuItems = () =>
+		contextMenuItems.map((kind) => {
+			switch (kind) {
+				case CONTEXT_MENU_ITEM_KIND.NEW:
+					return {
+						title: 'New...',
+						onClick: handleNewItem,
+					};
+				case CONTEXT_MENU_ITEM_KIND.EDIT:
+					return {
+						title: 'Edit...',
+						onClick: handleEditItem,
+					};
+				case CONTEXT_MENU_ITEM_KIND.COPY:
+					return {
+						title: 'Copy',
+						shortcut: [SPECIAL_KEY.CTRL, KEY.C],
+						onClick: handleCopyItem,
+					};
+				case CONTEXT_MENU_ITEM_KIND.PASTE:
+					return {
+						title: 'Paste',
+						shortcut: [SPECIAL_KEY.CTRL, KEY.D],
+						onClick: handlePasteItem,
+					};
+				case CONTEXT_MENU_ITEM_KIND.DELETE:
+					return {
+						title: 'Delete',
+						shortcut: [KEY.DELETE],
+						onClick: handleDeleteItem,
+					};
+				default:
+					const customItem = { ...kind };
+					if (kind.onClick) {
+						kind.onClick = async () => await kind.onClick!(list, currentSelectedItemNode);
+					}
+					return customItem;
+			}
+		});
+
+	return (
+		<ContextMenu items={getContextMenuItems()}>
+			<div className='tree'>{getTreeItems(list)}</div>
+		</ContextMenu>
+	);
 }
 
 export default Tree;

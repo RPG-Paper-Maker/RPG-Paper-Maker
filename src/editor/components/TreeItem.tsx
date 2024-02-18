@@ -22,34 +22,34 @@ type Props = {
 	level?: number;
 	selected?: boolean;
 	onSwitchExpanded: (id: number, expanded: boolean) => void;
-	onClick: (node: Node) => void;
+	onMouseDown: (node: Node) => void;
 };
 
-function TreeItem({ node, level = 0, selected = false, onSwitchExpanded, onClick }: Props) {
+function TreeItem({ node, level = 0, selected = false, onSwitchExpanded, onMouseDown }: Props) {
 	const [expanded, setExpanded] = useState(true);
 
 	const isTreeMapTag = () => node.content instanceof Model.TreeMapTag;
 
 	const isFolder = () => (node.content as Model.TreeMapTag).isFolder();
 
-	const handleClick = () => {
-		onClick(node);
+	const handleMouseDown = (e: any) => {
+		onMouseDown(node);
 	};
 
-	const handleClickSwitchExpand = () => {
+	const handleMouseDownSwitchExpand = (e: any) => {
 		onSwitchExpanded(node.content.id, !expanded);
 		setExpanded((value) => !value);
-		handleClick();
+		handleMouseDown(e);
 	};
 
 	return (
 		<div
 			className={Utils.getClassName([[selected, 'selected']], ['tree-item'])}
 			style={{ paddingLeft: `${level * 15}px` }}
-			onClick={handleClick}
+			onMouseDown={handleMouseDown}
 		>
 			{isTreeMapTag() && isFolder() && (
-				<div onClick={handleClickSwitchExpand}>{expanded ? <HiChevronDown /> : <HiChevronRight />}</div>
+				<div onMouseDown={handleMouseDownSwitchExpand}>{expanded ? <HiChevronDown /> : <HiChevronRight />}</div>
 			)}
 			{node.getIcon()}
 			{node.toString()}

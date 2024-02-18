@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState, useEffect, useRef, ReactNode } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	RootState,
@@ -31,7 +31,6 @@ import {
 import DialogNewProject from './dialogs/DialogNewProject';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
-import MenuSub from './MenuSub';
 import { Manager, Scene } from '../Editor';
 import {
 	AiOutlineArrowDown,
@@ -53,21 +52,13 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 import { LuFolders, LuSaveAll } from 'react-icons/lu';
 import Loader from './Loader';
 import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
-import { KEY, SPECIAL_KEY, LOCAL_FORAGE, Paths } from '../common';
+import { KEY, SPECIAL_KEY, LOCAL_FORAGE, Paths, MenuItemType } from '../common';
 import { LocalFile, Project } from '../core';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import FooterOK from './dialogs/footers/FooterOK';
-
-type MenuItemType = {
-	title: ReactNode | string;
-	icon?: JSX.Element;
-	disabled?: boolean;
-	onClick?: () => Promise<void>;
-	shortcut?: (SPECIAL_KEY | KEY)[];
-	children?: MenuItemType[];
-};
+import MenuCustom from './MenuCustom';
 
 function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
@@ -482,82 +473,6 @@ function MainMenuBar() {
 		},
 	];
 
-	const checkItemKeyDownShortcut = async (
-		itemList: MenuItemType[],
-		statesSpecialKeys: Map<SPECIAL_KEY, boolean>,
-		key: KEY | SPECIAL_KEY,
-		specialKeys: SPECIAL_KEY[],
-		event: KeyboardEvent
-	) => {
-		for (const item of itemList) {
-			const { shortcut, disabled, onClick, children } = item;
-			if (shortcut && onClick) {
-				// Check all special keys
-				let valid = true;
-				for (const specialKey of specialKeys) {
-					if (!statesSpecialKeys.get(specialKey) !== (shortcut.indexOf(specialKey) === -1)) {
-						if (children) {
-							if (await checkItemKeyDownShortcut(children, statesSpecialKeys, key, specialKeys, event)) {
-								return true;
-							}
-						}
-						valid = false;
-						break;
-					}
-				}
-				if (!valid) {
-					continue;
-				}
-				// Check key if not a specialKey
-				if (specialKeys.indexOf(key as SPECIAL_KEY) === -1 && shortcut.indexOf(key) !== -1) {
-					event.preventDefault();
-					if (disabled) {
-						return false;
-					} else {
-						await onClick();
-						return true;
-					}
-				}
-			} else {
-				if (children) {
-					if (await checkItemKeyDownShortcut(children, statesSpecialKeys, key, specialKeys, event)) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	};
-
-	const translateKey = (key: string) => {
-		switch (key) {
-			case 'CONTROL':
-				return SPECIAL_KEY.CTRL;
-			case 'ARROWUP':
-				return KEY.UP;
-			case 'ARROWDOWN':
-				return KEY.DOWN;
-			default:
-				return key;
-		}
-	};
-
-	const handleKeyDown = async (event: KeyboardEvent) => {
-		const statesSpecialKeys: Map<SPECIAL_KEY, boolean> = new Map();
-		statesSpecialKeys.set(SPECIAL_KEY.CTRL, event.ctrlKey);
-		statesSpecialKeys.set(SPECIAL_KEY.ALT, event.altKey);
-		statesSpecialKeys.set(SPECIAL_KEY.SHIFT, event.shiftKey);
-		const key = translateKey(event.key.toUpperCase());
-		const specialKeys = Object.values(SPECIAL_KEY);
-		return !(await checkItemKeyDownShortcut(
-			items,
-			statesSpecialKeys,
-			key as KEY | SPECIAL_KEY,
-			specialKeys,
-			event
-		));
-	};
-
 	// Triggers handling
 	useEffect(() => {
 		if (triggers.newProject) {
@@ -579,14 +494,6 @@ function MainMenuBar() {
 			dispatch(triggerPlay(false));
 			handlePlay().catch(console.error);
 		}
-	});
-
-	useEffect(() => {
-		window.addEventListener('keydown', handleKeyDown);
-		return () => {
-			window.removeEventListener('keydown', handleKeyDown);
-		};
-		// eslint-disable-next-line
 	});
 
 	const getMenuHamburger = () => {
@@ -619,28 +526,6 @@ function MainMenuBar() {
 		);
 	};
 
-	const getMenuDesktop = (list: any[]) =>
-		list.map((item: any, index: number) => {
-			if (item.children) {
-				return (
-					<MenuSub key={index} title={item.title} icon={item.icon} shortcut={item.shortcut}>
-						{getMenuDesktop(item.children)}
-					</MenuSub>
-				);
-			}
-			return (
-				<MenuItem
-					key={index}
-					icon={item.icon}
-					disabled={item.disabled}
-					shortcut={item.shortcut}
-					onClick={item.onClick}
-				>
-					{item.title}
-				</MenuItem>
-			);
-		});
-
 	return (
 		<>
 			<div className='flex-center-vertically'>
@@ -660,7 +545,7 @@ function MainMenuBar() {
 					</div>
 				)}
 				<div className='mobile-hidden'>
-					<Menu horizontal>{getMenuDesktop(items)}</Menu>
+					<MenuCustom items={items} horizontal />
 				</div>
 				<div className='flex-one' />
 				{hamburgerStates.length > 0 && (

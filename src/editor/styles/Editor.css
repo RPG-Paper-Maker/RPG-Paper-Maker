@@ -194,6 +194,10 @@ code {
 	position: relative;
 }
 
+.hight-z-index {
+	z-index: 999;
+}
+
 /* width */
 ::-webkit-scrollbar {
 	width: 10px;

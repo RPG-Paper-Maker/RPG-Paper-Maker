@@ -15,6 +15,8 @@ import Tree from './Tree';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Node, Project } from '../core';
+import { CONTEXT_MENU_ITEM_KIND } from '../common';
+import { Model } from '../Editor';
 
 type Props = {
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
@@ -29,9 +31,24 @@ function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurren
 		return null;
 	}
 
+	const handleNewMap = async (items: Node[], selectedItem: Node) => {};
+
+	const handleNewFolder = async (items: Node[], selectedItem: Node) => {};
+
 	return (
 		<Tree
 			list={Project.current.treeMaps.tree}
+			constructorType={Model.TreeMapTag}
+			contextMenuItems={[
+				CONTEXT_MENU_ITEM_KIND.EDIT,
+				{
+					title: 'New map...',
+					onClick: handleNewMap,
+				},
+				CONTEXT_MENU_ITEM_KIND.COPY,
+				CONTEXT_MENU_ITEM_KIND.PASTE,
+				CONTEXT_MENU_ITEM_KIND.DELETE,
+			]}
 			defaultSelectedID={-1}
 			onSelectedItem={onSelectedItem}
 			forcedCurrentSelectedItemID={forcedCurrentSelectedItemID}

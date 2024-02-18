@@ -131,8 +131,10 @@ export enum KEY {
 	W = 'W',
 	A = 'A',
 	D = 'D',
+	C = 'C',
 	UP = 'UP',
 	DOWN = 'DOWN',
+	DELETE = 'DELETE',
 }
 
 export enum BINDING {
@@ -307,4 +309,12 @@ export enum DYNAMIC_VALUE_KIND {
 	BACKGROUND_SOUND,
 	SOUND,
 	MUSIC_EFFECT,
+}
+
+export enum CONTEXT_MENU_ITEM_KIND {
+	NEW,
+	EDIT,
+	COPY,
+	PASTE,
+	DELETE,
 }

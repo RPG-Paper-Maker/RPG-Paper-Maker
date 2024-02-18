@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING } from './Enum';
+import { ReactNode } from 'react';
+import { BINDING, KEY, SPECIAL_KEY } from './Enum';
 
 export type KeyValue = {
 	k?: any;
@@ -17,3 +18,12 @@ export type KeyValue = {
 };
 
 export type BindingType = [string, string, any, BINDING, any?, any?];
+
+export type MenuItemType = {
+	title: ReactNode | string;
+	icon?: JSX.Element;
+	disabled?: boolean;
+	onClick?: (...args: any) => Promise<void>;
+	shortcut?: (SPECIAL_KEY | KEY)[];
+	children?: MenuItemType[];
+};

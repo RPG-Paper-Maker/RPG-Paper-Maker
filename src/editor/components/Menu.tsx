@@ -19,9 +19,17 @@ type Props = {
 	isActivable?: boolean;
 	activeIndex?: number;
 	setActiveIndex?: (v: number) => void;
+	isVisible?: boolean;
 };
 
-function Menu({ children, horizontal = false, isActivable = false, activeIndex = 0, setActiveIndex }: Props) {
+function Menu({
+	children,
+	horizontal = false,
+	isActivable = false,
+	activeIndex = 0,
+	setActiveIndex,
+	isVisible = true,
+}: Props) {
 	const [triggerCloseAll, setTriggerCloseAll] = useState(false);
 
 	const items = Children.map(children, (child, index) =>
@@ -42,7 +50,19 @@ function Menu({ children, horizontal = false, isActivable = false, activeIndex =
 		}
 	}, [triggerCloseAll]);
 
-	return <div className={Utils.getClassName([[horizontal, 'menu-horizontal']], ['menu'])}>{items}</div>;
+	return (
+		<div
+			className={Utils.getClassName(
+				[
+					[horizontal, 'menu-horizontal'],
+					[!isVisible, 'hidden'],
+				],
+				['menu']
+			)}
+		>
+			{items}
+		</div>
+	);
 }
 
 export default Menu;
