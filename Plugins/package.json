@@ -10,7 +10,8 @@
 		"Fog",
 		"JSONModelLoader",
 		"ModelLoadOnMapLoad",
-		"Raycaster"
+		"Raycaster",
+		"Light"
 	],
 	"others": [
 
