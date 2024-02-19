@@ -1,6 +1,7 @@
 {
 	"battle": [
-		"JollyFlipAnimation"
+		"JollyFlipAnimation",
+		"party_presence"
 	],
 	"menus": [
 
