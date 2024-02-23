@@ -15,7 +15,6 @@ import { Base } from './Base';
 import { LocalFile, Position, Project } from '../core';
 import { BINDING, BindingType, Paths } from '../common';
 
-// @ts-expect-error
 class TreeMapTag extends Base {
 	public saved!: boolean;
 	public cameraDistance?: number;
@@ -35,7 +34,7 @@ class TreeMapTag extends Base {
 		return [...TreeMapTag.bindings, ...additionnalBinding];
 	}
 
-	public static create(id: number, name: string, saved: boolean) {
+	public static create(id: number, name: string, saved = true) {
 		const tag = new TreeMapTag();
 		tag.id = id;
 		tag.name = name;
@@ -52,7 +51,7 @@ class TreeMapTag extends Base {
 	}
 
 	toString(): string {
-		return `${super.toString()}${this.saved ? '' : ' *'}`;
+		return `${this.name}${this.saved ? '' : ' *'}`;
 	}
 
 	async saveFiles() {

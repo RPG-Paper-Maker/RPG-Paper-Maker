@@ -28,7 +28,10 @@ function ContextMenu({ children, items = [] }: Props) {
 		setIsFocused(true);
 		switch (e.button) {
 			case 0:
-				setIsOpen(false);
+				setTimeout(() => {
+					// Small wait to let selected item time for onClick method to be triggered before hidding
+					setIsOpen(false);
+				}, 100);
 				break;
 			case 2:
 				setIsOpen(true);
@@ -51,6 +54,7 @@ function ContextMenu({ children, items = [] }: Props) {
 		return () => {
 			document.removeEventListener('mousedown', handleMouseDownOutside);
 		};
+		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (

@@ -97,10 +97,6 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 		setIsLoading(false);
 	};
 
-	const handleChangeProjectName = (e: any) => {
-		setProjectName(e.target.value);
-	};
-
 	const handleAccept = async (): Promise<boolean> => {
 		if (await checkValidAccept()) {
 			await createProject();
@@ -123,7 +119,7 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 				<Loader isLoading={isLoading} />
 				<div className='flex-center-vertically'>
 					<p className='label'>Name:</p>
-					<InputText value={projectName} onChange={handleChangeProjectName} />
+					<InputText value={projectName} onChange={setProjectName} />
 				</div>
 			</Dialog>
 			<Dialog

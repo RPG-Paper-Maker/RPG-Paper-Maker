@@ -44,6 +44,30 @@ class Node extends Serializable {
 		return null;
 	}
 
+	static getNewID(nodes: Node[]): number {
+		let exists = true;
+		let id = 1;
+		do {
+			exists = this.checkIDExists(nodes, id);
+			if (exists) {
+				id++;
+			}
+		} while (exists);
+		return id;
+	}
+
+	static checkIDExists(nodes: Node[], id: number): boolean {
+		for (const node of nodes) {
+			if (node.content.id === id) {
+				return true;
+			}
+			if (node.children.length > 0 && this.checkIDExists(node.children, id)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	getIcon() {
 		return this.content.getIcon();
 	}

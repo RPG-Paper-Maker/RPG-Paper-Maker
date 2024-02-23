@@ -26,6 +26,13 @@ class Map extends Base {
 		this.name = this.getRealName();
 	}
 
+	static create(id: number, name: string) {
+		const base = new Map();
+		base.id = id;
+		base.name = name;
+		return base;
+	}
+
 	getPath() {
 		return Paths.join(Project.current!.getPathMaps(), Model.Map.generateMapName(this.id), Paths.FILE_MAP_INFOS);
 	}

@@ -4,5 +4,6 @@ export * from './Enum';
 export * from './IO';
 export * from './Mathf';
 export * from './Paths';
+export * from './RPM';
 export * from './Types';
 export * from './Utils';

@@ -12,15 +12,19 @@
 import '../styles/Input.css';
 
 type Props = {
-	value: string;
+	value?: string;
 	onChange: (e: any) => void;
 };
 
 function InputText({ value, onChange }: Props) {
+	const handleChange = (e: any) => {
+		onChange(e.target.value);
+	};
+
 	return (
 		<input
 			value={value}
-			onChange={onChange}
+			onChange={handleChange}
 			autoComplete='off'
 			autoCorrect='off'
 			autoCapitalize='off'

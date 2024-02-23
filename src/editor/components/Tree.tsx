@@ -12,7 +12,7 @@
 import { ReactNode, useState, useEffect } from 'react';
 import '../styles/Tree.css';
 import TreeItem from './TreeItem';
-import { ArrayUtils, CONTEXT_MENU_ITEM_KIND, KEY, MenuItemType, SPECIAL_KEY } from '../common';
+import { ArrayUtils, CONTEXT_MENU_ITEM_KIND, KEY, MenuItemType, RPM, SPECIAL_KEY } from '../common';
 import { Node } from '../core';
 import ContextMenu from './ContextMenu';
 import { Model } from '../Editor';
@@ -158,7 +158,17 @@ function Tree({
 				default:
 					const customItem = { ...kind };
 					if (kind.onClick) {
-						kind.onClick = async () => await kind.onClick!(list, currentSelectedItemNode);
+						customItem.onClick = async () => {
+							RPM.treeCurrentItems = list;
+							RPM.treeCurrentItem = currentSelectedItemNode;
+							RPM.treeCurrentSetSelectedItem = (node: Node) => {
+								setCurrentSelectedItemNode(node);
+								if (onSelectedItem) {
+									onSelectedItem(node, false);
+								}
+							};
+							await kind.onClick!(list);
+						};
 					}
 					return customItem;
 			}
