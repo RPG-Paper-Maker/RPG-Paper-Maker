@@ -89,12 +89,24 @@ function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurren
 		}
 	};
 
-	const handleAcceptEditFolder = async () => {};
+	const handleEditFolder = async () => {
+		setEditedFolder(RPM.treeCurrentItem!.content);
+		setIsNew(false);
+		setNeedOpenName(true);
+	};
+
+	const handleAcceptEditFolder = async () => {
+		RPM.treeCurrentForceUpdate();
+	};
 
 	const getContextMenuItems = () =>
 		selectedNode
 			? (selectedNode.content as Model.TreeMapTag).isFolder()
 				? [
+						{
+							title: 'Edit name...',
+							onClick: handleEditFolder,
+						},
 						{
 							title: 'New map...',
 							onClick: handleNewMap,
