@@ -18,6 +18,7 @@ import { Node, Project } from '../core';
 import { CONTEXT_MENU_ITEM_KIND, RPM } from '../common';
 import { Model } from '../Editor';
 import DialogMapProperties from './dialogs/DialogMapProperties';
+import DialogName from './dialogs/DialogName';
 
 type Props = {
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
@@ -28,8 +29,10 @@ type Props = {
 function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurrentSelectedItemID }: Props) {
 	const [isNew, setIsNew] = useState(false);
 	const [editedMap, setEditedMap] = useState<Model.Map>(new Model.Map());
+	const [editedFolder, setEditedFolder] = useState<Model.Base>(new Model.Base());
 	const [selectedNode, setSelectedNode] = useState<Node | null>(null);
 	const [needOpenMapProperties, setNeedOpenMapProperties] = useState(false);
+	const [needOpenName, setNeedOpenName] = useState(false);
 
 	const isOpenLoading = useSelector((state: RootState) => state.projects.openLoading);
 
@@ -70,10 +73,26 @@ function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurren
 		}
 	};
 
-	const handleNewFolder = async () => {};
+	const handleNewFolder = async () => {
+		const id = Node.getNewID(RPM.treeCurrentItems, false);
+		const name = 'New folder';
+		setEditedFolder(Model.Base.create(id, name));
+		setIsNew(true);
+		setNeedOpenName(true);
+	};
+
+	const handleAcceptNewFolder = async () => {
+		if (editedFolder && selectedNode) {
+			const node = new Node(Model.TreeMapTag.create(editedFolder.id, editedFolder.name), [], selectedNode);
+			selectedNode.children.push(node);
+			RPM.treeCurrentSetSelectedItem(node);
+		}
+	};
+
+	const handleAcceptEditFolder = async () => {};
 
 	const getContextMenuItems = () =>
-		selectedNode && selectedNode.content.id !== -1
+		selectedNode
 			? (selectedNode.content as Model.TreeMapTag).isFolder()
 				? [
 						{
@@ -84,9 +103,18 @@ function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurren
 							title: 'New folder...',
 							onClick: handleNewFolder,
 						},
-						CONTEXT_MENU_ITEM_KIND.COPY,
-						CONTEXT_MENU_ITEM_KIND.PASTE,
-						CONTEXT_MENU_ITEM_KIND.DELETE,
+						{
+							title: 'Copy',
+							disabled: selectedNode.content.id === -1,
+						},
+						{
+							title: 'Paste',
+							disabled: selectedNode.content.id === -1,
+						},
+						{
+							title: 'Delete',
+							disabled: selectedNode.content.id === -1,
+						},
 				  ]
 				: [
 						{
@@ -115,6 +143,12 @@ function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurren
 				setNeedOpen={setNeedOpenMapProperties}
 				model={editedMap}
 				onAccept={isNew ? handleAcceptNewMap : handleAcceptEditMap}
+			/>
+			<DialogName
+				needOpen={needOpenName}
+				setNeedOpen={setNeedOpenName}
+				model={editedFolder}
+				onAccept={isNew ? handleAcceptNewFolder : handleAcceptEditFolder}
 			/>
 		</>
 	);

@@ -44,13 +44,14 @@ class Node extends Serializable {
 		return null;
 	}
 
-	static getNewID(nodes: Node[]): number {
+	static getNewID(nodes: Node[], positive = true): number {
 		let exists = true;
-		let id = 1;
+		const addition = positive ? 1 : -1;
+		let id = addition;
 		do {
 			exists = this.checkIDExists(nodes, id);
 			if (exists) {
-				id++;
+				id = id + addition;
 			}
 		} while (exists);
 		return id;
