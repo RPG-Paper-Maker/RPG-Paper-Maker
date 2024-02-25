@@ -51,6 +51,11 @@ class Node extends Serializable {
 		return null;
 	}
 
+	static getPathByID(nodes: Node[], id: number): string {
+		const node = Node.getNodeByID(nodes, id);
+		return node ? node.getPath(false) : 'ERROR: Cannot find path';
+	}
+
 	static getNewID(nodes: Node[], positive = true): number {
 		let exists = true;
 		const addition = positive ? 1 : -1;
@@ -86,6 +91,16 @@ class Node extends Serializable {
 			}
 		}
 		return list;
+	}
+
+	static getAllIDs(nodes: Node[], ids: number[] = []): number[] {
+		for (const node of nodes) {
+			ids.push(node.content.id);
+			if (node.children.length > 0) {
+				ids = this.getAllIDs(node.children, ids);
+			}
+		}
+		return ids;
 	}
 
 	getIcon() {

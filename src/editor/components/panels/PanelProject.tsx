@@ -56,10 +56,9 @@ function PanelProject() {
 	const projectMenuIndex = useSelector((state: RootState) => state.projects.menuIndex);
 
 	const getDefaultTabTitles = () =>
-		Project.current!.treeMaps.tabs.map((id) => {
-			const node = Node.getNodeByID(Project.current!.treeMaps.tree, id);
-			return Model.Base.create(id, node ? node.getPath(false) : 'ERROR: Cannot find path');
-		});
+		Project.current!.treeMaps.tabs.map((id) =>
+			Model.Base.create(id, Node.getPathByID(Project.current!.treeMaps.tree, id))
+		);
 
 	const getDefaultTabContents = () => Project.current!.treeMaps.tabs.map(() => null);
 
@@ -118,14 +117,6 @@ function PanelProject() {
 		// eslint-disable-next-line
 	}, [triggersTreeMap]);
 
-	useEffect(() => {
-		if (!openLoading) {
-			Project.current!.treeMaps.tabs = mapsTabsTitles.map((model) => model.id);
-			Project.current!.treeMaps.save().catch(console.error);
-		}
-		// eslint-disable-next-line
-	}, [mapsTabsTitles]);
-
 	// When first opening the project with all data loaded
 	useEffect(() => {
 		if (!openLoading) {
@@ -147,6 +138,14 @@ function PanelProject() {
 		}
 		// eslint-disable-next-line
 	}, [openLoading]);
+
+	useEffect(() => {
+		if (!openLoading) {
+			Project.current!.treeMaps.tabs = mapsTabsTitles.map((model) => model.id);
+			Project.current!.treeMaps.save().catch(console.error);
+		}
+		// eslint-disable-next-line
+	}, [mapsTabsTitles]);
 
 	return (
 		<>

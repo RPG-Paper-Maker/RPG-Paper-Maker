@@ -68,6 +68,20 @@ function TreeMaps({
 	};
 
 	const handleAcceptEditFolder = async () => {
+		if (selectedNode) {
+			const ids = Node.getAllIDs(selectedNode.children);
+			let changed = false;
+			for (const id of ids) {
+				const element = mapsTabsTitles.find((value) => value.id === id);
+				if (element) {
+					element.name = Node.getPathByID(Project.current!.treeMaps.tree, id);
+					changed = true;
+				}
+			}
+			if (changed) {
+				setMapsTabsTitles([...mapsTabsTitles]);
+			}
+		}
 		RPM.treeCurrentForceUpdate();
 	};
 
@@ -112,6 +126,13 @@ function TreeMaps({
 	};
 
 	const handleAcceptEditMap = async () => {
+		if (selectedNode) {
+			const element = mapsTabsTitles.find((value) => value.id === editedMap.id);
+			if (element) {
+				element.name = Node.getPathByID(Project.current!.treeMaps.tree, editedMap.id);
+				setMapsTabsTitles([...mapsTabsTitles]);
+			}
+		}
 		RPM.treeCurrentForceUpdate();
 	};
 
