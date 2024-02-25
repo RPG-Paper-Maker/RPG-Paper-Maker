@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Model } from '../Editor';
 import { HiChevronDown, HiChevronRight } from 'react-icons/hi';
 import '../styles/TreeItem.css';
-import { Node } from '../core';
+import { Node, Project } from '../core';
 import { Utils } from '../common';
 
 type Props = {
@@ -26,7 +26,7 @@ type Props = {
 };
 
 function TreeItem({ node, level = 0, selected = false, onSwitchExpanded, onMouseDown }: Props) {
-	const [expanded, setExpanded] = useState(true);
+	const [expanded, setExpanded] = useState(node.expanded);
 
 	const isTreeMapTag = () => node.content instanceof Model.TreeMapTag;
 
@@ -41,6 +41,13 @@ function TreeItem({ node, level = 0, selected = false, onSwitchExpanded, onMouse
 		setExpanded((value) => !value);
 		handleMouseDown(e);
 	};
+
+	useEffect(() => {
+		if (node.expanded !== expanded) {
+			node.expanded = expanded;
+			Project.current!.treeMaps.save().catch(console.error);
+		}
+	}, [expanded]);
 
 	return (
 		<div

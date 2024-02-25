@@ -11,7 +11,7 @@
 
 import { Model } from '../Editor';
 import { Serializable } from './Serializable';
-import { Utils } from '../common';
+import { BINDING, BindingType, Utils } from '../common';
 
 class Node extends Serializable {
 	public static readonly JSON_CHILDREN = 'children';
@@ -19,6 +19,13 @@ class Node extends Serializable {
 	public children: Node[];
 	public content: Model.Base;
 	public parent: Node | null;
+	public expanded: boolean = true;
+
+	public static readonly bindings: BindingType[] = [['expanded', 'e', true, BINDING.BOOLEAN]];
+
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...Node.bindings, ...additionnalBinding];
+	}
 
 	constructor(content?: Model.Base, children: Node[] = [], parent: Node | null = null) {
 		super();
@@ -69,6 +76,18 @@ class Node extends Serializable {
 		return false;
 	}
 
+	static getNotExpandedItemsList(nodes: Node[], list: number[] = []): number[] {
+		for (const node of nodes) {
+			if (!node.expanded) {
+				list.push(node.content.id);
+			}
+			if (node.children.length > 0) {
+				list = this.getNotExpandedItemsList(node.children, list);
+			}
+		}
+		return list;
+	}
+
 	getIcon() {
 		return this.content.getIcon();
 	}
@@ -94,13 +113,15 @@ class Node extends Serializable {
 		}
 	}
 
-	read(json: Record<string, any>) {
+	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.read(json, Node.getBindings(additionnalBinding));
 		this.content.read(json);
 		Utils.readList(this.children, json[Node.JSON_CHILDREN], Node);
 		this.updateParents();
 	}
 
-	write(json: Record<string, any>) {
+	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.write(json, Node.getBindings(additionnalBinding));
 		this.content.write(json);
 		Utils.writeList(this.children, json, Node.JSON_CHILDREN);
 	}

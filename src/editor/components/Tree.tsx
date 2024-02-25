@@ -46,7 +46,7 @@ function Tree({
 		defaultSelectedID === undefined ? (list && list.length && list[0].content.id) || -1 : defaultSelectedID;
 
 	const [currentSelectedItemNode, setCurrentSelectedItemNode] = useState(Node.getNodeByID(list, defaultID));
-	const [notExpandedItemsList, setNotExpandedItemsList] = useState<number[]>([]);
+	const [notExpandedItemsList, setNotExpandedItemsList] = useState<number[]>(Node.getNotExpandedItemsList(list));
 	const [forceUpdate, setForceUpdate] = useState(false);
 
 	const getNodeID = () => currentSelectedItemNode?.content?.id || -1;

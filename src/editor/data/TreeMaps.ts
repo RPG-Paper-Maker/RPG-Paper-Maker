@@ -65,9 +65,8 @@ class TreeMaps extends Serializable {
 		const children: Node[] = [];
 		for (const obj of json) {
 			const tag = new Model.TreeMapTag();
-			tag.read(obj);
 			const node = new Node(tag);
-			node.parent = root;
+			node.read(obj);
 			children.push(node);
 			const objChildren = obj[Node.JSON_CHILDREN];
 			if (objChildren) {
