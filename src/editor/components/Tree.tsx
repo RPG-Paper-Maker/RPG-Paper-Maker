@@ -47,6 +47,7 @@ function Tree({
 
 	const [currentSelectedItemNode, setCurrentSelectedItemNode] = useState(Node.getNodeByID(list, defaultID));
 	const [notExpandedItemsList, setNotExpandedItemsList] = useState<number[]>([]);
+	const [forceUpdate, setForceUpdate] = useState(false);
 
 	const getNodeID = () => currentSelectedItemNode?.content?.id || -1;
 
@@ -161,6 +162,9 @@ function Tree({
 						customItem.onClick = async () => {
 							RPM.treeCurrentItems = list;
 							RPM.treeCurrentItem = currentSelectedItemNode;
+							RPM.treeCurrentForceUpdate = () => {
+								setForceUpdate((value) => !value);
+							};
 							RPM.treeCurrentSetSelectedItem = (node: Node) => {
 								setCurrentSelectedItemNode(node);
 								if (onSelectedItem) {

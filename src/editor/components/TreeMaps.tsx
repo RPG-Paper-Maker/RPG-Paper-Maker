@@ -26,6 +26,7 @@ type Props = {
 };
 
 function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurrentSelectedItemID }: Props) {
+	const [isNew, setIsNew] = useState(false);
 	const [editedMap, setEditedMap] = useState<Model.Map>(new Model.Map());
 	const [selectedNode, setSelectedNode] = useState<Node | null>(null);
 	const [needOpenMapProperties, setNeedOpenMapProperties] = useState(false);
@@ -41,10 +42,21 @@ function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurren
 		setSelectedNode(node);
 	};
 
+	const handleEditMap = async () => {
+		setEditedMap(RPM.treeCurrentItem!.content as Model.Map);
+		setIsNew(false);
+		setNeedOpenMapProperties(true);
+	};
+
+	const handleAcceptEditMap = async () => {
+		RPM.treeCurrentForceUpdate();
+	};
+
 	const handleNewMap = async () => {
 		const id = Node.getNewID(RPM.treeCurrentItems);
 		const name = Model.Map.generateMapName(id);
 		setEditedMap(Model.Map.create(id, name));
+		setIsNew(true);
 		setNeedOpenMapProperties(true);
 	};
 
@@ -64,7 +76,6 @@ function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurren
 		selectedNode && selectedNode.content.id !== -1
 			? (selectedNode.content as Model.TreeMapTag).isFolder()
 				? [
-						CONTEXT_MENU_ITEM_KIND.EDIT,
 						{
 							title: 'New map...',
 							onClick: handleNewMap,
@@ -78,7 +89,10 @@ function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurren
 						CONTEXT_MENU_ITEM_KIND.DELETE,
 				  ]
 				: [
-						CONTEXT_MENU_ITEM_KIND.EDIT,
+						{
+							title: 'Edit map properties...',
+							onClick: handleEditMap,
+						},
 						CONTEXT_MENU_ITEM_KIND.COPY,
 						CONTEXT_MENU_ITEM_KIND.PASTE,
 						CONTEXT_MENU_ITEM_KIND.DELETE,
@@ -100,7 +114,7 @@ function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurren
 				needOpen={needOpenMapProperties}
 				setNeedOpen={setNeedOpenMapProperties}
 				model={editedMap}
-				onAccept={handleAcceptNewMap}
+				onAccept={isNew ? handleAcceptNewMap : handleAcceptEditMap}
 			/>
 		</>
 	);

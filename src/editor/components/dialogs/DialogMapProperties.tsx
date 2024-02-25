@@ -27,6 +27,7 @@ type Props = {
 
 function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) {
 	const [isOpen, setIsOpen] = useState(false);
+	const [focusFirst, setFocustFirst] = useState(false);
 	const [name, setName] = useStateString();
 	const [id, setID] = useStateNumber();
 
@@ -49,6 +50,7 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 	useEffect(() => {
 		if (needOpen) {
 			setNeedOpen(false);
+			setFocustFirst(true);
 			initialize();
 			setIsOpen(true);
 		}
@@ -65,7 +67,12 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 			<div className='flex flex-column gap-small'>
 				<div className='flex gap-medium'>
 					Name:
-					<InputText value={name} onChange={setName} />
+					<InputText
+						value={name}
+						onChange={setName}
+						focusFirst={focusFirst}
+						setFocustFirst={setFocustFirst}
+					/>
 				</div>
 				<div className='flex gap-medium'>ID: {Utils.formatNumberID(id)}</div>
 			</div>

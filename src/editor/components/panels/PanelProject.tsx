@@ -73,9 +73,7 @@ function PanelProject() {
 		if (!openLoading) {
 			if (node && !(node.content as Model.TreeMapTag).isFolder()) {
 				const id = node.content.id;
-				console.log(node);
 				const title = node.getPath(false);
-				console.log(title);
 				if (!mapsTabsTitles.find((model) => model.id === id)) {
 					const newListTitles = [...mapsTabsTitles];
 					newListTitles.push(Model.Base.create(id, title));

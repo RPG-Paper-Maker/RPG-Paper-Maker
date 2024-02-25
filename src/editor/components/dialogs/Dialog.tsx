@@ -14,6 +14,7 @@ import ReactDOM from 'react-dom';
 import { RxCross2 } from 'react-icons/rx';
 import { Utils } from '../../common/Utils';
 import '../../styles/Dialog.css';
+import { Inputs } from '../../managers';
 
 type Props = {
 	children: React.ReactNode;
@@ -31,6 +32,8 @@ function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false
 	const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
 	const [isMoved, setIsMoved] = useState(false);
 	const dialogRef = useRef<HTMLDivElement>(null);
+
+	Inputs.isMapFocused = !isOpen;
 
 	const updatePosition = (x: number, y: number) => {
 		if (dialogRef.current) {

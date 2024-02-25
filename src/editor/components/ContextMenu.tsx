@@ -31,7 +31,7 @@ function ContextMenu({ children, items = [] }: Props) {
 				setTimeout(() => {
 					// Small wait to let selected item time for onClick method to be triggered before hidding
 					setIsOpen(false);
-				}, 100);
+				}, 500);
 				break;
 			case 2:
 				setIsOpen(true);

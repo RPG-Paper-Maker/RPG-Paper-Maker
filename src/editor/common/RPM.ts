@@ -15,6 +15,7 @@ class RPM {
 	public static treeCurrentItems: Node[];
 	public static treeCurrentItem: Node | null;
 	public static treeCurrentSetSelectedItem: (n: Node) => void;
+	public static treeCurrentForceUpdate: () => void;
 }
 
 export { RPM };

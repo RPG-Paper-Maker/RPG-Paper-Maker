@@ -31,6 +31,7 @@ class Inputs {
 	public static keys: string[] = [];
 	public static previousTouchDistance = 0;
 	public static touchDistance = 0;
+	public static isMapFocused = true;
 
 	static getPositionX() {
 		return Constants.IS_MOBILE ? this.pointerX : this.mouseX;
@@ -139,10 +140,12 @@ class Inputs {
 		} else {
 			// Key down
 			const handleKeyDown = (e: any) => {
-				if (e.ctrlKey && e.key === 's') {
-					return;
-				}
-				if (!Scene.Map.current || Scene.Map.current.loading) {
+				if (
+					!this.isMapFocused ||
+					(e.ctrlKey && e.key === 's') ||
+					!Scene.Map.current ||
+					Scene.Map.current.loading
+				) {
 					return;
 				}
 				Inputs.isALT = e.altKey;
@@ -157,7 +160,7 @@ class Inputs {
 
 			// Key up
 			const handleKeyUp = (e: any) => {
-				if (!Scene.Map.current || Scene.Map.current.loading) {
+				if (!this.isMapFocused || !Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
 				Inputs.isALT = e.altKey;
@@ -170,7 +173,7 @@ class Inputs {
 
 			// Mouse down
 			const handleMouseDown = (e: any) => {
-				if (!Scene.Map.current || Scene.Map.current.loading) {
+				if (!this.isMapFocused || !Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
 				switch (e.button) {
@@ -201,7 +204,7 @@ class Inputs {
 
 			// Mouse move
 			const handleMouseMove = (e: any) => {
-				if (!Scene.Map.current || Scene.Map.current.loading) {
+				if (!this.isMapFocused || !Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
 				const rect = canvas.getBoundingClientRect();
@@ -242,6 +245,9 @@ class Inputs {
 
 			// Mouse wheel
 			const handleWheel = async (e: any) => {
+				if (!this.isMapFocused) {
+					return;
+				}
 				e.preventDefault();
 				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
