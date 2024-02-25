@@ -195,6 +195,10 @@ class Map extends Base {
 		return folderMap;
 	}
 
+	async deleteMap() {
+		await LocalFile.removeFolder(Paths.join(Project.current!.getPathMaps(), this.getRealName()));
+	}
+
 	read(json: Record<string, any>) {
 		super.read(json);
 	}

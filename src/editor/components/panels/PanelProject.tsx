@@ -181,6 +181,10 @@ function PanelProject() {
 									onSelectedItem={handleSelectedMapItem}
 									forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
 									setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
+									mapsTabsTitles={mapsTabsTitles}
+									setMapsTabsTitles={setMapsTabsTitles}
+									mapsTabsContents={mapsTabsContents}
+									setMapsTabsContents={setMapsTabsContents}
 								/>
 							</div>
 							<PanelTextures visible={projectMenuIndex === 1} />

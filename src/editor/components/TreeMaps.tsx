@@ -9,30 +9,46 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import '../styles/Tree.css';
 import Tree from './Tree';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Node, Project } from '../core';
-import { CONTEXT_MENU_ITEM_KIND, RPM } from '../common';
+import { ArrayUtils, CONTEXT_MENU_ITEM_KIND, KEY, RPM } from '../common';
 import { Model } from '../Editor';
 import DialogMapProperties from './dialogs/DialogMapProperties';
 import DialogName from './dialogs/DialogName';
+import Dialog from './dialogs/Dialog';
+import FooterNoYes from './dialogs/footers/FooterNoYes';
 
 type Props = {
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
 	forcedCurrentSelectedItemID?: number | null;
 	setForcedCurrentSelectedItemID?: (forced: number | null) => void;
+	mapsTabsTitles: Model.Base[];
+	setMapsTabsTitles: (tiles: Model.Base[]) => void;
+	mapsTabsContents: (ReactNode | null)[];
+	setMapsTabsContents: (contents: (ReactNode | null)[]) => void;
 };
 
-function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurrentSelectedItemID }: Props) {
+function TreeMaps({
+	onSelectedItem,
+	forcedCurrentSelectedItemID,
+	setForcedCurrentSelectedItemID,
+	mapsTabsTitles,
+	setMapsTabsTitles,
+	mapsTabsContents,
+	setMapsTabsContents,
+}: Props) {
 	const [isNew, setIsNew] = useState(false);
 	const [editedMap, setEditedMap] = useState<Model.Map>(new Model.Map());
 	const [editedFolder, setEditedFolder] = useState<Model.Base>(new Model.Base());
 	const [selectedNode, setSelectedNode] = useState<Node | null>(null);
 	const [needOpenMapProperties, setNeedOpenMapProperties] = useState(false);
 	const [needOpenName, setNeedOpenName] = useState(false);
+	const [isOpenDialogConfirm, setIsOpenDialogConfirm] = useState(false);
+	const [isDeletingMap, setIsDeletingMap] = useState(false);
 
 	const isOpenLoading = useSelector((state: RootState) => state.projects.openLoading);
 
@@ -45,13 +61,13 @@ function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurren
 		setSelectedNode(node);
 	};
 
-	const handleEditMap = async () => {
-		setEditedMap(RPM.treeCurrentItem!.content as Model.Map);
+	const handleEditFolder = async () => {
+		setEditedFolder(RPM.treeCurrentItem!.content);
 		setIsNew(false);
-		setNeedOpenMapProperties(true);
+		setNeedOpenName(true);
 	};
 
-	const handleAcceptEditMap = async () => {
+	const handleAcceptEditFolder = async () => {
 		RPM.treeCurrentForceUpdate();
 	};
 
@@ -89,14 +105,43 @@ function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurren
 		}
 	};
 
-	const handleEditFolder = async () => {
-		setEditedFolder(RPM.treeCurrentItem!.content);
+	const handleEditMap = async () => {
+		setEditedMap(RPM.treeCurrentItem!.content as Model.Map);
 		setIsNew(false);
-		setNeedOpenName(true);
+		setNeedOpenMapProperties(true);
 	};
 
-	const handleAcceptEditFolder = async () => {
+	const handleAcceptEditMap = async () => {
 		RPM.treeCurrentForceUpdate();
+	};
+
+	const handleDeleteMap = async () => {
+		setIsDeletingMap(true);
+		setIsOpenDialogConfirm(true);
+	};
+
+	const handleAcceptDeleteMap = async () => {
+		if (selectedNode && selectedNode.parent) {
+			const map = Model.Map.create(selectedNode.content.id, selectedNode.content.name);
+			await map.deleteMap();
+			const parent = selectedNode.parent;
+			ArrayUtils.removeElement(parent.children, selectedNode);
+			RPM.treeCurrentSetSelectedItem(parent);
+			const tabIndex = mapsTabsTitles.findIndex((value) => value.id === selectedNode.content.id);
+			if (tabIndex !== -1) {
+				const newTitles = [...mapsTabsTitles];
+				ArrayUtils.removeAt(newTitles, tabIndex);
+				setMapsTabsTitles(newTitles);
+				const newContents = [...mapsTabsContents];
+				ArrayUtils.removeAt(newContents, tabIndex);
+				setMapsTabsContents(newContents);
+			}
+		}
+		setIsOpenDialogConfirm(false);
+	};
+
+	const handleRejectDeleteMap = async () => {
+		setIsOpenDialogConfirm(false);
 	};
 
 	const getContextMenuItems = () =>
@@ -135,7 +180,11 @@ function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurren
 						},
 						CONTEXT_MENU_ITEM_KIND.COPY,
 						CONTEXT_MENU_ITEM_KIND.PASTE,
-						CONTEXT_MENU_ITEM_KIND.DELETE,
+						{
+							title: 'Delete',
+							onClick: handleDeleteMap,
+							shortcut: [KEY.DELETE],
+						},
 				  ]
 			: [];
 
@@ -162,6 +211,14 @@ function TreeMaps({ onSelectedItem, forcedCurrentSelectedItemID, setForcedCurren
 				model={editedFolder}
 				onAccept={isNew ? handleAcceptNewFolder : handleAcceptEditFolder}
 			/>
+			<Dialog
+				title='Warning'
+				isOpen={isOpenDialogConfirm}
+				footer={<FooterNoYes onNo={handleRejectDeleteMap} onYes={handleAcceptDeleteMap} />}
+				onClose={handleRejectDeleteMap}
+			>
+				<p className='warning text-center'>Are you sure you want to delete this map?</p>
+			</Dialog>
 		</>
 	);
 }
