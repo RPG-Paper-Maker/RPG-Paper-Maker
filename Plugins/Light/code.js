@@ -5,6 +5,8 @@ const pluginName = "Light";
 const inject = RPM.Manager.Plugins.inject;
 
 const onLoadID = RPM.Manager.Plugins.getParameter(pluginName, "Map load event ID");
+const path     = RPM.Manager.Plugins.getParameter(pluginName, "Shaders directory path");
+const shader   = RPM.Manager.Plugins.getParameter(pluginName, "Shader");
 
 var lightList = [];
 var mapID = 0;
@@ -26,6 +28,16 @@ setInterval(function ()
 			lightList = [];
 			mapID = RPM.Scene.Map.current.id;
 			RPM.Manager.Events.sendEventDetection(null, -1, false, onLoadID, [null]);
+			for (var i = 0; i < RPM.Scene.Map.current.scene.children.length; i++)
+			{
+				if (RPM.Scene.Map.current.scene.children[i].isDirectionalLight && lightList.indexOf(RPM.Scene.Map.current.scene.children[i]) < 0)
+				{
+					const light = RPM.Scene.Map.current.scene.children[i];
+					light.shadow.bias = -0.00002;
+					light.shadow.normalBias = 0.75;
+					break;
+				}
+			}
 		}
 		for (var i = 0; i < lightList.length; i++)
 		{
@@ -53,24 +65,29 @@ setInterval(function ()
 
 RPM.Manager.GL.load = async function()
 {
-	const shader = RPM.Manager.Plugins.getParameter(pluginName, "Shaders directory path") + RPM.Manager.Plugins.getParameter(pluginName, "Shader");
-	const vert = await RPM.Common.IO.openFile(shader + ".vert");
-	const frag = await RPM.Common.IO.openFile(shader + ".frag");
+	const vert = await RPM.Common.IO.openFile(path + shader + ".vert");
+	const frag = await RPM.Common.IO.openFile(path + shader + ".frag");
 	RPM.Manager.GL.SHADER_FIX_VERTEX    = vert;
 	RPM.Manager.GL.SHADER_FIX_FRAGMENT  = frag;
 	RPM.Manager.GL.SHADER_FACE_VERTEX   = vert;
 	RPM.Manager.GL.SHADER_FACE_FRAGMENT = frag;
-}
+};
 
 function enableCastShadows(mesh, enable)
 {
+	console.log(mesh);
 	if (!mesh.isScene)
-	{
 		mesh.castShadow = enable;
-		mesh.receiveShadow = enable;
-	}
 	for (var i = 0; i < mesh.children.length; i++)
 		enableCastShadows(mesh.children[i], enable);
+}
+
+function enableReceiveShadows(mesh, enable)
+{
+	if (!mesh.isScene)
+		mesh.receiveShadow = enable;
+	for (var i = 0; i < mesh.children.length; i++)
+		enableReceiveShadows(mesh.children[i], enable);
 }
 
 RPM.Manager.Plugins.registerCommand(pluginName, "Remove all lights", () =>
@@ -106,6 +123,13 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Remove light", (prop) =>
 	}
 });
 
+RPM.Manager.Plugins.registerCommand(pluginName, "Enable/disable light", (prop, enabled) =>
+{
+	var light = RPM.Core.ReactionInterpreter.currentObject.properties[prop];
+	if (!!light)
+		light.visible = enabled;
+});
+
 RPM.Manager.Plugins.registerCommand(pluginName, "Set ambient light", (intensity, color) =>
 {
 	for (var i = 0; i < RPM.Scene.Map.current.scene.children.length; i++)
@@ -137,7 +161,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Add directional light", (prop, 
 	light.shadow.mapSize.height = 8192;
 	light.shadow.camera.far = RPM.Datas.Systems.SQUARE_SIZE * 350;
 	light.shadow.bias = -0.00002;
-	light.shadow.normalBias = 0.5;
+	light.shadow.normalBias = 0.75;
 	if (prop > 0)
 		RPM.Core.ReactionInterpreter.currentObject.properties[prop] = light;
 	RPM.Scene.Map.current.scene.add(light);
@@ -198,6 +222,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Set hemisphere light colors", (
 	var light = RPM.Core.ReactionInterpreter.currentObject.properties[prop];
 	if (!light.isHemisphereLight)
 		return;
+	// for some reason, they are reversed
 	light.skyColor = colorBottom.color;
 	light.groundColor = colorTop.color;
 });
@@ -214,6 +239,24 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Set light cast shadow", (prop, 
 	if (light.isHemisphereLight)
 		return;
 	light.castShadow = castShadow;
+});
+
+RPM.Manager.Plugins.registerCommand(pluginName, "Set object cast shadow", (id, castShadow) =>
+{
+	RPM.Core.MapObject.search(id, (result) =>
+	{
+		if (!!result)
+			enableCastShadows(result.object.mesh, castShadow);
+	}, RPM.Core.ReactionInterpreter.currentObject);
+});
+
+RPM.Manager.Plugins.registerCommand(pluginName, "Set object receive shadow", (id, receiveShadow) =>
+{
+	RPM.Core.MapObject.search(id, (result) =>
+	{
+		if (!!result)
+			enableReceiveShadows(result.object.mesh, receiveShadow);
+	}, RPM.Core.ReactionInterpreter.currentObject);
 });
 
 RPM.Manager.Plugins.registerCommand(pluginName, "Set light position", (prop, x, y, z) =>

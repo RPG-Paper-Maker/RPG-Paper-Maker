@@ -4,6 +4,8 @@
 #include <gradientmap_pars_fragment>
 #include <lights_pars_begin>
 #include <shadowmap_pars_fragment>
+#include <uv_pars_fragment>
+#include <color_pars_fragment>
 
 uniform vec3 diffuse;
 uniform vec3 emissive;
@@ -15,10 +17,7 @@ uniform vec2 offset;
 uniform float repeat;
 uniform bool enableShadows;
 uniform sampler2D map;
-uniform vec3 specular;
-uniform float shininess;
 
-varying vec2 vUV;
 varying vec3 vNormal;
 varying vec3 fragPos;
 
@@ -102,6 +101,8 @@ void getPointShadowMasks(inout float pointShadows[NUM_POINT_LIGHT_SHADOWS])
 #if NUM_DIR_LIGHTS > 0
 vec4 getDirLight(const in int i, const in float shadow)
 {
+	if (!enableShadows)
+		return vec4(directionalLights[i].color * BRDF_Lambert(diffuse), 0.0);
 	vec3 color = directionalLights[i].color * shadow;
 	vec3 irradiance = getGradientIrradiance(normalize(vNormal), directionalLights[i].direction) * color;
 	return vec4(irradiance * BRDF_Lambert(diffuse), 0.0);
@@ -116,7 +117,7 @@ vec4 getSpotLight(const in int i, const in float shadow)
 	vec3 dir = normalize(lightToFrag);
 	float att = getSpotAttenuation(spotLights[i].coneCos, spotLights[i].penumbraCos, dot(dir, spotLights[i].direction));
 	att *= getDistanceAttenuation(dist, spotLights[i].distance, spotLights[i].decay);
-	vec3 color = spotLights[i].color * flatten(att, 5) * shadow;
+	vec3 color = spotLights[i].color * flatten(att, 5) * (enableShadows ? shadow : 1.0);
 	vec3 irradiance = getGradientIrradiance(normalize(vNormal), dir) * color;
 	return vec4(irradiance * BRDF_Lambert(diffuse), 0.0);
 }
@@ -129,7 +130,7 @@ vec4 getPointLight(const in int i, const in float shadow)
 	float dist = length(lightToFrag);
 	vec3 dir = normalize(lightToFrag);
 	float att = getDistanceAttenuation(dist, pointLights[i].distance, pointLights[i].decay);
-	vec3 color = pointLights[i].color * flatten(att, 5) * shadow;
+	vec3 color = pointLights[i].color * flatten(att, 5) * (enableShadows ? shadow : 1.0);
 	vec3 irradiance = getGradientIrradiance(normalize(vNormal), dir) * color;
 	return vec4(irradiance * BRDF_Lambert(diffuse), 0.0);
 }
@@ -138,12 +139,19 @@ vec4 getPointLight(const in int i, const in float shadow)
 void main()
 {
 	vec4 ambient = vec4(ambientLightColor.rgb / PI, 1.0); // maybe "/ PI" will have to be removed on more recent three.js revisions
-	vec2 coords = vec2(vUV.x + offset.x, vUV.y + offset.y);
+	vec2 coords = vec2(vUv.x + offset.x, vUv.y + offset.y);
 	vec2 pos = reverseH ? vec2(1.0 - coords.x, coords.y) : coords;
 	pos = vec2(pos.x - floor(pos.x), pos.y - floor(pos.y));
-	vec4 tex = texture2D(map, pos * repeat);
-	if (tex.a <= alpha_threshold)
-		discard;
+	#if defined(USE_COLOR)
+		vec4 tex = vec4(vColor, 1.0);
+	#elif defined(USE_COLOR_ALPHA)
+		vec4 tex = vColor;
+	#else
+		vec4 tex = texture2D(map, pos * repeat);
+		if (tex.a <= alpha_threshold)
+			discard;
+	#endif
+	tex.a *= opacity;
 
 	#if NUM_DIR_LIGHT_SHADOWS > 0
 		float dirShadows[NUM_DIR_LIGHT_SHADOWS];
@@ -187,11 +195,11 @@ void main()
 			gl_FragColor += getPointLight(i, pointShadows[i]);
 		#pragma unroll_loop_end
 	#endif
-/*
+
 	#ifdef DECODE_VIDEO_TEXTURE
 		// inline sRGB decode (TODO: Remove this code when https://crbug.com/1256340 is solved)
 		tex = vec4(mix(pow(tex.rgb * 0.9478672986 + vec3(0.0521327014), vec3(2.4)), tex.rgb * 0.0773993808, vec3(lessThanEqual(tex.rgb, vec3(0.04045)))), tex.w);
 	#endif
-*/
+
 	gl_FragColor *= tex;
 }
