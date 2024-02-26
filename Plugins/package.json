@@ -9,6 +9,7 @@
 	"map": [
 		"Fog",
 		"JSONModelLoader",
+		"GLTF Loader",
 		"ModelLoadOnMapLoad",
 		"Raycaster",
 		"Light"
