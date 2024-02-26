@@ -119,6 +119,53 @@ function TreeMaps({
 		}
 	};
 
+	const handleDeleteFolder = async () => {
+		setIsDeletingMap(false);
+		setIsOpenDialogConfirm(true);
+	};
+
+	const handleAcceptDeleteFolder = async () => {
+		if (selectedNode && selectedNode.parent) {
+			const [newTitles, newContents] = await deleteFolder(
+				selectedNode.children,
+				[...mapsTabsTitles],
+				[...mapsTabsContents]
+			);
+			ArrayUtils.removeElement(selectedNode.parent.children, selectedNode);
+			if (newTitles.length !== mapsTabsTitles.length) {
+				setMapsTabsTitles(newTitles);
+				setMapsTabsContents(newContents);
+			}
+			RPM.treeCurrentSetSelectedItem(selectedNode.parent);
+		}
+		setIsOpenDialogConfirm(false);
+	};
+
+	const deleteFolder = async (
+		nodes: Node[],
+		tabTitles: Model.Base[],
+		tabContents: (ReactNode | null)[]
+	): Promise<[Model.Base[], (ReactNode | null)[]]> => {
+		for (const node of nodes) {
+			if (node.children.length > 0) {
+				[tabTitles, tabContents] = await deleteFolder(node.children, tabTitles, tabContents);
+			} else {
+				const map = Model.Map.create(node.content.id, node.content.name);
+				await map.deleteMap();
+				const tabIndex = tabTitles.findIndex((value) => value.id === node.content.id);
+				if (tabIndex !== -1) {
+					ArrayUtils.removeAt(tabTitles, tabIndex);
+					ArrayUtils.removeAt(tabContents, tabIndex);
+				}
+			}
+		}
+		return [tabTitles, tabContents];
+	};
+
+	const handleRejectDelete = async () => {
+		setIsOpenDialogConfirm(false);
+	};
+
 	const handleEditMap = async () => {
 		setEditedMap(RPM.treeCurrentItem!.content as Model.Map);
 		setIsNew(false);
@@ -161,10 +208,6 @@ function TreeMaps({
 		setIsOpenDialogConfirm(false);
 	};
 
-	const handleRejectDeleteMap = async () => {
-		setIsOpenDialogConfirm(false);
-	};
-
 	const getContextMenuItems = () =>
 		selectedNode
 			? (selectedNode.content as Model.TreeMapTag).isFolder()
@@ -191,6 +234,7 @@ function TreeMaps({
 						},
 						{
 							title: 'Delete',
+							onClick: handleDeleteFolder,
 							disabled: selectedNode.content.id === -1,
 						},
 				  ]
@@ -235,10 +279,19 @@ function TreeMaps({
 			<Dialog
 				title='Warning'
 				isOpen={isOpenDialogConfirm}
-				footer={<FooterNoYes onNo={handleRejectDeleteMap} onYes={handleAcceptDeleteMap} />}
-				onClose={handleRejectDeleteMap}
+				footer={
+					<FooterNoYes
+						onNo={handleRejectDelete}
+						onYes={isDeletingMap ? handleAcceptDeleteMap : handleAcceptDeleteFolder}
+					/>
+				}
+				onClose={handleRejectDelete}
 			>
-				<p className='warning text-center'>Are you sure you want to delete this map?</p>
+				<p className='warning text-center'>
+					{isDeletingMap
+						? 'Are you sure you want to delete this map?'
+						: 'Are you sure you want to delete this directory? This will delete all the maps inside this folder.'}
+				</p>
 			</Dialog>
 		</>
 	);
