@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 function useStateNumber() {
 	return useState(0);

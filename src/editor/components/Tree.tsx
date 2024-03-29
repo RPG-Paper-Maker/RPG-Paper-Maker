@@ -70,15 +70,25 @@ function Tree({
 		}
 	};
 
-	const handleNewItem = async () => {};
+	const handleNewItem = async () => {
+		// TODO
+	};
 
-	const handleEditItem = async () => {};
+	const handleEditItem = async () => {
+		// TODO
+	};
 
-	const handleCopyItem = async () => {};
+	const handleCopyItem = async () => {
+		// TODO
+	};
 
-	const handlePasteItem = async () => {};
+	const handlePasteItem = async () => {
+		// TODO
+	};
 
-	const handleDeleteItem = async () => {};
+	const handleDeleteItem = async () => {
+		// TODO
+	};
 
 	useEffect(() => {
 		if (

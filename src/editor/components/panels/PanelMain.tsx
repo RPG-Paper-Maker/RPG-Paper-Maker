@@ -25,15 +25,14 @@ function PanelMain() {
 
 	const dispatch = useDispatch();
 
-	const handleFocus = async () => {
-		dispatch(setCopiedItems(await Node.loadToPaste()));
-	};
-
 	useEffect(() => {
+		const handleFocus = async () => {
+			dispatch(setCopiedItems(await Node.loadToPaste()));
+		};
 		handleFocus().catch(console.error);
 		window.addEventListener('focus', handleFocus);
 		return () => window.removeEventListener('focus', handleFocus);
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<div className='flex-one flex relative'>

@@ -47,7 +47,7 @@ function TreeItem({ node, level = 0, selected = false, onSwitchExpanded, onMouse
 			node.expanded = expanded;
 			Project.current!.treeMaps.save().catch(console.error);
 		}
-	}, [expanded]);
+	}, [node, expanded]);
 
 	return (
 		<div

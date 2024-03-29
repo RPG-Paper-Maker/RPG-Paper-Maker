@@ -110,7 +110,7 @@ const downloadOrCopyRepo = async (source, destination, localSource) => {
 
 const main = async () => {
 	try {
-		if (exists(modsPath)) {
+		if (await exists(modsPath)) {
 			await fs.rm(modsPath, { recursive: true });
 		}
 		await fs.mkdir(modsPath);

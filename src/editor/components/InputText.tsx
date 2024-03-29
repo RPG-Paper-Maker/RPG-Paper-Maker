@@ -31,7 +31,7 @@ function InputText({ value, onChange, focusFirst = false, setFocustFirst }: Prop
 			refInput.current?.focus();
 			setFocustFirst?.(false);
 		}
-	}, [focusFirst]);
+	}, [focusFirst, setFocustFirst]);
 
 	return (
 		<input

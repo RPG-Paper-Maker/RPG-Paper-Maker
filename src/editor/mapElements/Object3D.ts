@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { BINDING, BindingType, CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, PICTURE_KIND, SHAPE_KIND, Utils } from '../common';
 import { CustomGeometry, Position, Project } from '../core';
