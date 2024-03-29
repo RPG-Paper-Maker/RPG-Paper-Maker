@@ -89,7 +89,7 @@ class LocalFile extends Serializable {
 		await localforage.setItem(path, folderJson);
 	}
 
-	static async createFile(path: string, content: string) {
+	static async createFile(path: string, content = '') {
 		const dirs = path.split('/');
 		// Edit parent files names
 		if (dirs.length > 1) {
@@ -183,6 +183,21 @@ class LocalFile extends Serializable {
 		}
 	}
 
+	static async copyFolder(src: string, dst: string) {
+		const json = await localforage.getItem(src);
+		if (json) {
+			const folder = new LocalFile(true);
+			folder.read(json);
+			await LocalFile.createFolder(dst);
+			for (const childFolderName of folder.folderNames) {
+				await this.copyFolder(Paths.join(src, childFolderName), Paths.join(dst, childFolderName));
+			}
+			for (const childFileName of folder.fileNames) {
+				await LocalFile.copyFile(Paths.join(src, childFileName), Paths.join(dst, childFileName));
+			}
+		}
+	}
+
 	static async renameFile(path: string, fileNameBefore: string, fileNameAfter: string) {
 		const pathBefore = Paths.join(path, fileNameBefore);
 		const json = await localforage.getItem(pathBefore);
@@ -244,7 +259,7 @@ class LocalFile extends Serializable {
 		await LocalFile.createFile(dst, await IO.openFile(publicPath));
 	}
 
-	static async allStorage() {
+	static async allStorage(): Promise<string[]> {
 		const values: string[] = [];
 		await localforage.iterate((value, key, iterationNumber) => {
 			values.push(key);

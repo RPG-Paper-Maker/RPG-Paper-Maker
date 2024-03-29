@@ -37,10 +37,11 @@ class Map extends Base {
 		return Paths.join(Project.current!.getPathMaps(), Model.Map.generateMapName(this.id), Paths.FILE_MAP_INFOS);
 	}
 
-	static async createDefaultMap(id: number) {
+	static async createDefaultMap(id: number, name: string) {
 		const jsonObject = {};
 		const mapModel = new Model.Map();
 		mapModel.id = id;
+		mapModel.name = name;
 		// TODO
 		/*
         Position position(7, 0, 0, 7, 0);
@@ -112,12 +113,13 @@ class Map extends Base {
 			bgs: { id: -1, ie: false, is: false, name: '', v: { k: 3, v: 100 } },
 			d: 0,
 			h: 16,
-			id: 1,
+			id: this.id,
+			name: this.name,
 			isi: false,
 			isky: false,
 			l: 16,
 			music: { id: -1, ie: false, is: false, name: '', v: { k: 3, v: 100 } },
-			names: { '1': 'MAP0001' },
+			names: { '1': this.name },
 			of3d: [],
 			ofmoun: [],
 			ofsprites: [],

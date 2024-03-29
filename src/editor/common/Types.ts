@@ -11,6 +11,7 @@
 
 import { ReactNode } from 'react';
 import { BINDING, KEY, SPECIAL_KEY } from './Enum';
+import { Node } from '../core';
 
 export type KeyValue = {
 	k?: any;
@@ -26,4 +27,10 @@ export type MenuItemType = {
 	onClick?: (...args: any) => Promise<void>;
 	shortcut?: (SPECIAL_KEY | KEY)[];
 	children?: MenuItemType[];
+};
+
+export type CopiedItemsType = {
+	values: Node[];
+	constructorClass: any;
+	pathProject: string;
 };

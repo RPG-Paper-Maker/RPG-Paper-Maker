@@ -11,14 +11,21 @@
 
 import { Model } from '../Editor';
 import { Serializable } from './Serializable';
-import { BINDING, BindingType, Utils } from '../common';
+import { BINDING, BindingType, CopiedItemsType, LOCAL_FORAGE, Paths, Utils } from '../common';
+import { LocalFile } from './LocalFile';
+import { Project } from './Project';
+
+export const NODE_CONSTRUCTOR_KIND = {
+	Base: () => Model.Base,
+	TreeMapTag: () => Model.TreeMapTag,
+};
 
 class Node extends Serializable {
 	public static readonly JSON_CHILDREN = 'children';
 
-	public children: Node[];
-	public content: Model.Base;
-	public parent: Node | null;
+	public children: Node[] = [];
+	public content!: Model.Base;
+	public parent: Node | null = null;
 	public expanded: boolean = true;
 
 	public static readonly bindings: BindingType[] = [['expanded', 'e', true, BINDING.BOOLEAN]];
@@ -27,15 +34,16 @@ class Node extends Serializable {
 		return [...Node.bindings, ...additionnalBinding];
 	}
 
-	constructor(content?: Model.Base, children: Node[] = [], parent: Node | null = null) {
-		super();
+	static create(content?: Model.Base, children: Node[] = [], parent: Node | null = null): Node {
+		const node = new Node();
 		if (content === undefined) {
-			content = Model.Base.createDefault();
+			content = new Model.Base();
 		}
-		this.content = content;
-		this.children = children;
-		this.parent = parent;
-		this.updateParents();
+		node.content = content as Model.Base;
+		node.children = children;
+		node.parent = parent;
+		node.updateParents();
+		return node;
 	}
 
 	static getNodeByID(nodes: Node[], id: number): Node | null {
@@ -107,6 +115,19 @@ class Node extends Serializable {
 		return this.content.getIcon();
 	}
 
+	copy(node: Node): void {
+		this.children = node.children.map((child) => child.clone());
+		this.content = node.content.clone();
+		this.expanded = node.expanded;
+		this.updateParents();
+	}
+
+	clone(): Node {
+		const node = new Node();
+		node.copy(this);
+		return node;
+	}
+
 	getPath(includesRoot = true): string {
 		return `${
 			this.parent ? `${this.parent.getPath(includesRoot)}${this.parent.parent || includesRoot ? '/' : ''}` : ''
@@ -128,10 +149,61 @@ class Node extends Serializable {
 		}
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	static async loadToPaste(): Promise<CopiedItemsType | null> {
+		const pathCurrentCopy = Paths.join(LOCAL_FORAGE.ENGINE, Paths.FILE_CURRENT_COPY);
+		const file = await LocalFile.getFile(pathCurrentCopy);
+		if (file && file.content.length > 0) {
+			const content = JSON.parse(file.content);
+			const constructorClass = NODE_CONSTRUCTOR_KIND[content.type as keyof typeof NODE_CONSTRUCTOR_KIND]();
+			const nodes = content.json.map((jsonNode: any) => {
+				const node = new Node();
+				node.read(jsonNode, [], constructorClass);
+				return node;
+			});
+			return {
+				values: nodes,
+				constructorClass,
+				pathProject: content.pathProject,
+			};
+		}
+		return null;
+	}
+
+	static async saveToCopy(nodes: Node[]): Promise<CopiedItemsType> {
+		const pathCurrentCopy = Paths.join(LOCAL_FORAGE.ENGINE, Paths.FILE_CURRENT_COPY);
+		const pathProject = Project.current!.getPath();
+		const json = nodes.map((node) => {
+			const nodeJson = {};
+			node.write(nodeJson);
+			return nodeJson;
+		});
+		const constructorClass = nodes[0].content.constructor;
+		const content = {
+			type: `${constructorClass.name}`,
+			pathProject,
+			json,
+		};
+		await LocalFile.createFile(pathCurrentCopy, JSON.stringify(content));
+		return {
+			values: nodes.map((node) => node.clone()),
+			constructorClass,
+			pathProject,
+		};
+	}
+
+	read(json: Record<string, any>, additionnalBinding: BindingType[] = [], constructorClass: any = Model.Base) {
 		super.read(json, Node.getBindings(additionnalBinding));
+		if (!this.content) {
+			this.content = new constructorClass();
+		}
 		this.content.read(json);
-		Utils.readList(this.children, json[Node.JSON_CHILDREN], Node);
+		if (json[Node.JSON_CHILDREN]) {
+			for (const jsonNode of json[Node.JSON_CHILDREN]) {
+				const node = new Node();
+				node.read(jsonNode, [], constructorClass);
+				this.children.push(node);
+			}
+		}
 		this.updateParents();
 	}
 

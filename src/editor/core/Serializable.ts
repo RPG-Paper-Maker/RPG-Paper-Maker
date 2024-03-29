@@ -13,6 +13,14 @@ import { LocalFile, Position, Rectangle } from '.';
 import { BINDING, BindingType, KeyValue, Utils } from '../common';
 
 abstract class Serializable {
+	copy(serializable: Serializable): void {
+		// Nothing to copy in this base
+	}
+
+	clone(): Serializable {
+		return this;
+	}
+
 	getPath(temp: boolean = false) {
 		return '';
 	}

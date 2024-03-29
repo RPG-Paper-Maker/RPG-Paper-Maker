@@ -69,6 +69,21 @@ class TreeMapTag extends Base {
 		}
 	}
 
+	copy(tag: TreeMapTag): void {
+		super.copy(tag);
+		this.saved = tag.saved;
+		this.cameraDistance = tag.cameraDistance;
+		this.cameraHorizontalAngle = tag.cameraHorizontalAngle;
+		this.cameraVerticalAngle = tag.cameraVerticalAngle;
+		this.cursorPosition = tag.cursorPosition?.clone() ?? undefined;
+	}
+
+	clone(): TreeMapTag {
+		const node = new TreeMapTag();
+		node.copy(this);
+		return node;
+	}
+
 	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
 		super.read(json, TreeMapTag.getBindings(additionnalBinding));
 	}

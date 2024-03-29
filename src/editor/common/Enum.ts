@@ -11,7 +11,7 @@
 
 export enum LOCAL_FORAGE {
 	PROJECTS = 'projects',
-	ENGINE_SETTINGS = 'engineSettings',
+	ENGINE = 'engine',
 }
 
 export enum OBJECT_3D_EXTENSION {
@@ -132,6 +132,7 @@ export enum KEY {
 	A = 'A',
 	D = 'D',
 	C = 'C',
+	V = 'V',
 	UP = 'UP',
 	DOWN = 'DOWN',
 	DELETE = 'DELETE',

@@ -86,6 +86,8 @@ class Paths {
 	public static readonly FILE_PROTECT = '.protect';
 	public static readonly FILE_PLUGIN_CODE = 'code.js';
 	public static readonly FILE_PLUGIN_DETAILS = 'details.json';
+	public static readonly FILE_ENGINE_SETTINGS = 'engineSettings.json';
+	public static readonly FILE_CURRENT_COPY = 'currentCopy.json';
 	public static readonly FILE_VERSION = 'version';
 
 	public static readonly ALL_JSON = [

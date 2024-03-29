@@ -11,6 +11,8 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { CopiedItemsType } from '../../common';
+
 export interface ProjectState {
 	name: string;
 	location: string;
@@ -24,6 +26,7 @@ const ProjectsSlice = createSlice({
 		openLoading: false,
 		list: [] as ProjectState[],
 		menuIndex: 1,
+		copiedItems: null as CopiedItemsType | null,
 	},
 	reducers: {
 		setCurrentProjectName(state, action: PayloadAction<string>) {
@@ -50,6 +53,9 @@ const ProjectsSlice = createSlice({
 		setProjectMenuIndex(state, action: PayloadAction<number>) {
 			state.menuIndex = action.payload;
 		},
+		setCopiedItems(state, action: PayloadAction<CopiedItemsType | null>) {
+			state.copiedItems = action.payload;
+		},
 	},
 });
 
@@ -62,5 +68,6 @@ export const {
 	removeProject,
 	clearProjects,
 	setProjectMenuIndex,
+	setCopiedItems,
 } = ProjectsSlice.actions;
 export const ProjectsReducer = ProjectsSlice.reducer;

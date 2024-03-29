@@ -12,10 +12,10 @@
 import React, { ReactNode, useState } from 'react';
 import '../styles/Tree.css';
 import Tree from './Tree';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { Node, Project } from '../core';
-import { ArrayUtils, CONTEXT_MENU_ITEM_KIND, KEY, RPM } from '../common';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, setCopiedItems } from '../store';
+import { LocalFile, Node, Project } from '../core';
+import { ArrayUtils, KEY, Paths, RPM, SPECIAL_KEY } from '../common';
 import { Model } from '../Editor';
 import DialogMapProperties from './dialogs/DialogMapProperties';
 import DialogName from './dialogs/DialogName';
@@ -51,10 +51,14 @@ function TreeMaps({
 	const [isDeletingMap, setIsDeletingMap] = useState(false);
 
 	const isOpenLoading = useSelector((state: RootState) => state.projects.openLoading);
+	const copiedItems = useSelector((state: RootState) => state.projects.copiedItems);
+	const dispatch = useDispatch();
 
 	if (!Project.current || isOpenLoading) {
 		return null;
 	}
+
+	const canPaste = () => copiedItems?.constructorClass === Model.TreeMapTag;
 
 	const handleSelectedItem = (node: Node | null, isClick: boolean) => {
 		onSelectedItem?.(node, isClick);
@@ -95,7 +99,7 @@ function TreeMaps({
 
 	const handleAcceptNewMap = async () => {
 		if (editedMap && selectedNode) {
-			const node = new Node(Model.TreeMapTag.create(editedMap.id, editedMap.name), [], selectedNode);
+			const node = Node.create(Model.TreeMapTag.create(editedMap.id, editedMap.name), [], selectedNode);
 			selectedNode.children.push(node);
 			const map = Model.Map.create(editedMap.id, editedMap.name);
 			await map.createNewMap();
@@ -113,10 +117,60 @@ function TreeMaps({
 
 	const handleAcceptNewFolder = async () => {
 		if (editedFolder && selectedNode) {
-			const node = new Node(Model.TreeMapTag.create(editedFolder.id, editedFolder.name), [], selectedNode);
+			const node = Node.create(Model.TreeMapTag.create(editedFolder.id, editedFolder.name), [], selectedNode);
 			selectedNode.children.push(node);
 			RPM.treeCurrentSetSelectedItem(node);
 		}
+	};
+
+	const handleCopy = async () => {
+		if (selectedNode) {
+			dispatch(setCopiedItems(await Node.saveToCopy([selectedNode])));
+		}
+	};
+
+	const handlePaste = async () => {
+		if (selectedNode && copiedItems) {
+			const nodes = copiedItems.values;
+			const path = Paths.join(copiedItems.pathProject, Paths.MAPS);
+			const exists = await LocalFile.checkFileExists(path);
+			if (!exists) {
+				alert(`${path} doesn't exists so can't copy potential maps.`);
+			} else {
+				for (const node of nodes) {
+					const cloned = node.clone();
+					cloned.parent = selectedNode;
+					selectedNode.children.push(cloned);
+					await paste(cloned);
+					RPM.treeCurrentSetSelectedItem(cloned);
+				}
+			}
+		}
+	};
+
+	const paste = async (node: Node) => {
+		const tag = node.content as Model.TreeMapTag;
+		const newId = Node.getNewID(Project.current!.treeMaps.tree, !tag.isFolder());
+		if (tag.isFolder()) {
+			for (const child of node.children) {
+				await paste(child);
+			}
+		} else {
+			const srcMap = Model.Map.create(tag.id, tag.name);
+			const src = Paths.join(copiedItems!.pathProject, Paths.MAPS, srcMap.getRealName());
+			const exists = await LocalFile.checkFileExists(src);
+			const map = Model.Map.create(newId, tag.name);
+			if (!exists) {
+				alert(`Could not copy map at ${src}. Created an empty one.`);
+				await map.createNewMap();
+			} else {
+				await LocalFile.copyFolder(src, Paths.join(Project.current!.getPath(), Paths.MAPS, map.getRealName()));
+				await map.load();
+				map.id = newId;
+				await map.save();
+			}
+		}
+		tag.id = newId;
 	};
 
 	const handleDeleteFolder = async () => {
@@ -167,18 +221,23 @@ function TreeMaps({
 	};
 
 	const handleEditMap = async () => {
-		setEditedMap(RPM.treeCurrentItem!.content as Model.Map);
+		const map = Model.Map.create(RPM.treeCurrentItem!.content.id, RPM.treeCurrentItem!.content.name);
+		await map.load();
+		setEditedMap(map);
 		setIsNew(false);
 		setNeedOpenMapProperties(true);
 	};
 
 	const handleAcceptEditMap = async () => {
 		if (selectedNode) {
+			selectedNode.content.name = editedMap.name;
 			const element = mapsTabsTitles.find((value) => value.id === editedMap.id);
 			if (element) {
 				element.name = Node.getPathByID(Project.current!.treeMaps.tree, editedMap.id);
 				setMapsTabsTitles([...mapsTabsTitles]);
 			}
+			await Project.current!.treeMaps.save();
+			await editedMap.save();
 		}
 		RPM.treeCurrentForceUpdate();
 	};
@@ -226,11 +285,15 @@ function TreeMaps({
 						},
 						{
 							title: 'Copy',
+							onClick: handleCopy,
 							disabled: selectedNode.content.id === -1,
+							shortcut: [SPECIAL_KEY.CTRL, KEY.C],
 						},
 						{
 							title: 'Paste',
-							disabled: selectedNode.content.id === -1,
+							onClick: handlePaste,
+							disabled: !canPaste(),
+							shortcut: [SPECIAL_KEY.CTRL, KEY.V],
 						},
 						{
 							title: 'Delete',
@@ -243,8 +306,11 @@ function TreeMaps({
 							title: 'Edit map properties...',
 							onClick: handleEditMap,
 						},
-						CONTEXT_MENU_ITEM_KIND.COPY,
-						CONTEXT_MENU_ITEM_KIND.PASTE,
+						{
+							title: 'Copy',
+							onClick: handleCopy,
+							shortcut: [SPECIAL_KEY.CTRL, KEY.C],
+						},
 						{
 							title: 'Delete',
 							onClick: handleDeleteMap,

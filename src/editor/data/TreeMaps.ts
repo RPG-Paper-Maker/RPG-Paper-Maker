@@ -65,7 +65,7 @@ class TreeMaps extends Serializable {
 		const children: Node[] = [];
 		for (const obj of json) {
 			const tag = new Model.TreeMapTag();
-			const node = new Node(tag);
+			const node = Node.create(tag);
 			node.read(obj);
 			node.parent = root;
 			children.push(node);
@@ -79,7 +79,7 @@ class TreeMaps extends Serializable {
 
 	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
 		super.read(json, TreeMaps.getBindings(additionnalBinding));
-		const root = new Node(Model.TreeMapTag.create(-1, 'Maps', true));
+		const root = Node.create(Model.TreeMapTag.create(-1, 'Maps', true));
 		this.readRoot(json[TreeMaps.JSON_TREE], root);
 		this.tree = [root];
 	}

@@ -44,6 +44,7 @@ import {
 	removeProject,
 	clearProjects,
 	setProjectMenuIndex,
+	setCopiedItems,
 } from './slices/ProjectsReducer';
 import {
 	triggerNewProject,
@@ -100,6 +101,7 @@ export {
 	removeProject,
 	clearProjects,
 	setProjectMenuIndex,
+	setCopiedItems,
 	triggerNewProject,
 	triggerImportProject,
 	triggerOpenProject,

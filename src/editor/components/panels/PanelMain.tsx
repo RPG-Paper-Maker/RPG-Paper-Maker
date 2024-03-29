@@ -9,18 +9,31 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, setCopiedItems } from '../../store';
 import Loader from '../Loader';
 import PanelNoProject from './PanelNoProject';
 import PanelProject from './PanelProject';
 import Dialog from '../dialogs/Dialog';
+import { Node } from '../../core';
 
 function PanelMain() {
 	const currentProjectName = useSelector((state: RootState) => state.projects.current);
 	const loading = useSelector((state: RootState) => state.projects.loading);
 	const needsReloadPage = useSelector((state: RootState) => state.triggers.needsReloadPage);
+
+	const dispatch = useDispatch();
+
+	const handleFocus = async () => {
+		dispatch(setCopiedItems(await Node.loadToPaste()));
+	};
+
+	useEffect(() => {
+		handleFocus().catch(console.error);
+		window.addEventListener('focus', handleFocus);
+		return () => window.removeEventListener('focus', handleFocus);
+	}, []);
 
 	return (
 		<div className='flex-one flex relative'>

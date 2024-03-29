@@ -56,6 +56,17 @@ class Base extends Serializable {
 		}
 	}
 
+	copy(base: Base): void {
+		this.id = base.id;
+		this.name = base.name;
+	}
+
+	clone(): Base {
+		const base = new Base();
+		base.copy(this);
+		return base;
+	}
+
 	getIcon(): ReactNode {
 		return null;
 	}
@@ -70,17 +81,6 @@ class Base extends Serializable {
 
 	toStrings(): string[] {
 		return [this.toString()];
-	}
-
-	createCopy(): Base {
-		const model = new Base();
-		model.copy(this);
-		return model;
-	}
-
-	copy(model: Base) {
-		this.id = model.id;
-		this.name = model.name;
 	}
 
 	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {

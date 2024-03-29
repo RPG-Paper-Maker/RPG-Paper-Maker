@@ -30,6 +30,7 @@ function PanelLoading({ setLoaded }: Props) {
 		await initializeGL();
 		await initializeTextures();
 		await initializeLocalFiles();
+		await initializeEngineSettings();
 		await initializeEngineVersion();
 		await loadProjects(); // Desktop: load engine settings
 		setLoaded(true);
@@ -51,6 +52,13 @@ function PanelLoading({ setLoaded }: Props) {
 
 	const initializeLocalFiles = async () => {
 		await LocalFile.config();
+	};
+
+	const initializeEngineSettings = async () => {
+		const path = LOCAL_FORAGE.ENGINE;
+		if (!(await LocalFile.checkFileExists(path))) {
+			await LocalFile.createFolder(path);
+		}
 	};
 
 	const initializeEngineVersion = async () => {
