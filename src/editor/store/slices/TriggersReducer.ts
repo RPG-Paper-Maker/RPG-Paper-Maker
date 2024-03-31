@@ -31,6 +31,7 @@ const TriggersSlice = createSlice({
 		treeMap: false,
 		menu: false,
 		needsReloadPage: false,
+		needsReloadMap: false,
 	},
 	reducers: {
 		triggerNewProject(state, action: PayloadAction<boolean>) {
@@ -63,6 +64,9 @@ const TriggersSlice = createSlice({
 		setNeedsReloadPage(state) {
 			state.needsReloadPage = true;
 		},
+		setNeedsReloadMap(state) {
+			state.needsReloadMap = !state.needsReloadMap;
+		},
 	},
 });
 
@@ -77,5 +81,6 @@ export const {
 	triggerTreeMap,
 	triggerMenu,
 	setNeedsReloadPage,
+	setNeedsReloadMap,
 } = TriggersSlice.actions;
 export const TriggersReducer = TriggersSlice.reducer;

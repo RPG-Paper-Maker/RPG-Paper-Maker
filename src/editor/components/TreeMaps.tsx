@@ -13,7 +13,7 @@ import React, { ReactNode, useState } from 'react';
 import '../styles/Tree.css';
 import Tree from './Tree';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setCopiedItems } from '../store';
+import { RootState, setCopiedItems, setNeedsReloadMap } from '../store';
 import { LocalFile, Node, Project } from '../core';
 import { ArrayUtils, KEY, Paths, RPM, SPECIAL_KEY } from '../common';
 import { Model } from '../Editor';
@@ -21,6 +21,7 @@ import DialogMapProperties from './dialogs/DialogMapProperties';
 import DialogName from './dialogs/DialogName';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
+import { TreeMapTag } from '../models';
 
 type Props = {
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
@@ -101,8 +102,7 @@ function TreeMaps({
 		if (editedMap && selectedNode) {
 			const node = Node.create(Model.TreeMapTag.create(editedMap.id, editedMap.name), [], selectedNode);
 			selectedNode.children.push(node);
-			const map = Model.Map.create(editedMap.id, editedMap.name);
-			await map.createNewMap();
+			await editedMap.createNewMap();
 			RPM.treeCurrentSetSelectedItem(node);
 		}
 	};
@@ -228,7 +228,7 @@ function TreeMaps({
 		setNeedOpenMapProperties(true);
 	};
 
-	const handleAcceptEditMap = async () => {
+	const handleAcceptEditMap = async (previousModel: Model.Map) => {
 		if (selectedNode) {
 			selectedNode.content.name = editedMap.name;
 			const element = mapsTabsTitles.find((value) => value.id === editedMap.id);
@@ -236,8 +236,16 @@ function TreeMaps({
 				element.name = Node.getPathByID(Project.current!.treeMaps.tree, editedMap.id);
 				setMapsTabsTitles([...mapsTabsTitles]);
 			}
+			await editedMap.resizeMap(previousModel);
+			const tag = selectedNode.content as TreeMapTag;
+			const cursor = tag.cursorPosition;
+			if (cursor) {
+				editedMap.adjustPosition(cursor);
+			}
 			await Project.current!.treeMaps.save();
 			await editedMap.save();
+			await tag.saveFiles();
+			dispatch(setNeedsReloadMap());
 		}
 		RPM.treeCurrentForceUpdate();
 	};

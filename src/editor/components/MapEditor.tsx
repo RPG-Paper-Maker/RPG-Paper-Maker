@@ -30,6 +30,7 @@ function MapEditor() {
 
 	const currentMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
 	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
+	const needsReloadMap = useSelector((state: RootState) => state.triggers.needsReloadMap);
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const dispatch = useDispatch();
@@ -168,7 +169,7 @@ function MapEditor() {
 		clearMap();
 		initializeMap().catch(console.error);
 		// eslint-disable-next-line
-	}, [currentMapTag]);
+	}, [currentMapTag, needsReloadMap]);
 
 	// Resize after rendering
 	useEffect(() => {

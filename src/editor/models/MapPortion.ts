@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene } from '../Editor';
+import { Model, Scene } from '../Editor';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, Paths, SHAPE_KIND } from '../common';
 import { Serializable } from '../core/Serializable';
 import { Portion, Position, Project } from '../core';
@@ -62,6 +62,27 @@ class MapPortion extends Serializable {
 			case SHAPE_KIND.CUSTOM:
 				return Object3DCustom;
 		}
+	}
+
+	static removeElementsOut(map: Model.Map, mapping: Map<string, any>) {
+		const keysToDelete = [];
+		for (const [key] of mapping.entries()) {
+			const position = Position.fromKey(key);
+			if (!position.isInMap(map)) {
+				keysToDelete.push(key);
+			}
+		}
+		for (const key of keysToDelete) {
+			mapping.delete(key);
+		}
+	}
+
+	removeAllElementsOut(map: Model.Map) {
+		Model.MapPortion.removeElementsOut(map, this.lands);
+		Model.MapPortion.removeElementsOut(map, this.sprites);
+		Model.MapPortion.removeElementsOut(map, this.walls);
+		Model.MapPortion.removeElementsOut(map, this.mountains);
+		Model.MapPortion.removeElementsOut(map, this.objects3D);
 	}
 
 	getModelsByKind(kind: ELEMENT_MAP_KIND): Map<string, Base> | null {

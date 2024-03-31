@@ -11,8 +11,8 @@
 
 import { Model } from '../Editor';
 import { Base } from './Base';
-import { Constants, Paths, Utils } from '../common';
-import { LocalFile, MapPortion, Portion, Project } from '../core';
+import { BINDING, BindingType, Constants, Paths, Utils } from '../common';
+import { LocalFile, MapPortion, Portion, Position, Project } from '../core';
 
 class Map extends Base {
 	public tilesetID: number = 1;
@@ -21,9 +21,16 @@ class Map extends Base {
 	public height: number = 16;
 	public depth: number = 0;
 
-	constructor() {
-		super();
-		this.name = this.getRealName();
+	public static bindings: BindingType[] = [
+		['tilesetID', 'tileset', undefined, BINDING.NUMBER],
+		['length', 'l', undefined, BINDING.NUMBER],
+		['width', 'w', undefined, BINDING.NUMBER],
+		['height', 'h', undefined, BINDING.NUMBER],
+		['depth', 'd', undefined, BINDING.NUMBER],
+	];
+
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...this.bindings, ...additionnalBinding];
 	}
 
 	static create(id: number, name: string) {
@@ -34,7 +41,7 @@ class Map extends Base {
 	}
 
 	getPath() {
-		return Paths.join(Project.current!.getPathMaps(), Model.Map.generateMapName(this.id), Paths.FILE_MAP_INFOS);
+		return Paths.join(Project.current!.getPathMaps(), this.getRealName(), Paths.FILE_MAP_INFOS);
 	}
 
 	static async createDefaultMap(id: number, name: string) {
@@ -109,64 +116,7 @@ class Map extends Base {
 
 		// Write properties
 		// TODO
-		await LocalFile.writeJSON(Paths.join(folderMap, Paths.FILE_MAP_INFOS), {
-			bgs: { id: -1, ie: false, is: false, name: '', v: { k: 3, v: 100 } },
-			d: 0,
-			h: 16,
-			id: this.id,
-			name: this.name,
-			isi: false,
-			isky: false,
-			l: 16,
-			music: { id: -1, ie: false, is: false, name: '', v: { k: 3, v: 100 } },
-			names: { '1': this.name },
-			of3d: [],
-			ofmoun: [],
-			ofsprites: [],
-			sbid: { k: 7, v: 1 },
-			so: {
-				events: [
-					{
-						id: 1,
-						name: 'Time',
-						p: [
-							{ id: 1, name: '', v: { k: 2, v: null } },
-							{ id: 2, name: '', v: { k: 10, v: false } },
-						],
-						r: { '1': { bh: true, c: [] } },
-						sys: true,
-					},
-				],
-				hId: -1,
-				id: 1,
-				name: '',
-				ooepf: false,
-				states: [
-					{
-						cam: false,
-						climb: false,
-						dir: false,
-						gid: -1,
-						gk: 0,
-						id: 1,
-						move: false,
-						name: 'State 1',
-						pix: false,
-						pos: false,
-						stop: false,
-						sx: { k: 12, v: 1 },
-						sy: { k: 12, v: 1 },
-						sz: { k: 12, v: 1 },
-						through: false,
-						x: 0,
-						y: 0,
-					},
-				],
-			},
-			tileset: 1,
-			w: 16,
-		});
-		// await this.save(Paths.join(folderMap, Paths.FILE_MAP_INFOS));
+		await this.save();
 
 		// Portions
 		/*
@@ -201,12 +151,202 @@ class Map extends Base {
 		await LocalFile.removeFolder(Paths.join(Project.current!.getPathMaps(), this.getRealName()));
 	}
 
-	read(json: Record<string, any>) {
-		super.read(json);
+	getMapPortionPath(globalPortion: Portion) {
+		return Paths.join(
+			Project.current!.getPathMaps(),
+			Model.Map.generateMapName(this.id),
+			globalPortion.getFileName()
+		);
 	}
 
-	write(json: Record<string, any>) {
-		super.write(json);
+	async writeEmptyMapPortion(globalPortion: Portion) {
+		const json = {};
+		await LocalFile.writeJSON(this.getMapPortionPath(globalPortion), json);
+	}
+
+	async deleteCompleteMapPortion(globalPortion: Portion) {
+		await LocalFile.removeFile(this.getMapPortionPath(globalPortion));
+	}
+
+	async deleteMapElements(globalPortion: Portion) {
+		const mapPortion = new Model.MapPortion(globalPortion);
+		await mapPortion.load();
+		mapPortion.removeAllElementsOut(this);
+		await mapPortion.save();
+	}
+
+	async resizeMap(previousMap: Map) {
+		const [portionMaxX, portionMaxD, portionMaxH, portionMaxZ] = previousMap.getPortionsNumbers();
+		const [newPortionMaxX, newPortionMaxD, newPortionMaxH, newPortionMaxZ] = this.getPortionsNumbers();
+
+		// Write empty portions
+		for (let i = portionMaxX + 1; i <= newPortionMaxX; i++) {
+			for (let j = -newPortionMaxD; j <= newPortionMaxH; j++) {
+				for (let k = 0; k <= newPortionMaxZ; k++) {
+					await this.writeEmptyMapPortion(new Portion(i, j, k));
+				}
+			}
+		}
+		for (let j = portionMaxD + 1; j <= newPortionMaxD; j++) {
+			for (let i = 0; i <= newPortionMaxX; i++) {
+				for (let k = 0; k <= newPortionMaxZ; k++) {
+					await this.writeEmptyMapPortion(new Portion(i, -j, k));
+				}
+			}
+		}
+		for (let j = portionMaxH + 1; j <= newPortionMaxH; j++) {
+			for (let i = 0; i <= newPortionMaxX; i++) {
+				for (let k = 0; k <= newPortionMaxZ; k++) {
+					await this.writeEmptyMapPortion(new Portion(i, j, k));
+				}
+			}
+		}
+		for (let k = portionMaxZ + 1; k <= newPortionMaxZ; k++) {
+			for (let i = 0; i <= newPortionMaxX; i++) {
+				for (let j = -newPortionMaxD; j <= newPortionMaxH; j++) {
+					await this.writeEmptyMapPortion(new Portion(i, j, k));
+				}
+			}
+		}
+
+		const difLength = previousMap.length - this.length;
+		const difWidth = previousMap.width - this.width;
+		const difHeight = previousMap.height - this.height;
+		const difDepth = previousMap.depth - this.depth;
+		if (difLength > 0 || difWidth > 0 || difHeight > 0 || difDepth > 0) {
+			for (let i = newPortionMaxX + 1; i <= portionMaxX; i++) {
+				for (let j = -portionMaxD; j <= portionMaxH; j++) {
+					for (let k = 0; k <= portionMaxZ; k++) {
+						await this.deleteCompleteMapPortion(new Portion(i, j, k));
+					}
+				}
+			}
+			for (let j = newPortionMaxD + 1; j <= portionMaxD; j++) {
+				for (let i = 0; i <= portionMaxX; i++) {
+					for (let k = 0; k <= portionMaxZ; k++) {
+						await this.deleteCompleteMapPortion(new Portion(i, -j, k));
+					}
+				}
+			}
+			for (let j = newPortionMaxH + 1; j <= portionMaxH; j++) {
+				for (let i = 0; i <= portionMaxX; i++) {
+					for (let k = 0; k <= portionMaxZ; k++) {
+						await this.deleteCompleteMapPortion(new Portion(i, j, k));
+					}
+				}
+			}
+			for (let k = newPortionMaxZ + 1; k <= portionMaxZ; k++) {
+				for (let i = 0; i <= portionMaxX; i++) {
+					for (let j = -portionMaxD; j <= portionMaxH; j++) {
+						await this.deleteCompleteMapPortion(new Portion(i, j, k));
+					}
+				}
+			}
+
+			// Remove only cut items
+			for (let i = 0; i <= newPortionMaxX; i++) {
+				for (let j = -newPortionMaxD; j <= newPortionMaxH; j++) {
+					await this.deleteMapElements(new Portion(i, j, newPortionMaxZ));
+				}
+			}
+			for (let i = 0; i <= newPortionMaxX; i++) {
+				for (let k = 0; k <= newPortionMaxZ; k++) {
+					await this.deleteMapElements(new Portion(i, -newPortionMaxD, k));
+					await this.deleteMapElements(new Portion(i, newPortionMaxH, k));
+				}
+			}
+			for (let k = 0; k <= newPortionMaxZ; k++) {
+				for (let j = -newPortionMaxD; j <= newPortionMaxH; j++) {
+					await this.deleteMapElements(new Portion(newPortionMaxX, j, k));
+				}
+			}
+		}
+	}
+
+	adjustPosition(position: Position) {
+		if (position.x >= this.length) {
+			position.x = this.length - 1;
+		}
+		if (position.z >= this.width) {
+			position.z = this.width - 1;
+		}
+		if (position.y >= this.height) {
+			position.y = this.height - 1;
+		}
+		if (position.y < -this.depth) {
+			position.y = -this.depth;
+		}
+	}
+
+	copy(map: Map): void {
+		super.copy(map);
+		this.tilesetID = map.tilesetID;
+		this.length = map.length;
+		this.width = map.width;
+		this.height = map.height;
+		this.depth = map.depth;
+	}
+
+	clone(): Map {
+		const map = new Map();
+		map.copy(this);
+		return map;
+	}
+
+	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.read(json, Map.getBindings(additionnalBinding));
+	}
+
+	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+		super.write(json, Map.getBindings(additionnalBinding));
+		json.bgs = { id: -1, ie: false, is: false, name: '', v: { k: 3, v: 100 } };
+		json.isi = false;
+		json.isky = false;
+		json.music = { id: -1, ie: false, is: false, name: '', v: { k: 3, v: 100 } };
+		json.names = { '1': this.name };
+		json.of3d = [];
+		json.ofmoun = [];
+		json.ofsprites = [];
+		json.sbid = { k: 7, v: 1 };
+		json.so = {
+			events: [
+				{
+					id: 1,
+					name: 'Time',
+					p: [
+						{ id: 1, name: '', v: { k: 2, v: null } },
+						{ id: 2, name: '', v: { k: 10, v: false } },
+					],
+					r: { '1': { bh: true, c: [] } },
+					sys: true,
+				},
+			],
+			hId: -1,
+			id: 1,
+			name: '',
+			ooepf: false,
+			states: [
+				{
+					cam: false,
+					climb: false,
+					dir: false,
+					gid: -1,
+					gk: 0,
+					id: 1,
+					move: false,
+					name: 'State 1',
+					pix: false,
+					pos: false,
+					stop: false,
+					sx: { k: 12, v: 1 },
+					sy: { k: 12, v: 1 },
+					sz: { k: 12, v: 1 },
+					through: false,
+					x: 0,
+					y: 0,
+				},
+			],
+		};
 	}
 }
 

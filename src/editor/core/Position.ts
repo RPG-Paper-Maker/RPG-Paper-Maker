@@ -347,6 +347,25 @@ class Position extends Position3D {
 		].join('+');
 	}
 
+	static fromKey(key: string): Position {
+		const position = new Position();
+		const values = key.split('+');
+		position.x = Number(values[0]);
+		position.y = Number(values[1]);
+		position.yPixels = Number(values[2]);
+		position.z = Number(values[3]);
+		position.layer = Number(values[4]);
+		position.centerX = Number(values[5]);
+		position.centerZ = Number(values[6]);
+		position.angleY = Number(values[7]);
+		position.angleX = Number(values[8]);
+		position.angleZ = Number(values[9]);
+		position.scaleX = Number(values[10]);
+		position.scaleY = Number(values[11]);
+		position.scaleZ = Number(values[12]);
+		return position;
+	}
+
 	equals(position: Position): boolean {
 		return (
 			super.equals(position) &&
@@ -360,23 +379,6 @@ class Position extends Position3D {
 			this.scaleY === position.scaleY &&
 			this.scaleZ === position.scaleZ
 		);
-	}
-
-	fromKey(key: string) {
-		const values = key.split('+');
-		this.x = Number(values[0]);
-		this.y = Number(values[1]);
-		this.yPixels = Number(values[2]);
-		this.z = Number(values[3]);
-		this.layer = Number(values[4]);
-		this.centerX = Number(values[5]);
-		this.centerZ = Number(values[6]);
-		this.angleY = Number(values[7]);
-		this.angleX = Number(values[8]);
-		this.angleZ = Number(values[9]);
-		this.scaleX = Number(values[10]);
-		this.scaleY = Number(values[11]);
-		this.scaleZ = Number(values[12]);
 	}
 
 	copy(position: Position) {

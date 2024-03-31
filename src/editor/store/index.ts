@@ -57,6 +57,7 @@ import {
 	triggerTreeMap,
 	triggerMenu,
 	setNeedsReloadPage,
+	setNeedsReloadMap,
 } from './slices/TriggersReducer';
 
 const store = configureStore({
@@ -112,5 +113,6 @@ export {
 	triggerTreeMap,
 	triggerMenu,
 	setNeedsReloadPage,
+	setNeedsReloadMap,
 };
 export type RootState = ReturnType<typeof store.getState>;

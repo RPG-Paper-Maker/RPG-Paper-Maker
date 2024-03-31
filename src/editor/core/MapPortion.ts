@@ -752,8 +752,7 @@ class MapPortion {
 		}
 
 		for (const [positionKey, land] of this.model.lands) {
-			const position = new Position();
-			position.fromKey(positionKey);
+			const position = Position.fromKey(positionKey);
 			if (land instanceof MapElement.Floor) {
 				count = this.updateFloorGeometry(
 					position,
@@ -908,8 +907,7 @@ class MapPortion {
 		let staticCount = 0;
 		let faceCount = 0;
 		for (const [positionKey, sprite] of this.model.sprites) {
-			const position = new Position();
-			position.fromKey(positionKey);
+			const position = Position.fromKey(positionKey);
 			const localPosition = position.toVector3();
 			if (sprite.kind === ELEMENT_MAP_KIND.SPRITE_FACE) {
 				if (Scene.Map.current!.selectedElement === sprite) {
@@ -992,8 +990,7 @@ class MapPortion {
 		this.wallsMeshes = [];
 		const hash = new Map<number, any>();
 		for (const [positionKey, wall] of this.model.walls) {
-			const position = new Position();
-			position.fromKey(positionKey);
+			const position = Position.fromKey(positionKey);
 			let obj = hash.get(wall.wallID);
 			let material: THREE.MeshPhongMaterial | null;
 			let geometry: CustomGeometry;
@@ -1041,8 +1038,7 @@ class MapPortion {
 		}
 		this.mountainsList = new Map();
 		for (const [positionKey, mountain] of this.model.mountains) {
-			const position = new Position();
-			position.fromKey(positionKey);
+			const position = Position.fromKey(positionKey);
 			const pictureID = Project.current!.specialElements.getMountainByID(mountain.mountainID).pictureID;
 			let mountains = this.mountainsList.get(pictureID);
 			if (!mountains) {
@@ -1074,8 +1070,7 @@ class MapPortion {
 		this.objects3DMeshes = [];
 		const hash = new Map<number, any>();
 		for (const [positionKey, object3D] of this.model.objects3D) {
-			const position = new Position();
-			position.fromKey(positionKey);
+			const position = Position.fromKey(positionKey);
 			if (!object3D.data) {
 				object3D.data = Project.current!.specialElements.getObject3DByID(object3D.id);
 			}

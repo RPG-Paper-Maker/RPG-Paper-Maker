@@ -699,8 +699,7 @@ class Map extends Base {
 					obj.faceIndex
 				];
 				if (newPositionKey && (Scene.Map.isRemoving() || layer === RAYCASTING_LAYER.LANDS)) {
-					const newPosition = new Position();
-					newPosition.fromKey(newPositionKey);
+					const newPosition = Position.fromKey(newPositionKey);
 					if (Scene.Map.isRemoving() || isLayerOn) {
 						const element = this.mapPortion.model.getMapElement(
 							newPosition,
@@ -897,8 +896,7 @@ class Map extends Base {
 					obj.faceIndex
 				];
 				if (newPositionKey) {
-					const newPosition = new Position();
-					newPosition.fromKey(newPositionKey);
+					const newPosition = Position.fromKey(newPositionKey);
 					let element = this.mapPortion.model.getMapElement(
 						newPosition,
 						Scene.Map.currentSelectedMapElementKind

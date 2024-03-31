@@ -200,8 +200,7 @@ abstract class Serializable {
 					for (const [positionKey, element] of mapping) {
 						const objMap: KeyValue = {};
 						const tabKey: number[] = [];
-						const p = new Position();
-						p.fromKey(positionKey);
+						const p = Position.fromKey(positionKey);
 						p.write(tabKey);
 						const objElement = {};
 						element.write(objElement);

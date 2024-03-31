@@ -17,12 +17,14 @@ import { Model } from '../../Editor';
 import { Utils } from '../../common';
 import useStateNumber from '../../hooks/useStateNumber';
 import useStateString from '../../hooks/useStateString';
+import InputNumber from '../InputNumber';
+import Groupbox from '../Groupbox';
 
 type Props = {
 	needOpen: boolean;
 	setNeedOpen: (b: boolean) => void;
 	model: Model.Map;
-	onAccept: () => void;
+	onAccept: (previousModel: Model.Map) => Promise<void>;
 };
 
 function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) {
@@ -30,16 +32,29 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [name, setName] = useStateString();
 	const [id, setID] = useStateNumber();
+	const [length, setLength] = useStateNumber();
+	const [width, setWidth] = useStateNumber();
+	const [height, setHeight] = useStateNumber();
+	const [depth, setDepth] = useStateNumber();
 
 	const initialize = () => {
 		setName(model.name);
 		setID(model.id);
+		setLength(model.length);
+		setWidth(model.width);
+		setHeight(model.height);
+		setDepth(model.depth);
 	};
 
 	const handleAccept = async () => {
+		const previousModel = model.clone();
 		model.name = name;
 		model.id = id;
-		onAccept();
+		model.length = length;
+		model.width = width;
+		model.height = height;
+		model.depth = depth;
+		await onAccept(previousModel);
 		setIsOpen(false);
 	};
 
@@ -73,8 +88,24 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 						focusFirst={focusFirst}
 						setFocustFirst={setFocustFirst}
 					/>
+					ID: {Utils.formatNumberID(id)}
 				</div>
-				<div className='flex gap-medium'>ID: {Utils.formatNumberID(id)}</div>
+				<Groupbox title='Size'>
+					<div className='flex flex-one gap-medium'>
+						<div className='flex flex-column flex-one gap-small'>
+							Length:
+							<InputNumber value={length} onChange={setLength} />
+							Height:
+							<InputNumber value={height} onChange={setHeight} />
+						</div>
+						<div className='flex flex-column flex-one gap-small'>
+							Width:
+							<InputNumber value={width} onChange={setWidth} />
+							Depth:
+							<InputNumber value={depth} onChange={setDepth} />
+						</div>
+					</div>
+				</Groupbox>
 			</div>
 		</Dialog>
 	);

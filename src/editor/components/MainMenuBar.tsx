@@ -463,7 +463,7 @@ function MainMenuBar() {
 					icon: <BsPlay />,
 					disabled: !isProjectOpened,
 					onClick: handlePlay,
-					shortcut: [KEY.P],
+					shortcut: [SPECIAL_KEY.CTRL, KEY.P],
 				},
 			],
 		},
