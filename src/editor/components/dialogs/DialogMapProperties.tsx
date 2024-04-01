@@ -94,15 +94,15 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 					<div className='flex flex-one gap-medium'>
 						<div className='flex flex-column flex-one gap-small'>
 							Length:
-							<InputNumber value={length} onChange={setLength} />
+							<InputNumber value={length} onChange={setLength} min={1} />
 							Height:
-							<InputNumber value={height} onChange={setHeight} />
+							<InputNumber value={height} onChange={setHeight} min={1} />
 						</div>
 						<div className='flex flex-column flex-one gap-small'>
 							Width:
-							<InputNumber value={width} onChange={setWidth} />
+							<InputNumber value={width} onChange={setWidth} min={1} />
 							Depth:
-							<InputNumber value={depth} onChange={setDepth} />
+							<InputNumber value={depth} onChange={setDepth} min={0} />
 						</div>
 					</div>
 				</Groupbox>

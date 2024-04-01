@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { useEffect, useState } from 'react';
 import { INPUT_TYPE_WIDTH, Mathf } from '../common';
 import '../styles/Input.css';
 
@@ -29,6 +30,8 @@ function InputNumber({
 	max = 999999999,
 	decimals = false,
 }: Props) {
+	const [isEmpty, setIsEmpty] = useState(false);
+
 	const transformValue = (v: number) => (decimals ? Mathf.forceDecimals(v) : Mathf.forceInteger(v));
 
 	const getMaxWidth = () => {
@@ -45,15 +48,33 @@ function InputNumber({
 	};
 
 	const handleChange = (e: any) => {
-		onChange(transformValue(Number(e.target.value)));
+		setIsEmpty(e.target.value === '');
+		const v = transformValue(Number(e.target.value));
+		if (v < min) {
+			onChange(min);
+		} else if (v > max) {
+			onChange(max);
+		} else {
+			onChange(v);
+		}
+	};
+
+	const handleBlur = () => {
+		setIsEmpty(false);
+		if (value < min) {
+			onChange(min);
+		} else if (value > max) {
+			onChange(max);
+		}
 	};
 
 	return (
 		<input
 			type='number'
-			value={transformValue(value)}
 			min={min}
 			max={max}
+			value={isEmpty ? '' : transformValue(value).toString()}
+			onBlur={handleBlur}
 			onChange={handleChange}
 			step='any'
 			style={{ maxWidth: getMaxWidth() }}
