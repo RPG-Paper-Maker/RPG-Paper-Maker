@@ -21,7 +21,8 @@ import { Node } from '../../core';
 function PanelMain() {
 	const currentProjectName = useSelector((state: RootState) => state.projects.current);
 	const loading = useSelector((state: RootState) => state.projects.loading);
-	const needsReloadPage = useSelector((state: RootState) => state.triggers.needsReloadPage);
+	const needsReloadPageUpdate = useSelector((state: RootState) => state.triggers.needsReloadPageUpdate);
+	const needsReloadPageClearCache = useSelector((state: RootState) => state.triggers.needsReloadPageClearCache);
 
 	const dispatch = useDispatch();
 
@@ -38,10 +39,15 @@ function PanelMain() {
 		<div className='flex-one flex relative'>
 			<Loader large isLoading={loading} />
 			{currentProjectName.length === 0 ? <PanelNoProject /> : <PanelProject />}
-			{needsReloadPage && (
+			{needsReloadPageUpdate && (
 				<Dialog title='RPG Paper Maker was updated' isOpen>
-					<p>You need to reload your page to have the lastest version of RPG Paper Maker applied.</p>
+					<p>You need to refresh the page to have the lastest version of RPG Paper Maker applied.</p>
 					<p>No worries, what you were doing was saved temporarily.</p>
+				</Dialog>
+			)}
+			{needsReloadPageClearCache && (
+				<Dialog title='Reload page' isOpen>
+					<p>You need to refresh the page to finish cache clearing process.</p>
 				</Dialog>
 			)}
 		</div>

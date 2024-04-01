@@ -17,6 +17,7 @@ import {
 	clearProjects,
 	setCurrentProjectName,
 	setLoading,
+	setNeedsReloadPageClearCache,
 	setOpenLoading,
 	setProjectMenuIndex,
 	setUndoRedoIndex,
@@ -207,10 +208,6 @@ function MainMenuBar() {
 		setIsDialogWarningClearAllCacheOpen(true);
 	};
 
-	const handleRejectClearAllCache = async () => {
-		setIsDialogWarningClearAllCacheOpen(false);
-	};
-
 	const handleAcceptClearAllCache = async () => {
 		setIsLoading(true);
 		await handleCloseProject();
@@ -221,6 +218,11 @@ function MainMenuBar() {
 		}
 		setIsDialogWarningClearAllCacheOpen(false);
 		setIsLoading(false);
+		dispatch(setNeedsReloadPageClearCache());
+	};
+
+	const handleRejectClearAllCache = async () => {
+		setIsDialogWarningClearAllCacheOpen(false);
 	};
 
 	const handleUndo = async () => {

@@ -12,7 +12,7 @@
 import React, { useEffect } from 'react';
 import { Manager, Scene } from '../../Editor';
 import Loader from '../Loader';
-import { setNeedsReloadPage, setProjects } from '../../store';
+import { setNeedsReloadPageUpdate, setProjects } from '../../store';
 import { useDispatch } from 'react-redux';
 import { Constants, IO, LOCAL_FORAGE, Paths, Utils } from '../../common';
 import { LocalFile, Picture2D, Project } from '../../core';
@@ -67,7 +67,7 @@ function PanelLoading({ setLoaded }: Props) {
 			if (Project.VERSION.length === 0) {
 				Project.VERSION = newVersion;
 			} else if (Project.VERSION !== newVersion) {
-				dispatch(setNeedsReloadPage());
+				dispatch(setNeedsReloadPageUpdate());
 			}
 		};
 		await updateVersion();

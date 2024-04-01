@@ -56,7 +56,8 @@ import {
 	triggerSplitting,
 	triggerTreeMap,
 	triggerMenu,
-	setNeedsReloadPage,
+	setNeedsReloadPageUpdate,
+	setNeedsReloadPageClearCache,
 	setNeedsReloadMap,
 } from './slices/TriggersReducer';
 
@@ -112,7 +113,8 @@ export {
 	triggerSplitting,
 	triggerTreeMap,
 	triggerMenu,
-	setNeedsReloadPage,
+	setNeedsReloadPageUpdate,
+	setNeedsReloadPageClearCache,
 	setNeedsReloadMap,
 };
 export type RootState = ReturnType<typeof store.getState>;

@@ -30,7 +30,8 @@ const TriggersSlice = createSlice({
 		splitting: false,
 		treeMap: false,
 		menu: false,
-		needsReloadPage: false,
+		needsReloadPageUpdate: false,
+		needsReloadPageClearCache: false,
 		needsReloadMap: false,
 	},
 	reducers: {
@@ -61,8 +62,11 @@ const TriggersSlice = createSlice({
 		triggerMenu(state) {
 			state.menu = !state.menu;
 		},
-		setNeedsReloadPage(state) {
-			state.needsReloadPage = true;
+		setNeedsReloadPageUpdate(state) {
+			state.needsReloadPageUpdate = true;
+		},
+		setNeedsReloadPageClearCache(state) {
+			state.needsReloadPageClearCache = true;
 		},
 		setNeedsReloadMap(state) {
 			state.needsReloadMap = !state.needsReloadMap;
@@ -80,7 +84,8 @@ export const {
 	triggerSplitting,
 	triggerTreeMap,
 	triggerMenu,
-	setNeedsReloadPage,
+	setNeedsReloadPageUpdate,
+	setNeedsReloadPageClearCache,
 	setNeedsReloadMap,
 } = TriggersSlice.actions;
 export const TriggersReducer = TriggersSlice.reducer;
