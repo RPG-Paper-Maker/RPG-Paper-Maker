@@ -18,9 +18,9 @@ const localMessage = 'Local copy: ';
 const githubMessage = 'Github repository copy: ';
 const moveSymbol = '->';
 
-const downloadRepo = async (gitUrl, destination) => {
+const downloadRepo = async (gitUrl, destination, branch) => {
 	return new Promise((resolve, reject) => {
-		simpleGit().clone(gitUrl, destination, (error) => {
+		simpleGit().clone(gitUrl, destination, branch ? ['--branch', branch] : undefined, (error) => {
 			if (error) {
 				reject(error);
 			} else {
@@ -89,22 +89,17 @@ async function exists(path) {
 }
 
 const checkIsRepoAsync = async (path) => {
-	try {
-		await exists(`${path}/.git`);
-		return true;
-	} catch (error) {
-		return false;
-	}
+	return await exists(`${path}/.git`);
 };
 
-const downloadOrCopyRepo = async (source, destination, localSource) => {
+const downloadOrCopyRepo = async (source, destination, localSource, branch) => {
 	const isRepo = await checkIsRepoAsync(localSource);
 	if (isRepo) {
 		console.log(`${localMessage} ${localSource} ${moveSymbol} ${destination}`);
 		return copyDir(localSource, destination);
 	} else {
-		console.log(`${githubMessage} ${source} ${moveSymbol} ${destination}`);
-		return downloadRepo(source, destination);
+		console.log(`${githubMessage} ${source} ${branch} ${moveSymbol} ${destination}`);
+		return downloadRepo(source, destination, branch);
 	}
 };
 
@@ -116,8 +111,8 @@ const main = async () => {
 		await fs.mkdir(modsPath);
 
 		// Download or copy repositories and files
-		await downloadOrCopyRepo(gitUrls.scripts, destinationPaths.scripts, localPaths.scripts);
-		await downloadOrCopyRepo(gitUrls.scriptsBuild, destinationPaths.scriptsBuild, localPaths.scriptsBuild);
+		await downloadOrCopyRepo(gitUrls.scripts, destinationPaths.scripts, localPaths.scripts, '3.0.0');
+		await downloadOrCopyRepo(gitUrls.scriptsBuild, destinationPaths.scriptsBuild, localPaths.scriptsBuild, '3.0.0');
 		await downloadOrCopyRepo(gitUrls.br, destinationPaths.br, localPaths.br);
 		await downloadOrCopyRepo(gitUrls.dependencies, destinationPaths.dependencies, localPaths.dependencies);
 		await copyDirAndPrint(`${destinationPaths.br}/Content`, './public/BR');
