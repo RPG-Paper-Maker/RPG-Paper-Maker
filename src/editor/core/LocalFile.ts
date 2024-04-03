@@ -275,7 +275,7 @@ class LocalFile extends Serializable {
 		localforage.config({ name: 'RPGPaperMaker' });
 	}
 
-	static async readJSON(path: string): Promise<any> {
+	static async readJSON(path: string): Promise<any | null> {
 		const file = await LocalFile.getFile(path);
 		if (file) {
 			return JSON.parse(file.content);

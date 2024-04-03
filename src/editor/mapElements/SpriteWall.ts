@@ -114,10 +114,7 @@ class SpriteWall extends Base {
 	}
 
 	static getWall(position: Position) {
-		// const portion = Scene.Map.current!.getLocalPortion(position);
-		// TODO
-		// MapPortion* mapPortion = map->mapPortion(portion);
-		const mapPortion = Scene.Map.current!.mapPortion;
+		const mapPortion = Scene.Map.current!.getMapPortionByPosition(position);
 		return mapPortion !== null ? mapPortion.model.walls.get(position.toKey()) || null : null;
 	}
 
@@ -135,27 +132,30 @@ class SpriteWall extends Base {
 		return sprite !== null && sprite.wallID === id;
 	}
 
-	static updateAround(position: Position) {
-		const positionLeft = position.getLeft();
-		const positionRight = position.getRight();
-		const positionTopLeft = position.getTopLeft();
-		const positionTopRight = position.getTopRight();
-		const positionBotLeft = position.getBotLeft();
-		const positionBotRight = position.getBotRight();
-		const sprite = this.getWall(position);
-		const spriteLeft = this.getWall(positionLeft);
-		const spriteRight = this.getWall(positionRight);
-		const spriteTopLeft = this.getWall(positionTopLeft);
-		const spriteTopRight = this.getWall(positionTopRight);
-		const spriteBotLeft = this.getWall(positionBotLeft);
-		const spriteBotRight = this.getWall(positionBotRight);
-		sprite?.update(position);
-		spriteLeft?.update(positionLeft);
-		spriteRight?.update(positionRight);
-		spriteTopLeft?.update(positionTopLeft);
-		spriteTopRight?.update(positionTopRight);
-		spriteBotLeft?.update(positionBotLeft);
-		spriteBotRight?.update(positionBotRight);
+	static updateAround(position: Position, save: boolean) {
+		const positions = [
+			position.getLeft(),
+			position.getRight(),
+			position.getTopLeft(),
+			position.getTopRight(),
+			position.getBotLeft(),
+			position.getBotRight(),
+		];
+		const globalPortion = position.getGlobalPortion();
+		for (const sidePosition of positions) {
+			const sideSprite = this.getWall(sidePosition);
+			sideSprite?.update(sidePosition);
+			const sideGlobalPortion = sidePosition.getGlobalPortion();
+			if (!globalPortion.equals(sideGlobalPortion)) {
+				const mapPortion = Scene.Map.current!.getMapPortionFromGlobalPortion(sideGlobalPortion);
+				if (mapPortion) {
+					Scene.Map.current!.portionsToUpdate.add(mapPortion);
+					if (save) {
+						Scene.Map.current!.portionsToSave.add(mapPortion);
+					}
+				}
+			}
+		}
 	}
 
 	equals(mapElement: MapElement.Base) {

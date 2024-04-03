@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { MapElement, Scene } from '../Editor';
+import { MapElement, Model, Scene } from '../Editor';
 import { ELEMENT_MAP_KIND, Paths, Utils } from '../common';
 import { LocalFile, Position, Project, UndoRedoState } from '../core';
 
@@ -65,10 +65,25 @@ class UndoRedo {
 		return states;
 	}
 
-	private static apply(position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND) {
+	private static async apply(position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND) {
 		if (Scene.Map.current) {
-			Scene.Map.current.mapPortion.removeLastPreview();
-			Scene.Map.current.mapPortion.updateMapElement(position, element, kind, false, false, true, true);
+			const mapPortion = Scene.Map.current.getMapPortionByPosition(position);
+			if (mapPortion) {
+				mapPortion.removeLastPreview();
+				mapPortion.updateMapElement(position, element, kind, false, false, true, true);
+			} else {
+				const model = new Model.MapPortion(position.getGlobalPortion());
+				await model.load();
+				const models = model.getModelsByKind(kind);
+				if (models) {
+					if (element) {
+						models.set(position.toKey(), element);
+					} else {
+						models.delete(position.toKey());
+					}
+					await model.save();
+				}
+			}
 		}
 	}
 
@@ -77,11 +92,11 @@ class UndoRedo {
 		if (before) {
 			for (let i = states.length - 1; i >= 0; i--) {
 				const state = states[i];
-				this.apply(state.position, state.elementBefore, state.kindBefore);
+				await this.apply(state.position, state.elementBefore, state.kindBefore);
 			}
 		} else {
 			for (const state of states) {
-				this.apply(state.position, state.elementAfter, state.kindAfter);
+				await this.apply(state.position, state.elementAfter, state.kindAfter);
 			}
 		}
 	}

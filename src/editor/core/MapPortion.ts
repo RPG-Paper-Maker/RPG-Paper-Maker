@@ -21,8 +21,7 @@ import {
 	Rectangle,
 	UndoRedoState,
 } from '.';
-import { ACTION_KIND, Constants, ELEMENT_MAP_KIND, Mathf, RAYCASTING_LAYER, SPRITE_WALL_TYPE } from '../common';
-import { SpriteWall } from '../mapElements';
+import { ACTION_KIND, ELEMENT_MAP_KIND, Mathf, RAYCASTING_LAYER, SPRITE_WALL_TYPE } from '../common';
 
 class MapPortion {
 	public model!: Model.MapPortion;
@@ -63,10 +62,14 @@ class MapPortion {
 	}
 
 	removeLastPreview() {
+		const needUpdate = this.lastPreviewRemove.length > 0;
 		for (const [position, element, kind] of this.lastPreviewRemove) {
 			this.updateMapElement(position, element, kind, false, true, false, true);
 		}
 		this.lastPreviewRemove = [];
+		if (needUpdate) {
+			Scene.Map.current!.portionsToUpdate.add(this);
+		}
 	}
 
 	add(
@@ -77,7 +80,9 @@ class MapPortion {
 		updateAutotiles = true
 	) {
 		if (removePreview) {
-			this.removeLastPreview();
+			Scene.Map.current!.forEachMapPortions((mapPortion) => {
+				mapPortion?.removeLastPreview();
+			});
 		}
 		switch (Scene.Map.currentSelectedMapElementKind) {
 			case ELEMENT_MAP_KIND.FLOOR:
@@ -189,7 +194,9 @@ class MapPortion {
 
 	remove(position: Position, preview = false, removePreview = true, updateAutotiles = true) {
 		if (removePreview) {
-			this.removeLastPreview();
+			Scene.Map.current!.forEachMapPortions((mapPortion) => {
+				mapPortion?.removeLastPreview();
+			});
 		}
 		if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
 			this.updateWallFromCursor(-1, preview);
@@ -367,11 +374,7 @@ class MapPortion {
 			}
 		}
 		if (updateAutotiles) {
-			MapElement.Autotiles.updateAround(
-				position,
-				Scene.Map.current!.portionsToUpdate,
-				Scene.Map.current!.portionsToSave
-			);
+			MapElement.Autotiles.updateAround(position);
 		}
 	}
 
@@ -393,11 +396,7 @@ class MapPortion {
 			undoRedo
 		);
 		if (updateAutotiles) {
-			MapElement.Autotiles.updateAround(
-				position,
-				Scene.Map.current!.portionsToUpdate,
-				Scene.Map.current!.portionsToSave
-			);
+			MapElement.Autotiles.updateAround(position);
 		}
 	}
 
@@ -437,7 +436,7 @@ class MapPortion {
 			);
 		}
 		for (const position of positions) {
-			SpriteWall.updateAround(position);
+			MapElement.SpriteWall.updateAround(position, !preview);
 		}
 	}
 
@@ -458,7 +457,7 @@ class MapPortion {
 			undoRedo,
 			true
 		);
-		MapElement.SpriteWall.updateAround(position);
+		MapElement.SpriteWall.updateAround(position, !preview);
 	}
 
 	updateMountain(
@@ -477,11 +476,7 @@ class MapPortion {
 			removingPreview,
 			undoRedo
 		);
-		MapElement.Mountains.updateAround(
-			position,
-			Scene.Map.current!.portionsToUpdate,
-			Scene.Map.current!.portionsToSave
-		);
+		MapElement.Mountains.updateAround(position);
 	}
 
 	updateObject3D(
@@ -536,9 +531,9 @@ class MapPortion {
 			elements.set(key, element);
 		}
 		if (changed && Scene.Map.current) {
-			Scene.Map.current.addPortionToUpdate(this.model.globalPortion);
+			Scene.Map.current.portionsToUpdate.add(this);
 			if (!preview && !removingPreview) {
-				Scene.Map.current.addPortionToSave(this.model.globalPortion);
+				Scene.Map.current.portionsToSave.add(this);
 				if (!undoRedo) {
 					Scene.Map.current.undoRedoStates.push(
 						UndoRedoState.create(
@@ -618,21 +613,6 @@ class MapPortion {
 		}
 		Scene.Map.current!.scene.add(Scene.Map.current!.selectedMesh);
 		Scene.Map.current!.transformControls.attach(Scene.Map.current!.selectedMesh);
-	}
-
-	fillDefaultFloor(map: Model.Map) {
-		const rect = new Rectangle(0, 0, 1, 1);
-		const p = new Position();
-		for (let i = 0; i < Constants.PORTION_SIZE; i++) {
-			for (let j = 0; j < Constants.PORTION_SIZE; j++) {
-				p.x = this.model.globalPortion.x * Constants.PORTION_SIZE + i;
-				p.y = this.model.globalPortion.y * Constants.PORTION_SIZE;
-				p.z = this.model.globalPortion.z * Constants.PORTION_SIZE + j;
-				if (p.isInMap(map)) {
-					this.model.lands.set(p.toKey(), MapElement.Floor.create(rect));
-				}
-			}
-		}
 	}
 
 	checkTextures(layersPartOnly = false) {
@@ -1175,6 +1155,40 @@ class MapPortion {
 		if (this.hoveredMesh.geometry instanceof CustomGeometryFace) {
 			this.hoveredMesh.geometry.rotate(angle, MapElement.Base.Y_AXIS);
 		}
+	}
+
+	cleanAll() {
+		Scene.Map.current!.scene.remove(this.floorsMesh);
+		this.floorsMesh.geometry = new CustomGeometry();
+		Scene.Map.current!.scene.remove(this.spritesFaceMesh);
+		this.spritesFaceMesh.geometry = new CustomGeometry();
+		Scene.Map.current!.scene.remove(this.spritesFixMesh);
+		this.spritesFixMesh.geometry = new CustomGeometry();
+		for (const list of this.autotilesList) {
+			if (list) {
+				for (const autotiles of list) {
+					if (autotiles.mesh) {
+						Scene.Map.current!.scene.remove(autotiles.mesh);
+					}
+				}
+			}
+		}
+		this.autotilesList = [];
+		for (const walls of this.wallsMeshes) {
+			Scene.Map.current!.scene.remove(walls);
+		}
+		this.wallsMeshes = [];
+		for (const [, mountains] of this.mountainsList) {
+			if (mountains.mesh) {
+				Scene.Map.current!.scene.remove(mountains.mesh);
+			}
+		}
+		this.mountainsList = new Map();
+		for (const objects of this.objects3DMeshes) {
+			Scene.Map.current!.scene.remove(objects);
+		}
+		this.objects3DMeshes = [];
+		Scene.Map.current!.scene.remove(this.hoveredMesh);
 	}
 }
 

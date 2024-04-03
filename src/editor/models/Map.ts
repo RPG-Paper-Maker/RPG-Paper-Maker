@@ -12,7 +12,7 @@
 import { Model } from '../Editor';
 import { Base } from './Base';
 import { BINDING, BindingType, Constants, Paths, Utils } from '../common';
-import { LocalFile, MapPortion, Portion, Position, Project } from '../core';
+import { LocalFile, Portion, Position, Project } from '../core';
 
 class Map extends Base {
 	public tilesetID: number = 1;
@@ -45,7 +45,6 @@ class Map extends Base {
 	}
 
 	static async createDefaultMap(id: number, name: string) {
-		const jsonObject = {};
 		const mapModel = new Model.Map();
 		mapModel.id = id;
 		mapModel.name = name;
@@ -59,7 +58,7 @@ class Map extends Base {
         properties.setIsSkyColor(false);
         properties.setIsSkyImage(false);
         properties.skyboxID()->setNumberValue(1);*/
-		const folderMap = await mapModel.createNewMap(jsonObject);
+		const folderMap = await mapModel.createNewMap();
 
 		if (!folderMap) {
 			return;
@@ -67,9 +66,9 @@ class Map extends Base {
 
 		// Portion
 		const globalPortion = new Portion(0, 0, 0);
-		const mapPortion = new MapPortion();
-		mapPortion.initialize(globalPortion);
+		const mapPortion = new Model.MapPortion(globalPortion);
 		mapPortion.fillDefaultFloor(mapModel);
+		await mapPortion.save();
 		/*
         SystemCommonObject* o = new SystemCommonObject(1, RPM::translate(
             Translations::HERO), false, false, 2, new QStandardItemModel, new
@@ -85,8 +84,6 @@ class Map extends Base {
 			Paths.join(Paths.ROOT_DIRECTORY_LOCAL, Paths.DEFAULT, globalPortion.getFileName()),
 			Paths.join(Paths.join(folderMap, globalPortion.getFileName()))
 		);
-
-		// await mapPortion.save(Paths.join(folderMap, globalPortion.getFileName()));
 	}
 
 	static generateMapName(id: number): string {
@@ -106,7 +103,7 @@ class Map extends Base {
 		];
 	}
 
-	async createNewMap(jsonObject?: any): Promise<string | null> {
+	async createNewMap(): Promise<string | null> {
 		if (!Project.current) {
 			return null;
 		}
@@ -115,20 +112,17 @@ class Map extends Base {
 		await LocalFile.createFolder(folderMap);
 
 		// Write properties
-		// TODO
 		await this.save();
 
 		// Portions
-		/*
 		const [lx, ld, lh, lz] = this.getPortionsNumbers();
 		for (let i = 0; i < lx; i++) {
 			for (let j = -ld; j < lh; j++) {
 				for (let k = 0; k < lz; k++) {
-					const json = {};
-					// await LocalFile.writeJSON(Paths.join(folderMap, Portion.getFileName(i, j, k)), json);
+					await LocalFile.writeJSON(Paths.join(folderMap, Portion.getFileName(i, j, k)), {});
 				}
 			}
-		}*/
+		}
 
 		// Objects
 		// TODO
@@ -143,7 +137,6 @@ class Map extends Base {
 		await LocalFile.createFolder(Paths.join(folderMap, Paths.TEMP));
 		await LocalFile.createFolder(Paths.join(folderMap, Paths.TEMP_UNDO_REDO));
 		await LocalFile.createFile(Paths.join(folderMap, Paths.TEMP_UNDO_REDO, Paths.INDEX), '-1');
-
 		return folderMap;
 	}
 

@@ -10,9 +10,9 @@
 */
 
 import { Model, Scene } from '../Editor';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, Paths, SHAPE_KIND } from '../common';
+import { BINDING, BindingType, Constants, ELEMENT_MAP_KIND, Paths, SHAPE_KIND } from '../common';
 import { Serializable } from '../core/Serializable';
-import { Portion, Position, Project } from '../core';
+import { Portion, Position, Project, Rectangle } from '../core';
 import {
 	Autotile,
 	Base,
@@ -155,6 +155,21 @@ class MapPortion extends Serializable {
 			sprite = this.getSprite(p);
 		} while (sprite !== null && !sprite.isPreview);
 		return count - 1;
+	}
+
+	fillDefaultFloor(map: Model.Map) {
+		const rect = new Rectangle(0, 0, 1, 1);
+		const p = new Position();
+		for (let i = 0; i < Constants.PORTION_SIZE; i++) {
+			for (let j = 0; j < Constants.PORTION_SIZE; j++) {
+				p.x = this.globalPortion.x * Constants.PORTION_SIZE + i;
+				p.y = this.globalPortion.y * Constants.PORTION_SIZE;
+				p.z = this.globalPortion.z * Constants.PORTION_SIZE + j;
+				if (p.isInMap(map)) {
+					this.lands.set(p.toKey(), Floor.create(rect));
+				}
+			}
+		}
 	}
 
 	async load() {

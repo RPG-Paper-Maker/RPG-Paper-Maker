@@ -108,9 +108,9 @@ class CursorWall {
 	onMouseUp() {
 		if (this.positionStart !== null && this.positionEnd !== null) {
 			if (Scene.Map.isAdding()) {
-				Scene.Map.current!.mapPortion.add(this.positionStart);
+				Scene.Map.current!.getMapPortionByPosition(this.positionStart)?.add(this.positionStart);
 			} else if (Scene.Map.isRemoving()) {
-				Scene.Map.current!.mapPortion.remove(this.positionStart);
+				Scene.Map.current!.getMapPortionByPosition(this.positionStart)?.remove(this.positionStart);
 			}
 		}
 		this.isMouseDown = false;

@@ -79,13 +79,15 @@ class Map extends Base {
 	public meshPlane: THREE.Object3D | null = null;
 	public sunLight!: THREE.DirectionalLight;
 	public transformControls!: TransformControls;
-	public mapPortion!: MapPortion;
+	public mapPortions!: (MapPortion | null)[];
+	public currentPortion!: Portion;
+	public previousPortion!: Portion;
 	public materialTileset!: THREE.MeshPhongMaterial;
 	public materialTilesetHover!: THREE.MeshPhongMaterial;
 	public selectionOffset: THREE.Vector2 = new THREE.Vector2();
-	public portionsToUpdate: Portion[] = [];
-	public portionsToSave: Portion[] = [];
-	public portionsSaving: Portion[] = [];
+	public portionsToUpdate: Set<MapPortion> = new Set();
+	public portionsToSave: Set<MapPortion> = new Set();
+	public portionsSaving: Set<MapPortion> = new Set();
 	public undoRedoStates: UndoRedoState[] = [];
 	public undoRedoStatesSaving: UndoRedoState[] = [];
 	public lastPosition: Position | null = null;
@@ -177,32 +179,6 @@ class Map extends Base {
 		return Paths.join(Project.current?.getPathMaps(), Model.Map.generateMapName(this.id));
 	}
 
-	getLocalPortion(position: Position): Portion {
-		return new Portion(
-			Math.floor(position.x / Constants.PORTION_SIZE) -
-				Math.floor(this.cursor.position.x / Constants.PORTION_SIZE),
-			Math.floor(position.y / Constants.PORTION_SIZE) -
-				Math.floor(this.cursor.position.y / Constants.PORTION_SIZE),
-			Math.floor(position.z / Constants.PORTION_SIZE) -
-				Math.floor(this.cursor.position.z / Constants.PORTION_SIZE)
-		);
-	}
-
-	isInPortion(portion: Portion, offset = 0): boolean {
-		return (
-			portion.x <= +offset &&
-			portion.x >= -(Project.current!.systems.PORTIONS_RAY + offset) &&
-			portion.y <= Project.current!.systems.PORTIONS_RAY + offset &&
-			portion.y >= -(Project.current!.systems.PORTIONS_RAY + offset) &&
-			portion.z <= Project.current!.systems.PORTIONS_RAY + offset &&
-			portion.z >= -(Project.current!.systems.PORTIONS_RAY + offset)
-		);
-	}
-
-	getMapPortion(portion: Portion): MapPortion {
-		return this.mapPortion;
-	}
-
 	async load() {
 		Manager.GL.mapEditorContext.renderer.setClearColor('#8cc3ed');
 
@@ -235,17 +211,19 @@ class Map extends Base {
 		this.meshPlane.layers.enable(RAYCASTING_LAYER.PLANE);
 		this.scene.add(this.meshPlane);
 
+		// Cursors
+		this.cursor.initialize(Scene.Map.materialCursor);
+		this.cursorWall.initialize();
+
 		// Load portions
-		const globalPortion = new Portion(0, 0, 0);
+		this.currentPortion = this.cursor.position.getGlobalPortion();
+		await this.initializePortions();
+		/*
 		this.mapPortion = new MapPortion();
 		this.mapPortion.initialize(globalPortion);
 		await this.mapPortion.model.load();
 		this.mapPortion.updateMaterials();
-		await this.mapPortion.loadTexturesAndUpdateGeometries(false);
-
-		// Cursors
-		this.cursor.initialize(Scene.Map.materialCursor);
-		this.cursorWall.initialize();
+		await this.mapPortion.loadTexturesAndUpdateGeometries(false);*/
 
 		// Light
 		this.initializeSunLight();
@@ -280,15 +258,22 @@ class Map extends Base {
 	async save() {
 		this.loading = true;
 		await this.modelMap.save();
-		await this.mapPortion.model.save();
+		const filesPaths = await LocalFile.getFiles(Paths.join(this.modelMap.getPath(), Paths.TEMP));
+		for (const path of filesPaths) {
+			const list = path.split('/');
+			await LocalFile.copyFile(path, Paths.join(this.modelMap.getPath(), list[list.length - 1]));
+			await LocalFile.removeFile(path);
+		}
 		this.loading = false;
 	}
 
-	async savePortions() {
-		if (this.portionsSaving.length > 0) {
-			await this.mapPortion.model.save(true);
+	async savePortionsTemp() {
+		if (this.portionsSaving.size > 0) {
+			for (const mapPortion of this.portionsSaving) {
+				await mapPortion.model.save(true);
+			}
 		}
-		this.portionsSaving = [];
+		this.portionsSaving.clear();
 		if (this.tag.saved) {
 			this.tag.saved = false;
 			this.needsTreeMapUpdate = true;
@@ -325,6 +310,231 @@ class Map extends Base {
 		this.sunLight.shadow.bias = -0.0003;
 	}
 
+	async initializePortions() {
+		this.updateCurrentPortion();
+		await this.loadPortions();
+	}
+
+	updateCurrentPortion(): boolean {
+		if (!this.camera) {
+			return false;
+		}
+		this.previousPortion = this.currentPortion;
+		this.currentPortion = this.cursor.position.getGlobalPortion();
+		return !this.previousPortion.equals(this.currentPortion);
+	}
+
+	async loadPortions(update: boolean = false) {
+		if (!update) {
+			this.mapPortions = new Array(this.getMapPortionTotalSize());
+		}
+		const offsetX = this.currentPortion.x - this.previousPortion.x;
+		const offsetY = this.currentPortion.y - this.previousPortion.y;
+		const offsetZ = this.currentPortion.z - this.previousPortion.z;
+		const limit = Project.current!.systems.PORTIONS_RAY;
+		if (!update) {
+			for (let i = -limit; i <= limit; i++) {
+				for (let j = -limit; j <= limit; j++) {
+					for (let k = -limit; k <= limit; k++) {
+						await this.loadPortion(
+							this.currentPortion.x + i,
+							this.currentPortion.y + j,
+							this.currentPortion.z + k,
+							i,
+							j,
+							k
+						);
+					}
+				}
+			}
+			return;
+		}
+
+		// Make a temp copy for moving stuff correctly
+		const temp = new Array(this.mapPortions.length);
+		for (let i = 0, l = this.mapPortions.length; i < l; i++) {
+			temp[i] = this.mapPortions[i];
+		}
+
+		// Remove existing portions
+		for (let i = -limit; i <= limit; i++) {
+			for (let j = -limit; j <= limit; j++) {
+				for (let k = -limit; k <= limit; k++) {
+					const oi = i - offsetX;
+					const oj = j - offsetY;
+					const ok = k - offsetZ;
+					// If with negative offset, out of ray boundaries, remove
+					if (oi < -limit || oi > limit || oj < -limit || oj > limit || ok < -limit || ok > limit) {
+						this.removePortion(i, j, k);
+					}
+				}
+			}
+		}
+		// Move / Load
+		for (let i = -limit; i <= limit; i++) {
+			for (let j = -limit; j <= limit; j++) {
+				for (let k = -limit; k <= limit; k++) {
+					const x = this.currentPortion.x + i;
+					const y = this.currentPortion.y + j;
+					const z = this.currentPortion.z + k;
+					let oi = i - offsetX;
+					let oj = j - offsetY;
+					let ok = k - offsetZ;
+					// If with negative offset, in ray boundaries, move
+					if (oi >= -limit && oi <= limit && oj >= -limit && oj <= limit && ok >= -limit && ok <= limit) {
+						const previousIndex = this.getPortionIndex(i, j, k);
+						const newIndex = this.getPortionIndex(oi, oj, ok);
+						this.mapPortions[newIndex] = temp[previousIndex];
+					}
+					oi = i + offsetX;
+					oj = j + offsetY;
+					ok = k + offsetZ;
+					// If with positive offset, out of ray boundaries, load
+					if (oi < -limit || oi > limit || oj < -limit || oj > limit || ok < -limit || ok > limit) {
+						await this.loadPortion(x, y, z, i, j, k, true);
+					}
+				}
+			}
+		}
+		this.loading = false;
+	}
+
+	async loadPortion(
+		realX: number,
+		realY: number,
+		realZ: number,
+		x: number,
+		y: number,
+		z: number,
+		move: boolean = false
+	) {
+		const lx = Math.ceil(this.modelMap.length / Constants.PORTION_SIZE);
+		const lz = Math.ceil(this.modelMap.width / Constants.PORTION_SIZE);
+		const ld = Math.ceil(this.modelMap.depth / Constants.PORTION_SIZE);
+		const lh = Math.ceil(this.modelMap.height / Constants.PORTION_SIZE);
+		if (realX >= 0 && realX < lx && realY >= -ld && realY < lh && realZ >= 0 && realZ < lz) {
+			const portion = new Portion(realX, realY, realZ);
+			const modelMapPortion = new Model.MapPortion(portion);
+			let json = await LocalFile.readJSON(modelMapPortion.getPath(true));
+			if (json === null) {
+				json = await LocalFile.readJSON(modelMapPortion.getPath(false));
+			}
+			const mapPortion = new MapPortion();
+			mapPortion.initialize(portion);
+			this.setMapPortion(x, y, z, mapPortion, move);
+			if (json?.hasOwnProperty('lands')) {
+				mapPortion.model.read(json);
+				await mapPortion.loadTexturesAndUpdateGeometries(false);
+			}
+			mapPortion.updateMaterials();
+		} else {
+			this.setMapPortion(x, y, z, null, move);
+		}
+	}
+
+	async loadPortionFromPortion(portion: Portion, x: number, y: number, z: number, move: boolean) {
+		await this.loadPortion(portion.x + x, portion.y + y, portion.z + z, x, y, z, move);
+	}
+
+	removePortion(x: number, y: number, z: number) {
+		const index = this.getPortionIndex(x, y, z);
+		const mapPortion = this.mapPortions[index];
+		if (mapPortion !== null) {
+			mapPortion.cleanAll();
+			this.mapPortions[index] = null;
+		}
+	}
+
+	setPortion(i: number, j: number, k: number, m: number, n: number, o: number) {
+		this.setMapPortion(i, j, k, this.getMapPortion(m, n, o), true);
+	}
+
+	setMapPortion(x: number, y: number, z: number, mapPortion: MapPortion | null, move: boolean) {
+		const index = this.getPortionIndex(x, y, z);
+		let currentMapPortion = this.mapPortions[index];
+		if (currentMapPortion && !move) {
+			currentMapPortion.cleanAll();
+		}
+		this.mapPortions[index] = mapPortion;
+	}
+
+	getMapPortion(x: number, y: number, z: number): MapPortion | null {
+		return this.getBrutMapPortion(this.getPortionIndex(x, y, z));
+	}
+
+	getMapPortionFromPortion(portion: Portion): MapPortion | null {
+		return this.getMapPortion(portion.x, portion.y, portion.z);
+	}
+
+	getMapPortionFromGlobalPortion(globalPortion: Portion): MapPortion | null {
+		const portion = this.getLocalPortionFromGlobal(globalPortion);
+		return this.getMapPortion(portion.x, portion.y, portion.z);
+	}
+
+	getMapPortionByPosition(position: Position): MapPortion | null {
+		return this.getMapPortionFromGlobalPortion(position.getGlobalPortion());
+	}
+
+	getBrutMapPortion(index: number): MapPortion | null {
+		return this.mapPortions[index];
+	}
+
+	getPortionIndex(x: number, y: number, z: number): number {
+		const size = this.getMapPortionSize();
+		const limit = Project.current!.systems.PORTIONS_RAY;
+		return (x + limit) * size * size + (y + limit) * size + (z + limit);
+	}
+
+	getPortionIndexFromPortion(portion: Portion): number {
+		return this.getPortionIndex(portion.x, portion.y, portion.z);
+	}
+
+	getLocalPortion(position: Position): Portion {
+		return new Portion(
+			Math.floor(position.x / Constants.PORTION_SIZE) -
+				Math.floor(this.cursor.position.x / Constants.PORTION_SIZE),
+			Math.floor(position.y / Constants.PORTION_SIZE) -
+				Math.floor(this.cursor.position.y / Constants.PORTION_SIZE),
+			Math.floor(position.z / Constants.PORTION_SIZE) -
+				Math.floor(this.cursor.position.z / Constants.PORTION_SIZE)
+		);
+	}
+
+	getLocalPortionFromGlobal(globalPortion: Portion): Portion {
+		return new Portion(
+			globalPortion.x - Math.floor(this.cursor.position.x / Constants.PORTION_SIZE),
+			globalPortion.y - Math.floor(this.cursor.position.y / Constants.PORTION_SIZE),
+			globalPortion.z - Math.floor(this.cursor.position.z / Constants.PORTION_SIZE)
+		);
+	}
+
+	isInPortion(portion: Portion, offset = 0): boolean {
+		return (
+			portion.x <= +offset &&
+			portion.x >= -(Project.current!.systems.PORTIONS_RAY + offset) &&
+			portion.y <= Project.current!.systems.PORTIONS_RAY + offset &&
+			portion.y >= -(Project.current!.systems.PORTIONS_RAY + offset) &&
+			portion.z <= Project.current!.systems.PORTIONS_RAY + offset &&
+			portion.z >= -(Project.current!.systems.PORTIONS_RAY + offset)
+		);
+	}
+
+	getMapPortionSize(): number {
+		return Project.current!.systems.PORTIONS_RAY * 2 + 1;
+	}
+
+	getMapPortionTotalSize(): number {
+		const size = this.getMapPortionSize();
+		const limit = Project.current!.systems.PORTIONS_RAY;
+		return limit * 2 * size * size + limit * 2 * size + limit * 2;
+	}
+
+	forEachMapPortions(callback: (mapPortion: MapPortion | null) => void) {
+		for (let i = 0; i < this.mapPortions.length; i++) {
+			callback(this.mapPortions[i]);
+		}
+	}
+
 	add(position: Position, preview = false, removePreview = true, updateAutotiles = true) {
 		const spriteLayer =
 			Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON &&
@@ -334,10 +544,16 @@ class Map extends Base {
 		if (!preview) {
 			const positions = spriteLayer ? [position] : Mathf.traceLine(this.lastPosition, position);
 			for (const p of positions) {
-				this.mapPortion.add(p, preview, removePreview, allowBorders, updateAutotiles);
+				this.getMapPortionByPosition(p)?.add(p, preview, removePreview, allowBorders, updateAutotiles);
 			}
 		} else {
-			this.mapPortion.add(position, preview, removePreview, allowBorders, updateAutotiles);
+			this.getMapPortionByPosition(position)?.add(
+				position,
+				preview,
+				removePreview,
+				allowBorders,
+				updateAutotiles
+			);
 		}
 	}
 
@@ -345,21 +561,23 @@ class Map extends Base {
 		if (!preview) {
 			const positions = Mathf.traceLine(this.lastPosition, position);
 			for (const p of positions) {
-				this.mapPortion.remove(p, preview, removePreview, updateAutotiles);
+				this.getMapPortionByPosition(p)?.remove(p, preview, removePreview, updateAutotiles);
 			}
 		} else {
-			this.mapPortion.remove(position, preview, removePreview, updateAutotiles);
+			this.getMapPortionByPosition(position)?.remove(position, preview, removePreview, updateAutotiles);
 		}
 	}
 
 	paintPin(p: Position, kindAfter: ELEMENT_MAP_KIND, autotileID: number, textureAfter: Rectangle) {
 		const up = Scene.Map.current!.camera.getUp();
-		this.mapPortion.removeLastPreview();
+		this.forEachMapPortions((mapPortion) => {
+			mapPortion?.removeLastPreview();
+		});
 		if (p.isInMap(this.modelMap)) {
 			let portion = this.getLocalPortion(p);
 			if (this.isInPortion(portion)) {
-				const mapPortionBefore = this.getMapPortion(portion);
-				const landBefore = mapPortionBefore.model.lands.get(p.toKey()) || null;
+				const mapPortionBefore = this.getMapPortionFromPortion(portion);
+				const landBefore = mapPortionBefore?.model.lands.get(p.toKey()) || null;
 				const autotileBefore =
 					landBefore && landBefore instanceof MapElement.Autotile ? landBefore.autotileID : 0;
 				const textureBefore = landBefore ? landBefore.texture.clone() : new Rectangle();
@@ -372,9 +590,9 @@ class Map extends Base {
 						this.remove(p);
 					} else {
 						if (kindAfter === ELEMENT_MAP_KIND.FLOOR) {
-							mapPortionBefore.updateFloor(p, MapElement.Floor.create(textureAfterReduced, up));
+							mapPortionBefore?.updateFloor(p, MapElement.Floor.create(textureAfterReduced, up));
 						} else {
-							mapPortionBefore.updateAutotile(
+							mapPortionBefore?.updateAutotile(
 								p,
 								MapElement.Autotile.create(autotileID, 0, textureAfter, up)
 							);
@@ -403,8 +621,8 @@ class Map extends Base {
 							if (adjacentPosition.isInMap(this.modelMap)) {
 								portion = this.getLocalPortion(adjacentPosition);
 								if (this.isInPortion(portion)) {
-									const mapPortionHere = this.getMapPortion(portion);
-									const landHere = mapPortionHere.model.lands.get(adjacentPosition.toKey()) || null;
+									const mapPortionHere = this.getMapPortionFromPortion(portion);
+									const landHere = mapPortionHere?.model.lands.get(adjacentPosition.toKey()) || null;
 									if (
 										MapElement.Land.areLandsEquals(
 											landHere,
@@ -415,18 +633,18 @@ class Map extends Base {
 									) {
 										if (kindAfter === ELEMENT_MAP_KIND.NONE && landHere) {
 											if (landHere.kind === ELEMENT_MAP_KIND.FLOOR) {
-												mapPortionBefore.updateFloor(adjacentPosition, null);
+												mapPortionBefore?.updateFloor(adjacentPosition, null);
 											} else {
-												mapPortionBefore.updateAutotile(adjacentPosition, null);
+												mapPortionBefore?.updateAutotile(adjacentPosition, null);
 											}
 										} else {
 											if (kindAfter === ELEMENT_MAP_KIND.FLOOR) {
-												mapPortionBefore.updateFloor(
+												mapPortionBefore?.updateFloor(
 													adjacentPosition,
 													MapElement.Floor.create(textureAfterReduced, up)
 												);
 											} else {
-												mapPortionBefore.updateAutotile(
+												mapPortionBefore?.updateAutotile(
 													adjacentPosition,
 													MapElement.Autotile.create(autotileID, 0, textureAfter, up)
 												);
@@ -493,7 +711,9 @@ class Map extends Base {
 		} else {
 			this.camera.zoomOut(coef);
 		}
-		this.mapPortion.updateGeometries(true);
+		this.forEachMapPortions((mapPortion) => {
+			mapPortion?.updateGeometries(true);
+		});
 	}
 
 	zoomIn(coef = 1) {
@@ -520,8 +740,10 @@ class Map extends Base {
 
 	updateTransform() {
 		this.updateTransformPosition();
-		this.mapPortion.removeSelected();
-		this.mapPortion.addSelected();
+		if (this.selectedPosition && this.selectedElement) {
+			this.getMapPortionByPosition(this.selectedPosition)?.removeSelected();
+			this.getMapPortionByPosition(Position.createFromVector3(this.selectedMesh.position))?.addSelected();
+		}
 	}
 
 	updateTransformPosition() {
@@ -576,7 +798,10 @@ class Map extends Base {
 	removeTransform() {
 		if (this.selectedElement) {
 			this.transformControls.detach();
-			this.addPortionToUpdate(this.mapPortion.model.globalPortion);
+			const mapPortion = this.getMapPortionByPosition(Position.createFromVector3(this.selectedMesh.position));
+			if (mapPortion) {
+				this.portionsToUpdate.add(mapPortion);
+			}
 			this.selectedPosition = null;
 			this.selectedElement = null;
 			this.scene.remove(this.selectedMesh);
@@ -701,7 +926,7 @@ class Map extends Base {
 				if (newPositionKey && (Scene.Map.isRemoving() || layer === RAYCASTING_LAYER.LANDS)) {
 					const newPosition = Position.fromKey(newPositionKey);
 					if (Scene.Map.isRemoving() || isLayerOn) {
-						const element = this.mapPortion.model.getMapElement(
+						const element = this.getMapPortionByPosition(newPosition)?.model.getMapElement(
 							newPosition,
 							Scene.Map.currentSelectedMapElementKind
 						);
@@ -710,7 +935,10 @@ class Map extends Base {
 						}
 					}
 					if (layer === RAYCASTING_LAYER.LANDS) {
-						const element = this.mapPortion.model.getMapElement(newPosition, ELEMENT_MAP_KIND.FLOOR);
+						const element = this.getMapPortionByPosition(newPosition)?.model.getMapElement(
+							newPosition,
+							ELEMENT_MAP_KIND.FLOOR
+						);
 						if (element && element.isPreview) {
 							continue;
 						}
@@ -736,7 +964,7 @@ class Map extends Base {
 				if (isLayerOn) {
 					position.layer =
 						(isSpriteOptionSelected
-							? this.mapPortion.model.getLastSpriteLayerAt(position)
+							? this.getMapPortionByPosition(position)?.model.getLastSpriteLayerAt(position) || 0
 							: position.layer) + 1;
 				} else {
 					if (!Scene.Map.isRotateDisabled()) {
@@ -806,7 +1034,9 @@ class Map extends Base {
 							} else if (this.rectangleStartPosition && this.lastRectangleEndPosition) {
 								this.updateLockedY(position);
 								const positions = this.rectangleStartPosition.getPositionsRectangle(position);
-								this.mapPortion.removeLastPreview();
+								for (const rectanglePosition of positions) {
+									this.getMapPortionByPosition(rectanglePosition)?.removeLastPreview();
+								}
 								const adding = Scene.Map.isAdding();
 								for (const rectanglePosition of positions) {
 									if (adding) {
@@ -817,9 +1047,11 @@ class Map extends Base {
 								}
 								this.rectangleStartPosition.addPositionRectOutline(positions, position);
 								for (const rectanglePosition of positions) {
-									const land = this.mapPortion.model.lands.get(rectanglePosition.toKey());
+									const land = this.getMapPortionByPosition(rectanglePosition)?.model.lands.get(
+										rectanglePosition.toKey()
+									);
 									if (land instanceof MapElement.Autotile) {
-										land.update(rectanglePosition, this.getLocalPortion(rectanglePosition));
+										land.update(rectanglePosition);
 									}
 								}
 							} else if (
@@ -850,7 +1082,9 @@ class Map extends Base {
 			break;
 		}
 		if (intersects.length === 0) {
-			this.mapPortion.removeLastPreview();
+			this.forEachMapPortions((mapPortion) => {
+				mapPortion?.removeLastPreview();
+			});
 			this.lastPosition = null;
 			this.layerRayPosition = null;
 			this.pointedMapElementPosition = null;
@@ -897,12 +1131,10 @@ class Map extends Base {
 				];
 				if (newPositionKey) {
 					const newPosition = Position.fromKey(newPositionKey);
-					let element = this.mapPortion.model.getMapElement(
-						newPosition,
-						Scene.Map.currentSelectedMapElementKind
-					);
+					const mapPortion = this.getMapPortionByPosition(newPosition);
+					let element = mapPortion?.model.getMapElement(newPosition, Scene.Map.currentSelectedMapElementKind);
 					if (isLayerOn && isSpriteOptionSelected && (!element || element.isPreview)) {
-						element = this.mapPortion.model.getMapElement(newPosition, ELEMENT_MAP_KIND.SPRITE_WALL);
+						element = mapPortion?.model.getMapElement(newPosition, ELEMENT_MAP_KIND.SPRITE_WALL);
 					}
 					if (element && !element.isPreview) {
 						this.pointedMapElement = element;
@@ -933,11 +1165,15 @@ class Map extends Base {
 			this.requestPaintHUD = true;
 			if (Scene.Map.isTransforming()) {
 				if (this.pointedMapElementPosition !== null || previousPointedMapElementPosition !== null) {
-					this.addPortionToUpdate(
-						this.pointedMapElementPosition === null
-							? previousPointedMapElementPosition!.getGlobalPortion()
-							: this.pointedMapElementPosition.getGlobalPortion()
+					const mapPortion = this.getMapPortionFromGlobalPortion(
+						(this.pointedMapElementPosition === null
+							? previousPointedMapElementPosition!
+							: this.pointedMapElementPosition
+						).getGlobalPortion()
 					);
+					if (mapPortion) {
+						this.portionsToUpdate.add(mapPortion);
+					}
 				}
 			}
 		}
@@ -946,24 +1182,6 @@ class Map extends Base {
 			this.onMouseDown();
 			this.needsMouseDown = false;
 		}
-	}
-
-	addPortionToUpdate(portion: Portion) {
-		for (const portionToUpdate of this.portionsToUpdate) {
-			if (portion.equals(portionToUpdate)) {
-				return;
-			}
-		}
-		this.portionsToUpdate.push(portion);
-	}
-
-	addPortionToSave(portion: Portion) {
-		for (const portionToSave of this.portionsToSave) {
-			if (portion.equals(portionToSave)) {
-				return;
-			}
-		}
-		this.portionsToSave.push(portion);
 	}
 
 	addMobileKeyMove() {
@@ -1066,7 +1284,10 @@ class Map extends Base {
 				}
 				this.selectedPosition = this.selectedElement === null ? null : this.pointedMapElementPosition;
 				this.transformControls.detach();
-				this.addPortionToUpdate(this.mapPortion.model.globalPortion);
+				const mapPortion = this.selectedPosition ? this.getMapPortionByPosition(this.selectedPosition) : null;
+				if (mapPortion) {
+					this.portionsToUpdate.add(mapPortion);
+				}
 				this.needsUpdateSelectedPosition = this.selectedPosition;
 				this.needsUpdateSelectedMapElement = true;
 			}
@@ -1146,23 +1367,27 @@ class Map extends Base {
 		}
 		this.isDraggingTransforming = false;
 		if (this.rectangleStartPosition && this.lastPosition) {
-			for (const [position, previous, kind] of this.mapPortion.lastPreviewRemove) {
-				const element = this.mapPortion.model.getMapElement(position, kind);
-				if (element) {
-					element.isPreview = false;
+			this.forEachMapPortions((mapPortion) => {
+				if (mapPortion) {
+					for (const [position, previous, kind] of mapPortion.lastPreviewRemove) {
+						const element = mapPortion.model.getMapElement(position, kind);
+						if (element) {
+							element.isPreview = false;
+						}
+						this.undoRedoStates.push(
+							UndoRedoState.create(
+								position,
+								previous,
+								previous === null ? kind : previous.kind,
+								element,
+								element?.kind || kind
+							)
+						);
+					}
+					mapPortion.lastPreviewRemove = [];
+					this.portionsToSave.add(mapPortion);
 				}
-				this.undoRedoStates.push(
-					UndoRedoState.create(
-						position,
-						previous,
-						previous === null ? kind : previous.kind,
-						element,
-						element?.kind || kind
-					)
-				);
-			}
-			this.mapPortion.lastPreviewRemove = [];
-			this.addPortionToSave(this.mapPortion.model.globalPortion);
+			});
 		}
 		this.rectangleStartPosition = null;
 		this.lastRectangleEndPosition = null;
@@ -1229,21 +1454,25 @@ class Map extends Base {
 		}
 
 		// Update portions
-		if (this.portionsToUpdate.length > 0) {
-			this.mapPortion.updateGeometries();
+		for (const mapPortion of this.portionsToUpdate) {
+			mapPortion.updateGeometries();
 		}
-		this.portionsToUpdate = [];
-		if (this.portionsSaving.length === 0 && this.portionsToSave.length > 0) {
-			this.portionsSaving = [...this.portionsToSave];
-			this.savePortions().catch(console.error);
-			this.portionsToSave = [];
+		this.portionsToUpdate.clear();
+		if (this.portionsSaving.size === 0 && this.portionsToSave.size > 0) {
+			this.portionsSaving = new Set([...this.portionsToSave]);
+			this.savePortionsTemp().catch(console.error);
+			this.portionsToSave.clear();
 		}
 
 		// Update face sprites
 		const vector = new THREE.Vector3();
 		this.camera.getThreeCamera().getWorldDirection(vector);
 		const angle = Math.atan2(vector.x, vector.z) + Math.PI;
-		this.mapPortion.updateFaceSprites(angle);
+		this.forEachMapPortions((mapPortion) => {
+			if (mapPortion) {
+				mapPortion.updateFaceSprites(angle);
+			}
+		});
 		if (this.selectedElement?.kind === ELEMENT_MAP_KIND.SPRITE_FACE) {
 			(this.selectedMesh.geometry as CustomGeometryFace).rotate(
 				angle,
@@ -1258,6 +1487,12 @@ class Map extends Base {
 				(this.autotileFrame.value * MapElement.Autotiles.COUNT_LIST * 2 * Project.SQUARE_SIZE) /
 					Constants.MAX_PICTURE_SIZE
 			);
+		}
+
+		// Update portions
+		if (this.updateCurrentPortion()) {
+			this.loadPortions(true).catch(console.error);
+			this.loading = true;
 		}
 
 		Scene.Map.elapsedTime = new Date().getTime() - Scene.Map.lastUpdateTime;

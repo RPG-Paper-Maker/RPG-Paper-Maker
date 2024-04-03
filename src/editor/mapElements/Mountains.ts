@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
-import { CustomGeometry, Picture2D, Portion, Position, Project } from '../core';
+import { CustomGeometry, Picture2D, Position, Project } from '../core';
 import { PICTURE_KIND } from '../common';
 
 class Mountains {
@@ -180,31 +180,30 @@ class Mountains {
 		return material;
 	}
 
-	static getMountainHere(position: Position, portion: Portion) {
-		const newPortion = Scene.Map.current!.getLocalPortion(position);
-		if (portion.equals(newPortion)) {
-			return Scene.Map.current!.mapPortion.model.mountains.get(position.toKey()); // TODO
-		} else {
-			// If out of current portion
-		}
+	static getMountainHere(position: Position) {
+		return Scene.Map.current!.getMapPortionByPosition(position)?.model.mountains.get(position.toKey());
 	}
 
-	static updateAround(position: Position, portionsToUpdate: Portion[], portionsToSave: Portion[]) {
-		const portion = Scene.Map.current!.getLocalPortion(position);
+	static updateAround(position: Position) {
+		const globalPortion = position.getGlobalPortion();
 		const positions = [
 			position.getSquareLeft(),
 			position.getSquareRight(),
 			position.getSquareTop(),
 			position.getSquareBot(),
 		];
-		Mountains.getMountainHere(position, portion)?.update(position, portion);
+		Mountains.getMountainHere(position)?.update(position);
 		for (const aroundPosition of positions) {
-			const newPortion = Scene.Map.current!.getLocalPortion(aroundPosition);
-			const mountain = Mountains.getMountainHere(aroundPosition, newPortion);
+			const newGlobalPortion = aroundPosition.getGlobalPortion();
+			const mountain = Mountains.getMountainHere(aroundPosition);
 			if (mountain) {
-				if (mountain.update(aroundPosition, newPortion)) {
-					if (!portion.equals(newPortion)) {
-						// TODO
+				if (mountain.update(aroundPosition)) {
+					if (!globalPortion.equals(newGlobalPortion)) {
+						const mapPortion = Scene.Map.current!.getMapPortionFromGlobalPortion(newGlobalPortion);
+						if (mapPortion) {
+							Scene.Map.current!.portionsToUpdate.add(mapPortion);
+							Scene.Map.current!.portionsToSave.add(mapPortion);
+						}
 					}
 				}
 			}

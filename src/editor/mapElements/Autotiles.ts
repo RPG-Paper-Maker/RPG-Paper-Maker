@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
-import { CustomGeometry, Picture2D, Portion, Position, Project, Rectangle, TextureBundle } from '../core';
+import { CustomGeometry, Picture2D, Position, Project, Rectangle, TextureBundle } from '../core';
 import { AUTOTILE_TILE_NAMES, Constants, PICTURE_KIND } from '../common';
 
 class Autotiles {
@@ -293,141 +293,88 @@ class Autotiles {
 		texturesAutotile.push(textureAutotile);
 	}
 
-	static tileExisting(position: Position, portion: Portion): MapElement.Autotile | undefined {
-		const newPortion = Scene.Map.current!.getLocalPortion(position);
-		if (portion.equals(newPortion)) {
-			const land = Scene.Map.current!.mapPortion.model.lands.get(position.toKey()); // TODO
-			if (land && land instanceof MapElement.Autotile) {
-				return land;
-			}
-			return undefined;
-		} else {
-			// If out of current portion
-			/*
-			mapPortion = RPM::get()->project()->currentMap()->mapPortion(newPortion);
-			if (mapPortion == nullptr)
-			{
-			return nullptr;
-			} else
-			{
-			// Preview first
-			MapElement *element = mapPortion->getPreview(position);
-			if (element != nullptr && element->getKind() == MapEditorSelectionKind
-			::Land && element->getSubKind() == MapEditorSubSelectionKind::Autotiles)
-			{
-			return reinterpret_cast<AutotileDatas *>(element);
-			}
-			return reinterpret_cast<
-			AutotileDatas *>(mapPortion->getMapElementAt(position,
-			MapEditorSelectionKind::Land, MapEditorSubSelectionKind::Autotiles));
-			*/
+	static tileExisting(position: Position): MapElement.Autotile | undefined {
+		const globalPortion = position.getGlobalPortion();
+		const land = Scene.Map.current!.getMapPortionFromGlobalPortion(globalPortion)?.model.lands.get(
+			position.toKey()
+		);
+		if (land && land instanceof MapElement.Autotile) {
+			return land;
 		}
+		return undefined;
 	}
 
-	static tileOnWhatever(
-		position: Position,
-		portion: Portion,
-		id: number,
-		rect: Rectangle
-	): MapElement.Autotile | null {
-		const autotile = this.tileExisting(position, portion);
+	static tileOnWhatever(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
+		const autotile = this.tileExisting(position);
 		return autotile && autotile.autotileID === id && autotile.texture.equals(rect) ? autotile : null;
 	}
 
-	static tileOnLeft(position: Position, portion: Portion, id: number, rect: Rectangle): MapElement.Autotile | null {
+	static tileOnLeft(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
 		return this.tileOnWhatever(
 			new Position(position.x - 1, position.y, position.yPixels, position.z, position.layer),
-			portion,
 			id,
 			rect
 		);
 	}
 
-	static tileOnRight(position: Position, portion: Portion, id: number, rect: Rectangle): MapElement.Autotile | null {
+	static tileOnRight(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
 		return this.tileOnWhatever(
 			new Position(position.x + 1, position.y, position.yPixels, position.z, position.layer),
-			portion,
 			id,
 			rect
 		);
 	}
 
-	static tileOnTop(position: Position, portion: Portion, id: number, rect: Rectangle): MapElement.Autotile | null {
+	static tileOnTop(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
 		return this.tileOnWhatever(
 			new Position(position.x, position.y, position.yPixels, position.z - 1, position.layer),
-			portion,
 			id,
 			rect
 		);
 	}
 
-	static tileOnBottom(position: Position, portion: Portion, id: number, rect: Rectangle): MapElement.Autotile | null {
+	static tileOnBottom(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
 		return this.tileOnWhatever(
 			new Position(position.x, position.y, position.yPixels, position.z + 1, position.layer),
-			portion,
 			id,
 			rect
 		);
 	}
 
-	static tileOnTopLeft(
-		position: Position,
-		portion: Portion,
-		id: number,
-		rect: Rectangle
-	): MapElement.Autotile | null {
+	static tileOnTopLeft(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
 		return this.tileOnWhatever(
 			new Position(position.x - 1, position.y, position.yPixels, position.z - 1, position.layer),
-			portion,
 			id,
 			rect
 		);
 	}
 
-	static tileOnTopRight(
-		position: Position,
-		portion: Portion,
-		id: number,
-		rect: Rectangle
-	): MapElement.Autotile | null {
+	static tileOnTopRight(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
 		return this.tileOnWhatever(
 			new Position(position.x + 1, position.y, position.yPixels, position.z - 1, position.layer),
-			portion,
 			id,
 			rect
 		);
 	}
 
-	static tileOnBottomLeft(
-		position: Position,
-		portion: Portion,
-		id: number,
-		rect: Rectangle
-	): MapElement.Autotile | null {
+	static tileOnBottomLeft(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
 		return this.tileOnWhatever(
 			new Position(position.x - 1, position.y, position.yPixels, position.z + 1, position.layer),
-			portion,
 			id,
 			rect
 		);
 	}
 
-	static tileOnBottomRight(
-		position: Position,
-		portion: Portion,
-		id: number,
-		rect: Rectangle
-	): MapElement.Autotile | null {
+	static tileOnBottomRight(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
 		return this.tileOnWhatever(
 			new Position(position.x + 1, position.y, position.yPixels, position.z + 1, position.layer),
-			portion,
 			id,
 			rect
 		);
 	}
 
-	static updateAround(position: Position, portionsToUpdate: Portion[], portionsToSave: Portion[]) {
-		const portion = Scene.Map.current!.getLocalPortion(position);
+	static updateAround(position: Position) {
+		const globalPortion = position.getGlobalPortion();
 		for (let i = -1; i <= 1; i++) {
 			for (let j = -1; j <= 1; j++) {
 				const newPosition = new Position(
@@ -437,23 +384,18 @@ class Autotiles {
 					position.z + j,
 					position.layer
 				);
-				const newAutotile = this.tileExisting(newPosition, portion);
+				const newAutotile = this.tileExisting(newPosition);
 				if (newAutotile) {
 					// Update the current autotile
-					if (newAutotile.update(newPosition, portion)) {
-						const newPortion = Scene.Map.current!.getLocalPortion(newPosition);
-						// Update view in different portion
-						if (!portion.equals(newPortion)) {
-							// TODO
-							/*
-							mapPortion = RPM::get()->project()->currentMap()
-							->mapPortion(newPortion);
-							update += mapPortion;
-							if (previousPreview == nullptr) {
-							save += mapPortion;
-							} else {
-							*previousPreview += mapPortion;
-						}*/
+					if (newAutotile.update(newPosition)) {
+						const newGlobalPortion = newPosition.getGlobalPortion();
+						// Update and save if different portion
+						if (!globalPortion.equals(newGlobalPortion)) {
+							const mapPortion = Scene.Map.current!.getMapPortionFromGlobalPortion(newGlobalPortion);
+							if (mapPortion) {
+								Scene.Map.current!.portionsToUpdate.add(mapPortion);
+								Scene.Map.current!.portionsToSave.add(mapPortion);
+							}
 						}
 					}
 				}

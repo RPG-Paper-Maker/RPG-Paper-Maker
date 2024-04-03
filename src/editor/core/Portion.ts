@@ -44,6 +44,19 @@ class Portion {
 		return Portion.getFileName(this.x, this.y, this.z);
 	}
 
+	toKey(): string {
+		return [this.x, this.y, this.z].join('+');
+	}
+
+	static fromKey(key: string): Portion {
+		const portion = new Portion();
+		const values = key.split('+');
+		portion.x = Number(values[0]);
+		portion.y = Number(values[1]);
+		portion.z = Number(values[3]);
+		return portion;
+	}
+
 	equals(portion: Portion): boolean {
 		return this.x === portion.x && this.y === portion.y && this.z === portion.z;
 	}

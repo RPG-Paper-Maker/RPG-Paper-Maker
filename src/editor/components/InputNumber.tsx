@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { INPUT_TYPE_WIDTH, Mathf } from '../common';
 import '../styles/Input.css';
 

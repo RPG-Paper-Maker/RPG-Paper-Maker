@@ -34,6 +34,7 @@ function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false
 	const dialogRef = useRef<HTMLDivElement>(null);
 
 	Inputs.isMapFocused = !isOpen;
+	console.log(Inputs.isMapFocused);
 
 	const updatePosition = (x: number, y: number) => {
 		if (dialogRef.current) {

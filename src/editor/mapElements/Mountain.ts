@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { MapElement, Model } from '../Editor';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, Utils } from '../common';
-import { CustomGeometry, Portion, Position, Project } from '../core';
+import { CustomGeometry, Position, Project } from '../core';
 import { Base } from './Base';
 import { Mountains } from './Mountains';
 
@@ -737,20 +737,20 @@ class Mountain extends Base {
 		return count;
 	}
 
-	getMountainHere(position: Position, portion: Portion) {
-		const mountain = Mountains.getMountainHere(position, portion);
+	getMountainHere(position: Position) {
+		const mountain = Mountains.getMountainHere(position);
 		return mountain && mountain.equals(this);
 	}
 
-	update(position: Position, portion: Portion): boolean {
+	update(position: Position): boolean {
 		const previousLeft = this.left;
 		const previousRight = this.right;
 		const previousTop = this.top;
 		const previousBot = this.bot;
-		this.left = !!this.getMountainHere(position.getSquareLeft(), portion);
-		this.right = !!this.getMountainHere(position.getSquareRight(), portion);
-		this.top = !!this.getMountainHere(position.getSquareTop(), portion);
-		this.bot = !!this.getMountainHere(position.getSquareBot(), portion);
+		this.left = !!this.getMountainHere(position.getSquareLeft());
+		this.right = !!this.getMountainHere(position.getSquareRight());
+		this.top = !!this.getMountainHere(position.getSquareTop());
+		this.bot = !!this.getMountainHere(position.getSquareBot());
 		return (
 			this.left !== previousLeft ||
 			this.right !== previousRight ||
