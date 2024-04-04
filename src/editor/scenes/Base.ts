@@ -27,15 +27,15 @@ class Base {
 		this.camera.update();
 	}
 
-	onMouseDown(x: number, y: number) {
+	onMouseDown() {
 		// TODO
 	}
 
-	onMouseMove(x: number, y: number) {
+	onMouseMove() {
 		// TODO
 	}
 
-	onMouseUp(x: number, y: number) {
+	onMouseUp() {
 		// TODO
 	}
 

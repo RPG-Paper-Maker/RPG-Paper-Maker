@@ -23,5 +23,5 @@
   },
   "include": [
     "src"
-  ]
+, "eslint.config.mjs"  ]
 }

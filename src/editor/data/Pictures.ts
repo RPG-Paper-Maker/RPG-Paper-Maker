@@ -10,7 +10,7 @@
 */
 
 import { Model } from '../Editor';
-import { Paths, PICTURE_KIND } from '../common';
+import { JSONType, Paths, PICTURE_KIND } from '../common';
 import { Project, Serializable } from '../core';
 
 class Pictures extends Serializable {
@@ -25,17 +25,17 @@ class Pictures extends Serializable {
 		return this.list[kind][this.listIndexes[kind][id]];
 	}
 
-	read(json: Record<string, any>) {
+	read(json: JSONType) {
 		this.list = [];
 		this.listIndexes = [];
-		for (const { k, v } of json.list) {
+		for (const { k, v } of json.list as JSONType[]) {
 			const list: Model.Picture[] = [];
 			const listIndexes: number[] = [];
-			this.list[k] = list;
-			this.listIndexes[k] = listIndexes;
+			this.list[k as number] = list;
+			this.listIndexes[k as number] = listIndexes;
 			let index = 0;
-			for (const jsonPicture of v) {
-				const picture = new Model.Picture(k);
+			for (const jsonPicture of v as JSONType[]) {
+				const picture = new Model.Picture(k as number);
 				picture.read(jsonPicture);
 				list.push(picture);
 				listIndexes[picture.id] = index;
@@ -44,10 +44,10 @@ class Pictures extends Serializable {
 		}
 	}
 
-	write(json: Record<string, any>) {
-		const list: any[] = [];
+	write(json: JSONType) {
+		const list: JSONType[][] = [];
 		for (const [kind, pictures] of this.list.entries()) {
-			const jsonPictures: any[] = [];
+			const jsonPictures: JSONType[] = [];
 			for (const picture of pictures) {
 				const jsonPicture = {};
 				picture.write(jsonPicture);

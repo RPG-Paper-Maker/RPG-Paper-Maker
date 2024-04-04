@@ -10,7 +10,7 @@
 */
 
 import { SpecialElement } from './SpecialElement';
-import { BINDING, BindingType, MOUNTAIN_COLLISION_KIND } from '../common';
+import { BINDING, BindingType, JSONType, MOUNTAIN_COLLISION_KIND } from '../common';
 
 class Mountain extends SpecialElement {
 	public collisionKind!: MOUNTAIN_COLLISION_KIND;
@@ -23,11 +23,11 @@ class Mountain extends SpecialElement {
 		return [...Mountain.bindings, ...additionnalBinding];
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Mountain.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Mountain.getBindings(additionnalBinding));
 	}
 }

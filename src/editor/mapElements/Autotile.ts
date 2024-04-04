@@ -12,7 +12,7 @@
 import { MapElement } from '../Editor';
 import { CustomGeometry, Position, Project, Rectangle, TextureBundle } from '../core';
 import { Land } from './Land';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, Utils } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, Utils } from '../common';
 
 class Autotile extends Land {
 	public autotileID!: number;
@@ -32,7 +32,7 @@ class Autotile extends Land {
 		return [...Autotile.bindings, ...additionnalBinding];
 	}
 
-	static fromJSON(json: Record<string, any>): Autotile {
+	static fromJSON(json: JSONType): Autotile {
 		const autotile = new Autotile();
 		if (json) {
 			autotile.read(json);
@@ -199,11 +199,11 @@ class Autotile extends Land {
 		);
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Autotile.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Autotile.getBindings(additionnalBinding));
 	}
 }

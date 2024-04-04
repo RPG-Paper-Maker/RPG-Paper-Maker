@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	RootState,
@@ -53,7 +53,7 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 import { LuFolders, LuSaveAll } from 'react-icons/lu';
 import Loader from './Loader';
 import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
-import { KEY, SPECIAL_KEY, LOCAL_FORAGE, Paths, MenuItemType } from '../common';
+import { KEY, SPECIAL_KEY, LOCAL_FORAGE, Paths, MenuItemType, JSONType } from '../common';
 import { LocalFile, Project } from '../core';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
@@ -78,7 +78,7 @@ function MainMenuBar() {
 	const currentTreeMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
 	const currentProjectName = useSelector((state: RootState) => state.projects.current);
 	const triggers = useSelector((state: RootState) => state.triggers.mainBar);
-	const projectNames = useSelector((state: RootState) => state.projects.list).map(({ name, location }) => name);
+	const projectNames = useSelector((state: RootState) => state.projects.list).map(({ name }) => name);
 	const undoRedoIndex = useSelector((state: RootState) => state.mapEditor.undoRedo.index);
 	const undoRedoLength = useSelector((state: RootState) => state.mapEditor.undoRedo.length);
 	const projectMenuIndex = useSelector((state: RootState) => state.projects.menuIndex);
@@ -106,10 +106,10 @@ function MainMenuBar() {
 		setIsDialogNewProjectOpen(true);
 	};
 
-	const handleAcceptNewProject = async (data: Record<string, any>) => {
-		dispatch(addProject({ name: data.projectName, location: '' }));
+	const handleAcceptNewProject = async (data: JSONType) => {
+		dispatch(addProject({ name: data.projectName as string, location: '' }));
 		setIsDialogNewProjectOpen(false);
-		await handleOpenProject(data.projectName);
+		await handleOpenProject(data.projectName as string);
 	};
 
 	const handleRejectNewProject = async () => {
@@ -508,7 +508,7 @@ function MainMenuBar() {
 		}
 		return (
 			<Menu>
-				{list.map((item: any, index: number) => {
+				{list.map((item: MenuItemType, index: number) => {
 					const handleClick = () => {
 						if (item.onClick) {
 							item.onClick();
@@ -520,7 +520,7 @@ function MainMenuBar() {
 					};
 					return (
 						<MenuItem key={index} icon={item.icon} disabled={item.disabled} onClick={handleClick}>
-							{item.title}
+							{item.title as ReactElement}
 						</MenuItem>
 					);
 				})}

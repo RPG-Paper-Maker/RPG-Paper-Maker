@@ -18,12 +18,12 @@ import Loader from '../Loader';
 import { useDispatch } from 'react-redux';
 import { removeProject } from '../../store';
 import { LocalFile, Project } from '../../core';
-import { Constants, ELEMENT_MAP_KIND, LOCAL_FORAGE, Paths } from '../../common';
+import { Constants, ELEMENT_MAP_KIND, JSONType, LOCAL_FORAGE, Paths } from '../../common';
 import InputText from '../InputText';
 
 type Props = {
 	isOpen: boolean;
-	onAccept: (data: Record<string, any>) => void;
+	onAccept: (data: JSONType) => void;
 	onReject: () => void;
 };
 

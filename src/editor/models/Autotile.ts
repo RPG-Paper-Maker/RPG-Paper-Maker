@@ -10,7 +10,7 @@
 */
 
 import { SpecialElement } from './SpecialElement';
-import { BINDING, BindingType } from '../common';
+import { BINDING, BindingType, JSONType } from '../common';
 
 class Autotile extends SpecialElement {
 	public isAnimated!: boolean;
@@ -21,11 +21,11 @@ class Autotile extends SpecialElement {
 		return [...Autotile.bindings, ...additionnalBinding];
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Autotile.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Autotile.getBindings(additionnalBinding));
 	}
 }

@@ -422,7 +422,7 @@ class Map extends Base {
 			const mapPortion = new MapPortion();
 			mapPortion.initialize(portion);
 			this.setMapPortion(x, y, z, mapPortion, move);
-			if (json?.hasOwnProperty('lands')) {
+			if (json?.['lands']) {
 				mapPortion.model.read(json);
 				await mapPortion.loadTexturesAndUpdateGeometries(false);
 			}
@@ -451,7 +451,7 @@ class Map extends Base {
 
 	setMapPortion(x: number, y: number, z: number, mapPortion: MapPortion | null, move: boolean) {
 		const index = this.getPortionIndex(x, y, z);
-		let currentMapPortion = this.mapPortions[index];
+		const currentMapPortion = this.mapPortions[index];
 		if (currentMapPortion && !move) {
 			currentMapPortion.cleanAll();
 		}
@@ -1203,7 +1203,7 @@ class Map extends Base {
 		}
 	}
 
-	onKeyDown(key: string) {
+	onKeyDown() {
 		// TODO
 	}
 
@@ -1214,7 +1214,7 @@ class Map extends Base {
 		}
 	}
 
-	onKeyUp(key: string) {
+	onKeyUp() {
 		if (this.tag) {
 			this.tag.cursorPosition = this.cursor.position;
 			Project.current!.treeMaps.save().catch(console.error);
@@ -1297,7 +1297,7 @@ class Map extends Base {
 		}
 	}
 
-	onPointerDown(x: number, y: number) {
+	onPointerDown() {
 		if (Inputs.previousTouchDistance === 0 && this.rectangleStartPosition === null) {
 			this.addMobileKeyMove();
 			if (Inputs.keys.length > 0) {
@@ -1312,7 +1312,7 @@ class Map extends Base {
 		}
 	}
 
-	onMouseMove(x: number, y: number) {
+	onMouseMove() {
 		if (Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON) {
 			this.requestPaintHUD = true;
 		}
@@ -1355,7 +1355,7 @@ class Map extends Base {
 		// TODO
 	}
 
-	async onMouseUp(x: number, y: number) {
+	async onMouseUp() {
 		this.mouseUp = true;
 		this.needsUpdateRaycasting = false;
 		this.lockedY = null;
@@ -1399,8 +1399,8 @@ class Map extends Base {
 		this.mouseUp = false;
 	}
 
-	async onTouchEnd(x: number, y: number) {
-		await this.onMouseUp(x, y);
+	async onTouchEnd() {
+		await this.onMouseUp();
 		this.lastPosition = null;
 		Inputs.keys = [];
 		this.isMobileMovingCursor = false;

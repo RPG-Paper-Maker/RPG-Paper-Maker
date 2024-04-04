@@ -11,7 +11,7 @@
 
 import { Model } from '../Editor';
 import { Base } from './Base';
-import { BINDING, BindingType, Constants, Paths, Utils } from '../common';
+import { BINDING, BindingType, Constants, JSONType, Paths, Utils } from '../common';
 import { LocalFile, Portion, Position, Project } from '../core';
 
 class Map extends Base {
@@ -286,11 +286,11 @@ class Map extends Base {
 		return map;
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Map.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Map.getBindings(additionnalBinding));
 		json.bgs = { id: -1, ie: false, is: false, name: '', v: { k: 3, v: 100 } };
 		json.isi = false;

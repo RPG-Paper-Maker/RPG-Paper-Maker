@@ -33,7 +33,7 @@ function ProjectPreview({ project }: Props) {
 		dispatch(triggerOpenProject(project.name));
 	};
 
-	const handleRemoveProject = (e: any) => {
+	const handleClickRemoveProject = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
 		e.stopPropagation();
 		setIsDialogConfirmOpen(true);
 	};
@@ -61,7 +61,7 @@ function ProjectPreview({ project }: Props) {
 					{project.location.length > 0 && <div>{project.location}</div>}
 				</div>
 				<div>
-					<FaTrashAlt onClick={handleRemoveProject} />
+					<FaTrashAlt onClick={handleClickRemoveProject} />
 				</div>
 			</div>
 			<Dialog

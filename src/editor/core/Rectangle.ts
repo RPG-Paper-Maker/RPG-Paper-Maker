@@ -50,7 +50,7 @@ class Rectangle {
 		return `[${this.x}, ${this.y}${positionOnly ? '' : `,${this.width}, ${this.height}`}]`;
 	}
 
-	read(json: any) {
+	read(json: number[]) {
 		this.x = json[0];
 		this.y = json[1];
 		if (json.length === 2) {
@@ -62,7 +62,7 @@ class Rectangle {
 		}
 	}
 
-	write(json: any[]) {
+	write(json: number[]) {
 		json[0] = this.x;
 		json[1] = this.y;
 		json[2] = this.width;

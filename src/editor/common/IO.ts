@@ -1,3 +1,5 @@
+import { JSONType } from './Types';
+
 /*
     RPG Paper Maker Copyright (C) 2017-2024 Wano
 
@@ -10,7 +12,7 @@
 */
 class IO {
 	static async openFile(url: string): Promise<string> {
-		return await new Promise((resolve, reject) => {
+		return await new Promise((resolve) => {
 			const xhr = new XMLHttpRequest();
 			xhr.onreadystatechange = () => {
 				if (xhr.readyState === 4) {
@@ -24,7 +26,7 @@ class IO {
 		});
 	}
 
-	static async parseFileJSON(url: string): Promise<Record<string, any>> {
+	static async parseFileJSON(url: string): Promise<JSONType> {
 		const content = await IO.openFile(url);
 		try {
 			return JSON.parse(content);

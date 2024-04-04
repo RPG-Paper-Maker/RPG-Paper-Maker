@@ -68,7 +68,7 @@ function PanelProject() {
 		await Project.current!.settings.save();
 	};
 
-	const handleSelectedMapItem = (node: Node | null, isClick: boolean) => {
+	const handleSelectedMapItem = (node: Node | null) => {
 		if (!openLoading) {
 			if (node && !(node.content as Model.TreeMapTag).isFolder()) {
 				const id = node.content.id;

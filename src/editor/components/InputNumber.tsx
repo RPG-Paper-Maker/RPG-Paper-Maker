@@ -47,7 +47,7 @@ function InputNumber({
 		}
 	};
 
-	const handleChange = (e: any) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setIsEmpty(e.target.value === '');
 		const v = transformValue(Number(e.target.value));
 		if (v < min) {

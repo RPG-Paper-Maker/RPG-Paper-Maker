@@ -10,9 +10,11 @@
 */
 
 import { LocalFile, Position, Rectangle } from '.';
-import { BINDING, BindingType, KeyValue, Utils } from '../common';
+import { MapElement, Model } from '../Editor';
+import { BINDING, BindingType, JSONMapping, JSONType, KeyValue, Utils } from '../common';
 
-abstract class Serializable {
+class Serializable {
+	// eslint-disable-next-line
 	copy(serializable: Serializable): void {
 		// Nothing to copy in this base
 	}
@@ -21,6 +23,7 @@ abstract class Serializable {
 		return this;
 	}
 
+	// eslint-disable-next-line
 	getPath(temp: boolean = false) {
 		return '';
 	}
@@ -45,92 +48,100 @@ abstract class Serializable {
 		await LocalFile.writeJSON(this.getPath(temp), json);
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
-		for (const [name, jsonName, defaultValue, type, constructor, additionalFunction] of additionnalBinding) {
+	// eslint-disable-next-line
+	static fromJSON(json: JSONType): Serializable {
+		return new Serializable();
+	}
+
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
+		for (const [name, jsonName, defaultValue, type, constructorClass, additionalFunction] of additionnalBinding) {
 			switch (type) {
 				case BINDING.NUMBER:
 				case BINDING.STRING:
 				case BINDING.BOOLEAN:
-					(this as any)[name] = Utils.defaultValue(
+					(this as JSONType)[name] = Utils.defaultValue(
 						json[jsonName],
-						defaultValue === undefined ? (this as any)[name] : defaultValue
+						defaultValue === undefined ? (this as JSONType)[name] : defaultValue
 					);
 					break;
 				case BINDING.OBJECT: {
-					const jsonObj = json[jsonName];
+					const jsonObj = json[jsonName] as JSONType;
 					if (jsonObj === undefined) {
-						(this as any)[name] = defaultValue;
-					} else {
-						const obj = new constructor();
+						(this as JSONType)[name] = defaultValue;
+					} else if (constructorClass) {
+						const obj = new constructorClass();
 						obj.read(jsonObj);
-						(this as any)[name] = obj;
+						(this as JSONType)[name] = obj;
 					}
 					break;
 				}
 				case BINDING.POSITION: {
-					const jsonObj = json[jsonName];
+					const jsonObj = json[jsonName] as number[];
 					if (jsonObj === undefined) {
-						(this as any)[name] = defaultValue;
+						(this as JSONType)[name] = defaultValue;
 					} else {
 						const obj = new Position();
 						obj.read(jsonObj);
-						(this as any)[name] = obj;
+						(this as JSONType)[name] = obj;
 					}
 					break;
 				}
 				case BINDING.LIST: {
-					const jsonTab = json[jsonName];
-					const tab: any[] = [];
-					if (jsonTab) {
+					const jsonTab = json[jsonName] as JSONType[];
+					const tab: Serializable[] = [];
+					if (jsonTab && constructorClass) {
 						for (const jsonElement of jsonTab) {
-							const obj = new constructor();
+							const obj = new constructorClass();
 							obj.read(jsonElement);
 							tab.push(obj);
 						}
 					}
-					(this as any)[name] = tab;
+					(this as JSONType)[name] = tab;
 					break;
 				}
 				case BINDING.LIST_WITH_INDEXES: {
-					const jsonTab = json[jsonName];
-					const tab: any[] = [];
+					const jsonTab = json[jsonName] as JSONType[];
+					const tab: Serializable[] = [];
 					const tabIndexes: number[] = [];
-					if (jsonTab) {
+					if (jsonTab && constructorClass) {
 						for (const [index, jsonElement] of jsonTab.entries()) {
-							const obj = new constructor();
+							const obj = new constructorClass() as Model.Base;
 							obj.read(jsonElement);
 							tab.push(obj);
 							tabIndexes[obj.id] = index;
 						}
 					}
-					(this as any)[name] = tab;
-					(this as any)[`${name}Indexes`] = tabIndexes;
+					(this as JSONType)[name] = tab;
+					(this as JSONType)[`${name}Indexes`] = tabIndexes;
 					break;
 				}
 				case BINDING.MAP_POSITION: {
 					const mapping = new Map();
-					(this as any)[name] = mapping;
-					for (const objHash of json[jsonName]) {
+					(this as JSONType)[name] = mapping;
+					const jsonMappings = json[jsonName] as JSONMapping[];
+					for (const objHash of jsonMappings) {
 						const p = new Position();
 						p.read(objHash.k);
-						const cons = additionalFunction ? additionalFunction(objHash.v) : constructor;
-						mapping.set(p.toKey(), cons.fromJSON(objHash.v));
+						const cons = additionalFunction ? additionalFunction(objHash.v) : constructorClass;
+						if (cons) {
+							mapping.set(p.toKey(), cons.fromJSON(objHash.v));
+						}
 					}
 					break;
 				}
 				case BINDING.MAP: {
 					const mapping = new Map();
-					(this as any)[name] = mapping;
-					const jsonObj = json[jsonName];
+					(this as JSONType)[name] = mapping;
+					const jsonObj = json[jsonName] as Record<string, unknown>;
 					for (const key of Object.keys(jsonObj)) {
 						mapping.set(key, jsonObj[key]);
 					}
 					break;
 				}
 				case BINDING.RECTANGLE: {
-					const jsonObj = json[jsonName];
+					const jsonObj = json[jsonName] as number[];
 					if (!jsonObj && defaultValue === null) {
-						(this as any)[name] = null;
+						(this as JSONType)[name] = null;
 					} else {
 						let rectangle: Rectangle;
 						if (jsonObj) {
@@ -141,13 +152,13 @@ abstract class Serializable {
 								rectangle = defaultValue.clone();
 							} else {
 								if (defaultValue) {
-									rectangle = defaultValue;
+									rectangle = defaultValue as Rectangle;
 								} else {
 									rectangle = new Rectangle();
 								}
 							}
 						}
-						(this as any)[name] = rectangle;
+						(this as JSONType)[name] = rectangle;
 					}
 					break;
 				}
@@ -157,26 +168,27 @@ abstract class Serializable {
 		}
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		for (const [name, jsonName, defaultValue, type] of additionnalBinding) {
 			switch (type) {
 				case BINDING.NUMBER:
 				case BINDING.STRING:
 				case BINDING.BOOLEAN:
-					Utils.writeDefaultValue(json, jsonName, (this as any)[name], defaultValue);
+					Utils.writeDefaultValue(json, jsonName, (this as JSONType)[name], defaultValue);
 					break;
-				case BINDING.OBJECT:
-					const obj = (this as any)[name];
+				case BINDING.OBJECT: {
+					const obj = (this as JSONType)[name] as Serializable;
 					if (obj) {
 						const jsonObj = {};
 						obj.write(jsonObj);
 						json[jsonName] = jsonObj;
 					}
 					break;
+				}
 				case BINDING.POSITION: {
-					const p = (this as any)[name];
+					const p = (this as JSONType)[name] as Position;
 					if (p) {
-						const jsonTab: any[] = [];
+						const jsonTab: number[] = [];
 						p.write(jsonTab);
 						json[jsonName] = jsonTab;
 					}
@@ -184,8 +196,8 @@ abstract class Serializable {
 				}
 				case BINDING.LIST:
 				case BINDING.LIST_WITH_INDEXES: {
-					const tab = (this as any)[name];
-					const jsonTab: any[] = [];
+					const tab = (this as JSONType)[name] as Serializable[];
+					const jsonTab: JSONType[] = [];
 					for (const element of tab) {
 						const jsonObj = {};
 						element.write(jsonObj);
@@ -195,8 +207,8 @@ abstract class Serializable {
 					break;
 				}
 				case BINDING.MAP_POSITION: {
-					const mapping = (this as any)[name];
-					const jsonTab: any[] = [];
+					const mapping = (this as JSONType)[name] as Map<string, MapElement.Base>;
+					const jsonTab: JSONType[] = [];
 					for (const [positionKey, element] of mapping) {
 						const objMap: KeyValue = {};
 						const tabKey: number[] = [];
@@ -212,8 +224,8 @@ abstract class Serializable {
 					break;
 				}
 				case BINDING.MAP: {
-					const mapping = (this as any)[name];
-					const jsonMap: any = {};
+					const mapping = (this as JSONType)[name] as Map<string, unknown>;
+					const jsonMap: JSONType = {};
 					for (const [k, v] of mapping) {
 						jsonMap[k] = v;
 					}
@@ -221,11 +233,11 @@ abstract class Serializable {
 					break;
 				}
 				case BINDING.RECTANGLE: {
-					const rectangle = (this as any)[name];
+					const rectangle = (this as JSONType)[name] as Rectangle;
 					if (rectangle === null) {
 						json[jsonName] = null;
 					} else if (rectangle) {
-						const tab: any[] = [];
+						const tab: number[] = [];
 						rectangle.write(tab);
 						json[jsonName] = tab;
 					}

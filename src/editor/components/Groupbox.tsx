@@ -9,10 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { ReactNode } from 'react';
 import '../styles/Groupbox.css';
 
 type Props = {
-	children?: any;
+	children?: ReactNode;
 	title?: string;
 };
 

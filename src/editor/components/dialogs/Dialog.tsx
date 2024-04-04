@@ -49,7 +49,7 @@ function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false
 		}
 	};
 
-	const handleMouseMove = (e: any) => {
+	const handleMouseMove = (e: MouseEvent) => {
 		if (isDragging) {
 			updatePosition(e.clientX - initialPosition.x, e.clientY - initialPosition.y);
 		}

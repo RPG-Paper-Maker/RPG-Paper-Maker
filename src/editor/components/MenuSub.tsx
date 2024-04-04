@@ -9,12 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState, useRef, useEffect, ReactNode, Children, cloneElement } from 'react';
+import React, { useState, useRef, useEffect, ReactNode, Children, cloneElement, ReactElement } from 'react';
 import '../styles/MenuSub.css';
 import { Utils } from '../common';
 
 type Props = {
-	children: any;
+	children: ReactElement | ReactElement[];
 	title?: string;
 	icon?: ReactNode;
 	isActivable?: boolean;
@@ -55,7 +55,7 @@ function MenuSub({
 	const items = Children.map(children, (child) =>
 		cloneElement(child, {
 			setTriggerCloseAll,
-			onClick: (e: any) => {
+			onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>): void => {
 				if (child.props.onClick) {
 					child.props.onClick(e);
 				}
@@ -94,7 +94,7 @@ function MenuSub({
 		setIsOpen(true);
 	};
 
-	const handleClick = (e: any) => {
+	const handleClick = () => {
 		if (!disabled) {
 			if (isActivable && setActiveIndex) {
 				setActiveIndex(index);

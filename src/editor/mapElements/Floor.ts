@@ -11,7 +11,7 @@
 
 import { MapElement } from '../Editor';
 import { Land } from './Land';
-import { ELEMENT_MAP_KIND, Mathf } from '../common';
+import { ELEMENT_MAP_KIND, JSONType, Mathf } from '../common';
 import { CustomGeometry, Position, Project, Rectangle } from '../core';
 
 class Floor extends Land {
@@ -20,7 +20,7 @@ class Floor extends Land {
 		this.kind = ELEMENT_MAP_KIND.FLOOR;
 	}
 
-	static fromJSON(json: Record<string, any>): Floor {
+	static fromJSON(json: JSONType): Floor {
 		const floor = new Floor();
 		floor.read(json);
 		return floor;

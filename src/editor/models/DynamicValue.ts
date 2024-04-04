@@ -9,12 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND } from '../common';
+import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import { Serializable } from '../core';
 
 class DynamicValue extends Serializable {
 	public kind!: DYNAMIC_VALUE_KIND;
-	public value!: any;
+	public value!: unknown;
 	public customStructure!: Record<string, DynamicValue>;
 	public customList!: DynamicValue[];
 	public x!: DynamicValue;
@@ -30,11 +30,11 @@ class DynamicValue extends Serializable {
 		return [...DynamicValue.bindings, ...additionnalBinding];
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, DynamicValue.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, DynamicValue.getBindings(additionnalBinding));
 	}
 }

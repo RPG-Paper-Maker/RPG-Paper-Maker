@@ -10,14 +10,14 @@
 */
 
 import { Base } from './Base';
-import { BINDING, BindingType, Paths, PICTURE_KIND } from '../common';
+import { BINDING, BindingType, JSONType, Paths, PICTURE_KIND } from '../common';
 import { CollisionSquare, Picture2D, Project } from '../core';
 
 class Picture extends Base {
 	public kind!: PICTURE_KIND;
 	public isBR!: boolean;
 	public dlc!: string;
-	public jsonCollisions!: Record<string, any>[];
+	public jsonCollisions!: JSONType[];
 	public collisionsRepeat!: boolean;
 	public collisions!: CollisionSquare[];
 	public picture!: Picture2D;
@@ -104,11 +104,11 @@ class Picture extends Base {
 		this.picture = await Picture2D.loadImage(this.getPath());
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Picture.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Picture.getBindings(additionnalBinding));
 	}
 }

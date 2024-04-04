@@ -9,11 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { ReactElement } from 'react';
 import { Utils } from '../common';
 import '../styles/MenuItem.css';
 
 type Props = {
-	children?: any;
+	children?: ReactElement | ReactElement[] | string;
 	separator?: boolean;
 	icon?: React.ReactNode;
 	isActivable?: boolean;
@@ -39,7 +40,7 @@ function MenuItem({
 	onClick,
 	setTriggerCloseAll,
 }: Props) {
-	const handleClick = (e: any) => {
+	const handleClick = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
 		if (!disabled && !separator) {
 			if (isActivable && setActiveIndex) {
 				setActiveIndex(index);

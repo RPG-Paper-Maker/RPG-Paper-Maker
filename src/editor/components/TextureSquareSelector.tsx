@@ -114,7 +114,7 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 		return null;
 	};
 
-	const getCurrentPosition = (e: any) => {
+	const getCurrentPosition = (e: MouseEvent) => {
 		if (refCanvas.current) {
 			const rect = refCanvas.current.getBoundingClientRect();
 			const x = e.clientX - rect.left;
@@ -124,7 +124,7 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 		return { x: 0, y: 0 };
 	};
 
-	const getCurrentPositionMobile = (e: any) => {
+	const getCurrentPositionMobile = (e: TouchEvent) => {
 		if (refCanvas.current) {
 			const rect = refCanvas.current.getBoundingClientRect();
 			const x = e.touches[0].pageX - rect.left;
@@ -246,20 +246,20 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 		}
 	};
 
-	const handleMouseDown = (e: any) => {
+	const handleMouseDown = (e: MouseEvent) => {
 		const { x, y } = getCurrentPosition(e);
 		currentState.firstX = x;
 		currentState.firstY = y;
 	};
 
-	const handleTouchStart = (e: any) => {
+	const handleTouchStart = (e: TouchEvent) => {
 		const { x, y } = getCurrentPositionMobile(e);
 		currentState.firstX = x;
 		currentState.firstY = y;
 		updateMove(x, y);
 	};
 
-	const handleMouseMove = (e: any) => {
+	const handleMouseMove = (e: MouseEvent) => {
 		if (!isVisible() || !currentState.picture) {
 			return;
 		}
@@ -267,7 +267,7 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 		updateMove(x, y);
 	};
 
-	const handleMouseUp = async (e: any) => {
+	const handleMouseUp = async () => {
 		if (isVisible() && currentState.firstX !== -1 && currentState.firstY !== -1) {
 			if (currentState.previewRect) {
 				currentState.selectedRect = currentState.previewRect;
@@ -280,7 +280,7 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 		}
 	};
 
-	const handleTouchMove = (e: any) => {
+	const handleTouchMove = (e: TouchEvent) => {
 		if (!isVisible() || !currentState.picture) {
 			return;
 		}

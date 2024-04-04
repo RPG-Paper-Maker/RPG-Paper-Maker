@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { MapElement, Scene } from '../Editor';
 import { Base } from './Base';
 import { CustomGeometry, Position, Project, Rectangle } from '../core';
-import { BINDING, BindingType, ELEMENT_MAP_KIND } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType } from '../common';
 
 class Land extends Base {
 	public static readonly JSON_UP = 'up';
@@ -125,11 +125,11 @@ class Land extends Base {
 		geometry.pushQuadUVs(texA, texB, texC, texD);
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Land.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Land.getBindings(additionnalBinding));
 	}
 }

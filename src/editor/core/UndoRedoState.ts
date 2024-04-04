@@ -12,7 +12,7 @@
 import { MapElement } from '../Editor';
 import { Serializable } from './Serializable';
 import { Position } from '.';
-import { ELEMENT_MAP_KIND } from '../common';
+import { ELEMENT_MAP_KIND, JSONType } from '../common';
 
 class UndoRedoState extends Serializable {
 	public static readonly JSON_POSITION = 'p';
@@ -43,17 +43,23 @@ class UndoRedoState extends Serializable {
 		return state;
 	}
 
-	read(json: any): void {
+	read(json: JSONType): void {
 		this.position = new Position();
-		this.position.read(json[UndoRedoState.JSON_POSITION]);
-		this.kindBefore = json[UndoRedoState.JSON_KIND_BEFORE];
-		this.kindAfter = json[UndoRedoState.JSON_KIND_AFTER];
-		this.elementBefore = MapElement.Base.readMapElement(this.kindBefore, json[UndoRedoState.JSON_ELEMENT_BEFORE]);
-		this.elementAfter = MapElement.Base.readMapElement(this.kindAfter, json[UndoRedoState.JSON_ELEMENT_AFTER]);
+		this.position.read(json[UndoRedoState.JSON_POSITION] as number[]);
+		this.kindBefore = json[UndoRedoState.JSON_KIND_BEFORE] as number;
+		this.kindAfter = json[UndoRedoState.JSON_KIND_AFTER] as number;
+		this.elementBefore = MapElement.Base.readMapElement(
+			this.kindBefore,
+			json[UndoRedoState.JSON_ELEMENT_BEFORE] as JSONType
+		);
+		this.elementAfter = MapElement.Base.readMapElement(
+			this.kindAfter,
+			json[UndoRedoState.JSON_ELEMENT_AFTER] as JSONType
+		);
 	}
 
-	write(json: any): void {
-		const array: any[] = [];
+	write(json: JSONType): void {
+		const array: number[] = [];
 		this.position.write(array);
 		json[UndoRedoState.JSON_POSITION] = array;
 		json[UndoRedoState.JSON_KIND_BEFORE] = this.kindBefore;

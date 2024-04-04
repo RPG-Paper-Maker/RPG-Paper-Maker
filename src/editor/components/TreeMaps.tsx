@@ -275,57 +275,61 @@ function TreeMaps({
 		setIsOpenDialogConfirm(false);
 	};
 
-	const getContextMenuItems = () =>
-		selectedNode
-			? (selectedNode.content as Model.TreeMapTag).isFolder()
-				? [
-						{
-							title: 'Edit name...',
-							onClick: handleEditFolder,
-						},
-						{
-							title: 'New map...',
-							onClick: handleNewMap,
-						},
-						{
-							title: 'New folder...',
-							onClick: handleNewFolder,
-						},
-						{
-							title: 'Copy',
-							onClick: handleCopy,
-							disabled: selectedNode.content.id === -1,
-							shortcut: [SPECIAL_KEY.CTRL, KEY.C],
-						},
-						{
-							title: 'Paste',
-							onClick: handlePaste,
-							disabled: !canPaste(),
-							shortcut: [SPECIAL_KEY.CTRL, KEY.V],
-						},
-						{
-							title: 'Delete',
-							onClick: handleDeleteFolder,
-							disabled: selectedNode.content.id === -1,
-						},
-				  ]
-				: [
-						{
-							title: 'Edit map properties...',
-							onClick: handleEditMap,
-						},
-						{
-							title: 'Copy',
-							onClick: handleCopy,
-							shortcut: [SPECIAL_KEY.CTRL, KEY.C],
-						},
-						{
-							title: 'Delete',
-							onClick: handleDeleteMap,
-							shortcut: [KEY.DELETE],
-						},
-				  ]
-			: [];
+	const getContextMenuItems = () => {
+		if (selectedNode) {
+			if ((selectedNode.content as Model.TreeMapTag).isFolder()) {
+				return [
+					{
+						title: 'Edit name...',
+						onClick: handleEditFolder,
+					},
+					{
+						title: 'New map...',
+						onClick: handleNewMap,
+					},
+					{
+						title: 'New folder...',
+						onClick: handleNewFolder,
+					},
+					{
+						title: 'Copy',
+						onClick: handleCopy,
+						disabled: selectedNode.content.id === -1,
+						shortcut: [SPECIAL_KEY.CTRL, KEY.C],
+					},
+					{
+						title: 'Paste',
+						onClick: handlePaste,
+						disabled: !canPaste(),
+						shortcut: [SPECIAL_KEY.CTRL, KEY.V],
+					},
+					{
+						title: 'Delete',
+						onClick: handleDeleteFolder,
+						disabled: selectedNode.content.id === -1,
+					},
+				];
+			} else {
+				return [
+					{
+						title: 'Edit map properties...',
+						onClick: handleEditMap,
+					},
+					{
+						title: 'Copy',
+						onClick: handleCopy,
+						shortcut: [SPECIAL_KEY.CTRL, KEY.C],
+					},
+					{
+						title: 'Delete',
+						onClick: handleDeleteMap,
+						shortcut: [KEY.DELETE],
+					},
+				];
+			}
+		}
+		return [];
+	};
 
 	return (
 		<>

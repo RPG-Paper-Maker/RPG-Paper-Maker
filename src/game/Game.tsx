@@ -10,6 +10,7 @@
 */
 
 import { useEffect } from 'react';
+import { ExtendedWindow } from '../editor/common';
 
 type Props = {
 	projectName: string;
@@ -17,19 +18,10 @@ type Props = {
 
 function Game({ projectName }: Props) {
 	const getPixelRatio = () => {
-		const ctx = document.createElement('canvas').getContext('2d') as any;
-		const dpr = window.devicePixelRatio || 1;
-		const bsr =
-			ctx.webkitBackingStorePixelRatio ||
-			ctx.mozBackingStorePixelRatio ||
-			ctx.msBackingStorePixelRatio ||
-			ctx.oBackingStorePixelRatio ||
-			ctx.backingStorePixelRatio ||
-			1;
-		return dpr / bsr;
+		return window.devicePixelRatio || 1;
 	};
 
-	const createHiDPICanvas = (w: any, h: any, ratio: number = 1) => {
+	const createHiDPICanvas = (w: number, h: number, ratio: number = 1) => {
 		if (!ratio) {
 			ratio = getPixelRatio();
 		}
@@ -47,7 +39,7 @@ function Game({ projectName }: Props) {
 		script.src = './Scripts/System/main.js';
 		script.type = 'module';
 		script.async = true;
-		const global: any = window;
+		const global = window as ExtendedWindow;
 		global.rpgPaperMakerProjectName = projectName;
 		document.body.appendChild(script);
 		const canvas = createHiDPICanvas(window.innerWidth, window.innerHeight);

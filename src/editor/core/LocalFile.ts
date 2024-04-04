@@ -12,7 +12,7 @@
 import localforage from 'localforage';
 import { Serializable } from './Serializable';
 import JSZip from 'jszip';
-import { ArrayUtils, IO, Paths, Utils } from '../common';
+import { ArrayUtils, BINDING, BindingType, IO, JSONType, Paths } from '../common';
 
 class LocalFile extends Serializable {
 	public static readonly PATH_SYSTEMS = '/systems.json';
@@ -28,6 +28,17 @@ class LocalFile extends Serializable {
 	public content: string = '';
 	public isDir: boolean;
 
+	public static readonly bindings: BindingType[] = [
+		['folderNames', 'fon', [], BINDING.STRING],
+		['fileNames', 'fin', [], BINDING.STRING],
+		['content', 'c', '', BINDING.STRING],
+		['isDir', 'id', [], BINDING.BOOLEAN],
+	];
+
+	static getBindings(additionnalBinding: BindingType[]) {
+		return [...LocalFile.bindings, ...additionnalBinding];
+	}
+
 	constructor(isDir: boolean = LocalFile.DEFAULT_IS_DIR) {
 		super();
 		this.isDir = isDir;
@@ -39,7 +50,7 @@ class LocalFile extends Serializable {
 
 	static async getFile(path: string): Promise<LocalFile | null> {
 		const file = new LocalFile();
-		const json: Record<string, any> | null = await localforage.getItem(path);
+		const json: JSONType | null = await localforage.getItem(path);
 		if (json) {
 			file.read(json);
 			return file;
@@ -56,7 +67,7 @@ class LocalFile extends Serializable {
 	}
 
 	static async getFoldersFiles(path: string): Promise<[string[], string[]]> {
-		const json: Record<string, any> | null = await localforage.getItem(path);
+		const json: JSONType | null = await localforage.getItem(path);
 		if (json) {
 			const folder = new LocalFile(true);
 			folder.read(json);
@@ -72,7 +83,7 @@ class LocalFile extends Serializable {
 		if (dirs.length > 1) {
 			const newDirName = dirs.pop();
 			const parentPath = dirs.join('/');
-			const parentJson: Record<string, any> | null = await localforage.getItem(parentPath);
+			const parentJson: JSONType | null = await localforage.getItem(parentPath);
 			if (parentJson && newDirName) {
 				const parent = new LocalFile(false);
 				parent.read(parentJson);
@@ -95,7 +106,7 @@ class LocalFile extends Serializable {
 		if (dirs.length > 1) {
 			const newFileName = dirs.pop();
 			const parentPath = dirs.join('/');
-			const parentJson: Record<string, any> | null = await localforage.getItem(parentPath);
+			const parentJson: JSONType | null = await localforage.getItem(parentPath);
 			if (parentJson && newFileName) {
 				const parent = new LocalFile(false);
 				parent.read(parentJson);
@@ -121,7 +132,7 @@ class LocalFile extends Serializable {
 		if (editParent && dirs.length > 1) {
 			const folderName = dirs.pop();
 			const parentPath = dirs.join('/');
-			const parentJson: Record<string, any> | null = await localforage.getItem(parentPath);
+			const parentJson: JSONType | null = await localforage.getItem(parentPath);
 			if (parentJson && folderName) {
 				const parent = new LocalFile(false);
 				parent.read(parentJson);
@@ -133,7 +144,7 @@ class LocalFile extends Serializable {
 			}
 		}
 		// Remove children folders and files
-		const json: Record<string, any> | null = await localforage.getItem(path);
+		const json: JSONType | null = await localforage.getItem(path);
 		if (json) {
 			const folder = new LocalFile(false);
 			folder.read(json);
@@ -155,7 +166,7 @@ class LocalFile extends Serializable {
 		if (editParent && dirs.length > 1) {
 			const fileName = dirs.pop();
 			const parentPath = dirs.join('/');
-			const parentJson: Record<string, any> | null = await localforage.getItem(parentPath);
+			const parentJson: JSONType | null = await localforage.getItem(parentPath);
 			if (parentJson && fileName) {
 				const parent = new LocalFile(false);
 				parent.read(parentJson);
@@ -167,15 +178,14 @@ class LocalFile extends Serializable {
 			}
 		}
 		// Remove file
-		const json: Record<string, any> | null = await localforage.getItem(path);
+		const json: JSONType | null = await localforage.getItem(path);
 		if (json) {
-			// console.info('remove file ' + path);
 			await localforage.removeItem(path);
 		}
 	}
 
 	static async copyFile(src: string, dst: string) {
-		const json = await localforage.getItem(src);
+		const json = await localforage.getItem<JSONType>(src);
 		if (json) {
 			const file = new LocalFile(false);
 			file.read(json);
@@ -184,7 +194,7 @@ class LocalFile extends Serializable {
 	}
 
 	static async copyFolder(src: string, dst: string) {
-		const json = await localforage.getItem(src);
+		const json = await localforage.getItem<JSONType>(src);
 		if (json) {
 			const folder = new LocalFile(true);
 			folder.read(json);
@@ -261,7 +271,7 @@ class LocalFile extends Serializable {
 
 	static async allStorage(): Promise<string[]> {
 		const values: string[] = [];
-		await localforage.iterate((value, key, iterationNumber) => {
+		await localforage.iterate((value, key) => {
 			values.push(key);
 		});
 		return values;
@@ -275,7 +285,7 @@ class LocalFile extends Serializable {
 		localforage.config({ name: 'RPGPaperMaker' });
 	}
 
-	static async readJSON(path: string): Promise<any | null> {
+	static async readJSON(path: string): Promise<JSONType | null> {
 		const file = await LocalFile.getFile(path);
 		if (file) {
 			return JSON.parse(file.content);
@@ -283,22 +293,16 @@ class LocalFile extends Serializable {
 		return null;
 	}
 
-	static async writeJSON(path: string, json: any) {
+	static async writeJSON(path: string, json: JSONType) {
 		await LocalFile.createFile(path, JSON.stringify(json));
 	}
 
-	read(json: Record<string, any>) {
-		this.content = Utils.defaultValue(json[LocalFile.JSON_CONTENT], LocalFile.DEFAULT_CONTENT);
-		this.folderNames = Utils.defaultValue(json[LocalFile.JSON_FOLDER_NAMES], []);
-		this.fileNames = Utils.defaultValue(json[LocalFile.JSON_FILE_NAMES], []);
-		this.isDir = Utils.defaultValue(json[LocalFile.JSON_IS_DIR], LocalFile.DEFAULT_IS_DIR);
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
+		super.read(json, LocalFile.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>) {
-		Utils.writeDefaultValue(json, LocalFile.JSON_CONTENT, this.content, LocalFile.DEFAULT_CONTENT);
-		Utils.writeDefaultValueArray(json, LocalFile.JSON_FOLDER_NAMES, this.folderNames);
-		Utils.writeDefaultValueArray(json, LocalFile.JSON_FILE_NAMES, this.fileNames);
-		Utils.writeDefaultValue(json, LocalFile.JSON_IS_DIR, this.isDir, LocalFile.DEFAULT_IS_DIR);
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
+		super.write(json, LocalFile.getBindings(additionnalBinding));
 	}
 }
 

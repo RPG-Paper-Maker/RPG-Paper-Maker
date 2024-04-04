@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { MapElement, Model } from '../Editor';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, Utils } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, Utils } from '../common';
 import { CustomGeometry, Position, Project } from '../core';
 import { Base } from './Base';
 import { Mountains } from './Mountains';
@@ -58,7 +58,7 @@ class Mountain extends Base {
 		return [...Mountain.bindings, ...additionnalBinding];
 	}
 
-	static fromJSON(json: Record<string, any>): MapElement.Mountain {
+	static fromJSON(json: JSONType): MapElement.Mountain {
 		const mountain = new MapElement.Mountain();
 		if (json) {
 			mountain.read(json);
@@ -759,12 +759,12 @@ class Mountain extends Base {
 		);
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Mountain.getBindings(additionnalBinding));
 		this.angle = MapElement.Mountains.calculateAngle(this.getWidthTotalPixels(), this.getHeightTotalPixels());
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Mountain.getBindings(additionnalBinding));
 	}
 }

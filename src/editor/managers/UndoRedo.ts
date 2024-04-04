@@ -10,7 +10,7 @@
 */
 
 import { MapElement, Model, Scene } from '../Editor';
-import { ELEMENT_MAP_KIND, Paths, Utils } from '../common';
+import { ELEMENT_MAP_KIND, JSONType, Paths, Utils } from '../common';
 import { LocalFile, Position, Project, UndoRedoState } from '../core';
 
 class UndoRedo {
@@ -160,7 +160,7 @@ class UndoRedo {
 		}
 
 		// Create a new file for the new state
-		const arrayJson: Record<string, any>[] = [];
+		const arrayJson: JSONType[] = [];
 		for (const state of states) {
 			const json = {};
 			state.write(json);

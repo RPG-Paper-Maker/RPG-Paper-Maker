@@ -10,7 +10,7 @@
 */
 
 class ArrayUtils {
-	static insertFirst(array: any[], value: any) {
+	static insertFirst(array: unknown[], value: unknown) {
 		array.unshift(value);
 	}
 
@@ -18,11 +18,11 @@ class ArrayUtils {
 		array.splice(index, 0, value);
 	}
 
-	static contains<T>(array: any[], value: T) {
+	static contains<T>(array: unknown[], value: T) {
 		return array.indexOf(value) !== -1;
 	}
 
-	static removeAt(array: any[], index: number) {
+	static removeAt(array: unknown[], index: number) {
 		array.splice(index, 1);
 	}
 

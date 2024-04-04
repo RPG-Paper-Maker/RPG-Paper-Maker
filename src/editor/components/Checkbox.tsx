@@ -9,10 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { ReactNode } from 'react';
 import '../styles/Checkox.css';
 
 type Props = {
-	children?: any;
+	children?: ReactNode;
 	isChecked?: boolean;
 	onChange?: (checked: boolean) => void;
 };

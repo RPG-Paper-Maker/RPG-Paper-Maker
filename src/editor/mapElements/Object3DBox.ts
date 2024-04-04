@@ -15,6 +15,7 @@ import { MapElement, Model } from '../Editor';
 import { CustomGeometry, Position, Project } from '../core';
 import { Sprite } from './Sprite';
 import { Base } from './Base';
+import { JSONType } from '../common';
 
 class Object3DBox extends Object3D {
 	public static COEF = 0.01;
@@ -136,7 +137,7 @@ class Object3DBox extends Object3D {
 		22, 20, 22, 23,
 	];
 
-	static fromJSON(json: Record<string, any>): MapElement.Object3DBox {
+	static fromJSON(json: JSONType): MapElement.Object3DBox {
 		const object = new MapElement.Object3DBox();
 		if (json) {
 			object.read(json);

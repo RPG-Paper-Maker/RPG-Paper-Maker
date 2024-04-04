@@ -403,7 +403,7 @@ class Position extends Position3D {
 		return position;
 	}
 
-	read(json: any[]) {
+	read(json: number[]) {
 		super.read(json);
 		this.layer = json[4];
 		if (json.length > 5) {
@@ -422,7 +422,7 @@ class Position extends Position3D {
 		}
 	}
 
-	write(json: any[]) {
+	write(json: number[]) {
 		super.write(json);
 		json.push(this.layer);
 		if (

@@ -11,26 +11,46 @@
 
 import { ReactNode } from 'react';
 import { BINDING, KEY, SPECIAL_KEY } from './Enum';
-import { Node } from '../core';
+import { Node, Serializable } from '../core';
+import { MapElement } from '../Editor';
 
 export type KeyValue = {
-	k?: any;
-	v?: any;
+	k?: unknown;
+	v?: unknown;
 };
 
-export type BindingType = [string, string, any, BINDING, any?, any?];
+export type BindingType = [
+	string,
+	string,
+	unknown,
+	BINDING,
+	(typeof Serializable | null)?,
+	((json: JSONType) => typeof Serializable | typeof MapElement.Base)?
+];
 
 export type MenuItemType = {
 	title: ReactNode | string;
 	icon?: JSX.Element;
 	disabled?: boolean;
-	onClick?: (...args: any) => Promise<void>;
+	onClick?: (...args: unknown[]) => Promise<void>;
 	shortcut?: (SPECIAL_KEY | KEY)[];
 	children?: MenuItemType[];
 };
 
 export type CopiedItemsType = {
 	values: Node[];
-	constructorClass: any;
+	constructorClass: typeof Serializable;
 	pathProject: string;
+};
+
+export type ExtendedWindow = Window &
+	typeof globalThis & {
+		rpgPaperMakerProjectName: string;
+	};
+
+export type JSONType = Record<string, unknown>;
+
+export type JSONMapping = {
+	k: number[];
+	v: JSONType;
 };

@@ -139,9 +139,10 @@ function PanelTransform({ kind }: Props) {
 
 	const getMinY = () => {
 		switch (kind) {
-			case ACTION_KIND.TRANSLATE:
+			case ACTION_KIND.TRANSLATE: {
 				const min = -Scene.Map.current!.modelMap.depth;
 				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE ? min : min * Project.SQUARE_SIZE;
+			}
 			case ACTION_KIND.SCALE:
 				return 0.0001;
 			default:

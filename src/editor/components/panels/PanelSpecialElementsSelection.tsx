@@ -321,36 +321,34 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		);
 	};
 
-	const listElements = list
-		? filteredList.map((element) => {
-				const picture = Project.current!.pictures.getByID(kind, element.pictureID);
-				const selected = currentID === element.id;
-				return (
-					<div
-						ref={selected ? selectedElementRef : null}
-						className={Utils.getClassName([[selected, 'selected']], ['panel-special-element'])}
-						key={element.id}
-						onClick={() => handleClick(element.id)}
-					>
-						<div className='title'>
-							<div className='picture-container'>{getPictureOrCanvas(element.id, picture)}</div>
-							<div className='flex-one text-ellipsis'>{element.toStringNameID()}</div>
-							{getChevron(selected)}
-						</div>
-						{canExpand && selected && (
-							<div className='content'>
-								<TextureSquareSelector
-									texture={picture.getPath()}
-									divideWidth={(element as Model.Autotile).isAnimated ? 8 : 2}
-									divideHeight={3}
-									canChangeSize={false}
-								/>
-							</div>
-						)}
+	const listElements = filteredList.map((element) => {
+		const picture = Project.current!.pictures.getByID(kind, element.pictureID);
+		const selected = currentID === element.id;
+		return (
+			<div
+				ref={selected ? selectedElementRef : null}
+				className={Utils.getClassName([[selected, 'selected']], ['panel-special-element'])}
+				key={element.id}
+				onClick={() => handleClick(element.id)}
+			>
+				<div className='title'>
+					<div className='picture-container'>{getPictureOrCanvas(element.id, picture)}</div>
+					<div className='flex-one text-ellipsis'>{element.toStringNameID()}</div>
+					{getChevron(selected)}
+				</div>
+				{canExpand && selected && (
+					<div className='content'>
+						<TextureSquareSelector
+							texture={picture.getPath()}
+							divideWidth={(element as Model.Autotile).isAnimated ? 8 : 2}
+							divideHeight={3}
+							canChangeSize={false}
+						/>
 					</div>
-				);
-		  })
-		: [];
+				)}
+			</div>
+		);
+	});
 
 	return (
 		<div ref={contentRef} id='list-previewer' className={'panel-special-elements '}>

@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { MapElement } from '../Editor';
 import { Serializable } from '../core/Serializable';
 import { CustomGeometry, Position, Project } from '../core';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, SHAPE_KIND } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, SHAPE_KIND } from '../common';
 
 abstract class Base extends Serializable {
 	public static readonly COEF_TEX = 0.2;
@@ -49,7 +49,7 @@ abstract class Base extends Serializable {
 		return [...Base.bindings, ...additionnalBinding];
 	}
 
-	static readMapElement(kind: ELEMENT_MAP_KIND, json: Record<string, any>) {
+	static readMapElement(kind: ELEMENT_MAP_KIND, json: JSONType) {
 		if (json === null) {
 			return null;
 		}
@@ -73,8 +73,8 @@ abstract class Base extends Serializable {
 			case ELEMENT_MAP_KIND.MOUNTAIN:
 				model = new MapElement.Mountain();
 				break;
-			case ELEMENT_MAP_KIND.OBJECT3D:
-				const data = Project.current!.specialElements.getObject3DByID(json.did);
+			case ELEMENT_MAP_KIND.OBJECT3D: {
+				const data = Project.current!.specialElements.getObject3DByID(json['did'] as number);
 				switch (data.shapeKind) {
 					case SHAPE_KIND.BOX:
 						model = MapElement.Object3DBox.create(data);
@@ -84,6 +84,7 @@ abstract class Base extends Serializable {
 						break;
 				}
 				break;
+			}
 		}
 		if (model) {
 			model.read(json);
@@ -148,11 +149,11 @@ abstract class Base extends Serializable {
 		return Math.floor(Project.SQUARE_SIZE / 2);
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Base.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Base.getBindings(additionnalBinding));
 	}
 

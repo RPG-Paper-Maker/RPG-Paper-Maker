@@ -10,7 +10,7 @@
 */
 
 import { Model, Scene } from '../Editor';
-import { BINDING, BindingType, Constants, ELEMENT_MAP_KIND, Paths, SHAPE_KIND } from '../common';
+import { BINDING, BindingType, Constants, ELEMENT_MAP_KIND, JSONType, Paths, SHAPE_KIND } from '../common';
 import { Serializable } from '../core/Serializable';
 import { Portion, Position, Project, Rectangle } from '../core';
 import {
@@ -50,22 +50,26 @@ class MapPortion extends Serializable {
 		return [...MapPortion.bindings, ...additionnalBinding];
 	}
 
-	static getBindingJsonLands(json: Record<string, any>) {
+	static getBindingJsonLands(json: JSONType) {
 		return json.k === ELEMENT_MAP_KIND.FLOOR ? Floor : Autotile;
 	}
 
-	static getBindingJsonObjects3D(json: Record<string, any>) {
-		const data = Project.current!.specialElements.getObject3DByID(json.did);
+	static getBindingJsonObjects3D(json: JSONType) {
+		const data = Project.current!.specialElements.getObject3DByID(json['did'] as number);
 		switch (data.shapeKind) {
 			case SHAPE_KIND.BOX:
 				return Object3DBox;
 			case SHAPE_KIND.CUSTOM:
 				return Object3DCustom;
+			default:
+				throw new Error(
+					'Shape kind not supported yet. Remove this throw when all shape kinds are implemented.'
+				);
 		}
 	}
 
-	static removeElementsOut(map: Model.Map, mapping: Map<string, any>) {
-		const keysToDelete = [];
+	static removeElementsOut(map: Model.Map, mapping: Map<string, Base>) {
+		const keysToDelete: string[] = [];
 		for (const [key] of mapping.entries()) {
 			const position = Position.fromKey(key);
 			if (!position.isInMap(map)) {
@@ -176,11 +180,11 @@ class MapPortion extends Serializable {
 		await super.load(true); // Try to read temp files by default
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, MapPortion.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, MapPortion.getBindings(additionnalBinding));
 		json.objs = [];
 	}

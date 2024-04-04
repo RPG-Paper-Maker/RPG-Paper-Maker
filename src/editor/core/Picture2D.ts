@@ -11,8 +11,8 @@
 
 class Picture2D {
 	static async loadImage(path: string): Promise<HTMLImageElement> {
-		return await new Promise((resolve, reject) => {
-			const image: any = new Image();
+		return await new Promise((resolve) => {
+			const image = new Image();
 			if (path) {
 				image.onload = () => {
 					resolve(image);

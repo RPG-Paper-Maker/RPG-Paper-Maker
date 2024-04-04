@@ -11,7 +11,7 @@
 
 import { Serializable } from './Serializable';
 import { Project, Rectangle } from '.';
-import { BINDING, BindingType } from '../common';
+import { BINDING, BindingType, JSONType } from '../common';
 
 class CollisionSquare extends Serializable {
 	public rect: Rectangle;
@@ -47,11 +47,11 @@ class CollisionSquare extends Serializable {
 		this.climbing = false;
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, CollisionSquare.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, CollisionSquare.getBindings(additionnalBinding));
 	}
 }

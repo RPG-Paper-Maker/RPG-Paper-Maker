@@ -61,13 +61,13 @@ class Portion {
 		return this.x === portion.x && this.y === portion.y && this.z === portion.z;
 	}
 
-	read(json: any[]) {
+	read(json: number[]) {
 		this.x = json[0];
 		this.y = json[1];
 		this.z = json[2];
 	}
 
-	write(json: any[]) {
+	write(json: number[]) {
 		json.push(this.x);
 		json.push(this.y);
 		json.push(this.z);

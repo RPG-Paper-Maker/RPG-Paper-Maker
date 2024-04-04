@@ -12,11 +12,11 @@
 import * as THREE from 'three';
 import { Object3D } from './Object3D';
 import { CustomGeometry, Position, Project } from '../core';
-import { CUSTOM_SHAPE_KIND } from '../common';
+import { CUSTOM_SHAPE_KIND, JSONType } from '../common';
 import { MapElement, Model } from '../Editor';
 
 class Object3DCustom extends Object3D {
-	static fromJSON(json: Record<string, any>): MapElement.Object3DCustom {
+	static fromJSON(json: JSONType): MapElement.Object3DCustom {
 		const object = new MapElement.Object3DCustom();
 		if (json) {
 			object.read(json);

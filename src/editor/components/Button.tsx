@@ -14,7 +14,7 @@ import '../styles/Button.css';
 import { Utils } from '../common';
 
 type Props = {
-	children?: any;
+	children?: ReactNode;
 	primary?: boolean;
 	canHold?: boolean;
 	intervalHold?: number;
@@ -57,7 +57,7 @@ function Button({
 	useEffect(() => {
 		const current = ref.current;
 		if (canHold && current) {
-			const handle = (e: any) => {
+			const handle = () => {
 				const int = setInterval(() => {
 					handleClick();
 				}, intervalHold);

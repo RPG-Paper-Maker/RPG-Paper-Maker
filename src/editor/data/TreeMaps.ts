@@ -10,7 +10,7 @@
 */
 
 import { Model } from '../Editor';
-import { BINDING, BindingType, Paths, Utils } from '../common';
+import { BINDING, BindingType, JSONType, Paths, Utils } from '../common';
 import { Project, Serializable, Node } from '../core';
 
 class TreeMaps extends Serializable {
@@ -61,7 +61,7 @@ class TreeMaps extends Serializable {
 		await this.save();
 	}
 
-	readRoot(json: Record<string, any>[], root: Node) {
+	readRoot(json: JSONType[], root: Node) {
 		const children: Node[] = [];
 		for (const obj of json) {
 			const tag = new Model.TreeMapTag();
@@ -69,7 +69,7 @@ class TreeMaps extends Serializable {
 			node.read(obj);
 			node.parent = root;
 			children.push(node);
-			const objChildren = obj[Node.JSON_CHILDREN];
+			const objChildren = obj[Node.JSON_CHILDREN] as JSONType[];
 			if (objChildren) {
 				this.readRoot(objChildren, node);
 			}
@@ -77,14 +77,14 @@ class TreeMaps extends Serializable {
 		root.children = children;
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, TreeMaps.getBindings(additionnalBinding));
 		const root = Node.create(Model.TreeMapTag.create(-1, 'Maps', true));
-		this.readRoot(json[TreeMaps.JSON_TREE], root);
+		this.readRoot(json[TreeMaps.JSON_TREE] as JSONType[], root);
 		this.tree = [root];
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, TreeMaps.getBindings(additionnalBinding));
 		Utils.writeList(this.tree[0].children, json, TreeMaps.JSON_TREE);
 	}

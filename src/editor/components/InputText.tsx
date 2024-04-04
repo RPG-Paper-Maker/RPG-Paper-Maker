@@ -9,12 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import '../styles/Input.css';
 
 type Props = {
 	value?: string;
-	onChange: (e: any) => void;
+	onChange: (e: string) => void;
 	focusFirst?: boolean;
 	setFocustFirst?: (b: boolean) => void;
 };
@@ -22,7 +22,7 @@ type Props = {
 function InputText({ value, onChange, focusFirst = false, setFocustFirst }: Props) {
 	const refInput = useRef<HTMLInputElement>(null);
 
-	const handleChange = (e: any) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		onChange(e.target.value);
 	};
 

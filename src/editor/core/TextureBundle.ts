@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { Rectangle } from '.';
 
 class TextureBundle {
-	public list: any[][];
+	public list: [number, number[]][];
 	public material: THREE.MeshPhongMaterial | null;
 	public beginID!: number;
 	public beginPoint!: number[];

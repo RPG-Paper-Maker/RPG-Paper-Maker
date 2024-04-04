@@ -24,12 +24,14 @@
 		"react-redux": "^9.1.0",
 		"react-router-dom": "^6.22.3",
 		"react-scripts": "^5.0.1",
-		"three": "^0.163.0",
-		"typescript": "^5.4.3"
+		"three": "^0.163.0"
 	},
 	"devDependencies": {
 		"@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-		"simple-git": "^3.24.0"
+		"@types/eslint__js": "^8.42.3",
+		"eslint": "^8.57.0",
+		"simple-git": "^3.24.0",
+		"typescript-eslint": "^7.5.0"
 	},
 	"overrides": {
 		"nth-check": "2.0.1",
@@ -40,7 +42,8 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"tslint": " tslint --project tsconfig.json",
+		"tslint": "tslint --project tsconfig.json",
+		"eslint": "npx eslint ./src",
 		"update-mods": "node scripts/update-mods.mjs",
 		"update-deps": "ncu -u"
 	},

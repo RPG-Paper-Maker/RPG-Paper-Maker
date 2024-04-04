@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect } from 'react';
+import { ReactElement, useEffect } from 'react';
 import '../styles/Menu.css';
 import { KEY, MenuItemType, SPECIAL_KEY } from '../common';
 import MenuItem from './MenuItem';
@@ -33,11 +33,11 @@ function MenuCustom({
 	setActiveIndex,
 	allowKeyboard = true,
 }: Props) {
-	const getMenu = (list: any[]) =>
-		list.map((item: any, index: number) => {
+	const getMenu = (list: MenuItemType[]) =>
+		list.map((item, index: number) => {
 			if (item.children) {
 				return (
-					<MenuSub key={index} title={item.title} icon={item.icon} shortcut={item.shortcut}>
+					<MenuSub key={index} title={item.title as string} icon={item.icon} shortcut={item.shortcut}>
 						{getMenu(item.children)}
 					</MenuSub>
 				);
@@ -50,7 +50,7 @@ function MenuCustom({
 					shortcut={item.shortcut}
 					onClick={item.onClick}
 				>
-					{item.title}
+					{item.title as ReactElement}
 				</MenuItem>
 			);
 		});

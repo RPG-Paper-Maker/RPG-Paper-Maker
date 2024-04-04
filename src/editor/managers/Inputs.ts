@@ -54,7 +54,7 @@ class Inputs {
 
 		if (Constants.IS_MOBILE) {
 			// Pointer down
-			const handlePointerDown = (e: any) => {
+			const handlePointerDown = (e: PointerEvent) => {
 				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
@@ -66,12 +66,12 @@ class Inputs {
 				Inputs.pointerY = y;
 				Inputs.previousPointerX = x;
 				Inputs.previousPointerY = y;
-				Scene.Map.current.onPointerDown(Inputs.pointerX, Inputs.pointerY);
+				Scene.Map.current.onPointerDown();
 			};
 			canvas.addEventListener('pointerdown', handlePointerDown, false);
 
 			// Pointer move
-			const handlePointerMove = (e: any) => {
+			const handlePointerMove = (e: PointerEvent) => {
 				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
@@ -88,7 +88,7 @@ class Inputs {
 			canvas.addEventListener('pointermove', handlePointerMove, false);
 
 			// Touch start
-			const handleTouchStart = (e: any) => {
+			const handleTouchStart = (e: TouchEvent) => {
 				if (e.touches.length === 2) {
 					const touch1 = e.touches[0];
 					const touch2 = e.touches[1];
@@ -99,7 +99,7 @@ class Inputs {
 			document.addEventListener('touchstart', handleTouchStart, false);
 
 			// Touch move
-			const handleTouchMove = (e: any) => {
+			const handleTouchMove = (e: TouchEvent) => {
 				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
@@ -120,13 +120,13 @@ class Inputs {
 			document.addEventListener('touchmove', handleTouchMove, false);
 
 			// Touch end
-			const handleTouchEnd = async (e: any) => {
+			const handleTouchEnd = async () => {
 				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
 				Inputs.previousTouchDistance = 0;
 				Inputs.touchDistance = 0;
-				await Scene.Map.current.onTouchEnd(Inputs.pointerX, Inputs.pointerY);
+				await Scene.Map.current.onTouchEnd();
 				Inputs.isPointerPressed = false;
 			};
 			document.addEventListener('touchend', handleTouchEnd, false);
@@ -139,7 +139,7 @@ class Inputs {
 			};
 		} else {
 			// Key down
-			const handleKeyDown = (e: any) => {
+			const handleKeyDown = (e: globalThis.KeyboardEvent) => {
 				if (
 					!this.isMapFocused ||
 					(e.ctrlKey && e.key === 's') ||
@@ -154,12 +154,12 @@ class Inputs {
 				if (!ArrayUtils.contains(Inputs.keys, e.key)) {
 					Inputs.keys.push(e.key);
 				}
-				Scene.Map.current.onKeyDown(e.key);
+				Scene.Map.current.onKeyDown();
 			};
 			window.addEventListener('keydown', handleKeyDown);
 
 			// Key up
-			const handleKeyUp = (e: any) => {
+			const handleKeyUp = (e: globalThis.KeyboardEvent) => {
 				if (!this.isMapFocused || !Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
@@ -167,12 +167,12 @@ class Inputs {
 				Inputs.isCTRL = e.ctrlKey;
 				Inputs.isSHIFT = e.shiftKey;
 				ArrayUtils.removeElement(Inputs.keys, e.key);
-				Scene.Map.current.onKeyUp(e.key);
+				Scene.Map.current.onKeyUp();
 			};
 			window.addEventListener('keyup', handleKeyUp);
 
 			// Mouse down
-			const handleMouseDown = (e: any) => {
+			const handleMouseDown = (e: MouseEvent) => {
 				if (!this.isMapFocused || !Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
@@ -203,14 +203,14 @@ class Inputs {
 			canvas.addEventListener('mousedown', handleMouseDown, false);
 
 			// Mouse move
-			const handleMouseMove = (e: any) => {
+			const handleMouseMove = (e: MouseEvent) => {
 				if (!this.isMapFocused || !Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
 				const rect = canvas.getBoundingClientRect();
 				const x = e.clientX - rect.left;
 				const y = e.clientY - rect.top;
-				Scene.Map.current.onMouseMove(x, y);
+				Scene.Map.current.onMouseMove();
 				Inputs.previousMouseX = Inputs.mouseX;
 				Inputs.previousMouseY = Inputs.mouseY;
 				Inputs.mouseX = x;
@@ -219,14 +219,11 @@ class Inputs {
 			document.addEventListener('mousemove', handleMouseMove, false);
 
 			// Mouse up
-			const handleMouseUp = async (e: any) => {
+			const handleMouseUp = async (e: MouseEvent) => {
 				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
-				const rect = canvas.getBoundingClientRect();
-				const x = e.clientX - rect.left;
-				const y = e.clientY - rect.top;
-				await Scene.Map.current.onMouseUp(x, y);
+				await Scene.Map.current.onMouseUp();
 				switch (e.button) {
 					case 0:
 						Inputs.isPointerPressed = false;
@@ -244,7 +241,7 @@ class Inputs {
 			document.addEventListener('mouseup', handleMouseUp, false);
 
 			// Mouse wheel
-			const handleWheel = async (e: any) => {
+			const handleWheel = async (e: WheelEvent) => {
 				if (!this.isMapFocused) {
 					return;
 				}

@@ -10,7 +10,7 @@
 */
 
 import { Model } from '../Editor';
-import { BINDING, BindingType, Constants, Paths } from '../common';
+import { BINDING, BindingType, Constants, JSONType, Paths } from '../common';
 import { Position, Project, Serializable } from '../core';
 
 class System extends Serializable {
@@ -24,7 +24,7 @@ class System extends Serializable {
 	public autotilesFrameDuration!: number;
 	public heroMapID!: number;
 	public heroMapPosition!: Position;
-	public json: any; // TEMP, will be removed later
+	public json!: JSONType; // TEMP, will be removed later
 
 	public static readonly bindings: BindingType[] = [
 		['projectName', 'pn', 'Project without name', BINDING.OBJECT, Model.Localization],
@@ -49,13 +49,13 @@ class System extends Serializable {
 		return this.SQUARE_SIZE / Constants.BASE_SQUARE_SIZE;
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, System.getBindings(additionnalBinding));
 		this.json = json;
 		this.PATH_BR = './BR/';
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		Object.assign(json, this.json);
 		super.write(json, System.getBindings(additionnalBinding));
 	}

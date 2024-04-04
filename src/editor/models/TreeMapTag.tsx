@@ -13,7 +13,7 @@ import { Model } from '../Editor';
 import { FcFolder, FcFile } from 'react-icons/fc';
 import { Base } from './Base';
 import { LocalFile, Position, Project } from '../core';
-import { BINDING, BindingType, Paths } from '../common';
+import { BINDING, BindingType, JSONType, Paths } from '../common';
 
 class TreeMapTag extends Base {
 	public saved!: boolean;
@@ -84,11 +84,11 @@ class TreeMapTag extends Base {
 		return node;
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, TreeMapTag.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, TreeMapTag.getBindings(additionnalBinding));
 	}
 }

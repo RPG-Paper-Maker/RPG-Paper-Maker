@@ -10,7 +10,7 @@
 */
 
 import { Model } from '../Editor';
-import { CUSTOM_SHAPE_KIND, Paths } from '../common';
+import { CUSTOM_SHAPE_KIND, JSONType, Paths } from '../common';
 import { Project, Serializable } from '../core';
 
 class Shapes extends Serializable {
@@ -27,18 +27,18 @@ class Shapes extends Serializable {
 			: this.list[kind][this.listIndexes[kind][id]];
 	}
 
-	read(json: Record<string, any>) {
+	read(json: JSONType) {
 		this.list = [];
 		this.listIndexes = [];
-		for (const { k, v } of json.list) {
+		for (const { k, v } of json.list as JSONType[]) {
 			const list: Model.Shape[] = [];
 			const listIndexes: number[] = [];
-			this.list[k] = list;
-			this.listIndexes[k] = listIndexes;
+			this.list[k as number] = list;
+			this.listIndexes[k as number] = listIndexes;
 			let index = 0;
-			for (const jsonShape of v) {
+			for (const jsonShape of v as JSONType[]) {
 				const shape = new Model.Shape();
-				shape.kind = k;
+				shape.kind = k as number;
 				shape.read(jsonShape);
 				list.push(shape);
 				listIndexes[shape.id] = index;
@@ -47,12 +47,12 @@ class Shapes extends Serializable {
 		}
 	}
 
-	write(json: Record<string, any>) {
-		const list: any[] = [];
+	write(json: JSONType) {
+		const list: JSONType[][] = [];
 		for (const [kind, shapes] of this.list.entries()) {
-			const jsonShapes: any[] = [];
+			const jsonShapes: JSONType[] = [];
 			for (const shape of shapes) {
-				const jsonShape = {};
+				const jsonShape = {} as JSONType;
 				shape.write(jsonShape);
 				jsonShapes.push(jsonShape);
 			}

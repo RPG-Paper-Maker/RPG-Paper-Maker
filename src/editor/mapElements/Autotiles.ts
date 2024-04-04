@@ -152,7 +152,7 @@ class Autotiles {
 		picture: Model.Picture,
 		offset: number,
 		isAnimated: boolean
-	): Promise<any[]> {
+	): Promise<[TextureBundle | null, THREE.Texture, number]> {
 		const frames = isAnimated ? Project.current!.systems.autotilesFrames : 1;
 		const image = await Picture2D.loadImage(picture.getPath());
 		const width = Math.floor(image.width / 2 / Project.SQUARE_SIZE) / frames;
@@ -404,16 +404,18 @@ class Autotiles {
 	}
 
 	updateGeometry(position: Position, autotile: MapElement.Autotile) {
-		return this.width === null || this.height === 0
-			? null
-			: autotile.updateGeometryAutotile(
-					this.geometry,
-					this.bundle,
-					position,
-					this.width,
-					this.height,
-					this.count++
-			  );
+		if (this.width === null || this.height === 0) {
+			return null;
+		} else {
+			return autotile.updateGeometryAutotile(
+				this.geometry,
+				this.bundle,
+				position,
+				this.width,
+				this.height,
+				this.count++
+			);
+		}
 	}
 
 	createMesh(): boolean {

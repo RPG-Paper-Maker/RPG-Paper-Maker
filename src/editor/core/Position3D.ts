@@ -34,14 +34,14 @@ class Position3D extends Portion {
 		return super.equals(position) && this.yPixels === position.yPixels;
 	}
 
-	read(json: any[]) {
+	read(json: number[]) {
 		this.x = json[0];
 		this.y = json[1];
 		this.yPixels = json[2];
 		this.z = json[3];
 	}
 
-	write(json: any[]) {
+	write(json: number[]) {
 		json.push(this.x);
 		json.push(this.y);
 		json.push(this.yPixels);

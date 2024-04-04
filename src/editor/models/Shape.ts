@@ -11,8 +11,19 @@
 
 import * as THREE from 'three';
 import { Base } from './Base';
-import { BINDING, BindingType, CUSTOM_SHAPE_KIND, IO, Paths } from '../common';
+import { BINDING, BindingType, CUSTOM_SHAPE_KIND, IO, JSONType, Paths } from '../common';
 import { Project } from '../core';
+
+type GeometryDataType = {
+	vertices: THREE.Vector3[];
+	uvs: THREE.Vector2[];
+	minVertex: THREE.Vector3;
+	maxVertex: THREE.Vector3;
+	center: THREE.Vector3;
+	w: number;
+	h: number;
+	d: number;
+};
 
 class Shape extends Base {
 	public static loader = new THREE.FileLoader();
@@ -20,7 +31,7 @@ class Shape extends Base {
 	public kind!: CUSTOM_SHAPE_KIND;
 	public isBR!: boolean;
 	public dlc!: string;
-	public geometryData!: Record<string, any>;
+	public geometryData!: GeometryDataType;
 
 	public static readonly bindings: BindingType[] = [
 		['isBR', 'br', false, BINDING.BOOLEAN],
@@ -43,8 +54,7 @@ class Shape extends Base {
 		return '';
 	}
 
-	static parse(text: string): Record<string, any> {
-		const object: Record<string, any> = {};
+	static parse(text: string): GeometryDataType {
 		const vertices = [];
 		const normals = [];
 		const uvs = [];
@@ -64,7 +74,7 @@ class Shape extends Base {
 			/^f\s+((-?\d+)\/(-?\d+)\/(-?\d+))\s+((-?\d+)\/(-?\d+)\/(-?\d+))\s+((-?\d+)\/(-?\d+)\/(-?\d+))(?:\s+((-?\d+)\/(-?\d+)\/(-?\d+)))?/;
 		const lines = text.split('\n');
 		for (let line of lines) {
-			let result: any;
+			let result: RegExpExecArray | null;
 			line = line.trim();
 			if (line.length === 0 || line.charAt(0) === '#') {
 				continue;
@@ -134,19 +144,20 @@ class Shape extends Base {
 				}
 			}
 		}
-		object.vertices = vertices;
-		object.uvs = uvs;
-		object.minVertex = minVertex;
-		object.maxVertex = maxVertex;
-		object.center = new THREE.Vector3(
-			(maxVertex.x - minVertex.x) / 2 + minVertex.x,
-			(maxVertex.y - minVertex.y) / 2 + minVertex.y,
-			(maxVertex.z - minVertex.z) / 2 + minVertex.z
-		);
-		object.w = maxVertex.x - minVertex.x;
-		object.h = maxVertex.y - minVertex.y;
-		object.d = maxVertex.z - minVertex.z;
-		return object;
+		return {
+			vertices,
+			uvs,
+			minVertex,
+			maxVertex,
+			center: new THREE.Vector3(
+				(maxVertex.x - minVertex.x) / 2 + minVertex.x,
+				(maxVertex.y - minVertex.y) / 2 + minVertex.y,
+				(maxVertex.z - minVertex.z) / 2 + minVertex.z
+			),
+			w: maxVertex.x - minVertex.x,
+			h: maxVertex.y - minVertex.y,
+			d: maxVertex.z - minVertex.z,
+		};
 	}
 
 	static getFolder(kind: CUSTOM_SHAPE_KIND, isBR: boolean, dlc: string): string {
@@ -188,11 +199,11 @@ class Shape extends Base {
 		return this.id === -1 ? '' : `${Shape.getFolder(this.kind, this.isBR, this.dlc)}/${this.name}`;
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Shape.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Shape.getBindings(additionnalBinding));
 	}
 }

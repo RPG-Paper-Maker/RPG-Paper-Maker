@@ -19,7 +19,7 @@ import { Model } from '../Editor';
 
 type Props = {
 	list: Node[];
-	constructorType?: any;
+	constructorType?: typeof Model.Base;
 	contextMenuItems?: (CONTEXT_MENU_ITEM_KIND | MenuItemType)[];
 	defaultSelectedID?: number;
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
@@ -29,7 +29,6 @@ type Props = {
 
 function Tree({
 	list,
-	constructorType = Model.Base,
 	contextMenuItems = [
 		CONTEXT_MENU_ITEM_KIND.NEW,
 		CONTEXT_MENU_ITEM_KIND.EDIT,
@@ -166,7 +165,7 @@ function Tree({
 						shortcut: [KEY.DELETE],
 						onClick: handleDeleteItem,
 					};
-				default:
+				default: {
 					const customItem = { ...kind };
 					if (kind.onClick) {
 						customItem.onClick = async () => {
@@ -185,6 +184,7 @@ function Tree({
 						};
 					}
 					return customItem;
+				}
 			}
 		});
 

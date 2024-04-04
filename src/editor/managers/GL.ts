@@ -38,7 +38,7 @@ class GL {
 	public canvasHeight: number = 0;
 
 	static async loadTexture(path: string): Promise<THREE.MeshPhongMaterial> {
-		const texture: THREE.Texture = await new Promise((resolve, reject) => {
+		const texture: THREE.Texture = await new Promise((resolve) => {
 			this.textureLoader.load(
 				path,
 				(t: THREE.Texture) => {
@@ -83,7 +83,7 @@ class GL {
 		texture?: THREE.Texture | null;
 		flipX?: boolean;
 		flipY?: boolean;
-		uniforms?: Record<string, any>;
+		uniforms?: Record<string, THREE.IUniform<unknown>>;
 		side?: THREE.Side;
 		repeat?: number;
 		opacity?: number;
@@ -105,15 +105,13 @@ class GL {
 		const fragment = this.SHADER_DEFAULT_FRAGMENT;
 		const vertex = this.SHADER_DEFAULT_VERTEX;
 		const screenTone = this.screenTone;
-		const uniforms = opts.uniforms
-			? opts.uniforms
-			: {
-					offset: { value: new THREE.Vector2() },
-					colorD: { value: screenTone },
-					repeat: { value: repeat },
-					enableShadows: { value: shadows },
-					hovered: { value: hovered },
-			  };
+		const uniforms = Utils.defaultValue(opts.uniforms, {
+			offset: { value: new THREE.Vector2() },
+			colorD: { value: screenTone },
+			repeat: { value: repeat },
+			enableShadows: { value: shadows },
+			hovered: { value: hovered },
+		});
 
 		// Program cache key for multiple shader programs
 		const key = fragment === this.SHADER_DEFAULT_FRAGMENT ? 0 : 1;

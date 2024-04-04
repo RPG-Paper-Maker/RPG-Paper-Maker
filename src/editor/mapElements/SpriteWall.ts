@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Base } from './Base';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, PICTURE_KIND, SPRITE_WALL_TYPE, Utils } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND, SPRITE_WALL_TYPE, Utils } from '../common';
 import { CustomGeometry, Picture2D, Position, Project } from '../core';
 import { Sprite } from './Sprite';
 
@@ -34,7 +34,7 @@ class SpriteWall extends Base {
 		return [...SpriteWall.bindings, ...additionnalBinding];
 	}
 
-	static fromJSON(json: Record<string, any>): SpriteWall {
+	static fromJSON(json: JSONType): SpriteWall {
 		const wall = new SpriteWall();
 		if (json) {
 			wall.read(json);
@@ -269,11 +269,11 @@ class SpriteWall extends Base {
 		this.type = SpriteWall.addType(tA, tB);
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, SpriteWall.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, SpriteWall.getBindings(additionnalBinding));
 	}
 }

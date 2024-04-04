@@ -11,7 +11,16 @@
 
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
-import { BINDING, BindingType, CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, PICTURE_KIND, SHAPE_KIND, Utils } from '../common';
+import {
+	BINDING,
+	BindingType,
+	CUSTOM_SHAPE_KIND,
+	ELEMENT_MAP_KIND,
+	JSONType,
+	PICTURE_KIND,
+	SHAPE_KIND,
+	Utils,
+} from '../common';
 import { CustomGeometry, Position, Project } from '../core';
 import { Base } from './Base';
 
@@ -107,11 +116,11 @@ abstract class Object3D extends Base {
 
 	abstract updateGeometry(geometry: CustomGeometry, position: Position, count: number): number;
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Object3D.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Object3D.getBindings(additionnalBinding));
 	}
 }

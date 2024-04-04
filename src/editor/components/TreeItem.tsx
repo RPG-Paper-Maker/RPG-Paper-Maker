@@ -32,14 +32,14 @@ function TreeItem({ node, level = 0, selected = false, onSwitchExpanded, onMouse
 
 	const isFolder = () => (node.content as Model.TreeMapTag).isFolder();
 
-	const handleMouseDown = (e: any) => {
+	const handleMouseDown = () => {
 		onMouseDown(node);
 	};
 
-	const handleMouseDownSwitchExpand = (e: any) => {
+	const handleMouseDownSwitchExpand = () => {
 		onSwitchExpanded(node.content.id, !expanded);
 		setExpanded((value) => !value);
-		handleMouseDown(e);
+		handleMouseDown();
 	};
 
 	useEffect(() => {

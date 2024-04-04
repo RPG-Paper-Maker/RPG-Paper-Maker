@@ -11,7 +11,7 @@
 
 import { ReactNode } from 'react';
 import { Serializable } from '../core/Serializable';
-import { BINDING, BindingType, MODEL_TYPE, Utils } from '../common';
+import { BINDING, BindingType, JSONType, Utils } from '../common';
 
 class Base extends Serializable {
 	public id!: number;
@@ -39,20 +39,10 @@ class Base extends Serializable {
 		return base;
 	}
 
-	static getModel(kind: MODEL_TYPE): any {
-		switch (kind) {
-		}
-	}
-
-	static getDialog(kind: MODEL_TYPE): any {
-		switch (kind) {
-		}
-	}
-
 	applyDefault(additionnalBinding: BindingType[]) {
 		const bindings = Base.getBindings(additionnalBinding);
 		for (const [name, , defaultValue, ,] of bindings) {
-			(this as any)[name] = defaultValue;
+			(this as Record<string, unknown>)[name] = defaultValue;
 		}
 	}
 
@@ -83,11 +73,11 @@ class Base extends Serializable {
 		return [this.toString()];
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Base.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Base.getBindings(additionnalBinding));
 	}
 }

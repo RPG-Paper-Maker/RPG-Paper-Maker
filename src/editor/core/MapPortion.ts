@@ -23,6 +23,12 @@ import {
 } from '.';
 import { ACTION_KIND, ELEMENT_MAP_KIND, Mathf, RAYCASTING_LAYER, SPRITE_WALL_TYPE } from '../common';
 
+type GeometryMaterialType = {
+	geometry: CustomGeometry;
+	material: THREE.MeshPhongMaterial | null;
+	count?: number;
+};
+
 class MapPortion {
 	public model!: Model.MapPortion;
 	public floorsMesh!: THREE.Mesh;
@@ -141,7 +147,7 @@ class MapPortion {
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
 				this.updateWallFromCursor(Project.current!.settings.mapEditorCurrentWallID, preview);
 				break;
-			case ELEMENT_MAP_KIND.MOUNTAIN:
+			case ELEMENT_MAP_KIND.MOUNTAIN: {
 				const y = Project.current!.settings.mapEditorCurrentMountainHeightSquares;
 				const yPixels = Position3D.getPercentOfPixels(
 					Project.current!.settings.mapEditorCurrentMountainHeightPixels
@@ -177,6 +183,7 @@ class MapPortion {
 				}
 				this.updateMapElement(position, newMountain, Scene.Map.currentSelectedMapElementKind, preview);
 				break;
+			}
 			case ELEMENT_MAP_KIND.OBJECT3D:
 				this.updateMapElement(
 					position,
@@ -338,7 +345,7 @@ class MapPortion {
 						}
 					}
 					break;
-				case ACTION_KIND.RECTANGLE:
+				case ACTION_KIND.RECTANGLE: {
 					const x = Scene.Map.current!.rectangleStartPosition
 						? Mathf.mod(position.x - Scene.Map.current!.rectangleStartPosition.x, floor.texture.width)
 						: 0;
@@ -358,6 +365,7 @@ class MapPortion {
 						undoRedo
 					);
 					break;
+				}
 				case ACTION_KIND.PIN:
 					this.setMapElement(
 						position,
@@ -968,7 +976,7 @@ class MapPortion {
 			Scene.Map.current!.scene.remove(mesh);
 		}
 		this.wallsMeshes = [];
-		const hash = new Map<number, any>();
+		const hash = new Map<number, GeometryMaterialType>();
 		for (const [positionKey, wall] of this.model.walls) {
 			const position = Position.fromKey(positionKey);
 			let obj = hash.get(wall.wallID);
@@ -978,7 +986,7 @@ class MapPortion {
 			if (obj) {
 				geometry = obj.geometry;
 				material = obj.material;
-				count = obj.c;
+				count = obj.count as number;
 			} else {
 				material = MapElement.SpriteWall.getWallTexture(wall.wallID);
 				geometry = new CustomGeometry();
@@ -986,17 +994,17 @@ class MapPortion {
 				obj = {
 					geometry,
 					material,
-					c: count,
+					count,
 				};
 				hash.set(wall.wallID, obj);
 			}
 			const { width, height } = Manager.GL.getMaterialTextureSize(material);
-			obj.c = wall.updateGeometry(geometry, position, width, height, count);
+			obj.count = wall.updateGeometry(geometry, position, width, height, count);
 		}
 		// Add to scene
 		for (const [, obj] of hash) {
 			const geometry = obj.geometry;
-			if (!geometry.isEmpty()) {
+			if (!geometry.isEmpty() && obj.material) {
 				geometry.updateAttributes();
 				const mesh = new THREE.Mesh(geometry, obj.material);
 				mesh.receiveShadow = true;
@@ -1048,7 +1056,7 @@ class MapPortion {
 			Scene.Map.current!.scene.remove(mesh);
 		}
 		this.objects3DMeshes = [];
-		const hash = new Map<number, any>();
+		const hash = new Map<number, GeometryMaterialType>();
 		for (const [positionKey, object3D] of this.model.objects3D) {
 			const position = Position.fromKey(positionKey);
 			if (!object3D.data) {
@@ -1100,21 +1108,19 @@ class MapPortion {
 					if (obj) {
 						geometry = obj.geometry;
 						material = obj.material;
-						count = obj.count;
+						count = obj.count as number;
 					} else {
 						material = MapElement.Object3D.getObject3DTexture(object3D.id);
-						if (material) {
-							geometry = new CustomGeometry();
-							obj = {
-								geometry,
-								material,
-								count,
-							};
-							hash.set(object3D.data.pictureID, obj);
-						}
+						geometry = new CustomGeometry();
+						obj = {
+							geometry,
+							material,
+							count,
+						};
+						hash.set(object3D.data.pictureID, obj);
 					}
 					if (object3D && geometry) {
-						obj.c = object3D.updateGeometry(geometry, position, count);
+						obj.count = object3D.updateGeometry(geometry, position, count);
 					}
 				}
 			}
@@ -1123,7 +1129,7 @@ class MapPortion {
 		// Add meshes
 		for (const [, obj] of hash) {
 			const geometry = obj.geometry;
-			if (!geometry.isEmpty()) {
+			if (!geometry.isEmpty() && obj.material) {
 				geometry.updateAttributes();
 				const mesh = new THREE.Mesh(geometry, obj.material);
 				this.objects3DMeshes.push(mesh);

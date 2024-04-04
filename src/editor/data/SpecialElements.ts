@@ -10,7 +10,7 @@
 */
 
 import { Model } from '../Editor';
-import { BINDING, BindingType, Paths } from '../common';
+import { BINDING, BindingType, JSONType, Paths } from '../common';
 import { Project, Serializable } from '../core';
 
 class SpecialElements extends Serializable {
@@ -54,11 +54,11 @@ class SpecialElements extends Serializable {
 		return this.objects3D[this.objects3DIndexes[id]];
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, SpecialElements.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, SpecialElements.getBindings(additionnalBinding));
 	}
 }

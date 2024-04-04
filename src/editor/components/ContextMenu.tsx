@@ -24,7 +24,7 @@ function ContextMenu({ children, items = [] }: Props) {
 	const [isFocused, setIsFocused] = useState(false);
 	const ref = useRef<HTMLDivElement>(null);
 
-	const handleMouseDown = (e: any) => {
+	const handleMouseDown = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
 		setIsFocused(true);
 		switch (e.button) {
 			case 0:
@@ -43,8 +43,8 @@ function ContextMenu({ children, items = [] }: Props) {
 		}
 	};
 
-	const handleMouseDownOutside = (e: any) => {
-		if (e.button === 0 && isOpen && ref.current && !ref.current.contains(e.target)) {
+	const handleMouseDownOutside = (e: MouseEvent) => {
+		if (e.button === 0 && isOpen && ref.current && !ref.current.contains(e.target as Node)) {
 			setIsOpen(false);
 		}
 	};

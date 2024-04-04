@@ -10,7 +10,7 @@
 */
 
 import { Base } from './Base';
-import { BINDING, BindingType } from '../common';
+import { BINDING, BindingType, JSONType } from '../common';
 
 class SpecialElement extends Base {
 	public static readonly JSON_PICTURE_ID = 'pic';
@@ -24,11 +24,11 @@ class SpecialElement extends Base {
 		return [...SpecialElement.bindings, ...additionnalBinding];
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, SpecialElement.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, SpecialElement.getBindings(additionnalBinding));
 	}
 }

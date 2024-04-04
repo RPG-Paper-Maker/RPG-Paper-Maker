@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { SpecialElement } from './SpecialElement';
-import { BINDING, BindingType, OBJECT_COLLISION_KIND, SHAPE_KIND } from '../common';
+import { BINDING, BindingType, JSONType, OBJECT_COLLISION_KIND, SHAPE_KIND } from '../common';
 import { Project } from '../core';
 
 class Object3D extends SpecialElement {
@@ -67,11 +67,11 @@ class Object3D extends SpecialElement {
 		return new THREE.Vector3(this.getTotalWidthPixels(), this.getTotalHeightPixels(), this.getTotalDepthPixels());
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Object3D.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Object3D.getBindings(additionnalBinding));
 	}
 }

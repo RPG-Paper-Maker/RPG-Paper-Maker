@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType } from '../common';
+import { BINDING, BindingType, JSONType } from '../common';
 import { Serializable } from '../core';
 
 class Localization extends Serializable {
@@ -32,11 +32,11 @@ class Localization extends Serializable {
 		return this.names.get(1)!;
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Localization.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Localization.getBindings(additionnalBinding));
 	}
 }

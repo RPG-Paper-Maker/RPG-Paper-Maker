@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { MapElement, Scene } from '../Editor';
 import { Base } from './Base';
 import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle } from '../core';
-import { BINDING, BindingType, ELEMENT_MAP_KIND } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType } from '../common';
 
 class Sprite extends Base {
 	public static readonly MODEL = [
@@ -31,7 +31,7 @@ class Sprite extends Base {
 		return [...Sprite.bindings, ...additionnalBinding];
 	}
 
-	static fromJSON(json: Record<string, any>): Sprite {
+	static fromJSON(json: JSONType): Sprite {
 		const sprite = new Sprite();
 		if (json) {
 			sprite.read(json);
@@ -309,11 +309,11 @@ class Sprite extends Base {
 		return [geometry, count];
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Sprite.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Sprite.getBindings(additionnalBinding));
 	}
 }

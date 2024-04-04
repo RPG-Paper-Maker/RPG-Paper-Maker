@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ACTION_KIND, BINDING, BindingType, LAYER_KIND, MOBILE_ACTION, Paths } from '../common';
+import { ACTION_KIND, BINDING, BindingType, JSONType, LAYER_KIND, MOBILE_ACTION, Paths } from '../common';
 import { Project, Rectangle, Serializable } from '../core';
 
 class Settings extends Serializable {
@@ -77,11 +77,11 @@ class Settings extends Serializable {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_SETTINGS);
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Settings.getBindings(additionnalBinding));
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Settings.getBindings(additionnalBinding));
 	}
 }

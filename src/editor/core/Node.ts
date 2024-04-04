@@ -11,7 +11,7 @@
 
 import { Model } from '../Editor';
 import { Serializable } from './Serializable';
-import { BINDING, BindingType, CopiedItemsType, LOCAL_FORAGE, Paths, Utils } from '../common';
+import { BINDING, BindingType, CopiedItemsType, JSONType, LOCAL_FORAGE, Paths, Utils } from '../common';
 import { LocalFile } from './LocalFile';
 import { Project } from './Project';
 
@@ -155,7 +155,7 @@ class Node extends Serializable {
 		if (file && file.content.length > 0) {
 			const content = JSON.parse(file.content);
 			const constructorClass = NODE_CONSTRUCTOR_KIND[content.type as keyof typeof NODE_CONSTRUCTOR_KIND]();
-			const nodes = content.json.map((jsonNode: any) => {
+			const nodes = content.json.map((jsonNode: JSONType) => {
 				const node = new Node();
 				node.read(jsonNode, [], constructorClass);
 				return node;
@@ -177,7 +177,7 @@ class Node extends Serializable {
 			node.write(nodeJson);
 			return nodeJson;
 		});
-		const constructorClass = nodes[0].content.constructor;
+		const constructorClass = nodes[0].content.constructor as typeof Serializable;
 		const content = {
 			type: `${constructorClass.name}`,
 			pathProject,
@@ -191,14 +191,14 @@ class Node extends Serializable {
 		};
 	}
 
-	read(json: Record<string, any>, additionnalBinding: BindingType[] = [], constructorClass: any = Model.Base) {
+	read(json: JSONType, additionnalBinding: BindingType[] = [], constructorClass = Model.Base) {
 		super.read(json, Node.getBindings(additionnalBinding));
 		if (!this.content) {
 			this.content = new constructorClass();
 		}
 		this.content.read(json);
 		if (json[Node.JSON_CHILDREN]) {
-			for (const jsonNode of json[Node.JSON_CHILDREN]) {
+			for (const jsonNode of json[Node.JSON_CHILDREN] as JSONType[]) {
 				const node = new Node();
 				node.read(jsonNode, [], constructorClass);
 				this.children.push(node);
@@ -207,7 +207,7 @@ class Node extends Serializable {
 		this.updateParents();
 	}
 
-	write(json: Record<string, any>, additionnalBinding: BindingType[] = []) {
+	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Node.getBindings(additionnalBinding));
 		this.content.write(json);
 		Utils.writeList(this.children, json, Node.JSON_CHILDREN);
