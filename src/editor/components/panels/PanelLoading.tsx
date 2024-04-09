@@ -16,6 +16,7 @@ import { setNeedsReloadPageUpdate, setProjects } from '../../store';
 import { useDispatch } from 'react-redux';
 import { Constants, IO, LOCAL_FORAGE, Paths, Utils } from '../../common';
 import { LocalFile, Picture2D, Project } from '../../core';
+import { EngineSettings } from '../../data/EngineSettings';
 
 type Props = {
 	setLoaded: (v: boolean) => void;
@@ -58,7 +59,11 @@ function PanelLoading({ setLoaded }: Props) {
 		const path = LOCAL_FORAGE.ENGINE;
 		if (!(await LocalFile.checkFileExists(path))) {
 			await LocalFile.createFolder(path);
+			const json = {};
+			await LocalFile.createFile(Paths.join(path, Paths.FILE_ENGINE_SETTINGS), JSON.stringify(json));
 		}
+		EngineSettings.current = new EngineSettings();
+		EngineSettings.current.load();
 	};
 
 	const initializeEngineVersion = async () => {

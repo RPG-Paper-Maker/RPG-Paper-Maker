@@ -77,7 +77,7 @@ function PanelTextures({ visible }: Props) {
 									kind={PICTURE_KIND.MOUNTAINS}
 								/>
 							</div>
-							<div className='flex'>
+							<div className='flex-column'>
 								<PanelSettingsMountains />
 							</div>
 						</>

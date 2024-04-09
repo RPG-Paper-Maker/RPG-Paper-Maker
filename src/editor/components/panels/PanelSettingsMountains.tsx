@@ -22,6 +22,9 @@ import {
 	setCurrentMountainWidthPixels,
 	setCurrentMountainWidthSquares,
 } from '../../store';
+import { Constants } from '../../common';
+import Tips from '../Tips';
+import { EngineSettings } from '../../data/EngineSettings';
 
 const MIN_VALUE = 0;
 const MAX_VALUE_SQUARES = 999;
@@ -70,57 +73,70 @@ function PanelSettingsMountains() {
 		}
 	};
 
+	const handleCloseTipGridHeight = async () => {
+		EngineSettings.current.showTipsGridHeight = false;
+		await EngineSettings.current.save();
+	};
+
 	return (
-		<Groupbox title='Settings'>
-			<div className='flex flex-column gap-medium'>
-				<div className='flex flex-column gap-small'>
-					<label>Border width:</label>
-					<div className='flex gap-small'>
-						<InputNumber
-							value={widthSquares}
-							min={MIN_VALUE}
-							max={MAX_VALUE_SQUARES}
-							onChange={handleChangeWidthSquares}
-						/>
-						square(s)
+		<>
+			{!Constants.IS_MOBILE && EngineSettings.current.showTipsGridHeight && (
+				<Tips onClose={handleCloseTipGridHeight}>
+					You can move the map cursor up and down by pressing CTRL+ARROW UP/DOWN. To move by pixel, use
+					CTRL+SHIFT+ARROW UP/DOWN.
+				</Tips>
+			)}
+			<Groupbox title='Settings'>
+				<div className='flex flex-column gap-medium'>
+					<div className='flex flex-column gap-small'>
+						<label>Border width:</label>
+						<div className='flex gap-small'>
+							<InputNumber
+								value={widthSquares}
+								min={MIN_VALUE}
+								max={MAX_VALUE_SQUARES}
+								onChange={handleChangeWidthSquares}
+							/>
+							square(s)
+						</div>
+						<div className='flex gap-small'>
+							<InputNumber
+								value={widthPixels}
+								min={MIN_VALUE}
+								max={MAX_VALUE_PIXELS}
+								onChange={handleChangeWidthPixels}
+							/>
+							pixel(s)
+						</div>
+					</div>
+					<div className='flex flex-column gap-small'>
+						<label>Border height:</label>
+						<div className='flex gap-small'>
+							<InputNumber
+								value={heightSquares}
+								min={MIN_VALUE}
+								max={MAX_VALUE_SQUARES}
+								onChange={handleChangeHeightSquares}
+							/>
+							square(s)
+						</div>
+						<div className='flex gap-small'>
+							<InputNumber
+								value={heightPixels}
+								min={MIN_VALUE}
+								max={MAX_VALUE_PIXELS}
+								onChange={handleChangeHeightPixels}
+							/>
+							pixel(s)
+						</div>
 					</div>
 					<div className='flex gap-small'>
-						<InputNumber
-							value={widthPixels}
-							min={MIN_VALUE}
-							max={MAX_VALUE_PIXELS}
-							onChange={handleChangeWidthPixels}
-						/>
-						pixel(s)
+						<label>Angle:</label>
+						<label>{`${calculateAngle()}°`}</label>
 					</div>
 				</div>
-				<div className='flex flex-column gap-small'>
-					<label>Border height:</label>
-					<div className='flex gap-small'>
-						<InputNumber
-							value={heightSquares}
-							min={MIN_VALUE}
-							max={MAX_VALUE_SQUARES}
-							onChange={handleChangeHeightSquares}
-						/>
-						square(s)
-					</div>
-					<div className='flex gap-small'>
-						<InputNumber
-							value={heightPixels}
-							min={MIN_VALUE}
-							max={MAX_VALUE_PIXELS}
-							onChange={handleChangeHeightPixels}
-						/>
-						pixel(s)
-					</div>
-				</div>
-				<div className='flex gap-small'>
-					<label>Angle:</label>
-					<label>{`${calculateAngle()}°`}</label>
-				</div>
-			</div>
-		</Groupbox>
+			</Groupbox>
+		</>
 	);
 }
 
