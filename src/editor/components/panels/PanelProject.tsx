@@ -57,7 +57,7 @@ function PanelProject() {
 
 	const getDefaultTabTitles = () =>
 		Project.current!.treeMaps.tabs.map((id) =>
-			Model.Base.create(id, Node.getPathByID(Project.current!.treeMaps.tree, id))
+			Model.Base.create(id, Node.getNameByID(Project.current!.treeMaps.tree, id))
 		);
 
 	const getDefaultTabContents = () => Project.current!.treeMaps.tabs.map(() => null);
@@ -72,10 +72,9 @@ function PanelProject() {
 		if (!openLoading) {
 			if (node && !(node.content as Model.TreeMapTag).isFolder()) {
 				const id = node.content.id;
-				const title = node.getPath(false);
 				if (!mapsTabsTitles.find((model) => model.id === id)) {
 					const newListTitles = [...mapsTabsTitles];
-					newListTitles.push(Model.Base.create(id, title));
+					newListTitles.push(Model.Base.create(id, node.content.name));
 					setMapsTabsTitles(newListTitles);
 					setMapsTabsContents([...mapsTabsContents, null]);
 					setMapTabForcedCurrentIndex(newListTitles.findIndex((model) => model.id === id));
@@ -103,19 +102,6 @@ function PanelProject() {
 			}
 		}
 	};
-
-	useEffect(() => {
-		setMapsTabsTitles(
-			mapsTabsTitles.map((model) => {
-				const node = Node.getNodeByID(Project.current!.treeMaps.tree, model.id);
-				if (node) {
-					return Model.Base.create(model.id, node.getPath(false));
-				}
-				return model;
-			})
-		);
-		// eslint-disable-next-line
-	}, [triggersTreeMap]);
 
 	// When first opening the project with all data loaded
 	useEffect(() => {

@@ -24,7 +24,7 @@ function Editor() {
 	return (
 		<Provider store={store}>
 			{loaded ? (
-				<div className='flex-column fill-space scrollable' onContextMenu={(e) => e.preventDefault()}>
+				<div className='flex-column fill-space' onContextMenu={(e) => e.preventDefault()}>
 					<MainMenuBar />
 					<PanelMain />
 				</div>

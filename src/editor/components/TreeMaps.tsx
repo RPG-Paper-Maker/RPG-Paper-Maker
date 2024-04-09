@@ -73,20 +73,6 @@ function TreeMaps({
 	};
 
 	const handleAcceptEditFolder = async () => {
-		if (selectedNode) {
-			const ids = Node.getAllIDs(selectedNode.children);
-			let changed = false;
-			for (const id of ids) {
-				const element = mapsTabsTitles.find((value) => value.id === id);
-				if (element) {
-					element.name = Node.getPathByID(Project.current!.treeMaps.tree, id);
-					changed = true;
-				}
-			}
-			if (changed) {
-				setMapsTabsTitles([...mapsTabsTitles]);
-			}
-		}
 		RPM.treeCurrentForceUpdate();
 	};
 
@@ -233,7 +219,7 @@ function TreeMaps({
 			selectedNode.content.name = editedMap.name;
 			const element = mapsTabsTitles.find((value) => value.id === editedMap.id);
 			if (element) {
-				element.name = Node.getPathByID(Project.current!.treeMaps.tree, editedMap.id);
+				element.name = editedMap.name;
 				setMapsTabsTitles([...mapsTabsTitles]);
 			}
 			await editedMap.resizeMap(previousModel);

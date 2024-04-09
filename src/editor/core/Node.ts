@@ -64,6 +64,10 @@ class Node extends Serializable {
 		return node ? node.getPath(false) : 'ERROR: Cannot find path';
 	}
 
+	static getNameByID(nodes: Node[], id: number): string {
+		return Node.getNodeByID(nodes, id)?.content.name ?? '';
+	}
+
 	static getNewID(nodes: Node[], positive = true): number {
 		let exists = true;
 		const addition = positive ? 1 : -1;
