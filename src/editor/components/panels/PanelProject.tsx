@@ -52,7 +52,6 @@ function PanelProject() {
 
 	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
 	const openLoading = useSelector((state: RootState) => state.projects.openLoading);
-	const triggersTreeMap = useSelector((state: RootState) => state.triggers.treeMap);
 	const projectMenuIndex = useSelector((state: RootState) => state.projects.menuIndex);
 
 	const getDefaultTabTitles = () =>

@@ -16,6 +16,7 @@ import {
 	addProject,
 	clearProjects,
 	setCurrentProjectName,
+	setCurrentTreeMapTag,
 	setLoading,
 	setNeedsReloadPageClearCache,
 	setOpenLoading,
@@ -201,6 +202,7 @@ function MainMenuBar() {
 			Scene.Map.current = null;
 		}
 		Project.current = null;
+		dispatch(setCurrentTreeMapTag(null));
 		dispatch(setCurrentProjectName(''));
 	};
 

@@ -156,10 +156,12 @@ function MapEditor() {
 			Manager.GL.mapEditorContext.initialize('canvas-map-editor');
 			resize();
 			window.addEventListener('resize', resize);
+			loop();
 			return () => {
 				window.removeEventListener('resize', resize);
 				clearMap();
 				removeInputs();
+				cancelAnimationFrame(Scene.Map.animationFrameID);
 			};
 		}
 		// eslint-disable-next-line
@@ -175,12 +177,6 @@ function MapEditor() {
 	useEffect(() => {
 		resize();
 	});
-
-	useEffect(() => {
-		loop();
-		return () => cancelAnimationFrame(Scene.Map.animationFrameID);
-		// eslint-disable-next-line
-	}, []);
 
 	return (
 		<>
