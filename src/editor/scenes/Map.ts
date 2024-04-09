@@ -41,6 +41,7 @@ import {
 	ELEMENT_POSITION_KIND,
 	ACTION_KIND,
 	LAYER_KIND,
+	SPRITE_WALL_TYPE,
 } from '../common';
 import { CursorWall } from '../core/CursorWall';
 
@@ -108,6 +109,7 @@ class Map extends Base {
 	public selectedMesh!: THREE.Mesh;
 	public selectedElement: MapElement.Base | null = null;
 	public selectedPosition: Position | null = null;
+	public hoveredMesh!: THREE.Mesh;
 	public rectangleStartPosition: Position | null = null;
 	public lastRectangleEndPosition: Position | null = null;
 	public lockedY: number | null = null;
@@ -215,16 +217,6 @@ class Map extends Base {
 		this.cursor.initialize(Scene.Map.materialCursor);
 		this.cursorWall.initialize();
 
-		// Load portions
-		this.currentPortion = this.cursor.position.getGlobalPortion();
-		await this.initializePortions();
-		/*
-		this.mapPortion = new MapPortion();
-		this.mapPortion.initialize(globalPortion);
-		await this.mapPortion.model.load();
-		this.mapPortion.updateMaterials();
-		await this.mapPortion.loadTexturesAndUpdateGeometries(false);*/
-
 		// Light
 		this.initializeSunLight();
 
@@ -245,12 +237,20 @@ class Map extends Base {
 		this.selectedMesh = new THREE.Mesh(new CustomGeometry(), this.materialTilesetHover);
 		this.selectedMesh.receiveShadow = true;
 		this.selectedMesh.castShadow = true;
+		this.hoveredMesh = new THREE.Mesh(new CustomGeometry(), this.materialTilesetHover);
+		this.hoveredMesh.customDepthMaterial = this.materialTilesetHover.userData.customDepthMaterial;
+		this.hoveredMesh.receiveShadow = true;
+		this.hoveredMesh.castShadow = true;
 
 		// Start position
 		const isStartInMap = this.id === Project.current!.systems.heroMapID;
 		this.cursorStartPosition = new Cursor(isStartInMap ? Project.current!.systems.heroMapPosition : new Position());
 		this.cursorStartPosition.initialize(Scene.Map.materialStartPosition, 1, isStartInMap);
 		this.cursorStartPosition.updateMeshPosition();
+
+		// Load portions
+		this.currentPortion = this.cursor.position.getGlobalPortion();
+		await this.initializePortions();
 
 		this.loading = false;
 	}
@@ -510,7 +510,7 @@ class Map extends Base {
 
 	isInPortion(portion: Portion, offset = 0): boolean {
 		return (
-			portion.x <= +offset &&
+			portion.x <= Project.current!.systems.PORTIONS_RAY + offset &&
 			portion.x >= -(Project.current!.systems.PORTIONS_RAY + offset) &&
 			portion.y <= Project.current!.systems.PORTIONS_RAY + offset &&
 			portion.y >= -(Project.current!.systems.PORTIONS_RAY + offset) &&
@@ -541,30 +541,62 @@ class Map extends Base {
 			Scene.Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
 			Scene.Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_QUADRA;
 		const allowBorders = Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL || spriteLayer;
-		if (!preview) {
-			const positions = spriteLayer ? [position] : Mathf.traceLine(this.lastPosition, position);
-			for (const p of positions) {
-				this.getMapPortionByPosition(p)?.add(p, preview, removePreview, allowBorders, updateAutotiles);
-			}
+		if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
+			this.updateWallFromCursor(true, preview, removePreview);
 		} else {
-			this.getMapPortionByPosition(position)?.add(
-				position,
-				preview,
-				removePreview,
-				allowBorders,
-				updateAutotiles
-			);
+			if (!preview) {
+				const positions = spriteLayer ? [position] : Mathf.traceLine(this.lastPosition, position);
+				for (const p of positions) {
+					this.getMapPortionByPosition(p)?.add(p, preview, removePreview, allowBorders, updateAutotiles);
+				}
+			} else {
+				this.getMapPortionByPosition(position)?.add(
+					position,
+					preview,
+					removePreview,
+					allowBorders,
+					updateAutotiles
+				);
+			}
 		}
 	}
 
 	remove(position: Position, preview = false, removePreview = true, updateAutotiles = true) {
-		if (!preview) {
-			const positions = Mathf.traceLine(this.lastPosition, position);
-			for (const p of positions) {
-				this.getMapPortionByPosition(p)?.remove(p, preview, removePreview, updateAutotiles);
-			}
+		if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
+			this.updateWallFromCursor(false, preview, removePreview);
 		} else {
-			this.getMapPortionByPosition(position)?.remove(position, preview, removePreview, updateAutotiles);
+			if (!preview) {
+				const positions = Mathf.traceLine(this.lastPosition, position);
+				for (const p of positions) {
+					this.getMapPortionByPosition(p)?.remove(p, preview, removePreview, updateAutotiles);
+				}
+			} else {
+				this.getMapPortionByPosition(position)?.remove(position, preview, removePreview, updateAutotiles);
+			}
+		}
+	}
+
+	updateWallFromCursor(add = true, preview = false, removePreview = true) {
+		const positions = Scene.Map.current!.cursorWall.getPositions();
+		if (removePreview) {
+			this.forEachMapPortions((mapPortion) => {
+				mapPortion?.removeLastPreview();
+			});
+		}
+		for (const position of positions) {
+			this.getMapPortionByPosition(position)?.updateWall(
+				position,
+				add
+					? MapElement.SpriteWall.create(
+							Project.current!.settings.mapEditorCurrentWallID,
+							SPRITE_WALL_TYPE.MIDDLE
+					  )
+					: null,
+				preview
+			);
+		}
+		for (const position of positions) {
+			MapElement.SpriteWall.updateAround(position, !preview);
 		}
 	}
 
@@ -633,18 +665,18 @@ class Map extends Base {
 									) {
 										if (kindAfter === ELEMENT_MAP_KIND.NONE && landHere) {
 											if (landHere.kind === ELEMENT_MAP_KIND.FLOOR) {
-												mapPortionBefore?.updateFloor(adjacentPosition, null);
+												mapPortionHere?.updateFloor(adjacentPosition, null);
 											} else {
-												mapPortionBefore?.updateAutotile(adjacentPosition, null);
+												mapPortionHere?.updateAutotile(adjacentPosition, null);
 											}
 										} else {
 											if (kindAfter === ELEMENT_MAP_KIND.FLOOR) {
-												mapPortionBefore?.updateFloor(
+												mapPortionHere?.updateFloor(
 													adjacentPosition,
 													MapElement.Floor.create(textureAfterReduced, up)
 												);
 											} else {
-												mapPortionBefore?.updateAutotile(
+												mapPortionHere?.updateAutotile(
 													adjacentPosition,
 													MapElement.Autotile.create(autotileID, 0, textureAfter, up)
 												);
@@ -1034,9 +1066,9 @@ class Map extends Base {
 							} else if (this.rectangleStartPosition && this.lastRectangleEndPosition) {
 								this.updateLockedY(position);
 								const positions = this.rectangleStartPosition.getPositionsRectangle(position);
-								for (const rectanglePosition of positions) {
-									this.getMapPortionByPosition(rectanglePosition)?.removeLastPreview();
-								}
+								this.forEachMapPortions((mapPortion) => {
+									mapPortion?.removeLastPreview();
+								});
 								const adding = Scene.Map.isAdding();
 								for (const rectanglePosition of positions) {
 									if (adding) {
@@ -1165,14 +1197,17 @@ class Map extends Base {
 			this.requestPaintHUD = true;
 			if (Scene.Map.isTransforming()) {
 				if (this.pointedMapElementPosition !== null || previousPointedMapElementPosition !== null) {
-					const mapPortion = this.getMapPortionFromGlobalPortion(
-						(this.pointedMapElementPosition === null
-							? previousPointedMapElementPosition!
-							: this.pointedMapElementPosition
-						).getGlobalPortion()
-					);
-					if (mapPortion) {
-						this.portionsToUpdate.add(mapPortion);
+					if (previousPointedMapElementPosition) {
+						const mapPortion = this.getMapPortionByPosition(previousPointedMapElementPosition);
+						if (mapPortion) {
+							this.portionsToUpdate.add(mapPortion);
+						}
+					}
+					if (this.pointedMapElementPosition) {
+						const mapPortion = this.getMapPortionByPosition(this.pointedMapElementPosition);
+						if (mapPortion) {
+							this.portionsToUpdate.add(mapPortion);
+						}
 					}
 				}
 			}
@@ -1181,6 +1216,14 @@ class Map extends Base {
 		if (this.needsMouseDown) {
 			this.onMouseDown();
 			this.needsMouseDown = false;
+		}
+		if (
+			!Inputs.isPointerPressed &&
+			(!this.pointedMapElementPosition || !this.pointedMapElementPosition.isInMap(this.modelMap))
+		) {
+			this.forEachMapPortions((mapPortion) => {
+				mapPortion?.removeLastPreview();
+			});
 		}
 	}
 
@@ -1293,6 +1336,12 @@ class Map extends Base {
 			}
 			if (this.transformControls.dragging && Inputs.isPointerPressed) {
 				this.isDraggingTransforming = true;
+			}
+		}
+		if (Scene.Map.isTransforming()) {
+			const mapPortion = this.getMapPortionByPosition(Position.createFromVector3(this.selectedMesh.position));
+			if (mapPortion) {
+				mapPortion.updateGeometriesWithoutCheck();
 			}
 		}
 	}
@@ -1478,6 +1527,11 @@ class Map extends Base {
 				angle,
 				MapElement.Base.Y_AXIS,
 				this.selectedMesh.scale
+			);
+			(this.hoveredMesh.geometry as CustomGeometryFace).rotate(
+				angle,
+				MapElement.Base.Y_AXIS,
+				this.hoveredMesh.scale
 			);
 		}
 

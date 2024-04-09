@@ -160,7 +160,7 @@ class Inputs {
 
 			// Key up
 			const handleKeyUp = (e: globalThis.KeyboardEvent) => {
-				if (!this.isMapFocused || !Scene.Map.current || Scene.Map.current.loading) {
+				if (!this.isMapFocused || !Scene.Map.current) {
 					return;
 				}
 				Inputs.isALT = e.altKey;

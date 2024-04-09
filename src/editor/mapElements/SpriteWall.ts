@@ -134,6 +134,7 @@ class SpriteWall extends Base {
 
 	static updateAround(position: Position, save: boolean) {
 		const positions = [
+			position,
 			position.getLeft(),
 			position.getRight(),
 			position.getTopLeft(),
