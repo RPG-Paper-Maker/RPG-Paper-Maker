@@ -14,7 +14,6 @@ import FooterNoYes from './footers/FooterNoYes';
 import { Model, Scene } from '../../Editor';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import Loader from '../Loader';
 import { useDispatch } from 'react-redux';
 import { removeProject } from '../../store';
 import { LocalFile, Project } from '../../core';
