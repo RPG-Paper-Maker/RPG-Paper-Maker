@@ -94,12 +94,12 @@ class Map extends Base {
 		return Map.generateMapName(this.id);
 	}
 
-	getPortionsNumbers(): [number, number, number, number] {
+	getPortionsMax(): [number, number, number, number] {
 		return [
-			Math.floor((this.length - 1) / Constants.PORTION_SIZE) + 1,
-			Math.floor((this.depth - 1) / Constants.PORTION_SIZE) + (this.depth > 0 ? 1 : 0) + 1,
-			Math.floor((this.height - 1) / Constants.PORTION_SIZE) + 1,
-			Math.floor((this.width - 1) / Constants.PORTION_SIZE) + 1,
+			Math.floor((this.length - 1) / Constants.PORTION_SIZE),
+			Math.floor((this.depth - 1) / Constants.PORTION_SIZE) + (this.depth > 0 ? 0 : 1),
+			Math.floor((this.height - 1) / Constants.PORTION_SIZE),
+			Math.floor((this.width - 1) / Constants.PORTION_SIZE),
 		];
 	}
 
@@ -115,10 +115,10 @@ class Map extends Base {
 		await this.save();
 
 		// Portions
-		const [lx, ld, lh, lz] = this.getPortionsNumbers();
-		for (let i = 0; i < lx; i++) {
-			for (let j = -ld; j < lh; j++) {
-				for (let k = 0; k < lz; k++) {
+		const [lx, ld, lh, lz] = this.getPortionsMax();
+		for (let i = 0; i <= lx; i++) {
+			for (let j = -ld; j <= lh; j++) {
+				for (let k = 0; k <= lz; k++) {
 					await LocalFile.writeJSON(Paths.join(folderMap, Portion.getFileName(i, j, k)), {});
 				}
 			}
@@ -169,8 +169,8 @@ class Map extends Base {
 	}
 
 	async resizeMap(previousMap: Map) {
-		const [portionMaxX, portionMaxD, portionMaxH, portionMaxZ] = previousMap.getPortionsNumbers();
-		const [newPortionMaxX, newPortionMaxD, newPortionMaxH, newPortionMaxZ] = this.getPortionsNumbers();
+		const [portionMaxX, portionMaxD, portionMaxH, portionMaxZ] = previousMap.getPortionsMax();
+		const [newPortionMaxX, newPortionMaxD, newPortionMaxH, newPortionMaxZ] = this.getPortionsMax();
 
 		// Write empty portions
 		for (let i = portionMaxX + 1; i <= newPortionMaxX; i++) {

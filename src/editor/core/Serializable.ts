@@ -118,13 +118,15 @@ class Serializable {
 				case BINDING.MAP_POSITION: {
 					const mapping = new Map();
 					(this as JSONType)[name] = mapping;
-					const jsonMappings = json[jsonName] as JSONMapping[];
-					for (const objHash of jsonMappings) {
-						const p = new Position();
-						p.read(objHash.k);
-						const cons = additionalFunction ? additionalFunction(objHash.v) : constructorClass;
-						if (cons) {
-							mapping.set(p.toKey(), cons.fromJSON(objHash.v));
+					const jsonMappings = json[jsonName] as JSONMapping[] | undefined;
+					if (jsonMappings) {
+						for (const objHash of jsonMappings) {
+							const p = new Position();
+							p.read(objHash.k);
+							const cons = additionalFunction ? additionalFunction(objHash.v) : constructorClass;
+							if (cons) {
+								mapping.set(p.toKey(), cons.fromJSON(objHash.v));
+							}
 						}
 					}
 					break;

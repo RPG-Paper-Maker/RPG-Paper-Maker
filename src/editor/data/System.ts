@@ -29,7 +29,7 @@ class System extends Serializable {
 	public static readonly bindings: BindingType[] = [
 		['projectName', 'pn', 'Project without name', BINDING.OBJECT, Model.Localization],
 		['SQUARE_SIZE', 'ss', undefined, BINDING.NUMBER],
-		['PORTIONS_RAY', 'portionRayIngame', 3, BINDING.NUMBER],
+		['PORTIONS_RAY', 'portionRayEngine', 6, BINDING.NUMBER],
 		['PATH_BR', 'pathBR', undefined, BINDING.STRING],
 		['autotilesFrames', 'autotilesFrames', 4, BINDING.NUMBER],
 		['autotilesFrameDuration', 'autotilesFrameDuration', 150, BINDING.NUMBER],
