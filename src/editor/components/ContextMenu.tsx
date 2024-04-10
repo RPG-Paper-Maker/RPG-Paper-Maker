@@ -22,7 +22,16 @@ type Props = {
 function ContextMenu({ children, items = [] }: Props) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isFocused, setIsFocused] = useState(false);
+	const [timerID, setTimerID] = useState<NodeJS.Timeout | undefined>();
 	const ref = useRef<HTMLDivElement>(null);
+
+	const openContext = (x: number, y: number) => {
+		setIsOpen(true);
+		if (ref.current) {
+			ref.current.style.left = `${x}px`;
+			ref.current.style.top = `${y}px`;
+		}
+	};
 
 	const handleMouseDown = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
 		setIsFocused(true);
@@ -34,11 +43,7 @@ function ContextMenu({ children, items = [] }: Props) {
 				}, 200);
 				break;
 			case 2:
-				setIsOpen(true);
-				if (ref.current) {
-					ref.current.style.left = `${e.pageX}px`;
-					ref.current.style.top = `${e.pageY}px`;
-				}
+				openContext(e.pageX, e.pageY);
 				break;
 		}
 	};
@@ -47,6 +52,20 @@ function ContextMenu({ children, items = [] }: Props) {
 		if (e.button === 0 && isOpen && ref.current && !ref.current.contains(e.target as Node)) {
 			setIsOpen(false);
 		}
+	};
+
+	const handleTouchStart = (e: React.TouchEvent<HTMLElement>) => {
+		const id = setTimeout(() => {
+			openContext(e.touches[0].pageX, e.touches[0].pageY);
+		}, 500);
+		setTimerID(id);
+	};
+
+	// Function to handle touch end event
+	const handleTouchEnd = () => {
+		// Clear the timer when touch ends
+		clearTimeout(timerID);
+		setTimerID(undefined);
 	};
 
 	useEffect(() => {
@@ -58,7 +77,12 @@ function ContextMenu({ children, items = [] }: Props) {
 	}, [isOpen]);
 
 	return (
-		<div className='flex-one' onMouseDown={handleMouseDown}>
+		<div
+			className='flex-one'
+			onMouseDown={handleMouseDown}
+			onTouchStart={handleTouchStart}
+			onTouchEnd={handleTouchEnd}
+		>
 			{children}
 			<div ref={ref} className={Utils.getClassName([[!isOpen, 'hidden']], ['fixed', 'hight-z-index'])}>
 				<MenuCustom horizontal={false} items={items} allowKeyboard={isFocused} />
