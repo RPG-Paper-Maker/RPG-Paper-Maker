@@ -116,7 +116,6 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 				footer={<FooterCancelOK onCancel={onReject} onOK={handleAccept} />}
 				onClose={onReject}
 			>
-				<Loader isLoading={isLoading} />
 				<div className='flex-center-vertically'>
 					<p className='label'>Name:</p>
 					<InputText value={projectName} onChange={setProjectName} />

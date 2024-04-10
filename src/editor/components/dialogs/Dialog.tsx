@@ -15,6 +15,7 @@ import { RxCross2 } from 'react-icons/rx';
 import { Utils } from '../../common/Utils';
 import '../../styles/Dialog.css';
 import { Inputs } from '../../managers';
+import Loader from '../Loader';
 
 type Props = {
 	children: React.ReactNode;
@@ -32,8 +33,6 @@ function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false
 	const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
 	const [isMoved, setIsMoved] = useState(false);
 	const dialogRef = useRef<HTMLDivElement>(null);
-
-	Inputs.isMapFocused = !isOpen;
 
 	const updatePosition = (x: number, y: number) => {
 		if (dialogRef.current) {
@@ -110,6 +109,10 @@ function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false
 		}
 	});
 
+	useEffect(() => {
+		Inputs.isMapFocused = !isOpen;
+	}, [isOpen]);
+
 	const root = document.getElementById('root');
 	if (!root) {
 		return null;
@@ -135,7 +138,10 @@ function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false
 							<div className='flex-one'>{title}</div>
 							{onClose && <RxCross2 className='dialog-close' onClick={handleClose} />}
 						</div>
-						<div className='dialog-content'>{children}</div>
+						<div className='dialog-content'>
+							<Loader isLoading={isLoading} />
+							{children}
+						</div>
 						<div className='dialog-footer'>{footer}</div>
 					</div>
 				</div>

@@ -30,6 +30,7 @@ type Props = {
 function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [focusFirst, setFocustFirst] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const [name, setName] = useStateString();
 	const [id, setID] = useStateNumber();
 	const [length, setLength] = useStateNumber();
@@ -47,6 +48,7 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 	};
 
 	const handleAccept = async () => {
+		setIsLoading(true);
 		const previousModel = model.clone();
 		model.name = name;
 		model.id = id;
@@ -55,6 +57,7 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 		model.height = height;
 		model.depth = depth;
 		await onAccept(previousModel);
+		setIsLoading(false);
 		setIsOpen(false);
 	};
 
@@ -76,6 +79,7 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 		<Dialog
 			title='Set map properties...'
 			isOpen={isOpen}
+			isLoading={isLoading}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>
