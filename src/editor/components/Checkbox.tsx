@@ -10,7 +10,7 @@
 */
 
 import { ReactNode } from 'react';
-import '../styles/Checkox.css';
+import '../styles/Checkbox.css';
 
 type Props = {
 	children?: ReactNode;

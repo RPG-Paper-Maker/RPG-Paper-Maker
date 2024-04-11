@@ -11,16 +11,37 @@
 
 import React, { useEffect, useRef } from 'react';
 import '../styles/Input.css';
+import { INPUT_TYPE_WIDTH } from '../common';
 
 type Props = {
 	value?: string;
+	widthType?: INPUT_TYPE_WIDTH;
 	onChange: (e: string) => void;
 	focusFirst?: boolean;
 	setFocustFirst?: (b: boolean) => void;
 };
 
-function InputText({ value, onChange, focusFirst = false, setFocustFirst }: Props) {
+function InputText({
+	value,
+	widthType = INPUT_TYPE_WIDTH.NORMAL,
+	onChange,
+	focusFirst = false,
+	setFocustFirst,
+}: Props) {
 	const refInput = useRef<HTMLInputElement>(null);
+
+	const getMaxWidth = () => {
+		switch (widthType) {
+			case INPUT_TYPE_WIDTH.FILL:
+				return '100%';
+			case INPUT_TYPE_WIDTH.SMALL:
+				return '100px';
+			case INPUT_TYPE_WIDTH.NORMAL:
+				return '180px';
+			case INPUT_TYPE_WIDTH.LARGE:
+				return '300px';
+		}
+	};
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		onChange(e.target.value);
@@ -42,6 +63,7 @@ function InputText({ value, onChange, focusFirst = false, setFocustFirst }: Prop
 			autoCorrect='off'
 			autoCapitalize='off'
 			spellCheck='false'
+			style={{ maxWidth: getMaxWidth() }}
 		/>
 	);
 }

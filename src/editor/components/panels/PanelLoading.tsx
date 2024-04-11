@@ -28,13 +28,22 @@ function PanelLoading({ setLoaded }: Props) {
 	const initialize = async () => {
 		Constants.IS_MOBILE = Utils.isMobile();
 		Constants.IS_DESKTOP = Utils.isDesktop();
+		await initializeSystemInformation();
 		await initializeGL();
 		await initializeTextures();
 		await initializeLocalFiles();
 		await initializeEngineSettings();
 		await initializeEngineVersion();
-		await loadProjects(); // Desktop: load engine settings
+		loadProjects();
 		setLoaded(true);
+	};
+
+	const initializeSystemInformation = async () => {
+		if (Constants.IS_DESKTOP) {
+			const { documentsFolder } = await IO.getSystemInformation();
+			Paths.GLOBAL_DOCUMENTS = documentsFolder;
+			Paths.GLOBAL_RPM_GAMES = Paths.join(documentsFolder, 'RPG Paper Maker Games');
+		}
 	};
 
 	const initializeTextures = async () => {
@@ -82,14 +91,8 @@ function PanelLoading({ setLoaded }: Props) {
 		}
 	};
 
-	const loadProjects = async () => {
-		const projects = (await LocalFile.getFolders(LOCAL_FORAGE.PROJECTS)).map((name) => {
-			return {
-				name,
-				location: '',
-			};
-		});
-		dispatch(setProjects(projects));
+	const loadProjects = () => {
+		dispatch(setProjects(EngineSettings.current.recentProjects));
 	};
 
 	useEffect(() => {

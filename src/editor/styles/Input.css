@@ -15,6 +15,7 @@ input {
 	border: 2px solid var(--grey-color);
 	border-radius: 2px;
 	flex-grow: 1;
+	height: 19px;
 }
 
 input:focus-visible {

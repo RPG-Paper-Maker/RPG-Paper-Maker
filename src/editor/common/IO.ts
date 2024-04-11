@@ -1,5 +1,3 @@
-import { JSONType } from './Types';
-
 /*
     RPG Paper Maker Copyright (C) 2017-2024 Wano
 
@@ -10,6 +8,14 @@ import { JSONType } from './Types';
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+/*
+const electron = require('electron');
+const remote = electron.remote;
+const ipc = electron.ipcRenderer;
+const ElectronScreen = remote.screen;
+const app = remote.app;*/
+import { Constants } from './Constants';
+import { ExtendedWindow, JSONType } from './Types';
 class IO {
 	static async openFile(url: string): Promise<string> {
 		return await new Promise((resolve) => {
@@ -33,6 +39,17 @@ class IO {
 		} catch (e) {
 			return {};
 		}
+	}
+
+	static async openFolderDialog(callback: (f: string) => void) {
+		const result = await (window as ExtendedWindow).ipcRenderer.invoke('open-folder-dialog');
+		callback(result as string);
+	}
+
+	static async getSystemInformation() {
+		return (await (window as ExtendedWindow).ipcRenderer.invoke('get-system-information')) as Promise<{
+			documentsFolder: string;
+		}>;
 	}
 }
 

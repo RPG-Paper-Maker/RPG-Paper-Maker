@@ -12,11 +12,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { CopiedItemsType } from '../../common';
-
-export interface ProjectState {
-	name: string;
-	location: string;
-}
+import { Model } from '../../Editor';
 
 const ProjectsSlice = createSlice({
 	name: 'projects',
@@ -24,7 +20,7 @@ const ProjectsSlice = createSlice({
 		current: '',
 		loading: false,
 		openLoading: false,
-		list: [] as ProjectState[],
+		list: [] as Model.ProjectPreview[],
 		menuIndex: 1,
 		copiedItems: null as CopiedItemsType | null,
 	},
@@ -38,14 +34,8 @@ const ProjectsSlice = createSlice({
 		setOpenLoading(state, action: PayloadAction<boolean>) {
 			state.openLoading = action.payload;
 		},
-		setProjects(state, action: PayloadAction<ProjectState[]>) {
+		setProjects(state, action: PayloadAction<Model.ProjectPreview[]>) {
 			state.list = action.payload;
-		},
-		addProject(state, action: PayloadAction<ProjectState>) {
-			state.list.push(action.payload);
-		},
-		removeProject(state, action: PayloadAction<string>) {
-			state.list = state.list.filter((project) => project.name !== action.payload);
 		},
 		clearProjects(state) {
 			state.list = [];
@@ -64,8 +54,6 @@ export const {
 	setLoading,
 	setOpenLoading,
 	setProjects,
-	addProject,
-	removeProject,
 	clearProjects,
 	setProjectMenuIndex,
 	setCopiedItems,

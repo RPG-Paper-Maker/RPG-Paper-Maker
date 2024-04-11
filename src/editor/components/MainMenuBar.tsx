@@ -13,7 +13,6 @@ import React, { useState, useEffect, useRef, ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	RootState,
-	addProject,
 	clearProjects,
 	setCurrentProjectName,
 	setCurrentTreeMapTag,
@@ -21,6 +20,7 @@ import {
 	setNeedsReloadPageClearCache,
 	setOpenLoading,
 	setProjectMenuIndex,
+	setProjects,
 	setUndoRedoIndex,
 	triggerImportProject,
 	triggerNewProject,
@@ -33,7 +33,7 @@ import {
 import DialogNewProject from './dialogs/DialogNewProject';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
-import { Manager, Scene } from '../Editor';
+import { Manager, Model, Scene } from '../Editor';
 import {
 	AiOutlineArrowDown,
 	AiOutlineArrowUp,
@@ -61,6 +61,7 @@ import FooterNoYes from './dialogs/footers/FooterNoYes';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import FooterOK from './dialogs/footers/FooterOK';
 import MenuCustom from './MenuCustom';
+import { EngineSettings } from '../data/EngineSettings';
 
 function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
@@ -79,7 +80,7 @@ function MainMenuBar() {
 	const currentTreeMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
 	const currentProjectName = useSelector((state: RootState) => state.projects.current);
 	const triggers = useSelector((state: RootState) => state.triggers.mainBar);
-	const projectNames = useSelector((state: RootState) => state.projects.list).map(({ name }) => name);
+	const projects = useSelector((state: RootState) => state.projects.list);
 	const undoRedoIndex = useSelector((state: RootState) => state.mapEditor.undoRedo.index);
 	const undoRedoLength = useSelector((state: RootState) => state.mapEditor.undoRedo.length);
 	const projectMenuIndex = useSelector((state: RootState) => state.projects.menuIndex);
@@ -103,12 +104,20 @@ function MainMenuBar() {
 		await Project.current!.settings.save();
 	};
 
+	const addProject = async (name: string, location: string) => {
+		const project = Model.ProjectPreview.create(name, location);
+		const newList = [project, ...projects];
+		dispatch(setProjects(newList));
+		EngineSettings.current.recentProjects = newList;
+		await EngineSettings.current.save();
+	};
+
 	const handleNewProject = async () => {
 		setIsDialogNewProjectOpen(true);
 	};
 
 	const handleAcceptNewProject = async (data: JSONType) => {
-		dispatch(addProject({ name: data.projectName as string, location: '' }));
+		await addProject(data.projectName as string, '');
 		setIsDialogNewProjectOpen(false);
 		await handleOpenProject(data.projectName as string);
 	};
@@ -159,11 +168,11 @@ function MainMenuBar() {
 		}
 		const file = Array.from(importFileInputRef.current.files || [])[0];
 		const projectName = file.name.substring(0, file.name.length - 4);
-		if (projectNames.indexOf(projectName) === -1) {
+		if (!projects.every((project) => projectName !== project.name)) {
 			importFileInputRef.current.value = '';
 			dispatch(setLoading(true));
 			await LocalFile.loadZip(file, LOCAL_FORAGE.PROJECTS);
-			dispatch(addProject({ name: projectName, location: '' }));
+			await addProject(projectName, '');
 			await handleOpenProject(projectName);
 		} else {
 			setIsDialogWarningImportOpen(true);
@@ -181,7 +190,7 @@ function MainMenuBar() {
 		const projectName = file.name.substring(0, file.name.length - 4);
 		await LocalFile.removeFolder(Paths.join(LOCAL_FORAGE.PROJECTS, projectName));
 		await LocalFile.loadZip(file, LOCAL_FORAGE.PROJECTS);
-		dispatch(addProject({ name: projectName, location: '' }));
+		await addProject(projectName, '');
 		await handleOpenProject(projectName);
 	};
 
@@ -328,7 +337,10 @@ function MainMenuBar() {
 				{
 					title: 'Open existing project...',
 					icon: <AiOutlineFolderOpen />,
-					children: projectNames.map((name) => ({ title: name, onClick: () => handleOpenProject(name) })),
+					children: projects.map((project) => ({
+						title: project.name,
+						onClick: () => handleOpenProject(project.name),
+					})),
 				},
 				{
 					title: (

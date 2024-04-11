@@ -9,16 +9,28 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import FooterNoYes from './footers/FooterNoYes';
 import { Model, Scene } from '../../Editor';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import { useDispatch } from 'react-redux';
-import { removeProject } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
 import { LocalFile, Project } from '../../core';
-import { Constants, ELEMENT_MAP_KIND, JSONType, LOCAL_FORAGE, Paths } from '../../common';
+import {
+	Constants,
+	ELEMENT_MAP_KIND,
+	ExtendedWindow,
+	INPUT_TYPE_WIDTH,
+	IO,
+	JSONType,
+	LOCAL_FORAGE,
+	Paths,
+} from '../../common';
 import InputText from '../InputText';
+import { RootState, setProjects } from '../../store';
+import { EngineSettings } from '../../data/EngineSettings';
+import Button from '../Button';
+import Checkbox from '../Checkbox';
 
 type Props = {
 	isOpen: boolean;
@@ -28,8 +40,14 @@ type Props = {
 
 function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 	const [projectName, setProjectName] = useState('Project without name');
+	const [folderName, setFolderName] = useState('project-without-name');
+	const [isAutoGenerate, setIsAutoGenerate] = useState(true);
+	const [location, setLocation] = useState(Paths.GLOBAL_RPM_GAMES);
 	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+
+	const projects = useSelector((state: RootState) => state.projects.list);
+
 	const dispatch = useDispatch();
 
 	const checkValidAccept: () => Promise<boolean> = async () => {
@@ -58,8 +76,15 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 
 	const replaceProject = async () => {
 		setIsDialogConfirmOpen(false);
-		await LocalFile.removeFolder(Paths.join(LOCAL_FORAGE.PROJECTS, projectName));
-		dispatch(removeProject(projectName));
+		const newList = projects.filter((p) => projectName !== p.name);
+		dispatch(setProjects(newList));
+		if (Constants.IS_DESKTOP) {
+			await LocalFile.removeFolder(location);
+		} else {
+			await LocalFile.removeFolder(Paths.join(LOCAL_FORAGE.PROJECTS, projectName));
+		}
+		EngineSettings.current.recentProjects = newList;
+		await EngineSettings.current.save();
 		await createProject();
 		accept();
 	};
@@ -96,6 +121,30 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 		setIsLoading(false);
 	};
 
+	const formatFolderName = (name: string) => {
+		return name
+			.replace(/ /g, '-')
+			.replace(/[^a-zA-Z0-9-]/g, '')
+			.toLowerCase();
+	};
+
+	const handleChangeProjectName = (name: string) => {
+		if (isAutoGenerate) {
+			setFolderName(formatFolderName(name));
+		}
+		setProjectName(name);
+	};
+
+	const handleChangeFolderName = (name: string) => {
+		setFolderName(formatFolderName(name));
+	};
+
+	const handleClickLocation = async () => {
+		await IO.openFolderDialog((folderName) => {
+			setLocation(folderName);
+		});
+	};
+
 	const handleAccept = async (): Promise<boolean> => {
 		if (await checkValidAccept()) {
 			await createProject();
@@ -115,9 +164,31 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 				footer={<FooterCancelOK onCancel={onReject} onOK={handleAccept} />}
 				onClose={onReject}
 			>
-				<div className='flex-center-vertically'>
-					<p className='label'>Name:</p>
-					<InputText value={projectName} onChange={setProjectName} />
+				<div className='flex-column gap-small'>
+					<div className='flex gap-small'>
+						<div>Name:</div>
+						<InputText value={projectName} onChange={handleChangeProjectName} />
+						<div className='flex-columns'>
+							<div className='flex gap-small'>
+								<div>Folder name:</div>
+								<InputText value={folderName} onChange={handleChangeFolderName} />
+							</div>
+							<div className='flex-right-horizontally'>
+								<Checkbox isChecked={isAutoGenerate} onChange={setIsAutoGenerate}>
+									Auto-generate
+								</Checkbox>
+							</div>
+						</div>
+					</div>
+					{Constants.IS_DESKTOP && (
+						<div className='flex-column gap-small'>
+							<div>Location:</div>
+							<div className='flex gap-small'>
+								<InputText widthType={INPUT_TYPE_WIDTH.FILL} value={location} onChange={setLocation} />
+								<Button onClick={handleClickLocation}>...</Button>
+							</div>
+						</div>
+					)}
 				</div>
 			</Dialog>
 			<Dialog

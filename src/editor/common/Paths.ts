@@ -89,6 +89,8 @@ class Paths {
 	public static readonly FILE_ENGINE_SETTINGS = 'engineSettings.json';
 	public static readonly FILE_CURRENT_COPY = 'currentCopy.json';
 	public static readonly FILE_VERSION = 'version';
+	public static GLOBAL_DOCUMENTS = '';
+	public static GLOBAL_RPM_GAMES = '';
 
 	public static readonly ALL_JSON = [
 		Paths.FILE_PICTURES,

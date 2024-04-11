@@ -7,6 +7,7 @@ export * from './MapPortion';
 export * from './Mountain';
 export * from './Object3D';
 export * from './Picture';
+export * from './ProjectPreview';
 export * from './Shape';
 export * from './SpecialElement';
 export * from './TreeMapTag';

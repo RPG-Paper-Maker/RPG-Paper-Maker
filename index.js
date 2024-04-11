@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const { app, BrowserWindow, globalShortcut } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain, dialog } = require('electron');
+const path = require('path');
 
 let window;
 
@@ -19,9 +20,13 @@ const createWindow = () => {
 		height: 600,
 		webPreferences: {
 			nodeIntegration: true,
+			contextIsolation: false,
+			enableRemoteModule: true,
+			preload: path.join(__dirname, 'preload.js'),
 		},
+		icon: './public/icon.png',
 	});
-
+	window.maximize();
 	window.loadFile('./build/index.html');
 	window.removeMenu();
 };
@@ -33,3 +38,20 @@ app.whenReady()
 		})
 	)
 	.then(createWindow);
+
+ipcMain.handle('get-system-information', () => {
+	return {
+		documentsFolder: app.getPath('documents'),
+	};
+});
+
+ipcMain.handle('open-folder-dialog', async (defaultPath) => {
+	const result = await dialog.showOpenDialog(window, {
+		defaultPath,
+		properties: ['openDirectory'],
+	});
+	if (!result.canceled) {
+		const selectedFolder = result.filePaths[0];
+		return selectedFolder;
+	}
+});

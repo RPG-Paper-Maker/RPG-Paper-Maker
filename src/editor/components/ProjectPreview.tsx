@@ -11,22 +11,27 @@
 
 import React, { useState } from 'react';
 import '../styles/MenuSub.css';
-import { ProjectState, removeProject, setLoading } from '../store/slices/ProjectsReducer';
+import { setLoading, setProjects } from '../store/slices/ProjectsReducer';
 import '../styles/ProjectPreview.css';
 import { FaTrashAlt } from 'react-icons/fa';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
-import { useDispatch } from 'react-redux';
-import { triggerOpenProject } from '../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, triggerOpenProject } from '../store';
 import { LocalFile } from '../core';
-import { LOCAL_FORAGE, Paths, Utils } from '../common';
+import { Constants, LOCAL_FORAGE, Paths, Utils } from '../common';
+import { Model } from '../Editor';
+import { EngineSettings } from '../data/EngineSettings';
 
 type Props = {
-	project: ProjectState;
+	project: Model.ProjectPreview;
 };
 
 function ProjectPreview({ project }: Props) {
 	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
+
+	const projects = useSelector((state: RootState) => state.projects.list);
+
 	const dispatch = useDispatch();
 
 	const handleOpenProject = () => {
@@ -45,8 +50,15 @@ function ProjectPreview({ project }: Props) {
 	const handleAcceptRemoveProject = async () => {
 		setIsDialogConfirmOpen(false);
 		dispatch(setLoading(true));
-		await LocalFile.removeFolder(Paths.join(LOCAL_FORAGE.PROJECTS, project.name));
-		dispatch(removeProject(project.name));
+		const newList = projects.filter((p) => project.name !== p.name);
+		dispatch(setProjects(newList));
+		if (Constants.IS_DESKTOP) {
+			await LocalFile.removeFolder(project.location);
+		} else {
+			await LocalFile.removeFolder(Paths.join(LOCAL_FORAGE.PROJECTS, project.name));
+		}
+		EngineSettings.current.recentProjects = newList;
+		await EngineSettings.current.save();
 		dispatch(setLoading(false));
 	};
 

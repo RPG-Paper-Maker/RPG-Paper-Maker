@@ -89,6 +89,11 @@ code {
 	justify-content: center;
 }
 
+.flex-right-horizontally {
+	display: flex;
+	justify-content: end;
+}
+
 .flex-wrap {
 	flex-wrap: wrap;
 }

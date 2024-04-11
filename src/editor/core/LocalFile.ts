@@ -12,7 +12,7 @@
 import localforage from 'localforage';
 import { Serializable } from './Serializable';
 import JSZip from 'jszip';
-import { ArrayUtils, BINDING, BindingType, IO, JSONType, Paths } from '../common';
+import { ArrayUtils, BINDING, BindingType, Constants, IO, JSONType, Paths } from '../common';
 
 class LocalFile extends Serializable {
 	public static readonly PATH_SYSTEMS = '/systems.json';

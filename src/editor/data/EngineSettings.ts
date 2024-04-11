@@ -11,13 +11,18 @@
 
 import { BINDING, BindingType, JSONType, LOCAL_FORAGE, Paths } from '../common';
 import { Serializable } from '../core';
+import { ProjectPreview } from '../models';
 
 class EngineSettings extends Serializable {
 	public static current: EngineSettings;
 
+	public recentProjects!: ProjectPreview[];
 	public showTipsGridHeight!: boolean;
 
-	public static readonly bindings: BindingType[] = [['showTipsGridHeight', 'stgh', true, BINDING.BOOLEAN]];
+	public static readonly bindings: BindingType[] = [
+		['showTipsGridHeight', 'stgh', true, BINDING.BOOLEAN],
+		['recentProjects', 'rp', [], BINDING.LIST, ProjectPreview],
+	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...EngineSettings.bindings, ...additionnalBinding];
