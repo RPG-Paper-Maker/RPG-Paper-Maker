@@ -58,7 +58,7 @@ class Utils {
 	}
 
 	static formatNumber(num: number, size: number): string {
-		return ('000000000' + num).substr(-size);
+		return String(num).padStart(size, '0');
 	}
 
 	static formatNumberID(num: number): string {
@@ -92,6 +92,13 @@ class Utils {
 	static drawStrokedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
 		ctx.strokeText(text, x, y);
 		ctx.fillText(text, x, y);
+	}
+
+	static formatProjectFolderName(name: string) {
+		return name
+			.replace(/ /g, '-')
+			.replace(/[^a-zA-Z0-9-]/g, '')
+			.toLowerCase();
 	}
 }
 

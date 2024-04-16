@@ -35,11 +35,11 @@ import { Project } from '../core';
 function Toolbar() {
 	const dispatch = useDispatch();
 
-	const currentProjectName = useSelector((state: RootState) => state.projects.current);
+	const currentProject = useSelector((state: RootState) => state.projects.current);
 	const currentTreeMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
 	useSelector((state: RootState) => state.triggers.treeMap); // Force to check can save all
 
-	const isProjectOpened = currentProjectName !== '';
+	const isProjectOpened = currentProject !== null;
 
 	const isInMap = isProjectOpened && currentTreeMapTag !== null;
 

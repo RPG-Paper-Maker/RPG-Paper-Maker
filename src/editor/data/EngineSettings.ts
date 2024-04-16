@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType, LOCAL_FORAGE, Paths } from '../common';
+import { BINDING, BindingType, Constants, JSONType, LOCAL_FORAGE, Paths } from '../common';
 import { Serializable } from '../core';
 import { ProjectPreview } from '../models';
 
@@ -29,7 +29,7 @@ class EngineSettings extends Serializable {
 	}
 
 	getPath(): string {
-		return Paths.join(LOCAL_FORAGE.ENGINE, Paths.FILE_ENGINE_SETTINGS);
+		return Paths.join(Constants.IS_DESKTOP ? window.__dirname : LOCAL_FORAGE.ENGINE, Paths.FILE_ENGINE_SETTINGS);
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

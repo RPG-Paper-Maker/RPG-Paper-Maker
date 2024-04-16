@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 	RootState,
 	clearProjects,
-	setCurrentProjectName,
+	setCurrentProject,
 	setCurrentTreeMapTag,
 	setLoading,
 	setNeedsReloadPageClearCache,
@@ -54,7 +54,7 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 import { LuFolders, LuSaveAll } from 'react-icons/lu';
 import Loader from './Loader';
 import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
-import { KEY, SPECIAL_KEY, LOCAL_FORAGE, Paths, MenuItemType, JSONType } from '../common';
+import { KEY, SPECIAL_KEY, Paths, MenuItemType, Utils, Constants, IO } from '../common';
 import { LocalFile, Project } from '../core';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
@@ -62,6 +62,7 @@ import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import FooterOK from './dialogs/footers/FooterOK';
 import MenuCustom from './MenuCustom';
 import { EngineSettings } from '../data/EngineSettings';
+import { Platform } from '../common/Platform';
 
 function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
@@ -78,7 +79,7 @@ function MainMenuBar() {
 	const dispatch = useDispatch();
 
 	const currentTreeMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
-	const currentProjectName = useSelector((state: RootState) => state.projects.current);
+	const currentProject = useSelector((state: RootState) => state.projects.current);
 	const triggers = useSelector((state: RootState) => state.triggers.mainBar);
 	const projects = useSelector((state: RootState) => state.projects.list);
 	const undoRedoIndex = useSelector((state: RootState) => state.mapEditor.undoRedo.index);
@@ -86,7 +87,7 @@ function MainMenuBar() {
 	const projectMenuIndex = useSelector((state: RootState) => state.projects.menuIndex);
 	useSelector((state: RootState) => state.triggers.treeMap); // Force to check can save all
 
-	const isProjectOpened = currentProjectName !== '';
+	const isProjectOpened = currentProject !== null;
 
 	const isInMap = isProjectOpened && currentTreeMapTag !== null;
 
@@ -104,8 +105,7 @@ function MainMenuBar() {
 		await Project.current!.settings.save();
 	};
 
-	const addProject = async (name: string, location: string) => {
-		const project = Model.ProjectPreview.create(name, location);
+	const addProject = async (project: Model.ProjectPreview) => {
 		const newList = [project, ...projects];
 		dispatch(setProjects(newList));
 		EngineSettings.current.recentProjects = newList;
@@ -116,25 +116,25 @@ function MainMenuBar() {
 		setIsDialogNewProjectOpen(true);
 	};
 
-	const handleAcceptNewProject = async (data: JSONType) => {
-		await addProject(data.projectName as string, '');
+	const handleAcceptNewProject = async (project: Model.ProjectPreview) => {
+		await addProject(project);
 		setIsDialogNewProjectOpen(false);
-		await handleOpenProject(data.projectName as string);
+		await handleOpenProject(project);
 	};
 
 	const handleRejectNewProject = async () => {
 		setIsDialogNewProjectOpen(false);
 	};
 
-	const handleOpenProject = async (name: string) => {
+	const handleOpenProject = async (project: Model.ProjectPreview) => {
 		dispatch(setOpenLoading(true));
-		Project.current = new Project(name);
+		Project.current = new Project(project.name, project.location);
 		await Project.current.load();
 		if (Project.current.settings.projectVersion !== Project.VERSION) {
 			setIsDialogWarningProjectVersionOpen(true);
 			Project.current = null;
 		} else {
-			dispatch(setCurrentProjectName(name));
+			dispatch(setCurrentProject(project));
 		}
 		dispatch(setOpenLoading(false));
 	};
@@ -167,15 +167,18 @@ function MainMenuBar() {
 			return;
 		}
 		const file = Array.from(importFileInputRef.current.files || [])[0];
-		const projectName = file.name.substring(0, file.name.length - 4);
-		if (!projects.every((project) => projectName !== project.name)) {
+		const folderName = Utils.formatProjectFolderName(file.name.substring(0, file.name.length - 4));
+		const projectsFolders = await Platform.getFolders(Paths.getRPMGamesFolder());
+		if (projectsFolders.includes(folderName)) {
+			setIsDialogWarningImportOpen(true);
+		} else {
 			importFileInputRef.current.value = '';
 			dispatch(setLoading(true));
-			await LocalFile.loadZip(file, LOCAL_FORAGE.PROJECTS);
-			await addProject(projectName, '');
-			await handleOpenProject(projectName);
-		} else {
-			setIsDialogWarningImportOpen(true);
+			const path = Paths.join(Paths.getRPMGamesFolder(), folderName);
+			await Platform.loadZip(file, path);
+			const project = Model.ProjectPreview.create(folderName, path);
+			await addProject(project);
+			await handleOpenProject(project);
 		}
 	};
 
@@ -187,11 +190,13 @@ function MainMenuBar() {
 		dispatch(setLoading(true));
 		const file = Array.from(importFileInputRef.current.files || [])[0];
 		importFileInputRef.current.value = '';
-		const projectName = file.name.substring(0, file.name.length - 4);
-		await LocalFile.removeFolder(Paths.join(LOCAL_FORAGE.PROJECTS, projectName));
-		await LocalFile.loadZip(file, LOCAL_FORAGE.PROJECTS);
-		await addProject(projectName, '');
-		await handleOpenProject(projectName);
+		const folderName = Utils.formatProjectFolderName(file.name.substring(0, file.name.length - 4));
+		const path = Paths.join(Paths.getRPMGamesFolder(), folderName);
+		await Platform.removeFolder(path);
+		await Platform.loadZip(file, path);
+		const project = Model.ProjectPreview.create(folderName, path);
+		await addProject(project);
+		await handleOpenProject(project);
 	};
 
 	const handleRejectImport = async () => {
@@ -202,7 +207,14 @@ function MainMenuBar() {
 	};
 
 	const handleExport = async () => {
-		await LocalFile.downloadZip(Paths.join(LOCAL_FORAGE.PROJECTS, currentProjectName));
+		if (Constants.IS_DESKTOP) {
+			const folderPath = await IO.openFolderDialog();
+			if (folderPath) {
+				IO.downloadZip(currentProject!.location, folderPath);
+			}
+		} else {
+			await LocalFile.downloadZip(currentProject!.location);
+		}
 	};
 
 	const handleCloseProject = async () => {
@@ -212,7 +224,7 @@ function MainMenuBar() {
 		}
 		Project.current = null;
 		dispatch(setCurrentTreeMapTag(null));
-		dispatch(setCurrentProjectName(''));
+		dispatch(setCurrentProject(null));
 	};
 
 	const handleClearAllCache = async () => {
@@ -278,9 +290,7 @@ function MainMenuBar() {
 		Scene.Map.current!.zoomOut();
 	};
 
-	const getPlayURL = () => window.location.pathname + '?project=' + currentProjectName;
-
-	const play = () => window.open(getPlayURL(), '_blank');
+	const play = async () => await Platform.openGame(currentProject!.location);
 
 	const handlePlay = async () => {
 		if (canSaveAll) {
@@ -300,15 +310,11 @@ function MainMenuBar() {
 	};
 
 	const handleAcceptSavePlay = async () => {
-		const w = window.open('', '_blank');
 		setIsLoading(true);
 		await handleSaveAll();
 		setIsLoading(false);
 		setIsDialogSavePlayOpen(false);
-		if (w) {
-			w.location = getPlayURL();
-			w.focus();
-		}
+		play();
 	};
 
 	const handleClickHamburgerBack = () => {
@@ -339,7 +345,7 @@ function MainMenuBar() {
 					icon: <AiOutlineFolderOpen />,
 					children: projects.map((project) => ({
 						title: project.name,
-						onClick: () => handleOpenProject(project.name),
+						onClick: () => handleOpenProject(project),
 					})),
 				},
 				{
@@ -498,7 +504,7 @@ function MainMenuBar() {
 			dispatch(triggerImportProject(false));
 			handleImport().catch(console.error);
 		} else if (triggers.openProject) {
-			dispatch(triggerOpenProject(''));
+			dispatch(triggerOpenProject(null));
 			handleOpenProject(triggers.openProject).catch(console.error);
 		} else if (triggers.save) {
 			dispatch(triggerSave(false));

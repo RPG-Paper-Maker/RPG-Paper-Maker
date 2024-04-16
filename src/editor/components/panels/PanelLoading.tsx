@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux';
 import { Constants, IO, LOCAL_FORAGE, Paths, Utils } from '../../common';
 import { LocalFile, Picture2D, Project } from '../../core';
 import { EngineSettings } from '../../data/EngineSettings';
+import { Platform } from '../../common/Platform';
 
 type Props = {
 	setLoaded: (v: boolean) => void;
@@ -34,13 +35,14 @@ function PanelLoading({ setLoaded }: Props) {
 		await initializeLocalFiles();
 		await initializeEngineSettings();
 		await initializeEngineVersion();
-		loadProjects();
+		await loadProjects();
 		setLoaded(true);
 	};
 
 	const initializeSystemInformation = async () => {
 		if (Constants.IS_DESKTOP) {
 			const { documentsFolder } = await IO.getSystemInformation();
+			console.log(documentsFolder);
 			Paths.GLOBAL_DOCUMENTS = documentsFolder;
 			Paths.GLOBAL_RPM_GAMES = Paths.join(documentsFolder, 'RPG Paper Maker Games');
 		}
@@ -65,20 +67,23 @@ function PanelLoading({ setLoaded }: Props) {
 	};
 
 	const initializeEngineSettings = async () => {
-		const path = LOCAL_FORAGE.ENGINE;
-		if (!(await LocalFile.checkFileExists(path))) {
-			await LocalFile.createFolder(path);
-			const json = {};
-			await LocalFile.createFile(Paths.join(path, Paths.FILE_ENGINE_SETTINGS), JSON.stringify(json));
+		if (!Constants.IS_DESKTOP) {
+			if (!(await LocalFile.checkFileExists(LOCAL_FORAGE.ENGINE))) {
+				await LocalFile.createFolder(LOCAL_FORAGE.ENGINE);
+			}
 		}
 		EngineSettings.current = new EngineSettings();
-		EngineSettings.current.load();
+		if (!(await Platform.checkFileExists(EngineSettings.current.getPath()))) {
+			EngineSettings.current.read({});
+			await EngineSettings.current.save();
+		}
+		await EngineSettings.current.load();
 	};
 
 	const initializeEngineVersion = async () => {
 		const updateVersion = async () => {
-			const newVersion = await IO.openFile(Paths.join(Paths.ROOT_DIRECTORY_LOCAL, Paths.FILE_VERSION));
-			if (Project.VERSION.length === 0) {
+			const newVersion = await Platform.readPublicFile(Paths.FILE_VERSION);
+			if (newVersion && Project.VERSION.length === 0) {
 				Project.VERSION = newVersion;
 			} else if (Project.VERSION !== newVersion) {
 				dispatch(setNeedsReloadPageUpdate());
@@ -91,8 +96,13 @@ function PanelLoading({ setLoaded }: Props) {
 		}
 	};
 
-	const loadProjects = () => {
+	const loadProjects = async () => {
 		dispatch(setProjects(EngineSettings.current.recentProjects));
+		const path = Paths.getRPMGamesFolder();
+		console.log(path);
+		if (!(await Platform.checkFileExists(path))) {
+			await Platform.createFolder(path);
+		}
 	};
 
 	useEffect(() => {

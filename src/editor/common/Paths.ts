@@ -9,6 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Constants } from './Constants';
+import { LOCAL_FORAGE } from './Enum';
+
 class Paths {
 	public static readonly ROOT_DIRECTORY_LOCAL = '.';
 	public static readonly FILES = 'file:///';
@@ -127,8 +130,12 @@ class Paths {
 		return args.join('/'); // TODO: Depends on OS
 	}
 
-	static getFileName(path: string) {
+	static getFileName(path: string): string | undefined {
 		return path.split('/').pop();
+	}
+
+	static getRPMGamesFolder(): string {
+		return Constants.IS_DESKTOP ? Paths.GLOBAL_RPM_GAMES : LOCAL_FORAGE.PROJECTS;
 	}
 }
 

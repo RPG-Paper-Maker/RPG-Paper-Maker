@@ -10,12 +10,13 @@
 */
 
 import { Data, Model } from '../Editor';
-import { LOCAL_FORAGE, Paths } from '../common';
+import { Paths } from '../common';
 
 class Project {
 	public static current: Project | null = null;
 	public static VERSION = '';
 	public static SQUARE_SIZE = 16;
+	public location: string;
 	public settings = new Data.Settings();
 	public systems = new Data.System();
 	public treeMaps = new Data.TreeMaps();
@@ -23,16 +24,21 @@ class Project {
 	public shapes = new Data.Shapes();
 	public specialElements = new Data.SpecialElements();
 
-	constructor(name: string) {
+	constructor(name: string, location: string) {
 		this.systems.projectName = Model.Localization.create(name);
+		this.location = location;
 	}
 
 	getPath(): string {
-		return Paths.join(LOCAL_FORAGE.PROJECTS, this.systems.projectName.name()); // Different web and desktop
+		return this.location;
 	}
 
 	getPathMaps(): string {
 		return Paths.join(this.getPath(), Paths.MAPS);
+	}
+
+	getPathSaves(): string {
+		return Paths.join(this.getPath(), Paths.SAVES);
 	}
 
 	async load() {

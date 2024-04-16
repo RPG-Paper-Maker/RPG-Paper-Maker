@@ -13,10 +13,10 @@ import { useEffect } from 'react';
 import { ExtendedWindow } from '../editor/common';
 
 type Props = {
-	projectName: string;
+	location: string;
 };
 
-function Game({ projectName }: Props) {
+function Game({ location }: Props) {
 	const getPixelRatio = () => {
 		return window.devicePixelRatio || 1;
 	};
@@ -40,7 +40,7 @@ function Game({ projectName }: Props) {
 		script.type = 'module';
 		script.async = true;
 		const global = window as ExtendedWindow;
-		global.rpgPaperMakerProjectName = projectName;
+		global.rpgPaperMakerProjectLocation = location;
 		document.body.appendChild(script);
 		const canvas = createHiDPICanvas(window.innerWidth, window.innerHeight);
 		canvas.id = 'hud';

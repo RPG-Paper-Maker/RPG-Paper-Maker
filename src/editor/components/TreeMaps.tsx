@@ -14,7 +14,7 @@ import '../styles/Tree.css';
 import Tree from './Tree';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setCopiedItems, setNeedsReloadMap } from '../store';
-import { LocalFile, Node, Project } from '../core';
+import { Node, Project } from '../core';
 import { ArrayUtils, KEY, Paths, RPM, SPECIAL_KEY } from '../common';
 import { Model } from '../Editor';
 import DialogMapProperties from './dialogs/DialogMapProperties';
@@ -22,6 +22,7 @@ import DialogName from './dialogs/DialogName';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import { TreeMapTag } from '../models';
+import { Platform } from '../common/Platform';
 
 type Props = {
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
@@ -119,7 +120,7 @@ function TreeMaps({
 		if (selectedNode && copiedItems) {
 			const nodes = copiedItems.values;
 			const path = Paths.join(copiedItems.pathProject, Paths.MAPS);
-			const exists = await LocalFile.checkFileExists(path);
+			const exists = await Platform.checkFileExists(path);
 			if (!exists) {
 				alert(`${path} doesn't exists so can't copy potential maps.`);
 			} else {
@@ -144,13 +145,13 @@ function TreeMaps({
 		} else {
 			const srcMap = Model.Map.create(tag.id, tag.name);
 			const src = Paths.join(copiedItems!.pathProject, Paths.MAPS, srcMap.getRealName());
-			const exists = await LocalFile.checkFileExists(src);
+			const exists = await Platform.checkFileExists(src);
 			const map = Model.Map.create(newId, tag.name);
 			if (!exists) {
 				alert(`Could not copy map at ${src}. Created an empty one.`);
 				await map.createNewMap();
 			} else {
-				await LocalFile.copyFolder(src, Paths.join(Project.current!.getPath(), Paths.MAPS, map.getRealName()));
+				await Platform.copyFolder(src, Paths.join(Project.current!.getPath(), Paths.MAPS, map.getRealName()));
 				await map.load();
 				map.id = newId;
 				await map.save();

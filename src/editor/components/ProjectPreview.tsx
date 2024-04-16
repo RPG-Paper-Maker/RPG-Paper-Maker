@@ -18,10 +18,10 @@ import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, triggerOpenProject } from '../store';
-import { LocalFile } from '../core';
-import { Constants, LOCAL_FORAGE, Paths, Utils } from '../common';
+import { Constants, Paths, Utils } from '../common';
 import { Model } from '../Editor';
 import { EngineSettings } from '../data/EngineSettings';
+import { Platform } from '../common/Platform';
 
 type Props = {
 	project: Model.ProjectPreview;
@@ -35,7 +35,7 @@ function ProjectPreview({ project }: Props) {
 	const dispatch = useDispatch();
 
 	const handleOpenProject = () => {
-		dispatch(triggerOpenProject(project.name));
+		dispatch(triggerOpenProject(project));
 	};
 
 	const handleClickRemoveProject = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
@@ -52,11 +52,7 @@ function ProjectPreview({ project }: Props) {
 		dispatch(setLoading(true));
 		const newList = projects.filter((p) => project.name !== p.name);
 		dispatch(setProjects(newList));
-		if (Constants.IS_DESKTOP) {
-			await LocalFile.removeFolder(project.location);
-		} else {
-			await LocalFile.removeFolder(Paths.join(LOCAL_FORAGE.PROJECTS, project.name));
-		}
+		await Platform.removeFolder(Paths.join(project.location));
 		EngineSettings.current.recentProjects = newList;
 		await EngineSettings.current.save();
 		dispatch(setLoading(false));
@@ -68,11 +64,13 @@ function ProjectPreview({ project }: Props) {
 				className={Utils.getClassName([[isDialogConfirmOpen, 'selected']], ['project-preview'])}
 				onClick={handleOpenProject}
 			>
-				<div className='flex-one'>
+				<div className='flex-column flex-one gap-small'>
 					<div className='title'>{project.name}</div>
-					{project.location.length > 0 && <div>{project.location}</div>}
+					{Constants.IS_DESKTOP && project.location.length > 0 && (
+						<div className='text-small-detail'>{project.location}</div>
+					)}
 				</div>
-				<div>
+				<div className='flex-center-vertically'>
 					<FaTrashAlt onClick={handleClickRemoveProject} />
 				</div>
 			</div>

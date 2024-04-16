@@ -11,7 +11,8 @@
 
 import { MapElement, Model, Scene } from '../Editor';
 import { ELEMENT_MAP_KIND, JSONType, Paths, Utils } from '../common';
-import { LocalFile, Position, Project, UndoRedoState } from '../core';
+import { Platform } from '../common/Platform';
+import { Position, Project, UndoRedoState } from '../core';
 
 class UndoRedo {
 	public static readonly MAX_SAVES = 50;
@@ -35,32 +36,30 @@ class UndoRedo {
 
 	static async getStatesLength() {
 		if (Project.current) {
-			return (
-				(await LocalFile.getFiles(Paths.join(Scene.Map.current?.getPath(), Paths.TEMP_UNDO_REDO))).length - 1
-			);
+			return (await Platform.getFiles(Paths.join(Scene.Map.current?.getPath(), Paths.TEMP_UNDO_REDO))).length - 1;
 		}
 		return 0;
 	}
 
 	static async getCurrentCurrentIndex() {
 		if (Project.current) {
-			const file = await LocalFile.getFile(UndoRedo.getPathIndex());
-			if (file) {
-				return Number(file.content);
+			const content = await Platform.readFile(UndoRedo.getPathIndex());
+			if (content !== null) {
+				return Number(content);
 			}
 		}
 		return -1;
 	}
 
 	private static async saveCurrentCurrentIndex(index: number) {
-		await LocalFile.createFile(UndoRedo.getPathIndex(), `${index}`);
+		await Platform.createFile(UndoRedo.getPathIndex(), `${index}`);
 	}
 
 	private static async getStatesAt(index: number) {
 		const states: UndoRedoState[] = [];
-		const file = await LocalFile.getFile(this.getPathStatesAt(index));
-		if (file) {
-			Utils.readList(states, JSON.parse(file.content), UndoRedoState);
+		const content = await Platform.readFile(this.getPathStatesAt(index));
+		if (content !== null) {
+			Utils.readList(states, JSON.parse(content), UndoRedoState);
 		}
 		return states;
 	}
@@ -104,7 +103,7 @@ class UndoRedo {
 	private static async updateMaxFiles(index: number) {
 		const path = this.getPathStates();
 		for (let i = 1; i <= index; i++) {
-			await LocalFile.renameFile(path, this.getStateFilename(i), this.getStateFilename(i - 1));
+			await Platform.renameFile(path, this.getStateFilename(i), this.getStateFilename(i - 1));
 		}
 	}
 
@@ -156,7 +155,7 @@ class UndoRedo {
 		// Remove all existing states >= new index
 		const length = await this.getStatesLength();
 		for (let i = index; i < length; i++) {
-			await LocalFile.removeFile(this.getPathStatesAt(i));
+			await Platform.removeFile(this.getPathStatesAt(i));
 		}
 
 		// Create a new file for the new state
@@ -167,7 +166,7 @@ class UndoRedo {
 			arrayJson.push(json);
 		}
 
-		await LocalFile.createFile(this.getPathStatesAt(index), JSON.stringify(arrayJson));
+		await Platform.createFile(this.getPathStatesAt(index), JSON.stringify(arrayJson));
 		return { index, length: index + 1 };
 	}
 }

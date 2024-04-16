@@ -15,8 +15,8 @@ import Game from './game/Game';
 
 function App() {
 	const queryParameters = new URLSearchParams(window.location.search);
-	const projectName = queryParameters.get('project');
-	return <>{projectName ? <Game projectName={projectName} /> : <Editor />}</>;
+	const projectLocation = queryParameters.get('project');
+	return <>{projectLocation ? <Game location={projectLocation} /> : <Editor />}</>;
 }
 
 export default App;

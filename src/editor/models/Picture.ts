@@ -48,11 +48,8 @@ class Picture extends Base {
 
 	static getFolder(kind: PICTURE_KIND, isBR: boolean, dlc: string): string {
 		return (
-			(isBR
-				? Project.current!.systems.PATH_BR
-				: dlc
-				? `${Project.current!.systems.PATH_DLCS}/${dlc}`
-				: Paths.ROOT_DIRECTORY_LOCAL) + this.getLocalFolder(kind)
+			(isBR ? Project.current!.systems.PATH_BR : dlc ? `${Project.current!.systems.PATH_DLCS}/${dlc}` : '') +
+			this.getLocalFolder(kind)
 		);
 	}
 

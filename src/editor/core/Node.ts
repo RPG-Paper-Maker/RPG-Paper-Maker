@@ -11,9 +11,9 @@
 
 import { Model } from '../Editor';
 import { Serializable } from './Serializable';
-import { BINDING, BindingType, CopiedItemsType, JSONType, LOCAL_FORAGE, Paths, Utils } from '../common';
-import { LocalFile } from './LocalFile';
+import { BINDING, BindingType, Constants, CopiedItemsType, JSONType, LOCAL_FORAGE, Paths, Utils } from '../common';
 import { Project } from './Project';
+import { Platform } from '../common/Platform';
 
 export const NODE_CONSTRUCTOR_KIND = {
 	Base: () => Model.Base,
@@ -154,12 +154,15 @@ class Node extends Serializable {
 	}
 
 	static async loadToPaste(): Promise<CopiedItemsType | null> {
-		const pathCurrentCopy = Paths.join(LOCAL_FORAGE.ENGINE, Paths.FILE_CURRENT_COPY);
-		const file = await LocalFile.getFile(pathCurrentCopy);
-		if (file && file.content.length > 0) {
-			const content = JSON.parse(file.content);
-			const constructorClass = NODE_CONSTRUCTOR_KIND[content.type as keyof typeof NODE_CONSTRUCTOR_KIND]();
-			const nodes = content.json.map((jsonNode: JSONType) => {
+		const pathCurrentCopy = Paths.join(
+			Constants.IS_DESKTOP ? window.__dirname : LOCAL_FORAGE.ENGINE,
+			Paths.FILE_CURRENT_COPY
+		);
+		const content = await Platform.readFile(pathCurrentCopy);
+		if (content && content.length > 0) {
+			const json = JSON.parse(content);
+			const constructorClass = NODE_CONSTRUCTOR_KIND[json.type as keyof typeof NODE_CONSTRUCTOR_KIND]();
+			const nodes = json.json.map((jsonNode: JSONType) => {
 				const node = new Node();
 				node.read(jsonNode, [], constructorClass);
 				return node;
@@ -167,7 +170,7 @@ class Node extends Serializable {
 			return {
 				values: nodes,
 				constructorClass,
-				pathProject: content.pathProject,
+				pathProject: json.pathProject,
 			};
 		}
 		return null;
@@ -187,7 +190,7 @@ class Node extends Serializable {
 			pathProject,
 			json,
 		};
-		await LocalFile.createFile(pathCurrentCopy, JSON.stringify(content));
+		await Platform.createFile(pathCurrentCopy, JSON.stringify(content));
 		return {
 			values: nodes.map((node) => node.clone()),
 			constructorClass,

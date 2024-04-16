@@ -12,8 +12,9 @@
 import { Model } from '../Editor';
 import { FcFolder, FcFile } from 'react-icons/fc';
 import { Base } from './Base';
-import { LocalFile, Position, Project } from '../core';
+import { Position, Project } from '../core';
 import { BINDING, BindingType, JSONType, Paths } from '../common';
+import { Platform } from '../common/Platform';
 
 class TreeMapTag extends Base {
 	public saved!: boolean;
@@ -55,18 +56,18 @@ class TreeMapTag extends Base {
 	}
 
 	async saveFiles() {
-		if (Project.current) {
+		if (Project.current && !this.isFolder()) {
 			const path = Paths.join(Project.current.getPathMaps(), Model.Map.generateMapName(this.id));
 			const pathTemp = Paths.join(path, Paths.TEMP);
-			const fileNames = await LocalFile.getFiles(pathTemp);
+			const fileNames = await Platform.getFiles(pathTemp);
 			for (const fileName of fileNames) {
 				const pathFileTemp = Paths.join(pathTemp, fileName);
 				const pathFile = Paths.join(path, fileName);
-				await LocalFile.copyFile(pathFileTemp, pathFile);
-				await LocalFile.removeFile(pathFileTemp);
+				await Platform.copyFile(pathFileTemp, pathFile);
+				await Platform.removeFile(pathFileTemp);
 			}
-			this.saved = true;
 		}
+		this.saved = true;
 	}
 
 	copy(tag: TreeMapTag): void {

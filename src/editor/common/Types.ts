@@ -45,7 +45,7 @@ export type CopiedItemsType = {
 
 export type ExtendedWindow = Window &
 	typeof globalThis & {
-		rpgPaperMakerProjectName: string;
+		rpgPaperMakerProjectLocation: string;
 		documentsFolder: string;
 		ipcRenderer: {
 			invoke: (channel: string, ...args: unknown[]) => Promise<unknown>;

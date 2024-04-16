@@ -15,7 +15,8 @@ import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
-import { IO, Utils } from '../common';
+import { Paths, Utils } from '../common';
+import { Platform } from '../common/Platform';
 
 class GL {
 	public static SHADER_DEFAULT_VERTEX: string;
@@ -68,8 +69,8 @@ class GL {
 	}
 
 	static async initializeShaders() {
-		this.SHADER_DEFAULT_VERTEX = await IO.openFile('./Scripts/Shaders/default.vert');
-		this.SHADER_DEFAULT_FRAGMENT = await IO.openFile('./Scripts/Shaders/default.frag');
+		this.SHADER_DEFAULT_VERTEX = await Platform.readPublicFile(Paths.join('Scripts', 'Shaders', 'default.vert'));
+		this.SHADER_DEFAULT_FRAGMENT = await Platform.readPublicFile(Paths.join('Scripts', 'Shaders', 'default.frag'));
 	}
 
 	static getMaterialTextureSize(material: THREE.MeshPhongMaterial | null): { width: number; height: number } {

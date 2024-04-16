@@ -19,7 +19,7 @@ import Dialog from '../dialogs/Dialog';
 import { Node } from '../../core';
 
 function PanelMain() {
-	const currentProjectName = useSelector((state: RootState) => state.projects.current);
+	const currentProject = useSelector((state: RootState) => state.projects.current);
 	const loading = useSelector((state: RootState) => state.projects.loading);
 	const needsReloadPageUpdate = useSelector((state: RootState) => state.triggers.needsReloadPageUpdate);
 	const needsReloadPageClearCache = useSelector((state: RootState) => state.triggers.needsReloadPageClearCache);
@@ -38,7 +38,7 @@ function PanelMain() {
 	return (
 		<div className='flex-one flex relative'>
 			<Loader large isLoading={loading} />
-			{currentProjectName.length === 0 ? <PanelNoProject /> : <PanelProject />}
+			{currentProject === null ? <PanelNoProject /> : <PanelProject />}
 			{needsReloadPageUpdate && (
 				<Dialog title='RPG Paper Maker was updated' isOpen>
 					<p>You need to refresh the page to have the lastest version of RPG Paper Maker applied.</p>

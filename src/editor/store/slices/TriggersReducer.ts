@@ -11,6 +11,7 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { ProjectPreview } from '../../models';
 export interface ProjectState {
 	name: string;
 	location: string;
@@ -22,7 +23,7 @@ const TriggersSlice = createSlice({
 		mainBar: {
 			newProject: false,
 			importProject: false,
-			openProject: '',
+			openProject: null as ProjectPreview | null,
 			save: false,
 			saveAll: false,
 			play: false,
@@ -41,7 +42,7 @@ const TriggersSlice = createSlice({
 		triggerImportProject(state, action: PayloadAction<boolean>) {
 			state.mainBar.importProject = action.payload;
 		},
-		triggerOpenProject(state, action: PayloadAction<string>) {
+		triggerOpenProject(state, action: PayloadAction<ProjectPreview | null>) {
 			state.mainBar.openProject = action.payload;
 		},
 		triggerSave(state, action: PayloadAction<boolean>) {

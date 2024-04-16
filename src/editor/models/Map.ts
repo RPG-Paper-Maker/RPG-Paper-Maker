@@ -12,7 +12,8 @@
 import { Model } from '../Editor';
 import { Base } from './Base';
 import { BINDING, BindingType, Constants, JSONType, Paths, Utils } from '../common';
-import { LocalFile, Portion, Position, Project } from '../core';
+import { Portion, Position, Project } from '../core';
+import { Platform } from '../common/Platform';
 
 class Map extends Base {
 	public tilesetID: number = 1;
@@ -66,9 +67,6 @@ class Map extends Base {
 
 		// Portion
 		const globalPortion = new Portion(0, 0, 0);
-		const mapPortion = new Model.MapPortion(globalPortion);
-		mapPortion.fillDefaultFloor(mapModel);
-		await mapPortion.save();
 		/*
         SystemCommonObject* o = new SystemCommonObject(1, RPM::translate(
             Translations::HERO), false, false, 2, new QStandardItemModel, new
@@ -76,18 +74,18 @@ class Map extends Base {
         QJsonObject previous;
         MapEditorSubSelectionKind previousType;
         mapPortion.addObject(position, o, previous, previousType);*/
-		await LocalFile.writeJSON(Paths.join(folderMap, 'objects.json'), {
+		await Platform.writeJSON(Paths.join(folderMap, 'objects.json'), {
 			objs: [],
 		});
 		// TODO
-		await LocalFile.copyPublicFile(
-			Paths.join(Paths.ROOT_DIRECTORY_LOCAL, Paths.DEFAULT, globalPortion.getFileName()),
+		await Platform.copyPublicFile(
+			Paths.join(Paths.DEFAULT, globalPortion.getFileName()),
 			Paths.join(Paths.join(folderMap, globalPortion.getFileName()))
 		);
 	}
 
 	static generateMapName(id: number): string {
-		return 'MAP' + Utils.formatNumber(id, 4);
+		return 'MAP' + Utils.formatNumberID(id);
 	}
 
 	getRealName(): string {
@@ -109,7 +107,7 @@ class Map extends Base {
 		}
 		const mapName = this.getRealName();
 		const folderMap = Paths.join(Project.current.getPathMaps(), mapName);
-		await LocalFile.createFolder(folderMap);
+		await Platform.createFolder(folderMap);
 
 		// Write properties
 		await this.save();
@@ -119,7 +117,7 @@ class Map extends Base {
 		for (let i = 0; i <= lx; i++) {
 			for (let j = -ld; j <= lh; j++) {
 				for (let k = 0; k <= lz; k++) {
-					await LocalFile.writeJSON(Paths.join(folderMap, Portion.getFileName(i, j, k)), {});
+					await Platform.writeJSON(Paths.join(folderMap, Portion.getFileName(i, j, k)), {});
 				}
 			}
 		}
@@ -134,14 +132,14 @@ class Map extends Base {
                             */
 
 		// Temp empty folders
-		await LocalFile.createFolder(Paths.join(folderMap, Paths.TEMP));
-		await LocalFile.createFolder(Paths.join(folderMap, Paths.TEMP_UNDO_REDO));
-		await LocalFile.createFile(Paths.join(folderMap, Paths.TEMP_UNDO_REDO, Paths.INDEX), '-1');
+		await Platform.createFolder(Paths.join(folderMap, Paths.TEMP));
+		await Platform.createFolder(Paths.join(folderMap, Paths.TEMP_UNDO_REDO));
+		await Platform.createFile(Paths.join(folderMap, Paths.TEMP_UNDO_REDO, Paths.INDEX), '-1');
 		return folderMap;
 	}
 
 	async deleteMap() {
-		await LocalFile.removeFolder(Paths.join(Project.current!.getPathMaps(), this.getRealName()));
+		await Platform.removeFolder(Paths.join(Project.current!.getPathMaps(), this.getRealName()));
 	}
 
 	getMapPortionPath(globalPortion: Portion) {
@@ -154,11 +152,11 @@ class Map extends Base {
 
 	async writeEmptyMapPortion(globalPortion: Portion) {
 		const json = {};
-		await LocalFile.writeJSON(this.getMapPortionPath(globalPortion), json);
+		await Platform.writeJSON(this.getMapPortionPath(globalPortion), json);
 	}
 
 	async deleteCompleteMapPortion(globalPortion: Portion) {
-		await LocalFile.removeFile(this.getMapPortionPath(globalPortion));
+		await Platform.removeFile(this.getMapPortionPath(globalPortion));
 	}
 
 	async deleteMapElements(globalPortion: Portion) {

@@ -20,7 +20,6 @@ import {
 	CustomGeometryFace,
 	Frame,
 	Grid,
-	LocalFile,
 	MapPortion,
 	Portion,
 	Position,
@@ -44,6 +43,7 @@ import {
 	SPRITE_WALL_TYPE,
 } from '../common';
 import { CursorWall } from '../core/CursorWall';
+import { Platform } from '../common/Platform';
 
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
@@ -191,9 +191,9 @@ class Map extends Base {
 		// Load map model
 		const mapName = Model.Map.generateMapName(this.id);
 		const folderMap = Paths.join(Project.current!.getPathMaps(), mapName);
-		const file = await LocalFile.getFile(Paths.join(folderMap, Paths.FILE_MAP_INFOS));
-		if (file) {
-			this.modelMap.read(JSON.parse(file.content));
+		const content = await Platform.readFile(Paths.join(folderMap, Paths.FILE_MAP_INFOS));
+		if (content !== null) {
+			this.modelMap.read(JSON.parse(content));
 		}
 
 		// Create grid plane
@@ -258,11 +258,11 @@ class Map extends Base {
 	async save() {
 		this.loading = true;
 		await this.modelMap.save();
-		const filesPaths = await LocalFile.getFiles(Paths.join(this.modelMap.getPath(), Paths.TEMP));
+		const filesPaths = await Platform.getFiles(Paths.join(this.modelMap.getPath(), Paths.TEMP));
 		for (const path of filesPaths) {
 			const list = path.split('/');
-			await LocalFile.copyFile(path, Paths.join(this.modelMap.getPath(), list[list.length - 1]));
-			await LocalFile.removeFile(path);
+			await Platform.copyFile(path, Paths.join(this.modelMap.getPath(), list[list.length - 1]));
+			await Platform.removeFile(path);
 		}
 		this.loading = false;
 	}
@@ -415,9 +415,9 @@ class Map extends Base {
 		if (realX >= 0 && realX < lx && realY >= -ld && realY < lh && realZ >= 0 && realZ < lz) {
 			const portion = new Portion(realX, realY, realZ);
 			const modelMapPortion = new Model.MapPortion(portion);
-			let json = await LocalFile.readJSON(modelMapPortion.getPath(true));
+			let json = await Platform.readJSON(modelMapPortion.getPath(true));
 			if (json === null) {
-				json = await LocalFile.readJSON(modelMapPortion.getPath(false));
+				json = await Platform.readJSON(modelMapPortion.getPath(false));
 			}
 			const mapPortion = new MapPortion();
 			mapPortion.initialize(portion);

@@ -12,7 +12,8 @@
 import localforage from 'localforage';
 import { Serializable } from './Serializable';
 import JSZip from 'jszip';
-import { ArrayUtils, BINDING, BindingType, Constants, IO, JSONType, Paths } from '../common';
+import { ArrayUtils, BINDING, BindingType, JSONType, Paths } from '../common';
+import { Platform } from '../common/Platform';
 
 class LocalFile extends Serializable {
 	public static readonly PATH_SYSTEMS = '/systems.json';
@@ -20,8 +21,6 @@ class LocalFile extends Serializable {
 	public static readonly JSON_FILE_NAMES = 'fin';
 	public static readonly JSON_CONTENT = 'c';
 	public static readonly JSON_IS_DIR = 'id';
-	public static readonly DEFAULT_CONTENT = '';
-	public static readonly DEFAULT_IS_DIR = false;
 
 	public folderNames: string[] = [];
 	public fileNames: string[] = [];
@@ -32,14 +31,14 @@ class LocalFile extends Serializable {
 		['folderNames', 'fon', [], BINDING.STRING],
 		['fileNames', 'fin', [], BINDING.STRING],
 		['content', 'c', '', BINDING.STRING],
-		['isDir', 'id', [], BINDING.BOOLEAN],
+		['isDir', 'id', false, BINDING.BOOLEAN],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...LocalFile.bindings, ...additionnalBinding];
 	}
 
-	constructor(isDir: boolean = LocalFile.DEFAULT_IS_DIR) {
+	constructor(isDir = false) {
 		super();
 		this.isDir = isDir;
 	}
@@ -48,12 +47,12 @@ class LocalFile extends Serializable {
 		return (await localforage.getItem(path)) ? true : false;
 	}
 
-	static async getFile(path: string): Promise<LocalFile | null> {
+	static async readFile(path: string): Promise<string | null> {
 		const file = new LocalFile();
 		const json: JSONType | null = await localforage.getItem(path);
 		if (json) {
 			file.read(json);
-			return file;
+			return file.content;
 		}
 		return null;
 	}
@@ -220,7 +219,7 @@ class LocalFile extends Serializable {
 
 	static async downloadZip(path: string) {
 		const zip = new JSZip();
-		await LocalFile.getFolderZip(zip, path);
+		await Platform.getFolderZip(zip, path);
 		const blob = await zip.generateAsync({ type: 'blob' });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
@@ -230,43 +229,19 @@ class LocalFile extends Serializable {
 		URL.revokeObjectURL(url);
 	}
 
-	static async getFolderZip(zip: JSZip, path: string) {
-		const [folders, files] = await LocalFile.getFoldersFiles(path);
-		for (const folderName of folders) {
-			const folder = zip.folder(folderName);
-			if (folder) {
-				await LocalFile.getFolderZip(folder, Paths.join(path, folderName));
-			}
-		}
-		for (const fileName of files) {
-			const file = await LocalFile.getFile(Paths.join(path, fileName));
-			if (file) {
-				zip.file(fileName, file.content);
-			}
-		}
-	}
-
-	static async loadZip(file: File, basePath: string) {
-		const zip = new JSZip();
-		const zipData = await zip.loadAsync(file);
-		const projectName = file.name.substring(0, file.name.length - 4);
-		basePath = Paths.join(basePath, projectName);
-		await LocalFile.createFolder(basePath);
-		const paths = Object.keys(zipData.files);
-		for (const path of paths) {
-			const f = zipData.files[path];
-			const p = Paths.join(basePath, path);
-			if (f.dir) {
-				await LocalFile.createFolder(p);
-			} else {
-				const content = await f.async('text');
-				await LocalFile.createFile(p, content);
-			}
-		}
-	}
-
-	static async copyPublicFile(publicPath: string, dst: string) {
-		await LocalFile.createFile(dst, await IO.openFile(publicPath));
+	static async readPublicFile(path: string): Promise<string> {
+		return await new Promise((resolve) => {
+			const xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = () => {
+				if (xhr.readyState === 4) {
+					if (xhr.status === 200 || xhr.status === 0) {
+						resolve(xhr.responseText);
+					}
+				}
+			};
+			xhr.open('GET', Paths.join(Paths.ROOT_DIRECTORY_LOCAL, path), true);
+			xhr.send(null);
+		});
 	}
 
 	static async allStorage(): Promise<string[]> {
@@ -283,18 +258,6 @@ class LocalFile extends Serializable {
 
 	static async config() {
 		localforage.config({ name: 'RPGPaperMaker' });
-	}
-
-	static async readJSON(path: string): Promise<JSONType | null> {
-		const file = await LocalFile.getFile(path);
-		if (file) {
-			return JSON.parse(file.content);
-		}
-		return null;
-	}
-
-	static async writeJSON(path: string, json: JSONType) {
-		await LocalFile.createFile(path, JSON.stringify(json));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

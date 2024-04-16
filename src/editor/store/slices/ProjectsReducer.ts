@@ -17,7 +17,7 @@ import { Model } from '../../Editor';
 const ProjectsSlice = createSlice({
 	name: 'projects',
 	initialState: {
-		current: '',
+		current: null as Model.ProjectPreview | null,
 		loading: false,
 		openLoading: false,
 		list: [] as Model.ProjectPreview[],
@@ -25,7 +25,7 @@ const ProjectsSlice = createSlice({
 		copiedItems: null as CopiedItemsType | null,
 	},
 	reducers: {
-		setCurrentProjectName(state, action: PayloadAction<string>) {
+		setCurrentProject(state, action: PayloadAction<Model.ProjectPreview | null>) {
 			state.current = action.payload;
 		},
 		setLoading(state, action: PayloadAction<boolean>) {
@@ -50,7 +50,7 @@ const ProjectsSlice = createSlice({
 });
 
 export const {
-	setCurrentProjectName,
+	setCurrentProject,
 	setLoading,
 	setOpenLoading,
 	setProjects,

@@ -32,6 +32,11 @@ class ProjectPreview extends Serializable {
 		return project;
 	}
 
+	getFolderName(): string {
+		const location = this.location.split('/');
+		return location[location.length - 1];
+	}
+
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, ProjectPreview.getBindings(additionnalBinding));
 	}

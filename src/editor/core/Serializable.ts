@@ -9,9 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { LocalFile, Position, Rectangle } from '.';
+import { Position, Rectangle } from '.';
 import { MapElement, Model } from '../Editor';
 import { BINDING, BindingType, JSONMapping, JSONType, KeyValue, Utils } from '../common';
+import { Platform } from '../common/Platform';
 
 class Serializable {
 	// eslint-disable-next-line
@@ -24,17 +25,17 @@ class Serializable {
 	}
 
 	// eslint-disable-next-line
-	getPath(temp: boolean = false) {
+	getPath(temp: boolean = false): string {
 		return '';
 	}
 
 	async load(temp: boolean = false) {
-		let json = await LocalFile.readJSON(this.getPath(temp));
+		let json = await Platform.readJSON(this.getPath(temp));
 		if (json) {
 			this.read(json);
 		} else {
 			if (temp) {
-				json = await LocalFile.readJSON(this.getPath(false)); // If no temp files found, try with not temp
+				json = await Platform.readJSON(this.getPath(false)); // If no temp files found, try with not temp
 				if (json) {
 					this.read(json);
 				}
@@ -45,7 +46,7 @@ class Serializable {
 	async save(temp: boolean = false) {
 		const json = {};
 		this.write(json);
-		await LocalFile.writeJSON(this.getPath(temp), json);
+		await Platform.writeJSON(this.getPath(temp), json);
 	}
 
 	// eslint-disable-next-line
@@ -87,7 +88,7 @@ class Serializable {
 					break;
 				}
 				case BINDING.LIST: {
-					const jsonTab = json[jsonName] as JSONType[];
+					const jsonTab = json[jsonName] as JSONType[] | undefined;
 					const tab: Serializable[] = [];
 					if (jsonTab && constructorClass) {
 						for (const jsonElement of jsonTab) {
@@ -100,7 +101,7 @@ class Serializable {
 					break;
 				}
 				case BINDING.LIST_WITH_INDEXES: {
-					const jsonTab = json[jsonName] as JSONType[];
+					const jsonTab = json[jsonName] as JSONType[] | undefined;
 					const tab: Serializable[] = [];
 					const tabIndexes: number[] = [];
 					if (jsonTab && constructorClass) {

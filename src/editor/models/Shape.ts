@@ -11,8 +11,9 @@
 
 import * as THREE from 'three';
 import { Base } from './Base';
-import { BINDING, BindingType, CUSTOM_SHAPE_KIND, IO, JSONType, Paths } from '../common';
+import { BINDING, BindingType, CUSTOM_SHAPE_KIND, JSONType, Paths } from '../common';
 import { Project } from '../core';
+import { Platform } from '../common/Platform';
 
 type GeometryDataType = {
 	vertices: THREE.Vector3[];
@@ -162,11 +163,8 @@ class Shape extends Base {
 
 	static getFolder(kind: CUSTOM_SHAPE_KIND, isBR: boolean, dlc: string): string {
 		return (
-			(isBR
-				? Project.current!.systems.PATH_BR
-				: dlc
-				? `${Project.current!.systems.PATH_DLCS}/${dlc}`
-				: Paths.ROOT_DIRECTORY_LOCAL) + this.getLocalFolder(kind)
+			(isBR ? Project.current!.systems.PATH_BR : dlc ? `${Project.current!.systems.PATH_DLCS}/${dlc}` : '') +
+			this.getLocalFolder(kind)
 		);
 	}
 
@@ -188,7 +186,7 @@ class Shape extends Base {
 
 	async loadShape() {
 		if (this.id !== -1 && !this.isShapeLoaded()) {
-			const content = await IO.openFile(this.getPath());
+			const content = await Platform.readPublicFile(this.getPath());
 			if (content) {
 				this.geometryData = Shape.parse(content);
 			}

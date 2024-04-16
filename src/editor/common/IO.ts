@@ -8,48 +8,97 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-/*
-const electron = require('electron');
-const remote = electron.remote;
-const ipc = electron.ipcRenderer;
-const ElectronScreen = remote.screen;
-const app = remote.app;*/
-import { Constants } from './Constants';
-import { ExtendedWindow, JSONType } from './Types';
-class IO {
-	static async openFile(url: string): Promise<string> {
-		return await new Promise((resolve) => {
-			const xhr = new XMLHttpRequest();
-			xhr.onreadystatechange = () => {
-				if (xhr.readyState === 4) {
-					if (xhr.status === 200 || xhr.status === 0) {
-						resolve(xhr.responseText);
-					}
-				}
-			};
-			xhr.open('GET', url, true);
-			xhr.send(null);
-		});
-	}
 
+import JSZip from 'jszip';
+import { Paths } from './Paths';
+import { ExtendedWindow, JSONType } from './Types';
+import { Platform } from './Platform';
+
+class IO {
 	static async parseFileJSON(url: string): Promise<JSONType> {
-		const content = await IO.openFile(url);
+		const content = await IO.readFile(url);
 		try {
-			return JSON.parse(content);
+			return content === null ? {} : JSON.parse(content);
 		} catch (e) {
 			return {};
 		}
 	}
 
-	static async openFolderDialog(callback: (f: string) => void) {
-		const result = await (window as ExtendedWindow).ipcRenderer.invoke('open-folder-dialog');
-		callback(result as string);
+	static async invoke(channel: string, ...args: unknown[]): Promise<unknown> {
+		return await (window as ExtendedWindow).ipcRenderer.invoke(channel, ...args);
+	}
+
+	static async openFolderDialog(): Promise<string | undefined> {
+		return (await this.invoke('open-folder-dialog')) as string | undefined;
 	}
 
 	static async getSystemInformation() {
-		return (await (window as ExtendedWindow).ipcRenderer.invoke('get-system-information')) as Promise<{
+		return (await this.invoke('get-system-information')) as Promise<{
 			documentsFolder: string;
 		}>;
+	}
+
+	static async checkFileExists(path: string): Promise<boolean> {
+		return (await this.invoke('check-file-exists', path)) as boolean;
+	}
+
+	static async getFoldersFiles(path: string): Promise<[string[], string[]]> {
+		return (await this.invoke('get-folders-files', path)) as [string[], string[]];
+	}
+
+	static async getFolders(path: string): Promise<string[]> {
+		return (await this.invoke('get-folders', path)) as string[];
+	}
+
+	static async getFiles(path: string): Promise<string[]> {
+		return (await this.invoke('get-files', path)) as string[];
+	}
+
+	static async readFile(path: string): Promise<string | null> {
+		return (await this.invoke('read-file', path)) as string | null;
+	}
+
+	static async createFolder(path: string) {
+		await this.invoke('create-folder', path);
+	}
+
+	static async removeFolder(path: string) {
+		await this.invoke('remove-folder', path);
+	}
+
+	static async copyFolder(src: string, dst: string) {
+		await this.invoke('copy-folder', src, dst);
+	}
+
+	static async createFile(path: string, content: string | Blob) {
+		await this.invoke('create-file', path, content);
+	}
+
+	static async removeFile(path: string) {
+		await this.invoke('remove-file', path);
+	}
+
+	static async copyFile(src: string, dst: string) {
+		await this.invoke('copy-file', src, dst);
+	}
+
+	static async renameFile(path: string, fileNameBefore: string, fileNameAfter: string) {
+		await this.invoke('rename-file', Paths.join(path, fileNameBefore), Paths.join(path, fileNameAfter));
+	}
+
+	static async readPublicFile(path: string): Promise<string> {
+		return (await IO.readFile(Paths.join(window.__dirname, path))) as string;
+	}
+
+	static async downloadZip(path: string, dst: string) {
+		const zip = new JSZip();
+		await Platform.getFolderZip(zip, path);
+		const blob = await zip.generateAsync({ type: 'blob' });
+		await IO.createFile(dst, blob);
+	}
+
+	static async openGame(projectName: string) {
+		await this.invoke('open-game', projectName);
 	}
 }
 
