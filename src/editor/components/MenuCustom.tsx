@@ -37,7 +37,13 @@ function MenuCustom({
 		list.map((item, index: number) => {
 			if (item.children) {
 				return (
-					<MenuSub key={index} title={item.title as string} icon={item.icon} shortcut={item.shortcut}>
+					<MenuSub
+						key={index}
+						title={item.title as string}
+						icon={item.icon}
+						shortcut={item.shortcut}
+						onClick={item.onClick}
+					>
 						{getMenu(item.children)}
 					</MenuSub>
 				);

@@ -16,7 +16,7 @@ import { ArrayUtils, BINDING, BindingType, JSONType, Paths } from '../common';
 import { Platform } from '../common/Platform';
 
 class LocalFile extends Serializable {
-	public static readonly PATH_SYSTEMS = '/systems.json';
+	public static readonly CACHE_VERSION = '0.0.0';
 	public static readonly JSON_FOLDER_NAMES = 'fon';
 	public static readonly JSON_FILE_NAMES = 'fin';
 	public static readonly JSON_CONTENT = 'c';

@@ -18,10 +18,11 @@ import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, triggerOpenProject } from '../store';
-import { Constants, Paths, Utils } from '../common';
+import { Constants, Utils } from '../common';
 import { Model } from '../Editor';
 import { EngineSettings } from '../data/EngineSettings';
 import { Platform } from '../common/Platform';
+import { RxCross2 } from 'react-icons/rx';
 
 type Props = {
 	project: Model.ProjectPreview;
@@ -38,6 +39,14 @@ function ProjectPreview({ project }: Props) {
 		dispatch(triggerOpenProject(project));
 	};
 
+	const handleClickCloseProject = async (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+		e.stopPropagation();
+		const newList = projects.filter((p) => project.location !== p.location);
+		dispatch(setProjects(newList));
+		EngineSettings.current.recentProjects = newList;
+		await EngineSettings.current.save();
+	};
+
 	const handleClickRemoveProject = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
 		e.stopPropagation();
 		setIsDialogConfirmOpen(true);
@@ -50,9 +59,9 @@ function ProjectPreview({ project }: Props) {
 	const handleAcceptRemoveProject = async () => {
 		setIsDialogConfirmOpen(false);
 		dispatch(setLoading(true));
-		const newList = projects.filter((p) => project.name !== p.name);
+		const newList = projects.filter((p) => project.location !== p.location);
 		dispatch(setProjects(newList));
-		await Platform.removeFolder(Paths.join(project.location));
+		await Platform.removeFolder(project.location);
 		EngineSettings.current.recentProjects = newList;
 		await EngineSettings.current.save();
 		dispatch(setLoading(false));
@@ -66,11 +75,10 @@ function ProjectPreview({ project }: Props) {
 			>
 				<div className='flex-column flex-one gap-small'>
 					<div className='title'>{project.name}</div>
-					{Constants.IS_DESKTOP && project.location.length > 0 && (
-						<div className='text-small-detail'>{project.location}</div>
-					)}
+					{project.location.length > 0 && <div className='text-small-detail'>{project.location}</div>}
 				</div>
 				<div className='flex-center-vertically'>
+					{Constants.IS_DESKTOP && <RxCross2 onClick={handleClickCloseProject} />}
 					<FaTrashAlt onClick={handleClickRemoveProject} />
 				</div>
 			</div>

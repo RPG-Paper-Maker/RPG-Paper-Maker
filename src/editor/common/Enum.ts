@@ -319,3 +319,7 @@ export enum CONTEXT_MENU_ITEM_KIND {
 	PASTE,
 	DELETE,
 }
+
+export enum EXTENSION_KIND {
+	RPMG = 'rpmg',
+}

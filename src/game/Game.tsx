@@ -21,7 +21,7 @@ function Game({ location }: Props) {
 		return window.devicePixelRatio || 1;
 	};
 
-	const createHiDPICanvas = (w: number, h: number, ratio: number = 1) => {
+	const createHiDPICanvas = (w: number, h: number, ratio?: number) => {
 		if (!ratio) {
 			ratio = getPixelRatio();
 		}
@@ -30,7 +30,13 @@ function Game({ location }: Props) {
 		canvas.height = h * ratio;
 		canvas.style.width = w + 'px';
 		canvas.style.height = h + 'px';
-		canvas.getContext('2d')?.setTransform(ratio, 0, 0, ratio, 0, 0);
+		const ctx = canvas.getContext('2d');
+		if (ctx) {
+			ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+			ctx.imageSmoothingEnabled = false;
+			ctx.lineJoin = 'round';
+			ctx.lineWidth = 4;
+		}
 		return canvas;
 	};
 

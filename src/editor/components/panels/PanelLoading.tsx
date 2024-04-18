@@ -18,6 +18,7 @@ import { Constants, IO, LOCAL_FORAGE, Paths, Utils } from '../../common';
 import { LocalFile, Picture2D, Project } from '../../core';
 import { EngineSettings } from '../../data/EngineSettings';
 import { Platform } from '../../common/Platform';
+import localforage from 'localforage';
 
 type Props = {
 	setLoaded: (v: boolean) => void;
@@ -42,7 +43,6 @@ function PanelLoading({ setLoaded }: Props) {
 	const initializeSystemInformation = async () => {
 		if (Constants.IS_DESKTOP) {
 			const { documentsFolder } = await IO.getSystemInformation();
-			console.log(documentsFolder);
 			Paths.GLOBAL_DOCUMENTS = documentsFolder;
 			Paths.GLOBAL_RPM_GAMES = Paths.join(documentsFolder, 'RPG Paper Maker Games');
 		}
@@ -64,6 +64,17 @@ function PanelLoading({ setLoaded }: Props) {
 
 	const initializeLocalFiles = async () => {
 		await LocalFile.config();
+		if (!Constants.IS_DESKTOP) {
+			const cacheVersion = await localforage.getItem('CACHE_VERSION');
+			if (!cacheVersion || cacheVersion !== LocalFile.CACHE_VERSION) {
+				// TODO
+				const all = await LocalFile.allStorage();
+				for (const path of all) {
+					await LocalFile.brutRemove(path);
+				}
+				await localforage.setItem('CACHE_VERSION', LocalFile.CACHE_VERSION);
+			}
+		}
 	};
 
 	const initializeEngineSettings = async () => {
@@ -99,7 +110,6 @@ function PanelLoading({ setLoaded }: Props) {
 	const loadProjects = async () => {
 		dispatch(setProjects(EngineSettings.current.recentProjects));
 		const path = Paths.getRPMGamesFolder();
-		console.log(path);
 		if (!(await Platform.checkFileExists(path))) {
 			await Platform.createFolder(path);
 		}

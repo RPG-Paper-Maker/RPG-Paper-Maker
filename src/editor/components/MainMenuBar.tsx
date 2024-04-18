@@ -24,6 +24,7 @@ import {
 	setUndoRedoIndex,
 	triggerImportProject,
 	triggerNewProject,
+	triggerOpenDialogProject,
 	triggerOpenProject,
 	triggerPlay,
 	triggerSave,
@@ -33,7 +34,7 @@ import {
 import DialogNewProject from './dialogs/DialogNewProject';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
-import { Manager, Model, Scene } from '../Editor';
+import { Data, Manager, Model, Scene } from '../Editor';
 import {
 	AiOutlineArrowDown,
 	AiOutlineArrowUp,
@@ -54,7 +55,7 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 import { LuFolders, LuSaveAll } from 'react-icons/lu';
 import Loader from './Loader';
 import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
-import { KEY, SPECIAL_KEY, Paths, MenuItemType, Utils, Constants, IO } from '../common';
+import { KEY, SPECIAL_KEY, Paths, MenuItemType, Utils, Constants, IO, EXTENSION_KIND } from '../common';
 import { LocalFile, Project } from '../core';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
@@ -65,7 +66,7 @@ import { EngineSettings } from '../data/EngineSettings';
 import { Platform } from '../common/Platform';
 
 function MainMenuBar() {
-	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
+	const [needDialogNewProjectOpen, setNeedDialogNewProjectOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
 	const [isDialogWarningClearAllCacheOpen, setIsDialogWarningClearAllCacheOpen] = useState(false);
@@ -106,28 +107,45 @@ function MainMenuBar() {
 	};
 
 	const addProject = async (project: Model.ProjectPreview) => {
-		const newList = [project, ...projects];
+		let newList = projects.filter((p) => project.location !== p.location);
+		newList = [project, ...newList];
 		dispatch(setProjects(newList));
 		EngineSettings.current.recentProjects = newList;
 		await EngineSettings.current.save();
 	};
 
 	const handleNewProject = async () => {
-		setIsDialogNewProjectOpen(true);
+		setNeedDialogNewProjectOpen(true);
 	};
 
 	const handleAcceptNewProject = async (project: Model.ProjectPreview) => {
-		await addProject(project);
-		setIsDialogNewProjectOpen(false);
 		await handleOpenProject(project);
 	};
 
-	const handleRejectNewProject = async () => {
-		setIsDialogNewProjectOpen(false);
+	const handleOpenDialogProject = async () => {
+		if (Constants.IS_DESKTOP) {
+			const filesPath = await IO.openFileDialog({
+				defaultPath: Paths.getRPMGamesFolder(),
+				extensions: [EXTENSION_KIND.RPMG],
+			});
+			if (filesPath) {
+				const filePath = Paths.normalize(filesPath[0]);
+				const folders = filePath.split('/');
+				folders.pop();
+				const folderPath = folders.join('/');
+				await handleOpenProject(
+					Model.ProjectPreview.create(
+						await Data.System.getProjectName(folderPath),
+						Paths.normalize(folderPath)
+					)
+				);
+			}
+		}
 	};
 
 	const handleOpenProject = async (project: Model.ProjectPreview) => {
 		dispatch(setOpenLoading(true));
+		await addProject(project);
 		Project.current = new Project(project.name, project.location);
 		await Project.current.load();
 		if (Project.current.settings.projectVersion !== Project.VERSION) {
@@ -176,9 +194,10 @@ function MainMenuBar() {
 			dispatch(setLoading(true));
 			const path = Paths.join(Paths.getRPMGamesFolder(), folderName);
 			await Platform.loadZip(file, path);
-			const project = Model.ProjectPreview.create(folderName, path);
+			const project = Model.ProjectPreview.create(await Data.System.getProjectName(path), path);
 			await addProject(project);
 			await handleOpenProject(project);
+			dispatch(setLoading(false));
 		}
 	};
 
@@ -194,9 +213,10 @@ function MainMenuBar() {
 		const path = Paths.join(Paths.getRPMGamesFolder(), folderName);
 		await Platform.removeFolder(path);
 		await Platform.loadZip(file, path);
-		const project = Model.ProjectPreview.create(folderName, path);
+		const project = Model.ProjectPreview.create(await Data.System.getProjectName(path), path);
 		await addProject(project);
 		await handleOpenProject(project);
+		dispatch(setLoading(false));
 	};
 
 	const handleRejectImport = async () => {
@@ -343,6 +363,7 @@ function MainMenuBar() {
 				{
 					title: 'Open existing project...',
 					icon: <AiOutlineFolderOpen />,
+					onClick: handleOpenDialogProject,
 					children: projects.map((project) => ({
 						title: project.name,
 						onClick: () => handleOpenProject(project),
@@ -351,7 +372,7 @@ function MainMenuBar() {
 				{
 					title: (
 						<>
-							Import project...
+							{Constants.IS_DESKTOP ? 'Import web project...' : 'Import project...'}
 							<input
 								ref={importFileInputRef}
 								type='file'
@@ -366,7 +387,7 @@ function MainMenuBar() {
 					shortcut: [SPECIAL_KEY.CTRL, KEY.I],
 				},
 				{
-					title: 'Export project',
+					title: Constants.IS_DESKTOP ? 'Export project for web...' : 'Export project',
 					icon: <BiExport />,
 					disabled: !isProjectOpened,
 					onClick: handleExport,
@@ -503,6 +524,9 @@ function MainMenuBar() {
 		} else if (triggers.importProject) {
 			dispatch(triggerImportProject(false));
 			handleImport().catch(console.error);
+		} else if (triggers.openDialogProject) {
+			dispatch(triggerOpenDialogProject(false));
+			handleOpenDialogProject().catch(console.error);
 		} else if (triggers.openProject) {
 			dispatch(triggerOpenProject(null));
 			handleOpenProject(triggers.openProject).catch(console.error);
@@ -586,9 +610,9 @@ function MainMenuBar() {
 			</div>
 			<Toolbar />
 			<DialogNewProject
-				isOpen={isDialogNewProjectOpen}
+				needOpen={needDialogNewProjectOpen}
+				setNeedOpen={setNeedDialogNewProjectOpen}
 				onAccept={handleAcceptNewProject}
-				onReject={handleRejectNewProject}
 			/>
 			<Dialog
 				title='Warning'

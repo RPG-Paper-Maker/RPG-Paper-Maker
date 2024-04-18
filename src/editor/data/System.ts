@@ -11,6 +11,7 @@
 
 import { Model } from '../Editor';
 import { BINDING, BindingType, Constants, JSONType, Paths } from '../common';
+import { Platform } from '../common/Platform';
 import { Position, Project, Serializable } from '../core';
 
 class System extends Serializable {
@@ -39,6 +40,11 @@ class System extends Serializable {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...System.bindings, ...additionnalBinding];
+	}
+
+	static async getProjectName(path: string): Promise<string> {
+		const json = await Platform.readJSON(Paths.join(path, Paths.FILE_SYSTEM));
+		return json === null ? '' : (json.pn as { names: string[] }).names[1];
 	}
 
 	getPath(): string {

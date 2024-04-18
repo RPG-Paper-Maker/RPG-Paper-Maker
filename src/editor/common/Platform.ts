@@ -98,11 +98,12 @@ class Platform {
 		const zipData = await zip.loadAsync(file);
 		await Platform.createFolder(basePath);
 		const paths = Object.keys(zipData.files);
+		console.log(paths);
 		for (const path of paths) {
 			const f = zipData.files[path];
 			const p = Paths.join(basePath, path);
 			if (f.dir) {
-				await Platform.createFolder(p);
+				await Platform.createFolder(p.slice(0, -1));
 			} else {
 				const content = await f.async('text');
 				await Platform.createFile(p, content);

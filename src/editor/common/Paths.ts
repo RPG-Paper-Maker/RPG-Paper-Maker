@@ -92,6 +92,7 @@ class Paths {
 	public static readonly FILE_ENGINE_SETTINGS = 'engineSettings.json';
 	public static readonly FILE_CURRENT_COPY = 'currentCopy.json';
 	public static readonly FILE_VERSION = 'version';
+	public static readonly FILE_GAME_RPMG = 'game.rpmg';
 	public static GLOBAL_DOCUMENTS = '';
 	public static GLOBAL_RPM_GAMES = '';
 
@@ -127,7 +128,11 @@ class Paths {
 	];
 
 	static join(...args: (string | undefined | number)[]): string {
-		return args.join('/'); // TODO: Depends on OS
+		return this.normalize(args.join('/'));
+	}
+
+	static normalize(path: string): string {
+		return path.replaceAll('\\', '/');
 	}
 
 	static getFileName(path: string): string | undefined {

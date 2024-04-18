@@ -28,8 +28,16 @@ class IO {
 		return await (window as ExtendedWindow).ipcRenderer.invoke(channel, ...args);
 	}
 
-	static async openFolderDialog(): Promise<string | undefined> {
-		return (await this.invoke('open-folder-dialog')) as string | undefined;
+	static async openFolderDialog(defaultPath?: string): Promise<string | undefined> {
+		return (await this.invoke('open-folder-dialog', defaultPath)) as string | undefined;
+	}
+
+	static async openFileDialog(options: {
+		defaultPath?: string;
+		multiple?: string;
+		extensions?: string[];
+	}): Promise<string[] | undefined> {
+		return (await this.invoke('open-file-dialog', options)) as string[] | undefined;
 	}
 
 	static async getSystemInformation() {

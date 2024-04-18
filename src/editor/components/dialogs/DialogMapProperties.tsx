@@ -61,7 +61,7 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 		setIsOpen(false);
 	};
 
-	const handleReject = async () => {
+	const handleReject = () => {
 		setIsOpen(false);
 	};
 

@@ -54,6 +54,8 @@ function TreeMaps({
 
 	const isOpenLoading = useSelector((state: RootState) => state.projects.openLoading);
 	const copiedItems = useSelector((state: RootState) => state.projects.copiedItems);
+	useSelector((state: RootState) => state.triggers.treeMap);
+
 	const dispatch = useDispatch();
 
 	if (!Project.current || isOpenLoading) {

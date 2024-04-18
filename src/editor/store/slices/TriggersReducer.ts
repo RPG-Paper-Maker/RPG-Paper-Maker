@@ -23,6 +23,7 @@ const TriggersSlice = createSlice({
 		mainBar: {
 			newProject: false,
 			importProject: false,
+			openDialogProject: false,
 			openProject: null as ProjectPreview | null,
 			save: false,
 			saveAll: false,
@@ -41,6 +42,9 @@ const TriggersSlice = createSlice({
 		},
 		triggerImportProject(state, action: PayloadAction<boolean>) {
 			state.mainBar.importProject = action.payload;
+		},
+		triggerOpenDialogProject(state, action: PayloadAction<boolean>) {
+			state.mainBar.openDialogProject = action.payload;
 		},
 		triggerOpenProject(state, action: PayloadAction<ProjectPreview | null>) {
 			state.mainBar.openProject = action.payload;
@@ -78,6 +82,7 @@ const TriggersSlice = createSlice({
 export const {
 	triggerNewProject,
 	triggerImportProject,
+	triggerOpenDialogProject,
 	triggerOpenProject,
 	triggerSave,
 	triggerSaveAll,

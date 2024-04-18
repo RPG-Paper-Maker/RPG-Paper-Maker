@@ -47,6 +47,7 @@ import {
 import {
 	triggerNewProject,
 	triggerImportProject,
+	triggerOpenDialogProject,
 	triggerOpenProject,
 	triggerSave,
 	triggerSaveAll,
@@ -102,6 +103,7 @@ export {
 	setCopiedItems,
 	triggerNewProject,
 	triggerImportProject,
+	triggerOpenDialogProject,
 	triggerOpenProject,
 	triggerSave,
 	triggerSaveAll,

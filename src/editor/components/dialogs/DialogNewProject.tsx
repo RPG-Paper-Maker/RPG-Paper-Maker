@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FooterNoYes from './footers/FooterNoYes';
 import { Model, Scene } from '../../Editor';
 import Dialog from './Dialog';
@@ -23,24 +23,35 @@ import { EngineSettings } from '../../data/EngineSettings';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
 import { Platform } from '../../common/Platform';
+import useStateString from '../../hooks/useStateString';
+import useStateBool from '../../hooks/useStateBool';
 
 type Props = {
-	isOpen: boolean;
+	needOpen: boolean;
+	setNeedOpen: (b: boolean) => void;
 	onAccept: (data: Model.ProjectPreview) => void;
-	onReject: () => void;
 };
 
-function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
-	const [projectName, setProjectName] = useState('Project without name');
-	const [folderName, setFolderName] = useState('project-without-name');
-	const [isAutoGenerate, setIsAutoGenerate] = useState(true);
-	const [location, setLocation] = useState(Paths.getRPMGamesFolder());
-	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
+function DialogNewProject({ needOpen, setNeedOpen, onAccept }: Props) {
+	const [isOpen, setIsOpen] = useState(false);
+	const [focusFirst, setFocustFirst] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [projectName, setProjectName] = useStateString();
+	const [folderName, setFolderName] = useStateString();
+	const [isAutoGenerate, setIsAutoGenerate] = useStateBool();
+	const [location, setLocation] = useStateString();
+	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
 
 	const projects = useSelector((state: RootState) => state.projects.list);
 
 	const dispatch = useDispatch();
+
+	const initialize = () => {
+		setProjectName('Project without name');
+		setFolderName('project-without-name');
+		setIsAutoGenerate(true);
+		setLocation(Paths.getRPMGamesFolder());
+	};
 
 	const getcompleteLocation = () => Paths.join(location, folderName);
 
@@ -56,15 +67,12 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 
 	const accept = () => {
 		onAccept(Model.ProjectPreview.create(projectName, getcompleteLocation()));
+		setIsOpen(false);
 	};
 
 	const replaceProject = async () => {
 		setIsDialogConfirmOpen(false);
-		const newList = projects.filter((p) => projectName !== p.name);
-		dispatch(setProjects(newList));
-		await Platform.removeFolder(Paths.join(location, projectName));
-		EngineSettings.current.recentProjects = newList;
-		await EngineSettings.current.save();
+		await Platform.removeFolder(getcompleteLocation());
 		await createProject();
 		accept();
 	};
@@ -79,9 +87,12 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 			Scene.Map.current.close();
 		}
 		Scene.Map.current = null;
-		const project = new Project(projectName, getcompleteLocation());
+		const completeLocation = getcompleteLocation();
+		const project = new Project(projectName, completeLocation);
 		Project.current = project;
+		const folderPath = project.getPath();
 		await Platform.createFolder(project.getPath());
+		await Platform.createFile(Paths.join(folderPath, Paths.FILE_GAME_RPMG), '');
 		await Platform.createFolder(project.getPathSaves());
 		await Platform.createFolder(project.getPathMaps());
 		await Model.Map.createDefaultMap(1, 'Starting map');
@@ -96,6 +107,13 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 		}
 		await project.settings.save();
 		await Project.current.save();
+
+		// Update recent projects
+		let newList = projects.filter((p) => completeLocation !== p.location);
+		newList = [Model.ProjectPreview.create(projectName, completeLocation), ...newList];
+		dispatch(setProjects(newList));
+		EngineSettings.current.recentProjects = newList;
+		await EngineSettings.current.save();
 		setIsLoading(false);
 	};
 
@@ -111,7 +129,7 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 	};
 
 	const handleClickLocation = async () => {
-		const folderName = await IO.openFolderDialog();
+		const folderName = await IO.openFolderDialog(Paths.getRPMGamesFolder());
 		if (folderName) {
 			setLocation(folderName);
 		}
@@ -126,6 +144,19 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 		return false;
 	};
 
+	const handleReject = () => {
+		setIsOpen(false);
+	};
+
+	useEffect(() => {
+		if (needOpen) {
+			setNeedOpen(false);
+			initialize();
+			setIsOpen(true);
+		}
+		// eslint-disable-next-line
+	}, [needOpen]);
+
 	return (
 		<>
 			<Dialog
@@ -133,13 +164,18 @@ function DialogNewProject({ isOpen, onAccept, onReject }: Props) {
 				isOpen={isOpen}
 				isLoading={isLoading}
 				isDisabled={isDialogConfirmOpen}
-				footer={<FooterCancelOK onCancel={onReject} onOK={handleAccept} />}
-				onClose={onReject}
+				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+				onClose={handleReject}
 			>
 				<div className='flex-column gap-small'>
 					<div className='flex gap-small'>
 						<div>Name:</div>
-						<InputText value={projectName} onChange={handleChangeProjectName} />
+						<InputText
+							focusFirst={focusFirst}
+							setFocustFirst={setFocustFirst}
+							value={projectName}
+							onChange={handleChangeProjectName}
+						/>
 						{Constants.IS_DESKTOP && (
 							<div className='flex-columns'>
 								<div className='flex gap-small'>

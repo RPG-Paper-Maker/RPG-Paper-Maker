@@ -9,12 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const { app, BrowserWindow, globalShortcut, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain, dialog, screen } = require('electron');
 const path = require('path');
 const fs = require('fs').promises;
 
+let globalValues = {};
 let window;
-
+app.commandLine.appendSwitch('high-dpi-support', 1);
+app.commandLine.appendSwitch('force-device-scale-factor', 1);
 const createWindow = () => {
 	window = new BrowserWindow({
 		width: 800,
@@ -24,6 +26,7 @@ const createWindow = () => {
 			contextIsolation: false,
 			enableRemoteModule: true,
 			preload: path.join(__dirname, 'preload.js'),
+			zoomFactor: screen.getPrimaryDisplay().scaleFactor,
 		},
 		icon: './build/icon.png',
 	});
@@ -46,6 +49,24 @@ ipcMain.handle('get-system-information', () => {
 		documentsFolder,
 		gamesFolder: path.join(documentsFolder, 'RPG Paper Maker Games'),
 	};
+});
+
+ipcMain.handle('open-file-dialog', async (event, options) => {
+	const result = await dialog.showOpenDialog(window, {
+		filters: options.extensions.map((extension) => {
+			let name = '';
+			switch (extension) {
+				case 'rpmg':
+					name = 'RPG Paper Maker game file';
+					break;
+			}
+			return { name, extensions: [extension] };
+		}),
+		properties: ['openFile'],
+	});
+	if (!result.canceled) {
+		return result.filePaths;
+	}
 });
 
 ipcMain.handle('open-folder-dialog', async (event, defaultPath) => {
@@ -90,9 +111,9 @@ ipcMain.handle('get-files', async (event, path) => {
 	return files.filter((file) => !file.isDirectory()).map((folder) => folder.name);
 });
 
-ipcMain.handle('read-file', async (event, p) => {
+ipcMain.handle('read-file', async (event, p, isInPublic) => {
 	try {
-		return await fs.readFile(path.normalize(p), 'utf8');
+		return await fs.readFile(isInPublic ? path.join(app.getAppPath(), 'build', p) : p, 'utf8');
 	} catch {
 		return null;
 	}
@@ -161,11 +182,17 @@ ipcMain.handle('open-game', async (event, location) => {
 	});
 	game.loadFile('./build/index.html', { query: { project: location } });
 	game.removeMenu();
-	const shortcut = 'Alt+CommandOrControl+I';
+	const shortcut = 'Shift+CommandOrControl+I';
 	globalShortcut.register(shortcut, () => {
 		game.openDevTools({ mode: 'undocked' });
 	});
 	game.on('closed', () => {
 		globalShortcut.unregister(shortcut);
 	});
+	globalValues.currentGameWindow = game;
+});
+
+ipcMain.handle('close-game', () => {
+	globalValues.currentGameWindow.close();
+	globalValues.currentGameWindow = null;
 });

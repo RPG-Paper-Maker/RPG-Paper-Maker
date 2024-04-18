@@ -11,13 +11,14 @@
 
 import React from 'react';
 import Button from '../Button';
-import { AiOutlineFileAdd } from 'react-icons/ai';
+import { AiOutlineFileAdd, AiOutlineFolderOpen } from 'react-icons/ai';
 import { BiImport } from 'react-icons/bi';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, triggerImportProject, triggerNewProject } from '../../store';
+import { RootState, triggerImportProject, triggerNewProject, triggerOpenDialogProject } from '../../store';
 import ProjectPreview from '../ProjectPreview';
 import { MdOutlineAddchart } from 'react-icons/md';
 import { FaHandsHelping } from 'react-icons/fa';
+import { Constants } from '../../common';
 
 function PanelNoProject() {
 	const dispatch = useDispatch();
@@ -25,6 +26,10 @@ function PanelNoProject() {
 
 	const handleNewProject = () => {
 		dispatch(triggerNewProject(true));
+	};
+
+	const handleOpenDialogProject = () => {
+		dispatch(triggerOpenDialogProject(true));
 	};
 
 	const handleImportProject = () => {
@@ -43,7 +48,7 @@ function PanelNoProject() {
 		return projects.length === 0 ? (
 			<div className='text-small-detail'>No projects available.</div>
 		) : (
-			projects.map((project) => <ProjectPreview key={project.name} project={project} />)
+			projects.map((project) => <ProjectPreview key={project.location} project={project} />)
 		);
 	};
 
@@ -60,9 +65,15 @@ function PanelNoProject() {
 						<AiOutlineFileAdd />
 						New project...
 					</Button>
+					{Constants.IS_DESKTOP && (
+						<Button big onClick={handleOpenDialogProject}>
+							<AiOutlineFolderOpen />
+							Open project...
+						</Button>
+					)}
 					<Button big onClick={handleImportProject}>
 						<BiImport />
-						Import project...
+						{Constants.IS_DESKTOP ? 'Import web project...' : 'Import project...'}
 					</Button>
 					<Button big onClick={handleDLCs}>
 						<MdOutlineAddchart />
