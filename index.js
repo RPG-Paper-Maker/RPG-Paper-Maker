@@ -13,14 +13,16 @@ const { app, BrowserWindow, globalShortcut, ipcMain, dialog, screen } = require(
 const path = require('path');
 const fs = require('fs').promises;
 
-let globalValues = {};
-let window;
 app.commandLine.appendSwitch('high-dpi-support', 1);
 app.commandLine.appendSwitch('force-device-scale-factor', 1);
+
+let globalValues = {};
+let window;
+
 const createWindow = () => {
 	window = new BrowserWindow({
-		width: 800,
-		height: 600,
+		width: screen.getPrimaryDisplay().size.width - 100,
+		height: screen.getPrimaryDisplay().size.height - 100,
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
@@ -29,15 +31,21 @@ const createWindow = () => {
 			zoomFactor: screen.getPrimaryDisplay().scaleFactor,
 		},
 		icon: './build/icon.png',
+		frame: false,
 	});
 	window.maximize();
 	window.loadFile('./build/index.html');
-	window.removeMenu();
+	window.on('maximize', () => {
+		window.webContents.send('is-maximized');
+	});
+	window.on('unmaximize', () => {
+		window.webContents.send('is-unmaximized');
+	});
 };
 
 app.whenReady()
 	.then(() =>
-		globalShortcut.register('Alt+CommandOrControl+D', () => {
+		globalShortcut.register('Shift+CommandOrControl+D', () => {
 			window.openDevTools({ mode: 'undocked' });
 		})
 	)
@@ -195,4 +203,20 @@ ipcMain.handle('open-game', async (event, location) => {
 ipcMain.handle('close-game', () => {
 	globalValues.currentGameWindow.close();
 	globalValues.currentGameWindow = null;
+});
+
+ipcMain.handle('minimize', () => {
+	window.minimize();
+});
+
+ipcMain.handle('maximize', (event, b) => {
+	window.maximize();
+});
+
+ipcMain.handle('unmaximize', (event, b) => {
+	window.unmaximize();
+});
+
+ipcMain.handle('close', () => {
+	window.close();
 });

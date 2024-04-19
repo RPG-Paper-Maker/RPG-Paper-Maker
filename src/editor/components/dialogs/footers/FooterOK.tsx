@@ -11,6 +11,7 @@
 
 import Button from '../../Button';
 import '../../../styles/Footer.css';
+import { BUTTON_TYPE } from '../../../common';
 
 type Props = {
 	onOK: () => void;
@@ -19,7 +20,7 @@ type Props = {
 function FooterOK({ onOK }: Props) {
 	return (
 		<div className='footer-buttons'>
-			<Button primary onClick={onOK}>
+			<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={onOK}>
 				Ok
 			</Button>
 		</div>

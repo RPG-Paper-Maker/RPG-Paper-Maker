@@ -11,6 +11,7 @@
 
 import Button from '../../Button';
 import '../../../styles/Footer.css';
+import { BUTTON_TYPE } from '../../../common';
 
 type Props = {
 	onCancel: () => void;
@@ -23,7 +24,7 @@ function FooterCancelNoYes({ onCancel, onNo, onYes }: Props) {
 		<div className='footer-buttons'>
 			<Button onClick={onCancel}>Cancel</Button>
 			<Button onClick={onNo}>No</Button>
-			<Button primary onClick={onYes}>
+			<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={onYes}>
 				Yes
 			</Button>
 		</div>

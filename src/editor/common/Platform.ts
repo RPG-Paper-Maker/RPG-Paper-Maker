@@ -98,7 +98,6 @@ class Platform {
 		const zipData = await zip.loadAsync(file);
 		await Platform.createFolder(basePath);
 		const paths = Object.keys(zipData.files);
-		console.log(paths);
 		for (const path of paths) {
 			const f = zipData.files[path];
 			const p = Paths.join(basePath, path);

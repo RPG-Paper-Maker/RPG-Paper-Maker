@@ -11,31 +11,33 @@
 
 import { useState, useEffect, useRef, ReactNode } from 'react';
 import '../styles/Button.css';
-import { Utils } from '../common';
+import { BUTTON_TYPE, Utils } from '../common';
 
 type Props = {
 	children?: ReactNode;
-	primary?: boolean;
+	buttonType?: BUTTON_TYPE;
 	canHold?: boolean;
 	intervalHold?: number;
 	icon?: ReactNode;
 	activable?: boolean;
 	active?: boolean;
 	big?: boolean;
-	patreon?: boolean;
+	backgroundOnHoverOnly?: boolean;
+	square?: boolean;
 	onClick?: () => void;
 };
 
 function Button({
 	children,
-	primary = false,
+	buttonType = BUTTON_TYPE.DEFAULT,
 	canHold = false,
 	intervalHold = 0,
 	icon,
 	activable = false,
 	active = true,
 	big = false,
-	patreon = false,
+	backgroundOnHoverOnly = false,
+	square = false,
 	onClick,
 }: Props) {
 	const [activeState, setActiveState] = useState(active);
@@ -83,12 +85,15 @@ function Button({
 	return (
 		<button
 			ref={ref}
-			className={Utils.getClassName([
-				[!activeState, 'unactive'],
-				[primary, 'primary'],
-				[big, 'big'],
-				[patreon, 'patreon'],
-			])}
+			className={Utils.getClassName(
+				[
+					[!activeState, 'unactive'],
+					[big, 'big'],
+					[backgroundOnHoverOnly, 'backgroundOnHoverOnly'],
+					[square, 'square'],
+				],
+				[buttonType]
+			)}
 			onClick={handleClick}
 		>
 			{icon}

@@ -323,3 +323,10 @@ export enum CONTEXT_MENU_ITEM_KIND {
 export enum EXTENSION_KIND {
 	RPMG = 'rpmg',
 }
+
+export enum BUTTON_TYPE {
+	DEFAULT = 'default',
+	PRIMARY = 'primary',
+	RED = 'red',
+	PATREON = 'patreon',
+}

@@ -13,7 +13,7 @@
 	--main-bg-color: #2e324a;
 	--main-color: white;
 	--darker-bg-color: #29273d;
-	--darkest-bg-color: #29253a;
+	--darkest-bg-color: #221f35;
 	--darkest-containers-bg-color: #221f2e;
 	--hover-main-bg-color: #383c58;
 	--lighter-bg-color: #5f5a8a;
@@ -25,6 +25,7 @@
 	--hover-primary-dark-color: #2a9896;
 	--orange-color: #f6b780;
 	--red-color: #de3a3c;
+	--hover-red-color: #ce4144;
 	--patreon-color: #f96753;
 	--hover-patreon-color: #fe7765;
 	--special-elements-size: 30px;

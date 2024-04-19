@@ -22,16 +22,32 @@ button {
 	gap: 5px;
 }
 
+button.primary {
+	background-color: var(--primary-dark-color);
+}
+
+button.patreon {
+	background-color: var(--patreon-color);
+}
+
+button.red {
+	background-color: var(--red-color);
+}
+
+button.backgroundOnHoverOnly {
+	background-color: transparent;
+}
+
+button.square {
+	border-radius: 0;
+}
+
 button:hover {
 	background-color: var(--lightest-bg-color);
 }
 
 button.unactive {
 	opacity: 0.5;
-}
-
-button.primary {
-	background-color: var(--primary-dark-color);
 }
 
 button.primary:hover {
@@ -43,10 +59,10 @@ button.big {
 	font-size: 17px;
 }
 
-button.patreon {
-	background-color: var(--patreon-color);
-}
-
 button.patreon:hover {
 	background-color: var(--hover-patreon-color);
+}
+
+button.red:hover {
+	background-color: var(--hover-red-color);
 }

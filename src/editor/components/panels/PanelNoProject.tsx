@@ -18,7 +18,7 @@ import { RootState, triggerImportProject, triggerNewProject, triggerOpenDialogPr
 import ProjectPreview from '../ProjectPreview';
 import { MdOutlineAddchart } from 'react-icons/md';
 import { FaHandsHelping } from 'react-icons/fa';
-import { Constants } from '../../common';
+import { BUTTON_TYPE, Constants } from '../../common';
 
 function PanelNoProject() {
 	const dispatch = useDispatch();
@@ -61,7 +61,7 @@ function PanelNoProject() {
 					<div className='scrollable-flex-one'>{renderProjectsList()}</div>
 				</div>
 				<div className='flex-zero flex-column gap-small'>
-					<Button primary big onClick={handleNewProject}>
+					<Button buttonType={BUTTON_TYPE.PRIMARY} big onClick={handleNewProject}>
 						<AiOutlineFileAdd />
 						New project...
 					</Button>
@@ -79,7 +79,7 @@ function PanelNoProject() {
 						<MdOutlineAddchart />
 						DLCs
 					</Button>
-					<Button patreon big onClick={handleContribute}>
+					<Button buttonType={BUTTON_TYPE.PATREON} big onClick={handleContribute}>
 						<FaHandsHelping />
 						Contribute
 					</Button>

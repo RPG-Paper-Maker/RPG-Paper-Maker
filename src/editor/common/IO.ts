@@ -24,8 +24,22 @@ class IO {
 		}
 	}
 
+	static on(channel: string, callback: (...args: unknown[]) => void) {
+		(window as ExtendedWindow).ipcRenderer.on(channel, (event, ...attributes) => {
+			callback(...attributes);
+		});
+	}
+
 	static async invoke(channel: string, ...args: unknown[]): Promise<unknown> {
 		return await (window as ExtendedWindow).ipcRenderer.invoke(channel, ...args);
+	}
+
+	static async onMaximized(callback: (...args: unknown[]) => void) {
+		this.on('is-maximized', callback);
+	}
+
+	static async onUnmaximized(callback: (...args: unknown[]) => void) {
+		this.on('is-unmaximized', callback);
 	}
 
 	static async openFolderDialog(defaultPath?: string): Promise<string | undefined> {
@@ -107,6 +121,22 @@ class IO {
 
 	static async openGame(projectName: string) {
 		await this.invoke('open-game', projectName);
+	}
+
+	static async minimize() {
+		await this.invoke('minimize');
+	}
+
+	static async maximize() {
+		await this.invoke('maximize');
+	}
+
+	static async unmaximize() {
+		await this.invoke('unmaximize');
+	}
+
+	static async close() {
+		await this.invoke('close');
 	}
 }
 

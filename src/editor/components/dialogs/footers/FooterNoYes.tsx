@@ -11,6 +11,7 @@
 
 import Button from '../../Button';
 import '../../../styles/Footer.css';
+import { BUTTON_TYPE } from '../../../common';
 
 type Props = {
 	onNo: () => void;
@@ -21,7 +22,7 @@ function FooterNoYes({ onNo, onYes }: Props) {
 	return (
 		<div className='footer-buttons'>
 			<Button onClick={onNo}>No</Button>
-			<Button primary onClick={onYes}>
+			<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={onYes}>
 				Yes
 			</Button>
 		</div>

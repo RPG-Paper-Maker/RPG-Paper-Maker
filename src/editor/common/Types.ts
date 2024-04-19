@@ -49,6 +49,7 @@ export type ExtendedWindow = Window &
 		documentsFolder: string;
 		ipcRenderer: {
 			invoke: (channel: string, ...args: unknown[]) => Promise<unknown>;
+			on: (channel: string, callback: (event: unknown, ...args: unknown[]) => void) => void;
 		};
 	};
 

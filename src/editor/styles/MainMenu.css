@@ -9,6 +9,24 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+.main-menu-bar {
+	display: flex;
+	align-items: center;
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-app-region: drag;
+}
+
+.main-menu-bar .no-title-drag {
+	-webkit-app-region: no-drag;
+}
+
+.main-menu-bar,
+.main-menu-bar .menu-item,
+.main-menu-bar .menu-sub-title {
+	background-color: var(--darker-bg-color);
+}
+
 .main-menu-bar-logo {
 	width: 24px;
 	height: 24px;

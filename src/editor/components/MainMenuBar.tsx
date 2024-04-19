@@ -55,7 +55,7 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 import { LuFolders, LuSaveAll } from 'react-icons/lu';
 import Loader from './Loader';
 import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
-import { KEY, SPECIAL_KEY, Paths, MenuItemType, Utils, Constants, IO, EXTENSION_KIND } from '../common';
+import { KEY, SPECIAL_KEY, Paths, MenuItemType, Utils, Constants, IO, EXTENSION_KIND, BUTTON_TYPE } from '../common';
 import { LocalFile, Project } from '../core';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
@@ -64,6 +64,8 @@ import FooterOK from './dialogs/footers/FooterOK';
 import MenuCustom from './MenuCustom';
 import { EngineSettings } from '../data/EngineSettings';
 import { Platform } from '../common/Platform';
+import Button from './Button';
+import { VscChromeClose, VscChromeMaximize, VscChromeMinimize, VscChromeRestore } from 'react-icons/vsc';
 
 function MainMenuBar() {
 	const [needDialogNewProjectOpen, setNeedDialogNewProjectOpen] = useState(false);
@@ -74,6 +76,7 @@ function MainMenuBar() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
 	const [hamburgerStates, setHamburgerStates] = useState<number[]>([]);
+	const [isMaximized, setIsMaximized] = useState(false);
 
 	const importFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -337,6 +340,22 @@ function MainMenuBar() {
 		play();
 	};
 
+	const handleMinimize = async () => {
+		await IO.minimize();
+	};
+
+	const handleMaximize = async () => {
+		if (isMaximized) {
+			await IO.unmaximize();
+		} else {
+			await IO.maximize();
+		}
+	};
+
+	const handleClose = async () => {
+		await IO.close();
+	};
+
 	const handleClickHamburgerBack = () => {
 		setHamburgerStates((value) => {
 			const newList = [...value];
@@ -540,7 +559,18 @@ function MainMenuBar() {
 			dispatch(triggerPlay(false));
 			handlePlay().catch(console.error);
 		}
-	});
+	}, [triggers]);
+
+	useEffect(() => {
+		if (Constants.IS_DESKTOP) {
+			IO.onMaximized(() => {
+				setIsMaximized(true);
+			});
+			IO.onUnmaximized(() => {
+				setIsMaximized(false);
+			});
+		}
+	}, []);
 
 	const getMenuHamburger = () => {
 		let list = items;
@@ -574,10 +604,10 @@ function MainMenuBar() {
 
 	return (
 		<>
-			<div className='flex-center-vertically'>
+			<div className='main-menu-bar'>
 				<img className='main-menu-bar-logo' src={'./favicon.ico'} alt='logo' />
 				{isProjectOpened && (
-					<div className='mobile-only'>
+					<div className='mobile-only no-title-drag'>
 						<Menu
 							horizontal
 							isActivable
@@ -590,21 +620,34 @@ function MainMenuBar() {
 						</Menu>
 					</div>
 				)}
-				<div className='mobile-hidden'>
+				<div className='mobile-hidden no-title-drag'>
 					<MenuCustom items={items} horizontal />
 				</div>
 				<div className='flex-one' />
 				{hamburgerStates.length > 0 && (
-					<div className='main-menu-hamburger' onClick={handleClickHamburgerBack}>
+					<div className='main-menu-hamburger no-title-drag' onClick={handleClickHamburgerBack}>
 						<IoMdArrowBack />
 					</div>
 				)}
-				<div className='main-menu-hamburger' onClick={handleClickHamburger}>
+				<div className='main-menu-hamburger no-title-drag' onClick={handleClickHamburger}>
 					<RxHamburgerMenu />
 				</div>
 				{isHamburgerOpen && (
-					<div className='relative'>
+					<div className='relative no-title-drag'>
 						<div className='main-menu-hamburger-open menu-sub-content'>{getMenuHamburger()}</div>
+					</div>
+				)}
+				{Constants.IS_DESKTOP && (
+					<div className='flex fill-height no-title-drag'>
+						<Button square backgroundOnHoverOnly onClick={handleMinimize}>
+							<VscChromeMinimize />
+						</Button>
+						<Button square backgroundOnHoverOnly onClick={handleMaximize}>
+							{isMaximized ? <VscChromeRestore /> : <VscChromeMaximize />}
+						</Button>
+						<Button buttonType={BUTTON_TYPE.RED} square backgroundOnHoverOnly onClick={handleClose}>
+							<VscChromeClose />
+						</Button>
 					</div>
 				)}
 			</div>

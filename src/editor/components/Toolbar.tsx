@@ -11,7 +11,15 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, triggerNewProject, triggerPlay, triggerSave, triggerSaveAll } from '../store';
+import {
+	RootState,
+	triggerImportProject,
+	triggerNewProject,
+	triggerOpenDialogProject,
+	triggerPlay,
+	triggerSave,
+	triggerSaveAll,
+} from '../store';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
 import {
@@ -21,7 +29,7 @@ import {
 	AiOutlinePicture,
 	AiOutlineFontSize,
 } from 'react-icons/ai';
-import { BiSave, BiPyramid, BiCube } from 'react-icons/bi';
+import { BiSave, BiPyramid, BiCube, BiImport } from 'react-icons/bi';
 import { LuSaveAll, LuLanguages, LuMountain } from 'react-icons/lu';
 import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs';
 import { TbNumbers } from 'react-icons/tb';
@@ -31,6 +39,7 @@ import { TfiVideoClapper } from 'react-icons/tfi';
 import { GiBrickWall } from 'react-icons/gi';
 import '../styles/Toolbar.css';
 import { Project } from '../core';
+import { Constants } from '../common';
 
 function Toolbar() {
 	const dispatch = useDispatch();
@@ -49,6 +58,14 @@ function Toolbar() {
 
 	const handleNewProject = () => {
 		dispatch(triggerNewProject(true));
+	};
+
+	const handleImport = async () => {
+		dispatch(triggerImportProject(true));
+	};
+
+	const handleOpenDialogProject = async () => {
+		dispatch(triggerOpenDialogProject(true));
 	};
 
 	const handleSave = () => {
@@ -74,8 +91,11 @@ function Toolbar() {
 					<MenuItem icon={<AiOutlineFileAdd />} onClick={handleNewProject}>
 						New
 					</MenuItem>
-					<MenuItem icon={<AiOutlineFolderOpen />} onClick={handleFloor} disabled>
-						Open
+					<MenuItem
+						icon={Constants.IS_DESKTOP ? <AiOutlineFolderOpen /> : <BiImport />}
+						onClick={Constants.IS_DESKTOP ? handleOpenDialogProject : handleImport}
+					>
+						{Constants.IS_DESKTOP ? 'Open' : 'Import'}
 					</MenuItem>
 					<MenuItem icon={<BiSave />} onClick={handleSave} disabled={!canSave}>
 						Save

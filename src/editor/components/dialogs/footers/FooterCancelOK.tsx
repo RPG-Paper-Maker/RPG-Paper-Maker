@@ -11,6 +11,7 @@
 
 import Button from '../../Button';
 import '../../../styles/Footer.css';
+import { BUTTON_TYPE } from '../../../common';
 
 type Props = {
 	onOK: () => void;
@@ -21,7 +22,7 @@ function FooterCancelOK({ onOK, onCancel }: Props) {
 	return (
 		<div className='footer-buttons'>
 			<Button onClick={onCancel}>Cancel</Button>
-			<Button primary onClick={onOK}>
+			<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={onOK}>
 				Ok
 			</Button>
 		</div>
