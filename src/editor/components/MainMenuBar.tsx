@@ -71,6 +71,7 @@ function MainMenuBar() {
 	const [needDialogNewProjectOpen, setNeedDialogNewProjectOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
+	const [isDialogWarningProjectLocationExist, setIsDialogWarningProjectLocationExist] = useState(false);
 	const [isDialogWarningClearAllCacheOpen, setIsDialogWarningClearAllCacheOpen] = useState(false);
 	const [isDialogWarningSavePlayOpen, setIsDialogSavePlayOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -148,16 +149,24 @@ function MainMenuBar() {
 
 	const handleOpenProject = async (project: Model.ProjectPreview) => {
 		dispatch(setOpenLoading(true));
-		await addProject(project);
-		Project.current = new Project(project.name, project.location);
-		await Project.current.load();
-		if (Project.current.settings.projectVersion !== Project.VERSION) {
-			setIsDialogWarningProjectVersionOpen(true);
-			Project.current = null;
+		if (await IO.checkFileExists(project.location)) {
+			await addProject(project);
+			Project.current = new Project(project.name, project.location);
+			await Project.current.load();
+			if (Project.current.settings.projectVersion !== Project.VERSION) {
+				setIsDialogWarningProjectVersionOpen(true);
+				Project.current = null;
+			} else {
+				dispatch(setCurrentProject(project));
+			}
 		} else {
-			dispatch(setCurrentProject(project));
+			setIsDialogWarningProjectLocationExist(true);
 		}
 		dispatch(setOpenLoading(false));
+	};
+
+	const handleCloseWarningProjectLocationExist = () => {
+		setIsDialogWarningProjectLocationExist(false);
 	};
 
 	const handleCloseWarningProjectVersionOpen = () => {
@@ -559,6 +568,7 @@ function MainMenuBar() {
 			dispatch(triggerPlay(false));
 			handlePlay().catch(console.error);
 		}
+		// eslint-disable-next-line
 	}, [triggers]);
 
 	useEffect(() => {
@@ -702,6 +712,14 @@ function MainMenuBar() {
 			>
 				<Loader isLoading={isLoading} />
 				<div className='text-center'>You have some maps that are not saved. Do you want to save all?</div>
+			</Dialog>
+			<Dialog
+				title='Warning'
+				isOpen={isDialogWarningProjectLocationExist}
+				footer={<FooterOK onOK={handleCloseWarningProjectLocationExist} />}
+				onClose={handleCloseWarningProjectLocationExist}
+			>
+				<div className='text-center'>The path location doesn't exist.</div>
 			</Dialog>
 		</>
 	);

@@ -69,6 +69,20 @@ npm start
 
 This should open the project in [http://localhost:3000/](http://localhost:3000/).
 
+### Test Desktop version
+
+Make sure to build the project before:
+
+```bash
+npm run build
+```
+
+Then run electron:
+
+```bash
+npm run electron
+```
+
 ## :mortar_board: Project structure
 
 ### Folder Tree
