@@ -23,12 +23,14 @@ import { Model } from '../Editor';
 import { EngineSettings } from '../data/EngineSettings';
 import { Platform } from '../common/Platform';
 import { RxCross2 } from 'react-icons/rx';
+import FooterOK from './dialogs/footers/FooterOK';
 
 type Props = {
 	project: Model.ProjectPreview;
 };
 
 function ProjectPreview({ project }: Props) {
+	const [isDialogWarningLocationOpen, setIsDialogWarningLocationOpen] = useState(false);
 	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
 
 	const projects = useSelector((state: RootState) => state.projects.list);
@@ -47,9 +49,17 @@ function ProjectPreview({ project }: Props) {
 		await EngineSettings.current.save();
 	};
 
-	const handleClickRemoveProject = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+	const handleClickRemoveProject = async (e: React.MouseEvent<SVGElement, MouseEvent>) => {
 		e.stopPropagation();
-		setIsDialogConfirmOpen(true);
+		if (await Platform.checkFileExists(project.location)) {
+			setIsDialogConfirmOpen(true);
+		} else {
+			setIsDialogWarningLocationOpen(true);
+		}
+	};
+
+	const handleCloseWarningLocation = () => {
+		setIsDialogWarningLocationOpen(false);
 	};
 
 	const handleRejectRemoveProject = () => {
@@ -91,6 +101,14 @@ function ProjectPreview({ project }: Props) {
 				<div className='warning text-center'>
 					Are you sure that you want to delete <b>{project.name}</b>?<div>All will be lost forever.</div>
 				</div>
+			</Dialog>
+			<Dialog
+				title='Warning'
+				isOpen={isDialogWarningLocationOpen}
+				footer={<FooterOK onOK={handleCloseWarningLocation} />}
+				onClose={handleCloseWarningLocation}
+			>
+				<div className='text-center'>The path location doesn't exist.</div>
 			</Dialog>
 		</>
 	);
