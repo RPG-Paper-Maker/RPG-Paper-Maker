@@ -81,16 +81,20 @@ class Land extends Base {
 		h: number,
 		count: number,
 		squareWidth = 1,
-		squareHeight = 1
+		squareHeight = 1,
+		forceOffset = false
 	) {
 		const localPosition = position.toVector3();
 		const a = localPosition.x;
-		let yLayerOffset = position.layer * Scene.Map.current!.camera.getYOffsetDepth();
-		if (!this.up) {
-			yLayerOffset *= -1;
-		}
-		const b = localPosition.y + yLayerOffset;
+		let b = localPosition.y;
 		const c = localPosition.z;
+		if (forceOffset) {
+			let offset = position.layer * Scene.Map.current!.camera.getYOffsetDepth();
+			if (!this.up) {
+				offset *= -1;
+			}
+			b += offset;
+		}
 
 		// Vertices
 		const vecA = new THREE.Vector3(a - Project.SQUARE_SIZE / 2, b, c - Project.SQUARE_SIZE / 2);

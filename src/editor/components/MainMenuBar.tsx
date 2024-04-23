@@ -149,7 +149,7 @@ function MainMenuBar() {
 
 	const handleOpenProject = async (project: Model.ProjectPreview) => {
 		dispatch(setOpenLoading(true));
-		if (await IO.checkFileExists(project.location)) {
+		if (await Platform.checkFileExists(project.location)) {
 			await addProject(project);
 			Project.current = new Project(project.name, project.location);
 			await Project.current.load();

@@ -48,7 +48,14 @@ class Floor extends Land {
 		return `FLOOR | ${this.texture.toString(true)}`;
 	}
 
-	updateGeometry(geometry: CustomGeometry, position: Position, width: number, height: number, count: number) {
+	updateGeometry(
+		geometry: CustomGeometry,
+		position: Position,
+		width: number,
+		height: number,
+		count: number,
+		forceOffset = false
+	) {
 		if (width !== 0 && height !== 0) {
 			super.updateGeometryLand(
 				geometry,
@@ -61,7 +68,8 @@ class Floor extends Land {
 				(this.texture.height * Project.SQUARE_SIZE) / height,
 				count,
 				this.texture.width,
-				this.texture.height
+				this.texture.height,
+				forceOffset
 			);
 		}
 	}

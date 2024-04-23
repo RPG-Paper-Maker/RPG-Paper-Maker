@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { CustomGeometry, Picture2D, Position, Project, Rectangle, TextureBundle } from '../core';
-import { AUTOTILE_TILE_NAMES, Constants, PICTURE_KIND } from '../common';
+import { AUTOTILE_TILE_NAMES, Constants, PICTURE_KIND, RAYCASTING_LAYER } from '../common';
 
 class Autotiles {
 	public static COUNT_LIST = 5;
@@ -71,18 +71,14 @@ class Autotiles {
 	public bundle: TextureBundle;
 	public width: number;
 	public height: number;
-	public geometry: CustomGeometry;
-	public mesh: THREE.Mesh | null;
-	public count: number;
+	public meshes: [THREE.Mesh[], THREE.Mesh[]] = [[], []];
+	public counts: [number[], number[]] = [[], []];
 
 	constructor(bundle: TextureBundle) {
 		this.bundle = bundle;
 		const { width, height } = Manager.GL.getMaterialTextureSize(bundle.material);
 		this.width = width;
 		this.height = height;
-		this.geometry = new CustomGeometry();
-		this.mesh = null;
-		this.count = 0;
 	}
 
 	static getMaxAutotilesOffsetTexture(): number {
@@ -406,25 +402,28 @@ class Autotiles {
 	updateGeometry(position: Position, autotile: MapElement.Autotile) {
 		if (this.width === null || this.height === 0) {
 			return null;
-		} else {
-			return autotile.updateGeometryAutotile(
-				this.geometry,
+		} else if (this.bundle?.material) {
+			const side = autotile.up ? 0 : 1;
+			if (!this.meshes[side][position.layer]) {
+				const mesh = new THREE.Mesh(new CustomGeometry(), this.bundle.material);
+				mesh.receiveShadow = true;
+				mesh.castShadow = true;
+				mesh.customDepthMaterial = this.bundle.material.userData.customDepthMaterial;
+				mesh.layers.enable(RAYCASTING_LAYER.LANDS);
+				this.meshes[side][position.layer] = mesh;
+				this.counts[side][position.layer] = 0;
+			}
+			let count = this.counts[side][position.layer];
+			autotile.updateGeometryAutotile(
+				this.meshes[side][position.layer].geometry as CustomGeometry,
 				this.bundle,
 				position,
 				this.width,
 				this.height,
-				this.count++
+				count++
 			);
+			this.counts[side][position.layer] = count;
 		}
-	}
-
-	createMesh(): boolean {
-		if (this.geometry.isEmpty() || !this.bundle.material) {
-			return false;
-		}
-		this.geometry.updateAttributes();
-		this.mesh = new THREE.Mesh(this.geometry, this.bundle.material);
-		return true;
 	}
 }
 

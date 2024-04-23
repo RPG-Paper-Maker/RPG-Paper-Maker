@@ -426,7 +426,6 @@ class Map extends Base {
 				mapPortion.model.read(json);
 				await mapPortion.loadTexturesAndUpdateGeometries(false);
 			}
-			mapPortion.updateMaterials();
 		} else {
 			this.setMapPortion(x, y, z, null, move);
 		}
@@ -744,7 +743,7 @@ class Map extends Base {
 			this.camera.zoomOut(coef);
 		}
 		this.forEachMapPortions((mapPortion) => {
-			mapPortion?.updateGeometries(true);
+			mapPortion?.updatePositionLayers();
 		});
 	}
 

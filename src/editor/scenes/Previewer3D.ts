@@ -98,7 +98,7 @@ class Previewer3D extends Base {
 				new Position(),
 				MapElement.Autotile.create(autotileID, MapElement.Autotiles.PREVIEW_TILE, texture)
 			);
-			this.addToScene(GL, autotiles.geometry, autotiles.bundle.material);
+			this.addToScene(GL, autotiles.meshes[0][0].geometry as CustomGeometry, autotiles.bundle.material);
 		}
 	}
 
