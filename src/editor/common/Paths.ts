@@ -16,6 +16,8 @@ class Paths {
 	public static readonly ROOT_DIRECTORY_LOCAL = '.';
 	public static readonly FILES = 'file:///';
 	public static readonly MAPS = 'Maps';
+	public static readonly LOCALES = 'Locales';
+	public static readonly FILE_LOCALES = 'locales.json';
 	public static readonly PICTURES = 'Images';
 	public static readonly VIDEOS = 'Videos';
 	public static readonly FONTS = 'Fonts';

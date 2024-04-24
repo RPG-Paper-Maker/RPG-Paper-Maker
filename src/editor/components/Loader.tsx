@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { useTranslation } from 'react-i18next';
 import { Utils } from '../common';
 import '../styles/Loader.css';
 
@@ -19,13 +20,15 @@ type Props = {
 };
 
 function Loader({ isLoading, isHidding = false, large = false }: Props) {
+	const { t } = useTranslation();
+
 	return (
 		<>
 			{isLoading && (
 				<>
 					<div className={Utils.getClassName([[large, 'loader-large']], ['loader'])}>
 						<div className='loader-spinner'></div>
-						{large && <div className='loader-text'>Loading...</div>}
+						{large && <div className='loader-text'>{t('loading')}...</div>}
 					</div>
 					{isHidding && <div className={'loader-hidder'} />}
 				</>

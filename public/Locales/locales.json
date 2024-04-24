@@ -12,17 +12,5 @@
 		"中文 (beta)",
 		"한국어 (beta)"
 	],
-	"short": [
-		"en",
-		"fr",
-		"de",
-		"br",
-		"es",
-		"pl",
-		"ru",
-		"uk",
-		"jp",
-		"cn",
-		"ko"
-	]
+	"shorts": ["en", "fr", "de", "br", "es", "pl", "ru", "uk", "jp", "cn", "ko"]
 }

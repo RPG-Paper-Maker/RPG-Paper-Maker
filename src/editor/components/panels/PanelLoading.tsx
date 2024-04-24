@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Manager, Scene } from '../../Editor';
 import Loader from '../Loader';
 import { setNeedsReloadPageUpdate, setProjects } from '../../store';
@@ -19,47 +19,30 @@ import { LocalFile, Picture2D, Project } from '../../core';
 import { EngineSettings } from '../../data/EngineSettings';
 import { Platform } from '../../common/Platform';
 import localforage from 'localforage';
+import i18n, { loadLocales } from '../../i18n/i18n';
 
 type Props = {
 	setLoaded: (v: boolean) => void;
 };
 
 function PanelLoading({ setLoaded }: Props) {
+	const [displayLoader, setDisplayLoader] = useState(false);
+
 	const dispatch = useDispatch();
 
 	const initialize = async () => {
 		Constants.IS_MOBILE = Utils.isMobile();
 		Constants.IS_DESKTOP = Utils.isDesktop();
+		await initializeLocalFiles();
+		await initializeEngineSettings();
+		await initializeLocales();
+		setDisplayLoader(true);
 		await initializeSystemInformation();
 		await initializeGL();
 		await initializeTextures();
-		await initializeLocalFiles();
-		await initializeEngineSettings();
 		await initializeEngineVersion();
 		await loadProjects();
 		setLoaded(true);
-	};
-
-	const initializeSystemInformation = async () => {
-		if (Constants.IS_DESKTOP) {
-			const { documentsFolder } = await IO.getSystemInformation();
-			Paths.GLOBAL_DOCUMENTS = documentsFolder;
-			Paths.GLOBAL_RPM_GAMES = Paths.join(documentsFolder, 'RPG Paper Maker Games');
-		}
-	};
-
-	const initializeTextures = async () => {
-		Scene.Map.materialCursor = await Manager.GL.loadTexture('./Assets/cursor.png');
-		Scene.Map.pictureTilesetCursor = await Picture2D.loadImage('./Assets/tileset-cursor.png');
-		Scene.Map.pictureLayersOnCursor = await Picture2D.loadImage('./Assets/cursor-layers-on.svg');
-		Scene.Map.materialStartPosition = await Manager.GL.loadTexture('./Assets/start-position.png');
-	};
-
-	const initializeGL = async () => {
-		Manager.GL.mapEditorContext = new Manager.GL();
-		Manager.GL.mainPreviewerContext = new Manager.GL();
-		Manager.GL.listPreviewerContext = new Manager.GL();
-		await Manager.GL.initializeShaders();
 	};
 
 	const initializeLocalFiles = async () => {
@@ -91,6 +74,33 @@ function PanelLoading({ setLoaded }: Props) {
 		await EngineSettings.current.load();
 	};
 
+	const initializeLocales = async () => {
+		await loadLocales();
+		i18n.changeLanguage(EngineSettings.current.currentLanguage);
+	};
+
+	const initializeSystemInformation = async () => {
+		if (Constants.IS_DESKTOP) {
+			const { documentsFolder } = await IO.getSystemInformation();
+			Paths.GLOBAL_DOCUMENTS = documentsFolder;
+			Paths.GLOBAL_RPM_GAMES = Paths.join(documentsFolder, 'RPG Paper Maker Games');
+		}
+	};
+
+	const initializeTextures = async () => {
+		Scene.Map.materialCursor = await Manager.GL.loadTexture('./Assets/cursor.png');
+		Scene.Map.pictureTilesetCursor = await Picture2D.loadImage('./Assets/tileset-cursor.png');
+		Scene.Map.pictureLayersOnCursor = await Picture2D.loadImage('./Assets/cursor-layers-on.svg');
+		Scene.Map.materialStartPosition = await Manager.GL.loadTexture('./Assets/start-position.png');
+	};
+
+	const initializeGL = async () => {
+		Manager.GL.mapEditorContext = new Manager.GL();
+		Manager.GL.mainPreviewerContext = new Manager.GL();
+		Manager.GL.listPreviewerContext = new Manager.GL();
+		await Manager.GL.initializeShaders();
+	};
+
 	const initializeEngineVersion = async () => {
 		const updateVersion = async () => {
 			const newVersion = await Platform.readPublicFile(Paths.FILE_VERSION);
@@ -119,6 +129,10 @@ function PanelLoading({ setLoaded }: Props) {
 		initialize().catch(console.error);
 		// eslint-disable-next-line
 	}, []);
+
+	if (!displayLoader) {
+		return null;
+	}
 
 	return <Loader large isLoading />;
 }

@@ -194,9 +194,7 @@ function PanelProject() {
 						<MapEditorMenuBar />
 						<MapEditor />
 					</div>
-					{!currentMapID && (
-						<div className='flex-one flex-center-vertically flex-center-horizontally'>Select a map...</div>
-					)}
+					{!currentMapID && <div className='flex-one flex-center-v flex-center-h'>Select a map...</div>}
 				</div>
 			</Splitter>
 		</>

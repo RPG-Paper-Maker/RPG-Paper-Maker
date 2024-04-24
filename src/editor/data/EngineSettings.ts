@@ -17,11 +17,13 @@ class EngineSettings extends Serializable {
 	public static current: EngineSettings;
 
 	public recentProjects!: ProjectPreview[];
+	public currentLanguage!: string;
 	public showTipsGridHeight!: boolean;
 
 	public static readonly bindings: BindingType[] = [
-		['showTipsGridHeight', 'stgh', true, BINDING.BOOLEAN],
 		['recentProjects', 'rp', [], BINDING.LIST, ProjectPreview],
+		['currentLanguage', 'cl', 'en', BINDING.STRING],
+		['showTipsGridHeight', 'stgh', true, BINDING.BOOLEAN],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

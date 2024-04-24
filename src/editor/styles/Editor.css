@@ -80,12 +80,12 @@ code {
 	flex-grow: 0;
 }
 
-.flex-center-vertically {
+.flex-center-v {
 	display: flex;
 	align-items: center;
 }
 
-.flex-center-horizontally {
+.flex-center-h {
 	display: flex;
 	justify-content: center;
 }

@@ -17,20 +17,24 @@ import PanelLoading from './components/panels/PanelLoading';
 import PanelMain from './components/panels/PanelMain';
 import './styles/Editor.css';
 import './styles/Mobile.css';
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n/i18n';
 
 function Editor() {
 	const [loaded, setLoaded] = useState(false);
 
 	return (
 		<Provider store={store}>
-			{loaded ? (
-				<div className='flex-column fill-space' onContextMenu={(e) => e.preventDefault()}>
-					<MainMenuBar />
-					<PanelMain />
-				</div>
-			) : (
-				<PanelLoading setLoaded={setLoaded} />
-			)}
+			<I18nextProvider i18n={i18n}>
+				{loaded ? (
+					<div className='flex-column fill-space' onContextMenu={(e) => e.preventDefault()}>
+						<MainMenuBar />
+						<PanelMain />
+					</div>
+				) : (
+					<PanelLoading setLoaded={setLoaded} />
+				)}
+			</I18nextProvider>
 		</Provider>
 	);
 }

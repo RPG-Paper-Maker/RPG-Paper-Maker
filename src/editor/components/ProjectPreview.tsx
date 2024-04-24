@@ -87,7 +87,7 @@ function ProjectPreview({ project }: Props) {
 					<div className='title'>{project.name}</div>
 					{project.location.length > 0 && <div className='text-small-detail'>{project.location}</div>}
 				</div>
-				<div className='flex-center-vertically'>
+				<div className='flex-center-v'>
 					{Constants.IS_DESKTOP && <RxCross2 onClick={handleClickCloseProject} />}
 					<FaTrashAlt onClick={handleClickRemoveProject} />
 				</div>

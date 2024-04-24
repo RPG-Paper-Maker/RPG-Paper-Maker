@@ -66,9 +66,14 @@ import { EngineSettings } from '../data/EngineSettings';
 import { Platform } from '../common/Platform';
 import Button from './Button';
 import { VscChromeClose, VscChromeMaximize, VscChromeMinimize, VscChromeRestore } from 'react-icons/vsc';
+import { useTranslation } from 'react-i18next';
+import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
 
 function MainMenuBar() {
+	const { t } = useTranslation();
+
 	const [needDialogNewProjectOpen, setNeedDialogNewProjectOpen] = useState(false);
+	const [needDialogChangeLanguageOpen, setNeedDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
 	const [isDialogWarningProjectLocationExist, setIsDialogWarningProjectLocationExist] = useState(false);
@@ -322,6 +327,10 @@ function MainMenuBar() {
 		Scene.Map.current!.zoomOut();
 	};
 
+	const handleChangeLanguage = async () => {
+		setNeedDialogChangeLanguageOpen(true);
+	};
+
 	const play = async () => await Platform.openGame(currentProject!.location);
 
 	const handlePlay = async () => {
@@ -519,8 +528,13 @@ function MainMenuBar() {
 			disabled: true,
 		},
 		{
-			title: 'Options',
-			disabled: true,
+			title: t('options'),
+			children: [
+				{
+					title: `${t('change.language')}...`,
+					onClick: handleChangeLanguage,
+				},
+			],
 		},
 		{
 			title: 'Display',
@@ -666,6 +680,10 @@ function MainMenuBar() {
 				needOpen={needDialogNewProjectOpen}
 				setNeedOpen={setNeedDialogNewProjectOpen}
 				onAccept={handleAcceptNewProject}
+			/>
+			<DialogChangeLanguage
+				needOpen={needDialogChangeLanguageOpen}
+				setNeedOpen={setNeedDialogChangeLanguageOpen}
 			/>
 			<Dialog
 				title='Warning'
