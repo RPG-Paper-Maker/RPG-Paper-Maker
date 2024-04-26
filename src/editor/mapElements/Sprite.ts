@@ -14,6 +14,7 @@ import { MapElement, Scene } from '../Editor';
 import { Base } from './Base';
 import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle } from '../core';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType } from '../common';
+import i18next from 'i18next';
 
 class Sprite extends Base {
 	public static readonly MODEL = [
@@ -89,16 +90,16 @@ class Sprite extends Base {
 		let type = '';
 		switch (this.kind) {
 			case ELEMENT_MAP_KIND.SPRITE_FACE:
-				type = 'FACE SPRITE';
+				type = i18next.t('face.sprite').toUpperCase();
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_FIX:
-				type = 'FIX SPRITE';
+				type = i18next.t('fix.sprite').toUpperCase();
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
-				type = 'DOUBLE SPRITE';
+				type = i18next.t('double.sprite').toUpperCase();
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-				type = 'QUADRA SPRITE';
+				type = i18next.t('quadra.sprite').toUpperCase();
 				break;
 		}
 		return `${type} | ${this.texture.toString()}`;

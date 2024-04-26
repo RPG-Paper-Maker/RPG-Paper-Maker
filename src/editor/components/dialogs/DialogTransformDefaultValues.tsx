@@ -15,6 +15,7 @@ import FooterCancelOK from './footers/FooterCancelOK';
 import { Project } from '../../core';
 import { ACTION_KIND } from '../../common';
 import InputNumber from '../InputNumber';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
 	needOpen: boolean;
@@ -45,6 +46,8 @@ function DialogTransformDefaultValues({
 	kind,
 	kindText,
 }: Props) {
+	const { t } = useTranslation();
+
 	const [isOpen, setIsOpen] = useState(false);
 
 	const defaultX =
@@ -99,7 +102,7 @@ function DialogTransformDefaultValues({
 
 	return (
 		<Dialog
-			title={`Set default ${kindText}...`}
+			title={`${t('edit.default.transform.options', { transformOptions: kindText.toLowerCase() })}...`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}

@@ -22,7 +22,7 @@ class EngineSettings extends Serializable {
 
 	public static readonly bindings: BindingType[] = [
 		['recentProjects', 'rp', [], BINDING.LIST, ProjectPreview],
-		['currentLanguage', 'cl', 'en', BINDING.STRING],
+		['currentLanguage', 'cl', undefined, BINDING.STRING],
 		['showTipsGridHeight', 'stgh', true, BINDING.BOOLEAN],
 	];
 

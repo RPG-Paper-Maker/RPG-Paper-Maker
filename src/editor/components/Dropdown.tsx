@@ -100,7 +100,6 @@ function Dropdown({ value, onUpdateValue, options, translateOptions = false }: P
 		const dropdown = dropdownContainerRef.current;
 		if (container && dropdown) {
 			const top = getScrollingTop(container);
-			console.log(top);
 			const left = container.getBoundingClientRect().x - getViewportLeft();
 			const width = container.clientWidth - 1;
 			dropdown.style.top = `${top}px`;

@@ -24,12 +24,15 @@ import { EngineSettings } from '../data/EngineSettings';
 import { Platform } from '../common/Platform';
 import { RxCross2 } from 'react-icons/rx';
 import FooterOK from './dialogs/footers/FooterOK';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
 	project: Model.ProjectPreview;
 };
 
 function ProjectPreview({ project }: Props) {
+	const { t } = useTranslation();
+
 	const [isDialogWarningLocationOpen, setIsDialogWarningLocationOpen] = useState(false);
 	const [isDialogConfirmOpen, setIsDialogConfirmOpen] = useState(false);
 
@@ -93,22 +96,20 @@ function ProjectPreview({ project }: Props) {
 				</div>
 			</div>
 			<Dialog
-				title='Warning'
+				title={t('warning')}
 				isOpen={isDialogConfirmOpen}
 				footer={<FooterNoYes onNo={handleRejectRemoveProject} onYes={handleAcceptRemoveProject} />}
 				onClose={handleRejectRemoveProject}
 			>
-				<div className='warning text-center'>
-					Are you sure that you want to delete <b>{project.name}</b>?<div>All will be lost forever.</div>
-				</div>
+				<div className='warning text-center'>{t('warning.delete.project', { projectName: project.name })}</div>
 			</Dialog>
 			<Dialog
-				title='Warning'
+				title={t('warning')}
 				isOpen={isDialogWarningLocationOpen}
 				footer={<FooterOK onOK={handleCloseWarningLocation} />}
 				onClose={handleCloseWarningLocation}
 			>
-				<div className='text-center'>The path location doesn't exist.</div>
+				<div className='text-center'>{t('path.location.doesnt.exists')}.</div>
 			</Dialog>
 		</>
 	);

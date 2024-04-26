@@ -15,6 +15,7 @@ import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, Utils } from '../comm
 import { CustomGeometry, Position, Project } from '../core';
 import { Base } from './Base';
 import { Mountains } from './Mountains';
+import i18next from 'i18next';
 
 class Mountain extends Base {
 	public static X_LEFT_OFFSET = 0;
@@ -98,9 +99,7 @@ class Mountain extends Base {
 	}
 
 	toString(): string {
-		return `MOUNTAIN | ID: ${Utils.formatNumberID(
-			this.mountainID
-		)} | W:${this.getWidthTotalPixels()}px | H:${this.getHeightTotalPixels()}px`;
+		return `${i18next.t('mountain').toUpperCase()} | ID: ${Utils.formatNumberID(this.mountainID)}`;
 	}
 
 	getTotalSquaresWidth(): number {

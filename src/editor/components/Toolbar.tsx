@@ -40,8 +40,11 @@ import { GiBrickWall } from 'react-icons/gi';
 import '../styles/Toolbar.css';
 import { Project } from '../core';
 import { Constants } from '../common';
+import { useTranslation } from 'react-i18next';
 
 function Toolbar() {
+	const { t } = useTranslation();
+
 	const dispatch = useDispatch();
 
 	const currentProject = useSelector((state: RootState) => state.projects.current);
@@ -89,80 +92,80 @@ function Toolbar() {
 			<div className='toolbar'>
 				<Menu horizontal>
 					<MenuItem icon={<AiOutlineFileAdd />} onClick={handleNewProject}>
-						New
+						{t('new.project.tool')}
 					</MenuItem>
 					<MenuItem
 						icon={Constants.IS_DESKTOP ? <AiOutlineFolderOpen /> : <BiImport />}
 						onClick={Constants.IS_DESKTOP ? handleOpenDialogProject : handleImport}
 					>
-						{Constants.IS_DESKTOP ? 'Open' : 'Import'}
+						{Constants.IS_DESKTOP ? t('open.project.tool') : t('import.project.tool')}
 					</MenuItem>
 					<MenuItem icon={<BiSave />} onClick={handleSave} disabled={!canSave}>
-						Save
+						{t('save.tool')}
 					</MenuItem>
 					<MenuItem icon={<LuSaveAll />} onClick={handleSaveAll} disabled={!canSaveAll}>
-						All
+						{t('all')}
 					</MenuItem>
 					<MenuItem icon={<AiOutlineFolder />} onClick={handleFloor} disabled>
-						Folder
+						{t('folder')}
 					</MenuItem>
 					<MenuItem separator></MenuItem>
 					<MenuItem icon={<BsDatabase />} onClick={handleFloor} disabled>
-						Data
+						{t('datas.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<BsClipboardData />} onClick={handleFloor} disabled>
-						Systems
+						{t('systems.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<TbNumbers />} onClick={handleFloor} disabled>
-						Variables
+						{t('variables.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<FaArrowsAlt />} onClick={handleFloor} disabled>
-						Collisions
+						{t('collisions.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<FaRegKeyboard />} onClick={handleFloor} disabled>
-						Keyboard
+						{t('keyboard.controls.tool')}
 					</MenuItem>
 					<MenuItem icon={<LuLanguages />} onClick={handleFloor} disabled>
-						Languages
+						{t('languages.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<FaPlug />} onClick={handleFloor} disabled>
-						Plugins
+						{t('plugins')}
 					</MenuItem>
 					<MenuItem icon={<MdOutlineAddchart />} onClick={handleFloor} disabled>
-						DLCs
+						{t('dlcs')}
 					</MenuItem>
 					<MenuItem separator></MenuItem>
 					<MenuItem icon={<AiOutlinePicture />} onClick={handleFloor} disabled>
-						Pictures
+						{t('pictures.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<TfiVideoClapper />} onClick={handleFloor} disabled>
-						Videos
+						{t('videos.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<BsMusicNote />} onClick={handleFloor} disabled>
-						Songs
+						{t('songs.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<BiPyramid />} onClick={handleFloor} disabled>
-						Shapes
+						{t('shapes.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<AiOutlineFontSize />} onClick={handleFloor} disabled>
-						Fonts
+						{t('fonts.manager.tool')}
 					</MenuItem>
 					<MenuItem separator></MenuItem>
 					<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleFloor} disabled>
-						Autotiles
+						{t('autotiles.tool')}
 					</MenuItem>
 					<MenuItem icon={<GiBrickWall />} onClick={handleFloor} disabled>
-						Walls
+						{t('walls.tool')}
 					</MenuItem>
 					<MenuItem icon={<BiCube />} onClick={handleFloor} disabled>
-						3D objects
+						{t('threed.objects.tool')}
 					</MenuItem>
 					<MenuItem icon={<LuMountain />} onClick={handleFloor} disabled>
-						Mountains
+						{t('mountains.tool')}
 					</MenuItem>
 					<MenuItem separator></MenuItem>
 					<MenuItem icon={<BsPlay />} onClick={handlePlay} disabled={!isProjectOpened}>
-						Play
+						{t('play')}
 					</MenuItem>
 				</Menu>
 			</div>

@@ -25,6 +25,7 @@ import Checkbox from '../Checkbox';
 import { Platform } from '../../common/Platform';
 import useStateString from '../../hooks/useStateString';
 import useStateBool from '../../hooks/useStateBool';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
 	needOpen: boolean;
@@ -33,6 +34,8 @@ type Props = {
 };
 
 function DialogNewProject({ needOpen, setNeedOpen, onAccept }: Props) {
+	const { t } = useTranslation();
+
 	const [isOpen, setIsOpen] = useState(false);
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -47,8 +50,8 @@ function DialogNewProject({ needOpen, setNeedOpen, onAccept }: Props) {
 	const dispatch = useDispatch();
 
 	const initialize = () => {
-		setProjectName('Project without name');
-		setFolderName('project-without-name');
+		setProjectName(t('project.without.name'));
+		setFolderName(t('project.without.name.folder'));
 		setIsAutoGenerate(true);
 		setLocation(Paths.getRPMGamesFolder());
 	};
@@ -95,18 +98,19 @@ function DialogNewProject({ needOpen, setNeedOpen, onAccept }: Props) {
 		await Platform.createFile(Paths.join(folderPath, Paths.FILE_GAME_RPMG), '');
 		await Platform.createFolder(project.getPathSaves());
 		await Platform.createFolder(project.getPathMaps());
-		await Model.Map.createDefaultMap(1, 'Starting map');
-		await Model.Map.createDefaultMap(2, 'Default');
+		await Model.Map.createDefaultMap(1, t('starting.map'));
+		await Model.Map.createDefaultMap(2, t('default'));
 		Scene.Map.currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
 		for (const file of Paths.ALL_JSON) {
 			await Platform.copyPublicFile(Paths.join(Paths.DEFAULT, file), Paths.join(project.getPath(), file));
 		}
+		await project.load();
+		project.translateDefaults();
 		project.settings.projectVersion = Project.VERSION;
 		if (Constants.IS_MOBILE) {
 			project.settings.projectMenuIndex = 2;
 		}
-		await project.settings.save();
-		await Project.current.save();
+		await project.save();
 
 		// Update recent projects
 		let newList = projects.filter((p) => completeLocation !== p.location);
@@ -160,7 +164,7 @@ function DialogNewProject({ needOpen, setNeedOpen, onAccept }: Props) {
 	return (
 		<>
 			<Dialog
-				title='New project...'
+				title={`${t('new.project')}...`}
 				isOpen={isOpen}
 				isLoading={isLoading}
 				isDisabled={isDialogConfirmOpen}
@@ -169,7 +173,7 @@ function DialogNewProject({ needOpen, setNeedOpen, onAccept }: Props) {
 			>
 				<div className='flex-column gap-small'>
 					<div className='flex gap-small'>
-						<div>Name:</div>
+						<div>{t('name')}:</div>
 						<InputText
 							focusFirst={focusFirst}
 							setFocustFirst={setFocustFirst}
@@ -179,12 +183,12 @@ function DialogNewProject({ needOpen, setNeedOpen, onAccept }: Props) {
 						{Constants.IS_DESKTOP && (
 							<div className='flex-columns'>
 								<div className='flex gap-small'>
-									<div>Folder name:</div>
+									<div>{t('folder.name')}:</div>
 									<InputText value={folderName} onChange={handleChangeFolderName} />
 								</div>
 								<div className='flex-right-horizontally'>
 									<Checkbox isChecked={isAutoGenerate} onChange={setIsAutoGenerate}>
-										Auto-generate
+										{t('auto.generate')}
 									</Checkbox>
 								</div>
 							</div>
@@ -192,7 +196,7 @@ function DialogNewProject({ needOpen, setNeedOpen, onAccept }: Props) {
 					</div>
 					{Constants.IS_DESKTOP && (
 						<div className='flex-column gap-small'>
-							<div>Location:</div>
+							<div>{t('location')}:</div>
 							<div className='flex gap-small'>
 								<InputText widthType={INPUT_TYPE_WIDTH.FILL} value={location} onChange={setLocation} />
 								<Button onClick={handleClickLocation}>...</Button>
@@ -202,12 +206,12 @@ function DialogNewProject({ needOpen, setNeedOpen, onAccept }: Props) {
 				</div>
 			</Dialog>
 			<Dialog
-				title='Warning'
+				title={t('warning')}
 				isOpen={isDialogConfirmOpen}
 				footer={<FooterNoYes onNo={cancelCreation} onYes={replaceProject} />}
 				onClose={cancelCreation}
 			>
-				<p>This project name already exists. Would you like to replace it?</p>
+				<p>{t('warning.project.exist.overwrite', { path: getcompleteLocation() })}</p>
 			</Dialog>
 		</>
 	);

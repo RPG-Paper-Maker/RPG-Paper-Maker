@@ -12,16 +12,19 @@
 import Button from '../../Button';
 import '../../../styles/Footer.css';
 import { BUTTON_TYPE } from '../../../common';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
 	onOK: () => void;
 };
 
 function FooterOK({ onOK }: Props) {
+	const { t } = useTranslation();
+
 	return (
 		<div className='footer-buttons'>
 			<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={onOK}>
-				Ok
+				{t('ok')}
 			</Button>
 		</div>
 	);

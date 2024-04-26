@@ -15,6 +15,7 @@ import FooterCancelOK from './footers/FooterCancelOK';
 import InputText from '../InputText';
 import { Model } from '../../Editor';
 import useStateString from '../../hooks/useStateString';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
 	needOpen: boolean;
@@ -24,6 +25,8 @@ type Props = {
 };
 
 function DialogName({ needOpen, setNeedOpen, model, onAccept }: Props) {
+	const { t } = useTranslation();
+
 	const [isOpen, setIsOpen] = useState(false);
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [name, setName] = useStateString();
@@ -54,13 +57,13 @@ function DialogName({ needOpen, setNeedOpen, model, onAccept }: Props) {
 
 	return (
 		<Dialog
-			title='Set name...'
+			title={`${t('edit.name')}...`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>
 			<div className='flex gap-medium'>
-				Name:
+				{t('name')}:
 				<InputText value={name} onChange={setName} focusFirst={focusFirst} setFocustFirst={setFocustFirst} />
 			</div>
 		</Dialog>

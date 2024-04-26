@@ -13,6 +13,7 @@ import { MapElement } from '../Editor';
 import { CustomGeometry, Position, Project, Rectangle, TextureBundle } from '../core';
 import { Land } from './Land';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, Utils } from '../common';
+import i18next from 'i18next';
 
 class Autotile extends Land {
 	public autotileID!: number;
@@ -58,7 +59,9 @@ class Autotile extends Land {
 	}
 
 	toString(): string {
-		return `AUTOTILE | ID: ${Utils.formatNumberID(this.autotileID)} | ${this.texture.toString(true)}`;
+		return `${i18next.t('autotile').toUpperCase()} | ID: ${Utils.formatNumberID(
+			this.autotileID
+		)} | ${this.texture.toString(true)}`;
 	}
 
 	update(position: Position) {

@@ -56,6 +56,7 @@ ipcMain.handle('get-system-information', () => {
 	return {
 		documentsFolder,
 		gamesFolder: path.join(documentsFolder, 'RPG Paper Maker Games'),
+		userLocale: app.getLocale(),
 	};
 });
 

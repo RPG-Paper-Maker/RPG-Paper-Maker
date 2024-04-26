@@ -12,6 +12,7 @@
 import Button from '../../Button';
 import '../../../styles/Footer.css';
 import { BUTTON_TYPE } from '../../../common';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
 	onCancel: () => void;
@@ -20,12 +21,14 @@ type Props = {
 };
 
 function FooterCancelNoYes({ onCancel, onNo, onYes }: Props) {
+	const { t } = useTranslation();
+
 	return (
 		<div className='footer-buttons'>
-			<Button onClick={onCancel}>Cancel</Button>
-			<Button onClick={onNo}>No</Button>
+			<Button onClick={onCancel}>{t('cancel')}</Button>
+			<Button onClick={onNo}>{t('no')}</Button>
 			<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={onYes}>
-				Yes
+				{t('yes')}
 			</Button>
 		</div>
 	);

@@ -23,6 +23,7 @@ import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import { TreeMapTag } from '../models';
 import { Platform } from '../common/Platform';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
@@ -43,6 +44,8 @@ function TreeMaps({
 	mapsTabsContents,
 	setMapsTabsContents,
 }: Props) {
+	const { t } = useTranslation();
+
 	const [isNew, setIsNew] = useState(false);
 	const [editedMap, setEditedMap] = useState<Model.Map>(new Model.Map());
 	const [editedFolder, setEditedFolder] = useState<Model.Base>(new Model.Base());
@@ -58,7 +61,7 @@ function TreeMaps({
 
 	const dispatch = useDispatch();
 
-	if (!Project.current || isOpenLoading) {
+	if (isOpenLoading) {
 		return null;
 	}
 
@@ -98,7 +101,7 @@ function TreeMaps({
 
 	const handleNewFolder = async () => {
 		const id = Node.getNewID(RPM.treeCurrentItems, false);
-		const name = 'New folder';
+		const name = t('new.folder');
 		setEditedFolder(Model.Base.create(id, name));
 		setIsNew(true);
 		setNeedOpenName(true);
@@ -124,7 +127,11 @@ function TreeMaps({
 			const path = Paths.join(copiedItems.pathProject, Paths.MAPS);
 			const exists = await Platform.checkFileExists(path);
 			if (!exists) {
-				alert(`${path} doesn't exists so can't copy potential maps.`);
+				alert(
+					t('warning.path.doesnt.exist.copy.maps', {
+						path,
+					})
+				);
 			} else {
 				for (const node of nodes) {
 					const cloned = node.clone();
@@ -150,7 +157,7 @@ function TreeMaps({
 			const exists = await Platform.checkFileExists(src);
 			const map = Model.Map.create(newId, tag.name);
 			if (!exists) {
-				alert(`Could not copy map at ${src}. Created an empty one.`);
+				alert(t('warning.could.not.copy.map.created.empty', { path: src }));
 				await map.createNewMap();
 			} else {
 				await Platform.copyFolder(src, Paths.join(Project.current!.getPath(), Paths.MAPS, map.getRealName()));
@@ -269,31 +276,31 @@ function TreeMaps({
 			if ((selectedNode.content as Model.TreeMapTag).isFolder()) {
 				return [
 					{
-						title: 'Edit name...',
+						title: `${t('edit.name')}...`,
 						onClick: handleEditFolder,
 					},
 					{
-						title: 'New map...',
+						title: `${t('new.map')}...`,
 						onClick: handleNewMap,
 					},
 					{
-						title: 'New folder...',
+						title: `${t('new.folder')}...`,
 						onClick: handleNewFolder,
 					},
 					{
-						title: 'Copy',
+						title: t('copy'),
 						onClick: handleCopy,
 						disabled: selectedNode.content.id === -1,
 						shortcut: [SPECIAL_KEY.CTRL, KEY.C],
 					},
 					{
-						title: 'Paste',
+						title: t('paste'),
 						onClick: handlePaste,
 						disabled: !canPaste(),
 						shortcut: [SPECIAL_KEY.CTRL, KEY.V],
 					},
 					{
-						title: 'Delete',
+						title: t('delete'),
 						onClick: handleDeleteFolder,
 						disabled: selectedNode.content.id === -1,
 					},
@@ -301,16 +308,16 @@ function TreeMaps({
 			} else {
 				return [
 					{
-						title: 'Edit map properties...',
+						title: `${t('edit.map.properties')}...`,
 						onClick: handleEditMap,
 					},
 					{
-						title: 'Copy',
+						title: t('copy'),
 						onClick: handleCopy,
 						shortcut: [SPECIAL_KEY.CTRL, KEY.C],
 					},
 					{
-						title: 'Delete',
+						title: t('delete'),
 						onClick: handleDeleteMap,
 						shortcut: [KEY.DELETE],
 					},
@@ -323,7 +330,7 @@ function TreeMaps({
 	return (
 		<>
 			<Tree
-				list={Project.current.treeMaps.tree}
+				list={Project.current!.treeMaps.tree}
 				constructorType={Model.TreeMapTag}
 				contextMenuItems={getContextMenuItems()}
 				defaultSelectedID={-1}
@@ -344,7 +351,7 @@ function TreeMaps({
 				onAccept={isNew ? handleAcceptNewFolder : handleAcceptEditFolder}
 			/>
 			<Dialog
-				title='Warning'
+				title={t('warning')}
 				isOpen={isOpenDialogConfirm}
 				footer={
 					<FooterNoYes
@@ -355,9 +362,8 @@ function TreeMaps({
 				onClose={handleRejectDelete}
 			>
 				<p className='warning text-center'>
-					{isDeletingMap
-						? 'Are you sure you want to delete this map?'
-						: 'Are you sure you want to delete this directory? This will delete all the maps inside this folder.'}
+					{isDeletingMap ? t('are.you.sure.delete.this.map') : t('are.you.sure.delete.this.directory')}
+					{!isDeletingMap && `${t('this.will.delete.all.maps.inside.folder')}.`}
 				</p>
 			</Dialog>
 		</>

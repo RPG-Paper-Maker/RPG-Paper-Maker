@@ -14,7 +14,7 @@ import { Utils } from '../common';
 import '../styles/MenuItem.css';
 
 type Props = {
-	children?: ReactElement | ReactElement[] | string;
+	children?: ReactElement | ReactElement[] | string | string[];
 	separator?: boolean;
 	icon?: React.ReactNode;
 	isActivable?: boolean;

@@ -25,11 +25,14 @@ import {
 import { Constants } from '../../common';
 import Tips from '../Tips';
 import { EngineSettings } from '../../data/EngineSettings';
+import { useTranslation } from 'react-i18next';
 
 const MIN_VALUE = 0;
 const MAX_VALUE_SQUARES = 999;
 
 function PanelSettingsMountains() {
+	const { t } = useTranslation();
+
 	const widthSquares = useSelector((state: RootState) => state.mapEditor.currentMountainWidthSquares);
 	const widthPixels = useSelector((state: RootState) => state.mapEditor.currentMountainWidthPixels);
 	const heightSquares = useSelector((state: RootState) => state.mapEditor.currentMountainHeightSquares);
@@ -81,10 +84,7 @@ function PanelSettingsMountains() {
 	return (
 		<>
 			{!Constants.IS_MOBILE && EngineSettings.current.showTipsGridHeight && (
-				<Tips onClose={handleCloseTipGridHeight}>
-					You can move the map cursor up and down by pressing CTRL+ARROW UP/DOWN. To move by pixel, use
-					CTRL+SHIFT+ARROW UP/DOWN.
-				</Tips>
+				<Tips onClose={handleCloseTipGridHeight}>{t('tip.grid.height')}</Tips>
 			)}
 			<Groupbox title='Settings'>
 				<div className='flex flex-column gap-medium'>

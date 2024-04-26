@@ -19,7 +19,7 @@ import { LocalFile, Picture2D, Project } from '../../core';
 import { EngineSettings } from '../../data/EngineSettings';
 import { Platform } from '../../common/Platform';
 import localforage from 'localforage';
-import i18n, { loadLocales } from '../../i18n/i18n';
+import i18n, { LANGUAGES_SHORTS, loadLocales } from '../../i18n/i18n';
 
 type Props = {
 	setLoaded: (v: boolean) => void;
@@ -34,10 +34,10 @@ function PanelLoading({ setLoaded }: Props) {
 		Constants.IS_MOBILE = Utils.isMobile();
 		Constants.IS_DESKTOP = Utils.isDesktop();
 		await initializeLocalFiles();
+		await initializeSystemInformation();
 		await initializeEngineSettings();
 		await initializeLocales();
 		setDisplayLoader(true);
-		await initializeSystemInformation();
 		await initializeGL();
 		await initializeTextures();
 		await initializeEngineVersion();
@@ -60,6 +60,15 @@ function PanelLoading({ setLoaded }: Props) {
 		}
 	};
 
+	const initializeSystemInformation = async () => {
+		if (Constants.IS_DESKTOP) {
+			const { documentsFolder, gamesFolder, userLocale } = await IO.getSystemInformation();
+			Paths.GLOBAL_DOCUMENTS = documentsFolder;
+			Paths.GLOBAL_RPM_GAMES = gamesFolder;
+			Constants.USER_LOCALE = userLocale;
+		}
+	};
+
 	const initializeEngineSettings = async () => {
 		if (!Constants.IS_DESKTOP) {
 			if (!(await LocalFile.checkFileExists(LOCAL_FORAGE.ENGINE))) {
@@ -76,15 +85,19 @@ function PanelLoading({ setLoaded }: Props) {
 
 	const initializeLocales = async () => {
 		await loadLocales();
-		i18n.changeLanguage(EngineSettings.current.currentLanguage);
-	};
-
-	const initializeSystemInformation = async () => {
-		if (Constants.IS_DESKTOP) {
-			const { documentsFolder } = await IO.getSystemInformation();
-			Paths.GLOBAL_DOCUMENTS = documentsFolder;
-			Paths.GLOBAL_RPM_GAMES = Paths.join(documentsFolder, 'RPG Paper Maker Games');
+		if (!EngineSettings.current.currentLanguage) {
+			if (Constants.IS_DESKTOP) {
+				if (LANGUAGES_SHORTS.includes(Constants.USER_LOCALE)) {
+					EngineSettings.current.currentLanguage = Constants.USER_LOCALE;
+				} else {
+					EngineSettings.current.currentLanguage = 'en';
+				}
+			} else {
+				EngineSettings.current.currentLanguage = i18n.language;
+			}
+			await EngineSettings.current.save();
 		}
+		i18n.changeLanguage(EngineSettings.current.currentLanguage);
 	};
 
 	const initializeTextures = async () => {

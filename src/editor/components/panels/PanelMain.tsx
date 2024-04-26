@@ -17,8 +17,11 @@ import PanelNoProject from './PanelNoProject';
 import PanelProject from './PanelProject';
 import Dialog from '../dialogs/Dialog';
 import { Node } from '../../core';
+import { useTranslation } from 'react-i18next';
 
 function PanelMain() {
+	const { t } = useTranslation();
+
 	const currentProject = useSelector((state: RootState) => state.projects.current);
 	const loading = useSelector((state: RootState) => state.projects.loading);
 	const needsReloadPageUpdate = useSelector((state: RootState) => state.triggers.needsReloadPageUpdate);
@@ -40,14 +43,13 @@ function PanelMain() {
 			<Loader large isLoading={loading} />
 			{currentProject === null ? <PanelNoProject /> : <PanelProject />}
 			{needsReloadPageUpdate && (
-				<Dialog title='RPG Paper Maker was updated' isOpen>
-					<p>You need to refresh the page to have the lastest version of RPG Paper Maker applied.</p>
-					<p>No worries, what you were doing was saved temporarily.</p>
+				<Dialog title={t('warning.reload.page.update.title')} isOpen>
+					<p>{`${t('warning.reload.page.update')}.`}</p>
 				</Dialog>
 			)}
 			{needsReloadPageClearCache && (
-				<Dialog title='Reload page' isOpen>
-					<p>You need to refresh the page to finish cache clearing process.</p>
+				<Dialog title={t('warning')} isOpen>
+					<p>{`${t('warning.refresh.page.cache.clearing')}.`}</p>
 				</Dialog>
 			)}
 		</div>

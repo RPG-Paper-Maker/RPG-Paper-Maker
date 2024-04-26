@@ -15,6 +15,7 @@ import { Base } from './Base';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND, SPRITE_WALL_TYPE, Utils } from '../common';
 import { CustomGeometry, Picture2D, Position, Project } from '../core';
 import { Sprite } from './Sprite';
+import i18next from 'i18next';
 
 class SpriteWall extends Base {
 	public wallID!: number;
@@ -169,7 +170,7 @@ class SpriteWall extends Base {
 	}
 
 	toString(): string {
-		return `WALL | ID: ${Utils.formatNumberID(this.wallID)}`;
+		return `${i18next.t('wall').toUpperCase()} | ID: ${Utils.formatNumberID(this.wallID)}`;
 	}
 
 	updateGeometry(geometry: CustomGeometry, position: Position, width: number, height: number, count: number): number {

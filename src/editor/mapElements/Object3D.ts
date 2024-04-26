@@ -23,6 +23,7 @@ import {
 } from '../common';
 import { CustomGeometry, Position, Project } from '../core';
 import { Base } from './Base';
+import i18next from 'i18next';
 
 abstract class Object3D extends Base {
 	public id!: number;
@@ -107,7 +108,7 @@ abstract class Object3D extends Base {
 	}
 
 	toString(): string {
-		return `3D OBJECT | ID: ${Utils.formatNumberID(this.id)}`;
+		return `${i18next.t('threed.object').toUpperCase()} | ID: ${Utils.formatNumberID(this.id)}`;
 	}
 
 	abstract isCentered(): boolean;

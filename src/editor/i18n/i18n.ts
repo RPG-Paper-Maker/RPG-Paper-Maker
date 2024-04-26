@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import i18n from 'i18next';
+import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { Platform } from '../common/Platform';
@@ -17,6 +17,17 @@ import { JSONType, Paths } from '../common';
 
 export const LANGUAGES_NAMES: string[] = [];
 export const LANGUAGES_SHORTS: string[] = [];
+
+i18next
+	.use(LanguageDetector)
+	.use(initReactI18next)
+	.init({
+		resources: {},
+		fallbackLng: 'en',
+		interpolation: {
+			escapeValue: false,
+		},
+	});
 
 export const loadLocales = async () => {
 	const content = JSON.parse(
@@ -30,20 +41,8 @@ export const loadLocales = async () => {
 		LANGUAGES_NAMES.push(name);
 		LANGUAGES_SHORTS.push(short);
 		const json = JSON.parse(await Platform.readPublicFile(Paths.join(Paths.LOCALES, `${short}.json`)));
-		i18n.addResourceBundle(short, 'translation', json);
+		i18next.addResourceBundle(short, 'translation', json);
 	}
 };
 
-i18n.use(LanguageDetector)
-	.use(initReactI18next)
-	.init({
-		partialBundledLanguages: true,
-		ns: [],
-		resources: {},
-		fallbackLng: 'en',
-		interpolation: {
-			escapeValue: false,
-		},
-	});
-
-export default i18n;
+export default i18next;

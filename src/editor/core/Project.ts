@@ -41,6 +41,10 @@ class Project {
 		return Paths.join(this.getPath(), Paths.SAVES);
 	}
 
+	translateDefaults() {
+		this.treeMaps.translateDefaults();
+	}
+
 	async load() {
 		const projectName = this.systems.projectName.name();
 		await this.pictures.load();
@@ -54,6 +58,8 @@ class Project {
 	}
 
 	async save() {
+		await this.treeMaps.save();
+		await this.settings.save();
 		// await this.systems.save(Paths.join(this.getPath(), Paths.FILE_SYSTEM));
 	}
 }

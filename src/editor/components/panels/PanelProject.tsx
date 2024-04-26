@@ -41,8 +41,10 @@ import Loader from '../Loader';
 import TreeMaps from '../TreeMaps';
 import { Node, Project } from '../../core';
 import { Utils } from '../../common';
+import { useTranslation } from 'react-i18next';
 
 function PanelProject() {
+	const { t } = useTranslation();
 	const [mapsTabsTitles, setMapsTabsTitles] = useState<Model.Base[]>([]);
 	const [mapsTabsContents, setMapsTabsContents] = useState<(ReactNode | null)[]>([]);
 	const [mapForcedCurrentSelectedItemID, setMapForcedCurrentSelectedItemID] = useState<number | null>(null);
@@ -194,7 +196,9 @@ function PanelProject() {
 						<MapEditorMenuBar />
 						<MapEditor />
 					</div>
-					{!currentMapID && <div className='flex-one flex-center-v flex-center-h'>Select a map...</div>}
+					{!currentMapID && (
+						<div className='flex-one flex-center-v flex-center-h'>{`${t('select.map')}...`}</div>
+					)}
 				</div>
 			</Splitter>
 		</>

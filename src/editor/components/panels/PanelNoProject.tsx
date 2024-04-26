@@ -19,9 +19,13 @@ import ProjectPreview from '../ProjectPreview';
 import { MdOutlineAddchart } from 'react-icons/md';
 import { FaHandsHelping } from 'react-icons/fa';
 import { BUTTON_TYPE, Constants } from '../../common';
+import { useTranslation } from 'react-i18next';
 
 function PanelNoProject() {
+	const { t } = useTranslation();
+
 	const dispatch = useDispatch();
+
 	const projects = useSelector((state: RootState) => state.projects.list);
 
 	const handleNewProject = () => {
@@ -46,7 +50,7 @@ function PanelNoProject() {
 
 	const renderProjectsList = () => {
 		return projects.length === 0 ? (
-			<div className='text-small-detail'>No projects available.</div>
+			<div className='text-small-detail'>{`${t('no.recent.projects.opened')}.`}</div>
 		) : (
 			projects.map((project) => <ProjectPreview key={project.location} project={project} />)
 		);
@@ -54,34 +58,34 @@ function PanelNoProject() {
 
 	return (
 		<div className='flex-column flex-one padding-large'>
-			<h2 className='mobile-hidden'>Recent projects</h2>
+			<h2 className='mobile-hidden'>{t('recent.projects')}</h2>
 			<div className='flex flex-one gap-medium mobile-column-reverse'>
 				<div className='flex-column flex-one'>
-					<h2 className='mobile-only text-center'>Recent projects</h2>
+					<h2 className='mobile-only text-center'>{t('recent.projects')}</h2>
 					<div className='scrollable-flex-one'>{renderProjectsList()}</div>
 				</div>
 				<div className='flex-zero flex-column gap-small'>
 					<Button buttonType={BUTTON_TYPE.PRIMARY} big onClick={handleNewProject}>
 						<AiOutlineFileAdd />
-						New project...
+						{`${t('new.project')}...`}
 					</Button>
 					{Constants.IS_DESKTOP && (
 						<Button big onClick={handleOpenDialogProject}>
 							<AiOutlineFolderOpen />
-							Open project...
+							{`${t('open.project')}...`}
 						</Button>
 					)}
 					<Button big onClick={handleImportProject}>
 						<BiImport />
-						{Constants.IS_DESKTOP ? 'Import web project...' : 'Import project...'}
+						{`${Constants.IS_DESKTOP ? t('import.web.project') : t('import.project')}...`}
 					</Button>
 					<Button big onClick={handleDLCs}>
 						<MdOutlineAddchart />
-						DLCs
+						{t('dlcs')}
 					</Button>
 					<Button buttonType={BUTTON_TYPE.PATREON} big onClick={handleContribute}>
 						<FaHandsHelping />
-						Contribute
+						{t('contribute')}
 					</Button>
 				</div>
 			</div>

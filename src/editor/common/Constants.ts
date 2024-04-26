@@ -23,6 +23,7 @@ class Constants {
 	public static readonly PRECISION_POSITION = 0.000000001;
 	public static IS_MOBILE = false;
 	public static IS_DESKTOP = false;
+	public static USER_LOCALE = '';
 }
 
 export { Constants };

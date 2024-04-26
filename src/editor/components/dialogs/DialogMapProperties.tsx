@@ -19,6 +19,7 @@ import useStateNumber from '../../hooks/useStateNumber';
 import useStateString from '../../hooks/useStateString';
 import InputNumber from '../InputNumber';
 import Groupbox from '../Groupbox';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
 	needOpen: boolean;
@@ -28,6 +29,8 @@ type Props = {
 };
 
 function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) {
+	const { t } = useTranslation();
+
 	const [isOpen, setIsOpen] = useState(false);
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -77,7 +80,7 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 
 	return (
 		<Dialog
-			title='Set map properties...'
+			title={`${t('edit.map.properties')}...`}
 			isOpen={isOpen}
 			isLoading={isLoading}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
@@ -85,7 +88,7 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 		>
 			<div className='flex flex-column gap-small'>
 				<div className='flex gap-medium'>
-					Name:
+					{t('name')}:
 					<InputText
 						value={name}
 						onChange={setName}
@@ -94,18 +97,18 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 					/>
 					ID: {Utils.formatNumberID(id)}
 				</div>
-				<Groupbox title='Size'>
+				<Groupbox title={t('size')}>
 					<div className='flex flex-one gap-medium'>
 						<div className='flex flex-column flex-one gap-small'>
-							Length:
+							{t('length')}:
 							<InputNumber value={length} onChange={setLength} min={1} />
-							Height:
+							{t('height')}:
 							<InputNumber value={height} onChange={setHeight} min={1} />
 						</div>
 						<div className='flex flex-column flex-one gap-small'>
-							Width:
+							{t('width')}:
 							<InputNumber value={width} onChange={setWidth} min={1} />
-							Depth:
+							{t('depth')}:
 							<InputNumber value={depth} onChange={setDepth} min={0} />
 						</div>
 					</div>

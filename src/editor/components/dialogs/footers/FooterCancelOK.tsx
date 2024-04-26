@@ -12,6 +12,7 @@
 import Button from '../../Button';
 import '../../../styles/Footer.css';
 import { BUTTON_TYPE } from '../../../common';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
 	onOK: () => void;
@@ -19,11 +20,13 @@ type Props = {
 };
 
 function FooterCancelOK({ onOK, onCancel }: Props) {
+	const { t } = useTranslation();
+
 	return (
 		<div className='footer-buttons'>
-			<Button onClick={onCancel}>Cancel</Button>
+			<Button onClick={onCancel}>{t('cancel')}</Button>
 			<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={onOK}>
-				Ok
+				{t('ok')}
 			</Button>
 		</div>
 	);

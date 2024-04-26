@@ -42,8 +42,6 @@ function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false
 			const maxY = window.innerHeight - rect.height;
 			x = Math.min(maxX, Math.max(min, x));
 			y = Math.min(maxY, Math.max(min, y));
-			//dialogRef.current.style.transform = `translate(${x}px, ${y}px)`;
-
 			dialogRef.current.style.left = `${x}px`;
 			dialogRef.current.style.top = `${y}px`;
 		}
@@ -80,23 +78,6 @@ function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false
 		} else {
 			setIsClickedIn(false);
 		}
-		/*
-		if (!isClickedIn && !isLoading) {
-			setIsMoved(false);
-			if (onClose) {
-				onClose();
-			}
-		} else {
-			setIsClickedIn(false);
-		}*/
-	};
-
-	const handleStopPropagation = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-		/*
-		const container = dialogRef.current;
-		if (container && !container.contains(e.target as Node)) {
-			e.stopPropagation();
-		}*/
 	};
 
 	const handleMouseDownTitle = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -143,7 +124,6 @@ function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false
 						className='dialog'
 						onMouseDown={handleMouseDown}
 						onMouseUp={handleMouseUp}
-						onClick={handleStopPropagation}
 						style={{ transform: `translate(${isMoved ? '0,0' : '-50%,-50%'})` }}
 					>
 						{isDisabled && <div className='dialog-disable' />}

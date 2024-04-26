@@ -44,6 +44,7 @@ import {
 } from '../common';
 import { CursorWall } from '../core/CursorWall';
 import { Platform } from '../common/Platform';
+import i18n from '../i18n/i18n';
 
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
@@ -1575,7 +1576,9 @@ class Map extends Base {
 			const lines = this.pointedMapElementPosition.toString().split('\n');
 			ArrayUtils.insertFirst(
 				lines,
-				`[${this.pointedMapElement === null ? 'NONE' : this.pointedMapElement.toString()}]`
+				`[${
+					this.pointedMapElement === null ? i18n.t('none').toUpperCase() : this.pointedMapElement.toString()
+				}]`
 			);
 			Scene.Map.ctxHUD!.textBaseline = 'bottom';
 			const space = 18;

@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import { Model } from '../Editor';
 import { BINDING, BindingType, JSONType, Paths, Utils } from '../common';
 import { Project, Serializable, Node } from '../core';
@@ -31,6 +32,16 @@ class TreeMaps extends Serializable {
 
 	getPath(): string {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_TREE_MAPS);
+	}
+
+	translateDefaults() {
+		const root = this.tree[0];
+		const introduction = root.children[0];
+		introduction.content.name = i18next.t('introduction');
+		introduction.children[0].content.name = i18next.t('starting.map');
+		const battles = root.children[1];
+		battles.content.name = i18next.t('battle.maps');
+		battles.children[0].content.name = i18next.t('default');
 	}
 
 	private isAllMapsSavedRecursive(nodes: Node[]): boolean {
@@ -79,7 +90,7 @@ class TreeMaps extends Serializable {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, TreeMaps.getBindings(additionnalBinding));
-		const root = Node.create(Model.TreeMapTag.create(-1, 'Maps', true));
+		const root = Node.create(Model.TreeMapTag.create(-1, i18next.t('maps'), true));
 		this.readRoot(json[TreeMaps.JSON_TREE] as JSONType[], root);
 		this.tree = [root];
 	}

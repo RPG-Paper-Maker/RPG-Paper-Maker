@@ -14,6 +14,7 @@ import { Model } from '../Editor';
 import { Position3D } from './Position3D';
 import { Portion, Project } from '.';
 import { Constants, Mathf } from '../common';
+import i18next from 'i18next';
 
 class Position extends Position3D {
 	public layer: number;
@@ -302,11 +303,11 @@ class Position extends Position3D {
 	}
 
 	toString() {
-		return `${this.toStringCoords()}\nLayer = ${this.layer}\nAngles = [${this.angleX}, ${this.angleY}, ${
-			this.angleZ
-		}]\nScales = [${this.scaleX}, ${this.scaleY}, ${
+		return `${this.toStringCoords()}\n${i18next.t('layer')} = ${this.layer}\n${i18next.t('angles')} = [${
+			this.angleX
+		}, ${this.angleY}, ${this.angleZ}]\n${i18next.t('scales')} = [${this.scaleX}, ${this.scaleY}, ${
 			this.scaleZ
-		}]\nCenter = [X = ${this.getPixelsCenterX()}px, Z = ${this.getPixelsCenterZ()}px]`;
+		}]\n${i18next.t('center')} = [X = ${this.getPixelsCenterX()}px, Z = ${this.getPixelsCenterZ()}px]`;
 	}
 
 	toVector3(center: boolean = true): THREE.Vector3 {

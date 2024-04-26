@@ -57,6 +57,8 @@ class IO {
 	static async getSystemInformation() {
 		return (await this.invoke('get-system-information')) as Promise<{
 			documentsFolder: string;
+			gamesFolder: string;
+			userLocale: string;
 		}>;
 	}
 

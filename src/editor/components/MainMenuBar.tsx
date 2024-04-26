@@ -82,7 +82,7 @@ function MainMenuBar() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
 	const [hamburgerStates, setHamburgerStates] = useState<number[]>([]);
-	const [isMaximized, setIsMaximized] = useState(false);
+	const [isMaximized, setIsMaximized] = useState(true);
 
 	const importFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -389,16 +389,16 @@ function MainMenuBar() {
 
 	const items: MenuItemType[] = [
 		{
-			title: 'File',
+			title: t('file'),
 			children: [
 				{
-					title: 'New Project...',
+					title: `${t('new.project')}...`,
 					icon: <AiOutlineFileAdd />,
 					onClick: handleNewProject,
 					shortcut: [SPECIAL_KEY.CTRL, SPECIAL_KEY.ALT, KEY.N],
 				},
 				{
-					title: 'Open existing project...',
+					title: `${t('open.project')}...`,
 					icon: <AiOutlineFolderOpen />,
 					onClick: handleOpenDialogProject,
 					children: projects.map((project) => ({
@@ -409,7 +409,7 @@ function MainMenuBar() {
 				{
 					title: (
 						<>
-							{Constants.IS_DESKTOP ? 'Import web project...' : 'Import project...'}
+							{`${Constants.IS_DESKTOP ? t('import.web.project') : t('import.project')}...`}
 							<input
 								ref={importFileInputRef}
 								type='file'
@@ -424,94 +424,94 @@ function MainMenuBar() {
 					shortcut: [SPECIAL_KEY.CTRL, KEY.I],
 				},
 				{
-					title: Constants.IS_DESKTOP ? 'Export project for web...' : 'Export project',
+					title: `${Constants.IS_DESKTOP ? t('export.web.project') : t('export.project')}...`,
 					icon: <BiExport />,
 					disabled: !isProjectOpened,
 					onClick: handleExport,
 					shortcut: [SPECIAL_KEY.CTRL, KEY.E],
 				},
 				{
-					title: 'Save',
+					title: t('save'),
 					icon: <BiSave />,
 					disabled: !canSave,
 					onClick: handleSave,
 					shortcut: [SPECIAL_KEY.CTRL, KEY.S],
 				},
 				{
-					title: 'Save all',
+					title: t('save.all'),
 					icon: <LuSaveAll />,
 					disabled: !canSaveAll,
 					onClick: handleSaveAll,
 					shortcut: [SPECIAL_KEY.CTRL, SPECIAL_KEY.SHIFT, KEY.S],
 				},
 				{
-					title: 'Close',
+					title: t('close'),
 					icon: <MdClose />,
 					disabled: !isProjectOpened,
 					onClick: handleCloseProject,
 					shortcut: [SPECIAL_KEY.CTRL, KEY.Q],
 				},
 				{
-					title: 'Clear all cache',
+					title: t('clear.all.cache'),
 					icon: <AiOutlineClear />,
 					onClick: handleClearAllCache,
 				},
 			],
 		},
 		{
-			title: 'Edition',
+			title: t('edition'),
 			children: [
 				{
-					title: 'Undo',
+					title: t('undo'),
 					icon: <IoIosUndo />,
 					disabled: !canUndo,
 					onClick: handleUndo,
 					shortcut: [SPECIAL_KEY.CTRL, KEY.Z],
 				},
 				{
-					title: 'Redo',
+					title: t('redo'),
 					icon: <IoIosRedo />,
 					disabled: !canRedo,
 					onClick: handleRedo,
 					shortcut: [SPECIAL_KEY.CTRL, SPECIAL_KEY.SHIFT, KEY.Z],
 				},
 				{
-					title: 'Move cursor square up',
+					title: t('move.cursor.square.up'),
 					icon: <FaArrowUp />,
 					disabled: !isInMap,
 					onClick: handleMoveCursorSquareUp,
 					shortcut: [SPECIAL_KEY.CTRL, KEY.UP],
 				},
 				{
-					title: 'Move cursor pixel up',
+					title: t('move.cursor.pixel.up'),
 					icon: <AiOutlineArrowUp />,
 					disabled: !isInMap,
 					onClick: handleMoveCursorPixelUp,
 					shortcut: [SPECIAL_KEY.CTRL, SPECIAL_KEY.SHIFT, KEY.UP],
 				},
 				{
-					title: 'Move cursor square down',
+					title: t('move.cursor.square.down'),
 					icon: <FaArrowDown />,
 					disabled: !isInMap,
 					onClick: handleMoveCursorSquareDown,
 					shortcut: [SPECIAL_KEY.CTRL, KEY.DOWN],
 				},
 				{
-					title: 'Move cursor pixel down',
+					title: t('move.cursor.pixel.down'),
 					icon: <AiOutlineArrowDown />,
 					disabled: !isInMap,
 					onClick: handleMoveCursorPixelDown,
 					shortcut: [SPECIAL_KEY.CTRL, SPECIAL_KEY.SHIFT, KEY.DOWN],
 				},
 				{
-					title: 'Zoom in',
+					title: t('zoom.in'),
 					icon: <AiOutlineZoomIn />,
 					disabled: !isInMap,
 					onClick: handleZoomIn,
 					shortcut: [SPECIAL_KEY.SHIFT, KEY.UP],
 				},
 				{
-					title: 'Zoom out',
+					title: t('zoom.out'),
 					icon: <AiOutlineZoomOut />,
 					disabled: !isInMap,
 					onClick: handleZoomOut,
@@ -520,11 +520,11 @@ function MainMenuBar() {
 			],
 		},
 		{
-			title: 'Management',
+			title: t('management'),
 			disabled: true,
 		},
 		{
-			title: 'Special elements',
+			title: t('special.elements'),
 			disabled: true,
 		},
 		{
@@ -537,14 +537,14 @@ function MainMenuBar() {
 			],
 		},
 		{
-			title: 'Display',
+			title: t('display'),
 			disabled: true,
 		},
 		{
-			title: 'Test',
+			title: t('test'),
 			children: [
 				{
-					title: 'Play',
+					title: t('play'),
 					icon: <BsPlay />,
 					disabled: !isProjectOpened,
 					onClick: handlePlay,
@@ -553,7 +553,7 @@ function MainMenuBar() {
 			],
 		},
 		{
-			title: 'Help',
+			title: t('help'),
 			disabled: true,
 		},
 	];
@@ -686,38 +686,32 @@ function MainMenuBar() {
 				setNeedOpen={setNeedDialogChangeLanguageOpen}
 			/>
 			<Dialog
-				title='Warning'
+				title={t('warning')}
 				isOpen={isDialogWarningProjectVersionOpen}
 				footer={<FooterOK onOK={handleCloseWarningProjectVersionOpen} />}
 				onClose={handleCloseWarningProjectVersionOpen}
 			>
-				<p>
-					This project version is from a previous version. Retro versions compatibility is not handled yet for
-					this proto web version. Please create a new project.
-				</p>
+				<p>{t('warning.project.version')}</p>
 			</Dialog>
 			<Dialog
-				title='Warning'
+				title={t('warning')}
 				isOpen={isDialogWarningImportOpen}
 				footer={<FooterNoYes onNo={handleRejectImport} onYes={handleAcceptImport} />}
 				onClose={handleRejectImport}
 			>
-				<p>This project name already exists. Would you like to replace it?</p>
+				<p>{t('warning.project.exist.overwrite')}</p>
 			</Dialog>
 			<Dialog
-				title='Warning'
+				title={t('warning')}
 				isOpen={isDialogWarningClearAllCacheOpen}
 				footer={<FooterNoYes onNo={handleRejectClearAllCache} onYes={handleAcceptClearAllCache} />}
 				onClose={handleRejectClearAllCache}
 			>
 				<Loader isLoading={isLoading} />
-				<div className='warning text-center'>
-					This action will delete all your projects, and every settings you changed. Are you sure that you
-					want to continue?
-				</div>
+				<div className='warning text-center'>{t('warning.clearing.cache')}</div>
 			</Dialog>
 			<Dialog
-				title='Warning'
+				title={t('warning')}
 				isOpen={isDialogWarningSavePlayOpen}
 				footer={
 					<FooterCancelNoYes
@@ -729,15 +723,15 @@ function MainMenuBar() {
 				onClose={handleRejectSavePlay}
 			>
 				<Loader isLoading={isLoading} />
-				<div className='text-center'>You have some maps that are not saved. Do you want to save all?</div>
+				<div className='text-center'>{t('you.have.maps.not.saved')}</div>
 			</Dialog>
 			<Dialog
-				title='Warning'
+				title={t('warning')}
 				isOpen={isDialogWarningProjectLocationExist}
 				footer={<FooterOK onOK={handleCloseWarningProjectLocationExist} />}
 				onClose={handleCloseWarningProjectLocationExist}
 			>
-				<div className='text-center'>The path location doesn't exist.</div>
+				<div className='text-center'>{t('path.location.doesnt.exists')}.</div>
 			</Dialog>
 		</>
 	);

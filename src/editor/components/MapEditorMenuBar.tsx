@@ -51,8 +51,11 @@ import {
 	MOBILE_ACTION,
 } from '../common';
 import { Project } from '../core';
+import { useTranslation } from 'react-i18next';
 
 function MapEditorMenuBar() {
+	const { t } = useTranslation();
+
 	const [selectionIndex, setSelectionIndex] = useState(MENU_INDEX_MAP_EDITOR.LANDS);
 	const [, setLandsIndex] = useState(MENU_INDEX_LANDS_MAP_EDITOR.FLOOR);
 	const [, setSpritesIndex] = useState(MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_FACE);
@@ -388,47 +391,47 @@ function MapEditorMenuBar() {
 				<Menu horizontal isActivable activeIndex={selectionIndex} setActiveIndex={setSelectionIndex}>
 					<MenuSub active icon={getLandsIcon()} onClick={handleLands}>
 						<MenuItem icon={<FloorIcon />} onClick={handleFloors}>
-							Floors
+							{t('floor')}
 						</MenuItem>
 						<MenuItem icon={<MdAutoAwesomeMosaic />} onClick={handleAutotiles}>
-							Autotiles
+							{t('autotile')}
 						</MenuItem>
 					</MenuSub>
 					<MenuSub icon={getSpritesIcon()} onClick={handleSprites}>
 						<MenuItem icon={<FaceSpriteIcon />} onClick={handleFaceSprites}>
-							Face sprites
+							{t('face.sprite')}
 						</MenuItem>
 						<MenuItem icon={<FixSpriteIcon />} onClick={handleFixSprites}>
-							Fix sprites
+							{t('fix.sprite')}
 						</MenuItem>
 						<MenuItem icon={<DoubleSpriteIcon />} onClick={handleDoubleSprites}>
-							Double sprites
+							{t('double.sprite')}
 						</MenuItem>
 						<MenuItem icon={<QuadraSpriteIcon />} onClick={handleQuadraSprites}>
-							Quadra sprites
+							{t('quadra.sprite')}
 						</MenuItem>
 						<MenuItem icon={<GiBrickWall />} onClick={handleWallSprites}>
-							Walls
+							{t('wall')}
 						</MenuItem>
 					</MenuSub>
 					<MenuSub icon={<LuMountain />} onClick={handleMountains}>
 						<MenuItem icon={<FaMountain />} onClick={handleMountains}>
-							Mountains
+							{t('mountain')}
 						</MenuItem>
 					</MenuSub>
 					<MenuSub icon={<BiCube />} onClick={handleObjects3D}>
 						<MenuItem icon={<BiCube />} onClick={handleObjects3D}>
-							3D objects
+							{t('threed.object')}
 						</MenuItem>
 					</MenuSub>
 					<MenuSub icon={<GiEmptyChessboard />} disabled>
 						<MenuItem icon={<GiEmptyChessboard />} onClick={handleFloors}>
-							Objects - 0001: Empty
+							{t('object')} - 0001: {t('empty')}
 						</MenuItem>
 					</MenuSub>
 					<MenuSub icon={<FaFlagCheckered />} onClick={handleStartPosition}>
 						<MenuItem icon={<FaFlagCheckered />} onClick={handleStartPosition}>
-							Start position
+							{t('start.position')}
 						</MenuItem>
 					</MenuSub>
 				</Menu>

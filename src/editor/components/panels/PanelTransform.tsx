@@ -19,12 +19,15 @@ import Button from '../Button';
 import { Position, Project } from '../../core';
 import { Scene } from '../../Editor';
 import DialogTransformDefaultValues from '../dialogs/DialogTransformDefaultValues';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
 	kind: ACTION_KIND;
 };
 
 function PanelTransform({ kind }: Props) {
+	const { t } = useTranslation();
+
 	const [needDefaultDialogOpen, setNeedDefaultDialogOpen] = useState(false);
 
 	const selectedPosition = useSelector((state: RootState) => state.mapEditor.selectedPosition);
@@ -38,17 +41,17 @@ function PanelTransform({ kind }: Props) {
 	let kindText = '';
 	switch (kind) {
 		case ACTION_KIND.TRANSLATE:
-			kindText = 'Translate';
+			kindText = t('translation');
 			break;
 		case ACTION_KIND.ROTATE:
-			kindText = 'Rotate';
+			kindText = t('rotation');
 			break;
 		case ACTION_KIND.SCALE:
-			kindText = 'Scale';
+			kindText = t('scaling');
 			break;
 	}
 
-	const title = `${kindText} options`;
+	const title = t('transform.options', { transform: kindText.toLowerCase() });
 
 	const isDecimal = kind !== ACTION_KIND.TRANSLATE;
 
@@ -61,7 +64,7 @@ function PanelTransform({ kind }: Props) {
 	let units = '';
 	switch (kind) {
 		case ACTION_KIND.TRANSLATE:
-			units = currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE ? 'square(s)' : 'pixel(s)';
+			units = currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE ? t('square.s') : t('pixel.s');
 			break;
 		case ACTION_KIND.ROTATE:
 			units = '°';
@@ -270,12 +273,12 @@ function PanelTransform({ kind }: Props) {
 			<Groupbox title={title}>
 				<div className='flex flex-column gap-medium'>
 					{canEditDefaultValues && (
-						<Button
-							onClick={handleClickDefaultValues}
-						>{`Set default ${kindText.toLowerCase()} for new elements...`}</Button>
+						<Button onClick={handleClickDefaultValues}>{`${t('edit.default.transform.new.elements', {
+							transform: kindText.toLowerCase(),
+						})}...`}</Button>
 					)}
 					{isSelected && (
-						<Groupbox title='Current values'>
+						<Groupbox title={t('current.values')}>
 							<div className='flex flex-column gap-small'>
 								<div className='flex gap-medium'>
 									X:
@@ -319,7 +322,7 @@ function PanelTransform({ kind }: Props) {
 							<div>{getPositionText()}</div>
 						</>
 					) : (
-						<div className='text-center text-small-detail'>No map element selected.</div>
+						<div className='text-center text-small-detail'>{t('no.map.element.selected')}.</div>
 					)}
 				</div>
 			</Groupbox>
