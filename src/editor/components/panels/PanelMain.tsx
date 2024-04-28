@@ -43,8 +43,8 @@ function PanelMain() {
 			<Loader large isLoading={loading} />
 			{currentProject === null ? <PanelNoProject /> : <PanelProject />}
 			{needsReloadPageUpdate && (
-				<Dialog title={t('warning.reload.page.update.title')} isOpen>
-					<p>{`${t('warning.reload.page.update')}.`}</p>
+				<Dialog title={t('warning.refresh.page.update.title')} isOpen>
+					<p>{`${t('warning.refresh.page.update')}.`}</p>
 				</Dialog>
 			)}
 			{needsReloadPageClearCache && (

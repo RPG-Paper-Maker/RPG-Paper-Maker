@@ -145,19 +145,6 @@ class MapPortion {
 				const yPixels = Position3D.getPercentOfPixels(
 					Project.current!.settings.mapEditorCurrentMountainHeightPixels
 				);
-				let floorPosition = position.clone();
-				floorPosition.addY(y, yPixels);
-				this.updateMapElement(
-					floorPosition,
-					MapElement.Floor.create(
-						new Rectangle(
-							Project.current!.settings.mapEditorCurrentTilesetFloorTexture.x,
-							Project.current!.settings.mapEditorCurrentTilesetFloorTexture.y
-						)
-					),
-					ELEMENT_MAP_KIND.FLOOR,
-					preview
-				);
 				const newMountain = MapElement.Mountain.create(
 					Project.current!.settings.mapEditorCurrentMountainID,
 					Project.current!.settings.mapEditorCurrentMountainWidthSquares,
@@ -170,10 +157,25 @@ class MapPortion {
 					ELEMENT_MAP_KIND.MOUNTAIN
 				) as MapElement.Mountain | null;
 				if (previousMountain && !previousMountain.equals(newMountain)) {
-					floorPosition = position.clone();
-					floorPosition.addY(previousMountain.heightSquares, previousMountain.heightPixels);
-					this.updateMapElement(floorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
+					const previousFloorPosition = position.clone();
+					previousFloorPosition.addY(previousMountain.heightSquares, previousMountain.heightPixels);
+					if (previousFloorPosition.y !== y || previousFloorPosition.yPixels !== yPixels) {
+						this.updateMapElement(previousFloorPosition, null, ELEMENT_MAP_KIND.FLOOR, preview);
+					}
 				}
+				const floorPosition = position.clone();
+				floorPosition.addY(y, yPixels);
+				this.updateMapElement(
+					floorPosition,
+					MapElement.Floor.create(
+						new Rectangle(
+							Project.current!.settings.mapEditorCurrentTilesetFloorTexture.x,
+							Project.current!.settings.mapEditorCurrentTilesetFloorTexture.y
+						)
+					),
+					ELEMENT_MAP_KIND.FLOOR,
+					preview
+				);
 				this.updateMapElement(position, newMountain, Scene.Map.currentSelectedMapElementKind, preview);
 				break;
 			}
