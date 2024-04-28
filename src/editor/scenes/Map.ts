@@ -803,19 +803,42 @@ class Map extends Base {
 			this.selectedMesh.scale.setZ(Math.max(1, this.selectedMesh.scale.z - (this.selectedMesh.scale.z % 1)));
 		}
 		if (this.selectedMesh.position.x < 0) {
-			this.selectedMesh.position.setX(0);
-		} else if (this.selectedMesh.position.x > (this.modelMap.width - 1) * Project.SQUARE_SIZE) {
-			this.selectedMesh.position.setX((this.modelMap.width - 1) * Project.SQUARE_SIZE);
+			this.selectedMesh.position.setX(
+				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
+					? Project.SQUARE_SIZE / 2
+					: 0
+			);
+		} else if (Math.floor(this.selectedMesh.position.x / Project.SQUARE_SIZE) > this.modelMap.width - 1) {
+			this.selectedMesh.position.setX(
+				this.modelMap.width * Project.SQUARE_SIZE -
+					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
+						? Project.SQUARE_SIZE / 2
+						: 1)
+			);
 		}
 		if (this.selectedMesh.position.y < this.modelMap.depth * Project.SQUARE_SIZE) {
 			this.selectedMesh.position.setY(this.modelMap.depth * Project.SQUARE_SIZE);
-		} else if (this.selectedMesh.position.y > (this.modelMap.height - 1) * Project.SQUARE_SIZE) {
-			this.selectedMesh.position.setY((this.modelMap.height - 1) * Project.SQUARE_SIZE);
+		} else if (Math.floor(this.selectedMesh.position.y / Project.SQUARE_SIZE) > this.modelMap.height - 1) {
+			this.selectedMesh.position.setY(
+				(this.modelMap.height - 1) * Project.SQUARE_SIZE +
+					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
+						? 0
+						: Project.SQUARE_SIZE - 1)
+			);
 		}
 		if (this.selectedMesh.position.z < 0) {
-			this.selectedMesh.position.setZ(0);
-		} else if (this.selectedMesh.position.z > (this.modelMap.length - 1) * Project.SQUARE_SIZE) {
-			this.selectedMesh.position.setZ((this.modelMap.length - 1) * Project.SQUARE_SIZE);
+			this.selectedMesh.position.setZ(
+				Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
+					? Project.SQUARE_SIZE / 2
+					: 0
+			);
+		} else if (Math.floor(this.selectedMesh.position.z / Project.SQUARE_SIZE) > this.modelMap.length - 1) {
+			this.selectedMesh.position.setZ(
+				this.modelMap.length * Project.SQUARE_SIZE -
+					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
+						? Project.SQUARE_SIZE / 2
+						: 1)
+			);
 		}
 		if (this.transformControls.axis === null || this.transformControls.axis.includes('X')) {
 			this.selectedMesh.scale.setX(this.selectedMesh.scale.x <= 0 ? 0.001 : this.selectedMesh.scale.x);
@@ -1522,17 +1545,11 @@ class Map extends Base {
 				mapPortion.updateFaceSprites(angle);
 			}
 		});
-		if (this.selectedElement?.kind === ELEMENT_MAP_KIND.SPRITE_FACE) {
-			(this.selectedMesh.geometry as CustomGeometryFace).rotate(
-				angle,
-				MapElement.Base.Y_AXIS,
-				this.selectedMesh.scale
-			);
-			(this.hoveredMesh.geometry as CustomGeometryFace).rotate(
-				angle,
-				MapElement.Base.Y_AXIS,
-				this.hoveredMesh.scale
-			);
+		if (this.selectedMesh.geometry instanceof CustomGeometryFace) {
+			this.selectedMesh.geometry.rotate(angle, MapElement.Base.Y_AXIS, this.selectedMesh.scale);
+		}
+		if (this.hoveredMesh.geometry instanceof CustomGeometryFace) {
+			this.hoveredMesh.geometry.rotate(angle, MapElement.Base.Y_AXIS, this.hoveredMesh.scale);
 		}
 
 		// Update autotiles animated
