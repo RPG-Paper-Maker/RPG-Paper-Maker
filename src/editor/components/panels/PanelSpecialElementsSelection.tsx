@@ -30,8 +30,8 @@ type Props = {
 	kind: PICTURE_KIND;
 };
 
-const DISPLAY_INCREMENT = 30;
 const ELEMENT_HEIGHT = 30;
+const DISPLAY_INCREMENT = window.innerHeight / ELEMENT_HEIGHT;
 
 const getCanvasID = (id: number) => `canvas-${id}`;
 
@@ -351,7 +351,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	});
 
 	return (
-		<div ref={contentRef} id='list-previewer' className={'panel-special-elements '}>
+		<div ref={contentRef} id='list-previewer' className={'panel-special-elements'}>
 			{listElements}
 		</div>
 	);
