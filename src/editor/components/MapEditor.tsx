@@ -23,9 +23,13 @@ import {
 	triggerTreeMap,
 } from '../store';
 import Loader from './Loader';
-import { ACTION_KIND } from '../common';
+import { ACTION_KIND, KEY, SPECIAL_KEY } from '../common';
+import ContextMenu from './ContextMenu';
+import { useTranslation } from 'react-i18next';
 
 function MapEditor() {
+	const { t } = useTranslation();
+
 	const [firstLoading, setFirstLoading] = useState(false);
 
 	const currentMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
@@ -178,14 +182,39 @@ function MapEditor() {
 		resize();
 	});
 
+	const getContextMenuItems = () => [
+		{
+			title: `${t('new')}...`,
+		},
+		{
+			title: `${t('edit')}...`,
+			disabled: true,
+		},
+		{
+			title: t('copy'),
+			shortcut: [SPECIAL_KEY.CTRL, KEY.C],
+		},
+		{
+			title: t('paste'),
+
+			shortcut: [SPECIAL_KEY.CTRL, KEY.V],
+		},
+		{
+			title: t('delete'),
+			shortcut: [KEY.DELETE],
+		},
+	];
+
 	return (
 		<>
 			<Loader isLoading={firstLoading} />
-			<div className={`map-editor ${cursorClass()}`}>
-				<div ref={refCanvas} id='canvas-map-editor' className='fill-space' />
-				<canvas ref={refCanvasHUD} id='canvas-hud' />
-				<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px' />
-			</div>
+			<ContextMenu items={getContextMenuItems()}>
+				<div className={`map-editor ${cursorClass()}`}>
+					<div ref={refCanvas} id='canvas-map-editor' className='fill-space' />
+					<canvas ref={refCanvasHUD} id='canvas-hud' />
+					<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px' />
+				</div>
+			</ContextMenu>
 		</>
 	);
 }

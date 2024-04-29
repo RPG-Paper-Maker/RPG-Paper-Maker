@@ -303,6 +303,7 @@ function TreeMaps({
 						title: t('delete'),
 						onClick: handleDeleteFolder,
 						disabled: selectedNode.content.id === -1,
+						shortcut: [KEY.DELETE],
 					},
 				];
 			} else {

@@ -57,6 +57,14 @@ class Cursor {
 		}
 	}
 
+	addToScene() {
+		Scene.Map.current!.scene.add(this.mesh);
+	}
+
+	removeFromScene() {
+		Scene.Map.current!.scene.remove(this.mesh);
+	}
+
 	onKeyDownImmediate() {
 		if (this.frameMove.update()) {
 			const angle = Scene.Map.current!.camera.horizontalAngle;

@@ -84,6 +84,7 @@ function PanelTextures({ visible }: Props) {
 					);
 				case ELEMENT_MAP_KIND.OBJECT3D:
 					return <PanelSpecialElementsSelection key={currentMapElementKind} kind={PICTURE_KIND.OBJECTS_3D} />;
+				case ELEMENT_MAP_KIND.OBJECT:
 				case ELEMENT_MAP_KIND.START_POSITION:
 					return null;
 				default:

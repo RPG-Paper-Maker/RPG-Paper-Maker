@@ -59,6 +59,7 @@ function MapEditorMenuBar() {
 	const [selectionIndex, setSelectionIndex] = useState(MENU_INDEX_MAP_EDITOR.LANDS);
 	const [, setLandsIndex] = useState(MENU_INDEX_LANDS_MAP_EDITOR.FLOOR);
 	const [, setSpritesIndex] = useState(MENU_INDEX_SPRITES_MAP_EDITOR.SPRITE_FACE);
+	const [, setObjectsIndex] = useState(0);
 	const [mobileIndex, setMobileIndex] = useState(MOBILE_ACTION.PLUS);
 	const [elementPositionIndex, setElementPositionIndex] = useState(ELEMENT_POSITION_KIND.SQUARE);
 	const [actionIndex, setActionIndex] = useState(ACTION_KIND.PENCIL);
@@ -224,6 +225,25 @@ function MapEditorMenuBar() {
 		await Project.current!.settings.save();
 	};
 
+	const handleObjects = async () => {
+		switch (Project.current!.settings.mapEditorObjectsMenuIndex) {
+			case 0:
+				await handleObjectsDefault();
+				break;
+		}
+	};
+
+	const handleGenericObjects = async (kind: ELEMENT_MAP_KIND, menuIndex: number) => {
+		handleGeneric(kind, MENU_INDEX_MAP_EDITOR.OBJECTS);
+		Project.current!.settings.mapEditorObjectsMenuIndex = menuIndex;
+		await Project.current!.settings.save();
+		setObjectsIndex(Project.current!.settings.mapEditorObjectsMenuIndex);
+	};
+
+	const handleObjectsDefault = async () => {
+		await handleGenericObjects(ELEMENT_MAP_KIND.OBJECT, 0);
+	};
+
 	const handleStartPosition = async () => {
 		handleGeneric(ELEMENT_MAP_KIND.START_POSITION, MENU_INDEX_MAP_EDITOR.START_POSITION);
 		await Project.current!.settings.save();
@@ -325,6 +345,7 @@ function MapEditorMenuBar() {
 		if (!openLoading) {
 			setLandsIndex(Project.current!.settings.mapEditorLandsMenuIndex);
 			setSpritesIndex(Project.current!.settings.mapEditorSpritesMenuIndex);
+			setObjectsIndex(Project.current!.settings.mapEditorObjectsMenuIndex);
 			const menuIndex = Project.current!.settings.mapEditorMenuIndex;
 			setSelectionIndex(menuIndex);
 			const actionIndexBefore = Project.current!.settings.mapEditorCurrentActionIndex;
@@ -341,6 +362,9 @@ function MapEditorMenuBar() {
 				case MENU_INDEX_MAP_EDITOR.OBJECTS3D:
 					handleObjects3D().catch(console.error);
 					break;
+				case MENU_INDEX_MAP_EDITOR.OBJECTS:
+					handleObjects().catch(console.error);
+					break;
 				case MENU_INDEX_MAP_EDITOR.START_POSITION:
 					handleStartPosition().catch(console.error);
 					break;
@@ -356,6 +380,16 @@ function MapEditorMenuBar() {
 		}
 		// eslint-disable-next-line
 	}, [openLoading]);
+
+	useEffect(() => {
+		if (Scene.Map.current) {
+			if (selectionIndex === MENU_INDEX_MAP_EDITOR.OBJECTS) {
+				Scene.Map.current!.cursorObject.addToScene();
+			} else {
+				Scene.Map.current!.cursorObject.removeFromScene();
+			}
+		}
+	}, [selectionIndex]);
 
 	const getLandsIcon = () => {
 		switch (Project.current!.settings.mapEditorLandsMenuIndex) {
@@ -424,9 +458,9 @@ function MapEditorMenuBar() {
 							{t('threed.object')}
 						</MenuItem>
 					</MenuSub>
-					<MenuSub icon={<GiEmptyChessboard />} disabled>
-						<MenuItem icon={<GiEmptyChessboard />} onClick={handleFloors}>
-							{t('object')} - 0001: {t('empty')}
+					<MenuSub icon={<GiEmptyChessboard />} onClick={handleObjects}>
+						<MenuItem icon={<GiEmptyChessboard />} onClick={handleObjectsDefault}>
+							{t('object')}: {t('default')}
 						</MenuItem>
 					</MenuSub>
 					<MenuSub icon={<FaFlagCheckered />} onClick={handleStartPosition}>

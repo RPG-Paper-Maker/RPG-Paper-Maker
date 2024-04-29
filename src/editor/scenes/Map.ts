@@ -61,6 +61,8 @@ class Map extends Base {
 	public static ctxRendering: CanvasRenderingContext2D | null = null;
 	public static animationFrameID: number;
 	public static materialCursor: THREE.MeshPhongMaterial;
+	public static materialObjectSquareCursor: THREE.MeshPhongMaterial;
+	public static materialObjectSquare: THREE.MeshPhongMaterial;
 	public static pictureTilesetCursor: HTMLImageElement;
 	public static pictureLayersOnCursor: HTMLImageElement;
 	public static materialStartPosition: THREE.MeshPhongMaterial;
@@ -77,6 +79,7 @@ class Map extends Base {
 	public grid = new Grid();
 	public cursor: Cursor;
 	public cursorStartPosition!: Cursor;
+	public cursorObject!: Cursor;
 	public cursorWall = new CursorWall();
 	public meshPlane: THREE.Object3D | null = null;
 	public sunLight!: THREE.DirectionalLight;
@@ -129,6 +132,9 @@ class Map extends Base {
 		this.id = tag.id;
 		this.tag = tag;
 		this.cursor = new Cursor(tag.cursorPosition || new Position());
+		this.cursorObject = new Cursor(
+			new Position(0, tag.cursorPosition?.y ?? 0, tag.cursorPosition?.yPixels ?? 0, 0)
+		);
 	}
 
 	static isAdding(): boolean {
@@ -216,6 +222,10 @@ class Map extends Base {
 
 		// Cursors
 		this.cursor.initialize(Scene.Map.materialCursor);
+		this.cursorObject.initialize(Scene.Map.materialObjectSquareCursor, 1, false);
+		if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+			this.cursorObject.addToScene();
+		}
 		this.cursorWall.initialize();
 
 		// Light
@@ -541,37 +551,51 @@ class Map extends Base {
 			Scene.Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
 			Scene.Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_QUADRA;
 		const allowBorders = Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL || spriteLayer;
-		if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
-			this.updateWallFromCursor(true, preview, removePreview);
-		} else {
-			if (!preview) {
-				const positions = spriteLayer ? [position] : Mathf.traceLine(this.lastPosition, position);
-				for (const p of positions) {
-					this.getMapPortionByPosition(p)?.add(p, preview, removePreview, allowBorders, updateAutotiles);
+		switch (Scene.Map.currentSelectedMapElementKind) {
+			case ELEMENT_MAP_KIND.SPRITE_WALL:
+				this.updateWallFromCursor(true, preview, removePreview);
+				break;
+			case ELEMENT_MAP_KIND.OBJECT:
+				this.updateObjectCursor(preview, position);
+				break;
+			default: {
+				if (!preview) {
+					const positions = spriteLayer ? [position] : Mathf.traceLine(this.lastPosition, position);
+					for (const p of positions) {
+						this.getMapPortionByPosition(p)?.add(p, preview, removePreview, allowBorders, updateAutotiles);
+					}
+				} else {
+					this.getMapPortionByPosition(position)?.add(
+						position,
+						preview,
+						removePreview,
+						allowBorders,
+						updateAutotiles
+					);
 				}
-			} else {
-				this.getMapPortionByPosition(position)?.add(
-					position,
-					preview,
-					removePreview,
-					allowBorders,
-					updateAutotiles
-				);
+				break;
 			}
 		}
 	}
 
 	remove(position: Position, preview = false, removePreview = true, updateAutotiles = true) {
-		if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
-			this.updateWallFromCursor(false, preview, removePreview);
-		} else {
-			if (!preview) {
-				const positions = Mathf.traceLine(this.lastPosition, position);
-				for (const p of positions) {
-					this.getMapPortionByPosition(p)?.remove(p, preview, removePreview, updateAutotiles);
+		switch (Scene.Map.currentSelectedMapElementKind) {
+			case ELEMENT_MAP_KIND.SPRITE_WALL:
+				this.updateWallFromCursor(false, preview, removePreview);
+				break;
+			case ELEMENT_MAP_KIND.OBJECT:
+				this.updateObjectCursor(preview, position);
+				break;
+			default: {
+				if (!preview) {
+					const positions = Mathf.traceLine(this.lastPosition, position);
+					for (const p of positions) {
+						this.getMapPortionByPosition(p)?.remove(p, preview, removePreview, updateAutotiles);
+					}
+				} else {
+					this.getMapPortionByPosition(position)?.remove(position, preview, removePreview, updateAutotiles);
 				}
-			} else {
-				this.getMapPortionByPosition(position)?.remove(position, preview, removePreview, updateAutotiles);
+				break;
 			}
 		}
 	}
@@ -597,6 +621,13 @@ class Map extends Base {
 		}
 		for (const position of positions) {
 			MapElement.SpriteWall.updateAround(position, !preview);
+		}
+	}
+
+	updateObjectCursor(preview: boolean, position: Position) {
+		if (!preview && position.isInMap(this.modelMap)) {
+			this.cursorObject.position.setCoords(position.x, position.y, position.yPixels, position.z);
+			this.cursorObject.updateMeshPosition();
 		}
 	}
 

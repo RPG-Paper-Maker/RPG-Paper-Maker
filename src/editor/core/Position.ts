@@ -136,7 +136,7 @@ class Position extends Position3D {
 		);
 	}
 
-	applyCoords(x: number, y: number, yPixels: number, z: number): Position {
+	setCoords(x: number, y: number, yPixels: number, z: number): Position {
 		this.x = x;
 		this.y = y;
 		this.yPixels = yPixels;
