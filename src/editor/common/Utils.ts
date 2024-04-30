@@ -100,6 +100,20 @@ class Utils {
 			.replace(/[^a-zA-Z0-9-]/g, '')
 			.toLowerCase();
 	}
+
+	static getViewport() {
+		const dialogs = document.getElementsByClassName('dialog');
+		return dialogs.length === 0 ? document.body : dialogs[dialogs.length - 1];
+	}
+
+	static getViewportLeft() {
+		return Utils.getViewport().getBoundingClientRect().x;
+	}
+
+	static getViewportTop() {
+		const viewport = Utils.getViewport();
+		return viewport === document.body ? 0 : viewport.getBoundingClientRect().top;
+	}
 }
 
 export { Utils };

@@ -17,23 +17,11 @@ import { Model } from '../Editor';
 import { Utils } from '../common';
 import '../styles/Dropdown.css';
 
-const DROPDOWN_SPACE_ARROW = 10;
-
-const getViewport = () => {
-	const dialogs = document.getElementsByClassName('dialog');
-	return dialogs.length === 0 ? document.body : dialogs[dialogs.length - 1];
-};
-
-const getViewportLeft = () => getViewport().getBoundingClientRect().x;
-
-const getViewportTop = () => {
-	const viewport = getViewport();
-	return viewport === document.body ? 0 : viewport.getBoundingClientRect().top;
-};
+const DROPDOWN_SPACE_ARROW = 30;
 
 const getScrollingTop = (element?: HTMLElement) => {
 	const bounding = element?.getBoundingClientRect();
-	const positionTop = getViewportTop();
+	const positionTop = Utils.getViewportTop();
 
 	return bounding && element ? bounding.top - positionTop + element.offsetHeight : 0;
 };
@@ -100,8 +88,8 @@ function Dropdown({ value, onUpdateValue, options, translateOptions = false }: P
 		const dropdown = dropdownContainerRef.current;
 		if (container && dropdown) {
 			const top = getScrollingTop(container);
-			const left = container.getBoundingClientRect().x - getViewportLeft();
-			const width = container.clientWidth - 1;
+			const left = container.getBoundingClientRect().x - Utils.getViewportLeft();
+			const width = container.clientWidth;
 			dropdown.style.top = `${top}px`;
 			dropdown.style.left = `${left}px`;
 			dropdown.style.width = `${width}px`;
@@ -178,7 +166,7 @@ function Dropdown({ value, onUpdateValue, options, translateOptions = false }: P
 	return (
 		<div className={Utils.getClassName([[isOpen, 'open']], ['dropdown'])} ref={containerRef} onClick={handleClick}>
 			<div className='flex-one flex-center-v gap-small'>
-				<div className='flex-one'>{getCurrentItem()}</div>
+				<div className='flex-one flex-center-v'>{getCurrentItem()}</div>
 				<div className='flex'>
 					<BsChevronDown />
 				</div>

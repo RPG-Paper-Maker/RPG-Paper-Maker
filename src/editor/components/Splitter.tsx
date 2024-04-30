@@ -89,7 +89,7 @@ function Splitter({ children, vertical, defaultLeftSize, className, mobileHideFi
 				className={`splitter-button mobile-hidden ${vertical ? 'vertical' : 'horizontal'}`}
 				onMouseDown={handleMouseDownSplitter}
 			></div>
-			<div className='flex flex-one'>{children[1]}</div>
+			<div className='flex-one'>{children[1]}</div>
 		</div>
 	);
 }

@@ -86,7 +86,7 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>
-			<div className='flex flex-column gap-small'>
+			<div className='flex-column gap-small'>
 				<div className='flex gap-medium'>
 					{t('name')}:
 					<InputText
@@ -98,14 +98,14 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 					ID: {Utils.formatNumberID(id)}
 				</div>
 				<Groupbox title={t('size')}>
-					<div className='flex flex-one gap-medium'>
-						<div className='flex flex-column flex-one gap-small'>
+					<div className='flex-one gap-medium'>
+						<div className='flex-column flex-one gap-small'>
 							{t('length')}:
 							<InputNumber value={length} onChange={setLength} min={1} />
 							{t('height')}:
 							<InputNumber value={height} onChange={setHeight} min={1} />
 						</div>
-						<div className='flex flex-column flex-one gap-small'>
+						<div className='flex-column flex-one gap-small'>
 							{t('width')}:
 							<InputNumber value={width} onChange={setWidth} min={1} />
 							{t('depth')}:

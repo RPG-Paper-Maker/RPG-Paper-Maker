@@ -271,7 +271,7 @@ function PanelTransform({ kind }: Props) {
 	return (
 		<>
 			<Groupbox title={title}>
-				<div className='flex flex-column gap-medium'>
+				<div className='flex-column gap-medium'>
 					{canEditDefaultValues && (
 						<Button onClick={handleClickDefaultValues}>{`${t('edit.default.transform.new.elements', {
 							transform: kindText.toLowerCase(),
@@ -279,7 +279,7 @@ function PanelTransform({ kind }: Props) {
 					)}
 					{isSelected && (
 						<Groupbox title={t('current.values')}>
-							<div className='flex flex-column gap-small'>
+							<div className='flex-column gap-small'>
 								<div className='flex gap-medium'>
 									X:
 									<InputNumber

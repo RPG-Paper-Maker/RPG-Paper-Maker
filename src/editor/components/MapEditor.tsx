@@ -10,7 +10,7 @@
 */
 
 import { useEffect, useRef, useState } from 'react';
-import { Manager, Scene } from '../Editor';
+import { Manager, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import '../styles/MapEditor.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,16 +23,20 @@ import {
 	triggerTreeMap,
 } from '../store';
 import Loader from './Loader';
-import { ACTION_KIND, KEY, SPECIAL_KEY } from '../common';
+import { ACTION_KIND, ELEMENT_MAP_KIND, KEY, SPECIAL_KEY } from '../common';
 import ContextMenu from './ContextMenu';
 import { useTranslation } from 'react-i18next';
+import DialogMapObject from './dialogs/DialogMapObject';
 
 function MapEditor() {
 	const { t } = useTranslation();
 
 	const [firstLoading, setFirstLoading] = useState(false);
+	const [needOpenMapObject, setNeedOpenMapObject] = useState(false);
+	const [currentMapObject, setCurrentMapObject] = useState(new Model.MapObject());
 
 	const currentMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
+	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
 	const needsReloadMap = useSelector((state: RootState) => state.triggers.needsReloadMap);
 	useSelector((state: RootState) => state.triggers.splitting);
@@ -56,7 +60,11 @@ function MapEditor() {
 				name += 'scale';
 				break;
 			case ACTION_KIND.PENCIL:
-				name += 'pencil';
+				name +=
+					currentMapElementKind === ELEMENT_MAP_KIND.OBJECT ||
+					currentMapElementKind === ELEMENT_MAP_KIND.START_POSITION
+						? 'pointer'
+						: 'pencil';
 				break;
 			case ACTION_KIND.RECTANGLE:
 				name += 'rectangle';
@@ -147,6 +155,24 @@ function MapEditor() {
 		}
 	};
 
+	const handleDoubleClick = async () => {
+		if (currentMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+			await handleNewMapObject();
+		}
+	};
+
+	const handleNewMapObject = async () => {
+		const id = 1; // TODO
+		const mapObject = Model.MapObject.create(id, Model.MapObject.generateName(id));
+		setCurrentMapObject(mapObject);
+		setNeedOpenMapObject(true);
+		console.log('ok');
+	};
+
+	const handleAcceptMapObject = async () => {
+		setNeedOpenMapObject(false);
+	};
+
 	useEffect(() => {
 		const canvas = refCanvas.current;
 		const canvasHUD = refCanvasHUD.current;
@@ -182,39 +208,49 @@ function MapEditor() {
 		resize();
 	});
 
-	const getContextMenuItems = () => [
-		{
-			title: `${t('new')}...`,
-		},
-		{
-			title: `${t('edit')}...`,
-			disabled: true,
-		},
-		{
-			title: t('copy'),
-			shortcut: [SPECIAL_KEY.CTRL, KEY.C],
-		},
-		{
-			title: t('paste'),
+	const getContextMenuItems = () =>
+		currentMapElementKind === ELEMENT_MAP_KIND.OBJECT
+			? [
+					{
+						title: `${t('new')}...`,
+						onClick: handleNewMapObject,
+					},
+					{
+						title: `${t('edit')}...`,
+						disabled: true,
+					},
+					{
+						title: t('copy'),
+						shortcut: [SPECIAL_KEY.CTRL, KEY.C],
+					},
+					{
+						title: t('paste'),
 
-			shortcut: [SPECIAL_KEY.CTRL, KEY.V],
-		},
-		{
-			title: t('delete'),
-			shortcut: [KEY.DELETE],
-		},
-	];
+						shortcut: [SPECIAL_KEY.CTRL, KEY.V],
+					},
+					{
+						title: t('delete'),
+						shortcut: [KEY.DELETE],
+					},
+			  ]
+			: [];
 
 	return (
 		<>
 			<Loader isLoading={firstLoading} />
 			<ContextMenu items={getContextMenuItems()}>
-				<div className={`map-editor ${cursorClass()}`}>
+				<div className={`map-editor ${cursorClass()}`} onDoubleClick={handleDoubleClick}>
 					<div ref={refCanvas} id='canvas-map-editor' className='fill-space' />
 					<canvas ref={refCanvasHUD} id='canvas-hud' />
 					<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px' />
 				</div>
 			</ContextMenu>
+			<DialogMapObject
+				needOpen={needOpenMapObject}
+				setNeedOpen={setNeedOpenMapObject}
+				model={currentMapObject}
+				onAccept={handleAcceptMapObject}
+			/>
 		</>
 	);
 }

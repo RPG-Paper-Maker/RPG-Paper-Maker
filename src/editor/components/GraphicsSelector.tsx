@@ -9,9 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-.tree {
-	background-color: var(--darkest-containers-bg-color);
-	width: 100%;
-	border: 1px solid var(--lighter-bg-color);
-	border-radius: 2px;
+import { ReactNode } from 'react';
+import '../styles/GraphicsSelector.css';
+
+function GraphicsSelector() {
+	return <div className='graphics-selector'></div>;
 }
+
+export default GraphicsSelector;

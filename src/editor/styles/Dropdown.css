@@ -2,9 +2,8 @@
 	display: flex;
 	background-color: var(--lighter-bg-color);
 	color: var(--main-color);
-	border: 1px solid var(--main-color);
 	border-radius: 5px;
-	height: 26px;
+	height: 20px;
 	padding: 5px;
 	cursor: pointer;
 	box-sizing: border-box;
@@ -22,8 +21,8 @@
 	max-height: 15em;
 	position: fixed;
 	cursor: pointer;
-	border: 1px solid var(--main-color);
-	border-top: none;
+	box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px, rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
+		rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
 	border-radius: 0 0 5px 5px;
 	overflow: auto;
 }

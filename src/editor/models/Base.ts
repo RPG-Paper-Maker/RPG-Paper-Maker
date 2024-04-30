@@ -14,6 +14,8 @@ import { Serializable } from '../core/Serializable';
 import { BINDING, BindingType, JSONType, Utils } from '../common';
 
 class Base extends Serializable {
+	public static GRAPHICS_OPTIONS = Base.generateOptions(['none', 'fix.sprite', 'face.sprite', 'threed.object']);
+
 	public id!: number;
 	public name!: string;
 
@@ -37,6 +39,10 @@ class Base extends Serializable {
 		const base = new Base();
 		base.applyDefault(additionnalBinding);
 		return base;
+	}
+
+	public static generateOptions(labels: string[]) {
+		return labels.map((label, index) => Base.create(index, label));
 	}
 
 	applyDefault(additionnalBinding: BindingType[]) {

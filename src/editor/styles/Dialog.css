@@ -46,7 +46,7 @@
 	display: flex;
 	align-items: center;
 	background-color: var(--main-bg-color);
-	padding: 5px;
+	padding: 5px 10px 5px 10px;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
@@ -62,6 +62,7 @@
 }
 
 .dialog-content {
+	flex-grow: 1;
 	padding: 20px 20px 10px 20px;
 }
 

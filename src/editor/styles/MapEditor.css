@@ -17,6 +17,10 @@
 	padding: 5px 10px 5px 10px;
 }
 
+.map-editor-bar svg {
+	height: 14px;
+}
+
 .map-editor {
 	flex-grow: 1;
 	flex-basis: 0;
@@ -46,6 +50,10 @@
 
 .map-editor.cursor-pin {
 	cursor: url('../../assets/icons/cursor-pin.svg') 20 20, pointer;
+}
+
+.map-editor.cursor-pointer {
+	cursor: pointer;
 }
 
 #canvas-hud {

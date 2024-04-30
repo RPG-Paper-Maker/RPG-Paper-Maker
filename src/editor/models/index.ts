@@ -3,6 +3,7 @@ export * from './Base';
 export * from './DynamicValue';
 export * from './Localization';
 export * from './Map';
+export * from './MapObject';
 export * from './MapPortion';
 export * from './Mountain';
 export * from './Object3D';

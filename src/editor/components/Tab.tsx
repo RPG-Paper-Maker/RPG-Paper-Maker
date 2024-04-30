@@ -17,9 +17,10 @@ import { ArrayUtils, Utils } from '../common';
 
 type Props = {
 	titles: Model.Base[];
-	setTitles: (titles: Model.Base[]) => void;
+	setTitles?: (titles: Model.Base[]) => void;
 	contents: ReactNode[];
-	setContents: (contents: ReactNode[]) => void;
+	setContents?: (contents: ReactNode[]) => void;
+	defaultIndex?: number;
 	isClosable?: boolean;
 	onCurrentIndexChanged?: (index: number, model: Model.Base, isClick: boolean) => void;
 	forcedCurrentIndex?: number | null;
@@ -31,12 +32,13 @@ function Tab({
 	setTitles,
 	contents,
 	setContents,
+	defaultIndex = 0,
 	isClosable = false,
 	onCurrentIndexChanged,
 	forcedCurrentIndex,
 	setForcedCurrentIndex,
 }: Props) {
-	const [currentIndex, setCurrentIndex] = useState(-1);
+	const [currentIndex, setCurrentIndex] = useState(defaultIndex);
 
 	const handleClickClose = (e: React.MouseEvent<SVGElement, MouseEvent>, title: Model.Base) => {
 		e.stopPropagation();
@@ -44,10 +46,10 @@ function Tab({
 		const index = newTitlesList.findIndex((model) => model.id === title.id);
 		if (index !== -1) {
 			ArrayUtils.removeAt(newTitlesList, index);
-			setTitles(newTitlesList);
+			setTitles?.(newTitlesList);
 			const newContentsList = [...contents];
 			ArrayUtils.removeAt(newContentsList, index);
-			setContents(newContentsList);
+			setContents?.(newContentsList);
 			if (currentIndex >= index) {
 				const newIndex = newTitlesList.length - 1;
 				setCurrentIndex(newIndex);

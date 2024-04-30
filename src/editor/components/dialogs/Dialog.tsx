@@ -21,13 +21,25 @@ type Props = {
 	children: React.ReactNode;
 	title: string;
 	isOpen: boolean;
+	initialWidth?: string;
+	initialHeight?: string;
 	isDisabled?: boolean;
 	isLoading?: boolean;
 	footer?: React.ReactNode;
 	onClose?: () => void;
 };
 
-function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false, footer, onClose }: Props) {
+function Dialog({
+	children,
+	title,
+	isOpen,
+	initialWidth,
+	initialHeight,
+	isDisabled = false,
+	isLoading = false,
+	footer,
+	onClose,
+}: Props) {
 	const [isClickedIn, setIsClickedIn] = useState(false); // Prevent mouse down on div + mouse up out to close
 	const [isDragging, setIsDragging] = useState(false);
 	const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
@@ -124,7 +136,11 @@ function Dialog({ children, title, isOpen, isDisabled = false, isLoading = false
 						className='dialog'
 						onMouseDown={handleMouseDown}
 						onMouseUp={handleMouseUp}
-						style={{ transform: `translate(${isMoved ? '0,0' : '-50%,-50%'})` }}
+						style={{
+							transform: `translate(${isMoved ? '0,0' : '-50%,-50%'})`,
+							width: initialWidth,
+							height: initialHeight,
+						}}
 					>
 						{isDisabled && <div className='dialog-disable' />}
 						<div

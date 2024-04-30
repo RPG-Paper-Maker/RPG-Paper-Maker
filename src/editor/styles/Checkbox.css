@@ -14,7 +14,10 @@
 	align-items: center;
 	cursor: pointer;
 	user-select: none;
+
 	input {
+		cursor: pointer;
 		margin-right: 5px;
+		flex-grow: 0;
 	}
 }

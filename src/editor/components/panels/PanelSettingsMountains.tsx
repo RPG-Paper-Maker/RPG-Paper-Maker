@@ -87,8 +87,8 @@ function PanelSettingsMountains() {
 				<Tips onClose={handleCloseTipGridHeight}>{t('tip.grid.height')}</Tips>
 			)}
 			<Groupbox title='Settings'>
-				<div className='flex flex-column gap-medium'>
-					<div className='flex flex-column gap-small'>
+				<div className='flex-column gap-medium'>
+					<div className='flex-column gap-small'>
 						<label>Border width:</label>
 						<div className='flex gap-small'>
 							<InputNumber
@@ -109,7 +109,7 @@ function PanelSettingsMountains() {
 							pixel(s)
 						</div>
 					</div>
-					<div className='flex flex-column gap-small'>
+					<div className='flex-column gap-small'>
 						<label>Border height:</label>
 						<div className='flex gap-small'>
 							<InputNumber

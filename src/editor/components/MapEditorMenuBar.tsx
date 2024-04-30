@@ -421,7 +421,7 @@ function MapEditorMenuBar() {
 
 	return (
 		<div className='flex flex-wrap'>
-			<div className='flex flex-one'>
+			<div className='flex-one'>
 				<Menu horizontal isActivable activeIndex={selectionIndex} setActiveIndex={setSelectionIndex}>
 					<MenuSub active icon={getLandsIcon()} onClick={handleLands}>
 						<MenuItem icon={<FloorIcon />} onClick={handleFloors}>

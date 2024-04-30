@@ -12,7 +12,8 @@
 .tab {
 	display: flex;
 	flex-direction: column;
-	background-color: var(--darkest-bg-color);
+	flex-grow: 1;
+	background-color: var(--darker-bg-color);
 }
 
 .tab-titles {
@@ -33,7 +34,7 @@
 .tab-item {
 	display: flex;
 	align-items: center;
-	padding: 6px;
+	padding: 5px 10px 5px 10px;
 	gap: 5px;
 	font-size: 12px;
 	background-color: var(--main-bg-color);

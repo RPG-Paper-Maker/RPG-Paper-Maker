@@ -28,6 +28,8 @@ function ContextMenu({ children, items = [] }: Props) {
 	const openContext = (x: number, y: number) => {
 		setIsOpen(true);
 		if (ref.current) {
+			x -= Utils.getViewportLeft();
+			y -= Utils.getViewportTop();
 			ref.current.style.left = `${x}px`;
 			ref.current.style.top = `${y}px`;
 		}
@@ -35,20 +37,21 @@ function ContextMenu({ children, items = [] }: Props) {
 
 	const handleMouseDown = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
 		setIsFocused(true);
-		switch (e.button) {
-			case 0:
-				setTimeout(() => {
-					// Small wait to let selected item time for onClick method to be triggered before hidding
+		setTimeout(() => {
+			// Small wait to let selected item time for onClick method to be triggered before hidding
+			switch (e.button) {
+				case 0:
 					setIsOpen(false);
-				}, 200);
-				break;
-			case 2:
-				openContext(e.pageX, e.pageY);
-				break;
-		}
+					break;
+				case 2:
+					openContext(e.pageX, e.pageY);
+					break;
+			}
+		}, 200);
 	};
 
 	const handleMouseDownOutside = (e: MouseEvent) => {
+		console.log(e.button);
 		if (e.button === 0 && isOpen && ref.current && !ref.current.contains(e.target as Node)) {
 			setIsOpen(false);
 		}
@@ -69,10 +72,13 @@ function ContextMenu({ children, items = [] }: Props) {
 	};
 
 	useEffect(() => {
-		document.addEventListener('mousedown', handleMouseDownOutside);
-		return () => {
-			document.removeEventListener('mousedown', handleMouseDownOutside);
-		};
+		if (isOpen) {
+			console.log('ISOPEN');
+			document.addEventListener('mousedown', handleMouseDownOutside);
+			return () => {
+				document.removeEventListener('mousedown', handleMouseDownOutside);
+			};
+		}
 		// eslint-disable-next-line
 	}, [isOpen]);
 

@@ -11,8 +11,8 @@
 
 button {
 	border: none;
-	padding: 4px 10px 4px 10px;
-	border-radius: 2px;
+	padding: 3px 10px 3px 10px;
+	border-radius: 3px;
 	background-color: var(--lighter-bg-color);
 	color: white;
 	cursor: pointer;
@@ -20,6 +20,8 @@ button {
 	align-items: center;
 	justify-content: center;
 	gap: 5px;
+	font-size: 12px;
+	height: 20px;
 }
 
 button.primary {
@@ -42,7 +44,7 @@ button.square {
 	border-radius: 0;
 }
 
-button:hover {
+button:hover:not(.disabled) {
 	background-color: var(--lightest-bg-color);
 }
 
@@ -50,13 +52,13 @@ button.unactive {
 	opacity: 0.5;
 }
 
-button.primary:hover {
+button.primary:hover:not(.disabled) {
 	background-color: var(--hover-primary-dark-color);
 }
 
 button.big {
 	padding: 15px 35px 15px 35px;
-	font-size: 17px;
+	font-size: 15px;
 }
 
 button.patreon:hover {
@@ -65,4 +67,9 @@ button.patreon:hover {
 
 button.red:hover {
 	background-color: var(--hover-red-color);
+}
+
+button.disabled {
+	opacity: 0.4;
+	cursor: initial;
 }

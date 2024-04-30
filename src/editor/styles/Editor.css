@@ -50,7 +50,7 @@ body {
 	padding: 0;
 	background-color: var(--main-bg-color);
 	color: var(--main-color);
-	font-size: 14px;
+	font-size: 12px;
 	touch-action: none;
 	image-rendering: pixelated;
 	image-rendering: crisp-edges;

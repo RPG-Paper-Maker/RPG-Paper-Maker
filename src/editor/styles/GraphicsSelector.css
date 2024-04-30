@@ -1,0 +1,7 @@
+.graphics-selector {
+	display: flex;
+	flex-grow: 1;
+	background-color: var(--darkest-containers-bg-color);
+	border: 1px solid var(--lighter-bg-color);
+	border-radius: 2px;
+}

@@ -16,6 +16,7 @@ import { BUTTON_TYPE, Utils } from '../common';
 type Props = {
 	children?: ReactNode;
 	buttonType?: BUTTON_TYPE;
+	disabled?: boolean;
 	canHold?: boolean;
 	intervalHold?: number;
 	icon?: ReactNode;
@@ -30,6 +31,7 @@ type Props = {
 function Button({
 	children,
 	buttonType = BUTTON_TYPE.DEFAULT,
+	disabled = false,
 	canHold = false,
 	intervalHold = 0,
 	icon,
@@ -87,6 +89,7 @@ function Button({
 			ref={ref}
 			className={Utils.getClassName(
 				[
+					[disabled, 'disabled'],
 					[!activeState, 'unactive'],
 					[big, 'big'],
 					[backgroundOnHoverOnly, 'backgroundOnHoverOnly'],

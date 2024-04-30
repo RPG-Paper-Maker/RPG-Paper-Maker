@@ -1961,5 +1961,7 @@
 	"current.values": "Valeurs actuelles",
 	"warning.path.doesnt.exist.copy.maps": "{{path}} n'existe pas, vous ne pouvez donc pas copier de cartes potentielles.",
 	"warning.could.not.copy.map.created.empty": "Impossible de copier la carte à {{path}}. Création d'une vide.",
-	"introduction": "Introduction"
+	"introduction": "Introduction",
+	"edit.object": "Editer objet",
+	"edit.transformations": "Editer transformations"
 }

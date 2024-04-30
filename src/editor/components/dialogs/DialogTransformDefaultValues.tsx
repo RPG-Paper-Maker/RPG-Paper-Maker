@@ -107,7 +107,7 @@ function DialogTransformDefaultValues({
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>
-			<div className='flex flex-column gap-small'>
+			<div className='flex-column gap-small'>
 				<div className='flex gap-medium'>
 					X:
 					<InputNumber min={getMinX()} max={getMaxX()} value={x} onChange={setX} decimals={isDecimal} />

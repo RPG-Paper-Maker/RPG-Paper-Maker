@@ -140,7 +140,7 @@ function PanelProject() {
 			<Splitter
 				vertical={false}
 				defaultLeftSize={266}
-				className='flex flex-one'
+				className='flex-one'
 				mobileHideFirst={projectMenuIndex === 2}
 			>
 				<div className='bg-darker flex-column flex-one scrollable'>
@@ -186,6 +186,7 @@ function PanelProject() {
 							setTitles={setMapsTabsTitles}
 							contents={mapsTabsContents}
 							setContents={setMapsTabsContents}
+							defaultIndex={-1}
 							onCurrentIndexChanged={handleTabCurrentIndexChanged}
 							forcedCurrentIndex={mapTabForcedCurrentIndex}
 							setForcedCurrentIndex={setMapTabForcedCurrentIndex}

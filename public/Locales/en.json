@@ -1963,5 +1963,7 @@
 	"current.values": "Current values",
 	"warning.path.doesnt.exist.copy.maps": "{{path}} doesn't exists so you can't copy potential maps.",
 	"warning.could.not.copy.map.created.empty": "Could not copy map at {{path}}. Created an empty one.",
-	"introduction": "Introduction"
+	"introduction": "Introduction",
+	"edit.object": "Edit object",
+	"edit.transformations": "Update transformations"
 }
