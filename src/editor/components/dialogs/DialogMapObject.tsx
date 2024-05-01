@@ -14,7 +14,7 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 import InputText from '../InputText';
 import { Model } from '../../Editor';
-import { Utils } from '../../common';
+import { OBJECT_MOVING_KIND, Utils } from '../../common';
 import useStateNumber from '../../hooks/useStateNumber';
 import useStateString from '../../hooks/useStateString';
 import { useTranslation } from 'react-i18next';
@@ -26,39 +26,162 @@ import Checkbox from '../Checkbox';
 import Tab from '../Tab';
 import GraphicsSelector from '../GraphicsSelector';
 import Form from '../Form';
-import { Node } from '../../core';
+import { Node, Project } from '../../core';
+import useStateBool from '../../hooks/useStateBool';
+import { EventCommand, MapObjectState } from '../../models';
 
 type Props = {
 	needOpen: boolean;
 	setNeedOpen: (b: boolean) => void;
-	model: Model.MapObject;
+	object: Model.CommonObject;
 	onAccept: () => Promise<void>;
 };
 
-function DialogMapObject({ needOpen, setNeedOpen, model, onAccept }: Props) {
+function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 	const { t } = useTranslation();
 
 	const [isOpen, setIsOpen] = useState(false);
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const [tabTitles, setTabTitles] = useState([Model.Base.create(1, 'Hero action')]);
-	const [tabContents, setTabContents] = useState<ReactNode[]>([<Tree key={0} list={[]}></Tree>]);
 	const [name, setName] = useStateString();
-	const [id, setID] = useStateNumber();
-	const [objectModel, setObjectModel] = useState(Model.Base.create(0, t('none')));
-	const [states, setStates] = useState(Node.createList(model.states));
-	const [graphicsOption, setGraphicsOption] = useState(Model.Base.GRAPHICS_OPTIONS[0]);
-	const [moveAnimation, setMoveAnimation] = useState(true);
+	const [modelID, setModelID] = useStateNumber();
+	const [tabTitles, setTabTitles] = useState<Model.Base[]>([]);
+	const [tabContents, setTabContents] = useState<ReactNode[]>([]);
+	const [states, setStates] = useState<Node[]>([]);
+	const [events, setEvents] = useState<Node[]>([]);
+	const [properties, setProperties] = useState<Node[]>([]);
+	const [onlyOneEventPerFrame, setOnlyOneEventPerFrame] = useStateBool();
+	const [canBeTriggeredAnotherObject, setCanBeTriggeredAnotherObject] = useStateBool();
+	const [selectedState, setSelectedState] = useState<MapObjectState | null>(null);
+	const [graphicsID, setGraphicsID] = useStateNumber();
+	const [graphicsIndexX, setGraphicsIndexX] = useStateNumber();
+	const [graphicsIndexY, setGraphicsIndexY] = useStateNumber();
+	const [graphicsKind, setGraphicsKind] = useStateNumber();
+	const [objectMovingKind, setObjectMovingKind] = useStateNumber();
+	const [eventCommandRoute, setEventCommandRoute] = useState<EventCommand | null>(null);
+	const [speedID, setSpeedID] = useStateNumber();
+	const [frequencyID, setFrequencyID] = useStateNumber();
+	const [moveAnimation, setMoveAnimation] = useStateBool();
+	const [stopAnimation, setStopAnimation] = useStateBool();
+	const [climbAnimation, setClimbAnimation] = useStateBool();
+	const [directionFix, setDirectionFix] = useStateBool();
+	const [through, setThrough] = useStateBool();
+	const [setWithCamera, setSetWithCamera] = useStateBool();
+	const [pixelOffset, setPixelOffset] = useStateBool();
+	const [keepPosition, setKeepPosition] = useStateBool();
+	const [eventCommandDetection, setEventCommandDetection] = useState<EventCommand | null>(null);
 
 	const initialize = () => {
-		setName(model.name);
-		setID(model.id);
+		setName(object.name);
+		setModelID(object.commonModelID);
+		setTabTitles([Model.Base.create(1, 'Hero action')]);
+		setTabContents([<Tree key={0} list={[]}></Tree>]);
+		setStates(Node.createList(object.states));
+		setEvents(Node.createList(object.events));
+		setProperties(Node.createList(object.properties));
+		setOnlyOneEventPerFrame(object.onlyOneEventPerFrame);
+		setCanBeTriggeredAnotherObject(object.canBeTriggeredAnotherObject);
+		handleChangeState(object.states.length > 0 ? object.states[0] : null);
+	};
+
+	const getObjectsList = () => [Model.Base.create(-1, t('none')), ...Project.current!.commonEvents.commonObjects];
+
+	const handleChangeState = (state: MapObjectState | null) => {
+		setSelectedState(state);
+		if (state) {
+			setGraphicsID(state.graphicsID);
+			setGraphicsIndexX(state.graphicsIndexX);
+			setGraphicsIndexY(state.graphicsIndexY);
+			setGraphicsKind(state.graphicsKind);
+			setObjectMovingKind(state.objectMovingKind);
+			setEventCommandRoute(state.eventCommandRoute);
+			setSpeedID(state.speedID);
+			setFrequencyID(state.frequencyID);
+			setMoveAnimation(state.moveAnimation);
+			setStopAnimation(state.stopAnimation);
+			setClimbAnimation(state.climbAnimation);
+			setDirectionFix(state.directionFix);
+			setThrough(state.through);
+			setSetWithCamera(state.setWithCamera);
+			setPixelOffset(state.pixelOffset);
+			setKeepPosition(state.keepPosition);
+			setEventCommandDetection(state.eventCommandDetection);
+		}
+	};
+
+	const handleChangeGraphicsKind = (kind: number) => {
+		setGraphicsKind(kind);
+		selectedState!.graphicsKind = kind;
+	};
+
+	const handleChangeObjectMovingKind = (movingKind: number) => {
+		setObjectMovingKind(movingKind);
+		selectedState!.objectMovingKind = movingKind;
+	};
+
+	const handleChangeSpeedID = (speedID: number) => {
+		setSpeedID(speedID);
+		selectedState!.speedID = speedID;
+	};
+
+	const handleChangeFrequencyID = (frequencyID: number) => {
+		setFrequencyID(frequencyID);
+		selectedState!.frequencyID = frequencyID;
+	};
+
+	const handleChangeMoveAnimation = (moveAnimation: boolean) => {
+		setMoveAnimation(moveAnimation);
+		selectedState!.moveAnimation = moveAnimation;
+	};
+
+	const handleChangeStopAnimation = (stopAnimation: boolean) => {
+		setStopAnimation(stopAnimation);
+		selectedState!.stopAnimation = stopAnimation;
+	};
+
+	const handleChangeClimbAnimation = (climbAnimation: boolean) => {
+		setClimbAnimation(climbAnimation);
+		selectedState!.climbAnimation = climbAnimation;
+	};
+
+	const handleChangeDirectionFix = (directionFix: boolean) => {
+		setDirectionFix(directionFix);
+		selectedState!.directionFix = directionFix;
+	};
+
+	const handleChangeThrough = (through: boolean) => {
+		setThrough(through);
+		selectedState!.through = through;
+	};
+
+	const handleChangeSetWithCamera = (setWithCamera: boolean) => {
+		setSetWithCamera(setWithCamera);
+		selectedState!.setWithCamera = setWithCamera;
+	};
+
+	const handleChangePixelOffset = (pixelOffset: boolean) => {
+		setPixelOffset(pixelOffset);
+		selectedState!.pixelOffset = pixelOffset;
+	};
+
+	const handleChangeKeepPosition = (keepPosition: boolean) => {
+		setKeepPosition(keepPosition);
+		selectedState!.keepPosition = keepPosition;
+	};
+
+	const handleChangeDetectionCheck = (isChecked: boolean) => {
+		setEventCommandDetection(isChecked ? new EventCommand() : null);
 	};
 
 	const handleAccept = async () => {
 		setIsLoading(true);
-		model.name = name;
-		model.id = id;
+		object.name = name;
+		object.commonModelID = modelID;
+		object.canBeTriggeredAnotherObject = canBeTriggeredAnotherObject;
+		object.onlyOneEventPerFrame = onlyOneEventPerFrame;
+		object.states = Node.createListFromNodes(states);
+		object.events = Node.createListFromNodes(states);
+		object.properties = Node.createListFromNodes(states);
 		await onAccept();
 		setIsLoading(false);
 		setIsOpen(false);
@@ -85,7 +208,7 @@ function DialogMapObject({ needOpen, setNeedOpen, model, onAccept }: Props) {
 			isLoading={isLoading}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
-			initialWidth='65%'
+			initialWidth='60%'
 			initialHeight='85%'
 		>
 			<div className='flex-column fill-height gap-small'>
@@ -98,12 +221,12 @@ function DialogMapObject({ needOpen, setNeedOpen, model, onAccept }: Props) {
 							focusFirst={focusFirst}
 							setFocustFirst={setFocustFirst}
 						/>
-						ID: {Utils.formatNumberID(id)}
+						ID: {Utils.formatNumberID(object.id)}
 					</div>
 					<div className='flex-one' />
 					<div className='flex-center-v gap-small'>
 						{t('model')}:
-						<Dropdown value={objectModel} onUpdateValue={setObjectModel} options={[objectModel]} />
+						<Dropdown selectedID={modelID} onChange={setModelID} options={getObjectsList()} displayIDs />
 					</div>
 				</div>
 				<div className='flex-one gap-medium'>
@@ -116,87 +239,138 @@ function DialogMapObject({ needOpen, setNeedOpen, model, onAccept }: Props) {
 						/>
 					</div>
 					<div className='flex-column gap-small'>
-						{t('states')}:<Tree list={states}></Tree>
-						{t('properties')}:<Tree list={[]}></Tree>
-						{t('events')}:<Tree list={[]}></Tree>
-						<div className='flex gap-small'>
-							<div className='flex-column gap-small'>
-								{t('graphics')}:
-								<GraphicsSelector />
-								<Dropdown
-									value={graphicsOption}
-									onUpdateValue={setGraphicsOption}
-									options={Model.Base.GRAPHICS_OPTIONS}
-									translateOptions
-								/>
+						<div className='flex-one gap-small'>
+							<div className='flex-column flex-one gap-small'>
+								{t('states')}:<Tree list={states}></Tree>
 							</div>
 							<div className='flex-column flex-one gap-small'>
-								<Groupbox title={t('moving')}>
-									<Form>
-										<td>{t('type')}:</td>
-										<td>
-											<Dropdown
-												value={objectModel}
-												onUpdateValue={setObjectModel}
-												options={[objectModel]}
-											/>
-										</td>
-										<td></td>
-										<td>
-											<Button disabled>{t('edit.route')}...</Button>
-										</td>
-										<td>{t('speed')}:</td>
-										<td>
-											<Dropdown
-												value={objectModel}
-												onUpdateValue={setObjectModel}
-												options={[objectModel]}
-											/>
-										</td>
-										<td>{t('frequency')}:</td>
-										<td>
-											<Dropdown
-												value={objectModel}
-												onUpdateValue={setObjectModel}
-												options={[objectModel]}
-											/>
-										</td>
-									</Form>
-								</Groupbox>
-								<Button>{t('edit.transformations')}...</Button>
+								{t('events')}:<Tree list={events}></Tree>
 							</div>
 						</div>
-						<div className='flex'>
-							<Groupbox title={t('options')}>
-								<div className='flex gap-medium'>
-									<div className='flex-column'>
-										<Checkbox isChecked={moveAnimation} onChange={setMoveAnimation}>
-											{t('move.animation')}
-										</Checkbox>
-										<Checkbox>{t('stop.animation')}</Checkbox>
-										<Checkbox>{t('climb.animation')}</Checkbox>
-										<Checkbox>{t('direction.fix')}</Checkbox>
-									</div>
-									<div className='flex-column'>
-										<Checkbox>{t('through')}</Checkbox>
-										<Checkbox>{t('set.with.camera')}</Checkbox>
-										<Checkbox>{t('pixel.offset')}</Checkbox>
-										<Checkbox>{t('keep.position')}</Checkbox>
-									</div>
-									<div className='flex-one' />
-								</div>
-							</Groupbox>
+						<div className='flex-column flex-one gap-small'>
+							{t('properties')}:<Tree list={properties}></Tree>
 						</div>
+						{selectedState && (
+							<>
+								<div className='flex gap-small'>
+									<div className='flex-column gap-small'>
+										{t('graphics')}:
+										<GraphicsSelector />
+										<Dropdown
+											selectedID={graphicsKind}
+											onChange={handleChangeGraphicsKind}
+											options={Model.Base.GRAPHICS_OPTIONS}
+											translateOptions
+										/>
+									</div>
+									<div className='flex-column flex-one gap-small'>
+										<Groupbox title={t('moving')}>
+											<Form>
+												<td>{t('type')}:</td>
+												<td>
+													<Dropdown
+														selectedID={objectMovingKind}
+														onChange={handleChangeObjectMovingKind}
+														options={Model.Base.OBJECT_MOVING_OPTIONS}
+														translateOptions
+													/>
+												</td>
+												<td></td>
+												<td>
+													<Button disabled={graphicsKind !== OBJECT_MOVING_KIND.ROUTE}>
+														{t('edit.route')}...
+													</Button>
+												</td>
+												<td>{t('speed')}:</td>
+												<td>
+													<Dropdown
+														selectedID={speedID}
+														onChange={handleChangeSpeedID}
+														options={Model.Base.GRAPHICS_OPTIONS}
+														translateOptions
+													/>
+												</td>
+												<td>{t('frequency')}:</td>
+												<td>
+													<Dropdown
+														selectedID={frequencyID}
+														onChange={handleChangeFrequencyID}
+														options={Model.Base.GRAPHICS_OPTIONS}
+														translateOptions
+													/>
+												</td>
+											</Form>
+										</Groupbox>
+										<Button>{t('edit.transformations')}...</Button>
+									</div>
+								</div>
+								<div className='flex'>
+									<Groupbox title={t('options')}>
+										<div className='flex gap-medium'>
+											<div className='flex-column'>
+												<Checkbox
+													isChecked={moveAnimation}
+													onChange={handleChangeMoveAnimation}
+												>
+													{t('move.animation')}
+												</Checkbox>
+												<Checkbox
+													isChecked={stopAnimation}
+													onChange={handleChangeStopAnimation}
+												>
+													{t('stop.animation')}
+												</Checkbox>
+												<Checkbox
+													isChecked={climbAnimation}
+													onChange={handleChangeClimbAnimation}
+												>
+													{t('climb.animation')}
+												</Checkbox>
+												<Checkbox isChecked={directionFix} onChange={handleChangeDirectionFix}>
+													{t('direction.fix')}
+												</Checkbox>
+											</div>
+											<div className='flex-column'>
+												<Checkbox isChecked={through} onChange={handleChangeThrough}>
+													{t('through')}
+												</Checkbox>
+												<Checkbox
+													isChecked={setWithCamera}
+													onChange={handleChangeSetWithCamera}
+												>
+													{t('set.with.camera')}
+												</Checkbox>
+												<Checkbox isChecked={pixelOffset} onChange={handleChangePixelOffset}>
+													{t('pixel.offset')}
+												</Checkbox>
+												<Checkbox isChecked={keepPosition} onChange={handleChangeKeepPosition}>
+													{t('keep.position')}
+												</Checkbox>
+											</div>
+											<div className='flex-one' />
+										</div>
+									</Groupbox>
+								</div>
+							</>
+						)}
 					</div>
 				</div>
-				<div className='flex gap-small'>
-					<Checkbox>
-						<div className='flex-center-v gap-small'>
-							{t('detection')} <Button disabled>...</Button>
-						</div>
-					</Checkbox>
-					<Checkbox>{t('only.one.event.per.frame')}</Checkbox>
-					<Checkbox>{t('can.be.triggered.another.object')}</Checkbox>
+				<div className='flex'>
+					<div className='flex-one gap-small'>
+						<Checkbox isChecked={onlyOneEventPerFrame} onChange={setOnlyOneEventPerFrame}>
+							{t('only.one.event.per.frame')}
+						</Checkbox>
+						<Checkbox isChecked={canBeTriggeredAnotherObject} onChange={setCanBeTriggeredAnotherObject}>
+							{t('can.be.triggered.another.object')}
+						</Checkbox>
+					</div>
+					{selectedState && (
+						<Checkbox isChecked={!!eventCommandDetection} onChange={handleChangeDetectionCheck}>
+							<div className='flex-center-v gap-small'>
+								{t('detection')} <Button disabled={eventCommandDetection === null}>...</Button>
+							</div>
+						</Checkbox>
+					)}
 				</div>
 			</div>
 		</Dialog>

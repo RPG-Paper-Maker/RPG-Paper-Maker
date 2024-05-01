@@ -41,13 +41,14 @@ const getScrollableParent = (element: HTMLElement | ParentNode | null): Window |
 		: getScrollableParent(element.parentNode);
 
 type Props = {
-	value?: Model.Base;
-	onUpdateValue: (v: Model.Base) => void;
+	selectedID: number;
+	onChange: (id: number) => void;
 	options: Model.Base[];
 	translateOptions?: boolean;
+	displayIDs?: boolean;
 };
 
-function Dropdown({ value, onUpdateValue, options, translateOptions = false }: Props) {
+function Dropdown({ selectedID, onChange, options, translateOptions = false, displayIDs = false }: Props) {
 	const { t } = useTranslation();
 
 	const [isOpen, setIsOpen] = useState(false);
@@ -101,7 +102,7 @@ function Dropdown({ value, onUpdateValue, options, translateOptions = false }: P
 	};
 
 	const handleClickOption = (option: Model.Base) => {
-		onUpdateValue(option);
+		onChange(option.id);
 	};
 
 	const handleClickOutside = (event: MouseEvent) => {
@@ -150,16 +151,19 @@ function Dropdown({ value, onUpdateValue, options, translateOptions = false }: P
 		};
 	}, []);
 
-	const getCurrentItem = () => (value ? (translateOptions ? t(value.name) : value.name) : t('select.option'));
+	const selected = Model.Base.getByIDOrFirst(options, selectedID);
+
+	const getCurrentItem = () =>
+		translateOptions ? t(selected.name) : displayIDs ? selected.toStringNameID() : selected.name;
 
 	const getDropdownItems = () =>
 		options.map((option) => (
 			<div
-				className={Utils.getClassName([[value ? value.id === option.id : false, 'selected']], ['element'])}
+				className={Utils.getClassName([[selectedID === option.id, 'selected']], ['element'])}
 				key={option.id}
 				onClick={() => handleClickOption(option)}
 			>
-				{translateOptions ? t(option.name) : option.name}
+				{translateOptions ? t(option.name) : displayIDs ? option.toStringNameID() : option.name}
 			</div>
 		));
 

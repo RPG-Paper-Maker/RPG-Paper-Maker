@@ -75,7 +75,7 @@ class Map extends Base {
 	public needsUpdateSelectedPosition?: Position | null;
 	public needsUpdateSelectedMapElement = false;
 	public needsClose = false;
-	public modelMap: Model.Map = new Model.Map();
+	public modelMap = new Model.Map();
 	public grid = new Grid();
 	public cursor: Cursor;
 	public cursorStartPosition!: Cursor;
@@ -196,12 +196,8 @@ class Map extends Base {
 		this.materialTilesetHover = Manager.GL.createMaterial({ texture: this.materialTileset.map, hovered: true });
 
 		// Load map model
-		const mapName = Model.Map.generateMapName(this.id);
-		const folderMap = Paths.join(Project.current!.getPathMaps(), mapName);
-		const content = await Platform.readFile(Paths.join(folderMap, Paths.FILE_MAP_INFOS));
-		if (content !== null) {
-			this.modelMap.read(JSON.parse(content));
-		}
+		this.modelMap.id = this.id;
+		await this.modelMap.load();
 
 		// Create grid plane
 		const material = new THREE.Material();
@@ -628,6 +624,15 @@ class Map extends Base {
 		if (!preview && position.isInMap(this.modelMap)) {
 			this.cursorObject.position.setCoords(position.x, position.y, position.yPixels, position.z);
 			this.cursorObject.updateMeshPosition();
+		}
+	}
+
+	async updateObject(object: Model.CommonObject | null) {
+		const position = this.cursorObject.position.clone();
+		const mapPortion = this.getMapPortionByPosition(position);
+		if (mapPortion) {
+			await this.modelMap.updateObject(position, object);
+			mapPortion.updateObject(position, object);
 		}
 	}
 

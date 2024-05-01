@@ -130,7 +130,7 @@ class Paths {
 	];
 
 	static join(...args: (string | undefined | number)[]): string {
-		return this.normalize(args.join('/'));
+		return this.normalize(args.filter((arg) => arg !== undefined && arg !== '').join('/'));
 	}
 
 	static normalize(path: string): string {

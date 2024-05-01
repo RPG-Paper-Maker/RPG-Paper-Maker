@@ -26,6 +26,8 @@ class MapObjectReaction extends Base {
 
 	copy(reaction: MapObjectReaction): void {
 		super.copy(reaction);
+		this.commands = reaction.commands.map((command) => command.clone());
+		this.blockingHero = reaction.blockingHero;
 	}
 
 	clone(): MapObjectReaction {

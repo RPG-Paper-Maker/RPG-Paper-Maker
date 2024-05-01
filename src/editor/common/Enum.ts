@@ -106,6 +106,7 @@ export enum RAYCASTING_LAYER {
 	WALLS = 4,
 	MOUNTAINS = 5,
 	OBJECTS3D = 6,
+	OBJECTS = 7,
 }
 
 export enum MOBILE_ACTION {

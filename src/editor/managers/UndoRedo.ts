@@ -64,12 +64,20 @@ class UndoRedo {
 		return states;
 	}
 
-	private static async apply(position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND) {
+	private static async apply(
+		position: Position,
+		element: MapElement.Base | Model.CommonObject | null,
+		kind: ELEMENT_MAP_KIND
+	) {
 		if (Scene.Map.current) {
 			const mapPortion = Scene.Map.current.getMapPortionByPosition(position);
 			if (mapPortion) {
 				mapPortion.removeLastPreview();
-				mapPortion.updateMapElement(position, element, kind, false, false, true, true);
+				if (kind === ELEMENT_MAP_KIND.OBJECT) {
+					mapPortion.updateObject(position, element as Model.CommonObject, true);
+				} else {
+					mapPortion.updateMapElement(position, element as MapElement.Base, kind, false, false, true, true);
+				}
 			} else {
 				const model = new Model.MapPortion(position.getGlobalPortion());
 				await model.load();
@@ -81,6 +89,9 @@ class UndoRedo {
 						models.delete(position.toKey());
 					}
 					await model.save();
+					if (kind === ELEMENT_MAP_KIND.OBJECT) {
+						Scene.Map.current.modelMap.updateObject(position, element as Model.CommonObject | null);
+					}
 				}
 			}
 		}

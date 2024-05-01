@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { MapElement } from '../Editor';
+import { MapElement, Model } from '../Editor';
 import { Serializable } from './Serializable';
 import { Position } from '.';
 import { ELEMENT_MAP_KIND, JSONType } from '../common';
@@ -22,16 +22,16 @@ class UndoRedoState extends Serializable {
 	public static readonly JSON_KIND_AFTER = 'ka';
 
 	public position!: Position;
-	public elementBefore!: MapElement.Base | null;
+	public elementBefore!: MapElement.Base | Model.CommonObject | null;
 	public kindBefore!: ELEMENT_MAP_KIND;
-	public elementAfter!: MapElement.Base | null;
+	public elementAfter!: MapElement.Base | Model.CommonObject | null;
 	public kindAfter!: ELEMENT_MAP_KIND;
 
 	static create(
 		position: Position,
-		elementBefore: MapElement.Base | null,
+		elementBefore: MapElement.Base | Model.CommonObject | null,
 		kindBefore: ELEMENT_MAP_KIND,
-		elementAfter: MapElement.Base | null,
+		elementAfter: MapElement.Base | Model.CommonObject | null,
 		kindAfter: ELEMENT_MAP_KIND
 	) {
 		const state = new UndoRedoState();

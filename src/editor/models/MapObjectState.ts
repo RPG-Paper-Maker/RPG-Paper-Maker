@@ -18,11 +18,11 @@ import { EventCommand } from './EventCommand';
 class MapObjectState extends Base {
 	public graphicsKind!: ELEMENT_MAP_KIND;
 	public graphicsID!: number;
-	public indexX!: number;
-	public indexY!: number;
+	public graphicsIndexX!: number;
+	public graphicsIndexY!: number;
 	public rectTileset!: Rectangle;
 	public objectMovingKind!: OBJECT_MOVING_KIND;
-	public eventCommandRoute: any;
+	public eventCommandRoute!: EventCommand | null;
 	public speedID!: number;
 	public frequencyID!: number;
 	public moveAnimation!: boolean;
@@ -33,8 +33,7 @@ class MapObjectState extends Base {
 	public setWithCamera!: boolean;
 	public pixelOffset!: boolean;
 	public keepPosition!: boolean;
-	public itemDetection!: any;
-	public eventCommandDetection!: any;
+	public eventCommandDetection!: EventCommand | null;
 	public centerX!: DynamicValue;
 	public centerZ!: DynamicValue;
 	public angleX!: DynamicValue;
@@ -47,8 +46,8 @@ class MapObjectState extends Base {
 	public static bindings: BindingType[] = [
 		['graphicsKind', 'gk', undefined, BINDING.NUMBER],
 		['graphicsID', 'gid', undefined, BINDING.NUMBER],
-		['indexX', 'x', undefined, BINDING.NUMBER],
-		['indexY', 'y', undefined, BINDING.NUMBER],
+		['graphicsIndexX', 'x', undefined, BINDING.NUMBER],
+		['graphicsIndexY', 'y', undefined, BINDING.NUMBER],
 		['rectTileset', 'rt', undefined, BINDING.RECTANGLE],
 		['objectMovingKind', 'omk', OBJECT_MOVING_KIND.FIX, BINDING.NUMBER],
 		['eventCommandRoute', 'ecr', null, BINDING.OBJECT, EventCommand],
@@ -138,6 +137,32 @@ class MapObjectState extends Base {
 
 	copy(state: MapObjectState): void {
 		super.copy(state);
+		this.graphicsKind = state.graphicsKind;
+		this.graphicsID = state.graphicsID;
+		this.graphicsIndexX = state.graphicsIndexX;
+		this.graphicsIndexY = state.graphicsIndexY;
+		this.rectTileset = state.rectTileset.clone();
+		this.objectMovingKind = state.objectMovingKind;
+		this.eventCommandRoute = state.eventCommandRoute === null ? null : state.eventCommandRoute.clone();
+		this.speedID = state.speedID;
+		this.frequencyID = state.frequencyID;
+		this.moveAnimation = state.moveAnimation;
+		this.stopAnimation = state.stopAnimation;
+		this.climbAnimation = state.climbAnimation;
+		this.directionFix = state.directionFix;
+		this.through = state.through;
+		this.setWithCamera = state.setWithCamera;
+		this.pixelOffset = state.pixelOffset;
+		this.keepPosition = state.keepPosition;
+		this.eventCommandDetection = state.eventCommandDetection === null ? null : state.eventCommandDetection.clone();
+		this.centerX = state.centerX.clone();
+		this.centerZ = state.centerZ.clone();
+		this.angleX = state.angleX.clone();
+		this.angleY = state.angleY.clone();
+		this.angleZ = state.angleZ.clone();
+		this.scaleX = state.scaleX.clone();
+		this.scaleY = state.scaleY.clone();
+		this.scaleZ = state.scaleZ.clone();
 	}
 
 	clone(): MapObjectState {

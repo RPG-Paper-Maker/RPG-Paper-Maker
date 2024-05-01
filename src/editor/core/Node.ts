@@ -116,7 +116,11 @@ class Node extends Serializable {
 	}
 
 	static createList(list: Model.Base[]): Node[] {
-		return list.map((content) => Node.create(content));
+		return list.map((content) => Node.create(content.clone()));
+	}
+
+	static createListFromNodes<T>(nodes: Node[]): T[] {
+		return nodes.map((node) => node.content as T);
 	}
 
 	getIcon() {

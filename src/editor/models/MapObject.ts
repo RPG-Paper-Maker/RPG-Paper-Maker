@@ -10,37 +10,24 @@
 */
 
 import { Base } from './Base';
-import { BINDING, BindingType, JSONType, Utils } from '../common';
-import { MapObjectState } from './MapObjectState';
+import { BINDING, BindingType, JSONType } from '../common';
+import { Position } from '../core';
 
 class MapObject extends Base {
-	public states: MapObjectState[] = [MapObjectState.create(1, 'State 1')];
+	public position!: Position;
 
-	public static bindings: BindingType[] = [['states', 'states', undefined, BINDING.LIST, MapObjectState]];
+	public static bindings: BindingType[] = [['position', 'p', undefined, BINDING.POSITION]];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
-	static create(id: number, name: string) {
+	static create(id: number, name: string, position = new Position()): MapObject {
 		const object = new MapObject();
 		object.id = id;
 		object.name = name;
+		object.position = position;
 		return object;
-	}
-
-	static generateName(id: number) {
-		return `OBJ:${Utils.formatNumberID(id)}`;
-	}
-
-	copy(object: MapObject): void {
-		super.copy(object);
-	}
-
-	clone(): MapObject {
-		const map = new MapObject();
-		map.copy(this);
-		return map;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

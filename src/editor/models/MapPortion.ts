@@ -24,6 +24,7 @@ import {
 	Sprite,
 	SpriteWall,
 } from '../mapElements';
+import { CommonObject } from './CommonObject';
 
 class MapPortion extends Serializable {
 	public globalPortion: Portion;
@@ -32,6 +33,7 @@ class MapPortion extends Serializable {
 	public walls: Map<string, SpriteWall> = new Map();
 	public mountains: Map<string, Mountain> = new Map();
 	public objects3D: Map<string, Object3D> = new Map();
+	public objects: Map<string, CommonObject> = new Map();
 
 	public static readonly bindings: BindingType[] = [
 		['lands', 'lands', null, BINDING.MAP_POSITION, null, this.getBindingJsonLands],
@@ -39,6 +41,7 @@ class MapPortion extends Serializable {
 		['walls', 'walls', null, BINDING.MAP_POSITION, SpriteWall],
 		['mountains', 'moun', null, BINDING.MAP_POSITION, Mountain],
 		['objects3D', 'objs3d', null, BINDING.MAP_POSITION, null, this.getBindingJsonObjects3D],
+		['objects', 'objs', null, BINDING.MAP_POSITION, CommonObject],
 	];
 
 	constructor(globalPortion: Portion) {
@@ -68,7 +71,7 @@ class MapPortion extends Serializable {
 		}
 	}
 
-	static removeElementsOut(map: Model.Map, mapping: Map<string, Base>) {
+	static removeElementsOut(map: Model.Map, mapping: Map<string, Base | Model.CommonObject>) {
 		const keysToDelete: string[] = [];
 		for (const [key] of mapping.entries()) {
 			const position = Position.fromKey(key);
@@ -82,14 +85,15 @@ class MapPortion extends Serializable {
 	}
 
 	removeAllElementsOut(map: Model.Map) {
-		Model.MapPortion.removeElementsOut(map, this.lands);
-		Model.MapPortion.removeElementsOut(map, this.sprites);
-		Model.MapPortion.removeElementsOut(map, this.walls);
-		Model.MapPortion.removeElementsOut(map, this.mountains);
-		Model.MapPortion.removeElementsOut(map, this.objects3D);
+		MapPortion.removeElementsOut(map, this.lands);
+		MapPortion.removeElementsOut(map, this.sprites);
+		MapPortion.removeElementsOut(map, this.walls);
+		MapPortion.removeElementsOut(map, this.mountains);
+		MapPortion.removeElementsOut(map, this.objects3D);
+		MapPortion.removeElementsOut(map, this.objects);
 	}
 
-	getModelsByKind(kind: ELEMENT_MAP_KIND): Map<string, Base> | null {
+	getModelsByKind(kind: ELEMENT_MAP_KIND): Map<string, Base | Model.CommonObject> | null {
 		switch (kind) {
 			case ELEMENT_MAP_KIND.FLOOR:
 			case ELEMENT_MAP_KIND.AUTOTILE:
@@ -105,6 +109,8 @@ class MapPortion extends Serializable {
 				return this.mountains;
 			case ELEMENT_MAP_KIND.OBJECT3D:
 				return this.objects3D;
+			case ELEMENT_MAP_KIND.OBJECT:
+				return this.objects;
 			default:
 				return null;
 		}
@@ -186,7 +192,6 @@ class MapPortion extends Serializable {
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, MapPortion.getBindings(additionnalBinding));
-		json.objs = [];
 	}
 }
 

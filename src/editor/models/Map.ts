@@ -14,6 +14,7 @@ import { Base } from './Base';
 import { BINDING, BindingType, Constants, JSONType, Paths, Utils } from '../common';
 import { Portion, Position, Project } from '../core';
 import { Platform } from '../common/Platform';
+import { MapObject } from './MapObject';
 
 class Map extends Base {
 	public tilesetID: number = 1;
@@ -21,6 +22,7 @@ class Map extends Base {
 	public width: number = 16;
 	public height: number = 16;
 	public depth: number = 0;
+	public objects!: MapObject[];
 
 	public static bindings: BindingType[] = [
 		['tilesetID', 'tileset', undefined, BINDING.NUMBER],
@@ -28,6 +30,7 @@ class Map extends Base {
 		['width', 'w', undefined, BINDING.NUMBER],
 		['height', 'h', undefined, BINDING.NUMBER],
 		['depth', 'd', undefined, BINDING.NUMBER],
+		['objects', 'objs', [], BINDING.LIST, MapObject],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -41,8 +44,13 @@ class Map extends Base {
 		return base;
 	}
 
-	getPath() {
-		return Paths.join(Project.current!.getPathMaps(), this.getRealName(), Paths.FILE_MAP_INFOS);
+	getPath(temp = false) {
+		return Paths.join(
+			Project.current!.getPathMaps(),
+			this.getRealName(),
+			temp ? Paths.TEMP : undefined,
+			Paths.FILE_MAP_INFOS
+		);
 	}
 
 	static async createDefaultMap(id: number, name: string) {
@@ -269,19 +277,34 @@ class Map extends Base {
 		}
 	}
 
+	generateNewObjectID() {
+		let id = 1;
+		while (this.objects.find((mapObject) => mapObject.id === id)) {
+			id++;
+		}
+		return id;
+	}
+
+	async updateObject(position: Position, object: Model.CommonObject | null) {
+		this.objects = this.objects.filter((mapObject) => !position.equals(mapObject.position));
+		if (object !== null) {
+			this.objects.push(Model.MapObject.create(object.id, object.name, position));
+		}
+		await this.save(true);
+	}
+
 	copy(map: Map): void {
 		super.copy(map);
-		this.tilesetID = map.tilesetID;
-		this.length = map.length;
-		this.width = map.width;
-		this.height = map.height;
-		this.depth = map.depth;
 	}
 
 	clone(): Map {
 		const map = new Map();
 		map.copy(this);
 		return map;
+	}
+
+	async load() {
+		await super.load(true); // Try to read temp files by default
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

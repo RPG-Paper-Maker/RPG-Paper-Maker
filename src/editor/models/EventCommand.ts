@@ -25,6 +25,18 @@ class EventCommand extends Base {
 		return [...EventCommand.bindings, ...additionnalBinding];
 	}
 
+	copy(command: EventCommand): void {
+		super.copy(command);
+		this.kind = command.kind;
+		this.list = [...command.list];
+	}
+
+	clone(): EventCommand {
+		const command = new EventCommand();
+		command.copy(this);
+		return command;
+	}
+
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, EventCommand.getBindings(additionnalBinding));
 	}

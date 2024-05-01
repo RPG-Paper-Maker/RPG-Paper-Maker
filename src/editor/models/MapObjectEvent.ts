@@ -16,12 +16,12 @@ import { MapObjectParameter } from './MapObjectParameter';
 
 class MapObjectEvent extends Base {
 	public parameters!: MapObjectParameter[];
-	public reaction!: Map<number, MapObjectReaction>;
+	public reactions!: Map<number, MapObjectReaction>;
 	public isSystem!: boolean;
 
 	public static bindings: BindingType[] = [
 		['parameters', 'p', undefined, BINDING.LIST, MapObjectParameter],
-		['reaction', 'r', undefined, BINDING.MAP, MapObjectReaction],
+		['reactions', 'r', undefined, BINDING.MAP, MapObjectReaction],
 		['isSystem', 'sys', undefined, BINDING.BOOLEAN],
 	];
 
@@ -31,6 +31,12 @@ class MapObjectEvent extends Base {
 
 	copy(event: MapObjectEvent): void {
 		super.copy(event);
+		this.parameters = event.parameters.map((parameter) => parameter.clone());
+		this.reactions = new Map();
+		for (const [i, reaction] of event.reactions.entries()) {
+			this.reactions.set(i, reaction.clone());
+		}
+		this.isSystem = event.isSystem;
 	}
 
 	clone(): MapObjectEvent {

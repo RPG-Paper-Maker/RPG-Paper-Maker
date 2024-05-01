@@ -151,7 +151,14 @@ class Serializable {
 					(this as JSONType)[name] = mapping;
 					const jsonObj = json[jsonName] as Record<string, unknown>;
 					for (const key of Object.keys(jsonObj)) {
-						mapping.set(key, jsonObj[key]);
+						const jsonValue = jsonObj[key] as JSONType;
+						if (constructorClass) {
+							const obj = new constructorClass() as Model.Base;
+							obj.read(jsonValue);
+							mapping.set(key, obj);
+						} else {
+							mapping.set(key, jsonValue);
+						}
 					}
 					break;
 				}
@@ -186,7 +193,7 @@ class Serializable {
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
-		for (const [name, jsonName, defaultValue, type] of additionnalBinding) {
+		for (const [name, jsonName, defaultValue, type, constructorClass] of additionnalBinding) {
 			switch (type) {
 				case BINDING.NUMBER:
 				case BINDING.STRING:
@@ -222,12 +229,14 @@ class Serializable {
 				}
 				case BINDING.LIST:
 				case BINDING.LIST_WITH_INDEXES: {
-					const tab = (this as JSONType)[name] as Serializable[];
+					const tab = (this as JSONType)[name] as Serializable[] | undefined;
 					const jsonTab: JSONType[] = [];
-					for (const element of tab) {
-						const jsonObj = {};
-						element.write(jsonObj);
-						jsonTab.push(jsonObj);
+					if (tab) {
+						for (const element of tab) {
+							const jsonObj = {};
+							element.write(jsonObj);
+							jsonTab.push(jsonObj);
+						}
 					}
 					json[jsonName] = jsonTab;
 					break;
@@ -253,7 +262,13 @@ class Serializable {
 					const mapping = (this as JSONType)[name] as Map<string, unknown>;
 					const jsonMap: JSONType = {};
 					for (const [k, v] of mapping) {
-						jsonMap[k] = v;
+						if (constructorClass) {
+							const jsonValue = {};
+							(v as Serializable).write(jsonValue);
+							jsonMap[k] = jsonValue;
+						} else {
+							jsonMap[k] = v;
+						}
 					}
 					json[jsonName] = jsonMap;
 					break;

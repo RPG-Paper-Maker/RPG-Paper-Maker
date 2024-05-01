@@ -24,7 +24,7 @@ class CreateParameter extends Base {
 
 	copy(parameter: CreateParameter): void {
 		super.copy(parameter);
-		this.defaultValue.copy(parameter.defaultValue);
+		this.defaultValue = parameter.defaultValue.clone();
 	}
 
 	clone(): CreateParameter {

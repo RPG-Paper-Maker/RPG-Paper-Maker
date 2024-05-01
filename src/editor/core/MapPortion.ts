@@ -38,6 +38,7 @@ class MapPortion {
 	public wallsMeshes!: THREE.Mesh[];
 	public mountainsList!: Map<number, MapElement.Mountains>;
 	public objects3DMeshes!: THREE.Mesh[];
+	public objectsMesh: THREE.Mesh | null = null;
 	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND][] = [];
 
 	static offsetMeshPositionLayer(mesh: THREE.Mesh, side: number, layer: number, up = true) {
@@ -542,7 +543,7 @@ class MapPortion {
 					position.clone(),
 					null,
 					Scene.Map.current!.selectedElement.kind,
-					models,
+					models as Map<string, MapElement.Base>,
 					false,
 					false,
 					false
@@ -565,7 +566,7 @@ class MapPortion {
 					position.clone(),
 					Scene.Map.current!.selectedElement,
 					Scene.Map.current!.selectedElement.kind,
-					models,
+					models as Map<string, MapElement.Base>,
 					false,
 					false,
 					false
@@ -593,6 +594,23 @@ class MapPortion {
 		}
 		Scene.Map.current!.scene.add(Scene.Map.current!.selectedMesh);
 		Scene.Map.current!.transformControls.attach(Scene.Map.current!.selectedMesh);
+	}
+
+	updateObject(position: Position, object: Model.CommonObject | null, undoRedo = false) {
+		const key = position.toKey();
+		const previous = this.model.objects.get(key) || null;
+		if (object === null) {
+			this.model.objects.delete(key);
+		} else {
+			this.model.objects.set(key, object);
+		}
+		Scene.Map.current!.portionsToUpdate.add(this);
+		Scene.Map.current!.portionsToSave.add(this);
+		if (!undoRedo) {
+			Scene.Map.current!.undoRedoStates.push(
+				UndoRedoState.create(position, previous, ELEMENT_MAP_KIND.OBJECT, object, ELEMENT_MAP_KIND.OBJECT)
+			);
+		}
 	}
 
 	checkTextures() {
@@ -669,6 +687,7 @@ class MapPortion {
 		this.updateWallsGeometry();
 		this.updateMountainsGeometry();
 		this.updateObjects3DGeometry();
+		this.updateObjectsGeometry();
 	}
 
 	updateLandsGeometries() {
@@ -1135,6 +1154,43 @@ class MapPortion {
 		}
 	}
 
+	updateObjectsGeometry() {
+		if (this.objectsMesh !== null) {
+			Scene.Map.current!.scene.remove(this.objectsMesh);
+			this.objectsMesh = null;
+		}
+		const geometry = new CustomGeometry();
+		let count = 0;
+		for (const [positionKey] of this.model.objects) {
+			const position = Position.fromKey(positionKey);
+			const vec = position.toVector3(false);
+			const vecA = new THREE.Vector3(vec.x, vec.y, vec.z);
+			const vecB = new THREE.Vector3(vec.x + Project.SQUARE_SIZE, vec.y, vec.z);
+			const vecC = new THREE.Vector3(vec.x + Project.SQUARE_SIZE, vec.y, vec.z + Project.SQUARE_SIZE);
+			const vecD = new THREE.Vector3(vec.x, vec.y, vec.z + Project.SQUARE_SIZE);
+			geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
+			geometry.pushQuadIndices(count);
+			const coef = MapElement.Base.COEF_TEX / Project.SQUARE_SIZE;
+			const texA = new THREE.Vector2();
+			const texB = new THREE.Vector2();
+			const texC = new THREE.Vector2();
+			const texD = new THREE.Vector2();
+			CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, coef, coef, 1 - coef, 1 - coef);
+			geometry.pushQuadUVs(texA, texB, texC, texD);
+			count += 4;
+		}
+		if (!geometry.isEmpty()) {
+			geometry.updateAttributes();
+			this.objectsMesh = new THREE.Mesh(geometry, Scene.Map.materialObjectSquare);
+			this.objectsMesh.receiveShadow = true;
+			this.objectsMesh.castShadow = true;
+			this.objectsMesh.renderOrder = 0;
+			this.objectsMesh.layers.enable(RAYCASTING_LAYER.OBJECTS);
+			MapPortion.offsetMeshPositionLayer(this.objectsMesh, 0, 1);
+			Scene.Map.current!.scene.add(this.objectsMesh);
+		}
+	}
+
 	updateFaceSprites(angle: number) {
 		for (const mesh of this.spritesFaceMeshes) {
 			if (mesh) {
@@ -1178,6 +1234,9 @@ class MapPortion {
 			if (mesh) {
 				MapPortion.offsetMeshPositionLayer(mesh, 0, j, false);
 			}
+		}
+		if (this.objectsMesh) {
+			MapPortion.offsetMeshPositionLayer(this.objectsMesh, 0, 1);
 		}
 	}
 
@@ -1229,6 +1288,10 @@ class MapPortion {
 			Scene.Map.current!.scene.remove(objects);
 		}
 		this.objects3DMeshes = [];
+		if (this.objectsMesh !== null) {
+			Scene.Map.current!.scene.remove(this.objectsMesh);
+			this.objectsMesh = null;
+		}
 	}
 }
 

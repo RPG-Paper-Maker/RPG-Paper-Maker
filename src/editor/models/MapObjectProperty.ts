@@ -24,6 +24,7 @@ class MapObjectProperty extends Base {
 
 	copy(property: MapObjectProperty): void {
 		super.copy(property);
+		this.initialValue = property.initialValue.clone();
 	}
 
 	clone(): MapObjectProperty {

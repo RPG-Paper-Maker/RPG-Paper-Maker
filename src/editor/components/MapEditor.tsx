@@ -27,13 +27,14 @@ import { ACTION_KIND, ELEMENT_MAP_KIND, KEY, SPECIAL_KEY } from '../common';
 import ContextMenu from './ContextMenu';
 import { useTranslation } from 'react-i18next';
 import DialogMapObject from './dialogs/DialogMapObject';
+import { Project } from '../core';
 
 function MapEditor() {
 	const { t } = useTranslation();
 
 	const [firstLoading, setFirstLoading] = useState(false);
 	const [needOpenMapObject, setNeedOpenMapObject] = useState(false);
-	const [currentMapObject, setCurrentMapObject] = useState(new Model.MapObject());
+	const [currentMapObject, setCurrentMapObject] = useState(new Model.CommonObject());
 
 	const currentMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
@@ -162,14 +163,17 @@ function MapEditor() {
 	};
 
 	const handleNewMapObject = async () => {
-		const id = 1; // TODO
-		const mapObject = Model.MapObject.create(id, Model.MapObject.generateName(id));
+		const mapObject = Project.current!.commonEvents.defaultObject.clone();
+		const id = Scene.Map.current!.modelMap.generateNewObjectID();
+		mapObject.id = id;
+		mapObject.name = Model.CommonObject.generateName(id);
 		setCurrentMapObject(mapObject);
 		setNeedOpenMapObject(true);
 	};
 
 	const handleAcceptMapObject = async () => {
 		setNeedOpenMapObject(false);
+		await Scene.Map.current!.updateObject(currentMapObject);
 	};
 
 	useEffect(() => {
@@ -247,7 +251,7 @@ function MapEditor() {
 			<DialogMapObject
 				needOpen={needOpenMapObject}
 				setNeedOpen={setNeedOpenMapObject}
-				model={currentMapObject}
+				object={currentMapObject}
 				onAccept={handleAcceptMapObject}
 			/>
 		</>

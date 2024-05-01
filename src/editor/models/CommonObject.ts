@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, BindingType, JSONType, Utils } from '../common';
 import { Base } from './Base';
 import { MapObjectEvent } from './MapObjectEvent';
 import { MapObjectProperty } from './MapObjectProperty';
@@ -36,8 +36,18 @@ class CommonObject extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	static generateName(id: number) {
+		return `OBJ:${Utils.formatNumberID(id)}`;
+	}
+
 	copy(object: CommonObject): void {
 		super.copy(object);
+		this.states = object.states.map((state) => state.clone());
+		this.properties = object.properties.map((property) => property.clone());
+		this.events = object.events.map((state) => state.clone());
+		this.onlyOneEventPerFrame = object.onlyOneEventPerFrame;
+		this.canBeTriggeredAnotherObject = object.canBeTriggeredAnotherObject;
+		this.commonModelID = object.commonModelID;
 	}
 
 	clone(): CommonObject {

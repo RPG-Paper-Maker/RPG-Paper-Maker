@@ -11,10 +11,20 @@
 
 import { ReactNode } from 'react';
 import { Serializable } from '../core/Serializable';
-import { BINDING, BindingType, JSONType, Utils } from '../common';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, OBJECT_MOVING_KIND, Utils } from '../common';
 
 class Base extends Serializable {
-	public static GRAPHICS_OPTIONS = Base.generateOptions(['none', 'fix.sprite', 'face.sprite', 'threed.object']);
+	public static GRAPHICS_OPTIONS = [
+		Base.create(ELEMENT_MAP_KIND.NONE, 'none'),
+		Base.create(ELEMENT_MAP_KIND.SPRITE_FIX, 'fix.sprite'),
+		Base.create(ELEMENT_MAP_KIND.SPRITE_FACE, 'face.sprite'),
+		Base.create(ELEMENT_MAP_KIND.OBJECT3D, 'threed.object'),
+	];
+	public static OBJECT_MOVING_OPTIONS = [
+		Base.create(OBJECT_MOVING_KIND.FIX, 'fix'),
+		Base.create(OBJECT_MOVING_KIND.RANDOM, 'random'),
+		Base.create(OBJECT_MOVING_KIND.ROUTE, 'route'),
+	];
 
 	public id!: number;
 	public name!: string;
@@ -47,6 +57,10 @@ class Base extends Serializable {
 
 	public static getByID(list: Base[], id: number): Base | null {
 		return list.find((model) => model.id === id) ?? null;
+	}
+
+	public static getByIDOrFirst(list: Base[], id: number): Base {
+		return list.find((model) => model.id === id) ?? list[0];
 	}
 
 	applyDefault(additionnalBinding: BindingType[]) {

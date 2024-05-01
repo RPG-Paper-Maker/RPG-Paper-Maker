@@ -26,6 +26,8 @@ class MapObjectParameter extends Base {
 
 	copy(parameter: MapObjectParameter): void {
 		super.copy(parameter);
+		this.parameter = parameter.parameter.clone();
+		this.value = parameter.value.clone();
 	}
 
 	clone(): MapObjectParameter {
