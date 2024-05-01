@@ -123,6 +123,7 @@ class Map extends Base {
 	public needsUpdateRaycasting = false;
 	public needsMouseDown = false;
 	public needsSaveSystems = false;
+	public needsUpdateComponent = false;
 	public mouseUp = false;
 	public isTransforming = false;
 	public isDraggingTransforming = false;
@@ -623,6 +624,7 @@ class Map extends Base {
 	updateObjectCursor(preview: boolean, position: Position) {
 		if (!preview && position.isInMap(this.modelMap)) {
 			this.cursorObject.position.setCoords(position.x, position.y, position.yPixels, position.z);
+			this.needsUpdateComponent = true;
 			this.cursorObject.updateMeshPosition();
 		}
 	}
@@ -634,6 +636,15 @@ class Map extends Base {
 			await this.modelMap.updateObject(position, object);
 			mapPortion.updateObject(position, object);
 		}
+	}
+
+	getSelectedObject(): Model.CommonObject | null {
+		const position = this.cursorObject.position.clone();
+		const mapPortion = this.getMapPortionByPosition(position);
+		if (mapPortion) {
+			return mapPortion.model.objects.get(position.toKey()) ?? null;
+		}
+		return null;
 	}
 
 	paintPin(p: Position, kindAfter: ELEMENT_MAP_KIND, autotileID: number, textureAfter: Rectangle) {

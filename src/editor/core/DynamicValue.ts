@@ -30,7 +30,7 @@ class DynamicValue extends Serializable {
 		return [...DynamicValue.bindings, ...additionnalBinding];
 	}
 
-	static create(kind: DYNAMIC_VALUE_KIND, value: unknown) {
+	static create(kind: DYNAMIC_VALUE_KIND, value?: unknown) {
 		const dynamic = new DynamicValue();
 		dynamic.kind = kind;
 		dynamic.value = value;

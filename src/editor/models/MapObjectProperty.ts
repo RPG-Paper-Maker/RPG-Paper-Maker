@@ -10,13 +10,15 @@
 */
 
 import { Base } from './Base';
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 
 class MapObjectProperty extends Base {
 	public initialValue!: DynamicValue;
 
-	public static bindings: BindingType[] = [['initialValue', 'iv', undefined, BINDING.OBJECT, DynamicValue]];
+	public static bindings: BindingType[] = [
+		['initialValue', 'iv', DynamicValue.create(DYNAMIC_VALUE_KIND.NONE), BINDING.DYNAMIC_VALUE, DynamicValue],
+	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];

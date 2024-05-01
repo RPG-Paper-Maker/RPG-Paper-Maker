@@ -34,6 +34,7 @@ import {
 	setSelectedMapElement,
 	setUndoRedoIndex,
 	setUndoRedoLength,
+	setNeedsUpdateMapEditor,
 } from './slices/MapEditorReducer';
 import {
 	setCurrentProject,
@@ -94,6 +95,7 @@ export {
 	setSelectedMapElement,
 	setUndoRedoIndex,
 	setUndoRedoLength,
+	setNeedsUpdateMapEditor,
 	setCurrentProject,
 	setLoading,
 	setOpenLoading,

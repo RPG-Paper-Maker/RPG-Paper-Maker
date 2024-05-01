@@ -46,7 +46,10 @@ function ContextMenu({ children, items = [] }: Props) {
 				}, 200);
 				break;
 			case 2:
-				openContext(e.pageX, e.pageY);
+				setIsOpen(false);
+				setTimeout(() => {
+					openContext(e.pageX, e.pageY);
+				}, 100);
 				break;
 		}
 	};

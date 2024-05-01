@@ -45,6 +45,7 @@ const MapEditorSlice = createSlice({
 			index: -1,
 			length: 0,
 		},
+		needsUpdate: false,
 	},
 	reducers: {
 		setCurrentTreeMapTag(state, action: PayloadAction<Model.TreeMapTag | null>) {
@@ -107,6 +108,9 @@ const MapEditorSlice = createSlice({
 		setUndoRedoLength(state, action: PayloadAction<number>) {
 			state.undoRedo.length = action.payload;
 		},
+		setNeedsUpdateMapEditor(state) {
+			state.needsUpdate = !state.needsUpdate;
+		},
 	},
 });
 
@@ -131,5 +135,6 @@ export const {
 	setSelectedMapElement,
 	setUndoRedoIndex,
 	setUndoRedoLength,
+	setNeedsUpdateMapEditor,
 } = MapEditorSlice.actions;
 export const MapEditorReducer = MapEditorSlice.reducer;

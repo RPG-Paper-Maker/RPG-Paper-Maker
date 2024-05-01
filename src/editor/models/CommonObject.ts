@@ -56,6 +56,12 @@ class CommonObject extends Base {
 		return object;
 	}
 
+	static fromJSON(json: JSONType): CommonObject {
+		const object = new CommonObject();
+		object.read(json);
+		return object;
+	}
+
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, CommonObject.getBindings(additionnalBinding));
 	}

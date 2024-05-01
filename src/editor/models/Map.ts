@@ -285,6 +285,10 @@ class Map extends Base {
 		return id;
 	}
 
+	getObjectAt(position: Position): Model.MapObject | null {
+		return this.objects?.find((object) => object.position.equals(position)) ?? null;
+	}
+
 	async updateObject(position: Position, object: Model.CommonObject | null) {
 		this.objects = this.objects.filter((mapObject) => !position.equals(mapObject.position));
 		if (object !== null) {

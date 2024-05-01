@@ -150,14 +150,16 @@ class Serializable {
 					const mapping = new Map();
 					(this as JSONType)[name] = mapping;
 					const jsonObj = json[jsonName] as Record<string, unknown>;
-					for (const key of Object.keys(jsonObj)) {
-						const jsonValue = jsonObj[key] as JSONType;
-						if (constructorClass) {
-							const obj = new constructorClass() as Model.Base;
-							obj.read(jsonValue);
-							mapping.set(key, obj);
-						} else {
-							mapping.set(key, jsonValue);
+					if (jsonObj) {
+						for (const key of Object.keys(jsonObj)) {
+							const jsonValue = jsonObj[key] as JSONType;
+							if (constructorClass) {
+								const obj = new constructorClass() as Model.Base;
+								obj.read(jsonValue);
+								mapping.set(key, obj);
+							} else {
+								mapping.set(key, jsonValue);
+							}
 						}
 					}
 					break;

@@ -10,15 +10,17 @@
 */
 
 import { Base } from './Base';
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { CreateParameter } from './CreateParameter';
 
 class MapObjectParameter extends Base {
-	public parameter!: CreateParameter;
+	public parameter!: CreateParameter | null;
 	public value!: DynamicValue;
 
-	public static bindings: BindingType[] = [['value', 'v', undefined, BINDING.OBJECT, DynamicValue]];
+	public static bindings: BindingType[] = [
+		['value', 'v', DynamicValue.create(DYNAMIC_VALUE_KIND.NONE), BINDING.DYNAMIC_VALUE, DynamicValue],
+	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
@@ -26,7 +28,7 @@ class MapObjectParameter extends Base {
 
 	copy(parameter: MapObjectParameter): void {
 		super.copy(parameter);
-		this.parameter = parameter.parameter.clone();
+		this.parameter = null;
 		this.value = parameter.value.clone();
 	}
 

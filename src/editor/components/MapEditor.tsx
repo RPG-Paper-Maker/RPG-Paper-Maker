@@ -16,6 +16,7 @@ import '../styles/MapEditor.css';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	RootState,
+	setNeedsUpdateMapEditor,
 	setSelectedMapElement,
 	setSelectedPosition,
 	setUndoRedoIndex,
@@ -41,6 +42,7 @@ function MapEditor() {
 	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
 	const needsReloadMap = useSelector((state: RootState) => state.triggers.needsReloadMap);
 	useSelector((state: RootState) => state.triggers.splitting);
+	useSelector((state: RootState) => state.mapEditor.needsUpdate);
 
 	const dispatch = useDispatch();
 
@@ -123,6 +125,10 @@ function MapEditor() {
 				dispatch(setSelectedMapElement(Scene.Map.current!.selectedElement));
 				map.needsUpdateSelectedMapElement = false;
 			}
+			if (map.needsUpdateComponent) {
+				dispatch(setNeedsUpdateMapEditor());
+				map.needsUpdateComponent = false;
+			}
 			if (!map.loading && Inputs.keys.length > 0) {
 				map.onKeyDownImmediate();
 			}
@@ -157,8 +163,13 @@ function MapEditor() {
 	};
 
 	const handleDoubleClick = async () => {
-		if (currentMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
-			await handleNewMapObject();
+		if (Scene.Map.current && currentMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+			const isNew = !Scene.Map.current.modelMap?.getObjectAt(Scene.Map.current!.cursorObject.position);
+			if (isNew) {
+				await handleNewMapObject();
+			} else {
+				await handleEditMapObject();
+			}
 		}
 	};
 
@@ -169,6 +180,15 @@ function MapEditor() {
 		mapObject.name = Model.CommonObject.generateName(id);
 		setCurrentMapObject(mapObject);
 		setNeedOpenMapObject(true);
+	};
+
+	const handleEditMapObject = async () => {
+		let mapObject = Scene.Map.current!.getSelectedObject();
+		if (mapObject) {
+			mapObject = mapObject.clone();
+			setCurrentMapObject(mapObject);
+			setNeedOpenMapObject(true);
+		}
 	};
 
 	const handleAcceptMapObject = async () => {
@@ -211,32 +231,39 @@ function MapEditor() {
 		resize();
 	});
 
-	const getContextMenuItems = () =>
-		currentMapElementKind === ELEMENT_MAP_KIND.OBJECT
-			? [
-					{
-						title: `${t('new')}...`,
-						onClick: handleNewMapObject,
-					},
-					{
-						title: `${t('edit')}...`,
-						disabled: true,
-					},
-					{
-						title: t('copy'),
-						shortcut: [SPECIAL_KEY.CTRL, KEY.C],
-					},
-					{
-						title: t('paste'),
-
-						shortcut: [SPECIAL_KEY.CTRL, KEY.V],
-					},
-					{
-						title: t('delete'),
-						shortcut: [KEY.DELETE],
-					},
-			  ]
-			: [];
+	const getContextMenuItems = () => {
+		if (Scene.Map.current && currentMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+			const isNew = !Scene.Map.current.modelMap?.getObjectAt(Scene.Map.current!.cursorObject.position);
+			return [
+				{
+					title: `${t('new')}...`,
+					onClick: handleNewMapObject,
+					disabled: !isNew,
+				},
+				{
+					title: `${t('edit')}...`,
+					onClick: handleEditMapObject,
+					disabled: isNew,
+				},
+				{
+					title: t('copy'),
+					shortcut: [SPECIAL_KEY.CTRL, KEY.C],
+					disabled: isNew,
+				},
+				{
+					title: t('paste'),
+					shortcut: [SPECIAL_KEY.CTRL, KEY.V],
+					disabled: true,
+				},
+				{
+					title: t('delete'),
+					shortcut: [KEY.DELETE],
+					disabled: isNew,
+				},
+			];
+		}
+		return [];
+	};
 
 	return (
 		<>

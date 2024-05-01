@@ -10,13 +10,15 @@
 */
 
 import { Base } from './Base';
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 
 class CreateParameter extends Base {
 	public defaultValue!: DynamicValue;
 
-	public static bindings: BindingType[] = [['defaultValue', 'd', undefined, BINDING.OBJECT, DynamicValue]];
+	public static bindings: BindingType[] = [
+		['defaultValue', 'd', DynamicValue.create(DYNAMIC_VALUE_KIND.NONE), BINDING.DYNAMIC_VALUE, DynamicValue],
+	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
