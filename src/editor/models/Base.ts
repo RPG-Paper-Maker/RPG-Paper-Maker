@@ -45,6 +45,10 @@ class Base extends Serializable {
 		return labels.map((label, index) => Base.create(index, label));
 	}
 
+	public static getByID(list: Base[], id: number): Base | null {
+		return list.find((model) => model.id === id) ?? null;
+	}
+
 	applyDefault(additionnalBinding: BindingType[]) {
 		const bindings = Base.getBindings(additionnalBinding);
 		for (const [name, , defaultValue, ,] of bindings) {

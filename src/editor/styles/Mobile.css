@@ -50,9 +50,6 @@
 		width: 100% !important;
 		max-width: 100% !important;
 	}
-	.project-preview .title {
-		text-align: center;
-	}
 }
 
 @media (min-width: 1001px) {

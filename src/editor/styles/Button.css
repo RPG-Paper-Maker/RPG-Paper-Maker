@@ -59,6 +59,7 @@ button.primary:hover:not(.disabled) {
 button.big {
 	padding: 15px 35px 15px 35px;
 	font-size: 15px;
+	height: auto;
 }
 
 button.patreon:hover {

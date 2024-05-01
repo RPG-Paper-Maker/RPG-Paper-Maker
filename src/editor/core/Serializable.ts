@@ -13,6 +13,7 @@ import { Position, Rectangle } from '.';
 import { MapElement, Model } from '../Editor';
 import { BINDING, BindingType, JSONMapping, JSONType, KeyValue, Utils } from '../common';
 import { Platform } from '../common/Platform';
+import { DynamicValue } from './DynamicValue';
 
 class Serializable {
 	// eslint-disable-next-line
@@ -64,6 +65,20 @@ class Serializable {
 						json[jsonName],
 						defaultValue === undefined ? (this as JSONType)[name] : defaultValue
 					);
+					break;
+				case BINDING.DYNAMIC_VALUE:
+					const jsonValue = json[jsonName] as JSONType | undefined;
+					/*
+					if (jsonValue) {
+						const dynamicValue = new DynamicValue();
+						dynamicValue.read(jsonValue);
+						(this as JSONType)[name] = dynamicValue;
+					} else {
+						(this as JSONType)[name] =
+							defaultValue === undefined
+								? (this as JSONType)[name]
+								: (defaultValue as DynamicValue).clone();
+					}*/
 					break;
 				case BINDING.OBJECT: {
 					const jsonObj = json[jsonName] as JSONType;
@@ -178,6 +193,15 @@ class Serializable {
 				case BINDING.STRING:
 				case BINDING.BOOLEAN:
 					Utils.writeDefaultValue(json, jsonName, (this as JSONType)[name], defaultValue);
+					break;
+				case BINDING.DYNAMIC_VALUE:
+					const defaultDynamicValue = defaultValue as DynamicValue;
+					const dynamicValue = (this as JSONType)[name] as DynamicValue;
+					if (!defaultDynamicValue.equals(dynamicValue)) {
+						const jsonObj = {};
+						dynamicValue.write(jsonObj);
+						json[jsonName] = jsonObj;
+					}
 					break;
 				case BINDING.OBJECT: {
 					const obj = (this as JSONType)[name] as Serializable;

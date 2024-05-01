@@ -23,6 +23,7 @@ class Project {
 	public pictures = new Data.Pictures();
 	public shapes = new Data.Shapes();
 	public specialElements = new Data.SpecialElements();
+	public commonEvents = new Data.CommonEvents();
 
 	constructor(name: string, location: string) {
 		this.systems.projectName = Model.Localization.create(name);
@@ -43,6 +44,7 @@ class Project {
 
 	translateDefaults() {
 		this.treeMaps.translateDefaults();
+		this.commonEvents.translateDefaults();
 	}
 
 	async load() {
@@ -55,11 +57,14 @@ class Project {
 		Project.SQUARE_SIZE = this.systems.SQUARE_SIZE;
 		await this.treeMaps.load();
 		await this.specialElements.load();
+		await this.commonEvents.load();
+		console.log(this.commonEvents);
 	}
 
 	async save() {
 		await this.treeMaps.save();
 		await this.settings.save();
+		await this.commonEvents.save();
 		// await this.systems.save(Paths.join(this.getPath(), Paths.FILE_SYSTEM));
 	}
 }

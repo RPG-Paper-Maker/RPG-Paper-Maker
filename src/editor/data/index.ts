@@ -1,3 +1,4 @@
+export * from './CommonEvents';
 export * from './Pictures';
 export * from './Settings';
 export * from './Shapes';

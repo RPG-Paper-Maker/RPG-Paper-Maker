@@ -11,15 +11,12 @@
 
 import { Base } from './Base';
 import { BINDING, BindingType, JSONType, Utils } from '../common';
+import { MapObjectState } from './MapObjectState';
 
 class MapObject extends Base {
-	public static bindings: BindingType[] = [
-		['tilesetID', 'tileset', undefined, BINDING.NUMBER],
-		['length', 'l', undefined, BINDING.NUMBER],
-		['width', 'w', undefined, BINDING.NUMBER],
-		['height', 'h', undefined, BINDING.NUMBER],
-		['depth', 'd', undefined, BINDING.NUMBER],
-	];
+	public states: MapObjectState[] = [MapObjectState.create(1, 'State 1')];
+
+	public static bindings: BindingType[] = [['states', 'states', undefined, BINDING.LIST, MapObjectState]];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];

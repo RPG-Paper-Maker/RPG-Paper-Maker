@@ -23,37 +23,41 @@ function ContextMenu({ children, items = [] }: Props) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isFocused, setIsFocused] = useState(false);
 	const [timerID, setTimerID] = useState<NodeJS.Timeout | undefined>();
-	const ref = useRef<HTMLDivElement>(null);
+	const refComplete = useRef<HTMLDivElement>(null);
+	const refMenu = useRef<HTMLDivElement>(null);
 
 	const openContext = (x: number, y: number) => {
 		setIsOpen(true);
-		if (ref.current) {
+		if (refMenu.current) {
 			x -= Utils.getViewportLeft();
 			y -= Utils.getViewportTop();
-			ref.current.style.left = `${x}px`;
-			ref.current.style.top = `${y}px`;
+			refMenu.current.style.left = `${x}px`;
+			refMenu.current.style.top = `${y}px`;
 		}
 	};
 
 	const handleMouseDown = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
 		setIsFocused(true);
-		setTimeout(() => {
-			// Small wait to let selected item time for onClick method to be triggered before hidding
-			switch (e.button) {
-				case 0:
+		switch (e.button) {
+			case 0:
+				setTimeout(() => {
+					// Small wait to let selected item time for onClick method to be triggered before hidding
 					setIsOpen(false);
-					break;
-				case 2:
-					openContext(e.pageX, e.pageY);
-					break;
-			}
-		}, 200);
+				}, 200);
+				break;
+			case 2:
+				openContext(e.pageX, e.pageY);
+				break;
+		}
 	};
 
 	const handleMouseDownOutside = (e: MouseEvent) => {
-		console.log(e.button);
-		if (e.button === 0 && isOpen && ref.current && !ref.current.contains(e.target as Node)) {
+		const isOutComplete = refComplete.current && !refComplete.current.contains(e.target as Node);
+		if (isOutComplete || (e.button === 0 && refMenu.current && !refMenu.current.contains(e.target as Node))) {
 			setIsOpen(false);
+			if (isOutComplete) {
+				setIsFocused(false);
+			}
 		}
 	};
 
@@ -73,24 +77,24 @@ function ContextMenu({ children, items = [] }: Props) {
 
 	useEffect(() => {
 		if (isOpen) {
-			console.log('ISOPEN');
 			document.addEventListener('mousedown', handleMouseDownOutside);
-			return () => {
-				document.removeEventListener('mousedown', handleMouseDownOutside);
-			};
 		}
+		return () => {
+			document.removeEventListener('mousedown', handleMouseDownOutside);
+		};
 		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (
 		<div
+			ref={refComplete}
 			className='flex-one'
 			onMouseDown={handleMouseDown}
 			onTouchStart={handleTouchStart}
 			onTouchEnd={handleTouchEnd}
 		>
 			{children}
-			<div ref={ref} className={Utils.getClassName([[!isOpen, 'hidden']], ['fixed', 'hight-z-index'])}>
+			<div ref={refMenu} className={Utils.getClassName([[!isOpen, 'hidden']], ['fixed', 'hight-z-index'])}>
 				<MenuCustom horizontal={false} items={items} allowKeyboard={isFocused} />
 			</div>
 		</div>

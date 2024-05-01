@@ -11,13 +11,21 @@
 
 .checkbox {
 	display: flex;
+	gap: 5px;
 	align-items: center;
 	cursor: pointer;
 	user-select: none;
 
-	input {
+	.square {
+		background-color: white;
+		width: 8px;
+		height: 8px;
 		cursor: pointer;
-		margin-right: 5px;
-		flex-grow: 0;
+		border-radius: 2px;
+		border: 2px solid white;
+
+		&.checked {
+			background-color: var(--primary-color);
+		}
 	}
 }

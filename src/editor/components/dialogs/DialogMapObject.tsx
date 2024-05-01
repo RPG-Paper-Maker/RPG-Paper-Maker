@@ -26,6 +26,7 @@ import Checkbox from '../Checkbox';
 import Tab from '../Tab';
 import GraphicsSelector from '../GraphicsSelector';
 import Form from '../Form';
+import { Node } from '../../core';
 
 type Props = {
 	needOpen: boolean;
@@ -45,7 +46,9 @@ function DialogMapObject({ needOpen, setNeedOpen, model, onAccept }: Props) {
 	const [name, setName] = useStateString();
 	const [id, setID] = useStateNumber();
 	const [objectModel, setObjectModel] = useState(Model.Base.create(0, t('none')));
+	const [states, setStates] = useState(Node.createList(model.states));
 	const [graphicsOption, setGraphicsOption] = useState(Model.Base.GRAPHICS_OPTIONS[0]);
+	const [moveAnimation, setMoveAnimation] = useState(true);
 
 	const initialize = () => {
 		setName(model.name);
@@ -113,7 +116,7 @@ function DialogMapObject({ needOpen, setNeedOpen, model, onAccept }: Props) {
 						/>
 					</div>
 					<div className='flex-column gap-small'>
-						{t('states')}:<Tree list={[]}></Tree>
+						{t('states')}:<Tree list={states}></Tree>
 						{t('properties')}:<Tree list={[]}></Tree>
 						{t('events')}:<Tree list={[]}></Tree>
 						<div className='flex gap-small'>
@@ -165,9 +168,11 @@ function DialogMapObject({ needOpen, setNeedOpen, model, onAccept }: Props) {
 						</div>
 						<div className='flex'>
 							<Groupbox title={t('options')}>
-								<div className='flex'>
+								<div className='flex gap-medium'>
 									<div className='flex-column'>
-										<Checkbox>{t('move.animation')}</Checkbox>
+										<Checkbox isChecked={moveAnimation} onChange={setMoveAnimation}>
+											{t('move.animation')}
+										</Checkbox>
 										<Checkbox>{t('stop.animation')}</Checkbox>
 										<Checkbox>{t('climb.animation')}</Checkbox>
 										<Checkbox>{t('direction.fix')}</Checkbox>
@@ -184,7 +189,7 @@ function DialogMapObject({ needOpen, setNeedOpen, model, onAccept }: Props) {
 						</div>
 					</div>
 				</div>
-				<div className='flex'>
+				<div className='flex gap-small'>
 					<Checkbox>
 						<div className='flex-center-v gap-small'>
 							{t('detection')} <Button disabled>...</Button>

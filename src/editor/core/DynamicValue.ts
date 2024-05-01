@@ -10,7 +10,7 @@
 */
 
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
-import { Serializable } from '../core';
+import { Serializable } from '.';
 
 class DynamicValue extends Serializable {
 	public kind!: DYNAMIC_VALUE_KIND;
@@ -28,6 +28,28 @@ class DynamicValue extends Serializable {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...DynamicValue.bindings, ...additionnalBinding];
+	}
+
+	static create(kind: DYNAMIC_VALUE_KIND, value: unknown) {
+		const dynamic = new DynamicValue();
+		dynamic.kind = kind;
+		dynamic.value = value;
+		return dynamic;
+	}
+
+	equals(dynamic: DynamicValue): boolean {
+		return this.kind === dynamic.kind && this.value === dynamic.value;
+	}
+
+	copy(dynamic: DynamicValue): void {
+		this.kind = dynamic.kind;
+		this.value = dynamic.value;
+	}
+
+	clone(): DynamicValue {
+		const dynamic = new DynamicValue();
+		dynamic.copy(this);
+		return dynamic;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

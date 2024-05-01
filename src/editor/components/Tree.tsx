@@ -19,6 +19,7 @@ import { Model } from '../Editor';
 
 type Props = {
 	list: Node[];
+	cannotAdd?: boolean;
 	constructorType?: typeof Model.Base;
 	contextMenuItems?: (CONTEXT_MENU_ITEM_KIND | MenuItemType)[];
 	defaultSelectedID?: number;
@@ -29,6 +30,7 @@ type Props = {
 
 function Tree({
 	list,
+	cannotAdd = false,
 	contextMenuItems = [
 		CONTEXT_MENU_ITEM_KIND.NEW,
 		CONTEXT_MENU_ITEM_KIND.EDIT,
@@ -130,6 +132,18 @@ function Tree({
 			if (!ArrayUtils.contains(notExpandedItemsList, node.content.id)) {
 				getTreeItems(node.children, level + 1, items);
 			}
+		}
+		if (!cannotAdd && level === 0) {
+			items.push(
+				<TreeItem
+					key={-1}
+					node={Node.create(Model.Base.create(-1, ''))}
+					level={level}
+					selected={isSelected(-1)}
+					onSwitchExpanded={handleSwitchExpandedItem}
+					onMouseDown={handleMouseDownItem}
+				/>
+			);
 		}
 		return items;
 	};

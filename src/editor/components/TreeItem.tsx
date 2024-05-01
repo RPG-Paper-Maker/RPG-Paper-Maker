@@ -52,13 +52,14 @@ function TreeItem({ node, level = 0, selected = false, onSwitchExpanded, onMouse
 	return (
 		<div
 			className={Utils.getClassName([[selected, 'selected']], ['tree-item'])}
-			style={{ paddingLeft: `${level * 15}px` }}
+			style={{ paddingLeft: `${5 + level * 15}px` }}
 			onMouseDown={handleMouseDown}
 		>
 			{isTreeMapTag() && isFolder() && (
 				<div onMouseDown={handleMouseDownSwitchExpand}>{expanded ? <HiChevronDown /> : <HiChevronRight />}</div>
 			)}
 			{node.getIcon()}
+			{!isTreeMapTag() && '> '}
 			{node.toString()}
 		</div>
 	);

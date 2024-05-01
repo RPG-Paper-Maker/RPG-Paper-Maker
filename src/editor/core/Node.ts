@@ -115,6 +115,10 @@ class Node extends Serializable {
 		return ids;
 	}
 
+	static createList(list: Model.Base[]): Node[] {
+		return list.map((content) => Node.create(content));
+	}
+
 	getIcon() {
 		return this.content.getIcon();
 	}

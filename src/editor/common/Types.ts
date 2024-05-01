@@ -10,7 +10,7 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, KEY, SPECIAL_KEY } from './Enum';
+import { BINDING, DYNAMIC_VALUE_KIND, KEY, SPECIAL_KEY } from './Enum';
 import { Node, Serializable } from '../core';
 import { MapElement } from '../Editor';
 

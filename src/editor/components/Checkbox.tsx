@@ -11,6 +11,7 @@
 
 import { ReactNode } from 'react';
 import '../styles/Checkbox.css';
+import { Utils } from '../common';
 
 type Props = {
 	children?: ReactNode;
@@ -19,15 +20,15 @@ type Props = {
 };
 
 function Checkbox({ children, isChecked = false, onChange }: Props) {
-	const handleChange = () => {
+	const handleClick = () => {
 		if (onChange) {
 			onChange(!isChecked);
 		}
 	};
 
 	return (
-		<label className='checkbox'>
-			<input type='checkbox' checked={isChecked} onChange={handleChange} />
+		<label className='checkbox' onClick={handleClick}>
+			<div className={Utils.getClassName([[isChecked, 'checked']], ['square'])} />
 			{children}
 		</label>
 	);

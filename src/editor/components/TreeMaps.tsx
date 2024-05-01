@@ -338,6 +338,7 @@ function TreeMaps({
 				onSelectedItem={handleSelectedItem}
 				forcedCurrentSelectedItemID={forcedCurrentSelectedItemID}
 				setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemID}
+				cannotAdd
 			/>
 			<DialogMapProperties
 				needOpen={needOpenMapProperties}
