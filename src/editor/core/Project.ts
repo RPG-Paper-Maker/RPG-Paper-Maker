@@ -58,7 +58,6 @@ class Project {
 		await this.treeMaps.load();
 		await this.specialElements.load();
 		await this.commonEvents.load();
-		console.log(this.commonEvents);
 	}
 
 	async save() {

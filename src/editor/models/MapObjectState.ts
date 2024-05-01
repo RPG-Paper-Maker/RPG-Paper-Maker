@@ -63,14 +63,62 @@ class MapObjectState extends Base {
 		['pixelOffset', 'pix', undefined, BINDING.BOOLEAN],
 		['keepPosition', 'pos', undefined, BINDING.BOOLEAN],
 		['eventCommandDetection', 'ecd', null, BINDING.OBJECT, EventCommand],
-		['centerX', 'cx', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 50), BINDING.DYNAMIC_VALUE],
-		['centerZ', 'cz', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 50), BINDING.DYNAMIC_VALUE],
-		['angleX', 'ax', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE],
-		['angleY', 'ay', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE],
-		['angleZ', 'az', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE],
-		['scaleX', 'sx', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE],
-		['scaleY', 'sy', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE],
-		['scaleZ', 'sz', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE],
+		[
+			'centerX',
+			'cx',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 50),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'centerZ',
+			'cz',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 50),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'angleX',
+			'ax',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'angleY',
+			'ay',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'angleZ',
+			'az',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'scaleX',
+			'sx',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'scaleY',
+			'sy',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'scaleZ',
+			'sz',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -103,7 +151,6 @@ class MapObjectState extends Base {
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
-		console.log(this);
 		super.write(json, MapObjectState.getBindings(additionnalBinding));
 	}
 }

@@ -36,7 +36,6 @@ class MapObjectReaction extends Base {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, MapObjectReaction.getBindings(additionnalBinding));
-		console.log(json);
 		this.commands = (json.c as JSONType[]).map((jsonNode) => {
 			const node = new Node();
 			node.read(jsonNode, [], EventCommand);

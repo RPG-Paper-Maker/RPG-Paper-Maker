@@ -166,7 +166,6 @@ function MapEditor() {
 		const mapObject = Model.MapObject.create(id, Model.MapObject.generateName(id));
 		setCurrentMapObject(mapObject);
 		setNeedOpenMapObject(true);
-		console.log('ok');
 	};
 
 	const handleAcceptMapObject = async () => {
