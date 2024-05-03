@@ -164,7 +164,7 @@ function MapEditor() {
 
 	const handleDoubleClick = async () => {
 		if (Scene.Map.current && currentMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
-			const isNew = !Scene.Map.current.modelMap?.getObjectAt(Scene.Map.current!.cursorObject.position);
+			const isNew = !Scene.Map.current.model?.getObjectAt(Scene.Map.current!.cursorObject.position);
 			if (isNew) {
 				await handleNewMapObject();
 			} else {
@@ -175,7 +175,7 @@ function MapEditor() {
 
 	const handleNewMapObject = async () => {
 		const mapObject = Project.current!.commonEvents.defaultObject.clone();
-		const id = Model.Base.generateNewIDfromList(Scene.Map.current!.modelMap.objects);
+		const id = Model.Base.generateNewIDfromList(Scene.Map.current!.model.objects);
 		mapObject.id = id;
 		mapObject.name = Model.CommonObject.generateName(id);
 		setCurrentMapObject(mapObject);
@@ -233,7 +233,7 @@ function MapEditor() {
 
 	const getContextMenuItems = () => {
 		if (Scene.Map.current && currentMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
-			const isNew = !Scene.Map.current.modelMap?.getObjectAt(Scene.Map.current!.cursorObject.position);
+			const isNew = !Scene.Map.current.model?.getObjectAt(Scene.Map.current!.cursorObject.position);
 			return [
 				{
 					title: `${t('new')}...`,

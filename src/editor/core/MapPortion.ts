@@ -488,7 +488,7 @@ class MapPortion {
 		undoRedo = false,
 		allowBorders = false
 	): MapElement.Base | null {
-		if (!Scene.Map.current || (element && !position.isInMap(Scene.Map.current.modelMap, allowBorders))) {
+		if (!Scene.Map.current || (element && !position.isInMap(Scene.Map.current.model, allowBorders))) {
 			return null;
 		}
 		const key = position.toKey();

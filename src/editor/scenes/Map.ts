@@ -75,7 +75,7 @@ class Map extends Base {
 	public needsUpdateSelectedPosition?: Position | null;
 	public needsUpdateSelectedMapElement = false;
 	public needsClose = false;
-	public modelMap = new Model.Map();
+	public model = new Model.Map();
 	public grid = new Grid();
 	public cursor: Cursor;
 	public cursorStartPosition!: Cursor;
@@ -197,15 +197,15 @@ class Map extends Base {
 		this.materialTilesetHover = Manager.GL.createMaterial({ texture: this.materialTileset.map, hovered: true });
 
 		// Load map model
-		this.modelMap.id = this.id;
-		await this.modelMap.load();
+		this.model.id = this.id;
+		await this.model.load();
 
 		// Create grid plane
 		const material = new THREE.Material();
 		material.visible = false;
 		material.side = THREE.DoubleSide;
-		const length = Project.SQUARE_SIZE * this.modelMap.length;
-		const width = Project.SQUARE_SIZE * this.modelMap.width;
+		const length = Project.SQUARE_SIZE * this.model.length;
+		const width = Project.SQUARE_SIZE * this.model.width;
 		const extremeSize = Project.SQUARE_SIZE * 1000;
 		this.meshPlane = new THREE.Mesh(
 			new THREE.PlaneGeometry(length + extremeSize, width + extremeSize, 1),
@@ -229,7 +229,7 @@ class Map extends Base {
 		this.initializeSunLight();
 
 		// Grid
-		this.grid.initialize(this.modelMap);
+		this.grid.initialize(this.model);
 		this.syncCursorGrid();
 
 		// Transform controls
@@ -265,11 +265,11 @@ class Map extends Base {
 
 	async save() {
 		this.loading = true;
-		await this.modelMap.save();
-		const filesPaths = await Platform.getFiles(Paths.join(this.modelMap.getPath(), Paths.TEMP));
+		await this.model.save();
+		const filesPaths = await Platform.getFiles(Paths.join(this.model.getPath(), Paths.TEMP));
 		for (const path of filesPaths) {
 			const list = path.split('/');
-			await Platform.copyFile(path, Paths.join(this.modelMap.getPath(), list[list.length - 1]));
+			await Platform.copyFile(path, Paths.join(this.model.getPath(), list[list.length - 1]));
 			await Platform.removeFile(path);
 		}
 		this.loading = false;
@@ -416,10 +416,10 @@ class Map extends Base {
 		z: number,
 		move: boolean = false
 	) {
-		const lx = Math.ceil(this.modelMap.length / Constants.PORTION_SIZE);
-		const lz = Math.ceil(this.modelMap.width / Constants.PORTION_SIZE);
-		const ld = Math.ceil(this.modelMap.depth / Constants.PORTION_SIZE);
-		const lh = Math.ceil(this.modelMap.height / Constants.PORTION_SIZE);
+		const lx = Math.ceil(this.model.length / Constants.PORTION_SIZE);
+		const lz = Math.ceil(this.model.width / Constants.PORTION_SIZE);
+		const ld = Math.ceil(this.model.depth / Constants.PORTION_SIZE);
+		const lh = Math.ceil(this.model.height / Constants.PORTION_SIZE);
 		if (realX >= 0 && realX < lx && realY >= -ld && realY < lh && realZ >= 0 && realZ < lz) {
 			const portion = new Portion(realX, realY, realZ);
 			const modelMapPortion = new Model.MapPortion(portion);
@@ -622,7 +622,7 @@ class Map extends Base {
 	}
 
 	updateObjectCursor(preview: boolean, position: Position) {
-		if (!preview && position.isInMap(this.modelMap)) {
+		if (!preview && position.isInMap(this.model)) {
 			this.cursorObject.position.setCoords(position.x, position.y, position.yPixels, position.z);
 			this.needsUpdateComponent = true;
 			this.cursorObject.updateMeshPosition();
@@ -633,7 +633,7 @@ class Map extends Base {
 		const position = this.cursorObject.position.clone();
 		const mapPortion = this.getMapPortionByPosition(position);
 		if (mapPortion) {
-			await this.modelMap.updateObject(position, object);
+			await this.model.updateObject(position, object);
 			mapPortion.updateObject(position, object);
 		}
 	}
@@ -652,7 +652,7 @@ class Map extends Base {
 		this.forEachMapPortions((mapPortion) => {
 			mapPortion?.removeLastPreview();
 		});
-		if (p.isInMap(this.modelMap)) {
+		if (p.isInMap(this.model)) {
 			let portion = this.getLocalPortion(p);
 			if (this.isInPortion(portion)) {
 				const mapPortionBefore = this.getMapPortionFromPortion(portion);
@@ -697,7 +697,7 @@ class Map extends Base {
 							const localX = adjacentPosition.x - p.x;
 							const localZ = adjacentPosition.z - p.z;
 							textureAfterReduced = MapElement.Floor.getTextureReduced(textureAfter, localX, localZ);
-							if (adjacentPosition.isInMap(this.modelMap)) {
+							if (adjacentPosition.isInMap(this.model)) {
 								portion = this.getLocalPortion(adjacentPosition);
 								if (this.isInPortion(portion)) {
 									const mapPortionHere = this.getMapPortionFromPortion(portion);
@@ -752,7 +752,7 @@ class Map extends Base {
 		const addition = up ? 1 : -1;
 		if (square) {
 			const newY = this.cursor.position.y + addition;
-			if (newY >= -this.modelMap.depth && newY < this.modelMap.height) {
+			if (newY >= -this.model.depth && newY < this.model.height) {
 				this.cursor.position.y = newY;
 			}
 		} else {
@@ -855,19 +855,19 @@ class Map extends Base {
 					? Project.SQUARE_SIZE / 2
 					: 0
 			);
-		} else if (Math.floor(this.selectedMesh.position.x / Project.SQUARE_SIZE) > this.modelMap.width - 1) {
+		} else if (Math.floor(this.selectedMesh.position.x / Project.SQUARE_SIZE) > this.model.width - 1) {
 			this.selectedMesh.position.setX(
-				this.modelMap.width * Project.SQUARE_SIZE -
+				this.model.width * Project.SQUARE_SIZE -
 					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
 						? Project.SQUARE_SIZE / 2
 						: 1)
 			);
 		}
-		if (this.selectedMesh.position.y < this.modelMap.depth * Project.SQUARE_SIZE) {
-			this.selectedMesh.position.setY(this.modelMap.depth * Project.SQUARE_SIZE);
-		} else if (Math.floor(this.selectedMesh.position.y / Project.SQUARE_SIZE) > this.modelMap.height - 1) {
+		if (this.selectedMesh.position.y < this.model.depth * Project.SQUARE_SIZE) {
+			this.selectedMesh.position.setY(this.model.depth * Project.SQUARE_SIZE);
+		} else if (Math.floor(this.selectedMesh.position.y / Project.SQUARE_SIZE) > this.model.height - 1) {
 			this.selectedMesh.position.setY(
-				(this.modelMap.height - 1) * Project.SQUARE_SIZE +
+				(this.model.height - 1) * Project.SQUARE_SIZE +
 					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
 						? 0
 						: Project.SQUARE_SIZE - 1)
@@ -879,9 +879,9 @@ class Map extends Base {
 					? Project.SQUARE_SIZE / 2
 					: 0
 			);
-		} else if (Math.floor(this.selectedMesh.position.z / Project.SQUARE_SIZE) > this.modelMap.length - 1) {
+		} else if (Math.floor(this.selectedMesh.position.z / Project.SQUARE_SIZE) > this.model.length - 1) {
 			this.selectedMesh.position.setZ(
-				this.modelMap.length * Project.SQUARE_SIZE -
+				this.model.length * Project.SQUARE_SIZE -
 					(Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.SQUARE
 						? Project.SQUARE_SIZE / 2
 						: 1)
@@ -946,7 +946,7 @@ class Map extends Base {
 	}
 
 	updateStartPosition(position: Position) {
-		if (position.isInMap(this.modelMap)) {
+		if (position.isInMap(this.model)) {
 			Project.current!.systems.heroMapID = this.id;
 			Project.current!.systems.heroMapPosition = position;
 			this.cursorStartPosition.position = position;
@@ -1289,7 +1289,7 @@ class Map extends Base {
 		}
 		if (
 			!Inputs.isPointerPressed &&
-			(!this.pointedMapElementPosition || !this.pointedMapElementPosition.isInMap(this.modelMap))
+			(!this.pointedMapElementPosition || !this.pointedMapElementPosition.isInMap(this.model))
 		) {
 			this.forEachMapPortions((mapPortion) => {
 				mapPortion?.removeLastPreview();
@@ -1563,7 +1563,7 @@ class Map extends Base {
 		if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
 			if (
 				this.lastPosition !== null &&
-				this.lastPosition.isInMap(this.modelMap, false, true) &&
+				this.lastPosition.isInMap(this.model, false, true) &&
 				this.cursorWall.needsUpdate(this.lastPosition)
 			) {
 				this.cursorWall.update(this.lastPosition);
@@ -1636,7 +1636,7 @@ class Map extends Base {
 	}
 
 	drawPointedCoords() {
-		if (this.pointedMapElementPosition && this.pointedMapElementPosition.isInMap(this.modelMap)) {
+		if (this.pointedMapElementPosition && this.pointedMapElementPosition.isInMap(this.model)) {
 			const lines = this.pointedMapElementPosition.toString().split('\n');
 			ArrayUtils.insertFirst(
 				lines,

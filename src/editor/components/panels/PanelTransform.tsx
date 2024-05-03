@@ -133,8 +133,8 @@ function PanelTransform({ kind }: Props) {
 		switch (kind) {
 			case ACTION_KIND.TRANSLATE:
 				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
-					? Scene.Map.current!.modelMap.width - 1
-					: Scene.Map.current!.modelMap.width * Project.SQUARE_SIZE - 1;
+					? Scene.Map.current!.model.width - 1
+					: Scene.Map.current!.model.width * Project.SQUARE_SIZE - 1;
 			default:
 				return undefined;
 		}
@@ -143,7 +143,7 @@ function PanelTransform({ kind }: Props) {
 	const getMinY = () => {
 		switch (kind) {
 			case ACTION_KIND.TRANSLATE: {
-				const min = -Scene.Map.current!.modelMap.depth;
+				const min = -Scene.Map.current!.model.depth;
 				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE ? min : min * Project.SQUARE_SIZE;
 			}
 			case ACTION_KIND.SCALE:
@@ -157,8 +157,8 @@ function PanelTransform({ kind }: Props) {
 		switch (kind) {
 			case ACTION_KIND.TRANSLATE:
 				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
-					? Scene.Map.current!.modelMap.height - 1
-					: Scene.Map.current!.modelMap.height * Project.SQUARE_SIZE - 1;
+					? Scene.Map.current!.model.height - 1
+					: Scene.Map.current!.model.height * Project.SQUARE_SIZE - 1;
 			default:
 				return undefined;
 		}
@@ -179,8 +179,8 @@ function PanelTransform({ kind }: Props) {
 		switch (kind) {
 			case ACTION_KIND.TRANSLATE:
 				return currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE
-					? Scene.Map.current!.modelMap.length - 1
-					: Scene.Map.current!.modelMap.length * Project.SQUARE_SIZE - 1;
+					? Scene.Map.current!.model.length - 1
+					: Scene.Map.current!.model.length * Project.SQUARE_SIZE - 1;
 			default:
 				return undefined;
 		}

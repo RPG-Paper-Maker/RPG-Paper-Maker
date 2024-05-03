@@ -90,7 +90,7 @@ class UndoRedo {
 					}
 					await model.save();
 					if (kind === ELEMENT_MAP_KIND.OBJECT) {
-						Scene.Map.current.modelMap.updateObject(position, element as Model.CommonObject | null);
+						Scene.Map.current.model.updateObject(position, element as Model.CommonObject | null);
 					}
 				}
 			}

@@ -70,8 +70,8 @@ class Cursor {
 			const angle = Scene.Map.current!.camera.horizontalAngle;
 			const minX = 0;
 			const minZ = 0;
-			const maxX = Scene.Map.current!.modelMap.width - 1;
-			const maxZ = Scene.Map.current!.modelMap.length - 1;
+			const maxX = Scene.Map.current!.model.width - 1;
+			const maxZ = Scene.Map.current!.model.length - 1;
 			for (const key of Inputs.keys) {
 				let xPlus = 0;
 				let zPlus = 0;

@@ -16,20 +16,20 @@ import { Project } from '.';
 class Grid {
 	public line!: THREE.LineSegments;
 
-	initialize(modelMap: Model.Map) {
+	initialize(model: Model.Map) {
 		const material = new THREE.LineBasicMaterial({
 			color: 0xffffff,
 			transparent: true,
 			opacity: 0.3,
 		});
 		const points = [];
-		for (let i = 0, l = modelMap.length; i <= l; i++) {
+		for (let i = 0, l = model.length; i <= l; i++) {
 			points.push(new THREE.Vector3(i * Project.SQUARE_SIZE, 0, 0));
-			points.push(new THREE.Vector3(i * Project.SQUARE_SIZE, 0, modelMap.width * Project.SQUARE_SIZE));
+			points.push(new THREE.Vector3(i * Project.SQUARE_SIZE, 0, model.width * Project.SQUARE_SIZE));
 		}
-		for (let i = 0, l = modelMap.width; i <= l; i++) {
+		for (let i = 0, l = model.width; i <= l; i++) {
 			points.push(new THREE.Vector3(0, 0, i * Project.SQUARE_SIZE));
-			points.push(new THREE.Vector3(modelMap.length * Project.SQUARE_SIZE, 0, i * Project.SQUARE_SIZE));
+			points.push(new THREE.Vector3(model.length * Project.SQUARE_SIZE, 0, i * Project.SQUARE_SIZE));
 		}
 		const geometry = new THREE.BufferGeometry().setFromPoints(points);
 		this.line = new THREE.LineSegments(geometry, material);
