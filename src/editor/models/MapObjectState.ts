@@ -20,7 +20,7 @@ class MapObjectState extends Base {
 	public graphicsID!: number;
 	public graphicsIndexX!: number;
 	public graphicsIndexY!: number;
-	public rectTileset!: Rectangle;
+	public rectTileset?: Rectangle;
 	public objectMovingKind!: OBJECT_MOVING_KIND;
 	public eventCommandRoute!: EventCommand | null;
 	public speedID!: number;
@@ -131,8 +131,16 @@ class MapObjectState extends Base {
 		return object;
 	}
 
-	getCommonState() {
+	applyDefault(additionnalBinding: BindingType[] = []) {
+		super.applyDefault(MapObjectState.getBindings(additionnalBinding));
+	}
+
+	getCommonState(): Base | null {
 		return Base.getByID(Project.current!.commonEvents.states, this.id);
+	}
+
+	getName(): string {
+		return this.getCommonState()?.name || '???';
 	}
 
 	copy(state: MapObjectState): void {
@@ -141,7 +149,7 @@ class MapObjectState extends Base {
 		this.graphicsID = state.graphicsID;
 		this.graphicsIndexX = state.graphicsIndexX;
 		this.graphicsIndexY = state.graphicsIndexY;
-		this.rectTileset = state.rectTileset.clone();
+		this.rectTileset = state.rectTileset?.clone();
 		this.objectMovingKind = state.objectMovingKind;
 		this.eventCommandRoute = state.eventCommandRoute === null ? null : state.eventCommandRoute.clone();
 		this.speedID = state.speedID;

@@ -18,6 +18,7 @@ import { Platform } from '../common/Platform';
 export const NODE_CONSTRUCTOR_KIND = {
 	Base: () => Model.Base,
 	TreeMapTag: () => Model.TreeMapTag,
+	MapObjectState: () => Model.MapObjectState,
 };
 
 class Node extends Serializable {

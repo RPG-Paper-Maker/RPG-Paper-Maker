@@ -277,14 +277,6 @@ class Map extends Base {
 		}
 	}
 
-	generateNewObjectID() {
-		let id = 1;
-		while (this.objects.find((mapObject) => mapObject.id === id)) {
-			id++;
-		}
-		return id;
-	}
-
 	getObjectAt(position: Position): Model.MapObject | null {
 		return this.objects?.find((object) => object.position.equals(position)) ?? null;
 	}

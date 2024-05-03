@@ -185,7 +185,8 @@ function Dialog({
 
 	const handleCloseOut = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
 		const container = dialogRef.current;
-		if (!isClickedIn && !isLoading && container && !container.contains(e.target as Node)) {
+		const dialogs = document.getElementsByClassName('dialog');
+		if (dialogs.length <= 1 && !isClickedIn && !isLoading && container && !container.contains(e.target as Node)) {
 			setIsMoved(false);
 			if (onClose) {
 				onClose();

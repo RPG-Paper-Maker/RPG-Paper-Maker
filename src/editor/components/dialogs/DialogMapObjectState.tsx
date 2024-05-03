@@ -1,0 +1,111 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2024 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import React, { useEffect, useState } from 'react';
+import Dialog from './Dialog';
+import FooterCancelOK from './footers/FooterCancelOK';
+import { Model } from '../../Editor';
+import { useTranslation } from 'react-i18next';
+import Dropdown from '../Dropdown';
+import useStateNumber from '../../hooks/useStateNumber';
+import { Project } from '../../core';
+import FooterOK from './footers/FooterOK';
+
+type Props = {
+	needOpen: boolean;
+	setNeedOpen: (b: boolean) => void;
+	model: Model.Base;
+	isNew: boolean;
+	onAccept: () => void;
+	onReject?: () => void;
+};
+
+function DialogMapObjectState({ needOpen, setNeedOpen, model, isNew, onAccept, onReject }: Props) {
+	const state = model as Model.MapObjectState;
+
+	const { t } = useTranslation();
+
+	const [isOpen, setIsOpen] = useState(false);
+	const [isOpenWarning, setIsOpenWarning] = useState(false);
+	const [stateID, setStateID] = useStateNumber();
+
+	const initialize = () => {
+		if (isNew) {
+			state.id = 1;
+		}
+		setStateID(state.id);
+	};
+
+	const handleAccept = () => {
+		if (
+			(!isNew && state.id === stateID) ||
+			Project.current!.currentMapObjectStates.every((node) => node.content.id !== stateID)
+		) {
+			state.id = stateID;
+			onAccept();
+			setIsOpen(false);
+		} else {
+			setIsOpenWarning(true);
+		}
+	};
+
+	const handleReject = () => {
+		onReject?.();
+		setIsOpen(false);
+	};
+
+	const handleCloseWarning = () => {
+		setIsOpenWarning(false);
+	};
+
+	useEffect(() => {
+		if (needOpen) {
+			setNeedOpen(false);
+			initialize();
+			setIsOpen(true);
+		}
+		// eslint-disable-next-line
+	}, [needOpen]);
+
+	return (
+		<>
+			<Dialog
+				title={`${t('select.a.state')}...`}
+				isOpen={isOpen}
+				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+				onClose={handleReject}
+			>
+				<div className='flex gap-medium'>
+					{t('state.id')}:
+					<Dropdown
+						selectedID={stateID}
+						onChange={setStateID}
+						options={Project.current!.commonEvents.states}
+						displayIDs
+					/>
+				</div>
+			</Dialog>
+			<Dialog
+				title={t('warning')}
+				isOpen={isOpenWarning}
+				footer={<FooterOK onOK={handleCloseWarning} />}
+				onClose={handleCloseWarning}
+			>
+				<p>{`${t('cannot.duplicate.state')} ${Model.Base.getByID(
+					Project.current!.commonEvents.states,
+					stateID
+				)?.toStringNameID()}`}</p>
+			</Dialog>
+		</>
+	);
+}
+
+export default DialogMapObjectState;

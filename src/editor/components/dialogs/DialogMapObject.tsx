@@ -37,6 +37,8 @@ type Props = {
 	onAccept: () => Promise<void>;
 };
 
+const TREES_MIN_WIDTH = 150;
+
 function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 	const { t } = useTranslation();
 
@@ -76,15 +78,21 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 		setModelID(object.commonModelID);
 		setTabTitles([Model.Base.create(1, 'Hero action')]);
 		setTabContents([<Tree key={0} list={[]}></Tree>]);
-		setStates(Node.createList(object.states));
+		const newStates = Node.createList(object.states);
+		setStates(newStates);
 		setEvents(Node.createList(object.events));
 		setProperties(Node.createList(object.properties));
 		setOnlyOneEventPerFrame(object.onlyOneEventPerFrame);
 		setCanBeTriggeredAnotherObject(object.canBeTriggeredAnotherObject);
 		handleChangeState(object.states.length > 0 ? object.states[0] : null);
+		Project.current!.currentMapObjectStates = newStates;
 	};
 
 	const getObjectsList = () => [Model.Base.create(-1, t('none')), ...Project.current!.commonEvents.commonObjects];
+
+	const handleSelectedItemState = (node: Node | null) => {
+		handleChangeState(node && node.content.id !== -1 ? (node.content as MapObjectState) : null);
+	};
 
 	const handleChangeState = (state: MapObjectState | null) => {
 		setSelectedState(state);
@@ -180,8 +188,8 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 		object.canBeTriggeredAnotherObject = canBeTriggeredAnotherObject;
 		object.onlyOneEventPerFrame = onlyOneEventPerFrame;
 		object.states = Node.createListFromNodes(states);
-		object.events = Node.createListFromNodes(states);
-		object.properties = Node.createListFromNodes(states);
+		object.events = Node.createListFromNodes(events);
+		object.properties = Node.createListFromNodes(properties);
 		await onAccept();
 		setIsLoading(false);
 		setIsOpen(false);
@@ -230,7 +238,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 					</div>
 				</div>
 				<div className='flex-one gap-medium'>
-					<div className='flex-one'>
+					<div className={Utils.getClassName([[!selectedState, 'visibility-hidden']], ['flex-one'])}>
 						<Tab
 							titles={tabTitles}
 							setTitles={setTabTitles}
@@ -241,118 +249,113 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 					<div className='flex-column gap-small'>
 						<div className='flex-one gap-small'>
 							<div className='flex-column flex-one gap-small'>
-								{t('states')}:<Tree list={states}></Tree>
+								{t('states')}:
+								<Tree
+									constructorType={Model.MapObjectState}
+									list={states}
+									onSelectedItem={handleSelectedItemState}
+									minWidth={TREES_MIN_WIDTH}
+								></Tree>
 							</div>
 							<div className='flex-column flex-one gap-small'>
-								{t('events')}:<Tree list={events}></Tree>
+								{t('events')}:<Tree list={events} minWidth={TREES_MIN_WIDTH}></Tree>
 							</div>
 						</div>
 						<div className='flex-column flex-one gap-small'>
 							{t('properties')}:<Tree list={properties}></Tree>
 						</div>
-						{selectedState && (
-							<>
-								<div className='flex gap-small'>
-									<div className='flex-column gap-small'>
-										{t('graphics')}:
-										<GraphicsSelector />
-										<Dropdown
-											selectedID={graphicsKind}
-											onChange={handleChangeGraphicsKind}
-											options={Model.Base.GRAPHICS_OPTIONS}
-											translateOptions
-										/>
+						<div
+							className={Utils.getClassName(
+								[[!selectedState, 'visibility-hidden']],
+								['flex', 'gap-small']
+							)}
+						>
+							<div className='flex-column gap-small'>
+								{t('graphics')}:
+								<GraphicsSelector />
+								<Dropdown
+									selectedID={graphicsKind}
+									onChange={handleChangeGraphicsKind}
+									options={Model.Base.GRAPHICS_OPTIONS}
+									translateOptions
+								/>
+							</div>
+							<div className='flex-column flex-one gap-small'>
+								<Groupbox title={t('moving')}>
+									<Form>
+										<td>{t('type')}:</td>
+										<td>
+											<Dropdown
+												selectedID={objectMovingKind}
+												onChange={handleChangeObjectMovingKind}
+												options={Model.Base.OBJECT_MOVING_OPTIONS}
+												translateOptions
+											/>
+										</td>
+										<td></td>
+										<td>
+											<Button disabled={graphicsKind !== OBJECT_MOVING_KIND.ROUTE}>
+												{t('edit.route')}...
+											</Button>
+										</td>
+										<td>{t('speed')}:</td>
+										<td>
+											<Dropdown
+												selectedID={speedID}
+												onChange={handleChangeSpeedID}
+												options={Model.Base.GRAPHICS_OPTIONS}
+												translateOptions
+											/>
+										</td>
+										<td>{t('frequency')}:</td>
+										<td>
+											<Dropdown
+												selectedID={frequencyID}
+												onChange={handleChangeFrequencyID}
+												options={Model.Base.GRAPHICS_OPTIONS}
+												translateOptions
+											/>
+										</td>
+									</Form>
+								</Groupbox>
+								<Button>{t('edit.transformations')}...</Button>
+							</div>
+						</div>
+						<div className={Utils.getClassName([[!selectedState, 'visibility-hidden']], ['flex'])}>
+							<Groupbox title={t('options')}>
+								<div className='flex gap-medium'>
+									<div className='flex-column'>
+										<Checkbox isChecked={moveAnimation} onChange={handleChangeMoveAnimation}>
+											{t('move.animation')}
+										</Checkbox>
+										<Checkbox isChecked={stopAnimation} onChange={handleChangeStopAnimation}>
+											{t('stop.animation')}
+										</Checkbox>
+										<Checkbox isChecked={climbAnimation} onChange={handleChangeClimbAnimation}>
+											{t('climb.animation')}
+										</Checkbox>
+										<Checkbox isChecked={directionFix} onChange={handleChangeDirectionFix}>
+											{t('direction.fix')}
+										</Checkbox>
 									</div>
-									<div className='flex-column flex-one gap-small'>
-										<Groupbox title={t('moving')}>
-											<Form>
-												<td>{t('type')}:</td>
-												<td>
-													<Dropdown
-														selectedID={objectMovingKind}
-														onChange={handleChangeObjectMovingKind}
-														options={Model.Base.OBJECT_MOVING_OPTIONS}
-														translateOptions
-													/>
-												</td>
-												<td></td>
-												<td>
-													<Button disabled={graphicsKind !== OBJECT_MOVING_KIND.ROUTE}>
-														{t('edit.route')}...
-													</Button>
-												</td>
-												<td>{t('speed')}:</td>
-												<td>
-													<Dropdown
-														selectedID={speedID}
-														onChange={handleChangeSpeedID}
-														options={Model.Base.GRAPHICS_OPTIONS}
-														translateOptions
-													/>
-												</td>
-												<td>{t('frequency')}:</td>
-												<td>
-													<Dropdown
-														selectedID={frequencyID}
-														onChange={handleChangeFrequencyID}
-														options={Model.Base.GRAPHICS_OPTIONS}
-														translateOptions
-													/>
-												</td>
-											</Form>
-										</Groupbox>
-										<Button>{t('edit.transformations')}...</Button>
+									<div className='flex-column'>
+										<Checkbox isChecked={through} onChange={handleChangeThrough}>
+											{t('through')}
+										</Checkbox>
+										<Checkbox isChecked={setWithCamera} onChange={handleChangeSetWithCamera}>
+											{t('set.with.camera')}
+										</Checkbox>
+										<Checkbox isChecked={pixelOffset} onChange={handleChangePixelOffset}>
+											{t('pixel.offset')}
+										</Checkbox>
+										<Checkbox isChecked={keepPosition} onChange={handleChangeKeepPosition}>
+											{t('keep.position')}
+										</Checkbox>
 									</div>
+									<div className='flex-one' />
 								</div>
-								<div className='flex'>
-									<Groupbox title={t('options')}>
-										<div className='flex gap-medium'>
-											<div className='flex-column'>
-												<Checkbox
-													isChecked={moveAnimation}
-													onChange={handleChangeMoveAnimation}
-												>
-													{t('move.animation')}
-												</Checkbox>
-												<Checkbox
-													isChecked={stopAnimation}
-													onChange={handleChangeStopAnimation}
-												>
-													{t('stop.animation')}
-												</Checkbox>
-												<Checkbox
-													isChecked={climbAnimation}
-													onChange={handleChangeClimbAnimation}
-												>
-													{t('climb.animation')}
-												</Checkbox>
-												<Checkbox isChecked={directionFix} onChange={handleChangeDirectionFix}>
-													{t('direction.fix')}
-												</Checkbox>
-											</div>
-											<div className='flex-column'>
-												<Checkbox isChecked={through} onChange={handleChangeThrough}>
-													{t('through')}
-												</Checkbox>
-												<Checkbox
-													isChecked={setWithCamera}
-													onChange={handleChangeSetWithCamera}
-												>
-													{t('set.with.camera')}
-												</Checkbox>
-												<Checkbox isChecked={pixelOffset} onChange={handleChangePixelOffset}>
-													{t('pixel.offset')}
-												</Checkbox>
-												<Checkbox isChecked={keepPosition} onChange={handleChangeKeepPosition}>
-													{t('keep.position')}
-												</Checkbox>
-											</div>
-											<div className='flex-one' />
-										</div>
-									</Groupbox>
-								</div>
-							</>
-						)}
+							</Groupbox>
+						</div>
 					</div>
 				</div>
 				<div className='flex'>
@@ -364,13 +367,13 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 							{t('can.be.triggered.another.object')}
 						</Checkbox>
 					</div>
-					{selectedState && (
+					<div className={Utils.getClassName([[!selectedState, 'visibility-hidden']], ['flex'])}>
 						<Checkbox isChecked={!!eventCommandDetection} onChange={handleChangeDetectionCheck}>
 							<div className='flex-center-v gap-small'>
 								{t('detection')} <Button disabled={eventCommandDetection === null}>...</Button>
 							</div>
 						</Checkbox>
-					)}
+					</div>
 				</div>
 			</div>
 		</Dialog>

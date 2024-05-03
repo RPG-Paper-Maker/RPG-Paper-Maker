@@ -11,6 +11,7 @@
 
 import { Data, Model } from '../Editor';
 import { Paths } from '../common';
+import { Node } from './Node';
 
 class Project {
 	public static current: Project | null = null;
@@ -24,6 +25,7 @@ class Project {
 	public shapes = new Data.Shapes();
 	public specialElements = new Data.SpecialElements();
 	public commonEvents = new Data.CommonEvents();
+	public currentMapObjectStates: Node[] = [];
 
 	constructor(name: string, location: string) {
 		this.systems.projectName = Model.Localization.create(name);

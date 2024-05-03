@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode } from 'react';
 import { Serializable } from '../core/Serializable';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, OBJECT_MOVING_KIND, Utils } from '../common';
+import { ReactNode } from 'react';
 
 class Base extends Serializable {
 	public static GRAPHICS_OPTIONS = [
@@ -63,7 +63,15 @@ class Base extends Serializable {
 		return list.find((model) => model.id === id) ?? list[0];
 	}
 
-	applyDefault(additionnalBinding: BindingType[]) {
+	public static generateNewIDfromList(list: Base[]): number {
+		let id = 1;
+		while (list.find((base) => base.id === id)) {
+			id++;
+		}
+		return id;
+	}
+
+	applyDefault(additionnalBinding: BindingType[] = []) {
 		const bindings = Base.getBindings(additionnalBinding);
 		for (const [name, , defaultValue, ,] of bindings) {
 			(this as Record<string, unknown>)[name] = defaultValue;
@@ -85,8 +93,12 @@ class Base extends Serializable {
 		return null;
 	}
 
-	toStringNameID() {
-		return `${this.id < 0 ? '' : `${Utils.formatNumber(this.id, 4)}: `}${this.name}`;
+	getName(): string {
+		return this.name;
+	}
+
+	toStringNameID(): string {
+		return `${this.id < 0 ? '' : `${Utils.formatNumber(this.id, 4)}: `}${this.getName()}`;
 	}
 
 	toString(): string {

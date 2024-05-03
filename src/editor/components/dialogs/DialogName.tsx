@@ -22,9 +22,10 @@ type Props = {
 	setNeedOpen: (b: boolean) => void;
 	model: Model.Base;
 	onAccept: () => void;
+	onReject?: () => void;
 };
 
-function DialogName({ needOpen, setNeedOpen, model, onAccept }: Props) {
+function DialogName({ needOpen, setNeedOpen, model, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
 	const [isOpen, setIsOpen] = useState(false);
@@ -42,6 +43,7 @@ function DialogName({ needOpen, setNeedOpen, model, onAccept }: Props) {
 	};
 
 	const handleReject = async () => {
+		onReject?.();
 		setIsOpen(false);
 	};
 

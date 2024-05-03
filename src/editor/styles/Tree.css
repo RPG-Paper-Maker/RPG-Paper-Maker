@@ -14,4 +14,7 @@
 	width: 100%;
 	border: 1px solid var(--lighter-bg-color);
 	border-radius: 2px;
+	overflow: auto;
+	overflow-x: overlay;
+	overflow-y: overlay;
 }

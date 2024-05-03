@@ -175,7 +175,7 @@ function MapEditor() {
 
 	const handleNewMapObject = async () => {
 		const mapObject = Project.current!.commonEvents.defaultObject.clone();
-		const id = Scene.Map.current!.modelMap.generateNewObjectID();
+		const id = Model.Base.generateNewIDfromList(Scene.Map.current!.modelMap.objects);
 		mapObject.id = id;
 		mapObject.name = Model.CommonObject.generateName(id);
 		setCurrentMapObject(mapObject);

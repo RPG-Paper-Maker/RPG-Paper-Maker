@@ -15,6 +15,7 @@
 	align-items: center;
 	padding: 1px 5px 1px 5px;
 	cursor: pointer;
+	white-space: nowrap;
 }
 
 .tree-item:hover {
