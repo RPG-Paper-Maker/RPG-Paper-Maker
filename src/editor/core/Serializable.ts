@@ -66,7 +66,7 @@ class Serializable {
 						defaultValue === undefined ? (this as JSONType)[name] : defaultValue
 					);
 					break;
-				case BINDING.DYNAMIC_VALUE:
+				case BINDING.DYNAMIC_VALUE: {
 					const jsonValue = json[jsonName] as JSONType | undefined;
 					if (jsonValue) {
 						const dynamicValue = new constructorClass!();
@@ -79,6 +79,7 @@ class Serializable {
 								: (defaultValue as DynamicValue).clone();
 					}
 					break;
+				}
 				case BINDING.OBJECT: {
 					const jsonObj = json[jsonName] as JSONType;
 					if (jsonObj === undefined) {
@@ -202,7 +203,7 @@ class Serializable {
 				case BINDING.BOOLEAN:
 					Utils.writeDefaultValue(json, jsonName, (this as JSONType)[name], defaultValue);
 					break;
-				case BINDING.DYNAMIC_VALUE:
+				case BINDING.DYNAMIC_VALUE: {
 					const defaultDynamicValue = defaultValue as DynamicValue;
 					const dynamicValue = (this as JSONType)[name] as DynamicValue;
 					if (!defaultDynamicValue.equals(dynamicValue)) {
@@ -211,6 +212,7 @@ class Serializable {
 						json[jsonName] = jsonObj;
 					}
 					break;
+				}
 				case BINDING.OBJECT: {
 					const obj = (this as JSONType)[name] as Serializable;
 					if (obj) {

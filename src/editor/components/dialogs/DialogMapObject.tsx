@@ -55,12 +55,12 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 	const [onlyOneEventPerFrame, setOnlyOneEventPerFrame] = useStateBool();
 	const [canBeTriggeredAnotherObject, setCanBeTriggeredAnotherObject] = useStateBool();
 	const [selectedState, setSelectedState] = useState<MapObjectState | null>(null);
-	const [graphicsID, setGraphicsID] = useStateNumber();
-	const [graphicsIndexX, setGraphicsIndexX] = useStateNumber();
-	const [graphicsIndexY, setGraphicsIndexY] = useStateNumber();
+	//const [graphicsID, setGraphicsID] = useStateNumber();
+	//const [graphicsIndexX, setGraphicsIndexX] = useStateNumber();
+	//const [graphicsIndexY, setGraphicsIndexY] = useStateNumber();
 	const [graphicsKind, setGraphicsKind] = useStateNumber();
 	const [objectMovingKind, setObjectMovingKind] = useStateNumber();
-	const [eventCommandRoute, setEventCommandRoute] = useState<EventCommand | null>(null);
+	//const [eventCommandRoute, setEventCommandRoute] = useState<EventCommand | null>(null);
 	const [speedID, setSpeedID] = useStateNumber();
 	const [frequencyID, setFrequencyID] = useStateNumber();
 	const [moveAnimation, setMoveAnimation] = useStateBool();
@@ -97,12 +97,12 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 	const handleChangeState = (state: MapObjectState | null) => {
 		setSelectedState(state);
 		if (state) {
-			setGraphicsID(state.graphicsID);
-			setGraphicsIndexX(state.graphicsIndexX);
-			setGraphicsIndexY(state.graphicsIndexY);
+			//setGraphicsID(state.graphicsID);
+			//setGraphicsIndexX(state.graphicsIndexX);
+			//setGraphicsIndexY(state.graphicsIndexY);
 			setGraphicsKind(state.graphicsKind);
 			setObjectMovingKind(state.objectMovingKind);
-			setEventCommandRoute(state.eventCommandRoute);
+			//setEventCommandRoute(state.eventCommandRoute);
 			setSpeedID(state.speedID);
 			setFrequencyID(state.frequencyID);
 			setMoveAnimation(state.moveAnimation);

@@ -58,32 +58,18 @@ function Dialog({
 	const [resizingSide] = useState({ left: true });
 	const dialogRef = useRef<HTMLDivElement>(null);
 
-	const updatePosition = (x?: number, y?: number) => {
+	const updatePosition = (x: number, y: number) => {
 		if (dialogRef.current) {
 			const min = 0;
 			const rect = dialogRef.current.getBoundingClientRect();
 			const maxX = window.innerWidth - rect.width;
 			const maxY = window.innerHeight - rect.height;
-			if (x !== undefined) {
-				x = Math.min(maxX, Math.max(min, x));
-				dialogRef.current.style.left = `${x}px`;
-			}
-			if (y !== undefined) {
-				y = Math.min(maxY, Math.max(min, y));
-				dialogRef.current.style.top = `${y}px`;
-			}
+			x = Math.min(maxX, Math.max(min, x));
+			dialogRef.current.style.left = `${x}px`;
+			y = Math.min(maxY, Math.max(min, y));
+			dialogRef.current.style.top = `${y}px`;
 		}
-		return { x, y };
 	};
-
-	/*
-	const updateSize = (: number, y: number) => {
-		if (dialogRef.current) {
-
-			dialogRef.current.style.width = `${x}px`;
-			dialogRef.current.style.height = `${y}px`;
-		}
-	};*/
 
 	const handleMouseMoveDragging = (e: MouseEvent) => {
 		if (isDragging) {
@@ -128,7 +114,7 @@ function Dialog({
 		}
 	};
 
-	const handleMouseUpResizing = (e: MouseEvent) => {
+	const handleMouseUpResizing = () => {
 		setIsResizing(false);
 	};
 
@@ -235,7 +221,7 @@ function Dialog({
 			dialogRef.current.style.width = initialWidth || '';
 			dialogRef.current.style.height = initialHeight || '';
 		}
-	}, [isOpen]);
+	}, [isOpen, initialWidth, initialHeight]);
 
 	const root = document.getElementById('root');
 	if (!root) {

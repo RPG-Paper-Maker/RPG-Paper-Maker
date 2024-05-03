@@ -65,7 +65,8 @@ class Base extends Serializable {
 
 	public static generateNewIDfromList(list: Base[]): number {
 		let id = 1;
-		while (list.find((base) => base.id === id)) {
+		const ids = list.map((base) => base.id);
+		while (ids.includes(id)) {
 			id++;
 		}
 		return id;

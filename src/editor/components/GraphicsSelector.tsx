@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode } from 'react';
 import '../styles/GraphicsSelector.css';
 
 function GraphicsSelector() {
