@@ -29,6 +29,15 @@ type Props = {
 	onClose?: () => void;
 };
 
+enum RESIZING_TYPE {
+	LEFT_RIGHT = 'ew-resize',
+	BOTTOM = 'ns-resize',
+	LEFT_BOTTOM = 'nesw-resize',
+	RIGHT_BOTTOM = 'nwse-resize',
+}
+
+const RESIZING_SPACE = 5;
+
 function Dialog({
 	children,
 	title,
@@ -44,29 +53,123 @@ function Dialog({
 	const [isDragging, setIsDragging] = useState(false);
 	const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
 	const [isMoved, setIsMoved] = useState(false);
+	const [isResizing, setIsResizing] = useState(false);
+	const [resizingType, setResizingType] = useState(RESIZING_TYPE.BOTTOM);
+	const [resizingSide] = useState({ left: true });
 	const dialogRef = useRef<HTMLDivElement>(null);
 
-	const updatePosition = (x: number, y: number) => {
+	const updatePosition = (x?: number, y?: number) => {
 		if (dialogRef.current) {
 			const min = 0;
 			const rect = dialogRef.current.getBoundingClientRect();
 			const maxX = window.innerWidth - rect.width;
 			const maxY = window.innerHeight - rect.height;
-			x = Math.min(maxX, Math.max(min, x));
-			y = Math.min(maxY, Math.max(min, y));
-			dialogRef.current.style.left = `${x}px`;
-			dialogRef.current.style.top = `${y}px`;
+			if (x !== undefined) {
+				x = Math.min(maxX, Math.max(min, x));
+				dialogRef.current.style.left = `${x}px`;
+			}
+			if (y !== undefined) {
+				y = Math.min(maxY, Math.max(min, y));
+				dialogRef.current.style.top = `${y}px`;
+			}
 		}
+		return { x, y };
 	};
 
-	const handleMouseMove = (e: MouseEvent) => {
+	/*
+	const updateSize = (: number, y: number) => {
+		if (dialogRef.current) {
+
+			dialogRef.current.style.width = `${x}px`;
+			dialogRef.current.style.height = `${y}px`;
+		}
+	};*/
+
+	const handleMouseMoveDragging = (e: MouseEvent) => {
 		if (isDragging) {
 			updatePosition(e.clientX - initialPosition.x, e.clientY - initialPosition.y);
 		}
 	};
 
-	const handleMouseDown = () => {
+	const handleMouseMoveResizing = (e: MouseEvent) => {
+		if (isResizing && dialogRef.current) {
+			const rect = dialogRef.current.getBoundingClientRect();
+			dialogRef.current.style.cursor = resizingType;
+			let newWidth = rect.width;
+			let newHeight = rect.height;
+			if (
+				resizingType === RESIZING_TYPE.LEFT_RIGHT ||
+				resizingType === RESIZING_TYPE.LEFT_BOTTOM ||
+				resizingType === RESIZING_TYPE.RIGHT_BOTTOM
+			) {
+				newWidth = resizingSide.left ? rect.right - e.clientX : e.clientX - rect.left;
+				if (resizingSide.left) {
+					if (e.clientX < rect.right) {
+						dialogRef.current.style.width = `${newWidth}px`;
+						const newrect = dialogRef.current.getBoundingClientRect();
+						if (newrect.width !== rect.width) {
+							dialogRef.current.style.left = `${e.clientX}px`;
+						}
+					}
+				} else {
+					if (e.clientX > rect.left) {
+						dialogRef.current.style.width = `${newWidth}px`;
+					}
+				}
+			}
+			if (
+				resizingType === RESIZING_TYPE.BOTTOM ||
+				resizingType === RESIZING_TYPE.LEFT_BOTTOM ||
+				resizingType === RESIZING_TYPE.RIGHT_BOTTOM
+			) {
+				newHeight = e.clientY - rect.top;
+			}
+			dialogRef.current.style.minHeight = `${newHeight}px`;
+		}
+	};
+
+	const handleMouseUpResizing = (e: MouseEvent) => {
+		setIsResizing(false);
+	};
+
+	const handleMouseMove = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+		if (dialogRef.current && !isResizing) {
+			let cursor = '';
+			const rect = dialogRef.current.getBoundingClientRect();
+			const isBottom = e.clientY >= rect.y + rect.height - RESIZING_SPACE;
+			if (e.clientX >= rect.x + rect.width - RESIZING_SPACE) {
+				if (isBottom) {
+					cursor = 'nwse-resize';
+				} else {
+					cursor = 'ew-resize';
+				}
+				resizingSide.left = false;
+			} else if (e.clientX <= rect.x + RESIZING_SPACE) {
+				if (isBottom) {
+					cursor = 'nesw-resize';
+				} else {
+					cursor = 'ew-resize';
+				}
+				resizingSide.left = true;
+			} else if (isBottom) {
+				cursor = 'ns-resize';
+			}
+			dialogRef.current.style.cursor = cursor;
+		}
+	};
+
+	const handleMouseDown = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
 		setIsClickedIn(true);
+		if (dialogRef.current && dialogRef.current.style.cursor) {
+			setIsResizing(true);
+			setResizingType(dialogRef.current.style.cursor as RESIZING_TYPE);
+			setIsMoved(true);
+			const rect = dialogRef.current.getBoundingClientRect();
+			const x = e.clientX - rect.x;
+			const y = e.clientY - rect.y;
+			setInitialPosition({ x, y });
+			updatePosition(e.clientX - x, e.clientY - y);
+		}
 	};
 
 	const handleMouseUp = () => {
@@ -111,15 +214,26 @@ function Dialog({
 
 	useEffect(() => {
 		if (isDragging) {
-			document.addEventListener('mousemove', handleMouseMove);
+			document.addEventListener('mousemove', handleMouseMoveDragging);
 			return () => {
-				document.removeEventListener('mousemove', handleMouseMove);
+				document.removeEventListener('mousemove', handleMouseMoveDragging);
+			};
+		} else if (isResizing) {
+			document.addEventListener('mousemove', handleMouseMoveResizing);
+			document.addEventListener('mouseup', handleMouseUpResizing);
+			return () => {
+				document.removeEventListener('mousemove', handleMouseMoveResizing);
+				document.removeEventListener('mouseup', handleMouseUpResizing);
 			};
 		}
 	});
 
 	useEffect(() => {
 		Inputs.isMapFocused = !isOpen;
+		if (dialogRef.current && isOpen) {
+			dialogRef.current.style.width = initialWidth || '';
+			dialogRef.current.style.height = initialHeight || '';
+		}
 	}, [isOpen]);
 
 	const root = document.getElementById('root');
@@ -135,11 +249,10 @@ function Dialog({
 						ref={dialogRef}
 						className='dialog'
 						onMouseDown={handleMouseDown}
+						onMouseMove={handleMouseMove}
 						onMouseUp={handleMouseUp}
 						style={{
 							transform: `translate(${isMoved ? '0,0' : '-50%,-50%'})`,
-							width: initialWidth,
-							height: initialHeight,
 						}}
 					>
 						{isDisabled && <div className='dialog-disable' />}

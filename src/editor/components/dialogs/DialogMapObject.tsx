@@ -209,7 +209,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='60%'
-			initialHeight='85%'
+			initialHeight='90%'
 		>
 			<div className='flex-column fill-height gap-small'>
 				<div className='flex-center-v gap-small'>
