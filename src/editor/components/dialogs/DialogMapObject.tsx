@@ -238,13 +238,21 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 					</div>
 				</div>
 				<div className='flex-one gap-medium'>
-					<div className={Utils.getClassName([[!selectedState, 'visibility-hidden']], ['flex-one'])}>
-						<Tab
-							titles={tabTitles}
-							setTitles={setTabTitles}
-							contents={tabContents}
-							setContents={setTabContents}
-						/>
+					<div
+						className={Utils.getClassName(
+							[[!selectedState, 'visibility-hidden']],
+							['flex-column', 'flex-one']
+						)}
+					>
+						<div className='flex-one'>
+							<Tab
+								titles={tabTitles}
+								setTitles={setTabTitles}
+								contents={tabContents}
+								setContents={setTabContents}
+							/>
+						</div>
+						<Checkbox isChecked={false}>{t('block.hero.when.reaction')}</Checkbox>
 					</div>
 					<div className='flex-column gap-small'>
 						<div className='flex-one gap-small'>

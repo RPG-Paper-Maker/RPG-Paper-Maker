@@ -51,6 +51,7 @@ function Tree({
 	const [, setForceUpdate] = useState(false);
 	const [needOpenDialog, setNeedOpenDialog] = useState(false);
 	const [newModel, setNewModel] = useState<Model.Base | null>(null);
+	const [draggedNode, setDraggedNode] = useState<Node | null>(null);
 
 	const copiedItems = useSelector((state: RootState) => state.projects.copiedItems);
 
@@ -176,6 +177,37 @@ function Tree({
 		setNewModel(null);
 	};
 
+	const handleDragStart = (event: React.DragEvent, node: Node) => {
+		setDraggedNode(node);
+		event.dataTransfer.setData('text/plain', node.content.id.toString());
+	};
+
+	const handleDragOver = (event: React.DragEvent, node: Node) => {
+		if (draggedNode) {
+			event.preventDefault();
+			const targetNode = event.currentTarget as HTMLElement;
+			event.dataTransfer.dropEffect = 'move';
+			if (draggedNode.content.id !== node.content.id) {
+				targetNode.classList.add('drag-over');
+			}
+		}
+	};
+
+	const handleDragLeave = (event: React.DragEvent) => {
+		const targetNode = event.currentTarget as HTMLElement;
+		targetNode.classList.remove('drag-over');
+	};
+
+	const handleDrop = (event: React.DragEvent, targetNode: Node) => {
+		event.preventDefault();
+		(event.currentTarget as HTMLElement).classList.remove('drag-over');
+		if (targetNode !== draggedNode) {
+			ArrayUtils.removeElement(list, draggedNode);
+			ArrayUtils.insertAt(list, list.indexOf(targetNode), draggedNode);
+		}
+		setDraggedNode(null);
+	};
+
 	useEffect(() => {
 		if (
 			forcedCurrentSelectedItemID !== undefined &&
@@ -212,6 +244,11 @@ function Tree({
 					selected={isSelected(node.content.id)}
 					onSwitchExpanded={handleSwitchExpandedItem}
 					onMouseDown={handleMouseDownItem}
+					onDragStart={(event: React.DragEvent) => handleDragStart(event, node)}
+					onDragOver={(event: React.DragEvent) => handleDragOver(event, node)}
+					onDragLeave={handleDragLeave}
+					onDrop={(event: React.DragEvent) => handleDrop(event, node)}
+					draggable
 				/>
 			);
 			if (!ArrayUtils.contains(notExpandedItemsList, node.content.id)) {

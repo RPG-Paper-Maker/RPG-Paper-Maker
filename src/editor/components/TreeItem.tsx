@@ -23,9 +23,25 @@ type Props = {
 	selected?: boolean;
 	onSwitchExpanded: (id: number, expanded: boolean) => void;
 	onMouseDown: (node: Node) => void;
+	onDragStart?: (event: React.DragEvent) => void;
+	onDragOver?: (event: React.DragEvent) => void;
+	onDragLeave?: (event: React.DragEvent) => void;
+	onDrop?: (event: React.DragEvent) => void;
+	draggable?: boolean;
 };
 
-function TreeItem({ node, level = 0, selected = false, onSwitchExpanded, onMouseDown }: Props) {
+function TreeItem({
+	node,
+	level = 0,
+	selected = false,
+	onSwitchExpanded,
+	onMouseDown,
+	onDragStart,
+	onDragOver,
+	onDragLeave,
+	onDrop,
+	draggable = false,
+}: Props) {
 	const [expanded, setExpanded] = useState(node.expanded);
 
 	const isTreeMapTag = () => node.content instanceof Model.TreeMapTag;
@@ -54,6 +70,11 @@ function TreeItem({ node, level = 0, selected = false, onSwitchExpanded, onMouse
 			className={Utils.getClassName([[selected, 'selected']], ['tree-item'])}
 			style={{ paddingLeft: `${5 + level * 15}px` }}
 			onMouseDown={handleMouseDown}
+			onDragStart={onDragStart}
+			onDragOver={onDragOver}
+			onDragLeave={onDragLeave}
+			onDrop={onDrop}
+			draggable={draggable}
 		>
 			{isTreeMapTag() && isFolder() && (
 				<div onMouseDown={handleMouseDownSwitchExpand}>{expanded ? <HiChevronDown /> : <HiChevronRight />}</div>

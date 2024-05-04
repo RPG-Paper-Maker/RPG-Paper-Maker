@@ -25,3 +25,7 @@
 .tree-item.selected {
 	background-color: var(--primary-dark-color);
 }
+
+.tree-item.drag-over {
+	border-top: 2px solid var(--primary-color);
+}
