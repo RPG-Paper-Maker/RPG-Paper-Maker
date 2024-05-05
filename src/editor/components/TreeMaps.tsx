@@ -271,6 +271,10 @@ function TreeMaps({
 		setIsOpenDialogConfirm(false);
 	};
 
+	const handleDrop = async () => {
+		await Project.current!.treeMaps.save();
+	};
+
 	const getContextMenuItems = () => {
 		if (selectedNode) {
 			if ((selectedNode.content as Model.TreeMapTag).isFolder()) {
@@ -338,6 +342,7 @@ function TreeMaps({
 				onSelectedItem={handleSelectedItem}
 				forcedCurrentSelectedItemID={forcedCurrentSelectedItemID}
 				setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemID}
+				onDrop={handleDrop}
 				cannotAdd
 			/>
 			<DialogMapProperties

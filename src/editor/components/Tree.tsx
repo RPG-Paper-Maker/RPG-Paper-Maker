@@ -31,6 +31,7 @@ type Props = {
 	forcedCurrentSelectedItemID?: number | null;
 	setForcedCurrentSelectedItemID?: (forced: number | null) => void;
 	minWidth?: number;
+	onDrop?: () => Promise<void>;
 };
 
 function Tree({
@@ -42,6 +43,7 @@ function Tree({
 	onSelectedItem,
 	forcedCurrentSelectedItemID,
 	setForcedCurrentSelectedItemID,
+	onDrop,
 	minWidth,
 }: Props) {
 	const defaultID =
@@ -177,35 +179,73 @@ function Tree({
 		setNewModel(null);
 	};
 
-	const handleDragStart = (event: React.DragEvent, node: Node) => {
-		setDraggedNode(node);
-		event.dataTransfer.setData('text/plain', node.content.id.toString());
+	const removeDragDropClasses = (target: HTMLElement) => {
+		target.classList.remove('drag-over-top');
+		target.classList.remove('drag-over-bot');
+		target.classList.remove('drag-over-complete');
 	};
 
-	const handleDragOver = (event: React.DragEvent, node: Node) => {
+	const handleDragStart = (event: React.DragEvent, node: Node) => {
+		setDraggedNode(node);
+	};
+
+	const handleDragOver = async (event: React.DragEvent, node: Node) => {
+		event.preventDefault();
 		if (draggedNode) {
-			event.preventDefault();
-			const targetNode = event.currentTarget as HTMLElement;
 			event.dataTransfer.dropEffect = 'move';
-			if (draggedNode.content.id !== node.content.id) {
-				targetNode.classList.add('drag-over');
+			if (
+				draggedNode.content.id !== node.content.id &&
+				!Node.checkIDExists(draggedNode.children, node.content.id)
+			) {
+				const target = event.currentTarget as HTMLElement;
+				removeDragDropClasses(target);
+				const rect = target.getBoundingClientRect();
+				const y = event.clientY - rect.top;
+				if (node.isFolder()) {
+					if (y < 5) {
+						target.classList.add('drag-over-top');
+					} else if (y > 15) {
+						target.classList.add('drag-over-bot');
+					} else {
+						target.classList.add('drag-over-complete');
+					}
+				} else {
+					target.classList.add(`drag-over-${y < 10 ? 'top' : 'bot'}`);
+				}
 			}
 		}
 	};
 
 	const handleDragLeave = (event: React.DragEvent) => {
-		const targetNode = event.currentTarget as HTMLElement;
-		targetNode.classList.remove('drag-over');
+		removeDragDropClasses(event.currentTarget as HTMLElement);
 	};
 
-	const handleDrop = (event: React.DragEvent, targetNode: Node) => {
+	const handleDrop = async (event: React.DragEvent, node: Node) => {
 		event.preventDefault();
-		(event.currentTarget as HTMLElement).classList.remove('drag-over');
-		if (targetNode !== draggedNode) {
-			ArrayUtils.removeElement(list, draggedNode);
-			ArrayUtils.insertAt(list, list.indexOf(targetNode), draggedNode);
+		if (draggedNode) {
+			const target = event.currentTarget as HTMLElement;
+			if (
+				(node !== draggedNode && target.classList.contains('drag-over-complete')) ||
+				target.classList.contains('drag-over-top') ||
+				target.classList.contains('drag-over-bot')
+			) {
+				ArrayUtils.removeElement(draggedNode.parent ? draggedNode.parent.children : list, draggedNode);
+				const dropList = node.parent ? node.parent.children : list;
+				if (target.classList.contains('drag-over-complete')) {
+					node.children.push(draggedNode);
+					draggedNode.parent = node;
+				} else if (target.classList.contains('drag-over-top')) {
+					ArrayUtils.insertAt(dropList, dropList.indexOf(node), draggedNode);
+					draggedNode.parent = node.parent;
+				} else if (target.classList.contains('drag-over-bot')) {
+					ArrayUtils.insertAt(dropList, dropList.indexOf(node) + 1, draggedNode);
+					draggedNode.parent = node.parent;
+				}
+			}
+			removeDragDropClasses(target);
+			setDraggedNode(null);
+			await onDrop?.();
 		}
-		setDraggedNode(null);
 	};
 
 	useEffect(() => {
@@ -244,11 +284,11 @@ function Tree({
 					selected={isSelected(node.content.id)}
 					onSwitchExpanded={handleSwitchExpandedItem}
 					onMouseDown={handleMouseDownItem}
-					onDragStart={(event: React.DragEvent) => handleDragStart(event, node)}
-					onDragOver={(event: React.DragEvent) => handleDragOver(event, node)}
-					onDragLeave={handleDragLeave}
-					onDrop={(event: React.DragEvent) => handleDrop(event, node)}
-					draggable
+					onDragStart={node.draggable ? handleDragStart : undefined}
+					onDragOver={node.draggable ? handleDragOver : undefined}
+					onDragLeave={node.draggable ? handleDragLeave : undefined}
+					onDrop={node.draggable ? handleDrop : undefined}
+					draggable={node.draggable}
 				/>
 			);
 			if (!ArrayUtils.contains(notExpandedItemsList, node.content.id)) {

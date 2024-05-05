@@ -26,6 +26,14 @@
 	background-color: var(--primary-dark-color);
 }
 
-.tree-item.drag-over {
+.tree-item.drag-over-top {
 	border-top: 2px solid var(--primary-color);
+}
+
+.tree-item.drag-over-bot {
+	border-bottom: 2px solid var(--primary-color);
+}
+
+.tree-item.drag-over-complete {
+	border: 2px solid var(--primary-color);
 }

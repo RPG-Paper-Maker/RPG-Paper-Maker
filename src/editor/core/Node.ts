@@ -27,7 +27,8 @@ class Node extends Serializable {
 	public children: Node[] = [];
 	public content!: Model.Base;
 	public parent: Node | null = null;
-	public expanded: boolean = true;
+	public expanded = true;
+	public draggable = true;
 
 	public static readonly bindings: BindingType[] = [['expanded', 'e', true, BINDING.BOOLEAN]];
 
@@ -35,7 +36,7 @@ class Node extends Serializable {
 		return [...Node.bindings, ...additionnalBinding];
 	}
 
-	static create(content?: Model.Base, children: Node[] = [], parent: Node | null = null): Node {
+	static create(content?: Model.Base, children: Node[] = [], parent: Node | null = null, draggable = true): Node {
 		const node = new Node();
 		if (content === undefined) {
 			content = new Model.Base();
@@ -44,6 +45,7 @@ class Node extends Serializable {
 		node.children = children;
 		node.parent = parent;
 		node.updateParents();
+		node.draggable = draggable;
 		return node;
 	}
 
@@ -122,6 +124,10 @@ class Node extends Serializable {
 
 	static createListFromNodes<T>(nodes: Node[]): T[] {
 		return nodes.map((node) => node.content as T);
+	}
+
+	isFolder() {
+		return this.content.id < 0;
 	}
 
 	getIcon() {

@@ -23,10 +23,10 @@ type Props = {
 	selected?: boolean;
 	onSwitchExpanded: (id: number, expanded: boolean) => void;
 	onMouseDown: (node: Node) => void;
-	onDragStart?: (event: React.DragEvent) => void;
-	onDragOver?: (event: React.DragEvent) => void;
+	onDragStart?: (event: React.DragEvent, node: Node) => void;
+	onDragOver?: (event: React.DragEvent, node: Node) => void;
 	onDragLeave?: (event: React.DragEvent) => void;
-	onDrop?: (event: React.DragEvent) => void;
+	onDrop?: (event: React.DragEvent, node: Node) => void;
 	draggable?: boolean;
 };
 
@@ -70,10 +70,10 @@ function TreeItem({
 			className={Utils.getClassName([[selected, 'selected']], ['tree-item'])}
 			style={{ paddingLeft: `${5 + level * 15}px` }}
 			onMouseDown={handleMouseDown}
-			onDragStart={onDragStart}
-			onDragOver={onDragOver}
+			onDragStart={(event: React.DragEvent) => onDragStart?.(event, node)}
+			onDragOver={(event: React.DragEvent) => onDragOver?.(event, node)}
 			onDragLeave={onDragLeave}
-			onDrop={onDrop}
+			onDrop={(event: React.DragEvent) => onDrop?.(event, node)}
 			draggable={draggable}
 		>
 			{isTreeMapTag() && isFolder() && (
