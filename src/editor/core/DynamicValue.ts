@@ -11,6 +11,7 @@
 
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import { Serializable } from '.';
+import i18next from 'i18next';
 
 class DynamicValue extends Serializable {
 	public kind!: DYNAMIC_VALUE_KIND;
@@ -39,6 +40,21 @@ class DynamicValue extends Serializable {
 
 	equals(dynamic: DynamicValue): boolean {
 		return this.kind === dynamic.kind && this.value === dynamic.value;
+	}
+
+	toString(): string {
+		switch (this.kind) {
+			case DYNAMIC_VALUE_KIND.DEFAULT:
+				return i18next.t('default');
+			case DYNAMIC_VALUE_KIND.NONE:
+				return i18next.t('none');
+			case DYNAMIC_VALUE_KIND.ANYTHING:
+				return i18next.t('anything');
+			case DYNAMIC_VALUE_KIND.SWITCH:
+				return this.value ? 'ON' : 'OFF';
+			default:
+				return '' + this.value;
+		}
 	}
 
 	copy(dynamic: DynamicValue): void {

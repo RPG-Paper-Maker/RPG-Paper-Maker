@@ -13,6 +13,11 @@
 	border-radius: 5px 5px 0 0;
 }
 
+.dropdown.disabled {
+	opacity: 0.4;
+	cursor: initial;
+}
+
 .dropdown .content {
 	display: flex;
 	flex-direction: column;

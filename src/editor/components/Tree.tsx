@@ -20,11 +20,15 @@ import DialogName from './dialogs/DialogName';
 import DialogMapObjectState from './dialogs/DialogMapObjectState';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setCopiedItems } from '../store';
+import DialogMapObjectEvent from './dialogs/DialogMapObjectEvent';
+import { useTranslation } from 'react-i18next';
+import DialogMapObjectParameter from './dialogs/DialogMapObjectParameter';
 
 type Props = {
 	list: Node[];
 	constructorType?: typeof Model.Base;
 	cannotAdd?: boolean;
+	cannotDragDrop?: boolean;
 	contextMenuItems?: (CONTEXT_MENU_ITEM_KIND | MenuItemType)[];
 	defaultSelectedID?: number;
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
@@ -38,6 +42,7 @@ function Tree({
 	list,
 	constructorType = Model.Base,
 	cannotAdd = false,
+	cannotDragDrop = false,
 	contextMenuItems,
 	defaultSelectedID,
 	onSelectedItem,
@@ -46,6 +51,8 @@ function Tree({
 	onDrop,
 	minWidth,
 }: Props) {
+	const { t } = useTranslation();
+
 	const defaultID =
 		defaultSelectedID === undefined ? (list && list.length && list[0].content.id) || -1 : defaultSelectedID;
 	const [currentSelectedItemNode, setCurrentSelectedItemNode] = useState(Node.getNodeByID(list, defaultID));
@@ -191,13 +198,13 @@ function Tree({
 
 	const handleDragOver = async (event: React.DragEvent, node: Node) => {
 		event.preventDefault();
+		const target = event.currentTarget as HTMLElement;
 		if (draggedNode) {
 			event.dataTransfer.dropEffect = 'move';
 			if (
 				draggedNode.content.id !== node.content.id &&
 				!Node.checkIDExists(draggedNode.children, node.content.id)
 			) {
-				const target = event.currentTarget as HTMLElement;
 				removeDragDropClasses(target);
 				const rect = target.getBoundingClientRect();
 				const y = event.clientY - rect.top;
@@ -213,6 +220,9 @@ function Tree({
 					target.classList.add(`drag-over-${y < 10 ? 'top' : 'bot'}`);
 				}
 			}
+		} else {
+			event.dataTransfer.dropEffect = 'none';
+			target.style.cursor = 'not-allowed';
 		}
 	};
 
@@ -274,6 +284,8 @@ function Tree({
 		// eslint-disable-next-line
 	}, []);
 
+	const headers = constructorType.getTreeHeader();
+
 	const getTreeItems = (nodes: Node[], level = 0, items: ReactNode[] = []) => {
 		for (const node of nodes) {
 			items.push(
@@ -288,7 +300,8 @@ function Tree({
 					onDragOver={node.draggable ? handleDragOver : undefined}
 					onDragLeave={node.draggable ? handleDragLeave : undefined}
 					onDrop={node.draggable ? handleDrop : undefined}
-					draggable={node.draggable}
+					draggable={!cannotDragDrop && node.draggable}
+					headers={headers}
 				/>
 			);
 			if (!ArrayUtils.contains(notExpandedItemsList, node.content.id)) {
@@ -383,6 +396,10 @@ function Tree({
 					return <DialogName {...options} />;
 				case Model.MapObjectState:
 					return <DialogMapObjectState {...options} />;
+				case Model.MapObjectEvent:
+					return <DialogMapObjectEvent {...options} />;
+				case Model.MapObjectParameter:
+					return <DialogMapObjectParameter {...options} />;
 				default:
 					return null;
 			}
@@ -391,9 +408,21 @@ function Tree({
 		}
 	};
 
+	const getHeaders = () =>
+		headers.length > 0 && (
+			<div className='tree-header'>
+				{headers.map((label) => (
+					<div className='flex-one' key={label}>
+						{t(label)}
+					</div>
+				))}
+			</div>
+		);
+
 	return (
 		<ContextMenu items={getContextMenuItems()}>
 			<div onDoubleClick={handleDoubleClick} className='tree' style={{ minWidth: `${minWidth}px` }}>
+				<div className='flex gap-small'>{getHeaders()}</div>
 				{getTreeItems(list)}
 			</div>
 			{getDialog()}

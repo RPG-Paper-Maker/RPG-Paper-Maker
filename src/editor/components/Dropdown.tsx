@@ -17,7 +17,7 @@ import { Model } from '../Editor';
 import { Utils } from '../common';
 import '../styles/Dropdown.css';
 
-const DROPDOWN_SPACE_ARROW = 30;
+const DROPDOWN_SPACE_ARROW = 10;
 
 const getScrollingTop = (element?: HTMLElement) => {
 	const bounding = element?.getBoundingClientRect();
@@ -45,14 +45,23 @@ type Props = {
 	onChange: (id: number) => void;
 	options: Model.Base[];
 	translateOptions?: boolean;
+	disabled?: boolean;
 	displayIDs?: boolean;
+	fillWidth?: boolean;
 };
 
-function Dropdown({ selectedID, onChange, options, translateOptions = false, displayIDs = false }: Props) {
+function Dropdown({
+	selectedID,
+	onChange,
+	options,
+	translateOptions = false,
+	disabled = false,
+	displayIDs = false,
+	fillWidth = false,
+}: Props) {
 	const { t } = useTranslation();
 
 	const [isOpen, setIsOpen] = useState(false);
-	const [needReset, setNeedReset] = useState(false);
 
 	const dropdownContainerRef = useRef<HTMLDivElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -98,7 +107,9 @@ function Dropdown({ selectedID, onChange, options, translateOptions = false, dis
 	};
 
 	const handleClick = () => {
-		setIsOpen((value) => !value);
+		if (!disabled) {
+			setIsOpen((value) => !value);
+		}
 	};
 
 	const handleClickOption = (option: Model.Base) => {
@@ -116,13 +127,9 @@ function Dropdown({ selectedID, onChange, options, translateOptions = false, dis
 		const container = containerRef.current;
 		const dropdown = dropdownContainerRef.current;
 		if (container && dropdown) {
-			if (needReset) {
-				dropdown.style.width = '';
-				setNeedReset(false);
-			}
-			container.style.width = `${dropdown.getBoundingClientRect().width + DROPDOWN_SPACE_ARROW}px`;
+			container.style.minWidth = `${dropdown.getBoundingClientRect().width + DROPDOWN_SPACE_ARROW}px`;
 		}
-	}, [needReset]);
+	}, []);
 
 	useLayoutEffect(() => {
 		handleScroll();
@@ -138,18 +145,6 @@ function Dropdown({ selectedID, onChange, options, translateOptions = false, dis
 		window.addEventListener('click', handleClickOutside);
 		return () => window.removeEventListener('click', handleClickOutside);
 	}, [isOpen]);
-
-	useLayoutEffect(() => {
-		const handleLanguageChanged = () => {
-			setNeedReset(true);
-		};
-		i18n.on('languageChanged', handleLanguageChanged);
-
-		// Cleanup
-		return () => {
-			i18n.off('languageChanged', handleLanguageChanged);
-		};
-	}, []);
 
 	const selected = Model.Base.getByIDOrFirst(options, selectedID);
 
@@ -168,7 +163,18 @@ function Dropdown({ selectedID, onChange, options, translateOptions = false, dis
 		));
 
 	return (
-		<div className={Utils.getClassName([[isOpen, 'open']], ['dropdown'])} ref={containerRef} onClick={handleClick}>
+		<div
+			className={Utils.getClassName(
+				[
+					[isOpen, 'open'],
+					[disabled, 'disabled'],
+					[fillWidth, 'fill-width'],
+				],
+				['dropdown']
+			)}
+			ref={containerRef}
+			onClick={handleClick}
+		>
 			<div className='flex-one flex-center-v gap-small'>
 				<div className='flex-one flex-center-v'>{getCurrentItem()}</div>
 				<div className='flex'>

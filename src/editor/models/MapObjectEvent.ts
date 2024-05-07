@@ -10,9 +10,12 @@
 */
 
 import { Base } from './Base';
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import { MapObjectReaction } from './MapObjectReaction';
 import { MapObjectParameter } from './MapObjectParameter';
+import { Project } from '../core';
+import { CommonEvent } from './CommonEvent';
+import { DynamicValue } from '../core/DynamicValue';
 
 class MapObjectEvent extends Base {
 	public parameters!: MapObjectParameter[];
@@ -27,6 +30,28 @@ class MapObjectEvent extends Base {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	static getDefaultParameters(eventID: number, isSystem: boolean): MapObjectParameter[] {
+		const events = isSystem ? Project.current!.commonEvents.eventsSystem : Project.current!.commonEvents.eventsUser;
+		const event = Base.getByID(events, eventID) as CommonEvent;
+		const parameters = [];
+		for (const createParameter of event.parameters) {
+			parameters.push(
+				MapObjectParameter.create(
+					createParameter.id,
+					createParameter.name,
+					createParameter,
+					DynamicValue.create(DYNAMIC_VALUE_KIND.DEFAULT)
+				)
+			);
+		}
+		return parameters;
+	}
+
+	toStringNameID(): string {
+		const parameters = this.parameters.map((param) => param.toStringValueOrDefault());
+		return `${super.toStringNameID()}${parameters.length > 0 ? ` [${parameters.join(',')}]` : ''}`;
 	}
 
 	copy(event: MapObjectEvent): void {

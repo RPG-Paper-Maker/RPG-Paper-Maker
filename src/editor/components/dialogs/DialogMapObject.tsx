@@ -94,6 +94,8 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 		handleChangeState(node && node.content.id !== -1 ? (node.content as MapObjectState) : null);
 	};
 
+	const handleSelectedItemEvent = (node: Node | null) => {};
+
 	const handleChangeState = (state: MapObjectState | null) => {
 		setSelectedState(state);
 		if (state) {
@@ -241,7 +243,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 					<div
 						className={Utils.getClassName(
 							[[!selectedState, 'visibility-hidden']],
-							['flex-column', 'flex-one']
+							['flex-column', 'flex-one', 'gap-small']
 						)}
 					>
 						<div className='flex-one'>
@@ -255,22 +257,20 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 						<Checkbox isChecked={false}>{t('block.hero.when.reaction')}</Checkbox>
 					</div>
 					<div className='flex-column gap-small'>
-						<div className='flex-one gap-small'>
-							<div className='flex-column flex-one gap-small'>
-								{t('states')}:
-								<Tree
-									constructorType={Model.MapObjectState}
-									list={states}
-									onSelectedItem={handleSelectedItemState}
-									minWidth={TREES_MIN_WIDTH}
-								></Tree>
-							</div>
-							<div className='flex-column flex-one gap-small'>
-								{t('events')}:<Tree list={events} minWidth={TREES_MIN_WIDTH}></Tree>
-							</div>
+						<div className='flex-column flex-one gap-small'>
+							{t('states')}:
+							<Tree
+								constructorType={Model.MapObjectState}
+								list={states}
+								onSelectedItem={handleSelectedItemState}
+							/>
 						</div>
 						<div className='flex-column flex-one gap-small'>
-							{t('properties')}:<Tree list={properties}></Tree>
+							{t('properties')}:<Tree list={properties} />
+						</div>
+						<div className='flex-column flex-one gap-small'>
+							{t('events')}:
+							<Tree constructorType={Model.MapObjectEvent} list={events} />
 						</div>
 						<div
 							className={Utils.getClassName(

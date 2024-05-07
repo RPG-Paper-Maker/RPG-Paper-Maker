@@ -28,6 +28,7 @@ type Props = {
 	onDragLeave?: (event: React.DragEvent) => void;
 	onDrop?: (event: React.DragEvent, node: Node) => void;
 	draggable?: boolean;
+	headers?: string[];
 };
 
 function TreeItem({
@@ -41,6 +42,7 @@ function TreeItem({
 	onDragLeave,
 	onDrop,
 	draggable = false,
+	headers,
 }: Props) {
 	const [expanded, setExpanded] = useState(node.expanded);
 
@@ -65,6 +67,18 @@ function TreeItem({
 		}
 	}, [node, expanded]);
 
+	const getString = () => {
+		if (headers && headers.length > 0) {
+			return node.toStrings().map((value, index) => (
+				<div className='flex-one gap-small text-ellipsis' key={headers[index]}>
+					{value}
+				</div>
+			));
+		} else {
+			return node.toString();
+		}
+	};
+
 	return (
 		<div
 			className={Utils.getClassName([[selected, 'selected']], ['tree-item'])}
@@ -80,8 +94,7 @@ function TreeItem({
 				<div onMouseDown={handleMouseDownSwitchExpand}>{expanded ? <HiChevronDown /> : <HiChevronRight />}</div>
 			)}
 			{node.getIcon()}
-			{!isTreeMapTag() && '> '}
-			{node.toString()}
+			{getString()}
 		</div>
 	);
 }

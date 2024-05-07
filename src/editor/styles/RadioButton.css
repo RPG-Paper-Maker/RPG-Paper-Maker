@@ -9,21 +9,24 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-.tree {
-	background-color: var(--darkest-containers-bg-color);
-	width: 100%;
-	border: 1px solid var(--lighter-bg-color);
-	border-radius: 2px;
-	overflow: auto;
-	overflow-x: overlay;
-	overflow-y: overlay;
-}
-
-.tree-header {
+.radiobutton {
 	display: flex;
-	flex-grow: 1;
 	gap: 5px;
 	align-items: center;
-	padding: 1px 5px 1px 5px;
+	cursor: pointer;
+	user-select: none;
 	white-space: nowrap;
+
+	.square {
+		background-color: white;
+		width: 8px;
+		height: 8px;
+		cursor: pointer;
+		border-radius: 5px;
+		border: 2px solid white;
+
+		&.checked {
+			background-color: var(--primary-color);
+		}
+	}
 }

@@ -26,9 +26,38 @@ class MapObjectParameter extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	static getTreeHeader(): string[] {
+		return ['name', 'value', 'default.value'];
+	}
+
+	static create(id: number, name: string, createParameter?: CreateParameter, value?: DynamicValue) {
+		const parameter = new MapObjectParameter();
+		parameter.id = id;
+		parameter.name = name;
+		if (createParameter) {
+			parameter.parameter = createParameter;
+		}
+		if (value) {
+			parameter.value = value;
+		}
+		return parameter;
+	}
+
+	toStringValueOrDefault(): string {
+		return this.value.kind === DYNAMIC_VALUE_KIND.DEFAULT ? this.toStringDefault() : this.value.toString();
+	}
+
+	toStringDefault(): string {
+		return this.parameter?.defaultValue?.toString() ?? '-';
+	}
+
+	toStrings(): string[] {
+		return [`${Base.STRING_START}${this.name}`, this.value.toString(), this.toStringDefault()];
+	}
+
 	copy(parameter: MapObjectParameter): void {
 		super.copy(parameter);
-		this.parameter = null;
+		this.parameter = parameter.parameter === null ? null : parameter.parameter.clone();
 		this.value = parameter.value.clone();
 	}
 

@@ -314,6 +314,10 @@ export enum DYNAMIC_VALUE_KIND {
 	MUSIC_EFFECT,
 }
 
+export enum DYNAMIC_VALUE_OPTIONS_TYPE {
+	PARAMETER,
+}
+
 export enum CONTEXT_MENU_ITEM_KIND {
 	NEW,
 	EDIT,
