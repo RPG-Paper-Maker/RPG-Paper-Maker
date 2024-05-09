@@ -71,7 +71,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 	const [keepPosition, setKeepPosition] = useStateBool();
 	const [eventCommandDetection, setEventCommandDetection] = useState<EventCommand | null>(null);
 	const [forcedCurrentIndexTab, setForcedCurrentIndexTab] = useState<number | null>(null);
-	const [forcedCurrentSelectedEventKey, setForcedCurrentSelectedEventKey] = useState<string | null>(null);
+	const [forcedCurrentSelectedIndexEvent, setForcedCurrentSelectedIndexEvent] = useState<number | null>(null);
 
 	const initialize = () => {
 		setName(object.name);
@@ -93,12 +93,13 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 
 	const updateReactionsTab = (nodes: Node[]) => {
 		setTabTitles(nodes.map((node) => node.content));
-		setTabContents(nodes.map((node) => <Tree key={node.content.getKey()} list={[]}></Tree>));
+		setTabContents(nodes.map((node, index) => <Tree key={index} list={[]}></Tree>));
 	};
 
 	const handleCurrentIndexTabChanged = (index: number, model: Model.Base, isClick: boolean) => {
 		if (isClick) {
-			setForcedCurrentSelectedEventKey(model.getKey());
+			console.log(index);
+			setForcedCurrentSelectedIndexEvent(index);
 		}
 	};
 
@@ -301,8 +302,10 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 								list={events}
 								onSelectedItem={handleSelectedItemEvent}
 								onListUpdated={handleEventListUpdated}
-								forcedCurrentSelectedItemKey={forcedCurrentSelectedEventKey}
-								setForcedCurrentSelectedItemKey={setForcedCurrentSelectedEventKey}
+								forcedCurrentSelectedItemIndex={forcedCurrentSelectedIndexEvent}
+								setForcedCurrentSelectedItemIndex={setForcedCurrentSelectedIndexEvent}
+								doNotGenerateIDOnPaste
+								byIndex
 							/>
 						</div>
 						<div

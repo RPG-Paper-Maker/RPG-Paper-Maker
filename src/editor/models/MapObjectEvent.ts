@@ -49,11 +49,6 @@ class MapObjectEvent extends Base {
 		return parameters;
 	}
 
-	getKey(): string {
-		const parameters = this.parameters.map((param) => param.value.getKey());
-		return `${this.id}-${this.isSystem}-${parameters.join('-')}`;
-	}
-
 	getName(): string {
 		const parameters = this.parameters.map((param) => param.toStringValueOrDefault());
 		return `${

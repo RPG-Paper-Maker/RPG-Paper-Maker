@@ -40,7 +40,6 @@ function DialogMapObjectEvent({ needOpen, setNeedOpen, model, isNew, onAccept, o
 	const { t } = useTranslation();
 
 	const [isOpen, setIsOpen] = useState(false);
-	const [isOpenWarning, setIsOpenWarning] = useState(false);
 	const [eventSystemID, setEventSystemID] = useStateNumber();
 	const [eventUserID, setEventUserID] = useStateNumber();
 	const [isSystem, setIsSystem] = useStateBool();
@@ -94,32 +93,16 @@ function DialogMapObjectEvent({ needOpen, setNeedOpen, model, isNew, onAccept, o
 	};
 
 	const handleAccept = () => {
-		const newEvent = new MapObjectEvent();
-		newEvent.id = isSystem ? eventSystemID : eventUserID;
-		newEvent.isSystem = isSystem;
-		newEvent.parameters = Node.createListFromNodes(parameters);
-		const newKey = newEvent.getKey();
-		if (
-			(!isNew && event.getKey() === newKey) ||
-			Project.current!.currentMapObjectEvents.every((node) => node.content.getKey() !== newKey)
-		) {
-			event.id = newEvent.id;
-			event.isSystem = newEvent.isSystem;
-			event.parameters = newEvent.parameters;
-			onAccept();
-			setIsOpen(false);
-		} else {
-			setIsOpenWarning(true);
-		}
+		event.id = isSystem ? eventSystemID : eventUserID;
+		event.isSystem = isSystem;
+		event.parameters = Node.createListFromNodes(parameters);
+		onAccept();
+		setIsOpen(false);
 	};
 
 	const handleReject = () => {
 		onReject?.();
 		setIsOpen(false);
-	};
-
-	const handleCloseWarning = () => {
-		setIsOpenWarning(false);
 	};
 
 	useEffect(() => {
@@ -191,14 +174,6 @@ function DialogMapObjectEvent({ needOpen, setNeedOpen, model, isNew, onAccept, o
 						</Groupbox>
 					)}
 				</div>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={isOpenWarning}
-				footer={<FooterOK onOK={handleCloseWarning} />}
-				onClose={handleCloseWarning}
-			>
-				<p>{t('cannot.duplicate.event')}</p>
 			</Dialog>
 		</>
 	);

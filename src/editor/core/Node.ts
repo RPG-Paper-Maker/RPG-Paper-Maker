@@ -64,19 +64,6 @@ class Node extends Serializable {
 		return null;
 	}
 
-	static getNodeByKey(nodes: Node[], key: string): Node | null {
-		for (const node of nodes) {
-			if (node.content.getKey() === key) {
-				return node;
-			}
-			const child = this.getNodeByKey(node.children, key);
-			if (child) {
-				return child;
-			}
-		}
-		return null;
-	}
-
 	static getPathByID(nodes: Node[], id: number): string {
 		const node = Node.getNodeByID(nodes, id);
 		return node ? node.getPath(false) : 'ERROR: Cannot find path';

@@ -81,7 +81,7 @@ function Tab({
 		titles.map((title, index) => {
 			return (
 				<div
-					key={title.getKey()}
+					key={index}
 					className={Utils.getClassName([[currentIndex === index, 'selected']], ['tab-item'])}
 					onClick={() => handleClickItem(index)}
 				>

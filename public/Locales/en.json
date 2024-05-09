@@ -1965,6 +1965,5 @@
 	"warning.could.not.copy.map.created.empty": "Could not copy map at {{path}}. Created an empty one.",
 	"introduction": "Introduction",
 	"edit.object": "Edit object",
-	"edit.transformations": "Update transformations",
-	"cannot.duplicate.event": "Cannot duplicate event with same parameters."
+	"edit.transformations": "Update transformations"
 }
