@@ -111,7 +111,7 @@ QString ControlExport::createBrowser(QString location, int major, int minor)
     QString message;
     QDir dirLocation(location);
     QString projectName = QDir(m_project->pathCurrentProject()).dirName() +
-        "BROWSER" + "-v" + QString::number(major) + "." + QString::number(minor);;
+        "-BROWSER" + "-v" + QString::number(major) + "." + QString::number(minor);;
     QString path = Common::pathCombine(location, projectName);
 
     // Copying all the project
