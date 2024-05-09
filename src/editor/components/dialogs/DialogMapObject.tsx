@@ -283,30 +283,39 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 						<Checkbox isChecked={false}>{t('block.hero.when.reaction')}</Checkbox>
 					</div>
 					<div className='flex-column gap-small'>
-						<div className='flex-column flex-one gap-small'>
-							{t('states')}:
-							<Tree
-								constructorType={Model.MapObjectState}
-								list={states}
-								onSelectedItem={handleSelectedItemState}
-								onCreateItem={handleCreateState}
-							/>
-						</div>
-						<div className='flex-column flex-one gap-small'>
-							{t('properties')}:<Tree list={properties} />
+						<div className='flex-one gap-medium'>
+							<div className='flex-column flex-one gap-small'>
+								{t('states')}:
+								<div className='flex-one zero-height'>
+									<Tree
+										constructorType={Model.MapObjectState}
+										list={states}
+										onSelectedItem={handleSelectedItemState}
+										onCreateItem={handleCreateState}
+									/>
+								</div>
+							</div>
+							<div className='flex-column flex-one gap-small'>
+								{t('properties')}:
+								<div className='flex-one zero-height'>
+									<Tree list={properties} />
+								</div>
+							</div>
 						</div>
 						<div className='flex-column flex-one gap-small'>
 							{t('events')}:
-							<Tree
-								constructorType={Model.MapObjectEvent}
-								list={events}
-								onSelectedItem={handleSelectedItemEvent}
-								onListUpdated={handleEventListUpdated}
-								forcedCurrentSelectedItemIndex={forcedCurrentSelectedIndexEvent}
-								setForcedCurrentSelectedItemIndex={setForcedCurrentSelectedIndexEvent}
-								doNotGenerateIDOnPaste
-								byIndex
-							/>
+							<div className='flex-one zero-height'>
+								<Tree
+									constructorType={Model.MapObjectEvent}
+									list={events}
+									onSelectedItem={handleSelectedItemEvent}
+									onListUpdated={handleEventListUpdated}
+									forcedCurrentSelectedItemIndex={forcedCurrentSelectedIndexEvent}
+									setForcedCurrentSelectedItemIndex={setForcedCurrentSelectedIndexEvent}
+									doNotGenerateIDOnPaste
+									byIndex
+								/>
+							</div>
 						</div>
 						<div
 							className={Utils.getClassName(

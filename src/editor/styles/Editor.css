@@ -139,6 +139,10 @@ code {
 	height: 100%;
 }
 
+.zero-height {
+	height: 0;
+}
+
 .no-select-text {
 	-webkit-touch-callout: none; /* iOS Safari */
 	-webkit-user-select: none; /* Safari */
