@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import '../styles/Input.css';
 import { DynamicValue } from '../core/DynamicValue';
 import Dropdown from './Dropdown';

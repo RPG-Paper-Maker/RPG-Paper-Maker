@@ -38,8 +38,11 @@ type Props = {
 	defaultSelectedID?: number;
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
 	onCreateItem?: (node: Node) => void;
+	onListUpdated?: () => void;
 	forcedCurrentSelectedItemID?: number | null;
 	setForcedCurrentSelectedItemID?: (forced: number | null) => void;
+	forcedCurrentSelectedItemKey?: string | null;
+	setForcedCurrentSelectedItemKey?: (forced: string | null) => void;
 	minWidth?: number;
 	onDrop?: () => Promise<void>;
 };
@@ -58,8 +61,11 @@ function Tree({
 	defaultSelectedID,
 	onSelectedItem,
 	onCreateItem,
+	onListUpdated,
 	forcedCurrentSelectedItemID,
 	setForcedCurrentSelectedItemID,
+	forcedCurrentSelectedItemKey,
+	setForcedCurrentSelectedItemKey,
 	onDrop,
 	minWidth,
 }: Props) {
@@ -95,9 +101,11 @@ function Tree({
 
 	const canPaste = () => copiedItems?.constructorClass === constructorType;
 
-	const getNodeID = () => currentSelectedItemNode?.content?.id || -1;
+	const getNodeID = () => currentSelectedItemNode?.content?.id ?? -1;
 
-	const isSelected = (id: number) => id === getNodeID();
+	const getNodeKey = () => currentSelectedItemNode?.content?.getKey() ?? '-1';
+
+	const isSelected = (key: string) => key === getNodeKey();
 
 	const getNewIndex = () => {
 		if (currentSelectedItemNode) {
@@ -172,6 +180,7 @@ function Tree({
 				setCurrentSelectedItemNode(cloned);
 				onSelectedItem?.(cloned, false);
 			}
+			onListUpdated?.();
 		}
 	};
 
@@ -181,6 +190,7 @@ function Tree({
 			ArrayUtils.removeElement(list, currentSelectedItemNode);
 			const node = list[index] ?? null;
 			setCurrentSelectedItemNode(node);
+			onListUpdated?.();
 			onSelectedItem?.(node, false);
 		}
 	};
@@ -197,6 +207,7 @@ function Tree({
 		setNewModel(null);
 		setCurrentSelectedItemNode(node);
 		onSelectedItem?.(node, false);
+		onListUpdated?.();
 	};
 
 	const handleRejectDialog = () => {
@@ -272,6 +283,7 @@ function Tree({
 			removeDragDropClasses(target);
 			setDraggedNode(null);
 			await onDrop?.();
+			onListUpdated?.();
 		}
 	};
 
@@ -279,6 +291,7 @@ function Tree({
 		if (currentSelectedItemNode) {
 			currentSelectedItemNode.content.name = name;
 			setCurrentName(name);
+			onListUpdated?.();
 		}
 	};
 
@@ -299,6 +312,23 @@ function Tree({
 		// eslint-disable-next-line
 	}, [forcedCurrentSelectedItemID, setForcedCurrentSelectedItemID]);
 
+	useLayoutEffect(() => {
+		if (
+			forcedCurrentSelectedItemKey !== undefined &&
+			forcedCurrentSelectedItemKey !== null &&
+			setForcedCurrentSelectedItemKey
+		) {
+			const node = Node.getNodeByKey(list, forcedCurrentSelectedItemKey);
+			setCurrentSelectedItemNode(node);
+			setCurrentName(node?.content?.name || '');
+			setForcedCurrentSelectedItemKey(null);
+			if (onSelectedItem) {
+				onSelectedItem(node, false);
+			}
+		}
+		// eslint-disable-next-line
+	}, [forcedCurrentSelectedItemKey, setForcedCurrentSelectedItemKey]);
+
 	useEffect(() => {
 		if (currentSelectedItemNode) {
 			setCurrentSelectedItemNode(currentSelectedItemNode);
@@ -316,10 +346,10 @@ function Tree({
 		for (const node of nodes) {
 			items.push(
 				<TreeItem
-					key={node.content.id}
+					key={node.content.getKey()}
 					node={node}
 					level={level}
-					selected={isSelected(node.content.id)}
+					selected={isSelected(node.content.getKey())}
 					onSwitchExpanded={handleSwitchExpandedItem}
 					onMouseDown={handleMouseDownItem}
 					onDragStart={node.draggable ? handleDragStart : undefined}
@@ -340,7 +370,7 @@ function Tree({
 					key={-1}
 					node={Node.create(Model.Base.create(-1, ''))}
 					level={level}
-					selected={isSelected(-1)}
+					selected={isSelected('-1')}
 					onSwitchExpanded={handleSwitchExpandedItem}
 					onMouseDown={handleMouseDownItem}
 				/>

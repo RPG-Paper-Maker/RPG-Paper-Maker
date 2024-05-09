@@ -24,7 +24,7 @@ type Props = {
 
 function VariableSelector({ variableID, onChange }: Props) {
 	const [needDialogOpen, setNeedDialogOpen] = useState(false);
-	const [node, setNode] = useState(
+	const [node] = useState(
 		Node.create(Model.Base.create(variableID, Project.current!.variables.getVariableByID(variableID)?.name || ''))
 	);
 

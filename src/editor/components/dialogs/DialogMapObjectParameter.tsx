@@ -14,15 +14,6 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 import { Model } from '../../Editor';
 import { useTranslation } from 'react-i18next';
-import Dropdown from '../Dropdown';
-import useStateNumber from '../../hooks/useStateNumber';
-import { Node, Project } from '../../core';
-import Form from '../Form';
-import useStateBool from '../../hooks/useStateBool';
-import RadioButton from '../RadioButton';
-import Groupbox from '../Groupbox';
-import Tree from '../Tree';
-import { MapObjectEvent } from '../../models';
 import { DynamicValue } from '../../core/DynamicValue';
 import DynamicValueSelector from '../DynamicValueSelector';
 import { DYNAMIC_VALUE_OPTIONS_TYPE } from '../../common';
@@ -36,7 +27,7 @@ type Props = {
 	onReject?: () => void;
 };
 
-function DialogMapObjectParameter({ needOpen, setNeedOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogMapObjectParameter({ needOpen, setNeedOpen, model, onAccept, onReject }: Props) {
 	const parameter = model as Model.MapObjectParameter;
 
 	const { t } = useTranslation();

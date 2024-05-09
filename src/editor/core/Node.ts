@@ -19,6 +19,8 @@ export const NODE_CONSTRUCTOR_KIND = {
 	Base: () => Model.Base,
 	TreeMapTag: () => Model.TreeMapTag,
 	MapObjectState: () => Model.MapObjectState,
+	MapObjectProperty: () => Model.MapObjectProperty,
+	MapObjectEvent: () => Model.MapObjectEvent,
 };
 
 class Node extends Serializable {
@@ -55,6 +57,19 @@ class Node extends Serializable {
 				return node;
 			}
 			const child = this.getNodeByID(node.children, id);
+			if (child) {
+				return child;
+			}
+		}
+		return null;
+	}
+
+	static getNodeByKey(nodes: Node[], key: string): Node | null {
+		for (const node of nodes) {
+			if (node.content.getKey() === key) {
+				return node;
+			}
+			const child = this.getNodeByKey(node.children, key);
 			if (child) {
 				return child;
 			}

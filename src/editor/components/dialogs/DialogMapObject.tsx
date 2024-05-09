@@ -70,29 +70,53 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 	const [pixelOffset, setPixelOffset] = useStateBool();
 	const [keepPosition, setKeepPosition] = useStateBool();
 	const [eventCommandDetection, setEventCommandDetection] = useState<EventCommand | null>(null);
+	const [forcedCurrentIndexTab, setForcedCurrentIndexTab] = useState<number | null>(null);
+	const [forcedCurrentSelectedEventKey, setForcedCurrentSelectedEventKey] = useState<string | null>(null);
 
 	const initialize = () => {
 		setName(object.name);
 		setModelID(object.commonModelID);
-		setTabTitles([Model.Base.create(1, 'Hero action')]);
-		setTabContents([<Tree key={0} list={[]}></Tree>]);
 		const newStates = Node.createList(object.states);
+		const newEvents = Node.createList(object.events);
+		updateReactionsTab(newEvents);
 		setStates(newStates);
-		setEvents(Node.createList(object.events));
+		setEvents(newEvents);
 		setProperties(Node.createList(object.properties));
 		setOnlyOneEventPerFrame(object.onlyOneEventPerFrame);
 		setCanBeTriggeredAnotherObject(object.canBeTriggeredAnotherObject);
 		handleChangeState(object.states.length > 0 ? object.states[0] : null);
 		Project.current!.currentMapObjectStates = newStates;
+		Project.current!.currentMapObjectEvents = newEvents;
 	};
 
 	const getObjectsList = () => [Model.Base.create(-1, t('none')), ...Project.current!.commonEvents.commonObjects];
+
+	const updateReactionsTab = (nodes: Node[]) => {
+		setTabTitles(nodes.map((node) => node.content));
+		setTabContents(nodes.map((node) => <Tree key={node.content.getKey()} list={[]}></Tree>));
+	};
+
+	const handleCurrentIndexTabChanged = (index: number, model: Model.Base, isClick: boolean) => {
+		if (isClick) {
+			setForcedCurrentSelectedEventKey(model.getKey());
+		}
+	};
 
 	const handleSelectedItemState = (node: Node | null) => {
 		handleChangeState(node && node.content.id !== -1 ? (node.content as MapObjectState) : null);
 	};
 
-	const handleSelectedItemEvent = (node: Node | null) => {};
+	const handleCreateState = (node: Node) => {
+		(node.content as Model.MapObjectState).initialize();
+	};
+
+	const handleEventListUpdated = () => {
+		updateReactionsTab(events);
+	};
+
+	const handleSelectedItemEvent = (node: Node | null) => {
+		setForcedCurrentIndexTab(node ? events.indexOf(node) : -1);
+	};
 
 	const handleChangeState = (state: MapObjectState | null) => {
 		setSelectedState(state);
@@ -250,6 +274,9 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 								setTitles={setTabTitles}
 								contents={tabContents}
 								setContents={setTabContents}
+								forcedCurrentIndex={forcedCurrentIndexTab}
+								setForcedCurrentIndex={setForcedCurrentIndexTab}
+								onCurrentIndexChanged={handleCurrentIndexTabChanged}
 							/>
 						</div>
 						<Checkbox isChecked={false}>{t('block.hero.when.reaction')}</Checkbox>
@@ -261,6 +288,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 								constructorType={Model.MapObjectState}
 								list={states}
 								onSelectedItem={handleSelectedItemState}
+								onCreateItem={handleCreateState}
 							/>
 						</div>
 						<div className='flex-column flex-one gap-small'>
@@ -268,7 +296,14 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 						</div>
 						<div className='flex-column flex-one gap-small'>
 							{t('events')}:
-							<Tree constructorType={Model.MapObjectEvent} list={events} />
+							<Tree
+								constructorType={Model.MapObjectEvent}
+								list={events}
+								onSelectedItem={handleSelectedItemEvent}
+								onListUpdated={handleEventListUpdated}
+								forcedCurrentSelectedItemKey={forcedCurrentSelectedEventKey}
+								setForcedCurrentSelectedItemKey={setForcedCurrentSelectedEventKey}
+							/>
 						</div>
 						<div
 							className={Utils.getClassName(

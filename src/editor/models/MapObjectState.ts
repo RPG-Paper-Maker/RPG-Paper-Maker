@@ -131,6 +131,17 @@ class MapObjectState extends Base {
 		return object;
 	}
 
+	initialize() {
+		const firstState = Project.current!.commonEvents.defaultObject.states[0];
+		if (firstState) {
+			const id = this.id;
+			const name = this.name;
+			this.copy(firstState);
+			this.id = id;
+			this.name = name;
+		}
+	}
+
 	applyDefault(additionnalBinding: BindingType[] = []) {
 		super.applyDefault(MapObjectState.getBindings(additionnalBinding));
 	}

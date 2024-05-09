@@ -39,7 +39,6 @@ class Keyboard extends Locale {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Keyboard.getBindings(additionnalBinding));
-		console.log(this);
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {

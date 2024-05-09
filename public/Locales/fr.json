@@ -1963,5 +1963,6 @@
 	"warning.could.not.copy.map.created.empty": "Impossible de copier la carte à {{path}}. Création d'une vide.",
 	"introduction": "Introduction",
 	"edit.object": "Editer objet",
-	"edit.transformations": "Editer transformations"
+	"edit.transformations": "Editer transformations",
+	"cannot.duplicate.event": "Impossible de dupliquer un évenement avec les mêmes paramètres."
 }

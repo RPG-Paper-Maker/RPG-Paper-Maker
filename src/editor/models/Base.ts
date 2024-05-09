@@ -176,6 +176,10 @@ class Base extends Serializable {
 		return base;
 	}
 
+	getKey(): string {
+		return '' + this.id;
+	}
+
 	getIcon(): ReactNode {
 		return null;
 	}

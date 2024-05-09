@@ -67,7 +67,6 @@ function DialogVariables({ needOpen, setNeedOpen, model, onAccept, onReject }: P
 	};
 
 	const handleCreatePage = (node: Node) => {
-		console.log(node);
 		(node.content as Model.VariablesPage).initialize();
 	};
 

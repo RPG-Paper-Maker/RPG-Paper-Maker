@@ -39,6 +39,10 @@ class DynamicValue extends Serializable {
 		return dynamic;
 	}
 
+	getKey(): string {
+		return `${this.kind}/${this.value}`;
+	}
+
 	equals(dynamic: DynamicValue): boolean {
 		return this.kind === dynamic.kind && this.value === dynamic.value;
 	}

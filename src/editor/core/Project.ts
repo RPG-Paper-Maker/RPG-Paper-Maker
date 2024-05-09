@@ -28,6 +28,7 @@ class Project {
 	public variables = new Data.Variables();
 	public keyboard = new Data.Keyboard();
 	public currentMapObjectStates: Node[] = [];
+	public currentMapObjectEvents: Node[] = [];
 
 	constructor(name: string, location: string) {
 		this.systems.projectName = Model.Localization.create(name);

@@ -57,7 +57,7 @@ import { LuFolders, LuSaveAll } from 'react-icons/lu';
 import Loader from './Loader';
 import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
 import { KEY, SPECIAL_KEY, Paths, MenuItemType, Utils, Constants, IO, EXTENSION_KIND, BUTTON_TYPE } from '../common';
-import { LocalFile, Node, Project } from '../core';
+import { LocalFile, Project } from '../core';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';

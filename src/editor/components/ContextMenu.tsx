@@ -70,7 +70,6 @@ function ContextMenu({ children, items = [] }: Props) {
 
 	useEffect(() => {
 		const handleMouseDownOutside = (e: MouseEvent) => {
-			console.log('ok');
 			const isOutComplete = refComplete.current && !refComplete.current.contains(e.target as Node);
 			if (isOutComplete || (e.button === 0 && refMenu.current && !refMenu.current.contains(e.target as Node))) {
 				setIsOpen(false);

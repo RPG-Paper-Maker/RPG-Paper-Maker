@@ -81,11 +81,11 @@ function Tab({
 		titles.map((title, index) => {
 			return (
 				<div
-					key={title.id}
+					key={title.getKey()}
 					className={Utils.getClassName([[currentIndex === index, 'selected']], ['tab-item'])}
 					onClick={() => handleClickItem(index)}
 				>
-					{title.name}
+					{title.getName()}
 					{isClosable && <RxCross2 onClick={(e) => handleClickClose(e, title)} />}
 				</div>
 			);

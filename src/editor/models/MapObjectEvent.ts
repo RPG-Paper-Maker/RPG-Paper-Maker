@@ -49,9 +49,23 @@ class MapObjectEvent extends Base {
 		return parameters;
 	}
 
-	toString(): string {
+	getKey(): string {
+		const parameters = this.parameters.map((param) => param.value.getKey());
+		return `${this.id}-${this.isSystem}-${parameters.join('-')}`;
+	}
+
+	getName(): string {
 		const parameters = this.parameters.map((param) => param.toStringValueOrDefault());
-		return `${Base.STRING_START}${super.getName()}${parameters.length > 0 ? ` [${parameters.join(',')}]` : ''}`;
+		return `${
+			Base.getByID(
+				this.isSystem ? Project.current!.commonEvents.eventsSystem : Project.current!.commonEvents.eventsUser,
+				this.id
+			)?.name ?? ''
+		}${parameters.length > 0 ? ` [${parameters.join(',')}]` : ''}`;
+	}
+
+	toString(): string {
+		return `${Base.STRING_START}${this.getName()}`;
 	}
 
 	copy(event: MapObjectEvent): void {
