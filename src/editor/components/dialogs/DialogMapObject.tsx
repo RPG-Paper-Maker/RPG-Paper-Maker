@@ -98,7 +98,6 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 
 	const handleCurrentIndexTabChanged = (index: number, model: Model.Base, isClick: boolean) => {
 		if (isClick) {
-			console.log(index);
 			setForcedCurrentSelectedIndexEvent(index);
 		}
 	};

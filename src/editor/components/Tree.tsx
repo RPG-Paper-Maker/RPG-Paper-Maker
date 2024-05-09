@@ -316,14 +316,12 @@ function Tree({
 	}, [forcedCurrentSelectedItemID, setForcedCurrentSelectedItemID]);
 
 	useLayoutEffect(() => {
-		console.log(forcedCurrentSelectedItemIndex);
 		if (
 			forcedCurrentSelectedItemIndex !== undefined &&
 			forcedCurrentSelectedItemIndex !== null &&
 			setForcedCurrentSelectedItemIndex
 		) {
 			const node = list[forcedCurrentSelectedItemIndex];
-			console.log(node);
 			setCurrentSelectedItemNode(node);
 			setCurrentName(node?.content?.name || '');
 			setForcedCurrentSelectedItemIndex(null);
@@ -409,7 +407,7 @@ function Tree({
 				case CONTEXT_MENU_ITEM_KIND.PASTE:
 					return {
 						title: 'Paste',
-						shortcut: [SPECIAL_KEY.CTRL, KEY.D],
+						shortcut: [SPECIAL_KEY.CTRL, KEY.V],
 						onClick: handlePasteItem,
 						disabled: !canPaste(),
 					};
