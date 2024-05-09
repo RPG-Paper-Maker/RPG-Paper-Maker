@@ -11,8 +11,9 @@
 
 .tree {
 	background-color: var(--darkest-containers-bg-color);
-	width: 100%;
 	border: 1px solid var(--lighter-bg-color);
+	width: 100%;
+	height: 100%;
 	border-radius: 2px;
 	overflow: auto;
 	overflow-x: overlay;

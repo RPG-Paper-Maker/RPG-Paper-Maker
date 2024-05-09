@@ -54,16 +54,6 @@ function ContextMenu({ children, items = [] }: Props) {
 		}
 	};
 
-	const handleMouseDownOutside = (e: MouseEvent) => {
-		const isOutComplete = refComplete.current && !refComplete.current.contains(e.target as Node);
-		if (isOutComplete || (e.button === 0 && refMenu.current && !refMenu.current.contains(e.target as Node))) {
-			setIsOpen(false);
-			if (isOutComplete) {
-				setIsFocused(false);
-			}
-		}
-	};
-
 	const handleTouchStart = (e: React.TouchEvent<HTMLElement>) => {
 		const id = setTimeout(() => {
 			openContext(e.touches[0].pageX, e.touches[0].pageY);
@@ -79,19 +69,32 @@ function ContextMenu({ children, items = [] }: Props) {
 	};
 
 	useEffect(() => {
-		if (isOpen) {
-			document.addEventListener('mousedown', handleMouseDownOutside);
-		}
-		return () => {
-			document.removeEventListener('mousedown', handleMouseDownOutside);
+		const handleMouseDownOutside = (e: MouseEvent) => {
+			console.log('ok');
+			const isOutComplete = refComplete.current && !refComplete.current.contains(e.target as Node);
+			if (isOutComplete || (e.button === 0 && refMenu.current && !refMenu.current.contains(e.target as Node))) {
+				setIsOpen(false);
+				if (isOutComplete) {
+					setIsFocused(false);
+				}
+			}
 		};
+
+		if (isOpen) {
+			const dialogs = document.getElementsByClassName('dialog');
+			const currentDialog = dialogs.length === 0 ? document : dialogs[dialogs.length - 1];
+			currentDialog.addEventListener('mousedown', handleMouseDownOutside as EventListener);
+			return () => {
+				currentDialog.removeEventListener('mousedown', handleMouseDownOutside as EventListener);
+			};
+		}
 		// eslint-disable-next-line
 	}, [isOpen]);
 
 	return (
 		<div
 			ref={refComplete}
-			className='flex-one'
+			className='flex-one fill-width fill-height'
 			onMouseDown={handleMouseDown}
 			onTouchStart={handleTouchStart}
 			onTouchEnd={handleTouchEnd}

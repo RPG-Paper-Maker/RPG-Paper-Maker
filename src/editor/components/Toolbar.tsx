@@ -19,6 +19,7 @@ import {
 	triggerPlay,
 	triggerSave,
 	triggerSaveAll,
+	triggerVariables,
 } from '../store';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
@@ -79,6 +80,10 @@ function Toolbar() {
 		dispatch(triggerSaveAll(true));
 	};
 
+	const handleVariablesManager = () => {
+		dispatch(triggerVariables(true));
+	};
+
 	const handlePlay = () => {
 		dispatch(triggerPlay(true));
 	};
@@ -116,7 +121,7 @@ function Toolbar() {
 					<MenuItem icon={<BsClipboardData />} onClick={handleFloor} disabled>
 						{t('systems.manager.tool')}
 					</MenuItem>
-					<MenuItem icon={<TbNumbers />} onClick={handleFloor} disabled>
+					<MenuItem icon={<TbNumbers />} onClick={handleVariablesManager} disabled={!isProjectOpened}>
 						{t('variables.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<FaArrowsAlt />} onClick={handleFloor} disabled>

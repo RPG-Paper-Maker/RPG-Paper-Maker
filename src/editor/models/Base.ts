@@ -43,7 +43,7 @@ class Base extends Serializable {
 		Base.create(DYNAMIC_VALUE_KIND.PARAMETER, 'parameter'),
 		Base.create(DYNAMIC_VALUE_KIND.PROPERTY, 'property'),
 		Base.create(DYNAMIC_VALUE_KIND.DATABASE, 'database'),
-		Base.create(DYNAMIC_VALUE_KIND.MESSAGE, 'message'),
+		Base.create(DYNAMIC_VALUE_KIND.MESSAGE, 'text'),
 		Base.create(DYNAMIC_VALUE_KIND.SCRIPT, 'script'),
 		Base.create(DYNAMIC_VALUE_KIND.SWITCH, 'switch'),
 		Base.create(DYNAMIC_VALUE_KIND.KEYBOARD, 'keyboard'),

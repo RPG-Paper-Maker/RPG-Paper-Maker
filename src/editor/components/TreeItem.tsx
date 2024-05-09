@@ -75,7 +75,7 @@ function TreeItem({
 				</div>
 			));
 		} else {
-			return node.toString();
+			return <div className='flex-one gap-small text-ellipsis'>{node.toString()}</div>;
 		}
 	};
 

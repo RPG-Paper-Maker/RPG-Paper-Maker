@@ -169,9 +169,18 @@ function Dialog({
 		}
 	};
 
+	const handleMouseDownOverlay = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+		const container = dialogRef.current;
+		const dialogs = document.getElementsByClassName('dialog');
+		if (container === dialogs[dialogs.length - 1]) {
+			e.stopPropagation();
+		}
+	};
+
 	const handleCloseOut = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
 		const container = dialogRef.current;
 		const dialogs = document.getElementsByClassName('dialog');
+		e.stopPropagation();
 		if (dialogs.length <= 1 && !isClickedIn && !isLoading && container && !container.contains(e.target as Node)) {
 			setIsMoved(false);
 			if (onClose) {
@@ -231,7 +240,12 @@ function Dialog({
 	return ReactDOM.createPortal(
 		<>
 			{isOpen && (
-				<div className='dialog-overlay' onClick={handleCloseOut} onMouseUp={handleMouseUpTitle}>
+				<div
+					className='dialog-overlay'
+					onClick={handleCloseOut}
+					onMouseDown={handleMouseDownOverlay}
+					onMouseUp={handleMouseUpTitle}
+				>
 					<div
 						ref={dialogRef}
 						className='dialog'

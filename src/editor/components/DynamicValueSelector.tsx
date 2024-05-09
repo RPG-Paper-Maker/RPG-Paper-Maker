@@ -17,6 +17,7 @@ import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from
 import { Model } from '../Editor';
 import InputNumber from './InputNumber';
 import InputText from './InputText';
+import VariableSelector from './VariableSelector';
 
 type Props = {
 	value: DynamicValue;
@@ -30,11 +31,13 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 			: 0;
 	const defaultMessage = value.kind === DYNAMIC_VALUE_KIND.MESSAGE ? (value.value as string) : '';
 	const defaultSwitch = value.kind === DYNAMIC_VALUE_KIND.SWITCH ? (value.value as boolean) : true;
+	const defaultVariableID = value.kind === DYNAMIC_VALUE_KIND.VARIABLE ? (value.value as number) : 1;
 
 	const [kind, setKind] = useState(value.kind);
 	const [valueNumber, setValueNumber] = useState(defaultNumber);
 	const [valueMessage, setValueMessage] = useState(defaultMessage);
 	const [valueSwitch, setValueSwitch] = useState(defaultSwitch);
+	const [valueVariableID, setValueVariableID] = useState(defaultVariableID);
 
 	const getOptions = () => {
 		let list: DYNAMIC_VALUE_KIND[] = [];
@@ -70,7 +73,7 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 			case DYNAMIC_VALUE_KIND.NUMBER_DECIMAL:
 				return valueNumber;
 			case DYNAMIC_VALUE_KIND.VARIABLE:
-				value.value = null;
+				value.value = valueVariableID;
 				break;
 			case DYNAMIC_VALUE_KIND.MESSAGE:
 				value.value = valueMessage;
@@ -99,6 +102,11 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 		value.value = id === 0;
 	};
 
+	const handleChangeVariable = (id: number) => {
+		setValueVariableID(id);
+		value.value = id;
+	};
+
 	const getValueDisplay = () => {
 		switch (kind) {
 			case DYNAMIC_VALUE_KIND.NUMBER:
@@ -112,7 +120,7 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 					/>
 				);
 			case DYNAMIC_VALUE_KIND.VARIABLE:
-				return null;
+				return <VariableSelector variableID={valueVariableID} onChange={handleChangeVariable} />;
 			case DYNAMIC_VALUE_KIND.MESSAGE:
 				return (
 					<InputText value={valueMessage} onChange={handleChangeMessage} widthType={INPUT_TYPE_WIDTH.FILL} />

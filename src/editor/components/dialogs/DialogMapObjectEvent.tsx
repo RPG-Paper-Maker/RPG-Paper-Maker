@@ -49,9 +49,10 @@ function DialogMapObjectEvent({ needOpen, setNeedOpen, model, isNew, onAccept, o
 		if (isNew) {
 			setIsSystem(true);
 			setIsUser(false);
-			setEventSystemID(Project.current!.commonEvents.eventsSystem[0].id);
+			const systemID = Project.current!.commonEvents.eventsSystem[0].id;
+			setEventSystemID(systemID);
 			setEventUserID(Project.current!.commonEvents.eventsUser[0].id);
-			setParameters([]);
+			updateParameters(systemID, true);
 		} else {
 			setIsSystem(event.isSystem);
 			setIsUser(!event.isSystem);

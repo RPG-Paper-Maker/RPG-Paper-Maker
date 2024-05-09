@@ -279,3 +279,8 @@ code {
 .mobile-only {
 	display: none;
 }
+
+.disabled-label {
+	opacity: 0.4;
+	cursor: initial;
+}

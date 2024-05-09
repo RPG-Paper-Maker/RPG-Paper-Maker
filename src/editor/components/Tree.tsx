@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode, useState, useEffect } from 'react';
+import { ReactNode, useState, useEffect, useLayoutEffect } from 'react';
 import '../styles/Tree.css';
 import TreeItem from './TreeItem';
-import { ArrayUtils, CONTEXT_MENU_ITEM_KIND, KEY, MenuItemType, RPM, SPECIAL_KEY } from '../common';
+import { ArrayUtils, CONTEXT_MENU_ITEM_KIND, INPUT_TYPE_WIDTH, KEY, MenuItemType, RPM, SPECIAL_KEY } from '../common';
 import { Node } from '../core';
 import ContextMenu from './ContextMenu';
 import { Model } from '../Editor';
@@ -23,29 +23,41 @@ import { RootState, setCopiedItems } from '../store';
 import DialogMapObjectEvent from './dialogs/DialogMapObjectEvent';
 import { useTranslation } from 'react-i18next';
 import DialogMapObjectParameter from './dialogs/DialogMapObjectParameter';
+import InputText from './InputText';
+import useStateString from '../hooks/useStateString';
 
 type Props = {
 	list: Node[];
 	constructorType?: typeof Model.Base;
 	cannotAdd?: boolean;
+	cannotEdit?: boolean;
 	cannotDragDrop?: boolean;
+	canBeEmpty?: boolean;
+	showEditName?: boolean;
 	contextMenuItems?: (CONTEXT_MENU_ITEM_KIND | MenuItemType)[];
 	defaultSelectedID?: number;
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
+	onCreateItem?: (node: Node) => void;
 	forcedCurrentSelectedItemID?: number | null;
 	setForcedCurrentSelectedItemID?: (forced: number | null) => void;
 	minWidth?: number;
 	onDrop?: () => Promise<void>;
 };
 
+export const TREES_MIN_WIDTH = 150;
+
 function Tree({
 	list,
 	constructorType = Model.Base,
 	cannotAdd = false,
+	cannotEdit = false,
 	cannotDragDrop = false,
+	canBeEmpty = false,
+	showEditName = false,
 	contextMenuItems,
 	defaultSelectedID,
 	onSelectedItem,
+	onCreateItem,
 	forcedCurrentSelectedItemID,
 	setForcedCurrentSelectedItemID,
 	onDrop,
@@ -61,6 +73,7 @@ function Tree({
 	const [needOpenDialog, setNeedOpenDialog] = useState(false);
 	const [newModel, setNewModel] = useState<Model.Base | null>(null);
 	const [draggedNode, setDraggedNode] = useState<Node | null>(null);
+	const [currentName, setCurrentName] = useStateString();
 
 	const copiedItems = useSelector((state: RootState) => state.projects.copiedItems);
 
@@ -77,6 +90,8 @@ function Tree({
 		];
 		hasCustomItems = false;
 	}
+
+	const isEditNameDisabled = () => !currentSelectedItemNode || currentSelectedItemNode.content.id === -1;
 
 	const canPaste = () => copiedItems?.constructorClass === constructorType;
 
@@ -107,6 +122,7 @@ function Tree({
 
 	const handleMouseDownItem = (node: Node) => {
 		setCurrentSelectedItemNode(node);
+		setCurrentName(node.content.name);
 		if (onSelectedItem) {
 			onSelectedItem(node, true);
 		}
@@ -160,7 +176,7 @@ function Tree({
 	};
 
 	const handleDeleteItem = async () => {
-		if (currentSelectedItemNode) {
+		if (currentSelectedItemNode && (canBeEmpty || list.length > 1)) {
 			const index = getNewIndex();
 			ArrayUtils.removeElement(list, currentSelectedItemNode);
 			const node = list[index] ?? null;
@@ -174,6 +190,7 @@ function Tree({
 		if (newModel && currentSelectedItemNode) {
 			node = Node.create(newModel);
 			ArrayUtils.insertAt(list, getNewIndex(), node);
+			onCreateItem?.(node);
 		} else {
 			node = Node.create(currentSelectedItemNode?.content);
 		}
@@ -258,7 +275,14 @@ function Tree({
 		}
 	};
 
-	useEffect(() => {
+	const handleChangeName = (name: string) => {
+		if (currentSelectedItemNode) {
+			currentSelectedItemNode.content.name = name;
+			setCurrentName(name);
+		}
+	};
+
+	useLayoutEffect(() => {
 		if (
 			forcedCurrentSelectedItemID !== undefined &&
 			forcedCurrentSelectedItemID !== null &&
@@ -266,6 +290,7 @@ function Tree({
 		) {
 			const node = Node.getNodeByID(list, forcedCurrentSelectedItemID);
 			setCurrentSelectedItemNode(node);
+			setCurrentName(node?.content?.name || '');
 			setForcedCurrentSelectedItemID(null);
 			if (onSelectedItem) {
 				onSelectedItem(node, false);
@@ -277,6 +302,7 @@ function Tree({
 	useEffect(() => {
 		if (currentSelectedItemNode) {
 			setCurrentSelectedItemNode(currentSelectedItemNode);
+			setCurrentName(currentSelectedItemNode.content.name);
 			if (onSelectedItem) {
 				onSelectedItem(currentSelectedItemNode, false);
 			}
@@ -382,7 +408,7 @@ function Tree({
 	};
 
 	const getDialog = () => {
-		if (currentSelectedItemNode) {
+		if (currentSelectedItemNode && !cannotEdit) {
 			const options = {
 				isNew: newModel !== null,
 				needOpen: needOpenDialog,
@@ -392,8 +418,6 @@ function Tree({
 				onReject: handleRejectDialog,
 			};
 			switch (constructorType) {
-				case Model.Base:
-					return <DialogName {...options} />;
 				case Model.MapObjectState:
 					return <DialogMapObjectState {...options} />;
 				case Model.MapObjectEvent:
@@ -401,7 +425,7 @@ function Tree({
 				case Model.MapObjectParameter:
 					return <DialogMapObjectParameter {...options} />;
 				default:
-					return null;
+					return <DialogName {...options} />;
 			}
 		} else {
 			return null;
@@ -421,9 +445,22 @@ function Tree({
 
 	return (
 		<ContextMenu items={getContextMenuItems()}>
-			<div onDoubleClick={handleDoubleClick} className='tree' style={{ minWidth: `${minWidth}px` }}>
-				<div className='flex gap-small'>{getHeaders()}</div>
-				{getTreeItems(list)}
+			<div className='flex-column gap-medium fill-width fill-height'>
+				<div onDoubleClick={handleDoubleClick} className='tree' style={{ minWidth: `${minWidth}px` }}>
+					<div className='flex gap-small'>{getHeaders()}</div>
+					{getTreeItems(list)}
+				</div>
+				{showEditName && (
+					<div className='flex gap-small'>
+						<div className={isEditNameDisabled() ? 'disabled-label' : ''}>{t('name')}:</div>
+						<InputText
+							value={currentName}
+							onChange={handleChangeName}
+							widthType={INPUT_TYPE_WIDTH.FILL}
+							disabled={isEditNameDisabled()}
+						/>
+					</div>
+				)}
 			</div>
 			{getDialog()}
 		</ContextMenu>

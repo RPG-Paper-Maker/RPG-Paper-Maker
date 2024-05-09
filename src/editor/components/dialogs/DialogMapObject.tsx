@@ -37,8 +37,6 @@ type Props = {
 	onAccept: () => Promise<void>;
 };
 
-const TREES_MIN_WIDTH = 150;
-
 function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 	const { t } = useTranslation();
 

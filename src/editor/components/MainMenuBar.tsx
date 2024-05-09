@@ -30,6 +30,7 @@ import {
 	triggerSave,
 	triggerSaveAll,
 	triggerTreeMap,
+	triggerVariables,
 } from '../store';
 import DialogNewProject from './dialogs/DialogNewProject';
 import Menu from './Menu';
@@ -56,7 +57,7 @@ import { LuFolders, LuSaveAll } from 'react-icons/lu';
 import Loader from './Loader';
 import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
 import { KEY, SPECIAL_KEY, Paths, MenuItemType, Utils, Constants, IO, EXTENSION_KIND, BUTTON_TYPE } from '../common';
-import { LocalFile, Project } from '../core';
+import { LocalFile, Node, Project } from '../core';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
@@ -68,11 +69,14 @@ import Button from './Button';
 import { VscChromeClose, VscChromeMaximize, VscChromeMinimize, VscChromeRestore } from 'react-icons/vsc';
 import { useTranslation } from 'react-i18next';
 import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
+import { TbNumbers } from 'react-icons/tb';
+import DialogVariables from './dialogs/DialogVariables';
 
 function MainMenuBar() {
 	const { t } = useTranslation();
 
 	const [needDialogNewProjectOpen, setNeedDialogNewProjectOpen] = useState(false);
+	const [needDialogVariablesOpen, setNeedDialogVariablesOpen] = useState(false);
 	const [needDialogChangeLanguageOpen, setNeedDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
@@ -327,6 +331,10 @@ function MainMenuBar() {
 		Scene.Map.current!.zoomOut();
 	};
 
+	const handleVariablesManager = async () => {
+		setNeedDialogVariablesOpen(true);
+	};
+
 	const handleChangeLanguage = async () => {
 		setNeedDialogChangeLanguageOpen(true);
 	};
@@ -521,7 +529,13 @@ function MainMenuBar() {
 		},
 		{
 			title: t('management'),
-			disabled: true,
+			children: [
+				{
+					title: `${t('variables.manager')}...`,
+					icon: <TbNumbers />,
+					onClick: handleVariablesManager,
+				},
+			],
 		},
 		{
 			title: t('special.elements'),
@@ -578,6 +592,9 @@ function MainMenuBar() {
 		} else if (triggers.saveAll) {
 			dispatch(triggerSaveAll(false));
 			handleSaveAll().catch(console.error);
+		} else if (triggers.variables) {
+			dispatch(triggerVariables(false));
+			handleVariablesManager().catch(console.error);
 		} else if (triggers.play) {
 			dispatch(triggerPlay(false));
 			handlePlay().catch(console.error);
@@ -681,6 +698,7 @@ function MainMenuBar() {
 				setNeedOpen={setNeedDialogNewProjectOpen}
 				onAccept={handleAcceptNewProject}
 			/>
+			<DialogVariables needOpen={needDialogVariablesOpen} setNeedOpen={setNeedDialogVariablesOpen} />
 			<DialogChangeLanguage
 				needOpen={needDialogChangeLanguageOpen}
 				setNeedOpen={setNeedDialogChangeLanguageOpen}

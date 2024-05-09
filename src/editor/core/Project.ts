@@ -25,6 +25,7 @@ class Project {
 	public shapes = new Data.Shapes();
 	public specialElements = new Data.SpecialElements();
 	public commonEvents = new Data.CommonEvents();
+	public variables = new Data.Variables();
 	public currentMapObjectStates: Node[] = [];
 
 	constructor(name: string, location: string) {
@@ -51,6 +52,7 @@ class Project {
 
 	async load() {
 		const projectName = this.systems.projectName.name();
+		await this.variables.load();
 		await this.pictures.load();
 		await this.shapes.load();
 		await this.settings.load();
@@ -66,6 +68,7 @@ class Project {
 		await this.treeMaps.save();
 		await this.settings.save();
 		await this.commonEvents.save();
+		await this.variables.save();
 		// await this.systems.save(Paths.join(this.getPath(), Paths.FILE_SYSTEM));
 	}
 }

@@ -21,3 +21,4 @@ export * from './ProjectPreview';
 export * from './Shape';
 export * from './SpecialElement';
 export * from './TreeMapTag';
+export * from './VariablesPage';

@@ -10,7 +10,7 @@
 */
 
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
-import { Serializable } from '.';
+import { Project, Serializable } from '.';
 import i18next from 'i18next';
 
 class DynamicValue extends Serializable {
@@ -52,6 +52,10 @@ class DynamicValue extends Serializable {
 				return i18next.t('anything');
 			case DYNAMIC_VALUE_KIND.SWITCH:
 				return this.value ? 'ON' : 'OFF';
+			case DYNAMIC_VALUE_KIND.VARIABLE:
+				return `Variable: ${
+					Project.current!.variables.getVariableByID(this.value as number)?.toStringNameID() || this.value
+				}`;
 			default:
 				return '' + this.value;
 		}
