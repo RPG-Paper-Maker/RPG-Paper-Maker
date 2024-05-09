@@ -49,9 +49,9 @@ class MapObjectEvent extends Base {
 		return parameters;
 	}
 
-	toStringNameID(): string {
+	toString(): string {
 		const parameters = this.parameters.map((param) => param.toStringValueOrDefault());
-		return `${super.toStringNameID()}${parameters.length > 0 ? ` [${parameters.join(',')}]` : ''}`;
+		return `${Base.STRING_START}${super.getName()}${parameters.length > 0 ? ` [${parameters.join(',')}]` : ''}`;
 	}
 
 	copy(event: MapObjectEvent): void {

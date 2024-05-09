@@ -12,6 +12,7 @@
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import { Project, Serializable } from '.';
 import i18next from 'i18next';
+import { Model } from '../Editor';
 
 class DynamicValue extends Serializable {
 	public kind!: DYNAMIC_VALUE_KIND;
@@ -53,8 +54,13 @@ class DynamicValue extends Serializable {
 			case DYNAMIC_VALUE_KIND.SWITCH:
 				return this.value ? 'ON' : 'OFF';
 			case DYNAMIC_VALUE_KIND.VARIABLE:
-				return `Variable: ${
+				return `VAR: ${
 					Project.current!.variables.getVariableByID(this.value as number)?.toStringNameID() || this.value
+				}`;
+			case DYNAMIC_VALUE_KIND.KEYBOARD:
+				return `KB: ${
+					Model.Base.getByID(Project.current!.keyboard.list, this.value as number)?.toStringNameID() ||
+					this.value
 				}`;
 			default:
 				return '' + this.value;

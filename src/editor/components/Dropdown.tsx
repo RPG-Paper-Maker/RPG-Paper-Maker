@@ -12,12 +12,11 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { BsChevronDown } from 'react-icons/bs';
 import { useTranslation } from 'react-i18next';
-import i18n from 'i18next';
 import { Model } from '../Editor';
 import { Utils } from '../common';
 import '../styles/Dropdown.css';
 
-const DROPDOWN_SPACE_ARROW = 10;
+const DROPDOWN_SPACE_ARROW = 20;
 
 const getScrollingTop = (element?: HTMLElement) => {
 	const bounding = element?.getBoundingClientRect();
@@ -126,7 +125,7 @@ function Dropdown({
 	useLayoutEffect(() => {
 		const container = containerRef.current;
 		const dropdown = dropdownContainerRef.current;
-		if (container && dropdown) {
+		if (container && dropdown && !fillWidth) {
 			container.style.minWidth = `${dropdown.getBoundingClientRect().width + DROPDOWN_SPACE_ARROW}px`;
 		}
 	}, []);
@@ -146,6 +145,12 @@ function Dropdown({
 		return () => window.removeEventListener('click', handleClickOutside);
 	}, [isOpen]);
 
+	useEffect(() => {
+		if (disabled) {
+			setIsOpen(false);
+		}
+	}, [disabled]);
+
 	const selected = Model.Base.getByIDOrFirst(options, selectedID);
 
 	const getCurrentItem = () =>
@@ -154,7 +159,13 @@ function Dropdown({
 	const getDropdownItems = () =>
 		options.map((option) => (
 			<div
-				className={Utils.getClassName([[selectedID === option.id, 'selected']], ['element'])}
+				className={Utils.getClassName(
+					[
+						[selectedID === option.id, 'selected'],
+						[!fillWidth, 'white-space-nowrap'],
+					],
+					['element']
+				)}
 				key={option.id}
 				onClick={() => handleClickOption(option)}
 			>
@@ -176,7 +187,9 @@ function Dropdown({
 			onClick={handleClick}
 		>
 			<div className='flex-one flex-center-v gap-small'>
-				<div className='flex-one flex-center-v'>{getCurrentItem()}</div>
+				<div className={Utils.getClassName([[fillWidth, 'text-ellipsis']], ['flex-one', 'flex-center-v'])}>
+					{getCurrentItem()}
+				</div>
 				<div className='flex'>
 					<BsChevronDown />
 				</div>

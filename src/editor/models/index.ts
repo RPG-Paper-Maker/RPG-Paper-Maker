@@ -5,6 +5,7 @@ export * from './CommonObject';
 export * from './CommonReaction';
 export * from './CreateParameter';
 export * from './EventCommand';
+export * from './Keyboard';
 export * from './Localization';
 export * from './Map';
 export * from './MapObject';

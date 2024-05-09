@@ -26,6 +26,7 @@ class Project {
 	public specialElements = new Data.SpecialElements();
 	public commonEvents = new Data.CommonEvents();
 	public variables = new Data.Variables();
+	public keyboard = new Data.Keyboard();
 	public currentMapObjectStates: Node[] = [];
 
 	constructor(name: string, location: string) {
@@ -62,6 +63,7 @@ class Project {
 		await this.treeMaps.load();
 		await this.specialElements.load();
 		await this.commonEvents.load();
+		await this.keyboard.load();
 	}
 
 	async save() {

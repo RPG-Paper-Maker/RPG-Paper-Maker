@@ -264,6 +264,10 @@ code {
 	flex: 1;
 }
 
+.white-space-nowrap {
+	white-space: nowrap;
+}
+
 .bg-darker {
 	background-color: var(--darker-bg-color);
 }

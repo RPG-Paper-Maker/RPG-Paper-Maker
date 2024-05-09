@@ -23,7 +23,7 @@
 	flex-direction: column;
 	background-color: var(--darker-bg-color);
 	z-index: 1000;
-	max-height: 15em;
+	max-height: 20em;
 	position: fixed;
 	cursor: pointer;
 	box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px, rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
@@ -37,7 +37,6 @@
 	padding: 5px;
 	color: var(--main-color);
 	text-align: start;
-	white-space: nowrap;
 }
 
 .dropdown .content .element:hover {

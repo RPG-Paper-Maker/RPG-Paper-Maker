@@ -18,6 +18,7 @@ import { Model } from '../Editor';
 import InputNumber from './InputNumber';
 import InputText from './InputText';
 import VariableSelector from './VariableSelector';
+import { Project } from '../core';
 
 type Props = {
 	value: DynamicValue;
@@ -25,19 +26,24 @@ type Props = {
 };
 
 function DynamicValueSelector({ value, optionsType }: Props) {
-	const defaultNumber =
+	const [kind, setKind] = useState(value.kind);
+	const [valueNumber, setValueNumber] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.NUMBER || value.kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL
 			? (value.value as number)
-			: 0;
-	const defaultMessage = value.kind === DYNAMIC_VALUE_KIND.MESSAGE ? (value.value as string) : '';
-	const defaultSwitch = value.kind === DYNAMIC_VALUE_KIND.SWITCH ? (value.value as boolean) : true;
-	const defaultVariableID = value.kind === DYNAMIC_VALUE_KIND.VARIABLE ? (value.value as number) : 1;
-
-	const [kind, setKind] = useState(value.kind);
-	const [valueNumber, setValueNumber] = useState(defaultNumber);
-	const [valueMessage, setValueMessage] = useState(defaultMessage);
-	const [valueSwitch, setValueSwitch] = useState(defaultSwitch);
-	const [valueVariableID, setValueVariableID] = useState(defaultVariableID);
+			: 0
+	);
+	const [valueMessage, setValueMessage] = useState(
+		value.kind === DYNAMIC_VALUE_KIND.MESSAGE ? (value.value as string) : ''
+	);
+	const [valueSwitch, setValueSwitch] = useState(
+		value.kind === DYNAMIC_VALUE_KIND.SWITCH ? (value.value as boolean) : true
+	);
+	const [valueVariableID, setValueVariableID] = useState(
+		value.kind === DYNAMIC_VALUE_KIND.VARIABLE ? (value.value as number) : 1
+	);
+	const [valueKeyboardID, setValueKeyboardID] = useState(
+		value.kind === DYNAMIC_VALUE_KIND.VARIABLE ? (value.value as number) : Project.current!.keyboard.list[0].id
+	);
 
 	const getOptions = () => {
 		let list: DYNAMIC_VALUE_KIND[] = [];
@@ -82,7 +88,7 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 				value.value = valueSwitch;
 				break;
 			case DYNAMIC_VALUE_KIND.KEYBOARD:
-				value.value = null;
+				value.value = valueKeyboardID;
 				break;
 		}
 	};
@@ -104,6 +110,11 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 
 	const handleChangeVariable = (id: number) => {
 		setValueVariableID(id);
+		value.value = id;
+	};
+
+	const handleChangeKeyboard = (id: number) => {
+		setValueKeyboardID(id);
 		value.value = id;
 	};
 
@@ -135,7 +146,15 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 					/>
 				);
 			case DYNAMIC_VALUE_KIND.KEYBOARD:
-				return null;
+				return (
+					<Dropdown
+						selectedID={valueKeyboardID}
+						onChange={handleChangeKeyboard}
+						options={Project.current!.keyboard.list}
+						displayIDs
+						fillWidth
+					/>
+				);
 			default:
 				return null;
 		}
