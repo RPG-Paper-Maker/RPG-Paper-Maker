@@ -29,6 +29,7 @@ class Project {
 	public keyboard = new Data.Keyboard();
 	public currentMapObjectStates: Node[] = [];
 	public currentMapObjectEvents: Node[] = [];
+	public currentMapObjectProperties: Node[] = [];
 
 	constructor(name: string, location: string) {
 		this.systems.projectName = Model.Localization.create(name);

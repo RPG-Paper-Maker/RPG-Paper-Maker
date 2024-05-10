@@ -19,6 +19,7 @@ import InputNumber from './InputNumber';
 import InputText from './InputText';
 import VariableSelector from './VariableSelector';
 import { Project } from '../core';
+import '../styles/DynamicValueSelector.css';
 
 type Props = {
 	value: DynamicValue;
@@ -42,7 +43,7 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 		value.kind === DYNAMIC_VALUE_KIND.VARIABLE ? (value.value as number) : 1
 	);
 	const [valueKeyboardID, setValueKeyboardID] = useState(
-		value.kind === DYNAMIC_VALUE_KIND.VARIABLE ? (value.value as number) : Project.current!.keyboard.list[0].id
+		value.kind === DYNAMIC_VALUE_KIND.KEYBOARD ? (value.value as number) : Project.current!.keyboard.list[0].id
 	);
 
 	const getOptions = () => {
@@ -52,6 +53,16 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 				list = [
 					DYNAMIC_VALUE_KIND.DEFAULT,
 					DYNAMIC_VALUE_KIND.ANYTHING,
+					DYNAMIC_VALUE_KIND.NONE,
+					DYNAMIC_VALUE_KIND.NUMBER_DECIMAL,
+					DYNAMIC_VALUE_KIND.VARIABLE,
+					DYNAMIC_VALUE_KIND.MESSAGE,
+					DYNAMIC_VALUE_KIND.SWITCH,
+					DYNAMIC_VALUE_KIND.KEYBOARD,
+				];
+				break;
+			case DYNAMIC_VALUE_OPTIONS_TYPE.PROPERTY:
+				list = [
 					DYNAMIC_VALUE_KIND.NONE,
 					DYNAMIC_VALUE_KIND.NUMBER_DECIMAL,
 					DYNAMIC_VALUE_KIND.VARIABLE,
@@ -162,7 +173,7 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 	};
 
 	return (
-		<div className='flex gap-small' style={{ width: '250px' }}>
+		<div className='dynamic-value-selector'>
 			<Dropdown selectedID={kind} onChange={handleChangeKind} options={getOptions()} translateOptions />
 			<div className='flex-one'>{getValueDisplay()}</div>
 		</div>

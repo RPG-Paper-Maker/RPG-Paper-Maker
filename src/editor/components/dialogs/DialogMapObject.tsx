@@ -78,15 +78,17 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 		setModelID(object.commonModelID);
 		const newStates = Node.createList(object.states);
 		const newEvents = Node.createList(object.events);
+		const newProperties = Node.createList(object.properties);
 		updateReactionsTab(newEvents);
 		setStates(newStates);
 		setEvents(newEvents);
-		setProperties(Node.createList(object.properties));
+		setProperties(newProperties);
 		setOnlyOneEventPerFrame(object.onlyOneEventPerFrame);
 		setCanBeTriggeredAnotherObject(object.canBeTriggeredAnotherObject);
 		handleChangeState(object.states.length > 0 ? object.states[0] : null);
 		Project.current!.currentMapObjectStates = newStates;
 		Project.current!.currentMapObjectEvents = newEvents;
+		Project.current!.currentMapObjectProperties = newProperties;
 	};
 
 	const getObjectsList = () => [Model.Base.create(-1, t('none')), ...Project.current!.commonEvents.commonObjects];
@@ -308,7 +310,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 							<div className='flex-column flex-one gap-small'>
 								{t('properties')}:
 								<div className='flex-one zero-height'>
-									<Tree list={properties} />
+									<Tree list={properties} constructorType={Model.MapObjectProperty} />
 								</div>
 							</div>
 						</div>

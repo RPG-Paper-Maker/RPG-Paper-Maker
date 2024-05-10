@@ -57,7 +57,7 @@ class MapObjectParameter extends Base {
 
 	copy(parameter: MapObjectParameter): void {
 		super.copy(parameter);
-		this.parameter = parameter.parameter === null ? null : parameter.parameter.clone();
+		this.parameter = parameter.parameter;
 		this.value = parameter.value.clone();
 	}
 

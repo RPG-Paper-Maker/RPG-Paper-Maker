@@ -70,7 +70,9 @@ function DialogMapObjectEvent({ needOpen, setNeedOpen, model, isNew, onAccept, o
 	const radiosSetters = [setIsSystem, setIsUser];
 
 	const updateParameters = (eventID: number, isSys: boolean) => {
-		setParameters(Node.createList(MapObjectEvent.getDefaultParameters(eventID, isSys)));
+		setParameters(
+			Node.createList(MapObjectEvent.getDefaultParameters(eventID, isSys, Node.createListFromNodes(parameters)))
+		);
 	};
 
 	const handleChangeIsSystem = (b: boolean) => {

@@ -41,12 +41,13 @@ function Tab({
 	setForcedCurrentIndex,
 }: Props) {
 	const [currentIndex, setCurrentIndex] = useState(defaultIndex);
+	const [nextIndex, setNextIndex] = useState(defaultIndex); // Needed to make scrolling work properly on direct click...
 
 	const selectedElementRef = useRef<HTMLDivElement>(null);
 
 	const scrollToSelectedElement = () => {
 		if (selectedElementRef.current) {
-			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
 		}
 	};
 
@@ -71,7 +72,7 @@ function Tab({
 	};
 
 	const handleClickItem = (index: number) => {
-		setCurrentIndex(index);
+		setNextIndex(index);
 		if (onCurrentIndexChanged) {
 			onCurrentIndexChanged(index, titles[index], true);
 		}
@@ -96,9 +97,21 @@ function Tab({
 	}, [forcedCurrentIndex, setForcedCurrentIndex]);
 
 	useEffect(() => {
+		setCurrentIndex(nextIndex);
+		if (onCurrentIndexChanged) {
+			onCurrentIndexChanged(nextIndex, titles[nextIndex], true);
+		}
+		// eslint-disable-next-line
+	}, [nextIndex, setNextIndex]);
+
+	useEffect(() => {
 		scrollToSelectedElement();
 		// eslint-disable-next-line
 	}, [currentIndex]);
+
+	useEffect(() => {
+		scrollToSelectedElement();
+	}, []);
 
 	const getTitles = () =>
 		titles.map((title, index) => {

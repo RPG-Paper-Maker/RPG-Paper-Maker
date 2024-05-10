@@ -24,6 +24,10 @@ class MapObjectProperty extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	toString(): string {
+		return `${this.toStringNameID()} = ${this.initialValue.toString()}`;
+	}
+
 	copy(property: MapObjectProperty): void {
 		super.copy(property);
 		this.initialValue = property.initialValue.clone();

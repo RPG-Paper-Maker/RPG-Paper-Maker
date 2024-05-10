@@ -25,6 +25,7 @@ import { useTranslation } from 'react-i18next';
 import DialogMapObjectParameter from './dialogs/DialogMapObjectParameter';
 import InputText from './InputText';
 import useStateString from '../hooks/useStateString';
+import DialogMapObjectProperty from './dialogs/DialogMapObjectProperty';
 
 type Props = {
 	list: Node[];
@@ -124,7 +125,7 @@ function Tree({
 
 	const scrollToSelectedElement = () => {
 		if (selectedElementRef.current) {
-			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'center' });
 		}
 	};
 
@@ -362,9 +363,8 @@ function Tree({
 		for (const [index, node] of nodes.entries()) {
 			const selected = isSelected(byIndex ? index : node.content.id);
 			items.push(
-				<div ref={selected ? selectedElementRef : null}>
+				<div key={byIndex ? index : node.content.id} ref={selected ? selectedElementRef : null}>
 					<TreeItem
-						key={byIndex ? index : node.content.id}
 						node={node}
 						level={level}
 						selected={selected}
@@ -386,9 +386,8 @@ function Tree({
 		if (!cannotAdd && level === 0) {
 			const selected = isSelected(byIndex ? nodes.length : -1);
 			items.push(
-				<div ref={selected ? selectedElementRef : null}>
+				<div key={byIndex ? nodes.length : -1} ref={selected ? selectedElementRef : null}>
 					<TreeItem
-						key={byIndex ? nodes.length : -1}
 						node={Node.create(Model.Base.create(-1, ''))}
 						level={level}
 						selected={selected}
@@ -476,6 +475,8 @@ function Tree({
 					return <DialogMapObjectEvent {...options} />;
 				case Model.MapObjectParameter:
 					return <DialogMapObjectParameter {...options} />;
+				case Model.MapObjectProperty:
+					return <DialogMapObjectProperty {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

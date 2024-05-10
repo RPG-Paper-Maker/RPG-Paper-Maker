@@ -115,20 +115,13 @@ function Dropdown({
 		onChange(option.id);
 	};
 
-	const handleClickOutside = (event: MouseEvent) => {
-		const container = containerRef.current;
-		if (container && !container.contains(event.target as Node)) {
-			setIsOpen(false);
-		}
-	};
-
 	useLayoutEffect(() => {
 		const container = containerRef.current;
 		const dropdown = dropdownContainerRef.current;
 		if (container && dropdown && !fillWidth) {
 			container.style.minWidth = `${dropdown.getBoundingClientRect().width + DROPDOWN_SPACE_ARROW}px`;
 		}
-	}, []);
+	}, [fillWidth]);
 
 	useLayoutEffect(() => {
 		handleScroll();
@@ -141,8 +134,21 @@ function Dropdown({
 	});
 
 	useEffect(() => {
-		window.addEventListener('click', handleClickOutside);
-		return () => window.removeEventListener('click', handleClickOutside);
+		const handleMouseDownOutside = (event: MouseEvent) => {
+			const container = containerRef.current;
+			if (container && !container.contains(event.target as Node)) {
+				setIsOpen(false);
+			}
+		};
+
+		if (isOpen) {
+			const dialogs = document.getElementsByClassName('dialog');
+			const currentDialog = dialogs.length === 0 ? document : dialogs[dialogs.length - 1];
+			currentDialog.addEventListener('mousedown', handleMouseDownOutside as EventListener);
+			return () => {
+				currentDialog.removeEventListener('mousedown', handleMouseDownOutside as EventListener);
+			};
+		}
 	}, [isOpen]);
 
 	useEffect(() => {

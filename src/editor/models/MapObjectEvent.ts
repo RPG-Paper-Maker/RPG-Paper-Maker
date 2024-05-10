@@ -32,21 +32,33 @@ class MapObjectEvent extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
-	static getDefaultParameters(eventID: number, isSystem: boolean): MapObjectParameter[] {
+	static getDefaultParameters(
+		eventID: number,
+		isSystem: boolean,
+		initialParameters: MapObjectParameter[]
+	): MapObjectParameter[] {
 		const events = isSystem ? Project.current!.commonEvents.eventsSystem : Project.current!.commonEvents.eventsUser;
 		const event = Base.getByID(events, eventID) as CommonEvent;
 		const parameters = [];
 		for (const createParameter of event.parameters) {
+			const value = DynamicValue.create(DYNAMIC_VALUE_KIND.DEFAULT);
+			for (const parameter of initialParameters) {
+				if (createParameter.id === parameter.id) {
+					value.copy(parameter.value);
+					break;
+				}
+			}
 			parameters.push(
-				MapObjectParameter.create(
-					createParameter.id,
-					createParameter.name,
-					createParameter,
-					DynamicValue.create(DYNAMIC_VALUE_KIND.DEFAULT)
-				)
+				MapObjectParameter.create(createParameter.id, createParameter.name, createParameter, value)
 			);
 		}
 		return parameters;
+	}
+
+	updateParameters() {
+		if (Project.current) {
+			this.parameters = MapObjectEvent.getDefaultParameters(this.id, this.isSystem, this.parameters);
+		}
 	}
 
 	getName(): string {
@@ -81,6 +93,7 @@ class MapObjectEvent extends Base {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, MapObjectEvent.getBindings(additionnalBinding));
+		this.updateParameters();
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
