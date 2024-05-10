@@ -9,11 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { RxCross2 } from 'react-icons/rx';
 import '../styles/Tab.css';
 import { Model } from '../Editor';
 import { ArrayUtils, Utils } from '../common';
+import Button from './Button';
+import { FaCaretLeft, FaCaretRight } from 'react-icons/fa';
 
 type Props = {
 	titles: Model.Base[];
@@ -39,6 +41,14 @@ function Tab({
 	setForcedCurrentIndex,
 }: Props) {
 	const [currentIndex, setCurrentIndex] = useState(defaultIndex);
+
+	const selectedElementRef = useRef<HTMLDivElement>(null);
+
+	const scrollToSelectedElement = () => {
+		if (selectedElementRef.current) {
+			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+		}
+	};
 
 	const handleClickClose = (e: React.MouseEvent<SVGElement, MouseEvent>, title: Model.Base) => {
 		e.stopPropagation();
@@ -67,6 +77,14 @@ function Tab({
 		}
 	};
 
+	const handleClickLeftButton = () => {
+		handleClickItem(currentIndex === 0 ? 0 : currentIndex - 1);
+	};
+
+	const handleClickRightButton = () => {
+		handleClickItem(currentIndex === titles.length - 1 ? titles.length - 1 : currentIndex + 1);
+	};
+
 	useEffect(() => {
 		if (forcedCurrentIndex !== undefined && forcedCurrentIndex !== null && setForcedCurrentIndex) {
 			setCurrentIndex(forcedCurrentIndex);
@@ -77,12 +95,19 @@ function Tab({
 		// eslint-disable-next-line
 	}, [forcedCurrentIndex, setForcedCurrentIndex]);
 
+	useEffect(() => {
+		scrollToSelectedElement();
+		// eslint-disable-next-line
+	}, [currentIndex]);
+
 	const getTitles = () =>
 		titles.map((title, index) => {
+			const selected = currentIndex === index;
 			return (
 				<div
+					ref={selected ? selectedElementRef : null}
 					key={index}
-					className={Utils.getClassName([[currentIndex === index, 'selected']], ['tab-item'])}
+					className={Utils.getClassName([[selected, 'selected']], ['tab-item'])}
 					onClick={() => handleClickItem(index)}
 				>
 					{title.getName()}
@@ -95,7 +120,16 @@ function Tab({
 
 	return (
 		<div className='tab'>
-			<div className='tab-titles'>{getTitles()}</div>
+			<div className='tab-titles'>
+				<div className='scroll-area'>{getTitles()}</div>
+				<Button small icon={<FaCaretLeft />} onClick={handleClickLeftButton} disabled={currentIndex === 0} />
+				<Button
+					small
+					icon={<FaCaretRight />}
+					onClick={handleClickRightButton}
+					disabled={currentIndex === titles.length - 1}
+				/>
+			</div>
 			<div className='tab-content'>{getContents()}</div>
 		</div>
 	);

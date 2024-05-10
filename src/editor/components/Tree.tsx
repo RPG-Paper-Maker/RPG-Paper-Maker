@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode, useState, useEffect, useLayoutEffect } from 'react';
+import { ReactNode, useState, useEffect, useLayoutEffect, useRef } from 'react';
 import '../styles/Tree.css';
 import TreeItem from './TreeItem';
 import { ArrayUtils, CONTEXT_MENU_ITEM_KIND, INPUT_TYPE_WIDTH, KEY, MenuItemType, RPM, SPECIAL_KEY } from '../common';
@@ -87,6 +87,8 @@ function Tree({
 
 	const copiedItems = useSelector((state: RootState) => state.projects.copiedItems);
 
+	const selectedElementRef = useRef<HTMLDivElement>(null);
+
 	const dispatch = useDispatch();
 
 	let hasCustomItems = true;
@@ -119,6 +121,12 @@ function Tree({
 	};
 
 	const isSelected = (id: number) => id === (byIndex ? getNewIndex() : getNodeID());
+
+	const scrollToSelectedElement = () => {
+		if (selectedElementRef.current) {
+			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+		}
+	};
 
 	const handleSwitchExpandedItem = (id: number, expanded: boolean) => {
 		const newList = [...notExpandedItemsList];
@@ -333,6 +341,11 @@ function Tree({
 	}, [forcedCurrentSelectedItemIndex, setForcedCurrentSelectedItemIndex]);
 
 	useEffect(() => {
+		scrollToSelectedElement();
+		// eslint-disable-next-line
+	}, [currentSelectedItemNode]);
+
+	useEffect(() => {
 		if (currentSelectedItemNode) {
 			setCurrentSelectedItemNode(currentSelectedItemNode);
 			setCurrentName(currentSelectedItemNode.content.name);
@@ -347,36 +360,42 @@ function Tree({
 
 	const getTreeItems = (nodes: Node[], level = 0, items: ReactNode[] = []) => {
 		for (const [index, node] of nodes.entries()) {
+			const selected = isSelected(byIndex ? index : node.content.id);
 			items.push(
-				<TreeItem
-					key={byIndex ? index : node.content.id}
-					node={node}
-					level={level}
-					selected={isSelected(byIndex ? index : node.content.id)}
-					onSwitchExpanded={handleSwitchExpandedItem}
-					onMouseDown={handleMouseDownItem}
-					onDragStart={node.draggable ? handleDragStart : undefined}
-					onDragOver={node.draggable ? handleDragOver : undefined}
-					onDragLeave={node.draggable ? handleDragLeave : undefined}
-					onDrop={node.draggable ? handleDrop : undefined}
-					draggable={!cannotDragDrop && node.draggable}
-					headers={headers}
-				/>
+				<div ref={selected ? selectedElementRef : null}>
+					<TreeItem
+						key={byIndex ? index : node.content.id}
+						node={node}
+						level={level}
+						selected={selected}
+						onSwitchExpanded={handleSwitchExpandedItem}
+						onMouseDown={handleMouseDownItem}
+						onDragStart={node.draggable ? handleDragStart : undefined}
+						onDragOver={node.draggable ? handleDragOver : undefined}
+						onDragLeave={node.draggable ? handleDragLeave : undefined}
+						onDrop={node.draggable ? handleDrop : undefined}
+						draggable={!cannotDragDrop && node.draggable}
+						headers={headers}
+					/>
+				</div>
 			);
 			if (!ArrayUtils.contains(notExpandedItemsList, node.content.id)) {
 				getTreeItems(node.children, level + 1, items);
 			}
 		}
 		if (!cannotAdd && level === 0) {
+			const selected = isSelected(byIndex ? nodes.length : -1);
 			items.push(
-				<TreeItem
-					key={byIndex ? nodes.length : -1}
-					node={Node.create(Model.Base.create(-1, ''))}
-					level={level}
-					selected={isSelected(byIndex ? nodes.length : -1)}
-					onSwitchExpanded={handleSwitchExpandedItem}
-					onMouseDown={handleMouseDownItem}
-				/>
+				<div ref={selected ? selectedElementRef : null}>
+					<TreeItem
+						key={byIndex ? nodes.length : -1}
+						node={Node.create(Model.Base.create(-1, ''))}
+						level={level}
+						selected={selected}
+						onSwitchExpanded={handleSwitchExpandedItem}
+						onMouseDown={handleMouseDownItem}
+					/>
+				</div>
 			);
 		}
 		return items;

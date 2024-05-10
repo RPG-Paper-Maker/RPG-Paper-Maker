@@ -77,7 +77,8 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 				break;
 			case DYNAMIC_VALUE_KIND.NUMBER:
 			case DYNAMIC_VALUE_KIND.NUMBER_DECIMAL:
-				return valueNumber;
+				value.value = valueNumber;
+				break;
 			case DYNAMIC_VALUE_KIND.VARIABLE:
 				value.value = valueVariableID;
 				break;

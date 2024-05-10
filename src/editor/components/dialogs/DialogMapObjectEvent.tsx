@@ -23,7 +23,6 @@ import RadioButton from '../RadioButton';
 import Groupbox from '../Groupbox';
 import Tree from '../Tree';
 import { MapObjectEvent } from '../../models';
-import FooterOK from './footers/FooterOK';
 
 type Props = {
 	needOpen: boolean;

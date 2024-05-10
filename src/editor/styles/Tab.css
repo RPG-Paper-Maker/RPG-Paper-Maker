@@ -20,9 +20,14 @@
 	display: flex;
 	gap: 1px;
 	white-space: nowrap;
-	overflow: auto;
-	width: 0px;
-	min-width: 100%;
+	align-items: center;
+
+	.scroll-area {
+		display: flex;
+		flex-grow: 1;
+		overflow: hidden;
+		width: 0;
+	}
 }
 
 .tab-content {

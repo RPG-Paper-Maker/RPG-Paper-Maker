@@ -114,6 +114,17 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 		updateReactionsTab(events);
 	};
 
+	const handleCreateEvent = (node: Node) => {
+		const reactions = new Map<number, Model.MapObjectReaction>();
+		(node.content as Model.MapObjectEvent).reactions = reactions;
+		for (const state of states) {
+			const reaction = new Model.MapObjectReaction();
+			reaction.commands = [];
+			reaction.blockingHero = true;
+			reactions.set(state.content.id, reaction);
+		}
+	};
+
 	const handleSelectedItemEvent = (node: Node | null) => {
 		setForcedCurrentIndexTab(node ? events.indexOf(node) : -1);
 	};
@@ -309,6 +320,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 									list={events}
 									onSelectedItem={handleSelectedItemEvent}
 									onListUpdated={handleEventListUpdated}
+									onCreateItem={handleCreateEvent}
 									forcedCurrentSelectedItemIndex={forcedCurrentSelectedIndexEvent}
 									setForcedCurrentSelectedItemIndex={setForcedCurrentSelectedIndexEvent}
 									doNotGenerateIDOnPaste

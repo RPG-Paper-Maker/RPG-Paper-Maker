@@ -74,3 +74,7 @@ button.disabled {
 	opacity: 0.4;
 	cursor: initial;
 }
+
+button.small {
+	padding: 2px;
+}

@@ -25,6 +25,7 @@ type Props = {
 	big?: boolean;
 	backgroundOnHoverOnly?: boolean;
 	square?: boolean;
+	small?: boolean;
 	onClick?: () => void;
 };
 
@@ -40,6 +41,7 @@ function Button({
 	big = false,
 	backgroundOnHoverOnly = false,
 	square = false,
+	small = false,
 	onClick,
 }: Props) {
 	const [activeState, setActiveState] = useState(active);
@@ -94,6 +96,7 @@ function Button({
 					[big, 'big'],
 					[backgroundOnHoverOnly, 'backgroundOnHoverOnly'],
 					[square, 'square'],
+					[small, 'small'],
 				],
 				[buttonType]
 			)}
