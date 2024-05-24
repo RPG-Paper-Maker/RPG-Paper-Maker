@@ -17,6 +17,7 @@
 	"others": [
 		"Gamepad",
 		"Move in all directions",
-		"Skip title"
+		"Skip title",
+		"Autosave"
 	]
 }
