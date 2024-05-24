@@ -18,6 +18,8 @@
 		"Gamepad",
 		"Move in all directions",
 		"Skip title",
-		"Autosave"
+		"Autosave",
+		"Hide message box",
+		"Multiple window boxes"
 	]
 }
