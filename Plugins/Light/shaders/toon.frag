@@ -168,9 +168,8 @@ void main()
 	#endif
 
 	gl_FragColor = ambient + vec4(emissive, 0.0);
-	vec3 rgb = vec3(gl_FragColor.x + colorD.x, gl_FragColor.y + colorD.y, gl_FragColor.z + colorD.z);
-	vec3 intensity = vec3(dot(rgb, vec3(0.2125, 0.7154, 0.0721)));
-	gl_FragColor = vec4(mix(intensity, rgb, colorD.w), gl_FragColor.a);
+	vec3 intensity = vec3(dot(gl_FragColor.rgb, vec3(0.2125, 0.7154, 0.0721)));
+	gl_FragColor = vec4(mix(intensity, gl_FragColor.rgb, 1.0), gl_FragColor.a);
 
 	#if NUM_HEMI_LIGHTS > 0
 		#pragma unroll_loop_start
@@ -222,5 +221,23 @@ void main()
 	#endif
 
 	gl_FragColor *= tex;
+
+	float alpha = gl_FragColor.a;
+	if (gl_FragColor.r < 0.0)
+		gl_FragColor -= gl_FragColor.r;
+	if (gl_FragColor.g < 0.0)
+		gl_FragColor -= gl_FragColor.g;
+	if (gl_FragColor.b < 0.0)
+		gl_FragColor -= gl_FragColor.b;
+	if (gl_FragColor.r > 1.0)
+		gl_FragColor /= gl_FragColor.r;
+	if (gl_FragColor.g > 1.0)
+		gl_FragColor /= gl_FragColor.g;
+	if (gl_FragColor.b > 1.0)
+		gl_FragColor /= gl_FragColor.b;
+	gl_FragColor += vec4(colorD.rgb, 0.0);
+	float g = dot(gl_FragColor.rgb, vec3(0.2125, 0.7154, 0.0721));
+	gl_FragColor = vec4(mix(gl_FragColor.rgb, vec3(g), 1.0 - colorD.w), alpha);
+
 	#include <fog_fragment>
 }
