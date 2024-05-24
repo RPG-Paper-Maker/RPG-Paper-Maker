@@ -60,11 +60,11 @@ setInterval(function ()
 	{
 		for (var i = 0; i < gp.length; i++)
 		{
-			if (!!gp.item(i))
+			if (!!gp[i])
 			{
-				for (var j = 0; j < gp.item(i).buttons.length; j++)
+				for (var j = 0; j < gp[i].buttons.length; j++)
 				{
-					if (gp.item(i).buttons[j].pressed === true)
+					if (gp[i].buttons[j].pressed === true)
 					{
 						if (RPM.Common.Inputs.keysPressed.indexOf(getKey(j)) === -1)
 							RPM.Common.Inputs.keysPressed.push(getKey(j));
@@ -87,10 +87,10 @@ setInterval(function ()
 						buttonsList[i][j] = 0;
 					}
 				}
-				const lh = gp.item(i).axes[0];
-				const lv = gp.item(i).axes[1];
-				const rh = gp.item(i).axes[2];
-				const rv = gp.item(i).axes[3];
+				const lh = gp[i].axes[0];
+				const lv = gp[i].axes[1];
+				const rh = gp[i].axes[2];
+				const rv = gp[i].axes[3];
 				if (RPM.Manager.Stack.top instanceof RPM.Scene.Map && !RPM.Scene.Map.current.loading)
 				{
 					const id = RPM.System.DynamicValue.createNumber(i);
