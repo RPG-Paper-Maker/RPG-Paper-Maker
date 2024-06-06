@@ -50,6 +50,7 @@
 		"tslint": "tslint --project tsconfig.json",
 		"eslint": "npx eslint ./src",
 		"update-mods": "node scripts/update-mods.mjs",
+		"generate-file-manifest": "node scripts/generate-file-manifest.mjs",
 		"update-packages": "ncu -u"
 	},
 	"eslintConfig": {

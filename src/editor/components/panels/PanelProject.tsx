@@ -91,7 +91,7 @@ function PanelProject() {
 	};
 
 	const handleTabCurrentIndexChanged = async (index: number, model: Model.Base, isClick: boolean) => {
-		if (!openLoading) {
+		if (!openLoading && !isClick) {
 			let id = -1;
 			if (index !== -1 && model) {
 				id = model.id;
@@ -157,12 +157,7 @@ function PanelProject() {
 									<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
 								</Menu>
 							</div>
-							<div
-								className={Utils.getClassName(
-									[[projectMenuIndex !== 0, 'hidden']],
-									['flex', 'flex-one']
-								)}
-							>
+							<div className={Utils.getClassName({ hidden: projectMenuIndex !== 0 }, 'flex flex-one')}>
 								<TreeMaps
 									onSelectedItem={handleSelectedMapItem}
 									forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
@@ -193,7 +188,7 @@ function PanelProject() {
 							isClosable
 						/>
 					</div>
-					<div className={Utils.getClassName([[!currentMapID, 'hidden']], ['flex-column flex-one'])}>
+					<div className={Utils.getClassName({ hidden: !currentMapID }, 'flex-column flex-one')}>
 						<MapEditorMenuBar />
 						<MapEditor />
 					</div>

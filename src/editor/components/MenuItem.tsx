@@ -60,12 +60,12 @@ function MenuItem({
 		<div
 			onClick={handleClick}
 			className={Utils.getClassName(
-				[
-					[active, 'active'],
-					[disabled, 'disabled'],
-					[separator, 'separator'],
-				],
-				['menu-item']
+				{
+					active,
+					disabled,
+					separator,
+				},
+				'menu-item'
 			)}
 		>
 			{icon}

@@ -83,7 +83,7 @@ function ProjectPreview({ project }: Props) {
 	return (
 		<>
 			<div
-				className={Utils.getClassName([[isDialogConfirmOpen, 'selected']], ['project-preview'])}
+				className={Utils.getClassName({ selected: isDialogConfirmOpen }, 'project-preview')}
 				onClick={handleOpenProject}
 			>
 				<div className='flex-column flex-one gap-small'>

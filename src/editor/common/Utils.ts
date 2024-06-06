@@ -73,12 +73,10 @@ class Utils {
 		return b ? Constants.NUM_BOOL_TRUE : Constants.NUM_BOOL_FALSE;
 	}
 
-	static getClassName(array: [boolean, string][], always: string[] = []) {
-		return array
-			.filter(([condition]) => condition)
-			.map(([, className]) => className)
-			.concat(always)
-			.join(' ');
+	static getClassName(conditionals: Record<string, boolean>, always?: string): string {
+		return `${Object.keys(conditionals)
+			.filter((key) => conditionals[key])
+			.join(' ')}${always ? ` ${always}` : ''}`;
 	}
 
 	static isMobile(): boolean {

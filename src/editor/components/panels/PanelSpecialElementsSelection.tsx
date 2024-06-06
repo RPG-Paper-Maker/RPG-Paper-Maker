@@ -327,7 +327,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		return (
 			<div
 				ref={selected ? selectedElementRef : null}
-				className={Utils.getClassName([[selected, 'selected']], ['panel-special-element'])}
+				className={Utils.getClassName({ selected }, 'panel-special-element')}
 				key={element.id}
 				onClick={() => handleClick(element.id)}
 			>

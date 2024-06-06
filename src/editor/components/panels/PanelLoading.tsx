@@ -57,6 +57,7 @@ function PanelLoading({ setLoaded }: Props) {
 				}
 				await localforage.setItem('CACHE_VERSION', LocalFile.CACHE_VERSION);
 			}
+			await Platform.readFileManifest();
 		}
 	};
 

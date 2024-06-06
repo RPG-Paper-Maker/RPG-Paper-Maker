@@ -51,17 +51,7 @@ function Menu({
 	}, [triggerCloseAll]);
 
 	return (
-		<div
-			className={Utils.getClassName(
-				[
-					[horizontal, 'menu-horizontal'],
-					[!isVisible, 'hidden'],
-				],
-				['menu']
-			)}
-		>
-			{items}
-		</div>
+		<div className={Utils.getClassName({ 'menu-horizontal': horizontal, hidden: !isVisible }, 'menu')}>{items}</div>
 	);
 }
 

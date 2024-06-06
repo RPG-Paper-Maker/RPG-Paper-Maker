@@ -26,7 +26,7 @@ function Loader({ isLoading, isHidding = false, large = false }: Props) {
 		<>
 			{isLoading && (
 				<>
-					<div className={Utils.getClassName([[large, 'loader-large']], ['loader'])}>
+					<div className={Utils.getClassName({ 'loader-large': large }, 'loader')}>
 						<div className='loader-spinner'></div>
 						{large && <div className='loader-text'>{t('loading')}...</div>}
 					</div>

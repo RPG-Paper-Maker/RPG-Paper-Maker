@@ -258,7 +258,7 @@ function Dialog({
 					>
 						{isDisabled && <div className='dialog-disable' />}
 						<div
-							className={Utils.getClassName([[isDragging, 'dialog-title-grabbing']], ['dialog-title'])}
+							className={Utils.getClassName({ 'dialog-title-grabbing': isDragging }, 'dialog-title')}
 							onMouseDown={handleMouseDownTitle}
 						>
 							<div className='flex-one'>{title}</div>

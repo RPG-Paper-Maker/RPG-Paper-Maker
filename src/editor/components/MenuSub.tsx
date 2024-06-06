@@ -145,14 +145,7 @@ function MenuSub({
 	return (
 		<div ref={refMain} className='menu-sub'>
 			<div
-				className={Utils.getClassName(
-					[
-						[active, 'active'],
-						[isOpen, 'opened'],
-						[disabled, 'disabled'],
-					],
-					['menu-sub-title']
-				)}
+				className={Utils.getClassName({ active, opened: isOpen, disabled }, 'menu-sub-title')}
 				ref={refTitle}
 				onMouseEnter={handleMouseEnterTitle}
 				onMouseLeave={handleMouseLeaveTitle}

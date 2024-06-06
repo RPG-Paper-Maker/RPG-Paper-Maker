@@ -35,6 +35,7 @@ type Props = {
 	cannotDragDrop?: boolean;
 	canBeEmpty?: boolean;
 	doNotGenerateIDOnPaste?: boolean;
+	doNotShowID?: boolean;
 	showEditName?: boolean;
 	contextMenuItems?: (CONTEXT_MENU_ITEM_KIND | MenuItemType)[];
 	defaultSelectedID?: number;
@@ -60,6 +61,7 @@ function Tree({
 	cannotDragDrop = false,
 	canBeEmpty = false,
 	doNotGenerateIDOnPaste = false,
+	doNotShowID = false,
 	showEditName = false,
 	contextMenuItems,
 	defaultSelectedID,
@@ -104,9 +106,9 @@ function Tree({
 		hasCustomItems = false;
 	}
 
-	const isEditNameDisabled = () => !currentSelectedItemNode || currentSelectedItemNode.content.id === -1;
+	const isEditNameDisabled = () => !currentSelectedItemNode || currentSelectedItemNode.content.id <= 0;
 
-	const canPaste = () => copiedItems?.constructorClass === constructorType;
+	const canPaste = () => copiedItems?.constructorClass === constructorType && !cannotAdd;
 
 	const getNodeID = () => currentSelectedItemNode?.content?.id ?? -1;
 
@@ -317,6 +319,7 @@ function Tree({
 			setCurrentSelectedItemNode(node);
 			setCurrentName(node?.content?.name || '');
 			setForcedCurrentSelectedItemID(null);
+			scrollToSelectedElement();
 			if (onSelectedItem) {
 				onSelectedItem(node, false);
 			}
@@ -325,15 +328,18 @@ function Tree({
 	}, [forcedCurrentSelectedItemID, setForcedCurrentSelectedItemID]);
 
 	useLayoutEffect(() => {
+		console.log(forcedCurrentSelectedItemIndex);
 		if (
 			forcedCurrentSelectedItemIndex !== undefined &&
 			forcedCurrentSelectedItemIndex !== null &&
 			setForcedCurrentSelectedItemIndex
 		) {
 			const node = list[forcedCurrentSelectedItemIndex];
+			console.log(node, forcedCurrentSelectedItemIndex);
 			setCurrentSelectedItemNode(node);
 			setCurrentName(node?.content?.name || '');
 			setForcedCurrentSelectedItemIndex(null);
+			scrollToSelectedElement();
 			if (onSelectedItem) {
 				onSelectedItem(node, false);
 			}
@@ -342,14 +348,10 @@ function Tree({
 	}, [forcedCurrentSelectedItemIndex, setForcedCurrentSelectedItemIndex]);
 
 	useEffect(() => {
-		scrollToSelectedElement();
-		// eslint-disable-next-line
-	}, [currentSelectedItemNode]);
-
-	useEffect(() => {
 		if (currentSelectedItemNode) {
 			setCurrentSelectedItemNode(currentSelectedItemNode);
 			setCurrentName(currentSelectedItemNode.content.name);
+			scrollToSelectedElement();
 			if (onSelectedItem) {
 				onSelectedItem(currentSelectedItemNode, false);
 			}
@@ -376,6 +378,7 @@ function Tree({
 						onDrop={node.draggable ? handleDrop : undefined}
 						draggable={!cannotDragDrop && node.draggable}
 						headers={headers}
+						doNotShowID={doNotShowID}
 					/>
 				</div>
 			);
@@ -408,19 +411,20 @@ function Tree({
 					return {
 						title: 'New...',
 						onClick: handleNewItem,
+						disabled: cannotAdd,
 					};
 				case CONTEXT_MENU_ITEM_KIND.EDIT:
 					return {
 						title: 'Edit...',
 						onClick: handleEditItem,
-						disabled: isEmpty,
+						disabled: isEmpty || cannotAdd,
 					};
 				case CONTEXT_MENU_ITEM_KIND.COPY:
 					return {
 						title: 'Copy',
 						shortcut: [SPECIAL_KEY.CTRL, KEY.C],
 						onClick: handleCopyItem,
-						disabled: isEmpty,
+						disabled: isEmpty || cannotAdd,
 					};
 				case CONTEXT_MENU_ITEM_KIND.PASTE:
 					return {

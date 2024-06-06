@@ -98,7 +98,7 @@ function PanelTextures({ visible }: Props) {
 	return (
 		<div
 			ref={refTilesetPreviewDiv}
-			className={Utils.getClassName([[!visible, 'hidden']], ['flex-column', 'flex-one', 'gap-small'])}
+			className={Utils.getClassName({ hidden: !visible }, 'flex-column flex-one gap-small')}
 		>
 			<div ref={refTileset} className='scrollable flex-column flex-one gap-small'>
 				{getMainContent()}

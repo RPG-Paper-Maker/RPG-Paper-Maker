@@ -17,6 +17,8 @@ import { Paths } from './Paths';
 import { JSONType } from './Types';
 
 class Platform {
+	public static manifest: Record<string, unknown>;
+
 	static async checkFileExists(path: string): Promise<boolean> {
 		return await (Constants.IS_DESKTOP ? IO.checkFileExists(path) : LocalFile.checkFileExists(path));
 	}
@@ -145,6 +147,27 @@ class Platform {
 	static async copyPublicFile(publicPath: string, dst: string) {
 		const content = await Platform.readPublicFile(publicPath);
 		await Platform.createFile(dst, content);
+	}
+
+	static async readFileManifest() {
+		this.manifest = JSON.parse(await Platform.readPublicFile('./fileManifest.json'));
+		console.log(this.manifest);
+	}
+
+	static getAllFilesFromFolder(path: string): string[] {
+		if (Constants.IS_DESKTOP) {
+			return [];
+		} else {
+			const folders = path.split('/');
+			if (folders.length > 0 && folders[0] === '') {
+				folders.shift();
+			}
+			let currentFolder = this.manifest;
+			for (const folder of folders) {
+				currentFolder = currentFolder[folder] as Record<string, unknown>;
+			}
+			return currentFolder.files as string[];
+		}
 	}
 
 	static async openGame(location: string) {

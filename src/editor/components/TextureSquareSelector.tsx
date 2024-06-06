@@ -28,6 +28,8 @@ type CurrentStateProps = {
 	firstY: number;
 	selectedRect: Rectangle;
 	previewRect: Rectangle | null;
+	squareWidth: number;
+	squareHeight: number;
 };
 
 type Props = {
@@ -35,9 +37,20 @@ type Props = {
 	divideWidth?: number;
 	divideHeight?: number;
 	canChangeSize?: boolean;
+	columns?: number;
+	rows?: number;
+	onUpdateRectangle?: (rect: Rectangle) => void;
 };
 
-function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, canChangeSize = true }: Props) {
+function TextureSquareSelector({
+	texture,
+	divideWidth = 1,
+	divideHeight = 1,
+	canChangeSize = true,
+	columns = -1,
+	rows = -1,
+	onUpdateRectangle,
+}: Props) {
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 
 	const getDefaultRectangle = () => {
@@ -52,7 +65,7 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 				return Project.current!.settings.mapEditorCurrentTilesetSpriteTexture;
 			default:
-				return new Rectangle(0, 0, 1, 1);
+				return new Rectangle(0, 0, currentState.squareWidth, currentState.squareHeight);
 		}
 	};
 
@@ -60,8 +73,10 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 		picture: null,
 		firstX: -1,
 		firstY: -1,
-		selectedRect: getDefaultRectangle(),
+		selectedRect: new Rectangle(),
 		previewRect: null,
+		squareWidth: 1,
+		squareHeight: 1,
 	})[0];
 
 	const refCanvas = useRef<HTMLCanvasElement>(null);
@@ -73,10 +88,12 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 			case ELEMENT_MAP_KIND.FLOOR:
 				dispatch(setCurrentTilesetFloorTexture(currentState.selectedRect));
 				Project.current!.settings.mapEditorCurrentTilesetFloorTexture = currentState.selectedRect;
+				await Project.current!.settings!.save();
 				break;
 			case ELEMENT_MAP_KIND.AUTOTILE:
 				dispatch(setCurrentAutotileTexture(currentState.selectedRect));
 				Project.current!.settings.mapEditorCurrentAutotileTexture = currentState.selectedRect;
+				await Project.current!.settings!.save();
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_FACE:
 			case ELEMENT_MAP_KIND.SPRITE_FIX:
@@ -84,22 +101,31 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 				dispatch(setCurrentTilesetSpriteTexture(currentState.selectedRect));
 				Project.current!.settings.mapEditorCurrentTilesetSpriteTexture = currentState.selectedRect;
+				await Project.current!.settings!.save();
 				break;
 			default:
 				break;
 		}
-		await Project.current!.settings!.save();
+		onUpdateRectangle?.(currentState.selectedRect);
 	};
 
 	const initialize = async () => {
 		currentState.picture = await Picture2D.loadImage(texture);
+		currentState.squareWidth =
+			columns === -1 ? 1 : Math.floor(currentState.picture.width / Project.SQUARE_SIZE / columns);
+		currentState.squareHeight =
+			rows === -1 ? 1 : Math.floor(currentState.picture.height / Project.SQUARE_SIZE / rows);
+		currentState.firstX = -1;
+		currentState.firstY = -1;
+		currentState.selectedRect = getDefaultRectangle();
+		currentState.previewRect = null;
 		if (refCanvas.current) {
 			const w = (currentState.picture.width * 2) / divideWidth;
 			const h = (currentState.picture.height * 2) / divideHeight;
 			refCanvas.current.width = w;
 			refCanvas.current.height = h;
-			refCanvas.current.style.maxWidth = `${w}px`;
-			refCanvas.current.style.maxHeight = `${h}px`;
+			refCanvas.current.style.width = `${w}px`;
+			refCanvas.current.style.height = `${h}px`;
 		}
 		await updateRectangle();
 		update();
@@ -119,7 +145,14 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 			const rect = refCanvas.current.getBoundingClientRect();
 			const x = e.clientX - rect.left;
 			const y = e.clientY - rect.top;
-			return { x: Math.floor(x / Constants.BASE_SQUARE_SIZE), y: Math.floor(y / Constants.BASE_SQUARE_SIZE) };
+			return {
+				x:
+					Math.floor(Math.floor(x / Constants.BASE_SQUARE_SIZE) / currentState.squareWidth) *
+					currentState.squareWidth,
+				y:
+					Math.floor(Math.floor(y / Constants.BASE_SQUARE_SIZE) / currentState.squareHeight) *
+					currentState.squareHeight,
+			};
 		}
 		return { x: 0, y: 0 };
 	};
@@ -205,8 +238,8 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 		if (!currentState.picture) {
 			return;
 		}
-		let width = 1;
-		let height = 1;
+		let width = currentState.squareWidth;
+		let height = currentState.squareHeight;
 		if (currentState.firstX !== -1 && currentState.firstY !== -1) {
 			x = Math.min(Math.max(x, 0), Math.floor(currentState.picture.width / Project.SQUARE_SIZE) - 1);
 			y = Math.min(Math.max(y, 0), Math.floor(currentState.picture.height / Project.SQUARE_SIZE) - 1);
@@ -320,7 +353,21 @@ function TextureSquareSelector({ texture, divideWidth = 1, divideHeight = 1, can
 			};
 		}
 		// eslint-disable-next-line
-	}, []);
+	}, [texture]);
+
+	useEffect(() => {
+		currentState.squareWidth =
+			columns === -1 || !currentState.picture
+				? 1
+				: Math.floor(currentState.picture.width / Project.SQUARE_SIZE / columns);
+		currentState.squareHeight =
+			rows === -1 || !currentState.picture
+				? 1
+				: Math.floor(currentState.picture.height / Project.SQUARE_SIZE / rows);
+		currentState.selectedRect.width = currentState.squareWidth;
+		currentState.selectedRect.height = currentState.squareHeight;
+		update();
+	}, [rows, columns]);
 
 	return <canvas ref={refCanvas} className='pointer' width={'0'} height={'0'}></canvas>;
 }

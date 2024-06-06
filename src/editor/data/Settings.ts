@@ -40,6 +40,7 @@ class Settings extends Serializable {
 	public mapEditorDefaultScaleX!: number;
 	public mapEditorDefaultScaleY!: number;
 	public mapEditorDefaultScaleZ!: number;
+	public picturesShowAvailableContent!: boolean;
 
 	public static readonly bindings: BindingType[] = [
 		['projectVersion', 'pv', undefined, BINDING.STRING],
@@ -69,6 +70,7 @@ class Settings extends Serializable {
 		['mapEditorDefaultScaleX', 'medsx', 1, BINDING.NUMBER],
 		['mapEditorDefaultScaleY', 'medsy', 1, BINDING.NUMBER],
 		['mapEditorDefaultScaleZ', 'medsz', 1, BINDING.NUMBER],
+		['picturesShowAvailableContent', 'psac', true, BINDING.BOOLEAN],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

@@ -166,11 +166,11 @@ function Dropdown({
 		options.map((option) => (
 			<div
 				className={Utils.getClassName(
-					[
-						[selectedID === option.id, 'selected'],
-						[!fillWidth, 'white-space-nowrap'],
-					],
-					['element']
+					{
+						selected: selectedID === option.id,
+						'white-space-nowrap': !fillWidth,
+					},
+					'element'
 				)}
 				key={option.id}
 				onClick={() => handleClickOption(option)}
@@ -181,19 +181,12 @@ function Dropdown({
 
 	return (
 		<div
-			className={Utils.getClassName(
-				[
-					[isOpen, 'open'],
-					[disabled, 'disabled'],
-					[fillWidth, 'fill-width'],
-				],
-				['dropdown']
-			)}
+			className={Utils.getClassName({ open: isOpen, disabled, 'fill-width': fillWidth }, 'dropdown')}
 			ref={containerRef}
 			onClick={handleClick}
 		>
 			<div className='flex-one flex-center-v gap-small'>
-				<div className={Utils.getClassName([[fillWidth, 'text-ellipsis']], ['flex-one', 'flex-center-v'])}>
+				<div className={Utils.getClassName({ 'text-ellipsis': fillWidth }, 'flex-one flex-center-v')}>
 					{getCurrentItem()}
 				</div>
 				<div className='flex'>
@@ -201,7 +194,7 @@ function Dropdown({
 				</div>
 			</div>
 			<div
-				className={Utils.getClassName([[!canDisplayDropdown(), 'visibility-hidden']], ['content'])}
+				className={Utils.getClassName({ 'visibility-hidden': !canDisplayDropdown() }, 'content')}
 				ref={dropdownContainerRef}
 			>
 				{getDropdownItems()}

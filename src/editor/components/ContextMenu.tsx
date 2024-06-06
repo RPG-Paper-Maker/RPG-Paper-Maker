@@ -99,7 +99,7 @@ function ContextMenu({ children, items = [] }: Props) {
 			onTouchEnd={handleTouchEnd}
 		>
 			{children}
-			<div ref={refMenu} className={Utils.getClassName([[!isOpen, 'hidden']], ['fixed', 'hight-z-index'])}>
+			<div ref={refMenu} className={Utils.getClassName({ hidden: !isOpen }, 'fixed hight-z-index')}>
 				<MenuCustom horizontal={false} items={items} allowKeyboard={isFocused} />
 			</div>
 		</div>

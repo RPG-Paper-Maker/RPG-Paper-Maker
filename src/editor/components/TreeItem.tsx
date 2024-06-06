@@ -29,6 +29,7 @@ type Props = {
 	onDrop?: (event: React.DragEvent, node: Node) => void;
 	draggable?: boolean;
 	headers?: string[];
+	doNotShowID?: boolean;
 };
 
 function TreeItem({
@@ -43,6 +44,7 @@ function TreeItem({
 	onDrop,
 	draggable = false,
 	headers,
+	doNotShowID = false,
 }: Props) {
 	const [expanded, setExpanded] = useState(node.expanded);
 
@@ -75,13 +77,17 @@ function TreeItem({
 				</div>
 			));
 		} else {
-			return <div className='flex-one gap-small text-ellipsis'>{node.toString()}</div>;
+			return (
+				<div className='flex-one gap-small text-ellipsis'>
+					{doNotShowID ? node.content.getName() : node.toString()}
+				</div>
+			);
 		}
 	};
 
 	return (
 		<div
-			className={Utils.getClassName([[selected, 'selected']], ['tree-item'])}
+			className={Utils.getClassName({ selected }, 'tree-item')}
 			style={{ paddingLeft: `${5 + level * 15}px` }}
 			onMouseDown={handleMouseDown}
 			onDragStart={(event: React.DragEvent) => onDragStart?.(event, node)}

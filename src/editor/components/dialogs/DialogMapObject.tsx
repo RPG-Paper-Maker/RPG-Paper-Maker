@@ -277,8 +277,8 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 				<div className='flex-one gap-medium'>
 					<div
 						className={Utils.getClassName(
-							[[!selectedState, 'visibility-hidden']],
-							['flex-column', 'flex-one', 'gap-small']
+							{ 'visibility-hidden': !selectedState },
+							'flex-column flex-one gap-small'
 						)}
 					>
 						<div className='flex-one'>
@@ -330,12 +330,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 								/>
 							</div>
 						</div>
-						<div
-							className={Utils.getClassName(
-								[[!selectedState, 'visibility-hidden']],
-								['flex', 'gap-small']
-							)}
-						>
+						<div className={Utils.getClassName({ 'visibility-hidden': !selectedState }, 'flex gap-small')}>
 							<div className='flex-column gap-small'>
 								{t('graphics')}:
 								<GraphicsSelector />
@@ -387,7 +382,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 								<Button>{t('edit.transformations')}...</Button>
 							</div>
 						</div>
-						<div className={Utils.getClassName([[!selectedState, 'visibility-hidden']], ['flex'])}>
+						<div className={Utils.getClassName({ 'visibility-hidden': !selectedState }, 'flex')}>
 							<Groupbox title={t('options')}>
 								<div className='flex gap-medium'>
 									<div className='flex-column'>
@@ -433,7 +428,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 							{t('can.be.triggered.another.object')}
 						</Checkbox>
 					</div>
-					<div className={Utils.getClassName([[!selectedState, 'visibility-hidden']], ['flex'])}>
+					<div className={Utils.getClassName({ 'visibility-hidden': !selectedState }, 'flex')}>
 						<Checkbox isChecked={!!eventCommandDetection} onChange={handleChangeDetectionCheck}>
 							<div className='flex-center-v gap-small'>
 								{t('detection')} <Button disabled={eventCommandDetection === null}>...</Button>

@@ -51,6 +51,8 @@ function Button({
 		setActiveState(active);
 	}
 
+	const unactive = !activeState;
+
 	const handleClick = () => {
 		if (onClick) {
 			onClick();
@@ -90,15 +92,8 @@ function Button({
 		<button
 			ref={ref}
 			className={Utils.getClassName(
-				[
-					[disabled, 'disabled'],
-					[!activeState, 'unactive'],
-					[big, 'big'],
-					[backgroundOnHoverOnly, 'backgroundOnHoverOnly'],
-					[square, 'square'],
-					[small, 'small'],
-				],
-				[buttonType]
+				{ disabled, unactive, big, backgroundOnHoverOnly, square, small },
+				buttonType
 			)}
 			onClick={handleClick}
 		>

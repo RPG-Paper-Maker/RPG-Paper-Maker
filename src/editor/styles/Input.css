@@ -28,3 +28,7 @@ input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
 	opacity: 1;
 }
+
+input:disabled {
+	opacity: 0.4;
+}

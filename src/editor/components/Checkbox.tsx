@@ -28,7 +28,7 @@ function Checkbox({ children, isChecked = false, onChange }: Props) {
 
 	return (
 		<label className='checkbox' onClick={handleClick}>
-			<div className={Utils.getClassName([[isChecked, 'checked']], ['square'])} />
+			<div className={Utils.getClassName({ checked: isChecked }, 'square')} />
 			{children}
 		</label>
 	);

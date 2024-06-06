@@ -47,6 +47,23 @@ class CollisionSquare extends Serializable {
 		this.climbing = false;
 	}
 
+	copy(collision: CollisionSquare): void {
+		super.copy(collision);
+		this.rect = collision.rect?.clone() ?? null;
+		this.left = collision.left;
+		this.right = collision.right;
+		this.top = collision.top;
+		this.bot = collision.bot;
+		this.terrain = collision.terrain;
+		this.climbing = collision.climbing;
+	}
+
+	clone(): CollisionSquare {
+		const collision = new CollisionSquare();
+		collision.copy(this);
+		return collision;
+	}
+
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, CollisionSquare.getBindings(additionnalBinding));
 	}

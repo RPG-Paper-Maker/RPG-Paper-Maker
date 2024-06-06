@@ -38,7 +38,7 @@ function RadioButton({ children, isChecked = false, onChange, additionalChange, 
 
 	return (
 		<label className='radiobutton' onClick={handleClick}>
-			<div className={Utils.getClassName([[isChecked, 'checked']], ['square'])} />
+			<div className={Utils.getClassName({ checked: isChecked }, 'square')} />
 			{children}
 		</label>
 	);

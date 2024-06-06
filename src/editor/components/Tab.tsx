@@ -120,7 +120,7 @@ function Tab({
 				<div
 					ref={selected ? selectedElementRef : null}
 					key={index}
-					className={Utils.getClassName([[selected, 'selected']], ['tab-item'])}
+					className={Utils.getClassName({ selected }, 'tab-item')}
 					onClick={() => handleClickItem(index)}
 				>
 					{title.getName()}

@@ -85,6 +85,11 @@ code {
 	align-items: center;
 }
 
+.flex-center-self-v {
+	display: flex;
+	align-self: center;
+}
+
 .flex-center-h {
 	display: flex;
 	justify-content: center;
@@ -137,6 +142,10 @@ code {
 
 .fill-height {
 	height: 100%;
+}
+
+.zero-width {
+	width: 0;
 }
 
 .zero-height {

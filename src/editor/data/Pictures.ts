@@ -21,6 +21,10 @@ class Pictures extends Serializable {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_PICTURES);
 	}
 
+	getList(kind: PICTURE_KIND): Model.Picture[] {
+		return this.list[kind];
+	}
+
 	getByID(kind: PICTURE_KIND, id: number): Model.Picture {
 		return this.list[kind][this.listIndexes[kind][id]];
 	}

@@ -8,4 +8,5 @@ export * from './DialogMapObjectState';
 export * from './DialogMapProperties';
 export * from './DialogName';
 export * from './DialogNewProject';
+export * from './DialogPicturesPreview';
 export * from './DialogTransformDefaultValues';

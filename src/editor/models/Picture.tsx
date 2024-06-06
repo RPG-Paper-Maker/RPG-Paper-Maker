@@ -25,8 +25,6 @@ class Picture extends Base {
 	public height!: number;
 	public isStopAnimation!: boolean;
 	public isClimbAnimation!: boolean;
-	public borderLeft!: number;
-	public borderRight!: number;
 
 	constructor(kind: PICTURE_KIND) {
 		super();
@@ -36,7 +34,7 @@ class Picture extends Base {
 	public static readonly bindings: BindingType[] = [
 		['isBR', 'br', undefined, BINDING.BOOLEAN],
 		['dlc', 'd', '', BINDING.STRING],
-		['jsonCollisions', 'col', [], BINDING.LIST, CollisionSquare],
+		['collisions', 'col', [], BINDING.LIST, CollisionSquare],
 		['collisionsRepeat', 'rcol', false, BINDING.BOOLEAN],
 		['isStopAnimation', 'isStopAnimation', false, BINDING.BOOLEAN],
 		['isClimbAnimation', 'ica', false, BINDING.BOOLEAN],
@@ -99,6 +97,30 @@ class Picture extends Base {
 
 	async loadPicture() {
 		this.picture = await Picture2D.loadImage(this.getPath());
+	}
+
+	getIcon() {
+		return <img src='/Assets/bullet-br.png' />;
+	}
+
+	copy(picture: Picture): void {
+		super.copy(picture);
+		this.isBR = picture.isBR;
+		this.dlc = picture.dlc;
+		this.jsonCollisions = picture.jsonCollisions;
+		this.collisionsRepeat = picture.collisionsRepeat;
+		this.collisions = picture.collisions.map((collision) => collision.clone());
+		this.picture = picture.picture;
+		this.width = picture.width;
+		this.height = picture.height;
+		this.isStopAnimation = picture.isStopAnimation;
+		this.isClimbAnimation = picture.isClimbAnimation;
+	}
+
+	clone(): Picture {
+		const picture = new Picture(this.kind);
+		picture.copy(this);
+		return picture;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
