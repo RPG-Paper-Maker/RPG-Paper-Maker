@@ -24,6 +24,7 @@ import { Constants, ELEMENT_MAP_KIND } from '../common';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
+	path: string;
 	firstX: number;
 	firstY: number;
 	selectedRect: Rectangle;
@@ -71,6 +72,7 @@ function TextureSquareSelector({
 
 	const currentState = useState<CurrentStateProps>({
 		picture: null,
+		path: '',
 		firstX: -1,
 		firstY: -1,
 		selectedRect: new Rectangle(),
@@ -111,6 +113,7 @@ function TextureSquareSelector({
 
 	const initialize = async () => {
 		currentState.picture = await Picture2D.loadImage(texture);
+		currentState.path = texture;
 		currentState.squareWidth =
 			columns === -1 ? 1 : Math.floor(currentState.picture.width / Project.SQUARE_SIZE / columns);
 		currentState.squareHeight =
@@ -356,17 +359,19 @@ function TextureSquareSelector({
 	}, [texture]);
 
 	useEffect(() => {
-		currentState.squareWidth =
-			columns === -1 || !currentState.picture
-				? 1
-				: Math.floor(currentState.picture.width / Project.SQUARE_SIZE / columns);
-		currentState.squareHeight =
-			rows === -1 || !currentState.picture
-				? 1
-				: Math.floor(currentState.picture.height / Project.SQUARE_SIZE / rows);
-		currentState.selectedRect.width = currentState.squareWidth;
-		currentState.selectedRect.height = currentState.squareHeight;
-		update();
+		if (texture === currentState.path) {
+			currentState.squareWidth =
+				columns === -1 || !currentState.picture
+					? 1
+					: Math.floor(currentState.picture.width / Project.SQUARE_SIZE / columns);
+			currentState.squareHeight =
+				rows === -1 || !currentState.picture
+					? 1
+					: Math.floor(currentState.picture.height / Project.SQUARE_SIZE / rows);
+			currentState.selectedRect.width = currentState.squareWidth;
+			currentState.selectedRect.height = currentState.squareHeight;
+			update();
+		}
 	}, [rows, columns]);
 
 	return <canvas ref={refCanvas} className='pointer' width={'0'} height={'0'}></canvas>;

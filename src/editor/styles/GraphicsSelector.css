@@ -5,4 +5,16 @@
 	border: 1px solid var(--lighter-bg-color);
 	border-radius: 2px;
 	cursor: pointer;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+
+.graphics-selector-border {
+	display: flex;
+	border: 2px dashed var(--primary-color);
+	cursor: pointer;
+	position: absolute;
+	width: calc(100% - 10px);
+	height: calc(100% - 10px);
 }

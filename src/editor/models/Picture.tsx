@@ -109,7 +109,7 @@ class Picture extends Base {
 		this.dlc = picture.dlc;
 		this.jsonCollisions = picture.jsonCollisions;
 		this.collisionsRepeat = picture.collisionsRepeat;
-		this.collisions = picture.collisions.map((collision) => collision.clone());
+		this.collisions = picture.collisions?.map((collision) => collision.clone());
 		this.picture = picture.picture;
 		this.width = picture.width;
 		this.height = picture.height;

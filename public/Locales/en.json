@@ -2061,5 +2061,6 @@
 	"warning.could.not.copy.map.created.empty": "Could not copy map at {{path}}. Created an empty one.",
 	"introduction": "Introduction",
 	"edit.object": "Edit object",
-	"edit.transformations": "Update transformations"
+	"edit.transformations": "Update transformations",
+	"warning.picture.selection": "Select a picture in the left list to confirm."
 }

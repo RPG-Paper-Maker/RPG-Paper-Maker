@@ -19,14 +19,13 @@ type Props = {
 	texture: string;
 	isStopAnimation: boolean;
 	isClimbAnimation: boolean;
+	onUpdateRectangle: (rect: Rectangle) => void;
 };
 
-function TextureCharacterSelector({ texture, isStopAnimation, isClimbAnimation }: Props) {
+function TextureCharacterSelector({ texture, isStopAnimation, isClimbAnimation, onUpdateRectangle }: Props) {
 	const divideSize = Constants.BASE_SQUARE_SIZE / 2 / Project.SQUARE_SIZE;
 
 	const rows = 4 + (isStopAnimation ? 4 : 0) + (isClimbAnimation ? 4 : 0);
-
-	const handleUpdateRectangle = (rect: Rectangle) => {};
 
 	return (
 		<TextureSquareSelector
@@ -36,7 +35,7 @@ function TextureCharacterSelector({ texture, isStopAnimation, isClimbAnimation }
 			divideHeight={divideSize}
 			columns={4}
 			rows={rows}
-			onUpdateRectangle={handleUpdateRectangle}
+			onUpdateRectangle={onUpdateRectangle}
 		/>
 	);
 }

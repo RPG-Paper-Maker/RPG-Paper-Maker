@@ -16,20 +16,21 @@ import { Model } from '../../Editor';
 import { useTranslation } from 'react-i18next';
 import Groupbox from '../Groupbox';
 import Tree, { TREES_MIN_WIDTH } from '../Tree';
-import { Node, Project } from '../../core';
+import { Node, Project, Rectangle } from '../../core';
 import { BUTTON_TYPE, PICTURE_KIND } from '../../common';
 import Checkbox from '../Checkbox';
 import Button from '../Button';
 import { FaAngleDoubleLeft } from 'react-icons/fa';
 import TextureCharacterSelector from '../TextureCharacterSelector';
 import { Platform } from '../../common/Platform';
+import FooterOK from './footers/FooterOK';
 
 type Props = {
 	kind: PICTURE_KIND;
 	needOpen: boolean;
 	setNeedOpen: (b: boolean) => void;
 	model?: Model.Picture;
-	onAccept?: () => void;
+	onAccept?: (picture: Model.Picture, indexX: number, indexY: number) => void;
 	onReject?: () => void;
 };
 
@@ -37,12 +38,15 @@ function DialogPicturesPreview({ kind, needOpen, setNeedOpen, model, onAccept, o
 	const { t } = useTranslation();
 
 	const [isOpen, setIsOpen] = useState(false);
+	const [isDialogWarningSelectionOpen, setIsDialogWarningSelectionOpen] = useState(false);
 	const [picturesShowAvailableContent, setPicturesShowAvailableContent] = useState(
 		Project.current!.settings.picturesShowAvailableContent
 	);
+	const [isInitiating, setIsInitiating] = useState(false);
 	const [pictures, setPictures] = useState<Node[]>([]);
 	const [picturesAvailable, setPicturesAvailable] = useState<Node[]>([]);
 	const [selectedPicture, setSelectedPicture] = useState<Model.Picture | null>(null);
+	const [selectedRect, setSelectedRect] = useState(new Rectangle());
 	const [isStopAnimation, setIsStopAnimation] = useState(false);
 	const [isClimbAnimation, setIsClimbAnimation] = useState(false);
 	const [isSelectedLeftList, setIsSelectedLeftList] = useState(true);
@@ -50,6 +54,8 @@ function DialogPicturesPreview({ kind, needOpen, setNeedOpen, model, onAccept, o
 	const [forcedCurrentSelectedItemIDRight, setForcedCurrentSelectedItemIDRight] = useState<number | null>(null);
 
 	const initialize = () => {
+		setIsInitiating(true);
+		setIsSelectedLeftList(true);
 		setPictures(Node.createList(Project.current!.pictures.getList(kind)));
 		handleRefresh();
 	};
@@ -61,18 +67,22 @@ function DialogPicturesPreview({ kind, needOpen, setNeedOpen, model, onAccept, o
 	};
 
 	const handleChangeSelectedPictureLeft = (node: Node | null) => {
-		handleChangeSelectedPicture(node);
 		if (node) {
+			handleChangeSelectedPicture(node);
 			setIsSelectedLeftList(true);
 			setForcedCurrentSelectedItemIDRight(-1);
 		}
 	};
 
 	const handleChangeSelectedPictureRight = (node: Node | null) => {
-		handleChangeSelectedPicture(node);
-		if (node) {
+		if (node && !isInitiating) {
+			handleChangeSelectedPicture(node);
 			setIsSelectedLeftList(false);
 			setForcedCurrentSelectedItemIDLeft(-2);
+		}
+		if (isInitiating) {
+			setForcedCurrentSelectedItemIDLeft(model ? model.id : -1);
+			setIsInitiating(false);
 		}
 	};
 
@@ -85,6 +95,17 @@ function DialogPicturesPreview({ kind, needOpen, setNeedOpen, model, onAccept, o
 		} else {
 			setIsStopAnimation(false);
 			setIsClimbAnimation(false);
+		}
+	};
+
+	const handleClickMoveLeft = () => {
+		if (selectedPicture) {
+			const newPicture = selectedPicture.clone();
+			newPicture.id = Model.Base.generateNewIDfromList(pictures.map((node) => node.content));
+			const node = Node.create(newPicture);
+			setPictures([...pictures, node]);
+			setForcedCurrentSelectedItemIDLeft(newPicture.id);
+			handleChangeSelectedPictureLeft(node);
 		}
 	};
 
@@ -119,9 +140,19 @@ function DialogPicturesPreview({ kind, needOpen, setNeedOpen, model, onAccept, o
 		);
 	};
 
+	const handleCloseWarningSelectionOpen = () => {
+		setIsDialogWarningSelectionOpen(false);
+	};
+
 	const handleAccept = async () => {
-		onAccept?.();
-		setIsOpen(false);
+		if (selectedPicture === null || !isSelectedLeftList) {
+			setIsDialogWarningSelectionOpen(true);
+		} else {
+			Project.current!.pictures.list[kind] = pictures.map((node) => node.content as Model.Picture);
+			await Project.current!.pictures.save();
+			onAccept?.(selectedPicture, selectedRect.x / 2, selectedRect.y / 2);
+			setIsOpen(false);
+		}
 	};
 
 	const handleReject = async () => {
@@ -139,108 +170,130 @@ function DialogPicturesPreview({ kind, needOpen, setNeedOpen, model, onAccept, o
 	}, [needOpen]);
 
 	return (
-		<Dialog
-			title={`${t('select.picture')}...`}
-			isOpen={isOpen}
-			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-			initialWidth='70%'
-			initialHeight='70%'
-			onClose={handleReject}
-		>
-			<div className='flex-column gap-medium fill-height'>
-				<div className='flex gap-medium'>
-					<div className='flex-one'>
-						<Checkbox
-							isChecked={picturesShowAvailableContent}
-							onChange={handleChangePicturesShowAvailableContent}
-						>
-							{t('show.available.content')}
-						</Checkbox>
-					</div>
-					<div className='flex gap-small'>
-						<Button>{t('open.default.folder')}...</Button>
-						<Button>{t('open.project.folder')}...</Button>
-						<Button>{t('import.dlc.s')}...</Button>
-					</div>
-				</div>
-				<div className='flex-one gap-medium fill-height'>
-					<div className='flex-column'>
-						<div className='flex-one zero-height'>
-							<Tree
-								list={pictures}
-								minWidth={TREES_MIN_WIDTH}
-								onSelectedItem={handleChangeSelectedPictureLeft}
-								forcedCurrentSelectedItemIndex={forcedCurrentSelectedItemIDLeft}
-								setForcedCurrentSelectedItemIndex={setForcedCurrentSelectedItemIDLeft}
-								showEditName
-								cannotAdd
-								cannotEdit
-							/>
+		<>
+			<Dialog
+				title={`${t('select.picture')}...`}
+				isOpen={isOpen}
+				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+				initialWidth='70%'
+				initialHeight='70%'
+				onClose={handleReject}
+			>
+				<div className='flex-column gap-medium fill-height'>
+					<div className='flex gap-medium'>
+						<div className='flex-one'>
+							<Checkbox
+								isChecked={picturesShowAvailableContent}
+								onChange={handleChangePicturesShowAvailableContent}
+							>
+								{t('show.available.content')}
+							</Checkbox>
+						</div>
+						<div className='flex gap-small'>
+							<Button disabled>{t('open.default.folder')}...</Button>
+							<Button disabled>{t('open.project.folder')}...</Button>
+							<Button disabled>{t('import.dlc.s')}...</Button>
 						</div>
 					</div>
-					<div className='flex-one gap-medium'>
-						{picturesShowAvailableContent && (
-							<>
-								<div className='flex-column flex-center-self-v'>
-									<Button buttonType={BUTTON_TYPE.PRIMARY} icon={<FaAngleDoubleLeft />} disabled />
-								</div>
-								<div className='flex-column gap-small'>
-									<div className='flex-one zero-height'>
-										<Tree
-											list={picturesAvailable}
-											onSelectedItem={handleChangeSelectedPictureRight}
-											minWidth={TREES_MIN_WIDTH}
-											forcedCurrentSelectedItemID={forcedCurrentSelectedItemIDRight}
-											setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemIDRight}
-											cannotAdd
-											cannotEdit
-											cannotDragDrop
-											doNotShowID
-										/>
-									</div>
-									<div className='flex gap-small'>
-										<Button onClick={handleRefresh}>{t('refresh')}</Button>
-										<Button>{t('export')}...</Button>
-										<Button buttonType={BUTTON_TYPE.PRIMARY}>+</Button>
-									</div>
-								</div>
-							</>
-						)}
-						<div className='flex-one flex-column zero-width'>
-							{selectedPicture && (
+					<div className='flex-one gap-medium fill-height'>
+						<div className='flex-column'>
+							<div className='flex-one zero-height'>
+								<Tree
+									list={pictures}
+									minWidth={TREES_MIN_WIDTH}
+									onSelectedItem={handleChangeSelectedPictureLeft}
+									forcedCurrentSelectedItemID={forcedCurrentSelectedItemIDLeft}
+									setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemIDLeft}
+									showEditName
+									cannotAdd
+									cannotEdit
+								/>
+							</div>
+						</div>
+						<div className='flex-one gap-medium'>
+							{picturesShowAvailableContent && (
 								<>
-									<div className='flex-one scrollable'>
-										<TextureCharacterSelector
-											texture={selectedPicture.getPath()}
-											isStopAnimation={isStopAnimation}
-											isClimbAnimation={isClimbAnimation}
+									<div className='flex-column flex-center-self-v'>
+										<Button
+											buttonType={BUTTON_TYPE.PRIMARY}
+											icon={<FaAngleDoubleLeft />}
+											disabled={isSelectedLeftList || !selectedPicture}
+											onClick={handleClickMoveLeft}
 										/>
 									</div>
-									<div>
-										<Groupbox title={t('options')}>
-											<div className='flex gap-medium'>
-												<Checkbox
-													isChecked={isStopAnimation}
-													onChange={handleChangeStopAnimation}
-												>
-													{t('stop.animation')}
-												</Checkbox>
-												<Checkbox
-													isChecked={isClimbAnimation}
-													onChange={handleChangeClimbAnimation}
-												>
-													{t('climb.animation')}
-												</Checkbox>
-											</div>
-										</Groupbox>
+									<div className='flex-column gap-small'>
+										<div className='flex-one zero-height'>
+											<Tree
+												list={picturesAvailable}
+												onSelectedItem={handleChangeSelectedPictureRight}
+												onDoubleClick={handleClickMoveLeft}
+												minWidth={TREES_MIN_WIDTH}
+												forcedCurrentSelectedItemID={forcedCurrentSelectedItemIDRight}
+												setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemIDRight}
+												cannotAdd
+												cannotEdit
+												cannotDragDrop
+												cannotDelete
+												doNotShowID
+											/>
+										</div>
+										<div className='flex gap-small'>
+											<Button onClick={handleRefresh} disabled>
+												{t('refresh')}
+											</Button>
+											<Button disabled>{t('export')}...</Button>
+											<Button buttonType={BUTTON_TYPE.PRIMARY} disabled>
+												+
+											</Button>
+										</div>
 									</div>
 								</>
 							)}
+							<div className='flex-one flex-column zero-width'>
+								{selectedPicture && (
+									<>
+										<div className='flex-one scrollable'>
+											<TextureCharacterSelector
+												texture={selectedPicture.getPath()}
+												isStopAnimation={isStopAnimation}
+												isClimbAnimation={isClimbAnimation}
+												onUpdateRectangle={setSelectedRect}
+											/>
+										</div>
+										<div>
+											<Groupbox title={t('options')}>
+												<div className='flex gap-medium'>
+													<Checkbox
+														isChecked={isStopAnimation}
+														onChange={handleChangeStopAnimation}
+													>
+														{t('stop.animation')}
+													</Checkbox>
+													<Checkbox
+														isChecked={isClimbAnimation}
+														onChange={handleChangeClimbAnimation}
+													>
+														{t('climb.animation')}
+													</Checkbox>
+												</div>
+											</Groupbox>
+										</div>
+									</>
+								)}
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</Dialog>
+			</Dialog>
+			<Dialog
+				title={t('warning')}
+				isOpen={isDialogWarningSelectionOpen}
+				footer={<FooterOK onOK={handleCloseWarningSelectionOpen} />}
+				onClose={handleCloseWarningSelectionOpen}
+			>
+				<p>{t('warning.picture.selection')}</p>
+			</Dialog>
+		</>
 	);
 }
 

@@ -33,6 +33,7 @@ type Props = {
 	cannotAdd?: boolean;
 	cannotEdit?: boolean;
 	cannotDragDrop?: boolean;
+	cannotDelete?: boolean;
 	canBeEmpty?: boolean;
 	doNotGenerateIDOnPaste?: boolean;
 	doNotShowID?: boolean;
@@ -40,6 +41,7 @@ type Props = {
 	contextMenuItems?: (CONTEXT_MENU_ITEM_KIND | MenuItemType)[];
 	defaultSelectedID?: number;
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
+	onDoubleClick?: (node: Node | null) => void;
 	onCreateItem?: (node: Node) => void;
 	onListUpdated?: () => void;
 	forcedCurrentSelectedItemID?: number | null;
@@ -59,6 +61,7 @@ function Tree({
 	cannotAdd = false,
 	cannotEdit = false,
 	cannotDragDrop = false,
+	cannotDelete = false,
 	canBeEmpty = false,
 	doNotGenerateIDOnPaste = false,
 	doNotShowID = false,
@@ -68,6 +71,7 @@ function Tree({
 	onSelectedItem,
 	onCreateItem,
 	onListUpdated,
+	onDoubleClick,
 	forcedCurrentSelectedItemID,
 	setForcedCurrentSelectedItemID,
 	forcedCurrentSelectedItemIndex,
@@ -87,6 +91,7 @@ function Tree({
 	const [newModel, setNewModel] = useState<Model.Base | null>(null);
 	const [draggedNode, setDraggedNode] = useState<Node | null>(null);
 	const [currentName, setCurrentName] = useStateString();
+	const [needScroll, setNeedScroll] = useState(false);
 
 	const copiedItems = useSelector((state: RootState) => state.projects.copiedItems);
 
@@ -110,7 +115,7 @@ function Tree({
 
 	const canPaste = () => copiedItems?.constructorClass === constructorType && !cannotAdd;
 
-	const getNodeID = () => currentSelectedItemNode?.content?.id ?? -1;
+	const getNodeID = () => currentSelectedItemNode?.content?.id ?? null;
 
 	const getNewIndex = () => {
 		if (currentSelectedItemNode) {
@@ -157,6 +162,7 @@ function Tree({
 				handleEditItem();
 			}
 		}
+		onDoubleClick?.(currentSelectedItemNode);
 	};
 
 	const handleNewItem = async () => {
@@ -319,7 +325,9 @@ function Tree({
 			setCurrentSelectedItemNode(node);
 			setCurrentName(node?.content?.name || '');
 			setForcedCurrentSelectedItemID(null);
-			scrollToSelectedElement();
+			if (node) {
+				setNeedScroll(true);
+			}
 			if (onSelectedItem) {
 				onSelectedItem(node, false);
 			}
@@ -328,18 +336,18 @@ function Tree({
 	}, [forcedCurrentSelectedItemID, setForcedCurrentSelectedItemID]);
 
 	useLayoutEffect(() => {
-		console.log(forcedCurrentSelectedItemIndex);
 		if (
 			forcedCurrentSelectedItemIndex !== undefined &&
 			forcedCurrentSelectedItemIndex !== null &&
 			setForcedCurrentSelectedItemIndex
 		) {
 			const node = list[forcedCurrentSelectedItemIndex];
-			console.log(node, forcedCurrentSelectedItemIndex);
 			setCurrentSelectedItemNode(node);
 			setCurrentName(node?.content?.name || '');
 			setForcedCurrentSelectedItemIndex(null);
-			scrollToSelectedElement();
+			if (node) {
+				setNeedScroll(true);
+			}
 			if (onSelectedItem) {
 				onSelectedItem(node, false);
 			}
@@ -348,10 +356,19 @@ function Tree({
 	}, [forcedCurrentSelectedItemIndex, setForcedCurrentSelectedItemIndex]);
 
 	useEffect(() => {
+		if (needScroll) {
+			scrollToSelectedElement();
+			setNeedScroll(false);
+		}
+	}, [needScroll, currentSelectedItemNode]);
+
+	useEffect(() => {
 		if (currentSelectedItemNode) {
 			setCurrentSelectedItemNode(currentSelectedItemNode);
 			setCurrentName(currentSelectedItemNode.content.name);
-			scrollToSelectedElement();
+			if (currentSelectedItemNode) {
+				scrollToSelectedElement();
+			}
 			if (onSelectedItem) {
 				onSelectedItem(currentSelectedItemNode, false);
 			}
@@ -438,7 +455,7 @@ function Tree({
 						title: 'Delete',
 						shortcut: [KEY.DELETE],
 						onClick: handleDeleteItem,
-						disabled: isEmpty,
+						disabled: isEmpty || cannotDelete,
 					};
 				default: {
 					const customItem = { ...kind };

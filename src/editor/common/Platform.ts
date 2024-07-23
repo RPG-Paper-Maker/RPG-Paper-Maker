@@ -151,7 +151,6 @@ class Platform {
 
 	static async readFileManifest() {
 		this.manifest = JSON.parse(await Platform.readPublicFile('./fileManifest.json'));
-		console.log(this.manifest);
 	}
 
 	static getAllFilesFromFolder(path: string): string[] {

@@ -53,9 +53,9 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 	const [onlyOneEventPerFrame, setOnlyOneEventPerFrame] = useStateBool();
 	const [canBeTriggeredAnotherObject, setCanBeTriggeredAnotherObject] = useStateBool();
 	const [selectedState, setSelectedState] = useState<MapObjectState | null>(null);
-	//const [graphicsID, setGraphicsID] = useStateNumber();
-	//const [graphicsIndexX, setGraphicsIndexX] = useStateNumber();
-	//const [graphicsIndexY, setGraphicsIndexY] = useStateNumber();
+	const [graphicsID, setGraphicsID] = useStateNumber();
+	const [graphicsIndexX, setGraphicsIndexX] = useStateNumber();
+	const [graphicsIndexY, setGraphicsIndexY] = useStateNumber();
 	const [graphicsKind, setGraphicsKind] = useStateNumber();
 	const [objectMovingKind, setObjectMovingKind] = useStateNumber();
 	//const [eventCommandRoute, setEventCommandRoute] = useState<EventCommand | null>(null);
@@ -134,9 +134,9 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 	const handleChangeState = (state: MapObjectState | null) => {
 		setSelectedState(state);
 		if (state) {
-			//setGraphicsID(state.graphicsID);
-			//setGraphicsIndexX(state.graphicsIndexX);
-			//setGraphicsIndexY(state.graphicsIndexY);
+			setGraphicsID(state.graphicsID);
+			setGraphicsIndexX(state.graphicsIndexX);
+			setGraphicsIndexY(state.graphicsIndexY);
 			setGraphicsKind(state.graphicsKind);
 			setObjectMovingKind(state.objectMovingKind);
 			//setEventCommandRoute(state.eventCommandRoute);
@@ -157,6 +157,15 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 	const handleChangeGraphicsKind = (kind: number) => {
 		setGraphicsKind(kind);
 		selectedState!.graphicsKind = kind;
+	};
+
+	const handleUpdateGraphics = (id: number, indexX: number, indexY: number) => {
+		setGraphicsID(id);
+		setGraphicsIndexX(indexX);
+		setGraphicsIndexY(indexY);
+		selectedState!.graphicsID = id;
+		selectedState!.graphicsIndexX = indexX;
+		selectedState!.graphicsIndexY = indexY;
 	};
 
 	const handleChangeObjectMovingKind = (movingKind: number) => {
@@ -331,16 +340,14 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 							</div>
 						</div>
 						<div className={Utils.getClassName({ 'visibility-hidden': !selectedState }, 'flex gap-small')}>
-							<div className='flex-column gap-small'>
-								{t('graphics')}:
-								<GraphicsSelector />
-								<Dropdown
-									selectedID={graphicsKind}
-									onChange={handleChangeGraphicsKind}
-									options={Model.Base.GRAPHICS_OPTIONS}
-									translateOptions
-								/>
-							</div>
+							<GraphicsSelector
+								graphicsID={graphicsID}
+								graphicsIndexX={graphicsIndexX}
+								graphicsIndexY={graphicsIndexY}
+								graphicsKind={graphicsKind}
+								onChangeGraphicsKind={handleChangeGraphicsKind}
+								onUpdateGraphics={handleUpdateGraphics}
+							/>
 							<div className='flex-column flex-one gap-small'>
 								<Groupbox title={t('moving')}>
 									<Form>

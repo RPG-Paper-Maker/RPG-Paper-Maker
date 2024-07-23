@@ -49,15 +49,17 @@ class Pictures extends Serializable {
 	}
 
 	write(json: JSONType) {
-		const list: JSONType[][] = [];
+		const list: JSONType[] = [];
 		for (const [kind, pictures] of this.list.entries()) {
-			const jsonPictures: JSONType[] = [];
-			for (const picture of pictures) {
-				const jsonPicture = {};
-				picture.write(jsonPicture);
-				jsonPictures.push(jsonPicture);
+			if (pictures) {
+				const jsonPictures: JSONType[] = [];
+				for (const picture of pictures) {
+					const jsonPicture = {};
+					picture.write(jsonPicture);
+					jsonPictures.push(jsonPicture);
+				}
+				list.push({ k: kind, v: jsonPictures });
 			}
-			list[kind] = jsonPictures;
 		}
 		json.list = list;
 	}
