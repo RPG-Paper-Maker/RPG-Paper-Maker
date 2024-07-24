@@ -53,6 +53,10 @@ class Map extends Base {
 		);
 	}
 
+	getTileset(): Model.Tileset {
+		return Project.current!.tilesets.getTilesetByID(this.tilesetID);
+	}
+
 	static async createDefaultMap(id: number, name: string) {
 		const mapModel = new Model.Map();
 		mapModel.id = id;

@@ -9,20 +9,28 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import react from 'react';
+import { Constants } from '../common';
+import { Project, Rectangle } from '../core';
 import '../styles/Tree.css';
 import TextureSquareSelector from './TextureSquareSelector';
-import { Project, Rectangle } from '../core';
-import { Constants } from '../common';
 
 type Props = {
 	texture: string;
 	isStopAnimation: boolean;
 	isClimbAnimation: boolean;
+	defaultRectangle?: Rectangle;
 	onUpdateRectangle: (rect: Rectangle) => void;
+	adjustPositionSize?: boolean;
 };
 
-function TextureCharacterSelector({ texture, isStopAnimation, isClimbAnimation, onUpdateRectangle }: Props) {
+function TextureCharacterSelector({
+	texture,
+	isStopAnimation,
+	isClimbAnimation,
+	defaultRectangle,
+	onUpdateRectangle,
+	adjustPositionSize,
+}: Props) {
 	const divideSize = Constants.BASE_SQUARE_SIZE / 2 / Project.SQUARE_SIZE;
 
 	const rows = 4 + (isStopAnimation ? 4 : 0) + (isClimbAnimation ? 4 : 0);
@@ -35,7 +43,9 @@ function TextureCharacterSelector({ texture, isStopAnimation, isClimbAnimation, 
 			divideHeight={divideSize}
 			columns={4}
 			rows={rows}
+			defaultRectangle={defaultRectangle}
 			onUpdateRectangle={onUpdateRectangle}
+			adjustPositionSize={adjustPositionSize}
 		/>
 	);
 }

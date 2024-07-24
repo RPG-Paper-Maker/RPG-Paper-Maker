@@ -9,26 +9,26 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { ReactNode, useEffect, useState } from 'react';
-import Dialog from './Dialog';
-import FooterCancelOK from './footers/FooterCancelOK';
-import InputText from '../InputText';
+import { ReactNode, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Model } from '../../Editor';
 import { OBJECT_MOVING_KIND, Utils } from '../../common';
+import { Node, Project, Rectangle } from '../../core';
+import useStateBool from '../../hooks/useStateBool';
 import useStateNumber from '../../hooks/useStateNumber';
 import useStateString from '../../hooks/useStateString';
-import { useTranslation } from 'react-i18next';
-import Dropdown from '../Dropdown';
-import Tree from '../Tree';
-import Groupbox from '../Groupbox';
+import { EventCommand, MapObjectState } from '../../models';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
-import Tab from '../Tab';
-import GraphicsSelector from '../GraphicsSelector';
+import Dropdown from '../Dropdown';
 import Form from '../Form';
-import { Node, Project } from '../../core';
-import useStateBool from '../../hooks/useStateBool';
-import { EventCommand, MapObjectState } from '../../models';
+import GraphicsSelector from '../GraphicsSelector';
+import Groupbox from '../Groupbox';
+import InputText from '../InputText';
+import Tab from '../Tab';
+import Tree from '../Tree';
+import Dialog from './Dialog';
+import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
 	needOpen: boolean;
@@ -56,6 +56,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 	const [graphicsID, setGraphicsID] = useStateNumber();
 	const [graphicsIndexX, setGraphicsIndexX] = useStateNumber();
 	const [graphicsIndexY, setGraphicsIndexY] = useStateNumber();
+	const [rectTileset, setRectTileset] = useState<Rectangle>();
 	const [graphicsKind, setGraphicsKind] = useStateNumber();
 	const [objectMovingKind, setObjectMovingKind] = useStateNumber();
 	//const [eventCommandRoute, setEventCommandRoute] = useState<EventCommand | null>(null);
@@ -137,6 +138,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 			setGraphicsID(state.graphicsID);
 			setGraphicsIndexX(state.graphicsIndexX);
 			setGraphicsIndexY(state.graphicsIndexY);
+			setRectTileset(state.rectTileset);
 			setGraphicsKind(state.graphicsKind);
 			setObjectMovingKind(state.objectMovingKind);
 			//setEventCommandRoute(state.eventCommandRoute);
@@ -159,13 +161,15 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 		selectedState!.graphicsKind = kind;
 	};
 
-	const handleUpdateGraphics = (id: number, indexX: number, indexY: number) => {
-		setGraphicsID(id);
-		setGraphicsIndexX(indexX);
-		setGraphicsIndexY(indexY);
+	const handleUpdateGraphics = (id: number, rect: Rectangle, isTileset: boolean) => {
 		selectedState!.graphicsID = id;
-		selectedState!.graphicsIndexX = indexX;
-		selectedState!.graphicsIndexY = indexY;
+		selectedState!.graphicsIndexX = isTileset ? 0 : rect.x;
+		selectedState!.graphicsIndexY = isTileset ? 0 : rect.y;
+		selectedState!.rectTileset = isTileset ? rect.clone() : undefined;
+		setGraphicsID(id);
+		setGraphicsIndexX(selectedState!.graphicsIndexX);
+		setGraphicsIndexY(selectedState!.graphicsIndexY);
+		setRectTileset(selectedState!.rectTileset);
 	};
 
 	const handleChangeObjectMovingKind = (movingKind: number) => {
@@ -344,6 +348,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 								graphicsID={graphicsID}
 								graphicsIndexX={graphicsIndexX}
 								graphicsIndexY={graphicsIndexY}
+								rectTileset={rectTileset}
 								graphicsKind={graphicsKind}
 								onChangeGraphicsKind={handleChangeGraphicsKind}
 								onUpdateGraphics={handleUpdateGraphics}

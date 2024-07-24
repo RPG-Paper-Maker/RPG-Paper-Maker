@@ -27,6 +27,7 @@ class Project {
 	public commonEvents = new Data.CommonEvents();
 	public variables = new Data.Variables();
 	public keyboard = new Data.Keyboard();
+	public tilesets = new Data.Tilesets();
 	public currentMapObjectStates: Node[] = [];
 	public currentMapObjectEvents: Node[] = [];
 	public currentMapObjectProperties: Node[] = [];
@@ -66,6 +67,7 @@ class Project {
 		await this.specialElements.load();
 		await this.commonEvents.load();
 		await this.keyboard.load();
+		await this.tilesets.load();
 	}
 
 	async save() {

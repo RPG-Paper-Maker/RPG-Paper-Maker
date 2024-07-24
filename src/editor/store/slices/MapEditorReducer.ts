@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { MapElement, Model } from '../../Editor';
-import { Position, Rectangle } from '../../core';
 import { ACTION_KIND, ELEMENT_MAP_KIND, ELEMENT_POSITION_KIND, LAYER_KIND } from '../../common';
+import { Position, Rectangle } from '../../core';
 
 export interface ProjectState {
 	name: string;

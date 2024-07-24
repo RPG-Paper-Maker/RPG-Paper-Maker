@@ -9,32 +9,46 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FaAngleDoubleLeft } from 'react-icons/fa';
+import { BUTTON_TYPE, Constants, PICTURE_KIND } from '../../common';
+import { Platform } from '../../common/Platform';
+import { Node, Project, Rectangle } from '../../core';
+import { Model, Scene } from '../../Editor';
+import Button from '../Button';
+import Checkbox from '../Checkbox';
+import Groupbox from '../Groupbox';
+import TextureCharacterSelector from '../TextureCharacterSelector';
+import TextureSquareSelector from '../TextureSquareSelector';
+import Tree, { TREES_MIN_WIDTH } from '../Tree';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import { Model } from '../../Editor';
-import { useTranslation } from 'react-i18next';
-import Groupbox from '../Groupbox';
-import Tree, { TREES_MIN_WIDTH } from '../Tree';
-import { Node, Project, Rectangle } from '../../core';
-import { BUTTON_TYPE, PICTURE_KIND } from '../../common';
-import Checkbox from '../Checkbox';
-import Button from '../Button';
-import { FaAngleDoubleLeft } from 'react-icons/fa';
-import TextureCharacterSelector from '../TextureCharacterSelector';
-import { Platform } from '../../common/Platform';
 import FooterOK from './footers/FooterOK';
 
 type Props = {
 	kind: PICTURE_KIND;
 	needOpen: boolean;
 	setNeedOpen: (b: boolean) => void;
-	model?: Model.Picture;
-	onAccept?: (picture: Model.Picture, indexX: number, indexY: number) => void;
+	pictureID?: number;
+	indexX?: number;
+	indexY?: number;
+	rectTileset?: Rectangle;
+	onAccept?: (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => void;
 	onReject?: () => void;
 };
 
-function DialogPicturesPreview({ kind, needOpen, setNeedOpen, model, onAccept, onReject }: Props) {
+function DialogPicturesPreview({
+	kind,
+	needOpen,
+	setNeedOpen,
+	pictureID,
+	indexX,
+	indexY,
+	rectTileset,
+	onAccept,
+	onReject,
+}: Props) {
 	const { t } = useTranslation();
 
 	const [isOpen, setIsOpen] = useState(false);
@@ -46,6 +60,7 @@ function DialogPicturesPreview({ kind, needOpen, setNeedOpen, model, onAccept, o
 	const [pictures, setPictures] = useState<Node[]>([]);
 	const [picturesAvailable, setPicturesAvailable] = useState<Node[]>([]);
 	const [selectedPicture, setSelectedPicture] = useState<Model.Picture | null>(null);
+	const [selectedRectTileset, setSelectedRectTileset] = useState(new Rectangle());
 	const [selectedRect, setSelectedRect] = useState(new Rectangle());
 	const [isStopAnimation, setIsStopAnimation] = useState(false);
 	const [isClimbAnimation, setIsClimbAnimation] = useState(false);
@@ -57,6 +72,23 @@ function DialogPicturesPreview({ kind, needOpen, setNeedOpen, model, onAccept, o
 		setIsInitiating(true);
 		setIsSelectedLeftList(true);
 		setPictures(Node.createList(Project.current!.pictures.getList(kind)));
+		let rect = new Rectangle();
+		let rectT = new Rectangle();
+		if (pictureID !== undefined) {
+			setSelectedPicture(Project.current!.pictures.getByID(kind, pictureID));
+			if (pictureID === 0) {
+				if (rectTileset) {
+					rectT = rectTileset.clone();
+				}
+			} else {
+				if (indexX !== undefined && indexY !== undefined) {
+					const dif = Constants.BASE_SQUARE_SIZE / Project.SQUARE_SIZE;
+					rect = new Rectangle(indexX * dif, indexY * dif, dif, dif);
+				}
+			}
+		}
+		setSelectedRect(rect);
+		setSelectedRectTileset(rectT);
 		handleRefresh();
 	};
 
@@ -81,7 +113,7 @@ function DialogPicturesPreview({ kind, needOpen, setNeedOpen, model, onAccept, o
 			setForcedCurrentSelectedItemIDLeft(-2);
 		}
 		if (isInitiating) {
-			setForcedCurrentSelectedItemIDLeft(model ? model.id : -1);
+			setForcedCurrentSelectedItemIDLeft(pictureID !== undefined ? pictureID : -1);
 			setIsInitiating(false);
 		}
 	};
@@ -150,7 +182,13 @@ function DialogPicturesPreview({ kind, needOpen, setNeedOpen, model, onAccept, o
 		} else {
 			Project.current!.pictures.list[kind] = pictures.map((node) => node.content as Model.Picture);
 			await Project.current!.pictures.save();
-			onAccept?.(selectedPicture, selectedRect.x / 2, selectedRect.y / 2);
+			const isTileset = selectedPicture.id === 0;
+			const dif = Constants.BASE_SQUARE_SIZE / Project.SQUARE_SIZE;
+			onAccept?.(
+				selectedPicture,
+				isTileset ? selectedRectTileset.clone() : new Rectangle(selectedRect.x / dif, selectedRect.y / dif),
+				isTileset
+			);
 			setIsOpen(false);
 		}
 	};
@@ -168,6 +206,56 @@ function DialogPicturesPreview({ kind, needOpen, setNeedOpen, model, onAccept, o
 		}
 		// eslint-disable-next-line
 	}, [needOpen]);
+
+	const getPreviewerContent = () => {
+		switch (kind) {
+			case PICTURE_KIND.CHARACTERS:
+				if (selectedPicture!.id === -1) {
+					return null;
+				}
+				return selectedPicture!.id === 0 ? (
+					<TextureSquareSelector
+						texture={Project.current!.pictures.getByID(
+							PICTURE_KIND.TILESETS,
+							Scene.Map.current!.model.getTileset().pictureID
+						).getPath()}
+						defaultRectangle={selectedRectTileset}
+						onUpdateRectangle={setSelectedRectTileset}
+					/>
+				) : (
+					<TextureCharacterSelector
+						texture={selectedPicture!.getPath()}
+						isStopAnimation={isStopAnimation}
+						isClimbAnimation={isClimbAnimation}
+						defaultRectangle={selectedRect}
+						onUpdateRectangle={setSelectedRect}
+						adjustPositionSize
+					/>
+				);
+			default:
+				return null; // TODO
+		}
+	};
+
+	const getPreviewerOptionsContent = () => {
+		switch (kind) {
+			case PICTURE_KIND.CHARACTERS:
+				return selectedPicture!.id === 0 ? null : (
+					<Groupbox title={t('options')}>
+						<div className='flex gap-medium'>
+							<Checkbox isChecked={isStopAnimation} onChange={handleChangeStopAnimation}>
+								{t('stop.animation')}
+							</Checkbox>
+							<Checkbox isChecked={isClimbAnimation} onChange={handleChangeClimbAnimation}>
+								{t('climb.animation')}
+							</Checkbox>
+						</div>
+					</Groupbox>
+				);
+			default:
+				return null;
+		}
+	};
 
 	return (
 		<>
@@ -252,32 +340,8 @@ function DialogPicturesPreview({ kind, needOpen, setNeedOpen, model, onAccept, o
 							<div className='flex-one flex-column zero-width'>
 								{selectedPicture && (
 									<>
-										<div className='flex-one scrollable'>
-											<TextureCharacterSelector
-												texture={selectedPicture.getPath()}
-												isStopAnimation={isStopAnimation}
-												isClimbAnimation={isClimbAnimation}
-												onUpdateRectangle={setSelectedRect}
-											/>
-										</div>
-										<div>
-											<Groupbox title={t('options')}>
-												<div className='flex gap-medium'>
-													<Checkbox
-														isChecked={isStopAnimation}
-														onChange={handleChangeStopAnimation}
-													>
-														{t('stop.animation')}
-													</Checkbox>
-													<Checkbox
-														isChecked={isClimbAnimation}
-														onChange={handleChangeClimbAnimation}
-													>
-														{t('climb.animation')}
-													</Checkbox>
-												</div>
-											</Groupbox>
-										</div>
+										<div className='flex-one scrollable'>{getPreviewerContent()}</div>
+										<div>{getPreviewerOptionsContent()}</div>
 									</>
 								)}
 							</div>

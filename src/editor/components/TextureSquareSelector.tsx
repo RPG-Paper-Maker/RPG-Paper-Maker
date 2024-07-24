@@ -9,18 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState, useRef, useEffect } from 'react';
-import '../styles/Tree.css';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Scene } from '../Editor';
+import { Constants, ELEMENT_MAP_KIND } from '../common';
+import { Picture2D, Project, Rectangle } from '../core';
 import {
 	RootState,
 	setCurrentAutotileTexture,
 	setCurrentTilesetFloorTexture,
 	setCurrentTilesetSpriteTexture,
 } from '../store';
-import { Scene } from '../Editor';
-import { Picture2D, Project, Rectangle } from '../core';
-import { Constants, ELEMENT_MAP_KIND } from '../common';
+import '../styles/Tree.css';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
@@ -40,7 +40,9 @@ type Props = {
 	canChangeSize?: boolean;
 	columns?: number;
 	rows?: number;
+	defaultRectangle?: Rectangle;
 	onUpdateRectangle?: (rect: Rectangle) => void;
+	adjustPositionSize?: boolean;
 };
 
 function TextureSquareSelector({
@@ -50,7 +52,9 @@ function TextureSquareSelector({
 	canChangeSize = true,
 	columns = -1,
 	rows = -1,
+	defaultRectangle,
 	onUpdateRectangle,
+	adjustPositionSize,
 }: Props) {
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 
@@ -66,7 +70,7 @@ function TextureSquareSelector({
 			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 				return Project.current!.settings.mapEditorCurrentTilesetSpriteTexture;
 			default:
-				return new Rectangle(0, 0, currentState.squareWidth, currentState.squareHeight);
+				return defaultRectangle ?? new Rectangle(0, 0, currentState.squareWidth, currentState.squareHeight);
 		}
 	};
 
@@ -121,6 +125,21 @@ function TextureSquareSelector({
 		currentState.firstX = -1;
 		currentState.firstY = -1;
 		currentState.selectedRect = getDefaultRectangle();
+		if (adjustPositionSize) {
+			if (currentState.selectedRect.x % currentState.squareWidth !== 0) {
+				currentState.selectedRect.x += currentState.selectedRect.x % currentState.squareWidth;
+			}
+			currentState.selectedRect.x = Math.min(
+				currentState.selectedRect.x,
+				(columns - 1) * currentState.squareWidth
+			);
+			if (currentState.selectedRect.y % currentState.squareHeight !== 0) {
+				currentState.selectedRect.y += currentState.selectedRect.y % currentState.squareHeight;
+			}
+			currentState.selectedRect.y = Math.min(currentState.selectedRect.y, (rows - 1) * currentState.squareHeight);
+			currentState.selectedRect.width = currentState.squareWidth;
+			currentState.selectedRect.height = currentState.squareHeight;
+		}
 		currentState.previewRect = null;
 		if (refCanvas.current) {
 			const w = (currentState.picture.width * 2) / divideWidth;
@@ -177,39 +196,42 @@ function TextureSquareSelector({
 		}
 	};
 
-	const drawTexture = (ctx: CanvasRenderingContext2D) => {
-		if (currentState.picture) {
-			if (divideWidth === 1 && divideHeight === 1) {
-				ctx.drawImage(
-					currentState.picture,
-					0,
-					0,
-					currentState.picture.width * 2,
-					currentState.picture.height * 2
-				);
-			} else {
-				for (let i = 0, l = currentState.picture.width / Project.SQUARE_SIZE / divideWidth; i < l; i++) {
-					for (
-						let j = 0, ll = currentState.picture.height / Project.SQUARE_SIZE / divideHeight;
-						j < ll;
-						j++
-					) {
-						ctx.drawImage(
-							currentState.picture,
-							i * Project.SQUARE_SIZE * divideWidth,
-							j * Project.SQUARE_SIZE * divideHeight,
-							Project.SQUARE_SIZE,
-							Project.SQUARE_SIZE,
-							i * Project.SQUARE_SIZE * 2,
-							j * Project.SQUARE_SIZE * 2,
-							Project.SQUARE_SIZE * 2,
-							Project.SQUARE_SIZE * 2
-						);
+	const drawTexture = useCallback(
+		(ctx: CanvasRenderingContext2D) => {
+			if (currentState.picture) {
+				if (divideWidth === 1 && divideHeight === 1) {
+					ctx.drawImage(
+						currentState.picture,
+						0,
+						0,
+						currentState.picture.width * 2,
+						currentState.picture.height * 2
+					);
+				} else {
+					for (let i = 0, l = currentState.picture.width / Project.SQUARE_SIZE / divideWidth; i < l; i++) {
+						for (
+							let j = 0, ll = currentState.picture.height / Project.SQUARE_SIZE / divideHeight;
+							j < ll;
+							j++
+						) {
+							ctx.drawImage(
+								currentState.picture,
+								i * Project.SQUARE_SIZE * divideWidth,
+								j * Project.SQUARE_SIZE * divideHeight,
+								Project.SQUARE_SIZE,
+								Project.SQUARE_SIZE,
+								i * Project.SQUARE_SIZE * 2,
+								j * Project.SQUARE_SIZE * 2,
+								Project.SQUARE_SIZE * 2,
+								Project.SQUARE_SIZE * 2
+							);
+						}
 					}
 				}
 			}
-		}
-	};
+		},
+		[currentState, divideWidth, divideHeight]
+	);
 
 	const drawSelection = (ctx: CanvasRenderingContext2D, rect: Rectangle, opacity = 1) => {
 		ctx.globalAlpha = opacity;
@@ -268,7 +290,7 @@ function TextureSquareSelector({
 		}
 	};
 
-	const update = () => {
+	const update = useCallback(() => {
 		const ctx = getContext();
 		if (ctx && currentState.picture) {
 			clear(ctx);
@@ -280,7 +302,7 @@ function TextureSquareSelector({
 				drawSelection(ctx, currentState.previewRect, 0.5);
 			}
 		}
-	};
+	}, [currentState, drawTexture]);
 
 	const handleMouseDown = (e: MouseEvent) => {
 		const { x, y } = getCurrentPosition(e);
@@ -372,7 +394,7 @@ function TextureSquareSelector({
 			currentState.selectedRect.height = currentState.squareHeight;
 			update();
 		}
-	}, [rows, columns]);
+	}, [currentState, texture, update, rows, columns]);
 
 	return <canvas ref={refCanvas} className='pointer' width={'0'} height={'0'}></canvas>;
 }

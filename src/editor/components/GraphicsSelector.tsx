@@ -9,21 +9,22 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useRef, useState } from 'react';
-import { ELEMENT_MAP_KIND, PICTURE_KIND } from '../common';
-import DialogPicturesPreview from './dialogs/DialogPicturesPreview';
-import '../styles/GraphicsSelector.css';
-import { Model } from '../Editor';
-import { Picture2D, Project } from '../core';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Model, Scene } from '../Editor';
+import { ELEMENT_MAP_KIND, PICTURE_KIND } from '../common';
+import { Picture2D, Project, Rectangle } from '../core';
+import '../styles/GraphicsSelector.css';
 import Dropdown from './Dropdown';
+import DialogPicturesPreview from './dialogs/DialogPicturesPreview';
 
 type Props = {
 	graphicsID: number;
 	graphicsIndexX: number;
 	graphicsIndexY: number;
+	rectTileset?: Rectangle;
 	graphicsKind: number;
-	onUpdateGraphics: (id: number, indexX: number, indexY: number) => void;
+	onUpdateGraphics: (id: number, rect: Rectangle, isTileset: boolean) => void;
 	onChangeGraphicsKind: (kind: number) => void;
 };
 
@@ -31,6 +32,7 @@ function GraphicsSelector({
 	graphicsID,
 	graphicsIndexX,
 	graphicsIndexY,
+	rectTileset,
 	graphicsKind,
 	onChangeGraphicsKind,
 	onUpdateGraphics,
@@ -46,15 +48,26 @@ function GraphicsSelector({
 		graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX ||
 		graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE;
 
-	const updatePicture = async (picture: Model.Picture, indexX: number, indexY: number) => {
-		const img = await Picture2D.loadImage(picture.getPath());
-		const ctx = getContext();
-		if (ctx) {
-			clear(ctx);
-			draw(ctx, picture, img, indexX, indexY);
-		}
-		onUpdateGraphics(picture.id, indexX, indexY);
-	};
+	const updatePicture = useCallback(
+		async (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => {
+			const img = await Picture2D.loadImage(
+				(isTileset
+					? Project.current!.pictures.getByID(
+							PICTURE_KIND.TILESETS,
+							Scene.Map.current!.model.getTileset().pictureID
+					  )
+					: picture
+				).getPath()
+			);
+			const ctx = getContext();
+			if (ctx) {
+				clear(ctx);
+				draw(ctx, picture, img, rect, isTileset);
+			}
+			onUpdateGraphics(picture.id, rect, isTileset);
+		},
+		[onUpdateGraphics]
+	);
 
 	const getContext = () => {
 		if (refCanvas.current) {
@@ -74,13 +87,13 @@ function GraphicsSelector({
 		ctx: CanvasRenderingContext2D,
 		picture: Model.Picture,
 		image: HTMLImageElement,
-		indexX: number,
-		indexY: number
+		rect: Rectangle,
+		isTileset: boolean
 	) => {
 		const rows = 4 + (picture.isStopAnimation ? 4 : 0) + (picture.isClimbAnimation ? 4 : 0);
 		const columns = 4;
-		const srcWidth = image.width / columns;
-		const srcHeight = image.height / rows;
+		const srcWidth = isTileset ? rect.width * Project.SQUARE_SIZE : image.width / columns;
+		const srcHeight = isTileset ? rect.height * Project.SQUARE_SIZE : image.height / rows;
 		const width = Math.min(srcWidth, 100);
 		const height = Math.min(srcHeight, 100);
 		if (refCanvas.current) {
@@ -89,27 +102,45 @@ function GraphicsSelector({
 			refCanvas.current.style.width = `${width}px`;
 			refCanvas.current.style.height = `${height}px`;
 		}
-		ctx.drawImage(image, indexX * srcWidth, indexY * srcHeight, srcWidth, srcHeight, 0, 0, width, height);
+		ctx.drawImage(
+			image,
+			rect.x * (isTileset ? Project.SQUARE_SIZE : srcWidth),
+			rect.y * (isTileset ? Project.SQUARE_SIZE : srcHeight),
+			srcWidth,
+			srcHeight,
+			0,
+			0,
+			width,
+			height
+		);
 	};
 
 	const handleDoubleClick = () => {
 		setNeedOpenDialog(true);
 	};
 
-	const handleAcceptPictures = (picture: Model.Picture, indexX: number, indexY: number) => {
-		updatePicture(picture, indexX, indexY);
+	const handleAcceptPictures = (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => {
+		updatePicture(picture, rect, isTileset);
 		if (graphicsKind === ELEMENT_MAP_KIND.NONE) {
 			onChangeGraphicsKind(ELEMENT_MAP_KIND.SPRITE_FACE);
 		}
 	};
 
 	useEffect(() => {
-		updatePicture(
-			Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, graphicsID),
-			graphicsIndexX,
-			graphicsIndexY
-		);
-	}, []);
+		if (isCharacter) {
+			const isTileset = graphicsID === 0;
+			updatePicture(
+				Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, graphicsID),
+				isTileset && rectTileset ? rectTileset.clone() : new Rectangle(graphicsIndexX, graphicsIndexY, 1, 1),
+				isTileset
+			);
+		} else {
+			const ctx = getContext();
+			if (ctx) {
+				clear(ctx);
+			}
+		}
+	}, [graphicsID, graphicsIndexX, graphicsIndexY, isCharacter, rectTileset, updatePicture]);
 
 	return (
 		<>
@@ -131,6 +162,10 @@ function GraphicsSelector({
 				needOpen={needOpenDialog}
 				setNeedOpen={setNeedOpenDialog}
 				onAccept={handleAcceptPictures}
+				pictureID={graphicsID}
+				indexX={graphicsIndexX}
+				indexY={graphicsIndexY}
+				rectTileset={rectTileset}
 			/>
 		</>
 	);

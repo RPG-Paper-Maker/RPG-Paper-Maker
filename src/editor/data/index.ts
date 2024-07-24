@@ -6,5 +6,6 @@ export * from './Settings';
 export * from './Shapes';
 export * from './SpecialElements';
 export * from './System';
+export * from './Tilesets';
 export * from './TreeMaps';
 export * from './Variables';
