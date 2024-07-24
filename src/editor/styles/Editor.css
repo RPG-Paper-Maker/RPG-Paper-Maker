@@ -66,32 +66,23 @@ code {
 }
 
 .flex-column {
-	display: flex;
 	flex-direction: column;
 }
 
 .flex-one {
-	display: flex;
 	flex-grow: 1;
 	flex-basis: 0;
 }
 
-.flex-zero {
-	flex-grow: 0;
-}
-
 .flex-center-v {
-	display: flex;
 	align-items: center;
 }
 
 .flex-center-self-v {
-	display: flex;
 	align-self: center;
 }
 
 .flex-center-h {
-	display: flex;
 	justify-content: center;
 }
 

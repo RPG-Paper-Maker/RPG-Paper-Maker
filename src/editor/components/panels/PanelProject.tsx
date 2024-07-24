@@ -9,16 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { ReactNode, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import MapEditor from '../MapEditor';
-import MapEditorMenuBar from '../MapEditorMenuBar';
-import Splitter from '../Splitter';
-import Menu from '../Menu';
-import MenuItem from '../MenuItem';
+import { ReactNode, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LuFolders } from 'react-icons/lu';
 import { MdOutlineWallpaper } from 'react-icons/md';
-import Tab from '../Tab';
+import { useDispatch, useSelector } from 'react-redux';
+import { Utils } from '../../common';
+import { Node, Project } from '../../core';
 import { Model } from '../../Editor';
 import {
 	RootState,
@@ -36,12 +33,16 @@ import {
 	setCurrentWallID,
 	setProjectMenuIndex,
 } from '../../store';
-import PanelTextures from './PanelTextures';
+import Flex from '../Flex';
 import Loader from '../Loader';
+import MapEditor from '../MapEditor';
+import MapEditorMenuBar from '../MapEditorMenuBar';
+import Menu from '../Menu';
+import MenuItem from '../MenuItem';
+import Splitter from '../Splitter';
+import Tab from '../Tab';
 import TreeMaps from '../TreeMaps';
-import { Node, Project } from '../../core';
-import { Utils } from '../../common';
-import { useTranslation } from 'react-i18next';
+import PanelTextures from './PanelTextures';
 
 function PanelProject() {
 	const { t } = useTranslation();
@@ -140,10 +141,10 @@ function PanelProject() {
 			<Splitter
 				vertical={false}
 				defaultLeftSize={266}
-				className='flex-one'
+				className='flex flex-one'
 				mobileHideFirst={projectMenuIndex === 2}
 			>
-				<div className='bg-darker flex-column flex-one scrollable'>
+				<Flex column one className='bg-darker scrollable'>
 					{!openLoading && (
 						<>
 							<div className='mobile-hidden'>
@@ -157,7 +158,7 @@ function PanelProject() {
 									<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
 								</Menu>
 							</div>
-							<div className={Utils.getClassName({ hidden: projectMenuIndex !== 0 }, 'flex flex-one')}>
+							<Flex one className={Utils.getClassName({ hidden: projectMenuIndex !== 0 })}>
 								<TreeMaps
 									onSelectedItem={handleSelectedMapItem}
 									forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
@@ -167,14 +168,12 @@ function PanelProject() {
 									mapsTabsContents={mapsTabsContents}
 									setMapsTabsContents={setMapsTabsContents}
 								/>
-							</div>
+							</Flex>
 							<PanelTextures visible={projectMenuIndex === 1} />
 						</>
 					)}
-				</div>
-				<div
-					className={'flex-column flex-one map-editor-bar ' + (projectMenuIndex !== 2 ? 'mobile-hidden' : '')}
-				>
+				</Flex>
+				<Flex column one className={'map-editor-bar ' + (projectMenuIndex !== 2 ? 'mobile-hidden' : '')}>
 					<div className='mobile-hidden'>
 						<Tab
 							titles={mapsTabsTitles}
@@ -188,14 +187,12 @@ function PanelProject() {
 							isClosable
 						/>
 					</div>
-					<div className={Utils.getClassName({ hidden: !currentMapID }, 'flex-column flex-one')}>
+					<Flex column one className={Utils.getClassName({ hidden: !currentMapID })}>
 						<MapEditorMenuBar />
 						<MapEditor />
-					</div>
-					{!currentMapID && (
-						<div className='flex-one flex-center-v flex-center-h'>{`${t('select.map')}...`}</div>
-					)}
-				</div>
+					</Flex>
+					{!currentMapID && <Flex one centerV centerH>{`${t('select.map')}...`}</Flex>}
+				</Flex>
 			</Splitter>
 		</>
 	);

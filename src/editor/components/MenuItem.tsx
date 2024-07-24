@@ -12,6 +12,7 @@
 import { ReactElement } from 'react';
 import { Utils } from '../common';
 import '../styles/MenuItem.css';
+import Flex from './Flex';
 
 type Props = {
 	children?: ReactElement | ReactElement[] | string | string[];
@@ -71,7 +72,7 @@ function MenuItem({
 			{icon}
 			{shortcut.length > 0 ? (
 				<>
-					<div className='flex-one'>{children}</div>
+					<Flex one>{children}</Flex>
 					<div className='shortcut'>{getShortcut()}</div>
 				</>
 			) : (

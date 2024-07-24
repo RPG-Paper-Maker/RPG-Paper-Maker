@@ -21,6 +21,7 @@ import { EventCommand, MapObjectState } from '../../models';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
 import Dropdown from '../Dropdown';
+import Flex from '../Flex';
 import Form from '../Form';
 import GraphicsSelector from '../GraphicsSelector';
 import Groupbox from '../Groupbox';
@@ -269,9 +270,9 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 			initialWidth='60%'
 			initialHeight='90%'
 		>
-			<div className='flex-column fill-height gap-small'>
-				<div className='flex-center-v gap-small'>
-					<div className='flex-center-v gap-small'>
+			<Flex column fillHeight spaced>
+				<Flex centerV spaced>
+					<Flex centerV spaced>
 						{t('name')}:
 						<InputText
 							value={name}
@@ -280,21 +281,16 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 							setFocustFirst={setFocustFirst}
 						/>
 						ID: {Utils.formatNumberID(object.id)}
-					</div>
-					<div className='flex-one' />
-					<div className='flex-center-v gap-small'>
+					</Flex>
+					<Flex one />
+					<Flex centerV spaced>
 						{t('model')}:
 						<Dropdown selectedID={modelID} onChange={setModelID} options={getObjectsList()} displayIDs />
-					</div>
-				</div>
-				<div className='flex-one gap-medium'>
-					<div
-						className={Utils.getClassName(
-							{ 'visibility-hidden': !selectedState },
-							'flex-column flex-one gap-small'
-						)}
-					>
-						<div className='flex-one'>
+					</Flex>
+				</Flex>
+				<Flex one spacedLarge>
+					<Flex column one spaced className={Utils.getClassName({ 'visibility-hidden': !selectedState })}>
+						<Flex one>
 							<Tab
 								titles={tabTitles}
 								setTitles={setTabTitles}
@@ -304,32 +300,32 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 								setForcedCurrentIndex={setForcedCurrentIndexTab}
 								onCurrentIndexChanged={handleCurrentIndexTabChanged}
 							/>
-						</div>
+						</Flex>
 						<Checkbox isChecked={false}>{t('block.hero.when.reaction')}</Checkbox>
-					</div>
-					<div className='flex-column gap-small'>
-						<div className='flex-one gap-medium'>
-							<div className='flex-column flex-one gap-small'>
+					</Flex>
+					<Flex column spaced>
+						<Flex one spacedLarge>
+							<Flex column one spaced>
 								{t('states')}:
-								<div className='flex-one zero-height'>
+								<Flex one zeroHeight>
 									<Tree
 										constructorType={Model.MapObjectState}
 										list={states}
 										onSelectedItem={handleSelectedItemState}
 										onCreateItem={handleCreateState}
 									/>
-								</div>
-							</div>
-							<div className='flex-column flex-one gap-small'>
+								</Flex>
+							</Flex>
+							<Flex column one spaced>
 								{t('properties')}:
-								<div className='flex-one zero-height'>
+								<Flex one zeroHeight>
 									<Tree list={properties} constructorType={Model.MapObjectProperty} />
-								</div>
-							</div>
-						</div>
-						<div className='flex-column flex-one gap-small'>
+								</Flex>
+							</Flex>
+						</Flex>
+						<Flex column one spaced>
 							{t('events')}:
-							<div className='flex-one zero-height'>
+							<Flex one zeroHeight>
 								<Tree
 									constructorType={Model.MapObjectEvent}
 									list={events}
@@ -341,9 +337,9 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 									doNotGenerateIDOnPaste
 									byIndex
 								/>
-							</div>
-						</div>
-						<div className={Utils.getClassName({ 'visibility-hidden': !selectedState }, 'flex gap-small')}>
+							</Flex>
+						</Flex>
+						<Flex spaced className={Utils.getClassName({ 'visibility-hidden': !selectedState })}>
 							<GraphicsSelector
 								graphicsID={graphicsID}
 								graphicsIndexX={graphicsIndexX}
@@ -353,7 +349,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 								onChangeGraphicsKind={handleChangeGraphicsKind}
 								onUpdateGraphics={handleUpdateGraphics}
 							/>
-							<div className='flex-column flex-one gap-small'>
+							<Flex column one spaced>
 								<Groupbox title={t('moving')}>
 									<Form>
 										<td>{t('type')}:</td>
@@ -392,12 +388,12 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 									</Form>
 								</Groupbox>
 								<Button>{t('edit.transformations')}...</Button>
-							</div>
-						</div>
-						<div className={Utils.getClassName({ 'visibility-hidden': !selectedState }, 'flex')}>
+							</Flex>
+						</Flex>
+						<Flex className={Utils.getClassName({ 'visibility-hidden': !selectedState })}>
 							<Groupbox title={t('options')}>
-								<div className='flex gap-medium'>
-									<div className='flex-column'>
+								<Flex spacedLarge>
+									<Flex column>
 										<Checkbox isChecked={moveAnimation} onChange={handleChangeMoveAnimation}>
 											{t('move.animation')}
 										</Checkbox>
@@ -410,8 +406,8 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 										<Checkbox isChecked={directionFix} onChange={handleChangeDirectionFix}>
 											{t('direction.fix')}
 										</Checkbox>
-									</div>
-									<div className='flex-column'>
+									</Flex>
+									<Flex column>
 										<Checkbox isChecked={through} onChange={handleChangeThrough}>
 											{t('through')}
 										</Checkbox>
@@ -424,31 +420,31 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 										<Checkbox isChecked={keepPosition} onChange={handleChangeKeepPosition}>
 											{t('keep.position')}
 										</Checkbox>
-									</div>
-									<div className='flex-one' />
-								</div>
+									</Flex>
+									<Flex one />
+								</Flex>
 							</Groupbox>
-						</div>
-					</div>
-				</div>
-				<div className='flex'>
-					<div className='flex-one gap-small'>
+						</Flex>
+					</Flex>
+				</Flex>
+				<Flex>
+					<Flex one spaced>
 						<Checkbox isChecked={onlyOneEventPerFrame} onChange={setOnlyOneEventPerFrame}>
 							{t('only.one.event.per.frame')}
 						</Checkbox>
 						<Checkbox isChecked={canBeTriggeredAnotherObject} onChange={setCanBeTriggeredAnotherObject}>
 							{t('can.be.triggered.another.object')}
 						</Checkbox>
-					</div>
-					<div className={Utils.getClassName({ 'visibility-hidden': !selectedState }, 'flex')}>
+					</Flex>
+					<Flex className={Utils.getClassName({ 'visibility-hidden': !selectedState })}>
 						<Checkbox isChecked={!!eventCommandDetection} onChange={handleChangeDetectionCheck}>
-							<div className='flex-center-v gap-small'>
+							<Flex centerV spaced>
 								{t('detection')} <Button disabled={eventCommandDetection === null}>...</Button>
-							</div>
+							</Flex>
 						</Checkbox>
-					</div>
-				</div>
-			</div>
+					</Flex>
+				</Flex>
+			</Flex>
 		</Dialog>
 	);
 }

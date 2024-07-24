@@ -9,12 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { RxCross2 } from 'react-icons/rx';
 import { Utils } from '../../common/Utils';
-import '../../styles/Dialog.css';
 import { Inputs } from '../../managers';
+import '../../styles/Dialog.css';
+import Flex from '../Flex';
 import Loader from '../Loader';
 
 type Props = {
@@ -261,7 +262,7 @@ function Dialog({
 							className={Utils.getClassName({ 'dialog-title-grabbing': isDragging }, 'dialog-title')}
 							onMouseDown={handleMouseDownTitle}
 						>
-							<div className='flex-one'>{title}</div>
+							<Flex one>{title}</Flex>
 							{onClose && <RxCross2 className='dialog-close' onClick={handleClose} />}
 						</div>
 						<div className='dialog-content'>

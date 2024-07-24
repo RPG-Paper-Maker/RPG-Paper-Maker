@@ -9,20 +9,21 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Node, Project } from '../../core';
+import { Model } from '../../Editor';
+import useStateBool from '../../hooks/useStateBool';
+import useStateNumber from '../../hooks/useStateNumber';
+import { MapObjectEvent } from '../../models';
+import Dropdown from '../Dropdown';
+import Flex from '../Flex';
+import Form from '../Form';
+import Groupbox from '../Groupbox';
+import RadioButton from '../RadioButton';
+import Tree from '../Tree';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import { Model } from '../../Editor';
-import { useTranslation } from 'react-i18next';
-import Dropdown from '../Dropdown';
-import useStateNumber from '../../hooks/useStateNumber';
-import { Node, Project } from '../../core';
-import Form from '../Form';
-import useStateBool from '../../hooks/useStateBool';
-import RadioButton from '../RadioButton';
-import Groupbox from '../Groupbox';
-import Tree from '../Tree';
-import { MapObjectEvent } from '../../models';
 
 type Props = {
 	needOpen: boolean;
@@ -123,7 +124,7 @@ function DialogMapObjectEvent({ needOpen, setNeedOpen, model, isNew, onAccept, o
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
 			>
-				<div className='flex-column gap-medium'>
+				<Flex column spacedLarge>
 					<Form>
 						<td>
 							<RadioButton
@@ -174,7 +175,7 @@ function DialogMapObjectEvent({ needOpen, setNeedOpen, model, isNew, onAccept, o
 							/>
 						</Groupbox>
 					)}
-				</div>
+				</Flex>
 			</Dialog>
 		</>
 	);

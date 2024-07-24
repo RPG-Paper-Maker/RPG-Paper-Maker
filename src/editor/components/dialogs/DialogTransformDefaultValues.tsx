@@ -9,13 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ACTION_KIND } from '../../common';
+import { Project } from '../../core';
+import Flex from '../Flex';
+import InputNumber from '../InputNumber';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import { Project } from '../../core';
-import { ACTION_KIND } from '../../common';
-import InputNumber from '../InputNumber';
-import { useTranslation } from 'react-i18next';
 
 type Props = {
 	needOpen: boolean;
@@ -107,23 +108,23 @@ function DialogTransformDefaultValues({
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>
-			<div className='flex-column gap-small'>
-				<div className='flex gap-medium'>
+			<Flex column spaced>
+				<Flex spacedLarge>
 					X:
 					<InputNumber min={getMinX()} max={getMaxX()} value={x} onChange={setX} decimals={isDecimal} />
 					{units}
-				</div>
-				<div className='flex gap-medium'>
+				</Flex>
+				<Flex spacedLarge>
 					Y:
 					<InputNumber min={getMinY()} max={getMaxY()} value={y} onChange={setY} decimals={isDecimal} />
 					{units}
-				</div>
-				<div className='flex gap-medium'>
+				</Flex>
+				<Flex spacedLarge>
 					Z:
 					<InputNumber min={getMinZ()} max={getMaxZ()} value={z} onChange={setZ} decimals={isDecimal} />
 					{units}
-				</div>
-			</div>
+				</Flex>
+			</Flex>
 		</Dialog>
 	);
 }

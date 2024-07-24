@@ -9,11 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useRef, useState } from 'react';
-import '../../styles/PanelSpecialElementsSelection.css';
+import { useEffect, useRef, useState } from 'react';
 import { HiChevronDown, HiChevronLeft } from 'react-icons/hi';
-import TextureSquareSelector from '../TextureSquareSelector';
 import { useDispatch, useSelector } from 'react-redux';
+import { Manager, Model, Scene } from '../../Editor';
+import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
+import { Project, Rectangle } from '../../core';
 import {
 	RootState,
 	setCurrentAutotileID,
@@ -22,9 +23,9 @@ import {
 	setCurrentObject3DID,
 	setCurrentWallID,
 } from '../../store';
-import { Manager, Model, Scene } from '../../Editor';
-import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
-import { Project, Rectangle } from '../../core';
+import '../../styles/PanelSpecialElementsSelection.css';
+import Flex from '../Flex';
+import TextureSquareSelector from '../TextureSquareSelector';
 
 type Props = {
 	kind: PICTURE_KIND;
@@ -333,7 +334,9 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 			>
 				<div className='title'>
 					<div className='picture-container'>{getPictureOrCanvas(element.id, picture)}</div>
-					<div className='flex-one text-ellipsis'>{element.toStringNameID()}</div>
+					<Flex one className='text-ellipsis'>
+						{element.toStringNameID()}
+					</Flex>
 					{getChevron(selected)}
 				</div>
 				{canExpand && selected && (

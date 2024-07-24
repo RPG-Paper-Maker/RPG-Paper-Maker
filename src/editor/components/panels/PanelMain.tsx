@@ -9,15 +9,16 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { Node } from '../../core';
 import { RootState, setCopiedItems } from '../../store';
+import Dialog from '../dialogs/Dialog';
+import Flex from '../Flex';
 import Loader from '../Loader';
 import PanelNoProject from './PanelNoProject';
 import PanelProject from './PanelProject';
-import Dialog from '../dialogs/Dialog';
-import { Node } from '../../core';
-import { useTranslation } from 'react-i18next';
 
 function PanelMain() {
 	const { t } = useTranslation();
@@ -39,7 +40,7 @@ function PanelMain() {
 	}, [dispatch]);
 
 	return (
-		<div className='flex-one flex relative'>
+		<Flex one className='relative'>
 			<Loader large isLoading={loading} />
 			{currentProject === null ? <PanelNoProject /> : <PanelProject />}
 			{needsReloadPageUpdate && (
@@ -52,7 +53,7 @@ function PanelMain() {
 					<p>{`${t('warning.refresh.page.cache.clearing')}.`}</p>
 				</Dialog>
 			)}
-		</div>
+		</Flex>
 	);
 }
 

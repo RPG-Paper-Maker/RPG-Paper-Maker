@@ -9,17 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState } from 'react';
-import Groupbox from '../Groupbox';
-import InputNumber from '../InputNumber';
-import { ACTION_KIND, ELEMENT_POSITION_KIND } from '../../common';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setSelectedPosition } from '../../store';
-import Button from '../Button';
+import { ACTION_KIND, ELEMENT_POSITION_KIND } from '../../common';
 import { Position, Project } from '../../core';
 import { Scene } from '../../Editor';
+import { RootState, setSelectedPosition } from '../../store';
+import Button from '../Button';
 import DialogTransformDefaultValues from '../dialogs/DialogTransformDefaultValues';
-import { useTranslation } from 'react-i18next';
+import Flex from '../Flex';
+import Groupbox from '../Groupbox';
+import InputNumber from '../InputNumber';
 
 type Props = {
 	kind: ACTION_KIND;
@@ -271,7 +272,7 @@ function PanelTransform({ kind }: Props) {
 	return (
 		<>
 			<Groupbox title={title}>
-				<div className='flex-column gap-medium'>
+				<Flex column spacedLarge>
 					{canEditDefaultValues && (
 						<Button onClick={handleClickDefaultValues}>{`${t('edit.default.transform.new.elements', {
 							transform: kindText.toLowerCase(),
@@ -279,8 +280,8 @@ function PanelTransform({ kind }: Props) {
 					)}
 					{isSelected && (
 						<Groupbox title={t('current.values')}>
-							<div className='flex-column gap-small'>
-								<div className='flex gap-medium'>
+							<Flex column spaced>
+								<Flex spacedLarge>
 									X:
 									<InputNumber
 										min={getMinX()}
@@ -290,8 +291,8 @@ function PanelTransform({ kind }: Props) {
 										decimals={isDecimal}
 									/>
 									{units}
-								</div>
-								<div className='flex gap-medium'>
+								</Flex>
+								<Flex spacedLarge>
 									Y:
 									<InputNumber
 										min={getMinY()}
@@ -301,8 +302,8 @@ function PanelTransform({ kind }: Props) {
 										decimals={isDecimal}
 									/>
 									{units}
-								</div>
-								<div className='flex gap-medium'>
+								</Flex>
+								<Flex spacedLarge>
 									Z:
 									<InputNumber
 										min={getMinZ()}
@@ -312,8 +313,8 @@ function PanelTransform({ kind }: Props) {
 										decimals={isDecimal}
 									/>
 									{units}
-								</div>
-							</div>
+								</Flex>
+							</Flex>
 						</Groupbox>
 					)}
 					{isSelected ? (
@@ -324,7 +325,7 @@ function PanelTransform({ kind }: Props) {
 					) : (
 						<div className='text-center text-small-detail'>{t('no.map.element.selected')}.</div>
 					)}
-				</div>
+				</Flex>
 			</Groupbox>
 			<DialogTransformDefaultValues
 				needOpen={needDefaultDialogOpen}

@@ -10,21 +10,22 @@
 */
 
 import React, { useState } from 'react';
-import '../styles/MenuSub.css';
-import { setLoading, setProjects } from '../store/slices/ProjectsReducer';
-import '../styles/ProjectPreview.css';
+import { useTranslation } from 'react-i18next';
 import { FaTrashAlt } from 'react-icons/fa';
+import { RxCross2 } from 'react-icons/rx';
+import { useDispatch, useSelector } from 'react-redux';
+import { Constants, Utils } from '../common';
+import { Platform } from '../common/Platform';
+import { EngineSettings } from '../data/EngineSettings';
+import { Model } from '../Editor';
+import { RootState, triggerOpenProject } from '../store';
+import { setLoading, setProjects } from '../store/slices/ProjectsReducer';
+import '../styles/MenuSub.css';
+import '../styles/ProjectPreview.css';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, triggerOpenProject } from '../store';
-import { Constants, Utils } from '../common';
-import { Model } from '../Editor';
-import { EngineSettings } from '../data/EngineSettings';
-import { Platform } from '../common/Platform';
-import { RxCross2 } from 'react-icons/rx';
 import FooterOK from './dialogs/footers/FooterOK';
-import { useTranslation } from 'react-i18next';
+import Flex from './Flex';
 
 type Props = {
 	project: Model.ProjectPreview;
@@ -86,14 +87,14 @@ function ProjectPreview({ project }: Props) {
 				className={Utils.getClassName({ selected: isDialogConfirmOpen }, 'project-preview')}
 				onClick={handleOpenProject}
 			>
-				<div className='flex-column flex-one gap-small'>
+				<Flex column one spaced>
 					<div className='title'>{project.name}</div>
 					{project.location.length > 0 && <div className='text-small-detail'>{project.location}</div>}
-				</div>
-				<div className='flex-center-v'>
+				</Flex>
+				<Flex centerV>
 					{Constants.IS_DESKTOP && <RxCross2 onClick={handleClickCloseProject} />}
 					<FaTrashAlt onClick={handleClickRemoveProject} />
-				</div>
+				</Flex>
 			</div>
 			<Dialog
 				title={t('warning')}

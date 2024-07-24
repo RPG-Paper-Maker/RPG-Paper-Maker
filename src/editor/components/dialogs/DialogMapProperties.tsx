@@ -9,17 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useState } from 'react';
-import Dialog from './Dialog';
-import FooterCancelOK from './footers/FooterCancelOK';
-import InputText from '../InputText';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Model } from '../../Editor';
 import { Utils } from '../../common';
 import useStateNumber from '../../hooks/useStateNumber';
 import useStateString from '../../hooks/useStateString';
-import InputNumber from '../InputNumber';
+import Flex from '../Flex';
 import Groupbox from '../Groupbox';
-import { useTranslation } from 'react-i18next';
+import InputNumber from '../InputNumber';
+import InputText from '../InputText';
+import Dialog from './Dialog';
+import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
 	needOpen: boolean;
@@ -86,8 +87,8 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>
-			<div className='flex-column gap-small'>
-				<div className='flex gap-medium'>
+			<Flex column spaced>
+				<Flex spacedLarge>
 					{t('name')}:
 					<InputText
 						value={name}
@@ -96,24 +97,24 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 						setFocustFirst={setFocustFirst}
 					/>
 					ID: {Utils.formatNumberID(id)}
-				</div>
+				</Flex>
 				<Groupbox title={t('size')}>
-					<div className='flex-one gap-medium'>
-						<div className='flex-column flex-one gap-small'>
+					<Flex one spacedLarge>
+						<Flex column one spaced>
 							{t('length')}:
 							<InputNumber value={length} onChange={setLength} min={1} />
 							{t('height')}:
 							<InputNumber value={height} onChange={setHeight} min={1} />
-						</div>
-						<div className='flex-column flex-one gap-small'>
+						</Flex>
+						<Flex column one spaced>
 							{t('width')}:
 							<InputNumber value={width} onChange={setWidth} min={1} />
 							{t('depth')}:
 							<InputNumber value={depth} onChange={setDepth} min={0} />
-						</div>
-					</div>
+						</Flex>
+					</Flex>
 				</Groupbox>
-			</div>
+			</Flex>
 		</Dialog>
 	);
 }

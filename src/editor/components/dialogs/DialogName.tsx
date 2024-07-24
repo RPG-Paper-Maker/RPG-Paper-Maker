@@ -9,13 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useState } from 'react';
-import Dialog from './Dialog';
-import FooterCancelOK from './footers/FooterCancelOK';
-import InputText from '../InputText';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Model } from '../../Editor';
 import useStateString from '../../hooks/useStateString';
-import { useTranslation } from 'react-i18next';
+import Flex from '../Flex';
+import InputText from '../InputText';
+import Dialog from './Dialog';
+import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
 	needOpen: boolean;
@@ -64,10 +65,10 @@ function DialogName({ needOpen, setNeedOpen, model, onAccept, onReject }: Props)
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>
-			<div className='flex gap-medium'>
+			<Flex spacedLarge>
 				{t('name')}:
 				<InputText value={name} onChange={setName} focusFirst={focusFirst} setFocustFirst={setFocustFirst} />
-			</div>
+			</Flex>
 		</Dialog>
 	);
 }

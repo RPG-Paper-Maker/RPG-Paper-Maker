@@ -9,8 +9,33 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState, useEffect, useRef, ReactElement } from 'react';
+import { ReactElement, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+	AiOutlineArrowDown,
+	AiOutlineArrowUp,
+	AiOutlineClear,
+	AiOutlineFileAdd,
+	AiOutlineFolderOpen,
+	AiOutlineZoomIn,
+	AiOutlineZoomOut,
+} from 'react-icons/ai';
+import { BiExport, BiImport, BiSave } from 'react-icons/bi';
+import { BsPlay } from 'react-icons/bs';
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
+import { FiMap } from 'react-icons/fi';
+import { IoIosRedo, IoIosUndo, IoMdArrowBack } from 'react-icons/io';
+import { LuFolders, LuSaveAll } from 'react-icons/lu';
+import { MdClose, MdOutlineWallpaper } from 'react-icons/md';
+import { RxHamburgerMenu } from 'react-icons/rx';
+import { TbNumbers } from 'react-icons/tb';
+import { VscChromeClose, VscChromeMaximize, VscChromeMinimize, VscChromeRestore } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
+import { BUTTON_TYPE, Constants, EXTENSION_KIND, IO, KEY, MenuItemType, Paths, SPECIAL_KEY, Utils } from '../common';
+import { Platform } from '../common/Platform';
+import { LocalFile, Project } from '../core';
+import { EngineSettings } from '../data/EngineSettings';
+import { Data, Manager, Model, Scene } from '../Editor';
 import {
 	RootState,
 	clearProjects,
@@ -32,45 +57,21 @@ import {
 	triggerTreeMap,
 	triggerVariables,
 } from '../store';
-import DialogNewProject from './dialogs/DialogNewProject';
-import Menu from './Menu';
-import MenuItem from './MenuItem';
-import { Data, Manager, Model, Scene } from '../Editor';
-import {
-	AiOutlineArrowDown,
-	AiOutlineArrowUp,
-	AiOutlineClear,
-	AiOutlineFileAdd,
-	AiOutlineFolderOpen,
-	AiOutlineZoomIn,
-	AiOutlineZoomOut,
-} from 'react-icons/ai';
-import { BiSave, BiExport, BiImport } from 'react-icons/bi';
-import { BsPlay } from 'react-icons/bs';
-import { MdClose, MdOutlineWallpaper } from 'react-icons/md';
-import { IoIosUndo, IoIosRedo, IoMdArrowBack } from 'react-icons/io';
-import { FiMap } from 'react-icons/fi';
-import Toolbar from './Toolbar';
 import '../styles/MainMenu.css';
-import { RxHamburgerMenu } from 'react-icons/rx';
-import { LuFolders, LuSaveAll } from 'react-icons/lu';
-import Loader from './Loader';
-import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
-import { KEY, SPECIAL_KEY, Paths, MenuItemType, Utils, Constants, IO, EXTENSION_KIND, BUTTON_TYPE } from '../common';
-import { LocalFile, Project } from '../core';
-import Dialog from './dialogs/Dialog';
-import FooterNoYes from './dialogs/footers/FooterNoYes';
-import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
-import FooterOK from './dialogs/footers/FooterOK';
-import MenuCustom from './MenuCustom';
-import { EngineSettings } from '../data/EngineSettings';
-import { Platform } from '../common/Platform';
 import Button from './Button';
-import { VscChromeClose, VscChromeMaximize, VscChromeMinimize, VscChromeRestore } from 'react-icons/vsc';
-import { useTranslation } from 'react-i18next';
+import Dialog from './dialogs/Dialog';
 import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
-import { TbNumbers } from 'react-icons/tb';
+import DialogNewProject from './dialogs/DialogNewProject';
 import DialogVariables from './dialogs/DialogVariables';
+import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
+import FooterNoYes from './dialogs/footers/FooterNoYes';
+import FooterOK from './dialogs/footers/FooterOK';
+import Flex from './Flex';
+import Loader from './Loader';
+import Menu from './Menu';
+import MenuCustom from './MenuCustom';
+import MenuItem from './MenuItem';
+import Toolbar from './Toolbar';
 
 function MainMenuBar() {
 	const { t } = useTranslation();
@@ -664,7 +665,7 @@ function MainMenuBar() {
 				<div className='mobile-hidden no-title-drag'>
 					<MenuCustom items={items} horizontal />
 				</div>
-				<div className='flex-one' />
+				<Flex one />
 				{hamburgerStates.length > 0 && (
 					<div className='main-menu-hamburger no-title-drag' onClick={handleClickHamburgerBack}>
 						<IoMdArrowBack />
@@ -679,7 +680,7 @@ function MainMenuBar() {
 					</div>
 				)}
 				{Constants.IS_DESKTOP && (
-					<div className='flex fill-height no-title-drag'>
+					<Flex fillHeight className='no-title-drag'>
 						<Button square backgroundOnHoverOnly onClick={handleMinimize}>
 							<VscChromeMinimize />
 						</Button>
@@ -689,7 +690,7 @@ function MainMenuBar() {
 						<Button buttonType={BUTTON_TYPE.RED} square backgroundOnHoverOnly onClick={handleClose}>
 							<VscChromeClose />
 						</Button>
-					</div>
+					</Flex>
 				)}
 			</div>
 			<Toolbar />

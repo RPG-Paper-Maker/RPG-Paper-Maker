@@ -16,6 +16,7 @@ import { ELEMENT_MAP_KIND, PICTURE_KIND } from '../common';
 import { Picture2D, Project, Rectangle } from '../core';
 import '../styles/GraphicsSelector.css';
 import Dropdown from './Dropdown';
+import Flex from './Flex';
 import DialogPicturesPreview from './dialogs/DialogPicturesPreview';
 
 type Props = {
@@ -144,7 +145,7 @@ function GraphicsSelector({
 
 	return (
 		<>
-			<div className='flex-column gap-small'>
+			<Flex column spaced>
 				{t('graphics')}:
 				<div className='graphics-selector' onDoubleClick={handleDoubleClick}>
 					<div className='graphics-selector-border' />
@@ -156,7 +157,7 @@ function GraphicsSelector({
 					options={Model.Base.GRAPHICS_OPTIONS}
 					translateOptions
 				/>
-			</div>
+			</Flex>
 			<DialogPicturesPreview
 				kind={PICTURE_KIND.CHARACTERS}
 				needOpen={needOpenDialog}

@@ -9,23 +9,24 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useState } from 'react';
-import FooterNoYes from './footers/FooterNoYes';
-import { Model, Scene } from '../../Editor';
-import Dialog from './Dialog';
-import FooterCancelOK from './footers/FooterCancelOK';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Project } from '../../core';
 import { Constants, ELEMENT_MAP_KIND, INPUT_TYPE_WIDTH, IO, Paths, Utils } from '../../common';
-import InputText from '../InputText';
-import { RootState, setProjects } from '../../store';
+import { Platform } from '../../common/Platform';
+import { Project } from '../../core';
 import { EngineSettings } from '../../data/EngineSettings';
+import { Model, Scene } from '../../Editor';
+import useStateBool from '../../hooks/useStateBool';
+import useStateString from '../../hooks/useStateString';
+import { RootState, setProjects } from '../../store';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
-import { Platform } from '../../common/Platform';
-import useStateString from '../../hooks/useStateString';
-import useStateBool from '../../hooks/useStateBool';
-import { useTranslation } from 'react-i18next';
+import Flex from '../Flex';
+import InputText from '../InputText';
+import Dialog from './Dialog';
+import FooterCancelOK from './footers/FooterCancelOK';
+import FooterNoYes from './footers/FooterNoYes';
 
 type Props = {
 	needOpen: boolean;
@@ -171,8 +172,8 @@ function DialogNewProject({ needOpen, setNeedOpen, onAccept }: Props) {
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
 			>
-				<div className='flex-column gap-small'>
-					<div className='flex gap-small'>
+				<Flex column spaced>
+					<Flex spaced>
 						<div>{t('name')}:</div>
 						<InputText
 							focusFirst={focusFirst}
@@ -181,29 +182,29 @@ function DialogNewProject({ needOpen, setNeedOpen, onAccept }: Props) {
 							onChange={handleChangeProjectName}
 						/>
 						{Constants.IS_DESKTOP && (
-							<div className='flex-columns'>
-								<div className='flex gap-small'>
+							<Flex column>
+								<Flex spaced>
 									<div>{t('folder.name')}:</div>
 									<InputText value={folderName} onChange={handleChangeFolderName} />
-								</div>
-								<div className='flex-right-horizontally'>
+								</Flex>
+								<Flex rightH>
 									<Checkbox isChecked={isAutoGenerate} onChange={setIsAutoGenerate}>
 										{t('auto.generate')}
 									</Checkbox>
-								</div>
-							</div>
+								</Flex>
+							</Flex>
 						)}
-					</div>
+					</Flex>
 					{Constants.IS_DESKTOP && (
-						<div className='flex-column gap-small'>
+						<Flex column spaced>
 							<div>{t('location')}:</div>
-							<div className='flex gap-small'>
+							<Flex spaced>
 								<InputText widthType={INPUT_TYPE_WIDTH.FILL} value={location} onChange={setLocation} />
 								<Button onClick={handleClickLocation}>...</Button>
-							</div>
-						</div>
+							</Flex>
+						</Flex>
 					)}
-				</div>
+				</Flex>
 			</Dialog>
 			<Dialog
 				title={t('warning')}

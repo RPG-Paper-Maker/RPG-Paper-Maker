@@ -9,16 +9,17 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { store } from './store';
 import MainMenuBar from './components/MainMenuBar';
 import PanelLoading from './components/panels/PanelLoading';
 import PanelMain from './components/panels/PanelMain';
+import i18n from './i18n/i18n';
+import { store } from './store';
 import './styles/Editor.css';
 import './styles/Mobile.css';
-import { I18nextProvider } from 'react-i18next';
-import i18n from './i18n/i18n';
+import Flex from './components/Flex';
 
 function Editor() {
 	const [loaded, setLoaded] = useState(false);
@@ -27,10 +28,14 @@ function Editor() {
 		<Provider store={store}>
 			<I18nextProvider i18n={i18n}>
 				{loaded ? (
-					<div className='flex-column fill-space' onContextMenu={(e) => e.preventDefault()}>
+					<Flex
+						column
+						className='fill-space'
+						onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => e.preventDefault()}
+					>
 						<MainMenuBar />
 						<PanelMain />
-					</div>
+					</Flex>
 				) : (
 					<PanelLoading setLoaded={setLoaded} />
 				)}

@@ -9,14 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useRef, useState, useEffect } from 'react';
-import Previewer3D from '../Previewer3D';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import TextureSquareSelector from '../TextureSquareSelector';
-import PanelSpecialElementsSelection from './PanelSpecialElementsSelection';
 import { ACTION_KIND, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
+import { RootState } from '../../store';
+import Flex from '../Flex';
+import Previewer3D from '../Previewer3D';
+import TextureSquareSelector from '../TextureSquareSelector';
 import PanelSettingsMountains from './PanelSettingsMountains';
+import PanelSpecialElementsSelection from './PanelSpecialElementsSelection';
 import PanelTransform from './PanelTransform';
 
 type Props = {
@@ -71,15 +72,15 @@ function PanelTextures({ visible }: Props) {
 				case ELEMENT_MAP_KIND.MOUNTAIN:
 					return (
 						<>
-							<div className='flex-one scrollable'>
+							<Flex one className='scrollable'>
 								<PanelSpecialElementsSelection
 									key={currentMapElementKind}
 									kind={PICTURE_KIND.MOUNTAINS}
 								/>
-							</div>
-							<div className='flex-column'>
+							</Flex>
+							<Flex column>
 								<PanelSettingsMountains />
-							</div>
+							</Flex>
 						</>
 					);
 				case ELEMENT_MAP_KIND.OBJECT3D:
@@ -98,9 +99,9 @@ function PanelTextures({ visible }: Props) {
 	return (
 		<div
 			ref={refTilesetPreviewDiv}
-			className={Utils.getClassName({ hidden: !visible }, 'flex-column flex-one gap-small')}
+			className={Utils.getClassName({ hidden: !visible }, 'flex flex-column flex-one gap-small')}
 		>
-			<div ref={refTileset} className='scrollable flex-column flex-one gap-small'>
+			<div ref={refTileset} className='scrollable flex flex-column flex-one gap-small'>
 				{getMainContent()}
 			</div>
 			<div ref={refPreviewer} className='flex mobile-hidden'>

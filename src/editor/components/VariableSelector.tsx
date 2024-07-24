@@ -9,13 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState } from 'react';
-import '../styles/Input.css';
-import { Model } from '../Editor';
-import Tree from './Tree';
+import { useState } from 'react';
 import { Node, Project } from '../core';
+import { Model } from '../Editor';
+import '../styles/Input.css';
 import Button from './Button';
 import DialogVariables from './dialogs/DialogVariables';
+import Flex from './Flex';
+import Tree from './Tree';
 
 type Props = {
 	variableID: number;
@@ -38,10 +39,10 @@ function VariableSelector({ variableID, onChange }: Props) {
 
 	return (
 		<>
-			<div className='flex-one gap-small' onDoubleClick={handleOpenVariables}>
+			<Flex one spaced onDoubleClick={handleOpenVariables}>
 				<Tree list={[node]} cannotAdd cannotEdit cannotDragDrop />
 				<Button onClick={handleOpenVariables}>...</Button>
-			</div>
+			</Flex>
 			<DialogVariables
 				needOpen={needDialogOpen}
 				setNeedOpen={setNeedDialogOpen}

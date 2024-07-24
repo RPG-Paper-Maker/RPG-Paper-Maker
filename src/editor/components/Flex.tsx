@@ -1,0 +1,79 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2024 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { ReactNode } from 'react';
+import { Utils } from '../common';
+
+type Props = {
+	children?: ReactNode | ReactNode[];
+	column?: boolean;
+	one?: boolean;
+	spaced?: boolean;
+	spacedLarge?: boolean;
+	centerV?: boolean;
+	centerH?: boolean;
+	centerSelfV?: boolean;
+	rightH?: boolean;
+	wrap?: boolean;
+	fillWidth?: boolean;
+	fillHeight?: boolean;
+	zeroWidth?: boolean;
+	zeroHeight?: boolean;
+	className?: string;
+	[key: string]: unknown;
+};
+
+function Flex({
+	children,
+	column = false,
+	one = false,
+	spaced = false,
+	spacedLarge = false,
+	centerV = false,
+	centerH = false,
+	centerSelfV = false,
+	rightH = false,
+	wrap = false,
+	fillWidth = false,
+	fillHeight = false,
+	zeroWidth = false,
+	zeroHeight = false,
+	className,
+	...rest
+}: Props) {
+	return (
+		<div
+			className={Utils.getClassName(
+				{
+					'flex-column': column,
+					'flex-one': one,
+					'gap-small': spaced,
+					'gap-medium': spacedLarge,
+					'flex-center-v': centerV,
+					'flex-center-h': centerH,
+					'flex-center-self-v': centerSelfV,
+					'flex-right-horizontally': rightH,
+					'flex-wrap': wrap,
+					'fill-width': fillWidth,
+					'fill-height': fillHeight,
+					'zero-width': zeroWidth,
+					'zero-height': zeroHeight,
+				},
+				`flex ${className ?? ''}`
+			)}
+			{...rest}
+		>
+			{children}
+		</div>
+	);
+}
+
+export default Flex;

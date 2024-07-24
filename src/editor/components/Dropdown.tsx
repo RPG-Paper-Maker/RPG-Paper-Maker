@@ -9,12 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { BsChevronDown } from 'react-icons/bs';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BsChevronDown } from 'react-icons/bs';
 import { Model } from '../Editor';
 import { Utils } from '../common';
 import '../styles/Dropdown.css';
+import Flex from './Flex';
 
 const DROPDOWN_SPACE_ARROW = 20;
 
@@ -185,14 +186,14 @@ function Dropdown({
 			ref={containerRef}
 			onClick={handleClick}
 		>
-			<div className='flex-one flex-center-v gap-small'>
-				<div className={Utils.getClassName({ 'text-ellipsis': fillWidth }, 'flex-one flex-center-v')}>
+			<Flex one centerV spaced>
+				<Flex one centerV className={Utils.getClassName({ 'text-ellipsis': fillWidth })}>
 					{getCurrentItem()}
-				</div>
-				<div className='flex'>
+				</Flex>
+				<Flex>
 					<BsChevronDown />
-				</div>
-			</div>
+				</Flex>
+			</Flex>
 			<div
 				className={Utils.getClassName({ 'visibility-hidden': !canDisplayDropdown() }, 'content')}
 				ref={dropdownContainerRef}

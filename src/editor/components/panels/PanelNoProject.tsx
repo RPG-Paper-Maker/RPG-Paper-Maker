@@ -9,17 +9,17 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React from 'react';
-import Button from '../Button';
+import { useTranslation } from 'react-i18next';
 import { AiOutlineFileAdd, AiOutlineFolderOpen } from 'react-icons/ai';
 import { BiImport } from 'react-icons/bi';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, triggerImportProject, triggerNewProject, triggerOpenDialogProject } from '../../store';
-import ProjectPreview from '../ProjectPreview';
-import { MdOutlineAddchart } from 'react-icons/md';
 import { FaHandsHelping } from 'react-icons/fa';
+import { MdOutlineAddchart } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
 import { BUTTON_TYPE, Constants } from '../../common';
-import { useTranslation } from 'react-i18next';
+import { RootState, triggerImportProject, triggerNewProject, triggerOpenDialogProject } from '../../store';
+import Button from '../Button';
+import Flex from '../Flex';
+import ProjectPreview from '../ProjectPreview';
 
 function PanelNoProject() {
 	const { t } = useTranslation();
@@ -57,14 +57,14 @@ function PanelNoProject() {
 	};
 
 	return (
-		<div className='flex-column flex-one padding-large'>
+		<Flex column one className='padding-large'>
 			<h2 className='mobile-hidden'>{t('recent.projects')}</h2>
-			<div className='flex-one gap-medium mobile-column-reverse'>
-				<div className='flex-column flex-one'>
+			<Flex one spacedLarge className='mobile-column-reverse'>
+				<Flex column one>
 					<h2 className='mobile-only text-center'>{t('recent.projects')}</h2>
 					<div className='scrollable-flex-one'>{renderProjectsList()}</div>
-				</div>
-				<div className='flex-zero flex-column gap-small'>
+				</Flex>
+				<Flex column spaced>
 					<Button buttonType={BUTTON_TYPE.PRIMARY} big onClick={handleNewProject}>
 						<AiOutlineFileAdd />
 						{`${t('new.project')}...`}
@@ -87,9 +87,9 @@ function PanelNoProject() {
 						<FaHandsHelping />
 						{t('contribute')}
 					</Button>
-				</div>
-			</div>
-		</div>
+				</Flex>
+			</Flex>
+		</Flex>
 	);
 }
 

@@ -9,10 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState, useEffect, useRef } from 'react';
-import '../styles/Splitter.css';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { triggerSplitting } from '../store';
+import '../styles/Splitter.css';
+import Flex from './Flex';
 
 type Props = {
 	children: [JSX.Element, JSX.Element];
@@ -77,7 +78,7 @@ function Splitter({ children, vertical, defaultLeftSize, className, mobileHideFi
 
 	return (
 		<div
-			className={`splitter ${vertical ? 'flex-column' : 'flex'} ${className} ${
+			className={`splitter flex ${vertical ? 'flex-column' : ''} ${className} ${
 				isResizing ? (vertical ? 'col-resize' : 'row-resize') : ''
 			}`}
 			onMouseMove={handleMouseMove}
@@ -89,7 +90,7 @@ function Splitter({ children, vertical, defaultLeftSize, className, mobileHideFi
 				className={`splitter-button mobile-hidden ${vertical ? 'vertical' : 'horizontal'}`}
 				onMouseDown={handleMouseDownSplitter}
 			></div>
-			<div className='flex-one'>{children[1]}</div>
+			<Flex one>{children[1]}</Flex>
 		</div>
 	);
 }

@@ -9,14 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useState } from 'react';
-import Dialog from './Dialog';
-import FooterCancelOK from './footers/FooterCancelOK';
-import { Data, Model } from '../../Editor';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Node, Project } from '../../core';
+import { Data, Model } from '../../Editor';
+import Flex from '../Flex';
 import Groupbox from '../Groupbox';
 import Tree, { TREES_MIN_WIDTH } from '../Tree';
-import { Node, Project } from '../../core';
+import Dialog from './Dialog';
+import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
 	needOpen: boolean;
@@ -102,7 +103,7 @@ function DialogVariables({ needOpen, setNeedOpen, model, onAccept, onReject }: P
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>
-			<div className='flex gap-medium' style={{ height: '510px' }}>
+			<Flex spacedLarge style={{ height: '510px' }}>
 				<Groupbox title={t('variables')}>
 					<Tree
 						constructorType={Model.VariablesPage}
@@ -125,7 +126,7 @@ function DialogVariables({ needOpen, setNeedOpen, model, onAccept, onReject }: P
 					cannotDragDrop
 					showEditName
 				/>
-			</div>
+			</Flex>
 		</Dialog>
 	);
 }

@@ -10,8 +10,8 @@
 */
 
 import { ReactNode, useEffect, useRef, useState } from 'react';
-import '../styles/Menu.css';
 import { MenuItemType, Utils } from '../common';
+import '../styles/Menu.css';
 import MenuCustom from './MenuCustom';
 
 type Props = {
@@ -93,7 +93,7 @@ function ContextMenu({ children, items = [] }: Props) {
 	return (
 		<div
 			ref={refComplete}
-			className='flex-one fill-width fill-height'
+			className='flex flex-one fill-width fill-height'
 			onMouseDown={handleMouseDown}
 			onTouchStart={handleTouchStart}
 			onTouchEnd={handleTouchEnd}

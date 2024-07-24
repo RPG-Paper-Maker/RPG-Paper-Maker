@@ -9,17 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useState } from 'react';
+import i18n from 'i18next';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { EngineSettings } from '../../data/EngineSettings';
+import { Model } from '../../Editor';
+import useStateNumber from '../../hooks/useStateNumber';
+import useStateString from '../../hooks/useStateString';
+import { LANGUAGES_NAMES, LANGUAGES_SHORTS } from '../../i18n/i18n';
+import Dropdown from '../Dropdown';
+import Flex from '../Flex';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import { LANGUAGES_NAMES, LANGUAGES_SHORTS } from '../../i18n/i18n';
-import { Model } from '../../Editor';
-import { useTranslation } from 'react-i18next';
-import Dropdown from '../Dropdown';
-import i18n from 'i18next';
-import useStateString from '../../hooks/useStateString';
-import { EngineSettings } from '../../data/EngineSettings';
-import useStateNumber from '../../hooks/useStateNumber';
 
 type Props = {
 	needOpen: boolean;
@@ -78,9 +79,9 @@ function DialogChangeLanguage({ needOpen, setNeedOpen }: Props) {
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>
-			<div className='flex'>
+			<Flex>
 				<Dropdown selectedID={selectedID} onChange={handleChangeLanguage} options={options} />
-			</div>
+			</Flex>
 		</Dialog>
 	);
 }

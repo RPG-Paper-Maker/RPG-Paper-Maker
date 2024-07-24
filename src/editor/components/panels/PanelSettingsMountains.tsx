@@ -9,12 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React from 'react';
-import Groupbox from '../Groupbox';
-import InputNumber from '../InputNumber';
-import { Project } from '../../core';
-import { MapElement } from '../../Editor';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { Constants } from '../../common';
+import { Project } from '../../core';
+import { EngineSettings } from '../../data/EngineSettings';
+import { MapElement } from '../../Editor';
 import {
 	RootState,
 	setCurrentMountainHeightPixels,
@@ -22,10 +22,10 @@ import {
 	setCurrentMountainWidthPixels,
 	setCurrentMountainWidthSquares,
 } from '../../store';
-import { Constants } from '../../common';
+import Flex from '../Flex';
+import Groupbox from '../Groupbox';
+import InputNumber from '../InputNumber';
 import Tips from '../Tips';
-import { EngineSettings } from '../../data/EngineSettings';
-import { useTranslation } from 'react-i18next';
 
 const MIN_VALUE = 0;
 const MAX_VALUE_SQUARES = 999;
@@ -86,55 +86,55 @@ function PanelSettingsMountains() {
 			{!Constants.IS_MOBILE && EngineSettings.current.showTipsGridHeight && (
 				<Tips onClose={handleCloseTipGridHeight}>{t('tip.grid.height')}</Tips>
 			)}
-			<Groupbox title='Settings'>
-				<div className='flex-column gap-medium'>
-					<div className='flex-column gap-small'>
+			<Groupbox title={t('settings')}>
+				<Flex column spacedLarge>
+					<Flex column spaced>
 						<label>Border width:</label>
-						<div className='flex gap-small'>
+						<Flex spaced>
 							<InputNumber
 								value={widthSquares}
 								min={MIN_VALUE}
 								max={MAX_VALUE_SQUARES}
 								onChange={handleChangeWidthSquares}
 							/>
-							square(s)
-						</div>
-						<div className='flex gap-small'>
+							{t('square.s')}
+						</Flex>
+						<Flex spaced>
 							<InputNumber
 								value={widthPixels}
 								min={MIN_VALUE}
 								max={MAX_VALUE_PIXELS}
 								onChange={handleChangeWidthPixels}
 							/>
-							pixel(s)
-						</div>
-					</div>
-					<div className='flex-column gap-small'>
+							{t('pixel.s')}
+						</Flex>
+					</Flex>
+					<Flex column spaced>
 						<label>Border height:</label>
-						<div className='flex gap-small'>
+						<Flex spaced>
 							<InputNumber
 								value={heightSquares}
 								min={MIN_VALUE}
 								max={MAX_VALUE_SQUARES}
 								onChange={handleChangeHeightSquares}
 							/>
-							square(s)
-						</div>
-						<div className='flex gap-small'>
+							{t('square.s')}
+						</Flex>
+						<Flex spaced>
 							<InputNumber
 								value={heightPixels}
 								min={MIN_VALUE}
 								max={MAX_VALUE_PIXELS}
 								onChange={handleChangeHeightPixels}
 							/>
-							pixel(s)
-						</div>
-					</div>
-					<div className='flex gap-small'>
+							{t('pixel.s')}
+						</Flex>
+					</Flex>
+					<Flex spaced>
 						<label>Angle:</label>
 						<label>{`${calculateAngle()}°`}</label>
-					</div>
-				</div>
+					</Flex>
+				</Flex>
 			</Groupbox>
 		</>
 	);

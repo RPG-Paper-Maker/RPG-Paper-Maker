@@ -9,35 +9,26 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState, useEffect } from 'react';
-import Menu from './Menu';
-import MenuItem from './MenuItem';
-import MenuSub from './MenuSub';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
 import { BiCube, BiSolidPencil } from 'react-icons/bi';
-import { MdAutoAwesomeMosaic } from 'react-icons/md';
-import { ReactComponent as FloorIcon } from '../../assets/icons/floor.svg';
-import { ReactComponent as FaceSpriteIcon } from '../../assets/icons/face-sprite.svg';
-import { ReactComponent as FixSpriteIcon } from '../../assets/icons/fix-sprite.svg';
-import { ReactComponent as DoubleSpriteIcon } from '../../assets/icons/double-sprite.svg';
-import { ReactComponent as QuadraSpriteIcon } from '../../assets/icons/quadra-sprite.svg';
-import { ReactComponent as LayersOffIcon } from '../../assets/icons/layers-off.svg';
-import { ReactComponent as SquareIcon } from '../../assets/icons/square.svg';
-import { ReactComponent as PixelIcon } from '../../assets/icons/pixel.svg';
 import { FaFlagCheckered, FaLayerGroup, FaMountain } from 'react-icons/fa';
 import { GiBrickWall, GiEmptyChessboard } from 'react-icons/gi';
 import { LuMountain, LuMove3D, LuRotate3D, LuScale3D } from 'react-icons/lu';
-import { TbHandMove } from 'react-icons/tb';
-import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
+import { MdAutoAwesomeMosaic } from 'react-icons/md';
 import { PiSelectionAllFill } from 'react-icons/pi';
+import { TbHandMove } from 'react-icons/tb';
 import { VscPaintcan } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	RootState,
-	setCurrentActionKind,
-	setCurrentElementPositionKind,
-	setCurrentLayerKind,
-	setCurrentMapElementKind,
-} from '../store';
+import { ReactComponent as DoubleSpriteIcon } from '../../assets/icons/double-sprite.svg';
+import { ReactComponent as FaceSpriteIcon } from '../../assets/icons/face-sprite.svg';
+import { ReactComponent as FixSpriteIcon } from '../../assets/icons/fix-sprite.svg';
+import { ReactComponent as FloorIcon } from '../../assets/icons/floor.svg';
+import { ReactComponent as LayersOffIcon } from '../../assets/icons/layers-off.svg';
+import { ReactComponent as PixelIcon } from '../../assets/icons/pixel.svg';
+import { ReactComponent as QuadraSpriteIcon } from '../../assets/icons/quadra-sprite.svg';
+import { ReactComponent as SquareIcon } from '../../assets/icons/square.svg';
 import { Scene } from '../Editor';
 import {
 	ACTION_KIND,
@@ -51,7 +42,17 @@ import {
 	MOBILE_ACTION,
 } from '../common';
 import { Project } from '../core';
-import { useTranslation } from 'react-i18next';
+import {
+	RootState,
+	setCurrentActionKind,
+	setCurrentElementPositionKind,
+	setCurrentLayerKind,
+	setCurrentMapElementKind,
+} from '../store';
+import Flex from './Flex';
+import Menu from './Menu';
+import MenuItem from './MenuItem';
+import MenuSub from './MenuSub';
 
 function MapEditorMenuBar() {
 	const { t } = useTranslation();
@@ -420,8 +421,8 @@ function MapEditorMenuBar() {
 	};
 
 	return (
-		<div className='flex flex-wrap'>
-			<div className='flex-one'>
+		<Flex wrap>
+			<Flex one>
 				<Menu horizontal isActivable activeIndex={selectionIndex} setActiveIndex={setSelectionIndex}>
 					<MenuSub active icon={getLandsIcon()} onClick={handleLands}>
 						<MenuItem icon={<FloorIcon />} onClick={handleFloors}>
@@ -477,8 +478,8 @@ function MapEditorMenuBar() {
 						<MenuItem icon={<TbHandMove />} onClick={handleMobileMove} />
 					</Menu>
 				)}
-			</div>
-			<div className='flex'>
+			</Flex>
+			<Flex>
 				<Menu
 					horizontal
 					isActivable
@@ -510,8 +511,8 @@ function MapEditorMenuBar() {
 					<MenuItem icon={<LayersOffIcon />} onClick={handleLayersOff} />
 					<MenuItem icon={<FaLayerGroup />} onClick={handleLayersOn} disabled={isLayersOnDisabled()} />
 				</Menu>
-			</div>
-		</div>
+			</Flex>
+		</Flex>
 	);
 }
 

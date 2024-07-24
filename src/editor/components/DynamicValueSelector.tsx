@@ -9,17 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState } from 'react';
-import '../styles/Input.css';
-import { DynamicValue } from '../core/DynamicValue';
-import Dropdown from './Dropdown';
+import { useState } from 'react';
 import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from '../common';
+import { Project } from '../core';
+import { DynamicValue } from '../core/DynamicValue';
 import { Model } from '../Editor';
+import '../styles/DynamicValueSelector.css';
+import '../styles/Input.css';
+import Dropdown from './Dropdown';
+import Flex from './Flex';
 import InputNumber from './InputNumber';
 import InputText from './InputText';
 import VariableSelector from './VariableSelector';
-import { Project } from '../core';
-import '../styles/DynamicValueSelector.css';
 
 type Props = {
 	value: DynamicValue;
@@ -175,7 +176,7 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 	return (
 		<div className='dynamic-value-selector'>
 			<Dropdown selectedID={kind} onChange={handleChangeKind} options={getOptions()} translateOptions />
-			<div className='flex-one'>{getValueDisplay()}</div>
+			<Flex one>{getValueDisplay()}</Flex>
 		</div>
 	);
 }

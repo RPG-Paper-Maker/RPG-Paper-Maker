@@ -18,6 +18,7 @@ import { Node, Project, Rectangle } from '../../core';
 import { Model, Scene } from '../../Editor';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
+import Flex from '../Flex';
 import Groupbox from '../Groupbox';
 import TextureCharacterSelector from '../TextureCharacterSelector';
 import TextureSquareSelector from '../TextureSquareSelector';
@@ -242,14 +243,14 @@ function DialogPicturesPreview({
 			case PICTURE_KIND.CHARACTERS:
 				return selectedPicture!.id === 0 ? null : (
 					<Groupbox title={t('options')}>
-						<div className='flex gap-medium'>
+						<Flex spacedLarge>
 							<Checkbox isChecked={isStopAnimation} onChange={handleChangeStopAnimation}>
 								{t('stop.animation')}
 							</Checkbox>
 							<Checkbox isChecked={isClimbAnimation} onChange={handleChangeClimbAnimation}>
 								{t('climb.animation')}
 							</Checkbox>
-						</div>
+						</Flex>
 					</Groupbox>
 				);
 			default:
@@ -267,25 +268,25 @@ function DialogPicturesPreview({
 				initialHeight='70%'
 				onClose={handleReject}
 			>
-				<div className='flex-column gap-medium fill-height'>
-					<div className='flex gap-medium'>
-						<div className='flex-one'>
+				<Flex column spacedLarge fillHeight>
+					<Flex spacedLarge>
+						<Flex one>
 							<Checkbox
 								isChecked={picturesShowAvailableContent}
 								onChange={handleChangePicturesShowAvailableContent}
 							>
 								{t('show.available.content')}
 							</Checkbox>
-						</div>
-						<div className='flex gap-small'>
+						</Flex>
+						<Flex spaced>
 							<Button disabled>{t('open.default.folder')}...</Button>
 							<Button disabled>{t('open.project.folder')}...</Button>
 							<Button disabled>{t('import.dlc.s')}...</Button>
-						</div>
-					</div>
-					<div className='flex-one gap-medium fill-height'>
-						<div className='flex-column'>
-							<div className='flex-one zero-height'>
+						</Flex>
+					</Flex>
+					<Flex one spacedLarge fillHeight>
+						<Flex column>
+							<Flex one zeroHeight>
 								<Tree
 									list={pictures}
 									minWidth={TREES_MIN_WIDTH}
@@ -296,21 +297,21 @@ function DialogPicturesPreview({
 									cannotAdd
 									cannotEdit
 								/>
-							</div>
-						</div>
-						<div className='flex-one gap-medium'>
+							</Flex>
+						</Flex>
+						<Flex one spacedLarge>
 							{picturesShowAvailableContent && (
 								<>
-									<div className='flex-column flex-center-self-v'>
+									<Flex column centerSelfV>
 										<Button
 											buttonType={BUTTON_TYPE.PRIMARY}
 											icon={<FaAngleDoubleLeft />}
 											disabled={isSelectedLeftList || !selectedPicture}
 											onClick={handleClickMoveLeft}
 										/>
-									</div>
-									<div className='flex-column gap-small'>
-										<div className='flex-one zero-height'>
+									</Flex>
+									<Flex column spaced>
+										<Flex one zeroHeight>
 											<Tree
 												list={picturesAvailable}
 												onSelectedItem={handleChangeSelectedPictureRight}
@@ -324,8 +325,8 @@ function DialogPicturesPreview({
 												cannotDelete
 												doNotShowID
 											/>
-										</div>
-										<div className='flex gap-small'>
+										</Flex>
+										<Flex spaced>
 											<Button onClick={handleRefresh} disabled>
 												{t('refresh')}
 											</Button>
@@ -333,21 +334,23 @@ function DialogPicturesPreview({
 											<Button buttonType={BUTTON_TYPE.PRIMARY} disabled>
 												+
 											</Button>
-										</div>
-									</div>
+										</Flex>
+									</Flex>
 								</>
 							)}
-							<div className='flex-one flex-column zero-width'>
+							<Flex one column zeroWidth>
 								{selectedPicture && (
 									<>
-										<div className='flex-one scrollable'>{getPreviewerContent()}</div>
+										<Flex one className='scrollable'>
+											{getPreviewerContent()}
+										</Flex>
 										<div>{getPreviewerOptionsContent()}</div>
 									</>
 								)}
-							</div>
-						</div>
-					</div>
-				</div>
+							</Flex>
+						</Flex>
+					</Flex>
+				</Flex>
 			</Dialog>
 			<Dialog
 				title={t('warning')}

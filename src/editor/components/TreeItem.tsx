@@ -10,11 +10,12 @@
 */
 
 import { useEffect, useState } from 'react';
-import { Model } from '../Editor';
 import { HiChevronDown, HiChevronRight } from 'react-icons/hi';
-import '../styles/TreeItem.css';
-import { Node, Project } from '../core';
 import { Utils } from '../common';
+import { Node, Project } from '../core';
+import { Model } from '../Editor';
+import '../styles/TreeItem.css';
+import Flex from './Flex';
 
 type Props = {
 	node: Node;
@@ -72,15 +73,15 @@ function TreeItem({
 	const getString = () => {
 		if (headers && headers.length > 0) {
 			return node.toStrings().map((value, index) => (
-				<div className='flex-one gap-small text-ellipsis' key={headers[index]}>
+				<Flex one spaced className='text-ellipsis' key={headers[index]}>
 					{value}
-				</div>
+				</Flex>
 			));
 		} else {
 			return (
-				<div className='flex-one gap-small text-ellipsis'>
+				<Flex one spaced className='text-ellipsis'>
 					{doNotShowID ? node.content.getName() : node.toString()}
-				</div>
+				</Flex>
 			);
 		}
 	};

@@ -9,23 +9,24 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode, useState, useEffect, useLayoutEffect, useRef } from 'react';
-import '../styles/Tree.css';
-import TreeItem from './TreeItem';
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { ArrayUtils, CONTEXT_MENU_ITEM_KIND, INPUT_TYPE_WIDTH, KEY, MenuItemType, RPM, SPECIAL_KEY } from '../common';
 import { Node } from '../core';
-import ContextMenu from './ContextMenu';
 import { Model } from '../Editor';
-import DialogName from './dialogs/DialogName';
-import DialogMapObjectState from './dialogs/DialogMapObjectState';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setCopiedItems } from '../store';
-import DialogMapObjectEvent from './dialogs/DialogMapObjectEvent';
-import { useTranslation } from 'react-i18next';
-import DialogMapObjectParameter from './dialogs/DialogMapObjectParameter';
-import InputText from './InputText';
 import useStateString from '../hooks/useStateString';
+import { RootState, setCopiedItems } from '../store';
+import '../styles/Tree.css';
+import ContextMenu from './ContextMenu';
+import DialogMapObjectEvent from './dialogs/DialogMapObjectEvent';
+import DialogMapObjectParameter from './dialogs/DialogMapObjectParameter';
 import DialogMapObjectProperty from './dialogs/DialogMapObjectProperty';
+import DialogMapObjectState from './dialogs/DialogMapObjectState';
+import DialogName from './dialogs/DialogName';
+import Flex from './Flex';
+import InputText from './InputText';
+import TreeItem from './TreeItem';
 
 type Props = {
 	list: Node[];
@@ -510,22 +511,22 @@ function Tree({
 		headers.length > 0 && (
 			<div className='tree-header'>
 				{headers.map((label) => (
-					<div className='flex-one' key={label}>
+					<Flex one key={label}>
 						{t(label)}
-					</div>
+					</Flex>
 				))}
 			</div>
 		);
 
 	return (
 		<ContextMenu items={getContextMenuItems()}>
-			<div className='flex-column gap-medium fill-width fill-height'>
+			<Flex column spacedLarge fillWidth fillHeight>
 				<div onDoubleClick={handleDoubleClick} className='tree' style={{ minWidth: `${minWidth}px` }}>
-					<div className='flex gap-small'>{getHeaders()}</div>
+					<Flex spaced>{getHeaders()}</Flex>
 					{getTreeItems(list)}
 				</div>
 				{showEditName && (
-					<div className='flex gap-small'>
+					<Flex spaced>
 						<div className={isEditNameDisabled() ? 'disabled-label' : ''}>{t('name')}:</div>
 						<InputText
 							value={currentName}
@@ -533,9 +534,9 @@ function Tree({
 							widthType={INPUT_TYPE_WIDTH.FILL}
 							disabled={isEditNameDisabled()}
 						/>
-					</div>
+					</Flex>
 				)}
-			</div>
+			</Flex>
 			{getDialog()}
 		</ContextMenu>
 	);

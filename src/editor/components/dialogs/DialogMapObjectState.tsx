@@ -9,14 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Project } from '../../core';
+import { Model } from '../../Editor';
+import useStateNumber from '../../hooks/useStateNumber';
+import Dropdown from '../Dropdown';
+import Flex from '../Flex';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import { Model } from '../../Editor';
-import { useTranslation } from 'react-i18next';
-import Dropdown from '../Dropdown';
-import useStateNumber from '../../hooks/useStateNumber';
-import { Project } from '../../core';
 import FooterOK from './footers/FooterOK';
 
 type Props = {
@@ -83,7 +84,7 @@ function DialogMapObjectState({ needOpen, setNeedOpen, model, isNew, onAccept, o
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
 			>
-				<div className='flex gap-medium'>
+				<Flex spacedLarge>
 					{t('state.id')}:
 					<Dropdown
 						selectedID={stateID}
@@ -91,7 +92,7 @@ function DialogMapObjectState({ needOpen, setNeedOpen, model, isNew, onAccept, o
 						options={Project.current!.commonEvents.states}
 						displayIDs
 					/>
-				</div>
+				</Flex>
 			</Dialog>
 			<Dialog
 				title={t('warning')}
