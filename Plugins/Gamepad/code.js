@@ -5,9 +5,10 @@ const inject = RPM.Manager.Plugins.inject;
 
 const leftStickEventID = RPM.Manager.Plugins.getParameter(pluginName, "Left stick event ID");
 const rightStickEventID = RPM.Manager.Plugins.getParameter(pluginName, "Right stick event ID");
+const deadzone = RPM.Manager.Plugins.getParameter(pluginName, "Deadzone variable ID");;
+const repeatDelay = 30;
 
-var deadzone = 0.15;
-var repeatDelay = 30;
+var keysList = ["A", "B", "X", "Y", "LB", "RB", "LT", "RT", "Back", "Start", "L3", "R3", "Up", "Down", "Left", "Right", "Home"];
 
 // https://w3c.github.io/gamepad/#remapping
 var buttonsList =
@@ -28,27 +29,23 @@ var axesMenuList =
 
 function getKey(id)
 {
-	switch (id)
-	{
-		case  0: return "A";
-		case  1: return "B";
-		case  2: return "X";
-		case  3: return "Y";
-		case  4: return "LB";
-		case  5: return "RB";
-		case  6: return "LT";
-		case  7: return "RT";
-		case  8: return "Back";
-		case  9: return "Start";
-		case 10: return "L3";
-		case 11: return "R3";
-		case 12: return "Up";
-		case 13: return "Down";
-		case 14: return "Left";
-		case 15: return "Right";
-		case 16: return "Home";
-	}
+	if (id >= 0 && id < keysList.length)
+		return keysList[id];
 	return "Error";
+}
+
+const oldFunc = RPM.Common.KeyEvent.getKeyString;
+RPM.Common.KeyEvent.getKeyString = function (key)
+{
+	const str = oldFunc(key);
+	if (str.search(/\? \[ID=/) === 0)
+	{
+		const k = str.substring(6, str.indexOf("]"));
+		if (keysList.includes(k))
+			return "GPad." + k;
+	}
+	else
+		return str;
 }
 
 setInterval(function ()
@@ -91,20 +88,21 @@ setInterval(function ()
 				const lv = gp[i].axes[1];
 				const rh = gp[i].axes[2];
 				const rv = gp[i].axes[3];
-				if (RPM.Manager.Stack.top instanceof RPM.Scene.Map && !RPM.Scene.Map.current.loading)
+				if (RPM.Manager.Stack.top instanceof RPM.Scene.Map && !RPM.Scene.Map.current.loading && !RPM.Core.ReactionInterpreter.blockingHero)
 				{
-					const id = RPM.System.DynamicValue.createNumber(i);
-					if (Math.sqrt(lh * lh + lv * lv) > deadzone)
+					const d = Math.min(Math.max(RPM.Core.Game.current.variables[deadzone], 0.05), 0.95);
+					const id = RPM.System.DynamicValue.createNumber(i + 1);
+					if (Math.sqrt(lh * lh + lv * lv) > d)
 					{
 						const x = RPM.System.DynamicValue.createNumber(lh);
 						const y = RPM.System.DynamicValue.createNumber(lv);
-						RPM.Manager.Events.sendEventDetection(null, -1, false, leftStickEventID, [null, id, x, y]);
+						RPM.Core.Game.current.hero.receiveEvent(null, false, leftStickEventID, [null, id, x, y], RPM.Core.Game.current.heroStates);
 					}
-					if (Math.sqrt(rh * rh + rv * rv) > deadzone)
+					if (Math.sqrt(rh * rh + rv * rv) > d)
 					{
 						const x = RPM.System.DynamicValue.createNumber(rh);
 						const y = RPM.System.DynamicValue.createNumber(rv);
-						RPM.Manager.Events.sendEventDetection(null, -1, false, rightStickEventID, [null, id, x, y]);
+						RPM.Core.Game.current.hero.receiveEvent(null, false, rightStickEventID, [null, id, x, y], RPM.Core.Game.current.heroStates);
 					}
 				}
 				if (lv < -0.5 || rv < -0.5)
@@ -203,9 +201,4 @@ window.addEventListener("gamepadconnected", (e) =>
 	for (var i = 0; i < a.length; i++)
 		RPM.Datas.Settings.kb[c[a[i]].id] = c[a[i]].sc;
 	RPM.Datas.Settings.write();
-});
-
-RPM.Manager.Plugins.registerCommand(pluginName, "Change deadzone", (value) =>
-{
-	deadzone = Math.min(Math.max(value, 0.05), 0.95);
 });
