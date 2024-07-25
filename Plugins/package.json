@@ -11,7 +11,8 @@
 		"GLTF Loader",
 		"ModelLoadOnMapLoad",
 		"Raycaster",
-		"Light"
+		"Light",
+		"Waterfall"
 	],
 	"others": [
 		"Gamepad",
