@@ -43,6 +43,15 @@ inject(RPM.Scene.Menu, "close", async function () {
     RPM.Manager.Stack.isInMainMenu = false;
 })
 
+// Manual Autosave
+RPM.Manager.Plugins.registerCommand(pluginName, "Autosave", async function () {
+    if (allowSaves()) {
+        if (RPM.Manager.Plugins.getParameter(pluginName, "Autosave Method") === "Manual") {
+            await RPM.Core.Game.current.save(saveSlot);
+        }
+    }
+})
+
 // Stops player from overwrting the autosave slot
 inject(RPM.Scene.SaveGame, "action", async function (isKey, options) {
     if ((saveSlot == this.windowChoicesSlots.currentSelectedIndex + 1) && !canOverwrite) {
