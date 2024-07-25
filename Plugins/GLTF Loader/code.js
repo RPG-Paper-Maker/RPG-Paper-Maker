@@ -12,17 +12,17 @@ loader.setPath(RPM.Manager.Plugins.getParameter(pluginName, "Models directory pa
 var mixerList = [];
 var queue = [];
 var busy = false;
-var mapID = 0;
+var lastMap = null;
 
 setInterval(function ()
 {
 	if (RPM.Manager.Stack.top instanceof RPM.Scene.Map && !RPM.Scene.Map.current.loading)
 	{
 		const delta = clock.getDelta();
-		if (mapID != RPM.Scene.Map.current.id)
+		if (RPM.Scene.Map.current !== lastMap)
 		{
 			mixerList = [];
-			mapID = RPM.Scene.Map.current.id;
+			lastMap = RPM.Scene.Map.current;
 		}
 		for (var i = 1; i < mixerList.length; i++)
 			if (!!mixerList[i])
@@ -80,16 +80,20 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Load model", (id, filename) =>
 					id = result.object.id;
 					const model = gltf.scene;
 					const newModel = new THREE.Mesh().add(model);
-					const oldModel = getModel(id);
+					var oldModel = getModel(id);
 					const size = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
 					model.position.set(0, size.y * 0.5, 0);
 					model.animations = gltf.animations;
 					fixMaterial(model, true, true);
-					if (!!oldModel)
-						result.object.mesh.children.shift();
 					if (!!result.object.mesh)
+					{
+						if (!!oldModel)
+							result.object.mesh.children.shift();
 						while (result.object.mesh.children.length > 0)
 							newModel.add(result.object.mesh.children[0]);
+					}
+					else
+						oldModel = null;
 					if (!oldModel)
 					{
 						result.object.currentState.graphicID = 0;
@@ -198,7 +202,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Set scale", (id, scale) =>
 		callNext();
 });
 
-RPM.Manager.Plugins.registerCommand(pluginName, "Set visibility", (id, enabled) =>
+RPM.Manager.Plugins.registerCommand(pluginName, "Set opacity", (id, opacity) =>
 {
 	if (id == -1)
 		id = RPM.Core.ReactionInterpreter.currentObject.id;
@@ -206,7 +210,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Set visibility", (id, enabled) 
 	{
 		const model = getModel(id);
 		if (!!model)
-			model.visible = enabled;
+			model.children[0].material.opacity = opacity;
 		callNext();
 	});
 	if (!busy)
