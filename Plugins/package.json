@@ -12,7 +12,8 @@
 		"ModelLoadOnMapLoad",
 		"Raycaster",
 		"Light",
-		"Waterfall"
+		"Waterfall",
+		"Hide object on block view"
 	],
 	"others": [
 		"Gamepad",
