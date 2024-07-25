@@ -4,10 +4,9 @@ import { THREE } from "../../System/Globals.js";
 const pluginName = "Light";
 const inject = RPM.Manager.Plugins.inject;
 
-const path = "./Content/Datas/Scripts/Plugins/Light/shaders/";
+const path = RPM.Common.Paths.PLUGINS + pluginName + "/shaders/";
 
 var lightList = [];
-var mapID = 0;
 
 setInterval(function ()
 {
@@ -28,6 +27,7 @@ setInterval(function ()
 				const x = lightList[i].extraStuff.x;
 				const y = lightList[i].extraStuff.y;
 				const z = lightList[i].extraStuff.z;
+				console.log(x, y, z);
 				lightList[i].target.position.copy(RPM.Scene.Map.current.camera.targetPosition);
 				lightList[i].target.updateMatrixWorld();
 				lightList[i].position.set(x, y, z).multiplyScalar(RPM.Datas.Systems.SQUARE_SIZE * 20).add(RPM.Scene.Map.current.camera.targetPosition);
@@ -188,7 +188,10 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Add point light", (prop, id, x,
 		if (!!result)
 		{
 			if (!result.object.mesh)
+			{
 				result.object.mesh = new THREE.Mesh();
+				RPM.Scene.Map.current.scene.add(result.object.mesh);
+			}
 			result.object.mesh.add(light);
 			if (prop > 0)
 				RPM.Core.ReactionInterpreter.currentObject.properties[prop] = light;
@@ -212,7 +215,10 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Add spotlight", (prop, id, x, y
 		if (!!result)
 		{
 			if (!result.object.mesh)
+			{
 				result.object.mesh = new THREE.Mesh();
+				RPM.Scene.Map.current.scene.add(result.object.mesh);
+			}
 			result.object.mesh.add(light);
 			light.target = result.object.mesh;
 			if (prop > 0)
@@ -276,7 +282,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Set light position", (prop, x, 
 	if (light.isHemisphereLight)
 		return;
 	if (light.isDirectionalLight)
-		light.extraStuff.set(x, y, z);
+		light.extraStuff.set(x, y, z).normalize();
 	else
 		light.position.set(x * RPM.Datas.Systems.SQUARE_SIZE, y * RPM.Datas.Systems.SQUARE_SIZE, z * RPM.Datas.Systems.SQUARE_SIZE);
 });
