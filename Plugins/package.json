@@ -13,7 +13,8 @@
 		"Raycaster",
 		"Light",
 		"Waterfall",
-		"Hide object on block view"
+		"Hide object on block view",
+		"Mouse lock and raycaster"
 	],
 	"others": [
 		"Gamepad",
