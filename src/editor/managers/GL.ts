@@ -10,11 +10,11 @@
 */
 
 import * as THREE from 'three';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { Paths, Utils } from '../common';
 import { Platform } from '../common/Platform';
 
@@ -28,9 +28,7 @@ class GL {
 	public static DRACOLoader = new DRACOLoader();
 	public static GLTFExporter = new GLTFExporter();
 	public static raycaster = new THREE.Raycaster();
-	public static mapEditorContext: GL;
-	public static mainPreviewerContext: GL;
-	public static listPreviewerContext: GL;
+	public static mainContext: GL;
 	public static MATERIAL_EMPTY = this.loadTextureEmpty();
 	public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 	public parent!: HTMLElement;
@@ -156,19 +154,30 @@ class GL {
 		return material;
 	}
 
-	initialize(id: string, clearColor: string = '#211d2b', colorAlpha: number = 1) {
-		const parent = document.getElementById(id);
-		if (parent === null) {
-			throw new Error('No id ' + id + ' found in document for GL renderer.');
-		}
-		this.parent = parent;
+	initialize(id?: string) {
 		if (!this.renderer) {
+			const parent = document.getElementById(id ?? 'root');
+			if (parent === null) {
+				throw new Error('No id ' + id + ' found in document for GL renderer.');
+			}
+			this.parent = parent;
 			this.renderer = new THREE.WebGLRenderer({ alpha: true });
 			this.renderer.setPixelRatio(window.devicePixelRatio);
 			this.renderer.autoClear = false;
-			this.renderer.setSize(this.parent.clientWidth, this.parent.clientHeight);
-			this.renderer.setClearColor(clearColor, colorAlpha);
+			this.renderer.setSize(
+				id ? this.parent.clientWidth : window.innerWidth,
+				id ? this.parent.clientHeight : window.innerHeight
+			);
+			this.renderer.setClearColor(0x000000, 0);
 			this.renderer.shadowMap.enabled = true;
+			if (id === undefined) {
+				this.renderer.domElement.classList.add('canvas-renderer');
+				this.renderer.autoClear = false;
+				this.renderer.setScissorTest(false);
+				this.renderer.setClearColor(0xffffff, 0);
+				this.renderer.clear(true, true);
+				this.renderer.setScissorTest(true);
+			}
 		}
 		this.parent.appendChild(this.renderer.domElement);
 	}

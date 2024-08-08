@@ -11,9 +11,22 @@
 
 import * as THREE from 'three';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
-import { Manager, MapElement, Model, Scene } from '../Editor';
-import { Inputs } from '../managers';
 import { Base } from '.';
+import {
+	ACTION_KIND,
+	ArrayUtils,
+	Constants,
+	ELEMENT_MAP_KIND,
+	ELEMENT_POSITION_KIND,
+	LAYER_KIND,
+	Mathf,
+	MOBILE_ACTION,
+	Paths,
+	RAYCASTING_LAYER,
+	SPRITE_WALL_TYPE,
+	Utils,
+} from '../common';
+import { Platform } from '../common/Platform';
 import {
 	Cursor,
 	CustomGeometry,
@@ -28,23 +41,10 @@ import {
 	TextureBundle,
 	UndoRedoState,
 } from '../core';
-import {
-	Constants,
-	ELEMENT_MAP_KIND,
-	MOBILE_ACTION,
-	RAYCASTING_LAYER,
-	Paths,
-	Mathf,
-	Utils,
-	ArrayUtils,
-	ELEMENT_POSITION_KIND,
-	ACTION_KIND,
-	LAYER_KIND,
-	SPRITE_WALL_TYPE,
-} from '../common';
 import { CursorWall } from '../core/CursorWall';
-import { Platform } from '../common/Platform';
+import { Manager, MapElement, Model, Scene } from '../Editor';
 import i18n from '../i18n/i18n';
+import { Inputs } from '../managers';
 
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
@@ -190,7 +190,7 @@ class Map extends Base {
 	}
 
 	async load() {
-		Manager.GL.mapEditorContext.renderer.setClearColor('#8cc3ed');
+		this.scene.background = new THREE.Color(0x8cc3ed);
 
 		// Tileset texture material
 		this.materialTileset = await Manager.GL.loadTexture('./Assets/plains-woods.png');
@@ -233,10 +233,7 @@ class Map extends Base {
 		this.syncCursorGrid();
 
 		// Transform controls
-		this.transformControls = new TransformControls(
-			this.camera.getThreeCamera(),
-			Manager.GL.mapEditorContext.renderer.domElement
-		);
+		this.transformControls = new TransformControls(this.camera.getThreeCamera(), this.canvas!);
 		this.transformControls.setTranslationSnap(1);
 		if (Scene.Map.isTransforming()) {
 			Scene.Map.current!.setTransformMode(Project.current!.settings.mapEditorCurrentActionIndex);
@@ -961,11 +958,10 @@ class Map extends Base {
 		const isSpriteOptionSelected =
 			Scene.Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
 			Scene.Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_WALL;
-		const pointer = new THREE.Vector2();
-		if (Manager.GL.mapEditorContext.parent) {
-			pointer.x = (Inputs.getPositionX() / Manager.GL.mapEditorContext.canvasWidth) * 2 - 1;
-			pointer.y = -(Inputs.getPositionY() / Manager.GL.mapEditorContext.canvasHeight) * 2 + 1;
-		}
+		const pointer = new THREE.Vector2(
+			(Inputs.getPositionX() / this.canvas!.clientWidth) * 2 - 1,
+			-(Inputs.getPositionY() / this.canvas!.clientHeight) * 2 + 1
+		);
 		Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
 		let layer = RAYCASTING_LAYER.LANDS;
 		if (Scene.Map.isRemoving() && this.rectangleStartPosition === null) {
@@ -1299,19 +1295,17 @@ class Map extends Base {
 
 	addMobileKeyMove() {
 		const offset =
-			((Constants.CURSOR_MOVE_MOBILE_PERCENT / 100) *
-				(Manager.GL.mapEditorContext.canvasWidth + Manager.GL.mapEditorContext.canvasHeight)) /
-			2;
+			((Constants.CURSOR_MOVE_MOBILE_PERCENT / 100) * (this.canvas!.clientWidth + this.canvas!.clientHeight)) / 2;
 		if (Inputs.getPositionX() < offset) {
 			Inputs.keys.push('a');
 		}
-		if (Inputs.getPositionX() > Manager.GL.mapEditorContext.canvasWidth - offset) {
+		if (Inputs.getPositionX() > this.canvas!.clientWidth - offset) {
 			Inputs.keys.push('d');
 		}
 		if (Inputs.getPositionY() < offset) {
 			Inputs.keys.push('w');
 		}
-		if (Inputs.getPositionY() > Manager.GL.mapEditorContext.canvasHeight - offset) {
+		if (Inputs.getPositionY() > this.canvas!.clientHeight - offset) {
 			Inputs.keys.push('s');
 		}
 	}
@@ -1620,9 +1614,9 @@ class Map extends Base {
 
 	draw3D() {
 		if (this.needsClose) {
-			Manager.GL.mapEditorContext.renderer.setClearColor('#2e324a');
+			this.scene.background = new THREE.Color(0x2e324a);
 		}
-		super.draw3D(Manager.GL.mapEditorContext);
+		super.draw3D(Manager.GL.mainContext);
 	}
 
 	drawCursorCoords() {
@@ -1647,7 +1641,7 @@ class Map extends Base {
 			Scene.Map.ctxHUD!.textBaseline = 'bottom';
 			const space = 18;
 			const padding = 10;
-			const y = Manager.GL.mapEditorContext.canvasHeight - (lines.length - 1) * space - padding;
+			const y = this.canvas!.clientHeight - (lines.length - 1) * space - padding;
 			for (const [index, line] of lines.entries()) {
 				Utils.drawStrokedText(Scene.Map.ctxHUD!, line, padding, y + index * space);
 			}

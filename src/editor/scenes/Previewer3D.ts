@@ -10,10 +10,10 @@
 */
 
 import * as THREE from 'three';
-import { Manager, MapElement, Scene } from '../Editor';
 import { Base } from '.';
-import { CustomGeometry, CustomGeometryFace, Position, Position3D, Project, Rectangle, TextureBundle } from '../core';
 import { ELEMENT_MAP_KIND, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
+import { CustomGeometry, CustomGeometryFace, Position, Position3D, Project, Rectangle, TextureBundle } from '../core';
+import { Manager, MapElement, Scene } from '../Editor';
 import { Object3D } from '../mapElements';
 
 class Previewer3D extends Base {
@@ -23,6 +23,7 @@ class Previewer3D extends Base {
 
 	public id: string;
 	public canvas!: HTMLElement;
+	public parentCanvas!: HTMLElement;
 	public material: THREE.MeshPhongMaterial | null = null;
 	public sunLight!: THREE.DirectionalLight;
 	public meshes: THREE.Mesh[] = [];
@@ -66,16 +67,16 @@ class Previewer3D extends Base {
 		}
 	}
 
-	async loadFloor(GL: Manager.GL, texture: Rectangle) {
+	async loadFloor(texture: Rectangle) {
 		await this.loadMaterial();
 		const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
 		const floor = MapElement.Floor.create(texture);
 		const geometry = new CustomGeometry();
 		floor.updateGeometry(geometry, new Position(), width, height, 0);
-		this.addToScene(GL, geometry);
+		this.addToScene(geometry);
 	}
 
-	async loadAutotile(GL: Manager.GL, autotileID: number, texture: Rectangle) {
+	async loadAutotile(autotileID: number, texture: Rectangle) {
 		const autotile = Project.current!.specialElements.getAutotileByID(autotileID);
 		if (!autotile) {
 			this.clear();
@@ -98,20 +99,20 @@ class Previewer3D extends Base {
 				new Position(),
 				MapElement.Autotile.create(autotileID, MapElement.Autotiles.PREVIEW_TILE, texture)
 			);
-			this.addToScene(GL, autotiles.meshes[0][0].geometry as CustomGeometry, autotiles.bundle.material);
+			this.addToScene(autotiles.meshes[0][0].geometry as CustomGeometry, autotiles.bundle.material);
 		}
 	}
 
-	async loadSprite(GL: Manager.GL, texture: Rectangle, kind: ELEMENT_MAP_KIND) {
+	async loadSprite(texture: Rectangle, kind: ELEMENT_MAP_KIND) {
 		await this.loadMaterial();
 		const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
 		const sprite = MapElement.Sprite.create(kind, texture);
 		const geometry = new CustomGeometryFace();
 		sprite.updateGeometry(geometry, width, height, new Position(), 0, true, null);
-		this.addToScene(GL, geometry);
+		this.addToScene(geometry);
 	}
 
-	async loadWall(GL: Manager.GL, wallID: number) {
+	async loadWall(wallID: number) {
 		const wall = Project.current!.specialElements.getWallByID(wallID);
 		if (!wall) {
 			this.clear();
@@ -128,19 +129,11 @@ class Previewer3D extends Base {
 			count = spriteLeft.updateGeometry(geometry, new Position(), width, height, count);
 			count = spriteMiddle.updateGeometry(geometry, new Position(1), width, height, count);
 			spriteRight.updateGeometry(geometry, new Position(2), width, height, count);
-			this.addToScene(GL, geometry, textureWall);
+			this.addToScene(geometry, textureWall);
 		}
 	}
 
-	async loadMountain(
-		GL: Manager.GL,
-		mountainID: number,
-		textureFloor: Rectangle,
-		ws: number,
-		wp: number,
-		hs: number,
-		hp: number
-	) {
+	async loadMountain(mountainID: number, textureFloor: Rectangle, ws: number, wp: number, hs: number, hp: number) {
 		const wall = Project.current!.specialElements.getMountainByID(mountainID);
 		if (!wall) {
 			this.clear();
@@ -153,24 +146,18 @@ class Previewer3D extends Base {
 			const mountainElement = MapElement.Mountain.create(mountainID, ws, wpercent, hs, hpercent);
 			let geometry = new CustomGeometry();
 			mountainElement.updateGeometry(geometry, new Position(), 0);
-			this.addToScene(GL, geometry, textureMountain);
+			this.addToScene(geometry, textureMountain);
 			await this.loadMaterial();
 			const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
 			const floor = MapElement.Floor.create(new Rectangle(textureFloor.x, textureFloor.y, 1, 1));
 			geometry = new CustomGeometry();
 			const floorPosition = new Position(0, hs, hpercent);
 			floor.updateGeometry(geometry, floorPosition, width, height, 0);
-			this.addToScene(
-				GL,
-				geometry,
-				this.material,
-				false,
-				new THREE.Vector3(0, (floorPosition.getTotalY() / 2) * 16)
-			);
+			this.addToScene(geometry, this.material, false, new THREE.Vector3(0, (floorPosition.getTotalY() / 2) * 16));
 		}
 	}
 
-	async loadObject3D(GL: Manager.GL, object3DID: number) {
+	async loadObject3D(object3DID: number) {
 		const object = Project.current!.specialElements.getObject3DByID(object3DID);
 		if (!object) {
 			this.clear();
@@ -183,11 +170,10 @@ class Previewer3D extends Base {
 			await (object3DElement as MapElement.Object3DCustom).loadShape();
 		}
 		object3DElement.updateGeometry(geometry, new Position(), 0);
-		this.addToScene(GL, geometry, texture);
+		this.addToScene(geometry, texture);
 	}
 
 	addToScene(
-		GL: Manager.GL,
 		geometry: CustomGeometry | CustomGeometryFace,
 		material: THREE.MeshPhongMaterial | null = this.material,
 		needsClear = true,
@@ -209,7 +195,6 @@ class Previewer3D extends Base {
 				mesh.position.set(position.x, position.y, position.z);
 			}
 			this.updateCamera();
-			this.draw3D(GL);
 		}
 	}
 
@@ -275,10 +260,15 @@ class Previewer3D extends Base {
 
 	draw3DCut(GL: Manager.GL) {
 		if (GL.renderer && this.canvas) {
-			const { bottom, width, height } = this.canvas.getBoundingClientRect();
+			const { left, bottom, width, height } = this.canvas.getBoundingClientRect();
 			const domRect = GL.renderer.domElement.getBoundingClientRect();
-			GL.renderer.setViewport(0, domRect.height - bottom + domRect.top, width, height);
-			GL.renderer.setScissor(0, domRect.height - bottom + domRect.top, width, height);
+			if (this.parentCanvas) {
+				const rect = this.parentCanvas.getBoundingClientRect();
+				GL.renderer.setScissor(rect.left, domRect.height - rect.bottom + domRect.top, rect.width, rect.height);
+			} else {
+				GL.renderer.setScissor(left, domRect.height - bottom + domRect.top, width, height);
+			}
+			GL.renderer.setViewport(left, domRect.height - bottom + domRect.top, width, height);
 			GL.renderer.render(this.scene, this.camera.getThreeCamera());
 		}
 	}

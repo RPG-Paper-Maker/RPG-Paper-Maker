@@ -9,17 +9,17 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useState } from 'react';
-import { Manager, Scene } from '../../Editor';
-import Loader from '../Loader';
-import { setNeedsReloadPageUpdate, setProjects } from '../../store';
+import localforage from 'localforage';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Constants, IO, LOCAL_FORAGE, Paths, Utils } from '../../common';
+import { Platform } from '../../common/Platform';
 import { LocalFile, Picture2D, Project } from '../../core';
 import { EngineSettings } from '../../data/EngineSettings';
-import { Platform } from '../../common/Platform';
-import localforage from 'localforage';
+import { Manager, Scene } from '../../Editor';
 import i18n, { LANGUAGES_SHORTS, loadLocales } from '../../i18n/i18n';
+import { setNeedsReloadPageUpdate, setProjects } from '../../store';
+import Loader from '../Loader';
 
 type Props = {
 	setLoaded: (v: boolean) => void;
@@ -111,9 +111,7 @@ function PanelLoading({ setLoaded }: Props) {
 	};
 
 	const initializeGL = async () => {
-		Manager.GL.mapEditorContext = new Manager.GL();
-		Manager.GL.mainPreviewerContext = new Manager.GL();
-		Manager.GL.listPreviewerContext = new Manager.GL();
+		Manager.GL.mainContext = new Manager.GL();
 		await Manager.GL.initializeShaders();
 	};
 

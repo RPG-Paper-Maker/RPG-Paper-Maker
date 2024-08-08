@@ -49,6 +49,8 @@ function GraphicsSelector({
 		graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX ||
 		graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE;
 
+	const isObject3D = graphicsKind === ELEMENT_MAP_KIND.OBJECT3D;
+
 	const updatePicture = useCallback(
 		async (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => {
 			const img = await Picture2D.loadImage(
@@ -127,6 +129,10 @@ function GraphicsSelector({
 		}
 	};
 
+	const handleChangeGraphics = (kind: number) => {
+		onChangeGraphicsKind(kind);
+	};
+
 	useEffect(() => {
 		if (isCharacter) {
 			const isTileset = graphicsID === 0;
@@ -153,7 +159,7 @@ function GraphicsSelector({
 				</div>
 				<Dropdown
 					selectedID={graphicsKind}
-					onChange={onChangeGraphicsKind}
+					onChange={handleChangeGraphics}
 					options={Model.Base.GRAPHICS_OPTIONS}
 					translateOptions
 				/>

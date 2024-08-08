@@ -64,6 +64,7 @@
 	font-smooth: never;
 	-webkit-font-smoothing: none;
 	pointer-events: none;
+	z-index: 1;
 }
 
 #canvas-rendering {

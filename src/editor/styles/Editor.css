@@ -292,3 +292,14 @@ code {
 	opacity: 0.4;
 	cursor: initial;
 }
+
+.canvas-renderer {
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 0;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	pointer-events: none;
+}

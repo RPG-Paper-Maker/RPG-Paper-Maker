@@ -9,18 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useRef, useEffect } from 'react';
-import { Manager, MapElement, Scene } from '../Editor';
+import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
 import { ELEMENT_MAP_KIND } from '../common';
+import { Manager, MapElement, Scene } from '../Editor';
+import { RootState } from '../store';
 
 type Props = {
 	id: string;
-	onHeightUpdated: (height: number) => void;
+	onHeightUpdated?: (height: number) => void;
 };
 
-function Previewer3D({ id, onHeightUpdated }: Props) {
+function MainPreviewer3D({ id, onHeightUpdated }: Props) {
 	const refCanvas = useRef<HTMLDivElement>(null);
 
 	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
@@ -43,18 +43,16 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const initialize = async () => {
-		Manager.GL.mainPreviewerContext.initialize(id);
-		document.onselectstart = () => {
-			return false;
-		}; // prevent weird drag ghost picture
-		const scene = new Scene.Previewer3D(id);
-		scene.canvas = Manager.GL.mainPreviewerContext.parent;
-		Scene.Previewer3D.mainPreviewerScene = scene;
-		scene.loading = true;
-		await scene.load();
-		await update();
-		resize();
-		loop();
+		if (refCanvas.current) {
+			const scene = new Scene.Previewer3D(id);
+			scene.canvas = refCanvas.current;
+			Scene.Previewer3D.mainPreviewerScene = scene;
+			scene.loading = true;
+			await scene.load();
+			await update();
+			resize();
+			loop();
+		}
 	};
 
 	const update = async () => {
@@ -63,29 +61,22 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 			if (currentMapID && Scene.Map.isDrawing()) {
 				switch (currentMapElementKind) {
 					case ELEMENT_MAP_KIND.FLOOR:
-						await scene.loadFloor(Manager.GL.mainPreviewerContext, currentTilesetFloorTexture);
+						await scene.loadFloor(currentTilesetFloorTexture);
 						break;
 					case ELEMENT_MAP_KIND.AUTOTILE:
-						await scene
-							.loadAutotile(Manager.GL.mainPreviewerContext, currentAutotileID, currentAutotileTexture)
-							.catch(console.error);
+						await scene.loadAutotile(currentAutotileID, currentAutotileTexture).catch(console.error);
 						break;
 					case ELEMENT_MAP_KIND.SPRITE_FACE:
 					case ELEMENT_MAP_KIND.SPRITE_FIX:
 					case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
 					case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-						await scene.loadSprite(
-							Manager.GL.mainPreviewerContext,
-							currentTilesetSpriteTexture,
-							currentMapElementKind
-						);
+						await scene.loadSprite(currentTilesetSpriteTexture, currentMapElementKind);
 						break;
 					case ELEMENT_MAP_KIND.SPRITE_WALL:
-						await scene.loadWall(Manager.GL.mainPreviewerContext, currentWallID);
+						await scene.loadWall(currentWallID);
 						break;
 					case ELEMENT_MAP_KIND.MOUNTAIN:
 						await scene.loadMountain(
-							Manager.GL.mainPreviewerContext,
 							currentMountainID,
 							currentTilesetFloorTexture,
 							currentMountainWidthSquares,
@@ -95,7 +86,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 						);
 						break;
 					case ELEMENT_MAP_KIND.OBJECT3D:
-						await scene.loadObject3D(Manager.GL.mainPreviewerContext, currentObject3DID);
+						await scene.loadObject3D(currentObject3DID);
 						break;
 					default:
 						scene.clear();
@@ -105,26 +96,19 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 				if (selectedMapElement) {
 					switch (selectedMapElement.kind) {
 						case ELEMENT_MAP_KIND.FLOOR:
-							await scene.loadFloor(
-								Manager.GL.mainPreviewerContext,
-								(selectedMapElement as MapElement.Floor).texture
-							);
+							await scene.loadFloor((selectedMapElement as MapElement.Floor).texture);
 							break;
 						case ELEMENT_MAP_KIND.SPRITE_FACE:
 						case ELEMENT_MAP_KIND.SPRITE_FIX:
 						case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
 						case ELEMENT_MAP_KIND.SPRITE_QUADRA:
 							await scene.loadSprite(
-								Manager.GL.mainPreviewerContext,
 								(selectedMapElement as MapElement.Sprite).texture,
 								selectedMapElement.kind
 							);
 							break;
 						case ELEMENT_MAP_KIND.OBJECT3D:
-							await scene.loadObject3D(
-								Manager.GL.mainPreviewerContext,
-								(selectedMapElement as MapElement.Object3D).id
-							);
+							await scene.loadObject3D((selectedMapElement as MapElement.Object3D).id);
 							break;
 					}
 				} else {
@@ -139,21 +123,21 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		if (scene) {
 			requestAnimationFrame(loop);
 			scene.update();
-			scene.draw3D(Manager.GL.mainPreviewerContext);
+			scene.draw3D(Manager.GL.mainContext);
 		}
 	};
 
 	const resize = () => {
-		resizeForced(-1, -1);
+		resizeForced();
 	};
 
-	const resizeForced = (width = -1, height = -1) => {
-		Manager.GL.mainPreviewerContext.resize(true, width, height);
+	const resizeForced = () => {
 		const scene = Scene.Previewer3D.mainPreviewerScene;
-		if (scene) {
-			scene.camera.resizeGL(Manager.GL.mainPreviewerContext);
+		const canvas = refCanvas.current;
+		if (scene && canvas) {
+			scene.camera.resizeGL(Manager.GL.mainContext, canvas.clientWidth, canvas.clientHeight);
 			scene.update();
-			scene.draw3D(Manager.GL.mainPreviewerContext);
+			scene.draw3D(Manager.GL.mainContext);
 		}
 	};
 
@@ -161,8 +145,8 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		if (refCanvas.current) {
 			const width = refCanvas.current.getBoundingClientRect().width;
 			refCanvas.current.style.height = `${width}px`;
-			resizeForced(width, width);
-			onHeightUpdated(width);
+			resizeForced();
+			onHeightUpdated?.(width);
 		}
 	});
 
@@ -197,7 +181,7 @@ function Previewer3D({ id, onHeightUpdated }: Props) {
 		// eslint-disable-next-line
 	}, []);
 
-	return <div className='fill-width' ref={refCanvas} id={id}></div>;
+	return <div className='fill-width' ref={refCanvas} id={id} />;
 }
 
-export default Previewer3D;
+export default MainPreviewer3D;

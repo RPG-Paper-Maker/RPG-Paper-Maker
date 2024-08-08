@@ -10,10 +10,12 @@
 */
 
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { ACTION_KIND, ELEMENT_MAP_KIND, KEY, SPECIAL_KEY } from '../common';
+import { Project } from '../core';
 import { Manager, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
-import '../styles/MapEditor.css';
-import { useDispatch, useSelector } from 'react-redux';
 import {
 	RootState,
 	setNeedsUpdateMapEditor,
@@ -23,12 +25,10 @@ import {
 	setUndoRedoLength,
 	triggerTreeMap,
 } from '../store';
-import Loader from './Loader';
-import { ACTION_KIND, ELEMENT_MAP_KIND, KEY, SPECIAL_KEY } from '../common';
+import '../styles/MapEditor.css';
 import ContextMenu from './ContextMenu';
-import { useTranslation } from 'react-i18next';
 import DialogMapObject from './dialogs/DialogMapObject';
-import { Project } from '../core';
+import Loader from './Loader';
 
 function MapEditor() {
 	const { t } = useTranslation();
@@ -93,6 +93,7 @@ function MapEditor() {
 			setFirstLoading(true);
 			Scene.Map.current = new Scene.Map(currentMapTag);
 			Scene.Map.current.loading = true;
+			Scene.Map.current.canvas = refCanvas?.current;
 			await Scene.Map.current.load();
 			const undoRedoIndex = await Manager.UndoRedo.getCurrentCurrentIndex();
 			const undoRedoLength = await Manager.UndoRedo.getStatesLength();
@@ -146,18 +147,17 @@ function MapEditor() {
 	};
 
 	const resize = () => {
-		Manager.GL.mapEditorContext.resize();
-		if (Scene.Map.current) {
-			Scene.Map.current.camera.resizeGL(Manager.GL.mapEditorContext);
-		}
 		const canvas = refCanvas.current;
 		const canvasHUD = refCanvasHUD.current;
 		if (canvas && canvasHUD) {
+			if (Scene.Map.current) {
+				Scene.Map.current.camera.resizeGL(Manager.GL.mainContext, canvas.clientWidth, canvas.clientHeight);
+			}
 			const ratio = window.devicePixelRatio;
-			canvasHUD.width = Manager.GL.mapEditorContext.canvasWidth * ratio;
-			canvasHUD.height = Manager.GL.mapEditorContext.canvasHeight * ratio;
-			canvasHUD.style.width = `${Manager.GL.mapEditorContext.canvasWidth}px`;
-			canvasHUD.style.height = `${Manager.GL.mapEditorContext.canvasHeight}px`;
+			canvasHUD.width = canvas.clientWidth * ratio;
+			canvasHUD.height = canvas.clientHeight * ratio;
+			canvasHUD.style.width = `${canvas.clientWidth}px`;
+			canvasHUD.style.height = `${canvas.clientHeight}px`;
 			Scene.Map.ctxHUD!.setTransform(ratio, 0, 0, ratio, 0, 0);
 		}
 	};
@@ -206,7 +206,7 @@ function MapEditor() {
 			Scene.Map.ctxHUD = canvasHUD.getContext('2d');
 			Scene.Map.ctxRendering = canvasRendering.getContext('2d', { willReadFrequently: true });
 			const removeInputs = Inputs.initialize(canvas);
-			Manager.GL.mapEditorContext.initialize('canvas-map-editor');
+			Manager.GL.mainContext.initialize();
 			resize();
 			window.addEventListener('resize', resize);
 			loop();

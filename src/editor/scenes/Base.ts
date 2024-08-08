@@ -17,6 +17,7 @@ class Base {
 	public scene: THREE.Scene;
 	public camera: Camera;
 	public loading = true;
+	public canvas?: HTMLElement | null;
 
 	constructor(tag?: Model.TreeMapTag) {
 		this.scene = new THREE.Scene();
@@ -41,8 +42,13 @@ class Base {
 
 	draw3D(GL: Manager.GL) {
 		if (GL.renderer) {
-			GL.renderer.clear();
-			GL.renderer.render(this.scene, this.camera.getThreeCamera());
+			if (this.canvas) {
+				const { left, bottom, width, height } = this.canvas.getBoundingClientRect();
+				const domRect = GL.renderer.domElement.getBoundingClientRect();
+				GL.renderer.setViewport(left, domRect.height - bottom + domRect.top, width, height);
+				GL.renderer.setScissor(left, domRect.height - bottom + domRect.top, width, height);
+				GL.renderer.render(this.scene, this.camera.getThreeCamera());
+			}
 		}
 	}
 

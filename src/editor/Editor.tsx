@@ -29,6 +29,7 @@ function Editor() {
 			<I18nextProvider i18n={i18n}>
 				{loaded ? (
 					<Flex
+						id='main'
 						column
 						className='fill-space'
 						onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => e.preventDefault()}

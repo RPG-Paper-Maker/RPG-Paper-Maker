@@ -14,7 +14,7 @@ import { useSelector } from 'react-redux';
 import { ACTION_KIND, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
 import { RootState } from '../../store';
 import Flex from '../Flex';
-import Previewer3D from '../Previewer3D';
+import MainPreviewer3D from '../MainPreviewer3D';
 import TextureSquareSelector from '../TextureSquareSelector';
 import PanelSettingsMountains from './PanelSettingsMountains';
 import PanelSpecialElementsSelection from './PanelSpecialElementsSelection';
@@ -105,7 +105,7 @@ function PanelTextures({ visible }: Props) {
 				{getMainContent()}
 			</div>
 			<div ref={refPreviewer} className='flex mobile-hidden'>
-				<Previewer3D id='texture-previewer' onHeightUpdated={handlePreviewer3DHeightUpdated} />
+				<MainPreviewer3D id='texture-previewer' onHeightUpdated={handlePreviewer3DHeightUpdated} />
 			</div>
 		</div>
 	);

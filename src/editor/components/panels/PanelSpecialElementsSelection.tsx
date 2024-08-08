@@ -100,21 +100,15 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	const initializeCanvas = async () => {
 		const content = contentRef.current;
 		if (content) {
-			const isRendered = !!Manager.GL.listPreviewerContext.renderer;
-			Manager.GL.listPreviewerContext.initialize('list-previewer');
-			Manager.GL.listPreviewerContext.renderer.setSize(30, filteredList.length * ELEMENT_HEIGHT, true);
+			//Manager.GL.listPreviewerContext.renderer.setSize(30, filteredList.length * ELEMENT_HEIGHT, true);
+			/*
+			Manager.GL.listPreviewerContext.renderer.autoClear = false;
+			Manager.GL.listPreviewerContext.renderer.domElement.classList.add('canvas-list-previewer');
+			Manager.GL.listPreviewerContext.renderer.setScissorTest(false);
+			Manager.GL.listPreviewerContext.renderer.setClearColor(0xffffff, 0);
+			Manager.GL.listPreviewerContext.renderer.clear(true, true);
+			Manager.GL.listPreviewerContext.renderer.setScissorTest(true);*/
 
-			if (!isRendered) {
-				document.onselectstart = () => {
-					return false;
-				}; // prevent weird drag ghost picture
-				Manager.GL.listPreviewerContext.renderer.autoClear = false;
-				Manager.GL.listPreviewerContext.renderer.domElement.classList.add('canvas-list-previewer');
-				Manager.GL.listPreviewerContext.renderer.setScissorTest(false);
-				Manager.GL.listPreviewerContext.renderer.setClearColor(0xffffff, 0);
-				Manager.GL.listPreviewerContext.renderer.clear(true, true);
-				Manager.GL.listPreviewerContext.renderer.setScissorTest(true);
-			}
 			await updateCanvas();
 			loop();
 		}
@@ -122,7 +116,6 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 
 	const loop = () => {
 		if (Scene.Previewer3D.canDrawList) {
-			Manager.GL.listPreviewerContext.renderer.clear();
 			if (Scene.Previewer3D.listScenes.size > 0) {
 				for (const [, scene] of Scene.Previewer3D.listScenes) {
 					scene.camera.perspectiveCamera.aspect = 1;
@@ -130,7 +123,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 					if (!Scene.Previewer3D.canDrawList) {
 						break;
 					}
-					scene.draw3DCut(Manager.GL.listPreviewerContext);
+					scene.draw3DCut(Manager.GL.mainContext);
 				}
 				requestAnimationFrame(loop);
 			}
@@ -138,27 +131,31 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	};
 
 	const updateCanvas = async () => {
-		for (const element of filteredList) {
-			const id = getCanvasID(element.id);
-			const canvas = document.getElementById(id);
-			let scene = Scene.Previewer3D.listScenes.get(id);
-			if (scene) {
-				if (canvas) {
-					scene.canvas = canvas;
-				}
-			} else {
-				scene = new Scene.Previewer3D(id);
-				if (canvas) {
-					scene.canvas = canvas;
-					scene.isCut = true;
-					await scene.load();
-					Scene.Previewer3D.listScenes.set(scene.id, scene);
-					await scene.loadObject3D(Manager.GL.listPreviewerContext, element.id);
-					scene.camera.resizeGL(
-						Manager.GL.listPreviewerContext,
-						scene.canvas.clientWidth,
-						scene.canvas.clientHeight
-					);
+		const content = contentRef.current;
+		if (content) {
+			for (const element of filteredList) {
+				const id = getCanvasID(element.id);
+				const canvas = document.getElementById(id);
+				let scene = Scene.Previewer3D.listScenes.get(id);
+				if (scene) {
+					if (canvas) {
+						scene.canvas = canvas;
+					}
+				} else {
+					scene = new Scene.Previewer3D(id);
+					if (canvas) {
+						scene.canvas = canvas;
+						scene.parentCanvas = content;
+						scene.isCut = true;
+						await scene.load();
+						Scene.Previewer3D.listScenes.set(scene.id, scene);
+						await scene.loadObject3D(element.id);
+						scene.camera.resizeGL(
+							Manager.GL.mainContext,
+							scene.canvas.clientWidth,
+							scene.canvas.clientHeight
+						);
+					}
 				}
 			}
 		}
@@ -283,8 +280,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	useEffect(() => {
 		const content = contentRef.current;
 		if (content) {
-			if (displayCanvas && Manager.GL.listPreviewerContext.renderer) {
-				Manager.GL.listPreviewerContext.renderer.setSize(30, filteredList.length * ELEMENT_HEIGHT, true);
+			if (displayCanvas) {
 				updateCanvas().catch(console.error);
 			}
 			content.addEventListener('scroll', handleScroll);
