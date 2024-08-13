@@ -11,15 +11,18 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Model, Scene } from '../Editor';
+import { Manager, Model, Scene } from '../Editor';
 import { ELEMENT_MAP_KIND, PICTURE_KIND } from '../common';
 import { Picture2D, Project, Rectangle } from '../core';
 import '../styles/GraphicsSelector.css';
 import Dropdown from './Dropdown';
 import Flex from './Flex';
+import PreviewerObject3D from './PreviewerObject3D';
+import DialogObjects3DPreview from './dialogs/DialogObjects3DPreview';
 import DialogPicturesPreview from './dialogs/DialogPicturesPreview';
 
 type Props = {
+	sceneID: string;
 	graphicsID: number;
 	graphicsIndexX: number;
 	graphicsIndexY: number;
@@ -30,6 +33,7 @@ type Props = {
 };
 
 function GraphicsSelector({
+	sceneID,
 	graphicsID,
 	graphicsIndexX,
 	graphicsIndexY,
@@ -40,7 +44,8 @@ function GraphicsSelector({
 }: Props) {
 	const { t } = useTranslation();
 
-	const [needOpenDialog, setNeedOpenDialog] = useState(false);
+	const [isOpenDialogPictures, setIsOpenDialogPictures] = useState(false);
+	const [isOpenDialogObjects3D, setIsOpenDialogObjects3D] = useState(false);
 
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 
@@ -119,7 +124,11 @@ function GraphicsSelector({
 	};
 
 	const handleDoubleClick = () => {
-		setNeedOpenDialog(true);
+		if (isCharacter) {
+			setIsOpenDialogPictures(true);
+		} else {
+			setIsOpenDialogObjects3D(true);
+		}
 	};
 
 	const handleAcceptPictures = (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => {
@@ -129,8 +138,13 @@ function GraphicsSelector({
 		}
 	};
 
+	const handleAcceptObjects3D = (object3D: Model.Object3D) => {
+		onUpdateGraphics(object3D.id, new Rectangle(), false);
+	};
+
 	const handleChangeGraphics = (kind: number) => {
 		onChangeGraphicsKind(kind);
+		onUpdateGraphics(1, new Rectangle(), false);
 	};
 
 	useEffect(() => {
@@ -149,6 +163,16 @@ function GraphicsSelector({
 		}
 	}, [graphicsID, graphicsIndexX, graphicsIndexY, isCharacter, rectTileset, updatePicture]);
 
+	useEffect(() => {
+		if (isOpenDialogObjects3D) {
+			Manager.GL.layerOneContext.renderer.clear();
+		}
+	}, [isOpenDialogObjects3D]);
+
+	useEffect(() => {
+		Manager.GL.layerOneContext.renderer.clear();
+	}, [graphicsKind]);
+
 	return (
 		<>
 			<Flex column spaced>
@@ -156,6 +180,9 @@ function GraphicsSelector({
 				<div className='graphics-selector' onDoubleClick={handleDoubleClick}>
 					<div className='graphics-selector-border' />
 					{isCharacter && <canvas ref={refCanvas} className='pointer'></canvas>}
+					{isObject3D && !isOpenDialogObjects3D && (
+						<PreviewerObject3D sceneID={sceneID} objectID={graphicsID} />
+					)}
 				</div>
 				<Dropdown
 					selectedID={graphicsKind}
@@ -166,13 +193,19 @@ function GraphicsSelector({
 			</Flex>
 			<DialogPicturesPreview
 				kind={PICTURE_KIND.CHARACTERS}
-				needOpen={needOpenDialog}
-				setNeedOpen={setNeedOpenDialog}
+				isOpen={isOpenDialogPictures}
+				setIsOpen={setIsOpenDialogPictures}
 				onAccept={handleAcceptPictures}
 				pictureID={graphicsID}
 				indexX={graphicsIndexX}
 				indexY={graphicsIndexY}
 				rectTileset={rectTileset}
+			/>
+			<DialogObjects3DPreview
+				isOpen={isOpenDialogObjects3D}
+				setIsOpen={setIsOpenDialogObjects3D}
+				onAccept={handleAcceptObjects3D}
+				object3DID={graphicsID}
 			/>
 		</>
 	);

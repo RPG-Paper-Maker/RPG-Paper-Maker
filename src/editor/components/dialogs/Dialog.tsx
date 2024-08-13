@@ -233,6 +233,16 @@ function Dialog({
 		}
 	}, [isOpen, initialWidth, initialHeight]);
 
+	useEffect(() => {
+		if (isOpen) {
+			setIsDragging(false);
+			setIsMoved(false);
+			setInitialPosition({ x: 0, y: 0 });
+			setIsClickedIn(false);
+			setIsResizing(false);
+		}
+	}, [isOpen]);
+
 	const root = document.getElementById('root');
 	if (!root) {
 		return null;

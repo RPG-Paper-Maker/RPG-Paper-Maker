@@ -206,7 +206,6 @@ function MapEditor() {
 			Scene.Map.ctxHUD = canvasHUD.getContext('2d');
 			Scene.Map.ctxRendering = canvasRendering.getContext('2d', { willReadFrequently: true });
 			const removeInputs = Inputs.initialize(canvas);
-			Manager.GL.mainContext.initialize();
 			resize();
 			window.addEventListener('resize', resize);
 			loop();

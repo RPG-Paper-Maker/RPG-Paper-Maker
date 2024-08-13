@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import '../styles/Form.css';
 
 type Props = {

@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AiOutlineFileAdd, AiOutlineFolderOpen } from 'react-icons/ai';
 import { BiImport } from 'react-icons/bi';
@@ -16,6 +17,7 @@ import { FaHandsHelping } from 'react-icons/fa';
 import { MdOutlineAddchart } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { BUTTON_TYPE, Constants } from '../../common';
+import { Manager } from '../../Editor';
 import { RootState, triggerImportProject, triggerNewProject, triggerOpenDialogProject } from '../../store';
 import Button from '../Button';
 import Flex from '../Flex';
@@ -55,6 +57,10 @@ function PanelNoProject() {
 			projects.map((project) => <ProjectPreview key={project.location} project={project} />)
 		);
 	};
+
+	useEffect(() => {
+		Manager.GL.mainContext.remove();
+	}, []);
 
 	return (
 		<Flex column one className='padding-large'>

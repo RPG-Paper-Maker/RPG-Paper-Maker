@@ -11,6 +11,7 @@
 
 import { useEffect, useRef } from 'react';
 import { Manager, Scene } from '../Editor';
+import Flex from './Flex';
 
 type Props = {
 	sceneID: string;
@@ -18,7 +19,7 @@ type Props = {
 	GL?: Manager.GL;
 };
 
-function PreviewerObject3D({ sceneID, objectID, GL = Manager.GL.mainContext }: Props) {
+function PreviewerObject3D({ sceneID, objectID, GL = Manager.GL.layerOneContext }: Props) {
 	const refCanvas = useRef<HTMLDivElement>(null);
 
 	const initialize = async () => {
@@ -26,7 +27,7 @@ function PreviewerObject3D({ sceneID, objectID, GL = Manager.GL.mainContext }: P
 		if (canvas) {
 			const scene = new Scene.Previewer3D(sceneID);
 			scene.canvas = canvas;
-			Scene.Previewer3D.mainPreviewerScene = scene;
+			Scene.Previewer3D.listScenes.set(sceneID, scene);
 			scene.loading = true;
 			await scene.load();
 			await update();
@@ -39,11 +40,19 @@ function PreviewerObject3D({ sceneID, objectID, GL = Manager.GL.mainContext }: P
 		const scene = Scene.Previewer3D.listScenes.get(sceneID);
 		if (scene) {
 			await scene.loadObject3D(objectID);
+			if (refCanvas.current) {
+				const rect = refCanvas.current.getBoundingClientRect();
+				const size = Math.min(rect.width, rect.height);
+				refCanvas.current.style.width = `${size}px`;
+				refCanvas.current.style.height = `${size}px`;
+				resizeForced();
+			}
 		}
 	};
 
 	const loop = () => {
 		const scene = Scene.Previewer3D.listScenes.get(sceneID);
+		GL.renderer.clear();
 		if (scene) {
 			requestAnimationFrame(loop);
 			scene.update();
@@ -74,10 +83,17 @@ function PreviewerObject3D({ sceneID, objectID, GL = Manager.GL.mainContext }: P
 		window.addEventListener('resize', resize);
 		return () => {
 			window.removeEventListener('resize', resize);
+			Scene.Previewer3D.listScenes.delete(sceneID);
 		};
 	}, []);
 
-	return <div ref={refCanvas} />;
+	return (
+		<Flex one fillWidth fillHeight centerV>
+			<Flex one />
+			<div className='fill-width fill-height' ref={refCanvas} />
+			<Flex one />
+		</Flex>
+	);
 }
 
 export default PreviewerObject3D;

@@ -11,26 +11,24 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaAngleDoubleLeft } from 'react-icons/fa';
-import { BUTTON_TYPE, Constants, PICTURE_KIND } from '../../common';
+import { Constants, PICTURE_KIND } from '../../common';
 import { Platform } from '../../common/Platform';
 import { Node, Project, Rectangle } from '../../core';
 import { Model, Scene } from '../../Editor';
-import Button from '../Button';
 import Checkbox from '../Checkbox';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
+import PanelAssetsPreviewer from '../panels/PanelAssetsPreviewer';
 import TextureCharacterSelector from '../TextureCharacterSelector';
 import TextureSquareSelector from '../TextureSquareSelector';
-import Tree, { TREES_MIN_WIDTH } from '../Tree';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 import FooterOK from './footers/FooterOK';
 
 type Props = {
 	kind: PICTURE_KIND;
-	needOpen: boolean;
-	setNeedOpen: (b: boolean) => void;
+	isOpen: boolean;
+	setIsOpen: (b: boolean) => void;
 	pictureID?: number;
 	indexX?: number;
 	indexY?: number;
@@ -41,8 +39,8 @@ type Props = {
 
 function DialogPicturesPreview({
 	kind,
-	needOpen,
-	setNeedOpen,
+	isOpen,
+	setIsOpen,
 	pictureID,
 	indexX,
 	indexY,
@@ -52,11 +50,7 @@ function DialogPicturesPreview({
 }: Props) {
 	const { t } = useTranslation();
 
-	const [isOpen, setIsOpen] = useState(false);
 	const [isDialogWarningSelectionOpen, setIsDialogWarningSelectionOpen] = useState(false);
-	const [picturesShowAvailableContent, setPicturesShowAvailableContent] = useState(
-		Project.current!.settings.picturesShowAvailableContent
-	);
 	const [isInitiating, setIsInitiating] = useState(false);
 	const [pictures, setPictures] = useState<Node[]>([]);
 	const [picturesAvailable, setPicturesAvailable] = useState<Node[]>([]);
@@ -66,8 +60,6 @@ function DialogPicturesPreview({
 	const [isStopAnimation, setIsStopAnimation] = useState(false);
 	const [isClimbAnimation, setIsClimbAnimation] = useState(false);
 	const [isSelectedLeftList, setIsSelectedLeftList] = useState(true);
-	const [forcedCurrentSelectedItemIDLeft, setForcedCurrentSelectedItemIDLeft] = useState<number | null>(null);
-	const [forcedCurrentSelectedItemIDRight, setForcedCurrentSelectedItemIDRight] = useState<number | null>(null);
 
 	const initialize = () => {
 		setIsInitiating(true);
@@ -93,32 +85,6 @@ function DialogPicturesPreview({
 		handleRefresh();
 	};
 
-	const handleChangePicturesShowAvailableContent = async (b: boolean) => {
-		setPicturesShowAvailableContent(b);
-		Project.current!.settings.picturesShowAvailableContent = b;
-		await Project.current!.settings.save();
-	};
-
-	const handleChangeSelectedPictureLeft = (node: Node | null) => {
-		if (node) {
-			handleChangeSelectedPicture(node);
-			setIsSelectedLeftList(true);
-			setForcedCurrentSelectedItemIDRight(-1);
-		}
-	};
-
-	const handleChangeSelectedPictureRight = (node: Node | null) => {
-		if (node && !isInitiating) {
-			handleChangeSelectedPicture(node);
-			setIsSelectedLeftList(false);
-			setForcedCurrentSelectedItemIDLeft(-2);
-		}
-		if (isInitiating) {
-			setForcedCurrentSelectedItemIDLeft(pictureID !== undefined ? pictureID : -1);
-			setIsInitiating(false);
-		}
-	};
-
 	const handleChangeSelectedPicture = (node: Node | null) => {
 		const picture = (node?.content ?? null) as Model.Picture | null;
 		setSelectedPicture(picture);
@@ -128,17 +94,6 @@ function DialogPicturesPreview({
 		} else {
 			setIsStopAnimation(false);
 			setIsClimbAnimation(false);
-		}
-	};
-
-	const handleClickMoveLeft = () => {
-		if (selectedPicture) {
-			const newPicture = selectedPicture.clone();
-			newPicture.id = Model.Base.generateNewIDfromList(pictures.map((node) => node.content));
-			const node = Node.create(newPicture);
-			setPictures([...pictures, node]);
-			setForcedCurrentSelectedItemIDLeft(newPicture.id);
-			handleChangeSelectedPictureLeft(node);
 		}
 	};
 
@@ -200,61 +155,63 @@ function DialogPicturesPreview({
 	};
 
 	useEffect(() => {
-		if (needOpen) {
-			setNeedOpen(false);
+		if (isOpen) {
 			initialize();
-			setIsOpen(true);
 		}
 		// eslint-disable-next-line
-	}, [needOpen]);
+	}, [isOpen]);
 
 	const getPreviewerContent = () => {
-		switch (kind) {
-			case PICTURE_KIND.CHARACTERS:
-				if (selectedPicture!.id === -1) {
-					return null;
-				}
-				return selectedPicture!.id === 0 ? (
-					<TextureSquareSelector
-						texture={Project.current!.pictures.getByID(
-							PICTURE_KIND.TILESETS,
-							Scene.Map.current!.model.getTileset().pictureID
-						).getPath()}
-						defaultRectangle={selectedRectTileset}
-						onUpdateRectangle={setSelectedRectTileset}
-					/>
-				) : (
-					<TextureCharacterSelector
-						texture={selectedPicture!.getPath()}
-						isStopAnimation={isStopAnimation}
-						isClimbAnimation={isClimbAnimation}
-						defaultRectangle={selectedRect}
-						onUpdateRectangle={setSelectedRect}
-						adjustPositionSize
-					/>
-				);
-			default:
-				return null; // TODO
+		if (selectedPicture) {
+			switch (kind) {
+				case PICTURE_KIND.CHARACTERS:
+					if (selectedPicture.id === -1) {
+						return null;
+					}
+					return selectedPicture.id === 0 ? (
+						<TextureSquareSelector
+							texture={Project.current!.pictures.getByID(
+								PICTURE_KIND.TILESETS,
+								Scene.Map.current!.model.getTileset().pictureID
+							).getPath()}
+							defaultRectangle={selectedRectTileset}
+							onUpdateRectangle={setSelectedRectTileset}
+						/>
+					) : (
+						<TextureCharacterSelector
+							texture={selectedPicture.getPath()}
+							isStopAnimation={isStopAnimation}
+							isClimbAnimation={isClimbAnimation}
+							defaultRectangle={selectedRect}
+							onUpdateRectangle={setSelectedRect}
+							adjustPositionSize
+						/>
+					);
+				default:
+					return null; // TODO
+			}
 		}
 	};
 
 	const getPreviewerOptionsContent = () => {
-		switch (kind) {
-			case PICTURE_KIND.CHARACTERS:
-				return selectedPicture!.id === 0 ? null : (
-					<Groupbox title={t('options')}>
-						<Flex spacedLarge>
-							<Checkbox isChecked={isStopAnimation} onChange={handleChangeStopAnimation}>
-								{t('stop.animation')}
-							</Checkbox>
-							<Checkbox isChecked={isClimbAnimation} onChange={handleChangeClimbAnimation}>
-								{t('climb.animation')}
-							</Checkbox>
-						</Flex>
-					</Groupbox>
-				);
-			default:
-				return null;
+		if (selectedPicture) {
+			switch (kind) {
+				case PICTURE_KIND.CHARACTERS:
+					return selectedPicture.id === 0 ? null : (
+						<Groupbox title={t('options')}>
+							<Flex spacedLarge>
+								<Checkbox isChecked={isStopAnimation} onChange={handleChangeStopAnimation}>
+									{t('stop.animation')}
+								</Checkbox>
+								<Checkbox isChecked={isClimbAnimation} onChange={handleChangeClimbAnimation}>
+									{t('climb.animation')}
+								</Checkbox>
+							</Flex>
+						</Groupbox>
+					);
+				default:
+					return null;
+			}
 		}
 	};
 
@@ -268,89 +225,21 @@ function DialogPicturesPreview({
 				initialHeight='70%'
 				onClose={handleReject}
 			>
-				<Flex column spacedLarge fillHeight>
-					<Flex spacedLarge>
-						<Flex one>
-							<Checkbox
-								isChecked={picturesShowAvailableContent}
-								onChange={handleChangePicturesShowAvailableContent}
-							>
-								{t('show.available.content')}
-							</Checkbox>
-						</Flex>
-						<Flex spaced>
-							<Button disabled>{t('open.default.folder')}...</Button>
-							<Button disabled>{t('open.project.folder')}...</Button>
-							<Button disabled>{t('import.dlc.s')}...</Button>
-						</Flex>
-					</Flex>
-					<Flex one spacedLarge fillHeight>
-						<Flex column>
-							<Flex one zeroHeight>
-								<Tree
-									list={pictures}
-									minWidth={TREES_MIN_WIDTH}
-									onSelectedItem={handleChangeSelectedPictureLeft}
-									forcedCurrentSelectedItemID={forcedCurrentSelectedItemIDLeft}
-									setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemIDLeft}
-									showEditName
-									cannotAdd
-									cannotEdit
-								/>
-							</Flex>
-						</Flex>
-						<Flex one spacedLarge>
-							{picturesShowAvailableContent && (
-								<>
-									<Flex column centerSelfV>
-										<Button
-											buttonType={BUTTON_TYPE.PRIMARY}
-											icon={<FaAngleDoubleLeft />}
-											disabled={isSelectedLeftList || !selectedPicture}
-											onClick={handleClickMoveLeft}
-										/>
-									</Flex>
-									<Flex column spaced>
-										<Flex one zeroHeight>
-											<Tree
-												list={picturesAvailable}
-												onSelectedItem={handleChangeSelectedPictureRight}
-												onDoubleClick={handleClickMoveLeft}
-												minWidth={TREES_MIN_WIDTH}
-												forcedCurrentSelectedItemID={forcedCurrentSelectedItemIDRight}
-												setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemIDRight}
-												cannotAdd
-												cannotEdit
-												cannotDragDrop
-												cannotDelete
-												doNotShowID
-											/>
-										</Flex>
-										<Flex spaced>
-											<Button onClick={handleRefresh} disabled>
-												{t('refresh')}
-											</Button>
-											<Button disabled>{t('export')}...</Button>
-											<Button buttonType={BUTTON_TYPE.PRIMARY} disabled>
-												+
-											</Button>
-										</Flex>
-									</Flex>
-								</>
-							)}
-							<Flex one column zeroWidth>
-								{selectedPicture && (
-									<>
-										<Flex one className='scrollable'>
-											{getPreviewerContent()}
-										</Flex>
-										<div>{getPreviewerOptionsContent()}</div>
-									</>
-								)}
-							</Flex>
-						</Flex>
-					</Flex>
-				</Flex>
+				<PanelAssetsPreviewer
+					assetID={pictureID}
+					list={pictures}
+					setList={setPictures}
+					itemsAvailable={picturesAvailable}
+					selectedItem={selectedPicture}
+					isSelectedLeftList={isSelectedLeftList}
+					setIsSelectedLeftList={setIsSelectedLeftList}
+					isInitiating={isInitiating}
+					setIsInitiating={setIsInitiating}
+					onChangeSelectedItem={handleChangeSelectedPicture}
+					onRefresh={handleRefresh}
+					content={getPreviewerContent()}
+					options={getPreviewerOptionsContent()}
+				/>
 			</Dialog>
 			<Dialog
 				title={t('warning')}
@@ -358,7 +247,7 @@ function DialogPicturesPreview({
 				footer={<FooterOK onOK={handleCloseWarningSelectionOpen} />}
 				onClose={handleCloseWarningSelectionOpen}
 			>
-				<p>{t('warning.picture.selection')}</p>
+				<p>{t('warning.selection')}</p>
 			</Dialog>
 		</>
 	);

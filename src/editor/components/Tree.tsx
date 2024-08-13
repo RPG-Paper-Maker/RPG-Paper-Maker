@@ -422,7 +422,8 @@ function Tree({
 	};
 
 	const getContextMenuItems = () => {
-		const isEmpty = getNodeID() === -1;
+		const nodeID = getNodeID();
+		const isEmpty = nodeID === -1 || nodeID === 0;
 		return contextMenuItems!.map((kind) => {
 			switch (kind) {
 				case CONTEXT_MENU_ITEM_KIND.NEW:

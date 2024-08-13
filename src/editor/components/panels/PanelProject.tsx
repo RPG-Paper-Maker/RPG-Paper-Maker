@@ -16,7 +16,7 @@ import { MdOutlineWallpaper } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { Utils } from '../../common';
 import { Node, Project } from '../../core';
-import { Model } from '../../Editor';
+import { Manager, Model } from '../../Editor';
 import {
 	RootState,
 	setCurrentAutotileID,
@@ -104,6 +104,11 @@ function PanelProject() {
 			}
 		}
 	};
+
+	useEffect(() => {
+		Manager.GL.mainContext.initialize();
+		Manager.GL.layerOneContext.initialize(1);
+	}, []);
 
 	// When first opening the project with all data loaded
 	useEffect(() => {

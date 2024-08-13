@@ -10,9 +10,9 @@
 */
 
 import * as THREE from 'three';
-import { SpecialElement } from './SpecialElement';
 import { BINDING, BindingType, JSONType, OBJECT_COLLISION_KIND, SHAPE_KIND } from '../common';
 import { Project } from '../core';
+import { SpecialElement } from './SpecialElement';
 
 class Object3D extends SpecialElement {
 	public shapeKind!: SHAPE_KIND;
@@ -65,6 +65,30 @@ class Object3D extends SpecialElement {
 
 	getSizeVector(): THREE.Vector3 {
 		return new THREE.Vector3(this.getTotalWidthPixels(), this.getTotalHeightPixels(), this.getTotalDepthPixels());
+	}
+
+	copy(object3D: Object3D): void {
+		super.copy(object3D);
+		this.shapeKind = object3D.shapeKind;
+		this.objID = object3D.objID;
+		this.mtlID = object3D.mtlID;
+		this.collisionKind = object3D.collisionKind;
+		this.collisionCustomID = object3D.collisionCustomID;
+		this.scale = object3D.scale;
+		this.widthSquare = object3D.widthSquare;
+		this.widthPixel = object3D.widthPixel;
+		this.heightSquare = object3D.heightSquare;
+		this.heightPixel = object3D.heightPixel;
+		this.depthSquare = object3D.depthSquare;
+		this.depthPixel = object3D.depthPixel;
+		this.stretch = object3D.stretch;
+		this.isTopLeft = object3D.isTopLeft;
+	}
+
+	clone(): Object3D {
+		const object3D = new Object3D();
+		object3D.copy(this);
+		return object3D;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

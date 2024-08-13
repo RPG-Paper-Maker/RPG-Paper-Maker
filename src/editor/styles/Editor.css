@@ -293,11 +293,22 @@ code {
 	cursor: initial;
 }
 
-.canvas-renderer {
+.canvas-renderer-0 {
 	position: fixed;
 	left: 0;
 	top: 0;
 	z-index: 0;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	pointer-events: none;
+}
+
+.canvas-renderer-1 {
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 1000;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;

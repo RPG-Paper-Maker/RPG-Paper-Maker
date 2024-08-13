@@ -112,6 +112,7 @@ function PanelLoading({ setLoaded }: Props) {
 
 	const initializeGL = async () => {
 		Manager.GL.mainContext = new Manager.GL();
+		Manager.GL.layerOneContext = new Manager.GL();
 		await Manager.GL.initializeShaders();
 	};
 

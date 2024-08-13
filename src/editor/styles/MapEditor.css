@@ -70,3 +70,7 @@
 #canvas-rendering {
 	display: none;
 }
+
+#texture-previewer {
+	background-color: var(--darkest-containers-bg-color);
+}

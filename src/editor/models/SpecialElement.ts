@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from './Base';
 import { BINDING, BindingType, JSONType } from '../common';
+import { Base } from './Base';
 
 class SpecialElement extends Base {
 	public static readonly JSON_PICTURE_ID = 'pic';
@@ -22,6 +22,17 @@ class SpecialElement extends Base {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...SpecialElement.bindings, ...additionnalBinding];
+	}
+
+	copy(specialElement: SpecialElement): void {
+		super.copy(specialElement);
+		this.pictureID = specialElement.pictureID;
+	}
+
+	clone(): SpecialElement {
+		const specialElement = new SpecialElement();
+		specialElement.copy(this);
+		return specialElement;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

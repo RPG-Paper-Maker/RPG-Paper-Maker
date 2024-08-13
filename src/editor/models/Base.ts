@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Serializable } from '../core/Serializable';
+import { ReactNode } from 'react';
 import {
 	BINDING,
 	BindingType,
@@ -17,9 +17,10 @@ import {
 	ELEMENT_MAP_KIND,
 	JSONType,
 	OBJECT_MOVING_KIND,
+	SHAPE_KIND,
 	Utils,
 } from '../common';
-import { ReactNode } from 'react';
+import { Serializable } from '../core/Serializable';
 
 class Base extends Serializable {
 	public static STRING_START = '> ';
@@ -107,6 +108,14 @@ class Base extends Serializable {
 		Base.create(DYNAMIC_VALUE_KIND.MUSIC_EFFECT, 'music.effect'),
 	];
 	public static ON_OFF_OPTIONS = [Base.create(0, 'ON'), Base.create(1, 'OFF')];
+	public static SHAPE_KIND_OPTIONS = [
+		Base.create(SHAPE_KIND.BOX, 'box'),
+		Base.create(SHAPE_KIND.SPHERE, 'sphere'),
+		Base.create(SHAPE_KIND.CYLINDER, 'cylinder'),
+		Base.create(SHAPE_KIND.CONE, 'cone'),
+		Base.create(SHAPE_KIND.CAPSULE, 'capsule'),
+		Base.create(SHAPE_KIND.CUSTOM, 'custom'),
+	];
 
 	public id!: number;
 	public name!: string;

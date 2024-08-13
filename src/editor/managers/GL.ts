@@ -29,6 +29,7 @@ class GL {
 	public static GLTFExporter = new GLTFExporter();
 	public static raycaster = new THREE.Raycaster();
 	public static mainContext: GL;
+	public static layerOneContext: GL;
 	public static MATERIAL_EMPTY = this.loadTextureEmpty();
 	public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 	public parent!: HTMLElement;
@@ -154,32 +155,32 @@ class GL {
 		return material;
 	}
 
-	initialize(id?: string) {
+	initialize(layer = 0) {
 		if (!this.renderer) {
-			const parent = document.getElementById(id ?? 'root');
+			const parent = document.getElementById('root');
 			if (parent === null) {
-				throw new Error('No id ' + id + ' found in document for GL renderer.');
+				throw new Error('No root found in document for GL renderer.');
 			}
 			this.parent = parent;
 			this.renderer = new THREE.WebGLRenderer({ alpha: true });
 			this.renderer.setPixelRatio(window.devicePixelRatio);
 			this.renderer.autoClear = false;
-			this.renderer.setSize(
-				id ? this.parent.clientWidth : window.innerWidth,
-				id ? this.parent.clientHeight : window.innerHeight
-			);
-			this.renderer.setClearColor(0x000000, 0);
+			this.renderer.setSize(window.innerWidth, window.innerHeight);
 			this.renderer.shadowMap.enabled = true;
-			if (id === undefined) {
-				this.renderer.domElement.classList.add('canvas-renderer');
-				this.renderer.autoClear = false;
-				this.renderer.setScissorTest(false);
-				this.renderer.setClearColor(0xffffff, 0);
-				this.renderer.clear(true, true);
-				this.renderer.setScissorTest(true);
-			}
+			this.renderer.domElement.classList.add(`canvas-renderer-${layer}`);
+			this.renderer.autoClear = false;
+			this.renderer.setScissorTest(false);
+			this.renderer.setClearColor(0xffffff, 0);
+			this.renderer.clear(true, true);
+			this.renderer.setScissorTest(true);
 		}
 		this.parent.appendChild(this.renderer.domElement);
+	}
+
+	remove() {
+		if (this.renderer) {
+			this.parent.removeChild(this.renderer.domElement);
+		}
 	}
 
 	resize(scroll: boolean = false, forcedWidth = -1, forcedHeight = -1, updateStyle?: boolean) {

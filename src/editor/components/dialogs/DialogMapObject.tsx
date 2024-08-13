@@ -341,6 +341,7 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 						</Flex>
 						<Flex spaced className={Utils.getClassName({ 'visibility-hidden': !selectedState })}>
 							<GraphicsSelector
+								sceneID='dialog-map-object'
 								graphicsID={graphicsID}
 								graphicsIndexX={graphicsIndexX}
 								graphicsIndexY={graphicsIndexY}

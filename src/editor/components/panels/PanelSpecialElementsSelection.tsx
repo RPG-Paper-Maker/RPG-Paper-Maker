@@ -100,15 +100,6 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	const initializeCanvas = async () => {
 		const content = contentRef.current;
 		if (content) {
-			//Manager.GL.listPreviewerContext.renderer.setSize(30, filteredList.length * ELEMENT_HEIGHT, true);
-			/*
-			Manager.GL.listPreviewerContext.renderer.autoClear = false;
-			Manager.GL.listPreviewerContext.renderer.domElement.classList.add('canvas-list-previewer');
-			Manager.GL.listPreviewerContext.renderer.setScissorTest(false);
-			Manager.GL.listPreviewerContext.renderer.setClearColor(0xffffff, 0);
-			Manager.GL.listPreviewerContext.renderer.clear(true, true);
-			Manager.GL.listPreviewerContext.renderer.setScissorTest(true);*/
-
 			await updateCanvas();
 			loop();
 		}
@@ -140,6 +131,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 				if (scene) {
 					if (canvas) {
 						scene.canvas = canvas;
+						scene.parentCanvas = content;
 					}
 				} else {
 					scene = new Scene.Previewer3D(id);

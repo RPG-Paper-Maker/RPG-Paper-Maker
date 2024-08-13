@@ -120,7 +120,7 @@ function Dropdown({
 		const container = containerRef.current;
 		const dropdown = dropdownContainerRef.current;
 		if (container && dropdown && !fillWidth) {
-			container.style.minWidth = `${dropdown.getBoundingClientRect().width + DROPDOWN_SPACE_ARROW}px`;
+			container.style.width = `${dropdown.getBoundingClientRect().width + DROPDOWN_SPACE_ARROW}px`;
 		}
 	}, [fillWidth]);
 
