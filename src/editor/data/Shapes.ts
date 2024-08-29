@@ -14,17 +14,19 @@ import { CUSTOM_SHAPE_KIND, JSONType, Paths } from '../common';
 import { Project, Serializable } from '../core';
 
 class Shapes extends Serializable {
-	private list!: Model.Shape[][];
-	private listIndexes!: number[][];
+	public list!: Model.Shape[][];
+	public listIndexes!: number[][];
 
 	getPath(): string {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_SHAPES);
 	}
 
+	getList(kind: CUSTOM_SHAPE_KIND): Model.Shape[] {
+		return this.list[kind];
+	}
+
 	getByID(kind: CUSTOM_SHAPE_KIND, id: number): Model.Shape {
-		return kind === CUSTOM_SHAPE_KIND.NONE || id === -1
-			? new Model.Shape()
-			: this.list[kind][this.listIndexes[kind][id]];
+		return this.list[kind][this.listIndexes[kind][id]];
 	}
 
 	read(json: JSONType) {
@@ -37,8 +39,7 @@ class Shapes extends Serializable {
 			this.listIndexes[k as number] = listIndexes;
 			let index = 0;
 			for (const jsonShape of v as JSONType[]) {
-				const shape = new Model.Shape();
-				shape.kind = k as number;
+				const shape = new Model.Shape(k as CUSTOM_SHAPE_KIND);
 				shape.read(jsonShape);
 				list.push(shape);
 				listIndexes[shape.id] = index;
@@ -48,15 +49,17 @@ class Shapes extends Serializable {
 	}
 
 	write(json: JSONType) {
-		const list: JSONType[][] = [];
+		const list: JSONType[] = [];
 		for (const [kind, shapes] of this.list.entries()) {
-			const jsonShapes: JSONType[] = [];
-			for (const shape of shapes) {
-				const jsonShape = {} as JSONType;
-				shape.write(jsonShape);
-				jsonShapes.push(jsonShape);
+			if (shapes) {
+				const jsonShapes: JSONType[] = [];
+				for (const shape of shapes) {
+					const jsonShape = {} as JSONType;
+					shape.write(jsonShape);
+					jsonShapes.push(jsonShape);
+				}
+				list.push({ k: kind, v: jsonShapes });
 			}
-			list[kind] = jsonShapes;
 		}
 		json.list = list;
 	}

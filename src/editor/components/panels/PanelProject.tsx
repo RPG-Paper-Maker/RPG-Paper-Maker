@@ -108,6 +108,7 @@ function PanelProject() {
 	useEffect(() => {
 		Manager.GL.mainContext.initialize();
 		Manager.GL.layerOneContext.initialize(1);
+		Manager.GL.layerTwoContext.initialize(2);
 	}, []);
 
 	// When first opening the project with all data loaded

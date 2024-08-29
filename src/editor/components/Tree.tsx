@@ -12,7 +12,16 @@
 import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { ArrayUtils, CONTEXT_MENU_ITEM_KIND, INPUT_TYPE_WIDTH, KEY, MenuItemType, RPM, SPECIAL_KEY } from '../common';
+import {
+	ArrayUtils,
+	CONTEXT_MENU_ITEM_KIND,
+	INPUT_TYPE_WIDTH,
+	KEY,
+	MenuItemType,
+	RPM,
+	SPECIAL_KEY,
+	Utils,
+} from '../common';
 import { Node } from '../core';
 import { Model } from '../Editor';
 import useStateString from '../hooks/useStateString';
@@ -52,6 +61,7 @@ type Props = {
 	minWidth?: number;
 	byIndex?: boolean;
 	onDrop?: () => Promise<void>;
+	disabled?: boolean;
 };
 
 export const TREES_MIN_WIDTH = 150;
@@ -80,6 +90,7 @@ function Tree({
 	byIndex = false,
 	onDrop,
 	minWidth,
+	disabled = false,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -112,7 +123,7 @@ function Tree({
 		hasCustomItems = false;
 	}
 
-	const isEditNameDisabled = () => !currentSelectedItemNode || currentSelectedItemNode.content.id <= 0;
+	const isEditNameDisabled = () => disabled || !currentSelectedItemNode || currentSelectedItemNode.content.id <= 0;
 
 	const canPaste = () => copiedItems?.constructorClass === constructorType && !cannotAdd;
 
@@ -209,7 +220,7 @@ function Tree({
 		if (currentSelectedItemNode && (canBeEmpty || list.length > 1)) {
 			const index = getNewIndex();
 			ArrayUtils.removeElement(list, currentSelectedItemNode);
-			const node = list[index] ?? null;
+			const node = list[index] ?? Node.create(Model.Base.create(-1, ''));
 			setCurrentSelectedItemNode(node);
 			onListUpdated?.();
 			onSelectedItem?.(node, false);
@@ -390,10 +401,10 @@ function Tree({
 						selected={selected}
 						onSwitchExpanded={handleSwitchExpandedItem}
 						onMouseDown={handleMouseDownItem}
-						onDragStart={node.draggable ? handleDragStart : undefined}
-						onDragOver={node.draggable ? handleDragOver : undefined}
-						onDragLeave={node.draggable ? handleDragLeave : undefined}
-						onDrop={node.draggable ? handleDrop : undefined}
+						onDragStart={!disabled && node.draggable ? handleDragStart : undefined}
+						onDragOver={!disabled && node.draggable ? handleDragOver : undefined}
+						onDragLeave={!disabled && node.draggable ? handleDragLeave : undefined}
+						onDrop={!disabled && node.draggable ? handleDrop : undefined}
 						draggable={!cannotDragDrop && node.draggable}
 						headers={headers}
 						doNotShowID={doNotShowID}
@@ -422,6 +433,9 @@ function Tree({
 	};
 
 	const getContextMenuItems = () => {
+		if (disabled) {
+			return [];
+		}
 		const nodeID = getNodeID();
 		const isEmpty = nodeID === -1 || nodeID === 0;
 		return contextMenuItems!.map((kind) => {
@@ -522,13 +536,19 @@ function Tree({
 	return (
 		<ContextMenu items={getContextMenuItems()}>
 			<Flex column spacedLarge fillWidth fillHeight>
-				<div onDoubleClick={handleDoubleClick} className='tree' style={{ minWidth: `${minWidth}px` }}>
+				<div
+					onDoubleClick={handleDoubleClick}
+					className={Utils.getClassName({ disabled }, 'tree')}
+					style={{ minWidth: `${minWidth}px` }}
+				>
 					<Flex spaced>{getHeaders()}</Flex>
 					{getTreeItems(list)}
 				</div>
 				{showEditName && (
 					<Flex spaced>
-						<div className={isEditNameDisabled() ? 'disabled-label' : ''}>{t('name')}:</div>
+						<div className={Utils.getClassName({ 'disabled-label': disabled || isEditNameDisabled() })}>
+							{t('name')}:
+						</div>
 						<InputText
 							value={currentName}
 							onChange={handleChangeName}

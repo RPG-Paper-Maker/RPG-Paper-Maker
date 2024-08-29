@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState, useEffect, useRef, ReactNode } from 'react';
-import '../styles/Button.css';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { BUTTON_TYPE, Utils } from '../common';
+import '../styles/Button.css';
 
 type Props = {
 	children?: ReactNode;
@@ -54,11 +54,13 @@ function Button({
 	const unactive = !activeState;
 
 	const handleClick = () => {
-		if (onClick) {
-			onClick();
-		}
-		if (activable) {
-			setActiveState(!activeState);
+		if (!disabled) {
+			if (onClick) {
+				onClick();
+			}
+			if (activable) {
+				setActiveState(!activeState);
+			}
 		}
 	};
 

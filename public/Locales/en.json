@@ -2062,5 +2062,6 @@
 	"introduction": "Introduction",
 	"edit.object": "Edit object",
 	"edit.transformations": "Update transformations",
-	"warning.picture.selection": "Select a picture in the left list to confirm."
+	"warning.asset.selection": "Select an asset in the left list to confirm.",
+	"texture.size": "Texture size"
 }

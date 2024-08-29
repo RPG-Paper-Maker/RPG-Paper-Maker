@@ -46,6 +46,7 @@ type Props = {
 	options: Model.Base[];
 	translateOptions?: boolean;
 	disabled?: boolean;
+	disabledIds?: number[];
 	displayIDs?: boolean;
 	fillWidth?: boolean;
 };
@@ -56,6 +57,7 @@ function Dropdown({
 	options,
 	translateOptions = false,
 	disabled = false,
+	disabledIds = [],
 	displayIDs = false,
 	fillWidth = false,
 }: Props) {
@@ -113,7 +115,9 @@ function Dropdown({
 	};
 
 	const handleClickOption = (option: Model.Base) => {
-		onChange(option.id);
+		if (!disabledIds.includes(option.id)) {
+			onChange(option.id);
+		}
 	};
 
 	useLayoutEffect(() => {
@@ -169,6 +173,7 @@ function Dropdown({
 				className={Utils.getClassName(
 					{
 						selected: selectedID === option.id,
+						disabled: disabledIds.includes(option.id),
 						'white-space-nowrap': !fillWidth,
 					},
 					'element'

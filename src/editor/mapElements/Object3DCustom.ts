@@ -10,10 +10,10 @@
 */
 
 import * as THREE from 'three';
-import { Object3D } from './Object3D';
-import { CustomGeometry, Position, Project } from '../core';
 import { CUSTOM_SHAPE_KIND, JSONType } from '../common';
+import { CustomGeometry, Position, Project } from '../core';
 import { MapElement, Model } from '../Editor';
+import { Object3D } from './Object3D';
 
 class Object3DCustom extends Object3D {
 	static fromJSON(json: JSONType): MapElement.Object3DCustom {
@@ -49,7 +49,10 @@ class Object3DCustom extends Object3D {
 
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): number {
 		const localPosition = this.getLocalPosition(position);
-		const modelGeometry = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID).geometryData;
+		const modelGeometry = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID)?.geometryData;
+		if (!modelGeometry) {
+			return count;
+		}
 		const vertices = modelGeometry.vertices;
 		const uvs = modelGeometry.uvs;
 		const scale = this.data.scale;

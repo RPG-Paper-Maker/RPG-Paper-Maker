@@ -16,6 +16,7 @@ import {
 	DYNAMIC_VALUE_KIND,
 	ELEMENT_MAP_KIND,
 	JSONType,
+	OBJECT_COLLISION_KIND,
 	OBJECT_MOVING_KIND,
 	SHAPE_KIND,
 	Utils,
@@ -116,6 +117,14 @@ class Base extends Serializable {
 		Base.create(SHAPE_KIND.CAPSULE, 'capsule'),
 		Base.create(SHAPE_KIND.CUSTOM, 'custom'),
 	];
+	public static OBJECT_COLLISION_KIND_OPTIONS = [
+		Base.create(OBJECT_COLLISION_KIND.NONE, 'none'),
+		Base.create(OBJECT_COLLISION_KIND.PERFECT, 'perfect'),
+		Base.create(OBJECT_COLLISION_KIND.SIMPLIFIED, 'simplified'),
+		Base.create(OBJECT_COLLISION_KIND.CUSTOM, 'custom'),
+	];
+	public static OBJECT_3D_IS_TOP_LEFT = [Base.create(1, 'top.left'), Base.create(2, 'centered')];
+	public static OBJECT_3D_STRETCH = [Base.create(1, 'stretch'), Base.create(2, 'perfect.size')];
 
 	public id!: number;
 	public name!: string;

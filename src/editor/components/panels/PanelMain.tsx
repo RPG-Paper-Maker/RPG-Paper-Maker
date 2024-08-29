@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Node } from '../../core';
 import { RootState, setCopiedItems } from '../../store';
-import Dialog from '../dialogs/Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../dialogs/Dialog';
 import Flex from '../Flex';
 import Loader from '../Loader';
 import PanelNoProject from './PanelNoProject';
@@ -40,20 +40,22 @@ function PanelMain() {
 	}, [dispatch]);
 
 	return (
-		<Flex one className='relative'>
-			<Loader large isLoading={loading} />
-			{currentProject === null ? <PanelNoProject /> : <PanelProject />}
-			{needsReloadPageUpdate && (
-				<Dialog title={t('warning.refresh.page.update.title')} isOpen>
-					<p>{`${t('warning.refresh.page.update')}.`}</p>
-				</Dialog>
-			)}
-			{needsReloadPageClearCache && (
-				<Dialog title={t('warning')} isOpen>
-					<p>{`${t('warning.refresh.page.cache.clearing')}.`}</p>
-				</Dialog>
-			)}
-		</Flex>
+		<>
+			<Flex one className='relative'>
+				<Loader large isLoading={loading} />
+				{currentProject === null ? <PanelNoProject /> : <PanelProject />}
+			</Flex>
+			<Dialog
+				title={t('warning.refresh.page.update.title')}
+				isOpen={needsReloadPageUpdate}
+				zIndex={Z_INDEX_LEVEL.LAYER_TOP}
+			>
+				<p>{`${t('warning.refresh.page.update')}.`}</p>
+			</Dialog>
+			<Dialog title={t('warning')} isOpen={needsReloadPageClearCache} zIndex={Z_INDEX_LEVEL.LAYER_TOP}>
+				<p>{`${t('warning.refresh.page.cache.clearing')}.`}</p>
+			</Dialog>
+		</>
 	);
 }
 

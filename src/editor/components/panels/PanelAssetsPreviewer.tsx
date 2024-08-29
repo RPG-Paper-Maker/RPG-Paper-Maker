@@ -66,7 +66,7 @@ function PanelAssetsPreviewer({
 	};
 
 	const handleChangeSelectedItemLeft = (node: Node | null) => {
-		if (node) {
+		if (node || !itemsAvailable) {
 			onChangeSelectedItem(node);
 			setIsSelectedLeftList?.(true);
 			setForcedCurrentSelectedItemIDRight(-1);

@@ -11,9 +11,9 @@
 
 import * as THREE from 'three';
 import { Base } from '.';
-import { ELEMENT_MAP_KIND, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
+import { CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
 import { CustomGeometry, CustomGeometryFace, Position, Position3D, Project, Rectangle, TextureBundle } from '../core';
-import { Manager, MapElement, Scene } from '../Editor';
+import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Object3D } from '../mapElements';
 
 class Previewer3D extends Base {
@@ -159,6 +159,10 @@ class Previewer3D extends Base {
 
 	async loadObject3D(object3DID: number) {
 		const object = Project.current!.specialElements.getObject3DByID(object3DID);
+		this.loadObject3DByModel(object);
+	}
+
+	async loadObject3DByModel(object: Model.Object3D) {
 		if (!object) {
 			this.clear();
 			return;
@@ -169,6 +173,26 @@ class Previewer3D extends Base {
 		if (object.shapeKind === SHAPE_KIND.CUSTOM) {
 			await (object3DElement as MapElement.Object3DCustom).loadShape();
 		}
+		object3DElement.updateGeometry(geometry, new Position(), 0);
+		this.addToScene(geometry, texture);
+	}
+
+	async loadShape(shapeID: number) {
+		const shape = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, shapeID);
+		if (!shape) {
+			this.clear();
+			return;
+		}
+		const texture = new THREE.MeshPhongMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+		const geometry = new CustomGeometry();
+		if (!shape.geometryData) {
+			await shape.loadShape();
+		}
+		const object = new Model.Object3D();
+		object.shapeKind = SHAPE_KIND.CUSTOM;
+		object.objID = shapeID;
+		object.scale = 1;
+		const object3DElement = MapElement.Object3D.create(object);
 		object3DElement.updateGeometry(geometry, new Position(), 0);
 		this.addToScene(geometry, texture);
 	}

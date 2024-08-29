@@ -14,15 +14,18 @@
 	gap: 5px;
 	align-items: center;
 	padding: 1px 5px 2px 5px;
-	cursor: pointer;
 	white-space: nowrap;
 }
 
-.tree-item:hover {
+.tree:not(.disabled) .tree-item {
+	cursor: pointer;
+}
+
+.tree:not(.disabled) .tree-item:hover {
 	background-color: var(--hover-main-bg-color);
 }
 
-.tree-item.selected {
+.tree:not(.disabled) .tree-item.selected {
 	background-color: var(--primary-dark-color);
 }
 

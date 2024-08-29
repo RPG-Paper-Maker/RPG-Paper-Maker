@@ -26,6 +26,7 @@ type Props = {
 	initialHeight?: string;
 	isDisabled?: boolean;
 	isLoading?: boolean;
+	zIndex?: number;
 	footer?: React.ReactNode;
 	onClose?: () => void;
 };
@@ -35,6 +36,11 @@ enum RESIZING_TYPE {
 	BOTTOM = 'ns-resize',
 	LEFT_BOTTOM = 'nesw-resize',
 	RIGHT_BOTTOM = 'nwse-resize',
+}
+
+export enum Z_INDEX_LEVEL {
+	LAYER_TWO = 2000,
+	LAYER_TOP = 9999,
 }
 
 const RESIZING_SPACE = 5;
@@ -47,6 +53,7 @@ function Dialog({
 	initialHeight,
 	isDisabled = false,
 	isLoading = false,
+	zIndex,
 	footer,
 	onClose,
 }: Props) {
@@ -256,6 +263,9 @@ function Dialog({
 					onClick={handleCloseOut}
 					onMouseDown={handleMouseDownOverlay}
 					onMouseUp={handleMouseUpTitle}
+					style={{
+						zIndex,
+					}}
 				>
 					<div
 						ref={dialogRef}

@@ -10,9 +10,9 @@
 */
 
 import * as THREE from 'three';
+import { Mathf, Utils } from '../common';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
-import { Mathf, Utils } from '../common';
 import { Project } from './Project';
 
 class Camera {

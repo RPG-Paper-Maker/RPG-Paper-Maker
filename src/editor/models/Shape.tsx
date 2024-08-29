@@ -10,10 +10,10 @@
 */
 
 import * as THREE from 'three';
-import { Base } from './Base';
 import { BINDING, BindingType, CUSTOM_SHAPE_KIND, JSONType, Paths } from '../common';
-import { Project } from '../core';
 import { Platform } from '../common/Platform';
+import { Project } from '../core';
+import { Base } from './Base';
 
 type GeometryDataType = {
 	vertices: THREE.Vector3[];
@@ -33,6 +33,11 @@ class Shape extends Base {
 	public isBR!: boolean;
 	public dlc!: string;
 	public geometryData!: GeometryDataType;
+
+	constructor(kind: CUSTOM_SHAPE_KIND) {
+		super();
+		this.kind = kind;
+	}
 
 	public static readonly bindings: BindingType[] = [
 		['isBR', 'br', false, BINDING.BOOLEAN],
@@ -195,6 +200,22 @@ class Shape extends Base {
 
 	getPath(): string {
 		return this.id === -1 ? '' : `${Shape.getFolder(this.kind, this.isBR, this.dlc)}/${this.name}`;
+	}
+
+	getIcon() {
+		return <img src='/Assets/bullet-br.png' />;
+	}
+
+	copy(shape: Shape): void {
+		super.copy(shape);
+		this.isBR = shape.isBR;
+		this.dlc = shape.dlc;
+	}
+
+	clone(): Shape {
+		const shape = new Shape(this.kind);
+		shape.copy(this);
+		return shape;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

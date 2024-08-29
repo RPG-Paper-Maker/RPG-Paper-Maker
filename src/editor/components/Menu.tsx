@@ -10,8 +10,8 @@
 */
 
 import { Children, cloneElement, useEffect, useState } from 'react';
-import '../styles/Menu.css';
 import { Utils } from '../common';
+import '../styles/Menu.css';
 
 type Props = {
 	children: JSX.Element | JSX.Element[];

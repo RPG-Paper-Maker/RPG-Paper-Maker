@@ -40,6 +40,10 @@ class CommonObject extends Base {
 		return `OBJ:${Utils.formatNumberID(id)}`;
 	}
 
+	getFirstState(): MapObjectState | null {
+		return this.states[0] ?? null;
+	}
+
 	copy(object: CommonObject): void {
 		super.copy(object);
 		this.states = object.states.map((state) => state.clone());

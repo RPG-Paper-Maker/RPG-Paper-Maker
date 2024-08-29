@@ -27,3 +27,7 @@
 	padding: 1px 5px 1px 5px;
 	white-space: nowrap;
 }
+
+.tree.disabled {
+	color: var(--lighter-bg-color);
+}

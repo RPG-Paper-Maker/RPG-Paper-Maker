@@ -9,8 +9,25 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+	AiOutlineFileAdd,
+	AiOutlineFolder,
+	AiOutlineFolderOpen,
+	AiOutlineFontSize,
+	AiOutlinePicture,
+} from 'react-icons/ai';
+import { BiCube, BiImport, BiPyramid, BiSave } from 'react-icons/bi';
+import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs';
+import { FaArrowsAlt, FaPlug, FaRegKeyboard } from 'react-icons/fa';
+import { GiBrickWall } from 'react-icons/gi';
+import { LuLanguages, LuMountain, LuSaveAll } from 'react-icons/lu';
+import { MdAutoAwesomeMosaic, MdOutlineAddchart } from 'react-icons/md';
+import { TbNumbers } from 'react-icons/tb';
+import { TfiVideoClapper } from 'react-icons/tfi';
 import { useDispatch, useSelector } from 'react-redux';
+import { Constants } from '../common';
+import { Project } from '../core';
 import {
 	RootState,
 	triggerImportProject,
@@ -21,27 +38,9 @@ import {
 	triggerSaveAll,
 	triggerVariables,
 } from '../store';
+import '../styles/Toolbar.css';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
-import {
-	AiOutlineFileAdd,
-	AiOutlineFolderOpen,
-	AiOutlineFolder,
-	AiOutlinePicture,
-	AiOutlineFontSize,
-} from 'react-icons/ai';
-import { BiSave, BiPyramid, BiCube, BiImport } from 'react-icons/bi';
-import { LuSaveAll, LuLanguages, LuMountain } from 'react-icons/lu';
-import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs';
-import { TbNumbers } from 'react-icons/tb';
-import { FaArrowsAlt, FaRegKeyboard, FaPlug } from 'react-icons/fa';
-import { MdOutlineAddchart, MdAutoAwesomeMosaic } from 'react-icons/md';
-import { TfiVideoClapper } from 'react-icons/tfi';
-import { GiBrickWall } from 'react-icons/gi';
-import '../styles/Toolbar.css';
-import { Project } from '../core';
-import { Constants } from '../common';
-import { useTranslation } from 'react-i18next';
 
 function Toolbar() {
 	const { t } = useTranslation();
@@ -111,9 +110,13 @@ function Toolbar() {
 					<MenuItem icon={<LuSaveAll />} onClick={handleSaveAll} disabled={!canSaveAll}>
 						{t('all')}
 					</MenuItem>
-					<MenuItem icon={<AiOutlineFolder />} onClick={handleFloor} disabled>
-						{t('folder')}
-					</MenuItem>
+					{Constants.IS_DESKTOP ? (
+						<MenuItem icon={<AiOutlineFolder />} onClick={handleFloor} disabled>
+							{t('folder')}
+						</MenuItem>
+					) : (
+						<></>
+					)}
 					<MenuItem separator></MenuItem>
 					<MenuItem icon={<BsDatabase />} onClick={handleFloor} disabled>
 						{t('datas.manager.tool')}

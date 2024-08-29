@@ -51,6 +51,18 @@ class Object3D extends SpecialElement {
 		return [...Object3D.bindings, ...additionnalBinding];
 	}
 
+	static convertPixelFromPercent(percent: number): number {
+		return Math.floor(Project.SQUARE_SIZE * (percent / 100));
+	}
+
+	static convertPixelToPercent(value: number): number {
+		return (value / Project.SQUARE_SIZE) * 100;
+	}
+
+	applyDefault(additionnalBinding: BindingType[] = []) {
+		super.applyDefault(Object3D.getBindings(additionnalBinding));
+	}
+
 	getTotalWidthPixels(): number {
 		return this.widthSquare * Project.SQUARE_SIZE + (this.widthPixel * Project.SQUARE_SIZE) / 100;
 	}

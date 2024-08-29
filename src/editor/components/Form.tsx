@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
+import { Utils } from '../common';
 import '../styles/Form.css';
 
 type Props = {
@@ -17,17 +18,29 @@ type Props = {
 };
 
 function Form({ children }: Props) {
-	const getRows = () => {
-		const rows: ReactNode[] = [];
-		for (let i = 0, l = children.length; i < l; i += 2) {
-			rows.push(
-				<tr key={i}>
-					{children[i]}
-					{children[i + 1]}
-				</tr>
-			);
+	const getRowsWithoutFragment = (cleanedChildren: ReactNode[], rows: ReactNode[]) => {
+		for (const child of rows) {
+			if (React.isValidElement(child)) {
+				if (child.type === React.Fragment) {
+					getRowsWithoutFragment(cleanedChildren, React.Children.toArray(child.props.children));
+				} else {
+					cleanedChildren.push(child);
+				}
+			}
 		}
-		return rows;
+	};
+
+	const getRows = () => {
+		const cleanedChildren: ReactNode[] = [];
+		getRowsWithoutFragment(cleanedChildren, children);
+		return cleanedChildren
+			.filter((element, index) => index % 2 === 0)
+			.map((element, index) => (
+				<tr key={index}>
+					{cleanedChildren[index * 2]}
+					{cleanedChildren[index * 2 + 1]}
+				</tr>
+			));
 	};
 
 	return (
@@ -37,4 +50,23 @@ function Form({ children }: Props) {
 	);
 }
 
+type LabelProps = {
+	children?: ReactNode;
+	disabled?: boolean;
+};
+
+function Label({ children, disabled = false }: LabelProps) {
+	return <td className={Utils.getClassName({ disabled })}>{children}:</td>;
+}
+
+type ValueProps = {
+	children?: ReactNode;
+	disabled?: boolean;
+};
+
+function Value({ children, disabled = false }: ValueProps) {
+	return <td className={Utils.getClassName({ disabled })}>{children}</td>;
+}
+
 export default Form;
+export { Label, Value };

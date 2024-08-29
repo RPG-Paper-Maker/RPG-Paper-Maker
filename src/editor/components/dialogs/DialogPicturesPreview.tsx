@@ -20,8 +20,9 @@ import Flex from '../Flex';
 import Groupbox from '../Groupbox';
 import PanelAssetsPreviewer from '../panels/PanelAssetsPreviewer';
 import TextureCharacterSelector from '../TextureCharacterSelector';
+import TexturePreviewer from '../TexturePreviewer';
 import TextureSquareSelector from '../TextureSquareSelector';
-import Dialog from './Dialog';
+import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 import FooterOK from './footers/FooterOK';
 
@@ -68,7 +69,10 @@ function DialogPicturesPreview({
 		let rect = new Rectangle();
 		let rectT = new Rectangle();
 		if (pictureID !== undefined) {
-			setSelectedPicture(Project.current!.pictures.getByID(kind, pictureID));
+			const picture = Project.current!.pictures.getByID(kind, pictureID);
+			setSelectedPicture(picture);
+			setIsStopAnimation(picture.isStopAnimation);
+			setIsClimbAnimation(picture.isClimbAnimation);
 			if (pictureID === 0) {
 				if (rectTileset) {
 					rectT = rectTileset.clone();
@@ -188,7 +192,7 @@ function DialogPicturesPreview({
 						/>
 					);
 				default:
-					return null; // TODO
+					return <TexturePreviewer texture={selectedPicture.getPath()} />;
 			}
 		}
 	};
@@ -224,6 +228,7 @@ function DialogPicturesPreview({
 				initialWidth='70%'
 				initialHeight='70%'
 				onClose={handleReject}
+				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			>
 				<PanelAssetsPreviewer
 					assetID={pictureID}
@@ -246,8 +251,9 @@ function DialogPicturesPreview({
 				isOpen={isDialogWarningSelectionOpen}
 				footer={<FooterOK onOK={handleCloseWarningSelectionOpen} />}
 				onClose={handleCloseWarningSelectionOpen}
+				zIndex={Z_INDEX_LEVEL.LAYER_TOP}
 			>
-				<p>{t('warning.selection')}</p>
+				<p>{t('warning.asset.selection')}</p>
 			</Dialog>
 		</>
 	);

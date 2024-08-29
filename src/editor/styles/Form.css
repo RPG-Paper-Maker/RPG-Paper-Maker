@@ -9,7 +9,7 @@ table.form tr > :first-child {
 	padding-right: 5px;
 	display: flex;
 	vertical-align: middle;
-	height: 20px;
+	height: 25px;
 	white-space: nowrap;
 }
 
@@ -22,4 +22,8 @@ table.form tr > :nth-child(2) {
 
 table.form tr > :nth-child(2) > * {
 	width: 100%;
+}
+
+table.form tr td.disabled {
+	color: var(--lighter-bg-color);
 }

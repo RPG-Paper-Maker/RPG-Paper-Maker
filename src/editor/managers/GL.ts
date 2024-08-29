@@ -30,6 +30,7 @@ class GL {
 	public static raycaster = new THREE.Raycaster();
 	public static mainContext: GL;
 	public static layerOneContext: GL;
+	public static layerTwoContext: GL;
 	public static MATERIAL_EMPTY = this.loadTextureEmpty();
 	public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 	public parent!: HTMLElement;
@@ -60,7 +61,7 @@ class GL {
 	}
 
 	static loadTextureEmpty(): THREE.MeshPhongMaterial {
-		const material = new THREE.MeshPhongMaterial();
+		const material = new THREE.MeshPhongMaterial({ opacity: 0, transparent: true });
 		material.userData.uniforms = {
 			t: { value: undefined },
 		};

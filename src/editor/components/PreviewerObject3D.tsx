@@ -16,11 +16,49 @@ import Flex from './Flex';
 type Props = {
 	sceneID: string;
 	objectID: number;
+	isShape?: boolean;
 	GL?: Manager.GL;
+	triggerUpdate?: boolean;
+	setTriggerUpdate?: (b: boolean) => void;
 };
 
-function PreviewerObject3D({ sceneID, objectID, GL = Manager.GL.layerOneContext }: Props) {
+function PreviewerObject3D({
+	sceneID,
+	objectID,
+	isShape = false,
+	triggerUpdate,
+	setTriggerUpdate,
+	GL = Manager.GL.layerOneContext,
+}: Props) {
 	const refCanvas = useRef<HTMLDivElement>(null);
+
+	const loop = () => {
+		const scene = Scene.Previewer3D.listScenes.get(sceneID);
+		GL.renderer.clear();
+		if (scene) {
+			requestAnimationFrame(loop);
+			scene.update();
+			scene.draw3D(GL);
+		}
+	};
+
+	const resize = () => {
+		const scene = Scene.Previewer3D.listScenes.get(sceneID);
+		const canvas = refCanvas.current;
+		if (scene && canvas) {
+			scene.camera.resizeGL(GL, canvas.clientWidth, canvas.clientHeight);
+			scene.update();
+			scene.draw3D(GL);
+		}
+	};
+
+	const update = async () => {
+		const scene = Scene.Previewer3D.listScenes.get(sceneID);
+		if (scene) {
+			await (isShape ? scene.loadShape(objectID) : scene.loadObject3D(objectID));
+			resize();
+		}
+	};
 
 	const initialize = async () => {
 		const canvas = refCanvas.current;
@@ -36,47 +74,16 @@ function PreviewerObject3D({ sceneID, objectID, GL = Manager.GL.layerOneContext 
 		}
 	};
 
-	const update = async () => {
-		const scene = Scene.Previewer3D.listScenes.get(sceneID);
-		if (scene) {
-			await scene.loadObject3D(objectID);
-			if (refCanvas.current) {
-				const rect = refCanvas.current.getBoundingClientRect();
-				const size = Math.min(rect.width, rect.height);
-				refCanvas.current.style.width = `${size}px`;
-				refCanvas.current.style.height = `${size}px`;
-				resizeForced();
-			}
-		}
-	};
-
-	const loop = () => {
-		const scene = Scene.Previewer3D.listScenes.get(sceneID);
-		GL.renderer.clear();
-		if (scene) {
-			requestAnimationFrame(loop);
-			scene.update();
-			scene.draw3D(GL);
-		}
-	};
-
-	const resize = () => {
-		resizeForced();
-	};
-
-	const resizeForced = () => {
-		const scene = Scene.Previewer3D.mainPreviewerScene;
-		const canvas = refCanvas.current;
-		if (scene && canvas) {
-			scene.camera.resizeGL(GL, canvas.clientWidth, canvas.clientHeight);
-			scene.update();
-			scene.draw3D(GL);
-		}
-	};
-
 	useEffect(() => {
 		update().catch(console.error);
 	}, [objectID]);
+
+	useEffect(() => {
+		if (triggerUpdate && setTriggerUpdate) {
+			update().catch(console.error);
+			setTriggerUpdate(false);
+		}
+	}, [triggerUpdate]);
 
 	useEffect(() => {
 		initialize().catch(console.error);
@@ -85,13 +92,11 @@ function PreviewerObject3D({ sceneID, objectID, GL = Manager.GL.layerOneContext 
 			window.removeEventListener('resize', resize);
 			Scene.Previewer3D.listScenes.delete(sceneID);
 		};
-	}, []);
+	}, [sceneID]);
 
 	return (
 		<Flex one fillWidth fillHeight centerV>
-			<Flex one />
 			<div className='fill-width fill-height' ref={refCanvas} />
-			<Flex one />
 		</Flex>
 	);
 }

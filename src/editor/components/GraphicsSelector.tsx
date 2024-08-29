@@ -142,9 +142,16 @@ function GraphicsSelector({
 		onUpdateGraphics(object3D.id, new Rectangle(), false);
 	};
 
-	const handleChangeGraphics = (kind: number) => {
-		onChangeGraphicsKind(kind);
-		onUpdateGraphics(1, new Rectangle(), false);
+	const handleChangeGraphicsKind = (kind: number) => {
+		if (
+			(graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX || graphicsKind === ELEMENT_MAP_KIND.SPRITE_FACE) &&
+			(kind === ELEMENT_MAP_KIND.SPRITE_FIX || kind === ELEMENT_MAP_KIND.SPRITE_FACE)
+		) {
+			onChangeGraphicsKind(kind);
+		} else {
+			onChangeGraphicsKind(kind);
+			onUpdateGraphics(kind === ELEMENT_MAP_KIND.NONE ? -1 : 1, new Rectangle(), false);
+		}
 	};
 
 	useEffect(() => {
@@ -186,9 +193,10 @@ function GraphicsSelector({
 				</div>
 				<Dropdown
 					selectedID={graphicsKind}
-					onChange={handleChangeGraphics}
+					onChange={handleChangeGraphicsKind}
 					options={Model.Base.GRAPHICS_OPTIONS}
 					translateOptions
+					fillWidth
 				/>
 			</Flex>
 			<DialogPicturesPreview

@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Model } from '../Editor';
-import { Serializable } from './Serializable';
 import { BINDING, BindingType, Constants, CopiedItemsType, JSONType, LOCAL_FORAGE, Paths, Utils } from '../common';
-import { Project } from './Project';
 import { Platform } from '../common/Platform';
+import { Model } from '../Editor';
+import { Project } from './Project';
+import { Serializable } from './Serializable';
 
 export const NODE_CONSTRUCTOR_KIND = {
 	Base: () => Model.Base,
@@ -21,6 +21,7 @@ export const NODE_CONSTRUCTOR_KIND = {
 	MapObjectState: () => Model.MapObjectState,
 	MapObjectProperty: () => Model.MapObjectProperty,
 	MapObjectEvent: () => Model.MapObjectEvent,
+	Object3D: () => Model.Object3D,
 };
 
 class Node extends Serializable {

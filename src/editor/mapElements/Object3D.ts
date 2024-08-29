@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import {
@@ -23,7 +24,6 @@ import {
 } from '../common';
 import { CustomGeometry, Position, Project } from '../core';
 import { Base } from './Base';
-import i18next from 'i18next';
 
 abstract class Object3D extends Base {
 	public id!: number;

@@ -39,10 +39,15 @@
 	text-align: start;
 }
 
-.dropdown .content .element:hover {
+.dropdown .content .element:hover:not(.disabled) {
 	background-color: var(--darkest-bg-color);
 }
 
 .dropdown .content .element.selected {
 	background-color: var(--lighter-bg-color);
+}
+
+.dropdown .content .element.disabled {
+	color: var(--lighter-bg-color);
+	cursor: default;
 }

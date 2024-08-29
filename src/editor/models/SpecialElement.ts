@@ -24,6 +24,10 @@ class SpecialElement extends Base {
 		return [...SpecialElement.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []) {
+		super.applyDefault(SpecialElement.getBindings(additionnalBinding));
+	}
+
 	copy(specialElement: SpecialElement): void {
 		super.copy(specialElement);
 		this.pictureID = specialElement.pictureID;
