@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Manager, Model, Scene } from '../Editor';
 import { ELEMENT_MAP_KIND, PICTURE_KIND } from '../common';
@@ -56,26 +56,23 @@ function GraphicsSelector({
 
 	const isObject3D = graphicsKind === ELEMENT_MAP_KIND.OBJECT3D;
 
-	const updatePicture = useCallback(
-		async (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => {
-			const img = await Picture2D.loadImage(
-				(isTileset
-					? Project.current!.pictures.getByID(
-							PICTURE_KIND.TILESETS,
-							Scene.Map.current!.model.getTileset().pictureID
-					  )
-					: picture
-				).getPath()
-			);
-			const ctx = getContext();
-			if (ctx) {
-				clear(ctx);
-				draw(ctx, picture, img, rect, isTileset);
-			}
-			onUpdateGraphics(picture.id, rect, isTileset);
-		},
-		[onUpdateGraphics]
-	);
+	const updatePicture = async (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => {
+		const img = await Picture2D.loadImage(
+			(isTileset
+				? Project.current!.pictures.getByID(
+						PICTURE_KIND.TILESETS,
+						Scene.Map.current!.model.getTileset().pictureID
+				  )
+				: picture
+			).getPath()
+		);
+		const ctx = getContext();
+		if (ctx) {
+			clear(ctx);
+			draw(ctx, picture, img, rect, isTileset);
+		}
+		onUpdateGraphics(picture.id, rect, isTileset);
+	};
 
 	const getContext = () => {
 		if (refCanvas.current) {
@@ -168,7 +165,8 @@ function GraphicsSelector({
 				clear(ctx);
 			}
 		}
-	}, [graphicsID, graphicsIndexX, graphicsIndexY, isCharacter, rectTileset, updatePicture]);
+		// eslint-disable-next-line
+	}, [graphicsID]);
 
 	useEffect(() => {
 		if (isOpenDialogObjects3D) {

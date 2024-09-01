@@ -106,6 +106,7 @@ class Map extends Base {
 	public texturesObjects3D: THREE.MeshPhongMaterial[] = [];
 	public texturesObjects3DHover: THREE.MeshPhongMaterial[] = [];
 	public texturesMountains: globalThis.Map<number, THREE.MeshPhongMaterial> = new globalThis.Map();
+	public texturesCharacters: THREE.MeshPhongMaterial[] = [];
 	public autotilesOffset = new THREE.Vector2();
 	public autotileFrame = new Frame(Project.current!.systems.autotilesFrameDuration, {
 		frames: Project.current!.systems.autotilesFrames,

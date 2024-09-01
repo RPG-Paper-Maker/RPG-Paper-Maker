@@ -9,12 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
-import { MapElement, Scene } from '../Editor';
-import { Base } from './Base';
-import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle } from '../core';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType } from '../common';
 import i18next from 'i18next';
+import * as THREE from 'three';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND } from '../common';
+import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle } from '../core';
+import { Manager, MapElement, Scene } from '../Editor';
+import { Base } from './Base';
 
 class Sprite extends Base {
 	public static readonly MODEL = [
@@ -75,6 +75,25 @@ class Sprite extends Base {
 		geometry.pushQuadIndices(count, position);
 		geometry.pushQuadUVs(texA, texB, texC, texD);
 		return count + 4;
+	}
+
+	static getCharacterTexture(id: number): THREE.MeshPhongMaterial | null {
+		return Scene.Map.current!.texturesCharacters[id] || null;
+	}
+
+	static async loadCharacterTexture(id: number): Promise<THREE.MeshPhongMaterial> {
+		let textureCharacter = Scene.Map.current ? Scene.Map.current.texturesCharacters[id] : null;
+		if (!textureCharacter) {
+			const picture = Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, id);
+			if (picture) {
+				const path = picture.getPath();
+				textureCharacter = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();
+			} else {
+				textureCharacter = Manager.GL.loadTextureEmpty();
+			}
+			Scene.Map.current!.texturesCharacters[id] = textureCharacter;
+		}
+		return textureCharacter;
 	}
 
 	equals(mapElement: MapElement.Base) {

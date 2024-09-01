@@ -10,7 +10,6 @@
 */
 
 import * as THREE from 'three';
-import { Manager, MapElement, Model, Scene } from '../Editor';
 import {
 	CustomGeometry,
 	CustomGeometryFace,
@@ -21,7 +20,8 @@ import {
 	Rectangle,
 	UndoRedoState,
 } from '.';
-import { ACTION_KIND, ELEMENT_MAP_KIND, Mathf, RAYCASTING_LAYER } from '../common';
+import { ACTION_KIND, ELEMENT_MAP_KIND, Mathf, PICTURE_KIND, RAYCASTING_LAYER } from '../common';
+import { Manager, MapElement, Model, Scene } from '../Editor';
 
 type GeometryMaterialType = {
 	geometry: CustomGeometry;
@@ -39,6 +39,8 @@ class MapPortion {
 	public mountainsList!: Map<number, MapElement.Mountains>;
 	public objects3DMeshes!: THREE.Mesh[];
 	public objectsMesh: THREE.Mesh | null = null;
+	public objectsMeshes: THREE.Mesh[] = [];
+	public objectsSpritesFaceMeshes: THREE.Mesh[] = [];
 	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND][] = [];
 
 	static offsetMeshPositionLayer(mesh: THREE.Mesh, side: number, layer: number, up = true) {
@@ -648,7 +650,33 @@ class MapPortion {
 				return false;
 			}
 		}
-
+		for (const [, object] of this.model.objects) {
+			const state = object.getFirstState();
+			if (state) {
+				switch (state.graphicsKind) {
+					case ELEMENT_MAP_KIND.SPRITE_FIX:
+					case ELEMENT_MAP_KIND.SPRITE_FACE:
+						if (state.graphicsID !== 0) {
+							const textureCharacter = MapElement.Sprite.getCharacterTexture(state.graphicsID);
+							if (textureCharacter === null) {
+								Scene.Map.current!.loading = true;
+								this.loadTexturesAndUpdateGeometries().catch(console.error);
+								return false;
+							}
+						}
+						break;
+					case ELEMENT_MAP_KIND.OBJECT3D: {
+						const textureObject3D = MapElement.Object3D.getObject3DTexture(state.graphicsID);
+						if (textureObject3D === null || !MapElement.Object3D.isShapeLoaded(state.graphicsID)) {
+							Scene.Map.current!.loading = true;
+							this.loadTexturesAndUpdateGeometries().catch(console.error);
+							return false;
+						}
+						break;
+					}
+				}
+			}
+		}
 		return true;
 	}
 
@@ -667,6 +695,23 @@ class MapPortion {
 		for (const [, object3D] of this.model.objects3D) {
 			await MapElement.Object3D.loadObject3DTexture(object3D.id);
 			await MapElement.Object3D.loadShapeOBJ(object3D.id);
+		}
+		for (const [, object] of this.model.objects) {
+			const state = object.getFirstState();
+			if (state) {
+				switch (state.graphicsKind) {
+					case ELEMENT_MAP_KIND.SPRITE_FIX:
+					case ELEMENT_MAP_KIND.SPRITE_FACE:
+						if (state.graphicsID !== 0) {
+							await MapElement.Sprite.loadCharacterTexture(state.graphicsID);
+						}
+						break;
+					case ELEMENT_MAP_KIND.OBJECT3D:
+						await MapElement.Object3D.loadObject3DTexture(state.graphicsID);
+						await MapElement.Object3D.loadShapeOBJ(state.graphicsID);
+						break;
+				}
+			}
 		}
 		this.updateGeometriesWithoutCheck();
 		if (updateLoading) {
@@ -1159,10 +1204,20 @@ class MapPortion {
 			Scene.Map.current!.scene.remove(this.objectsMesh);
 			this.objectsMesh = null;
 		}
+		for (const mesh of this.objectsMeshes) {
+			Scene.Map.current!.scene.remove(mesh);
+		}
+		for (const mesh of this.objectsSpritesFaceMeshes) {
+			Scene.Map.current!.scene.remove(mesh);
+		}
+		this.objectsMeshes = [];
+		this.objectsSpritesFaceMeshes = [];
 		const geometry = new CustomGeometry();
 		let count = 0;
-		for (const [positionKey] of this.model.objects) {
+		for (const [positionKey, object] of this.model.objects) {
 			const position = Position.fromKey(positionKey);
+
+			// Object square cursor
 			const vec = position.toVector3(false);
 			const vecA = new THREE.Vector3(vec.x, vec.y, vec.z);
 			const vecB = new THREE.Vector3(vec.x + Project.SQUARE_SIZE, vec.y, vec.z);
@@ -1178,7 +1233,78 @@ class MapPortion {
 			CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, coef, coef, 1 - coef, 1 - coef);
 			geometry.pushQuadUVs(texA, texB, texC, texD);
 			count += 4;
+
+			// First state graphics
+			const state = object.getFirstState();
+			if (state) {
+				let mesh: THREE.Mesh | null = null;
+				switch (state.graphicsKind) {
+					case ELEMENT_MAP_KIND.NONE:
+						break;
+					case ELEMENT_MAP_KIND.SPRITE_FIX:
+					case ELEMENT_MAP_KIND.SPRITE_FACE: {
+						const material =
+							state.graphicsID === 0
+								? Scene.Map.current!.materialTileset
+								: Scene.Map.current!.texturesCharacters[state.graphicsID];
+						const { width, height } = Manager.GL.getMaterialTextureSize(material);
+						const characterRect = new Rectangle();
+						if (state.graphicsID !== 0) {
+							const picture = Project.current!.pictures.getByID(
+								PICTURE_KIND.CHARACTERS,
+								state.graphicsID
+							);
+							const rows = 4 + (picture.isStopAnimation ? 4 : 0) + (picture.isClimbAnimation ? 4 : 0);
+							const squareWidth = width / Project.SQUARE_SIZE / 4;
+							const squareHeight = height / Project.SQUARE_SIZE / rows;
+							characterRect.x = state.graphicsIndexX * squareWidth;
+							characterRect.y = state.graphicsIndexY * squareHeight;
+							characterRect.width = squareWidth;
+							characterRect.height = squareHeight;
+						}
+						const sprite = MapElement.Sprite.create(
+							state.graphicsKind,
+							state.graphicsID === 0 ? state.rectTileset ?? new Rectangle() : characterRect
+						);
+						const geometrySprite =
+							state.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX
+								? new CustomGeometry()
+								: new CustomGeometryFace();
+						const localPosition = position.toVector3();
+						sprite.updateGeometry(geometrySprite, width, height, position, 0, false, localPosition);
+						geometrySprite.updateAttributes();
+						mesh = new THREE.Mesh(geometrySprite, material);
+						if (state.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX) {
+							this.objectsMeshes.push(mesh);
+						} else {
+							this.objectsSpritesFaceMeshes.push(mesh);
+						}
+						break;
+					}
+					case ELEMENT_MAP_KIND.OBJECT3D: {
+						const material = MapElement.Object3D.getObject3DTexture(state.graphicsID);
+						if (material) {
+							const geometryObject3D = new CustomGeometry();
+							const object3D = MapElement.Object3D.create(
+								Project.current!.specialElements.getObject3DByID(state.graphicsID)
+							);
+							object3D.updateGeometry(geometryObject3D, position, 0);
+							geometryObject3D.updateAttributes();
+							mesh = new THREE.Mesh(geometryObject3D, material);
+							this.objectsMeshes.push(mesh);
+						}
+						break;
+					}
+				}
+				if (mesh) {
+					mesh.receiveShadow = true;
+					mesh.castShadow = true;
+					mesh.renderOrder = 0;
+					Scene.Map.current!.scene.add(mesh);
+				}
+			}
 		}
+		// Object square cursors
 		if (!geometry.isEmpty()) {
 			geometry.updateAttributes();
 			this.objectsMesh = new THREE.Mesh(geometry, Scene.Map.materialObjectSquare);
@@ -1193,6 +1319,11 @@ class MapPortion {
 
 	updateFaceSprites(angle: number) {
 		for (const mesh of this.spritesFaceMeshes) {
+			if (mesh) {
+				(mesh.geometry as CustomGeometryFace).rotate(angle, MapElement.Base.Y_AXIS);
+			}
+		}
+		for (const mesh of this.objectsSpritesFaceMeshes) {
 			if (mesh) {
 				(mesh.geometry as CustomGeometryFace).rotate(angle, MapElement.Base.Y_AXIS);
 			}
@@ -1291,6 +1422,12 @@ class MapPortion {
 		if (this.objectsMesh !== null) {
 			Scene.Map.current!.scene.remove(this.objectsMesh);
 			this.objectsMesh = null;
+		}
+		for (const mesh of this.objectsMeshes) {
+			Scene.Map.current!.scene.remove(mesh);
+		}
+		for (const mesh of this.objectsSpritesFaceMeshes) {
+			Scene.Map.current!.scene.remove(mesh);
 		}
 	}
 }

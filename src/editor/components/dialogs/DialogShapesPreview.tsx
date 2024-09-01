@@ -105,6 +105,7 @@ function DialogShapesPreview({ kind, isOpen, setIsOpen, shapeID, onAccept, onRej
 		if (shapes.length > 0) {
 			updateShapesList();
 		}
+		// eslint-disable-next-line
 	}, [shapes.length]);
 
 	useEffect(() => {
