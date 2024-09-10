@@ -33,7 +33,8 @@
 		"@babel/plugin-proposal-private-property-in-object": "^7.21.11",
 		"@types/eslint__js": "^8.42.3",
 		"electron": "^32.0.1",
-		"eslint": "^9.9.1",
+		"eslint": "^8.57.0",
+		"eslint-config-react-app": "^7.0.1",
 		"simple-git": "^3.26.0",
 		"typescript-eslint": "^8.3.0"
 	},

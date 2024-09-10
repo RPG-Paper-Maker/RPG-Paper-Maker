@@ -11,8 +11,8 @@
 
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
-import { CustomGeometry, Picture2D, Position, Project } from '../core';
 import { PICTURE_KIND } from '../common';
+import { CustomGeometry, Picture2D, Position, Project } from '../core';
 
 class Mountains {
 	public pictureID: number;
@@ -163,7 +163,7 @@ class Mountains {
 				sDiv,
 				sDiv
 			);
-		} catch (e) {
+		} catch {
 			console.error(
 				'Error: Wrong mountain (with ID:' +
 					picture.id +

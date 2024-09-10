@@ -29,15 +29,14 @@ import FooterCancelOK from './footers/FooterCancelOK';
 import FooterNoYes from './footers/FooterNoYes';
 
 type Props = {
-	needOpen: boolean;
-	setNeedOpen: (b: boolean) => void;
+	isOpen: boolean;
+	setIsOpen: (b: boolean) => void;
 	onAccept: (data: Model.ProjectPreview) => void;
 };
 
-function DialogNewProject({ needOpen, setNeedOpen, onAccept }: Props) {
+function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 	const { t } = useTranslation();
 
-	const [isOpen, setIsOpen] = useState(false);
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [projectName, setProjectName] = useStateString();
@@ -154,13 +153,13 @@ function DialogNewProject({ needOpen, setNeedOpen, onAccept }: Props) {
 	};
 
 	useEffect(() => {
-		if (needOpen) {
-			setNeedOpen(false);
+		if (isOpen) {
+			setIsOpen(false);
 			initialize();
 			setIsOpen(true);
 		}
 		// eslint-disable-next-line
-	}, [needOpen]);
+	}, [isOpen]);
 
 	return (
 		<>

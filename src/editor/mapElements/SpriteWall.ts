@@ -9,13 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import * as THREE from 'three';
-import { Manager, MapElement, Model, Scene } from '../Editor';
-import { Base } from './Base';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND, SPRITE_WALL_TYPE, Utils } from '../common';
 import { CustomGeometry, Picture2D, Position, Project } from '../core';
+import { Manager, MapElement, Model, Scene } from '../Editor';
+import { Base } from './Base';
 import { Sprite } from './Sprite';
-import i18next from 'i18next';
 
 class SpriteWall extends Base {
 	public wallID!: number;
@@ -104,7 +104,7 @@ class SpriteWall extends Base {
 		try {
 			Scene.Map.ctxRendering!.putImageData(left, w, 0);
 			Scene.Map.ctxRendering!.putImageData(right, w + Math.floor(Project.SQUARE_SIZE / 2), 0);
-		} catch (e) {
+		} catch {
 			console.error(
 				'Error: Wrong wall (with ID:' + id + ') parsing. Please verify that you have a 3 x 3 picture.'
 			);

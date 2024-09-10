@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from './Base';
 import { BINDING, BindingType, JSONType, Paths, PICTURE_KIND } from '../common';
 import { CollisionSquare, Picture2D, Project } from '../core';
+import { Base } from './Base';
 
 class Picture extends Base {
 	public kind!: PICTURE_KIND;
@@ -100,7 +100,7 @@ class Picture extends Base {
 	}
 
 	getIcon() {
-		return <img src='/Assets/bullet-br.png' />;
+		return <img src='/Assets/bullet-br.png' alt='br bullet' />;
 	}
 
 	copy(picture: Picture): void {

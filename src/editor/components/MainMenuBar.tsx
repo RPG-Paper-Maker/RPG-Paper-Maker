@@ -76,7 +76,7 @@ import Toolbar from './Toolbar';
 function MainMenuBar() {
 	const { t } = useTranslation();
 
-	const [needDialogNewProjectOpen, setNeedDialogNewProjectOpen] = useState(false);
+	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
 	const [needDialogVariablesOpen, setNeedDialogVariablesOpen] = useState(false);
 	const [needDialogChangeLanguageOpen, setNeedDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
@@ -129,7 +129,7 @@ function MainMenuBar() {
 	};
 
 	const handleNewProject = async () => {
-		setNeedDialogNewProjectOpen(true);
+		setIsDialogNewProjectOpen(true);
 	};
 
 	const handleAcceptNewProject = async (project: Model.ProjectPreview) => {
@@ -695,8 +695,8 @@ function MainMenuBar() {
 			</div>
 			<Toolbar />
 			<DialogNewProject
-				needOpen={needDialogNewProjectOpen}
-				setNeedOpen={setNeedDialogNewProjectOpen}
+				isOpen={isDialogNewProjectOpen}
+				setIsOpen={setIsDialogNewProjectOpen}
 				onAccept={handleAcceptNewProject}
 			/>
 			<DialogVariables needOpen={needDialogVariablesOpen} setNeedOpen={setNeedDialogVariablesOpen} />

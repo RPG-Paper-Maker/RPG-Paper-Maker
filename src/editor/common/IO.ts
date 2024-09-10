@@ -11,15 +11,15 @@
 
 import JSZip from 'jszip';
 import { Paths } from './Paths';
-import { ExtendedWindow, JSONType } from './Types';
 import { Platform } from './Platform';
+import { ExtendedWindow, JSONType } from './Types';
 
 class IO {
 	static async parseFileJSON(url: string): Promise<JSONType> {
 		const content = await IO.readFile(url);
 		try {
 			return content === null ? {} : JSON.parse(content);
-		} catch (e) {
+		} catch {
 			return {};
 		}
 	}
