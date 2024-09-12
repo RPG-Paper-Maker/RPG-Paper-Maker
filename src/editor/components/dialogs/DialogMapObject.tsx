@@ -32,16 +32,15 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	needOpen: boolean;
-	setNeedOpen: (b: boolean) => void;
+	isOpen: boolean;
+	setIsOpen: (b: boolean) => void;
 	object: Model.CommonObject;
 	onAccept: () => Promise<void>;
 };
 
-function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
+function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	const { t } = useTranslation();
 
-	const [isOpen, setIsOpen] = useState(false);
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [name, setName] = useStateString();
@@ -163,14 +162,14 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 	};
 
 	const handleUpdateGraphics = (id: number, rect: Rectangle, isTileset: boolean) => {
-		selectedState!.graphicsID = id;
-		selectedState!.graphicsIndexX = isTileset ? 0 : rect.x;
-		selectedState!.graphicsIndexY = isTileset ? 0 : rect.y;
-		selectedState!.rectTileset = isTileset ? rect.clone() : undefined;
+		selectedState.graphicsID = id;
+		selectedState.graphicsIndexX = isTileset ? 0 : rect.x;
+		selectedState.graphicsIndexY = isTileset ? 0 : rect.y;
+		selectedState.rectTileset = isTileset ? rect.clone() : undefined;
 		setGraphicsID(id);
-		setGraphicsIndexX(selectedState!.graphicsIndexX);
-		setGraphicsIndexY(selectedState!.graphicsIndexY);
-		setRectTileset(selectedState!.rectTileset);
+		setGraphicsIndexX(selectedState.graphicsIndexX);
+		setGraphicsIndexY(selectedState.graphicsIndexY);
+		setRectTileset(selectedState.rectTileset);
 	};
 
 	const handleChangeObjectMovingKind = (movingKind: number) => {
@@ -251,14 +250,12 @@ function DialogMapObject({ needOpen, setNeedOpen, object, onAccept }: Props) {
 	};
 
 	useEffect(() => {
-		if (needOpen) {
-			setNeedOpen(false);
+		if (isOpen) {
 			setFocustFirst(true);
 			initialize();
-			setIsOpen(true);
 		}
 		// eslint-disable-next-line
-	}, [needOpen]);
+	}, [isOpen]);
 
 	return (
 		<Dialog

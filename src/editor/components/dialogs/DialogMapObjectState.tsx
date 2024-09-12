@@ -21,22 +21,21 @@ import FooterCancelOK from './footers/FooterCancelOK';
 import FooterOK from './footers/FooterOK';
 
 type Props = {
-	needOpen: boolean;
-	setNeedOpen: (b: boolean) => void;
+	isOpen: boolean;
+	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	isNew: boolean;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogMapObjectState({ needOpen, setNeedOpen, model, isNew, onAccept, onReject }: Props) {
-	const state = model as Model.MapObjectState;
-
+function DialogMapObjectState({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
-	const [isOpen, setIsOpen] = useState(false);
 	const [isOpenWarning, setIsOpenWarning] = useState(false);
 	const [stateID, setStateID] = useStateNumber();
+
+	const state = model as Model.MapObjectState;
 
 	const initialize = () => {
 		if (isNew) {
@@ -68,13 +67,11 @@ function DialogMapObjectState({ needOpen, setNeedOpen, model, isNew, onAccept, o
 	};
 
 	useEffect(() => {
-		if (needOpen) {
-			setNeedOpen(false);
+		if (isOpen) {
 			initialize();
-			setIsOpen(true);
 		}
 		// eslint-disable-next-line
-	}, [needOpen]);
+	}, [isOpen]);
 
 	return (
 		<>

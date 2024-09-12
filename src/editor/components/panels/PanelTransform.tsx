@@ -328,8 +328,8 @@ function PanelTransform({ kind }: Props) {
 				</Flex>
 			</Groupbox>
 			<DialogTransformDefaultValues
-				needOpen={needDefaultDialogOpen}
-				setNeedOpen={setNeedDefaultDialogOpen}
+				isOpen={needDefaultDialogOpen}
+				setIsOpen={setNeedDefaultDialogOpen}
 				getMinX={getMinX}
 				getMaxX={getMaxX}
 				getMinY={getMinY}

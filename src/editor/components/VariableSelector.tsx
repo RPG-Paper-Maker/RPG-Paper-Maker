@@ -44,8 +44,8 @@ function VariableSelector({ variableID, onChange }: Props) {
 				<Button onClick={handleOpenVariables}>...</Button>
 			</Flex>
 			<DialogVariables
-				needOpen={needDialogOpen}
-				setNeedOpen={setNeedDialogOpen}
+				isOpen={needDialogOpen}
+				setIsOpen={setNeedDialogOpen}
 				model={node.content}
 				onAccept={handleAccept}
 			/>

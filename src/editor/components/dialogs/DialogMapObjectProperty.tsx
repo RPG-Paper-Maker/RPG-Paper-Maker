@@ -9,33 +9,32 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useState } from 'react';
-import Dialog from './Dialog';
-import FooterCancelOK from './footers/FooterCancelOK';
-import { Model } from '../../Editor';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DynamicValue } from '../../core/DynamicValue';
-import DynamicValueSelector from '../DynamicValueSelector';
 import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from '../../common';
+import { DynamicValue } from '../../core/DynamicValue';
+import { Model } from '../../Editor';
 import useStateString from '../../hooks/useStateString';
+import DynamicValueSelector from '../DynamicValueSelector';
 import Form from '../Form';
 import InputText from '../InputText';
+import Dialog from './Dialog';
+import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	needOpen: boolean;
-	setNeedOpen: (b: boolean) => void;
+	isOpen: boolean;
+	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
 	isNew: boolean;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogMapObjectProperty({ needOpen, setNeedOpen, model, isNew, onAccept, onReject }: Props) {
+function DialogMapObjectProperty({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: Props) {
 	const property = model as Model.MapObjectProperty;
 
 	const { t } = useTranslation();
 
-	const [isOpen, setIsOpen] = useState(false);
 	const [name, setName] = useStateString();
 	const [initialValue, setInitialValue] = useState<DynamicValue>();
 
@@ -62,13 +61,11 @@ function DialogMapObjectProperty({ needOpen, setNeedOpen, model, isNew, onAccept
 	};
 
 	useEffect(() => {
-		if (needOpen) {
-			setNeedOpen(false);
+		if (isOpen) {
 			initialize();
-			setIsOpen(true);
 		}
 		// eslint-disable-next-line
-	}, [needOpen]);
+	}, [isOpen]);
 
 	return (
 		<>

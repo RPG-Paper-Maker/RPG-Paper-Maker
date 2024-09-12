@@ -23,16 +23,15 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	needOpen: boolean;
-	setNeedOpen: (b: boolean) => void;
+	isOpen: boolean;
+	setIsOpen: (b: boolean) => void;
 	model: Model.Map;
 	onAccept: (previousModel: Model.Map) => Promise<void>;
 };
 
-function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) {
+function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 	const { t } = useTranslation();
 
-	const [isOpen, setIsOpen] = useState(false);
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [name, setName] = useStateString();
@@ -70,14 +69,12 @@ function DialogMapProperties({ needOpen, setNeedOpen, model, onAccept }: Props) 
 	};
 
 	useEffect(() => {
-		if (needOpen) {
-			setNeedOpen(false);
+		if (isOpen) {
 			setFocustFirst(true);
 			initialize();
-			setIsOpen(true);
 		}
 		// eslint-disable-next-line
-	}, [needOpen]);
+	}, [isOpen]);
 
 	return (
 		<Dialog

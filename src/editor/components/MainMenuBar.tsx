@@ -77,8 +77,8 @@ function MainMenuBar() {
 	const { t } = useTranslation();
 
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
-	const [needDialogVariablesOpen, setNeedDialogVariablesOpen] = useState(false);
-	const [needDialogChangeLanguageOpen, setNeedDialogChangeLanguageOpen] = useState(false);
+	const [isDialogVariablesOpen, setIsDialogVariablesOpen] = useState(false);
+	const [isDialogChangeLanguageOpen, setIsDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
 	const [isDialogWarningProjectLocationExist, setIsDialogWarningProjectLocationExist] = useState(false);
@@ -333,11 +333,11 @@ function MainMenuBar() {
 	};
 
 	const handleVariablesManager = async () => {
-		setNeedDialogVariablesOpen(true);
+		setIsDialogVariablesOpen(true);
 	};
 
 	const handleChangeLanguage = async () => {
-		setNeedDialogChangeLanguageOpen(true);
+		setIsDialogChangeLanguageOpen(true);
 	};
 
 	const play = async () => await Platform.openGame(currentProject!.location);
@@ -699,11 +699,8 @@ function MainMenuBar() {
 				setIsOpen={setIsDialogNewProjectOpen}
 				onAccept={handleAcceptNewProject}
 			/>
-			<DialogVariables needOpen={needDialogVariablesOpen} setNeedOpen={setNeedDialogVariablesOpen} />
-			<DialogChangeLanguage
-				needOpen={needDialogChangeLanguageOpen}
-				setNeedOpen={setNeedDialogChangeLanguageOpen}
-			/>
+			<DialogVariables isOpen={isDialogVariablesOpen} setIsOpen={setIsDialogVariablesOpen} />
+			<DialogChangeLanguage isOpen={isDialogChangeLanguageOpen} setIsOpen={setIsDialogChangeLanguageOpen} />
 			<Dialog
 				title={t('warning')}
 				isOpen={isDialogWarningProjectVersionOpen}

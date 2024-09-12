@@ -19,8 +19,8 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	needOpen: boolean;
-	setNeedOpen: (b: boolean) => void;
+	isOpen: boolean;
+	setIsOpen: (b: boolean) => void;
 	getMinX: () => number | undefined;
 	getMaxX: () => number | undefined;
 	getMinY: () => number | undefined;
@@ -34,8 +34,8 @@ type Props = {
 };
 
 function DialogTransformDefaultValues({
-	needOpen,
-	setNeedOpen,
+	isOpen,
+	setIsOpen,
 	getMinX,
 	getMaxX,
 	getMinY,
@@ -48,8 +48,6 @@ function DialogTransformDefaultValues({
 	kindText,
 }: Props) {
 	const { t } = useTranslation();
-
-	const [isOpen, setIsOpen] = useState(false);
 
 	const defaultX =
 		kind === ACTION_KIND.ROTATE
@@ -68,7 +66,7 @@ function DialogTransformDefaultValues({
 	const [y, setY] = useState(defaultY);
 	const [z, setZ] = useState(defaultZ);
 
-	const reset = () => {
+	const initialize = () => {
 		setX(defaultX);
 		setY(defaultY);
 		setZ(defaultZ);
@@ -93,13 +91,11 @@ function DialogTransformDefaultValues({
 	};
 
 	useEffect(() => {
-		if (needOpen) {
-			setNeedOpen(false);
-			reset();
-			setIsOpen(true);
+		if (isOpen) {
+			initialize();
 		}
 		// eslint-disable-next-line
-	}, [needOpen]);
+	}, [isOpen]);
 
 	return (
 		<Dialog

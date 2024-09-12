@@ -34,7 +34,7 @@ function MapEditor() {
 	const { t } = useTranslation();
 
 	const [firstLoading, setFirstLoading] = useState(false);
-	const [needOpenMapObject, setNeedOpenMapObject] = useState(false);
+	const [isOpenMapObject, setIsOpenMapObject] = useState(false);
 	const [currentMapObject, setCurrentMapObject] = useState(new Model.CommonObject());
 
 	const currentMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
@@ -179,7 +179,7 @@ function MapEditor() {
 		mapObject.id = id;
 		mapObject.name = Model.CommonObject.generateName(id);
 		setCurrentMapObject(mapObject);
-		setNeedOpenMapObject(true);
+		setIsOpenMapObject(true);
 	};
 
 	const handleEditMapObject = async () => {
@@ -187,12 +187,12 @@ function MapEditor() {
 		if (mapObject) {
 			mapObject = mapObject.clone();
 			setCurrentMapObject(mapObject);
-			setNeedOpenMapObject(true);
+			setIsOpenMapObject(true);
 		}
 	};
 
 	const handleAcceptMapObject = async () => {
-		setNeedOpenMapObject(false);
+		setIsOpenMapObject(false);
 		await Scene.Map.current!.updateObject(currentMapObject);
 	};
 
@@ -275,8 +275,8 @@ function MapEditor() {
 				</div>
 			</ContextMenu>
 			<DialogMapObject
-				needOpen={needOpenMapObject}
-				setNeedOpen={setNeedOpenMapObject}
+				isOpen={isOpenMapObject}
+				setIsOpen={setIsOpenMapObject}
 				object={currentMapObject}
 				onAccept={handleAcceptMapObject}
 			/>

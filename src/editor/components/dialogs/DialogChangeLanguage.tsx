@@ -23,14 +23,13 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	needOpen: boolean;
-	setNeedOpen: (b: boolean) => void;
+	isOpen: boolean;
+	setIsOpen: (b: boolean) => void;
 };
 
-function DialogChangeLanguage({ needOpen, setNeedOpen }: Props) {
+function DialogChangeLanguage({ isOpen, setIsOpen }: Props) {
 	const { t } = useTranslation();
 
-	const [isOpen, setIsOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [selectedID, setSelectedID] = useStateNumber();
 	const [initialShort, setInitialShort] = useStateString();
@@ -63,13 +62,11 @@ function DialogChangeLanguage({ needOpen, setNeedOpen }: Props) {
 	};
 
 	useEffect(() => {
-		if (needOpen) {
-			setNeedOpen(false);
+		if (isOpen) {
 			initialize();
-			setIsOpen(true);
 		}
 		// eslint-disable-next-line
-	}, [needOpen]);
+	}, [isOpen]);
 
 	return (
 		<Dialog

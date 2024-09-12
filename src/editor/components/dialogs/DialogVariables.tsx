@@ -20,17 +20,16 @@ import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
-	needOpen: boolean;
-	setNeedOpen: (b: boolean) => void;
+	isOpen: boolean;
+	setIsOpen: (b: boolean) => void;
 	model?: Model.Base;
 	onAccept?: () => void;
 	onReject?: () => void;
 };
 
-function DialogVariables({ needOpen, setNeedOpen, model, onAccept, onReject }: Props) {
+function DialogVariables({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
-	const [isOpen, setIsOpen] = useState(false);
 	const [pages, setPages] = useState<Node[]>([]);
 	const [variables, setVariables] = useState<Node[]>([]);
 	const [forcedPageCurrentSelectedItemID, setForcedPageCurrentSelectedItemID] = useState<number | null>(null);
@@ -88,13 +87,11 @@ function DialogVariables({ needOpen, setNeedOpen, model, onAccept, onReject }: P
 	};
 
 	useEffect(() => {
-		if (needOpen) {
-			setNeedOpen(false);
+		if (isOpen) {
 			initialize();
-			setIsOpen(true);
 		}
 		// eslint-disable-next-line
-	}, [needOpen]);
+	}, [isOpen]);
 
 	return (
 		<Dialog

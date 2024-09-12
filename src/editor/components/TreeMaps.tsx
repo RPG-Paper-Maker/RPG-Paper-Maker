@@ -9,21 +9,21 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { ReactNode, useState } from 'react';
-import '../styles/Tree.css';
-import Tree from './Tree';
+import { ReactNode, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setCopiedItems, setNeedsReloadMap } from '../store';
-import { Node, Project } from '../core';
 import { ArrayUtils, KEY, Paths, RPM, SPECIAL_KEY } from '../common';
+import { Platform } from '../common/Platform';
+import { Node, Project } from '../core';
 import { Model } from '../Editor';
+import { TreeMapTag } from '../models';
+import { RootState, setCopiedItems, setNeedsReloadMap } from '../store';
+import '../styles/Tree.css';
+import Dialog from './dialogs/Dialog';
 import DialogMapProperties from './dialogs/DialogMapProperties';
 import DialogName from './dialogs/DialogName';
-import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
-import { TreeMapTag } from '../models';
-import { Platform } from '../common/Platform';
-import { useTranslation } from 'react-i18next';
+import Tree from './Tree';
 
 type Props = {
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
@@ -50,8 +50,8 @@ function TreeMaps({
 	const [editedMap, setEditedMap] = useState<Model.Map>(new Model.Map());
 	const [editedFolder, setEditedFolder] = useState<Model.Base>(new Model.Base());
 	const [selectedNode, setSelectedNode] = useState<Node | null>(null);
-	const [needOpenMapProperties, setNeedOpenMapProperties] = useState(false);
-	const [needOpenName, setNeedOpenName] = useState(false);
+	const [isOpenMapProperties, setIsOpenMapProperties] = useState(false);
+	const [isOpenName, setIsOpenName] = useState(false);
 	const [isOpenDialogConfirm, setIsOpenDialogConfirm] = useState(false);
 	const [isDeletingMap, setIsDeletingMap] = useState(false);
 
@@ -75,7 +75,7 @@ function TreeMaps({
 	const handleEditFolder = async () => {
 		setEditedFolder(RPM.treeCurrentItem!.content);
 		setIsNew(false);
-		setNeedOpenName(true);
+		setIsOpenName(true);
 	};
 
 	const handleAcceptEditFolder = async () => {
@@ -87,7 +87,7 @@ function TreeMaps({
 		const name = Model.Map.generateMapName(id);
 		setEditedMap(Model.Map.create(id, name));
 		setIsNew(true);
-		setNeedOpenMapProperties(true);
+		setIsOpenMapProperties(true);
 	};
 
 	const handleAcceptNewMap = async () => {
@@ -104,7 +104,7 @@ function TreeMaps({
 		const name = t('new.folder');
 		setEditedFolder(Model.Base.create(id, name));
 		setIsNew(true);
-		setNeedOpenName(true);
+		setIsOpenName(true);
 	};
 
 	const handleAcceptNewFolder = async () => {
@@ -221,7 +221,7 @@ function TreeMaps({
 		await map.load();
 		setEditedMap(map);
 		setIsNew(false);
-		setNeedOpenMapProperties(true);
+		setIsOpenMapProperties(true);
 	};
 
 	const handleAcceptEditMap = async (previousModel: Model.Map) => {
@@ -346,14 +346,14 @@ function TreeMaps({
 				cannotAdd
 			/>
 			<DialogMapProperties
-				needOpen={needOpenMapProperties}
-				setNeedOpen={setNeedOpenMapProperties}
+				isOpen={isOpenMapProperties}
+				setIsOpen={setIsOpenMapProperties}
 				model={editedMap}
 				onAccept={isNew ? handleAcceptNewMap : handleAcceptEditMap}
 			/>
 			<DialogName
-				needOpen={needOpenName}
-				setNeedOpen={setNeedOpenName}
+				isOpen={isOpenName}
+				setIsOpen={setIsOpenName}
 				model={editedFolder}
 				onAccept={isNew ? handleAcceptNewFolder : handleAcceptEditFolder}
 			/>

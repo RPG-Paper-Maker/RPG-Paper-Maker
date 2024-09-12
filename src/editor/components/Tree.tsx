@@ -99,7 +99,7 @@ function Tree({
 	const [currentSelectedItemNode, setCurrentSelectedItemNode] = useState(Node.getNodeByID(list, defaultID));
 	const [notExpandedItemsList, setNotExpandedItemsList] = useState<number[]>(Node.getNotExpandedItemsList(list));
 	const [, setForceUpdate] = useState(false);
-	const [needOpenDialog, setNeedOpenDialog] = useState(false);
+	const [isOpenDialog, setIsOpenDialog] = useState(false);
 	const [newModel, setNewModel] = useState<Model.Base | null>(null);
 	const [draggedNode, setDraggedNode] = useState<Node | null>(null);
 	const [currentName, setCurrentName] = useStateString();
@@ -183,11 +183,11 @@ function Tree({
 		const id = Model.Base.generateNewIDfromList(list.map((node) => node.content));
 		model.id = id;
 		setNewModel(model);
-		setNeedOpenDialog(true);
+		setIsOpenDialog(true);
 	};
 
 	const handleEditItem = async () => {
-		setNeedOpenDialog(true);
+		setIsOpenDialog(true);
 	};
 
 	const handleCopyItem = async () => {
@@ -499,8 +499,8 @@ function Tree({
 		if (currentSelectedItemNode && !cannotEdit) {
 			const options = {
 				isNew: newModel !== null,
-				needOpen: needOpenDialog,
-				setNeedOpen: setNeedOpenDialog,
+				isOpen: isOpenDialog,
+				setIsOpen: setIsOpenDialog,
 				model: newModel ?? currentSelectedItemNode.content,
 				onAccept: handleAcceptDialog,
 				onReject: handleRejectDialog,
