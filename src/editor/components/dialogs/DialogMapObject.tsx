@@ -12,7 +12,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Model } from '../../Editor';
-import { OBJECT_MOVING_KIND, Utils } from '../../common';
+import { ELEMENT_MAP_KIND, OBJECT_MOVING_KIND, Utils } from '../../common';
 import { Node, Project, Rectangle } from '../../core';
 import useStateBool from '../../hooks/useStateBool';
 import useStateNumber from '../../hooks/useStateNumber';
@@ -53,7 +53,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	const [onlyOneEventPerFrame, setOnlyOneEventPerFrame] = useStateBool();
 	const [canBeTriggeredAnotherObject, setCanBeTriggeredAnotherObject] = useStateBool();
 	const [selectedState, setSelectedState] = useState<MapObjectState | null>(null);
-	const [graphicsID, setGraphicsID] = useStateNumber();
+	const [graphicsID, setGraphicsID] = useState(-1);
 	const [graphicsIndexX, setGraphicsIndexX] = useStateNumber();
 	const [graphicsIndexY, setGraphicsIndexY] = useStateNumber();
 	const [rectTileset, setRectTileset] = useState<Rectangle>();
@@ -86,10 +86,18 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 		setProperties(newProperties);
 		setOnlyOneEventPerFrame(object.onlyOneEventPerFrame);
 		setCanBeTriggeredAnotherObject(object.canBeTriggeredAnotherObject);
-		handleChangeState(object.states.length > 0 ? object.states[0] : null);
+		handleChangeState(newStates.length > 0 ? (newStates[0].content as MapObjectState) : null);
 		Project.current!.currentMapObjectStates = newStates;
 		Project.current!.currentMapObjectEvents = newEvents;
 		Project.current!.currentMapObjectProperties = newProperties;
+	};
+
+	const reset = () => {
+		setGraphicsID(-1);
+		setGraphicsIndexX(0);
+		setGraphicsIndexY(0);
+		setGraphicsKind(ELEMENT_MAP_KIND.NONE);
+		setSelectedState(null);
 	};
 
 	const getObjectsList = () => [Model.Base.create(-1, t('none')), ...Project.current!.commonEvents.commonObjects];
@@ -133,13 +141,12 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	};
 
 	const handleChangeState = (state: MapObjectState | null) => {
-		setSelectedState(state);
 		if (state) {
-			setGraphicsID(state.graphicsID);
+			setGraphicsKind(state.graphicsKind);
 			setGraphicsIndexX(state.graphicsIndexX);
 			setGraphicsIndexY(state.graphicsIndexY);
 			setRectTileset(state.rectTileset);
-			setGraphicsKind(state.graphicsKind);
+			setGraphicsID(state.graphicsID);
 			setObjectMovingKind(state.objectMovingKind);
 			//setEventCommandRoute(state.eventCommandRoute);
 			setSpeedID(state.speedID);
@@ -154,6 +161,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 			setKeepPosition(state.keepPosition);
 			setEventCommandDetection(state.eventCommandDetection);
 		}
+		setSelectedState(state);
 	};
 
 	const handleChangeGraphicsKind = (kind: number) => {
@@ -162,19 +170,26 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	};
 
 	const handleUpdateGraphics = (id: number, rect: Rectangle, isTileset: boolean) => {
-		selectedState.graphicsID = id;
-		selectedState.graphicsIndexX = isTileset ? 0 : rect.x;
-		selectedState.graphicsIndexY = isTileset ? 0 : rect.y;
-		selectedState.rectTileset = isTileset ? rect.clone() : undefined;
+		if (selectedState === null) {
+			return;
+		}
+		selectedState!.graphicsID = id;
+		selectedState!.graphicsIndexX = isTileset ? 0 : rect.x;
+		selectedState!.graphicsIndexY = isTileset ? 0 : rect.y;
+		selectedState!.rectTileset = isTileset ? rect.clone() : undefined;
 		setGraphicsID(id);
-		setGraphicsIndexX(selectedState.graphicsIndexX);
-		setGraphicsIndexY(selectedState.graphicsIndexY);
-		setRectTileset(selectedState.rectTileset);
+		setGraphicsIndexX(selectedState!.graphicsIndexX);
+		setGraphicsIndexY(selectedState!.graphicsIndexY);
+		setRectTileset(selectedState!.rectTileset);
 	};
 
 	const handleChangeObjectMovingKind = (movingKind: number) => {
 		setObjectMovingKind(movingKind);
 		selectedState!.objectMovingKind = movingKind;
+	};
+
+	const handleClickEditRoute = () => {
+		alert('TODO');
 	};
 
 	const handleChangeSpeedID = (speedID: number) => {
@@ -253,6 +268,8 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 		if (isOpen) {
 			setFocustFirst(true);
 			initialize();
+		} else {
+			reset();
 		}
 		// eslint-disable-next-line
 	}, [isOpen]);
@@ -357,11 +374,15 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 												onChange={handleChangeObjectMovingKind}
 												options={Model.Base.OBJECT_MOVING_OPTIONS}
 												translateOptions
+												fillWidth
 											/>
 										</td>
 										<td></td>
 										<td>
-											<Button disabled={graphicsKind !== OBJECT_MOVING_KIND.ROUTE}>
+											<Button
+												disabled={objectMovingKind !== OBJECT_MOVING_KIND.ROUTE}
+												onClick={handleClickEditRoute}
+											>
 												{t('edit.route')}...
 											</Button>
 										</td>
@@ -370,8 +391,8 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 											<Dropdown
 												selectedID={speedID}
 												onChange={handleChangeSpeedID}
-												options={Model.Base.GRAPHICS_OPTIONS}
-												translateOptions
+												options={Project.current!.systems.speeds}
+												fillWidth
 											/>
 										</td>
 										<td>{t('frequency')}:</td>
@@ -379,13 +400,13 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 											<Dropdown
 												selectedID={frequencyID}
 												onChange={handleChangeFrequencyID}
-												options={Model.Base.GRAPHICS_OPTIONS}
-												translateOptions
+												options={Project.current!.systems.frequencies}
+												fillWidth
 											/>
 										</td>
 									</Form>
 								</Groupbox>
-								<Button>{t('edit.transformations')}...</Button>
+								<Button>{t('update.transformations')}...</Button>
 							</Flex>
 						</Flex>
 						<Flex className={Utils.getClassName({ 'visibility-hidden': !selectedState })}>

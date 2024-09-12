@@ -21,6 +21,7 @@ export * from './Picture';
 export * from './ProjectPreview';
 export * from './Shape';
 export * from './SpecialElement';
+export * from './SpeedFrequency';
 export * from './Tileset';
 export * from './TreeMapTag';
 export * from './VariablesPage';

@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from './Base';
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, ELEMENT_MAP_KIND, JSONType, OBJECT_MOVING_KIND } from '../common';
 import { Project, Rectangle } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Base } from './Base';
 import { EventCommand } from './EventCommand';
 
 class MapObjectState extends Base {

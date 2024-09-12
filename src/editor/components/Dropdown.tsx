@@ -123,8 +123,13 @@ function Dropdown({
 	useLayoutEffect(() => {
 		const container = containerRef.current;
 		const dropdown = dropdownContainerRef.current;
-		if (container && dropdown && !fillWidth) {
-			container.style.width = `${dropdown.getBoundingClientRect().width + DROPDOWN_SPACE_ARROW}px`;
+		if (container && dropdown) {
+			const v = `${dropdown.getBoundingClientRect().width + DROPDOWN_SPACE_ARROW}px`;
+			if (fillWidth) {
+				container.style.minWidth = v;
+			} else {
+				container.style.width = v;
+			}
 		}
 	}, [fillWidth]);
 

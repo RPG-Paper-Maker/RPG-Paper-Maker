@@ -25,6 +25,10 @@ class System extends Serializable {
 	public autotilesFrameDuration!: number;
 	public heroMapID!: number;
 	public heroMapPosition!: Position;
+	public speeds!: Model.SpeedFrequency[];
+	public speedsIndexes!: number[];
+	public frequencies!: Model.SpeedFrequency[];
+	public frequenciesIndexes!: number;
 	public json!: JSONType; // TEMP, will be removed later
 
 	public static readonly bindings: BindingType[] = [
@@ -36,6 +40,8 @@ class System extends Serializable {
 		['autotilesFrameDuration', 'autotilesFrameDuration', 150, BINDING.NUMBER],
 		['heroMapID', 'idMapHero', 1, BINDING.NUMBER],
 		['heroMapPosition', 'hmp', new Position(7, 0, 0, 7), BINDING.POSITION],
+		['speeds', 'sf', [], BINDING.LIST_WITH_INDEXES, Model.SpeedFrequency],
+		['frequencies', 'f', [], BINDING.LIST_WITH_INDEXES, Model.SpeedFrequency],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

@@ -166,7 +166,7 @@ function GraphicsSelector({
 			}
 		}
 		// eslint-disable-next-line
-	}, [graphicsID]);
+	}, [graphicsID, graphicsKind]);
 
 	useEffect(() => {
 		if (isOpenDialogObjects3D) {

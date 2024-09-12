@@ -40,11 +40,15 @@
 }
 
 .dropdown .content .element:hover:not(.disabled) {
-	background-color: var(--darkest-bg-color);
+	background-color: var(--main-bg-color);
 }
 
 .dropdown .content .element.selected {
 	background-color: var(--lighter-bg-color);
+}
+
+.dropdown .content .element.selected:hover {
+	background-color: var(--lightest-bg-color);
 }
 
 .dropdown .content .element.disabled {
