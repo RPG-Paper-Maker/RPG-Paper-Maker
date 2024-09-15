@@ -9,14 +9,17 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-fieldset {
-	border: 1px solid var(--lighter-bg-color);
-	background-color: var(--darker-bg-color);
-	padding: 8px;
-	border-radius: 4px;
+import { Node } from '../core';
+import { Model } from '../Editor';
+import '../styles/Tree.css';
+import Tree from './Tree';
+
+type Props = {
+	list: Node[];
+};
+
+function TreeCommands({ list }: Props) {
+	return <Tree list={list} constructorType={Model.MapObjectCommand} />;
 }
 
-legend {
-	padding-left: 10px;
-	padding-right: 10px;
-}
+export default TreeCommands;

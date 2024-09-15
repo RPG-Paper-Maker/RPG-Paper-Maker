@@ -11,12 +11,12 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE } from '../../common';
-import { DynamicValue } from '../../core/DynamicValue';
-import { Model } from '../../Editor';
-import DynamicValueSelector from '../DynamicValueSelector';
-import Dialog from './Dialog';
-import FooterCancelOK from './footers/FooterCancelOK';
+import { DYNAMIC_VALUE_OPTIONS_TYPE } from '../../../common';
+import { DynamicValue } from '../../../core/DynamicValue';
+import { Model } from '../../../Editor';
+import DynamicValueSelector from '../../DynamicValueSelector';
+import Dialog from '../Dialog';
+import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
 	isOpen: boolean;

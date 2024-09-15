@@ -11,15 +11,15 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from '../../common';
-import { DynamicValue } from '../../core/DynamicValue';
-import { Model } from '../../Editor';
-import useStateString from '../../hooks/useStateString';
-import DynamicValueSelector from '../DynamicValueSelector';
-import Form from '../Form';
-import InputText from '../InputText';
-import Dialog from './Dialog';
-import FooterCancelOK from './footers/FooterCancelOK';
+import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from '../../../common';
+import { DynamicValue } from '../../../core/DynamicValue';
+import { Model } from '../../../Editor';
+import useStateString from '../../../hooks/useStateString';
+import DynamicValueSelector from '../../DynamicValueSelector';
+import Form from '../../Form';
+import InputText from '../../InputText';
+import Dialog from '../Dialog';
+import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
 	isOpen: boolean;

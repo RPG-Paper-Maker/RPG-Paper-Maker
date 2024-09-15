@@ -10,12 +10,12 @@
 */
 
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import { FaCaretLeft, FaCaretRight } from 'react-icons/fa';
 import { RxCross2 } from 'react-icons/rx';
-import '../styles/Tab.css';
 import { Model } from '../Editor';
 import { ArrayUtils, Utils } from '../common';
+import '../styles/Tab.css';
 import Button from './Button';
-import { FaCaretLeft, FaCaretRight } from 'react-icons/fa';
 
 type Props = {
 	titles: Model.Base[];
@@ -23,7 +23,8 @@ type Props = {
 	contents: ReactNode[];
 	setContents?: (contents: ReactNode[]) => void;
 	defaultIndex?: number;
-	isClosable?: boolean;
+	closable?: boolean;
+	hideScroll?: boolean;
 	onCurrentIndexChanged?: (index: number, model: Model.Base, isClick: boolean) => void;
 	forcedCurrentIndex?: number | null;
 	setForcedCurrentIndex?: (forced: number | null) => void;
@@ -35,7 +36,8 @@ function Tab({
 	contents,
 	setContents,
 	defaultIndex = 0,
-	isClosable = false,
+	closable = false,
+	hideScroll = false,
 	onCurrentIndexChanged,
 	forcedCurrentIndex,
 	setForcedCurrentIndex,
@@ -124,7 +126,7 @@ function Tab({
 					onClick={() => handleClickItem(index)}
 				>
 					{title.getName()}
-					{isClosable && <RxCross2 onClick={(e) => handleClickClose(e, title)} />}
+					{closable && <RxCross2 onClick={(e) => handleClickClose(e, title)} />}
 				</div>
 			);
 		});
@@ -134,14 +136,23 @@ function Tab({
 	return (
 		<div className='tab'>
 			<div className='tab-titles'>
-				<div className='scroll-area'>{getTitles()}</div>
-				<Button small icon={<FaCaretLeft />} onClick={handleClickLeftButton} disabled={currentIndex === 0} />
-				<Button
-					small
-					icon={<FaCaretRight />}
-					onClick={handleClickRightButton}
-					disabled={currentIndex === titles.length - 1}
-				/>
+				<div className={hideScroll ? 'flex' : 'scroll-area'}>{getTitles()}</div>
+				{!hideScroll && (
+					<>
+						<Button
+							small
+							icon={<FaCaretLeft />}
+							onClick={handleClickLeftButton}
+							disabled={currentIndex === 0}
+						/>
+						<Button
+							small
+							icon={<FaCaretRight />}
+							onClick={handleClickRightButton}
+							disabled={currentIndex === titles.length - 1}
+						/>
+					</>
+				)}
 			</div>
 			<div className='tab-content'>{getContents()}</div>
 		</div>

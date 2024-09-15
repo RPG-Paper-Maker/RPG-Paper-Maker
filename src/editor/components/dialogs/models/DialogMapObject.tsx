@@ -11,25 +11,26 @@
 
 import { ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Model } from '../../Editor';
-import { ELEMENT_MAP_KIND, OBJECT_MOVING_KIND, Utils } from '../../common';
-import { Node, Project, Rectangle } from '../../core';
-import useStateBool from '../../hooks/useStateBool';
-import useStateNumber from '../../hooks/useStateNumber';
-import useStateString from '../../hooks/useStateString';
-import { MapObjectCommand, MapObjectEvent, MapObjectState } from '../../models';
-import Button from '../Button';
-import Checkbox from '../Checkbox';
-import Dropdown from '../Dropdown';
-import Flex from '../Flex';
-import Form from '../Form';
-import GraphicsSelector from '../GraphicsSelector';
-import Groupbox from '../Groupbox';
-import InputText from '../InputText';
-import Tab from '../Tab';
-import Tree from '../Tree';
-import Dialog from './Dialog';
-import FooterCancelOK from './footers/FooterCancelOK';
+import { Model } from '../../../Editor';
+import { ELEMENT_MAP_KIND, OBJECT_MOVING_KIND, Utils } from '../../../common';
+import { Node, Project, Rectangle } from '../../../core';
+import useStateBool from '../../../hooks/useStateBool';
+import useStateNumber from '../../../hooks/useStateNumber';
+import useStateString from '../../../hooks/useStateString';
+import { MapObjectCommand, MapObjectEvent, MapObjectState } from '../../../models';
+import Button from '../../Button';
+import Checkbox from '../../Checkbox';
+import Dropdown from '../../Dropdown';
+import Flex from '../../Flex';
+import Form from '../../Form';
+import GraphicsSelector from '../../GraphicsSelector';
+import Groupbox from '../../Groupbox';
+import InputText from '../../InputText';
+import Tab from '../../Tab';
+import Tree from '../../Tree';
+import TreeCommands from '../../TreeCommands';
+import Dialog from '../Dialog';
+import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
 	isOpen: boolean;
@@ -114,7 +115,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 				nodes.map((node) => {
 					const event = node.content as MapObjectEvent;
 					const reaction = event.reactions.get('' + state.id);
-					return reaction ? <Tree key={node.content.id} list={reaction.commands} /> : null;
+					return reaction ? <TreeCommands key={node.content.id} list={reaction.commands} /> : null;
 				})
 			);
 		}

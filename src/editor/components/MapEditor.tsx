@@ -27,7 +27,7 @@ import {
 } from '../store';
 import '../styles/MapEditor.css';
 import ContextMenu from './ContextMenu';
-import DialogMapObject from './dialogs/DialogMapObject';
+import DialogMapObject from './dialogs/models/DialogMapObject';
 import Loader from './Loader';
 
 function MapEditor() {

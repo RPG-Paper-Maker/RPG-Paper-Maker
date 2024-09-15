@@ -20,9 +20,9 @@ import { TreeMapTag } from '../models';
 import { RootState, setCopiedItems, setNeedsReloadMap } from '../store';
 import '../styles/Tree.css';
 import Dialog from './dialogs/Dialog';
-import DialogMapProperties from './dialogs/DialogMapProperties';
-import DialogName from './dialogs/DialogName';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
+import DialogMapProperties from './dialogs/models/DialogMapProperties';
+import DialogName from './dialogs/models/DialogName';
 import Tree from './Tree';
 
 type Props = {

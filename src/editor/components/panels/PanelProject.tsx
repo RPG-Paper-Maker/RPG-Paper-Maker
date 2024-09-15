@@ -190,7 +190,7 @@ function PanelProject() {
 							onCurrentIndexChanged={handleTabCurrentIndexChanged}
 							forcedCurrentIndex={mapTabForcedCurrentIndex}
 							setForcedCurrentIndex={setMapTabForcedCurrentIndex}
-							isClosable
+							closable
 						/>
 					</div>
 					<Flex column one className={Utils.getClassName({ hidden: !currentMapID })}>

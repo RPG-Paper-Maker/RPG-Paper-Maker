@@ -11,14 +11,14 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Project } from '../../core';
-import { Model } from '../../Editor';
-import useStateNumber from '../../hooks/useStateNumber';
-import Dropdown from '../Dropdown';
-import Flex from '../Flex';
-import Dialog from './Dialog';
-import FooterCancelOK from './footers/FooterCancelOK';
-import FooterOK from './footers/FooterOK';
+import { Project } from '../../../core';
+import { Model } from '../../../Editor';
+import useStateNumber from '../../../hooks/useStateNumber';
+import Dropdown from '../../Dropdown';
+import Flex from '../../Flex';
+import Dialog from '../Dialog';
+import FooterCancelOK from '../footers/FooterCancelOK';
+import FooterOK from '../footers/FooterOK';
 
 type Props = {
 	isOpen: boolean;

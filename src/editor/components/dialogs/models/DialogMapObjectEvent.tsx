@@ -11,19 +11,19 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Node, Project } from '../../core';
-import { Model } from '../../Editor';
-import useStateBool from '../../hooks/useStateBool';
-import useStateNumber from '../../hooks/useStateNumber';
-import { MapObjectEvent } from '../../models';
-import Dropdown from '../Dropdown';
-import Flex from '../Flex';
-import Form from '../Form';
-import Groupbox from '../Groupbox';
-import RadioButton from '../RadioButton';
-import Tree from '../Tree';
-import Dialog from './Dialog';
-import FooterCancelOK from './footers/FooterCancelOK';
+import { Node, Project } from '../../../core';
+import { Model } from '../../../Editor';
+import useStateBool from '../../../hooks/useStateBool';
+import useStateNumber from '../../../hooks/useStateNumber';
+import { MapObjectEvent } from '../../../models';
+import Dropdown from '../../Dropdown';
+import Flex from '../../Flex';
+import Form from '../../Form';
+import Groupbox from '../../Groupbox';
+import RadioButton from '../../RadioButton';
+import Tree from '../../Tree';
+import Dialog from '../Dialog';
+import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
 	isOpen: boolean;

@@ -28,11 +28,12 @@ import useStateString from '../hooks/useStateString';
 import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
-import DialogMapObjectEvent from './dialogs/DialogMapObjectEvent';
-import DialogMapObjectParameter from './dialogs/DialogMapObjectParameter';
-import DialogMapObjectProperty from './dialogs/DialogMapObjectProperty';
-import DialogMapObjectState from './dialogs/DialogMapObjectState';
-import DialogName from './dialogs/DialogName';
+import DialogMapObjectCommand from './dialogs/models/DialogMapObjectCommand';
+import DialogMapObjectEvent from './dialogs/models/DialogMapObjectEvent';
+import DialogMapObjectParameter from './dialogs/models/DialogMapObjectParameter';
+import DialogMapObjectProperty from './dialogs/models/DialogMapObjectProperty';
+import DialogMapObjectState from './dialogs/models/DialogMapObjectState';
+import DialogName from './dialogs/models/DialogName';
 import Flex from './Flex';
 import InputText from './InputText';
 import TreeItem from './TreeItem';
@@ -516,6 +517,8 @@ function Tree({
 					return <DialogMapObjectParameter {...options} />;
 				case Model.MapObjectProperty:
 					return <DialogMapObjectProperty {...options} />;
+				case Model.MapObjectCommand:
+					return <DialogMapObjectCommand {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}
