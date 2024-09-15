@@ -48,7 +48,7 @@ class CommonObject extends Base {
 		super.copy(object);
 		this.states = object.states.map((state) => state.clone());
 		this.properties = object.properties.map((property) => property.clone());
-		this.events = object.events.map((state) => state.clone());
+		this.events = object.events.map((event) => event.clone());
 		this.onlyOneEventPerFrame = object.onlyOneEventPerFrame;
 		this.canBeTriggeredAnotherObject = object.canBeTriggeredAnotherObject;
 		this.commonModelID = object.commonModelID;

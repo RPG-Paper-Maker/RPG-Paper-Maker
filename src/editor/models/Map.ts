@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { BINDING, BindingType, Constants, JSONType, Paths, Utils } from '../common';
+import { Platform } from '../common/Platform';
+import { Portion, Position, Project } from '../core';
 import { Model } from '../Editor';
 import { Base } from './Base';
-import { BINDING, BindingType, Constants, JSONType, Paths, Utils } from '../common';
-import { Portion, Position, Project } from '../core';
-import { Platform } from '../common/Platform';
 import { MapObject } from './MapObject';
 
 class Map extends Base {

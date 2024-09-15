@@ -13,7 +13,7 @@ import { BINDING, BindingType, DYNAMIC_VALUE_KIND, ELEMENT_MAP_KIND, JSONType, O
 import { Project, Rectangle } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Base } from './Base';
-import { EventCommand } from './EventCommand';
+import { MapObjectCommand } from './MapObjectCommand';
 
 class MapObjectState extends Base {
 	public graphicsKind!: ELEMENT_MAP_KIND;
@@ -22,7 +22,7 @@ class MapObjectState extends Base {
 	public graphicsIndexY!: number;
 	public rectTileset?: Rectangle;
 	public objectMovingKind!: OBJECT_MOVING_KIND;
-	public eventCommandRoute!: EventCommand | null;
+	public eventCommandRoute!: MapObjectCommand | null;
 	public speedID!: number;
 	public frequencyID!: number;
 	public moveAnimation!: boolean;
@@ -33,7 +33,7 @@ class MapObjectState extends Base {
 	public setWithCamera!: boolean;
 	public pixelOffset!: boolean;
 	public keepPosition!: boolean;
-	public eventCommandDetection!: EventCommand | null;
+	public eventCommandDetection!: MapObjectCommand | null;
 	public centerX!: DynamicValue;
 	public centerZ!: DynamicValue;
 	public angleX!: DynamicValue;
@@ -50,7 +50,7 @@ class MapObjectState extends Base {
 		['graphicsIndexY', 'y', undefined, BINDING.NUMBER],
 		['rectTileset', 'rt', undefined, BINDING.RECTANGLE],
 		['objectMovingKind', 'omk', OBJECT_MOVING_KIND.FIX, BINDING.NUMBER],
-		['eventCommandRoute', 'ecr', null, BINDING.OBJECT, EventCommand],
+		['eventCommandRoute', 'ecr', null, BINDING.OBJECT, MapObjectCommand],
 		['speedID', 's', 1, BINDING.NUMBER],
 		['frequencyID', 'f', 1, BINDING.NUMBER],
 		['moveAnimation', 'move', undefined, BINDING.BOOLEAN],
@@ -61,7 +61,7 @@ class MapObjectState extends Base {
 		['setWithCamera', 'cam', undefined, BINDING.BOOLEAN],
 		['pixelOffset', 'pix', undefined, BINDING.BOOLEAN],
 		['keepPosition', 'pos', undefined, BINDING.BOOLEAN],
-		['eventCommandDetection', 'ecd', null, BINDING.OBJECT, EventCommand],
+		['eventCommandDetection', 'ecd', null, BINDING.OBJECT, MapObjectCommand],
 		[
 			'centerX',
 			'cx',

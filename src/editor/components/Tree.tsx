@@ -96,7 +96,9 @@ function Tree({
 
 	const defaultID =
 		defaultSelectedID === undefined ? (list && list.length && list[0].content.id) || -1 : defaultSelectedID;
-	const [currentSelectedItemNode, setCurrentSelectedItemNode] = useState(Node.getNodeByID(list, defaultID));
+	const [currentSelectedItemNode, setCurrentSelectedItemNode] = useState(
+		Node.getNodeByID(list, defaultID) ?? (cannotAdd ? null : Node.create(Model.Base.create(-1, '')))
+	);
 	const [notExpandedItemsList, setNotExpandedItemsList] = useState<number[]>(Node.getNotExpandedItemsList(list));
 	const [, setForceUpdate] = useState(false);
 	const [isOpenDialog, setIsOpenDialog] = useState(false);

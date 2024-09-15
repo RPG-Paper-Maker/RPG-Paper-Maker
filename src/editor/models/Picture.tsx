@@ -19,7 +19,7 @@ class Picture extends Base {
 	public dlc!: string;
 	public jsonCollisions!: JSONType[];
 	public collisionsRepeat!: boolean;
-	public collisions!: CollisionSquare[];
+	public collisions: CollisionSquare[] = [];
 	public picture!: Picture2D;
 	public width!: number;
 	public height!: number;
@@ -34,7 +34,7 @@ class Picture extends Base {
 	public static readonly bindings: BindingType[] = [
 		['isBR', 'br', undefined, BINDING.BOOLEAN],
 		['dlc', 'd', '', BINDING.STRING],
-		['collisions', 'col', [], BINDING.LIST, CollisionSquare],
+		['jsonCollisions', 'col', [], BINDING.NUMBER],
 		['collisionsRepeat', 'rcol', false, BINDING.BOOLEAN],
 		['isStopAnimation', 'isStopAnimation', false, BINDING.BOOLEAN],
 		['isClimbAnimation', 'ica', false, BINDING.BOOLEAN],
@@ -107,7 +107,7 @@ class Picture extends Base {
 		super.copy(picture);
 		this.isBR = picture.isBR;
 		this.dlc = picture.dlc;
-		this.jsonCollisions = picture.jsonCollisions;
+		this.jsonCollisions = [...picture.jsonCollisions];
 		this.collisionsRepeat = picture.collisionsRepeat;
 		this.collisions = picture.collisions?.map((collision) => collision.clone());
 		this.picture = picture.picture;

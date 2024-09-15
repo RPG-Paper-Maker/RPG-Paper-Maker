@@ -119,7 +119,7 @@ function Toolbar() {
 					)}
 					<MenuItem separator></MenuItem>
 					<MenuItem icon={<BsDatabase />} onClick={handleFloor} disabled>
-						{t('datas.manager.tool')}
+						{t('data.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<BsClipboardData />} onClick={handleFloor} disabled>
 						{t('systems.manager.tool')}

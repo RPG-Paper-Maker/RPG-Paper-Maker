@@ -9,17 +9,17 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from './Base';
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
-import { MapObjectReaction } from './MapObjectReaction';
-import { MapObjectParameter } from './MapObjectParameter';
 import { Project } from '../core';
-import { CommonEvent } from './CommonEvent';
 import { DynamicValue } from '../core/DynamicValue';
+import { Base } from './Base';
+import { CommonEvent } from './CommonEvent';
+import { MapObjectParameter } from './MapObjectParameter';
+import { MapObjectReaction } from './MapObjectReaction';
 
 class MapObjectEvent extends Base {
 	public parameters!: MapObjectParameter[];
-	public reactions!: Map<number, MapObjectReaction>;
+	public reactions!: Map<string, MapObjectReaction>;
 	public isSystem!: boolean;
 
 	public static bindings: BindingType[] = [

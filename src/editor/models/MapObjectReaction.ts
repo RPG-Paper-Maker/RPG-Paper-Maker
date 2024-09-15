@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from './Base';
 import { BINDING, BindingType, JSONType } from '../common';
 import { Node } from '../core';
-import { EventCommand } from './EventCommand';
+import { Base } from './Base';
+import { MapObjectCommand } from './MapObjectCommand';
 
 class MapObjectReaction extends Base {
 	public commands!: Node[];
@@ -40,7 +40,7 @@ class MapObjectReaction extends Base {
 		super.read(json, MapObjectReaction.getBindings(additionnalBinding));
 		this.commands = (json.c as JSONType[]).map((jsonNode) => {
 			const node = new Node();
-			node.read(jsonNode, [], EventCommand);
+			node.read(jsonNode, [], MapObjectCommand);
 			return node;
 		});
 	}

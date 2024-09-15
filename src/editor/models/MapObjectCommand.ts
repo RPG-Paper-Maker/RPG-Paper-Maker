@@ -12,38 +12,38 @@
 import { BINDING, BindingType, EVENT_COMMAND_KIND, JSONType } from '../common';
 import { Base } from './Base';
 
-class EventCommand extends Base {
+class MapObjectCommand extends Base {
 	public kind!: EVENT_COMMAND_KIND;
-	public list!: (number | string | boolean)[];
+	public command!: (number | string | boolean)[];
 
-	public static readonly bindings: BindingType[] = [
+	public static bindings: BindingType[] = [
 		['kind', 'kind', undefined, BINDING.NUMBER],
-		['list', 'command', undefined, BINDING.NUMBER],
+		['command', 'command', undefined, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
-		return [...EventCommand.bindings, ...additionnalBinding];
+		return [...this.bindings, ...additionnalBinding];
 	}
 
-	copy(command: EventCommand): void {
+	copy(command: MapObjectCommand): void {
 		super.copy(command);
 		this.kind = command.kind;
-		this.list = [...command.list];
+		this.command = [...command.command];
 	}
 
-	clone(): EventCommand {
-		const command = new EventCommand();
+	clone(): MapObjectCommand {
+		const command = new MapObjectCommand();
 		command.copy(this);
 		return command;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.read(json, EventCommand.getBindings(additionnalBinding));
+		super.read(json, MapObjectCommand.getBindings(additionnalBinding));
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.write(json, EventCommand.getBindings(additionnalBinding));
+		super.write(json, MapObjectCommand.getBindings(additionnalBinding));
 	}
 }
 
-export { EventCommand };
+export { MapObjectCommand };

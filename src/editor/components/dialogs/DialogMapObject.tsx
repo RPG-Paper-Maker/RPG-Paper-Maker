@@ -17,7 +17,7 @@ import { Node, Project, Rectangle } from '../../core';
 import useStateBool from '../../hooks/useStateBool';
 import useStateNumber from '../../hooks/useStateNumber';
 import useStateString from '../../hooks/useStateString';
-import { EventCommand, MapObjectState } from '../../models';
+import { MapObjectCommand, MapObjectEvent, MapObjectState } from '../../models';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
 import Dropdown from '../Dropdown';
@@ -53,6 +53,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	const [onlyOneEventPerFrame, setOnlyOneEventPerFrame] = useStateBool();
 	const [canBeTriggeredAnotherObject, setCanBeTriggeredAnotherObject] = useStateBool();
 	const [selectedState, setSelectedState] = useState<MapObjectState | null>(null);
+	const [selectedEvent, setSelectedEvent] = useState<MapObjectEvent | null>(null);
 	const [graphicsID, setGraphicsID] = useState(-1);
 	const [graphicsIndexX, setGraphicsIndexX] = useStateNumber();
 	const [graphicsIndexY, setGraphicsIndexY] = useStateNumber();
@@ -70,9 +71,11 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	const [setWithCamera, setSetWithCamera] = useStateBool();
 	const [pixelOffset, setPixelOffset] = useStateBool();
 	const [keepPosition, setKeepPosition] = useStateBool();
-	const [eventCommandDetection, setEventCommandDetection] = useState<EventCommand | null>(null);
+	const [eventCommandDetection, setEventCommandDetection] = useState<MapObjectCommand | null>(null);
 	const [forcedCurrentIndexTab, setForcedCurrentIndexTab] = useState<number | null>(null);
+	const [forcedCurrentSelectedIDState, setForcedCurrentSelectedIDState] = useState<number | null>(null);
 	const [forcedCurrentSelectedIndexEvent, setForcedCurrentSelectedIndexEvent] = useState<number | null>(null);
+	const [blockingHero, setBlockingHero] = useStateBool();
 
 	const initialize = () => {
 		setName(object.name);
@@ -80,13 +83,15 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 		const newStates = Node.createList(object.states);
 		const newEvents = Node.createList(object.events);
 		const newProperties = Node.createList(object.properties);
-		updateReactionsTab(newEvents);
 		setStates(newStates);
-		setEvents(newEvents);
+		setForcedCurrentSelectedIDState(newStates[0]?.content?.id ?? -1);
 		setProperties(newProperties);
+		setEvents(newEvents);
 		setOnlyOneEventPerFrame(object.onlyOneEventPerFrame);
 		setCanBeTriggeredAnotherObject(object.canBeTriggeredAnotherObject);
-		handleChangeState(newStates.length > 0 ? (newStates[0].content as MapObjectState) : null);
+		const state = newStates.length > 0 ? (newStates[0].content as MapObjectState) : null;
+		handleChangeState(state, newEvents);
+		setSelectedEvent(newEvents.length > 0 ? (newEvents[0].content as MapObjectEvent) : null);
 		Project.current!.currentMapObjectStates = newStates;
 		Project.current!.currentMapObjectEvents = newEvents;
 		Project.current!.currentMapObjectProperties = newProperties;
@@ -102,9 +107,27 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 
 	const getObjectsList = () => [Model.Base.create(-1, t('none')), ...Project.current!.commonEvents.commonObjects];
 
-	const updateReactionsTab = (nodes: Node[]) => {
-		setTabTitles(nodes.map((node) => node.content));
-		setTabContents(nodes.map((node, index) => <Tree key={index} list={[]}></Tree>));
+	const updateReactionsTab = (nodes: Node[], state: MapObjectState | null) => {
+		if (state) {
+			setTabTitles(nodes.map((node) => node.content));
+			setTabContents(
+				nodes.map((node) => {
+					const event = node.content as MapObjectEvent;
+					const reaction = event.reactions.get('' + state.id);
+					return reaction ? <Tree key={node.content.id} list={reaction.commands} /> : null;
+				})
+			);
+		}
+	};
+
+	const handleChangeBlockingHero = (b: boolean) => {
+		setBlockingHero(b);
+		if (selectedEvent && selectedState) {
+			const reaction = selectedEvent.reactions.get('' + selectedState.id);
+			if (reaction) {
+				reaction.blockingHero = b;
+			}
+		}
 	};
 
 	const handleCurrentIndexTabChanged = (index: number, model: Model.Base, isClick: boolean) => {
@@ -114,33 +137,54 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	};
 
 	const handleSelectedItemState = (node: Node | null) => {
-		handleChangeState(node && node.content.id !== -1 ? (node.content as MapObjectState) : null);
+		const state = node && node.content.id !== -1 ? (node.content as MapObjectState) : null;
+		handleChangeState(state);
+		if (state) {
+			setBlockingHero(selectedEvent?.reactions?.get?.('' + state.id)?.blockingHero ?? false);
+		}
 	};
 
 	const handleCreateState = (node: Node) => {
-		(node.content as Model.MapObjectState).initialize();
-	};
-
-	const handleEventListUpdated = () => {
-		updateReactionsTab(events);
-	};
-
-	const handleCreateEvent = (node: Node) => {
-		const reactions = new Map<number, Model.MapObjectReaction>();
-		(node.content as Model.MapObjectEvent).reactions = reactions;
-		for (const state of states) {
+		const state = node.content as Model.MapObjectState;
+		state.initialize();
+		const id = '' + state.id;
+		for (const node of events) {
+			const event = node.content as Model.MapObjectEvent;
 			const reaction = new Model.MapObjectReaction();
 			reaction.commands = [];
 			reaction.blockingHero = true;
-			reactions.set(state.content.id, reaction);
+			event.reactions.set(id, reaction);
+		}
+	};
+
+	const handleEventListUpdated = () => {
+		updateReactionsTab(events, selectedState);
+	};
+
+	const handleCreateEvent = (node: Node) => {
+		const reactions = new Map<string, Model.MapObjectReaction>();
+		const event = node.content as Model.MapObjectEvent;
+		event.reactions = reactions;
+		for (const state of states) {
+			const id = '' + state.content.id;
+			const reaction = new Model.MapObjectReaction();
+			reaction.commands = [];
+			reaction.blockingHero = true;
+			reactions.set(id, reaction);
 		}
 	};
 
 	const handleSelectedItemEvent = (node: Node | null) => {
+		const event = (node?.content as MapObjectEvent) ?? null;
+		setSelectedEvent(event);
+		if (event) {
+			setBlockingHero(event.reactions?.get?.('' + selectedState?.id)?.blockingHero ?? false);
+		}
 		setForcedCurrentIndexTab(node ? events.indexOf(node) : -1);
 	};
 
-	const handleChangeState = (state: MapObjectState | null) => {
+	const handleChangeState = (state: MapObjectState | null, newEvents?: Node[]) => {
+		setSelectedState(state);
 		if (state) {
 			setGraphicsKind(state.graphicsKind);
 			setGraphicsIndexX(state.graphicsIndexX);
@@ -161,7 +205,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 			setKeepPosition(state.keepPosition);
 			setEventCommandDetection(state.eventCommandDetection);
 		}
-		setSelectedState(state);
+		updateReactionsTab(newEvents ?? events, state);
 	};
 
 	const handleChangeGraphicsKind = (kind: number) => {
@@ -243,7 +287,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	};
 
 	const handleChangeDetectionCheck = (isChecked: boolean) => {
-		setEventCommandDetection(isChecked ? new EventCommand() : null);
+		setEventCommandDetection(isChecked ? new MapObjectCommand() : null);
 	};
 
 	const handleAccept = async () => {
@@ -303,8 +347,8 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 					</Flex>
 				</Flex>
 				<Flex one spacedLarge>
-					<Flex column one spaced className={Utils.getClassName({ 'visibility-hidden': !selectedState })}>
-						<Flex one>
+					<Flex one spaced className={Utils.getClassName({ 'visibility-hidden': !selectedState })}>
+						<Flex column one spaced>
 							<Tab
 								titles={tabTitles}
 								setTitles={setTabTitles}
@@ -314,8 +358,10 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 								setForcedCurrentIndex={setForcedCurrentIndexTab}
 								onCurrentIndexChanged={handleCurrentIndexTabChanged}
 							/>
+							<Checkbox isChecked={blockingHero} onChange={handleChangeBlockingHero}>
+								{t('block.hero.when.reaction')}
+							</Checkbox>
 						</Flex>
-						<Checkbox isChecked={false}>{t('block.hero.when.reaction')}</Checkbox>
 					</Flex>
 					<Flex column spaced>
 						<Flex one spacedLarge>
@@ -327,6 +373,8 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 										list={states}
 										onSelectedItem={handleSelectedItemState}
 										onCreateItem={handleCreateState}
+										forcedCurrentSelectedItemID={forcedCurrentSelectedIDState}
+										setForcedCurrentSelectedItemID={setForcedCurrentSelectedIDState}
 									/>
 								</Flex>
 							</Flex>
