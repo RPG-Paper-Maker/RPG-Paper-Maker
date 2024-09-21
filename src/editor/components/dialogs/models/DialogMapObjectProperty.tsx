@@ -16,7 +16,7 @@ import { DynamicValue } from '../../../core/DynamicValue';
 import { Model } from '../../../Editor';
 import useStateString from '../../../hooks/useStateString';
 import DynamicValueSelector from '../../DynamicValueSelector';
-import Form from '../../Form';
+import Form, { Label, Value } from '../../Form';
 import InputText from '../../InputText';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
@@ -67,27 +67,25 @@ function DialogMapObjectProperty({ isOpen, setIsOpen, model, isNew, onAccept, on
 		// eslint-disable-next-line
 	}, [isOpen]);
 
-	return (
-		<>
-			<Dialog
-				title={`${t('set.property')}...`}
-				isOpen={isOpen}
-				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-				onClose={handleReject}
-			>
-				<Form>
-					<td>{t('name')}:</td>
-					<td>
-						<InputText value={name} onChange={setName} widthType={INPUT_TYPE_WIDTH.FILL} />
-					</td>
-					<td>{t('initial.value')}:</td>
-					<td>
-						<DynamicValueSelector value={initialValue!} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.PROPERTY} />
-					</td>
-				</Form>
-			</Dialog>
-		</>
-	);
+	return initialValue ? (
+		<Dialog
+			title={`${t('set.property')}...`}
+			isOpen={isOpen}
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			onClose={handleReject}
+		>
+			<Form>
+				<Label>{t('name')}</Label>
+				<Value>
+					<InputText value={name} onChange={setName} widthType={INPUT_TYPE_WIDTH.FILL} />
+				</Value>
+				<Label>{t('initial.value')}</Label>
+				<Value>
+					<DynamicValueSelector value={initialValue} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.PROPERTY} />
+				</Value>
+			</Form>
+		</Dialog>
+	) : null;
 }
 
 export default DialogMapObjectProperty;

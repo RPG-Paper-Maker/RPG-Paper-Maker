@@ -10,9 +10,9 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, KEY, SPECIAL_KEY } from './Enum';
 import { Node, Serializable } from '../core';
 import { MapElement } from '../Editor';
+import { BINDING, KEY, SPECIAL_KEY } from './Enum';
 
 export type KeyValue = {
 	k?: unknown;
@@ -59,3 +59,5 @@ export type JSONMapping = {
 	k: number[];
 	v: JSONType;
 };
+
+export type ITERATOR = { i: number };

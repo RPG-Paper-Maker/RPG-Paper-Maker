@@ -18,7 +18,7 @@ import useStateNumber from '../../../hooks/useStateNumber';
 import { MapObjectEvent } from '../../../models';
 import Dropdown from '../../Dropdown';
 import Flex from '../../Flex';
-import Form from '../../Form';
+import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
 import RadioButton from '../../RadioButton';
 import Tree from '../../Tree';
@@ -123,17 +123,17 @@ function DialogMapObjectEvent({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 			>
 				<Flex column spacedLarge>
 					<Form>
-						<td>
+						<Label>
 							<RadioButton
 								isChecked={isSystem}
 								onChange={setIsSystem}
 								additionalChange={handleChangeIsSystem}
 								allOnChanges={radiosSetters}
 							>
-								{t('event.system')}:
+								{t('event.system')}
 							</RadioButton>
-						</td>
-						<td>
+						</Label>
+						<Value>
 							<Dropdown
 								selectedID={eventSystemID}
 								onChange={handleChangeEventSystemID}
@@ -141,18 +141,18 @@ function DialogMapObjectEvent({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 								disabled={!isSystem}
 								displayIDs
 							/>
-						</td>
-						<td>
+						</Value>
+						<Label>
 							<RadioButton
 								isChecked={isUser}
 								onChange={setIsUser}
 								additionalChange={handleChangeIsUser}
 								allOnChanges={radiosSetters}
 							>
-								{t('event.user')}:
+								{t('event.user')}
 							</RadioButton>
-						</td>
-						<td>
+						</Label>
+						<Value>
 							<Dropdown
 								selectedID={eventUserID}
 								onChange={handleChangeEventUserID}
@@ -160,7 +160,7 @@ function DialogMapObjectEvent({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 								disabled={!isUser}
 								displayIDs
 							/>
-						</td>
+						</Value>
 					</Form>
 					{parameters.length > 0 && (
 						<Groupbox title={t('parameter.values')}>

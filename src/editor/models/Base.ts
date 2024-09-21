@@ -45,7 +45,7 @@ class Base extends Serializable {
 		Base.create(DYNAMIC_VALUE_KIND.PARAMETER, 'parameter'),
 		Base.create(DYNAMIC_VALUE_KIND.PROPERTY, 'property'),
 		Base.create(DYNAMIC_VALUE_KIND.DATABASE, 'database'),
-		Base.create(DYNAMIC_VALUE_KIND.MESSAGE, 'text'),
+		Base.create(DYNAMIC_VALUE_KIND.TEXT, 'text'),
 		Base.create(DYNAMIC_VALUE_KIND.SCRIPT, 'script'),
 		Base.create(DYNAMIC_VALUE_KIND.SWITCH, 'switch'),
 		Base.create(DYNAMIC_VALUE_KIND.KEYBOARD, 'keyboard'),
@@ -198,6 +198,10 @@ class Base extends Serializable {
 		return null;
 	}
 
+	getDropdownIcon(): ReactNode {
+		return null;
+	}
+
 	getName(): string {
 		return this.name;
 	}
@@ -206,12 +210,12 @@ class Base extends Serializable {
 		return `${Base.STRING_START}${this.id <= 0 ? '' : `${Utils.formatNumber(this.id, 4)}: `}${this.getName()}`;
 	}
 
-	toString(): string {
+	toString(): string | ReactNode {
 		return this.toStringNameID();
 	}
 
 	toStrings(): string[] {
-		return [this.toString()];
+		return ['' + this.toString()];
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

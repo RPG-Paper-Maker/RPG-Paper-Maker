@@ -40,9 +40,12 @@ type Props = {
 	canChangeSize?: boolean;
 	columns?: number;
 	rows?: number;
+	squareWidth?: number;
+	squareHeight?: number;
 	defaultRectangle?: Rectangle;
 	onUpdateRectangle?: (rect: Rectangle) => void;
 	adjustPositionSize?: boolean;
+	doNotUpdateTexture?: boolean;
 };
 
 function TextureSquareSelector({
@@ -52,13 +55,34 @@ function TextureSquareSelector({
 	canChangeSize = true,
 	columns = -1,
 	rows = -1,
+	squareWidth,
+	squareHeight,
 	defaultRectangle,
 	onUpdateRectangle,
 	adjustPositionSize,
+	doNotUpdateTexture = false,
 }: Props) {
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 
 	const getDefaultRectangle = () => {
+		if (doNotUpdateTexture) {
+			let resizedRectangle: Rectangle | undefined = undefined;
+			if (defaultRectangle) {
+				if (squareWidth !== undefined && squareHeight !== undefined) {
+					resizedRectangle = new Rectangle(
+						defaultRectangle.x * squareWidth,
+						defaultRectangle.y * squareHeight,
+						squareWidth,
+						squareHeight
+					);
+				}
+			}
+			return (
+				resizedRectangle ??
+				defaultRectangle ??
+				new Rectangle(0, 0, currentState.squareWidth, currentState.squareHeight)
+			);
+		}
 		switch (Scene.Map.currentSelectedMapElementKind) {
 			case ELEMENT_MAP_KIND.FLOOR:
 				return Project.current!.settings.mapEditorCurrentTilesetFloorTexture;
@@ -90,27 +114,29 @@ function TextureSquareSelector({
 	const dispatch = useDispatch();
 
 	const updateRectangle = async () => {
-		switch (Scene.Map.currentSelectedMapElementKind) {
-			case ELEMENT_MAP_KIND.FLOOR:
-				dispatch(setCurrentTilesetFloorTexture(currentState.selectedRect));
-				Project.current!.settings.mapEditorCurrentTilesetFloorTexture = currentState.selectedRect;
-				await Project.current!.settings!.save();
-				break;
-			case ELEMENT_MAP_KIND.AUTOTILE:
-				dispatch(setCurrentAutotileTexture(currentState.selectedRect));
-				Project.current!.settings.mapEditorCurrentAutotileTexture = currentState.selectedRect;
-				await Project.current!.settings!.save();
-				break;
-			case ELEMENT_MAP_KIND.SPRITE_FACE:
-			case ELEMENT_MAP_KIND.SPRITE_FIX:
-			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
-			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-				dispatch(setCurrentTilesetSpriteTexture(currentState.selectedRect));
-				Project.current!.settings.mapEditorCurrentTilesetSpriteTexture = currentState.selectedRect;
-				await Project.current!.settings!.save();
-				break;
-			default:
-				break;
+		if (!doNotUpdateTexture) {
+			switch (Scene.Map.currentSelectedMapElementKind) {
+				case ELEMENT_MAP_KIND.FLOOR:
+					dispatch(setCurrentTilesetFloorTexture(currentState.selectedRect));
+					Project.current!.settings.mapEditorCurrentTilesetFloorTexture = currentState.selectedRect;
+					await Project.current!.settings!.save();
+					break;
+				case ELEMENT_MAP_KIND.AUTOTILE:
+					dispatch(setCurrentAutotileTexture(currentState.selectedRect));
+					Project.current!.settings.mapEditorCurrentAutotileTexture = currentState.selectedRect;
+					await Project.current!.settings!.save();
+					break;
+				case ELEMENT_MAP_KIND.SPRITE_FACE:
+				case ELEMENT_MAP_KIND.SPRITE_FIX:
+				case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
+				case ELEMENT_MAP_KIND.SPRITE_QUADRA:
+					dispatch(setCurrentTilesetSpriteTexture(currentState.selectedRect));
+					Project.current!.settings.mapEditorCurrentTilesetSpriteTexture = currentState.selectedRect;
+					await Project.current!.settings!.save();
+					break;
+				default:
+					break;
+			}
 		}
 		onUpdateRectangle?.(currentState.selectedRect);
 	};
@@ -119,9 +145,10 @@ function TextureSquareSelector({
 		currentState.picture = await Picture2D.loadImage(texture);
 		currentState.path = texture;
 		currentState.squareWidth =
-			columns === -1 ? 1 : Math.floor(currentState.picture.width / Project.SQUARE_SIZE / columns);
+			squareWidth ??
+			(columns === -1 ? 1 : Math.floor(currentState.picture.width / Project.SQUARE_SIZE / columns));
 		currentState.squareHeight =
-			rows === -1 ? 1 : Math.floor(currentState.picture.height / Project.SQUARE_SIZE / rows);
+			squareHeight ?? (rows === -1 ? 1 : Math.floor(currentState.picture.height / Project.SQUARE_SIZE / rows));
 		currentState.firstX = -1;
 		currentState.firstY = -1;
 		currentState.selectedRect = getDefaultRectangle();
@@ -199,15 +226,15 @@ function TextureSquareSelector({
 	const drawTexture = useCallback(
 		(ctx: CanvasRenderingContext2D) => {
 			if (currentState.picture) {
-				if (divideWidth === 1 && divideHeight === 1) {
-					ctx.drawImage(
-						currentState.picture,
-						0,
-						0,
-						currentState.picture.width * 2,
-						currentState.picture.height * 2
-					);
-				} else {
+				ctx.drawImage(
+					currentState.picture,
+					0,
+					0,
+					(currentState.picture.width * 2) / divideWidth,
+					(currentState.picture.height * 2) / divideHeight
+				);
+
+				/*
 					for (let i = 0, l = currentState.picture.width / Project.SQUARE_SIZE / divideWidth; i < l; i++) {
 						for (
 							let j = 0, ll = currentState.picture.height / Project.SQUARE_SIZE / divideHeight;
@@ -226,8 +253,7 @@ function TextureSquareSelector({
 								Project.SQUARE_SIZE * 2
 							);
 						}
-					}
-				}
+					}*/
 			}
 		},
 		[currentState, divideWidth, divideHeight]

@@ -22,7 +22,7 @@ import Button from '../../Button';
 import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
 import Flex from '../../Flex';
-import Form from '../../Form';
+import Form, { Label, Value } from '../../Form';
 import GraphicsSelector from '../../GraphicsSelector';
 import Groupbox from '../../Groupbox';
 import InputText from '../../InputText';
@@ -76,6 +76,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	const [forcedCurrentIndexTab, setForcedCurrentIndexTab] = useState<number | null>(null);
 	const [forcedCurrentSelectedIDState, setForcedCurrentSelectedIDState] = useState<number | null>(null);
 	const [forcedCurrentSelectedIndexEvent, setForcedCurrentSelectedIndexEvent] = useState<number | null>(null);
+	const [forcedCurrentSelectedIndexReaction, setForcedCurrentSelectedIndexReaction] = useState<number | null>(null);
 	const [blockingHero, setBlockingHero] = useStateBool();
 
 	const initialize = () => {
@@ -92,10 +93,12 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 		setCanBeTriggeredAnotherObject(object.canBeTriggeredAnotherObject);
 		const state = newStates.length > 0 ? (newStates[0].content as MapObjectState) : null;
 		handleChangeState(state, newEvents);
-		setSelectedEvent(newEvents.length > 0 ? (newEvents[0].content as MapObjectEvent) : null);
+		const event = newEvents.length > 0 ? (newEvents[0].content as MapObjectEvent) : null;
+		setSelectedEvent(event);
 		Project.current!.currentMapObjectStates = newStates;
 		Project.current!.currentMapObjectEvents = newEvents;
 		Project.current!.currentMapObjectProperties = newProperties;
+		Project.current!.currentMapObjectParameters = event?.parameters ?? [];
 	};
 
 	const reset = () => {
@@ -104,6 +107,13 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 		setGraphicsIndexY(0);
 		setGraphicsKind(ELEMENT_MAP_KIND.NONE);
 		setSelectedState(null);
+		setStates([]);
+		setProperties([]);
+		setEvents([]);
+		setTabTitles([]);
+		setTabContents([]);
+		Project.current!.currentMapObjectProperties = [];
+		Project.current!.currentMapObjectParameters = [];
 	};
 
 	const getObjectsList = () => [Model.Base.create(-1, t('none')), ...Project.current!.commonEvents.commonObjects];
@@ -182,6 +192,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 			setBlockingHero(event.reactions?.get?.('' + selectedState?.id)?.blockingHero ?? false);
 		}
 		setForcedCurrentIndexTab(node ? events.indexOf(node) : -1);
+		Project.current!.currentMapObjectParameters = event?.parameters ?? [];
 	};
 
 	const handleChangeState = (state: MapObjectState | null, newEvents?: Node[]) => {
@@ -416,8 +427,8 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 							<Flex column one spaced>
 								<Groupbox title={t('moving')}>
 									<Form>
-										<td>{t('type')}:</td>
-										<td>
+										<Label>{t('type')}</Label>
+										<Value>
 											<Dropdown
 												selectedID={objectMovingKind}
 												onChange={handleChangeObjectMovingKind}
@@ -425,34 +436,34 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 												translateOptions
 												fillWidth
 											/>
-										</td>
-										<td></td>
-										<td>
+										</Value>
+										<td />
+										<Value>
 											<Button
 												disabled={objectMovingKind !== OBJECT_MOVING_KIND.ROUTE}
 												onClick={handleClickEditRoute}
 											>
 												{t('edit.route')}...
 											</Button>
-										</td>
-										<td>{t('speed')}:</td>
-										<td>
+										</Value>
+										<Label>{t('speed')}</Label>
+										<Value>
 											<Dropdown
 												selectedID={speedID}
 												onChange={handleChangeSpeedID}
 												options={Project.current!.systems.speeds}
 												fillWidth
 											/>
-										</td>
-										<td>{t('frequency')}:</td>
-										<td>
+										</Value>
+										<Label>{t('frequency')}</Label>
+										<Value>
 											<Dropdown
 												selectedID={frequencyID}
 												onChange={handleChangeFrequencyID}
 												options={Project.current!.systems.frequencies}
 												fillWidth
 											/>
-										</td>
+										</Value>
 									</Form>
 								</Groupbox>
 								<Button>{t('update.transformations')}...</Button>

@@ -56,18 +56,16 @@ function DialogMapObjectParameter({ isOpen, setIsOpen, model, onAccept, onReject
 		// eslint-disable-next-line
 	}, [isOpen]);
 
-	return (
-		<>
-			<Dialog
-				title={`${t('set.parameter')}...`}
-				isOpen={isOpen}
-				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-				onClose={handleReject}
-			>
-				<DynamicValueSelector value={value!} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.PARAMETER} />
-			</Dialog>
-		</>
-	);
+	return value ? (
+		<Dialog
+			title={`${t('set.parameter')}...`}
+			isOpen={isOpen}
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			onClose={handleReject}
+		>
+			<DynamicValueSelector value={value} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.PARAMETER} />
+		</Dialog>
+	) : null;
 }
 
 export default DialogMapObjectParameter;

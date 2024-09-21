@@ -15,6 +15,7 @@ import { Project, Serializable } from '../core';
 
 class Keyboard extends Serializable {
 	public list!: Model.Keyboard[];
+	public listIndexes!: number[];
 	public keyAction!: number;
 	public keyCancel!: number;
 	public keyUp!: number;
@@ -23,7 +24,7 @@ class Keyboard extends Serializable {
 	public keyRight!: number;
 
 	public static readonly bindings: BindingType[] = [
-		['list', 'list', undefined, BINDING.LIST, Model.Keyboard],
+		['list', 'list', undefined, BINDING.LIST_WITH_INDEXES, Model.Keyboard],
 		['keyAction', 'a', undefined, BINDING.NUMBER],
 		['keyCancel', 'c', undefined, BINDING.NUMBER],
 		['keyUp', 'u', undefined, BINDING.NUMBER],
@@ -34,6 +35,10 @@ class Keyboard extends Serializable {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	getByID(id: number): Model.Keyboard | undefined {
+		return this.list[this.listIndexes[id]];
 	}
 
 	getPath(): string {

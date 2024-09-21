@@ -1,5 +1,6 @@
 .dynamic-value-selector {
 	display: flex;
+	align-items: center;
 	gap: 5px;
 	width: 250px !important;
 }

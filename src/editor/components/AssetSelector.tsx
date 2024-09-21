@@ -13,7 +13,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { AiOutlinePicture } from 'react-icons/ai';
 import { BiPyramid } from 'react-icons/bi';
 import { CUSTOM_SHAPE_KIND, PICTURE_KIND } from '../common';
-import { Node, Project } from '../core';
+import { Node, Project, Rectangle } from '../core';
 import { Model } from '../Editor';
 import '../styles/GraphicsSelector.css';
 import Button from './Button';
@@ -30,15 +30,17 @@ export enum ASSET_SELECTOR_TYPE {
 type Props = {
 	selectionType: ASSET_SELECTOR_TYPE;
 	selectedID: number;
+	indexX?: number;
+	indexY?: number;
 	kind?: number;
-	onChange: (id: number) => void;
+	onChange: (id: number, indexX: number, indexY: number) => void;
 	disabled?: boolean;
 };
 
 const DEFAULT_PICTURE_KIND = PICTURE_KIND.PICTURES;
 const DEFAULT_CUSTOM_SHAPE_KIND = CUSTOM_SHAPE_KIND.OBJ;
 
-function AssetSelector({ selectionType, selectedID, kind, onChange, disabled = false }: Props) {
+function AssetSelector({ selectionType, selectedID, indexX, indexY, kind, onChange, disabled = false }: Props) {
 	const getSelectedItem = useCallback(() => {
 		let base: Model.Base | null = null;
 		switch (selectionType) {
@@ -61,13 +63,13 @@ function AssetSelector({ selectionType, selectedID, kind, onChange, disabled = f
 		}
 	};
 
-	const handleAcceptPicture = (picture: Model.Picture) => {
-		onChange(picture.id);
+	const handleAcceptPicture = (picture: Model.Picture, rect: Rectangle) => {
+		onChange(picture.id, rect.x / rect.width, rect.y / rect.height);
 		setList([Node.create(picture)]);
 	};
 
 	const handleAcceptShape = (shape: Model.Shape) => {
-		onChange(shape.id);
+		onChange(shape.id, 0, 0);
 		setList([Node.create(shape)]);
 	};
 
@@ -91,6 +93,8 @@ function AssetSelector({ selectionType, selectedID, kind, onChange, disabled = f
 				return (
 					<DialogPicturesPreview
 						pictureID={selectedID}
+						indexX={indexX}
+						indexY={indexY}
 						kind={kind ?? DEFAULT_PICTURE_KIND}
 						{...options}
 						onAccept={handleAcceptPicture}

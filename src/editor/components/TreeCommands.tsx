@@ -19,7 +19,7 @@ type Props = {
 };
 
 function TreeCommands({ list }: Props) {
-	return <Tree list={list} constructorType={Model.MapObjectCommand} />;
+	return <Tree list={list} constructorType={Model.MapObjectCommand} byIndex />;
 }
 
 export default TreeCommands;

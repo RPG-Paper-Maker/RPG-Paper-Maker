@@ -47,6 +47,14 @@ class Variables extends Serializable {
 		return null;
 	}
 
+	getVariables(): Model.Base[] {
+		const list = [];
+		for (const page of this.pages) {
+			list.push(...page.list);
+		}
+		return list;
+	}
+
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Variables.getBindings(additionnalBinding));
 	}

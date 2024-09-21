@@ -32,7 +32,6 @@ function TextureCharacterSelector({
 	adjustPositionSize,
 }: Props) {
 	const divideSize = Constants.BASE_SQUARE_SIZE / 2 / Project.SQUARE_SIZE;
-
 	const rows = 4 + (isStopAnimation ? 4 : 0) + (isClimbAnimation ? 4 : 0);
 
 	return (
@@ -46,6 +45,7 @@ function TextureCharacterSelector({
 			defaultRectangle={defaultRectangle}
 			onUpdateRectangle={onUpdateRectangle}
 			adjustPositionSize={adjustPositionSize}
+			doNotUpdateTexture
 		/>
 	);
 }

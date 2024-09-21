@@ -28,9 +28,11 @@ class Project {
 	public variables = new Data.Variables();
 	public keyboard = new Data.Keyboard();
 	public tilesets = new Data.Tilesets();
+	public languages = new Data.Languages();
 	public currentMapObjectStates: Node[] = [];
 	public currentMapObjectEvents: Node[] = [];
 	public currentMapObjectProperties: Node[] = [];
+	public currentMapObjectParameters: Model.Base[] = [];
 
 	constructor(name: string, location: string) {
 		this.systems.projectName = Model.Localization.create(name);
@@ -56,6 +58,7 @@ class Project {
 
 	async load() {
 		const projectName = this.systems.projectName.name();
+		await this.languages.load();
 		await this.variables.load();
 		await this.pictures.load();
 		await this.shapes.load();

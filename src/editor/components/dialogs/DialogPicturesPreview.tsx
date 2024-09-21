@@ -11,7 +11,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Constants, PICTURE_KIND } from '../../common';
+import { PICTURE_KIND } from '../../common';
 import { Platform } from '../../common/Platform';
 import { Node, Project, Rectangle } from '../../core';
 import { Model, Scene } from '../../Editor';
@@ -79,14 +79,19 @@ function DialogPicturesPreview({
 				}
 			} else {
 				if (indexX !== undefined && indexY !== undefined) {
-					const dif = Constants.BASE_SQUARE_SIZE / Project.SQUARE_SIZE;
-					rect = new Rectangle(indexX * dif, indexY * dif, dif, dif);
+					rect = new Rectangle(indexX, indexY, 1, 1);
 				}
 			}
 		}
 		setSelectedRect(rect);
 		setSelectedRectTileset(rectT);
 		handleRefresh();
+	};
+
+	const reset = () => {
+		setSelectedPicture(null);
+		setPictures([]);
+		setPicturesAvailable([]);
 	};
 
 	const handleChangeSelectedPicture = (node: Node | null) => {
@@ -143,19 +148,23 @@ function DialogPicturesPreview({
 			Project.current!.pictures.list[kind] = pictures.map((node) => node.content as Model.Picture);
 			await Project.current!.pictures.save();
 			const isTileset = selectedPicture.id === 0;
-			const dif = Constants.BASE_SQUARE_SIZE / Project.SQUARE_SIZE;
 			onAccept?.(
 				selectedPicture,
-				isTileset ? selectedRectTileset.clone() : new Rectangle(selectedRect.x / dif, selectedRect.y / dif),
+				isTileset
+					? selectedRectTileset.clone()
+					: new Rectangle(selectedRect.x / selectedRect.width, selectedRect.y / selectedRect.height),
 				isTileset
 			);
 			setIsOpen(false);
+			reset();
 		}
 	};
 
 	const handleReject = async () => {
 		onReject?.();
+		setSelectedPicture(null);
 		setIsOpen(false);
+		reset();
 	};
 
 	useEffect(() => {
@@ -180,6 +189,7 @@ function DialogPicturesPreview({
 							).getPath()}
 							defaultRectangle={selectedRectTileset}
 							onUpdateRectangle={setSelectedRectTileset}
+							doNotUpdateTexture
 						/>
 					) : (
 						<TextureCharacterSelector
@@ -191,6 +201,36 @@ function DialogPicturesPreview({
 							adjustPositionSize
 						/>
 					);
+				case PICTURE_KIND.ICONS: {
+					const size = Project.current!.systems.iconsSize / Project.SQUARE_SIZE;
+					return (
+						<TextureSquareSelector
+							texture={selectedPicture.getPath()}
+							canChangeSize={false}
+							squareWidth={size}
+							squareHeight={size}
+							defaultRectangle={selectedRect}
+							onUpdateRectangle={setSelectedRect}
+							doNotUpdateTexture
+						/>
+					);
+				}
+				case PICTURE_KIND.FACESETS: {
+					const size = Project.current!.systems.facesetsSize / Project.SQUARE_SIZE / 2;
+					return (
+						<TextureSquareSelector
+							texture={selectedPicture.getPath()}
+							canChangeSize={false}
+							divideWidth={2}
+							divideHeight={2}
+							squareWidth={size}
+							squareHeight={size}
+							defaultRectangle={selectedRect}
+							onUpdateRectangle={setSelectedRect}
+							doNotUpdateTexture
+						/>
+					);
+				}
 				default:
 					return <TexturePreviewer texture={selectedPicture.getPath()} />;
 			}

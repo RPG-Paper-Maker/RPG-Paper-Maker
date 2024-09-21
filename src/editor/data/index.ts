@@ -1,6 +1,7 @@
 export * from './CommonEvents';
 export * from './EngineSettings';
 export * from './Keyboard';
+export * from './Languages';
 export * from './Pictures';
 export * from './Settings';
 export * from './Shapes';

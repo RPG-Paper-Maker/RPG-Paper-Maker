@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from '../common';
 import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
@@ -34,9 +34,7 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 			? (value.value as number)
 			: 0
 	);
-	const [valueMessage, setValueMessage] = useState(
-		value.kind === DYNAMIC_VALUE_KIND.MESSAGE ? (value.value as string) : ''
-	);
+	const [valueText, setValueText] = useState(value.kind === DYNAMIC_VALUE_KIND.TEXT ? (value.value as string) : '');
 	const [valueSwitch, setValueSwitch] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.SWITCH ? (value.value as boolean) : true
 	);
@@ -44,7 +42,17 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 		value.kind === DYNAMIC_VALUE_KIND.VARIABLE ? (value.value as number) : 1
 	);
 	const [valueKeyboardID, setValueKeyboardID] = useState(
-		value.kind === DYNAMIC_VALUE_KIND.KEYBOARD ? (value.value as number) : Project.current!.keyboard.list[0].id
+		value.kind === DYNAMIC_VALUE_KIND.KEYBOARD ? (value.value as number) : Project.current!.keyboard.list[0]?.id
+	);
+	const [valueParameterID, setValueParameterID] = useState(
+		value.kind === DYNAMIC_VALUE_KIND.PARAMETER
+			? (value.value as number)
+			: Project.current!.currentMapObjectParameters[0]?.id
+	);
+	const [valuePropertyID, setValuePropertyID] = useState(
+		value.kind === DYNAMIC_VALUE_KIND.PROPERTY
+			? (value.value as number)
+			: Project.current!.currentMapObjectProperties[0]?.content?.id
 	);
 
 	const getOptions = () => {
@@ -57,7 +65,7 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 					DYNAMIC_VALUE_KIND.NONE,
 					DYNAMIC_VALUE_KIND.NUMBER_DECIMAL,
 					DYNAMIC_VALUE_KIND.VARIABLE,
-					DYNAMIC_VALUE_KIND.MESSAGE,
+					DYNAMIC_VALUE_KIND.TEXT,
 					DYNAMIC_VALUE_KIND.SWITCH,
 					DYNAMIC_VALUE_KIND.KEYBOARD,
 				];
@@ -67,10 +75,19 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 					DYNAMIC_VALUE_KIND.NONE,
 					DYNAMIC_VALUE_KIND.NUMBER_DECIMAL,
 					DYNAMIC_VALUE_KIND.VARIABLE,
-					DYNAMIC_VALUE_KIND.MESSAGE,
+					DYNAMIC_VALUE_KIND.TEXT,
 					DYNAMIC_VALUE_KIND.SWITCH,
 					DYNAMIC_VALUE_KIND.KEYBOARD,
 				];
+				break;
+			case DYNAMIC_VALUE_OPTIONS_TYPE.TEXT:
+				list = [DYNAMIC_VALUE_KIND.TEXT, DYNAMIC_VALUE_KIND.VARIABLE];
+				if (Project.current!.currentMapObjectParameters.length > 0) {
+					list.push(DYNAMIC_VALUE_KIND.PARAMETER);
+				}
+				if (Project.current!.currentMapObjectProperties.length > 0) {
+					list.push(DYNAMIC_VALUE_KIND.PROPERTY);
+				}
 				break;
 			default:
 				break;
@@ -94,14 +111,20 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 			case DYNAMIC_VALUE_KIND.VARIABLE:
 				value.value = valueVariableID;
 				break;
-			case DYNAMIC_VALUE_KIND.MESSAGE:
-				value.value = valueMessage;
+			case DYNAMIC_VALUE_KIND.TEXT:
+				value.value = valueText;
 				break;
 			case DYNAMIC_VALUE_KIND.SWITCH:
 				value.value = valueSwitch;
 				break;
 			case DYNAMIC_VALUE_KIND.KEYBOARD:
 				value.value = valueKeyboardID;
+				break;
+			case DYNAMIC_VALUE_KIND.PARAMETER:
+				value.value = valueParameterID;
+				break;
+			case DYNAMIC_VALUE_KIND.PROPERTY:
+				value.value = valuePropertyID;
 				break;
 		}
 	};
@@ -111,9 +134,9 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 		value.value = num;
 	};
 
-	const handleChangeMessage = (message: string) => {
-		setValueMessage(message);
-		value.value = message;
+	const handleChangeText = (text: string) => {
+		setValueText(text);
+		value.value = text;
 	};
 
 	const handleChangeSwitch = (id: number) => {
@@ -131,6 +154,28 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 		value.value = id;
 	};
 
+	const handleChangeParameter = (id: number) => {
+		setValueParameterID(id);
+		value.value = id;
+	};
+
+	const handleChangeProperty = (id: number) => {
+		setValuePropertyID(id);
+		value.value = id;
+	};
+
+	useEffect(() => {
+		setKind(value.kind);
+	}, [value.kind]);
+
+	useEffect(() => {
+		switch (value.kind) {
+			case DYNAMIC_VALUE_KIND.TEXT:
+				setValueText(value.value as string);
+				break;
+		}
+	}, [value.value]);
+
 	const getValueDisplay = () => {
 		switch (kind) {
 			case DYNAMIC_VALUE_KIND.NUMBER:
@@ -145,10 +190,8 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 				);
 			case DYNAMIC_VALUE_KIND.VARIABLE:
 				return <VariableSelector variableID={valueVariableID} onChange={handleChangeVariable} />;
-			case DYNAMIC_VALUE_KIND.MESSAGE:
-				return (
-					<InputText value={valueMessage} onChange={handleChangeMessage} widthType={INPUT_TYPE_WIDTH.FILL} />
-				);
+			case DYNAMIC_VALUE_KIND.TEXT:
+				return <InputText value={valueText} onChange={handleChangeText} widthType={INPUT_TYPE_WIDTH.FILL} />;
 			case DYNAMIC_VALUE_KIND.SWITCH:
 				return (
 					<Dropdown
@@ -164,6 +207,26 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 						selectedID={valueKeyboardID}
 						onChange={handleChangeKeyboard}
 						options={Project.current!.keyboard.list}
+						displayIDs
+						fillWidth
+					/>
+				);
+			case DYNAMIC_VALUE_KIND.PARAMETER:
+				return (
+					<Dropdown
+						selectedID={valueParameterID}
+						onChange={handleChangeParameter}
+						options={Project.current!.currentMapObjectParameters}
+						displayIDs
+						fillWidth
+					/>
+				);
+			case DYNAMIC_VALUE_KIND.PROPERTY:
+				return (
+					<Dropdown
+						selectedID={valuePropertyID}
+						onChange={handleChangeProperty}
+						options={Project.current!.currentMapObjectProperties.map((node) => node.content)}
 						displayIDs
 						fillWidth
 					/>

@@ -9,10 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
-import { Project, Serializable } from '.';
 import i18next from 'i18next';
+import { Project, Serializable } from '.';
+import { BINDING, BindingType, DYNAMIC_VALUE_KIND, ITERATOR, JSONType } from '../common';
 import { Model } from '../Editor';
+import { MapObjectCommandType } from '../models';
 
 class DynamicValue extends Serializable {
 	public kind!: DYNAMIC_VALUE_KIND;
@@ -37,6 +38,29 @@ class DynamicValue extends Serializable {
 		dynamic.kind = kind;
 		dynamic.value = value;
 		return dynamic;
+	}
+
+	update(kind: DYNAMIC_VALUE_KIND, value: unknown) {
+		this.kind = kind;
+		this.value = value;
+	}
+
+	updateCommand(command: MapObjectCommandType[], iterator: ITERATOR) {
+		this.kind = command[iterator.i++] as DYNAMIC_VALUE_KIND;
+		this.value = command[iterator.i++];
+	}
+
+	getCommand(command: MapObjectCommandType[]) {
+		command.push(this.kind);
+		command.push(this.value as MapObjectCommandType);
+	}
+
+	updateToDefaultText() {
+		this.update(DYNAMIC_VALUE_KIND.TEXT, '');
+	}
+
+	updateToDefaultDatabase() {
+		this.update(DYNAMIC_VALUE_KIND.DATABASE, 1);
 	}
 
 	equals(dynamic: DynamicValue): boolean {

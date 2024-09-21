@@ -1,1 +1,1 @@
-export * from './DialogCommands';
+export * from './DialogCommandShowText';

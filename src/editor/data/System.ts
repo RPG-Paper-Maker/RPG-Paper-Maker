@@ -23,12 +23,17 @@ class System extends Serializable {
 	public FRAMES!: number;
 	public autotilesFrames!: number;
 	public autotilesFrameDuration!: number;
+	public facesetsSize!: number;
+	public facesetScalingWidth!: number;
+	public facesetScalingHeight!: number;
+	public iconsSize!: number;
 	public heroMapID!: number;
 	public heroMapPosition!: Position;
 	public speeds!: Model.SpeedFrequency[];
-	public speedsIndexes!: number[];
 	public frequencies!: Model.SpeedFrequency[];
-	public frequenciesIndexes!: number;
+	public fontSizes!: Model.FontSize[];
+	public fontNames!: Model.FontName[];
+	public colors!: Model.Color[];
 	public json!: JSONType; // TEMP, will be removed later
 
 	public static readonly bindings: BindingType[] = [
@@ -38,10 +43,17 @@ class System extends Serializable {
 		['PATH_BR', 'pathBR', undefined, BINDING.STRING],
 		['autotilesFrames', 'autotilesFrames', 4, BINDING.NUMBER],
 		['autotilesFrameDuration', 'autotilesFrameDuration', 150, BINDING.NUMBER],
+		['facesetsSize', 'facesetsSize', 128, BINDING.NUMBER],
+		['facesetScalingWidth', 'facesetScalingWidth', 120, BINDING.NUMBER],
+		['facesetScalingHeight', 'facesetScalingHeight', 120, BINDING.NUMBER],
+		['iconsSize', 'iconsSize', 16, BINDING.NUMBER],
 		['heroMapID', 'idMapHero', 1, BINDING.NUMBER],
 		['heroMapPosition', 'hmp', new Position(7, 0, 0, 7), BINDING.POSITION],
-		['speeds', 'sf', [], BINDING.LIST_WITH_INDEXES, Model.SpeedFrequency],
-		['frequencies', 'f', [], BINDING.LIST_WITH_INDEXES, Model.SpeedFrequency],
+		['speeds', 'sf', [], BINDING.LIST, Model.SpeedFrequency],
+		['frequencies', 'f', [], BINDING.LIST, Model.SpeedFrequency],
+		['fontSizes', 'fs', [], BINDING.LIST, Model.FontSize],
+		['fontNames', 'fn', [], BINDING.LIST, Model.FontName],
+		['colors', 'colors', [], BINDING.LIST, Model.Color],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

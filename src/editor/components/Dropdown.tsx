@@ -49,6 +49,8 @@ type Props = {
 	disabledIds?: number[];
 	displayIDs?: boolean;
 	fillWidth?: boolean;
+	noSelectionName?: string;
+	noWidthChange?: boolean;
 };
 
 function Dropdown({
@@ -60,6 +62,8 @@ function Dropdown({
 	disabledIds = [],
 	displayIDs = false,
 	fillWidth = false,
+	noSelectionName = '',
+	noWidthChange = false,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -104,7 +108,9 @@ function Dropdown({
 			const width = container.clientWidth;
 			dropdown.style.top = `${top}px`;
 			dropdown.style.left = `${left}px`;
-			dropdown.style.width = `${width}px`;
+			if (!noWidthChange) {
+				dropdown.style.width = `${width}px`;
+			}
 		}
 	};
 
@@ -123,8 +129,11 @@ function Dropdown({
 	useLayoutEffect(() => {
 		const container = containerRef.current;
 		const dropdown = dropdownContainerRef.current;
-		if (container && dropdown) {
-			const v = `${dropdown.getBoundingClientRect().width + DROPDOWN_SPACE_ARROW}px`;
+		if (container && dropdown && !noWidthChange) {
+			const v = `${Math.max(
+				container.getBoundingClientRect().width,
+				dropdown.getBoundingClientRect().width + DROPDOWN_SPACE_ARROW
+			)}px`;
 			if (fillWidth) {
 				container.style.minWidth = v;
 			} else {
@@ -167,14 +176,16 @@ function Dropdown({
 		}
 	}, [disabled]);
 
-	const selected = Model.Base.getByIDOrFirst(options, selectedID);
+	const selectedOrEmpty = Model.Base.getByID(options, selectedID);
+	const selected = selectedOrEmpty ?? Model.Base.create(selectedID, noSelectionName);
 
 	const getCurrentItem = () =>
-		translateOptions ? t(selected.name) : displayIDs ? selected.toStringNameID() : selected.name;
+		translateOptions ? t(selected.name) : displayIDs && selectedOrEmpty ? selected.toStringNameID() : selected.name;
 
 	const getDropdownItems = () =>
 		options.map((option) => (
-			<div
+			<Flex
+				spaced
 				className={Utils.getClassName(
 					{
 						selected: selectedID === option.id,
@@ -186,8 +197,9 @@ function Dropdown({
 				key={option.id}
 				onClick={() => handleClickOption(option)}
 			>
+				{option.getDropdownIcon()}
 				{translateOptions ? t(option.name) : displayIDs ? option.toStringNameID() : option.name}
-			</div>
+			</Flex>
 		));
 
 	return (

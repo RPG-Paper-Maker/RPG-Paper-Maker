@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Constants, ITERATOR, JSONType } from '.';
 import { Serializable } from '../core';
-import { Constants, JSONType } from '.';
 
 class Utils {
 	public static defaultValue<T>(value: T | undefined, defaultValue: T): T {
@@ -111,6 +111,10 @@ class Utils {
 	static getViewportTop() {
 		const viewport = Utils.getViewport();
 		return viewport === document.body ? 0 : viewport.getBoundingClientRect().top;
+	}
+
+	static generateIterator(): ITERATOR {
+		return { i: 0 };
 	}
 }
 

@@ -36,6 +36,10 @@ button.red {
 	background-color: var(--red-color);
 }
 
+button.primaryText {
+	color: var(--primary-color);
+}
+
 button.backgroundOnHoverOnly {
 	background-color: transparent;
 }

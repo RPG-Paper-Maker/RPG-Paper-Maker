@@ -1,5 +1,4 @@
 export * from './DialogMapObject';
-export * from './DialogMapObjectCommand';
 export * from './DialogMapObjectEvent';
 export * from './DialogMapObjectParameter';
 export * from './DialogMapObjectProperty';
