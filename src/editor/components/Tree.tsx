@@ -66,6 +66,7 @@ type Props = {
 	byIndex?: boolean;
 	onDrop?: () => Promise<void>;
 	disabled?: boolean;
+	scrollable?: boolean;
 };
 
 export const TREES_MIN_WIDTH = 150;
@@ -97,6 +98,7 @@ function Tree({
 	onDrop,
 	minWidth,
 	disabled = false,
+	scrollable = false,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -684,7 +686,7 @@ function Tree({
 			<Flex column spacedLarge fillWidth fillHeight>
 				<div
 					onDoubleClick={handleDoubleClick}
-					className={Utils.getClassName({ disabled }, 'tree')}
+					className={Utils.getClassName({ disabled, 'zero-height': scrollable }, 'tree')}
 					style={{ minWidth: `${minWidth}px` }}
 				>
 					<Flex spaced>{getHeaders()}</Flex>

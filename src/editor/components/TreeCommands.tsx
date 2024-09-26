@@ -81,6 +81,7 @@ function TreeCommands({ list }: Props) {
 			onAccept={handleAcceptCommand}
 			multipleLevels
 			canBeEmpty
+			scrollable
 		/>
 	) : null;
 }

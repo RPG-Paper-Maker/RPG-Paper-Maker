@@ -19,6 +19,7 @@ import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tab from '../../Tab';
 import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
+import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
 import DialogCommandShowText from '../commands/DialogCommandShowText';
 import Dialog from '../Dialog';
 
@@ -273,6 +274,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept }: P
 				return <DialogCommandShowText {...options} />;
 			case EVENT_COMMAND_KIND.DISPLAY_CHOICE:
 				return <DialogCommandDisplayChoice {...options} />;
+			case EVENT_COMMAND_KIND.INPUT_NUMBER:
+				return <DialogCommandInputNumber {...options} />;
 			default:
 				return null;
 		}
@@ -280,7 +283,7 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept }: P
 
 	return (
 		<>
-			{isNew && (
+			{!isOpenCommand && (
 				<Dialog
 					title={`${t('commands')}...`}
 					isOpen={isOpen}

@@ -360,6 +360,19 @@ class MapObjectCommand extends Base {
 		return '';
 	}
 
+	getColor(): string {
+		switch (this.kind) {
+			case EVENT_COMMAND_KIND.SHOW_TEXT:
+			case EVENT_COMMAND_KIND.DISPLAY_CHOICE:
+			case EVENT_COMMAND_KIND.INPUT_NUMBER:
+				return MapObjectCommand.COLOR_ORANGE;
+			case EVENT_COMMAND_KIND.CHOICE:
+			case EVENT_COMMAND_KIND.END_CHOICE:
+				return MapObjectCommand.COLOR_PURPLE;
+		}
+		return 'white';
+	}
+
 	canHaveChildren(): boolean {
 		return this.kind === EVENT_COMMAND_KIND.CHOICE;
 	}
@@ -370,18 +383,6 @@ class MapObjectCommand extends Base {
 
 	isFixedNode(): boolean {
 		return this.kind === EVENT_COMMAND_KIND.CHOICE || this.kind === EVENT_COMMAND_KIND.END_CHOICE;
-	}
-
-	getColor(): string {
-		switch (this.kind) {
-			case EVENT_COMMAND_KIND.SHOW_TEXT:
-			case EVENT_COMMAND_KIND.DISPLAY_CHOICE:
-				return MapObjectCommand.COLOR_ORANGE;
-			case EVENT_COMMAND_KIND.CHOICE:
-			case EVENT_COMMAND_KIND.END_CHOICE:
-				return MapObjectCommand.COLOR_PURPLE;
-		}
-		return 'white';
 	}
 
 	getIcon(): ReactNode {
@@ -429,6 +430,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
 				texts = [''];
+				break;
+			case EVENT_COMMAND_KIND.INPUT_NUMBER:
+				texts = this.toStringInputNumber(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -525,6 +529,12 @@ class MapObjectCommand extends Base {
 			)}=${maxChoices}]`,
 			choices.join(' | '),
 		];
+	}
+
+	toStringInputNumber(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const stockValueVariable = this.toStringDynamicValue(iterator, properties, parameters);
+		const digits = this.toStringDynamicValue(iterator, properties, parameters);
+		return [`${i18next.t('stock.value.in.variable.id')} ${stockValueVariable}, ${i18next.t('digits')} ${digits}`];
 	}
 
 	copy(command: MapObjectCommand): void {

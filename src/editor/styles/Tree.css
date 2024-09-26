@@ -17,7 +17,7 @@
 	overflow: auto;
 	overflow-x: overlay;
 	overflow-y: auto;
-	height: 0px;
+	height: 100%;
 }
 
 .tree-header {

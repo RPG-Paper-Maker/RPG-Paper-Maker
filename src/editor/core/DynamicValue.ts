@@ -63,6 +63,10 @@ class DynamicValue extends Serializable {
 		this.update(DYNAMIC_VALUE_KIND.NUMBER, n);
 	}
 
+	updateToDefaultVariable(n = 1) {
+		this.update(DYNAMIC_VALUE_KIND.VARIABLE, n);
+	}
+
 	updateToDefaultDatabase() {
 		this.update(DYNAMIC_VALUE_KIND.DATABASE, 1);
 	}
