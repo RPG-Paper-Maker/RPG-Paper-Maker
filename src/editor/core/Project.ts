@@ -35,7 +35,7 @@ class Project {
 	public currentMapObjectParameters: Model.Base[] = [];
 
 	constructor(name: string, location: string) {
-		this.systems.projectName = Model.Localization.create(name);
+		this.systems.projectName = Model.Localization.create(0, name);
 		this.location = location;
 	}
 
@@ -57,7 +57,7 @@ class Project {
 	}
 
 	async load() {
-		const projectName = this.systems.projectName.name();
+		const projectName = this.systems.projectName.getName();
 		await this.languages.load();
 		await this.variables.load();
 		await this.pictures.load();

@@ -183,17 +183,6 @@ class Base extends Serializable {
 		}
 	}
 
-	copy(base: Base): void {
-		this.id = base.id;
-		this.name = base.name;
-	}
-
-	clone(): Base {
-		const base = new Base();
-		base.copy(this);
-		return base;
-	}
-
 	getIcon(): ReactNode {
 		return null;
 	}
@@ -206,6 +195,22 @@ class Base extends Serializable {
 		return this.name;
 	}
 
+	canHaveChildren(): boolean {
+		return false;
+	}
+
+	canExpand(): boolean {
+		return false;
+	}
+
+	isFixedNode(): boolean {
+		return false;
+	}
+
+	getSelectionNextIndexes(): number {
+		return 0;
+	}
+
 	toStringNameID(): string {
 		return `${Base.STRING_START}${this.id <= 0 ? '' : `${Utils.formatNumber(this.id, 4)}: `}${this.getName()}`;
 	}
@@ -216,6 +221,17 @@ class Base extends Serializable {
 
 	toStrings(): string[] {
 		return ['' + this.toString()];
+	}
+
+	copy(base: Base): void {
+		this.id = base.id;
+		this.name = base.name;
+	}
+
+	clone(): Base {
+		const base = new Base();
+		base.copy(this);
+		return base;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

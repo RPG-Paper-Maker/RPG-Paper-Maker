@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { ProjectPreview } from '../../models';
 export interface ProjectState {
 	name: string;
@@ -36,6 +36,7 @@ const TriggersSlice = createSlice({
 		needsReloadPageUpdate: false,
 		needsReloadPageClearCache: false,
 		needsReloadMap: false,
+		isOpeningNewDialog: false,
 	},
 	reducers: {
 		triggerNewProject(state, action: PayloadAction<boolean>) {
@@ -80,6 +81,9 @@ const TriggersSlice = createSlice({
 		setNeedsReloadMap(state) {
 			state.needsReloadMap = !state.needsReloadMap;
 		},
+		setIsOpeningNewDialog(state) {
+			state.isOpeningNewDialog = !state.isOpeningNewDialog;
+		},
 	},
 });
 
@@ -98,5 +102,6 @@ export const {
 	setNeedsReloadPageUpdate,
 	setNeedsReloadPageClearCache,
 	setNeedsReloadMap,
+	setIsOpeningNewDialog,
 } = TriggersSlice.actions;
 export const TriggersReducer = TriggersSlice.reducer;

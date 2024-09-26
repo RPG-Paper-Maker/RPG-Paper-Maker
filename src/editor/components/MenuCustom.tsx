@@ -10,11 +10,11 @@
 */
 
 import { ReactElement, useEffect } from 'react';
-import '../styles/Menu.css';
 import { KEY, MenuItemType, SPECIAL_KEY } from '../common';
+import '../styles/Menu.css';
+import Menu from './Menu';
 import MenuItem from './MenuItem';
 import MenuSub from './MenuSub';
-import Menu from './Menu';
 
 type Props = {
 	items: MenuItemType[];
@@ -146,7 +146,7 @@ function MenuCustom({
 			window.removeEventListener('keydown', handleKeyDown);
 		};
 		// eslint-disable-next-line
-	});
+	}, [allowKeyboard, items]);
 
 	return (
 		<Menu

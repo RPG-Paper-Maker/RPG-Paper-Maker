@@ -21,6 +21,7 @@ export const NODE_CONSTRUCTOR_KIND = {
 	MapObjectState: () => Model.MapObjectState,
 	MapObjectProperty: () => Model.MapObjectProperty,
 	MapObjectEvent: () => Model.MapObjectEvent,
+	MapObjectCommand: () => Model.MapObjectCommand,
 	Object3D: () => Model.Object3D,
 };
 
@@ -32,6 +33,9 @@ class Node extends Serializable {
 	public parent: Node | null = null;
 	public expanded = true;
 	public draggable = true;
+	public previous: Node | null = null;
+	public next: Node | null = null;
+	public willBeDeleted = false;
 
 	public static readonly bindings: BindingType[] = [['expanded', 'e', true, BINDING.BOOLEAN]];
 
@@ -121,6 +125,16 @@ class Node extends Serializable {
 		return ids;
 	}
 
+	static attributeIDsToList(nodes: Node[], currentID = 1): number {
+		for (const node of nodes) {
+			node.content.id = currentID++;
+			if (node.children.length > 0) {
+				currentID = this.attributeIDsToList(node.children, currentID);
+			}
+		}
+		return currentID;
+	}
+
 	static createList(list: Model.Base[], clone = true): Node[] {
 		return list.map((content) => Node.create(clone ? content.clone() : content));
 	}
@@ -131,6 +145,10 @@ class Node extends Serializable {
 
 	isFolder() {
 		return this.content.id < 0;
+	}
+
+	canExpand() {
+		return this.content.canExpand();
 	}
 
 	getIcon() {

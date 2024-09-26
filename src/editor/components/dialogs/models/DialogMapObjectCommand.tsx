@@ -18,6 +18,7 @@ import Button from '../../Button';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tab from '../../Tab';
+import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
 import DialogCommandShowText from '../commands/DialogCommandShowText';
 import Dialog from '../Dialog';
 
@@ -59,7 +60,9 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept }: P
 	};
 
 	const handleRejectCommand = () => {
-		setIsOpen(false);
+		if (!isNew) {
+			setIsOpen(false);
+		}
 		setIsOpenCommand(false);
 	};
 
@@ -268,6 +271,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept }: P
 		switch (selectedCommand) {
 			case EVENT_COMMAND_KIND.SHOW_TEXT:
 				return <DialogCommandShowText {...options} />;
+			case EVENT_COMMAND_KIND.DISPLAY_CHOICE:
+				return <DialogCommandDisplayChoice {...options} />;
 			default:
 				return null;
 		}

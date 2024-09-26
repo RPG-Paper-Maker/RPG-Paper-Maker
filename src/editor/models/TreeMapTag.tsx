@@ -9,12 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Model } from '../Editor';
-import { FcFolder, FcFile } from 'react-icons/fc';
-import { Base } from './Base';
-import { Position, Project } from '../core';
+import { FcFile, FcFolder } from 'react-icons/fc';
 import { BINDING, BindingType, JSONType, Paths } from '../common';
 import { Platform } from '../common/Platform';
+import { Position, Project } from '../core';
+import { Model } from '../Editor';
+import { Base } from './Base';
 
 class TreeMapTag extends Base {
 	public saved!: boolean;
@@ -45,6 +45,10 @@ class TreeMapTag extends Base {
 
 	isFolder() {
 		return this.id < 0;
+	}
+
+	canExpand(): boolean {
+		return this.isFolder();
 	}
 
 	getIcon() {

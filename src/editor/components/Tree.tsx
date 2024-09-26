@@ -28,6 +28,7 @@ import useStateString from '../hooks/useStateString';
 import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
+import DialogLocalization from './dialogs/models/DialogLocalization';
 import DialogMapObjectCommand from './dialogs/models/DialogMapObjectCommand';
 import DialogMapObjectEvent from './dialogs/models/DialogMapObjectEvent';
 import DialogMapObjectParameter from './dialogs/models/DialogMapObjectParameter';
@@ -49,12 +50,14 @@ type Props = {
 	doNotGenerateIDOnPaste?: boolean;
 	doNotShowID?: boolean;
 	showEditName?: boolean;
+	multipleLevels?: boolean;
 	contextMenuItems?: (CONTEXT_MENU_ITEM_KIND | MenuItemType)[];
 	defaultSelectedID?: number;
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
 	onDoubleClick?: (node: Node | null) => void;
 	onCreateItem?: (node: Node) => void;
 	onListUpdated?: () => void;
+	onAccept?: (node: Node, isNew: boolean) => void;
 	forcedCurrentSelectedItemID?: number | null;
 	setForcedCurrentSelectedItemID?: (forced: number | null) => void;
 	forcedCurrentSelectedItemIndex?: number | null;
@@ -78,12 +81,14 @@ function Tree({
 	doNotGenerateIDOnPaste = false,
 	doNotShowID = false,
 	showEditName = false,
+	multipleLevels = false,
 	contextMenuItems,
 	defaultSelectedID,
 	onSelectedItem,
+	onDoubleClick,
 	onCreateItem,
 	onListUpdated,
-	onDoubleClick,
+	onAccept,
 	forcedCurrentSelectedItemID,
 	setForcedCurrentSelectedItemID,
 	forcedCurrentSelectedItemIndex,
@@ -135,14 +140,17 @@ function Tree({
 
 	const getNewIndex = () => {
 		if (currentSelectedItemNode) {
-			let index = list.indexOf(currentSelectedItemNode);
+			const currentList = currentSelectedItemNode.parent?.children ?? list;
+			let index = currentList.indexOf(currentSelectedItemNode);
 			if (index === -1) {
-				index = list.length;
+				index = currentList.length;
 			}
 			return index;
 		}
 		return 0;
 	};
+
+	const isEmpty = byIndex ? getNewIndex() === list.length : (getNodeID() ?? -1) <= 0;
 
 	const isSelected = (id: number) => id === (byIndex ? getNewIndex() : getNodeID());
 
@@ -172,7 +180,7 @@ function Tree({
 
 	const handleDoubleClick = () => {
 		if (!hasCustomItems) {
-			if (getNodeID() === -1) {
+			if (isEmpty) {
 				handleNewItem();
 			} else {
 				handleEditItem();
@@ -184,8 +192,7 @@ function Tree({
 	const handleNewItem = async () => {
 		const model = new constructorType();
 		model.applyDefault();
-		const id = Model.Base.generateNewIDfromList(list.map((node) => node.content));
-		model.id = id;
+		model.id = Node.getNewID(list);
 		setNewModel(model);
 		setIsOpenDialog(true);
 	};
@@ -196,35 +203,64 @@ function Tree({
 
 	const handleCopyItem = async () => {
 		if (currentSelectedItemNode) {
-			dispatch(setCopiedItems(await Node.saveToCopy([currentSelectedItemNode])));
+			const nodes = [];
+			nodes.push(currentSelectedItemNode);
+			const currentList = currentSelectedItemNode.parent?.children ?? list;
+			const selectionIndexes = currentSelectedItemNode.content.getSelectionNextIndexes();
+			const index = currentList.indexOf(currentSelectedItemNode) + 1;
+			for (let i = 0; i < selectionIndexes - 1; i++) {
+				nodes.push(currentList[index + i]);
+			}
+			dispatch(setCopiedItems(await Node.saveToCopy(nodes)));
 		}
 	};
 
 	const handlePasteItem = async () => {
 		if (currentSelectedItemNode && copiedItems) {
 			const nodes = copiedItems.values;
+			const currentList = currentSelectedItemNode.parent?.children ?? list;
 			let index = getNewIndex();
 			let cloned: Node | null = null;
+			let firstCloned: Node | null = null;
 			for (const node of nodes) {
 				cloned = node.clone();
-				if (!doNotGenerateIDOnPaste) {
-					cloned.content.id = Model.Base.generateNewIDfromList(list.map((node) => node.content));
+				if (firstCloned === null) {
+					firstCloned = cloned;
 				}
-				ArrayUtils.insertAt(list, index++, cloned);
+				cloned.parent = currentSelectedItemNode.parent;
+				ArrayUtils.insertAt(currentList, index++, cloned);
+				if (!doNotGenerateIDOnPaste) {
+					generateNewIDsToAllNodes(cloned);
+				}
 			}
-			if (cloned) {
-				setCurrentSelectedItemNode(cloned);
-				onSelectedItem?.(cloned, false);
+			if (firstCloned) {
+				setCurrentSelectedItemNode(firstCloned);
+				onSelectedItem?.(firstCloned, false);
 			}
 			onListUpdated?.();
 		}
 	};
 
+	const generateNewIDsToAllNodes = (node: Node) => {
+		node.content.id = Node.getNewID(list);
+		for (const child of node.children) {
+			generateNewIDsToAllNodes(child);
+		}
+	};
+
 	const handleDeleteItem = async () => {
-		if (currentSelectedItemNode && (canBeEmpty || list.length > 1)) {
-			const index = getNewIndex();
-			ArrayUtils.removeElement(list, currentSelectedItemNode);
-			const node = list[index] ?? Node.create(Model.Base.create(-1, ''));
+		const currentList = currentSelectedItemNode?.parent?.children ?? list;
+		if (currentSelectedItemNode && (canBeEmpty || currentList.length > 1)) {
+			currentSelectedItemNode.willBeDeleted = true;
+			getTreeItems(list, []);
+			let node = currentSelectedItemNode.next;
+			const index = currentList.indexOf(currentSelectedItemNode);
+			ArrayUtils.removeElement(currentList, currentSelectedItemNode);
+			const selectionIndexes = currentSelectedItemNode.content.getSelectionNextIndexes();
+			for (let i = 0; i < selectionIndexes - 1; i++) {
+				node = currentList[index]?.next ?? null;
+				ArrayUtils.removeAt(currentList, index);
+			}
 			setCurrentSelectedItemNode(node);
 			onListUpdated?.();
 			onSelectedItem?.(node, false);
@@ -234,11 +270,15 @@ function Tree({
 	const handleAcceptDialog = () => {
 		let node: Node | null = null;
 		if (newModel && currentSelectedItemNode) {
+			const currentList = currentSelectedItemNode.parent?.children ?? list;
 			node = Node.create(newModel);
-			ArrayUtils.insertAt(list, getNewIndex(), node);
+			node.parent = currentSelectedItemNode.parent;
+			ArrayUtils.insertAt(currentList, getNewIndex(), node);
 			onCreateItem?.(node);
+			onAccept?.(node, true);
 		} else {
 			node = currentSelectedItemNode;
+			onAccept?.(node!, false);
 		}
 		setNewModel(null);
 		setCurrentSelectedItemNode(node);
@@ -256,32 +296,63 @@ function Tree({
 		target.classList.remove('drag-over-complete');
 	};
 
+	const getCompleteNodes = (node: Node): Node[] => {
+		const nodes = [];
+		nodes.push(node);
+		const currentList = node.parent?.children ?? list;
+		const selectionIndexes = node.content.getSelectionNextIndexes();
+		const index = currentList.indexOf(node) + 1;
+		for (let i = 0; i < selectionIndexes - 1; i++) {
+			nodes.push(currentList[index + i]);
+		}
+		return nodes;
+	};
+
+	const checkNodeInsideNode = (node1: Node, node2: Node): boolean => {
+		return checkNodeInside(node2, getCompleteNodes(node1));
+	};
+
+	const checkNodeInside = (otherNode: Node, nodes: Node[]): boolean => {
+		const parent = otherNode.parent;
+		if (parent !== null) {
+			if (nodes.includes(parent)) {
+				return true;
+			}
+			return checkNodeInside(parent, nodes);
+		}
+		return false;
+	};
+
 	const handleDragStart = (event: React.DragEvent, node: Node) => {
 		setDraggedNode(node);
 	};
 
-	const handleDragOver = async (event: React.DragEvent, node: Node) => {
+	const handleDragOver = async (event: React.DragEvent, node: Node, onlyTop = false) => {
 		event.preventDefault();
 		const target = event.currentTarget as HTMLElement;
 		if (draggedNode) {
 			event.dataTransfer.dropEffect = 'move';
 			if (
 				draggedNode.content.id !== node.content.id &&
+				!checkNodeInsideNode(draggedNode, node) &&
 				!Node.checkIDExists(draggedNode.children, node.content.id)
 			) {
 				removeDragDropClasses(target);
 				const rect = target.getBoundingClientRect();
 				const y = event.clientY - rect.top;
 				if (node.isFolder()) {
-					if (y < 5) {
+					if ((!onlyTop && y < 5) || (onlyTop && y < 10)) {
 						target.classList.add('drag-over-top');
-					} else if (y > 15) {
+					} else if (!onlyTop && y > 15) {
 						target.classList.add('drag-over-bot');
-					} else {
+					} else if (!onlyTop) {
 						target.classList.add('drag-over-complete');
 					}
 				} else {
-					target.classList.add(`drag-over-${y < 10 ? 'top' : 'bot'}`);
+					const isTop = y < 10;
+					if (!onlyTop || (onlyTop && isTop)) {
+						target.classList.add(`drag-over-${isTop ? 'top' : 'bot'}`);
+					}
 				}
 			}
 		} else {
@@ -299,21 +370,37 @@ function Tree({
 		if (draggedNode) {
 			const target = event.currentTarget as HTMLElement;
 			if (
-				(node !== draggedNode && target.classList.contains('drag-over-complete')) ||
+				(node !== draggedNode &&
+					!checkNodeInsideNode(draggedNode, node) &&
+					target.classList.contains('drag-over-complete')) ||
 				target.classList.contains('drag-over-top') ||
 				target.classList.contains('drag-over-bot')
 			) {
-				ArrayUtils.removeElement(draggedNode.parent ? draggedNode.parent.children : list, draggedNode);
-				const dropList = node.parent ? node.parent.children : list;
+				const nodes = getCompleteNodes(draggedNode);
+				let dropList = draggedNode.parent?.children ?? list;
+				for (const n of nodes) {
+					ArrayUtils.removeElement(dropList, n);
+				}
 				if (target.classList.contains('drag-over-complete')) {
 					node.children.push(draggedNode);
 					draggedNode.parent = node;
 				} else if (target.classList.contains('drag-over-top')) {
-					ArrayUtils.insertAt(dropList, dropList.indexOf(node), draggedNode);
-					draggedNode.parent = node.parent;
+					dropList = node.parent?.children ?? list;
+					let index = dropList.indexOf(node);
+					if (index === -1) {
+						index = dropList.length;
+					}
+					for (const n of nodes) {
+						ArrayUtils.insertAt(dropList, index++, n);
+						n.parent = node.parent;
+					}
 				} else if (target.classList.contains('drag-over-bot')) {
-					ArrayUtils.insertAt(dropList, dropList.indexOf(node) + 1, draggedNode);
-					draggedNode.parent = node.parent;
+					dropList = node.parent?.children ?? list;
+					let index = dropList.indexOf(node) + 1;
+					for (const n of nodes) {
+						ArrayUtils.insertAt(dropList, index++, n);
+						n.parent = node.parent;
+					}
 				}
 			}
 			removeDragDropClasses(target);
@@ -394,45 +481,97 @@ function Tree({
 
 	const headers = constructorType.getTreeHeader();
 
-	const getTreeItems = (nodes: Node[], level = 0, items: ReactNode[] = []) => {
+	const getTreeItems = (
+		nodes: Node[],
+		items: ReactNode[],
+		parent: Node | null = null,
+		level = 0,
+		addEmpty = false,
+		emptyID = -1,
+		parentSelected = false
+	): number => {
+		let lastNode: Node | null = null;
+		let selectNextIndexes = 0;
 		for (const [index, node] of nodes.entries()) {
-			const selected = isSelected(byIndex ? index : node.content.id);
+			if (lastNode) {
+				lastNode.next = node;
+			}
+			const selected = selectNextIndexes > 0 || parentSelected || isSelected(byIndex ? index : node.content.id);
+			if (selected && selectNextIndexes === 0) {
+				selectNextIndexes = node.content.getSelectionNextIndexes();
+			}
+			if (selectNextIndexes > 0) {
+				selectNextIndexes--;
+			}
+			const nbSelectionNextIndex = node.content.getSelectionNextIndexes();
 			items.push(
-				<div key={byIndex ? index : node.content.id} ref={selected ? selectedElementRef : null}>
+				<div key={byIndex ? `${index}-${level}` : node.content.id} ref={selected ? selectedElementRef : null}>
 					<TreeItem
 						node={node}
 						level={level}
 						selected={selected}
 						onSwitchExpanded={handleSwitchExpandedItem}
 						onMouseDown={handleMouseDownItem}
-						onDragStart={!disabled && node.draggable ? handleDragStart : undefined}
-						onDragOver={!disabled && node.draggable ? handleDragOver : undefined}
-						onDragLeave={!disabled && node.draggable ? handleDragLeave : undefined}
-						onDrop={!disabled && node.draggable ? handleDrop : undefined}
-						draggable={!cannotDragDrop && node.draggable}
+						onDragStart={
+							!disabled && node.draggable && !node.content.isFixedNode() ? handleDragStart : undefined
+						}
+						onDragOver={
+							!disabled && node.draggable && !node.content.isFixedNode()
+								? (e, n) => handleDragOver(e, n, nbSelectionNextIndex > 0)
+								: undefined
+						}
+						onDragLeave={
+							!disabled && node.draggable && !node.content.isFixedNode() ? handleDragLeave : undefined
+						}
+						onDrop={!disabled && node.draggable && !node.content.isFixedNode() ? handleDrop : undefined}
+						draggable={!cannotDragDrop && node.draggable && !node.content.isFixedNode()}
 						headers={headers}
 						doNotShowID={doNotShowID}
 					/>
 				</div>
 			);
-			if (!ArrayUtils.contains(notExpandedItemsList, node.content.id)) {
-				getTreeItems(node.children, level + 1, items);
+			if (!node.willBeDeleted && !ArrayUtils.contains(notExpandedItemsList, node.content.id)) {
+				emptyID = getTreeItems(
+					node.children,
+					items,
+					node,
+					level + 1,
+					node.content.canHaveChildren(),
+					emptyID,
+					multipleLevels && selected
+				);
 			}
+			lastNode = node;
 		}
-		if (!cannotAdd && level === 0) {
-			const selected = isSelected(byIndex ? nodes.length : -1);
+		if (!cannotAdd && ((multipleLevels && addEmpty) || level === 0)) {
+			const selected = parentSelected || isSelected(byIndex ? nodes.length : emptyID);
+			const node = Node.create(Model.Base.create(emptyID, ''));
+			node.parent = parent;
+			if (lastNode) {
+				lastNode.next = node;
+			}
 			items.push(
-				<div key={byIndex ? nodes.length : -1} ref={selected ? selectedElementRef : null}>
+				<div key={byIndex ? nodes.length : emptyID} ref={selected ? selectedElementRef : null}>
 					<TreeItem
-						node={Node.create(Model.Base.create(-1, ''))}
+						node={node}
 						level={level}
 						selected={selected}
 						onSwitchExpanded={handleSwitchExpandedItem}
 						onMouseDown={handleMouseDownItem}
+						onDragOver={!disabled ? (e, n) => handleDragOver(e, n, true) : undefined}
+						onDragLeave={!disabled ? handleDragLeave : undefined}
+						onDrop={!disabled ? handleDrop : undefined}
 					/>
 				</div>
 			);
+			emptyID--;
 		}
+		return emptyID;
+	};
+
+	const getItems = () => {
+		const items: ReactNode[] = [];
+		getTreeItems(list, items);
 		return items;
 	};
 
@@ -440,42 +579,41 @@ function Tree({
 		if (disabled) {
 			return [];
 		}
-		const nodeID = getNodeID();
-		const isEmpty = nodeID === -1 || nodeID === 0;
+		const isFixed = currentSelectedItemNode?.content?.isFixedNode() ?? false;
 		return contextMenuItems!.map((kind) => {
 			switch (kind) {
 				case CONTEXT_MENU_ITEM_KIND.NEW:
 					return {
 						title: 'New...',
 						onClick: handleNewItem,
-						disabled: cannotAdd,
+						disabled: cannotAdd || isFixed,
 					};
 				case CONTEXT_MENU_ITEM_KIND.EDIT:
 					return {
 						title: 'Edit...',
 						onClick: handleEditItem,
-						disabled: isEmpty || cannotAdd,
+						disabled: isEmpty || cannotAdd || isFixed,
 					};
 				case CONTEXT_MENU_ITEM_KIND.COPY:
 					return {
 						title: 'Copy',
 						shortcut: [SPECIAL_KEY.CTRL, KEY.C],
 						onClick: handleCopyItem,
-						disabled: isEmpty || cannotAdd,
+						disabled: isEmpty || cannotAdd || isFixed,
 					};
 				case CONTEXT_MENU_ITEM_KIND.PASTE:
 					return {
 						title: 'Paste',
 						shortcut: [SPECIAL_KEY.CTRL, KEY.V],
 						onClick: handlePasteItem,
-						disabled: !canPaste(),
+						disabled: !canPaste() || isFixed,
 					};
 				case CONTEXT_MENU_ITEM_KIND.DELETE:
 					return {
 						title: 'Delete',
 						shortcut: [KEY.DELETE],
 						onClick: handleDeleteItem,
-						disabled: isEmpty || cannotDelete,
+						disabled: isEmpty || cannotDelete || isFixed,
 					};
 				default: {
 					const customItem = { ...kind };
@@ -520,6 +658,8 @@ function Tree({
 					return <DialogMapObjectProperty {...options} />;
 				case Model.MapObjectCommand:
 					return <DialogMapObjectCommand {...options} />;
+				case Model.Localization:
+					return <DialogLocalization {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}
@@ -548,7 +688,7 @@ function Tree({
 					style={{ minWidth: `${minWidth}px` }}
 				>
 					<Flex spaced>{getHeaders()}</Flex>
-					{getTreeItems(list)}
+					{getItems()}
 				</div>
 				{showEditName && (
 					<Flex spaced>

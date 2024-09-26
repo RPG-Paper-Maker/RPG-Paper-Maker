@@ -9,11 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType } from '../common';
-import { Serializable } from '../core';
+import { BINDING, BindingType, ITERATOR, JSONType } from '../common';
+import { Base } from './Base';
+import { MapObjectCommandType } from './MapObjectCommand';
 
-class Localization extends Serializable {
-	public names!: Map<number, string>;
+class Localization extends Base {
+	public names: Map<number, string> = new Map();
 
 	public static readonly bindings: BindingType[] = [['names', 'names', undefined, BINDING.MAP]];
 
@@ -21,15 +22,41 @@ class Localization extends Serializable {
 		return [...Localization.bindings, ...additionnalBinding];
 	}
 
-	static create(name: string): Localization {
+	static create(id: number, name: string): Localization {
 		const localization = new Localization();
+		localization.id = id;
+		localization.name = name;
 		localization.names = new Map();
 		localization.names.set(1, name);
 		return localization;
 	}
 
-	name(): string {
-		return this.names.get(1)!;
+	initializeCommand(command: MapObjectCommandType[], iterator: ITERATOR) {
+		const id = command[iterator.i++] as number;
+		const name = command[iterator.i++] as string;
+		this.names.set(id, name);
+	}
+
+	getCommand(command: MapObjectCommandType[]) {
+		for (const [id, name] of this.names) {
+			command.push(id);
+			command.push(name);
+		}
+	}
+
+	getName(): string {
+		return this.names.get(1) ?? '';
+	}
+
+	copy(localization: Localization): void {
+		super.copy(localization);
+		this.names = new Map(localization.names);
+	}
+
+	clone(): Localization {
+		const localization = new Localization();
+		localization.copy(this);
+		return localization;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

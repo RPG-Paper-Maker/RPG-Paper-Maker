@@ -10,7 +10,9 @@
 */
 
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { MenuItemType, Utils } from '../common';
+import { RootState } from '../store';
 import '../styles/Menu.css';
 import MenuCustom from './MenuCustom';
 
@@ -25,6 +27,8 @@ function ContextMenu({ children, items = [] }: Props) {
 	const [timerID, setTimerID] = useState<NodeJS.Timeout | undefined>();
 	const refComplete = useRef<HTMLDivElement>(null);
 	const refMenu = useRef<HTMLDivElement>(null);
+
+	const isOpeningNewDialog = useSelector((state: RootState) => state.triggers.isOpeningNewDialog);
 
 	const openContext = (x: number, y: number) => {
 		setIsOpen(true);
@@ -87,8 +91,11 @@ function ContextMenu({ children, items = [] }: Props) {
 				currentDialog.removeEventListener('mousedown', handleMouseDownOutside as EventListener);
 			};
 		}
-		// eslint-disable-next-line
 	}, [isOpen]);
+
+	useEffect(() => {
+		setIsFocused(false);
+	}, [isOpeningNewDialog]);
 
 	return (
 		<div

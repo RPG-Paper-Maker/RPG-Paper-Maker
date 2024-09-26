@@ -76,7 +76,6 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	const [forcedCurrentIndexTab, setForcedCurrentIndexTab] = useState<number | null>(null);
 	const [forcedCurrentSelectedIDState, setForcedCurrentSelectedIDState] = useState<number | null>(null);
 	const [forcedCurrentSelectedIndexEvent, setForcedCurrentSelectedIndexEvent] = useState<number | null>(null);
-	const [forcedCurrentSelectedIndexReaction, setForcedCurrentSelectedIndexReaction] = useState<number | null>(null);
 	const [blockingHero, setBlockingHero] = useStateBool();
 
 	const initialize = () => {

@@ -82,6 +82,20 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 				break;
 			case DYNAMIC_VALUE_OPTIONS_TYPE.TEXT:
 				list = [DYNAMIC_VALUE_KIND.TEXT, DYNAMIC_VALUE_KIND.VARIABLE];
+				break;
+			case DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER:
+				list = [DYNAMIC_VALUE_KIND.NUMBER, DYNAMIC_VALUE_KIND.VARIABLE];
+				break;
+			case DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL:
+				list = [DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, DYNAMIC_VALUE_KIND.VARIABLE];
+				break;
+			default:
+				break;
+		}
+		switch (optionsType) {
+			case DYNAMIC_VALUE_OPTIONS_TYPE.TEXT:
+			case DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER:
+			case DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL:
 				if (Project.current!.currentMapObjectParameters.length > 0) {
 					list.push(DYNAMIC_VALUE_KIND.PARAMETER);
 				}
@@ -170,6 +184,10 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 
 	useEffect(() => {
 		switch (value.kind) {
+			case DYNAMIC_VALUE_KIND.NUMBER:
+			case DYNAMIC_VALUE_KIND.NUMBER_DECIMAL:
+				setValueNumber(value.value as number);
+				break;
 			case DYNAMIC_VALUE_KIND.TEXT:
 				setValueText(value.value as string);
 				break;

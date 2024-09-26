@@ -12,8 +12,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { RxCross2 } from 'react-icons/rx';
+import { useDispatch } from 'react-redux';
 import { Utils } from '../../common/Utils';
 import { Inputs } from '../../managers';
+import { setIsOpeningNewDialog } from '../../store/slices/TriggersReducer';
 import '../../styles/Dialog.css';
 import Flex from '../Flex';
 import Loader from '../Loader';
@@ -65,6 +67,8 @@ function Dialog({
 	const [resizingType, setResizingType] = useState(RESIZING_TYPE.BOTTOM);
 	const [resizingSide] = useState({ left: true });
 	const dialogRef = useRef<HTMLDivElement>(null);
+
+	const dispatch = useDispatch();
 
 	const updatePosition = (x: number, y: number) => {
 		if (dialogRef.current) {
@@ -242,12 +246,14 @@ function Dialog({
 
 	useEffect(() => {
 		if (isOpen) {
+			dispatch(setIsOpeningNewDialog());
 			setIsDragging(false);
 			setIsMoved(false);
 			setInitialPosition({ x: 0, y: 0 });
 			setIsClickedIn(false);
 			setIsResizing(false);
 		}
+		// eslint-disable-next-line
 	}, [isOpen]);
 
 	const root = document.getElementById('root');

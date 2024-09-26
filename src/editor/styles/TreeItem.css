@@ -17,6 +17,11 @@
 	white-space: nowrap;
 }
 
+.tree-item svg {
+	align-self: self-start;
+	margin-top: 3px;
+}
+
 .tree:not(.disabled) .tree-item {
 	cursor: pointer;
 }

@@ -55,8 +55,12 @@ class DynamicValue extends Serializable {
 		command.push(this.value as MapObjectCommandType);
 	}
 
-	updateToDefaultText() {
-		this.update(DYNAMIC_VALUE_KIND.TEXT, '');
+	updateToDefaultText(text = '') {
+		this.update(DYNAMIC_VALUE_KIND.TEXT, text);
+	}
+
+	updateToDefaultNumber(n = 0) {
+		this.update(DYNAMIC_VALUE_KIND.NUMBER, n);
 	}
 
 	updateToDefaultDatabase() {

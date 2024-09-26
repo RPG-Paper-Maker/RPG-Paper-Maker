@@ -10,16 +10,18 @@
 */
 
 import { ReactNode } from 'react';
+import { Utils } from '../common';
 import '../styles/Groupbox.css';
 
 type Props = {
 	children?: ReactNode;
 	title?: string;
+	fillWidth?: boolean;
 };
 
-function Groupbox({ children, title = '' }: Props) {
+function Groupbox({ children, title = '', fillWidth = false }: Props) {
 	return (
-		<fieldset>
+		<fieldset className={Utils.getClassName({ 'fill-width': fillWidth })}>
 			<legend>{title}</legend>
 			{children}
 		</fieldset>

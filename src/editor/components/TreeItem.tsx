@@ -49,10 +49,6 @@ function TreeItem({
 }: Props) {
 	const [expanded, setExpanded] = useState(node.expanded);
 
-	const isTreeMapTag = () => node.content instanceof Model.TreeMapTag;
-
-	const isFolder = () => (node.content as Model.TreeMapTag).isFolder();
-
 	const handleMouseDown = () => {
 		onMouseDown(node);
 	};
@@ -80,7 +76,7 @@ function TreeItem({
 		} else {
 			return (
 				<Flex one spaced className='text-ellipsis'>
-					{doNotShowID ? node.content.getName() : node.toString()}
+					{doNotShowID ? `${Model.Base.STRING_START} ${node.content.getName()}` : node.toString()}
 				</Flex>
 			);
 		}
@@ -88,7 +84,7 @@ function TreeItem({
 
 	return (
 		<div
-			className={Utils.getClassName({ selected }, 'tree-item')}
+			className={Utils.getClassName({ selected }, 'tree-item no-select-text')}
 			style={{ paddingLeft: `${5 + level * 15}px` }}
 			onMouseDown={handleMouseDown}
 			onDragStart={(event: React.DragEvent) => onDragStart?.(event, node)}
@@ -97,9 +93,12 @@ function TreeItem({
 			onDrop={(event: React.DragEvent) => onDrop?.(event, node)}
 			draggable={draggable}
 		>
-			{isTreeMapTag() && isFolder() && (
-				<div onMouseDown={handleMouseDownSwitchExpand}>{expanded ? <HiChevronDown /> : <HiChevronRight />}</div>
-			)}
+			{node.canExpand() &&
+				(expanded ? (
+					<HiChevronDown onMouseDown={handleMouseDownSwitchExpand} />
+				) : (
+					<HiChevronRight onMouseDown={handleMouseDownSwitchExpand} />
+				))}
 			{node.getIcon()}
 			{getString()}
 		</div>

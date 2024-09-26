@@ -1,3 +1,4 @@
+export * from './DialogLocalization';
 export * from './DialogMapObject';
 export * from './DialogMapObjectEvent';
 export * from './DialogMapObjectParameter';

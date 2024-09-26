@@ -51,6 +51,7 @@ import { BINDING, BindingType, DYNAMIC_VALUE_KIND, EVENT_COMMAND_KIND, ITERATOR,
 import Flex from '../components/Flex';
 import { Project } from '../core';
 import { Base } from './Base';
+import { Localization } from './Localization';
 
 export type MapObjectCommandType = number | string | boolean;
 
@@ -85,6 +86,8 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.SHOW_TEXT:
 				return <BiMessageDetail />;
 			case EVENT_COMMAND_KIND.DISPLAY_CHOICE:
+			case EVENT_COMMAND_KIND.CHOICE:
+			case EVENT_COMMAND_KIND.END_CHOICE:
 			case EVENT_COMMAND_KIND.IF:
 				return <FaCodeBranch />;
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
@@ -205,158 +208,178 @@ class MapObjectCommand extends Base {
 		return null;
 	}
 
-	static getCommandName(kind: EVENT_COMMAND_KIND): string {
+	static getCommandName(kind: EVENT_COMMAND_KIND, command: MapObjectCommandType[] = []): string {
 		switch (kind) {
 			case EVENT_COMMAND_KIND.SHOW_TEXT:
-				return 'show.text';
+				return i18next.t('show.text');
 			case EVENT_COMMAND_KIND.DISPLAY_CHOICE:
-				return 'display.choices';
+				return i18next.t('display.choices');
+			case EVENT_COMMAND_KIND.CHOICE:
+				return `${i18next.t('choice')} ${command[0]}`;
+			case EVENT_COMMAND_KIND.END_CHOICE:
+				return i18next.t('end.choice');
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
-				return 'input.number';
+				return i18next.t('input.number');
 			case EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS:
-				return 'set.dialog.box.options';
+				return i18next.t('set.dialog.box.options');
 			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
-				return 'change.screen.tone';
+				return i18next.t('change.screen.tone');
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
-				return 'shake.screen';
+				return i18next.t('shake.screen');
 			case EVENT_COMMAND_KIND.FLASH_SCREEN:
-				return 'flash.screen';
+				return i18next.t('flash.screen');
 			case EVENT_COMMAND_KIND.CHANGE_WEATHER:
-				return 'change.weather';
+				return i18next.t('change.weather');
 			case EVENT_COMMAND_KIND.CHANGE_MAP_PROPERTIES:
-				return 'change.map.properties';
+				return i18next.t('change.map.properties');
 			case EVENT_COMMAND_KIND.SWITCH_TEXTURE:
-				return 'switch.texture';
+				return i18next.t('switch.texture');
 			case EVENT_COMMAND_KIND.WAIT:
-				return 'wait';
+				return i18next.t('wait');
 			case EVENT_COMMAND_KIND.CHANGE_CHRONOMETER:
-				return 'change.chronometer';
+				return i18next.t('change.chronometer');
 			case EVENT_COMMAND_KIND.TELEPORT_OBJECT:
-				return 'teleport.object';
+				return i18next.t('teleport.object');
 			case EVENT_COMMAND_KIND.MOVE_OBJECT:
-				return 'move.object';
+				return i18next.t('move.object');
 			case EVENT_COMMAND_KIND.DISPLAY_AN_ANIMATION:
-				return 'display.an.animation';
+				return i18next.t('display.an.animation');
 			case EVENT_COMMAND_KIND.MOVE_CAMERA:
-				return 'move.camera';
+				return i18next.t('move.camera');
 			case EVENT_COMMAND_KIND.RESET_CAMERA:
-				return 'reset.camera';
+				return i18next.t('reset.camera');
 			case EVENT_COMMAND_KIND.CREATE_OBJECT_IN_MAP:
-				return 'create.object.in.map';
+				return i18next.t('create.object.in.map');
 			case EVENT_COMMAND_KIND.REMOVE_OBJECT_FROM_MAP:
-				return 'remove.object.from.map';
+				return i18next.t('remove.object.from.map');
 			case EVENT_COMMAND_KIND.DISPLAY_A_PICTURE:
-				return 'display.a.picture';
+				return i18next.t('display.a.picture');
 			case EVENT_COMMAND_KIND.SET_MOVE_TURN_A_PICTURE:
-				return 'set.move.turn.a.picture';
+				return i18next.t('set.move.turn.a.picture');
 			case EVENT_COMMAND_KIND.REMOVE_A_PICTURE:
-				return 'remove.a.picture';
+				return i18next.t('remove.a.picture');
 			case EVENT_COMMAND_KIND.PLAY_A_VIDEO:
-				return 'play.a.video';
+				return i18next.t('play.a.video');
 			case EVENT_COMMAND_KIND.START_SHOP_MENU:
-				return 'start.shop.menu';
+				return i18next.t('start.shop.menu');
 			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
-				return 'restock.shop';
+				return i18next.t('restock.shop');
 			case EVENT_COMMAND_KIND.ENTER_A_NAME_MENU:
-				return 'enter.a.name.menu';
+				return i18next.t('enter.a.name.menu');
 			case EVENT_COMMAND_KIND.OPEN_MAIN_MENU:
-				return 'open.main.menu';
+				return i18next.t('open.main.menu');
 			case EVENT_COMMAND_KIND.OPEN_SAVES_MENU:
-				return 'open.saves.menu';
+				return i18next.t('open.saves.menu');
 			case EVENT_COMMAND_KIND.TITLE_SCREEN:
-				return 'title.screen';
+				return i18next.t('title.screen');
 			case EVENT_COMMAND_KIND.GAME_OVER:
-				return 'game.over';
+				return i18next.t('game.over');
 			case EVENT_COMMAND_KIND.PLAY_MUSIC:
-				return 'play.music';
+				return i18next.t('play.music');
 			case EVENT_COMMAND_KIND.STOP_MUSIC:
-				return 'stop.music';
+				return i18next.t('stop.music');
 			case EVENT_COMMAND_KIND.PLAY_BACKGROUND_SOUND:
-				return 'play.background.sound';
+				return i18next.t('play.background.sound');
 			case EVENT_COMMAND_KIND.STOP_BACKGROUND_SOUND:
-				return 'stop.background.sound';
+				return i18next.t('stop.background.sound');
 			case EVENT_COMMAND_KIND.PLAY_SOUND:
-				return 'play.a.sound';
+				return i18next.t('play.a.sound');
 			case EVENT_COMMAND_KIND.STOP_A_SOUND:
-				return 'stop.a.sound';
+				return i18next.t('stop.a.sound');
 			case EVENT_COMMAND_KIND.PLAY_MUSIC_EFFECT:
-				return 'play.music.effect';
+				return i18next.t('play.music.effect');
 			case EVENT_COMMAND_KIND.SEND_EVENT:
-				return 'send.event';
+				return i18next.t('send.event');
 			case EVENT_COMMAND_KIND.CHANGE_STATE:
-				return 'change.state';
+				return i18next.t('change.state');
 			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
-				return 'change.property';
+				return i18next.t('change.property');
 			case EVENT_COMMAND_KIND.MODIFY_CURRENCY:
-				return 'modify.currency';
+				return i18next.t('modify.currency');
 			case EVENT_COMMAND_KIND.MODIFY_INVENTORY:
-				return 'modify.inventory';
+				return i18next.t('modify.inventory');
 			case EVENT_COMMAND_KIND.MODIFY_TEAM:
-				return 'modify.team';
+				return i18next.t('modify.team');
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_SAVES:
-				return 'allow.forbid.saves';
+				return i18next.t('allow.forbid.saves');
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_MAIN_MENU:
-				return 'allow.forbid.main.menu';
+				return i18next.t('allow.forbid.main.menu');
 			case EVENT_COMMAND_KIND.START_BATTLE:
-				return 'start.battle';
+				return i18next.t('start.battle');
 			case EVENT_COMMAND_KIND.CHANGE_BATTLER_GRAPHICS:
-				return 'change.battler.graphics';
+				return i18next.t('change.battler.graphics');
 			case EVENT_COMMAND_KIND.DISPLAY_HIDE_A_BATTLER:
-				return 'display.hide.a.battler';
+				return i18next.t('display.hide.a.battler');
 			case EVENT_COMMAND_KIND.TRANSFORM_A_BATTLER:
-				return 'transform.a.battler';
+				return i18next.t('transform.a.battler');
 			case EVENT_COMMAND_KIND.FORCE_AN_ACTION:
-				return 'force.an.action';
+				return i18next.t('force.an.action');
 			case EVENT_COMMAND_KIND.END_BATTLE:
-				return 'end.battle';
+				return i18next.t('end.battle');
 			case EVENT_COMMAND_KIND.CHANGE_BATTLE_MUSIC:
-				return 'change.battle.music';
+				return i18next.t('change.battle.music');
 			case EVENT_COMMAND_KIND.CHANGE_VICTORY_MUSIC:
-				return 'change.victory.music';
+				return i18next.t('change.victory.music');
 			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
-				return 'change.a.statistic';
+				return i18next.t('change.a.statistic');
 			case EVENT_COMMAND_KIND.CHANGE_EXPERIENCE_CURVE:
-				return 'change.experience.curve';
+				return i18next.t('change.experience.curve');
 			case EVENT_COMMAND_KIND.CHANGE_STATUS:
-				return 'change.status';
+				return i18next.t('change.status');
 			case EVENT_COMMAND_KIND.CHANGE_A_SKILL:
-				return 'change.a.skill';
+				return i18next.t('change.a.skill');
 			case EVENT_COMMAND_KIND.CHANGE_NAME:
-				return 'change.name';
+				return i18next.t('change.name');
 			case EVENT_COMMAND_KIND.CHANGE_CLASS:
-				return 'change.class';
+				return i18next.t('change.class');
 			case EVENT_COMMAND_KIND.CHANGE_EQUIPMENT:
-				return 'change.equipment';
+				return i18next.t('change.equipment');
 			case EVENT_COMMAND_KIND.IF:
-				return 'condition';
+				return i18next.t('condition');
 			case EVENT_COMMAND_KIND.WHILE:
-				return 'loop';
+				return i18next.t('loop');
 			case EVENT_COMMAND_KIND.WHILE_BREAK:
-				return 'break.loop';
+				return i18next.t('break.loop');
 			case EVENT_COMMAND_KIND.LABEL:
-				return 'label';
+				return i18next.t('label');
 			case EVENT_COMMAND_KIND.JUMP_LABEL:
-				return 'jump.to.label';
+				return i18next.t('jump.to.label');
 			case EVENT_COMMAND_KIND.STOP_REACTION:
-				return 'stop.reaction';
+				return i18next.t('stop.reaction');
 			case EVENT_COMMAND_KIND.COMMENT:
-				return 'comment';
+				return i18next.t('comment');
 			case EVENT_COMMAND_KIND.CALL_A_COMMON_REACTION:
-				return 'call.a.common.reaction';
+				return i18next.t('call.a.common.reaction');
 			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
-				return 'change.variables';
+				return i18next.t('change.variables');
 			case EVENT_COMMAND_KIND.SCRIPT:
-				return 'script';
+				return i18next.t('script');
 			case EVENT_COMMAND_KIND.PLUGIN:
-				return 'plugin';
+				return i18next.t('plugin');
 		}
 		return '';
+	}
+
+	canHaveChildren(): boolean {
+		return this.kind === EVENT_COMMAND_KIND.CHOICE;
+	}
+
+	canExpand(): boolean {
+		return this.canHaveChildren();
+	}
+
+	isFixedNode(): boolean {
+		return this.kind === EVENT_COMMAND_KIND.CHOICE || this.kind === EVENT_COMMAND_KIND.END_CHOICE;
 	}
 
 	getColor(): string {
 		switch (this.kind) {
 			case EVENT_COMMAND_KIND.SHOW_TEXT:
+			case EVENT_COMMAND_KIND.DISPLAY_CHOICE:
 				return MapObjectCommand.COLOR_ORANGE;
+			case EVENT_COMMAND_KIND.CHOICE:
+			case EVENT_COMMAND_KIND.END_CHOICE:
+				return MapObjectCommand.COLOR_PURPLE;
 		}
 		return 'white';
 	}
@@ -365,21 +388,60 @@ class MapObjectCommand extends Base {
 		return MapObjectCommand.getIconKind(this.kind);
 	}
 
+	getSelectionNextIndexes(): number {
+		switch (this.kind) {
+			case EVENT_COMMAND_KIND.DISPLAY_CHOICE:
+				return this.getChoicesNumber() + 2;
+			default:
+				return 0;
+		}
+	}
+
+	getChoicesNumber(): number {
+		let i = 4;
+		let nb = 0;
+		let next = '';
+		while (i < this.command.length) {
+			next = this.command[i] as string;
+			if (next === '-') {
+				i++;
+				nb++;
+			}
+			i += 2;
+		}
+		return nb;
+	}
+
 	toString(): string | ReactNode {
-		let text = '';
-		let commandName = MapObjectCommand.getCommandName(this.kind);
-		let color = this.getColor();
+		let texts: string[] = [];
+		const commandName = MapObjectCommand.getCommandName(this.kind, this.command);
+		const color = this.getColor();
 		const iterator = Utils.generateIterator();
 		const parameters = Project.current!.currentMapObjectParameters;
 		const properties = Project.current!.currentMapObjectProperties.map((node) => node.content);
 		switch (this.kind) {
 			case EVENT_COMMAND_KIND.SHOW_TEXT:
-				text = this.toStringShowText(iterator, parameters, properties);
+				texts = this.toStringShowText(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.DISPLAY_CHOICE:
+				texts = this.toStringDisplayChoices(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.CHOICE:
+			case EVENT_COMMAND_KIND.END_CHOICE:
+				texts = [''];
 				break;
 		}
 		return (
 			<Flex spaced>
-				<div style={{ fontWeight: 'bold', color }}>{i18next.t(commandName)}</div> : {text}
+				<Flex column spaced>
+					<Flex spaced>
+						<div style={{ fontWeight: 'bold', color }}>{commandName}</div>
+						{`: ${texts[0]}`}
+					</Flex>
+					{texts.slice(1).map((text, index) => (
+						<div key={index}>{text}</div>
+					))}
+				</Flex>
 			</Flex>
 		);
 	}
@@ -400,24 +462,28 @@ class MapObjectCommand extends Base {
 				return '' + value;
 			case DYNAMIC_VALUE_KIND.SWITCH:
 				return value === 1 ? 'ON' : 'OFF';
-			case DYNAMIC_VALUE_KIND.KEYBOARD:
+			case DYNAMIC_VALUE_KIND.KEYBOARD: {
 				const keyboard = Project.current!.keyboard.getByID(value as number);
 				return `${i18next.t('keyboard')} ${keyboard?.toString() ?? value}`;
-			case DYNAMIC_VALUE_KIND.VARIABLE:
+			}
+			case DYNAMIC_VALUE_KIND.VARIABLE: {
 				const variable = Project.current!.variables.getVariableByID(value as number);
 				return `${i18next.t('variable')} ${variable?.toString() ?? value}`;
-			case DYNAMIC_VALUE_KIND.PARAMETER:
+			}
+			case DYNAMIC_VALUE_KIND.PARAMETER: {
 				const parameter = Base.getByID(parameters, value as number);
 				return `${i18next.t('parameter')} ${parameter?.toString() ?? value}`;
-			case DYNAMIC_VALUE_KIND.PROPERTY:
+			}
+			case DYNAMIC_VALUE_KIND.PROPERTY: {
 				const property = Base.getByID(properties, value as number);
 				return `${i18next.t('property')} ${property?.toString() ?? value}`;
+			}
 			default:
 				return '';
 		}
 	}
 
-	toStringShowText(iterator: ITERATOR, properties: Base[], parameters: Base[]): string {
+	toStringShowText(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const interlocutor = this.toStringDynamicValue(iterator, properties, parameters);
 		iterator.i += 3;
 		let id: number;
@@ -429,7 +495,36 @@ class MapObjectCommand extends Base {
 				break;
 			}
 		}
-		return `${interlocutor.length === 0 ? '' : `[${interlocutor}] `}${text}`;
+		return [`${interlocutor.length === 0 ? '' : `[${interlocutor}] `}${text}`];
+	}
+
+	toStringDisplayChoices(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const cancelAutoIndex = this.toStringDynamicValue(iterator, properties, parameters);
+		const maxChoices = this.toStringDynamicValue(iterator, properties, parameters);
+		const choices: string[] = [];
+		let lang: Localization | null = null;
+		let next = '';
+		while (iterator.i < this.command.length) {
+			next = this.command[iterator.i] as string;
+			if (next === '-') {
+				iterator.i++;
+				if (lang !== null) {
+					choices.push(lang.getName());
+				}
+				lang = new Localization();
+			} else if (lang) {
+				lang.initializeCommand(this.command, iterator);
+			}
+		}
+		if (lang !== null) {
+			choices.push(lang.getName());
+		}
+		return [
+			`[${i18next.t('cancel.auto.index').toLowerCase()}=${cancelAutoIndex}, ${i18next.t(
+				'max.number.choices.display'
+			)}=${maxChoices}]`,
+			choices.join(' | '),
+		];
 	}
 
 	copy(command: MapObjectCommand): void {
@@ -450,9 +545,11 @@ class MapObjectCommand extends Base {
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
+		const id = this.id;
 		this.id = 0;
 		this.name = '';
 		super.write(json, MapObjectCommand.getBindings(additionnalBinding));
+		this.id = id;
 	}
 }
 

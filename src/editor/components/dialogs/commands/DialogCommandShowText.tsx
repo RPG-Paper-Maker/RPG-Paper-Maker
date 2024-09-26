@@ -162,8 +162,7 @@ function DialogCommandShowText({ isOpen, setIsOpen, list, onAccept, onReject }: 
 			newList.push(id);
 			newList.push(text);
 		}
-		const command = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.SHOW_TEXT, newList);
-		onAccept(command);
+		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.SHOW_TEXT, newList));
 	};
 
 	const handleReject = async () => {
