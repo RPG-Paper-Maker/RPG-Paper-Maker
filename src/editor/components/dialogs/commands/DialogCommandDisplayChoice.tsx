@@ -13,8 +13,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
 import { Node } from '../../../core';
-import { DynamicValue } from '../../../core/DynamicValue';
 import { Model } from '../../../Editor';
+import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import { MapObjectCommandType } from '../../../models';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
@@ -35,8 +35,8 @@ function DialogCommandDisplayChoice({ isOpen, setIsOpen, list, onAccept, onRejec
 	const { t } = useTranslation();
 
 	const [choices, setChoices] = useState<Node[]>([]);
-	const [maxNumberChoicesDisplay] = useState<DynamicValue>(new DynamicValue());
-	const [cancelAutoIndex] = useState<DynamicValue>(new DynamicValue());
+	const [maxNumberChoicesDisplay] = useStateDynamicValue();
+	const [cancelAutoIndex] = useStateDynamicValue();
 	const [forcedCurrentSelectedItemIndex, setForcedCurrentSelectedItemIndex] = useState<number | null>(null);
 
 	const initialize = () => {

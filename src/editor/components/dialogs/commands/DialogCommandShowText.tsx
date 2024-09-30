@@ -14,8 +14,8 @@ import { useTranslation } from 'react-i18next';
 import { FaAlignCenter, FaAlignLeft, FaAlignRight, FaBold, FaItalic } from 'react-icons/fa';
 import { BUTTON_TYPE, DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, PICTURE_KIND, Utils } from '../../../common';
 import { Project, Rectangle } from '../../../core';
-import { DynamicValue } from '../../../core/DynamicValue';
 import { Model } from '../../../Editor';
+import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../../models';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
@@ -42,7 +42,7 @@ function DialogCommandShowText({ isOpen, setIsOpen, list, onAccept, onReject }: 
 	const { t } = useTranslation();
 
 	const [isOpenDialogIcon, setIsOpenDialogIcon] = useState(false);
-	const [interlocutor] = useState<DynamicValue>(new DynamicValue());
+	const [interlocutor] = useStateDynamicValue();
 	const [facesetID, setFacesetID] = useStateNumber();
 	const [facesetIndexX, setFacesetIndexX] = useStateNumber();
 	const [facesetIndexY, setFacesetIndexY] = useStateNumber();

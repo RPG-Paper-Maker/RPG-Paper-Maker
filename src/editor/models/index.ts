@@ -29,3 +29,4 @@ export * from './SpeedFrequency';
 export * from './Tileset';
 export * from './TreeMapTag';
 export * from './VariablesPage';
+export * from './WindowSkin';

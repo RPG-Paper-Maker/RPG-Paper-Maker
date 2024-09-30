@@ -20,6 +20,7 @@ type Props = {
 	max?: number;
 	min?: number;
 	decimals?: boolean;
+	disabled?: boolean;
 };
 
 function InputNumber({
@@ -29,10 +30,14 @@ function InputNumber({
 	min = -999999999,
 	max = 999999999,
 	decimals = false,
+	disabled = false,
 }: Props) {
-	const [isEmpty, setIsEmpty] = useState(false);
-
 	const transformValue = (v: number) => (decimals ? Mathf.forceDecimals(v) : Mathf.forceInteger(v));
+
+	const transformValueToText = (v: number) =>
+		decimals ? Mathf.forceDecimalsText(v) : Mathf.forceInteger(v).toString();
+
+	const [displayedValue, setDisplayedValue] = useState(transformValueToText(value));
 
 	const getMaxWidth = () => {
 		switch (widthType) {
@@ -48,8 +53,8 @@ function InputNumber({
 	};
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setIsEmpty(e.target.value === '');
 		const v = transformValue(Number(e.target.value));
+		setDisplayedValue(e.target.value);
 		if (v < min) {
 			onChange(min);
 		} else if (v > max) {
@@ -60,12 +65,16 @@ function InputNumber({
 	};
 
 	const handleBlur = () => {
-		setIsEmpty(false);
+		let v = value;
 		if (value < min) {
-			onChange(min);
+			v = min;
 		} else if (value > max) {
-			onChange(max);
+			v = max;
 		}
+		if (v !== value) {
+			onChange(v);
+		}
+		setDisplayedValue(transformValueToText(v));
 	};
 
 	return (
@@ -73,11 +82,12 @@ function InputNumber({
 			type='number'
 			min={min}
 			max={max}
-			value={isEmpty ? '' : transformValue(value).toString()}
+			value={displayedValue}
 			onBlur={handleBlur}
 			onChange={handleChange}
 			step='any'
 			style={{ maxWidth: getMaxWidth() }}
+			disabled={disabled}
 		/>
 	);
 }

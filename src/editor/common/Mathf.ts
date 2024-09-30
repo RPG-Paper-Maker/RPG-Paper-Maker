@@ -37,8 +37,12 @@ class Mathf {
 		return degrees * (Math.PI / 180);
 	}
 
+	static forceDecimalsText(num: number, decimals = 4): string {
+		return num.toFixed(decimals);
+	}
+
 	static forceDecimals(num: number, decimals = 4): number {
-		return parseFloat(num.toFixed(decimals));
+		return parseFloat(this.forceDecimalsText(num, decimals));
 	}
 
 	static forceInteger(num: number): number {

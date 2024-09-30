@@ -44,7 +44,7 @@ class Base extends Serializable {
 		Base.create(DYNAMIC_VALUE_KIND.VARIABLE, 'variable'),
 		Base.create(DYNAMIC_VALUE_KIND.PARAMETER, 'parameter'),
 		Base.create(DYNAMIC_VALUE_KIND.PROPERTY, 'property'),
-		Base.create(DYNAMIC_VALUE_KIND.DATABASE, 'database'),
+		Base.create(DYNAMIC_VALUE_KIND.DATABASE, 'selection'),
 		Base.create(DYNAMIC_VALUE_KIND.TEXT, 'text'),
 		Base.create(DYNAMIC_VALUE_KIND.SCRIPT, 'script'),
 		Base.create(DYNAMIC_VALUE_KIND.SWITCH, 'switch'),
@@ -123,8 +123,10 @@ class Base extends Serializable {
 		Base.create(OBJECT_COLLISION_KIND.SIMPLIFIED, 'simplified'),
 		Base.create(OBJECT_COLLISION_KIND.CUSTOM, 'custom'),
 	];
-	public static OBJECT_3D_IS_TOP_LEFT = [Base.create(1, 'top.left'), Base.create(2, 'centered')];
-	public static OBJECT_3D_STRETCH = [Base.create(1, 'stretch'), Base.create(2, 'perfect.size')];
+	public static OBJECT_3D_IS_TOP_LEFT_OPTIONS = [Base.create(1, 'top.left'), Base.create(2, 'centered')];
+	public static OBJECT_3D_STRETCH_OPTIONS = [Base.create(1, 'stretch'), Base.create(2, 'perfect.size')];
+	public static BEHIND_ABOVE_OPTIONS = [Base.create(0, 'behind'), Base.create(1, 'above')];
+	public static YES_NO_OPTIONS = [Base.create(0, 'yes'), Base.create(1, 'no')];
 
 	public id!: number;
 	public name!: string;

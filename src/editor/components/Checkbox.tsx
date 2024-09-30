@@ -10,25 +10,26 @@
 */
 
 import { ReactNode } from 'react';
-import '../styles/Checkbox.css';
 import { Utils } from '../common';
+import '../styles/Checkbox.css';
 
 type Props = {
 	children?: ReactNode;
 	isChecked?: boolean;
 	onChange?: (checked: boolean) => void;
+	disabled?: boolean;
 };
 
-function Checkbox({ children, isChecked = false, onChange }: Props) {
+function Checkbox({ children, isChecked = false, onChange, disabled = false }: Props) {
 	const handleClick = () => {
-		if (onChange) {
+		if (!disabled && onChange) {
 			onChange(!isChecked);
 		}
 	};
 
 	return (
-		<label className='checkbox' onClick={handleClick}>
-			<div className={Utils.getClassName({ checked: isChecked }, 'square')} />
+		<label className={Utils.getClassName({ disabled }, 'checkbox')} onClick={handleClick}>
+			<div className={Utils.getClassName({ checked: isChecked, disabled }, 'square')} />
 			{children}
 		</label>
 	);

@@ -59,8 +59,8 @@ class DynamicValue extends Serializable {
 		this.update(DYNAMIC_VALUE_KIND.TEXT, text);
 	}
 
-	updateToDefaultNumber(n = 0) {
-		this.update(DYNAMIC_VALUE_KIND.NUMBER, n);
+	updateToDefaultNumber(n = 0, decimal = false) {
+		this.update(decimal ? DYNAMIC_VALUE_KIND.NUMBER_DECIMAL : DYNAMIC_VALUE_KIND.NUMBER, n);
 	}
 
 	updateToDefaultVariable(n = 1) {

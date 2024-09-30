@@ -237,7 +237,8 @@ function Dialog({
 	});
 
 	useEffect(() => {
-		Inputs.isMapFocused = !isOpen;
+		const dialogs = document.getElementsByClassName('dialog');
+		Inputs.isMapFocused = dialogs.length === 0;
 		if (dialogRef.current && isOpen) {
 			dialogRef.current.style.width = initialWidth || '';
 			dialogRef.current.style.height = initialHeight || '';

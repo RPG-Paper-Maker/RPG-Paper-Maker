@@ -365,6 +365,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.SHOW_TEXT:
 			case EVENT_COMMAND_KIND.DISPLAY_CHOICE:
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
+			case EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS:
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -434,6 +435,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
 				texts = this.toStringInputNumber(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS:
+				texts = this.toStringSetDialogBoxOptions(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -450,7 +454,13 @@ class MapObjectCommand extends Base {
 		);
 	}
 
-	toStringDynamicValue(iterator: ITERATOR, properties: Base[] = [], parameters: Base[] = [], active = false): string {
+	toStringDynamicValue(
+		iterator: ITERATOR,
+		properties: Base[] = [],
+		parameters: Base[] = [],
+		database: Base[] = [],
+		active = false
+	): string {
 		const kind = this.command[iterator.i++] as number;
 		const value = this.command[iterator.i++];
 		if (active) {
@@ -461,7 +471,6 @@ class MapObjectCommand extends Base {
 				return i18next.t('none');
 			case DYNAMIC_VALUE_KIND.NUMBER:
 			case DYNAMIC_VALUE_KIND.NUMBER_DECIMAL:
-			case DYNAMIC_VALUE_KIND.DATABASE:
 			case DYNAMIC_VALUE_KIND.TEXT:
 				return '' + value;
 			case DYNAMIC_VALUE_KIND.SWITCH:
@@ -481,6 +490,10 @@ class MapObjectCommand extends Base {
 			case DYNAMIC_VALUE_KIND.PROPERTY: {
 				const property = Base.getByID(properties, value as number);
 				return `${i18next.t('property')} ${property?.toString() ?? value}`;
+			}
+			case DYNAMIC_VALUE_KIND.DATABASE: {
+				const db = Base.getByID(database, value as number);
+				return `${db?.toString() ?? value}`;
 			}
 			default:
 				return '';
@@ -535,6 +548,93 @@ class MapObjectCommand extends Base {
 		const stockValueVariable = this.toStringDynamicValue(iterator, properties, parameters);
 		const digits = this.toStringDynamicValue(iterator, properties, parameters);
 		return [`${i18next.t('stock.value.in.variable.id')} ${stockValueVariable}, ${i18next.t('digits')} ${digits}`];
+	}
+
+	toStringSetDialogBoxOptionsSimple(
+		texts: string[],
+		label: string,
+		iterator: ITERATOR,
+		properties: Base[],
+		parameters: Base[],
+		dataBase: Base[] = []
+	) {
+		let checked = Utils.initializeBoolCommand(this.command, iterator);
+		if (checked) {
+			texts.push(`${label}: ${this.toStringDynamicValue(iterator, properties, parameters, dataBase)}`);
+		}
+	}
+
+	toStringSetDialogBoxOptions(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts = [''];
+		this.toStringSetDialogBoxOptionsSimple(
+			texts,
+			i18next.t('window.skin.id'),
+			iterator,
+			properties,
+			parameters,
+			Project.current!.systems.windowSkins
+		);
+		this.toStringSetDialogBoxOptionsSimple(texts, 'X', iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, 'Y', iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('width'), iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('height'), iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('padding.left'), iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('padding.top'), iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('padding.right'), iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('padding.bottom'), iterator, properties, parameters);
+		let checked = Utils.initializeBoolCommand(this.command, iterator);
+		if (checked) {
+			texts.push(
+				`${i18next.t('faceset.position')}: ${i18next.t(this.command[iterator.i++] === 0 ? 'behind' : 'above')}`
+			);
+		}
+		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('faceset.x'), iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('faceset.y'), iterator, properties, parameters);
+		checked = Utils.initializeBoolCommand(this.command, iterator);
+		if (checked) {
+			texts.push(`${i18next.t('text.outline')}: ${i18next.t(this.command[iterator.i++] === 0 ? 'yes' : 'no')}`);
+		}
+		this.toStringSetDialogBoxOptionsSimple(
+			texts,
+			i18next.t('text.color.id.text'),
+			iterator,
+			properties,
+			parameters,
+			Project.current!.systems.colors
+		);
+		this.toStringSetDialogBoxOptionsSimple(
+			texts,
+			i18next.t('text.color.id.outline'),
+			iterator,
+			properties,
+			parameters,
+			Project.current!.systems.colors
+		);
+		this.toStringSetDialogBoxOptionsSimple(
+			texts,
+			i18next.t('text.color.id.background'),
+			iterator,
+			properties,
+			parameters,
+			Project.current!.systems.colors
+		);
+		this.toStringSetDialogBoxOptionsSimple(
+			texts,
+			i18next.t('text.size.id'),
+			iterator,
+			properties,
+			parameters,
+			Project.current!.systems.fontSizes
+		);
+		this.toStringSetDialogBoxOptionsSimple(
+			texts,
+			i18next.t('text.font.id'),
+			iterator,
+			properties,
+			parameters,
+			Project.current!.systems.fontNames
+		);
+		return texts;
 	}
 
 	copy(command: MapObjectCommand): void {

@@ -21,16 +21,19 @@ import Tree from './Tree';
 type Props = {
 	variableID: number;
 	onChange: (id: number) => void;
+	disabled?: boolean;
 };
 
-function VariableSelector({ variableID, onChange }: Props) {
+function VariableSelector({ variableID, onChange, disabled = false }: Props) {
 	const [needDialogOpen, setNeedDialogOpen] = useState(false);
 	const [node] = useState(
 		Node.create(Model.Base.create(variableID, Project.current!.variables.getVariableByID(variableID)?.name || ''))
 	);
 
 	const handleOpenVariables = () => {
-		setNeedDialogOpen(true);
+		if (!disabled) {
+			setNeedDialogOpen(true);
+		}
 	};
 
 	const handleAccept = () => {
@@ -40,8 +43,10 @@ function VariableSelector({ variableID, onChange }: Props) {
 	return (
 		<>
 			<Flex one spaced onDoubleClick={handleOpenVariables}>
-				<Tree list={[node]} cannotAdd cannotEdit cannotDragDrop />
-				<Button onClick={handleOpenVariables}>...</Button>
+				<Tree list={[node]} disabled={disabled} cannotAdd cannotEdit cannotDragDrop />
+				<Button onClick={handleOpenVariables} disabled={disabled}>
+					...
+				</Button>
 			</Flex>
 			<DialogVariables
 				isOpen={needDialogOpen}

@@ -9,12 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
-import { DynamicValue } from '../../../core/DynamicValue';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
+import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import { MapObjectCommandType } from '../../../models';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Form, { Label, Value } from '../../Form';
@@ -32,8 +32,8 @@ type Props = {
 function DialogCommandInputNumber({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
-	const [stockValueVariable] = useState<DynamicValue>(new DynamicValue());
-	const [digits] = useState<DynamicValue>(new DynamicValue());
+	const [stockValueVariable] = useStateDynamicValue();
+	const [digits] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {

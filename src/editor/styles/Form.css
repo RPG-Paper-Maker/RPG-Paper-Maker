@@ -27,3 +27,7 @@ table.form tr > :nth-child(2) > * {
 table.form tr td.disabled {
 	color: var(--lighter-bg-color);
 }
+
+table.form tr td div.colon.disabled {
+	color: var(--lighter-bg-color);
+}

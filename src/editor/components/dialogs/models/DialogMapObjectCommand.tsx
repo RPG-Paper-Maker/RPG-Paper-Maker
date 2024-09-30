@@ -20,6 +20,7 @@ import Groupbox from '../../Groupbox';
 import Tab from '../../Tab';
 import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
 import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
+import DialogCommandSetDialogBoxOptions from '../commands/DialogCommandSetDialogBoxOptions';
 import DialogCommandShowText from '../commands/DialogCommandShowText';
 import Dialog from '../Dialog';
 
@@ -276,6 +277,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept }: P
 				return <DialogCommandDisplayChoice {...options} />;
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
 				return <DialogCommandInputNumber {...options} />;
+			case EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS:
+				return <DialogCommandSetDialogBoxOptions {...options} />;
 			default:
 				return null;
 		}

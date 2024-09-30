@@ -25,9 +25,11 @@ import VariableSelector from './VariableSelector';
 type Props = {
 	value: DynamicValue;
 	optionsType: DYNAMIC_VALUE_OPTIONS_TYPE;
+	databaseOptions?: Model.Base[];
+	disabled?: boolean;
 };
 
-function DynamicValueSelector({ value, optionsType }: Props) {
+function DynamicValueSelector({ value, optionsType, databaseOptions = [], disabled = false }: Props) {
 	const [kind, setKind] = useState(value.kind);
 	const [valueNumber, setValueNumber] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.NUMBER || value.kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL
@@ -53,6 +55,9 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 		value.kind === DYNAMIC_VALUE_KIND.PROPERTY
 			? (value.value as number)
 			: Project.current!.currentMapObjectProperties[0]?.content?.id
+	);
+	const [valueDatabase, setValueDatabase] = useState(
+		value.kind === DYNAMIC_VALUE_KIND.DATABASE ? (value.value as number) : 1
 	);
 
 	const getOptions = () => {
@@ -89,6 +94,9 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 			case DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL:
 				list = [DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, DYNAMIC_VALUE_KIND.VARIABLE];
 				break;
+			case DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE:
+				list = [DYNAMIC_VALUE_KIND.DATABASE, DYNAMIC_VALUE_KIND.NUMBER, DYNAMIC_VALUE_KIND.VARIABLE];
+				break;
 			default:
 				break;
 		}
@@ -96,6 +104,7 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 			case DYNAMIC_VALUE_OPTIONS_TYPE.TEXT:
 			case DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER:
 			case DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL:
+			case DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE:
 				if (Project.current!.currentMapObjectParameters.length > 0) {
 					list.push(DYNAMIC_VALUE_KIND.PARAMETER);
 				}
@@ -140,6 +149,9 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 			case DYNAMIC_VALUE_KIND.PROPERTY:
 				value.value = valuePropertyID;
 				break;
+			case DYNAMIC_VALUE_KIND.DATABASE:
+				value.value = valueDatabase;
+				break;
 		}
 	};
 
@@ -178,6 +190,11 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 		value.value = id;
 	};
 
+	const handleChangeDetabase = (id: number) => {
+		setValueDatabase(id);
+		value.value = id;
+	};
+
 	useEffect(() => {
 		setKind(value.kind);
 	}, [value.kind]);
@@ -191,7 +208,23 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 			case DYNAMIC_VALUE_KIND.TEXT:
 				setValueText(value.value as string);
 				break;
+			case DYNAMIC_VALUE_KIND.VARIABLE:
+				setValueVariableID(value.value as number);
+				break;
+			case DYNAMIC_VALUE_KIND.KEYBOARD:
+				setValueVariableID(value.value as number);
+				break;
+			case DYNAMIC_VALUE_KIND.PARAMETER:
+				setValueParameterID(value.value as number);
+				break;
+			case DYNAMIC_VALUE_KIND.PROPERTY:
+				setValuePropertyID(value.value as number);
+				break;
+			case DYNAMIC_VALUE_KIND.DATABASE:
+				setValueDatabase(value.value as number);
+				break;
 		}
+		// eslint-disable-next-line
 	}, [value.value]);
 
 	const getValueDisplay = () => {
@@ -204,18 +237,33 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 						onChange={handleChangeNumber}
 						widthType={INPUT_TYPE_WIDTH.FILL}
 						decimals={kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL}
+						disabled={disabled}
 					/>
 				);
 			case DYNAMIC_VALUE_KIND.VARIABLE:
-				return <VariableSelector variableID={valueVariableID} onChange={handleChangeVariable} />;
+				return (
+					<VariableSelector
+						variableID={valueVariableID}
+						onChange={handleChangeVariable}
+						disabled={disabled}
+					/>
+				);
 			case DYNAMIC_VALUE_KIND.TEXT:
-				return <InputText value={valueText} onChange={handleChangeText} widthType={INPUT_TYPE_WIDTH.FILL} />;
+				return (
+					<InputText
+						value={valueText}
+						onChange={handleChangeText}
+						widthType={INPUT_TYPE_WIDTH.FILL}
+						disabled={disabled}
+					/>
+				);
 			case DYNAMIC_VALUE_KIND.SWITCH:
 				return (
 					<Dropdown
 						selectedID={valueSwitch ? 0 : 1}
 						onChange={handleChangeSwitch}
 						options={Model.Base.ON_OFF_OPTIONS}
+						disabled={disabled}
 						fillWidth
 					/>
 				);
@@ -225,6 +273,7 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 						selectedID={valueKeyboardID}
 						onChange={handleChangeKeyboard}
 						options={Project.current!.keyboard.list}
+						disabled={disabled}
 						displayIDs
 						fillWidth
 					/>
@@ -235,6 +284,7 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 						selectedID={valueParameterID}
 						onChange={handleChangeParameter}
 						options={Project.current!.currentMapObjectParameters}
+						disabled={disabled}
 						displayIDs
 						fillWidth
 					/>
@@ -245,6 +295,18 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 						selectedID={valuePropertyID}
 						onChange={handleChangeProperty}
 						options={Project.current!.currentMapObjectProperties.map((node) => node.content)}
+						disabled={disabled}
+						displayIDs
+						fillWidth
+					/>
+				);
+			case DYNAMIC_VALUE_KIND.DATABASE:
+				return (
+					<Dropdown
+						selectedID={valueDatabase}
+						onChange={handleChangeDetabase}
+						options={databaseOptions}
+						disabled={disabled}
 						displayIDs
 						fillWidth
 					/>
@@ -256,7 +318,13 @@ function DynamicValueSelector({ value, optionsType }: Props) {
 
 	return (
 		<div className='dynamic-value-selector'>
-			<Dropdown selectedID={kind} onChange={handleChangeKind} options={getOptions()} translateOptions />
+			<Dropdown
+				selectedID={kind}
+				onChange={handleChangeKind}
+				options={getOptions()}
+				disabled={disabled}
+				translateOptions
+			/>
 			<Flex one>{getValueDisplay()}</Flex>
 		</div>
 	);

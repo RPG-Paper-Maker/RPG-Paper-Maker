@@ -34,6 +34,7 @@ class System extends Serializable {
 	public fontSizes!: Model.FontSize[];
 	public fontNames!: Model.FontName[];
 	public colors!: Model.Color[];
+	public windowSkins!: Model.WindowSkin[];
 	public json!: JSONType; // TEMP, will be removed later
 
 	public static readonly bindings: BindingType[] = [
@@ -54,6 +55,7 @@ class System extends Serializable {
 		['fontSizes', 'fs', [], BINDING.LIST, Model.FontSize],
 		['fontNames', 'fn', [], BINDING.LIST, Model.FontName],
 		['colors', 'colors', [], BINDING.LIST, Model.Color],
+		['windowSkins', 'wskins', [], BINDING.LIST, Model.WindowSkin],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

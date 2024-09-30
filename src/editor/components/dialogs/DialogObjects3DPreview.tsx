@@ -299,7 +299,7 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, onAccept, onRej
 									<Dropdown
 										selectedID={selectedObject3D.isTopLeft ? 1 : 2}
 										onChange={handleChangeIsTopLeft}
-										options={Model.Base.OBJECT_3D_IS_TOP_LEFT}
+										options={Model.Base.OBJECT_3D_IS_TOP_LEFT_OPTIONS}
 										translateOptions
 									/>
 								</Value>
@@ -308,7 +308,7 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, onAccept, onRej
 									<Dropdown
 										selectedID={selectedObject3D.stretch ? 1 : 2}
 										onChange={handleChangeStretch}
-										options={Model.Base.OBJECT_3D_STRETCH}
+										options={Model.Base.OBJECT_3D_STRETCH_OPTIONS}
 										translateOptions
 									/>
 								</Value>
