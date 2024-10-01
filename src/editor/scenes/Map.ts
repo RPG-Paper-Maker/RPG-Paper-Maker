@@ -239,7 +239,7 @@ class Map extends Base {
 		if (Scene.Map.isTransforming()) {
 			Scene.Map.current!.setTransformMode(Project.current!.settings.mapEditorCurrentActionIndex);
 		}
-		this.scene.add(this.transformControls);
+		this.scene.add(this.transformControls.getHelper());
 		this.selectedMesh = new THREE.Mesh(new CustomGeometry(), this.materialTilesetHover);
 		this.selectedMesh.receiveShadow = true;
 		this.selectedMesh.castShadow = true;
@@ -1020,7 +1020,7 @@ class Map extends Base {
 					(this.lockedY === null && this.lockedYPixels === null && this.lockedLayer === null))
 			) {
 				const newPositionKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
-					obj.faceIndex
+					obj.faceIndex ?? 0
 				];
 				if (newPositionKey && (Scene.Map.isRemoving() || layer === RAYCASTING_LAYER.LANDS)) {
 					const newPosition = Position.fromKey(newPositionKey);
@@ -1226,7 +1226,7 @@ class Map extends Base {
 		for (const obj of intersects) {
 			if (obj.faceIndex !== undefined) {
 				const newPositionKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
-					obj.faceIndex
+					obj.faceIndex ?? 0
 				];
 				if (newPositionKey) {
 					const newPosition = Position.fromKey(newPositionKey);
