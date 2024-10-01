@@ -12,7 +12,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { ACTION_KIND, ELEMENT_POSITION_KIND } from '../../common';
+import { ACTION_KIND, ELEMENT_POSITION_KIND, Utils } from '../../common';
 import { Position, Project } from '../../core';
 import { Scene } from '../../Editor';
 import { RootState, setSelectedPosition } from '../../store';
@@ -52,7 +52,7 @@ function PanelTransform({ kind }: Props) {
 			break;
 	}
 
-	const title = t('transform.options', { transform: kindText.toLowerCase() });
+	const title = t('transform.options', { transform: Utils.capitalize(kindText.toLowerCase()) });
 
 	const isDecimal = kind !== ACTION_KIND.TRANSLATE;
 
@@ -65,7 +65,9 @@ function PanelTransform({ kind }: Props) {
 	let units = '';
 	switch (kind) {
 		case ACTION_KIND.TRANSLATE:
-			units = currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE ? t('square.s') : t('pixel.s');
+			units = (
+				currentElementPositionKind === ELEMENT_POSITION_KIND.SQUARE ? t('square.s') : t('pixel.s')
+			).toLowerCase();
 			break;
 		case ACTION_KIND.ROTATE:
 			units = '°';
@@ -281,7 +283,7 @@ function PanelTransform({ kind }: Props) {
 					{isSelected && (
 						<Groupbox title={t('current.values')}>
 							<Flex column spaced>
-								<Flex spacedLarge>
+								<Flex centerV spaced>
 									X:
 									<InputNumber
 										min={getMinX()}
@@ -292,7 +294,7 @@ function PanelTransform({ kind }: Props) {
 									/>
 									{units}
 								</Flex>
-								<Flex spacedLarge>
+								<Flex centerV spaced>
 									Y:
 									<InputNumber
 										min={getMinY()}
@@ -303,7 +305,7 @@ function PanelTransform({ kind }: Props) {
 									/>
 									{units}
 								</Flex>
-								<Flex spacedLarge>
+								<Flex centerV spaced>
 									Z:
 									<InputNumber
 										min={getMinZ()}

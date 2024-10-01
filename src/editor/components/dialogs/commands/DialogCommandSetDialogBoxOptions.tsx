@@ -98,7 +98,7 @@ function DialogCommandSetDialogBoxOptions({ isOpen, setIsOpen, list, onAccept, o
 		defaultKind: DYNAMIC_VALUE_KIND,
 		defaultValue: unknown
 	) => {
-		let checked = Utils.initializeBoolCommand(l, iterator);
+		const checked = Utils.initializeBoolCommand(l, iterator);
 		setter(checked);
 		if (checked) {
 			dynamic.updateCommand(l, iterator);

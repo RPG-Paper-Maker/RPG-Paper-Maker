@@ -558,7 +558,7 @@ class MapObjectCommand extends Base {
 		parameters: Base[],
 		dataBase: Base[] = []
 	) {
-		let checked = Utils.initializeBoolCommand(this.command, iterator);
+		const checked = Utils.initializeBoolCommand(this.command, iterator);
 		if (checked) {
 			texts.push(`${label}: ${this.toStringDynamicValue(iterator, properties, parameters, dataBase)}`);
 		}

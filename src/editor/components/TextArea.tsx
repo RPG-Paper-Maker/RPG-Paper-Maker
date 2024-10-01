@@ -58,6 +58,7 @@ function TextArea({ text, onChange, triggerInsertText, setTriggerInsertText }: P
 			insertTextAtCaret(triggerInsertText);
 			setTriggerInsertText(null);
 		}
+		// eslint-disable-next-line
 	}, [triggerInsertText]);
 
 	return <textarea ref={textareaRef} value={text} onChange={handleChange} onBlur={handleBlur} spellCheck='false' />;
