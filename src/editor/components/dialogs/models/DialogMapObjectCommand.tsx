@@ -18,6 +18,7 @@ import Button from '../../Button';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tab from '../../Tab';
+import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreenTone';
 import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
 import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
 import DialogCommandSetDialogBoxOptions from '../commands/DialogCommandSetDialogBoxOptions';
@@ -279,6 +280,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept }: P
 				return <DialogCommandInputNumber {...options} />;
 			case EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS:
 				return <DialogCommandSetDialogBoxOptions {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
+				return <DialogCommandChangeScreenTone {...options} />;
 			default:
 				return null;
 		}

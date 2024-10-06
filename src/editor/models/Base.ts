@@ -127,6 +127,7 @@ class Base extends Serializable {
 	public static OBJECT_3D_STRETCH_OPTIONS = [Base.create(1, 'stretch'), Base.create(2, 'perfect.size')];
 	public static BEHIND_ABOVE_OPTIONS = [Base.create(0, 'behind'), Base.create(1, 'above')];
 	public static YES_NO_OPTIONS = [Base.create(0, 'yes'), Base.create(1, 'no')];
+	public static PLUS_MINUS_OPTIONS = [Base.create(0, '+'), Base.create(1, '-')];
 
 	public id!: number;
 	public name!: string;

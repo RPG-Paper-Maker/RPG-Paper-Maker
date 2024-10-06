@@ -27,9 +27,26 @@ type Props = {
 	optionsType: DYNAMIC_VALUE_OPTIONS_TYPE;
 	databaseOptions?: Model.Base[];
 	disabled?: boolean;
+	onChangeKind?: (k: DYNAMIC_VALUE_KIND) => void;
+	onChangeValue?: (v: unknown) => void;
+	forcedValue?: unknown;
+	setForcedValue?: (v?: unknown) => void;
+	min?: number;
+	max?: number;
 };
 
-function DynamicValueSelector({ value, optionsType, databaseOptions = [], disabled = false }: Props) {
+function DynamicValueSelector({
+	value,
+	optionsType,
+	databaseOptions = [],
+	disabled = false,
+	onChangeKind,
+	onChangeValue,
+	forcedValue,
+	setForcedValue,
+	min,
+	max,
+}: Props) {
 	const [kind, setKind] = useState(value.kind);
 	const [valueNumber, setValueNumber] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.NUMBER || value.kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL
@@ -197,6 +214,7 @@ function DynamicValueSelector({ value, optionsType, databaseOptions = [], disabl
 
 	useEffect(() => {
 		setKind(value.kind);
+		onChangeKind?.(value.kind);
 	}, [value.kind]);
 
 	useEffect(() => {
@@ -224,6 +242,7 @@ function DynamicValueSelector({ value, optionsType, databaseOptions = [], disabl
 				setValueDatabase(value.value as number);
 				break;
 		}
+		onChangeValue?.(value.value);
 		// eslint-disable-next-line
 	}, [value.value]);
 
@@ -238,6 +257,10 @@ function DynamicValueSelector({ value, optionsType, databaseOptions = [], disabl
 						widthType={INPUT_TYPE_WIDTH.FILL}
 						decimals={kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL}
 						disabled={disabled}
+						forcedValue={forcedValue as number | undefined}
+						setForcedValue={setForcedValue}
+						min={min}
+						max={max}
 					/>
 				);
 			case DYNAMIC_VALUE_KIND.VARIABLE:

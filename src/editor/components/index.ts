@@ -10,6 +10,8 @@ export * from './MapEditorMenuBar';
 export * from './Menu';
 export * from './MenuItem';
 export * from './MenuSub';
+export * from './Slider';
+export * from './SliderDynamic';
 export * from './Splitter';
 export * from './Tab';
 export * from './TextureSquareSelector';

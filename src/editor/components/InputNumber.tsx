@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { INPUT_TYPE_WIDTH, Mathf } from '../common';
 import '../styles/Input.css';
 
@@ -21,6 +21,8 @@ type Props = {
 	min?: number;
 	decimals?: boolean;
 	disabled?: boolean;
+	forcedValue?: number;
+	setForcedValue?: (v?: number) => void;
 };
 
 function InputNumber({
@@ -31,6 +33,8 @@ function InputNumber({
 	max = 999999999,
 	decimals = false,
 	disabled = false,
+	forcedValue,
+	setForcedValue,
 }: Props) {
 	const transformValue = (v: number) => (decimals ? Mathf.forceDecimals(v) : Mathf.forceInteger(v));
 
@@ -76,6 +80,13 @@ function InputNumber({
 		}
 		setDisplayedValue(transformValueToText(v));
 	};
+
+	useEffect(() => {
+		if (forcedValue !== undefined && setForcedValue) {
+			setDisplayedValue(transformValueToText(forcedValue));
+			setForcedValue(undefined);
+		}
+	}, [forcedValue, setForcedValue]);
 
 	return (
 		<input
