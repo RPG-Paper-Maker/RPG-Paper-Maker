@@ -22,6 +22,7 @@ import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreen
 import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
 import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
 import DialogCommandSetDialogBoxOptions from '../commands/DialogCommandSetDialogBoxOptions';
+import DialogCommandShakeScreen from '../commands/DialogCommandShakeScreen';
 import DialogCommandShowText from '../commands/DialogCommandShowText';
 import Dialog from '../Dialog';
 
@@ -282,6 +283,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept }: P
 				return <DialogCommandSetDialogBoxOptions {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
 				return <DialogCommandChangeScreenTone {...options} />;
+			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
+				return <DialogCommandShakeScreen {...options} />;
 			default:
 				return null;
 		}

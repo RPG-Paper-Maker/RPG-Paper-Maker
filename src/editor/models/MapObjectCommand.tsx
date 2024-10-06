@@ -367,6 +367,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
 			case EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS:
 			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
+			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -441,6 +442,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
 				texts = this.toStringChangeScreenTone(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
+				texts = this.toStringShakeScreen(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -661,6 +665,25 @@ class MapObjectCommand extends Base {
 			)}`;
 			texts.push(`${operation} ${addingColor}`);
 		}
+		let time = '';
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			time += `[${i18next.t('wait.end')}] `;
+		}
+		time += `${i18next.t('time').toUpperCase()}: ${this.toStringDynamicValue(
+			iterator,
+			properties,
+			parameters
+		)} ${i18next.t('seconds').toLowerCase()}`;
+		texts.push(time);
+		return texts;
+	}
+
+	toStringShakeScreen(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts = [''];
+		const offset = this.toStringDynamicValue(iterator, properties, parameters);
+		texts.push(`${i18next.t('offset')}: ${offset} ${i18next.t('pixel.s').toLowerCase()}`);
+		const shakesNumber = this.toStringDynamicValue(iterator, properties, parameters);
+		texts.push(`${i18next.t('shakes.number')}: ${shakesNumber} ${i18next.t('per.second').toLowerCase()}`);
 		let time = '';
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			time += `[${i18next.t('wait.end')}] `;
