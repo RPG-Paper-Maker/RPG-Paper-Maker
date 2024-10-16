@@ -48,15 +48,8 @@ class Localization extends Base {
 		return this.names.get(1) ?? '';
 	}
 
-	copy(localization: Localization): void {
-		super.copy(localization);
-		this.names = new Map(localization.names);
-	}
-
-	clone(): Localization {
-		const localization = new Localization();
-		localization.copy(this);
-		return localization;
+	copy(localization: Localization, additionnalBinding: BindingType[] = []): void {
+		super.copy(localization, Localization.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

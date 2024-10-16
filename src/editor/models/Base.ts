@@ -226,15 +226,14 @@ class Base extends Serializable {
 		return ['' + this.toString()];
 	}
 
-	copy(base: Base): void {
-		this.id = base.id;
-		this.name = base.name;
+	copy(base: Base, additionnalBinding: BindingType[] = []): void {
+		super.copy(base, Base.getBindings(additionnalBinding));
 	}
 
-	clone(): Base {
-		const base = new Base();
+	clone(): this {
+		const base = new (this.constructor as { new (): Base })();
 		base.copy(this);
-		return base;
+		return base as this;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

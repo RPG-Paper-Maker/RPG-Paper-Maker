@@ -22,15 +22,8 @@ class CommonReaction extends MapObjectReaction {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
-	copy(reaction: CommonReaction): void {
-		super.copy(reaction);
-		this.parameters = reaction.parameters.map((parameter) => parameter.clone());
-	}
-
-	clone(): CommonReaction {
-		const reaction = new CommonReaction();
-		reaction.copy(this);
-		return reaction;
+	copy(reaction: CommonReaction, additionnalBinding: BindingType[] = []): void {
+		super.copy(reaction, CommonReaction.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

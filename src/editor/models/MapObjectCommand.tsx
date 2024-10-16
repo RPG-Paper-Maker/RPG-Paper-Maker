@@ -702,12 +702,6 @@ class MapObjectCommand extends Base {
 		this.command = [...command.command];
 	}
 
-	clone(): MapObjectCommand {
-		const command = new MapObjectCommand();
-		command.copy(this);
-		return command;
-	}
-
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, MapObjectCommand.getBindings(additionnalBinding));
 		this.id = 0;

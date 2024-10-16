@@ -31,12 +31,6 @@ class Keyboard extends Locale {
 		this.shortcuts = keyboard.shortcuts.map((shortcut) => [...shortcut]);
 	}
 
-	clone(): Keyboard {
-		const keyboard = new Keyboard();
-		keyboard.copy(this);
-		return keyboard;
-	}
-
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Keyboard.getBindings(additionnalBinding));
 	}

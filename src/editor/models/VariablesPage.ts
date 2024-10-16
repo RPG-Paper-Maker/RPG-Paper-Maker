@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from './Base';
 import { BINDING, BindingType, JSONType } from '../common';
+import { Base } from './Base';
 
 const VARIABLES_PER_PAGE = 25;
 
@@ -31,14 +31,7 @@ class VariablesPage extends Base {
 	}
 
 	copy(page: VariablesPage): void {
-		super.copy(page);
-		this.list = page.list.map((variable) => variable.clone());
-	}
-
-	clone(): VariablesPage {
-		const page = new VariablesPage();
-		page.copy(this);
-		return page;
+		super.copy(page, VariablesPage.getBindings([]));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

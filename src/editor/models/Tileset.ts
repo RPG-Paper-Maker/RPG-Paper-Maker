@@ -44,12 +44,6 @@ class Tileset extends Base {
 		this.objects = [...tileset.objects];
 	}
 
-	clone(): Tileset {
-		const tileset = new Tileset();
-		tileset.copy(this);
-		return tileset;
-	}
-
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Tileset.getBindings(additionnalBinding));
 	}

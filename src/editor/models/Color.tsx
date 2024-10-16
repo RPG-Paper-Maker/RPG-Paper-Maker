@@ -30,18 +30,8 @@ class Color extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
-	copy(color: Color): void {
-		super.copy(color);
-		this.red = color.red;
-		this.green = color.green;
-		this.blue = color.blue;
-		this.alpha = color.alpha;
-	}
-
-	clone(): Color {
-		const color = new Color();
-		color.copy(this);
-		return color;
+	copy(color: Color, additionnalBinding: BindingType[] = []): void {
+		super.copy(color, Color.getBindings(additionnalBinding));
 	}
 
 	getDropdownIcon(): ReactNode {

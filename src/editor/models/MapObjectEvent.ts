@@ -85,12 +85,6 @@ class MapObjectEvent extends Base {
 		this.isSystem = event.isSystem;
 	}
 
-	clone(): MapObjectEvent {
-		const event = new MapObjectEvent();
-		event.copy(this);
-		return event;
-	}
-
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, MapObjectEvent.getBindings(additionnalBinding));
 		this.updateParameters();

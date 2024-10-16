@@ -60,32 +60,7 @@ class WindowSkin extends Base {
 	}
 
 	copy(windowSkin: WindowSkin): void {
-		super.copy(windowSkin);
-		this.pictureID = windowSkin.pictureID;
-		this.borderTopLeft = windowSkin.borderTopLeft;
-		this.borderTopRight = windowSkin.borderTopRight;
-		this.borderBotLeft = windowSkin.borderBotLeft;
-		this.borderBotRight = windowSkin.borderBotRight;
-		this.borderLeft = windowSkin.borderLeft;
-		this.borderRight = windowSkin.borderRight;
-		this.borderTop = windowSkin.borderTop;
-		this.borderBot = windowSkin.borderBot;
-		this.background = windowSkin.background;
-		this.backgroundSelection = windowSkin.backgroundSelection;
-		this.backgroundRepeat = windowSkin.backgroundRepeat;
-		this.arrowEndMessage = windowSkin.arrowEndMessage;
-		this.arrowTargetSelection = windowSkin.arrowTargetSelection;
-		this.arrowUpDown = windowSkin.arrowUpDown;
-		this.textNormal = windowSkin.textNormal;
-		this.textCritical = windowSkin.textCritical;
-		this.textHeal = windowSkin.textHeal;
-		this.textMiss = windowSkin.textMiss;
-	}
-
-	clone(): WindowSkin {
-		const windowSkin = new WindowSkin();
-		windowSkin.copy(this);
-		return windowSkin;
+		super.copy(windowSkin, WindowSkin.getBindings([]));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

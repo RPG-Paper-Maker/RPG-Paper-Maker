@@ -297,12 +297,6 @@ class Map extends Base {
 		super.copy(map);
 	}
 
-	clone(): Map {
-		const map = new Map();
-		map.copy(this);
-		return map;
-	}
-
 	async load() {
 		await super.load(true); // Try to read temp files by default
 	}

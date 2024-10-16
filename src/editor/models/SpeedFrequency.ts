@@ -24,15 +24,8 @@ class SpeedFrequency extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
-	copy(speedFrequency: SpeedFrequency): void {
-		super.copy(speedFrequency);
-		this.value = speedFrequency.value.clone();
-	}
-
-	clone(): SpeedFrequency {
-		const speedFrequency = new SpeedFrequency();
-		speedFrequency.copy(this);
-		return speedFrequency;
+	copy(speedFrequency: SpeedFrequency, additionnalBinding: BindingType[] = []): void {
+		super.copy(speedFrequency, SpeedFrequency.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

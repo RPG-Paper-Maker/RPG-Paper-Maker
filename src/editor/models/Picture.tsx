@@ -103,24 +103,10 @@ class Picture extends Base {
 		return <img src='/Assets/bullet-br.png' alt='br bullet' />;
 	}
 
-	copy(picture: Picture): void {
-		super.copy(picture);
-		this.isBR = picture.isBR;
-		this.dlc = picture.dlc;
+	copy(picture: Picture, additionnalBinding: BindingType[] = []): void {
+		super.copy(picture, Picture.getBindings(additionnalBinding));
 		this.jsonCollisions = [...picture.jsonCollisions];
-		this.collisionsRepeat = picture.collisionsRepeat;
 		this.collisions = picture.collisions?.map((collision) => collision.clone());
-		this.picture = picture.picture;
-		this.width = picture.width;
-		this.height = picture.height;
-		this.isStopAnimation = picture.isStopAnimation;
-		this.isClimbAnimation = picture.isClimbAnimation;
-	}
-
-	clone(): Picture {
-		const picture = new Picture(this.kind);
-		picture.copy(this);
-		return picture;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from './Base';
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
+import { Base } from './Base';
 
 class MapObjectProperty extends Base {
 	public initialValue!: DynamicValue;
@@ -28,15 +28,8 @@ class MapObjectProperty extends Base {
 		return `${this.toStringNameID()} = ${this.initialValue.toString()}`;
 	}
 
-	copy(property: MapObjectProperty): void {
-		super.copy(property);
-		this.initialValue = property.initialValue.clone();
-	}
-
-	clone(): MapObjectProperty {
-		const property = new MapObjectProperty();
-		property.copy(this);
-		return property;
+	copy(property: MapObjectProperty, additionnalBinding: BindingType[] = []): void {
+		super.copy(property, additionnalBinding);
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

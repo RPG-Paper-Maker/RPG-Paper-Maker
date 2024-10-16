@@ -44,20 +44,8 @@ class CommonObject extends Base {
 		return this.states[0] ?? null;
 	}
 
-	copy(object: CommonObject): void {
-		super.copy(object);
-		this.states = object.states.map((state) => state.clone());
-		this.properties = object.properties.map((property) => property.clone());
-		this.events = object.events.map((event) => event.clone());
-		this.onlyOneEventPerFrame = object.onlyOneEventPerFrame;
-		this.canBeTriggeredAnotherObject = object.canBeTriggeredAnotherObject;
-		this.commonModelID = object.commonModelID;
-	}
-
-	clone(): CommonObject {
-		const object = new CommonObject();
-		object.copy(this);
-		return object;
+	copy(object: CommonObject, additionnalBinding: BindingType[] = []): void {
+		super.copy(object, CommonObject.getBindings(additionnalBinding));
 	}
 
 	static fromJSON(json: JSONType): CommonObject {

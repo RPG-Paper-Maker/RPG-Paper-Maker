@@ -154,40 +154,8 @@ class MapObjectState extends Base {
 		return this.getCommonState()?.name || '???';
 	}
 
-	copy(state: MapObjectState): void {
-		super.copy(state);
-		this.graphicsKind = state.graphicsKind;
-		this.graphicsID = state.graphicsID;
-		this.graphicsIndexX = state.graphicsIndexX;
-		this.graphicsIndexY = state.graphicsIndexY;
-		this.rectTileset = state.rectTileset?.clone();
-		this.objectMovingKind = state.objectMovingKind;
-		this.eventCommandRoute = state.eventCommandRoute === null ? null : state.eventCommandRoute.clone();
-		this.speedID = state.speedID;
-		this.frequencyID = state.frequencyID;
-		this.moveAnimation = state.moveAnimation;
-		this.stopAnimation = state.stopAnimation;
-		this.climbAnimation = state.climbAnimation;
-		this.directionFix = state.directionFix;
-		this.through = state.through;
-		this.setWithCamera = state.setWithCamera;
-		this.pixelOffset = state.pixelOffset;
-		this.keepPosition = state.keepPosition;
-		this.eventCommandDetection = state.eventCommandDetection === null ? null : state.eventCommandDetection.clone();
-		this.centerX = state.centerX.clone();
-		this.centerZ = state.centerZ.clone();
-		this.angleX = state.angleX.clone();
-		this.angleY = state.angleY.clone();
-		this.angleZ = state.angleZ.clone();
-		this.scaleX = state.scaleX.clone();
-		this.scaleY = state.scaleY.clone();
-		this.scaleZ = state.scaleZ.clone();
-	}
-
-	clone(): MapObjectState {
-		const state = new MapObjectState();
-		state.copy(this);
-		return state;
+	copy(state: MapObjectState, additionnalBinding: BindingType[] = []): void {
+		super.copy(state, MapObjectState.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

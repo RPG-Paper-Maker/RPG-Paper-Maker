@@ -28,15 +28,8 @@ class SpecialElement extends Base {
 		super.applyDefault(SpecialElement.getBindings(additionnalBinding));
 	}
 
-	copy(specialElement: SpecialElement): void {
-		super.copy(specialElement);
-		this.pictureID = specialElement.pictureID;
-	}
-
-	clone(): SpecialElement {
-		const specialElement = new SpecialElement();
-		specialElement.copy(this);
-		return specialElement;
+	copy(specialElement: SpecialElement, additionnalBinding: BindingType[] = []): void {
+		super.copy(specialElement, SpecialElement.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

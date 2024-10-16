@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from './Base';
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
+import { Base } from './Base';
 
 class CreateParameter extends Base {
 	public defaultValue!: DynamicValue;
@@ -24,15 +24,8 @@ class CreateParameter extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
-	copy(parameter: CreateParameter): void {
-		super.copy(parameter);
-		this.defaultValue = parameter.defaultValue.clone();
-	}
-
-	clone(): CreateParameter {
-		const parameter = new CreateParameter();
-		parameter.copy(this);
-		return parameter;
+	copy(parameter: CreateParameter, additionnalBinding: BindingType[] = []): void {
+		super.copy(parameter, CreateParameter.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

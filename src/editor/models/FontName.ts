@@ -28,17 +28,8 @@ class FontName extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
-	copy(fontName: FontName): void {
-		super.copy(fontName);
-		this.isBasic = fontName.isBasic;
-		this.font = fontName.font.clone();
-		this.customFontID = fontName.customFontID;
-	}
-
-	clone(): FontName {
-		const fontName = new FontName();
-		fontName.copy(this);
-		return fontName;
+	copy(fontName: FontName, additionnalBinding: BindingType[] = []): void {
+		super.copy(fontName, FontName.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

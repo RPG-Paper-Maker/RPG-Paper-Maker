@@ -24,16 +24,9 @@ class MapObjectReaction extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
-	copy(reaction: MapObjectReaction): void {
-		super.copy(reaction);
+	copy(reaction: MapObjectReaction, additionnalBinding: BindingType[] = []): void {
+		super.copy(reaction, MapObjectReaction.getBindings(additionnalBinding));
 		this.commands = reaction.commands.map((command) => command.clone());
-		this.blockingHero = reaction.blockingHero;
-	}
-
-	clone(): MapObjectReaction {
-		const reaction = new MapObjectReaction();
-		reaction.copy(this);
-		return reaction;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

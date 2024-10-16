@@ -83,12 +83,6 @@ class TreeMapTag extends Base {
 		this.cursorPosition = tag.cursorPosition?.clone() ?? undefined;
 	}
 
-	clone(): TreeMapTag {
-		const node = new TreeMapTag();
-		node.copy(this);
-		return node;
-	}
-
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, TreeMapTag.getBindings(additionnalBinding));
 	}

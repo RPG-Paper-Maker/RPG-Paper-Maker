@@ -21,15 +21,8 @@ class Language extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
-	copy(language: Language): void {
-		super.copy(language);
-		this.kind = language.kind;
-	}
-
-	clone(): Language {
-		const language = new Language();
-		language.copy(this);
-		return language;
+	copy(language: Language, additionnalBinding: BindingType[] = []): void {
+		super.copy(language, Language.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

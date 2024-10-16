@@ -206,16 +206,8 @@ class Shape extends Base {
 		return <img src='/Assets/bullet-br.png' alt='br bullet' />;
 	}
 
-	copy(shape: Shape): void {
-		super.copy(shape);
-		this.isBR = shape.isBR;
-		this.dlc = shape.dlc;
-	}
-
-	clone(): Shape {
-		const shape = new Shape(this.kind);
-		shape.copy(this);
-		return shape;
+	copy(shape: Shape, additionnalBinding: BindingType[] = []): void {
+		super.copy(shape, Shape.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

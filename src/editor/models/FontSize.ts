@@ -24,15 +24,8 @@ class FontSize extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
-	copy(fontSize: FontSize): void {
-		super.copy(fontSize);
-		this.value = fontSize.value.clone();
-	}
-
-	clone(): FontSize {
-		const fontSize = new FontSize();
-		fontSize.copy(this);
-		return fontSize;
+	copy(fontSize: FontSize, additionnalBinding: BindingType[] = []): void {
+		super.copy(fontSize, FontSize.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

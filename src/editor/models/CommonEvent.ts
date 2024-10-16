@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from './Base';
 import { BINDING, BindingType, JSONType } from '../common';
+import { Base } from './Base';
 import { CreateParameter } from './CreateParameter';
 
 class CommonEvent extends Base {
@@ -22,15 +22,8 @@ class CommonEvent extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
-	copy(event: CommonEvent): void {
-		super.copy(event);
-		this.parameters = event.parameters.map((parameter) => parameter.clone());
-	}
-
-	clone(): CommonEvent {
-		const event = new CommonEvent();
-		event.copy(this);
-		return event;
+	copy(event: CommonEvent, additionnalBinding: BindingType[] = []): void {
+		super.copy(event, CommonEvent.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

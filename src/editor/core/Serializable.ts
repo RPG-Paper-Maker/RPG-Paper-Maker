@@ -16,9 +16,38 @@ import { Platform } from '../common/Platform';
 import { DynamicValue } from './DynamicValue';
 
 class Serializable {
-	// eslint-disable-next-line
-	copy(serializable: Serializable): void {
-		// Nothing to copy in this base
+	copy(serializable: Serializable, additionnalBinding: BindingType[] = []): void {
+		for (const [name, , , type, ,] of additionnalBinding) {
+			switch (type) {
+				case BINDING.NUMBER:
+				case BINDING.STRING:
+				case BINDING.BOOLEAN:
+					(this as JSONType)[name] = serializable[name as keyof Serializable];
+					break;
+				case BINDING.DYNAMIC_VALUE:
+				case BINDING.OBJECT:
+				case BINDING.POSITION:
+				case BINDING.RECTANGLE: {
+					const value = serializable[name as keyof Serializable] as unknown;
+					(this as JSONType)[name] = value === null ? null : (value as Serializable).clone();
+					break;
+				}
+				case BINDING.LIST:
+				case BINDING.LIST_WITH_INDEXES: {
+					const value = serializable[name as keyof Serializable] as unknown;
+					(this as JSONType)[name] = (value as Serializable[]).map((o) => o.clone());
+					break;
+				}
+				case BINDING.MAP:
+				case BINDING.MAP_POSITION: {
+					const value = serializable[name as keyof Serializable] as unknown;
+					(this as JSONType)[name] = new Map(value as Map<string, unknown>);
+					break;
+				}
+				default:
+					break;
+			}
+		}
 	}
 
 	clone(): Serializable {

@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from './Base';
 import { BINDING, BindingType, JSONType } from '../common';
+import { Base } from './Base';
 
 class Locale extends Base {
 	public names!: Record<number, string>;
@@ -24,12 +24,6 @@ class Locale extends Base {
 	copy(locale: Locale): void {
 		super.copy(locale);
 		this.names = { ...locale.names };
-	}
-
-	clone(): Locale {
-		const locale = new Locale();
-		locale.copy(this);
-		return locale;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
