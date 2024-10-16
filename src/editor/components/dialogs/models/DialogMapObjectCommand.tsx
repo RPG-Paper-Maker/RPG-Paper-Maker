@@ -19,6 +19,7 @@ import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tab from '../../Tab';
 import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreenTone';
+import DialogCommandChangeWeather from '../commands/DialogCommandChangeWeather';
 import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
 import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
 import DialogCommandSetDialogBoxOptions from '../commands/DialogCommandSetDialogBoxOptions';
@@ -285,6 +286,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept }: P
 				return <DialogCommandChangeScreenTone {...options} />;
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
 				return <DialogCommandShakeScreen {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_WEATHER:
+				return <DialogCommandChangeWeather {...options} />;
 			default:
 				return null;
 		}

@@ -1,4 +1,5 @@
 export * from './DialogCommandChangeScreenTone';
+export * from './DialogCommandChangeWeather';
 export * from './DialogCommandDisplayChoice';
 export * from './DialogCommandInputNumber';
 export * from './DialogCommandSetDialogBoxOptions';

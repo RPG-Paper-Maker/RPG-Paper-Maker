@@ -9,37 +9,38 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode } from 'react';
-import '../styles/RadioButton.css';
+import React, { ReactNode } from 'react';
 import { Utils } from '../common';
+import '../styles/RadioButton.css';
+import Flex from './Flex';
+import { RadioGroupContext } from './RadioGroup';
 
 type Props = {
+	value: number;
 	children?: ReactNode;
-	isChecked?: boolean;
-	onChange?: (checked: boolean) => void;
-	additionalChange?: (checked: boolean) => void;
-	allOnChanges?: ((checked: boolean) => void)[];
 };
 
-function RadioButton({ children, isChecked = false, onChange, additionalChange, allOnChanges }: Props) {
-	const handleClick = () => {
-		if (onChange && !isChecked) {
-			onChange(true);
-			additionalChange?.(true);
-			if (allOnChanges) {
-				for (const onChangeOther of allOnChanges) {
-					if (onChange !== onChangeOther) {
-						onChangeOther(false);
-					}
-				}
-			}
-		}
+function RadioButton({ value, children }: Props) {
+	const { selected, onChange } = React.useContext(RadioGroupContext);
+
+	const checked = value === selected;
+
+	const handleChange = () => {
+		onChange(value);
 	};
 
 	return (
-		<label className='radiobutton' onClick={handleClick}>
-			<div className={Utils.getClassName({ checked: isChecked }, 'square')} />
-			{children}
+		<label className='radiobutton'>
+			<Flex spaced centerV>
+				<input
+					type='radio'
+					value={value}
+					checked={checked}
+					onChange={handleChange}
+					className={Utils.getClassName({ checked })}
+				/>
+				<p>{children}</p>
+			</Flex>
 		</label>
 	);
 }

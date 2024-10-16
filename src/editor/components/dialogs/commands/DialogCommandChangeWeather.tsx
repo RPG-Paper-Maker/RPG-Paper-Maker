@@ -11,15 +11,12 @@
 
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Constants, DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
+import { Constants, EVENT_COMMAND_KIND, Utils } from '../../../common';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import { MapObjectCommandType } from '../../../models';
-import Checkbox from '../../Checkbox';
-import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
-import Form, { Label, Value } from '../../Form';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
@@ -31,7 +28,7 @@ type Props = {
 	onReject: () => void;
 };
 
-function DialogCommandShakeScreen({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandChangeWeather({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
 	const [offset] = useStateDynamicValue();
@@ -80,45 +77,14 @@ function DialogCommandShakeScreen({ isOpen, setIsOpen, list, onAccept, onReject 
 
 	return (
 		<Dialog
-			title={`${t('shake.screen')}...`}
+			title={`${t('input.number')}...`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>
-			<Flex column spacedLarge>
-				<Form>
-					<Label>{t('offset')}</Label>
-					<Value>
-						<Flex spaced>
-							<DynamicValueSelector value={offset} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
-							{t('pixel.s').toLowerCase()}
-						</Flex>
-					</Value>
-					<Label>{t('shakes.number')}</Label>
-					<Value>
-						<Flex spaced>
-							<DynamicValueSelector
-								value={shakesNumber}
-								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
-							/>
-							{t('per.second').toLowerCase()}
-						</Flex>
-					</Value>
-				</Form>
-				<Checkbox isChecked={isWaitingEndCommand} onChange={setIsWaitingEndCommand}>
-					{t('wait.end.change.before.next.command')}
-				</Checkbox>
-				<Flex>
-					<Flex one />
-					<Flex spaced centerV>
-						<div>{t('time')}:</div>
-						<DynamicValueSelector value={time} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
-						<div>{t('seconds')}</div>
-					</Flex>
-				</Flex>
-			</Flex>
+			<Flex column spaced></Flex>
 		</Dialog>
 	);
 }
 
-export default DialogCommandShakeScreen;
+export default DialogCommandChangeWeather;

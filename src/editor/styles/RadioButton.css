@@ -17,16 +17,26 @@
 	user-select: none;
 	white-space: nowrap;
 
-	.square {
-		background-color: white;
-		width: 8px;
-		height: 8px;
-		cursor: pointer;
-		border-radius: 5px;
+	input {
+		appearance: none;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		width: 13px;
+		height: 13px;
 		border: 2px solid white;
+		border-radius: 100%;
+		background-color: transparent;
+		position: relative;
+		box-shadow: 0 0 0 1px var(--lightest-bg-color);
+		margin-bottom: 3px;
+		cursor: pointer;
 
 		&.checked {
 			background-color: var(--primary-color);
 		}
+	}
+
+	p {
+		cursor: pointer;
 	}
 }
