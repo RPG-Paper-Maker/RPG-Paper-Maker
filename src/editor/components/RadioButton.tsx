@@ -18,19 +18,22 @@ import { RadioGroupContext } from './RadioGroup';
 type Props = {
 	value: number;
 	children?: ReactNode;
+	disabled?: boolean;
 };
 
-function RadioButton({ value, children }: Props) {
+function RadioButton({ value, children, disabled = false }: Props) {
 	const { selected, onChange } = React.useContext(RadioGroupContext);
 
 	const checked = value === selected;
 
 	const handleChange = () => {
-		onChange(value);
+		if (!disabled) {
+			onChange(value);
+		}
 	};
 
 	return (
-		<label className='radiobutton'>
+		<label className={Utils.getClassName({ disabled }, 'radiobutton')}>
 			<Flex spaced centerV>
 				<input
 					type='radio'

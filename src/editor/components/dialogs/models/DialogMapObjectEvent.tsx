@@ -47,7 +47,7 @@ function DialogMapObjectEvent({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 	const [eventSystemID, setEventSystemID] = useStateNumber();
 	const [eventUserID, setEventUserID] = useStateNumber();
 	const [parameters, setParameters] = useState<Node[]>([]);
-	const [selectionType, setSelectionType] = useState(SELECTION_TYPE.SYSTEM);
+	const [selectionType, setSelectionType] = useStateNumber();
 
 	const initialize = () => {
 		if (isNew) {
@@ -114,7 +114,7 @@ function DialogMapObjectEvent({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 				onClose={handleReject}
 			>
 				<Flex column spacedLarge>
-					<RadioGroup value={selectionType} onChange={setSelectionType}>
+					<RadioGroup selected={selectionType} onChange={setSelectionType}>
 						<Form>
 							<Label>
 								<RadioButton value={SELECTION_TYPE.SYSTEM}>{t('event.system')}</RadioButton>

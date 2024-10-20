@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 
 export const RadioGroupContext = React.createContext({
 	selected: 0,
@@ -10,21 +10,12 @@ export const RadioGroupContext = React.createContext({
 
 type Props = {
 	children?: ReactNode | ReactNode[];
-	value: number;
+	selected: number;
 	onChange: (v: number) => void;
 };
 
-function RadioGroup({ value, onChange, children }: Props) {
-	const [selected, setSelected] = useState(value);
-
-	const handleChange = (newValue: number) => {
-		setSelected(newValue);
-		onChange(newValue);
-	};
-
-	return (
-		<RadioGroupContext.Provider value={{ selected, onChange: handleChange }}>{children}</RadioGroupContext.Provider>
-	);
+function RadioGroup({ selected, onChange, children }: Props) {
+	return <RadioGroupContext.Provider value={{ selected, onChange }}>{children}</RadioGroupContext.Provider>;
 }
 
 export default RadioGroup;

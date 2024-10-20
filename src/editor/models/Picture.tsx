@@ -105,6 +105,7 @@ class Picture extends Base {
 
 	copy(picture: Picture, additionnalBinding: BindingType[] = []): void {
 		super.copy(picture, Picture.getBindings(additionnalBinding));
+		this.kind = picture.kind;
 		this.jsonCollisions = [...picture.jsonCollisions];
 		this.collisions = picture.collisions?.map((collision) => collision.clone());
 	}

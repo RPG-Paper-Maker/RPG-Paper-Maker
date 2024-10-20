@@ -46,7 +46,7 @@ class Base extends Serializable {
 		Base.create(DYNAMIC_VALUE_KIND.PROPERTY, 'property'),
 		Base.create(DYNAMIC_VALUE_KIND.DATABASE, 'selection'),
 		Base.create(DYNAMIC_VALUE_KIND.TEXT, 'text'),
-		Base.create(DYNAMIC_VALUE_KIND.SCRIPT, 'script'),
+		Base.create(DYNAMIC_VALUE_KIND.FORMULA, 'formula'),
 		Base.create(DYNAMIC_VALUE_KIND.SWITCH, 'switch'),
 		Base.create(DYNAMIC_VALUE_KIND.KEYBOARD, 'keyboard'),
 		Base.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 'number'),
@@ -228,12 +228,6 @@ class Base extends Serializable {
 
 	copy(base: Base, additionnalBinding: BindingType[] = []): void {
 		super.copy(base, Base.getBindings(additionnalBinding));
-	}
-
-	clone(): this {
-		const base = new (this.constructor as { new (): Base })();
-		base.copy(this);
-		return base as this;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

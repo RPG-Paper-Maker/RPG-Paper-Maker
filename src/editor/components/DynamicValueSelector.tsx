@@ -29,8 +29,6 @@ type Props = {
 	disabled?: boolean;
 	onChangeKind?: (k: DYNAMIC_VALUE_KIND) => void;
 	onChangeValue?: (v: unknown) => void;
-	forcedValue?: unknown;
-	setForcedValue?: (v?: unknown) => void;
 	min?: number;
 	max?: number;
 };
@@ -42,8 +40,6 @@ function DynamicValueSelector({
 	disabled = false,
 	onChangeKind,
 	onChangeValue,
-	forcedValue,
-	setForcedValue,
 	min,
 	max,
 }: Props) {
@@ -53,7 +49,11 @@ function DynamicValueSelector({
 			? (value.value as number)
 			: 0
 	);
-	const [valueText, setValueText] = useState(value.kind === DYNAMIC_VALUE_KIND.TEXT ? (value.value as string) : '');
+	const [valueText, setValueText] = useState(
+		value.kind === DYNAMIC_VALUE_KIND.TEXT || value.kind === DYNAMIC_VALUE_KIND.FORMULA
+			? (value.value as string)
+			: ''
+	);
 	const [valueSwitch, setValueSwitch] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.SWITCH ? (value.value as boolean) : true
 	);
@@ -76,6 +76,7 @@ function DynamicValueSelector({
 	const [valueDatabase, setValueDatabase] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.DATABASE ? (value.value as number) : 1
 	);
+	const [forcedValueNumber, setForcedValueNumber] = useState<number | undefined>();
 
 	const getOptions = () => {
 		let list: DYNAMIC_VALUE_KIND[] = [];
@@ -114,6 +115,12 @@ function DynamicValueSelector({
 			case DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE:
 				list = [DYNAMIC_VALUE_KIND.DATABASE, DYNAMIC_VALUE_KIND.NUMBER, DYNAMIC_VALUE_KIND.VARIABLE];
 				break;
+			case DYNAMIC_VALUE_OPTIONS_TYPE.SWITCH:
+				list = [DYNAMIC_VALUE_KIND.SWITCH, DYNAMIC_VALUE_KIND.VARIABLE];
+				break;
+			case DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA:
+				list = [DYNAMIC_VALUE_KIND.FORMULA, DYNAMIC_VALUE_KIND.VARIABLE];
+				break;
 			default:
 				break;
 		}
@@ -122,6 +129,8 @@ function DynamicValueSelector({
 			case DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER:
 			case DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL:
 			case DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE:
+			case DYNAMIC_VALUE_OPTIONS_TYPE.SWITCH:
+			case DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA:
 				if (Project.current!.currentMapObjectParameters.length > 0) {
 					list.push(DYNAMIC_VALUE_KIND.PARAMETER);
 				}
@@ -152,6 +161,7 @@ function DynamicValueSelector({
 				value.value = valueVariableID;
 				break;
 			case DYNAMIC_VALUE_KIND.TEXT:
+			case DYNAMIC_VALUE_KIND.FORMULA:
 				value.value = valueText;
 				break;
 			case DYNAMIC_VALUE_KIND.SWITCH:
@@ -215,6 +225,7 @@ function DynamicValueSelector({
 	useEffect(() => {
 		setKind(value.kind);
 		onChangeKind?.(value.kind);
+		// eslint-disable-next-line
 	}, [value.kind]);
 
 	useEffect(() => {
@@ -222,8 +233,10 @@ function DynamicValueSelector({
 			case DYNAMIC_VALUE_KIND.NUMBER:
 			case DYNAMIC_VALUE_KIND.NUMBER_DECIMAL:
 				setValueNumber(value.value as number);
+				setForcedValueNumber(value.value as number);
 				break;
 			case DYNAMIC_VALUE_KIND.TEXT:
+			case DYNAMIC_VALUE_KIND.FORMULA:
 				setValueText(value.value as string);
 				break;
 			case DYNAMIC_VALUE_KIND.VARIABLE:
@@ -241,6 +254,9 @@ function DynamicValueSelector({
 			case DYNAMIC_VALUE_KIND.DATABASE:
 				setValueDatabase(value.value as number);
 				break;
+			case DYNAMIC_VALUE_KIND.SWITCH:
+				setValueSwitch(value.value as boolean);
+				break;
 		}
 		onChangeValue?.(value.value);
 		// eslint-disable-next-line
@@ -257,8 +273,8 @@ function DynamicValueSelector({
 						widthType={INPUT_TYPE_WIDTH.FILL}
 						decimals={kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL}
 						disabled={disabled}
-						forcedValue={forcedValue as number | undefined}
-						setForcedValue={setForcedValue}
+						forcedValue={forcedValueNumber}
+						setForcedValue={setForcedValueNumber}
 						min={min}
 						max={max}
 					/>
@@ -272,6 +288,7 @@ function DynamicValueSelector({
 					/>
 				);
 			case DYNAMIC_VALUE_KIND.TEXT:
+			case DYNAMIC_VALUE_KIND.FORMULA:
 				return (
 					<InputText
 						value={valueText}

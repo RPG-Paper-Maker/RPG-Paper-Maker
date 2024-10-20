@@ -38,5 +38,22 @@
 
 	p {
 		cursor: pointer;
+		margin: 0;
+	}
+
+	&.disabled {
+		cursor: default;
+
+		input {
+			cursor: default;
+
+			&.checked {
+				background-color: var(--lightest-bg-color);
+			}
+		}
+
+		p {
+			cursor: default;
+		}
 	}
 }

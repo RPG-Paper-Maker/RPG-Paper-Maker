@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Serializable } from './Serializable';
 import { Project, Rectangle } from '.';
 import { BINDING, BindingType, JSONType } from '../common';
+import { Serializable } from './Serializable';
 
 class CollisionSquare extends Serializable {
 	public rect: Rectangle;
@@ -56,12 +56,6 @@ class CollisionSquare extends Serializable {
 		this.bot = collision.bot;
 		this.terrain = collision.terrain;
 		this.climbing = collision.climbing;
-	}
-
-	clone(): CollisionSquare {
-		const collision = new CollisionSquare();
-		collision.copy(this);
-		return collision;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState } from 'react';
 import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import useStateBool from '../hooks/useStateBool';
@@ -27,7 +26,6 @@ type Props = {
 
 function SliderDynamic({ dynamic, min, max, step }: Props) {
 	const [valueSlide, setValueSlide] = useStateNumber();
-	const [forcedInput, setForcedInput] = useState<unknown>();
 	const [disabled, setDisabled] = useStateBool();
 
 	const canDisable = (k: DYNAMIC_VALUE_KIND) => k !== DYNAMIC_VALUE_KIND.NUMBER;
@@ -45,7 +43,6 @@ function SliderDynamic({ dynamic, min, max, step }: Props) {
 	const handleChangeValueSlide = (v: number) => {
 		handleChangeValue(v);
 		dynamic.value = v;
-		setForcedInput(v);
 	};
 
 	return (
@@ -63,8 +60,6 @@ function SliderDynamic({ dynamic, min, max, step }: Props) {
 				optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
 				onChangeKind={handleChangeKind}
 				onChangeValue={handleChangeValue}
-				forcedValue={forcedInput}
-				setForcedValue={setForcedInput}
 				min={min}
 				max={max}
 			/>

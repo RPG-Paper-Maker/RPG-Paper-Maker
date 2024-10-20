@@ -162,12 +162,6 @@ class Node extends Serializable {
 		this.updateParents();
 	}
 
-	clone(): Node {
-		const node = new Node();
-		node.copy(this);
-		return node;
-	}
-
 	getPath(includesRoot = true): string {
 		return `${
 			this.parent ? `${this.parent.getPath(includesRoot)}${this.parent.parent || includesRoot ? '/' : ''}` : ''

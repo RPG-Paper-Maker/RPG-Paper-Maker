@@ -17,11 +17,12 @@ type Props = {
 	children?: ReactNode;
 	title?: string;
 	fillWidth?: boolean;
+	disabled?: boolean;
 };
 
-function Groupbox({ children, title = '', fillWidth = false }: Props) {
+function Groupbox({ children, title = '', fillWidth = false, disabled = false }: Props) {
 	return (
-		<fieldset className={Utils.getClassName({ 'fill-width': fillWidth })}>
+		<fieldset className={Utils.getClassName({ 'fill-width': fillWidth, disabled })}>
 			<legend>{title}</legend>
 			{children}
 		</fieldset>

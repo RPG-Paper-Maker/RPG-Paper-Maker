@@ -368,6 +368,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS:
 			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
+			case EVENT_COMMAND_KIND.CHANGE_WEATHER:
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -446,6 +447,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
 				texts = this.toStringShakeScreen(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.CHANGE_WEATHER:
+				texts = this.toStringChangeWeather(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -480,9 +484,10 @@ class MapObjectCommand extends Base {
 			case DYNAMIC_VALUE_KIND.NUMBER:
 			case DYNAMIC_VALUE_KIND.NUMBER_DECIMAL:
 			case DYNAMIC_VALUE_KIND.TEXT:
+			case DYNAMIC_VALUE_KIND.FORMULA:
 				return '' + value;
 			case DYNAMIC_VALUE_KIND.SWITCH:
-				return value === 1 ? 'ON' : 'OFF';
+				return value ? 'ON' : 'OFF';
 			case DYNAMIC_VALUE_KIND.KEYBOARD: {
 				const keyboard = Project.current!.keyboard.getByID(value as number);
 				return `${i18next.t('keyboard')} ${keyboard?.toString() ?? value}`;
@@ -684,6 +689,76 @@ class MapObjectCommand extends Base {
 		texts.push(`${i18next.t('offset')}: ${offset} ${i18next.t('pixel.s').toLowerCase()}`);
 		const shakesNumber = this.toStringDynamicValue(iterator, properties, parameters);
 		texts.push(`${i18next.t('shakes.number')}: ${shakesNumber} ${i18next.t('per.second').toLowerCase()}`);
+		let time = '';
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			time += `[${i18next.t('wait.end')}] `;
+		}
+		time += `${i18next.t('time').toUpperCase()}: ${this.toStringDynamicValue(
+			iterator,
+			properties,
+			parameters
+		)} ${i18next.t('seconds').toLowerCase()}`;
+		texts.push(time);
+		return texts;
+	}
+
+	toStringChangeWeather(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts = [];
+		switch (this.command[iterator.i++] as number) {
+			case 0:
+				texts.push(i18next.t('none'));
+				break;
+			case 1: {
+				texts.push(i18next.t('custom'));
+				let texture = `${i18next.t('texture')}: `;
+				switch (this.command[iterator.i++] as number) {
+					case 0:
+						texture += `${i18next.t('color.id')} ${this.toStringDynamicValue(
+							iterator,
+							properties,
+							parameters,
+							Project.current!.systems.colors
+						)}`;
+						break;
+					case 1:
+						texture += `${i18next.t('image')} ${this.toStringDynamicValue(
+							iterator,
+							properties,
+							parameters,
+							Project.current!.systems.colors,
+							true
+						)}`;
+						break;
+				}
+				texts.push(texture);
+				texts.push(
+					`${i18next.t('number.per.portion')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
+				);
+				texts.push(
+					`${i18next.t('ray.portions')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
+				);
+				texts.push(`${i18next.t('size')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
+				texts.push(`DepthTest: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
+				texts.push(`DepthWrite: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
+				texts.push(
+					`${i18next.t('initial.velocity')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
+				);
+				texts.push(
+					`${i18next.t('velocity.addition')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
+				);
+				texts.push(
+					`${i18next.t('initial.y.rotation')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
+				);
+				texts.push(
+					`${i18next.t('y.rotation.addition')}: ${this.toStringDynamicValue(
+						iterator,
+						properties,
+						parameters
+					)}`
+				);
+				break;
+			}
+		}
 		let time = '';
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			time += `[${i18next.t('wait.end')}] `;

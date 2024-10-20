@@ -208,6 +208,7 @@ class Shape extends Base {
 
 	copy(shape: Shape, additionnalBinding: BindingType[] = []): void {
 		super.copy(shape, Shape.getBindings(additionnalBinding));
+		this.kind = shape.kind;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

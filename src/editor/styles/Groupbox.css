@@ -14,6 +14,10 @@ fieldset {
 	background-color: var(--darker-bg-color);
 	padding: 8px;
 	border-radius: 4px;
+
+	&.disabled {
+		color: var(--lighter-bg-color);
+	}
 }
 
 legend {

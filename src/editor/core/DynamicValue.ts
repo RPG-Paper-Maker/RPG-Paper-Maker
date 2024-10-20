@@ -11,7 +11,7 @@
 
 import i18next from 'i18next';
 import { Project, Serializable } from '.';
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, ITERATOR, JSONType } from '../common';
+import { BINDING, BindingType, Constants, DYNAMIC_VALUE_KIND, ITERATOR, JSONType, Utils } from '../common';
 import { Model } from '../Editor';
 import { MapObjectCommandType } from '../models';
 
@@ -23,6 +23,7 @@ class DynamicValue extends Serializable {
 	public x!: DynamicValue;
 	public y!: DynamicValue;
 	public z!: DynamicValue;
+	public isActivated = false;
 
 	public static readonly bindings: BindingType[] = [
 		['kind', 'k', undefined, BINDING.NUMBER],
@@ -45,14 +46,20 @@ class DynamicValue extends Serializable {
 		this.value = value;
 	}
 
-	updateCommand(command: MapObjectCommandType[], iterator: ITERATOR) {
+	updateCommand(command: MapObjectCommandType[], iterator: ITERATOR, active = false) {
 		this.kind = command[iterator.i++] as DYNAMIC_VALUE_KIND;
 		this.value = command[iterator.i++];
+		if (active) {
+			this.isActivated = Utils.numToBool(command[iterator.i++] as number);
+		}
 	}
 
-	getCommand(command: MapObjectCommandType[]) {
+	getCommand(command: MapObjectCommandType[], active = false) {
 		command.push(this.kind);
 		command.push(this.value as MapObjectCommandType);
+		if (active) {
+			command.push(this.isActivated ? Constants.NUM_BOOL_TRUE : Constants.NUM_BOOL_FALSE);
+		}
 	}
 
 	updateToDefaultText(text = '') {
@@ -67,8 +74,16 @@ class DynamicValue extends Serializable {
 		this.update(DYNAMIC_VALUE_KIND.VARIABLE, n);
 	}
 
-	updateToDefaultDatabase() {
-		this.update(DYNAMIC_VALUE_KIND.DATABASE, 1);
+	updateToDefaultDatabase(db = 1) {
+		this.update(DYNAMIC_VALUE_KIND.DATABASE, db);
+	}
+
+	updateToDefaultSwitch(b = true) {
+		this.update(DYNAMIC_VALUE_KIND.SWITCH, b);
+	}
+
+	updateToDefaultFormula(formula = '') {
+		this.update(DYNAMIC_VALUE_KIND.FORMULA, formula);
 	}
 
 	equals(dynamic: DynamicValue): boolean {
@@ -102,12 +117,7 @@ class DynamicValue extends Serializable {
 	copy(dynamic: DynamicValue): void {
 		this.kind = dynamic.kind;
 		this.value = dynamic.value;
-	}
-
-	clone(): DynamicValue {
-		const dynamic = new DynamicValue();
-		dynamic.copy(this);
-		return dynamic;
+		this.isActivated = dynamic.isActivated;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

@@ -50,8 +50,10 @@ class Serializable {
 		}
 	}
 
-	clone(): Serializable {
-		return this;
+	clone(): this {
+		const serializable = new (this.constructor as { new (): Serializable })();
+		serializable.copy(this);
+		return serializable as this;
 	}
 
 	// eslint-disable-next-line

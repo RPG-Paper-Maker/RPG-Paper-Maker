@@ -12,17 +12,20 @@
 import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaAngleDoubleLeft } from 'react-icons/fa';
-import { BUTTON_TYPE } from '../../common';
+import { BUTTON_TYPE, DYNAMIC_VALUE_OPTIONS_TYPE } from '../../common';
 import { Node, Project } from '../../core';
+import { DynamicValue } from '../../core/DynamicValue';
 import { Model } from '../../Editor';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
+import DynamicValueSelector from '../DynamicValueSelector';
 import Flex from '../Flex';
 import Tree, { TREES_MIN_WIDTH } from '../Tree';
 
 type Props = {
 	constructorType?: typeof Model.Base;
 	assetID?: number;
+	dynamicValueID?: DynamicValue;
 	list: Node[];
 	setList: (nodes: Node[]) => void;
 	itemsAvailable?: Node[];
@@ -35,11 +38,13 @@ type Props = {
 	onRefresh?: () => void;
 	content: ReactNode;
 	options?: ReactNode;
+	active?: boolean;
 };
 
 function PanelAssetsPreviewer({
 	constructorType = Model.Base,
 	assetID,
+	dynamicValueID,
 	list,
 	setList,
 	itemsAvailable,
@@ -52,12 +57,14 @@ function PanelAssetsPreviewer({
 	onRefresh,
 	content,
 	options,
+	active = false,
 }: Props) {
 	const { t } = useTranslation();
 
 	const [showAvailableContent, setShowAvailableContent] = useState(Project.current!.settings.showAvailableContent);
 	const [forcedCurrentSelectedItemIDLeft, setForcedCurrentSelectedItemIDLeft] = useState<number | null>(null);
 	const [forcedCurrentSelectedItemIDRight, setForcedCurrentSelectedItemIDRight] = useState<number | null>(null);
+	const [isCheckedActivated, setIsCheckedActivated] = useState(dynamicValueID?.isActivated);
 
 	const handleChangePicturesShowAvailableContent = async (b: boolean) => {
 		setShowAvailableContent(b);
@@ -94,6 +101,10 @@ function PanelAssetsPreviewer({
 			setForcedCurrentSelectedItemIDLeft(newItem.id);
 			handleChangeSelectedItemLeft(node);
 		}
+	};
+	const handleChangeActivated = (b: boolean) => {
+		setIsCheckedActivated(b);
+		dynamicValueID!.isActivated = b;
 	};
 
 	return (
@@ -181,6 +192,18 @@ function PanelAssetsPreviewer({
 					</Flex>
 				</Flex>
 			</Flex>
+			{active && dynamicValueID && (
+				<Flex spaced>
+					<Checkbox isChecked={isCheckedActivated} onChange={handleChangeActivated}>
+						{t('select.picture.id')}:
+					</Checkbox>
+					<DynamicValueSelector
+						value={dynamicValueID}
+						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+						disabled={!isCheckedActivated}
+					/>
+				</Flex>
+			)}
 		</Flex>
 	);
 }

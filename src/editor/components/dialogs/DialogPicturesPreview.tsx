@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { PICTURE_KIND } from '../../common';
 import { Platform } from '../../common/Platform';
 import { Node, Project, Rectangle } from '../../core';
+import { DynamicValue } from '../../core/DynamicValue';
 import { Model, Scene } from '../../Editor';
 import Checkbox from '../Checkbox';
 import Flex from '../Flex';
@@ -31,11 +32,13 @@ type Props = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	pictureID?: number;
+	dynamicPictureID?: DynamicValue;
 	indexX?: number;
 	indexY?: number;
 	rectTileset?: Rectangle;
 	onAccept?: (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => void;
 	onReject?: () => void;
+	active?: boolean;
 };
 
 function DialogPicturesPreview({
@@ -43,11 +46,13 @@ function DialogPicturesPreview({
 	isOpen,
 	setIsOpen,
 	pictureID,
+	dynamicPictureID,
 	indexX,
 	indexY,
 	rectTileset,
 	onAccept,
 	onReject,
+	active = false,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -61,9 +66,11 @@ function DialogPicturesPreview({
 	const [isStopAnimation, setIsStopAnimation] = useState(false);
 	const [isClimbAnimation, setIsClimbAnimation] = useState(false);
 	const [isSelectedLeftList, setIsSelectedLeftList] = useState(true);
+	const [newDynamicPictureID, setNewDynamicPictureID] = useState(dynamicPictureID);
 
 	const initialize = () => {
 		setIsInitiating(true);
+		setNewDynamicPictureID(dynamicPictureID?.clone());
 		setIsSelectedLeftList(true);
 		setPictures(Node.createList(Project.current!.pictures.getList(kind)));
 		let rect = new Rectangle();
@@ -155,6 +162,14 @@ function DialogPicturesPreview({
 					: new Rectangle(selectedRect.x / selectedRect.width, selectedRect.y / selectedRect.height),
 				isTileset
 			);
+
+			if (active) {
+				if (!newDynamicPictureID!.isActivated) {
+					dynamicPictureID!.updateToDefaultNumber(selectedPicture.id);
+				} else {
+					dynamicPictureID!.copy(newDynamicPictureID!);
+				}
+			}
 			setIsOpen(false);
 			reset();
 		}
@@ -272,6 +287,7 @@ function DialogPicturesPreview({
 			>
 				<PanelAssetsPreviewer
 					assetID={pictureID}
+					dynamicValueID={newDynamicPictureID}
 					list={pictures}
 					setList={setPictures}
 					itemsAvailable={picturesAvailable}
@@ -284,6 +300,7 @@ function DialogPicturesPreview({
 					onRefresh={handleRefresh}
 					content={getPreviewerContent()}
 					options={getPreviewerOptionsContent()}
+					active={active}
 				/>
 			</Dialog>
 			<Dialog
