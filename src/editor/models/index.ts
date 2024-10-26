@@ -1,5 +1,6 @@
 export * from './Autotile';
 export * from './Base';
+export * from './CameraProperty';
 export * from './Color';
 export * from './CommonEvent';
 export * from './CommonObject';
@@ -24,6 +25,8 @@ export * from './Object3D';
 export * from './Picture';
 export * from './ProjectPreview';
 export * from './Shape';
+export * from './Skybox';
+export * from './Song';
 export * from './SpecialElement';
 export * from './SpeedFrequency';
 export * from './Tileset';

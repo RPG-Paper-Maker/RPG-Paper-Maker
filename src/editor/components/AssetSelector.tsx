@@ -12,7 +12,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AiOutlinePicture } from 'react-icons/ai';
 import { BiPyramid } from 'react-icons/bi';
-import { CUSTOM_SHAPE_KIND, DYNAMIC_VALUE_KIND, PICTURE_KIND } from '../common';
+import { BsMusicNote } from 'react-icons/bs';
+import { CUSTOM_SHAPE_KIND, DYNAMIC_VALUE_KIND, PICTURE_KIND, SONG_KIND } from '../common';
 import { Node, Project, Rectangle } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Model } from '../Editor';
@@ -20,12 +21,14 @@ import '../styles/GraphicsSelector.css';
 import Button from './Button';
 import DialogPicturesPreview from './dialogs/DialogPicturesPreview';
 import DialogShapesPreview from './dialogs/DialogShapesPreview';
+import DialogSongsPreview from './dialogs/DialogSongsPreview';
 import Flex from './Flex';
 import Tree, { TREES_MIN_WIDTH } from './Tree';
 
 export enum ASSET_SELECTOR_TYPE {
 	PICTURES,
 	SHAPES,
+	SONGS,
 }
 
 type Props = {
@@ -42,6 +45,7 @@ type Props = {
 
 const DEFAULT_PICTURE_KIND = PICTURE_KIND.PICTURES;
 const DEFAULT_CUSTOM_SHAPE_KIND = CUSTOM_SHAPE_KIND.OBJ;
+const DEFAULT_SONG_KIND = SONG_KIND.MUSIC;
 
 function AssetSelector({
 	selectionType,
@@ -67,6 +71,9 @@ function AssetSelector({
 				break;
 			case ASSET_SELECTOR_TYPE.SHAPES:
 				base = Project.current!.shapes.getByID(kind ?? DEFAULT_CUSTOM_SHAPE_KIND, getSelectedID());
+				break;
+			case ASSET_SELECTOR_TYPE.SONGS:
+				base = Project.current!.songs.getByID(kind ?? DEFAULT_SONG_KIND, getSelectedID());
 				break;
 		}
 		return Node.create(base ? base : Model.Base.create(-1, '<NONE>'));
@@ -96,6 +103,15 @@ function AssetSelector({
 		setList([Node.create(shape)]);
 	};
 
+	const handleAcceptSong = (song: Model.Song) => {
+		onChange?.(song.id, 0, 0);
+		setList([
+			Node.create(
+				active && selectedDynamic!.isActivated ? Model.Base.create(-1, selectedDynamic!.toString()) : song
+			),
+		]);
+	};
+
 	useEffect(() => {
 		setList([
 			selectedDynamic && selectedDynamic.kind !== DYNAMIC_VALUE_KIND.NUMBER
@@ -111,6 +127,8 @@ function AssetSelector({
 				return <AiOutlinePicture />;
 			case ASSET_SELECTOR_TYPE.SHAPES:
 				return <BiPyramid />;
+			case ASSET_SELECTOR_TYPE.SONGS:
+				return <BsMusicNote />;
 		}
 	};
 
@@ -137,6 +155,17 @@ function AssetSelector({
 						kind={kind ?? DEFAULT_CUSTOM_SHAPE_KIND}
 						{...options}
 						onAccept={handleAcceptShape}
+					/>
+				);
+			case ASSET_SELECTOR_TYPE.SONGS:
+				return (
+					<DialogSongsPreview
+						songID={getSelectedID()}
+						dynamicSongID={selectedDynamic}
+						kind={kind ?? DEFAULT_SONG_KIND}
+						{...options}
+						onAccept={handleAcceptSong}
+						active={active}
 					/>
 				);
 		}

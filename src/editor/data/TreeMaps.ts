@@ -12,7 +12,7 @@
 import i18next from 'i18next';
 import { Model } from '../Editor';
 import { BINDING, BindingType, JSONType, Paths, Utils } from '../common';
-import { Project, Serializable, Node } from '../core';
+import { Node, Project, Serializable } from '../core';
 
 class TreeMaps extends Serializable {
 	public static readonly JSON_TREE = 'tree';
@@ -70,6 +70,27 @@ class TreeMaps extends Serializable {
 	async saveAllTags() {
 		await this.saveAllTagsRecursive(this.tree);
 		await this.save();
+	}
+
+	private getAllMapsNodes(nodes: Node[], list: Model.Base[], basePath = '', level = 0) {
+		for (const node of nodes) {
+			if (node.children.length > 0) {
+				this.getAllMapsNodes(
+					node.children,
+					list,
+					level === 0 ? '' : `${basePath}${node.content.name}/`,
+					level + 1
+				);
+			} else {
+				list.push(Model.Base.create(node.content.id, `${basePath}${node.content.name}`));
+			}
+		}
+	}
+
+	getAllMapsList(): Model.Base[] {
+		const list: Model.Base[] = [Model.Base.create(-1, i18next.t('this.map'))];
+		this.getAllMapsNodes(this.tree, list);
+		return list;
 	}
 
 	readRoot(json: JSONType[], root: Node) {

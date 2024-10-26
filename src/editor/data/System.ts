@@ -35,6 +35,8 @@ class System extends Serializable {
 	public fontNames!: Model.FontName[];
 	public colors!: Model.Color[];
 	public windowSkins!: Model.WindowSkin[];
+	public cameraProperties!: Model.CameraProperty[];
+	public skyboxes!: Model.Skybox[];
 	public json!: JSONType; // TEMP, will be removed later
 
 	public static readonly bindings: BindingType[] = [
@@ -56,6 +58,8 @@ class System extends Serializable {
 		['fontNames', 'fn', [], BINDING.LIST, Model.FontName],
 		['colors', 'colors', [], BINDING.LIST, Model.Color],
 		['windowSkins', 'wskins', [], BINDING.LIST, Model.WindowSkin],
+		['cameraProperties', 'cp', [], BINDING.LIST, Model.CameraProperty],
+		['skyboxes', 'sb', [], BINDING.LIST, Model.Skybox],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

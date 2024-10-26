@@ -446,3 +446,11 @@ export enum LANGUAGE_KIND {
 	CHINESE,
 	KOREAN,
 }
+
+export enum SONG_KIND {
+	NONE,
+	MUSIC,
+	BACKGROUND_SOUND,
+	SOUND,
+	MUSIC_EFFECT,
+}

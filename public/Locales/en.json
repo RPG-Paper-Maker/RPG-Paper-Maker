@@ -2060,5 +2060,6 @@
 	"warning.could.not.copy.map.created.empty": "Could not copy map at {{path}}. Created an empty one.",
 	"introduction": "Introduction",
 	"edit.object": "Edit object",
-	"warning.asset.selection": "Select an asset in the left list to confirm."
+	"warning.asset.selection": "Select an asset in the left list to confirm.",
+	"select.by.id": "Select by ID"
 }

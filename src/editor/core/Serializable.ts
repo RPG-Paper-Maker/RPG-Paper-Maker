@@ -29,7 +29,7 @@ class Serializable {
 				case BINDING.POSITION:
 				case BINDING.RECTANGLE: {
 					const value = serializable[name as keyof Serializable] as unknown;
-					(this as JSONType)[name] = value === null ? null : (value as Serializable).clone();
+					(this as JSONType)[name] = value ? (value as Rectangle).clone() : value;
 					break;
 				}
 				case BINDING.LIST:

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { EVENT_COMMAND_KIND } from '../../../common';
 import { Model } from '../../../Editor';
@@ -18,6 +18,7 @@ import Button from '../../Button';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tab from '../../Tab';
+import DialogCommandChangeMapProperties from '../commands/DialogCommandChangeMapProperties';
 import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreenTone';
 import DialogCommandChangeWeather from '../commands/DialogCommandChangeWeather';
 import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
@@ -33,9 +34,10 @@ type Props = {
 	model: Model.Base;
 	isNew: boolean;
 	onAccept: () => void;
+	onReject: () => void;
 };
 
-function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept }: Props) {
+function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: Props) {
 	const command = model as MapObjectCommand;
 
 	const { t } = useTranslation();
@@ -46,6 +48,11 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept }: P
 	const initialize = () => {
 		setIsOpenCommand(!isNew);
 		setSelectedCommand(isNew ? undefined : command.kind);
+	};
+
+	const reset = () => {
+		setIsOpenCommand(false);
+		setSelectedCommand(undefined);
 	};
 
 	const handleClickOpenCommand = (kind: EVENT_COMMAND_KIND, isOpeningCommand: boolean) => {
@@ -73,11 +80,14 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept }: P
 
 	const handleReject = async () => {
 		setIsOpen(false);
+		onReject();
 	};
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (isOpen) {
 			initialize();
+		} else {
+			reset();
 		}
 		// eslint-disable-next-line
 	}, [isOpen]);
@@ -288,6 +298,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept }: P
 				return <DialogCommandShakeScreen {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_WEATHER:
 				return <DialogCommandChangeWeather {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_MAP_PROPERTIES:
+				return <DialogCommandChangeMapProperties {...options} />;
 			default:
 				return null;
 		}

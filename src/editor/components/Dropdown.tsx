@@ -51,6 +51,7 @@ type Props = {
 	fillWidth?: boolean;
 	noSelectionName?: string;
 	noWidthChange?: boolean;
+	width?: string;
 };
 
 function Dropdown({
@@ -64,6 +65,7 @@ function Dropdown({
 	fillWidth = false,
 	noSelectionName = '',
 	noWidthChange = false,
+	width,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -136,7 +138,7 @@ function Dropdown({
 			)}px`;
 			if (fillWidth) {
 				container.style.minWidth = v;
-			} else {
+			} else if (width === undefined) {
 				container.style.width = v;
 			}
 		}
@@ -206,6 +208,7 @@ function Dropdown({
 	return (
 		<div
 			className={Utils.getClassName({ open: isOpen, disabled, 'fill-width': fillWidth }, 'dropdown')}
+			style={{ width }}
 			ref={containerRef}
 			onClick={handleClick}
 		>

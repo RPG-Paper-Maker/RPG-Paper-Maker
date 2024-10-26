@@ -47,7 +47,16 @@ import { RiSwordLine, RiTeamLine } from 'react-icons/ri';
 import { TbImageInPicture, TbMoneybag, TbNumber123, TbNumbers, TbTexture } from 'react-icons/tb';
 import { TiArrowLoop } from 'react-icons/ti';
 import { VscSymbolProperty } from 'react-icons/vsc';
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, EVENT_COMMAND_KIND, ITERATOR, JSONType, Utils } from '../common';
+import {
+	BINDING,
+	BindingType,
+	DYNAMIC_VALUE_KIND,
+	EVENT_COMMAND_KIND,
+	ITERATOR,
+	JSONType,
+	SONG_KIND,
+	Utils,
+} from '../common';
 import Flex from '../components/Flex';
 import { Project } from '../core';
 import { Base } from './Base';
@@ -369,6 +378,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
 			case EVENT_COMMAND_KIND.CHANGE_WEATHER:
+			case EVENT_COMMAND_KIND.CHANGE_MAP_PROPERTIES:
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -450,6 +460,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_WEATHER:
 				texts = this.toStringChangeWeather(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.CHANGE_MAP_PROPERTIES:
+				texts = this.toStringChangeMapProperties(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -510,6 +523,16 @@ class MapObjectCommand extends Base {
 			}
 			default:
 				return '';
+		}
+	}
+
+	toStringMap(iterator: ITERATOR, properties: Base[], parameters: Base[]): string {
+		switch (this.command[iterator.i + 1]) {
+			case -1:
+				iterator.i += 2;
+				return i18next.t('this.map');
+			default:
+				return this.toStringDynamicValue(iterator, properties, parameters);
 		}
 	}
 
@@ -769,6 +792,76 @@ class MapObjectCommand extends Base {
 			parameters
 		)} ${i18next.t('seconds').toLowerCase()}`;
 		texts.push(time);
+		return texts;
+	}
+
+	toStringChangeMapProperties(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts = [];
+		texts.push(this.toStringMap(iterator, properties, parameters));
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			texts.push(
+				`${i18next.t('tileset.id')}: ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.tilesets.list
+				)}`
+			);
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			texts.push(
+				`${i18next.t('music')}: ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.songs.getList(SONG_KIND.MUSIC),
+					true
+				)}`
+			);
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			texts.push(
+				`${i18next.t('background.sound')}: ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.songs.getList(SONG_KIND.BACKGROUND_SOUND),
+					true
+				)}`
+			);
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			texts.push(
+				`${i18next.t('camera.properties.id')}: ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.systems.cameraProperties
+				)}`
+			);
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			let sky = `${i18next.t('sky')}: `;
+			switch (this.command[iterator.i++] as number) {
+				case 0:
+					sky += `${i18next.t('color.id').toLowerCase()} ${this.toStringDynamicValue(
+						iterator,
+						properties,
+						parameters,
+						Project.current!.systems.colors
+					)}`;
+					break;
+				case 1:
+					sky += `${i18next.t('skybox.id').toLowerCase()} ${this.toStringDynamicValue(
+						iterator,
+						properties,
+						parameters,
+						Project.current!.systems.skyboxes
+					)}`;
+					break;
+			}
+			texts.push(sky);
+		}
 		return texts;
 	}
 

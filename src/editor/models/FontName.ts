@@ -20,7 +20,13 @@ class FontName extends Base {
 
 	public static bindings: BindingType[] = [
 		['isBasic', 'isBasic', true, BINDING.BOOLEAN],
-		['font', 'f', DynamicValue.create(DYNAMIC_VALUE_KIND.TEXT, Constants.DEFAULT_FONT_NAME), BINDING.DYNAMIC_VALUE],
+		[
+			'font',
+			'f',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.TEXT, Constants.DEFAULT_FONT_NAME),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
 		['customFontID', 'customFontID', 1, BINDING.NUMBER],
 	];
 

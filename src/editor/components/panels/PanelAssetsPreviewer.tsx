@@ -195,7 +195,7 @@ function PanelAssetsPreviewer({
 			{active && dynamicValueID && (
 				<Flex spaced>
 					<Checkbox isChecked={isCheckedActivated} onChange={handleChangeActivated}>
-						{t('select.picture.id')}:
+						{t('select.by.id')}:
 					</Checkbox>
 					<DynamicValueSelector
 						value={dynamicValueID}

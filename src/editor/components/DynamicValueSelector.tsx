@@ -22,6 +22,8 @@ import InputNumber from './InputNumber';
 import InputText from './InputText';
 import VariableSelector from './VariableSelector';
 
+const INPUT_WIDTH = '200px';
+
 type Props = {
 	value: DynamicValue;
 	optionsType: DYNAMIC_VALUE_OPTIONS_TYPE;
@@ -315,7 +317,7 @@ function DynamicValueSelector({
 						options={Project.current!.keyboard.list}
 						disabled={disabled}
 						displayIDs
-						fillWidth
+						width={INPUT_WIDTH}
 					/>
 				);
 			case DYNAMIC_VALUE_KIND.PARAMETER:
@@ -326,7 +328,7 @@ function DynamicValueSelector({
 						options={Project.current!.currentMapObjectParameters}
 						disabled={disabled}
 						displayIDs
-						fillWidth
+						width={INPUT_WIDTH}
 					/>
 				);
 			case DYNAMIC_VALUE_KIND.PROPERTY:
@@ -337,7 +339,7 @@ function DynamicValueSelector({
 						options={Project.current!.currentMapObjectProperties.map((node) => node.content)}
 						disabled={disabled}
 						displayIDs
-						fillWidth
+						width={INPUT_WIDTH}
 					/>
 				);
 			case DYNAMIC_VALUE_KIND.DATABASE:
@@ -348,7 +350,7 @@ function DynamicValueSelector({
 						options={databaseOptions}
 						disabled={disabled}
 						displayIDs
-						fillWidth
+						width={INPUT_WIDTH}
 					/>
 				);
 			default:
