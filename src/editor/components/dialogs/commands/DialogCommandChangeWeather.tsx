@@ -11,7 +11,7 @@
 
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Constants, DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, PICTURE_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, PICTURE_KIND, Utils } from '../../../common';
 import { Project } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
@@ -158,7 +158,7 @@ function DialogCommandChangeWeather({ isOpen, setIsOpen, list, onAccept, onRejec
 			initialYRotation.getCommand(newList);
 			yRotationAddition.getCommand(newList);
 		}
-		newList.push(isWaitingEndCommand ? Constants.NUM_BOOL_TRUE : Constants.NUM_BOOL_FALSE);
+		newList.push(Utils.boolToNum(isWaitingEndCommand));
 		time.getCommand(newList);
 		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHANGE_WEATHER, newList));
 	};

@@ -11,7 +11,7 @@
 
 import i18next from 'i18next';
 import { Project, Serializable } from '.';
-import { BINDING, BindingType, Constants, DYNAMIC_VALUE_KIND, ITERATOR, JSONType, Utils } from '../common';
+import { BINDING, BindingType, DYNAMIC_VALUE_KIND, ITERATOR, JSONType, Utils } from '../common';
 import { Model } from '../Editor';
 import { MapObjectCommandType } from '../models';
 
@@ -58,7 +58,7 @@ class DynamicValue extends Serializable {
 		command.push(this.kind);
 		command.push(this.value as MapObjectCommandType);
 		if (active) {
-			command.push(this.isActivated ? Constants.NUM_BOOL_TRUE : Constants.NUM_BOOL_FALSE);
+			command.push(Utils.boolToNum(this.isActivated));
 		}
 	}
 

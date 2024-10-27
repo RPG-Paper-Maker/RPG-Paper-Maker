@@ -18,6 +18,7 @@ import Button from '../../Button';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tab from '../../Tab';
+import DialogCommandChangeChronometer from '../commands/DialogCommandChangeChronometer';
 import DialogCommandChangeMapProperties from '../commands/DialogCommandChangeMapProperties';
 import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreenTone';
 import DialogCommandChangeWeather from '../commands/DialogCommandChangeWeather';
@@ -306,6 +307,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandSwitchTexture {...options} />;
 			case EVENT_COMMAND_KIND.WAIT:
 				return <DialogCommandWait {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_CHRONOMETER:
+				return <DialogCommandChangeChronometer {...options} />;
 			default:
 				return null;
 		}

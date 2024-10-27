@@ -11,7 +11,7 @@
 
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Constants, DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
 import { Project } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
@@ -93,14 +93,12 @@ function DialogCommandChangeScreenTone({ isOpen, setIsOpen, list, onAccept, onRe
 		green.getCommand(newList);
 		blue.getCommand(newList);
 		grey.getCommand(newList);
+		newList.push(Utils.boolToNum(isAddingColorID));
 		if (isAddingColorID) {
-			newList.push(Constants.NUM_BOOL_TRUE);
 			newList.push(addingColorIndex);
 			addingColorID.getCommand(newList);
-		} else {
-			newList.push(Constants.NUM_BOOL_FALSE);
 		}
-		newList.push(isWaitingEndCommand ? Constants.NUM_BOOL_TRUE : Constants.NUM_BOOL_FALSE);
+		newList.push(Utils.boolToNum(isWaitingEndCommand));
 		time.getCommand(newList);
 		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE, newList));
 	};

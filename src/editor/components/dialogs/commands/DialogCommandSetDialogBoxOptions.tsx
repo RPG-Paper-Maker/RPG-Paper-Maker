@@ -11,14 +11,7 @@
 
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-	Constants,
-	DYNAMIC_VALUE_KIND,
-	DYNAMIC_VALUE_OPTIONS_TYPE,
-	EVENT_COMMAND_KIND,
-	ITERATOR,
-	Utils,
-} from '../../../common';
+import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, ITERATOR, Utils } from '../../../common';
 import { Project } from '../../../core';
 import { DynamicValue } from '../../../core/DynamicValue';
 import { Model } from '../../../Editor';
@@ -216,11 +209,9 @@ function DialogCommandSetDialogBoxOptions({ isOpen, setIsOpen, list, onAccept, o
 	};
 
 	const getCommandCheck = (newList: Model.MapObjectCommandType[], checked: boolean, dynamic: DynamicValue) => {
+		newList.push(Utils.boolToNum(checked));
 		if (checked) {
-			newList.push(Constants.NUM_BOOL_TRUE);
 			dynamic.getCommand(newList);
-		} else {
-			newList.push(Constants.NUM_BOOL_FALSE);
 		}
 	};
 
@@ -236,19 +227,15 @@ function DialogCommandSetDialogBoxOptions({ isOpen, setIsOpen, list, onAccept, o
 		getCommandCheck(newList, isPaddingTop, paddingTop);
 		getCommandCheck(newList, isPaddingRight, paddingRight);
 		getCommandCheck(newList, isPaddingBottom, paddingBottom);
+		newList.push(Utils.boolToNum(isFacesetPosition));
 		if (isFacesetPosition) {
-			newList.push(Constants.NUM_BOOL_TRUE);
 			newList.push(facesetPositionIndex);
-		} else {
-			newList.push(Constants.NUM_BOOL_FALSE);
 		}
 		getCommandCheck(newList, isFacesetX, facesetX);
 		getCommandCheck(newList, isFacesetY, facesetY);
+		newList.push(Utils.boolToNum(isOutline));
 		if (isOutline) {
-			newList.push(Constants.NUM_BOOL_TRUE);
 			newList.push(outlineIndex);
-		} else {
-			newList.push(Constants.NUM_BOOL_FALSE);
 		}
 		getCommandCheck(newList, isColorText, colorTextID);
 		getCommandCheck(newList, isColorOutline, colorOutlineID);

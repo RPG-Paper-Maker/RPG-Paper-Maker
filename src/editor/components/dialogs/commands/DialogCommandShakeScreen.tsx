@@ -11,7 +11,7 @@
 
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Constants, DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
@@ -61,7 +61,7 @@ function DialogCommandShakeScreen({ isOpen, setIsOpen, list, onAccept, onReject 
 		const newList: MapObjectCommandType[] = [];
 		offset.getCommand(newList);
 		shakesNumber.getCommand(newList);
-		newList.push(isWaitingEndCommand ? Constants.NUM_BOOL_TRUE : Constants.NUM_BOOL_FALSE);
+		newList.push(Utils.boolToNum(isWaitingEndCommand));
 		time.getCommand(newList);
 		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.SHAKE_SCREEN, newList));
 	};

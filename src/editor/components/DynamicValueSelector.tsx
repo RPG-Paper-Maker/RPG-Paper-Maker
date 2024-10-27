@@ -22,7 +22,7 @@ import InputNumber from './InputNumber';
 import InputText from './InputText';
 import VariableSelector from './VariableSelector';
 
-const INPUT_WIDTH = '200px';
+export const INPUT_WIDTH = '200px';
 
 type Props = {
 	value: DynamicValue;

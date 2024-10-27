@@ -471,6 +471,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.WAIT:
 				texts = this.toStringWait(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.CHANGE_CHRONOMETER:
+				texts = this.toStringChangeChronometer(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -955,6 +958,46 @@ class MapObjectCommand extends Base {
 
 	toStringWait(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		return [`${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t('seconds')}`];
+	}
+
+	toStringChangeChronometer(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		let text = '';
+		const id = this.toStringDynamicValue(iterator, properties, parameters);
+		const operation = this.command[iterator.i++] as number;
+		switch (operation) {
+			case 0:
+				text += i18next.t('start').toLowerCase();
+				break;
+			case 1:
+				text += i18next.t('pause').toLowerCase();
+				break;
+			case 2:
+				text += i18next.t('continue').toLowerCase();
+				break;
+			case 3:
+				text += i18next.t('stop').toLowerCase();
+				break;
+			default:
+				break;
+		}
+		text += ` ${i18next.t('chronometer.id').toLowerCase()} ${id}`;
+		if (operation === 0) {
+			text += ` ${i18next.t('time').toLowerCase()} ${this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters
+			)} ${i18next.t('seconds').toLowerCase()}`;
+			if (Utils.initializeBoolCommand(this.command, iterator)) {
+				text += ` [${i18next.t('display.on.screen')}]`;
+			}
+		} else if (Utils.initializeBoolCommand(this.command, iterator)) {
+			text += ` [${i18next.t('stock.current.chronometer.value.in.variable.id')} ${this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters
+			)}]`;
+		}
+		return [text];
 	}
 
 	copy(command: MapObjectCommand): void {

@@ -15,6 +15,7 @@ import { Model } from '../Editor';
 import '../styles/Input.css';
 import Button from './Button';
 import DialogVariables from './dialogs/DialogVariables';
+import { INPUT_WIDTH } from './DynamicValueSelector';
 import Flex from './Flex';
 import Tree from './Tree';
 
@@ -42,7 +43,7 @@ function VariableSelector({ variableID, onChange, disabled = false }: Props) {
 
 	return (
 		<>
-			<Flex one spaced onDoubleClick={handleOpenVariables}>
+			<Flex one spaced onDoubleClick={handleOpenVariables} style={{ width: INPUT_WIDTH }}>
 				<Tree list={[node]} disabled={disabled} cannotAdd cannotEdit cannotDragDrop />
 				<Button onClick={handleOpenVariables} disabled={disabled}>
 					...
