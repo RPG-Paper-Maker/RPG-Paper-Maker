@@ -468,6 +468,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.SWITCH_TEXTURE:
 				texts = this.toStringSwitchTexture(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.WAIT:
+				texts = this.toStringWait(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -948,6 +951,10 @@ class MapObjectCommand extends Base {
 			texts.push(`${i18next.t('mountain.id')} ${mountain} ${i18next.t('to').toLowerCase()} ${newMountain}`);
 		}
 		return texts;
+	}
+
+	toStringWait(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		return [`${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t('seconds')}`];
 	}
 
 	copy(command: MapObjectCommand): void {

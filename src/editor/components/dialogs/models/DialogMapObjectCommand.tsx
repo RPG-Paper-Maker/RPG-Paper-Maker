@@ -27,6 +27,7 @@ import DialogCommandSetDialogBoxOptions from '../commands/DialogCommandSetDialog
 import DialogCommandShakeScreen from '../commands/DialogCommandShakeScreen';
 import DialogCommandShowText from '../commands/DialogCommandShowText';
 import DialogCommandSwitchTexture from '../commands/DialogCommandSwitchTexture';
+import DialogCommandWait from '../commands/DialogCommandWait';
 import Dialog from '../Dialog';
 
 type Props = {
@@ -303,6 +304,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandChangeMapProperties {...options} />;
 			case EVENT_COMMAND_KIND.SWITCH_TEXTURE:
 				return <DialogCommandSwitchTexture {...options} />;
+			case EVENT_COMMAND_KIND.WAIT:
+				return <DialogCommandWait {...options} />;
 			default:
 				return null;
 		}
