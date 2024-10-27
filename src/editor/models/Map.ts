@@ -86,9 +86,6 @@ class Map extends Base {
         QJsonObject previous;
         MapEditorSubSelectionKind previousType;
         mapPortion.addObject(position, o, previous, previousType);*/
-		await Platform.writeJSON(Paths.join(folderMap, 'objects.json'), {
-			objs: [],
-		});
 		// TODO
 		await Platform.copyPublicFile(
 			Paths.join(Paths.DEFAULT, globalPortion.getFileName()),

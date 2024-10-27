@@ -196,6 +196,10 @@ function MapEditor() {
 		await Scene.Map.current!.updateObject(currentMapObject);
 	};
 
+	const handleDeleteMapObject = async () => {
+		await Scene.Map.current!.updateObject(null);
+	};
+
 	useEffect(() => {
 		const canvas = refCanvas.current;
 		const canvasHUD = refCanvasHUD.current;
@@ -237,11 +241,13 @@ function MapEditor() {
 				{
 					title: `${t('new')}...`,
 					onClick: handleNewMapObject,
+					shortcut: [KEY.ENTER],
 					disabled: !isNew,
 				},
 				{
 					title: `${t('edit')}...`,
 					onClick: handleEditMapObject,
+					shortcut: [KEY.ENTER],
 					disabled: isNew,
 				},
 				{
@@ -257,6 +263,7 @@ function MapEditor() {
 				{
 					title: t('delete'),
 					shortcut: [KEY.DELETE],
+					onClick: handleDeleteMapObject,
 					disabled: isNew,
 				},
 			];

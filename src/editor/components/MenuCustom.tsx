@@ -91,7 +91,7 @@ function MenuCustom({
 				if (specialKeys.indexOf(key as SPECIAL_KEY) === -1 && shortcut.indexOf(key) !== -1) {
 					event.preventDefault();
 					if (disabled) {
-						return false;
+						continue;
 					} else {
 						await onClick();
 						return true;

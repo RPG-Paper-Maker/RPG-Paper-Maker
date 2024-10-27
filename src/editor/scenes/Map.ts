@@ -630,10 +630,8 @@ class Map extends Base {
 	async updateObject(object: Model.CommonObject | null) {
 		const position = this.cursorObject.position.clone();
 		const mapPortion = this.getMapPortionByPosition(position);
-		if (mapPortion) {
-			await this.model.updateObject(position, object);
-			mapPortion.updateObject(position, object);
-		}
+		await this.model.updateObject(position, object);
+		mapPortion?.updateObject(position, object);
 	}
 
 	getSelectedObject(): Model.CommonObject | null {

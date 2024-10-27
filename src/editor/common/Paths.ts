@@ -59,7 +59,6 @@ class Paths {
 	public static readonly INDEX = 'index';
 	public static readonly TEMP_UNDO_REDO = 'temp-undo-redo';
 	public static readonly FILE_MAP_INFOS = 'infos.json';
-	public static readonly FILE_MAP_OBJECTS = 'objects.json';
 	public static readonly FILE_PICTURES = 'pictures.json';
 	public static readonly FILE_VIDEOS = 'videos.json';
 	public static readonly FILE_FONTS = 'fonts.json';
