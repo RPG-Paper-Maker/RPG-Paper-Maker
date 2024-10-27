@@ -13,11 +13,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ACTION_KIND, ELEMENT_MAP_KIND, KEY, SPECIAL_KEY } from '../common';
-import { Project } from '../core';
+import { Node, Project } from '../core';
 import { Manager, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import {
 	RootState,
+	setCopiedItems,
 	setNeedsUpdateMapEditor,
 	setSelectedMapElement,
 	setSelectedPosition,
@@ -41,6 +42,7 @@ function MapEditor() {
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
 	const needsReloadMap = useSelector((state: RootState) => state.triggers.needsReloadMap);
+	const copiedItems = useSelector((state: RootState) => state.projects.copiedItems);
 	useSelector((state: RootState) => state.triggers.splitting);
 	useSelector((state: RootState) => state.mapEditor.needsUpdate);
 
@@ -49,6 +51,8 @@ function MapEditor() {
 	const refCanvas = useRef<HTMLDivElement>(null);
 	const refCanvasHUD = useRef<HTMLCanvasElement>(null);
 	const refCanvasRendering = useRef<HTMLCanvasElement>(null);
+
+	const canPaste = () => copiedItems?.constructorClass === Model.CommonObject;
 
 	const cursorClass = () => {
 		let name = 'cursor-';
@@ -196,6 +200,21 @@ function MapEditor() {
 		await Scene.Map.current!.updateObject(currentMapObject);
 	};
 
+	const handleCopyMapObject = async () => {
+		const mapObject = Scene.Map.current!.getSelectedObject();
+		if (mapObject !== null) {
+			dispatch(setCopiedItems(await Node.saveToCopy([Node.create(mapObject)])));
+		}
+	};
+
+	const handlePasteMapObject = async () => {
+		if (copiedItems) {
+			const mapObject = copiedItems.values[0].content.clone() as Model.CommonObject;
+			mapObject.id = Model.Base.generateNewIDfromList(Scene.Map.current!.model.objects);
+			await Scene.Map.current!.updateObject(mapObject);
+		}
+	};
+
 	const handleDeleteMapObject = async () => {
 		await Scene.Map.current!.updateObject(null);
 	};
@@ -252,13 +271,15 @@ function MapEditor() {
 				},
 				{
 					title: t('copy'),
+					onClick: handleCopyMapObject,
 					shortcut: [SPECIAL_KEY.CTRL, KEY.C],
 					disabled: isNew,
 				},
 				{
 					title: t('paste'),
+					onClick: handlePasteMapObject,
 					shortcut: [SPECIAL_KEY.CTRL, KEY.V],
-					disabled: true,
+					disabled: !canPaste(),
 				},
 				{
 					title: t('delete'),

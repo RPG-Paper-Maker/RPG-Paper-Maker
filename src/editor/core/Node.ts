@@ -18,6 +18,7 @@ import { Serializable } from './Serializable';
 export const NODE_CONSTRUCTOR_KIND = {
 	Base: () => Model.Base,
 	TreeMapTag: () => Model.TreeMapTag,
+	CommonObject: () => Model.CommonObject,
 	MapObjectState: () => Model.MapObjectState,
 	MapObjectProperty: () => Model.MapObjectProperty,
 	MapObjectEvent: () => Model.MapObjectEvent,
