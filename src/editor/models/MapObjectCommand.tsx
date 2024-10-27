@@ -54,6 +54,7 @@ import {
 	EVENT_COMMAND_KIND,
 	ITERATOR,
 	JSONType,
+	PICTURE_KIND,
 	SONG_KIND,
 	Utils,
 } from '../common';
@@ -379,6 +380,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
 			case EVENT_COMMAND_KIND.CHANGE_WEATHER:
 			case EVENT_COMMAND_KIND.CHANGE_MAP_PROPERTIES:
+			case EVENT_COMMAND_KIND.SWITCH_TEXTURE:
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -463,6 +465,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_MAP_PROPERTIES:
 				texts = this.toStringChangeMapProperties(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.SWITCH_TEXTURE:
+				texts = this.toStringSwitchTexture(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -495,6 +500,10 @@ class MapObjectCommand extends Base {
 			case DYNAMIC_VALUE_KIND.NONE:
 				return i18next.t('none');
 			case DYNAMIC_VALUE_KIND.NUMBER:
+			case DYNAMIC_VALUE_KIND.DATABASE: {
+				const db = Base.getByID(database, value as number);
+				return `${db?.toString() ?? value}`;
+			}
 			case DYNAMIC_VALUE_KIND.NUMBER_DECIMAL:
 			case DYNAMIC_VALUE_KIND.TEXT:
 			case DYNAMIC_VALUE_KIND.FORMULA:
@@ -516,10 +525,6 @@ class MapObjectCommand extends Base {
 			case DYNAMIC_VALUE_KIND.PROPERTY: {
 				const property = Base.getByID(properties, value as number);
 				return `${i18next.t('property')} ${property?.toString() ?? value}`;
-			}
-			case DYNAMIC_VALUE_KIND.DATABASE: {
-				const db = Base.getByID(database, value as number);
-				return `${db?.toString() ?? value}`;
 			}
 			default:
 				return '';
@@ -861,6 +866,86 @@ class MapObjectCommand extends Base {
 					break;
 			}
 			texts.push(sky);
+		}
+		return texts;
+	}
+
+	toStringSwitchTexture(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts = [''];
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			const tileset = this.toStringDynamicValue(iterator, properties, parameters, Project.current!.tilesets.list);
+			const newtileset = this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.pictures.getList(PICTURE_KIND.TILESETS),
+				true
+			);
+			texts.push(`${i18next.t('tileset.id')} ${tileset} ${i18next.t('to').toLowerCase()} ${newtileset}`);
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			const autotile = this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.specialElements.autotiles
+			);
+			const newAutotile = this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.pictures.getList(PICTURE_KIND.AUTOTILES),
+				true
+			);
+			texts.push(`${i18next.t('autotile.id')} ${autotile} ${i18next.t('to').toLowerCase()} ${newAutotile}`);
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			const wall = this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.specialElements.walls
+			);
+			const newWall = this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.pictures.getList(PICTURE_KIND.WALLS),
+				true
+			);
+			texts.push(`${i18next.t('wall.id')} ${wall} ${i18next.t('to').toLowerCase()} ${newWall}`);
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			const object3D = this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.specialElements.objects3D
+			);
+			const newObject3D = this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.pictures.getList(PICTURE_KIND.OBJECTS_3D),
+				true
+			);
+			texts.push(`${i18next.t('object.3d.id')} ${object3D} ${i18next.t('to').toLowerCase()} ${newObject3D}`);
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			const mountain = this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.specialElements.mountains
+			);
+			const newMountain = this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.pictures.getList(PICTURE_KIND.MOUNTAINS),
+				true
+			);
+			texts.push(`${i18next.t('mountain.id')} ${mountain} ${i18next.t('to').toLowerCase()} ${newMountain}`);
 		}
 		return texts;
 	}

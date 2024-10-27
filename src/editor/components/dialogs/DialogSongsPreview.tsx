@@ -16,6 +16,8 @@ import { Platform } from '../../common/Platform';
 import { Node, Project } from '../../core';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Model } from '../../Editor';
+import Flex from '../Flex';
+import Groupbox from '../Groupbox';
 import PanelAssetsPreviewer from '../panels/PanelAssetsPreviewer';
 import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
@@ -30,6 +32,7 @@ type Props = {
 	onAccept?: (song: Model.Song) => void;
 	onReject?: () => void;
 	active?: boolean;
+	displayOptions?: boolean;
 };
 
 function DialogSongsPreview({
@@ -41,6 +44,7 @@ function DialogSongsPreview({
 	onAccept,
 	onReject,
 	active = false,
+	displayOptions = false,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -135,8 +139,16 @@ function DialogSongsPreview({
 	};
 
 	const getPreviewerOptionsContent = () => {
-		if (selectedSong) {
-			return null;
+		if (selectedSong && displayOptions) {
+			return (
+				<Groupbox title={t('options')}>
+					<Flex column spaced>
+						<Flex spaced>
+							<div>{t('volume')}:</div>
+						</Flex>
+					</Flex>
+				</Groupbox>
+			);
 		}
 	};
 

@@ -16,6 +16,7 @@
 		"@types/react-router-dom": "^5.3.3",
 		"@types/stats": "^0.16.30",
 		"@types/three": "^0.169.0",
+		"howler": "^2.2.4",
 		"i18next": "^23.15.1",
 		"i18next-browser-languagedetector": "^8.0.0",
 		"jszip": "^3.10.1",

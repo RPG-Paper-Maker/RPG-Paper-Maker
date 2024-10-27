@@ -86,6 +86,7 @@ function InputNumber({
 			setDisplayedValue(transformValueToText(forcedValue));
 			setForcedValue(undefined);
 		}
+		// eslint-disable-next-line
 	}, [forcedValue, setForcedValue]);
 
 	return (
