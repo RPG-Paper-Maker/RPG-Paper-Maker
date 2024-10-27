@@ -198,6 +198,7 @@ function MapEditor() {
 	const handleAcceptMapObject = async () => {
 		setIsOpenMapObject(false);
 		await Scene.Map.current!.updateObject(currentMapObject);
+		Scene.Map.current!.updateUndoRedoSave();
 	};
 
 	const handleCopyMapObject = async () => {
@@ -212,11 +213,13 @@ function MapEditor() {
 			const mapObject = copiedItems.values[0].content.clone() as Model.CommonObject;
 			mapObject.id = Model.Base.generateNewIDfromList(Scene.Map.current!.model.objects);
 			await Scene.Map.current!.updateObject(mapObject);
+			Scene.Map.current!.updateUndoRedoSave();
 		}
 	};
 
 	const handleDeleteMapObject = async () => {
 		await Scene.Map.current!.updateObject(null);
+		Scene.Map.current!.updateUndoRedoSave();
 	};
 
 	useEffect(() => {

@@ -11,9 +11,9 @@
 
 import * as THREE from 'three';
 import { MapElement } from '../Editor';
-import { Serializable } from '../core/Serializable';
-import { CustomGeometry, Position, Project } from '../core';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, SHAPE_KIND } from '../common';
+import { CustomGeometry, Position, Project } from '../core';
+import { Serializable } from '../core/Serializable';
 
 abstract class Base extends Serializable {
 	public static readonly COEF_TEX = 0.2;

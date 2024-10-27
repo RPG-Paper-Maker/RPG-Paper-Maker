@@ -610,7 +610,13 @@ class MapPortion {
 		Scene.Map.current!.portionsToSave.add(this);
 		if (!undoRedo) {
 			Scene.Map.current!.undoRedoStates.push(
-				UndoRedoState.create(position, previous, ELEMENT_MAP_KIND.OBJECT, object, ELEMENT_MAP_KIND.OBJECT)
+				UndoRedoState.create(
+					position,
+					previous,
+					ELEMENT_MAP_KIND.OBJECT,
+					object?.clone() ?? null,
+					ELEMENT_MAP_KIND.OBJECT
+				)
 			);
 		}
 	}

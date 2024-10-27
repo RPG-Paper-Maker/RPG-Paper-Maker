@@ -9,10 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { MapElement, Model } from '../Editor';
-import { Serializable } from './Serializable';
 import { Position } from '.';
 import { ELEMENT_MAP_KIND, JSONType } from '../common';
+import { MapElement, Model } from '../Editor';
+import { CommonObject } from '../models';
+import { Serializable } from './Serializable';
 
 class UndoRedoState extends Serializable {
 	public static readonly JSON_POSITION = 'p';
@@ -48,14 +49,18 @@ class UndoRedoState extends Serializable {
 		this.position.read(json[UndoRedoState.JSON_POSITION] as number[]);
 		this.kindBefore = json[UndoRedoState.JSON_KIND_BEFORE] as number;
 		this.kindAfter = json[UndoRedoState.JSON_KIND_AFTER] as number;
-		this.elementBefore = MapElement.Base.readMapElement(
-			this.kindBefore,
-			json[UndoRedoState.JSON_ELEMENT_BEFORE] as JSONType
-		);
-		this.elementAfter = MapElement.Base.readMapElement(
-			this.kindAfter,
-			json[UndoRedoState.JSON_ELEMENT_AFTER] as JSONType
-		);
+		let jsonElement = json[UndoRedoState.JSON_ELEMENT_BEFORE] as JSONType;
+		this.elementBefore = MapElement.Base.readMapElement(this.kindBefore, jsonElement);
+		if (this.kindBefore === ELEMENT_MAP_KIND.OBJECT && jsonElement) {
+			this.elementBefore = new CommonObject();
+			this.elementBefore.read(jsonElement);
+		}
+		jsonElement = json[UndoRedoState.JSON_ELEMENT_AFTER] as JSONType;
+		this.elementAfter = MapElement.Base.readMapElement(this.kindAfter, jsonElement);
+		if (this.kindAfter === ELEMENT_MAP_KIND.OBJECT && jsonElement) {
+			this.elementAfter = new CommonObject();
+			this.elementAfter.read(jsonElement);
+		}
 	}
 
 	write(json: JSONType): void {
