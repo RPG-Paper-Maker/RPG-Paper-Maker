@@ -37,6 +37,7 @@ function MapEditor() {
 	const [firstLoading, setFirstLoading] = useState(false);
 	const [isOpenMapObject, setIsOpenMapObject] = useState(false);
 	const [currentMapObject, setCurrentMapObject] = useState(new Model.CommonObject());
+	const [isFocused, setIsFocused] = useState(false);
 
 	const currentMapTag = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
@@ -261,16 +262,16 @@ function MapEditor() {
 			const isNew = !Scene.Map.current.model?.getObjectAt(Scene.Map.current!.cursorObject.position);
 			return [
 				{
-					title: `${t('new')}...`,
-					onClick: handleNewMapObject,
-					shortcut: [KEY.ENTER],
-					disabled: !isNew,
-				},
-				{
 					title: `${t('edit')}...`,
 					onClick: handleEditMapObject,
 					shortcut: [KEY.ENTER],
 					disabled: isNew,
+				},
+				{
+					title: `${t('new')}...`,
+					onClick: handleNewMapObject,
+					shortcut: [KEY.ENTER],
+					disabled: !isNew,
 				},
 				{
 					title: t('copy'),
@@ -298,7 +299,7 @@ function MapEditor() {
 	return (
 		<>
 			<Loader isLoading={firstLoading} />
-			<ContextMenu items={getContextMenuItems()}>
+			<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
 				<div className={`map-editor ${cursorClass()}`} onDoubleClick={handleDoubleClick}>
 					<div ref={refCanvas} id='canvas-map-editor' className='fill-space' />
 					<canvas ref={refCanvasHUD} id='canvas-hud' />

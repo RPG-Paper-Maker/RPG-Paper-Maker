@@ -115,6 +115,7 @@ function Tree({
 	const [draggedNode, setDraggedNode] = useState<Node | null>(null);
 	const [currentName, setCurrentName] = useStateString();
 	const [needScroll, setNeedScroll] = useState(false);
+	const [isFocused, setIsFocused] = useState(false);
 
 	const copiedItems = useSelector((state: RootState) => state.projects.copiedItems);
 
@@ -125,8 +126,8 @@ function Tree({
 	let hasCustomItems = true;
 	if (!contextMenuItems) {
 		contextMenuItems = [
-			CONTEXT_MENU_ITEM_KIND.NEW,
 			CONTEXT_MENU_ITEM_KIND.EDIT,
+			CONTEXT_MENU_ITEM_KIND.NEW,
 			CONTEXT_MENU_ITEM_KIND.COPY,
 			CONTEXT_MENU_ITEM_KIND.PASTE,
 			CONTEXT_MENU_ITEM_KIND.DELETE,
@@ -481,6 +482,33 @@ function Tree({
 		// eslint-disable-next-line
 	}, []);
 
+	useEffect(() => {
+		const handleKeyDown = async (event: KeyboardEvent) => {
+			if (isFocused) {
+				switch (event.key.toUpperCase()) {
+					case 'ARROWUP':
+						if (currentSelectedItemNode?.previous) {
+							setCurrentSelectedItemNode(currentSelectedItemNode.previous);
+						}
+						break;
+					case 'ARROWDOWN':
+						if (currentSelectedItemNode?.next) {
+							setCurrentSelectedItemNode(currentSelectedItemNode.next);
+						}
+						break;
+					default:
+						break;
+				}
+			}
+			return true;
+		};
+
+		window.addEventListener('keydown', handleKeyDown);
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [list, isFocused, currentSelectedItemNode, setCurrentSelectedItemNode]);
+
 	const headers = constructorType.getTreeHeader();
 
 	const getTreeItems = (
@@ -492,20 +520,28 @@ function Tree({
 		emptyID = -1,
 		parentSelected = false
 	): number => {
-		let lastNode: Node | null = null;
+		const canAddEmptyNode = !cannotAdd && ((multipleLevels && addEmpty) || level === 0);
+		let emptyNode: Node | null = null;
+		if (canAddEmptyNode) {
+			emptyNode = Node.create(Model.Base.create(emptyID, ''));
+			emptyNode.parent = parent;
+			emptyID--;
+		}
 		let selectNextIndexes = 0;
 		for (const [index, node] of nodes.entries()) {
-			if (lastNode) {
-				lastNode.next = node;
+			const nbSelectionNextIndex = node.content.getSelectionNextIndexes();
+			const nextNode = nodes[index + nbSelectionNextIndex + 1] ?? emptyNode;
+			node.next = nextNode;
+			if (nextNode && !nextNode.previous) {
+				nextNode.previous = node;
 			}
 			const selected = selectNextIndexes > 0 || parentSelected || isSelected(byIndex ? index : node.content.id);
 			if (selected && selectNextIndexes === 0) {
-				selectNextIndexes = node.content.getSelectionNextIndexes();
+				selectNextIndexes = nbSelectionNextIndex;
 			}
 			if (selectNextIndexes > 0) {
 				selectNextIndexes--;
 			}
-			const nbSelectionNextIndex = node.content.getSelectionNextIndexes();
 			items.push(
 				<div key={byIndex ? `${index}-${level}` : node.content.id} ref={selected ? selectedElementRef : null}>
 					<TreeItem
@@ -543,19 +579,13 @@ function Tree({
 					multipleLevels && selected
 				);
 			}
-			lastNode = node;
 		}
-		if (!cannotAdd && ((multipleLevels && addEmpty) || level === 0)) {
-			const selected = parentSelected || isSelected(byIndex ? nodes.length : emptyID);
-			const node = Node.create(Model.Base.create(emptyID, ''));
-			node.parent = parent;
-			if (lastNode) {
-				lastNode.next = node;
-			}
+		if (canAddEmptyNode) {
+			const selected = parentSelected || isSelected(byIndex ? nodes.length : emptyNode!.content.id);
 			items.push(
-				<div key={byIndex ? nodes.length : emptyID} ref={selected ? selectedElementRef : null}>
+				<div key={byIndex ? nodes.length : emptyNode!.content.id} ref={selected ? selectedElementRef : null}>
 					<TreeItem
-						node={node}
+						node={emptyNode!}
 						level={level}
 						selected={selected}
 						onSwitchExpanded={handleSwitchExpandedItem}
@@ -566,7 +596,6 @@ function Tree({
 					/>
 				</div>
 			);
-			emptyID--;
 		}
 		return emptyID;
 	};
@@ -584,17 +613,19 @@ function Tree({
 		const isFixed = currentSelectedItemNode?.content?.isFixedNode() ?? false;
 		return contextMenuItems!.map((kind) => {
 			switch (kind) {
-				case CONTEXT_MENU_ITEM_KIND.NEW:
-					return {
-						title: 'New...',
-						onClick: handleNewItem,
-						disabled: cannotAdd || isFixed,
-					};
 				case CONTEXT_MENU_ITEM_KIND.EDIT:
 					return {
 						title: 'Edit...',
+						shortcut: [KEY.ENTER],
 						onClick: handleEditItem,
 						disabled: isEmpty || cannotAdd || isFixed,
+					};
+				case CONTEXT_MENU_ITEM_KIND.NEW:
+					return {
+						title: 'New...',
+						shortcut: [KEY.ENTER],
+						onClick: handleNewItem,
+						disabled: cannotAdd || isFixed,
 					};
 				case CONTEXT_MENU_ITEM_KIND.COPY:
 					return {
@@ -682,7 +713,7 @@ function Tree({
 		);
 
 	return (
-		<ContextMenu items={getContextMenuItems()}>
+		<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
 			<Flex column spacedLarge fillWidth fillHeight>
 				<div
 					onDoubleClick={handleDoubleClick}

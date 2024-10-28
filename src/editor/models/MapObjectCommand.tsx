@@ -480,7 +480,7 @@ class MapObjectCommand extends Base {
 				<Flex column spaced>
 					<Flex spaced>
 						<div style={{ fontWeight: 'bold', color }}>{commandName}</div>
-						{`: ${texts[0]}`}
+						{`${this.kind === EVENT_COMMAND_KIND.END_CHOICE ? '' : ':'} ${texts[0]}`}
 					</Flex>
 					{texts.slice(1).map((text, index) => (
 						<div key={index}>{text}</div>

@@ -19,11 +19,12 @@ import MenuCustom from './MenuCustom';
 type Props = {
 	children: ReactNode;
 	items?: MenuItemType[];
+	isFocused: boolean;
+	setIsFocused: (b: boolean) => void;
 };
 
-function ContextMenu({ children, items = [] }: Props) {
+function ContextMenu({ children, items = [], isFocused, setIsFocused }: Props) {
 	const [isOpen, setIsOpen] = useState(false);
-	const [isFocused, setIsFocused] = useState(false);
 	const [timerID, setTimerID] = useState<NodeJS.Timeout | undefined>();
 	const refComplete = useRef<HTMLDivElement>(null);
 	const refMenu = useRef<HTMLDivElement>(null);
