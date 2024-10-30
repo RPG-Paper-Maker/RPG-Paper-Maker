@@ -144,6 +144,16 @@ class Node extends Serializable {
 		return nodes.map((node) => node.content as T);
 	}
 
+	getParents(): Node[] {
+		const parents = [];
+		let node = this.parent;
+		while (node !== null) {
+			parents.push(node);
+			node = node.parent;
+		}
+		return parents;
+	}
+
 	isFolder() {
 		return this.content.id < 0;
 	}

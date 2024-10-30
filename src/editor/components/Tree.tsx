@@ -25,6 +25,7 @@ import {
 import { Node } from '../core';
 import { Model } from '../Editor';
 import useStateString from '../hooks/useStateString';
+import { Inputs } from '../managers';
 import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
@@ -67,6 +68,7 @@ type Props = {
 	onDrop?: () => Promise<void>;
 	disabled?: boolean;
 	scrollable?: boolean;
+	multipleSelection?: boolean;
 };
 
 export const TREES_MIN_WIDTH = 150;
@@ -99,6 +101,7 @@ function Tree({
 	minWidth,
 	disabled = false,
 	scrollable = false,
+	multipleSelection = false,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -108,6 +111,7 @@ function Tree({
 		(byIndex ? list[0] : Node.getNodeByID(list, defaultID)) ??
 			(cannotAdd ? null : Node.create(Model.Base.create(-1, '')))
 	);
+	const [additionalSelectedNodes, setAdditionalSelectedNodes] = useState<Node[]>([]);
 	const [notExpandedItemsList, setNotExpandedItemsList] = useState<number[]>(Node.getNotExpandedItemsList(list));
 	const [, setForceUpdate] = useState(false);
 	const [isOpenDialog, setIsOpenDialog] = useState(false);
@@ -174,7 +178,23 @@ function Tree({
 	};
 
 	const handleMouseDownItem = (node: Node) => {
-		setCurrentSelectedItemNode(node);
+		if (multipleSelection && (Inputs.isSHIFT || Inputs.isCTRL)) {
+			if (node.content.id !== currentSelectedItemNode!.content.id) {
+				if (additionalSelectedNodes.some((n) => n.content.id === node.content.id)) {
+					setAdditionalSelectedNodes(additionalSelectedNodes.filter((n) => node.content.id !== n.content.id));
+				} else {
+					setAdditionalSelectedNodes([...additionalSelectedNodes, node]);
+				}
+			} else {
+				if (additionalSelectedNodes.length > 0) {
+					setCurrentSelectedItemNode(additionalSelectedNodes[0]);
+					setAdditionalSelectedNodes(additionalSelectedNodes.slice(1));
+				}
+			}
+		} else {
+			setCurrentSelectedItemNode(node);
+			setAdditionalSelectedNodes([]);
+		}
 		setCurrentName(node.content.name);
 		if (onSelectedItem) {
 			onSelectedItem(node, true);
@@ -204,16 +224,44 @@ function Tree({
 		setIsOpenDialog(true);
 	};
 
-	const handleCopyItem = async () => {
-		if (currentSelectedItemNode) {
-			const nodes = [];
-			nodes.push(currentSelectedItemNode);
-			const currentList = currentSelectedItemNode.parent?.children ?? list;
-			const selectionIndexes = currentSelectedItemNode.content.getSelectionNextIndexes();
-			const index = currentList.indexOf(currentSelectedItemNode) + 1;
-			for (let i = 0; i < selectionIndexes - 1; i++) {
-				nodes.push(currentList[index + i]);
+	const getCorrectSelectedNodes = () => {
+		const selectedNodes = [currentSelectedItemNode!, ...additionalSelectedNodes];
+		const selectedNodesComplete: Node[] = [];
+		for (const node of selectedNodes) {
+			const isFixed = node.content.isFixedNode();
+			if (!isFixed) {
+				selectedNodesComplete.push(node);
+				const currentList = node.parent?.children ?? list;
+				const selectionIndexes = node.content.getSelectionNextIndexes();
+				const index = currentList.indexOf(node) + 1;
+				for (let i = 0; i < selectionIndexes - 1; i++) {
+					selectedNodesComplete.push(currentList[index + i]);
+				}
 			}
+		}
+		const selectedWithoutChildren: Node[] = [];
+		for (const node of selectedNodesComplete) {
+			if (node && !node.getParents().some((parent) => selectedNodesComplete.includes(parent))) {
+				selectedWithoutChildren.push(node);
+			}
+		}
+		const reorderedNodes: Node[] = [];
+		reorderSelectedNodes(reorderedNodes, list, selectedWithoutChildren);
+		return reorderedNodes;
+	};
+
+	const reorderSelectedNodes = (result: Node[], nodes: Node[], selectedNodes: Node[]) => {
+		for (const node of nodes) {
+			if (selectedNodes.includes(node) && !result.includes(node)) {
+				result.push(node);
+			}
+			reorderSelectedNodes(result, node.children, selectedNodes);
+		}
+	};
+
+	const handleCopyItem = async () => {
+		const nodes = getCorrectSelectedNodes();
+		if (nodes.length > 0) {
 			dispatch(setCopiedItems(await Node.saveToCopy(nodes)));
 		}
 	};
@@ -252,21 +300,19 @@ function Tree({
 	};
 
 	const handleDeleteItem = async () => {
-		const currentList = currentSelectedItemNode?.parent?.children ?? list;
-		if (currentSelectedItemNode && (canBeEmpty || currentList.length > 1)) {
-			currentSelectedItemNode.willBeDeleted = true;
-			getTreeItems(list, []);
-			let node = currentSelectedItemNode.next;
-			const index = currentList.indexOf(currentSelectedItemNode);
-			ArrayUtils.removeElement(currentList, currentSelectedItemNode);
-			const selectionIndexes = currentSelectedItemNode.content.getSelectionNextIndexes();
-			for (let i = 0; i < selectionIndexes - 1; i++) {
-				node = currentList[index]?.next ?? null;
-				ArrayUtils.removeAt(currentList, index);
+		const nodes = getCorrectSelectedNodes();
+		if (nodes.length > 0) {
+			for (const node of nodes) {
+				node.willBeDeleted = true;
 			}
-			setCurrentSelectedItemNode(node);
+			getTreeItems(list, []);
+			const nextNode = nodes[nodes.length - 1].next;
+			for (const node of nodes) {
+				ArrayUtils.removeElement(node.parent?.children ?? list, node);
+			}
+			setCurrentSelectedItemNode(nextNode);
 			onListUpdated?.();
-			onSelectedItem?.(node, false);
+			onSelectedItem?.(nextNode, false);
 		}
 	};
 
@@ -535,7 +581,11 @@ function Tree({
 			if (nextNode && !nextNode.previous) {
 				nextNode.previous = node;
 			}
-			const selected = selectNextIndexes > 0 || parentSelected || isSelected(byIndex ? index : node.content.id);
+			const selected =
+				selectNextIndexes > 0 ||
+				parentSelected ||
+				isSelected(byIndex ? index : node.content.id) ||
+				additionalSelectedNodes.includes(node);
 			if (selected && selectNextIndexes === 0) {
 				selectNextIndexes = nbSelectionNextIndex;
 			}
@@ -581,7 +631,10 @@ function Tree({
 			}
 		}
 		if (canAddEmptyNode) {
-			const selected = parentSelected || isSelected(byIndex ? nodes.length : emptyNode!.content.id);
+			const selected =
+				parentSelected ||
+				isSelected(byIndex ? nodes.length : emptyNode!.content.id) ||
+				additionalSelectedNodes.some((n) => n.content.id === emptyNode!.content.id);
 			items.push(
 				<div key={byIndex ? nodes.length : emptyNode!.content.id} ref={selected ? selectedElementRef : null}>
 					<TreeItem
@@ -618,35 +671,38 @@ function Tree({
 						title: 'Edit...',
 						shortcut: [KEY.ENTER],
 						onClick: handleEditItem,
-						disabled: isEmpty || cannotAdd || isFixed,
+						disabled: isEmpty || cannotAdd || isFixed || additionalSelectedNodes.length > 0,
 					};
 				case CONTEXT_MENU_ITEM_KIND.NEW:
 					return {
 						title: 'New...',
 						shortcut: [KEY.ENTER],
 						onClick: handleNewItem,
-						disabled: cannotAdd || isFixed,
+						disabled: cannotAdd || isFixed || additionalSelectedNodes.length > 0,
 					};
 				case CONTEXT_MENU_ITEM_KIND.COPY:
 					return {
 						title: 'Copy',
 						shortcut: [SPECIAL_KEY.CTRL, KEY.C],
 						onClick: handleCopyItem,
-						disabled: isEmpty || cannotAdd || isFixed,
+						disabled: ((isEmpty || isFixed) && additionalSelectedNodes.length === 0) || cannotAdd,
 					};
 				case CONTEXT_MENU_ITEM_KIND.PASTE:
 					return {
 						title: 'Paste',
 						shortcut: [SPECIAL_KEY.CTRL, KEY.V],
 						onClick: handlePasteItem,
-						disabled: !canPaste() || isFixed,
+						disabled: !canPaste() || isFixed || additionalSelectedNodes.length > 0,
 					};
 				case CONTEXT_MENU_ITEM_KIND.DELETE:
 					return {
 						title: 'Delete',
 						shortcut: [KEY.DELETE],
 						onClick: handleDeleteItem,
-						disabled: isEmpty || cannotDelete || isFixed,
+						disabled:
+							((isEmpty || isFixed) && additionalSelectedNodes.length === 0) ||
+							cannotDelete ||
+							(!canBeEmpty && list.length === 1),
 					};
 				default: {
 					const customItem = { ...kind };

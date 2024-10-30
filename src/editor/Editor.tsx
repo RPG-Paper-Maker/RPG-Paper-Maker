@@ -9,20 +9,36 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
+import Flex from './components/Flex';
 import MainMenuBar from './components/MainMenuBar';
 import PanelLoading from './components/panels/PanelLoading';
 import PanelMain from './components/panels/PanelMain';
 import i18n from './i18n/i18n';
+import { Inputs } from './managers/Inputs';
 import { store } from './store';
 import './styles/Editor.css';
 import './styles/Mobile.css';
-import Flex from './components/Flex';
 
 function Editor() {
 	const [loaded, setLoaded] = useState(false);
+
+	useEffect(() => {
+		const handleKeyDown = (e: globalThis.KeyboardEvent) => {
+			Inputs.isALT = e.altKey;
+			Inputs.isCTRL = e.ctrlKey;
+			Inputs.isSHIFT = e.shiftKey;
+		};
+		const handleKeyUp = (e: globalThis.KeyboardEvent) => {
+			Inputs.isALT = e.altKey;
+			Inputs.isCTRL = e.ctrlKey;
+			Inputs.isSHIFT = e.shiftKey;
+		};
+		window.addEventListener('keydown', handleKeyDown);
+		window.addEventListener('keyup', handleKeyUp);
+	}, []);
 
 	return (
 		<Provider store={store}>

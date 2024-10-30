@@ -82,6 +82,7 @@ function TreeCommands({ list }: Props) {
 			multipleLevels
 			canBeEmpty
 			scrollable
+			multipleSelection
 		/>
 	) : null;
 }

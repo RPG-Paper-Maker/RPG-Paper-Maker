@@ -148,9 +148,6 @@ class Inputs {
 				) {
 					return;
 				}
-				Inputs.isALT = e.altKey;
-				Inputs.isCTRL = e.ctrlKey;
-				Inputs.isSHIFT = e.shiftKey;
 				if (!ArrayUtils.contains(Inputs.keys, e.key)) {
 					Inputs.keys.push(e.key);
 				}
@@ -163,9 +160,6 @@ class Inputs {
 				if (!this.isMapFocused || !Scene.Map.current) {
 					return;
 				}
-				Inputs.isALT = e.altKey;
-				Inputs.isCTRL = e.ctrlKey;
-				Inputs.isSHIFT = e.shiftKey;
 				ArrayUtils.removeElement(Inputs.keys, e.key);
 				Scene.Map.current.onKeyUp();
 			};
