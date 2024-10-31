@@ -9,39 +9,43 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-.tree-item {
+.treeItem {
 	display: flex;
 	gap: 5px;
 	align-items: center;
 	padding: 1px 5px 2px 5px;
 	white-space: nowrap;
+
+	svg {
+		align-self: self-start;
+		margin-top: 3px;
+	}
+
+	&.dragOverTop {
+		border-top: 2px solid var(--primary-color);
+	}
+
+	&.dragOverBot {
+		border-bottom: 2px solid var(--primary-color);
+	}
+
+	&.dragOverComplete {
+		border: 2px solid var(--primary-color);
+	}
 }
 
-.tree-item svg {
-	align-self: self-start;
-	margin-top: 3px;
-}
+.tree {
+	&:not(.disabled) {
+		.treeItem {
+			cursor: pointer;
 
-.tree:not(.disabled) .tree-item {
-	cursor: pointer;
-}
+			&:hover {
+				background-color: var(--hover-main-bg-color);
+			}
 
-.tree:not(.disabled) .tree-item:hover {
-	background-color: var(--hover-main-bg-color);
-}
-
-.tree:not(.disabled) .tree-item.selected {
-	background-color: var(--primary-dark-color);
-}
-
-.tree-item.drag-over-top {
-	border-top: 2px solid var(--primary-color);
-}
-
-.tree-item.drag-over-bot {
-	border-bottom: 2px solid var(--primary-color);
-}
-
-.tree-item.drag-over-complete {
-	border: 2px solid var(--primary-color);
+			&.selected {
+				background-color: var(--primary-dark-color);
+			}
+		}
+	}
 }

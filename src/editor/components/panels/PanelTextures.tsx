@@ -99,12 +99,12 @@ function PanelTextures({ visible }: Props) {
 	return (
 		<div
 			ref={refTilesetPreviewDiv}
-			className={Utils.getClassName({ hidden: !visible }, 'flex flex-column flex-one gap-small')}
+			className={Utils.getClassName({ hidden: !visible }, 'flex flexColumn flexOne gapSmall')}
 		>
-			<div ref={refTileset} className='scrollable flex flex-column flex-one gap-small'>
+			<div ref={refTileset} className='scrollable flex flexColumn flexOne gapSmall'>
 				{getMainContent()}
 			</div>
-			<div ref={refPreviewer} className='flex mobile-hidden'>
+			<div ref={refPreviewer} className='flex mobileHidden'>
 				<MainPreviewer3D id='texture-previewer' onHeightUpdated={handlePreviewer3DHeightUpdated} />
 			</div>
 		</div>

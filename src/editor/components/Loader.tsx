@@ -26,11 +26,11 @@ function Loader({ isLoading, isHidding = false, large = false }: Props) {
 		<>
 			{isLoading && (
 				<>
-					<div className={Utils.getClassName({ 'loader-large': large }, 'loader')}>
-						<div className='loader-spinner'></div>
-						{large && <div className='loader-text'>{t('loading')}...</div>}
+					<div className={Utils.getClassName({ large }, 'loader')}>
+						<div className='spinner'></div>
+						{large && <div className='text'>{t('loading')}...</div>}
 					</div>
-					{isHidding && <div className={'loader-hidder'} />}
+					{isHidding && <div className={'loaderHidder'} />}
 				</>
 			)}
 		</>

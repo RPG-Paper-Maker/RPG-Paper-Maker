@@ -57,7 +57,7 @@ import {
 	triggerTreeMap,
 	triggerVariables,
 } from '../store';
-import '../styles/MainMenu.css';
+import '../styles/MainMenuBar.css';
 import Button from './Button';
 import Dialog from './dialogs/Dialog';
 import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
@@ -646,10 +646,10 @@ function MainMenuBar() {
 
 	return (
 		<>
-			<div className='main-menu-bar'>
-				<img className='main-menu-bar-logo' src={'./favicon.ico'} alt='logo' />
+			<div className='mainMenuBar'>
+				<img className='logo' src={'./favicon.ico'} alt='logo' />
 				{isProjectOpened && (
-					<div className='mobile-only no-title-drag'>
+					<div className='mobileOnly noTitleDrag'>
 						<Menu
 							horizontal
 							isActivable
@@ -662,25 +662,25 @@ function MainMenuBar() {
 						</Menu>
 					</div>
 				)}
-				<div className='mobile-hidden no-title-drag'>
+				<div className='mobileHidden noTitleDrag'>
 					<MenuCustom items={items} horizontal />
 				</div>
 				<Flex one />
 				{hamburgerStates.length > 0 && (
-					<div className='main-menu-hamburger no-title-drag' onClick={handleClickHamburgerBack}>
+					<div className='hamburger noTitleDrag' onClick={handleClickHamburgerBack}>
 						<IoMdArrowBack />
 					</div>
 				)}
-				<div className='main-menu-hamburger no-title-drag' onClick={handleClickHamburger}>
+				<div className='hamburger noTitleDrag' onClick={handleClickHamburger}>
 					<RxHamburgerMenu />
 				</div>
 				{isHamburgerOpen && (
-					<div className='relative no-title-drag'>
-						<div className='main-menu-hamburger-open menu-sub-content'>{getMenuHamburger()}</div>
+					<div className='relative noTitleDrag'>
+						<div className='hamburgerOpen menuSubContent'>{getMenuHamburger()}</div>
 					</div>
 				)}
 				{Constants.IS_DESKTOP && (
-					<Flex fillHeight className='no-title-drag'>
+					<Flex fillHeight className='noTitleDrag'>
 						<Button square backgroundOnHoverOnly onClick={handleMinimize}>
 							<VscChromeMinimize />
 						</Button>
@@ -724,7 +724,7 @@ function MainMenuBar() {
 				onClose={handleRejectClearAllCache}
 			>
 				<Loader isLoading={isLoading} />
-				<div className='warning text-center'>{t('warning.clearing.cache')}</div>
+				<div className='warning textCenter'>{t('warning.clearing.cache')}</div>
 			</Dialog>
 			<Dialog
 				title={t('warning')}
@@ -739,7 +739,7 @@ function MainMenuBar() {
 				onClose={handleRejectSavePlay}
 			>
 				<Loader isLoading={isLoading} />
-				<div className='text-center'>{t('you.have.maps.not.saved')}</div>
+				<div className='textCenter'>{t('you.have.maps.not.saved')}</div>
 			</Dialog>
 			<Dialog
 				title={t('warning')}
@@ -747,7 +747,7 @@ function MainMenuBar() {
 				footer={<FooterOK onOK={handleCloseWarningProjectLocationExist} />}
 				onClose={handleCloseWarningProjectLocationExist}
 			>
-				<div className='text-center'>{t('path.location.doesnt.exists')}.</div>
+				<div className='textCenter'>{t('path.location.doesnt.exists')}.</div>
 			</Dialog>
 		</>
 	);

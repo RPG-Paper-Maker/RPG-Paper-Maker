@@ -47,7 +47,7 @@ function Editor() {
 					<Flex
 						id='main'
 						column
-						className='fill-space'
+						className='fillSpace'
 						onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => e.preventDefault()}
 					>
 						<MainMenuBar />

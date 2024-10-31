@@ -14,47 +14,41 @@
 		display: none;
 	}
 
-	.toolbar-mobile-separator {
+	.toolbarMobileSeparator {
 		border-top: 1px solid var(--darkest-bg-color);
 	}
 
-	.project-preview svg {
-		visibility: visible;
-	}
-
-	.project-preview {
+	.projectPreview {
 		background-color: var(--hover-main-bg-color);
+
+		svg {
+			visibility: visible;
+		}
 	}
 }
 
 @media (max-width: 1000px) {
-	.mobile-row {
-		flex-direction: row !important;
-	}
-	.mobile-column {
+	.mobileColumn {
 		flex-direction: column;
 	}
-	.mobile-column-reverse {
+	.mobileColumnReverse {
 		flex-direction: column-reverse;
 	}
-	.mobile-hidden {
+	.mobileHidden {
 		display: none;
 	}
-	.mobile-only {
+	.mobileOnly {
 		display: block;
 	}
-	.mobile-one {
-		flex-grow: 1 !important;
-	}
-	.mobile-fill-width {
+	.mobileFillWidth {
 		width: 100% !important;
 		max-width: 100% !important;
 	}
 }
 
 @media (min-width: 1001px) {
-	.main-menu-hamburger,
-	.main-menu-hamburger-open {
+	.hamburger,
+	.hamburgerOpen {
 		display: none !important;
 	}
 }

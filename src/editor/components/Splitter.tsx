@@ -11,6 +11,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { Utils } from '../common';
 import { triggerSplitting } from '../store';
 import '../styles/Splitter.css';
 import Flex from './Flex';
@@ -78,16 +79,17 @@ function Splitter({ children, vertical, defaultLeftSize, className, mobileHideFi
 
 	return (
 		<div
-			className={`splitter flex ${vertical ? 'flex-column' : ''} ${className} ${
-				isResizing ? (vertical ? 'col-resize' : 'row-resize') : ''
-			}`}
+			className={Utils.getClassName(
+				{ flexColumn: vertical, colResize: isResizing && vertical, rowResize: isResizing && !vertical },
+				`splitter flex ${className}`
+			)}
 			onMouseMove={handleMouseMove}
 		>
-			<div className={`${mobileHideFirst ? 'mobile-hidden' : 'mobile-fill-width'} flex`} ref={refLeft}>
+			<div className={`${mobileHideFirst ? 'mobileHidden' : 'mobileFillWidth'} flex`} ref={refLeft}>
 				{children[0]}
 			</div>
 			<div
-				className={`splitter-button mobile-hidden ${vertical ? 'vertical' : 'horizontal'}`}
+				className={`splitterButton mobileHidden ${vertical ? 'vertical' : 'horizontal'}`}
 				onMouseDown={handleMouseDownSplitter}
 			></div>
 			<Flex one>{children[1]}</Flex>

@@ -300,8 +300,8 @@ function MapEditor() {
 		<>
 			<Loader isLoading={firstLoading} />
 			<ContextMenu items={getContextMenuItems()} isFocused={isFocused} setIsFocused={setIsFocused}>
-				<div className={`map-editor ${cursorClass()}`} onDoubleClick={handleDoubleClick}>
-					<div ref={refCanvas} id='canvas-map-editor' className='fill-space' />
+				<div className={`mapEditor ${cursorClass()}`} onDoubleClick={handleDoubleClick}>
+					<div ref={refCanvas} id='canvas-map-editor' className='fillSpace' />
 					<canvas ref={refCanvasHUD} id='canvas-hud' />
 					<canvas ref={refCanvasRendering} id='canvas-rendering' width='4096px' height='4096px' />
 				</div>

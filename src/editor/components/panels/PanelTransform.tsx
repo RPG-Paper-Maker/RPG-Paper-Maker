@@ -325,7 +325,7 @@ function PanelTransform({ kind }: Props) {
 							<div>{getPositionText()}</div>
 						</>
 					) : (
-						<div className='text-center text-small-detail'>{t('no.map.element.selected')}.</div>
+						<div className='textCenter textSmallDetail'>{t('no.map.element.selected')}.</div>
 					)}
 				</Flex>
 			</Groupbox>

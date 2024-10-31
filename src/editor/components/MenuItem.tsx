@@ -66,7 +66,7 @@ function MenuItem({
 					disabled,
 					separator,
 				},
-				'menu-item'
+				'menuItem'
 			)}
 		>
 			{icon}

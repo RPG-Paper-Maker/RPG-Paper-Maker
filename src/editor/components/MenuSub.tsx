@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useState, useRef, useEffect, ReactNode, Children, cloneElement, ReactElement } from 'react';
-import '../styles/MenuSub.css';
+import React, { Children, cloneElement, ReactElement, ReactNode, useEffect, useRef, useState } from 'react';
 import { Utils } from '../common';
+import '../styles/MenuSub.css';
 
 type Props = {
 	children: ReactElement | ReactElement[];
@@ -106,7 +106,7 @@ function MenuSub({
 	useEffect(() => {
 		if (refMain.current && refMain.current.parentElement) {
 			if (!isRoot && refArrow.current) {
-				refArrow.current.classList.add('arrow-right');
+				refArrow.current.classList.add('arrowRight');
 			}
 			if (refTitle.current && refContent.current) {
 				const rect = refTitle.current.getBoundingClientRect();
@@ -143,9 +143,9 @@ function MenuSub({
 	const getShortcut = () => shortcut.join(' + ');
 
 	return (
-		<div ref={refMain} className='menu-sub'>
+		<div ref={refMain} className='menuSub'>
 			<div
-				className={Utils.getClassName({ active, opened: isOpen, disabled }, 'menu-sub-title')}
+				className={Utils.getClassName({ active, opened: isOpen, disabled }, 'title')}
 				ref={refTitle}
 				onMouseEnter={handleMouseEnterTitle}
 				onMouseLeave={handleMouseLeaveTitle}
@@ -159,7 +159,7 @@ function MenuSub({
 			</div>
 			<div ref={refContent} className='absolute'>
 				<div
-					className='menu-sub-content'
+					className='content'
 					onMouseLeave={handleMouseLeaveContent}
 					onMouseEnter={handleMouseEnterContent}
 					hidden={!subVisible}

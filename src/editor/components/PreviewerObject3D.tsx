@@ -99,7 +99,7 @@ function PreviewerObject3D({
 
 	return (
 		<Flex one fillWidth fillHeight centerV>
-			<div className='fill-width fill-height' ref={refCanvas} />
+			<div className='fillWidth fillHeight' ref={refCanvas} />
 		</Flex>
 	);
 }

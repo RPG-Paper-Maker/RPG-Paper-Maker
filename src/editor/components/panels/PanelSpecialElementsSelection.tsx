@@ -304,7 +304,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 
 	const getPictureOrCanvas = (id: number, picture: Model.Picture) => {
 		return displayCanvas ? (
-			<div id={getCanvasID(id)} className='icon-canvas' />
+			<div id={getCanvasID(id)} className='iconCanvas' />
 		) : (
 			<img src={picture.getPath()} alt={'icon'} />
 		);
@@ -316,13 +316,13 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		return (
 			<div
 				ref={selected ? selectedElementRef : null}
-				className={Utils.getClassName({ selected }, 'panel-special-element')}
+				className={Utils.getClassName({ selected }, 'element')}
 				key={element.id}
 				onClick={() => handleClick(element.id)}
 			>
 				<div className='title'>
-					<div className='picture-container'>{getPictureOrCanvas(element.id, picture)}</div>
-					<Flex one className='text-ellipsis'>
+					<div className='pictureContainer'>{getPictureOrCanvas(element.id, picture)}</div>
+					<Flex one className='textEllipsis'>
 						{element.toStringNameID()}
 					</Flex>
 					{getChevron(selected)}
@@ -342,7 +342,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	});
 
 	return (
-		<div ref={contentRef} id='list-previewer' className={'panel-special-elements'}>
+		<div ref={contentRef} id='list-previewer' className={'panelSpecialElements'}>
 			{listElements}
 		</div>
 	);

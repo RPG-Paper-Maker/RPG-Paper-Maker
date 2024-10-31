@@ -193,7 +193,7 @@ function Dropdown({
 					{
 						selected: selectedID === option.id,
 						disabled: disabledIds.includes(option.id),
-						'white-space-nowrap': !fillWidth,
+						whiteSpaceNowrap: !fillWidth,
 					},
 					'element'
 				)}
@@ -207,13 +207,13 @@ function Dropdown({
 
 	return (
 		<div
-			className={Utils.getClassName({ open: isOpen, disabled, 'fill-width': fillWidth }, 'dropdown')}
+			className={Utils.getClassName({ open: isOpen, disabled, fillWidth }, 'dropdown')}
 			style={{ width }}
 			ref={containerRef}
 			onClick={handleClick}
 		>
 			<Flex one centerV spaced>
-				<Flex one centerV className={Utils.getClassName({ 'text-ellipsis': fillWidth })}>
+				<Flex one centerV className={Utils.getClassName({ textEllipsis: fillWidth })}>
 					{getCurrentItem()}
 				</Flex>
 				<Flex>
@@ -221,7 +221,7 @@ function Dropdown({
 				</Flex>
 			</Flex>
 			<div
-				className={Utils.getClassName({ 'visibility-hidden': !canDisplayDropdown() }, 'content')}
+				className={Utils.getClassName({ visibilityHidden: !canDisplayDropdown() }, 'content')}
 				ref={dropdownContainerRef}
 			>
 				{getDropdownItems()}

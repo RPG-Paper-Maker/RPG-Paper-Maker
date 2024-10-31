@@ -181,7 +181,7 @@ function MainPreviewer3D({ id, onHeightUpdated }: Props) {
 		// eslint-disable-next-line
 	}, []);
 
-	return <div className='fill-width' ref={refCanvas} id={id} />;
+	return <div className='fillWidth' ref={refCanvas} id={id} />;
 }
 
 export default MainPreviewer3D;

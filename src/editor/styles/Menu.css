@@ -20,7 +20,7 @@
 	cursor: pointer;
 }
 
-.menu-horizontal {
+.menuHorizontal {
 	display: flex;
 	flex-direction: row;
 }

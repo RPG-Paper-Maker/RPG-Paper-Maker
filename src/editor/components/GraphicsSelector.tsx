@@ -182,8 +182,8 @@ function GraphicsSelector({
 		<>
 			<Flex column spaced>
 				{t('graphics')}:
-				<div className='graphics-selector' onDoubleClick={handleDoubleClick}>
-					<div className='graphics-selector-border' />
+				<div className='graphicsSelector' onDoubleClick={handleDoubleClick}>
+					<div className='border' />
 					{isCharacter && <canvas ref={refCanvas} className='pointer'></canvas>}
 					{isObject3D && !isOpenDialogObjects3D && (
 						<PreviewerObject3D sceneID={sceneID} objectID={graphicsID} />

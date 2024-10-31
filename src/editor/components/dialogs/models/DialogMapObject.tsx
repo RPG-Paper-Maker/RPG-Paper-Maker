@@ -358,7 +358,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 					</Flex>
 				</Flex>
 				<Flex one spacedLarge>
-					<Flex one spaced className={Utils.getClassName({ 'visibility-hidden': !selectedState })}>
+					<Flex one spaced className={Utils.getClassName({ visibilityHidden: !selectedState })}>
 						<Flex column one spaced>
 							<Tab
 								titles={tabTitles}
@@ -412,7 +412,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 								/>
 							</Flex>
 						</Flex>
-						<Flex spaced className={Utils.getClassName({ 'visibility-hidden': !selectedState })}>
+						<Flex spaced className={Utils.getClassName({ visibilityHidden: !selectedState })}>
 							<GraphicsSelector
 								sceneID='dialog-map-object'
 								graphicsID={graphicsID}
@@ -468,7 +468,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 								<Button>{t('update.transformations')}...</Button>
 							</Flex>
 						</Flex>
-						<Flex className={Utils.getClassName({ 'visibility-hidden': !selectedState })}>
+						<Flex className={Utils.getClassName({ visibilityHidden: !selectedState })}>
 							<Groupbox title={t('options')}>
 								<Flex spacedLarge>
 									<Flex column>
@@ -514,7 +514,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 							{t('can.be.triggered.another.object')}
 						</Checkbox>
 					</Flex>
-					<Flex className={Utils.getClassName({ 'visibility-hidden': !selectedState })}>
+					<Flex className={Utils.getClassName({ visibilityHidden: !selectedState })}>
 						<Checkbox isChecked={!!eventCommandDetection} onChange={handleChangeDetectionCheck}>
 							<Flex centerV spaced>
 								{t('detection')} <Button disabled={eventCommandDetection === null}>...</Button>

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-.dialog-overlay {
+.dialogOverlay {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -34,7 +34,7 @@
 	animation: fadeIn 0.25s;
 }
 
-.dialog-disable {
+.dialogDisable {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -44,7 +44,7 @@
 	background-color: rgba(0, 0, 0, 0.5);
 }
 
-.dialog-title {
+.dialogTitle {
 	display: flex;
 	align-items: center;
 	background-color: var(--main-bg-color);
@@ -55,19 +55,19 @@
 	cursor: grab;
 }
 
-.dialog-title-grabbing {
+.dialogTitleGrabbing {
 	cursor: grabbing;
 }
 
-.dialog-close {
+.dialogClose {
 	cursor: pointer;
 }
 
-.dialog-content {
+.dialogContent {
 	flex-grow: 1;
 	padding: 20px 20px 10px 20px;
 }
 
-.dialog-footer {
+.dialogFooter {
 	padding: 10px 20px 20px 20px;
 }

@@ -18,8 +18,8 @@
 	font-size: 0.8em;
 	text-align: center;
 	cursor: pointer;
-}
 
-.tips .icon {
-	padding-top: 2px;
+	.icon {
+		padding-top: 2px;
+	}
 }

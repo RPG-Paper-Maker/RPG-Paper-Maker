@@ -65,53 +65,45 @@ code {
 	flex-direction: row;
 }
 
-.flex-column {
+.flexColumn {
 	flex-direction: column;
 }
 
-.flex-one {
+.flexOne {
 	flex-grow: 1;
 	flex-basis: 0;
 }
 
-.flex-center-v {
+.flexCenterV {
 	align-items: center;
 }
 
-.flex-center-self-v {
+.flexCenterSelfV {
 	align-self: center;
 }
 
-.flex-center-h {
+.flexCenterH {
 	justify-content: center;
 }
 
-.flex-right-horizontally {
+.flexRightHorizontally {
 	display: flex;
 	justify-content: flex-end;
 }
 
-.flex-wrap {
+.flexWrap {
 	flex-wrap: wrap;
 }
 
-.gap-small {
+.gapSmall {
 	gap: 5px;
 }
 
-.gap-medium {
+.gapMedium {
 	gap: 10px;
 }
 
-.padding-small {
-	padding: 5px;
-}
-
-.padding-medium {
-	padding: 15px;
-}
-
-.padding-large {
+.paddingLarge {
 	padding: 30px;
 }
 
@@ -119,7 +111,7 @@ code {
 	margin-right: 0.5em;
 }
 
-.fill-space {
+.fillSpace {
 	margin: 0;
 	padding: 0;
 	position: absolute;
@@ -127,34 +119,30 @@ code {
 	height: 100%;
 }
 
-.fill-width {
+.fillWidth {
 	width: 100%;
 }
 
-.fill-height {
+.fillHeight {
 	height: 100%;
 }
 
-.zero-width {
+.zeroWidth {
 	width: 0;
 }
 
-.zero-height {
+.zeroHeight {
 	height: 0;
 }
 
-.no-select-text {
+.noSelectText {
 	-webkit-touch-callout: none; /* iOS Safari */
 	-webkit-user-select: none; /* Safari */
 	-khtml-user-select: none; /* Konqueror HTML */
 	-moz-user-select: none; /* Old versions of Firefox */
 	-ms-user-select: none; /* Internet Explorer/Edge */
 	user-select: none; /* Non-prefixed version, currently
-                                    supported by Chrome, Edge, Opera and Firefox */
-}
-
-.word-break {
-	word-break: break-all;
+     supported by Chrome, Edge, Opera and Firefox */
 }
 
 .pointer {
@@ -205,7 +193,7 @@ code {
 	position: relative;
 }
 
-.hight-z-index {
+.hightZIndex {
 	z-index: 999;
 }
 
@@ -235,7 +223,7 @@ code {
 	overflow-y: overlay;
 }
 
-.scrollable-flex-one {
+.scrollableFlexOne {
 	flex: 1 1 auto;
 	overflow-y: auto;
 	height: 0px;
@@ -250,16 +238,16 @@ code {
 	color: var(--red-color);
 }
 
-.text-center {
+.textCenter {
 	text-align: center;
 }
 
-.text-small-detail {
+.textSmallDetail {
 	color: var(--grey-color);
 	font-size: 11px;
 }
 
-.text-ellipsis {
+.textEllipsis {
 	display: block;
 	white-space: nowrap;
 	overflow: hidden;
@@ -268,11 +256,11 @@ code {
 	flex: 1;
 }
 
-.white-space-nowrap {
+.whiteSpaceNowrap {
 	white-space: nowrap;
 }
 
-.bg-darker {
+.bgDarker {
 	background-color: var(--darker-bg-color);
 }
 
@@ -280,20 +268,20 @@ code {
 	display: none !important;
 }
 
-.visibility-hidden {
+.visibilityHidden {
 	visibility: hidden;
 }
 
-.mobile-only {
+.mobileOnly {
 	display: none;
 }
 
-.disabled-label {
+.disabledLabel {
 	opacity: 0.4;
 	cursor: initial;
 }
 
-.canvas-renderer-0 {
+.canvasRenderer0 {
 	position: fixed;
 	left: 0;
 	top: 0;
@@ -304,7 +292,7 @@ code {
 	pointer-events: none;
 }
 
-.canvas-renderer-1 {
+.canvasRenderer1 {
 	position: fixed;
 	left: 0;
 	top: 0;
@@ -315,7 +303,7 @@ code {
 	pointer-events: none;
 }
 
-.canvas-renderer-2 {
+.canvasRenderer2 {
 	position: fixed;
 	left: 0;
 	top: 0;

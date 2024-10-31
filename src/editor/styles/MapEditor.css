@@ -9,51 +9,53 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-.map-editor-bar .menu-sub-title {
-	padding: 7px 10px 7px 10px;
+.mapEditorBar {
+	.menuSub .title {
+		padding: 7px 10px 7px 10px;
+	}
+
+	.menuItem:not(.separator) {
+		padding: 5px 10px 5px 10px;
+	}
+
+	svg {
+		height: 14px;
+	}
 }
 
-.map-editor-bar .menu-item:not(.separator) {
-	padding: 5px 10px 5px 10px;
-}
-
-.map-editor-bar svg {
-	height: 14px;
-}
-
-.map-editor {
+.mapEditor {
 	flex-grow: 1;
 	flex-basis: 0;
 	position: relative;
 	color: white;
-}
 
-.map-editor.cursor-translate {
-	cursor: url('../../assets/icons/cursor-translate.svg') 10 10, pointer;
-}
+	&.cursor-translate {
+		cursor: url('../../assets/icons/cursor-translate.svg') 10 10, pointer;
+	}
 
-.map-editor.cursor-rotate {
-	cursor: url('../../assets/icons/cursor-rotate.svg') 10 10, pointer;
-}
+	&.cursor-rotate {
+		cursor: url('../../assets/icons/cursor-rotate.svg') 10 10, pointer;
+	}
 
-.map-editor.cursor-scale {
-	cursor: url('../../assets/icons/cursor-scale.svg') 10 10, pointer;
-}
+	&.cursor-scale {
+		cursor: url('../../assets/icons/cursor-scale.svg') 10 10, pointer;
+	}
 
-.map-editor.cursor-pencil {
-	cursor: url('../../assets/icons/cursor-pencil.svg') 3 20, pointer;
-}
+	&.cursor-pencil {
+		cursor: url('../../assets/icons/cursor-pencil.svg') 3 20, pointer;
+	}
 
-.map-editor.cursor-rectangle {
-	cursor: url('../../assets/icons/cursor-rectangle.svg') 10 10, pointer;
-}
+	&.cursor-rectangle {
+		cursor: url('../../assets/icons/cursor-rectangle.svg') 10 10, pointer;
+	}
 
-.map-editor.cursor-pin {
-	cursor: url('../../assets/icons/cursor-pin.svg') 20 20, pointer;
-}
+	&.cursor-pin {
+		cursor: url('../../assets/icons/cursor-pin.svg') 20 20, pointer;
+	}
 
-.map-editor.cursor-pointer {
-	cursor: pointer;
+	&.cursor-pointer {
+		cursor: pointer;
+	}
 }
 
 #canvas-hud {

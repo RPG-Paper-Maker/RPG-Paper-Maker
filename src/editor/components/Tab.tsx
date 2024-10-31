@@ -122,7 +122,7 @@ function Tab({
 				<div
 					ref={selected ? selectedElementRef : null}
 					key={index}
-					className={Utils.getClassName({ selected }, 'tab-item')}
+					className={Utils.getClassName({ selected }, 'tabItem')}
 					onClick={() => handleClickItem(index)}
 				>
 					{title.getName()}
@@ -135,7 +135,7 @@ function Tab({
 
 	return (
 		<div className='tab'>
-			<div className='tab-titles'>
+			<div className='tabTitles'>
 				<div className={hideScroll ? 'flex' : 'scroll-area'}>{getTitles()}</div>
 				{!hideScroll && (
 					<>
@@ -154,7 +154,7 @@ function Tab({
 					</>
 				)}
 			</div>
-			<div className='tab-content'>{getContents()}</div>
+			<div className='tabContent'>{getContents()}</div>
 		</div>
 	);
 }

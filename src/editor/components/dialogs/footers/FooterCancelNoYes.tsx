@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import Button from '../../Button';
-import '../../../styles/Footer.css';
-import { BUTTON_TYPE } from '../../../common';
 import { useTranslation } from 'react-i18next';
+import { BUTTON_TYPE } from '../../../common';
+import '../../../styles/Footer.css';
+import Button from '../../Button';
 
 type Props = {
 	onCancel: () => void;
@@ -24,7 +24,7 @@ function FooterCancelNoYes({ onCancel, onNo, onYes }: Props) {
 	const { t } = useTranslation();
 
 	return (
-		<div className='footer-buttons'>
+		<div className='footerButtons'>
 			<Button onClick={onCancel}>{t('cancel')}</Button>
 			<Button onClick={onNo}>{t('no')}</Button>
 			<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={onYes}>

@@ -9,34 +9,31 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-.project-preview {
+.projectPreview {
 	display: flex;
 	padding: 10px;
 	cursor: pointer;
-}
 
-.project-preview:hover,
-.project-preview.selected {
-	background-color: var(--hover-main-bg-color);
-}
+	&:hover,
+	&.selected {
+		background-color: var(--hover-main-bg-color);
+	}
 
-.project-preview svg {
-	visibility: hidden;
-	padding: 5px;
-}
+	svg {
+		visibility: hidden;
+		padding: 5px;
+		color: var(--lighter-bg-color);
 
-.project-preview:hover svg {
-	visibility: visible;
-}
+		&:hover {
+			color: var(--main-color);
+		}
+	}
 
-.project-preview svg {
-	color: var(--lighter-bg-color);
-}
+	&:hover svg {
+		visibility: visible;
+	}
 
-.project-preview svg:hover {
-	color: var(--main-color);
-}
-
-.project-preview .title {
-	color: var(--primary-color);
+	.title {
+		color: var(--primary-color);
+	}
 }

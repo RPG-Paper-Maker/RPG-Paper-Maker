@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-.footer-buttons {
+.footerButtons {
 	display: flex;
 	justify-content: flex-end;
 	gap: 5px;

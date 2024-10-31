@@ -368,7 +368,7 @@ function TreeMaps({
 				}
 				onClose={handleRejectDelete}
 			>
-				<p className='warning text-center'>
+				<p className='warning textCenter'>
 					{isDeletingMap ? t('are.you.sure.delete.this.map') : t('are.you.sure.delete.this.directory')}
 					{!isDeletingMap && `${t('this.will.delete.all.maps.inside.folder')}.`}
 				</p>

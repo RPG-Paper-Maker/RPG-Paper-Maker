@@ -53,19 +53,19 @@ function Flex({
 		<div
 			className={Utils.getClassName(
 				{
-					'flex-column': column,
-					'flex-one': one,
-					'gap-small': spaced,
-					'gap-medium': spacedLarge,
-					'flex-center-v': centerV,
-					'flex-center-h': centerH,
-					'flex-center-self-v': centerSelfV,
-					'flex-right-horizontally': rightH,
-					'flex-wrap': wrap,
-					'fill-width': fillWidth,
-					'fill-height': fillHeight,
-					'zero-width': zeroWidth,
-					'zero-height': zeroHeight,
+					flexColumn: column,
+					flexOne: one,
+					gapSmall: spaced,
+					gapMedium: spacedLarge,
+					flexCenterV: centerV,
+					flexCenterH: centerH,
+					flexCenterSelfV: centerSelfV,
+					flexRightHorizontally: rightH,
+					flexWrap: wrap,
+					fillWidth,
+					fillHeight,
+					zeroWidth,
+					zeroHeight,
 				},
 				`flex ${className ?? ''}`
 			)}

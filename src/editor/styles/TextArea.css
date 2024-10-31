@@ -4,9 +4,9 @@ textarea {
 	color: var(--main-color);
 	border-radius: 2px;
 	height: 100px;
-}
 
-textarea:focus-visible {
-	border: 1px solid var(--primary-color);
-	outline-width: 0;
+	&:focus-visible {
+		border: 1px solid var(--primary-color);
+		outline-width: 0;
+	}
 }

@@ -22,7 +22,7 @@ type Props = {
 
 function Groupbox({ children, title = '', fillWidth = false, disabled = false }: Props) {
 	return (
-		<fieldset className={Utils.getClassName({ 'fill-width': fillWidth, disabled })}>
+		<fieldset className={Utils.getClassName({ fillWidth, disabled })}>
 			<legend>{title}</legend>
 			{children}
 		</fieldset>

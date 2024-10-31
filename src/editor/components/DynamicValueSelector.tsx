@@ -359,7 +359,7 @@ function DynamicValueSelector({
 	};
 
 	return (
-		<div className='dynamic-value-selector'>
+		<div className='dynamicValueSelector'>
 			<Dropdown
 				selectedID={kind}
 				onChange={handleChangeKind}

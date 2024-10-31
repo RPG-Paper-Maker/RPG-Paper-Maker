@@ -52,7 +52,7 @@ function PanelNoProject() {
 
 	const renderProjectsList = () => {
 		return projects.length === 0 ? (
-			<div className='text-small-detail'>{`${t('no.recent.projects.opened')}.`}</div>
+			<div className='textSmallDetail'>{`${t('no.recent.projects.opened')}.`}</div>
 		) : (
 			projects.map((project) => <ProjectPreview key={project.location} project={project} />)
 		);
@@ -63,12 +63,12 @@ function PanelNoProject() {
 	}, []);
 
 	return (
-		<Flex column one className='padding-large'>
-			<h2 className='mobile-hidden'>{t('recent.projects')}</h2>
-			<Flex one spacedLarge className='mobile-column-reverse'>
+		<Flex column one className='paddingLarge'>
+			<h2 className='mobileHidden'>{t('recent.projects')}</h2>
+			<Flex one spacedLarge className='mobileColumnReverse'>
 				<Flex column one>
-					<h2 className='mobile-only text-center'>{t('recent.projects')}</h2>
-					<div className='scrollable-flex-one'>{renderProjectsList()}</div>
+					<h2 className='mobileOnly textCenter'>{t('recent.projects')}</h2>
+					<div className='scrollableFlexOne'>{renderProjectsList()}</div>
 				</Flex>
 				<Flex column spaced>
 					<Button buttonType={BUTTON_TYPE.PRIMARY} big onClick={handleNewProject}>

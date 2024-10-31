@@ -168,7 +168,7 @@ class GL {
 			this.renderer.autoClear = false;
 			this.renderer.setSize(window.innerWidth, window.innerHeight);
 			this.renderer.shadowMap.enabled = true;
-			this.renderer.domElement.classList.add(`canvas-renderer-${layer}`);
+			this.renderer.domElement.classList.add(`canvasRenderer${layer}`);
 			this.renderer.autoClear = false;
 			this.renderer.setScissorTest(false);
 			this.renderer.setClearColor(0xffffff, 0);

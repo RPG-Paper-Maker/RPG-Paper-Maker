@@ -340,9 +340,9 @@ function Tree({
 	};
 
 	const removeDragDropClasses = (target: HTMLElement) => {
-		target.classList.remove('drag-over-top');
-		target.classList.remove('drag-over-bot');
-		target.classList.remove('drag-over-complete');
+		target.classList.remove('dragOverTop');
+		target.classList.remove('dragOverBot');
+		target.classList.remove('dragOverComplete');
 	};
 
 	const getCompleteNodes = (node: Node): Node[] => {
@@ -391,11 +391,11 @@ function Tree({
 				const y = event.clientY - rect.top;
 				if (node.isFolder()) {
 					if ((!onlyTop && y < 5) || (onlyTop && y < 10)) {
-						target.classList.add('drag-over-top');
+						target.classList.add('dragOverTop');
 					} else if (!onlyTop && y > 15) {
-						target.classList.add('drag-over-bot');
+						target.classList.add('dragOverBot');
 					} else if (!onlyTop) {
-						target.classList.add('drag-over-complete');
+						target.classList.add('dragOverComplete');
 					}
 				} else {
 					const isTop = y < 10;
@@ -421,19 +421,19 @@ function Tree({
 			if (
 				(node !== draggedNode &&
 					!checkNodeInsideNode(draggedNode, node) &&
-					target.classList.contains('drag-over-complete')) ||
-				target.classList.contains('drag-over-top') ||
-				target.classList.contains('drag-over-bot')
+					target.classList.contains('dragOverComplete')) ||
+				target.classList.contains('dragOverTop') ||
+				target.classList.contains('dragOverBot')
 			) {
 				const nodes = getCompleteNodes(draggedNode);
 				let dropList = draggedNode.parent?.children ?? list;
 				for (const n of nodes) {
 					ArrayUtils.removeElement(dropList, n);
 				}
-				if (target.classList.contains('drag-over-complete')) {
+				if (target.classList.contains('dragOverComplete')) {
 					node.children.push(draggedNode);
 					draggedNode.parent = node;
-				} else if (target.classList.contains('drag-over-top')) {
+				} else if (target.classList.contains('dragOverTop')) {
 					dropList = node.parent?.children ?? list;
 					let index = dropList.indexOf(node);
 					if (index === -1) {
@@ -443,7 +443,7 @@ function Tree({
 						ArrayUtils.insertAt(dropList, index++, n);
 						n.parent = node.parent;
 					}
-				} else if (target.classList.contains('drag-over-bot')) {
+				} else if (target.classList.contains('dragOverBot')) {
 					dropList = node.parent?.children ?? list;
 					let index = dropList.indexOf(node) + 1;
 					for (const n of nodes) {
@@ -759,7 +759,7 @@ function Tree({
 
 	const getHeaders = () =>
 		headers.length > 0 && (
-			<div className='tree-header'>
+			<div className='treeHeader'>
 				{headers.map((label) => (
 					<Flex one key={label}>
 						{t(label)}
@@ -773,7 +773,7 @@ function Tree({
 			<Flex column spacedLarge fillWidth fillHeight>
 				<div
 					onDoubleClick={handleDoubleClick}
-					className={Utils.getClassName({ disabled, 'zero-height': scrollable }, 'tree')}
+					className={Utils.getClassName({ disabled, zeroHeight: scrollable }, 'tree')}
 					style={{ minWidth: `${minWidth}px` }}
 				>
 					<Flex spaced>{getHeaders()}</Flex>
@@ -781,7 +781,7 @@ function Tree({
 				</div>
 				{showEditName && (
 					<Flex spaced>
-						<div className={Utils.getClassName({ 'disabled-label': disabled || isEditNameDisabled() })}>
+						<div className={Utils.getClassName({ disabledLabel: disabled || isEditNameDisabled() })}>
 							{t('name')}:
 						</div>
 						<InputText

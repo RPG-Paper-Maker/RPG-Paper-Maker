@@ -9,37 +9,37 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-.toolbar {
-	padding-top: 0px;
-	padding-bottom: 0px;
-	border-bottom: 1px solid var(--main-bg-color);
-}
-
 .toolbar,
 .toolbar .menu,
-.toolbar .menu-item {
+.toolbar .menuItem {
 	background-color: var(--darkest-bg-color);
 	gap: 0;
 }
 
-.toolbar .menu-item {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	font-size: 9px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	height: 36px;
-}
+.toolbar {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom: 1px solid var(--main-bg-color);
 
-.toolbar .menu-item svg {
-	width: 24px;
-	height: 24px;
-	color: var(--primary-color);
-	margin-right: 0;
-}
+	.menuItem {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		font-size: 9px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		height: 36px;
 
-.toolbar .menu-item.separator {
-	height: 20px;
-	margin-top: 10px;
+		svg {
+			width: 24px;
+			height: 24px;
+			color: var(--primary-color);
+			margin-right: 0;
+		}
+
+		&.separator {
+			height: 20px;
+			margin-top: 10px;
+		}
+	}
 }

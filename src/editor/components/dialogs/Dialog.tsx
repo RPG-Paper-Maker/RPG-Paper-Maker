@@ -266,7 +266,7 @@ function Dialog({
 		<>
 			{isOpen && (
 				<div
-					className='dialog-overlay'
+					className='dialogOverlay'
 					onClick={handleCloseOut}
 					onMouseDown={handleMouseDownOverlay}
 					onMouseUp={handleMouseUpTitle}
@@ -284,19 +284,19 @@ function Dialog({
 							transform: `translate(${isMoved ? '0,0' : '-50%,-50%'})`,
 						}}
 					>
-						{isDisabled && <div className='dialog-disable' />}
+						{isDisabled && <div className='dialogDisable' />}
 						<div
-							className={Utils.getClassName({ 'dialog-title-grabbing': isDragging }, 'dialog-title')}
+							className={Utils.getClassName({ dialogTitleGrabbing: isDragging }, 'dialogTitle')}
 							onMouseDown={handleMouseDownTitle}
 						>
 							<Flex one>{title}</Flex>
-							{onClose && <RxCross2 className='dialog-close' onClick={handleClose} />}
+							{onClose && <RxCross2 className='dialogClose' onClick={handleClose} />}
 						</div>
-						<div className='dialog-content'>
+						<div className='dialogContent'>
 							<Loader isLoading={isLoading} />
 							{children}
 						</div>
-						<div className='dialog-footer'>{footer}</div>
+						<div className='dialogFooter'>{footer}</div>
 					</div>
 				</div>
 			)}

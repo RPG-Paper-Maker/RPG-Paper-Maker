@@ -147,13 +147,13 @@ function PanelProject() {
 			<Splitter
 				vertical={false}
 				defaultLeftSize={266}
-				className='flex flex-one'
+				className='flex flexOne'
 				mobileHideFirst={projectMenuIndex === 2}
 			>
-				<Flex column one className='bg-darker scrollable'>
+				<Flex column one className='bgDarker scrollable'>
 					{!openLoading && (
 						<>
-							<div className='mobile-hidden'>
+							<div className='mobileHidden'>
 								<Menu
 									horizontal
 									isActivable
@@ -179,8 +179,8 @@ function PanelProject() {
 						</>
 					)}
 				</Flex>
-				<Flex column one className={'map-editor-bar ' + (projectMenuIndex !== 2 ? 'mobile-hidden' : '')}>
-					<div className='mobile-hidden'>
+				<Flex column one className={'mapEditorBar ' + (projectMenuIndex !== 2 ? 'mobileHidden' : '')}>
+					<div className='mobileHidden'>
 						<Tab
 							titles={mapsTabsTitles}
 							setTitles={setMapsTabsTitles}

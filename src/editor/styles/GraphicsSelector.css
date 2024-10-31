@@ -1,4 +1,4 @@
-.graphics-selector {
+.graphicsSelector {
 	display: flex;
 	flex-grow: 1;
 	background-color: var(--darkest-containers-bg-color);
@@ -10,13 +10,13 @@
 	position: relative;
 	width: 100px;
 	height: 100px;
-}
 
-.graphics-selector-border {
-	display: flex;
-	border: 2px dashed var(--primary-color);
-	cursor: pointer;
-	position: absolute;
-	width: calc(100% - 10px);
-	height: calc(100% - 10px);
+	.border {
+		display: flex;
+		border: 2px dashed var(--primary-color);
+		cursor: pointer;
+		position: absolute;
+		width: calc(100% - 10px);
+		height: calc(100% - 10px);
+	}
 }

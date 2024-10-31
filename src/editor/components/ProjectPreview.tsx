@@ -84,12 +84,12 @@ function ProjectPreview({ project }: Props) {
 	return (
 		<>
 			<div
-				className={Utils.getClassName({ selected: isDialogConfirmOpen }, 'project-preview')}
+				className={Utils.getClassName({ selected: isDialogConfirmOpen }, 'projectPreview')}
 				onClick={handleOpenProject}
 			>
 				<Flex column one spaced>
 					<div className='title'>{project.name}</div>
-					{project.location.length > 0 && <div className='text-small-detail'>{project.location}</div>}
+					{project.location.length > 0 && <div className='textSmallDetail'>{project.location}</div>}
 				</Flex>
 				<Flex centerV>
 					{Constants.IS_DESKTOP && <RxCross2 onClick={handleClickCloseProject} />}
@@ -102,7 +102,7 @@ function ProjectPreview({ project }: Props) {
 				footer={<FooterNoYes onNo={handleRejectRemoveProject} onYes={handleAcceptRemoveProject} />}
 				onClose={handleRejectRemoveProject}
 			>
-				<div className='warning text-center'>{t('warning.delete.project', { projectName: project.name })}</div>
+				<div className='warning textCenter'>{t('warning.delete.project', { projectName: project.name })}</div>
 			</Dialog>
 			<Dialog
 				title={t('warning')}
@@ -110,7 +110,7 @@ function ProjectPreview({ project }: Props) {
 				footer={<FooterOK onOK={handleCloseWarningLocation} />}
 				onClose={handleCloseWarningLocation}
 			>
-				<div className='text-center'>{t('path.location.doesnt.exists')}.</div>
+				<div className='textCenter'>{t('path.location.doesnt.exists')}.</div>
 			</Dialog>
 		</>
 	);

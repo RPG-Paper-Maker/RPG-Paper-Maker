@@ -177,7 +177,7 @@ function Toolbar() {
 					</MenuItem>
 				</Menu>
 			</div>
-			<div className='toolbar-mobile-separator'></div>
+			<div className='toolbarMobileSeparator'></div>
 		</>
 	);
 }

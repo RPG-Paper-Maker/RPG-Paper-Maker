@@ -14,50 +14,50 @@
 	flex-direction: column;
 	flex-grow: 1;
 	background-color: var(--darker-bg-color);
-}
 
-.tab-titles {
-	display: flex;
-	gap: 1px;
-	white-space: nowrap;
-	align-items: center;
-
-	.scroll-area {
+	.tabTitles {
 		display: flex;
-		flex-grow: 1;
-		overflow: hidden;
-		width: 0;
+		gap: 1px;
+		white-space: nowrap;
+		align-items: center;
+
+		.scroll-area {
+			display: flex;
+			flex-grow: 1;
+			overflow: hidden;
+			width: 0;
+		}
 	}
-}
 
-.tab-content {
-	display: flex;
-	flex-direction: column;
-	flex-grow: 1;
-}
+	.tabContent {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+	}
 
-.tab-item {
-	display: flex;
-	align-items: center;
-	padding: 5px 10px 5px 10px;
-	gap: 5px;
-	font-size: 12px;
-	background-color: var(--main-bg-color);
-	border-radius: 5px 5px 0px 0px;
-	background-color: var(--darker-bg-color);
-	color: var(--grey-color);
-	cursor: pointer;
-}
+	.tabItem {
+		display: flex;
+		align-items: center;
+		padding: 5px 10px 5px 10px;
+		gap: 5px;
+		font-size: 12px;
+		background-color: var(--main-bg-color);
+		border-radius: 5px 5px 0px 0px;
+		background-color: var(--darker-bg-color);
+		color: var(--grey-color);
+		cursor: pointer;
 
-.tab-item:hover {
-	color: var(--lightest-bg-color);
-}
+		&:hover {
+			color: var(--lightest-bg-color);
+		}
 
-.tab-item.selected {
-	background-color: var(--main-bg-color);
-	color: white;
-}
+		&.selected {
+			background-color: var(--main-bg-color);
+			color: white;
+		}
 
-.tab-item:has(svg:hover) {
-	color: var(--red-color);
+		&:has(svg:hover) {
+			color: var(--red-color);
+		}
+	}
 }

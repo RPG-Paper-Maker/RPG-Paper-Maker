@@ -69,13 +69,13 @@ function TreeItem({
 	const getString = () => {
 		if (headers && headers.length > 0) {
 			return node.toStrings().map((value, index) => (
-				<Flex one spaced className='text-ellipsis' key={headers[index]}>
+				<Flex one spaced className='textEllipsis' key={headers[index]}>
 					{value}
 				</Flex>
 			));
 		} else {
 			return (
-				<Flex one spaced className='text-ellipsis'>
+				<Flex one spaced className='textEllipsis'>
 					{doNotShowID ? `${Model.Base.STRING_START} ${node.content.getName()}` : node.toString()}
 				</Flex>
 			);
@@ -84,7 +84,7 @@ function TreeItem({
 
 	return (
 		<div
-			className={Utils.getClassName({ selected }, 'tree-item no-select-text')}
+			className={Utils.getClassName({ selected }, 'treeItem noSelectText')}
 			style={{ paddingLeft: `${5 + level * 15}px` }}
 			onMouseDown={handleMouseDown}
 			onDragStart={(event: React.DragEvent) => onDragStart?.(event, node)}

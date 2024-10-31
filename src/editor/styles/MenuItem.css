@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-.menu-item {
+.menuItem {
 	display: flex;
 	align-items: center;
 	background-color: var(--main-bg-color);
@@ -22,37 +22,37 @@
 	white-space: nowrap;
 	transition: all 0.25s ease-out;
 	gap: 10px;
-}
 
-.menu-item:not(.menu-item.disabled):not(.menu-item.active):hover {
-	background-color: var(--hover-main-bg-color) !important;
-}
+	&:not(.menuItem.disabled):not(.menuItem.active):hover {
+		background-color: var(--hover-main-bg-color) !important;
+	}
 
-.menu-item.active {
-	background-color: var(--primary-dark-color);
-}
+	&.active {
+		background-color: var(--primary-dark-color);
+	}
 
-.menu-item.disabled {
-	color: #999999ce;
-	cursor: default;
-}
+	&.disabled {
+		color: #999999ce;
+		cursor: default;
+	}
 
-.menu-item.disabled svg {
-	color: #999999ce !important;
-}
+	&.disabled svg {
+		color: #999999ce !important;
+	}
 
-.menu-item.separator {
-	background-color: var(--lighter-bg-color) !important;
-	padding: 0.5px;
-	margin-left: 5px;
-	margin-right: 5px;
-}
+	&.separator {
+		background-color: var(--lighter-bg-color) !important;
+		padding: 0.5px;
+		margin-left: 5px;
+		margin-right: 5px;
+	}
 
-.menu-item .shortcut {
-	color: var(--grey-light-color);
-	font-size: 10px;
-}
+	.shortcut {
+		color: var(--grey-light-color);
+		font-size: 10px;
+	}
 
-.menu-item.disabled .shortcut {
-	color: var(--grey-color);
+	&.disabled .shortcut {
+		color: var(--grey-color);
+	}
 }

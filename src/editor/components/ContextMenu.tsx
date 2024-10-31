@@ -92,22 +92,24 @@ function ContextMenu({ children, items = [], isFocused, setIsFocused }: Props) {
 				currentDialog.removeEventListener('mousedown', handleMouseDownOutside as EventListener);
 			};
 		}
+		// eslint-disable-next-line
 	}, [isOpen]);
 
 	useEffect(() => {
 		setIsFocused(false);
+		// eslint-disable-next-line
 	}, [isOpeningNewDialog]);
 
 	return (
 		<div
 			ref={refComplete}
-			className='flex flex-one fill-width fill-height'
+			className='flex flexOne fillWidth fillHeight'
 			onMouseDown={handleMouseDown}
 			onTouchStart={handleTouchStart}
 			onTouchEnd={handleTouchEnd}
 		>
 			{children}
-			<div ref={refMenu} className={Utils.getClassName({ hidden: !isOpen }, 'fixed hight-z-index')}>
+			<div ref={refMenu} className={Utils.getClassName({ hidden: !isOpen }, 'fixed hightZIndex')}>
 				<MenuCustom horizontal={false} items={items} allowKeyboard={isFocused} />
 			</div>
 		</div>
