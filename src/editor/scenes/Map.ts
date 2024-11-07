@@ -128,6 +128,9 @@ class Map extends Base {
 	public mouseUp = false;
 	public isTransforming = false;
 	public isDraggingTransforming = false;
+	public movingObject: Model.CommonObject | null = null;
+	public movingObjectInitialPosition: Position | null = null;
+	public previewDeletedMovingObject: Model.CommonObject | null = null;
 
 	constructor(tag: Model.TreeMapTag) {
 		super(tag);
@@ -550,9 +553,12 @@ class Map extends Base {
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
 				this.updateWallFromCursor(true, preview, removePreview);
 				break;
-			case ELEMENT_MAP_KIND.OBJECT:
+			case ELEMENT_MAP_KIND.OBJECT: {
+				const previousPosition = this.cursorObject.position.clone();
 				this.updateObjectCursor(preview, position);
+				this.moveObject(previousPosition, position);
 				break;
+			}
 			default: {
 				if (!preview) {
 					const positions = spriteLayer ? [position] : Mathf.traceLine(this.lastPosition, position);
@@ -624,6 +630,23 @@ class Map extends Base {
 			this.cursorObject.position.setCoords(position.x, position.y, position.yPixels, position.z);
 			this.needsUpdateComponent = true;
 			this.cursorObject.updateMeshPosition();
+		}
+	}
+
+	moveObject(previousPosition: Position, position: Position) {
+		if (this.movingObject !== null) {
+			const previousPortion = this.getMapPortionByPosition(previousPosition);
+			const newPortion = this.getMapPortionByPosition(position);
+			if (previousPortion && newPortion) {
+				previousPortion.model.objects.delete(previousPosition.toKey());
+				if (this.previewDeletedMovingObject && this.previewDeletedMovingObject !== this.movingObject) {
+					previousPortion.model.objects.set(previousPosition.toKey(), this.previewDeletedMovingObject);
+				}
+				this.previewDeletedMovingObject = newPortion.model.objects.get(position.toKey()) ?? null;
+				newPortion.model.objects.set(position.toKey(), this.movingObject);
+				Scene.Map.current!.portionsToUpdate.add(previousPortion);
+				Scene.Map.current!.portionsToUpdate.add(newPortion);
+			}
 		}
 	}
 
@@ -1314,7 +1337,7 @@ class Map extends Base {
 	}
 
 	onKeyDownImmediate() {
-		if (this.rectangleStartPosition === null) {
+		if (this.rectangleStartPosition === null && this.movingObject === null) {
 			this.cursor.onKeyDownImmediate();
 			this.requestPaintHUD = true;
 		}
@@ -1360,6 +1383,10 @@ class Map extends Base {
 											: Project.current!.settings.mapEditorCurrentAutotileTexture
 									);
 									break;
+							}
+							if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+								this.movingObject = this.getSelectedObject();
+								this.movingObjectInitialPosition = this.lastPosition;
 							}
 							break;
 					}
@@ -1473,6 +1500,39 @@ class Map extends Base {
 		this.lockedY = null;
 		this.lockedYPixels = null;
 		this.lockedLayer = null;
+		if (
+			this.movingObject &&
+			this.movingObjectInitialPosition &&
+			!this.cursorObject.position.equals(this.movingObjectInitialPosition)
+		) {
+			const previousPortion = this.getMapPortionByPosition(this.movingObjectInitialPosition);
+			const newPortion = this.getMapPortionByPosition(this.cursorObject.position);
+			if (previousPortion && newPortion) {
+				this.portionsToSave.add(previousPortion);
+				this.portionsToSave.add(newPortion);
+				this.undoRedoStates.push(
+					UndoRedoState.create(
+						this.movingObjectInitialPosition,
+						this.movingObject,
+						ELEMENT_MAP_KIND.OBJECT,
+						null,
+						ELEMENT_MAP_KIND.OBJECT
+					)
+				);
+				this.undoRedoStates.push(
+					UndoRedoState.create(
+						this.cursorObject.position,
+						this.previewDeletedMovingObject,
+						ELEMENT_MAP_KIND.OBJECT,
+						this.movingObject,
+						ELEMENT_MAP_KIND.OBJECT
+					)
+				);
+			}
+		}
+		this.movingObjectInitialPosition = null;
+		this.movingObject = null;
+		this.previewDeletedMovingObject = null;
 		this.cursorWall.onMouseUp();
 		if (this.isDraggingTransforming) {
 			this.updateTransform();
