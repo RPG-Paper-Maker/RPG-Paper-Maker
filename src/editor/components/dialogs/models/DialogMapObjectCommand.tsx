@@ -23,6 +23,7 @@ import DialogCommandChangeMapProperties from '../commands/DialogCommandChangeMap
 import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreenTone';
 import DialogCommandChangeWeather from '../commands/DialogCommandChangeWeather';
 import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
+import DialogCommandFlashScreen from '../commands/DialogCommandFlashScreen';
 import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
 import DialogCommandSetDialogBoxOptions from '../commands/DialogCommandSetDialogBoxOptions';
 import DialogCommandShakeScreen from '../commands/DialogCommandShakeScreen';
@@ -300,6 +301,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandChangeScreenTone {...options} />;
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
 				return <DialogCommandShakeScreen {...options} />;
+			case EVENT_COMMAND_KIND.FLASH_SCREEN:
+				return <DialogCommandFlashScreen {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_WEATHER:
 				return <DialogCommandChangeWeather {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_MAP_PROPERTIES:
