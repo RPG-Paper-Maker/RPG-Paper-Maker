@@ -20,7 +20,7 @@ class Grid {
 		const material = new THREE.LineBasicMaterial({
 			color: 0xffffff,
 			transparent: true,
-			opacity: 0.3,
+			opacity: 0.2,
 		});
 		const points = [];
 		for (let i = 0, l = map.model.length; i <= l; i++) {

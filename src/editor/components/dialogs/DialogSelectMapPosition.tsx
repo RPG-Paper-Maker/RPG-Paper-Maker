@@ -66,7 +66,6 @@ function DialogSelectMapPosition({
 		setMapForcedCurrentSelectedItemID(defaultMapID);
 		setX(defaultX);
 		setY(defaultY);
-		setYp(defaultYp);
 		setZ(defaultZ);
 	};
 
@@ -77,6 +76,7 @@ function DialogSelectMapPosition({
 		} else {
 			tag.cursorPosition = new Position(defaultX, defaultY, 0, defaultZ);
 			tag.cursorPosition.updateYPixels(defaultYp);
+			setYp(tag.cursorPosition.yPixels);
 		}
 		setCurrentMapTag(tag);
 	};
@@ -100,7 +100,7 @@ function DialogSelectMapPosition({
 	const handleChangeYp = (yp: number) => {
 		setYp(yp);
 		if (Scene.Map.currentpositionSelector) {
-			Scene.Map.currentpositionSelector.cursor.position.yPixels = yp;
+			Scene.Map.currentpositionSelector.cursor.position.updateYPixels(yp);
 			Scene.Map.currentpositionSelector.syncCursorGrid();
 		}
 	};
@@ -117,7 +117,7 @@ function DialogSelectMapPosition({
 		if (Scene.Map.currentpositionSelector) {
 			setX(Scene.Map.currentpositionSelector.cursor.position.x);
 			setY(Scene.Map.currentpositionSelector.cursor.position.y);
-			setYp(Scene.Map.currentpositionSelector.cursor.position.yPixels);
+			setYp(Scene.Map.currentpositionSelector.cursor.position.getTotalYPixels());
 			setZ(Scene.Map.currentpositionSelector.cursor.position.z);
 		}
 	};

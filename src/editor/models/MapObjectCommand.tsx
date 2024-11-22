@@ -1014,7 +1014,7 @@ class MapObjectCommand extends Base {
 	}
 
 	toStringTeleportObject(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
-		let texts = [];
+		const texts = [];
 		texts.push(
 			`${this.toStringDynamicObject(iterator, properties, parameters)} ${i18next
 				.t('to.the.coordinates')
