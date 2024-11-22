@@ -10,31 +10,31 @@
 */
 
 import * as THREE from 'three';
-import { Model, Scene } from '../Editor';
 import { Project } from '.';
+import { Scene } from '../Editor';
 
 class Grid {
 	public line!: THREE.LineSegments;
 
-	initialize(model: Model.Map) {
+	initialize(map: Scene.Map) {
 		const material = new THREE.LineBasicMaterial({
 			color: 0xffffff,
 			transparent: true,
 			opacity: 0.3,
 		});
 		const points = [];
-		for (let i = 0, l = model.length; i <= l; i++) {
+		for (let i = 0, l = map.model.length; i <= l; i++) {
 			points.push(new THREE.Vector3(i * Project.SQUARE_SIZE, 0, 0));
-			points.push(new THREE.Vector3(i * Project.SQUARE_SIZE, 0, model.width * Project.SQUARE_SIZE));
+			points.push(new THREE.Vector3(i * Project.SQUARE_SIZE, 0, map.model.width * Project.SQUARE_SIZE));
 		}
-		for (let i = 0, l = model.width; i <= l; i++) {
+		for (let i = 0, l = map.model.width; i <= l; i++) {
 			points.push(new THREE.Vector3(0, 0, i * Project.SQUARE_SIZE));
-			points.push(new THREE.Vector3(model.length * Project.SQUARE_SIZE, 0, i * Project.SQUARE_SIZE));
+			points.push(new THREE.Vector3(map.model.length * Project.SQUARE_SIZE, 0, i * Project.SQUARE_SIZE));
 		}
 		const geometry = new THREE.BufferGeometry().setFromPoints(points);
 		this.line = new THREE.LineSegments(geometry, material);
 		this.line.renderOrder = 5;
-		Scene.Map.current?.scene.add(this.line);
+		map.scene.add(this.line);
 	}
 }
 

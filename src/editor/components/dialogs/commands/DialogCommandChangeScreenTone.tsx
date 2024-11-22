@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
 import { Project } from '../../../core';
@@ -108,7 +108,7 @@ function DialogCommandChangeScreenTone({ isOpen, setIsOpen, list, onAccept, onRe
 		onReject();
 	};
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (isOpen) {
 			initialize();
 		}

@@ -10,19 +10,21 @@
 */
 
 import * as THREE from 'three';
-import { MapElement, Scene } from '../Editor';
 import { CustomGeometry, Frame, Position, Project } from '.';
-import { Inputs } from '../managers';
 import { KEY } from '../common';
+import { MapElement, Scene } from '../Editor';
+import { Inputs } from '../managers';
 
 class Cursor {
 	public position: Position;
+	public map: Scene.Map;
 	public mesh!: THREE.Mesh<CustomGeometry, THREE.MeshPhongMaterial>;
 	public frame = new Frame(200);
 	public frameMove = new Frame(20);
 
-	constructor(position: Position) {
+	constructor(position: Position, map: Scene.Map) {
 		this.position = position;
+		this.map = map;
 	}
 
 	initialize(material: THREE.MeshPhongMaterial, frames = 4, addToScene = true) {
@@ -53,25 +55,25 @@ class Cursor {
 		this.mesh.position.set(x, y, z);
 		this.mesh.renderOrder = 2;
 		if (addToScene) {
-			Scene.Map.current!.scene.add(this.mesh);
+			this.map.scene.add(this.mesh);
 		}
 	}
 
 	addToScene() {
-		Scene.Map.current!.scene.add(this.mesh);
+		this.map.scene.add(this.mesh);
 	}
 
 	removeFromScene() {
-		Scene.Map.current!.scene.remove(this.mesh);
+		this.map.scene.remove(this.mesh);
 	}
 
 	onKeyDownImmediate() {
 		if (this.frameMove.update()) {
-			const angle = Scene.Map.current!.camera.horizontalAngle;
+			const angle = this.map.camera.horizontalAngle;
 			const minX = 0;
 			const minZ = 0;
-			const maxX = Scene.Map.current!.model.width - 1;
-			const maxZ = Scene.Map.current!.model.length - 1;
+			const maxX = this.map.model.width - 1;
+			const maxZ = this.map.model.length - 1;
 			for (const key of Inputs.keys) {
 				let xPlus = 0;
 				let zPlus = 0;
@@ -102,13 +104,14 @@ class Cursor {
 
 	updateMeshPosition() {
 		const vector = this.position.toVector3(false);
-		this.mesh.position.set(vector.x, vector.y + Scene.Map.current!.camera.getYOffsetDepth(), vector.z);
+		this.mesh.position.set(vector.x, vector.y + this.map.camera.getYOffsetDepth(), vector.z);
 	}
 
 	syncWithCameraTargetPosition() {
 		this.updateMeshPosition();
 		const vectorCenter = this.position.toVector3();
-		Scene.Map.current!.camera.targetPosition.set(vectorCenter.x, vectorCenter.y, vectorCenter.z);
+		this.map.camera.targetPosition.set(vectorCenter.x, vectorCenter.y, vectorCenter.z);
+		this.map.cursorPositionUpdated = true;
 	}
 
 	update() {

@@ -135,13 +135,13 @@ function MapEditor() {
 				dispatch(setNeedsUpdateMapEditor());
 				map.needsUpdateComponent = false;
 			}
-			if (!map.loading && Inputs.keys.length > 0) {
+			if (Inputs.isMapFocused && !map.loading && Inputs.keys.length > 0) {
 				map.onKeyDownImmediate();
 			}
 			if (!map.loading) {
 				map.update();
 			}
-			if (!map.loading) {
+			if (map.initialized) {
 				map.draw3D();
 			}
 			if (!map.loading) {

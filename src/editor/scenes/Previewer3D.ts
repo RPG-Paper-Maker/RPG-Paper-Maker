@@ -58,6 +58,7 @@ class Previewer3D extends Base {
 	async load() {
 		this.initializeSunLight();
 		this.loading = false;
+		this.initialized = true;
 	}
 
 	async loadMaterial() {
@@ -72,7 +73,7 @@ class Previewer3D extends Base {
 		const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
 		const floor = MapElement.Floor.create(texture);
 		const geometry = new CustomGeometry();
-		floor.updateGeometry(geometry, new Position(), width, height, 0);
+		floor.updateGeometry(Scene.Map.current!, geometry, new Position(), width, height, 0);
 		this.addToScene(geometry);
 	}
 
@@ -82,7 +83,7 @@ class Previewer3D extends Base {
 			this.clear();
 			return;
 		}
-		const texturesAutotile = await MapElement.Autotiles.loadAutotileTexture(autotileID);
+		const texturesAutotile = await MapElement.Autotiles.loadAutotileTexture(Scene.Map.current, autotileID);
 		const pictureID = autotile.pictureID;
 		let includedTexture: TextureBundle | null = null;
 		if (texturesAutotile) {
@@ -96,6 +97,7 @@ class Previewer3D extends Base {
 		if (includedTexture !== null) {
 			const autotiles = new MapElement.Autotiles(includedTexture);
 			autotiles.updateGeometry(
+				Scene.Map.current!,
 				new Position(),
 				MapElement.Autotile.create(autotileID, MapElement.Autotiles.PREVIEW_TILE, texture)
 			);
@@ -108,7 +110,7 @@ class Previewer3D extends Base {
 		const { width, height } = Manager.GL.getMaterialTextureSize(this.material);
 		const sprite = MapElement.Sprite.create(kind, texture);
 		const geometry = new CustomGeometryFace();
-		sprite.updateGeometry(geometry, width, height, new Position(), 0, true, null);
+		sprite.updateGeometry(Scene.Map.current!, geometry, width, height, new Position(), 0, true, null);
 		this.addToScene(geometry);
 	}
 
@@ -118,7 +120,7 @@ class Previewer3D extends Base {
 			this.clear();
 			return;
 		}
-		const textureWall = await MapElement.SpriteWall.loadWallTexture(wallID);
+		const textureWall = await MapElement.SpriteWall.loadWallTexture(Scene.Map.current, wallID);
 		if (textureWall) {
 			const { width, height } = Manager.GL.getMaterialTextureSize(textureWall);
 			const spriteLeft = MapElement.SpriteWall.create(wallID, SPRITE_WALL_TYPE.LEFT);
@@ -139,7 +141,7 @@ class Previewer3D extends Base {
 			this.clear();
 			return;
 		}
-		const textureMountain = await MapElement.Mountains.loadMountainTexture(mountainID);
+		const textureMountain = await MapElement.Mountains.loadMountainTexture(Scene.Map.current, mountainID);
 		if (textureMountain) {
 			const wpercent = Position3D.getPercentOfPixels(wp);
 			const hpercent = Position3D.getPercentOfPixels(hp);
@@ -152,7 +154,7 @@ class Previewer3D extends Base {
 			const floor = MapElement.Floor.create(new Rectangle(textureFloor.x, textureFloor.y, 1, 1));
 			geometry = new CustomGeometry();
 			const floorPosition = new Position(0, hs, hpercent);
-			floor.updateGeometry(geometry, floorPosition, width, height, 0);
+			floor.updateGeometry(Scene.Map.current!, geometry, floorPosition, width, height, 0);
 			this.addToScene(geometry, this.material, false, new THREE.Vector3(0, (floorPosition.getTotalY() / 2) * 16));
 		}
 	}
@@ -167,7 +169,7 @@ class Previewer3D extends Base {
 			this.clear();
 			return;
 		}
-		const texture = await Object3D.loadObject3DTexture(object.id);
+		const texture = await Object3D.loadObject3DTexture(Scene.Map.current, object.id);
 		const geometry = new CustomGeometry();
 		const object3DElement = MapElement.Object3D.create(object);
 		if (object.shapeKind === SHAPE_KIND.CUSTOM) {

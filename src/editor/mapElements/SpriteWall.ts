@@ -50,16 +50,15 @@ class SpriteWall extends Base {
 		return wall;
 	}
 
-	static getWallTexture(id: number): THREE.MeshPhongMaterial | null {
-		const textureWall =
-			Scene.Map.current!.texturesWalls[Project.current!.specialElements.getWallByID(id).pictureID];
+	static getWallTexture(map: Scene.Map, id: number): THREE.MeshPhongMaterial | null {
+		const textureWall = map.texturesWalls[Project.current!.specialElements.getWallByID(id).pictureID];
 		return textureWall || null;
 	}
 
-	static async loadWallTexture(id: number): Promise<THREE.MeshPhongMaterial> {
+	static async loadWallTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
 		const wall = Project.current!.specialElements.getWallByID(id);
 		const pictureID = wall.pictureID;
-		let textureWall = Scene.Map.current ? Scene.Map.current.texturesWalls[pictureID] : null;
+		let textureWall = map ? map.texturesWalls[pictureID] : null;
 		if (!textureWall) {
 			if (wall) {
 				const picture = Project.current!.pictures.getByID(PICTURE_KIND.WALLS, pictureID);
@@ -71,8 +70,8 @@ class SpriteWall extends Base {
 			} else {
 				textureWall = Manager.GL.loadTextureEmpty();
 			}
-			if (Scene.Map.current) {
-				Scene.Map.current.texturesWalls[pictureID] = textureWall;
+			if (map) {
+				map.texturesWalls[pictureID] = textureWall;
 			}
 		}
 		return textureWall;
@@ -114,8 +113,8 @@ class SpriteWall extends Base {
 		return Manager.GL.createMaterial({ texture });
 	}
 
-	static getWall(position: Position) {
-		const mapPortion = Scene.Map.current!.getMapPortionByPosition(position);
+	static getWall(map: Scene.Map, position: Position) {
+		const mapPortion = map.getMapPortionByPosition(position);
 		return mapPortion !== null ? mapPortion.model.walls.get(position.toKey()) || null : null;
 	}
 
@@ -133,7 +132,7 @@ class SpriteWall extends Base {
 		return sprite !== null && sprite.wallID === id;
 	}
 
-	static updateAround(position: Position, save: boolean) {
+	static updateAround(map: Scene.Map, position: Position, save: boolean) {
 		const positions = [
 			position,
 			position.getLeft(),
@@ -145,15 +144,15 @@ class SpriteWall extends Base {
 		];
 		const globalPortion = position.getGlobalPortion();
 		for (const sidePosition of positions) {
-			const sideSprite = this.getWall(sidePosition);
-			sideSprite?.update(sidePosition);
+			const sideSprite = this.getWall(map, sidePosition);
+			sideSprite?.update(map, sidePosition);
 			const sideGlobalPortion = sidePosition.getGlobalPortion();
 			if (!globalPortion.equals(sideGlobalPortion)) {
-				const mapPortion = Scene.Map.current!.getMapPortionFromGlobalPortion(sideGlobalPortion);
+				const mapPortion = map.getMapPortionFromGlobalPortion(sideGlobalPortion);
 				if (mapPortion) {
-					Scene.Map.current!.portionsToUpdate.add(mapPortion);
+					map.portionsToUpdate.add(mapPortion);
 					if (save) {
-						Scene.Map.current!.portionsToSave.add(mapPortion);
+						map.portionsToSave.add(mapPortion);
 					}
 				}
 			}
@@ -231,14 +230,14 @@ class SpriteWall extends Base {
 		);
 	}
 
-	update(position: Position) {
+	update(map: Scene.Map, position: Position) {
 		// Getting all sprites
-		const spriteLeft = SpriteWall.getWall(position.getLeft());
-		const spriteRight = SpriteWall.getWall(position.getRight());
-		const spriteTopLeft = SpriteWall.getWall(position.getTopLeft());
-		const spriteTopRight = SpriteWall.getWall(position.getTopRight());
-		const spriteBotLeft = SpriteWall.getWall(position.getBotLeft());
-		const spriteBotRight = SpriteWall.getWall(position.getBotRight());
+		const spriteLeft = SpriteWall.getWall(map, position.getLeft());
+		const spriteRight = SpriteWall.getWall(map, position.getRight());
+		const spriteTopLeft = SpriteWall.getWall(map, position.getTopLeft());
+		const spriteTopRight = SpriteWall.getWall(map, position.getTopRight());
+		const spriteBotLeft = SpriteWall.getWall(map, position.getBotLeft());
+		const spriteBotRight = SpriteWall.getWall(map, position.getBotRight());
 
 		// Borders
 		let tA: SPRITE_WALL_TYPE;

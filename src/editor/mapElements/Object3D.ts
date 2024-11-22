@@ -57,8 +57,8 @@ abstract class Object3D extends Base {
 		return object;
 	}
 
-	static getObject3DTexture(id: number, hovered = false): THREE.MeshPhongMaterial | null {
-		const array = hovered ? Scene.Map.current!.texturesObjects3DHover : Scene.Map.current!.texturesObjects3D;
+	static getObject3DTexture(map: Scene.Map, id: number, hovered = false): THREE.MeshPhongMaterial | null {
+		const array = hovered ? map.texturesObjects3DHover : map.texturesObjects3D;
 		return array[Project.current!.specialElements.getObject3DByID(id).pictureID] || null;
 	}
 
@@ -70,10 +70,10 @@ abstract class Object3D extends Base {
 		return true;
 	}
 
-	static async loadObject3DTexture(id: number): Promise<THREE.MeshPhongMaterial> {
+	static async loadObject3DTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
 		const object3D = Project.current!.specialElements.getObject3DByID(id);
 		const pictureID = object3D.pictureID;
-		let textureObject3D = Scene.Map.current ? Scene.Map.current.texturesObjects3D[pictureID] : null;
+		let textureObject3D = map ? map.texturesObjects3D[pictureID] : null;
 		if (!textureObject3D) {
 			const picture = Project.current!.pictures.getByID(PICTURE_KIND.OBJECTS_3D, pictureID);
 			if (picture) {
@@ -82,8 +82,8 @@ abstract class Object3D extends Base {
 			} else {
 				textureObject3D = Manager.GL.loadTextureEmpty();
 			}
-			Scene.Map.current!.texturesObjects3D[pictureID] = textureObject3D;
-			Scene.Map.current!.texturesObjects3DHover[pictureID] = Manager.GL.createMaterial({
+			map!.texturesObjects3D[pictureID] = textureObject3D;
+			map!.texturesObjects3DHover[pictureID] = Manager.GL.createMaterial({
 				texture: textureObject3D.map,
 				hovered: true,
 			});

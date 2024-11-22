@@ -77,12 +77,12 @@ class Sprite extends Base {
 		return count + 4;
 	}
 
-	static getCharacterTexture(id: number): THREE.MeshPhongMaterial | null {
-		return Scene.Map.current!.texturesCharacters[id] || null;
+	static getCharacterTexture(map: Scene.Map, id: number): THREE.MeshPhongMaterial | null {
+		return map.texturesCharacters[id] || null;
 	}
 
-	static async loadCharacterTexture(id: number): Promise<THREE.MeshPhongMaterial> {
-		let textureCharacter = Scene.Map.current ? Scene.Map.current.texturesCharacters[id] : null;
+	static async loadCharacterTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
+		let textureCharacter = map ? map.texturesCharacters[id] : null;
 		if (!textureCharacter) {
 			const picture = Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, id);
 			if (picture) {
@@ -91,7 +91,7 @@ class Sprite extends Base {
 			} else {
 				textureCharacter = Manager.GL.loadTextureEmpty();
 			}
-			Scene.Map.current!.texturesCharacters[id] = textureCharacter;
+			map!.texturesCharacters[id] = textureCharacter;
 		}
 		return textureCharacter;
 	}
@@ -125,6 +125,7 @@ class Sprite extends Base {
 	}
 
 	getVectors(
+		map: Scene.Map,
 		vecA: THREE.Vector3,
 		vecB: THREE.Vector3,
 		vecC: THREE.Vector3,
@@ -137,7 +138,7 @@ class Sprite extends Base {
 		// Apply an offset according to layer position
 		let zPlus = 0;
 		if (forceOffset) {
-			zPlus = position.layer * Scene.Map.current!.camera.getYOffsetDepth();
+			zPlus = position.layer * map.camera.getYOffsetDepth();
 			if (this.kind !== ELEMENT_MAP_KIND.SPRITE_FACE && !this.front) {
 				zPlus *= -1;
 			}
@@ -156,6 +157,7 @@ class Sprite extends Base {
 	}
 
 	updateGeometry(
+		map: Scene.Map,
 		geometry: CustomGeometry | CustomGeometryFace,
 		width: number,
 		height: number,
@@ -178,7 +180,7 @@ class Sprite extends Base {
 		);
 
 		// For static sprites
-		this.getVectors(vecA, vecB, vecC, vecD, pos, position, size, forceOffset);
+		this.getVectors(map, vecA, vecB, vecC, vecD, pos, position, size, forceOffset);
 		if (localPosition !== null) {
 			vecA.add(localPosition);
 			vecB.add(localPosition);
@@ -326,9 +328,15 @@ class Sprite extends Base {
 		return count;
 	}
 
-	createGeometry(width: number, height: number, tileset: boolean, position: Position): [CustomGeometry, number] {
+	createGeometry(
+		map: Scene.Map,
+		width: number,
+		height: number,
+		tileset: boolean,
+		position: Position
+	): [CustomGeometry, number] {
 		const geometry = new CustomGeometry();
-		const count = this.updateGeometry(geometry, width, height, position, 0, tileset, null);
+		const count = this.updateGeometry(map, geometry, width, height, position, 0, tileset, null);
 		geometry.updateAttributes();
 		return [geometry, count];
 	}

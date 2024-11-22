@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from '../common';
 import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
@@ -78,7 +78,6 @@ function DynamicValueSelector({
 	const [valueDatabase, setValueDatabase] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.DATABASE ? (value.value as number) : 1
 	);
-	const [forcedValueNumber, setForcedValueNumber] = useState<number | undefined>();
 
 	const getOptions = () => {
 		let list: DYNAMIC_VALUE_KIND[] = [];
@@ -224,18 +223,17 @@ function DynamicValueSelector({
 		value.value = id;
 	};
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		setKind(value.kind);
 		onChangeKind?.(value.kind);
 		// eslint-disable-next-line
 	}, [value.kind]);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		switch (value.kind) {
 			case DYNAMIC_VALUE_KIND.NUMBER:
 			case DYNAMIC_VALUE_KIND.NUMBER_DECIMAL:
 				setValueNumber(value.value as number);
-				setForcedValueNumber(value.value as number);
 				break;
 			case DYNAMIC_VALUE_KIND.TEXT:
 			case DYNAMIC_VALUE_KIND.FORMULA:
@@ -272,11 +270,9 @@ function DynamicValueSelector({
 					<InputNumber
 						value={valueNumber}
 						onChange={handleChangeNumber}
-						widthType={INPUT_TYPE_WIDTH.FILL}
+						widthType={INPUT_TYPE_WIDTH.LARGE}
 						decimals={kind === DYNAMIC_VALUE_KIND.NUMBER_DECIMAL}
 						disabled={disabled}
-						forcedValue={forcedValueNumber}
-						setForcedValue={setForcedValueNumber}
 						min={min}
 						max={max}
 					/>
@@ -295,7 +291,7 @@ function DynamicValueSelector({
 					<InputText
 						value={valueText}
 						onChange={handleChangeText}
-						widthType={INPUT_TYPE_WIDTH.FILL}
+						widthType={INPUT_TYPE_WIDTH.LARGE}
 						disabled={disabled}
 					/>
 				);

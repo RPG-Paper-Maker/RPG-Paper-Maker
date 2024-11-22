@@ -28,6 +28,7 @@ import DialogCommandSetDialogBoxOptions from '../commands/DialogCommandSetDialog
 import DialogCommandShakeScreen from '../commands/DialogCommandShakeScreen';
 import DialogCommandShowText from '../commands/DialogCommandShowText';
 import DialogCommandSwitchTexture from '../commands/DialogCommandSwitchTexture';
+import DialogCommandTeleportObject from '../commands/DialogCommandTeleportObject';
 import DialogCommandWait from '../commands/DialogCommandWait';
 import Dialog from '../Dialog';
 
@@ -309,6 +310,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandWait {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_CHRONOMETER:
 				return <DialogCommandChangeChronometer {...options} />;
+			case EVENT_COMMAND_KIND.TELEPORT_OBJECT:
+				return <DialogCommandTeleportObject {...options} />;
 			default:
 				return null;
 		}

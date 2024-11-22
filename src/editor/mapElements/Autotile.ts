@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { MapElement } from '../Editor';
+import i18next from 'i18next';
+import { MapElement, Scene } from '../Editor';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, Utils } from '../common';
 import { CustomGeometry, Position, Project, Rectangle, TextureBundle } from '../core';
 import { Land } from './Land';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, Utils } from '../common';
-import i18next from 'i18next';
 
 class Autotile extends Land {
 	public autotileID!: number;
@@ -64,31 +64,31 @@ class Autotile extends Land {
 		)} | ${this.texture.toString(true)}`;
 	}
 
-	update(position: Position) {
+	update(map: Scene.Map, position: Position) {
 		let a = 0;
 		let b = 0;
 		let c = 0;
 		let d = 0;
 		// Top left
 		if (
-			!MapElement.Autotiles.tileOnLeft(position, this.autotileID, this.texture) &&
-			!MapElement.Autotiles.tileOnTop(position, this.autotileID, this.texture)
+			!MapElement.Autotiles.tileOnLeft(map, position, this.autotileID, this.texture) &&
+			!MapElement.Autotiles.tileOnTop(map, position, this.autotileID, this.texture)
 		) {
 			a = 1;
 		} else if (
-			!MapElement.Autotiles.tileOnTop(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnLeft(position, this.autotileID, this.texture)
+			!MapElement.Autotiles.tileOnTop(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnLeft(map, position, this.autotileID, this.texture)
 		) {
 			a = 3;
 		} else if (
-			!MapElement.Autotiles.tileOnLeft(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnTop(position, this.autotileID, this.texture)
+			!MapElement.Autotiles.tileOnLeft(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnTop(map, position, this.autotileID, this.texture)
 		) {
 			a = 4;
 		} else if (
-			MapElement.Autotiles.tileOnLeft(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnTop(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnTopLeft(position, this.autotileID, this.texture)
+			MapElement.Autotiles.tileOnLeft(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnTop(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnTopLeft(map, position, this.autotileID, this.texture)
 		) {
 			a = 2;
 		} else {
@@ -97,24 +97,24 @@ class Autotile extends Land {
 
 		// Top right
 		if (
-			!MapElement.Autotiles.tileOnRight(position, this.autotileID, this.texture) &&
-			!MapElement.Autotiles.tileOnTop(position, this.autotileID, this.texture)
+			!MapElement.Autotiles.tileOnRight(map, position, this.autotileID, this.texture) &&
+			!MapElement.Autotiles.tileOnTop(map, position, this.autotileID, this.texture)
 		) {
 			b = 1;
 		} else if (
-			!MapElement.Autotiles.tileOnTop(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnRight(position, this.autotileID, this.texture)
+			!MapElement.Autotiles.tileOnTop(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnRight(map, position, this.autotileID, this.texture)
 		) {
 			b = 3;
 		} else if (
-			!MapElement.Autotiles.tileOnRight(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnTop(position, this.autotileID, this.texture)
+			!MapElement.Autotiles.tileOnRight(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnTop(map, position, this.autotileID, this.texture)
 		) {
 			b = 4;
 		} else if (
-			MapElement.Autotiles.tileOnRight(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnTop(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnTopRight(position, this.autotileID, this.texture)
+			MapElement.Autotiles.tileOnRight(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnTop(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnTopRight(map, position, this.autotileID, this.texture)
 		) {
 			b = 2;
 		} else {
@@ -123,24 +123,24 @@ class Autotile extends Land {
 
 		// Bottom left
 		if (
-			!MapElement.Autotiles.tileOnLeft(position, this.autotileID, this.texture) &&
-			!MapElement.Autotiles.tileOnBottom(position, this.autotileID, this.texture)
+			!MapElement.Autotiles.tileOnLeft(map, position, this.autotileID, this.texture) &&
+			!MapElement.Autotiles.tileOnBottom(map, position, this.autotileID, this.texture)
 		) {
 			c = 1;
 		} else if (
-			!MapElement.Autotiles.tileOnBottom(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnLeft(position, this.autotileID, this.texture)
+			!MapElement.Autotiles.tileOnBottom(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnLeft(map, position, this.autotileID, this.texture)
 		) {
 			c = 3;
 		} else if (
-			!MapElement.Autotiles.tileOnLeft(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnBottom(position, this.autotileID, this.texture)
+			!MapElement.Autotiles.tileOnLeft(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnBottom(map, position, this.autotileID, this.texture)
 		) {
 			c = 4;
 		} else if (
-			MapElement.Autotiles.tileOnLeft(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnBottom(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnBottomLeft(position, this.autotileID, this.texture)
+			MapElement.Autotiles.tileOnLeft(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnBottom(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnBottomLeft(map, position, this.autotileID, this.texture)
 		) {
 			c = 2;
 		} else {
@@ -149,24 +149,24 @@ class Autotile extends Land {
 
 		// Bottom right
 		if (
-			!MapElement.Autotiles.tileOnRight(position, this.autotileID, this.texture) &&
-			!MapElement.Autotiles.tileOnBottom(position, this.autotileID, this.texture)
+			!MapElement.Autotiles.tileOnRight(map, position, this.autotileID, this.texture) &&
+			!MapElement.Autotiles.tileOnBottom(map, position, this.autotileID, this.texture)
 		) {
 			d = 1;
 		} else if (
-			!MapElement.Autotiles.tileOnBottom(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnRight(position, this.autotileID, this.texture)
+			!MapElement.Autotiles.tileOnBottom(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnRight(map, position, this.autotileID, this.texture)
 		) {
 			d = 3;
 		} else if (
-			!MapElement.Autotiles.tileOnRight(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnBottom(position, this.autotileID, this.texture)
+			!MapElement.Autotiles.tileOnRight(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnBottom(map, position, this.autotileID, this.texture)
 		) {
 			d = 4;
 		} else if (
-			MapElement.Autotiles.tileOnRight(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnBottom(position, this.autotileID, this.texture) &&
-			MapElement.Autotiles.tileOnBottomRight(position, this.autotileID, this.texture)
+			MapElement.Autotiles.tileOnRight(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnBottom(map, position, this.autotileID, this.texture) &&
+			MapElement.Autotiles.tileOnBottomRight(map, position, this.autotileID, this.texture)
 		) {
 			d = 2;
 		} else {
@@ -179,6 +179,7 @@ class Autotile extends Land {
 	}
 
 	updateGeometryAutotile(
+		map: Scene.Map,
 		geometry: CustomGeometry,
 		texture: TextureBundle,
 		position: Position,
@@ -188,6 +189,7 @@ class Autotile extends Land {
 	) {
 		const autotile = Project.current!.specialElements.getAutotileByID(this.autotileID);
 		return super.updateGeometryLand(
+			map,
 			geometry,
 			position,
 			width,

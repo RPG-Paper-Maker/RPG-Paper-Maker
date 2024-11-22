@@ -8,4 +8,5 @@ export * from './DialogCommandSetDialogBoxOptions';
 export * from './DialogCommandShakeScreen';
 export * from './DialogCommandShowText';
 export * from './DialogCommandSwitchTexture';
+export * from './DialogCommandTeleportObject';
 export * from './DialogCommandWait';

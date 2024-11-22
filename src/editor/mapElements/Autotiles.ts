@@ -11,8 +11,8 @@
 
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
-import { CustomGeometry, Picture2D, Position, Project, Rectangle, TextureBundle } from '../core';
 import { AUTOTILE_TILE_NAMES, Constants, PICTURE_KIND, RAYCASTING_LAYER } from '../common';
+import { CustomGeometry, Picture2D, Position, Project, Rectangle, TextureBundle } from '../core';
 
 class Autotiles {
 	public static COUNT_LIST = 5;
@@ -85,24 +85,23 @@ class Autotiles {
 		return Math.floor(Constants.MAX_PICTURE_SIZE / (9 * Project.SQUARE_SIZE));
 	}
 
-	static getAutotileTexture(id: number): TextureBundle[] | null {
-		const texturesAutotile =
-			Scene.Map.current!.texturesAutotiles[Project.current!.specialElements.getAutotileByID(id).pictureID];
+	static getAutotileTexture(map: Scene.Map, id: number): TextureBundle[] | null {
+		const texturesAutotile = map.texturesAutotiles[Project.current!.specialElements.getAutotileByID(id).pictureID];
 		return texturesAutotile || null;
 	}
 
-	static async loadAutotileTexture(id: number): Promise<TextureBundle[]> {
+	static async loadAutotileTexture(map: Scene.Map | null, id: number): Promise<TextureBundle[]> {
 		const autotile = Project.current!.specialElements.getAutotileByID(id);
 		const pictureID = autotile.pictureID;
-		let texturesAutotile = Scene.Map.current ? Scene.Map.current.texturesAutotiles[pictureID] : null;
+		let texturesAutotile = map ? map.texturesAutotiles[pictureID] : null;
 		if (!texturesAutotile) {
 			let offset = 0;
 			let result = null;
 			let textureAutotile: TextureBundle | null = null;
 			let texture = new THREE.Texture();
 			texturesAutotile = [];
-			if (Scene.Map.current) {
-				Scene.Map.current.texturesAutotiles[pictureID] = texturesAutotile;
+			if (map) {
+				map.texturesAutotiles[pictureID] = texturesAutotile;
 			}
 			Scene.Map.ctxRendering!.clearRect(
 				0,
@@ -116,6 +115,7 @@ class Autotiles {
 				const picture = Project.current!.pictures.getByID(PICTURE_KIND.AUTOTILES, pictureID);
 				if (picture) {
 					result = await this.loadTextureAutotile(
+						map,
 						texturesAutotile,
 						textureAutotile,
 						texture,
@@ -135,13 +135,14 @@ class Autotiles {
 				offset = result[2];
 			}
 			if (offset > 0 && textureAutotile) {
-				await this.updateTextureAutotile(texturesAutotile, textureAutotile, texture);
+				await this.updateTextureAutotile(map, texturesAutotile, textureAutotile, texture);
 			}
 		}
 		return texturesAutotile;
 	}
 
 	static async loadTextureAutotile(
+		map: Scene.Map | null,
 		texturesAutotile: TextureBundle[],
 		textureAutotile: TextureBundle | null,
 		texture: THREE.Texture,
@@ -160,7 +161,7 @@ class Autotiles {
 			const point = [i % width, Math.floor(i / width)];
 			if (isAnimated) {
 				if (textureAutotile != null) {
-					await this.updateTextureAutotile(texturesAutotile, textureAutotile, texture);
+					await this.updateTextureAutotile(map, texturesAutotile, textureAutotile, texture);
 					texture = new THREE.Texture();
 					Scene.Map.ctxRendering!.clearRect(
 						0,
@@ -186,7 +187,7 @@ class Autotiles {
 				textureAutotile.setEnd(picture.id, point);
 				textureAutotile.addToList(picture.id, point);
 				if (!isAnimated && offset === this.getMaxAutotilesOffsetTexture()) {
-					await this.updateTextureAutotile(texturesAutotile, textureAutotile, texture);
+					await this.updateTextureAutotile(map, texturesAutotile, textureAutotile, texture);
 					texture = new THREE.Texture();
 					Scene.Map.ctxRendering!.clearRect(
 						0,
@@ -274,6 +275,7 @@ class Autotiles {
 	}
 
 	static async updateTextureAutotile(
+		map: Scene.Map | null,
 		texturesAutotile: TextureBundle[],
 		textureAutotile: TextureBundle,
 		texture: THREE.Texture
@@ -281,95 +283,111 @@ class Autotiles {
 		texture.image = await Picture2D.loadImage(Scene.Map.canvasRendering!.toDataURL());
 		texture.needsUpdate = true;
 		textureAutotile.material = Manager.GL.createMaterial({ texture });
-		if (Scene.Map.current) {
+		if (map) {
 			textureAutotile.material.userData.uniforms.offset.value = textureAutotile.isAnimated
-				? Scene.Map.current.autotilesOffset
+				? map.autotilesOffset
 				: new THREE.Vector2();
 		}
 		texturesAutotile.push(textureAutotile);
 	}
 
-	static tileExisting(position: Position): MapElement.Autotile | undefined {
+	static tileExisting(map: Scene.Map, position: Position): MapElement.Autotile | undefined {
 		const globalPortion = position.getGlobalPortion();
-		const land = Scene.Map.current!.getMapPortionFromGlobalPortion(globalPortion)?.model.lands.get(
-			position.toKey()
-		);
+		const land = map.getMapPortionFromGlobalPortion(globalPortion)?.model.lands.get(position.toKey());
 		if (land && land instanceof MapElement.Autotile) {
 			return land;
 		}
 		return undefined;
 	}
 
-	static tileOnWhatever(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
-		const autotile = this.tileExisting(position);
+	static tileOnWhatever(map: Scene.Map, position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
+		const autotile = this.tileExisting(map, position);
 		return autotile && autotile.autotileID === id && autotile.texture.equals(rect) ? autotile : null;
 	}
 
-	static tileOnLeft(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
+	static tileOnLeft(map: Scene.Map, position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
 		return this.tileOnWhatever(
+			map,
 			new Position(position.x - 1, position.y, position.yPixels, position.z, position.layer),
 			id,
 			rect
 		);
 	}
 
-	static tileOnRight(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
+	static tileOnRight(map: Scene.Map, position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
 		return this.tileOnWhatever(
+			map,
 			new Position(position.x + 1, position.y, position.yPixels, position.z, position.layer),
 			id,
 			rect
 		);
 	}
 
-	static tileOnTop(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
+	static tileOnTop(map: Scene.Map, position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
 		return this.tileOnWhatever(
+			map,
 			new Position(position.x, position.y, position.yPixels, position.z - 1, position.layer),
 			id,
 			rect
 		);
 	}
 
-	static tileOnBottom(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
+	static tileOnBottom(map: Scene.Map, position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
 		return this.tileOnWhatever(
+			map,
 			new Position(position.x, position.y, position.yPixels, position.z + 1, position.layer),
 			id,
 			rect
 		);
 	}
 
-	static tileOnTopLeft(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
+	static tileOnTopLeft(map: Scene.Map, position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
 		return this.tileOnWhatever(
+			map,
 			new Position(position.x - 1, position.y, position.yPixels, position.z - 1, position.layer),
 			id,
 			rect
 		);
 	}
 
-	static tileOnTopRight(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
+	static tileOnTopRight(map: Scene.Map, position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
 		return this.tileOnWhatever(
+			map,
 			new Position(position.x + 1, position.y, position.yPixels, position.z - 1, position.layer),
 			id,
 			rect
 		);
 	}
 
-	static tileOnBottomLeft(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
+	static tileOnBottomLeft(
+		map: Scene.Map,
+		position: Position,
+		id: number,
+		rect: Rectangle
+	): MapElement.Autotile | null {
 		return this.tileOnWhatever(
+			map,
 			new Position(position.x - 1, position.y, position.yPixels, position.z + 1, position.layer),
 			id,
 			rect
 		);
 	}
 
-	static tileOnBottomRight(position: Position, id: number, rect: Rectangle): MapElement.Autotile | null {
+	static tileOnBottomRight(
+		map: Scene.Map,
+		position: Position,
+		id: number,
+		rect: Rectangle
+	): MapElement.Autotile | null {
 		return this.tileOnWhatever(
+			map,
 			new Position(position.x + 1, position.y, position.yPixels, position.z + 1, position.layer),
 			id,
 			rect
 		);
 	}
 
-	static updateAround(position: Position) {
+	static updateAround(map: Scene.Map, position: Position) {
 		const globalPortion = position.getGlobalPortion();
 		for (let i = -1; i <= 1; i++) {
 			for (let j = -1; j <= 1; j++) {
@@ -380,17 +398,17 @@ class Autotiles {
 					position.z + j,
 					position.layer
 				);
-				const newAutotile = this.tileExisting(newPosition);
+				const newAutotile = this.tileExisting(map, newPosition);
 				if (newAutotile) {
 					// Update the current autotile
-					if (newAutotile.update(newPosition)) {
+					if (newAutotile.update(map, newPosition)) {
 						const newGlobalPortion = newPosition.getGlobalPortion();
 						// Update and save if different portion
 						if (!globalPortion.equals(newGlobalPortion)) {
-							const mapPortion = Scene.Map.current!.getMapPortionFromGlobalPortion(newGlobalPortion);
+							const mapPortion = map.getMapPortionFromGlobalPortion(newGlobalPortion);
 							if (mapPortion) {
-								Scene.Map.current!.portionsToUpdate.add(mapPortion);
-								Scene.Map.current!.portionsToSave.add(mapPortion);
+								map.portionsToUpdate.add(mapPortion);
+								map.portionsToSave.add(mapPortion);
 							}
 						}
 					}
@@ -399,7 +417,7 @@ class Autotiles {
 		}
 	}
 
-	updateGeometry(position: Position, autotile: MapElement.Autotile) {
+	updateGeometry(map: Scene.Map, position: Position, autotile: MapElement.Autotile) {
 		if (this.width === null || this.height === 0) {
 			return null;
 		} else if (this.bundle?.material) {
@@ -415,6 +433,7 @@ class Autotiles {
 			}
 			let count = this.counts[side][position.layer];
 			autotile.updateGeometryAutotile(
+				map,
 				this.meshes[side][position.layer].geometry as CustomGeometry,
 				this.bundle,
 				position,

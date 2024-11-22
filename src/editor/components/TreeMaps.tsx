@@ -29,10 +29,12 @@ type Props = {
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
 	forcedCurrentSelectedItemID?: number | null;
 	setForcedCurrentSelectedItemID?: (forced: number | null) => void;
-	mapsTabsTitles: Model.Base[];
-	setMapsTabsTitles: (tiles: Model.Base[]) => void;
-	mapsTabsContents: (ReactNode | null)[];
-	setMapsTabsContents: (contents: (ReactNode | null)[]) => void;
+	mapsTabsTitles?: Model.Base[];
+	setMapsTabsTitles?: (tiles: Model.Base[]) => void;
+	mapsTabsContents?: (ReactNode | null)[];
+	setMapsTabsContents?: (contents: (ReactNode | null)[]) => void;
+	cannotEdit?: boolean;
+	minWidth?: number;
 };
 
 function TreeMaps({
@@ -43,6 +45,8 @@ function TreeMaps({
 	setMapsTabsTitles,
 	mapsTabsContents,
 	setMapsTabsContents,
+	cannotEdit = false,
+	minWidth,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -175,7 +179,7 @@ function TreeMaps({
 	};
 
 	const handleAcceptDeleteFolder = async () => {
-		if (selectedNode && selectedNode.parent) {
+		if (selectedNode && selectedNode.parent && mapsTabsTitles && mapsTabsContents) {
 			const [newTitles, newContents] = await deleteFolder(
 				selectedNode.children,
 				[...mapsTabsTitles],
@@ -183,8 +187,8 @@ function TreeMaps({
 			);
 			ArrayUtils.removeElement(selectedNode.parent.children, selectedNode);
 			if (newTitles.length !== mapsTabsTitles.length) {
-				setMapsTabsTitles(newTitles);
-				setMapsTabsContents(newContents);
+				setMapsTabsTitles?.(newTitles);
+				setMapsTabsContents?.(newContents);
 			}
 			RPM.treeCurrentSetSelectedItem(selectedNode.parent);
 		}
@@ -227,10 +231,10 @@ function TreeMaps({
 	const handleAcceptEditMap = async (previousModel: Model.Map) => {
 		if (selectedNode) {
 			selectedNode.content.name = editedMap.name;
-			const element = mapsTabsTitles.find((value) => value.id === editedMap.id);
-			if (element) {
+			const element = mapsTabsTitles?.find((value) => value.id === editedMap.id);
+			if (element && mapsTabsTitles) {
 				element.name = editedMap.name;
-				setMapsTabsTitles([...mapsTabsTitles]);
+				setMapsTabsTitles?.([...mapsTabsTitles]);
 			}
 			await editedMap.resizeMap(previousModel);
 			const tag = selectedNode.content as TreeMapTag;
@@ -252,7 +256,7 @@ function TreeMaps({
 	};
 
 	const handleAcceptDeleteMap = async () => {
-		if (selectedNode && selectedNode.parent) {
+		if (selectedNode && selectedNode.parent && mapsTabsTitles && mapsTabsContents) {
 			const map = Model.Map.create(selectedNode.content.id, selectedNode.content.name);
 			await map.deleteMap();
 			const parent = selectedNode.parent;
@@ -262,10 +266,10 @@ function TreeMaps({
 			if (tabIndex !== -1) {
 				const newTitles = [...mapsTabsTitles];
 				ArrayUtils.removeAt(newTitles, tabIndex);
-				setMapsTabsTitles(newTitles);
+				setMapsTabsTitles?.(newTitles);
 				const newContents = [...mapsTabsContents];
 				ArrayUtils.removeAt(newContents, tabIndex);
-				setMapsTabsContents(newContents);
+				setMapsTabsContents?.(newContents);
 			}
 		}
 		setIsOpenDialogConfirm(false);
@@ -276,7 +280,7 @@ function TreeMaps({
 	};
 
 	const getContextMenuItems = () => {
-		if (selectedNode) {
+		if (selectedNode && !cannotEdit) {
 			if ((selectedNode.content as Model.TreeMapTag).isFolder()) {
 				return [
 					{
@@ -343,6 +347,7 @@ function TreeMaps({
 				forcedCurrentSelectedItemID={forcedCurrentSelectedItemID}
 				setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemID}
 				onDrop={handleDrop}
+				minWidth={minWidth}
 				cannotAdd
 			/>
 			<DialogMapProperties

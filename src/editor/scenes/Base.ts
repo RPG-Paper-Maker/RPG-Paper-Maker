@@ -17,6 +17,7 @@ class Base {
 	public scene: THREE.Scene;
 	public camera: Camera;
 	public loading = true;
+	public initialized = false;
 	public canvas?: HTMLElement | null;
 
 	constructor(tag?: Model.TreeMapTag) {
@@ -62,6 +63,7 @@ class Base {
 				mesh.parent.remove(mesh);
 			}
 		}
+		this.scene.background = null;
 	}
 }
 

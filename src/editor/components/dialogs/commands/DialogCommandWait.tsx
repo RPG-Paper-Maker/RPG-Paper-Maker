@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
 import { Model } from '../../../Editor';
@@ -57,7 +57,7 @@ function DialogCommandWait({ isOpen, setIsOpen, list, onAccept, onReject }: Prop
 		onReject();
 	};
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (isOpen) {
 			initialize();
 		}

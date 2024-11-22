@@ -99,7 +99,7 @@ class Camera {
 		this.getThreeCamera().lookAt(this.targetPosition);
 	}
 
-	update() {
+	update(map?: Scene.Map) {
 		// Update position
 		this.updateCameraPosition();
 
@@ -107,25 +107,25 @@ class Camera {
 		this.updateView();
 
 		// Update light
-		if (Scene.Map.current && Scene.Map.current.sunLight) {
-			Scene.Map.current.sunLight.target.position.copy(this.targetPosition);
-			Scene.Map.current.sunLight.target.updateMatrixWorld();
-			Scene.Map.current.sunLight.position
+		if (map && map.sunLight) {
+			map.sunLight.target.position.copy(this.targetPosition);
+			map.sunLight.target.updateMatrixWorld();
+			map.sunLight.position
 				.set(-1, 1.75, 1)
 				.multiplyScalar(Project.SQUARE_SIZE * 10)
 				.add(this.targetPosition);
 			const d = Math.max((Project.SQUARE_SIZE * this.distance) / 10, 400);
-			if (d !== Scene.Map.current.sunLight.shadow.camera.right) {
-				Scene.Map.current.sunLight.shadow.camera.left = -d;
-				Scene.Map.current.sunLight.shadow.camera.right = d;
-				Scene.Map.current.sunLight.shadow.camera.top = d;
-				Scene.Map.current.sunLight.shadow.camera.bottom = -d;
-				Scene.Map.current.sunLight.shadow.camera.updateProjectionMatrix();
+			if (d !== map.sunLight.shadow.camera.right) {
+				map.sunLight.shadow.camera.left = -d;
+				map.sunLight.shadow.camera.right = d;
+				map.sunLight.shadow.camera.top = d;
+				map.sunLight.shadow.camera.bottom = -d;
+				map.sunLight.shadow.camera.updateProjectionMatrix();
 			}
 		}
 	}
 
-	onMouseWheelUpdate() {
+	onMouseWheelUpdate(updateTag: boolean) {
 		this.horizontalAngle += (Inputs.getPositionX() - Inputs.getPreviousPositionX()) / 2;
 		this.verticalAngle -= (Inputs.getPositionY() - Inputs.getPreviousPositionY()) / 2;
 		if (this.verticalAngle < 1) {
@@ -134,7 +134,7 @@ class Camera {
 		if (this.verticalAngle > 179) {
 			this.verticalAngle = 179;
 		}
-		if (this.tag) {
+		if (updateTag && this.tag) {
 			this.tag.cameraHorizontalAngle = this.horizontalAngle;
 			this.tag.cameraVerticalAngle = this.verticalAngle;
 		}

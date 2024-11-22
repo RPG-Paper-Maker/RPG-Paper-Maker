@@ -60,6 +60,7 @@ import {
 } from '../common';
 import Flex from '../components/Flex';
 import { Project } from '../core';
+import { Scene } from '../Editor';
 import { Base } from './Base';
 import { Localization } from './Localization';
 
@@ -381,6 +382,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_WEATHER:
 			case EVENT_COMMAND_KIND.CHANGE_MAP_PROPERTIES:
 			case EVENT_COMMAND_KIND.SWITCH_TEXTURE:
+			case EVENT_COMMAND_KIND.TELEPORT_OBJECT:
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -474,6 +476,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_CHRONOMETER:
 				texts = this.toStringChangeChronometer(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.TELEPORT_OBJECT:
+				texts = this.toStringTeleportObject(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -535,6 +540,14 @@ class MapObjectCommand extends Base {
 			default:
 				return '';
 		}
+	}
+
+	toStringDynamicObject(iterator: ITERATOR, properties: Base[] = [], parameters: Base[] = []): string {
+		const objectsList = [
+			...[Base.create(0, i18next.t('hero')), Base.create(-1, i18next.t('this.object'))],
+			...(Scene.Map.current?.model.objects ?? []),
+		];
+		return this.toStringDynamicValue(iterator, properties, parameters, objectsList);
 	}
 
 	toStringMap(iterator: ITERATOR, properties: Base[], parameters: Base[]): string {
@@ -998,6 +1011,56 @@ class MapObjectCommand extends Base {
 			)}]`;
 		}
 		return [text];
+	}
+
+	toStringTeleportObject(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		let texts = [];
+		texts.push(
+			`${this.toStringDynamicObject(iterator, properties, parameters)} ${i18next
+				.t('to.the.coordinates')
+				.toLowerCase()}`
+		);
+		const selectionKind = this.command[iterator.i++] as number;
+		if (selectionKind === 0 || selectionKind === 1) {
+			let id = '';
+			let x = '';
+			let y = '';
+			let yp = '';
+			let z = '';
+			switch (selectionKind) {
+				case 0:
+					id = '' + this.command[iterator.i++];
+					x = '' + this.command[iterator.i++];
+					y = '' + this.command[iterator.i++];
+					yp = '' + this.command[iterator.i++];
+					z = '' + this.command[iterator.i++];
+					break;
+				case 1:
+					id = this.toStringDynamicValue(iterator, properties, parameters);
+					x = this.toStringDynamicValue(iterator, properties, parameters);
+					y = this.toStringDynamicValue(iterator, properties, parameters);
+					yp = this.toStringDynamicValue(iterator, properties, parameters);
+					z = this.toStringDynamicValue(iterator, properties, parameters);
+					break;
+			}
+			texts.push(`${i18next.t('map.id')}: ${id}`);
+			texts.push(`X: ${x}`);
+			texts.push(`Y: ${y}`);
+			texts.push(`Y+: ${yp}`);
+			texts.push(`Z: ${z}`);
+		} else {
+			texts.push(
+				`${this.toStringDynamicObject(iterator, properties, parameters)} ${i18next
+					.t('coordinates')
+					.toLowerCase()}`
+			);
+		}
+		texts.push(
+			`[${i18next.t('direction')}: ${i18next.t(
+				Base.TRANSITION_DIRECTION_OPTIONS[this.command[iterator.i++] as number].name
+			)}]`
+		);
+		return texts;
 	}
 
 	copy(command: MapObjectCommand): void {

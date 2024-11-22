@@ -30,6 +30,7 @@ type GeometryMaterialType = {
 };
 
 class MapPortion {
+	public map!: Scene.Map;
 	public model!: Model.MapPortion;
 	public floorsMeshes!: [THREE.Mesh[], THREE.Mesh[]]; // [0 for up, 1 for down][layer]
 	public spritesFaceMeshes!: THREE.Mesh[]; // [layer]
@@ -43,8 +44,8 @@ class MapPortion {
 	public objectsSpritesFaceMeshes: THREE.Mesh[] = [];
 	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND][] = [];
 
-	static offsetMeshPositionLayer(mesh: THREE.Mesh, side: number, layer: number, up = true) {
-		let offset = layer * Scene.Map.current!.camera.getYOffsetDepth();
+	static offsetMeshPositionLayer(map: Scene.Map, mesh: THREE.Mesh, side: number, layer: number, up = true) {
+		let offset = layer * map.camera.getYOffsetDepth();
 		if (side === 1) {
 			offset *= -1;
 		}
@@ -55,8 +56,9 @@ class MapPortion {
 		}
 	}
 
-	initialize(globalPortion: Portion) {
+	initialize(globalPortion: Portion, map: Scene.Map) {
 		this.model = new Model.MapPortion(globalPortion);
+		this.map = map;
 		this.floorsMeshes = [[], []];
 		this.spritesFaceMeshes = [];
 		this.spritesFixMeshes = [[], []];
@@ -73,7 +75,7 @@ class MapPortion {
 		}
 		this.lastPreviewRemove = [];
 		if (needUpdate) {
-			Scene.Map.current!.portionsToUpdate.add(this);
+			this.map.portionsToUpdate.add(this);
 		}
 	}
 
@@ -85,7 +87,7 @@ class MapPortion {
 		updateAutotiles = true
 	) {
 		if (removePreview) {
-			Scene.Map.current!.forEachMapPortions((mapPortion) => {
+			this.map.forEachMapPortions((mapPortion) => {
 				mapPortion?.removeLastPreview();
 			});
 		}
@@ -95,7 +97,7 @@ class MapPortion {
 					position,
 					MapElement.Floor.create(
 						Project.current!.settings.mapEditorCurrentTilesetFloorTexture,
-						Scene.Map.current!.camera.getUp()
+						this.map.camera.getUp()
 					),
 					ELEMENT_MAP_KIND.FLOOR,
 					preview,
@@ -112,7 +114,7 @@ class MapPortion {
 						Project.current!.settings.mapEditorCurrentAutotileID,
 						MapElement.Autotiles.PREVIEW_TILE,
 						Project.current!.settings.mapEditorCurrentAutotileTexture,
-						Scene.Map.current!.camera.getUp()
+						this.map.camera.getUp()
 					),
 					ELEMENT_MAP_KIND.AUTOTILE,
 					preview,
@@ -131,10 +133,10 @@ class MapPortion {
 					MapElement.Sprite.create(
 						Scene.Map.currentSelectedMapElementKind,
 						Project.current!.settings.mapEditorCurrentTilesetSpriteTexture,
-						Scene.Map.current!.camera.getFront(Manager.GL.raycaster.ray.direction, position.angleY),
-						Scene.Map.current!.layerRayPosition ? Scene.Map.current!.layerRayPosition.x - position.x : 0,
-						Scene.Map.current!.layerRayPosition ? Scene.Map.current!.layerRayPosition.y - position.y : 0,
-						Scene.Map.current!.layerRayPosition ? Scene.Map.current!.layerRayPosition.z - position.z : 0
+						this.map.camera.getFront(Manager.GL.raycaster.ray.direction, position.angleY),
+						this.map.layerRayPosition ? this.map.layerRayPosition.x - position.x : 0,
+						this.map.layerRayPosition ? this.map.layerRayPosition.y - position.y : 0,
+						this.map.layerRayPosition ? this.map.layerRayPosition.z - position.z : 0
 					),
 					Scene.Map.currentSelectedMapElementKind,
 					preview,
@@ -199,7 +201,7 @@ class MapPortion {
 
 	remove(position: Position, preview = false, removePreview = true, updateAutotiles = true) {
 		if (removePreview) {
-			Scene.Map.current!.forEachMapPortions((mapPortion) => {
+			this.map.forEachMapPortions((mapPortion) => {
 				mapPortion?.removeLastPreview();
 			});
 		}
@@ -340,11 +342,11 @@ class MapPortion {
 					}
 					break;
 				case ACTION_KIND.RECTANGLE: {
-					const x = Scene.Map.current!.rectangleStartPosition
-						? Mathf.mod(position.x - Scene.Map.current!.rectangleStartPosition.x, floor.texture.width)
+					const x = this.map.rectangleStartPosition
+						? Mathf.mod(position.x - this.map.rectangleStartPosition.x, floor.texture.width)
 						: 0;
-					const y = Scene.Map.current!.rectangleStartPosition
-						? Mathf.mod(position.z - Scene.Map.current!.rectangleStartPosition.z, floor.texture.height)
+					const y = this.map.rectangleStartPosition
+						? Mathf.mod(position.z - this.map.rectangleStartPosition.z, floor.texture.height)
 						: 0;
 					this.setMapElement(
 						position,
@@ -376,7 +378,7 @@ class MapPortion {
 			}
 		}
 		if (updateAutotiles) {
-			MapElement.Autotiles.updateAround(position);
+			MapElement.Autotiles.updateAround(this.map, position);
 		}
 	}
 
@@ -398,7 +400,7 @@ class MapPortion {
 			undoRedo
 		);
 		if (updateAutotiles) {
-			MapElement.Autotiles.updateAround(position);
+			MapElement.Autotiles.updateAround(this.map, position);
 		}
 	}
 
@@ -440,7 +442,7 @@ class MapPortion {
 			undoRedo,
 			true
 		);
-		MapElement.SpriteWall.updateAround(position, !preview);
+		MapElement.SpriteWall.updateAround(this.map, position, !preview);
 	}
 
 	updateMountain(
@@ -459,7 +461,7 @@ class MapPortion {
 			removingPreview,
 			undoRedo
 		);
-		MapElement.Mountains.updateAround(position);
+		MapElement.Mountains.updateAround(this.map, position);
 	}
 
 	updateObject3D(
@@ -490,7 +492,7 @@ class MapPortion {
 		undoRedo = false,
 		allowBorders = false
 	): MapElement.Base | null {
-		if (!Scene.Map.current || (element && !position.isInMap(Scene.Map.current.model, allowBorders))) {
+		if (!this.map || (element && !position.isInMap(this.map.model, allowBorders))) {
 			return null;
 		}
 		const key = position.toKey();
@@ -502,10 +504,10 @@ class MapPortion {
 		if (
 			preview &&
 			!removingPreview &&
-			Scene.Map.current.lastPosition !== null &&
+			this.map.lastPosition !== null &&
 			(previous === null || !previous.isPreview)
 		) {
-			Scene.Map.current.lastMapElement = previous;
+			this.map.lastMapElement = previous;
 		}
 		if (element === null) {
 			changed = elements.delete(key);
@@ -513,12 +515,12 @@ class MapPortion {
 			changed = previous ? !previous.equals(element) : true;
 			elements.set(key, element);
 		}
-		if (changed && Scene.Map.current) {
-			Scene.Map.current.portionsToUpdate.add(this);
+		if (changed && this.map) {
+			this.map.portionsToUpdate.add(this);
 			if (!preview && !removingPreview) {
-				Scene.Map.current.portionsToSave.add(this);
+				this.map.portionsToSave.add(this);
 				if (!undoRedo) {
-					Scene.Map.current.undoRedoStates.push(
+					this.map.undoRedoStates.push(
 						UndoRedoState.create(
 							position,
 							previous,
@@ -537,14 +539,14 @@ class MapPortion {
 	}
 
 	removeSelected() {
-		if (Scene.Map.current!.selectedPosition && Scene.Map.current!.selectedElement) {
-			const position = Scene.Map.current!.selectedPosition;
-			const models = this.model.getModelsByKind(Scene.Map.current!.selectedElement.kind);
+		if (this.map.selectedPosition && this.map.selectedElement) {
+			const position = this.map.selectedPosition;
+			const models = this.model.getModelsByKind(this.map.selectedElement.kind);
 			if (models) {
 				this.setMapElement(
 					position.clone(),
 					null,
-					Scene.Map.current!.selectedElement.kind,
+					this.map.selectedElement.kind,
 					models as Map<string, MapElement.Base>,
 					false,
 					false,
@@ -555,25 +557,25 @@ class MapPortion {
 	}
 
 	addSelected() {
-		if (Scene.Map.current!.selectedElement && Scene.Map.current!.selectedPosition) {
-			const position = Scene.Map.current!.selectedElement.getPositionFromVec3(
-				Scene.Map.current!.selectedMesh.position,
-				Scene.Map.current!.selectedMesh.rotation,
-				Scene.Map.current!.selectedMesh.scale
+		if (this.map.selectedElement && this.map.selectedPosition) {
+			const position = this.map.selectedElement.getPositionFromVec3(
+				this.map.selectedMesh.position,
+				this.map.selectedMesh.rotation,
+				this.map.selectedMesh.scale
 			);
-			position.layer = Scene.Map.current!.selectedPosition.layer;
-			const models = this.model.getModelsByKind(Scene.Map.current!.selectedElement.kind);
+			position.layer = this.map.selectedPosition.layer;
+			const models = this.model.getModelsByKind(this.map.selectedElement.kind);
 			if (models) {
 				this.setMapElement(
 					position.clone(),
-					Scene.Map.current!.selectedElement,
-					Scene.Map.current!.selectedElement.kind,
+					this.map.selectedElement,
+					this.map.selectedElement.kind,
 					models as Map<string, MapElement.Base>,
 					false,
 					false,
 					false
 				);
-				Scene.Map.current!.selectedPosition = position;
+				this.map.selectedPosition = position;
 			}
 		}
 	}
@@ -585,17 +587,15 @@ class MapPortion {
 		position: Position
 	) {
 		geometry.updateAttributes();
-		Scene.Map.current!.selectedMesh.geometry = geometry;
-		Scene.Map.current!.selectedMesh.material = material;
-		if (!Scene.Map.current!.transformControls.dragging) {
-			Scene.Map.current!.selectedMesh.position.copy(localPosition);
-			Scene.Map.current!.selectedMesh.rotation.copy(
-				Scene.Map.current!.selectedElement!.getLocalRotation(position)
-			);
-			Scene.Map.current!.selectedMesh.scale.copy(Scene.Map.current!.selectedElement!.getLocalScale(position));
+		this.map.selectedMesh.geometry = geometry;
+		this.map.selectedMesh.material = material;
+		if (!this.map.transformControls.dragging) {
+			this.map.selectedMesh.position.copy(localPosition);
+			this.map.selectedMesh.rotation.copy(this.map.selectedElement!.getLocalRotation(position));
+			this.map.selectedMesh.scale.copy(this.map.selectedElement!.getLocalScale(position));
 		}
-		Scene.Map.current!.scene.add(Scene.Map.current!.selectedMesh);
-		Scene.Map.current!.transformControls.attach(Scene.Map.current!.selectedMesh);
+		this.map.scene.add(this.map.selectedMesh);
+		this.map.transformControls.attach(this.map.selectedMesh);
 	}
 
 	updateObject(position: Position, object: Model.CommonObject | null, undoRedo = false) {
@@ -606,10 +606,10 @@ class MapPortion {
 		} else {
 			this.model.objects.set(key, object);
 		}
-		Scene.Map.current!.portionsToUpdate.add(this);
-		Scene.Map.current!.portionsToSave.add(this);
+		this.map.portionsToUpdate.add(this);
+		this.map.portionsToSave.add(this);
 		if (!undoRedo) {
-			Scene.Map.current!.undoRedoStates.push(
+			this.map.undoRedoStates.push(
 				UndoRedoState.create(
 					position,
 					previous,
@@ -624,34 +624,34 @@ class MapPortion {
 	checkTextures() {
 		for (const [, land] of this.model.lands) {
 			if (land instanceof MapElement.Autotile) {
-				const texturesAutotile = MapElement.Autotiles.getAutotileTexture(land.autotileID);
+				const texturesAutotile = MapElement.Autotiles.getAutotileTexture(this.map, land.autotileID);
 				if (texturesAutotile === null) {
-					Scene.Map.current!.loading = true;
+					this.map.loading = true;
 					this.loadTexturesAndUpdateGeometries().catch(console.error);
 					return false;
 				}
 			}
 		}
 		for (const [, wall] of this.model.walls) {
-			const textureWall = MapElement.SpriteWall.getWallTexture(wall.wallID);
+			const textureWall = MapElement.SpriteWall.getWallTexture(this.map, wall.wallID);
 			if (textureWall === null) {
-				Scene.Map.current!.loading = true;
+				this.map.loading = true;
 				this.loadTexturesAndUpdateGeometries().catch(console.error);
 				return false;
 			}
 		}
 		for (const [, mountain] of this.model.mountains) {
-			const textureMountain = MapElement.Mountains.getMountainTexture(mountain.mountainID);
+			const textureMountain = MapElement.Mountains.getMountainTexture(this.map, mountain.mountainID);
 			if (textureMountain === null) {
-				Scene.Map.current!.loading = true;
+				this.map.loading = true;
 				this.loadTexturesAndUpdateGeometries().catch(console.error);
 				return false;
 			}
 		}
 		for (const [, object3D] of this.model.objects3D) {
-			const textureObject3D = MapElement.Object3D.getObject3DTexture(object3D.id);
+			const textureObject3D = MapElement.Object3D.getObject3DTexture(this.map, object3D.id);
 			if (textureObject3D === null || !MapElement.Object3D.isShapeLoaded(object3D.id)) {
-				Scene.Map.current!.loading = true;
+				this.map.loading = true;
 				this.loadTexturesAndUpdateGeometries().catch(console.error);
 				return false;
 			}
@@ -663,18 +663,18 @@ class MapPortion {
 					case ELEMENT_MAP_KIND.SPRITE_FIX:
 					case ELEMENT_MAP_KIND.SPRITE_FACE:
 						if (state.graphicsID !== 0) {
-							const textureCharacter = MapElement.Sprite.getCharacterTexture(state.graphicsID);
+							const textureCharacter = MapElement.Sprite.getCharacterTexture(this.map, state.graphicsID);
 							if (textureCharacter === null) {
-								Scene.Map.current!.loading = true;
+								this.map.loading = true;
 								this.loadTexturesAndUpdateGeometries().catch(console.error);
 								return false;
 							}
 						}
 						break;
 					case ELEMENT_MAP_KIND.OBJECT3D: {
-						const textureObject3D = MapElement.Object3D.getObject3DTexture(state.graphicsID);
+						const textureObject3D = MapElement.Object3D.getObject3DTexture(this.map, state.graphicsID);
 						if (textureObject3D === null || !MapElement.Object3D.isShapeLoaded(state.graphicsID)) {
-							Scene.Map.current!.loading = true;
+							this.map.loading = true;
 							this.loadTexturesAndUpdateGeometries().catch(console.error);
 							return false;
 						}
@@ -689,17 +689,17 @@ class MapPortion {
 	async loadTexturesAndUpdateGeometries(updateLoading = true) {
 		for (const [, land] of this.model.lands) {
 			if (land instanceof MapElement.Autotile) {
-				await MapElement.Autotiles.loadAutotileTexture(land.autotileID);
+				await MapElement.Autotiles.loadAutotileTexture(this.map, land.autotileID);
 			}
 		}
 		for (const [, wall] of this.model.walls) {
-			await MapElement.SpriteWall.loadWallTexture(wall.wallID);
+			await MapElement.SpriteWall.loadWallTexture(this.map, wall.wallID);
 		}
 		for (const [, mountain] of this.model.mountains) {
-			await MapElement.Mountains.loadMountainTexture(mountain.mountainID);
+			await MapElement.Mountains.loadMountainTexture(this.map, mountain.mountainID);
 		}
 		for (const [, object3D] of this.model.objects3D) {
-			await MapElement.Object3D.loadObject3DTexture(object3D.id);
+			await MapElement.Object3D.loadObject3DTexture(this.map, object3D.id);
 			await MapElement.Object3D.loadShapeOBJ(object3D.id);
 		}
 		for (const [, object] of this.model.objects) {
@@ -709,11 +709,11 @@ class MapPortion {
 					case ELEMENT_MAP_KIND.SPRITE_FIX:
 					case ELEMENT_MAP_KIND.SPRITE_FACE:
 						if (state.graphicsID !== 0) {
-							await MapElement.Sprite.loadCharacterTexture(state.graphicsID);
+							await MapElement.Sprite.loadCharacterTexture(this.map, state.graphicsID);
 						}
 						break;
 					case ELEMENT_MAP_KIND.OBJECT3D:
-						await MapElement.Object3D.loadObject3DTexture(state.graphicsID);
+						await MapElement.Object3D.loadObject3DTexture(this.map, state.graphicsID);
 						await MapElement.Object3D.loadShapeOBJ(state.graphicsID);
 						break;
 				}
@@ -721,7 +721,7 @@ class MapPortion {
 		}
 		this.updateGeometriesWithoutCheck();
 		if (updateLoading) {
-			Scene.Map.current!.loading = false;
+			this.map.loading = false;
 		}
 	}
 
@@ -732,7 +732,7 @@ class MapPortion {
 	}
 
 	updateGeometriesWithoutCheck() {
-		Scene.Map.current!.scene.remove(Scene.Map.current!.hoveredMesh);
+		this.map.scene.remove(this.map.hoveredMesh);
 		this.updateLandsGeometries();
 		this.updateSpritesGeometry();
 		this.updateWallsGeometry();
@@ -744,14 +744,14 @@ class MapPortion {
 	updateLandsGeometries() {
 		const isPointedFloor =
 			Scene.Map.isTransforming() &&
-			!Scene.Map.current!.isDraggingTransforming &&
+			!this.map.isDraggingTransforming &&
 			Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR;
-		const material = Scene.Map.current!.materialTileset;
+		const material = this.map.materialTileset;
 		const { width, height } = Manager.GL.getMaterialTextureSize(material);
 		const floorCounts: [number[], number[]] = [[], []];
 		for (let i = 0; i < 2; i++) {
 			for (const mesh of this.floorsMeshes[i]) {
-				Scene.Map.current!.scene.remove(mesh);
+				this.map.scene.remove(mesh);
 			}
 		}
 		this.floorsMeshes = [[], []];
@@ -761,7 +761,7 @@ class MapPortion {
 					for (let i = 0; i < 2; i++) {
 						const meshes = autotiles.meshes[i];
 						for (const mesh of meshes) {
-							Scene.Map.current!.scene.remove(mesh);
+							this.map.scene.remove(mesh);
 						}
 					}
 				}
@@ -770,8 +770,8 @@ class MapPortion {
 		this.autotilesList = [];
 
 		// Create autotiles according to the textures
-		for (let i = 0, l = Scene.Map.current!.texturesAutotiles.length; i < l; i++) {
-			const texturesAutotile = Scene.Map.current!.texturesAutotiles[i];
+		for (let i = 0, l = this.map.texturesAutotiles.length; i < l; i++) {
+			const texturesAutotile = this.map.texturesAutotiles[i];
 			if (texturesAutotile) {
 				for (const textureAutotile of texturesAutotile) {
 					if (!this.autotilesList[i]) {
@@ -796,20 +796,20 @@ class MapPortion {
 			for (let j = 0, l = meshes.length; j < l; j++) {
 				const mesh = meshes[j];
 				if (mesh) {
-					MapPortion.offsetMeshPositionLayer(mesh, i, j);
+					MapPortion.offsetMeshPositionLayer(this.map, mesh, i, j);
 					(mesh.geometry as CustomGeometry).updateAttributes();
-					Scene.Map.current!.scene.add(mesh);
+					this.map.scene.add(mesh);
 				}
 			}
 		}
 
 		if (isPointedFloor) {
-			const hoveredGeometry = Scene.Map.current!.hoveredMesh.geometry as CustomGeometry;
+			const hoveredGeometry = this.map.hoveredMesh.geometry as CustomGeometry;
 			if (!hoveredGeometry.isEmpty()) {
 				hoveredGeometry.updateAttributes();
-				Scene.Map.current!.hoveredMesh.renderOrder = 0;
-				Scene.Map.current!.hoveredMesh.layers.enable(RAYCASTING_LAYER.LANDS);
-				Scene.Map.current!.scene.add(Scene.Map.current!.hoveredMesh);
+				this.map.hoveredMesh.renderOrder = 0;
+				this.map.hoveredMesh.layers.enable(RAYCASTING_LAYER.LANDS);
+				this.map.scene.add(this.map.hoveredMesh);
 			}
 		}
 
@@ -822,9 +822,9 @@ class MapPortion {
 						for (let j = 0, l = meshes.length; j < l; j++) {
 							const mesh = meshes[j];
 							if (mesh) {
-								MapPortion.offsetMeshPositionLayer(mesh, i, j);
+								MapPortion.offsetMeshPositionLayer(this.map, mesh, i, j);
 								(mesh.geometry as CustomGeometry).updateAttributes();
-								Scene.Map.current!.scene.add(mesh);
+								this.map.scene.add(mesh);
 							}
 						}
 					}
@@ -841,19 +841,20 @@ class MapPortion {
 		isPointedFloor: boolean,
 		floorCounts: [number[], number[]]
 	) {
-		if (Scene.Map.current!.selectedElement === floor) {
+		if (this.map.selectedElement === floor) {
 			const selectedGeometry = new CustomGeometry();
-			floor.updateGeometry(selectedGeometry, new Position(0, 0, 0, 0, 0, 0, 0), width, height, 0, true);
+			floor.updateGeometry(this.map, selectedGeometry, new Position(0, 0, 0, 0, 0, 0, 0), width, height, 0, true);
 			this.updateSelected(
 				selectedGeometry,
-				Scene.Map.current!.hoveredMesh.material,
-				Scene.Map.current!.selectedElement.getLocalPosition(position),
+				this.map.hoveredMesh.material,
+				this.map.selectedElement.getLocalPosition(position),
 				position
 			);
-		} else if (isPointedFloor && Scene.Map.current!.pointedMapElement === floor) {
-			Scene.Map.current!.hoveredMesh.geometry = new CustomGeometry();
+		} else if (isPointedFloor && this.map.pointedMapElement === floor) {
+			this.map.hoveredMesh.geometry = new CustomGeometry();
 			floor.updateGeometry(
-				Scene.Map.current!.hoveredMesh.geometry as CustomGeometry,
+				this.map,
+				this.map.hoveredMesh.geometry as CustomGeometry,
 				position,
 				width,
 				height,
@@ -864,7 +865,7 @@ class MapPortion {
 			const side = floor.up ? 0 : 1;
 			let mesh = this.floorsMeshes[side][position.layer];
 			if (!mesh) {
-				mesh = new THREE.Mesh(new CustomGeometry(), Scene.Map.current!.materialTileset);
+				mesh = new THREE.Mesh(new CustomGeometry(), this.map.materialTileset);
 				mesh.receiveShadow = true;
 				mesh.castShadow = true;
 				mesh.renderOrder = 0;
@@ -874,7 +875,7 @@ class MapPortion {
 			}
 			const geometry = mesh.geometry as CustomGeometry;
 			let count = floorCounts[side][position.layer];
-			floor.updateGeometry(geometry, position, width, height, count);
+			floor.updateGeometry(this.map, geometry, position, width, height, count);
 			count++;
 			floorCounts[side][position.layer] = count;
 		}
@@ -882,7 +883,7 @@ class MapPortion {
 
 	updateAutotileGeometry(position: Position, autotile: MapElement.Autotile) {
 		let texture = null;
-		const texturesAutotile = MapElement.Autotiles.getAutotileTexture(autotile.autotileID);
+		const texturesAutotile = MapElement.Autotiles.getAutotileTexture(this.map, autotile.autotileID);
 		let autotiles: MapElement.Autotiles | null = null;
 		if (texturesAutotile) {
 			const pictureID = Project.current!.specialElements.getAutotileByID(autotile.autotileID).pictureID;
@@ -896,7 +897,7 @@ class MapPortion {
 			}
 		}
 		if (texture !== null && texture.material !== null) {
-			autotiles!.updateGeometry(position, autotile);
+			autotiles!.updateGeometry(this.map, position, autotile);
 		}
 	}
 
@@ -904,11 +905,11 @@ class MapPortion {
 		// Clear
 		for (let i = 0; i < 2; i++) {
 			for (const mesh of this.spritesFixMeshes[i]) {
-				Scene.Map.current!.scene.remove(mesh);
+				this.map.scene.remove(mesh);
 			}
 		}
 		for (const mesh of this.spritesFaceMeshes) {
-			Scene.Map.current!.scene.remove(mesh);
+			this.map.scene.remove(mesh);
 		}
 		this.spritesFixMeshes = [[], []];
 		this.spritesFaceMeshes = [];
@@ -916,10 +917,10 @@ class MapPortion {
 		// New
 		const isPointedSprite =
 			Scene.Map.isTransforming() &&
-			!Scene.Map.current!.isDraggingTransforming &&
+			!this.map.isDraggingTransforming &&
 			Scene.Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
 			Scene.Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_QUADRA;
-		const material = Scene.Map.current!.materialTileset;
+		const material = this.map.materialTileset;
 		const { width, height } = Manager.GL.getMaterialTextureSize(material);
 		const staticCounts: [number[], number[]] = [[], []];
 		const faceCounts: number[] = [];
@@ -927,22 +928,42 @@ class MapPortion {
 			const position = Position.fromKey(positionKey);
 			const localPosition = position.toVector3();
 			if (sprite.kind === ELEMENT_MAP_KIND.SPRITE_FACE) {
-				if (Scene.Map.current!.selectedElement === sprite) {
+				if (this.map.selectedElement === sprite) {
 					const geometry = new CustomGeometryFace();
-					sprite.updateGeometry(geometry, width, height, new Position(), 0, true, new THREE.Vector3(), true);
-					this.updateSelected(geometry, Scene.Map.current!.hoveredMesh.material, localPosition, position);
+					sprite.updateGeometry(
+						this.map,
+						geometry,
+						width,
+						height,
+						new Position(),
+						0,
+						true,
+						new THREE.Vector3(),
+						true
+					);
+					this.updateSelected(geometry, this.map.hoveredMesh.material, localPosition, position);
 				} else if (
 					Project.current!.settings.mapEditorCurrentActionIndex !== ACTION_KIND.ROTATE &&
 					isPointedSprite &&
-					Scene.Map.current!.pointedMapElement === sprite
+					this.map.pointedMapElement === sprite
 				) {
 					const hoveredGeometry = new CustomGeometryFace();
-					Scene.Map.current!.hoveredMesh.geometry = hoveredGeometry;
-					sprite.updateGeometry(hoveredGeometry, width, height, position, 0, true, localPosition, true);
+					this.map.hoveredMesh.geometry = hoveredGeometry;
+					sprite.updateGeometry(
+						this.map,
+						hoveredGeometry,
+						width,
+						height,
+						position,
+						0,
+						true,
+						localPosition,
+						true
+					);
 				} else {
 					let mesh = this.spritesFaceMeshes[position.layer];
 					if (!mesh) {
-						mesh = new THREE.Mesh(new CustomGeometryFace(), Scene.Map.current!.materialTileset);
+						mesh = new THREE.Mesh(new CustomGeometryFace(), this.map.materialTileset);
 						mesh.receiveShadow = true;
 						mesh.castShadow = true;
 						mesh.renderOrder = 3;
@@ -954,6 +975,7 @@ class MapPortion {
 					const geometry = mesh.geometry as CustomGeometryFace;
 					let faceCount = faceCounts[position.layer];
 					faceCount = sprite.updateGeometry(
+						this.map,
 						geometry,
 						width,
 						height,
@@ -966,18 +988,38 @@ class MapPortion {
 				}
 			} else {
 				const side = sprite.front ? 0 : 1;
-				if (Scene.Map.current!.selectedElement === sprite) {
+				if (this.map.selectedElement === sprite) {
 					const geometry = new CustomGeometry();
-					sprite.updateGeometry(geometry, width, height, new Position(), 0, true, new THREE.Vector3(), true);
-					this.updateSelected(geometry, Scene.Map.current!.hoveredMesh.material, localPosition, position);
-				} else if (isPointedSprite && Scene.Map.current!.pointedMapElement === sprite) {
+					sprite.updateGeometry(
+						this.map,
+						geometry,
+						width,
+						height,
+						new Position(),
+						0,
+						true,
+						new THREE.Vector3(),
+						true
+					);
+					this.updateSelected(geometry, this.map.hoveredMesh.material, localPosition, position);
+				} else if (isPointedSprite && this.map.pointedMapElement === sprite) {
 					const hoveredGeometry = new CustomGeometry();
-					Scene.Map.current!.hoveredMesh.geometry = hoveredGeometry;
-					sprite.updateGeometry(hoveredGeometry, width, height, position, 0, true, localPosition, true);
+					this.map.hoveredMesh.geometry = hoveredGeometry;
+					sprite.updateGeometry(
+						this.map,
+						hoveredGeometry,
+						width,
+						height,
+						position,
+						0,
+						true,
+						localPosition,
+						true
+					);
 				} else {
 					let mesh = this.spritesFixMeshes[side][position.layer];
 					if (!mesh) {
-						mesh = new THREE.Mesh(new CustomGeometry(), Scene.Map.current!.materialTileset);
+						mesh = new THREE.Mesh(new CustomGeometry(), this.map.materialTileset);
 						mesh.receiveShadow = true;
 						mesh.castShadow = true;
 						mesh.renderOrder = 3;
@@ -989,6 +1031,7 @@ class MapPortion {
 					const geometry = mesh.geometry as CustomGeometry;
 					let staticCount = staticCounts[side][position.layer];
 					staticCount = sprite.updateGeometry(
+						this.map,
 						geometry,
 						width,
 						height,
@@ -1007,35 +1050,35 @@ class MapPortion {
 			for (let j = 0, l = meshes.length; j < l; j++) {
 				const mesh = meshes[j];
 				if (mesh) {
-					MapPortion.offsetMeshPositionLayer(mesh, i, j, false);
+					MapPortion.offsetMeshPositionLayer(this.map, mesh, i, j, false);
 					(mesh.geometry as CustomGeometry).updateAttributes();
-					Scene.Map.current!.scene.add(mesh);
+					this.map.scene.add(mesh);
 				}
 			}
 		}
 		for (let j = 0, l = this.spritesFaceMeshes.length; j < l; j++) {
 			const mesh = this.spritesFaceMeshes[j];
 			if (mesh) {
-				MapPortion.offsetMeshPositionLayer(mesh, 0, j, false);
+				MapPortion.offsetMeshPositionLayer(this.map, mesh, 0, j, false);
 				(mesh.geometry as CustomGeometryFace).updateAttributes();
-				Scene.Map.current!.scene.add(mesh);
+				this.map.scene.add(mesh);
 			}
 		}
 
 		if (isPointedSprite) {
-			const hoveredGeometry = Scene.Map.current!.hoveredMesh.geometry as CustomGeometry;
+			const hoveredGeometry = this.map.hoveredMesh.geometry as CustomGeometry;
 			if (!hoveredGeometry.isEmpty()) {
 				hoveredGeometry.updateAttributes();
-				Scene.Map.current!.hoveredMesh.renderOrder = 3;
-				Scene.Map.current!.hoveredMesh.layers.enable(RAYCASTING_LAYER.SPRITES);
-				Scene.Map.current!.scene.add(Scene.Map.current!.hoveredMesh);
+				this.map.hoveredMesh.renderOrder = 3;
+				this.map.hoveredMesh.layers.enable(RAYCASTING_LAYER.SPRITES);
+				this.map.scene.add(this.map.hoveredMesh);
 			}
 		}
 	}
 
 	updateWallsGeometry() {
 		for (const mesh of this.wallsMeshes) {
-			Scene.Map.current!.scene.remove(mesh);
+			this.map.scene.remove(mesh);
 		}
 		this.wallsMeshes = [];
 		const hash = new Map<number, GeometryMaterialType>();
@@ -1050,7 +1093,7 @@ class MapPortion {
 				material = obj.material;
 				count = obj.count as number;
 			} else {
-				material = MapElement.SpriteWall.getWallTexture(wall.wallID);
+				material = MapElement.SpriteWall.getWallTexture(this.map, wall.wallID);
 				geometry = new CustomGeometry();
 				count = 0;
 				obj = {
@@ -1075,7 +1118,7 @@ class MapPortion {
 				mesh.layers.enable(RAYCASTING_LAYER.WALLS);
 				mesh.renderOrder = 3;
 				this.wallsMeshes.push(mesh);
-				Scene.Map.current!.scene.add(mesh);
+				this.map.scene.add(mesh);
 			}
 		}
 	}
@@ -1083,7 +1126,7 @@ class MapPortion {
 	updateMountainsGeometry() {
 		for (const [, mountains] of this.mountainsList) {
 			if (mountains.mesh) {
-				Scene.Map.current!.scene.remove(mountains.mesh);
+				this.map.scene.remove(mountains.mesh);
 			}
 		}
 		this.mountainsList = new Map();
@@ -1092,7 +1135,7 @@ class MapPortion {
 			const pictureID = Project.current!.specialElements.getMountainByID(mountain.mountainID).pictureID;
 			let mountains = this.mountainsList.get(pictureID);
 			if (!mountains) {
-				mountains = new MapElement.Mountains(pictureID, Scene.Map.current!.texturesMountains.get(pictureID)!);
+				mountains = new MapElement.Mountains(pictureID, this.map.texturesMountains.get(pictureID)!);
 				this.mountainsList.set(pictureID, mountains);
 			}
 			mountains.updateGeometry(position, mountain);
@@ -1104,7 +1147,7 @@ class MapPortion {
 				mountains.mesh!.castShadow = true;
 				mountains.mesh!.customDepthMaterial = mountains.material.userData.customDepthMaterial;
 				mountains.mesh!.layers.enable(RAYCASTING_LAYER.MOUNTAINS);
-				Scene.Map.current!.scene.add(mountains.mesh!);
+				this.map.scene.add(mountains.mesh!);
 			}
 		}
 	}
@@ -1112,10 +1155,10 @@ class MapPortion {
 	updateObjects3DGeometry() {
 		const isPointedObject3D =
 			Scene.Map.isTransforming() &&
-			!Scene.Map.current!.isDraggingTransforming &&
+			!this.map.isDraggingTransforming &&
 			Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT3D;
 		for (const mesh of this.objects3DMeshes) {
-			Scene.Map.current!.scene.remove(mesh);
+			this.map.scene.remove(mesh);
 		}
 		this.objects3DMeshes = [];
 		const hash = new Map<number, GeometryMaterialType>();
@@ -1131,13 +1174,13 @@ class MapPortion {
 				let geometry: CustomGeometry | null = null;
 				let count = 0;
 				if (
-					(isPointedObject3D && Scene.Map.current!.pointedMapElement === object3D) ||
-					Scene.Map.current!.selectedElement === object3D
+					(isPointedObject3D && this.map.pointedMapElement === object3D) ||
+					this.map.selectedElement === object3D
 				) {
-					material = MapElement.Object3D.getObject3DTexture(object3D.id, true);
+					material = MapElement.Object3D.getObject3DTexture(this.map, object3D.id, true);
 					geometry = new CustomGeometry();
 					if (object3D && material) {
-						if (Scene.Map.current!.selectedElement === object3D) {
+						if (this.map.selectedElement === object3D) {
 							object3D.updateGeometry(
 								geometry,
 								new Position(
@@ -1154,7 +1197,7 @@ class MapPortion {
 							this.updateSelected(
 								geometry,
 								material,
-								Scene.Map.current!.selectedElement.getLocalPosition(position),
+								this.map.selectedElement.getLocalPosition(position),
 								position
 							);
 						} else {
@@ -1172,7 +1215,7 @@ class MapPortion {
 						material = obj.material;
 						count = obj.count as number;
 					} else {
-						material = MapElement.Object3D.getObject3DTexture(object3D.id);
+						material = MapElement.Object3D.getObject3DTexture(this.map, object3D.id);
 						geometry = new CustomGeometry();
 						obj = {
 							geometry,
@@ -1200,21 +1243,21 @@ class MapPortion {
 				mesh.castShadow = true;
 				mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
 				mesh.layers.enable(RAYCASTING_LAYER.OBJECTS3D);
-				Scene.Map.current!.scene.add(mesh);
+				this.map.scene.add(mesh);
 			}
 		}
 	}
 
 	updateObjectsGeometry() {
 		if (this.objectsMesh !== null) {
-			Scene.Map.current!.scene.remove(this.objectsMesh);
+			this.map.scene.remove(this.objectsMesh);
 			this.objectsMesh = null;
 		}
 		for (const mesh of this.objectsMeshes) {
-			Scene.Map.current!.scene.remove(mesh);
+			this.map.scene.remove(mesh);
 		}
 		for (const mesh of this.objectsSpritesFaceMeshes) {
-			Scene.Map.current!.scene.remove(mesh);
+			this.map.scene.remove(mesh);
 		}
 		this.objectsMeshes = [];
 		this.objectsSpritesFaceMeshes = [];
@@ -1251,8 +1294,8 @@ class MapPortion {
 					case ELEMENT_MAP_KIND.SPRITE_FACE: {
 						const material =
 							state.graphicsID === 0
-								? Scene.Map.current!.materialTileset
-								: Scene.Map.current!.texturesCharacters[state.graphicsID];
+								? this.map.materialTileset
+								: this.map.texturesCharacters[state.graphicsID];
 						const { width, height } = Manager.GL.getMaterialTextureSize(material);
 						const characterRect = new Rectangle();
 						if (state.graphicsID !== 0) {
@@ -1277,7 +1320,16 @@ class MapPortion {
 								? new CustomGeometry()
 								: new CustomGeometryFace();
 						const localPosition = position.toVector3();
-						sprite.updateGeometry(geometrySprite, width, height, position, 0, false, localPosition);
+						sprite.updateGeometry(
+							this.map,
+							geometrySprite,
+							width,
+							height,
+							position,
+							0,
+							false,
+							localPosition
+						);
 						geometrySprite.updateAttributes();
 						mesh = new THREE.Mesh(geometrySprite, material);
 						if (state.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX) {
@@ -1288,7 +1340,7 @@ class MapPortion {
 						break;
 					}
 					case ELEMENT_MAP_KIND.OBJECT3D: {
-						const material = MapElement.Object3D.getObject3DTexture(state.graphicsID);
+						const material = MapElement.Object3D.getObject3DTexture(this.map, state.graphicsID);
 						if (material) {
 							const geometryObject3D = new CustomGeometry();
 							const object3D = MapElement.Object3D.create(
@@ -1306,7 +1358,7 @@ class MapPortion {
 					mesh.receiveShadow = true;
 					mesh.castShadow = true;
 					mesh.renderOrder = 0;
-					Scene.Map.current!.scene.add(mesh);
+					this.map.scene.add(mesh);
 				}
 			}
 		}
@@ -1318,8 +1370,8 @@ class MapPortion {
 			this.objectsMesh.castShadow = true;
 			this.objectsMesh.renderOrder = 0;
 			this.objectsMesh.layers.enable(RAYCASTING_LAYER.OBJECTS);
-			MapPortion.offsetMeshPositionLayer(this.objectsMesh, 0, 1);
-			Scene.Map.current!.scene.add(this.objectsMesh);
+			MapPortion.offsetMeshPositionLayer(this.map, this.objectsMesh, 0, 1);
+			this.map.scene.add(this.objectsMesh);
 		}
 	}
 
@@ -1342,7 +1394,7 @@ class MapPortion {
 			for (let j = 0, l = meshes.length; j < l; j++) {
 				const mesh = meshes[j];
 				if (mesh) {
-					MapPortion.offsetMeshPositionLayer(mesh, i, j);
+					MapPortion.offsetMeshPositionLayer(this.map, mesh, i, j);
 				}
 			}
 			for (const list of this.autotilesList) {
@@ -1352,7 +1404,7 @@ class MapPortion {
 						for (let j = 0, l = autotiles.meshes.length; j < l; j++) {
 							const mesh = meshes[j];
 							if (mesh) {
-								MapPortion.offsetMeshPositionLayer(mesh, i, j);
+								MapPortion.offsetMeshPositionLayer(this.map, mesh, i, j);
 							}
 						}
 					}
@@ -1362,18 +1414,18 @@ class MapPortion {
 			for (let j = 0, l = meshes.length; j < l; j++) {
 				const mesh = meshes[j];
 				if (mesh) {
-					MapPortion.offsetMeshPositionLayer(mesh, i, j, false);
+					MapPortion.offsetMeshPositionLayer(this.map, mesh, i, j, false);
 				}
 			}
 		}
 		for (let j = 0, l = this.spritesFaceMeshes.length; j < l; j++) {
 			const mesh = this.spritesFaceMeshes[j];
 			if (mesh) {
-				MapPortion.offsetMeshPositionLayer(mesh, 0, j, false);
+				MapPortion.offsetMeshPositionLayer(this.map, mesh, 0, j, false);
 			}
 		}
 		if (this.objectsMesh) {
-			MapPortion.offsetMeshPositionLayer(this.objectsMesh, 0, 1);
+			MapPortion.offsetMeshPositionLayer(this.map, this.objectsMesh, 0, 1);
 		}
 	}
 
@@ -1381,12 +1433,12 @@ class MapPortion {
 		for (let i = 0; i < 2; i++) {
 			for (const mesh of this.floorsMeshes[i]) {
 				if (mesh) {
-					Scene.Map.current!.scene.remove(mesh);
+					this.map.scene.remove(mesh);
 				}
 			}
 			for (const mesh of this.spritesFixMeshes[i]) {
 				if (mesh) {
-					Scene.Map.current!.scene.remove(mesh);
+					this.map.scene.remove(mesh);
 				}
 			}
 		}
@@ -1394,7 +1446,7 @@ class MapPortion {
 		this.spritesFixMeshes = [[], []];
 		for (const mesh of this.spritesFaceMeshes) {
 			if (mesh) {
-				Scene.Map.current!.scene.remove(mesh);
+				this.map.scene.remove(mesh);
 			}
 		}
 		this.spritesFaceMeshes = [];
@@ -1404,7 +1456,7 @@ class MapPortion {
 					for (let i = 0; i < 2; i++) {
 						const meshes = autotiles.meshes[i];
 						for (const mesh of meshes) {
-							Scene.Map.current!.scene.remove(mesh);
+							this.map.scene.remove(mesh);
 						}
 					}
 				}
@@ -1412,28 +1464,28 @@ class MapPortion {
 		}
 		this.autotilesList = [];
 		for (const walls of this.wallsMeshes) {
-			Scene.Map.current!.scene.remove(walls);
+			this.map.scene.remove(walls);
 		}
 		this.wallsMeshes = [];
 		for (const [, mountains] of this.mountainsList) {
 			if (mountains.mesh) {
-				Scene.Map.current!.scene.remove(mountains.mesh);
+				this.map.scene.remove(mountains.mesh);
 			}
 		}
 		this.mountainsList = new Map();
 		for (const objects of this.objects3DMeshes) {
-			Scene.Map.current!.scene.remove(objects);
+			this.map.scene.remove(objects);
 		}
 		this.objects3DMeshes = [];
 		if (this.objectsMesh !== null) {
-			Scene.Map.current!.scene.remove(this.objectsMesh);
+			this.map.scene.remove(this.objectsMesh);
 			this.objectsMesh = null;
 		}
 		for (const mesh of this.objectsMeshes) {
-			Scene.Map.current!.scene.remove(mesh);
+			this.map.scene.remove(mesh);
 		}
 		for (const mesh of this.objectsSpritesFaceMeshes) {
-			Scene.Map.current!.scene.remove(mesh);
+			this.map.scene.remove(mesh);
 		}
 	}
 }

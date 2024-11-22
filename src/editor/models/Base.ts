@@ -108,7 +108,7 @@ class Base extends Serializable {
 		Base.create(DYNAMIC_VALUE_KIND.SOUND, 'sound'),
 		Base.create(DYNAMIC_VALUE_KIND.MUSIC_EFFECT, 'music.effect'),
 	];
-	public static ON_OFF_OPTIONS = [Base.create(0, 'ON'), Base.create(1, 'OFF')];
+	public static ON_OFF_OPTIONS = Base.mapListIndex(['ON', 'OFF']);
 	public static SHAPE_KIND_OPTIONS = [
 		Base.create(SHAPE_KIND.BOX, 'box'),
 		Base.create(SHAPE_KIND.SPHERE, 'sphere'),
@@ -123,11 +123,14 @@ class Base extends Serializable {
 		Base.create(OBJECT_COLLISION_KIND.SIMPLIFIED, 'simplified'),
 		Base.create(OBJECT_COLLISION_KIND.CUSTOM, 'custom'),
 	];
-	public static OBJECT_3D_IS_TOP_LEFT_OPTIONS = [Base.create(1, 'top.left'), Base.create(2, 'centered')];
-	public static OBJECT_3D_STRETCH_OPTIONS = [Base.create(1, 'stretch'), Base.create(2, 'perfect.size')];
-	public static BEHIND_ABOVE_OPTIONS = [Base.create(0, 'behind'), Base.create(1, 'above')];
-	public static YES_NO_OPTIONS = [Base.create(0, 'yes'), Base.create(1, 'no')];
-	public static PLUS_MINUS_OPTIONS = [Base.create(0, '+'), Base.create(1, '-')];
+	public static OBJECT_3D_IS_TOP_LEFT_OPTIONS = Base.mapListIndex(['top.left', 'centered'], 1);
+	public static OBJECT_3D_STRETCH_OPTIONS = Base.mapListIndex(['stretch', 'perfect.size'], 1);
+	public static BEHIND_ABOVE_OPTIONS = Base.mapListIndex(['behind', 'above']);
+	public static YES_NO_OPTIONS = Base.mapListIndex(['yes', 'no']);
+	public static PLUS_MINUS_OPTIONS = Base.mapListIndex(['+', '-']);
+	public static TRANSITION_DIRECTION_OPTIONS = Base.mapListIndex(['unchanged', 'south', 'west', 'north', 'east']);
+	public static TRANSITION_START_OPTIONS = Base.mapListIndex(['none', 'fade.in', 'zoom.in']);
+	public static TRANSITION_END_OPTIONS = Base.mapListIndex(['none', 'fade.out', 'zoom.out']);
 
 	public id!: number;
 	public name!: string;
@@ -150,6 +153,10 @@ class Base extends Serializable {
 		base.id = id;
 		base.name = name;
 		return base;
+	}
+
+	static mapListIndex(list: string[], offset = 0) {
+		return list.map((name, index) => Base.create(index + offset, name));
 	}
 
 	static createDefault(additionnalBinding: BindingType[] = []) {

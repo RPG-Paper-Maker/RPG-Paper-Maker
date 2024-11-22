@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Model } from '../../../Editor';
 import { Utils } from '../../../common';
@@ -68,7 +68,7 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 		setIsOpen(false);
 	};
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (isOpen) {
 			setFocustFirst(true);
 			initialize();

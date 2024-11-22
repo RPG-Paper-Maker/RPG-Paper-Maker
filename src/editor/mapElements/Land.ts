@@ -10,10 +10,10 @@
 */
 
 import * as THREE from 'three';
+import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType } from '../common';
+import { CustomGeometry, Position, Project, Rectangle } from '../core';
 import { MapElement, Scene } from '../Editor';
 import { Base } from './Base';
-import { CustomGeometry, Position, Project, Rectangle } from '../core';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType } from '../common';
 
 class Land extends Base {
 	public static readonly JSON_UP = 'up';
@@ -71,6 +71,7 @@ class Land extends Base {
 	}
 
 	updateGeometryLand(
+		map: Scene.Map,
 		geometry: CustomGeometry,
 		position: Position,
 		width: number,
@@ -89,7 +90,7 @@ class Land extends Base {
 		let b = localPosition.y;
 		const c = localPosition.z;
 		if (forceOffset) {
-			let offset = position.layer * Scene.Map.current!.camera.getYOffsetDepth();
+			let offset = position.layer * map.camera.getYOffsetDepth();
 			if (!this.up) {
 				offset *= -1;
 			}

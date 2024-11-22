@@ -49,7 +49,7 @@ class Inputs {
 		return Constants.IS_MOBILE ? this.previousPointerY : this.previousMouseY;
 	}
 
-	static initialize(canvas: HTMLDivElement) {
+	static initialize(canvas: HTMLDivElement, canvasOnly = false) {
 		Inputs.keys = [];
 
 		if (Constants.IS_MOBILE) {
@@ -96,7 +96,9 @@ class Inputs {
 					Inputs.previousTouchDistance = Inputs.touchDistance;
 				}
 			};
-			document.addEventListener('touchstart', handleTouchStart, false);
+			if (!canvasOnly) {
+				document.addEventListener('touchstart', handleTouchStart, false);
+			}
 
 			// Touch move
 			const handleTouchMove = (e: TouchEvent) => {
@@ -117,7 +119,9 @@ class Inputs {
 				}
 				Scene.Map.current.onTouchMove();
 			};
-			document.addEventListener('touchmove', handleTouchMove, false);
+			if (!canvasOnly) {
+				document.addEventListener('touchmove', handleTouchMove, false);
+			}
 
 			// Touch end
 			const handleTouchEnd = async () => {
@@ -129,19 +133,23 @@ class Inputs {
 				await Scene.Map.current.onTouchEnd();
 				Inputs.isPointerPressed = false;
 			};
-			document.addEventListener('touchend', handleTouchEnd, false);
+			if (!canvasOnly) {
+				document.addEventListener('touchend', handleTouchEnd, false);
+			}
 
 			return () => {
 				canvas.removeEventListener('pointerdown', handlePointerDown, false);
 				canvas.removeEventListener('pointermove', handlePointerMove, false);
-				document.removeEventListener('touchmove', handleTouchMove, false);
-				document.removeEventListener('touchend', handleTouchEnd, false);
+				if (!canvasOnly) {
+					document.removeEventListener('touchmove', handleTouchMove, false);
+					document.removeEventListener('touchend', handleTouchEnd, false);
+				}
 			};
 		} else {
 			// Key down
 			const handleKeyDown = (e: globalThis.KeyboardEvent) => {
 				if (
-					!this.isMapFocused ||
+					(!this.isMapFocused && !Scene.Map.currentpositionSelector) ||
 					(e.ctrlKey && e.key === 's') ||
 					!Scene.Map.current ||
 					Scene.Map.current.loading
@@ -151,23 +159,31 @@ class Inputs {
 				if (!ArrayUtils.contains(Inputs.keys, e.key)) {
 					Inputs.keys.push(e.key);
 				}
-				Scene.Map.current.onKeyDown();
+				(Scene.Map.currentpositionSelector ?? Scene.Map.current).onKeyDown();
 			};
-			window.addEventListener('keydown', handleKeyDown);
+			if (!canvasOnly) {
+				window.addEventListener('keydown', handleKeyDown);
+			}
 
 			// Key up
 			const handleKeyUp = (e: globalThis.KeyboardEvent) => {
-				if (!this.isMapFocused || !Scene.Map.current) {
+				if ((!this.isMapFocused && !Scene.Map.currentpositionSelector) || !Scene.Map.current) {
 					return;
 				}
 				ArrayUtils.removeElement(Inputs.keys, e.key);
-				Scene.Map.current.onKeyUp();
+				(Scene.Map.currentpositionSelector ?? Scene.Map.current).onKeyUp();
 			};
-			window.addEventListener('keyup', handleKeyUp);
+			if (!canvasOnly) {
+				window.addEventListener('keyup', handleKeyUp);
+			}
 
 			// Mouse down
 			const handleMouseDown = (e: MouseEvent) => {
-				if (!this.isMapFocused || !Scene.Map.current || Scene.Map.current.loading) {
+				if (
+					(!this.isMapFocused && !Scene.Map.currentpositionSelector) ||
+					!Scene.Map.current ||
+					Scene.Map.current.loading
+				) {
 					return;
 				}
 				switch (e.button) {
@@ -184,11 +200,10 @@ class Inputs {
 					default:
 						break;
 				}
-
-				const rect = canvas.getBoundingClientRect();
+				const rect = (Scene.Map.currentpositionSelector ?? Scene.Map.current).canvas!.getBoundingClientRect();
 				const x = e.clientX - rect.left;
 				const y = e.clientY - rect.top;
-				Scene.Map.current.onMouseDown();
+				(Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseDown();
 				Inputs.mouseX = x;
 				Inputs.mouseY = y;
 				Inputs.previousMouseX = x;
@@ -198,26 +213,32 @@ class Inputs {
 
 			// Mouse move
 			const handleMouseMove = (e: MouseEvent) => {
-				if (!this.isMapFocused || !Scene.Map.current || Scene.Map.current.loading) {
+				if (
+					(!this.isMapFocused && !Scene.Map.currentpositionSelector) ||
+					!Scene.Map.current ||
+					Scene.Map.current.loading
+				) {
 					return;
 				}
-				const rect = canvas.getBoundingClientRect();
+				const rect = (Scene.Map.currentpositionSelector ?? Scene.Map.current).canvas!.getBoundingClientRect();
 				const x = e.clientX - rect.left;
 				const y = e.clientY - rect.top;
-				Scene.Map.current.onMouseMove();
+				(Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseMove();
 				Inputs.previousMouseX = Inputs.mouseX;
 				Inputs.previousMouseY = Inputs.mouseY;
 				Inputs.mouseX = x;
 				Inputs.mouseY = y;
 			};
-			document.addEventListener('mousemove', handleMouseMove, false);
+			if (!canvasOnly) {
+				document.addEventListener('mousemove', handleMouseMove, false);
+			}
 
 			// Mouse up
 			const handleMouseUp = async (e: MouseEvent) => {
 				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
-				await Scene.Map.current.onMouseUp();
+				await (Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseUp();
 				switch (e.button) {
 					case 0:
 						Inputs.isPointerPressed = false;
@@ -232,27 +253,31 @@ class Inputs {
 						break;
 				}
 			};
-			document.addEventListener('mouseup', handleMouseUp, false);
+			if (!canvasOnly) {
+				document.addEventListener('mouseup', handleMouseUp, false);
+			}
 
 			// Mouse wheel
 			const handleWheel = async (e: WheelEvent) => {
-				if (!this.isMapFocused) {
+				if (!this.isMapFocused && !Scene.Map.currentpositionSelector) {
 					return;
 				}
 				e.preventDefault();
 				if (!Scene.Map.current || Scene.Map.current.loading) {
 					return;
 				}
-				await Scene.Map.current.onMouseWheel(e.deltaY);
+				await (Scene.Map.currentpositionSelector ?? Scene.Map.current).onMouseWheel(e.deltaY);
 			};
 			canvas.addEventListener('wheel', handleWheel);
 
 			return () => {
-				window.removeEventListener('keydown', handleKeyDown);
-				window.addEventListener('keyup', handleKeyUp);
+				if (!canvasOnly) {
+					window.removeEventListener('keydown', handleKeyDown);
+					window.removeEventListener('keyup', handleKeyUp);
+					document.removeEventListener('mousemove', handleMouseMove, false);
+					document.removeEventListener('mouseup', handleMouseUp, false);
+				}
 				canvas.removeEventListener('mousedown', handleMouseDown, false);
-				document.removeEventListener('mousemove', handleMouseMove, false);
-				document.removeEventListener('mouseup', handleMouseUp, false);
 				canvas.removeEventListener('wheel', handleWheel);
 			};
 		}

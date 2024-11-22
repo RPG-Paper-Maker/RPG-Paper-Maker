@@ -21,8 +21,6 @@ type Props = {
 	min?: number;
 	decimals?: boolean;
 	disabled?: boolean;
-	forcedValue?: number;
-	setForcedValue?: (v?: number) => void;
 };
 
 function InputNumber({
@@ -33,8 +31,6 @@ function InputNumber({
 	max = 999999999,
 	decimals = false,
 	disabled = false,
-	forcedValue,
-	setForcedValue,
 }: Props) {
 	const transformValue = (v: number) => (decimals ? Mathf.forceDecimals(v) : Mathf.forceInteger(v));
 
@@ -43,7 +39,7 @@ function InputNumber({
 
 	const [displayedValue, setDisplayedValue] = useState(transformValueToText(value));
 
-	const getMaxWidth = () => {
+	const getWidth = () => {
 		switch (widthType) {
 			case INPUT_TYPE_WIDTH.FILL:
 				return '100%';
@@ -52,7 +48,7 @@ function InputNumber({
 			case INPUT_TYPE_WIDTH.NORMAL:
 				return '100px';
 			case INPUT_TYPE_WIDTH.LARGE:
-				return '200px';
+				return '195px';
 		}
 	};
 
@@ -82,12 +78,9 @@ function InputNumber({
 	};
 
 	useEffect(() => {
-		if (forcedValue !== undefined && setForcedValue) {
-			setDisplayedValue(transformValueToText(forcedValue));
-			setForcedValue(undefined);
-		}
+		setDisplayedValue(transformValueToText(value));
 		// eslint-disable-next-line
-	}, [forcedValue, setForcedValue]);
+	}, [value]);
 
 	return (
 		<input
@@ -98,7 +91,7 @@ function InputNumber({
 			onBlur={handleBlur}
 			onChange={handleChange}
 			step='any'
-			style={{ maxWidth: getMaxWidth() }}
+			style={{ width: getWidth() }}
 			disabled={disabled}
 		/>
 	);

@@ -52,14 +52,18 @@ function Form({ children }: Props) {
 
 type LabelProps = {
 	children?: ReactNode;
+	disabled?: boolean;
 	disabledColon?: boolean;
+	hideColon?: boolean;
 };
 
-function Label({ children, disabledColon = false }: LabelProps) {
+function Label({ children, disabled = false, disabledColon = false, hideColon = false }: LabelProps) {
 	return (
 		<td>
-			{children}
-			<div className={Utils.getClassName({ disabled: disabledColon }, 'colon')}>:</div>
+			<div className={Utils.getClassName({ disabledLabel: disabled })}>{children}</div>
+			<div className={Utils.getClassName({ disabled: disabledColon || disabled }, 'colon')}>
+				{!hideColon && ':'}
+			</div>
 		</td>
 	);
 }

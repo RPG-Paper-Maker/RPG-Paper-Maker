@@ -287,6 +287,7 @@ class Map extends Base {
 		if (object !== null) {
 			this.objects.push(Model.MapObject.create(object.id, object.name, position));
 		}
+		this.objects.sort((a: Model.MapObject, b: Model.MapObject) => a.id - b.id);
 		await this.save(true);
 	}
 

@@ -9,13 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import * as THREE from 'three';
-import { MapElement, Model } from '../Editor';
+import { MapElement, Model, Scene } from '../Editor';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, Utils } from '../common';
 import { CustomGeometry, Position, Project } from '../core';
 import { Base } from './Base';
 import { Mountains } from './Mountains';
-import i18next from 'i18next';
 
 class Mountain extends Base {
 	public static X_LEFT_OFFSET = 0;
@@ -736,20 +736,20 @@ class Mountain extends Base {
 		return count;
 	}
 
-	getMountainHere(position: Position) {
-		const mountain = Mountains.getMountainHere(position);
+	getMountainHere(map: Scene.Map, position: Position) {
+		const mountain = Mountains.getMountainHere(map, position);
 		return mountain && mountain.equals(this);
 	}
 
-	update(position: Position): boolean {
+	update(map: Scene.Map, position: Position): boolean {
 		const previousLeft = this.left;
 		const previousRight = this.right;
 		const previousTop = this.top;
 		const previousBot = this.bot;
-		this.left = !!this.getMountainHere(position.getSquareLeft());
-		this.right = !!this.getMountainHere(position.getSquareRight());
-		this.top = !!this.getMountainHere(position.getSquareTop());
-		this.bot = !!this.getMountainHere(position.getSquareBot());
+		this.left = !!this.getMountainHere(map, position.getSquareLeft());
+		this.right = !!this.getMountainHere(map, position.getSquareRight());
+		this.top = !!this.getMountainHere(map, position.getSquareTop());
+		this.bot = !!this.getMountainHere(map, position.getSquareBot());
 		return (
 			this.left !== previousLeft ||
 			this.right !== previousRight ||

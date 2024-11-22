@@ -38,32 +38,31 @@ class Mountains {
 		return width === 0 ? 90 : (Math.atan(height / width) * 180) / Math.PI;
 	}
 
-	static getMountainTexture(id: number): THREE.MeshPhongMaterial | null {
-		return (
-			Scene.Map.current!.texturesMountains.get(Project.current!.specialElements.getMountainByID(id).pictureID) ||
-			null
-		);
+	static getMountainTexture(map: Scene.Map, id: number): THREE.MeshPhongMaterial | null {
+		return map.texturesMountains.get(Project.current!.specialElements.getMountainByID(id).pictureID) || null;
 	}
 
-	static async loadMountainTexture(id: number): Promise<THREE.MeshPhongMaterial> {
+	static async loadMountainTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
 		const mountain = Project.current!.specialElements.getMountainByID(id);
 		const pictureID = mountain.pictureID;
-		let textureMountain = Scene.Map.current ? Scene.Map.current.texturesMountains.get(pictureID) : null;
+		let textureMountain = map ? map.texturesMountains.get(pictureID) : null;
 		if (!textureMountain) {
 			if (mountain) {
 				const picture = Project.current!.pictures.getByID(PICTURE_KIND.MOUNTAINS, pictureID);
-				textureMountain = picture ? await this.loadTextureMountain(picture) : Manager.GL.loadTextureEmpty();
+				textureMountain = picture
+					? await this.loadTextureMountain(map, picture)
+					: Manager.GL.loadTextureEmpty();
 			} else {
 				textureMountain = Manager.GL.loadTextureEmpty();
 			}
-			if (Scene.Map.current) {
-				Scene.Map.current.texturesMountains.set(pictureID, textureMountain);
+			if (map) {
+				map.texturesMountains.set(pictureID, textureMountain);
 			}
 		}
 		return textureMountain;
 	}
 
-	static async loadTextureMountain(picture: Model.Picture): Promise<THREE.MeshPhongMaterial> {
+	static async loadTextureMountain(map: Scene.Map | null, picture: Model.Picture): Promise<THREE.MeshPhongMaterial> {
 		const image = await Picture2D.loadImage(picture.getPath());
 
 		const sourceSize = 3 * Project.SQUARE_SIZE;
@@ -174,17 +173,17 @@ class Mountains {
 		texture.image = await Picture2D.loadImage(Scene.Map.canvasRendering!.toDataURL());
 		texture.needsUpdate = true;
 		const material = Manager.GL.createMaterial({ texture, side: THREE.BackSide });
-		if (Scene.Map.current) {
-			Scene.Map.current.texturesMountains.set(picture.id, material);
+		if (map) {
+			map.texturesMountains.set(picture.id, material);
 		}
 		return material;
 	}
 
-	static getMountainHere(position: Position) {
-		return Scene.Map.current!.getMapPortionByPosition(position)?.model.mountains.get(position.toKey());
+	static getMountainHere(map: Scene.Map, position: Position) {
+		return map.getMapPortionByPosition(position)?.model.mountains.get(position.toKey());
 	}
 
-	static updateAround(position: Position) {
+	static updateAround(map: Scene.Map, position: Position) {
 		const globalPortion = position.getGlobalPortion();
 		const positions = [
 			position.getSquareLeft(),
@@ -192,17 +191,17 @@ class Mountains {
 			position.getSquareTop(),
 			position.getSquareBot(),
 		];
-		Mountains.getMountainHere(position)?.update(position);
+		Mountains.getMountainHere(map, position)?.update(map, position);
 		for (const aroundPosition of positions) {
 			const newGlobalPortion = aroundPosition.getGlobalPortion();
-			const mountain = Mountains.getMountainHere(aroundPosition);
+			const mountain = Mountains.getMountainHere(map, aroundPosition);
 			if (mountain) {
-				if (mountain.update(aroundPosition)) {
+				if (mountain.update(map, aroundPosition)) {
 					if (!globalPortion.equals(newGlobalPortion)) {
-						const mapPortion = Scene.Map.current!.getMapPortionFromGlobalPortion(newGlobalPortion);
+						const mapPortion = map.getMapPortionFromGlobalPortion(newGlobalPortion);
 						if (mapPortion) {
-							Scene.Map.current!.portionsToUpdate.add(mapPortion);
-							Scene.Map.current!.portionsToSave.add(mapPortion);
+							map.portionsToUpdate.add(mapPortion);
+							map.portionsToSave.add(mapPortion);
 						}
 					}
 				}

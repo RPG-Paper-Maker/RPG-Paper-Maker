@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { MapElement } from '../Editor';
-import { Land } from './Land';
+import i18next from 'i18next';
 import { ELEMENT_MAP_KIND, JSONType, Mathf } from '../common';
 import { CustomGeometry, Position, Project, Rectangle } from '../core';
-import i18next from 'i18next';
+import { MapElement, Scene } from '../Editor';
+import { Land } from './Land';
 
 class Floor extends Land {
 	constructor() {
@@ -50,6 +50,7 @@ class Floor extends Land {
 	}
 
 	updateGeometry(
+		map: Scene.Map,
 		geometry: CustomGeometry,
 		position: Position,
 		width: number,
@@ -59,6 +60,7 @@ class Floor extends Land {
 	) {
 		if (width !== 0 && height !== 0) {
 			super.updateGeometryLand(
+				map,
 				geometry,
 				position,
 				width,

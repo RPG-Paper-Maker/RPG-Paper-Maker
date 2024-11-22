@@ -11,8 +11,8 @@
 
 import { Model, Scene } from '../Editor';
 import { BINDING, BindingType, Constants, ELEMENT_MAP_KIND, JSONType, Paths, SHAPE_KIND } from '../common';
-import { Serializable } from '../core/Serializable';
 import { Portion, Position, Project, Rectangle } from '../core';
+import { Serializable } from '../core/Serializable';
 import {
 	Autotile,
 	Base,
@@ -121,10 +121,10 @@ class MapPortion extends Serializable {
 	}
 
 	getPath(temp: boolean = false): string {
-		if (!Project.current || !Scene.Map.current) {
+		if (!Project.current || (!Scene.Map.currentpositionSelector && !Scene.Map.current)) {
 			return '';
 		}
-		let path = Scene.Map.current.getPath();
+		let path = (Scene.Map.currentpositionSelector ?? Scene.Map.current)!.getPath();
 		if (temp) {
 			path = Paths.join(path, Paths.TEMP);
 		}
