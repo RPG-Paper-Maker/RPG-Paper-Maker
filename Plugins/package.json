@@ -15,7 +15,10 @@
 		"Waterfall",
 		"Hide object on block view",
 		"Mouse lock and raycaster",
-		"True jump"
+		"True jump",
+		"Particle effects",
+		"Map loop",
+		"Realistic water and sun"
 	],
 	"others": [
 		"Gamepad",
