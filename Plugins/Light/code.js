@@ -1,12 +1,13 @@
-import { RPM } from "../path.js"
+import { RPM } from "../path.js";
 import { THREE } from "../../System/Globals.js";
 
 const pluginName = "Light";
-const inject = RPM.Manager.Plugins.inject;
 
 const path = RPM.Common.Paths.PLUGINS + pluginName + "/shaders/";
+const rings = RPM.Manager.Plugins.getParameter(pluginName, "Number of light rings");
 
 var lightList = [];
+var lastMap = null;
 
 setInterval(function ()
 {
@@ -20,6 +21,18 @@ setInterval(function ()
 {
 	if (RPM.Manager.Stack.top instanceof RPM.Scene.Map && !RPM.Scene.Map.current.loading)
 	{
+		if (RPM.Scene.Map.current !== lastMap)
+		{
+			for (var i = 0; i < lightList.length; i++)
+			{
+				if (!lightList[i].parent || !lightList[i].parent.parent)
+				{
+					lightList[i].dispose();
+					lightList.splice(i, 1);
+				}
+			}
+			lastMap = RPM.Scene.Map.current;
+		}
 		for (var i = 0; i < lightList.length; i++)
 		{
 			if (lightList[i].isDirectionalLight)
@@ -27,11 +40,10 @@ setInterval(function ()
 				const x = lightList[i].extraStuff.x;
 				const y = lightList[i].extraStuff.y;
 				const z = lightList[i].extraStuff.z;
-				console.log(x, y, z);
+				const d = Math.max(RPM.Datas.Systems.SQUARE_SIZE * RPM.Scene.Map.current.camera.distance / 10, 400);
 				lightList[i].target.position.copy(RPM.Scene.Map.current.camera.targetPosition);
 				lightList[i].target.updateMatrixWorld();
-				lightList[i].position.set(x, y, z).multiplyScalar(RPM.Datas.Systems.SQUARE_SIZE * 20).add(RPM.Scene.Map.current.camera.targetPosition);
-				const d = RPM.Scene.Map.current.camera.distance * 8;
+				lightList[i].position.set(x, y, z).multiplyScalar(d / 2).add(RPM.Scene.Map.current.camera.targetPosition);
 				if (d !== lightList[i].shadow.camera.right)
 				{
 					lightList[i].shadow.camera.left = -d;
@@ -47,8 +59,9 @@ setInterval(function ()
 
 RPM.Manager.GL.load = async function()
 {
-	const vert = await RPM.Common.IO.openFile(path + "toon.vert");
-	const frag = await RPM.Common.IO.openFile(path + "toon.frag");
+	var vert = await RPM.Common.IO.openFile(path + "toon.vert");
+	var frag = await RPM.Common.IO.openFile(path + "toon.frag");
+	frag = frag.replace("int numberOfRings = 5;", "int numberOfRings = " + rings.toString() + ";");
 	RPM.Manager.GL.SHADER_FIX_VERTEX = vert;
 	RPM.Manager.GL.SHADER_FIX_FRAGMENT = frag;
 	RPM.Manager.GL.SHADER_FACE_VERTEX = vert;
@@ -58,7 +71,7 @@ RPM.Manager.GL.load = async function()
 
 function enableCastShadows(mesh, enable)
 {
-	if (!mesh.isScene)
+	if (mesh.isMesh)
 		mesh.castShadow = enable;
 	for (var i = 0; i < mesh.children.length; i++)
 		enableCastShadows(mesh.children[i], enable);
@@ -86,13 +99,30 @@ function limitDistance(value)
 
 RPM.Manager.Plugins.registerCommand(pluginName, "Get local lights", (startFrom) =>
 {
-	if (!RPM.Core.ReactionInterpreter.currentObject.mesh)
+	const obj = RPM.Core.ReactionInterpreter.currentObject;
+	if (!obj.lightsPlugin_localLights)
 		return;
-	const children = RPM.Core.ReactionInterpreter.currentObject.mesh.children;
-	const props = RPM.Core.ReactionInterpreter.currentObject.properties;
+	const children = obj.lightsPlugin_localLights.children;
 	for (var i = 0; i < children.length; i++)
-		if (lightList.indexOf(children[i]) >= 0)
-			props[startFrom++] = children[i];
+		if (lightList.includes(children[i]))
+			obj.properties[startFrom++] = children[i];
+});
+
+RPM.Manager.Plugins.registerCommand(pluginName, "Reattach lights", () =>
+{
+	const obj = RPM.Core.ReactionInterpreter.currentObject;
+	if (!obj.lightsPlugin_localLights)
+		return;
+	if (!obj.mesh)
+	{
+		obj.mesh = new THREE.Mesh();
+		RPM.Scene.Map.current.scene.add(obj.mesh);
+	}
+	if (obj.lightsPlugin_localLights.parent !== obj.mesh)
+		obj.mesh.add(obj.lightsPlugin_localLights);
+	for (var i = 1; i < obj.properties.length; i++)
+		if (lightList.includes(obj.properties[i]) && obj.properties[i].parent !== obj.lightsPlugin_localLights)
+			obj.lightsPlugin_localLights.add(obj.properties[i]);
 });
 
 RPM.Manager.Plugins.registerCommand(pluginName, "Remove all lights", () =>
@@ -110,7 +140,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Remove default directional ligh
 	const scene = RPM.Scene.Map.current.scene;
 	for (var i = 0; i < scene.children.length; i++)
 	{
-		if (scene.children[i].isDirectionalLight && lightList.indexOf(scene.children[i]) < 0)
+		if (scene.children[i].isDirectionalLight && !lightList.includes(scene.children[i]))
 		{
 			scene.remove(scene.children[i]);
 			break;
@@ -141,7 +171,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Set ambient light", (intensity,
 	const scene = RPM.Scene.Map.current.scene;
 	for (var i = 0; i < scene.children.length; i++)
 	{
-		if (scene.children[i].isAmbientLight && lightList.indexOf(scene.children[i]) < 0)
+		if (scene.children[i].isAmbientLight && !lightList.includes(scene.children[i]))
 		{
 			scene.children[i].intensity = intensity;
 			scene.children[i].color = color.color;
@@ -164,10 +194,10 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Add directional light", (prop, 
 	const light = new THREE.DirectionalLight(color.color, intensity);
 	light.extraStuff = new THREE.Vector3(x, y, z).normalize();
 	light.castShadow = castShadow;
-	light.shadow.mapSize.width = 8192;
-	light.shadow.mapSize.height = 8192;
+	light.shadow.mapSize.width = 2048;
+	light.shadow.mapSize.height = 2048;
 	light.shadow.camera.far = RPM.Datas.Systems.SQUARE_SIZE * 350;
-	light.shadow.bias = -0.00002;
+	light.shadow.bias = -0.0002;
 	light.shadow.normalBias = 0.65 * RPM.Datas.Systems.SQUARE_SIZE / 16;
 	if (prop > 0)
 		RPM.Core.ReactionInterpreter.currentObject.properties[prop] = light;
@@ -177,26 +207,28 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Add directional light", (prop, 
 
 RPM.Manager.Plugins.registerCommand(pluginName, "Add point light", (prop, id, x, y, z, intensity, color, radius, castShadow) =>
 {
-	const light = new THREE.PointLight(color.color, intensity);
-	light.shadow.bias = -0.001;
-	light.shadow.normalBias = 0.375 * RPM.Datas.Systems.SQUARE_SIZE / 16;
-	light.distance = limitDistance(radius * RPM.Datas.Systems.SQUARE_SIZE);
+	const light = new THREE.PointLight(color.color, intensity, limitDistance(radius * RPM.Datas.Systems.SQUARE_SIZE));
+	light.shadow.bias = -0.0001;
+	light.shadow.normalBias = 0.44 * RPM.Datas.Systems.SQUARE_SIZE / 16;
 	light.position.set(x * RPM.Datas.Systems.SQUARE_SIZE, y * RPM.Datas.Systems.SQUARE_SIZE, z * RPM.Datas.Systems.SQUARE_SIZE);
 	light.castShadow = castShadow;
 	RPM.Core.MapObject.search(id, (result) =>
 	{
-		if (!!result)
+		if (!result.object.mesh)
 		{
-			if (!result.object.mesh)
-			{
-				result.object.mesh = new THREE.Mesh();
-				RPM.Scene.Map.current.scene.add(result.object.mesh);
-			}
-			result.object.mesh.add(light);
-			if (prop > 0)
-				RPM.Core.ReactionInterpreter.currentObject.properties[prop] = light;
-			lightList.push(light);
+			result.object.mesh = new THREE.Mesh();
+			RPM.Scene.Map.current.scene.add(result.object.mesh);
 		}
+		if (!result.object.lightsPlugin_localLights)
+		{
+			result.object.lightsPlugin_localLights = new THREE.Group();
+			result.object.lightsPlugin_localLights.lightsPlugin_isLightGroup = true;
+			result.object.mesh.add(result.object.lightsPlugin_localLights);
+		}
+		result.object.lightsPlugin_localLights.add(light);
+		if (prop > 0)
+			RPM.Core.ReactionInterpreter.currentObject.properties[prop] = light;
+		lightList.push(light);
 	}, RPM.Core.ReactionInterpreter.currentObject);
 });
 
@@ -212,19 +244,28 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Add spotlight", (prop, id, x, y
 	light.distance = limitDistance(distance * RPM.Datas.Systems.SQUARE_SIZE);
 	RPM.Core.MapObject.search(id, (result) =>
 	{
-		if (!!result)
+		if (!result.object.mesh)
 		{
-			if (!result.object.mesh)
-			{
-				result.object.mesh = new THREE.Mesh();
-				RPM.Scene.Map.current.scene.add(result.object.mesh);
-			}
-			result.object.mesh.add(light);
-			light.target = result.object.mesh;
-			if (prop > 0)
-				RPM.Core.ReactionInterpreter.currentObject.properties[prop] = light;
-			lightList.push(light);
+			result.object.mesh = new THREE.Mesh();
+			RPM.Scene.Map.current.scene.add(result.object.mesh);
 		}
+		if (!result.object.lightsPlugin_localLights)
+		{
+			result.object.lightsPlugin_localLights = new THREE.Group();
+			result.object.lightsPlugin_localLights.lightsPlugin_isLightGroup = true;
+			result.object.mesh.add(result.object.lightsPlugin_localLights);
+		}
+		result.object.lightsPlugin_localLights.add(light);
+		if (!result.object.mesh.lightsPlugin_target)
+		{
+			const target = new THREE.Object3D();
+			result.object.mesh.lightsPlugin_target = target;
+			result.object.mesh.add(target);
+			light.target = target;
+		}
+		if (prop > 0)
+			RPM.Core.ReactionInterpreter.currentObject.properties[prop] = light;
+		lightList.push(light);
 	}, RPM.Core.ReactionInterpreter.currentObject);
 });
 
@@ -294,8 +335,18 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Set spotlight target", (prop, i
 		return;
 	RPM.Core.MapObject.search(id, (result) =>
 	{
-		if (!!result)
-			light.target = result.object.mesh;
+		if (!result.object.mesh)
+		{
+			result.object.mesh = new THREE.Mesh();
+			RPM.Scene.Map.current.scene.add(result.object.mesh);
+		}
+		if (!result.object.mesh.lightsPlugin_target)
+		{
+			const target = new THREE.Object3D();
+			result.object.mesh.lightsPlugin_target = target;
+			result.object.mesh.add(target);
+			light.target = target;
+		}
 	}, RPM.Core.ReactionInterpreter.currentObject);
 });
 

@@ -22,19 +22,15 @@ uniform sampler2D map;
 varying vec3 vNormal;
 varying vec3 fragPos;
 
-float flatten(in float value, in int layers)
+float flatten(in float value, in int rings)
 {
-	float threshold = 1.0 / float(layers);
-	float result = 1.0;
-	for (int i = 1; i < layers; i++)
-	{
+	if (rings == 0)
+		return value;
+	float threshold = 1.0 / float(rings + 1);
+	for (int i = 1; i <= rings; i++)
 		if (value < float(i) * threshold)
-		{
-			result = float(i - 1) / float(layers - 1);
-			break;
-		}
-	}
-	return result;
+			return float(i - 1) / float(rings);
+	return 1.0;
 }
 
 #if NUM_DIR_LIGHT_SHADOWS > 0
@@ -111,27 +107,27 @@ vec4 getDirLight(const in int i, const in float shadow)
 #endif
 
 #if NUM_SPOT_LIGHTS > 0
-vec4 getSpotLight(const in int i, const in float shadow)
+vec4 getSpotLight(const in int i, const in float shadow, const in int rings)
 {
 	vec3 lightToFrag = spotLights[i].position - fragPos;
 	float dist = length(lightToFrag);
 	vec3 dir = normalize(lightToFrag);
 	float att = getSpotAttenuation(spotLights[i].coneCos, spotLights[i].penumbraCos, dot(dir, spotLights[i].direction));
 	att *= getDistanceAttenuation(dist, spotLights[i].distance, spotLights[i].decay);
-	vec3 color = spotLights[i].color * flatten(att, 5) * (enableShadows ? shadow : 1.0);
+	vec3 color = spotLights[i].color * flatten(att, rings) * (enableShadows ? shadow : 1.0);
 	vec3 irradiance = getGradientIrradiance(normalize(vNormal), dir) * color;
 	return vec4(irradiance * BRDF_Lambert(diffuse), 0.0);
 }
 #endif
 
 #if NUM_POINT_LIGHTS > 0
-vec4 getPointLight(const in int i, const in float shadow)
+vec4 getPointLight(const in int i, const in float shadow, const in int rings)
 {
 	vec3 lightToFrag = pointLights[i].position - fragPos;
 	float dist = length(lightToFrag);
 	vec3 dir = normalize(lightToFrag);
 	float att = getDistanceAttenuation(dist, pointLights[i].distance, pointLights[i].decay);
-	vec3 color = pointLights[i].color * flatten(att, 5) * (enableShadows ? shadow : 1.0);
+	vec3 color = pointLights[i].color * flatten(att, rings) * (enableShadows ? shadow : 1.0);
 	vec3 irradiance = getGradientIrradiance(normalize(vNormal), dir) * color;
 	return vec4(irradiance * BRDF_Lambert(diffuse), 0.0);
 }
@@ -139,16 +135,18 @@ vec4 getPointLight(const in int i, const in float shadow)
 
 void main()
 {
+	int numberOfRings = 5;
 	vec4 ambient = vec4(ambientLightColor.rgb / PI, 1.0); // maybe "/ PI" will have to be removed on more recent three.js revisions
 	vec2 coords = vec2(vUv.x + offset.x, vUv.y + offset.y);
 	vec2 pos = reverseH ? vec2(1.0 - coords.x, coords.y) : coords;
 	pos = vec2(pos.x - floor(pos.x), pos.y - floor(pos.y));
+	vec4 tex;
 	#if defined(USE_COLOR)
-		vec4 tex = vec4(vColor, 1.0);
+		tex = vec4(vColor, 1.0);
 	#elif defined(USE_COLOR_ALPHA)
-		vec4 tex = vColor;
+		tex = vColor;
 	#else
-		vec4 tex = texture2D(map, pos * repeat);
+		tex = texture2D(map, pos * repeat);
 		if (tex.a <= alpha_threshold)
 			discard;
 	#endif
@@ -173,10 +171,11 @@ void main()
 
 	#if NUM_HEMI_LIGHTS > 0
 		#pragma unroll_loop_start
-		for (int i = 0; i < NUM_DIR_LIGHTS; i++)
+		for (int i = 0; i < NUM_HEMI_LIGHTS; i++)
 			gl_FragColor += vec4(getHemisphereLightIrradiance(hemisphereLights[i], vNormal), 0.0);
 		#pragma unroll_loop_end
 	#endif
+
 	float shadow;
 	#if NUM_DIR_LIGHTS > 0
 		#pragma unroll_loop_start
@@ -198,7 +197,7 @@ void main()
 			#if UNROLLED_LOOP_INDEX < NUM_SPOT_LIGHT_SHADOWS
 				shadow = spotShadows[UNROLLED_LOOP_INDEX];
 			#endif
-			gl_FragColor += getSpotLight(UNROLLED_LOOP_INDEX, shadow);
+			gl_FragColor += getSpotLight(UNROLLED_LOOP_INDEX, shadow, numberOfRings);
 		}
 		#pragma unroll_loop_end
 	#endif
@@ -210,7 +209,7 @@ void main()
 			#if UNROLLED_LOOP_INDEX < NUM_POINT_LIGHT_SHADOWS
 				shadow = pointShadows[UNROLLED_LOOP_INDEX];
 			#endif
-			gl_FragColor += getPointLight(UNROLLED_LOOP_INDEX, shadow);
+			gl_FragColor += getPointLight(UNROLLED_LOOP_INDEX, shadow, numberOfRings);
 		}
 		#pragma unroll_loop_end
 	#endif
