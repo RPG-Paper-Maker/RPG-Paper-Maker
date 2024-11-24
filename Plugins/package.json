@@ -14,7 +14,8 @@
 		"Light",
 		"Waterfall",
 		"Hide object on block view",
-		"Mouse lock and raycaster"
+		"Mouse lock and raycaster",
+		"True jump"
 	],
 	"others": [
 		"Gamepad",
