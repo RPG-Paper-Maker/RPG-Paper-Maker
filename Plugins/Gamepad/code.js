@@ -8,6 +8,8 @@ const rightStickEventID = RPM.Manager.Plugins.getParameter(pluginName, "Right st
 const deadzone = RPM.Manager.Plugins.getParameter(pluginName, "Deadzone variable ID");;
 const repeatDelay = 30;
 
+var leftStickNeutral = true;
+var rightStickNeutral = true;
 var keysList = ["A", "B", "X", "Y", "LB", "RB", "LT", "RT", "Back", "Start", "L3", "R3", "Up", "Down", "Left", "Right", "Home"];
 
 // https://w3c.github.io/gamepad/#remapping
@@ -90,6 +92,8 @@ setInterval(function ()
 				const rv = gp[i].axes[3];
 				if (RPM.Manager.Stack.top instanceof RPM.Scene.Map && !RPM.Scene.Map.current.loading && !RPM.Core.ReactionInterpreter.blockingHero)
 				{
+					if (RPM.Core.Game.current.variables[deadzone] === 0)
+						RPM.Core.Game.current.variables[deadzone] = 0.15;
 					const d = Math.min(Math.max(RPM.Core.Game.current.variables[deadzone], 0.05), 0.95);
 					const id = RPM.System.DynamicValue.createNumber(i + 1);
 					if (Math.sqrt(lh * lh + lv * lv) > d)
@@ -97,12 +101,28 @@ setInterval(function ()
 						const x = RPM.System.DynamicValue.createNumber(lh);
 						const y = RPM.System.DynamicValue.createNumber(lv);
 						RPM.Core.Game.current.hero.receiveEvent(null, false, leftStickEventID, [null, id, x, y], RPM.Core.Game.current.heroStates);
+						leftStickNeutral = false;
+					}
+					else
+					{
+						const x = RPM.System.DynamicValue.createNumber(0);
+						const y = RPM.System.DynamicValue.createNumber(0);
+						RPM.Core.Game.current.hero.receiveEvent(null, false, leftStickEventID, [null, id, x, y], RPM.Core.Game.current.heroStates);
+						leftStickNeutral = true;
 					}
 					if (Math.sqrt(rh * rh + rv * rv) > d)
 					{
 						const x = RPM.System.DynamicValue.createNumber(rh);
 						const y = RPM.System.DynamicValue.createNumber(rv);
 						RPM.Core.Game.current.hero.receiveEvent(null, false, rightStickEventID, [null, id, x, y], RPM.Core.Game.current.heroStates);
+						rightStickNeutral = false;
+					}
+					else
+					{
+						const x = RPM.System.DynamicValue.createNumber(0);
+						const y = RPM.System.DynamicValue.createNumber(0);
+						RPM.Core.Game.current.hero.receiveEvent(null, false, rightStickEventID, [null, id, x, y], RPM.Core.Game.current.heroStates);
+						rightStickNeutral = true;
 					}
 				}
 				if (lv < -0.5 || rv < -0.5)
