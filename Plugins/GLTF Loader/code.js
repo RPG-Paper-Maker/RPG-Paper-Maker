@@ -3,7 +3,6 @@ import { THREE } from "../../System/Globals.js";
 import { GLTFLoader } from "./GLTFLoader.js";
 
 const pluginName = "GLTF Loader";
-const inject = RPM.Manager.Plugins.inject;
 
 const clock = new THREE.Clock();
 const loader = new GLTFLoader();
@@ -25,18 +24,33 @@ setInterval(function ()
 			lastMap = RPM.Scene.Map.current;
 		}
 		for (var i = 1; i < mixerList.length; i++)
+		{
 			if (!!mixerList[i])
-				mixerList[i].update(delta * mixerList[i].timeScale);
+			{
+				if (mixerList[i].mapObj.removed)
+				{
+					mixerList[i].getRoot().removeFromParent();
+					mixerList[i] = null;
+				}
+				else
+					mixerList[i].update(delta * mixerList[i].timeScale);
+			}
+		}
 	}
 }, 16);
 
 function callNext()
 {
 	busy = true;
-	if (queue.length > 0)
-		queue.shift().call();
+	if (RPM.Scene.Map.current !== lastMap)
+		setTimeout(callNext, 17);
 	else
-		busy = false;
+	{
+		if (queue.length > 0)
+			queue.shift().call();
+		else
+			busy = false;
+	}
 }
 
 function getModel(id)
@@ -46,22 +60,50 @@ function getModel(id)
 	return mixerList[id].getRoot();
 }
 
+function changeOpacity(mesh, value)
+{
+	if (mesh.isMesh)
+	{
+		mesh.renderOrder = 0;
+		mesh.material.opacity = value;
+		mesh.material.transparent = true;
+	}
+	for (var i = 0; i < mesh.children.length; i++)
+		changeOpacity(mesh.children[i], value);
+}
+
 function fixMaterial(model, cast, receive)
 {
+	if (!model)
+		return;
 	if (!!model.material)
 	{
 		model.castShadow = cast;
 		model.receiveShadow = receive;
-		model.material.side = THREE.FrontSide;
 		const mat = RPM.Manager.GL.createMaterial({texture: model.material.map});
-		if (!model.material.map)
-			mat.vertexColors = true;
+		mat.vertexColors = !model.material.map;
 		model.material = mat;
+	}
+	if (!!model.geometry)
+	{
+		model.geometry.computeVertexNormals();
+		model.geometry.boundingBox.expandByObject(model);
+		model.geometry.boundingSphere.radius = model.geometry.boundingBox.getSize(new THREE.Vector3()) * 1.5;
 	}
 	if (model.isLight)
 		model.visible = false;
 	for (var i = 0; i < model.children.length; i++)
 		fixMaterial(model.children[i], cast, receive);
+}
+
+function hasSkinnedChildren(mesh)
+{
+	if (mesh.isSkinnedMesh)
+		return true;
+	for (var i = 0; i < mesh.children.length; i++)
+		if (hasSkinnedChildren(mesh.children[i]))
+			return true;
+	return false;
 }
 
 RPM.Manager.Plugins.registerCommand(pluginName, "Load model", (id, filename) =>
@@ -73,57 +115,73 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Load model", (id, filename) =>
 		try
 		{
 			const gltf = await loader.loadAsync(filename);
+			const model = gltf.scene;
+			var newModel = new THREE.Group().add(model);
+			if (hasSkinnedChildren(model))
+			{
+				newModel.mapLoopPlugin_isGLTFRoot = true;
+				newModel = new THREE.Group().add(newModel);
+			}
 			RPM.Core.MapObject.search(id, (result) =>
 			{
-				if (!!result)
+				id = result.object.id;
+				var oldModel = getModel(id);
+				const size = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
+				model.position.set(0, size.y * 0.5, 0);
+				model.animations = gltf.animations;
+				fixMaterial(model, true, true);
+				if (!!result.object.mesh)
 				{
-					id = result.object.id;
-					const model = gltf.scene;
-					const newModel = new THREE.Mesh().add(model);
-					var oldModel = getModel(id);
-					const size = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
-					model.position.set(0, size.y * 0.5, 0);
-					model.animations = gltf.animations;
-					fixMaterial(model, true, true);
-					if (!!result.object.mesh)
-					{
-						if (!!oldModel)
-							result.object.mesh.children.shift();
-						while (result.object.mesh.children.length > 0)
-							newModel.add(result.object.mesh.children[0]);
-					}
-					else
-						oldModel = null;
-					if (!oldModel)
-					{
-						result.object.currentState.graphicID = 0;
-						result.object.changeState();
-						result.object.currentStateInstance.graphicKind = 10;
-					}
-					RPM.Scene.Map.current.scene.remove(result.object.mesh);
-					result.object.mesh = newModel;
-					RPM.Scene.Map.current.scene.add(result.object.mesh);
-					result.object.boundingBoxSettings =
-					{
-						b: [[0, size.y * 0.5, 0, size.x, size.y, size.z, 0, 0, 0]],
-						d: 1,
-						h: 1,
-						k: true,
-						l: new THREE.Vector3(0.01, 0.01, 0.01),
-						m: 1,
-						p: RPM.Core.Position.createFromVector3(result.object.position),
-						w: 1
-					};
-					result.object.updateBB(result.object.position);
-					while (mixerList.length <= id)
-						mixerList.push(null);
-					mixerList[id] = new THREE.AnimationMixer(model);
-					if (result.object.isHero)
-						mixerList[0] = mixerList[id];
-					callNext();
+					if (!!oldModel)
+						result.object.mesh.children.shift();
+					while (result.object.mesh.children.length > 0)
+						newModel.add(result.object.mesh.children[0]);
 				}
 				else
-					RPM.Common.Platform.showErrorMessage("Error: couldn't find map object with ID " + id.toString());
+					oldModel = null;
+				if (!oldModel)
+				{
+					result.object.currentState.graphicID = 0;
+					result.object.changeState();
+					result.object.currentStateInstance.graphicKind = 10;
+				}
+				RPM.Scene.Map.current.scene.remove(result.object.mesh);
+				result.object.mesh = newModel;
+				RPM.Scene.Map.current.scene.add(result.object.mesh);
+				result.object.boundingBoxSettings =
+				{
+					b: [[0, size.y * 0.5, 0, size.x, size.y, size.z, 0, 0, 0]],
+					d: 1,
+					h: 1,
+					k: true,
+					l: new THREE.Vector3(0.01, 0.01, 0.01),
+					m: 1,
+					p: RPM.Core.Position.createFromVector3(result.object.position),
+					w: 1
+				};
+				result.object.updateBB(result.object.position);
+				while (mixerList.length <= id)
+					mixerList.push(null);
+				mixerList[id] = new THREE.AnimationMixer(model);
+				mixerList[id].queue = [];
+				mixerList[id].mapObj = result.object;
+				mixerList[id].addEventListener("finished", function (e)
+				{
+					if (mixerList[id].queue.length > 0)
+					{
+						const action = mixerList[id].queue.shift().play();
+						action.clampWhenFinished = true;
+						if (!!mixerList[id].currentAnim)
+						{
+							mixerList[id].currentAnim.crossFadeTo(action, 0);
+							mixerList[id].currentAnim.stop();
+						}
+						mixerList[id].currentAnim = action;
+					}
+				});
+				if (result.object.isHero)
+					mixerList[0] = mixerList[id];
+				callNext();
 			}, RPM.Core.ReactionInterpreter.currentObject);
 		}
 		catch (e)
@@ -146,12 +204,9 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Reset bounding box", (id) =>
 		{
 			RPM.Core.MapObject.search(id, (result) =>
 			{
-				if (!!result)
-				{
-					const size = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
-					result.object.boundingBoxSettings.b[0] = [0, size.y * 0.5, 0, size.x, size.y, size.z, 0, 0, 0];
-					result.object.updateBB(result.object.position);
-				}
+				const size = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
+				result.object.boundingBoxSettings.b[0] = [0, size.y * 0.5, 0, size.x, size.y, size.z, 0, 0, 0];
+				result.object.updateBB(result.object.position);
 			}, RPM.Core.ReactionInterpreter.currentObject);
 		}
 		callNext();
@@ -174,11 +229,8 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Set bounding box", (id, x, y, z
 			z = Math.abs(z * RPM.Datas.Systems.SQUARE_SIZE);
 			RPM.Core.MapObject.search(id, (result) =>
 			{
-				if (!!result)
-				{
-					result.object.boundingBoxSettings.b[0] = [0, y * 0.5, 0, x, y, z, 0, 0, 0];
-					result.object.updateBB(result.object.position);
-				}
+				result.object.boundingBoxSettings.b[0] = [0, y * 0.5, 0, x, y, z, 0, 0, 0];
+				result.object.updateBB(result.object.position);
 			}, RPM.Core.ReactionInterpreter.currentObject);
 		}
 		callNext();
@@ -210,7 +262,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Set opacity", (id, opacity) =>
 	{
 		const model = getModel(id);
 		if (!!model)
-			model.children[0].material.opacity = opacity;
+			changeOpacity(model, opacity);
 		callNext();
 	});
 	if (!busy)
@@ -224,8 +276,9 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Set offset", (id, x, y, z) =>
 	queue.push(function ()
 	{
 		const model = getModel(id);
+		const s = RPM.Datas.Systems.SQUARE_SIZE;
 		if (!!model)
-			model.position.set(x, y + new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3()).y * 0.5, z);
+			model.position.set(x * s, y * s + new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3()).y * 0.5, z * s);
 		callNext();
 	});
 	if (!busy)
@@ -320,7 +373,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Look at", (objID, tgtID) =>
 		callNext();
 });
 
-RPM.Manager.Plugins.registerCommand(pluginName, "Play animation", (id, name, loop) =>
+RPM.Manager.Plugins.registerCommand(pluginName, "Play animation", (id, name, loop, speed) =>
 {
 	if (id == -1)
 		id = RPM.Core.ReactionInterpreter.currentObject.id;
@@ -332,8 +385,40 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Play animation", (id, name, loo
 		const anim = THREE.AnimationClip.findByName(model.animations, name);
 		if (!!mixerList[id] && !!anim)
 		{
-			mixerList[id].stopAllAction();
-			mixerList[id].clipAction(anim).setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce).play();
+			const action = mixerList[id].clipAction(anim);
+			action.clampWhenFinished = true;
+			action.timeScale = speed;
+			action.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce).play();
+			if (!!mixerList[id].currentAnim)
+			{
+				mixerList[id].currentAnim.crossFadeTo(action, 0);
+				mixerList[id].currentAnim.stop();
+			}
+			mixerList[id].currentAnim = action;
+		}
+		callNext();
+	});
+	if (!busy)
+		callNext();
+});
+
+RPM.Manager.Plugins.registerCommand(pluginName, "Queue animation", (id, name, loop, speed) =>
+{
+	if (id == -1)
+		id = RPM.Core.ReactionInterpreter.currentObject.id;
+	queue.push(function ()
+	{
+		const model = getModel(id);
+		if (!model)
+			return;
+		const anim = THREE.AnimationClip.findByName(model.animations, name);
+		if (!!mixerList[id] && !!anim)
+		{
+			const action = mixerList[id].clipAction(anim);
+			action.clampWhenFinished = true;
+			action.timeScale = speed;
+			action.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce);
+			mixerList[id].queue.push(action);
 		}
 		callNext();
 	});
@@ -369,11 +454,15 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Set animation speed", (id, spee
 		callNext();
 });
 
-RPM.Manager.Plugins.registerCommand(pluginName, "Trigger event", (id) =>
+RPM.Manager.Plugins.registerCommand(pluginName, "Trigger event", (id, self) =>
 {
+	const obj = RPM.Core.ReactionInterpreter.currentObject;
 	queue.push(function ()
 	{
-		RPM.Manager.Events.sendEventDetection(null, -1, false, id, [null]);
+		if (self)
+			obj.receiveEvent(obj, false, id, [null], obj.states);
+		else
+			RPM.Manager.Events.sendEventDetection(null, -1, false, id, [null]);
 		callNext();
 	});
 	if (!busy)
