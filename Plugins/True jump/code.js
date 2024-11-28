@@ -7,30 +7,81 @@ const up = new THREE.Vector3(0, 1, 0);
 const down = new THREE.Vector3(0, -1, 0);
 const timeout = 10;
 
-function checkCollisions(obj, v0, pos, mountains = true)
+function checkCollisions(obj, v0, pos)
 {
-	const p0 = RPM.Core.Position.createFromVector3(obj.position);
-	const p1 = RPM.Core.Position.createFromVector3(pos);
-	const mp = RPM.Scene.Map.current.getMapPortionByPosition(p0);
+	const raycaster = new THREE.Raycaster();
+	var intersect = null;
+
+	// get bounding boxes and meshes from map portion
 	obj.updateBBPosition(pos);
-	var r;
+	const m = RPM.Scene.Map.current;
+	const p = RPM.Core.Position.createFromVector3(pos);
+	const mp = m.getMapPortionByPosition(p);
+	if (!mp)
+		return true;
+	const b = obj.boundingBoxSettings.b;
+	const dir = v0.clone().normalize();
+	const obstacles = [];
+	obstacles.push(mp.staticFloorsMesh);
+	for (var i = 0; i < mp.staticAutotilesList.length; i++)
+		if (!!mp.staticAutotilesList[i] && !!mp.staticAutotilesList[i][0].mesh)
+			obstacles.push(mp.staticAutotilesList[i][0].mesh);
+	for (var i = 0; i < mp.staticMountainsList.length; i++)
+		if (!!mp.staticMountainsList[i].mesh)
+			obstacles.push(mp.staticMountainsList[i].mesh);
+	for (var i = 0; i < mp.staticWallsList.length; i++)
+		obstacles.push(mp.staticWallsList[i]);
+	for (var i = 0; i < mp.staticObjects3DList.length; i++)
+		obstacles.push(mp.staticObjects3DList[i]);
+
+	var result = RPM.Manager.Collisions.checkObjectsRay(pos, obj);
+	if (!!result && result[0])
+		return true;
 	for (var i = 0; i < obj.meshBoundingBox.length; i++)
 	{
+		// default collision test for sprites, plus a command to subtract the travelled distance
 		obj.currentBoundingBox = obj.meshBoundingBox[i];
-		r = RPM.Manager.Collisions.checkSprites(mp, p1, pos, [], obj);
-		if (!!r && r[0])
-			return true;
-		if (mountains)
+		result = RPM.Manager.Collisions.checkSprites(mp, p, [], obj);
+		if (!!result && result[0])
 		{
-			r = RPM.Manager.Collisions.checkMountains(mp, p1, pos, [], obj);
-			if (!!r && r[0])
+			obj.position.sub(v0);
+			return true;
+		}
+
+		// raycast based collision chekcs. add 1 to y to avoid a bug where the character "sinks" in the ground
+		const origin = obj.position.clone().add(new THREE.Vector3(b[i][0], b[i][1] + 1, b[i][2]));
+
+		// an approximation to avoid unnecessary calculations
+		const xz = Math.sqrt(Math.pow(b[i][3], 2) + Math.pow(b[i][5], 2)) / 2;
+
+		// branch into horizontal and vertical movement
+		if (v0.y != 0)
+		{
+			// vertical check. start at the center of the box
+			raycaster.far = v0.length() + b[i][4] / 2 + 1;
+			raycaster.set(origin, dir);
+			intersect = raycaster.intersectObjects(obstacles);
+			if (intersect.length > 0)
 				return true;
 		}
-		if (RPM.Manager.Collisions.checkLands(mp, p0, p1, obj, v0, []) || RPM.Manager.Collisions.checkObjects3D(mp, p1, pos, [], obj))
-			return true;
-		r = RPM.Manager.Collisions.checkObjectsRay(pos, obj);
-		if (!!r && r[0])
-			return true;
+		else
+		{
+			// horizontal check. start at base, middle and top of the object's collision box, horizontally centered
+			raycaster.far = v0.length() + xz + 1;
+			const v = origin.clone();
+			v.y -= b[i][4];
+			for (var j = 0; j < 3; j++)
+			{
+				v.y += b[i][4] / 2;
+				raycaster.set(v, dir);
+				intersect = raycaster.intersectObjects(obstacles);
+				if (intersect.length > 0)
+				{
+					//obj.position.sub(v0);
+					return true;
+				}
+			}
+		}
 	}
 	return false;
 }
@@ -38,68 +89,77 @@ function checkCollisions(obj, v0, pos, mountains = true)
 function moveHorizontal(obj, v0, time)
 {
 	const pos = obj.position.clone().add(v0);
-	const m = RPM.Scene.Map.current.mapProperties;
+	const orig = obj.position.clone();
+    const m = RPM.Scene.Map.current;
+	const mp = m.mapProperties;
 	const s = RPM.Datas.Systems.SQUARE_SIZE;
-	if (pos.x >= 0 && pos.x < m.length * s && pos.z >= 0 && pos.z < m.width * s && !checkCollisions(obj, v0, pos))
+
+	// add map loop compatibility
+	var blocked = false;
+	if (!m.mapLoopPlugin_loopX)
+	{
+		if (pos.x < 0 || pos.x >= mp.length * s)
+			blocked = true;
+	}
+	else
+	{
+		if (pos.x < 0)
+		{
+			pos.x += mp.length * s;
+			obj.position.x += mp.length * s;
+		}
+		if (pos.x >= mp.length * s)
+		{
+			pos.x -= mp.length * s;
+			obj.position.x -= mp.length * s;
+		}
+	}
+	if (!m.mapLoopPlugin_loopZ)
+	{
+		if (pos.z < 0 || pos.z >= mp.width * s)
+			blocked = true;
+	}
+	else
+	{
+		if (pos.z < 0)
+		{
+			pos.z += mp.width * s;
+			obj.position.z += mp.width * s;
+		}
+		if (pos.z >= mp.width * s)
+		{
+			pos.z -= mp.width * s;
+			obj.position.z -= mp.width * s;
+		}
+	}
+
+	if (!blocked && !checkCollisions(obj, v0, pos))
 	{
 		obj.position = pos;
 		if (RPM.Core.Game.current.playTime.time < time)
 			setTimeout(moveHorizontal, timeout, obj, v0, time);
 	}
+	else
+		obj.position = orig;
 	obj.updateBBPosition(obj.position);
 }
 
-// do horizontal and vertical movement separately
 function moveVertical(obj, prop, flag, vy, a)
 {
-	const raycaster = new THREE.Raycaster();
-
-	// find bounding box height, defined by b[i][4] in its settings
-	var yMax = 0;
-	if (vy > 0)
-		for (var i = 0; i < obj.meshBoundingBox.length; i++)
-			if (yMax < obj.boundingBoxSettings.b[i][4])
-				yMax = obj.boundingBoxSettings.b[i][4];
-
-	// get floor and mountain meshes from map portion
-	const p = RPM.Core.Position.createFromVector3(obj.position);
-	const mp = RPM.Scene.Map.current.getMapPortionByPosition(p);
-	const origin = obj.position.clone();
-	origin.y += 1;
-	raycaster.set(origin, (vy > 0 ? up : down));
-	const obstacles = [];
-	obstacles.push(mp.staticFloorsMesh);
-	for (var i = 0; i < mp.staticMountainsList.length; i++)
-		if (!!mp.staticMountainsList[i].mesh)
-			obstacles.push(mp.staticMountainsList[i].mesh);
-	const intersect = raycaster.intersectObjects(obstacles);
-	var keepGoing = true;
-	if (intersect.length > 0 && intersect[0].distance < Math.abs(vy) + yMax + 1)
+	const v0 = new THREE.Vector3(0, vy, 0);
+	const fpos = obj.position.clone().add(v0);
+	if (fpos.y < 0)
+		prop[flag] = false;
+	else if (!checkCollisions(obj, v0, fpos))
 	{
-		obj.position.y = intersect[0].point.y;
-
-		// if object is going up (jumping), keep going as if it reached the peak (vy = 0)
-		if (vy > 0)
-			vy = 0;
-		else
-			keepGoing = false;
+		obj.position = fpos;
+		setTimeout(moveVertical, timeout, obj, prop, flag, vy - a, a);
 	}
-
-	// if no relevant intersection, call function recursively with timeout. otherwise, set jumping flag to off
-	if (keepGoing)
-	{
-		const v0 = new THREE.Vector3(0, vy, 0);
-		const pos = obj.position.clone().add(v0);
-		if (!checkCollisions(obj, v0, pos, false))
-		{
-			obj.position.y += vy;
-			setTimeout(moveVertical, timeout, obj, prop, flag, vy - a, a);
-		}
-		else
-			prop[flag] = false;
-	}
+	else if (vy > 0)
+		setTimeout(moveVertical, timeout, obj, prop, flag, -a, a);
 	else
 		prop[flag] = false;
+	obj.updateBBPosition(obj.position);
 }
 
 RPM.Manager.Plugins.registerCommand(pluginName, "Jump", (id, propFlag, x, z, peak, time, iniSpd, camera) =>
@@ -121,8 +181,11 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Fall", (id, propFlag, gravity) 
 	RPM.Core.MapObject.search(id, (result) =>
 	{
 		const prop = RPM.Core.ReactionInterpreter.currentObject.properties;
-		prop[propFlag] = true;
-		setTimeout(moveVertical, 1, result.object, prop, propFlag, 0, gravity);
+		if (!checkCollisions(result.object, down, result.object.position.clone().add(down)))
+		{
+			prop[propFlag] = true;
+			setTimeout(moveVertical, 1, result.object, prop, propFlag, 0, gravity);
+		}
 	}, RPM.Core.ReactionInterpreter.currentObject);
 });
 
@@ -140,18 +203,6 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Check ground", (id, prop) =>
 {
 	RPM.Core.MapObject.search(id, (result) =>
 	{
-		const raycaster = new THREE.Raycaster();
-		const p = RPM.Core.Position.createFromVector3(result.object.position);
-		const mp = RPM.Scene.Map.current.getMapPortionByPosition(p);
-		const origin = result.object.position.clone();
-		origin.y += 1;
-		raycaster.set(origin, down);
-		const obstacles = [];
-		obstacles.push(mp.staticFloorsMesh);
-		for (var i = 0; i < mp.staticMountainsList.length; i++)
-			if (!!mp.staticMountainsList[i].mesh)
-				obstacles.push(mp.staticMountainsList[i].mesh);
-		const intersect = raycaster.intersectObjects(obstacles);
-		RPM.Core.ReactionInterpreter.currentObject.properties[prop] = (intersect.length > 0 && intersect[0].distance < 2);
+		RPM.Core.ReactionInterpreter.currentObject.properties[prop] = checkCollisions(result.object, down, result.object.position.clone().add(down));
 	}, RPM.Core.ReactionInterpreter.currentObject);
 });
