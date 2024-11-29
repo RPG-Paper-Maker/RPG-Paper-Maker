@@ -385,6 +385,8 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_MAP_PROPERTIES:
 			case EVENT_COMMAND_KIND.SWITCH_TEXTURE:
 			case EVENT_COMMAND_KIND.TELEPORT_OBJECT:
+			case EVENT_COMMAND_KIND.MOVE_OBJECT:
+			case EVENT_COMMAND_KIND.DISPLAY_AN_ANIMATION:
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -486,6 +488,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.MOVE_OBJECT:
 				texts = this.toStringMoveObject(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.DISPLAY_AN_ANIMATION:
+				texts = this.toStringDisplayAnAnimation(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1109,6 +1114,22 @@ class MapObjectCommand extends Base {
 			const move = new MapObjectCommandMove();
 			move.initialize(this.command, iterator);
 			texts.push(move.toString());
+		}
+		return texts;
+	}
+
+	toStringDisplayAnAnimation(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts = [];
+		const objectID = `${i18next.t('object.id')} ${this.toStringDynamicObject(iterator, properties, parameters)}`;
+		const animation = `${i18next.t('animation.id')} ${this.toStringDynamicValue(
+			iterator,
+			properties,
+			parameters,
+			Project.current!.animations.list
+		)}`;
+		texts.push(`${objectID} ${animation}`);
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			texts.push(`[${i18next.t('wait.end')}]`);
 		}
 		return texts;
 	}

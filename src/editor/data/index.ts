@@ -1,3 +1,4 @@
+export * from './Animations';
 export * from './CommonEvents';
 export * from './EngineSettings';
 export * from './Keyboard';

@@ -30,6 +30,7 @@ class Project {
 	public keyboard = new Data.Keyboard();
 	public tilesets = new Data.Tilesets();
 	public languages = new Data.Languages();
+	public animations = new Data.Animations();
 	public currentMapObjectStates: Node[] = [];
 	public currentMapObjectEvents: Node[] = [];
 	public currentMapObjectProperties: Node[] = [];
@@ -73,6 +74,7 @@ class Project {
 		await this.commonEvents.load();
 		await this.keyboard.load();
 		await this.tilesets.load();
+		await this.animations.load();
 	}
 
 	async save() {

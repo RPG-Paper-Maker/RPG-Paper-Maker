@@ -1,3 +1,7 @@
+export * from './Animation';
+export * from './AnimationFrame';
+export * from './AnimationFrameEffect';
+export * from './AnimationFrameElement';
 export * from './Autotile';
 export * from './Base';
 export * from './CameraProperty';
@@ -24,6 +28,7 @@ export * from './MapPortion';
 export * from './Mountain';
 export * from './Object3D';
 export * from './Picture';
+export * from './PlaySong';
 export * from './ProjectPreview';
 export * from './Shape';
 export * from './Skybox';
