@@ -31,6 +31,7 @@ import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
 import DialogLocalization from './dialogs/models/DialogLocalization';
 import DialogMapObjectCommand from './dialogs/models/DialogMapObjectCommand';
+import DialogMapObjectCommandMove from './dialogs/models/DialogMapObjectCommandMove';
 import DialogMapObjectEvent from './dialogs/models/DialogMapObjectEvent';
 import DialogMapObjectParameter from './dialogs/models/DialogMapObjectParameter';
 import DialogMapObjectProperty from './dialogs/models/DialogMapObjectProperty';
@@ -749,6 +750,8 @@ function Tree({
 					return <DialogMapObjectCommand {...options} />;
 				case Model.Localization:
 					return <DialogLocalization {...options} />;
+				case Model.MapObjectCommandMove:
+					return <DialogMapObjectCommandMove {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

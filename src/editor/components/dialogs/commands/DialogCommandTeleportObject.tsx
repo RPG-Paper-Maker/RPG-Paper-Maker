@@ -68,10 +68,7 @@ function DialogCommandTeleportObject({ isOpen, setIsOpen, list, onAccept, onReje
 	const [endColor] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
 
-	const objectsList = [
-		...[Model.Base.create(0, t('hero')), Model.Base.create(-1, t('this.object'))],
-		...(Scene.Map.current?.model.objects ?? []),
-	];
+	const objectsList = Scene.Map.getCurrentMapObjectsList();
 	const isSelect = selectionType === SELECTION_TYPE.SELECT;
 	const isEnter = selectionType === SELECTION_TYPE.ENTER;
 	const isObject = selectionType === SELECTION_TYPE.OBJECT;

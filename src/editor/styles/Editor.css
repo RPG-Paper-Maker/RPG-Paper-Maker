@@ -135,6 +135,10 @@ code {
 	height: 0;
 }
 
+.fillSmallSpace {
+	height: 20px;
+}
+
 .noSelectText {
 	-webkit-touch-callout: none; /* iOS Safari */
 	-webkit-user-select: none; /* Safari */

@@ -43,7 +43,7 @@ import {
 } from '../core';
 import { CursorWall } from '../core/CursorWall';
 import { Manager, MapElement, Model, Scene } from '../Editor';
-import i18n from '../i18n/i18n';
+import { default as i18n, default as i18next } from '../i18n/i18n';
 import { Inputs } from '../managers';
 
 class Map extends Base {
@@ -147,6 +147,11 @@ class Map extends Base {
 			this
 		);
 	}
+
+	static getCurrentMapObjectsList = () => [
+		...[Model.Base.create(0, i18next.t('hero')), Model.Base.create(-1, i18next.t('this.object'))],
+		...(Scene.Map.current?.model?.objects ?? []),
+	];
 
 	static isAdding(): boolean {
 		return Constants.IS_MOBILE

@@ -63,6 +63,7 @@ import { Project } from '../core';
 import { Scene } from '../Editor';
 import { Base } from './Base';
 import { Localization } from './Localization';
+import { MapObjectCommandMove } from './MapObjectCommandMove';
 
 export type MapObjectCommandType = number | string | boolean;
 
@@ -483,6 +484,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.TELEPORT_OBJECT:
 				texts = this.toStringTeleportObject(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.MOVE_OBJECT:
+				texts = this.toStringMoveObject(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -547,10 +551,7 @@ class MapObjectCommand extends Base {
 	}
 
 	toStringDynamicObject(iterator: ITERATOR, properties: Base[] = [], parameters: Base[] = []): string {
-		const objectsList = [
-			...[Base.create(0, i18next.t('hero')), Base.create(-1, i18next.t('this.object'))],
-			...(Scene.Map.current?.model.objects ?? []),
-		];
+		const objectsList = Scene.Map.getCurrentMapObjectsList();
 		return this.toStringDynamicValue(iterator, properties, parameters, objectsList);
 	}
 
@@ -755,7 +756,14 @@ class MapObjectCommand extends Base {
 
 	toStringFlashScreen(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const texts = [];
-		texts.push(`${i18next.t('color.id')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
+		texts.push(
+			`${i18next.t('color.id')}: ${this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.systems.colors
+			)}`
+		);
 		let time = '';
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			time += `[${i18next.t('wait.end')}] `;
@@ -1080,6 +1088,28 @@ class MapObjectCommand extends Base {
 				Base.TRANSITION_DIRECTION_OPTIONS[this.command[iterator.i++] as number].name
 			)}]`
 		);
+		return texts;
+	}
+
+	toStringMoveObject(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts = [];
+		texts.push(this.toStringDynamicObject(iterator, properties, parameters));
+		const options: string[] = [];
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			options.push(i18next.t('ignore.if.impossible'));
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			options.push(i18next.t('wait.end'));
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			options.push(i18next.t('camera.orientation'));
+		}
+		texts.push(`[${options.join(';')}]`);
+		while (iterator.i < this.command.length) {
+			const move = new MapObjectCommandMove();
+			move.initialize(this.command, iterator);
+			texts.push(move.toString());
+		}
 		return texts;
 	}
 

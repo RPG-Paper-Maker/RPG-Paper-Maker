@@ -23,6 +23,7 @@ export const NODE_CONSTRUCTOR_KIND = {
 	MapObjectProperty: () => Model.MapObjectProperty,
 	MapObjectEvent: () => Model.MapObjectEvent,
 	MapObjectCommand: () => Model.MapObjectCommand,
+	MapObjectCommandMove: () => Model.MapObjectCommandMove,
 	Object3D: () => Model.Object3D,
 };
 

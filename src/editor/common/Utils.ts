@@ -71,7 +71,7 @@ class Utils {
 	}
 
 	static initializeBoolCommand(list: Model.MapObjectCommandType[], iterator: ITERATOR): boolean {
-		return Utils.numToBool(list[iterator.i++] as number);
+		return Utils.numToBool(Number(list[iterator.i++]));
 	}
 
 	static boolToNum(b: boolean): number {

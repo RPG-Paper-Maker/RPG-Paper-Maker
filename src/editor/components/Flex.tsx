@@ -27,6 +27,7 @@ type Props = {
 	fillHeight?: boolean;
 	zeroWidth?: boolean;
 	zeroHeight?: boolean;
+	fillSmallSpace?: boolean;
 	className?: string;
 	[key: string]: unknown;
 };
@@ -46,6 +47,7 @@ function Flex({
 	fillHeight = false,
 	zeroWidth = false,
 	zeroHeight = false,
+	fillSmallSpace = false,
 	className,
 	...rest
 }: Props) {
@@ -66,6 +68,7 @@ function Flex({
 					fillHeight,
 					zeroWidth,
 					zeroHeight,
+					fillSmallSpace,
 				},
 				`flex ${className ?? ''}`
 			)}

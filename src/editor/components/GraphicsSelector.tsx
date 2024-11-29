@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { Manager, Model, Scene } from '../Editor';
 import { ELEMENT_MAP_KIND, PICTURE_KIND } from '../common';
 import { Picture2D, Project, Rectangle } from '../core';
+import { DynamicValue } from '../core/DynamicValue';
 import '../styles/GraphicsSelector.css';
 import Dropdown from './Dropdown';
 import Flex from './Flex';
@@ -24,6 +25,7 @@ import DialogPicturesPreview from './dialogs/DialogPicturesPreview';
 type Props = {
 	sceneID: string;
 	graphicsID: number;
+	dynamicID?: DynamicValue;
 	graphicsIndexX: number;
 	graphicsIndexY: number;
 	rectTileset?: Rectangle;
@@ -35,6 +37,7 @@ type Props = {
 function GraphicsSelector({
 	sceneID,
 	graphicsID,
+	dynamicID,
 	graphicsIndexX,
 	graphicsIndexY,
 	rectTileset,
@@ -199,6 +202,7 @@ function GraphicsSelector({
 			</Flex>
 			<DialogPicturesPreview
 				kind={PICTURE_KIND.CHARACTERS}
+				dynamicPictureID={dynamicID}
 				isOpen={isOpenDialogPictures}
 				setIsOpen={setIsOpenDialogPictures}
 				onAccept={handleAcceptPictures}
@@ -206,6 +210,7 @@ function GraphicsSelector({
 				indexX={graphicsIndexX}
 				indexY={graphicsIndexY}
 				rectTileset={rectTileset}
+				active={dynamicID !== undefined}
 			/>
 			<DialogObjects3DPreview
 				isOpen={isOpenDialogObjects3D}

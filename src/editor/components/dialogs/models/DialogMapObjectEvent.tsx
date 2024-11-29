@@ -106,55 +106,48 @@ function DialogMapObjectEvent({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 	}, [isOpen]);
 
 	return (
-		<>
-			<Dialog
-				title={`${t('set.event')}...`}
-				isOpen={isOpen}
-				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-				onClose={handleReject}
-			>
-				<Flex column spacedLarge>
-					<RadioGroup selected={selectionType} onChange={setSelectionType}>
-						<Form>
-							<Label>
-								<RadioButton value={SELECTION_TYPE.SYSTEM}>{t('event.system')}</RadioButton>
-							</Label>
-							<Value>
-								<Dropdown
-									selectedID={eventSystemID}
-									onChange={handleChangeEventSystemID}
-									options={Project.current!.commonEvents.eventsSystem}
-									disabled={selectionType !== SELECTION_TYPE.SYSTEM}
-									displayIDs
-								/>
-							</Value>
-							<Label>
-								<RadioButton value={SELECTION_TYPE.USER}>{t('event.user')}</RadioButton>
-							</Label>
-							<Value>
-								<Dropdown
-									selectedID={eventUserID}
-									onChange={handleChangeEventUserID}
-									options={Project.current!.commonEvents.eventsUser}
-									disabled={selectionType !== SELECTION_TYPE.USER}
-									displayIDs
-								/>
-							</Value>
-						</Form>
-					</RadioGroup>
-					{parameters.length > 0 && (
-						<Groupbox title={t('parameter.values')}>
-							<Tree
-								constructorType={Model.MapObjectParameter}
-								list={parameters}
-								cannotAdd
-								cannotDragDrop
+		<Dialog
+			title={`${t('set.event')}...`}
+			isOpen={isOpen}
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			onClose={handleReject}
+		>
+			<Flex column spacedLarge>
+				<RadioGroup selected={selectionType} onChange={setSelectionType}>
+					<Form>
+						<Label>
+							<RadioButton value={SELECTION_TYPE.SYSTEM}>{t('event.system')}</RadioButton>
+						</Label>
+						<Value>
+							<Dropdown
+								selectedID={eventSystemID}
+								onChange={handleChangeEventSystemID}
+								options={Project.current!.commonEvents.eventsSystem}
+								disabled={selectionType !== SELECTION_TYPE.SYSTEM}
+								displayIDs
 							/>
-						</Groupbox>
-					)}
-				</Flex>
-			</Dialog>
-		</>
+						</Value>
+						<Label>
+							<RadioButton value={SELECTION_TYPE.USER}>{t('event.user')}</RadioButton>
+						</Label>
+						<Value>
+							<Dropdown
+								selectedID={eventUserID}
+								onChange={handleChangeEventUserID}
+								options={Project.current!.commonEvents.eventsUser}
+								disabled={selectionType !== SELECTION_TYPE.USER}
+								displayIDs
+							/>
+						</Value>
+					</Form>
+				</RadioGroup>
+				{parameters.length > 0 && (
+					<Groupbox title={t('parameter.values')}>
+						<Tree constructorType={Model.MapObjectParameter} list={parameters} cannotAdd cannotDragDrop />
+					</Groupbox>
+				)}
+			</Flex>
+		</Dialog>
 	);
 }
 

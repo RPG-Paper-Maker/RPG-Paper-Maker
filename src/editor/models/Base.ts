@@ -131,6 +131,7 @@ class Base extends Serializable {
 	public static TRANSITION_DIRECTION_OPTIONS = Base.mapListIndex(['unchanged', 'south', 'west', 'north', 'east']);
 	public static TRANSITION_START_OPTIONS = Base.mapListIndex(['none', 'fade.in', 'zoom.in']);
 	public static TRANSITION_END_OPTIONS = Base.mapListIndex(['none', 'fade.out', 'zoom.out']);
+	public static SQUARE_STEP_OPTIONS = Base.mapListIndex(['square', 'step']);
 
 	public id!: number;
 	public name!: string;

@@ -14,6 +14,7 @@ export * from './Localization';
 export * from './Map';
 export * from './MapObject';
 export * from './MapObjectCommand';
+export * from './MapObjectCommandMove';
 export * from './MapObjectEvent';
 export * from './MapObjectParameter';
 export * from './MapObjectProperty';
