@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { EVENT_COMMAND_KIND } from '../../../common';
 import { Model } from '../../../Editor';
@@ -100,15 +100,18 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 		// eslint-disable-next-line
 	}, [isOpen]);
 
-	const getButton = (kind: EVENT_COMMAND_KIND, isOpeningCommand = true) => (
-		<Button
-			icon={MapObjectCommand.getIconKind(kind)}
-			onClick={() => handleClickOpenCommand(kind, isOpeningCommand)}
-		>
-			{t(MapObjectCommand.getCommandName(kind))}
-			{isOpeningCommand && '...'}
-		</Button>
-	);
+	const getButton = (kind: EVENT_COMMAND_KIND) => {
+		const isOpeningCommand = !MapObjectCommand.isNotOpeningCommand(kind);
+		return (
+			<Button
+				icon={MapObjectCommand.getIconKind(kind)}
+				onClick={() => handleClickOpenCommand(kind, isOpeningCommand)}
+			>
+				{t(MapObjectCommand.getCommandName(kind))}
+				{isOpeningCommand && '...'}
+			</Button>
+		);
+	};
 
 	const getStagingContent = () => (
 		<Flex spaced key={0}>
@@ -328,6 +331,18 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return null;
 		}
 	};
+
+	useEffect(() => {
+		if (
+			isOpen &&
+			!isNew &&
+			(selectedCommand === EVENT_COMMAND_KIND.CHOICE ||
+				MapObjectCommand.isNotOpeningCommand(selectedCommand as EVENT_COMMAND_KIND))
+		) {
+			setIsOpen(false);
+			onReject();
+		}
+	}, [isOpen, isNew, selectedCommand]);
 
 	return (
 		<>

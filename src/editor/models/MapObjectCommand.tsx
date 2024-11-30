@@ -93,6 +93,10 @@ class MapObjectCommand extends Base {
 		return mapObjectCommand;
 	}
 
+	static isNotOpeningCommand(kind: EVENT_COMMAND_KIND): boolean {
+		return kind === EVENT_COMMAND_KIND.END_CHOICE || kind === EVENT_COMMAND_KIND.RESET_CAMERA;
+	}
+
 	static getIconKind(kind: EVENT_COMMAND_KIND): ReactNode {
 		switch (kind) {
 			case EVENT_COMMAND_KIND.SHOW_TEXT:
@@ -388,6 +392,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.MOVE_OBJECT:
 			case EVENT_COMMAND_KIND.DISPLAY_AN_ANIMATION:
 			case EVENT_COMMAND_KIND.MOVE_CAMERA:
+			case EVENT_COMMAND_KIND.RESET_CAMERA:
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -452,6 +457,7 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
+			case EVENT_COMMAND_KIND.RESET_CAMERA:
 				texts = [''];
 				break;
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
@@ -502,7 +508,7 @@ class MapObjectCommand extends Base {
 				<Flex column spaced>
 					<Flex spaced>
 						<div style={{ fontWeight: 'bold', color }}>{commandName}</div>
-						{`${this.kind === EVENT_COMMAND_KIND.END_CHOICE ? '' : ':'} ${texts[0]}`}
+						{`${MapObjectCommand.isNotOpeningCommand(this.kind) ? '' : ':'} ${texts[0]}`}
 					</Flex>
 					{texts.slice(1).map((text, index) => (
 						<div key={index}>{text}</div>
