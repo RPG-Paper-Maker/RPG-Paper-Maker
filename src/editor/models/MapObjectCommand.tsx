@@ -387,6 +387,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.TELEPORT_OBJECT:
 			case EVENT_COMMAND_KIND.MOVE_OBJECT:
 			case EVENT_COMMAND_KIND.DISPLAY_AN_ANIMATION:
+			case EVENT_COMMAND_KIND.MOVE_CAMERA:
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -492,6 +493,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.DISPLAY_AN_ANIMATION:
 				texts = this.toStringDisplayAnAnimation(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.MOVE_CAMERA:
+				texts = this.toStringMoveCamera(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -567,6 +571,25 @@ class MapObjectCommand extends Base {
 				return i18next.t('this.map');
 			default:
 				return this.toStringDynamicValue(iterator, properties, parameters);
+		}
+	}
+
+	toStringOperation(iterator: ITERATOR): string {
+		switch (this.command[iterator.i++]) {
+			case 0:
+				return '=';
+			case 1:
+				return '+';
+			case 2:
+				return '-';
+			case 3:
+				return '=';
+			case 4:
+				return '/';
+			case 5:
+				return '%';
+			default:
+				return '';
 		}
 	}
 
@@ -1131,6 +1154,65 @@ class MapObjectCommand extends Base {
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			texts.push(`[${i18next.t('wait.end')}]`);
 		}
+		return texts;
+	}
+
+	toStringMoveCamera(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts = [''];
+		let target = '';
+		switch (this.command[iterator.i++]) {
+			case 0:
+				target += i18next.t('unchanged');
+				break;
+			case 1:
+				target += `${i18next.t('object.id')} ${this.toStringDynamicObject(iterator, properties, parameters)}`;
+				break;
+		}
+		texts.push(`${i18next.t('target')}: ${target}`);
+		const operation = this.toStringOperation(iterator);
+		const optionsMove: string[] = [];
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			optionsMove.push(i18next.t('offset'));
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			optionsMove.push(i18next.t('camera.orientation'));
+		}
+		const x = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t(
+			this.command[iterator.i++] === 0 ? 'square.s' : 'pixel.s'
+		)}`;
+		const y = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t(
+			this.command[iterator.i++] === 0 ? 'square.s' : 'pixel.s'
+		)}`;
+		const z = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t(
+			this.command[iterator.i++] === 0 ? 'square.s' : 'pixel.s'
+		)}`;
+		texts.push(`${i18next.t('move')}: X: ${x}; Y: ${y}; Z: ${z} [${optionsMove.join(';')}]`);
+		const optionsRotation: string[] = [];
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			optionsMove.push(i18next.t('offset'));
+		}
+		const h = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)}°`;
+		const v = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)}°`;
+		texts.push(
+			`${i18next.t('rotation')}: ${i18next.t('horizontal.short')}: ${h}; ${i18next.t(
+				'vertical.short'
+			)}: ${v} [${optionsRotation.join(';')}]`
+		);
+		texts.push(
+			`${i18next.t('zoom')}: ${i18next.t('distance')}: ${operation} ${this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters
+			)}`
+		);
+		let time = '';
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			time += `[${i18next.t('wait.end')}] `;
+		}
+		time += `${i18next.t('time')}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t(
+			'seconds'
+		)}`;
+		texts.push(time);
 		return texts;
 	}
 

@@ -26,6 +26,7 @@ import DialogCommandDisplayAnAnimation from '../commands/DialogCommandDisplayAnA
 import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
 import DialogCommandFlashScreen from '../commands/DialogCommandFlashScreen';
 import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
+import DialogCommandMoveCamera from '../commands/DialogCommandMoveCamera';
 import DialogCommandMoveObject from '../commands/DialogCommandMoveObject';
 import DialogCommandSetDialogBoxOptions from '../commands/DialogCommandSetDialogBoxOptions';
 import DialogCommandShakeScreen from '../commands/DialogCommandShakeScreen';
@@ -321,6 +322,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandMoveObject {...options} />;
 			case EVENT_COMMAND_KIND.DISPLAY_AN_ANIMATION:
 				return <DialogCommandDisplayAnAnimation {...options} />;
+			case EVENT_COMMAND_KIND.MOVE_CAMERA:
+				return <DialogCommandMoveCamera {...options} />;
 			default:
 				return null;
 		}

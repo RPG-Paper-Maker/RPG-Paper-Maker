@@ -6,6 +6,7 @@ export * from './DialogCommandDisplayAnAnimation';
 export * from './DialogCommandDisplayChoice';
 export * from './DialogCommandFlashScreen';
 export * from './DialogCommandInputNumber';
+export * from './DialogCommandMoveCamera';
 export * from './DialogCommandMoveObject';
 export * from './DialogCommandMoveObjectChangeGraphics';
 export * from './DialogCommandMoveObjectChangeSpeedFrequency';
