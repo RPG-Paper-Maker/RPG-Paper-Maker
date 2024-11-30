@@ -79,7 +79,7 @@ function DynamicValueSelector({
 		value.kind === DYNAMIC_VALUE_KIND.DATABASE ? (value.value as number) : 1
 	);
 
-	const getOptions = () => {
+	const getOptionsKind = () => {
 		let list: DYNAMIC_VALUE_KIND[] = [];
 		switch (optionsType) {
 			case DYNAMIC_VALUE_OPTIONS_TYPE.PARAMETER:
@@ -114,7 +114,11 @@ function DynamicValueSelector({
 				list = [DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, DYNAMIC_VALUE_KIND.VARIABLE];
 				break;
 			case DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE:
-				list = [DYNAMIC_VALUE_KIND.DATABASE, DYNAMIC_VALUE_KIND.NUMBER, DYNAMIC_VALUE_KIND.VARIABLE];
+				if (databaseOptions.length > 0) {
+					list.push(DYNAMIC_VALUE_KIND.DATABASE);
+				}
+				list.push(DYNAMIC_VALUE_KIND.NUMBER);
+				list.push(DYNAMIC_VALUE_KIND.VARIABLE);
 				break;
 			case DYNAMIC_VALUE_OPTIONS_TYPE.SWITCH:
 				list = [DYNAMIC_VALUE_KIND.SWITCH, DYNAMIC_VALUE_KIND.VARIABLE];
@@ -142,8 +146,10 @@ function DynamicValueSelector({
 			default:
 				break;
 		}
-		return list.map((k) => Model.Base.DYNAMIC_VALUE_KIND_OPTIONS[k]);
+		return list;
 	};
+
+	const getOptions = () => getOptionsKind().map((k) => Model.Base.DYNAMIC_VALUE_KIND_OPTIONS[k]);
 
 	const handleChangeKind = (id: number) => {
 		setKind(id);
@@ -224,6 +230,13 @@ function DynamicValueSelector({
 	};
 
 	useLayoutEffect(() => {
+		if (
+			(value.kind === DYNAMIC_VALUE_KIND.DATABASE && databaseOptions.length === 0) ||
+			(value.kind === DYNAMIC_VALUE_KIND.PARAMETER && Project.current!.currentMapObjectParameters.length === 0) ||
+			(value.kind === DYNAMIC_VALUE_KIND.PROPERTY && Project.current!.currentMapObjectProperties.length === 0)
+		) {
+			value.kind = getOptionsKind()[0];
+		}
 		setKind(value.kind);
 		onChangeKind?.(value.kind);
 		// eslint-disable-next-line

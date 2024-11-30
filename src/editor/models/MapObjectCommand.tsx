@@ -393,6 +393,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.DISPLAY_AN_ANIMATION:
 			case EVENT_COMMAND_KIND.MOVE_CAMERA:
 			case EVENT_COMMAND_KIND.RESET_CAMERA:
+			case EVENT_COMMAND_KIND.CREATE_OBJECT_IN_MAP:
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -502,6 +503,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.MOVE_CAMERA:
 				texts = this.toStringMoveCamera(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.CREATE_OBJECT_IN_MAP:
+				texts = this.toStringCreateObjectInMap(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -596,6 +600,44 @@ class MapObjectCommand extends Base {
 				return '%';
 			default:
 				return '';
+		}
+	}
+
+	toStringPosition(texts: string[], iterator: ITERATOR, properties: Base[], parameters: Base[]) {
+		const selectionKind = this.command[iterator.i++] as number;
+		if (selectionKind === 0 || selectionKind === 1) {
+			let id = '';
+			let x = '';
+			let y = '';
+			let yp = '';
+			let z = '';
+			switch (selectionKind) {
+				case 0:
+					id = '' + this.command[iterator.i++];
+					x = '' + this.command[iterator.i++];
+					y = '' + this.command[iterator.i++];
+					yp = '' + this.command[iterator.i++];
+					z = '' + this.command[iterator.i++];
+					break;
+				case 1:
+					id = this.toStringDynamicValue(iterator, properties, parameters);
+					x = this.toStringDynamicValue(iterator, properties, parameters);
+					y = this.toStringDynamicValue(iterator, properties, parameters);
+					yp = this.toStringDynamicValue(iterator, properties, parameters);
+					z = this.toStringDynamicValue(iterator, properties, parameters);
+					break;
+			}
+			texts.push(`${i18next.t('map.id')}: ${id}`);
+			texts.push(`X: ${x}`);
+			texts.push(`Y: ${y}`);
+			texts.push(`Y+: ${yp}`);
+			texts.push(`Z: ${z}`);
+		} else {
+			texts.push(
+				`${this.toStringDynamicObject(iterator, properties, parameters)} ${i18next
+					.t('coordinates')
+					.toLowerCase()}`
+			);
 		}
 	}
 
@@ -1082,41 +1124,7 @@ class MapObjectCommand extends Base {
 				.t('to.the.coordinates')
 				.toLowerCase()}`
 		);
-		const selectionKind = this.command[iterator.i++] as number;
-		if (selectionKind === 0 || selectionKind === 1) {
-			let id = '';
-			let x = '';
-			let y = '';
-			let yp = '';
-			let z = '';
-			switch (selectionKind) {
-				case 0:
-					id = '' + this.command[iterator.i++];
-					x = '' + this.command[iterator.i++];
-					y = '' + this.command[iterator.i++];
-					yp = '' + this.command[iterator.i++];
-					z = '' + this.command[iterator.i++];
-					break;
-				case 1:
-					id = this.toStringDynamicValue(iterator, properties, parameters);
-					x = this.toStringDynamicValue(iterator, properties, parameters);
-					y = this.toStringDynamicValue(iterator, properties, parameters);
-					yp = this.toStringDynamicValue(iterator, properties, parameters);
-					z = this.toStringDynamicValue(iterator, properties, parameters);
-					break;
-			}
-			texts.push(`${i18next.t('map.id')}: ${id}`);
-			texts.push(`X: ${x}`);
-			texts.push(`Y: ${y}`);
-			texts.push(`Y+: ${yp}`);
-			texts.push(`Z: ${z}`);
-		} else {
-			texts.push(
-				`${this.toStringDynamicObject(iterator, properties, parameters)} ${i18next
-					.t('coordinates')
-					.toLowerCase()}`
-			);
-		}
+		this.toStringPosition(texts, iterator, properties, parameters);
 		texts.push(
 			`[${i18next.t('direction')}: ${i18next.t(
 				Base.TRANSITION_DIRECTION_OPTIONS[this.command[iterator.i++] as number].name
@@ -1184,13 +1192,13 @@ class MapObjectCommand extends Base {
 			optionsMove.push(i18next.t('camera.orientation'));
 		}
 		const x = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t(
-			this.command[iterator.i++] === 0 ? 'square.s' : 'pixel.s'
+			Base.SQUARES_PIXELS_OPTIONS[this.command[iterator.i++] as number].name
 		)}`;
 		const y = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t(
-			this.command[iterator.i++] === 0 ? 'square.s' : 'pixel.s'
+			Base.SQUARES_PIXELS_OPTIONS[this.command[iterator.i++] as number].name
 		)}`;
 		const z = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t(
-			this.command[iterator.i++] === 0 ? 'square.s' : 'pixel.s'
+			Base.SQUARES_PIXELS_OPTIONS[this.command[iterator.i++] as number].name
 		)}`;
 		texts.push(`${i18next.t('move')}: X: ${x}; Y: ${y}; Z: ${z} [${optionsMove.join(';')}]`);
 		const optionsRotation: string[] = [];
@@ -1219,6 +1227,29 @@ class MapObjectCommand extends Base {
 			'seconds'
 		)}`;
 		texts.push(time);
+		return texts;
+	}
+
+	toStringCreateObjectInMap(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts = [];
+		texts.push(
+			`${i18next.t('new.object.model.id')}: ${this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.commonEvents.commonObjects
+			)} ${i18next.t('to.the.coordinates').toLowerCase()}`
+		);
+		this.toStringPosition(texts, iterator, properties, parameters);
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			texts.push(
+				`[${i18next.t('stock.instance.id.in').toLowerCase()} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters
+				)}]`
+			);
+		}
 		return texts;
 	}
 

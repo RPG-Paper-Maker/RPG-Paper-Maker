@@ -22,6 +22,7 @@ import DialogCommandChangeChronometer from '../commands/DialogCommandChangeChron
 import DialogCommandChangeMapProperties from '../commands/DialogCommandChangeMapProperties';
 import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreenTone';
 import DialogCommandChangeWeather from '../commands/DialogCommandChangeWeather';
+import DialogCommandCreateObjectInMap from '../commands/DialogCommandCreateObjectInMap';
 import DialogCommandDisplayAnAnimation from '../commands/DialogCommandDisplayAnAnimation';
 import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
 import DialogCommandFlashScreen from '../commands/DialogCommandFlashScreen';
@@ -327,6 +328,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandDisplayAnAnimation {...options} />;
 			case EVENT_COMMAND_KIND.MOVE_CAMERA:
 				return <DialogCommandMoveCamera {...options} />;
+			case EVENT_COMMAND_KIND.CREATE_OBJECT_IN_MAP:
+				return <DialogCommandCreateObjectInMap {...options} />;
 			default:
 				return null;
 		}
