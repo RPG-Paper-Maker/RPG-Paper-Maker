@@ -24,6 +24,7 @@ import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreen
 import DialogCommandChangeWeather from '../commands/DialogCommandChangeWeather';
 import DialogCommandCreateObjectInMap from '../commands/DialogCommandCreateObjectInMap';
 import DialogCommandDisplayAnAnimation from '../commands/DialogCommandDisplayAnAnimation';
+import DialogCommandDisplayAPicture from '../commands/DialogCommandDisplayAPicture';
 import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
 import DialogCommandFlashScreen from '../commands/DialogCommandFlashScreen';
 import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
@@ -333,6 +334,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandCreateObjectInMap {...options} />;
 			case EVENT_COMMAND_KIND.REMOVE_OBJECT_FROM_MAP:
 				return <DialogCommandRemoveObjectFromMap {...options} />;
+			case EVENT_COMMAND_KIND.DISPLAY_A_PICTURE:
+				return <DialogCommandDisplayAPicture {...options} />;
 			default:
 				return null;
 		}

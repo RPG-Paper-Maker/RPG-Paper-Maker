@@ -39,7 +39,7 @@ function InputNumber({
 
 	const [displayedValue, setDisplayedValue] = useState(transformValueToText(value));
 
-	const getWidth = () => {
+	const width = (() => {
 		switch (widthType) {
 			case INPUT_TYPE_WIDTH.FILL:
 				return '100%';
@@ -50,7 +50,7 @@ function InputNumber({
 			case INPUT_TYPE_WIDTH.LARGE:
 				return '195px';
 		}
-	};
+	})();
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const v = transformValue(Number(e.target.value));
@@ -91,7 +91,7 @@ function InputNumber({
 			onBlur={handleBlur}
 			onChange={handleChange}
 			step='any'
-			style={{ width: getWidth() }}
+			style={{ minWidth: width, maxWidth: width }}
 			disabled={disabled}
 		/>
 	);

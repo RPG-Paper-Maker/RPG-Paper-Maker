@@ -16,7 +16,7 @@ import { Data, Model } from '../../Editor';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
 import Tree, { TREES_MIN_WIDTH } from '../Tree';
-import Dialog from './Dialog';
+import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
@@ -99,6 +99,7 @@ function DialogVariables({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex spacedLarge style={{ height: '510px' }}>
 				<Groupbox title={t('variables')}>

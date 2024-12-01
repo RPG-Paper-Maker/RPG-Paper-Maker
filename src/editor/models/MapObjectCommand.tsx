@@ -510,6 +510,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.REMOVE_OBJECT_FROM_MAP:
 				texts = this.toStringRemoveObjectFromMap(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.DISPLAY_A_PICTURE:
+				texts = this.toStringDisplayAPicture(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -1259,6 +1262,29 @@ class MapObjectCommand extends Base {
 
 	toStringRemoveObjectFromMap(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		return [`ID ${this.toStringDynamicObject(iterator, properties, parameters)}`];
+	}
+
+	toStringDisplayAPicture(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const id = this.toStringDynamicValue(
+			iterator,
+			properties,
+			parameters,
+			Project.current!.pictures.getList(PICTURE_KIND.PICTURES),
+			true
+		);
+		const index = this.toStringDynamicValue(iterator, properties, parameters);
+		const origin = i18next.t(Base.TOP_LEFT_CENTER_OPTIONS[this.command[iterator.i++] as number].name);
+		const x = this.toStringDynamicValue(iterator, properties, parameters);
+		const y = this.toStringDynamicValue(iterator, properties, parameters);
+		const zoom = this.toStringDynamicValue(iterator, properties, parameters);
+		const opacity = this.toStringDynamicValue(iterator, properties, parameters);
+		const angle = this.toStringDynamicValue(iterator, properties, parameters);
+		return [
+			`ID=${id} ${i18next.t('index').toLowerCase()}=${index}`,
+			`${i18next.t('origin')}=${origin}, X=${x}, Y=${y}, ${i18next.t('zoom')}=${zoom}% ${i18next.t(
+				'opacity'
+			)}=${opacity}% ${i18next.t('angle')}=${angle}°`,
+		];
 	}
 
 	copy(command: MapObjectCommand): void {

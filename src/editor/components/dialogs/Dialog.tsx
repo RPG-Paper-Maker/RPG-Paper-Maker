@@ -258,49 +258,45 @@ function Dialog({
 	}, [isOpen]);
 
 	const root = document.getElementById('root');
-	if (!root) {
+	if (!root || !isOpen) {
 		return null;
 	}
 
 	return ReactDOM.createPortal(
-		<>
-			{isOpen && (
+		<div
+			className='dialogOverlay'
+			onClick={handleCloseOut}
+			onMouseDown={handleMouseDownOverlay}
+			onMouseUp={handleMouseUpTitle}
+			style={{
+				zIndex,
+			}}
+		>
+			<div
+				ref={dialogRef}
+				className='dialog'
+				onMouseDown={handleMouseDown}
+				onMouseMove={handleMouseMove}
+				onMouseUp={handleMouseUp}
+				style={{
+					transform: `translate(${isMoved ? '0,0' : '-50%,-50%'})`,
+				}}
+			>
+				{isDisabled && <div className='dialogDisable' />}
 				<div
-					className='dialogOverlay'
-					onClick={handleCloseOut}
-					onMouseDown={handleMouseDownOverlay}
-					onMouseUp={handleMouseUpTitle}
-					style={{
-						zIndex,
-					}}
+					className={Utils.getClassName({ dialogTitleGrabbing: isDragging }, 'dialogTitle')}
+					onMouseDown={handleMouseDownTitle}
 				>
-					<div
-						ref={dialogRef}
-						className='dialog'
-						onMouseDown={handleMouseDown}
-						onMouseMove={handleMouseMove}
-						onMouseUp={handleMouseUp}
-						style={{
-							transform: `translate(${isMoved ? '0,0' : '-50%,-50%'})`,
-						}}
-					>
-						{isDisabled && <div className='dialogDisable' />}
-						<div
-							className={Utils.getClassName({ dialogTitleGrabbing: isDragging }, 'dialogTitle')}
-							onMouseDown={handleMouseDownTitle}
-						>
-							<Flex one>{title}</Flex>
-							{onClose && <RxCross2 className='dialogClose' onClick={handleClose} />}
-						</div>
-						<div className='dialogContent'>
-							<Loader isLoading={isLoading} />
-							{children}
-						</div>
-						<div className='dialogFooter'>{footer}</div>
-					</div>
+					<Flex one>{title}</Flex>
+					{onClose && <RxCross2 className='dialogClose' onClick={handleClose} />}
 				</div>
-			)}
-		</>,
+				<div className='dialogContent'>
+					<Loader isLoading={isLoading} />
+					{children}
+				</div>
+				<div className='dialogFooter'>{footer}</div>
+			</div>
+		</div>,
 		root
 	);
 }

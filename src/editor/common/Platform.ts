@@ -165,7 +165,7 @@ class Platform {
 			for (const folder of folders) {
 				currentFolder = currentFolder[folder] as Record<string, unknown>;
 			}
-			return currentFolder.files as string[];
+			return (currentFolder?.files as string[]) ?? [];
 		}
 	}
 

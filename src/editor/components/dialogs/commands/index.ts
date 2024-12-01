@@ -3,6 +3,7 @@ export * from './DialogCommandChangeMapProperties';
 export * from './DialogCommandChangeScreenTone';
 export * from './DialogCommandChangeWeather';
 export * from './DialogCommandDisplayAnAnimation';
+export * from './DialogCommandDisplayAPicture';
 export * from './DialogCommandDisplayChoice';
 export * from './DialogCommandFlashScreen';
 export * from './DialogCommandInputNumber';
