@@ -29,6 +29,7 @@ import DialogCommandFlashScreen from '../commands/DialogCommandFlashScreen';
 import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
 import DialogCommandMoveCamera from '../commands/DialogCommandMoveCamera';
 import DialogCommandMoveObject from '../commands/DialogCommandMoveObject';
+import DialogCommandRemoveObjectFromMap from '../commands/DialogCommandRemoveObjectFromMap';
 import DialogCommandSetDialogBoxOptions from '../commands/DialogCommandSetDialogBoxOptions';
 import DialogCommandShakeScreen from '../commands/DialogCommandShakeScreen';
 import DialogCommandShowText from '../commands/DialogCommandShowText';
@@ -330,6 +331,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandMoveCamera {...options} />;
 			case EVENT_COMMAND_KIND.CREATE_OBJECT_IN_MAP:
 				return <DialogCommandCreateObjectInMap {...options} />;
+			case EVENT_COMMAND_KIND.REMOVE_OBJECT_FROM_MAP:
+				return <DialogCommandRemoveObjectFromMap {...options} />;
 			default:
 				return null;
 		}
@@ -345,6 +348,7 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 			setIsOpen(false);
 			onReject();
 		}
+		// eslint-disable-next-line
 	}, [isOpen, isNew, selectedCommand]);
 
 	return (

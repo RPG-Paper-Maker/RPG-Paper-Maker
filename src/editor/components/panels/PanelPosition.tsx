@@ -36,7 +36,7 @@ export enum SELECTION_TYPE {
 	OBJECT,
 }
 
-const PanelPosition = forwardRef(({}, ref) => {
+const PanelPosition = forwardRef((props, ref) => {
 	const { t } = useTranslation();
 
 	const [isSelectMapPositionDialogOpen, setIsSelectMapPositionDialogOpen] = useState(false);

@@ -394,6 +394,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.MOVE_CAMERA:
 			case EVENT_COMMAND_KIND.RESET_CAMERA:
 			case EVENT_COMMAND_KIND.CREATE_OBJECT_IN_MAP:
+			case EVENT_COMMAND_KIND.REMOVE_OBJECT_FROM_MAP:
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -505,6 +506,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.CREATE_OBJECT_IN_MAP:
 				texts = this.toStringCreateObjectInMap(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.REMOVE_OBJECT_FROM_MAP:
+				texts = this.toStringRemoveObjectFromMap(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1251,6 +1255,10 @@ class MapObjectCommand extends Base {
 			);
 		}
 		return texts;
+	}
+
+	toStringRemoveObjectFromMap(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		return [`ID ${this.toStringDynamicObject(iterator, properties, parameters)}`];
 	}
 
 	copy(command: MapObjectCommand): void {
