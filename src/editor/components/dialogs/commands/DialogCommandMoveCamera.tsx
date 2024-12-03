@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
 import { Model, Scene } from '../../../Editor';
@@ -24,6 +24,7 @@ import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
 import PanelOperations, { SELECTION_OPERATION_TYPE } from '../../panels/PanelOperations';
+import PanelWaitTime, { PanelWaitTimeRef } from '../../panels/PanelWaitTime';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
 import Dialog from '../Dialog';
@@ -45,6 +46,8 @@ type Props = {
 function DialogCommandMoveCamera({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
+	const panelWaitTimeRef = useRef<PanelWaitTimeRef>();
+
 	const [selectionTargetType, setSelectionTargetType] = useStateNumber();
 	const [objectID] = useStateDynamicValue();
 	const [selectionOperationType, setSelectionOperationType] = useStateNumber();
@@ -59,8 +62,6 @@ function DialogCommandMoveCamera({ isOpen, setIsOpen, list, onAccept, onReject }
 	const [horizontal] = useStateDynamicValue();
 	const [vertical] = useStateDynamicValue();
 	const [distance] = useStateDynamicValue();
-	const [isWaitingEndCommand, setIsWaitingEndCommand] = useStateBool();
-	const [time] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
 
 	const objectsList = Scene.Map.getCurrentMapObjectsList();
@@ -87,8 +88,7 @@ function DialogCommandMoveCamera({ isOpen, setIsOpen, list, onAccept, onReject }
 			horizontal.updateCommand(list, iterator);
 			vertical.updateCommand(list, iterator);
 			distance.updateCommand(list, iterator);
-			setIsWaitingEndCommand(Utils.initializeBoolCommand(list, iterator));
-			time.updateCommand(list, iterator);
+			panelWaitTimeRef.current?.initialize(list, iterator);
 		} else {
 			setSelectionTargetType(SELECTION_TARGET_TYPE.UNCHANGED);
 			setSelectionOperationType(SELECTION_OPERATION_TYPE.PLUS);
@@ -103,8 +103,7 @@ function DialogCommandMoveCamera({ isOpen, setIsOpen, list, onAccept, onReject }
 			horizontal.updateToDefaultNumber(0, true);
 			vertical.updateToDefaultNumber(0, true);
 			distance.updateToDefaultNumber();
-			setIsWaitingEndCommand(true);
-			time.updateToDefaultNumber(0, true);
+			panelWaitTimeRef.current?.initialize();
 		}
 		setTrigger((v) => !v);
 	};
@@ -129,8 +128,7 @@ function DialogCommandMoveCamera({ isOpen, setIsOpen, list, onAccept, onReject }
 		horizontal.getCommand(newList);
 		vertical.getCommand(newList);
 		distance.getCommand(newList);
-		newList.push(Utils.boolToNum(isWaitingEndCommand));
-		time.getCommand(newList);
+		panelWaitTimeRef.current?.getCommand(newList);
 		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.MOVE_CAMERA, newList));
 	};
 
@@ -261,17 +259,7 @@ function DialogCommandMoveCamera({ isOpen, setIsOpen, list, onAccept, onReject }
 						<DynamicValueSelector value={distance} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />°
 					</Flex>
 				</Groupbox>
-				<Checkbox isChecked={isWaitingEndCommand} onChange={setIsWaitingEndCommand}>
-					{t('wait.end.change.before.next.command')}
-				</Checkbox>
-				<Flex>
-					<Flex one />
-					<Flex spaced centerV>
-						<div>{t('time')}:</div>
-						<DynamicValueSelector value={time} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
-						<div>{t('seconds')}</div>
-					</Flex>
-				</Flex>
+				<PanelWaitTime ref={panelWaitTimeRef} />
 			</Flex>
 		</Dialog>
 	);

@@ -32,6 +32,7 @@ import DialogCommandMoveCamera from '../commands/DialogCommandMoveCamera';
 import DialogCommandMoveObject from '../commands/DialogCommandMoveObject';
 import DialogCommandRemoveObjectFromMap from '../commands/DialogCommandRemoveObjectFromMap';
 import DialogCommandSetDialogBoxOptions from '../commands/DialogCommandSetDialogBoxOptions';
+import DialogCommandSetMoveTurnAPicture from '../commands/DialogCommandSetMoveTurnAPicture';
 import DialogCommandShakeScreen from '../commands/DialogCommandShakeScreen';
 import DialogCommandShowText from '../commands/DialogCommandShowText';
 import DialogCommandSwitchTexture from '../commands/DialogCommandSwitchTexture';
@@ -336,6 +337,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandRemoveObjectFromMap {...options} />;
 			case EVENT_COMMAND_KIND.DISPLAY_A_PICTURE:
 				return <DialogCommandDisplayAPicture {...options} />;
+			case EVENT_COMMAND_KIND.SET_MOVE_TURN_A_PICTURE:
+				return <DialogCommandSetMoveTurnAPicture {...options} />;
 			default:
 				return null;
 		}

@@ -9,17 +9,17 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import { MapObjectCommandType } from '../../../models';
-import Checkbox from '../../Checkbox';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
+import PanelWaitTime, { PanelWaitTimeRef } from '../../panels/PanelWaitTime';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
@@ -34,10 +34,10 @@ type Props = {
 function DialogCommandShakeScreen({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
+	const panelWaitTimeRef = useRef<PanelWaitTimeRef>();
+
 	const [offset] = useStateDynamicValue();
 	const [shakesNumber] = useStateDynamicValue();
-	const [isWaitingEndCommand, setIsWaitingEndCommand] = useStateBool();
-	const [time] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
@@ -45,13 +45,11 @@ function DialogCommandShakeScreen({ isOpen, setIsOpen, list, onAccept, onReject 
 			const iterator = Utils.generateIterator();
 			offset.updateCommand(list, iterator);
 			shakesNumber.updateCommand(list, iterator);
-			setIsWaitingEndCommand(Utils.initializeBoolCommand(list, iterator));
-			time.updateCommand(list, iterator);
+			panelWaitTimeRef.current?.initialize(list, iterator);
 		} else {
 			offset.updateToDefaultNumber(30);
 			shakesNumber.updateToDefaultNumber(2, true);
-			setIsWaitingEndCommand(true);
-			time.updateToDefaultNumber(2, true);
+			panelWaitTimeRef.current?.initialize();
 		}
 		setTrigger((v) => !v);
 	};
@@ -61,8 +59,7 @@ function DialogCommandShakeScreen({ isOpen, setIsOpen, list, onAccept, onReject 
 		const newList: MapObjectCommandType[] = [];
 		offset.getCommand(newList);
 		shakesNumber.getCommand(newList);
-		newList.push(Utils.boolToNum(isWaitingEndCommand));
-		time.getCommand(newList);
+		panelWaitTimeRef.current?.getCommand(newList);
 		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.SHAKE_SCREEN, newList));
 	};
 
@@ -105,17 +102,7 @@ function DialogCommandShakeScreen({ isOpen, setIsOpen, list, onAccept, onReject 
 						</Flex>
 					</Value>
 				</Form>
-				<Checkbox isChecked={isWaitingEndCommand} onChange={setIsWaitingEndCommand}>
-					{t('wait.end.change.before.next.command')}
-				</Checkbox>
-				<Flex>
-					<Flex one />
-					<Flex spaced centerV>
-						<div>{t('time')}:</div>
-						<DynamicValueSelector value={time} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
-						<div>{t('seconds')}</div>
-					</Flex>
-				</Flex>
+				<PanelWaitTime ref={panelWaitTimeRef} defaultSeconds={2} />
 			</Flex>
 		</Dialog>
 	);

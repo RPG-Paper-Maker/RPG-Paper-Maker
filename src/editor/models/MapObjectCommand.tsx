@@ -395,6 +395,8 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.RESET_CAMERA:
 			case EVENT_COMMAND_KIND.CREATE_OBJECT_IN_MAP:
 			case EVENT_COMMAND_KIND.REMOVE_OBJECT_FROM_MAP:
+			case EVENT_COMMAND_KIND.DISPLAY_A_PICTURE:
+			case EVENT_COMMAND_KIND.SET_MOVE_TURN_A_PICTURE:
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -512,6 +514,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.DISPLAY_A_PICTURE:
 				texts = this.toStringDisplayAPicture(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.SET_MOVE_TURN_A_PICTURE:
+				texts = this.toStringSetMoveTurnAPicture(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1285,6 +1290,52 @@ class MapObjectCommand extends Base {
 				'opacity'
 			)}=${opacity}% ${i18next.t('angle')}=${angle}°`,
 		];
+	}
+
+	toStringSetMoveTurnAPicture(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts = [];
+		texts.push(
+			`${i18next.t('index').toLowerCase()}=${this.toStringDynamicValue(iterator, properties, parameters)}`
+		);
+		let checked = Utils.initializeBoolCommand(this.command, iterator);
+		if (checked) {
+			texts.push(
+				`${i18next.t('image.id')}: ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.pictures.getList(PICTURE_KIND.PICTURES),
+					true
+				)}`
+			);
+		}
+		checked = Utils.initializeBoolCommand(this.command, iterator);
+		if (checked) {
+			texts.push(`${i18next.t('zoom')}: ${this.toStringDynamicValue(iterator, properties, parameters)}%`);
+		}
+		checked = Utils.initializeBoolCommand(this.command, iterator);
+		if (checked) {
+			texts.push(`${i18next.t('opacity')}: ${this.toStringDynamicValue(iterator, properties, parameters)}%`);
+		}
+		checked = Utils.initializeBoolCommand(this.command, iterator);
+		if (checked) {
+			texts.push(`X: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
+		}
+		checked = Utils.initializeBoolCommand(this.command, iterator);
+		if (checked) {
+			texts.push(`Y: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
+		}
+		checked = Utils.initializeBoolCommand(this.command, iterator);
+		if (checked) {
+			texts.push(`${i18next.t('angle')}: ${this.toStringDynamicValue(iterator, properties, parameters)}°`);
+		}
+		const isWaitEnd = Utils.initializeBoolCommand(this.command, iterator);
+		const time = this.toStringDynamicValue(iterator, properties, parameters);
+		texts.push(`${i18next.t('with.time')}=${time} ${i18next.t('seconds')}`);
+		if (isWaitEnd) {
+			texts.push(`[${i18next.t('wait.end')}]`);
+		}
+		return texts;
 	}
 
 	copy(command: MapObjectCommand): void {

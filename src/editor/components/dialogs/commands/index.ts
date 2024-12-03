@@ -14,6 +14,7 @@ export * from './DialogCommandMoveObjectChangeSpeedFrequency';
 export * from './DialogCommandMoveObjectJump';
 export * from './DialogCommandRemoveObjectFromMap';
 export * from './DialogCommandSetDialogBoxOptions';
+export * from './DialogCommandSetMoveTurnAPicture';
 export * from './DialogCommandShakeScreen';
 export * from './DialogCommandShowText';
 export * from './DialogCommandSwitchTexture';

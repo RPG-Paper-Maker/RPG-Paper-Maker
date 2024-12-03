@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
 import { Project } from '../../../core';
@@ -23,6 +23,7 @@ import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
+import PanelWaitTime, { PanelWaitTimeRef } from '../../panels/PanelWaitTime';
 import SliderDynamic from '../../SliderDynamic';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
@@ -43,6 +44,8 @@ const GREY_MAX = 100;
 function DialogCommandChangeScreenTone({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
+	const panelWaitTimeRef = useRef<PanelWaitTimeRef>();
+
 	const [red] = useStateDynamicValue();
 	const [green] = useStateDynamicValue();
 	const [blue] = useStateDynamicValue();
@@ -50,8 +53,6 @@ function DialogCommandChangeScreenTone({ isOpen, setIsOpen, list, onAccept, onRe
 	const [isAddingColorID, setIsAddingColorID] = useStateBool();
 	const [addingColorIndex, setAddingColorIndex] = useStateNumber();
 	const [addingColorID] = useStateDynamicValue();
-	const [isWaitingEndCommand, setIsWaitingEndCommand] = useStateBool();
-	const [time] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
@@ -70,8 +71,7 @@ function DialogCommandChangeScreenTone({ isOpen, setIsOpen, list, onAccept, onRe
 				setAddingColorIndex(0);
 				addingColorID.updateToDefaultDatabase();
 			}
-			setIsWaitingEndCommand(Utils.initializeBoolCommand(list, iterator));
-			time.updateCommand(list, iterator);
+			panelWaitTimeRef.current?.initialize(list, iterator);
 		} else {
 			red.updateToDefaultNumber();
 			green.updateToDefaultNumber();
@@ -80,8 +80,7 @@ function DialogCommandChangeScreenTone({ isOpen, setIsOpen, list, onAccept, onRe
 			setIsAddingColorID(false);
 			setAddingColorIndex(0);
 			addingColorID.updateToDefaultDatabase();
-			setIsWaitingEndCommand(true);
-			time.updateToDefaultNumber(0, true);
+			panelWaitTimeRef.current?.initialize();
 		}
 		setTrigger((v) => !v);
 	};
@@ -98,8 +97,7 @@ function DialogCommandChangeScreenTone({ isOpen, setIsOpen, list, onAccept, onRe
 			newList.push(addingColorIndex);
 			addingColorID.getCommand(newList);
 		}
-		newList.push(Utils.boolToNum(isWaitingEndCommand));
-		time.getCommand(newList);
+		panelWaitTimeRef.current?.getCommand(newList);
 		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE, newList));
 	};
 
@@ -158,17 +156,7 @@ function DialogCommandChangeScreenTone({ isOpen, setIsOpen, list, onAccept, onRe
 						disabled={!isAddingColorID}
 					/>
 				</Flex>
-				<Checkbox isChecked={isWaitingEndCommand} onChange={setIsWaitingEndCommand}>
-					{t('wait.end.change.before.next.command')}
-				</Checkbox>
-				<Flex>
-					<Flex one />
-					<Flex spaced centerV>
-						<div>{t('time')}:</div>
-						<DynamicValueSelector value={time} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
-						<div>{t('seconds')}</div>
-					</Flex>
-				</Flex>
+				<PanelWaitTime ref={panelWaitTimeRef} />
 			</Flex>
 		</Dialog>
 	);

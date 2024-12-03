@@ -80,7 +80,6 @@ function DialogCommandSetDialogBoxOptions({ isOpen, setIsOpen, list, onAccept, o
 	const [sizeID] = useStateDynamicValue();
 	const [isFontID, setIsFontID] = useStateBool();
 	const [fontID] = useStateDynamicValue();
-
 	const [, setTrigger] = useStateBool();
 
 	const initializeCheck = (
