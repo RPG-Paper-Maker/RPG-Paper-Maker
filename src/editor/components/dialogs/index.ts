@@ -7,3 +7,4 @@ export * from './DialogSelectMapPosition';
 export * from './DialogSongsPreview';
 export * from './DialogTransformDefaultValues';
 export * from './DialogVariables';
+export * from './DialogVideosPreview';

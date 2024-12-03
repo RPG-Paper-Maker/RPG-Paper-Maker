@@ -13,6 +13,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { AiOutlinePicture } from 'react-icons/ai';
 import { BiPyramid } from 'react-icons/bi';
 import { BsMusicNote } from 'react-icons/bs';
+import { TfiVideoClapper } from 'react-icons/tfi';
 import { CUSTOM_SHAPE_KIND, DYNAMIC_VALUE_KIND, PICTURE_KIND, SONG_KIND } from '../common';
 import { Node, Project, Rectangle } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
@@ -22,6 +23,7 @@ import Button from './Button';
 import DialogPicturesPreview from './dialogs/DialogPicturesPreview';
 import DialogShapesPreview from './dialogs/DialogShapesPreview';
 import DialogSongsPreview from './dialogs/DialogSongsPreview';
+import DialogVideosPreview from './dialogs/DialogVideosPreview';
 import Flex from './Flex';
 import Tree, { TREES_MIN_WIDTH } from './Tree';
 
@@ -29,6 +31,7 @@ export enum ASSET_SELECTOR_TYPE {
 	PICTURES,
 	SHAPES,
 	SONGS,
+	VIDEOS,
 }
 
 type Props = {
@@ -75,6 +78,9 @@ function AssetSelector({
 			case ASSET_SELECTOR_TYPE.SONGS:
 				base = Project.current!.songs.getByID(kind ?? DEFAULT_SONG_KIND, getSelectedID());
 				break;
+			case ASSET_SELECTOR_TYPE.VIDEOS:
+				base = Project.current!.videos.getByID(getSelectedID());
+				break;
 		}
 		return Node.create(base ? base : Model.Base.create(-1, '<NONE>'));
 		// eslint-disable-next-line
@@ -112,6 +118,15 @@ function AssetSelector({
 		]);
 	};
 
+	const handleAcceptVideo = (video: Model.Video) => {
+		onChange?.(video.id, 0, 0);
+		setList([
+			Node.create(
+				active && selectedDynamic!.isActivated ? Model.Base.create(-1, selectedDynamic!.toString()) : video
+			),
+		]);
+	};
+
 	useEffect(() => {
 		setList([
 			selectedDynamic && selectedDynamic.kind !== DYNAMIC_VALUE_KIND.NUMBER
@@ -129,6 +144,8 @@ function AssetSelector({
 				return <BiPyramid />;
 			case ASSET_SELECTOR_TYPE.SONGS:
 				return <BsMusicNote />;
+			case ASSET_SELECTOR_TYPE.VIDEOS:
+				return <TfiVideoClapper />;
 		}
 	};
 
@@ -165,6 +182,16 @@ function AssetSelector({
 						kind={kind ?? DEFAULT_SONG_KIND}
 						{...options}
 						onAccept={handleAcceptSong}
+						active={active}
+					/>
+				);
+			case ASSET_SELECTOR_TYPE.VIDEOS:
+				return (
+					<DialogVideosPreview
+						videoID={getSelectedID()}
+						dynamicVideoID={selectedDynamic}
+						{...options}
+						onAccept={handleAcceptVideo}
 						active={active}
 					/>
 				);

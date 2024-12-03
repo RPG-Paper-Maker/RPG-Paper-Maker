@@ -398,6 +398,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.DISPLAY_A_PICTURE:
 			case EVENT_COMMAND_KIND.SET_MOVE_TURN_A_PICTURE:
 			case EVENT_COMMAND_KIND.REMOVE_A_PICTURE:
+			case EVENT_COMMAND_KIND.PLAY_A_VIDEO:
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -521,6 +522,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.REMOVE_A_PICTURE:
 				texts = this.toStringRemoveAPicture(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.PLAY_A_VIDEO:
+				texts = this.toStringPlayAVideo(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1344,6 +1348,47 @@ class MapObjectCommand extends Base {
 
 	toStringRemoveAPicture(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		return [`${i18next.t('index').toLowerCase()}=${this.toStringDynamicValue(iterator, properties, parameters)}`];
+	}
+
+	toStringPlayAVideo(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts: string[] = [];
+		switch (this.command[iterator.i++] as number) {
+			case 0: {
+				texts.push(
+					`${i18next.t('play').toLowerCase()} ${i18next
+						.t('video')
+						.toLowerCase()} ${Project.current!.videos.getByID(
+						this.command[iterator.i++] as number
+					).toString()}`
+				);
+				const options: string[] = [];
+				if (Utils.initializeBoolCommand(this.command, iterator)) {
+					options.push(
+						`${i18next.t('start')}: ${this.toStringDynamicValue(
+							iterator,
+							properties,
+							parameters
+						)} ${i18next.t('seconds')}`
+					);
+				}
+				if (Utils.initializeBoolCommand(this.command, iterator)) {
+					options.push(i18next.t('wait.end'));
+				}
+				if (options.length > 0) {
+					texts.push(`[${options.join(';')}]`);
+				}
+				break;
+			}
+			case 1:
+				texts.push(i18next.t('pause').toLowerCase());
+				break;
+			case 2:
+				texts.push(i18next.t('stop').toLowerCase());
+				break;
+			default:
+				break;
+		}
+		return texts;
 	}
 
 	copy(command: MapObjectCommand): void {

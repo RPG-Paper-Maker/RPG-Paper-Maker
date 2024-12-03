@@ -24,6 +24,7 @@ class Project {
 	public pictures = new Data.Pictures();
 	public shapes = new Data.Shapes();
 	public songs = new Data.Songs();
+	public videos = new Data.Videos();
 	public specialElements = new Data.SpecialElements();
 	public commonEvents = new Data.CommonEvents();
 	public variables = new Data.Variables();
@@ -65,6 +66,7 @@ class Project {
 		await this.pictures.load();
 		await this.shapes.load();
 		await this.songs.load();
+		await this.videos.load();
 		await this.settings.load();
 		await this.systems.load();
 		this.systems.projectName.names.set(1, projectName);

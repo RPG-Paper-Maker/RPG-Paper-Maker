@@ -12,3 +12,4 @@ export * from './System';
 export * from './Tilesets';
 export * from './TreeMaps';
 export * from './Variables';
+export * from './Videos';
