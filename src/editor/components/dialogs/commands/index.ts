@@ -12,6 +12,7 @@ export * from './DialogCommandMoveObject';
 export * from './DialogCommandMoveObjectChangeGraphics';
 export * from './DialogCommandMoveObjectChangeSpeedFrequency';
 export * from './DialogCommandMoveObjectJump';
+export * from './DialogCommandRemoveAPicture';
 export * from './DialogCommandRemoveObjectFromMap';
 export * from './DialogCommandSetDialogBoxOptions';
 export * from './DialogCommandSetMoveTurnAPicture';

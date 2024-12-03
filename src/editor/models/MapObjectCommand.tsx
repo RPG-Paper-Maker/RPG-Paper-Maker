@@ -397,6 +397,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.REMOVE_OBJECT_FROM_MAP:
 			case EVENT_COMMAND_KIND.DISPLAY_A_PICTURE:
 			case EVENT_COMMAND_KIND.SET_MOVE_TURN_A_PICTURE:
+			case EVENT_COMMAND_KIND.REMOVE_A_PICTURE:
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
@@ -517,6 +518,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.SET_MOVE_TURN_A_PICTURE:
 				texts = this.toStringSetMoveTurnAPicture(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.REMOVE_A_PICTURE:
+				texts = this.toStringRemoveAPicture(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1336,6 +1340,10 @@ class MapObjectCommand extends Base {
 			texts.push(`[${i18next.t('wait.end')}]`);
 		}
 		return texts;
+	}
+
+	toStringRemoveAPicture(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		return [`${i18next.t('index').toLowerCase()}=${this.toStringDynamicValue(iterator, properties, parameters)}`];
 	}
 
 	copy(command: MapObjectCommand): void {
