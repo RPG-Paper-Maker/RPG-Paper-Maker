@@ -108,7 +108,7 @@ function DialogCommandPlaySong({ commandKind, isOpen, setIsOpen, list, onAccept,
 
 	return (
 		<DialogSongsPreview
-			title={`${t(Model.MapObjectCommand.getCommandName(commandKind))}...`}
+			title={t(Model.MapObjectCommand.getCommandName(commandKind))}
 			isOpen={isOpen && isInitialized}
 			setIsOpen={setIsOpen}
 			songID={songID}

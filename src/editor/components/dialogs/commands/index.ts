@@ -22,6 +22,7 @@ export * from './DialogCommandSetMoveTurnAPicture';
 export * from './DialogCommandShakeScreen';
 export * from './DialogCommandShowText';
 export * from './DialogCommandStartShopMenu';
+export * from './DialogCommandStopSong';
 export * from './DialogCommandSwitchTexture';
 export * from './DialogCommandTeleportObject';
 export * from './DialogCommandWait';

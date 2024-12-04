@@ -40,6 +40,7 @@ import DialogCommandSetMoveTurnAPicture from '../commands/DialogCommandSetMoveTu
 import DialogCommandShakeScreen from '../commands/DialogCommandShakeScreen';
 import DialogCommandShowText from '../commands/DialogCommandShowText';
 import DialogCommandStartShopMenu from '../commands/DialogCommandStartShopMenu';
+import DialogCommandStopSong from '../commands/DialogCommandStopSong';
 import DialogCommandSwitchTexture from '../commands/DialogCommandSwitchTexture';
 import DialogCommandTeleportObject from '../commands/DialogCommandTeleportObject';
 import DialogCommandWait from '../commands/DialogCommandWait';
@@ -359,6 +360,10 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 			case EVENT_COMMAND_KIND.PLAY_SOUND:
 			case EVENT_COMMAND_KIND.PLAY_MUSIC_EFFECT:
 				return <DialogCommandPlaySong commandKind={selectedCommand} {...options} />;
+			case EVENT_COMMAND_KIND.STOP_MUSIC:
+			case EVENT_COMMAND_KIND.STOP_BACKGROUND_SOUND:
+			case EVENT_COMMAND_KIND.STOP_A_SOUND:
+				return <DialogCommandStopSong commandKind={selectedCommand} {...options} />;
 			default:
 				return null;
 		}

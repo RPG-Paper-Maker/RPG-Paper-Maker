@@ -422,6 +422,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.PLAY_BACKGROUND_SOUND:
 			case EVENT_COMMAND_KIND.PLAY_SOUND:
 			case EVENT_COMMAND_KIND.PLAY_MUSIC_EFFECT:
+			case EVENT_COMMAND_KIND.STOP_MUSIC:
+			case EVENT_COMMAND_KIND.STOP_BACKGROUND_SOUND:
+			case EVENT_COMMAND_KIND.STOP_A_SOUND:
 				return MapObjectCommand.COLOR_BLUE;
 		}
 		return 'white';
@@ -570,6 +573,11 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.PLAY_MUSIC_EFFECT:
 				texts = this.toStringPlaySong(iterator, parameters, properties, SONG_KIND.MUSIC_EFFECT);
+				break;
+			case EVENT_COMMAND_KIND.STOP_MUSIC:
+			case EVENT_COMMAND_KIND.STOP_BACKGROUND_SOUND:
+			case EVENT_COMMAND_KIND.STOP_A_SOUND:
+				texts = this.toStringStopSong(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1487,6 +1495,16 @@ class MapObjectCommand extends Base {
 			texts.push(`${i18next.t('end')}: ${end}`);
 		}
 		return texts;
+	}
+
+	toStringStopSong(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		let str = '';
+		const seconds = `${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t('seconds')}`;
+		if (this.kind === EVENT_COMMAND_KIND.STOP_A_SOUND) {
+			str += `${i18next.t('sound.id')} ${this.toStringDynamicValue(iterator, properties, parameters)} `;
+		}
+		str += seconds;
+		return [str];
 	}
 
 	copy(command: MapObjectCommand): void {
