@@ -18,9 +18,10 @@ type Props = {
 	max: number;
 	step?: number;
 	disabled?: boolean;
+	fillWidth?: boolean;
 };
 
-function Slider({ value, onChange, min, max, step = 1, disabled = false }: Props) {
+function Slider({ value, onChange, min, max, step = 1, disabled = false, fillWidth = false }: Props) {
 	const getWidth = () => (Math.abs(min) + Math.abs(max)) / step;
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +37,7 @@ function Slider({ value, onChange, min, max, step = 1, disabled = false }: Props
 			step={step}
 			value={value}
 			onChange={handleChange}
-			style={{ width: `${getWidth()}px` }}
+			style={{ width: fillWidth ? '100%' : `${getWidth()}px` }}
 			disabled={disabled}
 		/>
 	);

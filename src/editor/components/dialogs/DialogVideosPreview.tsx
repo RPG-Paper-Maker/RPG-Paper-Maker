@@ -140,8 +140,8 @@ function DialogVideosPreview({
 				<Flex column spaced>
 					<Flex one />
 					<Flex spaced centerH>
-						<Button icon={<FaPause />} disabled />
 						<Button icon={<FaStop />} disabled />
+						<Button icon={<FaPause />} disabled />
 						<Button icon={<FaPlay />} disabled />
 					</Flex>
 				</Flex>

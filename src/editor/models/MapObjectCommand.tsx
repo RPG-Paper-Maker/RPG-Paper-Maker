@@ -418,6 +418,10 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.OPEN_SAVES_MENU:
 			case EVENT_COMMAND_KIND.TITLE_SCREEN:
 			case EVENT_COMMAND_KIND.GAME_OVER:
+			case EVENT_COMMAND_KIND.PLAY_MUSIC:
+			case EVENT_COMMAND_KIND.PLAY_BACKGROUND_SOUND:
+			case EVENT_COMMAND_KIND.PLAY_SOUND:
+			case EVENT_COMMAND_KIND.PLAY_MUSIC_EFFECT:
 				return MapObjectCommand.COLOR_BLUE;
 		}
 		return 'white';
@@ -554,6 +558,18 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.ENTER_A_NAME_MENU:
 				texts = this.toStringEnterANameMenu(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.PLAY_MUSIC:
+				texts = this.toStringPlaySong(iterator, parameters, properties, SONG_KIND.MUSIC);
+				break;
+			case EVENT_COMMAND_KIND.PLAY_BACKGROUND_SOUND:
+				texts = this.toStringPlaySong(iterator, parameters, properties, SONG_KIND.BACKGROUND_SOUND);
+				break;
+			case EVENT_COMMAND_KIND.PLAY_SOUND:
+				texts = this.toStringPlaySong(iterator, parameters, properties, SONG_KIND.SOUND);
+				break;
+			case EVENT_COMMAND_KIND.PLAY_MUSIC_EFFECT:
+				texts = this.toStringPlaySong(iterator, parameters, properties, SONG_KIND.MUSIC_EFFECT);
 				break;
 		}
 		return (
@@ -1445,6 +1461,31 @@ class MapObjectCommand extends Base {
 			`${i18next.t('hero.with.instance.id')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
 		);
 		texts.push(`${i18next.t('max.characters')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
+		return texts;
+	}
+
+	toStringPlaySong(iterator: ITERATOR, properties: Base[], parameters: Base[], kind: SONG_KIND): string[] {
+		const texts = [];
+		const isActivated = Utils.initializeBoolCommand(this.command, iterator);
+		const list = Project.current!.songs.getList(kind);
+		const idNumber = this.toStringDynamicValue(iterator, properties, parameters, list);
+		const id = Base.getByID(list, this.command[iterator.i++] as number)?.toString() ?? '';
+		const volume = this.toStringDynamicValue(iterator, properties, parameters);
+		texts.push(
+			`${isActivated ? `${i18next.t('with.id').toLowerCase()} ${idNumber}` : id} ${i18next
+				.t('with.volume')
+				.toLowerCase()}: ${volume}`
+		);
+		const isStart = Utils.initializeBoolCommand(this.command, iterator);
+		const start = this.toStringDynamicValue(iterator, properties, parameters);
+		if (isStart) {
+			texts.push(`${i18next.t('start')}: ${start}`);
+		}
+		const isEnd = Utils.initializeBoolCommand(this.command, iterator);
+		const end = this.toStringDynamicValue(iterator, properties, parameters);
+		if (isEnd) {
+			texts.push(`${i18next.t('end')}: ${end}`);
+		}
 		return texts;
 	}
 

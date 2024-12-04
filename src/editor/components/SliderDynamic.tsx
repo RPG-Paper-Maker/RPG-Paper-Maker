@@ -22,9 +22,11 @@ type Props = {
 	min: number;
 	max: number;
 	step?: number;
+	isVertical?: boolean;
+	unit?: string;
 };
 
-function SliderDynamic({ dynamic, min, max, step }: Props) {
+function SliderDynamic({ dynamic, min, max, step, isVertical = false, unit }: Props) {
 	const [valueSlide, setValueSlide] = useStateNumber();
 	const [disabled, setDisabled] = useStateBool();
 
@@ -46,7 +48,7 @@ function SliderDynamic({ dynamic, min, max, step }: Props) {
 	};
 
 	return (
-		<Flex spaced centerV>
+		<Flex column={isVertical} spaced centerV={!isVertical}>
 			<Slider
 				value={valueSlide}
 				onChange={handleChangeValueSlide}
@@ -54,15 +56,19 @@ function SliderDynamic({ dynamic, min, max, step }: Props) {
 				max={max}
 				step={step}
 				disabled={disabled}
+				fillWidth
 			/>
-			<DynamicValueSelector
-				value={dynamic}
-				optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
-				onChangeKind={handleChangeKind}
-				onChangeValue={handleChangeValue}
-				min={min}
-				max={max}
-			/>
+			<Flex spaced centerV>
+				<DynamicValueSelector
+					value={dynamic}
+					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+					onChangeKind={handleChangeKind}
+					onChangeValue={handleChangeValue}
+					min={min}
+					max={max}
+				/>
+				{unit}
+			</Flex>
 		</Flex>
 	);
 }

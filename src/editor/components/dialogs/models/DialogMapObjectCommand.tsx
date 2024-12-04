@@ -32,6 +32,7 @@ import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
 import DialogCommandMoveCamera from '../commands/DialogCommandMoveCamera';
 import DialogCommandMoveObject from '../commands/DialogCommandMoveObject';
 import DialogCommandPlayAVideo from '../commands/DialogCommandPlayAVideo';
+import DialogCommandPlaySong from '../commands/DialogCommandPlaySong';
 import DialogCommandRemoveAPicture from '../commands/DialogCommandRemoveAPicture';
 import DialogCommandRemoveObjectFromMap from '../commands/DialogCommandRemoveObjectFromMap';
 import DialogCommandSetDialogBoxOptions from '../commands/DialogCommandSetDialogBoxOptions';
@@ -353,6 +354,11 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandStartShopMenu isRestock {...options} />;
 			case EVENT_COMMAND_KIND.ENTER_A_NAME_MENU:
 				return <DialogCommandEnterANameMenu {...options} />;
+			case EVENT_COMMAND_KIND.PLAY_MUSIC:
+			case EVENT_COMMAND_KIND.PLAY_BACKGROUND_SOUND:
+			case EVENT_COMMAND_KIND.PLAY_SOUND:
+			case EVENT_COMMAND_KIND.PLAY_MUSIC_EFFECT:
+				return <DialogCommandPlaySong commandKind={selectedCommand} {...options} />;
 			default:
 				return null;
 		}

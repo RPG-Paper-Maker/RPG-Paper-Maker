@@ -180,7 +180,7 @@ function PanelAssetsPreviewer({
 							</Flex>
 						</>
 					)}
-					<Flex one column zeroWidth>
+					<Flex one column zeroWidth spacedLarge>
 						{selectedItem && (
 							<>
 								<Flex one className='scrollable'>

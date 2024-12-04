@@ -32,6 +32,7 @@
 	},
 	"devDependencies": {
 		"@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+		"@types/howler": "^2.2.12",
 		"electron": "^33.2.1",
 		"eslint": "^8.57.0",
 		"eslint-config-react-app": "^7.0.1",
