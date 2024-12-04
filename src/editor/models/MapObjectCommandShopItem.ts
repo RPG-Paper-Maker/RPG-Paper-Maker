@@ -112,10 +112,8 @@ class MapObjectCommandShopItem extends Base {
 		switch (this.selectionItem) {
 			case ITEM_KIND.ITEM:
 				return this.itemID.toString(Project.current!.items.list);
-				break;
 			case ITEM_KIND.WEAPON:
 				return this.weaponID.toString(Project.current!.weapons.list);
-				break;
 			case ITEM_KIND.ARMOR:
 				return this.armorID.toString(Project.current!.armors.list);
 			default:

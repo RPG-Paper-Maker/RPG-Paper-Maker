@@ -26,6 +26,7 @@ import DialogCommandCreateObjectInMap from '../commands/DialogCommandCreateObjec
 import DialogCommandDisplayAnAnimation from '../commands/DialogCommandDisplayAnAnimation';
 import DialogCommandDisplayAPicture from '../commands/DialogCommandDisplayAPicture';
 import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
+import DialogCommandEnterANameMenu from '../commands/DialogCommandEnterANameMenu';
 import DialogCommandFlashScreen from '../commands/DialogCommandFlashScreen';
 import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
 import DialogCommandMoveCamera from '../commands/DialogCommandMoveCamera';
@@ -350,6 +351,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandStartShopMenu {...options} />;
 			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
 				return <DialogCommandStartShopMenu isRestock {...options} />;
+			case EVENT_COMMAND_KIND.ENTER_A_NAME_MENU:
+				return <DialogCommandEnterANameMenu {...options} />;
 			default:
 				return null;
 		}

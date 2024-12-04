@@ -5,6 +5,7 @@ export * from './DialogCommandChangeWeather';
 export * from './DialogCommandDisplayAnAnimation';
 export * from './DialogCommandDisplayAPicture';
 export * from './DialogCommandDisplayChoice';
+export * from './DialogCommandEnterANameMenu';
 export * from './DialogCommandFlashScreen';
 export * from './DialogCommandInputNumber';
 export * from './DialogCommandMoveCamera';

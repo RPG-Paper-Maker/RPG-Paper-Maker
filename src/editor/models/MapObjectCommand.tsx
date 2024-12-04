@@ -406,6 +406,7 @@ class MapObjectCommand extends Base {
 				return MapObjectCommand.COLOR_PURPLE;
 			case EVENT_COMMAND_KIND.START_SHOP_MENU:
 			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
+			case EVENT_COMMAND_KIND.ENTER_A_NAME_MENU:
 				return MapObjectCommand.COLOR_BLUE;
 		}
 		return 'white';
@@ -535,6 +536,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
 				texts = this.toStringStartShopMenu(iterator, parameters, properties, true);
+				break;
+			case EVENT_COMMAND_KIND.ENTER_A_NAME_MENU:
+				texts = this.toStringEnterANameMenu(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1417,6 +1421,15 @@ class MapObjectCommand extends Base {
 			texts.push(`${i18next.t('buy.only')}: ${buyOnly}`);
 		}
 		texts.push(`${i18next.t('shop.id')}: ${shopID}`);
+		return texts;
+	}
+
+	toStringEnterANameMenu(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts = [''];
+		texts.push(
+			`${i18next.t('hero.with.instance.id')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
+		);
+		texts.push(`${i18next.t('max.characters')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
 		return texts;
 	}
 
