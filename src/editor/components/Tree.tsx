@@ -29,9 +29,11 @@ import { Inputs } from '../managers';
 import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
+import DialogCost from './dialogs/models/DialogCost';
 import DialogLocalization from './dialogs/models/DialogLocalization';
 import DialogMapObjectCommand from './dialogs/models/DialogMapObjectCommand';
 import DialogMapObjectCommandMove from './dialogs/models/DialogMapObjectCommandMove';
+import DialogMapObjectCommandShopItem from './dialogs/models/DialogMapObjectCommandShopItem';
 import DialogMapObjectEvent from './dialogs/models/DialogMapObjectEvent';
 import DialogMapObjectParameter from './dialogs/models/DialogMapObjectParameter';
 import DialogMapObjectProperty from './dialogs/models/DialogMapObjectProperty';
@@ -44,6 +46,7 @@ import TreeItem from './TreeItem';
 type Props = {
 	list: Node[];
 	constructorType?: typeof Model.Base;
+	defaultNewModel?: Model.Base;
 	cannotAdd?: boolean;
 	cannotEdit?: boolean;
 	cannotDragDrop?: boolean;
@@ -77,6 +80,7 @@ export const TREES_MIN_WIDTH = 150;
 function Tree({
 	list,
 	constructorType = Model.Base,
+	defaultNewModel,
 	cannotAdd = false,
 	cannotEdit = false,
 	cannotDragDrop = false,
@@ -214,8 +218,13 @@ function Tree({
 	};
 
 	const handleNewItem = async () => {
-		const model = new constructorType();
-		model.applyDefault();
+		let model: Model.Base;
+		if (defaultNewModel) {
+			model = defaultNewModel.clone();
+		} else {
+			model = new constructorType();
+			model.applyDefault();
+		}
 		model.id = Node.getNewID(list);
 		setNewModel(model);
 		setIsOpenDialog(true);
@@ -752,6 +761,10 @@ function Tree({
 					return <DialogLocalization {...options} />;
 				case Model.MapObjectCommandMove:
 					return <DialogMapObjectCommandMove {...options} />;
+				case Model.MapObjectCommandShopItem:
+					return <DialogMapObjectCommandShopItem {...options} />;
+				case Model.Cost:
+					return <DialogCost {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

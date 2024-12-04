@@ -1,6 +1,9 @@
 export * from './Animations';
+export * from './Armors';
+export * from './BattleSystem';
 export * from './CommonEvents';
 export * from './EngineSettings';
+export * from './Items';
 export * from './Keyboard';
 export * from './Languages';
 export * from './Pictures';
@@ -13,3 +16,4 @@ export * from './Tilesets';
 export * from './TreeMaps';
 export * from './Variables';
 export * from './Videos';
+export * from './Weapons';

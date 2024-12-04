@@ -134,6 +134,7 @@ class Base extends Serializable {
 	public static SQUARE_STEP_OPTIONS = Base.mapListIndex(['square', 'step']);
 	public static SQUARES_PIXELS_OPTIONS = Base.mapListIndex(['square.s', 'pixel.s']);
 	public static TOP_LEFT_CENTER_OPTIONS = Base.mapListIndex(['top.left', 'center']);
+	public static DAMAGE_KIND_OPTIONS = Base.mapListIndex(['statistic', 'currency', 'variable']);
 
 	public id!: number;
 	public name!: string;

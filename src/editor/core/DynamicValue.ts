@@ -41,6 +41,12 @@ class DynamicValue extends Serializable {
 		return dynamic;
 	}
 
+	static createCommand(command: MapObjectCommandType[], iterator: ITERATOR, active = false) {
+		const dynamic = new DynamicValue();
+		dynamic.updateCommand(command, iterator, active);
+		return dynamic;
+	}
+
 	update(kind: DYNAMIC_VALUE_KIND, value: unknown) {
 		this.kind = kind;
 		this.value = value;
@@ -90,7 +96,13 @@ class DynamicValue extends Serializable {
 		return this.kind === dynamic.kind && this.value === dynamic.value;
 	}
 
-	toString(): string {
+	isFixNumberValue(): boolean {
+		return [DYNAMIC_VALUE_KIND.DATABASE, DYNAMIC_VALUE_KIND.NUMBER, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL].includes(
+			this.kind
+		);
+	}
+
+	toString(database: Model.Base[] = []): string {
 		switch (this.kind) {
 			case DYNAMIC_VALUE_KIND.DEFAULT:
 				return i18next.t('default');
@@ -109,6 +121,8 @@ class DynamicValue extends Serializable {
 					Model.Base.getByID(Project.current!.keyboard.list, this.value as number)?.toStringNameID() ||
 					this.value
 				}`;
+			case DYNAMIC_VALUE_KIND.DATABASE:
+				return Model.Base.getByID(database, this.value as number)?.toStringNameID() ?? '' + this.value;
 			default:
 				return '' + this.value;
 		}

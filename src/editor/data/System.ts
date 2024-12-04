@@ -37,6 +37,7 @@ class System extends Serializable {
 	public windowSkins!: Model.WindowSkin[];
 	public cameraProperties!: Model.CameraProperty[];
 	public skyboxes!: Model.Skybox[];
+	public currencies!: Model.Currency[];
 	public json!: JSONType; // TEMP, will be removed later
 
 	public static readonly bindings: BindingType[] = [
@@ -60,6 +61,7 @@ class System extends Serializable {
 		['windowSkins', 'wskins', [], BINDING.LIST, Model.WindowSkin],
 		['cameraProperties', 'cp', [], BINDING.LIST, Model.CameraProperty],
 		['skyboxes', 'sb', [], BINDING.LIST, Model.Skybox],
+		['currencies', 'currencies', [], BINDING.LIST, Model.Currency],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

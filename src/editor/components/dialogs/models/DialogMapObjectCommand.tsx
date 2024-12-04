@@ -37,6 +37,7 @@ import DialogCommandSetDialogBoxOptions from '../commands/DialogCommandSetDialog
 import DialogCommandSetMoveTurnAPicture from '../commands/DialogCommandSetMoveTurnAPicture';
 import DialogCommandShakeScreen from '../commands/DialogCommandShakeScreen';
 import DialogCommandShowText from '../commands/DialogCommandShowText';
+import DialogCommandStartShopMenu from '../commands/DialogCommandStartShopMenu';
 import DialogCommandSwitchTexture from '../commands/DialogCommandSwitchTexture';
 import DialogCommandTeleportObject from '../commands/DialogCommandTeleportObject';
 import DialogCommandWait from '../commands/DialogCommandWait';
@@ -345,6 +346,10 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandRemoveAPicture {...options} />;
 			case EVENT_COMMAND_KIND.PLAY_A_VIDEO:
 				return <DialogCommandPlayAVideo {...options} />;
+			case EVENT_COMMAND_KIND.START_SHOP_MENU:
+				return <DialogCommandStartShopMenu {...options} />;
+			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
+				return <DialogCommandStartShopMenu isRestock {...options} />;
 			default:
 				return null;
 		}

@@ -64,6 +64,7 @@ import { Scene } from '../Editor';
 import { Base } from './Base';
 import { Localization } from './Localization';
 import { MapObjectCommandMove } from './MapObjectCommandMove';
+import { MapObjectCommandShopItem } from './MapObjectCommandShopItem';
 
 export type MapObjectCommandType = number | string | boolean;
 
@@ -403,6 +404,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
 				return MapObjectCommand.COLOR_PURPLE;
+			case EVENT_COMMAND_KIND.START_SHOP_MENU:
+			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
+				return MapObjectCommand.COLOR_BLUE;
 		}
 		return 'white';
 	}
@@ -525,6 +529,12 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.PLAY_A_VIDEO:
 				texts = this.toStringPlayAVideo(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.START_SHOP_MENU:
+				texts = this.toStringStartShopMenu(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
+				texts = this.toStringStartShopMenu(iterator, parameters, properties, true);
 				break;
 		}
 		return (
@@ -1388,6 +1398,25 @@ class MapObjectCommand extends Base {
 			default:
 				break;
 		}
+		return texts;
+	}
+
+	toStringStartShopMenu(iterator: ITERATOR, properties: Base[], parameters: Base[], isRestock = false): string[] {
+		const texts = [''];
+		let buyOnly = '';
+		if (!isRestock) {
+			buyOnly = this.toStringDynamicValue(iterator, properties, parameters);
+		}
+		const shopID = this.toStringDynamicValue(iterator, properties, parameters);
+		while (iterator.i < this.command.length) {
+			const shopItem = new MapObjectCommandShopItem();
+			shopItem.initialize(this.command, iterator);
+			texts.push(shopItem.toString());
+		}
+		if (!isRestock) {
+			texts.push(`${i18next.t('buy.only')}: ${buyOnly}`);
+		}
+		texts.push(`${i18next.t('shop.id')}: ${shopID}`);
 		return texts;
 	}
 

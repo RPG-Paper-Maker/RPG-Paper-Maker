@@ -14,7 +14,7 @@ import { Base } from './Base';
 import { MapObjectCommandType } from './MapObjectCommand';
 
 class Localization extends Base {
-	public names: Map<number, string> = new Map();
+	public names: Map<string, string> = new Map();
 
 	public static readonly bindings: BindingType[] = [['names', 'names', undefined, BINDING.MAP]];
 
@@ -27,12 +27,12 @@ class Localization extends Base {
 		localization.id = id;
 		localization.name = name;
 		localization.names = new Map();
-		localization.names.set(1, name);
+		localization.names.set('1', name);
 		return localization;
 	}
 
 	initializeCommand(command: MapObjectCommandType[], iterator: ITERATOR) {
-		const id = command[iterator.i++] as number;
+		const id = command[iterator.i++] as string;
 		const name = command[iterator.i++] as string;
 		this.names.set(id, name);
 	}
@@ -45,7 +45,7 @@ class Localization extends Base {
 	}
 
 	getName(): string {
-		return this.names.get(1) ?? '';
+		return this.names.get('1') ?? '';
 	}
 
 	copy(localization: Localization, additionnalBinding: BindingType[] = []): void {

@@ -32,6 +32,10 @@ class Project {
 	public tilesets = new Data.Tilesets();
 	public languages = new Data.Languages();
 	public animations = new Data.Animations();
+	public items = new Data.Items();
+	public weapons = new Data.Weapons();
+	public armors = new Data.Armors();
+	public battleSystem = new Data.BattleSystem();
 	public currentMapObjectStates: Node[] = [];
 	public currentMapObjectEvents: Node[] = [];
 	public currentMapObjectProperties: Node[] = [];
@@ -69,7 +73,7 @@ class Project {
 		await this.videos.load();
 		await this.settings.load();
 		await this.systems.load();
-		this.systems.projectName.names.set(1, projectName);
+		this.systems.projectName.names.set('1', projectName);
 		Project.SQUARE_SIZE = this.systems.SQUARE_SIZE;
 		await this.treeMaps.load();
 		await this.specialElements.load();
@@ -77,6 +81,10 @@ class Project {
 		await this.keyboard.load();
 		await this.tilesets.load();
 		await this.animations.load();
+		await this.items.load();
+		await this.weapons.load();
+		await this.armors.load();
+		await this.battleSystem.load();
 	}
 
 	async save() {

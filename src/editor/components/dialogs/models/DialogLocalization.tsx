@@ -36,7 +36,7 @@ function DialogLocalization({ isOpen, setIsOpen, model, onAccept, onReject }: Pr
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [name, setName] = useStateString();
 	const [tabTitles, setTabTitles] = useState<Model.Base[]>([]);
-	const [names, setNames] = useState<Map<number, string>>(new Map());
+	const [names, setNames] = useState<Map<string, string>>(new Map());
 
 	const initialize = () => {
 		setName(localization.getName());
@@ -47,13 +47,13 @@ function DialogLocalization({ isOpen, setIsOpen, model, onAccept, onReject }: Pr
 	const handleChangeAllNames = (n: string) => {
 		setName(n);
 		for (const language of Project.current!.languages.list) {
-			names.set(language.id, n);
+			names.set('' + language.id, n);
 		}
 		setNames(new Map(names));
 	};
 
 	const handleChangeName = (id: number, n: string) => {
-		names.set(id, n);
+		names.set('' + id, n);
 		setNames(new Map(names));
 	};
 
@@ -81,7 +81,10 @@ function DialogLocalization({ isOpen, setIsOpen, model, onAccept, onReject }: Pr
 		Project.current!.languages.list.map((language) => (
 			<Flex key={language.id} spaced>
 				{t('name')}:
-				<InputText value={names.get(language.id) ?? ''} onChange={(n) => handleChangeName(language.id, n)} />
+				<InputText
+					value={names.get('' + language.id) ?? ''}
+					onChange={(n) => handleChangeName(language.id, n)}
+				/>
 			</Flex>
 		));
 

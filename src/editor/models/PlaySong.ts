@@ -23,15 +23,22 @@ class PlaySong extends Base {
 	public end!: DynamicValue;
 
 	public static bindings: BindingType[] = [
-		['volume', 'v', undefined, BINDING.DYNAMIC_VALUE],
+		['volume', 'v', undefined, BINDING.DYNAMIC_VALUE, DynamicValue],
 		['isStart', 'is', undefined, BINDING.BOOLEAN],
-		['start', 's', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE],
+		['start', 's', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE, DynamicValue],
 		['isEnd', 'ie', undefined, BINDING.BOOLEAN],
-		['start', 'e', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE],
+		['start', 'e', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE, DynamicValue],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	static createPlaySong(kind: SONG_KIND) {
+		const song = new PlaySong();
+		song.kind = kind;
+		song.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
+		return song;
 	}
 
 	copy(playSong: PlaySong): void {
