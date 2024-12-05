@@ -14,6 +14,7 @@ export * from './CommonSkillItem';
 export * from './Cost';
 export * from './CreateParameter';
 export * from './Currency';
+export * from './Detection';
 export * from './Effect';
 export * from './FontName';
 export * from './FontSize';

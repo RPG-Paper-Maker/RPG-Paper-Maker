@@ -9,11 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
+import { BINDING, BindingType, DYNAMIC_VALUE_KIND, ITERATOR, JSONType } from '../common';
 import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Base } from './Base';
 import { CommonEvent } from './CommonEvent';
+import { MapObjectCommandType } from './MapObjectCommand';
 import { MapObjectParameter } from './MapObjectParameter';
 import { MapObjectReaction } from './MapObjectReaction';
 
@@ -55,10 +56,21 @@ class MapObjectEvent extends Base {
 		return parameters;
 	}
 
-	updateParameters() {
-		if (Project.current) {
-			this.parameters = MapObjectEvent.getDefaultParameters(this.id, this.isSystem, this.parameters);
+	initialize(list: MapObjectCommandType[], iterator: ITERATOR) {
+		this.isSystem = list[iterator.i++] === 0;
+		this.id = list[iterator.i++] as number;
+		this.parameters = [];
+		while (iterator.i < list.length) {
+			const paramID = list[iterator.i++] as number;
+			const v = new DynamicValue();
+			v.updateCommand(list, iterator);
+			this.parameters.push(MapObjectParameter.create(paramID, '', undefined, v));
 		}
+		this.updateParameters();
+	}
+
+	updateParameters() {
+		this.parameters = MapObjectEvent.getDefaultParameters(this.id, this.isSystem, this.parameters);
 	}
 
 	getName(): string {

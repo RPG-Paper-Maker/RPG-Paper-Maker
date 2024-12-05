@@ -57,6 +57,7 @@ class MapObjectParameter extends Base {
 
 	copy(parameter: MapObjectParameter, additionnalBinding: BindingType[] = []): void {
 		super.copy(parameter, MapObjectParameter.getBindings(additionnalBinding));
+		this.parameter = parameter.parameter ? parameter.parameter.clone() : null;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

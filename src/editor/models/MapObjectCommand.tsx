@@ -65,6 +65,7 @@ import { Base } from './Base';
 import { Localization } from './Localization';
 import { MapObjectCommandMove } from './MapObjectCommandMove';
 import { MapObjectCommandShopItem } from './MapObjectCommandShopItem';
+import { MapObjectEvent } from './MapObjectEvent';
 
 export type MapObjectCommandType = number | string | boolean;
 
@@ -425,6 +426,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.STOP_MUSIC:
 			case EVENT_COMMAND_KIND.STOP_BACKGROUND_SOUND:
 			case EVENT_COMMAND_KIND.STOP_A_SOUND:
+			case EVENT_COMMAND_KIND.SEND_EVENT:
 				return MapObjectCommand.COLOR_BLUE;
 		}
 		return 'white';
@@ -578,6 +580,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.STOP_BACKGROUND_SOUND:
 			case EVENT_COMMAND_KIND.STOP_A_SOUND:
 				texts = this.toStringStopSong(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.SEND_EVENT:
+				texts = this.toStringSendEvent(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1504,6 +1509,50 @@ class MapObjectCommand extends Base {
 			str += `${i18next.t('sound.id')} ${this.toStringDynamicValue(iterator, properties, parameters)} `;
 		}
 		str += seconds;
+		return [str];
+	}
+
+	toStringSendEvent(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		let str = `${i18next.t('to').toLowerCase()} `;
+		switch (this.command[iterator.i++]) {
+			case 0:
+				str += i18next.t('all').toLowerCase();
+				break;
+			case 1: {
+				str += `${i18next.t('detection').toLowerCase()} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.systems.detections
+				)}`;
+				const options = [];
+				if (Utils.initializeBoolCommand(this.command, iterator)) {
+					options.push(i18next.t('sender.cant.receive').toLocaleLowerCase());
+				}
+				if (Utils.initializeBoolCommand(this.command, iterator)) {
+					options.push(i18next.t('only.the.closest').toLocaleLowerCase());
+				}
+				if (options.length > 0) {
+					str += ` [${options.join(', ')}]`;
+				}
+				break;
+			}
+			case 2:
+				str += `${i18next.t('object').toLowerCase()} ${this.toStringDynamicObject(
+					iterator,
+					properties,
+					parameters
+				)}`;
+				break;
+		}
+		const event = new MapObjectEvent();
+		event.initialize(this.command, iterator);
+		event.name =
+			Base.getByID(
+				event.isSystem ? Project.current!.commonEvents.eventsSystem : Project.current!.commonEvents.eventsUser,
+				event.id
+			)?.name ?? '';
+		str += ` ${i18next.t('with.event').toLowerCase()} ${event.toString()}`;
 		return [str];
 	}
 
