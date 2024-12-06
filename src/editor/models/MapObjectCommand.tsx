@@ -427,6 +427,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.STOP_BACKGROUND_SOUND:
 			case EVENT_COMMAND_KIND.STOP_A_SOUND:
 			case EVENT_COMMAND_KIND.SEND_EVENT:
+			case EVENT_COMMAND_KIND.CHANGE_STATE:
 				return MapObjectCommand.COLOR_BLUE;
 		}
 		return 'white';
@@ -583,6 +584,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.SEND_EVENT:
 				texts = this.toStringSendEvent(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.CHANGE_STATE:
+				texts = this.toStringChangeState(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1554,6 +1558,55 @@ class MapObjectCommand extends Base {
 			)?.name ?? '';
 		str += ` ${i18next.t('with.event').toLowerCase()} ${event.toString()}`;
 		return [str];
+	}
+
+	toStringChangeState(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		let mapID = '';
+		switch (this.command[iterator.i + 1]) {
+			case -1:
+				mapID = i18next.t('this.map');
+				iterator.i += 2;
+				break;
+			default:
+				mapID = this.toStringDynamicValue(iterator, properties, parameters);
+				break;
+		}
+		let objectID = '';
+		switch (this.command[iterator.i + 1]) {
+			case -1:
+				objectID = i18next.t('this.object');
+				iterator.i += 2;
+				break;
+			case 0:
+				objectID = i18next.t('hero');
+				iterator.i += 2;
+				break;
+			default:
+				objectID = this.toStringDynamicValue(iterator, properties, parameters);
+				break;
+		}
+		const stateID = this.toStringDynamicValue(
+			iterator,
+			properties,
+			parameters,
+			Project.current!.commonEvents.states
+		);
+		let operation = '';
+		switch (this.command[iterator.i++]) {
+			case 0:
+				operation += i18next.t('pass.into');
+				break;
+			case 1:
+				operation += i18next.t('add');
+				break;
+			case 2:
+				operation += i18next.t('remove');
+				break;
+		}
+		return [
+			`${i18next.t('map.id')} ${mapID}, ${i18next.t('object.id')} ${objectID}`,
+			`${operation} ${i18next.t('state.id').toLowerCase()} ${stateID}`,
+		];
 	}
 
 	copy(command: MapObjectCommand): void {

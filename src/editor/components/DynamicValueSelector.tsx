@@ -224,7 +224,7 @@ function DynamicValueSelector({
 		value.value = id;
 	};
 
-	const handleChangeDetabase = (id: number) => {
+	const handleChangeDatabase = (id: number) => {
 		setValueDatabase(id);
 		value.value = id;
 	};
@@ -355,7 +355,7 @@ function DynamicValueSelector({
 				return (
 					<Dropdown
 						selectedID={valueDatabase}
-						onChange={handleChangeDetabase}
+						onChange={handleChangeDatabase}
 						options={databaseOptions}
 						disabled={disabled}
 						displayIDs

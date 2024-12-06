@@ -21,6 +21,7 @@ import Tab from '../../Tab';
 import DialogCommandChangeChronometer from '../commands/DialogCommandChangeChronometer';
 import DialogCommandChangeMapProperties from '../commands/DialogCommandChangeMapProperties';
 import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreenTone';
+import DialogCommandChangeState from '../commands/DialogCommandChangeState';
 import DialogCommandChangeWeather from '../commands/DialogCommandChangeWeather';
 import DialogCommandCreateObjectInMap from '../commands/DialogCommandCreateObjectInMap';
 import DialogCommandDisplayAnAnimation from '../commands/DialogCommandDisplayAnAnimation';
@@ -367,6 +368,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandStopSong commandKind={selectedCommand} {...options} />;
 			case EVENT_COMMAND_KIND.SEND_EVENT:
 				return <DialogCommandSendEvent {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_STATE:
+				return <DialogCommandChangeState {...options} />;
 			default:
 				return null;
 		}
