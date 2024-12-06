@@ -29,11 +29,11 @@ type Props = {
 	setSelectionType: (v: number) => void;
 };
 
-function PanelOperations({ selectionType, setSelectionType }: Props) {
+function PanelOperation({ selectionType, setSelectionType }: Props) {
 	const { t } = useTranslation();
 
 	return (
-		<Groupbox title={t('operations')}>
+		<Groupbox title={t('operation')}>
 			<RadioGroup selected={selectionType} onChange={setSelectionType}>
 				<Flex spaced>
 					<RadioButton value={SELECTION_OPERATION_TYPE.EQUALS}>(=) {t('equals')}</RadioButton>
@@ -48,4 +48,4 @@ function PanelOperations({ selectionType, setSelectionType }: Props) {
 	);
 }
 
-export default PanelOperations;
+export default PanelOperation;

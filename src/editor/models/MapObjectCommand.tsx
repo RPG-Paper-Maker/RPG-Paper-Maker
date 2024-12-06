@@ -428,6 +428,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.STOP_A_SOUND:
 			case EVENT_COMMAND_KIND.SEND_EVENT:
 			case EVENT_COMMAND_KIND.CHANGE_STATE:
+			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
 				return MapObjectCommand.COLOR_BLUE;
 		}
 		return 'white';
@@ -588,6 +589,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_STATE:
 				texts = this.toStringChangeState(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
+				texts = this.toStringChangeProperty(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -675,7 +679,7 @@ class MapObjectCommand extends Base {
 			case 2:
 				return '-';
 			case 3:
-				return '=';
+				return '*';
 			case 4:
 				return '/';
 			case 5:
@@ -1607,6 +1611,13 @@ class MapObjectCommand extends Base {
 			`${i18next.t('map.id')} ${mapID}, ${i18next.t('object.id')} ${objectID}`,
 			`${operation} ${i18next.t('state.id').toLowerCase()} ${stateID}`,
 		];
+	}
+
+	toStringChangeProperty(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const propertyID = this.toStringDynamicValue(iterator, properties, parameters, properties);
+		const operation = this.toStringOperation(iterator);
+		const newValue = this.toStringDynamicValue(iterator, properties, parameters);
+		return [`${i18next.t('property.id')} ${propertyID} ${operation} ${newValue}`];
 	}
 
 	copy(command: MapObjectCommand): void {

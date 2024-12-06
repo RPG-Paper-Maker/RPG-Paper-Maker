@@ -1,0 +1,114 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2024 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { useLayoutEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
+import { Project } from '../../../core';
+import { Model } from '../../../Editor';
+import useStateBool from '../../../hooks/useStateBool';
+import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
+import useStateNumber from '../../../hooks/useStateNumber';
+import { MapObjectCommandType } from '../../../models';
+import DynamicValueSelector from '../../DynamicValueSelector';
+import Flex from '../../Flex';
+import Groupbox from '../../Groupbox';
+import PanelOperation, { SELECTION_OPERATION_TYPE } from '../../panels/PanelOperation';
+import Dialog from '../Dialog';
+import FooterCancelOK from '../footers/FooterCancelOK';
+
+type Props = {
+	isOpen: boolean;
+	setIsOpen: (b: boolean) => void;
+	list?: MapObjectCommandType[];
+	onAccept: (command: Model.MapObjectCommand) => void;
+	onReject: () => void;
+};
+
+function DialogCommandChangeProperty({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+	const { t } = useTranslation();
+
+	const [propertyID] = useStateDynamicValue();
+	const [selectionOperationType, setSelectionOperationType] = useStateNumber();
+	const [newValue] = useStateDynamicValue();
+	const [, setTrigger] = useStateBool();
+
+	const properties = Project.current!.currentMapObjectProperties.map((node) => node.content);
+
+	const initialize = () => {
+		if (list) {
+			const iterator = Utils.generateIterator();
+			propertyID.updateCommand(list, iterator);
+			setSelectionOperationType(list[iterator.i++] as SELECTION_OPERATION_TYPE);
+			newValue.updateCommand(list, iterator);
+		} else {
+			propertyID.updateToDefaultDatabase();
+			setSelectionOperationType(SELECTION_OPERATION_TYPE.EQUALS);
+			newValue.updateToDefaultNumber(0, true);
+		}
+		setTrigger((v) => !v);
+	};
+
+	const handleAccept = async () => {
+		setIsOpen(false);
+		const newList: MapObjectCommandType[] = [];
+		propertyID.getCommand(newList);
+		newList.push(selectionOperationType);
+		newValue.getCommand(newList);
+		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHANGE_PROPERTY, newList));
+	};
+
+	const handleReject = async () => {
+		setIsOpen(false);
+		onReject();
+	};
+
+	useLayoutEffect(() => {
+		if (isOpen) {
+			initialize();
+		}
+		// eslint-disable-next-line
+	}, [isOpen]);
+
+	return (
+		<Dialog
+			title={`${t('change.property')}...`}
+			isOpen={isOpen}
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			onClose={handleReject}
+		>
+			<Flex column spacedLarge>
+				<Groupbox title={t('selection')}>
+					<Flex spaced centerV>
+						<div>{t('property.id')}:</div>
+						<DynamicValueSelector
+							value={propertyID}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+							databaseOptions={properties}
+						/>
+					</Flex>
+				</Groupbox>
+				<PanelOperation selectionType={selectionOperationType} setSelectionType={setSelectionOperationType} />
+				<Groupbox title={t('value')}>
+					<Flex spaced centerV>
+						<div>{t('new.value')}:</div>
+						<DynamicValueSelector
+							value={newValue}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
+						/>
+					</Flex>
+				</Groupbox>
+			</Flex>
+		</Dialog>
+	);
+}
+
+export default DialogCommandChangeProperty;

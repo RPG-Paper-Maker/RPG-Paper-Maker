@@ -153,7 +153,7 @@ function DialogCommandChangeState({ isOpen, setIsOpen, list, onAccept, onReject 
 					</Form>
 				</Groupbox>
 				<Groupbox title={t('selection')}>
-					<Flex spaced>
+					<Flex spaced centerV>
 						<div>{t('state.id')}:</div>
 						<DynamicValueSelector
 							value={stateID}

@@ -20,6 +20,7 @@ import Groupbox from '../../Groupbox';
 import Tab from '../../Tab';
 import DialogCommandChangeChronometer from '../commands/DialogCommandChangeChronometer';
 import DialogCommandChangeMapProperties from '../commands/DialogCommandChangeMapProperties';
+import DialogCommandChangeProperty from '../commands/DialogCommandChangeProperty';
 import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreenTone';
 import DialogCommandChangeState from '../commands/DialogCommandChangeState';
 import DialogCommandChangeWeather from '../commands/DialogCommandChangeWeather';
@@ -370,6 +371,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandSendEvent {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_STATE:
 				return <DialogCommandChangeState {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
+				return <DialogCommandChangeProperty {...options} />;
 			default:
 				return null;
 		}

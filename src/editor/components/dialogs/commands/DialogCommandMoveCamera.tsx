@@ -23,7 +23,7 @@ import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
-import PanelOperations, { SELECTION_OPERATION_TYPE } from '../../panels/PanelOperations';
+import PanelOperation, { SELECTION_OPERATION_TYPE } from '../../panels/PanelOperation';
 import PanelWaitTime, { PanelWaitTimeRef } from '../../panels/PanelWaitTime';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
@@ -173,7 +173,7 @@ function DialogCommandMoveCamera({ isOpen, setIsOpen, list, onAccept, onReject }
 						</Form>
 					</RadioGroup>
 				</Groupbox>
-				<PanelOperations selectionType={selectionOperationType} setSelectionType={setSelectionOperationType} />
+				<PanelOperation selectionType={selectionOperationType} setSelectionType={setSelectionOperationType} />
 				<Groupbox title={t('move')}>
 					<Flex column spaced>
 						<Flex spaced>

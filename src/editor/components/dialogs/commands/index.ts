@@ -1,5 +1,6 @@
 export * from './DialogCommandChangeChronometer';
 export * from './DialogCommandChangeMapProperties';
+export * from './DialogCommandChangeProperty';
 export * from './DialogCommandChangeScreenTone';
 export * from './DialogCommandChangeState';
 export * from './DialogCommandChangeWeather';
