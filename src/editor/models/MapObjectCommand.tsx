@@ -429,6 +429,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.SEND_EVENT:
 			case EVENT_COMMAND_KIND.CHANGE_STATE:
 			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
+			case EVENT_COMMAND_KIND.MODIFY_CURRENCY:
 				return MapObjectCommand.COLOR_BLUE;
 		}
 		return 'white';
@@ -591,6 +592,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
 				texts = this.toStringChangeProperty(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.MODIFY_CURRENCY:
+				texts = this.toStringModifyCurrency(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1618,6 +1622,13 @@ class MapObjectCommand extends Base {
 		const operation = this.toStringOperation(iterator);
 		const newValue = this.toStringDynamicValue(iterator, properties, parameters);
 		return [`${i18next.t('property.id')} ${propertyID} ${operation} ${newValue}`];
+	}
+
+	toStringModifyCurrency(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const currencyID = this.toStringDynamicValue(iterator, properties, parameters, properties);
+		const operation = this.toStringOperation(iterator);
+		const value = this.toStringDynamicValue(iterator, properties, parameters);
+		return [`${i18next.t('currency.id')} ${currencyID} ${operation} ${value}`];
 	}
 
 	copy(command: MapObjectCommand): void {

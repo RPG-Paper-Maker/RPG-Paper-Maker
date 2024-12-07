@@ -31,6 +31,7 @@ import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
 import DialogCommandEnterANameMenu from '../commands/DialogCommandEnterANameMenu';
 import DialogCommandFlashScreen from '../commands/DialogCommandFlashScreen';
 import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
+import DialogCommandModifyCurrency from '../commands/DialogCommandModifyCurrency';
 import DialogCommandMoveCamera from '../commands/DialogCommandMoveCamera';
 import DialogCommandMoveObject from '../commands/DialogCommandMoveObject';
 import DialogCommandPlayAVideo from '../commands/DialogCommandPlayAVideo';
@@ -373,6 +374,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandChangeState {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
 				return <DialogCommandChangeProperty {...options} />;
+			case EVENT_COMMAND_KIND.MODIFY_CURRENCY:
+				return <DialogCommandModifyCurrency {...options} />;
 			default:
 				return null;
 		}

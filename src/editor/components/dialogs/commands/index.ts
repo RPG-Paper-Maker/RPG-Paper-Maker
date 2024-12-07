@@ -10,6 +10,7 @@ export * from './DialogCommandDisplayChoice';
 export * from './DialogCommandEnterANameMenu';
 export * from './DialogCommandFlashScreen';
 export * from './DialogCommandInputNumber';
+export * from './DialogCommandModifyCurrency';
 export * from './DialogCommandMoveCamera';
 export * from './DialogCommandMoveObject';
 export * from './DialogCommandMoveObjectChangeGraphics';
