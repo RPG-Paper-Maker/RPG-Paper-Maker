@@ -11,6 +11,7 @@ export * from './DialogCommandEnterANameMenu';
 export * from './DialogCommandFlashScreen';
 export * from './DialogCommandInputNumber';
 export * from './DialogCommandModifyCurrency';
+export * from './DialogCommandModifyInventory';
 export * from './DialogCommandMoveCamera';
 export * from './DialogCommandMoveObject';
 export * from './DialogCommandMoveObjectChangeGraphics';

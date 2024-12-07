@@ -52,6 +52,7 @@ import {
 	BindingType,
 	DYNAMIC_VALUE_KIND,
 	EVENT_COMMAND_KIND,
+	ITEM_KIND,
 	ITERATOR,
 	JSONType,
 	PICTURE_KIND,
@@ -430,6 +431,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_STATE:
 			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
 			case EVENT_COMMAND_KIND.MODIFY_CURRENCY:
+			case EVENT_COMMAND_KIND.MODIFY_INVENTORY:
 				return MapObjectCommand.COLOR_BLUE;
 		}
 		return 'white';
@@ -595,6 +597,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.MODIFY_CURRENCY:
 				texts = this.toStringModifyCurrency(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.MODIFY_INVENTORY:
+				texts = this.toStringModifyInventory(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1625,10 +1630,47 @@ class MapObjectCommand extends Base {
 	}
 
 	toStringModifyCurrency(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
-		const currencyID = this.toStringDynamicValue(iterator, properties, parameters, properties);
+		const currencyID = this.toStringDynamicValue(
+			iterator,
+			properties,
+			parameters,
+			Project.current!.systems.currencies
+		);
 		const operation = this.toStringOperation(iterator);
 		const value = this.toStringDynamicValue(iterator, properties, parameters);
 		return [`${i18next.t('currency.id')} ${currencyID} ${operation} ${value}`];
+	}
+
+	toStringModifyInventory(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		let str = '';
+		const selection = this.command[iterator.i++];
+		switch (selection) {
+			case ITEM_KIND.ITEM:
+				str += i18next.t('item.id');
+				break;
+			case ITEM_KIND.WEAPON:
+				str += i18next.t('weapon.id');
+				break;
+			case ITEM_KIND.ARMOR:
+				str += i18next.t('armor.id');
+				break;
+		}
+		let database: Base[] = [];
+		switch (selection) {
+			case ITEM_KIND.ITEM:
+				database = Project.current!.items.list;
+				break;
+			case ITEM_KIND.WEAPON:
+				database = Project.current!.weapons.list;
+				break;
+			case ITEM_KIND.ARMOR:
+				database = Project.current!.armors.list;
+				break;
+		}
+		const itemID = this.toStringDynamicValue(iterator, properties, parameters, database);
+		const operation = this.toStringOperation(iterator);
+		const value = this.toStringDynamicValue(iterator, properties, parameters);
+		return [`${str} ${itemID} ${operation} ${value}`];
 	}
 
 	copy(command: MapObjectCommand): void {
