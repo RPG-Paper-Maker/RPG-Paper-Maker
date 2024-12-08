@@ -432,6 +432,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
 			case EVENT_COMMAND_KIND.MODIFY_CURRENCY:
 			case EVENT_COMMAND_KIND.MODIFY_INVENTORY:
+			case EVENT_COMMAND_KIND.MODIFY_TEAM:
 				return MapObjectCommand.COLOR_BLUE;
 		}
 		return 'white';
@@ -600,6 +601,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.MODIFY_INVENTORY:
 				texts = this.toStringModifyInventory(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.MODIFY_TEAM:
+				texts = this.toStringModifyTeam(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1671,6 +1675,61 @@ class MapObjectCommand extends Base {
 		const operation = this.toStringOperation(iterator);
 		const value = this.toStringDynamicValue(iterator, properties, parameters);
 		return [`${str} ${itemID} ${operation} ${value}`];
+	}
+
+	toStringModifyTeam(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		let str = '';
+		switch (this.command[iterator.i++]) {
+			case 0: {
+				str += `${i18next.t('create.new.instance.with.level').toLowerCase()} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters
+				)} ${i18next.t('in').toLowerCase()} `;
+				str += `${i18next
+					.t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name)
+					.toLowerCase()} ${i18next.t('of')} `;
+				const stockVariable = this.toStringDynamicValue(iterator, properties, parameters);
+				if (this.command[iterator.i++] === 0) {
+					str += `${i18next.t('hero.id').toLowerCase()} ${this.toStringDynamicValue(
+						iterator,
+						properties,
+						parameters,
+						Project.current!.heroes.list
+					)}`;
+				} else {
+					str += `${i18next.t('monster.id').toLowerCase()} ${this.toStringDynamicValue(
+						iterator,
+						properties,
+						parameters,
+						Project.current!.monsters.list
+					)}`;
+				}
+				str += ` ${i18next.t('and.stock.in.variable')} ${stockVariable}`;
+				break;
+			}
+			case 1:
+				str += `${i18next.t('add.enemy.instance.id')} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters
+				)} ${i18next.t('in')} `;
+				str += i18next.t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name).toLowerCase();
+				break;
+			case 2: {
+				const move = this.command[iterator.i++] === 0;
+				str += `${i18next.t('modify')} ${i18next.t(move ? 'move.verb' : 'remove').toLowerCase()} ${i18next
+					.t('character.with.instance.id')
+					.toLowerCase()} ${this.toStringDynamicValue(iterator, properties, parameters)}`;
+				if (move) {
+					str += ` ${i18next.t('to').toLowerCase()} ${i18next
+						.t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name)
+						.toLowerCase()}`;
+				}
+				break;
+			}
+		}
+		return [str];
 	}
 
 	copy(command: MapObjectCommand): void {

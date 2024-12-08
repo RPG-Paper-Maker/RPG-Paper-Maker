@@ -33,6 +33,7 @@ import DialogCommandFlashScreen from '../commands/DialogCommandFlashScreen';
 import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
 import DialogCommandModifyCurrency from '../commands/DialogCommandModifyCurrency';
 import DialogCommandModifyInventory from '../commands/DialogCommandModifyInventory';
+import DialogCommandModifyTeam from '../commands/DialogCommandModifyTeam';
 import DialogCommandMoveCamera from '../commands/DialogCommandMoveCamera';
 import DialogCommandMoveObject from '../commands/DialogCommandMoveObject';
 import DialogCommandPlayAVideo from '../commands/DialogCommandPlayAVideo';
@@ -379,6 +380,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandModifyCurrency {...options} />;
 			case EVENT_COMMAND_KIND.MODIFY_INVENTORY:
 				return <DialogCommandModifyInventory {...options} />;
+			case EVENT_COMMAND_KIND.MODIFY_TEAM:
+				return <DialogCommandModifyTeam {...options} />;
 			default:
 				return null;
 		}

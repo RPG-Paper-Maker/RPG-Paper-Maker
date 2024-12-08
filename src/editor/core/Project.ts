@@ -35,6 +35,8 @@ class Project {
 	public items = new Data.Items();
 	public weapons = new Data.Weapons();
 	public armors = new Data.Armors();
+	public heroes = new Data.Heroes();
+	public monsters = new Data.Monsters();
 	public battleSystem = new Data.BattleSystem();
 	public currentMapObjectStates: Node[] = [];
 	public currentMapObjectEvents: Node[] = [];
@@ -84,6 +86,8 @@ class Project {
 		await this.items.load();
 		await this.weapons.load();
 		await this.armors.load();
+		await this.heroes.load();
+		await this.monsters.load();
 		await this.battleSystem.load();
 	}
 
