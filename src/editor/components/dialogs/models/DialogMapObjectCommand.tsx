@@ -18,6 +18,7 @@ import Button from '../../Button';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tab from '../../Tab';
+import DialogCommandAllowForbidSavesMainMenu from '../commands/DialogCommandAllowForbidSavesMainMenu';
 import DialogCommandChangeChronometer from '../commands/DialogCommandChangeChronometer';
 import DialogCommandChangeMapProperties from '../commands/DialogCommandChangeMapProperties';
 import DialogCommandChangeProperty from '../commands/DialogCommandChangeProperty';
@@ -382,6 +383,9 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandModifyInventory {...options} />;
 			case EVENT_COMMAND_KIND.MODIFY_TEAM:
 				return <DialogCommandModifyTeam {...options} />;
+			case EVENT_COMMAND_KIND.ALLOW_FORBID_SAVES:
+			case EVENT_COMMAND_KIND.ALLOW_FORBID_MAIN_MENU:
+				return <DialogCommandAllowForbidSavesMainMenu kind={selectedCommand} {...options} />;
 			default:
 				return null;
 		}

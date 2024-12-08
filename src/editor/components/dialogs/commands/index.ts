@@ -1,3 +1,4 @@
+export * from './DialogCommandAllowForbidSavesMainMenu';
 export * from './DialogCommandChangeChronometer';
 export * from './DialogCommandChangeMapProperties';
 export * from './DialogCommandChangeProperty';

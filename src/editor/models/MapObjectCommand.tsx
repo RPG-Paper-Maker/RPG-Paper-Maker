@@ -433,6 +433,8 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.MODIFY_CURRENCY:
 			case EVENT_COMMAND_KIND.MODIFY_INVENTORY:
 			case EVENT_COMMAND_KIND.MODIFY_TEAM:
+			case EVENT_COMMAND_KIND.ALLOW_FORBID_SAVES:
+			case EVENT_COMMAND_KIND.ALLOW_FORBID_MAIN_MENU:
 				return MapObjectCommand.COLOR_BLUE;
 		}
 		return 'white';
@@ -604,6 +606,10 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.MODIFY_TEAM:
 				texts = this.toStringModifyTeam(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.ALLOW_FORBID_SAVES:
+			case EVENT_COMMAND_KIND.ALLOW_FORBID_MAIN_MENU:
+				texts = this.toStringAllowForbidSavesMainMenu(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1730,6 +1736,10 @@ class MapObjectCommand extends Base {
 			}
 		}
 		return [str];
+	}
+
+	toStringAllowForbidSavesMainMenu(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		return [this.toStringDynamicValue(iterator, properties, parameters)];
 	}
 
 	copy(command: MapObjectCommand): void {

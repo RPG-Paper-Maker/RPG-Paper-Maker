@@ -22,6 +22,7 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
+	kind: EVENT_COMMAND_KIND;
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	list?: MapObjectCommandType[];
@@ -29,18 +30,18 @@ type Props = {
 	onReject: () => void;
 };
 
-function DialogCommandWait({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandAllowForbidSavesMainMenu({ kind, isOpen, setIsOpen, list, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
-	const [time] = useStateDynamicValue();
+	const [allow] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
 		if (list) {
 			const iterator = Utils.generateIterator();
-			time.updateCommand(list, iterator);
+			allow.updateCommand(list, iterator);
 		} else {
-			time.updateToDefaultNumber(0, true);
+			allow.updateToDefaultSwitch(true);
 		}
 		setTrigger((v) => !v);
 	};
@@ -48,8 +49,8 @@ function DialogCommandWait({ isOpen, setIsOpen, list, onAccept, onReject }: Prop
 	const handleAccept = async () => {
 		setIsOpen(false);
 		const newList: MapObjectCommandType[] = [];
-		time.getCommand(newList);
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.WAIT, newList));
+		allow.getCommand(newList);
+		onAccept(Model.MapObjectCommand.createCommand(kind, newList));
 	};
 
 	const handleReject = async () => {
@@ -66,18 +67,19 @@ function DialogCommandWait({ isOpen, setIsOpen, list, onAccept, onReject }: Prop
 
 	return (
 		<Dialog
-			title={`${t('wait')}...`}
+			title={`${t(
+				kind === EVENT_COMMAND_KIND.ALLOW_FORBID_SAVES ? 'allow.forbid.saves' : 'allow.forbid.main.menu'
+			)}...`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>
 			<Flex spaced centerV>
-				<div>{t('time')}:</div>
-				<DynamicValueSelector value={time} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL} />
-				{t('seconds').toLowerCase()}
+				<div>{t('allow')}:</div>
+				<DynamicValueSelector value={allow} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.SWITCH} />
 			</Flex>
 		</Dialog>
 	);
 }
 
-export default DialogCommandWait;
+export default DialogCommandAllowForbidSavesMainMenu;
