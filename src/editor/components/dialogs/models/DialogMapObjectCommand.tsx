@@ -368,6 +368,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 			case EVENT_COMMAND_KIND.PLAY_BACKGROUND_SOUND:
 			case EVENT_COMMAND_KIND.PLAY_SOUND:
 			case EVENT_COMMAND_KIND.PLAY_MUSIC_EFFECT:
+			case EVENT_COMMAND_KIND.CHANGE_BATTLE_MUSIC:
+			case EVENT_COMMAND_KIND.CHANGE_VICTORY_MUSIC:
 				return <DialogCommandPlaySong commandKind={selectedCommand} {...options} />;
 			case EVENT_COMMAND_KIND.STOP_MUSIC:
 			case EVENT_COMMAND_KIND.STOP_BACKGROUND_SOUND:

@@ -66,6 +66,8 @@ function DialogCommandPlaySong({ commandKind, isOpen, setIsOpen, list, onAccept,
 	const getKind = () => {
 		switch (commandKind) {
 			case EVENT_COMMAND_KIND.PLAY_MUSIC:
+			case EVENT_COMMAND_KIND.CHANGE_BATTLE_MUSIC:
+			case EVENT_COMMAND_KIND.CHANGE_VICTORY_MUSIC:
 				return SONG_KIND.MUSIC;
 			case EVENT_COMMAND_KIND.PLAY_BACKGROUND_SOUND:
 				return SONG_KIND.BACKGROUND_SOUND;

@@ -454,6 +454,8 @@ class MapObjectCommand extends Base {
 				return MapObjectCommand.COLOR_BLUE;
 			case EVENT_COMMAND_KIND.START_BATTLE:
 			case EVENT_COMMAND_KIND.END_BATTLE:
+			case EVENT_COMMAND_KIND.CHANGE_BATTLE_MUSIC:
+			case EVENT_COMMAND_KIND.CHANGE_VICTORY_MUSIC:
 				return MapObjectCommand.COLOR_GREEN;
 		}
 		return 'white';
@@ -608,6 +610,8 @@ class MapObjectCommand extends Base {
 				texts = this.toStringEnterANameMenu(iterator, parameters, properties);
 				break;
 			case EVENT_COMMAND_KIND.PLAY_MUSIC:
+			case EVENT_COMMAND_KIND.CHANGE_BATTLE_MUSIC:
+			case EVENT_COMMAND_KIND.CHANGE_VICTORY_MUSIC:
 				texts = this.toStringPlaySong(iterator, parameters, properties, SONG_KIND.MUSIC);
 				break;
 			case EVENT_COMMAND_KIND.PLAY_BACKGROUND_SOUND:
