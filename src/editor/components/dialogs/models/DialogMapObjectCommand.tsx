@@ -46,6 +46,7 @@ import DialogCommandSetDialogBoxOptions from '../commands/DialogCommandSetDialog
 import DialogCommandSetMoveTurnAPicture from '../commands/DialogCommandSetMoveTurnAPicture';
 import DialogCommandShakeScreen from '../commands/DialogCommandShakeScreen';
 import DialogCommandShowText from '../commands/DialogCommandShowText';
+import DialogCommandStartBattle from '../commands/DialogCommandStartBattle';
 import DialogCommandStartShopMenu from '../commands/DialogCommandStartShopMenu';
 import DialogCommandStopSong from '../commands/DialogCommandStopSong';
 import DialogCommandSwitchTexture from '../commands/DialogCommandSwitchTexture';
@@ -386,6 +387,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_SAVES:
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_MAIN_MENU:
 				return <DialogCommandAllowForbidSavesMainMenu kind={selectedCommand} {...options} />;
+			case EVENT_COMMAND_KIND.START_BATTLE:
+				return <DialogCommandStartBattle {...options} />;
 			default:
 				return null;
 		}

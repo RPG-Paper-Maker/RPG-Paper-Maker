@@ -62,6 +62,27 @@ function TreeCommands({ list }: Props) {
 				}
 				break;
 			}
+			case EVENT_COMMAND_KIND.START_BATTLE: {
+				const isNoGameOver = command.isBattleNoGameOver();
+				const previousIsNoGameOver =
+					(currentList[index]?.content as Model.MapObjectCommand)?.kind === EVENT_COMMAND_KIND.IF_WIN;
+				if ((isNew && isNoGameOver) || (!isNew && !previousIsNoGameOver && isNoGameOver)) {
+					const ifWin = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.IF_WIN);
+					ifWin.id = Node.getNewID(list);
+					ArrayUtils.insertAt(currentList, index++, Node.create(ifWin));
+					const ifLose = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.IF_LOSE);
+					ifLose.id = Node.getNewID(list);
+					ArrayUtils.insertAt(currentList, index++, Node.create(ifLose));
+					const endIf = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.END_IF);
+					endIf.id = Node.getNewID(list);
+					ArrayUtils.insertAt(currentList, index++, Node.create(endIf));
+				} else if (!isNew && previousIsNoGameOver && !isNoGameOver) {
+					ArrayUtils.removeAt(currentList, index);
+					ArrayUtils.removeAt(currentList, index);
+					ArrayUtils.removeAt(currentList, index);
+				}
+				break;
+			}
 			default:
 				node.content.id = Node.getNewID(list);
 				break;

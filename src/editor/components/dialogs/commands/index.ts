@@ -28,6 +28,7 @@ export * from './DialogCommandSetDialogBoxOptions';
 export * from './DialogCommandSetMoveTurnAPicture';
 export * from './DialogCommandShakeScreen';
 export * from './DialogCommandShowText';
+export * from './DialogCommandStartBattle';
 export * from './DialogCommandStartShopMenu';
 export * from './DialogCommandStopSong';
 export * from './DialogCommandSwitchTexture';

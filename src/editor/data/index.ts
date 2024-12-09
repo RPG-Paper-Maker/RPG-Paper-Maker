@@ -16,6 +16,7 @@ export * from './SpecialElements';
 export * from './System';
 export * from './Tilesets';
 export * from './TreeMaps';
+export * from './Troops';
 export * from './Variables';
 export * from './Videos';
 export * from './Weapons';

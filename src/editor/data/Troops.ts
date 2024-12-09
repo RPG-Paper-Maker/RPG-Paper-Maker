@@ -13,33 +13,33 @@ import { Model } from '../Editor';
 import { BINDING, BindingType, JSONType, Paths } from '../common';
 import { Project, Serializable } from '../core';
 
-class BattleSystem extends Serializable {
-	public statistics!: Model.Statistic[];
-	public battleMaps!: Model.BattleMap[];
-	public json!: JSONType; // TEMP, will be removed later
+class Troops extends Serializable {
+	public list!: Model.Troop[];
+	public listIndexes!: number[];
 
 	public static readonly bindings: BindingType[] = [
-		['statistics', 'statistics', [], BINDING.LIST, Model.Statistic],
-		['battleMaps', 'battleMaps', [], BINDING.LIST, Model.BattleMap],
+		['list', 'troops', undefined, BINDING.LIST_WITH_INDEXES, Model.Troop],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
-		return [...BattleSystem.bindings, ...additionnalBinding];
+		return [...this.bindings, ...additionnalBinding];
 	}
 
 	getPath(): string {
-		return Paths.join(Project.current!.getPath(), Paths.FILE_BATTLE_SYSTEM);
+		return Paths.join(Project.current!.getPath(), Paths.FILE_TROOPS);
+	}
+
+	getByID(id: number): Model.Troop {
+		return this.list[this.listIndexes[id]];
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.read(json, BattleSystem.getBindings(additionnalBinding));
-		this.json = json;
+		super.read(json, Troops.getBindings(additionnalBinding));
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
-		Object.assign(json, this.json);
-		super.write(json, BattleSystem.getBindings(additionnalBinding));
+		super.write(json, Troops.getBindings(additionnalBinding));
 	}
 }
 
-export { BattleSystem };
+export { Troops };

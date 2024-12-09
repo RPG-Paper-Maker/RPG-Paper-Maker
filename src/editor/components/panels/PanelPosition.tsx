@@ -13,6 +13,7 @@ import { forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Scene } from '../../Editor';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, ITERATOR } from '../../common';
+import { Project } from '../../core';
 import useStateDynamicValue from '../../hooks/useStateDynamicValue';
 import useStateNumber from '../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../models';
@@ -36,11 +37,23 @@ export enum SELECTION_TYPE {
 	OBJECT,
 }
 
-const PanelPosition = forwardRef((props, ref) => {
+export enum SELECTION_BATTLE_MAP_TYPE {
+	ID,
+	SELECT,
+	ENTER,
+	DEFAULT,
+}
+
+type Props = {
+	isBattleMap?: boolean;
+};
+
+const PanelPosition = forwardRef(({ isBattleMap = false }: Props, ref) => {
 	const { t } = useTranslation();
 
 	const [isSelectMapPositionDialogOpen, setIsSelectMapPositionDialogOpen] = useState(false);
 	const [selectionType, setSelectionType] = useStateNumber();
+	const [battleMapID] = useStateDynamicValue();
 	const [mapID, setMapID] = useStateNumber();
 	const [x, setX] = useStateNumber();
 	const [y, setY] = useStateNumber();
@@ -54,41 +67,51 @@ const PanelPosition = forwardRef((props, ref) => {
 	const [positionObjectID] = useStateDynamicValue();
 
 	const objectsList = Scene.Map.getCurrentMapObjectsList();
-	const isSelect = selectionType === SELECTION_TYPE.SELECT;
-	const isEnter = selectionType === SELECTION_TYPE.ENTER;
+	const isID = selectionType === SELECTION_BATTLE_MAP_TYPE.ID;
+	const isSelect = isBattleMap
+		? selectionType === SELECTION_BATTLE_MAP_TYPE.SELECT
+		: selectionType === SELECTION_TYPE.SELECT;
+	const isEnter = isBattleMap
+		? selectionType === SELECTION_BATTLE_MAP_TYPE.ENTER
+		: selectionType === SELECTION_TYPE.ENTER;
 	const isObject = selectionType === SELECTION_TYPE.OBJECT;
 
 	const initialize = (list?: MapObjectCommandType[], iterator?: ITERATOR) => {
-		enterMapID.updateToDefaultNumber(0);
+		battleMapID.updateToDefaultDatabase();
+		enterMapID.updateToDefaultNumber(1);
 		enterX.updateToDefaultNumber(0);
 		enterY.updateToDefaultNumber(0);
 		enterYp.updateToDefaultNumber(0);
 		enterZ.updateToDefaultNumber(0);
 		positionObjectID.updateToDefaultDatabase(-1);
 		if (list && iterator) {
-			const selectionType = list[iterator.i++] as SELECTION_TYPE;
+			const selectionType = list[iterator.i++] as number;
 			setSelectionType(selectionType);
-			switch (selectionType) {
-				case SELECTION_TYPE.SELECT:
-					setMapID(list[iterator.i++] as number);
-					setX(list[iterator.i++] as number);
-					setY(list[iterator.i++] as number);
-					setYp(list[iterator.i++] as number);
-					setZ(list[iterator.i++] as number);
-					break;
-				case SELECTION_TYPE.ENTER:
-					enterMapID.updateCommand(list, iterator);
-					enterX.updateCommand(list, iterator);
-					enterY.updateCommand(list, iterator);
-					enterYp.updateCommand(list, iterator);
-					enterZ.updateCommand(list, iterator);
-					break;
-				case SELECTION_TYPE.OBJECT:
-					positionObjectID.updateCommand(list, iterator);
-					break;
+			if (isBattleMap && selectionType === SELECTION_BATTLE_MAP_TYPE.ID) {
+				battleMapID.updateCommand(list, iterator);
+			} else if (
+				(isBattleMap && selectionType === SELECTION_BATTLE_MAP_TYPE.SELECT) ||
+				(!isBattleMap && selectionType === SELECTION_TYPE.SELECT)
+			) {
+				setMapID(list[iterator.i++] as number);
+				setX(list[iterator.i++] as number);
+				setY(list[iterator.i++] as number);
+				setYp(list[iterator.i++] as number);
+				setZ(list[iterator.i++] as number);
+			} else if (
+				(isBattleMap && selectionType === SELECTION_BATTLE_MAP_TYPE.ENTER) ||
+				(!isBattleMap && selectionType === SELECTION_TYPE.ENTER)
+			) {
+				enterMapID.updateCommand(list, iterator);
+				enterX.updateCommand(list, iterator);
+				enterY.updateCommand(list, iterator);
+				enterYp.updateCommand(list, iterator);
+				enterZ.updateCommand(list, iterator);
+			} else if (!isBattleMap && selectionType === SELECTION_TYPE.OBJECT) {
+				positionObjectID.updateCommand(list, iterator);
 			}
 		} else {
-			setSelectionType(SELECTION_TYPE.SELECT);
+			setSelectionType(isBattleMap ? SELECTION_BATTLE_MAP_TYPE.DEFAULT : SELECTION_TYPE.SELECT);
 			setMapID(1);
 			setX(0);
 			setY(0);
@@ -99,24 +122,28 @@ const PanelPosition = forwardRef((props, ref) => {
 
 	const getCommand = (newList: MapObjectCommandType[]) => {
 		newList.push(selectionType);
-		switch (selectionType) {
-			case SELECTION_TYPE.SELECT:
-				newList.push(mapID);
-				newList.push(x);
-				newList.push(y);
-				newList.push(yp);
-				newList.push(z);
-				break;
-			case SELECTION_TYPE.ENTER:
-				enterMapID.getCommand(newList);
-				enterX.getCommand(newList);
-				enterY.getCommand(newList);
-				enterYp.getCommand(newList);
-				enterZ.getCommand(newList);
-				break;
-			case SELECTION_TYPE.OBJECT:
-				positionObjectID.getCommand(newList);
-				break;
+		if (isBattleMap && selectionType === SELECTION_BATTLE_MAP_TYPE.ID) {
+			battleMapID.getCommand(newList);
+		} else if (
+			(isBattleMap && selectionType === SELECTION_BATTLE_MAP_TYPE.SELECT) ||
+			(!isBattleMap && selectionType === SELECTION_TYPE.SELECT)
+		) {
+			newList.push(mapID);
+			newList.push(x);
+			newList.push(y);
+			newList.push(yp);
+			newList.push(z);
+		} else if (
+			(isBattleMap && selectionType === SELECTION_BATTLE_MAP_TYPE.ENTER) ||
+			(!isBattleMap && selectionType === SELECTION_TYPE.ENTER)
+		) {
+			enterMapID.getCommand(newList);
+			enterX.getCommand(newList);
+			enterY.getCommand(newList);
+			enterYp.getCommand(newList);
+			enterZ.getCommand(newList);
+		} else if (!isBattleMap && selectionType === SELECTION_TYPE.OBJECT) {
+			positionObjectID.getCommand(newList);
 		}
 	};
 
@@ -139,11 +166,32 @@ const PanelPosition = forwardRef((props, ref) => {
 
 	return (
 		<>
-			<Groupbox title={t('position')}>
+			<Groupbox title={t(isBattleMap ? 'battle.map' : 'position')}>
 				<RadioGroup selected={selectionType} onChange={setSelectionType}>
 					<Form>
+						{isBattleMap && (
+							<>
+								<Label hideColon>
+									<RadioButton value={SELECTION_BATTLE_MAP_TYPE.DEFAULT}>{t('default')}</RadioButton>
+								</Label>
+								<Value />
+								<Label>
+									<RadioButton value={SELECTION_BATTLE_MAP_TYPE.ID}>ID</RadioButton>
+								</Label>
+								<Value>
+									<DynamicValueSelector
+										value={battleMapID}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+										databaseOptions={Project.current!.battleSystem.battleMaps}
+										disabled={!isID}
+									/>
+								</Value>
+							</>
+						)}
 						<Label>
-							<RadioButton value={SELECTION_TYPE.SELECT}>{t('select')}</RadioButton>
+							<RadioButton value={isBattleMap ? SELECTION_BATTLE_MAP_TYPE.SELECT : SELECTION_TYPE.SELECT}>
+								{t('select')}
+							</RadioButton>
 						</Label>
 						<Value>
 							<Flex column spaced>
@@ -175,7 +223,9 @@ const PanelPosition = forwardRef((props, ref) => {
 							</Flex>
 						</Value>
 						<Label>
-							<RadioButton value={SELECTION_TYPE.ENTER}>{t('enter')}</RadioButton>
+							<RadioButton value={isBattleMap ? SELECTION_BATTLE_MAP_TYPE.ENTER : SELECTION_TYPE.ENTER}>
+								{t('enter')}
+							</RadioButton>
 						</Label>
 						<Value>
 							<Form>
@@ -221,17 +271,21 @@ const PanelPosition = forwardRef((props, ref) => {
 								</Value>
 							</Form>
 						</Value>
-						<Label>
-							<RadioButton value={SELECTION_TYPE.OBJECT}>{t('object.id')}</RadioButton>
-						</Label>
-						<Value>
-							<DynamicValueSelector
-								value={positionObjectID}
-								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
-								databaseOptions={objectsList}
-								disabled={!isObject}
-							/>
-						</Value>
+						{!isBattleMap && (
+							<>
+								<Label>
+									<RadioButton value={SELECTION_TYPE.OBJECT}>{t('object.id')}</RadioButton>
+								</Label>
+								<Value>
+									<DynamicValueSelector
+										value={positionObjectID}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+										databaseOptions={objectsList}
+										disabled={!isObject}
+									/>
+								</Value>
+							</>
+						)}
 					</Form>
 				</RadioGroup>
 			</Groupbox>

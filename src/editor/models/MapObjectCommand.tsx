@@ -104,6 +104,9 @@ class MapObjectCommand extends Base {
 			EVENT_COMMAND_KIND.OPEN_SAVES_MENU,
 			EVENT_COMMAND_KIND.TITLE_SCREEN,
 			EVENT_COMMAND_KIND.GAME_OVER,
+			EVENT_COMMAND_KIND.IF_WIN,
+			EVENT_COMMAND_KIND.IF_LOSE,
+			EVENT_COMMAND_KIND.END_IF,
 		].includes(kind);
 	}
 
@@ -115,6 +118,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
 			case EVENT_COMMAND_KIND.IF:
+			case EVENT_COMMAND_KIND.IF_WIN:
+			case EVENT_COMMAND_KIND.IF_LOSE:
+			case EVENT_COMMAND_KIND.END_IF:
 				return <FaCodeBranch />;
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
 				return <TbNumber123 />;
@@ -244,6 +250,12 @@ class MapObjectCommand extends Base {
 				return `${i18next.t('choice')} ${command[0]}`;
 			case EVENT_COMMAND_KIND.END_CHOICE:
 				return i18next.t('end.choice');
+			case EVENT_COMMAND_KIND.IF_WIN:
+				return i18next.t('if.win');
+			case EVENT_COMMAND_KIND.IF_LOSE:
+				return i18next.t('if.lose');
+			case EVENT_COMMAND_KIND.END_IF:
+				return i18next.t('end.if');
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
 				return i18next.t('input.number');
 			case EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS:
@@ -412,6 +424,9 @@ class MapObjectCommand extends Base {
 				return MapObjectCommand.COLOR_ORANGE;
 			case EVENT_COMMAND_KIND.CHOICE:
 			case EVENT_COMMAND_KIND.END_CHOICE:
+			case EVENT_COMMAND_KIND.IF_WIN:
+			case EVENT_COMMAND_KIND.IF_LOSE:
+			case EVENT_COMMAND_KIND.END_IF:
 				return MapObjectCommand.COLOR_PURPLE;
 			case EVENT_COMMAND_KIND.START_SHOP_MENU:
 			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
@@ -436,12 +451,14 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_SAVES:
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_MAIN_MENU:
 				return MapObjectCommand.COLOR_BLUE;
+			case EVENT_COMMAND_KIND.START_BATTLE:
+				return MapObjectCommand.COLOR_GREEN;
 		}
 		return 'white';
 	}
 
 	canHaveChildren(): boolean {
-		return this.kind === EVENT_COMMAND_KIND.CHOICE;
+		return [EVENT_COMMAND_KIND.CHOICE, EVENT_COMMAND_KIND.IF_WIN, EVENT_COMMAND_KIND.IF_LOSE].includes(this.kind);
 	}
 
 	canExpand(): boolean {
@@ -449,7 +466,13 @@ class MapObjectCommand extends Base {
 	}
 
 	isFixedNode(): boolean {
-		return this.kind === EVENT_COMMAND_KIND.CHOICE || this.kind === EVENT_COMMAND_KIND.END_CHOICE;
+		return [
+			EVENT_COMMAND_KIND.CHOICE,
+			EVENT_COMMAND_KIND.END_CHOICE,
+			EVENT_COMMAND_KIND.IF_WIN,
+			EVENT_COMMAND_KIND.IF_LOSE,
+			EVENT_COMMAND_KIND.END_IF,
+		].includes(this.kind);
 	}
 
 	getIcon(): ReactNode {
@@ -460,6 +483,8 @@ class MapObjectCommand extends Base {
 		switch (this.kind) {
 			case EVENT_COMMAND_KIND.DISPLAY_CHOICE:
 				return this.getChoicesNumber() + 2;
+			case EVENT_COMMAND_KIND.START_BATTLE:
+				return this.isBattleNoGameOver() ? 4 : 0;
 			default:
 				return 0;
 		}
@@ -478,6 +503,10 @@ class MapObjectCommand extends Base {
 			i += 2;
 		}
 		return nb;
+	}
+
+	isBattleNoGameOver(): boolean {
+		return !Utils.numToBool(this.command[1] as number);
 	}
 
 	toString(): string | ReactNode {
@@ -501,6 +530,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.OPEN_SAVES_MENU:
 			case EVENT_COMMAND_KIND.TITLE_SCREEN:
 			case EVENT_COMMAND_KIND.GAME_OVER:
+			case EVENT_COMMAND_KIND.IF_WIN:
+			case EVENT_COMMAND_KIND.IF_LOSE:
+			case EVENT_COMMAND_KIND.END_IF:
 				texts = [''];
 				break;
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
@@ -611,6 +643,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_MAIN_MENU:
 				texts = this.toStringAllowForbidSavesMainMenu(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.START_BATTLE:
+				texts = this.toStringStartBattle(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -708,41 +743,47 @@ class MapObjectCommand extends Base {
 		}
 	}
 
-	toStringPosition(texts: string[], iterator: ITERATOR, properties: Base[], parameters: Base[]) {
+	toStringPosition(texts: string[], iterator: ITERATOR, properties: Base[], parameters: Base[], isBattleMap = false) {
 		const selectionKind = this.command[iterator.i++] as number;
-		if (selectionKind === 0 || selectionKind === 1) {
+		if (isBattleMap && selectionKind === 0) {
+			texts.push(
+				this.toStringDynamicValue(iterator, properties, parameters, Project.current!.battleSystem.battleMaps)
+			);
+		} else if (
+			(isBattleMap && (selectionKind === 1 || selectionKind === 2)) ||
+			(!isBattleMap && (selectionKind === 0 || selectionKind === 1))
+		) {
 			let id = '';
 			let x = '';
 			let y = '';
 			let yp = '';
 			let z = '';
-			switch (selectionKind) {
-				case 0:
-					id = '' + this.command[iterator.i++];
-					x = '' + this.command[iterator.i++];
-					y = '' + this.command[iterator.i++];
-					yp = '' + this.command[iterator.i++];
-					z = '' + this.command[iterator.i++];
-					break;
-				case 1:
-					id = this.toStringDynamicValue(iterator, properties, parameters);
-					x = this.toStringDynamicValue(iterator, properties, parameters);
-					y = this.toStringDynamicValue(iterator, properties, parameters);
-					yp = this.toStringDynamicValue(iterator, properties, parameters);
-					z = this.toStringDynamicValue(iterator, properties, parameters);
-					break;
+			if ((isBattleMap && selectionKind === 1) || (!isBattleMap && selectionKind === 0)) {
+				id = '' + this.command[iterator.i++];
+				x = '' + this.command[iterator.i++];
+				y = '' + this.command[iterator.i++];
+				yp = '' + this.command[iterator.i++];
+				z = '' + this.command[iterator.i++];
+			} else if ((isBattleMap && selectionKind === 2) || (!isBattleMap && selectionKind === 1)) {
+				id = this.toStringDynamicValue(iterator, properties, parameters);
+				x = this.toStringDynamicValue(iterator, properties, parameters);
+				y = this.toStringDynamicValue(iterator, properties, parameters);
+				yp = this.toStringDynamicValue(iterator, properties, parameters);
+				z = this.toStringDynamicValue(iterator, properties, parameters);
 			}
 			texts.push(`${i18next.t('map.id')}: ${id}`);
 			texts.push(`X: ${x}`);
 			texts.push(`Y: ${y}`);
 			texts.push(`Y+: ${yp}`);
 			texts.push(`Z: ${z}`);
-		} else {
+		} else if (!isBattleMap && selectionKind === 2) {
 			texts.push(
 				`${this.toStringDynamicObject(iterator, properties, parameters)} ${i18next
 					.t('coordinates')
 					.toLowerCase()}`
 			);
+		} else if (isBattleMap && selectionKind === 3) {
+			texts.push(i18next.t('default'));
 		}
 	}
 
@@ -1740,6 +1781,60 @@ class MapObjectCommand extends Base {
 
 	toStringAllowForbidSavesMainMenu(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		return [this.toStringDynamicValue(iterator, properties, parameters)];
+	}
+
+	toStringStartBattle(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts = [];
+		const optionsList = [];
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			optionsList.push(i18next.t('allow.escape'));
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			optionsList.push(i18next.t('defeat.causes.game.over'));
+		}
+		const options = `[${optionsList.join(';')}]`;
+		const kind = this.command[iterator.i++];
+		let str = '';
+		switch (kind) {
+			case 0:
+				str = `${i18next.t('with.id').toLowerCase()} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.troops.list
+				)}`;
+				break;
+			case 1:
+				str = `${i18next.t('random').toLowerCase()} [${i18next.t('in.map.property')}}`;
+				break;
+		}
+		str += ` ${i18next.t('with.battle.map').toLowerCase()}`;
+		texts.push(str);
+		this.toStringPosition(texts, iterator, properties, parameters, true);
+		let transition = `${i18next.t('with.transition').toLowerCase()} `;
+		const start = this.command[iterator.i++] as number;
+		transition += i18next.t(Base.TRANSITION_START_OPTIONS[start].name);
+		if (start === 1) {
+			transition += ` ${this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.systems.colors
+			)}`;
+		}
+		const end = this.command[iterator.i++] as number;
+		transition += ` ${i18next.t('and.then')} ${i18next.t(Base.TRANSITION_END_OPTIONS[end].name)}`;
+		if (end === 1) {
+			transition += ` ${this.toStringDynamicValue(
+				iterator,
+				properties,
+				parameters,
+				Project.current!.systems.colors
+			)}`;
+		}
+		texts.push(transition);
+		texts.push(options);
+		return texts;
 	}
 
 	copy(command: MapObjectCommand): void {
