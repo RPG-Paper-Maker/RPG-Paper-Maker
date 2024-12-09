@@ -118,12 +118,13 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 		// eslint-disable-next-line
 	}, [isOpen]);
 
-	const getButton = (kind: EVENT_COMMAND_KIND) => {
+	const getButton = (kind: EVENT_COMMAND_KIND, disabled = false) => {
 		const isOpeningCommand = !MapObjectCommand.isNotOpeningCommand(kind);
 		return (
 			<Button
 				icon={MapObjectCommand.getIconKind(kind)}
 				onClick={() => handleClickOpenCommand(kind, isOpeningCommand)}
+				disabled={disabled}
 			>
 				{t(MapObjectCommand.getCommandName(kind))}
 				{isOpeningCommand && '...'}
@@ -242,10 +243,10 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				<Groupbox title={t('battles')}>
 					<Flex column spaced>
 						{getButton(EVENT_COMMAND_KIND.START_BATTLE)}
-						{getButton(EVENT_COMMAND_KIND.CHANGE_BATTLER_GRAPHICS)}
-						{getButton(EVENT_COMMAND_KIND.DISPLAY_HIDE_A_BATTLER)}
-						{getButton(EVENT_COMMAND_KIND.TRANSFORM_A_BATTLER)}
-						{getButton(EVENT_COMMAND_KIND.FORCE_AN_ACTION)}
+						{getButton(EVENT_COMMAND_KIND.CHANGE_BATTLER_GRAPHICS, true)}
+						{getButton(EVENT_COMMAND_KIND.DISPLAY_HIDE_A_BATTLER, true)}
+						{getButton(EVENT_COMMAND_KIND.TRANSFORM_A_BATTLER, true)}
+						{getButton(EVENT_COMMAND_KIND.FORCE_AN_ACTION, true)}
 						{getButton(EVENT_COMMAND_KIND.END_BATTLE)}
 					</Flex>
 				</Groupbox>

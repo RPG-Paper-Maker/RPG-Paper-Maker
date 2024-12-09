@@ -107,6 +107,7 @@ class MapObjectCommand extends Base {
 			EVENT_COMMAND_KIND.IF_WIN,
 			EVENT_COMMAND_KIND.IF_LOSE,
 			EVENT_COMMAND_KIND.END_IF,
+			EVENT_COMMAND_KIND.END_BATTLE,
 		].includes(kind);
 	}
 
@@ -452,6 +453,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_MAIN_MENU:
 				return MapObjectCommand.COLOR_BLUE;
 			case EVENT_COMMAND_KIND.START_BATTLE:
+			case EVENT_COMMAND_KIND.END_BATTLE:
 				return MapObjectCommand.COLOR_GREEN;
 		}
 		return 'white';
@@ -533,6 +535,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.IF_WIN:
 			case EVENT_COMMAND_KIND.IF_LOSE:
 			case EVENT_COMMAND_KIND.END_IF:
+			case EVENT_COMMAND_KIND.END_BATTLE:
 				texts = [''];
 				break;
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
