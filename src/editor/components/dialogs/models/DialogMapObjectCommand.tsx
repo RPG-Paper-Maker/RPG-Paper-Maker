@@ -21,6 +21,7 @@ import Tab from '../../Tab';
 import DialogCommandAllowForbidSavesMainMenu from '../commands/DialogCommandAllowForbidSavesMainMenu';
 import DialogCommandChangeAStatistic from '../commands/DialogCommandChangeAStatistic';
 import DialogCommandChangeChronometer from '../commands/DialogCommandChangeChronometer';
+import DialogCommandChangeExperienceCurve from '../commands/DialogCommandChangeExperienceCurve';
 import DialogCommandChangeMapProperties from '../commands/DialogCommandChangeMapProperties';
 import DialogCommandChangeProperty from '../commands/DialogCommandChangeProperty';
 import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreenTone';
@@ -395,6 +396,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandStartBattle {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
 				return <DialogCommandChangeAStatistic {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_EXPERIENCE_CURVE:
+				return <DialogCommandChangeExperienceCurve {...options} />;
 			default:
 				return null;
 		}

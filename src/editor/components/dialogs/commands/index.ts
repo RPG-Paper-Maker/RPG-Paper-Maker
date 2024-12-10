@@ -1,6 +1,7 @@
 export * from './DialogCommandAllowForbidSavesMainMenu';
 export * from './DialogCommandChangeAStatistic';
 export * from './DialogCommandChangeChronometer';
+export * from './DialogCommandChangeExperienceCurve';
 export * from './DialogCommandChangeMapProperties';
 export * from './DialogCommandChangeProperty';
 export * from './DialogCommandChangeScreenTone';
