@@ -19,6 +19,7 @@ import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tab from '../../Tab';
 import DialogCommandAllowForbidSavesMainMenu from '../commands/DialogCommandAllowForbidSavesMainMenu';
+import DialogCommandChangeAStatistic from '../commands/DialogCommandChangeAStatistic';
 import DialogCommandChangeChronometer from '../commands/DialogCommandChangeChronometer';
 import DialogCommandChangeMapProperties from '../commands/DialogCommandChangeMapProperties';
 import DialogCommandChangeProperty from '../commands/DialogCommandChangeProperty';
@@ -392,6 +393,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandAllowForbidSavesMainMenu kind={selectedCommand} {...options} />;
 			case EVENT_COMMAND_KIND.START_BATTLE:
 				return <DialogCommandStartBattle {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
+				return <DialogCommandChangeAStatistic {...options} />;
 			default:
 				return null;
 		}

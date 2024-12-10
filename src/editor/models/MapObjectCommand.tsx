@@ -456,6 +456,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.END_BATTLE:
 			case EVENT_COMMAND_KIND.CHANGE_BATTLE_MUSIC:
 			case EVENT_COMMAND_KIND.CHANGE_VICTORY_MUSIC:
+			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
 				return MapObjectCommand.COLOR_GREEN;
 		}
 		return 'white';
@@ -653,6 +654,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.START_BATTLE:
 				texts = this.toStringStartBattle(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
+				texts = this.toStringChangeAStatistic(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -791,6 +795,23 @@ class MapObjectCommand extends Base {
 			);
 		} else if (isBattleMap && selectionKind === 3) {
 			texts.push(i18next.t('default'));
+		}
+	}
+
+	toStringSelectionHero(iterator: ITERATOR, properties: Base[], parameters: Base[]): string {
+		switch (this.command[iterator.i++]) {
+			case 0:
+				return `${i18next.t('hero.enemy.instance.id').toLowerCase()} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters
+				)}`;
+			case 1:
+				return `${i18next.t('the.entire').toLowerCase()} ${i18next
+					.t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name)
+					.toLowerCase()}`;
+			default:
+				return '';
 		}
 	}
 
@@ -1841,6 +1862,40 @@ class MapObjectCommand extends Base {
 		}
 		texts.push(transition);
 		texts.push(options);
+		return texts;
+	}
+
+	toStringChangeAStatistic(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const texts = [];
+		const statisitic = `${i18next.t('statistic.id')} ${this.toStringDynamicValue(
+			iterator,
+			properties,
+			parameters,
+			Project.current!.battleSystem.statistics
+		)}`;
+		let selection = this.toStringSelectionHero(iterator, properties, parameters);
+		const operation = this.toStringOperation(iterator);
+		let value = '';
+		switch (this.command[iterator.i++]) {
+			case 0:
+			case 1:
+				value = this.toStringDynamicValue(iterator, properties, parameters);
+				break;
+			case 2:
+				value = i18next.t('maximum.statistic.value');
+				break;
+		}
+		texts.push(`${statisitic} ${selection} ${operation} ${value}`);
+		const options = [];
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			options.push(i18next.t('can.go.above.maximum.value'));
+		}
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			options.push(i18next.t('apply.change.maximum.value'));
+		}
+		if (options.length > 0) {
+			texts.push(`[${options.join(';')}]`);
+		}
 		return texts;
 	}
 
