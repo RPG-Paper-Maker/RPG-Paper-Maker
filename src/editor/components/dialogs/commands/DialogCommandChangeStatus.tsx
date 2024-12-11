@@ -12,6 +12,7 @@
 import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, OPERATION_KIND, Utils } from '../../../common';
+import { Project } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
@@ -20,10 +21,16 @@ import { MapObjectCommandType } from '../../../models';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
-import PanelOperation from '../../panels/PanelOperation';
 import PanelSelectionHero, { PanelSelectionHeroRef } from '../../panels/PanelSelectionHero';
+import RadioButton from '../../RadioButton';
+import RadioGroup from '../../RadioGroup';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+
+enum SELECTION_OPERATION_TYPE {
+	ADD,
+	REMOVE,
+}
 
 type Props = {
 	isOpen: boolean;
@@ -33,31 +40,25 @@ type Props = {
 	onReject: () => void;
 };
 
-function DialogCommandChangeExperienceCurve({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandChangeStatus({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
 	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>();
 
-	const [levelFrom] = useStateDynamicValue();
-	const [levelTo] = useStateDynamicValue();
 	const [selectionOperationType, setSelectionOperationType] = useStateNumber();
-	const [totalExperience] = useStateDynamicValue();
+	const [statusID] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
 		if (list) {
 			const iterator = Utils.generateIterator();
 			panelSelectionHeroRef.current?.initialize(list, iterator);
-			levelFrom.updateCommand(list, iterator);
-			levelTo.updateCommand(list, iterator);
 			setSelectionOperationType(list[iterator.i++] as OPERATION_KIND);
-			totalExperience.updateCommand(list, iterator);
+			statusID.updateCommand(list, iterator);
 		} else {
 			panelSelectionHeroRef.current?.initialize();
-			levelFrom.updateToDefaultNumber(0);
-			levelTo.updateToDefaultNumber(2);
 			setSelectionOperationType(OPERATION_KIND.EQUAL_TO);
-			totalExperience.updateToDefaultNumber(0);
+			statusID.updateToDefaultDatabase();
 		}
 		setTrigger((v) => !v);
 	};
@@ -66,11 +67,9 @@ function DialogCommandChangeExperienceCurve({ isOpen, setIsOpen, list, onAccept,
 		setIsOpen(false);
 		const newList: MapObjectCommandType[] = [];
 		panelSelectionHeroRef.current?.getCommand(newList);
-		levelFrom.getCommand(newList);
-		levelTo.getCommand(newList);
 		newList.push(selectionOperationType);
-		totalExperience.getCommand(newList);
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHANGE_EXPERIENCE_CURVE, newList));
+		statusID.getCommand(newList);
+		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHANGE_STATUS, newList));
 	};
 
 	const handleReject = async () => {
@@ -87,29 +86,34 @@ function DialogCommandChangeExperienceCurve({ isOpen, setIsOpen, list, onAccept,
 
 	return (
 		<Dialog
-			title={`${t('change.experience.curve')}...`}
+			title={`${t('change.status')}...`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>
 			<Flex column spacedLarge>
 				<PanelSelectionHero ref={panelSelectionHeroRef} />
-				<Groupbox title={t('level')}>
+				<Groupbox title={t('operation')}>
+					<RadioGroup selected={selectionOperationType} onChange={setSelectionOperationType}>
+						<Flex spaced>
+							<RadioButton value={SELECTION_OPERATION_TYPE.ADD}>{t('add')}</RadioButton>
+							<RadioButton value={SELECTION_OPERATION_TYPE.REMOVE}>{t('remove')}</RadioButton>
+						</Flex>
+					</RadioGroup>
+				</Groupbox>
+				<Groupbox title={t('status')}>
 					<Flex spaced centerV>
-						<div>{t('range')}:</div>
-						<DynamicValueSelector value={levelFrom} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
-						{t('to').toLowerCase()}
-						<DynamicValueSelector value={levelTo} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+						<div>{t('status.id')}:</div>
+						<DynamicValueSelector
+							value={statusID}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+							databaseOptions={Project.current!.status.list}
+						/>
 					</Flex>
 				</Groupbox>
-				<PanelOperation selectionType={selectionOperationType} setSelectionType={setSelectionOperationType} />
-				<Flex spaced centerV>
-					<div>{t('total.experience')}:</div>
-					<DynamicValueSelector value={totalExperience} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
-				</Flex>
 			</Flex>
 		</Dialog>
 	);
 }
 
-export default DialogCommandChangeExperienceCurve;
+export default DialogCommandChangeStatus;

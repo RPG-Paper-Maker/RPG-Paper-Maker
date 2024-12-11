@@ -14,10 +14,11 @@ import { DynamicValue } from '../core/DynamicValue';
 import { Characteristic } from './Characteristic';
 import { Cost } from './Cost';
 import { Effect } from './Effect';
+import { Icon } from './Icon';
 import { Localization } from './Localization';
 import { PlaySong } from './PlaySong';
 
-class CommonSkillItem extends Localization {
+class CommonSkillItem extends Icon {
 	public type!: number;
 	public consumable!: boolean;
 	public oneHand!: boolean;

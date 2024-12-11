@@ -31,6 +31,7 @@ class Project {
 	public keyboard = new Data.Keyboard();
 	public tilesets = new Data.Tilesets();
 	public languages = new Data.Languages();
+	public status = new Data.Status();
 	public animations = new Data.Animations();
 	public items = new Data.Items();
 	public weapons = new Data.Weapons();
@@ -83,6 +84,7 @@ class Project {
 		await this.commonEvents.load();
 		await this.keyboard.load();
 		await this.tilesets.load();
+		await this.status.load();
 		await this.animations.load();
 		await this.items.load();
 		await this.weapons.load();

@@ -458,6 +458,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_VICTORY_MUSIC:
 			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
 			case EVENT_COMMAND_KIND.CHANGE_EXPERIENCE_CURVE:
+			case EVENT_COMMAND_KIND.CHANGE_STATUS:
 				return MapObjectCommand.COLOR_GREEN;
 		}
 		return 'white';
@@ -660,6 +661,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_EXPERIENCE_CURVE:
 				texts = this.toStringChangeExperienceCurve(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.CHANGE_STATUS:
+				texts = this.toStringChangeStatus(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1904,8 +1908,7 @@ class MapObjectCommand extends Base {
 	}
 
 	toStringChangeExperienceCurve(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
-		let str = '';
-		str += this.toStringSelectionHero(iterator, properties, parameters);
+		let str = this.toStringSelectionHero(iterator, properties, parameters);
 		str += ` ${i18next.t('level').toLowerCase()} ${i18next.t('range').toLowerCase()} ${this.toStringDynamicValue(
 			iterator,
 			properties,
@@ -1916,6 +1919,18 @@ class MapObjectCommand extends Base {
 			.toLowerCase()} `;
 		str += `${this.toStringOperation(iterator)} `;
 		str += this.toStringDynamicValue(iterator, properties, parameters);
+		return [str];
+	}
+
+	toStringChangeStatus(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const selection = this.toStringSelectionHero(iterator, properties, parameters);
+		let str = i18next.t(this.command[iterator.i++] === 0 ? 'add' : 'remove');
+		str += ` ${i18next.t('status.id').toLowerCase()} ${this.toStringDynamicValue(
+			iterator,
+			properties,
+			parameters,
+			Project.current!.status.list
+		)} ${i18next.t('to').toLowerCase()} ${selection}`;
 		return [str];
 	}
 

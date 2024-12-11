@@ -13,6 +13,7 @@ export * from './Settings';
 export * from './Shapes';
 export * from './Songs';
 export * from './SpecialElements';
+export * from './Status';
 export * from './System';
 export * from './Tilesets';
 export * from './TreeMaps';

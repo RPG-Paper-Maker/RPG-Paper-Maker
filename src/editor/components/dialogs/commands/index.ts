@@ -6,6 +6,7 @@ export * from './DialogCommandChangeMapProperties';
 export * from './DialogCommandChangeProperty';
 export * from './DialogCommandChangeScreenTone';
 export * from './DialogCommandChangeState';
+export * from './DialogCommandChangeStatus';
 export * from './DialogCommandChangeWeather';
 export * from './DialogCommandDisplayAnAnimation';
 export * from './DialogCommandDisplayAPicture';

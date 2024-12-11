@@ -26,6 +26,7 @@ import DialogCommandChangeMapProperties from '../commands/DialogCommandChangeMap
 import DialogCommandChangeProperty from '../commands/DialogCommandChangeProperty';
 import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreenTone';
 import DialogCommandChangeState from '../commands/DialogCommandChangeState';
+import DialogCommandChangeStatus from '../commands/DialogCommandChangeStatus';
 import DialogCommandChangeWeather from '../commands/DialogCommandChangeWeather';
 import DialogCommandCreateObjectInMap from '../commands/DialogCommandCreateObjectInMap';
 import DialogCommandDisplayAnAnimation from '../commands/DialogCommandDisplayAnAnimation';
@@ -398,6 +399,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandChangeAStatistic {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_EXPERIENCE_CURVE:
 				return <DialogCommandChangeExperienceCurve {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_STATUS:
+				return <DialogCommandChangeStatus {...options} />;
 			default:
 				return null;
 		}
