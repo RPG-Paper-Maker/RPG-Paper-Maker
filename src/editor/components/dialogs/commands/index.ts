@@ -4,6 +4,7 @@ export * from './DialogCommandChangeAStatistic';
 export * from './DialogCommandChangeChronometer';
 export * from './DialogCommandChangeExperienceCurve';
 export * from './DialogCommandChangeMapProperties';
+export * from './DialogCommandChangeName';
 export * from './DialogCommandChangeProperty';
 export * from './DialogCommandChangeScreenTone';
 export * from './DialogCommandChangeState';

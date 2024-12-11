@@ -460,6 +460,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_EXPERIENCE_CURVE:
 			case EVENT_COMMAND_KIND.CHANGE_STATUS:
 			case EVENT_COMMAND_KIND.CHANGE_A_SKILL:
+			case EVENT_COMMAND_KIND.CHANGE_NAME:
 				return MapObjectCommand.COLOR_GREEN;
 		}
 		return 'white';
@@ -668,6 +669,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_A_SKILL:
 				texts = this.toStringChangeASkill(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.CHANGE_NAME:
+				texts = this.toStringChangeName(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1946,6 +1950,12 @@ class MapObjectCommand extends Base {
 				.t('skill.id')
 				.toLowerCase()} ${skill} ${i18next.t('to').toLowerCase()} ${selection}`,
 		];
+	}
+
+	toStringChangeName(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const name = this.toStringDynamicValue(iterator, properties, parameters);
+		const selection = this.toStringSelectionHero(iterator, properties, parameters);
+		return [`${selection} ${i18next.t('to').toLowerCase()} ${name}`];
 	}
 
 	copy(command: MapObjectCommand): void {

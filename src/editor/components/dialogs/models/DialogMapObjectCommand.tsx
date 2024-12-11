@@ -24,6 +24,7 @@ import DialogCommandChangeAStatistic from '../commands/DialogCommandChangeAStati
 import DialogCommandChangeChronometer from '../commands/DialogCommandChangeChronometer';
 import DialogCommandChangeExperienceCurve from '../commands/DialogCommandChangeExperienceCurve';
 import DialogCommandChangeMapProperties from '../commands/DialogCommandChangeMapProperties';
+import DialogCommandChangeName from '../commands/DialogCommandChangeName';
 import DialogCommandChangeProperty from '../commands/DialogCommandChangeProperty';
 import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreenTone';
 import DialogCommandChangeState from '../commands/DialogCommandChangeState';
@@ -404,6 +405,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandChangeStatus {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_A_SKILL:
 				return <DialogCommandChangeASkill {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_NAME:
+				return <DialogCommandChangeName {...options} />;
 			default:
 				return null;
 		}
