@@ -11,6 +11,7 @@ export * from './Monsters';
 export * from './Pictures';
 export * from './Settings';
 export * from './Shapes';
+export * from './Skills';
 export * from './Songs';
 export * from './SpecialElements';
 export * from './Status';

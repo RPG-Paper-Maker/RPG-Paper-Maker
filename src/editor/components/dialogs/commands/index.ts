@@ -1,4 +1,5 @@
 export * from './DialogCommandAllowForbidSavesMainMenu';
+export * from './DialogCommandChangeASkill';
 export * from './DialogCommandChangeAStatistic';
 export * from './DialogCommandChangeChronometer';
 export * from './DialogCommandChangeExperienceCurve';

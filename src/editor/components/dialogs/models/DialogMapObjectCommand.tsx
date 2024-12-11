@@ -19,6 +19,7 @@ import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tab from '../../Tab';
 import DialogCommandAllowForbidSavesMainMenu from '../commands/DialogCommandAllowForbidSavesMainMenu';
+import DialogCommandChangeASkill from '../commands/DialogCommandChangeASkill';
 import DialogCommandChangeAStatistic from '../commands/DialogCommandChangeAStatistic';
 import DialogCommandChangeChronometer from '../commands/DialogCommandChangeChronometer';
 import DialogCommandChangeExperienceCurve from '../commands/DialogCommandChangeExperienceCurve';
@@ -401,6 +402,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandChangeExperienceCurve {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_STATUS:
 				return <DialogCommandChangeStatus {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_A_SKILL:
+				return <DialogCommandChangeASkill {...options} />;
 			default:
 				return null;
 		}
