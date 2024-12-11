@@ -2,6 +2,7 @@ export * from './DialogCommandAllowForbidSavesMainMenu';
 export * from './DialogCommandChangeASkill';
 export * from './DialogCommandChangeAStatistic';
 export * from './DialogCommandChangeChronometer';
+export * from './DialogCommandChangeClass';
 export * from './DialogCommandChangeExperienceCurve';
 export * from './DialogCommandChangeMapProperties';
 export * from './DialogCommandChangeName';

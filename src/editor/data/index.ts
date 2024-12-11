@@ -1,6 +1,7 @@
 export * from './Animations';
 export * from './Armors';
 export * from './BattleSystem';
+export * from './Classes';
 export * from './CommonEvents';
 export * from './EngineSettings';
 export * from './Heroes';

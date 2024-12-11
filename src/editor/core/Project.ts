@@ -37,6 +37,7 @@ class Project {
 	public weapons = new Data.Weapons();
 	public armors = new Data.Armors();
 	public skills = new Data.Skills();
+	public classes = new Data.Classes();
 	public heroes = new Data.Heroes();
 	public monsters = new Data.Monsters();
 	public troops = new Data.Troops();
@@ -91,6 +92,7 @@ class Project {
 		await this.weapons.load();
 		await this.armors.load();
 		await this.skills.load();
+		await this.classes.load();
 		await this.heroes.load();
 		await this.monsters.load();
 		await this.troops.load();

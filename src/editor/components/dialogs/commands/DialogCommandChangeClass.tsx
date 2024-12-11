@@ -12,6 +12,7 @@
 import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
+import { Project } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
@@ -31,21 +32,21 @@ type Props = {
 	onReject: () => void;
 };
 
-function DialogCommandChangeName({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandChangeClass({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
 	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>();
 
-	const [name] = useStateDynamicValue();
+	const [classID] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
 		if (list) {
 			const iterator = Utils.generateIterator();
-			name.updateCommand(list, iterator);
+			classID.updateCommand(list, iterator);
 			panelSelectionHeroRef.current?.initialize(list, iterator);
 		} else {
-			name.updateToDefaultText();
+			classID.updateToDefaultDatabase();
 			panelSelectionHeroRef.current?.initialize();
 		}
 		setTrigger((v) => !v);
@@ -54,9 +55,9 @@ function DialogCommandChangeName({ isOpen, setIsOpen, list, onAccept, onReject }
 	const handleAccept = async () => {
 		setIsOpen(false);
 		const newList: MapObjectCommandType[] = [];
-		name.getCommand(newList);
+		classID.getCommand(newList);
 		panelSelectionHeroRef.current?.getCommand(newList);
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHANGE_NAME, newList));
+		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHANGE_CLASS, newList));
 	};
 
 	const handleReject = async () => {
@@ -73,7 +74,7 @@ function DialogCommandChangeName({ isOpen, setIsOpen, list, onAccept, onReject }
 
 	return (
 		<Dialog
-			title={`${t('change.name')}...`}
+			title={`${t('change.class')}...`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
@@ -82,8 +83,12 @@ function DialogCommandChangeName({ isOpen, setIsOpen, list, onAccept, onReject }
 				<PanelSelectionHero ref={panelSelectionHeroRef} />
 				<Groupbox title={t('value')}>
 					<Flex spaced centerV>
-						<div>{t('name')}:</div>
-						<DynamicValueSelector value={name} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT} />
+						<div>{t('class.id')}:</div>
+						<DynamicValueSelector
+							value={classID}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+							databaseOptions={Project.current!.classes.list}
+						/>
 					</Flex>
 				</Groupbox>
 			</Flex>
@@ -91,4 +96,4 @@ function DialogCommandChangeName({ isOpen, setIsOpen, list, onAccept, onReject }
 	);
 }
 
-export default DialogCommandChangeName;
+export default DialogCommandChangeClass;

@@ -22,6 +22,7 @@ import DialogCommandAllowForbidSavesMainMenu from '../commands/DialogCommandAllo
 import DialogCommandChangeASkill from '../commands/DialogCommandChangeASkill';
 import DialogCommandChangeAStatistic from '../commands/DialogCommandChangeAStatistic';
 import DialogCommandChangeChronometer from '../commands/DialogCommandChangeChronometer';
+import DialogCommandChangeClass from '../commands/DialogCommandChangeClass';
 import DialogCommandChangeExperienceCurve from '../commands/DialogCommandChangeExperienceCurve';
 import DialogCommandChangeMapProperties from '../commands/DialogCommandChangeMapProperties';
 import DialogCommandChangeName from '../commands/DialogCommandChangeName';
@@ -407,6 +408,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandChangeASkill {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_NAME:
 				return <DialogCommandChangeName {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_CLASS:
+				return <DialogCommandChangeClass {...options} />;
 			default:
 				return null;
 		}
