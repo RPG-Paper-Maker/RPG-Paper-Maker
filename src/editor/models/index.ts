@@ -63,4 +63,5 @@ export * from './TroopReaction';
 export * from './TroopReactionConditions';
 export * from './VariablesPage';
 export * from './Video';
+export * from './WeaponArmorKind';
 export * from './WindowSkin';

@@ -137,6 +137,7 @@ class Base extends Serializable {
 	public static DAMAGE_KIND_OPTIONS = Base.mapListIndex(['statistic', 'currency', 'variable']);
 	public static TEAM_OPTIONS = Base.mapListIndex(['team', 'reserve', 'hidden', 'troop']);
 	public static MOVE_REMOVE_OPTIONS = Base.mapListIndex(['move', 'remove']);
+	public static WEAPON_ARMOR_ID_OPTIONS = Base.mapListIndex(['weapon.id', 'armor.id']);
 
 	public id!: number;
 	public name!: string;

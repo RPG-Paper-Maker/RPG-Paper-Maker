@@ -462,6 +462,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_A_SKILL:
 			case EVENT_COMMAND_KIND.CHANGE_NAME:
 			case EVENT_COMMAND_KIND.CHANGE_CLASS:
+			case EVENT_COMMAND_KIND.CHANGE_EQUIPMENT:
 				return MapObjectCommand.COLOR_GREEN;
 		}
 		return 'white';
@@ -676,6 +677,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_CLASS:
 				texts = this.toStringChangeClass(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.CHANGE_EQUIPMENT:
+				texts = this.toStringChangeEquipment(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1893,7 +1897,7 @@ class MapObjectCommand extends Base {
 			parameters,
 			Project.current!.battleSystem.statistics
 		)}`;
-		let selection = this.toStringSelectionHero(iterator, properties, parameters);
+		const selection = this.toStringSelectionHero(iterator, properties, parameters);
 		const operation = this.toStringOperation(iterator);
 		let value = '';
 		switch (this.command[iterator.i++]) {
@@ -1966,6 +1970,36 @@ class MapObjectCommand extends Base {
 		const classID = this.toStringDynamicValue(iterator, properties, parameters, Project.current!.classes.list);
 		const selection = this.toStringSelectionHero(iterator, properties, parameters);
 		return [`${selection} ${i18next.t('to').toLowerCase()} ${i18next.t('class.id').toLowerCase()} ${classID}`];
+	}
+
+	toStringChangeEquipment(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const equipment = this.toStringDynamicValue(
+			iterator,
+			properties,
+			parameters,
+			Project.current!.battleSystem.equipments
+		);
+		const isWeapon = Utils.initializeBoolCommand(this.command, iterator);
+		const weaponArmor = this.toStringDynamicValue(
+			iterator,
+			properties,
+			parameters,
+			isWeapon ? Project.current!.weapons.list : Project.current!.armors.list
+		);
+		const selection = this.toStringSelectionHero(iterator, properties, parameters);
+		const options = [];
+		if (Utils.initializeBoolCommand(this.command, iterator)) {
+			options.push(i18next.t('apply.only.if.in.inventory'));
+		}
+		const texts = [
+			`${i18next.t('equipment.id')} ${equipment} ${i18next.t('with').toLowerCase()} ${i18next.t(
+				isWeapon ? 'weapon.id' : 'armor.id'
+			)} ${weaponArmor} ${i18next.t('to').toLowerCase()} ${selection}`,
+		];
+		if (options.length > 0) {
+			texts.push(`[${options.join(';')}]`);
+		}
+		return texts;
 	}
 
 	copy(command: MapObjectCommand): void {
