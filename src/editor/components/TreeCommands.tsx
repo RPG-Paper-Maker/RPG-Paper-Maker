@@ -101,6 +101,14 @@ function TreeCommands({ list }: Props) {
 				}
 				break;
 			}
+			case EVENT_COMMAND_KIND.WHILE: {
+				if (isNew) {
+					const endWhile = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.END_WHILE);
+					endWhile.id = Node.getNewID(list);
+					ArrayUtils.insertAt(currentList, index++, Node.create(endWhile));
+				}
+				break;
+			}
 			default:
 				node.content.id = Node.getNewID(list);
 				break;

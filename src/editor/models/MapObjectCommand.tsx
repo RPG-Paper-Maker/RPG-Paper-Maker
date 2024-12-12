@@ -110,6 +110,8 @@ class MapObjectCommand extends Base {
 			EVENT_COMMAND_KIND.END_IF,
 			EVENT_COMMAND_KIND.END_BATTLE,
 			EVENT_COMMAND_KIND.ELSE,
+			EVENT_COMMAND_KIND.WHILE,
+			EVENT_COMMAND_KIND.END_WHILE,
 		].includes(kind);
 	}
 
@@ -224,6 +226,7 @@ class MapObjectCommand extends Base {
 				return <LuShirt />;
 			case EVENT_COMMAND_KIND.WHILE:
 			case EVENT_COMMAND_KIND.WHILE_BREAK:
+			case EVENT_COMMAND_KIND.END_WHILE:
 				return <TiArrowLoop />;
 			case EVENT_COMMAND_KIND.LABEL:
 			case EVENT_COMMAND_KIND.JUMP_LABEL:
@@ -384,6 +387,8 @@ class MapObjectCommand extends Base {
 				return i18next.t('loop');
 			case EVENT_COMMAND_KIND.WHILE_BREAK:
 				return i18next.t('break.loop');
+			case EVENT_COMMAND_KIND.END_WHILE:
+				return i18next.t('end.loop');
 			case EVENT_COMMAND_KIND.LABEL:
 				return i18next.t('label');
 			case EVENT_COMMAND_KIND.JUMP_LABEL:
@@ -435,6 +440,8 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.END_IF:
 			case EVENT_COMMAND_KIND.IF:
 			case EVENT_COMMAND_KIND.ELSE:
+			case EVENT_COMMAND_KIND.WHILE:
+			case EVENT_COMMAND_KIND.END_WHILE:
 				return MapObjectCommand.COLOR_PURPLE;
 			case EVENT_COMMAND_KIND.START_SHOP_MENU:
 			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
@@ -482,6 +489,7 @@ class MapObjectCommand extends Base {
 			EVENT_COMMAND_KIND.IF_LOSE,
 			EVENT_COMMAND_KIND.IF,
 			EVENT_COMMAND_KIND.ELSE,
+			EVENT_COMMAND_KIND.WHILE,
 		].includes(this.kind);
 	}
 
@@ -497,6 +505,7 @@ class MapObjectCommand extends Base {
 			EVENT_COMMAND_KIND.IF_LOSE,
 			EVENT_COMMAND_KIND.END_IF,
 			EVENT_COMMAND_KIND.ELSE,
+			EVENT_COMMAND_KIND.END_WHILE,
 		].includes(this.kind);
 	}
 
@@ -512,6 +521,8 @@ class MapObjectCommand extends Base {
 				return this.isBattleNoGameOver() ? 4 : 0;
 			case EVENT_COMMAND_KIND.IF:
 				return this.isConditionElse() ? 3 : 2;
+			case EVENT_COMMAND_KIND.WHILE:
+				return 2;
 			default:
 				return 0;
 		}
@@ -567,6 +578,8 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.END_BATTLE:
 			case EVENT_COMMAND_KIND.ELSE:
 			case EVENT_COMMAND_KIND.IF:
+			case EVENT_COMMAND_KIND.WHILE:
+			case EVENT_COMMAND_KIND.END_WHILE:
 				texts = [''];
 				break;
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
