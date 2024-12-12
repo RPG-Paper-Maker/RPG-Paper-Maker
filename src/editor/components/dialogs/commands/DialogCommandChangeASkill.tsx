@@ -86,7 +86,7 @@ function DialogCommandChangeASkill({ isOpen, setIsOpen, list, onAccept, onReject
 
 	return (
 		<Dialog
-			title={`${t('change.skill')}...`}
+			title={`${t('change.a.skill')}...`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}

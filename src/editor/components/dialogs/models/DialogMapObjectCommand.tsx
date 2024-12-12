@@ -38,6 +38,7 @@ import DialogCommandDisplayAPicture from '../commands/DialogCommandDisplayAPictu
 import DialogCommandDisplayChoice from '../commands/DialogCommandDisplayChoice';
 import DialogCommandEnterANameMenu from '../commands/DialogCommandEnterANameMenu';
 import DialogCommandFlashScreen from '../commands/DialogCommandFlashScreen';
+import DialogCommandIf from '../commands/DialogCommandIf';
 import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
 import DialogCommandModifyCurrency from '../commands/DialogCommandModifyCurrency';
 import DialogCommandModifyInventory from '../commands/DialogCommandModifyInventory';
@@ -413,6 +414,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandChangeClass {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_EQUIPMENT:
 				return <DialogCommandChangeEquipment {...options} />;
+			case EVENT_COMMAND_KIND.IF:
+				return <DialogCommandIf {...options} />;
 			default:
 				return null;
 		}

@@ -50,6 +50,7 @@ import { VscSymbolProperty } from 'react-icons/vsc';
 import {
 	BINDING,
 	BindingType,
+	CONDITION_HEROES_KIND,
 	DYNAMIC_VALUE_KIND,
 	EVENT_COMMAND_KIND,
 	ITEM_KIND,
@@ -108,6 +109,7 @@ class MapObjectCommand extends Base {
 			EVENT_COMMAND_KIND.IF_LOSE,
 			EVENT_COMMAND_KIND.END_IF,
 			EVENT_COMMAND_KIND.END_BATTLE,
+			EVENT_COMMAND_KIND.ELSE,
 		].includes(kind);
 	}
 
@@ -122,6 +124,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.IF_WIN:
 			case EVENT_COMMAND_KIND.IF_LOSE:
 			case EVENT_COMMAND_KIND.END_IF:
+			case EVENT_COMMAND_KIND.ELSE:
 				return <FaCodeBranch />;
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
 				return <TbNumber123 />;
@@ -375,6 +378,8 @@ class MapObjectCommand extends Base {
 				return i18next.t('change.equipment');
 			case EVENT_COMMAND_KIND.IF:
 				return i18next.t('condition');
+			case EVENT_COMMAND_KIND.ELSE:
+				return i18next.t('else');
 			case EVENT_COMMAND_KIND.WHILE:
 				return i18next.t('loop');
 			case EVENT_COMMAND_KIND.WHILE_BREAK:
@@ -428,6 +433,8 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.IF_WIN:
 			case EVENT_COMMAND_KIND.IF_LOSE:
 			case EVENT_COMMAND_KIND.END_IF:
+			case EVENT_COMMAND_KIND.IF:
+			case EVENT_COMMAND_KIND.ELSE:
 				return MapObjectCommand.COLOR_PURPLE;
 			case EVENT_COMMAND_KIND.START_SHOP_MENU:
 			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
@@ -469,7 +476,13 @@ class MapObjectCommand extends Base {
 	}
 
 	canHaveChildren(): boolean {
-		return [EVENT_COMMAND_KIND.CHOICE, EVENT_COMMAND_KIND.IF_WIN, EVENT_COMMAND_KIND.IF_LOSE].includes(this.kind);
+		return [
+			EVENT_COMMAND_KIND.CHOICE,
+			EVENT_COMMAND_KIND.IF_WIN,
+			EVENT_COMMAND_KIND.IF_LOSE,
+			EVENT_COMMAND_KIND.IF,
+			EVENT_COMMAND_KIND.ELSE,
+		].includes(this.kind);
 	}
 
 	canExpand(): boolean {
@@ -483,6 +496,7 @@ class MapObjectCommand extends Base {
 			EVENT_COMMAND_KIND.IF_WIN,
 			EVENT_COMMAND_KIND.IF_LOSE,
 			EVENT_COMMAND_KIND.END_IF,
+			EVENT_COMMAND_KIND.ELSE,
 		].includes(this.kind);
 	}
 
@@ -496,6 +510,8 @@ class MapObjectCommand extends Base {
 				return this.getChoicesNumber() + 2;
 			case EVENT_COMMAND_KIND.START_BATTLE:
 				return this.isBattleNoGameOver() ? 4 : 0;
+			case EVENT_COMMAND_KIND.IF:
+				return this.isConditionElse() ? 3 : 2;
 			default:
 				return 0;
 		}
@@ -518,6 +534,10 @@ class MapObjectCommand extends Base {
 
 	isBattleNoGameOver(): boolean {
 		return !Utils.numToBool(this.command[1] as number);
+	}
+
+	isConditionElse(): boolean {
+		return Utils.numToBool(this.command[0] as number);
 	}
 
 	toString(): string | ReactNode {
@@ -545,6 +565,8 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.IF_LOSE:
 			case EVENT_COMMAND_KIND.END_IF:
 			case EVENT_COMMAND_KIND.END_BATTLE:
+			case EVENT_COMMAND_KIND.ELSE:
+			case EVENT_COMMAND_KIND.IF:
 				texts = [''];
 				break;
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
@@ -686,8 +708,16 @@ class MapObjectCommand extends Base {
 			<Flex spaced>
 				<Flex column spaced>
 					<Flex spaced>
-						<div style={{ fontWeight: 'bold', color }}>{commandName}</div>
-						{`${MapObjectCommand.isNotOpeningCommand(this.kind) ? '' : ':'} ${texts[0]}`}
+						{this.kind === EVENT_COMMAND_KIND.IF ? (
+							<div style={{ fontWeight: 'bold', color }}>
+								{this.toStringIf(iterator, parameters, properties)}
+							</div>
+						) : (
+							<>
+								<div style={{ fontWeight: 'bold', color }}>{commandName}</div>
+								{`${MapObjectCommand.isNotOpeningCommand(this.kind) ? '' : ':'} ${texts[0]}`}
+							</>
+						)}
 					</Flex>
 					{texts.slice(1).map((text, index) => (
 						<div key={index}>{text}</div>
@@ -2000,6 +2030,177 @@ class MapObjectCommand extends Base {
 			texts.push(`[${options.join(';')}]`);
 		}
 		return texts;
+	}
+
+	toStringIf(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		iterator.i++;
+		const compareOptions = Base.getCompareOptions();
+		let str = '';
+		switch (this.command[iterator.i++]) {
+			case 0:
+				str += this.toStringDynamicValue(iterator, properties, parameters);
+				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
+				str += this.toStringDynamicValue(iterator, properties, parameters);
+				break;
+			case 1: {
+				const index = this.command[iterator.i++] as CONDITION_HEROES_KIND;
+				str += `${i18next.t(Base.HEROES_OPTIONS[index].name)}`;
+				if (index === CONDITION_HEROES_KIND.THE_HERO_WITH_INSTANCE_ID) {
+					str += ` ${this.toStringDynamicValue(iterator, properties, parameters)}`;
+				}
+				if (Utils.initializeBoolCommand(this.command, iterator)) {
+					str += ` ${i18next.t('in').toLowerCase()} ${i18next
+						.t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name)
+						.toLowerCase()}`;
+				}
+				str += ' ';
+				switch (this.command[iterator.i++]) {
+					case 0:
+						str += `${i18next.t('are.named').toLowerCase()} ${this.toStringDynamicValue(
+							iterator,
+							properties,
+							parameters
+						)}`;
+						break;
+					case 1:
+						str += `${i18next.t('are.in').toLowerCase()} ${i18next
+							.t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name)
+							.toLowerCase()}`;
+						break;
+					case 2:
+						str += `${i18next.t('are.able.skill.id').toLowerCase()} ${this.toStringDynamicValue(
+							iterator,
+							properties,
+							parameters,
+							Project.current!.skills.list
+						)}`;
+						break;
+					case 3:
+						str += `${i18next.t('are.equiped.with').toLowerCase()} `;
+						switch (this.command[iterator.i++]) {
+							case 0:
+								str += `${i18next.t('weapon.id').toLowerCase()} ${this.toStringDynamicValue(
+									iterator,
+									properties,
+									parameters,
+									Project.current!.weapons.list
+								)}`;
+								break;
+							case 1:
+								str += `${i18next.t('armor.id').toLowerCase()} ${this.toStringDynamicValue(
+									iterator,
+									properties,
+									parameters,
+									Project.current!.armors.list
+								)}`;
+						}
+						break;
+					case 4:
+						str += `${i18next.t('are.under.effect.status.id').toLowerCase()} ${this.toStringDynamicValue(
+							iterator,
+							properties,
+							parameters,
+							Project.current!.status.list
+						)}`;
+						break;
+					case 5:
+						str += `${i18next.t('have.statistic.id').toLowerCase()} ${this.toStringDynamicValue(
+							iterator,
+							properties,
+							parameters,
+							Project.current!.battleSystem.statistics
+						)} `;
+						str += compareOptions[this.command[iterator.i++] as number].name;
+						str += ` ${this.toStringDynamicValue(iterator, properties, parameters)}`;
+						break;
+				}
+				break;
+			}
+			case 2:
+				str += `${i18next.t('currency.id')} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.systems.currencies
+				)}`;
+				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
+				str += this.toStringDynamicValue(iterator, properties, parameters);
+				break;
+			case 3:
+				str += `${i18next.t('item.id')} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.items.list
+				)}`;
+				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
+				str += this.toStringDynamicValue(iterator, properties, parameters);
+				break;
+			case 4:
+				str += `${i18next.t('weapon.id')} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.weapons.list
+				)}`;
+				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
+				str += this.toStringDynamicValue(iterator, properties, parameters);
+				if (Utils.initializeBoolCommand(this.command, iterator)) {
+					str += ` + ${i18next.t('check.weapons.equiped.too').toLowerCase()}`;
+				}
+				break;
+			case 5:
+				str += `${i18next.t('armor.id')} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.armors.list
+				)}`;
+				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
+				str += this.toStringDynamicValue(iterator, properties, parameters);
+				if (Utils.initializeBoolCommand(this.command, iterator)) {
+					str += ` + ${i18next.t('check.armors.equiped.too').toLowerCase()}`;
+				}
+				break;
+			case 6:
+				str += `${i18next.t('key.id')}: ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.keyboard.list
+				)} ${i18next.t('is').toLowerCase()} `;
+				str += this.toStringDynamicValue(iterator, properties, parameters);
+				break;
+			case 7:
+				str += `${i18next.t('script')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`;
+				break;
+			case 8:
+				str += i18next.t('escaped.last.battle');
+				break;
+			case 9:
+				str += `${i18next.t('object.id')} ${this.toStringDynamicObject(
+					iterator,
+					properties,
+					parameters
+				)} ${i18next.t('is.looking.at').toLowerCase()} `;
+				str += i18next.t(Base.ORIENTATION_OPTIONS[this.command[iterator.i++] as number].name);
+				break;
+			case 10:
+				str += `${i18next.t('chronometer.id')} ${this.toStringDynamicValue(iterator, properties, parameters)} `;
+				str += `${compareOptions[this.command[iterator.i++] as number].name} `;
+				str += `${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next
+					.t('seconds')
+					.toLowerCase()}`;
+				break;
+			case 11:
+				str += `${i18next.t('object.id')} ${this.toStringDynamicObject(
+					iterator,
+					properties,
+					parameters
+				)} ${i18next.t('is.climbing').toLowerCase()} `;
+				break;
+		}
+		return [`${i18next.t('if')} (${str})`];
 	}
 
 	copy(command: MapObjectCommand): void {

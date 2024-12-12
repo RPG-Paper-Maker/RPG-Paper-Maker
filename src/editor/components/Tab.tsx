@@ -28,6 +28,7 @@ type Props = {
 	onCurrentIndexChanged?: (index: number, model: Model.Base, isClick: boolean) => void;
 	forcedCurrentIndex?: number | null;
 	setForcedCurrentIndex?: (forced: number | null) => void;
+	padding?: boolean;
 };
 
 function Tab({
@@ -41,6 +42,7 @@ function Tab({
 	onCurrentIndexChanged,
 	forcedCurrentIndex,
 	setForcedCurrentIndex,
+	padding = false,
 }: Props) {
 	const [currentIndex, setCurrentIndex] = useState(defaultIndex);
 	const [nextIndex, setNextIndex] = useState(defaultIndex); // Needed to make scrolling work properly on direct click...
@@ -94,14 +96,18 @@ function Tab({
 			if (onCurrentIndexChanged) {
 				onCurrentIndexChanged(forcedCurrentIndex, titles[forcedCurrentIndex], false);
 			}
+			setForcedCurrentIndex(null);
 		}
 		// eslint-disable-next-line
 	}, [forcedCurrentIndex, setForcedCurrentIndex]);
 
 	useEffect(() => {
-		setCurrentIndex(nextIndex);
-		if (onCurrentIndexChanged) {
-			onCurrentIndexChanged(nextIndex, titles[nextIndex], true);
+		if (nextIndex !== -1) {
+			setCurrentIndex(nextIndex);
+			if (onCurrentIndexChanged) {
+				onCurrentIndexChanged(nextIndex, titles[nextIndex], true);
+			}
+			setNextIndex(-1);
 		}
 		// eslint-disable-next-line
 	}, [nextIndex, setNextIndex]);
@@ -154,7 +160,7 @@ function Tab({
 					</>
 				)}
 			</div>
-			<div className='tabContent'>{getContents()}</div>
+			<div className={Utils.getClassName({ padding }, 'tabContent')}>{getContents()}</div>
 		</div>
 	);
 }

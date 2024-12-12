@@ -17,6 +17,7 @@ export * from './DialogCommandDisplayAPicture';
 export * from './DialogCommandDisplayChoice';
 export * from './DialogCommandEnterANameMenu';
 export * from './DialogCommandFlashScreen';
+export * from './DialogCommandIf';
 export * from './DialogCommandInputNumber';
 export * from './DialogCommandModifyCurrency';
 export * from './DialogCommandModifyInventory';

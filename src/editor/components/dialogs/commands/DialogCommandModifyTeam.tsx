@@ -187,7 +187,7 @@ function DialogCommandModifyTeam({ isOpen, setIsOpen, list, onAccept, onReject }
 						<div className={Utils.getClassName({ disabledLabel: !isCreate })}>{t('of')}</div>
 					</Flex>
 					<Flex spaced>
-						<div className='fillSmallSpace' />
+						<Flex fillSmallSpace />
 						<RadioGroup selected={selectionHeroMonsterType} onChange={setSelectionHeroMonsterType}>
 							<Flex column spacedLarge>
 								<Form>

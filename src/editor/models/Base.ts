@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import { ReactNode } from 'react';
 import {
 	BINDING,
@@ -138,6 +139,23 @@ class Base extends Serializable {
 	public static TEAM_OPTIONS = Base.mapListIndex(['team', 'reserve', 'hidden', 'troop']);
 	public static MOVE_REMOVE_OPTIONS = Base.mapListIndex(['move', 'remove']);
 	public static WEAPON_ARMOR_ID_OPTIONS = Base.mapListIndex(['weapon.id', 'armor.id']);
+	public static HEROES_OPTIONS = Base.mapListIndex([
+		'all.heroes',
+		'none.of.heroes',
+		'at.least.one.hero',
+		'hero.with.instance.id',
+	]);
+	public static ORIENTATION_OPTIONS = Base.mapListIndex(['south', 'west', 'north', 'east']);
+
+	public static getCompareOptions = () =>
+		Base.mapListIndex([
+			`= (${i18next.t('equal.to')})`,
+			`!= (${i18next.t('not.equal.to')})`,
+			`>= (${i18next.t('greater.than.or.equal.to')})`,
+			`<= (${i18next.t('lesser.than.or.equal.to')})`,
+			`> (${i18next.t('greater.than')})`,
+			`< (${i18next.t('lesser.than')})`,
+		]);
 
 	public id!: number;
 	public name!: string;

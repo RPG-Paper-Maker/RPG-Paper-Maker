@@ -83,6 +83,24 @@ function TreeCommands({ list }: Props) {
 				}
 				break;
 			}
+			case EVENT_COMMAND_KIND.IF: {
+				const isElse = command.isConditionElse();
+				const previousIsElse =
+					(currentList[index]?.content as Model.MapObjectCommand)?.kind === EVENT_COMMAND_KIND.ELSE;
+				if ((isNew && isElse) || (!isNew && !previousIsElse && isElse)) {
+					const ifElse = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.ELSE);
+					ifElse.id = Node.getNewID(list);
+					ArrayUtils.insertAt(currentList, index++, Node.create(ifElse));
+				} else if (!isNew && previousIsElse && !isElse) {
+					ArrayUtils.removeAt(currentList, index);
+				}
+				if (isNew) {
+					const endIf = Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.END_IF);
+					endIf.id = Node.getNewID(list);
+					ArrayUtils.insertAt(currentList, index++, Node.create(endIf));
+				}
+				break;
+			}
 			default:
 				node.content.id = Node.getNewID(list);
 				break;
