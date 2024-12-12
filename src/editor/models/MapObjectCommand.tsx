@@ -112,6 +112,7 @@ class MapObjectCommand extends Base {
 			EVENT_COMMAND_KIND.ELSE,
 			EVENT_COMMAND_KIND.WHILE,
 			EVENT_COMMAND_KIND.END_WHILE,
+			EVENT_COMMAND_KIND.WHILE_BREAK,
 		].includes(kind);
 	}
 
@@ -442,6 +443,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.ELSE:
 			case EVENT_COMMAND_KIND.WHILE:
 			case EVENT_COMMAND_KIND.END_WHILE:
+			case EVENT_COMMAND_KIND.WHILE_BREAK:
 				return MapObjectCommand.COLOR_PURPLE;
 			case EVENT_COMMAND_KIND.START_SHOP_MENU:
 			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
@@ -580,6 +582,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.IF:
 			case EVENT_COMMAND_KIND.WHILE:
 			case EVENT_COMMAND_KIND.END_WHILE:
+			case EVENT_COMMAND_KIND.WHILE_BREAK:
 				texts = [''];
 				break;
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
