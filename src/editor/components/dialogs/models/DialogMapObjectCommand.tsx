@@ -13,7 +13,7 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { EVENT_COMMAND_KIND } from '../../../common';
 import { Model } from '../../../Editor';
-import { MapObjectCommand } from '../../../models';
+import { MapObjectCommand, MapObjectCommandType } from '../../../models';
 import Button from '../../Button';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
@@ -40,6 +40,7 @@ import DialogCommandEnterANameMenu from '../commands/DialogCommandEnterANameMenu
 import DialogCommandFlashScreen from '../commands/DialogCommandFlashScreen';
 import DialogCommandIf from '../commands/DialogCommandIf';
 import DialogCommandInputNumber from '../commands/DialogCommandInputNumber';
+import DialogCommandLabel from '../commands/DialogCommandLabel';
 import DialogCommandModifyCurrency from '../commands/DialogCommandModifyCurrency';
 import DialogCommandModifyInventory from '../commands/DialogCommandModifyInventory';
 import DialogCommandModifyTeam from '../commands/DialogCommandModifyTeam';
@@ -61,6 +62,15 @@ import DialogCommandSwitchTexture from '../commands/DialogCommandSwitchTexture';
 import DialogCommandTeleportObject from '../commands/DialogCommandTeleportObject';
 import DialogCommandWait from '../commands/DialogCommandWait';
 import Dialog from '../Dialog';
+
+export type CommandProps = {
+	commandKind: EVENT_COMMAND_KIND;
+	isOpen: boolean;
+	setIsOpen: (b: boolean) => void;
+	list?: MapObjectCommandType[];
+	onAccept: (command: Model.MapObjectCommand) => void;
+	onReject: () => void;
+};
 
 type Props = {
 	isOpen: boolean;
@@ -306,7 +316,7 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				<Groupbox title={t('advanced')}>
 					<Flex column spaced>
 						{getButton(EVENT_COMMAND_KIND.SCRIPT)}
-						{getButton(EVENT_COMMAND_KIND.PLUGIN)}
+						{getButton(EVENT_COMMAND_KIND.PLUGIN, true)}
 					</Flex>
 				</Groupbox>
 			</Flex>
@@ -315,6 +325,7 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 
 	const getDialogCommand = () => {
 		const options = {
+			commandKind: selectedCommand!,
 			isOpen: isOpenCommand,
 			setIsOpen: setIsOpenCommand,
 			onAccept: handleAcceptCommand,
@@ -367,9 +378,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 			case EVENT_COMMAND_KIND.PLAY_A_VIDEO:
 				return <DialogCommandPlayAVideo {...options} />;
 			case EVENT_COMMAND_KIND.START_SHOP_MENU:
-				return <DialogCommandStartShopMenu {...options} />;
 			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
-				return <DialogCommandStartShopMenu isRestock {...options} />;
+				return <DialogCommandStartShopMenu {...options} />;
 			case EVENT_COMMAND_KIND.ENTER_A_NAME_MENU:
 				return <DialogCommandEnterANameMenu {...options} />;
 			case EVENT_COMMAND_KIND.PLAY_MUSIC:
@@ -378,11 +388,11 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 			case EVENT_COMMAND_KIND.PLAY_MUSIC_EFFECT:
 			case EVENT_COMMAND_KIND.CHANGE_BATTLE_MUSIC:
 			case EVENT_COMMAND_KIND.CHANGE_VICTORY_MUSIC:
-				return <DialogCommandPlaySong commandKind={selectedCommand} {...options} />;
+				return <DialogCommandPlaySong {...options} />;
 			case EVENT_COMMAND_KIND.STOP_MUSIC:
 			case EVENT_COMMAND_KIND.STOP_BACKGROUND_SOUND:
 			case EVENT_COMMAND_KIND.STOP_A_SOUND:
-				return <DialogCommandStopSong commandKind={selectedCommand} {...options} />;
+				return <DialogCommandStopSong {...options} />;
 			case EVENT_COMMAND_KIND.SEND_EVENT:
 				return <DialogCommandSendEvent {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_STATE:
@@ -397,7 +407,7 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandModifyTeam {...options} />;
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_SAVES:
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_MAIN_MENU:
-				return <DialogCommandAllowForbidSavesMainMenu kind={selectedCommand} {...options} />;
+				return <DialogCommandAllowForbidSavesMainMenu {...options} />;
 			case EVENT_COMMAND_KIND.START_BATTLE:
 				return <DialogCommandStartBattle {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
@@ -416,6 +426,9 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandChangeEquipment {...options} />;
 			case EVENT_COMMAND_KIND.IF:
 				return <DialogCommandIf {...options} />;
+			case EVENT_COMMAND_KIND.LABEL:
+			case EVENT_COMMAND_KIND.JUMP_LABEL:
+				return <DialogCommandLabel {...options} />;
 			default:
 				return null;
 		}

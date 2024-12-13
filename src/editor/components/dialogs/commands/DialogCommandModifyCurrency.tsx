@@ -11,7 +11,7 @@
 
 import { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, Utils } from '../../../common';
 import { Project } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
@@ -24,16 +24,9 @@ import Groupbox from '../../Groupbox';
 import PanelOperation, { SELECTION_OPERATION_TYPE } from '../../panels/PanelOperation';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandModifyCurrency({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandModifyCurrency({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [currencyID] = useStateDynamicValue();
@@ -61,7 +54,7 @@ function DialogCommandModifyCurrency({ isOpen, setIsOpen, list, onAccept, onReje
 		currencyID.getCommand(newList);
 		newList.push(selectionOperationType);
 		value.getCommand(newList);
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.MODIFY_CURRENCY, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {

@@ -11,7 +11,7 @@
 
 import { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, Utils } from '../../../common';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
@@ -25,6 +25,7 @@ import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
 enum SELECTION_OPERATION_TYPE {
 	START,
@@ -33,15 +34,7 @@ enum SELECTION_OPERATION_TYPE {
 	STOP,
 }
 
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandChangeChronometer({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandChangeChronometer({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [stockValueVariableID] = useStateDynamicValue();
@@ -102,7 +95,7 @@ function DialogCommandChangeChronometer({ isOpen, setIsOpen, list, onAccept, onR
 				}
 				break;
 		}
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHANGE_CHRONOMETER, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {

@@ -18,17 +18,9 @@ import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../../models';
 import DialogSongsPreview from '../DialogSongsPreview';
+import { CommandProps } from '../models';
 
-type Props = {
-	commandKind: EVENT_COMMAND_KIND;
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandPlaySong({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandPlaySong({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [songID, setSongID] = useStateNumber();

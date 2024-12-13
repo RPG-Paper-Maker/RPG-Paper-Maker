@@ -11,7 +11,7 @@
 
 import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, OPERATION_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, OPERATION_KIND, Utils } from '../../../common';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
@@ -24,16 +24,16 @@ import PanelOperation from '../../panels/PanelOperation';
 import PanelSelectionHero, { PanelSelectionHeroRef } from '../../panels/PanelSelectionHero';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandChangeExperienceCurve({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandChangeExperienceCurve({
+	commandKind,
+	isOpen,
+	setIsOpen,
+	list,
+	onAccept,
+	onReject,
+}: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>();
@@ -70,7 +70,7 @@ function DialogCommandChangeExperienceCurve({ isOpen, setIsOpen, list, onAccept,
 		levelTo.getCommand(newList);
 		newList.push(selectionOperationType);
 		totalExperience.getCommand(newList);
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHANGE_EXPERIENCE_CURVE, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {

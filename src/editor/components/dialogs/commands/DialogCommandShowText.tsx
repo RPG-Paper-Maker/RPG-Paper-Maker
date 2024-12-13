@@ -12,7 +12,7 @@
 import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaAlignCenter, FaAlignLeft, FaAlignRight, FaBold, FaItalic } from 'react-icons/fa';
-import { BUTTON_TYPE, DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, PICTURE_KIND, Utils } from '../../../common';
+import { BUTTON_TYPE, DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, Utils } from '../../../common';
 import { Project, Rectangle } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
@@ -29,16 +29,9 @@ import TextArea from '../../TextArea';
 import Dialog from '../Dialog';
 import DialogPicturesPreview from '../DialogPicturesPreview';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandShowText({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandShowText({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [isOpenDialogIcon, setIsOpenDialogIcon] = useState(false);
@@ -162,7 +155,7 @@ function DialogCommandShowText({ isOpen, setIsOpen, list, onAccept, onReject }: 
 			newList.push(id);
 			newList.push(text);
 		}
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.SHOW_TEXT, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {

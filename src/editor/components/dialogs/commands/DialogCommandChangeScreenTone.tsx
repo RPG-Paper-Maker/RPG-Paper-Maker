@@ -11,7 +11,7 @@
 
 import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, Utils } from '../../../common';
 import { Project } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
@@ -27,21 +27,14 @@ import PanelWaitTime, { PanelWaitTimeRef } from '../../panels/PanelWaitTime';
 import SliderDynamic from '../../SliderDynamic';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
-
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
+import { CommandProps } from '../models';
 
 const COLOR_MIN = -255;
 const COLOR_MAX = 255;
 const GREY_MIN = 0;
 const GREY_MAX = 100;
 
-function DialogCommandChangeScreenTone({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandChangeScreenTone({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelWaitTimeRef = useRef<PanelWaitTimeRef>();
@@ -98,7 +91,7 @@ function DialogCommandChangeScreenTone({ isOpen, setIsOpen, list, onAccept, onRe
 			addingColorID.getCommand(newList);
 		}
 		panelWaitTimeRef.current?.getCommand(newList);
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {

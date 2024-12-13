@@ -11,7 +11,7 @@
 
 import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, Utils } from '../../../common';
 import { Node } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
@@ -22,16 +22,9 @@ import Groupbox from '../../Groupbox';
 import Tree from '../../Tree';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandDisplayChoice({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandDisplayChoice({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [choices, setChoices] = useState<Node[]>([]);
@@ -86,7 +79,7 @@ function DialogCommandDisplayChoice({ isOpen, setIsOpen, list, onAccept, onRejec
 			newList.push('-');
 			lang.getCommand(newList);
 		}
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.DISPLAY_CHOICE, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {

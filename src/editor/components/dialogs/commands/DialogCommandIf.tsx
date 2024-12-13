@@ -11,13 +11,7 @@
 
 import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-	CONDITION_HEROES_KIND,
-	DYNAMIC_VALUE_OPTIONS_TYPE,
-	EVENT_COMMAND_KIND,
-	OPERATION_KIND,
-	Utils,
-} from '../../../common';
+import { CONDITION_HEROES_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, OPERATION_KIND, Utils } from '../../../common';
 import { Project } from '../../../core';
 import { Model, Scene } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
@@ -34,6 +28,7 @@ import RadioGroup from '../../RadioGroup';
 import Tab from '../../Tab';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
 enum SELECTION_TYPE {
 	VARIABLE_PARAM_PROP = 0,
@@ -64,15 +59,7 @@ enum SELECTION_HEROES_EQUIPED_TYPE {
 	ARMOR,
 }
 
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandIf({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandIf({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [forcedTabIndex, setForcedTabIndex] = useState<number | null>(null);
@@ -409,7 +396,7 @@ function DialogCommandIf({ isOpen, setIsOpen, list, onAccept, onReject }: Props)
 				script.getCommand(newList);
 				break;
 		}
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.IF, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {

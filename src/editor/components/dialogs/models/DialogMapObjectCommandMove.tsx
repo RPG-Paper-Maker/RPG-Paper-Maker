@@ -10,7 +10,7 @@
 */
 
 import { useEffect } from 'react';
-import { COMMAND_MOVE_KIND } from '../../../common';
+import { COMMAND_MOVE_KIND, EVENT_COMMAND_KIND } from '../../../common';
 import { Model } from '../../../Editor';
 import { MapObjectCommandMove } from '../../../models';
 import DialogCommandMoveObjectChangeGraphics from '../commands/DialogCommandMoveObjectChangeGraphics';
@@ -55,6 +55,7 @@ function DialogMapObjectCommandMove({ isOpen, setIsOpen, model, isNew, onAccept,
 				};
 				return (
 					<DialogCommandWait
+						commandKind={EVENT_COMMAND_KIND.WAIT}
 						isOpen={isOpen}
 						setIsOpen={setIsOpen}
 						list={isNew ? undefined : list}

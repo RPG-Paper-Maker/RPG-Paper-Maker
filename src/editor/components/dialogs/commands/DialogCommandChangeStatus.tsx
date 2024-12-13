@@ -11,7 +11,7 @@
 
 import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, OPERATION_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, OPERATION_KIND, Utils } from '../../../common';
 import { Project } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
@@ -26,21 +26,14 @@ import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
 enum SELECTION_OPERATION_TYPE {
 	ADD,
 	REMOVE,
 }
 
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandChangeStatus({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandChangeStatus({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>();
@@ -69,7 +62,7 @@ function DialogCommandChangeStatus({ isOpen, setIsOpen, list, onAccept, onReject
 		panelSelectionHeroRef.current?.getCommand(newList);
 		newList.push(selectionOperationType);
 		statusID.getCommand(newList);
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHANGE_STATUS, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {

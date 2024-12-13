@@ -20,17 +20,9 @@ import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
-type Props = {
-	commandKind: EVENT_COMMAND_KIND;
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandStopSong({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandStopSong({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [soundID] = useStateDynamicValue();

@@ -11,7 +11,7 @@
 
 import { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, ITERATOR, Utils } from '../../../common';
+import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, ITERATOR, Utils } from '../../../common';
 import { Project } from '../../../core';
 import { DynamicValue } from '../../../core/DynamicValue';
 import { Model } from '../../../Editor';
@@ -27,16 +27,9 @@ import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandSetDialogBoxOptions({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandSetDialogBoxOptions({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [isWindowSkinID, setIsWindowSkinID] = useStateBool();
@@ -241,7 +234,7 @@ function DialogCommandSetDialogBoxOptions({ isOpen, setIsOpen, list, onAccept, o
 		getCommandCheck(newList, isColorBackground, colorBackgroundID);
 		getCommandCheck(newList, isSizeID, sizeID);
 		getCommandCheck(newList, isFontID, fontID);
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {

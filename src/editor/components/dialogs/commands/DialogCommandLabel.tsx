@@ -11,7 +11,7 @@
 
 import { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
@@ -22,18 +22,18 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
-function DialogCommandRemoveAPicture({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
+function DialogCommandLabel({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const [index] = useStateDynamicValue();
+	const [label] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
 
 	const initialize = () => {
 		if (list) {
 			const iterator = Utils.generateIterator();
-			index.updateCommand(list, iterator);
+			label.updateCommand(list, iterator);
 		} else {
-			index.updateToDefaultNumber(0);
+			label.updateToDefaultText();
 		}
 		setTrigger((v) => !v);
 	};
@@ -41,7 +41,7 @@ function DialogCommandRemoveAPicture({ commandKind, isOpen, setIsOpen, list, onA
 	const handleAccept = async () => {
 		setIsOpen(false);
 		const newList: MapObjectCommandType[] = [];
-		index.getCommand(newList);
+		label.getCommand(newList);
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
@@ -59,17 +59,17 @@ function DialogCommandRemoveAPicture({ commandKind, isOpen, setIsOpen, list, onA
 
 	return (
 		<Dialog
-			title={`${t('remove.a.picture')}...`}
+			title={`${t(commandKind === EVENT_COMMAND_KIND.LABEL ? 'label' : 'jump.to.label')}...`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>
 			<Flex spaced centerV>
-				<div>{t('image.index')}:</div>
-				<DynamicValueSelector value={index} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+				<div>{t('label')}:</div>
+				<DynamicValueSelector value={label} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.TEXT} />
 			</Flex>
 		</Dialog>
 	);
 }
 
-export default DialogCommandRemoveAPicture;
+export default DialogCommandLabel;

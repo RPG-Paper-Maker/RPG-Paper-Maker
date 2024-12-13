@@ -20,17 +20,16 @@ import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
-type Props = {
-	kind: EVENT_COMMAND_KIND;
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandAllowForbidSavesMainMenu({ kind, isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandAllowForbidSavesMainMenu({
+	commandKind,
+	isOpen,
+	setIsOpen,
+	list,
+	onAccept,
+	onReject,
+}: CommandProps) {
 	const { t } = useTranslation();
 
 	const [allow] = useStateDynamicValue();
@@ -50,7 +49,7 @@ function DialogCommandAllowForbidSavesMainMenu({ kind, isOpen, setIsOpen, list, 
 		setIsOpen(false);
 		const newList: MapObjectCommandType[] = [];
 		allow.getCommand(newList);
-		onAccept(Model.MapObjectCommand.createCommand(kind, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {
@@ -68,7 +67,7 @@ function DialogCommandAllowForbidSavesMainMenu({ kind, isOpen, setIsOpen, list, 
 	return (
 		<Dialog
 			title={`${t(
-				kind === EVENT_COMMAND_KIND.ALLOW_FORBID_SAVES ? 'allow.forbid.saves' : 'allow.forbid.main.menu'
+				commandKind === EVENT_COMMAND_KIND.ALLOW_FORBID_SAVES ? 'allow.forbid.saves' : 'allow.forbid.main.menu'
 			)}...`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}

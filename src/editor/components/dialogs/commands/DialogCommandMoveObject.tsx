@@ -27,20 +27,13 @@ import Groupbox from '../../Groupbox';
 import Tree from '../../Tree';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 import DialogCommandMoveObjectChangeGraphics from './DialogCommandMoveObjectChangeGraphics';
 import DialogCommandMoveObjectChangeSpeedFrequency from './DialogCommandMoveObjectChangeSpeedFrequency';
 import DialogCommandMoveObjectJump from './DialogCommandMoveObjectJump';
 import DialogCommandWait from './DialogCommandWait';
 
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandMoveObject({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandMoveObject({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [isDialogJumpOpen, setIsDialogJumpOpen] = useState(false);
@@ -199,7 +192,7 @@ function DialogCommandMoveObject({ isOpen, setIsOpen, list, onAccept, onReject }
 		for (const node of commands) {
 			newList.push(...(node.content as Model.MapObjectCommandMove).command);
 		}
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.MOVE_OBJECT, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {
@@ -418,6 +411,7 @@ function DialogCommandMoveObject({ isOpen, setIsOpen, list, onAccept, onReject }
 				isNew
 			/>
 			<DialogCommandWait
+				commandKind={EVENT_COMMAND_KIND.WAIT}
 				isOpen={isDialogWaitOpen}
 				setIsOpen={setIsDialogWaitOpen}
 				onAccept={handleAcceptWait}

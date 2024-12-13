@@ -11,7 +11,7 @@
 
 import { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, Utils } from '../../../common';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
@@ -20,16 +20,9 @@ import DynamicValueSelector from '../../DynamicValueSelector';
 import Form, { Label, Value } from '../../Form';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandEnterANameMenu({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandEnterANameMenu({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [instanceID] = useStateDynamicValue();
@@ -53,7 +46,7 @@ function DialogCommandEnterANameMenu({ isOpen, setIsOpen, list, onAccept, onReje
 		const newList: MapObjectCommandType[] = [];
 		instanceID.getCommand(newList);
 		maxCharacters.getCommand(newList);
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.ENTER_A_NAME_MENU, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {

@@ -11,7 +11,7 @@
 
 import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, Utils } from '../../../common';
 import { Project } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
@@ -29,6 +29,7 @@ import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
 enum SELECTION_VALUE_TYPE {
 	NUMBER,
@@ -36,15 +37,7 @@ enum SELECTION_VALUE_TYPE {
 	MAXIMUM,
 }
 
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandChangeAStatistic({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandChangeAStatistic({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>();
@@ -109,7 +102,7 @@ function DialogCommandChangeAStatistic({ isOpen, setIsOpen, list, onAccept, onRe
 		}
 		newList.push(Utils.boolToNum(isCanGoAboveMaximumValue));
 		newList.push(Utils.boolToNum(isApplyChangeMaximumValue));
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHANGE_A_STATISTIC, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {

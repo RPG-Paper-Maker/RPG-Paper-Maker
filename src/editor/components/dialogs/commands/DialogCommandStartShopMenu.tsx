@@ -23,23 +23,17 @@ import Form, { Label, Value } from '../../Form';
 import Tree from '../../Tree';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-	isRestock?: boolean;
-};
-
-function DialogCommandStartShopMenu({ isOpen, setIsOpen, list, onAccept, onReject, isRestock = false }: Props) {
+function DialogCommandStartShopMenu({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [shopItems, setShopItems] = useState<Node[]>([]);
 	const [buyOnly] = useStateDynamicValue();
 	const [shopID] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
+
+	const isRestock = commandKind === EVENT_COMMAND_KIND.RESTOCK_SHOP;
 
 	const initialize = () => {
 		if (list) {
@@ -76,12 +70,7 @@ function DialogCommandStartShopMenu({ isOpen, setIsOpen, list, onAccept, onRejec
 			const shopItem = node.content as Model.MapObjectCommandShopItem;
 			shopItem.getCommand(newList);
 		}
-		onAccept(
-			Model.MapObjectCommand.createCommand(
-				isRestock ? EVENT_COMMAND_KIND.RESTOCK_SHOP : EVENT_COMMAND_KIND.START_SHOP_MENU,
-				newList
-			)
-		);
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {

@@ -11,7 +11,7 @@
 
 import { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, PICTURE_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, Utils } from '../../../common';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
@@ -26,16 +26,9 @@ import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandDisplayAPicture({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandDisplayAPicture({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const [imageID] = useStateDynamicValue();
@@ -88,7 +81,7 @@ function DialogCommandDisplayAPicture({ isOpen, setIsOpen, list, onAccept, onRej
 		opacity.getCommand(newList);
 		angle.getCommand(newList);
 		newList.push(Utils.boolToNum(isStretch));
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.DISPLAY_A_PICTURE, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {

@@ -444,6 +444,8 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.WHILE:
 			case EVENT_COMMAND_KIND.END_WHILE:
 			case EVENT_COMMAND_KIND.WHILE_BREAK:
+			case EVENT_COMMAND_KIND.LABEL:
+			case EVENT_COMMAND_KIND.JUMP_LABEL:
 				return MapObjectCommand.COLOR_PURPLE;
 			case EVENT_COMMAND_KIND.START_SHOP_MENU:
 			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
@@ -646,10 +648,8 @@ class MapObjectCommand extends Base {
 				texts = this.toStringPlayAVideo(iterator, parameters, properties);
 				break;
 			case EVENT_COMMAND_KIND.START_SHOP_MENU:
-				texts = this.toStringStartShopMenu(iterator, parameters, properties);
-				break;
 			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
-				texts = this.toStringStartShopMenu(iterator, parameters, properties, true);
+				texts = this.toStringStartShopMenu(iterator, parameters, properties);
 				break;
 			case EVENT_COMMAND_KIND.ENTER_A_NAME_MENU:
 				texts = this.toStringEnterANameMenu(iterator, parameters, properties);
@@ -718,6 +718,10 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_EQUIPMENT:
 				texts = this.toStringChangeEquipment(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.LABEL:
+			case EVENT_COMMAND_KIND.JUMP_LABEL:
+				texts = this.toStringLabel(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -1615,7 +1619,8 @@ class MapObjectCommand extends Base {
 		return texts;
 	}
 
-	toStringStartShopMenu(iterator: ITERATOR, properties: Base[], parameters: Base[], isRestock = false): string[] {
+	toStringStartShopMenu(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const isRestock = this.kind === EVENT_COMMAND_KIND.RESTOCK_SHOP;
 		const texts = [''];
 		let buyOnly = '';
 		if (!isRestock) {
@@ -2217,6 +2222,10 @@ class MapObjectCommand extends Base {
 				break;
 		}
 		return [`${i18next.t('if')} (${str})`];
+	}
+
+	toStringLabel(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		return [this.toStringDynamicValue(iterator, properties, parameters)];
 	}
 
 	copy(command: MapObjectCommand): void {

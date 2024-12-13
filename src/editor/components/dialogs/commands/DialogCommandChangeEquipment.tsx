@@ -11,7 +11,7 @@
 
 import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, Utils } from '../../../common';
+import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, Utils } from '../../../common';
 import { Project } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
@@ -27,16 +27,9 @@ import Groupbox from '../../Groupbox';
 import PanelSelectionHero, { PanelSelectionHeroRef } from '../../panels/PanelSelectionHero';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import { CommandProps } from '../models';
 
-type Props = {
-	isOpen: boolean;
-	setIsOpen: (b: boolean) => void;
-	list?: MapObjectCommandType[];
-	onAccept: (command: Model.MapObjectCommand) => void;
-	onReject: () => void;
-};
-
-function DialogCommandChangeEquipment({ isOpen, setIsOpen, list, onAccept, onReject }: Props) {
+function DialogCommandChangeEquipment({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
 	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>();
@@ -101,7 +94,7 @@ function DialogCommandChangeEquipment({ isOpen, setIsOpen, list, onAccept, onRej
 		(weaponArmorKind === 0 ? weaponID : armorID).getCommand(newList);
 		panelSelectionHeroRef.current?.getCommand(newList);
 		newList.push(Utils.boolToNum(isApplyOnlyIfInInventory));
-		onAccept(Model.MapObjectCommand.createCommand(EVENT_COMMAND_KIND.CHANGE_EQUIPMENT, newList));
+		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
 	const handleReject = async () => {
