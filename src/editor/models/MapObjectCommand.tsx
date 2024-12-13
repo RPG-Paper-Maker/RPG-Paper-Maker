@@ -72,12 +72,12 @@ import { MapObjectEvent } from './MapObjectEvent';
 export type MapObjectCommandType = number | string | boolean;
 
 class MapObjectCommand extends Base {
-	public static COLOR_ORANGE = '#FF8C00';
+	public static COLOR_ORANGE = '#ffa538';
 	public static COLOR_BLUE = '#569ae8';
 	public static COLOR_GREEN = '#35c452';
 	public static COLOR_YELLOW = '#e8dd48';
-	public static COLOR_PURPLE = '#911f8b';
-	public static COLOR_COMMENT = '#199406';
+	public static COLOR_PURPLE = '#dd9eff';
+	public static COLOR_COMMENT = '#ffffff';
 	public kind!: EVENT_COMMAND_KIND;
 	public command!: MapObjectCommandType[];
 
@@ -484,6 +484,8 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CHANGE_CLASS:
 			case EVENT_COMMAND_KIND.CHANGE_EQUIPMENT:
 				return MapObjectCommand.COLOR_GREEN;
+			case EVENT_COMMAND_KIND.COMMENT:
+				return MapObjectCommand.COLOR_COMMENT;
 		}
 		return 'white';
 	}
@@ -588,6 +590,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.END_WHILE:
 			case EVENT_COMMAND_KIND.WHILE_BREAK:
 			case EVENT_COMMAND_KIND.STOP_REACTION:
+			case EVENT_COMMAND_KIND.COMMENT:
 				texts = [''];
 				break;
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
@@ -731,16 +734,7 @@ class MapObjectCommand extends Base {
 			<Flex spaced>
 				<Flex column spaced>
 					<Flex spaced>
-						{this.kind === EVENT_COMMAND_KIND.IF ? (
-							<div style={{ fontWeight: 'bold', color }}>
-								{this.toStringIf(iterator, parameters, properties)}
-							</div>
-						) : (
-							<>
-								<div style={{ fontWeight: 'bold', color }}>{commandName}</div>
-								{`${MapObjectCommand.isNotOpeningCommand(this.kind) ? '' : ':'} ${texts[0]}`}
-							</>
-						)}
+						{this.toStringFirstLine(color, commandName, texts, iterator, properties, parameters)}
 					</Flex>
 					{texts.slice(1).map((text, index) => (
 						<div key={index}>{text}</div>
@@ -748,6 +742,30 @@ class MapObjectCommand extends Base {
 				</Flex>
 			</Flex>
 		);
+	}
+
+	toStringFirstLine(
+		color: string,
+		commandName: string,
+		texts: string[],
+		iterator: ITERATOR,
+		properties: Base[] = [],
+		parameters: Base[] = []
+	): ReactNode {
+		const style = { fontWeight: 'bold', color };
+		switch (this.kind) {
+			case EVENT_COMMAND_KIND.IF:
+				return <div style={style}>{this.toStringIf(iterator, parameters, properties)}</div>;
+			case EVENT_COMMAND_KIND.COMMENT:
+				return <div style={style}>{this.command[0]}</div>;
+			default:
+				return (
+					<>
+						<div style={style}>{commandName}</div>
+						{`${MapObjectCommand.isNotOpeningCommand(this.kind) ? '' : ':'} ${texts[0]}`}
+					</>
+				);
+		}
 	}
 
 	toStringDynamicValue(

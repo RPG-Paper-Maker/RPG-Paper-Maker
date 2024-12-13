@@ -32,6 +32,7 @@ import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreen
 import DialogCommandChangeState from '../commands/DialogCommandChangeState';
 import DialogCommandChangeStatus from '../commands/DialogCommandChangeStatus';
 import DialogCommandChangeWeather from '../commands/DialogCommandChangeWeather';
+import DialogCommandComment from '../commands/DialogCommandComment';
 import DialogCommandCreateObjectInMap from '../commands/DialogCommandCreateObjectInMap';
 import DialogCommandDisplayAnAnimation from '../commands/DialogCommandDisplayAnAnimation';
 import DialogCommandDisplayAPicture from '../commands/DialogCommandDisplayAPicture';
@@ -429,6 +430,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 			case EVENT_COMMAND_KIND.LABEL:
 			case EVENT_COMMAND_KIND.JUMP_LABEL:
 				return <DialogCommandLabel {...options} />;
+			case EVENT_COMMAND_KIND.COMMENT:
+				return <DialogCommandComment {...options} />;
 			default:
 				return null;
 		}
