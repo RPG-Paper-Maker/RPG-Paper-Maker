@@ -39,7 +39,7 @@ export enum SELECTION_TARGET_TYPE {
 function DialogCommandSendEvent({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelPositionRef = useRef<PanelObjectEventRef>();
+	const panelObjectEventRef = useRef<PanelObjectEventRef>();
 
 	const [selectionTargetType, setSelectionTargetType] = useStateNumber();
 	const [detectionID] = useStateDynamicValue();
@@ -72,10 +72,10 @@ function DialogCommandSendEvent({ commandKind, isOpen, setIsOpen, list, onAccept
 					objectID.updateCommand(list, iterator);
 					break;
 			}
-			panelPositionRef.current?.initialize(list, iterator);
+			panelObjectEventRef.current?.initialize(list, iterator);
 		} else {
 			setSelectionTargetType(SELECTION_TARGET_TYPE.DETECTION);
-			panelPositionRef.current?.initialize();
+			panelObjectEventRef.current?.initialize();
 		}
 		setSenderCantReceive(scr);
 		setOnlyTheClosest(otc);
@@ -96,7 +96,7 @@ function DialogCommandSendEvent({ commandKind, isOpen, setIsOpen, list, onAccept
 				objectID.getCommand(newList);
 				break;
 		}
-		panelPositionRef.current?.accept(newList);
+		panelObjectEventRef.current?.accept(newList);
 		onAccept(Model.MapObjectCommand.createCommand(commandKind, newList));
 	};
 
@@ -169,7 +169,7 @@ function DialogCommandSendEvent({ commandKind, isOpen, setIsOpen, list, onAccept
 					</RadioGroup>
 				</Groupbox>
 				<Groupbox title={t('event')}>
-					<PanelObjectEvent event={event} isNew={!list} ref={panelPositionRef} />
+					<PanelObjectEvent event={event} isNew={!list} ref={panelObjectEventRef} />
 				</Groupbox>
 			</Flex>
 		</Dialog>

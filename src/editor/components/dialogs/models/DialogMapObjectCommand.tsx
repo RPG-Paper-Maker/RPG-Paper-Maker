@@ -19,6 +19,7 @@ import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tab from '../../Tab';
 import DialogCommandAllowForbidSavesMainMenu from '../commands/DialogCommandAllowForbidSavesMainMenu';
+import DialogCommandCallACommonReaction from '../commands/DialogCommandCallACommonReaction';
 import DialogCommandChangeASkill from '../commands/DialogCommandChangeASkill';
 import DialogCommandChangeAStatistic from '../commands/DialogCommandChangeAStatistic';
 import DialogCommandChangeChronometer from '../commands/DialogCommandChangeChronometer';
@@ -432,6 +433,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandLabel {...options} />;
 			case EVENT_COMMAND_KIND.COMMENT:
 				return <DialogCommandComment {...options} />;
+			case EVENT_COMMAND_KIND.CALL_A_COMMON_REACTION:
+				return <DialogCommandCallACommonReaction {...options} />;
 			default:
 				return null;
 		}

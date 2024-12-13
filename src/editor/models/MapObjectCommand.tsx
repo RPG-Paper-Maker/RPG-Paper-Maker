@@ -448,6 +448,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.LABEL:
 			case EVENT_COMMAND_KIND.JUMP_LABEL:
 			case EVENT_COMMAND_KIND.STOP_REACTION:
+			case EVENT_COMMAND_KIND.CALL_A_COMMON_REACTION:
 				return MapObjectCommand.COLOR_PURPLE;
 			case EVENT_COMMAND_KIND.START_SHOP_MENU:
 			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
@@ -728,6 +729,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.LABEL:
 			case EVENT_COMMAND_KIND.JUMP_LABEL:
 				texts = this.toStringLabel(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.CALL_A_COMMON_REACTION:
+				texts = this.toStringCallACommonReaction(iterator);
 				break;
 		}
 		return (
@@ -2247,6 +2251,15 @@ class MapObjectCommand extends Base {
 
 	toStringLabel(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		return [this.toStringDynamicValue(iterator, properties, parameters)];
+	}
+
+	toStringCallACommonReaction(iterator: ITERATOR): string[] {
+		return [
+			Base.getByIDOrFirst(
+				Project.current!.commonEvents.commonReactions,
+				this.command[iterator.i++] as number
+			).toString() as string,
+		];
 	}
 
 	copy(command: MapObjectCommand): void {

@@ -9,8 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
+import { DynamicValue } from '../core/DynamicValue';
 import { CreateParameter } from './CreateParameter';
+import { MapObjectParameter } from './MapObjectParameter';
 import { MapObjectReaction } from './MapObjectReaction';
 
 class CommonReaction extends MapObjectReaction {
@@ -20,6 +22,17 @@ class CommonReaction extends MapObjectReaction {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	getDefaultParameters(): MapObjectParameter[] {
+		return this.parameters.map((createParameter) =>
+			MapObjectParameter.create(
+				createParameter.id,
+				createParameter.name,
+				createParameter,
+				DynamicValue.create(DYNAMIC_VALUE_KIND.DEFAULT)
+			)
+		);
 	}
 
 	copy(reaction: CommonReaction, additionnalBinding: BindingType[] = []): void {
