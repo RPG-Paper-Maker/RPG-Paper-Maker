@@ -24,6 +24,8 @@ import {
 } from '../common';
 import { Serializable } from '../core/Serializable';
 
+const { t } = i18next;
+
 class Base extends Serializable {
 	public static STRING_START = '> ';
 	public static GRAPHICS_OPTIONS = [
@@ -146,15 +148,42 @@ class Base extends Serializable {
 		'hero.with.instance.id',
 	]);
 	public static ORIENTATION_OPTIONS = Base.mapListIndex(['south', 'west', 'north', 'east']);
+	public static ITEM_OPTIONS = Base.mapListIndex(['item', 'weapon', 'armor']);
+	public static CURRENCY_OPTIONS = Base.mapListIndex(['owned', 'earned', 'used']);
+	public static VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS = Base.mapListIndex([
+		'x.square.position',
+		'y.square.position',
+		'z.square.position',
+		'x.pixel.position',
+		'y.pixel.position',
+		'z.pixel.position',
+		'orientation',
+		'terrain',
+	]);
+	public static VARIABLE_OTHER_CHARACTERISTICS_OPTIONS = Base.mapListIndex([
+		'current.map.id',
+		'number.in.team',
+		'number.in.hidden',
+		'number.in.reserve',
+		'total.number.of.steps',
+		'total.number.of.seconds',
+		'total.number.of.saves.done',
+		'total.number.of.battles',
+		'camera.x.position',
+		'camera.y.position',
+		'camera.z.position',
+		'total.seconds.current.music',
+		'total.seconds.current.background.music',
+	]);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([
-			`= (${i18next.t('equal.to')})`,
-			`!= (${i18next.t('not.equal.to')})`,
-			`>= (${i18next.t('greater.than.or.equal.to')})`,
-			`<= (${i18next.t('lesser.than.or.equal.to')})`,
-			`> (${i18next.t('greater.than')})`,
-			`< (${i18next.t('lesser.than')})`,
+			`= (${t('equal.to')})`,
+			`!= (${t('not.equal.to')})`,
+			`>= (${t('greater.than.or.equal.to')})`,
+			`<= (${t('lesser.than.or.equal.to')})`,
+			`> (${t('greater.than')})`,
+			`< (${t('lesser.than')})`,
 		]);
 
 	public id!: number;

@@ -32,6 +32,7 @@ import DialogCommandChangeProperty from '../commands/DialogCommandChangeProperty
 import DialogCommandChangeScreenTone from '../commands/DialogCommandChangeScreenTone';
 import DialogCommandChangeState from '../commands/DialogCommandChangeState';
 import DialogCommandChangeStatus from '../commands/DialogCommandChangeStatus';
+import DialogCommandChangeVariables from '../commands/DialogCommandChangeVariables';
 import DialogCommandChangeWeather from '../commands/DialogCommandChangeWeather';
 import DialogCommandComment from '../commands/DialogCommandComment';
 import DialogCommandCreateObjectInMap from '../commands/DialogCommandCreateObjectInMap';
@@ -435,6 +436,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandComment {...options} />;
 			case EVENT_COMMAND_KIND.CALL_A_COMMON_REACTION:
 				return <DialogCommandCallACommonReaction {...options} />;
+			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
+				return <DialogCommandChangeVariables {...options} />;
 			default:
 				return null;
 		}

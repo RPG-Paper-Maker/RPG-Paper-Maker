@@ -17,6 +17,7 @@ import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Base } from './Base';
 import { Sprite } from './Sprite';
 
+const { t } = i18next;
 class SpriteWall extends Base {
 	public wallID!: number;
 	public type!: SPRITE_WALL_TYPE;
@@ -169,7 +170,7 @@ class SpriteWall extends Base {
 	}
 
 	toString(): string {
-		return `${i18next.t('wall').toUpperCase()} | ID: ${Utils.formatNumberID(this.wallID)}`;
+		return `${t('wall').toUpperCase()} | ID: ${Utils.formatNumberID(this.wallID)}`;
 	}
 
 	updateGeometry(geometry: CustomGeometry, position: Position, width: number, height: number, count: number): number {

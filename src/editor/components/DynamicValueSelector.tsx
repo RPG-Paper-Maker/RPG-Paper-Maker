@@ -308,7 +308,7 @@ function DynamicValueSelector({
 					<InputText
 						value={valueText}
 						onChange={handleChangeText}
-						widthType={INPUT_TYPE_WIDTH.LARGE}
+						widthType={INPUT_TYPE_WIDTH.NORMAL}
 						disabled={disabled}
 					/>
 				);
@@ -319,7 +319,7 @@ function DynamicValueSelector({
 						onChange={handleChangeSwitch}
 						options={Model.Base.ON_OFF_OPTIONS}
 						disabled={disabled}
-						fillWidth
+						width={INPUT_WIDTH}
 					/>
 				);
 			case DYNAMIC_VALUE_KIND.KEYBOARD:

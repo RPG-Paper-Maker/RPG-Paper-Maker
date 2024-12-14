@@ -14,6 +14,8 @@ import { Model } from '../Editor';
 import { BINDING, BindingType, JSONType, Paths, Utils } from '../common';
 import { Node, Project, Serializable } from '../core';
 
+const { t } = i18next;
+
 class TreeMaps extends Serializable {
 	public static readonly JSON_TREE = 'tree';
 
@@ -37,11 +39,11 @@ class TreeMaps extends Serializable {
 	translateDefaults() {
 		const root = this.tree[0];
 		const introduction = root.children[0];
-		introduction.content.name = i18next.t('introduction');
-		introduction.children[0].content.name = i18next.t('starting.map');
+		introduction.content.name = t('introduction');
+		introduction.children[0].content.name = t('starting.map');
 		const battles = root.children[1];
-		battles.content.name = i18next.t('battle.maps');
-		battles.children[0].content.name = i18next.t('default');
+		battles.content.name = t('battle.maps');
+		battles.children[0].content.name = t('default');
 	}
 
 	private isAllMapsSavedRecursive(nodes: Node[]): boolean {
@@ -88,7 +90,7 @@ class TreeMaps extends Serializable {
 	}
 
 	getAllMapsList(): Model.Base[] {
-		const list: Model.Base[] = [Model.Base.create(-1, i18next.t('this.map'))];
+		const list: Model.Base[] = [Model.Base.create(-1, t('this.map'))];
 		this.getAllMapsNodes(this.tree, list);
 		return list;
 	}
@@ -111,7 +113,7 @@ class TreeMaps extends Serializable {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, TreeMaps.getBindings(additionnalBinding));
-		const root = Node.create(Model.TreeMapTag.create(-1, i18next.t('maps'), true), [], null, false);
+		const root = Node.create(Model.TreeMapTag.create(-1, t('maps'), true), [], null, false);
 		this.readRoot(json[TreeMaps.JSON_TREE] as JSONType[], root);
 		this.tree = [root];
 	}

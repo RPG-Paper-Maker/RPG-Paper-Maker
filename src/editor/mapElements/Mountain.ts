@@ -17,6 +17,8 @@ import { CustomGeometry, Position, Project } from '../core';
 import { Base } from './Base';
 import { Mountains } from './Mountains';
 
+const { t } = i18next;
+
 class Mountain extends Base {
 	public static X_LEFT_OFFSET = 0;
 	public static X_MID_OFFSET = 1;
@@ -99,7 +101,7 @@ class Mountain extends Base {
 	}
 
 	toString(): string {
-		return `${i18next.t('mountain').toUpperCase()} | ID: ${Utils.formatNumberID(this.mountainID)}`;
+		return `${t('mountain').toUpperCase()} | ID: ${Utils.formatNumberID(this.mountainID)}`;
 	}
 
 	getTotalSquaresWidth(): number {

@@ -15,6 +15,8 @@ import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, Utils } from '../comm
 import { CustomGeometry, Position, Project, Rectangle, TextureBundle } from '../core';
 import { Land } from './Land';
 
+const { t } = i18next;
+
 class Autotile extends Land {
 	public autotileID!: number;
 	public tileID!: number;
@@ -59,9 +61,9 @@ class Autotile extends Land {
 	}
 
 	toString(): string {
-		return `${i18next.t('autotile').toUpperCase()} | ID: ${Utils.formatNumberID(
-			this.autotileID
-		)} | ${this.texture.toString(true)}`;
+		return `${t('autotile').toUpperCase()} | ID: ${Utils.formatNumberID(this.autotileID)} | ${this.texture.toString(
+			true
+		)}`;
 	}
 
 	update(map: Scene.Map, position: Position) {

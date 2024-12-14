@@ -15,6 +15,8 @@ import { CustomGeometry, Position, Project, Rectangle } from '../core';
 import { MapElement, Scene } from '../Editor';
 import { Land } from './Land';
 
+const { t } = i18next;
+
 class Floor extends Land {
 	constructor() {
 		super();
@@ -46,7 +48,7 @@ class Floor extends Land {
 	}
 
 	toString(): string {
-		return `${i18next.t('floor').toUpperCase()} | ${this.texture.toString(true)}`;
+		return `${t('floor').toUpperCase()} | ${this.texture.toString(true)}`;
 	}
 
 	updateGeometry(

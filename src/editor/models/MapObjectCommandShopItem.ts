@@ -18,6 +18,7 @@ import { CommonSkillItem } from './CommonSkillItem';
 import { Cost } from './Cost';
 import { MapObjectCommandType } from './MapObjectCommand';
 
+const { t } = i18next;
 class MapObjectCommandShopItem extends Base {
 	public selectionItem!: ITEM_KIND;
 	public itemID!: DynamicValue;
@@ -132,7 +133,7 @@ class MapObjectCommandShopItem extends Base {
 							this.itemID.value as number
 						) as CommonSkillItem;
 					} else {
-						return i18next.t('default');
+						return t('default');
 					}
 					break;
 				case ITEM_KIND.WEAPON:
@@ -142,7 +143,7 @@ class MapObjectCommandShopItem extends Base {
 							this.weaponID.value as number
 						) as CommonSkillItem;
 					} else {
-						return i18next.t('default');
+						return t('default');
 					}
 					break;
 				case ITEM_KIND.ARMOR:
@@ -152,7 +153,7 @@ class MapObjectCommandShopItem extends Base {
 							this.armorID.value as number
 						) as CommonSkillItem;
 					} else {
-						return i18next.t('default');
+						return t('default');
 					}
 					break;
 			}

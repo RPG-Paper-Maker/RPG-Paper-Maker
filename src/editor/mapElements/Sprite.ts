@@ -16,6 +16,7 @@ import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle } from
 import { Manager, MapElement, Scene } from '../Editor';
 import { Base } from './Base';
 
+const { t } = i18next;
 class Sprite extends Base {
 	public static readonly MODEL = [
 		new THREE.Vector3(-0.5, 1.0, 0.0),
@@ -109,16 +110,16 @@ class Sprite extends Base {
 		let type = '';
 		switch (this.kind) {
 			case ELEMENT_MAP_KIND.SPRITE_FACE:
-				type = i18next.t('face.sprite').toUpperCase();
+				type = t('face.sprite').toUpperCase();
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_FIX:
-				type = i18next.t('fix.sprite').toUpperCase();
+				type = t('fix.sprite').toUpperCase();
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
-				type = i18next.t('double.sprite').toUpperCase();
+				type = t('double.sprite').toUpperCase();
 				break;
 			case ELEMENT_MAP_KIND.SPRITE_QUADRA:
-				type = i18next.t('quadra.sprite').toUpperCase();
+				type = t('quadra.sprite').toUpperCase();
 				break;
 		}
 		return `${type} | ${this.texture.toString()}`;

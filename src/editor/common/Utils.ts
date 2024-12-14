@@ -118,6 +118,11 @@ class Utils {
 		return viewport === document.body ? 0 : viewport.getBoundingClientRect().top;
 	}
 
+	static getViewportBottom() {
+		const viewport = Utils.getViewport();
+		return viewport === document.body ? 0 : viewport.getBoundingClientRect().bottom;
+	}
+
 	static generateIterator(): ITERATOR {
 		return { i: 0 };
 	}

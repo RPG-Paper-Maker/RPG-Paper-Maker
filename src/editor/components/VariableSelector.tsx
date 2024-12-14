@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Node, Project } from '../core';
 import { Model } from '../Editor';
 import '../styles/Input.css';
@@ -22,14 +22,17 @@ import Tree from './Tree';
 type Props = {
 	variableID: number;
 	onChange: (id: number) => void;
+	forcedVariableID?: number | null;
+	setForcedVariableID?: (v: number | null) => void;
 	disabled?: boolean;
 };
 
-function VariableSelector({ variableID, onChange, disabled = false }: Props) {
+function VariableSelector({ variableID, onChange, forcedVariableID, setForcedVariableID, disabled = false }: Props) {
+	const getNodeContent = (id: number) =>
+		Model.Base.create(id, Project.current!.variables.getVariableByID(id)?.name || '');
+
 	const [needDialogOpen, setNeedDialogOpen] = useState(false);
-	const [node] = useState(
-		Node.create(Model.Base.create(variableID, Project.current!.variables.getVariableByID(variableID)?.name || ''))
-	);
+	const [node] = useState(Node.create(getNodeContent(variableID)));
 
 	const handleOpenVariables = () => {
 		if (!disabled) {
@@ -41,10 +44,31 @@ function VariableSelector({ variableID, onChange, disabled = false }: Props) {
 		onChange(node.content.id);
 	};
 
+	useEffect(() => {
+		if (forcedVariableID !== null && forcedVariableID !== undefined && setForcedVariableID) {
+			onChange(forcedVariableID);
+			node.content = getNodeContent(forcedVariableID);
+			setForcedVariableID(null);
+		}
+	}, [forcedVariableID, setForcedVariableID]);
+
 	return (
 		<>
-			<Flex one spaced onDoubleClick={handleOpenVariables} style={{ width: INPUT_WIDTH }}>
-				<Tree list={[node]} disabled={disabled} cannotAdd cannotEdit cannotDragDrop />
+			<Flex
+				one
+				spaced
+				onDoubleClick={handleOpenVariables}
+				style={{ minWidth: INPUT_WIDTH, maxWidth: INPUT_WIDTH }}
+			>
+				<Tree
+					list={[node]}
+					disabled={disabled}
+					forcedCurrentSelectedItemID={forcedVariableID}
+					setForcedCurrentSelectedItemID={setForcedVariableID}
+					cannotAdd
+					cannotEdit
+					cannotDragDrop
+				/>
 				<Button onClick={handleOpenVariables} disabled={disabled}>
 					...
 				</Button>

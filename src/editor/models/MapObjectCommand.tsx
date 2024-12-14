@@ -70,6 +70,7 @@ import { MapObjectCommandShopItem } from './MapObjectCommandShopItem';
 import { MapObjectEvent } from './MapObjectEvent';
 
 export type MapObjectCommandType = number | string | boolean;
+const { t } = i18next;
 
 class MapObjectCommand extends Base {
 	public static COLOR_ORANGE = '#ffa538';
@@ -252,161 +253,161 @@ class MapObjectCommand extends Base {
 	static getCommandName(kind: EVENT_COMMAND_KIND, command: MapObjectCommandType[] = []): string {
 		switch (kind) {
 			case EVENT_COMMAND_KIND.SHOW_TEXT:
-				return i18next.t('show.text');
+				return t('show.text');
 			case EVENT_COMMAND_KIND.DISPLAY_CHOICE:
-				return i18next.t('display.choices');
+				return t('display.choices');
 			case EVENT_COMMAND_KIND.CHOICE:
-				return `${i18next.t('choice')} ${command[0]}`;
+				return `${t('choice')} ${command[0]}`;
 			case EVENT_COMMAND_KIND.END_CHOICE:
-				return i18next.t('end.choice');
+				return t('end.choice');
 			case EVENT_COMMAND_KIND.IF_WIN:
-				return i18next.t('if.win');
+				return t('if.win');
 			case EVENT_COMMAND_KIND.IF_LOSE:
-				return i18next.t('if.lose');
+				return t('if.lose');
 			case EVENT_COMMAND_KIND.END_IF:
-				return i18next.t('end.if');
+				return t('end.if');
 			case EVENT_COMMAND_KIND.INPUT_NUMBER:
-				return i18next.t('input.number');
+				return t('input.number');
 			case EVENT_COMMAND_KIND.SET_DIALOG_BOX_OPTIONS:
-				return i18next.t('set.dialog.box.options');
+				return t('set.dialog.box.options');
 			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
-				return i18next.t('change.screen.tone');
+				return t('change.screen.tone');
 			case EVENT_COMMAND_KIND.SHAKE_SCREEN:
-				return i18next.t('shake.screen');
+				return t('shake.screen');
 			case EVENT_COMMAND_KIND.FLASH_SCREEN:
-				return i18next.t('flash.screen');
+				return t('flash.screen');
 			case EVENT_COMMAND_KIND.CHANGE_WEATHER:
-				return i18next.t('change.weather');
+				return t('change.weather');
 			case EVENT_COMMAND_KIND.CHANGE_MAP_PROPERTIES:
-				return i18next.t('change.map.properties');
+				return t('change.map.properties');
 			case EVENT_COMMAND_KIND.SWITCH_TEXTURE:
-				return i18next.t('switch.texture');
+				return t('switch.texture');
 			case EVENT_COMMAND_KIND.WAIT:
-				return i18next.t('wait');
+				return t('wait');
 			case EVENT_COMMAND_KIND.CHANGE_CHRONOMETER:
-				return i18next.t('change.chronometer');
+				return t('change.chronometer');
 			case EVENT_COMMAND_KIND.TELEPORT_OBJECT:
-				return i18next.t('teleport.object');
+				return t('teleport.object');
 			case EVENT_COMMAND_KIND.MOVE_OBJECT:
-				return i18next.t('move.object');
+				return t('move.object');
 			case EVENT_COMMAND_KIND.DISPLAY_AN_ANIMATION:
-				return i18next.t('display.an.animation');
+				return t('display.an.animation');
 			case EVENT_COMMAND_KIND.MOVE_CAMERA:
-				return i18next.t('move.camera');
+				return t('move.camera');
 			case EVENT_COMMAND_KIND.RESET_CAMERA:
-				return i18next.t('reset.camera');
+				return t('reset.camera');
 			case EVENT_COMMAND_KIND.CREATE_OBJECT_IN_MAP:
-				return i18next.t('create.object.in.map');
+				return t('create.object.in.map');
 			case EVENT_COMMAND_KIND.REMOVE_OBJECT_FROM_MAP:
-				return i18next.t('remove.object.from.map');
+				return t('remove.object.from.map');
 			case EVENT_COMMAND_KIND.DISPLAY_A_PICTURE:
-				return i18next.t('display.a.picture');
+				return t('display.a.picture');
 			case EVENT_COMMAND_KIND.SET_MOVE_TURN_A_PICTURE:
-				return i18next.t('set.move.turn.a.picture');
+				return t('set.move.turn.a.picture');
 			case EVENT_COMMAND_KIND.REMOVE_A_PICTURE:
-				return i18next.t('remove.a.picture');
+				return t('remove.a.picture');
 			case EVENT_COMMAND_KIND.PLAY_A_VIDEO:
-				return i18next.t('play.a.video');
+				return t('play.a.video');
 			case EVENT_COMMAND_KIND.START_SHOP_MENU:
-				return i18next.t('start.shop.menu');
+				return t('start.shop.menu');
 			case EVENT_COMMAND_KIND.RESTOCK_SHOP:
-				return i18next.t('restock.shop');
+				return t('restock.shop');
 			case EVENT_COMMAND_KIND.ENTER_A_NAME_MENU:
-				return i18next.t('enter.a.name.menu');
+				return t('enter.a.name.menu');
 			case EVENT_COMMAND_KIND.OPEN_MAIN_MENU:
-				return i18next.t('open.main.menu');
+				return t('open.main.menu');
 			case EVENT_COMMAND_KIND.OPEN_SAVES_MENU:
-				return i18next.t('open.saves.menu');
+				return t('open.saves.menu');
 			case EVENT_COMMAND_KIND.TITLE_SCREEN:
-				return i18next.t('title.screen');
+				return t('title.screen');
 			case EVENT_COMMAND_KIND.GAME_OVER:
-				return i18next.t('game.over');
+				return t('game.over');
 			case EVENT_COMMAND_KIND.PLAY_MUSIC:
-				return i18next.t('play.music');
+				return t('play.music');
 			case EVENT_COMMAND_KIND.STOP_MUSIC:
-				return i18next.t('stop.music');
+				return t('stop.music');
 			case EVENT_COMMAND_KIND.PLAY_BACKGROUND_SOUND:
-				return i18next.t('play.background.sound');
+				return t('play.background.sound');
 			case EVENT_COMMAND_KIND.STOP_BACKGROUND_SOUND:
-				return i18next.t('stop.background.sound');
+				return t('stop.background.sound');
 			case EVENT_COMMAND_KIND.PLAY_SOUND:
-				return i18next.t('play.a.sound');
+				return t('play.a.sound');
 			case EVENT_COMMAND_KIND.STOP_A_SOUND:
-				return i18next.t('stop.a.sound');
+				return t('stop.a.sound');
 			case EVENT_COMMAND_KIND.PLAY_MUSIC_EFFECT:
-				return i18next.t('play.music.effect');
+				return t('play.music.effect');
 			case EVENT_COMMAND_KIND.SEND_EVENT:
-				return i18next.t('send.event');
+				return t('send.event');
 			case EVENT_COMMAND_KIND.CHANGE_STATE:
-				return i18next.t('change.state');
+				return t('change.state');
 			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
-				return i18next.t('change.property');
+				return t('change.property');
 			case EVENT_COMMAND_KIND.MODIFY_CURRENCY:
-				return i18next.t('modify.currency');
+				return t('modify.currency');
 			case EVENT_COMMAND_KIND.MODIFY_INVENTORY:
-				return i18next.t('modify.inventory');
+				return t('modify.inventory');
 			case EVENT_COMMAND_KIND.MODIFY_TEAM:
-				return i18next.t('modify.team');
+				return t('modify.team');
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_SAVES:
-				return i18next.t('allow.forbid.saves');
+				return t('allow.forbid.saves');
 			case EVENT_COMMAND_KIND.ALLOW_FORBID_MAIN_MENU:
-				return i18next.t('allow.forbid.main.menu');
+				return t('allow.forbid.main.menu');
 			case EVENT_COMMAND_KIND.START_BATTLE:
-				return i18next.t('start.battle');
+				return t('start.battle');
 			case EVENT_COMMAND_KIND.CHANGE_BATTLER_GRAPHICS:
-				return i18next.t('change.battler.graphics');
+				return t('change.battler.graphics');
 			case EVENT_COMMAND_KIND.DISPLAY_HIDE_A_BATTLER:
-				return i18next.t('display.hide.a.battler');
+				return t('display.hide.a.battler');
 			case EVENT_COMMAND_KIND.TRANSFORM_A_BATTLER:
-				return i18next.t('transform.a.battler');
+				return t('transform.a.battler');
 			case EVENT_COMMAND_KIND.FORCE_AN_ACTION:
-				return i18next.t('force.an.action');
+				return t('force.an.action');
 			case EVENT_COMMAND_KIND.END_BATTLE:
-				return i18next.t('end.battle');
+				return t('end.battle');
 			case EVENT_COMMAND_KIND.CHANGE_BATTLE_MUSIC:
-				return i18next.t('change.battle.music');
+				return t('change.battle.music');
 			case EVENT_COMMAND_KIND.CHANGE_VICTORY_MUSIC:
-				return i18next.t('change.victory.music');
+				return t('change.victory.music');
 			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
-				return i18next.t('change.a.statistic');
+				return t('change.a.statistic');
 			case EVENT_COMMAND_KIND.CHANGE_EXPERIENCE_CURVE:
-				return i18next.t('change.experience.curve');
+				return t('change.experience.curve');
 			case EVENT_COMMAND_KIND.CHANGE_STATUS:
-				return i18next.t('change.status');
+				return t('change.status');
 			case EVENT_COMMAND_KIND.CHANGE_A_SKILL:
-				return i18next.t('change.a.skill');
+				return t('change.a.skill');
 			case EVENT_COMMAND_KIND.CHANGE_NAME:
-				return i18next.t('change.name');
+				return t('change.name');
 			case EVENT_COMMAND_KIND.CHANGE_CLASS:
-				return i18next.t('change.class');
+				return t('change.class');
 			case EVENT_COMMAND_KIND.CHANGE_EQUIPMENT:
-				return i18next.t('change.equipment');
+				return t('change.equipment');
 			case EVENT_COMMAND_KIND.IF:
-				return i18next.t('condition');
+				return t('condition');
 			case EVENT_COMMAND_KIND.ELSE:
-				return i18next.t('else');
+				return t('else');
 			case EVENT_COMMAND_KIND.WHILE:
-				return i18next.t('loop');
+				return t('loop');
 			case EVENT_COMMAND_KIND.WHILE_BREAK:
-				return i18next.t('break.loop');
+				return t('break.loop');
 			case EVENT_COMMAND_KIND.END_WHILE:
-				return i18next.t('end.loop');
+				return t('end.loop');
 			case EVENT_COMMAND_KIND.LABEL:
-				return i18next.t('label');
+				return t('label');
 			case EVENT_COMMAND_KIND.JUMP_LABEL:
-				return i18next.t('jump.to.label');
+				return t('jump.to.label');
 			case EVENT_COMMAND_KIND.STOP_REACTION:
-				return i18next.t('stop.reaction');
+				return t('stop.reaction');
 			case EVENT_COMMAND_KIND.COMMENT:
-				return i18next.t('comment');
+				return t('comment');
 			case EVENT_COMMAND_KIND.CALL_A_COMMON_REACTION:
-				return i18next.t('call.a.common.reaction');
+				return t('call.a.common.reaction');
 			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
-				return i18next.t('change.variables');
+				return t('change.variables');
 			case EVENT_COMMAND_KIND.SCRIPT:
-				return i18next.t('script');
+				return t('script');
 			case EVENT_COMMAND_KIND.PLUGIN:
-				return i18next.t('plugin');
+				return t('plugin');
 		}
 		return '';
 	}
@@ -487,6 +488,8 @@ class MapObjectCommand extends Base {
 				return MapObjectCommand.COLOR_GREEN;
 			case EVENT_COMMAND_KIND.COMMENT:
 				return MapObjectCommand.COLOR_COMMENT;
+			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
+				return MapObjectCommand.COLOR_YELLOW;
 		}
 		return 'white';
 	}
@@ -733,6 +736,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.CALL_A_COMMON_REACTION:
 				texts = this.toStringCallACommonReaction(iterator);
 				break;
+			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
+				texts = this.toStringChangeVariables(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -786,7 +792,7 @@ class MapObjectCommand extends Base {
 		}
 		switch (kind) {
 			case DYNAMIC_VALUE_KIND.NONE:
-				return i18next.t('none');
+				return t('none');
 			case DYNAMIC_VALUE_KIND.NUMBER:
 			case DYNAMIC_VALUE_KIND.DATABASE: {
 				const db = Base.getByID(database, value as number);
@@ -800,19 +806,19 @@ class MapObjectCommand extends Base {
 				return value ? 'ON' : 'OFF';
 			case DYNAMIC_VALUE_KIND.KEYBOARD: {
 				const keyboard = Project.current!.keyboard.getByID(value as number);
-				return `${i18next.t('keyboard')} ${keyboard?.toString() ?? value}`;
+				return `${t('keyboard')} ${keyboard?.toString() ?? value}`;
 			}
 			case DYNAMIC_VALUE_KIND.VARIABLE: {
 				const variable = Project.current!.variables.getVariableByID(value as number);
-				return `${i18next.t('variable')} ${variable?.toString() ?? value}`;
+				return `${t('variable')} ${variable?.toString() ?? value}`;
 			}
 			case DYNAMIC_VALUE_KIND.PARAMETER: {
 				const parameter = Base.getByID(parameters, value as number);
-				return `${i18next.t('parameter')} ${parameter?.toString() ?? value}`;
+				return `${t('parameter')} ${parameter?.toString() ?? value}`;
 			}
 			case DYNAMIC_VALUE_KIND.PROPERTY: {
 				const property = Base.getByID(properties, value as number);
-				return `${i18next.t('property')} ${property?.toString() ?? value}`;
+				return `${t('property')} ${property?.toString() ?? value}`;
 			}
 			default:
 				return '';
@@ -828,7 +834,7 @@ class MapObjectCommand extends Base {
 		switch (this.command[iterator.i + 1]) {
 			case -1:
 				iterator.i += 2;
-				return i18next.t('this.map');
+				return t('this.map');
 			default:
 				return this.toStringDynamicValue(iterator, properties, parameters);
 		}
@@ -881,7 +887,7 @@ class MapObjectCommand extends Base {
 				yp = this.toStringDynamicValue(iterator, properties, parameters);
 				z = this.toStringDynamicValue(iterator, properties, parameters);
 			}
-			texts.push(`${i18next.t('map.id')}: ${id}`);
+			texts.push(`${t('map.id')}: ${id}`);
 			texts.push(`X: ${x}`);
 			texts.push(`Y: ${y}`);
 			texts.push(`Y+: ${yp}`);
@@ -893,20 +899,20 @@ class MapObjectCommand extends Base {
 					.toLowerCase()}`
 			);
 		} else if (isBattleMap && selectionKind === 3) {
-			texts.push(i18next.t('default'));
+			texts.push(t('default'));
 		}
 	}
 
 	toStringSelectionHero(iterator: ITERATOR, properties: Base[], parameters: Base[]): string {
 		switch (this.command[iterator.i++]) {
 			case 0:
-				return `${i18next.t('hero.enemy.instance.id').toLowerCase()} ${this.toStringDynamicValue(
+				return `${t('hero.enemy.instance.id').toLowerCase()} ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters
 				)}`;
 			case 1:
-				return `${i18next.t('the.entire').toLowerCase()} ${i18next
+				return `${t('the.entire').toLowerCase()} ${i18next
 					.t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name)
 					.toLowerCase()}`;
 			default:
@@ -951,7 +957,7 @@ class MapObjectCommand extends Base {
 			choices.push(lang.getName());
 		}
 		return [
-			`[${i18next.t('cancel.auto.index').toLowerCase()}=${cancelAutoIndex}, ${i18next.t(
+			`[${t('cancel.auto.index').toLowerCase()}=${cancelAutoIndex}, ${t(
 				'max.number.choices.display'
 			)}=${maxChoices}]`,
 			choices.join(' | '),
@@ -961,7 +967,7 @@ class MapObjectCommand extends Base {
 	toStringInputNumber(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const stockValueVariable = this.toStringDynamicValue(iterator, properties, parameters);
 		const digits = this.toStringDynamicValue(iterator, properties, parameters);
-		return [`${i18next.t('stock.value.in.variable.id')} ${stockValueVariable}, ${i18next.t('digits')} ${digits}`];
+		return [`${t('stock.value.in.variable.id')} ${stockValueVariable}, ${t('digits')} ${digits}`];
 	}
 
 	toStringSetDialogBoxOptionsSimple(
@@ -982,7 +988,7 @@ class MapObjectCommand extends Base {
 		const texts = [''];
 		this.toStringSetDialogBoxOptionsSimple(
 			texts,
-			i18next.t('window.skin.id'),
+			t('window.skin.id'),
 			iterator,
 			properties,
 			parameters,
@@ -990,27 +996,25 @@ class MapObjectCommand extends Base {
 		);
 		this.toStringSetDialogBoxOptionsSimple(texts, 'X', iterator, properties, parameters);
 		this.toStringSetDialogBoxOptionsSimple(texts, 'Y', iterator, properties, parameters);
-		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('width'), iterator, properties, parameters);
-		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('height'), iterator, properties, parameters);
-		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('padding.left'), iterator, properties, parameters);
-		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('padding.top'), iterator, properties, parameters);
-		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('padding.right'), iterator, properties, parameters);
-		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('padding.bottom'), iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, t('width'), iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, t('height'), iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, t('padding.left'), iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, t('padding.top'), iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, t('padding.right'), iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, t('padding.bottom'), iterator, properties, parameters);
 		let checked = Utils.initializeBoolCommand(this.command, iterator);
 		if (checked) {
-			texts.push(
-				`${i18next.t('faceset.position')}: ${i18next.t(this.command[iterator.i++] === 0 ? 'behind' : 'above')}`
-			);
+			texts.push(`${t('faceset.position')}: ${t(this.command[iterator.i++] === 0 ? 'behind' : 'above')}`);
 		}
-		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('faceset.x'), iterator, properties, parameters);
-		this.toStringSetDialogBoxOptionsSimple(texts, i18next.t('faceset.y'), iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, t('faceset.x'), iterator, properties, parameters);
+		this.toStringSetDialogBoxOptionsSimple(texts, t('faceset.y'), iterator, properties, parameters);
 		checked = Utils.initializeBoolCommand(this.command, iterator);
 		if (checked) {
-			texts.push(`${i18next.t('text.outline')}: ${i18next.t(this.command[iterator.i++] === 0 ? 'yes' : 'no')}`);
+			texts.push(`${t('text.outline')}: ${t(this.command[iterator.i++] === 0 ? 'yes' : 'no')}`);
 		}
 		this.toStringSetDialogBoxOptionsSimple(
 			texts,
-			i18next.t('text.color.id.text'),
+			t('text.color.id.text'),
 			iterator,
 			properties,
 			parameters,
@@ -1018,7 +1022,7 @@ class MapObjectCommand extends Base {
 		);
 		this.toStringSetDialogBoxOptionsSimple(
 			texts,
-			i18next.t('text.color.id.outline'),
+			t('text.color.id.outline'),
 			iterator,
 			properties,
 			parameters,
@@ -1026,7 +1030,7 @@ class MapObjectCommand extends Base {
 		);
 		this.toStringSetDialogBoxOptionsSimple(
 			texts,
-			i18next.t('text.color.id.background'),
+			t('text.color.id.background'),
 			iterator,
 			properties,
 			parameters,
@@ -1034,7 +1038,7 @@ class MapObjectCommand extends Base {
 		);
 		this.toStringSetDialogBoxOptionsSimple(
 			texts,
-			i18next.t('text.size.id'),
+			t('text.size.id'),
 			iterator,
 			properties,
 			parameters,
@@ -1042,7 +1046,7 @@ class MapObjectCommand extends Base {
 		);
 		this.toStringSetDialogBoxOptionsSimple(
 			texts,
-			i18next.t('text.font.id'),
+			t('text.font.id'),
 			iterator,
 			properties,
 			parameters,
@@ -1054,16 +1058,16 @@ class MapObjectCommand extends Base {
 	toStringChangeScreenTone(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const texts = [''];
 		const red = this.toStringDynamicValue(iterator, properties, parameters);
-		texts.push(`${i18next.t('red.short')}: ${red}`);
+		texts.push(`${t('red.short')}: ${red}`);
 		const green = this.toStringDynamicValue(iterator, properties, parameters);
-		texts.push(`${i18next.t('green.short')}: ${green}`);
+		texts.push(`${t('green.short')}: ${green}`);
 		const blue = this.toStringDynamicValue(iterator, properties, parameters);
-		texts.push(`${i18next.t('blue.short')}: ${blue}`);
+		texts.push(`${t('blue.short')}: ${blue}`);
 		const grey = `${this.toStringDynamicValue(iterator, properties, parameters)}%`;
-		texts.push(`${i18next.t('grey')}: ${grey}`);
+		texts.push(`${t('grey')}: ${grey}`);
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			const operation = Utils.initializeBoolCommand(this.command, iterator) ? '-' : '+';
-			const addingColor = `${i18next.t('color').toLowerCase()} ${this.toStringDynamicValue(
+			const addingColor = `${t('color').toLowerCase()} ${this.toStringDynamicValue(
 				iterator,
 				properties,
 				parameters,
@@ -1073,13 +1077,11 @@ class MapObjectCommand extends Base {
 		}
 		let time = '';
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			time += `[${i18next.t('wait.end')}] `;
+			time += `[${t('wait.end')}] `;
 		}
-		time += `${i18next.t('time').toUpperCase()}: ${this.toStringDynamicValue(
-			iterator,
-			properties,
-			parameters
-		)} ${i18next.t('seconds').toLowerCase()}`;
+		time += `${t('time').toUpperCase()}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
+			'seconds'
+		).toLowerCase()}`;
 		texts.push(time);
 		return texts;
 	}
@@ -1087,18 +1089,16 @@ class MapObjectCommand extends Base {
 	toStringShakeScreen(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const texts = [''];
 		const offset = this.toStringDynamicValue(iterator, properties, parameters);
-		texts.push(`${i18next.t('offset')}: ${offset} ${i18next.t('pixel.s').toLowerCase()}`);
+		texts.push(`${t('offset')}: ${offset} ${t('pixel.s').toLowerCase()}`);
 		const shakesNumber = this.toStringDynamicValue(iterator, properties, parameters);
-		texts.push(`${i18next.t('shakes.number')}: ${shakesNumber} ${i18next.t('per.second').toLowerCase()}`);
+		texts.push(`${t('shakes.number')}: ${shakesNumber} ${t('per.second').toLowerCase()}`);
 		let time = '';
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			time += `[${i18next.t('wait.end')}] `;
+			time += `[${t('wait.end')}] `;
 		}
-		time += `${i18next.t('time').toUpperCase()}: ${this.toStringDynamicValue(
-			iterator,
-			properties,
-			parameters
-		)} ${i18next.t('seconds').toLowerCase()}`;
+		time += `${t('time').toUpperCase()}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
+			'seconds'
+		).toLowerCase()}`;
 		texts.push(time);
 		return texts;
 	}
@@ -1106,7 +1106,7 @@ class MapObjectCommand extends Base {
 	toStringFlashScreen(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const texts = [];
 		texts.push(
-			`${i18next.t('color.id')}: ${this.toStringDynamicValue(
+			`${t('color.id')}: ${this.toStringDynamicValue(
 				iterator,
 				properties,
 				parameters,
@@ -1115,13 +1115,11 @@ class MapObjectCommand extends Base {
 		);
 		let time = '';
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			time += `[${i18next.t('wait.end')}] `;
+			time += `[${t('wait.end')}] `;
 		}
-		time += `${i18next.t('time').toUpperCase()}: ${this.toStringDynamicValue(
-			iterator,
-			properties,
-			parameters
-		)} ${i18next.t('seconds').toLowerCase()}`;
+		time += `${t('time').toUpperCase()}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
+			'seconds'
+		).toLowerCase()}`;
 		texts.push(time);
 		return texts;
 	}
@@ -1130,14 +1128,14 @@ class MapObjectCommand extends Base {
 		const texts = [];
 		switch (this.command[iterator.i++] as number) {
 			case 0:
-				texts.push(i18next.t('none'));
+				texts.push(t('none'));
 				break;
 			case 1: {
-				texts.push(i18next.t('custom'));
-				let texture = `${i18next.t('texture')}: `;
+				texts.push(t('custom'));
+				let texture = `${t('texture')}: `;
 				switch (this.command[iterator.i++] as number) {
 					case 0:
-						texture += `${i18next.t('color.id')} ${this.toStringDynamicValue(
+						texture += `${t('color.id')} ${this.toStringDynamicValue(
 							iterator,
 							properties,
 							parameters,
@@ -1145,7 +1143,7 @@ class MapObjectCommand extends Base {
 						)}`;
 						break;
 					case 1:
-						texture += `${i18next.t('image')} ${this.toStringDynamicValue(
+						texture += `${t('image')} ${this.toStringDynamicValue(
 							iterator,
 							properties,
 							parameters,
@@ -1156,42 +1154,30 @@ class MapObjectCommand extends Base {
 				}
 				texts.push(texture);
 				texts.push(
-					`${i18next.t('number.per.portion')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
+					`${t('number.per.portion')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
 				);
-				texts.push(
-					`${i18next.t('ray.portions')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
-				);
-				texts.push(`${i18next.t('size')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
+				texts.push(`${t('ray.portions')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
+				texts.push(`${t('size')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
 				texts.push(`DepthTest: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
 				texts.push(`DepthWrite: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
+				texts.push(`${t('initial.velocity')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
+				texts.push(`${t('velocity.addition')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
 				texts.push(
-					`${i18next.t('initial.velocity')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
+					`${t('initial.y.rotation')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
 				);
 				texts.push(
-					`${i18next.t('velocity.addition')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
-				);
-				texts.push(
-					`${i18next.t('initial.y.rotation')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
-				);
-				texts.push(
-					`${i18next.t('y.rotation.addition')}: ${this.toStringDynamicValue(
-						iterator,
-						properties,
-						parameters
-					)}`
+					`${t('y.rotation.addition')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
 				);
 				break;
 			}
 		}
 		let time = '';
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			time += `[${i18next.t('wait.end')}] `;
+			time += `[${t('wait.end')}] `;
 		}
-		time += `${i18next.t('time').toUpperCase()}: ${this.toStringDynamicValue(
-			iterator,
-			properties,
-			parameters
-		)} ${i18next.t('seconds').toLowerCase()}`;
+		time += `${t('time').toUpperCase()}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
+			'seconds'
+		).toLowerCase()}`;
 		texts.push(time);
 		return texts;
 	}
@@ -1201,7 +1187,7 @@ class MapObjectCommand extends Base {
 		texts.push(this.toStringMap(iterator, properties, parameters));
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			texts.push(
-				`${i18next.t('tileset.id')}: ${this.toStringDynamicValue(
+				`${t('tileset.id')}: ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters,
@@ -1211,7 +1197,7 @@ class MapObjectCommand extends Base {
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			texts.push(
-				`${i18next.t('music')}: ${this.toStringDynamicValue(
+				`${t('music')}: ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters,
@@ -1222,7 +1208,7 @@ class MapObjectCommand extends Base {
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			texts.push(
-				`${i18next.t('background.sound')}: ${this.toStringDynamicValue(
+				`${t('background.sound')}: ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters,
@@ -1233,7 +1219,7 @@ class MapObjectCommand extends Base {
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			texts.push(
-				`${i18next.t('camera.properties.id')}: ${this.toStringDynamicValue(
+				`${t('camera.properties.id')}: ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters,
@@ -1242,10 +1228,10 @@ class MapObjectCommand extends Base {
 			);
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			let sky = `${i18next.t('sky')}: `;
+			let sky = `${t('sky')}: `;
 			switch (this.command[iterator.i++] as number) {
 				case 0:
-					sky += `${i18next.t('color.id').toLowerCase()} ${this.toStringDynamicValue(
+					sky += `${t('color.id').toLowerCase()} ${this.toStringDynamicValue(
 						iterator,
 						properties,
 						parameters,
@@ -1253,7 +1239,7 @@ class MapObjectCommand extends Base {
 					)}`;
 					break;
 				case 1:
-					sky += `${i18next.t('skybox.id').toLowerCase()} ${this.toStringDynamicValue(
+					sky += `${t('skybox.id').toLowerCase()} ${this.toStringDynamicValue(
 						iterator,
 						properties,
 						parameters,
@@ -1277,7 +1263,7 @@ class MapObjectCommand extends Base {
 				Project.current!.pictures.getList(PICTURE_KIND.TILESETS),
 				true
 			);
-			texts.push(`${i18next.t('tileset.id')} ${tileset} ${i18next.t('to').toLowerCase()} ${newtileset}`);
+			texts.push(`${t('tileset.id')} ${tileset} ${t('to').toLowerCase()} ${newtileset}`);
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			const autotile = this.toStringDynamicValue(
@@ -1293,7 +1279,7 @@ class MapObjectCommand extends Base {
 				Project.current!.pictures.getList(PICTURE_KIND.AUTOTILES),
 				true
 			);
-			texts.push(`${i18next.t('autotile.id')} ${autotile} ${i18next.t('to').toLowerCase()} ${newAutotile}`);
+			texts.push(`${t('autotile.id')} ${autotile} ${t('to').toLowerCase()} ${newAutotile}`);
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			const wall = this.toStringDynamicValue(
@@ -1309,7 +1295,7 @@ class MapObjectCommand extends Base {
 				Project.current!.pictures.getList(PICTURE_KIND.WALLS),
 				true
 			);
-			texts.push(`${i18next.t('wall.id')} ${wall} ${i18next.t('to').toLowerCase()} ${newWall}`);
+			texts.push(`${t('wall.id')} ${wall} ${t('to').toLowerCase()} ${newWall}`);
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			const object3D = this.toStringDynamicValue(
@@ -1325,7 +1311,7 @@ class MapObjectCommand extends Base {
 				Project.current!.pictures.getList(PICTURE_KIND.OBJECTS_3D),
 				true
 			);
-			texts.push(`${i18next.t('object.3d.id')} ${object3D} ${i18next.t('to').toLowerCase()} ${newObject3D}`);
+			texts.push(`${t('object.3d.id')} ${object3D} ${t('to').toLowerCase()} ${newObject3D}`);
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			const mountain = this.toStringDynamicValue(
@@ -1341,13 +1327,13 @@ class MapObjectCommand extends Base {
 				Project.current!.pictures.getList(PICTURE_KIND.MOUNTAINS),
 				true
 			);
-			texts.push(`${i18next.t('mountain.id')} ${mountain} ${i18next.t('to').toLowerCase()} ${newMountain}`);
+			texts.push(`${t('mountain.id')} ${mountain} ${t('to').toLowerCase()} ${newMountain}`);
 		}
 		return texts;
 	}
 
 	toStringWait(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
-		return [`${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t('seconds')}`];
+		return [`${this.toStringDynamicValue(iterator, properties, parameters)} ${t('seconds')}`];
 	}
 
 	toStringChangeChronometer(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
@@ -1356,32 +1342,30 @@ class MapObjectCommand extends Base {
 		const operation = this.command[iterator.i++] as number;
 		switch (operation) {
 			case 0:
-				text += i18next.t('start').toLowerCase();
+				text += t('start').toLowerCase();
 				break;
 			case 1:
-				text += i18next.t('pause').toLowerCase();
+				text += t('pause').toLowerCase();
 				break;
 			case 2:
-				text += i18next.t('continue').toLowerCase();
+				text += t('continue').toLowerCase();
 				break;
 			case 3:
-				text += i18next.t('stop').toLowerCase();
+				text += t('stop').toLowerCase();
 				break;
 			default:
 				break;
 		}
-		text += ` ${i18next.t('chronometer.id').toLowerCase()} ${id}`;
+		text += ` ${t('chronometer.id').toLowerCase()} ${id}`;
 		if (operation === 0) {
-			text += ` ${i18next.t('time').toLowerCase()} ${this.toStringDynamicValue(
-				iterator,
-				properties,
-				parameters
-			)} ${i18next.t('seconds').toLowerCase()}`;
+			text += ` ${t('time').toLowerCase()} ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
+				'seconds'
+			).toLowerCase()}`;
 			if (Utils.initializeBoolCommand(this.command, iterator)) {
-				text += ` [${i18next.t('display.on.screen')}]`;
+				text += ` [${t('display.on.screen')}]`;
 			}
 		} else if (Utils.initializeBoolCommand(this.command, iterator)) {
-			text += ` [${i18next.t('stock.current.chronometer.value.in.variable.id')} ${this.toStringDynamicValue(
+			text += ` [${t('stock.current.chronometer.value.in.variable.id')} ${this.toStringDynamicValue(
 				iterator,
 				properties,
 				parameters
@@ -1399,9 +1383,7 @@ class MapObjectCommand extends Base {
 		);
 		this.toStringPosition(texts, iterator, properties, parameters);
 		texts.push(
-			`[${i18next.t('direction')}: ${i18next.t(
-				Base.TRANSITION_DIRECTION_OPTIONS[this.command[iterator.i++] as number].name
-			)}]`
+			`[${t('direction')}: ${t(Base.TRANSITION_DIRECTION_OPTIONS[this.command[iterator.i++] as number].name)}]`
 		);
 		return texts;
 	}
@@ -1411,13 +1393,13 @@ class MapObjectCommand extends Base {
 		texts.push(this.toStringDynamicObject(iterator, properties, parameters));
 		const options: string[] = [];
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			options.push(i18next.t('ignore.if.impossible'));
+			options.push(t('ignore.if.impossible'));
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			options.push(i18next.t('wait.end'));
+			options.push(t('wait.end'));
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			options.push(i18next.t('camera.orientation'));
+			options.push(t('camera.orientation'));
 		}
 		texts.push(`[${options.join(';')}]`);
 		while (iterator.i < this.command.length) {
@@ -1430,8 +1412,8 @@ class MapObjectCommand extends Base {
 
 	toStringDisplayAnAnimation(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const texts = [];
-		const objectID = `${i18next.t('object.id')} ${this.toStringDynamicObject(iterator, properties, parameters)}`;
-		const animation = `${i18next.t('animation.id')} ${this.toStringDynamicValue(
+		const objectID = `${t('object.id')} ${this.toStringDynamicObject(iterator, properties, parameters)}`;
+		const animation = `${t('animation.id')} ${this.toStringDynamicValue(
 			iterator,
 			properties,
 			parameters,
@@ -1439,7 +1421,7 @@ class MapObjectCommand extends Base {
 		)}`;
 		texts.push(`${objectID} ${animation}`);
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			texts.push(`[${i18next.t('wait.end')}]`);
+			texts.push(`[${t('wait.end')}]`);
 		}
 		return texts;
 	}
@@ -1449,44 +1431,44 @@ class MapObjectCommand extends Base {
 		let target = '';
 		switch (this.command[iterator.i++]) {
 			case 0:
-				target += i18next.t('unchanged');
+				target += t('unchanged');
 				break;
 			case 1:
-				target += `${i18next.t('object.id')} ${this.toStringDynamicObject(iterator, properties, parameters)}`;
+				target += `${t('object.id')} ${this.toStringDynamicObject(iterator, properties, parameters)}`;
 				break;
 		}
-		texts.push(`${i18next.t('target')}: ${target}`);
+		texts.push(`${t('target')}: ${target}`);
 		const operation = this.toStringOperation(iterator);
 		const optionsMove: string[] = [];
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			optionsMove.push(i18next.t('offset'));
+			optionsMove.push(t('offset'));
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			optionsMove.push(i18next.t('camera.orientation'));
+			optionsMove.push(t('camera.orientation'));
 		}
-		const x = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t(
+		const x = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
 			Base.SQUARES_PIXELS_OPTIONS[this.command[iterator.i++] as number].name
 		)}`;
-		const y = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t(
+		const y = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
 			Base.SQUARES_PIXELS_OPTIONS[this.command[iterator.i++] as number].name
 		)}`;
-		const z = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t(
+		const z = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)} ${t(
 			Base.SQUARES_PIXELS_OPTIONS[this.command[iterator.i++] as number].name
 		)}`;
-		texts.push(`${i18next.t('move')}: X: ${x}; Y: ${y}; Z: ${z} [${optionsMove.join(';')}]`);
+		texts.push(`${t('move')}: X: ${x}; Y: ${y}; Z: ${z} [${optionsMove.join(';')}]`);
 		const optionsRotation: string[] = [];
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			optionsMove.push(i18next.t('offset'));
+			optionsMove.push(t('offset'));
 		}
 		const h = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)}°`;
 		const v = `${operation} ${this.toStringDynamicValue(iterator, properties, parameters)}°`;
 		texts.push(
-			`${i18next.t('rotation')}: ${i18next.t('horizontal.short')}: ${h}; ${i18next.t(
-				'vertical.short'
-			)}: ${v} [${optionsRotation.join(';')}]`
+			`${t('rotation')}: ${t('horizontal.short')}: ${h}; ${t('vertical.short')}: ${v} [${optionsRotation.join(
+				';'
+			)}]`
 		);
 		texts.push(
-			`${i18next.t('zoom')}: ${i18next.t('distance')}: ${operation} ${this.toStringDynamicValue(
+			`${t('zoom')}: ${t('distance')}: ${operation} ${this.toStringDynamicValue(
 				iterator,
 				properties,
 				parameters
@@ -1494,11 +1476,9 @@ class MapObjectCommand extends Base {
 		);
 		let time = '';
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			time += `[${i18next.t('wait.end')}] `;
+			time += `[${t('wait.end')}] `;
 		}
-		time += `${i18next.t('time')}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t(
-			'seconds'
-		)}`;
+		time += `${t('time')}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${t('seconds')}`;
 		texts.push(time);
 		return texts;
 	}
@@ -1506,17 +1486,17 @@ class MapObjectCommand extends Base {
 	toStringCreateObjectInMap(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const texts = [];
 		texts.push(
-			`${i18next.t('new.object.model.id')}: ${this.toStringDynamicValue(
+			`${t('new.object.model.id')}: ${this.toStringDynamicValue(
 				iterator,
 				properties,
 				parameters,
 				Project.current!.commonEvents.commonObjects
-			)} ${i18next.t('to.the.coordinates').toLowerCase()}`
+			)} ${t('to.the.coordinates').toLowerCase()}`
 		);
 		this.toStringPosition(texts, iterator, properties, parameters);
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
 			texts.push(
-				`[${i18next.t('stock.instance.id.in').toLowerCase()} ${this.toStringDynamicValue(
+				`[${t('stock.instance.id.in').toLowerCase()} ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters
@@ -1539,29 +1519,27 @@ class MapObjectCommand extends Base {
 			true
 		);
 		const index = this.toStringDynamicValue(iterator, properties, parameters);
-		const origin = i18next.t(Base.TOP_LEFT_CENTER_OPTIONS[this.command[iterator.i++] as number].name);
+		const origin = t(Base.TOP_LEFT_CENTER_OPTIONS[this.command[iterator.i++] as number].name);
 		const x = this.toStringDynamicValue(iterator, properties, parameters);
 		const y = this.toStringDynamicValue(iterator, properties, parameters);
 		const zoom = this.toStringDynamicValue(iterator, properties, parameters);
 		const opacity = this.toStringDynamicValue(iterator, properties, parameters);
 		const angle = this.toStringDynamicValue(iterator, properties, parameters);
 		return [
-			`ID=${id} ${i18next.t('index').toLowerCase()}=${index}`,
-			`${i18next.t('origin')}=${origin}, X=${x}, Y=${y}, ${i18next.t('zoom')}=${zoom}% ${i18next.t(
-				'opacity'
-			)}=${opacity}% ${i18next.t('angle')}=${angle}°`,
+			`ID=${id} ${t('index').toLowerCase()}=${index}`,
+			`${t('origin')}=${origin}, X=${x}, Y=${y}, ${t('zoom')}=${zoom}% ${t('opacity')}=${opacity}% ${t(
+				'angle'
+			)}=${angle}°`,
 		];
 	}
 
 	toStringSetMoveTurnAPicture(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const texts = [];
-		texts.push(
-			`${i18next.t('index').toLowerCase()}=${this.toStringDynamicValue(iterator, properties, parameters)}`
-		);
+		texts.push(`${t('index').toLowerCase()}=${this.toStringDynamicValue(iterator, properties, parameters)}`);
 		let checked = Utils.initializeBoolCommand(this.command, iterator);
 		if (checked) {
 			texts.push(
-				`${i18next.t('image.id')}: ${this.toStringDynamicValue(
+				`${t('image.id')}: ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters,
@@ -1572,11 +1550,11 @@ class MapObjectCommand extends Base {
 		}
 		checked = Utils.initializeBoolCommand(this.command, iterator);
 		if (checked) {
-			texts.push(`${i18next.t('zoom')}: ${this.toStringDynamicValue(iterator, properties, parameters)}%`);
+			texts.push(`${t('zoom')}: ${this.toStringDynamicValue(iterator, properties, parameters)}%`);
 		}
 		checked = Utils.initializeBoolCommand(this.command, iterator);
 		if (checked) {
-			texts.push(`${i18next.t('opacity')}: ${this.toStringDynamicValue(iterator, properties, parameters)}%`);
+			texts.push(`${t('opacity')}: ${this.toStringDynamicValue(iterator, properties, parameters)}%`);
 		}
 		checked = Utils.initializeBoolCommand(this.command, iterator);
 		if (checked) {
@@ -1588,19 +1566,19 @@ class MapObjectCommand extends Base {
 		}
 		checked = Utils.initializeBoolCommand(this.command, iterator);
 		if (checked) {
-			texts.push(`${i18next.t('angle')}: ${this.toStringDynamicValue(iterator, properties, parameters)}°`);
+			texts.push(`${t('angle')}: ${this.toStringDynamicValue(iterator, properties, parameters)}°`);
 		}
 		const isWaitEnd = Utils.initializeBoolCommand(this.command, iterator);
 		const time = this.toStringDynamicValue(iterator, properties, parameters);
-		texts.push(`${i18next.t('with.time')}=${time} ${i18next.t('seconds')}`);
+		texts.push(`${t('with.time')}=${time} ${t('seconds')}`);
 		if (isWaitEnd) {
-			texts.push(`[${i18next.t('wait.end')}]`);
+			texts.push(`[${t('wait.end')}]`);
 		}
 		return texts;
 	}
 
 	toStringRemoveAPicture(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
-		return [`${i18next.t('index').toLowerCase()}=${this.toStringDynamicValue(iterator, properties, parameters)}`];
+		return [`${t('index').toLowerCase()}=${this.toStringDynamicValue(iterator, properties, parameters)}`];
 	}
 
 	toStringPlayAVideo(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
@@ -1608,24 +1586,18 @@ class MapObjectCommand extends Base {
 		switch (this.command[iterator.i++] as number) {
 			case 0: {
 				texts.push(
-					`${i18next.t('play').toLowerCase()} ${i18next
-						.t('video')
-						.toLowerCase()} ${Project.current!.videos.getByID(
+					`${t('play').toLowerCase()} ${t('video').toLowerCase()} ${Project.current!.videos.getByID(
 						this.command[iterator.i++] as number
 					).toString()}`
 				);
 				const options: string[] = [];
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
 					options.push(
-						`${i18next.t('start')}: ${this.toStringDynamicValue(
-							iterator,
-							properties,
-							parameters
-						)} ${i18next.t('seconds')}`
+						`${t('start')}: ${this.toStringDynamicValue(iterator, properties, parameters)} ${t('seconds')}`
 					);
 				}
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
-					options.push(i18next.t('wait.end'));
+					options.push(t('wait.end'));
 				}
 				if (options.length > 0) {
 					texts.push(`[${options.join(';')}]`);
@@ -1633,10 +1605,10 @@ class MapObjectCommand extends Base {
 				break;
 			}
 			case 1:
-				texts.push(i18next.t('pause').toLowerCase());
+				texts.push(t('pause').toLowerCase());
 				break;
 			case 2:
-				texts.push(i18next.t('stop').toLowerCase());
+				texts.push(t('stop').toLowerCase());
 				break;
 			default:
 				break;
@@ -1658,18 +1630,16 @@ class MapObjectCommand extends Base {
 			texts.push(shopItem.toString());
 		}
 		if (!isRestock) {
-			texts.push(`${i18next.t('buy.only')}: ${buyOnly}`);
+			texts.push(`${t('buy.only')}: ${buyOnly}`);
 		}
-		texts.push(`${i18next.t('shop.id')}: ${shopID}`);
+		texts.push(`${t('shop.id')}: ${shopID}`);
 		return texts;
 	}
 
 	toStringEnterANameMenu(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const texts = [''];
-		texts.push(
-			`${i18next.t('hero.with.instance.id')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`
-		);
-		texts.push(`${i18next.t('max.characters')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
+		texts.push(`${t('hero.with.instance.id')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
+		texts.push(`${t('max.characters')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`);
 		return texts;
 	}
 
@@ -1681,41 +1651,41 @@ class MapObjectCommand extends Base {
 		const id = Base.getByID(list, this.command[iterator.i++] as number)?.toString() ?? '';
 		const volume = this.toStringDynamicValue(iterator, properties, parameters);
 		texts.push(
-			`${isActivated ? `${i18next.t('with.id').toLowerCase()} ${idNumber}` : id} ${i18next
+			`${isActivated ? `${t('with.id').toLowerCase()} ${idNumber}` : id} ${i18next
 				.t('with.volume')
 				.toLowerCase()}: ${volume}`
 		);
 		const isStart = Utils.initializeBoolCommand(this.command, iterator);
 		const start = this.toStringDynamicValue(iterator, properties, parameters);
 		if (isStart) {
-			texts.push(`${i18next.t('start')}: ${start}`);
+			texts.push(`${t('start')}: ${start}`);
 		}
 		const isEnd = Utils.initializeBoolCommand(this.command, iterator);
 		const end = this.toStringDynamicValue(iterator, properties, parameters);
 		if (isEnd) {
-			texts.push(`${i18next.t('end')}: ${end}`);
+			texts.push(`${t('end')}: ${end}`);
 		}
 		return texts;
 	}
 
 	toStringStopSong(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		let str = '';
-		const seconds = `${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next.t('seconds')}`;
+		const seconds = `${this.toStringDynamicValue(iterator, properties, parameters)} ${t('seconds')}`;
 		if (this.kind === EVENT_COMMAND_KIND.STOP_A_SOUND) {
-			str += `${i18next.t('sound.id')} ${this.toStringDynamicValue(iterator, properties, parameters)} `;
+			str += `${t('sound.id')} ${this.toStringDynamicValue(iterator, properties, parameters)} `;
 		}
 		str += seconds;
 		return [str];
 	}
 
 	toStringSendEvent(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
-		let str = `${i18next.t('to').toLowerCase()} `;
+		let str = `${t('to').toLowerCase()} `;
 		switch (this.command[iterator.i++]) {
 			case 0:
-				str += i18next.t('all').toLowerCase();
+				str += t('all').toLowerCase();
 				break;
 			case 1: {
-				str += `${i18next.t('detection').toLowerCase()} ${this.toStringDynamicValue(
+				str += `${t('detection').toLowerCase()} ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters,
@@ -1723,10 +1693,10 @@ class MapObjectCommand extends Base {
 				)}`;
 				const options = [];
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
-					options.push(i18next.t('sender.cant.receive').toLocaleLowerCase());
+					options.push(t('sender.cant.receive').toLocaleLowerCase());
 				}
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
-					options.push(i18next.t('only.the.closest').toLocaleLowerCase());
+					options.push(t('only.the.closest').toLocaleLowerCase());
 				}
 				if (options.length > 0) {
 					str += ` [${options.join(', ')}]`;
@@ -1734,11 +1704,7 @@ class MapObjectCommand extends Base {
 				break;
 			}
 			case 2:
-				str += `${i18next.t('object').toLowerCase()} ${this.toStringDynamicObject(
-					iterator,
-					properties,
-					parameters
-				)}`;
+				str += `${t('object').toLowerCase()} ${this.toStringDynamicObject(iterator, properties, parameters)}`;
 				break;
 		}
 		const event = new MapObjectEvent();
@@ -1748,7 +1714,7 @@ class MapObjectCommand extends Base {
 				event.isSystem ? Project.current!.commonEvents.eventsSystem : Project.current!.commonEvents.eventsUser,
 				event.id
 			)?.name ?? '';
-		str += ` ${i18next.t('with.event').toLowerCase()} ${event.toString()}`;
+		str += ` ${t('with.event').toLowerCase()} ${event.toString()}`;
 		return [str];
 	}
 
@@ -1756,7 +1722,7 @@ class MapObjectCommand extends Base {
 		let mapID = '';
 		switch (this.command[iterator.i + 1]) {
 			case -1:
-				mapID = i18next.t('this.map');
+				mapID = t('this.map');
 				iterator.i += 2;
 				break;
 			default:
@@ -1766,11 +1732,11 @@ class MapObjectCommand extends Base {
 		let objectID = '';
 		switch (this.command[iterator.i + 1]) {
 			case -1:
-				objectID = i18next.t('this.object');
+				objectID = t('this.object');
 				iterator.i += 2;
 				break;
 			case 0:
-				objectID = i18next.t('hero');
+				objectID = t('hero');
 				iterator.i += 2;
 				break;
 			default:
@@ -1786,18 +1752,18 @@ class MapObjectCommand extends Base {
 		let operation = '';
 		switch (this.command[iterator.i++]) {
 			case 0:
-				operation += i18next.t('pass.into');
+				operation += t('pass.into');
 				break;
 			case 1:
-				operation += i18next.t('add');
+				operation += t('add');
 				break;
 			case 2:
-				operation += i18next.t('remove');
+				operation += t('remove');
 				break;
 		}
 		return [
-			`${i18next.t('map.id')} ${mapID}, ${i18next.t('object.id')} ${objectID}`,
-			`${operation} ${i18next.t('state.id').toLowerCase()} ${stateID}`,
+			`${t('map.id')} ${mapID}, ${t('object.id')} ${objectID}`,
+			`${operation} ${t('state.id').toLowerCase()} ${stateID}`,
 		];
 	}
 
@@ -1805,7 +1771,7 @@ class MapObjectCommand extends Base {
 		const propertyID = this.toStringDynamicValue(iterator, properties, parameters, properties);
 		const operation = this.toStringOperation(iterator);
 		const newValue = this.toStringDynamicValue(iterator, properties, parameters);
-		return [`${i18next.t('property.id')} ${propertyID} ${operation} ${newValue}`];
+		return [`${t('property.id')} ${propertyID} ${operation} ${newValue}`];
 	}
 
 	toStringModifyCurrency(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
@@ -1817,7 +1783,7 @@ class MapObjectCommand extends Base {
 		);
 		const operation = this.toStringOperation(iterator);
 		const value = this.toStringDynamicValue(iterator, properties, parameters);
-		return [`${i18next.t('currency.id')} ${currencyID} ${operation} ${value}`];
+		return [`${t('currency.id')} ${currencyID} ${operation} ${value}`];
 	}
 
 	toStringModifyInventory(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
@@ -1825,13 +1791,13 @@ class MapObjectCommand extends Base {
 		const selection = this.command[iterator.i++];
 		switch (selection) {
 			case ITEM_KIND.ITEM:
-				str += i18next.t('item.id');
+				str += t('item.id');
 				break;
 			case ITEM_KIND.WEAPON:
-				str += i18next.t('weapon.id');
+				str += t('weapon.id');
 				break;
 			case ITEM_KIND.ARMOR:
-				str += i18next.t('armor.id');
+				str += t('armor.id');
 				break;
 		}
 		let database: Base[] = [];
@@ -1856,48 +1822,46 @@ class MapObjectCommand extends Base {
 		let str = '';
 		switch (this.command[iterator.i++]) {
 			case 0: {
-				str += `${i18next.t('create.new.instance.with.level').toLowerCase()} ${this.toStringDynamicValue(
+				str += `${t('create.new.instance.with.level').toLowerCase()} ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters
-				)} ${i18next.t('in').toLowerCase()} `;
-				str += `${i18next
-					.t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name)
-					.toLowerCase()} ${i18next.t('of')} `;
+				)} ${t('in').toLowerCase()} `;
+				str += `${t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name).toLowerCase()} ${t('of')} `;
 				const stockVariable = this.toStringDynamicValue(iterator, properties, parameters);
 				if (this.command[iterator.i++] === 0) {
-					str += `${i18next.t('hero.id').toLowerCase()} ${this.toStringDynamicValue(
+					str += `${t('hero.id').toLowerCase()} ${this.toStringDynamicValue(
 						iterator,
 						properties,
 						parameters,
 						Project.current!.heroes.list
 					)}`;
 				} else {
-					str += `${i18next.t('monster.id').toLowerCase()} ${this.toStringDynamicValue(
+					str += `${t('monster.id').toLowerCase()} ${this.toStringDynamicValue(
 						iterator,
 						properties,
 						parameters,
 						Project.current!.monsters.list
 					)}`;
 				}
-				str += ` ${i18next.t('and.stock.in.variable')} ${stockVariable}`;
+				str += ` ${t('and.stock.in.variable')} ${stockVariable}`;
 				break;
 			}
 			case 1:
-				str += `${i18next.t('add.enemy.instance.id')} ${this.toStringDynamicValue(
+				str += `${t('add.enemy.instance.id')} ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters
-				)} ${i18next.t('in')} `;
-				str += i18next.t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name).toLowerCase();
+				)} ${t('in')} `;
+				str += t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name).toLowerCase();
 				break;
 			case 2: {
 				const move = this.command[iterator.i++] === 0;
-				str += `${i18next.t('modify')} ${i18next.t(move ? 'move.verb' : 'remove').toLowerCase()} ${i18next
+				str += `${t('modify')} ${t(move ? 'move.verb' : 'remove').toLowerCase()} ${i18next
 					.t('character.with.instance.id')
 					.toLowerCase()} ${this.toStringDynamicValue(iterator, properties, parameters)}`;
 				if (move) {
-					str += ` ${i18next.t('to').toLowerCase()} ${i18next
+					str += ` ${t('to').toLowerCase()} ${i18next
 						.t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name)
 						.toLowerCase()}`;
 				}
@@ -1915,17 +1879,17 @@ class MapObjectCommand extends Base {
 		const texts = [];
 		const optionsList = [];
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			optionsList.push(i18next.t('allow.escape'));
+			optionsList.push(t('allow.escape'));
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			optionsList.push(i18next.t('defeat.causes.game.over'));
+			optionsList.push(t('defeat.causes.game.over'));
 		}
 		const options = `[${optionsList.join(';')}]`;
 		const kind = this.command[iterator.i++];
 		let str = '';
 		switch (kind) {
 			case 0:
-				str = `${i18next.t('with.id').toLowerCase()} ${this.toStringDynamicValue(
+				str = `${t('with.id').toLowerCase()} ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters,
@@ -1933,15 +1897,15 @@ class MapObjectCommand extends Base {
 				)}`;
 				break;
 			case 1:
-				str = `${i18next.t('random').toLowerCase()} [${i18next.t('in.map.property')}}`;
+				str = `${t('random').toLowerCase()} [${t('in.map.property')}}`;
 				break;
 		}
-		str += ` ${i18next.t('with.battle.map').toLowerCase()}`;
+		str += ` ${t('with.battle.map').toLowerCase()}`;
 		texts.push(str);
 		this.toStringPosition(texts, iterator, properties, parameters, true);
-		let transition = `${i18next.t('with.transition').toLowerCase()} `;
+		let transition = `${t('with.transition').toLowerCase()} `;
 		const start = this.command[iterator.i++] as number;
-		transition += i18next.t(Base.TRANSITION_START_OPTIONS[start].name);
+		transition += t(Base.TRANSITION_START_OPTIONS[start].name);
 		if (start === 1) {
 			transition += ` ${this.toStringDynamicValue(
 				iterator,
@@ -1951,7 +1915,7 @@ class MapObjectCommand extends Base {
 			)}`;
 		}
 		const end = this.command[iterator.i++] as number;
-		transition += ` ${i18next.t('and.then')} ${i18next.t(Base.TRANSITION_END_OPTIONS[end].name)}`;
+		transition += ` ${t('and.then')} ${t(Base.TRANSITION_END_OPTIONS[end].name)}`;
 		if (end === 1) {
 			transition += ` ${this.toStringDynamicValue(
 				iterator,
@@ -1967,7 +1931,7 @@ class MapObjectCommand extends Base {
 
 	toStringChangeAStatistic(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const texts = [];
-		const statisitic = `${i18next.t('statistic.id')} ${this.toStringDynamicValue(
+		const statisitic = `${t('statistic.id')} ${this.toStringDynamicValue(
 			iterator,
 			properties,
 			parameters,
@@ -1982,16 +1946,16 @@ class MapObjectCommand extends Base {
 				value = this.toStringDynamicValue(iterator, properties, parameters);
 				break;
 			case 2:
-				value = i18next.t('maximum.statistic.value');
+				value = t('maximum.statistic.value');
 				break;
 		}
 		texts.push(`${statisitic} ${selection} ${operation} ${value}`);
 		const options = [];
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			options.push(i18next.t('can.go.above.maximum.value'));
+			options.push(t('can.go.above.maximum.value'));
 		}
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			options.push(i18next.t('apply.change.maximum.value'));
+			options.push(t('apply.change.maximum.value'));
 		}
 		if (options.length > 0) {
 			texts.push(`[${options.join(';')}]`);
@@ -2001,11 +1965,11 @@ class MapObjectCommand extends Base {
 
 	toStringChangeExperienceCurve(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		let str = this.toStringSelectionHero(iterator, properties, parameters);
-		str += ` ${i18next.t('level').toLowerCase()} ${i18next.t('range').toLowerCase()} ${this.toStringDynamicValue(
+		str += ` ${t('level').toLowerCase()} ${t('range').toLowerCase()} ${this.toStringDynamicValue(
 			iterator,
 			properties,
 			parameters
-		)} ${i18next.t('to').toLowerCase()} `;
+		)} ${t('to').toLowerCase()} `;
 		str += `${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next
 			.t('total.experience')
 			.toLowerCase()} `;
@@ -2016,13 +1980,13 @@ class MapObjectCommand extends Base {
 
 	toStringChangeStatus(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const selection = this.toStringSelectionHero(iterator, properties, parameters);
-		let str = i18next.t(this.command[iterator.i++] === 0 ? 'add' : 'remove');
-		str += ` ${i18next.t('status.id').toLowerCase()} ${this.toStringDynamicValue(
+		let str = t(this.command[iterator.i++] === 0 ? 'add' : 'remove');
+		str += ` ${t('status.id').toLowerCase()} ${this.toStringDynamicValue(
 			iterator,
 			properties,
 			parameters,
 			Project.current!.status.list
-		)} ${i18next.t('to').toLowerCase()} ${selection}`;
+		)} ${t('to').toLowerCase()} ${selection}`;
 		return [str];
 	}
 
@@ -2030,22 +1994,22 @@ class MapObjectCommand extends Base {
 		const skill = this.toStringDynamicValue(iterator, properties, parameters, Project.current!.skills.list);
 		const selection = this.toStringSelectionHero(iterator, properties, parameters);
 		return [
-			`${i18next.t(this.command[iterator.i++] === 0 ? 'learn' : 'forget')} ${i18next
+			`${t(this.command[iterator.i++] === 0 ? 'learn' : 'forget')} ${i18next
 				.t('skill.id')
-				.toLowerCase()} ${skill} ${i18next.t('to').toLowerCase()} ${selection}`,
+				.toLowerCase()} ${skill} ${t('to').toLowerCase()} ${selection}`,
 		];
 	}
 
 	toStringChangeName(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const name = this.toStringDynamicValue(iterator, properties, parameters);
 		const selection = this.toStringSelectionHero(iterator, properties, parameters);
-		return [`${selection} ${i18next.t('to').toLowerCase()} ${name}`];
+		return [`${selection} ${t('to').toLowerCase()} ${name}`];
 	}
 
 	toStringChangeClass(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const classID = this.toStringDynamicValue(iterator, properties, parameters, Project.current!.classes.list);
 		const selection = this.toStringSelectionHero(iterator, properties, parameters);
-		return [`${selection} ${i18next.t('to').toLowerCase()} ${i18next.t('class.id').toLowerCase()} ${classID}`];
+		return [`${selection} ${t('to').toLowerCase()} ${t('class.id').toLowerCase()} ${classID}`];
 	}
 
 	toStringChangeEquipment(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
@@ -2065,12 +2029,12 @@ class MapObjectCommand extends Base {
 		const selection = this.toStringSelectionHero(iterator, properties, parameters);
 		const options = [];
 		if (Utils.initializeBoolCommand(this.command, iterator)) {
-			options.push(i18next.t('apply.only.if.in.inventory'));
+			options.push(t('apply.only.if.in.inventory'));
 		}
 		const texts = [
-			`${i18next.t('equipment.id')} ${equipment} ${i18next.t('with').toLowerCase()} ${i18next.t(
+			`${t('equipment.id')} ${equipment} ${t('with').toLowerCase()} ${t(
 				isWeapon ? 'weapon.id' : 'armor.id'
-			)} ${weaponArmor} ${i18next.t('to').toLowerCase()} ${selection}`,
+			)} ${weaponArmor} ${t('to').toLowerCase()} ${selection}`,
 		];
 		if (options.length > 0) {
 			texts.push(`[${options.join(';')}]`);
@@ -2090,31 +2054,31 @@ class MapObjectCommand extends Base {
 				break;
 			case 1: {
 				const index = this.command[iterator.i++] as CONDITION_HEROES_KIND;
-				str += `${i18next.t(Base.HEROES_OPTIONS[index].name)}`;
+				str += `${t(Base.HEROES_OPTIONS[index].name)}`;
 				if (index === CONDITION_HEROES_KIND.THE_HERO_WITH_INSTANCE_ID) {
 					str += ` ${this.toStringDynamicValue(iterator, properties, parameters)}`;
 				}
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
-					str += ` ${i18next.t('in').toLowerCase()} ${i18next
+					str += ` ${t('in').toLowerCase()} ${i18next
 						.t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name)
 						.toLowerCase()}`;
 				}
 				str += ' ';
 				switch (this.command[iterator.i++]) {
 					case 0:
-						str += `${i18next.t('are.named').toLowerCase()} ${this.toStringDynamicValue(
+						str += `${t('are.named').toLowerCase()} ${this.toStringDynamicValue(
 							iterator,
 							properties,
 							parameters
 						)}`;
 						break;
 					case 1:
-						str += `${i18next.t('are.in').toLowerCase()} ${i18next
+						str += `${t('are.in').toLowerCase()} ${i18next
 							.t(Base.TEAM_OPTIONS[this.command[iterator.i++] as number].name)
 							.toLowerCase()}`;
 						break;
 					case 2:
-						str += `${i18next.t('are.able.skill.id').toLowerCase()} ${this.toStringDynamicValue(
+						str += `${t('are.able.skill.id').toLowerCase()} ${this.toStringDynamicValue(
 							iterator,
 							properties,
 							parameters,
@@ -2122,10 +2086,10 @@ class MapObjectCommand extends Base {
 						)}`;
 						break;
 					case 3:
-						str += `${i18next.t('are.equiped.with').toLowerCase()} `;
+						str += `${t('are.equiped.with').toLowerCase()} `;
 						switch (this.command[iterator.i++]) {
 							case 0:
-								str += `${i18next.t('weapon.id').toLowerCase()} ${this.toStringDynamicValue(
+								str += `${t('weapon.id').toLowerCase()} ${this.toStringDynamicValue(
 									iterator,
 									properties,
 									parameters,
@@ -2133,7 +2097,7 @@ class MapObjectCommand extends Base {
 								)}`;
 								break;
 							case 1:
-								str += `${i18next.t('armor.id').toLowerCase()} ${this.toStringDynamicValue(
+								str += `${t('armor.id').toLowerCase()} ${this.toStringDynamicValue(
 									iterator,
 									properties,
 									parameters,
@@ -2142,7 +2106,7 @@ class MapObjectCommand extends Base {
 						}
 						break;
 					case 4:
-						str += `${i18next.t('are.under.effect.status.id').toLowerCase()} ${this.toStringDynamicValue(
+						str += `${t('are.under.effect.status.id').toLowerCase()} ${this.toStringDynamicValue(
 							iterator,
 							properties,
 							parameters,
@@ -2150,7 +2114,7 @@ class MapObjectCommand extends Base {
 						)}`;
 						break;
 					case 5:
-						str += `${i18next.t('have.statistic.id').toLowerCase()} ${this.toStringDynamicValue(
+						str += `${t('have.statistic.id').toLowerCase()} ${this.toStringDynamicValue(
 							iterator,
 							properties,
 							parameters,
@@ -2163,7 +2127,7 @@ class MapObjectCommand extends Base {
 				break;
 			}
 			case 2:
-				str += `${i18next.t('currency.id')} ${this.toStringDynamicValue(
+				str += `${t('currency.id')} ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters,
@@ -2173,7 +2137,7 @@ class MapObjectCommand extends Base {
 				str += this.toStringDynamicValue(iterator, properties, parameters);
 				break;
 			case 3:
-				str += `${i18next.t('item.id')} ${this.toStringDynamicValue(
+				str += `${t('item.id')} ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters,
@@ -2183,7 +2147,7 @@ class MapObjectCommand extends Base {
 				str += this.toStringDynamicValue(iterator, properties, parameters);
 				break;
 			case 4:
-				str += `${i18next.t('weapon.id')} ${this.toStringDynamicValue(
+				str += `${t('weapon.id')} ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters,
@@ -2192,11 +2156,11 @@ class MapObjectCommand extends Base {
 				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters);
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
-					str += ` + ${i18next.t('check.weapons.equiped.too').toLowerCase()}`;
+					str += ` + ${t('check.weapons.equiped.too').toLowerCase()}`;
 				}
 				break;
 			case 5:
-				str += `${i18next.t('armor.id')} ${this.toStringDynamicValue(
+				str += `${t('armor.id')} ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters,
@@ -2205,48 +2169,44 @@ class MapObjectCommand extends Base {
 				str += ` ${compareOptions[this.command[iterator.i++] as number].name} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters);
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
-					str += ` + ${i18next.t('check.armors.equiped.too').toLowerCase()}`;
+					str += ` + ${t('check.armors.equiped.too').toLowerCase()}`;
 				}
 				break;
 			case 6:
-				str += `${i18next.t('key.id')}: ${this.toStringDynamicValue(
+				str += `${t('key.id')}: ${this.toStringDynamicValue(
 					iterator,
 					properties,
 					parameters,
 					Project.current!.keyboard.list
-				)} ${i18next.t('is').toLowerCase()} `;
+				)} ${t('is').toLowerCase()} `;
 				str += this.toStringDynamicValue(iterator, properties, parameters);
 				break;
 			case 7:
-				str += `${i18next.t('script')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`;
+				str += `${t('script')}: ${this.toStringDynamicValue(iterator, properties, parameters)}`;
 				break;
 			case 8:
-				str += i18next.t('escaped.last.battle');
+				str += t('escaped.last.battle');
 				break;
 			case 9:
-				str += `${i18next.t('object.id')} ${this.toStringDynamicObject(
-					iterator,
-					properties,
-					parameters
-				)} ${i18next.t('is.looking.at').toLowerCase()} `;
-				str += i18next.t(Base.ORIENTATION_OPTIONS[this.command[iterator.i++] as number].name);
+				str += `${t('object.id')} ${this.toStringDynamicObject(iterator, properties, parameters)} ${t(
+					'is.looking.at'
+				).toLowerCase()} `;
+				str += t(Base.ORIENTATION_OPTIONS[this.command[iterator.i++] as number].name);
 				break;
 			case 10:
-				str += `${i18next.t('chronometer.id')} ${this.toStringDynamicValue(iterator, properties, parameters)} `;
+				str += `${t('chronometer.id')} ${this.toStringDynamicValue(iterator, properties, parameters)} `;
 				str += `${compareOptions[this.command[iterator.i++] as number].name} `;
 				str += `${this.toStringDynamicValue(iterator, properties, parameters)} ${i18next
 					.t('seconds')
 					.toLowerCase()}`;
 				break;
 			case 11:
-				str += `${i18next.t('object.id')} ${this.toStringDynamicObject(
-					iterator,
-					properties,
-					parameters
-				)} ${i18next.t('is.climbing').toLowerCase()} `;
+				str += `${t('object.id')} ${this.toStringDynamicObject(iterator, properties, parameters)} ${t(
+					'is.climbing'
+				).toLowerCase()} `;
 				break;
 		}
-		return [`${i18next.t('if')} (${str})`];
+		return [`${t('if')} (${str})`];
 	}
 
 	toStringLabel(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
@@ -2260,6 +2220,98 @@ class MapObjectCommand extends Base {
 				this.command[iterator.i++] as number
 			).toString() as string,
 		];
+	}
+
+	toStringChangeVariables(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		let str = '';
+		let selection = this.command[iterator.i++];
+		switch (selection) {
+			case 0:
+				str +=
+					Project.current!.variables.getVariableByID(this.command[iterator.i++] as number)?.toString() ?? '';
+				break;
+			case 1: {
+				const range1 = this.command[iterator.i++];
+				const range2 = this.command[iterator.i++];
+				str += `${range1} ${t('to').toLowerCase()} ${range2}`;
+				break;
+			}
+		}
+		str += ` ${this.toStringOperation(iterator)} `;
+		selection = this.command[iterator.i++];
+		switch (selection) {
+			case 0:
+			case 2:
+			case 3:
+				str += this.toStringDynamicValue(iterator, properties, parameters);
+				break;
+			case 1:
+				str += `${t('random.number.between').toLowerCase()} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters
+				)} ${t('and').toLowerCase()} `;
+				str += this.toStringDynamicValue(iterator, properties, parameters);
+				break;
+			case 4:
+				str += `${t('object.id').toLowerCase()} ${this.toStringDynamicObject(
+					iterator,
+					properties,
+					parameters
+				)} `;
+				str += t(Base.VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS[this.command[iterator.i++] as number].name);
+				break;
+			case 5:
+				str += `${t('number.of').toLowerCase()} `;
+				let list: Base[] = [];
+				switch (this.command[iterator.i++]) {
+					case 0:
+						str += t('item').toLowerCase();
+						list = Project.current!.items.list;
+						break;
+					case 1:
+						str += t('weapon').toLowerCase();
+						list = Project.current!.weapons.list;
+						break;
+					case 2:
+						str += t('armor').toLowerCase();
+						list = Project.current!.armors.list;
+						break;
+				}
+				str += ` ${this.toStringDynamicValue(iterator, properties, parameters, list)} ${t(
+					'in.inventory'
+				).toLowerCase()}`;
+				break;
+			case 6:
+				str += `${t('total.currency').toLowerCase()} ${t(
+					Base.CURRENCY_OPTIONS[this.command[iterator.i++] as number].name
+				).toLowerCase()} `;
+				str += this.toStringDynamicValue(iterator, properties, parameters, Project.current!.systems.currencies);
+				break;
+			case 7:
+				str += `${t('hero.enemy.instance.id').toLowerCase()} ${this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters
+				)} ${t('statistic.id').toLowerCase()} `;
+				str += this.toStringDynamicValue(
+					iterator,
+					properties,
+					parameters,
+					Project.current!.battleSystem.statistics
+				);
+				break;
+			case 8:
+				iterator.i++; // TODO
+				str += `${t('enemy').toLowerCase()} [TODO] ${t('instance.id').toLowerCase()} `;
+				break;
+			case 9:
+				str += t(
+					Base.VARIABLE_OTHER_CHARACTERISTICS_OPTIONS[this.command[iterator.i++] as number].name
+				).toLowerCase();
+				break;
+		}
+		return [str];
 	}
 
 	copy(command: MapObjectCommand): void {

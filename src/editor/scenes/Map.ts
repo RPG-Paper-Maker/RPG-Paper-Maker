@@ -46,6 +46,7 @@ import { Manager, MapElement, Model, Scene } from '../Editor';
 import { default as i18n, default as i18next } from '../i18n/i18n';
 import { Inputs } from '../managers';
 
+const { t } = i18next;
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
 
@@ -149,7 +150,7 @@ class Map extends Base {
 	}
 
 	static getCurrentMapObjectsList = () => [
-		...[Model.Base.create(0, i18next.t('hero')), Model.Base.create(-1, i18next.t('this.object'))],
+		...[Model.Base.create(0, t('hero')), Model.Base.create(-1, t('this.object'))],
 		...(Scene.Map.current?.model?.objects ?? []),
 	];
 

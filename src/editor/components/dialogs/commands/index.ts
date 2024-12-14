@@ -12,6 +12,7 @@ export * from './DialogCommandChangeProperty';
 export * from './DialogCommandChangeScreenTone';
 export * from './DialogCommandChangeState';
 export * from './DialogCommandChangeStatus';
+export * from './DialogCommandChangeVariables';
 export * from './DialogCommandChangeWeather';
 export * from './DialogCommandComment';
 export * from './DialogCommandDisplayAnAnimation';

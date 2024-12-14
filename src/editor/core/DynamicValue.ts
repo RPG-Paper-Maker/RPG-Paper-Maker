@@ -15,6 +15,7 @@ import { BINDING, BindingType, DYNAMIC_VALUE_KIND, ITERATOR, JSONType, Utils } f
 import { Model } from '../Editor';
 import { MapObjectCommandType } from '../models';
 
+const { t } = i18next;
 class DynamicValue extends Serializable {
 	public kind!: DYNAMIC_VALUE_KIND;
 	public value!: unknown;
@@ -105,11 +106,11 @@ class DynamicValue extends Serializable {
 	toString(database: Model.Base[] = []): string {
 		switch (this.kind) {
 			case DYNAMIC_VALUE_KIND.DEFAULT:
-				return i18next.t('default');
+				return t('default');
 			case DYNAMIC_VALUE_KIND.NONE:
-				return i18next.t('none');
+				return t('none');
 			case DYNAMIC_VALUE_KIND.ANYTHING:
-				return i18next.t('anything');
+				return t('anything');
 			case DYNAMIC_VALUE_KIND.SWITCH:
 				return this.value ? 'ON' : 'OFF';
 			case DYNAMIC_VALUE_KIND.VARIABLE:

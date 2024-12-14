@@ -105,9 +105,14 @@ function Dropdown({
 		const container = containerRef.current;
 		const dropdown = dropdownContainerRef.current;
 		if (container && dropdown) {
-			const top = getScrollingTop(container);
+			let top = getScrollingTop(container);
+			const bottom = Utils.getViewportBottom();
 			const left = container.getBoundingClientRect().x - Utils.getViewportLeft();
 			const width = container.clientWidth;
+			const height = top + dropdown.getBoundingClientRect().height;
+			if (height > bottom) {
+				top -= height - bottom;
+			}
 			dropdown.style.top = `${top}px`;
 			dropdown.style.left = `${left}px`;
 			if (!noWidthChange) {

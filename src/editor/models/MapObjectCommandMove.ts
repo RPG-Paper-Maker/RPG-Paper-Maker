@@ -16,6 +16,7 @@ import { DynamicValue } from '../core/DynamicValue';
 import { Base } from './Base';
 import { MapObjectCommand, MapObjectCommandType } from './MapObjectCommand';
 
+const { t } = i18next;
 class MapObjectCommandMove extends Base {
 	public command!: MapObjectCommandType[];
 
@@ -114,54 +115,54 @@ class MapObjectCommandMove extends Base {
 			case COMMAND_MOVE_KIND.MOVE_OPPOSITE_HERO:
 			case COMMAND_MOVE_KIND.MOVE_FRONT:
 			case COMMAND_MOVE_KIND.MOVE_BACK: {
-				const squareStep = i18next.t(this.command[iterator.i++] === 0 ? 'square' : 'step');
+				const squareStep = t(this.command[iterator.i++] === 0 ? 'square' : 'step');
 				let direction = '';
 				switch (kind) {
 					case COMMAND_MOVE_KIND.MOVE_NORTH:
-						direction = i18next.t('north');
+						direction = t('north');
 						break;
 					case COMMAND_MOVE_KIND.MOVE_SOUTH:
-						direction = i18next.t('south');
+						direction = t('south');
 						break;
 					case COMMAND_MOVE_KIND.MOVE_WEST:
-						direction = i18next.t('west');
+						direction = t('west');
 						break;
 					case COMMAND_MOVE_KIND.MOVE_EAST:
-						direction = i18next.t('east');
+						direction = t('east');
 						break;
 					case COMMAND_MOVE_KIND.MOVE_NORTH_WEST:
-						direction = i18next.t('north.west');
+						direction = t('north.west');
 						break;
 					case COMMAND_MOVE_KIND.MOVE_NORTH_EAST:
-						direction = i18next.t('north.east');
+						direction = t('north.east');
 						break;
 					case COMMAND_MOVE_KIND.MOVE_SOUTH_WEST:
-						direction = i18next.t('south.west');
+						direction = t('south.west');
 						break;
 					case COMMAND_MOVE_KIND.MOVE_SOUTH_EAST:
-						direction = i18next.t('south.east');
+						direction = t('south.east');
 						break;
 					case COMMAND_MOVE_KIND.MOVE_RANDOM:
-						direction = i18next.t('random').toLowerCase();
+						direction = t('random').toLowerCase();
 						break;
 					case COMMAND_MOVE_KIND.MOVE_HERO:
-						direction = i18next.t('hero').toLowerCase();
+						direction = t('hero').toLowerCase();
 						break;
 					case COMMAND_MOVE_KIND.MOVE_OPPOSITE_HERO:
-						direction = i18next.t('opposite.hero').toLowerCase();
+						direction = t('opposite.hero').toLowerCase();
 						break;
 					case COMMAND_MOVE_KIND.MOVE_FRONT:
-						direction = i18next.t('front').toLowerCase();
+						direction = t('front').toLowerCase();
 						break;
 					case COMMAND_MOVE_KIND.MOVE_BACK:
-						direction = i18next.t('back').toLowerCase();
+						direction = t('back').toLowerCase();
 						break;
 				}
-				str += `${i18next.t('move.1')} ${squareStep} ${i18next.t('to')} ${direction}`;
+				str += `${t('move.1')} ${squareStep} ${t('to')} ${direction}`;
 				break;
 			}
 			case COMMAND_MOVE_KIND.JUMP: {
-				const squareStep = i18next.t(this.command[iterator.i++] === 0 ? 'square' : 'step');
+				const squareStep = t(this.command[iterator.i++] === 0 ? 'square' : 'step');
 				const x = new DynamicValue();
 				x.updateCommand(this.command, iterator);
 				const y = new DynamicValue();
@@ -176,53 +177,53 @@ class MapObjectCommandMove extends Base {
 				peakYp.updateCommand(this.command, iterator);
 				const time = new DynamicValue();
 				time.updateCommand(this.command, iterator);
-				str += `${i18next.t(
+				str += `${t(
 					'jump'
-				)} ${squareStep.toLowerCase()} X:${x.toString()}, Y:${y.toString()}, Y+:${yp.toString()}, Z:${z.toString()}, ${i18next.t(
+				)} ${squareStep.toLowerCase()} X:${x.toString()}, Y:${y.toString()}, Y+:${yp.toString()}, Z:${z.toString()}, ${t(
 					'peak'
-				)} Y:${peakY.toString()}, Y+:${peakYp.toString()} ${i18next.t('time')}:${time.toString()}${i18next
+				)} Y:${peakY.toString()}, Y+:${peakYp.toString()} ${t('time')}:${time.toString()}${i18next
 					.t('seconds')
 					.toLowerCase()}`;
 				break;
 			}
 			case COMMAND_MOVE_KIND.TURN_NORTH:
-				str += i18next.t('turn.north');
+				str += t('turn.north');
 				break;
 			case COMMAND_MOVE_KIND.TURN_SOUTH:
-				str += i18next.t('turn.south');
+				str += t('turn.south');
 				break;
 			case COMMAND_MOVE_KIND.TURN_WEST:
-				str += i18next.t('turn.west');
+				str += t('turn.west');
 				break;
 			case COMMAND_MOVE_KIND.TURN_EAST:
-				str += i18next.t('turn.east');
+				str += t('turn.east');
 				break;
 			case COMMAND_MOVE_KIND.TURN_90_LEFT:
-				str += i18next.t('turn.90.left');
+				str += t('turn.90.left');
 				break;
 			case COMMAND_MOVE_KIND.TURN_90_RIGHT:
-				str += i18next.t('turn.90.right');
+				str += t('turn.90.right');
 				break;
 			case COMMAND_MOVE_KIND.LOOK_AT_HERO:
-				str += i18next.t('look.at.hero');
+				str += t('look.at.hero');
 				break;
 			case COMMAND_MOVE_KIND.LOOK_AT_HERO_OPPOSITE:
-				str += i18next.t('look.at.hero.opposite');
+				str += t('look.at.hero.opposite');
 				break;
 			case COMMAND_MOVE_KIND.CHANGE_SPEED:
 			case COMMAND_MOVE_KIND.CHANGE_FREQUENCY: {
 				let permanent = '';
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
-					permanent = `[${i18next.t('permanent')}]`;
+					permanent = `[${t('permanent')}]`;
 				}
 				const value = new DynamicValue();
 				value.updateCommand(this.command, iterator);
 				switch (kind) {
 					case COMMAND_MOVE_KIND.CHANGE_SPEED:
-						str += i18next.t('change.speed');
+						str += t('change.speed');
 						break;
 					case COMMAND_MOVE_KIND.CHANGE_FREQUENCY:
-						str += i18next.t('change.frequency');
+						str += t('change.frequency');
 						break;
 				}
 				str += `: ${value.toString()} ${permanent}`;
@@ -238,7 +239,7 @@ class MapObjectCommandMove extends Base {
 			case COMMAND_MOVE_KIND.KEEP_POSITION: {
 				const options: string[] = [Utils.initializeBoolCommand(this.command, iterator) ? 'ON' : 'OFF'];
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
-					options.push(i18next.t('permanent').toLowerCase());
+					options.push(t('permanent').toLowerCase());
 				}
 				let name = '';
 				switch (kind) {
@@ -267,18 +268,18 @@ class MapObjectCommandMove extends Base {
 						name = 'keep.position';
 						break;
 				}
-				str += `${i18next.t(name)} [${options.join(',')}]`;
+				str += `${t(name)} [${options.join(',')}]`;
 				break;
 			}
 			case COMMAND_MOVE_KIND.CHANGE_GRAPHICS: {
 				let permanent = '';
 				if (Utils.initializeBoolCommand(this.command, iterator)) {
-					permanent = `[${i18next.t('permanent')}]`;
+					permanent = `[${t('permanent')}]`;
 				}
 				iterator.i += 2;
 				const value = new DynamicValue();
 				value.updateCommand(this.command, iterator, true);
-				str += `${i18next.t('change.graphics')} ${i18next.t('id')}:${value.toString()} ${permanent}`;
+				str += `${t('change.graphics')} ${t('id')}:${value.toString()} ${permanent}`;
 				break;
 			}
 			case COMMAND_MOVE_KIND.WAIT: {
