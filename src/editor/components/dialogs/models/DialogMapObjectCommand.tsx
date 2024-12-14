@@ -53,6 +53,7 @@ import DialogCommandPlayAVideo from '../commands/DialogCommandPlayAVideo';
 import DialogCommandPlaySong from '../commands/DialogCommandPlaySong';
 import DialogCommandRemoveAPicture from '../commands/DialogCommandRemoveAPicture';
 import DialogCommandRemoveObjectFromMap from '../commands/DialogCommandRemoveObjectFromMap';
+import DialogCommandScript from '../commands/DialogCommandScript';
 import DialogCommandSendEvent from '../commands/DialogCommandSendEvent';
 import DialogCommandSetDialogBoxOptions from '../commands/DialogCommandSetDialogBoxOptions';
 import DialogCommandSetMoveTurnAPicture from '../commands/DialogCommandSetMoveTurnAPicture';
@@ -438,6 +439,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandCallACommonReaction {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
 				return <DialogCommandChangeVariables {...options} />;
+			case EVENT_COMMAND_KIND.SCRIPT:
+				return <DialogCommandScript {...options} />;
 			default:
 				return null;
 		}

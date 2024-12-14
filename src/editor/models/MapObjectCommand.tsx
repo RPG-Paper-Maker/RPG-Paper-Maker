@@ -489,6 +489,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.COMMENT:
 				return MapObjectCommand.COLOR_COMMENT;
 			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
+			case EVENT_COMMAND_KIND.SCRIPT:
 				return MapObjectCommand.COLOR_YELLOW;
 		}
 		return 'white';
@@ -738,6 +739,9 @@ class MapObjectCommand extends Base {
 				break;
 			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
 				texts = this.toStringChangeVariables(iterator, parameters, properties);
+				break;
+			case EVENT_COMMAND_KIND.SCRIPT:
+				texts = this.toStringScript(iterator, parameters, properties);
 				break;
 		}
 		return (
@@ -2312,6 +2316,13 @@ class MapObjectCommand extends Base {
 				break;
 		}
 		return [str];
+	}
+
+	toStringScript(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const isDynamic = Utils.initializeBoolCommand(this.command, iterator);
+		return [
+			isDynamic ? this.toStringDynamicValue(iterator, properties, parameters) : '' + this.command[iterator.i++],
+		];
 	}
 
 	copy(command: MapObjectCommand): void {

@@ -17,9 +17,10 @@ type Props = {
 	onChange: (t: string) => void;
 	triggerInsertText?: string[] | null;
 	setTriggerInsertText?: (t: string[] | null) => void;
+	disabled?: boolean;
 };
 
-function TextArea({ text, onChange, triggerInsertText, setTriggerInsertText }: Props) {
+function TextArea({ text, onChange, triggerInsertText, setTriggerInsertText, disabled = false }: Props) {
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 	const insertTextAtCaret = (insertedText: string[]) => {
@@ -61,7 +62,16 @@ function TextArea({ text, onChange, triggerInsertText, setTriggerInsertText }: P
 		// eslint-disable-next-line
 	}, [triggerInsertText]);
 
-	return <textarea ref={textareaRef} value={text} onChange={handleChange} onBlur={handleBlur} spellCheck='false' />;
+	return (
+		<textarea
+			ref={textareaRef}
+			value={text}
+			onChange={handleChange}
+			onBlur={handleBlur}
+			spellCheck='false'
+			disabled={disabled}
+		/>
+	);
 }
 
 export default TextArea;
