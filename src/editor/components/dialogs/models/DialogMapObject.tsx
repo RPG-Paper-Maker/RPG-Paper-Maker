@@ -12,7 +12,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Model } from '../../../Editor';
-import { ELEMENT_MAP_KIND, OBJECT_MOVING_KIND, Utils } from '../../../common';
+import { ELEMENT_MAP_KIND, EVENT_COMMAND_KIND, OBJECT_MOVING_KIND, Utils } from '../../../common';
 import { Node, Project, Rectangle } from '../../../core';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateNumber from '../../../hooks/useStateNumber';
@@ -30,6 +30,7 @@ import Tab from '../../Tab';
 import Tree from '../../Tree';
 import TreeCommands from '../../TreeCommands';
 import Dialog from '../Dialog';
+import DialogCommandMoveObject from '../commands/DialogCommandMoveObject';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
@@ -44,6 +45,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isDialogCommandMoveObjectOpen, setIsDialogCommandMoveObjectOpen] = useState(false);
 	const [name, setName] = useStateString();
 	const [modelID, setModelID] = useStateNumber();
 	const [tabTitles, setTabTitles] = useState<Model.Base[]>([]);
@@ -61,7 +63,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	const [rectTileset, setRectTileset] = useState<Rectangle>();
 	const [graphicsKind, setGraphicsKind] = useStateNumber();
 	const [objectMovingKind, setObjectMovingKind] = useStateNumber();
-	//const [eventCommandRoute, setEventCommandRoute] = useState<EventCommand | null>(null);
+	const [eventCommandRoute, setEventCommandRoute] = useState<MapObjectCommand | null>(null);
 	const [speedID, setSpeedID] = useStateNumber();
 	const [frequencyID, setFrequencyID] = useStateNumber();
 	const [moveAnimation, setMoveAnimation] = useStateBool();
@@ -203,7 +205,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 			setRectTileset(state.rectTileset);
 			setGraphicsID(state.graphicsID);
 			setObjectMovingKind(state.objectMovingKind);
-			//setEventCommandRoute(state.eventCommandRoute);
+			setEventCommandRoute(state.eventCommandRoute);
 			setSpeedID(state.speedID);
 			setFrequencyID(state.frequencyID);
 			setMoveAnimation(state.moveAnimation);
@@ -238,13 +240,22 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 		setRectTileset(selectedState!.rectTileset);
 	};
 
-	const handleChangeObjectMovingKind = (movingKind: number) => {
+	const handleChangeObjectMovingKind = (movingKind: OBJECT_MOVING_KIND) => {
 		setObjectMovingKind(movingKind);
 		selectedState!.objectMovingKind = movingKind;
+		if (movingKind !== OBJECT_MOVING_KIND.ROUTE) {
+			selectedState!.eventCommandRoute = null;
+			setEventCommandRoute(null);
+		}
 	};
 
 	const handleClickEditRoute = () => {
-		alert('TODO');
+		setIsDialogCommandMoveObjectOpen(true);
+	};
+
+	const handleAcceptEditRoute = (command: Model.MapObjectCommand) => {
+		selectedState!.eventCommandRoute = command;
+		setEventCommandRoute(command);
 	};
 
 	const handleChangeSpeedID = (speedID: number) => {
@@ -330,200 +341,215 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	}, [isOpen]);
 
 	return (
-		<Dialog
-			title={`${t('edit.object')}...`}
-			isOpen={isOpen}
-			isLoading={isLoading}
-			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-			onClose={handleReject}
-			initialWidth='60%'
-			initialHeight='90%'
-		>
-			<Flex column fillHeight spaced>
-				<Flex centerV spaced>
+		<>
+			<Dialog
+				title={`${t('edit.object')}...`}
+				isOpen={isOpen}
+				isLoading={isLoading}
+				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+				onClose={handleReject}
+				initialWidth='60%'
+				initialHeight='90%'
+			>
+				<Flex column fillHeight spaced>
 					<Flex centerV spaced>
-						{t('name')}:
-						<InputText
-							value={name}
-							onChange={setName}
-							focusFirst={focusFirst}
-							setFocustFirst={setFocustFirst}
-						/>
-						ID: {Utils.formatNumberID(object.id)}
-					</Flex>
-					<Flex one />
-					<Flex centerV spaced>
-						{t('model')}:
-						<Dropdown selectedID={modelID} onChange={setModelID} options={getObjectsList()} displayIDs />
-					</Flex>
-				</Flex>
-				<Flex one spacedLarge>
-					<Flex one spaced className={Utils.getClassName({ visibilityHidden: !selectedState })}>
-						<Flex column one spaced>
-							<Tab
-								titles={tabTitles}
-								setTitles={setTabTitles}
-								contents={tabContents}
-								setContents={setTabContents}
-								forcedCurrentIndex={forcedCurrentIndexTab}
-								setForcedCurrentIndex={setForcedCurrentIndexTab}
-								onCurrentIndexChanged={handleCurrentIndexTabChanged}
+						<Flex centerV spaced>
+							{t('name')}:
+							<InputText
+								value={name}
+								onChange={setName}
+								focusFirst={focusFirst}
+								setFocustFirst={setFocustFirst}
 							/>
-							<Checkbox isChecked={blockingHero} onChange={handleChangeBlockingHero}>
-								{t('block.hero.when.reaction')}
-							</Checkbox>
+							ID: {Utils.formatNumberID(object.id)}
+						</Flex>
+						<Flex one />
+						<Flex centerV spaced>
+							{t('model')}:
+							<Dropdown
+								selectedID={modelID}
+								onChange={setModelID}
+								options={getObjectsList()}
+								displayIDs
+							/>
 						</Flex>
 					</Flex>
-					<Flex column spaced>
-						<Flex one spacedLarge>
+					<Flex one spacedLarge>
+						<Flex one spaced className={Utils.getClassName({ visibilityHidden: !selectedState })}>
 							<Flex column one spaced>
-								{t('states')}:
+								<Tab
+									titles={tabTitles}
+									setTitles={setTabTitles}
+									contents={tabContents}
+									setContents={setTabContents}
+									forcedCurrentIndex={forcedCurrentIndexTab}
+									setForcedCurrentIndex={setForcedCurrentIndexTab}
+									onCurrentIndexChanged={handleCurrentIndexTabChanged}
+								/>
+								<Checkbox isChecked={blockingHero} onChange={handleChangeBlockingHero}>
+									{t('block.hero.when.reaction')}
+								</Checkbox>
+							</Flex>
+						</Flex>
+						<Flex column spaced>
+							<Flex one spacedLarge>
+								<Flex column one spaced>
+									{t('states')}:
+									<Flex one zeroHeight>
+										<Tree
+											constructorType={Model.MapObjectState}
+											list={states}
+											onSelectedItem={handleSelectedItemState}
+											onCreateItem={handleCreateState}
+											forcedCurrentSelectedItemID={forcedCurrentSelectedIDState}
+											setForcedCurrentSelectedItemID={setForcedCurrentSelectedIDState}
+										/>
+									</Flex>
+								</Flex>
+								<Flex column one spaced>
+									{t('properties')}:
+									<Flex one zeroHeight>
+										<Tree list={properties} constructorType={Model.MapObjectProperty} />
+									</Flex>
+								</Flex>
+							</Flex>
+							<Flex column one spaced>
+								{t('events')}:
 								<Flex one zeroHeight>
 									<Tree
-										constructorType={Model.MapObjectState}
-										list={states}
-										onSelectedItem={handleSelectedItemState}
-										onCreateItem={handleCreateState}
-										forcedCurrentSelectedItemID={forcedCurrentSelectedIDState}
-										setForcedCurrentSelectedItemID={setForcedCurrentSelectedIDState}
+										constructorType={Model.MapObjectEvent}
+										list={events}
+										onSelectedItem={handleSelectedItemEvent}
+										onListUpdated={handleEventListUpdated}
+										onCreateItem={handleCreateEvent}
+										forcedCurrentSelectedItemIndex={forcedCurrentSelectedIndexEvent}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentSelectedIndexEvent}
+										doNotGenerateIDOnPaste
+										byIndex
 									/>
 								</Flex>
 							</Flex>
-							<Flex column one spaced>
-								{t('properties')}:
-								<Flex one zeroHeight>
-									<Tree list={properties} constructorType={Model.MapObjectProperty} />
+							<Flex spaced className={Utils.getClassName({ visibilityHidden: !selectedState })}>
+								<GraphicsSelector
+									sceneID='dialog-map-object'
+									graphicsID={graphicsID}
+									graphicsIndexX={graphicsIndexX}
+									graphicsIndexY={graphicsIndexY}
+									rectTileset={rectTileset}
+									graphicsKind={graphicsKind}
+									onChangeGraphicsKind={handleChangeGraphicsKind}
+									onUpdateGraphics={handleUpdateGraphics}
+								/>
+								<Flex column one spaced>
+									<Groupbox title={t('moving')}>
+										<Form>
+											<Label>{t('type')}</Label>
+											<Value>
+												<Dropdown
+													selectedID={objectMovingKind}
+													onChange={handleChangeObjectMovingKind}
+													options={Model.Base.OBJECT_MOVING_OPTIONS}
+													translateOptions
+													fillWidth
+												/>
+											</Value>
+											<td />
+											<Value>
+												<Button
+													disabled={objectMovingKind !== OBJECT_MOVING_KIND.ROUTE}
+													onClick={handleClickEditRoute}
+												>
+													{t('edit.route')}...
+												</Button>
+											</Value>
+											<Label>{t('speed')}</Label>
+											<Value>
+												<Dropdown
+													selectedID={speedID}
+													onChange={handleChangeSpeedID}
+													options={Project.current!.systems.speeds}
+													fillWidth
+												/>
+											</Value>
+											<Label>{t('frequency')}</Label>
+											<Value>
+												<Dropdown
+													selectedID={frequencyID}
+													onChange={handleChangeFrequencyID}
+													options={Project.current!.systems.frequencies}
+													fillWidth
+												/>
+											</Value>
+										</Form>
+									</Groupbox>
+									<Button>{t('update.transformations')}...</Button>
 								</Flex>
 							</Flex>
-						</Flex>
-						<Flex column one spaced>
-							{t('events')}:
-							<Flex one zeroHeight>
-								<Tree
-									constructorType={Model.MapObjectEvent}
-									list={events}
-									onSelectedItem={handleSelectedItemEvent}
-									onListUpdated={handleEventListUpdated}
-									onCreateItem={handleCreateEvent}
-									forcedCurrentSelectedItemIndex={forcedCurrentSelectedIndexEvent}
-									setForcedCurrentSelectedItemIndex={setForcedCurrentSelectedIndexEvent}
-									doNotGenerateIDOnPaste
-									byIndex
-								/>
-							</Flex>
-						</Flex>
-						<Flex spaced className={Utils.getClassName({ visibilityHidden: !selectedState })}>
-							<GraphicsSelector
-								sceneID='dialog-map-object'
-								graphicsID={graphicsID}
-								graphicsIndexX={graphicsIndexX}
-								graphicsIndexY={graphicsIndexY}
-								rectTileset={rectTileset}
-								graphicsKind={graphicsKind}
-								onChangeGraphicsKind={handleChangeGraphicsKind}
-								onUpdateGraphics={handleUpdateGraphics}
-							/>
-							<Flex column one spaced>
-								<Groupbox title={t('moving')}>
-									<Form>
-										<Label>{t('type')}</Label>
-										<Value>
-											<Dropdown
-												selectedID={objectMovingKind}
-												onChange={handleChangeObjectMovingKind}
-												options={Model.Base.OBJECT_MOVING_OPTIONS}
-												translateOptions
-												fillWidth
-											/>
-										</Value>
-										<td />
-										<Value>
-											<Button
-												disabled={objectMovingKind !== OBJECT_MOVING_KIND.ROUTE}
-												onClick={handleClickEditRoute}
-											>
-												{t('edit.route')}...
-											</Button>
-										</Value>
-										<Label>{t('speed')}</Label>
-										<Value>
-											<Dropdown
-												selectedID={speedID}
-												onChange={handleChangeSpeedID}
-												options={Project.current!.systems.speeds}
-												fillWidth
-											/>
-										</Value>
-										<Label>{t('frequency')}</Label>
-										<Value>
-											<Dropdown
-												selectedID={frequencyID}
-												onChange={handleChangeFrequencyID}
-												options={Project.current!.systems.frequencies}
-												fillWidth
-											/>
-										</Value>
-									</Form>
+							<Flex className={Utils.getClassName({ visibilityHidden: !selectedState })}>
+								<Groupbox title={t('options')}>
+									<Flex spacedLarge>
+										<Flex column>
+											<Checkbox isChecked={moveAnimation} onChange={handleChangeMoveAnimation}>
+												{t('move.animation')}
+											</Checkbox>
+											<Checkbox isChecked={stopAnimation} onChange={handleChangeStopAnimation}>
+												{t('stop.animation')}
+											</Checkbox>
+											<Checkbox isChecked={climbAnimation} onChange={handleChangeClimbAnimation}>
+												{t('climb.animation')}
+											</Checkbox>
+											<Checkbox isChecked={directionFix} onChange={handleChangeDirectionFix}>
+												{t('direction.fix')}
+											</Checkbox>
+										</Flex>
+										<Flex column>
+											<Checkbox isChecked={through} onChange={handleChangeThrough}>
+												{t('through')}
+											</Checkbox>
+											<Checkbox isChecked={setWithCamera} onChange={handleChangeSetWithCamera}>
+												{t('set.with.camera')}
+											</Checkbox>
+											<Checkbox isChecked={pixelOffset} onChange={handleChangePixelOffset}>
+												{t('pixel.offset')}
+											</Checkbox>
+											<Checkbox isChecked={keepPosition} onChange={handleChangeKeepPosition}>
+												{t('keep.position')}
+											</Checkbox>
+										</Flex>
+										<Flex one />
+									</Flex>
 								</Groupbox>
-								<Button>{t('update.transformations')}...</Button>
 							</Flex>
+						</Flex>
+					</Flex>
+					<Flex>
+						<Flex one spaced>
+							<Checkbox isChecked={onlyOneEventPerFrame} onChange={setOnlyOneEventPerFrame}>
+								{t('only.one.event.per.frame')}
+							</Checkbox>
+							<Checkbox isChecked={canBeTriggeredAnotherObject} onChange={setCanBeTriggeredAnotherObject}>
+								{t('can.be.triggered.another.object')}
+							</Checkbox>
 						</Flex>
 						<Flex className={Utils.getClassName({ visibilityHidden: !selectedState })}>
-							<Groupbox title={t('options')}>
-								<Flex spacedLarge>
-									<Flex column>
-										<Checkbox isChecked={moveAnimation} onChange={handleChangeMoveAnimation}>
-											{t('move.animation')}
-										</Checkbox>
-										<Checkbox isChecked={stopAnimation} onChange={handleChangeStopAnimation}>
-											{t('stop.animation')}
-										</Checkbox>
-										<Checkbox isChecked={climbAnimation} onChange={handleChangeClimbAnimation}>
-											{t('climb.animation')}
-										</Checkbox>
-										<Checkbox isChecked={directionFix} onChange={handleChangeDirectionFix}>
-											{t('direction.fix')}
-										</Checkbox>
-									</Flex>
-									<Flex column>
-										<Checkbox isChecked={through} onChange={handleChangeThrough}>
-											{t('through')}
-										</Checkbox>
-										<Checkbox isChecked={setWithCamera} onChange={handleChangeSetWithCamera}>
-											{t('set.with.camera')}
-										</Checkbox>
-										<Checkbox isChecked={pixelOffset} onChange={handleChangePixelOffset}>
-											{t('pixel.offset')}
-										</Checkbox>
-										<Checkbox isChecked={keepPosition} onChange={handleChangeKeepPosition}>
-											{t('keep.position')}
-										</Checkbox>
-									</Flex>
-									<Flex one />
+							<Checkbox isChecked={!!eventCommandDetection} onChange={handleChangeDetectionCheck}>
+								<Flex centerV spaced>
+									{t('detection')} <Button disabled={eventCommandDetection === null}>...</Button>
 								</Flex>
-							</Groupbox>
+							</Checkbox>
 						</Flex>
 					</Flex>
 				</Flex>
-				<Flex>
-					<Flex one spaced>
-						<Checkbox isChecked={onlyOneEventPerFrame} onChange={setOnlyOneEventPerFrame}>
-							{t('only.one.event.per.frame')}
-						</Checkbox>
-						<Checkbox isChecked={canBeTriggeredAnotherObject} onChange={setCanBeTriggeredAnotherObject}>
-							{t('can.be.triggered.another.object')}
-						</Checkbox>
-					</Flex>
-					<Flex className={Utils.getClassName({ visibilityHidden: !selectedState })}>
-						<Checkbox isChecked={!!eventCommandDetection} onChange={handleChangeDetectionCheck}>
-							<Flex centerV spaced>
-								{t('detection')} <Button disabled={eventCommandDetection === null}>...</Button>
-							</Flex>
-						</Checkbox>
-					</Flex>
-				</Flex>
-			</Flex>
-		</Dialog>
+			</Dialog>
+			<DialogCommandMoveObject
+				commandKind={EVENT_COMMAND_KIND.MOVE_OBJECT}
+				isOpen={isDialogCommandMoveObjectOpen}
+				setIsOpen={setIsDialogCommandMoveObjectOpen}
+				list={eventCommandRoute?.command}
+				onAccept={handleAcceptEditRoute}
+				onReject={() => {}}
+			/>
+		</>
 	);
 }
 
