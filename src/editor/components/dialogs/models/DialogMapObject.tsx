@@ -31,6 +31,7 @@ import Tree from '../../Tree';
 import TreeCommands from '../../TreeCommands';
 import Dialog from '../Dialog';
 import DialogCommandMoveObject from '../commands/DialogCommandMoveObject';
+import DialogCommandSendEvent from '../commands/DialogCommandSendEvent';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
@@ -46,6 +47,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isDialogCommandMoveObjectOpen, setIsDialogCommandMoveObjectOpen] = useState(false);
+	const [isDialogCommandSendEventOpen, setIsDialogCommandSendEventOpen] = useState(false);
 	const [name, setName] = useStateString();
 	const [modelID, setModelID] = useStateNumber();
 	const [tabTitles, setTabTitles] = useState<Model.Base[]>([]);
@@ -309,7 +311,21 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 	};
 
 	const handleChangeDetectionCheck = (isChecked: boolean) => {
-		setEventCommandDetection(isChecked ? new MapObjectCommand() : null);
+		if (isChecked) {
+			setIsDialogCommandSendEventOpen(true);
+		} else {
+			selectedState!.eventCommandDetection = null;
+			setEventCommandDetection(null);
+		}
+	};
+
+	const handleAcceptDetection = (command: Model.MapObjectCommand) => {
+		selectedState!.eventCommandDetection = command;
+		setEventCommandDetection(command);
+	};
+
+	const handleClickDetection = () => {
+		setIsDialogCommandSendEventOpen(true);
 	};
 
 	const handleAccept = async () => {
@@ -522,7 +538,7 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 							</Flex>
 						</Flex>
 					</Flex>
-					<Flex>
+					<Flex spacedLarge>
 						<Flex one spaced>
 							<Checkbox isChecked={onlyOneEventPerFrame} onChange={setOnlyOneEventPerFrame}>
 								{t('only.one.event.per.frame')}
@@ -532,11 +548,14 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 							</Checkbox>
 						</Flex>
 						<Flex className={Utils.getClassName({ visibilityHidden: !selectedState })}>
-							<Checkbox isChecked={!!eventCommandDetection} onChange={handleChangeDetectionCheck}>
-								<Flex centerV spaced>
-									{t('detection')} <Button disabled={eventCommandDetection === null}>...</Button>
-								</Flex>
-							</Checkbox>
+							<Flex centerV spaced>
+								<Checkbox isChecked={!!eventCommandDetection} onChange={handleChangeDetectionCheck}>
+									{t('detection')}
+								</Checkbox>
+								<Button disabled={eventCommandDetection === null} onClick={handleClickDetection}>
+									...
+								</Button>
+							</Flex>
 						</Flex>
 					</Flex>
 				</Flex>
@@ -547,6 +566,14 @@ function DialogMapObject({ isOpen, setIsOpen, object, onAccept }: Props) {
 				setIsOpen={setIsDialogCommandMoveObjectOpen}
 				list={eventCommandRoute?.command}
 				onAccept={handleAcceptEditRoute}
+				onReject={() => {}}
+			/>
+			<DialogCommandSendEvent
+				commandKind={EVENT_COMMAND_KIND.SEND_EVENT}
+				isOpen={isDialogCommandSendEventOpen}
+				setIsOpen={setIsDialogCommandSendEventOpen}
+				list={eventCommandDetection?.command}
+				onAccept={handleAcceptDetection}
 				onReject={() => {}}
 			/>
 		</>
