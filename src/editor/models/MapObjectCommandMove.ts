@@ -282,30 +282,47 @@ class MapObjectCommandMove extends Base {
 				str += `${t('change.graphics')} ${t('id')}:${value.toString()} ${permanent}`;
 				break;
 			}
-			case COMMAND_MOVE_KIND.WAIT: {
-				const list = this.command.slice(1);
-				const command = MapObjectCommand.createCommand(EVENT_COMMAND_KIND.WAIT, list);
-				const commandName = MapObjectCommand.getCommandName(command.kind, command.command);
-				const iterator = Utils.generateIterator();
-				const parameters = Project.current!.currentMapObjectParameters;
-				const properties = Project.current!.currentMapObjectProperties.map((node) => node.content);
-				str += `${commandName}: ${command.toStringWait(iterator, parameters, properties)[0]}`;
-				break;
-			}
-			case COMMAND_MOVE_KIND.PLAY_SOUND: {
-				const list = this.command.slice(1);
-				const command = MapObjectCommand.createCommand(EVENT_COMMAND_KIND.PLAY_SOUND, list);
-				str += command.toString();
-				break;
-			}
+			case COMMAND_MOVE_KIND.WAIT:
+			case COMMAND_MOVE_KIND.PLAY_SOUND:
 			case COMMAND_MOVE_KIND.SCRIPT: {
 				const list = this.command.slice(1);
-				const command = MapObjectCommand.createCommand(EVENT_COMMAND_KIND.SCRIPT, list);
-				str += command.toString();
+				let commandKind = EVENT_COMMAND_KIND.NONE;
+				switch (kind) {
+					case COMMAND_MOVE_KIND.WAIT:
+						commandKind = EVENT_COMMAND_KIND.WAIT;
+						break;
+					case COMMAND_MOVE_KIND.PLAY_SOUND:
+						commandKind = EVENT_COMMAND_KIND.PLAY_SOUND;
+						break;
+					case COMMAND_MOVE_KIND.SCRIPT:
+						commandKind = EVENT_COMMAND_KIND.SCRIPT;
+						break;
+				}
+				const command = MapObjectCommand.createCommand(commandKind, list);
+				const commandName = MapObjectCommand.getCommandName(command.kind, command.command);
+				const newIterator = Utils.generateIterator();
+				const parameters = Project.current!.currentMapObjectParameters;
+				const properties = Project.current!.currentMapObjectProperties.map((node) => node.content);
+				str += `${commandName}: ${
+					this.toStringCommand(command).apply(command, [newIterator, parameters, properties])[0]
+				}`;
 				break;
 			}
 		}
 		return str;
+	}
+
+	toStringCommand(command: MapObjectCommand) {
+		switch (command.kind) {
+			case EVENT_COMMAND_KIND.WAIT:
+				return command.toStringWait;
+			case EVENT_COMMAND_KIND.PLAY_SOUND:
+				return command.toStringPlaySong;
+			case EVENT_COMMAND_KIND.SCRIPT:
+				return command.toStringScript;
+			default:
+				return command.toStringWait;
+		}
 	}
 
 	copy(command: MapObjectCommandMove): void {

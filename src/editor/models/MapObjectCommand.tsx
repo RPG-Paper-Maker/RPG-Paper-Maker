@@ -668,16 +668,10 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.PLAY_MUSIC:
 			case EVENT_COMMAND_KIND.CHANGE_BATTLE_MUSIC:
 			case EVENT_COMMAND_KIND.CHANGE_VICTORY_MUSIC:
-				texts = this.toStringPlaySong(iterator, parameters, properties, SONG_KIND.MUSIC);
-				break;
 			case EVENT_COMMAND_KIND.PLAY_BACKGROUND_SOUND:
-				texts = this.toStringPlaySong(iterator, parameters, properties, SONG_KIND.BACKGROUND_SOUND);
-				break;
 			case EVENT_COMMAND_KIND.PLAY_SOUND:
-				texts = this.toStringPlaySong(iterator, parameters, properties, SONG_KIND.SOUND);
-				break;
 			case EVENT_COMMAND_KIND.PLAY_MUSIC_EFFECT:
-				texts = this.toStringPlaySong(iterator, parameters, properties, SONG_KIND.MUSIC_EFFECT);
+				texts = this.toStringPlaySong(iterator, parameters, properties);
 				break;
 			case EVENT_COMMAND_KIND.STOP_MUSIC:
 			case EVENT_COMMAND_KIND.STOP_BACKGROUND_SOUND:
@@ -1647,9 +1641,21 @@ class MapObjectCommand extends Base {
 		return texts;
 	}
 
-	toStringPlaySong(iterator: ITERATOR, properties: Base[], parameters: Base[], kind: SONG_KIND): string[] {
+	toStringPlaySong(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const texts = [];
 		const isActivated = Utils.initializeBoolCommand(this.command, iterator);
+		let kind = SONG_KIND.MUSIC;
+		switch (this.kind) {
+			case EVENT_COMMAND_KIND.PLAY_BACKGROUND_SOUND:
+				kind = SONG_KIND.BACKGROUND_SOUND;
+				break;
+			case EVENT_COMMAND_KIND.PLAY_MUSIC_EFFECT:
+				kind = SONG_KIND.MUSIC_EFFECT;
+				break;
+			case EVENT_COMMAND_KIND.PLAY_SOUND:
+				kind = SONG_KIND.SOUND;
+				break;
+		}
 		const list = Project.current!.songs.getList(kind);
 		const idNumber = this.toStringDynamicValue(iterator, properties, parameters, list);
 		const id = Base.getByID(list, this.command[iterator.i++] as number)?.toString() ?? '';

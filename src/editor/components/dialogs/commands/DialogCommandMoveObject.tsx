@@ -31,6 +31,8 @@ import { CommandProps } from '../models';
 import DialogCommandMoveObjectChangeGraphics from './DialogCommandMoveObjectChangeGraphics';
 import DialogCommandMoveObjectChangeSpeedFrequency from './DialogCommandMoveObjectChangeSpeedFrequency';
 import DialogCommandMoveObjectJump from './DialogCommandMoveObjectJump';
+import DialogCommandPlaySong from './DialogCommandPlaySong';
+import DialogCommandScript from './DialogCommandScript';
 import DialogCommandWait from './DialogCommandWait';
 
 function DialogCommandMoveObject({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
@@ -41,6 +43,8 @@ function DialogCommandMoveObject({ commandKind, isOpen, setIsOpen, list, onAccep
 	const [isDialogChangeFrequencyOpen, setIsDialogChangeFrequencyOpen] = useState(false);
 	const [isDialogChangeGraphicsOpen, setIsDialogChangeGraphicsOpen] = useState(false);
 	const [isDialogWaitOpen, setIsDialogWaitOpen] = useState(false);
+	const [isDialogPlaySoundOpen, setIsDialogPlaySoundOpen] = useState(false);
+	const [isDialogScriptOpen, setIsDialogScriptOpen] = useState(false);
 	const [objectID] = useStateDynamicValue();
 	const [commands, setCommands] = useState<Node[]>([]);
 	const [isIgnoreIfImpossible, setIsIgnoreIfImpossible] = useStateBool();
@@ -164,22 +168,34 @@ function DialogCommandMoveObject({ commandKind, isOpen, setIsOpen, list, onAccep
 		setChangeGraphics(Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.CHANGE_GRAPHICS));
 	};
 
+	const handleAcceptCommand = (command: Model.MapObjectCommand, kind: COMMAND_MOVE_KIND) => {
+		const move = Model.MapObjectCommandMove.createMove(kind);
+		move.command.push(...(command.command as string[]));
+		addCommand(move);
+	};
+
 	const handleClickWait = () => {
 		setIsDialogWaitOpen(true);
 	};
 
 	const handleAcceptWait = (command: Model.MapObjectCommand) => {
-		const move = Model.MapObjectCommandMove.createMove(COMMAND_MOVE_KIND.WAIT);
-		move.command.push(...(command.command as string[]));
-		addCommand(move);
+		handleAcceptCommand(command, COMMAND_MOVE_KIND.WAIT);
 	};
 
 	const handleClickPlaySound = () => {
-		// TODO
+		setIsDialogPlaySoundOpen(true);
+	};
+
+	const handleAcceptPlaySound = (command: Model.MapObjectCommand) => {
+		handleAcceptCommand(command, COMMAND_MOVE_KIND.PLAY_SOUND);
 	};
 
 	const handleClickScript = () => {
-		// TODO
+		setIsDialogScriptOpen(true);
+	};
+
+	const handleAcceptScript = (command: Model.MapObjectCommand) => {
+		handleAcceptCommand(command, COMMAND_MOVE_KIND.SCRIPT);
 	};
 
 	const handleAccept = async () => {
@@ -415,6 +431,20 @@ function DialogCommandMoveObject({ commandKind, isOpen, setIsOpen, list, onAccep
 				isOpen={isDialogWaitOpen}
 				setIsOpen={setIsDialogWaitOpen}
 				onAccept={handleAcceptWait}
+				onReject={() => {}}
+			/>
+			<DialogCommandPlaySong
+				commandKind={EVENT_COMMAND_KIND.PLAY_SOUND}
+				isOpen={isDialogPlaySoundOpen}
+				setIsOpen={setIsDialogPlaySoundOpen}
+				onAccept={handleAcceptPlaySound}
+				onReject={() => {}}
+			/>
+			<DialogCommandScript
+				commandKind={EVENT_COMMAND_KIND.SCRIPT}
+				isOpen={isDialogScriptOpen}
+				setIsOpen={setIsDialogScriptOpen}
+				onAccept={handleAcceptScript}
 				onReject={() => {}}
 			/>
 		</>
