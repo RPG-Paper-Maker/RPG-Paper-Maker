@@ -237,7 +237,7 @@ class Serializable {
 				case BINDING.DYNAMIC_VALUE: {
 					const defaultDynamicValue = defaultValue as DynamicValue;
 					const dynamicValue = (this as JSONType)[name] as DynamicValue;
-					if (!defaultDynamicValue.equals(dynamicValue)) {
+					if (!defaultValue || !dynamicValue.equals(defaultDynamicValue)) {
 						const jsonObj = {};
 						dynamicValue.write(jsonObj);
 						json[jsonName] = jsonObj;

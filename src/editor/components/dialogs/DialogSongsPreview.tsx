@@ -191,6 +191,7 @@ function DialogSongsPreview({
 			if (active) {
 				if (!newDynamicSongID!.isActivated) {
 					dynamicSongID!.updateToDefaultNumber(selectedSong.id);
+					dynamicSongID!.isActivated = false;
 				} else {
 					dynamicSongID!.copy(newDynamicSongID!);
 				}

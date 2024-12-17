@@ -29,6 +29,7 @@ class DynamicValue extends Serializable {
 	public static readonly bindings: BindingType[] = [
 		['kind', 'k', undefined, BINDING.NUMBER],
 		['value', 'v', undefined, BINDING.NUMBER],
+		['isActivated', 'ia', false, BINDING.BOOLEAN],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -101,6 +102,10 @@ class DynamicValue extends Serializable {
 		return [DYNAMIC_VALUE_KIND.DATABASE, DYNAMIC_VALUE_KIND.NUMBER, DYNAMIC_VALUE_KIND.NUMBER_DECIMAL].includes(
 			this.kind
 		);
+	}
+
+	getFixNumberValue(): number {
+		return this.isFixNumberValue() ? (this.value as number) : 1;
 	}
 
 	toString(database: Model.Base[] = []): string {

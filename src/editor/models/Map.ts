@@ -9,19 +9,35 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, Constants, JSONType, Paths, Utils } from '../common';
+import { BINDING, BindingType, Constants, DYNAMIC_VALUE_KIND, JSONType, Paths, SONG_KIND, Utils } from '../common';
 import { Platform } from '../common/Platform';
 import { Portion, Position, Project } from '../core';
+import { DynamicValue } from '../core/DynamicValue';
 import { Model } from '../Editor';
-import { Base } from './Base';
+import { Localization } from './Localization';
 import { MapObject } from './MapObject';
+import { PlaySong } from './PlaySong';
 
-class Map extends Base {
-	public tilesetID: number = 1;
-	public length: number = 16;
-	public width: number = 16;
-	public height: number = 16;
-	public depth: number = 0;
+export enum SELECTION_SKY_TYPE {
+	COLOR,
+	IMAGE,
+	SKYBOX,
+}
+class Map extends Localization {
+	public tilesetID = 1;
+	public length = 16;
+	public width = 16;
+	public height = 16;
+	public depth = 0;
+	public music!: PlaySong;
+	public backgroundSound!: PlaySong;
+	public cameraPropertiesID!: DynamicValue;
+	public isSunlight!: boolean;
+	public isSkyColor = false;
+	public skyColorID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
+	public isSkyImage = false;
+	public skyImageID = -1;
+	public skyboxID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
 	public objects!: MapObject[];
 
 	public static bindings: BindingType[] = [
@@ -30,6 +46,18 @@ class Map extends Base {
 		['width', 'w', undefined, BINDING.NUMBER],
 		['height', 'h', undefined, BINDING.NUMBER],
 		['depth', 'd', undefined, BINDING.NUMBER],
+		['music', 'music', undefined, BINDING.OBJECT, PlaySong],
+		['backgroundSound', 'bgs', undefined, BINDING.OBJECT, PlaySong],
+		[
+			'cameraPropertiesID',
+			'cp',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		['isSunlight', 'isl', true, BINDING.BOOLEAN],
+		['isSkyColor', 'isky', undefined, BINDING.BOOLEAN],
+		['isSkyImage', 'isi', undefined, BINDING.BOOLEAN],
 		['objects', 'objs', [], BINDING.LIST, MapObject],
 	];
 
@@ -55,6 +83,16 @@ class Map extends Base {
 
 	getTileset(): Model.Tileset {
 		return Project.current!.tilesets.getTilesetByID(this.tilesetID);
+	}
+
+	getSkySelection(): SELECTION_SKY_TYPE {
+		if (this.isSkyColor) {
+			return SELECTION_SKY_TYPE.COLOR;
+		} else if (this.isSkyImage) {
+			return SELECTION_SKY_TYPE.IMAGE;
+		} else {
+			return SELECTION_SKY_TYPE.SKYBOX;
+		}
 	}
 
 	static async createDefaultMap(id: number, name: string) {
@@ -301,19 +339,33 @@ class Map extends Base {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Map.getBindings(additionnalBinding));
+		this.music.kind = SONG_KIND.MUSIC;
+		this.backgroundSound.kind = SONG_KIND.BACKGROUND_SOUND;
+		if (this.isSkyColor) {
+			this.skyColorID.read(json.sky as JSONType);
+		} else if (this.isSkyImage) {
+			this.skyImageID = json.ipid as number;
+		} else {
+			this.skyboxID.read(json.sbid as JSONType);
+		}
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Map.getBindings(additionnalBinding));
-		json.bgs = { id: -1, ie: false, is: false, name: '', v: { k: 3, v: 100 } };
-		json.isi = false;
-		json.isky = false;
-		json.music = { id: -1, ie: false, is: false, name: '', v: { k: 3, v: 100 } };
-		json.names = { '1': this.name };
+		if (this.isSkyColor) {
+			const obj: JSONType = {};
+			this.skyColorID.write(obj);
+			json.sky = obj;
+		} else if (this.isSkyImage) {
+			json.ipid = this.skyImageID;
+		} else {
+			const obj: JSONType = {};
+			this.skyboxID.write(obj);
+			json.sbid = obj;
+		}
 		json.of3d = [];
 		json.ofmoun = [];
 		json.ofsprites = [];
-		json.sbid = { k: 7, v: 1 };
 		json.so = {
 			events: [
 				{

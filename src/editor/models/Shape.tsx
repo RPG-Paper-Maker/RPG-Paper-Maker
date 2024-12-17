@@ -203,7 +203,7 @@ class Shape extends Base {
 	}
 
 	getIcon() {
-		return <img src='/Assets/bullet-br.png' alt='br bullet' />;
+		return <img src='/Assets/bullet-br.png' alt='br bullet' width='16px' />;
 	}
 
 	copy(shape: Shape, additionnalBinding: BindingType[] = []): void {

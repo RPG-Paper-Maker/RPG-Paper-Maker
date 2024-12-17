@@ -48,6 +48,10 @@ class Localization extends Base {
 		return this.names.get('1') ?? '';
 	}
 
+	updateMainName(name: string) {
+		this.names.set('1', name);
+	}
+
 	copy(localization: Localization, additionnalBinding: BindingType[] = []): void {
 		super.copy(localization, Localization.getBindings(additionnalBinding));
 	}

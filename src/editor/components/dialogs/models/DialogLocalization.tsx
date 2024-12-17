@@ -105,7 +105,7 @@ function DialogLocalization({ isOpen, setIsOpen, model, onAccept, onReject }: Pr
 						setFocustFirst={setFocustFirst}
 					/>
 				</Flex>
-				<Tab titles={tabTitles} contents={getTabContents()} />
+				<Tab titles={tabTitles} contents={getTabContents()} padding />
 			</Flex>
 		</Dialog>
 	);

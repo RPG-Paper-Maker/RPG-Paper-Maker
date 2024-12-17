@@ -18,7 +18,6 @@ import { CUSTOM_SHAPE_KIND, DYNAMIC_VALUE_KIND, PICTURE_KIND, SONG_KIND } from '
 import { Node, Project, Rectangle } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Model } from '../Editor';
-import '../styles/GraphicsSelector.css';
 import Button from './Button';
 import DialogPicturesPreview from './dialogs/DialogPicturesPreview';
 import DialogShapesPreview from './dialogs/DialogShapesPreview';
@@ -41,6 +40,7 @@ type Props = {
 	indexX?: number;
 	indexY?: number;
 	kind?: number;
+	songOptions?: Model.PlaySong;
 	onChange?: (id: number, indexX: number, indexY: number) => void;
 	disabled?: boolean;
 	active?: boolean;
@@ -57,6 +57,7 @@ function AssetSelector({
 	indexX,
 	indexY,
 	kind,
+	songOptions,
 	onChange,
 	disabled = false,
 	active = false,
@@ -180,6 +181,8 @@ function AssetSelector({
 						songID={getSelectedID()}
 						dynamicSongID={selectedDynamic}
 						kind={kind ?? DEFAULT_SONG_KIND}
+						songOptions={songOptions}
+						displayOptions={!!songOptions}
 						{...options}
 						onAccept={handleAcceptSong}
 						active={active}

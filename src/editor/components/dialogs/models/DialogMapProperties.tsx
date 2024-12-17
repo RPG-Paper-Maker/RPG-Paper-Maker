@@ -9,16 +9,27 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Model } from '../../../Editor';
-import { Utils } from '../../../common';
+import { DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, SONG_KIND, Utils } from '../../../common';
+import { Project } from '../../../core';
+import useStateBool from '../../../hooks/useStateBool';
+import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
-import useStateString from '../../../hooks/useStateString';
+import { SELECTION_SKY_TYPE } from '../../../models';
+import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
+import Checkbox from '../../Checkbox';
+import Dropdown from '../../Dropdown';
+import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
+import Form, { Label, Value } from '../../Form';
 import Groupbox from '../../Groupbox';
+import InputLocalization from '../../InputLocalization';
 import InputNumber from '../../InputNumber';
-import InputText from '../../InputText';
+import PlaySongSelector, { PlaySongSelectorRef } from '../../PlaySongSelector';
+import RadioButton from '../../RadioButton';
+import RadioGroup from '../../RadioGroup';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
@@ -32,33 +43,75 @@ type Props = {
 function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 	const { t } = useTranslation();
 
+	const playMusicSelectorRef = useRef<PlaySongSelectorRef>();
+	const playBackgroundSoundSelectorRef = useRef<PlaySongSelectorRef>();
+
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const [name, setName] = useStateString();
+	const [localization, setLocalization] = useState(new Model.Localization());
 	const [id, setID] = useStateNumber();
+	const [tilesetID, setTilesetID] = useStateNumber();
 	const [length, setLength] = useStateNumber();
 	const [width, setWidth] = useStateNumber();
 	const [height, setHeight] = useStateNumber();
 	const [depth, setDepth] = useStateNumber();
+	const [cameraPropertiesID] = useStateDynamicValue();
+	const [isSunlight, setIsSunlight] = useStateBool();
+	const [skySelection, setSkySelection] = useStateNumber();
+	const [skyColorID] = useStateDynamicValue();
+	const [skyImageID, setSkyImageID] = useStateNumber();
+	const [skyboxID] = useStateDynamicValue();
 
 	const initialize = () => {
-		setName(model.name);
+		setLocalization(model);
 		setID(model.id);
+		setTilesetID(model.tilesetID);
 		setLength(model.length);
 		setWidth(model.width);
 		setHeight(model.height);
 		setDepth(model.depth);
+		playMusicSelectorRef.current?.initialize(model.music);
+		playBackgroundSoundSelectorRef.current?.initialize(model.backgroundSound);
+		cameraPropertiesID.copy(model.cameraPropertiesID);
+		setIsSunlight(model.isSunlight);
+		setSkySelection(model.getSkySelection());
+		skyColorID.copy(model.skyColorID);
+		setSkyImageID(model.skyImageID);
+		skyboxID.copy(model.skyboxID);
 	};
 
 	const handleAccept = async () => {
 		setIsLoading(true);
 		const previousModel = model.clone();
-		model.name = name;
+		model.name = localization.name;
+		model.names = localization.names;
 		model.id = id;
+		model.tilesetID = tilesetID;
 		model.length = length;
 		model.width = width;
 		model.height = height;
 		model.depth = depth;
+		playMusicSelectorRef.current?.accept(model.music);
+		playBackgroundSoundSelectorRef.current?.accept(model.backgroundSound);
+		model.cameraPropertiesID.copy(cameraPropertiesID);
+		model.isSunlight = isSunlight;
+		model.isSkyColor = skySelection === SELECTION_SKY_TYPE.COLOR;
+		if (model.isSkyColor) {
+			model.skyColorID.copy(skyColorID);
+		} else {
+			model.skyColorID.updateToDefaultDatabase();
+		}
+		model.isSkyImage = skySelection === SELECTION_SKY_TYPE.IMAGE;
+		if (model.isSkyImage) {
+			model.skyImageID = skyImageID;
+		} else {
+			model.skyImageID = -1;
+		}
+		if (skySelection === SELECTION_SKY_TYPE.SKYBOX) {
+			model.skyboxID.copy(skyboxID);
+		} else {
+			model.skyboxID.updateToDefaultDatabase();
+		}
 		await onAccept(previousModel);
 		setIsLoading(false);
 		setIsOpen(false);
@@ -84,17 +137,29 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 		>
-			<Flex column spaced>
-				<Flex spacedLarge>
-					{t('name')}:
-					<InputText
-						value={name}
-						onChange={setName}
-						focusFirst={focusFirst}
-						setFocustFirst={setFocustFirst}
-					/>
-					ID: {Utils.formatNumberID(id)}
-				</Flex>
+			<Flex column spacedLarge>
+				<Form>
+					<Label>{t('name')}</Label>
+					<Value>
+						<Flex spacedLarge centerV>
+							<InputLocalization
+								localization={model}
+								focusFirst={focusFirst}
+								setFocustFirst={setFocustFirst}
+							/>
+							<div>ID: {Utils.formatNumberID(id)}</div>
+						</Flex>
+					</Value>
+					<Label>{t('tileset')}</Label>
+					<Value>
+						<Dropdown
+							selectedID={tilesetID}
+							onChange={setTilesetID}
+							options={Project.current!.tilesets.list}
+							displayIDs
+						/>
+					</Value>
+				</Form>
 				<Groupbox title={t('size')}>
 					<Flex one spacedLarge>
 						<Flex column one spaced>
@@ -110,6 +175,67 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 							<InputNumber value={depth} onChange={setDepth} min={0} />
 						</Flex>
 					</Flex>
+				</Groupbox>
+				<Form>
+					<Label>{t('music')}</Label>
+					<Value>
+						<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playMusicSelectorRef} />
+					</Value>
+					<Label>{t('background.sound')}</Label>
+					<Value>
+						<PlaySongSelector songKind={SONG_KIND.BACKGROUND_SOUND} ref={playBackgroundSoundSelectorRef} />
+					</Value>
+					<Label>{t('camera.properties.id')}</Label>
+					<Value>
+						<DynamicValueSelector
+							value={cameraPropertiesID}
+							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+							databaseOptions={Project.current!.systems.cameraProperties}
+						/>
+					</Value>
+				</Form>
+				<Checkbox isChecked={isSunlight} onChange={setIsSunlight}>
+					{t('sun.light')}
+				</Checkbox>
+				<Groupbox title={t('sky')}>
+					<RadioGroup selected={skySelection} onChange={setSkySelection}>
+						<Form>
+							<Label>
+								<RadioButton value={SELECTION_SKY_TYPE.COLOR}>{t('color.id')}</RadioButton>
+							</Label>
+							<Value>
+								<DynamicValueSelector
+									value={skyColorID}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+									databaseOptions={Project.current!.systems.colors}
+									disabled={skySelection !== SELECTION_SKY_TYPE.COLOR}
+								/>
+							</Value>
+							<Label>
+								<RadioButton value={SELECTION_SKY_TYPE.IMAGE}>{t('picture')}</RadioButton>
+							</Label>
+							<Value>
+								<AssetSelector
+									selectionType={ASSET_SELECTOR_TYPE.PICTURES}
+									kind={PICTURE_KIND.PICTURES}
+									selectedID={skyImageID}
+									onChange={setSkyImageID}
+									disabled={skySelection !== SELECTION_SKY_TYPE.IMAGE}
+								/>
+							</Value>
+							<Label>
+								<RadioButton value={SELECTION_SKY_TYPE.SKYBOX}>{t('skybox.id')}</RadioButton>
+							</Label>
+							<Value>
+								<DynamicValueSelector
+									value={skyboxID}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+									databaseOptions={Project.current!.systems.skyboxes}
+									disabled={skySelection !== SELECTION_SKY_TYPE.SKYBOX}
+								/>
+							</Value>
+						</Form>
+					</RadioGroup>
 				</Groupbox>
 			</Flex>
 		</Dialog>

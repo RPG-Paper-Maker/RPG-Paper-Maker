@@ -1,6 +1,7 @@
 export * from './Button';
 export * from './Checkbox';
 export * from './Groupbox';
+export * from './InputLocalization';
 export * from './InputText';
 export * from './Loader';
 export * from './MainMenuBar';
@@ -10,6 +11,7 @@ export * from './MapEditorMenuBar';
 export * from './Menu';
 export * from './MenuItem';
 export * from './MenuSub';
+export * from './PlaySongSelector';
 export * from './Slider';
 export * from './SliderDynamic';
 export * from './Splitter';

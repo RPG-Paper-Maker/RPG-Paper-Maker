@@ -12,6 +12,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ACTION_KIND, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
+import { Project } from '../../core';
+import { Scene } from '../../Editor';
 import { RootState } from '../../store';
 import Flex from '../Flex';
 import MainPreviewer3D from '../MainPreviewer3D';
@@ -56,7 +58,7 @@ function PanelTextures({ visible }: Props) {
 	}, []);
 
 	const getMainContent = () => {
-		if (!currentMapID) {
+		if (!currentMapID || !Scene.Map.current) {
 			return null;
 		}
 		if (
@@ -89,7 +91,15 @@ function PanelTextures({ visible }: Props) {
 				case ELEMENT_MAP_KIND.START_POSITION:
 					return null;
 				default:
-					return <TextureSquareSelector texture='./Assets/plains-woods.png' />;
+					return (
+						<TextureSquareSelector
+							texture={Project.current!.pictures.getByID(
+								PICTURE_KIND.TILESETS,
+								Project.current!.tilesets.getTilesetByID(Scene.Map.current.model.tilesetID)
+									?.pictureID ?? 1
+							).getPath()}
+						/>
+					);
 			}
 		} else {
 			return <PanelTransform kind={currentActionKind} />;

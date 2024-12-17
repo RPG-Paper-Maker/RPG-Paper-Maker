@@ -10,6 +10,7 @@
 */
 
 import { ReactNode } from 'react';
+import * as THREE from 'three';
 import { BINDING, BindingType, JSONType } from '../common';
 import { Base } from './Base';
 
@@ -44,6 +45,10 @@ class Color extends Base {
 				}}
 			/>
 		);
+	}
+
+	getTHREEColor(): THREE.Color {
+		return new THREE.Color(this.red / 255, this.green / 255, this.blue / 255);
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

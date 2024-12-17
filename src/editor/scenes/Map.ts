@@ -22,6 +22,7 @@ import {
 	Mathf,
 	MOBILE_ACTION,
 	Paths,
+	PICTURE_KIND,
 	RAYCASTING_LAYER,
 	SPRITE_WALL_TYPE,
 	Utils,
@@ -47,6 +48,7 @@ import { default as i18n, default as i18next } from '../i18n/i18n';
 import { Inputs } from '../managers';
 
 const { t } = i18next;
+
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
 
@@ -206,15 +208,21 @@ class Map extends Base {
 	}
 
 	async load() {
-		this.scene.background = new THREE.Color(0x8cc3ed);
-
-		// Tileset texture material
-		this.materialTileset = await Manager.GL.loadTexture('./Assets/plains-woods.png');
-		this.materialTilesetHover = Manager.GL.createMaterial({ texture: this.materialTileset.map, hovered: true });
-
 		// Load map model
 		this.model.id = this.id;
 		await this.model.load();
+
+		// Tileset texture material
+		this.materialTileset = await Manager.GL.loadTexture(
+			Project.current!.pictures.getByID(
+				PICTURE_KIND.TILESETS,
+				Project.current!.tilesets.getTilesetByID(this.model.tilesetID)?.pictureID ?? 1
+			).getPath()
+		);
+		this.materialTilesetHover = Manager.GL.createMaterial({ texture: this.materialTileset.map, hovered: true });
+
+		// Background
+		this.updateBackground();
 
 		// Create grid plane
 		const material = new THREE.Material();
@@ -320,23 +328,68 @@ class Map extends Base {
 	}
 
 	initializeSunLight() {
-		const ambient = new THREE.AmbientLight(0xffffff, 1.2);
+		const ambient = new THREE.AmbientLight(0xffffff, this.model.isSunlight ? 1.2 : 2.0);
 		this.scene.add(ambient);
-		this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
-		this.sunLight.position.set(-1, 1.75, 1);
-		this.sunLight.position.multiplyScalar(Project.SQUARE_SIZE * 10);
-		this.sunLight.target.position.set(0, 0, 0);
-		this.scene.add(this.sunLight);
-		this.sunLight.castShadow = true;
-		this.sunLight.shadow.mapSize.width = 2048;
-		this.sunLight.shadow.mapSize.height = 2048;
-		const d = Project.SQUARE_SIZE * 10;
-		this.sunLight.shadow.camera.left = -d;
-		this.sunLight.shadow.camera.right = d;
-		this.sunLight.shadow.camera.top = d;
-		this.sunLight.shadow.camera.bottom = -d;
-		this.sunLight.shadow.camera.far = Project.SQUARE_SIZE * 350;
-		this.sunLight.shadow.bias = -0.0003;
+		if (this.model.isSunlight) {
+			this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
+			this.sunLight.position.set(-1, 1.75, 1);
+			this.sunLight.position.multiplyScalar(Project.SQUARE_SIZE * 10);
+			this.sunLight.target.position.set(0, 0, 0);
+			this.scene.add(this.sunLight);
+			this.sunLight.castShadow = true;
+			this.sunLight.shadow.mapSize.width = 2048;
+			this.sunLight.shadow.mapSize.height = 2048;
+			const d = Project.SQUARE_SIZE * 10;
+			this.sunLight.shadow.camera.left = -d;
+			this.sunLight.shadow.camera.right = d;
+			this.sunLight.shadow.camera.top = d;
+			this.sunLight.shadow.camera.bottom = -d;
+			this.sunLight.shadow.camera.far = Project.SQUARE_SIZE * 350;
+			this.sunLight.shadow.bias = -0.0003;
+		}
+	}
+
+	updateBackground() {
+		if (this.model.isSkyColor) {
+			this.updateBackgroundColor();
+		} else if (this.model.isSkyImage) {
+			this.updateBackgroundImage();
+		} else {
+			this.updateBackgroundSkybox();
+		}
+	}
+
+	updateBackgroundColor() {
+		this.scene.background = (
+			Model.Base.getByIDOrFirst(
+				Project.current!.systems.colors,
+				this.model.skyColorID.getFixNumberValue()
+			) as Model.Color
+		).getTHREEColor();
+	}
+
+	updateBackgroundImage() {
+		const texture = Manager.GL.textureLoader.load(
+			Project.current!.pictures.getByID(PICTURE_KIND.PICTURES, this.model.skyImageID).getPath()
+		);
+		texture.magFilter = THREE.NearestFilter;
+		texture.minFilter = THREE.NearestFilter;
+		this.scene.background = texture;
+	}
+
+	updateBackgroundSkybox() {
+		let size = (10000 * Project.SQUARE_SIZE) / Constants.BASE_SQUARE_SIZE;
+		const skyboxGeometry = new THREE.BoxGeometry(size, size, size);
+		const skyboxMesh = new THREE.Mesh(
+			skyboxGeometry,
+			(
+				Model.Base.getByIDOrFirst(
+					Project.current!.systems.skyboxes,
+					this.model.skyboxID.getFixNumberValue()
+				) as Model.Skybox
+			).createTextures()
+		);
+		this.scene.add(skyboxMesh);
 	}
 
 	async initializePortions() {

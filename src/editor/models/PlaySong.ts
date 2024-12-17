@@ -27,7 +27,7 @@ class PlaySong extends Base {
 		['isStart', 'is', undefined, BINDING.BOOLEAN],
 		['start', 's', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE, DynamicValue],
 		['isEnd', 'ie', undefined, BINDING.BOOLEAN],
-		['start', 'e', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE, DynamicValue],
+		['end', 'e', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DECIMAL, 0), BINDING.DYNAMIC_VALUE, DynamicValue],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

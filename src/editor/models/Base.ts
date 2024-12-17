@@ -219,19 +219,19 @@ class Base extends Serializable {
 		return base;
 	}
 
-	public static generateOptions(labels: string[]) {
+	static generateOptions(labels: string[]) {
 		return labels.map((label, index) => Base.create(index, label));
 	}
 
-	public static getByID(list: Base[], id: number): Base | null {
+	static getByID(list: Base[], id: number): Base | null {
 		return list.find((model) => model.id === id) ?? null;
 	}
 
-	public static getByIDOrFirst(list: Base[], id: number): Base {
+	static getByIDOrFirst(list: Base[], id: number): Base {
 		return list.find((model) => model.id === id) ?? list[0];
 	}
 
-	public static generateNewIDfromList(list: Base[]): number {
+	static generateNewIDfromList(list: Base[]): number {
 		let id = 1;
 		const ids = list.map((base) => base.id);
 		while (ids.includes(id)) {
@@ -245,6 +245,10 @@ class Base extends Serializable {
 		for (const [name, , defaultValue, ,] of bindings) {
 			(this as Record<string, unknown>)[name] = defaultValue;
 		}
+	}
+
+	setID(id: number) {
+		this.id = id;
 	}
 
 	getIcon(): ReactNode {

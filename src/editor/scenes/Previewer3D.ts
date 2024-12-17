@@ -63,8 +63,7 @@ class Previewer3D extends Base {
 
 	async loadMaterial() {
 		if (this.material === null) {
-			this.material =
-				Scene.Map.current?.materialTileset || (await Manager.GL.loadTexture('./Assets/plains-woods.png'));
+			this.material = Scene.Map.current?.materialTileset ?? null;
 		}
 	}
 
