@@ -25,9 +25,7 @@ class Localization extends Base {
 	static create(id: number, name: string): Localization {
 		const localization = new Localization();
 		localization.id = id;
-		localization.name = name;
-		localization.names = new Map();
-		localization.names.set('1', name);
+		localization.updateMainName(name);
 		return localization;
 	}
 
@@ -49,6 +47,7 @@ class Localization extends Base {
 	}
 
 	updateMainName(name: string) {
+		this.name = name;
 		this.names.set('1', name);
 	}
 

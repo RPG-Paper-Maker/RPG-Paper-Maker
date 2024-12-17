@@ -9,10 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType, Utils } from '../common';
+import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType, Utils } from '../common';
+import { Project } from '../core';
+import { DynamicValue } from '../core/DynamicValue';
 import { Base } from './Base';
 import { MapObjectEvent } from './MapObjectEvent';
+import { MapObjectParameter } from './MapObjectParameter';
 import { MapObjectProperty } from './MapObjectProperty';
+import { MapObjectReaction } from './MapObjectReaction';
 import { MapObjectState } from './MapObjectState';
 
 class CommonObject extends Base {
@@ -34,6 +38,45 @@ class CommonObject extends Base {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	static createStartupObject() {
+		const object = new CommonObject();
+		object.commonModelID = -1;
+		object.canBeTriggeredAnotherObject = true;
+		object.onlyOneEventPerFrame = false;
+		object.properties = [];
+		const firstState = Base.getByIDOrFirst(Project.current!.commonEvents.states, 1);
+		const state = new MapObjectState();
+		state.id = firstState.id;
+		state.name = firstState.name;
+		object.states = [state];
+		const eventTime = Project.current!.commonEvents.eventsSystem[0];
+		const event = new MapObjectEvent();
+		event.id = 1;
+		event.name = eventTime.name;
+		event.parameters = [
+			MapObjectParameter.create(
+				1,
+				eventTime.parameters[0].name,
+				eventTime.parameters[0],
+				DynamicValue.create(DYNAMIC_VALUE_KIND.DEFAULT)
+			),
+			MapObjectParameter.create(
+				2,
+				eventTime.parameters[1].name,
+				eventTime.parameters[1],
+				DynamicValue.create(DYNAMIC_VALUE_KIND.SWITCH, true)
+			),
+		];
+		const reaction = new MapObjectReaction();
+		reaction.commands = [];
+		reaction.blockingHero = true;
+		event.reactions = new Map();
+		event.reactions.set('1', reaction);
+		event.isSystem = true;
+		object.events = [event];
+		return object;
 	}
 
 	static generateName(id: number) {

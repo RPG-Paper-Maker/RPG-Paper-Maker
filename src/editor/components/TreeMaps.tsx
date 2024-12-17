@@ -89,7 +89,7 @@ function TreeMaps({
 	const handleNewMap = async () => {
 		const id = Node.getNewID(RPM.treeCurrentItems);
 		const name = Model.Map.generateMapName(id);
-		setEditedMap(Model.Map.create(id, name));
+		setEditedMap(Model.Map.createDefaultNewMap(id, name));
 		setIsNew(true);
 		setIsOpenMapProperties(true);
 	};

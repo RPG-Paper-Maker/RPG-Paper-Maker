@@ -137,7 +137,7 @@ function Tab({
 			);
 		});
 
-	const getContents = () => [contents[currentIndex]]; // TODO: only hide when it was opened at least once;
+	const getContents = () => [contents[currentIndex]];
 
 	return (
 		<div className='tab'>

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Model } from '../../../Editor';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, SONG_KIND, Utils } from '../../../common';
@@ -30,6 +30,8 @@ import InputNumber from '../../InputNumber';
 import PlaySongSelector, { PlaySongSelectorRef } from '../../PlaySongSelector';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
+import Tab from '../../Tab';
+import PanelMapObject, { PanelMapObjectRef } from '../../panels/PanelMapObject';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
@@ -45,6 +47,7 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 
 	const playMusicSelectorRef = useRef<PlaySongSelectorRef>();
 	const playBackgroundSoundSelectorRef = useRef<PlaySongSelectorRef>();
+	const panelMapObjectRef = useRef<PanelMapObjectRef>();
 
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -61,6 +64,7 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 	const [skyColorID] = useStateDynamicValue();
 	const [skyImageID, setSkyImageID] = useStateNumber();
 	const [skyboxID] = useStateDynamicValue();
+	const [startupObject] = useState(new Model.CommonObject());
 
 	const initialize = () => {
 		setLocalization(model);
@@ -78,6 +82,11 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 		skyColorID.copy(model.skyColorID);
 		setSkyImageID(model.skyImageID);
 		skyboxID.copy(model.skyboxID);
+		startupObject.copy(model.startupObject);
+	};
+
+	const reset = () => {
+		panelMapObjectRef.current?.reset();
 	};
 
 	const handleAccept = async () => {
@@ -112,6 +121,8 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 		} else {
 			model.skyboxID.updateToDefaultDatabase();
 		}
+		panelMapObjectRef.current?.accept();
+		model.startupObject.copy(startupObject);
 		await onAccept(previousModel);
 		setIsLoading(false);
 		setIsOpen(false);
@@ -125,9 +136,27 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 		if (isOpen) {
 			setFocustFirst(true);
 			initialize();
+		} else {
+			reset();
 		}
 		// eslint-disable-next-line
 	}, [isOpen]);
+
+	const mapStartupReactionsContent = useCallback(
+		() => (
+			<PanelMapObject
+				key={0}
+				object={startupObject}
+				ref={panelMapObjectRef}
+				hideNameID
+				hideStateValues
+				saveOnDestruction
+			/>
+		),
+		[]
+	);
+
+	const getBattlesContent = () => null;
 
 	return (
 		<Dialog
@@ -136,107 +165,122 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 			isLoading={isLoading}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			initialWidth='1000px'
+			initialHeight='650px'
 		>
-			<Flex column spacedLarge>
-				<Form>
-					<Label>{t('name')}</Label>
-					<Value>
-						<Flex spacedLarge centerV>
-							<InputLocalization
-								localization={model}
-								focusFirst={focusFirst}
-								setFocustFirst={setFocustFirst}
+			<Flex fillHeight spacedLarge>
+				<Flex column spacedLarge>
+					<Form>
+						<Label>{t('name')}</Label>
+						<Value>
+							<Flex spacedLarge centerV>
+								<InputLocalization
+									localization={model}
+									focusFirst={focusFirst}
+									setFocustFirst={setFocustFirst}
+								/>
+								<div>ID: {Utils.formatNumberID(id)}</div>
+							</Flex>
+						</Value>
+						<Label>{t('tileset')}</Label>
+						<Value>
+							<Dropdown
+								selectedID={tilesetID}
+								onChange={setTilesetID}
+								options={Project.current!.tilesets.list}
+								displayIDs
 							/>
-							<div>ID: {Utils.formatNumberID(id)}</div>
+						</Value>
+					</Form>
+					<Groupbox title={t('size')}>
+						<Flex one spacedLarge>
+							<Flex column one spaced>
+								{t('length')}:
+								<InputNumber value={length} onChange={setLength} min={1} />
+								{t('height')}:
+								<InputNumber value={height} onChange={setHeight} min={1} />
+							</Flex>
+							<Flex column one spaced>
+								{t('width')}:
+								<InputNumber value={width} onChange={setWidth} min={1} />
+								{t('depth')}:
+								<InputNumber value={depth} onChange={setDepth} min={0} />
+							</Flex>
 						</Flex>
-					</Value>
-					<Label>{t('tileset')}</Label>
-					<Value>
-						<Dropdown
-							selectedID={tilesetID}
-							onChange={setTilesetID}
-							options={Project.current!.tilesets.list}
-							displayIDs
-						/>
-					</Value>
-				</Form>
-				<Groupbox title={t('size')}>
-					<Flex one spacedLarge>
-						<Flex column one spaced>
-							{t('length')}:
-							<InputNumber value={length} onChange={setLength} min={1} />
-							{t('height')}:
-							<InputNumber value={height} onChange={setHeight} min={1} />
-						</Flex>
-						<Flex column one spaced>
-							{t('width')}:
-							<InputNumber value={width} onChange={setWidth} min={1} />
-							{t('depth')}:
-							<InputNumber value={depth} onChange={setDepth} min={0} />
-						</Flex>
-					</Flex>
-				</Groupbox>
-				<Form>
-					<Label>{t('music')}</Label>
-					<Value>
-						<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playMusicSelectorRef} />
-					</Value>
-					<Label>{t('background.sound')}</Label>
-					<Value>
-						<PlaySongSelector songKind={SONG_KIND.BACKGROUND_SOUND} ref={playBackgroundSoundSelectorRef} />
-					</Value>
-					<Label>{t('camera.properties.id')}</Label>
-					<Value>
-						<DynamicValueSelector
-							value={cameraPropertiesID}
-							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
-							databaseOptions={Project.current!.systems.cameraProperties}
-						/>
-					</Value>
-				</Form>
-				<Checkbox isChecked={isSunlight} onChange={setIsSunlight}>
-					{t('sun.light')}
-				</Checkbox>
-				<Groupbox title={t('sky')}>
-					<RadioGroup selected={skySelection} onChange={setSkySelection}>
-						<Form>
-							<Label>
-								<RadioButton value={SELECTION_SKY_TYPE.COLOR}>{t('color.id')}</RadioButton>
-							</Label>
-							<Value>
-								<DynamicValueSelector
-									value={skyColorID}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
-									databaseOptions={Project.current!.systems.colors}
-									disabled={skySelection !== SELECTION_SKY_TYPE.COLOR}
-								/>
-							</Value>
-							<Label>
-								<RadioButton value={SELECTION_SKY_TYPE.IMAGE}>{t('picture')}</RadioButton>
-							</Label>
-							<Value>
-								<AssetSelector
-									selectionType={ASSET_SELECTOR_TYPE.PICTURES}
-									kind={PICTURE_KIND.PICTURES}
-									selectedID={skyImageID}
-									onChange={setSkyImageID}
-									disabled={skySelection !== SELECTION_SKY_TYPE.IMAGE}
-								/>
-							</Value>
-							<Label>
-								<RadioButton value={SELECTION_SKY_TYPE.SKYBOX}>{t('skybox.id')}</RadioButton>
-							</Label>
-							<Value>
-								<DynamicValueSelector
-									value={skyboxID}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
-									databaseOptions={Project.current!.systems.skyboxes}
-									disabled={skySelection !== SELECTION_SKY_TYPE.SKYBOX}
-								/>
-							</Value>
-						</Form>
-					</RadioGroup>
-				</Groupbox>
+					</Groupbox>
+					<Form>
+						<Label>{t('music')}</Label>
+						<Value>
+							<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playMusicSelectorRef} />
+						</Value>
+						<Label>{t('background.sound')}</Label>
+						<Value>
+							<PlaySongSelector
+								songKind={SONG_KIND.BACKGROUND_SOUND}
+								ref={playBackgroundSoundSelectorRef}
+							/>
+						</Value>
+						<Label>{t('camera.properties.id')}</Label>
+						<Value>
+							<DynamicValueSelector
+								value={cameraPropertiesID}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+								databaseOptions={Project.current!.systems.cameraProperties}
+							/>
+						</Value>
+					</Form>
+					<Checkbox isChecked={isSunlight} onChange={setIsSunlight}>
+						{t('sun.light')}
+					</Checkbox>
+					<Groupbox title={t('sky')}>
+						<RadioGroup selected={skySelection} onChange={setSkySelection}>
+							<Form>
+								<Label>
+									<RadioButton value={SELECTION_SKY_TYPE.COLOR}>{t('color.id')}</RadioButton>
+								</Label>
+								<Value>
+									<DynamicValueSelector
+										value={skyColorID}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+										databaseOptions={Project.current!.systems.colors}
+										disabled={skySelection !== SELECTION_SKY_TYPE.COLOR}
+									/>
+								</Value>
+								<Label>
+									<RadioButton value={SELECTION_SKY_TYPE.IMAGE}>{t('picture')}</RadioButton>
+								</Label>
+								<Value>
+									<AssetSelector
+										selectionType={ASSET_SELECTOR_TYPE.PICTURES}
+										kind={PICTURE_KIND.PICTURES}
+										selectedID={skyImageID}
+										onChange={setSkyImageID}
+										disabled={skySelection !== SELECTION_SKY_TYPE.IMAGE}
+									/>
+								</Value>
+								<Label>
+									<RadioButton value={SELECTION_SKY_TYPE.SKYBOX}>{t('skybox.id')}</RadioButton>
+								</Label>
+								<Value>
+									<DynamicValueSelector
+										value={skyboxID}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+										databaseOptions={Project.current!.systems.skyboxes}
+										disabled={skySelection !== SELECTION_SKY_TYPE.SKYBOX}
+									/>
+								</Value>
+							</Form>
+						</RadioGroup>
+					</Groupbox>
+				</Flex>
+				<Flex one fillWidth>
+					<Tab
+						titles={[Model.Base.create(1, t('map.startup.reactions')), Model.Base.create(2, t('battles'))]}
+						contents={[mapStartupReactionsContent(), getBattlesContent()]}
+						padding
+						hideScroll
+					/>
+				</Flex>
 			</Flex>
 		</Dialog>
 	);

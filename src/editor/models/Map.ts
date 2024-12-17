@@ -14,6 +14,7 @@ import { Platform } from '../common/Platform';
 import { Portion, Position, Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Model } from '../Editor';
+import { CommonObject } from './CommonObject';
 import { Localization } from './Localization';
 import { MapObject } from './MapObject';
 import { PlaySong } from './PlaySong';
@@ -29,16 +30,17 @@ class Map extends Localization {
 	public width = 16;
 	public height = 16;
 	public depth = 0;
-	public music!: PlaySong;
-	public backgroundSound!: PlaySong;
-	public cameraPropertiesID!: DynamicValue;
-	public isSunlight!: boolean;
+	public music = PlaySong.createPlaySong(SONG_KIND.MUSIC);
+	public backgroundSound = PlaySong.createPlaySong(SONG_KIND.MUSIC);
+	public cameraPropertiesID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
+	public isSunlight = true;
 	public isSkyColor = false;
 	public skyColorID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
 	public isSkyImage = false;
 	public skyImageID = -1;
 	public skyboxID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
-	public objects!: MapObject[];
+	public startupObject = new CommonObject();
+	public objects: MapObject[] = [];
 
 	public static bindings: BindingType[] = [
 		['tilesetID', 'tileset', undefined, BINDING.NUMBER],
@@ -58,6 +60,7 @@ class Map extends Localization {
 		['isSunlight', 'isl', true, BINDING.BOOLEAN],
 		['isSkyColor', 'isky', undefined, BINDING.BOOLEAN],
 		['isSkyImage', 'isi', undefined, BINDING.BOOLEAN],
+		['startupObject', 'so', undefined, BINDING.OBJECT, CommonObject],
 		['objects', 'objs', [], BINDING.LIST, MapObject],
 	];
 
@@ -68,7 +71,7 @@ class Map extends Localization {
 	static create(id: number, name: string) {
 		const base = new Map();
 		base.id = id;
-		base.name = name;
+		base.updateMainName(name);
 		return base;
 	}
 
@@ -95,36 +98,21 @@ class Map extends Localization {
 		}
 	}
 
+	static createDefaultNewMap(id: number, name: string) {
+		const map = Model.Map.create(id, name);
+		map.startupObject = Model.CommonObject.createStartupObject();
+		return map;
+	}
+
 	static async createDefaultMap(id: number, name: string) {
 		const mapModel = new Model.Map();
 		mapModel.id = id;
 		mapModel.name = name;
-		// TODO
-		/*
-        Position position(7, 0, 0, 7, 0);
-        SystemMapObject super(1, RPM::translate(Translations::HERO), position);
-        super.write(json);
-        jsonObject.append(json);*/
-		/*
-        properties.setIsSkyColor(false);
-        properties.setIsSkyImage(false);
-        properties.skyboxID()->setNumberValue(1);*/
 		const folderMap = await mapModel.createNewMap();
-
 		if (!folderMap) {
 			return;
 		}
-
-		// Portion
 		const globalPortion = new Portion(0, 0, 0);
-		/*
-        SystemCommonObject* o = new SystemCommonObject(1, RPM::translate(
-            Translations::HERO), false, false, 2, new QStandardItemModel, new
-            QStandardItemModel, new QStandardItemModel);
-        QJsonObject previous;
-        MapEditorSubSelectionKind previousType;
-        mapPortion.addObject(position, o, previous, previousType);*/
-		// TODO
 		await Platform.copyPublicFile(
 			Paths.join(Paths.DEFAULT, globalPortion.getFileName()),
 			Paths.join(Paths.join(folderMap, globalPortion.getFileName()))
@@ -168,15 +156,6 @@ class Map extends Localization {
 				}
 			}
 		}
-
-		// Objects
-		// TODO
-		/*
-        QJsonObject json;
-        json["objs"] = jsonObject;
-        Common::writeOtherJSON(Common::pathCombine(dirMap, RPM::FILE_MAP_OBJECTS),
-                            json);
-                            */
 
 		// Temp empty folders
 		await Platform.createFolder(Paths.join(folderMap, Paths.TEMP));
@@ -366,6 +345,7 @@ class Map extends Localization {
 		json.of3d = [];
 		json.ofmoun = [];
 		json.ofsprites = [];
+		/*
 		json.so = {
 			events: [
 				{
@@ -404,7 +384,7 @@ class Map extends Localization {
 					y: 0,
 				},
 			],
-		};
+		};*/
 	}
 }
 
