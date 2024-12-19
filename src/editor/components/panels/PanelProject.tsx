@@ -92,7 +92,7 @@ function PanelProject() {
 	};
 
 	const handleTabCurrentIndexChanged = async (index: number, model: Model.Base, isClick: boolean) => {
-		if (!openLoading && !isClick) {
+		if (!openLoading) {
 			let id = -1;
 			if (index !== -1 && model) {
 				id = model.id;
