@@ -55,7 +55,6 @@ class PlaySong extends Base {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, PlaySong.getBindings(additionnalBinding));
-		console.log(json);
 		if (json.isbi) {
 			this.songID = new DynamicValue();
 			this.songID.read(json.vid as JSONType);
@@ -68,9 +67,7 @@ class PlaySong extends Base {
 		super.write(json, PlaySong.getBindings(additionnalBinding));
 		json.isbi = true;
 		const obj: JSONType = {};
-		console.log(this.songID);
 		this.songID.write(obj);
-		console.log(obj);
 		json.vid = obj;
 	}
 }

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Node, Project } from '../../core';
 import { Data, Model } from '../../Editor';
@@ -38,7 +38,8 @@ function DialogVariables({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 
 	const initialize = () => {
 		const clonedPages = Project.current!.variables.pages.map((page) => page.clone());
-		setPages(Node.createList(clonedPages));
+		const nodesPages = Node.createList(clonedPages);
+		setPages(nodesPages);
 		if (model) {
 			const page = Data.Variables.getPageByVariableID(clonedPages, model.id);
 			if (page) {
@@ -49,7 +50,7 @@ function DialogVariables({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 				setVariables(Node.createList(clonedPages[0].list));
 			}
 		} else {
-			setVariables(Node.createList(clonedPages[0].list));
+			setForcedPageCurrentSelectedItemID(nodesPages[0].content.id);
 		}
 	};
 
@@ -86,7 +87,7 @@ function DialogVariables({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 		setIsOpen(false);
 	};
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (isOpen) {
 			initialize();
 		}

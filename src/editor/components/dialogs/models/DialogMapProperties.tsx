@@ -72,7 +72,6 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 	const [randomBattleVariance] = useStateDynamicValue();
 
 	const initialize = () => {
-		console.log(model);
 		setLocalization(model);
 		setID(model.id);
 		setTilesetID(model.tilesetID);
