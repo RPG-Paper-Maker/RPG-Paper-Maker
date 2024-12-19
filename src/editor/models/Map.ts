@@ -140,9 +140,7 @@ class Map extends Localization {
 	}
 
 	static async createDefaultMap(id: number, name: string) {
-		const mapModel = new Model.Map();
-		mapModel.id = id;
-		mapModel.name = name;
+		const mapModel = Map.createDefaultNewMap(id, name);
 		const folderMap = await mapModel.createNewMap();
 		if (!folderMap) {
 			return;

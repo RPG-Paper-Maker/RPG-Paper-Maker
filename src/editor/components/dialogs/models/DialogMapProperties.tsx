@@ -178,8 +178,8 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 					databaseOptions={Project.current!.battleSystem.battleMaps}
 				/>
 			</Flex>
-			<Flex one>
-				<Groupbox title={t('random.battles')}>
+			<Flex one fillWidth>
+				<Groupbox title={t('random.battles')} fillWidth>
 					<Flex column spaced fillHeight>
 						<Flex one zeroHeight>
 							<Tree constructorType={RandomBattle} list={randomBattles} />
@@ -213,7 +213,7 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 			isLoading={isLoading}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
-			initialWidth='1000px'
+			initialWidth='1100px'
 			initialHeight='650px'
 		>
 			<Flex fillHeight spacedLarge>

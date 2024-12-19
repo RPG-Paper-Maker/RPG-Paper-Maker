@@ -98,13 +98,13 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 		await Platform.createFile(Paths.join(folderPath, Paths.FILE_GAME_RPMG), '');
 		await Platform.createFolder(project.getPathSaves());
 		await Platform.createFolder(project.getPathMaps());
-		await Model.Map.createDefaultMap(1, t('starting.map'));
-		await Model.Map.createDefaultMap(2, t('default'));
 		Scene.Map.currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
 		for (const file of Paths.ALL_JSON) {
 			await Platform.copyPublicFile(Paths.join(Paths.DEFAULT, file), Paths.join(project.getPath(), file));
 		}
 		await project.load();
+		await Model.Map.createDefaultMap(1, t('starting.map'));
+		await Model.Map.createDefaultMap(2, t('default'));
 		project.translateDefaults();
 		project.settings.projectVersion = Project.VERSION;
 		if (Constants.IS_MOBILE) {

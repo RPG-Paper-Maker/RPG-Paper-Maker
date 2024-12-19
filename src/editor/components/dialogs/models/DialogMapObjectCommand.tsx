@@ -466,7 +466,7 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 					title={`${t('commands')}...`}
 					isOpen={isOpen}
 					onClose={handleReject}
-					initialWidth='500px'
+					initialWidth='600px'
 					initialHeight='550px'
 				>
 					<Tab
