@@ -48,6 +48,7 @@ class CommonObject extends Base {
 		object.properties = [];
 		const firstState = Base.getByIDOrFirst(Project.current!.commonEvents.states, 1);
 		const state = new MapObjectState();
+		state.applyDefault();
 		state.id = firstState.id;
 		state.name = firstState.name;
 		object.states = [state];

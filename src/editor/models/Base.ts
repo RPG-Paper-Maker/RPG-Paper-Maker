@@ -242,8 +242,27 @@ class Base extends Serializable {
 
 	applyDefault(additionnalBinding: BindingType[] = []) {
 		const bindings = Base.getBindings(additionnalBinding);
-		for (const [name, , defaultValue, ,] of bindings) {
-			(this as Record<string, unknown>)[name] = defaultValue;
+		for (const [name, , defaultValue, bindingType] of bindings) {
+			if (defaultValue !== undefined) {
+				switch (bindingType) {
+					case BINDING.BOOLEAN:
+					case BINDING.NUMBER:
+					case BINDING.STRING:
+						(this as Record<string, unknown>)[name] = defaultValue;
+						break;
+					case BINDING.DYNAMIC_VALUE:
+					case BINDING.OBJECT:
+						(this as Record<string, unknown>)[name] = defaultValue
+							? (defaultValue as Serializable).clone()
+							: defaultValue;
+						break;
+					case BINDING.LIST:
+						(this as Record<string, unknown>)[name] = [];
+						break;
+					default:
+						break;
+				}
+			}
 		}
 	}
 

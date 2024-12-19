@@ -30,6 +30,7 @@ import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
 import DialogCost from './dialogs/models/DialogCost';
+import DialogDynamicNumber from './dialogs/models/DialogDynamicNumber';
 import DialogLocalization from './dialogs/models/DialogLocalization';
 import DialogMapObjectCommand from './dialogs/models/DialogMapObjectCommand';
 import DialogMapObjectCommandMove from './dialogs/models/DialogMapObjectCommandMove';
@@ -39,6 +40,7 @@ import DialogMapObjectParameter from './dialogs/models/DialogMapObjectParameter'
 import DialogMapObjectProperty from './dialogs/models/DialogMapObjectProperty';
 import DialogMapObjectState from './dialogs/models/DialogMapObjectState';
 import DialogName from './dialogs/models/DialogName';
+import DialogRandomBattle from './dialogs/models/DialogRandomBattle';
 import Flex from './Flex';
 import InputText from './InputText';
 import TreeItem from './TreeItem';
@@ -765,6 +767,10 @@ function Tree({
 					return <DialogMapObjectCommandShopItem {...options} />;
 				case Model.Cost:
 					return <DialogCost {...options} />;
+				case Model.RandomBattle:
+					return <DialogRandomBattle {...options} />;
+				case Model.DynamicNumber:
+					return <DialogDynamicNumber {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

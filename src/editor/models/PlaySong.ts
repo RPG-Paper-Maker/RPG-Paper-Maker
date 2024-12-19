@@ -16,7 +16,7 @@ import { Base } from './Base';
 class PlaySong extends Base {
 	public kind!: SONG_KIND;
 	public songID!: DynamicValue;
-	public volume!: DynamicValue;
+	public volume = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 100);
 	public isStart!: boolean;
 	public start!: DynamicValue;
 	public isEnd!: boolean;
@@ -36,18 +36,26 @@ class PlaySong extends Base {
 
 	static createPlaySong(kind: SONG_KIND) {
 		const song = new PlaySong();
+		song.applyDefault();
+		song.id = -1;
 		song.kind = kind;
 		song.songID = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, -1);
 		return song;
 	}
 
+	applyDefault() {
+		super.applyDefault(PlaySong.getBindings([]));
+	}
+
 	copy(playSong: PlaySong): void {
 		super.copy(playSong, PlaySong.getBindings([]));
 		this.songID = playSong.songID.clone();
+		this.kind = playSong.kind;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, PlaySong.getBindings(additionnalBinding));
+		console.log(json);
 		if (json.isbi) {
 			this.songID = new DynamicValue();
 			this.songID.read(json.vid as JSONType);
@@ -60,7 +68,9 @@ class PlaySong extends Base {
 		super.write(json, PlaySong.getBindings(additionnalBinding));
 		json.isbi = true;
 		const obj: JSONType = {};
+		console.log(this.songID);
 		this.songID.write(obj);
+		console.log(obj);
 		json.vid = obj;
 	}
 }

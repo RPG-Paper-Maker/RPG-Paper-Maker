@@ -1,4 +1,5 @@
 export * from './DialogCost';
+export * from './DialogDynamicNumber';
 export * from './DialogLocalization';
 export * from './DialogMapObject';
 export * from './DialogMapObjectCommand';
@@ -10,3 +11,4 @@ export * from './DialogMapObjectProperty';
 export * from './DialogMapObjectState';
 export * from './DialogMapProperties';
 export * from './DialogName';
+export * from './DialogRandomBattle';

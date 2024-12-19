@@ -9,15 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Model } from '../../../Editor';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, PICTURE_KIND, SONG_KIND, Utils } from '../../../common';
-import { Project } from '../../../core';
+import { Node, Project } from '../../../core';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
-import { SELECTION_SKY_TYPE } from '../../../models';
+import { RandomBattle, SELECTION_SKY_TYPE } from '../../../models';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';
 import Checkbox from '../../Checkbox';
 import Dropdown from '../../Dropdown';
@@ -31,6 +31,7 @@ import PlaySongSelector, { PlaySongSelectorRef } from '../../PlaySongSelector';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
 import Tab from '../../Tab';
+import Tree from '../../Tree';
 import PanelMapObject, { PanelMapObjectRef } from '../../panels/PanelMapObject';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
@@ -65,8 +66,13 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 	const [skyImageID, setSkyImageID] = useStateNumber();
 	const [skyboxID] = useStateDynamicValue();
 	const [startupObject] = useState(new Model.CommonObject());
+	const [randomBattleMapID] = useStateDynamicValue();
+	const [randomBattles, setRandomBattles] = useState<Node[]>([]);
+	const [randomBattleNumberStep] = useStateDynamicValue();
+	const [randomBattleVariance] = useStateDynamicValue();
 
 	const initialize = () => {
+		console.log(model);
 		setLocalization(model);
 		setID(model.id);
 		setTilesetID(model.tilesetID);
@@ -83,6 +89,12 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 		setSkyImageID(model.skyImageID);
 		skyboxID.copy(model.skyboxID);
 		startupObject.copy(model.startupObject);
+		randomBattleMapID.copy(model.randomBattleMapID);
+		randomBattleNumberStep.copy(model.randomBattleNumberStep);
+		randomBattleVariance.copy(model.randomBattleVariance);
+		const battles = Node.createList(model.randomBattles);
+		setRandomBattles(battles);
+		RandomBattle.currentList = battles;
 	};
 
 	const reset = () => {
@@ -123,6 +135,10 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 		}
 		panelMapObjectRef.current?.accept();
 		model.startupObject.copy(startupObject);
+		model.randomBattleMapID.copy(randomBattleMapID);
+		model.randomBattles = Node.createListFromNodes(randomBattles);
+		model.randomBattleNumberStep.copy(randomBattleNumberStep);
+		model.randomBattleVariance.copy(randomBattleVariance);
 		await onAccept(previousModel);
 		setIsLoading(false);
 		setIsOpen(false);
@@ -142,21 +158,54 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 		// eslint-disable-next-line
 	}, [isOpen]);
 
-	const mapStartupReactionsContent = useCallback(
-		() => (
-			<PanelMapObject
-				key={0}
-				object={startupObject}
-				ref={panelMapObjectRef}
-				hideNameID
-				hideStateValues
-				saveOnDestruction
-			/>
-		),
-		[]
+	const getMapStartupReactionsContent = () => (
+		<PanelMapObject
+			key={0}
+			object={startupObject}
+			ref={panelMapObjectRef}
+			hideNameID
+			hideStateValues
+			saveOnDestruction
+		/>
 	);
 
-	const getBattlesContent = () => null;
+	const getBattlesContent = () => (
+		<Flex key={1} column spacedLarge fillHeight>
+			<Flex spaced>
+				<div>{t('battle.map.id')}:</div>
+				<DynamicValueSelector
+					value={randomBattleMapID}
+					optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.DATABASE}
+					databaseOptions={Project.current!.battleSystem.battleMaps}
+				/>
+			</Flex>
+			<Flex one>
+				<Groupbox title={t('random.battles')}>
+					<Flex column spaced fillHeight>
+						<Flex one zeroHeight>
+							<Tree constructorType={RandomBattle} list={randomBattles} />
+						</Flex>
+						<Form>
+							<Label>{t('number.of.steps.after.next.battle')}</Label>
+							<Value>
+								<DynamicValueSelector
+									value={randomBattleNumberStep}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+								/>
+							</Value>
+							<Label>{`${t('variance')} (%)`}</Label>
+							<Value>
+								<DynamicValueSelector
+									value={randomBattleVariance}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+								/>
+							</Value>
+						</Form>
+					</Flex>
+				</Groupbox>
+			</Flex>
+		</Flex>
+	);
 
 	return (
 		<Dialog
@@ -276,7 +325,7 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 				<Flex one fillWidth>
 					<Tab
 						titles={[Model.Base.create(1, t('map.startup.reactions')), Model.Base.create(2, t('battles'))]}
-						contents={[mapStartupReactionsContent(), getBattlesContent()]}
+						contents={[getMapStartupReactionsContent(), getBattlesContent()]}
 						padding
 						hideScroll
 					/>

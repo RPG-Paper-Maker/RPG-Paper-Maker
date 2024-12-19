@@ -18,6 +18,7 @@ import { CommonObject } from './CommonObject';
 import { Localization } from './Localization';
 import { MapObject } from './MapObject';
 import { PlaySong } from './PlaySong';
+import { RandomBattle } from './RandomBattle';
 
 export enum SELECTION_SKY_TYPE {
 	COLOR,
@@ -40,6 +41,10 @@ class Map extends Localization {
 	public skyImageID = -1;
 	public skyboxID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
 	public startupObject = new CommonObject();
+	public randomBattleMapID!: DynamicValue;
+	public randomBattles!: RandomBattle[];
+	public randomBattleNumberStep!: DynamicValue;
+	public randomBattleVariance!: DynamicValue;
 	public objects: MapObject[] = [];
 
 	public static bindings: BindingType[] = [
@@ -61,6 +66,29 @@ class Map extends Localization {
 		['isSkyColor', 'isky', undefined, BINDING.BOOLEAN],
 		['isSkyImage', 'isi', undefined, BINDING.BOOLEAN],
 		['startupObject', 'so', undefined, BINDING.OBJECT, CommonObject],
+		['startupObject', 'so', undefined, BINDING.OBJECT, CommonObject],
+		[
+			'randomBattleMapID',
+			'randomBattleMapID',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		['randomBattles', 'randomBattles', [], BINDING.LIST, RandomBattle],
+		[
+			'randomBattleNumberStep',
+			'randomBattleNumberStep',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 300),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'randomBattleVariance',
+			'randomBattleVariance',
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 20),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
 		['objects', 'objs', [], BINDING.LIST, MapObject],
 	];
 
@@ -73,6 +101,10 @@ class Map extends Localization {
 		base.id = id;
 		base.updateMainName(name);
 		return base;
+	}
+
+	applyDefault() {
+		super.applyDefault(Map.getBindings([]));
 	}
 
 	getPath(temp = false) {
@@ -99,7 +131,10 @@ class Map extends Localization {
 	}
 
 	static createDefaultNewMap(id: number, name: string) {
-		const map = Model.Map.create(id, name);
+		const map = new Model.Map();
+		map.applyDefault();
+		map.id = id;
+		map.updateMainName(name);
 		map.startupObject = Model.CommonObject.createStartupObject();
 		return map;
 	}
@@ -309,7 +344,7 @@ class Map extends Localization {
 	}
 
 	copy(map: Map): void {
-		super.copy(map);
+		super.copy(map, Map.getBindings([]));
 	}
 
 	async load() {
@@ -345,46 +380,6 @@ class Map extends Localization {
 		json.of3d = [];
 		json.ofmoun = [];
 		json.ofsprites = [];
-		/*
-		json.so = {
-			events: [
-				{
-					id: 1,
-					name: 'Time',
-					p: [
-						{ id: 1, name: '', v: { k: 2, v: null } },
-						{ id: 2, name: '', v: { k: 10, v: false } },
-					],
-					r: { '1': { bh: true, c: [] } },
-					sys: true,
-				},
-			],
-			hId: -1,
-			id: 1,
-			name: '',
-			ooepf: false,
-			states: [
-				{
-					cam: false,
-					climb: false,
-					dir: false,
-					gid: -1,
-					gk: 0,
-					id: 1,
-					move: false,
-					name: 'State 1',
-					pix: false,
-					pos: false,
-					stop: false,
-					sx: { k: 12, v: 1 },
-					sy: { k: 12, v: 1 },
-					sz: { k: 12, v: 1 },
-					through: false,
-					x: 0,
-					y: 0,
-				},
-			],
-		};*/
 	}
 }
 

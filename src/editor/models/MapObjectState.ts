@@ -131,6 +131,10 @@ class MapObjectState extends Base {
 		return object;
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []) {
+		super.applyDefault(MapObjectState.getBindings(additionnalBinding));
+	}
+
 	initialize() {
 		const firstState = Project.current!.commonEvents.defaultObject.states[0];
 		if (firstState) {
@@ -140,10 +144,6 @@ class MapObjectState extends Base {
 			this.id = id;
 			this.name = name;
 		}
-	}
-
-	applyDefault(additionnalBinding: BindingType[] = []) {
-		super.applyDefault(MapObjectState.getBindings(additionnalBinding));
 	}
 
 	getCommonState(): Base | null {
