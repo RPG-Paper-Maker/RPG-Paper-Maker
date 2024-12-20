@@ -4,15 +4,66 @@
 		<meta charset="utf-8" />
 		<link rel="icon" href="favicon.ico" />
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-		<title>RPG Paper Maker</title>
+		<title>RPG Paper Maker - MAINTENANCE</title>
 		<style>
-			div {
-				text-align: center;
-				font-weight: bold;
+			body {
+				background-color: #2e324a;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+			.loader {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				z-index: 999;
+
+				.spinner {
+					border: 5px solid #cacaca;
+					border-top: 5px solid #25bbb9;
+					border-radius: 50%;
+					animation: spin 1s linear infinite;
+					width: 20px;
+					height: 20px;
+				}
+
+				&.large .spinner {
+					width: 150px;
+					height: 150px;
+					border-width: 10px;
+				}
+
+				.text {
+					position: absolute;
+					color: #221f35;
+					font-weight: bold;
+					text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
+					font-size: 25px;
+					text-align: center;
+				}
+			}
+
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
 			}
 		</style>
 	</head>
 	<body>
-		<div>RPG Paper Maker is currently updating to a new version. Please wait a few minutes!</div>
+		<div class="loader large">
+			<div class="spinner large"></div>
+			<div class="text">
+				RPG Paper Maker is upgrading to a new version now.
+				<div />
+				Please wait a few minutes!
+			</div>
+		</div>
 	</body>
 </html>
