@@ -100,7 +100,7 @@ class Picture extends Base {
 	}
 
 	getIcon() {
-		return <img src='/Assets/bullet-br.png' alt='br bullet' width='16px' />;
+		return <img src='./Assets/bullet-br.png' alt='br bullet' width='16px' />;
 	}
 
 	copy(picture: Picture, additionnalBinding: BindingType[] = []): void {

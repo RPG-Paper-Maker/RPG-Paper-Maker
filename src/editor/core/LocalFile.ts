@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import localforage from 'localforage';
-import { Serializable } from './Serializable';
 import JSZip from 'jszip';
+import localforage from 'localforage';
 import { ArrayUtils, BINDING, BindingType, JSONType, Paths } from '../common';
 import { Platform } from '../common/Platform';
+import { Serializable } from './Serializable';
 
 class LocalFile extends Serializable {
 	public static readonly CACHE_VERSION = '0.0.0';
@@ -239,7 +239,9 @@ class LocalFile extends Serializable {
 					}
 				}
 			};
-			xhr.open('GET', Paths.join(Paths.ROOT_DIRECTORY_LOCAL, path), true);
+			xhr.open('GET', `${Paths.join(Paths.ROOT_DIRECTORY_LOCAL, path)}?cache_bust=${new Date().getTime()}`, true);
+			xhr.setRequestHeader('Cache-Control', 'no-cache');
+			xhr.setRequestHeader('Pragma', 'no-cache');
 			xhr.send(null);
 		});
 	}

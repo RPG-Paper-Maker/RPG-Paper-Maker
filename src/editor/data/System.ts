@@ -86,7 +86,7 @@ class System extends Serializable {
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, System.getBindings(additionnalBinding));
 		this.json = json;
-		this.PATH_BR = '/BR/';
+		this.PATH_BR = './BR/';
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {

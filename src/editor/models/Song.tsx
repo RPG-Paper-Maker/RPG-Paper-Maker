@@ -58,7 +58,7 @@ class Song extends Base {
 	}
 
 	getIcon() {
-		return <img src='/Assets/bullet-br.png' alt='br bullet' width='16px' />;
+		return <img src='./Assets/bullet-br.png' alt='br bullet' width='16px' />;
 	}
 
 	copy(song: Song, additionnalBinding: BindingType[] = []): void {

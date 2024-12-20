@@ -158,6 +158,7 @@ class Platform {
 			return [];
 		} else {
 			const folders = path.split('/');
+			folders.shift();
 			if (folders.length > 0 && folders[0] === '') {
 				folders.shift();
 			}
