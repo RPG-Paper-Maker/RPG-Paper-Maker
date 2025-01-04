@@ -72,6 +72,7 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 	const [randomBattleVariance] = useStateDynamicValue();
 
 	const initialize = () => {
+		setFocustFirst(true);
 		setLocalization(model);
 		setID(model.id);
 		setTilesetID(model.tilesetID);
@@ -149,7 +150,6 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 
 	useLayoutEffect(() => {
 		if (isOpen) {
-			setFocustFirst(true);
 			initialize();
 		} else {
 			reset();

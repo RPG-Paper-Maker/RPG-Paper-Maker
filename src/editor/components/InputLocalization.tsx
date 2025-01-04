@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LuLanguages } from 'react-icons/lu';
 import { INPUT_TYPE_WIDTH } from '../common';
 import { Model } from '../Editor';
@@ -35,7 +35,7 @@ function InputLocalization({
 	disabled = false,
 }: Props) {
 	const [isDialogLocalizationOpen, setIsDialogLocalizationOpen] = useState(false);
-	const [name, setName] = useState(localization?.getName());
+	const [name, setName] = useState(localization.getName());
 
 	const handleAccept = () => {
 		setName(localization?.getName());
@@ -49,6 +49,10 @@ function InputLocalization({
 	const handleClick = () => {
 		setIsDialogLocalizationOpen(true);
 	};
+
+	useEffect(() => {
+		setName(localization.getName());
+	}, [localization]);
 
 	return (
 		<>

@@ -58,6 +58,7 @@ import {
 	triggerSaveAll,
 	triggerSplitting,
 	TriggersReducer,
+	triggerSystems,
 	triggerTreeMap,
 	triggerVariables,
 } from './slices/TriggersReducer';
@@ -116,6 +117,7 @@ export {
 	triggerSave,
 	triggerSaveAll,
 	triggerSplitting,
+	triggerSystems,
 	triggerTreeMap,
 	triggerVariables,
 };

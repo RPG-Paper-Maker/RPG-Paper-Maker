@@ -242,6 +242,7 @@ function Dialog({
 		if (dialogRef.current && isOpen) {
 			dialogRef.current.style.width = initialWidth || '';
 			dialogRef.current.style.height = initialHeight || '';
+			dialogRef.current.style.minHeight = initialHeight || '';
 		}
 	}, [isOpen, initialWidth, initialHeight]);
 

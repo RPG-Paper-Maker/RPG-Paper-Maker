@@ -175,6 +175,7 @@ class Base extends Serializable {
 		'total.seconds.current.music',
 		'total.seconds.current.background.music',
 	]);
+	public static SCREEN_RESOLUTION_OPTIONS = Base.mapListIndex(['window', 'full.screen']);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([

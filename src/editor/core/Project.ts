@@ -47,8 +47,7 @@ class Project {
 	public currentMapObjectProperties: Node[] = [];
 	public currentMapObjectParameters: Model.Base[] = [];
 
-	constructor(name: string, location: string) {
-		this.systems.projectName = Model.Localization.create(0, name);
+	constructor(location: string) {
 		this.location = location;
 	}
 
@@ -70,7 +69,6 @@ class Project {
 	}
 
 	async load() {
-		const projectName = this.systems.projectName.getName();
 		await this.languages.load();
 		await this.variables.load();
 		await this.pictures.load();
@@ -79,7 +77,6 @@ class Project {
 		await this.videos.load();
 		await this.settings.load();
 		await this.systems.load();
-		this.systems.projectName.names.set('1', projectName);
 		Project.SQUARE_SIZE = this.systems.SQUARE_SIZE;
 		await this.treeMaps.load();
 		await this.specialElements.load();
@@ -104,7 +101,7 @@ class Project {
 		await this.settings.save();
 		await this.commonEvents.save();
 		await this.variables.save();
-		// await this.systems.save(Paths.join(this.getPath(), Paths.FILE_SYSTEM));
+		await this.systems.save();
 	}
 }
 

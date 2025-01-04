@@ -29,6 +29,7 @@ type Props = {
 	forcedCurrentIndex?: number | null;
 	setForcedCurrentIndex?: (forced: number | null) => void;
 	padding?: boolean;
+	scrollableContent?: boolean;
 };
 
 function Tab({
@@ -43,6 +44,7 @@ function Tab({
 	forcedCurrentIndex,
 	setForcedCurrentIndex,
 	padding = false,
+	scrollableContent = false,
 }: Props) {
 	const [currentIndex, setCurrentIndex] = useState(defaultIndex);
 	const [nextIndex, setNextIndex] = useState(defaultIndex); // Needed to make scrolling work properly on direct click...
@@ -160,7 +162,14 @@ function Tab({
 					</>
 				)}
 			</div>
-			<div className={Utils.getClassName({ padding }, 'tabContent')}>{getContents()}</div>
+			<div
+				className={Utils.getClassName(
+					{ padding, scrollable: scrollableContent, zeroHeight: scrollableContent },
+					'tabContent'
+				)}
+			>
+				{getContents()}
+			</div>
 		</div>
 	);
 }

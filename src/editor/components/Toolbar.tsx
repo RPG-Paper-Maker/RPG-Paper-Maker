@@ -36,6 +36,7 @@ import {
 	triggerPlay,
 	triggerSave,
 	triggerSaveAll,
+	triggerSystems,
 	triggerVariables,
 } from '../store';
 import '../styles/Toolbar.css';
@@ -77,6 +78,10 @@ function Toolbar() {
 
 	const handleSaveAll = () => {
 		dispatch(triggerSaveAll(true));
+	};
+
+	const handleSystemsManager = () => {
+		dispatch(triggerSystems(true));
 	};
 
 	const handleVariablesManager = () => {
@@ -121,7 +126,7 @@ function Toolbar() {
 					<MenuItem icon={<BsDatabase />} onClick={handleFloor} disabled>
 						{t('data.manager.tool')}
 					</MenuItem>
-					<MenuItem icon={<BsClipboardData />} onClick={handleFloor} disabled>
+					<MenuItem icon={<BsClipboardData />} onClick={handleSystemsManager} disabled={!isProjectOpened}>
 						{t('systems.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<TbNumbers />} onClick={handleVariablesManager} disabled={!isProjectOpened}>

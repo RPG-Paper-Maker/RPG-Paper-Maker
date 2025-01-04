@@ -61,3 +61,8 @@ export type JSONMapping = {
 };
 
 export type ITERATOR = { i: number };
+
+export interface initializeAcceptRef {
+	initialize: () => void;
+	accept: () => void;
+}

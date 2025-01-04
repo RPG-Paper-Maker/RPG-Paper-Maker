@@ -91,7 +91,7 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 		}
 		Scene.Map.current = null;
 		const completeLocation = getcompleteLocation();
-		const project = new Project(projectName, completeLocation);
+		const project = new Project(completeLocation);
 		Project.current = project;
 		const folderPath = project.getPath();
 		await Platform.createFolder(project.getPath());
@@ -110,6 +110,7 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 		if (Constants.IS_MOBILE) {
 			project.settings.projectMenuIndex = 2;
 		}
+		project.systems.projectName.updateMainName(projectName);
 		await project.save();
 
 		// Update recent projects

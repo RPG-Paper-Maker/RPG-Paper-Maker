@@ -379,6 +379,7 @@ const PanelMapObject = forwardRef(
 					accept();
 				};
 			}
+			// eslint-disable-next-line
 		}, []);
 
 		return (

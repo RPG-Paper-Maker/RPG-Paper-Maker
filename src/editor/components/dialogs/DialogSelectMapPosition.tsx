@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Node, Position, Project } from '../../core';
 import { Model, Scene } from '../../Editor';
@@ -139,11 +139,9 @@ function DialogSelectMapPosition({
 		setIsOpen(false);
 	};
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (isOpen) {
-			setIsOpen(false);
 			initialize();
-			setIsOpen(true);
 		}
 		// eslint-disable-next-line
 	}, [isOpen]);

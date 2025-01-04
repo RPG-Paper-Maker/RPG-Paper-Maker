@@ -30,6 +30,7 @@ type Props = {
 	fillSmallSpace?: boolean;
 	disabledLabel?: boolean;
 	className?: string;
+	onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 	[key: string]: unknown;
 };
 
@@ -51,6 +52,7 @@ function Flex({
 	fillSmallSpace = false,
 	disabledLabel = false,
 	className,
+	onClick,
 	...rest
 }: Props) {
 	return (
@@ -75,6 +77,7 @@ function Flex({
 				},
 				`flex ${className ?? ''}`
 			)}
+			onClick={onClick}
 			{...rest}
 		>
 			{children}

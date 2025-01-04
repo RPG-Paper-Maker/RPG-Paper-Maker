@@ -10,12 +10,13 @@
 */
 
 import React, { useEffect, useRef } from 'react';
-import '../styles/Input.css';
 import { INPUT_TYPE_WIDTH } from '../common';
+import '../styles/Input.css';
 
 type Props = {
 	value?: string;
 	widthType?: INPUT_TYPE_WIDTH;
+	style?: React.CSSProperties;
 	onChange: (e: string) => void;
 	focusFirst?: boolean;
 	setFocustFirst?: (b: boolean) => void;
@@ -25,6 +26,7 @@ type Props = {
 function InputText({
 	value,
 	widthType = INPUT_TYPE_WIDTH.NORMAL,
+	style,
 	onChange,
 	focusFirst = false,
 	setFocustFirst,
@@ -33,6 +35,9 @@ function InputText({
 	const refInput = useRef<HTMLInputElement>(null);
 
 	const getMaxWidth = () => {
+		if (style !== undefined) {
+			return undefined;
+		}
 		switch (widthType) {
 			case INPUT_TYPE_WIDTH.FILL:
 				return '100%';
@@ -65,7 +70,7 @@ function InputText({
 			autoCorrect='off'
 			autoCapitalize='off'
 			spellCheck='false'
-			style={{ maxWidth: getMaxWidth() }}
+			style={{ ...style, maxWidth: getMaxWidth() }}
 			disabled={disabled}
 		/>
 	);

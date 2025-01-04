@@ -21,7 +21,7 @@ import {
 	AiOutlineZoomOut,
 } from 'react-icons/ai';
 import { BiExport, BiImport, BiSave } from 'react-icons/bi';
-import { BsPlay } from 'react-icons/bs';
+import { BsClipboardData, BsPlay } from 'react-icons/bs';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { FiMap } from 'react-icons/fi';
 import { IoIosRedo, IoIosUndo, IoMdArrowBack } from 'react-icons/io';
@@ -54,6 +54,7 @@ import {
 	triggerPlay,
 	triggerSave,
 	triggerSaveAll,
+	triggerSystems,
 	triggerTreeMap,
 	triggerVariables,
 } from '../store';
@@ -62,6 +63,7 @@ import Button from './Button';
 import Dialog from './dialogs/Dialog';
 import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
 import DialogNewProject from './dialogs/DialogNewProject';
+import DialogSystems from './dialogs/DialogSystems';
 import DialogVariables from './dialogs/DialogVariables';
 import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
@@ -77,6 +79,7 @@ function MainMenuBar() {
 	const { t } = useTranslation();
 
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
+	const [isDialogSystemsOpen, setIsDialogSystemsOpen] = useState(false);
 	const [isDialogVariablesOpen, setIsDialogVariablesOpen] = useState(false);
 	const [isDialogChangeLanguageOpen, setIsDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
@@ -161,7 +164,7 @@ function MainMenuBar() {
 		dispatch(setOpenLoading(true));
 		if (await Platform.checkFileExists(project.location)) {
 			await addProject(project);
-			Project.current = new Project(project.name, project.location);
+			Project.current = new Project(project.location);
 			await Project.current.load();
 			if (Project.current.settings.projectVersion !== Project.VERSION) {
 				setIsDialogWarningProjectVersionOpen(true);
@@ -330,6 +333,10 @@ function MainMenuBar() {
 
 	const handleZoomOut = async () => {
 		Scene.Map.current!.zoomOut();
+	};
+
+	const handleSystemsManager = async () => {
+		setIsDialogSystemsOpen(true);
 	};
 
 	const handleVariablesManager = async () => {
@@ -532,9 +539,16 @@ function MainMenuBar() {
 			title: t('management'),
 			children: [
 				{
+					title: `${t('systems.manager')}...`,
+					icon: <BsClipboardData />,
+					onClick: handleSystemsManager,
+					disabled: !isProjectOpened,
+				},
+				{
 					title: `${t('variables.manager')}...`,
 					icon: <TbNumbers />,
 					onClick: handleVariablesManager,
+					disabled: !isProjectOpened,
 				},
 			],
 		},
@@ -593,6 +607,9 @@ function MainMenuBar() {
 		} else if (triggers.saveAll) {
 			dispatch(triggerSaveAll(false));
 			handleSaveAll().catch(console.error);
+		} else if (triggers.systems) {
+			dispatch(triggerSystems(false));
+			handleSystemsManager().catch(console.error);
 		} else if (triggers.variables) {
 			dispatch(triggerVariables(false));
 			handleVariablesManager().catch(console.error);
@@ -699,6 +716,7 @@ function MainMenuBar() {
 				setIsOpen={setIsDialogNewProjectOpen}
 				onAccept={handleAcceptNewProject}
 			/>
+			<DialogSystems isOpen={isDialogSystemsOpen} setIsOpen={setIsDialogSystemsOpen} />
 			<DialogVariables isOpen={isDialogVariablesOpen} setIsOpen={setIsDialogVariablesOpen} />
 			<DialogChangeLanguage isOpen={isDialogChangeLanguageOpen} setIsOpen={setIsDialogChangeLanguageOpen} />
 			<Dialog
