@@ -34,6 +34,10 @@ class FontName extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault() {
+		super.applyDefault(FontName.getBindings([]));
+	}
+
 	copy(fontName: FontName, additionnalBinding: BindingType[] = []): void {
 		super.copy(fontName, FontName.getBindings(additionnalBinding));
 	}

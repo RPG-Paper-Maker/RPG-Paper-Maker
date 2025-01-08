@@ -25,6 +25,8 @@ export const NODE_CONSTRUCTOR_KIND = {
 	MapObjectCommand: () => Model.MapObjectCommand,
 	MapObjectCommandMove: () => Model.MapObjectCommandMove,
 	Object3D: () => Model.Object3D,
+	FontSize: () => Model.FontSize,
+	FontName: () => Model.FontName,
 };
 
 class Node extends Serializable {

@@ -21,6 +21,7 @@ class Project {
 	public settings = new Data.Settings();
 	public systems = new Data.System();
 	public treeMaps = new Data.TreeMaps();
+	public fonts = new Data.Fonts();
 	public pictures = new Data.Pictures();
 	public shapes = new Data.Shapes();
 	public songs = new Data.Songs();
@@ -71,6 +72,7 @@ class Project {
 	async load() {
 		await this.languages.load();
 		await this.variables.load();
+		await this.fonts.load();
 		await this.pictures.load();
 		await this.shapes.load();
 		await this.songs.load();

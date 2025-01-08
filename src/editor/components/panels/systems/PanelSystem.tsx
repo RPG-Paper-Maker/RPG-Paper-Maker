@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Model } from '../../../Editor';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, SONG_KIND } from '../../../common';
-import { Project } from '../../../core';
+import { Node, Project } from '../../../core';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
@@ -28,10 +28,13 @@ import InputLocalization from '../../InputLocalization';
 import InputNumber from '../../InputNumber';
 import InputText from '../../InputText';
 import PlaySongSelector, { PlaySongSelectorRef } from '../../PlaySongSelector';
+import Tree from '../../Tree';
 import DialogEnterNameOptions from '../../dialogs/DialogEnterNameOptions';
 import DialogCommandSetDialogBoxOptions from '../../dialogs/commands/DialogCommandSetDialogBoxOptions';
 
-const PanelSystem = forwardRef(({}, ref) => {
+const TREES_STYLE_HEIGHT = { height: '200px' };
+
+const PanelSystem = forwardRef((props, ref) => {
 	const { t } = useTranslation();
 
 	const playCursorSoundSelectorRef = useRef<PlaySongSelectorRef>();
@@ -71,6 +74,10 @@ const PanelSystem = forwardRef(({}, ref) => {
 	const [saveSlots, setSaveSlots] = useStateNumber();
 	const [priceSoldItem] = useStateDynamicValue();
 	const [enterNameTable, setEnterNameTable] = useState<string[][]>([]);
+	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
+	const [fontSizes, setFontSizes] = useState<Node[]>([]);
+	const [fontNames, setFontNames] = useState<Node[]>([]);
+	const [colors, setColors] = useState<Node[]>([]);
 
 	const initialize = () => {
 		const systems = Project.current!.systems;
@@ -108,6 +115,10 @@ const PanelSystem = forwardRef(({}, ref) => {
 		setSaveSlots(systems.saveSlots);
 		priceSoldItem.copy(systems.priceSoldItem);
 		setEnterNameTable(systems.enterNameTable);
+		setForcedCurrentIndex(0);
+		setFontSizes(Node.createList(systems.fontSizes));
+		setFontNames(Node.createList(systems.fontNames));
+		setColors(Node.createList(systems.colors));
 	};
 
 	const handleClickDefaultDialogBoxOptions = () => {
@@ -161,6 +172,9 @@ const PanelSystem = forwardRef(({}, ref) => {
 		systems.saveSlots = saveSlots;
 		systems.priceSoldItem.copy(priceSoldItem);
 		systems.enterNameTable = enterNameTable;
+		systems.fontSizes = Node.createListFromNodes(fontSizes);
+		systems.fontNames = Node.createListFromNodes(fontNames);
+		systems.colors = Node.createListFromNodes(colors);
 	};
 
 	useImperativeHandle(ref, () => ({
@@ -169,9 +183,9 @@ const PanelSystem = forwardRef(({}, ref) => {
 	}));
 
 	return (
-		<React.Fragment key={0}>
-			<Flex spaced>
-				<Flex column spacedLarge className='scrollable'>
+		<>
+			<Flex spacedLarge>
+				<Flex column spacedLarge>
 					<Flex column spaced>
 						<div>{t('game.name')}:</div>
 						<InputLocalization
@@ -382,6 +396,49 @@ const PanelSystem = forwardRef(({}, ref) => {
 						</Flex>
 					</Groupbox>
 				</Flex>
+				<Flex column spaced fillWidth>
+					<Flex spaced>
+						<Flex one>
+							<Groupbox title={t('font.sizes')} fillWidth>
+								<Flex one style={TREES_STYLE_HEIGHT}>
+									<Tree
+										constructorType={Model.FontSize}
+										list={fontSizes}
+										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										noScrollOnForce
+									/>
+								</Flex>
+							</Groupbox>
+						</Flex>
+						<Flex one>
+							<Groupbox title={t('font.names')} fillWidth>
+								<Flex one style={TREES_STYLE_HEIGHT}>
+									<Tree
+										constructorType={Model.FontName}
+										list={fontNames}
+										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										noScrollOnForce
+									/>
+								</Flex>
+							</Groupbox>
+						</Flex>
+						<Flex one>
+							<Groupbox title={t('colors')} fillWidth>
+								<Flex one style={TREES_STYLE_HEIGHT}>
+									<Tree
+										constructorType={Model.Color}
+										list={colors}
+										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										noScrollOnForce
+									/>
+								</Flex>
+							</Groupbox>
+						</Flex>
+					</Flex>
+				</Flex>
 			</Flex>
 			<DialogEnterNameOptions
 				isOpen={isDialogEnterNameOptionsOpen}
@@ -389,7 +446,7 @@ const PanelSystem = forwardRef(({}, ref) => {
 				options={enterNameTable}
 				onAccept={handleAcceptEnterNameOptions}
 			/>
-		</React.Fragment>
+		</>
 	);
 });
 

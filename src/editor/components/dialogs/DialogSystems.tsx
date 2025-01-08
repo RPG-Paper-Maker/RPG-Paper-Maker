@@ -61,9 +61,10 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 		>
 			<Tab
 				titles={[Model.Base.create(1, t('system')), Model.Base.create(2, t('battle.system'))]}
-				contents={[<PanelSystem ref={panelSystemRef} />, null]}
+				contents={[<PanelSystem key={0} ref={panelSystemRef} />, <div key={1}>Battle System</div>]}
 				padding
 				scrollableContent
+				preloadAllContent
 			/>
 		</Dialog>
 	);

@@ -31,6 +31,8 @@ import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
 import DialogCost from './dialogs/models/DialogCost';
 import DialogDynamicNumber from './dialogs/models/DialogDynamicNumber';
+import DialogFontName from './dialogs/models/DialogFontName';
+import DialogFontSize from './dialogs/models/DialogFontSize';
 import DialogLocalization from './dialogs/models/DialogLocalization';
 import DialogMapObjectCommand from './dialogs/models/DialogMapObjectCommand';
 import DialogMapObjectCommandMove from './dialogs/models/DialogMapObjectCommandMove';
@@ -75,6 +77,7 @@ type Props = {
 	disabled?: boolean;
 	scrollable?: boolean;
 	multipleSelection?: boolean;
+	noScrollOnForce?: boolean;
 };
 
 export const TREES_MIN_WIDTH = 150;
@@ -109,6 +112,7 @@ function Tree({
 	disabled = false,
 	scrollable = false,
 	multipleSelection = false,
+	noScrollOnForce = false,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -169,7 +173,7 @@ function Tree({
 	const isSelected = (id: number) => id === (byIndex ? getNewIndex() : getNodeID());
 
 	const scrollToSelectedElement = () => {
-		if (selectedElementRef.current) {
+		if (!noScrollOnForce && selectedElementRef.current) {
 			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'center' });
 		}
 	};
@@ -771,6 +775,10 @@ function Tree({
 					return <DialogRandomBattle {...options} />;
 				case Model.DynamicNumber:
 					return <DialogDynamicNumber {...options} />;
+				case Model.FontSize:
+					return <DialogFontSize {...options} />;
+				case Model.FontName:
+					return <DialogFontName {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

@@ -1,5 +1,7 @@
 export * from './DialogCost';
 export * from './DialogDynamicNumber';
+export * from './DialogFontName';
+export * from './DialogFontSize';
 export * from './DialogLocalization';
 export * from './DialogMapObject';
 export * from './DialogMapObjectCommand';

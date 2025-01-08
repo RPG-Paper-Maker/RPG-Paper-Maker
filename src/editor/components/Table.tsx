@@ -60,6 +60,7 @@ function Table({ values, onChange }: Props) {
 		return () => {
 			currentDialog.removeEventListener('mousedown', handleMouseDownOutside as EventListener);
 		};
+		// eslint-disable-next-line
 	}, []);
 
 	return (

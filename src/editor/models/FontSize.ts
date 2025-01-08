@@ -14,14 +14,18 @@ import { DynamicValue } from '../core/DynamicValue';
 import { Base } from './Base';
 
 class FontSize extends Base {
-	public value!: DynamicValue;
+	public size!: DynamicValue;
 
 	public static bindings: BindingType[] = [
-		['value', 'v', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 1), BINDING.DYNAMIC_VALUE, DynamicValue],
+		['size', 's', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 1), BINDING.DYNAMIC_VALUE, DynamicValue],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	applyDefault() {
+		super.applyDefault(FontSize.getBindings([]));
 	}
 
 	copy(fontSize: FontSize, additionnalBinding: BindingType[] = []): void {

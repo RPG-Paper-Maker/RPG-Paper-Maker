@@ -4,6 +4,7 @@ export * from './BattleSystem';
 export * from './Classes';
 export * from './CommonEvents';
 export * from './EngineSettings';
+export * from './Fonts';
 export * from './Heroes';
 export * from './Items';
 export * from './Keyboard';
