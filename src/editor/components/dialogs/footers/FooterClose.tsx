@@ -10,25 +10,20 @@
 */
 
 import { useTranslation } from 'react-i18next';
-import { BUTTON_TYPE } from '../../../common';
 import Button from '../../Button';
 
 type Props = {
-	onNo: () => void;
-	onYes: () => void;
+	onClose: () => void;
 };
 
-function FooterNoYes({ onNo, onYes }: Props) {
+function FooterClose({ onClose }: Props) {
 	const { t } = useTranslation();
 
 	return (
 		<div className='footerButtons'>
-			<Button onClick={onNo}>{t('no')}</Button>
-			<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={onYes}>
-				{t('yes')}
-			</Button>
+			<Button onClick={onClose}>{t('close')}</Button>
 		</div>
 	);
 }
 
-export default FooterNoYes;
+export default FooterClose;

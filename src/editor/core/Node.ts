@@ -28,6 +28,7 @@ export const NODE_CONSTRUCTOR_KIND = {
 	FontSize: () => Model.FontSize,
 	FontName: () => Model.FontName,
 	Color: () => Model.Color,
+	WindowSkin: () => Model.WindowSkin,
 };
 
 class Node extends Serializable {

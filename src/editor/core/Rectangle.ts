@@ -42,6 +42,13 @@ class Rectangle {
 		return this.x === rect.x && this.y === rect.y && this.width === rect.width && this.height === rect.height;
 	}
 
+	copy(rectangle: Rectangle) {
+		this.x = rectangle.x;
+		this.y = rectangle.y;
+		this.width = rectangle.width;
+		this.height = rectangle.height;
+	}
+
 	clone() {
 		return new Rectangle(this.x, this.y, this.width, this.height);
 	}

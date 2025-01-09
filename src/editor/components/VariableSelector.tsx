@@ -12,7 +12,6 @@
 import { useEffect, useState } from 'react';
 import { Node, Project } from '../core';
 import { Model } from '../Editor';
-import '../styles/Input.css';
 import Button from './Button';
 import DialogVariables from './dialogs/DialogVariables';
 import { INPUT_WIDTH } from './DynamicValueSelector';

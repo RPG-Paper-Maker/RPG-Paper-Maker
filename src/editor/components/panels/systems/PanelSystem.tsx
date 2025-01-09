@@ -78,6 +78,7 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [fontSizes, setFontSizes] = useState<Node[]>([]);
 	const [fontNames, setFontNames] = useState<Node[]>([]);
 	const [colors, setColors] = useState<Node[]>([]);
+	const [windowSkins, setWindowSkins] = useState<Node[]>([]);
 
 	const initialize = () => {
 		const systems = Project.current!.systems;
@@ -119,6 +120,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		setFontSizes(Node.createList(systems.fontSizes));
 		setFontNames(Node.createList(systems.fontNames));
 		setColors(Node.createList(systems.colors));
+		setWindowSkins(Node.createList(systems.windowSkins));
 	};
 
 	const handleClickDefaultDialogBoxOptions = () => {
@@ -175,6 +177,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		systems.fontSizes = Node.createListFromNodes(fontSizes);
 		systems.fontNames = Node.createListFromNodes(fontNames);
 		systems.colors = Node.createListFromNodes(colors);
+		systems.windowSkins = Node.createListFromNodes(windowSkins);
 	};
 
 	useImperativeHandle(ref, () => ({
@@ -404,6 +407,47 @@ const PanelSystem = forwardRef((props, ref) => {
 									<Tree
 										constructorType={Model.FontSize}
 										list={fontSizes}
+										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										noScrollOnForce
+									/>
+								</Flex>
+							</Groupbox>
+						</Flex>
+						<Flex one>
+							<Groupbox title={t('font.names')} fillWidth>
+								<Flex one style={TREES_STYLE_HEIGHT}>
+									<Tree
+										constructorType={Model.FontName}
+										list={fontNames}
+										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										noScrollOnForce
+									/>
+								</Flex>
+							</Groupbox>
+						</Flex>
+						<Flex one>
+							<Groupbox title={t('colors')} fillWidth>
+								<Flex one style={TREES_STYLE_HEIGHT}>
+									<Tree
+										constructorType={Model.Color}
+										list={colors}
+										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										noScrollOnForce
+									/>
+								</Flex>
+							</Groupbox>
+						</Flex>
+					</Flex>
+					<Flex spaced>
+						<Flex one>
+							<Groupbox title={t('window.skins')} fillWidth>
+								<Flex one style={TREES_STYLE_HEIGHT}>
+									<Tree
+										constructorType={Model.WindowSkin}
+										list={windowSkins}
 										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
 										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 										noScrollOnForce

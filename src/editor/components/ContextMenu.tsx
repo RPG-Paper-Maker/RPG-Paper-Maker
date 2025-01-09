@@ -13,7 +13,6 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MenuItemType, Utils } from '../common';
 import { RootState } from '../store';
-import '../styles/Menu.css';
 import MenuCustom from './MenuCustom';
 
 type Props = {

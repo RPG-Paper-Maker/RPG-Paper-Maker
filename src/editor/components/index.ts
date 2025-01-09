@@ -17,6 +17,7 @@ export * from './SliderDynamic';
 export * from './Splitter';
 export * from './Tab';
 export * from './TextureSquareSelector';
+export * from './TextureWindowSkinSelector';
 export * from './Toolbar';
 export * from './Tree';
 export * from './TreeItem';

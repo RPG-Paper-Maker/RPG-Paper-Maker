@@ -44,6 +44,7 @@ import DialogMapObjectProperty from './dialogs/models/DialogMapObjectProperty';
 import DialogMapObjectState from './dialogs/models/DialogMapObjectState';
 import DialogName from './dialogs/models/DialogName';
 import DialogRandomBattle from './dialogs/models/DialogRandomBattle';
+import DialogWindowSkin from './dialogs/models/DialogWindowSkin';
 import Flex from './Flex';
 import InputText from './InputText';
 import TreeItem from './TreeItem';
@@ -529,6 +530,7 @@ function Tree({
 			scrollToSelectedElement();
 			setNeedScroll(false);
 		}
+		// eslint-disable-next-line
 	}, [needScroll, currentSelectedItemNode]);
 
 	useEffect(() => {
@@ -782,6 +784,8 @@ function Tree({
 					return <DialogFontName {...options} />;
 				case Model.Color:
 					return <DialogColor {...options} />;
+				case Model.WindowSkin:
+					return <DialogWindowSkin {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

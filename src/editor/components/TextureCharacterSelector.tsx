@@ -11,7 +11,6 @@
 
 import { Constants } from '../common';
 import { Project, Rectangle } from '../core';
-import '../styles/Tree.css';
 import TextureSquareSelector from './TextureSquareSelector';
 
 type Props = {

@@ -13,7 +13,6 @@ import { useEffect, useState } from 'react';
 import { LuLanguages } from 'react-icons/lu';
 import { INPUT_TYPE_WIDTH } from '../common';
 import { Model } from '../Editor';
-import '../styles/Input.css';
 import Button from './Button';
 import DialogLocalization from './dialogs/models/DialogLocalization';
 import Flex from './Flex';

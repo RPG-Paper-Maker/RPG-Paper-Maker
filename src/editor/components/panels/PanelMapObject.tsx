@@ -384,7 +384,7 @@ const PanelMapObject = forwardRef(
 
 		return (
 			<>
-				<Flex column fillHeight spaced>
+				<Flex column fillWidth fillHeight spaced>
 					<Flex centerV spaced>
 						{!hideNameID && (
 							<Flex centerV spaced>

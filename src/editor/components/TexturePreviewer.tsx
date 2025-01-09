@@ -11,7 +11,6 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Picture2D } from '../core';
-import '../styles/Tree.css';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;

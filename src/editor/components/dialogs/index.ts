@@ -4,6 +4,7 @@ export * from './DialogEnterNameOptions';
 export * from './DialogNewProject';
 export * from './DialogObjects3DPreview';
 export * from './DialogPicturesPreview';
+export * from './DialogRectangle';
 export * from './DialogSelectMapPosition';
 export * from './DialogSongsPreview';
 export * from './DialogSystems';

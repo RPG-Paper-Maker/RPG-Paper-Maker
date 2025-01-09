@@ -27,6 +27,8 @@ type Props = {
 	square?: boolean;
 	small?: boolean;
 	onClick?: () => void;
+	onMouseEnter?: () => void;
+	onMouseLeave?: () => void;
 };
 
 function Button({
@@ -43,6 +45,8 @@ function Button({
 	square = false,
 	small = false,
 	onClick,
+	onMouseEnter,
+	onMouseLeave,
 }: Props) {
 	const [activeState, setActiveState] = useState(active);
 	const ref = useRef<HTMLButtonElement>(null);
@@ -98,6 +102,8 @@ function Button({
 				buttonType
 			)}
 			onClick={handleClick}
+			onMouseEnter={onMouseEnter}
+			onMouseLeave={onMouseLeave}
 		>
 			{icon}
 			{children}

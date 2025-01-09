@@ -108,7 +108,7 @@ function PanelAssetsPreviewer({
 	};
 
 	return (
-		<Flex column spacedLarge fillHeight>
+		<Flex column spacedLarge fillWidth fillHeight>
 			{itemsAvailable && (
 				<Flex spacedLarge>
 					<Flex one>

@@ -11,7 +11,6 @@
 
 import { useTranslation } from 'react-i18next';
 import { BUTTON_TYPE } from '../../../common';
-import '../../../styles/Footer.css';
 import Button from '../../Button';
 
 type Props = {

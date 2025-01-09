@@ -154,6 +154,10 @@ code {
 	cursor: pointer !important;
 }
 
+.crosshair {
+	cursor: crosshair !important;
+}
+
 .grabbing {
 	cursor: grabbing !important;
 }

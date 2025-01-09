@@ -13,7 +13,6 @@ import { useLayoutEffect, useState } from 'react';
 import { ArrayUtils, EVENT_COMMAND_KIND } from '../common';
 import { Node } from '../core';
 import { Model } from '../Editor';
-import '../styles/Tree.css';
 import Tree from './Tree';
 
 type Props = {

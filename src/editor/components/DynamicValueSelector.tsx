@@ -15,7 +15,6 @@ import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Model } from '../Editor';
 import '../styles/DynamicValueSelector.css';
-import '../styles/Input.css';
 import Dropdown from './Dropdown';
 import Flex from './Flex';
 import InputNumber from './InputNumber';

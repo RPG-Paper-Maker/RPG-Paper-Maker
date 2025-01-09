@@ -20,7 +20,6 @@ import { EngineSettings } from '../data/EngineSettings';
 import { Model } from '../Editor';
 import { RootState, triggerOpenProject } from '../store';
 import { setLoading, setProjects } from '../store/slices/ProjectsReducer';
-import '../styles/MenuSub.css';
 import '../styles/ProjectPreview.css';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';

@@ -20,7 +20,6 @@ import {
 	setCurrentTilesetFloorTexture,
 	setCurrentTilesetSpriteTexture,
 } from '../store';
-import '../styles/Tree.css';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;

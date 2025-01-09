@@ -18,7 +18,6 @@ import { Node, Project } from '../core';
 import { Model } from '../Editor';
 import { TreeMapTag } from '../models';
 import { RootState, setCopiedItems, setNeedsReloadMap } from '../store';
-import '../styles/Tree.css';
 import Dialog from './dialogs/Dialog';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import DialogMapProperties from './dialogs/models/DialogMapProperties';

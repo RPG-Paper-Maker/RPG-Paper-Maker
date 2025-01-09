@@ -12,7 +12,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Manager, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
-import '../styles/MapEditor.css';
 import Loader from './Loader';
 
 type Props = {

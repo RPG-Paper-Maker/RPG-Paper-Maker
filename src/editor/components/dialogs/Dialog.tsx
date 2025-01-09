@@ -17,6 +17,7 @@ import { Utils } from '../../common/Utils';
 import { Inputs } from '../../managers';
 import { setIsOpeningNewDialog } from '../../store/slices/TriggersReducer';
 import '../../styles/Dialog.css';
+import '../../styles/Footer.css';
 import Flex from '../Flex';
 import Loader from '../Loader';
 

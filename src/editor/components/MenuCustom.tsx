@@ -11,7 +11,6 @@
 
 import { ReactElement, useEffect } from 'react';
 import { KEY, MenuItemType, SPECIAL_KEY } from '../common';
-import '../styles/Menu.css';
 import Menu from './Menu';
 import MenuItem from './MenuItem';
 import MenuSub from './MenuSub';
