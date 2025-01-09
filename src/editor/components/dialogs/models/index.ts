@@ -1,3 +1,4 @@
+export * from './DialogColor';
 export * from './DialogCost';
 export * from './DialogDynamicNumber';
 export * from './DialogFontName';

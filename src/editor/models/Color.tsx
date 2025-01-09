@@ -31,6 +31,14 @@ class Color extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault() {
+		super.applyDefault(Color.getBindings([]));
+		this.red = 0;
+		this.green = 0;
+		this.blue = 0;
+		this.alpha = 1;
+	}
+
 	copy(color: Color, additionnalBinding: BindingType[] = []): void {
 		super.copy(color, Color.getBindings(additionnalBinding));
 	}

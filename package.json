@@ -5,6 +5,7 @@
 	"author": "Marie Laporte",
 	"private": true,
 	"dependencies": {
+		"@rc-component/color-picker": "^2.0.1",
 		"@reduxjs/toolkit": "^2.4.0",
 		"@testing-library/jest-dom": "^6.6.3",
 		"@testing-library/react": "^16.0.1",

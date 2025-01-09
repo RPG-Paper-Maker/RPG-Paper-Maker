@@ -29,6 +29,7 @@ import { Inputs } from '../managers';
 import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
+import DialogColor from './dialogs/models/DialogColor';
 import DialogCost from './dialogs/models/DialogCost';
 import DialogDynamicNumber from './dialogs/models/DialogDynamicNumber';
 import DialogFontName from './dialogs/models/DialogFontName';
@@ -779,6 +780,8 @@ function Tree({
 					return <DialogFontSize {...options} />;
 				case Model.FontName:
 					return <DialogFontName {...options} />;
+				case Model.Color:
+					return <DialogColor {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

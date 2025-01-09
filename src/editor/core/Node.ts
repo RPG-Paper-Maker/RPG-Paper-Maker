@@ -27,6 +27,7 @@ export const NODE_CONSTRUCTOR_KIND = {
 	Object3D: () => Model.Object3D,
 	FontSize: () => Model.FontSize,
 	FontName: () => Model.FontName,
+	Color: () => Model.Color,
 };
 
 class Node extends Serializable {
