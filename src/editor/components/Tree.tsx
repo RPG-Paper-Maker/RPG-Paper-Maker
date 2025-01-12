@@ -31,6 +31,7 @@ import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
 import DialogColor from './dialogs/models/DialogColor';
 import DialogCost from './dialogs/models/DialogCost';
+import DialogCurrency from './dialogs/models/DialogCurrency';
 import DialogDynamicNumber from './dialogs/models/DialogDynamicNumber';
 import DialogFontName from './dialogs/models/DialogFontName';
 import DialogFontSize from './dialogs/models/DialogFontSize';
@@ -786,6 +787,8 @@ function Tree({
 					return <DialogColor {...options} />;
 				case Model.WindowSkin:
 					return <DialogWindowSkin {...options} />;
+				case Model.Currency:
+					return <DialogCurrency {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

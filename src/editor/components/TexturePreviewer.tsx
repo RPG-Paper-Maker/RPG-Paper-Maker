@@ -10,7 +10,7 @@
 */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Picture2D } from '../core';
+import { Picture2D, Rectangle } from '../core';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
@@ -19,9 +19,11 @@ type CurrentStateProps = {
 
 type Props = {
 	texture: string;
+	sourceRectangle?: Rectangle;
+	scale?: number;
 };
 
-function TexturePreviewer({ texture }: Props) {
+function TexturePreviewer({ texture, sourceRectangle, scale = 2 }: Props) {
 	const currentState = useState<CurrentStateProps>({
 		picture: null,
 		path: '',
@@ -33,8 +35,8 @@ function TexturePreviewer({ texture }: Props) {
 		currentState.picture = await Picture2D.loadImage(texture);
 		currentState.path = texture;
 		if (refCanvas.current) {
-			const w = currentState.picture.width * 2;
-			const h = currentState.picture.height * 2;
+			const w = (sourceRectangle ? sourceRectangle : currentState.picture).width * scale;
+			const h = (sourceRectangle ? sourceRectangle : currentState.picture).height * scale;
 			refCanvas.current.width = w;
 			refCanvas.current.height = h;
 			refCanvas.current.style.width = `${w}px`;
@@ -66,21 +68,25 @@ function TexturePreviewer({ texture }: Props) {
 			if (currentState.picture) {
 				ctx.drawImage(
 					currentState.picture,
+					sourceRectangle ? sourceRectangle.x : 0,
+					sourceRectangle ? sourceRectangle.y : 0,
+					(sourceRectangle ? sourceRectangle : currentState.picture).width,
+					(sourceRectangle ? sourceRectangle : currentState.picture).height,
 					0,
 					0,
-					currentState.picture.width * 2,
-					currentState.picture.height * 2
+					(sourceRectangle ? sourceRectangle : currentState.picture).width * scale,
+					(sourceRectangle ? sourceRectangle : currentState.picture).height * scale
 				);
 			}
 		}
-	}, [currentState]);
+	}, [currentState, sourceRectangle]);
 
 	useEffect(() => {
 		initialize().catch(console.error);
 		// eslint-disable-next-line
-	}, [texture]);
+	}, [texture, sourceRectangle]);
 
-	return <canvas ref={refCanvas} className='pointer' width={'0'} height={'0'}></canvas>;
+	return <canvas ref={refCanvas} className='pointer' width={'0'} height={'0'} />;
 }
 
 export default TexturePreviewer;

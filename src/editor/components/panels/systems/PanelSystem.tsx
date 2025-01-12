@@ -79,6 +79,7 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [fontNames, setFontNames] = useState<Node[]>([]);
 	const [colors, setColors] = useState<Node[]>([]);
 	const [windowSkins, setWindowSkins] = useState<Node[]>([]);
+	const [currencies, setCurrencies] = useState<Node[]>([]);
 
 	const initialize = () => {
 		const systems = Project.current!.systems;
@@ -121,6 +122,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		setFontNames(Node.createList(systems.fontNames));
 		setColors(Node.createList(systems.colors));
 		setWindowSkins(Node.createList(systems.windowSkins));
+		setCurrencies(Node.createList(systems.currencies));
 	};
 
 	const handleClickDefaultDialogBoxOptions = () => {
@@ -178,6 +180,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		systems.fontNames = Node.createListFromNodes(fontNames);
 		systems.colors = Node.createListFromNodes(colors);
 		systems.windowSkins = Node.createListFromNodes(windowSkins);
+		systems.currencies = Node.createListFromNodes(currencies);
 	};
 
 	useImperativeHandle(ref, () => ({
@@ -456,11 +459,11 @@ const PanelSystem = forwardRef((props, ref) => {
 							</Groupbox>
 						</Flex>
 						<Flex one>
-							<Groupbox title={t('font.names')} fillWidth>
+							<Groupbox title={t('currencies')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
 									<Tree
-										constructorType={Model.FontName}
-										list={fontNames}
+										constructorType={Model.Currency}
+										list={currencies}
 										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
 										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 										noScrollOnForce

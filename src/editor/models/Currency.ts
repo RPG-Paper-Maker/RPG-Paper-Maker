@@ -11,9 +11,9 @@
 
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
-import { Localization } from './Localization';
+import { Icon } from './Icon';
 
-class Currency extends Localization {
+class Currency extends Icon {
 	public displayInMenu!: DynamicValue;
 
 	public static bindings: BindingType[] = [
@@ -28,6 +28,10 @@ class Currency extends Localization {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	applyDefault() {
+		super.applyDefault(Currency.getBindings([]));
 	}
 
 	copy(currency: Currency): void {
