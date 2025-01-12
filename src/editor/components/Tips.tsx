@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2024 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { ReactNode, useState } from 'react';
-import '../styles/Tips.css';
-import { RxCross2 } from 'react-icons/rx';
+import { ReactNode, useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
+import { RxCross2 } from 'react-icons/rx';
+import '../styles/Tips.css';
 
 type Props = {
 	children: ReactNode;

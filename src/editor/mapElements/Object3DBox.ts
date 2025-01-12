@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2024 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -10,12 +10,12 @@
 */
 
 import * as THREE from 'three';
-import { Object3D } from './Object3D';
 import { MapElement, Model } from '../Editor';
-import { CustomGeometry, Position, Project } from '../core';
-import { Sprite } from './Sprite';
-import { Base } from './Base';
 import { JSONType } from '../common';
+import { CustomGeometry, Position, Project } from '../core';
+import { Base } from './Base';
+import { Object3D } from './Object3D';
+import { Sprite } from './Sprite';
 
 class Object3DBox extends Object3D {
 	public static COEF = 0.01;

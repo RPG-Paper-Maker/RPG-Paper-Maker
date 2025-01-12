@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2024 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { SpecialElement } from './SpecialElement';
 import { BINDING, BindingType, JSONType, MOUNTAIN_COLLISION_KIND } from '../common';
+import { SpecialElement } from './SpecialElement';
 
 class Mountain extends SpecialElement {
 	public collisionKind!: MOUNTAIN_COLLISION_KIND;
