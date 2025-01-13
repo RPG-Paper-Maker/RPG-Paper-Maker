@@ -80,6 +80,7 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [colors, setColors] = useState<Node[]>([]);
 	const [windowSkins, setWindowSkins] = useState<Node[]>([]);
 	const [currencies, setCurrencies] = useState<Node[]>([]);
+	const [speeds, setSpeeds] = useState<Node[]>([]);
 
 	const initialize = () => {
 		const systems = Project.current!.systems;
@@ -123,6 +124,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		setColors(Node.createList(systems.colors));
 		setWindowSkins(Node.createList(systems.windowSkins));
 		setCurrencies(Node.createList(systems.currencies));
+		setSpeeds(Node.createList(systems.speeds));
 	};
 
 	const handleClickDefaultDialogBoxOptions = () => {
@@ -181,6 +183,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		systems.colors = Node.createListFromNodes(colors);
 		systems.windowSkins = Node.createListFromNodes(windowSkins);
 		systems.currencies = Node.createListFromNodes(currencies);
+		systems.speeds = Node.createListFromNodes(speeds);
 	};
 
 	useImperativeHandle(ref, () => ({
@@ -472,11 +475,11 @@ const PanelSystem = forwardRef((props, ref) => {
 							</Groupbox>
 						</Flex>
 						<Flex one>
-							<Groupbox title={t('colors')} fillWidth>
+							<Groupbox title={t('speeds')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
 									<Tree
-										constructorType={Model.Color}
-										list={colors}
+										constructorType={Model.SpeedFrequency}
+										list={speeds}
 										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
 										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 										noScrollOnForce

@@ -24,11 +24,6 @@ import TextureIconPreviewer from '../../TextureIconPreviewer';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
-enum SELECTION_FONT_TYPE {
-	BASIC,
-	CUSTOM,
-}
-
 type Props = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;

@@ -16,4 +16,5 @@ export * from './DialogMapObjectState';
 export * from './DialogMapProperties';
 export * from './DialogName';
 export * from './DialogRandomBattle';
+export * from './DialogSpeedFrequency';
 export * from './DialogWindowSkin';

@@ -24,6 +24,10 @@ class SpeedFrequency extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault() {
+		super.applyDefault(SpeedFrequency.getBindings([]));
+	}
+
 	copy(speedFrequency: SpeedFrequency, additionnalBinding: BindingType[] = []): void {
 		super.copy(speedFrequency, SpeedFrequency.getBindings(additionnalBinding));
 	}

@@ -45,6 +45,7 @@ import DialogMapObjectProperty from './dialogs/models/DialogMapObjectProperty';
 import DialogMapObjectState from './dialogs/models/DialogMapObjectState';
 import DialogName from './dialogs/models/DialogName';
 import DialogRandomBattle from './dialogs/models/DialogRandomBattle';
+import DialogSpeedFrequency from './dialogs/models/DialogSpeedFrequency';
 import DialogWindowSkin from './dialogs/models/DialogWindowSkin';
 import Flex from './Flex';
 import InputText from './InputText';
@@ -789,6 +790,8 @@ function Tree({
 					return <DialogWindowSkin {...options} />;
 				case Model.Currency:
 					return <DialogCurrency {...options} />;
+				case Model.SpeedFrequency:
+					return <DialogSpeedFrequency {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

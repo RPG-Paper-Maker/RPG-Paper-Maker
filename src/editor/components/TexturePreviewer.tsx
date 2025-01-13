@@ -79,7 +79,7 @@ function TexturePreviewer({ texture, sourceRectangle, scale = 2 }: Props) {
 				);
 			}
 		}
-	}, [currentState, sourceRectangle]);
+	}, [currentState, sourceRectangle, scale]);
 
 	useEffect(() => {
 		initialize().catch(console.error);
