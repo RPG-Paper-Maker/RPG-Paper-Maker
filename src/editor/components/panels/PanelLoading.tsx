@@ -105,6 +105,8 @@ function PanelLoading({ setLoaded }: Props) {
 		Scene.Map.materialCursor = await Manager.GL.loadTexture('./Assets/cursor.png');
 		Scene.Map.materialObjectSquareCursor = await Manager.GL.loadTexture('./Assets/object-square-cursor.png');
 		Scene.Map.materialObjectSquare = await Manager.GL.loadTexture('./Assets/object-square.png');
+		Scene.Map.materialDetectionBox = await Manager.GL.loadTexture('./Assets/detection-box.png');
+		Scene.Map.materialDetectionArrow = await Manager.GL.loadTexture('./Assets/detection-arrow.png');
 		Scene.Map.pictureTilesetCursor = await Picture2D.loadImage('./Assets/tileset-cursor.png');
 		Scene.Map.pictureLayersOnCursor = await Picture2D.loadImage('./Assets/cursor-layers-on.svg');
 		Scene.Map.materialStartPosition = await Manager.GL.loadTexture('./Assets/start-position.png');

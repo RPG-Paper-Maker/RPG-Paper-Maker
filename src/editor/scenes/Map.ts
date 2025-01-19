@@ -68,13 +68,22 @@ class Map extends Base {
 	public static materialCursor: THREE.MeshPhongMaterial;
 	public static materialObjectSquareCursor: THREE.MeshPhongMaterial;
 	public static materialObjectSquare: THREE.MeshPhongMaterial;
+	public static materialDetectionBox: THREE.MeshPhongMaterial;
+	public static materialDetectionArrow: THREE.MeshPhongMaterial;
 	public static pictureTilesetCursor: HTMLImageElement;
 	public static pictureLayersOnCursor: HTMLImageElement;
 	public static materialStartPosition: THREE.MeshPhongMaterial;
 
 	public id: number;
-	public tag: Model.TreeMapTag;
+	public tag?: Model.TreeMapTag;
 	public canEdit = true;
+	public isDetection: boolean;
+	public detectionFieldLeft?: number;
+	public detectionFieldRight?: number;
+	public detectionFieldTop?: number;
+	public detectionFieldBot?: number;
+	public detectionBoxes?: globalThis.Map<Position, MapElement.Object3DBox>;
+	public detectionBoxesMesh?: THREE.Mesh;
 	public needsTreeMapUpdate = false;
 	public needsUpdateIndex: number | null = null;
 	public needsUpdateLength: number | null = null;
@@ -87,6 +96,7 @@ class Map extends Base {
 	public cursor: Cursor;
 	public cursorStartPosition!: Cursor;
 	public cursorObject!: Cursor;
+	public cursorDetection!: Cursor;
 	public cursorWall = new CursorWall();
 	public meshPlane: THREE.Object3D | null = null;
 	public sunLight!: THREE.DirectionalLight;
@@ -139,16 +149,18 @@ class Map extends Base {
 	public movingObjectInitialPosition: Position | null = null;
 	public previewDeletedMovingObject: Model.CommonObject | null = null;
 
-	constructor(tag: Model.TreeMapTag, canEdit = true) {
-		super(tag);
-		this.id = tag.id;
+	constructor(tag?: Model.TreeMapTag, canEdit = true, isDetection = false) {
+		super(tag, isDetection);
+		this.isDetection = isDetection;
+		this.id = tag?.id ?? -1;
 		this.tag = tag;
 		this.canEdit = canEdit;
-		this.cursor = new Cursor(tag.cursorPosition || new Position(), this);
+		this.cursor = new Cursor(tag?.cursorPosition || new Position(), this);
 		this.cursorObject = new Cursor(
-			new Position(0, tag.cursorPosition?.y ?? 0, tag.cursorPosition?.yPixels ?? 0, 0),
+			new Position(0, tag?.cursorPosition?.y ?? 0, tag?.cursorPosition?.yPixels ?? 0, 0),
 			this
 		);
+		this.cursorDetection = new Cursor(new Position(), this);
 	}
 
 	static getCurrentMapObjectsList = () => [
@@ -208,21 +220,25 @@ class Map extends Base {
 	}
 
 	async load() {
-		// Load map model
-		this.model.id = this.id;
-		await this.model.load();
+		if (!this.isDetection) {
+			// Load map model
+			this.model.id = this.id;
+			await this.model.load();
 
-		// Tileset texture material
-		this.materialTileset = await Manager.GL.loadTexture(
-			Project.current!.pictures.getByID(
-				PICTURE_KIND.TILESETS,
-				Project.current!.tilesets.getTilesetByID(this.model.tilesetID)?.pictureID ?? 1
-			).getPath()
-		);
-		this.materialTilesetHover = Manager.GL.createMaterial({ texture: this.materialTileset.map, hovered: true });
+			// Tileset texture material
+			this.materialTileset = await Manager.GL.loadTexture(
+				Project.current!.pictures.getByID(
+					PICTURE_KIND.TILESETS,
+					Project.current!.tilesets.getTilesetByID(this.model.tilesetID)?.pictureID ?? 1
+				).getPath()
+			);
+			this.materialTilesetHover = Manager.GL.createMaterial({ texture: this.materialTileset.map, hovered: true });
 
-		// Background
-		this.updateBackground();
+			// Background
+			this.updateBackground();
+		} else {
+			this.scene.background = new THREE.Color(0x221f2e);
+		}
 
 		// Create grid plane
 		const material = new THREE.Material();
@@ -250,13 +266,18 @@ class Map extends Base {
 			}
 			this.cursorWall.initialize();
 		}
+		if (this.isDetection) {
+			this.cursorDetection.initialize(Scene.Map.materialDetectionArrow, 1);
+		}
 
 		// Light
 		this.initializeSunLight();
 
 		// Grid
-		this.grid.initialize(this);
-		this.syncCursorGrid();
+		if (!this.isDetection) {
+			this.grid.initialize(this);
+			this.syncCursorGrid();
+		}
 
 		// Transform controls
 		if (this.canEdit) {
@@ -311,7 +332,7 @@ class Map extends Base {
 			}
 		}
 		this.portionsSaving.clear();
-		if (this.tag.saved) {
+		if (this.tag?.saved) {
 			this.tag.saved = false;
 			this.needsTreeMapUpdate = true;
 			if (Project.current) {
@@ -378,7 +399,7 @@ class Map extends Base {
 	}
 
 	updateBackgroundSkybox() {
-		let size = (10000 * Project.SQUARE_SIZE) / Constants.BASE_SQUARE_SIZE;
+		const size = (10000 * Project.SQUARE_SIZE) / Constants.BASE_SQUARE_SIZE;
 		const skyboxGeometry = new THREE.BoxGeometry(size, size, size);
 		const skyboxMesh = new THREE.Mesh(
 			skyboxGeometry,
@@ -390,6 +411,29 @@ class Map extends Base {
 			).createTextures()
 		);
 		this.scene.add(skyboxMesh);
+	}
+
+	updateDetectionGrid(left: number, right: number, top: number, bot: number) {
+		this.grid.updateDetectionGrid(this, left, right, top, bot);
+		this.detectionFieldLeft = left;
+		this.detectionFieldRight = right;
+		this.detectionFieldTop = top;
+		this.detectionFieldBot = bot;
+		this.syncCursorGrid();
+	}
+
+	initializeDetectionBoxes(boxes: globalThis.Map<Position, MapElement.Object3DBox>) {
+		this.detectionBoxes = boxes;
+		const geometry = new CustomGeometry();
+		let count = 0;
+		for (const [position, box] of boxes) {
+			box.updateGeometry(geometry, position, count);
+		}
+		geometry.updateAttributes();
+		this.detectionBoxesMesh = new THREE.Mesh(geometry, Scene.Map.materialDetectionBox);
+		this.detectionBoxesMesh.layers.enable(RAYCASTING_LAYER.OBJECTS3D);
+		this.detectionBoxesMesh.renderOrder = 999;
+		this.scene.add(this.detectionBoxesMesh);
 	}
 
 	async initializePortions() {
@@ -833,6 +877,22 @@ class Map extends Base {
 	}
 
 	syncCursorGrid() {
+		if (
+			this.isDetection &&
+			this.detectionFieldLeft !== undefined &&
+			this.detectionFieldRight !== undefined &&
+			this.detectionFieldTop !== undefined &&
+			this.detectionFieldBot !== undefined
+		) {
+			this.cursor.position.x = Math.min(
+				this.detectionFieldRight,
+				Math.max(-this.detectionFieldLeft, this.cursor.position.x)
+			);
+			this.cursor.position.z = Math.min(
+				this.detectionFieldBot,
+				Math.max(-this.detectionFieldTop, this.cursor.position.z)
+			);
+		}
 		const totalY = this.cursor.position.getTotalY();
 		this.meshPlane!.position.setY(totalY);
 		this.grid.line.position.setY(totalY + this.camera.getYOffsetDepth());
@@ -1718,7 +1778,7 @@ class Map extends Base {
 		}
 
 		// Update portions
-		if (this.canEdit) {
+		if (this.canEdit && !this.isDetection) {
 			for (const mapPortion of this.portionsToUpdate) {
 				mapPortion.updateGeometries();
 			}

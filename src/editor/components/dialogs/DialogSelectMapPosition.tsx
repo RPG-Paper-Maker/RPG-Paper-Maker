@@ -156,7 +156,7 @@ function DialogSelectMapPosition({
 				initialHeight='70%'
 				onClose={handleReject}
 			>
-				<Flex spaced fillHeight>
+				<Flex spaced fillWidth fillHeight>
 					<Flex fillHeight>
 						<TreeMaps
 							onSelectedItem={handleSelectedMapItem}

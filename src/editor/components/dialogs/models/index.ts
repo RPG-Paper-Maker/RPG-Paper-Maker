@@ -1,6 +1,7 @@
 export * from './DialogColor';
 export * from './DialogCost';
 export * from './DialogCurrency';
+export * from './DialogDetection';
 export * from './DialogDynamicNumber';
 export * from './DialogFontName';
 export * from './DialogFontSize';

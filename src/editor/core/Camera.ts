@@ -27,11 +27,14 @@ class Camera {
 	public defaultCameraPosition: THREE.Vector3;
 	public tag?: Model.TreeMapTag;
 
-	constructor(tag?: Model.TreeMapTag) {
+	constructor(tag?: Model.TreeMapTag, isDetection = false) {
 		this.tag = tag;
 		this.perspectiveCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 100000);
-		this.distance = Utils.defaultValue(tag?.cameraDistance, 800 * Project.current!.systems.getCoefSquareSize());
-		this.horizontalAngle = Utils.defaultValue(tag?.cameraHorizontalAngle, -90);
+		this.distance = Utils.defaultValue(
+			tag?.cameraDistance,
+			(isDetection ? 400 : 800) * Project.current!.systems.getCoefSquareSize()
+		);
+		this.horizontalAngle = Utils.defaultValue(tag?.cameraHorizontalAngle, isDetection ? -125 : -90);
 		this.verticalAngle = Utils.defaultValue(tag?.cameraVerticalAngle, 55);
 		this.targetPosition =
 			tag && tag.cursorPosition

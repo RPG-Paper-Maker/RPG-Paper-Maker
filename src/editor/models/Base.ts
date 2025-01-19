@@ -177,6 +177,7 @@ class Base extends Serializable {
 	]);
 	public static SCREEN_RESOLUTION_OPTIONS = Base.mapListIndex(['window', 'full.screen']);
 	public static STRETCH_REPEAT_OPTIONS = Base.mapListIndex(['stretch', 'repeat']);
+	public static DETECTION_AUTOMATIC_OPTIONS = Base.mapListIndex(['circle', 'rectangle']);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([

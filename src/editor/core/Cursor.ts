@@ -70,10 +70,12 @@ class Cursor {
 	onKeyDownImmediate() {
 		if (this.frameMove.update()) {
 			const angle = this.map.camera.horizontalAngle;
-			const minX = 0;
-			const minZ = 0;
-			const maxX = this.map.model.width - 1;
-			const maxZ = this.map.model.length - 1;
+			const minX = this.map.detectionFieldLeft === undefined ? 0 : -this.map.detectionFieldLeft;
+			const minZ = this.map.detectionFieldTop === undefined ? 0 : -this.map.detectionFieldTop;
+			const maxX =
+				this.map.detectionFieldRight === undefined ? this.map.model.width - 1 : this.map.detectionFieldRight;
+			const maxZ =
+				this.map.detectionFieldBot === undefined ? this.map.model.length - 1 : this.map.detectionFieldBot;
 			for (const key of Inputs.keys) {
 				let xPlus = 0;
 				let zPlus = 0;

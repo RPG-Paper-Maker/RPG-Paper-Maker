@@ -81,6 +81,7 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [windowSkins, setWindowSkins] = useState<Node[]>([]);
 	const [currencies, setCurrencies] = useState<Node[]>([]);
 	const [speeds, setSpeeds] = useState<Node[]>([]);
+	const [detections, setDetections] = useState<Node[]>([]);
 
 	const initialize = () => {
 		const systems = Project.current!.systems;
@@ -125,6 +126,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		setWindowSkins(Node.createList(systems.windowSkins));
 		setCurrencies(Node.createList(systems.currencies));
 		setSpeeds(Node.createList(systems.speeds));
+		setDetections(Node.createList(systems.detections));
 	};
 
 	const handleClickDefaultDialogBoxOptions = () => {
@@ -184,6 +186,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		systems.windowSkins = Node.createListFromNodes(windowSkins);
 		systems.currencies = Node.createListFromNodes(currencies);
 		systems.speeds = Node.createListFromNodes(speeds);
+		systems.detections = Node.createListFromNodes(detections);
 	};
 
 	useImperativeHandle(ref, () => ({
@@ -454,6 +457,47 @@ const PanelSystem = forwardRef((props, ref) => {
 									<Tree
 										constructorType={Model.WindowSkin}
 										list={windowSkins}
+										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										noScrollOnForce
+									/>
+								</Flex>
+							</Groupbox>
+						</Flex>
+						<Flex one>
+							<Groupbox title={t('currencies')} fillWidth>
+								<Flex one style={TREES_STYLE_HEIGHT}>
+									<Tree
+										constructorType={Model.Currency}
+										list={currencies}
+										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										noScrollOnForce
+									/>
+								</Flex>
+							</Groupbox>
+						</Flex>
+						<Flex one>
+							<Groupbox title={t('speeds')} fillWidth>
+								<Flex one style={TREES_STYLE_HEIGHT}>
+									<Tree
+										constructorType={Model.SpeedFrequency}
+										list={speeds}
+										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										noScrollOnForce
+									/>
+								</Flex>
+							</Groupbox>
+						</Flex>
+					</Flex>
+					<Flex spaced>
+						<Flex one>
+							<Groupbox title={t('detections')} fillWidth>
+								<Flex one style={TREES_STYLE_HEIGHT}>
+									<Tree
+										constructorType={Model.Detection}
+										list={detections}
 										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
 										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 										noScrollOnForce

@@ -32,6 +32,7 @@ import ContextMenu from './ContextMenu';
 import DialogColor from './dialogs/models/DialogColor';
 import DialogCost from './dialogs/models/DialogCost';
 import DialogCurrency from './dialogs/models/DialogCurrency';
+import DialogDetection from './dialogs/models/DialogDetection';
 import DialogDynamicNumber from './dialogs/models/DialogDynamicNumber';
 import DialogFontName from './dialogs/models/DialogFontName';
 import DialogFontSize from './dialogs/models/DialogFontSize';
@@ -792,6 +793,8 @@ function Tree({
 					return <DialogCurrency {...options} />;
 				case Model.SpeedFrequency:
 					return <DialogSpeedFrequency {...options} />;
+				case Model.Detection:
+					return <DialogDetection {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

@@ -20,9 +20,9 @@ class Base {
 	public initialized = false;
 	public canvas?: HTMLElement | null;
 
-	constructor(tag?: Model.TreeMapTag) {
+	constructor(tag?: Model.TreeMapTag, isDetection = false) {
 		this.scene = new THREE.Scene();
-		this.camera = new Camera(tag);
+		this.camera = new Camera(tag, isDetection);
 	}
 
 	update() {
