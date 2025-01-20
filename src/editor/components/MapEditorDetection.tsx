@@ -10,9 +10,14 @@
 */
 
 import { useEffect, useRef, useState } from 'react';
+import { ReactComponent as PixelIcon } from '../../assets/icons/pixel.svg';
+import { ReactComponent as SquareIcon } from '../../assets/icons/square.svg';
 import { Manager, MapElement, Scene } from '../Editor';
 import { Inputs } from '../managers';
+import Flex from './Flex';
 import Loader from './Loader';
+import Menu from './Menu';
+import MenuItem from './MenuItem';
 
 type Props = {
 	fieldLeft: number;
@@ -42,6 +47,7 @@ function MapEditorDetection({
 	boxes,
 }: Props) {
 	const [firstLoading, setFirstLoading] = useState(false);
+	const [elementPositionIndex, setElementPositionIndex] = useState(0);
 
 	const refCanvas = useRef<HTMLDivElement>(null);
 
@@ -96,6 +102,20 @@ function MapEditorDetection({
 		}
 	};
 
+	const handleSquare = () => {
+		if (Scene.Map.currentpositionSelector) {
+			setElementPositionIndex(0);
+			Scene.Map.currentpositionSelector.detectionSquare = true;
+		}
+	};
+
+	const handlePixel = () => {
+		if (Scene.Map.currentpositionSelector) {
+			setElementPositionIndex(1);
+			Scene.Map.currentpositionSelector.detectionSquare = false;
+		}
+	};
+
 	useEffect(() => {
 		clearMap();
 		initializeMap().catch(console.error);
@@ -116,18 +136,18 @@ function MapEditorDetection({
 	}, []);
 
 	useEffect(() => {
-		if (Scene.Map.currentpositionSelector) {
-			Scene.Map.currentpositionSelector.updateDetectionGrid(fieldLeft, fieldRight, fieldTop, fieldBot);
-		}
-		// eslint-disable-next-line
-	}, [Scene.Map.currentpositionSelector, fieldLeft, fieldRight, fieldTop, fieldBot]);
-
-	useEffect(() => {
 		if (Scene.Map.currentpositionSelector && boxes) {
 			Scene.Map.currentpositionSelector.initializeDetectionBoxes(boxes);
 		}
 		// eslint-disable-next-line
 	}, [Scene.Map.currentpositionSelector, boxes]);
+
+	useEffect(() => {
+		if (Scene.Map.currentpositionSelector) {
+			Scene.Map.currentpositionSelector.updateDetectionGrid(fieldLeft, fieldRight, fieldTop, fieldBot);
+		}
+		// eslint-disable-next-line
+	}, [Scene.Map.currentpositionSelector, fieldLeft, fieldRight, fieldTop, fieldBot]);
 
 	useEffect(() => {
 		if (Scene.Map.currentpositionSelector) {
@@ -157,9 +177,20 @@ function MapEditorDetection({
 	return (
 		<>
 			<Loader isLoading={firstLoading} />
-			<div className='mapEditor'>
-				<div ref={refCanvas} id='canvas-map-editor-detection' className='fillSpace' />
-			</div>
+			<Flex column fillHeight>
+				<Menu
+					horizontal
+					isActivable
+					activeIndex={elementPositionIndex}
+					setActiveIndex={setElementPositionIndex}
+				>
+					<MenuItem icon={<SquareIcon />} onClick={handleSquare} />
+					<MenuItem icon={<PixelIcon />} onClick={handlePixel} />
+				</Menu>
+				<div className='mapEditor'>
+					<div ref={refCanvas} id='canvas-map-editor-detection' className='fillSpace' />
+				</div>
+			</Flex>
 		</>
 	);
 }

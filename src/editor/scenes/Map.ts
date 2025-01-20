@@ -85,6 +85,7 @@ class Map extends Base {
 	public detectionBoxes?: globalThis.Map<string, MapElement.Object3DBox>;
 	public detectionBoxesMesh?: THREE.Mesh;
 	public detectionCurrentData?: Model.Object3D;
+	public detectionSquare = true;
 	public needsTreeMapUpdate = false;
 	public needsUpdateIndex: number | null = null;
 	public needsUpdateLength: number | null = null;
@@ -426,6 +427,16 @@ class Map extends Base {
 		this.detectionFieldTop = top;
 		this.detectionFieldBot = bot;
 		this.syncCursorGrid();
+		if (this.detectionBoxes) {
+			const entries = this.detectionBoxes.entries();
+			for (const [positionKey] of entries) {
+				const position = Position.fromKey(positionKey);
+				if (position.x < -left || position.x > right || position.z < -top || position.z > bot) {
+					this.detectionBoxes.delete(positionKey);
+				}
+			}
+			this.updateDetectionBoxes(this.detectionBoxes);
+		}
 	}
 
 	initializeDetectionBoxes(boxes: globalThis.Map<string, MapElement.Object3DBox>) {
@@ -1213,10 +1224,14 @@ class Map extends Base {
 		// Intersection for deleting or adding stuff
 		for (const obj of intersects) {
 			let position = new Position(
-				Math.floor(obj.point.x / Project.SQUARE_SIZE),
+				obj.point.x > 0
+					? Math.floor(obj.point.x / Project.SQUARE_SIZE)
+					: Math.ceil((obj.point.x - 1) / Project.SQUARE_SIZE),
 				this.lockedY === null ? this.cursor.position.y : this.lockedY,
 				this.lockedYPixels === null ? this.cursor.position.yPixels : this.lockedYPixels,
-				Math.floor(obj.point.z / Project.SQUARE_SIZE)
+				obj.point.z > 0
+					? Math.floor(obj.point.z / Project.SQUARE_SIZE)
+					: Math.ceil((obj.point.z - 1) / Project.SQUARE_SIZE)
 			);
 			if (
 				obj.faceIndex !== undefined &&
@@ -1266,7 +1281,11 @@ class Map extends Base {
 				}
 			}
 			if ((this.canEdit || this.isDetection) && !Scene.Map.isRemoving()) {
-				if (Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.PIXEL) {
+				if (
+					(this.isDetection && !this.detectionSquare) ||
+					(!this.isDetection &&
+						Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.PIXEL)
+				) {
 					position.centerX = ((Math.floor(obj.point.x) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
 					position.centerZ = ((Math.floor(obj.point.z) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
 				}
