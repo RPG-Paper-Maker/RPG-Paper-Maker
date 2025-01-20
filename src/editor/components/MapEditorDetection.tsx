@@ -10,7 +10,6 @@
 */
 
 import { useEffect, useRef, useState } from 'react';
-import { Position } from '../core';
 import { Manager, MapElement, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import Loader from './Loader';
@@ -20,10 +19,28 @@ type Props = {
 	fieldRight: number;
 	fieldTop: number;
 	fieldBot: number;
-	boxes?: Map<Position, MapElement.Object3DBox>;
+	newBoxLengthSquares: number;
+	newBoxLengthPixels: number;
+	newBoxWidthSquares: number;
+	newBoxWidthPixels: number;
+	newBoxHeightSquares: number;
+	newBoxHeightPixels: number;
+	boxes?: Map<string, MapElement.Object3DBox>;
 };
 
-function MapEditorDetection({ fieldLeft, fieldRight, fieldTop, fieldBot, boxes }: Props) {
+function MapEditorDetection({
+	fieldLeft,
+	fieldRight,
+	fieldTop,
+	fieldBot,
+	newBoxLengthSquares,
+	newBoxLengthPixels,
+	newBoxWidthSquares,
+	newBoxWidthPixels,
+	newBoxHeightSquares,
+	newBoxHeightPixels,
+	boxes,
+}: Props) {
 	const [firstLoading, setFirstLoading] = useState(false);
 
 	const refCanvas = useRef<HTMLDivElement>(null);
@@ -102,13 +119,35 @@ function MapEditorDetection({ fieldLeft, fieldRight, fieldTop, fieldBot, boxes }
 		if (Scene.Map.currentpositionSelector) {
 			Scene.Map.currentpositionSelector.updateDetectionGrid(fieldLeft, fieldRight, fieldTop, fieldBot);
 		}
+		// eslint-disable-next-line
 	}, [Scene.Map.currentpositionSelector, fieldLeft, fieldRight, fieldTop, fieldBot]);
 
 	useEffect(() => {
 		if (Scene.Map.currentpositionSelector && boxes) {
 			Scene.Map.currentpositionSelector.initializeDetectionBoxes(boxes);
 		}
+		// eslint-disable-next-line
 	}, [Scene.Map.currentpositionSelector, boxes]);
+
+	useEffect(() => {
+		if (Scene.Map.currentpositionSelector) {
+			Scene.Map.currentpositionSelector.detectionCurrentData!.widthSquare = newBoxLengthSquares;
+			Scene.Map.currentpositionSelector.detectionCurrentData!.widthPixel = newBoxLengthPixels;
+			Scene.Map.currentpositionSelector.detectionCurrentData!.depthSquare = newBoxWidthSquares;
+			Scene.Map.currentpositionSelector.detectionCurrentData!.depthPixel = newBoxWidthPixels;
+			Scene.Map.currentpositionSelector.detectionCurrentData!.heightSquare = newBoxHeightSquares;
+			Scene.Map.currentpositionSelector.detectionCurrentData!.heightPixel = newBoxHeightPixels;
+		}
+		// eslint-disable-next-line
+	}, [
+		Scene.Map.currentpositionSelector,
+		newBoxLengthSquares,
+		newBoxLengthPixels,
+		newBoxWidthSquares,
+		newBoxWidthPixels,
+		newBoxHeightSquares,
+		newBoxHeightPixels,
+	]);
 
 	// Resize after rendering
 	useEffect(() => {

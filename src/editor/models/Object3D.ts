@@ -79,6 +79,14 @@ class Object3D extends SpecialElement {
 		return new THREE.Vector3(this.getTotalWidthPixels(), this.getTotalHeightPixels(), this.getTotalDepthPixels());
 	}
 
+	isZeroSize(): boolean {
+		return (
+			(this.widthSquare === 0 && this.widthPixel === 0) ||
+			(this.heightSquare === 0 && this.heightPixel === 0) ||
+			(this.depthSquare === 0 && this.depthPixel === 0)
+		);
+	}
+
 	copy(object3D: Object3D, additionnalBinding: BindingType[] = []): void {
 		super.copy(object3D, Object3D.getBindings(additionnalBinding));
 	}

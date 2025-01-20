@@ -82,8 +82,9 @@ class Map extends Base {
 	public detectionFieldRight?: number;
 	public detectionFieldTop?: number;
 	public detectionFieldBot?: number;
-	public detectionBoxes?: globalThis.Map<Position, MapElement.Object3DBox>;
+	public detectionBoxes?: globalThis.Map<string, MapElement.Object3DBox>;
 	public detectionBoxesMesh?: THREE.Mesh;
+	public detectionCurrentData?: Model.Object3D;
 	public needsTreeMapUpdate = false;
 	public needsUpdateIndex: number | null = null;
 	public needsUpdateLength: number | null = null;
@@ -161,6 +162,11 @@ class Map extends Base {
 			this
 		);
 		this.cursorDetection = new Cursor(new Position(), this);
+		if (this.isDetection) {
+			this.detectionCurrentData = new Model.Object3D();
+			this.detectionCurrentData.applyDefault();
+			this.detectionCurrentData.stretch = true;
+		}
 	}
 
 	static getCurrentMapObjectsList = () => [
@@ -422,18 +428,30 @@ class Map extends Base {
 		this.syncCursorGrid();
 	}
 
-	initializeDetectionBoxes(boxes: globalThis.Map<Position, MapElement.Object3DBox>) {
+	initializeDetectionBoxes(boxes: globalThis.Map<string, MapElement.Object3DBox>) {
 		this.detectionBoxes = boxes;
 		const geometry = new CustomGeometry();
 		let count = 0;
-		for (const [position, box] of boxes) {
-			box.updateGeometry(geometry, position, count);
+		for (const [positionKey, box] of boxes) {
+			const position = Position.fromKey(positionKey);
+			count = box.updateGeometry(geometry, position, count);
 		}
 		geometry.updateAttributes();
 		this.detectionBoxesMesh = new THREE.Mesh(geometry, Scene.Map.materialDetectionBox);
 		this.detectionBoxesMesh.layers.enable(RAYCASTING_LAYER.OBJECTS3D);
 		this.detectionBoxesMesh.renderOrder = 999;
 		this.scene.add(this.detectionBoxesMesh);
+	}
+
+	updateDetectionBoxes(boxes: globalThis.Map<string, MapElement.Object3DBox>) {
+		const geometry = new CustomGeometry();
+		let count = 0;
+		for (const [positionKey, box] of boxes) {
+			const position = Position.fromKey(positionKey);
+			count = box.updateGeometry(geometry, position, count);
+		}
+		geometry.updateAttributes();
+		this.detectionBoxesMesh!.geometry = geometry;
 	}
 
 	async initializePortions() {
@@ -715,6 +733,32 @@ class Map extends Base {
 				}
 				break;
 			}
+		}
+	}
+
+	isPositionDetectionInField(position: Position): boolean {
+		return (
+			position.x >= -this.detectionFieldLeft! &&
+			position.x <= this.detectionFieldRight! &&
+			position.z >= -this.detectionFieldTop! &&
+			position.z <= this.detectionFieldBot!
+		);
+	}
+
+	addDetection(position: Position, preview = false) {
+		if (this.detectionBoxes && this.detectionBoxesMesh && this.detectionCurrentData) {
+			const newBoxes = preview ? new globalThis.Map(this.detectionBoxes) : this.detectionBoxes;
+			if (!this.detectionCurrentData.isZeroSize() && this.isPositionDetectionInField(position)) {
+				newBoxes.set(position.toKey(), MapElement.Object3DBox.create(this.detectionCurrentData!.clone()));
+			}
+			this.updateDetectionBoxes(newBoxes);
+		}
+	}
+
+	removeDetection(position: Position) {
+		if (this.detectionBoxes && this.detectionBoxesMesh) {
+			this.detectionBoxes.delete(position.toKey());
+			this.updateDetectionBoxes(this.detectionBoxes);
 		}
 	}
 
@@ -1138,6 +1182,9 @@ class Map extends Base {
 					break;
 			}
 		}
+		if (this.isDetection && Scene.Map.isRemoving()) {
+			layer = RAYCASTING_LAYER.OBJECTS3D;
+		}
 		if (isLayerOn && isSpriteOptionSelected) {
 			Manager.GL.raycaster.layers.enable(layer);
 			Manager.GL.raycaster.layers.enable(RAYCASTING_LAYER.SPRITES);
@@ -1181,38 +1228,44 @@ class Map extends Base {
 				];
 				if (newPositionKey && (Scene.Map.isRemoving() || layer === RAYCASTING_LAYER.LANDS)) {
 					const newPosition = Position.fromKey(newPositionKey);
-					if (Scene.Map.isRemoving() || isLayerOn) {
-						const element = this.getMapPortionByPosition(newPosition)?.model.getMapElement(
-							newPosition,
-							Scene.Map.currentSelectedMapElementKind
-						);
-						if (element && element.isPreview) {
+					if (this.isDetection) {
+						if (Scene.Map.isRemoving() && !this.detectionBoxes?.has(newPositionKey)) {
 							continue;
 						}
-					}
-					if (layer === RAYCASTING_LAYER.LANDS) {
-						const element = this.getMapPortionByPosition(newPosition)?.model.getMapElement(
-							newPosition,
-							ELEMENT_MAP_KIND.FLOOR
-						);
-						if (element && element.isPreview) {
+					} else {
+						if (Scene.Map.isRemoving() || isLayerOn) {
+							const element = this.getMapPortionByPosition(newPosition)?.model.getMapElement(
+								newPosition,
+								Scene.Map.currentSelectedMapElementKind
+							);
+							if (element && element.isPreview) {
+								continue;
+							}
+						}
+						if (layer === RAYCASTING_LAYER.LANDS) {
+							const element = this.getMapPortionByPosition(newPosition)?.model.getMapElement(
+								newPosition,
+								ELEMENT_MAP_KIND.FLOOR
+							);
+							if (element && element.isPreview) {
+								continue;
+							}
+						} else if (
+							this.lockedY !== null &&
+							this.lockedYPixels !== null &&
+							this.lockedLayer !== null &&
+							Scene.Map.isRemoving() &&
+							(newPosition.y !== this.lockedY ||
+								newPosition.yPixels !== this.lockedYPixels ||
+								newPosition.layer !== this.lockedLayer)
+						) {
 							continue;
 						}
-					} else if (
-						this.lockedY !== null &&
-						this.lockedYPixels !== null &&
-						this.lockedLayer !== null &&
-						Scene.Map.isRemoving() &&
-						(newPosition.y !== this.lockedY ||
-							newPosition.yPixels !== this.lockedYPixels ||
-							newPosition.layer !== this.lockedLayer)
-					) {
-						continue;
 					}
 					position = newPosition;
 				}
 			}
-			if (this.canEdit && !Scene.Map.isRemoving()) {
+			if ((this.canEdit || this.isDetection) && !Scene.Map.isRemoving()) {
 				if (Project.current!.settings.mapEditorCurrentElementPositionIndex === ELEMENT_POSITION_KIND.PIXEL) {
 					position.centerX = ((Math.floor(obj.point.x) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
 					position.centerZ = ((Math.floor(obj.point.z) % Project.SQUARE_SIZE) / Project.SQUARE_SIZE) * 100;
@@ -1329,6 +1382,15 @@ class Map extends Base {
 							}
 							break;
 					}
+				}
+			}
+			if (this.isDetection) {
+				if (Scene.Map.isAdding()) {
+					this.addDetection(position, false);
+				} else if (Scene.Map.isRemoving()) {
+					this.removeDetection(position);
+				} else {
+					this.addDetection(position, true);
 				}
 			}
 			this.lastPosition = position;
@@ -1493,62 +1555,73 @@ class Map extends Base {
 			this.camera.onMouseWheelUpdate(this === Scene.Map.current);
 		} else if (
 			!Inputs.isMouseWheelPressed &&
-			(Inputs.isCTRL || !this.canEdit) &&
+			(Inputs.isCTRL || (!this.canEdit && !this.isDetection)) &&
 			this.lastPosition &&
 			this.lastPosition.isInMap(this.model)
 		) {
 			this.cursor.position = this.lastPosition.clone();
 			this.syncCursorGrid();
 		} else {
-			if (this.canEdit && Scene.Map.isDrawing()) {
-				if (Scene.Map.isAdding() && this.lastPosition) {
-					switch (Scene.Map.currentSelectedMapElementKind) {
-						case ELEMENT_MAP_KIND.START_POSITION:
-							this.updateStartPosition(this.lastPosition);
-							break;
-						case ELEMENT_MAP_KIND.SPRITE_WALL:
-							this.cursorWall.onMouseDown(this.lastPosition);
-							break;
-						default:
-							this.updateLockedY(this.lastPosition);
-							switch (Project.current!.settings.mapEditorCurrentActionIndex) {
-								case ACTION_KIND.PENCIL:
-									this.add(this.lastPosition);
-									break;
-								case ACTION_KIND.RECTANGLE:
-									this.rectangleStartPosition = this.lastPosition.clone();
-									this.lastRectangleEndPosition = this.lastPosition.clone();
-									break;
-								case ACTION_KIND.PIN:
-									this.paintPin(
-										this.lastPosition,
-										Scene.Map.currentSelectedMapElementKind,
-										Project.current!.settings.mapEditorCurrentAutotileID,
-										Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR
-											? Project.current!.settings.mapEditorCurrentTilesetFloorTexture
-											: Project.current!.settings.mapEditorCurrentAutotileTexture
-									);
-									break;
-							}
-							if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
-								this.movingObject = this.getSelectedObject();
-								this.movingObjectInitialPosition = this.lastPosition;
-							}
-							break;
+			if ((this.canEdit && Scene.Map.isDrawing()) || this.isDetection) {
+				if (this.isDetection) {
+					if (Scene.Map.isAdding() && this.lastPosition) {
+						this.addDetection(this.lastPosition);
+					} else if (Scene.Map.isRemoving()) {
+						this.needsUpdateRaycasting = true;
 					}
-				} else if (Scene.Map.isRemoving()) {
-					if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL && this.lastPosition) {
-						this.cursorWall.onMouseDown(this.lastPosition);
-					} else {
-						switch (Project.current!.settings.mapEditorCurrentActionIndex) {
-							case ACTION_KIND.PIN:
-								if (this.lastPosition) {
-									this.paintPin(this.lastPosition, ELEMENT_MAP_KIND.NONE, -1, new Rectangle());
+				} else {
+					if (Scene.Map.isAdding() && this.lastPosition) {
+						switch (Scene.Map.currentSelectedMapElementKind) {
+							case ELEMENT_MAP_KIND.START_POSITION:
+								this.updateStartPosition(this.lastPosition);
+								break;
+							case ELEMENT_MAP_KIND.SPRITE_WALL:
+								this.cursorWall.onMouseDown(this.lastPosition);
+								break;
+							default:
+								this.updateLockedY(this.lastPosition);
+								switch (Project.current!.settings.mapEditorCurrentActionIndex) {
+									case ACTION_KIND.PENCIL:
+										this.add(this.lastPosition);
+										break;
+									case ACTION_KIND.RECTANGLE:
+										this.rectangleStartPosition = this.lastPosition.clone();
+										this.lastRectangleEndPosition = this.lastPosition.clone();
+										break;
+									case ACTION_KIND.PIN:
+										this.paintPin(
+											this.lastPosition,
+											Scene.Map.currentSelectedMapElementKind,
+											Project.current!.settings.mapEditorCurrentAutotileID,
+											Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR
+												? Project.current!.settings.mapEditorCurrentTilesetFloorTexture
+												: Project.current!.settings.mapEditorCurrentAutotileTexture
+										);
+										break;
+								}
+								if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+									this.movingObject = this.getSelectedObject();
+									this.movingObjectInitialPosition = this.lastPosition;
 								}
 								break;
 						}
-						this.lastPosition = null;
-						this.needsUpdateRaycasting = true;
+					} else if (Scene.Map.isRemoving()) {
+						if (
+							Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL &&
+							this.lastPosition
+						) {
+							this.cursorWall.onMouseDown(this.lastPosition);
+						} else {
+							switch (Project.current!.settings.mapEditorCurrentActionIndex) {
+								case ACTION_KIND.PIN:
+									if (this.lastPosition) {
+										this.paintPin(this.lastPosition, ELEMENT_MAP_KIND.NONE, -1, new Rectangle());
+									}
+									break;
+							}
+							this.lastPosition = null;
+							this.needsUpdateRaycasting = true;
+						}
 					}
 				}
 			} else if (this.canEdit && !this.transformControls.dragging && Inputs.isPointerPressed) {

@@ -55,7 +55,7 @@ function DialogDetection({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 	const [radius, setRadius] = useStateNumber();
 	const [length, setLength] = useStateNumber();
 	const [width, setWidth] = useStateNumber();
-	const [boxes, setBoxes] = useState<Map<Position, MapElement.Object3DBox>>();
+	const [boxes, setBoxes] = useState<Map<string, MapElement.Object3DBox>>();
 
 	const maxSquareSize = 99;
 	const maxPixelsSize = Project.SQUARE_SIZE - 1;
@@ -79,8 +79,8 @@ function DialogDetection({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 		setWidth(1);
 		setBoxes(
 			new Map(
-				Array.from(detection.boxes.entries(), ([key, value]) => [
-					key.clone(),
+				Array.from(detection.boxes.entries(), ([position, value]) => [
+					position.toKey(),
 					MapElement.Object3DBox.create(value.clone()),
 				])
 			)
@@ -88,6 +88,16 @@ function DialogDetection({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 	};
 
 	const reset = () => {
+		setFieldLeft(0);
+		setFieldRight(0);
+		setFieldTop(0);
+		setFieldBot(0);
+		setNewBoxLengthSquares(1);
+		setNewBoxLengthPixels(0);
+		setNewBoxWidthSquares(1);
+		setNewBoxWidthPixels(0);
+		setNewBoxHeightSquares(1);
+		setNewBoxHeightPixels(0);
 		setBoxes(undefined);
 	};
 
@@ -115,7 +125,9 @@ function DialogDetection({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 		detection.fieldRight = fieldRight;
 		detection.fieldTop = fieldTop;
 		detection.fieldBot = fieldBot;
-		detection.boxes = new Map(Array.from(boxes!.entries(), ([key, value]) => [key.clone(), value.data.clone()]));
+		detection.boxes = new Map(
+			Array.from(boxes!.entries(), ([key, value]) => [Position.fromKey(key), value.data.clone()])
+		);
 		onAccept();
 		setIsOpen(false);
 	};
@@ -274,6 +286,12 @@ function DialogDetection({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 						fieldRight={fieldRight}
 						fieldTop={fieldTop}
 						fieldBot={fieldBot}
+						newBoxLengthSquares={newBoxLengthSquares}
+						newBoxLengthPixels={newBoxLengthPixels}
+						newBoxWidthSquares={newBoxWidthSquares}
+						newBoxWidthPixels={newBoxWidthPixels}
+						newBoxHeightSquares={newBoxHeightSquares}
+						newBoxHeightPixels={newBoxHeightPixels}
 						boxes={boxes}
 					/>
 				</Flex>
