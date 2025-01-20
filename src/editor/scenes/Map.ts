@@ -773,6 +773,45 @@ class Map extends Base {
 		}
 	}
 
+	generateDetectionCircle(radius: number) {
+		if (this.detectionBoxes && this.detectionCurrentData && !this.detectionCurrentData.isZeroSize()) {
+			for (let z = -radius; z <= radius; z++) {
+				for (let x = -radius; x <= radius; x++) {
+					if (x * x + z * z <= radius * radius) {
+						this.generateDetectionXZ(x, z);
+					}
+				}
+			}
+			this.updateDetectionBoxes(this.detectionBoxes);
+		}
+	}
+
+	generateDetectionRectangle(length: number, width: number) {
+		if (this.detectionBoxes && this.detectionCurrentData && !this.detectionCurrentData.isZeroSize()) {
+			for (let z = -width; z <= width; z++) {
+				for (let x = -length; x <= length; x++) {
+					this.generateDetectionXZ(x, z);
+				}
+			}
+			this.updateDetectionBoxes(this.detectionBoxes);
+		}
+	}
+
+	generateDetectionXZ(x: number, z: number) {
+		const position = new Position(
+			this.cursor.position.x + x,
+			this.cursor.position.y,
+			this.cursor.position.yPixels,
+			this.cursor.position.z + z
+		);
+		if (this.isPositionDetectionInField(position)) {
+			this.detectionBoxes!.set(
+				position.toKey(),
+				MapElement.Object3DBox.create(this.detectionCurrentData!.clone())
+			);
+		}
+	}
+
 	updateWallFromCursor(add = true, preview = false, removePreview = true) {
 		const positions = this.cursorWall.getPositions();
 		if (removePreview) {

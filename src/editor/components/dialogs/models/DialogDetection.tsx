@@ -13,7 +13,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { INPUT_TYPE_WIDTH } from '../../../common';
 import { Position, Project } from '../../../core';
-import { MapElement, Model } from '../../../Editor';
+import { MapElement, Model, Scene } from '../../../Editor';
 import useStateNumber from '../../../hooks/useStateNumber';
 import useStateString from '../../../hooks/useStateString';
 import Button from '../../Button';
@@ -117,7 +117,15 @@ function DialogDetection({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 		setFieldTop(n);
 	};
 
-	const handleClickGenerate = () => {};
+	const handleClickGenerate = () => {
+		if (Scene.Map.currentpositionSelector) {
+			if (selectedAutomaticIndex === 0) {
+				Scene.Map.currentpositionSelector.generateDetectionCircle(radius);
+			} else {
+				Scene.Map.currentpositionSelector.generateDetectionRectangle(length, width);
+			}
+		}
+	};
 
 	const handleAccept = async () => {
 		detection.name = name;
@@ -148,7 +156,7 @@ function DialogDetection({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 
 	return (
 		<Dialog
-			title={`${t('set.font.size')}...`}
+			title={`${t('set.detection')}...`}
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
@@ -275,7 +283,7 @@ function DialogDetection({ isOpen, setIsOpen, model, onAccept, onReject }: Props
 									{!isCircle && <InputNumber value={width} onChange={setWidth} min={1} max={99} />}
 								</Value>
 							</Form>
-							<Button onClick={handleClickGenerate}>{t('generate')}...</Button>
+							<Button onClick={handleClickGenerate}>{t('generate')}</Button>
 						</Flex>
 					</Groupbox>
 				</Flex>
