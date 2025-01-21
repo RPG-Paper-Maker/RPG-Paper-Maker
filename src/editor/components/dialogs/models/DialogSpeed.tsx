@@ -30,8 +30,8 @@ type Props = {
 	onReject?: () => void;
 };
 
-function DialogSpeedFrequency({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
-	const speedFrequency = model as Model.SpeedFrequency;
+function DialogSpeed({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+	const speed = model as Model.Speed;
 
 	const { t } = useTranslation();
 
@@ -39,13 +39,13 @@ function DialogSpeedFrequency({ isOpen, setIsOpen, model, onAccept, onReject }: 
 	const [value] = useStateDynamicValue();
 
 	const initialize = () => {
-		setName(speedFrequency.name);
-		value.copy(speedFrequency.value);
+		setName(speed.name);
+		value.copy(speed.value);
 	};
 
 	const handleAccept = async () => {
-		speedFrequency.name = name;
-		speedFrequency.value.copy(value);
+		speed.name = name;
+		speed.value.copy(value);
 		onAccept();
 		setIsOpen(false);
 	};
@@ -86,4 +86,4 @@ function DialogSpeedFrequency({ isOpen, setIsOpen, model, onAccept, onReject }: 
 	);
 }
 
-export default DialogSpeedFrequency;
+export default DialogSpeed;

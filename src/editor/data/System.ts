@@ -49,8 +49,8 @@ class System extends Serializable {
 	public saveSlots!: number;
 	public priceSoldItem!: DynamicValue;
 	public enterNameTable!: string[][];
-	public speeds!: Model.SpeedFrequency[];
-	public frequencies!: Model.SpeedFrequency[];
+	public speeds!: Model.Speed[];
+	public frequencies!: Model.Frequency[];
 	public fontSizes!: Model.FontSize[];
 	public fontNames!: Model.FontName[];
 	public colors!: Model.Color[];
@@ -135,8 +135,8 @@ class System extends Serializable {
 			DynamicValue,
 		],
 		['enterNameTable', 'enterNameTable', undefined, BINDING.STRING],
-		['speeds', 'sf', [], BINDING.LIST, Model.SpeedFrequency],
-		['frequencies', 'f', [], BINDING.LIST, Model.SpeedFrequency],
+		['speeds', 'sf', [], BINDING.LIST, Model.Speed],
+		['frequencies', 'f', [], BINDING.LIST, Model.Frequency],
 		['fontSizes', 'fs', [], BINDING.LIST, Model.FontSize],
 		['fontNames', 'fn', [], BINDING.LIST, Model.FontName],
 		['colors', 'colors', [], BINDING.LIST, Model.Color],

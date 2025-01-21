@@ -37,6 +37,7 @@ import DialogDetection from './dialogs/models/DialogDetection';
 import DialogDynamicNumber from './dialogs/models/DialogDynamicNumber';
 import DialogFontName from './dialogs/models/DialogFontName';
 import DialogFontSize from './dialogs/models/DialogFontSize';
+import DialogFrequency from './dialogs/models/DialogFrequency';
 import DialogLocalization from './dialogs/models/DialogLocalization';
 import DialogMapObjectCommand from './dialogs/models/DialogMapObjectCommand';
 import DialogMapObjectCommandMove from './dialogs/models/DialogMapObjectCommandMove';
@@ -47,7 +48,7 @@ import DialogMapObjectProperty from './dialogs/models/DialogMapObjectProperty';
 import DialogMapObjectState from './dialogs/models/DialogMapObjectState';
 import DialogName from './dialogs/models/DialogName';
 import DialogRandomBattle from './dialogs/models/DialogRandomBattle';
-import DialogSpeedFrequency from './dialogs/models/DialogSpeedFrequency';
+import DialogSpeed from './dialogs/models/DialogSpeed';
 import DialogWindowSkin from './dialogs/models/DialogWindowSkin';
 import Flex from './Flex';
 import InputText from './InputText';
@@ -792,12 +793,14 @@ function Tree({
 					return <DialogWindowSkin {...options} />;
 				case Model.Currency:
 					return <DialogCurrency {...options} />;
-				case Model.SpeedFrequency:
-					return <DialogSpeedFrequency {...options} />;
+				case Model.Speed:
+					return <DialogSpeed {...options} />;
 				case Model.Detection:
 					return <DialogDetection {...options} />;
 				case Model.CameraProperty:
 					return <DialogCameraProperty {...options} />;
+				case Model.Frequency:
+					return <DialogFrequency {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

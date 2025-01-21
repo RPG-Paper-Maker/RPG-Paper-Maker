@@ -30,9 +30,10 @@ export const NODE_CONSTRUCTOR_KIND = {
 	Color: () => Model.Color,
 	WindowSkin: () => Model.WindowSkin,
 	Currency: () => Model.Currency,
-	SpeedFrequency: () => Model.SpeedFrequency,
+	Speed: () => Model.Speed,
 	Detection: () => Model.Detection,
 	CameraProperty: () => Model.CameraProperty,
+	Frequency: () => Model.Frequency,
 };
 
 class Node extends Serializable {

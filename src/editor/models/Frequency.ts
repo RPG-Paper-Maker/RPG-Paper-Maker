@@ -13,7 +13,7 @@ import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { Base } from './Base';
 
-class SpeedFrequency extends Base {
+class Frequency extends Base {
 	public value!: DynamicValue;
 
 	public static bindings: BindingType[] = [
@@ -25,20 +25,21 @@ class SpeedFrequency extends Base {
 	}
 
 	applyDefault() {
-		super.applyDefault(SpeedFrequency.getBindings([]));
+		super.applyDefault(Frequency.getBindings([]));
+		this.value.value = 0;
 	}
 
-	copy(speedFrequency: SpeedFrequency, additionnalBinding: BindingType[] = []): void {
-		super.copy(speedFrequency, SpeedFrequency.getBindings(additionnalBinding));
+	copy(frequency: Frequency, additionnalBinding: BindingType[] = []): void {
+		super.copy(frequency, Frequency.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.read(json, SpeedFrequency.getBindings(additionnalBinding));
+		super.read(json, Frequency.getBindings(additionnalBinding));
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.write(json, SpeedFrequency.getBindings(additionnalBinding));
+		super.write(json, Frequency.getBindings(additionnalBinding));
 	}
 }
 
-export { SpeedFrequency };
+export { Frequency };

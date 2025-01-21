@@ -83,6 +83,7 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [speeds, setSpeeds] = useState<Node[]>([]);
 	const [detections, setDetections] = useState<Node[]>([]);
 	const [cameraProperties, setCameraProperties] = useState<Node[]>([]);
+	const [frequencies, setFrequencies] = useState<Node[]>([]);
 
 	const initialize = () => {
 		const systems = Project.current!.systems;
@@ -129,6 +130,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		setSpeeds(Node.createList(systems.speeds));
 		setDetections(Node.createList(systems.detections));
 		setCameraProperties(Node.createList(systems.cameraProperties));
+		setFrequencies(Node.createList(systems.frequencies));
 	};
 
 	const handleClickDefaultDialogBoxOptions = () => {
@@ -484,7 +486,7 @@ const PanelSystem = forwardRef((props, ref) => {
 							<Groupbox title={t('speeds')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
 									<Tree
-										constructorType={Model.SpeedFrequency}
+										constructorType={Model.Speed}
 										list={speeds}
 										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
 										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
@@ -522,11 +524,11 @@ const PanelSystem = forwardRef((props, ref) => {
 							</Groupbox>
 						</Flex>
 						<Flex one>
-							<Groupbox title={t('speeds')} fillWidth>
+							<Groupbox title={t('frequencies')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
 									<Tree
-										constructorType={Model.SpeedFrequency}
-										list={speeds}
+										constructorType={Model.Frequency}
+										list={frequencies}
 										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
 										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 										noScrollOnForce
