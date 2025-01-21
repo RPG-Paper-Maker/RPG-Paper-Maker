@@ -82,6 +82,7 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [currencies, setCurrencies] = useState<Node[]>([]);
 	const [speeds, setSpeeds] = useState<Node[]>([]);
 	const [detections, setDetections] = useState<Node[]>([]);
+	const [cameraProperties, setCameraProperties] = useState<Node[]>([]);
 
 	const initialize = () => {
 		const systems = Project.current!.systems;
@@ -127,6 +128,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		setCurrencies(Node.createList(systems.currencies));
 		setSpeeds(Node.createList(systems.speeds));
 		setDetections(Node.createList(systems.detections));
+		setCameraProperties(Node.createList(systems.cameraProperties));
 	};
 
 	const handleClickDefaultDialogBoxOptions = () => {
@@ -187,6 +189,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		systems.currencies = Node.createListFromNodes(currencies);
 		systems.speeds = Node.createListFromNodes(speeds);
 		systems.detections = Node.createListFromNodes(detections);
+		systems.cameraProperties = Node.createListFromNodes(cameraProperties);
 	};
 
 	useImperativeHandle(ref, () => ({
@@ -506,11 +509,11 @@ const PanelSystem = forwardRef((props, ref) => {
 							</Groupbox>
 						</Flex>
 						<Flex one>
-							<Groupbox title={t('currencies')} fillWidth>
+							<Groupbox title={t('camera.proeprties')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
 									<Tree
-										constructorType={Model.Currency}
-										list={currencies}
+										constructorType={Model.CameraProperty}
+										list={cameraProperties}
 										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
 										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 										noScrollOnForce

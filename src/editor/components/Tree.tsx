@@ -29,6 +29,7 @@ import { Inputs } from '../managers';
 import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
+import DialogCameraProperty from './dialogs/models/DialogCameraProperty';
 import DialogColor from './dialogs/models/DialogColor';
 import DialogCost from './dialogs/models/DialogCost';
 import DialogCurrency from './dialogs/models/DialogCurrency';
@@ -795,6 +796,8 @@ function Tree({
 					return <DialogSpeedFrequency {...options} />;
 				case Model.Detection:
 					return <DialogDetection {...options} />;
+				case Model.CameraProperty:
+					return <DialogCameraProperty {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

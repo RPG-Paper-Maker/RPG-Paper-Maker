@@ -90,6 +90,10 @@ class CameraProperty extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault() {
+		super.applyDefault(CameraProperty.getBindings([]));
+	}
+
 	copy(cameraProperty: CameraProperty): void {
 		super.copy(cameraProperty, CameraProperty.getBindings([]));
 	}

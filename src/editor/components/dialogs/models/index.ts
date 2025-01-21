@@ -1,3 +1,4 @@
+export * from './DialogCameraProperty';
 export * from './DialogColor';
 export * from './DialogCost';
 export * from './DialogCurrency';
