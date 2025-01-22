@@ -84,6 +84,7 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [detections, setDetections] = useState<Node[]>([]);
 	const [cameraProperties, setCameraProperties] = useState<Node[]>([]);
 	const [frequencies, setFrequencies] = useState<Node[]>([]);
+	const [skyboxes, setSkyboxes] = useState<Node[]>([]);
 
 	const initialize = () => {
 		const systems = Project.current!.systems;
@@ -131,6 +132,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		setDetections(Node.createList(systems.detections));
 		setCameraProperties(Node.createList(systems.cameraProperties));
 		setFrequencies(Node.createList(systems.frequencies));
+		setSkyboxes(Node.createList(systems.skyboxes));
 	};
 
 	const handleClickDefaultDialogBoxOptions = () => {
@@ -192,6 +194,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		systems.speeds = Node.createListFromNodes(speeds);
 		systems.detections = Node.createListFromNodes(detections);
 		systems.cameraProperties = Node.createListFromNodes(cameraProperties);
+		systems.skyboxes = Node.createListFromNodes(skyboxes);
 	};
 
 	useImperativeHandle(ref, () => ({
@@ -536,6 +539,35 @@ const PanelSystem = forwardRef((props, ref) => {
 								</Flex>
 							</Groupbox>
 						</Flex>
+					</Flex>
+					<Flex spaced>
+						<Flex one>
+							<Groupbox title={t('skyboxes')} fillWidth>
+								<Flex one style={TREES_STYLE_HEIGHT}>
+									<Tree
+										constructorType={Model.Skybox}
+										list={skyboxes}
+										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										noScrollOnForce
+									/>
+								</Flex>
+							</Groupbox>
+						</Flex>
+						<Flex one>
+							<Groupbox title={t('camera.proeprties')} fillWidth>
+								<Flex one style={TREES_STYLE_HEIGHT}>
+									<Tree
+										constructorType={Model.CameraProperty}
+										list={cameraProperties}
+										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										noScrollOnForce
+									/>
+								</Flex>
+							</Groupbox>
+						</Flex>
+						<Flex one />
 					</Flex>
 				</Flex>
 			</Flex>

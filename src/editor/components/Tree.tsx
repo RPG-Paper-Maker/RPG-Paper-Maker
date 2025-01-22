@@ -48,6 +48,7 @@ import DialogMapObjectProperty from './dialogs/models/DialogMapObjectProperty';
 import DialogMapObjectState from './dialogs/models/DialogMapObjectState';
 import DialogName from './dialogs/models/DialogName';
 import DialogRandomBattle from './dialogs/models/DialogRandomBattle';
+import DialogSkybox from './dialogs/models/DialogSkybox';
 import DialogSpeed from './dialogs/models/DialogSpeed';
 import DialogWindowSkin from './dialogs/models/DialogWindowSkin';
 import Flex from './Flex';
@@ -801,6 +802,8 @@ function Tree({
 					return <DialogCameraProperty {...options} />;
 				case Model.Frequency:
 					return <DialogFrequency {...options} />;
+				case Model.Skybox:
+					return <DialogSkybox {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

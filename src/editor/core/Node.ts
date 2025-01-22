@@ -34,6 +34,7 @@ export const NODE_CONSTRUCTOR_KIND = {
 	Detection: () => Model.Detection,
 	CameraProperty: () => Model.CameraProperty,
 	Frequency: () => Model.Frequency,
+	Skybox: () => Model.Skybox,
 };
 
 class Node extends Serializable {
