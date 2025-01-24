@@ -59,6 +59,7 @@ class System extends Serializable {
 	public skyboxes!: Model.Skybox[];
 	public currencies!: Model.Currency[];
 	public detections!: Model.Detection[];
+	public initialPartyMembers!: Model.InitialPartyMember[];
 	public PATH_BR!: string;
 	public PATH_DLCS!: string;
 	public heroMapID!: number;
@@ -145,6 +146,7 @@ class System extends Serializable {
 		['skyboxes', 'sb', [], BINDING.LIST, Model.Skybox],
 		['currencies', 'currencies', [], BINDING.LIST, Model.Currency],
 		['detections', 'd', [], BINDING.LIST, Model.Detection],
+		['initialPartyMembers', 'initialPartyMembers', [], BINDING.LIST, Model.InitialPartyMember],
 		['PATH_BR', 'pathBR', undefined, BINDING.STRING],
 		['heroMapID', 'idMapHero', 1, BINDING.NUMBER],
 		['heroMapPosition', 'hmp', new Position(7, 0, 0, 7), BINDING.POSITION],

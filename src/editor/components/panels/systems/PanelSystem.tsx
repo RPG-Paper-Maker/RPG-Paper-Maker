@@ -85,6 +85,7 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [cameraProperties, setCameraProperties] = useState<Node[]>([]);
 	const [frequencies, setFrequencies] = useState<Node[]>([]);
 	const [skyboxes, setSkyboxes] = useState<Node[]>([]);
+	const [initialPartyMembers, setInitialPartyMembers] = useState<Node[]>([]);
 
 	const initialize = () => {
 		const systems = Project.current!.systems;
@@ -133,6 +134,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		setCameraProperties(Node.createList(systems.cameraProperties));
 		setFrequencies(Node.createList(systems.frequencies));
 		setSkyboxes(Node.createList(systems.skyboxes));
+		setInitialPartyMembers(Node.createList(systems.initialPartyMembers));
 	};
 
 	const handleClickDefaultDialogBoxOptions = () => {
@@ -195,6 +197,7 @@ const PanelSystem = forwardRef((props, ref) => {
 		systems.detections = Node.createListFromNodes(detections);
 		systems.cameraProperties = Node.createListFromNodes(cameraProperties);
 		systems.skyboxes = Node.createListFromNodes(skyboxes);
+		systems.initialPartyMembers = Node.createListFromNodes(initialPartyMembers);
 	};
 
 	useImperativeHandle(ref, () => ({
@@ -514,7 +517,7 @@ const PanelSystem = forwardRef((props, ref) => {
 							</Groupbox>
 						</Flex>
 						<Flex one>
-							<Groupbox title={t('camera.proeprties')} fillWidth>
+							<Groupbox title={t('camera.properties')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
 									<Tree
 										constructorType={Model.CameraProperty}
@@ -555,11 +558,11 @@ const PanelSystem = forwardRef((props, ref) => {
 							</Groupbox>
 						</Flex>
 						<Flex one>
-							<Groupbox title={t('camera.proeprties')} fillWidth>
+							<Groupbox title={t('initial.party.members')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
 									<Tree
-										constructorType={Model.CameraProperty}
-										list={cameraProperties}
+										constructorType={Model.InitialPartyMember}
+										list={initialPartyMembers}
 										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
 										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 										noScrollOnForce

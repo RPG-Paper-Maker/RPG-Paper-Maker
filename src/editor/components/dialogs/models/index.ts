@@ -7,6 +7,7 @@ export * from './DialogDynamicNumber';
 export * from './DialogFontName';
 export * from './DialogFontSize';
 export * from './DialogFrequency';
+export * from './DialogInitialPartyMember';
 export * from './DialogLocalization';
 export * from './DialogMapObject';
 export * from './DialogMapObjectCommand';

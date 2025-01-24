@@ -38,6 +38,7 @@ import DialogDynamicNumber from './dialogs/models/DialogDynamicNumber';
 import DialogFontName from './dialogs/models/DialogFontName';
 import DialogFontSize from './dialogs/models/DialogFontSize';
 import DialogFrequency from './dialogs/models/DialogFrequency';
+import DialogInitialPartyMember from './dialogs/models/DialogInitialPartyMember';
 import DialogLocalization from './dialogs/models/DialogLocalization';
 import DialogMapObjectCommand from './dialogs/models/DialogMapObjectCommand';
 import DialogMapObjectCommandMove from './dialogs/models/DialogMapObjectCommandMove';
@@ -804,6 +805,9 @@ function Tree({
 					return <DialogFrequency {...options} />;
 				case Model.Skybox:
 					return <DialogSkybox {...options} />;
+				case Model.InitialPartyMember:
+					return <DialogInitialPartyMember {...options} />;
+
 				default:
 					return <DialogName {...options} />;
 			}

@@ -61,6 +61,7 @@ function DynamicValueSelector({
 	const [valueVariableID, setValueVariableID] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.VARIABLE ? (value.value as number) : 1
 	);
+	const [forcedVariableID, setForcedVariabledID] = useState<number | null>(null);
 	const [valueKeyboardID, setValueKeyboardID] = useState(
 		value.kind === DYNAMIC_VALUE_KIND.KEYBOARD ? (value.value as number) : Project.current!.keyboard.list[0]?.id
 	);
@@ -257,6 +258,9 @@ function DynamicValueSelector({
 				break;
 			case DYNAMIC_VALUE_KIND.VARIABLE:
 				setValueVariableID(value.value as number);
+				if (valueVariableID !== value.value) {
+					setForcedVariabledID(value.value as number);
+				}
 				break;
 			case DYNAMIC_VALUE_KIND.KEYBOARD:
 				setValueVariableID(value.value as number);
@@ -297,6 +301,8 @@ function DynamicValueSelector({
 				return (
 					<VariableSelector
 						variableID={valueVariableID}
+						forcedVariableID={forcedVariableID}
+						setForcedVariableID={setForcedVariabledID}
 						onChange={handleChangeVariable}
 						disabled={disabled}
 					/>

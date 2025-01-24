@@ -26,6 +26,7 @@ export * from './FontSize';
 export * from './Frequency';
 export * from './Hero';
 export * from './Icon';
+export * from './InitialPartyMember';
 export * from './Keyboard';
 export * from './Language';
 export * from './Localization';

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { Node, Project } from '../core';
 import { Model } from '../Editor';
 import Button from './Button';
@@ -43,7 +43,7 @@ function VariableSelector({ variableID, onChange, forcedVariableID, setForcedVar
 		onChange(node.content.id);
 	};
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (forcedVariableID !== null && forcedVariableID !== undefined && setForcedVariableID) {
 			onChange(forcedVariableID);
 			node.content = getNodeContent(forcedVariableID);
