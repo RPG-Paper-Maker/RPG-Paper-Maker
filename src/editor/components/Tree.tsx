@@ -29,6 +29,7 @@ import { Inputs } from '../managers';
 import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
+import DialogBattleMap from './dialogs/models/DialogBattleMap';
 import DialogCameraProperty from './dialogs/models/DialogCameraProperty';
 import DialogColor from './dialogs/models/DialogColor';
 import DialogCost from './dialogs/models/DialogCost';
@@ -807,7 +808,8 @@ function Tree({
 					return <DialogSkybox {...options} />;
 				case Model.InitialPartyMember:
 					return <DialogInitialPartyMember {...options} />;
-
+				case Model.BattleMap:
+					return <DialogBattleMap {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

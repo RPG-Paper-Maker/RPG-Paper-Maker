@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Model } from '../../../Editor';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, EVENT_COMMAND_KIND, SONG_KIND } from '../../../common';
@@ -204,6 +204,11 @@ const PanelSystem = forwardRef((props, ref) => {
 		initialize,
 		accept,
 	}));
+
+	useLayoutEffect(() => {
+		initialize();
+		// eslint-disable-next-line
+	}, []);
 
 	return (
 		<>

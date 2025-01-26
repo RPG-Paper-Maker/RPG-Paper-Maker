@@ -15,6 +15,18 @@ import { Project, Serializable } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 
 class BattleSystem extends Serializable {
+	public levelStatisticID!: number;
+	public expStatisticID!: number;
+	public formulaIsDead!: DynamicValue;
+	public formulaCrit!: DynamicValue;
+	public heroesBattlersCenterOffset!: DynamicValue;
+	public heroesBattlersOffset!: DynamicValue;
+	public troopsBattlersCenterOffset!: DynamicValue;
+	public troopsBattlersOffset!: DynamicValue;
+	public battleMusic!: Model.PlaySong;
+	public battleLevelUp!: Model.PlaySong;
+	public battleVictory!: Model.PlaySong;
+	public cameraMoveInBattle!: boolean;
 	public statistics!: Model.Statistic[];
 	public battleMaps!: Model.BattleMap[];
 	public equipments!: Model.Localization[];
@@ -23,6 +35,54 @@ class BattleSystem extends Serializable {
 	public json!: JSONType; // TEMP, will be removed later
 
 	public static readonly bindings: BindingType[] = [
+		['levelStatisticID', 'lv', undefined, BINDING.NUMBER],
+		['expStatisticID', 'xp', undefined, BINDING.NUMBER],
+		['formulaIsDead', 'fisdead', undefined, BINDING.DYNAMIC_VALUE, DynamicValue],
+		['formulaCrit', 'fc', DynamicValue.create(DYNAMIC_VALUE_KIND.FORMULA, ''), BINDING.DYNAMIC_VALUE, DynamicValue],
+		[
+			'heroesBattlersCenterOffset',
+			'heroesBattlersCenterOffset',
+			DynamicValue.create(
+				DYNAMIC_VALUE_KIND.FORMULA,
+				'new Core.Vector3(2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)'
+			),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'heroesBattlersOffset',
+			'heroesBattlersOffset',
+			DynamicValue.create(
+				DYNAMIC_VALUE_KIND.FORMULA,
+				'new Core.Vector3(i * Datas.Systems.SQUARE_SIZE / 2, 0, i * Datas.Systems.SQUARE_SIZE)'
+			),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'troopsBattlersCenterOffset',
+			'troopsBattlersCenterOffset',
+			DynamicValue.create(
+				DYNAMIC_VALUE_KIND.FORMULA,
+				'new Core.Vector3(-2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)'
+			),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		[
+			'troopsBattlersOffset',
+			'troopsBattlersOffset',
+			DynamicValue.create(
+				DYNAMIC_VALUE_KIND.FORMULA,
+				'new Core.Vector3(-i * Datas.Systems.SQUARE_SIZE * 3 / 4, 0, i * Datas.Systems.SQUARE_SIZE)'
+			),
+			BINDING.DYNAMIC_VALUE,
+			DynamicValue,
+		],
+		['battleMusic', 'bmusic', undefined, BINDING.OBJECT, Model.PlaySong],
+		['battleLevelUp', 'blevelup', undefined, BINDING.OBJECT, Model.PlaySong],
+		['battleVictory', 'bvictory', undefined, BINDING.OBJECT, Model.PlaySong],
+		['cameraMoveInBattle', 'cmib', true, BINDING.BOOLEAN],
 		['statistics', 'statistics', [], BINDING.LIST, Model.Statistic],
 		['battleMaps', 'battleMaps', [], BINDING.LIST, Model.BattleMap],
 		['equipments', 'equipments', [], BINDING.LIST, Model.Localization],

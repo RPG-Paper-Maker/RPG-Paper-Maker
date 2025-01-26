@@ -9,11 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { initializeAcceptRef } from '../../common';
 import { Project } from '../../core';
 import { Model } from '../../Editor';
+import PanelBattleSystem from '../panels/systems/PanelBattleSystem';
 import PanelSystem from '../panels/systems/PanelSystem';
 import Tab from '../Tab';
 import Dialog from './Dialog';
@@ -28,27 +29,19 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 	const { t } = useTranslation();
 
 	const panelSystemRef = useRef<initializeAcceptRef>(null);
-
-	const initialize = () => {
-		panelSystemRef.current!.initialize();
-	};
+	const panelBattleSystemRef = useRef<initializeAcceptRef>(null);
 
 	const handleAccept = async () => {
-		panelSystemRef.current!.accept();
+		panelSystemRef.current?.accept();
+		panelBattleSystemRef.current?.accept();
 		await Project.current!.systems.save();
+		await Project.current!.battleSystem.save();
 		setIsOpen(false);
 	};
 
 	const handleReject = () => {
 		setIsOpen(false);
 	};
-
-	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
-		// eslint-disable-next-line
-	}, [isOpen]);
 
 	return (
 		<Dialog
@@ -61,10 +54,13 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 		>
 			<Tab
 				titles={[Model.Base.create(1, t('system')), Model.Base.create(2, t('battle.system'))]}
-				contents={[<PanelSystem key={0} ref={panelSystemRef} />, <div key={1}>Battle System</div>]}
+				contents={[
+					<PanelSystem key={0} ref={panelSystemRef} />,
+					<PanelBattleSystem key={1} ref={panelBattleSystemRef} />,
+				]}
 				padding
 				scrollableContent
-				preloadAllContent
+				lazyLoadingContent
 			/>
 		</Dialog>
 	);

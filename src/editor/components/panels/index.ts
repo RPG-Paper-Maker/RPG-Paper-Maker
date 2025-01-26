@@ -6,6 +6,7 @@ export * from './PanelOperation';
 export * from './PanelPosition';
 export * from './PanelProject';
 export * from './PanelSelectionHero';
+export * from './PanelSelectMapPosition';
 export * from './PanelSpecialElementsSelection';
 export * from './PanelTextures';
 export * from './PanelTransform';

@@ -68,6 +68,7 @@ function VariableSelector({ variableID, onChange, forcedVariableID, setForcedVar
 					cannotAdd
 					cannotEdit
 					cannotDragDrop
+					noScrollOnForce
 				/>
 				<Button onClick={handleOpenVariables} disabled={disabled}>
 					...

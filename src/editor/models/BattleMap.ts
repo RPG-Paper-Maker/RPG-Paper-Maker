@@ -10,7 +10,7 @@
 */
 
 import { BINDING, BindingType, JSONType } from '../common';
-import { Position } from '../core';
+import { Position, Project } from '../core';
 import { Base } from './Base';
 
 class BattleMap extends Base {
@@ -24,6 +24,16 @@ class BattleMap extends Base {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	applyDefault() {
+		super.applyDefault(BattleMap.getBindings([]));
+		this.idMap = 1;
+		this.position = new Position();
+	}
+
+	getName(): string {
+		return Base.getByID(Project.current!.treeMaps.getAllMapsList(), this.idMap)?.name ?? '';
 	}
 
 	copy(battleMap: BattleMap): void {

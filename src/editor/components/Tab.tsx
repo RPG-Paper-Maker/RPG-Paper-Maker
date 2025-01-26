@@ -30,7 +30,7 @@ type Props = {
 	setForcedCurrentIndex?: (forced: number | null) => void;
 	padding?: boolean;
 	scrollableContent?: boolean;
-	preloadAllContent?: boolean;
+	lazyLoadingContent?: boolean;
 };
 
 function Tab({
@@ -46,10 +46,11 @@ function Tab({
 	setForcedCurrentIndex,
 	padding = false,
 	scrollableContent = false,
-	preloadAllContent = false,
+	lazyLoadingContent = false,
 }: Props) {
 	const [currentIndex, setCurrentIndex] = useState(defaultIndex);
 	const [nextIndex, setNextIndex] = useState(defaultIndex); // Needed to make scrolling work properly on direct click...
+	const [openedTabs, setOpenedTabs] = useState<number[]>([]);
 
 	const selectedElementRef = useRef<HTMLDivElement>(null);
 
@@ -118,6 +119,9 @@ function Tab({
 
 	useEffect(() => {
 		scrollToSelectedElement();
+		if (!openedTabs.includes(currentIndex)) {
+			setOpenedTabs([...openedTabs, currentIndex]);
+		}
 		// eslint-disable-next-line
 	}, [currentIndex]);
 
@@ -142,12 +146,14 @@ function Tab({
 		});
 
 	const getContents = () =>
-		preloadAllContent
-			? contents.map((content, index) => (
-					<div key={index} style={{ display: currentIndex === index ? 'block' : 'none' }}>
-						{content}
-					</div>
-			  ))
+		lazyLoadingContent
+			? contents
+					.filter((content, index) => openedTabs.includes(index))
+					.map((content, index) => (
+						<div key={index} style={{ display: currentIndex === index ? 'block' : 'none' }}>
+							{content}
+						</div>
+					))
 			: contents[currentIndex];
 
 	return (
