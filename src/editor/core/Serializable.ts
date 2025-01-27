@@ -11,7 +11,7 @@
 
 import { Position, Rectangle } from '.';
 import { MapElement, Model } from '../Editor';
-import { BINDING, BindingType, JSONMapping, JSONType, KeyValue, Utils } from '../common';
+import { BINDING, BindingType, JSONMapping, JSONMappingKeyValue, JSONType, KeyValue, Utils } from '../common';
 import { Platform } from '../common/Platform';
 import { DynamicValue } from './DynamicValue';
 
@@ -42,6 +42,16 @@ class Serializable {
 				case BINDING.MAP_POSITION: {
 					const value = serializable[name as keyof Serializable] as unknown;
 					(this as JSONType)[name] = new Map(value as Map<string, unknown>);
+					break;
+				}
+				case BINDING.MAP_KEY_VALUE: {
+					const value = serializable[name as keyof Serializable] as unknown;
+					(this as JSONType)[name] = new Map(
+						Array.from((value as Map<number, Serializable>).entries(), ([key, value]) => [
+							key,
+							value.clone(),
+						])
+					);
 					break;
 				}
 				default:
@@ -196,6 +206,23 @@ class Serializable {
 					}
 					break;
 				}
+				case BINDING.MAP_KEY_VALUE: {
+					const mapping = new Map();
+					(this as JSONType)[name] = mapping;
+					const list = json[jsonName] as JSONMappingKeyValue[];
+					if (list) {
+						for (const { k, v } of list) {
+							if (constructorClass) {
+								const obj = new constructorClass() as Model.Base;
+								obj.read(v);
+								mapping.set(k, obj);
+							} else {
+								mapping.set(k, v);
+							}
+						}
+					}
+					break;
+				}
 				case BINDING.RECTANGLE: {
 					const jsonObj = json[jsonName] as number[];
 					if (!jsonObj && defaultValue === null) {
@@ -306,6 +333,21 @@ class Serializable {
 						}
 					}
 					json[jsonName] = jsonMap;
+					break;
+				}
+				case BINDING.MAP_KEY_VALUE: {
+					const mapping = (this as JSONType)[name] as Map<number, unknown>;
+					const jsonList: JSONMappingKeyValue[] = [];
+					for (const [k, v] of mapping) {
+						if (constructorClass) {
+							const jsonValue = {};
+							(v as Serializable).write(jsonValue);
+							jsonList.push({ k, v: jsonValue });
+						} else {
+							jsonList.push({ k, v: v as JSONType });
+						}
+					}
+					json[jsonName] = jsonList;
 					break;
 				}
 				case BINDING.RECTANGLE: {

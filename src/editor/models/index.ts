@@ -20,6 +20,8 @@ export * from './Currency';
 export * from './Detection';
 export * from './DynamicNumber';
 export * from './Effect';
+export * from './Element';
+export * from './ElementEfficiency';
 export * from './Font';
 export * from './FontName';
 export * from './FontSize';

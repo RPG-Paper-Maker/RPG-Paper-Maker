@@ -37,6 +37,7 @@ export const NODE_CONSTRUCTOR_KIND = {
 	Skybox: () => Model.Skybox,
 	InitialPartyMember: () => Model.InitialPartyMember,
 	BattleMap: () => Model.BattleMap,
+	Element: () => Model.Element,
 };
 
 class Node extends Serializable {

@@ -42,20 +42,10 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 	const [heroesBattlersOffset] = useStateDynamicValue();
 	const [troopsBattlersCenterOffset] = useStateDynamicValue();
 	const [troopsBattlersOffset] = useStateDynamicValue();
+	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
 	const [battleMaps, setBattleMaps] = useState<Node[]>([]);
 	const [cameraMoveInBattle, setcameraMoveInBattle] = useStateBool();
-	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
-	const [fontSizes, setFontSizes] = useState<Node[]>([]);
-	const [fontNames, setFontNames] = useState<Node[]>([]);
-	const [colors, setColors] = useState<Node[]>([]);
-	const [windowSkins, setWindowSkins] = useState<Node[]>([]);
-	const [currencies, setCurrencies] = useState<Node[]>([]);
-	const [speeds, setSpeeds] = useState<Node[]>([]);
-	const [detections, setDetections] = useState<Node[]>([]);
-	const [cameraProperties, setCameraProperties] = useState<Node[]>([]);
-	const [frequencies, setFrequencies] = useState<Node[]>([]);
-	const [skyboxes, setSkyboxes] = useState<Node[]>([]);
-	const [initialPartyMembers, setInitialPartyMembers] = useState<Node[]>([]);
+	const [elements, setElements] = useState<Node[]>([]);
 
 	const initialize = () => {
 		const battleSystem = Project.current!.battleSystem;
@@ -70,8 +60,14 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 		playBattleMusicSelectorRef.current?.initialize(battleSystem.battleMusic);
 		playBattleLevelUpSelectorRef.current?.initialize(battleSystem.battleLevelUp);
 		playBattleVictorySelectorRef.current?.initialize(battleSystem.battleVictory);
+		setForcedCurrentIndex(0);
 		setBattleMaps(Node.createList(battleSystem.battleMaps));
 		setcameraMoveInBattle(battleSystem.cameraMoveInBattle);
+		setElements(Node.createList(battleSystem.elements));
+	};
+
+	const updateElements = () => {
+		Project.current!.battleSystem.elements = Node.createListFromNodes(elements);
 	};
 
 	const accept = () => {
@@ -89,6 +85,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 		playBattleVictorySelectorRef.current!.accept(battleSystem.battleVictory);
 		battleSystem.battleMaps = Node.createListFromNodes(battleMaps);
 		battleSystem.cameraMoveInBattle = cameraMoveInBattle;
+		battleSystem.elements = Node.createListFromNodes(elements);
 	};
 
 	useImperativeHandle(ref, () => ({
@@ -205,13 +202,14 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 				<Flex column spaced fillWidth>
 					<Flex spaced>
 						<Flex one>
-							<Groupbox title={t('font.sizes')} fillWidth>
+							<Groupbox title={t('elements')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
 									<Tree
-										constructorType={Model.FontSize}
-										list={fontSizes}
+										constructorType={Model.Element}
+										list={elements}
 										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
 										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										onListUpdated={updateElements}
 										noScrollOnForce
 									/>
 								</Flex>
@@ -219,141 +217,31 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('font.names')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.FontName}
-										list={fontNames}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
-								</Flex>
+								<Flex one style={TREES_STYLE_HEIGHT}></Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('colors')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Color}
-										list={colors}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
-								</Flex>
+								<Flex one style={TREES_STYLE_HEIGHT}></Flex>
 							</Groupbox>
 						</Flex>
 					</Flex>
 					<Flex spaced>
 						<Flex one>
 							<Groupbox title={t('window.skins')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.WindowSkin}
-										list={windowSkins}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
-								</Flex>
+								<Flex one style={TREES_STYLE_HEIGHT}></Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('currencies')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Currency}
-										list={currencies}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
-								</Flex>
+								<Flex one style={TREES_STYLE_HEIGHT}></Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('speeds')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Speed}
-										list={speeds}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
-								</Flex>
+								<Flex one style={TREES_STYLE_HEIGHT}></Flex>
 							</Groupbox>
 						</Flex>
-					</Flex>
-					<Flex spaced>
-						<Flex one>
-							<Groupbox title={t('detections')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Detection}
-										list={detections}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
-								</Flex>
-							</Groupbox>
-						</Flex>
-						<Flex one>
-							<Groupbox title={t('camera.properties')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.CameraProperty}
-										list={cameraProperties}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
-								</Flex>
-							</Groupbox>
-						</Flex>
-						<Flex one>
-							<Groupbox title={t('frequencies')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Frequency}
-										list={frequencies}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
-								</Flex>
-							</Groupbox>
-						</Flex>
-					</Flex>
-					<Flex spaced>
-						<Flex one>
-							<Groupbox title={t('skyboxes')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Skybox}
-										list={skyboxes}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
-								</Flex>
-							</Groupbox>
-						</Flex>
-						<Flex one>
-							<Groupbox title={t('initial.party.members')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.InitialPartyMember}
-										list={initialPartyMembers}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
-								</Flex>
-							</Groupbox>
-						</Flex>
-						<Flex one />
 					</Flex>
 				</Flex>
 			</Flex>

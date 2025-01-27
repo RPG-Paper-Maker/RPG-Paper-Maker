@@ -36,6 +36,7 @@ import DialogCost from './dialogs/models/DialogCost';
 import DialogCurrency from './dialogs/models/DialogCurrency';
 import DialogDetection from './dialogs/models/DialogDetection';
 import DialogDynamicNumber from './dialogs/models/DialogDynamicNumber';
+import DialogElement from './dialogs/models/DialogElement';
 import DialogFontName from './dialogs/models/DialogFontName';
 import DialogFontSize from './dialogs/models/DialogFontSize';
 import DialogFrequency from './dialogs/models/DialogFrequency';
@@ -810,6 +811,10 @@ function Tree({
 					return <DialogInitialPartyMember {...options} />;
 				case Model.BattleMap:
 					return <DialogBattleMap {...options} />;
+				case Model.Element:
+					return <DialogElement {...options} />;
+				case Model.ElementEfficiency:
+					return <DialogDynamicNumber {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

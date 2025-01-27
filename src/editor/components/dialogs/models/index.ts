@@ -5,6 +5,7 @@ export * from './DialogCost';
 export * from './DialogCurrency';
 export * from './DialogDetection';
 export * from './DialogDynamicNumber';
+export * from './DialogElement';
 export * from './DialogFontName';
 export * from './DialogFontSize';
 export * from './DialogFrequency';

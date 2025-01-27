@@ -55,6 +55,11 @@ export type ExtendedWindow = Window &
 
 export type JSONType = Record<string, unknown>;
 
+export type JSONMappingKeyValue = {
+	k: number;
+	v: JSONType;
+};
+
 export type JSONMapping = {
 	k: number[];
 	v: JSONType;

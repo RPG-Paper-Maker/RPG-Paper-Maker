@@ -39,7 +39,9 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 		setIsOpen(false);
 	};
 
-	const handleReject = () => {
+	const handleReject = async () => {
+		await Project.current!.systems.load();
+		await Project.current!.battleSystem.load();
 		setIsOpen(false);
 	};
 

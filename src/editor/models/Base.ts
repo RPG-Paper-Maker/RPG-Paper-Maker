@@ -265,6 +265,14 @@ class Base extends Serializable {
 					default:
 						break;
 				}
+			} else {
+				switch (bindingType) {
+					case BINDING.MAP_KEY_VALUE:
+						(this as Record<string, unknown>)[name] = new Map();
+						break;
+					default:
+						break;
+				}
 			}
 		}
 	}
