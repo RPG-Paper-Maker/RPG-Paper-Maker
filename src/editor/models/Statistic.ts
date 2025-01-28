@@ -27,6 +27,12 @@ class Statistic extends Localization {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault() {
+		super.applyDefault(Statistic.getBindings([]));
+		this.abbreviation = '';
+		this.isFix = true;
+	}
+
 	copy(statistic: Statistic): void {
 		super.copy(statistic, Statistic.getBindings([]));
 	}

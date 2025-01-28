@@ -52,6 +52,12 @@ function DialogElement({ isOpen, setIsOpen, model, onAccept, onReject }: Props) 
 		setEfficiencies(Node.createList(element.getEfficiencies()));
 	};
 
+	const handleChangeIcon = (id: number, indexX: number, indexY: number) => {
+		setIconID(id);
+		setIconIndexX(indexX);
+		setIconIndexY(indexY);
+	};
+
 	const handleAccept = async () => {
 		element.copy(localization);
 		element.pictureID = iconID;
@@ -97,6 +103,7 @@ function DialogElement({ isOpen, setIsOpen, model, onAccept, onReject }: Props) 
 								selectedID={iconID}
 								indexX={iconIndexX}
 								indexY={iconIndexY}
+								onChange={handleChangeIcon}
 							/>
 							<TextureIconPreviewer id={iconID} indexX={iconIndexX} indexY={iconIndexY} />
 						</Flex>

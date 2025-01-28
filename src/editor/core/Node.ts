@@ -38,6 +38,7 @@ export const NODE_CONSTRUCTOR_KIND = {
 	InitialPartyMember: () => Model.InitialPartyMember,
 	BattleMap: () => Model.BattleMap,
 	Element: () => Model.Element,
+	Statistic: () => Model.Statistic,
 };
 
 class Node extends Serializable {

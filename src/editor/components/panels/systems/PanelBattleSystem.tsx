@@ -46,6 +46,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 	const [battleMaps, setBattleMaps] = useState<Node[]>([]);
 	const [cameraMoveInBattle, setcameraMoveInBattle] = useStateBool();
 	const [elements, setElements] = useState<Node[]>([]);
+	const [statistics, setStatistics] = useState<Node[]>([]);
 
 	const initialize = () => {
 		const battleSystem = Project.current!.battleSystem;
@@ -64,6 +65,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 		setBattleMaps(Node.createList(battleSystem.battleMaps));
 		setcameraMoveInBattle(battleSystem.cameraMoveInBattle);
 		setElements(Node.createList(battleSystem.elements));
+		setStatistics(Node.createList(battleSystem.statistics));
 	};
 
 	const updateElements = () => {
@@ -86,6 +88,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 		battleSystem.battleMaps = Node.createListFromNodes(battleMaps);
 		battleSystem.cameraMoveInBattle = cameraMoveInBattle;
 		battleSystem.elements = Node.createListFromNodes(elements);
+		battleSystem.statistics = Node.createListFromNodes(statistics);
 	};
 
 	useImperativeHandle(ref, () => ({
@@ -216,8 +219,16 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 							</Groupbox>
 						</Flex>
 						<Flex one>
-							<Groupbox title={t('font.names')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}></Flex>
+							<Groupbox title={t('common.statistics')} fillWidth>
+								<Flex one style={TREES_STYLE_HEIGHT}>
+									<Tree
+										constructorType={Model.Statistic}
+										list={statistics}
+										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										noScrollOnForce
+									/>
+								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>

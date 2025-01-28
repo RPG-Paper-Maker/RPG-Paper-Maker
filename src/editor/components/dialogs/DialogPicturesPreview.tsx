@@ -77,9 +77,7 @@ function DialogPicturesPreview({
 		let rectT = new Rectangle();
 		if (pictureID !== undefined) {
 			const picture = Project.current!.pictures.getByID(kind, pictureID);
-			setSelectedPicture(picture);
-			setIsStopAnimation(picture.isStopAnimation);
-			setIsClimbAnimation(picture.isClimbAnimation);
+			updateSelectedPicture(picture);
 			if (pictureID === 0) {
 				if (rectTileset) {
 					rectT = rectTileset.clone();
@@ -101,9 +99,8 @@ function DialogPicturesPreview({
 		setPicturesAvailable([]);
 	};
 
-	const handleChangeSelectedPicture = (node: Node | null) => {
-		const picture = (node?.content ?? null) as Model.Picture | null;
-		setSelectedPicture(picture);
+	const updateSelectedPicture = (picture?: Model.Picture | null) => {
+		setSelectedPicture(picture ?? null);
 		if (picture) {
 			setIsStopAnimation(picture.isStopAnimation);
 			setIsClimbAnimation(picture.isClimbAnimation);
@@ -111,6 +108,10 @@ function DialogPicturesPreview({
 			setIsStopAnimation(false);
 			setIsClimbAnimation(false);
 		}
+	};
+
+	const handleChangeSelectedPicture = (node: Node | null) => {
+		updateSelectedPicture((node?.content ?? null) as Model.Picture | null);
 	};
 
 	const handleChangeStopAnimation = (b: boolean) => {

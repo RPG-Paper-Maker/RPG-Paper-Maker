@@ -53,6 +53,7 @@ import DialogName from './dialogs/models/DialogName';
 import DialogRandomBattle from './dialogs/models/DialogRandomBattle';
 import DialogSkybox from './dialogs/models/DialogSkybox';
 import DialogSpeed from './dialogs/models/DialogSpeed';
+import DialogStatistic from './dialogs/models/DialogStatistic';
 import DialogWindowSkin from './dialogs/models/DialogWindowSkin';
 import Flex from './Flex';
 import InputText from './InputText';
@@ -815,6 +816,8 @@ function Tree({
 					return <DialogElement {...options} />;
 				case Model.ElementEfficiency:
 					return <DialogDynamicNumber {...options} />;
+				case Model.Statistic:
+					return <DialogStatistic {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}
