@@ -24,6 +24,12 @@ class Serializable {
 				case BINDING.BOOLEAN:
 					(this as JSONType)[name] = serializable[name as keyof Serializable];
 					break;
+				case BINDING.LIST_NUMBER:
+				case BINDING.LIST_STRING:
+				case BINDING.LIST_BOOLEAN:
+					const value = serializable[name as keyof Serializable] as unknown;
+					(this as JSONType)[name] = [...(value as unknown[])];
+					break;
 				case BINDING.DYNAMIC_VALUE:
 				case BINDING.OBJECT:
 				case BINDING.POSITION:
@@ -102,6 +108,9 @@ class Serializable {
 				case BINDING.NUMBER:
 				case BINDING.STRING:
 				case BINDING.BOOLEAN:
+				case BINDING.LIST_NUMBER:
+				case BINDING.LIST_STRING:
+				case BINDING.LIST_BOOLEAN:
 					(this as JSONType)[name] = Utils.defaultValue(
 						json[jsonName],
 						defaultValue === undefined ? (this as JSONType)[name] : defaultValue
@@ -260,6 +269,17 @@ class Serializable {
 				case BINDING.STRING:
 				case BINDING.BOOLEAN:
 					Utils.writeDefaultValue(json, jsonName, (this as JSONType)[name], defaultValue);
+					break;
+				case BINDING.LIST_NUMBER:
+				case BINDING.LIST_STRING:
+				case BINDING.LIST_BOOLEAN:
+					const value = (this as JSONType)[name];
+					Utils.writeDefaultValue(
+						json,
+						jsonName,
+						value ? [...(value as unknown[])] : value,
+						defaultValue as unknown[]
+					);
 					break;
 				case BINDING.DYNAMIC_VALUE: {
 					const defaultDynamicValue = defaultValue as DynamicValue;

@@ -9,12 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { HiChevronDown, HiChevronRight } from 'react-icons/hi';
 import { Utils } from '../common';
 import { Node, Project } from '../core';
 import { Model } from '../Editor';
 import '../styles/TreeItem.css';
+import Checkbox from './Checkbox';
 import Flex from './Flex';
 
 type Props = {
@@ -48,6 +49,14 @@ function TreeItem({
 	doNotShowID = false,
 }: Props) {
 	const [expanded, setExpanded] = useState(node.expanded);
+	const [isChecked, setIsChecked] = useState((node.content as Model.Checkable).enabled ?? false);
+
+	const isCheckable = useMemo(() => node.content instanceof Model.Checkable, [node]);
+
+	const handleCheck = (b: boolean) => {
+		(node.content as Model.Checkable).enabled = b;
+		setIsChecked(b);
+	};
 
 	const handleMouseDown = () => {
 		onMouseDown(node);
@@ -58,6 +67,12 @@ function TreeItem({
 		setExpanded((value) => !value);
 		handleMouseDown();
 	};
+
+	useEffect(() => {
+		if (isCheckable) {
+			setIsChecked((node.content as Model.Checkable).enabled);
+		}
+	}, [node, isCheckable]);
 
 	useEffect(() => {
 		if (node.expanded !== expanded) {
@@ -93,6 +108,7 @@ function TreeItem({
 			onDrop={(event: React.DragEvent) => onDrop?.(event, node)}
 			draggable={draggable}
 		>
+			{isCheckable && <Checkbox isChecked={isChecked} onChange={handleCheck} />}
 			{node.canExpand() &&
 				(expanded ? (
 					<HiChevronDown onMouseDown={handleMouseDownSwitchExpand} />

@@ -253,6 +253,11 @@ class Base extends Serializable {
 					case BINDING.STRING:
 						(this as Record<string, unknown>)[name] = defaultValue;
 						break;
+					case BINDING.LIST_BOOLEAN:
+					case BINDING.LIST_NUMBER:
+					case BINDING.LIST_STRING:
+						(this as Record<string, unknown>)[name] = [...(defaultValue as unknown[])];
+						break;
 					case BINDING.DYNAMIC_VALUE:
 					case BINDING.OBJECT:
 						(this as Record<string, unknown>)[name] = defaultValue

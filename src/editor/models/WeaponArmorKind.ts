@@ -10,15 +10,38 @@
 */
 
 import { BINDING, BindingType, JSONType } from '../common';
-import { Base } from './Base';
+import { Project } from '../core';
+import { Checkable } from './Checkable';
+import { Localization } from './Localization';
 
-class WeaponArmorKind extends Base {
+class WeaponArmorKind extends Localization {
 	public equipments!: boolean[];
 
-	public static bindings: BindingType[] = [['equipments', 'equipment', undefined, BINDING.BOOLEAN]];
+	public static bindings: BindingType[] = [['equipments', 'equipment', undefined, BINDING.LIST_BOOLEAN]];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	applyDefault(): void {
+		super.applyDefault(WeaponArmorKind.getBindings([]));
+		this.equipments = [false];
+		for (let equipment of Project.current!.battleSystem.equipments) {
+			this.equipments[equipment.id] = false;
+		}
+	}
+
+	getEquipments(): Checkable[] {
+		return Project.current!.battleSystem.equipments.map((equipment: Localization) =>
+			Checkable.createCheckable(equipment.id, equipment.getName(), this.equipments[equipment.id] ?? false)
+		);
+	}
+
+	fromEquipments(equipments: Checkable[]) {
+		this.equipments = [false];
+		for (let equipment of equipments) {
+			this.equipments[equipment.id] = equipment.enabled;
+		}
 	}
 
 	copy(weaponArmorKind: WeaponArmorKind): void {
@@ -27,11 +50,13 @@ class WeaponArmorKind extends Base {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, WeaponArmorKind.getBindings(additionnalBinding));
-		this.equipments.unshift(false);
+		this.equipments = [false, ...this.equipments];
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
+		this.equipments.shift();
 		super.write(json, WeaponArmorKind.getBindings(additionnalBinding));
+		this.equipments.unshift(false);
 	}
 }
 

@@ -52,7 +52,7 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='1000px'
-			initialHeight='600px'
+			initialHeight='650px'
 		>
 			<Tab
 				titles={[Model.Base.create(1, t('system')), Model.Base.create(2, t('battle.system'))]}

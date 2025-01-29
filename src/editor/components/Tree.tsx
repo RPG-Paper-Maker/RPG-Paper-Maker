@@ -54,6 +54,7 @@ import DialogRandomBattle from './dialogs/models/DialogRandomBattle';
 import DialogSkybox from './dialogs/models/DialogSkybox';
 import DialogSpeed from './dialogs/models/DialogSpeed';
 import DialogStatistic from './dialogs/models/DialogStatistic';
+import DialogWeaponArmorKind from './dialogs/models/DialogWeaponArmorKind';
 import DialogWindowSkin from './dialogs/models/DialogWindowSkin';
 import Flex from './Flex';
 import InputText from './InputText';
@@ -756,7 +757,7 @@ function Tree({
 	};
 
 	const getDialog = () => {
-		if (currentSelectedItemNode && !cannotEdit) {
+		if (currentSelectedItemNode && !cannotEdit && constructorType !== Model.Checkable) {
 			const options = {
 				isNew: newModel !== null,
 				isOpen: isOpenDialog,
@@ -818,6 +819,8 @@ function Tree({
 					return <DialogDynamicNumber {...options} />;
 				case Model.Statistic:
 					return <DialogStatistic {...options} />;
+				case Model.WeaponArmorKind:
+					return <DialogWeaponArmorKind {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

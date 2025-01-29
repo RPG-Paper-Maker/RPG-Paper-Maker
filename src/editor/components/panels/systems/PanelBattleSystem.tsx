@@ -47,6 +47,8 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 	const [cameraMoveInBattle, setcameraMoveInBattle] = useStateBool();
 	const [elements, setElements] = useState<Node[]>([]);
 	const [statistics, setStatistics] = useState<Node[]>([]);
+	const [weaponsKind, setWeaponsKind] = useState<Node[]>([]);
+	const [armorsKind, setArmorsKind] = useState<Node[]>([]);
 
 	const initialize = () => {
 		const battleSystem = Project.current!.battleSystem;
@@ -66,6 +68,8 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 		setcameraMoveInBattle(battleSystem.cameraMoveInBattle);
 		setElements(Node.createList(battleSystem.elements));
 		setStatistics(Node.createList(battleSystem.statistics));
+		setWeaponsKind(Node.createList(battleSystem.weaponsKind));
+		setArmorsKind(Node.createList(battleSystem.armorsKind));
 	};
 
 	const updateElements = () => {
@@ -89,6 +93,8 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 		battleSystem.cameraMoveInBattle = cameraMoveInBattle;
 		battleSystem.elements = Node.createListFromNodes(elements);
 		battleSystem.statistics = Node.createListFromNodes(statistics);
+		battleSystem.weaponsKind = Node.createListFromNodes(weaponsKind);
+		battleSystem.armorsKind = Node.createListFromNodes(armorsKind);
 	};
 
 	useImperativeHandle(ref, () => ({
@@ -232,8 +238,16 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 							</Groupbox>
 						</Flex>
 						<Flex one>
-							<Groupbox title={t('colors')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}></Flex>
+							<Groupbox title={t('weapons.kind')} fillWidth>
+								<Flex one style={TREES_STYLE_HEIGHT}>
+									<Tree
+										constructorType={Model.WeaponArmorKind}
+										list={weaponsKind}
+										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										noScrollOnForce
+									/>
+								</Flex>
 							</Groupbox>
 						</Flex>
 					</Flex>
@@ -249,8 +263,16 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 							</Groupbox>
 						</Flex>
 						<Flex one>
-							<Groupbox title={t('speeds')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}></Flex>
+							<Groupbox title={t('armors.kind')} fillWidth>
+								<Flex one style={TREES_STYLE_HEIGHT}>
+									<Tree
+										constructorType={Model.WeaponArmorKind}
+										list={armorsKind}
+										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+										noScrollOnForce
+									/>
+								</Flex>
 							</Groupbox>
 						</Flex>
 					</Flex>

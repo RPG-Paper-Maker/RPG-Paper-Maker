@@ -7,6 +7,7 @@ export * from './Base';
 export * from './BattleMap';
 export * from './CameraProperty';
 export * from './Characteristic';
+export * from './Checkable';
 export * from './Class';
 export * from './ClassSkill';
 export * from './Color';
