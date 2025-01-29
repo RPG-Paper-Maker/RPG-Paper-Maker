@@ -39,6 +39,9 @@ export const NODE_CONSTRUCTOR_KIND = {
 	BattleMap: () => Model.BattleMap,
 	Element: () => Model.Element,
 	Statistic: () => Model.Statistic,
+	WeaponArmorKind: () => Model.WeaponArmorKind,
+	Localization: () => Model.Localization,
+	BattleCommand: () => Model.BattleCommand,
 };
 
 class Node extends Serializable {

@@ -29,6 +29,7 @@ import { Inputs } from '../managers';
 import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
+import DialogBattleCommand from './dialogs/models/DialogBattleCommand';
 import DialogBattleMap from './dialogs/models/DialogBattleMap';
 import DialogCameraProperty from './dialogs/models/DialogCameraProperty';
 import DialogColor from './dialogs/models/DialogColor';
@@ -821,6 +822,8 @@ function Tree({
 					return <DialogStatistic {...options} />;
 				case Model.WeaponArmorKind:
 					return <DialogWeaponArmorKind {...options} />;
+				case Model.BattleCommand:
+					return <DialogBattleCommand {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

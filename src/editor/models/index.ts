@@ -4,6 +4,7 @@ export * from './AnimationFrameEffect';
 export * from './AnimationFrameElement';
 export * from './Autotile';
 export * from './Base';
+export * from './BattleCommand';
 export * from './BattleMap';
 export * from './CameraProperty';
 export * from './Characteristic';

@@ -33,6 +33,7 @@ class BattleSystem extends Serializable {
 	public equipments!: Model.Localization[];
 	public weaponsKind!: Model.WeaponArmorKind[];
 	public armorsKind!: Model.WeaponArmorKind[];
+	public battleCommands!: Model.BattleCommand[];
 	public json!: JSONType; // TEMP, will be removed later
 
 	public static readonly bindings: BindingType[] = [
@@ -90,6 +91,7 @@ class BattleSystem extends Serializable {
 		['equipments', 'equipments', [], BINDING.LIST, Model.Localization],
 		['weaponsKind', 'weaponsKind', [], BINDING.LIST, Model.WeaponArmorKind],
 		['armorsKind', 'armorsKind', [], BINDING.LIST, Model.WeaponArmorKind],
+		['battleCommands', 'battleCommands', [], BINDING.LIST, Model.BattleCommand],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

@@ -1,3 +1,4 @@
+export * from './DialogBattleCommand';
 export * from './DialogBattleMap';
 export * from './DialogCameraProperty';
 export * from './DialogColor';
