@@ -22,7 +22,7 @@ class Checkable extends Base {
 	}
 
 	static createCheckable(id: number, name: string, checked: boolean): Checkable {
-		let checkable = new Checkable();
+		const checkable = new Checkable();
 		checkable.id = id;
 		checkable.name = name;
 		checkable.checked = checked;

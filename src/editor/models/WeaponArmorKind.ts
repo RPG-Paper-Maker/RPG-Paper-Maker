@@ -26,7 +26,7 @@ class WeaponArmorKind extends Localization {
 	applyDefault(): void {
 		super.applyDefault(WeaponArmorKind.getBindings([]));
 		this.equipments = [false];
-		for (let equipment of Project.current!.battleSystem.equipments) {
+		for (const equipment of Project.current!.battleSystem.equipments) {
 			this.equipments[equipment.id] = false;
 		}
 	}
@@ -39,7 +39,7 @@ class WeaponArmorKind extends Localization {
 
 	fromEquipments(equipments: Checkable[]) {
 		this.equipments = [false];
-		for (let equipment of equipments) {
+		for (const equipment of equipments) {
 			this.equipments[equipment.id] = equipment.checked;
 		}
 	}

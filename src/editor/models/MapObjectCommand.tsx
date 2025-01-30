@@ -2271,7 +2271,7 @@ class MapObjectCommand extends Base {
 				)} `;
 				str += t(Base.VARIABLE_OBJECT_CHARACTERISTIC_OPTIONS[this.command[iterator.i++] as number].name);
 				break;
-			case 5:
+			case 5: {
 				str += `${t('number.of').toLowerCase()} `;
 				let list: Base[] = [];
 				switch (this.command[iterator.i++]) {
@@ -2292,6 +2292,7 @@ class MapObjectCommand extends Base {
 					'in.inventory'
 				).toLowerCase()}`;
 				break;
+			}
 			case 6:
 				str += `${t('total.currency').toLowerCase()} ${t(
 					Base.CURRENCY_OPTIONS[this.command[iterator.i++] as number].name

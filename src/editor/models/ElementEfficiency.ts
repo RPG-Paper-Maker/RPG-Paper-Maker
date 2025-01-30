@@ -16,7 +16,7 @@ class ElementEfficiency extends Base {
 	public value!: DynamicValue;
 
 	public static createEfficiency(id: number, name: string, value: DynamicValue): ElementEfficiency {
-		let element = new ElementEfficiency();
+		const element = new ElementEfficiency();
 		element.id = id;
 		element.name = name;
 		element.value = value;

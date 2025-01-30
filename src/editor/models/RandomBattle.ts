@@ -56,7 +56,7 @@ class RandomBattle extends Base {
 
 	getProbability(): string {
 		let sum = 0;
-		let list = RandomBattle.currentList.map((node) => node.clone());
+		const list = RandomBattle.currentList.map((node) => node.clone());
 		const current = list.find((node) => node.content.id === this.id);
 		if (list.find((node) => node.content.id === this.id)) {
 			ArrayUtils.removeElement(list, current);

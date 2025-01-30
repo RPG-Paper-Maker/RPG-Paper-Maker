@@ -40,7 +40,7 @@ class Element extends Icon {
 
 	fromEfficiencies(efficiencies: ElementEfficiency[]) {
 		this.efficiencies = new Map();
-		for (let efficiency of efficiencies) {
+		for (const efficiency of efficiencies) {
 			if (efficiency.value.kind !== DYNAMIC_VALUE_KIND.NUMBER_DECIMAL || efficiency.value.value !== 1) {
 				this.efficiencies.set(efficiency.id, efficiency.value.clone());
 			}
