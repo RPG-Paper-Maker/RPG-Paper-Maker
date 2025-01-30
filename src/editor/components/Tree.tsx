@@ -41,6 +41,7 @@ import DialogElement from './dialogs/models/DialogElement';
 import DialogFontName from './dialogs/models/DialogFontName';
 import DialogFontSize from './dialogs/models/DialogFontSize';
 import DialogFrequency from './dialogs/models/DialogFrequency';
+import DialogGameOverCommand from './dialogs/models/DialogGameOverCommand';
 import DialogInitialPartyMember from './dialogs/models/DialogInitialPartyMember';
 import DialogLocalization from './dialogs/models/DialogLocalization';
 import DialogMapObjectCommand from './dialogs/models/DialogMapObjectCommand';
@@ -55,6 +56,7 @@ import DialogRandomBattle from './dialogs/models/DialogRandomBattle';
 import DialogSkybox from './dialogs/models/DialogSkybox';
 import DialogSpeed from './dialogs/models/DialogSpeed';
 import DialogStatistic from './dialogs/models/DialogStatistic';
+import DialogTitleCommand from './dialogs/models/DialogTitleCommand';
 import DialogWeaponArmorKind from './dialogs/models/DialogWeaponArmorKind';
 import DialogWindowSkin from './dialogs/models/DialogWindowSkin';
 import Flex from './Flex';
@@ -430,7 +432,7 @@ function Tree({
 				} else {
 					const isTop = y < 10;
 					if (!onlyTop || (onlyTop && isTop)) {
-						target.classList.add(`drag-over-${isTop ? 'top' : 'bot'}`);
+						target.classList.add(`dragOver${isTop ? 'Top' : 'Bot'}`);
 					}
 				}
 			}
@@ -824,6 +826,10 @@ function Tree({
 					return <DialogWeaponArmorKind {...options} />;
 				case Model.BattleCommand:
 					return <DialogBattleCommand {...options} />;
+				case Model.TitleCommand:
+					return <DialogTitleCommand {...options} />;
+				case Model.GameOverCommand:
+					return <DialogGameOverCommand {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

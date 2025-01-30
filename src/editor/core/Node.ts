@@ -42,6 +42,8 @@ export const NODE_CONSTRUCTOR_KIND = {
 	WeaponArmorKind: () => Model.WeaponArmorKind,
 	Localization: () => Model.Localization,
 	BattleCommand: () => Model.BattleCommand,
+	TitleCommand: () => Model.TitleCommand,
+	GameOverCommand: () => Model.GameOverCommand,
 };
 
 class Node extends Serializable {

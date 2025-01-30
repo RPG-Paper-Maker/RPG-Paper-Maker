@@ -118,194 +118,192 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 	}, []);
 
 	return (
-		<>
-			<Flex spacedLarge>
-				<Flex column spacedLarge>
-					<Flex column spaced>
-						<div>{t('statistic.associated.level')}:</div>
-						<Dropdown
-							selectedID={levelStatisticID}
-							onChange={setLevelStatisticID}
-							options={Project.current!.battleSystem.statistics}
-							displayIDs
-							fillWidth
-						/>
-					</Flex>
-					<Flex column spaced>
-						<div>{t('statistic.associated.exp')}:</div>
-						<Dropdown
-							selectedID={expStatisticID}
-							onChange={setExpStatisticID}
-							options={Project.current!.battleSystem.statistics}
-							displayIDs
-							fillWidth
-						/>
-					</Flex>
-					<Groupbox title={t('formulas')}>
-						<Flex column spacedLarge>
-							<Flex column spaced>
-								<div>{t('is.dead')}:</div>
-								<DynamicValueSelector
-									value={formulaIsDead}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
-								/>
-							</Flex>
-							<Flex column spaced>
-								<div>{t('critical.influence')}:</div>
-								<DynamicValueSelector
-									value={formulaCrit}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
-								/>
-							</Flex>
-							<Flex column spaced>
-								<div>{t('heroes.battlers.center.offset')}:</div>
-								<DynamicValueSelector
-									value={heroesBattlersCenterOffset}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
-								/>
-							</Flex>
-							<Flex column spaced>
-								<div>{t('heroes.battlers.offset')}:</div>
-								<DynamicValueSelector
-									value={heroesBattlersOffset}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
-								/>
-							</Flex>
-							<Flex column spaced>
-								<div>{t('troops.battlers.center.offset')}:</div>
-								<DynamicValueSelector
-									value={troopsBattlersCenterOffset}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
-								/>
-							</Flex>
-							<Flex column spaced>
-								<div>{t('troops.battlers.offset')}:</div>
-								<DynamicValueSelector
-									value={troopsBattlersOffset}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
-								/>
-							</Flex>
-						</Flex>
-					</Groupbox>
-					<Groupbox title={t('musics')}>
-						<Flex column spacedLarge>
-							<Flex column spaced>
-								<div>{t('battle')}:</div>
-								<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playBattleMusicSelectorRef} />
-							</Flex>
-							<Flex column spaced>
-								<div>{t('level.up')}:</div>
-								<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playBattleLevelUpSelectorRef} />
-							</Flex>
-							<Flex column spaced>
-								<div>{t('victory')}:</div>
-								<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playBattleVictorySelectorRef} />
-							</Flex>
-						</Flex>
-					</Groupbox>
-					<Groupbox title={t('battle.maps')}>
-						<Flex one style={TREES_STYLE_HEIGHT}>
-							<Tree
-								constructorType={Model.BattleMap}
-								list={battleMaps}
-								forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-								setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-								noScrollOnForce
+		<Flex spacedLarge>
+			<Flex column spacedLarge>
+				<Flex column spaced>
+					<div>{t('statistic.associated.level')}:</div>
+					<Dropdown
+						selectedID={levelStatisticID}
+						onChange={setLevelStatisticID}
+						options={Project.current!.battleSystem.statistics}
+						displayIDs
+						fillWidth
+					/>
+				</Flex>
+				<Flex column spaced>
+					<div>{t('statistic.associated.exp')}:</div>
+					<Dropdown
+						selectedID={expStatisticID}
+						onChange={setExpStatisticID}
+						options={Project.current!.battleSystem.statistics}
+						displayIDs
+						fillWidth
+					/>
+				</Flex>
+				<Groupbox title={t('formulas')}>
+					<Flex column spacedLarge>
+						<Flex column spaced>
+							<div>{t('is.dead')}:</div>
+							<DynamicValueSelector
+								value={formulaIsDead}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
 							/>
 						</Flex>
-					</Groupbox>
-					<Checkbox isChecked={cameraMoveInBattle} onChange={setcameraMoveInBattle}>
-						{t('camera.move.in.battle')}
-					</Checkbox>
-				</Flex>
-				<Flex column spaced fillWidth>
-					<Flex spaced>
-						<Flex one>
-							<Groupbox title={t('elements')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Element}
-										list={elements}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										onListUpdated={updateElements}
-										noScrollOnForce
-									/>
-								</Flex>
-							</Groupbox>
+						<Flex column spaced>
+							<div>{t('critical.influence')}:</div>
+							<DynamicValueSelector
+								value={formulaCrit}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
+							/>
 						</Flex>
-						<Flex one>
-							<Groupbox title={t('common.statistics')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Statistic}
-										list={statistics}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
-								</Flex>
-							</Groupbox>
+						<Flex column spaced>
+							<div>{t('heroes.battlers.center.offset')}:</div>
+							<DynamicValueSelector
+								value={heroesBattlersCenterOffset}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
+							/>
 						</Flex>
-						<Flex one>
-							<Groupbox title={t('weapons.kind')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.WeaponArmorKind}
-										list={weaponsKind}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
-								</Flex>
-							</Groupbox>
+						<Flex column spaced>
+							<div>{t('heroes.battlers.offset')}:</div>
+							<DynamicValueSelector
+								value={heroesBattlersOffset}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
+							/>
+						</Flex>
+						<Flex column spaced>
+							<div>{t('troops.battlers.center.offset')}:</div>
+							<DynamicValueSelector
+								value={troopsBattlersCenterOffset}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
+							/>
+						</Flex>
+						<Flex column spaced>
+							<div>{t('troops.battlers.offset')}:</div>
+							<DynamicValueSelector
+								value={troopsBattlersOffset}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
+							/>
 						</Flex>
 					</Flex>
-					<Flex spaced>
-						<Flex one>
-							<Groupbox title={t('common.battle.commands')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.BattleCommand}
-										list={battleCommands}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
-								</Flex>
-							</Groupbox>
+				</Groupbox>
+				<Groupbox title={t('musics')}>
+					<Flex column spacedLarge>
+						<Flex column spaced>
+							<div>{t('battle')}:</div>
+							<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playBattleMusicSelectorRef} />
 						</Flex>
-						<Flex one>
-							<Groupbox title={t('common.equipments')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Localization}
-										list={equipments}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										onListUpdated={updateEquipments}
-										noScrollOnForce
-									/>
-								</Flex>
-							</Groupbox>
+						<Flex column spaced>
+							<div>{t('level.up')}:</div>
+							<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playBattleLevelUpSelectorRef} />
 						</Flex>
-						<Flex one>
-							<Groupbox title={t('armors.kind')} fillWidth>
-								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.WeaponArmorKind}
-										list={armorsKind}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
-								</Flex>
-							</Groupbox>
+						<Flex column spaced>
+							<div>{t('victory')}:</div>
+							<PlaySongSelector songKind={SONG_KIND.MUSIC} ref={playBattleVictorySelectorRef} />
 						</Flex>
+					</Flex>
+				</Groupbox>
+				<Groupbox title={t('battle.maps')}>
+					<Flex one style={TREES_STYLE_HEIGHT}>
+						<Tree
+							constructorType={Model.BattleMap}
+							list={battleMaps}
+							forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+							setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+							noScrollOnForce
+						/>
+					</Flex>
+				</Groupbox>
+				<Checkbox isChecked={cameraMoveInBattle} onChange={setcameraMoveInBattle}>
+					{t('camera.move.in.battle')}
+				</Checkbox>
+			</Flex>
+			<Flex column spaced fillWidth>
+				<Flex spaced>
+					<Flex one>
+						<Groupbox title={t('elements')} fillWidth>
+							<Flex one style={TREES_STYLE_HEIGHT}>
+								<Tree
+									constructorType={Model.Element}
+									list={elements}
+									forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+									setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+									onListUpdated={updateElements}
+									noScrollOnForce
+								/>
+							</Flex>
+						</Groupbox>
+					</Flex>
+					<Flex one>
+						<Groupbox title={t('common.statistics')} fillWidth>
+							<Flex one style={TREES_STYLE_HEIGHT}>
+								<Tree
+									constructorType={Model.Statistic}
+									list={statistics}
+									forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+									setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+									noScrollOnForce
+								/>
+							</Flex>
+						</Groupbox>
+					</Flex>
+					<Flex one>
+						<Groupbox title={t('weapons.kind')} fillWidth>
+							<Flex one style={TREES_STYLE_HEIGHT}>
+								<Tree
+									constructorType={Model.WeaponArmorKind}
+									list={weaponsKind}
+									forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+									setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+									noScrollOnForce
+								/>
+							</Flex>
+						</Groupbox>
+					</Flex>
+				</Flex>
+				<Flex spaced>
+					<Flex one>
+						<Groupbox title={t('common.battle.commands')} fillWidth>
+							<Flex one style={TREES_STYLE_HEIGHT}>
+								<Tree
+									constructorType={Model.BattleCommand}
+									list={battleCommands}
+									forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+									setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+									noScrollOnForce
+								/>
+							</Flex>
+						</Groupbox>
+					</Flex>
+					<Flex one>
+						<Groupbox title={t('common.equipments')} fillWidth>
+							<Flex one style={TREES_STYLE_HEIGHT}>
+								<Tree
+									constructorType={Model.Localization}
+									list={equipments}
+									forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+									setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+									onListUpdated={updateEquipments}
+									noScrollOnForce
+								/>
+							</Flex>
+						</Groupbox>
+					</Flex>
+					<Flex one>
+						<Groupbox title={t('armors.kind')} fillWidth>
+							<Flex one style={TREES_STYLE_HEIGHT}>
+								<Tree
+									constructorType={Model.WeaponArmorKind}
+									list={armorsKind}
+									forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+									setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+									noScrollOnForce
+								/>
+							</Flex>
+						</Groupbox>
 					</Flex>
 				</Flex>
 			</Flex>
-		</>
+		</Flex>
 	);
 });
 

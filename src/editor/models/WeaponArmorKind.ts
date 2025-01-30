@@ -40,7 +40,7 @@ class WeaponArmorKind extends Localization {
 	fromEquipments(equipments: Checkable[]) {
 		this.equipments = [false];
 		for (let equipment of equipments) {
-			this.equipments[equipment.id] = equipment.enabled;
+			this.equipments[equipment.id] = equipment.checked;
 		}
 	}
 

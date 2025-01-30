@@ -19,6 +19,7 @@ export * from './SpecialElements';
 export * from './Status';
 export * from './System';
 export * from './Tilesets';
+export * from './TitleScreenGameOver';
 export * from './TreeMaps';
 export * from './Troops';
 export * from './Variables';

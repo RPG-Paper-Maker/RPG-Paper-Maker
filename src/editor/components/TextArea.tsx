@@ -10,6 +10,7 @@
 */
 
 import { ChangeEvent, FocusEvent, useEffect, useRef } from 'react';
+import { Utils } from '../common';
 import '../styles/TextArea.css';
 
 type Props = {
@@ -18,9 +19,17 @@ type Props = {
 	triggerInsertText?: string[] | null;
 	setTriggerInsertText?: (t: string[] | null) => void;
 	disabled?: boolean;
+	fillHeight?: boolean;
 };
 
-function TextArea({ text, onChange, triggerInsertText, setTriggerInsertText, disabled = false }: Props) {
+function TextArea({
+	text,
+	onChange,
+	triggerInsertText,
+	setTriggerInsertText,
+	disabled = false,
+	fillHeight = false,
+}: Props) {
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 	const insertTextAtCaret = (insertedText: string[]) => {
@@ -64,6 +73,7 @@ function TextArea({ text, onChange, triggerInsertText, setTriggerInsertText, dis
 
 	return (
 		<textarea
+			className={Utils.getClassName({ fillHeight })}
 			ref={textareaRef}
 			value={text}
 			onChange={handleChange}

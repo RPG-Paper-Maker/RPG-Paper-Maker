@@ -43,6 +43,7 @@ class Project {
 	public monsters = new Data.Monsters();
 	public troops = new Data.Troops();
 	public battleSystem = new Data.BattleSystem();
+	public titleScreenGameOver = new Data.TitleScreenGameOver();
 	public currentMapObjectStates: Node[] = [];
 	public currentMapObjectEvents: Node[] = [];
 	public currentMapObjectProperties: Node[] = [];
@@ -96,6 +97,7 @@ class Project {
 		await this.monsters.load();
 		await this.troops.load();
 		await this.battleSystem.load();
+		await this.titleScreenGameOver.load();
 	}
 
 	async save() {

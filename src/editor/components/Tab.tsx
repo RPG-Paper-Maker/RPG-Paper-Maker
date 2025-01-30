@@ -16,6 +16,7 @@ import { Model } from '../Editor';
 import { ArrayUtils, Utils } from '../common';
 import '../styles/Tab.css';
 import Button from './Button';
+import Flex from './Flex';
 
 type Props = {
 	titles: Model.Base[];
@@ -148,12 +149,12 @@ function Tab({
 	const getContents = () =>
 		lazyLoadingContent
 			? contents
-					.filter((content, index) => openedTabs.includes(index))
 					.map((content, index) => (
-						<div key={index} style={{ display: currentIndex === index ? 'block' : 'none' }}>
+						<Flex column one key={index} style={{ display: currentIndex === index ? 'flex' : 'none' }}>
 							{content}
-						</div>
+						</Flex>
 					))
+					.filter((content, index) => openedTabs.includes(index))
 			: contents[currentIndex];
 
 	return (

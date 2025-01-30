@@ -49,12 +49,12 @@ function TreeItem({
 	doNotShowID = false,
 }: Props) {
 	const [expanded, setExpanded] = useState(node.expanded);
-	const [isChecked, setIsChecked] = useState((node.content as Model.Checkable).enabled ?? false);
+	const [isChecked, setIsChecked] = useState((node.content as Model.Checkable).checked ?? false);
 
 	const isCheckable = useMemo(() => node.content instanceof Model.Checkable, [node]);
 
 	const handleCheck = (b: boolean) => {
-		(node.content as Model.Checkable).enabled = b;
+		(node.content as Model.Checkable).checked = b;
 		setIsChecked(b);
 	};
 
@@ -70,7 +70,7 @@ function TreeItem({
 
 	useEffect(() => {
 		if (isCheckable) {
-			setIsChecked((node.content as Model.Checkable).enabled);
+			setIsChecked((node.content as Model.Checkable).checked);
 		}
 	}, [node, isCheckable]);
 
