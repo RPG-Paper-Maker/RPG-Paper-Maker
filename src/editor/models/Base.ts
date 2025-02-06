@@ -180,6 +180,25 @@ class Base extends Serializable {
 	public static DETECTION_AUTOMATIC_OPTIONS = Base.mapListIndex(['circle', 'rectangle']);
 	public static TITLE_COMMAND_OPTIONS = Base.mapListIndex(['new.game', 'load.game', 'settings', 'exit', 'script']);
 	public static GAME_OVER_COMMAND_OPTIONS = Base.mapListIndex(['continue', 'title.screen', 'exit', 'script']);
+	public static INVENTORY_FILTER_OPTIONS = Base.mapListIndex([
+		'all',
+		'consumables',
+		'custom',
+		'weapons',
+		'armors',
+		'weapons.and.armors',
+		'script',
+	]);
+	public static MAIN_MENU_COMMAND_OPTIONS = Base.mapListIndex([
+		'inventory',
+		'skills',
+		'equip',
+		'states',
+		'order',
+		'save',
+		'quit',
+		'script',
+	]);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([

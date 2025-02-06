@@ -25,6 +25,10 @@ class TitleCommand extends Localization {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(): void {
+		super.applyDefault(TitleCommand.getBindings([]));
+	}
+
 	copy(titleCommand: TitleCommand): void {
 		super.copy(titleCommand, TitleCommand.getBindings([]));
 	}

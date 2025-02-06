@@ -42,8 +42,11 @@ import DialogFontName from './dialogs/models/DialogFontName';
 import DialogFontSize from './dialogs/models/DialogFontSize';
 import DialogFrequency from './dialogs/models/DialogFrequency';
 import DialogGameOverCommand from './dialogs/models/DialogGameOverCommand';
+import DialogHeroStatisticDisplay from './dialogs/models/DialogHeroStatisticDisplay';
 import DialogInitialPartyMember from './dialogs/models/DialogInitialPartyMember';
+import DialogInventoryFilter from './dialogs/models/DialogInventoryFilter';
 import DialogLocalization from './dialogs/models/DialogLocalization';
+import DialogMainMenuCommand from './dialogs/models/DialogMainMenuCommand';
 import DialogMapObjectCommand from './dialogs/models/DialogMapObjectCommand';
 import DialogMapObjectCommandMove from './dialogs/models/DialogMapObjectCommandMove';
 import DialogMapObjectCommandShopItem from './dialogs/models/DialogMapObjectCommandShopItem';
@@ -830,6 +833,12 @@ function Tree({
 					return <DialogTitleCommand {...options} />;
 				case Model.GameOverCommand:
 					return <DialogGameOverCommand {...options} />;
+				case Model.InventoryFilter:
+					return <DialogInventoryFilter {...options} />;
+				case Model.MainMenuCommand:
+					return <DialogMainMenuCommand {...options} />;
+				case Model.HeroStatisticDisplay:
+					return <DialogHeroStatisticDisplay {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

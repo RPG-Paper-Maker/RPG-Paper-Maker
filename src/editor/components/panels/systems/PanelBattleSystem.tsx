@@ -80,6 +80,10 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 		Project.current!.battleSystem.elements = Node.createListFromNodes(elements);
 	};
 
+	const updateStatistics = () => {
+		Project.current!.battleSystem.statistics = Node.createListFromNodes(statistics);
+	};
+
 	const updateEquipments = () => {
 		Project.current!.battleSystem.equipments = Node.createListFromNodes(equipments);
 	};
@@ -241,6 +245,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 									list={statistics}
 									forcedCurrentSelectedItemIndex={forcedCurrentIndex}
 									setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+									onListUpdated={updateStatistics}
 									noScrollOnForce
 								/>
 							</Flex>

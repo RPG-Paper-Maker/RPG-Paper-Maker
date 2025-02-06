@@ -9,16 +9,16 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, GAME_OVER_COMMAND_KIND, JSONType } from '../common';
+import { BINDING, BindingType, JSONType, MAIN_MENU_COMMAND_KIND } from '../common';
 import { Localization } from './Localization';
 
-class GameOverCommand extends Localization {
-	public kind!: GAME_OVER_COMMAND_KIND;
+class MainMenuCommand extends Localization {
+	public kind!: MAIN_MENU_COMMAND_KIND;
 	public script!: string;
 
 	public static bindings: BindingType[] = [
-		['kind', 'k', GAME_OVER_COMMAND_KIND.CONTINUE, BINDING.NUMBER],
-		['script', 's', '', BINDING.STRING],
+		['kind', 'kind', MAIN_MENU_COMMAND_KIND.INVENTORY, BINDING.NUMBER],
+		['script', 'script', '', BINDING.STRING],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -26,20 +26,20 @@ class GameOverCommand extends Localization {
 	}
 
 	applyDefault(): void {
-		super.applyDefault(GameOverCommand.getBindings([]));
+		super.applyDefault(MainMenuCommand.getBindings([]));
 	}
 
-	copy(gameOverCommand: GameOverCommand): void {
-		super.copy(gameOverCommand, GameOverCommand.getBindings([]));
+	copy(mainMenuCommand: MainMenuCommand): void {
+		super.copy(mainMenuCommand, MainMenuCommand.getBindings([]));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.read(json, GameOverCommand.getBindings(additionnalBinding));
+		super.read(json, MainMenuCommand.getBindings(additionnalBinding));
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.write(json, GameOverCommand.getBindings(additionnalBinding));
+		super.write(json, MainMenuCommand.getBindings(additionnalBinding));
 	}
 }
 
-export { GameOverCommand };
+export { MainMenuCommand };

@@ -15,6 +15,7 @@ import { initializeAcceptRef } from '../../common';
 import { Project } from '../../core';
 import { Model } from '../../Editor';
 import PanelBattleSystem from '../panels/systems/PanelBattleSystem';
+import PanelMainMenu from '../panels/systems/PanelMainMenu';
 import PanelSystem from '../panels/systems/PanelSystem';
 import PanelTitleScreenGameOver from '../panels/systems/PanelTitleScreenGameOver';
 import Tab from '../Tab';
@@ -32,11 +33,13 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 	const panelSystemRef = useRef<initializeAcceptRef>(null);
 	const panelBattleSystemRef = useRef<initializeAcceptRef>(null);
 	const panelTitleScreenGameOverRef = useRef<initializeAcceptRef>(null);
+	const panelMainMenuRef = useRef<initializeAcceptRef>(null);
 
 	const handleAccept = async () => {
 		panelSystemRef.current?.accept();
 		panelBattleSystemRef.current?.accept();
 		panelTitleScreenGameOverRef.current?.accept();
+		panelMainMenuRef.current?.accept();
 		await Project.current!.systems.save();
 		await Project.current!.battleSystem.save();
 		await Project.current!.titleScreenGameOver.save();
@@ -60,11 +63,17 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 			initialHeight='620px'
 		>
 			<Tab
-				titles={Model.Base.mapListIndex([t('system'), t('battle.system'), t('title.screen.game.over')])}
+				titles={Model.Base.mapListIndex([
+					t('system'),
+					t('battle.system'),
+					t('title.screen.game.over'),
+					t('main.menu'),
+				])}
 				contents={[
 					<PanelSystem key={0} ref={panelSystemRef} />,
 					<PanelBattleSystem key={1} ref={panelBattleSystemRef} />,
 					<PanelTitleScreenGameOver key={2} ref={panelTitleScreenGameOverRef} />,
+					<PanelMainMenu key={3} ref={panelMainMenuRef} />,
 				]}
 				padding
 				scrollableContent

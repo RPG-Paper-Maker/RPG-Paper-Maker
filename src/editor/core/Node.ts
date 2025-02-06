@@ -44,6 +44,9 @@ export const NODE_CONSTRUCTOR_KIND = {
 	BattleCommand: () => Model.BattleCommand,
 	TitleCommand: () => Model.TitleCommand,
 	GameOverCommand: () => Model.GameOverCommand,
+	InventoryFilter: () => Model.InventoryFilter,
+	MainMenuCommand: () => Model.MainMenuCommand,
+	HeroStatisticDisplay: () => Model.HeroStatisticDisplay,
 };
 
 class Node extends Serializable {

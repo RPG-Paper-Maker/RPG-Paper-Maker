@@ -60,6 +60,10 @@ class System extends Serializable {
 	public currencies!: Model.Currency[];
 	public detections!: Model.Detection[];
 	public initialPartyMembers!: Model.InitialPartyMember[];
+	public itemsTypes!: Model.Localization[];
+	public inventoryFilters!: Model.InventoryFilter[];
+	public mainMenuCommands!: Model.MainMenuCommand[];
+	public heroesStatisticsDisplay!: Model.HeroStatisticDisplay[];
 	public PATH_BR!: string;
 	public PATH_DLCS!: string;
 	public heroMapID!: number;
@@ -147,6 +151,10 @@ class System extends Serializable {
 		['currencies', 'currencies', [], BINDING.LIST, Model.Currency],
 		['detections', 'd', [], BINDING.LIST, Model.Detection],
 		['initialPartyMembers', 'initialPartyMembers', [], BINDING.LIST, Model.InitialPartyMember],
+		['itemsTypes', 'itemsTypes', [], BINDING.LIST, Model.Localization],
+		['inventoryFilters', 'inventoryFilters', [], BINDING.LIST, Model.InventoryFilter],
+		['mainMenuCommands', 'mainMenuCommands', [], BINDING.LIST, Model.MainMenuCommand],
+		['heroesStatisticsDisplay', 'heroesStatistics', [], BINDING.LIST, Model.HeroStatisticDisplay],
 		['PATH_BR', 'pathBR', undefined, BINDING.STRING],
 		['heroMapID', 'idMapHero', 1, BINDING.NUMBER],
 		['heroMapPosition', 'hmp', new Position(7, 0, 0, 7), BINDING.POSITION],
