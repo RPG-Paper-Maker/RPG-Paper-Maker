@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { forwardRef, useImperativeHandle, useLayoutEffect, useState } from 'react';
+import { forwardRef, useImperativeHandle, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Node, Project } from '../../../core';
 import { Model } from '../../../Editor';
@@ -27,6 +27,8 @@ const PanelEventsStates = forwardRef((props, ref) => {
 	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
 	const [forcedCurrentIndexParameters, setForcedCurrentIndexParameters] = useState<number | null>(null);
 
+	const isEventDisabled = useMemo(() => selectedEvent === null || selectedEvent.id === -1, [selectedEvent]);
+
 	const initialize = () => {
 		const commonEvents = Project.current!.commonEvents;
 		setEvents(Node.createList(commonEvents.eventsUser));
@@ -35,10 +37,12 @@ const PanelEventsStates = forwardRef((props, ref) => {
 	};
 
 	const handleSelectEvent = (node: Node | null) => {
-		const event = (node?.content ?? null) as Model.CommonEvent | null;
-		setSelectedEvent(event);
-		setParameters(Node.createList(event?.parameters ?? []));
-		setForcedCurrentIndexParameters(0);
+		if (node) {
+			const event = node.content as Model.CommonEvent;
+			setSelectedEvent(event);
+			setParameters(Node.createList(event.parameters));
+			setForcedCurrentIndexParameters(0);
+		}
 	};
 
 	const handleUpdateParameters = () => {
@@ -80,11 +84,12 @@ const PanelEventsStates = forwardRef((props, ref) => {
 									noScrollOnForce
 									scrollable
 									showEditName
+									applyDefault
 								/>
 							</Flex>
 						</Flex>
 						<Flex one>
-							<Groupbox title={t('parameters')} fillWidth>
+							<Groupbox title={t('parameters')} fillWidth disabled={isEventDisabled}>
 								<Flex one fillHeight>
 									<Tree
 										constructorType={Model.CreateParameter}
@@ -92,6 +97,7 @@ const PanelEventsStates = forwardRef((props, ref) => {
 										forcedCurrentSelectedItemIndex={forcedCurrentIndexParameters}
 										setForcedCurrentSelectedItemIndex={setForcedCurrentIndexParameters}
 										onListUpdated={handleUpdateParameters}
+										disabled={isEventDisabled}
 										noScrollOnForce
 										scrollable
 										canBeEmpty

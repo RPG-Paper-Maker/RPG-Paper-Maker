@@ -1,0 +1,142 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { forwardRef, useImperativeHandle, useLayoutEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Node, Project } from '../../../core';
+import { Model } from '../../../Editor';
+import useStateBool from '../../../hooks/useStateBool';
+import Checkbox from '../../Checkbox';
+import Flex from '../../Flex';
+import Groupbox from '../../Groupbox';
+import Tree, { TREES_MIN_HEIGHT, TREES_MIN_WIDTH } from '../../Tree';
+import TreeCommands from '../../TreeCommands';
+
+const PanelCommonReactions = forwardRef((props, ref) => {
+	const { t } = useTranslation();
+
+	const [reactions, setReactions] = useState<Node[]>([]);
+	const [selectedReaction, setSelectedReaction] = useState<Model.CommonReaction | null>(null);
+	const [parameters, setParameters] = useState<Node[]>([]);
+	const [isBlock, setIsBlock] = useStateBool();
+	const [commands, setCommands] = useState<Node[]>([]);
+	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
+	const [forcedCurrentIndexParameters, setForcedCurrentIndexParameters] = useState<number | null>(null);
+
+	const isReactionDisabled = useMemo(
+		() => selectedReaction === null || selectedReaction.id === -1,
+		[selectedReaction]
+	);
+
+	const initialize = () => {
+		const commonEvents = Project.current!.commonEvents;
+		setReactions(Node.createList(commonEvents.commonReactions));
+		setForcedCurrentIndex(0);
+	};
+
+	const handleSelectReaction = (node: Node | null) => {
+		if (node) {
+			const reaction = node.content as Model.CommonReaction;
+			setSelectedReaction(reaction);
+			setParameters(Node.createList(reaction.parameters));
+			setIsBlock(reaction.blockingHero);
+			setCommands(reaction.commands.map((node) => node.clone()));
+			setForcedCurrentIndexParameters(0);
+		}
+	};
+
+	const handleUpdateParameters = () => {
+		if (selectedReaction) {
+			selectedReaction.parameters = Node.createListFromNodes(parameters);
+		}
+	};
+
+	const handleChangeBlock = (b: boolean) => {
+		if (selectedReaction) {
+			setIsBlock(b);
+			selectedReaction.blockingHero = b;
+		}
+	};
+
+	const handleUpdateCommands = () => {
+		if (selectedReaction) {
+			selectedReaction.commands = commands.map((node) => node.clone());
+		}
+	};
+
+	const accept = () => {
+		const commonEvents = Project.current!.commonEvents;
+		commonEvents.commonReactions = Node.createListFromNodes(reactions);
+	};
+
+	useImperativeHandle(ref, () => ({
+		initialize,
+		accept,
+	}));
+
+	useLayoutEffect(() => {
+		initialize();
+		// eslint-disable-next-line
+	}, []);
+
+	return (
+		<Flex spacedLarge fillWidth fillHeight>
+			<Groupbox title={t('common.reactions')}>
+				<Flex one fillHeight>
+					<Tree
+						constructorType={Model.CommonReaction}
+						list={reactions}
+						forcedCurrentSelectedItemIndex={forcedCurrentIndex}
+						setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
+						minWidth={TREES_MIN_WIDTH}
+						onSelectedItem={handleSelectReaction}
+						noScrollOnForce
+						scrollable
+						showEditName
+						applyDefault
+					/>
+				</Flex>
+			</Groupbox>
+			<Flex one>
+				<Flex column spacedLarge fillWidth>
+					<Groupbox title={t('parameters')} disabled={isReactionDisabled}>
+						<Flex one fillHeight>
+							<Tree
+								constructorType={Model.CreateParameter}
+								list={parameters}
+								forcedCurrentSelectedItemIndex={forcedCurrentIndexParameters}
+								setForcedCurrentSelectedItemIndex={setForcedCurrentIndexParameters}
+								onListUpdated={handleUpdateParameters}
+								minHeight={TREES_MIN_HEIGHT}
+								disabled={isReactionDisabled}
+								noScrollOnForce
+								scrollable
+								canBeEmpty
+							/>
+						</Flex>
+					</Groupbox>
+					<Checkbox isChecked={isBlock} onChange={handleChangeBlock} disabled={isReactionDisabled}>
+						{t('block.hero.when.reaction')}
+					</Checkbox>
+					<Flex one>
+						<TreeCommands
+							list={commands}
+							onListUpdated={handleUpdateCommands}
+							disabled={isReactionDisabled}
+						/>
+					</Flex>
+				</Flex>
+			</Flex>
+		</Flex>
+	);
+});
+
+export default PanelCommonReactions;

@@ -102,7 +102,7 @@ function DialogCommandDisplayChoice({ commandKind, isOpen, setIsOpen, list, onAc
 			onClose={handleReject}
 			initialWidth='600px'
 		>
-			<Flex spaced>
+			<Flex spaced fillWidth>
 				<Flex one fillWidth>
 					<Groupbox title={t('choices')} fillWidth>
 						<Tree

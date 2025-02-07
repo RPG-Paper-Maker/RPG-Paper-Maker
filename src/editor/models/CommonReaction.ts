@@ -24,6 +24,10 @@ class CommonReaction extends MapObjectReaction {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault() {
+		super.applyDefault(CommonReaction.getBindings([]));
+	}
+
 	getDefaultParameters(): MapObjectParameter[] {
 		return this.parameters.map((createParameter) =>
 			MapObjectParameter.create(

@@ -15,6 +15,7 @@ import { initializeAcceptRef } from '../../common';
 import { Project } from '../../core';
 import { Model } from '../../Editor';
 import PanelBattleSystem from '../panels/systems/PanelBattleSystem';
+import PanelCommonReactions from '../panels/systems/PanelCommonReactions';
 import PanelEventsStates from '../panels/systems/PanelEventsStates';
 import PanelMainMenu from '../panels/systems/PanelMainMenu';
 import PanelSystem from '../panels/systems/PanelSystem';
@@ -36,6 +37,7 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 	const panelTitleScreenGameOverRef = useRef<initializeAcceptRef>(null);
 	const panelMainMenuRef = useRef<initializeAcceptRef>(null);
 	const panelEventsStatesRef = useRef<initializeAcceptRef>(null);
+	const panelCommonReactionsRef = useRef<initializeAcceptRef>(null);
 
 	const handleAccept = async () => {
 		panelSystemRef.current?.accept();
@@ -43,6 +45,7 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 		panelTitleScreenGameOverRef.current?.accept();
 		panelMainMenuRef.current?.accept();
 		panelEventsStatesRef.current?.accept();
+		panelCommonReactionsRef.current?.accept();
 		await Project.current!.systems.save();
 		await Project.current!.battleSystem.save();
 		await Project.current!.titleScreenGameOver.save();
@@ -74,6 +77,7 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 					t('title.screen.game.over'),
 					t('main.menu'),
 					t('events.states'),
+					t('common.reactions'),
 				])}
 				contents={[
 					<PanelSystem key={0} ref={panelSystemRef} />,
@@ -81,6 +85,7 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 					<PanelTitleScreenGameOver key={2} ref={panelTitleScreenGameOverRef} />,
 					<PanelMainMenu key={3} ref={panelMainMenuRef} />,
 					<PanelEventsStates key={4} ref={panelMainMenuRef} />,
+					<PanelCommonReactions key={5} ref={panelCommonReactionsRef} />,
 				]}
 				padding
 				scrollableContent

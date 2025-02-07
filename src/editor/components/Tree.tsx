@@ -92,15 +92,18 @@ type Props = {
 	forcedCurrentSelectedItemIndex?: number | null;
 	setForcedCurrentSelectedItemIndex?: (forced: number | null) => void;
 	minWidth?: number;
+	minHeight?: number;
 	byIndex?: boolean;
 	onDrop?: () => Promise<void>;
 	disabled?: boolean;
 	scrollable?: boolean;
 	multipleSelection?: boolean;
 	noScrollOnForce?: boolean;
+	applyDefault?: boolean;
 };
 
 export const TREES_MIN_WIDTH = 150;
+export const TREES_MIN_HEIGHT = 100;
 
 function Tree({
 	list,
@@ -129,18 +132,31 @@ function Tree({
 	byIndex = false,
 	onDrop,
 	minWidth,
+	minHeight,
 	disabled = false,
 	scrollable = false,
 	multipleSelection = false,
 	noScrollOnForce = false,
+	applyDefault = false,
 }: Props) {
 	const { t } = useTranslation();
+
+	const createDefault = (id: number) => {
+		if (applyDefault) {
+			const model = new constructorType();
+			model.applyDefault();
+			model.id = id;
+			model.name = '';
+			return model;
+		} else {
+			return Model.Base.create(id, '');
+		}
+	};
 
 	const defaultID =
 		defaultSelectedID === undefined ? (list && list.length && list[0].content.id) || -1 : defaultSelectedID;
 	const [currentSelectedItemNode, setCurrentSelectedItemNode] = useState(
-		(byIndex ? list[0] : Node.getNodeByID(list, defaultID)) ??
-			(cannotAdd ? null : Node.create(Model.Base.create(-1, '')))
+		(byIndex ? list[0] : Node.getNodeByID(list, defaultID)) ?? (cannotAdd ? null : Node.create(createDefault(-1)))
 	);
 	const [additionalSelectedNodes, setAdditionalSelectedNodes] = useState<Node[]>([]);
 	const [notExpandedItemsList, setNotExpandedItemsList] = useState<number[]>(Node.getNotExpandedItemsList(list));
@@ -529,7 +545,7 @@ function Tree({
 			forcedCurrentSelectedItemIndex !== null &&
 			setForcedCurrentSelectedItemIndex
 		) {
-			const node = list[forcedCurrentSelectedItemIndex] ?? Node.create(Model.Base.create(-1, ''));
+			const node = list[forcedCurrentSelectedItemIndex] ?? Node.create(createDefault(-1));
 			setCurrentSelectedItemNode(node);
 			setCurrentName(node.content.name);
 			setForcedCurrentSelectedItemIndex(null);
@@ -604,7 +620,7 @@ function Tree({
 		const canAddEmptyNode = !cannotAdd && ((multipleLevels && addEmpty) || level === 0);
 		let emptyNode: Node | null = null;
 		if (canAddEmptyNode) {
-			emptyNode = Node.create(Model.Base.create(emptyID, ''));
+			emptyNode = Node.create(createDefault(emptyID));
 			emptyNode.parent = parent;
 			emptyID--;
 		}
@@ -865,7 +881,7 @@ function Tree({
 				<div
 					onDoubleClick={handleDoubleClick}
 					className={Utils.getClassName({ disabled, zeroHeight: scrollable }, 'tree')}
-					style={{ minWidth: `${minWidth}px` }}
+					style={{ minWidth: `${minWidth}px`, minHeight: `${minHeight}px` }}
 				>
 					<Flex spaced>{getHeaders()}</Flex>
 					{getItems()}

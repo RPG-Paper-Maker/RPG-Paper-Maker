@@ -24,6 +24,11 @@ class MapObjectReaction extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []) {
+		super.applyDefault(MapObjectReaction.getBindings(additionnalBinding));
+		this.commands = [];
+	}
+
 	copy(reaction: MapObjectReaction, additionnalBinding: BindingType[] = []): void {
 		super.copy(reaction, MapObjectReaction.getBindings(additionnalBinding));
 		this.commands = reaction.commands.map((command) => command.clone());

@@ -22,6 +22,10 @@ class CommonEvent extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault() {
+		super.applyDefault(CommonEvent.getBindings([]));
+	}
+
 	copy(event: CommonEvent, additionnalBinding: BindingType[] = []): void {
 		super.copy(event, CommonEvent.getBindings(additionnalBinding));
 	}
