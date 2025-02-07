@@ -47,6 +47,7 @@ export const NODE_CONSTRUCTOR_KIND = {
 	InventoryFilter: () => Model.InventoryFilter,
 	MainMenuCommand: () => Model.MainMenuCommand,
 	HeroStatisticDisplay: () => Model.HeroStatisticDisplay,
+	CreateParameter: () => Model.CreateParameter,
 };
 
 class Node extends Serializable {

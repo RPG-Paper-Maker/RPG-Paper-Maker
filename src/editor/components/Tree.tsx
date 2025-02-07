@@ -34,6 +34,7 @@ import DialogBattleMap from './dialogs/models/DialogBattleMap';
 import DialogCameraProperty from './dialogs/models/DialogCameraProperty';
 import DialogColor from './dialogs/models/DialogColor';
 import DialogCost from './dialogs/models/DialogCost';
+import DialogCreateParameter from './dialogs/models/DialogCreateParameter';
 import DialogCurrency from './dialogs/models/DialogCurrency';
 import DialogDetection from './dialogs/models/DialogDetection';
 import DialogDynamicNumber from './dialogs/models/DialogDynamicNumber';
@@ -528,13 +529,11 @@ function Tree({
 			forcedCurrentSelectedItemIndex !== null &&
 			setForcedCurrentSelectedItemIndex
 		) {
-			const node = list[forcedCurrentSelectedItemIndex];
+			const node = list[forcedCurrentSelectedItemIndex] ?? Node.create(Model.Base.create(-1, ''));
 			setCurrentSelectedItemNode(node);
-			setCurrentName(node?.content?.name || '');
+			setCurrentName(node.content.name);
 			setForcedCurrentSelectedItemIndex(null);
-			if (node) {
-				setNeedScroll(true);
-			}
+			setNeedScroll(true);
 			if (onSelectedItem) {
 				onSelectedItem(node, false);
 			}
@@ -839,6 +838,8 @@ function Tree({
 					return <DialogMainMenuCommand {...options} />;
 				case Model.HeroStatisticDisplay:
 					return <DialogHeroStatisticDisplay {...options} />;
+				case Model.CreateParameter:
+					return <DialogCreateParameter {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

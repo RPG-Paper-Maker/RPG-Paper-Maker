@@ -16,12 +16,23 @@ import { Base } from './Base';
 class CreateParameter extends Base {
 	public defaultValue!: DynamicValue;
 
-	public static bindings: BindingType[] = [
-		['defaultValue', 'd', DynamicValue.create(DYNAMIC_VALUE_KIND.NONE), BINDING.DYNAMIC_VALUE, DynamicValue],
-	];
+	public static bindings: BindingType[] = [['defaultValue', 'd', undefined, BINDING.DYNAMIC_VALUE, DynamicValue]];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	static getTreeHeader(): string[] {
+		return ['name', 'default.value'];
+	}
+
+	applyDefault() {
+		super.applyDefault(CreateParameter.getBindings([]));
+		this.defaultValue = DynamicValue.create(DYNAMIC_VALUE_KIND.ANYTHING);
+	}
+
+	toStrings(): string[] {
+		return [this.toStringNameID(), this.defaultValue.toString()];
 	}
 
 	copy(parameter: CreateParameter, additionnalBinding: BindingType[] = []): void {

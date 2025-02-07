@@ -15,6 +15,7 @@ import { initializeAcceptRef } from '../../common';
 import { Project } from '../../core';
 import { Model } from '../../Editor';
 import PanelBattleSystem from '../panels/systems/PanelBattleSystem';
+import PanelEventsStates from '../panels/systems/PanelEventsStates';
 import PanelMainMenu from '../panels/systems/PanelMainMenu';
 import PanelSystem from '../panels/systems/PanelSystem';
 import PanelTitleScreenGameOver from '../panels/systems/PanelTitleScreenGameOver';
@@ -34,15 +35,18 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 	const panelBattleSystemRef = useRef<initializeAcceptRef>(null);
 	const panelTitleScreenGameOverRef = useRef<initializeAcceptRef>(null);
 	const panelMainMenuRef = useRef<initializeAcceptRef>(null);
+	const panelEventsStatesRef = useRef<initializeAcceptRef>(null);
 
 	const handleAccept = async () => {
 		panelSystemRef.current?.accept();
 		panelBattleSystemRef.current?.accept();
 		panelTitleScreenGameOverRef.current?.accept();
 		panelMainMenuRef.current?.accept();
+		panelEventsStatesRef.current?.accept();
 		await Project.current!.systems.save();
 		await Project.current!.battleSystem.save();
 		await Project.current!.titleScreenGameOver.save();
+		await Project.current!.commonEvents.save();
 		setIsOpen(false);
 	};
 
@@ -50,6 +54,7 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 		await Project.current!.systems.load();
 		await Project.current!.battleSystem.load();
 		await Project.current!.titleScreenGameOver.load();
+		await Project.current!.commonEvents.load();
 		setIsOpen(false);
 	};
 
@@ -68,12 +73,14 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 					t('battle.system'),
 					t('title.screen.game.over'),
 					t('main.menu'),
+					t('events.states'),
 				])}
 				contents={[
 					<PanelSystem key={0} ref={panelSystemRef} />,
 					<PanelBattleSystem key={1} ref={panelBattleSystemRef} />,
 					<PanelTitleScreenGameOver key={2} ref={panelTitleScreenGameOverRef} />,
 					<PanelMainMenu key={3} ref={panelMainMenuRef} />,
+					<PanelEventsStates key={4} ref={panelMainMenuRef} />,
 				]}
 				padding
 				scrollableContent

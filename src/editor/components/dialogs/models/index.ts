@@ -3,6 +3,7 @@ export * from './DialogBattleMap';
 export * from './DialogCameraProperty';
 export * from './DialogColor';
 export * from './DialogCost';
+export * from './DialogCreateParameter';
 export * from './DialogCurrency';
 export * from './DialogDetection';
 export * from './DialogDynamicNumber';
