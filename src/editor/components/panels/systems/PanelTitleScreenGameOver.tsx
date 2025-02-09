@@ -44,7 +44,6 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 	const [gameOverBackgroundImageID, setGameOverBackgroundImageID] = useStateNumber();
 	const [gameOverBackgroundVideoID, setGameOverBackgroundVideoID] = useStateNumber();
 	const [gameOverCommands, setGameOverCommands] = useState<Node[]>([]);
-	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
 
 	const initialize = () => {
 		const titleScreenGameOver = Project.current!.titleScreenGameOver;
@@ -67,7 +66,6 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 		setGameOverBackgroundVideoID(titleScreenGameOver.gameOverBackgroundVideoID);
 		playGameOverMusicSelectorRef.current!.initialize(titleScreenGameOver.gameOverMusic);
 		setGameOverCommands(Node.createList(titleScreenGameOver.gameOverCommands));
-		setForcedCurrentIndex(0);
 	};
 
 	const accept = () => {
@@ -148,8 +146,6 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 									<Tree
 										constructorType={Model.TitleCommand}
 										list={titleCommands}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 										noScrollOnForce
 										scrollable
 										doNotShowID
@@ -220,8 +216,6 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 									<Tree
 										constructorType={Model.GameOverCommand}
 										list={gameOverCommands}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 										noScrollOnForce
 										scrollable
 										doNotShowID

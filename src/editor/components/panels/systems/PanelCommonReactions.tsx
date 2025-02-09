@@ -28,8 +28,6 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 	const [parameters, setParameters] = useState<Node[]>([]);
 	const [isBlock, setIsBlock] = useStateBool();
 	const [commands, setCommands] = useState<Node[]>([]);
-	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
-	const [forcedCurrentIndexParameters, setForcedCurrentIndexParameters] = useState<number | null>(null);
 
 	const isReactionDisabled = useMemo(
 		() => selectedReaction === null || selectedReaction.id === -1,
@@ -39,7 +37,6 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 	const initialize = () => {
 		const commonEvents = Project.current!.commonEvents;
 		setReactions(Node.createList(commonEvents.commonReactions));
-		setForcedCurrentIndex(0);
 	};
 
 	const handleSelectReaction = (node: Node | null) => {
@@ -49,7 +46,6 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 			setParameters(Node.createList(reaction.parameters));
 			setIsBlock(reaction.blockingHero);
 			setCommands(reaction.commands.map((node) => node.clone()));
-			setForcedCurrentIndexParameters(0);
 		}
 	};
 
@@ -94,8 +90,6 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 					<Tree
 						constructorType={Model.CommonReaction}
 						list={reactions}
-						forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-						setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 						minWidth={TREES_MIN_WIDTH}
 						onSelectedItem={handleSelectReaction}
 						noScrollOnForce
@@ -112,8 +106,6 @@ const PanelCommonReactions = forwardRef((props, ref) => {
 							<Tree
 								constructorType={Model.CreateParameter}
 								list={parameters}
-								forcedCurrentSelectedItemIndex={forcedCurrentIndexParameters}
-								setForcedCurrentSelectedItemIndex={setForcedCurrentIndexParameters}
 								onListUpdated={handleUpdateParameters}
 								minHeight={TREES_MIN_HEIGHT}
 								disabled={isReactionDisabled}

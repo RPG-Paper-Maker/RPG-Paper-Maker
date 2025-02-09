@@ -23,7 +23,6 @@ type Props = {
 
 function TreeCommands({ list, onListUpdated, disabled }: Props) {
 	const [updatedList, setUpdatedList] = useState<Node[] | null>(null);
-	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
 
 	const handleAcceptCommand = (node: Node, isNew: boolean) => {
 		const command = node.content as Model.MapObjectCommand;
@@ -119,8 +118,7 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 
 	useLayoutEffect(() => {
 		Node.attributeIDsToList(list);
-		setUpdatedList([...list]);
-		setForcedCurrentIndex(0);
+		setUpdatedList(list);
 		// eslint-disable-next-line
 	}, [list]);
 
@@ -131,8 +129,6 @@ function TreeCommands({ list, onListUpdated, disabled }: Props) {
 			onAccept={handleAcceptCommand}
 			onListUpdated={onListUpdated}
 			disabled={disabled}
-			forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-			setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 			multipleLevels
 			canBeEmpty
 			scrollable

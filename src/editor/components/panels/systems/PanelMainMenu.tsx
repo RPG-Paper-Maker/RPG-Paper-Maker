@@ -24,7 +24,6 @@ const PanelMainMenu = forwardRef((props, ref) => {
 	const [inventoryFilters, setInventoryFilters] = useState<Node[]>([]);
 	const [mainMenuCommands, setMainMenuCommands] = useState<Node[]>([]);
 	const [heroesStatisticsDisplay, setHeroesStatisticsDisplay] = useState<Node[]>([]);
-	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
 
 	const initialize = () => {
 		const system = Project.current!.systems;
@@ -32,7 +31,6 @@ const PanelMainMenu = forwardRef((props, ref) => {
 		setInventoryFilters(Node.createList(system.inventoryFilters));
 		setMainMenuCommands(Node.createList(system.mainMenuCommands));
 		setHeroesStatisticsDisplay(Node.createList(system.heroesStatisticsDisplay));
-		setForcedCurrentIndex(0);
 	};
 
 	const updateItemsTypes = () => {
@@ -66,8 +64,6 @@ const PanelMainMenu = forwardRef((props, ref) => {
 							<Tree
 								constructorType={Model.Localization}
 								list={itemsTypes}
-								forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-								setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 								onListUpdated={updateItemsTypes}
 								noScrollOnForce
 								scrollable
@@ -81,8 +77,6 @@ const PanelMainMenu = forwardRef((props, ref) => {
 							<Tree
 								constructorType={Model.InventoryFilter}
 								list={inventoryFilters}
-								forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-								setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 								noScrollOnForce
 								scrollable
 							/>
@@ -97,8 +91,6 @@ const PanelMainMenu = forwardRef((props, ref) => {
 							<Tree
 								constructorType={Model.MainMenuCommand}
 								list={mainMenuCommands}
-								forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-								setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 								noScrollOnForce
 								scrollable
 							/>
@@ -111,8 +103,6 @@ const PanelMainMenu = forwardRef((props, ref) => {
 							<Tree
 								constructorType={Model.HeroStatisticDisplay}
 								list={heroesStatisticsDisplay}
-								forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-								setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 								noScrollOnForce
 								scrollable
 							/>

@@ -42,10 +42,14 @@ type Props = {
 	hideNameID?: boolean;
 	hideStateValues?: boolean;
 	saveOnDestruction?: boolean;
+	saveOnUpdate?: boolean;
 };
 
 const PanelMapObject = forwardRef(
-	({ object, hideNameID = false, hideStateValues = false, saveOnDestruction = false }: Props, ref) => {
+	(
+		{ object, hideNameID = false, hideStateValues = false, saveOnDestruction = false, saveOnUpdate = false }: Props,
+		ref
+	) => {
 		const { t } = useTranslation();
 
 		const [focusFirst, setFocustFirst] = useState(false);
@@ -137,6 +141,45 @@ const PanelMapObject = forwardRef(
 
 		const getObjectsList = () => [Model.Base.create(-1, t('none')), ...Project.current!.commonEvents.commonObjects];
 
+		const handleChangeModelID = (id: number) => {
+			setModelID(id);
+			if (saveOnUpdate) {
+				object.commonModelID = id;
+			}
+		};
+
+		const handleChangeOnlyOneEventPerFrame = (b: boolean) => {
+			setOnlyOneEventPerFrame(b);
+			if (saveOnUpdate) {
+				object.onlyOneEventPerFrame = b;
+			}
+		};
+
+		const handleChangeCanBeTriggeredAnotherObject = (b: boolean) => {
+			setCanBeTriggeredAnotherObject(b);
+			if (saveOnUpdate) {
+				object.canBeTriggeredAnotherObject = b;
+			}
+		};
+
+		const handleUpdateStates = () => {
+			if (saveOnUpdate) {
+				object.states = Node.createListFromNodes(statesRef.current.states);
+			}
+		};
+
+		const handleUpdateProperties = () => {
+			if (saveOnUpdate) {
+				object.properties = Node.createListFromNodes(statesRef.current.properties);
+			}
+		};
+
+		const handleUpdateEvents = () => {
+			if (saveOnUpdate) {
+				object.events = Node.createListFromNodes(statesRef.current.events);
+			}
+		};
+
 		const updateReactionsTab = (nodes: Node[], state: Model.MapObjectState | null) => {
 			if (state) {
 				setTabTitles(nodes.map((node) => node.content));
@@ -144,7 +187,13 @@ const PanelMapObject = forwardRef(
 					nodes.map((node) => {
 						const event = node.content as Model.MapObjectEvent;
 						const reaction = event.reactions.get('' + state.id);
-						return reaction ? <TreeCommands key={node.content.id} list={reaction.commands} /> : null;
+						return reaction ? (
+							<TreeCommands
+								key={node.content.id}
+								list={reaction.commands}
+								onListUpdated={handleUpdateEvents}
+							/>
+						) : null;
 					})
 				);
 			}
@@ -156,6 +205,7 @@ const PanelMapObject = forwardRef(
 				const reaction = selectedEvent.reactions.get('' + selectedState.id);
 				if (reaction) {
 					reaction.blockingHero = b;
+					handleUpdateEvents();
 				}
 			}
 		};
@@ -184,11 +234,13 @@ const PanelMapObject = forwardRef(
 				reaction.commands = [];
 				reaction.blockingHero = true;
 				event.reactions.set(id, reaction);
+				handleUpdateEvents();
 			}
 		};
 
 		const handleEventListUpdated = () => {
 			updateReactionsTab(events, selectedState);
+			handleUpdateEvents();
 		};
 
 		const handleCreateEvent = (node: Node) => {
@@ -242,6 +294,7 @@ const PanelMapObject = forwardRef(
 		const handleChangeGraphicsKind = (kind: number) => {
 			setGraphicsKind(kind);
 			selectedState!.graphicsKind = kind;
+			handleUpdateStates();
 		};
 
 		const handleUpdateGraphics = (id: number, rect: Rectangle, isTileset: boolean) => {
@@ -256,6 +309,7 @@ const PanelMapObject = forwardRef(
 			setGraphicsIndexX(selectedState!.graphicsIndexX);
 			setGraphicsIndexY(selectedState!.graphicsIndexY);
 			setRectTileset(selectedState!.rectTileset);
+			handleUpdateStates();
 		};
 
 		const handleChangeObjectMovingKind = (movingKind: OBJECT_MOVING_KIND) => {
@@ -265,6 +319,7 @@ const PanelMapObject = forwardRef(
 				selectedState!.eventCommandRoute = null;
 				setEventCommandRoute(null);
 			}
+			handleUpdateStates();
 		};
 
 		const handleClickEditRoute = () => {
@@ -274,56 +329,67 @@ const PanelMapObject = forwardRef(
 		const handleAcceptEditRoute = (command: Model.MapObjectCommand) => {
 			selectedState!.eventCommandRoute = command;
 			setEventCommandRoute(command);
+			handleUpdateStates();
 		};
 
 		const handleChangeSpeedID = (speedID: number) => {
 			setSpeedID(speedID);
 			selectedState!.speedID = speedID;
+			handleUpdateStates();
 		};
 
 		const handleChangeFrequencyID = (frequencyID: number) => {
 			setFrequencyID(frequencyID);
 			selectedState!.frequencyID = frequencyID;
+			handleUpdateStates();
 		};
 
 		const handleChangeMoveAnimation = (moveAnimation: boolean) => {
 			setMoveAnimation(moveAnimation);
 			selectedState!.moveAnimation = moveAnimation;
+			handleUpdateStates();
 		};
 
 		const handleChangeStopAnimation = (stopAnimation: boolean) => {
 			setStopAnimation(stopAnimation);
 			selectedState!.stopAnimation = stopAnimation;
+			handleUpdateStates();
 		};
 
 		const handleChangeClimbAnimation = (climbAnimation: boolean) => {
 			setClimbAnimation(climbAnimation);
 			selectedState!.climbAnimation = climbAnimation;
+			handleUpdateStates();
 		};
 
 		const handleChangeDirectionFix = (directionFix: boolean) => {
 			setDirectionFix(directionFix);
 			selectedState!.directionFix = directionFix;
+			handleUpdateStates();
 		};
 
 		const handleChangeThrough = (through: boolean) => {
 			setThrough(through);
 			selectedState!.through = through;
+			handleUpdateStates();
 		};
 
 		const handleChangeSetWithCamera = (setWithCamera: boolean) => {
 			setSetWithCamera(setWithCamera);
 			selectedState!.setWithCamera = setWithCamera;
+			handleUpdateStates();
 		};
 
 		const handleChangePixelOffset = (pixelOffset: boolean) => {
 			setPixelOffset(pixelOffset);
 			selectedState!.pixelOffset = pixelOffset;
+			handleUpdateStates();
 		};
 
 		const handleChangeKeepPosition = (keepPosition: boolean) => {
 			setKeepPosition(keepPosition);
 			selectedState!.keepPosition = keepPosition;
+			handleUpdateStates();
 		};
 
 		const handleChangeDetectionCheck = (isChecked: boolean) => {
@@ -332,12 +398,14 @@ const PanelMapObject = forwardRef(
 			} else {
 				selectedState!.eventCommandDetection = null;
 				setEventCommandDetection(null);
+				handleUpdateStates();
 			}
 		};
 
 		const handleAcceptDetection = (command: Model.MapObjectCommand) => {
 			selectedState!.eventCommandDetection = command;
 			setEventCommandDetection(command);
+			handleUpdateStates();
 		};
 
 		const handleClickDetection = () => {
@@ -403,7 +471,7 @@ const PanelMapObject = forwardRef(
 							{t('model')}:
 							<Dropdown
 								selectedID={modelID}
-								onChange={setModelID}
+								onChange={handleChangeModelID}
 								options={getObjectsList()}
 								displayIDs
 							/>
@@ -436,6 +504,7 @@ const PanelMapObject = forwardRef(
 											list={states}
 											onSelectedItem={handleSelectedItemState}
 											onCreateItem={handleCreateState}
+											onListUpdated={handleUpdateStates}
 											forcedCurrentSelectedItemID={forcedCurrentSelectedIDState}
 											setForcedCurrentSelectedItemID={setForcedCurrentSelectedIDState}
 										/>
@@ -444,7 +513,11 @@ const PanelMapObject = forwardRef(
 								<Flex column one spaced>
 									{t('properties')}:
 									<Flex one zeroHeight>
-										<Tree list={properties} constructorType={Model.MapObjectProperty} />
+										<Tree
+											list={properties}
+											constructorType={Model.MapObjectProperty}
+											onListUpdated={handleUpdateProperties}
+										/>
 									</Flex>
 								</Flex>
 							</Flex>
@@ -564,10 +637,13 @@ const PanelMapObject = forwardRef(
 					</Flex>
 					<Flex spacedLarge>
 						<Flex one spaced>
-							<Checkbox isChecked={onlyOneEventPerFrame} onChange={setOnlyOneEventPerFrame}>
+							<Checkbox isChecked={onlyOneEventPerFrame} onChange={handleChangeOnlyOneEventPerFrame}>
 								{t('only.one.event.per.frame')}
 							</Checkbox>
-							<Checkbox isChecked={canBeTriggeredAnotherObject} onChange={setCanBeTriggeredAnotherObject}>
+							<Checkbox
+								isChecked={canBeTriggeredAnotherObject}
+								onChange={handleChangeCanBeTriggeredAnotherObject}
+							>
 								{t('can.be.triggered.another.object')}
 							</Checkbox>
 						</Flex>

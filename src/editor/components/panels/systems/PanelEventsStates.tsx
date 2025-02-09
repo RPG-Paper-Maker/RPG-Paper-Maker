@@ -24,8 +24,6 @@ const PanelEventsStates = forwardRef((props, ref) => {
 	const [selectedEvent, setSelectedEvent] = useState<Model.CommonEvent | null>(null);
 	const [parameters, setParameters] = useState<Node[]>([]);
 	const [states, setStates] = useState<Node[]>([]);
-	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
-	const [forcedCurrentIndexParameters, setForcedCurrentIndexParameters] = useState<number | null>(null);
 
 	const isEventDisabled = useMemo(() => selectedEvent === null || selectedEvent.id === -1, [selectedEvent]);
 
@@ -33,7 +31,6 @@ const PanelEventsStates = forwardRef((props, ref) => {
 		const commonEvents = Project.current!.commonEvents;
 		setEvents(Node.createList(commonEvents.eventsUser));
 		setStates(Node.createList(commonEvents.states));
-		setForcedCurrentIndex(0);
 	};
 
 	const handleSelectEvent = (node: Node | null) => {
@@ -41,7 +38,6 @@ const PanelEventsStates = forwardRef((props, ref) => {
 			const event = node.content as Model.CommonEvent;
 			setSelectedEvent(event);
 			setParameters(Node.createList(event.parameters));
-			setForcedCurrentIndexParameters(0);
 		}
 	};
 
@@ -77,8 +73,6 @@ const PanelEventsStates = forwardRef((props, ref) => {
 								<Tree
 									constructorType={Model.CommonEvent}
 									list={events}
-									forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-									setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 									minWidth={TREES_MIN_WIDTH}
 									onSelectedItem={handleSelectEvent}
 									noScrollOnForce
@@ -94,8 +88,6 @@ const PanelEventsStates = forwardRef((props, ref) => {
 									<Tree
 										constructorType={Model.CreateParameter}
 										list={parameters}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndexParameters}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndexParameters}
 										onListUpdated={handleUpdateParameters}
 										disabled={isEventDisabled}
 										noScrollOnForce
@@ -114,8 +106,6 @@ const PanelEventsStates = forwardRef((props, ref) => {
 						<Tree
 							constructorType={Model.Base}
 							list={states}
-							forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-							setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 							minWidth={TREES_MIN_WIDTH}
 							noScrollOnForce
 							scrollable

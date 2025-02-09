@@ -84,6 +84,12 @@ class CommonObject extends Base {
 		return `OBJ:${Utils.formatNumberID(id)}`;
 	}
 
+	applyDefault(): void {
+		super.applyDefault(CommonObject.getBindings([]));
+		this.copy(Project.current!.commonEvents.defaultObject);
+		this.name = '';
+	}
+
 	getFirstState(): MapObjectState | null {
 		return this.states[0] ?? null;
 	}

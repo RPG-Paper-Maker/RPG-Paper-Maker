@@ -29,7 +29,7 @@ class MapObjectProperty extends Base {
 	}
 
 	copy(property: MapObjectProperty, additionnalBinding: BindingType[] = []): void {
-		super.copy(property, additionnalBinding);
+		super.copy(property, MapObjectProperty.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

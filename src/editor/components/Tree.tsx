@@ -545,17 +545,34 @@ function Tree({
 			forcedCurrentSelectedItemIndex !== null &&
 			setForcedCurrentSelectedItemIndex
 		) {
-			const node = list[forcedCurrentSelectedItemIndex] ?? Node.create(createDefault(-1));
+			const node =
+				forcedCurrentSelectedItemIndex === -1
+					? null
+					: list[forcedCurrentSelectedItemIndex] ?? Node.create(createDefault(-1));
 			setCurrentSelectedItemNode(node);
-			setCurrentName(node.content.name);
+			setCurrentName(node?.content?.name ?? '');
 			setForcedCurrentSelectedItemIndex(null);
-			setNeedScroll(true);
+			if (node) {
+				setNeedScroll(true);
+			}
 			if (onSelectedItem) {
 				onSelectedItem(node, false);
 			}
 		}
 		// eslint-disable-next-line
 	}, [forcedCurrentSelectedItemIndex, setForcedCurrentSelectedItemIndex]);
+
+	useLayoutEffect(() => {
+		if (defaultSelectedID === undefined) {
+			const node = list[0] ?? Node.create(createDefault(-1));
+			setCurrentSelectedItemNode(node);
+			setCurrentName(node.content.name);
+			if (onSelectedItem) {
+				onSelectedItem(node, false);
+			}
+		}
+		// eslint-disable-next-line
+	}, [list]);
 
 	useEffect(() => {
 		if (needScroll) {

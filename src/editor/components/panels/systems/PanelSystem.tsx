@@ -74,7 +74,6 @@ const PanelSystem = forwardRef((props, ref) => {
 	const [saveSlots, setSaveSlots] = useStateNumber();
 	const [priceSoldItem] = useStateDynamicValue();
 	const [enterNameTable, setEnterNameTable] = useState<string[][]>([]);
-	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
 	const [fontSizes, setFontSizes] = useState<Node[]>([]);
 	const [fontNames, setFontNames] = useState<Node[]>([]);
 	const [colors, setColors] = useState<Node[]>([]);
@@ -123,7 +122,6 @@ const PanelSystem = forwardRef((props, ref) => {
 		setSaveSlots(systems.saveSlots);
 		priceSoldItem.copy(systems.priceSoldItem);
 		setEnterNameTable(systems.enterNameTable);
-		setForcedCurrentIndex(0);
 		setFontSizes(Node.createList(systems.fontSizes));
 		setFontNames(Node.createList(systems.fontNames));
 		setColors(Node.createList(systems.colors));
@@ -429,39 +427,21 @@ const PanelSystem = forwardRef((props, ref) => {
 						<Flex one>
 							<Groupbox title={t('font.sizes')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.FontSize}
-										list={fontSizes}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
+									<Tree constructorType={Model.FontSize} list={fontSizes} noScrollOnForce />
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('font.names')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.FontName}
-										list={fontNames}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
+									<Tree constructorType={Model.FontName} list={fontNames} noScrollOnForce />
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('colors')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Color}
-										list={colors}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
+									<Tree constructorType={Model.Color} list={colors} noScrollOnForce />
 								</Flex>
 							</Groupbox>
 						</Flex>
@@ -470,39 +450,21 @@ const PanelSystem = forwardRef((props, ref) => {
 						<Flex one>
 							<Groupbox title={t('window.skins')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.WindowSkin}
-										list={windowSkins}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
+									<Tree constructorType={Model.WindowSkin} list={windowSkins} noScrollOnForce />
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('currencies')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Currency}
-										list={currencies}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
+									<Tree constructorType={Model.Currency} list={currencies} noScrollOnForce />
 								</Flex>
 							</Groupbox>
 						</Flex>
 						<Flex one>
 							<Groupbox title={t('speeds')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Speed}
-										list={speeds}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
+									<Tree constructorType={Model.Speed} list={speeds} noScrollOnForce />
 								</Flex>
 							</Groupbox>
 						</Flex>
@@ -511,13 +473,7 @@ const PanelSystem = forwardRef((props, ref) => {
 						<Flex one>
 							<Groupbox title={t('detections')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Detection}
-										list={detections}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
+									<Tree constructorType={Model.Detection} list={detections} noScrollOnForce />
 								</Flex>
 							</Groupbox>
 						</Flex>
@@ -527,8 +483,6 @@ const PanelSystem = forwardRef((props, ref) => {
 									<Tree
 										constructorType={Model.CameraProperty}
 										list={cameraProperties}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 										noScrollOnForce
 									/>
 								</Flex>
@@ -537,13 +491,7 @@ const PanelSystem = forwardRef((props, ref) => {
 						<Flex one>
 							<Groupbox title={t('frequencies')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Frequency}
-										list={frequencies}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
+									<Tree constructorType={Model.Frequency} list={frequencies} noScrollOnForce />
 								</Flex>
 							</Groupbox>
 						</Flex>
@@ -552,13 +500,7 @@ const PanelSystem = forwardRef((props, ref) => {
 						<Flex one>
 							<Groupbox title={t('skyboxes')} fillWidth>
 								<Flex one style={TREES_STYLE_HEIGHT}>
-									<Tree
-										constructorType={Model.Skybox}
-										list={skyboxes}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-										noScrollOnForce
-									/>
+									<Tree constructorType={Model.Skybox} list={skyboxes} noScrollOnForce />
 								</Flex>
 							</Groupbox>
 						</Flex>
@@ -568,8 +510,6 @@ const PanelSystem = forwardRef((props, ref) => {
 									<Tree
 										constructorType={Model.InitialPartyMember}
 										list={initialPartyMembers}
-										forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-										setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 										noScrollOnForce
 									/>
 								</Flex>

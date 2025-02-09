@@ -42,7 +42,6 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 	const [heroesBattlersOffset] = useStateDynamicValue();
 	const [troopsBattlersCenterOffset] = useStateDynamicValue();
 	const [troopsBattlersOffset] = useStateDynamicValue();
-	const [forcedCurrentIndex, setForcedCurrentIndex] = useState<number | null>(null);
 	const [battleMaps, setBattleMaps] = useState<Node[]>([]);
 	const [cameraMoveInBattle, setcameraMoveInBattle] = useStateBool();
 	const [elements, setElements] = useState<Node[]>([]);
@@ -65,7 +64,6 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 		playBattleMusicSelectorRef.current?.initialize(battleSystem.battleMusic);
 		playBattleLevelUpSelectorRef.current?.initialize(battleSystem.battleLevelUp);
 		playBattleVictorySelectorRef.current?.initialize(battleSystem.battleVictory);
-		setForcedCurrentIndex(0);
 		setBattleMaps(Node.createList(battleSystem.battleMaps));
 		setcameraMoveInBattle(battleSystem.cameraMoveInBattle);
 		setElements(Node.createList(battleSystem.elements));
@@ -208,13 +206,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 				</Groupbox>
 				<Groupbox title={t('battle.maps')}>
 					<Flex one style={TREES_STYLE_HEIGHT}>
-						<Tree
-							constructorType={Model.BattleMap}
-							list={battleMaps}
-							forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-							setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-							noScrollOnForce
-						/>
+						<Tree constructorType={Model.BattleMap} list={battleMaps} noScrollOnForce />
 					</Flex>
 				</Groupbox>
 				<Checkbox isChecked={cameraMoveInBattle} onChange={setcameraMoveInBattle}>
@@ -229,8 +221,6 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 								<Tree
 									constructorType={Model.Element}
 									list={elements}
-									forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-									setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 									onListUpdated={updateElements}
 									noScrollOnForce
 								/>
@@ -243,8 +233,6 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 								<Tree
 									constructorType={Model.Statistic}
 									list={statistics}
-									forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-									setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 									onListUpdated={updateStatistics}
 									noScrollOnForce
 								/>
@@ -254,13 +242,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 					<Flex one>
 						<Groupbox title={t('weapons.kind')} fillWidth>
 							<Flex one style={TREES_STYLE_HEIGHT}>
-								<Tree
-									constructorType={Model.WeaponArmorKind}
-									list={weaponsKind}
-									forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-									setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-									noScrollOnForce
-								/>
+								<Tree constructorType={Model.WeaponArmorKind} list={weaponsKind} noScrollOnForce />
 							</Flex>
 						</Groupbox>
 					</Flex>
@@ -269,13 +251,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 					<Flex one>
 						<Groupbox title={t('common.battle.commands')} fillWidth>
 							<Flex one style={TREES_STYLE_HEIGHT}>
-								<Tree
-									constructorType={Model.BattleCommand}
-									list={battleCommands}
-									forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-									setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-									noScrollOnForce
-								/>
+								<Tree constructorType={Model.BattleCommand} list={battleCommands} noScrollOnForce />
 							</Flex>
 						</Groupbox>
 					</Flex>
@@ -285,8 +261,6 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 								<Tree
 									constructorType={Model.Localization}
 									list={equipments}
-									forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-									setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
 									onListUpdated={updateEquipments}
 									noScrollOnForce
 								/>
@@ -296,13 +270,7 @@ const PanelBattleSystem = forwardRef((props, ref) => {
 					<Flex one>
 						<Groupbox title={t('armors.kind')} fillWidth>
 							<Flex one style={TREES_STYLE_HEIGHT}>
-								<Tree
-									constructorType={Model.WeaponArmorKind}
-									list={armorsKind}
-									forcedCurrentSelectedItemIndex={forcedCurrentIndex}
-									setForcedCurrentSelectedItemIndex={setForcedCurrentIndex}
-									noScrollOnForce
-								/>
+								<Tree constructorType={Model.WeaponArmorKind} list={armorsKind} noScrollOnForce />
 							</Flex>
 						</Groupbox>
 					</Flex>
