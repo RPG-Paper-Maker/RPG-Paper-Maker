@@ -21,6 +21,7 @@ import Button from '../Button';
 import Checkbox from '../Checkbox';
 import DialogCommandMoveObject from '../dialogs/commands/DialogCommandMoveObject';
 import DialogCommandSendEvent from '../dialogs/commands/DialogCommandSendEvent';
+import DialogTransformations from '../dialogs/DialogTransformations';
 import Dropdown from '../Dropdown';
 import Flex from '../Flex';
 import Form, { Label, Value } from '../Form';
@@ -55,6 +56,7 @@ const PanelMapObject = forwardRef(
 		const [focusFirst, setFocustFirst] = useState(false);
 		const [isDialogCommandMoveObjectOpen, setIsDialogCommandMoveObjectOpen] = useState(false);
 		const [isDialogCommandSendEventOpen, setIsDialogCommandSendEventOpen] = useState(false);
+		const [isDialogTransformationsOpen, setIsDialogTransformationsOpen] = useState(false);
 		const [name, setName] = useStateString();
 		const [modelID, setModelID] = useStateNumber();
 		const [tabTitles, setTabTitles] = useState<Model.Base[]>([]);
@@ -412,6 +414,10 @@ const PanelMapObject = forwardRef(
 			setIsDialogCommandSendEventOpen(true);
 		};
 
+		const handleClickUpdateTransformations = () => {
+			setIsDialogTransformationsOpen(true);
+		};
+
 		const accept = async () => {
 			object.name = statesRef.current.name;
 			object.commonModelID = statesRef.current.modelID;
@@ -593,7 +599,9 @@ const PanelMapObject = forwardRef(
 											</Value>
 										</Form>
 									</Groupbox>
-									<Button>{t('update.transformations')}...</Button>
+									<Button onClick={handleClickUpdateTransformations}>
+										{t('update.transformations')}...
+									</Button>
 								</Flex>
 							</Flex>
 							<Flex
@@ -675,6 +683,21 @@ const PanelMapObject = forwardRef(
 					onAccept={handleAcceptDetection}
 					onReject={() => {}}
 				/>
+				{selectedState && (
+					<DialogTransformations
+						isOpen={isDialogTransformationsOpen}
+						setIsOpen={setIsDialogTransformationsOpen}
+						centerX={selectedState.centerX}
+						centerZ={selectedState.centerZ}
+						angleX={selectedState.angleX}
+						angleY={selectedState.angleY}
+						angleZ={selectedState.angleZ}
+						scaleX={selectedState.scaleX}
+						scaleY={selectedState.scaleY}
+						scaleZ={selectedState.scaleZ}
+						onAccept={handleUpdateStates}
+					/>
+				)}
 			</>
 		);
 	}

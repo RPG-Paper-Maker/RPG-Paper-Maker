@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -155,11 +155,15 @@ function Tree({
 
 	const defaultID =
 		defaultSelectedID === undefined ? (list && list.length && list[0].content.id) || -1 : defaultSelectedID;
+	const defaultNotExpandedItemsList = useMemo(() => Node.getNotExpandedItemsList(list), [list]);
+
 	const [currentSelectedItemNode, setCurrentSelectedItemNode] = useState(
-		(byIndex ? list[0] : Node.getNodeByID(list, defaultID)) ?? (cannotAdd ? null : Node.create(createDefault(-1)))
+		() =>
+			(byIndex ? list[0] : Node.getNodeByID(list, defaultID)) ??
+			(cannotAdd ? null : Node.create(createDefault(-1)))
 	);
 	const [additionalSelectedNodes, setAdditionalSelectedNodes] = useState<Node[]>([]);
-	const [notExpandedItemsList, setNotExpandedItemsList] = useState<number[]>(Node.getNotExpandedItemsList(list));
+	const [notExpandedItemsList, setNotExpandedItemsList] = useState<number[]>(defaultNotExpandedItemsList);
 	const [, setForceUpdate] = useState(false);
 	const [isOpenDialog, setIsOpenDialog] = useState(false);
 	const [newModel, setNewModel] = useState<Model.Base | null>(null);

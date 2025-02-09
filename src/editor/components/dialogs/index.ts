@@ -8,6 +8,7 @@ export * from './DialogRectangle';
 export * from './DialogSelectMapPosition';
 export * from './DialogSongsPreview';
 export * from './DialogSystems';
+export * from './DialogTransformations';
 export * from './DialogTransformDefaultValues';
 export * from './DialogVariables';
 export * from './DialogVideosPreview';
