@@ -19,6 +19,7 @@ import { Inputs } from '../managers';
 import {
 	RootState,
 	setCopiedItems,
+	setMapEditorLoaded,
 	setNeedsUpdateMapEditor,
 	setSelectedMapElement,
 	setSelectedPosition,
@@ -96,6 +97,7 @@ function MapEditor() {
 	const initializeMap = async () => {
 		if (currentMapTag && currentMapTag.id > 0) {
 			setFirstLoading(true);
+			dispatch(setMapEditorLoaded(false));
 			Scene.Map.current = new Scene.Map(currentMapTag);
 			Scene.Map.current.loading = true;
 			Scene.Map.current.canvas = refCanvas?.current;
@@ -105,6 +107,7 @@ function MapEditor() {
 			dispatch(setUndoRedoIndex(undoRedoIndex));
 			dispatch(setUndoRedoLength(undoRedoLength));
 			setFirstLoading(false);
+			dispatch(setMapEditorLoaded(true));
 		}
 	};
 

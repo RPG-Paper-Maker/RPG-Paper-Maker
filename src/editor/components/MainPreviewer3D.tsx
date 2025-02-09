@@ -40,6 +40,7 @@ function MainPreviewer3D({ id, onHeightUpdated }: Props) {
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
 	const selectedMapElement = useSelector((state: RootState) => state.mapEditor.selectedMapElement);
+	const mapEditorLoaded = useSelector((state: RootState) => state.mapEditor.loaded);
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const initialize = async () => {
@@ -58,7 +59,7 @@ function MainPreviewer3D({ id, onHeightUpdated }: Props) {
 	const update = async () => {
 		const scene = Scene.Previewer3D.mainPreviewerScene;
 		if (scene) {
-			if (currentMapID && Scene.Map.isDrawing()) {
+			if (currentMapID && Scene.Map.isDrawing() && mapEditorLoaded) {
 				switch (currentMapElementKind) {
 					case ELEMENT_MAP_KIND.FLOOR:
 						await scene.loadFloor(currentTilesetFloorTexture);
@@ -169,6 +170,7 @@ function MainPreviewer3D({ id, onHeightUpdated }: Props) {
 		currentMapID,
 		currentActionKind,
 		selectedMapElement,
+		mapEditorLoaded,
 	]);
 
 	useEffect(() => {
