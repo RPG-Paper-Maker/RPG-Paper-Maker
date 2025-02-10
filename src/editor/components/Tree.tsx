@@ -858,7 +858,7 @@ function Tree({
 				case Model.Element:
 					return <DialogElement {...options} />;
 				case Model.ElementEfficiency:
-					return <DialogDynamicNumber {...options} />;
+					return <DialogDynamicNumber decimal {...options} />;
 				case Model.Statistic:
 					return <DialogStatistic {...options} />;
 				case Model.WeaponArmorKind:

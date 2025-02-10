@@ -23,11 +23,12 @@ type Props = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	model: Model.Base;
+	decimal?: boolean;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogDynamicNumber({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogDynamicNumber({ isOpen, setIsOpen, model, decimal = false, onAccept, onReject }: Props) {
 	const dynamicNumber = model as Model.DynamicNumber;
 
 	const { t } = useTranslation();
@@ -65,7 +66,12 @@ function DialogDynamicNumber({ isOpen, setIsOpen, model, onAccept, onReject }: P
 		>
 			<Flex spaced centerV>
 				<div>{t('value')}:</div>
-				<DynamicValueSelector value={value} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER} />
+				<DynamicValueSelector
+					value={value}
+					optionsType={
+						decimal ? DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL : DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER
+					}
+				/>
 			</Flex>
 		</Dialog>
 	);

@@ -103,7 +103,7 @@ function DialogCommandCallACommonReaction({ commandKind, isOpen, setIsOpen, list
 			onClose={handleReject}
 			initialWidth='500px'
 		>
-			<Flex column spacedLarge>
+			<Flex column spacedLarge fillWidth>
 				<Flex spaced centerV>
 					<div>{t('common.reaction')}</div>
 					<Dropdown

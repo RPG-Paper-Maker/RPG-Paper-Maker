@@ -216,7 +216,7 @@ function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 			initialWidth='1100px'
 			initialHeight='650px'
 		>
-			<Flex fillHeight spacedLarge>
+			<Flex fillWidth fillHeight spacedLarge>
 				<Flex column spacedLarge>
 					<Form>
 						<Label>{t('name')}</Label>

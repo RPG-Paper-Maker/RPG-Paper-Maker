@@ -92,6 +92,7 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 
 	const [isOpenCommand, setIsOpenCommand] = useState(false);
 	const [selectedCommand, setSelectedCommand] = useState<EVENT_COMMAND_KIND>();
+	const [tabIndex, setTabIndex] = useState(0);
 
 	const initialize = () => {
 		setIsOpenCommand(!isNew);
@@ -478,6 +479,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 							Model.Base.create(4, t('structure')),
 						]}
 						contents={[getStagingContent(), getMapContent(), getBattleContent(), getStructureContent()]}
+						defaultIndex={tabIndex}
+						onCurrentIndexChanged={setTabIndex}
 					/>
 				</Dialog>
 			)}

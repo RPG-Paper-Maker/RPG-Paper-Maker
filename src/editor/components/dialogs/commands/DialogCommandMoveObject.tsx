@@ -232,7 +232,7 @@ function DialogCommandMoveObject({ commandKind, isOpen, setIsOpen, list, onAccep
 				onClose={handleReject}
 				initialWidth='750px'
 			>
-				<Flex column spacedLarge>
+				<Flex column spacedLarge fillWidth>
 					<Flex spaced>
 						<div>{t('object.id')}:</div>
 						<DynamicValueSelector
