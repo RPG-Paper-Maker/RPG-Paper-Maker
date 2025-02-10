@@ -9,13 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { PICTURE_KIND } from '../../common';
 import { Platform } from '../../common/Platform';
 import { Node, Project, Rectangle } from '../../core';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Model, Scene } from '../../Editor';
+import { setNeedsReloadMap } from '../../store';
 import Checkbox from '../Checkbox';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
@@ -23,12 +25,13 @@ import PanelAssetsPreviewer from '../panels/PanelAssetsPreviewer';
 import TextureCharacterSelector from '../TextureCharacterSelector';
 import TexturePreviewer from '../TexturePreviewer';
 import TextureSquareSelector from '../TextureSquareSelector';
+import Tree, { TREES_MIN_WIDTH } from '../Tree';
 import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 import FooterOK from './footers/FooterOK';
 
 type Props = {
-	kind: PICTURE_KIND;
+	kind?: PICTURE_KIND;
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	pictureID?: number;
@@ -41,7 +44,7 @@ type Props = {
 	active?: boolean;
 };
 
-function DialogPicturesPreview({
+function DialogPictures({
 	kind,
 	isOpen,
 	setIsOpen,
@@ -67,16 +70,63 @@ function DialogPicturesPreview({
 	const [isClimbAnimation, setIsClimbAnimation] = useState(false);
 	const [isSelectedLeftList, setIsSelectedLeftList] = useState(true);
 	const [newDynamicPictureID, setNewDynamicPictureID] = useState(dynamicPictureID);
+	const [selectedKind, setSelectedKind] = useState(kind);
+
+	const dispatch = useDispatch();
+
+	const folders = useMemo(
+		() =>
+			kind === undefined
+				? [
+						Node.create(Model.TreeMapTag.create(-1, 'Images'), [
+							Node.create(
+								Model.TreeMapTag.create(-2, 'HUD'),
+								Node.createList(
+									[
+										Model.TreeMapTag.create(PICTURE_KIND.ANIMATIONS, 'Animations'),
+										Model.TreeMapTag.create(PICTURE_KIND.BARS, 'Bars'),
+										Model.TreeMapTag.create(PICTURE_KIND.FACESETS, 'Facesets'),
+										Model.TreeMapTag.create(PICTURE_KIND.ICONS, 'Icons'),
+										Model.TreeMapTag.create(PICTURE_KIND.PICTURES, 'Pictures'),
+										Model.TreeMapTag.create(PICTURE_KIND.TITLE_SCREENS, 'TitleScreens'),
+										Model.TreeMapTag.create(PICTURE_KIND.WINDOW_SKINS, 'WindowSkins'),
+										Model.TreeMapTag.create(PICTURE_KIND.GAME_OVERS, 'GameOver'),
+									],
+									false
+								)
+							),
+							Node.create(
+								Model.TreeMapTag.create(-3, 'Textures2D'),
+								Node.createList(
+									[
+										Model.TreeMapTag.create(PICTURE_KIND.AUTOTILES, 'Autotiles'),
+										Model.TreeMapTag.create(PICTURE_KIND.BATTLERS, 'Battlers'),
+										Model.TreeMapTag.create(PICTURE_KIND.CHARACTERS, 'Characters'),
+										Model.TreeMapTag.create(PICTURE_KIND.MOUNTAINS, 'Mountains'),
+										Model.TreeMapTag.create(PICTURE_KIND.OBJECTS_3D, 'Objects3D'),
+										Model.TreeMapTag.create(PICTURE_KIND.TILESETS, 'Tilesets'),
+										Model.TreeMapTag.create(PICTURE_KIND.WALLS, 'Walls'),
+										Model.TreeMapTag.create(PICTURE_KIND.SKYBOXES, 'SkyBoxes'),
+										Model.TreeMapTag.create(PICTURE_KIND.PARTICLES, 'Particles'),
+									],
+									false
+								)
+							),
+						]),
+				  ]
+				: [],
+		[kind]
+	);
 
 	const initialize = () => {
 		setIsInitiating(true);
 		setNewDynamicPictureID(dynamicPictureID?.clone());
 		setIsSelectedLeftList(true);
-		setPictures(Node.createList(Project.current!.pictures.getList(kind)));
+		setPictures(Node.createList(Project.current!.pictures.getList(selectedKind!), kind !== undefined));
 		let rect = new Rectangle();
 		let rectT = new Rectangle();
 		if (pictureID !== undefined) {
-			const picture = Project.current!.pictures.getByID(kind, pictureID);
+			const picture = Project.current!.pictures.getByID(selectedKind!, pictureID);
 			updateSelectedPicture(picture);
 			if (pictureID === 0) {
 				if (rectTileset) {
@@ -129,15 +179,20 @@ function DialogPicturesPreview({
 	};
 
 	const handleRefresh = async () => {
-		const path = Model.Picture.getFolder(kind, true, '');
+		const path = Model.Picture.getFolder(selectedKind!, true, '');
 		const files = Platform.getAllFilesFromFolder(path);
 		setPicturesAvailable(
 			Node.createList(
 				files.map((name, index) => {
-					const picture = new Model.Picture(kind);
+					const picture = new Model.Picture(selectedKind!);
 					picture.id = index + 1;
 					picture.name = name;
 					picture.isBR = true;
+					picture.dlc = '';
+					picture.jsonCollisions = [];
+					picture.collisionsRepeat = false;
+					picture.isStopAnimation = false;
+					picture.isClimbAnimation = false;
 					return picture;
 				}),
 				false
@@ -149,34 +204,56 @@ function DialogPicturesPreview({
 		setIsDialogWarningSelectionOpen(false);
 	};
 
-	const handleAccept = async () => {
-		if (selectedPicture === null || !isSelectedLeftList) {
-			setIsDialogWarningSelectionOpen(true);
-		} else {
-			Project.current!.pictures.list[kind] = pictures.map((node) => node.content as Model.Picture);
-			await Project.current!.pictures.save();
-			const isTileset = selectedPicture.id === 0;
-			onAccept?.(
-				selectedPicture,
-				isTileset
-					? selectedRectTileset.clone()
-					: new Rectangle(selectedRect.x / selectedRect.width, selectedRect.y / selectedRect.height),
-				isTileset
-			);
+	const handleChangeFolder = (node: Node | null) => {
+		setSelectedKind(node && node.content.id >= 0 ? node.content.id : undefined);
+	};
 
-			if (active) {
-				if (!newDynamicPictureID!.isActivated) {
-					dynamicPictureID!.updateToDefaultNumber(selectedPicture.id);
-				} else {
-					dynamicPictureID!.copy(newDynamicPictureID!);
-				}
-			}
+	const handleListUpdated = () => {
+		if (kind === undefined && selectedKind) {
+			console.log('ok');
+			Project.current!.pictures.list[selectedKind] = Node.createListFromNodes(pictures);
+		}
+	};
+
+	const handleAccept = async () => {
+		if (kind === undefined) {
 			setIsOpen(false);
 			reset();
+			await Project.current!.pictures.save();
+			dispatch(setNeedsReloadMap());
+		} else {
+			if (selectedPicture === null || !isSelectedLeftList) {
+				setIsDialogWarningSelectionOpen(true);
+			} else {
+				Project.current!.pictures.list[kind] = Node.createListFromNodes(pictures);
+				await Project.current!.pictures.save();
+				const isTileset = selectedPicture.id === 0;
+				onAccept?.(
+					selectedPicture,
+					isTileset
+						? selectedRectTileset.clone()
+						: new Rectangle(selectedRect.x / selectedRect.width, selectedRect.y / selectedRect.height),
+					isTileset
+				);
+
+				if (active) {
+					if (!newDynamicPictureID!.isActivated) {
+						dynamicPictureID!.updateToDefaultNumber(selectedPicture.id);
+					} else {
+						dynamicPictureID!.copy(newDynamicPictureID!);
+					}
+				}
+				setIsOpen(false);
+				reset();
+				dispatch(setNeedsReloadMap());
+			}
 		}
 	};
 
 	const handleReject = async () => {
+		if (kind === undefined) {
+			await Project.current!.pictures.load();
+		}
 		onReject?.();
 		setSelectedPicture(null);
 		setIsOpen(false);
@@ -184,15 +261,23 @@ function DialogPicturesPreview({
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
+		if (selectedKind === undefined) {
+			reset();
+		}
+		// eslint-disable-next-line
+	}, [selectedKind]);
+
+	useLayoutEffect(() => {
+		if (isOpen && selectedKind !== undefined) {
+			reset();
 			initialize();
 		}
 		// eslint-disable-next-line
-	}, [isOpen]);
+	}, [isOpen, selectedKind]);
 
 	const getPreviewerContent = () => {
 		if (selectedPicture) {
-			switch (kind) {
+			switch (selectedKind) {
 				case PICTURE_KIND.CHARACTERS:
 					if (selectedPicture.id === -1) {
 						return null;
@@ -255,7 +340,7 @@ function DialogPicturesPreview({
 
 	const getPreviewerOptionsContent = () => {
 		if (selectedPicture) {
-			switch (kind) {
+			switch (selectedKind) {
 				case PICTURE_KIND.CHARACTERS:
 					return selectedPicture.id === 0 ? null : (
 						<Groupbox title={t('options')}>
@@ -278,7 +363,7 @@ function DialogPicturesPreview({
 	return (
 		<>
 			<Dialog
-				title={`${t('select.picture')}...`}
+				title={`${t(kind === undefined ? 'pictures.manager' : 'select.picture')}...`}
 				isOpen={isOpen}
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				initialWidth='70%'
@@ -286,23 +371,44 @@ function DialogPicturesPreview({
 				onClose={handleReject}
 				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			>
-				<PanelAssetsPreviewer
-					assetID={pictureID}
-					dynamicValueID={newDynamicPictureID}
-					list={pictures}
-					setList={setPictures}
-					itemsAvailable={picturesAvailable}
-					selectedItem={selectedPicture}
-					isSelectedLeftList={isSelectedLeftList}
-					setIsSelectedLeftList={setIsSelectedLeftList}
-					isInitiating={isInitiating}
-					setIsInitiating={setIsInitiating}
-					onChangeSelectedItem={handleChangeSelectedPicture}
-					onRefresh={handleRefresh}
-					content={getPreviewerContent()}
-					options={getPreviewerOptionsContent()}
-					active={active}
-				/>
+				<Flex spacedLarge fillWidth>
+					{kind === undefined && (
+						<Flex>
+							<Tree
+								list={folders}
+								minWidth={TREES_MIN_WIDTH}
+								onSelectedItem={handleChangeFolder}
+								cannotAdd
+								cannotEdit
+								cannotDragDrop
+								cannotDelete
+								doNotShowID
+							/>
+						</Flex>
+					)}
+					{selectedKind ? (
+						<PanelAssetsPreviewer
+							assetID={pictureID}
+							dynamicValueID={newDynamicPictureID}
+							list={pictures}
+							setList={setPictures}
+							itemsAvailable={picturesAvailable}
+							selectedItem={selectedPicture}
+							isSelectedLeftList={isSelectedLeftList}
+							setIsSelectedLeftList={setIsSelectedLeftList}
+							isInitiating={isInitiating}
+							setIsInitiating={setIsInitiating}
+							onChangeSelectedItem={handleChangeSelectedPicture}
+							onRefresh={handleRefresh}
+							onListUpdated={handleListUpdated}
+							content={getPreviewerContent()}
+							options={getPreviewerOptionsContent()}
+							active={active}
+						/>
+					) : (
+						<Flex one />
+					)}
+				</Flex>
 			</Dialog>
 			<Dialog
 				title={t('warning')}
@@ -317,4 +423,4 @@ function DialogPicturesPreview({
 	);
 }
 
-export default DialogPicturesPreview;
+export default DialogPictures;

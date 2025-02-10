@@ -19,7 +19,7 @@ import { Node, Project, Rectangle } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Model } from '../Editor';
 import Button from './Button';
-import DialogPicturesPreview from './dialogs/DialogPicturesPreview';
+import DialogPictures from './dialogs/DialogPictures';
 import DialogShapesPreview from './dialogs/DialogShapesPreview';
 import DialogSongsPreview from './dialogs/DialogSongsPreview';
 import DialogVideosPreview from './dialogs/DialogVideosPreview';
@@ -155,7 +155,7 @@ function AssetSelector({
 		switch (selectionType) {
 			case ASSET_SELECTOR_TYPE.PICTURES:
 				return (
-					<DialogPicturesPreview
+					<DialogPictures
 						pictureID={getSelectedID()}
 						dynamicPictureID={selectedDynamic}
 						indexX={indexX}

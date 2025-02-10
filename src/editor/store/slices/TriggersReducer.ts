@@ -29,6 +29,7 @@ const TriggersSlice = createSlice({
 			saveAll: false,
 			systems: false,
 			variables: false,
+			pictures: false,
 			play: false,
 		},
 		splitting: false,
@@ -63,6 +64,9 @@ const TriggersSlice = createSlice({
 		},
 		triggerVariables(state, action: PayloadAction<boolean>) {
 			state.mainBar.variables = action.payload;
+		},
+		triggerPictures(state, action: PayloadAction<boolean>) {
+			state.mainBar.pictures = action.payload;
 		},
 		triggerPlay(state, action: PayloadAction<boolean>) {
 			state.mainBar.play = action.payload;
@@ -100,6 +104,7 @@ export const {
 	triggerSaveAll,
 	triggerSystems,
 	triggerVariables,
+	triggerPictures,
 	triggerPlay,
 	triggerSplitting,
 	triggerTreeMap,

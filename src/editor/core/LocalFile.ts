@@ -229,13 +229,41 @@ class LocalFile extends Serializable {
 		URL.revokeObjectURL(url);
 	}
 
+	static async download(path: string, isPublic: boolean) {
+		//const content = await (isPublic ? LocalFile.readPublicFileBlob(path) : LocalFile.readFile(path));
+		const content = await LocalFile.readPublicFileBlob(path);
+		console.log(content);
+		if (content) {
+			const url = URL.createObjectURL(content);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = Paths.getFileName(path) || '';
+			a.click();
+			URL.revokeObjectURL(url);
+		}
+	}
+
 	static async readPublicFile(path: string): Promise<string> {
+		return (await LocalFile.readPublicFileGeneral(path)).responseText;
+	}
+
+	static async readPublicFileBlob(path: string): Promise<Blob> {
+		return (await LocalFile.readPublicFileGeneral(path, 'blob')).response;
+	}
+
+	static async readPublicFileGeneral(
+		path: string,
+		responseType?: XMLHttpRequestResponseType
+	): Promise<XMLHttpRequest> {
 		return await new Promise((resolve) => {
 			const xhr = new XMLHttpRequest();
+			if (responseType) {
+				xhr.responseType = responseType;
+			}
 			xhr.onreadystatechange = () => {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200 || xhr.status === 0) {
-						resolve(xhr.responseText);
+						resolve(xhr);
 					}
 				}
 			};

@@ -17,6 +17,7 @@ import {
 	AiOutlineClear,
 	AiOutlineFileAdd,
 	AiOutlineFolderOpen,
+	AiOutlinePicture,
 	AiOutlineZoomIn,
 	AiOutlineZoomOut,
 } from 'react-icons/ai';
@@ -51,6 +52,7 @@ import {
 	triggerNewProject,
 	triggerOpenDialogProject,
 	triggerOpenProject,
+	triggerPictures,
 	triggerPlay,
 	triggerSave,
 	triggerSaveAll,
@@ -63,6 +65,7 @@ import Button from './Button';
 import Dialog from './dialogs/Dialog';
 import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
 import DialogNewProject from './dialogs/DialogNewProject';
+import DialogPictures from './dialogs/DialogPictures';
 import DialogSystems from './dialogs/DialogSystems';
 import DialogVariables from './dialogs/DialogVariables';
 import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
@@ -81,6 +84,7 @@ function MainMenuBar() {
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
 	const [isDialogSystemsOpen, setIsDialogSystemsOpen] = useState(false);
 	const [isDialogVariablesOpen, setIsDialogVariablesOpen] = useState(false);
+	const [isDialogPicturesOpen, setIsDialogPicturesOpen] = useState(false);
 	const [isDialogChangeLanguageOpen, setIsDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
@@ -343,6 +347,10 @@ function MainMenuBar() {
 		setIsDialogVariablesOpen(true);
 	};
 
+	const handlePicturesManager = async () => {
+		setIsDialogPicturesOpen(true);
+	};
+
 	const handleChangeLanguage = async () => {
 		setIsDialogChangeLanguageOpen(true);
 	};
@@ -550,6 +558,12 @@ function MainMenuBar() {
 					onClick: handleVariablesManager,
 					disabled: !isProjectOpened,
 				},
+				{
+					title: `${t('pictures.manager')}...`,
+					icon: <AiOutlinePicture />,
+					onClick: handlePicturesManager,
+					disabled: !isProjectOpened,
+				},
 			],
 		},
 		{
@@ -613,6 +627,9 @@ function MainMenuBar() {
 		} else if (triggers.variables) {
 			dispatch(triggerVariables(false));
 			handleVariablesManager().catch(console.error);
+		} else if (triggers.pictures) {
+			dispatch(triggerPictures(false));
+			handlePicturesManager().catch(console.error);
 		} else if (triggers.play) {
 			dispatch(triggerPlay(false));
 			handlePlay().catch(console.error);
@@ -718,6 +735,7 @@ function MainMenuBar() {
 			/>
 			<DialogSystems isOpen={isDialogSystemsOpen} setIsOpen={setIsDialogSystemsOpen} />
 			<DialogVariables isOpen={isDialogVariablesOpen} setIsOpen={setIsDialogVariablesOpen} />
+			<DialogPictures isOpen={isDialogPicturesOpen} setIsOpen={setIsDialogPicturesOpen} />
 			<DialogChangeLanguage isOpen={isDialogChangeLanguageOpen} setIsOpen={setIsDialogChangeLanguageOpen} />
 			<Dialog
 				title={t('warning')}

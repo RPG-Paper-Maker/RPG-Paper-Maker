@@ -12,8 +12,8 @@
 import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaAngleDoubleLeft } from 'react-icons/fa';
-import { BUTTON_TYPE, DYNAMIC_VALUE_OPTIONS_TYPE } from '../../common';
-import { Node, Project } from '../../core';
+import { BUTTON_TYPE, Constants, DYNAMIC_VALUE_OPTIONS_TYPE } from '../../common';
+import { LocalFile, Node, Project } from '../../core';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Model } from '../../Editor';
 import Button from '../Button';
@@ -36,6 +36,7 @@ type Props = {
 	setIsInitiating: (b: boolean) => void;
 	onChangeSelectedItem: (node: Node | null) => void;
 	onRefresh?: () => void;
+	onListUpdated?: () => void;
 	content: ReactNode;
 	options?: ReactNode;
 	active?: boolean;
@@ -55,6 +56,7 @@ function PanelAssetsPreviewer({
 	setIsInitiating,
 	onChangeSelectedItem,
 	onRefresh,
+	onListUpdated,
 	content,
 	options,
 	active = false,
@@ -97,14 +99,21 @@ function PanelAssetsPreviewer({
 			const newItem = selectedItem.clone();
 			newItem.id = Model.Base.generateNewIDfromList(list.map((node) => node.content));
 			const node = Node.create(newItem);
-			setList([...list, node]);
+			list.push(node);
 			setForcedCurrentSelectedItemIDLeft(newItem.id);
 			handleChangeSelectedItemLeft(node);
+			onListUpdated?.();
 		}
 	};
 	const handleChangeActivated = (b: boolean) => {
 		setIsCheckedActivated(b);
 		dynamicValueID!.isActivated = b;
+	};
+
+	const handleClickExport = () => {
+		if (selectedItem && selectedItem.id > 0) {
+			LocalFile.download(selectedItem.getPath(), (selectedItem as Model.Picture).isBR);
+		}
 	};
 
 	return (
@@ -116,10 +125,12 @@ function PanelAssetsPreviewer({
 							{t('show.available.content')}
 						</Checkbox>
 					</Flex>
-					<Flex spaced>
-						<Button disabled>{t('open.default.folder')}...</Button>
-						<Button disabled>{t('open.project.folder')}...</Button>
-					</Flex>
+					{Constants.IS_DESKTOP && (
+						<Flex spaced>
+							<Button disabled>{t('open.default.folder')}...</Button>
+							<Button disabled>{t('open.project.folder')}...</Button>
+						</Flex>
+					)}
 				</Flex>
 			)}
 			<Flex one spacedLarge fillHeight>
@@ -131,6 +142,7 @@ function PanelAssetsPreviewer({
 								list={list}
 								minWidth={TREES_MIN_WIDTH}
 								onSelectedItem={handleChangeSelectedItemLeft}
+								onListUpdated={onListUpdated}
 								defaultSelectedID={assetID}
 								forcedCurrentSelectedItemID={forcedCurrentSelectedItemIDLeft}
 								setForcedCurrentSelectedItemID={setForcedCurrentSelectedItemIDLeft}
@@ -169,13 +181,9 @@ function PanelAssetsPreviewer({
 									/>
 								</Flex>
 								<Flex spaced>
-									<Button onClick={onRefresh} disabled>
-										{t('refresh')}
-									</Button>
-									<Button disabled>{t('export')}...</Button>
-									<Button buttonType={BUTTON_TYPE.PRIMARY} disabled>
-										+
-									</Button>
+									<Button onClick={onRefresh}>{t('refresh')}</Button>
+									<Button onClick={handleClickExport}>{t('export')}...</Button>
+									<Button buttonType={BUTTON_TYPE.PRIMARY}>+</Button>
 								</Flex>
 							</Flex>
 						</>

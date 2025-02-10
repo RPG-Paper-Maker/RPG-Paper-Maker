@@ -11,9 +11,11 @@
 
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { initializeAcceptRef } from '../../common';
 import { Project } from '../../core';
 import { Model } from '../../Editor';
+import { setNeedsReloadMap } from '../../store';
 import PanelBattleSystem from '../panels/systems/PanelBattleSystem';
 import PanelCommonReactions from '../panels/systems/PanelCommonReactions';
 import PanelEventsStates from '../panels/systems/PanelEventsStates';
@@ -32,6 +34,8 @@ type Props = {
 
 function DialogSystems({ isOpen, setIsOpen }: Props) {
 	const { t } = useTranslation();
+
+	const dispatch = useDispatch();
 
 	const panelSystemRef = useRef<initializeAcceptRef>(null);
 	const panelBattleSystemRef = useRef<initializeAcceptRef>(null);
@@ -53,6 +57,7 @@ function DialogSystems({ isOpen, setIsOpen }: Props) {
 		await Project.current!.battleSystem.save();
 		await Project.current!.titleScreenGameOver.save();
 		await Project.current!.commonEvents.save();
+		dispatch(setNeedsReloadMap());
 		setIsOpen(false);
 	};
 

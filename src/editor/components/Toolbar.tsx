@@ -33,6 +33,7 @@ import {
 	triggerImportProject,
 	triggerNewProject,
 	triggerOpenDialogProject,
+	triggerPictures,
 	triggerPlay,
 	triggerSave,
 	triggerSaveAll,
@@ -86,6 +87,10 @@ function Toolbar() {
 
 	const handleVariablesManager = () => {
 		dispatch(triggerVariables(true));
+	};
+
+	const handlePicturesManager = () => {
+		dispatch(triggerPictures(true));
 	};
 
 	const handlePlay = () => {
@@ -148,7 +153,7 @@ function Toolbar() {
 						{t('dlcs')}
 					</MenuItem>
 					<MenuItem separator></MenuItem>
-					<MenuItem icon={<AiOutlinePicture />} onClick={handleFloor} disabled>
+					<MenuItem icon={<AiOutlinePicture />} onClick={handlePicturesManager} disabled={!isProjectOpened}>
 						{t('pictures.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<TfiVideoClapper />} onClick={handleFloor} disabled>

@@ -20,7 +20,7 @@ import Dropdown from './Dropdown';
 import Flex from './Flex';
 import PreviewerObject3D from './PreviewerObject3D';
 import DialogObjects3DPreview from './dialogs/DialogObjects3DPreview';
-import DialogPicturesPreview from './dialogs/DialogPicturesPreview';
+import DialogPictures from './dialogs/DialogPictures';
 
 type Props = {
 	sceneID: string;
@@ -200,7 +200,7 @@ function GraphicsSelector({
 					fillWidth
 				/>
 			</Flex>
-			<DialogPicturesPreview
+			<DialogPictures
 				kind={PICTURE_KIND.CHARACTERS}
 				dynamicPictureID={dynamicID}
 				isOpen={isOpenDialogPictures}

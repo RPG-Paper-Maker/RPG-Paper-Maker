@@ -27,7 +27,7 @@ import Form, { Label, Value } from '../../Form';
 import Tab from '../../Tab';
 import TextArea from '../../TextArea';
 import Dialog from '../Dialog';
-import DialogPicturesPreview from '../DialogPicturesPreview';
+import DialogPictures from '../DialogPictures';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
@@ -305,7 +305,7 @@ function DialogCommandShowText({ commandKind, isOpen, setIsOpen, list, onAccept,
 					<Tab titles={tabTitles} contents={getTabContents()} />
 				</Flex>
 			</Dialog>
-			<DialogPicturesPreview
+			<DialogPictures
 				isOpen={isOpenDialogIcon}
 				setIsOpen={setIsOpenDialogIcon}
 				pictureID={-1}
