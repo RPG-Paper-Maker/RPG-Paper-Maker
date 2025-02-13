@@ -331,6 +331,10 @@ class Base extends Serializable {
 		return false;
 	}
 
+	isFolder(): boolean {
+		return this.id < 0;
+	}
+
 	getSelectionNextIndexes(): number {
 		return 0;
 	}

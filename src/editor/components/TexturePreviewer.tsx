@@ -10,7 +10,7 @@
 */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Picture2D, Rectangle } from '../core';
+import { LocalFile, Picture2D, Rectangle } from '../core';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
@@ -21,9 +21,10 @@ type Props = {
 	texture: string;
 	sourceRectangle?: Rectangle;
 	scale?: number;
+	base64?: boolean;
 };
 
-function TexturePreviewer({ texture, sourceRectangle, scale = 2 }: Props) {
+function TexturePreviewer({ texture, sourceRectangle, scale = 2, base64 = false }: Props) {
 	const currentState = useState<CurrentStateProps>({
 		picture: null,
 		path: '',
@@ -32,8 +33,9 @@ function TexturePreviewer({ texture, sourceRectangle, scale = 2 }: Props) {
 	const refCanvas = useRef<HTMLCanvasElement>(null);
 
 	const initialize = async () => {
-		currentState.picture = await Picture2D.loadImage(texture);
-		currentState.path = texture;
+		const path = base64 ? (await LocalFile.readFile(texture)) ?? '' : texture;
+		currentState.picture = await Picture2D.loadImage(path);
+		currentState.path = path;
 		if (refCanvas.current) {
 			const w = (sourceRectangle ? sourceRectangle : currentState.picture).width * scale;
 			const h = (sourceRectangle ? sourceRectangle : currentState.picture).height * scale;

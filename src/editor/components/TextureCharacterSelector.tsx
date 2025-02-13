@@ -20,6 +20,7 @@ type Props = {
 	defaultRectangle?: Rectangle;
 	onUpdateRectangle: (rect: Rectangle) => void;
 	adjustPositionSize?: boolean;
+	base64?: boolean;
 };
 
 function TextureCharacterSelector({
@@ -29,6 +30,7 @@ function TextureCharacterSelector({
 	defaultRectangle,
 	onUpdateRectangle,
 	adjustPositionSize,
+	base64 = false,
 }: Props) {
 	const divideSize = Constants.BASE_SQUARE_SIZE / 2 / Project.SQUARE_SIZE;
 	const rows = 4 + (isStopAnimation ? 4 : 0) + (isClimbAnimation ? 4 : 0);
@@ -44,6 +46,7 @@ function TextureCharacterSelector({
 			defaultRectangle={defaultRectangle}
 			onUpdateRectangle={onUpdateRectangle}
 			adjustPositionSize={adjustPositionSize}
+			base64={base64}
 			doNotUpdateTexture
 		/>
 	);

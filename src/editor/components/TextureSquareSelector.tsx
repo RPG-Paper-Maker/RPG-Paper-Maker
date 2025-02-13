@@ -13,7 +13,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Scene } from '../Editor';
 import { Constants, ELEMENT_MAP_KIND } from '../common';
-import { Picture2D, Project, Rectangle } from '../core';
+import { LocalFile, Picture2D, Project, Rectangle } from '../core';
 import {
 	RootState,
 	setCurrentAutotileTexture,
@@ -45,6 +45,7 @@ type Props = {
 	onUpdateRectangle?: (rect: Rectangle) => void;
 	adjustPositionSize?: boolean;
 	doNotUpdateTexture?: boolean;
+	base64?: boolean;
 };
 
 function TextureSquareSelector({
@@ -60,6 +61,7 @@ function TextureSquareSelector({
 	onUpdateRectangle,
 	adjustPositionSize,
 	doNotUpdateTexture = false,
+	base64 = false,
 }: Props) {
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 
@@ -141,8 +143,9 @@ function TextureSquareSelector({
 	};
 
 	const initialize = async () => {
-		currentState.picture = await Picture2D.loadImage(texture);
-		currentState.path = texture;
+		const path = base64 ? (await LocalFile.readFile(texture)) ?? '' : texture;
+		currentState.picture = await Picture2D.loadImage(path);
+		currentState.path = path;
 		currentState.squareWidth =
 			squareWidth ??
 			(columns === -1 ? 1 : Math.floor(currentState.picture.width / Project.SQUARE_SIZE / columns));

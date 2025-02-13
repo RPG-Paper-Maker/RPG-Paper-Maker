@@ -102,6 +102,26 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 		for (const file of Paths.ALL_JSON) {
 			await Platform.copyPublicFile(Paths.join(Paths.DEFAULT, file), Paths.join(project.getPath(), file));
 		}
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.PICTURES));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.HUD));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.ANIMATIONS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.BARS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.FACESETS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.ICONS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.HUD_PICTURES));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.TITLE_SCREEN));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.WINDOW_SKINS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.GAME_OVER));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.TEXTURES2D));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.AUTOTILES));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.BATTLERS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.CHARACTERS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.MOUNTAINS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.OBJECTS_3D));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.TILESETS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.WALLS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.SKYBOXES));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.PARTICLES));
 		await project.load();
 		await Model.Map.createDefaultMap(1, t('starting.map'));
 		await Model.Map.createDefaultMap(2, t('default'));

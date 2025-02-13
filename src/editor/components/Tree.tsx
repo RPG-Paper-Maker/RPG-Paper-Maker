@@ -100,6 +100,7 @@ type Props = {
 	multipleSelection?: boolean;
 	noScrollOnForce?: boolean;
 	applyDefault?: boolean;
+	noFirstSelection?: boolean;
 };
 
 export const TREES_MIN_WIDTH = 150;
@@ -138,6 +139,7 @@ function Tree({
 	multipleSelection = false,
 	noScrollOnForce = false,
 	applyDefault = false,
+	noFirstSelection = false,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -567,8 +569,11 @@ function Tree({
 	}, [forcedCurrentSelectedItemIndex, setForcedCurrentSelectedItemIndex]);
 
 	useLayoutEffect(() => {
-		if (defaultSelectedID === undefined) {
-			const node = list[0] ?? Node.create(createDefault(-1));
+		if (!noFirstSelection) {
+			const index =
+				defaultSelectedID === undefined ? 0 : list.findIndex((node) => node.content.id === defaultSelectedID);
+			console.log(index);
+			const node = list[index] ?? Node.create(createDefault(-1));
 			setCurrentSelectedItemNode(node);
 			setCurrentName(node.content.name);
 			if (onSelectedItem) {

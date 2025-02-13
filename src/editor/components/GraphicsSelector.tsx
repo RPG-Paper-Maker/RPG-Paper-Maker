@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Manager, Model, Scene } from '../Editor';
 import { ELEMENT_MAP_KIND, PICTURE_KIND } from '../common';
-import { Picture2D, Project, Rectangle } from '../core';
+import { LocalFile, Picture2D, Project, Rectangle } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import '../styles/GraphicsSelector.css';
 import Dropdown from './Dropdown';
@@ -60,15 +60,11 @@ function GraphicsSelector({
 	const isObject3D = graphicsKind === ELEMENT_MAP_KIND.OBJECT3D;
 
 	const updatePicture = async (picture: Model.Picture, rect: Rectangle, isTileset: boolean) => {
-		const img = await Picture2D.loadImage(
-			(isTileset
-				? Project.current!.pictures.getByID(
-						PICTURE_KIND.TILESETS,
-						Scene.Map.current!.model.getTileset().pictureID
-				  )
-				: picture
-			).getPath()
-		);
+		const pic = isTileset
+			? Project.current!.pictures.getByID(PICTURE_KIND.TILESETS, Scene.Map.current!.model.getTileset().pictureID)
+			: picture;
+		const path = pic.getPath();
+		const img = await Picture2D.loadImage(pic.isBR ? path : (await LocalFile.readFile(path)) ?? '');
 		const ctx = getContext();
 		if (ctx) {
 			clear(ctx);

@@ -43,10 +43,6 @@ class TreeMapTag extends Base {
 		return tag;
 	}
 
-	isFolder() {
-		return this.id < 0;
-	}
-
 	canExpand(): boolean {
 		return this.isFolder();
 	}

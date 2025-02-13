@@ -179,7 +179,7 @@ class Node extends Serializable {
 	}
 
 	isFolder() {
-		return this.content.id < 0;
+		return this.content.isFolder();
 	}
 
 	canExpand() {

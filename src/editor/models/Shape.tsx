@@ -198,6 +198,10 @@ class Shape extends Base {
 		}
 	}
 
+	isFolder() {
+		return false;
+	}
+
 	getPath(): string {
 		return this.id === -1 ? '' : `${Shape.getFolder(this.kind, this.isBR, this.dlc)}/${this.name}`;
 	}

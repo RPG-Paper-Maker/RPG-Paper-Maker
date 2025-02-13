@@ -204,6 +204,7 @@ function DialogWindowSkin({ isOpen, setIsOpen, model, onAccept, onReject }: Prop
 								setSelectedRectangle={setSelectedRectangle}
 								isSelecting={isSelecting}
 								onSelectionFinished={handleSelectionFinished}
+								base64={!selectedPicture?.isBR}
 							/>
 						</Flex>
 						<Groupbox title={t('zoom')} disabled={!selectedPicture || isSelecting}>

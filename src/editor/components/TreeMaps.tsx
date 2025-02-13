@@ -348,6 +348,7 @@ function TreeMaps({
 				onDrop={handleDrop}
 				minWidth={minWidth}
 				cannotAdd
+				applyDefault
 			/>
 			<DialogMapProperties
 				isOpen={isOpenMapProperties}

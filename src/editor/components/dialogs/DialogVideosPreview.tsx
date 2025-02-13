@@ -164,7 +164,6 @@ function DialogVideosPreview({
 					assetID={videoID}
 					dynamicValueID={newDynamicVideoID}
 					list={videos}
-					setList={setVideos}
 					itemsAvailable={videosAvailable}
 					selectedItem={selectedVideo}
 					isSelectedLeftList={isSelectedLeftList}

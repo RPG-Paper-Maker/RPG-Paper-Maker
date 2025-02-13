@@ -21,7 +21,8 @@ type Props = {
 };
 
 function TextureIconPreviewer({ id, indexX, indexY }: Props) {
-	const texture = useMemo(() => Project.current!.pictures.getByID(PICTURE_KIND.ICONS, id)?.getPath(), [id]);
+	const picture = useMemo(() => Project.current!.pictures.getByID(PICTURE_KIND.ICONS, id), [id]);
+	const texture = useMemo(() => picture?.getPath(), [id]);
 	const sourceRectangle = useMemo(
 		() =>
 			new Rectangle(
@@ -33,7 +34,7 @@ function TextureIconPreviewer({ id, indexX, indexY }: Props) {
 		[indexX, indexY]
 	);
 
-	return <TexturePreviewer texture={texture} sourceRectangle={sourceRectangle} scale={1} />;
+	return <TexturePreviewer texture={texture} sourceRectangle={sourceRectangle} scale={1} base64={!picture.isBR} />;
 }
 
 export default TextureIconPreviewer;

@@ -95,7 +95,7 @@ class LocalFile extends Serializable {
 		const folder = new LocalFile(true);
 		const folderJson = {};
 		folder.write(folderJson);
-		// console.info('create folder ' + path);
+		//console.info('create folder ' + path);
 		await localforage.setItem(path, folderJson);
 	}
 
@@ -229,18 +229,26 @@ class LocalFile extends Serializable {
 		URL.revokeObjectURL(url);
 	}
 
-	static async download(path: string, isPublic: boolean) {
-		//const content = await (isPublic ? LocalFile.readPublicFileBlob(path) : LocalFile.readFile(path));
-		const content = await LocalFile.readPublicFileBlob(path);
-		console.log(content);
-		if (content) {
-			const url = URL.createObjectURL(content);
-			const a = document.createElement('a');
-			a.href = url;
-			a.download = Paths.getFileName(path) || '';
-			a.click();
-			URL.revokeObjectURL(url);
+	static async readBase64File(path: string): Promise<Blob> {
+		const base64DataUrl = (await LocalFile.readFile(path)) ?? '';
+		const [prefix, base64] = base64DataUrl.split(',');
+		const mimeType = prefix.match(/:(.*?);/)?.[1];
+		const byteCharacters = atob(base64);
+		const byteNumbers = new Uint8Array(byteCharacters.length);
+		for (let i = 0; i < byteCharacters.length; i++) {
+			byteNumbers[i] = byteCharacters.charCodeAt(i);
 		}
+		return new Blob([byteNumbers], { type: mimeType });
+	}
+
+	static async download(path: string, isPublic: boolean) {
+		const content = await (isPublic ? LocalFile.readPublicFileBlob(path) : LocalFile.readBase64File(path));
+		const url = URL.createObjectURL(content);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = Paths.getFileName(path) || '';
+		a.click();
+		URL.revokeObjectURL(url);
 	}
 
 	static async readPublicFile(path: string): Promise<string> {

@@ -34,6 +34,7 @@ import {
 	CustomGeometryFace,
 	Frame,
 	Grid,
+	LocalFile,
 	MapPortion,
 	Portion,
 	Position,
@@ -233,11 +234,12 @@ class Map extends Base {
 			await this.model.load();
 
 			// Tileset texture material
+			const picture = Project.current!.pictures.getByID(
+				PICTURE_KIND.TILESETS,
+				Project.current!.tilesets.getTilesetByID(this.model.tilesetID)?.pictureID ?? 1
+			);
 			this.materialTileset = await Manager.GL.loadTexture(
-				Project.current!.pictures.getByID(
-					PICTURE_KIND.TILESETS,
-					Project.current!.tilesets.getTilesetByID(this.model.tilesetID)?.pictureID ?? 1
-				).getPath()
+				picture.isBR ? picture.getPath() : (await LocalFile.readFile(picture.getPath())) ?? ''
 			);
 			this.materialTilesetHover = Manager.GL.createMaterial({ texture: this.materialTileset.map, hovered: true });
 

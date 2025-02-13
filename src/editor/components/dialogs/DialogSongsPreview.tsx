@@ -322,7 +322,6 @@ function DialogSongsPreview({
 					assetID={songID}
 					dynamicValueID={newDynamicSongID}
 					list={songs}
-					setList={setSongs}
 					itemsAvailable={songsAvailable}
 					selectedItem={selectedSong}
 					isSelectedLeftList={isSelectedLeftList}

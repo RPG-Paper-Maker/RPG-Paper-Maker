@@ -371,7 +371,6 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, onAccept, onRej
 					constructorType={Model.Object3D}
 					assetID={object3DID}
 					list={objects3D}
-					setList={setObjects3D}
 					selectedItem={selectedObject3D}
 					isInitiating={isInitiating}
 					setIsInitiating={setIsInitiating}

@@ -151,7 +151,6 @@ function DialogShapesPreview({ kind, isOpen, setIsOpen, shapeID, onAccept, onRej
 				<PanelAssetsPreviewer
 					assetID={shapeID}
 					list={shapes}
-					setList={setShapes}
 					itemsAvailable={shapesAvailable}
 					selectedItem={selectedShape}
 					isSelectedLeftList={isSelectedLeftList}

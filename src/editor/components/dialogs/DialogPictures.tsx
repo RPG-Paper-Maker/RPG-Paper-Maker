@@ -12,7 +12,7 @@
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { PICTURE_KIND } from '../../common';
+import { Paths, PICTURE_KIND } from '../../common';
 import { Platform } from '../../common/Platform';
 import { Node, Project, Rectangle } from '../../core';
 import { DynamicValue } from '../../core/DynamicValue';
@@ -181,23 +181,33 @@ function DialogPictures({
 	const handleRefresh = async () => {
 		const path = Model.Picture.getFolder(selectedKind!, true, '');
 		const files = Platform.getAllFilesFromFolder(path);
-		setPicturesAvailable(
-			Node.createList(
+		const customNames = await Platform.getFiles(Paths.join(Model.Picture.getFolder(selectedKind!, false, '')));
+		setPicturesAvailable([
+			...Node.createList(
 				files.map((name, index) => {
 					const picture = new Model.Picture(selectedKind!);
+					picture.applyDefault();
 					picture.id = index + 1;
 					picture.name = name;
 					picture.isBR = true;
 					picture.dlc = '';
-					picture.jsonCollisions = [];
-					picture.collisionsRepeat = false;
-					picture.isStopAnimation = false;
-					picture.isClimbAnimation = false;
 					return picture;
 				}),
 				false
-			)
-		);
+			),
+			...Node.createList(
+				customNames.map((name, index) => {
+					const picture = new Model.Picture(selectedKind!);
+					picture.applyDefault();
+					picture.id = files.length + index + 1;
+					picture.name = name;
+					picture.isBR = false;
+					picture.dlc = '';
+					return picture;
+				}),
+				false
+			),
+		]);
 	};
 
 	const handleCloseWarningSelectionOpen = () => {
@@ -210,7 +220,6 @@ function DialogPictures({
 
 	const handleListUpdated = () => {
 		if (kind === undefined && selectedKind) {
-			console.log('ok');
 			Project.current!.pictures.list[selectedKind] = Node.createListFromNodes(pictures);
 		}
 	};
@@ -277,6 +286,7 @@ function DialogPictures({
 
 	const getPreviewerContent = () => {
 		if (selectedPicture) {
+			const path = selectedPicture.getPath();
 			switch (selectedKind) {
 				case PICTURE_KIND.CHARACTERS:
 					if (selectedPicture.id === -1) {
@@ -290,15 +300,17 @@ function DialogPictures({
 							).getPath()}
 							defaultRectangle={selectedRectTileset}
 							onUpdateRectangle={setSelectedRectTileset}
+							base64={!selectedPicture.isBR}
 							doNotUpdateTexture
 						/>
 					) : (
 						<TextureCharacterSelector
-							texture={selectedPicture.getPath()}
+							texture={path}
 							isStopAnimation={isStopAnimation}
 							isClimbAnimation={isClimbAnimation}
 							defaultRectangle={selectedRect}
 							onUpdateRectangle={setSelectedRect}
+							base64={!selectedPicture.isBR}
 							adjustPositionSize
 						/>
 					);
@@ -306,12 +318,13 @@ function DialogPictures({
 					const size = Project.current!.systems.iconsSize / Project.SQUARE_SIZE;
 					return (
 						<TextureSquareSelector
-							texture={selectedPicture.getPath()}
+							texture={path}
 							canChangeSize={false}
 							squareWidth={size}
 							squareHeight={size}
 							defaultRectangle={selectedRect}
 							onUpdateRectangle={setSelectedRect}
+							base64={!selectedPicture.isBR}
 							doNotUpdateTexture
 						/>
 					);
@@ -320,7 +333,7 @@ function DialogPictures({
 					const size = Project.current!.systems.facesetsSize / Project.SQUARE_SIZE / 2;
 					return (
 						<TextureSquareSelector
-							texture={selectedPicture.getPath()}
+							texture={path}
 							canChangeSize={false}
 							divideWidth={2}
 							divideHeight={2}
@@ -328,12 +341,13 @@ function DialogPictures({
 							squareHeight={size}
 							defaultRectangle={selectedRect}
 							onUpdateRectangle={setSelectedRect}
+							base64={!selectedPicture.isBR}
 							doNotUpdateTexture
 						/>
 					);
 				}
 				default:
-					return <TexturePreviewer texture={selectedPicture.getPath()} />;
+					return <TexturePreviewer texture={path} base64={!selectedPicture.isBR} />;
 			}
 		}
 	};
@@ -391,7 +405,6 @@ function DialogPictures({
 							assetID={pictureID}
 							dynamicValueID={newDynamicPictureID}
 							list={pictures}
-							setList={setPictures}
 							itemsAvailable={picturesAvailable}
 							selectedItem={selectedPicture}
 							isSelectedLeftList={isSelectedLeftList}
@@ -404,6 +417,7 @@ function DialogPictures({
 							content={getPreviewerContent()}
 							options={getPreviewerOptionsContent()}
 							active={active}
+							basePath={Model.Picture.getFolder(selectedKind, false, '')}
 						/>
 					) : (
 						<Flex one />

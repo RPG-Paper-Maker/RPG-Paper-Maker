@@ -46,8 +46,11 @@ class Picture extends Base {
 
 	static getFolder(kind: PICTURE_KIND, isBR: boolean, dlc: string): string {
 		return (
-			(isBR ? Project.current!.systems.PATH_BR : dlc ? `${Project.current!.systems.PATH_DLCS}/${dlc}` : '') +
-			this.getLocalFolder(kind)
+			(isBR
+				? Project.current!.systems.PATH_BR
+				: dlc
+				? `${Project.current!.systems.PATH_DLCS}/${dlc}`
+				: `${Project.current!.getPath()}/`) + this.getLocalFolder(kind)
 		);
 	}
 
@@ -91,8 +94,16 @@ class Picture extends Base {
 		return '';
 	}
 
+	applyDefault(): void {
+		super.applyDefault(Picture.getBindings([]));
+	}
+
 	getPath(): string {
 		return this.id === -1 || !this.name ? '' : Picture.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
+	}
+
+	isFolder() {
+		return false;
 	}
 
 	async loadPicture() {
@@ -100,7 +111,13 @@ class Picture extends Base {
 	}
 
 	getIcon() {
-		return <img src='./Assets/bullet-br.png' alt='br bullet' width='16px' />;
+		return (
+			<img
+				src={`./Assets/bullet-${this.isBR || this.id === -1 ? 'br' : 'custom'}.png`}
+				alt='bullet'
+				width='16px'
+			/>
+		);
 	}
 
 	copy(picture: Picture, additionnalBinding: BindingType[] = []): void {

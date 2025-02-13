@@ -334,6 +334,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 							divideWidth={(element as Model.Autotile).isAnimated ? 8 : 2}
 							divideHeight={3}
 							canChangeSize={false}
+							base64={!picture.isBR}
 						/>
 					</div>
 				)}

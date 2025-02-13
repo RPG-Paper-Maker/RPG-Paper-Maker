@@ -57,6 +57,10 @@ class Song extends Base {
 		return this.id === -1 || !this.name ? '' : Song.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
 	}
 
+	isFolder() {
+		return false;
+	}
+
 	getIcon() {
 		return <img src='./Assets/bullet-br.png' alt='br bullet' width='16px' />;
 	}

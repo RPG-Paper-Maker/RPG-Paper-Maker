@@ -41,6 +41,10 @@ class Video extends Base {
 		return this.id === -1 ? '' : `${Video.getFolder(this.isBR, this.dlc)}/${this.name}`;
 	}
 
+	isFolder() {
+		return false;
+	}
+
 	getIcon() {
 		return <img src='./Assets/bullet-br.png' alt='br bullet' width='16px' />;
 	}

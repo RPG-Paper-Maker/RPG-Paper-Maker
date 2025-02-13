@@ -11,7 +11,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Utils } from '../common';
-import { Picture2D, Rectangle } from '../core';
+import { LocalFile, Picture2D, Rectangle } from '../core';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;
@@ -25,6 +25,7 @@ type Props = {
 	setSelectedRectangle: (rectangle: Rectangle) => void;
 	isSelecting: boolean;
 	onSelectionFinished: () => void;
+	base64?: boolean;
 };
 
 function TextureWindowSkinSelector({
@@ -34,6 +35,7 @@ function TextureWindowSkinSelector({
 	setSelectedRectangle,
 	isSelecting,
 	onSelectionFinished,
+	base64 = false,
 }: Props) {
 	const currentState = useState<CurrentStateProps>({
 		picture: null,
@@ -52,8 +54,9 @@ function TextureWindowSkinSelector({
 	})();
 
 	const initialize = async () => {
-		currentState.picture = await Picture2D.loadImage(texture);
-		currentState.path = texture;
+		const path = base64 ? (await LocalFile.readFile(texture)) ?? '' : texture;
+		currentState.picture = await Picture2D.loadImage(path);
+		currentState.path = path;
 		if (refCanvas.current) {
 			const w = currentState.picture.width * zoomFactor;
 			const h = currentState.picture.height * zoomFactor;
