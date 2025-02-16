@@ -15,11 +15,8 @@ import { Project, Serializable } from '../core';
 
 class Troops extends Serializable {
 	public list!: Model.Troop[];
-	public listIndexes!: number[];
 
-	public static readonly bindings: BindingType[] = [
-		['list', 'troops', undefined, BINDING.LIST_WITH_INDEXES, Model.Troop],
-	];
+	public static readonly bindings: BindingType[] = [['list', 'troops', undefined, BINDING.LIST, Model.Troop]];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
@@ -30,7 +27,7 @@ class Troops extends Serializable {
 	}
 
 	getByID(id: number): Model.Troop {
-		return this.list[this.listIndexes[id]];
+		return this.list.find((troop) => troop.id === id)!;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

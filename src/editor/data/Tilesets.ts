@@ -15,11 +15,8 @@ import { Project, Serializable } from '../core';
 
 class Tilesets extends Serializable {
 	public list!: Model.Tileset[];
-	public listIndexes!: number[];
 
-	public static readonly bindings: BindingType[] = [
-		['list', 'list', undefined, BINDING.LIST_WITH_INDEXES, Model.Tileset],
-	];
+	public static readonly bindings: BindingType[] = [['list', 'list', undefined, BINDING.LIST, Model.Tileset]];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
@@ -30,7 +27,7 @@ class Tilesets extends Serializable {
 	}
 
 	getTilesetByID(id: number): Model.Tileset {
-		return this.list[this.listIndexes[id]];
+		return this.list.find((tileset) => tileset.id === id)!;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

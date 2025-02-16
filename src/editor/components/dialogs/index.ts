@@ -11,4 +11,4 @@ export * from './DialogSystems';
 export * from './DialogTransformations';
 export * from './DialogTransformDefaultValues';
 export * from './DialogVariables';
-export * from './DialogVideosPreview';
+export * from './DialogVideos';

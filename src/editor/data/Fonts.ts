@@ -15,11 +15,8 @@ import { Project, Serializable } from '../core';
 
 class Fonts extends Serializable {
 	public list!: Model.Font[];
-	public listIndexes!: number[];
 
-	public static readonly bindings: BindingType[] = [
-		['list', 'list', undefined, BINDING.LIST_WITH_INDEXES, Model.Font],
-	];
+	public static readonly bindings: BindingType[] = [['list', 'list', undefined, BINDING.LIST, Model.Font]];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
@@ -30,7 +27,7 @@ class Fonts extends Serializable {
 	}
 
 	getFontByID(id: number): Model.Font {
-		return this.list[this.listIndexes[id]];
+		return this.list.find((font) => font.id === id)!;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

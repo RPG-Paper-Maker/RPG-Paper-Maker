@@ -39,8 +39,7 @@ class Serializable {
 					(this as JSONType)[name] = value ? (value as Rectangle).clone() : value;
 					break;
 				}
-				case BINDING.LIST:
-				case BINDING.LIST_WITH_INDEXES: {
+				case BINDING.LIST: {
 					const value = serializable[name as keyof Serializable] as unknown;
 					(this as JSONType)[name] = (value as Serializable[]).map((o) => o.clone());
 					break;
@@ -164,22 +163,6 @@ class Serializable {
 						}
 					}
 					(this as JSONType)[name] = tab;
-					break;
-				}
-				case BINDING.LIST_WITH_INDEXES: {
-					const jsonTab = json[jsonName] as JSONType[] | undefined;
-					const tab: Serializable[] = [];
-					const tabIndexes: number[] = [];
-					if (jsonTab && constructorClass) {
-						for (const [index, jsonElement] of jsonTab.entries()) {
-							const obj = new constructorClass() as Model.Base;
-							obj.read(jsonElement);
-							tab.push(obj);
-							tabIndexes[obj.id] = index;
-						}
-					}
-					(this as JSONType)[name] = tab;
-					(this as JSONType)[`${name}Indexes`] = tabIndexes;
 					break;
 				}
 				case BINDING.MAP_POSITION: {
@@ -311,8 +294,7 @@ class Serializable {
 					}
 					break;
 				}
-				case BINDING.LIST:
-				case BINDING.LIST_WITH_INDEXES: {
+				case BINDING.LIST: {
 					const tab = (this as JSONType)[name] as Serializable[] | undefined;
 					const jsonTab: JSONType[] = [];
 					if (tab) {

@@ -15,7 +15,6 @@ import { Project, Serializable } from '../core';
 
 class Songs extends Serializable {
 	public list!: Model.Song[][];
-	private listIndexes!: number[][];
 
 	getPath(): string {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_SONGS);
@@ -26,24 +25,18 @@ class Songs extends Serializable {
 	}
 
 	getByID(kind: SONG_KIND, id: number): Model.Song {
-		return this.list[kind][this.listIndexes[kind][id]];
+		return this.list[kind].find((song) => song.id === id)!;
 	}
 
 	read(json: JSONType) {
 		this.list = [];
-		this.listIndexes = [];
 		for (const { k, v } of json.list as JSONType[]) {
 			const list: Model.Song[] = [];
-			const listIndexes: number[] = [];
 			this.list[k as number] = list;
-			this.listIndexes[k as number] = listIndexes;
-			let index = 0;
 			for (const jsonSong of v as JSONType[]) {
 				const song = new Model.Song(k as SONG_KIND);
 				song.read(jsonSong);
 				list.push(song);
-				listIndexes[song.id] = index;
-				index++;
 			}
 		}
 	}

@@ -15,10 +15,9 @@ import { Project, Serializable } from '../core';
 
 class Skills extends Serializable {
 	public list!: Model.CommonSkillItem[];
-	public listIndexes!: number[];
 
 	public static readonly bindings: BindingType[] = [
-		['list', 'skills', undefined, BINDING.LIST_WITH_INDEXES, Model.CommonSkillItem],
+		['list', 'skills', undefined, BINDING.LIST, Model.CommonSkillItem],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -30,7 +29,7 @@ class Skills extends Serializable {
 	}
 
 	getByID(id: number): Model.CommonSkillItem {
-		return this.list[this.listIndexes[id]];
+		return this.list.find((skill) => skill.id === id)!;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

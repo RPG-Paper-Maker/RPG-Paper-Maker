@@ -122,6 +122,18 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 		await Platform.createFolder(Paths.join(project.getPath(), Paths.WALLS));
 		await Platform.createFolder(Paths.join(project.getPath(), Paths.SKYBOXES));
 		await Platform.createFolder(Paths.join(project.getPath(), Paths.PARTICLES));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.VIDEOS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.SONGS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.MUSICS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.BACKGROUND_SOUNDS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.SOUNDS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.MUSIC_EFFECTS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.SHAPES));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.OBJ_COLLISIONS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.MTL));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.OBJ));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.FONTS));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.STYLES));
 		await project.load();
 		await Model.Map.createDefaultMap(1, t('starting.map'));
 		await Model.Map.createDefaultMap(2, t('default'));

@@ -40,6 +40,7 @@ type Props = {
 	options?: ReactNode;
 	active?: boolean;
 	basePath?: string;
+	importTypes?: string;
 };
 
 function PanelAssetsPreviewer({
@@ -60,6 +61,7 @@ function PanelAssetsPreviewer({
 	options,
 	active = false,
 	basePath,
+	importTypes,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -113,9 +115,7 @@ function PanelAssetsPreviewer({
 	};
 
 	const handleClickExport = () => {
-		if (selectedItem && selectedItem.id > 0) {
-			LocalFile.download(selectedItem.getPath(), (selectedItem as Model.Picture).isBR);
-		}
+		LocalFile.download(selectedItem!.getPath(), (selectedItem as Model.Picture).isBR);
 	};
 
 	const handleClickPlus = async () => {
@@ -215,7 +215,12 @@ function PanelAssetsPreviewer({
 								</Flex>
 								<Flex spaced>
 									<Button onClick={onRefresh}>{t('refresh')}</Button>
-									<Button onClick={handleClickExport}>{t('export')}...</Button>
+									<Button
+										onClick={handleClickExport}
+										disabled={!selectedItem || selectedItem.id <= 0}
+									>
+										{t('export')}...
+									</Button>
 									<Button buttonType={BUTTON_TYPE.PRIMARY} onClick={handleClickPlus}>
 										+
 									</Button>
@@ -224,7 +229,7 @@ function PanelAssetsPreviewer({
 										type='file'
 										hidden
 										onChange={handleImportFileChange}
-										accept='image/png, image/jpeg'
+										accept={importTypes}
 									/>
 								</Flex>
 							</Flex>

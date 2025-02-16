@@ -123,7 +123,11 @@ class Platform {
 		for (const fileName of files) {
 			const content = await Platform.readFile(Paths.join(path, fileName));
 			if (content !== null) {
-				zip.file(fileName, content);
+				if (content.startsWith('data')) {
+					zip.file(fileName, LocalFile.base64FileToBlob(content));
+				} else {
+					zip.file(fileName, content);
+				}
 			}
 		}
 	}

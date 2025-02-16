@@ -79,9 +79,6 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, onAccept, onRej
 
 	const updateObjects3DList = () => {
 		Project.current!.specialElements.objects3D = objects3D.map((node) => node.content as Model.Object3D);
-		objects3D.forEach((object3D, index) => {
-			Project.current!.specialElements.objects3DIndexes[object3D.content.id] = index;
-		});
 	};
 
 	const handleChangeSelectedObject3D = (node: Node | null) => {

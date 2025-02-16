@@ -15,7 +15,6 @@ import { Project, Serializable } from '../core';
 
 class Pictures extends Serializable {
 	public list!: Model.Picture[][];
-	private listIndexes!: number[][];
 
 	getPath(): string {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_PICTURES);
@@ -26,24 +25,18 @@ class Pictures extends Serializable {
 	}
 
 	getByID(kind: PICTURE_KIND, id: number): Model.Picture {
-		return this.list[kind][this.listIndexes[kind][id]];
+		return this.list[kind].find((picture) => picture.id === id)!;
 	}
 
 	read(json: JSONType) {
 		this.list = [];
-		this.listIndexes = [];
 		for (const { k, v } of json.list as JSONType[]) {
 			const list: Model.Picture[] = [];
-			const listIndexes: number[] = [];
 			this.list[k as number] = list;
-			this.listIndexes[k as number] = listIndexes;
-			let index = 0;
 			for (const jsonPicture of v as JSONType[]) {
 				const picture = new Model.Picture(k as number);
 				picture.read(jsonPicture);
 				list.push(picture);
-				listIndexes[picture.id] = index;
-				index++;
 			}
 		}
 	}

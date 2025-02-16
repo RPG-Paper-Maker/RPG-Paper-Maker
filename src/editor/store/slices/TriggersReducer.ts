@@ -30,6 +30,10 @@ const TriggersSlice = createSlice({
 			systems: false,
 			variables: false,
 			pictures: false,
+			videos: false,
+			songs: false,
+			shapes: false,
+			fonts: false,
 			play: false,
 		},
 		splitting: false,
@@ -68,6 +72,18 @@ const TriggersSlice = createSlice({
 		triggerPictures(state, action: PayloadAction<boolean>) {
 			state.mainBar.pictures = action.payload;
 		},
+		triggerVideos(state, action: PayloadAction<boolean>) {
+			state.mainBar.videos = action.payload;
+		},
+		triggerSongs(state, action: PayloadAction<boolean>) {
+			state.mainBar.songs = action.payload;
+		},
+		triggerShapes(state, action: PayloadAction<boolean>) {
+			state.mainBar.shapes = action.payload;
+		},
+		triggerFonts(state, action: PayloadAction<boolean>) {
+			state.mainBar.fonts = action.payload;
+		},
 		triggerPlay(state, action: PayloadAction<boolean>) {
 			state.mainBar.play = action.payload;
 		},
@@ -105,6 +121,10 @@ export const {
 	triggerSystems,
 	triggerVariables,
 	triggerPictures,
+	triggerSongs,
+	triggerFonts,
+	triggerShapes,
+	triggerVideos,
 	triggerPlay,
 	triggerSplitting,
 	triggerTreeMap,

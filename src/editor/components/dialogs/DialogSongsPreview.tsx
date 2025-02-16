@@ -333,6 +333,7 @@ function DialogSongsPreview({
 					content={getPreviewerContent()}
 					options={getPreviewerOptionsContent()}
 					active={active}
+					importTypes='music/mp3, music/ogg, music/wav'
 				/>
 			</Dialog>
 			<Dialog

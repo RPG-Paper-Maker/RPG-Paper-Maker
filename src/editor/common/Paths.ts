@@ -21,6 +21,7 @@ class Paths {
 	public static readonly PICTURES = 'Images';
 	public static readonly VIDEOS = 'Videos';
 	public static readonly FONTS = 'Fonts';
+	public static readonly STYLES = 'Styles';
 	public static readonly HUD = Paths.join(Paths.PICTURES, 'HUD');
 	public static readonly TEXTURES2D = Paths.join(Paths.PICTURES, 'Textures2D');
 	public static readonly BARS = Paths.join(Paths.HUD, 'Bars');

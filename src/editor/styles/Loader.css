@@ -21,6 +21,11 @@
 	z-index: 999;
 	background-color: rgba(0, 0, 0, 0.4);
 
+	&.alone {
+		background-color: transparent;
+		position: relative;
+	}
+
 	.spinner {
 		border: 5px solid var(--grey-light-color);
 		border-top: 5px solid var(--primary-color);

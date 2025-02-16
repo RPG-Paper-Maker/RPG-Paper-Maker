@@ -30,6 +30,7 @@ import { Constants } from '../common';
 import { Project } from '../core';
 import {
 	RootState,
+	triggerFonts,
 	triggerImportProject,
 	triggerNewProject,
 	triggerOpenDialogProject,
@@ -37,8 +38,11 @@ import {
 	triggerPlay,
 	triggerSave,
 	triggerSaveAll,
+	triggerShapes,
+	triggerSongs,
 	triggerSystems,
 	triggerVariables,
+	triggerVideos,
 } from '../store';
 import '../styles/Toolbar.css';
 import Menu from './Menu';
@@ -91,6 +95,22 @@ function Toolbar() {
 
 	const handlePicturesManager = () => {
 		dispatch(triggerPictures(true));
+	};
+
+	const handleVideosManager = () => {
+		dispatch(triggerVideos(true));
+	};
+
+	const handleSongsManager = () => {
+		dispatch(triggerSongs(true));
+	};
+
+	const handleShapesManager = () => {
+		dispatch(triggerShapes(true));
+	};
+
+	const handleFontsManager = () => {
+		dispatch(triggerFonts(true));
 	};
 
 	const handlePlay = () => {
@@ -156,16 +176,16 @@ function Toolbar() {
 					<MenuItem icon={<AiOutlinePicture />} onClick={handlePicturesManager} disabled={!isProjectOpened}>
 						{t('pictures.manager.tool')}
 					</MenuItem>
-					<MenuItem icon={<TfiVideoClapper />} onClick={handleFloor} disabled>
+					<MenuItem icon={<TfiVideoClapper />} onClick={handleVideosManager} disabled={!isProjectOpened}>
 						{t('videos.manager.tool')}
 					</MenuItem>
-					<MenuItem icon={<BsMusicNote />} onClick={handleFloor} disabled>
+					<MenuItem icon={<BsMusicNote />} onClick={handleSongsManager} disabled>
 						{t('songs.manager.tool')}
 					</MenuItem>
-					<MenuItem icon={<BiPyramid />} onClick={handleFloor} disabled>
+					<MenuItem icon={<BiPyramid />} onClick={handleShapesManager} disabled>
 						{t('shapes.manager.tool')}
 					</MenuItem>
-					<MenuItem icon={<AiOutlineFontSize />} onClick={handleFloor} disabled>
+					<MenuItem icon={<AiOutlineFontSize />} onClick={handleFontsManager} disabled>
 						{t('fonts.manager.tool')}
 					</MenuItem>
 					<MenuItem separator></MenuItem>

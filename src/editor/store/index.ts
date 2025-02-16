@@ -49,6 +49,7 @@ import {
 	setNeedsReloadMap,
 	setNeedsReloadPageClearCache,
 	setNeedsReloadPageUpdate,
+	triggerFonts,
 	triggerImportProject,
 	triggerMenu,
 	triggerNewProject,
@@ -58,11 +59,14 @@ import {
 	triggerPlay,
 	triggerSave,
 	triggerSaveAll,
+	triggerShapes,
+	triggerSongs,
 	triggerSplitting,
 	TriggersReducer,
 	triggerSystems,
 	triggerTreeMap,
 	triggerVariables,
+	triggerVideos,
 } from './slices/TriggersReducer';
 
 const store = configureStore({
@@ -111,6 +115,7 @@ export {
 	setUndoRedoIndex,
 	setUndoRedoLength,
 	store,
+	triggerFonts,
 	triggerImportProject,
 	triggerMenu,
 	triggerNewProject,
@@ -120,9 +125,12 @@ export {
 	triggerPlay,
 	triggerSave,
 	triggerSaveAll,
+	triggerShapes,
+	triggerSongs,
 	triggerSplitting,
 	triggerSystems,
 	triggerTreeMap,
 	triggerVariables,
+	triggerVideos,
 };
 export type RootState = ReturnType<typeof store.getState>;

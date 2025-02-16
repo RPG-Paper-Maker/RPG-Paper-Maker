@@ -1,1 +1,6 @@
-{"list":[{"br":false,"id":-1,"name":"<None>"},{"br":true,"id":1,"name":"Default.ttf"}]}
+{
+	"list": [
+		{ "br": true, "id": -1, "name": "<None>" },
+		{ "br": true, "id": 1, "name": "Default.ttf" }
+	]
+}

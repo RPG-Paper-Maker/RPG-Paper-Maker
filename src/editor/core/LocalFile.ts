@@ -230,7 +230,10 @@ class LocalFile extends Serializable {
 	}
 
 	static async readBase64File(path: string): Promise<Blob> {
-		const base64DataUrl = (await LocalFile.readFile(path)) ?? '';
+		return LocalFile.base64FileToBlob((await LocalFile.readFile(path)) ?? '');
+	}
+
+	static base64FileToBlob(base64DataUrl: string): Blob {
 		const [prefix, base64] = base64DataUrl.split(',');
 		const mimeType = prefix.match(/:(.*?);/)?.[1];
 		const byteCharacters = atob(base64);

@@ -53,9 +53,6 @@ function DialogShapesPreview({ kind, isOpen, setIsOpen, shapeID, onAccept, onRej
 
 	const updateShapesList = () => {
 		Project.current!.shapes.list[kind] = shapes.map((node) => node.content as Model.Shape);
-		shapes.forEach((shape, index) => {
-			Project.current!.shapes.listIndexes[kind][shape.content.id] = index;
-		});
 	};
 
 	const handleChangeSelectedShape = (node: Node | null) => {

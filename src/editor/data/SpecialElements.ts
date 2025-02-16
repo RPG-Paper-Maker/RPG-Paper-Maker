@@ -15,19 +15,15 @@ import { Project, Serializable } from '../core';
 
 class SpecialElements extends Serializable {
 	public autotiles!: Model.Autotile[];
-	public autotilesIndexes!: number[];
 	public walls!: Model.SpecialElement[];
-	public wallsIndexes!: number[];
 	public mountains!: Model.Mountain[];
-	public mountainsIndexes!: number[];
 	public objects3D!: Model.Object3D[];
-	public objects3DIndexes!: number[];
 
 	public static readonly bindings: BindingType[] = [
-		['autotiles', 'autotiles', undefined, BINDING.LIST_WITH_INDEXES, Model.Autotile],
-		['walls', 'walls', undefined, BINDING.LIST_WITH_INDEXES, Model.SpecialElement],
-		['mountains', 'm', undefined, BINDING.LIST_WITH_INDEXES, Model.Mountain],
-		['objects3D', 'o', undefined, BINDING.LIST_WITH_INDEXES, Model.Object3D],
+		['autotiles', 'autotiles', undefined, BINDING.LIST, Model.Autotile],
+		['walls', 'walls', undefined, BINDING.LIST, Model.SpecialElement],
+		['mountains', 'm', undefined, BINDING.LIST, Model.Mountain],
+		['objects3D', 'o', undefined, BINDING.LIST, Model.Object3D],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -39,19 +35,19 @@ class SpecialElements extends Serializable {
 	}
 
 	getAutotileByID(id: number): Model.Autotile {
-		return this.autotiles[this.autotilesIndexes[id]];
+		return this.autotiles.find((autotile) => autotile.id === id)!;
 	}
 
 	getWallByID(id: number): Model.SpecialElement {
-		return this.walls[this.wallsIndexes[id]];
+		return this.walls.find((wall) => wall.id === id)!;
 	}
 
 	getMountainByID(id: number): Model.Mountain {
-		return this.mountains[this.mountainsIndexes[id]];
+		return this.mountains.find((mountain) => mountain.id === id)!;
 	}
 
 	getObject3DByID(id: number): Model.Object3D {
-		return this.objects3D[this.objects3DIndexes[id]];
+		return this.objects3D.find((object) => object.id === id)!;
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {

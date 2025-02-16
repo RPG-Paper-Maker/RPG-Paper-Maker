@@ -9,27 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType, Paths } from '../common';
+import { Paths } from '../common';
 import { Project } from '../core';
-import { Base } from './Base';
+import { Asset } from './Asset';
 
-class Video extends Base {
-	public isBR!: boolean;
-	public dlc!: string;
-
-	public static readonly bindings: BindingType[] = [
-		['isBR', 'br', false, BINDING.BOOLEAN],
-		['dlc', 'd', '', BINDING.STRING],
-	];
-
-	static getBindings(additionnalBinding: BindingType[]) {
-		return [...Video.bindings, ...additionnalBinding];
-	}
-
+class Video extends Asset {
 	static getFolder(isBR: boolean, dlc: string): string {
 		return (
-			(isBR ? Project.current!.systems.PATH_BR : dlc ? `${Project.current!.systems.PATH_DLCS}/${dlc}` : '') +
-			this.getLocalFolder()
+			(isBR
+				? Project.current?.systems?.PATH_BR
+				: dlc
+				? `${Project.current?.systems?.PATH_DLCS}/${dlc}`
+				: `${Project.current?.getPath()}/`) + this.getLocalFolder()
 		);
 	}
 
@@ -39,26 +30,6 @@ class Video extends Base {
 
 	getPath(): string {
 		return this.id === -1 ? '' : `${Video.getFolder(this.isBR, this.dlc)}/${this.name}`;
-	}
-
-	isFolder() {
-		return false;
-	}
-
-	getIcon() {
-		return <img src='./Assets/bullet-br.png' alt='br bullet' width='16px' />;
-	}
-
-	copy(video: Video, additionnalBinding: BindingType[] = []): void {
-		super.copy(video, Video.getBindings(additionnalBinding));
-	}
-
-	read(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.read(json, Video.getBindings(additionnalBinding));
-	}
-
-	write(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.write(json, Video.getBindings(additionnalBinding));
 	}
 }
 

@@ -231,6 +231,9 @@ function Tree({
 	};
 
 	const handleMouseDownItem = (node: Node) => {
+		if (currentSelectedItemNode === node) {
+			return;
+		}
 		if (multipleSelection && (Inputs.isSHIFT || Inputs.isCTRL)) {
 			if (node.content.id !== currentSelectedItemNode!.content.id) {
 				if (additionalSelectedNodes.some((n) => n.content.id === node.content.id)) {
@@ -572,7 +575,6 @@ function Tree({
 		if (!noFirstSelection) {
 			const index =
 				defaultSelectedID === undefined ? 0 : list.findIndex((node) => node.content.id === defaultSelectedID);
-			console.log(index);
 			const node = list[index] ?? Node.create(createDefault(-1));
 			setCurrentSelectedItemNode(node);
 			setCurrentName(node.content.name);

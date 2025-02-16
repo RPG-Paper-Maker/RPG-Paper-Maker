@@ -10,10 +10,10 @@
 */
 
 import * as THREE from 'three';
-import { BINDING, BindingType, CUSTOM_SHAPE_KIND, JSONType, Paths } from '../common';
+import { CUSTOM_SHAPE_KIND, Paths } from '../common';
 import { Platform } from '../common/Platform';
 import { Project } from '../core';
-import { Base } from './Base';
+import { Asset } from './Asset';
 
 type GeometryDataType = {
 	vertices: THREE.Vector3[];
@@ -26,26 +26,15 @@ type GeometryDataType = {
 	d: number;
 };
 
-class Shape extends Base {
+class Shape extends Asset {
 	public static loader = new THREE.FileLoader();
 
 	public kind!: CUSTOM_SHAPE_KIND;
-	public isBR!: boolean;
-	public dlc!: string;
 	public geometryData!: GeometryDataType;
 
 	constructor(kind: CUSTOM_SHAPE_KIND) {
 		super();
 		this.kind = kind;
-	}
-
-	public static readonly bindings: BindingType[] = [
-		['isBR', 'br', false, BINDING.BOOLEAN],
-		['dlc', 'd', '', BINDING.STRING],
-	];
-
-	static getBindings(additionnalBinding: BindingType[]) {
-		return [...Shape.bindings, ...additionnalBinding];
 	}
 
 	static customShapeKindToString(kind: CUSTOM_SHAPE_KIND): string {
@@ -168,8 +157,11 @@ class Shape extends Base {
 
 	static getFolder(kind: CUSTOM_SHAPE_KIND, isBR: boolean, dlc: string): string {
 		return (
-			(isBR ? Project.current!.systems.PATH_BR : dlc ? `${Project.current!.systems.PATH_DLCS}/${dlc}` : '') +
-			this.getLocalFolder(kind)
+			(isBR
+				? Project.current?.systems?.PATH_BR
+				: dlc
+				? `${Project.current?.systems?.PATH_DLCS}/${dlc}`
+				: `${Project.current?.getPath()}/`) + this.getLocalFolder(kind)
 		);
 	}
 
@@ -198,29 +190,13 @@ class Shape extends Base {
 		}
 	}
 
-	isFolder() {
-		return false;
-	}
-
 	getPath(): string {
 		return this.id === -1 ? '' : `${Shape.getFolder(this.kind, this.isBR, this.dlc)}/${this.name}`;
 	}
 
-	getIcon() {
-		return <img src='./Assets/bullet-br.png' alt='br bullet' width='16px' />;
-	}
-
-	copy(shape: Shape, additionnalBinding: BindingType[] = []): void {
-		super.copy(shape, Shape.getBindings(additionnalBinding));
+	copy(shape: Shape): void {
+		super.copy(shape);
 		this.kind = shape.kind;
-	}
-
-	read(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.read(json, Shape.getBindings(additionnalBinding));
-	}
-
-	write(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.write(json, Shape.getBindings(additionnalBinding));
 	}
 }
 

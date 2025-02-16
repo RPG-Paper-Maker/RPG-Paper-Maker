@@ -17,16 +17,17 @@ type Props = {
 	isLoading: boolean;
 	isHidding?: boolean;
 	large?: boolean;
+	alone?: boolean;
 };
 
-function Loader({ isLoading, isHidding = false, large = false }: Props) {
+function Loader({ isLoading, isHidding = false, large = false, alone = false }: Props) {
 	const { t } = useTranslation();
 
 	return (
 		<>
 			{isLoading && (
 				<>
-					<div className={Utils.getClassName({ large }, 'loader')}>
+					<div className={Utils.getClassName({ large, alone }, 'loader')}>
 						<div className='spinner'></div>
 						{large && <div className='text'>{t('loading')}...</div>}
 					</div>

@@ -17,12 +17,13 @@ import {
 	AiOutlineClear,
 	AiOutlineFileAdd,
 	AiOutlineFolderOpen,
+	AiOutlineFontSize,
 	AiOutlinePicture,
 	AiOutlineZoomIn,
 	AiOutlineZoomOut,
 } from 'react-icons/ai';
-import { BiExport, BiImport, BiSave } from 'react-icons/bi';
-import { BsClipboardData, BsPlay } from 'react-icons/bs';
+import { BiExport, BiImport, BiPyramid, BiSave } from 'react-icons/bi';
+import { BsClipboardData, BsMusicNote, BsPlay } from 'react-icons/bs';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { FiMap } from 'react-icons/fi';
 import { IoIosRedo, IoIosUndo, IoMdArrowBack } from 'react-icons/io';
@@ -30,6 +31,7 @@ import { LuFolders, LuSaveAll } from 'react-icons/lu';
 import { MdClose, MdOutlineWallpaper } from 'react-icons/md';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { TbNumbers } from 'react-icons/tb';
+import { TfiVideoClapper } from 'react-icons/tfi';
 import { VscChromeClose, VscChromeMaximize, VscChromeMinimize, VscChromeRestore } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
 import { BUTTON_TYPE, Constants, EXTENSION_KIND, IO, KEY, MenuItemType, Paths, SPECIAL_KEY, Utils } from '../common';
@@ -48,6 +50,7 @@ import {
 	setProjectMenuIndex,
 	setProjects,
 	setUndoRedoIndex,
+	triggerFonts,
 	triggerImportProject,
 	triggerNewProject,
 	triggerOpenDialogProject,
@@ -56,9 +59,12 @@ import {
 	triggerPlay,
 	triggerSave,
 	triggerSaveAll,
+	triggerShapes,
+	triggerSongs,
 	triggerSystems,
 	triggerTreeMap,
 	triggerVariables,
+	triggerVideos,
 } from '../store';
 import '../styles/MainMenuBar.css';
 import Button from './Button';
@@ -68,6 +74,7 @@ import DialogNewProject from './dialogs/DialogNewProject';
 import DialogPictures from './dialogs/DialogPictures';
 import DialogSystems from './dialogs/DialogSystems';
 import DialogVariables from './dialogs/DialogVariables';
+import DialogVideos from './dialogs/DialogVideos';
 import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import FooterOK from './dialogs/footers/FooterOK';
@@ -85,6 +92,10 @@ function MainMenuBar() {
 	const [isDialogSystemsOpen, setIsDialogSystemsOpen] = useState(false);
 	const [isDialogVariablesOpen, setIsDialogVariablesOpen] = useState(false);
 	const [isDialogPicturesOpen, setIsDialogPicturesOpen] = useState(false);
+	const [isDialogVideosOpen, setIsDialogVideosOpen] = useState(false);
+	const [isDialogSongsOpen, setIsDialogSongsOpen] = useState(false);
+	const [isDialogShapesOpen, setIsDialogShapesOpen] = useState(false);
+	const [isDialogFontsOpen, setIsDialogFontsOpen] = useState(false);
 	const [isDialogChangeLanguageOpen, setIsDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
@@ -351,6 +362,22 @@ function MainMenuBar() {
 		setIsDialogPicturesOpen(true);
 	};
 
+	const handleVideosManager = async () => {
+		setIsDialogVideosOpen(true);
+	};
+
+	const handleSongsManager = async () => {
+		setIsDialogSongsOpen(true);
+	};
+
+	const handleShapesManager = async () => {
+		setIsDialogShapesOpen(true);
+	};
+
+	const handleFontsManager = async () => {
+		setIsDialogFontsOpen(true);
+	};
+
 	const handleChangeLanguage = async () => {
 		setIsDialogChangeLanguageOpen(true);
 	};
@@ -564,6 +591,30 @@ function MainMenuBar() {
 					onClick: handlePicturesManager,
 					disabled: !isProjectOpened,
 				},
+				{
+					title: `${t('videos.manager')}...`,
+					icon: <TfiVideoClapper />,
+					onClick: handleVideosManager,
+					disabled: !isProjectOpened,
+				},
+				{
+					title: `${t('songs.manager')}...`,
+					icon: <BsMusicNote />,
+					onClick: handleSongsManager,
+					disabled: !isProjectOpened,
+				},
+				{
+					title: `${t('shapes.manager')}...`,
+					icon: <BiPyramid />,
+					onClick: handleShapesManager,
+					disabled: !isProjectOpened,
+				},
+				{
+					title: `${t('fonts.manager')}...`,
+					icon: <AiOutlineFontSize />,
+					onClick: handleFontsManager,
+					disabled: !isProjectOpened,
+				},
 			],
 		},
 		{
@@ -630,6 +681,18 @@ function MainMenuBar() {
 		} else if (triggers.pictures) {
 			dispatch(triggerPictures(false));
 			handlePicturesManager().catch(console.error);
+		} else if (triggers.videos) {
+			dispatch(triggerVideos(false));
+			handleVideosManager().catch(console.error);
+		} else if (triggers.songs) {
+			dispatch(triggerSongs(false));
+			handleSongsManager().catch(console.error);
+		} else if (triggers.shapes) {
+			dispatch(triggerShapes(false));
+			handleShapesManager().catch(console.error);
+		} else if (triggers.fonts) {
+			dispatch(triggerFonts(false));
+			handleFontsManager().catch(console.error);
 		} else if (triggers.play) {
 			dispatch(triggerPlay(false));
 			handlePlay().catch(console.error);
@@ -736,6 +799,7 @@ function MainMenuBar() {
 			<DialogSystems isOpen={isDialogSystemsOpen} setIsOpen={setIsDialogSystemsOpen} />
 			<DialogVariables isOpen={isDialogVariablesOpen} setIsOpen={setIsDialogVariablesOpen} />
 			<DialogPictures isOpen={isDialogPicturesOpen} setIsOpen={setIsDialogPicturesOpen} />
+			<DialogVideos manager isOpen={isDialogVideosOpen} setIsOpen={setIsDialogVideosOpen} />
 			<DialogChangeLanguage isOpen={isDialogChangeLanguageOpen} setIsOpen={setIsDialogChangeLanguageOpen} />
 			<Dialog
 				title={t('warning')}

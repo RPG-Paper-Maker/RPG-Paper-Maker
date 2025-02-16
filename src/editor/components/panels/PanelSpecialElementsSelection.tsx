@@ -72,13 +72,19 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	const getIndex = () => {
 		switch (kind) {
 			case PICTURE_KIND.AUTOTILES:
-				return Project.current!.specialElements.autotilesIndexes[currentAutotileID];
+				return Project.current!.specialElements.autotiles.findIndex(
+					(autotile) => autotile.id === currentAutotileID
+				);
 			case PICTURE_KIND.WALLS:
-				return Project.current!.specialElements.wallsIndexes[currentWallID];
+				return Project.current!.specialElements.walls.findIndex((wall) => wall.id === currentWallID);
 			case PICTURE_KIND.MOUNTAINS:
-				return Project.current!.specialElements.mountainsIndexes[currentMountainID];
+				return Project.current!.specialElements.mountains.findIndex(
+					(mountain) => mountain.id === currentMountainID
+				);
 			case PICTURE_KIND.OBJECTS_3D:
-				return Project.current!.specialElements.objects3DIndexes[currentObject3DID];
+				return Project.current!.specialElements.objects3D.findIndex(
+					(object) => object.id === currentObject3DID
+				);
 		}
 		return 0;
 	};

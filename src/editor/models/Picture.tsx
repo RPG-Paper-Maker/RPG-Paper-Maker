@@ -11,12 +11,10 @@
 
 import { BINDING, BindingType, JSONType, Paths, PICTURE_KIND } from '../common';
 import { CollisionSquare, Picture2D, Project } from '../core';
-import { Base } from './Base';
+import { Asset } from './Asset';
 
-class Picture extends Base {
+class Picture extends Asset {
 	public kind!: PICTURE_KIND;
-	public isBR!: boolean;
-	public dlc!: string;
 	public jsonCollisions!: JSONType[];
 	public collisionsRepeat!: boolean;
 	public collisions: CollisionSquare[] = [];
@@ -32,8 +30,6 @@ class Picture extends Base {
 	}
 
 	public static readonly bindings: BindingType[] = [
-		['isBR', 'br', undefined, BINDING.BOOLEAN],
-		['dlc', 'd', '', BINDING.STRING],
 		['jsonCollisions', 'col', [], BINDING.NUMBER],
 		['collisionsRepeat', 'rcol', false, BINDING.BOOLEAN],
 		['isStopAnimation', 'isStopAnimation', false, BINDING.BOOLEAN],
@@ -47,10 +43,10 @@ class Picture extends Base {
 	static getFolder(kind: PICTURE_KIND, isBR: boolean, dlc: string): string {
 		return (
 			(isBR
-				? Project.current!.systems.PATH_BR
+				? Project.current?.systems?.PATH_BR
 				: dlc
-				? `${Project.current!.systems.PATH_DLCS}/${dlc}`
-				: `${Project.current!.getPath()}/`) + this.getLocalFolder(kind)
+				? `${Project.current?.systems?.PATH_DLCS}/${dlc}`
+				: `${Project.current?.getPath()}/`) + this.getLocalFolder(kind)
 		);
 	}
 
@@ -102,22 +98,8 @@ class Picture extends Base {
 		return this.id === -1 || !this.name ? '' : Picture.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
 	}
 
-	isFolder() {
-		return false;
-	}
-
 	async loadPicture() {
 		this.picture = await Picture2D.loadImage(this.getPath());
-	}
-
-	getIcon() {
-		return (
-			<img
-				src={`./Assets/bullet-${this.isBR || this.id === -1 ? 'br' : 'custom'}.png`}
-				alt='bullet'
-				width='16px'
-			/>
-		);
 	}
 
 	copy(picture: Picture, additionnalBinding: BindingType[] = []): void {

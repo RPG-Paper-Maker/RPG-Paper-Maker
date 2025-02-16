@@ -12,7 +12,7 @@
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Paths, PICTURE_KIND } from '../../common';
+import { PICTURE_KIND } from '../../common';
 import { Platform } from '../../common/Platform';
 import { Node, Project, Rectangle } from '../../core';
 import { DynamicValue } from '../../core/DynamicValue';
@@ -179,9 +179,8 @@ function DialogPictures({
 	};
 
 	const handleRefresh = async () => {
-		const path = Model.Picture.getFolder(selectedKind!, true, '');
-		const files = Platform.getAllFilesFromFolder(path);
-		const customNames = await Platform.getFiles(Paths.join(Model.Picture.getFolder(selectedKind!, false, '')));
+		const files = Platform.getAllFilesFromFolder(Model.Picture.getFolder(selectedKind!, true, ''));
+		const customNames = await Platform.getFiles(Model.Picture.getFolder(selectedKind!, false, ''));
 		setPicturesAvailable([
 			...Node.createList(
 				files.map((name, index) => {
@@ -418,6 +417,7 @@ function DialogPictures({
 							options={getPreviewerOptionsContent()}
 							active={active}
 							basePath={Model.Picture.getFolder(selectedKind, false, '')}
+							importTypes='image/png, image/jpeg'
 						/>
 					) : (
 						<Flex one />

@@ -15,7 +15,6 @@ import { Project, Serializable } from '../core';
 
 class Shapes extends Serializable {
 	public list!: Model.Shape[][];
-	public listIndexes!: number[][];
 
 	getPath(): string {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_SHAPES);
@@ -26,24 +25,18 @@ class Shapes extends Serializable {
 	}
 
 	getByID(kind: CUSTOM_SHAPE_KIND, id: number): Model.Shape {
-		return this.list[kind][this.listIndexes[kind][id]];
+		return this.list[kind].find((shape) => shape.id === id)!;
 	}
 
 	read(json: JSONType) {
 		this.list = [];
-		this.listIndexes = [];
 		for (const { k, v } of json.list as JSONType[]) {
 			const list: Model.Shape[] = [];
-			const listIndexes: number[] = [];
 			this.list[k as number] = list;
-			this.listIndexes[k as number] = listIndexes;
-			let index = 0;
 			for (const jsonShape of v as JSONType[]) {
 				const shape = new Model.Shape(k as CUSTOM_SHAPE_KIND);
 				shape.read(jsonShape);
 				list.push(shape);
-				listIndexes[shape.id] = index;
-				index++;
 			}
 		}
 	}

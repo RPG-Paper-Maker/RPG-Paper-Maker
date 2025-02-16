@@ -9,33 +9,25 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType, Paths, SONG_KIND } from '../common';
+import { Paths, SONG_KIND } from '../common';
 import { Project } from '../core';
-import { Base } from './Base';
+import { Asset } from './Asset';
 
-class Song extends Base {
+class Song extends Asset {
 	public kind!: SONG_KIND;
-	public isBR!: boolean;
-	public dlc!: string;
 
 	constructor(kind: SONG_KIND) {
 		super();
 		this.kind = kind;
 	}
 
-	public static readonly bindings: BindingType[] = [
-		['isBR', 'br', undefined, BINDING.BOOLEAN],
-		['dlc', 'd', '', BINDING.STRING],
-	];
-
-	static getBindings(additionnalBinding: BindingType[]) {
-		return [...Song.bindings, ...additionnalBinding];
-	}
-
 	static getFolder(kind: SONG_KIND, isBR: boolean, dlc: string): string {
 		return (
-			(isBR ? Project.current!.systems.PATH_BR : dlc ? `${Project.current!.systems.PATH_DLCS}/${dlc}` : '') +
-			this.getLocalFolder(kind)
+			(isBR
+				? Project.current?.systems?.PATH_BR
+				: dlc
+				? `${Project.current?.systems?.PATH_DLCS}/${dlc}`
+				: `${Project.current?.getPath()}/`) + this.getLocalFolder(kind)
 		);
 	}
 
@@ -57,25 +49,9 @@ class Song extends Base {
 		return this.id === -1 || !this.name ? '' : Song.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
 	}
 
-	isFolder() {
-		return false;
-	}
-
-	getIcon() {
-		return <img src='./Assets/bullet-br.png' alt='br bullet' width='16px' />;
-	}
-
-	copy(song: Song, additionnalBinding: BindingType[] = []): void {
-		super.copy(song, Song.getBindings(additionnalBinding));
+	copy(song: Song): void {
+		super.copy(song);
 		this.kind = song.kind;
-	}
-
-	read(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.read(json, Song.getBindings(additionnalBinding));
-	}
-
-	write(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.write(json, Song.getBindings(additionnalBinding));
 	}
 }
 

@@ -22,7 +22,7 @@ import Button from './Button';
 import DialogPictures from './dialogs/DialogPictures';
 import DialogShapesPreview from './dialogs/DialogShapesPreview';
 import DialogSongsPreview from './dialogs/DialogSongsPreview';
-import DialogVideosPreview from './dialogs/DialogVideosPreview';
+import DialogVideos from './dialogs/DialogVideos';
 import Flex from './Flex';
 import Tree, { TREES_MIN_WIDTH } from './Tree';
 
@@ -190,7 +190,7 @@ function AssetSelector({
 				);
 			case ASSET_SELECTOR_TYPE.VIDEOS:
 				return (
-					<DialogVideosPreview
+					<DialogVideos
 						videoID={getSelectedID()}
 						dynamicVideoID={selectedDynamic}
 						{...options}
