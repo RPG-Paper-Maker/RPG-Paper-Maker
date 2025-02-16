@@ -109,6 +109,13 @@ function PanelAssetsPreviewer({
 			onListUpdated?.();
 		}
 	};
+
+	const canDeleteRight = (node: Node | null) => !!node && !(node.content as Model.Asset).isBR;
+
+	const handleDeleteRight = (node: Node) => {
+		LocalFile.removeFile(node.content.getPath());
+	};
+
 	const handleChangeActivated = (b: boolean) => {
 		setIsCheckedActivated(b);
 		dynamicValueID!.isActivated = b;
@@ -208,7 +215,8 @@ function PanelAssetsPreviewer({
 										cannotAdd
 										cannotEdit
 										cannotDragDrop
-										cannotDelete
+										canDelete={canDeleteRight}
+										onDeleteItem={handleDeleteRight}
 										doNotShowID
 										noFirstSelection
 									/>

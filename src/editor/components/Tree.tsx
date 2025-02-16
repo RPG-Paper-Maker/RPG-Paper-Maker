@@ -75,6 +75,7 @@ type Props = {
 	cannotEdit?: boolean;
 	cannotDragDrop?: boolean;
 	cannotDelete?: boolean;
+	canDelete?: (node: Node | null) => boolean;
 	canBeEmpty?: boolean;
 	doNotGenerateIDOnPaste?: boolean;
 	doNotShowID?: boolean;
@@ -85,6 +86,7 @@ type Props = {
 	onSelectedItem?: (node: Node | null, isClick: boolean) => void;
 	onDoubleClick?: (node: Node | null) => void;
 	onCreateItem?: (node: Node) => void;
+	onDeleteItem?: (node: Node) => void;
 	onListUpdated?: () => void;
 	onAccept?: (node: Node, isNew: boolean) => void;
 	forcedCurrentSelectedItemID?: number | null;
@@ -114,6 +116,7 @@ function Tree({
 	cannotEdit = false,
 	cannotDragDrop = false,
 	cannotDelete = false,
+	canDelete,
 	canBeEmpty = false,
 	doNotGenerateIDOnPaste = false,
 	doNotShowID = false,
@@ -124,6 +127,7 @@ function Tree({
 	onSelectedItem,
 	onDoubleClick,
 	onCreateItem,
+	onDeleteItem,
 	onListUpdated,
 	onAccept,
 	forcedCurrentSelectedItemID,
@@ -370,6 +374,7 @@ function Tree({
 			const nextNode = nodes[nodes.length - 1].next;
 			for (const node of nodes) {
 				ArrayUtils.removeElement(node.parent?.children ?? list, node);
+				onDeleteItem?.(node);
 			}
 			setCurrentSelectedItemNode(nextNode);
 			onListUpdated?.();
@@ -743,6 +748,7 @@ function Tree({
 			return [];
 		}
 		const isFixed = currentSelectedItemNode?.content?.isFixedNode() ?? false;
+		console.log(!canDelete?.(currentSelectedItemNode));
 		return contextMenuItems!.map((kind) => {
 			switch (kind) {
 				case CONTEXT_MENU_ITEM_KIND.EDIT:
@@ -779,6 +785,7 @@ function Tree({
 						shortcut: [KEY.DELETE],
 						onClick: handleDeleteItem,
 						disabled:
+							(canDelete && !canDelete(currentSelectedItemNode)) ||
 							((isEmpty || isFixed) && additionalSelectedNodes.length === 0) ||
 							cannotDelete ||
 							(!canBeEmpty && list.length === 1),
