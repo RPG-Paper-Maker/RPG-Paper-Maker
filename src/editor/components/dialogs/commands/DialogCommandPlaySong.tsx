@@ -17,7 +17,7 @@ import { Model } from '../../../Editor';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../../models';
-import DialogSongsPreview from '../DialogSongsPreview';
+import DialogSongs from '../DialogSongs';
 import { CommandProps } from '../models';
 
 function DialogCommandPlaySong({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
@@ -101,7 +101,7 @@ function DialogCommandPlaySong({ commandKind, isOpen, setIsOpen, list, onAccept,
 	}, [isOpen]);
 
 	return (
-		<DialogSongsPreview
+		<DialogSongs
 			title={t(Model.MapObjectCommand.getCommandName(commandKind))}
 			isOpen={isOpen && isInitialized}
 			setIsOpen={setIsOpen}

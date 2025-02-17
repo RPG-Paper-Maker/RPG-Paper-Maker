@@ -136,7 +136,7 @@ function DialogCommandPlayAVideo({ commandKind, isOpen, setIsOpen, list, onAccep
 						optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER_DECIMAL}
 						disabled={disabled || !isStart}
 					/>
-					<div className={Utils.getClassName({ disabledLabel: disabled })}>{t('seconds')}</div>
+					<div className={Utils.getClassName({ disabledLabel: disabled || !isStart })}>{t('seconds')}</div>
 				</Flex>
 				<Checkbox isChecked={isWaitingEndCommand} onChange={setIsWaitingEndCommand} disabled={disabled}>
 					{t('wait.end.change.before.next.command')}

@@ -45,6 +45,10 @@ class Song extends Asset {
 		return '';
 	}
 
+	applyDefault(): void {
+		super.applyDefault(Song.getBindings([]));
+	}
+
 	getPath(): string {
 		return this.id === -1 || !this.name ? '' : Song.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
 	}

@@ -748,7 +748,6 @@ function Tree({
 			return [];
 		}
 		const isFixed = currentSelectedItemNode?.content?.isFixedNode() ?? false;
-		console.log(!canDelete?.(currentSelectedItemNode));
 		return contextMenuItems!.map((kind) => {
 			switch (kind) {
 				case CONTEXT_MENU_ITEM_KIND.EDIT:

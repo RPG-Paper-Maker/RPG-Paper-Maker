@@ -118,6 +118,10 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 												kind={PICTURE_KIND.TITLE_SCREENS}
 												selectedID={titleBackgroundImageID}
 												onChange={setTitleBackgroundImageID}
+												disabled={
+													selectionTitleScreenBackgroundType !==
+													SELECTION_BACKGROUND_TYPE.IMAGE
+												}
 											/>
 										</Value>
 										<Label>
@@ -130,6 +134,10 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 												selectionType={ASSET_SELECTOR_TYPE.VIDEOS}
 												selectedID={titleBackgroundVideoID}
 												onChange={setTitleBackgroundVideoID}
+												disabled={
+													selectionTitleScreenBackgroundType !==
+													SELECTION_BACKGROUND_TYPE.VIDEO
+												}
 											/>
 										</Value>
 									</Form>
@@ -188,6 +196,9 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 												kind={PICTURE_KIND.GAME_OVERS}
 												selectedID={gameOverBackgroundImageID}
 												onChange={setGameOverBackgroundImageID}
+												disabled={
+													selectionGameOverBackgroundType !== SELECTION_BACKGROUND_TYPE.IMAGE
+												}
 											/>
 										</Value>
 										<Label>
@@ -200,6 +211,9 @@ const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 												selectionType={ASSET_SELECTOR_TYPE.VIDEOS}
 												selectedID={gameOverBackgroundVideoID}
 												onChange={setGameOverBackgroundVideoID}
+												disabled={
+													selectionGameOverBackgroundType !== SELECTION_BACKGROUND_TYPE.VIDEO
+												}
 											/>
 										</Value>
 									</Form>

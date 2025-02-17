@@ -169,9 +169,13 @@ function Toolbar() {
 					<MenuItem icon={<FaPlug />} onClick={handleFloor} disabled>
 						{t('plugins')}
 					</MenuItem>
-					<MenuItem icon={<MdOutlineAddchart />} onClick={handleFloor} disabled>
-						{t('dlcs')}
-					</MenuItem>
+					<>
+						{Constants.IS_DESKTOP && (
+							<MenuItem icon={<MdOutlineAddchart />} onClick={handleFloor} disabled>
+								{t('dlcs')}
+							</MenuItem>
+						)}
+					</>
 					<MenuItem separator></MenuItem>
 					<MenuItem icon={<AiOutlinePicture />} onClick={handlePicturesManager} disabled={!isProjectOpened}>
 						{t('pictures.manager.tool')}
@@ -179,7 +183,7 @@ function Toolbar() {
 					<MenuItem icon={<TfiVideoClapper />} onClick={handleVideosManager} disabled={!isProjectOpened}>
 						{t('videos.manager.tool')}
 					</MenuItem>
-					<MenuItem icon={<BsMusicNote />} onClick={handleSongsManager} disabled>
+					<MenuItem icon={<BsMusicNote />} onClick={handleSongsManager} disabled={!isProjectOpened}>
 						{t('songs.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<BiPyramid />} onClick={handleShapesManager} disabled>

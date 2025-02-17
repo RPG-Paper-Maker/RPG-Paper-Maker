@@ -72,6 +72,7 @@ import Dialog from './dialogs/Dialog';
 import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
 import DialogNewProject from './dialogs/DialogNewProject';
 import DialogPictures from './dialogs/DialogPictures';
+import DialogSongs from './dialogs/DialogSongs';
 import DialogSystems from './dialogs/DialogSystems';
 import DialogVariables from './dialogs/DialogVariables';
 import DialogVideos from './dialogs/DialogVideos';
@@ -800,6 +801,7 @@ function MainMenuBar() {
 			<DialogVariables isOpen={isDialogVariablesOpen} setIsOpen={setIsDialogVariablesOpen} />
 			<DialogPictures isOpen={isDialogPicturesOpen} setIsOpen={setIsDialogPicturesOpen} />
 			<DialogVideos manager isOpen={isDialogVideosOpen} setIsOpen={setIsDialogVideosOpen} />
+			<DialogSongs isOpen={isDialogSongsOpen} setIsOpen={setIsDialogSongsOpen} />
 			<DialogChangeLanguage isOpen={isDialogChangeLanguageOpen} setIsOpen={setIsDialogChangeLanguageOpen} />
 			<Dialog
 				title={t('warning')}

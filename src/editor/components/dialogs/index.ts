@@ -6,7 +6,7 @@ export * from './DialogObjects3DPreview';
 export * from './DialogPictures';
 export * from './DialogRectangle';
 export * from './DialogSelectMapPosition';
-export * from './DialogSongsPreview';
+export * from './DialogSongs';
 export * from './DialogSystems';
 export * from './DialogTransformations';
 export * from './DialogTransformDefaultValues';

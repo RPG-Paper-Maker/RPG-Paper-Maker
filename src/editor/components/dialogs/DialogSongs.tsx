@@ -10,12 +10,12 @@
 */
 
 import { Howl } from 'howler';
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPause, FaPlay, FaStop } from 'react-icons/fa';
 import { BUTTON_TYPE, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, SONG_KIND, Utils } from '../../common';
 import { Platform } from '../../common/Platform';
-import { Node, Project } from '../../core';
+import { LocalFile, Node, Project } from '../../core';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Model } from '../../Editor';
 import useStateBool from '../../hooks/useStateBool';
@@ -28,13 +28,14 @@ import Form, { Label, Value } from '../Form';
 import Groupbox from '../Groupbox';
 import PanelAssetsPreviewer from '../panels/PanelAssetsPreviewer';
 import SliderDynamic from '../SliderDynamic';
+import Tree, { TREES_MIN_WIDTH } from '../Tree';
 import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 import FooterOK from './footers/FooterOK';
 
 type Props = {
 	title?: string;
-	kind: SONG_KIND;
+	kind?: SONG_KIND;
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
 	songID?: number;
@@ -46,7 +47,7 @@ type Props = {
 	songOptions?: Model.PlaySong;
 };
 
-function DialogSongsPreview({
+function DialogSongs({
 	title,
 	kind,
 	isOpen,
@@ -77,17 +78,40 @@ function DialogSongsPreview({
 	const [playingHowl, setPlayingHowl] = useState<Howl>();
 	const [isPaused, setIsPaused] = useStateBool();
 	const [isStopped, setIsStopped] = useStateBool();
+	const [selectedKind, setSelectedKind] = useState(kind);
 
-	const displayOptionsStartEnd = kind === SONG_KIND.MUSIC || kind === SONG_KIND.BACKGROUND_SOUND;
+	const displayOptionsStartEnd = useMemo(
+		() => selectedKind === SONG_KIND.MUSIC || selectedKind === SONG_KIND.BACKGROUND_SOUND,
+		[selectedKind]
+	);
+	const folders = useMemo(
+		() =>
+			kind === undefined
+				? [
+						Node.create(
+							Model.TreeMapTag.create(-1, 'Songs'),
+							Node.createList(
+								[
+									Model.TreeMapTag.create(SONG_KIND.MUSIC, 'Musics'),
+									Model.TreeMapTag.create(SONG_KIND.BACKGROUND_SOUND, 'BackgroundSounds'),
+									Model.TreeMapTag.create(SONG_KIND.SOUND, 'Sounds'),
+									Model.TreeMapTag.create(SONG_KIND.MUSIC_EFFECT, 'MusicEffects'),
+								],
+								false
+							)
+						),
+				  ]
+				: [],
+		[kind]
+	);
 
 	const initialize = () => {
 		setIsInitiating(true);
 		setNewDynamicSongID(dynamicSongID?.clone());
 		setIsSelectedLeftList(true);
-		setSongs(Node.createList(Project.current!.songs.getList(kind)));
+		setSongs(Node.createList(Project.current!.songs.getList(selectedKind!)));
 		if (songID !== undefined) {
-			const song = Project.current!.songs.getByID(kind, songID);
-			setSelectedSong(song);
+			updateSong(Project.current!.songs.getByID(selectedKind!, songID));
 		}
 		start.updateToDefaultNumber(0, true);
 		end.updateToDefaultNumber(0, true);
@@ -120,35 +144,65 @@ function DialogSongsPreview({
 		playingHowl?.stop();
 	};
 
-	const handleChangeSelectedSong = (node: Node | null) => {
-		const song = (node?.content ?? null) as Model.Song | null;
+	const updateSong = (song: Model.Song | null) => {
 		setSelectedSong(song);
 		const path = song?.getPath();
-		setSelectedHowl(
-			song && path
-				? new Howl({
+		if (song && path) {
+			if (!song.isBR) {
+				setSelectedHowl(undefined);
+				(async () => {
+					const base64 = (await LocalFile.readFile(path)) ?? '';
+					setSelectedHowl(
+						new Howl({
+							src: [base64],
+							html5: true,
+						})
+					);
+				})();
+			} else {
+				setSelectedHowl(
+					new Howl({
 						src: [path],
 						html5: true,
-				  })
-				: undefined
-		);
+					})
+				);
+			}
+		} else {
+			setSelectedHowl(undefined);
+		}
+	};
+
+	const handleChangeSelectedSong = (node: Node | null) => {
+		updateSong((node?.content ?? null) as Model.Song | null);
 	};
 
 	const handleRefresh = async () => {
-		const path = Model.Song.getFolder(kind, true, '');
-		const files = Platform.getAllFilesFromFolder(path);
-		setSongsAvailable(
-			Node.createList(
+		const files = Platform.getAllFilesFromFolder(Model.Song.getFolder(selectedKind!, true, ''));
+		const customNames = await Platform.getFiles(Model.Song.getFolder(selectedKind!, false, ''));
+		setSongsAvailable([
+			...Node.createList(
 				files.map((name, index) => {
-					const song = new Model.Song(kind);
+					const song = new Model.Song(selectedKind!);
 					song.id = index + 1;
 					song.name = name;
 					song.isBR = true;
 					return song;
 				}),
 				false
-			)
-		);
+			),
+			...Node.createList(
+				customNames.map((name, index) => {
+					const song = new Model.Song(selectedKind!);
+					song.applyDefault();
+					song.id = files.length + index + 1;
+					song.name = name;
+					song.isBR = false;
+					song.dlc = '';
+					return song;
+				}),
+				false
+			),
+		]);
 	};
 
 	const handleCloseWarningSelectionOpen = () => {
@@ -182,38 +236,57 @@ function DialogSongsPreview({
 		setIsStopped(false);
 	};
 
+	const handleChangeFolder = (node: Node | null) => {
+		setSelectedKind(node && node.content.id >= 0 ? node.content.id : undefined);
+	};
+
+	const handleListUpdated = () => {
+		if (kind === undefined && selectedKind) {
+			Project.current!.songs.list[selectedKind] = Node.createListFromNodes(songs);
+		}
+	};
+
 	const handleAccept = async () => {
-		if (selectedSong === null || !isSelectedLeftList) {
-			setIsDialogWarningSelectionOpen(true);
-		} else {
-			Project.current!.songs.list[kind] = songs.map((node) => node.content as Model.Song);
-			await Project.current!.songs.save();
-			if (active) {
-				if (!newDynamicSongID!.isActivated) {
-					dynamicSongID!.updateToDefaultNumber(selectedSong.id);
-					dynamicSongID!.isActivated = false;
-				} else {
-					dynamicSongID!.copy(newDynamicSongID!);
-				}
-			}
-			if (songOptions) {
-				songOptions.volume.copy(volume);
-				songOptions.isStart = isStart;
-				if (isStart) {
-					songOptions.start.copy(start);
-				}
-				songOptions.isEnd = isEnd;
-				if (isEnd) {
-					songOptions.end.copy(end);
-				}
-			}
-			onAccept?.(selectedSong);
+		if (kind === undefined) {
 			setIsOpen(false);
 			reset();
+			await Project.current!.songs.save();
+		} else {
+			if (selectedSong === null || !isSelectedLeftList) {
+				setIsDialogWarningSelectionOpen(true);
+			} else {
+				Project.current!.songs.list[selectedKind!] = songs.map((node) => node.content as Model.Song);
+				await Project.current!.songs.save();
+				if (active) {
+					if (!newDynamicSongID!.isActivated) {
+						dynamicSongID!.updateToDefaultNumber(selectedSong.id);
+						dynamicSongID!.isActivated = false;
+					} else {
+						dynamicSongID!.copy(newDynamicSongID!);
+					}
+				}
+				if (songOptions) {
+					songOptions.volume.copy(volume);
+					songOptions.isStart = isStart;
+					if (isStart) {
+						songOptions.start.copy(start);
+					}
+					songOptions.isEnd = isEnd;
+					if (isEnd) {
+						songOptions.end.copy(end);
+					}
+				}
+				onAccept?.(selectedSong);
+				setIsOpen(false);
+				reset();
+			}
 		}
 	};
 
 	const handleReject = async () => {
+		if (kind === undefined) {
+			await Project.current!.songs.load();
+		}
 		onReject?.();
 		setSelectedSong(null);
 		setIsOpen(false);
@@ -221,11 +294,18 @@ function DialogSongsPreview({
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
+		if (selectedKind === undefined) {
+			reset();
+		}
+		// eslint-disable-next-line
+	}, [selectedKind]);
+
+	useLayoutEffect(() => {
+		if (isOpen && selectedKind !== undefined) {
 			initialize();
 		}
 		// eslint-disable-next-line
-	}, [isOpen]);
+	}, [isOpen, selectedKind]);
 
 	const getPreviewerContent = () => {
 		if (selectedSong) {
@@ -310,7 +390,7 @@ function DialogSongsPreview({
 	return (
 		<>
 			<Dialog
-				title={`${title ?? t('select.song')}...`}
+				title={`${title ?? t(kind === undefined ? 'songs.manager' : 'select.song')}...`}
 				isOpen={isOpen}
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				initialWidth='70%'
@@ -318,23 +398,45 @@ function DialogSongsPreview({
 				onClose={handleReject}
 				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			>
-				<PanelAssetsPreviewer
-					assetID={songID}
-					dynamicValueID={newDynamicSongID}
-					list={songs}
-					itemsAvailable={songsAvailable}
-					selectedItem={selectedSong}
-					isSelectedLeftList={isSelectedLeftList}
-					setIsSelectedLeftList={setIsSelectedLeftList}
-					isInitiating={isInitiating}
-					setIsInitiating={setIsInitiating}
-					onChangeSelectedItem={handleChangeSelectedSong}
-					onRefresh={handleRefresh}
-					content={getPreviewerContent()}
-					options={getPreviewerOptionsContent()}
-					active={active}
-					importTypes='music/mp3, music/ogg, music/wav'
-				/>
+				<Flex spacedLarge fillWidth>
+					{kind === undefined && (
+						<Flex>
+							<Tree
+								list={folders}
+								minWidth={TREES_MIN_WIDTH}
+								onSelectedItem={handleChangeFolder}
+								cannotAdd
+								cannotEdit
+								cannotDragDrop
+								cannotDelete
+								doNotShowID
+							/>
+						</Flex>
+					)}
+					{selectedKind ? (
+						<PanelAssetsPreviewer
+							assetID={songID}
+							dynamicValueID={newDynamicSongID}
+							list={songs}
+							itemsAvailable={songsAvailable}
+							selectedItem={selectedSong}
+							isSelectedLeftList={isSelectedLeftList}
+							setIsSelectedLeftList={setIsSelectedLeftList}
+							isInitiating={isInitiating}
+							setIsInitiating={setIsInitiating}
+							onChangeSelectedItem={handleChangeSelectedSong}
+							onRefresh={handleRefresh}
+							onListUpdated={handleListUpdated}
+							content={getPreviewerContent()}
+							options={getPreviewerOptionsContent()}
+							active={active}
+							basePath={Model.Song.getFolder(selectedKind, false, '')}
+							importTypes='audio/mp3, audio/ogg, audio/wav'
+						/>
+					) : (
+						<Flex one />
+					)}
+				</Flex>
 			</Dialog>
 			<Dialog
 				title={t('warning')}
@@ -349,4 +451,4 @@ function DialogSongsPreview({
 	);
 }
 
-export default DialogSongsPreview;
+export default DialogSongs;

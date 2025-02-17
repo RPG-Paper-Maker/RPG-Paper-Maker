@@ -21,7 +21,7 @@ import { Model } from '../Editor';
 import Button from './Button';
 import DialogPictures from './dialogs/DialogPictures';
 import DialogShapesPreview from './dialogs/DialogShapesPreview';
-import DialogSongsPreview from './dialogs/DialogSongsPreview';
+import DialogSongs from './dialogs/DialogSongs';
 import DialogVideos from './dialogs/DialogVideos';
 import Flex from './Flex';
 import Tree, { TREES_MIN_WIDTH } from './Tree';
@@ -177,7 +177,7 @@ function AssetSelector({
 				);
 			case ASSET_SELECTOR_TYPE.SONGS:
 				return (
-					<DialogSongsPreview
+					<DialogSongs
 						songID={getSelectedID()}
 						dynamicSongID={selectedDynamic}
 						kind={kind ?? DEFAULT_SONG_KIND}
