@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { CUSTOM_SHAPE_KIND, Paths } from '../common';
 import { Platform } from '../common/Platform';
-import { Project } from '../core';
+import { LocalFile, Project } from '../core';
 import { Asset } from './Asset';
 
 type GeometryDataType = {
@@ -177,13 +177,19 @@ class Shape extends Asset {
 		return '';
 	}
 
+	applyDefault(): void {
+		super.applyDefault([]);
+	}
+
 	isShapeLoaded() {
 		return !!this.geometryData;
 	}
 
 	async loadShape() {
 		if (this.id !== -1 && !this.isShapeLoaded()) {
-			const content = await Platform.readPublicFile(this.getPath());
+			const content = await (this.isBR
+				? Platform.readPublicFile(this.getPath())
+				: await (await LocalFile.readBase64File(this.getPath())).text());
 			if (content) {
 				this.geometryData = Shape.parse(content);
 			}

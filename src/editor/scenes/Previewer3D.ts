@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Base } from '.';
-import { CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
+import { ELEMENT_MAP_KIND, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
 import { CustomGeometry, CustomGeometryFace, Position, Position3D, Project, Rectangle, TextureBundle } from '../core';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Object3D } from '../mapElements';
@@ -178,8 +178,7 @@ class Previewer3D extends Base {
 		this.addToScene(geometry, texture);
 	}
 
-	async loadShape(shapeID: number) {
-		const shape = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, shapeID);
+	async loadShape(shape: Model.Shape) {
 		if (!shape) {
 			this.clear();
 			return;
@@ -191,9 +190,9 @@ class Previewer3D extends Base {
 		}
 		const object = new Model.Object3D();
 		object.shapeKind = SHAPE_KIND.CUSTOM;
-		object.objID = shapeID;
 		object.scale = 1;
-		const object3DElement = MapElement.Object3D.create(object);
+		const object3DElement = MapElement.Object3D.create(object) as MapElement.Object3DCustom;
+		object3DElement.shape = shape;
 		object3DElement.updateGeometry(geometry, new Position(), 0);
 		this.addToScene(geometry, texture);
 	}

@@ -20,7 +20,7 @@ import { DynamicValue } from '../core/DynamicValue';
 import { Model } from '../Editor';
 import Button from './Button';
 import DialogPictures from './dialogs/DialogPictures';
-import DialogShapesPreview from './dialogs/DialogShapesPreview';
+import DialogShapes from './dialogs/DialogShapes';
 import DialogSongs from './dialogs/DialogSongs';
 import DialogVideos from './dialogs/DialogVideos';
 import Flex from './Flex';
@@ -168,7 +168,7 @@ function AssetSelector({
 				);
 			case ASSET_SELECTOR_TYPE.SHAPES:
 				return (
-					<DialogShapesPreview
+					<DialogShapes
 						shapeID={selectedID}
 						kind={kind ?? DEFAULT_CUSTOM_SHAPE_KIND}
 						{...options}

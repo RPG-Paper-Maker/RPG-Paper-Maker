@@ -16,6 +16,8 @@ import { MapElement, Model } from '../Editor';
 import { Object3D } from './Object3D';
 
 class Object3DCustom extends Object3D {
+	public shape?: Model.Shape;
+
 	static fromJSON(json: JSONType): MapElement.Object3DCustom {
 		const object = new MapElement.Object3DCustom();
 		if (json) {
@@ -35,8 +37,12 @@ class Object3DCustom extends Object3D {
 		return true;
 	}
 
+	getShape(): Model.Shape | undefined {
+		return this.shape ?? Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID);
+	}
+
 	getCenterVector(): THREE.Vector3 {
-		return Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID).geometryData.center.clone();
+		return this.getShape()!.geometryData.center.clone();
 	}
 
 	getAdditionalX(): number {
@@ -49,7 +55,7 @@ class Object3DCustom extends Object3D {
 
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): number {
 		const localPosition = this.getLocalPosition(position);
-		const modelGeometry = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID)?.geometryData;
+		const modelGeometry = this.getShape()?.geometryData;
 		if (!modelGeometry) {
 			return count;
 		}
@@ -87,10 +93,7 @@ class Object3DCustom extends Object3D {
 	}
 
 	async loadShape() {
-		const shape = Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID);
-		if (!shape.geometryData) {
-			await shape.loadShape();
-		}
+		await Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID).loadShape();
 	}
 }
 

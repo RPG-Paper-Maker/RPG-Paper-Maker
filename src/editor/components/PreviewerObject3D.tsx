@@ -10,13 +10,13 @@
 */
 
 import { useEffect, useRef } from 'react';
-import { Manager, Scene } from '../Editor';
+import { Manager, Model, Scene } from '../Editor';
 import Flex from './Flex';
 
 type Props = {
 	sceneID: string;
-	objectID: number;
-	isShape?: boolean;
+	objectID?: number;
+	shape?: Model.Shape;
 	GL?: Manager.GL;
 	triggerUpdate?: boolean;
 	setTriggerUpdate?: (b: boolean) => void;
@@ -25,7 +25,7 @@ type Props = {
 function PreviewerObject3D({
 	sceneID,
 	objectID,
-	isShape = false,
+	shape,
 	triggerUpdate,
 	setTriggerUpdate,
 	GL = Manager.GL.layerOneContext,
@@ -55,7 +55,7 @@ function PreviewerObject3D({
 	const update = async () => {
 		const scene = Scene.Previewer3D.listScenes.get(sceneID);
 		if (scene) {
-			await (isShape ? scene.loadShape(objectID) : scene.loadObject3D(objectID));
+			await (shape ? scene.loadShape(shape) : scene.loadObject3D(objectID!));
 			resize();
 		}
 	};
@@ -77,7 +77,7 @@ function PreviewerObject3D({
 	useEffect(() => {
 		update().catch(console.error);
 		// eslint-disable-next-line
-	}, [objectID]);
+	}, [objectID, shape]);
 
 	useEffect(() => {
 		if (triggerUpdate && setTriggerUpdate) {

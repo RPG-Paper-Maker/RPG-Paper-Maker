@@ -186,7 +186,7 @@ function Toolbar() {
 					<MenuItem icon={<BsMusicNote />} onClick={handleSongsManager} disabled={!isProjectOpened}>
 						{t('songs.manager.tool')}
 					</MenuItem>
-					<MenuItem icon={<BiPyramid />} onClick={handleShapesManager} disabled>
+					<MenuItem icon={<BiPyramid />} onClick={handleShapesManager} disabled={!isProjectOpened}>
 						{t('shapes.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<AiOutlineFontSize />} onClick={handleFontsManager} disabled>
