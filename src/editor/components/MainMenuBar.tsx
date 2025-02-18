@@ -70,6 +70,7 @@ import '../styles/MainMenuBar.css';
 import Button from './Button';
 import Dialog from './dialogs/Dialog';
 import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
+import DialogFonts from './dialogs/DialogFonts';
 import DialogNewProject from './dialogs/DialogNewProject';
 import DialogPictures from './dialogs/DialogPictures';
 import DialogShapes from './dialogs/DialogShapes';
@@ -804,6 +805,7 @@ function MainMenuBar() {
 			<DialogVideos manager isOpen={isDialogVideosOpen} setIsOpen={setIsDialogVideosOpen} />
 			<DialogSongs isOpen={isDialogSongsOpen} setIsOpen={setIsDialogSongsOpen} />
 			<DialogShapes isOpen={isDialogShapesOpen} setIsOpen={setIsDialogShapesOpen} />
+			<DialogFonts isOpen={isDialogFontsOpen} setIsOpen={setIsDialogFontsOpen} />
 			<DialogChangeLanguage isOpen={isDialogChangeLanguageOpen} setIsOpen={setIsDialogChangeLanguageOpen} />
 			<Dialog
 				title={t('warning')}

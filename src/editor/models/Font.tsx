@@ -10,7 +10,7 @@
 */
 
 import { Paths } from '../common';
-import { Project } from '../core';
+import { LocalFile, Project } from '../core';
 import { Asset } from './Asset';
 
 class Font extends Asset {
@@ -26,6 +26,13 @@ class Font extends Asset {
 
 	getPath(): string {
 		return this.id === -1 || !this.name ? '' : Font.getFolder(this.isBR, this.dlc) + '/' + this.name;
+	}
+
+	async getFontFace(name: string): Promise<string> {
+		return `@font-face {
+			font-family: "${name}";
+			src: url("${this.isBR ? this.getPath() : (await LocalFile.readFile(this.getPath())) ?? ''}");
+		}`;
 	}
 }
 

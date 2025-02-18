@@ -10,7 +10,8 @@
 */
 
 import { useEffect } from 'react';
-import { ExtendedWindow } from '../editor/common';
+import { ExtendedWindow, Paths } from '../editor/common';
+import { LocalFile } from '../editor/core';
 
 type Props = {
 	location: string;
@@ -42,19 +43,30 @@ function Game({ location }: Props) {
 
 	useEffect(() => {
 		const script = document.createElement('script');
-		script.src = './Scripts/System/main.js';
-		script.type = 'module';
-		script.async = true;
-		const global = window as ExtendedWindow;
-		global.rpgPaperMakerProjectLocation = location;
-		document.body.appendChild(script);
 		const canvas = createHiDPICanvas(window.innerWidth, window.innerHeight);
-		canvas.id = 'hud';
-		document.body.appendChild(canvas);
+		const style = document.createElement('style');
+
+		const initialize = async () => {
+			await LocalFile.config();
+			style.innerHTML =
+				(await LocalFile.readFile(Paths.join(location, Paths.STYLES, Paths.FILE_FONTS_CSS))) ?? '';
+			console.log(style.innerHTML);
+			document.head.appendChild(style);
+			script.src = './Scripts/System/main.js';
+			script.type = 'module';
+			script.async = true;
+			const global = window as ExtendedWindow;
+			global.rpgPaperMakerProjectLocation = location;
+			document.body.appendChild(script);
+			canvas.id = 'hud';
+			document.body.appendChild(canvas);
+		};
+		initialize().catch(console.error);
 
 		return () => {
 			document.body.removeChild(script);
 			document.body.removeChild(canvas);
+			document.body.removeChild(style);
 		};
 		// eslint-disable-next-line
 	}, []);

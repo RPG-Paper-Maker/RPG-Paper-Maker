@@ -33,7 +33,3 @@ canvas {
 	-webkit-font-smoothing: none;
 	image-rendering: pixelated;
 }
-@font-face {
-	font-family: 'Default';
-	src: url('./BR/Fonts/Default.ttf');
-}

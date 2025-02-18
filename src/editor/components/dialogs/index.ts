@@ -1,6 +1,7 @@
 export * from './Dialog';
 export * from './DialogChangeLanguage';
 export * from './DialogEnterNameOptions';
+export * from './DialogFonts';
 export * from './DialogNewProject';
 export * from './DialogObjects3DPreview';
 export * from './DialogPictures';

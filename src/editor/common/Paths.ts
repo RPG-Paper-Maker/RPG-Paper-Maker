@@ -95,6 +95,7 @@ class Paths {
 	public static readonly FILE_CURRENT_COPY = 'currentCopy.json';
 	public static readonly FILE_VERSION = 'version';
 	public static readonly FILE_GAME_RPMG = 'game.rpmg';
+	public static readonly FILE_FONTS_CSS = 'fonts.css';
 	public static GLOBAL_DOCUMENTS = '';
 	public static GLOBAL_RPM_GAMES = '';
 

@@ -177,6 +177,27 @@ class System extends Serializable {
 		return this.SQUARE_SIZE / Constants.BASE_SQUARE_SIZE;
 	}
 
+	async getStyleCSS(): Promise<string> {
+		const fonts = [] as string[];
+		for (const face of this.fontNames) {
+			const font = Project.current!.fonts.getFontByID(face.customFontID);
+			fonts.push(await font.getFontFace(face.name));
+		}
+		return fonts.join('');
+	}
+
+	async saveStyleCSS() {
+		Platform.createFile(
+			Paths.join(Project.current!.getPath(), Paths.STYLES, Paths.FILE_FONTS_CSS),
+			await this.getStyleCSS()
+		);
+	}
+
+	async save(temp?: boolean) {
+		await super.save(temp);
+		await this.saveStyleCSS();
+	}
+
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, System.getBindings(additionnalBinding));
 		this.json = json;

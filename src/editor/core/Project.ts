@@ -106,6 +106,7 @@ class Project {
 		await this.commonEvents.save();
 		await this.variables.save();
 		await this.systems.save();
+		await this.fonts.save();
 	}
 }
 

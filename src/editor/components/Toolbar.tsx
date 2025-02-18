@@ -189,7 +189,7 @@ function Toolbar() {
 					<MenuItem icon={<BiPyramid />} onClick={handleShapesManager} disabled={!isProjectOpened}>
 						{t('shapes.manager.tool')}
 					</MenuItem>
-					<MenuItem icon={<AiOutlineFontSize />} onClick={handleFontsManager} disabled>
+					<MenuItem icon={<AiOutlineFontSize />} onClick={handleFontsManager} disabled={!isProjectOpened}>
 						{t('fonts.manager.tool')}
 					</MenuItem>
 					<MenuItem separator></MenuItem>

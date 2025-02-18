@@ -36,7 +36,7 @@ type Props = {
 	onChangeSelectedItem: (node: Node | null) => void;
 	onRefresh?: () => void;
 	onListUpdated?: () => void;
-	content: ReactNode;
+	content?: ReactNode;
 	options?: ReactNode;
 	active?: boolean;
 	basePath?: string;
