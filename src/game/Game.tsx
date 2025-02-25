@@ -50,7 +50,6 @@ function Game({ location }: Props) {
 			await LocalFile.config();
 			style.innerHTML =
 				(await LocalFile.readFile(Paths.join(location, Paths.STYLES, Paths.FILE_FONTS_CSS))) ?? '';
-			console.log(style.innerHTML);
 			document.head.appendChild(style);
 			script.src = './Scripts/System/main.js';
 			script.type = 'module';

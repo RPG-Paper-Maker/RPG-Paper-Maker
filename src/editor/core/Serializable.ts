@@ -132,7 +132,7 @@ class Serializable {
 				}
 				case BINDING.OBJECT: {
 					const jsonObj = json[jsonName] as JSONType;
-					if (jsonObj === undefined) {
+					if (jsonObj === undefined && defaultValue !== undefined) {
 						(this as JSONType)[name] = defaultValue;
 					} else if (constructorClass) {
 						const obj = new constructorClass();

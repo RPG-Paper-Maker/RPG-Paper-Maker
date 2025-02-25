@@ -83,11 +83,13 @@ abstract class Object3D extends Base {
 			} else {
 				textureObject3D = Manager.GL.loadTextureEmpty();
 			}
-			map!.texturesObjects3D[pictureID] = textureObject3D;
-			map!.texturesObjects3DHover[pictureID] = Manager.GL.createMaterial({
-				texture: textureObject3D.map,
-				hovered: true,
-			});
+			if (map) {
+				map.texturesObjects3D[pictureID] = textureObject3D;
+				map.texturesObjects3DHover[pictureID] = Manager.GL.createMaterial({
+					texture: textureObject3D.map,
+					hovered: true,
+				});
+			}
 		}
 		return textureObject3D;
 	}

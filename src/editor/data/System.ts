@@ -156,8 +156,8 @@ class System extends Serializable {
 		['mainMenuCommands', 'mainMenuCommands', [], BINDING.LIST, Model.MainMenuCommand],
 		['heroesStatisticsDisplay', 'heroesStatistics', [], BINDING.LIST, Model.HeroStatisticDisplay],
 		['PATH_BR', 'pathBR', undefined, BINDING.STRING],
-		['heroMapID', 'idMapHero', 1, BINDING.NUMBER],
-		['heroMapPosition', 'hmp', new Position(7, 0, 0, 7), BINDING.POSITION],
+		['heroMapID', 'idMapHero', undefined, BINDING.NUMBER],
+		['heroMapPosition', 'hmp', undefined, BINDING.POSITION],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -166,7 +166,7 @@ class System extends Serializable {
 
 	static async getProjectName(path: string): Promise<string> {
 		const json = await Platform.readJSON(Paths.join(path, Paths.FILE_SYSTEM));
-		return json === null ? '' : (json.pn as { names: string[] }).names[1];
+		return json === null ? 'Unknown' : (json.pn as { names: string[] }).names[1];
 	}
 
 	getPath(): string {

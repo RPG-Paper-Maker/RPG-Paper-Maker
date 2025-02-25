@@ -207,6 +207,16 @@ class LocalFile extends Serializable {
 		}
 	}
 
+	static async moveFile(src: string, dst: string) {
+		await LocalFile.copyFile(src, dst);
+		await LocalFile.removeFile(src);
+	}
+
+	static async moveFolder(src: string, dst: string) {
+		await LocalFile.copyFolder(src, dst);
+		await LocalFile.removeFolder(src);
+	}
+
 	static async renameFile(path: string, fileNameBefore: string, fileNameAfter: string) {
 		const pathBefore = Paths.join(path, fileNameBefore);
 		const json = await localforage.getItem(pathBefore);
@@ -218,15 +228,19 @@ class LocalFile extends Serializable {
 	}
 
 	static async downloadZip(path: string) {
+		const fileName = Paths.getFileName(path) || '';
 		const zip = new JSZip();
-		await Platform.getFolderZip(zip, path);
-		const blob = await zip.generateAsync({ type: 'blob' });
-		const url = URL.createObjectURL(blob);
-		const a = document.createElement('a');
-		a.href = url;
-		a.download = Paths.getFileName(path) || '';
-		a.click();
-		URL.revokeObjectURL(url);
+		const folder = zip.folder(fileName);
+		if (folder) {
+			await Platform.getFolderZip(folder, path);
+			const blob = await zip.generateAsync({ type: 'blob' });
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = fileName;
+			a.click();
+			URL.revokeObjectURL(url);
+		}
 	}
 
 	static async readBase64File(path: string): Promise<Blob> {

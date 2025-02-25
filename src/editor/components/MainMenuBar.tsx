@@ -34,11 +34,24 @@ import { TbNumbers } from 'react-icons/tb';
 import { TfiVideoClapper } from 'react-icons/tfi';
 import { VscChromeClose, VscChromeMaximize, VscChromeMinimize, VscChromeRestore } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
-import { BUTTON_TYPE, Constants, EXTENSION_KIND, IO, KEY, MenuItemType, Paths, SPECIAL_KEY, Utils } from '../common';
+import {
+	BUTTON_TYPE,
+	Constants,
+	EXTENSION_KIND,
+	IO,
+	JSONType,
+	KEY,
+	MenuItemType,
+	Paths,
+	SPECIAL_KEY,
+	Utils,
+} from '../common';
 import { Platform } from '../common/Platform';
 import { LocalFile, Project } from '../core';
 import { EngineSettings } from '../data/EngineSettings';
 import { Data, Manager, Model, Scene } from '../Editor';
+import useStateString from '../hooks/useStateString';
+import { ProjectUpdater } from '../projectUpdater/ProjectUpdater';
 import {
 	RootState,
 	clearProjects,
@@ -101,6 +114,8 @@ function MainMenuBar() {
 	const [isDialogFontsOpen, setIsDialogFontsOpen] = useState(false);
 	const [isDialogChangeLanguageOpen, setIsDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
+	const [warningVersionMessage, setWarningVersionMessage] = useStateString();
+	const [currentVersion, setCurrentVersion] = useState('');
 	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
 	const [isDialogWarningProjectLocationExist, setIsDialogWarningProjectLocationExist] = useState(false);
 	const [isDialogWarningClearAllCacheOpen, setIsDialogWarningClearAllCacheOpen] = useState(false);
@@ -181,13 +196,40 @@ function MainMenuBar() {
 	const handleOpenProject = async (project: Model.ProjectPreview) => {
 		dispatch(setOpenLoading(true));
 		if (await Platform.checkFileExists(project.location)) {
-			await addProject(project);
 			Project.current = new Project(project.location);
-			await Project.current.load();
-			if (Project.current.settings.projectVersion !== Project.VERSION) {
-				setIsDialogWarningProjectVersionOpen(true);
-				Project.current = null;
+			let json = await Platform.readJSON(Paths.join(project.location, Paths.FILE_SYSTEM));
+			if (json) {
+				const name = ((json.pn as JSONType)?.names as JSONType)?.['1'];
+				if (name !== undefined) {
+					project.name = name as string;
+				}
+			}
+			await addProject(project);
+			json = await Platform.readJSON(Paths.join(project.location, Paths.FILE_SETTINGS));
+			let version = (json?.pv as string) ?? '';
+			if (version !== Project.VERSION) {
+				if (!version) {
+					version = '2.0.11';
+				}
+				if (version.startsWith('proto')) {
+					setWarningVersionMessage(t('warning.project.version'));
+					setIsDialogWarningProjectVersionOpen(true);
+					Project.current = null;
+				} else if (!ProjectUpdater.checkVersion(version, Project.VERSION)) {
+					setWarningVersionMessage(`${t('version.pb.1')} ${version} ${t('version.pb.2')} ${Project.VERSION}`);
+					setIsDialogWarningProjectVersionOpen(true);
+					Project.current = null;
+				} else {
+					setCurrentVersion(version);
+				}
 			} else {
+				await Project.current.load();
+				const newName = Project.current.systems.projectName.getName();
+				if (project.name !== newName) {
+					project.name = newName;
+					await addProject(project);
+				}
+				await Project.current.systems.saveStyleCSS();
 				dispatch(setCurrentProject(project));
 			}
 		} else {
@@ -202,6 +244,20 @@ function MainMenuBar() {
 
 	const handleCloseWarningProjectVersionOpen = () => {
 		setIsDialogWarningProjectVersionOpen(false);
+	};
+
+	const handleAcceptUpdateProjectVersion = async () => {
+		const version = currentVersion;
+		setCurrentVersion('');
+		dispatch(setLoading(true));
+		await ProjectUpdater.update(version);
+		dispatch(setLoading(false));
+		await handleOpenProject(Model.ProjectPreview.create('Unkown', Project.current!.location));
+	};
+
+	const handleRejectUpdateProjectVersion = () => {
+		Project.current = null;
+		setCurrentVersion('');
 	};
 
 	const handleSave = async () => {
@@ -238,7 +294,6 @@ function MainMenuBar() {
 			const path = Paths.join(Paths.getRPMGamesFolder(), folderName);
 			await Platform.loadZip(file, path);
 			const project = Model.ProjectPreview.create(await Data.System.getProjectName(path), path);
-			await addProject(project);
 			await handleOpenProject(project);
 			dispatch(setLoading(false));
 		}
@@ -257,7 +312,6 @@ function MainMenuBar() {
 		await Platform.removeFolder(path);
 		await Platform.loadZip(file, path);
 		const project = Model.ProjectPreview.create(await Data.System.getProjectName(path), path);
-		await addProject(project);
 		await handleOpenProject(project);
 		dispatch(setLoading(false));
 	};
@@ -813,7 +867,17 @@ function MainMenuBar() {
 				footer={<FooterOK onOK={handleCloseWarningProjectVersionOpen} />}
 				onClose={handleCloseWarningProjectVersionOpen}
 			>
-				<p>{t('warning.project.version')}</p>
+				<p>{warningVersionMessage}</p>
+			</Dialog>
+			<Dialog
+				title={t('conversion.needed')}
+				isOpen={!!currentVersion}
+				footer={
+					<FooterNoYes onYes={handleAcceptUpdateProjectVersion} onNo={handleRejectUpdateProjectVersion} />
+				}
+				onClose={handleRejectUpdateProjectVersion}
+			>
+				<p>{t('update.project.version', { currentVersion: currentVersion, newVersion: Project.VERSION })}</p>
 			</Dialog>
 			<Dialog
 				title={t('warning')}

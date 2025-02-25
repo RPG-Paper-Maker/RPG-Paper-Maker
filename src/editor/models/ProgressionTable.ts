@@ -23,11 +23,24 @@ class ProgressionTable extends Base {
 		['initialValue', 'i', undefined, BINDING.DYNAMIC_VALUE, DynamicValue],
 		['finalValue', 'f', undefined, BINDING.DYNAMIC_VALUE, DynamicValue],
 		['equation', 'e', undefined, BINDING.NUMBER],
-		['table', 't', undefined, BINDING.NUMBER],
+		['table', 't', [], BINDING.LIST_NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	static createProgression(i: DynamicValue, f: DynamicValue, e: number): ProgressionTable {
+		let progressionTable = new ProgressionTable();
+		progressionTable.applyDefault();
+		progressionTable.initialValue = i;
+		progressionTable.finalValue = f;
+		progressionTable.equation = e;
+		return progressionTable;
+	}
+
+	applyDefault(): void {
+		super.applyDefault(ProgressionTable.getBindings([]));
 	}
 
 	copy(progressionTable: ProgressionTable): void {

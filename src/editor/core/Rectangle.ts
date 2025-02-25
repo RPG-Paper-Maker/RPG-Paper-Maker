@@ -69,11 +69,13 @@ class Rectangle {
 		}
 	}
 
-	write(json: number[]) {
+	write(json: number[], force = false) {
 		json[0] = this.x;
 		json[1] = this.y;
-		json[2] = this.width;
-		json[3] = this.height;
+		if (force || this.width !== 1 || this.height !== 1) {
+			json[2] = this.width;
+			json[3] = this.height;
+		}
 	}
 }
 

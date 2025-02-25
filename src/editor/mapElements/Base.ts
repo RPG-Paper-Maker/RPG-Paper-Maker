@@ -33,7 +33,6 @@ abstract class Base extends Serializable {
 		['yOffset', 'yOff', 0, BINDING.NUMBER],
 		['zOffset', 'zOff', 0, BINDING.NUMBER],
 		['front', 'f', true, BINDING.BOOLEAN],
-		['kind', 'k', undefined, BINDING.NUMBER],
 	];
 
 	constructor() {

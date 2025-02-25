@@ -94,6 +94,10 @@ class IO {
 		await this.invoke('copy-folder', src, dst);
 	}
 
+	static async moveFolder(src: string, dst: string) {
+		await this.invoke('move-folder', src, dst);
+	}
+
 	static async createFile(path: string, content: string | Blob) {
 		await this.invoke('create-file', path, content);
 	}
@@ -106,6 +110,10 @@ class IO {
 		await this.invoke('copy-file', src, dst);
 	}
 
+	static async moveFile(src: string, dst: string) {
+		await this.invoke('move-file', src, dst);
+	}
+
 	static async renameFile(path: string, fileNameBefore: string, fileNameAfter: string) {
 		await this.invoke('rename-file', Paths.join(path, fileNameBefore), Paths.join(path, fileNameAfter));
 	}
@@ -115,10 +123,14 @@ class IO {
 	}
 
 	static async downloadZip(path: string, dst: string) {
+		const fileName = Paths.getFileName(path) || '';
 		const zip = new JSZip();
-		await Platform.getFolderZip(zip, path);
-		const blob = await zip.generateAsync({ type: 'blob' });
-		await IO.createFile(dst, blob);
+		const folder = zip.folder(fileName);
+		if (folder) {
+			await Platform.getFolderZip(folder, path);
+			const blob = await zip.generateAsync({ type: 'blob' });
+			await IO.createFile(dst, blob);
+		}
 	}
 
 	static async openGame(projectName: string) {

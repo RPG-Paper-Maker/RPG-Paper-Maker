@@ -26,6 +26,7 @@ class Land extends Base {
 	public static readonly bindings: BindingType[] = [
 		['up', 'up', true, BINDING.BOOLEAN],
 		['texture', 't', undefined, BINDING.RECTANGLE],
+		['kind', 'k', undefined, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

@@ -407,18 +407,20 @@ class Position extends Position3D {
 
 	read(json: number[]) {
 		super.read(json);
-		this.layer = json[4];
-		if (json.length > 5) {
-			this.centerX = json[5];
-			this.centerZ = json[6];
-			this.angleY = json[7];
-			if (json.length > 8) {
-				this.angleX = json[8];
-				this.angleZ = json[9];
-				if (json.length > 10) {
-					this.scaleX = json[10];
-					this.scaleY = json[11];
-					this.scaleZ = json[12];
+		if (json.length > 4) {
+			this.layer = json[4];
+			if (json.length > 5) {
+				this.centerX = json[5];
+				this.centerZ = json[6];
+				this.angleY = json[7];
+				if (json.length > 8) {
+					this.angleX = json[8];
+					this.angleZ = json[9];
+					if (json.length > 10) {
+						this.scaleX = json[10];
+						this.scaleY = json[11];
+						this.scaleZ = json[12];
+					}
 				}
 			}
 		}
@@ -426,33 +428,35 @@ class Position extends Position3D {
 
 	write(json: number[]) {
 		super.write(json);
-		json.push(this.layer);
-		if (
-			this.centerX !== 50.0 ||
-			this.centerZ !== 50.0 ||
-			this.angleY !== 0.0 ||
-			this.angleX !== 0.0 ||
-			this.angleZ !== 0.0 ||
-			this.scaleX !== 1.0 ||
-			this.scaleY !== 1.0 ||
-			this.scaleZ !== 1.0
-		) {
-			json.push(this.centerX);
-			json.push(this.centerZ);
-			json.push(this.angleY);
+		if (this.layer !== 0) {
+			json.push(this.layer);
 			if (
+				this.centerX !== 50.0 ||
+				this.centerZ !== 50.0 ||
+				this.angleY !== 0.0 ||
 				this.angleX !== 0.0 ||
 				this.angleZ !== 0.0 ||
 				this.scaleX !== 1.0 ||
 				this.scaleY !== 1.0 ||
 				this.scaleZ !== 1.0
 			) {
-				json.push(this.angleX);
-				json.push(this.angleZ);
-				if (this.scaleX !== 1.0 || this.scaleY !== 1.0 || this.scaleZ !== 1.0) {
-					json.push(this.scaleX);
-					json.push(this.scaleY);
-					json.push(this.scaleZ);
+				json.push(this.centerX);
+				json.push(this.centerZ);
+				json.push(this.angleY);
+				if (
+					this.angleX !== 0.0 ||
+					this.angleZ !== 0.0 ||
+					this.scaleX !== 1.0 ||
+					this.scaleY !== 1.0 ||
+					this.scaleZ !== 1.0
+				) {
+					json.push(this.angleX);
+					json.push(this.angleZ);
+					if (this.scaleX !== 1.0 || this.scaleY !== 1.0 || this.scaleZ !== 1.0) {
+						json.push(this.scaleX);
+						json.push(this.scaleY);
+						json.push(this.scaleZ);
+					}
 				}
 			}
 		}

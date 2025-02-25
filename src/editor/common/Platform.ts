@@ -18,6 +18,43 @@ import { JSONType } from './Types';
 
 class Platform {
 	public static manifest: Record<string, unknown>;
+	public static MIME_TYPES: Record<string, string> = {
+		// Images
+		png: 'image/png',
+		jpg: 'image/jpeg',
+		jpeg: 'image/jpeg',
+		gif: 'image/gif',
+		webp: 'image/webp',
+		svg: 'image/svg+xml',
+
+		// Audio
+		mp3: 'audio/mpeg',
+		wav: 'audio/wav',
+		ogg: 'audio/ogg',
+
+		// Video
+		mp4: 'video/mp4',
+		webm: 'video/webm',
+		ogv: 'video/ogg',
+
+		// Fonts
+		ttf: 'font/ttf',
+		otf: 'font/otf',
+		woff: 'font/woff',
+		woff2: 'font/woff2',
+
+		// Documents
+		pdf: 'application/pdf',
+
+		// Archives
+		zip: 'application/zip',
+		rar: 'application/vnd.rar',
+		'7z': 'application/x-7z-compressed',
+
+		// OBJ
+		obj: 'model/obj',
+		mtl: 'text/plain',
+	};
 
 	static async checkFileExists(path: string): Promise<boolean> {
 		return await (Constants.IS_DESKTOP ? IO.checkFileExists(path) : LocalFile.checkFileExists(path));
@@ -63,6 +100,14 @@ class Platform {
 		}
 	}
 
+	static async moveFolder(src: string, dst: string) {
+		if (Constants.IS_DESKTOP) {
+			await IO.moveFolder(src, dst);
+		} else {
+			await LocalFile.moveFolder(src, dst);
+		}
+	}
+
 	static async createFile(path: string, content: string) {
 		if (Constants.IS_DESKTOP) {
 			await IO.createFile(path, content);
@@ -87,6 +132,14 @@ class Platform {
 		}
 	}
 
+	static async moveFile(src: string, dst: string) {
+		if (Constants.IS_DESKTOP) {
+			await IO.moveFile(src, dst);
+		} else {
+			await LocalFile.moveFile(src, dst);
+		}
+	}
+
 	static async renameFile(path: string, fileNameBefore: string, fileNameAfter: string) {
 		if (Constants.IS_DESKTOP) {
 			await IO.renameFile(path, fileNameBefore, fileNameAfter);
@@ -100,13 +153,31 @@ class Platform {
 		const zipData = await zip.loadAsync(file);
 		await Platform.createFolder(basePath);
 		const paths = Object.keys(zipData.files);
+		const rootFolder = paths[0]?.split('/')[0] ?? '';
 		for (const path of paths) {
 			const f = zipData.files[path];
-			const p = Paths.join(basePath, path);
+			const relativePath = path.startsWith(rootFolder + '/') ? path.substring(rootFolder.length + 1) : path;
+			if (!relativePath) continue; // Skip empty paths (root itself)
+			const p = Paths.join(basePath, relativePath);
 			if (f.dir) {
 				await Platform.createFolder(p.slice(0, -1));
 			} else {
-				const content = await f.async('text');
+				const ext = relativePath.split('.').pop()?.toLowerCase();
+				const uint8ArrayToBase64 = (uint8Array: Uint8Array): string => {
+					let binary = '';
+					for (let i = 0; i < uint8Array.length; i++) {
+						binary += String.fromCharCode(uint8Array[i]);
+					}
+					return btoa(binary); // Convert to Base64
+				};
+				let content = '';
+				const mimeType = Platform.MIME_TYPES[ext || ''];
+				if (mimeType) {
+					const binaryData = await f.async('uint8array'); // Read as binary
+					content = `data:${mimeType};base64,${uint8ArrayToBase64(binaryData)}`;
+				} else {
+					content = await f.async('text');
+				}
 				await Platform.createFile(p, content);
 			}
 		}

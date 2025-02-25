@@ -27,7 +27,7 @@ class Sprite extends Base {
 
 	public texture!: Rectangle;
 
-	public static readonly bindings: BindingType[] = [['texture', 't', null, BINDING.RECTANGLE]];
+	public static readonly bindings: BindingType[] = [['kind', 'k', undefined, BINDING.NUMBER]];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...Sprite.bindings, ...additionnalBinding];
@@ -344,10 +344,14 @@ class Sprite extends Base {
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Sprite.getBindings(additionnalBinding));
+		this.texture = new Rectangle();
+		this.texture.read(json.t as number[]);
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Sprite.getBindings(additionnalBinding));
+		json.t = [];
+		this.texture.write(json.t as number[], true);
 	}
 }
 

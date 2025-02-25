@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { Base } from './Base';
 import { ProgressionTable } from './ProgressionTable';
@@ -24,9 +24,19 @@ class StatisticProgression extends Base {
 	public static bindings: BindingType[] = [
 		['maxValue', 'm', undefined, BINDING.DYNAMIC_VALUE, DynamicValue],
 		['isFix', 'if', undefined, BINDING.BOOLEAN],
-		['table', 't', undefined, BINDING.OBJECT, ProgressionTable],
-		['random', 'r', undefined, BINDING.DYNAMIC_VALUE, DynamicValue],
-		['formula', 'f', undefined, BINDING.DYNAMIC_VALUE, DynamicValue],
+		[
+			'table',
+			't',
+			ProgressionTable.createProgression(
+				DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 1),
+				DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 1),
+				0
+			),
+			BINDING.OBJECT,
+			ProgressionTable,
+		],
+		['random', 'r', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0), BINDING.DYNAMIC_VALUE, DynamicValue],
+		['formula', 'f', DynamicValue.create(DYNAMIC_VALUE_KIND.FORMULA, ''), BINDING.DYNAMIC_VALUE, DynamicValue],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
