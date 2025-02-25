@@ -118,6 +118,7 @@ class ProjectUpdater_3_0_0 {
 			for (const wall of walls) {
 				const value = wall.v as JSONType;
 				value.t = value.k;
+				delete value.k;
 			}
 			json.walls = walls;
 			json.sprites = sprites;
