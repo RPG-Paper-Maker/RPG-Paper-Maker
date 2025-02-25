@@ -234,14 +234,7 @@ class Map extends Base {
 			await this.model.load();
 
 			// Tileset texture material
-			const picture = Project.current!.pictures.getByID(
-				PICTURE_KIND.TILESETS,
-				Project.current!.tilesets.getTilesetByID(this.model.tilesetID)?.pictureID ?? 1
-			);
-			this.materialTileset = await Manager.GL.loadTexture(
-				picture.isBR ? picture.getPath() : (await LocalFile.readFile(picture.getPath())) ?? ''
-			);
-			this.materialTilesetHover = Manager.GL.createMaterial({ texture: this.materialTileset.map, hovered: true });
+			await this.loadTileset();
 
 			// Background
 			this.updateBackground();
@@ -320,6 +313,47 @@ class Map extends Base {
 
 		this.loading = false;
 		this.initialized = true;
+	}
+
+	async loadTileset() {
+		const picture = Project.current!.pictures.getByID(
+			PICTURE_KIND.TILESETS,
+			Project.current!.tilesets.getTilesetByID(this.model.tilesetID)?.pictureID ?? 1
+		);
+		this.materialTileset = await Manager.GL.loadTexture(
+			picture.isBR ? picture.getPath() : (await LocalFile.readFile(picture.getPath())) ?? ''
+		);
+		this.materialTilesetHover = Manager.GL.createMaterial({ texture: this.materialTileset.map, hovered: true });
+	}
+
+	reloadTextures(kind?: PICTURE_KIND) {
+		if (kind === undefined || kind === PICTURE_KIND.AUTOTILES) {
+			this.texturesAutotiles = [];
+		}
+		if (kind === undefined || kind === PICTURE_KIND.WALLS) {
+			this.texturesWalls = [];
+		}
+		if (kind === undefined || kind === PICTURE_KIND.OBJECTS_3D) {
+			this.texturesObjects3D = [];
+			this.texturesObjects3DHover = [];
+		}
+		if (kind === undefined || kind === PICTURE_KIND.MOUNTAINS) {
+			this.texturesMountains = new globalThis.Map();
+		}
+		if (kind === undefined || kind === PICTURE_KIND.CHARACTERS) {
+			this.texturesCharacters = [];
+		}
+		if (kind === undefined || kind === PICTURE_KIND.SKYBOXES) {
+			this.updateBackground();
+		}
+		if (kind === undefined || kind === PICTURE_KIND.TILESETS) {
+			this.loadTileset();
+		}
+		if (kind !== PICTURE_KIND.SKYBOXES) {
+			this.forEachMapPortions((mapPortion) => {
+				mapPortion.loadTexturesAndUpdateGeometries();
+			});
+		}
 	}
 
 	async save() {
@@ -685,9 +719,12 @@ class Map extends Base {
 		return limit * 2 * size * size + limit * 2 * size + limit * 2;
 	}
 
-	forEachMapPortions(callback: (mapPortion: MapPortion | null) => void) {
+	forEachMapPortions(callback: (mapPortion: MapPortion) => void) {
 		for (let i = 0; i < this.mapPortions.length; i++) {
-			callback(this.mapPortions[i]);
+			const mapPortion = this.mapPortions[i];
+			if (mapPortion) {
+				callback(mapPortion);
+			}
 		}
 	}
 
@@ -818,7 +855,7 @@ class Map extends Base {
 		const positions = this.cursorWall.getPositions();
 		if (removePreview) {
 			this.forEachMapPortions((mapPortion) => {
-				mapPortion?.removeLastPreview();
+				mapPortion.removeLastPreview();
 			});
 		}
 		for (const position of positions) {
@@ -883,7 +920,7 @@ class Map extends Base {
 	paintPin(p: Position, kindAfter: ELEMENT_MAP_KIND, autotileID: number, textureAfter: Rectangle) {
 		const up = this.camera.getUp();
 		this.forEachMapPortions((mapPortion) => {
-			mapPortion?.removeLastPreview();
+			mapPortion.removeLastPreview();
 		});
 		if (p.isInMap(this.model)) {
 			let portion = this.getLocalPortion(p);
@@ -1407,7 +1444,7 @@ class Map extends Base {
 								this.updateLockedY(position);
 								const positions = this.rectangleStartPosition.getPositionsRectangle(position);
 								this.forEachMapPortions((mapPortion) => {
-									mapPortion?.removeLastPreview();
+									mapPortion.removeLastPreview();
 								});
 								const adding = Scene.Map.isAdding();
 								for (const rectanglePosition of positions) {
@@ -1464,7 +1501,7 @@ class Map extends Base {
 		}
 		if (intersects.length === 0) {
 			this.forEachMapPortions((mapPortion) => {
-				mapPortion?.removeLastPreview();
+				mapPortion.removeLastPreview();
 			});
 			this.lastPosition = null;
 			this.layerRayPosition = null;
@@ -1571,7 +1608,7 @@ class Map extends Base {
 			(!this.pointedMapElementPosition || !this.pointedMapElementPosition.isInMap(this.model))
 		) {
 			this.forEachMapPortions((mapPortion) => {
-				mapPortion?.removeLastPreview();
+				mapPortion.removeLastPreview();
 			});
 		}
 	}
@@ -1821,25 +1858,23 @@ class Map extends Base {
 		this.isDraggingTransforming = false;
 		if (this.rectangleStartPosition && this.lastPosition) {
 			this.forEachMapPortions((mapPortion) => {
-				if (mapPortion) {
-					for (const [position, previous, kind] of mapPortion.lastPreviewRemove) {
-						const element = mapPortion.model.getMapElement(position, kind);
-						if (element) {
-							element.isPreview = false;
-						}
-						this.undoRedoStates.push(
-							UndoRedoState.create(
-								position,
-								previous,
-								previous === null ? kind : previous.kind,
-								element,
-								element?.kind || kind
-							)
-						);
+				for (const [position, previous, kind] of mapPortion.lastPreviewRemove) {
+					const element = mapPortion.model.getMapElement(position, kind);
+					if (element) {
+						element.isPreview = false;
 					}
-					mapPortion.lastPreviewRemove = [];
-					this.portionsToSave.add(mapPortion);
+					this.undoRedoStates.push(
+						UndoRedoState.create(
+							position,
+							previous,
+							previous === null ? kind : previous.kind,
+							element,
+							element?.kind || kind
+						)
+					);
 				}
+				mapPortion.lastPreviewRemove = [];
+				this.portionsToSave.add(mapPortion);
 			});
 		}
 		this.rectangleStartPosition = null;
@@ -1930,9 +1965,7 @@ class Map extends Base {
 		this.camera.getThreeCamera().getWorldDirection(vector);
 		const angle = Math.atan2(vector.x, vector.z) + Math.PI;
 		this.forEachMapPortions((mapPortion) => {
-			if (mapPortion) {
-				mapPortion.updateFaceSprites(angle);
-			}
+			mapPortion.updateFaceSprites(angle);
 		});
 		if (this.canEdit) {
 			if (this.selectedMesh.geometry instanceof CustomGeometryFace) {

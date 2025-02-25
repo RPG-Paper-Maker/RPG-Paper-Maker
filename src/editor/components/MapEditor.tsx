@@ -253,7 +253,12 @@ function MapEditor() {
 		clearMap();
 		initializeMap().catch(console.error);
 		// eslint-disable-next-line
-	}, [currentMapTag, needsReloadMap]);
+	}, [currentMapTag]);
+
+	useEffect(() => {
+		initializeMap().catch(console.error);
+		// eslint-disable-next-line
+	}, [needsReloadMap]);
 
 	// Resize after rendering
 	useEffect(() => {

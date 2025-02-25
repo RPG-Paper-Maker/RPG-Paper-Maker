@@ -67,6 +67,7 @@ function Dialog({
 	const [isResizing, setIsResizing] = useState(false);
 	const [resizingType, setResizingType] = useState(RESIZING_TYPE.BOTTOM);
 	const [resizingSide] = useState({ left: true });
+
 	const dialogRef = useRef<HTMLDivElement>(null);
 
 	const dispatch = useDispatch();

@@ -11,13 +11,11 @@
 
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { PICTURE_KIND } from '../../common';
 import { Platform } from '../../common/Platform';
 import { Node, Project, Rectangle } from '../../core';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Model, Scene } from '../../Editor';
-import { setNeedsReloadMap } from '../../store';
 import Checkbox from '../Checkbox';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
@@ -59,6 +57,7 @@ function DialogPictures({
 }: Props) {
 	const { t } = useTranslation();
 
+	const [isLoading, setIsLoading] = useState(false);
 	const [isDialogWarningSelectionOpen, setIsDialogWarningSelectionOpen] = useState(false);
 	const [isInitiating, setIsInitiating] = useState(false);
 	const [pictures, setPictures] = useState<Node[]>([]);
@@ -71,8 +70,6 @@ function DialogPictures({
 	const [isSelectedLeftList, setIsSelectedLeftList] = useState(true);
 	const [newDynamicPictureID, setNewDynamicPictureID] = useState(dynamicPictureID);
 	const [selectedKind, setSelectedKind] = useState(kind);
-
-	const dispatch = useDispatch();
 
 	const folders = useMemo(
 		() =>
@@ -225,14 +222,18 @@ function DialogPictures({
 
 	const handleAccept = async () => {
 		if (kind === undefined) {
+			setIsLoading(true);
+			Scene.Map.current?.reloadTextures();
+			await Project.current!.pictures.save();
+			setIsLoading(false);
 			setIsOpen(false);
 			reset();
-			await Project.current!.pictures.save();
-			dispatch(setNeedsReloadMap());
 		} else {
 			if (selectedPicture === null || !isSelectedLeftList) {
 				setIsDialogWarningSelectionOpen(true);
 			} else {
+				setIsLoading(true);
+				Scene.Map.current?.reloadTextures(kind);
 				Project.current!.pictures.list[kind] = Node.createListFromNodes(pictures);
 				await Project.current!.pictures.save();
 				const isTileset = selectedPicture.id === 0;
@@ -243,7 +244,6 @@ function DialogPictures({
 						: new Rectangle(selectedRect.x / selectedRect.width, selectedRect.y / selectedRect.height),
 					isTileset
 				);
-
 				if (active) {
 					if (!newDynamicPictureID!.isActivated) {
 						dynamicPictureID!.updateToDefaultNumber(selectedPicture.id);
@@ -251,16 +251,18 @@ function DialogPictures({
 						dynamicPictureID!.copy(newDynamicPictureID!);
 					}
 				}
+				setIsLoading(false);
 				setIsOpen(false);
 				reset();
-				dispatch(setNeedsReloadMap());
 			}
 		}
 	};
 
 	const handleReject = async () => {
 		if (kind === undefined) {
+			setIsLoading(true);
 			await Project.current!.pictures.load();
+			setIsLoading(false);
 		}
 		onReject?.();
 		setSelectedPicture(null);
@@ -383,6 +385,7 @@ function DialogPictures({
 				initialHeight='70%'
 				onClose={handleReject}
 				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+				isLoading={isLoading}
 			>
 				<Flex spacedLarge fillWidth>
 					{kind === undefined && (
