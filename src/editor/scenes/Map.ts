@@ -857,6 +857,7 @@ class Map extends Base {
 				}
 				this.previewDeletedMovingObject = newPortion.model.objects.get(position.toKey()) ?? null;
 				newPortion.model.objects.set(position.toKey(), this.movingObject);
+				this.model.moveObject(previousPosition, position);
 				this.portionsToUpdate.add(previousPortion);
 				this.portionsToUpdate.add(newPortion);
 			}
@@ -1807,6 +1808,7 @@ class Map extends Base {
 						ELEMENT_MAP_KIND.OBJECT
 					)
 				);
+				await this.model.save(true);
 			}
 		}
 		this.movingObjectInitialPosition = null;

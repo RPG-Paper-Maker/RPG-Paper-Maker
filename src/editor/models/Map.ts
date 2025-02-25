@@ -341,6 +341,13 @@ class Map extends Localization {
 		await this.save(true);
 	}
 
+	moveObject(previousPosition: Position, newPosition: Position) {
+		const object = this.objects.find((mapObject) => mapObject.position.equals(previousPosition));
+		if (object) {
+			object.position = newPosition;
+		}
+	}
+
 	copy(map: Map): void {
 		super.copy(map, Map.getBindings([]));
 	}
