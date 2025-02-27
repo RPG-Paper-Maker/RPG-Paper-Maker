@@ -23,7 +23,7 @@ import {
 	AiOutlineZoomOut,
 } from 'react-icons/ai';
 import { BiExport, BiImport, BiPyramid, BiSave } from 'react-icons/bi';
-import { BsClipboardData, BsMusicNote, BsPlay } from 'react-icons/bs';
+import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { FiMap } from 'react-icons/fi';
 import { IoIosRedo, IoIosUndo, IoMdArrowBack } from 'react-icons/io';
@@ -63,6 +63,7 @@ import {
 	setProjectMenuIndex,
 	setProjects,
 	setUndoRedoIndex,
+	triggerData,
 	triggerFonts,
 	triggerImportProject,
 	triggerNewProject,
@@ -83,6 +84,7 @@ import '../styles/MainMenuBar.css';
 import Button from './Button';
 import Dialog from './dialogs/Dialog';
 import DialogChangeLanguage from './dialogs/DialogChangeLanguage';
+import DialogData from './dialogs/DialogData';
 import DialogFonts from './dialogs/DialogFonts';
 import DialogNewProject from './dialogs/DialogNewProject';
 import DialogPictures from './dialogs/DialogPictures';
@@ -105,6 +107,7 @@ function MainMenuBar() {
 	const { t } = useTranslation();
 
 	const [isDialogNewProjectOpen, setIsDialogNewProjectOpen] = useState(false);
+	const [isDialogDataOpen, setIsDialogDataOpen] = useState(false);
 	const [isDialogSystemsOpen, setIsDialogSystemsOpen] = useState(false);
 	const [isDialogVariablesOpen, setIsDialogVariablesOpen] = useState(false);
 	const [isDialogPicturesOpen, setIsDialogPicturesOpen] = useState(false);
@@ -407,6 +410,10 @@ function MainMenuBar() {
 		Scene.Map.current!.zoomOut();
 	};
 
+	const handleDataManager = async () => {
+		setIsDialogDataOpen(true);
+	};
+
 	const handleSystemsManager = async () => {
 		setIsDialogSystemsOpen(true);
 	};
@@ -631,6 +638,12 @@ function MainMenuBar() {
 			title: t('management'),
 			children: [
 				{
+					title: `${t('data.manager')}...`,
+					icon: <BsDatabase />,
+					onClick: handleDataManager,
+					disabled: !isProjectOpened,
+				},
+				{
 					title: `${t('systems.manager')}...`,
 					icon: <BsClipboardData />,
 					onClick: handleSystemsManager,
@@ -729,6 +742,9 @@ function MainMenuBar() {
 		} else if (triggers.saveAll) {
 			dispatch(triggerSaveAll(false));
 			handleSaveAll().catch(console.error);
+		} else if (triggers.data) {
+			dispatch(triggerData(false));
+			handleDataManager().catch(console.error);
 		} else if (triggers.systems) {
 			dispatch(triggerSystems(false));
 			handleSystemsManager().catch(console.error);
@@ -853,6 +869,7 @@ function MainMenuBar() {
 				setIsOpen={setIsDialogNewProjectOpen}
 				onAccept={handleAcceptNewProject}
 			/>
+			<DialogData isOpen={isDialogDataOpen} setIsOpen={setIsDialogDataOpen} />
 			<DialogSystems isOpen={isDialogSystemsOpen} setIsOpen={setIsDialogSystemsOpen} />
 			<DialogVariables isOpen={isDialogVariablesOpen} setIsOpen={setIsDialogVariablesOpen} />
 			<DialogPictures isOpen={isDialogPicturesOpen} setIsOpen={setIsDialogPicturesOpen} />

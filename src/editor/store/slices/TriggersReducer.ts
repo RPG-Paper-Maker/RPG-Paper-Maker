@@ -27,6 +27,7 @@ const TriggersSlice = createSlice({
 			openProject: null as ProjectPreview | null,
 			save: false,
 			saveAll: false,
+			data: false,
 			systems: false,
 			variables: false,
 			pictures: false,
@@ -62,6 +63,9 @@ const TriggersSlice = createSlice({
 		},
 		triggerSaveAll(state, action: PayloadAction<boolean>) {
 			state.mainBar.saveAll = action.payload;
+		},
+		triggerData(state, action: PayloadAction<boolean>) {
+			state.mainBar.data = action.payload;
 		},
 		triggerSystems(state, action: PayloadAction<boolean>) {
 			state.mainBar.systems = action.payload;
@@ -118,6 +122,7 @@ export const {
 	triggerOpenProject,
 	triggerSave,
 	triggerSaveAll,
+	triggerData,
 	triggerSystems,
 	triggerVariables,
 	triggerPictures,

@@ -103,6 +103,7 @@ type Props = {
 	noScrollOnForce?: boolean;
 	applyDefault?: boolean;
 	noFirstSelection?: boolean;
+	isLocalization?: boolean;
 };
 
 export const TREES_MIN_WIDTH = 150;
@@ -144,6 +145,7 @@ function Tree({
 	noScrollOnForce = false,
 	applyDefault = false,
 	noFirstSelection = false,
+	isLocalization = false,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -925,12 +927,14 @@ function Tree({
 						<div className={Utils.getClassName({ disabledLabel: disabled || isEditNameDisabled() })}>
 							{t('name')}:
 						</div>
-						<InputText
-							value={currentName}
-							onChange={handleChangeName}
-							widthType={INPUT_TYPE_WIDTH.FILL}
-							disabled={isEditNameDisabled()}
-						/>
+						{isLocalization ? null : (
+							<InputText
+								value={currentName}
+								onChange={handleChangeName}
+								widthType={INPUT_TYPE_WIDTH.FILL}
+								disabled={isEditNameDisabled()}
+							/>
+						)}
 					</Flex>
 				)}
 			</Flex>

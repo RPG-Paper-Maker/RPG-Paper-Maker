@@ -30,6 +30,7 @@ import { Constants } from '../common';
 import { Project } from '../core';
 import {
 	RootState,
+	triggerData,
 	triggerFonts,
 	triggerImportProject,
 	triggerNewProject,
@@ -83,6 +84,10 @@ function Toolbar() {
 
 	const handleSaveAll = () => {
 		dispatch(triggerSaveAll(true));
+	};
+
+	const handleDataManager = () => {
+		dispatch(triggerData(true));
 	};
 
 	const handleSystemsManager = () => {
@@ -148,7 +153,7 @@ function Toolbar() {
 						<></>
 					)}
 					<MenuItem separator></MenuItem>
-					<MenuItem icon={<BsDatabase />} onClick={handleFloor} disabled>
+					<MenuItem icon={<BsDatabase />} onClick={handleDataManager} disabled={!isProjectOpened}>
 						{t('data.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<BsClipboardData />} onClick={handleSystemsManager} disabled={!isProjectOpened}>

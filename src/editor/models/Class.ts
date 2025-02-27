@@ -40,6 +40,10 @@ class Class extends Localization {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(): void {
+		super.applyDefault(Class.getBindings([]));
+	}
+
 	copy(className: Class): void {
 		super.copy(className, Class.getBindings([]));
 	}
