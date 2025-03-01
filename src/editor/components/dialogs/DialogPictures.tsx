@@ -223,7 +223,7 @@ function DialogPictures({
 	const handleAccept = async () => {
 		if (kind === undefined) {
 			setIsLoading(true);
-			Scene.Map.current?.reloadTextures();
+			await Scene.Map.current?.reloadTextures();
 			await Project.current!.pictures.save();
 			setIsLoading(false);
 			setIsOpen(false);
@@ -233,7 +233,7 @@ function DialogPictures({
 				setIsDialogWarningSelectionOpen(true);
 			} else {
 				setIsLoading(true);
-				Scene.Map.current?.reloadTextures(kind);
+				await Scene.Map.current?.reloadTextures(kind);
 				Project.current!.pictures.list[kind] = Node.createListFromNodes(pictures);
 				await Project.current!.pictures.save();
 				const isTileset = selectedPicture.id === 0;

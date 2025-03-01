@@ -11,6 +11,7 @@
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BiExport } from 'react-icons/bi';
 import { FaTrashAlt } from 'react-icons/fa';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
@@ -50,6 +51,13 @@ function ProjectPreview({ project }: Props) {
 		dispatch(setProjects(newList));
 		EngineSettings.current.recentProjects = newList;
 		await EngineSettings.current.save();
+	};
+
+	const handleClickExportProject = async (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+		dispatch(setLoading(true));
+		e.stopPropagation();
+		await Platform.export(project.location);
+		dispatch(setLoading(false));
 	};
 
 	const handleClickRemoveProject = async (e: React.MouseEvent<SVGElement, MouseEvent>) => {
@@ -92,6 +100,7 @@ function ProjectPreview({ project }: Props) {
 				</Flex>
 				<Flex centerV>
 					{Constants.IS_DESKTOP && <RxCross2 onClick={handleClickCloseProject} />}
+					<BiExport onClick={handleClickExportProject} />
 					<FaTrashAlt onClick={handleClickRemoveProject} />
 				</Flex>
 			</div>

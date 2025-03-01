@@ -87,7 +87,7 @@ class Sprite extends Base {
 		if (!textureCharacter) {
 			const picture = Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, id);
 			if (picture) {
-				const path = picture.getPath();
+				const path = await picture.getPathOrBase64();
 				textureCharacter = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();
 			} else {
 				textureCharacter = Manager.GL.loadTextureEmpty();

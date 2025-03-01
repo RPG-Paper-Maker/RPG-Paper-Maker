@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType, Paths, PICTURE_KIND } from '../common';
-import { CollisionSquare, Picture2D, Project } from '../core';
+import { BINDING, BindingType, Constants, JSONType, Paths, PICTURE_KIND } from '../common';
+import { CollisionSquare, LocalFile, Picture2D, Project } from '../core';
 import { Asset } from './Asset';
 
 class Picture extends Asset {
@@ -96,6 +96,10 @@ class Picture extends Asset {
 
 	getPath(): string {
 		return this.id === -1 || !this.name ? '' : Picture.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
+	}
+
+	async getPathOrBase64(): Promise<string> {
+		return this.isBR && !Constants.IS_DESKTOP ? this.getPath() : (await LocalFile.readFile(this.getPath())) ?? '';
 	}
 
 	async loadPicture() {

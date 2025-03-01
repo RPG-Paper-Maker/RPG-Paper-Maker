@@ -58,6 +58,7 @@ import {
 	setCurrentProject,
 	setCurrentTreeMapTag,
 	setLoading,
+	setLoadingBar,
 	setNeedsReloadPageClearCache,
 	setOpenLoading,
 	setProjectMenuIndex,
@@ -119,7 +120,7 @@ function MainMenuBar() {
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
 	const [warningVersionMessage, setWarningVersionMessage] = useStateString();
 	const [currentVersion, setCurrentVersion] = useState('');
-	const [isDialogWarningImportOpen, setIsDialogWarningImportOpen] = useState(false);
+	const [warningImportPath, setWarningImportPath] = useState('');
 	const [isDialogWarningProjectLocationExist, setIsDialogWarningProjectLocationExist] = useState(false);
 	const [isDialogWarningClearAllCacheOpen, setIsDialogWarningClearAllCacheOpen] = useState(false);
 	const [isDialogWarningSavePlayOpen, setIsDialogSavePlayOpen] = useState(false);
@@ -282,6 +283,10 @@ function MainMenuBar() {
 		importFileInputRef.current?.click();
 	};
 
+	const updateLoadingBar = (current: number, total: number, label = '') => {
+		dispatch(setLoadingBar({ percent: Math.floor((current / total) * 100), label }));
+	};
+
 	const handleImportFileChange = async () => {
 		if (!importFileInputRef.current) {
 			return;
@@ -290,15 +295,18 @@ function MainMenuBar() {
 		const folderName = Utils.formatProjectFolderName(file.name.substring(0, file.name.length - 4));
 		const projectsFolders = await Platform.getFolders(Paths.getRPMGamesFolder());
 		if (projectsFolders.includes(folderName)) {
-			setIsDialogWarningImportOpen(true);
+			setWarningImportPath(Paths.join(Paths.getRPMGamesFolder(), folderName));
 		} else {
 			importFileInputRef.current.value = '';
 			dispatch(setLoading(true));
+			dispatch(setLoadingBar({ percent: 0, label: '' }));
 			const path = Paths.join(Paths.getRPMGamesFolder(), folderName);
-			await Platform.loadZip(file, path);
+			await Platform.loadZip(file, path, updateLoadingBar);
+			dispatch(setLoadingBar({ percent: 100, label: '' }));
 			const project = Model.ProjectPreview.create(await Data.System.getProjectName(path), path);
 			await handleOpenProject(project);
 			dispatch(setLoading(false));
+			dispatch(setLoadingBar(null));
 		}
 	};
 
@@ -306,7 +314,7 @@ function MainMenuBar() {
 		if (!importFileInputRef.current) {
 			return;
 		}
-		setIsDialogWarningImportOpen(false);
+		setWarningImportPath('');
 		dispatch(setLoading(true));
 		const file = Array.from(importFileInputRef.current.files || [])[0];
 		importFileInputRef.current.value = '';
@@ -320,21 +328,16 @@ function MainMenuBar() {
 	};
 
 	const handleRejectImport = async () => {
-		setIsDialogWarningImportOpen(false);
+		setWarningImportPath('');
 		if (importFileInputRef.current) {
 			importFileInputRef.current.value = '';
 		}
 	};
 
 	const handleExport = async () => {
-		if (Constants.IS_DESKTOP) {
-			const folderPath = await IO.openFolderDialog();
-			if (folderPath) {
-				IO.downloadZip(currentProject!.location, folderPath);
-			}
-		} else {
-			await LocalFile.downloadZip(currentProject!.location);
-		}
+		dispatch(setLoading(true));
+		await Platform.export(currentProject!.location);
+		dispatch(setLoading(false));
 	};
 
 	const handleCloseProject = async () => {
@@ -898,11 +901,11 @@ function MainMenuBar() {
 			</Dialog>
 			<Dialog
 				title={t('warning')}
-				isOpen={isDialogWarningImportOpen}
+				isOpen={!!warningImportPath}
 				footer={<FooterNoYes onNo={handleRejectImport} onYes={handleAcceptImport} />}
 				onClose={handleRejectImport}
 			>
-				<p>{t('warning.project.exist.overwrite')}</p>
+				<p>{t('warning.project.exist.overwrite', { path: warningImportPath })}</p>
 			</Dialog>
 			<Dialog
 				title={t('warning')}

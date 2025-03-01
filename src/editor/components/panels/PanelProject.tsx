@@ -164,7 +164,7 @@ function PanelProject() {
 									<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
 								</Menu>
 							</div>
-							<Flex one className={Utils.getClassName({ hidden: projectMenuIndex !== 0 })}>
+							<Flex one fillHeight className={Utils.getClassName({ hidden: projectMenuIndex !== 0 })}>
 								<TreeMaps
 									onSelectedItem={handleSelectedMapItem}
 									forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}

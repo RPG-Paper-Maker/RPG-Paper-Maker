@@ -36,20 +36,25 @@ class Skybox extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
-	createTextures(): THREE.MeshPhongMaterial[] {
-		return [this.left, this.right, this.top, this.bot, this.front, this.back].map((side) => {
+	async createTextures(): Promise<THREE.MeshPhongMaterial[]> {
+		const textures = [] as THREE.MeshPhongMaterial[];
+		const sides = [this.left, this.right, this.top, this.bot, this.front, this.back];
+		for (const side of sides) {
 			const texture = Manager.GL.textureLoader.load(
-				Project.current!.pictures.getByID(PICTURE_KIND.SKYBOXES, side).getPath()
+				await Project.current!.pictures.getByID(PICTURE_KIND.SKYBOXES, side).getPathOrBase64()
 			);
 			texture.wrapS = THREE.RepeatWrapping;
 			texture.repeat.x = -1;
-			return Manager.GL.createMaterial({
-				texture: texture,
-				side: THREE.BackSide,
-				shadows: false,
-				flipY: true,
-			});
-		});
+			textures.push(
+				Manager.GL.createMaterial({
+					texture: texture,
+					side: THREE.BackSide,
+					shadows: false,
+					flipY: true,
+				})
+			);
+		}
+		return textures;
 	}
 
 	copy(skybox: Skybox, additionnalBinding: BindingType[] = []): void {

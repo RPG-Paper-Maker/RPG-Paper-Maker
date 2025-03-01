@@ -11,9 +11,11 @@
 
 .loader {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	position: fixed;
+	gap: 10px;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -46,7 +48,7 @@
 		color: var(--darkest-bg-color);
 		font-weight: bold;
 		text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
-		font-size: 20px;
+		font-size: 18px;
 	}
 }
 

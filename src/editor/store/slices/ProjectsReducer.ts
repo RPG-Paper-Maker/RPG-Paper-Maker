@@ -19,6 +19,8 @@ const ProjectsSlice = createSlice({
 	initialState: {
 		current: null as Model.ProjectPreview | null,
 		loading: false,
+		loadingBarPercent: null as number | null,
+		loadingBarLabel: null as string | null,
 		openLoading: false,
 		list: [] as Model.ProjectPreview[],
 		menuIndex: 1,
@@ -30,6 +32,10 @@ const ProjectsSlice = createSlice({
 		},
 		setLoading(state, action: PayloadAction<boolean>) {
 			state.loading = action.payload;
+		},
+		setLoadingBar(state, action: PayloadAction<{ percent: number; label: string } | null>) {
+			state.loadingBarPercent = action.payload?.percent ?? null;
+			state.loadingBarLabel = action.payload?.label ?? null;
 		},
 		setOpenLoading(state, action: PayloadAction<boolean>) {
 			state.openLoading = action.payload;
@@ -52,6 +58,7 @@ const ProjectsSlice = createSlice({
 export const {
 	setCurrentProject,
 	setLoading,
+	setLoadingBar,
 	setOpenLoading,
 	setProjects,
 	clearProjects,

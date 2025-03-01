@@ -25,6 +25,8 @@ function PanelMain() {
 
 	const currentProject = useSelector((state: RootState) => state.projects.current);
 	const loading = useSelector((state: RootState) => state.projects.loading);
+	const loadingPercent = useSelector((state: RootState) => state.projects.loadingBarPercent);
+	const loadingLabel = useSelector((state: RootState) => state.projects.loadingBarLabel);
 	const needsReloadPageUpdate = useSelector((state: RootState) => state.triggers.needsReloadPageUpdate);
 	const needsReloadPageClearCache = useSelector((state: RootState) => state.triggers.needsReloadPageClearCache);
 
@@ -42,7 +44,7 @@ function PanelMain() {
 	return (
 		<>
 			<Flex one className='relative'>
-				<Loader large isLoading={loading} />
+				<Loader large isLoading={loading} percent={loadingPercent} label={loadingLabel} />
 				{currentProject === null ? <PanelNoProject /> : <PanelProject />}
 			</Flex>
 			<Dialog

@@ -34,7 +34,6 @@ import {
 	CustomGeometryFace,
 	Frame,
 	Grid,
-	LocalFile,
 	MapPortion,
 	Portion,
 	Position,
@@ -237,7 +236,7 @@ class Map extends Base {
 			await this.loadTileset();
 
 			// Background
-			this.updateBackground();
+			await this.updateBackground();
 		} else {
 			this.scene.background = new THREE.Color(0x221f2e);
 		}
@@ -320,13 +319,11 @@ class Map extends Base {
 			PICTURE_KIND.TILESETS,
 			Project.current!.tilesets.getTilesetByID(this.model.tilesetID)?.pictureID ?? 1
 		);
-		this.materialTileset = await Manager.GL.loadTexture(
-			picture.isBR ? picture.getPath() : (await LocalFile.readFile(picture.getPath())) ?? ''
-		);
+		this.materialTileset = await Manager.GL.loadTexture(await picture.getPathOrBase64());
 		this.materialTilesetHover = Manager.GL.createMaterial({ texture: this.materialTileset.map, hovered: true });
 	}
 
-	reloadTextures(kind?: PICTURE_KIND) {
+	async reloadTextures(kind?: PICTURE_KIND) {
 		if (kind === undefined || kind === PICTURE_KIND.AUTOTILES) {
 			this.texturesAutotiles = [];
 		}
@@ -344,10 +341,10 @@ class Map extends Base {
 			this.texturesCharacters = [];
 		}
 		if (kind === undefined || kind === PICTURE_KIND.SKYBOXES) {
-			this.updateBackground();
+			await this.updateBackground();
 		}
 		if (kind === undefined || kind === PICTURE_KIND.TILESETS) {
-			this.loadTileset();
+			await this.loadTileset();
 		}
 		if (kind !== PICTURE_KIND.SKYBOXES) {
 			this.forEachMapPortions((mapPortion) => {
@@ -413,13 +410,13 @@ class Map extends Base {
 		}
 	}
 
-	updateBackground() {
+	async updateBackground() {
 		if (this.model.isSkyColor) {
 			this.updateBackgroundColor();
 		} else if (this.model.isSkyImage) {
 			this.updateBackgroundImage();
 		} else {
-			this.updateBackgroundSkybox();
+			await this.updateBackgroundSkybox();
 		}
 	}
 
@@ -441,12 +438,12 @@ class Map extends Base {
 		this.scene.background = texture;
 	}
 
-	updateBackgroundSkybox() {
+	async updateBackgroundSkybox() {
 		const size = (10000 * Project.SQUARE_SIZE) / Constants.BASE_SQUARE_SIZE;
 		const skyboxGeometry = new THREE.BoxGeometry(size, size, size);
 		const skyboxMesh = new THREE.Mesh(
 			skyboxGeometry,
-			(
+			await (
 				Model.Base.getByIDOrFirst(
 					Project.current!.systems.skyboxes,
 					this.model.skyboxID.getFixNumberValue()

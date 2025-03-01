@@ -1304,7 +1304,7 @@ class MapPortion {
 								state.graphicsID
 							);
 							const rows = 4 + (picture.isStopAnimation ? 4 : 0) + (picture.isClimbAnimation ? 4 : 0);
-							const squareWidth = width / Project.SQUARE_SIZE / 4;
+							const squareWidth = width / Project.SQUARE_SIZE / Project.current!.systems.FRAMES;
 							const squareHeight = height / Project.SQUARE_SIZE / rows;
 							characterRect.x = state.graphicsIndexX * squareWidth;
 							characterRect.y = state.graphicsIndexY * squareHeight;

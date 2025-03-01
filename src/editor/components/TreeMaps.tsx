@@ -349,6 +349,7 @@ function TreeMaps({
 				minWidth={minWidth}
 				cannotAdd
 				applyDefault
+				scrollable
 			/>
 			<DialogMapProperties
 				isOpen={isOpenMapProperties}

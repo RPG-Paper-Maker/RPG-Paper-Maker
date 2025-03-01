@@ -77,7 +77,7 @@ class ProjectUpdater {
 	}
 
 	static updateObjectCommand(obj: JSONType, callback: (json: JSONType) => void) {
-		for (const event of obj.events as JSONType[]) {
+		for (const event of (obj.events ?? []) as JSONType[]) {
 			const reactions = event.r as Record<string, JSONType>;
 			for (const id in reactions) {
 				for (const command of reactions[id].c as JSONType[]) {
@@ -141,7 +141,7 @@ class ProjectUpdater {
 	}
 
 	static updateObjectStates(obj: JSONType, callback: (json: JSONType) => void) {
-		for (const state of obj.states as JSONType[]) {
+		for (const state of (obj.states ?? []) as JSONType[]) {
 			callback.call(this, state);
 		}
 	}
@@ -151,7 +151,7 @@ class ProjectUpdater {
 
 		// Map portions
 		await this.updateAllMapPortions((json: JSONType) => {
-			for (const obj of json.objs as JSONType[]) {
+			for (const obj of (json.objs ?? []) as JSONType[]) {
 				this.updateObjectStates(obj.v as JSONType, callback);
 			}
 		});

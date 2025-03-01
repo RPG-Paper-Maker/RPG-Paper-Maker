@@ -39,6 +39,11 @@ class ProjectUpdater_3_0_0 {
 		}
 
 		// Move all files correctly
+		await Platform.removeFile(Paths.join(projectPath, 'Datas', 'Scripts', 'Plugins', 'path.js'));
+		await Platform.moveFolder(
+			Paths.join(projectPath, 'Datas', 'Scripts', 'Plugins'),
+			Paths.join(projectPath, 'Plugins')
+		);
 		await Platform.moveFolder(Paths.join(projectPath, 'Datas', 'Maps'), Paths.join(projectPath, 'Maps'));
 		await Platform.moveFolder(Paths.join(projectPath, 'Datas', 'Saves'), Paths.join(projectPath, 'Saves'));
 		const names = [
@@ -100,21 +105,21 @@ class ProjectUpdater_3_0_0 {
 
 		// Map portions edit
 		await ProjectUpdater.updateAllMapPortions((json: JSONType) => {
-			const floors = (json.lands as JSONType).floors as JSONType[];
+			const floors = ((json.lands as JSONType)?.floors as JSONType[]) ?? [];
 			for (const floor of floors) {
 				(floor.v as JSONType).k = 1;
 			}
-			const autotiles = (json.lands as JSONType).autotiles as JSONType[];
+			const autotiles = ((json.lands as JSONType)?.autotiles as JSONType[]) ?? [];
 			for (const autotile of autotiles) {
 				(autotile.v as JSONType).k = 2;
 			}
 			json.lands = [...floors, ...autotiles];
-			const sprites = (json.sprites as JSONType).list as JSONType[];
+			const sprites = ((json.sprites as JSONType)?.list as JSONType[]) ?? [];
 			for (const sprite of sprites) {
 				const value = sprite.v as JSONType;
 				value.k = (value.k as number) - 1;
 			}
-			const walls = (json.sprites as JSONType).walls as JSONType[];
+			const walls = ((json.sprites as JSONType)?.walls as JSONType[]) ?? [];
 			for (const wall of walls) {
 				const value = wall.v as JSONType;
 				value.t = value.k;
@@ -122,9 +127,11 @@ class ProjectUpdater_3_0_0 {
 			}
 			json.walls = walls;
 			json.sprites = sprites;
-			json.moun = (json.moun as JSONType).a as JSONType[];
-			json.objs3d = (json.objs3d as JSONType).a as JSONType[];
-			json.objs = ((json.objs as JSONType).list as JSONType[]).filter((obj) => (obj.v as JSONType).hId !== 2);
+			json.moun = ((json.moun as JSONType)?.a as JSONType[]) ?? [];
+			json.objs3d = ((json.objs3d as JSONType)?.a as JSONType[]) ?? [];
+			json.objs = (((json.objs as JSONType)?.list as JSONType[]) ?? []).filter(
+				(obj) => (obj.v as JSONType).hId !== 2
+			);
 		});
 
 		// Remove hero from map infos

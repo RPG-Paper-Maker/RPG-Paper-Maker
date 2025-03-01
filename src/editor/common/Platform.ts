@@ -148,13 +148,18 @@ class Platform {
 		}
 	}
 
-	static async loadZip(file: File, basePath: string) {
+	static async loadZip(
+		file: File,
+		basePath: string,
+		callback?: (current: number, total: number, label: string) => void
+	) {
 		const zip = new JSZip();
 		const zipData = await zip.loadAsync(file);
 		await Platform.createFolder(basePath);
 		const paths = Object.keys(zipData.files);
 		const rootFolder = paths[0]?.split('/')[0] ?? '';
-		for (const path of paths) {
+		for (let i = 0, l = paths.length; i < l; i++) {
+			const path = paths[i];
 			const f = zipData.files[path];
 			const relativePath = path.startsWith(rootFolder + '/') ? path.substring(rootFolder.length + 1) : path;
 			if (!relativePath) continue; // Skip empty paths (root itself)
@@ -178,6 +183,7 @@ class Platform {
 				} else {
 					content = await f.async('text');
 				}
+				callback?.call(this, i, l, p);
 				await Platform.createFile(p, content);
 			}
 		}
@@ -250,6 +256,17 @@ class Platform {
 			await IO.openGame(location);
 		} else {
 			window.open(`${window.location.pathname}?project=${location}`, '_blank');
+		}
+	}
+
+	static async export(location: string) {
+		if (Constants.IS_DESKTOP) {
+			const folderPath = await IO.openFolderDialog();
+			if (folderPath) {
+				IO.downloadZip(location, folderPath);
+			}
+		} else {
+			await LocalFile.downloadZip(location);
 		}
 	}
 }
