@@ -54,6 +54,7 @@
 		"eslint": "npx eslint ./src",
 		"update-mods": "node scripts/update-mods.mjs",
 		"generate-file-manifest": "node scripts/generate-file-manifest.mjs",
+		"generate-plugins-manifest": "node scripts/generate-plugins-manifest.mjs",
 		"update-packages": "ncu -u"
 	},
 	"eslintConfig": {

@@ -11,6 +11,7 @@ export * from './Keyboard';
 export * from './Languages';
 export * from './Monsters';
 export * from './Pictures';
+export * from './Scripts';
 export * from './Settings';
 export * from './Shapes';
 export * from './Skills';

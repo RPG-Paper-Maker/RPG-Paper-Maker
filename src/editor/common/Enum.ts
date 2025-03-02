@@ -673,3 +673,16 @@ export enum MAIN_MENU_COMMAND_KIND {
 	QUIT,
 	SCRIPT,
 }
+
+export enum PLUGIN_TYPE_KIND {
+	EMPTY,
+	LOCAL,
+	ONLINE,
+}
+
+export enum PLUGIN_CATEGORY_KIND {
+	BATTLE,
+	MENUS,
+	MAP,
+	OTHERS,
+}

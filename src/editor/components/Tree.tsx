@@ -56,6 +56,7 @@ import DialogMapObjectParameter from './dialogs/models/DialogMapObjectParameter'
 import DialogMapObjectProperty from './dialogs/models/DialogMapObjectProperty';
 import DialogMapObjectState from './dialogs/models/DialogMapObjectState';
 import DialogName from './dialogs/models/DialogName';
+import DialogPlugin from './dialogs/models/DialogPlugin';
 import DialogRandomBattle from './dialogs/models/DialogRandomBattle';
 import DialogSkybox from './dialogs/models/DialogSkybox';
 import DialogSpeed from './dialogs/models/DialogSpeed';
@@ -892,6 +893,8 @@ function Tree({
 					return <DialogHeroStatisticDisplay {...options} />;
 				case Model.CreateParameter:
 					return <DialogCreateParameter {...options} />;
+				case Model.Plugin:
+					return <DialogPlugin {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

@@ -32,6 +32,7 @@ type Props = {
 	padding?: boolean;
 	scrollableContent?: boolean;
 	lazyLoadingContent?: boolean;
+	disabled?: boolean;
 };
 
 function Tab({
@@ -48,6 +49,7 @@ function Tab({
 	padding = false,
 	scrollableContent = false,
 	lazyLoadingContent = false,
+	disabled = false,
 }: Props) {
 	const [currentIndex, setCurrentIndex] = useState(defaultIndex);
 	const [nextIndex, setNextIndex] = useState(defaultIndex); // Needed to make scrolling work properly on direct click...
@@ -63,6 +65,9 @@ function Tab({
 
 	const handleClickClose = (e: React.MouseEvent<SVGElement, MouseEvent>, title: Model.Base) => {
 		e.stopPropagation();
+		if (disabled) {
+			return;
+		}
 		const newTitlesList = [...titles];
 		const index = newTitlesList.findIndex((model) => model.id === title.id);
 		if (index !== -1) {
@@ -82,17 +87,23 @@ function Tab({
 	};
 
 	const handleClickItem = (index: number) => {
-		setNextIndex(index);
-		if (onCurrentIndexChanged) {
-			onCurrentIndexChanged(index, titles[index], true);
+		if (disabled) {
+			return;
 		}
+		setNextIndex(index);
 	};
 
 	const handleClickLeftButton = () => {
+		if (disabled) {
+			return;
+		}
 		handleClickItem(currentIndex === 0 ? 0 : currentIndex - 1);
 	};
 
 	const handleClickRightButton = () => {
+		if (disabled) {
+			return;
+		}
 		handleClickItem(currentIndex === titles.length - 1 ? titles.length - 1 : currentIndex + 1);
 	};
 
@@ -137,7 +148,7 @@ function Tab({
 				<div
 					ref={selected ? selectedElementRef : null}
 					key={index}
-					className={Utils.getClassName({ selected }, 'tabItem')}
+					className={Utils.getClassName({ selected: selected && !disabled, disabled }, 'tabItem')}
 					onClick={() => handleClickItem(index)}
 				>
 					{title.getName()}
@@ -167,13 +178,13 @@ function Tab({
 							small
 							icon={<FaCaretLeft />}
 							onClick={handleClickLeftButton}
-							disabled={currentIndex === 0}
+							disabled={disabled || currentIndex === 0}
 						/>
 						<Button
 							small
 							icon={<FaCaretRight />}
 							onClick={handleClickRightButton}
-							disabled={currentIndex === titles.length - 1}
+							disabled={disabled || currentIndex === titles.length - 1}
 						/>
 					</>
 				)}

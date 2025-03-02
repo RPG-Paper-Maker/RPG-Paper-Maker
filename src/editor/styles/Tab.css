@@ -53,6 +53,11 @@
 
 		&:hover {
 			color: var(--lightest-bg-color);
+
+			&.disabled {
+				color: var(--grey-color);
+				cursor: default;
+			}
 		}
 
 		&.selected {

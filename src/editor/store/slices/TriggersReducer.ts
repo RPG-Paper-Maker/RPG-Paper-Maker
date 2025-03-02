@@ -30,6 +30,7 @@ const TriggersSlice = createSlice({
 			data: false,
 			systems: false,
 			variables: false,
+			plugins: false,
 			pictures: false,
 			videos: false,
 			songs: false,
@@ -72,6 +73,9 @@ const TriggersSlice = createSlice({
 		},
 		triggerVariables(state, action: PayloadAction<boolean>) {
 			state.mainBar.variables = action.payload;
+		},
+		triggerPlugins(state, action: PayloadAction<boolean>) {
+			state.mainBar.plugins = action.payload;
 		},
 		triggerPictures(state, action: PayloadAction<boolean>) {
 			state.mainBar.pictures = action.payload;
@@ -125,6 +129,7 @@ export const {
 	triggerData,
 	triggerSystems,
 	triggerVariables,
+	triggerPlugins,
 	triggerPictures,
 	triggerSongs,
 	triggerFonts,

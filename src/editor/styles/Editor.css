@@ -322,3 +322,13 @@ code {
 	user-select: none;
 	pointer-events: none;
 }
+
+.verticalSeparator {
+	height: 100%;
+	border-right: 1px solid var(--grey-light-color);
+}
+
+.horizontalSeparator {
+	width: 100%;
+	border-bottom: 1px solid var(--grey-light-color);
+}

@@ -6,6 +6,7 @@ export * from './DialogFonts';
 export * from './DialogNewProject';
 export * from './DialogObjects3DPreview';
 export * from './DialogPictures';
+export * from './DialogPlugins';
 export * from './DialogRectangle';
 export * from './DialogSelectMapPosition';
 export * from './DialogSongs';

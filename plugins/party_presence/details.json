@@ -1,0 +1,1 @@
+{"defaultParameters":[{"defaultValue":{"k":12,"min":0,"v":3},"description":"The max size of the party during battle","id":-1,"name":"Battle Party Size"}],"name":"party_presence","parameters":[{"defaultValue":{"k":12,"min":0,"v":3},"description":"The max size of the party during battle","id":-1,"name":"Battle Party Size"}],"type":1}

@@ -37,6 +37,7 @@ import {
 	triggerOpenDialogProject,
 	triggerPictures,
 	triggerPlay,
+	triggerPlugins,
 	triggerSave,
 	triggerSaveAll,
 	triggerShapes,
@@ -96,6 +97,10 @@ function Toolbar() {
 
 	const handleVariablesManager = () => {
 		dispatch(triggerVariables(true));
+	};
+
+	const handlePluginsManager = () => {
+		dispatch(triggerPlugins(true));
 	};
 
 	const handlePicturesManager = () => {
@@ -171,7 +176,7 @@ function Toolbar() {
 					<MenuItem icon={<LuLanguages />} onClick={handleFloor} disabled>
 						{t('languages.manager.tool')}
 					</MenuItem>
-					<MenuItem icon={<FaPlug />} onClick={handleFloor} disabled>
+					<MenuItem icon={<FaPlug />} onClick={handlePluginsManager} disabled={!isProjectOpened}>
 						{t('plugins')}
 					</MenuItem>
 					<>

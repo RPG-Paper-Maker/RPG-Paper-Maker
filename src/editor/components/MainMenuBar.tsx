@@ -24,7 +24,7 @@ import {
 } from 'react-icons/ai';
 import { BiExport, BiImport, BiPyramid, BiSave } from 'react-icons/bi';
 import { BsClipboardData, BsDatabase, BsMusicNote, BsPlay } from 'react-icons/bs';
-import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
+import { FaArrowDown, FaArrowUp, FaPlug } from 'react-icons/fa';
 import { FiMap } from 'react-icons/fi';
 import { IoIosRedo, IoIosUndo, IoMdArrowBack } from 'react-icons/io';
 import { LuFolders, LuSaveAll } from 'react-icons/lu';
@@ -72,6 +72,7 @@ import {
 	triggerOpenProject,
 	triggerPictures,
 	triggerPlay,
+	triggerPlugins,
 	triggerSave,
 	triggerSaveAll,
 	triggerShapes,
@@ -89,6 +90,7 @@ import DialogData from './dialogs/DialogData';
 import DialogFonts from './dialogs/DialogFonts';
 import DialogNewProject from './dialogs/DialogNewProject';
 import DialogPictures from './dialogs/DialogPictures';
+import DialogPlugins from './dialogs/DialogPlugins';
 import DialogShapes from './dialogs/DialogShapes';
 import DialogSongs from './dialogs/DialogSongs';
 import DialogSystems from './dialogs/DialogSystems';
@@ -111,6 +113,7 @@ function MainMenuBar() {
 	const [isDialogDataOpen, setIsDialogDataOpen] = useState(false);
 	const [isDialogSystemsOpen, setIsDialogSystemsOpen] = useState(false);
 	const [isDialogVariablesOpen, setIsDialogVariablesOpen] = useState(false);
+	const [isDialogPluginsOpen, setIsDialogPluginsOpen] = useState(false);
 	const [isDialogPicturesOpen, setIsDialogPicturesOpen] = useState(false);
 	const [isDialogVideosOpen, setIsDialogVideosOpen] = useState(false);
 	const [isDialogSongsOpen, setIsDialogSongsOpen] = useState(false);
@@ -425,6 +428,10 @@ function MainMenuBar() {
 		setIsDialogVariablesOpen(true);
 	};
 
+	const handlePluginsManager = async () => {
+		setIsDialogPluginsOpen(true);
+	};
+
 	const handlePicturesManager = async () => {
 		setIsDialogPicturesOpen(true);
 	};
@@ -659,6 +666,12 @@ function MainMenuBar() {
 					disabled: !isProjectOpened,
 				},
 				{
+					title: `${t('plugins.manager')}...`,
+					icon: <FaPlug />,
+					onClick: handlePluginsManager,
+					disabled: !isProjectOpened,
+				},
+				{
 					title: `${t('pictures.manager')}...`,
 					icon: <AiOutlinePicture />,
 					onClick: handlePicturesManager,
@@ -754,6 +767,9 @@ function MainMenuBar() {
 		} else if (triggers.variables) {
 			dispatch(triggerVariables(false));
 			handleVariablesManager().catch(console.error);
+		} else if (triggers.plugins) {
+			dispatch(triggerPlugins(false));
+			handlePluginsManager().catch(console.error);
 		} else if (triggers.pictures) {
 			dispatch(triggerPictures(false));
 			handlePicturesManager().catch(console.error);
@@ -875,6 +891,7 @@ function MainMenuBar() {
 			<DialogData isOpen={isDialogDataOpen} setIsOpen={setIsDialogDataOpen} />
 			<DialogSystems isOpen={isDialogSystemsOpen} setIsOpen={setIsDialogSystemsOpen} />
 			<DialogVariables isOpen={isDialogVariablesOpen} setIsOpen={setIsDialogVariablesOpen} />
+			<DialogPlugins isOpen={isDialogPluginsOpen} setIsOpen={setIsDialogPluginsOpen} />
 			<DialogPictures isOpen={isDialogPicturesOpen} setIsOpen={setIsDialogPicturesOpen} />
 			<DialogVideos manager isOpen={isDialogVideosOpen} setIsOpen={setIsDialogVideosOpen} />
 			<DialogSongs isOpen={isDialogSongsOpen} setIsOpen={setIsDialogSongsOpen} />

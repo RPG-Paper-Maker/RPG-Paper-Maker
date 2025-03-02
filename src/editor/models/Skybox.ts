@@ -36,6 +36,10 @@ class Skybox extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault() {
+		super.applyDefault(Skybox.getBindings([]));
+	}
+
 	async createTextures(): Promise<THREE.MeshPhongMaterial[]> {
 		const textures = [] as THREE.MeshPhongMaterial[];
 		const sides = [this.left, this.right, this.top, this.bot, this.front, this.back];
