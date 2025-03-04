@@ -2064,5 +2064,6 @@
 	"select.by.id": "Select by ID",
 	"update.project.version": "The project version is {{currentVersion}}, you need to convert to {{newVersion}} to continue.",
 	"plugins.manager": "Plugins manager",
-	"select.or.double.click.list": "Select or double click in the list"
+	"select.or.double.click.list": "Select or double click in the list",
+	"no.connexion": "No connexion"
 }

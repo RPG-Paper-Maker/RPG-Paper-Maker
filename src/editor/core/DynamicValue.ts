@@ -24,12 +24,16 @@ class DynamicValue extends Serializable {
 	public x!: DynamicValue;
 	public y!: DynamicValue;
 	public z!: DynamicValue;
+	public min: number | null = null;
+	public max: number | null = null;
 	public isActivated = false;
 
 	public static readonly bindings: BindingType[] = [
 		['kind', 'k', undefined, BINDING.NUMBER],
 		['value', 'v', undefined, BINDING.NUMBER],
 		['isActivated', 'ia', false, BINDING.BOOLEAN],
+		['min', 'min', null, BINDING.NUMBER],
+		['max', 'max', null, BINDING.NUMBER],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -135,17 +139,65 @@ class DynamicValue extends Serializable {
 	}
 
 	copy(dynamic: DynamicValue): void {
-		this.kind = dynamic.kind;
-		this.value = dynamic.value;
-		this.isActivated = dynamic.isActivated;
+		super.copy(dynamic, DynamicValue.getBindings([]));
+		switch (this.kind) {
+			case DYNAMIC_VALUE_KIND.VECTOR2:
+				this.x = dynamic.x.clone();
+				this.y = dynamic.y.clone();
+				break;
+			case DYNAMIC_VALUE_KIND.VECTOR3:
+				this.x = dynamic.x.clone();
+				this.y = dynamic.y.clone();
+				this.z = dynamic.z.clone();
+				break;
+		}
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, DynamicValue.getBindings(additionnalBinding));
+		switch (this.kind) {
+			case DYNAMIC_VALUE_KIND.VECTOR2:
+				this.x = new DynamicValue();
+				this.x.read(json.x as JSONType);
+				this.y = new DynamicValue();
+				this.y.read(json.y as JSONType);
+				break;
+			case DYNAMIC_VALUE_KIND.VECTOR3:
+				this.x = new DynamicValue();
+				this.x.read(json.x as JSONType);
+				this.y = new DynamicValue();
+				this.y.read(json.y as JSONType);
+				this.z = new DynamicValue();
+				this.z.read(json.z as JSONType);
+				break;
+		}
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, DynamicValue.getBindings(additionnalBinding));
+		switch (this.kind) {
+			case DYNAMIC_VALUE_KIND.VECTOR2: {
+				let obj = {};
+				this.x.write(obj);
+				json.x = obj;
+				obj = {};
+				this.y.write(obj);
+				json.y = obj;
+				break;
+			}
+			case DYNAMIC_VALUE_KIND.VECTOR3: {
+				let obj = {};
+				this.x.write(obj);
+				json.x = obj;
+				obj = {};
+				this.y.write(obj);
+				json.y = obj;
+				obj = {};
+				this.z.write(obj);
+				json.z = obj;
+				break;
+			}
+		}
 	}
 }
 

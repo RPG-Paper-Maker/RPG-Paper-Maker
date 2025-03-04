@@ -12,6 +12,7 @@
 import { BINDING, BindingType, JSONType, PLUGIN_CATEGORY_KIND, PLUGIN_TYPE_KIND } from '../common';
 import { Base } from './Base';
 import { PluginCommand } from './PluginCommand';
+import { PluginDefaultParameter } from './PluginDefaultParameter';
 import { PluginParameter } from './PluginParameter';
 
 class Plugin extends Base {
@@ -23,7 +24,7 @@ class Plugin extends Base {
 	public description!: string;
 	public version!: string;
 	public tutorial!: string;
-	public defaultParameters!: PluginParameter[];
+	public defaultParameters!: PluginDefaultParameter[];
 	public parameters!: PluginParameter[];
 	public commands!: PluginCommand[];
 
@@ -36,13 +37,20 @@ class Plugin extends Base {
 		['description', 'description', '', BINDING.STRING],
 		['version', 'version', '1.0.0', BINDING.STRING],
 		['tutorial', 'tutorial', '', BINDING.STRING],
-		['defaultParameters', 'defaultParameters', [], BINDING.LIST, PluginParameter],
+		['defaultParameters', 'defaultParameters', [], BINDING.LIST, PluginDefaultParameter],
 		['parameters', 'parameters', [], BINDING.LIST, PluginParameter],
 		['commands', 'commands', [], BINDING.LIST, PluginCommand],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	static create(id: number, name: string) {
+		const plugin = new Plugin();
+		plugin.id = id;
+		plugin.name = name;
+		return plugin;
 	}
 
 	applyDefault() {

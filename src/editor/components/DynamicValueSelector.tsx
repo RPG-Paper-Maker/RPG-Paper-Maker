@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useState } from 'react';
-import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from '../common';
+import { useLayoutEffect, useMemo, useState } from 'react';
+import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH, PICTURE_KIND, SONG_KIND } from '../common';
 import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Model } from '../Editor';
@@ -140,6 +140,69 @@ function DynamicValueSelector({
 			case DYNAMIC_VALUE_OPTIONS_TYPE.VARIABLE_PARAM_PROP:
 				list.push(DYNAMIC_VALUE_KIND.VARIABLE);
 				break;
+			case DYNAMIC_VALUE_OPTIONS_TYPE.PLUGIN_VALUE:
+				list = [
+					DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE,
+					DYNAMIC_VALUE_KIND.CUSTOM_LIST,
+					DYNAMIC_VALUE_KIND.VECTOR2,
+					DYNAMIC_VALUE_KIND.VECTOR3,
+					DYNAMIC_VALUE_KIND.VARIABLE,
+					DYNAMIC_VALUE_KIND.NUMBER_DECIMAL,
+					DYNAMIC_VALUE_KIND.SWITCH,
+					DYNAMIC_VALUE_KIND.TEXT,
+					DYNAMIC_VALUE_KIND.CLASS,
+					DYNAMIC_VALUE_KIND.HERO,
+					DYNAMIC_VALUE_KIND.MONSTER,
+					DYNAMIC_VALUE_KIND.TROOP,
+					DYNAMIC_VALUE_KIND.ITEM,
+					DYNAMIC_VALUE_KIND.WEAPON,
+					DYNAMIC_VALUE_KIND.ARMOR,
+					DYNAMIC_VALUE_KIND.SKILL,
+					DYNAMIC_VALUE_KIND.ANIMATION,
+					DYNAMIC_VALUE_KIND.STATUS,
+					DYNAMIC_VALUE_KIND.TILESET,
+					DYNAMIC_VALUE_KIND.FONT_SIZE,
+					DYNAMIC_VALUE_KIND.FONT_NAME,
+					DYNAMIC_VALUE_KIND.COLOR,
+					DYNAMIC_VALUE_KIND.WINDOW_SKIN,
+					DYNAMIC_VALUE_KIND.CURRENCY,
+					DYNAMIC_VALUE_KIND.SPEED,
+					DYNAMIC_VALUE_KIND.DETECTION,
+					DYNAMIC_VALUE_KIND.CAMERA_PROPERTY,
+					DYNAMIC_VALUE_KIND.FREQUENCY,
+					DYNAMIC_VALUE_KIND.SKYBOX,
+					DYNAMIC_VALUE_KIND.BATTLE_MAP,
+					DYNAMIC_VALUE_KIND.ELEMENT,
+					DYNAMIC_VALUE_KIND.COMMON_STATISTIC,
+					DYNAMIC_VALUE_KIND.WEAPONS_KIND,
+					DYNAMIC_VALUE_KIND.ARMORS_KIND,
+					DYNAMIC_VALUE_KIND.COMMON_BATTLECOMMAND,
+					DYNAMIC_VALUE_KIND.COMMON_EQUIPMENT,
+					DYNAMIC_VALUE_KIND.EVENT,
+					DYNAMIC_VALUE_KIND.STATE,
+					DYNAMIC_VALUE_KIND.COMMON_REACTION,
+					DYNAMIC_VALUE_KIND.MODEL,
+					DYNAMIC_VALUE_KIND.BARS,
+					DYNAMIC_VALUE_KIND.ICONS,
+					DYNAMIC_VALUE_KIND.AUTOTILES,
+					DYNAMIC_VALUE_KIND.CHARACTERS,
+					DYNAMIC_VALUE_KIND.MOUNTAINS,
+					DYNAMIC_VALUE_KIND.TILESETS,
+					DYNAMIC_VALUE_KIND.WALLS,
+					DYNAMIC_VALUE_KIND.BATTLERS,
+					DYNAMIC_VALUE_KIND.FACESETS,
+					DYNAMIC_VALUE_KIND.WINDOW_SKINS,
+					DYNAMIC_VALUE_KIND.TITLE_SCREEN,
+					DYNAMIC_VALUE_KIND.OBJECT3D,
+					DYNAMIC_VALUE_KIND.PICTURES,
+					DYNAMIC_VALUE_KIND.ANIMATIONS,
+					DYNAMIC_VALUE_KIND.SKYBOXES,
+					DYNAMIC_VALUE_KIND.MUSIC,
+					DYNAMIC_VALUE_KIND.BACKGROUND_SOUND,
+					DYNAMIC_VALUE_KIND.SOUND,
+					DYNAMIC_VALUE_KIND.MUSIC_EFFECT,
+				];
+				break;
 			default:
 				break;
 		}
@@ -165,6 +228,117 @@ function DynamicValueSelector({
 	};
 
 	const getOptions = () => getOptionsKind().map((k) => Model.Base.DYNAMIC_VALUE_KIND_OPTIONS[k]);
+
+	const databaseList = useMemo(() => {
+		switch (kind) {
+			case DYNAMIC_VALUE_KIND.DATABASE:
+				return databaseOptions;
+			case DYNAMIC_VALUE_KIND.CLASS:
+				return Project.current!.classes.list;
+			case DYNAMIC_VALUE_KIND.HERO:
+				return Project.current!.heroes.list;
+			case DYNAMIC_VALUE_KIND.MONSTER:
+				return Project.current!.monsters.list;
+			case DYNAMIC_VALUE_KIND.TROOP:
+				return Project.current!.troops.list;
+			case DYNAMIC_VALUE_KIND.ITEM:
+				return Project.current!.items.list;
+			case DYNAMIC_VALUE_KIND.WEAPON:
+				return Project.current!.weapons.list;
+			case DYNAMIC_VALUE_KIND.ARMOR:
+				return Project.current!.armors.list;
+			case DYNAMIC_VALUE_KIND.SKILL:
+				return Project.current!.skills.list;
+			case DYNAMIC_VALUE_KIND.ANIMATION:
+				return Project.current!.animations.list;
+			case DYNAMIC_VALUE_KIND.STATUS:
+				return Project.current!.status.list;
+			case DYNAMIC_VALUE_KIND.TILESET:
+				return Project.current!.tilesets.list;
+			case DYNAMIC_VALUE_KIND.FONT_SIZE:
+				return Project.current!.systems.fontSizes;
+			case DYNAMIC_VALUE_KIND.FONT_NAME:
+				return Project.current!.systems.fontNames;
+			case DYNAMIC_VALUE_KIND.COLOR:
+				return Project.current!.systems.colors;
+			case DYNAMIC_VALUE_KIND.WINDOW_SKIN:
+				return Project.current!.systems.windowSkins;
+			case DYNAMIC_VALUE_KIND.CURRENCY:
+				return Project.current!.systems.currencies;
+			case DYNAMIC_VALUE_KIND.SPEED:
+				return Project.current!.systems.speeds;
+			case DYNAMIC_VALUE_KIND.DETECTION:
+				return Project.current!.systems.detections;
+			case DYNAMIC_VALUE_KIND.CAMERA_PROPERTY:
+				return Project.current!.systems.cameraProperties;
+			case DYNAMIC_VALUE_KIND.FREQUENCY:
+				return Project.current!.systems.frequencies;
+			case DYNAMIC_VALUE_KIND.SKYBOX:
+				return Project.current!.systems.skyboxes;
+			case DYNAMIC_VALUE_KIND.BATTLE_MAP:
+				return Project.current!.battleSystem.battleMaps;
+			case DYNAMIC_VALUE_KIND.ELEMENT:
+				return Project.current!.battleSystem.elements;
+			case DYNAMIC_VALUE_KIND.COMMON_STATISTIC:
+				return Project.current!.battleSystem.statistics;
+			case DYNAMIC_VALUE_KIND.WEAPONS_KIND:
+				return Project.current!.battleSystem.weaponsKind;
+			case DYNAMIC_VALUE_KIND.ARMORS_KIND:
+				return Project.current!.battleSystem.armorsKind;
+			case DYNAMIC_VALUE_KIND.COMMON_BATTLECOMMAND:
+				return Project.current!.battleSystem.battleCommands;
+			case DYNAMIC_VALUE_KIND.COMMON_EQUIPMENT:
+				return Project.current!.battleSystem.equipments;
+			case DYNAMIC_VALUE_KIND.EVENT:
+				return Project.current!.commonEvents.eventsUser;
+			case DYNAMIC_VALUE_KIND.STATE:
+				return Project.current!.commonEvents.states;
+			case DYNAMIC_VALUE_KIND.COMMON_REACTION:
+				return Project.current!.commonEvents.commonReactions;
+			case DYNAMIC_VALUE_KIND.MODEL:
+				return Project.current!.commonEvents.commonObjects;
+			case DYNAMIC_VALUE_KIND.BARS:
+				return Project.current!.pictures.getList(PICTURE_KIND.BARS);
+			case DYNAMIC_VALUE_KIND.ICONS:
+				return Project.current!.pictures.getList(PICTURE_KIND.ICONS);
+			case DYNAMIC_VALUE_KIND.AUTOTILES:
+				return Project.current!.pictures.getList(PICTURE_KIND.AUTOTILES);
+			case DYNAMIC_VALUE_KIND.CHARACTERS:
+				return Project.current!.pictures.getList(PICTURE_KIND.CHARACTERS);
+			case DYNAMIC_VALUE_KIND.MOUNTAINS:
+				return Project.current!.pictures.getList(PICTURE_KIND.MOUNTAINS);
+			case DYNAMIC_VALUE_KIND.TILESETS:
+				return Project.current!.pictures.getList(PICTURE_KIND.TILESETS);
+			case DYNAMIC_VALUE_KIND.WALLS:
+				return Project.current!.pictures.getList(PICTURE_KIND.WALLS);
+			case DYNAMIC_VALUE_KIND.BATTLERS:
+				return Project.current!.pictures.getList(PICTURE_KIND.BATTLERS);
+			case DYNAMIC_VALUE_KIND.FACESETS:
+				return Project.current!.pictures.getList(PICTURE_KIND.FACESETS);
+			case DYNAMIC_VALUE_KIND.WINDOW_SKINS:
+				return Project.current!.pictures.getList(PICTURE_KIND.WINDOW_SKINS);
+			case DYNAMIC_VALUE_KIND.TITLE_SCREEN:
+				return Project.current!.pictures.getList(PICTURE_KIND.TITLE_SCREENS);
+			case DYNAMIC_VALUE_KIND.OBJECT3D:
+				return Project.current!.pictures.getList(PICTURE_KIND.OBJECTS_3D);
+			case DYNAMIC_VALUE_KIND.PICTURES:
+				return Project.current!.pictures.getList(PICTURE_KIND.PICTURES);
+			case DYNAMIC_VALUE_KIND.ANIMATIONS:
+				return Project.current!.pictures.getList(PICTURE_KIND.ANIMATIONS);
+			case DYNAMIC_VALUE_KIND.SKYBOXES:
+				return Project.current!.pictures.getList(PICTURE_KIND.SKYBOXES);
+			case DYNAMIC_VALUE_KIND.MUSIC:
+				return Project.current!.songs.getList(SONG_KIND.MUSIC);
+			case DYNAMIC_VALUE_KIND.BACKGROUND_SOUND:
+				return Project.current!.songs.getList(SONG_KIND.BACKGROUND_SOUND);
+			case DYNAMIC_VALUE_KIND.SOUND:
+				return Project.current!.songs.getList(SONG_KIND.SOUND);
+			case DYNAMIC_VALUE_KIND.MUSIC_EFFECT:
+				return Project.current!.songs.getList(SONG_KIND.MUSIC_EFFECT);
+			default:
+				return [];
+		}
+	}, [kind]);
 
 	const handleChangeKind = (id: number) => {
 		setKind(id);
@@ -372,16 +546,72 @@ function DynamicValueSelector({
 					/>
 				);
 			case DYNAMIC_VALUE_KIND.DATABASE:
+			case DYNAMIC_VALUE_KIND.CLASS:
+			case DYNAMIC_VALUE_KIND.HERO:
+			case DYNAMIC_VALUE_KIND.MONSTER:
+			case DYNAMIC_VALUE_KIND.TROOP:
+			case DYNAMIC_VALUE_KIND.ITEM:
+			case DYNAMIC_VALUE_KIND.WEAPON:
+			case DYNAMIC_VALUE_KIND.ARMOR:
+			case DYNAMIC_VALUE_KIND.SKILL:
+			case DYNAMIC_VALUE_KIND.ANIMATION:
+			case DYNAMIC_VALUE_KIND.STATUS:
+			case DYNAMIC_VALUE_KIND.TILESET:
+			case DYNAMIC_VALUE_KIND.FONT_SIZE:
+			case DYNAMIC_VALUE_KIND.FONT_NAME:
+			case DYNAMIC_VALUE_KIND.COLOR:
+			case DYNAMIC_VALUE_KIND.WINDOW_SKIN:
+			case DYNAMIC_VALUE_KIND.CURRENCY:
+			case DYNAMIC_VALUE_KIND.SPEED:
+			case DYNAMIC_VALUE_KIND.DETECTION:
+			case DYNAMIC_VALUE_KIND.CAMERA_PROPERTY:
+			case DYNAMIC_VALUE_KIND.FREQUENCY:
+			case DYNAMIC_VALUE_KIND.SKYBOX:
+			case DYNAMIC_VALUE_KIND.BATTLE_MAP:
+			case DYNAMIC_VALUE_KIND.ELEMENT:
+			case DYNAMIC_VALUE_KIND.COMMON_STATISTIC:
+			case DYNAMIC_VALUE_KIND.WEAPONS_KIND:
+			case DYNAMIC_VALUE_KIND.ARMORS_KIND:
+			case DYNAMIC_VALUE_KIND.COMMON_BATTLECOMMAND:
+			case DYNAMIC_VALUE_KIND.COMMON_EQUIPMENT:
+			case DYNAMIC_VALUE_KIND.EVENT:
+			case DYNAMIC_VALUE_KIND.STATE:
+			case DYNAMIC_VALUE_KIND.COMMON_REACTION:
+			case DYNAMIC_VALUE_KIND.MODEL:
+			case DYNAMIC_VALUE_KIND.BARS:
+			case DYNAMIC_VALUE_KIND.ICONS:
+			case DYNAMIC_VALUE_KIND.AUTOTILES:
+			case DYNAMIC_VALUE_KIND.CHARACTERS:
+			case DYNAMIC_VALUE_KIND.MOUNTAINS:
+			case DYNAMIC_VALUE_KIND.TILESETS:
+			case DYNAMIC_VALUE_KIND.WALLS:
+			case DYNAMIC_VALUE_KIND.BATTLERS:
+			case DYNAMIC_VALUE_KIND.FACESETS:
+			case DYNAMIC_VALUE_KIND.WINDOW_SKINS:
+			case DYNAMIC_VALUE_KIND.TITLE_SCREEN:
+			case DYNAMIC_VALUE_KIND.OBJECT3D:
+			case DYNAMIC_VALUE_KIND.PICTURES:
+			case DYNAMIC_VALUE_KIND.ANIMATIONS:
+			case DYNAMIC_VALUE_KIND.SKYBOXES:
+			case DYNAMIC_VALUE_KIND.MUSIC:
+			case DYNAMIC_VALUE_KIND.BACKGROUND_SOUND:
+			case DYNAMIC_VALUE_KIND.SOUND:
+			case DYNAMIC_VALUE_KIND.MUSIC_EFFECT:
 				return (
 					<Dropdown
 						selectedID={valueDatabase}
 						onChange={handleChangeDatabase}
-						options={databaseOptions}
+						options={databaseList}
 						disabled={disabled}
 						displayIDs
 						width={INPUT_WIDTH}
 					/>
 				);
+			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
+			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
+			case DYNAMIC_VALUE_KIND.VECTOR2:
+			case DYNAMIC_VALUE_KIND.VECTOR3:
+				return null;
 			default:
 				return null;
 		}

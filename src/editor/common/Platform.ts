@@ -269,6 +269,15 @@ class Platform {
 			await LocalFile.downloadZip(location);
 		}
 	}
+
+	static async readOnlineFile(path: string): Promise<string | null> {
+		const value = await new Promise<Response | null>((resolve) => {
+			fetch(path)
+				.then((value) => resolve(value))
+				.catch(() => resolve(null));
+		});
+		return value === null ? null : await value.text();
+	}
 }
 
 export { Platform };

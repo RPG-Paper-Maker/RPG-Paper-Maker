@@ -57,6 +57,7 @@ import DialogMapObjectProperty from './dialogs/models/DialogMapObjectProperty';
 import DialogMapObjectState from './dialogs/models/DialogMapObjectState';
 import DialogName from './dialogs/models/DialogName';
 import DialogPlugin from './dialogs/models/DialogPlugin';
+import DialogPluginParameter from './dialogs/models/DialogPluginParameter';
 import DialogRandomBattle from './dialogs/models/DialogRandomBattle';
 import DialogSkybox from './dialogs/models/DialogSkybox';
 import DialogSpeed from './dialogs/models/DialogSpeed';
@@ -895,6 +896,10 @@ function Tree({
 					return <DialogCreateParameter {...options} />;
 				case Model.Plugin:
 					return <DialogPlugin {...options} />;
+				case Model.PluginParameter:
+					return <DialogPluginParameter {...options} />;
+				case Model.PluginDefaultParameter:
+					return <DialogPluginParameter isDefault {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

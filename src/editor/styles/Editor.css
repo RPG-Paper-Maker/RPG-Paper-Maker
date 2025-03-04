@@ -60,6 +60,10 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+a {
+	color: var(--primary-color);
+}
+
 .flex {
 	display: flex;
 	flex-direction: row;

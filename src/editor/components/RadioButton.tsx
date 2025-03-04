@@ -42,7 +42,7 @@ function RadioButton({ value, children, disabled = false }: Props) {
 					onChange={handleChange}
 					className={Utils.getClassName({ checked })}
 				/>
-				<p>{children}</p>
+				<Flex disabledLabel={disabled}>{children}</Flex>
 			</Flex>
 		</label>
 	);

@@ -59,6 +59,7 @@ export * from './Picture';
 export * from './PlaySong';
 export * from './Plugin';
 export * from './PluginCommand';
+export * from './PluginDefaultParameter';
 export * from './PluginParameter';
 export * from './ProgressionTable';
 export * from './ProjectPreview';
