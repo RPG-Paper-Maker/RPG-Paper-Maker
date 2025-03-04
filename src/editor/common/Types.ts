@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ReactNode } from 'react';
+import { JSX, ReactNode } from 'react';
 import { Node, Serializable } from '../core';
 import { MapElement } from '../Editor';
 import { BINDING, KEY, SPECIAL_KEY } from './Enum';
