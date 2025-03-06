@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { ReactNode } from 'react';
+import React, { JSX, ReactNode } from 'react';
 import { Utils } from '../common';
 import '../styles/Form.css';
 
@@ -22,7 +22,10 @@ function Form({ children }: Props) {
 		for (const child of rows) {
 			if (React.isValidElement(child)) {
 				if (child.type === React.Fragment) {
-					getRowsWithoutFragment(cleanedChildren, React.Children.toArray(child.props.children));
+					getRowsWithoutFragment(
+						cleanedChildren,
+						React.Children.toArray((child as JSX.Element).props.children)
+					);
 				} else {
 					cleanedChildren.push(child);
 				}

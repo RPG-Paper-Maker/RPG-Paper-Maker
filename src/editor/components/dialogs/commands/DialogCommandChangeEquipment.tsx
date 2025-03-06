@@ -32,7 +32,7 @@ import { CommandProps } from '../models';
 function DialogCommandChangeEquipment({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>();
+	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>(null);
 
 	const [equipmentID] = useStateDynamicValue();
 	const [weaponArmorKind, setWeaponArmorKind] = useStateNumber();

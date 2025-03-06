@@ -40,7 +40,7 @@ enum SELECTION_TROOP_TYPE {
 function DialogCommandStartBattle({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelPositionRef = useRef<PanelPositionRef>();
+	const panelPositionRef = useRef<PanelPositionRef>(null);
 
 	const [selectionTroopType, setSelectionTroopType] = useStateNumber();
 	const [troopID] = useStateDynamicValue();

@@ -40,7 +40,7 @@ enum SELECTION_VALUE_TYPE {
 function DialogCommandChangeAStatistic({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>();
+	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>(null);
 
 	const [statisticID] = useStateDynamicValue();
 	const [selectionOperationType, setSelectionOperationType] = useStateNumber();

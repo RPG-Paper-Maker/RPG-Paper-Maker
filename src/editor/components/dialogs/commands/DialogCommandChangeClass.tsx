@@ -28,7 +28,7 @@ import { CommandProps } from '../models';
 function DialogCommandChangeClass({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>();
+	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>(null);
 
 	const [classID] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();

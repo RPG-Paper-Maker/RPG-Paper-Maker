@@ -29,7 +29,7 @@ import { CommandProps } from '../models';
 function DialogCommandSetMoveTurnAPicture({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelWaitTimeRef = useRef<PanelWaitTimeRef>();
+	const panelWaitTimeRef = useRef<PanelWaitTimeRef>(null);
 
 	const [index] = useStateDynamicValue();
 	const [isSet, setIsSet] = useStateBool();

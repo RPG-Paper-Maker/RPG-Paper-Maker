@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useCallback, useEffect, useState } from 'react';
+import { JSX, useCallback, useEffect, useState } from 'react';
 import { AiOutlinePicture } from 'react-icons/ai';
 import { BiPyramid } from 'react-icons/bi';
 import { BsMusicNote } from 'react-icons/bs';
@@ -137,7 +137,7 @@ function AssetSelector({
 		// eslint-disable-next-line
 	}, [selectedID, selectedDynamic?.kind, selectedDynamic?.value, getSelectedItem]);
 
-	const getIcon = () => {
+	const getIcon = (): JSX.Element => {
 		switch (selectionType) {
 			case ASSET_SELECTOR_TYPE.PICTURES:
 				return <AiOutlinePicture />;

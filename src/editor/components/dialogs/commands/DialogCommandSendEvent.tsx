@@ -39,7 +39,7 @@ export enum SELECTION_TARGET_TYPE {
 function DialogCommandSendEvent({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelObjectEventRef = useRef<PanelObjectEventRef>();
+	const panelObjectEventRef = useRef<PanelObjectEventRef>(null);
 
 	const [selectionTargetType, setSelectionTargetType] = useStateNumber();
 	const [detectionID] = useStateDynamicValue();

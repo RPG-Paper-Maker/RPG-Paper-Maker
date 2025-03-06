@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useRef, useState } from 'react';
+import { JSX, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Utils } from '../common';
 import { triggerSplitting } from '../store';

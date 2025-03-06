@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { JSX } from 'react';
 import { FcFile, FcFolder } from 'react-icons/fc';
 import { BINDING, BindingType, JSONType, Paths } from '../common';
 import { Platform } from '../common/Platform';
@@ -47,7 +48,7 @@ class TreeMapTag extends Base {
 		return this.isFolder();
 	}
 
-	getIcon() {
+	getIcon(): JSX.Element {
 		return this.isFolder() ? <FcFolder /> : <FcFile />;
 	}
 

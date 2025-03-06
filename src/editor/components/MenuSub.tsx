@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { Children, cloneElement, ReactElement, ReactNode, useEffect, useRef, useState } from 'react';
+import React, { Children, cloneElement, JSX, ReactElement, ReactNode, useEffect, useRef, useState } from 'react';
 import { Utils } from '../common';
 import '../styles/MenuSub.css';
 
@@ -52,7 +52,7 @@ function MenuSub({
 	const refArrow = useRef<HTMLHeadingElement>(null);
 	const refContent = useRef<HTMLHeadingElement>(null);
 
-	const items = Children.map(children, (child) =>
+	const items = Children.map(children, (child: JSX.Element) =>
 		cloneElement(child, {
 			setTriggerCloseAll,
 			onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>): void => {

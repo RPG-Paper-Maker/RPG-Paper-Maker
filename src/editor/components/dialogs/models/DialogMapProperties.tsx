@@ -46,9 +46,9 @@ type Props = {
 function DialogMapProperties({ isOpen, setIsOpen, model, onAccept }: Props) {
 	const { t } = useTranslation();
 
-	const playMusicSelectorRef = useRef<PlaySongSelectorRef>();
-	const playBackgroundSoundSelectorRef = useRef<PlaySongSelectorRef>();
-	const panelMapObjectRef = useRef<PanelMapObjectRef>();
+	const playMusicSelectorRef = useRef<PlaySongSelectorRef>(null);
+	const playBackgroundSoundSelectorRef = useRef<PlaySongSelectorRef>(null);
+	const panelMapObjectRef = useRef<PanelMapObjectRef>(null);
 
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);

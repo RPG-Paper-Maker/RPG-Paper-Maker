@@ -37,10 +37,10 @@ const TREES_STYLE_HEIGHT = { height: '200px' };
 const PanelSystem = forwardRef((props, ref) => {
 	const { t } = useTranslation();
 
-	const playCursorSoundSelectorRef = useRef<PlaySongSelectorRef>();
-	const playConfirmationSoundSelectorRef = useRef<PlaySongSelectorRef>();
-	const playCancelSoundSelectorRef = useRef<PlaySongSelectorRef>();
-	const playImpossibleSoundSelectorRef = useRef<PlaySongSelectorRef>();
+	const playCursorSoundSelectorRef = useRef<PlaySongSelectorRef>(null);
+	const playConfirmationSoundSelectorRef = useRef<PlaySongSelectorRef>(null);
+	const playCancelSoundSelectorRef = useRef<PlaySongSelectorRef>(null);
+	const playImpossibleSoundSelectorRef = useRef<PlaySongSelectorRef>(null);
 
 	const [focusFirst, setFocustFirst] = useState(false);
 	const [isDialogDefaultDialogBoxOptionsOpen, setIsDialogDefaultDialogBoxOptionsOpen] = useState(false);

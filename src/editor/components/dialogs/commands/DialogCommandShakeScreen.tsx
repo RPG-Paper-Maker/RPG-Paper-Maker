@@ -27,7 +27,7 @@ import { CommandProps } from '../models';
 function DialogCommandShakeScreen({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelWaitTimeRef = useRef<PanelWaitTimeRef>();
+	const panelWaitTimeRef = useRef<PanelWaitTimeRef>(null);
 
 	const [offset] = useStateDynamicValue();
 	const [shakesNumber] = useStateDynamicValue();

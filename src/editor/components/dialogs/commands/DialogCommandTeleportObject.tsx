@@ -31,7 +31,7 @@ import { CommandProps } from '../models';
 function DialogCommandTeleportObject({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelPositionRef = useRef<PanelPositionRef>();
+	const panelPositionRef = useRef<PanelPositionRef>(null);
 
 	const [objectID] = useStateDynamicValue();
 	const [direction, setDirection] = useStateNumber();

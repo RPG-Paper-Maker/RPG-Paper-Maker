@@ -36,7 +36,7 @@ enum SELECTION_OPERATION_TYPE {
 function DialogCommandChangeASkill({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>();
+	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>(null);
 
 	const [selectionOperationType, setSelectionOperationType] = useStateNumber();
 	const [skillID] = useStateDynamicValue();

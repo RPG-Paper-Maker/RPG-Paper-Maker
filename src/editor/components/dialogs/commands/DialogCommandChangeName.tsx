@@ -27,7 +27,7 @@ import { CommandProps } from '../models';
 function DialogCommandChangeName({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>();
+	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>(null);
 
 	const [name] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();

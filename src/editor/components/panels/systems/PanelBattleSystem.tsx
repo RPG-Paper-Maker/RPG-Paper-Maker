@@ -30,9 +30,9 @@ const TREES_STYLE_HEIGHT = { height: '200px' };
 const PanelBattleSystem = forwardRef((props, ref) => {
 	const { t } = useTranslation();
 
-	const playBattleMusicSelectorRef = useRef<PlaySongSelectorRef>();
-	const playBattleLevelUpSelectorRef = useRef<PlaySongSelectorRef>();
-	const playBattleVictorySelectorRef = useRef<PlaySongSelectorRef>();
+	const playBattleMusicSelectorRef = useRef<PlaySongSelectorRef>(null);
+	const playBattleLevelUpSelectorRef = useRef<PlaySongSelectorRef>(null);
+	const playBattleVictorySelectorRef = useRef<PlaySongSelectorRef>(null);
 
 	const [levelStatisticID, setLevelStatisticID] = useStateNumber();
 	const [expStatisticID, setExpStatisticID] = useStateNumber();

@@ -28,7 +28,7 @@ import { CommandProps } from '../models';
 function DialogCommandCreateObjectInMap({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelPositionRef = useRef<PanelPositionRef>();
+	const panelPositionRef = useRef<PanelPositionRef>(null);
 
 	const [modelID] = useStateDynamicValue();
 	const [isStockCurrentValueVariableID, setIsStockCurrentValueVariableID] = useStateBool();

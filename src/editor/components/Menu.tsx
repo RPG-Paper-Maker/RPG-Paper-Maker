@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Children, cloneElement, useEffect, useState } from 'react';
+import { Children, cloneElement, JSX, useEffect, useState } from 'react';
 import { Utils } from '../common';
 import '../styles/Menu.css';
 

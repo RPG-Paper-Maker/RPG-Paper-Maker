@@ -37,7 +37,7 @@ const GREY_MAX = 100;
 function DialogCommandChangeScreenTone({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelWaitTimeRef = useRef<PanelWaitTimeRef>();
+	const panelWaitTimeRef = useRef<PanelWaitTimeRef>(null);
 
 	const [red] = useStateDynamicValue();
 	const [green] = useStateDynamicValue();

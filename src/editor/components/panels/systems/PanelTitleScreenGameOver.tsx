@@ -32,8 +32,8 @@ enum SELECTION_BACKGROUND_TYPE {
 const PanelTitleScreenGameOver = forwardRef((props, ref) => {
 	const { t } = useTranslation();
 
-	const playTitleMusicSelectorRef = useRef<PlaySongSelectorRef>();
-	const playGameOverMusicSelectorRef = useRef<PlaySongSelectorRef>();
+	const playTitleMusicSelectorRef = useRef<PlaySongSelectorRef>(null);
+	const playGameOverMusicSelectorRef = useRef<PlaySongSelectorRef>(null);
 
 	const [selectionTitleScreenBackgroundType, setSelectionTitleScreenBackgroundType] = useStateNumber();
 	const [titleBackgroundImageID, setTitleBackgroundImageID] = useStateNumber();

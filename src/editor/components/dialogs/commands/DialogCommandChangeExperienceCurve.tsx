@@ -36,7 +36,7 @@ function DialogCommandChangeExperienceCurve({
 }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>();
+	const panelSelectionHeroRef = useRef<PanelSelectionHeroRef>(null);
 
 	const [levelFrom] = useStateDynamicValue();
 	const [levelTo] = useStateDynamicValue();

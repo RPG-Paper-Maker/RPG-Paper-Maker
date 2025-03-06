@@ -30,7 +30,7 @@ function DialogMapObjectEvent({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 
 	const { t } = useTranslation();
 
-	const panelPositionRef = useRef<PanelObjectEventRef>();
+	const panelPositionRef = useRef<PanelObjectEventRef>(null);
 
 	const initialize = () => {
 		panelPositionRef.current?.initialize();

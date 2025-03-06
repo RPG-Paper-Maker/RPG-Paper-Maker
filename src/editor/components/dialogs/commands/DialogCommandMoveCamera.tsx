@@ -39,7 +39,7 @@ enum SELECTION_TARGET_TYPE {
 function DialogCommandMoveCamera({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelWaitTimeRef = useRef<PanelWaitTimeRef>();
+	const panelWaitTimeRef = useRef<PanelWaitTimeRef>(null);
 
 	const [selectionTargetType, setSelectionTargetType] = useStateNumber();
 	const [objectID] = useStateDynamicValue();

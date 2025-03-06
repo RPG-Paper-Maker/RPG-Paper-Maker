@@ -27,7 +27,7 @@ import { CommandProps } from '../models';
 function DialogCommandFlashScreen({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const panelWaitTimeRef = useRef<PanelWaitTimeRef>();
+	const panelWaitTimeRef = useRef<PanelWaitTimeRef>(null);
 
 	const [colorID] = useStateDynamicValue();
 	const [, setTrigger] = useStateBool();
