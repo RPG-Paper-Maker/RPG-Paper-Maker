@@ -170,12 +170,14 @@ class CustomStructure extends Base {
 		}
 		this.isElement = customStructure.isElement;
 		this.isClosure = customStructure.isClosure;
+		if (this.isClosure) {
+			this.isList = customStructure.isList;
+		}
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, CustomStructure.getBindings(additionnalBinding));
 		this.id = 0;
-		this.name = '';
 		if (this.isElement) {
 			this.isProperty = Utils.defaultValue(json.isProperty as boolean, true);
 			this.description = Utils.defaultValue(json.description as string, '');
@@ -201,7 +203,6 @@ class CustomStructure extends Base {
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		const id = this.id;
 		this.id = 0;
-		this.name = '';
 		super.write(json, CustomStructure.getBindings(additionnalBinding));
 		this.id = id;
 		if (this.elements) {

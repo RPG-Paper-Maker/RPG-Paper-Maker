@@ -78,6 +78,29 @@ function TreeCustomStructure({ list, onListUpdated, disabled }: Props) {
 		}
 	};
 
+	const handlePasteItem = (node: Node) => {
+		const structure = node.content as Model.CustomStructure;
+		if (structure.isClosure) {
+			return;
+		}
+		const parent = node.parent?.content as Model.CustomStructure;
+		if (parent) {
+			if ((parent.value && parent.value.kind === DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE) || !parent.isList) {
+				structure.isProperty = true;
+				if (structure.name.length === 0) {
+					structure.name = 'new';
+				}
+				while (node.parent?.children?.some((n) => n !== node && n.content.name === structure.name)) {
+					structure.name += '_copy';
+				}
+			} else {
+				structure.isProperty = false;
+				structure.name = '';
+				structure.description = '';
+			}
+		}
+	};
+
 	useLayoutEffect(() => {
 		Node.attributeIDsToList(list);
 		setUpdatedList(list);
@@ -92,6 +115,7 @@ function TreeCustomStructure({ list, onListUpdated, disabled }: Props) {
 			disabled={disabled}
 			onSelectedItem={handleSelectedItem}
 			onAccept={handleAcceptItem}
+			onPasteItem={handlePasteItem}
 			defaultNewModel={defaultModel}
 			multipleLevels
 			canBeEmpty

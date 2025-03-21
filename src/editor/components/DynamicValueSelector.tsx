@@ -392,7 +392,7 @@ function DynamicValueSelector({
 			default:
 				return [];
 		}
-	}, [kind]);
+	}, [kind, databaseOptions]);
 
 	const handleChangeKind = (id: number) => {
 		setKind(id);

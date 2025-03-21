@@ -48,6 +48,7 @@ export const NODE_CONSTRUCTOR_KIND = {
 	MainMenuCommand: () => Model.MainMenuCommand,
 	HeroStatisticDisplay: () => Model.HeroStatisticDisplay,
 	CreateParameter: () => Model.CreateParameter,
+	CustomStructure: () => Model.CustomStructure,
 };
 
 class Node extends Serializable {

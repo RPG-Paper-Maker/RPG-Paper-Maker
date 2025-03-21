@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE } from '../../../common';
 import { Node } from '../../../core';
@@ -40,7 +40,7 @@ function DialogCustomStructure({ isOpen, setIsOpen, model, parent, onAccept, onR
 
 	const { t } = useTranslation();
 
-	const [isWarningOpen, setIsWarningOpen] = useState(false);
+	const [warning, setWarning] = useStateString();
 	const [key, setKey] = useStateString();
 	const [description, setDescription] = useStateString();
 	const [value] = useStateDynamicValue();
@@ -56,11 +56,15 @@ function DialogCustomStructure({ isOpen, setIsOpen, model, parent, onAccept, onR
 	};
 
 	const handleCloseWarning = () => {
-		setIsWarningOpen(false);
+		setWarning('');
 	};
 
 	const handleAccept = () => {
 		if (customStructure.isProperty) {
+			if (key.length === 0) {
+				setWarning('The key cannot be empty.');
+				return;
+			}
 			if (
 				parent &&
 				parent.children
@@ -68,7 +72,7 @@ function DialogCustomStructure({ isOpen, setIsOpen, model, parent, onAccept, onR
 					.map((node) => node.content.name)
 					.includes(key)
 			) {
-				setIsWarningOpen(true);
+				setWarning('This key already exists in your custom structure.');
 				return;
 			}
 			customStructure.name = key;
@@ -131,11 +135,11 @@ function DialogCustomStructure({ isOpen, setIsOpen, model, parent, onAccept, onR
 			</Dialog>
 			<Dialog
 				title={t('warning')}
-				isOpen={isWarningOpen}
+				isOpen={!!warning}
 				footer={<FooterOK onOK={handleCloseWarning} />}
 				onClose={handleCloseWarning}
 			>
-				<p>This key already exists in your custom structure.</p>
+				<p>{warning}</p>
 			</Dialog>
 		</>
 	);
