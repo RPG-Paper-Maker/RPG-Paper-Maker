@@ -20,6 +20,7 @@ export * from './CommonSkillItem';
 export * from './Cost';
 export * from './CreateParameter';
 export * from './Currency';
+export * from './CustomStructure';
 export * from './Detection';
 export * from './DynamicNumber';
 export * from './Effect';

@@ -50,6 +50,9 @@ function DialogPluginParameter({ isDefault = false, isOpen, setIsOpen, model, on
 	};
 
 	const handleAccept = async () => {
+		parameter.name = name;
+		parameter.description = description;
+		parameter.defaultValue.copy(value);
 		onAccept();
 		setIsOpen(false);
 	};
@@ -75,7 +78,7 @@ function DialogPluginParameter({ isDefault = false, isOpen, setIsOpen, model, on
 			initialWidth='600px'
 			initialHeight='400px'
 		>
-			<Flex column spacedLarge>
+			<Flex column spacedLarge fillWidth>
 				<Form>
 					<Label>{t('name')}</Label>
 					<Value>{name}</Value>
@@ -91,7 +94,7 @@ function DialogPluginParameter({ isDefault = false, isOpen, setIsOpen, model, on
 					</Value>
 				</Form>
 				<Flex one>
-					<DynamicValueSelectorExtra value={value} kind={kind} />
+					<DynamicValueSelectorExtra value={value} kind={kind} canEditMinMax={isDefault} />
 				</Flex>
 			</Flex>
 		</Dialog>

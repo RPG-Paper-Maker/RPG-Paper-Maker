@@ -34,12 +34,11 @@ import FooterCancelOK from '../footers/FooterCancelOK';
 type Props = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
-	model: Model.Base;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogPlugin({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
+function DialogPlugin({ isOpen, setIsOpen, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
 	const [type, setType] = useStateNumber();
@@ -52,8 +51,8 @@ function DialogPlugin({ isOpen, setIsOpen, model, onAccept, onReject }: Props) {
 	const [connexionIssue, setConnexionIssue] = useState(false);
 
 	const pluginOnlineDisabled = useMemo(
-		() => connexionIssue || loadingPlugin || loadingPlugins,
-		[connexionIssue, loadingPlugin]
+		() => connexionIssue || loadingPlugin || loadingPlugins || type !== PLUGIN_TYPE_KIND.ONLINE,
+		[connexionIssue, loadingPlugin, type]
 	);
 
 	const initialize = () => {

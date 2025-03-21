@@ -11,16 +11,16 @@
 
 import i18next from 'i18next';
 import { Project, Serializable } from '.';
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, ITERATOR, JSONType, Utils } from '../common';
+import { BINDING, BindingType, DYNAMIC_VALUE_KIND, ITERATOR, JSONType, PICTURE_KIND, Utils } from '../common';
 import { Model } from '../Editor';
-import { MapObjectCommandType } from '../models';
+import { CustomStructure, MapObjectCommandType } from '../models';
 
 const { t } = i18next;
 class DynamicValue extends Serializable {
 	public kind!: DYNAMIC_VALUE_KIND;
 	public value!: unknown;
-	public customStructure!: Record<string, DynamicValue>;
-	public customList!: DynamicValue[];
+	public customStructure!: CustomStructure;
+	public customList!: CustomStructure;
 	public x!: DynamicValue;
 	public y!: DynamicValue;
 	public z!: DynamicValue;
@@ -112,6 +112,10 @@ class DynamicValue extends Serializable {
 		return this.isFixNumberValue() ? (this.value as number) : 1;
 	}
 
+	getBaseString(base?: Model.Base | null): string {
+		return base?.toStringNameID(false) ?? '' + this.value;
+	}
+
 	toString(database: Model.Base[] = []): string {
 		switch (this.kind) {
 			case DYNAMIC_VALUE_KIND.DEFAULT:
@@ -123,16 +127,23 @@ class DynamicValue extends Serializable {
 			case DYNAMIC_VALUE_KIND.SWITCH:
 				return this.value ? 'ON' : 'OFF';
 			case DYNAMIC_VALUE_KIND.VARIABLE:
-				return `VAR: ${
-					Project.current!.variables.getVariableByID(this.value as number)?.toStringNameID() || this.value
-				}`;
+				return `VAR: ${this.getBaseString(Project.current!.variables.getVariableByID(this.value as number))}`;
 			case DYNAMIC_VALUE_KIND.KEYBOARD:
-				return `KB: ${
-					Model.Base.getByID(Project.current!.keyboard.list, this.value as number)?.toStringNameID() ||
-					this.value
-				}`;
+				return `KB: ${this.getBaseString(
+					Model.Base.getByID(Project.current!.keyboard.list, this.value as number)
+				)}`;
 			case DYNAMIC_VALUE_KIND.DATABASE:
-				return Model.Base.getByID(database, this.value as number)?.toStringNameID() ?? '' + this.value;
+				return this.getBaseString(Model.Base.getByID(database, this.value as number));
+			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
+				return this.customStructure.toStringComplete();
+			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
+				return this.customList.toStringComplete();
+			case DYNAMIC_VALUE_KIND.ANIMATION:
+				return this.getBaseString(Project.current!.animations.getAnimationByID(this.value as number));
+			case DYNAMIC_VALUE_KIND.ANIMATIONS:
+				return this.getBaseString(
+					Project.current!.pictures.getByID(PICTURE_KIND.ANIMATIONS, this.value as number)
+				);
 			default:
 				return '' + this.value;
 		}
@@ -141,6 +152,12 @@ class DynamicValue extends Serializable {
 	copy(dynamic: DynamicValue): void {
 		super.copy(dynamic, DynamicValue.getBindings([]));
 		switch (this.kind) {
+			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
+				this.customStructure = dynamic.customStructure.clone();
+				break;
+			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
+				this.customList = dynamic.customList.clone();
+				break;
 			case DYNAMIC_VALUE_KIND.VECTOR2:
 				this.x = dynamic.x.clone();
 				this.y = dynamic.y.clone();
@@ -156,6 +173,14 @@ class DynamicValue extends Serializable {
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, DynamicValue.getBindings(additionnalBinding));
 		switch (this.kind) {
+			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
+				this.customStructure = new CustomStructure();
+				this.customStructure.read(json.customStructure as JSONType);
+				break;
+			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
+				this.customList = new CustomStructure();
+				this.customList.read(json.customList as JSONType);
+				break;
 			case DYNAMIC_VALUE_KIND.VECTOR2:
 				this.x = new DynamicValue();
 				this.x.read(json.x as JSONType);
@@ -176,6 +201,18 @@ class DynamicValue extends Serializable {
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, DynamicValue.getBindings(additionnalBinding));
 		switch (this.kind) {
+			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE: {
+				let obj = {};
+				this.customStructure.write(obj);
+				json.customStructure = obj;
+				break;
+			}
+			case DYNAMIC_VALUE_KIND.CUSTOM_LIST: {
+				let obj = {};
+				this.customList.write(obj);
+				json.customList = obj;
+				break;
+			}
 			case DYNAMIC_VALUE_KIND.VECTOR2: {
 				let obj = {};
 				this.x.write(obj);

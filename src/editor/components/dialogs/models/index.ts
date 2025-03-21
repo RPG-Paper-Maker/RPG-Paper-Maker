@@ -5,6 +5,7 @@ export * from './DialogColor';
 export * from './DialogCost';
 export * from './DialogCreateParameter';
 export * from './DialogCurrency';
+export * from './DialogCustomStructure';
 export * from './DialogDetection';
 export * from './DialogDynamicNumber';
 export * from './DialogElement';

@@ -41,7 +41,7 @@ class Serializable {
 				}
 				case BINDING.LIST: {
 					const value = serializable[name as keyof Serializable] as unknown;
-					(this as JSONType)[name] = (value as Serializable[]).map((o) => o.clone());
+					(this as JSONType)[name] = value === null ? null : (value as Serializable[]).map((o) => o.clone());
 					break;
 				}
 				case BINDING.MAP:
@@ -162,7 +162,11 @@ class Serializable {
 							tab.push(obj);
 						}
 					}
-					(this as JSONType)[name] = tab;
+					if (!jsonTab && defaultValue === null) {
+						(this as JSONType)[name] = null;
+					} else {
+						(this as JSONType)[name] = tab;
+					}
 					break;
 				}
 				case BINDING.MAP_POSITION: {
@@ -304,7 +308,9 @@ class Serializable {
 							jsonTab.push(jsonObj);
 						}
 					}
-					json[jsonName] = jsonTab;
+					if (tab || defaultValue !== null) {
+						json[jsonName] = jsonTab;
+					}
 					break;
 				}
 				case BINDING.MAP_POSITION: {

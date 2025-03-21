@@ -339,8 +339,10 @@ class Base extends Serializable {
 		return 0;
 	}
 
-	toStringNameID(): string {
-		return `${Base.STRING_START}${this.id <= 0 ? '' : `${Utils.formatNumber(this.id, 4)}: `}${this.getName()}`;
+	toStringNameID(start = true): string {
+		return `${start ? Base.STRING_START : ''}${
+			this.id <= 0 ? '' : `${Utils.formatNumber(this.id, 4)}: `
+		}${this.getName()}`;
 	}
 
 	toString(): string | ReactNode {

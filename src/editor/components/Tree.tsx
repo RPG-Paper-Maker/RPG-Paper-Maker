@@ -36,6 +36,7 @@ import DialogColor from './dialogs/models/DialogColor';
 import DialogCost from './dialogs/models/DialogCost';
 import DialogCreateParameter from './dialogs/models/DialogCreateParameter';
 import DialogCurrency from './dialogs/models/DialogCurrency';
+import DialogCustomStructure from './dialogs/models/DialogCustomStructure';
 import DialogDetection from './dialogs/models/DialogDetection';
 import DialogDynamicNumber from './dialogs/models/DialogDynamicNumber';
 import DialogElement from './dialogs/models/DialogElement';
@@ -106,6 +107,7 @@ type Props = {
 	applyDefault?: boolean;
 	noFirstSelection?: boolean;
 	isLocalization?: boolean;
+	cannotAddEditRemoveRoot?: boolean;
 };
 
 export const TREES_MIN_WIDTH = 150;
@@ -148,6 +150,7 @@ function Tree({
 	applyDefault = false,
 	noFirstSelection = false,
 	isLocalization = false,
+	cannotAddEditRemoveRoot = false,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -266,7 +269,7 @@ function Tree({
 	};
 
 	const handleDoubleClick = () => {
-		if (!hasCustomItems) {
+		if (!hasCustomItems && (!cannotAddEditRemoveRoot || currentSelectedItemNode !== list[0])) {
 			if (isEmpty) {
 				handleNewItem();
 			} else {
@@ -654,7 +657,8 @@ function Tree({
 		emptyID = -1,
 		parentSelected = false
 	): number => {
-		const canAddEmptyNode = !cannotAdd && ((multipleLevels && addEmpty) || level === 0);
+		const canAddEmptyNode =
+			!cannotAdd && ((multipleLevels && addEmpty) || (level === 0 && !cannotAddEditRemoveRoot));
 		let emptyNode: Node | null = null;
 		if (canAddEmptyNode) {
 			emptyNode = Node.create(createDefault(emptyID));
@@ -752,6 +756,8 @@ function Tree({
 			return [];
 		}
 		const isFixed = currentSelectedItemNode?.content?.isFixedNode() ?? false;
+		const disableAll =
+			cannotAddEditRemoveRoot && (currentSelectedItemNode === list[0] || currentSelectedItemNode === list[1]);
 		return contextMenuItems!.map((kind) => {
 			switch (kind) {
 				case CONTEXT_MENU_ITEM_KIND.EDIT:
@@ -759,28 +765,29 @@ function Tree({
 						title: 'Edit...',
 						shortcut: [KEY.ENTER],
 						onClick: handleEditItem,
-						disabled: isEmpty || cannotAdd || isFixed || additionalSelectedNodes.length > 0,
+						disabled: disableAll || isEmpty || cannotAdd || isFixed || additionalSelectedNodes.length > 0,
 					};
 				case CONTEXT_MENU_ITEM_KIND.NEW:
 					return {
 						title: 'New...',
 						shortcut: [KEY.ENTER],
 						onClick: handleNewItem,
-						disabled: cannotAdd || isFixed || additionalSelectedNodes.length > 0,
+						disabled: disableAll || cannotAdd || isFixed || additionalSelectedNodes.length > 0,
 					};
 				case CONTEXT_MENU_ITEM_KIND.COPY:
 					return {
 						title: 'Copy',
 						shortcut: [SPECIAL_KEY.CTRL, KEY.C],
 						onClick: handleCopyItem,
-						disabled: ((isEmpty || isFixed) && additionalSelectedNodes.length === 0) || cannotAdd,
+						disabled:
+							disableAll || ((isEmpty || isFixed) && additionalSelectedNodes.length === 0) || cannotAdd,
 					};
 				case CONTEXT_MENU_ITEM_KIND.PASTE:
 					return {
 						title: 'Paste',
 						shortcut: [SPECIAL_KEY.CTRL, KEY.V],
 						onClick: handlePasteItem,
-						disabled: !canPaste() || isFixed || additionalSelectedNodes.length > 0,
+						disabled: disableAll || !canPaste() || isFixed || additionalSelectedNodes.length > 0,
 					};
 				case CONTEXT_MENU_ITEM_KIND.DELETE:
 					return {
@@ -788,6 +795,7 @@ function Tree({
 						shortcut: [KEY.DELETE],
 						onClick: handleDeleteItem,
 						disabled:
+							disableAll ||
 							(canDelete && !canDelete(currentSelectedItemNode)) ||
 							((isEmpty || isFixed) && additionalSelectedNodes.length === 0) ||
 							cannotDelete ||
@@ -900,6 +908,8 @@ function Tree({
 					return <DialogPluginParameter {...options} />;
 				case Model.PluginDefaultParameter:
 					return <DialogPluginParameter isDefault {...options} />;
+				case Model.CustomStructure:
+					return <DialogCustomStructure parent={currentSelectedItemNode.parent} {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

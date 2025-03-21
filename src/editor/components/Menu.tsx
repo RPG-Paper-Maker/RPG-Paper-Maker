@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Children, cloneElement, JSX, useEffect, useState } from 'react';
+import React, { Children, cloneElement, JSX, useEffect, useState } from 'react';
 import { Utils } from '../common';
 import '../styles/Menu.css';
 
@@ -32,8 +32,23 @@ function Menu({
 }: Props) {
 	const [triggerCloseAll, setTriggerCloseAll] = useState(false);
 
-	const items = Children.map(children, (child, index) =>
-		cloneElement(child, {
+	const items = Children.map(children, (child, index) => {
+		if (
+			!React.isValidElement<{
+				triggerCloseAll: boolean;
+				setTriggerCloseAll: React.Dispatch<React.SetStateAction<boolean>>;
+				isActivable: boolean;
+				active: boolean;
+				setActiveIndex: ((v: number) => void) | undefined;
+				index: number;
+				isRoot: boolean;
+			}>(child) ||
+			child.type === React.Fragment
+		) {
+			return child; // Don't clone if it's a fragment
+		}
+
+		return cloneElement(child, {
 			triggerCloseAll,
 			setTriggerCloseAll,
 			isActivable,
@@ -41,8 +56,8 @@ function Menu({
 			setActiveIndex,
 			index,
 			isRoot: true,
-		})
-	);
+		});
+	});
 
 	useEffect(() => {
 		if (triggerCloseAll) {
