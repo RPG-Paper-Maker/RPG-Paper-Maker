@@ -21,7 +21,7 @@ class ProjectUpdater_3_0_0 {
 
 		// Remove maps temp files
 		await Platform.removeFolder(Paths.join(projectPath, 'Datas', 'Maps', 'temp'));
-		let folders = await Platform.getFolders(Paths.join(projectPath, 'Datas', 'Maps'));
+		const folders = await Platform.getFolders(Paths.join(projectPath, 'Datas', 'Maps'));
 		for (const name of folders) {
 			const mapPath = Paths.join(projectPath, 'Datas', 'Maps', name);
 			await Platform.removeFolder(Paths.join(mapPath, 'temp'));

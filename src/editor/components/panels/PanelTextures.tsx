@@ -90,12 +90,13 @@ function PanelTextures({ visible }: Props) {
 				case ELEMENT_MAP_KIND.OBJECT:
 				case ELEMENT_MAP_KIND.START_POSITION:
 					return null;
-				default:
+				default: {
 					const picture = Project.current!.pictures.getByID(
 						PICTURE_KIND.TILESETS,
 						Project.current!.tilesets.getTilesetByID(Scene.Map.current.model.tilesetID)?.pictureID ?? 1
 					);
 					return <TextureSquareSelector texture={picture.getPath()} base64={!picture.isBR} />;
+				}
 			}
 		} else {
 			return <PanelTransform kind={currentActionKind} />;

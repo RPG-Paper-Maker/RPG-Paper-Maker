@@ -57,8 +57,8 @@ function DialogVideos({
 	const [newDynamicVideoID, setNewDynamicVideoID] = useState(dynamicVideoID);
 	const [loading, setLoading] = useState(false);
 
-	const playerRef = useRef<any>(null);
-	const sourceRef = useRef<any>(null);
+	const playerRef = useRef<HTMLVideoElement>(null);
+	const sourceRef = useRef<HTMLSourceElement>(null);
 
 	const folders = useMemo(() => (manager ? [Node.create(Model.TreeMapTag.create(-1, 'Videos'))] : []), [manager]);
 	const isVideoPlayable = useMemo(

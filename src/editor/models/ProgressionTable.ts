@@ -31,7 +31,7 @@ class ProgressionTable extends Base {
 	}
 
 	static createProgression(i: DynamicValue, f: DynamicValue, e: number): ProgressionTable {
-		let progressionTable = new ProgressionTable();
+		const progressionTable = new ProgressionTable();
 		progressionTable.applyDefault();
 		progressionTable.initialValue = i;
 		progressionTable.finalValue = f;

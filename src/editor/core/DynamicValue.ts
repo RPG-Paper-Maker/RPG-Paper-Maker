@@ -202,13 +202,13 @@ class DynamicValue extends Serializable {
 		super.write(json, DynamicValue.getBindings(additionnalBinding));
 		switch (this.kind) {
 			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE: {
-				let obj = {};
+				const obj = {};
 				this.customStructure.write(obj);
 				json.customStructure = obj;
 				break;
 			}
 			case DYNAMIC_VALUE_KIND.CUSTOM_LIST: {
-				let obj = {};
+				const obj = {};
 				this.customList.write(obj);
 				json.customList = obj;
 				break;
