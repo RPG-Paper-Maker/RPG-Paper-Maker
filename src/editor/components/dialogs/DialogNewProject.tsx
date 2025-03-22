@@ -134,6 +134,7 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 		await Platform.createFolder(Paths.join(project.getPath(), Paths.OBJ));
 		await Platform.createFolder(Paths.join(project.getPath(), Paths.FONTS));
 		await Platform.createFolder(Paths.join(project.getPath(), Paths.STYLES));
+		await Platform.createFolder(Paths.join(project.getPath(), Paths.PLUGINS));
 		await project.load();
 		await Model.Map.createDefaultMap(1, t('starting.map'));
 		await Model.Map.createDefaultMap(2, t('default'));

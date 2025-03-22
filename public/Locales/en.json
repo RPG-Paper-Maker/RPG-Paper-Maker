@@ -2065,5 +2065,7 @@
 	"update.project.version": "The project version is {{currentVersion}}, you need to convert to {{newVersion}} to continue.",
 	"plugins.manager": "Plugins manager",
 	"select.or.double.click.list": "Select or double click in the list",
-	"no.connexion": "No connexion"
+	"no.connexion": "No connexion",
+	"plugin.name.cannot.be.empty": "The plugin name cannot be empty",
+	"plugin.name.already.exists": "This plugin name already exists in your project"
 }

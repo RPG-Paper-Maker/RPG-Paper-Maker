@@ -11,13 +11,16 @@
 
 import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Paths } from '../../common';
+import { Platform } from '../../common/Platform';
 import { Node, Project } from '../../core';
 import { Model } from '../../Editor';
 import Flex from '../Flex';
+import PanelPluginDetails from '../panels/plugins/PanelPluginDetails';
 import Tab from '../Tab';
 import Tree, { TREES_MIN_WIDTH } from '../Tree';
 import Dialog from './Dialog';
-import FooterCancelOK from './footers/FooterCancelOK';
+import FooterCancelSaveClose from './footers/FooterCancelSaveClose';
 
 type Props = {
 	isOpen: boolean;
@@ -27,11 +30,19 @@ type Props = {
 function DialogPlugins({ isOpen, setIsOpen }: Props) {
 	const { t } = useTranslation();
 
+	const [isLoading, setIsLoading] = useState(false);
 	const [plugins, setPlugins] = useState<Node[]>([]);
 	const [selectedPlugin, setSelectedPlugin] = useState<Model.Plugin | null>(null);
 
-	const initialize = () => {
+	const initialize = async () => {
+		setIsLoading(true);
+		await Platform.removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP));
+		await Platform.copyFolder(
+			Paths.join(Project.current!.getPath(), Paths.PLUGINS),
+			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP)
+		);
 		setPlugins(Node.createList(Project.current!.scripts.plugins));
+		setIsLoading(false);
 	};
 
 	const handleSelectPlugin = (node: Node | null) => {
@@ -41,28 +52,33 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		}
 	};
 
-	const handleAccept = async () => {
-		/*
-		panelSystemRef.current?.accept();
-		panelBattleSystemRef.current?.accept();
-		panelTitleScreenGameOverRef.current?.accept();
-		panelMainMenuRef.current?.accept();
-		panelEventsStatesRef.current?.accept();
-		panelCommonReactionsRef.current?.accept();
-		panelModelsRef.current?.accept();
-		await Project.current!.systems.save();
-		await Project.current!.battleSystem.save();
-		await Project.current!.titleScreenGameOver.save();
-		await Project.current!.commonEvents.save();*/
+	const handleCancel = async () => {
+		setIsLoading(true);
+		await Platform.removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP));
+		await Project.current!.scripts.load();
+		setIsLoading(false);
 		setIsOpen(false);
 	};
 
-	const handleReject = async () => {
-		/*
-		await Project.current!.systems.load();
-		await Project.current!.battleSystem.load();
-		await Project.current!.titleScreenGameOver.load();
-		await Project.current!.commonEvents.load();*/
+	const handleSave = async () => {
+		setIsLoading(true);
+		await Platform.removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS));
+		await Platform.copyFolder(
+			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP),
+			Paths.join(Project.current!.getPath(), Paths.PLUGINS)
+		);
+		setIsLoading(false);
+	};
+
+	const handleSaveAndClose = async () => {
+		setIsLoading(true);
+		await Platform.removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS));
+		await Platform.copyFolder(
+			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP),
+			Paths.join(Project.current!.getPath(), Paths.PLUGINS)
+		);
+		await Platform.removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP));
+		setIsLoading(false);
 		setIsOpen(false);
 	};
 
@@ -106,9 +122,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 
 	const getPluginsDetailsContent = () => (
 		<Flex key={0} column spacedLarge fillWidth fillHeight>
-			<div>
-				<b>{t('name')}:</b> {selectedPlugin?.name}
-			</div>
+			<PanelPluginDetails plugin={selectedPlugin} />
 		</Flex>
 	);
 
@@ -116,14 +130,21 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		<Dialog
 			title={`${t('plugins.manager')}...`}
 			isOpen={isOpen}
-			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-			onClose={handleReject}
+			footer={
+				<FooterCancelSaveClose
+					onCancel={handleCancel}
+					onSave={handleSave}
+					onSaveAndClose={handleSaveAndClose}
+				/>
+			}
+			onClose={handleCancel}
 			initialWidth='1000px'
 			initialHeight='700px'
+			isLoading={isLoading}
 		>
 			<Tab
-				titles={Model.Base.mapListIndex(['Plugins', 'System', 'Libs', 'Shaders'])}
-				contents={[getPluginsContent(), null, null, null]}
+				titles={Model.Base.mapListIndex(['Plugins', 'Source code'])}
+				contents={[getPluginsContent(), null]}
 				padding
 				scrollableContent
 				lazyLoadingContent

@@ -104,6 +104,41 @@ class Utils {
 			.toLowerCase();
 	}
 
+	static sanitizeFilename(name: string): string {
+		const forbiddenChars = /[\\/:*?"<>|]/g;
+		let sanitized = name.replace(forbiddenChars, '');
+		sanitized = sanitized.normalize('NFD').replace(/[̀-ͯ]/g, '');
+		sanitized = sanitized.replace(/[^a-zA-Z0-9_.-]/g, '');
+		const reservedNames = [
+			'CON',
+			'PRN',
+			'AUX',
+			'NUL',
+			'COM1',
+			'COM2',
+			'COM3',
+			'COM4',
+			'COM5',
+			'COM6',
+			'COM7',
+			'COM8',
+			'COM9',
+			'LPT1',
+			'LPT2',
+			'LPT3',
+			'LPT4',
+			'LPT5',
+			'LPT6',
+			'LPT7',
+			'LPT8',
+			'LPT9',
+		];
+		if (reservedNames.includes(sanitized.toUpperCase())) {
+			sanitized = '_' + sanitized;
+		}
+		return sanitized;
+	}
+
 	static getViewport() {
 		const dialogs = document.getElementsByClassName('dialog');
 		return dialogs.length === 0 ? document.body : dialogs[dialogs.length - 1];

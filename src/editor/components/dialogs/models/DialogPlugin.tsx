@@ -12,9 +12,9 @@
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdOutlineWifiOff } from 'react-icons/md';
-import { INPUT_TYPE_WIDTH, JSONType, PLUGIN_TYPE_KIND } from '../../../common';
+import { INPUT_TYPE_WIDTH, JSONType, Paths, PLUGIN_TYPE_KIND, Utils } from '../../../common';
 import { Platform } from '../../../common/Platform';
-import { Node } from '../../../core';
+import { Node, Project } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateNumber from '../../../hooks/useStateNumber';
 import useStateString from '../../../hooks/useStateString';
@@ -30,17 +30,23 @@ import Tab from '../../Tab';
 import Tree, { TREES_MIN_WIDTH } from '../../Tree';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
+import FooterOK from '../footers/FooterOK';
 
 type Props = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
+	model: Model.Base;
+	isNew: boolean;
 	onAccept: () => void;
 	onReject?: () => void;
 };
 
-function DialogPlugin({ isOpen, setIsOpen, onAccept, onReject }: Props) {
+function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: Props) {
+	const plugin = model as Model.Plugin;
+
 	const { t } = useTranslation();
 
+	const [warning, setWarning] = useStateString();
 	const [type, setType] = useStateNumber();
 	const [name, setName] = useStateString();
 	const [plugins, setPlugins] = useState<Node[]>([]);
@@ -62,6 +68,10 @@ function DialogPlugin({ isOpen, setIsOpen, onAccept, onReject }: Props) {
 		setConnexionIssue(false);
 		setLoadingPlugins(true);
 		loadOnlinePlugins().catch(console.error);
+	};
+
+	const handleChangeName = (name: string) => {
+		setName(Utils.sanitizeFilename(name));
 	};
 
 	const loadOnlinePlugins = async () => {
@@ -123,7 +133,39 @@ function DialogPlugin({ isOpen, setIsOpen, onAccept, onReject }: Props) {
 		}
 	};
 
+	const handleCloseWarning = () => {
+		setWarning('');
+	};
+
 	const handleAccept = async () => {
+		if (type === PLUGIN_TYPE_KIND.EMPTY) {
+			if (name.length === 0) {
+				setWarning(t('plugin.name.cannot.be.empty'));
+				return;
+			}
+			if (Project.current!.scripts.plugins.some((plugin) => plugin.name === name)) {
+				setWarning(t('plugin.name.already.exists'));
+				return;
+			}
+			plugin.name = name;
+			const pluginFolder = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, name);
+			if (isNew) {
+				await Platform.createFolder(pluginFolder);
+				await Platform.createFile(
+					Paths.join(pluginFolder, Paths.FILE_PLUGIN_CODE),
+					`const pluginName = "${plugin.name}";
+const inject = Manager.Plugins.inject;
+
+// Start code here`
+				);
+				const json = {};
+				plugin.write(json);
+				await Platform.createFile(Paths.join(pluginFolder, Paths.FILE_PLUGIN_DETAILS), JSON.stringify(json));
+			}
+			const json = {};
+			plugin.write(json);
+			await Platform.createFile(Paths.join(pluginFolder, Paths.FILE_PLUGIN_DETAILS), JSON.stringify(json));
+		}
 		onAccept();
 		setIsOpen(false);
 	};
@@ -148,94 +190,109 @@ function DialogPlugin({ isOpen, setIsOpen, onAccept, onReject }: Props) {
 	}, [isOpen]);
 
 	return (
-		<Dialog
-			title={`${t('set.plugin')}...`}
-			isOpen={isOpen}
-			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-			onClose={handleReject}
-			initialWidth='800px'
-			initialHeight='600px'
-		>
-			<RadioGroup selected={type} onChange={setType}>
-				<Flex column spacedLarge fillWidth>
-					<Form>
-						<Label>
-							<RadioButton value={PLUGIN_TYPE_KIND.EMPTY}>{t('create.empty')}</RadioButton>
-						</Label>
-						<Value>
-							<InputText
-								value={name}
-								onChange={setName}
-								widthType={INPUT_TYPE_WIDTH.FILL}
-								disabled={type !== PLUGIN_TYPE_KIND.EMPTY}
-							/>
-						</Value>
-						<Label>
-							<RadioButton value={PLUGIN_TYPE_KIND.LOCAL}>{t('import.from.local.plugin')}</RadioButton>
-						</Label>
-						<Value>
-							<Flex spaced centerV>
-								<Button disabled={type !== PLUGIN_TYPE_KIND.LOCAL}>...</Button>
-								<Flex disabledLabel={type !== PLUGIN_TYPE_KIND.LOCAL} className='textSmallDetail'>
-									{t('no.plugin.selected')}
+		<>
+			<Dialog
+				title={`${t('set.plugin')}...`}
+				isOpen={isOpen}
+				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+				onClose={handleReject}
+				initialWidth='800px'
+				initialHeight='600px'
+			>
+				<RadioGroup selected={type} onChange={setType}>
+					<Flex column spacedLarge fillWidth>
+						<Form>
+							<Label>
+								<RadioButton value={PLUGIN_TYPE_KIND.EMPTY}>{t('create.empty')}</RadioButton>
+							</Label>
+							<Value>
+								<InputText
+									value={name}
+									onChange={handleChangeName}
+									widthType={INPUT_TYPE_WIDTH.FILL}
+									disabled={type !== PLUGIN_TYPE_KIND.EMPTY}
+								/>
+							</Value>
+							<Label>
+								<RadioButton value={PLUGIN_TYPE_KIND.LOCAL}>
+									{t('import.from.local.plugin')}
+								</RadioButton>
+							</Label>
+							<Value>
+								<Flex spaced centerV>
+									<Button disabled={type !== PLUGIN_TYPE_KIND.LOCAL}>...</Button>
+									<Flex disabledLabel={type !== PLUGIN_TYPE_KIND.LOCAL} className='textSmallDetail'>
+										{t('no.plugin.selected')}
+									</Flex>
 								</Flex>
+							</Value>
+						</Form>
+						<div className='horizontalSeparator' />
+						<RadioButton value={PLUGIN_TYPE_KIND.ONLINE} disabled={connexionIssue}>
+							{t('add.from.online.plugins.list')}:
+						</RadioButton>
+						{connexionIssue ? (
+							<Flex spaced fillWidth fillHeight centerH centerV>
+								<MdOutlineWifiOff />
+								{t('no.connexion')}
 							</Flex>
-						</Value>
-					</Form>
-					<div className='horizontalSeparator' />
-					<RadioButton value={PLUGIN_TYPE_KIND.ONLINE} disabled={connexionIssue}>
-						{t('add.from.online.plugins.list')}:
-					</RadioButton>
-					{connexionIssue ? (
-						<Flex spaced fillWidth fillHeight centerH centerV>
-							<MdOutlineWifiOff />
-							{t('no.connexion')}
-						</Flex>
-					) : (
-						<>
-							<Tab
-								titles={Model.Base.mapListIndex([t('battle'), t('menus'), t('map'), t('others')])}
-								contents={[null, null, null, null]}
-								disabled={pluginOnlineDisabled}
-								onCurrentIndexChanged={handleOnlineTabChanged}
-								padding
-								scrollableContent
-							/>
-							<Flex spacedLarge fillWidth fillHeight centerH={loadingPlugins}>
-								{loadingPlugins ? (
-									<Loader isLoading alone />
-								) : (
-									<>
-										<Flex column spacedLarge>
-											<Flex fillHeight>
-												<Tree
-													constructorType={Model.Base}
-													list={plugins}
-													minWidth={TREES_MIN_WIDTH}
-													onSelectedItem={handleSelectPlugin}
-													disabled={pluginOnlineDisabled}
-													noScrollOnForce
-													scrollable
-													cannotAdd
-													cannotDelete
-													cannotDragDrop
-													cannotEdit
-													doNotShowID
-												/>
+						) : (
+							<>
+								<Tab
+									titles={Model.Base.mapListIndex([t('battle'), t('menus'), t('map'), t('others')])}
+									contents={[null, null, null, null]}
+									disabled={pluginOnlineDisabled}
+									onCurrentIndexChanged={handleOnlineTabChanged}
+									padding
+									scrollableContent
+								/>
+								<Flex spacedLarge fillWidth fillHeight centerH={loadingPlugins}>
+									{loadingPlugins ? (
+										<Loader isLoading alone />
+									) : (
+										<>
+											<Flex column spacedLarge>
+												<Flex fillHeight>
+													<Tree
+														constructorType={Model.Base}
+														list={plugins}
+														minWidth={TREES_MIN_WIDTH}
+														onSelectedItem={handleSelectPlugin}
+														disabled={pluginOnlineDisabled}
+														noScrollOnForce
+														scrollable
+														cannotAdd
+														cannotDelete
+														cannotDragDrop
+														cannotEdit
+														doNotShowID
+													/>
+												</Flex>
+												<Button disabled={pluginOnlineDisabled} onClick={handleClickRefresh}>
+													{t('refresh')}
+												</Button>
 											</Flex>
-											<Button disabled={pluginOnlineDisabled} onClick={handleClickRefresh}>
-												{t('refresh')}
-											</Button>
-										</Flex>
-										<PanelPluginDetails plugin={selectedPlugin} disabled={pluginOnlineDisabled} />
-									</>
-								)}
-							</Flex>
-						</>
-					)}
-				</Flex>
-			</RadioGroup>
-		</Dialog>
+											<PanelPluginDetails
+												plugin={selectedPlugin}
+												disabled={pluginOnlineDisabled}
+											/>
+										</>
+									)}
+								</Flex>
+							</>
+						)}
+					</Flex>
+				</RadioGroup>
+			</Dialog>
+			<Dialog
+				title={t('warning')}
+				isOpen={!!warning}
+				footer={<FooterOK onOK={handleCloseWarning} />}
+				onClose={handleCloseWarning}
+			>
+				<p>{warning}</p>
+			</Dialog>
+		</>
 	);
 }
 
