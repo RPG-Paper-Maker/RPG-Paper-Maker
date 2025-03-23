@@ -114,9 +114,11 @@ function PanelProject() {
 	// When first opening the project with all data loaded
 	useEffect(() => {
 		if (!openLoading) {
-			setMapsTabsTitles(getDefaultTabTitles());
+			const titles = getDefaultTabTitles();
+			setMapsTabsTitles(titles);
 			setMapsTabsContents(getDefaultTabContents());
 			setMapForcedCurrentSelectedItemID(Project.current!.treeMaps.currentMap);
+			setMapTabForcedCurrentIndex(titles.findIndex((model) => model.id === Project.current!.treeMaps.currentMap));
 			dispatch(setProjectMenuIndex(Project.current!.settings.projectMenuIndex));
 			dispatch(setCurrentTilesetFloorTexture(Project.current!.settings.mapEditorCurrentTilesetFloorTexture));
 			dispatch(setCurrentTilesetSpriteTexture(Project.current!.settings.mapEditorCurrentTilesetSpriteTexture));

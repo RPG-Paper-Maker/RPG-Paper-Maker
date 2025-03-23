@@ -118,12 +118,12 @@ const PanelMapObject = forwardRef(
 			setCanBeTriggeredAnotherObject(object.canBeTriggeredAnotherObject);
 			const state = newStates.length > 0 ? (newStates[0].content as Model.MapObjectState) : null;
 			handleChangeState(state, newEvents);
-			const event = newEvents.length > 0 ? (newEvents[0].content as Model.MapObjectEvent) : null;
-			setSelectedEvent(event);
+			const event = newEvents.length > 0 ? newEvents[0] : null;
+			handleSelectedItemEvent(event);
+			setForcedCurrentIndexTab(event ? newEvents.indexOf(event) : -1);
 			Project.current!.currentMapObjectStates = newStates;
 			Project.current!.currentMapObjectEvents = newEvents;
 			Project.current!.currentMapObjectProperties = newProperties;
-			Project.current!.currentMapObjectParameters = event?.parameters ?? [];
 		};
 
 		const reset = () => {
