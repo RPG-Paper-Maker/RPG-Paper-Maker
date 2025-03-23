@@ -109,6 +109,8 @@ type Props = {
 	noFirstSelection?: boolean;
 	isLocalization?: boolean;
 	cannotAddEditRemoveRoot?: boolean;
+	hideCheck?: boolean;
+	triggerUpdate?: boolean;
 };
 
 export const TREES_MIN_WIDTH = 150;
@@ -153,6 +155,7 @@ function Tree({
 	noFirstSelection = false,
 	isLocalization = false,
 	cannotAddEditRemoveRoot = false,
+	hideCheck = false,
 }: Props) {
 	const { t } = useTranslation();
 
@@ -710,6 +713,7 @@ function Tree({
 						draggable={!cannotDragDrop && node.draggable && !node.content.isFixedNode()}
 						headers={headers}
 						doNotShowID={doNotShowID}
+						hideCheck={hideCheck}
 					/>
 				</div>
 			);
@@ -741,6 +745,7 @@ function Tree({
 						onDragOver={!disabled ? (e, n) => handleDragOver(e, n, true) : undefined}
 						onDragLeave={!disabled ? handleDragLeave : undefined}
 						onDrop={!disabled ? handleDrop : undefined}
+						hideCheck={hideCheck}
 					/>
 				</div>
 			);

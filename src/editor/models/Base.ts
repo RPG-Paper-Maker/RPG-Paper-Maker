@@ -361,8 +361,16 @@ class Base extends Serializable {
 		super.read(json, Base.getBindings(additionnalBinding));
 	}
 
+	readSimple(json: JSONType, additionnalBinding: BindingType[] = []) {
+		super.read(json, additionnalBinding);
+	}
+
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Base.getBindings(additionnalBinding));
+	}
+
+	writeSimple(json: JSONType, additionnalBinding: BindingType[] = []) {
+		super.write(json, additionnalBinding);
 	}
 }
 

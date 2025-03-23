@@ -32,6 +32,7 @@ type Props = {
 	draggable?: boolean;
 	headers?: string[];
 	doNotShowID?: boolean;
+	hideCheck?: boolean;
 };
 
 function TreeItem({
@@ -47,11 +48,15 @@ function TreeItem({
 	draggable = false,
 	headers,
 	doNotShowID = false,
+	hideCheck = false,
 }: Props) {
 	const [expanded, setExpanded] = useState(node.expanded);
 	const [isChecked, setIsChecked] = useState((node.content as Model.Checkable).checked ?? false);
 
-	const isCheckable = useMemo(() => node.content instanceof Model.Checkable, [node]);
+	const isCheckable = useMemo(
+		() => !hideCheck && node.content instanceof Model.Checkable && node.content.id !== -1,
+		[hideCheck, node]
+	);
 
 	const handleCheck = (b: boolean) => {
 		(node.content as Model.Checkable).checked = b;

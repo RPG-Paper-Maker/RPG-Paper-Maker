@@ -9,14 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType, PLUGIN_CATEGORY_KIND, PLUGIN_TYPE_KIND } from '../common';
-import { Base } from './Base';
+import { ReactNode } from 'react';
+import { BINDING, BindingType, JSONType, Paths, PLUGIN_CATEGORY_KIND, PLUGIN_TYPE_KIND } from '../common';
+import { Project } from '../core';
+import { Checkable } from './Checkable';
 import { PluginCommand } from './PluginCommand';
 import { PluginDefaultParameter } from './PluginDefaultParameter';
 import { PluginParameter } from './PluginParameter';
 
-class Plugin extends Base {
-	public isOn!: boolean;
+class Plugin extends Checkable {
 	public type!: PLUGIN_TYPE_KIND;
 	public category!: PLUGIN_CATEGORY_KIND;
 	public author!: string;
@@ -27,9 +28,11 @@ class Plugin extends Base {
 	public defaultParameters!: PluginDefaultParameter[];
 	public parameters!: PluginParameter[];
 	public commands!: PluginCommand[];
+	public code!: string;
+	public saved = true;
 
 	public static bindings: BindingType[] = [
-		['isOn', 'isOn', true, BINDING.BOOLEAN],
+		['name', 'name', '', BINDING.STRING],
 		['type', 'type', PLUGIN_TYPE_KIND.EMPTY, BINDING.NUMBER],
 		['category', 'category', PLUGIN_CATEGORY_KIND.BATTLE, BINDING.NUMBER],
 		['author', 'author', '', BINDING.STRING],
@@ -53,20 +56,40 @@ class Plugin extends Base {
 		return plugin;
 	}
 
+	getPath(): string {
+		return Paths.join(Project.current!.getPath(), Paths.PLUGINS, this.name, Paths.FILE_PLUGIN_DETAILS);
+	}
+
+	getPathCode(): string {
+		return Paths.join(Project.current!.getPath(), Paths.PLUGINS, this.name, Paths.FILE_PLUGIN_CODE);
+	}
+
 	applyDefault() {
-		super.applyDefault(Plugin.getBindings([]));
+		super.applyDefault(Plugin.bindings);
+	}
+
+	toString(): string | ReactNode {
+		return super.toString() + (this.saved ? '' : ' *');
 	}
 
 	copy(plugin: Plugin): void {
-		super.copy(plugin, Plugin.getBindings([]));
+		super.copy(plugin, Plugin.bindings);
 	}
 
-	read(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.read(json, Plugin.getBindings(additionnalBinding));
+	readSimple(json: JSONType) {
+		super.read(json);
 	}
 
-	write(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.write(json, Plugin.getBindings(additionnalBinding));
+	readDetails(json: JSONType) {
+		super.readSimple(json, Plugin.bindings);
+	}
+
+	writeSimple(json: JSONType) {
+		super.write(json);
+	}
+
+	writeDetails(json: JSONType) {
+		super.writeSimple(json, Plugin.bindings);
 	}
 }
 

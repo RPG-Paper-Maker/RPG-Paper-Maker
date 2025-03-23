@@ -108,9 +108,7 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 				);
 				if (file) {
 					const json: JSONType = JSON.parse(file);
-					const id = plugin.id;
-					plugin.read(json);
-					plugin.id = id;
+					plugin.readDetails(json);
 					setLoadingPlugin(false);
 				} else {
 					setConnexionIssue(true);
@@ -151,13 +149,11 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 			const pluginFolder = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, name);
 			if (isNew) {
 				await Platform.createFolder(pluginFolder);
-				await Platform.createFile(
-					Paths.join(pluginFolder, Paths.FILE_PLUGIN_CODE),
-					`const pluginName = "${plugin.name}";
+				plugin.code = `const pluginName = "${plugin.name}";
 const inject = Manager.Plugins.inject;
 
-// Start code here`
-				);
+// Start code here`;
+				await Platform.createFile(Paths.join(pluginFolder, Paths.FILE_PLUGIN_CODE), plugin.code);
 				const json = {};
 				plugin.write(json);
 				await Platform.createFile(Paths.join(pluginFolder, Paths.FILE_PLUGIN_DETAILS), JSON.stringify(json));
@@ -254,7 +250,6 @@ const inject = Manager.Plugins.inject;
 											<Flex column spacedLarge>
 												<Flex fillHeight>
 													<Tree
-														constructorType={Model.Base}
 														list={plugins}
 														minWidth={TREES_MIN_WIDTH}
 														onSelectedItem={handleSelectPlugin}
@@ -266,6 +261,7 @@ const inject = Manager.Plugins.inject;
 														cannotDragDrop
 														cannotEdit
 														doNotShowID
+														hideCheck
 													/>
 												</Flex>
 												<Button disabled={pluginOnlineDisabled} onClick={handleClickRefresh}>

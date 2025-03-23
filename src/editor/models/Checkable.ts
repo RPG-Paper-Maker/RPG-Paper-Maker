@@ -29,16 +29,28 @@ class Checkable extends Base {
 		return checkable;
 	}
 
-	copy(checkable: Checkable): void {
-		super.copy(checkable, Checkable.getBindings([]));
+	applyDefault(additionnalBinding: BindingType[] = []) {
+		super.applyDefault(Checkable.getBindings(additionnalBinding));
+	}
+
+	copy(checkable: Checkable, additionnalBinding: BindingType[] = []): void {
+		super.copy(checkable, Checkable.getBindings(additionnalBinding));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, Checkable.getBindings(additionnalBinding));
 	}
 
+	readSimple(json: JSONType, additionnalBinding: BindingType[] = []) {
+		super.readSimple(json, additionnalBinding);
+	}
+
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.write(json, Checkable.getBindings(additionnalBinding));
+	}
+
+	writeSimple(json: JSONType, additionnalBinding: BindingType[] = []) {
+		super.writeSimple(json, additionnalBinding);
 	}
 }
 

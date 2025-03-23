@@ -5,6 +5,7 @@
 	"author": "Marie Laporte",
 	"private": true,
 	"dependencies": {
+		"@monaco-editor/react": "^4.7.0",
 		"@rc-component/color-picker": "^2.0.1",
 		"@reduxjs/toolkit": "^2.6.0",
 		"@testing-library/jest-dom": "^6.6.3",
