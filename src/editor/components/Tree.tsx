@@ -911,7 +911,7 @@ function Tree({
 				case Model.CreateParameter:
 					return <DialogCreateParameter {...options} />;
 				case Model.Plugin:
-					return <DialogPlugin {...options} />;
+					return options.isNew ? <DialogPlugin {...options} /> : null;
 				case Model.PluginParameter:
 					return <DialogPluginParameter {...options} />;
 				case Model.PluginDefaultParameter:

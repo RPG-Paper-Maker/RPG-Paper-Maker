@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdOutlineWifiOff } from 'react-icons/md';
 import { INPUT_TYPE_WIDTH, JSONType, Paths, PLUGIN_TYPE_KIND, Utils } from '../../../common';
@@ -46,9 +46,13 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 
 	const { t } = useTranslation();
 
+	const importFileInputRef = useRef<HTMLInputElement>(null);
+
+	const [isLoading, setIsLoading] = useState(false);
 	const [warning, setWarning] = useStateString();
 	const [type, setType] = useStateNumber();
 	const [name, setName] = useStateString();
+	const [importFile, setImportFile] = useState<File>();
 	const [plugins, setPlugins] = useState<Node[]>([]);
 	const [loadingPlugins, setLoadingPlugins] = useState(true);
 	const [allPluginsJSON, setAllPluginsJSON] = useState<JSONType[][]>([]);
@@ -64,6 +68,7 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 	const initialize = () => {
 		setType(PLUGIN_TYPE_KIND.EMPTY);
 		setName('');
+		setImportFile(undefined);
 		setSelectedPlugin(null);
 		setConnexionIssue(false);
 		setLoadingPlugins(true);
@@ -72,6 +77,18 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 
 	const handleChangeName = (name: string) => {
 		setName(Utils.sanitizeFilename(name));
+	};
+
+	const handleClickImport = () => {
+		importFileInputRef.current?.click();
+	};
+
+	const handleImportFileChange = async () => {
+		if (!importFileInputRef.current) {
+			return;
+		}
+		setImportFile(Array.from(importFileInputRef.current.files || [])[0]);
+		importFileInputRef.current.value = '';
 	};
 
 	const loadOnlinePlugins = async () => {
@@ -136,32 +153,62 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 	};
 
 	const handleAccept = async () => {
-		if (type === PLUGIN_TYPE_KIND.EMPTY) {
-			if (name.length === 0) {
-				setWarning(t('plugin.name.cannot.be.empty'));
-				return;
-			}
-			if (Project.current!.scripts.plugins.some((plugin) => plugin.name === name)) {
-				setWarning(t('plugin.name.already.exists'));
-				return;
-			}
-			plugin.name = name;
-			const pluginFolder = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, name);
-			if (isNew) {
-				await Platform.createFolder(pluginFolder);
-				plugin.code = `const pluginName = "${plugin.name}";
-const inject = Manager.Plugins.inject;
-
-// Start code here`;
-				await Platform.createFile(Paths.join(pluginFolder, Paths.FILE_PLUGIN_CODE), plugin.code);
+		switch (type) {
+			case PLUGIN_TYPE_KIND.EMPTY: {
+				if (name.length === 0) {
+					setWarning(t('plugin.name.cannot.be.empty'));
+					return;
+				}
+				if (Project.current!.scripts.plugins.some((plugin) => plugin.name === name)) {
+					setWarning(t('plugin.name.already.exists'));
+					return;
+				}
+				setIsLoading(true);
+				plugin.name = name;
+				const pluginFolder = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, name);
+				if (isNew) {
+					await Platform.createFolder(pluginFolder);
+					plugin.code = `const pluginName = "${plugin.name}";
+	const inject = Manager.Plugins.inject;
+	
+	// Start code here`;
+					await Platform.createFile(Paths.join(pluginFolder, Paths.FILE_PLUGIN_CODE), plugin.code);
+					const json = {};
+					plugin.write(json);
+					await Platform.createFile(
+						Paths.join(pluginFolder, Paths.FILE_PLUGIN_DETAILS),
+						JSON.stringify(json)
+					);
+				}
 				const json = {};
 				plugin.write(json);
 				await Platform.createFile(Paths.join(pluginFolder, Paths.FILE_PLUGIN_DETAILS), JSON.stringify(json));
+				setIsLoading(false);
+				break;
 			}
-			const json = {};
-			plugin.write(json);
-			await Platform.createFile(Paths.join(pluginFolder, Paths.FILE_PLUGIN_DETAILS), JSON.stringify(json));
+			case PLUGIN_TYPE_KIND.LOCAL: {
+				if (!importFile) {
+					setWarning(t('you.need.select.plugin.import'));
+					return;
+				}
+				const folderName = importFile.name.substring(0, importFile.name.length - 4);
+				if (Project.current!.scripts.plugins.some((plugin) => plugin.name === folderName)) {
+					setWarning(t('plugin.name.already.exists'));
+					return;
+				}
+				setIsLoading(true);
+				const path = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, folderName);
+				await Platform.loadZip(importFile, path);
+				plugin.code = (await Platform.readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
+				const json = await Platform.readJSON(Paths.join(path, Paths.FILE_PLUGIN_DETAILS));
+				if (json) {
+					plugin.readDetails(json);
+				}
+				setIsLoading(false);
+				break;
+			}
 		}
+		plugin.saved = false;
 		onAccept();
 		setIsOpen(false);
 	};
@@ -194,6 +241,7 @@ const inject = Manager.Plugins.inject;
 				onClose={handleReject}
 				initialWidth='800px'
 				initialHeight='600px'
+				isLoading={isLoading}
 			>
 				<RadioGroup selected={type} onChange={setType}>
 					<Flex column spacedLarge fillWidth>
@@ -216,10 +264,19 @@ const inject = Manager.Plugins.inject;
 							</Label>
 							<Value>
 								<Flex spaced centerV>
-									<Button disabled={type !== PLUGIN_TYPE_KIND.LOCAL}>...</Button>
+									<Button disabled={type !== PLUGIN_TYPE_KIND.LOCAL} onClick={handleClickImport}>
+										...
+									</Button>
 									<Flex disabledLabel={type !== PLUGIN_TYPE_KIND.LOCAL} className='textSmallDetail'>
-										{t('no.plugin.selected')}
+										{importFile ? importFile.name : t('no.plugin.selected')}
 									</Flex>
+									<input
+										ref={importFileInputRef}
+										type='file'
+										hidden
+										onChange={handleImportFileChange}
+										accept='.zip'
+									/>
 								</Flex>
 							</Value>
 						</Form>

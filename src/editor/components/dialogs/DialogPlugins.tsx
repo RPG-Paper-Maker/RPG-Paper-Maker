@@ -61,21 +61,21 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		if (node) {
 			const plugin = node.content as Model.Plugin;
 			setSelectedPlugin(plugin);
-			if (plugin.id !== -1) {
+			if (plugin.id !== -1 && plugin.code === undefined) {
 				setIsLoading(true);
 				(async () => {
-					const code =
-						(await Platform.readFile(
-							Paths.join(
-								Project.current!.getPath(),
-								Paths.PLUGINS_TEMP,
-								plugin.name,
-								Paths.FILE_PLUGIN_CODE
-							)
-						)) ?? '';
+					const path = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, plugin.name);
+					const code = (await Platform.readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
 					setCode(code);
+					plugin.code = code;
+					const json = await Platform.readJSON(Paths.join(path, Paths.FILE_PLUGIN_DETAILS));
+					if (json) {
+						plugin.readDetails(json);
+					}
 					setIsLoading(false);
 				})();
+			} else {
+				setCode(plugin.code ?? '');
 			}
 		}
 	};

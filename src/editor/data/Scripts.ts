@@ -29,11 +29,6 @@ class Scripts extends Serializable {
 			for (const jsonPlugin of jsonList) {
 				const plugin = new Model.Plugin();
 				plugin.readSimple(jsonPlugin);
-				const jsonDetails = await Platform.readJSON(plugin.getPath());
-				if (jsonDetails) {
-					plugin.readDetails(jsonDetails);
-				}
-				plugin.code = (await Platform.readFile(plugin.getPathCode())) ?? '';
 				this.plugins.push(plugin);
 			}
 		}
