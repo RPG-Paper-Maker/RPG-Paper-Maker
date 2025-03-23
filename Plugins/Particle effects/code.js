@@ -61,6 +61,15 @@ class Token
 	static POW   = 16;
 	static ROUND = 17;
 	static RAND2 = 18;
+	static SQR   = 19;
+	static MIN   = 20;
+	static MAX   = 21;
+	static COMMA = 22;
+	static VAR   = 23;
+	static RAND3 = 24;
+	static RAND4 = 25;
+	static RAND5 = 26;
+	static RAND6 = 27;
 }
 
 function tokenize(text)
@@ -95,6 +104,8 @@ function tokenize(text)
 			expr.push({ token: Token.OPEN, type: null, value: null });
 		else if (text[i] == ')')
 			expr.push({ token: Token.CLOSE, type: null, value: null });
+		else if (text[i] == ',')
+			expr.push({ token: Token.COMMA, type: "op", value: null });
 		else if (text[i] == 'l')
 		{
 			if (text[++i] == 'n')
@@ -111,7 +122,7 @@ function tokenize(text)
 				else
 					return null;
 			}
-			else if (text[++i] == 'q')
+			else if (text[i] == 'q')
 			{
 				if (text[++i] == 'r')
 				{
@@ -121,7 +132,10 @@ function tokenize(text)
 						return null;
 				}
 				else
-					return null;
+				{
+					expr.push({ token: Token.SQR, type: "val", value: null });
+					i--;
+				}
 			}
 			else
 				return null;
@@ -188,11 +202,58 @@ function tokenize(text)
 			{
 				expr.push({ token: Token.RAND2, type: "val", value: null });
 			}
+			else if (text[i] == '3')
+			{
+				expr.push({ token: Token.RAND3, type: "val", value: null });
+			}
+			else if (text[i] == '4')
+			{
+				expr.push({ token: Token.RAND4, type: "val", value: null });
+			}
+			else if (text[i] == '5')
+			{
+				expr.push({ token: Token.RAND5, type: "val", value: null });
+			}
+			else if (text[i] == '6')
+			{
+				expr.push({ token: Token.RAND6, type: "val", value: null });
+			}
 			else
 			{
 				expr.push({ token: Token.RAND, type: "val", value: null });
 				i--;
 			}
+		}
+		else if (text[i] == 'm')
+		{
+			if (text[++i] == 'i')
+			{
+				if (text[++i] == 'n')
+					expr.push({ token: Token.MIN, type: "func", value: null });
+				else
+					return null;
+			}
+			else if (text[i] == 'a')
+			{
+				if (text[++i] == 'x')
+					expr.push({ token: Token.MAX, type: "func", value: null });
+				else
+					return null;
+			}
+			else
+				return null;
+		}
+		else if (text[i] == 'v')
+		{
+			if (text[++i] == 'a')
+			{
+				if (text[++i] == 'r')
+					expr.push({ token: Token.VAR, type: "func", value: null });
+				else
+					return null;
+			}
+			else
+				return null;
 		}
 		else
 		{
@@ -312,31 +373,54 @@ function buildTree(expr)
 			tree[i].right = tree.splice(i + 1, 1)[0];
 		}
 	}
+	for (var i = 0; i < tree.length; i++)
+	{
+		if (tree[i].token === Token.COMMA)
+		{
+			tree[i].left = tree.splice(--i, 1)[0];
+			tree[i].right = tree.splice(i + 1, 1)[0];
+		}
+	}
 	return tree[0];
 }
 
-function evaluate(expr, t, r, r2)
+function evaluate(expr, t, r)
 {
 	switch (expr.token)
 	{
-		case Token.ADD:   return evaluate(expr.left, t, r, r2) + evaluate(expr.right, t, r, r2);
-		case Token.SUB:   return evaluate(expr.left, t, r, r2) - evaluate(expr.right, t, r, r2);
-		case Token.MULT:  return evaluate(expr.left, t, r, r2) * evaluate(expr.right, t, r, r2);
-		case Token.DIV:   return evaluate(expr.left, t, r, r2) / evaluate(expr.right, t, r, r2);
-		case Token.MOD:   return evaluate(expr.left, t, r, r2) % evaluate(expr.right, t, r, r2);
-		case Token.POW:   return Math.pow(evaluate(expr.left, t, r, r2), evaluate(expr.right, t, r, r2));
-		case Token.SQRT:  return Math.sqrt(evaluate(expr.left, t, r, r2));
-		case Token.LN:    return Math.log(evaluate(expr.left, t, r, r2));
-		case Token.SIN:   return Math.sin(evaluate(expr.left, t, r, r2));
-		case Token.COS:   return Math.cos(evaluate(expr.left, t, r, r2));
-		case Token.TAN:   return Math.tan(evaluate(expr.left, t, r, r2));
-		case Token.ABS:   return Math.abs(evaluate(expr.left, t, r, r2));
-		case Token.ROUND: return Math.round(evaluate(expr.left, t, r, r2));
 		case Token.TIME:  return t;
-		case Token.RAND:  return r;
-		case Token.RAND2: return r2;
+		case Token.RAND:  return r[0];
+		case Token.RAND2: return r[1];
+		case Token.RAND3: return r[2];
+		case Token.RAND4: return r[3];
+		case Token.RAND5: return r[4];
+		case Token.RAND6: return r[5];
+		case Token.SQR:   return RPM.Datas.Systems.SQUARE_SIZE;
 		case Token.NUM:   return expr.value;
-		default:		  return null;
+		default:          break;
+	}
+	const left = evaluate(expr.left, t, r);
+	if (Array.isArray(left) && expr.token !== Token.MIN && expr.token !== Token.MAX)
+		return null;
+	switch (expr.token)
+	{
+		case Token.ADD:   return left + evaluate(expr.right, t, r);
+		case Token.SUB:   return left - evaluate(expr.right, t, r);
+		case Token.MULT:  return left * evaluate(expr.right, t, r);
+		case Token.DIV:   return left / evaluate(expr.right, t, r);
+		case Token.MOD:   return left % evaluate(expr.right, t, r);
+		case Token.POW:   return Math.pow(left, evaluate(expr.right, t, r));
+		case Token.SQRT:  return Math.sqrt(left);
+		case Token.LN:    return Math.log(left);
+		case Token.SIN:   return Math.sin(left);
+		case Token.COS:   return Math.cos(left);
+		case Token.TAN:   return Math.tan(left);
+		case Token.ABS:   return Math.abs(left);
+		case Token.ROUND: return Math.round(left);
+		case Token.VAR:   return RPM.Core.Game.current.variables[Math.round(left)];
+		case Token.MIN:   return Math.min(...left);
+		case Token.MAX:   return Math.max(...left);
+		case Token.COMMA: return [left].concat([evaluate(expr.right, t, r)]);
 	}
 }
 
@@ -348,13 +432,14 @@ setInterval(function ()
 		for (var i = 0; i < emitterList.length; i++)
 		{
 			const e = emitterList[i];
-			if (e.map === RPM.Scene.Map.current && !!e.mesh.parent)
+			e.mesh.visible = e.origin.isInScene;
+			if (e.map === RPM.Scene.Map.current && !e.origin.removed)
 			{
 				e.emissionTime += delta;
 				if (e.rate > 0 && e.emissionTime > e.nextEmission)
 				{
 					e.nextEmission = e.emissionTime + (1 + Math.random()) / (2 * e.rate);
-					e.particles.push({ time: 0, rand: Math.random(), rand2: Math.random() });
+					e.particles.push({ time: 0, rand: [Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random()], origin: e.origin.position.clone() });
 				}
 				for (var j = 0; j < e.maxParticles; j++)
 				{
@@ -366,11 +451,11 @@ setInterval(function ()
 						else
 						{
 							p.time += delta;
-							dummy.position.set(evaluate(e.px, p.time, p.rand, p.rand2), evaluate(e.py, p.time, p.rand, p.rand2), evaluate(e.pz, p.time, p.rand, p.rand2));
-							dummy.position.multiplyScalar(RPM.Datas.Systems.SQUARE_SIZE);
-							dummy.scale.set(1, 1, 1).multiplyScalar(evaluate(e.size, p.time, p.rand, p.rand2));
-							dummy.rotation.y = (270 - RPM.Scene.Map.current.camera.horizontalAngle) * Math.PI / 180.0;
-							e.instanceAlpha[j] = evaluate(e.opacity, p.time, p.rand, p.rand2);
+							dummy.position.set(evaluate(e.px, p.time, p.rand) + p.origin.x, evaluate(e.py, p.time, p.rand)  + p.origin.y, evaluate(e.pz, p.time, p.rand)  + p.origin.z);
+							dummy.scale.set(1, 1, 1).multiplyScalar(evaluate(e.size, p.time, p.rand));
+							dummy.lookAt(RPM.Scene.Map.current.camera.getThreeCamera().position);
+							dummy.rotation.z += evaluate(e.rot, p.time, p.rand) * Math.PI / 180.0;
+							e.instanceAlpha[j] = evaluate(e.opacity, p.time, p.rand);
 							dummy.updateMatrix();
 							e.mesh.setMatrixAt(j, dummy.matrix);
 						}
@@ -393,8 +478,30 @@ setInterval(function ()
 	}
 }, 16);
 
-RPM.Manager.Plugins.registerCommand(pluginName, "Start particle effect", (object, rate, lifespan, position, size, opacity, texture, additiveBlending) =>
+function endParticles(object, smooth)
 {
+	if (object == -1)
+		object = RPM.Core.ReactionInterpreter.currentObject.id;
+	else if (object == 0)
+		object = RPM.Core.Game.current.hero.id;
+	for (var i = 0; i < emitterList.length; i++)
+	{
+		const e = emitterList[i];
+		if (e.id === object)
+		{
+			e.rate = 0;
+			setTimeout(function ()
+			{
+				RPM.Scene.Map.current.scene.remove(e.mesh);
+			}, smooth ? e.lifespan * 1000 : 1);
+			break;
+		}
+	}
+}
+
+RPM.Manager.Plugins.registerCommand(pluginName, "Start particle effect", (object, rate, lifespan, position, rotation, size, opacity, texture, additiveBlending) =>
+{
+	endParticles(object, false);
 	if (object == -1)
 		object = RPM.Core.ReactionInterpreter.currentObject.id;
 	else if (object == 0)
@@ -420,26 +527,23 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Start particle effect", (object
 			});
 			const mesh = new THREE.InstancedMesh(geo, mat, maxParticles);
 			mesh.renderOrder = 1;
-			if (!result.object.mesh)
-			{
-				result.object.mesh = new THREE.Mesh();
-				RPM.Scene.Map.current.scene.add(result.object.mesh);
-			}
-			result.object.mesh.add(mesh);
+			RPM.Scene.Map.current.scene.add(mesh);
 			position = position.split(";");
 			const exprPx = tokenize(position[0]);
 			const exprPy = tokenize(position[1]);
 			const exprPz = tokenize(position[2]);
+			const exprRot = tokenize(rotation);
 			const exprSize = tokenize(size);
 			const exprAlpha = tokenize(opacity);
 			var errorPx = false;
 			var errorPy = false;
 			var errorPz = false;
+			var errorRot = false;
 			var errorSize = false;
 			var errorAlpha = false;
 			try
 			{
-				evaluate(exprPx, 0, 0, 0);
+				evaluate(exprPx, 0, [0, 0, 0, 0, 0, 0]);
 			}
 			catch (e)
 			{
@@ -447,7 +551,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Start particle effect", (object
 			}
 			try
 			{
-				evaluate(exprPy, 0, 0, 0);
+				evaluate(exprPy, 0, [0, 0, 0, 0, 0, 0]);
 			}
 			catch (e)
 			{
@@ -455,7 +559,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Start particle effect", (object
 			}
 			try
 			{
-				evaluate(exprPz, 0, 0, 0);
+				evaluate(exprPz, 0, [0, 0, 0, 0, 0, 0]);
 			}
 			catch (e)
 			{
@@ -463,7 +567,15 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Start particle effect", (object
 			}
 			try
 			{
-				evaluate(exprSize, 0, 0, 0);
+				evaluate(exprRot, 0, [0, 0, 0, 0, 0, 0]);
+			}
+			catch (e)
+			{
+				errorRot = true;
+			}
+			try
+			{
+				evaluate(exprSize, 0, [0, 0, 0, 0, 0, 0]);
 			}
 			catch (e)
 			{
@@ -471,13 +583,13 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Start particle effect", (object
 			}
 			try
 			{
-				evaluate(exprAlpha, 0, 0, 0);
+				evaluate(exprAlpha, 0, [0, 0, 0, 0, 0, 0]);
 			}
 			catch (e)
 			{
 				errorAlpha = true;
 			}
-			if (errorPx || errorPy || errorPz || errorSize || errorAlpha)
+			if (errorPx || errorPy || errorPz || errorRot || errorSize || errorAlpha)
 			{
 				var msg = "The program found one or more errors in the following formulas:";
 				if (errorPx)
@@ -486,6 +598,8 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Start particle effect", (object
 					msg += "\nposition (y): " + position[1];
 				if (errorPz)
 					msg += "\nposition (z): " + position[2];
+				if (errorRot)
+					msg += "\nrotation: " + rotation;
 				if (errorSize)
 					msg += "\nsize: " + size;
 				if (errorAlpha)
@@ -497,6 +611,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Start particle effect", (object
 				emitterList.push(
 				{
 					id: object,
+					origin: result.object,
 					emissionTime: 0,
 					nextEmission: 0,
 					maxParticles: maxParticles,
@@ -509,6 +624,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Start particle effect", (object
 					px: exprPx,
 					py: exprPy,
 					pz: exprPz,
+					rot: exprRot,
 					size: exprSize,
 					opacity: exprAlpha
 				});
@@ -519,21 +635,5 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Start particle effect", (object
 
 RPM.Manager.Plugins.registerCommand(pluginName, "End particle effect", (object, smooth) =>
 {
-	if (object == -1)
-		object = RPM.Core.ReactionInterpreter.currentObject.id;
-	else if (object == 0)
-		object = RPM.Core.Game.current.hero.id;
-	for (var i = 0; i < emitterList.length; i++)
-	{
-		const e = emitterList[i];
-		if (e.id === object)
-		{
-			e.rate = 0;
-			setTimeout(function ()
-			{
-				e.mesh.parent.remove(e.mesh);
-			}, smooth ? e.lifespan * 1000 : 1);
-			break;
-		}
-	}
+	endParticles(object, smooth);
 });
