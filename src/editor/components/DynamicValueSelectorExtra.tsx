@@ -100,7 +100,7 @@ function DynamicValueSelectorExtra({
 				setMax?.(value.max ?? undefined);
 				break;
 		}
-	}, [kind]);
+	}, [kind, setMin, setMax, value]);
 
 	const getContent = () => {
 		switch (kind) {

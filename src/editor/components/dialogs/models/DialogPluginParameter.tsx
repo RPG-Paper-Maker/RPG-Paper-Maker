@@ -99,7 +99,7 @@ function DialogPluginParameter({ isDefault = false, isOpen, setIsOpen, model, on
 					</Value>
 					<Label>{t('description')}</Label>
 					<Value>{isDefault ? <TextArea text={description} onChange={setDescription} /> : description}</Value>
-					<Label>{t('value')}</Label>
+					<Label>{t(isDefault ? 'default.value' : 'value')}</Label>
 					<Value>
 						<DynamicValueSelector
 							value={value}

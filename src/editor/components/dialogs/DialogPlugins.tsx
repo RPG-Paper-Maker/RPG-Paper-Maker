@@ -354,7 +354,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 						<Flex column spacedLarge>
 							{pictureBase64 && (
 								<Flex centerH>
-									<img src={pictureBase64} style={{ width: 'fit-content' }} />
+									<img src={pictureBase64} style={{ width: 'fit-content' }} alt='plugin' />
 								</Flex>
 							)}
 							<Button onClick={handleClickSelectPicture}>{t('select')}...</Button>

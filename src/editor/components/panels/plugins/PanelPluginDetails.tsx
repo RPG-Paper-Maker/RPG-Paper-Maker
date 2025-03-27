@@ -57,7 +57,7 @@ const PanelPluginDetails = forwardRef(({ plugin, triggerUpdateParameters, disabl
 				<Flex one column spacedLarge scrollable>
 					{plugin.pictureBase64 && (
 						<Flex centerH>
-							<img src={plugin.pictureBase64} style={{ width: 'fit-content' }} />
+							<img src={plugin.pictureBase64} style={{ width: 'fit-content' }} alt='plugin' />
 						</Flex>
 					)}
 					<div className={divClass}>
@@ -88,7 +88,7 @@ const PanelPluginDetails = forwardRef(({ plugin, triggerUpdateParameters, disabl
 							{disabled ? (
 								plugin.website
 							) : (
-								<a href={plugin.website} target='_blank'>
+								<a href={plugin.website} target='_blank' rel='noreferrer'>
 									{plugin.website}
 								</a>
 							)}
@@ -100,7 +100,7 @@ const PanelPluginDetails = forwardRef(({ plugin, triggerUpdateParameters, disabl
 							{disabled ? (
 								plugin.tutorial
 							) : (
-								<a href={plugin.tutorial} target='_blank'>
+								<a href={plugin.tutorial} target='_blank' rel='noreferrer'>
 									{plugin.tutorial}
 								</a>
 							)}
@@ -131,9 +131,7 @@ const PanelPluginDetails = forwardRef(({ plugin, triggerUpdateParameters, disabl
 										<li key={command.id}>
 											<b>
 												{command.name}(
-												{command.defaultParameters
-													.map((parameters) => parameters.name)
-													.join(', ')}
+												{command.parameters.map((parameter) => parameter.name).join(', ')}
 												):
 											</b>{' '}
 											{command.description}

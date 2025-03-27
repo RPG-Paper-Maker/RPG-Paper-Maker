@@ -11,15 +11,15 @@
 
 import { BINDING, BindingType, JSONType } from '../common';
 import { Base } from './Base';
-import { PluginParameter } from './PluginParameter';
+import { PluginDefaultParameter } from './PluginDefaultParameter';
 
 class PluginCommand extends Base {
 	public description!: string;
-	public defaultParameters!: PluginParameter[];
+	public parameters!: PluginDefaultParameter[];
 
 	public static bindings: BindingType[] = [
 		['description', 'description', '', BINDING.STRING],
-		['defaultParameters', 'defaultParameters', [], BINDING.LIST, PluginParameter],
+		['parameters', 'defaultParameters', [], BINDING.LIST, PluginDefaultParameter],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -28,6 +28,10 @@ class PluginCommand extends Base {
 
 	static getTreeHeader(): string[] {
 		return ['Name([Parameters])'];
+	}
+
+	toString(): string {
+		return `${super.toString()}(${this.parameters.map((p) => p.name).join(', ')})`;
 	}
 
 	applyDefault() {

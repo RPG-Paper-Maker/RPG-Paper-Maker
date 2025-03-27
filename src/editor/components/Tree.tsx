@@ -58,6 +58,7 @@ import DialogMapObjectProperty from './dialogs/models/DialogMapObjectProperty';
 import DialogMapObjectState from './dialogs/models/DialogMapObjectState';
 import DialogName from './dialogs/models/DialogName';
 import DialogPlugin from './dialogs/models/DialogPlugin';
+import DialogPluginCommand from './dialogs/models/DialogPluginCommand';
 import DialogPluginParameter from './dialogs/models/DialogPluginParameter';
 import DialogRandomBattle from './dialogs/models/DialogRandomBattle';
 import DialogSkybox from './dialogs/models/DialogSkybox';
@@ -918,6 +919,8 @@ function Tree({
 					return <DialogPluginParameter isDefault {...options} />;
 				case Model.CustomStructure:
 					return <DialogCustomStructure parent={currentSelectedItemNode.parent} {...options} />;
+				case Model.PluginCommand:
+					return <DialogPluginCommand {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}
