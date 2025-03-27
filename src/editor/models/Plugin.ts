@@ -29,6 +29,7 @@ class Plugin extends Checkable {
 	public parameters!: PluginParameter[];
 	public commands!: PluginCommand[];
 	public code!: string;
+	public pictureBase64!: string;
 	public saved = true;
 
 	public static bindings: BindingType[] = [

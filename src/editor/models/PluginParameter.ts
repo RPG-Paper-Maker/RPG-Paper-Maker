@@ -12,8 +12,15 @@
 import { PluginDefaultParameter } from './PluginDefaultParameter';
 
 class PluginParameter extends PluginDefaultParameter {
+	public defaultParameter!: PluginDefaultParameter;
+
 	static getTreeHeader(): string[] {
 		return ['name', 'value'];
+	}
+
+	copy(pluginParameter: PluginParameter): void {
+		super.copy(pluginParameter);
+		this.defaultParameter = pluginParameter.defaultParameter;
 	}
 }
 

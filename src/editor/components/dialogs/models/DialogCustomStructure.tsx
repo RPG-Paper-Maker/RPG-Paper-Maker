@@ -22,6 +22,7 @@ import DynamicValueSelectorExtra from '../../DynamicValueSelectorExtra';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import InputText from '../../InputText';
+import TextArea from '../../TextArea';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import FooterOK from '../footers/FooterOK';
@@ -89,11 +90,10 @@ function DialogCustomStructure({ isOpen, setIsOpen, model, parent, onAccept, onR
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
+		initialize();
+
 		// eslint-disable-next-line
-	}, [isOpen]);
+	}, []);
 
 	return (
 		<>
@@ -115,7 +115,7 @@ function DialogCustomStructure({ isOpen, setIsOpen, model, parent, onAccept, onR
 								</Value>
 								<Label>{t('description')}</Label>
 								<Value>
-									<InputText value={description} onChange={setDescription} />
+									<TextArea text={description} onChange={setDescription} />
 								</Value>
 							</>
 						)}
@@ -129,7 +129,7 @@ function DialogCustomStructure({ isOpen, setIsOpen, model, parent, onAccept, onR
 						</Value>
 					</Form>
 					<Flex one>
-						<DynamicValueSelectorExtra value={value} kind={kind} noStructure />
+						<DynamicValueSelectorExtra value={value} kind={kind} noStructure canEditMinMax={false} />
 					</Flex>
 				</Flex>
 			</Dialog>

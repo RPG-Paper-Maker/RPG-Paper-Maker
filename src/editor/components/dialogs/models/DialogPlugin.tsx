@@ -126,11 +126,15 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 				if (file) {
 					const json: JSONType = JSON.parse(file);
 					plugin.readDetails(json);
+					plugin.parameters.forEach((parameter, index) => {
+						parameter.defaultParameter = plugin.defaultParameters[index];
+					});
 					setLoadingPlugin(false);
 				} else {
 					setConnexionIssue(true);
 					setType(0);
 					setSelectedPlugin(null);
+					return;
 				}
 			}
 			setSelectedPlugin(plugin);

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH, PICTURE_KIND, SONG_KIND } from '../common';
 import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
@@ -628,6 +628,18 @@ function DynamicValueSelector({
 		onChangeValue?.(value.value);
 		// eslint-disable-next-line
 	}, [value.value]);
+
+	useEffect(() => {
+		if (min !== undefined && valueNumber < min) {
+			setValueNumber(min);
+		}
+	}, [min]);
+
+	useEffect(() => {
+		if (max !== undefined && valueNumber > max) {
+			setValueNumber(max);
+		}
+	}, [max]);
 
 	const getValueDisplay = () => {
 		switch (kind) {

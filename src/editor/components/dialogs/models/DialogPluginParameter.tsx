@@ -9,17 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DYNAMIC_VALUE_OPTIONS_TYPE } from '../../../common';
+import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from '../../../common';
 import { Model } from '../../../Editor';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
-import useStateNumber from '../../../hooks/useStateNumber';
 import useStateString from '../../../hooks/useStateString';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import DynamicValueSelectorExtra from '../../DynamicValueSelectorExtra';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
+import InputText from '../../InputText';
+import TextArea from '../../TextArea';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
@@ -40,12 +41,18 @@ function DialogPluginParameter({ isDefault = false, isOpen, setIsOpen, model, on
 	const [name, setName] = useStateString();
 	const [description, setDescription] = useStateString();
 	const [value] = useStateDynamicValue();
-	const [kind, setKind] = useStateNumber();
+	const [kind, setKind] = useState(DYNAMIC_VALUE_KIND.NONE);
+	const [min, setMin] = useState<number | undefined>();
+	const [max, setMax] = useState<number | undefined>();
 
 	const initialize = () => {
 		setName(parameter.name);
 		setDescription(parameter.description);
 		value.copy(parameter.defaultValue);
+		if (!isDefault) {
+			value.min = parameter.defaultParameter.defaultValue.min;
+			value.max = parameter.defaultParameter.defaultValue.max;
+		}
 		setKind(value.kind);
 	};
 
@@ -53,6 +60,10 @@ function DialogPluginParameter({ isDefault = false, isOpen, setIsOpen, model, on
 		parameter.name = name;
 		parameter.description = description;
 		parameter.defaultValue.copy(value);
+		if (!isDefault) {
+			value.min = null;
+			value.max = null;
+		}
 		onAccept();
 		setIsOpen(false);
 	};
@@ -63,11 +74,9 @@ function DialogPluginParameter({ isDefault = false, isOpen, setIsOpen, model, on
 	};
 
 	useLayoutEffect(() => {
-		if (isOpen) {
-			initialize();
-		}
+		initialize();
 		// eslint-disable-next-line
-	}, [isOpen]);
+	}, []);
 
 	return (
 		<Dialog
@@ -81,20 +90,36 @@ function DialogPluginParameter({ isDefault = false, isOpen, setIsOpen, model, on
 			<Flex column spacedLarge fillWidth>
 				<Form>
 					<Label>{t('name')}</Label>
-					<Value>{name}</Value>
+					<Value>
+						{isDefault ? (
+							<InputText value={name} onChange={setName} widthType={INPUT_TYPE_WIDTH.FILL} />
+						) : (
+							name
+						)}
+					</Value>
 					<Label>{t('description')}</Label>
-					<Value>{description}</Value>
+					<Value>{isDefault ? <TextArea text={description} onChange={setDescription} /> : description}</Value>
 					<Label>{t('value')}</Label>
 					<Value>
 						<DynamicValueSelector
 							value={value}
 							optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.PLUGIN_VALUE}
 							onChangeKind={setKind}
+							min={min}
+							max={max}
 						/>
 					</Value>
 				</Form>
 				<Flex one>
-					<DynamicValueSelectorExtra value={value} kind={kind} canEditMinMax={isDefault} />
+					<DynamicValueSelectorExtra
+						value={value}
+						kind={kind}
+						min={min}
+						setMin={setMin}
+						max={max}
+						setMax={setMax}
+						canEditMinMax={isDefault}
+					/>
 				</Flex>
 			</Flex>
 		</Dialog>

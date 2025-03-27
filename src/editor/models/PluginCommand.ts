@@ -26,6 +26,10 @@ class PluginCommand extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	static getTreeHeader(): string[] {
+		return ['Name([Parameters])'];
+	}
+
 	applyDefault() {
 		super.applyDefault(PluginCommand.getBindings([]));
 	}

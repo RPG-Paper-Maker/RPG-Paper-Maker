@@ -11,20 +11,29 @@
 
 import Editor, { Monaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Paths } from '../../common';
+import { INPUT_TYPE_WIDTH, Paths } from '../../common';
 import { Platform } from '../../common/Platform';
-import { Node, Project } from '../../core';
+import { LocalFile, Node, Project } from '../../core';
 import { Model } from '../../Editor';
 import useStateBool from '../../hooks/useStateBool';
+import useStateNumber from '../../hooks/useStateNumber';
 import useStateString from '../../hooks/useStateString';
+import Button from '../Button';
+import Dropdown from '../Dropdown';
 import Flex from '../Flex';
+import Form, { Label, Value } from '../Form';
+import Groupbox from '../Groupbox';
+import InputText from '../InputText';
 import PanelPluginDetails from '../panels/plugins/PanelPluginDetails';
 import Tab from '../Tab';
+import TextArea from '../TextArea';
 import Tree, { TREES_MIN_WIDTH } from '../Tree';
 import Dialog from './Dialog';
 import FooterCancelSaveClose from './footers/FooterCancelSaveClose';
+
+const TREES_STYLE_HEIGHT = { height: '100px' };
 
 type Props = {
 	isOpen: boolean;
@@ -34,11 +43,24 @@ type Props = {
 function DialogPlugins({ isOpen, setIsOpen }: Props) {
 	const { t } = useTranslation();
 
+	const importPictureInputRef = useRef<HTMLInputElement>(null);
+
 	const [isLoading, setIsLoading] = useState(false);
 	const [plugins, setPlugins] = useState<Node[]>([]);
 	const [selectedPlugin, setSelectedPlugin] = useState<Model.Plugin | null>(null);
 	const [code, setCode] = useStateString();
 	const [triggerUpdate, setTriggerUpdate] = useStateBool();
+	const [pictureBase64, setPictureBase64] = useStateString();
+	const [name, setName] = useStateString();
+	const [author, setAuthor] = useStateString();
+	const [description, setDescription] = useStateString();
+	const [version, setVersion] = useStateString();
+	const [website, setWebsite] = useStateString();
+	const [tutorial, setTutorial] = useStateString();
+	const [category, setCategory] = useStateNumber();
+	const [defaultParameters, setDefaultParameters] = useState<Node[]>([]);
+	const [commands, setCommands] = useState<Node[]>([]);
+	const [triggerUpdateParameters, setTriggerUpdateParameters] = useStateBool();
 
 	const initialize = async () => {
 		setIsLoading(true);
@@ -55,12 +77,18 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		setPlugins([]);
 		setSelectedPlugin(null);
 		setCode('');
+		setPictureBase64('');
+	};
+
+	const updateParametersDefaults = (plugin: Model.Plugin) => {
+		plugin.parameters.forEach((parameter, index) => {
+			parameter.defaultParameter = plugin.defaultParameters[index];
+		});
 	};
 
 	const handleSelectPlugin = (node: Node | null) => {
 		if (node) {
 			const plugin = node.content as Model.Plugin;
-			setSelectedPlugin(plugin);
 			if (plugin.id !== -1 && plugin.code === undefined) {
 				setIsLoading(true);
 				(async () => {
@@ -72,10 +100,25 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					if (json) {
 						plugin.readDetails(json);
 					}
+					setName(plugin.name);
+					setAuthor(plugin.author);
+					setDescription(plugin.description);
+					setVersion(plugin.version);
+					setWebsite(plugin.website);
+					setTutorial(plugin.tutorial);
+					setCategory(plugin.category);
+					setDefaultParameters(Node.createList(plugin.defaultParameters));
+					updateParametersDefaults(plugin);
+					setCommands(Node.createList(plugin.commands));
+					plugin.pictureBase64 =
+						(await LocalFile.readFile(Paths.join(path, Paths.FILE_PLUGIN_PICTURE))) ?? '';
+					setPictureBase64(plugin.pictureBase64);
+					setSelectedPlugin(plugin);
 					setIsLoading(false);
 				})();
 			} else {
 				setCode(plugin.code ?? '');
+				setSelectedPlugin(plugin);
 			}
 		}
 	};
@@ -100,6 +143,102 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 }
 		`;
 		monaco.languages.typescript.javascriptDefaults.addExtraLib(dts, 'filename/constants.d.ts');
+	};
+
+	const unsavePlugin = () => {
+		selectedPlugin!.saved = false;
+		setTriggerUpdate((b) => !b);
+	};
+
+	const handleClickSelectPicture = () => {
+		importPictureInputRef.current?.click();
+	};
+
+	const handleImportPictureChange = async () => {
+		if (!importPictureInputRef.current) {
+			return;
+		}
+		const file = Array.from(importPictureInputRef.current.files || [])[0];
+		if (file) {
+			setIsLoading(true);
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = async () => {
+				selectedPlugin!.pictureBase64 = reader.result as string;
+				setPictureBase64(selectedPlugin!.pictureBase64);
+				await LocalFile.createFile(
+					Paths.join(
+						Project.current!.getPath(),
+						Paths.PLUGINS_TEMP,
+						selectedPlugin!.name,
+						Paths.FILE_PLUGIN_PICTURE
+					),
+					selectedPlugin!.pictureBase64
+				);
+				unsavePlugin();
+				setIsLoading(false);
+			};
+			reader.onerror = (error) => {
+				console.error('Error converting file to Base64:', error);
+			};
+		}
+	};
+
+	const handleChangeName = (s: string) => {
+		setName(s);
+		selectedPlugin!.name = s;
+		unsavePlugin();
+	};
+
+	const handleChangeAuthor = (s: string) => {
+		setAuthor(s);
+		selectedPlugin!.author = s;
+		unsavePlugin();
+	};
+
+	const handleChangeDescription = (s: string) => {
+		setDescription(s);
+		selectedPlugin!.description = s;
+		unsavePlugin();
+	};
+
+	const handleChangeVersion = (s: string) => {
+		setVersion(s);
+		selectedPlugin!.version = s;
+		unsavePlugin();
+	};
+
+	const handleChangeWebsite = (s: string) => {
+		setWebsite(s);
+		selectedPlugin!.website = s;
+		unsavePlugin();
+	};
+
+	const handleChangeTutorial = (s: string) => {
+		setTutorial(s);
+		selectedPlugin!.tutorial = s;
+		unsavePlugin();
+	};
+
+	const handleChangeCategory = (id: number) => {
+		setCategory(id);
+		selectedPlugin!.category = id;
+		unsavePlugin();
+	};
+
+	const handleDefaultParametersUpdated = () => {
+		selectedPlugin!.defaultParameters = Node.createListFromNodes(defaultParameters);
+		selectedPlugin!.parameters = selectedPlugin!.defaultParameters.map(
+			(parameter) => parameter.clone() as Model.PluginParameter
+		);
+		setTriggerUpdateParameters((b) => !b);
+		updateParametersDefaults(selectedPlugin!);
+		unsavePlugin();
+	};
+
+	const handleCommandsUpdated = () => {
+		selectedPlugin!.commands = Node.createListFromNodes(commands);
+		unsavePlugin();
 	};
 
 	const handleCancel = async () => {
@@ -173,7 +312,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 				{selectedPlugin && selectedPlugin.id !== -1 ? (
 					<Tab
 						titles={Model.Base.mapListIndex([t('details'), t('code'), t('edit'), t('export')])}
-						contents={[getPluginsDetailsContent(), getPluginsDetailsCode(), null, null]}
+						contents={[getPluginsDetailsContent(), getPluginsDetailsCode(), getPluginsDetailsEdit(), null]}
 						padding
 						scrollableContent
 						lazyLoadingContent
@@ -190,7 +329,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 
 	const getPluginsDetailsContent = () => (
 		<Flex key={0} column spacedLarge fillWidth fillHeight>
-			<PanelPluginDetails plugin={selectedPlugin} />
+			<PanelPluginDetails plugin={selectedPlugin} triggerUpdateParameters={triggerUpdateParameters} />
 		</Flex>
 	);
 
@@ -205,6 +344,88 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 			/>
 		</Flex>
 	);
+
+	const getPluginsDetailsEdit = () => {
+		return (
+			<Flex key={2} column spacedLarge fillWidth fillHeight>
+				<Form>
+					<Label>{t('picture')}</Label>
+					<Value>
+						<Flex column spacedLarge>
+							{pictureBase64 && (
+								<Flex centerH>
+									<img src={pictureBase64} style={{ width: 'fit-content' }} />
+								</Flex>
+							)}
+							<Button onClick={handleClickSelectPicture}>{t('select')}...</Button>
+							<input
+								ref={importPictureInputRef}
+								type='file'
+								hidden
+								onChange={handleImportPictureChange}
+								accept='.png'
+							/>
+						</Flex>
+					</Value>
+					<Label>{t('name')}</Label>
+					<Value>
+						<InputText value={name} onChange={handleChangeName} widthType={INPUT_TYPE_WIDTH.FILL} />
+					</Value>
+					<Label>{t('author')}</Label>
+					<Value>
+						<InputText value={author} onChange={handleChangeAuthor} widthType={INPUT_TYPE_WIDTH.FILL} />
+					</Value>
+					<Label>{t('description')}</Label>
+					<Value>
+						<TextArea text={description} onChange={handleChangeDescription} />
+					</Value>
+					<Label>{t('version')}</Label>
+					<Value>
+						<InputText value={version} onChange={handleChangeVersion} widthType={INPUT_TYPE_WIDTH.FILL} />
+					</Value>
+					<Label>{t('website')}</Label>
+					<Value>
+						<InputText value={website} onChange={handleChangeWebsite} widthType={INPUT_TYPE_WIDTH.FILL} />
+					</Value>
+					<Label>{t('tutorial')}</Label>
+					<Value>
+						<InputText value={tutorial} onChange={handleChangeTutorial} widthType={INPUT_TYPE_WIDTH.FILL} />
+					</Value>
+					<Label>{t('category')}</Label>
+					<Value>
+						<Dropdown
+							selectedID={category}
+							onChange={handleChangeCategory}
+							options={Model.Base.PLUGIN_CATEGORY_OPTIONS}
+							translateOptions
+						/>
+					</Value>
+				</Form>
+				<Groupbox title={t('parameters')}>
+					<Flex one style={TREES_STYLE_HEIGHT}>
+						<Tree
+							constructorType={Model.PluginDefaultParameter}
+							list={defaultParameters}
+							onListUpdated={handleDefaultParametersUpdated}
+							noScrollOnForce
+							byIndex
+							doNotShowID
+						/>
+					</Flex>
+				</Groupbox>
+				<Groupbox title={t('commands')}>
+					<Flex one style={TREES_STYLE_HEIGHT}>
+						<Tree
+							constructorType={Model.PluginCommand}
+							list={commands}
+							onListUpdated={handleCommandsUpdated}
+							noScrollOnForce
+						/>
+					</Flex>
+				</Groupbox>
+			</Flex>
+		);
+	};
 
 	return (
 		<Dialog

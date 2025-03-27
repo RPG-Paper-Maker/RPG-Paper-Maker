@@ -199,6 +199,7 @@ class Base extends Serializable {
 		'quit',
 		'script',
 	]);
+	public static PLUGIN_CATEGORY_OPTIONS = Base.mapListIndex(['battle', 'menus', 'map', 'others']);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([

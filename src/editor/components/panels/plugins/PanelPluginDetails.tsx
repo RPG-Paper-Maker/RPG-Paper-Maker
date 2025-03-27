@@ -22,10 +22,11 @@ const TREES_STYLE_HEIGHT = { height: '100px' };
 
 type Props = {
 	plugin: Model.Plugin | null;
+	triggerUpdateParameters?: boolean;
 	disabled?: boolean;
 };
 
-const PanelPluginDetails = forwardRef(({ plugin, disabled = false }: Props, ref) => {
+const PanelPluginDetails = forwardRef(({ plugin, triggerUpdateParameters, disabled = false }: Props, ref) => {
 	const { t } = useTranslation();
 
 	const [parameters, setParameters] = useState<Node[]>([]);
@@ -48,12 +49,17 @@ const PanelPluginDetails = forwardRef(({ plugin, disabled = false }: Props, ref)
 	useLayoutEffect(() => {
 		initialize();
 		// eslint-disable-next-line
-	}, [plugin]);
+	}, [plugin, triggerUpdateParameters]);
 
 	return (
 		plugin && (
 			<Flex one column scrollable>
 				<Flex one column spacedLarge scrollable>
+					{plugin.pictureBase64 && (
+						<Flex centerH>
+							<img src={plugin.pictureBase64} style={{ width: 'fit-content' }} />
+						</Flex>
+					)}
 					<div className={divClass}>
 						<b>{t('name')}: </b>
 						{plugin.name}
@@ -112,6 +118,7 @@ const PanelPluginDetails = forwardRef(({ plugin, disabled = false }: Props, ref)
 									cannotAdd
 									cannotDragDrop
 									byIndex
+									doNotShowID
 								/>
 							</Flex>
 						</Groupbox>

@@ -832,7 +832,7 @@ function Tree({
 	};
 
 	const getDialog = () => {
-		if (currentSelectedItemNode && !cannotEdit && constructorType !== Model.Checkable) {
+		if (currentSelectedItemNode && !cannotEdit && constructorType !== Model.Checkable && isOpenDialog) {
 			const options = {
 				isNew: newModel !== null,
 				isOpen: isOpenDialog,

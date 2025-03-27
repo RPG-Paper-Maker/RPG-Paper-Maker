@@ -22,35 +22,43 @@ import TreeCustomStructure from './TreeCustomStructure';
 type Props = {
 	value: DynamicValue;
 	kind: DYNAMIC_VALUE_KIND;
+	min?: number;
+	setMin?: (m?: number) => void;
+	max?: number;
+	setMax?: (m?: number) => void;
 	canEditMinMax?: boolean;
 	noStructure?: boolean;
 };
 
-function DynamicValueSelectorExtra({ value, kind, canEditMinMax = false, noStructure = false }: Props) {
-	const [previousKind, setPreviousKind] = useState(kind);
+function DynamicValueSelectorExtra({
+	value,
+	kind,
+	min,
+	setMin,
+	max,
+	setMax,
+	canEditMinMax = false,
+	noStructure = false,
+}: Props) {
 	const [nodes, setNodes] = useState<Node[]>([]);
-	const [isMin, setIsMin] = useState(value.min !== null);
-	const [min, setMin] = useState(value.min ?? 0);
-	const [isMax, setIsMax] = useState(value.max !== null);
-	const [max, setMax] = useState(value.max ?? 0);
 
 	const handleChangeIsMin = (b: boolean) => {
-		setIsMin(b);
-		value.min = b ? min : null;
+		setMin?.(b ? 0 : undefined);
+		value.min = b ? 0 : null;
 	};
 
 	const handleChangeMin = (m: number) => {
-		setMin(m);
+		setMin?.(m);
 		value.min = m;
 	};
 
 	const handleChangeIsMax = (b: boolean) => {
-		setIsMax(b);
-		value.max = b ? max : null;
+		setMax?.(b ? 0 : undefined);
+		value.max = b ? 0 : null;
 	};
 
 	const handleChangeMax = (m: number) => {
-		setMax(m);
+		setMax?.(m);
 		value.max = m;
 	};
 
@@ -66,13 +74,6 @@ function DynamicValueSelectorExtra({ value, kind, canEditMinMax = false, noStruc
 	};
 
 	useEffect(() => {
-		switch (previousKind) {
-			case DYNAMIC_VALUE_KIND.NUMBER_DECIMAL:
-				value.min = null;
-				value.max = null;
-				break;
-		}
-		setPreviousKind(kind);
 		switch (kind) {
 			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
 				if (!value.customStructure) {
@@ -95,8 +96,8 @@ function DynamicValueSelectorExtra({ value, kind, canEditMinMax = false, noStruc
 				setNodes(value.customList.toNodes());
 				break;
 			case DYNAMIC_VALUE_KIND.NUMBER_DECIMAL:
-				value.min = isMin ? min : null;
-				value.max = isMax ? max : null;
+				setMin?.(value.min ?? undefined);
+				setMax?.(value.max ?? undefined);
 				break;
 		}
 	}, [kind]);
@@ -111,16 +112,26 @@ function DynamicValueSelectorExtra({ value, kind, canEditMinMax = false, noStruc
 					<Flex column>
 						<Flex spacedLarge centerV>
 							<Flex spaced centerV>
-								<Checkbox isChecked={isMin} onChange={handleChangeIsMin}>
+								<Checkbox isChecked={min !== undefined} onChange={handleChangeIsMin}>
 									Min:
 								</Checkbox>
-								<InputNumber value={min} onChange={handleChangeMin} disabled={!isMin} />
+								<InputNumber
+									value={min ?? 0}
+									onChange={handleChangeMin}
+									disabled={min === undefined}
+									max={max}
+								/>
 							</Flex>
 							<Flex spaced centerV>
-								<Checkbox isChecked={isMax} onChange={handleChangeIsMax}>
+								<Checkbox isChecked={max !== undefined} onChange={handleChangeIsMax}>
 									Max:
 								</Checkbox>
-								<InputNumber value={max} onChange={handleChangeMax} disabled={!isMax} />
+								<InputNumber
+									value={max ?? 0}
+									onChange={handleChangeMax}
+									disabled={max === undefined}
+									min={min}
+								/>
 							</Flex>
 						</Flex>
 						<Flex one />

@@ -41,7 +41,7 @@ class PluginDefaultParameter extends Base {
 	}
 
 	toStrings(): string[] {
-		return [this.toStringNameID(), this.defaultValue.toString()];
+		return [`${Base.STRING_START} ${this.getName()}`, this.defaultValue.toString()];
 	}
 
 	copy(pluginDefaultParameter: PluginDefaultParameter): void {

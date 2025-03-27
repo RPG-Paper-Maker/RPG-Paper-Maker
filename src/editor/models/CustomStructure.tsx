@@ -65,10 +65,11 @@ class CustomStructure extends Base {
 
 	canHaveChildren(): boolean {
 		return (
-			!this.isClosure &&
-			(!this.value ||
-				this.value.kind === DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE ||
-				this.value.kind === DYNAMIC_VALUE_KIND.CUSTOM_LIST)
+			!!this.elements ||
+			(!this.isClosure &&
+				(!this.value ||
+					this.value.kind === DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE ||
+					this.value.kind === DYNAMIC_VALUE_KIND.CUSTOM_LIST))
 		);
 	}
 
@@ -96,7 +97,7 @@ class CustomStructure extends Base {
 			const closure = new CustomStructure();
 			closure.applyDefault();
 			closure.isClosure = true;
-			closure.isList = this.isList;
+			closure.isList = this.value ? this.value.kind === DYNAMIC_VALUE_KIND.CUSTOM_LIST : this.isList;
 			return [node, Node.create(closure, [], parent)];
 		}
 		return [node];
@@ -137,6 +138,11 @@ class CustomStructure extends Base {
 		) : this.canHaveChildren() ? (
 			<Flex spaced>
 				{'>'}
+				{this.isProperty && (
+					<div style={{ fontWeight: 'bold', color: Model.MapObjectCommand.COLOR_GREEN }}>
+						{`"${this.name}":`}
+					</div>
+				)}
 				<div style={{ fontWeight: 'bold', color: Model.MapObjectCommand.COLOR_ORANGE }}>
 					{this.isList || this.value?.kind === DYNAMIC_VALUE_KIND.CUSTOM_LIST ? '[' : '{'}
 				</div>
