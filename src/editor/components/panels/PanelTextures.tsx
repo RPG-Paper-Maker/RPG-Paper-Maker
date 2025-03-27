@@ -35,6 +35,7 @@ function PanelTextures({ visible }: Props) {
 	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
+	const mapLoaded = useSelector((state: RootState) => state.mapEditor.loaded);
 	useSelector((state: RootState) => state.triggers.splitting);
 
 	const updateHeight = () => {
@@ -58,7 +59,7 @@ function PanelTextures({ visible }: Props) {
 	}, []);
 
 	const getMainContent = () => {
-		if (!currentMapID || !Scene.Map.current) {
+		if (!currentMapID || !Scene.Map.current || !mapLoaded) {
 			return null;
 		}
 		if (
