@@ -33,6 +33,7 @@ export * from './DialogCommandMoveObjectChangeSpeedFrequency';
 export * from './DialogCommandMoveObjectJump';
 export * from './DialogCommandPlayAVideo';
 export * from './DialogCommandPlaySong';
+export * from './DialogCommandPlugin';
 export * from './DialogCommandRemoveAPicture';
 export * from './DialogCommandRemoveObjectFromMap';
 export * from './DialogCommandScript';

@@ -96,10 +96,6 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					const code = (await Platform.readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
 					setCode(code);
 					plugin.code = code;
-					const json = await Platform.readJSON(Paths.join(path, Paths.FILE_PLUGIN_DETAILS));
-					if (json) {
-						plugin.readDetails(json);
-					}
 					setName(plugin.name);
 					setAuthor(plugin.author);
 					setDescription(plugin.description);

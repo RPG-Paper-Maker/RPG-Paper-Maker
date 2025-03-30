@@ -68,8 +68,10 @@ import { Localization } from './Localization';
 import { MapObjectCommandMove } from './MapObjectCommandMove';
 import { MapObjectCommandShopItem } from './MapObjectCommandShopItem';
 import { MapObjectEvent } from './MapObjectEvent';
+import { Plugin } from './Plugin';
+import { PluginCommand } from './PluginCommand';
 
-export type MapObjectCommandType = number | string | boolean;
+export type MapObjectCommandType = number | string | boolean | JSONType;
 const { t } = i18next;
 
 class MapObjectCommand extends Base {
@@ -490,6 +492,7 @@ class MapObjectCommand extends Base {
 				return MapObjectCommand.COLOR_COMMENT;
 			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
 			case EVENT_COMMAND_KIND.SCRIPT:
+			case EVENT_COMMAND_KIND.PLUGIN:
 				return MapObjectCommand.COLOR_YELLOW;
 		}
 		return 'white';
@@ -737,6 +740,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.SCRIPT:
 				texts = this.toStringScript(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.PLUGIN:
+				texts = this.toStringPlugin(iterator, parameters, properties);
+				break;
 		}
 		return (
 			<Flex spaced>
@@ -765,7 +771,7 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.IF:
 				return <div style={style}>{this.toStringIf(iterator, parameters, properties)}</div>;
 			case EVENT_COMMAND_KIND.COMMENT:
-				return <div style={style}>{this.command[0]}</div>;
+				return <div style={style}>{this.command[0] as string}</div>;
 			default:
 				return (
 					<>
@@ -2329,6 +2335,22 @@ class MapObjectCommand extends Base {
 		const isDynamic = Utils.initializeBoolCommand(this.command, iterator);
 		return [
 			isDynamic ? this.toStringDynamicValue(iterator, properties, parameters) : '' + this.command[iterator.i++],
+		];
+	}
+
+	toStringPlugin(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const pluginID = this.command[iterator.i++] as number;
+		const commandID = this.command[iterator.i++] as number;
+		const parametersValues = [] as string[];
+		while (iterator.i + 1 < this.command.length) {
+			parametersValues.push(this.toStringDynamicValue(iterator, properties, parameters));
+		}
+		const plugin = Base.getByID(Project.current!.scripts.plugins, pluginID) as Plugin | undefined;
+		const command = Base.getByID(plugin?.commands ?? [], commandID) as PluginCommand;
+		return [
+			`${plugin?.name} - ${command?.name}(${command?.parameters.map(
+				(parameter, index) => parametersValues[index] ?? parameter.toString()
+			).join(',')})`,
 		];
 	}
 

@@ -10,12 +10,13 @@
 */
 
 import { ReactNode } from 'react';
-import { BindingType, DYNAMIC_VALUE_KIND, JSONType, Utils } from '../common';
+import { BindingType, DYNAMIC_VALUE_KIND, ITERATOR, JSONType, Utils } from '../common';
 import Flex from '../components/Flex';
 import { Node } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Model } from '../Editor';
 import { Base } from './Base';
+import { MapObjectCommandType } from './MapObjectCommand';
 
 class CustomStructure extends Base {
 	public elements!: CustomStructure[];
@@ -79,6 +80,16 @@ class CustomStructure extends Base {
 
 	isFixedNode(): boolean {
 		return this.isClosure;
+	}
+
+	updateCommand(command: MapObjectCommandType[], iterator: ITERATOR) {
+		this.read(command[iterator.i++] as JSONType);
+	}
+
+	getCommand(command: MapObjectCommandType[]) {
+		const json = {} as JSONType;
+		this.write(json);
+		command.push(json);
 	}
 
 	toNodes(parent: Node | null = null): Node[] {

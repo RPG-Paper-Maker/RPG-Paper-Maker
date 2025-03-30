@@ -10,7 +10,7 @@
 */
 
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH, PICTURE_KIND, SONG_KIND } from '../common';
+import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from '../common';
 import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Model } from '../Editor';
@@ -284,113 +284,12 @@ function DynamicValueSelector({
 	const getOptions = () => getOptionsKind().map((k) => Model.Base.DYNAMIC_VALUE_KIND_OPTIONS[k]);
 
 	const databaseList = useMemo(() => {
+		DynamicValue.getDatabase(kind);
 		switch (kind) {
 			case DYNAMIC_VALUE_KIND.DATABASE:
 				return databaseOptions;
-			case DYNAMIC_VALUE_KIND.CLASS:
-				return Project.current!.classes.list;
-			case DYNAMIC_VALUE_KIND.HERO:
-				return Project.current!.heroes.list;
-			case DYNAMIC_VALUE_KIND.MONSTER:
-				return Project.current!.monsters.list;
-			case DYNAMIC_VALUE_KIND.TROOP:
-				return Project.current!.troops.list;
-			case DYNAMIC_VALUE_KIND.ITEM:
-				return Project.current!.items.list;
-			case DYNAMIC_VALUE_KIND.WEAPON:
-				return Project.current!.weapons.list;
-			case DYNAMIC_VALUE_KIND.ARMOR:
-				return Project.current!.armors.list;
-			case DYNAMIC_VALUE_KIND.SKILL:
-				return Project.current!.skills.list;
-			case DYNAMIC_VALUE_KIND.ANIMATION:
-				return Project.current!.animations.list;
-			case DYNAMIC_VALUE_KIND.STATUS:
-				return Project.current!.status.list;
-			case DYNAMIC_VALUE_KIND.TILESET:
-				return Project.current!.tilesets.list;
-			case DYNAMIC_VALUE_KIND.FONT_SIZE:
-				return Project.current!.systems.fontSizes;
-			case DYNAMIC_VALUE_KIND.FONT_NAME:
-				return Project.current!.systems.fontNames;
-			case DYNAMIC_VALUE_KIND.COLOR:
-				return Project.current!.systems.colors;
-			case DYNAMIC_VALUE_KIND.WINDOW_SKIN:
-				return Project.current!.systems.windowSkins;
-			case DYNAMIC_VALUE_KIND.CURRENCY:
-				return Project.current!.systems.currencies;
-			case DYNAMIC_VALUE_KIND.SPEED:
-				return Project.current!.systems.speeds;
-			case DYNAMIC_VALUE_KIND.DETECTION:
-				return Project.current!.systems.detections;
-			case DYNAMIC_VALUE_KIND.CAMERA_PROPERTY:
-				return Project.current!.systems.cameraProperties;
-			case DYNAMIC_VALUE_KIND.FREQUENCY:
-				return Project.current!.systems.frequencies;
-			case DYNAMIC_VALUE_KIND.SKYBOX:
-				return Project.current!.systems.skyboxes;
-			case DYNAMIC_VALUE_KIND.BATTLE_MAP:
-				return Project.current!.battleSystem.battleMaps;
-			case DYNAMIC_VALUE_KIND.ELEMENT:
-				return Project.current!.battleSystem.elements;
-			case DYNAMIC_VALUE_KIND.COMMON_STATISTIC:
-				return Project.current!.battleSystem.statistics;
-			case DYNAMIC_VALUE_KIND.WEAPONS_KIND:
-				return Project.current!.battleSystem.weaponsKind;
-			case DYNAMIC_VALUE_KIND.ARMORS_KIND:
-				return Project.current!.battleSystem.armorsKind;
-			case DYNAMIC_VALUE_KIND.COMMON_BATTLECOMMAND:
-				return Project.current!.battleSystem.battleCommands;
-			case DYNAMIC_VALUE_KIND.COMMON_EQUIPMENT:
-				return Project.current!.battleSystem.equipments;
-			case DYNAMIC_VALUE_KIND.EVENT:
-				return Project.current!.commonEvents.eventsUser;
-			case DYNAMIC_VALUE_KIND.STATE:
-				return Project.current!.commonEvents.states;
-			case DYNAMIC_VALUE_KIND.COMMON_REACTION:
-				return Project.current!.commonEvents.commonReactions;
-			case DYNAMIC_VALUE_KIND.MODEL:
-				return Project.current!.commonEvents.commonObjects;
-			case DYNAMIC_VALUE_KIND.BARS:
-				return Project.current!.pictures.getList(PICTURE_KIND.BARS);
-			case DYNAMIC_VALUE_KIND.ICONS:
-				return Project.current!.pictures.getList(PICTURE_KIND.ICONS);
-			case DYNAMIC_VALUE_KIND.AUTOTILES:
-				return Project.current!.pictures.getList(PICTURE_KIND.AUTOTILES);
-			case DYNAMIC_VALUE_KIND.CHARACTERS:
-				return Project.current!.pictures.getList(PICTURE_KIND.CHARACTERS);
-			case DYNAMIC_VALUE_KIND.MOUNTAINS:
-				return Project.current!.pictures.getList(PICTURE_KIND.MOUNTAINS);
-			case DYNAMIC_VALUE_KIND.TILESETS:
-				return Project.current!.pictures.getList(PICTURE_KIND.TILESETS);
-			case DYNAMIC_VALUE_KIND.WALLS:
-				return Project.current!.pictures.getList(PICTURE_KIND.WALLS);
-			case DYNAMIC_VALUE_KIND.BATTLERS:
-				return Project.current!.pictures.getList(PICTURE_KIND.BATTLERS);
-			case DYNAMIC_VALUE_KIND.FACESETS:
-				return Project.current!.pictures.getList(PICTURE_KIND.FACESETS);
-			case DYNAMIC_VALUE_KIND.WINDOW_SKINS:
-				return Project.current!.pictures.getList(PICTURE_KIND.WINDOW_SKINS);
-			case DYNAMIC_VALUE_KIND.TITLE_SCREEN:
-				return Project.current!.pictures.getList(PICTURE_KIND.TITLE_SCREENS);
-			case DYNAMIC_VALUE_KIND.OBJECT3D:
-				return Project.current!.pictures.getList(PICTURE_KIND.OBJECTS_3D);
-			case DYNAMIC_VALUE_KIND.PICTURES:
-				return Project.current!.pictures.getList(PICTURE_KIND.PICTURES);
-			case DYNAMIC_VALUE_KIND.ANIMATIONS:
-				return Project.current!.pictures.getList(PICTURE_KIND.ANIMATIONS);
-			case DYNAMIC_VALUE_KIND.SKYBOXES:
-				return Project.current!.pictures.getList(PICTURE_KIND.SKYBOXES);
-			case DYNAMIC_VALUE_KIND.MUSIC:
-				return Project.current!.songs.getList(SONG_KIND.MUSIC);
-			case DYNAMIC_VALUE_KIND.BACKGROUND_SOUND:
-				return Project.current!.songs.getList(SONG_KIND.BACKGROUND_SOUND);
-			case DYNAMIC_VALUE_KIND.SOUND:
-				return Project.current!.songs.getList(SONG_KIND.SOUND);
-			case DYNAMIC_VALUE_KIND.MUSIC_EFFECT:
-				return Project.current!.songs.getList(SONG_KIND.MUSIC_EFFECT);
 			default:
-				return [];
+				return DynamicValue.getDatabase(kind);
 		}
 	}, [kind, databaseOptions]);
 

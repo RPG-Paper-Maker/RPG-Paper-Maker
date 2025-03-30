@@ -51,6 +51,7 @@ import DialogCommandMoveCamera from '../commands/DialogCommandMoveCamera';
 import DialogCommandMoveObject from '../commands/DialogCommandMoveObject';
 import DialogCommandPlayAVideo from '../commands/DialogCommandPlayAVideo';
 import DialogCommandPlaySong from '../commands/DialogCommandPlaySong';
+import DialogCommandPlugin from '../commands/DialogCommandPlugin';
 import DialogCommandRemoveAPicture from '../commands/DialogCommandRemoveAPicture';
 import DialogCommandRemoveObjectFromMap from '../commands/DialogCommandRemoveObjectFromMap';
 import DialogCommandScript from '../commands/DialogCommandScript';
@@ -321,7 +322,7 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				<Groupbox title={t('advanced')}>
 					<Flex column spaced>
 						{getButton(EVENT_COMMAND_KIND.SCRIPT)}
-						{getButton(EVENT_COMMAND_KIND.PLUGIN, true)}
+						{getButton(EVENT_COMMAND_KIND.PLUGIN)}
 					</Flex>
 				</Groupbox>
 			</Flex>
@@ -442,6 +443,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandChangeVariables {...options} />;
 			case EVENT_COMMAND_KIND.SCRIPT:
 				return <DialogCommandScript {...options} />;
+			case EVENT_COMMAND_KIND.PLUGIN:
+				return <DialogCommandPlugin {...options} />;
 			default:
 				return null;
 		}
