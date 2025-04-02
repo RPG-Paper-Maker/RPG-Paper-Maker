@@ -326,7 +326,11 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 
 	const getPluginsDetailsContent = () => (
 		<Flex key={0} column spacedLarge fillWidth fillHeight>
-			<PanelPluginDetails plugin={selectedPlugin} triggerUpdateParameters={triggerUpdateParameters} />
+			<PanelPluginDetails
+				plugin={selectedPlugin}
+				triggerUpdateParameters={triggerUpdateParameters}
+				onParametersUpdated={unsavePlugin}
+			/>
 		</Flex>
 	);
 

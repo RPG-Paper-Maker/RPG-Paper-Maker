@@ -10,12 +10,15 @@
 */
 
 import { useEffect, useState } from 'react';
-import { DYNAMIC_VALUE_KIND } from '../common';
+import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE } from '../common';
 import { Node } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import useStateBool from '../hooks/useStateBool';
 import { CustomStructure } from '../models';
 import Checkbox from './Checkbox';
+import DynamicValueSelector from './DynamicValueSelector';
 import Flex from './Flex';
+import Form, { Label, Value } from './Form';
 import InputNumber from './InputNumber';
 import TreeCustomStructure from './TreeCustomStructure';
 
@@ -41,6 +44,7 @@ function DynamicValueSelectorExtra({
 	noStructure = false,
 }: Props) {
 	const [nodes, setNodes] = useState<Node[]>([]);
+	const [trigger, setTrigger] = useStateBool();
 
 	const handleChangeIsMin = (b: boolean) => {
 		setMin?.(b ? 0 : undefined);
@@ -99,6 +103,19 @@ function DynamicValueSelectorExtra({
 				setMin?.(value.min ?? undefined);
 				setMax?.(value.max ?? undefined);
 				break;
+			case DYNAMIC_VALUE_KIND.VECTOR2:
+			case DYNAMIC_VALUE_KIND.VECTOR3:
+				if (!value.x) {
+					value.x = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
+					value.y = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
+				}
+				if (kind === DYNAMIC_VALUE_KIND.VECTOR3 && !value.z) {
+					value.x = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
+					value.y = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
+					value.z = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
+				}
+				setTrigger((v) => !v);
+				break;
 		}
 	}, [kind, setMin, setMax, value]);
 
@@ -137,6 +154,46 @@ function DynamicValueSelectorExtra({
 						<Flex one />
 					</Flex>
 				) : null;
+			case DYNAMIC_VALUE_KIND.VECTOR2:
+			case DYNAMIC_VALUE_KIND.VECTOR3:
+				return (
+					<Flex column>
+						<Form>
+							<Label>X</Label>
+							<Value>
+								{value.x && (
+									<DynamicValueSelector
+										value={value.x}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+									/>
+								)}
+							</Value>
+							<Label>Y</Label>
+							<Value>
+								{value.y && (
+									<DynamicValueSelector
+										value={value.y}
+										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+									/>
+								)}
+							</Value>
+							{kind === DYNAMIC_VALUE_KIND.VECTOR3 && (
+								<>
+									<Label>Z</Label>
+									<Value>
+										{value.z && (
+											<DynamicValueSelector
+												value={value.z}
+												optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+											/>
+										)}
+									</Value>
+								</>
+							)}
+						</Form>
+						<Flex one />
+					</Flex>
+				);
 		}
 		return null;
 	};
