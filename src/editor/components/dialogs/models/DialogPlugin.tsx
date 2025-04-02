@@ -54,12 +54,11 @@ const copyFolder = async (path: string, pluginName: string, folder: ManifestType
 			if (mimeType) {
 				const binaryData = await Platform.readOnlineFileUint8Array(getGitURL(Paths.join(path, file)));
 				if (binaryData) {
-					content = `data:${mimeType};base64,${Platform.uint8ArrayToBase64(binaryData)}`;
+					content = `data:${mimeType};base64,${Utils.uint8ArrayToBase64(binaryData)}`;
 				}
 			} else {
 				content = (await Platform.readOnlineFile(getGitURL(Paths.join(path, file)))) ?? '';
 			}
-			console.log(path);
 			await Platform.createFile(Paths.join(projectPath, file), content);
 		}
 	}
@@ -100,7 +99,7 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 
 	const pluginOnlineDisabled = useMemo(
 		() => connexionIssue || loadingPlugin || loadingPlugins || type !== PLUGIN_TYPE_KIND.ONLINE,
-		[connexionIssue, loadingPlugin, type]
+		[connexionIssue, loadingPlugin, loadingPlugins, type]
 	);
 
 	const initialize = () => {
@@ -153,13 +152,21 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 			if (plugin.description === undefined) {
 				setSelectedPlugin(null);
 				setLoadingPlugin(true);
-				const file = await Platform.readOnlineFile(getGitURL(Paths.join(plugin.name, 'details.json')));
+				const file = await Platform.readOnlineFile(
+					getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_DETAILS))
+				);
 				if (file) {
 					const json: JSONType = JSON.parse(file);
 					plugin.readDetails(json);
 					plugin.parameters.forEach((parameter, index) => {
 						parameter.defaultParameter = plugin.defaultParameters[index];
 					});
+					const picture = await Platform.readOnlineFileUint8Array(
+						getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_PICTURE))
+					);
+					if (picture) {
+						plugin.pictureBase64 = `data:image/png;base64,${Utils.uint8ArrayToBase64(picture)}`;
+					}
 					setLoadingPlugin(false);
 				} else {
 					setConnexionIssue(true);
@@ -249,12 +256,7 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 					plugin.code =
 						(await Platform.readOnlineFile(getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_CODE)))) ??
 						'';
-					const picture = await Platform.readOnlineFileBlob(
-						getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_PICTURE))
-					);
-					if (picture) {
-						plugin.pictureBase64 = await Utils.BlobToBase64(picture);
-					}
+					plugin.pictureBase64 = selectedPlugin.pictureBase64;
 					plugin.checked = true;
 					const pluginManifest = allPluginsJSON[plugin.category].find((p) => p.name === plugin.name);
 					if (pluginManifest) {

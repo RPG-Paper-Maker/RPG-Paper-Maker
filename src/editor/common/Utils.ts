@@ -169,7 +169,7 @@ class Utils {
 		return str.charAt(0).toUpperCase() + str.slice(1);
 	}
 
-	static async BlobToBase64(blob: Blob): Promise<string> {
+	static async blobToBase64(blob: Blob): Promise<string> {
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
 			reader.onloadend = () => resolve(reader.result as string);
@@ -177,6 +177,14 @@ class Utils {
 			reader.readAsDataURL(blob);
 		});
 	}
+
+	static uint8ArrayToBase64 = (uint8Array: Uint8Array): string => {
+		let binary = '';
+		for (let i = 0; i < uint8Array.length; i++) {
+			binary += String.fromCharCode(uint8Array[i]);
+		}
+		return btoa(binary); // Convert to Base64
+	};
 }
 
 export { Utils };

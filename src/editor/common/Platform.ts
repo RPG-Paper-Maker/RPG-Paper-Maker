@@ -15,6 +15,7 @@ import { Constants } from './Constants';
 import { IO } from './IO';
 import { Paths } from './Paths';
 import { JSONType } from './Types';
+import { Utils } from './Utils';
 
 class Platform {
 	public static manifest: Record<string, unknown>;
@@ -148,14 +149,6 @@ class Platform {
 		}
 	}
 
-	static uint8ArrayToBase64 = (uint8Array: Uint8Array): string => {
-		let binary = '';
-		for (let i = 0; i < uint8Array.length; i++) {
-			binary += String.fromCharCode(uint8Array[i]);
-		}
-		return btoa(binary); // Convert to Base64
-	};
-
 	static async loadZip(
 		file: File,
 		basePath: string,
@@ -180,7 +173,7 @@ class Platform {
 				const mimeType = Platform.MIME_TYPES[ext || ''];
 				if (mimeType) {
 					const binaryData = await f.async('uint8array'); // Read as binary
-					content = `data:${mimeType};base64,${Platform.uint8ArrayToBase64(binaryData)}`;
+					content = `data:${mimeType};base64,${Utils.uint8ArrayToBase64(binaryData)}`;
 				} else {
 					content = await f.async('text');
 				}
@@ -290,6 +283,9 @@ class Platform {
 	static async readOnlineFileUint8Array(url: string): Promise<Uint8Array | null> {
 		try {
 			const response = await fetch(url);
+			if (!response.ok) {
+				return null;
+			}
 			const arrayBuffer = await response.arrayBuffer();
 			return new Uint8Array(arrayBuffer);
 		} catch (e) {
