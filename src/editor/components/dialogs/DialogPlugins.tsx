@@ -89,13 +89,16 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 	const handleSelectPlugin = (node: Node | null) => {
 		if (node) {
 			const plugin = node.content as Model.Plugin;
-			if (plugin.id !== -1 && plugin.code === undefined) {
+			if (plugin.id !== -1) {
 				setIsLoading(true);
 				(async () => {
-					const path = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, plugin.name);
-					const code = (await Platform.readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
-					setCode(code);
-					plugin.code = code;
+					if (plugin.code === undefined) {
+						const path = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, plugin.name);
+						plugin.code = (await Platform.readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
+						plugin.pictureBase64 =
+							(await LocalFile.readFile(Paths.join(path, Paths.FILE_PLUGIN_PICTURE))) ?? '';
+					}
+					setCode(plugin.code);
 					setName(plugin.name);
 					setAuthor(plugin.author);
 					setDescription(plugin.description);
@@ -106,8 +109,6 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					setDefaultParameters(Node.createList(plugin.defaultParameters));
 					updateParametersDefaults(plugin);
 					setCommands(Node.createList(plugin.commands));
-					plugin.pictureBase64 =
-						(await LocalFile.readFile(Paths.join(path, Paths.FILE_PLUGIN_PICTURE))) ?? '';
 					setPictureBase64(plugin.pictureBase64);
 					setSelectedPlugin(plugin);
 					setIsLoading(false);

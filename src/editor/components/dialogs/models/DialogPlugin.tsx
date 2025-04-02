@@ -32,6 +32,44 @@ import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import FooterOK from '../footers/FooterOK';
 
+const BASE_GIT_URL = 'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0/plugins';
+
+const getGitURL = (path: string) => Paths.join(BASE_GIT_URL, path.replaceAll(' ', '%20'));
+
+type ManifestType = {
+	name: string;
+	files?: string[];
+	folders?: ManifestType[];
+};
+
+const copyFolder = async (path: string, pluginName: string, folder: ManifestType) => {
+	path = Paths.join(path, folder.name);
+	const projectPath = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, path);
+	await Platform.createFolder(projectPath);
+	if (folder.files) {
+		for (const file of folder.files) {
+			const ext = file.split('.').pop()?.toLowerCase();
+			let content = '';
+			const mimeType = Platform.MIME_TYPES[ext || ''];
+			if (mimeType) {
+				const binaryData = await Platform.readOnlineFileUint8Array(getGitURL(Paths.join(path, file)));
+				if (binaryData) {
+					content = `data:${mimeType};base64,${Platform.uint8ArrayToBase64(binaryData)}`;
+				}
+			} else {
+				content = (await Platform.readOnlineFile(getGitURL(Paths.join(path, file)))) ?? '';
+			}
+			console.log(path);
+			await Platform.createFile(Paths.join(projectPath, file), content);
+		}
+	}
+	if (folder.folders) {
+		for (const f of folder.folders) {
+			await copyFolder(path, pluginName, f);
+		}
+	}
+};
+
 type Props = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
@@ -92,9 +130,7 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 	};
 
 	const loadOnlinePlugins = async () => {
-		const file = await Platform.readOnlineFile(
-			'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0/plugins/manifest.json'
-		);
+		const file = await Platform.readOnlineFile(`${BASE_GIT_URL}/manifest.json`);
 		if (file) {
 			const manifest: JSONType[][] = JSON.parse(file);
 			setAllPluginsJSON(manifest);
@@ -117,12 +153,7 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 			if (plugin.description === undefined) {
 				setSelectedPlugin(null);
 				setLoadingPlugin(true);
-				const file = await Platform.readOnlineFile(
-					`https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0/plugins/${plugin.name.replaceAll(
-						' ',
-						'%20'
-					)}/details.json`
-				);
+				const file = await Platform.readOnlineFile(getGitURL(Paths.join(plugin.name, 'details.json')));
 				if (file) {
 					const json: JSONType = JSON.parse(file);
 					plugin.readDetails(json);
@@ -210,6 +241,31 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 				}
 				setIsLoading(false);
 				break;
+			}
+			case PLUGIN_TYPE_KIND.ONLINE: {
+				if (selectedPlugin) {
+					setIsLoading(true);
+					plugin.copy(selectedPlugin);
+					plugin.code =
+						(await Platform.readOnlineFile(getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_CODE)))) ??
+						'';
+					const picture = await Platform.readOnlineFileBlob(
+						getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_PICTURE))
+					);
+					if (picture) {
+						plugin.pictureBase64 = await Utils.BlobToBase64(picture);
+					}
+					plugin.checked = true;
+					const pluginManifest = allPluginsJSON[plugin.category].find((p) => p.name === plugin.name);
+					if (pluginManifest) {
+						copyFolder('', plugin.name, pluginManifest as ManifestType);
+					}
+					setIsLoading(false);
+					break;
+				} else {
+					setWarning(t('you.need.select.plugin.import'));
+					return;
+				}
 			}
 		}
 		plugin.saved = false;

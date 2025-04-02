@@ -148,6 +148,14 @@ class Platform {
 		}
 	}
 
+	static uint8ArrayToBase64 = (uint8Array: Uint8Array): string => {
+		let binary = '';
+		for (let i = 0; i < uint8Array.length; i++) {
+			binary += String.fromCharCode(uint8Array[i]);
+		}
+		return btoa(binary); // Convert to Base64
+	};
+
 	static async loadZip(
 		file: File,
 		basePath: string,
@@ -168,18 +176,11 @@ class Platform {
 				await Platform.createFolder(p.slice(0, -1));
 			} else {
 				const ext = relativePath.split('.').pop()?.toLowerCase();
-				const uint8ArrayToBase64 = (uint8Array: Uint8Array): string => {
-					let binary = '';
-					for (let i = 0; i < uint8Array.length; i++) {
-						binary += String.fromCharCode(uint8Array[i]);
-					}
-					return btoa(binary); // Convert to Base64
-				};
 				let content = '';
 				const mimeType = Platform.MIME_TYPES[ext || ''];
 				if (mimeType) {
 					const binaryData = await f.async('uint8array'); // Read as binary
-					content = `data:${mimeType};base64,${uint8ArrayToBase64(binaryData)}`;
+					content = `data:${mimeType};base64,${Platform.uint8ArrayToBase64(binaryData)}`;
 				} else {
 					content = await f.async('text');
 				}
@@ -271,12 +272,29 @@ class Platform {
 	}
 
 	static async readOnlineFile(path: string): Promise<string | null> {
-		const value = await new Promise<Response | null>((resolve) => {
-			fetch(path)
-				.then((value) => resolve(value))
-				.catch(() => resolve(null));
-		});
-		return value === null ? null : await value.text();
+		try {
+			return (await fetch(path)).text();
+		} catch (e) {
+			return null;
+		}
+	}
+
+	static async readOnlineFileBlob(path: string): Promise<Blob | null> {
+		try {
+			return (await fetch(path)).blob();
+		} catch (e) {
+			return null;
+		}
+	}
+
+	static async readOnlineFileUint8Array(url: string): Promise<Uint8Array | null> {
+		try {
+			const response = await fetch(url);
+			const arrayBuffer = await response.arrayBuffer();
+			return new Uint8Array(arrayBuffer);
+		} catch (e) {
+			return null;
+		}
 	}
 }
 
