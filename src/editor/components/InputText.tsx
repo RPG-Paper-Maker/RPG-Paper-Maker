@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { INPUT_TYPE_WIDTH } from '../common';
 import '../styles/Input.css';
 
@@ -18,6 +18,7 @@ type Props = {
 	widthType?: INPUT_TYPE_WIDTH;
 	style?: React.CSSProperties;
 	onChange: (e: string) => void;
+	isAsyncChange?: boolean;
 	focusFirst?: boolean;
 	setFocustFirst?: (b: boolean) => void;
 	disabled?: boolean;
@@ -28,11 +29,37 @@ function InputText({
 	widthType = INPUT_TYPE_WIDTH.NORMAL,
 	style,
 	onChange,
+	isAsyncChange = false,
 	focusFirst = false,
 	setFocustFirst,
 	disabled = false,
 }: Props) {
 	const refInput = useRef<HTMLInputElement>(null);
+
+	const [queue] = useState<string[]>([]);
+	const [isProcessing, setIsProcessing] = useState(false);
+
+	const processQueue = async () => {
+		if (isProcessing || queue.length === 0) {
+			return;
+		}
+		setIsProcessing(true);
+		while (queue.length > 0) {
+			const value = queue[0];
+			queue.shift();
+			await onChange(value);
+		}
+		setIsProcessing(false);
+	};
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (isAsyncChange) {
+			queue.push(e.target.value);
+			processQueue();
+		} else {
+			onChange(e.target.value);
+		}
+	};
 
 	const getMaxWidth = () => {
 		if (style !== undefined) {
@@ -48,10 +75,6 @@ function InputText({
 			case INPUT_TYPE_WIDTH.LARGE:
 				return '300px';
 		}
-	};
-
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		onChange(e.target.value);
 	};
 
 	useEffect(() => {

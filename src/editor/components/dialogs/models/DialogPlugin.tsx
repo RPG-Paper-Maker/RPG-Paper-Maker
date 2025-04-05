@@ -211,9 +211,9 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 				if (isNew) {
 					await Platform.createFolder(pluginFolder);
 					plugin.code = `const pluginName = "${plugin.name}";
-	const inject = Manager.Plugins.inject;
-	
-	// Start code here`;
+const inject = Manager.Plugins.inject;
+
+// Start code here`;
 					await Platform.createFile(Paths.join(pluginFolder, Paths.FILE_PLUGIN_CODE), plugin.code);
 					const json = {};
 					plugin.write(json);

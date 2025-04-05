@@ -181,8 +181,12 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		}
 	};
 
-	const handleChangeName = (s: string) => {
+	const handleChangeName = async (s: string) => {
+		if (s.length === 0 || Project.current!.scripts.plugins.some((p) => p.name === s)) {
+			return;
+		}
 		setName(s);
+		await Platform.renameFile(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP), selectedPlugin!.name, s);
 		selectedPlugin!.name = s;
 		unsavePlugin();
 	};
@@ -370,7 +374,12 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					</Value>
 					<Label>{t('name')}</Label>
 					<Value>
-						<InputText value={name} onChange={handleChangeName} widthType={INPUT_TYPE_WIDTH.FILL} />
+						<InputText
+							value={name}
+							onChange={handleChangeName}
+							widthType={INPUT_TYPE_WIDTH.FILL}
+							isAsyncChange
+						/>
 					</Value>
 					<Label>{t('author')}</Label>
 					<Value>

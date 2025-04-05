@@ -221,9 +221,33 @@ class LocalFile extends Serializable {
 		const pathBefore = Paths.join(path, fileNameBefore);
 		const json = await localforage.getItem(pathBefore);
 		if (json) {
-			const pathAfter = Paths.join(path, fileNameAfter);
-			await localforage.setItem(pathAfter, json);
-			await localforage.removeItem(pathBefore);
+			const parentJson: JSONType | null = await localforage.getItem(path);
+			if (parentJson) {
+				const parent = new LocalFile(true);
+				parent.read(parentJson);
+				let index = parent.fileNames.findIndex((file) => file === fileNameBefore);
+				if (index !== -1) {
+					ArrayUtils.removeAt(parent.fileNames, index);
+					parent.fileNames.push(fileNameAfter);
+					const newJson = {};
+					parent.write(newJson);
+					await localforage.setItem(path, newJson);
+				} else {
+					index = parent.folderNames.findIndex((file) => file === fileNameBefore);
+					if (index !== -1) {
+						ArrayUtils.removeAt(parent.folderNames, index);
+						parent.folderNames.push(fileNameAfter);
+						const newJson = {};
+						parent.write(newJson);
+						await localforage.setItem(path, newJson);
+					} else {
+						throw new Error('Could not rename file correctly.');
+					}
+				}
+				const pathAfter = Paths.join(path, fileNameAfter);
+				await localforage.setItem(pathAfter, json);
+				await localforage.removeItem(pathBefore);
+			}
 		}
 	}
 
