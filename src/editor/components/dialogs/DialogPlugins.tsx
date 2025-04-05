@@ -242,6 +242,12 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		unsavePlugin();
 	};
 
+	const handleClickExport = async () => {
+		setIsLoading(true);
+		await Platform.export(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, selectedPlugin!.name));
+		setIsLoading(false);
+	};
+
 	const handleCancel = async () => {
 		setIsLoading(true);
 		await Platform.removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP));
@@ -313,7 +319,12 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 				{selectedPlugin && selectedPlugin.id !== -1 ? (
 					<Tab
 						titles={Model.Base.mapListIndex([t('details'), t('code'), t('edit'), t('export')])}
-						contents={[getPluginsDetailsContent(), getPluginsDetailsCode(), getPluginsDetailsEdit(), null]}
+						contents={[
+							getPluginsDetailsContent(),
+							getPluginsDetailsCode(),
+							getPluginsDetailsEdit(),
+							getPluginsDetailsExport(),
+						]}
 						padding
 						scrollableContent
 						lazyLoadingContent
@@ -436,6 +447,23 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 			</Flex>
 		);
 	};
+
+	const getPluginsDetailsExport = () => (
+		<Flex key={3} column spacedLarge fillWidth fillHeight>
+			<b>{t('export.this.plugin.locally')}:</b>
+			<Flex>
+				<Button onClick={handleClickExport}>{t('export')}...</Button>
+			</Flex>
+			<b>{t('export.to.online.database')}:</b>
+			<a
+				href={'https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/wiki/Online-plugins-submission'}
+				target='_blank'
+				rel='noreferrer'
+			>
+				https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/wiki/Online-plugins-submission
+			</a>
+		</Flex>
+	);
 
 	return (
 		<Dialog
