@@ -11,9 +11,9 @@
 
 import Editor, { Monaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { INPUT_TYPE_WIDTH, Paths } from '../../common';
+import { INPUT_TYPE_WIDTH, ITERATOR, JSONType, Paths } from '../../common';
 import { Platform } from '../../common/Platform';
 import { LocalFile, Node, Project } from '../../core';
 import { Model } from '../../Editor';
@@ -29,11 +29,35 @@ import InputText from '../InputText';
 import PanelPluginDetails from '../panels/plugins/PanelPluginDetails';
 import Tab from '../Tab';
 import TextArea from '../TextArea';
-import Tree, { TREES_MIN_WIDTH } from '../Tree';
+import Tree, { TREES_LARGE_MIN_WIDTH, TREES_MIN_WIDTH } from '../Tree';
 import Dialog from './Dialog';
 import FooterCancelSaveClose from './footers/FooterCancelSaveClose';
 
 const TREES_STYLE_HEIGHT = { height: '100px' };
+
+const manifestToTreeMapTag = (manifest: JSONType, foldersID: ITERATOR, filesID: ITERATOR, path: string): Node[] => {
+	const nodes: Node[] = [];
+	for (const key in manifest) {
+		if (key === 'files') {
+			nodes.push(
+				...(manifest[key] as string[]).map((file) =>
+					Node.create(Model.TreeMapTag.create(filesID.i++, file, true, Paths.join(path, file)))
+				)
+			);
+		} else {
+			const folder = Node.create(Model.TreeMapTag.create(foldersID.i--, key));
+			folder.expanded = false;
+			folder.children = manifestToTreeMapTag(
+				manifest[key] as JSONType,
+				foldersID,
+				filesID,
+				Paths.join(path, key)
+			);
+			nodes.push(folder);
+		}
+	}
+	return nodes;
+};
 
 type Props = {
 	isOpen: boolean;
@@ -61,6 +85,18 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 	const [defaultParameters, setDefaultParameters] = useState<Node[]>([]);
 	const [commands, setCommands] = useState<Node[]>([]);
 	const [triggerUpdateParameters, setTriggerUpdateParameters] = useStateBool();
+	const [sourceCode, setSourceCode] = useStateString();
+	const [isSourceCodeJavascript, setIsSourceCodeJavascript] = useState(false);
+
+	const folders = useMemo(
+		() => [
+			Node.create(
+				Model.TreeMapTag.create(-1, 'Scripts'),
+				manifestToTreeMapTag(Platform.manifest.Scripts as JSONType, { i: -2 }, { i: 1 }, '/Scripts')
+			),
+		],
+		[]
+	);
 
 	const initialize = async () => {
 		setIsLoading(true);
@@ -246,6 +282,19 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		setIsLoading(true);
 		await Platform.export(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, selectedPlugin!.name));
 		setIsLoading(false);
+	};
+
+	const handleSelectSourceCode = async (node: Node | null) => {
+		if (node) {
+			const tag = node.content as Model.TreeMapTag;
+			if (tag.path) {
+				setSourceCode(await Platform.readPublicFile(tag.path));
+				setIsSourceCodeJavascript(tag.name.endsWith('.js'));
+				return;
+			}
+		}
+		setSourceCode('');
+		setIsSourceCodeJavascript(false);
 	};
 
 	const handleCancel = async () => {
@@ -465,6 +514,34 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		</Flex>
 	);
 
+	const getPluginsSourceCode = () => (
+		<Flex key={1} spacedLarge fillWidth fillHeight>
+			<Flex fillHeight>
+				<Tree
+					constructorType={Model.TreeMapTag}
+					list={folders}
+					minWidth={TREES_LARGE_MIN_WIDTH}
+					onSelectedItem={handleSelectSourceCode}
+					noScrollOnForce
+					scrollable
+					cannotAdd
+					cannotDelete
+					cannotDragDrop
+					cannotEdit
+				/>
+			</Flex>
+			<Flex one>
+				{sourceCode && (
+					<Editor
+						defaultLanguage={isSourceCodeJavascript ? 'javascript' : 'typescript'}
+						value={sourceCode}
+						theme='vs-dark'
+					/>
+				)}
+			</Flex>
+		</Flex>
+	);
+
 	return (
 		<Dialog
 			title={`${t('plugins.manager')}...`}
@@ -483,7 +560,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		>
 			<Tab
 				titles={Model.Base.mapListIndex(['Plugins', 'Source code'])}
-				contents={[getPluginsContent(), null]}
+				contents={[getPluginsContent(), getPluginsSourceCode()]}
 				padding
 				scrollableContent
 				lazyLoadingContent

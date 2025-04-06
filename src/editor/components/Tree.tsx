@@ -116,6 +116,7 @@ type Props = {
 
 export const TREES_MIN_WIDTH = 150;
 export const TREES_MIN_HEIGHT = 100;
+export const TREES_LARGE_MIN_WIDTH = 250;
 
 function Tree({
 	list,

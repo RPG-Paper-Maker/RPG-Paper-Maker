@@ -23,6 +23,7 @@ class TreeMapTag extends Base {
 	public cameraHorizontalAngle?: number;
 	public cameraVerticalAngle?: number;
 	public cursorPosition?: Position;
+	public path?: string;
 
 	public static readonly bindings: BindingType[] = [
 		['saved', 's', true, BINDING.BOOLEAN],
@@ -36,11 +37,12 @@ class TreeMapTag extends Base {
 		return [...TreeMapTag.bindings, ...additionnalBinding];
 	}
 
-	public static create(id: number, name: string, saved = true) {
+	public static create(id: number, name: string, saved = true, path?: string): TreeMapTag {
 		const tag = new TreeMapTag();
 		tag.id = id;
 		tag.name = name;
 		tag.saved = saved;
+		tag.path = path;
 		return tag;
 	}
 
