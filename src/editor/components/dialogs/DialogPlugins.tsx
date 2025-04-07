@@ -13,7 +13,7 @@ import Editor, { Monaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { INPUT_TYPE_WIDTH, ITERATOR, JSONType, Paths } from '../../common';
+import { INPUT_TYPE_WIDTH, ITERATOR, JSONType, Paths, PLUGIN_TYPE_KIND } from '../../common';
 import { Platform } from '../../common/Platform';
 import { LocalFile, Node, Project } from '../../core';
 import { Model } from '../../Editor';
@@ -21,6 +21,7 @@ import useStateBool from '../../hooks/useStateBool';
 import useStateNumber from '../../hooks/useStateNumber';
 import useStateString from '../../hooks/useStateString';
 import Button from '../Button';
+import Checkbox from '../Checkbox';
 import Dropdown from '../Dropdown';
 import Flex from '../Flex';
 import Form, { Label, Value } from '../Form';
@@ -87,6 +88,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 	const [triggerUpdateParameters, setTriggerUpdateParameters] = useStateBool();
 	const [sourceCode, setSourceCode] = useStateString();
 	const [isSourceCodeJavascript, setIsSourceCodeJavascript] = useState(false);
+	const [autoUpdate, setAutoUpdate] = useStateBool();
 
 	const folders = useMemo(
 		() => [
@@ -145,6 +147,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					setDefaultParameters(Node.createList(plugin.defaultParameters));
 					updateParametersDefaults(plugin);
 					setCommands(Node.createList(plugin.commands));
+					setAutoUpdate(plugin.autoUpdate);
 					setPictureBase64(plugin.pictureBase64);
 					setSelectedPlugin(plugin);
 					setIsLoading(false);
@@ -278,6 +281,19 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		unsavePlugin();
 	};
 
+	const handleChangeAutoUpdate = (b: boolean) => {
+		setAutoUpdate(b);
+		selectedPlugin!.autoUpdate = b;
+		unsavePlugin();
+	};
+
+	const handleClickCheckUpdate = async () => {
+		setIsLoading(true);
+		await selectedPlugin!.checkUpdate(undefined, true);
+		unsavePlugin();
+		setIsLoading(false);
+	};
+
 	const handleClickExport = async () => {
 		setIsLoading(true);
 		await Platform.export(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, selectedPlugin!.name));
@@ -366,19 +382,30 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 			</Flex>
 			<Flex one>
 				{selectedPlugin && selectedPlugin.id !== -1 ? (
-					<Tab
-						titles={Model.Base.mapListIndex([t('details'), t('code'), t('edit'), t('export')])}
-						contents={[
-							getPluginsDetailsContent(),
-							getPluginsDetailsCode(),
-							getPluginsDetailsEdit(),
-							getPluginsDetailsExport(),
-						]}
-						padding
-						scrollableContent
-						lazyLoadingContent
-						hideScroll
-					/>
+					<Flex column spacedLarge fillWidth>
+						<Tab
+							titles={Model.Base.mapListIndex([t('details'), t('code'), t('edit'), t('export')])}
+							contents={[
+								getPluginsDetailsContent(),
+								getPluginsDetailsCode(),
+								getPluginsDetailsEdit(),
+								getPluginsDetailsExport(),
+							]}
+							padding
+							scrollableContent
+							lazyLoadingContent
+							hideScroll
+						/>
+						{selectedPlugin.type === PLUGIN_TYPE_KIND.ONLINE && (
+							<Flex spacedLarge>
+								<Flex one />
+								<Checkbox isChecked={autoUpdate} onChange={handleChangeAutoUpdate}>
+									{t('auto.update')}
+								</Checkbox>
+								<Button onClick={handleClickCheckUpdate}>{t('check.update')}</Button>
+							</Flex>
+						)}
+					</Flex>
 				) : (
 					<Flex one centerV centerH>
 						{t('select.or.double.click.list')}...

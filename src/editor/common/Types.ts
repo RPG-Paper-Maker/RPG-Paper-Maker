@@ -71,3 +71,9 @@ export interface initializeAcceptRef {
 	initialize: () => void;
 	accept: () => boolean;
 }
+
+export type PluginsManifestType = {
+	name: string;
+	files?: string[];
+	folders?: PluginsManifestType[];
+};

@@ -10,7 +10,7 @@
 */
 
 import { Model } from '../Editor';
-import { JSONType, Paths } from '../common';
+import { JSONType, Paths, PLUGIN_TYPE_KIND } from '../common';
 import { Platform } from '../common/Platform';
 import { Project, Serializable } from '../core';
 
@@ -19,6 +19,17 @@ class Scripts extends Serializable {
 
 	getPath(): string {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_SCRIPTS);
+	}
+
+	async checkUpdates() {
+		const manifest = await Model.Plugin.getManifest();
+		if (manifest) {
+			for (const plugin of this.plugins) {
+				if (plugin.type === PLUGIN_TYPE_KIND.ONLINE && plugin.autoUpdate) {
+					await plugin.checkUpdate(manifest, false);
+				}
+			}
+		}
 	}
 
 	async load() {
@@ -36,6 +47,7 @@ class Scripts extends Serializable {
 				this.plugins.push(plugin);
 			}
 		}
+		await this.checkUpdates();
 	}
 
 	async save() {

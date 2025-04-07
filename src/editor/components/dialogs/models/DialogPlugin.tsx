@@ -12,7 +12,7 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdOutlineWifiOff } from 'react-icons/md';
-import { INPUT_TYPE_WIDTH, JSONType, Paths, PLUGIN_TYPE_KIND, Utils } from '../../../common';
+import { INPUT_TYPE_WIDTH, JSONType, Paths, PLUGIN_TYPE_KIND, PluginsManifestType, Utils } from '../../../common';
 import { Platform } from '../../../common/Platform';
 import { Node, Project } from '../../../core';
 import { Model } from '../../../Editor';
@@ -31,43 +31,6 @@ import Tree, { TREES_MIN_WIDTH } from '../../Tree';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import FooterOK from '../footers/FooterOK';
-
-const BASE_GIT_URL = 'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0/plugins';
-
-const getGitURL = (path: string) => Paths.join(BASE_GIT_URL, path.replaceAll(' ', '%20'));
-
-type ManifestType = {
-	name: string;
-	files?: string[];
-	folders?: ManifestType[];
-};
-
-const copyFolder = async (path: string, pluginName: string, folder: ManifestType) => {
-	path = Paths.join(path, folder.name);
-	const projectPath = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, path);
-	await Platform.createFolder(projectPath);
-	if (folder.files) {
-		for (const file of folder.files) {
-			const ext = file.split('.').pop()?.toLowerCase();
-			let content = '';
-			const mimeType = Platform.MIME_TYPES[ext || ''];
-			if (mimeType) {
-				const binaryData = await Platform.readOnlineFileUint8Array(getGitURL(Paths.join(path, file)));
-				if (binaryData) {
-					content = `data:${mimeType};base64,${Utils.uint8ArrayToBase64(binaryData)}`;
-				}
-			} else {
-				content = (await Platform.readOnlineFile(getGitURL(Paths.join(path, file)))) ?? '';
-			}
-			await Platform.createFile(Paths.join(projectPath, file), content);
-		}
-	}
-	if (folder.folders) {
-		for (const f of folder.folders) {
-			await copyFolder(path, pluginName, f);
-		}
-	}
-};
 
 type Props = {
 	isOpen: boolean;
@@ -129,9 +92,8 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 	};
 
 	const loadOnlinePlugins = async () => {
-		const file = await Platform.readOnlineFile(`${BASE_GIT_URL}/manifest.json`);
-		if (file) {
-			const manifest: JSONType[][] = JSON.parse(file);
+		const manifest = await Model.Plugin.getManifest();
+		if (manifest) {
 			setAllPluginsJSON(manifest);
 			setLoadingPlugins(false);
 		} else {
@@ -153,7 +115,7 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 				setSelectedPlugin(null);
 				setLoadingPlugin(true);
 				const file = await Platform.readOnlineFile(
-					getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_DETAILS))
+					Model.Plugin.getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_DETAILS))
 				);
 				if (file) {
 					const json: JSONType = JSON.parse(file);
@@ -162,7 +124,7 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 						parameter.defaultParameter = plugin.defaultParameters[index];
 					});
 					const picture = await Platform.readOnlineFileUint8Array(
-						getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_PICTURE))
+						Model.Plugin.getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_PICTURE))
 					);
 					if (picture) {
 						plugin.pictureBase64 = `data:image/png;base64,${Utils.uint8ArrayToBase64(picture)}`;
@@ -207,6 +169,7 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 				}
 				setIsLoading(true);
 				plugin.name = name;
+				plugin.type = type;
 				const pluginFolder = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, name);
 				if (isNew) {
 					await Platform.createFolder(pluginFolder);
@@ -242,6 +205,7 @@ const inject = Manager.Plugins.inject;
 				const path = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, folderName);
 				await Platform.loadZip(importFile, path);
 				plugin.code = (await Platform.readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
+				plugin.type = type;
 				const json = await Platform.readJSON(Paths.join(path, Paths.FILE_PLUGIN_DETAILS));
 				if (json) {
 					plugin.readDetails(json);
@@ -251,16 +215,24 @@ const inject = Manager.Plugins.inject;
 			}
 			case PLUGIN_TYPE_KIND.ONLINE: {
 				if (selectedPlugin) {
+					if (Project.current!.scripts.plugins.some((plugin) => plugin.name === selectedPlugin.name)) {
+						setWarning(t('plugin.name.already.exists'));
+						return;
+					}
 					setIsLoading(true);
+					const id = plugin.id;
 					plugin.copy(selectedPlugin);
+					plugin.id = id;
+					plugin.type = type;
 					plugin.code =
-						(await Platform.readOnlineFile(getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_CODE)))) ??
-						'';
+						(await Platform.readOnlineFile(
+							Model.Plugin.getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_CODE))
+						)) ?? '';
 					plugin.pictureBase64 = selectedPlugin.pictureBase64;
 					plugin.checked = true;
 					const pluginManifest = allPluginsJSON[plugin.category].find((p) => p.name === plugin.name);
 					if (pluginManifest) {
-						copyFolder('', plugin.name, pluginManifest as ManifestType);
+						Model.Plugin.copyOnlineFolder('', plugin.name, pluginManifest as PluginsManifestType);
 					}
 					setIsLoading(false);
 					break;

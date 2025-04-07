@@ -297,16 +297,22 @@ class ProjectUpdater_3_0_0 {
 			await Platform.writeJSON(Paths.join(projectPath, 'fonts.json'), jsonFonts);
 		}
 
-		// Plugins: isOn moved to scripts.json and renamed checked
+		// Plugins: isOn moved to scripts.json and renamed checked, moving type to scripts.json
 		const jsonScripts = await Platform.readJSON(Paths.join(projectPath, 'scripts.json'));
 		if (jsonScripts) {
 			const jsonPlugins = jsonScripts.plugins as JSONType[];
 			for (const plugin of jsonPlugins) {
 				const detailsPath = Paths.join(projectPath, 'Plugins', plugin.name as string, 'details.json');
 				const pluginDetails = await Platform.readJSON(detailsPath);
-				if (pluginDetails && pluginDetails.isOn === false) {
-					plugin.checked = false;
-					delete pluginDetails.isOn;
+				if (pluginDetails) {
+					if (pluginDetails.isOn === false) {
+						plugin.checked = false;
+						delete pluginDetails.isOn;
+					}
+					if (pluginDetails.type !== undefined) {
+						plugin.type = pluginDetails.type;
+						delete pluginDetails.type;
+					}
 					await Platform.writeJSON(detailsPath, pluginDetails);
 				}
 			}

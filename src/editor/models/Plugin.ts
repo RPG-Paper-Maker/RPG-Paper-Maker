@@ -10,7 +10,17 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, JSONType, Paths, PLUGIN_CATEGORY_KIND, PLUGIN_TYPE_KIND } from '../common';
+import {
+	BINDING,
+	BindingType,
+	JSONType,
+	Paths,
+	PLUGIN_CATEGORY_KIND,
+	PLUGIN_TYPE_KIND,
+	PluginsManifestType,
+	Utils,
+} from '../common';
+import { Platform } from '../common/Platform';
 import { Project } from '../core';
 import { Checkable } from './Checkable';
 import { PluginCommand } from './PluginCommand';
@@ -18,6 +28,8 @@ import { PluginDefaultParameter } from './PluginDefaultParameter';
 import { PluginParameter } from './PluginParameter';
 
 class Plugin extends Checkable {
+	public static readonly BASE_GIT_URL =
+		'https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/refs/heads/web-3.0.0/plugins';
 	public type!: PLUGIN_TYPE_KIND;
 	public category!: PLUGIN_CATEGORY_KIND;
 	public author!: string;
@@ -28,13 +40,13 @@ class Plugin extends Checkable {
 	public defaultParameters!: PluginDefaultParameter[];
 	public parameters!: PluginParameter[];
 	public commands!: PluginCommand[];
+	public autoUpdate = true;
 	public code!: string;
 	public pictureBase64!: string;
 	public saved = true;
 
 	public static bindings: BindingType[] = [
 		['name', 'name', '', BINDING.STRING],
-		['type', 'type', PLUGIN_TYPE_KIND.EMPTY, BINDING.NUMBER],
 		['category', 'category', PLUGIN_CATEGORY_KIND.BATTLE, BINDING.NUMBER],
 		['author', 'author', '', BINDING.STRING],
 		['website', 'website', '', BINDING.STRING],
@@ -44,6 +56,7 @@ class Plugin extends Checkable {
 		['defaultParameters', 'defaultParameters', [], BINDING.LIST, PluginDefaultParameter],
 		['parameters', 'parameters', [], BINDING.LIST, PluginParameter],
 		['commands', 'commands', [], BINDING.LIST, PluginCommand],
+		['autoUpdate', 'au', true, BINDING.BOOLEAN],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -55,6 +68,47 @@ class Plugin extends Checkable {
 		plugin.id = id;
 		plugin.name = name;
 		return plugin;
+	}
+
+	static getGitURL(path: string) {
+		return Paths.join(this.BASE_GIT_URL, path.replaceAll(' ', '%20'));
+	}
+
+	static async getManifest(): Promise<JSONType[][] | null> {
+		const file = await Platform.readOnlineFile(`${this.BASE_GIT_URL}/manifest.json`);
+		if (file) {
+			return JSON.parse(file) as JSONType[][];
+		}
+		return null;
+	}
+
+	static async copyOnlineFolder(path: string, pluginName: string, folder: PluginsManifestType) {
+		path = Paths.join(path, folder.name);
+		const projectPath = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, path);
+		await Platform.createFolder(projectPath);
+		if (folder.files) {
+			for (const file of folder.files) {
+				const ext = file.split('.').pop()?.toLowerCase();
+				let content = '';
+				const mimeType = Platform.MIME_TYPES[ext || ''];
+				if (mimeType) {
+					const binaryData = await Platform.readOnlineFileUint8Array(
+						Plugin.getGitURL(Paths.join(path, file))
+					);
+					if (binaryData) {
+						content = `data:${mimeType};base64,${Utils.uint8ArrayToBase64(binaryData)}`;
+					}
+				} else {
+					content = (await Platform.readOnlineFile(Plugin.getGitURL(Paths.join(path, file)))) ?? '';
+				}
+				await Platform.createFile(Paths.join(projectPath, file), content);
+			}
+		}
+		if (folder.folders) {
+			for (const f of folder.folders) {
+				await this.copyOnlineFolder(path, pluginName, f);
+			}
+		}
 	}
 
 	getPath(): string {
@@ -69,16 +123,43 @@ class Plugin extends Checkable {
 		super.applyDefault(Plugin.bindings);
 	}
 
+	async checkUpdate(manifest?: JSONType[][] | null, temp = false) {
+		const content = await Platform.readOnlineFile(
+			Plugin.getGitURL(Paths.join(this.name, Paths.FILE_PLUGIN_DETAILS))
+		);
+		if (!manifest) {
+			manifest = await Plugin.getManifest();
+			if (!manifest) {
+				return;
+			}
+		}
+		if (content) {
+			const json = JSON.parse(content);
+			const newVersion = json.version ?? '1.0.0';
+			if (newVersion !== this.version) {
+				await Platform.removeFolder(
+					Paths.join(Project.current!.getPath(), temp ? Paths.PLUGINS_TEMP : Paths.PLUGINS, this.name)
+				);
+				const pluginManifest = manifest[this.category].find((p) => p.name === this.name);
+				if (pluginManifest) {
+					Plugin.copyOnlineFolder('', this.name, pluginManifest as PluginsManifestType);
+				}
+			}
+		}
+	}
+
 	toString(): string | ReactNode {
 		return super.toString() + (this.saved ? '' : ' *');
 	}
 
 	copy(plugin: Plugin): void {
 		super.copy(plugin, Plugin.bindings);
+		this.type = plugin.type;
 	}
 
 	readSimple(json: JSONType) {
 		super.read(json);
+		this.type = (json.type as PLUGIN_TYPE_KIND) ?? PLUGIN_TYPE_KIND.EMPTY;
 	}
 
 	readDetails(json: JSONType) {
@@ -87,6 +168,9 @@ class Plugin extends Checkable {
 
 	writeSimple(json: JSONType) {
 		super.write(json);
+		if (this.type !== PLUGIN_TYPE_KIND.EMPTY) {
+			json.type = this.type;
+		}
 	}
 
 	writeDetails(json: JSONType) {
