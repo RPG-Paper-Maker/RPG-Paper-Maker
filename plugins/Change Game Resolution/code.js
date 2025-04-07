@@ -33,6 +33,7 @@ function setWindowSize(width, height, fullscreen) {
 
     // Update the window size
     RPM.Datas.Systems.updateWindowSize(width, height, fullscreen);
+    RPM.Datas.Systems.updateWindowSize(width, height, fullscreen);
 }
 
 /**
@@ -49,4 +50,12 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Set Resolution", (Width, Height
  */
 RPM.Manager.Plugins.registerCommand(pluginName, "Set Full Screen", () => {
     setWindowSize(0, 0, true);
+});
+
+/**
+ * Confirm the resolution change.
+ */
+RPM.Manager.Plugins.registerCommand(pluginName, "Reload Game", () => {
+    // Reload the window/game
+    window.location.reload();
 });

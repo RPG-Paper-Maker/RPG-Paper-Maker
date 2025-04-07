@@ -25,9 +25,11 @@ setInterval(function ()
 		{
 			for (var i = 0; i < lightList.length; i++)
 			{
-				if (!lightList[i].parent || !lightList[i].parent.parent)
+				if (lightList[i].rpmRootScene !== RPM.Scene.Map.current)
 				{
-					lightList[i].dispose();
+					if (!!lightList[i].parent)
+						lightList[i].parent.remove(lightList[i]);
+//					lightList[i].dispose();
 					lightList.splice(i, 1);
 				}
 			}
@@ -183,6 +185,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Set ambient light", (intensity,
 RPM.Manager.Plugins.registerCommand(pluginName, "Add hemisphere light", (prop, intensity, colorTop, colorBottom) =>
 {
 	const light = new THREE.HemisphereLight(colorBottom.color, colorTop.color, intensity);
+	light.rpmRootScene = RPM.Scene.Map.current;
 	if (prop > 0)
 		RPM.Core.ReactionInterpreter.currentObject.properties[prop] = light;
 	RPM.Scene.Map.current.scene.add(light);
@@ -192,6 +195,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Add hemisphere light", (prop, i
 RPM.Manager.Plugins.registerCommand(pluginName, "Add directional light", (prop, x, y, z, intensity, color, castShadow) =>
 {
 	const light = new THREE.DirectionalLight(color.color, intensity);
+	light.rpmRootScene = RPM.Scene.Map.current;
 	light.extraStuff = new THREE.Vector3(x, y, z).normalize();
 	light.castShadow = castShadow;
 	light.shadow.mapSize.width = 2048;
@@ -208,6 +212,7 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Add directional light", (prop, 
 RPM.Manager.Plugins.registerCommand(pluginName, "Add point light", (prop, id, x, y, z, intensity, color, radius, castShadow) =>
 {
 	const light = new THREE.PointLight(color.color, intensity, limitDistance(radius * RPM.Datas.Systems.SQUARE_SIZE));
+	light.rpmRootScene = RPM.Scene.Map.current;
 	light.shadow.bias = -0.0001;
 	light.shadow.normalBias = 0.44 * RPM.Datas.Systems.SQUARE_SIZE / 16;
 	light.position.set(x * RPM.Datas.Systems.SQUARE_SIZE, y * RPM.Datas.Systems.SQUARE_SIZE, z * RPM.Datas.Systems.SQUARE_SIZE);
@@ -225,16 +230,20 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Add point light", (prop, id, x,
 			result.object.lightsPlugin_localLights.lightsPlugin_isLightGroup = true;
 			result.object.mesh.add(result.object.lightsPlugin_localLights);
 		}
+		if (result.object.lightsPlugin_localLights.parent !== result.object.mesh)
+			result.object.mesh.add(result.object.lightsPlugin_localLights);
 		result.object.lightsPlugin_localLights.add(light);
 		if (prop > 0)
 			RPM.Core.ReactionInterpreter.currentObject.properties[prop] = light;
 		lightList.push(light);
+		console.log(lightList);
 	}, RPM.Core.ReactionInterpreter.currentObject);
 });
 
 RPM.Manager.Plugins.registerCommand(pluginName, "Add spotlight", (prop, id, x, y, z, intensity, color, angle, distance, castShadow) =>
 {
 	const light = new THREE.SpotLight(color.color, intensity);
+	light.rpmRootScene = RPM.Scene.Map.current;
 	light.position.set(x * RPM.Datas.Systems.SQUARE_SIZE, y * RPM.Datas.Systems.SQUARE_SIZE, z * RPM.Datas.Systems.SQUARE_SIZE);
 	light.castShadow = castShadow;
 	light.angle = angle * Math.PI / 180.0;
@@ -255,6 +264,8 @@ RPM.Manager.Plugins.registerCommand(pluginName, "Add spotlight", (prop, id, x, y
 			result.object.lightsPlugin_localLights.lightsPlugin_isLightGroup = true;
 			result.object.mesh.add(result.object.lightsPlugin_localLights);
 		}
+		if (result.object.lightsPlugin_localLights.parent !== result.object.mesh)
+			result.object.mesh.add(result.object.lightsPlugin_localLights);
 		result.object.lightsPlugin_localLights.add(light);
 		if (!result.object.mesh.lightsPlugin_target)
 		{
