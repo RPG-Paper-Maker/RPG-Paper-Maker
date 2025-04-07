@@ -21,6 +21,20 @@ class Scripts extends Serializable {
 		return Paths.join(Project.current!.getPath(), Paths.FILE_SCRIPTS);
 	}
 
+	getLocalPlugins(): string[] {
+		const plugins: string[] = [];
+		for (const plugin of this.plugins) {
+			if (
+				plugin.type === PLUGIN_TYPE_KIND.EMPTY ||
+				plugin.type === PLUGIN_TYPE_KIND.LOCAL ||
+				(plugin.type === PLUGIN_TYPE_KIND.ONLINE && !plugin.autoUpdate)
+			) {
+				plugins.push(plugin.name);
+			}
+		}
+		return plugins;
+	}
+
 	async checkUpdates() {
 		const manifest = await Model.Plugin.getManifest();
 		if (manifest) {
@@ -28,6 +42,19 @@ class Scripts extends Serializable {
 				if (plugin.type === PLUGIN_TYPE_KIND.ONLINE && plugin.autoUpdate) {
 					await plugin.checkUpdate(manifest, false);
 				}
+			}
+		}
+	}
+
+	async loadSimple() {
+		this.plugins = [];
+		const json = await Platform.readJSON(this.getPath());
+		if (json) {
+			const jsonList = (json.plugins ?? []) as JSONType[];
+			for (const jsonPlugin of jsonList) {
+				const plugin = new Model.Plugin();
+				plugin.readSimple(jsonPlugin);
+				this.plugins.push(plugin);
 			}
 		}
 	}

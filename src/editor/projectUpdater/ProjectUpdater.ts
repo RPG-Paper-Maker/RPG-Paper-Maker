@@ -27,7 +27,7 @@ class ProjectUpdater {
 		return newPatch > currPatch;
 	}
 
-	static async update(version: string) {
+	static async update(version: string): Promise<string | null> {
 		try {
 			let passed = false;
 			for (const newVersion of this.versions) {
@@ -49,8 +49,12 @@ class ProjectUpdater {
 				json.pv = Project.VERSION;
 				await Platform.writeJSON(Paths.join(projectPath, Paths.FILE_SETTINGS), json);
 			}
+			await Project.current!.scripts.loadSimple();
+			const localPlugins = Project.current!.scripts.getLocalPlugins();
+			return localPlugins.length > 0 ? localPlugins.join(', ') : null;
 		} catch (error) {
 			console.error('Failed to load updater:', error);
+			return null;
 		}
 	}
 

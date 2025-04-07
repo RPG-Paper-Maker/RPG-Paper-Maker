@@ -2069,5 +2069,6 @@
 	"plugin.name.cannot.be.empty": "The plugin name cannot be empty",
 	"plugin.name.already.exists": "This plugin name already exists in your project",
 	"auto.update": "Auto update",
-	"check.update": "Check update"
+	"check.update": "Check update",
+	"warning.local.plugins.update": "Your project was updated. You might need to update your following local plugins: {{plugins}}. Favor online plugins that update automatically with each update!"
 }

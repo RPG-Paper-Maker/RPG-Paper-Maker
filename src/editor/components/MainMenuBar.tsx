@@ -121,6 +121,7 @@ function MainMenuBar() {
 	const [isDialogFontsOpen, setIsDialogFontsOpen] = useState(false);
 	const [isDialogChangeLanguageOpen, setIsDialogChangeLanguageOpen] = useState(false);
 	const [isDialogWarningProjectVersionOpen, setIsDialogWarningProjectVersionOpen] = useState(false);
+	const [warningLocalPluginsMessage, setWarningLocalPluginsMessage] = useStateString();
 	const [warningVersionMessage, setWarningVersionMessage] = useStateString();
 	const [currentVersion, setCurrentVersion] = useState('');
 	const [warningImportPath, setWarningImportPath] = useState('');
@@ -201,6 +202,7 @@ function MainMenuBar() {
 	};
 
 	const handleOpenProject = async (project: Model.ProjectPreview) => {
+		dispatch(setLoading(true));
 		dispatch(setOpenLoading(true));
 		if (await Platform.checkFileExists(project.location)) {
 			Project.current = new Project(project.location);
@@ -243,6 +245,7 @@ function MainMenuBar() {
 			setIsDialogWarningProjectLocationExist(true);
 		}
 		dispatch(setOpenLoading(false));
+		dispatch(setLoading(false));
 	};
 
 	const handleCloseWarningProjectLocationExist = () => {
@@ -257,8 +260,16 @@ function MainMenuBar() {
 		const version = currentVersion;
 		setCurrentVersion('');
 		dispatch(setLoading(true));
-		await ProjectUpdater.update(version);
-		dispatch(setLoading(false));
+		const warning = await ProjectUpdater.update(version);
+		if (warning) {
+			setWarningLocalPluginsMessage(t('warning.local.plugins.update', { plugins: warning }));
+		} else {
+			await handleOpenProject(Model.ProjectPreview.create('Unkown', Project.current!.location));
+		}
+	};
+
+	const handleCloseWarningLocalPluginsMessage = async () => {
+		setWarningLocalPluginsMessage('');
 		await handleOpenProject(Model.ProjectPreview.create('Unkown', Project.current!.location));
 	};
 
@@ -956,6 +967,16 @@ function MainMenuBar() {
 			>
 				<div className='textCenter'>{t('path.location.doesnt.exists')}.</div>
 			</Dialog>
+			{warningLocalPluginsMessage && (
+				<Dialog
+					isOpen
+					title={t('warning')}
+					footer={<FooterOK onOK={handleCloseWarningLocalPluginsMessage} />}
+					onClose={handleCloseWarningLocalPluginsMessage}
+				>
+					<p>{warningLocalPluginsMessage}</p>
+				</Dialog>
+			)}
 		</>
 	);
 }

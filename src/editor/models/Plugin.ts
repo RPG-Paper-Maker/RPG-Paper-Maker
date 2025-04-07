@@ -56,7 +56,6 @@ class Plugin extends Checkable {
 		['defaultParameters', 'defaultParameters', [], BINDING.LIST, PluginDefaultParameter],
 		['parameters', 'parameters', [], BINDING.LIST, PluginParameter],
 		['commands', 'commands', [], BINDING.LIST, PluginCommand],
-		['autoUpdate', 'au', true, BINDING.BOOLEAN],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
@@ -160,6 +159,7 @@ class Plugin extends Checkable {
 	readSimple(json: JSONType) {
 		super.read(json);
 		this.type = (json.type as PLUGIN_TYPE_KIND) ?? PLUGIN_TYPE_KIND.EMPTY;
+		this.autoUpdate = (json.au as boolean) ?? true;
 	}
 
 	readDetails(json: JSONType) {
@@ -170,6 +170,9 @@ class Plugin extends Checkable {
 		super.write(json);
 		if (this.type !== PLUGIN_TYPE_KIND.EMPTY) {
 			json.type = this.type;
+		}
+		if (!this.autoUpdate) {
+			json.au = this.autoUpdate;
 		}
 	}
 
