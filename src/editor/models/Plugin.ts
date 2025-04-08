@@ -136,12 +136,20 @@ class Plugin extends Checkable {
 			const json = JSON.parse(content);
 			const newVersion = json.version ?? '1.0.0';
 			if (newVersion !== this.version) {
+				const pathDetails = Paths.join(
+					Project.current!.getPath(),
+					temp ? Paths.PLUGINS_TEMP : Paths.PLUGINS,
+					this.name,
+					Paths.FILE_PLUGIN_DETAILS
+				);
+				json.parameters = (await Platform.readJSON(pathDetails))?.parameters;
 				await Platform.removeFolder(
 					Paths.join(Project.current!.getPath(), temp ? Paths.PLUGINS_TEMP : Paths.PLUGINS, this.name)
 				);
 				const pluginManifest = manifest[this.category].find((p) => p.name === this.name);
 				if (pluginManifest) {
 					Plugin.copyOnlineFolder('', this.name, pluginManifest as PluginsManifestType);
+					await Platform.writeJSON(pathDetails, json);
 				}
 			}
 		}
