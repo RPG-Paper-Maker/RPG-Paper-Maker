@@ -1,5 +1,3 @@
-import { THREE } from "../../System/Globals.js";
-
 /**
  * Based on "A Practical Analytic Model for Daylight"
  * aka The Preetham Model, the de facto standard analytic skydome model
@@ -12,45 +10,40 @@ import { THREE } from "../../System/Globals.js";
  * http://blenderartists.org/forum/showthread.php?245954-preethams-sky-impementation-HDR
  *
  * Three.js integration by zz85 http://twitter.com/blurspline
-*/
+ */
 
 class Sky extends THREE.Mesh {
-
 	constructor() {
-
 		const shader = Sky.SkyShader;
 
-		const material = new THREE.ShaderMaterial( {
+		const material = new THREE.ShaderMaterial({
 			name: shader.name,
-			uniforms: THREE.UniformsUtils.clone( shader.uniforms ),
+			uniforms: THREE.UniformsUtils.clone(shader.uniforms),
 			vertexShader: shader.vertexShader,
 			fragmentShader: shader.fragmentShader,
 			side: THREE.BackSide,
-			depthWrite: false
-		} );
+			depthWrite: false,
+		});
 
-		super( new THREE.BoxGeometry( 1, 1, 1 ), material );
+		super(new THREE.BoxGeometry(1, 1, 1), material);
 
 		this.isSky = true;
-
 	}
-
 }
 
 Sky.SkyShader = {
-
 	name: 'SkyShader',
 
 	uniforms: {
-		'turbidity': { value: 2 },
-		'rayleigh': { value: 1 },
-		'mieCoefficient': { value: 0.005 },
-		'mieDirectionalG': { value: 0.8 },
-		'sunPosition': { value: new THREE.Vector3() },
-		'up': { value: new THREE.Vector3( 0, 1, 0 ) }
+		turbidity: { value: 2 },
+		rayleigh: { value: 1 },
+		mieCoefficient: { value: 0.005 },
+		mieDirectionalG: { value: 0.8 },
+		sunPosition: { value: new THREE.Vector3() },
+		up: { value: new THREE.Vector3(0, 1, 0) },
 	},
 
-	vertexShader: /* glsl */`
+	vertexShader: /* glsl */ `
 		uniform vec3 sunPosition;
 		uniform float rayleigh;
 		uniform float turbidity;
@@ -122,7 +115,7 @@ Sky.SkyShader = {
 
 		}`,
 
-	fragmentShader: /* glsl */`
+	fragmentShader: /* glsl */ `
 		varying vec3 vWorldPosition;
 		varying vec3 vSunDirection;
 		varying float vSunfade;
@@ -206,8 +199,7 @@ Sky.SkyShader = {
 			//#include <colorspace_fragment>
 			gl_FragColor = linearToOutputTexel( gl_FragColor );
 
-		}`
-
+		}`,
 };
 
-export { Sky };
+return Sky;

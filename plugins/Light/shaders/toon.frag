@@ -137,7 +137,7 @@ void main()
 {
 	int numberOfRings = 5;
 	vec4 ambient = vec4(ambientLightColor.rgb / PI, 1.0); // maybe "/ PI" will have to be removed on more recent three.js revisions
-	vec2 coords = vec2(vUv.x + offset.x, vUv.y + offset.y);
+	vec2 coords = vec2(vMapUv.x + offset.x, vMapUv.y + offset.y);
 	vec2 pos = reverseH ? vec2(1.0 - coords.x, coords.y) : coords;
 	pos = vec2(pos.x - floor(pos.x), pos.y - floor(pos.y));
 	vec4 tex;
