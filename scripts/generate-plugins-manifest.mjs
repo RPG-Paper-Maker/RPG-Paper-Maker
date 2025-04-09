@@ -10,18 +10,20 @@ function generateFileManifest(relativePath, folderName) {
 	const folderPath = path.join(relativePath, folderName);
 	const files = fs.readdirSync(folderPath);
 	files.forEach((file) => {
-		const filePath = path.join(folderPath, file);
-		const stat = fs.statSync(filePath);
-		if (stat.isDirectory()) {
-			if (!manifest.folders) {
-				manifest.folders = [];
+		if (file !== '.git') {
+			const filePath = path.join(folderPath, file);
+			const stat = fs.statSync(filePath);
+			if (stat.isDirectory()) {
+				if (!manifest.folders) {
+					manifest.folders = [];
+				}
+				manifest.folders.push(generateFileManifest(folderPath, file));
+			} else {
+				if (!manifest.files) {
+					manifest.files = [];
+				}
+				manifest.files.push(file);
 			}
-			manifest.folders.push(generateFileManifest(folderPath, file));
-		} else {
-			if (!manifest.files) {
-				manifest.files = [];
-			}
-			manifest.files.push(file);
 		}
 	});
 	return manifest;
