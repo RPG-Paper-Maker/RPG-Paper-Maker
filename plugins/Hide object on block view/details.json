@@ -1,1 +1,102 @@
-{"author":"RussoDaFederal","category":2,"commands":[{"defaultParameters":[{"defaultValue":{"k":12,"v":-1},"description":"ID of the map object. -1 is self, 0 is hero","id":-1,"name":"id"},{"defaultValue":{"k":10,"v":true},"id":-1,"name":"erase"}],"description":"Set whether a single map object should be erased if blocking the camera","id":1,"name":"Filter map object"},{"defaultParameters":[{"defaultValue":{"k":10,"v":false},"description":"When set to ON, will erase map entities based on camera target instead of hero","id":-1,"name":"enable"}],"description":"When set to ON, will erase map entities based on camera target instead of hero","id":2,"name":"Follow camera"}],"defaultParameters":[{"description":"ID of the variable where to store the radius (in squares) of the \"erase circle\"","id":-1,"name":"Erase radius variable ID"},{"description":"If the variable of given ID is ON, mountains in front of the camera will be erased.","id":-1,"name":"Filter mountains variable ID"},{"description":"If the variable of given ID is ON, tileset elements in front of the camera will be erased.","id":-1,"name":"Filter tileset variable ID"},{"description":"If the variable of given ID is ON, walls in front of the camera will be erased.","id":-1,"name":"Filter walls variable ID"},{"description":"If the variable of given ID is ON, static 3D objects in front of the camera will be erased.","id":-1,"name":"Filter 3D objects variable ID"},{"description":"ID of the variable that holds the Y offset of the \"eraser\". Can be changed dynamically.","id":-1,"name":"Y offset variable ID"}],"description":"Replaces the zoom on camera block by a shader based approach. When the camera is blocked, the shader erases the elements in front of it in a circle in the center of the viewport. The elements that are erased or not can be toggled dynamically, including individual map elements.\n\nWarning! Currently there is a major setback when using this plugin, which is caused by how texture bundles are organized in the engine by default. When filtering a map entity, all entities of the same category (wall, mountain, floor, 3D object), except individual map objects, that share its texture will also be filtered. This is especially bothersome when walking near corners. One workaround is to use different texture files for walls on different axes (X or Z), although this is notably confusing and doesn't work well with mountains, for example. Or you can simply ignore this issue, I guess. I did the best I could, the rest is up to you.","name":"Hide object on block view","parameters":[{"description":"ID of the variable where to store the radius (in squares) of the \"erase circle\"","id":-1,"name":"Erase radius variable ID"},{"description":"If the variable of given ID is ON, mountains in front of the camera will be erased.","id":-1,"name":"Filter mountains variable ID"},{"description":"If the variable of given ID is ON, tileset elements in front of the camera will be erased.","id":-1,"name":"Filter tileset variable ID"},{"description":"If the variable of given ID is ON, walls in front of the camera will be erased.","id":-1,"name":"Filter walls variable ID"},{"description":"If the variable of given ID is ON, static 3D objects in front of the camera will be erased.","id":-1,"name":"Filter 3D objects variable ID"},{"description":"ID of the variable that holds the Y offset of the \"eraser\". Can be changed dynamically.","id":-1,"name":"Y offset variable ID"}],"type":1,"version":"1.3.0","website":"https://github.com/yaleksander/RPM-Plugin-Hide-on-block-view"}
+{
+	"author": "RussoDaFederal",
+	"category": 2,
+	"commands": [
+		{
+			"defaultParameters": [
+				{
+					"defaultValue": { "k": 12, "v": -1 },
+					"description": "ID of the map object. -1 is self, 0 is hero",
+					"id": -1,
+					"name": "id"
+				},
+				{ "defaultValue": { "k": 10, "v": true }, "id": -1, "name": "erase" }
+			],
+			"description": "Set whether a single map object should be erased if blocking the camera",
+			"id": 1,
+			"name": "Filter map object"
+		},
+		{
+			"defaultParameters": [
+				{
+					"defaultValue": { "k": 10, "v": false },
+					"description": "When set to ON, will erase map entities based on camera target instead of hero",
+					"id": -1,
+					"name": "enable"
+				}
+			],
+			"description": "When set to ON, will erase map entities based on camera target instead of hero",
+			"id": 2,
+			"name": "Follow camera"
+		}
+	],
+	"defaultParameters": [
+		{
+			"description": "ID of the variable where to store the radius (in squares) of the \"erase circle\"",
+			"id": -1,
+			"name": "Erase radius variable ID"
+		},
+		{
+			"description": "If the variable of given ID is ON, mountains in front of the camera will be erased.",
+			"id": -1,
+			"name": "Filter mountains variable ID"
+		},
+		{
+			"description": "If the variable of given ID is ON, tileset elements in front of the camera will be erased.",
+			"id": -1,
+			"name": "Filter tileset variable ID"
+		},
+		{
+			"description": "If the variable of given ID is ON, walls in front of the camera will be erased.",
+			"id": -1,
+			"name": "Filter walls variable ID"
+		},
+		{
+			"description": "If the variable of given ID is ON, static 3D objects in front of the camera will be erased.",
+			"id": -1,
+			"name": "Filter 3D objects variable ID"
+		},
+		{
+			"description": "ID of the variable that holds the Y offset of the \"eraser\". Can be changed dynamically.",
+			"id": -1,
+			"name": "Y offset variable ID"
+		}
+	],
+	"description": "Replaces the zoom on camera block by a shader based approach. When the camera is blocked, the shader erases the elements in front of it in a circle in the center of the viewport. The elements that are erased or not can be toggled dynamically, including individual map elements.\n\nWarning! Currently there is a major setback when using this plugin, which is caused by how texture bundles are organized in the engine by default. When filtering a map entity, all entities of the same category (wall, mountain, floor, 3D object), except individual map objects, that share its texture will also be filtered. This is especially bothersome when walking near corners. One workaround is to use different texture files for walls on different axes (X or Z), although this is notably confusing and doesn't work well with mountains, for example. Or you can simply ignore this issue, I guess. I did the best I could, the rest is up to you.",
+	"name": "Hide object on block view",
+	"parameters": [
+		{
+			"description": "ID of the variable where to store the radius (in squares) of the \"erase circle\"",
+			"id": -1,
+			"name": "Erase radius variable ID"
+		},
+		{
+			"description": "If the variable of given ID is ON, mountains in front of the camera will be erased.",
+			"id": -1,
+			"name": "Filter mountains variable ID"
+		},
+		{
+			"description": "If the variable of given ID is ON, tileset elements in front of the camera will be erased.",
+			"id": -1,
+			"name": "Filter tileset variable ID"
+		},
+		{
+			"description": "If the variable of given ID is ON, walls in front of the camera will be erased.",
+			"id": -1,
+			"name": "Filter walls variable ID"
+		},
+		{
+			"description": "If the variable of given ID is ON, static 3D objects in front of the camera will be erased.",
+			"id": -1,
+			"name": "Filter 3D objects variable ID"
+		},
+		{
+			"description": "ID of the variable that holds the Y offset of the \"eraser\". Can be changed dynamically.",
+			"id": -1,
+			"name": "Y offset variable ID"
+		}
+	],
+	"type": 1,
+	"version": "1.4.0",
+	"website": "https://github.com/yaleksander/RPM-Plugin-Hide-on-block-view"
+}

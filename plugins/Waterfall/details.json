@@ -1,1 +1,108 @@
-{"author":"RussoDaFederal","category":2,"commands":[{"defaultParameters":[{"defaultValue":{"k":12,"v":-1},"description":"ID of the Map Object that will become the waterfall. -1 is self","id":-1,"name":"id"},{"defaultValue":{"k":12,"v":3},"description":"Diameter of the waterfall, in squares","id":-1,"name":"diameter"},{"defaultValue":{"k":12,"v":10},"description":"Height of the waterfall, in squares","id":-1,"name":"height"},{"defaultValue":{"k":12,"v":1},"description":"Shape of the waterfall. 1 = cylinder; 2 = box; 3 = sphere; 4 = plane","id":-1,"name":"shape"},{"defaultValue":{"k":12,"v":1},"description":"The animation speed of the waterfall","id":-1,"name":"speed"},{"defaultValue":{"k":27,"v":1},"description":"Dark color to mix to the top of the waterfall","id":-1,"name":"topDark"},{"defaultValue":{"k":27,"v":1},"description":"Dark color to mix to the bottom of the waterfall","id":-1,"name":"bottomDark"},{"defaultValue":{"k":27,"v":2},"description":"Light color to mix to the top of the waterfall","id":-1,"name":"topLight"},{"defaultValue":{"k":27,"v":2},"description":"Light color to mix to the bottom of the waterfall","id":-1,"name":"bottomLight"},{"defaultValue":{"k":27,"v":2},"description":"Color of the waterfall's foam at the bottom","id":-1,"name":"foamColor"},{"defaultValue":{"k":10,"v":true},"description":"Whether to add foam or not","id":-1,"name":"addFoam"},{"defaultValue":{"k":12,"v":1},"description":"The opacity of the waterfall, from 0 to 1. 0 is invisible, 1 is fully opaque","id":-1,"name":"opacity"}],"description":"Turn a Map Object into a waterfall (will replace its graphics)","id":1,"name":"Create waterfall"},{"defaultParameters":[{"defaultValue":{"k":12,"v":-1},"description":"ID of the map object where the waterfall is. -1 is self, 0 is hero","id":-1,"name":"id"},{"defaultValue":{"k":12,"v":1},"description":"Opacity value ranging from 0 to 1. 0 is invisible and 1 is fully opaque","id":-1,"name":"opacity"}],"description":"Change the opacity of the waterfall","id":2,"name":"Set opacity"}],"description":"Enables creating an animated waterfall. The waterfall will replace the graphics of a given map object.\n\nCredits to Mugen87 (https://github.com/Mugen87) for creating this ThreeJS waterfall: https://codesandbox.io/p/sandbox/funny-lake-7rkse. I mostly just ported that code to RPM.\n\nTip: if you use blue (0x00ff00) for the dark colors and white (0xffffff) for the light colors, you'll get a decent enough effect. Try combining different colors to achieve the result you want!\n\nWarning! If you have downloaded this plugin directly from the engine, there might be missing files. You can download the missing files from GitHub on the provided link or from the RPG Paper Maker Discord server.","name":"Waterfall","version":"1.0.1","website":"https://github.com/yaleksander/RPM-Plugin-Waterfall"}
+{
+	"author": "RussoDaFederal",
+	"category": 2,
+	"commands": [
+		{
+			"defaultParameters": [
+				{
+					"defaultValue": { "k": 12, "v": -1 },
+					"description": "ID of the Map Object that will become the waterfall. -1 is self",
+					"id": -1,
+					"name": "id"
+				},
+				{
+					"defaultValue": { "k": 12, "v": 3 },
+					"description": "Diameter of the waterfall, in squares",
+					"id": -1,
+					"name": "diameter"
+				},
+				{
+					"defaultValue": { "k": 12, "v": 10 },
+					"description": "Height of the waterfall, in squares",
+					"id": -1,
+					"name": "height"
+				},
+				{
+					"defaultValue": { "k": 12, "v": 1 },
+					"description": "Shape of the waterfall. 1 = cylinder; 2 = box; 3 = sphere; 4 = plane",
+					"id": -1,
+					"name": "shape"
+				},
+				{
+					"defaultValue": { "k": 12, "v": 1 },
+					"description": "The animation speed of the waterfall",
+					"id": -1,
+					"name": "speed"
+				},
+				{
+					"defaultValue": { "k": 27, "v": 1 },
+					"description": "Dark color to mix to the top of the waterfall",
+					"id": -1,
+					"name": "topDark"
+				},
+				{
+					"defaultValue": { "k": 27, "v": 1 },
+					"description": "Dark color to mix to the bottom of the waterfall",
+					"id": -1,
+					"name": "bottomDark"
+				},
+				{
+					"defaultValue": { "k": 27, "v": 2 },
+					"description": "Light color to mix to the top of the waterfall",
+					"id": -1,
+					"name": "topLight"
+				},
+				{
+					"defaultValue": { "k": 27, "v": 2 },
+					"description": "Light color to mix to the bottom of the waterfall",
+					"id": -1,
+					"name": "bottomLight"
+				},
+				{
+					"defaultValue": { "k": 27, "v": 2 },
+					"description": "Color of the waterfall's foam at the bottom",
+					"id": -1,
+					"name": "foamColor"
+				},
+				{
+					"defaultValue": { "k": 10, "v": true },
+					"description": "Whether to add foam or not",
+					"id": -1,
+					"name": "addFoam"
+				},
+				{
+					"defaultValue": { "k": 12, "v": 1 },
+					"description": "The opacity of the waterfall, from 0 to 1. 0 is invisible, 1 is fully opaque",
+					"id": -1,
+					"name": "opacity"
+				}
+			],
+			"description": "Turn a Map Object into a waterfall (will replace its graphics)",
+			"id": 1,
+			"name": "Create waterfall"
+		},
+		{
+			"defaultParameters": [
+				{
+					"defaultValue": { "k": 12, "v": -1 },
+					"description": "ID of the map object where the waterfall is. -1 is self, 0 is hero",
+					"id": -1,
+					"name": "id"
+				},
+				{
+					"defaultValue": { "k": 12, "v": 1 },
+					"description": "Opacity value ranging from 0 to 1. 0 is invisible and 1 is fully opaque",
+					"id": -1,
+					"name": "opacity"
+				}
+			],
+			"description": "Change the opacity of the waterfall",
+			"id": 2,
+			"name": "Set opacity"
+		}
+	],
+	"description": "Enables creating an animated waterfall. The waterfall will replace the graphics of a given map object.\n\nCredits to Mugen87 (https://github.com/Mugen87) for creating this ThreeJS waterfall: https://codesandbox.io/p/sandbox/funny-lake-7rkse. I mostly just ported that code to RPM.\n\nTip: if you use blue (0x00ff00) for the dark colors and white (0xffffff) for the light colors, you'll get a decent enough effect. Try combining different colors to achieve the result you want!\n\nWarning! If you have downloaded this plugin directly from the engine, there might be missing files. You can download the missing files from GitHub on the provided link or from the RPG Paper Maker Discord server.",
+	"name": "Waterfall",
+	"version": "1.1.0",
+	"website": "https://github.com/yaleksander/RPM-Plugin-Waterfall"
+}

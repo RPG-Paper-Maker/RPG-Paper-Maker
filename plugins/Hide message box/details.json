@@ -1,1 +1,21 @@
-{"author":"RussoDaFederal","category":3,"commands":[{"description":"Hide the active message box","id":1,"name":"Hide text"},{"description":"Show a previously hidden message box","id":2,"name":"Show text"},{"defaultParameters":[{"defaultValue":{"k":12,"v":1},"description":"ID of the property","id":-1,"name":"id"}],"description":"Assign ON or OFF to the property of given ID to know if the text is hidden or not","id":3,"name":"Is hidden?"},{"description":"Toggle the text visibility (show/hide)","id":4,"name":"Toggle text"}],"description":"Enables toggling the visibility of the dialogue box. Do not use this plugin on the Hero Model, since the Hero is usually blocked when a message is shown, which means the event listeners would be blocked too. Instead, use it on a Map Object. My suggestion is to make a new Model and spawn it using the Hero Model (with Create Object In Map command). Use a Time Event [repeat OFF, interval 0] to spawn only one instance of that new Model. On that new model, create a Time Event [repeat ON, interval around 0.02] and add a pair of Conditions to check if a certain key is pressed and if it's just pressed and not held. If the conditions are met, use the Toggle Text command from this plugin. You can also use the Hide Text, Show Text and Is Hidden commands to implement it differently. Also, you might need to teleport this Map Object to the Hero constantly if you have big maps. Some Map Objects do not run their Reactions if they're too far away from the Hero.\n\nThe dialogue box cannot be hidden when there are choices to be made. While hidden, the text cannot be passed nor skipped until the user selects to show the text again manually.","name":"Hide message box","version":"1.0.2","website":"https://github.com/yaleksander/RPM-Plugin-Hide-message-box"}
+{
+	"author": "RussoDaFederal",
+	"category": 3,
+	"commands": [
+		{ "description": "Hide the active message box", "id": 1, "name": "Hide text" },
+		{ "description": "Show a previously hidden message box", "id": 2, "name": "Show text" },
+		{
+			"defaultParameters": [
+				{ "defaultValue": { "k": 12, "v": 1 }, "description": "ID of the property", "id": -1, "name": "id" }
+			],
+			"description": "Assign ON or OFF to the property of given ID to know if the text is hidden or not",
+			"id": 3,
+			"name": "Is hidden?"
+		},
+		{ "description": "Toggle the text visibility (show/hide)", "id": 4, "name": "Toggle text" }
+	],
+	"description": "Enables toggling the visibility of the dialogue box. Do not use this plugin on the Hero Model, since the Hero is usually blocked when a message is shown, which means the event listeners would be blocked too. Instead, use it on a Map Object. My suggestion is to make a new Model and spawn it using the Hero Model (with Create Object In Map command). Use a Time Event [repeat OFF, interval 0] to spawn only one instance of that new Model. On that new model, create a Time Event [repeat ON, interval around 0.02] and add a pair of Conditions to check if a certain key is pressed and if it's just pressed and not held. If the conditions are met, use the Toggle Text command from this plugin. You can also use the Hide Text, Show Text and Is Hidden commands to implement it differently. Also, you might need to teleport this Map Object to the Hero constantly if you have big maps. Some Map Objects do not run their Reactions if they're too far away from the Hero.\n\nThe dialogue box cannot be hidden when there are choices to be made. While hidden, the text cannot be passed nor skipped until the user selects to show the text again manually.",
+	"name": "Hide message box",
+	"version": "1.1.0",
+	"website": "https://github.com/yaleksander/RPM-Plugin-Hide-message-box"
+}
