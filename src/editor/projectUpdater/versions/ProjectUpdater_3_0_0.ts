@@ -12,6 +12,7 @@
 import { ArrayUtils, JSONType, Paths } from '../../common';
 import { Platform } from '../../common/Platform';
 import { Project } from '../../core';
+import { Model } from '../../Editor';
 import { MapObjectCommandType } from '../../models';
 import { ProjectUpdater } from '../ProjectUpdater';
 
@@ -298,6 +299,8 @@ class ProjectUpdater_3_0_0 {
 		}
 
 		// Plugins: isOn moved to scripts.json and renamed checked, moving type to scripts.json
+		const manifest = await Model.Plugin.getManifest();
+		const onlinePluginNames = manifest?.flat()?.map((plugin) => plugin.name) ?? [];
 		const jsonScripts = await Platform.readJSON(Paths.join(projectPath, 'scripts.json'));
 		if (jsonScripts) {
 			const jsonPlugins = jsonScripts.plugins as JSONType[];
@@ -312,6 +315,9 @@ class ProjectUpdater_3_0_0 {
 					if (pluginDetails.type !== undefined) {
 						plugin.type = pluginDetails.type;
 						delete pluginDetails.type;
+					}
+					if (onlinePluginNames.includes(plugin.name)) {
+						plugin.type = 2;
 					}
 					await Platform.writeJSON(detailsPath, pluginDetails);
 				}
