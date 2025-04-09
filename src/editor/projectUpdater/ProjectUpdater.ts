@@ -27,9 +27,13 @@ class ProjectUpdater {
 		return newPatch > currPatch;
 	}
 
-	static async update(version: string): Promise<string | null> {
+	static async update(
+		version: string,
+		callback: (current: number, total: number, label: string) => void
+	): Promise<string | null> {
 		try {
 			let passed = false;
+			let index = 0;
 			for (const newVersion of this.versions) {
 				if (passed || this.checkVersion(version, newVersion)) {
 					passed = true;
@@ -37,11 +41,13 @@ class ProjectUpdater {
 					const module = await import(`./versions/${className}`);
 					const updaterClass = module[className];
 					if (updaterClass && typeof updaterClass.update === 'function') {
+						callback(index, this.versions.length, `Updating to version ${newVersion}...`);
 						await updaterClass.update();
 					} else {
 						throw new Error(`Update method not found in ${className}`);
 					}
 				}
+				index++;
 			}
 			const projectPath = Project.current!.getPath();
 			const json = await Platform.readJSON(Paths.join(projectPath, Paths.FILE_SETTINGS));

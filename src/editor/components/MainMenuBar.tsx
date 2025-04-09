@@ -260,7 +260,7 @@ function MainMenuBar() {
 		const version = currentVersion;
 		setCurrentVersion('');
 		dispatch(setLoading(true));
-		const warning = await ProjectUpdater.update(version);
+		const warning = await ProjectUpdater.update(version, updateLoadingBar);
 		if (warning) {
 			setWarningLocalPluginsMessage(t('warning.local.plugins.update', { plugins: warning }));
 		} else {
