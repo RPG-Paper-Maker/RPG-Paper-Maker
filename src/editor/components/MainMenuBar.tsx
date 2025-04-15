@@ -261,6 +261,7 @@ function MainMenuBar() {
 		setCurrentVersion('');
 		dispatch(setLoading(true));
 		const warning = await ProjectUpdater.update(version, updateLoadingBar);
+		dispatch(setLoadingBar(null));
 		if (warning) {
 			setWarningLocalPluginsMessage(t('warning.local.plugins.update', { plugins: warning }));
 		} else {
@@ -297,8 +298,11 @@ function MainMenuBar() {
 		importFileInputRef.current?.click();
 	};
 
-	const updateLoadingBar = (current: number, total: number, label = '') => {
-		dispatch(setLoadingBar({ percent: Math.floor((current / total) * 100), label }));
+	const updateLoadingBar = (current: number, total: number, label = '', extra = 0) => {
+		const stepSize = 100 / total;
+		const baseProgress = (current / total) * 100;
+		const extraProgress = (extra / 100) * stepSize;
+		dispatch(setLoadingBar({ percent: Math.floor(baseProgress + extraProgress), label }));
 	};
 
 	const handleImportFileChange = async () => {
@@ -662,7 +666,7 @@ function MainMenuBar() {
 					title: `${t('data.manager')}...`,
 					icon: <BsDatabase />,
 					onClick: handleDataManager,
-					disabled: !isProjectOpened,
+					disabled: true,
 				},
 				{
 					title: `${t('systems.manager')}...`,

@@ -9,11 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import { ReactNode } from 'react';
 import {
 	BINDING,
 	BindingType,
 	JSONType,
+	notifySuccess,
 	Paths,
 	PLUGIN_CATEGORY_KIND,
 	PLUGIN_TYPE_KIND,
@@ -81,9 +83,9 @@ class Plugin extends Checkable {
 		return null;
 	}
 
-	static async copyOnlineFolder(path: string, pluginName: string, folder: PluginsManifestType) {
+	static async copyOnlineFolder(path: string, pluginName: string, folder: PluginsManifestType, temp: boolean) {
 		path = Paths.join(path, folder.name);
-		const projectPath = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, path);
+		const projectPath = Paths.join(Project.current!.getPath(), temp ? Paths.PLUGINS_TEMP : Paths.PLUGINS, path);
 		await Platform.createFolder(projectPath);
 		if (folder.files) {
 			for (const file of folder.files) {
@@ -105,7 +107,7 @@ class Plugin extends Checkable {
 		}
 		if (folder.folders) {
 			for (const f of folder.folders) {
-				await this.copyOnlineFolder(path, pluginName, f);
+				await this.copyOnlineFolder(path, pluginName, f, temp);
 			}
 		}
 	}
@@ -134,22 +136,37 @@ class Plugin extends Checkable {
 		}
 		if (content) {
 			const json = JSON.parse(content);
+			const pathDetails = Paths.join(
+				Project.current!.getPath(),
+				temp ? Paths.PLUGINS_TEMP : Paths.PLUGINS,
+				this.name,
+				Paths.FILE_PLUGIN_DETAILS
+			);
+			const jsonOld = await Platform.readJSON(pathDetails);
 			const newVersion = json.version ?? '1.0.0';
-			if (newVersion !== this.version) {
-				const pathDetails = Paths.join(
-					Project.current!.getPath(),
-					temp ? Paths.PLUGINS_TEMP : Paths.PLUGINS,
-					this.name,
-					Paths.FILE_PLUGIN_DETAILS
-				);
-				json.parameters = (await Platform.readJSON(pathDetails))?.parameters;
+			const oldVersion = jsonOld?.version ?? '1.0.0';
+			if (newVersion !== oldVersion) {
+				// Keep the old parameters + add the new ones
+				const newParameters = [] as JSONType[];
+				for (const parameter of json.parameters ?? []) {
+					const currentParameter = (jsonOld?.parameters as JSONType[])?.find(
+						(p) => p.name === parameter.name
+					);
+					newParameters.push(currentParameter ?? parameter);
+				}
+				json.parameters = newParameters;
 				await Platform.removeFolder(
 					Paths.join(Project.current!.getPath(), temp ? Paths.PLUGINS_TEMP : Paths.PLUGINS, this.name)
 				);
-				const pluginManifest = manifest[this.category].find((p) => p.name === this.name);
+				const pluginManifest = manifest[json.category ?? PLUGIN_CATEGORY_KIND.BATTLE].find(
+					(p) => p.name === this.name
+				);
 				if (pluginManifest) {
-					Plugin.copyOnlineFolder('', this.name, pluginManifest as PluginsManifestType);
+					await Plugin.copyOnlineFolder('', this.name, pluginManifest as PluginsManifestType, temp);
 					await Platform.writeJSON(pathDetails, json);
+					notifySuccess(
+						i18next.t('plugin.successfully.updated', { name: this.name, oldVersion, newVersion })
+					);
 				}
 			}
 		}
@@ -162,6 +179,7 @@ class Plugin extends Checkable {
 	copy(plugin: Plugin): void {
 		super.copy(plugin, Plugin.bindings);
 		this.type = plugin.type;
+		this.autoUpdate = plugin.autoUpdate;
 	}
 
 	readSimple(json: JSONType) {

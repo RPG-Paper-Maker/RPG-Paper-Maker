@@ -770,14 +770,16 @@ class MapPortion {
 		this.autotilesList = [];
 
 		// Create autotiles according to the textures
-		for (let i = 0, l = this.map.texturesAutotiles.length; i < l; i++) {
-			const texturesAutotile = this.map.texturesAutotiles[i];
+		for (const autotile of Project.current!.specialElements.autotiles) {
+			const autotileID = autotile.id;
+			const pictureID = autotile.pictureID;
+			const texturesAutotile = this.map.texturesAutotiles[pictureID];
 			if (texturesAutotile) {
 				for (const textureAutotile of texturesAutotile) {
-					if (!this.autotilesList[i]) {
-						this.autotilesList[i] = [];
+					if (!this.autotilesList[autotileID]) {
+						this.autotilesList[autotileID] = [];
 					}
-					this.autotilesList[i].push(new MapElement.Autotiles(textureAutotile));
+					this.autotilesList[autotileID].push(new MapElement.Autotiles(textureAutotile));
 				}
 			}
 		}
@@ -1286,6 +1288,9 @@ class MapPortion {
 			// First state graphics
 			const state = object.getFirstState();
 			if (state) {
+				position.scaleX = state.scaleX.getFixNumberValue();
+				position.scaleY = state.scaleY.getFixNumberValue();
+				position.scaleZ = state.scaleZ.getFixNumberValue();
 				let mesh: THREE.Mesh | null = null;
 				switch (state.graphicsKind) {
 					case ELEMENT_MAP_KIND.NONE:

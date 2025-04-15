@@ -9,13 +9,20 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { ToastContainer } from 'react-toastify';
+import './editor/common/ToasterError';
 import Editor from './editor/Editor';
 import Game from './game/Game';
 
 function App() {
 	const queryParameters = new URLSearchParams(window.location.search);
 	const projectLocation = queryParameters.get('project');
-	return <>{projectLocation ? <Game location={projectLocation} /> : <Editor />}</>;
+	return (
+		<>
+			{projectLocation ? <Game location={projectLocation} /> : <Editor />}
+			<ToastContainer />
+		</>
+	);
 }
 
 export default App;

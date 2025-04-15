@@ -158,7 +158,7 @@ function Toolbar() {
 						<></>
 					)}
 					<MenuItem separator></MenuItem>
-					<MenuItem icon={<BsDatabase />} onClick={handleDataManager} disabled={!isProjectOpened}>
+					<MenuItem icon={<BsDatabase />} onClick={handleDataManager} disabled>
 						{t('data.manager.tool')}
 					</MenuItem>
 					<MenuItem icon={<BsClipboardData />} onClick={handleSystemsManager} disabled={!isProjectOpened}>

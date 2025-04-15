@@ -5,5 +5,7 @@ export * from './IO';
 export * from './Mathf';
 export * from './Paths';
 export * from './RPM';
+export * from './ToasterError';
+export * from './ToasterUtils';
 export * from './Types';
 export * from './Utils';

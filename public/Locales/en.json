@@ -2070,5 +2070,6 @@
 	"plugin.name.already.exists": "This plugin name already exists in your project",
 	"auto.update": "Auto update",
 	"check.update": "Check update",
-	"warning.local.plugins.update": "Your project was updated. You might need to update your following local plugins: {{plugins}}. Favor online plugins that update automatically with each update!"
+	"warning.local.plugins.update": "Your project was updated. You might need to update your following local plugins: {{plugins}}. Favor online plugins that update automatically with each update!",
+	"plugin.successfully.updated": "Plugin {{name}} successfully updated from {{oldVersion}} to {{newVersion}}"
 }

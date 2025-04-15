@@ -161,6 +161,8 @@ function Tree({
 }: Props) {
 	const { t } = useTranslation();
 
+	const listRef = useRef<HTMLDivElement>(null);
+
 	const createDefault = (id: number) => {
 		if (applyDefault) {
 			const model = new constructorType();
@@ -624,6 +626,17 @@ function Tree({
 				onSelectedItem(currentSelectedItemNode, false);
 			}
 		}
+
+		const handleMouseDownOutside = (e: MouseEvent) => {
+			if (listRef.current && !listRef.current.contains(e.target as globalThis.Node)) {
+				setIsFocused(false);
+			}
+		};
+		const dialog = document.getElementsByClassName('dialog')[0] ?? document;
+		dialog.addEventListener('mousedown', handleMouseDownOutside as EventListener);
+		return () => {
+			dialog.removeEventListener('mousedown', handleMouseDownOutside as EventListener);
+		};
 		// eslint-disable-next-line
 	}, []);
 
@@ -948,6 +961,7 @@ function Tree({
 					onDoubleClick={handleDoubleClick}
 					className={Utils.getClassName({ disabled, zeroHeight: scrollable }, 'tree')}
 					style={{ minWidth: `${minWidth}px`, minHeight: `${minHeight}px` }}
+					ref={listRef}
 				>
 					<Flex spaced>{getHeaders()}</Flex>
 					{getItems()}

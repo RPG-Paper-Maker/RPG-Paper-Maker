@@ -190,9 +190,10 @@ class Shape extends Asset {
 			const content = await (this.isBR
 				? Platform.readPublicFile(this.getPath())
 				: await (await LocalFile.readBase64File(this.getPath())).text());
-			if (content) {
-				this.geometryData = Shape.parse(content);
+			if (content.length === 0) {
+				console.warn(`The shape ${this.toStringNameID()} content is empty.`);
 			}
+			this.geometryData = Shape.parse(content);
 		}
 	}
 

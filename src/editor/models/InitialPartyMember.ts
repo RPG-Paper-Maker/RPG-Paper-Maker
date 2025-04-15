@@ -58,6 +58,7 @@ class InitialPartyMember extends Base {
 		if (jsonHero === undefined) {
 			this.heroID = DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, 1);
 		} else {
+			this.heroID = new DynamicValue();
 			this.heroID.read(jsonHero);
 		}
 	}

@@ -78,7 +78,7 @@ abstract class Object3D extends Base {
 		if (!textureObject3D) {
 			const picture = Project.current!.pictures.getByID(PICTURE_KIND.OBJECTS_3D, pictureID);
 			if (picture) {
-				const path = picture.getPath();
+				const path = await picture.getPathOrBase64();
 				textureObject3D = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();
 			} else {
 				textureObject3D = Manager.GL.loadTextureEmpty();

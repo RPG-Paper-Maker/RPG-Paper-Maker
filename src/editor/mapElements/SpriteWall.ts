@@ -79,7 +79,7 @@ class SpriteWall extends Base {
 	}
 
 	static async loadTextureWall(picture: Model.Picture, id: number): Promise<THREE.MeshPhongMaterial> {
-		const image = await Picture2D.loadImage(picture.getPath());
+		const image = await Picture2D.loadImage(await picture.getPathOrBase64());
 		const texture = new THREE.Texture();
 		const w = image.width;
 		const h = image.height;

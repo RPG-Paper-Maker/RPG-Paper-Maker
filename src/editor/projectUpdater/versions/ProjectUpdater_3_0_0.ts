@@ -17,7 +17,7 @@ import { MapObjectCommandType } from '../../models';
 import { ProjectUpdater } from '../ProjectUpdater';
 
 class ProjectUpdater_3_0_0 {
-	static async update() {
+	static async update(callback: (percent: number) => void) {
 		const projectPath = Project.current!.getPath();
 
 		// Remove maps temp files
@@ -38,6 +38,7 @@ class ProjectUpdater_3_0_0 {
 			}
 			await Platform.removeFile(Paths.join(mapPath, 'objects.json'));
 		}
+		callback(10);
 
 		// Move all files correctly
 		await Platform.removeFile(Paths.join(projectPath, 'Datas', 'Scripts', 'Plugins', 'path.js'));
@@ -87,6 +88,7 @@ class ProjectUpdater_3_0_0 {
 			Paths.join(projectPath, 'treeMaps.json')
 		);
 		await Platform.removeFolder(Paths.join(projectPath, 'Datas'));
+		callback(20);
 
 		// Treemaps folders ids should be unique
 		let json = await Platform.readJSON(Paths.join(projectPath, 'treeMaps.json'));
@@ -103,9 +105,14 @@ class ProjectUpdater_3_0_0 {
 			updateTree(json.tree as JSONType[]);
 			await Platform.writeJSON(Paths.join(projectPath, 'treeMaps.json'), json);
 		}
+		callback(25);
 
 		// Map portions edit
-		await ProjectUpdater.updateAllMapPortions((json: JSONType) => {
+		const jsonSystems = (await Platform.readJSON(Paths.join(projectPath, 'system.json'))) ?? {};
+		const heroMapID = jsonSystems.idMapHero as number;
+		const idObjHero = jsonSystems.idObjHero as number;
+		const mapName = `MAP${String(heroMapID).padStart(4, '0')}`;
+		await ProjectUpdater.updateAllMapPortions((json: JSONType, currentMapName: string) => {
 			const floors = ((json.lands as JSONType)?.floors as JSONType[]) ?? [];
 			for (const floor of floors) {
 				(floor.v as JSONType).k = 1;
@@ -130,16 +137,14 @@ class ProjectUpdater_3_0_0 {
 			json.sprites = sprites;
 			json.moun = ((json.moun as JSONType)?.a as JSONType[]) ?? [];
 			json.objs3d = ((json.objs3d as JSONType)?.a as JSONType[]) ?? [];
-			json.objs = (((json.objs as JSONType)?.list as JSONType[]) ?? []).filter(
-				(obj) => (obj.v as JSONType).hId !== 2
-			);
+			json.objs = ((json.objs as JSONType)?.list as JSONType[]) ?? [];
+			if (currentMapName === mapName) {
+				json.objs = (json.objs as JSONType[]).filter((obj) => (obj.v as JSONType).id !== idObjHero);
+			}
 		});
+		callback(50);
 
 		// Remove hero from map infos
-		const jsonSystems = (await Platform.readJSON(Paths.join(projectPath, 'system.json'))) ?? {};
-		const heroMapID = jsonSystems.idMapHero as number;
-		const idObjHero = jsonSystems.idObjHero as number;
-		const mapName = `MAP${String(heroMapID).padStart(4, '0')}`;
 		json = await Platform.readJSON(Paths.join(projectPath, 'Maps', mapName, 'infos.json'));
 		if (json) {
 			const hero = (json.objs as JSONType[]).find((obj) => obj.id === idObjHero);
@@ -152,6 +157,7 @@ class ProjectUpdater_3_0_0 {
 			}
 		}
 		await Platform.createFile(Paths.join(projectPath, 'game.rpmg'), '');
+		callback(60);
 
 		// Common events default and hero objects
 		const jsonEvents = await Platform.readJSON(Paths.join(projectPath, 'commonEvents.json'));
@@ -190,6 +196,7 @@ class ProjectUpdater_3_0_0 {
 			jsonEvents.ho = object ?? jsonEvents.do;
 			await Platform.writeJSON(Paths.join(projectPath, 'commonEvents.json'), jsonEvents);
 		}
+		callback(70);
 
 		// Move turn a picture
 		await ProjectUpdater.updateAllCommands((json: JSONType) => {
@@ -231,6 +238,7 @@ class ProjectUpdater_3_0_0 {
 			}
 			await Platform.writeJSON(Paths.join(projectPath, 'battleSystem.json'), jsonBattle);
 		}
+		callback(80);
 
 		// Title screen commands ids unique
 		const jsonTitle = await Platform.readJSON(Paths.join(projectPath, 'titlescreenGameover.json'));
@@ -297,6 +305,7 @@ class ProjectUpdater_3_0_0 {
 			}
 			await Platform.writeJSON(Paths.join(projectPath, 'fonts.json'), jsonFonts);
 		}
+		callback(90);
 
 		// Plugins: isOn moved to scripts.json and renamed checked, moving type to scripts.json
 		const manifest = await Model.Plugin.getManifest();

@@ -114,7 +114,7 @@ const main = async () => {
 		await downloadOrCopyRepo(gitUrls.scripts, destinationPaths.scripts, localPaths.scripts, '3.0.0');
 		await downloadOrCopyRepo(gitUrls.scriptsBuild, destinationPaths.scriptsBuild, localPaths.scriptsBuild, '3.0.0');
 		await downloadOrCopyRepo(gitUrls.br, destinationPaths.br, localPaths.br);
-		await downloadOrCopyRepo(gitUrls.dependencies, destinationPaths.dependencies, localPaths.dependencies);
+		await downloadOrCopyRepo(gitUrls.dependencies, destinationPaths.dependencies, localPaths.dependencies, '3.0.0');
 		await copyDirAndPrint(`${destinationPaths.br}/Content`, './public/BR');
 		await copyDirAndPrint(`${destinationPaths.scriptsBuild}/Scripts`, './public/Scripts');
 		const webPath = `${destinationPaths.dependencies}/Game/web/`;

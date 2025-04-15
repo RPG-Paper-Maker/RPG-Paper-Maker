@@ -274,7 +274,7 @@ class LocalFile extends Serializable {
 	static base64FileToBlob(base64DataUrl: string): Blob {
 		const [prefix, base64] = base64DataUrl.split(',');
 		const mimeType = prefix.match(/:(.*?);/)?.[1];
-		const byteCharacters = atob(base64);
+		const byteCharacters = atob(base64 ?? '');
 		const byteNumbers = new Uint8Array(byteCharacters.length);
 		for (let i = 0; i < byteCharacters.length; i++) {
 			byteNumbers[i] = byteCharacters.charCodeAt(i);

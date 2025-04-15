@@ -49,6 +49,10 @@ export const NODE_CONSTRUCTOR_KIND = {
 	HeroStatisticDisplay: () => Model.HeroStatisticDisplay,
 	CreateParameter: () => Model.CreateParameter,
 	CustomStructure: () => Model.CustomStructure,
+	Plugin: () => Model.Plugin,
+	PluginCommand: () => Model.PluginCommand,
+	PluginParameter: () => Model.PluginParameter,
+	PluginDefaultParameter: () => Model.PluginDefaultParameter,
 };
 
 class Node extends Serializable {

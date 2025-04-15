@@ -163,6 +163,12 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		Project.current!.scripts.plugins = Node.createListFromNodes(plugins);
 	};
 
+	const handleDeletePlugin = async (node: Node) => {
+		await Platform.removeFolder(
+			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, (node.content as Model.Plugin).name)
+		);
+	};
+
 	const handleOnChangeCode = (v?: string) => {
 		if (selectedPlugin && v !== undefined) {
 			selectedPlugin.code = v;
@@ -374,6 +380,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 					minWidth={TREES_MIN_WIDTH}
 					onSelectedItem={handleSelectPlugin}
 					onListUpdated={handleListUpdated}
+					onDeleteItem={handleDeletePlugin}
 					triggerUpdate={triggerUpdate}
 					noScrollOnForce
 					scrollable

@@ -29,7 +29,7 @@ class ProjectUpdater {
 
 	static async update(
 		version: string,
-		callback: (current: number, total: number, label: string) => void
+		callback: (current: number, total: number, label?: string, extraPercent?: number) => void
 	): Promise<string | null> {
 		try {
 			let passed = false;
@@ -41,14 +41,19 @@ class ProjectUpdater {
 					const module = await import(`./versions/${className}`);
 					const updaterClass = module[className];
 					if (updaterClass && typeof updaterClass.update === 'function') {
-						callback(index, this.versions.length, `Updating to version ${newVersion}...`);
-						await updaterClass.update();
+						const label = `Updating to version ${newVersion}...`;
+						const currentIndex = index;
+						callback(currentIndex, this.versions.length, label);
+						await updaterClass.update((percent: number) => {
+							callback(currentIndex, this.versions.length, label, percent);
+						});
 					} else {
 						throw new Error(`Update method not found in ${className}`);
 					}
 				}
 				index++;
 			}
+			callback(1, 1);
 			const projectPath = Project.current!.getPath();
 			const json = await Platform.readJSON(Paths.join(projectPath, Paths.FILE_SETTINGS));
 			if (json) {
@@ -64,21 +69,21 @@ class ProjectUpdater {
 		}
 	}
 
-	static async updateMapFolder(folder: string, callback: (json: JSONType) => void) {
+	static async updateMapFolder(folder: string, callback: (json: JSONType, mapName: string) => void) {
 		const files = await Platform.getFiles(Paths.join(Project.current!.getPath(), Paths.MAPS, folder));
 		for (const file of files) {
 			if (file !== 'infos.json') {
 				const path = Paths.join(Project.current!.getPath(), Paths.MAPS, folder, file);
 				const json = await Platform.readJSON(path);
 				if (json) {
-					callback.call(this, json);
+					callback.call(this, json, folder);
 					await Platform.writeJSON(path, json);
 				}
 			}
 		}
 	}
 
-	static async updateAllMapPortions(callback: (json: JSONType) => void) {
+	static async updateAllMapPortions(callback: (json: JSONType, mapName: string) => void) {
 		const folders = await Platform.getFolders(Paths.join(Project.current!.getPath(), Paths.MAPS));
 		for (const name of folders) {
 			await this.updateMapFolder(name, callback);
