@@ -1148,8 +1148,8 @@ class Map extends Base {
 						: 1)
 			);
 		}
-		if (this.selectedMesh.position.y < this.model.depth * Project.SQUARE_SIZE) {
-			this.selectedMesh.position.setY(this.model.depth * Project.SQUARE_SIZE);
+		if (this.selectedMesh.position.y < -this.model.depth * Project.SQUARE_SIZE) {
+			this.selectedMesh.position.setY(-this.model.depth * Project.SQUARE_SIZE);
 		} else if (Math.floor(this.selectedMesh.position.y / Project.SQUARE_SIZE) > this.model.height - 1) {
 			this.selectedMesh.position.setY(
 				(this.model.height - 1) * Project.SQUARE_SIZE +
