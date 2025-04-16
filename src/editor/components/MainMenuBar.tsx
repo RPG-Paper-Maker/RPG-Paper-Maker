@@ -100,7 +100,6 @@ import FooterCancelNoYes from './dialogs/footers/FooterCancelNoYes';
 import FooterNoYes from './dialogs/footers/FooterNoYes';
 import FooterOK from './dialogs/footers/FooterOK';
 import Flex from './Flex';
-import Loader from './Loader';
 import Menu from './Menu';
 import MenuCustom from './MenuCustom';
 import MenuItem from './MenuItem';
@@ -942,15 +941,16 @@ function MainMenuBar() {
 			<Dialog
 				title={t('warning')}
 				isOpen={isDialogWarningClearAllCacheOpen}
+				isLoading={isLoading}
 				footer={<FooterNoYes onNo={handleRejectClearAllCache} onYes={handleAcceptClearAllCache} />}
 				onClose={handleRejectClearAllCache}
 			>
-				<Loader isLoading={isLoading} />
 				<div className='warning textCenter'>{t('warning.clearing.cache')}</div>
 			</Dialog>
 			<Dialog
 				title={t('warning')}
 				isOpen={isDialogWarningSavePlayOpen}
+				isLoading={isLoading}
 				footer={
 					<FooterCancelNoYes
 						onCancel={handleCancelSavePlay}
@@ -960,7 +960,6 @@ function MainMenuBar() {
 				}
 				onClose={handleRejectSavePlay}
 			>
-				<Loader isLoading={isLoading} />
 				<div className='textCenter'>{t('you.have.maps.not.saved')}</div>
 			</Dialog>
 			<Dialog
