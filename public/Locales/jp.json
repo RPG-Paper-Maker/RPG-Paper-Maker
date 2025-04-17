@@ -2061,5 +2061,16 @@
 	"introduction": "はじめに",
 	"edit.object": "オブジェクトを編集",
 	"warning.asset.selection": "左側のリストでアセットを選択して確認します。",
-	"select.by.id": "IDで選択"
+	"select.by.id": "IDで選択",
+	"update.project.version": "プロジェクトのバージョンは {{currentVersion}} です。続行するには {{newVersion}} に変換する必要があります。",
+	"plugins.manager": "プラグインマネージャー",
+	"select.or.double.click.list": "リストで選択またはダブルクリックしてください",
+	"no.connexion": "接続なし",
+	"plugin.name.cannot.be.empty": "プラグイン名を空にすることはできません",
+	"plugin.name.already.exists": "このプラグイン名はすでにプロジェクトに存在します",
+	"auto.update": "自動更新",
+	"check.update": "アップデートを確認",
+	"warning.local.plugins.update": "プロジェクトが更新されました。以下のローカルプラグインを更新する必要があるかもしれません：{{plugins}}。常に自動更新されるオンラインプラグインの使用を推奨します！",
+	"plugin.successfully.updated": "プラグイン {{name}} は {{oldVersion}} から {{newVersion}} に正常に更新されました",
+	"how.convert.project.2.0": "2.0 プロジェクトを変換するには？"
 }

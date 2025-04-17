@@ -2061,5 +2061,16 @@
 	"introduction": "Einführung",
 	"edit.object": "Objekt bearbeiten",
 	"warning.asset.selection": "Wählen Sie zur Bestätigung ein Asset aus der Liste links aus.",
-	"select.by.id": "Nach ID auswählen"
+	"select.by.id": "Nach ID auswählen",
+	"update.project.version": "Die Projektversion ist {{currentVersion}}, Sie müssen auf {{newVersion}} konvertieren, um fortzufahren.",
+	"plugins.manager": "Plugin-Manager",
+	"select.or.double.click.list": "Wählen Sie aus oder doppelklicken Sie in der Liste",
+	"no.connexion": "Keine Verbindung",
+	"plugin.name.cannot.be.empty": "Der Plugin-Name darf nicht leer sein",
+	"plugin.name.already.exists": "Dieser Plugin-Name existiert bereits in Ihrem Projekt",
+	"auto.update": "Automatisches Update",
+	"check.update": "Nach Updates suchen",
+	"warning.local.plugins.update": "Ihr Projekt wurde aktualisiert. Möglicherweise müssen Sie die folgenden lokalen Plugins aktualisieren: {{plugins}}. Bevorzugen Sie Online-Plugins, die bei jedem Update automatisch aktualisiert werden!",
+	"plugin.successfully.updated": "Plugin {{name}} erfolgreich von {{oldVersion}} auf {{newVersion}} aktualisiert",
+	"how.convert.project.2.0": "Wie konvertiere ich mein 2.0-Projekt?"
 }

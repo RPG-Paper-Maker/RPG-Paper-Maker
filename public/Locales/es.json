@@ -2061,5 +2061,16 @@
 	"introduction": "Introducción",
 	"edit.object": "Editar objeto",
 	"warning.asset.selection": "Seleccione un activo de la lista de la izquierda para confirmar.",
-	"select.by.id": "Seleccionar por ID"
+	"select.by.id": "Seleccionar por ID",
+	"update.project.version": "La versión del proyecto es {{currentVersion}}, necesita convertirla a {{newVersion}} para continuar.",
+	"plugins.manager": "Administrador de complementos",
+	"select.or.double.click.list": "Seleccione o haga doble clic en la lista",
+	"no.connexion": "Sin conexión",
+	"plugin.name.cannot.be.empty": "El nombre del complemento no puede estar vacío",
+	"plugin.name.already.exists": "Este nombre de complemento ya existe en su proyecto",
+	"auto.update": "Actualización automática",
+	"check.update": "Buscar actualizaciones",
+	"warning.local.plugins.update": "Su proyecto ha sido actualizado. Puede que necesite actualizar los siguientes complementos locales: {{plugins}}. ¡Prefiera los complementos en línea que se actualizan automáticamente con cada nueva versión!",
+	"plugin.successfully.updated": "El complemento {{name}} se actualizó correctamente de {{oldVersion}} a {{newVersion}}",
+	"how.convert.project.2.0": "¿Cómo convierto mi proyecto 2.0?"
 }

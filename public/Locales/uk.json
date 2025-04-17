@@ -2061,5 +2061,16 @@
 	"introduction": "Вступ",
 	"edit.object": "Редагувати o6'єкт",
 	"warning.asset.selection": "Виберіть актив зі списку ліворуч, щоб підтвердити.",
-	"select.by.id": "Вибрати за ідентифікатором"
+	"select.by.id": "Вибрати за ідентифікатором",
+	"update.project.version": "Версія проєкту — {{currentVersion}}, потрібно конвертувати у {{newVersion}}, щоб продовжити.",
+	"plugins.manager": "Менеджер плагінів",
+	"select.or.double.click.list": "Виберіть або двічі клацніть у списку",
+	"no.connexion": "Немає з'єднання",
+	"plugin.name.cannot.be.empty": "Назва плагіна не може бути порожньою",
+	"plugin.name.already.exists": "Ця назва плагіна вже існує у вашому проєкті",
+	"auto.update": "Автоматичне оновлення",
+	"check.update": "Перевірити оновлення",
+	"warning.local.plugins.update": "Ваш проєкт було оновлено. Можливо, вам потрібно оновити наступні локальні плагіни: {{plugins}}. Віддавайте перевагу онлайн-плагінам, які оновлюються автоматично при кожному оновленні!",
+	"plugin.successfully.updated": "Плагін {{name}} успішно оновлено з {{oldVersion}} до {{newVersion}}",
+	"how.convert.project.2.0": "Як конвертувати мій проєкт 2.0?"
 }

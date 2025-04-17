@@ -2061,5 +2061,16 @@
 	"introduction": "wprowadzenie",
 	"edit.object": "Edytuj obiekt",
 	"warning.asset.selection": "Wybierz zasób z listy po lewej stronie, aby potwierdzić.",
-	"select.by.id": "Wybierz według ID"
+	"select.by.id": "Wybierz według ID",
+	"update.project.version": "Wersja projektu to {{currentVersion}}, musisz przekonwertować na {{newVersion}}, aby kontynuować.",
+	"plugins.manager": "Menedżer wtyczek",
+	"select.or.double.click.list": "Wybierz lub kliknij dwukrotnie na liście",
+	"no.connexion": "Brak połączenia",
+	"plugin.name.cannot.be.empty": "Nazwa wtyczki nie może być pusta",
+	"plugin.name.already.exists": "Ta nazwa wtyczki już istnieje w Twoim projekcie",
+	"auto.update": "Automatyczna aktualizacja",
+	"check.update": "Sprawdź aktualizacje",
+	"warning.local.plugins.update": "Twój projekt został zaktualizowany. Możesz potrzebować zaktualizować następujące lokalne wtyczki: {{plugins}}. Preferuj wtyczki online, które są aktualizowane automatycznie przy każdej aktualizacji!",
+	"plugin.successfully.updated": "Wtyczka {{name}} została pomyślnie zaktualizowana z {{oldVersion}} do {{newVersion}}",
+	"how.convert.project.2.0": "Jak przekonwertować mój projekt 2.0?"
 }

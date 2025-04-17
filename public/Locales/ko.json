@@ -2061,5 +2061,16 @@
 	"introduction": "소개",
 	"edit.object": "개체 편집",
 	"warning.asset.selection": "확인하려면 왼쪽 목록에서 자산을 선택하세요.",
-	"select.by.id": "ID로 선택"
+	"select.by.id": "ID로 선택",
+	"update.project.version": "프로젝트 버전은 {{currentVersion}}입니다. 계속하려면 {{newVersion}}으로 변환해야 합니다.",
+	"plugins.manager": "플러그인 관리자",
+	"select.or.double.click.list": "목록에서 선택하거나 더블 클릭하세요",
+	"no.connexion": "연결 없음",
+	"plugin.name.cannot.be.empty": "플러그인 이름은 비워둘 수 없습니다",
+	"plugin.name.already.exists": "이 플러그인 이름은 프로젝트에 이미 존재합니다",
+	"auto.update": "자동 업데이트",
+	"check.update": "업데이트 확인",
+	"warning.local.plugins.update": "프로젝트가 업데이트되었습니다. 다음 로컬 플러그인을 업데이트해야 할 수도 있습니다: {{plugins}}. 각 업데이트 시 자동으로 업데이트되는 온라인 플러그인을 사용하는 것이 좋습니다!",
+	"plugin.successfully.updated": "플러그인 {{name}}이(가) {{oldVersion}}에서 {{newVersion}}으로 성공적으로 업데이트되었습니다",
+	"how.convert.project.2.0": "2.0 프로젝트를 변환하는 방법은?"
 }

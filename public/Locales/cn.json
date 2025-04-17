@@ -2061,5 +2061,16 @@
 	"introduction": "簡介",
 	"edit.object": "編輯物件",
 	"warning.asset.selection": "在左側清單中選擇一個資產進行確認。",
-	"select.by.id": "按 ID 選擇"
+	"select.by.id": "按 ID 選擇",
+	"update.project.version": "專案版本為 {{currentVersion}}，您需要轉換為 {{newVersion}} 才能繼續。",
+	"plugins.manager": "插件管理器",
+	"select.or.double.click.list": "在列表中選擇或雙擊",
+	"no.connexion": "無連線",
+	"plugin.name.cannot.be.empty": "插件名稱不能為空",
+	"plugin.name.already.exists": "此插件名稱已存在於您的專案中",
+	"auto.update": "自動更新",
+	"check.update": "檢查更新",
+	"warning.local.plugins.update": "您的專案已更新。您可能需要更新以下本地插件：{{plugins}}。建議使用線上插件，這樣可在每次更新時自動更新！",
+	"plugin.successfully.updated": "插件 {{name}} 已成功從 {{oldVersion}} 更新至 {{newVersion}}",
+	"how.convert.project.2.0": "如何轉換我的 2.0 專案？"
 }

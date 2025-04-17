@@ -2061,5 +2061,16 @@
 	"introduction": "Introduction",
 	"edit.object": "Editer objet",
 	"warning.asset.selection": "Sélectionnez une ressource dans la liste de gauche pour confirmer.",
-	"select.by.id": "Sélectionner par ID"
+	"select.by.id": "Sélectionner par ID",
+	"update.project.version": "La version du projet est {{currentVersion}}, vous devez la convertir en {{newVersion}} pour continuer.",
+	"plugins.manager": "Gestionnaire de plugins",
+	"select.or.double.click.list": "Sélectionnez ou double-cliquez dans la liste",
+	"no.connexion": "Pas de connexion",
+	"plugin.name.cannot.be.empty": "Le nom du plugin ne peut pas être vide",
+	"plugin.name.already.exists": "Ce nom de plugin existe déjà dans votre projet",
+	"auto.update": "Mise à jour automatique",
+	"check.update": "Vérifier la mise à jour",
+	"warning.local.plugins.update": "Votre projet a été mis à jour. Vous pourriez avoir besoin de mettre à jour les plugins locaux suivants : {{plugins}}. Privilégiez les plugins en ligne qui se mettent à jour automatiquement à chaque mise à jour !",
+	"plugin.successfully.updated": "Plugin {{name}} mis à jour avec succès de {{oldVersion}} à {{newVersion}}",
+	"how.convert.project.2.0": "Comment convertir mon projet 2.0 ?"
 }
