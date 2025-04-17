@@ -10,7 +10,7 @@
 */
 
 import i18next from 'i18next';
-import * as THREE from 'three';
+import { MeshPhongMaterial, Vector2, Vector3 } from 'three';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND } from '../common';
 import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle } from '../core';
 import { Manager, MapElement, Scene } from '../Editor';
@@ -19,10 +19,10 @@ import { Base } from './Base';
 const { t } = i18next;
 class Sprite extends Base {
 	public static readonly MODEL = [
-		new THREE.Vector3(-0.5, 1.0, 0.0),
-		new THREE.Vector3(0.5, 1.0, 0.0),
-		new THREE.Vector3(0.5, 0.0, 0.0),
-		new THREE.Vector3(-0.5, 0.0, 0.0),
+		new Vector3(-0.5, 1.0, 0.0),
+		new Vector3(0.5, 1.0, 0.0),
+		new Vector3(0.5, 0.0, 0.0),
+		new Vector3(-0.5, 0.0, 0.0),
 	];
 
 	public texture!: Rectangle;
@@ -61,14 +61,14 @@ class Sprite extends Base {
 
 	static addStaticSpriteToGeometry(
 		geometry: CustomGeometry,
-		vecA: THREE.Vector3,
-		vecB: THREE.Vector3,
-		vecC: THREE.Vector3,
-		vecD: THREE.Vector3,
-		texA: THREE.Vector2,
-		texB: THREE.Vector2,
-		texC: THREE.Vector2,
-		texD: THREE.Vector2,
+		vecA: Vector3,
+		vecB: Vector3,
+		vecC: Vector3,
+		vecD: Vector3,
+		texA: Vector2,
+		texB: Vector2,
+		texC: Vector2,
+		texD: Vector2,
 		count: number,
 		position: Position
 	): number {
@@ -78,11 +78,11 @@ class Sprite extends Base {
 		return count + 4;
 	}
 
-	static getCharacterTexture(map: Scene.Map, id: number): THREE.MeshPhongMaterial | null {
+	static getCharacterTexture(map: Scene.Map, id: number): MeshPhongMaterial | null {
 		return map.texturesCharacters[id] || null;
 	}
 
-	static async loadCharacterTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
+	static async loadCharacterTexture(map: Scene.Map | null, id: number): Promise<MeshPhongMaterial> {
 		let textureCharacter = map ? map.texturesCharacters[id] : null;
 		if (!textureCharacter) {
 			const picture = Project.current!.pictures.getByID(PICTURE_KIND.CHARACTERS, id);
@@ -127,13 +127,13 @@ class Sprite extends Base {
 
 	getVectors(
 		map: Scene.Map,
-		vecA: THREE.Vector3,
-		vecB: THREE.Vector3,
-		vecC: THREE.Vector3,
-		vecD: THREE.Vector3,
-		pos: THREE.Vector3,
+		vecA: Vector3,
+		vecB: Vector3,
+		vecC: Vector3,
+		vecD: Vector3,
+		pos: Vector3,
 		position: Position,
-		size: THREE.Vector3,
+		size: Vector3,
 		forceOffset = false
 	) {
 		// Apply an offset according to layer position
@@ -165,16 +165,16 @@ class Sprite extends Base {
 		position: Position,
 		count: number,
 		tileset: boolean,
-		localPosition: THREE.Vector3 | null,
+		localPosition: Vector3 | null,
 		forceOffset = false
 	): number {
 		const vecA = Sprite.MODEL[0].clone();
 		const vecB = Sprite.MODEL[1].clone();
 		const vecC = Sprite.MODEL[2].clone();
 		const vecD = Sprite.MODEL[3].clone();
-		const center = new THREE.Vector3();
-		const pos = new THREE.Vector3();
-		const size = new THREE.Vector3(
+		const center = new Vector3();
+		const pos = new Vector3();
+		const size = new Vector3(
 			this.texture.width * Project.SQUARE_SIZE * position.scaleX,
 			this.texture.height * Project.SQUARE_SIZE * position.scaleY,
 			1.0
@@ -190,7 +190,7 @@ class Sprite extends Base {
 			center.add(localPosition);
 			pos.add(localPosition);
 		} else {
-			localPosition = tileset ? position.toVector3() : new THREE.Vector3();
+			localPosition = tileset ? position.toVector3() : new Vector3();
 		}
 
 		// Getting UV coordinates
@@ -204,16 +204,16 @@ class Sprite extends Base {
 		y += coefY;
 		w -= coefX * 2;
 		h -= coefY * 2;
-		const texA = new THREE.Vector2();
-		const texB = new THREE.Vector2();
-		const texC = new THREE.Vector2();
-		const texD = new THREE.Vector2();
+		const texA = new Vector2();
+		const texB = new Vector2();
+		const texC = new Vector2();
+		const texD = new Vector2();
 		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 
 		if (geometry instanceof CustomGeometryFace) {
 			// Face sprite
-			const p = new THREE.Vector3(pos.x, localPosition.y + this.yOffset * Project.SQUARE_SIZE, pos.z);
-			const c = new THREE.Vector3(center.x, localPosition.y + this.yOffset * Project.SQUARE_SIZE, center.z);
+			const p = new Vector3(pos.x, localPosition.y + this.yOffset * Project.SQUARE_SIZE, pos.z);
+			const c = new Vector3(center.x, localPosition.y + this.yOffset * Project.SQUARE_SIZE, center.z);
 			geometry.pushQuadVerticesFace(
 				Sprite.MODEL[0].clone().multiply(size).add(p),
 				Sprite.MODEL[1].clone().multiply(size).add(p),

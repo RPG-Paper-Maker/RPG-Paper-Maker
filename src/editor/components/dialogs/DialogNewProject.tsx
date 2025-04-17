@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Constants, ELEMENT_MAP_KIND, INPUT_TYPE_WIDTH, IO, Paths, Utils } from '../../common';
-import { Platform } from '../../common/Platform';
+import { copyPublicFile, createFile, createFolder, getFolders, removeFolder } from '../../common/Platform';
 import { Project } from '../../core';
 import { EngineSettings } from '../../data/EngineSettings';
 import { Model, Scene } from '../../Editor';
@@ -60,7 +60,7 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 
 	const checkValidAccept: () => Promise<boolean> = async () => {
 		// Check if folder name already exists in this folder location
-		const projectsFolders = await Platform.getFolders(location);
+		const projectsFolders = await getFolders(location);
 		if (projectsFolders.find((name) => folderName === name)) {
 			setIsDialogConfirmOpen(true);
 			return false;
@@ -75,7 +75,7 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 
 	const replaceProject = async () => {
 		setIsDialogConfirmOpen(false);
-		await Platform.removeFolder(getcompleteLocation());
+		await removeFolder(getcompleteLocation());
 		await createProject();
 		accept();
 	};
@@ -94,47 +94,47 @@ function DialogNewProject({ isOpen, setIsOpen, onAccept }: Props) {
 		const project = new Project(completeLocation);
 		Project.current = project;
 		const folderPath = project.getPath();
-		await Platform.createFolder(project.getPath());
-		await Platform.createFile(Paths.join(folderPath, Paths.FILE_GAME_RPMG), '');
-		await Platform.createFolder(project.getPathSaves());
-		await Platform.createFolder(project.getPathMaps());
+		await createFolder(project.getPath());
+		await createFile(Paths.join(folderPath, Paths.FILE_GAME_RPMG), '');
+		await createFolder(project.getPathSaves());
+		await createFolder(project.getPathMaps());
 		Scene.Map.currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
 		for (const file of Paths.ALL_JSON) {
-			await Platform.copyPublicFile(Paths.join(Paths.DEFAULT, file), Paths.join(project.getPath(), file));
+			await copyPublicFile(Paths.join(Paths.DEFAULT, file), Paths.join(project.getPath(), file));
 		}
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.PICTURES));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.HUD));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.ANIMATIONS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.BARS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.FACESETS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.ICONS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.HUD_PICTURES));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.TITLE_SCREEN));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.WINDOW_SKINS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.GAME_OVER));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.TEXTURES2D));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.AUTOTILES));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.BATTLERS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.CHARACTERS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.MOUNTAINS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.OBJECTS_3D));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.TILESETS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.WALLS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.SKYBOXES));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.PARTICLES));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.VIDEOS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.SONGS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.MUSICS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.BACKGROUND_SOUNDS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.SOUNDS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.MUSIC_EFFECTS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.SHAPES));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.OBJ_COLLISIONS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.MTL));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.OBJ));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.FONTS));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.STYLES));
-		await Platform.createFolder(Paths.join(project.getPath(), Paths.PLUGINS));
+		await createFolder(Paths.join(project.getPath(), Paths.PICTURES));
+		await createFolder(Paths.join(project.getPath(), Paths.HUD));
+		await createFolder(Paths.join(project.getPath(), Paths.ANIMATIONS));
+		await createFolder(Paths.join(project.getPath(), Paths.BARS));
+		await createFolder(Paths.join(project.getPath(), Paths.FACESETS));
+		await createFolder(Paths.join(project.getPath(), Paths.ICONS));
+		await createFolder(Paths.join(project.getPath(), Paths.HUD_PICTURES));
+		await createFolder(Paths.join(project.getPath(), Paths.TITLE_SCREEN));
+		await createFolder(Paths.join(project.getPath(), Paths.WINDOW_SKINS));
+		await createFolder(Paths.join(project.getPath(), Paths.GAME_OVER));
+		await createFolder(Paths.join(project.getPath(), Paths.TEXTURES2D));
+		await createFolder(Paths.join(project.getPath(), Paths.AUTOTILES));
+		await createFolder(Paths.join(project.getPath(), Paths.BATTLERS));
+		await createFolder(Paths.join(project.getPath(), Paths.CHARACTERS));
+		await createFolder(Paths.join(project.getPath(), Paths.MOUNTAINS));
+		await createFolder(Paths.join(project.getPath(), Paths.OBJECTS_3D));
+		await createFolder(Paths.join(project.getPath(), Paths.TILESETS));
+		await createFolder(Paths.join(project.getPath(), Paths.WALLS));
+		await createFolder(Paths.join(project.getPath(), Paths.SKYBOXES));
+		await createFolder(Paths.join(project.getPath(), Paths.PARTICLES));
+		await createFolder(Paths.join(project.getPath(), Paths.VIDEOS));
+		await createFolder(Paths.join(project.getPath(), Paths.SONGS));
+		await createFolder(Paths.join(project.getPath(), Paths.MUSICS));
+		await createFolder(Paths.join(project.getPath(), Paths.BACKGROUND_SOUNDS));
+		await createFolder(Paths.join(project.getPath(), Paths.SOUNDS));
+		await createFolder(Paths.join(project.getPath(), Paths.MUSIC_EFFECTS));
+		await createFolder(Paths.join(project.getPath(), Paths.SHAPES));
+		await createFolder(Paths.join(project.getPath(), Paths.OBJ_COLLISIONS));
+		await createFolder(Paths.join(project.getPath(), Paths.MTL));
+		await createFolder(Paths.join(project.getPath(), Paths.OBJ));
+		await createFolder(Paths.join(project.getPath(), Paths.FONTS));
+		await createFolder(Paths.join(project.getPath(), Paths.STYLES));
+		await createFolder(Paths.join(project.getPath(), Paths.PLUGINS));
 		await project.load();
 		await Model.Map.createDefaultMap(1, t('starting.map'));
 		await Model.Map.createDefaultMap(2, t('default'));

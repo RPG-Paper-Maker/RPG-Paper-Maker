@@ -11,7 +11,7 @@
 
 import { Model } from '../Editor';
 import { BINDING, BindingType, Constants, DYNAMIC_VALUE_KIND, JSONType, Paths, SONG_KIND } from '../common';
-import { Platform } from '../common/Platform';
+import { createFile, readJSON } from '../common/Platform';
 import { Position, Project, Serializable } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 
@@ -165,7 +165,7 @@ class System extends Serializable {
 	}
 
 	static async getProjectName(path: string): Promise<string> {
-		const json = await Platform.readJSON(Paths.join(path, Paths.FILE_SYSTEM));
+		const json = await readJSON(Paths.join(path, Paths.FILE_SYSTEM));
 		return json === null ? 'Unknown' : (json.pn as { names: string[] }).names[1];
 	}
 
@@ -187,7 +187,7 @@ class System extends Serializable {
 	}
 
 	async saveStyleCSS() {
-		Platform.createFile(
+		createFile(
 			Paths.join(Project.current!.getPath(), Paths.STYLES, Paths.FILE_FONTS_CSS),
 			await this.getStyleCSS()
 		);

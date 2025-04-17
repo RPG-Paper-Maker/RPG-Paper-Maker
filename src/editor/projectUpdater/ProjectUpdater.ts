@@ -10,7 +10,7 @@
 */
 
 import { JSONType, Paths } from '../common';
-import { Platform } from '../common/Platform';
+import { getFiles, getFolders, readJSON, writeJSON } from '../common/Platform';
 import { Project } from '../core';
 
 class ProjectUpdater {
@@ -55,10 +55,10 @@ class ProjectUpdater {
 			}
 			callback(1, 1);
 			const projectPath = Project.current!.getPath();
-			const json = await Platform.readJSON(Paths.join(projectPath, Paths.FILE_SETTINGS));
+			const json = await readJSON(Paths.join(projectPath, Paths.FILE_SETTINGS));
 			if (json) {
 				json.pv = Project.VERSION;
-				await Platform.writeJSON(Paths.join(projectPath, Paths.FILE_SETTINGS), json);
+				await writeJSON(Paths.join(projectPath, Paths.FILE_SETTINGS), json);
 			}
 			await Project.current!.scripts.loadSimple();
 			const localPlugins = Project.current!.scripts.getLocalPlugins();
@@ -70,21 +70,21 @@ class ProjectUpdater {
 	}
 
 	static async updateMapFolder(folder: string, callback: (json: JSONType, mapName: string) => void) {
-		const files = await Platform.getFiles(Paths.join(Project.current!.getPath(), Paths.MAPS, folder));
+		const files = await getFiles(Paths.join(Project.current!.getPath(), Paths.MAPS, folder));
 		for (const file of files) {
 			if (file !== 'infos.json') {
 				const path = Paths.join(Project.current!.getPath(), Paths.MAPS, folder, file);
-				const json = await Platform.readJSON(path);
+				const json = await readJSON(path);
 				if (json) {
 					callback.call(this, json, folder);
-					await Platform.writeJSON(path, json);
+					await writeJSON(path, json);
 				}
 			}
 		}
 	}
 
 	static async updateAllMapPortions(callback: (json: JSONType, mapName: string) => void) {
-		const folders = await Platform.getFolders(Paths.join(Project.current!.getPath(), Paths.MAPS));
+		const folders = await getFolders(Paths.join(Project.current!.getPath(), Paths.MAPS));
 		for (const name of folders) {
 			await this.updateMapFolder(name, callback);
 			await this.updateMapFolder(Paths.join(name, Paths.TEMP), callback);
@@ -113,18 +113,18 @@ class ProjectUpdater {
 		});
 
 		// Map startup reactions
-		const folders = await Platform.getFolders(Paths.join(projectPath, Paths.MAPS));
+		const folders = await getFolders(Paths.join(projectPath, Paths.MAPS));
 		for (const name of folders) {
 			const path = Paths.join(projectPath, Paths.MAPS, name, Paths.FILE_MAP_INFOS);
-			const json = await Platform.readJSON(path);
+			const json = await readJSON(path);
 			if (json) {
 				this.updateObjectCommand(json.so as JSONType, callback);
-				await Platform.writeJSON(path, json);
+				await writeJSON(path, json);
 			}
 		}
 
 		// Common objects + common reactions
-		const jsonEvents = await Platform.readJSON(Paths.join(projectPath, Paths.FILE_COMMON_EVENTS));
+		const jsonEvents = await readJSON(Paths.join(projectPath, Paths.FILE_COMMON_EVENTS));
 		if (jsonEvents) {
 			this.updateObjectCommand(jsonEvents.do as JSONType, callback);
 			this.updateObjectCommand(jsonEvents.ho as JSONType, callback);
@@ -136,11 +136,11 @@ class ProjectUpdater {
 					callback.call(this, command);
 				}
 			}
-			await Platform.writeJSON(Paths.join(projectPath, Paths.FILE_COMMON_EVENTS), jsonEvents);
+			await writeJSON(Paths.join(projectPath, Paths.FILE_COMMON_EVENTS), jsonEvents);
 		}
 
 		// Troops reactions
-		const jsonTroops = await Platform.readJSON(Paths.join(projectPath, Paths.FILE_TROOPS));
+		const jsonTroops = await readJSON(Paths.join(projectPath, Paths.FILE_TROOPS));
 		if (jsonTroops) {
 			for (const troop of jsonTroops.troops as JSONType[]) {
 				if (troop.reactions) {
@@ -151,7 +151,7 @@ class ProjectUpdater {
 					}
 				}
 			}
-			await Platform.writeJSON(Paths.join(projectPath, Paths.FILE_TROOPS), jsonTroops);
+			await writeJSON(Paths.join(projectPath, Paths.FILE_TROOPS), jsonTroops);
 		}
 	}
 
@@ -172,14 +172,14 @@ class ProjectUpdater {
 		});
 
 		// Common objects
-		const jsonEvents = await Platform.readJSON(Paths.join(projectPath, Paths.FILE_COMMON_EVENTS));
+		const jsonEvents = await readJSON(Paths.join(projectPath, Paths.FILE_COMMON_EVENTS));
 		if (jsonEvents) {
 			this.updateObjectStates(jsonEvents.do as JSONType, callback);
 			this.updateObjectStates(jsonEvents.ho as JSONType, callback);
 			for (const obj of jsonEvents.commonObjects as JSONType[]) {
 				this.updateObjectStates(obj, callback);
 			}
-			await Platform.writeJSON(Paths.join(projectPath, Paths.FILE_COMMON_EVENTS), jsonEvents);
+			await writeJSON(Paths.join(projectPath, Paths.FILE_COMMON_EVENTS), jsonEvents);
 		}
 	}
 }

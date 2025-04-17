@@ -11,7 +11,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Platform } from '../../common/Platform';
+import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { Node, Project } from '../../core';
 import { Model } from '../../Editor';
 import Flex from '../Flex';
@@ -56,8 +56,8 @@ function DialogFonts({ isOpen, setIsOpen }: Props) {
 	};
 
 	const handleRefresh = async () => {
-		const files = Platform.getAllFilesFromFolder(Model.Font.getFolder(true, ''));
-		const customNames = await Platform.getFiles(Model.Font.getFolder(false, ''));
+		const files = getAllFilesFromFolder(Model.Font.getFolder(true, ''));
+		const customNames = await getFiles(Model.Font.getFolder(false, ''));
 		setFontsAvailable([
 			...Node.createList(
 				files.map((name, index) => {

@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import JSZip from 'jszip';
 import { LocalFile } from '../core';
 import { Constants } from './Constants';
 import { IO } from './IO';
@@ -17,281 +16,290 @@ import { Paths } from './Paths';
 import { JSONType } from './Types';
 import { Utils } from './Utils';
 
-class Platform {
-	public static manifest: Record<string, unknown>;
-	public static MIME_TYPES: Record<string, string> = {
-		// Images
-		png: 'image/png',
-		jpg: 'image/jpeg',
-		jpeg: 'image/jpeg',
-		gif: 'image/gif',
-		webp: 'image/webp',
-		svg: 'image/svg+xml',
+export const MIME_TYPES: Record<string, string> = {
+	// Images
+	png: 'image/png',
+	jpg: 'image/jpeg',
+	jpeg: 'image/jpeg',
+	gif: 'image/gif',
+	webp: 'image/webp',
+	svg: 'image/svg+xml',
 
-		// Audio
-		mp3: 'audio/mpeg',
-		wav: 'audio/wav',
-		ogg: 'audio/ogg',
+	// Audio
+	mp3: 'audio/mpeg',
+	wav: 'audio/wav',
+	ogg: 'audio/ogg',
 
-		// Video
-		mp4: 'video/mp4',
-		webm: 'video/webm',
-		ogv: 'video/ogg',
+	// Video
+	mp4: 'video/mp4',
+	webm: 'video/webm',
+	ogv: 'video/ogg',
 
-		// Fonts
-		ttf: 'font/ttf',
-		otf: 'font/otf',
-		woff: 'font/woff',
-		woff2: 'font/woff2',
+	// Fonts
+	ttf: 'font/ttf',
+	otf: 'font/otf',
+	woff: 'font/woff',
+	woff2: 'font/woff2',
 
-		// Documents
-		pdf: 'application/pdf',
+	// Documents
+	pdf: 'application/pdf',
 
-		// Archives
-		zip: 'application/zip',
-		rar: 'application/vnd.rar',
-		'7z': 'application/x-7z-compressed',
+	// Archives
+	zip: 'application/zip',
+	rar: 'application/vnd.rar',
+	'7z': 'application/x-7z-compressed',
 
-		// OBJ
-		obj: 'model/obj',
-		mtl: 'text/plain',
-	};
+	// OBJ
+	obj: 'model/obj',
+	mtl: 'text/plain',
+};
 
-	static async checkFileExists(path: string): Promise<boolean> {
-		return await (Constants.IS_DESKTOP ? IO.checkFileExists(path) : LocalFile.checkFileExists(path));
+export const checkFileExists = async (path: string): Promise<boolean> => {
+	return await (Constants.IS_DESKTOP ? IO.checkFileExists(path) : LocalFile.checkFileExists(path));
+};
+
+export const getFoldersFiles = async (path: string): Promise<[string[], string[]]> => {
+	return await (Constants.IS_DESKTOP ? IO.getFoldersFiles(path) : LocalFile.getFoldersFiles(path));
+};
+
+export const getFolders = async (path: string): Promise<string[]> => {
+	return await (Constants.IS_DESKTOP ? IO.getFolders(path) : LocalFile.getFolders(path));
+};
+
+export const getFiles = async (path: string): Promise<string[]> => {
+	return await (Constants.IS_DESKTOP ? IO.getFiles(path) : LocalFile.getFiles(path));
+};
+
+export const readFile = async (path: string): Promise<string | null> => {
+	return await (Constants.IS_DESKTOP ? IO.readFile(path) : LocalFile.readFile(path));
+};
+
+export const createFolder = async (path: string) => {
+	if (Constants.IS_DESKTOP) {
+		await IO.createFolder(path);
+	} else {
+		await LocalFile.createFolder(path);
 	}
+};
 
-	static async getFoldersFiles(path: string): Promise<[string[], string[]]> {
-		return await (Constants.IS_DESKTOP ? IO.getFoldersFiles(path) : LocalFile.getFoldersFiles(path));
+export const removeFolder = async (path: string) => {
+	if (Constants.IS_DESKTOP) {
+		await IO.removeFolder(path);
+	} else {
+		await LocalFile.removeFolder(path);
 	}
+};
 
-	static async getFolders(path: string): Promise<string[]> {
-		return await (Constants.IS_DESKTOP ? IO.getFolders(path) : LocalFile.getFolders(path));
+export const copyFolder = async (src: string, dst: string) => {
+	if (Constants.IS_DESKTOP) {
+		await IO.copyFolder(src, dst);
+	} else {
+		await LocalFile.copyFolder(src, dst);
 	}
+};
 
-	static async getFiles(path: string): Promise<string[]> {
-		return await (Constants.IS_DESKTOP ? IO.getFiles(path) : LocalFile.getFiles(path));
+export const moveFolder = async (src: string, dst: string) => {
+	if (Constants.IS_DESKTOP) {
+		await IO.moveFolder(src, dst);
+	} else {
+		await LocalFile.moveFolder(src, dst);
 	}
+};
 
-	static async readFile(path: string): Promise<string | null> {
-		return await (Constants.IS_DESKTOP ? IO.readFile(path) : LocalFile.readFile(path));
+export const createFile = async (path: string, content: string) => {
+	if (Constants.IS_DESKTOP) {
+		await IO.createFile(path, content);
+	} else {
+		await LocalFile.createFile(path, content);
 	}
+};
 
-	static async createFolder(path: string) {
-		if (Constants.IS_DESKTOP) {
-			await IO.createFolder(path);
+export const removeFile = async (path: string) => {
+	if (Constants.IS_DESKTOP) {
+		await IO.removeFile(path);
+	} else {
+		await LocalFile.removeFile(path);
+	}
+};
+
+export const copyFile = async (src: string, dst: string) => {
+	if (Constants.IS_DESKTOP) {
+		await IO.copyFile(src, dst);
+	} else {
+		await LocalFile.copyFile(src, dst);
+	}
+};
+
+export const moveFile = async (src: string, dst: string) => {
+	if (Constants.IS_DESKTOP) {
+		await IO.moveFile(src, dst);
+	} else {
+		await LocalFile.moveFile(src, dst);
+	}
+};
+
+export const renameFile = async (path: string, fileNameBefore: string, fileNameAfter: string) => {
+	if (Constants.IS_DESKTOP) {
+		await IO.renameFile(path, fileNameBefore, fileNameAfter);
+	} else {
+		await LocalFile.renameFile(path, fileNameBefore, fileNameAfter);
+	}
+};
+
+export const loadZip = async (
+	file: File,
+	basePath: string,
+	callback?: (current: number, total: number, label: string) => void
+) => {
+	const JSZip = (await import('jszip')).default;
+	const zip = new JSZip();
+	const zipData = await zip.loadAsync(file);
+	await createFolder(basePath);
+	const paths = Object.keys(zipData.files);
+	const rootFolder = paths[0]?.split('/')[0] ?? '';
+	for (let i = 0, l = paths.length; i < l; i++) {
+		const path = paths[i];
+		const f = zipData.files[path];
+		const relativePath = path.startsWith(rootFolder + '/') ? path.substring(rootFolder.length + 1) : path;
+		if (!relativePath) continue; // Skip empty paths (root itself)
+		const p = Paths.join(basePath, relativePath);
+		if (f.dir) {
+			await createFolder(p.slice(0, -1));
 		} else {
-			await LocalFile.createFolder(path);
-		}
-	}
-
-	static async removeFolder(path: string) {
-		if (Constants.IS_DESKTOP) {
-			await IO.removeFolder(path);
-		} else {
-			await LocalFile.removeFolder(path);
-		}
-	}
-
-	static async copyFolder(src: string, dst: string) {
-		if (Constants.IS_DESKTOP) {
-			await IO.copyFolder(src, dst);
-		} else {
-			await LocalFile.copyFolder(src, dst);
-		}
-	}
-
-	static async moveFolder(src: string, dst: string) {
-		if (Constants.IS_DESKTOP) {
-			await IO.moveFolder(src, dst);
-		} else {
-			await LocalFile.moveFolder(src, dst);
-		}
-	}
-
-	static async createFile(path: string, content: string) {
-		if (Constants.IS_DESKTOP) {
-			await IO.createFile(path, content);
-		} else {
-			await LocalFile.createFile(path, content);
-		}
-	}
-
-	static async removeFile(path: string) {
-		if (Constants.IS_DESKTOP) {
-			await IO.removeFile(path);
-		} else {
-			await LocalFile.removeFile(path);
-		}
-	}
-
-	static async copyFile(src: string, dst: string) {
-		if (Constants.IS_DESKTOP) {
-			await IO.copyFile(src, dst);
-		} else {
-			await LocalFile.copyFile(src, dst);
-		}
-	}
-
-	static async moveFile(src: string, dst: string) {
-		if (Constants.IS_DESKTOP) {
-			await IO.moveFile(src, dst);
-		} else {
-			await LocalFile.moveFile(src, dst);
-		}
-	}
-
-	static async renameFile(path: string, fileNameBefore: string, fileNameAfter: string) {
-		if (Constants.IS_DESKTOP) {
-			await IO.renameFile(path, fileNameBefore, fileNameAfter);
-		} else {
-			await LocalFile.renameFile(path, fileNameBefore, fileNameAfter);
-		}
-	}
-
-	static async loadZip(
-		file: File,
-		basePath: string,
-		callback?: (current: number, total: number, label: string) => void
-	) {
-		const zip = new JSZip();
-		const zipData = await zip.loadAsync(file);
-		await Platform.createFolder(basePath);
-		const paths = Object.keys(zipData.files);
-		const rootFolder = paths[0]?.split('/')[0] ?? '';
-		for (let i = 0, l = paths.length; i < l; i++) {
-			const path = paths[i];
-			const f = zipData.files[path];
-			const relativePath = path.startsWith(rootFolder + '/') ? path.substring(rootFolder.length + 1) : path;
-			if (!relativePath) continue; // Skip empty paths (root itself)
-			const p = Paths.join(basePath, relativePath);
-			if (f.dir) {
-				await Platform.createFolder(p.slice(0, -1));
+			const ext = relativePath.split('.').pop()?.toLowerCase();
+			let content = '';
+			const mimeType = MIME_TYPES[ext || ''];
+			if (mimeType) {
+				const binaryData = await f.async('uint8array'); // Read as binary
+				content = `data:${mimeType};base64,${Utils.uint8ArrayToBase64(binaryData)}`;
 			} else {
-				const ext = relativePath.split('.').pop()?.toLowerCase();
-				let content = '';
-				const mimeType = Platform.MIME_TYPES[ext || ''];
-				if (mimeType) {
-					const binaryData = await f.async('uint8array'); // Read as binary
-					content = `data:${mimeType};base64,${Utils.uint8ArrayToBase64(binaryData)}`;
-				} else {
-					content = await f.async('text');
-				}
-				callback?.call(this, i, l, p);
-				await Platform.createFile(p, content);
+				content = await f.async('text');
 			}
+			callback?.call(this, i, l, p);
+			await createFile(p, content);
 		}
 	}
+};
 
-	static async getFolderZip(zip: JSZip, path: string) {
-		const [folders, files] = await Platform.getFoldersFiles(path);
-		for (const folderName of folders) {
-			const folder = zip.folder(folderName);
-			if (folder) {
-				await Platform.getFolderZip(folder, Paths.join(path, folderName));
-			}
-		}
-		for (const fileName of files) {
-			const content = await Platform.readFile(Paths.join(path, fileName));
-			if (content !== null) {
-				if (content.startsWith('data')) {
-					zip.file(fileName, LocalFile.base64FileToBlob(content));
-				} else {
-					zip.file(fileName, content);
-				}
-			}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getFolderZip = async (zip: any, path: string) => {
+	const [folders, files] = await getFoldersFiles(path);
+	for (const folderName of folders) {
+		const folder = zip.folder(folderName);
+		if (folder) {
+			await getFolderZip(folder, Paths.join(path, folderName));
 		}
 	}
-
-	static async readJSON(path: string): Promise<JSONType | null> {
-		const content = await Platform.readFile(path);
+	for (const fileName of files) {
+		const content = await readFile(Paths.join(path, fileName));
 		if (content !== null) {
-			return JSON.parse(content);
+			if (content.startsWith('data')) {
+				zip.file(fileName, LocalFile.base64FileToBlob(content));
+			} else {
+				zip.file(fileName, content);
+			}
 		}
-		return null;
 	}
+};
 
-	static async writeJSON(path: string, json: JSONType) {
-		await Platform.createFile(path, JSON.stringify(json));
+export const readJSON = async (path: string): Promise<JSONType | null> => {
+	const content = await readFile(path);
+	if (content !== null) {
+		return JSON.parse(content);
 	}
+	return null;
+};
 
-	static async readPublicFile(path: string): Promise<string> {
-		return await (Constants.IS_DESKTOP ? IO.readPublicFile(path) : LocalFile.readPublicFile(path));
-	}
+export const writeJSON = async (path: string, json: JSONType) => {
+	await createFile(path, JSON.stringify(json));
+};
 
-	static async copyPublicFile(publicPath: string, dst: string) {
-		const content = await Platform.readPublicFile(publicPath);
-		await Platform.createFile(dst, content);
-	}
+export const readPublicFile = async (path: string): Promise<string> => {
+	return await (Constants.IS_DESKTOP ? IO.readPublicFile(path) : LocalFile.readPublicFile(path));
+};
 
-	static async readFileManifest() {
-		this.manifest = JSON.parse(await Platform.readPublicFile('./fileManifest.json'));
-	}
+export const copyPublicFile = async (publicPath: string, dst: string) => {
+	const content = await readPublicFile(publicPath);
+	await createFile(dst, content);
+};
 
-	static getAllFilesFromFolder(path: string): string[] {
-		if (Constants.IS_DESKTOP) {
-			return [];
-		} else {
-			const folders = path.split('/');
+export const readFileManifest = async () => {
+	Platform.manifest = JSON.parse(await readPublicFile('./fileManifest.json'));
+};
+
+export const getAllFilesFromFolder = (path: string): string[] => {
+	if (Constants.IS_DESKTOP) {
+		return [];
+	} else {
+		const folders = path.split('/');
+		folders.shift();
+		if (folders.length > 0 && folders[0] === '') {
 			folders.shift();
-			if (folders.length > 0 && folders[0] === '') {
-				folders.shift();
-			}
-			let currentFolder = this.manifest;
-			for (const folder of folders) {
-				currentFolder = currentFolder[folder] as Record<string, unknown>;
-			}
-			return (currentFolder?.files as string[]) ?? [];
 		}
-	}
-
-	static async openGame(location: string) {
-		if (Constants.IS_DESKTOP) {
-			await IO.openGame(location);
-		} else {
-			window.open(`${window.location.pathname}?project=${location}`, '_blank');
+		let currentFolder = Platform.manifest;
+		for (const folder of folders) {
+			currentFolder = currentFolder[folder] as Record<string, unknown>;
 		}
+		return (currentFolder?.files as string[]) ?? [];
 	}
+};
 
-	static async export(location: string) {
+export const openGame = async (location: string) => {
+	if (Constants.IS_DESKTOP) {
+		await IO.openGame(location);
+	} else {
+		window.open(`${window.location.pathname}?project=${location}`, '_blank');
+	}
+};
+
+export const exportFolder = async (location: string) => {
+	const fileName = Paths.getFileName(location) || '';
+	const JSZip = (await import('jszip')).default;
+	const zip = new JSZip();
+	const folder = zip.folder(fileName);
+	if (folder) {
+		await getFolderZip(folder, location);
+		const blob = await zip.generateAsync({ type: 'blob' });
 		if (Constants.IS_DESKTOP) {
 			const folderPath = await IO.openFolderDialog();
 			if (folderPath) {
-				IO.downloadZip(location, folderPath);
+				IO.downloadBlob(folderPath, blob);
 			}
 		} else {
-			await LocalFile.downloadZip(location);
+			await LocalFile.downloadBlob(fileName, blob);
 		}
 	}
+};
 
-	static async readOnlineFile(path: string): Promise<string | null> {
-		try {
-			return (await fetch(path)).text();
-		} catch (e) {
+export const readOnlineFile = async (path: string): Promise<string | null> => {
+	try {
+		return (await fetch(path)).text();
+	} catch {
+		return null;
+	}
+};
+
+export const readOnlineFileBlob = async (path: string): Promise<Blob | null> => {
+	try {
+		return (await fetch(path)).blob();
+	} catch {
+		return null;
+	}
+};
+
+export const readOnlineFileUint8Array = async (url: string): Promise<Uint8Array | null> => {
+	try {
+		const response = await fetch(url);
+		if (!response.ok) {
 			return null;
 		}
+		const arrayBuffer = await response.arrayBuffer();
+		return new Uint8Array(arrayBuffer);
+	} catch {
+		return null;
 	}
+};
 
-	static async readOnlineFileBlob(path: string): Promise<Blob | null> {
-		try {
-			return (await fetch(path)).blob();
-		} catch (e) {
-			return null;
-		}
-	}
-
-	static async readOnlineFileUint8Array(url: string): Promise<Uint8Array | null> {
-		try {
-			const response = await fetch(url);
-			if (!response.ok) {
-				return null;
-			}
-			const arrayBuffer = await response.arrayBuffer();
-			return new Uint8Array(arrayBuffer);
-		} catch (e) {
-			return null;
-		}
-	}
+export class Platform {
+	public static manifest: Record<string, unknown>;
 }
-
-export { Platform };

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import { Euler, Vector2, Vector3 } from 'three';
 import { MapElement, Model } from '../Editor';
 import { JSONType } from '../common';
 import { CustomGeometry, Position, Project } from '../core';
@@ -21,77 +21,77 @@ class Object3DBox extends Object3D {
 	public static COEF = 0.01;
 	public static VERTICES = [
 		// Front
-		new THREE.Vector3(0.0, 1.0, 1.0),
-		new THREE.Vector3(1.0, 1.0, 1.0),
-		new THREE.Vector3(1.0, 0.0, 1.0),
-		new THREE.Vector3(0.0, 0.0, 1.0),
+		new Vector3(0.0, 1.0, 1.0),
+		new Vector3(1.0, 1.0, 1.0),
+		new Vector3(1.0, 0.0, 1.0),
+		new Vector3(0.0, 0.0, 1.0),
 
 		// Back
-		new THREE.Vector3(1.0, 1.0, 0.0),
-		new THREE.Vector3(0.0, 1.0, 0.0),
-		new THREE.Vector3(0.0, 0.0, 0.0),
-		new THREE.Vector3(1.0, 0.0, 0.0),
+		new Vector3(1.0, 1.0, 0.0),
+		new Vector3(0.0, 1.0, 0.0),
+		new Vector3(0.0, 0.0, 0.0),
+		new Vector3(1.0, 0.0, 0.0),
 
 		// Left
-		new THREE.Vector3(0.0, 1.0, 0.0),
-		new THREE.Vector3(0.0, 1.0, 1.0),
-		new THREE.Vector3(0.0, 0.0, 1.0),
-		new THREE.Vector3(0.0, 0.0, 0.0),
+		new Vector3(0.0, 1.0, 0.0),
+		new Vector3(0.0, 1.0, 1.0),
+		new Vector3(0.0, 0.0, 1.0),
+		new Vector3(0.0, 0.0, 0.0),
 
 		// Right
-		new THREE.Vector3(1.0, 1.0, 1.0),
-		new THREE.Vector3(1.0, 1.0, 0.0),
-		new THREE.Vector3(1.0, 0.0, 0.0),
-		new THREE.Vector3(1.0, 0.0, 1.0),
+		new Vector3(1.0, 1.0, 1.0),
+		new Vector3(1.0, 1.0, 0.0),
+		new Vector3(1.0, 0.0, 0.0),
+		new Vector3(1.0, 0.0, 1.0),
 
 		// Bottom
-		new THREE.Vector3(0.0, 0.0, 1.0),
-		new THREE.Vector3(1.0, 0.0, 1.0),
-		new THREE.Vector3(1.0, 0.0, 0.0),
-		new THREE.Vector3(0.0, 0.0, 0.0),
+		new Vector3(0.0, 0.0, 1.0),
+		new Vector3(1.0, 0.0, 1.0),
+		new Vector3(1.0, 0.0, 0.0),
+		new Vector3(0.0, 0.0, 0.0),
 
 		// Top
-		new THREE.Vector3(0.0, 1.0, 0.0),
-		new THREE.Vector3(1.0, 1.0, 0.0),
-		new THREE.Vector3(1.0, 1.0, 1.0),
-		new THREE.Vector3(0.0, 1.0, 1.0),
+		new Vector3(0.0, 1.0, 0.0),
+		new Vector3(1.0, 1.0, 0.0),
+		new Vector3(1.0, 1.0, 1.0),
+		new Vector3(0.0, 1.0, 1.0),
 	];
 	public static VERTICES_CENTER = [
 		// Front
-		new THREE.Vector3(-0.5, 1.0, 0.5),
-		new THREE.Vector3(0.5, 1.0, 0.5),
-		new THREE.Vector3(0.5, 0.0, 0.5),
-		new THREE.Vector3(-0.5, 0.0, 0.5),
+		new Vector3(-0.5, 1.0, 0.5),
+		new Vector3(0.5, 1.0, 0.5),
+		new Vector3(0.5, 0.0, 0.5),
+		new Vector3(-0.5, 0.0, 0.5),
 
 		// Back
-		new THREE.Vector3(0.5, 1.0, -0.5),
-		new THREE.Vector3(-0.5, 1.0, -0.5),
-		new THREE.Vector3(-0.5, 0.0, -0.5),
-		new THREE.Vector3(0.5, 0.0, -0.5),
+		new Vector3(0.5, 1.0, -0.5),
+		new Vector3(-0.5, 1.0, -0.5),
+		new Vector3(-0.5, 0.0, -0.5),
+		new Vector3(0.5, 0.0, -0.5),
 
 		// Left
-		new THREE.Vector3(-0.5, 1.0, -0.5),
-		new THREE.Vector3(-0.5, 1.0, 0.5),
-		new THREE.Vector3(-0.5, 0.0, 0.5),
-		new THREE.Vector3(-0.5, 0.0, -0.5),
+		new Vector3(-0.5, 1.0, -0.5),
+		new Vector3(-0.5, 1.0, 0.5),
+		new Vector3(-0.5, 0.0, 0.5),
+		new Vector3(-0.5, 0.0, -0.5),
 
 		// Right
-		new THREE.Vector3(0.5, 1.0, 0.5),
-		new THREE.Vector3(0.5, 1.0, -0.5),
-		new THREE.Vector3(0.5, 0.0, -0.5),
-		new THREE.Vector3(0.5, 0.0, 0.5),
+		new Vector3(0.5, 1.0, 0.5),
+		new Vector3(0.5, 1.0, -0.5),
+		new Vector3(0.5, 0.0, -0.5),
+		new Vector3(0.5, 0.0, 0.5),
 
 		// Bottom
-		new THREE.Vector3(-0.5, 0.0, 0.5),
-		new THREE.Vector3(0.5, 0.0, 0.5),
-		new THREE.Vector3(0.5, 0.0, -0.5),
-		new THREE.Vector3(-0.5, 0.0, -0.5),
+		new Vector3(-0.5, 0.0, 0.5),
+		new Vector3(0.5, 0.0, 0.5),
+		new Vector3(0.5, 0.0, -0.5),
+		new Vector3(-0.5, 0.0, -0.5),
 
 		// Top
-		new THREE.Vector3(-0.5, 1.0, -0.5),
-		new THREE.Vector3(0.5, 1.0, -0.5),
-		new THREE.Vector3(0.5, 1.0, 0.5),
-		new THREE.Vector3(-0.5, 1.0, 0.5),
+		new Vector3(-0.5, 1.0, -0.5),
+		new Vector3(0.5, 1.0, -0.5),
+		new Vector3(0.5, 1.0, 0.5),
+		new Vector3(-0.5, 1.0, 0.5),
 	];
 	public static NB_VERTICES = 24;
 	public static TEXTURES = [
@@ -152,8 +152,8 @@ class Object3DBox extends Object3D {
 		return object;
 	}
 
-	getCenterVector(): THREE.Vector3 {
-		return new THREE.Vector3(
+	getCenterVector(): Vector3 {
+		return new Vector3(
 			this.data.getTotalWidthPixels() / 2,
 			this.data.getTotalHeightPixels() / 2,
 			this.data.getTotalDepthPixels() / 2
@@ -164,7 +164,7 @@ class Object3DBox extends Object3D {
 		return !this.data.isTopLeft;
 	}
 
-	getLocalPosition(position: Position): THREE.Vector3 {
+	getLocalPosition(position: Position): Vector3 {
 		const localPosition = position.toVector3(false);
 		if (this.data.isTopLeft) {
 			localPosition.setX(
@@ -181,7 +181,7 @@ class Object3DBox extends Object3D {
 		return localPosition;
 	}
 
-	getPositionFromVec3(vec: THREE.Vector3, rotation: THREE.Euler, scale: THREE.Vector3): Position {
+	getPositionFromVec3(vec: Vector3, rotation: Euler, scale: Vector3): Position {
 		const v = vec.clone();
 		if (this.data.isTopLeft) {
 			v.setX(v.x + Math.floor(Project.SQUARE_SIZE / 2));
@@ -239,10 +239,10 @@ class Object3DBox extends Object3D {
 			const tB = Object3DBox.TEXTURES[i + 1];
 			const tC = Object3DBox.TEXTURES[i + 2];
 			const tD = Object3DBox.TEXTURES[i + 3];
-			const texA = new THREE.Vector2(textures[tA[0]], textures[tA[1]]);
-			const texB = new THREE.Vector2(textures[tB[0]], textures[tB[1]]);
-			const texC = new THREE.Vector2(textures[tC[0]], textures[tC[1]]);
-			const texD = new THREE.Vector2(textures[tD[0]], textures[tD[1]]);
+			const texA = new Vector2(textures[tA[0]], textures[tA[1]]);
+			const texB = new Vector2(textures[tB[0]], textures[tB[1]]);
+			const texC = new Vector2(textures[tC[0]], textures[tC[1]]);
+			const texD = new Vector2(textures[tD[0]], textures[tD[1]]);
 			Base.rotateQuadEuler(vecA, vecB, vecC, vecD, localPosition, position.toRotationEuler());
 			count = Sprite.addStaticSpriteToGeometry(
 				geometry,

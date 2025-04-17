@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import { AmbientLight, DirectionalLight, DoubleSide, Mesh, MeshPhongMaterial, Vector3 } from 'three';
 import { Base } from '.';
 import { ELEMENT_MAP_KIND, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
 import { CustomGeometry, CustomGeometryFace, Position, Position3D, Project, Rectangle, TextureBundle } from '../core';
@@ -24,9 +24,9 @@ class Previewer3D extends Base {
 	public id: string;
 	public canvas!: HTMLElement;
 	public parentCanvas!: HTMLElement;
-	public material: THREE.MeshPhongMaterial | null = null;
-	public sunLight!: THREE.DirectionalLight;
-	public meshes: THREE.Mesh[] = [];
+	public material: MeshPhongMaterial | null = null;
+	public sunLight!: DirectionalLight;
+	public meshes: Mesh[] = [];
 	public currentRotation: number = 0;
 	public isCut = false;
 
@@ -36,9 +36,9 @@ class Previewer3D extends Base {
 	}
 
 	initializeSunLight() {
-		const ambient = new THREE.AmbientLight(0xffffff, 1.2);
+		const ambient = new AmbientLight(0xffffff, 1.2);
 		this.scene.add(ambient);
-		this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
+		this.sunLight = new DirectionalLight(0xffffff, 2);
 		this.sunLight.position.set(-1, 1.75, 1);
 		this.sunLight.position.multiplyScalar(16 * 10);
 		this.sunLight.target.position.set(0, 0, 0);
@@ -154,7 +154,7 @@ class Previewer3D extends Base {
 			geometry = new CustomGeometry();
 			const floorPosition = new Position(0, hs, hpercent);
 			floor.updateGeometry(Scene.Map.current!, geometry, floorPosition, width, height, 0);
-			this.addToScene(geometry, this.material, false, new THREE.Vector3(0, (floorPosition.getTotalY() / 2) * 16));
+			this.addToScene(geometry, this.material, false, new Vector3(0, (floorPosition.getTotalY() / 2) * 16));
 		}
 	}
 
@@ -183,7 +183,7 @@ class Previewer3D extends Base {
 			this.clear();
 			return;
 		}
-		const texture = new THREE.MeshPhongMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+		const texture = new MeshPhongMaterial({ color: 0xffffff, side: DoubleSide });
 		const geometry = new CustomGeometry();
 		if (!shape.geometryData) {
 			await shape.loadShape();
@@ -199,16 +199,16 @@ class Previewer3D extends Base {
 
 	addToScene(
 		geometry: CustomGeometry | CustomGeometryFace,
-		material: THREE.MeshPhongMaterial | null = this.material,
+		material: MeshPhongMaterial | null = this.material,
 		needsClear = true,
-		position: THREE.Vector3 | null = null
+		position: Vector3 | null = null
 	) {
 		if (needsClear) {
 			this.clear();
 		}
 		if (!geometry.isEmpty() && material) {
 			geometry.updateAttributes();
-			const mesh = new THREE.Mesh(geometry, material);
+			const mesh = new Mesh(geometry, material);
 			this.meshes.push(mesh);
 			this.scene.add(mesh);
 			if (this.isCut) {
@@ -233,8 +233,8 @@ class Previewer3D extends Base {
 		if (this.meshes.length === 0) {
 			return;
 		}
-		const min = new THREE.Vector3(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY);
-		const max = new THREE.Vector3(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY);
+		const min = new Vector3(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY);
+		const max = new Vector3(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY);
 		let w = 0;
 		let h = 0;
 		let d = 0;
@@ -242,7 +242,7 @@ class Previewer3D extends Base {
 		for (const mesh of this.meshes) {
 			mesh.scale.set(resize, resize, resize);
 			let bb = mesh.geometry.boundingBox;
-			let m: THREE.Vector3;
+			let m: Vector3;
 			if (bb === null) {
 				mesh.geometry.computeBoundingBox();
 				bb = mesh.geometry.boundingBox;

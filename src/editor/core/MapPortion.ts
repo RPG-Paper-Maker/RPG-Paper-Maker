@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import { Material, Mesh, MeshPhongMaterial, Vector2, Vector3 } from 'three';
 import {
 	CustomGeometry,
 	CustomGeometryFace,
@@ -25,26 +25,26 @@ import { Manager, MapElement, Model, Scene } from '../Editor';
 
 type GeometryMaterialType = {
 	geometry: CustomGeometry;
-	material: THREE.MeshPhongMaterial | null;
+	material: MeshPhongMaterial | null;
 	count?: number;
 };
 
 class MapPortion {
 	public map!: Scene.Map;
 	public model!: Model.MapPortion;
-	public floorsMeshes!: [THREE.Mesh[], THREE.Mesh[]]; // [0 for up, 1 for down][layer]
-	public spritesFaceMeshes!: THREE.Mesh[]; // [layer]
-	public spritesFixMeshes!: [THREE.Mesh[], THREE.Mesh[]]; // [0 for front, 1 for back][layer]
+	public floorsMeshes!: [Mesh[], Mesh[]]; // [0 for up, 1 for down][layer]
+	public spritesFaceMeshes!: Mesh[]; // [layer]
+	public spritesFixMeshes!: [Mesh[], Mesh[]]; // [0 for front, 1 for back][layer]
 	public autotilesList!: MapElement.Autotiles[][];
-	public wallsMeshes!: THREE.Mesh[];
+	public wallsMeshes!: Mesh[];
 	public mountainsList!: Map<number, MapElement.Mountains>;
-	public objects3DMeshes!: THREE.Mesh[];
-	public objectsMesh: THREE.Mesh | null = null;
-	public objectsMeshes: THREE.Mesh[] = [];
-	public objectsSpritesFaceMeshes: THREE.Mesh[] = [];
+	public objects3DMeshes!: Mesh[];
+	public objectsMesh: Mesh | null = null;
+	public objectsMeshes: Mesh[] = [];
+	public objectsSpritesFaceMeshes: Mesh[] = [];
 	public lastPreviewRemove: [position: Position, element: MapElement.Base | null, kind: ELEMENT_MAP_KIND][] = [];
 
-	static offsetMeshPositionLayer(map: Scene.Map, mesh: THREE.Mesh, side: number, layer: number, up = true) {
+	static offsetMeshPositionLayer(map: Scene.Map, mesh: Mesh, side: number, layer: number, up = true) {
 		let offset = layer * map.camera.getYOffsetDepth();
 		if (side === 1) {
 			offset *= -1;
@@ -582,8 +582,8 @@ class MapPortion {
 
 	updateSelected(
 		geometry: CustomGeometry,
-		material: THREE.Material | THREE.Material[],
-		localPosition: THREE.Vector3,
+		material: Material | Material[],
+		localPosition: Vector3,
 		position: Position
 	) {
 		geometry.updateAttributes();
@@ -867,7 +867,7 @@ class MapPortion {
 			const side = floor.up ? 0 : 1;
 			let mesh = this.floorsMeshes[side][position.layer];
 			if (!mesh) {
-				mesh = new THREE.Mesh(new CustomGeometry(), this.map.materialTileset);
+				mesh = new Mesh(new CustomGeometry(), this.map.materialTileset);
 				mesh.receiveShadow = true;
 				mesh.castShadow = true;
 				mesh.renderOrder = 0;
@@ -940,7 +940,7 @@ class MapPortion {
 						new Position(),
 						0,
 						true,
-						new THREE.Vector3(),
+						new Vector3(),
 						true
 					);
 					this.updateSelected(geometry, this.map.hoveredMesh.material, localPosition, position);
@@ -965,7 +965,7 @@ class MapPortion {
 				} else {
 					let mesh = this.spritesFaceMeshes[position.layer];
 					if (!mesh) {
-						mesh = new THREE.Mesh(new CustomGeometryFace(), this.map.materialTileset);
+						mesh = new Mesh(new CustomGeometryFace(), this.map.materialTileset);
 						mesh.receiveShadow = true;
 						mesh.castShadow = true;
 						mesh.renderOrder = 3;
@@ -1000,7 +1000,7 @@ class MapPortion {
 						new Position(),
 						0,
 						true,
-						new THREE.Vector3(),
+						new Vector3(),
 						true
 					);
 					this.updateSelected(geometry, this.map.hoveredMesh.material, localPosition, position);
@@ -1021,7 +1021,7 @@ class MapPortion {
 				} else {
 					let mesh = this.spritesFixMeshes[side][position.layer];
 					if (!mesh) {
-						mesh = new THREE.Mesh(new CustomGeometry(), this.map.materialTileset);
+						mesh = new Mesh(new CustomGeometry(), this.map.materialTileset);
 						mesh.receiveShadow = true;
 						mesh.castShadow = true;
 						mesh.renderOrder = 3;
@@ -1087,7 +1087,7 @@ class MapPortion {
 		for (const [positionKey, wall] of this.model.walls) {
 			const position = Position.fromKey(positionKey);
 			let obj = hash.get(wall.wallID);
-			let material: THREE.MeshPhongMaterial | null;
+			let material: MeshPhongMaterial | null;
 			let geometry: CustomGeometry;
 			let count: number;
 			if (obj) {
@@ -1113,7 +1113,7 @@ class MapPortion {
 			const geometry = obj.geometry;
 			if (!geometry.isEmpty() && obj.material) {
 				geometry.updateAttributes();
-				const mesh = new THREE.Mesh(geometry, obj.material);
+				const mesh = new Mesh(geometry, obj.material);
 				mesh.receiveShadow = true;
 				mesh.castShadow = true;
 				mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
@@ -1172,7 +1172,7 @@ class MapPortion {
 			if (object3D.data) {
 				// Constructing the geometry
 				let obj = hash.get(object3D.data.pictureID);
-				let material: THREE.MeshPhongMaterial | null;
+				let material: MeshPhongMaterial | null;
 				let geometry: CustomGeometry | null = null;
 				let count = 0;
 				if (
@@ -1238,7 +1238,7 @@ class MapPortion {
 			const geometry = obj.geometry;
 			if (!geometry.isEmpty() && obj.material) {
 				geometry.updateAttributes();
-				const mesh = new THREE.Mesh(geometry, obj.material);
+				const mesh = new Mesh(geometry, obj.material);
 				this.objects3DMeshes.push(mesh);
 				mesh.renderOrder = 999;
 				mesh.receiveShadow = true;
@@ -1270,17 +1270,17 @@ class MapPortion {
 
 			// Object square cursor
 			const vec = position.toVector3(false);
-			const vecA = new THREE.Vector3(vec.x, vec.y, vec.z);
-			const vecB = new THREE.Vector3(vec.x + Project.SQUARE_SIZE, vec.y, vec.z);
-			const vecC = new THREE.Vector3(vec.x + Project.SQUARE_SIZE, vec.y, vec.z + Project.SQUARE_SIZE);
-			const vecD = new THREE.Vector3(vec.x, vec.y, vec.z + Project.SQUARE_SIZE);
+			const vecA = new Vector3(vec.x, vec.y, vec.z);
+			const vecB = new Vector3(vec.x + Project.SQUARE_SIZE, vec.y, vec.z);
+			const vecC = new Vector3(vec.x + Project.SQUARE_SIZE, vec.y, vec.z + Project.SQUARE_SIZE);
+			const vecD = new Vector3(vec.x, vec.y, vec.z + Project.SQUARE_SIZE);
 			geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 			geometry.pushQuadIndices(count);
 			const coef = MapElement.Base.COEF_TEX / Project.SQUARE_SIZE;
-			const texA = new THREE.Vector2();
-			const texB = new THREE.Vector2();
-			const texC = new THREE.Vector2();
-			const texD = new THREE.Vector2();
+			const texA = new Vector2();
+			const texB = new Vector2();
+			const texC = new Vector2();
+			const texD = new Vector2();
 			CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, coef, coef, 1 - coef, 1 - coef);
 			geometry.pushQuadUVs(texA, texB, texC, texD);
 			count += 4;
@@ -1291,7 +1291,7 @@ class MapPortion {
 				position.scaleX = state.scaleX.getFixNumberValue();
 				position.scaleY = state.scaleY.getFixNumberValue();
 				position.scaleZ = state.scaleZ.getFixNumberValue();
-				let mesh: THREE.Mesh | null = null;
+				let mesh: Mesh | null = null;
 				switch (state.graphicsKind) {
 					case ELEMENT_MAP_KIND.NONE:
 						break;
@@ -1336,7 +1336,7 @@ class MapPortion {
 							localPosition
 						);
 						geometrySprite.updateAttributes();
-						mesh = new THREE.Mesh(geometrySprite, material);
+						mesh = new Mesh(geometrySprite, material);
 						if (state.graphicsKind === ELEMENT_MAP_KIND.SPRITE_FIX) {
 							this.objectsMeshes.push(mesh);
 						} else {
@@ -1353,7 +1353,7 @@ class MapPortion {
 							);
 							object3D.updateGeometry(geometryObject3D, position, 0);
 							geometryObject3D.updateAttributes();
-							mesh = new THREE.Mesh(geometryObject3D, material);
+							mesh = new Mesh(geometryObject3D, material);
 							this.objectsMeshes.push(mesh);
 						}
 						break;
@@ -1370,7 +1370,7 @@ class MapPortion {
 		// Object square cursors
 		if (!geometry.isEmpty()) {
 			geometry.updateAttributes();
-			this.objectsMesh = new THREE.Mesh(geometry, Scene.Map.materialObjectSquare);
+			this.objectsMesh = new Mesh(geometry, Scene.Map.materialObjectSquare);
 			this.objectsMesh.receiveShadow = true;
 			this.objectsMesh.castShadow = true;
 			this.objectsMesh.renderOrder = 0;

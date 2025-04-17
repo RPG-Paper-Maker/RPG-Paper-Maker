@@ -12,7 +12,7 @@
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CUSTOM_SHAPE_KIND } from '../../common';
-import { Platform } from '../../common/Platform';
+import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { Node, Project } from '../../core';
 import { Manager, Model } from '../../Editor';
 import Flex from '../Flex';
@@ -97,8 +97,8 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 	};
 
 	const handleRefresh = async () => {
-		const files = Platform.getAllFilesFromFolder(Model.Shape.getFolder(selectedKind!, true, ''));
-		const customNames = await Platform.getFiles(Model.Shape.getFolder(selectedKind!, false, ''));
+		const files = getAllFilesFromFolder(Model.Shape.getFolder(selectedKind!, true, ''));
+		const customNames = await getFiles(Model.Shape.getFolder(selectedKind!, false, ''));
 		setShapesAvailable([
 			...Node.createList(
 				files.map((name, index) => {

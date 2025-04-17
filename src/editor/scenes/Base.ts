@@ -9,19 +9,19 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import { Object3D, Scene } from 'three';
 import { Manager, Model } from '../Editor';
 import { Camera } from '../core';
 
 class Base {
-	public scene: THREE.Scene;
+	public scene: Scene;
 	public camera: Camera;
 	public loading = true;
 	public initialized = false;
 	public canvas?: HTMLElement | null;
 
 	constructor(tag?: Model.TreeMapTag, isDetection = false) {
-		this.scene = new THREE.Scene();
+		this.scene = new Scene();
 		this.camera = new Camera(tag, isDetection);
 	}
 
@@ -54,7 +54,7 @@ class Base {
 	}
 
 	close() {
-		const meshes: THREE.Object3D[] = [];
+		const meshes: Object3D[] = [];
 		this.scene.traverse((object) => {
 			meshes.push(object);
 		});

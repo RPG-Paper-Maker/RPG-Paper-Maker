@@ -10,7 +10,7 @@
 */
 
 import i18next from 'i18next';
-import * as THREE from 'three';
+import { Vector2, Vector3 } from 'three';
 import { MapElement, Model, Scene } from '../Editor';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, Utils } from '../common';
 import { CustomGeometry, Position, Project } from '../core';
@@ -137,7 +137,7 @@ class Mountain extends Base {
 		left: boolean,
 		right: boolean,
 		angle: number,
-		center: THREE.Vector3,
+		center: Vector3,
 		width: number,
 		height: number,
 		w: number,
@@ -149,10 +149,10 @@ class Mountain extends Base {
 		yBot: number,
 		zFront: number,
 		zBack: number,
-		vecFrontA: THREE.Vector3,
-		vecBackA: THREE.Vector3,
-		vecFrontB: THREE.Vector3,
-		vecBackB: THREE.Vector3,
+		vecFrontA: Vector3,
+		vecBackA: Vector3,
+		vecFrontB: Vector3,
+		vecBackB: Vector3,
 		geometry: CustomGeometry,
 		count: number
 	): number {
@@ -385,7 +385,7 @@ class Mountain extends Base {
 		xKind: number,
 		yKind: number,
 		angle: number,
-		center: THREE.Vector3,
+		center: Vector3,
 		width: number,
 		height: number,
 		w: number,
@@ -474,7 +474,7 @@ class Mountain extends Base {
 		xKind: number,
 		yKind: number,
 		angle: number,
-		center: THREE.Vector3,
+		center: Vector3,
 		width: number,
 		height: number,
 		w: number,
@@ -509,38 +509,38 @@ class Mountain extends Base {
 		h -= coefY * 2;
 
 		// Textures and vertices
-		let texA: THREE.Vector2;
-		let texB: THREE.Vector2;
-		let texC: THREE.Vector2;
-		let texD: THREE.Vector2;
+		let texA: Vector2;
+		let texB: Vector2;
+		let texC: Vector2;
+		let texD: Vector2;
 		if (isCorner) {
-			texA = new THREE.Vector2(
+			texA = new Vector2(
 				(xKind * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - xCornerOffsetTop) / 2) / width + coefX,
 				y
 			);
-			texB = new THREE.Vector2(
+			texB = new Vector2(
 				((xKind + 1) * Project.SQUARE_SIZE - (Project.SQUARE_SIZE - xCornerOffsetTop) / 2) / width - coefX,
 				y
 			);
-			texC = new THREE.Vector2(
+			texC = new Vector2(
 				((xKind + 1) * Project.SQUARE_SIZE - (Project.SQUARE_SIZE - xCornerOffsetBot) / 2) / width - coefX,
 				y + h
 			);
-			texD = new THREE.Vector2(
+			texD = new Vector2(
 				(xKind * Project.SQUARE_SIZE + (Project.SQUARE_SIZE - xCornerOffsetBot) / 2) / width + coefX,
 				y + h
 			);
 		} else {
 			// Triangle form for corners
-			texA = new THREE.Vector2(x, y);
-			texB = new THREE.Vector2(x + w, y);
-			texC = new THREE.Vector2(x + w, y + h);
-			texD = new THREE.Vector2(x, y + h);
+			texA = new Vector2(x, y);
+			texB = new Vector2(x + w, y);
+			texC = new Vector2(x + w, y + h);
+			texD = new Vector2(x, y + h);
 		}
-		const vecA = new THREE.Vector3(xLeftTop, yTop, zBackLeft);
-		const vecB = new THREE.Vector3(xRightTop, yTop, zBackRight);
-		const vecC = new THREE.Vector3(xRightBot, yBot, zFrontRight);
-		const vecD = new THREE.Vector3(xLeftBot, yBot, zFrontLeft);
+		const vecA = new Vector3(xLeftTop, yTop, zBackLeft);
+		const vecB = new Vector3(xRightTop, yTop, zBackRight);
+		const vecC = new Vector3(xRightBot, yBot, zFrontRight);
+		const vecD = new Vector3(xLeftBot, yBot, zFrontLeft);
 
 		// Rotate and draw sprite side
 		MapElement.Base.rotateQuad(vecA, vecB, vecC, vecD, center, angle, MapElement.Base.Y_AXIS);
@@ -561,7 +561,7 @@ class Mountain extends Base {
 	}
 
 	drawFakeTopFloor(
-		localPosition: THREE.Vector3,
+		localPosition: Vector3,
 		position: Position,
 		yTop: number,
 		geometry: CustomGeometry,
@@ -569,14 +569,10 @@ class Mountain extends Base {
 		height: number,
 		count: number
 	) {
-		const vecA = new THREE.Vector3(localPosition.x, yTop, localPosition.z);
-		const vecB = new THREE.Vector3(localPosition.x + Project.SQUARE_SIZE, yTop, localPosition.z);
-		const vecC = new THREE.Vector3(
-			localPosition.x + Project.SQUARE_SIZE,
-			yTop,
-			localPosition.z + Project.SQUARE_SIZE
-		);
-		const vecD = new THREE.Vector3(localPosition.x, yTop, localPosition.z + Project.SQUARE_SIZE);
+		const vecA = new Vector3(localPosition.x, yTop, localPosition.z);
+		const vecB = new Vector3(localPosition.x + Project.SQUARE_SIZE, yTop, localPosition.z);
+		const vecC = new Vector3(localPosition.x + Project.SQUARE_SIZE, yTop, localPosition.z + Project.SQUARE_SIZE);
+		const vecD = new Vector3(localPosition.x, yTop, localPosition.z + Project.SQUARE_SIZE);
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 		geometry.pushQuadIndices(count, position);
 		count += 4;
@@ -590,10 +586,10 @@ class Mountain extends Base {
 		texY += coefY;
 		texW -= coefX * 2;
 		texH -= coefY * 2;
-		const texA = new THREE.Vector2();
-		const texB = new THREE.Vector2();
-		const texC = new THREE.Vector2();
-		const texD = new THREE.Vector2();
+		const texA = new Vector2();
+		const texB = new Vector2();
+		const texC = new Vector2();
+		const texD = new Vector2();
 		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, texX, texY, texW, texH);
 		geometry.pushQuadUVs(texA, texB, texC, texD);
 		return count;
@@ -608,7 +604,7 @@ class Mountain extends Base {
 		const faceHeight = Math.sqrt(wp * wp + hp * hp);
 		const w = Project.SQUARE_SIZE / width;
 		const localPosition = position.toVector3(false);
-		const center = new THREE.Vector3(
+		const center = new Vector3(
 			localPosition.x + Project.SQUARE_SIZE / 2,
 			localPosition.y + Project.SQUARE_SIZE / 2,
 			localPosition.z + Project.SQUARE_SIZE / 2
@@ -619,10 +615,10 @@ class Mountain extends Base {
 		const yBot = localPosition.y;
 		const zFront = localPosition.z + Project.SQUARE_SIZE + wp;
 		const zBack = zFront - wp;
-		const vecFrontB = new THREE.Vector3(xLeft, yBot, zFront);
-		const vecBackB = new THREE.Vector3(xLeft, yTop, zBack);
-		const vecFrontA = new THREE.Vector3(xLeft - wp, yBot, zBack);
-		const vecBackA = new THREE.Vector3(xLeft, yTop, zBack);
+		const vecFrontB = new Vector3(xLeft, yBot, zFront);
+		const vecBackB = new Vector3(xLeft, yTop, zBack);
+		const vecFrontA = new Vector3(xLeft - wp, yBot, zBack);
+		const vecBackA = new Vector3(xLeft, yTop, zBack);
 
 		// Bot
 		if (!this.bot) {

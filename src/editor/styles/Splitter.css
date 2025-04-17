@@ -13,7 +13,7 @@
 	background-color: var(--main-bg-color);
 
 	.splitterButton {
-		.vertical {
+		&.vertical {
 			height: 4px;
 			border: 1px solid var(--darkest-bg-color);
 
@@ -22,7 +22,7 @@
 			}
 		}
 
-		.horizontal {
+		&.horizontal {
 			width: 4px;
 			border: 1px solid var(--darkest-bg-color);
 

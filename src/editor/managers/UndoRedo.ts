@@ -11,7 +11,7 @@
 
 import { MapElement, Model, Scene } from '../Editor';
 import { ELEMENT_MAP_KIND, JSONType, Paths, Utils } from '../common';
-import { Platform } from '../common/Platform';
+import { createFile, getFiles, readFile, removeFile, renameFile } from '../common/Platform';
 import { Position, Project, UndoRedoState } from '../core';
 
 class UndoRedo {
@@ -36,14 +36,14 @@ class UndoRedo {
 
 	static async getStatesLength() {
 		if (Project.current) {
-			return (await Platform.getFiles(Paths.join(Scene.Map.current?.getPath(), Paths.TEMP_UNDO_REDO))).length - 1;
+			return (await getFiles(Paths.join(Scene.Map.current?.getPath(), Paths.TEMP_UNDO_REDO))).length - 1;
 		}
 		return 0;
 	}
 
 	static async getCurrentCurrentIndex() {
 		if (Project.current) {
-			const content = await Platform.readFile(UndoRedo.getPathIndex());
+			const content = await readFile(UndoRedo.getPathIndex());
 			if (content !== null) {
 				return Number(content);
 			}
@@ -52,12 +52,12 @@ class UndoRedo {
 	}
 
 	private static async saveCurrentCurrentIndex(index: number) {
-		await Platform.createFile(UndoRedo.getPathIndex(), `${index}`);
+		await createFile(UndoRedo.getPathIndex(), `${index}`);
 	}
 
 	private static async getStatesAt(index: number) {
 		const states: UndoRedoState[] = [];
-		const content = await Platform.readFile(this.getPathStatesAt(index));
+		const content = await readFile(this.getPathStatesAt(index));
 		if (content !== null) {
 			Utils.readList(states, JSON.parse(content), UndoRedoState);
 		}
@@ -115,7 +115,7 @@ class UndoRedo {
 	private static async updateMaxFiles(index: number) {
 		const path = this.getPathStates();
 		for (let i = 1; i <= index; i++) {
-			await Platform.renameFile(path, this.getStateFilename(i), this.getStateFilename(i - 1));
+			await renameFile(path, this.getStateFilename(i), this.getStateFilename(i - 1));
 		}
 	}
 
@@ -167,7 +167,7 @@ class UndoRedo {
 		// Remove all existing states >= new index
 		const length = await this.getStatesLength();
 		for (let i = index; i < length; i++) {
-			await Platform.removeFile(this.getPathStatesAt(i));
+			await removeFile(this.getPathStatesAt(i));
 		}
 
 		// Create a new file for the new state
@@ -178,7 +178,7 @@ class UndoRedo {
 			arrayJson.push(json);
 		}
 
-		await Platform.createFile(this.getPathStatesAt(index), JSON.stringify(arrayJson));
+		await createFile(this.getPathStatesAt(index), JSON.stringify(arrayJson));
 		return { index, length: index + 1 };
 	}
 }

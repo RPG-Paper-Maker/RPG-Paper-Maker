@@ -13,7 +13,7 @@ import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrayUtils, KEY, Paths, RPM, SPECIAL_KEY } from '../common';
-import { Platform } from '../common/Platform';
+import { checkFileExists, copyFolder } from '../common/Platform';
 import { Node, Project } from '../core';
 import { Model } from '../Editor';
 import { TreeMapTag } from '../models';
@@ -128,7 +128,7 @@ function TreeMaps({
 		if (selectedNode && copiedItems) {
 			const nodes = copiedItems.values;
 			const path = Paths.join(copiedItems.pathProject, Paths.MAPS);
-			const exists = await Platform.checkFileExists(path);
+			const exists = await checkFileExists(path);
 			if (!exists) {
 				alert(
 					t('warning.path.doesnt.exist.copy.maps', {
@@ -157,13 +157,13 @@ function TreeMaps({
 		} else {
 			const srcMap = Model.Map.create(tag.id, tag.name);
 			const src = Paths.join(copiedItems!.pathProject, Paths.MAPS, srcMap.getRealName());
-			const exists = await Platform.checkFileExists(src);
+			const exists = await checkFileExists(src);
 			const map = Model.Map.create(newId, tag.name);
 			if (!exists) {
 				alert(t('warning.could.not.copy.map.created.empty', { path: src }));
 				await map.createNewMap();
 			} else {
-				await Platform.copyFolder(src, Paths.join(Project.current!.getPath(), Paths.MAPS, map.getRealName()));
+				await copyFolder(src, Paths.join(Project.current!.getPath(), Paths.MAPS, map.getRealName()));
 				await map.load();
 				map.id = newId;
 				await map.save();

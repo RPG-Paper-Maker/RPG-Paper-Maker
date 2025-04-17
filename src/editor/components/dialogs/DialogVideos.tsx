@@ -12,7 +12,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPause, FaPlay, FaStop } from 'react-icons/fa';
-import { Platform } from '../../common/Platform';
+import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { LocalFile, Node, Project } from '../../core';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Model } from '../../Editor';
@@ -109,8 +109,8 @@ function DialogVideos({
 	};
 
 	const handleRefresh = async () => {
-		const files = Platform.getAllFilesFromFolder(Model.Video.getFolder(true, ''));
-		const customNames = await Platform.getFiles(Model.Video.getFolder(false, ''));
+		const files = getAllFilesFromFolder(Model.Video.getFolder(true, ''));
+		const customNames = await getFiles(Model.Video.getFolder(false, ''));
 		setVideosAvailable([
 			...Node.createList(
 				files.map((name, index) => {

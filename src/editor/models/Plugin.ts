@@ -22,7 +22,16 @@ import {
 	PluginsManifestType,
 	Utils,
 } from '../common';
-import { Platform } from '../common/Platform';
+import {
+	createFile,
+	createFolder,
+	MIME_TYPES,
+	readJSON,
+	readOnlineFile,
+	readOnlineFileUint8Array,
+	removeFolder,
+	writeJSON,
+} from '../common/Platform';
 import { Project } from '../core';
 import { Checkable } from './Checkable';
 import { PluginCommand } from './PluginCommand';
@@ -76,7 +85,7 @@ class Plugin extends Checkable {
 	}
 
 	static async getManifest(): Promise<JSONType[][] | null> {
-		const file = await Platform.readOnlineFile(`${this.BASE_GIT_URL}/manifest.json`);
+		const file = await readOnlineFile(`${this.BASE_GIT_URL}/manifest.json`);
 		if (file) {
 			return JSON.parse(file) as JSONType[][];
 		}
@@ -86,23 +95,21 @@ class Plugin extends Checkable {
 	static async copyOnlineFolder(path: string, pluginName: string, folder: PluginsManifestType, temp: boolean) {
 		path = Paths.join(path, folder.name);
 		const projectPath = Paths.join(Project.current!.getPath(), temp ? Paths.PLUGINS_TEMP : Paths.PLUGINS, path);
-		await Platform.createFolder(projectPath);
+		await createFolder(projectPath);
 		if (folder.files) {
 			for (const file of folder.files) {
 				const ext = file.split('.').pop()?.toLowerCase();
 				let content = '';
-				const mimeType = Platform.MIME_TYPES[ext || ''];
+				const mimeType = MIME_TYPES[ext || ''];
 				if (mimeType) {
-					const binaryData = await Platform.readOnlineFileUint8Array(
-						Plugin.getGitURL(Paths.join(path, file))
-					);
+					const binaryData = await readOnlineFileUint8Array(Plugin.getGitURL(Paths.join(path, file)));
 					if (binaryData) {
 						content = `data:${mimeType};base64,${Utils.uint8ArrayToBase64(binaryData)}`;
 					}
 				} else {
-					content = (await Platform.readOnlineFile(Plugin.getGitURL(Paths.join(path, file)))) ?? '';
+					content = (await readOnlineFile(Plugin.getGitURL(Paths.join(path, file)))) ?? '';
 				}
-				await Platform.createFile(Paths.join(projectPath, file), content);
+				await createFile(Paths.join(projectPath, file), content);
 			}
 		}
 		if (folder.folders) {
@@ -125,9 +132,7 @@ class Plugin extends Checkable {
 	}
 
 	async checkUpdate(manifest?: JSONType[][] | null, temp = false) {
-		const content = await Platform.readOnlineFile(
-			Plugin.getGitURL(Paths.join(this.name, Paths.FILE_PLUGIN_DETAILS))
-		);
+		const content = await readOnlineFile(Plugin.getGitURL(Paths.join(this.name, Paths.FILE_PLUGIN_DETAILS)));
 		if (!manifest) {
 			manifest = await Plugin.getManifest();
 			if (!manifest) {
@@ -142,7 +147,7 @@ class Plugin extends Checkable {
 				this.name,
 				Paths.FILE_PLUGIN_DETAILS
 			);
-			const jsonOld = await Platform.readJSON(pathDetails);
+			const jsonOld = await readJSON(pathDetails);
 			const newVersion = json.version ?? '1.0.0';
 			const oldVersion = jsonOld?.version ?? '1.0.0';
 			if (newVersion !== oldVersion) {
@@ -155,7 +160,7 @@ class Plugin extends Checkable {
 					newParameters.push(currentParameter ?? parameter);
 				}
 				json.parameters = newParameters;
-				await Platform.removeFolder(
+				await removeFolder(
 					Paths.join(Project.current!.getPath(), temp ? Paths.PLUGINS_TEMP : Paths.PLUGINS, this.name)
 				);
 				const pluginManifest = manifest[json.category ?? PLUGIN_CATEGORY_KIND.BATTLE].find(
@@ -163,7 +168,7 @@ class Plugin extends Checkable {
 				);
 				if (pluginManifest) {
 					await Plugin.copyOnlineFolder('', this.name, pluginManifest as PluginsManifestType, temp);
-					await Platform.writeJSON(pathDetails, json);
+					await writeJSON(pathDetails, json);
 					notifySuccess(
 						i18next.t('plugin.successfully.updated', { name: this.name, oldVersion, newVersion })
 					);

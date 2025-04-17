@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import { Vector3 } from 'three';
 import { Project } from '.';
 import { Constants } from '../common';
 
@@ -32,7 +32,7 @@ class Portion {
 		return new Portion(array[0], array[1], array[2]);
 	}
 
-	static createFromVector3(position: THREE.Vector3): Portion {
+	static createFromVector3(position: Vector3): Portion {
 		return new Portion(
 			Math.floor(position.x / Project.SQUARE_SIZE / Constants.PORTION_SIZE),
 			Math.floor(position.y / Project.SQUARE_SIZE / Constants.PORTION_SIZE),

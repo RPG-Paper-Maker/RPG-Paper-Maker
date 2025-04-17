@@ -9,26 +9,26 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import { BufferGeometry, Color, LineBasicMaterial, LineSegments, Vector3 } from 'three';
 import { Position, Project } from '.';
 import { Constants } from '../common';
 import { Scene } from '../Editor';
 
 class CursorWall {
-	public lines!: THREE.LineSegments;
-	public material!: THREE.LineBasicMaterial;
+	public lines!: LineSegments;
+	public material!: LineBasicMaterial;
 	public isVisible = false;
 	public positionStart: Position | null = null;
 	public positionEnd: Position | null = null;
 	public isMouseDown = false;
 
 	initialize() {
-		this.material = new THREE.LineBasicMaterial({
+		this.material = new LineBasicMaterial({
 			color: 0xffffff,
 			opacity: 1,
 		});
-		const geometry = new THREE.BufferGeometry();
-		this.lines = new THREE.LineSegments(geometry, this.material);
+		const geometry = new BufferGeometry();
+		this.lines = new LineSegments(geometry, this.material);
 		this.lines.renderOrder = 3;
 	}
 
@@ -128,7 +128,7 @@ class CursorWall {
 	update(position: Position) {
 		this.updatePositions(position);
 		const points = [];
-		const additionVector = new THREE.Vector3(0, Project.SQUARE_SIZE * 3, 0);
+		const additionVector = new Vector3(0, Project.SQUARE_SIZE * 3, 0);
 		if (this.positionStart) {
 			const vStartA = this.positionStart.toVector3(false);
 			const vStartB = vStartA.clone().add(additionVector);
@@ -141,9 +141,9 @@ class CursorWall {
 			points.push(vEndA);
 			points.push(vEndB);
 		}
-		const geometry = new THREE.BufferGeometry().setFromPoints(points);
+		const geometry = new BufferGeometry().setFromPoints(points);
 		this.lines.geometry = geometry;
-		this.material.color = new THREE.Color(this.arePositionsAligned() ? 0xffffff : 0xff0000);
+		this.material.color = new Color(this.arePositionsAligned() ? 0xffffff : 0xff0000);
 		if (!this.isVisible) {
 			Scene.Map.current?.scene.add(this.lines);
 			this.isVisible = true;

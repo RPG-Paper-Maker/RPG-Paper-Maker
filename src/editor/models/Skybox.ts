@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import { BackSide, MeshPhongMaterial, RepeatWrapping } from 'three';
 import { BINDING, BindingType, JSONType, PICTURE_KIND } from '../common';
 import { Project } from '../core';
 import { Manager } from '../Editor';
@@ -40,19 +40,19 @@ class Skybox extends Base {
 		super.applyDefault(Skybox.getBindings([]));
 	}
 
-	async createTextures(): Promise<THREE.MeshPhongMaterial[]> {
-		const textures = [] as THREE.MeshPhongMaterial[];
+	async createTextures(): Promise<MeshPhongMaterial[]> {
+		const textures = [] as MeshPhongMaterial[];
 		const sides = [this.left, this.right, this.top, this.bot, this.front, this.back];
 		for (const side of sides) {
 			const texture = Manager.GL.textureLoader.load(
 				await Project.current!.pictures.getByID(PICTURE_KIND.SKYBOXES, side).getPathOrBase64()
 			);
-			texture.wrapS = THREE.RepeatWrapping;
+			texture.wrapS = RepeatWrapping;
 			texture.repeat.x = -1;
 			textures.push(
 				Manager.GL.createMaterial({
 					texture: texture,
-					side: THREE.BackSide,
+					side: BackSide,
 					shadows: false,
 					flipY: true,
 				})

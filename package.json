@@ -40,7 +40,9 @@
 		"eslint": "^8.57.0",
 		"eslint-config-react-app": "^7.0.1",
 		"simple-git": "^3.27.0",
-		"typescript-eslint": "^8.29.0"
+		"typescript-eslint": "^8.29.0",
+		"webpack-bundle-analyzer": "^4.10.2",
+		"source-map-explorer": "^2.5.3"
 	},
 	"overrides": {
 		"nth-check": "2.0.1",
@@ -57,7 +59,8 @@
 		"update-mods": "node scripts/update-mods.mjs",
 		"generate-file-manifest": "node scripts/generate-file-manifest.mjs",
 		"generate-plugins-manifest": "node scripts/generate-plugins-manifest.mjs",
-		"update-packages": "ncu -u"
+		"update-packages": "ncu -u",
+		"analyze": "source-map-explorer 'build/static/js/*.js'"
 	},
 	"eslintConfig": {
 		"extends": [

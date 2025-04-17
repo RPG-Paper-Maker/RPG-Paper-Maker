@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import { Vector3 } from 'three';
 import { BINDING, BindingType, JSONType, OBJECT_COLLISION_KIND, SHAPE_KIND } from '../common';
 import { Project } from '../core';
 import { SpecialElement } from './SpecialElement';
@@ -75,8 +75,8 @@ class Object3D extends SpecialElement {
 		return this.depthSquare * Project.SQUARE_SIZE + (this.depthPixel * Project.SQUARE_SIZE) / 100;
 	}
 
-	getSizeVector(): THREE.Vector3 {
-		return new THREE.Vector3(this.getTotalWidthPixels(), this.getTotalHeightPixels(), this.getTotalDepthPixels());
+	getSizeVector(): Vector3 {
+		return new Vector3(this.getTotalWidthPixels(), this.getTotalHeightPixels(), this.getTotalDepthPixels());
 	}
 
 	isZeroSize(): boolean {

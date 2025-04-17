@@ -10,7 +10,7 @@
 */
 
 import { BINDING, BindingType, Constants, CopiedItemsType, JSONType, LOCAL_FORAGE, Paths, Utils } from '../common';
-import { Platform } from '../common/Platform';
+import { createFile, readFile } from '../common/Platform';
 import { Model } from '../Editor';
 import { Project } from './Project';
 import { Serializable } from './Serializable';
@@ -228,7 +228,7 @@ class Node extends Serializable {
 			Constants.IS_DESKTOP ? window.__dirname : LOCAL_FORAGE.ENGINE,
 			Paths.FILE_CURRENT_COPY
 		);
-		const content = await Platform.readFile(pathCurrentCopy);
+		const content = await readFile(pathCurrentCopy);
 		if (content && content.length > 0) {
 			const json = JSON.parse(content);
 			const constructorClass = NODE_CONSTRUCTOR_KIND[json.type as keyof typeof NODE_CONSTRUCTOR_KIND]();
@@ -260,7 +260,7 @@ class Node extends Serializable {
 			pathProject,
 			json,
 		};
-		await Platform.createFile(pathCurrentCopy, JSON.stringify(content));
+		await createFile(pathCurrentCopy, JSON.stringify(content));
 		return {
 			values: nodes.map((node) => node.clone()),
 			constructorClass,

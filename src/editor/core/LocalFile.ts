@@ -9,10 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import JSZip from 'jszip';
 import localforage from 'localforage';
 import { ArrayUtils, BINDING, BindingType, JSONType, Paths } from '../common';
-import { Platform } from '../common/Platform';
 import { Serializable } from './Serializable';
 
 class LocalFile extends Serializable {
@@ -251,20 +249,13 @@ class LocalFile extends Serializable {
 		}
 	}
 
-	static async downloadZip(path: string) {
-		const fileName = Paths.getFileName(path) || '';
-		const zip = new JSZip();
-		const folder = zip.folder(fileName);
-		if (folder) {
-			await Platform.getFolderZip(folder, path);
-			const blob = await zip.generateAsync({ type: 'blob' });
-			const url = URL.createObjectURL(blob);
-			const a = document.createElement('a');
-			a.href = url;
-			a.download = fileName;
-			a.click();
-			URL.revokeObjectURL(url);
-		}
+	static async downloadBlob(fileName: string, blob: Blob) {
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = fileName;
+		a.click();
+		URL.revokeObjectURL(url);
 	}
 
 	static async readBase64File(path: string): Promise<Blob> {

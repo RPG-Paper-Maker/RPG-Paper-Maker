@@ -46,15 +46,23 @@ import {
 	SPECIAL_KEY,
 	Utils,
 } from '../common';
-import { Platform } from '../common/Platform';
+import {
+	checkFileExists,
+	exportFolder,
+	getFolders,
+	loadZip,
+	openGame,
+	readJSON,
+	removeFolder,
+} from '../common/Platform';
 import { LocalFile, Project } from '../core';
 import { EngineSettings } from '../data/EngineSettings';
 import { Data, Manager, Model, Scene } from '../Editor';
 import useStateString from '../hooks/useStateString';
 import { ProjectUpdater } from '../projectUpdater/ProjectUpdater';
 import {
-	RootState,
 	clearProjects,
+	RootState,
 	setCurrentProject,
 	setCurrentTreeMapTag,
 	setLoading,
@@ -203,9 +211,9 @@ function MainMenuBar() {
 	const handleOpenProject = async (project: Model.ProjectPreview) => {
 		dispatch(setLoading(true));
 		dispatch(setOpenLoading(true));
-		if (await Platform.checkFileExists(project.location)) {
+		if (await checkFileExists(project.location)) {
 			Project.current = new Project(project.location);
-			let json = await Platform.readJSON(Paths.join(project.location, Paths.FILE_SYSTEM));
+			let json = await readJSON(Paths.join(project.location, Paths.FILE_SYSTEM));
 			if (json) {
 				const name = ((json.pn as JSONType)?.names as JSONType)?.['1'];
 				if (name !== undefined) {
@@ -213,7 +221,7 @@ function MainMenuBar() {
 				}
 			}
 			await addProject(project);
-			json = await Platform.readJSON(Paths.join(project.location, Paths.FILE_SETTINGS));
+			json = await readJSON(Paths.join(project.location, Paths.FILE_SETTINGS));
 			let version = (json?.pv as string) ?? '';
 			if (version !== Project.VERSION) {
 				if (!version) {
@@ -310,7 +318,7 @@ function MainMenuBar() {
 		}
 		const file = Array.from(importFileInputRef.current.files || [])[0];
 		const folderName = Utils.formatProjectFolderName(file.name.substring(0, file.name.length - 4));
-		const projectsFolders = await Platform.getFolders(Paths.getRPMGamesFolder());
+		const projectsFolders = await getFolders(Paths.getRPMGamesFolder());
 		if (projectsFolders.includes(folderName)) {
 			setWarningImportPath(Paths.join(Paths.getRPMGamesFolder(), folderName));
 		} else {
@@ -318,7 +326,7 @@ function MainMenuBar() {
 			dispatch(setLoading(true));
 			dispatch(setLoadingBar({ percent: 0, label: '' }));
 			const path = Paths.join(Paths.getRPMGamesFolder(), folderName);
-			await Platform.loadZip(file, path, updateLoadingBar);
+			await loadZip(file, path, updateLoadingBar);
 			dispatch(setLoadingBar({ percent: 100, label: '' }));
 			const project = Model.ProjectPreview.create(await Data.System.getProjectName(path), path);
 			await handleOpenProject(project);
@@ -337,8 +345,8 @@ function MainMenuBar() {
 		importFileInputRef.current.value = '';
 		const folderName = Utils.formatProjectFolderName(file.name.substring(0, file.name.length - 4));
 		const path = Paths.join(Paths.getRPMGamesFolder(), folderName);
-		await Platform.removeFolder(path);
-		await Platform.loadZip(file, path);
+		await removeFolder(path);
+		await loadZip(file, path);
 		const project = Model.ProjectPreview.create(await Data.System.getProjectName(path), path);
 		await handleOpenProject(project);
 		dispatch(setLoading(false));
@@ -353,7 +361,7 @@ function MainMenuBar() {
 
 	const handleExport = async () => {
 		dispatch(setLoading(true));
-		await Platform.export(currentProject!.location);
+		await exportFolder(currentProject!.location);
 		dispatch(setLoading(false));
 	};
 
@@ -470,7 +478,7 @@ function MainMenuBar() {
 		setIsDialogChangeLanguageOpen(true);
 	};
 
-	const play = async () => await Platform.openGame(currentProject!.location);
+	const play = async () => await openGame(currentProject!.location);
 
 	const handlePlay = async () => {
 		if (canSaveAll) {

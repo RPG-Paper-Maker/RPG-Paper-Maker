@@ -9,7 +9,21 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import {
+	AmbientLight,
+	BoxGeometry,
+	Color,
+	DirectionalLight,
+	DoubleSide,
+	Material,
+	Mesh,
+	MeshPhongMaterial,
+	NearestFilter,
+	Object3D,
+	PlaneGeometry,
+	Vector2,
+	Vector3,
+} from 'three';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
 import { Base } from '.';
 import {
@@ -27,7 +41,7 @@ import {
 	SPRITE_WALL_TYPE,
 	Utils,
 } from '../common';
-import { Platform } from '../common/Platform';
+import { copyFile, getFiles, readJSON, removeFile } from '../common/Platform';
 import {
 	Cursor,
 	CustomGeometry,
@@ -43,7 +57,7 @@ import {
 	UndoRedoState,
 } from '../core';
 import { CursorWall } from '../core/CursorWall';
-import { Manager, MapElement, Model, Scene } from '../Editor';
+import { Manager, MapElement, Model } from '../Editor';
 import { default as i18n, default as i18next } from '../i18n/i18n';
 import { Inputs } from '../managers';
 
@@ -52,8 +66,8 @@ const { t } = i18next;
 class Map extends Base {
 	public static readonly MENU_BAR_HEIGHT = 26;
 
-	public static current: Scene.Map | null;
-	public static currentpositionSelector: Scene.Map | null = null;
+	public static current: Map | null;
+	public static currentpositionSelector: Map | null = null;
 	public static currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
 	public static currentSelectedMobileAction = MOBILE_ACTION.PLUS;
 	public static elapsedTime = 0;
@@ -65,14 +79,14 @@ class Map extends Base {
 	public static ctxRendering: CanvasRenderingContext2D | null = null;
 	public static animationFrameID: number;
 	public static positionSelectorAnimationFrameID: number;
-	public static materialCursor: THREE.MeshPhongMaterial;
-	public static materialObjectSquareCursor: THREE.MeshPhongMaterial;
-	public static materialObjectSquare: THREE.MeshPhongMaterial;
-	public static materialDetectionBox: THREE.MeshPhongMaterial;
-	public static materialDetectionArrow: THREE.MeshPhongMaterial;
+	public static materialCursor: MeshPhongMaterial;
+	public static materialObjectSquareCursor: MeshPhongMaterial;
+	public static materialObjectSquare: MeshPhongMaterial;
+	public static materialDetectionBox: MeshPhongMaterial;
+	public static materialDetectionArrow: MeshPhongMaterial;
 	public static pictureTilesetCursor: HTMLImageElement;
 	public static pictureLayersOnCursor: HTMLImageElement;
-	public static materialStartPosition: THREE.MeshPhongMaterial;
+	public static materialStartPosition: MeshPhongMaterial;
 
 	public id: number;
 	public tag?: Model.TreeMapTag;
@@ -83,7 +97,7 @@ class Map extends Base {
 	public detectionFieldTop?: number;
 	public detectionFieldBot?: number;
 	public detectionBoxes?: globalThis.Map<string, MapElement.Object3DBox>;
-	public detectionBoxesMesh?: THREE.Mesh;
+	public detectionBoxesMesh?: Mesh;
 	public detectionCurrentData?: Model.Object3D;
 	public detectionSquare = true;
 	public needsTreeMapUpdate = false;
@@ -100,15 +114,15 @@ class Map extends Base {
 	public cursorObject!: Cursor;
 	public cursorDetection!: Cursor;
 	public cursorWall = new CursorWall();
-	public meshPlane: THREE.Object3D | null = null;
-	public sunLight!: THREE.DirectionalLight;
+	public meshPlane: Object3D | null = null;
+	public sunLight!: DirectionalLight;
 	public transformControls!: TransformControls;
 	public mapPortions!: (MapPortion | null)[];
 	public currentPortion!: Portion;
 	public previousPortion!: Portion;
-	public materialTileset!: THREE.MeshPhongMaterial;
-	public materialTilesetHover!: THREE.MeshPhongMaterial;
-	public selectionOffset: THREE.Vector2 = new THREE.Vector2();
+	public materialTileset!: MeshPhongMaterial;
+	public materialTilesetHover!: MeshPhongMaterial;
+	public selectionOffset = new Vector2();
 	public portionsToUpdate: Set<MapPortion> = new Set();
 	public portionsToSave: Set<MapPortion> = new Set();
 	public portionsSaving: Set<MapPortion> = new Set();
@@ -121,19 +135,19 @@ class Map extends Base {
 	public pointedMapElement: MapElement.Base | null = null;
 	public isMobileMovingCursor = false;
 	public texturesAutotiles: TextureBundle[][] = [];
-	public texturesWalls: THREE.MeshPhongMaterial[] = [];
-	public texturesObjects3D: THREE.MeshPhongMaterial[] = [];
-	public texturesObjects3DHover: THREE.MeshPhongMaterial[] = [];
-	public texturesMountains: globalThis.Map<number, THREE.MeshPhongMaterial> = new globalThis.Map();
-	public texturesCharacters: THREE.MeshPhongMaterial[] = [];
-	public autotilesOffset = new THREE.Vector2();
+	public texturesWalls: MeshPhongMaterial[] = [];
+	public texturesObjects3D: MeshPhongMaterial[] = [];
+	public texturesObjects3DHover: MeshPhongMaterial[] = [];
+	public texturesMountains: globalThis.Map<number, MeshPhongMaterial> = new globalThis.Map();
+	public texturesCharacters: MeshPhongMaterial[] = [];
+	public autotilesOffset = new Vector2();
 	public autotileFrame = new Frame(Project.current!.systems.autotilesFrameDuration, {
 		frames: Project.current!.systems.autotilesFrames,
 	});
-	public selectedMesh!: THREE.Mesh;
+	public selectedMesh!: Mesh;
 	public selectedElement: MapElement.Base | null = null;
 	public selectedPosition: Position | null = null;
-	public hoveredMesh!: THREE.Mesh;
+	public hoveredMesh!: Mesh;
 	public rectangleStartPosition: Position | null = null;
 	public lastRectangleEndPosition: Position | null = null;
 	public lockedY: number | null = null;
@@ -172,18 +186,18 @@ class Map extends Base {
 
 	static getCurrentMapObjectsList = () => [
 		...[Model.Base.create(0, t('hero')), Model.Base.create(-1, t('this.object'))],
-		...(Scene.Map.current?.model?.objects ?? []),
+		...(Map.current?.model?.objects ?? []),
 	];
 
 	static isAdding(): boolean {
 		return Constants.IS_MOBILE
-			? Scene.Map.currentSelectedMobileAction === MOBILE_ACTION.PLUS && Inputs.isPointerPressed
+			? Map.currentSelectedMobileAction === MOBILE_ACTION.PLUS && Inputs.isPointerPressed
 			: Inputs.isPointerPressed;
 	}
 
 	static isRemoving(): boolean {
 		return Constants.IS_MOBILE
-			? Scene.Map.currentSelectedMobileAction === MOBILE_ACTION.MINUS && Inputs.isPointerPressed
+			? Map.currentSelectedMobileAction === MOBILE_ACTION.MINUS && Inputs.isPointerPressed
 			: Inputs.isMouseRightPressed;
 	}
 
@@ -208,7 +222,7 @@ class Map extends Base {
 			ELEMENT_MAP_KIND.MOUNTAIN,
 			ELEMENT_MAP_KIND.OBJECT,
 			ELEMENT_MAP_KIND.START_POSITION,
-		].includes(Scene.Map.currentSelectedMapElementKind);
+		].includes(Map.currentSelectedMapElementKind);
 	}
 
 	static isScaleDisabled(): boolean {
@@ -219,7 +233,7 @@ class Map extends Base {
 			ELEMENT_MAP_KIND.MOUNTAIN,
 			ELEMENT_MAP_KIND.OBJECT,
 			ELEMENT_MAP_KIND.START_POSITION,
-		].includes(Scene.Map.currentSelectedMapElementKind);
+		].includes(Map.currentSelectedMapElementKind);
 	}
 
 	getPath(): string {
@@ -238,20 +252,17 @@ class Map extends Base {
 			// Background
 			await this.updateBackground();
 		} else {
-			this.scene.background = new THREE.Color(0x221f2e);
+			this.scene.background = new Color(0x221f2e);
 		}
 
 		// Create grid plane
-		const material = new THREE.Material();
+		const material = new Material();
 		material.visible = false;
-		material.side = THREE.DoubleSide;
+		material.side = DoubleSide;
 		const length = Project.SQUARE_SIZE * this.model.length;
 		const width = Project.SQUARE_SIZE * this.model.width;
 		const extremeSize = Project.SQUARE_SIZE * 1000;
-		this.meshPlane = new THREE.Mesh(
-			new THREE.PlaneGeometry(length + extremeSize, width + extremeSize, 1),
-			material
-		);
+		this.meshPlane = new Mesh(new PlaneGeometry(length + extremeSize, width + extremeSize, 1), material);
 		this.meshPlane.visible = false;
 		this.meshPlane.position.set(Math.floor(length / 2), 0, Math.floor(width / 2));
 		this.meshPlane.rotation.set(Math.PI / -2, 0, 0);
@@ -259,16 +270,16 @@ class Map extends Base {
 		this.scene.add(this.meshPlane);
 
 		// Cursors
-		this.cursor.initialize(Scene.Map.materialCursor);
+		this.cursor.initialize(Map.materialCursor);
 		if (this.canEdit) {
-			this.cursorObject.initialize(Scene.Map.materialObjectSquareCursor, 1, false);
-			if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+			this.cursorObject.initialize(Map.materialObjectSquareCursor, 1, false);
+			if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
 				this.cursorObject.addToScene();
 			}
 			this.cursorWall.initialize();
 		}
 		if (this.isDetection) {
-			this.cursorDetection.initialize(Scene.Map.materialDetectionArrow, 1);
+			this.cursorDetection.initialize(Map.materialDetectionArrow, 1);
 		}
 
 		// Light
@@ -284,14 +295,14 @@ class Map extends Base {
 		if (this.canEdit) {
 			this.transformControls = new TransformControls(this.camera.getThreeCamera(), this.canvas!);
 			this.transformControls.setTranslationSnap(1);
-			if (Scene.Map.isTransforming()) {
+			if (Map.isTransforming()) {
 				this.setTransformMode(Project.current!.settings.mapEditorCurrentActionIndex);
 			}
 			this.scene.add(this.transformControls.getHelper());
-			this.selectedMesh = new THREE.Mesh(new CustomGeometry(), this.materialTilesetHover);
+			this.selectedMesh = new Mesh(new CustomGeometry(), this.materialTilesetHover);
 			this.selectedMesh.receiveShadow = true;
 			this.selectedMesh.castShadow = true;
-			this.hoveredMesh = new THREE.Mesh(new CustomGeometry(), this.materialTilesetHover);
+			this.hoveredMesh = new Mesh(new CustomGeometry(), this.materialTilesetHover);
 			this.hoveredMesh.customDepthMaterial = this.materialTilesetHover.userData.customDepthMaterial;
 			this.hoveredMesh.receiveShadow = true;
 			this.hoveredMesh.castShadow = true;
@@ -303,7 +314,7 @@ class Map extends Base {
 			isStartInMap ? Project.current!.systems.heroMapPosition : new Position(),
 			this
 		);
-		this.cursorStartPosition.initialize(Scene.Map.materialStartPosition, 1, isStartInMap);
+		this.cursorStartPosition.initialize(Map.materialStartPosition, 1, isStartInMap);
 		this.cursorStartPosition.updateMeshPosition();
 
 		// Load portions
@@ -356,11 +367,11 @@ class Map extends Base {
 	async save() {
 		this.loading = true;
 		await this.model.save();
-		const filesPaths = await Platform.getFiles(Paths.join(this.model.getPath(), Paths.TEMP));
+		const filesPaths = await getFiles(Paths.join(this.model.getPath(), Paths.TEMP));
 		for (const path of filesPaths) {
 			const list = path.split('/');
-			await Platform.copyFile(path, Paths.join(this.model.getPath(), list[list.length - 1]));
-			await Platform.removeFile(path);
+			await copyFile(path, Paths.join(this.model.getPath(), list[list.length - 1]));
+			await removeFile(path);
 		}
 		this.loading = false;
 	}
@@ -389,10 +400,10 @@ class Map extends Base {
 	}
 
 	initializeSunLight() {
-		const ambient = new THREE.AmbientLight(0xffffff, this.model.isSunlight ? 1.2 : 2.0);
+		const ambient = new AmbientLight(0xffffff, this.model.isSunlight ? 1.2 : 2.0);
 		this.scene.add(ambient);
 		if (this.model.isSunlight) {
-			this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
+			this.sunLight = new DirectionalLight(0xffffff, 2);
 			this.sunLight.position.set(-1, 1.75, 1);
 			this.sunLight.position.multiplyScalar(Project.SQUARE_SIZE * 10);
 			this.sunLight.target.position.set(0, 0, 0);
@@ -433,15 +444,15 @@ class Map extends Base {
 		const texture = Manager.GL.textureLoader.load(
 			Project.current!.pictures.getByID(PICTURE_KIND.PICTURES, this.model.skyImageID).getPath()
 		);
-		texture.magFilter = THREE.NearestFilter;
-		texture.minFilter = THREE.NearestFilter;
+		texture.magFilter = NearestFilter;
+		texture.minFilter = NearestFilter;
 		this.scene.background = texture;
 	}
 
 	async updateBackgroundSkybox() {
 		const size = (10000 * Project.SQUARE_SIZE) / Constants.BASE_SQUARE_SIZE;
-		const skyboxGeometry = new THREE.BoxGeometry(size, size, size);
-		const skyboxMesh = new THREE.Mesh(
+		const skyboxGeometry = new BoxGeometry(size, size, size);
+		const skyboxMesh = new Mesh(
 			skyboxGeometry,
 			await (
 				Model.Base.getByIDOrFirst(
@@ -481,7 +492,7 @@ class Map extends Base {
 			count = box.updateGeometry(geometry, position, count);
 		}
 		geometry.updateAttributes();
-		this.detectionBoxesMesh = new THREE.Mesh(geometry, Scene.Map.materialDetectionBox);
+		this.detectionBoxesMesh = new Mesh(geometry, Map.materialDetectionBox);
 		this.detectionBoxesMesh.layers.enable(RAYCASTING_LAYER.OBJECTS3D);
 		this.detectionBoxesMesh.renderOrder = 999;
 		this.scene.add(this.detectionBoxesMesh);
@@ -603,9 +614,9 @@ class Map extends Base {
 		if (realX >= 0 && realX < lx && realY >= -ld && realY < lh && realZ >= 0 && realZ < lz) {
 			const portion = new Portion(realX, realY, realZ);
 			const modelMapPortion = new Model.MapPortion(portion);
-			let json = await Platform.readJSON(modelMapPortion.getPath(true));
+			let json = await readJSON(modelMapPortion.getPath(true));
 			if (json === null) {
-				json = await Platform.readJSON(modelMapPortion.getPath(false));
+				json = await readJSON(modelMapPortion.getPath(false));
 			}
 			const mapPortion = new MapPortion();
 			mapPortion.initialize(portion, this);
@@ -728,10 +739,10 @@ class Map extends Base {
 	add(position: Position, preview = false, removePreview = true, updateAutotiles = true) {
 		const spriteLayer =
 			Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON &&
-			Scene.Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
-			Scene.Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_QUADRA;
-		const allowBorders = Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL || spriteLayer;
-		switch (Scene.Map.currentSelectedMapElementKind) {
+			Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
+			Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_QUADRA;
+		const allowBorders = Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL || spriteLayer;
+		switch (Map.currentSelectedMapElementKind) {
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
 				this.updateWallFromCursor(true, preview, removePreview);
 				break;
@@ -762,7 +773,7 @@ class Map extends Base {
 	}
 
 	remove(position: Position, preview = false, removePreview = true, updateAutotiles = true) {
-		switch (Scene.Map.currentSelectedMapElementKind) {
+		switch (Map.currentSelectedMapElementKind) {
 			case ELEMENT_MAP_KIND.SPRITE_WALL:
 				this.updateWallFromCursor(false, preview, removePreview);
 				break;
@@ -868,7 +879,7 @@ class Map extends Base {
 			);
 		}
 		for (const position of positions) {
-			MapElement.SpriteWall.updateAround(Scene.Map.current!, position, !preview);
+			MapElement.SpriteWall.updateAround(Map.current!, position, !preview);
 		}
 	}
 
@@ -1245,16 +1256,16 @@ class Map extends Base {
 		const isLayerOn = this.canEdit && Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON;
 		const isSpriteOptionSelected =
 			this.canEdit &&
-			Scene.Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
-			Scene.Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_WALL;
-		const pointer = new THREE.Vector2(
+			Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
+			Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_WALL;
+		const pointer = new Vector2(
 			(Inputs.getPositionX() / this.canvas!.clientWidth) * 2 - 1,
 			-(Inputs.getPositionY() / this.canvas!.clientHeight) * 2 + 1
 		);
 		Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
 		let layer = RAYCASTING_LAYER.LANDS;
-		if (this.canEdit && Scene.Map.isRemoving() && this.rectangleStartPosition === null) {
-			switch (Scene.Map.currentSelectedMapElementKind) {
+		if (this.canEdit && Map.isRemoving() && this.rectangleStartPosition === null) {
+			switch (Map.currentSelectedMapElementKind) {
 				case ELEMENT_MAP_KIND.SPRITE_FACE:
 				case ELEMENT_MAP_KIND.SPRITE_FIX:
 				case ELEMENT_MAP_KIND.SPRITE_DOUBLE:
@@ -1269,7 +1280,7 @@ class Map extends Base {
 					break;
 			}
 		}
-		if (this.isDetection && Scene.Map.isRemoving()) {
+		if (this.isDetection && Map.isRemoving()) {
 			layer = RAYCASTING_LAYER.OBJECTS3D;
 		}
 		if (isLayerOn && isSpriteOptionSelected) {
@@ -1311,23 +1322,23 @@ class Map extends Base {
 			);
 			if (
 				obj.faceIndex !== undefined &&
-				(Scene.Map.isRemoving() ||
+				(Map.isRemoving() ||
 					(this.lockedY === null && this.lockedYPixels === null && this.lockedLayer === null))
 			) {
-				const newPositionKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
+				const newPositionKey = ((obj.object as Mesh).geometry as CustomGeometry)?.facePositions?.[
 					obj.faceIndex ?? 0
 				];
-				if (newPositionKey && (Scene.Map.isRemoving() || layer === RAYCASTING_LAYER.LANDS)) {
+				if (newPositionKey && (Map.isRemoving() || layer === RAYCASTING_LAYER.LANDS)) {
 					const newPosition = Position.fromKey(newPositionKey);
 					if (this.isDetection) {
-						if (Scene.Map.isRemoving() && !this.detectionBoxes?.has(newPositionKey)) {
+						if (Map.isRemoving() && !this.detectionBoxes?.has(newPositionKey)) {
 							continue;
 						}
 					} else {
-						if (Scene.Map.isRemoving() || isLayerOn) {
+						if (Map.isRemoving() || isLayerOn) {
 							const element = this.getMapPortionByPosition(newPosition)?.model.getMapElement(
 								newPosition,
-								Scene.Map.currentSelectedMapElementKind
+								Map.currentSelectedMapElementKind
 							);
 							if (element && element.isPreview) {
 								continue;
@@ -1345,7 +1356,7 @@ class Map extends Base {
 							this.lockedY !== null &&
 							this.lockedYPixels !== null &&
 							this.lockedLayer !== null &&
-							Scene.Map.isRemoving() &&
+							Map.isRemoving() &&
 							(newPosition.y !== this.lockedY ||
 								newPosition.yPixels !== this.lockedYPixels ||
 								newPosition.layer !== this.lockedLayer)
@@ -1356,7 +1367,7 @@ class Map extends Base {
 					position = newPosition;
 				}
 			}
-			if ((this.canEdit || this.isDetection) && !Scene.Map.isRemoving()) {
+			if ((this.canEdit || this.isDetection) && !Map.isRemoving()) {
 				if (
 					(this.isDetection && !this.detectionSquare) ||
 					(!this.isDetection &&
@@ -1371,12 +1382,12 @@ class Map extends Base {
 							? this.getMapPortionByPosition(position)?.model.getLastSpriteLayerAt(position) || 0
 							: position.layer) + 1;
 				} else {
-					if (!Scene.Map.isRotateDisabled()) {
+					if (!Map.isRotateDisabled()) {
 						position.angleX = Project.current!.settings.mapEditorDefaultRotateX;
 						position.angleY = Project.current!.settings.mapEditorDefaultRotateY;
 						position.angleZ = Project.current!.settings.mapEditorDefaultRotateZ;
 					}
-					if (!Scene.Map.isScaleDisabled()) {
+					if (!Map.isScaleDisabled()) {
 						position.scaleX = Project.current!.settings.mapEditorDefaultScaleX;
 						position.scaleY = Project.current!.settings.mapEditorDefaultScaleY;
 						position.scaleZ = Project.current!.settings.mapEditorDefaultScaleZ;
@@ -1409,26 +1420,26 @@ class Map extends Base {
 				if (
 					Project.current!.settings.mapEditorCurrentActionIndex === ACTION_KIND.RECTANGLE &&
 					this.rectangleStartPosition === null &&
-					Scene.Map.isRemoving() &&
+					Map.isRemoving() &&
 					this.lastPosition === null
 				) {
 					this.rectangleStartPosition = position.clone();
 					this.lastRectangleEndPosition = position.clone();
 				}
 				this.layerRayPosition = isLayerOn ? newLayerRayPosition : null;
-				if (Scene.Map.isDrawing()) {
-					switch (Scene.Map.currentSelectedMapElementKind) {
+				if (Map.isDrawing()) {
+					switch (Map.currentSelectedMapElementKind) {
 						case ELEMENT_MAP_KIND.START_POSITION:
-							if (Scene.Map.isAdding()) {
+							if (Map.isAdding()) {
 								this.updateStartPosition(position);
 							}
 							break;
 						case ELEMENT_MAP_KIND.SPRITE_WALL:
-							if (Scene.Map.isAdding()) {
+							if (Map.isAdding()) {
 								this.updateLockedY(position);
 								this.cursorWall.update(position);
 								this.add(position, true);
-							} else if (Scene.Map.isRemoving()) {
+							} else if (Map.isRemoving()) {
 								this.updateLockedY(position);
 								this.cursorWall.update(position);
 								this.remove(position, true);
@@ -1443,7 +1454,7 @@ class Map extends Base {
 								this.forEachMapPortions((mapPortion) => {
 									mapPortion.removeLastPreview();
 								});
-								const adding = Scene.Map.isAdding();
+								const adding = Map.isAdding();
 								for (const rectanglePosition of positions) {
 									if (adding) {
 										this.add(rectanglePosition, true, false, false);
@@ -1461,14 +1472,14 @@ class Map extends Base {
 									}
 								}
 							} else if (
-								Scene.Map.isAdding() &&
+								Map.isAdding() &&
 								(!Constants.IS_MOBILE ||
 									Project.current!.settings.mapEditorCurrentActionIndex !== ACTION_KIND.PIN)
 							) {
 								this.updateLockedY(position);
 								this.add(position);
 							} else if (
-								Scene.Map.isRemoving() &&
+								Map.isRemoving() &&
 								(!Constants.IS_MOBILE ||
 									Project.current!.settings.mapEditorCurrentActionIndex !== ACTION_KIND.PIN)
 							) {
@@ -1480,9 +1491,9 @@ class Map extends Base {
 				}
 			}
 			if (this.isDetection) {
-				if (Scene.Map.isAdding()) {
+				if (Map.isAdding()) {
 					this.addDetection(position, false);
-				} else if (Scene.Map.isRemoving()) {
+				} else if (Map.isRemoving()) {
 					this.removeDetection(position);
 				} else {
 					this.addDetection(position, true);
@@ -1507,7 +1518,7 @@ class Map extends Base {
 		}
 
 		// For displaying information on left bottom corner
-		switch (Scene.Map.currentSelectedMapElementKind) {
+		switch (Map.currentSelectedMapElementKind) {
 			case ELEMENT_MAP_KIND.FLOOR:
 			case ELEMENT_MAP_KIND.AUTOTILE:
 				layer = RAYCASTING_LAYER.LANDS;
@@ -1541,13 +1552,13 @@ class Map extends Base {
 		intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		for (const obj of intersects) {
 			if (obj.faceIndex !== undefined) {
-				const newPositionKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
+				const newPositionKey = ((obj.object as Mesh).geometry as CustomGeometry)?.facePositions?.[
 					obj.faceIndex ?? 0
 				];
 				if (newPositionKey) {
 					const newPosition = Position.fromKey(newPositionKey);
 					const mapPortion = this.getMapPortionByPosition(newPosition);
-					let element = mapPortion?.model.getMapElement(newPosition, Scene.Map.currentSelectedMapElementKind);
+					let element = mapPortion?.model.getMapElement(newPosition, Map.currentSelectedMapElementKind);
 					if (isLayerOn && isSpriteOptionSelected && (!element || element.isPreview)) {
 						element = mapPortion?.model.getMapElement(newPosition, ELEMENT_MAP_KIND.SPRITE_WALL);
 					}
@@ -1562,7 +1573,7 @@ class Map extends Base {
 			break;
 		}
 		if (
-			Scene.Map.isDrawing() &&
+			Map.isDrawing() &&
 			this.lastPosition !== null &&
 			this.pointedMapElementPosition !== null &&
 			this.lastPosition.equals(this.pointedMapElementPosition)
@@ -1578,7 +1589,7 @@ class Map extends Base {
 				!previousPointedMapElementPosition.equals(this.pointedMapElementPosition))
 		) {
 			this.requestPaintHUD = true;
-			if (Scene.Map.isTransforming()) {
+			if (Map.isTransforming()) {
 				if (this.pointedMapElementPosition !== null || previousPointedMapElementPosition !== null) {
 					if (previousPointedMapElementPosition) {
 						const mapPortion = this.getMapPortionByPosition(previousPointedMapElementPosition);
@@ -1647,7 +1658,7 @@ class Map extends Base {
 
 	onMouseDown() {
 		if (Inputs.isSHIFT) {
-			this.camera.onMouseWheelUpdate(this === Scene.Map.current);
+			this.camera.onMouseWheelUpdate(this === Map.current);
 		} else if (
 			!Inputs.isMouseWheelPressed &&
 			(Inputs.isCTRL || (!this.canEdit && !this.isDetection)) &&
@@ -1657,16 +1668,16 @@ class Map extends Base {
 			this.cursor.position = this.lastPosition.clone();
 			this.syncCursorGrid();
 		} else {
-			if ((this.canEdit && Scene.Map.isDrawing()) || this.isDetection) {
+			if ((this.canEdit && Map.isDrawing()) || this.isDetection) {
 				if (this.isDetection) {
-					if (Scene.Map.isAdding() && this.lastPosition) {
+					if (Map.isAdding() && this.lastPosition) {
 						this.addDetection(this.lastPosition);
-					} else if (Scene.Map.isRemoving()) {
+					} else if (Map.isRemoving()) {
 						this.needsUpdateRaycasting = true;
 					}
 				} else {
-					if (Scene.Map.isAdding() && this.lastPosition) {
-						switch (Scene.Map.currentSelectedMapElementKind) {
+					if (Map.isAdding() && this.lastPosition) {
+						switch (Map.currentSelectedMapElementKind) {
 							case ELEMENT_MAP_KIND.START_POSITION:
 								this.updateStartPosition(this.lastPosition);
 								break;
@@ -1686,25 +1697,22 @@ class Map extends Base {
 									case ACTION_KIND.PIN:
 										this.paintPin(
 											this.lastPosition,
-											Scene.Map.currentSelectedMapElementKind,
+											Map.currentSelectedMapElementKind,
 											Project.current!.settings.mapEditorCurrentAutotileID,
-											Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR
+											Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.FLOOR
 												? Project.current!.settings.mapEditorCurrentTilesetFloorTexture
 												: Project.current!.settings.mapEditorCurrentAutotileTexture
 										);
 										break;
 								}
-								if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+								if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
 									this.movingObject = this.getSelectedObject();
 									this.movingObjectInitialPosition = this.lastPosition;
 								}
 								break;
 						}
-					} else if (Scene.Map.isRemoving()) {
-						if (
-							Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL &&
-							this.lastPosition
-						) {
+					} else if (Map.isRemoving()) {
+						if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL && this.lastPosition) {
 							this.cursorWall.onMouseDown(this.lastPosition);
 						} else {
 							switch (Project.current!.settings.mapEditorCurrentActionIndex) {
@@ -1742,7 +1750,7 @@ class Map extends Base {
 				this.isDraggingTransforming = true;
 			}
 		}
-		if (this.canEdit && Scene.Map.isTransforming()) {
+		if (this.canEdit && Map.isTransforming()) {
 			const mapPortion = this.getMapPortionByPosition(Position.createFromVector3(this.selectedMesh.position));
 			if (mapPortion) {
 				mapPortion.updateGeometriesWithoutCheck();
@@ -1757,7 +1765,7 @@ class Map extends Base {
 				this.cursor.onKeyDownImmediate();
 				this.isMobileMovingCursor = true;
 			} else {
-				if (Scene.Map.currentSelectedMobileAction !== MOBILE_ACTION.MOVE) {
+				if (Map.currentSelectedMobileAction !== MOBILE_ACTION.MOVE) {
 					this.needsUpdateRaycasting = true;
 					this.needsMouseDown = true;
 				}
@@ -1770,7 +1778,7 @@ class Map extends Base {
 			this.requestPaintHUD = true;
 		}
 		if (Inputs.isMouseWheelPressed || (Inputs.isPointerPressed && Inputs.isSHIFT)) {
-			this.camera.onMouseWheelUpdate(this === Scene.Map.current);
+			this.camera.onMouseWheelUpdate(this === Map.current);
 		} else {
 			// Avoid to draw undesired new preview
 			if (!this.mouseUp) {
@@ -1794,11 +1802,11 @@ class Map extends Base {
 					this.zoomOut(zoomFactor / 10);
 				}
 			} else {
-				if (Scene.Map.currentSelectedMobileAction !== MOBILE_ACTION.MOVE) {
+				if (Map.currentSelectedMobileAction !== MOBILE_ACTION.MOVE) {
 					this.needsUpdateRaycasting = true;
 					this.updateMoveTransformDragging();
 				} else {
-					this.camera.onMouseWheelUpdate(this === Scene.Map.current);
+					this.camera.onMouseWheelUpdate(this === Map.current);
 				}
 			}
 		}
@@ -1931,7 +1939,7 @@ class Map extends Base {
 		// Cursors
 		this.cursor.update();
 		if (this.canEdit) {
-			if (Scene.Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
+			if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.SPRITE_WALL) {
 				if (
 					this.lastPosition !== null &&
 					this.lastPosition.isInMap(this.model, false, true) &&
@@ -1958,7 +1966,7 @@ class Map extends Base {
 		}
 
 		// Update face sprites
-		const vector = new THREE.Vector3();
+		const vector = new Vector3();
 		this.camera.getThreeCamera().getWorldDirection(vector);
 		const angle = Math.atan2(vector.x, vector.z) + Math.PI;
 		this.forEachMapPortions((mapPortion) => {
@@ -1987,14 +1995,14 @@ class Map extends Base {
 			this.loading = true;
 		}
 
-		Scene.Map.elapsedTime = new Date().getTime() - Scene.Map.lastUpdateTime;
-		Scene.Map.averageElapsedTime = (Scene.Map.averageElapsedTime + Scene.Map.elapsedTime) / 2;
-		Scene.Map.lastUpdateTime = new Date().getTime();
+		Map.elapsedTime = new Date().getTime() - Map.lastUpdateTime;
+		Map.averageElapsedTime = (Map.averageElapsedTime + Map.elapsedTime) / 2;
+		Map.lastUpdateTime = new Date().getTime();
 	}
 
 	draw3D(GL = Manager.GL.mainContext) {
 		if (this.needsClose) {
-			this.scene.background = new THREE.Color(0x2e324a);
+			this.scene.background = new Color(0x2e324a);
 		}
 		super.draw3D(GL);
 	}
@@ -2003,9 +2011,9 @@ class Map extends Base {
 		const space = 18;
 		const padding = 10;
 		const lines = this.cursor.position.toStringCoords().split('\n');
-		Scene.Map.ctxHUD!.textBaseline = 'top';
+		Map.ctxHUD!.textBaseline = 'top';
 		for (const [index, line] of lines.entries()) {
-			Utils.drawStrokedText(Scene.Map.ctxHUD!, line, padding, padding + index * space);
+			Utils.drawStrokedText(Map.ctxHUD!, line, padding, padding + index * space);
 		}
 	}
 
@@ -2018,19 +2026,19 @@ class Map extends Base {
 					this.pointedMapElement === null ? i18n.t('none').toUpperCase() : this.pointedMapElement.toString()
 				}]`
 			);
-			Scene.Map.ctxHUD!.textBaseline = 'bottom';
+			Map.ctxHUD!.textBaseline = 'bottom';
 			const space = 18;
 			const padding = 10;
 			const y = this.canvas!.clientHeight - (lines.length - 1) * space - padding;
 			for (const [index, line] of lines.entries()) {
-				Utils.drawStrokedText(Scene.Map.ctxHUD!, line, padding, y + index * space);
+				Utils.drawStrokedText(Map.ctxHUD!, line, padding, y + index * space);
 			}
 		}
 	}
 
 	drawLayersOnCursor() {
 		if (Project.current!.settings.mapEditorCurrentLayerIndex === LAYER_KIND.ON) {
-			Scene.Map.ctxHUD!.drawImage(Scene.Map.pictureLayersOnCursor, Inputs.mouseX + 20, Inputs.mouseY - 20);
+			Map.ctxHUD!.drawImage(Map.pictureLayersOnCursor, Inputs.mouseX + 20, Inputs.mouseY - 20);
 		}
 	}
 
@@ -2049,13 +2057,13 @@ class Map extends Base {
 	}
 
 	clearHUD() {
-		Scene.Map.ctxHUD!.clearRect(0, 0, Scene.Map.canvasHUD!.width, Scene.Map.canvasHUD!.height);
-		Scene.Map.ctxHUD!.imageSmoothingEnabled = false;
-		Scene.Map.ctxHUD!.font = '12px sans-serif';
-		Scene.Map.ctxHUD!.fillStyle = 'white';
-		Scene.Map.ctxHUD!.strokeStyle = '#29273d';
-		Scene.Map.ctxHUD!.lineJoin = 'round';
-		Scene.Map.ctxHUD!.lineWidth = 4;
+		Map.ctxHUD!.clearRect(0, 0, Map.canvasHUD!.width, Map.canvasHUD!.height);
+		Map.ctxHUD!.imageSmoothingEnabled = false;
+		Map.ctxHUD!.font = '12px sans-serif';
+		Map.ctxHUD!.fillStyle = 'white';
+		Map.ctxHUD!.strokeStyle = '#29273d';
+		Map.ctxHUD!.lineJoin = 'round';
+		Map.ctxHUD!.lineWidth = 4;
 	}
 }
 

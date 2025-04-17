@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import { Float32BufferAttribute, Vector3 } from 'three';
 import { CustomGeometry } from '.';
 
 class CustomGeometryFace extends CustomGeometry {
@@ -18,13 +18,7 @@ class CustomGeometryFace extends CustomGeometry {
 	public centerPoints: number[] = [];
 	public currentAngle: number = 0;
 
-	pushQuadVerticesFace(
-		vecA: THREE.Vector3,
-		vecB: THREE.Vector3,
-		vecC: THREE.Vector3,
-		vecD: THREE.Vector3,
-		center: THREE.Vector3
-	) {
+	pushQuadVerticesFace(vecA: Vector3, vecB: Vector3, vecC: Vector3, vecD: Vector3, center: Vector3) {
 		this._vertices.push(vecA.x, vecA.y, vecA.z);
 		this._vertices.push(vecB.x, vecB.y, vecB.z);
 		this._vertices.push(vecC.x, vecC.y, vecC.z);
@@ -32,15 +26,15 @@ class CustomGeometryFace extends CustomGeometry {
 		this._center.push(center.x, center.y, center.z);
 	}
 
-	rotate(angle: number, axis: THREE.Vector3, scaled?: THREE.Vector3) {
+	rotate(angle: number, axis: Vector3, scaled?: Vector3) {
 		const a = angle - this.currentAngle;
 		if (a === 0) {
 			return;
 		}
 		this.currentAngle = angle;
 		const vertices = this.getVertices();
-		const vertex = new THREE.Vector3();
-		const center = new THREE.Vector3();
+		const vertex = new Vector3();
+		const center = new Vector3();
 		let ic = 0;
 		for (let i = 0, l = vertices.length; i < l; i += 3) {
 			ic = Math.floor(i / 12) * 3;
@@ -57,13 +51,13 @@ class CustomGeometryFace extends CustomGeometry {
 			}
 			this._vertices.push(vertex.x, vertex.y, vertex.z);
 		}
-		this.setAttribute('position', new THREE.Float32BufferAttribute(this._vertices, 3));
+		this.setAttribute('position', new Float32BufferAttribute(this._vertices, 3));
 		this._vertices = [];
 		this.computeVertexNormals();
 	}
 
 	updateAttributes() {
-		this.setAttribute('position', new THREE.Float32BufferAttribute(this._vertices, 3));
+		this.setAttribute('position', new Float32BufferAttribute(this._vertices, 3));
 		this._vertices = [];
 		this.setIndex(this._indices);
 		this._indices = [];

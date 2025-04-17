@@ -44,7 +44,7 @@ function DynamicValueSelectorExtra({
 	noStructure = false,
 }: Props) {
 	const [nodes, setNodes] = useState<Node[]>([]);
-	const [trigger, setTrigger] = useStateBool();
+	const [, setTrigger] = useStateBool();
 
 	const handleChangeIsMin = (b: boolean) => {
 		setMin?.(b ? 0 : undefined);
@@ -117,7 +117,7 @@ function DynamicValueSelectorExtra({
 				setTrigger((v) => !v);
 				break;
 		}
-	}, [kind, setMin, setMax, value]);
+	}, [kind, setMin, setMax, value, setTrigger]);
 
 	const getContent = () => {
 		switch (kind) {

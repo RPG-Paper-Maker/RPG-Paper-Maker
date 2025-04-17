@@ -9,9 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import JSZip from 'jszip';
 import { Paths } from './Paths';
-import { Platform } from './Platform';
 import { ExtendedWindow, JSONType } from './Types';
 
 class IO {
@@ -122,15 +120,8 @@ class IO {
 		return (await IO.readFile(Paths.join(window.__dirname, path))) as string;
 	}
 
-	static async downloadZip(path: string, dst: string) {
-		const fileName = Paths.getFileName(path) || '';
-		const zip = new JSZip();
-		const folder = zip.folder(fileName);
-		if (folder) {
-			await Platform.getFolderZip(folder, path);
-			const blob = await zip.generateAsync({ type: 'blob' });
-			await IO.createFile(dst, blob);
-		}
+	static async downloadBlob(dst: string, blob: Blob) {
+		await IO.createFile(dst, blob);
 	}
 
 	static async openGame(projectName: string) {

@@ -16,7 +16,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
 import { Constants, Utils } from '../common';
-import { Platform } from '../common/Platform';
+import { checkFileExists, exportFolder, removeFolder } from '../common/Platform';
 import { EngineSettings } from '../data/EngineSettings';
 import { Model } from '../Editor';
 import { RootState, triggerOpenProject } from '../store';
@@ -56,13 +56,13 @@ function ProjectPreview({ project }: Props) {
 	const handleClickExportProject = async (e: React.MouseEvent<SVGElement, MouseEvent>) => {
 		dispatch(setLoading(true));
 		e.stopPropagation();
-		await Platform.export(project.location);
+		await exportFolder(project.location);
 		dispatch(setLoading(false));
 	};
 
 	const handleClickRemoveProject = async (e: React.MouseEvent<SVGElement, MouseEvent>) => {
 		e.stopPropagation();
-		if (await Platform.checkFileExists(project.location)) {
+		if (await checkFileExists(project.location)) {
 			setIsDialogConfirmOpen(true);
 		} else {
 			setIsDialogWarningLocationOpen(true);
@@ -82,7 +82,7 @@ function ProjectPreview({ project }: Props) {
 		dispatch(setLoading(true));
 		const newList = projects.filter((p) => project.location !== p.location);
 		dispatch(setProjects(newList));
-		await Platform.removeFolder(project.location);
+		await removeFolder(project.location);
 		EngineSettings.current.recentProjects = newList;
 		await EngineSettings.current.save();
 		dispatch(setLoading(false));

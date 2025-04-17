@@ -9,12 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import Editor, { Monaco } from '@monaco-editor/react';
-import { editor } from 'monaco-editor';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { lazy, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { INPUT_TYPE_WIDTH, ITERATOR, JSONType, Paths, PLUGIN_TYPE_KIND } from '../../common';
-import { Platform } from '../../common/Platform';
+import {
+	copyFolder,
+	exportFolder,
+	Platform,
+	readFile,
+	readPublicFile,
+	removeFolder,
+	renameFile,
+} from '../../common/Platform';
 import { LocalFile, Node, Project } from '../../core';
 import { Model } from '../../Editor';
 import useStateBool from '../../hooks/useStateBool';
@@ -33,6 +39,7 @@ import TextArea from '../TextArea';
 import Tree, { TREES_LARGE_MIN_WIDTH, TREES_MIN_WIDTH } from '../Tree';
 import Dialog from './Dialog';
 import FooterCancelSaveClose from './footers/FooterCancelSaveClose';
+const Editor = lazy(() => import('@monaco-editor/react'));
 
 const TREES_STYLE_HEIGHT = { height: '100px' };
 
@@ -102,8 +109,8 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 
 	const initialize = async () => {
 		setIsLoading(true);
-		await Platform.removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP));
-		await Platform.copyFolder(
+		await removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP));
+		await copyFolder(
 			Paths.join(Project.current!.getPath(), Paths.PLUGINS),
 			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP)
 		);
@@ -132,7 +139,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 				(async () => {
 					if (plugin.code === undefined) {
 						const path = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, plugin.name);
-						plugin.code = (await Platform.readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
+						plugin.code = (await readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
 						plugin.pictureBase64 =
 							(await LocalFile.readFile(Paths.join(path, Paths.FILE_PLUGIN_PICTURE))) ?? '';
 					}
@@ -164,7 +171,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 	};
 
 	const handleDeletePlugin = async (node: Node) => {
-		await Platform.removeFolder(
+		await removeFolder(
 			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, (node.content as Model.Plugin).name)
 		);
 	};
@@ -177,7 +184,8 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		}
 	};
 
-	const handleEditorDidMount = (editor: editor.IStandaloneCodeEditor, monaco: Monaco) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const handleEditorDidMount = (editor: unknown, monaco: any) => {
 		/* TODO: Add declaration file for global classes, should not contain exports */
 		const dts = `
 		  declare class Constants {
@@ -231,7 +239,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 			return;
 		}
 		setName(s);
-		await Platform.renameFile(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP), selectedPlugin!.name, s);
+		await renameFile(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP), selectedPlugin!.name, s);
 		selectedPlugin!.name = s;
 		unsavePlugin();
 	};
@@ -302,7 +310,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 
 	const handleClickExport = async () => {
 		setIsLoading(true);
-		await Platform.export(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, selectedPlugin!.name));
+		await exportFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, selectedPlugin!.name));
 		setIsLoading(false);
 	};
 
@@ -310,7 +318,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 		if (node) {
 			const tag = node.content as Model.TreeMapTag;
 			if (tag.path) {
-				setSourceCode(await Platform.readPublicFile(tag.path));
+				setSourceCode(await readPublicFile(tag.path));
 				setIsSourceCodeJavascript(tag.name.endsWith('.js'));
 				return;
 			}
@@ -321,15 +329,15 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 
 	const handleCancel = async () => {
 		setIsLoading(true);
-		await Platform.removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP));
+		await removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP));
 		await Project.current!.scripts.load();
 		setIsLoading(false);
 		setIsOpen(false);
 	};
 
 	const handleSave = async () => {
-		await Platform.removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS));
-		await Platform.copyFolder(
+		await removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS));
+		await copyFolder(
 			Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP),
 			Paths.join(Project.current!.getPath(), Paths.PLUGINS)
 		);
@@ -343,7 +351,7 @@ function DialogPlugins({ isOpen, setIsOpen }: Props) {
 	const handleSaveAndClose = async () => {
 		setIsLoading(true);
 		await handleSave();
-		await Platform.removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP));
+		await removeFolder(Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP));
 		setIsLoading(false);
 		setIsOpen(false);
 	};

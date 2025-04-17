@@ -9,25 +9,25 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import { FileLoader, Vector2, Vector3 } from 'three';
 import { CUSTOM_SHAPE_KIND, Paths } from '../common';
-import { Platform } from '../common/Platform';
+import { readPublicFile } from '../common/Platform';
 import { LocalFile, Project } from '../core';
 import { Asset } from './Asset';
 
 type GeometryDataType = {
-	vertices: THREE.Vector3[];
-	uvs: THREE.Vector2[];
-	minVertex: THREE.Vector3;
-	maxVertex: THREE.Vector3;
-	center: THREE.Vector3;
+	vertices: Vector3[];
+	uvs: Vector2[];
+	minVertex: Vector3;
+	maxVertex: Vector3;
+	center: Vector3;
 	w: number;
 	h: number;
 	d: number;
 };
 
 class Shape extends Asset {
-	public static loader = new THREE.FileLoader();
+	public static loader = new FileLoader();
 
 	public kind!: CUSTOM_SHAPE_KIND;
 	public geometryData!: GeometryDataType;
@@ -55,8 +55,8 @@ class Shape extends Asset {
 		const uvs = [];
 		const v = [];
 		const t = [];
-		let minVertex = new THREE.Vector3();
-		let maxVertex = new THREE.Vector3();
+		let minVertex = new Vector3();
+		let maxVertex = new Vector3();
 		let firstVertex = true;
 		// eslint-disable-next-line
 		const vertexPattern = /^v\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
@@ -77,7 +77,7 @@ class Shape extends Asset {
 			result = vertexPattern.exec(line);
 			if (result !== null) {
 				// ["v 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
-				const temp3D = new THREE.Vector3(
+				const temp3D = new Vector3(
 					parseFloat(result[1]) * Project.SQUARE_SIZE,
 					parseFloat(result[2]) * Project.SQUARE_SIZE,
 					parseFloat(result[3]) * Project.SQUARE_SIZE
@@ -118,7 +118,7 @@ class Shape extends Asset {
 			result = uvPattern.exec(line);
 			if (result !== null) {
 				// ["vt 0.1 0.2", "0.1", "0.2"]
-				t.push(new THREE.Vector2(parseFloat(result[1]), 1.0 - parseFloat(result[2])));
+				t.push(new Vector2(parseFloat(result[1]), 1.0 - parseFloat(result[2])));
 				continue;
 			}
 			result = facePattern.exec(line);
@@ -144,7 +144,7 @@ class Shape extends Asset {
 			uvs,
 			minVertex,
 			maxVertex,
-			center: new THREE.Vector3(
+			center: new Vector3(
 				(maxVertex.x - minVertex.x) / 2 + minVertex.x,
 				(maxVertex.y - minVertex.y) / 2 + minVertex.y,
 				(maxVertex.z - minVertex.z) / 2 + minVertex.z
@@ -188,7 +188,7 @@ class Shape extends Asset {
 	async loadShape() {
 		if (this.id !== -1 && !this.isShapeLoaded()) {
 			const content = await (this.isBR
-				? Platform.readPublicFile(this.getPath())
+				? readPublicFile(this.getPath())
 				: await (await LocalFile.readBase64File(this.getPath())).text());
 			if (content.length === 0) {
 				console.warn(`The shape ${this.toStringNameID()} content is empty.`);

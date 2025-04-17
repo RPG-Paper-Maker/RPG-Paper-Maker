@@ -13,7 +13,15 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdOutlineWifiOff } from 'react-icons/md';
 import { INPUT_TYPE_WIDTH, JSONType, Paths, PLUGIN_TYPE_KIND, PluginsManifestType, Utils } from '../../../common';
-import { Platform } from '../../../common/Platform';
+import {
+	createFile,
+	createFolder,
+	loadZip,
+	readFile,
+	readJSON,
+	readOnlineFile,
+	readOnlineFileUint8Array,
+} from '../../../common/Platform';
 import { Node, Project } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateNumber from '../../../hooks/useStateNumber';
@@ -114,7 +122,7 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 			if (plugin.description === undefined) {
 				setSelectedPlugin(null);
 				setLoadingPlugin(true);
-				const file = await Platform.readOnlineFile(
+				const file = await readOnlineFile(
 					Model.Plugin.getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_DETAILS))
 				);
 				if (file) {
@@ -123,7 +131,7 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 					plugin.parameters.forEach((parameter, index) => {
 						parameter.defaultParameter = plugin.defaultParameters[index];
 					});
-					const picture = await Platform.readOnlineFileUint8Array(
+					const picture = await readOnlineFileUint8Array(
 						Model.Plugin.getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_PICTURE))
 					);
 					if (picture) {
@@ -172,22 +180,19 @@ function DialogPlugin({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: P
 				plugin.type = type;
 				const pluginFolder = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, name);
 				if (isNew) {
-					await Platform.createFolder(pluginFolder);
+					await createFolder(pluginFolder);
 					plugin.code = `const pluginName = "${plugin.name}";
 const inject = Manager.Plugins.inject;
 
 // Start code here`;
-					await Platform.createFile(Paths.join(pluginFolder, Paths.FILE_PLUGIN_CODE), plugin.code);
+					await createFile(Paths.join(pluginFolder, Paths.FILE_PLUGIN_CODE), plugin.code);
 					const json = {};
 					plugin.write(json);
-					await Platform.createFile(
-						Paths.join(pluginFolder, Paths.FILE_PLUGIN_DETAILS),
-						JSON.stringify(json)
-					);
+					await createFile(Paths.join(pluginFolder, Paths.FILE_PLUGIN_DETAILS), JSON.stringify(json));
 				}
 				const json = {};
 				plugin.write(json);
-				await Platform.createFile(Paths.join(pluginFolder, Paths.FILE_PLUGIN_DETAILS), JSON.stringify(json));
+				await createFile(Paths.join(pluginFolder, Paths.FILE_PLUGIN_DETAILS), JSON.stringify(json));
 				setIsLoading(false);
 				break;
 			}
@@ -203,10 +208,10 @@ const inject = Manager.Plugins.inject;
 				}
 				setIsLoading(true);
 				const path = Paths.join(Project.current!.getPath(), Paths.PLUGINS_TEMP, folderName);
-				await Platform.loadZip(importFile, path);
-				plugin.code = (await Platform.readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
+				await loadZip(importFile, path);
+				plugin.code = (await readFile(Paths.join(path, Paths.FILE_PLUGIN_CODE))) ?? '';
 				plugin.type = type;
-				const json = await Platform.readJSON(Paths.join(path, Paths.FILE_PLUGIN_DETAILS));
+				const json = await readJSON(Paths.join(path, Paths.FILE_PLUGIN_DETAILS));
 				if (json) {
 					plugin.readDetails(json);
 				}
@@ -225,7 +230,7 @@ const inject = Manager.Plugins.inject;
 					plugin.id = id;
 					plugin.type = type;
 					plugin.code =
-						(await Platform.readOnlineFile(
+						(await readOnlineFile(
 							Model.Plugin.getGitURL(Paths.join(plugin.name, Paths.FILE_PLUGIN_CODE))
 						)) ?? '';
 					plugin.pictureBase64 = selectedPlugin.pictureBase64;

@@ -9,21 +9,21 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import { BufferGeometry, Euler, Float32BufferAttribute, Vector2, Vector3 } from 'three';
 import { Position } from '.';
 import { Mathf } from '../common';
 
-class CustomGeometry extends THREE.BufferGeometry {
+class CustomGeometry extends BufferGeometry {
 	public _vertices: number[] = [];
 	public _indices: number[] = [];
 	public _uvs: number[] = [];
 	public facePositions: string[] = [];
 
 	static uvsQuadToTex(
-		texA: THREE.Vector2,
-		texB: THREE.Vector2,
-		texC: THREE.Vector2,
-		texD: THREE.Vector2,
+		texA: Vector2,
+		texB: Vector2,
+		texC: Vector2,
+		texD: Vector2,
 		x: number,
 		y: number,
 		w: number,
@@ -35,19 +35,13 @@ class CustomGeometry extends THREE.BufferGeometry {
 		texD.set(x, y + h);
 	}
 
-	static rotateVertex(
-		vec: THREE.Vector3,
-		center: THREE.Vector3,
-		angle: number,
-		axis: THREE.Vector3,
-		isDegree: boolean = true
-	) {
+	static rotateVertex(vec: Vector3, center: Vector3, angle: number, axis: Vector3, isDegree: boolean = true) {
 		vec.sub(center);
 		vec.applyAxisAngle(axis, isDegree ? Mathf.degreesToRadians(angle) : angle);
 		vec.add(center);
 	}
 
-	static rotateVertexEuler(vec: THREE.Vector3, center: THREE.Vector3, euler: THREE.Euler) {
+	static rotateVertexEuler(vec: Vector3, center: Vector3, euler: Euler) {
 		vec.sub(center);
 		vec.applyEuler(euler);
 		vec.add(center);
@@ -57,11 +51,11 @@ class CustomGeometry extends THREE.BufferGeometry {
 		return this._vertices.length === 0;
 	}
 
-	getVerticesVectors(): THREE.Vector3[] {
+	getVerticesVectors(): Vector3[] {
 		const vertices = [];
 		const array = this.getVertices();
 		for (let i = 0, l = array.length; i < l; i += 3) {
-			vertices.push(new THREE.Vector3(array[i], array[i + 1], array[i + 2]));
+			vertices.push(new Vector3(array[i], array[i + 1], array[i + 2]));
 		}
 		return vertices;
 	}
@@ -83,19 +77,19 @@ class CustomGeometry extends THREE.BufferGeometry {
 		return this.getAttribute('normal').array;
 	}
 
-	rotateA(angle: number, axis: THREE.Vector3, center: THREE.Vector3) {
+	rotateA(angle: number, axis: Vector3, center: Vector3) {
 		const vertices = this.getVertices();
-		const vertex = new THREE.Vector3();
+		const vertex = new Vector3();
 		for (let i = 0, l = vertices.length; i < l; i += 3) {
 			vertex.set(vertices[i], vertices[i + 1], vertices[i + 2]);
 			CustomGeometry.rotateVertex(vertex, center, angle, axis);
 			this._vertices.push(vertex.x, vertex.y, vertex.z);
 		}
-		this.setAttribute('position', new THREE.Float32BufferAttribute(this._vertices, 3));
+		this.setAttribute('position', new Float32BufferAttribute(this._vertices, 3));
 		this._vertices = [];
 	}
 
-	pushTriangleVertices(vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3) {
+	pushTriangleVertices(vecA: Vector3, vecB: Vector3, vecC: Vector3) {
 		this._vertices.push(vecA.x, vecA.y, vecA.z);
 		this._vertices.push(vecB.x, vecB.y, vecB.z);
 		this._vertices.push(vecC.x, vecC.y, vecC.z);
@@ -106,13 +100,13 @@ class CustomGeometry extends THREE.BufferGeometry {
 		this.facePositions.push(position.toKey());
 	}
 
-	pushTriangleUVs(texA: THREE.Vector2, texB: THREE.Vector2, texC: THREE.Vector2) {
+	pushTriangleUVs(texA: Vector2, texB: Vector2, texC: Vector2) {
 		this._uvs.push(texA.x, texA.y);
 		this._uvs.push(texB.x, texB.y);
 		this._uvs.push(texC.x, texC.y);
 	}
 
-	pushQuadVertices(vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3, vecD: THREE.Vector3) {
+	pushQuadVertices(vecA: Vector3, vecB: Vector3, vecC: Vector3, vecD: Vector3) {
 		this._vertices.push(vecA.x, vecA.y, vecA.z);
 		this._vertices.push(vecB.x, vecB.y, vecB.z);
 		this._vertices.push(vecC.x, vecC.y, vecC.z);
@@ -128,7 +122,7 @@ class CustomGeometry extends THREE.BufferGeometry {
 		}
 	}
 
-	pushQuadUVs(texA: THREE.Vector2, texB: THREE.Vector2, texC: THREE.Vector2, texD: THREE.Vector2) {
+	pushQuadUVs(texA: Vector2, texB: Vector2, texC: Vector2, texD: Vector2) {
 		this._uvs.push(texA.x, texA.y);
 		this._uvs.push(texB.x, texB.y);
 		this._uvs.push(texC.x, texC.y);
@@ -136,12 +130,12 @@ class CustomGeometry extends THREE.BufferGeometry {
 	}
 
 	updateUVs() {
-		this.setAttribute('uv', new THREE.Float32BufferAttribute(this._uvs, 2));
+		this.setAttribute('uv', new Float32BufferAttribute(this._uvs, 2));
 		this._uvs = [];
 	}
 
 	updateAttributes() {
-		this.setAttribute('position', new THREE.Float32BufferAttribute(this._vertices, 3));
+		this.setAttribute('position', new Float32BufferAttribute(this._vertices, 3));
 		this._vertices = [];
 		this.setIndex(this._indices);
 		this._indices = [];

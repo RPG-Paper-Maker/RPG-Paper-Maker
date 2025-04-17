@@ -11,7 +11,7 @@
 
 import { Model } from '../Editor';
 import { JSONType, Paths, PLUGIN_TYPE_KIND } from '../common';
-import { Platform } from '../common/Platform';
+import { createFile, readJSON, writeJSON } from '../common/Platform';
 import { Project, Serializable } from '../core';
 
 class Scripts extends Serializable {
@@ -48,7 +48,7 @@ class Scripts extends Serializable {
 
 	async loadSimple() {
 		this.plugins = [];
-		const json = await Platform.readJSON(this.getPath());
+		const json = await readJSON(this.getPath());
 		if (json) {
 			const jsonList = (json.plugins ?? []) as JSONType[];
 			for (const jsonPlugin of jsonList) {
@@ -61,13 +61,13 @@ class Scripts extends Serializable {
 
 	async load() {
 		this.plugins = [];
-		const json = await Platform.readJSON(this.getPath());
+		const json = await readJSON(this.getPath());
 		if (json) {
 			const jsonList = (json.plugins ?? []) as JSONType[];
 			for (const jsonPlugin of jsonList) {
 				const plugin = new Model.Plugin();
 				plugin.readSimple(jsonPlugin);
-				const jsonDetails = await Platform.readJSON(plugin.getPath());
+				const jsonDetails = await readJSON(plugin.getPath());
 				if (jsonDetails) {
 					plugin.readDetails(jsonDetails);
 				}
@@ -88,13 +88,13 @@ class Scripts extends Serializable {
 				if (!plugin.saved) {
 					const jsonPluginDetails = {};
 					plugin.writeDetails(jsonPluginDetails);
-					await Platform.writeJSON(plugin.getPath(), jsonPluginDetails);
-					await Platform.createFile(plugin.getPathCode(), plugin.code);
+					await writeJSON(plugin.getPath(), jsonPluginDetails);
+					await createFile(plugin.getPathCode(), plugin.code);
 				}
 			}
 			json.plugins = jsonList;
 		}
-		await Platform.writeJSON(this.getPath(), json);
+		await writeJSON(this.getPath(), json);
 	}
 }
 

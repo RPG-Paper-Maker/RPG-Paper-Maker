@@ -171,7 +171,7 @@ function Tab({
 	return (
 		<div className='tab'>
 			<div className='tabTitles'>
-				<div className={hideScroll ? 'flex' : 'scroll-area'}>{getTitles()}</div>
+				<div className={hideScroll ? 'flex' : 'scrollArea'}>{getTitles()}</div>
 				{!hideScroll && (
 					<>
 						<Button

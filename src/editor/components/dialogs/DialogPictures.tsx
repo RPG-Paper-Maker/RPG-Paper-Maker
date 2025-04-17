@@ -12,7 +12,7 @@
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PICTURE_KIND } from '../../common';
-import { Platform } from '../../common/Platform';
+import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { Node, Project, Rectangle } from '../../core';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Model, Scene } from '../../Editor';
@@ -176,8 +176,8 @@ function DialogPictures({
 	};
 
 	const handleRefresh = async () => {
-		const files = Platform.getAllFilesFromFolder(Model.Picture.getFolder(selectedKind!, true, ''));
-		const customNames = await Platform.getFiles(Model.Picture.getFolder(selectedKind!, false, ''));
+		const files = getAllFilesFromFolder(Model.Picture.getFolder(selectedKind!, true, ''));
+		const customNames = await getFiles(Model.Picture.getFolder(selectedKind!, false, ''));
 		setPicturesAvailable([
 			...Node.createList(
 				files.map((name, index) => {

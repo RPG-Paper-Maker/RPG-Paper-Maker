@@ -10,7 +10,7 @@
 */
 
 import { BINDING, BindingType, Constants, DYNAMIC_VALUE_KIND, JSONType, Paths, SONG_KIND, Utils } from '../common';
-import { Platform } from '../common/Platform';
+import { copyPublicFile, createFile, createFolder, removeFile, removeFolder, writeJSON } from '../common/Platform';
 import { Portion, Position, Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Model } from '../Editor';
@@ -146,7 +146,7 @@ class Map extends Localization {
 			return;
 		}
 		const globalPortion = new Portion(0, 0, 0);
-		await Platform.copyPublicFile(
+		await copyPublicFile(
 			Paths.join(Paths.DEFAULT, globalPortion.getFileName()),
 			Paths.join(Paths.join(folderMap, globalPortion.getFileName()))
 		);
@@ -175,7 +175,7 @@ class Map extends Localization {
 		}
 		const mapName = this.getRealName();
 		const folderMap = Paths.join(Project.current.getPathMaps(), mapName);
-		await Platform.createFolder(folderMap);
+		await createFolder(folderMap);
 
 		// Write properties
 		await this.save();
@@ -185,20 +185,20 @@ class Map extends Localization {
 		for (let i = 0; i <= lx; i++) {
 			for (let j = -ld; j <= lh; j++) {
 				for (let k = 0; k <= lz; k++) {
-					await Platform.writeJSON(Paths.join(folderMap, Portion.getFileName(i, j, k)), {});
+					await writeJSON(Paths.join(folderMap, Portion.getFileName(i, j, k)), {});
 				}
 			}
 		}
 
 		// Temp empty folders
-		await Platform.createFolder(Paths.join(folderMap, Paths.TEMP));
-		await Platform.createFolder(Paths.join(folderMap, Paths.TEMP_UNDO_REDO));
-		await Platform.createFile(Paths.join(folderMap, Paths.TEMP_UNDO_REDO, Paths.INDEX), '-1');
+		await createFolder(Paths.join(folderMap, Paths.TEMP));
+		await createFolder(Paths.join(folderMap, Paths.TEMP_UNDO_REDO));
+		await createFile(Paths.join(folderMap, Paths.TEMP_UNDO_REDO, Paths.INDEX), '-1');
 		return folderMap;
 	}
 
 	async deleteMap() {
-		await Platform.removeFolder(Paths.join(Project.current!.getPathMaps(), this.getRealName()));
+		await removeFolder(Paths.join(Project.current!.getPathMaps(), this.getRealName()));
 	}
 
 	getMapPortionPath(globalPortion: Portion) {
@@ -211,11 +211,11 @@ class Map extends Localization {
 
 	async writeEmptyMapPortion(globalPortion: Portion) {
 		const json = {};
-		await Platform.writeJSON(this.getMapPortionPath(globalPortion), json);
+		await writeJSON(this.getMapPortionPath(globalPortion), json);
 	}
 
 	async deleteCompleteMapPortion(globalPortion: Portion) {
-		await Platform.removeFile(this.getMapPortionPath(globalPortion));
+		await removeFile(this.getMapPortionPath(globalPortion));
 	}
 
 	async deleteMapElements(globalPortion: Portion) {

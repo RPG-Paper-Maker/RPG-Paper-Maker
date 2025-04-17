@@ -12,7 +12,7 @@
 import { Position, Rectangle } from '.';
 import { MapElement, Model } from '../Editor';
 import { BINDING, BindingType, JSONMapping, JSONMappingKeyValue, JSONType, KeyValue, Utils } from '../common';
-import { Platform } from '../common/Platform';
+import { readJSON, writeJSON } from '../common/Platform';
 import { DynamicValue } from './DynamicValue';
 
 class Serializable {
@@ -78,12 +78,12 @@ class Serializable {
 	}
 
 	async load(temp: boolean = false) {
-		let json = await Platform.readJSON(this.getPath(temp));
+		let json = await readJSON(this.getPath(temp));
 		if (json) {
 			this.read(json);
 		} else {
 			if (temp) {
-				json = await Platform.readJSON(this.getPath(false)); // If no temp files found, try with not temp
+				json = await readJSON(this.getPath(false)); // If no temp files found, try with not temp
 				if (json) {
 					this.read(json);
 				}
@@ -94,7 +94,7 @@ class Serializable {
 	async save(temp: boolean = false) {
 		const json = {};
 		this.write(json);
-		await Platform.writeJSON(this.getPath(temp), json);
+		await writeJSON(this.getPath(temp), json);
 	}
 
 	// eslint-disable-next-line

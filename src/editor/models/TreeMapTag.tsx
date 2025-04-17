@@ -12,7 +12,7 @@
 import { JSX } from 'react';
 import { FcFile, FcFolder } from 'react-icons/fc';
 import { BINDING, BindingType, JSONType, Paths } from '../common';
-import { Platform } from '../common/Platform';
+import { copyFile, getFiles, removeFile } from '../common/Platform';
 import { Position, Project } from '../core';
 import { Model } from '../Editor';
 import { Base } from './Base';
@@ -62,12 +62,12 @@ class TreeMapTag extends Base {
 		if (Project.current && !this.isFolder()) {
 			const path = Paths.join(Project.current.getPathMaps(), Model.Map.generateMapName(this.id));
 			const pathTemp = Paths.join(path, Paths.TEMP);
-			const fileNames = await Platform.getFiles(pathTemp);
+			const fileNames = await getFiles(pathTemp);
 			for (const fileName of fileNames) {
 				const pathFileTemp = Paths.join(pathTemp, fileName);
 				const pathFile = Paths.join(path, fileName);
-				await Platform.copyFile(pathFileTemp, pathFile);
-				await Platform.removeFile(pathFileTemp);
+				await copyFile(pathFileTemp, pathFile);
+				await removeFile(pathFileTemp);
 			}
 		}
 		this.saved = true;

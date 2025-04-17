@@ -532,12 +532,14 @@ function DynamicValueSelector({
 		if (min !== undefined && valueNumber < min) {
 			setValueNumber(min);
 		}
+		// eslint-disable-next-line
 	}, [min]);
 
 	useEffect(() => {
 		if (max !== undefined && valueNumber > max) {
 			setValueNumber(max);
 		}
+		// eslint-disable-next-line
 	}, [max]);
 
 	const getValueDisplay = () => {

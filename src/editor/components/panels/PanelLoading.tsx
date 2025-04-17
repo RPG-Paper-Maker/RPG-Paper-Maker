@@ -13,7 +13,7 @@ import localforage from 'localforage';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Constants, IO, LOCAL_FORAGE, Paths, Utils } from '../../common';
-import { Platform } from '../../common/Platform';
+import { checkFileExists, createFolder, readFileManifest, readPublicFile } from '../../common/Platform';
 import { LocalFile, Picture2D, Project } from '../../core';
 import { EngineSettings } from '../../data/EngineSettings';
 import { Manager, Scene } from '../../Editor';
@@ -57,7 +57,7 @@ function PanelLoading({ setLoaded }: Props) {
 				}
 				await localforage.setItem('CACHE_VERSION', LocalFile.CACHE_VERSION);
 			}
-			await Platform.readFileManifest();
+			await readFileManifest();
 		}
 	};
 
@@ -77,7 +77,7 @@ function PanelLoading({ setLoaded }: Props) {
 			}
 		}
 		EngineSettings.current = new EngineSettings();
-		if (!(await Platform.checkFileExists(EngineSettings.current.getPath()))) {
+		if (!(await checkFileExists(EngineSettings.current.getPath()))) {
 			EngineSettings.current.read({});
 			await EngineSettings.current.save();
 		}
@@ -121,7 +121,7 @@ function PanelLoading({ setLoaded }: Props) {
 
 	const initializeEngineVersion = async () => {
 		const updateVersion = async () => {
-			const newVersion = await Platform.readPublicFile(Paths.FILE_VERSION);
+			const newVersion = await readPublicFile(Paths.FILE_VERSION);
 			if (newVersion && Project.VERSION.length === 0) {
 				Project.VERSION = newVersion;
 			} else if (Project.VERSION !== newVersion) {
@@ -138,8 +138,8 @@ function PanelLoading({ setLoaded }: Props) {
 	const loadProjects = async () => {
 		dispatch(setProjects(EngineSettings.current.recentProjects));
 		const path = Paths.getRPMGamesFolder();
-		if (!(await Platform.checkFileExists(path))) {
-			await Platform.createFolder(path);
+		if (!(await checkFileExists(path))) {
+			await createFolder(path);
 		}
 	};
 

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import { Vector2, Vector3 } from 'three';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType } from '../common';
 import { CustomGeometry, Position, Project, Rectangle } from '../core';
 import { MapElement, Scene } from '../Editor';
@@ -99,15 +99,15 @@ class Land extends Base {
 		}
 
 		// Vertices
-		const vecA = new THREE.Vector3(a - Project.SQUARE_SIZE / 2, b, c - Project.SQUARE_SIZE / 2);
-		const vecB = new THREE.Vector3(a + (Project.SQUARE_SIZE / 2) * squareWidth, b, c - Project.SQUARE_SIZE / 2);
-		const vecC = new THREE.Vector3(
+		const vecA = new Vector3(a - Project.SQUARE_SIZE / 2, b, c - Project.SQUARE_SIZE / 2);
+		const vecB = new Vector3(a + (Project.SQUARE_SIZE / 2) * squareWidth, b, c - Project.SQUARE_SIZE / 2);
+		const vecC = new Vector3(
 			a + (Project.SQUARE_SIZE / 2) * squareWidth,
 			b,
 			c + (Project.SQUARE_SIZE / 2) * squareHeight
 		);
-		const vecD = new THREE.Vector3(a - Project.SQUARE_SIZE / 2, b, c + (Project.SQUARE_SIZE / 2) * squareHeight);
-		const center = new THREE.Vector3(a, b, c);
+		const vecD = new Vector3(a - Project.SQUARE_SIZE / 2, b, c + (Project.SQUARE_SIZE / 2) * squareHeight);
+		const center = new Vector3(a, b, c);
 		Base.rotateQuadEuler(vecA, vecB, vecC, vecD, center, position.toRotationEuler());
 
 		// Vertices
@@ -123,10 +123,10 @@ class Land extends Base {
 		y += coefY;
 		w -= coefX * 2;
 		h -= coefY * 2;
-		const texA = new THREE.Vector2();
-		const texB = new THREE.Vector2();
-		const texC = new THREE.Vector2();
-		const texD = new THREE.Vector2();
+		const texA = new Vector2();
+		const texB = new Vector2();
+		const texC = new Vector2();
+		const texD = new Vector2();
 		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 		geometry.pushQuadUVs(texA, texB, texC, texD);
 	}

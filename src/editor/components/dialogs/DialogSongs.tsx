@@ -9,12 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Howl } from 'howler';
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPause, FaPlay, FaStop } from 'react-icons/fa';
 import { BUTTON_TYPE, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, SONG_KIND, Utils } from '../../common';
-import { Platform } from '../../common/Platform';
+import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { LocalFile, Node, Project } from '../../core';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Model } from '../../Editor';
@@ -144,10 +143,11 @@ function DialogSongs({
 		playingHowl?.stop();
 	};
 
-	const updateSong = (song: Model.Song | null) => {
+	const updateSong = async (song: Model.Song | null) => {
 		setSelectedSong(song);
 		const path = song?.getPath();
 		if (song && path) {
+			const { Howl } = await import('howler');
 			if (!song.isBR) {
 				setSelectedHowl(undefined);
 				(async () => {
@@ -177,8 +177,8 @@ function DialogSongs({
 	};
 
 	const handleRefresh = async () => {
-		const files = Platform.getAllFilesFromFolder(Model.Song.getFolder(selectedKind!, true, ''));
-		const customNames = await Platform.getFiles(Model.Song.getFolder(selectedKind!, false, ''));
+		const files = getAllFilesFromFolder(Model.Song.getFolder(selectedKind!, true, ''));
+		const customNames = await getFiles(Model.Song.getFolder(selectedKind!, false, ''));
 		setSongsAvailable([
 			...Node.createList(
 				files.map((name, index) => {

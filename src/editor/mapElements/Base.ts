@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import { Euler, Vector3 } from 'three';
 import { MapElement } from '../Editor';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, SHAPE_KIND } from '../common';
 import { CustomGeometry, Position, Project } from '../core';
@@ -17,9 +17,9 @@ import { Serializable } from '../core/Serializable';
 
 abstract class Base extends Serializable {
 	public static readonly COEF_TEX = 0.2;
-	public static readonly Y_AXIS = new THREE.Vector3(0, 1, 0);
-	public static readonly X_AXIS = new THREE.Vector3(1, 0, 0);
-	public static readonly Z_AXIS = new THREE.Vector3(0, 0, 1);
+	public static readonly Y_AXIS = new Vector3(0, 1, 0);
+	public static readonly X_AXIS = new Vector3(1, 0, 0);
+	public static readonly Z_AXIS = new Vector3(0, 0, 1);
 
 	public xOffset: number;
 	public yOffset: number;
@@ -92,13 +92,13 @@ abstract class Base extends Serializable {
 	}
 
 	static rotateQuad(
-		vecA: THREE.Vector3,
-		vecB: THREE.Vector3,
-		vecC: THREE.Vector3,
-		vecD: THREE.Vector3,
-		center: THREE.Vector3,
+		vecA: Vector3,
+		vecB: Vector3,
+		vecC: Vector3,
+		vecD: Vector3,
+		center: Vector3,
 		angle: number,
-		axis: THREE.Vector3
+		axis: Vector3
 	) {
 		CustomGeometry.rotateVertex(vecA, center, angle, axis);
 		CustomGeometry.rotateVertex(vecB, center, angle, axis);
@@ -106,33 +106,26 @@ abstract class Base extends Serializable {
 		CustomGeometry.rotateVertex(vecD, center, angle, axis);
 	}
 
-	static rotateQuadEuler(
-		vecA: THREE.Vector3,
-		vecB: THREE.Vector3,
-		vecC: THREE.Vector3,
-		vecD: THREE.Vector3,
-		center: THREE.Vector3,
-		euler: THREE.Euler
-	) {
+	static rotateQuadEuler(vecA: Vector3, vecB: Vector3, vecC: Vector3, vecD: Vector3, center: Vector3, euler: Euler) {
 		CustomGeometry.rotateVertexEuler(vecA, center, euler);
 		CustomGeometry.rotateVertexEuler(vecB, center, euler);
 		CustomGeometry.rotateVertexEuler(vecC, center, euler);
 		CustomGeometry.rotateVertexEuler(vecD, center, euler);
 	}
 
-	getLocalPosition(position: Position): THREE.Vector3 {
+	getLocalPosition(position: Position): Vector3 {
 		return position.toVector3();
 	}
 
-	getLocalRotation(position: Position): THREE.Euler {
+	getLocalRotation(position: Position): Euler {
 		return position.toRotationEuler();
 	}
 
-	getLocalScale(position: Position): THREE.Vector3 {
+	getLocalScale(position: Position): Vector3 {
 		return position.toScaleVector();
 	}
 
-	getPositionFromVec3(vec: THREE.Vector3, rotation: THREE.Euler, scale: THREE.Vector3): Position {
+	getPositionFromVec3(vec: Vector3, rotation: Euler, scale: Vector3): Position {
 		return Position.createFromVector3(vec, rotation, scale);
 	}
 

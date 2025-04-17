@@ -10,7 +10,17 @@
 */
 
 import { ArrayUtils, JSONType, Paths } from '../../common';
-import { Platform } from '../../common/Platform';
+import {
+	createFile,
+	createFolder,
+	getFolders,
+	moveFile,
+	moveFolder,
+	readJSON,
+	removeFile,
+	removeFolder,
+	writeJSON,
+} from '../../common/Platform';
 import { Project } from '../../core';
 import { Model } from '../../Editor';
 import { MapObjectCommandType } from '../../models';
@@ -21,33 +31,30 @@ class ProjectUpdater_3_0_0 {
 		const projectPath = Project.current!.getPath();
 
 		// Remove maps temp files
-		await Platform.removeFolder(Paths.join(projectPath, 'Datas', 'Maps', 'temp'));
-		const folders = await Platform.getFolders(Paths.join(projectPath, 'Datas', 'Maps'));
+		await removeFolder(Paths.join(projectPath, 'Datas', 'Maps', 'temp'));
+		const folders = await getFolders(Paths.join(projectPath, 'Datas', 'Maps'));
 		for (const name of folders) {
 			const mapPath = Paths.join(projectPath, 'Datas', 'Maps', name);
-			await Platform.removeFolder(Paths.join(mapPath, 'temp'));
-			await Platform.createFolder(Paths.join(mapPath, 'temp'));
-			await Platform.removeFolder(Paths.join(mapPath, 'tempUndoRedo'));
-			await Platform.createFolder(Paths.join(mapPath, 'temp-undo-redo'));
-			await Platform.createFile(Paths.join(mapPath, 'temp-undo-redo', 'index'), '-1');
-			const jsonInfos = await Platform.readJSON(Paths.join(mapPath, 'infos.json'));
-			const jsonObjects = await Platform.readJSON(Paths.join(mapPath, 'objects.json'));
+			await removeFolder(Paths.join(mapPath, 'temp'));
+			await createFolder(Paths.join(mapPath, 'temp'));
+			await removeFolder(Paths.join(mapPath, 'tempUndoRedo'));
+			await createFolder(Paths.join(mapPath, 'temp-undo-redo'));
+			await createFile(Paths.join(mapPath, 'temp-undo-redo', 'index'), '-1');
+			const jsonInfos = await readJSON(Paths.join(mapPath, 'infos.json'));
+			const jsonObjects = await readJSON(Paths.join(mapPath, 'objects.json'));
 			if (jsonInfos && jsonObjects) {
 				jsonInfos.objs = jsonObjects.objs;
-				await Platform.writeJSON(Paths.join(mapPath, 'infos.json'), jsonInfos);
+				await writeJSON(Paths.join(mapPath, 'infos.json'), jsonInfos);
 			}
-			await Platform.removeFile(Paths.join(mapPath, 'objects.json'));
+			await removeFile(Paths.join(mapPath, 'objects.json'));
 		}
 		callback(10);
 
 		// Move all files correctly
-		await Platform.removeFile(Paths.join(projectPath, 'Datas', 'Scripts', 'Plugins', 'path.js'));
-		await Platform.moveFolder(
-			Paths.join(projectPath, 'Datas', 'Scripts', 'Plugins'),
-			Paths.join(projectPath, 'Plugins')
-		);
-		await Platform.moveFolder(Paths.join(projectPath, 'Datas', 'Maps'), Paths.join(projectPath, 'Maps'));
-		await Platform.moveFolder(Paths.join(projectPath, 'Datas', 'Saves'), Paths.join(projectPath, 'Saves'));
+		await removeFile(Paths.join(projectPath, 'Datas', 'Scripts', 'Plugins', 'path.js'));
+		await moveFolder(Paths.join(projectPath, 'Datas', 'Scripts', 'Plugins'), Paths.join(projectPath, 'Plugins'));
+		await moveFolder(Paths.join(projectPath, 'Datas', 'Maps'), Paths.join(projectPath, 'Maps'));
+		await moveFolder(Paths.join(projectPath, 'Datas', 'Saves'), Paths.join(projectPath, 'Saves'));
 		const names = [
 			'animations',
 			'armors',
@@ -78,20 +85,14 @@ class ProjectUpdater_3_0_0 {
 			'weapons',
 		];
 		for (const name of names) {
-			await Platform.moveFile(
-				Paths.join(projectPath, 'Datas', `${name}.json`),
-				Paths.join(projectPath, `${name}.json`)
-			);
+			await moveFile(Paths.join(projectPath, 'Datas', `${name}.json`), Paths.join(projectPath, `${name}.json`));
 		}
-		await Platform.moveFile(
-			Paths.join(projectPath, 'Datas', 'treeMap.json'),
-			Paths.join(projectPath, 'treeMaps.json')
-		);
-		await Platform.removeFolder(Paths.join(projectPath, 'Datas'));
+		await moveFile(Paths.join(projectPath, 'Datas', 'treeMap.json'), Paths.join(projectPath, 'treeMaps.json'));
+		await removeFolder(Paths.join(projectPath, 'Datas'));
 		callback(20);
 
 		// Treemaps folders ids should be unique
-		let json = await Platform.readJSON(Paths.join(projectPath, 'treeMaps.json'));
+		let json = await readJSON(Paths.join(projectPath, 'treeMaps.json'));
 		if (json) {
 			let id = -2;
 			const updateTree = (nodes: JSONType[] = []) => {
@@ -103,12 +104,12 @@ class ProjectUpdater_3_0_0 {
 				}
 			};
 			updateTree(json.tree as JSONType[]);
-			await Platform.writeJSON(Paths.join(projectPath, 'treeMaps.json'), json);
+			await writeJSON(Paths.join(projectPath, 'treeMaps.json'), json);
 		}
 		callback(25);
 
 		// Map portions edit
-		const jsonSystems = (await Platform.readJSON(Paths.join(projectPath, 'system.json'))) ?? {};
+		const jsonSystems = (await readJSON(Paths.join(projectPath, 'system.json'))) ?? {};
 		const heroMapID = jsonSystems.idMapHero as number;
 		const idObjHero = jsonSystems.idObjHero as number;
 		const mapName = `MAP${String(heroMapID).padStart(4, '0')}`;
@@ -145,22 +146,22 @@ class ProjectUpdater_3_0_0 {
 		callback(50);
 
 		// Remove hero from map infos
-		json = await Platform.readJSON(Paths.join(projectPath, 'Maps', mapName, 'infos.json'));
+		json = await readJSON(Paths.join(projectPath, 'Maps', mapName, 'infos.json'));
 		if (json) {
 			const hero = (json.objs as JSONType[]).find((obj) => obj.id === idObjHero);
 			if (hero) {
 				jsonSystems.hmp = hero.p;
 				delete jsonSystems.idObjHero;
-				await Platform.writeJSON(Paths.join(projectPath, 'system.json'), jsonSystems);
+				await writeJSON(Paths.join(projectPath, 'system.json'), jsonSystems);
 				ArrayUtils.removeElement(json.objs as JSONType[], hero);
-				await Platform.writeJSON(Paths.join(projectPath, 'Maps', mapName, 'infos.json'), json);
+				await writeJSON(Paths.join(projectPath, 'Maps', mapName, 'infos.json'), json);
 			}
 		}
-		await Platform.createFile(Paths.join(projectPath, 'game.rpmg'), '');
+		await createFile(Paths.join(projectPath, 'game.rpmg'), '');
 		callback(60);
 
 		// Common events default and hero objects
-		const jsonEvents = await Platform.readJSON(Paths.join(projectPath, 'commonEvents.json'));
+		const jsonEvents = await readJSON(Paths.join(projectPath, 'commonEvents.json'));
 		if (jsonEvents) {
 			const objects = jsonEvents.commonObjects as JSONType[];
 			let object = objects.find((obj) => obj.id === 1);
@@ -194,7 +195,7 @@ class ProjectUpdater_3_0_0 {
 			};
 			object = objects.find((obj) => obj.id === 2);
 			jsonEvents.ho = object ?? jsonEvents.do;
-			await Platform.writeJSON(Paths.join(projectPath, 'commonEvents.json'), jsonEvents);
+			await writeJSON(Paths.join(projectPath, 'commonEvents.json'), jsonEvents);
 		}
 		callback(70);
 
@@ -216,7 +217,7 @@ class ProjectUpdater_3_0_0 {
 		});
 
 		// Battle system texts to formulas
-		const jsonBattle = await Platform.readJSON(Paths.join(projectPath, 'battleSystem.json'));
+		const jsonBattle = await readJSON(Paths.join(projectPath, 'battleSystem.json'));
 		if (jsonBattle) {
 			if (jsonBattle.fisdead && (jsonBattle.fisdead as JSONType).k === 8) {
 				(jsonBattle.fisdead as JSONType).k = 9;
@@ -236,12 +237,12 @@ class ProjectUpdater_3_0_0 {
 			if (jsonBattle.troopsBattlersOffset && (jsonBattle.troopsBattlersOffset as JSONType).k === 8) {
 				(jsonBattle.troopsBattlersOffset as JSONType).k = 9;
 			}
-			await Platform.writeJSON(Paths.join(projectPath, 'battleSystem.json'), jsonBattle);
+			await writeJSON(Paths.join(projectPath, 'battleSystem.json'), jsonBattle);
 		}
 		callback(80);
 
 		// Title screen commands ids unique
-		const jsonTitle = await Platform.readJSON(Paths.join(projectPath, 'titlescreenGameover.json'));
+		const jsonTitle = await readJSON(Paths.join(projectPath, 'titlescreenGameover.json'));
 		if (jsonTitle) {
 			let id = 1;
 			for (const command of jsonTitle.tc as JSONType[]) {
@@ -251,11 +252,11 @@ class ProjectUpdater_3_0_0 {
 			for (const command of jsonTitle.gameOverCommands as JSONType[]) {
 				command.id = id++;
 			}
-			await Platform.writeJSON(Paths.join(projectPath, 'titlescreenGameover.json'), jsonTitle);
+			await writeJSON(Paths.join(projectPath, 'titlescreenGameover.json'), jsonTitle);
 		}
 
 		// Assets none and tileset is BR
-		const jsonPictures = await Platform.readJSON(Paths.join(projectPath, 'pictures.json'));
+		const jsonPictures = await readJSON(Paths.join(projectPath, 'pictures.json'));
 		if (jsonPictures) {
 			const list = jsonPictures.list as JSONType[];
 			for (const obj of list) {
@@ -265,9 +266,9 @@ class ProjectUpdater_3_0_0 {
 					}
 				}
 			}
-			await Platform.writeJSON(Paths.join(projectPath, 'pictures.json'), jsonPictures);
+			await writeJSON(Paths.join(projectPath, 'pictures.json'), jsonPictures);
 		}
-		const jsonSongs = await Platform.readJSON(Paths.join(projectPath, 'songs.json'));
+		const jsonSongs = await readJSON(Paths.join(projectPath, 'songs.json'));
 		if (jsonSongs) {
 			const list = jsonSongs.list as JSONType[];
 			for (const obj of list) {
@@ -276,17 +277,17 @@ class ProjectUpdater_3_0_0 {
 					song.br = true;
 				}
 			}
-			await Platform.writeJSON(Paths.join(projectPath, 'songs.json'), jsonSongs);
+			await writeJSON(Paths.join(projectPath, 'songs.json'), jsonSongs);
 		}
-		const jsonVideos = await Platform.readJSON(Paths.join(projectPath, 'videos.json'));
+		const jsonVideos = await readJSON(Paths.join(projectPath, 'videos.json'));
 		if (jsonVideos) {
 			const video = (jsonVideos.list as JSONType[]).find((video) => video.id === -1);
 			if (video) {
 				video.br = true;
 			}
-			await Platform.writeJSON(Paths.join(projectPath, 'videos.json'), jsonVideos);
+			await writeJSON(Paths.join(projectPath, 'videos.json'), jsonVideos);
 		}
-		const jsonShapes = await Platform.readJSON(Paths.join(projectPath, 'shapes.json'));
+		const jsonShapes = await readJSON(Paths.join(projectPath, 'shapes.json'));
 		if (jsonShapes) {
 			const list = jsonShapes.list as JSONType[];
 			for (const obj of list) {
@@ -295,27 +296,27 @@ class ProjectUpdater_3_0_0 {
 					shape.br = true;
 				}
 			}
-			await Platform.writeJSON(Paths.join(projectPath, 'shapes.json'), jsonShapes);
+			await writeJSON(Paths.join(projectPath, 'shapes.json'), jsonShapes);
 		}
-		const jsonFonts = await Platform.readJSON(Paths.join(projectPath, 'fonts.json'));
+		const jsonFonts = await readJSON(Paths.join(projectPath, 'fonts.json'));
 		if (jsonFonts) {
 			const font = (jsonFonts.list as JSONType[]).find((font) => font.id === -1);
 			if (font) {
 				font.br = true;
 			}
-			await Platform.writeJSON(Paths.join(projectPath, 'fonts.json'), jsonFonts);
+			await writeJSON(Paths.join(projectPath, 'fonts.json'), jsonFonts);
 		}
 		callback(90);
 
 		// Plugins: isOn moved to scripts.json and renamed checked, moving type to scripts.json
 		const manifest = await Model.Plugin.getManifest();
 		const onlinePluginNames = manifest?.flat()?.map((plugin) => plugin.name) ?? [];
-		const jsonScripts = await Platform.readJSON(Paths.join(projectPath, 'scripts.json'));
+		const jsonScripts = await readJSON(Paths.join(projectPath, 'scripts.json'));
 		if (jsonScripts) {
 			const jsonPlugins = jsonScripts.plugins as JSONType[];
 			for (const plugin of jsonPlugins) {
 				const detailsPath = Paths.join(projectPath, 'Plugins', plugin.name as string, 'details.json');
-				const pluginDetails = await Platform.readJSON(detailsPath);
+				const pluginDetails = await readJSON(detailsPath);
 				if (pluginDetails) {
 					if (pluginDetails.isOn === false) {
 						plugin.checked = false;
@@ -328,10 +329,10 @@ class ProjectUpdater_3_0_0 {
 					if (onlinePluginNames.includes(plugin.name)) {
 						plugin.type = 2;
 					}
-					await Platform.writeJSON(detailsPath, pluginDetails);
+					await writeJSON(detailsPath, pluginDetails);
 				}
 			}
-			await Platform.writeJSON(Paths.join(projectPath, 'scripts.json'), jsonScripts);
+			await writeJSON(Paths.join(projectPath, 'scripts.json'), jsonScripts);
 		}
 	}
 }

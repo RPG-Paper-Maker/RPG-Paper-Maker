@@ -10,7 +10,7 @@
 */
 
 import i18next from 'i18next';
-import * as THREE from 'three';
+import { MeshPhongMaterial, Texture, Vector2, Vector3 } from 'three';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND, SPRITE_WALL_TYPE, Utils } from '../common';
 import { CustomGeometry, Picture2D, Position, Project } from '../core';
 import { Manager, MapElement, Model, Scene } from '../Editor';
@@ -51,12 +51,12 @@ class SpriteWall extends Base {
 		return wall;
 	}
 
-	static getWallTexture(map: Scene.Map, id: number): THREE.MeshPhongMaterial | null {
+	static getWallTexture(map: Scene.Map, id: number): MeshPhongMaterial | null {
 		const textureWall = map.texturesWalls[Project.current!.specialElements.getWallByID(id).pictureID];
 		return textureWall || null;
 	}
 
-	static async loadWallTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
+	static async loadWallTexture(map: Scene.Map | null, id: number): Promise<MeshPhongMaterial> {
 		const wall = Project.current!.specialElements.getWallByID(id);
 		const pictureID = wall.pictureID;
 		let textureWall = map ? map.texturesWalls[pictureID] : null;
@@ -78,9 +78,9 @@ class SpriteWall extends Base {
 		return textureWall;
 	}
 
-	static async loadTextureWall(picture: Model.Picture, id: number): Promise<THREE.MeshPhongMaterial> {
+	static async loadTextureWall(picture: Model.Picture, id: number): Promise<MeshPhongMaterial> {
 		const image = await Picture2D.loadImage(await picture.getPathOrBase64());
-		const texture = new THREE.Texture();
+		const texture = new Texture();
 		const w = image.width;
 		const h = image.height;
 		if (w === 0 || h === 0) {
@@ -174,12 +174,12 @@ class SpriteWall extends Base {
 	}
 
 	updateGeometry(geometry: CustomGeometry, position: Position, width: number, height: number, count: number): number {
-		const vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
-		const vecB = new THREE.Vector3(0.5, 1.0, 0.0);
-		const vecC = new THREE.Vector3(0.5, 0.0, 0.0);
-		const vecD = new THREE.Vector3(-0.5, 0.0, 0.0);
-		const center = new THREE.Vector3();
-		const size = new THREE.Vector3(Project.SQUARE_SIZE, height, 0);
+		const vecA = new Vector3(-0.5, 1.0, 0.0);
+		const vecB = new Vector3(0.5, 1.0, 0.0);
+		const vecC = new Vector3(0.5, 0.0, 0.0);
+		const vecD = new Vector3(-0.5, 0.0, 0.0);
+		const center = new Vector3();
+		const size = new Vector3(Project.SQUARE_SIZE, height, 0);
 		const angle = position.angleY;
 		const localPosition = position.toVector3();
 
@@ -208,10 +208,10 @@ class SpriteWall extends Base {
 		y += coefY;
 		w -= coefX * 2;
 		h -= coefY * 2;
-		const texA = new THREE.Vector2();
-		const texB = new THREE.Vector2();
-		const texC = new THREE.Vector2();
-		const texD = new THREE.Vector2();
+		const texA = new Vector2();
+		const texB = new Vector2();
+		const texC = new Vector2();
+		const texD = new Vector2();
 		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 
 		// Add sprite to geometry
