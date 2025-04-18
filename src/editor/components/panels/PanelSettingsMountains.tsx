@@ -23,7 +23,6 @@ import {
 	setCurrentMountainWidthSquares,
 } from '../../store';
 import Flex from '../Flex';
-import Groupbox from '../Groupbox';
 import InputNumber from '../InputNumber';
 import Tips from '../Tips';
 
@@ -86,19 +85,16 @@ function PanelSettingsMountains() {
 			{!Constants.IS_MOBILE && EngineSettings.current.showTipsGridHeight && (
 				<Tips onClose={handleCloseTipGridHeight}>{t('tip.grid.height')}</Tips>
 			)}
-			<Groupbox title={t('settings')}>
-				<Flex column spacedLarge>
+			<Flex column spaced paddingSmall>
+				<Flex spaced>
 					<Flex column spaced>
 						<label>Border width:</label>
-						<Flex spaced>
-							<InputNumber
-								value={widthSquares}
-								min={MIN_VALUE}
-								max={MAX_VALUE_SQUARES}
-								onChange={handleChangeWidthSquares}
-							/>
-							{t('square.s')}
-						</Flex>
+						<InputNumber
+							value={widthSquares}
+							min={MIN_VALUE}
+							max={MAX_VALUE_SQUARES}
+							onChange={handleChangeWidthSquares}
+						/>
 						<Flex spaced>
 							<InputNumber
 								value={widthPixels}
@@ -106,20 +102,17 @@ function PanelSettingsMountains() {
 								max={MAX_VALUE_PIXELS}
 								onChange={handleChangeWidthPixels}
 							/>
-							{t('pixel.s')}
+							px
 						</Flex>
 					</Flex>
 					<Flex column spaced>
 						<label>Border height:</label>
-						<Flex spaced>
-							<InputNumber
-								value={heightSquares}
-								min={MIN_VALUE}
-								max={MAX_VALUE_SQUARES}
-								onChange={handleChangeHeightSquares}
-							/>
-							{t('square.s')}
-						</Flex>
+						<InputNumber
+							value={heightSquares}
+							min={MIN_VALUE}
+							max={MAX_VALUE_SQUARES}
+							onChange={handleChangeHeightSquares}
+						/>
 						<Flex spaced>
 							<InputNumber
 								value={heightPixels}
@@ -127,15 +120,12 @@ function PanelSettingsMountains() {
 								max={MAX_VALUE_PIXELS}
 								onChange={handleChangeHeightPixels}
 							/>
-							{t('pixel.s')}
+							px
 						</Flex>
 					</Flex>
-					<Flex spaced>
-						<label>Angle:</label>
-						<label>{`${calculateAngle()}°`}</label>
-					</Flex>
 				</Flex>
-			</Groupbox>
+				<Flex centerH>Angle: {calculateAngle()}°</Flex>
+			</Flex>
 		</>
 	);
 }

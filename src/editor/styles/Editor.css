@@ -107,6 +107,10 @@ a {
 	gap: 10px;
 }
 
+.paddingSmall {
+	padding: 5px;
+}
+
 .paddingLarge {
 	padding: 30px;
 }

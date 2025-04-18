@@ -18,6 +18,7 @@ type Props = {
 	one?: boolean;
 	spaced?: boolean;
 	spacedLarge?: boolean;
+	paddingSmall?: boolean;
 	centerV?: boolean;
 	centerH?: boolean;
 	centerSelfV?: boolean;
@@ -41,6 +42,7 @@ function Flex({
 	one = false,
 	spaced = false,
 	spacedLarge = false,
+	paddingSmall = false,
 	centerV = false,
 	centerH = false,
 	centerSelfV = false,
@@ -65,6 +67,7 @@ function Flex({
 					flexOne: one,
 					gapSmall: spaced,
 					gapMedium: spacedLarge,
+					paddingSmall,
 					flexCenterV: centerV,
 					flexCenterH: centerH,
 					flexCenterSelfV: centerSelfV,

@@ -11,8 +11,6 @@
 
 import { ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LuFolders } from 'react-icons/lu';
-import { MdOutlineWallpaper } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { Utils } from '../../common';
 import { Node, Project } from '../../core';
@@ -37,8 +35,6 @@ import Flex from '../Flex';
 import Loader from '../Loader';
 import MapEditor from '../MapEditor';
 import MapEditorMenuBar from '../MapEditorMenuBar';
-import Menu from '../Menu';
-import MenuItem from '../MenuItem';
 import Splitter from '../Splitter';
 import Tab from '../Tab';
 import TreeMaps from '../TreeMaps';
@@ -155,29 +151,38 @@ function PanelProject() {
 				<Flex column one className='bgDarker scrollable'>
 					{!openLoading && (
 						<>
-							<div className='mobileHidden'>
-								<Menu
-									horizontal
-									isActivable
-									activeIndex={projectMenuIndex}
-									setActiveIndex={updateProjectMenuIndex}
-								>
-									<MenuItem icon={<LuFolders />}></MenuItem>
-									<MenuItem icon={<MdOutlineWallpaper />}></MenuItem>
-								</Menu>
-							</div>
-							<Flex one fillHeight className={Utils.getClassName({ hidden: projectMenuIndex !== 0 })}>
-								<TreeMaps
-									onSelectedItem={handleSelectedMapItem}
-									forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
-									setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
-									mapsTabsTitles={mapsTabsTitles}
-									setMapsTabsTitles={setMapsTabsTitles}
-									mapsTabsContents={mapsTabsContents}
-									setMapsTabsContents={setMapsTabsContents}
+							<Flex one className='mobileOnly'>
+								<Flex one fillHeight className={Utils.getClassName({ hidden: projectMenuIndex !== 0 })}>
+									<TreeMaps
+										onSelectedItem={handleSelectedMapItem}
+										forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
+										setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
+										mapsTabsTitles={mapsTabsTitles}
+										setMapsTabsTitles={setMapsTabsTitles}
+										mapsTabsContents={mapsTabsContents}
+										setMapsTabsContents={setMapsTabsContents}
+									/>
+								</Flex>
+								<PanelTextures visible={projectMenuIndex === 1} />
+							</Flex>
+							<Flex column one className='mobileHidden'>
+								<PanelTextures
+									visible
+									extraContent={
+										<Flex one fillHeight>
+											<TreeMaps
+												onSelectedItem={handleSelectedMapItem}
+												forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
+												setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
+												mapsTabsTitles={mapsTabsTitles}
+												setMapsTabsTitles={setMapsTabsTitles}
+												mapsTabsContents={mapsTabsContents}
+												setMapsTabsContents={setMapsTabsContents}
+											/>
+										</Flex>
+									}
 								/>
 							</Flex>
-							<PanelTextures visible={projectMenuIndex === 1} />
 						</>
 					)}
 				</Flex>

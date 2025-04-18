@@ -17,7 +17,7 @@ import '../styles/Splitter.css';
 import Flex from './Flex';
 
 type Props = {
-	children: [JSX.Element, JSX.Element];
+	children: [JSX.Element | undefined, JSX.Element | undefined];
 	vertical: boolean;
 	defaultLeftSize?: number;
 	className?: string;
@@ -38,13 +38,14 @@ function Splitter({ children, vertical, defaultLeftSize, className, mobileHideFi
 		if (isResizing) {
 			const leftDiv = refLeft.current;
 			if (leftDiv) {
+				const rect = leftDiv.getBoundingClientRect();
 				if (vertical) {
-					const pxSize = `${e.clientY}px`;
+					const pxSize = `${e.clientY - rect.y}px`;
 					leftDiv.style.minHeight = pxSize;
 					leftDiv.style.maxHeight = pxSize;
 					leftDiv.style.height = pxSize;
 				} else {
-					const pxSize = `${e.clientX}px`;
+					const pxSize = `${e.clientX - rect.x}px`;
 					leftDiv.style.minWidth = pxSize;
 					leftDiv.style.maxWidth = pxSize;
 					leftDiv.style.width = pxSize;
@@ -77,11 +78,16 @@ function Splitter({ children, vertical, defaultLeftSize, className, mobileHideFi
 		// eslint-disable-next-line
 	}, []);
 
-	return (
+	return children[0] && children[1] ? (
 		<div
 			className={Utils.getClassName(
-				{ flexColumn: vertical, colResize: isResizing && vertical, rowResize: isResizing && !vertical },
-				`splitter flex ${className}`
+				{
+					flexColumn: vertical,
+					fillWidth: vertical,
+					colResize: isResizing && vertical,
+					rowResize: isResizing && !vertical,
+				},
+				`splitter flex ${className ?? ''}`
 			)}
 			onMouseMove={handleMouseMove}
 		>
@@ -94,6 +100,8 @@ function Splitter({ children, vertical, defaultLeftSize, className, mobileHideFi
 			></div>
 			<Flex one>{children[1]}</Flex>
 		</div>
+	) : (
+		children[0] ?? children[1] ?? null
 	);
 }
 

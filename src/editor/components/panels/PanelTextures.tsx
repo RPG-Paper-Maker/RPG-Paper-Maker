@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useRef, useState } from 'react';
+import { JSX, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ACTION_KIND, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
 import { Project } from '../../core';
@@ -17,6 +17,7 @@ import { Scene } from '../../Editor';
 import { RootState } from '../../store';
 import Flex from '../Flex';
 import MainPreviewer3D from '../MainPreviewer3D';
+import Splitter from '../Splitter';
 import TextureSquareSelector from '../TextureSquareSelector';
 import PanelSettingsMountains from './PanelSettingsMountains';
 import PanelSpecialElementsSelection from './PanelSpecialElementsSelection';
@@ -24,9 +25,10 @@ import PanelTransform from './PanelTransform';
 
 type Props = {
 	visible: boolean;
+	extraContent?: JSX.Element;
 };
 
-function PanelTextures({ visible }: Props) {
+function PanelTextures({ visible, extraContent }: Props) {
 	const refTilesetPreviewDiv = useRef<HTMLDivElement>(null);
 	const refTileset = useRef<HTMLDivElement>(null);
 	const refPreviewer = useRef<HTMLDivElement>(null);
@@ -107,13 +109,18 @@ function PanelTextures({ visible }: Props) {
 	return (
 		<div
 			ref={refTilesetPreviewDiv}
-			className={Utils.getClassName({ hidden: !visible }, 'flex flexColumn flexOne gapSmall')}
+			className={Utils.getClassName({ hidden: !visible }, 'flex flexColumn flexOne gapSmall fillHeight')}
 		>
-			<div ref={refTileset} className='scrollable flex flexColumn flexOne gapSmall'>
-				{getMainContent()}
-			</div>
+			<Flex one>
+				<Splitter vertical defaultLeftSize={window.innerHeight / 3}>
+					<div ref={refTileset} className='scrollable flex flexColumn flexOne gapSmall'>
+						{getMainContent()}
+					</div>
+					{extraContent}
+				</Splitter>
+			</Flex>
 			<div ref={refPreviewer} className='flex mobileHidden'>
-				<MainPreviewer3D id='texture-previewer' onHeightUpdated={handlePreviewer3DHeightUpdated} />
+				<MainPreviewer3D id='texture-previewer' />
 			</div>
 		</div>
 	);
