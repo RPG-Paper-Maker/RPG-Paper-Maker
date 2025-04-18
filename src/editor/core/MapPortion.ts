@@ -1372,7 +1372,6 @@ class MapPortion {
 			geometry.updateAttributes();
 			this.objectsMesh = new Mesh(geometry, Scene.Map.materialObjectSquare);
 			this.objectsMesh.receiveShadow = true;
-			this.objectsMesh.castShadow = true;
 			this.objectsMesh.renderOrder = 0;
 			this.objectsMesh.layers.enable(RAYCASTING_LAYER.OBJECTS);
 			MapPortion.offsetMeshPositionLayer(this.map, this.objectsMesh, 0, 1);
