@@ -9,39 +9,27 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { forwardRef, useImperativeHandle, useLayoutEffect, useMemo, useState } from 'react';
+import { forwardRef, useImperativeHandle, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Node, Project } from '../../../core';
 import { Model } from '../../../Editor';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
-import Tree, { TREES_MIN_HEIGHT, TREES_MIN_WIDTH } from '../../Tree';
+import Tree, { TREES_MIN_WIDTH } from '../../Tree';
+import PanelClasseContent from './PanelClassContent';
 
 const PanelClasses = forwardRef((props, ref) => {
 	const { t } = useTranslation();
 
 	const [classes, setClasses] = useState<Node[]>([]);
 	const [selectedClass, setSelectedClass] = useState<Model.Class | null>(null);
-	const [statisticsProgression, setStatisticsProgression] = useState<Node[]>([]);
-
-	const isClassDisabled = useMemo(() => selectedClass === null || selectedClass.id === -1, [selectedClass]);
 
 	const initialize = () => {
 		setClasses(Node.createList(Project.current!.classes.list));
 	};
 
 	const handleSelectClass = (node: Node | null) => {
-		if (node) {
-			const cls = node.content as Model.Class;
-			setSelectedClass(cls);
-			setStatisticsProgression(Node.createList(cls.statisticsProgression));
-		}
-	};
-
-	const handleUpdateStatisticProgression = () => {
-		if (selectedClass) {
-			selectedClass.statisticsProgression = Node.createListFromNodes(statisticsProgression);
-		}
+		setSelectedClass((node?.content as Model.Class) ?? null);
 	};
 
 	const accept = () => {
@@ -70,34 +58,13 @@ const PanelClasses = forwardRef((props, ref) => {
 						noScrollOnForce
 						scrollable
 						showEditName
+						isLocalization
 						applyDefault
 					/>
 				</Flex>
 			</Groupbox>
 			<Flex one>
-				<Flex column spacedLarge fillWidth>
-					<Flex spacedLarge>
-						<Flex one>
-							<Groupbox title={t('experience')} disabled={isClassDisabled} fillWidth></Groupbox>
-						</Flex>
-						<Flex one>
-							<Groupbox title={t('statistics.progression')} disabled={isClassDisabled} fillWidth>
-								<Flex one fillHeight>
-									<Tree
-										constructorType={Model.StatisticProgression}
-										list={statisticsProgression}
-										onListUpdated={handleUpdateStatisticProgression}
-										minHeight={TREES_MIN_HEIGHT}
-										disabled={isClassDisabled}
-										noScrollOnForce
-										scrollable
-										canBeEmpty
-									/>
-								</Flex>
-							</Groupbox>
-						</Flex>
-					</Flex>
-				</Flex>
+				<PanelClasseContent selectedClass={selectedClass} />
 			</Flex>
 		</Flex>
 	);

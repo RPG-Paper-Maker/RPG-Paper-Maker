@@ -16,7 +16,7 @@ import InputText from './InputText';
 
 type Props = {
 	values: string[][];
-	onChange: (values: string[][]) => void;
+	onChange?: (values: string[][], row: number, column: number) => void;
 };
 
 function Table({ values, onChange }: Props) {
@@ -31,7 +31,7 @@ function Table({ values, onChange }: Props) {
 		editingElement && editingElement.row === row && editingElement.column === column;
 
 	const handleClick = (e: React.MouseEvent<HTMLDivElement>, row: number, column: number) => {
-		if (!isEditing(row, column)) {
+		if (onChange && !isEditing(row, column)) {
 			setEditingElement({ row, column });
 			setEditingText(values[row][column]);
 			const boundingBox = e.currentTarget.getBoundingClientRect();
@@ -41,10 +41,12 @@ function Table({ values, onChange }: Props) {
 	};
 
 	const handleEditText = (row: number, column: number, text: string) => {
-		const newValues = values.map((lines) => [...lines]);
-		newValues[row][column] = text;
-		onChange(newValues);
-		setEditingText(text);
+		if (onChange) {
+			const newValues = values.map((lines) => [...lines]);
+			newValues[row][column] = text;
+			onChange(newValues, row, column);
+			setEditingText(text);
+		}
 	};
 
 	useEffect(() => {

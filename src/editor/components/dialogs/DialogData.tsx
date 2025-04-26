@@ -13,6 +13,7 @@ import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { initializeAcceptRef } from '../../common';
+import { Project } from '../../core';
 import { Model } from '../../Editor';
 import { setNeedsReloadMap } from '../../store';
 import PanelClasses from '../panels/data/PanelClasses';
@@ -33,6 +34,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 	const panelClassesRef = useRef<initializeAcceptRef>(null);
 
 	const handleAccept = async () => {
+		panelClassesRef.current?.accept();
 		/*
 		panelSystemRef.current?.accept();
 		panelBattleSystemRef.current?.accept();
@@ -50,6 +52,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 	};
 
 	const handleReject = async () => {
+		await Project.current!.classes.load();
 		/*
 		await Project.current!.systems.load();
 		await Project.current!.battleSystem.load();

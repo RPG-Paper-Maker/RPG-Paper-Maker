@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONMapping, JSONType } from '../common';
+import { BINDING, BindingType, JSONType, KeyValue } from '../common';
 import { Characteristic } from './Characteristic';
 import { ClassSkill } from './ClassSkill';
 import { Localization } from './Localization';
@@ -20,7 +20,7 @@ class Class extends Localization {
 	public finalLevel!: number;
 	public experienceBase!: number;
 	public experienceInflation!: number;
-	public experienceTable!: JSONMapping[];
+	public experienceTable!: KeyValue[];
 	public characteristics!: Characteristic[];
 	public statisticsProgression!: StatisticProgression[];
 	public skills!: ClassSkill[];
@@ -30,7 +30,7 @@ class Class extends Localization {
 		['finalLevel', 'mxL', -1, BINDING.NUMBER],
 		['experienceBase', 'eB', -1, BINDING.NUMBER],
 		['experienceInflation', 'eI', -1, BINDING.NUMBER],
-		['experienceTable', 'eT', [], BINDING.NUMBER],
+		['experienceTable', 'eT', [], BINDING.LIST_NUMBER],
 		['characteristics', 'characteristics', [], BINDING.LIST, Characteristic],
 		['statisticsProgression', 'stats', [], BINDING.LIST, StatisticProgression],
 		['skills', 'skills', [], BINDING.LIST, ClassSkill],
@@ -42,6 +42,10 @@ class Class extends Localization {
 
 	applyDefault(): void {
 		super.applyDefault(Class.getBindings([]));
+		this.initialLevel = 1;
+		this.finalLevel = 100;
+		this.experienceBase = 0;
+		this.experienceInflation = 0;
 	}
 
 	copy(className: Class): void {

@@ -24,6 +24,7 @@ type Props = {
 	focusFirst?: boolean;
 	setFocustFirst?: (b: boolean) => void;
 	disabled?: boolean;
+	onUpdate?: () => void;
 };
 
 function InputLocalization({
@@ -32,17 +33,20 @@ function InputLocalization({
 	focusFirst = false,
 	setFocustFirst,
 	disabled = false,
+	onUpdate,
 }: Props) {
 	const [isDialogLocalizationOpen, setIsDialogLocalizationOpen] = useState(false);
 	const [name, setName] = useState(localization.getName());
 
 	const handleAccept = () => {
 		setName(localization?.getName());
+		onUpdate?.();
 	};
 
 	const handleChange = (n: string) => {
 		setName(n);
 		localization.updateMainName(n);
+		onUpdate?.();
 	};
 
 	const handleClick = () => {

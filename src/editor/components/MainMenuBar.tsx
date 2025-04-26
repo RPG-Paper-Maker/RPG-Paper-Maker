@@ -673,7 +673,7 @@ function MainMenuBar() {
 					title: `${t('data.manager')}...`,
 					icon: <BsDatabase />,
 					onClick: handleDataManager,
-					disabled: true,
+					disabled: !isProjectOpened,
 				},
 				{
 					title: `${t('systems.manager')}...`,

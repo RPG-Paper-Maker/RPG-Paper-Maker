@@ -26,6 +26,7 @@ import { Node } from '../core';
 import { Model } from '../Editor';
 import useStateString from '../hooks/useStateString';
 import { Inputs } from '../managers';
+import { Localization } from '../models';
 import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
@@ -68,6 +69,7 @@ import DialogTitleCommand from './dialogs/models/DialogTitleCommand';
 import DialogWeaponArmorKind from './dialogs/models/DialogWeaponArmorKind';
 import DialogWindowSkin from './dialogs/models/DialogWindowSkin';
 import Flex from './Flex';
+import InputLocalization from './InputLocalization';
 import InputText from './InputText';
 import TreeItem from './TreeItem';
 
@@ -971,7 +973,12 @@ function Tree({
 						<div className={Utils.getClassName({ disabledLabel: disabled || isEditNameDisabled() })}>
 							{t('name')}:
 						</div>
-						{isLocalization ? null : (
+						{isLocalization ? (
+							<InputLocalization
+								localization={currentSelectedItemNode?.content as Localization}
+								onUpdate={() => setForceUpdate((value) => !value)}
+							/>
+						) : (
 							<InputText
 								value={currentName}
 								onChange={handleChangeName}

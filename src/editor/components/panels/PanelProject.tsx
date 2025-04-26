@@ -42,6 +42,7 @@ import PanelTextures from './PanelTextures';
 
 function PanelProject() {
 	const { t } = useTranslation();
+
 	const [mapsTabsTitles, setMapsTabsTitles] = useState<Model.Base[]>([]);
 	const [mapsTabsContents, setMapsTabsContents] = useState<(ReactNode | null)[]>([]);
 	const [mapForcedCurrentSelectedItemID, setMapForcedCurrentSelectedItemID] = useState<number | null>(null);
@@ -59,12 +60,6 @@ function PanelProject() {
 		);
 
 	const getDefaultTabContents = () => Project.current!.treeMaps.tabs.map(() => null);
-
-	const updateProjectMenuIndex = async (index: number) => {
-		dispatch(setProjectMenuIndex(index));
-		Project.current!.settings.projectMenuIndex = index;
-		await Project.current!.settings.save();
-	};
 
 	const handleSelectedMapItem = (node: Node | null) => {
 		if (!openLoading) {

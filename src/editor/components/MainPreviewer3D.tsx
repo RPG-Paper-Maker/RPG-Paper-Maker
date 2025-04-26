@@ -17,10 +17,9 @@ import { RootState } from '../store';
 
 type Props = {
 	id: string;
-	onHeightUpdated?: (height: number) => void;
 };
 
-function MainPreviewer3D({ id, onHeightUpdated }: Props) {
+function MainPreviewer3D({ id }: Props) {
 	const refCanvas = useRef<HTMLDivElement>(null);
 
 	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
@@ -147,7 +146,6 @@ function MainPreviewer3D({ id, onHeightUpdated }: Props) {
 			const width = refCanvas.current.getBoundingClientRect().width;
 			refCanvas.current.style.height = `${width}px`;
 			resizeForced();
-			onHeightUpdated?.(width);
 		}
 	});
 

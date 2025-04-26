@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { JSX, useEffect, useRef, useState } from 'react';
+import { JSX, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { ACTION_KIND, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
 import { Project } from '../../core';
@@ -32,33 +32,12 @@ function PanelTextures({ visible, extraContent }: Props) {
 	const refTilesetPreviewDiv = useRef<HTMLDivElement>(null);
 	const refTileset = useRef<HTMLDivElement>(null);
 	const refPreviewer = useRef<HTMLDivElement>(null);
-	const [height, setHeight] = useState(0);
 
 	const currentMapID = useSelector((state: RootState) => state.mapEditor.currentTreeMapTag?.id);
 	const currentMapElementKind = useSelector((state: RootState) => state.mapEditor.currentMapElementKind);
 	const currentActionKind = useSelector((state: RootState) => state.mapEditor.currentActionKind);
 	const mapLoaded = useSelector((state: RootState) => state.mapEditor.loaded);
 	useSelector((state: RootState) => state.triggers.splitting);
-
-	const updateHeight = () => {
-		if (refTilesetPreviewDiv.current) {
-			setHeight(refTilesetPreviewDiv.current.getBoundingClientRect().height);
-		}
-	};
-
-	const handlePreviewer3DHeightUpdated = (previewer3DHeight: number) => {
-		if (refTilesetPreviewDiv.current && refTileset.current && refPreviewer.current) {
-			const h = height - previewer3DHeight - 10;
-			refTileset.current.style.height = `${h}px`;
-		}
-	};
-
-	useEffect(() => {
-		updateHeight();
-		window.addEventListener('resize', updateHeight);
-		return () => window.removeEventListener('resize', updateHeight);
-		// eslint-disable-next-line
-	}, []);
 
 	const getMainContent = () => {
 		if (!currentMapID || !Scene.Map.current || !mapLoaded) {
