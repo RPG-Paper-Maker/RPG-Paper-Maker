@@ -91,7 +91,6 @@ function PanelClassContent({ selectedClass }: Props) {
 		for (let i = 1; i < totalList.length; i++) {
 			const line = new Array(2);
 			line[0] = '' + (i + 1);
-			console.log(expList, i);
 			line[1] = '' + (Number(totalList[i - 1][1]) + Number(expList[i - 1][1]));
 			totalList[i] = line;
 		}

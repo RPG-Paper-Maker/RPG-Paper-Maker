@@ -22,8 +22,6 @@
 	position: fixed;
 	top: 50%;
 	left: 50%;
-	min-width: fit-content;
-	min-height: fit-content;
 	display: flex;
 	flex-direction: column;
 	border-radius: 2px;
