@@ -13,7 +13,7 @@ import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Node } from '../../../core';
 import useStateNumber from '../../../hooks/useStateNumber';
-import { Base, Characteristic, Class, StatisticProgression } from '../../../models';
+import { Base, Characteristic, Class, ClassSkill, StatisticProgression } from '../../../models';
 import Button from '../../Button';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
@@ -41,12 +41,20 @@ function PanelClassContent({ selectedClass }: Props) {
 	const [skills, setSkills] = useState<Node[]>([]);
 
 	const isClassDisabled = useMemo(() => selectedClass === null || selectedClass.id === -1, [selectedClass]);
+	const hightlightedElements = useMemo(() => {
+		const elements: Record<number, number[]> = {};
+		if (selectedClass) {
+			for (const { k } of selectedClass.experienceTable) {
+				elements[(k as number) - initialLevel] = [1];
+			}
+		}
+		return elements;
+		// eslint-disable-next-line
+	}, [selectedClass, experienceToNextLevelValues, initialLevel]);
 
 	const update = () => {
 		if (selectedClass) {
-			const expList = getExperienceList();
-			setExperienceToNextLevelValues(expList);
-			setExperienceTotalValues(getTotalExperienceList(expList));
+			updateExperience();
 			setInitialLevel(selectedClass.initialLevel);
 			setFinalLevel(selectedClass.finalLevel);
 			setExperienceBase(selectedClass.experienceBase);
@@ -68,15 +76,16 @@ function PanelClassContent({ selectedClass }: Props) {
 	};
 
 	const getExperienceList = (): string[][] => {
+		const initialLevel = selectedClass!.initialLevel;
 		const finalLevel = selectedClass!.finalLevel;
 		const experienceBase = selectedClass!.experienceBase;
 		const experienceInflation = selectedClass!.experienceInflation;
 		const experienceTable = selectedClass!.experienceTable;
-		const expList: string[][] = new Array(finalLevel - 1);
+		const expList: string[][] = new Array(finalLevel - initialLevel);
 		const pow = 2.4 + experienceInflation / 100;
 		for (let i = 1; i < finalLevel; i++) {
 			const line = new Array(2);
-			line[0] = '' + i;
+			line[0] = '' + (initialLevel + i - 1);
 			line[1] = experienceTable[i - 1]
 				? '' + experienceTable[i - 1]
 				: '' + Math.floor(experienceBase * (Math.pow(i + 4, pow) / Math.pow(5, pow)));
@@ -86,15 +95,22 @@ function PanelClassContent({ selectedClass }: Props) {
 	};
 
 	const getTotalExperienceList = (expList: string[][]): string[][] => {
+		const initialLevel = selectedClass!.initialLevel;
 		const totalList: string[][] = new Array(expList.length + 1);
-		totalList[0] = ['1', '0'];
+		totalList[0] = ['' + initialLevel, '0'];
 		for (let i = 1; i < totalList.length; i++) {
 			const line = new Array(2);
-			line[0] = '' + (i + 1);
+			line[0] = '' + (initialLevel + i);
 			line[1] = '' + (Number(totalList[i - 1][1]) + Number(expList[i - 1][1]));
 			totalList[i] = line;
 		}
 		return totalList;
+	};
+
+	const updateExperience = () => {
+		const expList = getExperienceList();
+		setExperienceToNextLevelValues(expList);
+		setExperienceTotalValues(getTotalExperienceList(expList));
 	};
 
 	const handleChangeTableExperienceToNextLevel = (values: string[][], row: number, column: number) => {
@@ -102,9 +118,11 @@ function PanelClassContent({ selectedClass }: Props) {
 			return; // Do not allow to edit the first column (level)
 		}
 		setExperienceToNextLevelValues([...values]);
+		setExperienceTotalValues(getTotalExperienceList(values));
 		if (selectedClass) {
 			const element = selectedClass.experienceTable.find(({ k }) => k === row + 1);
 			if (element) {
+				element.v = Number(values[row][column]);
 			} else {
 				selectedClass.experienceTable.push({ k: row + 1, v: Number(values[row][column]) });
 			}
@@ -112,9 +130,55 @@ function PanelClassContent({ selectedClass }: Props) {
 	};
 
 	const handleChangeInitialLevel = (value: number) => {
+		if (value >= finalLevel) {
+			return;
+		}
 		setInitialLevel(value);
 		if (selectedClass) {
 			selectedClass.initialLevel = value;
+			updateExperience();
+		}
+	};
+
+	const handleChangeExperienceBase = (value: number) => {
+		setExperienceBase(value);
+		if (selectedClass) {
+			selectedClass.experienceBase = value;
+			updateExperience();
+		}
+	};
+
+	const handleChangeFinalLevel = (value: number) => {
+		if (value <= initialLevel) {
+			return;
+		}
+		setFinalLevel(value);
+		if (selectedClass) {
+			selectedClass.finalLevel = value;
+			updateExperience();
+		}
+	};
+
+	const handleChangeExperienceInflation = (value: number) => {
+		setExperienceInflation(value);
+		if (selectedClass) {
+			selectedClass.experienceInflation = value;
+			updateExperience();
+		}
+	};
+
+	const handleClickResetExperience = () => {
+		if (selectedClass) {
+			setInitialLevel(1);
+			selectedClass.initialLevel = 1;
+			setFinalLevel(100);
+			selectedClass.finalLevel = 100;
+			setExperienceBase(0);
+			selectedClass.experienceBase = 0;
+			setExperienceInflation(0);
+			selectedClass.experienceInflation = 0;
+			selectedClass.experienceTable = [];
+			updateExperience();
 		}
 	};
 
@@ -130,6 +194,12 @@ function PanelClassContent({ selectedClass }: Props) {
 		}
 	};
 
+	const handleUpdateSkills = () => {
+		if (selectedClass) {
+			selectedClass.skills = Node.createListFromNodes(skills);
+		}
+	};
+
 	useLayoutEffect(() => {
 		update();
 		// eslint-disable-next-line
@@ -141,6 +211,7 @@ function PanelClassContent({ selectedClass }: Props) {
 				<Table
 					values={total ? experienceTotalValues : experienceToNextLevelValues}
 					onChange={total ? undefined : handleChangeTableExperienceToNextLevel}
+					highlightedElements={total ? undefined : hightlightedElements}
 				/>
 			);
 		}
@@ -164,11 +235,20 @@ function PanelClassContent({ selectedClass }: Props) {
 									<Form>
 										<Label>{t('initial.level')}</Label>
 										<Value>
-											<InputNumber value={initialLevel} onChange={handleChangeInitialLevel} />
+											<InputNumber
+												value={initialLevel}
+												onChange={handleChangeInitialLevel}
+												min={1}
+												max={9999}
+											/>
 										</Value>
 										<Label>{t('base')}</Label>
 										<Value>
-											<InputNumber value={initialLevel} onChange={handleChangeInitialLevel} />
+											<InputNumber
+												value={experienceBase}
+												onChange={handleChangeExperienceBase}
+												min={0}
+											/>
 										</Value>
 									</Form>
 								</Flex>
@@ -176,16 +256,25 @@ function PanelClassContent({ selectedClass }: Props) {
 									<Form>
 										<Label>{t('max.level')}</Label>
 										<Value>
-											<InputNumber value={initialLevel} onChange={handleChangeInitialLevel} />
+											<InputNumber
+												value={finalLevel}
+												onChange={handleChangeFinalLevel}
+												min={1}
+												max={99999}
+											/>
 										</Value>
 										<Label>{t('inflation')}</Label>
 										<Value>
-											<InputNumber value={initialLevel} onChange={handleChangeInitialLevel} />
+											<InputNumber
+												value={experienceInflation}
+												onChange={handleChangeExperienceInflation}
+												min={0}
+											/>
 										</Value>
 									</Form>
 								</Flex>
 							</Flex>
-							<Button>{t('reset')}</Button>
+							<Button onClick={handleClickResetExperience}>{t('reset')}</Button>
 						</Flex>
 					</Groupbox>
 				</Flex>
@@ -227,9 +316,9 @@ function PanelClassContent({ selectedClass }: Props) {
 					<Groupbox title={t('skills.to.learn')} disabled={isClassDisabled} fillWidth>
 						<Flex one fillHeight>
 							<Tree
-								constructorType={StatisticProgression}
-								list={statisticsProgression}
-								onListUpdated={handleUpdateStatisticProgression}
+								constructorType={ClassSkill}
+								list={skills}
+								onListUpdated={handleUpdateSkills}
 								minHeight={TREES_MIN_HEIGHT}
 								disabled={isClassDisabled}
 								noScrollOnForce

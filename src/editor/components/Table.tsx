@@ -10,6 +10,7 @@
 */
 
 import { useEffect, useRef, useState } from 'react';
+import { Utils } from '../common';
 import useStateString from '../hooks/useStateString';
 import '../styles/Table.css';
 import InputText from './InputText';
@@ -17,9 +18,10 @@ import InputText from './InputText';
 type Props = {
 	values: string[][];
 	onChange?: (values: string[][], row: number, column: number) => void;
+	highlightedElements?: Record<number, number[]>;
 };
 
-function Table({ values, onChange }: Props) {
+function Table({ values, onChange, highlightedElements }: Props) {
 	const refTable = useRef<HTMLTableElement>(null);
 
 	const [editingElement, setEditingElement] = useState<{ row: number; column: number } | null>(null);
@@ -81,7 +83,13 @@ function Table({ values, onChange }: Props) {
 										style={inputStyle}
 									/>
 								) : (
-									<div>{element}</div>
+									<div
+										className={Utils.getClassName({
+											highlight: !!highlightedElements?.[indexRow]?.includes(indexColumn),
+										})}
+									>
+										{element}
+									</div>
 								)}
 							</td>
 						))}

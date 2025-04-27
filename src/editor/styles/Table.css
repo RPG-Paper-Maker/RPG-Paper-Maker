@@ -17,6 +17,11 @@
 		div {
 			padding: 8px;
 			height: 100%;
+
+			&.highlight {
+				color: var(--primary-color);
+				font-weight: bold;
+			}
 		}
 	}
 }
