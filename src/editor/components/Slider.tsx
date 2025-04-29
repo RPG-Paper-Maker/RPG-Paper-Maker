@@ -10,6 +10,7 @@
 */
 
 import { ChangeEvent } from 'react';
+import '../styles/Slider.css';
 
 type Props = {
 	value: number;

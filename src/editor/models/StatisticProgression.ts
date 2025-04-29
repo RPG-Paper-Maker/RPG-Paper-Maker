@@ -10,11 +10,14 @@
 */
 
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
+import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Base } from './Base';
 import { ProgressionTable } from './ProgressionTable';
 
 class StatisticProgression extends Base {
+	public static selectedClassInitialLevel: number;
+	public static selectedClassFinalLevel: number;
 	public maxValue!: DynamicValue;
 	public isFix!: boolean;
 	public table!: ProgressionTable;
@@ -41,6 +44,29 @@ class StatisticProgression extends Base {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	static getTreeHeader(): string[] {
+		return ['statistic', 'initial', 'final'];
+	}
+
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(StatisticProgression.getBindings(additionnalBinding));
+		this.id = 1;
+		this.maxValue = DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0);
+		this.isFix = true;
+	}
+
+	getName(): string {
+		return Project.current!.battleSystem.getStatisticByID(this.id).getName();
+	}
+
+	toStrings(): string[] {
+		return [
+			'' + this.toString(),
+			this.isFix ? this.table.initialValue.toString() : '-',
+			this.isFix ? this.table.finalValue.toString() : '-',
+		];
 	}
 
 	copy(statisticProgression: StatisticProgression): void {

@@ -212,7 +212,7 @@ function DialogVideos({
 					<Flex one />
 					<Loader isLoading={loading} />
 					<video ref={playerRef} width='100%' height={loading ? 0 : undefined}>
-						<source ref={sourceRef} src='' type='video/mp4' />
+						<source ref={sourceRef} type='video/mp4' />
 					</video>
 					<Flex one />
 				</Flex>

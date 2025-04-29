@@ -34,6 +34,7 @@ export * from './DialogPluginParameter';
 export * from './DialogRandomBattle';
 export * from './DialogSpeed';
 export * from './DialogStatistic';
+export * from './DialogStatisticProgression';
 export * from './DialogTitleCommand';
 export * from './DialogWeaponArmorKind';
 export * from './DialogWindowSkin';

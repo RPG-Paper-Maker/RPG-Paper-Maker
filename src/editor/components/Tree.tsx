@@ -65,6 +65,7 @@ import DialogRandomBattle from './dialogs/models/DialogRandomBattle';
 import DialogSkybox from './dialogs/models/DialogSkybox';
 import DialogSpeed from './dialogs/models/DialogSpeed';
 import DialogStatistic from './dialogs/models/DialogStatistic';
+import DialogStatisticProgression from './dialogs/models/DialogStatisticProgression';
 import DialogTitleCommand from './dialogs/models/DialogTitleCommand';
 import DialogWeaponArmorKind from './dialogs/models/DialogWeaponArmorKind';
 import DialogWindowSkin from './dialogs/models/DialogWindowSkin';
@@ -937,6 +938,8 @@ function Tree({
 					return <DialogCustomStructure parent={currentSelectedItemNode.parent} {...options} />;
 				case Model.PluginCommand:
 					return <DialogPluginCommand {...options} />;
+				case Model.StatisticProgression:
+					return <DialogStatisticProgression {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

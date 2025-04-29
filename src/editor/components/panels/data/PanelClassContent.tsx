@@ -57,6 +57,8 @@ function PanelClassContent({ selectedClass }: Props) {
 			updateExperience();
 			setInitialLevel(selectedClass.initialLevel);
 			setFinalLevel(selectedClass.finalLevel);
+			StatisticProgression.selectedClassInitialLevel = selectedClass.initialLevel;
+			StatisticProgression.selectedClassFinalLevel = selectedClass.finalLevel;
 			setExperienceBase(selectedClass.experienceBase);
 			setExperienceInflation(selectedClass.experienceInflation);
 			setStatisticsProgression(Node.createList(selectedClass.statisticsProgression));

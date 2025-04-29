@@ -2,6 +2,7 @@ export * from './Button';
 export * from './Checkbox';
 export * from './DynamicValueSelector';
 export * from './DynamicValueSelectorExtra';
+export * from './Graph';
 export * from './Groupbox';
 export * from './InputLocalization';
 export * from './InputText';

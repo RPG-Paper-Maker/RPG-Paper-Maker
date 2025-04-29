@@ -118,6 +118,10 @@ class BattleSystem extends Serializable {
 		return baseList;
 	}
 
+	getStatisticByID(id: number): Model.Statistic {
+		return this.statistics.find((stat) => stat.id === id)!;
+	}
+
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
 		super.read(json, BattleSystem.getBindings(additionnalBinding));
 		this.json = json;

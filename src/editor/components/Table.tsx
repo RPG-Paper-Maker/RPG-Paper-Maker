@@ -19,9 +19,10 @@ type Props = {
 	values: string[][];
 	onChange?: (values: string[][], row: number, column: number) => void;
 	highlightedElements?: Record<number, number[]>;
+	disabled?: boolean;
 };
 
-function Table({ values, onChange, highlightedElements }: Props) {
+function Table({ values, onChange, highlightedElements, disabled = false }: Props) {
 	const refTable = useRef<HTMLTableElement>(null);
 
 	const [editingElement, setEditingElement] = useState<{ row: number; column: number } | null>(null);
@@ -33,7 +34,7 @@ function Table({ values, onChange, highlightedElements }: Props) {
 		editingElement && editingElement.row === row && editingElement.column === column;
 
 	const handleClick = (e: React.MouseEvent<HTMLDivElement>, row: number, column: number) => {
-		if (onChange && !isEditing(row, column)) {
+		if (!disabled && onChange && !isEditing(row, column)) {
 			setEditingElement({ row, column });
 			setEditingText(values[row][column]);
 			const boundingBox = e.currentTarget.getBoundingClientRect();
@@ -68,7 +69,7 @@ function Table({ values, onChange, highlightedElements }: Props) {
 	}, []);
 
 	return (
-		<table ref={refTable} className='table'>
+		<table ref={refTable} className={Utils.getClassName({ disabled }, 'table')}>
 			<tbody>
 				{values.map((lines, indexRow) => (
 					<tr key={indexRow}>

@@ -9,27 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-.table {
-	td {
-		border: 1px solid var(--lighter-bg-color);
-		cursor: pointer;
-
-		div {
-			padding: 8px;
-			height: 100%;
-
-			&.highlight {
-				color: var(--primary-color);
-				font-weight: bold;
-			}
-		}
-	}
-
-	&.disabled {
-		opacity: 0.5;
-
-		td {
-			cursor: default;
-		}
-	}
+input[type='range'] {
+	flex-grow: 0;
 }
