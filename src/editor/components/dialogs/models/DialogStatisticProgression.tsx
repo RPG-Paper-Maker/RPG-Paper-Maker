@@ -11,12 +11,14 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE } from '../../../common';
 import { Project } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { Base } from '../../../models';
+import { showWarning } from '../../../store';
 import Button from '../../Button';
 import Dropdown from '../../Dropdown';
 import DynamicValueSelector from '../../DynamicValueSelector';
@@ -31,7 +33,6 @@ import Tab from '../../Tab';
 import Table from '../../Table';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
-import FooterOK from '../footers/FooterOK';
 
 enum SELECTION_TYPE {
 	FIX,
@@ -52,7 +53,6 @@ function DialogStatisticProgression({ isOpen, setIsOpen, model, isNew, onAccept,
 
 	const { t } = useTranslation();
 
-	const [isWarningOpen, setIsWarningOpen] = useState(false);
 	const [statisticID, setStatisticID] = useStateNumber();
 	const [maximumValue] = useStateDynamicValue();
 	const [type, setType] = useStateNumber();
@@ -63,6 +63,8 @@ function DialogStatisticProgression({ isOpen, setIsOpen, model, isNew, onAccept,
 	const [randomVariation] = useStateDynamicValue();
 	const [equation, setEquation] = useStateNumber();
 	const [formula] = useStateDynamicValue();
+
+	const dispatch = useDispatch();
 
 	const hightlightedElements = useMemo(() => {
 		const elements: Record<number, number[]> = {};
@@ -163,15 +165,11 @@ function DialogStatisticProgression({ isOpen, setIsOpen, model, isNew, onAccept,
 		}
 	};
 
-	const handleCloseWarning = () => {
-		setIsWarningOpen(false);
-	};
-
 	const handleAccept = async () => {
 		if (isNew || statisticProgression.id !== statisticID) {
 			const statistic = Project.current!.battleSystem.statistics.find((s) => s.id === statisticID);
 			if (statistic) {
-				setIsWarningOpen(true);
+				dispatch(showWarning(t('id.already.exists.list')));
 				return;
 			}
 		}
@@ -222,123 +220,113 @@ function DialogStatisticProgression({ isOpen, setIsOpen, model, isNew, onAccept,
 	const getGraphContent = () => <Graph xValues={xValues} yValues={yValues} disabled={type !== SELECTION_TYPE.FIX} />;
 
 	return (
-		<>
-			<Dialog
-				title={`${t('set.statistic.progression')}...`}
-				isOpen={isOpen}
-				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-				onClose={handleReject}
-				initialWidth='600px'
-				initialHeight='700px'
-			>
-				<Flex column spacedLarge fillWidth fillHeight>
-					<Groupbox title={t('information')}>
+		<Dialog
+			title={`${t('set.statistic.progression')}...`}
+			isOpen={isOpen}
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			onClose={handleReject}
+			initialWidth='600px'
+			initialHeight='700px'
+		>
+			<Flex column spacedLarge fillWidth fillHeight>
+				<Groupbox title={t('information')}>
+					<Form>
+						<Label>{t('statistic.id')}</Label>
+						<Value>
+							<Dropdown
+								selectedID={statisticID}
+								onChange={setStatisticID}
+								options={Project.current!.battleSystem.statistics}
+								displayIDs
+							/>
+						</Value>
+						<Label>{t('maximum.value')}</Label>
+						<Value>
+							<DynamicValueSelector
+								value={maximumValue}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+							/>
+						</Value>
+					</Form>
+				</Groupbox>
+				<RadioGroup selected={type} onChange={setType}>
+					<Flex one column spacedLarge>
+						<RadioButton value={SELECTION_TYPE.FIX}>{t('fix')}</RadioButton>
+						<Flex one>
+							<Tab
+								titles={Base.mapListIndex([t('graph'), t('table')])}
+								contents={[getGraphContent(), getTableContent()]}
+								scrollableContent
+								hideScroll
+								disabled={type !== SELECTION_TYPE.FIX}
+							/>
+						</Flex>
 						<Form>
-							<Label>{t('statistic.id')}</Label>
-							<Value>
-								<Dropdown
-									selectedID={statisticID}
-									onChange={setStatisticID}
-									options={Project.current!.battleSystem.statistics}
-									displayIDs
-								/>
-							</Value>
-							<Label>{t('maximum.value')}</Label>
+							<Label disabled={type !== SELECTION_TYPE.FIX}>{t('initial.value')}</Label>
 							<Value>
 								<DynamicValueSelector
-									value={maximumValue}
+									value={initialValue}
+									onChangeKind={handleChangeInitialValue}
+									onChangeValue={handleChangeInitialValue}
 									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+									disabled={type !== SELECTION_TYPE.FIX}
+								/>
+							</Value>
+							<Label disabled={type !== SELECTION_TYPE.FIX}>{t('final.value')}</Label>
+							<Value>
+								<DynamicValueSelector
+									value={finalValue}
+									onChangeKind={handleChangeFinalValue}
+									onChangeValue={handleChangeFinalValue}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+									disabled={type !== SELECTION_TYPE.FIX}
+								/>
+							</Value>
+							<Label disabled={type !== SELECTION_TYPE.FIX}>{t('random.variation')}</Label>
+							<Value>
+								<DynamicValueSelector
+									value={randomVariation}
+									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
+									disabled={type !== SELECTION_TYPE.FIX}
 								/>
 							</Value>
 						</Form>
-					</Groupbox>
-					<RadioGroup selected={type} onChange={setType}>
-						<Flex one column spacedLarge>
-							<RadioButton value={SELECTION_TYPE.FIX}>{t('fix')}</RadioButton>
-							<Flex one>
-								<Tab
-									titles={Base.mapListIndex([t('graph'), t('table')])}
-									contents={[getGraphContent(), getTableContent()]}
-									scrollableContent
-									hideScroll
-									disabled={type !== SELECTION_TYPE.FIX}
-								/>
-							</Flex>
-							<Form>
-								<Label disabled={type !== SELECTION_TYPE.FIX}>{t('initial.value')}</Label>
-								<Value>
-									<DynamicValueSelector
-										value={initialValue}
-										onChangeKind={handleChangeInitialValue}
-										onChangeValue={handleChangeInitialValue}
-										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
-										disabled={type !== SELECTION_TYPE.FIX}
-									/>
-								</Value>
-								<Label disabled={type !== SELECTION_TYPE.FIX}>{t('final.value')}</Label>
-								<Value>
-									<DynamicValueSelector
-										value={finalValue}
-										onChangeKind={handleChangeFinalValue}
-										onChangeValue={handleChangeFinalValue}
-										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
-										disabled={type !== SELECTION_TYPE.FIX}
-									/>
-								</Value>
-								<Label disabled={type !== SELECTION_TYPE.FIX}>{t('random.variation')}</Label>
-								<Value>
-									<DynamicValueSelector
-										value={randomVariation}
-										optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.NUMBER}
-										disabled={type !== SELECTION_TYPE.FIX}
-									/>
-								</Value>
-							</Form>
-							<Flex column>
-								<Slider
-									value={equation}
-									onChange={handleChangeEquation}
-									min={-4}
-									max={4}
-									fillWidth
-									disabled={type !== SELECTION_TYPE.FIX}
-								/>
-								<Flex>
-									<Flex one disabledLabel={type !== SELECTION_TYPE.FIX}>
-										{t('slow')}
-									</Flex>
-									<Flex one centerH disabledLabel={type !== SELECTION_TYPE.FIX}>
-										{t('linear')}
-									</Flex>
-									<Flex one rightH disabledLabel={type !== SELECTION_TYPE.FIX}>
-										{t('fast')}
-									</Flex>
+						<Flex column>
+							<Slider
+								value={equation}
+								onChange={handleChangeEquation}
+								min={-4}
+								max={4}
+								fillWidth
+								disabled={type !== SELECTION_TYPE.FIX}
+							/>
+							<Flex>
+								<Flex one disabledLabel={type !== SELECTION_TYPE.FIX}>
+									{t('slow')}
+								</Flex>
+								<Flex one centerH disabledLabel={type !== SELECTION_TYPE.FIX}>
+									{t('linear')}
+								</Flex>
+								<Flex one rightH disabledLabel={type !== SELECTION_TYPE.FIX}>
+									{t('fast')}
 								</Flex>
 							</Flex>
-							<Button onClick={handleClickReset} disabled={type !== SELECTION_TYPE.FIX}>
-								{t('reset')}
-							</Button>
-							<Flex spaced>
-								<RadioButton value={SELECTION_TYPE.FORMULA}>{t('formula')}</RadioButton>
-								<DynamicValueSelector
-									value={formula}
-									optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
-									disabled={type !== SELECTION_TYPE.FORMULA}
-								/>
-							</Flex>
 						</Flex>
-					</RadioGroup>
-				</Flex>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={isWarningOpen}
-				footer={<FooterOK onOK={handleCloseWarning} />}
-				onClose={handleCloseWarning}
-			>
-				<p>{t('id.already.exists.list')}</p>
-			</Dialog>
-		</>
+						<Button onClick={handleClickReset} disabled={type !== SELECTION_TYPE.FIX}>
+							{t('reset')}
+						</Button>
+						<Flex spaced>
+							<RadioButton value={SELECTION_TYPE.FORMULA}>{t('formula')}</RadioButton>
+							<DynamicValueSelector
+								value={formula}
+								optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.FORMULA}
+								disabled={type !== SELECTION_TYPE.FORMULA}
+							/>
+						</Flex>
+					</Flex>
+				</RadioGroup>
+			</Flex>
+		</Dialog>
 	);
 }
 

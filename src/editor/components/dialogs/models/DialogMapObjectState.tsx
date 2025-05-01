@@ -9,16 +9,17 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { Project } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateNumber from '../../../hooks/useStateNumber';
+import { showWarning } from '../../../store';
 import Dropdown from '../../Dropdown';
 import Flex from '../../Flex';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
-import FooterOK from '../footers/FooterOK';
 
 type Props = {
 	isOpen: boolean;
@@ -30,12 +31,13 @@ type Props = {
 };
 
 function DialogMapObjectState({ isOpen, setIsOpen, model, isNew, onAccept, onReject }: Props) {
+	const state = model as Model.MapObjectState;
+
 	const { t } = useTranslation();
 
-	const [isOpenWarning, setIsOpenWarning] = useState(false);
 	const [stateID, setStateID] = useStateNumber();
 
-	const state = model as Model.MapObjectState;
+	const dispatch = useDispatch();
 
 	const initialize = () => {
 		if (isNew) {
@@ -53,17 +55,20 @@ function DialogMapObjectState({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 			onAccept();
 			setIsOpen(false);
 		} else {
-			setIsOpenWarning(true);
+			dispatch(
+				showWarning(
+					`${t('cannot.duplicate.state')} ${Model.Base.getByID(
+						Project.current!.commonEvents.states,
+						stateID
+					)?.toStringNameID()}`
+				)
+			);
 		}
 	};
 
 	const handleReject = () => {
 		onReject?.();
 		setIsOpen(false);
-	};
-
-	const handleCloseWarning = () => {
-		setIsOpenWarning(false);
 	};
 
 	useEffect(() => {
@@ -74,35 +79,22 @@ function DialogMapObjectState({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 	}, [isOpen]);
 
 	return (
-		<>
-			<Dialog
-				title={`${t('select.a.state')}...`}
-				isOpen={isOpen}
-				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-				onClose={handleReject}
-			>
-				<Flex spacedLarge>
-					{t('state.id')}:
-					<Dropdown
-						selectedID={stateID}
-						onChange={setStateID}
-						options={Project.current!.commonEvents.states}
-						displayIDs
-					/>
-				</Flex>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={isOpenWarning}
-				footer={<FooterOK onOK={handleCloseWarning} />}
-				onClose={handleCloseWarning}
-			>
-				<p>{`${t('cannot.duplicate.state')} ${Model.Base.getByID(
-					Project.current!.commonEvents.states,
-					stateID
-				)?.toStringNameID()}`}</p>
-			</Dialog>
-		</>
+		<Dialog
+			title={`${t('select.a.state')}...`}
+			isOpen={isOpen}
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			onClose={handleReject}
+		>
+			<Flex spacedLarge>
+				{t('state.id')}:
+				<Dropdown
+					selectedID={stateID}
+					onChange={setStateID}
+					options={Project.current!.commonEvents.states}
+					displayIDs
+				/>
+			</Flex>
+		</Dialog>
 	);
 }
 

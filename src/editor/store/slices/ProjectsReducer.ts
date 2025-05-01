@@ -25,6 +25,7 @@ const ProjectsSlice = createSlice({
 		list: [] as Model.ProjectPreview[],
 		menuIndex: 1,
 		copiedItems: null as CopiedItemsType | null,
+		warning: '',
 	},
 	reducers: {
 		setCurrentProject(state, action: PayloadAction<Model.ProjectPreview | null>) {
@@ -52,6 +53,9 @@ const ProjectsSlice = createSlice({
 		setCopiedItems(state, action: PayloadAction<CopiedItemsType | null>) {
 			state.copiedItems = action.payload;
 		},
+		showWarning(state, action: PayloadAction<string>) {
+			state.warning = action.payload;
+		},
 	},
 });
 
@@ -64,5 +68,6 @@ export const {
 	clearProjects,
 	setProjectMenuIndex,
 	setCopiedItems,
+	showWarning,
 } = ProjectsSlice.actions;
 export const ProjectsReducer = ProjectsSlice.reducer;

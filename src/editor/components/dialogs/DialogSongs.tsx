@@ -12,6 +12,7 @@
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPause, FaPlay, FaStop } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
 import { BUTTON_TYPE, DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, SONG_KIND, Utils } from '../../common';
 import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { LocalFile, Node, Project } from '../../core';
@@ -19,6 +20,7 @@ import { DynamicValue } from '../../core/DynamicValue';
 import { Model } from '../../Editor';
 import useStateBool from '../../hooks/useStateBool';
 import useStateDynamicValue from '../../hooks/useStateDynamicValue';
+import { showWarning } from '../../store';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
 import DynamicValueSelector from '../DynamicValueSelector';
@@ -30,7 +32,6 @@ import SliderDynamic from '../SliderDynamic';
 import Tree, { TREES_MIN_WIDTH } from '../Tree';
 import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import FooterOK from './footers/FooterOK';
 
 type Props = {
 	title?: string;
@@ -61,7 +62,6 @@ function DialogSongs({
 }: Props) {
 	const { t } = useTranslation();
 
-	const [isDialogWarningSelectionOpen, setIsDialogWarningSelectionOpen] = useState(false);
 	const [isInitiating, setIsInitiating] = useState(false);
 	const [songs, setSongs] = useState<Node[]>([]);
 	const [songsAvailable, setSongsAvailable] = useState<Node[]>([]);
@@ -78,6 +78,8 @@ function DialogSongs({
 	const [isPaused, setIsPaused] = useStateBool();
 	const [isStopped, setIsStopped] = useStateBool();
 	const [selectedKind, setSelectedKind] = useState(kind);
+
+	const dispatch = useDispatch();
 
 	const displayOptionsStartEnd = useMemo(
 		() => selectedKind === SONG_KIND.MUSIC || selectedKind === SONG_KIND.BACKGROUND_SOUND,
@@ -205,10 +207,6 @@ function DialogSongs({
 		]);
 	};
 
-	const handleCloseWarningSelectionOpen = () => {
-		setIsDialogWarningSelectionOpen(false);
-	};
-
 	const handleStop = () => {
 		playingHowl!.stop();
 		setIsPaused(false);
@@ -253,7 +251,7 @@ function DialogSongs({
 			await Project.current!.songs.save();
 		} else {
 			if (selectedSong === null || !isSelectedLeftList) {
-				setIsDialogWarningSelectionOpen(true);
+				dispatch(showWarning(t('warning.asset.selection')));
 			} else {
 				Project.current!.songs.list[selectedKind!] = songs.map((node) => node.content as Model.Song);
 				await Project.current!.songs.save();
@@ -388,66 +386,55 @@ function DialogSongs({
 	};
 
 	return (
-		<>
-			<Dialog
-				title={`${title ?? t(kind === undefined ? 'songs.manager' : 'select.song')}...`}
-				isOpen={isOpen}
-				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-				initialWidth='70%'
-				initialHeight='70%'
-				onClose={handleReject}
-				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
-			>
-				<Flex spacedLarge fillWidth>
-					{kind === undefined && (
-						<Flex>
-							<Tree
-								list={folders}
-								minWidth={TREES_MIN_WIDTH}
-								onSelectedItem={handleChangeFolder}
-								cannotAdd
-								cannotEdit
-								cannotDragDrop
-								cannotDelete
-								doNotShowID
-							/>
-						</Flex>
-					)}
-					{selectedKind ? (
-						<PanelAssetsPreviewer
-							assetID={songID}
-							dynamicValueID={newDynamicSongID}
-							list={songs}
-							itemsAvailable={songsAvailable}
-							selectedItem={selectedSong}
-							isSelectedLeftList={isSelectedLeftList}
-							setIsSelectedLeftList={setIsSelectedLeftList}
-							isInitiating={isInitiating}
-							setIsInitiating={setIsInitiating}
-							onChangeSelectedItem={handleChangeSelectedSong}
-							onRefresh={handleRefresh}
-							onListUpdated={handleListUpdated}
-							content={getPreviewerContent()}
-							options={getPreviewerOptionsContent()}
-							active={active}
-							basePath={Model.Song.getFolder(selectedKind, false, '')}
-							importTypes='audio/mp3, audio/ogg, audio/wav'
+		<Dialog
+			title={`${title ?? t(kind === undefined ? 'songs.manager' : 'select.song')}...`}
+			isOpen={isOpen}
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			initialWidth='70%'
+			initialHeight='70%'
+			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+		>
+			<Flex spacedLarge fillWidth>
+				{kind === undefined && (
+					<Flex>
+						<Tree
+							list={folders}
+							minWidth={TREES_MIN_WIDTH}
+							onSelectedItem={handleChangeFolder}
+							cannotAdd
+							cannotEdit
+							cannotDragDrop
+							cannotDelete
+							doNotShowID
 						/>
-					) : (
-						<Flex one />
-					)}
-				</Flex>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={isDialogWarningSelectionOpen}
-				footer={<FooterOK onOK={handleCloseWarningSelectionOpen} />}
-				onClose={handleCloseWarningSelectionOpen}
-				zIndex={Z_INDEX_LEVEL.LAYER_TOP}
-			>
-				<p>{t('warning.asset.selection')}</p>
-			</Dialog>
-		</>
+					</Flex>
+				)}
+				{selectedKind ? (
+					<PanelAssetsPreviewer
+						assetID={songID}
+						dynamicValueID={newDynamicSongID}
+						list={songs}
+						itemsAvailable={songsAvailable}
+						selectedItem={selectedSong}
+						isSelectedLeftList={isSelectedLeftList}
+						setIsSelectedLeftList={setIsSelectedLeftList}
+						isInitiating={isInitiating}
+						setIsInitiating={setIsInitiating}
+						onChangeSelectedItem={handleChangeSelectedSong}
+						onRefresh={handleRefresh}
+						onListUpdated={handleListUpdated}
+						content={getPreviewerContent()}
+						options={getPreviewerOptionsContent()}
+						active={active}
+						basePath={Model.Song.getFolder(selectedKind, false, '')}
+						importTypes='audio/mp3, audio/ogg, audio/wav'
+					/>
+				) : (
+					<Flex one />
+				)}
+			</Flex>
+		</Dialog>
 	);
 }
 

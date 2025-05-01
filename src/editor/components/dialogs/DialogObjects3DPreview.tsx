@@ -11,10 +11,12 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { CUSTOM_SHAPE_KIND, OBJECT_COLLISION_KIND, PICTURE_KIND, SHAPE_KIND } from '../../common';
 import { Node, Project } from '../../core';
 import { Model } from '../../Editor';
 import useStateNumber from '../../hooks/useStateNumber';
+import { showWarning } from '../../store';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../AssetSelector';
 import Dropdown from '../Dropdown';
 import Flex from '../Flex';
@@ -23,9 +25,8 @@ import Groupbox from '../Groupbox';
 import InputNumber from '../InputNumber';
 import PanelAssetsPreviewer from '../panels/PanelAssetsPreviewer';
 import PreviewerObject3D from '../PreviewerObject3D';
-import Dialog, { Z_INDEX_LEVEL } from './Dialog';
+import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import FooterOK from './footers/FooterOK';
 
 type Props = {
 	isOpen: boolean;
@@ -38,7 +39,6 @@ type Props = {
 function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
-	const [isDialogWarningSelectionOpen, setIsDialogWarningSelectionOpen] = useState(false);
 	const [triggerUpdate, setTriggerUpdate] = useState(false);
 	const [isInitiating, setIsInitiating] = useState(false);
 	const [objects3D, setObjects3D] = useState<Node[]>([]);
@@ -50,6 +50,8 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, onAccept, onRej
 	const [widthPixels, setWidthPixels] = useStateNumber();
 	const [heightPixels, setHeightPixels] = useStateNumber();
 	const [depthPixels, setDepthPixels] = useStateNumber();
+
+	const dispatch = useDispatch();
 
 	const isCustom = selectedObject3D?.shapeKind === SHAPE_KIND.CUSTOM;
 	const isBox = selectedObject3D?.shapeKind === SHAPE_KIND.BOX;
@@ -165,13 +167,9 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, onAccept, onRej
 		setTriggerUpdate(true);
 	};
 
-	const handleCloseWarningSelectionOpen = () => {
-		setIsDialogWarningSelectionOpen(false);
-	};
-
 	const handleAccept = async () => {
 		if (!selectedObject3D || selectedObject3D.id === -1) {
-			setIsDialogWarningSelectionOpen(true);
+			dispatch(showWarning(t('warning.asset.selection')));
 		} else {
 			updateObjects3DList();
 			await Project.current!.specialElements.save();
@@ -355,37 +353,26 @@ function DialogObjects3DPreview({ isOpen, setIsOpen, object3DID, onAccept, onRej
 	};
 
 	return (
-		<>
-			<Dialog
-				title={`${t('threed.objects')}...`}
-				isOpen={isOpen}
-				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-				initialWidth='70%'
-				initialHeight='70%'
-				onClose={handleReject}
-			>
-				<PanelAssetsPreviewer
-					constructorType={Model.Object3D}
-					assetID={object3DID}
-					list={objects3D}
-					selectedItem={selectedObject3D}
-					isInitiating={isInitiating}
-					setIsInitiating={setIsInitiating}
-					onChangeSelectedItem={handleChangeSelectedObject3D}
-					content={getPreviewerContent()}
-					options={getPreviewerOptions()}
-				/>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={isDialogWarningSelectionOpen}
-				footer={<FooterOK onOK={handleCloseWarningSelectionOpen} />}
-				onClose={handleCloseWarningSelectionOpen}
-				zIndex={Z_INDEX_LEVEL.LAYER_TOP}
-			>
-				<p>{t('warning.asset.selection')}</p>
-			</Dialog>
-		</>
+		<Dialog
+			title={`${t('threed.objects')}...`}
+			isOpen={isOpen}
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			initialWidth='70%'
+			initialHeight='70%'
+			onClose={handleReject}
+		>
+			<PanelAssetsPreviewer
+				constructorType={Model.Object3D}
+				assetID={object3DID}
+				list={objects3D}
+				selectedItem={selectedObject3D}
+				isInitiating={isInitiating}
+				setIsInitiating={setIsInitiating}
+				onChangeSelectedItem={handleChangeSelectedObject3D}
+				content={getPreviewerContent()}
+				options={getPreviewerOptions()}
+			/>
+		</Dialog>
 	);
 }
 

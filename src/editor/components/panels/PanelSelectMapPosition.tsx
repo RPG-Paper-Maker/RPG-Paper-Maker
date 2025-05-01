@@ -11,11 +11,11 @@
 
 import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { Node, Position, Project } from '../../core';
 import { Model, Scene } from '../../Editor';
 import useStateNumber from '../../hooks/useStateNumber';
-import Dialog, { Z_INDEX_LEVEL } from '../dialogs/Dialog';
-import FooterOK from '../dialogs/footers/FooterOK';
+import { showWarning } from '../../store';
 import Flex from '../Flex';
 import Form, { Label, Value } from '../Form';
 import Groupbox from '../Groupbox';
@@ -36,13 +36,14 @@ const PanelSelectMapPosition = forwardRef(
 	({ defaultMapID, defaultX, defaultY, defaultYp, defaultZ, onAccept }: Props, ref) => {
 		const { t } = useTranslation();
 
-		const [isDialogWarningSelectionOpen, setIsDialogWarningSelectionOpen] = useState(false);
 		const [mapForcedCurrentSelectedItemID, setMapForcedCurrentSelectedItemID] = useState<number | null>(null);
 		const [x, setX] = useStateNumber();
 		const [y, setY] = useStateNumber();
 		const [yp, setYp] = useStateNumber();
 		const [z, setZ] = useStateNumber();
 		const [currentMapTag, setCurrentMapTag] = useState<Model.TreeMapTag>();
+
+		const dispatch = useDispatch();
 
 		const disabledCoords = useMemo(() => !currentMapTag || currentMapTag.isFolder(), [currentMapTag]);
 
@@ -121,16 +122,12 @@ const PanelSelectMapPosition = forwardRef(
 			}
 		};
 
-		const handleCloseWarningSelectionOpen = () => {
-			setIsDialogWarningSelectionOpen(false);
-		};
-
 		const accept = () => {
 			if (currentMapTag && !currentMapTag.isFolder()) {
 				onAccept(currentMapTag.id, x, y, yp, z);
 				return true;
 			} else {
-				setIsDialogWarningSelectionOpen(true);
+				dispatch(showWarning(t('you.should.select.map.not.folder')));
 			}
 			return false;
 		};
@@ -141,58 +138,42 @@ const PanelSelectMapPosition = forwardRef(
 		}));
 
 		return (
-			<>
-				<Flex spaced fillWidth fillHeight>
-					<Flex fillHeight>
-						<TreeMaps
-							onSelectedItem={handleSelectedMapItem}
-							forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
-							setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
-							cannotEdit
-							minWidth={200}
-						/>
-					</Flex>
-					<Flex one fillWidth fillHeight>
-						<MapPositionSelector currentMapTag={currentMapTag} onCursorUpdated={handleCursorUpdated} />
-					</Flex>
-					<Flex fillHeight>
-						<Groupbox title={t('coordinates')} disabled={disabledCoords}>
-							<Form>
-								<Label disabled={disabledCoords}>X</Label>
-								<Value>
-									<InputNumber value={x} onChange={handleChangeX} min={0} disabled={disabledCoords} />
-								</Value>
-								<Label disabled={disabledCoords}>Y</Label>
-								<Value>
-									<InputNumber value={y} onChange={handleChangeY} disabled={disabledCoords} />
-								</Value>
-								<Label disabled={disabledCoords}>Y+</Label>
-								<Value>
-									<InputNumber
-										value={yp}
-										onChange={handleChangeYp}
-										disabled={disabledCoords}
-										min={0}
-									/>
-								</Value>
-								<Label disabled={disabledCoords}>Z</Label>
-								<Value>
-									<InputNumber value={z} onChange={handleChangeZ} disabled={disabledCoords} min={0} />
-								</Value>
-							</Form>
-						</Groupbox>
-					</Flex>
+			<Flex spaced fillWidth fillHeight>
+				<Flex fillHeight>
+					<TreeMaps
+						onSelectedItem={handleSelectedMapItem}
+						forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
+						setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
+						cannotEdit
+						minWidth={200}
+					/>
 				</Flex>
-				<Dialog
-					title={t('warning')}
-					isOpen={isDialogWarningSelectionOpen}
-					footer={<FooterOK onOK={handleCloseWarningSelectionOpen} />}
-					onClose={handleCloseWarningSelectionOpen}
-					zIndex={Z_INDEX_LEVEL.LAYER_TOP}
-				>
-					<p>{t('you.should.select.map.not.folder')}</p>
-				</Dialog>
-			</>
+				<Flex one fillWidth fillHeight>
+					<MapPositionSelector currentMapTag={currentMapTag} onCursorUpdated={handleCursorUpdated} />
+				</Flex>
+				<Flex fillHeight>
+					<Groupbox title={t('coordinates')} disabled={disabledCoords}>
+						<Form>
+							<Label disabled={disabledCoords}>X</Label>
+							<Value>
+								<InputNumber value={x} onChange={handleChangeX} min={0} disabled={disabledCoords} />
+							</Value>
+							<Label disabled={disabledCoords}>Y</Label>
+							<Value>
+								<InputNumber value={y} onChange={handleChangeY} disabled={disabledCoords} />
+							</Value>
+							<Label disabled={disabledCoords}>Y+</Label>
+							<Value>
+								<InputNumber value={yp} onChange={handleChangeYp} disabled={disabledCoords} min={0} />
+							</Value>
+							<Label disabled={disabledCoords}>Z</Label>
+							<Value>
+								<InputNumber value={z} onChange={handleChangeZ} disabled={disabledCoords} min={0} />
+							</Value>
+						</Form>
+					</Groupbox>
+				</Flex>
+			</Flex>
 		);
 	}
 );

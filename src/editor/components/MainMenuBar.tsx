@@ -918,7 +918,7 @@ function MainMenuBar() {
 			<DialogVideos manager isOpen={isDialogVideosOpen} setIsOpen={setIsDialogVideosOpen} />
 			<DialogSongs isOpen={isDialogSongsOpen} setIsOpen={setIsDialogSongsOpen} />
 			<DialogShapes isOpen={isDialogShapesOpen} setIsOpen={setIsDialogShapesOpen} />
-			<DialogFonts isOpen={isDialogFontsOpen} setIsOpen={setIsDialogFontsOpen} />
+			<DialogFonts manager isOpen={isDialogFontsOpen} setIsOpen={setIsDialogFontsOpen} />
 			<DialogChangeLanguage isOpen={isDialogChangeLanguageOpen} setIsOpen={setIsDialogChangeLanguageOpen} />
 			<Dialog
 				title={t('warning')}

@@ -12,10 +12,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPause, FaPlay, FaStop } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
 import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { LocalFile, Node, Project } from '../../core';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Model } from '../../Editor';
+import { showWarning } from '../../store';
 import Button from '../Button';
 import Flex from '../Flex';
 import Loader from '../Loader';
@@ -23,7 +25,6 @@ import PanelAssetsPreviewer from '../panels/PanelAssetsPreviewer';
 import Tree, { TREES_MIN_WIDTH } from '../Tree';
 import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import FooterOK from './footers/FooterOK';
 
 type Props = {
 	isOpen: boolean;
@@ -48,7 +49,6 @@ function DialogVideos({
 }: Props) {
 	const { t } = useTranslation();
 
-	const [isDialogWarningSelectionOpen, setIsDialogWarningSelectionOpen] = useState(false);
 	const [isInitiating, setIsInitiating] = useState(false);
 	const [videos, setVideos] = useState<Node[]>([]);
 	const [videosAvailable, setVideosAvailable] = useState<Node[]>([]);
@@ -59,6 +59,8 @@ function DialogVideos({
 
 	const playerRef = useRef<HTMLVideoElement>(null);
 	const sourceRef = useRef<HTMLSourceElement>(null);
+
+	const dispatch = useDispatch();
 
 	const folders = useMemo(() => (manager ? [Node.create(Model.TreeMapTag.create(-1, 'Videos'))] : []), [manager]);
 	const isVideoPlayable = useMemo(
@@ -137,10 +139,6 @@ function DialogVideos({
 		]);
 	};
 
-	const handleCloseWarningSelectionOpen = () => {
-		setIsDialogWarningSelectionOpen(false);
-	};
-
 	const handleListUpdated = () => {
 		if (manager) {
 			Project.current!.videos.list = Node.createListFromNodes(videos);
@@ -173,7 +171,7 @@ function DialogVideos({
 			await Project.current!.videos.save();
 		} else {
 			if (selectedVideo === null || !isSelectedLeftList) {
-				setIsDialogWarningSelectionOpen(true);
+				dispatch(showWarning(t('warning.asset.selection')));
 			} else {
 				Project.current!.videos.list = videos.map((node) => node.content as Model.Video);
 				await Project.current!.videos.save();
@@ -233,61 +231,50 @@ function DialogVideos({
 	};
 
 	return (
-		<>
-			<Dialog
-				title={`${t(manager ? 'videos.manager' : 'select.video')}...`}
-				isOpen={isOpen}
-				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-				initialWidth='70%'
-				initialHeight='70%'
-				onClose={handleReject}
-				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
-			>
-				<Flex spacedLarge fillWidth>
-					{manager && (
-						<Flex>
-							<Tree
-								list={folders}
-								minWidth={TREES_MIN_WIDTH}
-								cannotAdd
-								cannotEdit
-								cannotDragDrop
-								cannotDelete
-								doNotShowID
-							/>
-						</Flex>
-					)}
-					<PanelAssetsPreviewer
-						assetID={videoID}
-						dynamicValueID={newDynamicVideoID}
-						list={videos}
-						itemsAvailable={videosAvailable}
-						selectedItem={selectedVideo}
-						isSelectedLeftList={isSelectedLeftList}
-						setIsSelectedLeftList={setIsSelectedLeftList}
-						isInitiating={isInitiating}
-						setIsInitiating={setIsInitiating}
-						onChangeSelectedItem={handleChangeSelectedVideo}
-						onRefresh={handleRefresh}
-						onListUpdated={handleListUpdated}
-						content={getPreviewerContent()}
-						options={getPreviewerOptionsContent()}
-						active={active}
-						basePath={Model.Video.getFolder(false, '')}
-						importTypes='video/mp4,video/x-m4v,video/*'
-					/>
-				</Flex>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={isDialogWarningSelectionOpen}
-				footer={<FooterOK onOK={handleCloseWarningSelectionOpen} />}
-				onClose={handleCloseWarningSelectionOpen}
-				zIndex={Z_INDEX_LEVEL.LAYER_TOP}
-			>
-				<p>{t('warning.asset.selection')}</p>
-			</Dialog>
-		</>
+		<Dialog
+			title={`${t(manager ? 'videos.manager' : 'select.video')}...`}
+			isOpen={isOpen}
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			initialWidth='70%'
+			initialHeight='70%'
+			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+		>
+			<Flex spacedLarge fillWidth>
+				{manager && (
+					<Flex>
+						<Tree
+							list={folders}
+							minWidth={TREES_MIN_WIDTH}
+							cannotAdd
+							cannotEdit
+							cannotDragDrop
+							cannotDelete
+							doNotShowID
+						/>
+					</Flex>
+				)}
+				<PanelAssetsPreviewer
+					assetID={videoID}
+					dynamicValueID={newDynamicVideoID}
+					list={videos}
+					itemsAvailable={videosAvailable}
+					selectedItem={selectedVideo}
+					isSelectedLeftList={isSelectedLeftList}
+					setIsSelectedLeftList={setIsSelectedLeftList}
+					isInitiating={isInitiating}
+					setIsInitiating={setIsInitiating}
+					onChangeSelectedItem={handleChangeSelectedVideo}
+					onRefresh={handleRefresh}
+					onListUpdated={handleListUpdated}
+					content={getPreviewerContent()}
+					options={getPreviewerOptionsContent()}
+					active={active}
+					basePath={Model.Video.getFolder(false, '')}
+					importTypes='video/mp4,video/x-m4v,video/*'
+				/>
+			</Flex>
+		</Dialog>
 	);
 }
 

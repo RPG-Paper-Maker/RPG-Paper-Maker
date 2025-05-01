@@ -13,8 +13,9 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Node } from '../../core';
-import { RootState, setCopiedItems } from '../../store';
+import { RootState, setCopiedItems, showWarning } from '../../store';
 import Dialog, { Z_INDEX_LEVEL } from '../dialogs/Dialog';
+import FooterOK from '../dialogs/footers/FooterOK';
 import Flex from '../Flex';
 import Loader from '../Loader';
 import PanelNoProject from './PanelNoProject';
@@ -29,8 +30,13 @@ function PanelMain() {
 	const loadingLabel = useSelector((state: RootState) => state.projects.loadingBarLabel);
 	const needsReloadPageUpdate = useSelector((state: RootState) => state.triggers.needsReloadPageUpdate);
 	const needsReloadPageClearCache = useSelector((state: RootState) => state.triggers.needsReloadPageClearCache);
+	const warning = useSelector((state: RootState) => state.projects.warning);
 
 	const dispatch = useDispatch();
+
+	const handleCloseWarning = () => {
+		dispatch(showWarning(''));
+	};
 
 	useEffect(() => {
 		const handleFocus = async () => {
@@ -56,6 +62,15 @@ function PanelMain() {
 			</Dialog>
 			<Dialog title={t('warning')} isOpen={needsReloadPageClearCache} zIndex={Z_INDEX_LEVEL.LAYER_TOP}>
 				<p>{`${t('warning.refresh.page.cache.clearing')}.`}</p>
+			</Dialog>
+			<Dialog
+				title={t('warning')}
+				isOpen={!!warning}
+				zIndex={Z_INDEX_LEVEL.LAYER_TOP}
+				footer={<FooterOK onOK={handleCloseWarning} />}
+				onClose={handleCloseWarning}
+			>
+				<p>{warning}</p>
 			</Dialog>
 		</>
 	);

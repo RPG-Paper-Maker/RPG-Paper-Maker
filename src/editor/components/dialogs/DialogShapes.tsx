@@ -11,17 +11,18 @@
 
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { CUSTOM_SHAPE_KIND } from '../../common';
 import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { Node, Project } from '../../core';
 import { Manager, Model } from '../../Editor';
+import { showWarning } from '../../store';
 import Flex from '../Flex';
 import PanelAssetsPreviewer from '../panels/PanelAssetsPreviewer';
 import PreviewerObject3D from '../PreviewerObject3D';
 import Tree, { TREES_MIN_WIDTH } from '../Tree';
 import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import FooterOK from './footers/FooterOK';
 
 type Props = {
 	kind?: CUSTOM_SHAPE_KIND;
@@ -35,13 +36,14 @@ type Props = {
 function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: Props) {
 	const { t } = useTranslation();
 
-	const [isDialogWarningSelectionOpen, setIsDialogWarningSelectionOpen] = useState(false);
 	const [isInitiating, setIsInitiating] = useState(false);
 	const [shapes, setShapes] = useState<Node[]>([]);
 	const [shapesAvailable, setShapesAvailable] = useState<Node[]>([]);
 	const [selectedShape, setSelectedShape] = useState<Model.Shape | null>(null);
 	const [isSelectedLeftList, setIsSelectedLeftList] = useState(true);
 	const [selectedKind, setSelectedKind] = useState(kind);
+
+	const dispatch = useDispatch();
 
 	const folders = useMemo(
 		() =>
@@ -125,10 +127,6 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 		]);
 	};
 
-	const handleCloseWarningSelectionOpen = () => {
-		setIsDialogWarningSelectionOpen(false);
-	};
-
 	const handleChangeFolder = (node: Node | null) => {
 		setSelectedKind(node && node.content.id >= 0 ? node.content.id : undefined);
 	};
@@ -145,7 +143,7 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 			setIsOpen(false);
 		} else {
 			if (selectedShape === null || !isSelectedLeftList) {
-				setIsDialogWarningSelectionOpen(true);
+				dispatch(showWarning(t('warning.asset.selection')));
 			} else {
 				await Project.current!.shapes.save();
 				onAccept?.(selectedShape);
@@ -197,64 +195,53 @@ function DialogShapes({ kind, isOpen, setIsOpen, shapeID, onAccept, onReject }: 
 	};
 
 	return (
-		<>
-			<Dialog
-				title={`${t('select.shape')}...`}
-				isOpen={isOpen}
-				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-				initialWidth='70%'
-				initialHeight='70%'
-				onClose={handleReject}
-				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
-			>
-				<Flex spacedLarge fillWidth>
-					{kind === undefined && (
-						<Flex>
-							<Tree
-								list={folders}
-								minWidth={TREES_MIN_WIDTH}
-								onSelectedItem={handleChangeFolder}
-								cannotAdd
-								cannotEdit
-								cannotDragDrop
-								cannotDelete
-								doNotShowID
-							/>
-						</Flex>
-					)}
-					{selectedKind ? (
-						<PanelAssetsPreviewer
-							assetID={shapeID}
-							list={shapes}
-							itemsAvailable={shapesAvailable}
-							selectedItem={selectedShape}
-							isSelectedLeftList={isSelectedLeftList}
-							setIsSelectedLeftList={setIsSelectedLeftList}
-							isInitiating={isInitiating}
-							setIsInitiating={setIsInitiating}
-							onChangeSelectedItem={handleChangeSelectedShape}
-							onRefresh={handleRefresh}
-							onListUpdated={handleListUpdated}
-							content={getPreviewerContent()}
-							options={getPreviewerOptionsContent()}
-							basePath={Model.Shape.getFolder(selectedKind, false, '')}
-							importTypes={importTypes}
+		<Dialog
+			title={`${t('select.shape')}...`}
+			isOpen={isOpen}
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			initialWidth='70%'
+			initialHeight='70%'
+			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+		>
+			<Flex spacedLarge fillWidth>
+				{kind === undefined && (
+					<Flex>
+						<Tree
+							list={folders}
+							minWidth={TREES_MIN_WIDTH}
+							onSelectedItem={handleChangeFolder}
+							cannotAdd
+							cannotEdit
+							cannotDragDrop
+							cannotDelete
+							doNotShowID
 						/>
-					) : (
-						<Flex one />
-					)}
-				</Flex>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={isDialogWarningSelectionOpen}
-				footer={<FooterOK onOK={handleCloseWarningSelectionOpen} />}
-				onClose={handleCloseWarningSelectionOpen}
-				zIndex={Z_INDEX_LEVEL.LAYER_TOP}
-			>
-				<p>{t('warning.asset.selection')}</p>
-			</Dialog>
-		</>
+					</Flex>
+				)}
+				{selectedKind ? (
+					<PanelAssetsPreviewer
+						assetID={shapeID}
+						list={shapes}
+						itemsAvailable={shapesAvailable}
+						selectedItem={selectedShape}
+						isSelectedLeftList={isSelectedLeftList}
+						setIsSelectedLeftList={setIsSelectedLeftList}
+						isInitiating={isInitiating}
+						setIsInitiating={setIsInitiating}
+						onChangeSelectedItem={handleChangeSelectedShape}
+						onRefresh={handleRefresh}
+						onListUpdated={handleListUpdated}
+						content={getPreviewerContent()}
+						options={getPreviewerOptionsContent()}
+						basePath={Model.Shape.getFolder(selectedKind, false, '')}
+						importTypes={importTypes}
+					/>
+				) : (
+					<Flex one />
+				)}
+			</Flex>
+		</Dialog>
 	);
 }
 

@@ -11,6 +11,7 @@
 
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { Utils } from '../../../common';
 import { Node, Project } from '../../../core';
 import { DynamicValue } from '../../../core/DynamicValue';
@@ -18,6 +19,7 @@ import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../../models';
+import { showWarning } from '../../../store';
 import Dropdown from '../../Dropdown';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
@@ -25,7 +27,6 @@ import Groupbox from '../../Groupbox';
 import Tree from '../../Tree';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
-import FooterOK from '../footers/FooterOK';
 import { CommandProps } from '../models';
 
 const TREES_STYLE_HEIGHT = { height: '100px' };
@@ -33,11 +34,12 @@ const TREES_STYLE_HEIGHT = { height: '100px' };
 function DialogCommandPlugin({ commandKind, isOpen, setIsOpen, list, onAccept, onReject }: CommandProps) {
 	const { t } = useTranslation();
 
-	const [isWarningDialogOpen, setIsWarningDialogOpen] = useState(false);
 	const [pluginID, setPluginID] = useStateNumber();
 	const [commandID, setCommandID] = useStateNumber();
 	const [parameters, setParameters] = useState<Node[]>([]);
 	const [, setTrigger] = useStateBool();
+
+	const dispatch = useDispatch();
 
 	const initialize = () => {
 		if (list) {
@@ -90,13 +92,9 @@ function DialogCommandPlugin({ commandKind, isOpen, setIsOpen, list, onAccept, o
 		);
 	};
 
-	const handleCloseWarning = () => {
-		setIsWarningDialogOpen(false);
-	};
-
 	const handleAccept = async () => {
 		if (Project.current!.scripts.plugins.length === 0 || commands.length === 0) {
-			setIsWarningDialogOpen(true);
+			dispatch(showWarning('You have to select a command to execute.'));
 			return;
 		}
 		setIsOpen(false);
@@ -123,64 +121,54 @@ function DialogCommandPlugin({ commandKind, isOpen, setIsOpen, list, onAccept, o
 	}, [isOpen]);
 
 	return (
-		<>
-			<Dialog
-				title={`${t('plugin')}...`}
-				isOpen={isOpen}
-				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-				onClose={handleReject}
-				initialWidth='600px'
-			>
-				<Flex column spacedLarge fillWidth>
-					<Form>
-						<Label disabled={disabledPlugin}>{t('plugin')}</Label>
-						<Value>
-							<Dropdown
-								selectedID={pluginID}
-								onChange={handleChangePlugin}
-								options={Project.current!.scripts.plugins}
-								disabled={disabledPlugin}
-								displayIDs
-								fillWidth
-							/>
-						</Value>
-						<Label disabled={disabled}>{t('command')}</Label>
-						<Value>
-							<Dropdown
-								selectedID={commandID}
-								onChange={(id) => handleChangeCommand(pluginID, id)}
-								options={commands}
-								disabled={disabled}
-								displayIDs
-								fillWidth
-							/>
-						</Value>
-					</Form>
-					<Groupbox title={t('parameters')} disabled={disabledParameters} fillWidth>
-						<Flex one style={TREES_STYLE_HEIGHT}>
-							<Tree
-								constructorType={Model.PluginParameter}
-								list={parameters}
-								disabled={disabledParameters}
-								noScrollOnForce
-								cannotAdd
-								cannotDelete
-								cannotDragDrop
-								byIndex
-							/>
-						</Flex>
-					</Groupbox>
-				</Flex>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={isWarningDialogOpen}
-				footer={<FooterOK onOK={handleCloseWarning} />}
-				onClose={handleCloseWarning}
-			>
-				<p>You have to select a command to execute.</p>
-			</Dialog>
-		</>
+		<Dialog
+			title={`${t('plugin')}...`}
+			isOpen={isOpen}
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			onClose={handleReject}
+			initialWidth='600px'
+		>
+			<Flex column spacedLarge fillWidth>
+				<Form>
+					<Label disabled={disabledPlugin}>{t('plugin')}</Label>
+					<Value>
+						<Dropdown
+							selectedID={pluginID}
+							onChange={handleChangePlugin}
+							options={Project.current!.scripts.plugins}
+							disabled={disabledPlugin}
+							displayIDs
+							fillWidth
+						/>
+					</Value>
+					<Label disabled={disabled}>{t('command')}</Label>
+					<Value>
+						<Dropdown
+							selectedID={commandID}
+							onChange={(id) => handleChangeCommand(pluginID, id)}
+							options={commands}
+							disabled={disabled}
+							displayIDs
+							fillWidth
+						/>
+					</Value>
+				</Form>
+				<Groupbox title={t('parameters')} disabled={disabledParameters} fillWidth>
+					<Flex one style={TREES_STYLE_HEIGHT}>
+						<Tree
+							constructorType={Model.PluginParameter}
+							list={parameters}
+							disabled={disabledParameters}
+							noScrollOnForce
+							cannotAdd
+							cannotDelete
+							cannotDragDrop
+							byIndex
+						/>
+					</Flex>
+				</Groupbox>
+			</Flex>
+		</Dialog>
 	);
 }
 

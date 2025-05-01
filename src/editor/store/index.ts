@@ -45,6 +45,7 @@ import {
 	setOpenLoading,
 	setProjectMenuIndex,
 	setProjects,
+	showWarning,
 } from './slices/ProjectsReducer';
 import {
 	setNeedsReloadMap,
@@ -118,6 +119,7 @@ export {
 	setSelectedPosition,
 	setUndoRedoIndex,
 	setUndoRedoLength,
+	showWarning,
 	store,
 	triggerData,
 	triggerFonts,

@@ -11,30 +11,33 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { Node, Project } from '../../core';
 import { Model } from '../../Editor';
+import { showWarning } from '../../store';
 import Flex from '../Flex';
 import PanelAssetsPreviewer from '../panels/PanelAssetsPreviewer';
 import Tree, { TREES_MIN_WIDTH } from '../Tree';
 import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import FooterOK from './footers/FooterOK';
 
 type Props = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
+	manager?: boolean;
 };
 
-function DialogFonts({ isOpen, setIsOpen }: Props) {
+function DialogFonts({ isOpen, setIsOpen, manager }: Props) {
 	const { t } = useTranslation();
 
-	const [isDialogWarningSelectionOpen, setIsDialogWarningSelectionOpen] = useState(false);
 	const [isInitiating, setIsInitiating] = useState(false);
 	const [fonts, setFonts] = useState<Node[]>([]);
 	const [fontsAvailable, setFontsAvailable] = useState<Node[]>([]);
 	const [selectedFont, setSelectedFont] = useState<Model.Font | null>(null);
 	const [isSelectedLeftList, setIsSelectedLeftList] = useState(true);
+
+	const dispatch = useDispatch();
 
 	const folders = useMemo(() => [Node.create(Model.TreeMapTag.create(-1, 'Fonts'))], []);
 
@@ -84,15 +87,17 @@ function DialogFonts({ isOpen, setIsOpen }: Props) {
 		]);
 	};
 
-	const handleCloseWarningSelectionOpen = () => {
-		setIsDialogWarningSelectionOpen(false);
-	};
-
 	const handleListUpdated = () => {
 		Project.current!.fonts.list = Node.createListFromNodes(fonts);
 	};
 
 	const handleAccept = async () => {
+		if (!manager) {
+			if (selectedFont === null || !isSelectedLeftList) {
+				dispatch(showWarning(t('warning.asset.selection')));
+				return;
+			}
+		}
 		await Project.current!.fonts.save();
 		await Project.current!.systems.saveStyleCSS();
 		setIsOpen(false);
@@ -114,55 +119,44 @@ function DialogFonts({ isOpen, setIsOpen }: Props) {
 	}, [isOpen]);
 
 	return (
-		<>
-			<Dialog
-				title={`${t('fonts.manager')}...`}
-				isOpen={isOpen}
-				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-				initialWidth='70%'
-				initialHeight='70%'
-				onClose={handleReject}
-				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
-			>
-				<Flex spacedLarge fillWidth>
-					<Flex>
-						<Tree
-							list={folders}
-							minWidth={TREES_MIN_WIDTH}
-							cannotAdd
-							cannotEdit
-							cannotDragDrop
-							cannotDelete
-							doNotShowID
-						/>
-					</Flex>
-					<PanelAssetsPreviewer
-						assetID={-1}
-						list={fonts}
-						itemsAvailable={fontsAvailable}
-						selectedItem={selectedFont}
-						isSelectedLeftList={isSelectedLeftList}
-						setIsSelectedLeftList={setIsSelectedLeftList}
-						isInitiating={isInitiating}
-						setIsInitiating={setIsInitiating}
-						onChangeSelectedItem={handleChangeSelectedFont}
-						onRefresh={handleRefresh}
-						onListUpdated={handleListUpdated}
-						basePath={Model.Font.getFolder(false, '')}
-						importTypes='.ttf, .otf, .woff, .woff2'
+		<Dialog
+			title={`${t('fonts.manager')}...`}
+			isOpen={isOpen}
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			initialWidth='70%'
+			initialHeight='70%'
+			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+		>
+			<Flex spacedLarge fillWidth>
+				<Flex>
+					<Tree
+						list={folders}
+						minWidth={TREES_MIN_WIDTH}
+						cannotAdd
+						cannotEdit
+						cannotDragDrop
+						cannotDelete
+						doNotShowID
 					/>
 				</Flex>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={isDialogWarningSelectionOpen}
-				footer={<FooterOK onOK={handleCloseWarningSelectionOpen} />}
-				onClose={handleCloseWarningSelectionOpen}
-				zIndex={Z_INDEX_LEVEL.LAYER_TOP}
-			>
-				<p>{t('warning.asset.selection')}</p>
-			</Dialog>
-		</>
+				<PanelAssetsPreviewer
+					assetID={-1}
+					list={fonts}
+					itemsAvailable={fontsAvailable}
+					selectedItem={selectedFont}
+					isSelectedLeftList={isSelectedLeftList}
+					setIsSelectedLeftList={setIsSelectedLeftList}
+					isInitiating={isInitiating}
+					setIsInitiating={setIsInitiating}
+					onChangeSelectedItem={handleChangeSelectedFont}
+					onRefresh={handleRefresh}
+					onListUpdated={handleListUpdated}
+					basePath={Model.Font.getFolder(false, '')}
+					importTypes='.ttf, .otf, .woff, .woff2'
+				/>
+			</Flex>
+		</Dialog>
 	);
 }
 

@@ -11,12 +11,14 @@
 
 import { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { DYNAMIC_VALUE_OPTIONS_TYPE } from '../../../common';
 import { Node } from '../../../core';
 import { Model } from '../../../Editor';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';
 import useStateString from '../../../hooks/useStateString';
+import { showWarning } from '../../../store';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import DynamicValueSelectorExtra from '../../DynamicValueSelectorExtra';
 import Flex from '../../Flex';
@@ -25,7 +27,6 @@ import InputText from '../../InputText';
 import TextArea from '../../TextArea';
 import Dialog from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
-import FooterOK from '../footers/FooterOK';
 
 type Props = {
 	isOpen: boolean;
@@ -41,11 +42,12 @@ function DialogCustomStructure({ isOpen, setIsOpen, model, parent, onAccept, onR
 
 	const { t } = useTranslation();
 
-	const [warning, setWarning] = useStateString();
 	const [key, setKey] = useStateString();
 	const [description, setDescription] = useStateString();
 	const [value] = useStateDynamicValue();
 	const [kind, setKind] = useStateNumber();
+
+	const dispatch = useDispatch();
 
 	const initialize = () => {
 		if (customStructure.isProperty) {
@@ -56,14 +58,10 @@ function DialogCustomStructure({ isOpen, setIsOpen, model, parent, onAccept, onR
 		setKind(value.kind);
 	};
 
-	const handleCloseWarning = () => {
-		setWarning('');
-	};
-
 	const handleAccept = () => {
 		if (customStructure.isProperty) {
 			if (key.length === 0) {
-				setWarning('The key cannot be empty.');
+				dispatch(showWarning('The key cannot be empty.'));
 				return;
 			}
 			if (
@@ -73,7 +71,7 @@ function DialogCustomStructure({ isOpen, setIsOpen, model, parent, onAccept, onR
 					.map((node) => node.content.name)
 					.includes(key)
 			) {
-				setWarning('This key already exists in your custom structure.');
+				dispatch(showWarning('This key already exists in your custom structure.'));
 				return;
 			}
 			customStructure.name = key;
@@ -132,14 +130,6 @@ function DialogCustomStructure({ isOpen, setIsOpen, model, parent, onAccept, onR
 						<DynamicValueSelectorExtra value={value} kind={kind} noStructure canEditMinMax={false} />
 					</Flex>
 				</Flex>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={!!warning}
-				footer={<FooterOK onOK={handleCloseWarning} />}
-				onClose={handleCloseWarning}
-			>
-				<p>{warning}</p>
 			</Dialog>
 		</>
 	);

@@ -11,11 +11,13 @@
 
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { PICTURE_KIND } from '../../common';
 import { getAllFilesFromFolder, getFiles } from '../../common/Platform';
 import { Node, Project, Rectangle } from '../../core';
 import { DynamicValue } from '../../core/DynamicValue';
 import { Model, Scene } from '../../Editor';
+import { showWarning } from '../../store';
 import Checkbox from '../Checkbox';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';
@@ -26,7 +28,6 @@ import TextureSquareSelector from '../TextureSquareSelector';
 import Tree, { TREES_MIN_WIDTH } from '../Tree';
 import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
-import FooterOK from './footers/FooterOK';
 
 type Props = {
 	kind?: PICTURE_KIND;
@@ -58,7 +59,6 @@ function DialogPictures({
 	const { t } = useTranslation();
 
 	const [isLoading, setIsLoading] = useState(false);
-	const [isDialogWarningSelectionOpen, setIsDialogWarningSelectionOpen] = useState(false);
 	const [isInitiating, setIsInitiating] = useState(false);
 	const [pictures, setPictures] = useState<Node[]>([]);
 	const [picturesAvailable, setPicturesAvailable] = useState<Node[]>([]);
@@ -70,6 +70,8 @@ function DialogPictures({
 	const [isSelectedLeftList, setIsSelectedLeftList] = useState(true);
 	const [newDynamicPictureID, setNewDynamicPictureID] = useState(dynamicPictureID);
 	const [selectedKind, setSelectedKind] = useState(kind);
+
+	const dispatch = useDispatch();
 
 	const folders = useMemo(
 		() =>
@@ -206,10 +208,6 @@ function DialogPictures({
 		]);
 	};
 
-	const handleCloseWarningSelectionOpen = () => {
-		setIsDialogWarningSelectionOpen(false);
-	};
-
 	const handleChangeFolder = (node: Node | null) => {
 		setSelectedKind(node && node.content.id >= 0 ? node.content.id : undefined);
 	};
@@ -230,7 +228,7 @@ function DialogPictures({
 			reset();
 		} else {
 			if (selectedPicture === null || !isSelectedLeftList) {
-				setIsDialogWarningSelectionOpen(true);
+				dispatch(showWarning(t('warning.asset.selection')));
 			} else {
 				setIsLoading(true);
 				await Scene.Map.current?.reloadTextures(kind);
@@ -376,67 +374,56 @@ function DialogPictures({
 	};
 
 	return (
-		<>
-			<Dialog
-				title={`${t(kind === undefined ? 'pictures.manager' : 'select.picture')}...`}
-				isOpen={isOpen}
-				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
-				initialWidth='70%'
-				initialHeight='70%'
-				onClose={handleReject}
-				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
-				isLoading={isLoading}
-			>
-				<Flex spacedLarge fillWidth>
-					{kind === undefined && (
-						<Flex>
-							<Tree
-								list={folders}
-								minWidth={TREES_MIN_WIDTH}
-								onSelectedItem={handleChangeFolder}
-								cannotAdd
-								cannotEdit
-								cannotDragDrop
-								cannotDelete
-								doNotShowID
-							/>
-						</Flex>
-					)}
-					{selectedKind ? (
-						<PanelAssetsPreviewer
-							assetID={pictureID}
-							dynamicValueID={newDynamicPictureID}
-							list={pictures}
-							itemsAvailable={picturesAvailable}
-							selectedItem={selectedPicture}
-							isSelectedLeftList={isSelectedLeftList}
-							setIsSelectedLeftList={setIsSelectedLeftList}
-							isInitiating={isInitiating}
-							setIsInitiating={setIsInitiating}
-							onChangeSelectedItem={handleChangeSelectedPicture}
-							onRefresh={handleRefresh}
-							onListUpdated={handleListUpdated}
-							content={getPreviewerContent()}
-							options={getPreviewerOptionsContent()}
-							active={active}
-							basePath={Model.Picture.getFolder(selectedKind, false, '')}
-							importTypes='image/png, image/jpeg'
+		<Dialog
+			title={`${t(kind === undefined ? 'pictures.manager' : 'select.picture')}...`}
+			isOpen={isOpen}
+			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
+			initialWidth='70%'
+			initialHeight='70%'
+			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
+			isLoading={isLoading}
+		>
+			<Flex spacedLarge fillWidth>
+				{kind === undefined && (
+					<Flex>
+						<Tree
+							list={folders}
+							minWidth={TREES_MIN_WIDTH}
+							onSelectedItem={handleChangeFolder}
+							cannotAdd
+							cannotEdit
+							cannotDragDrop
+							cannotDelete
+							doNotShowID
 						/>
-					) : (
-						<Flex one />
-					)}
-				</Flex>
-			</Dialog>
-			<Dialog
-				title={t('warning')}
-				isOpen={isDialogWarningSelectionOpen}
-				footer={<FooterOK onOK={handleCloseWarningSelectionOpen} />}
-				onClose={handleCloseWarningSelectionOpen}
-				zIndex={Z_INDEX_LEVEL.LAYER_TOP}
-			>
-				<p>{t('warning.asset.selection')}</p>
-			</Dialog>
-		</>
+					</Flex>
+				)}
+				{selectedKind ? (
+					<PanelAssetsPreviewer
+						assetID={pictureID}
+						dynamicValueID={newDynamicPictureID}
+						list={pictures}
+						itemsAvailable={picturesAvailable}
+						selectedItem={selectedPicture}
+						isSelectedLeftList={isSelectedLeftList}
+						setIsSelectedLeftList={setIsSelectedLeftList}
+						isInitiating={isInitiating}
+						setIsInitiating={setIsInitiating}
+						onChangeSelectedItem={handleChangeSelectedPicture}
+						onRefresh={handleRefresh}
+						onListUpdated={handleListUpdated}
+						content={getPreviewerContent()}
+						options={getPreviewerOptionsContent()}
+						active={active}
+						basePath={Model.Picture.getFolder(selectedKind, false, '')}
+						importTypes='image/png, image/jpeg'
+					/>
+				) : (
+					<Flex one />
+				)}
+			</Flex>
+		</Dialog>
 	);
 }
 
