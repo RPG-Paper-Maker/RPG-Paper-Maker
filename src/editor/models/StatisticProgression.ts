@@ -58,7 +58,7 @@ class StatisticProgression extends Base {
 	}
 
 	getName(): string {
-		return Project.current!.battleSystem.getStatisticByID(this.id).getName();
+		return Project.current!.battleSystem.getStatisticByID(this.id)?.getName() ?? '';
 	}
 
 	toStrings(): string[] {

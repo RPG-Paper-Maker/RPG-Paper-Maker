@@ -2072,5 +2072,6 @@
 	"check.update": "Check update",
 	"warning.local.plugins.update": "Your project was updated. You might need to update your following local plugins: {{plugins}}. Favor online plugins that update automatically with each update!",
 	"plugin.successfully.updated": "Plugin {{name}} successfully updated from {{oldVersion}} to {{newVersion}}",
-	"how.convert.project.2.0": "How to convert my 2.0 project?"
+	"how.convert.project.2.0": "How to convert my 2.0 project?",
+	"id.already.exists.list": "This ID already exists in this list."
 }
