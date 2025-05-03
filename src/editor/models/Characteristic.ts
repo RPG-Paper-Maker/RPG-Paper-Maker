@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
+import { ReactNode } from 'react';
 import {
 	BINDING,
 	BindingType,
@@ -17,8 +19,11 @@ import {
 	INCREASE_DECREASE_KIND,
 	JSONType,
 } from '../common';
+import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Base } from './Base';
+
+const { t } = i18next;
 
 class Characteristic extends Base {
 	public kind!: CHARACTERISTIC_KIND;
@@ -135,6 +140,76 @@ class Characteristic extends Base {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	toString(): string | ReactNode {
+		let text = Base.STRING_START;
+		switch (this.kind) {
+			case CHARACTERISTIC_KIND.INCREASE_DECREASE:
+				text += `${t(this.isIncreaseDecrease ? 'increase' : 'decrease')} ${
+					Base.INCREASE_DECREASE_OPTIONS[this.increaseDecreaseKind].name
+				} `;
+				switch (this.increaseDecreaseKind) {
+					case INCREASE_DECREASE_KIND.STAT_VALUE:
+						text += this.statisticValueID.toString(Project.current!.battleSystem.statistics);
+						break;
+					case INCREASE_DECREASE_KIND.ELEMENT_RES:
+						text += this.elementResID.toString(Project.current!.battleSystem.elements);
+						break;
+					case INCREASE_DECREASE_KIND.STATUS_RES:
+						text += this.statusResID.toString(Project.current!.battleSystem.elements);
+						break;
+					case INCREASE_DECREASE_KIND.CURRENCY_GAIN:
+						text += this.currencyGainID.toString(Project.current!.systems.currencies);
+						break;
+					case INCREASE_DECREASE_KIND.SKILL_COST:
+						text += this.isAllSkillCost
+							? `(${t('all').toLowerCase()})`
+							: this.skillCostID.toString(Project.current!.skills.list);
+						break;
+					case INCREASE_DECREASE_KIND.VARIABLE:
+						text += `${this.variableID}`;
+						break;
+					default:
+						break;
+				}
+				text += ` ${this.operation ? '*' : '+'} ${this.value.toString()} ${this.unit ? '%' : ''}`;
+				break;
+			case CHARACTERISTIC_KIND.ALLOW_FORBID_EQUIP:
+				text += `${t(this.isAllowEquip ? 'allow' : 'forbid')} ${t('equip').toLowerCase()} ${
+					this.isAllowEquipWeapon
+						? `${t('weapon.id').toLowerCase()} ${this.equipWeaponTypeID.toString(
+								Project.current!.battleSystem.weaponsKind
+						  )}`
+						: `${t('armor.id').toLowerCase()} ${this.equipArmorTypeID.toString(
+								Project.current!.battleSystem.armorsKind
+						  )}`
+				}`;
+				break;
+			case CHARACTERISTIC_KIND.ALLOW_FORBID_CHANGE:
+				text += `${t(this.isAllowChangeEquipment ? 'allow' : 'forbid')} ${t(
+					'change.equipment'
+				).toLowerCase()} ${this.changeEquipmentID.toString(Project.current!.battleSystem.equipments)}`;
+				break;
+			case CHARACTERISTIC_KIND.BEGIN_EQUIPMENT:
+				text += `${t('begin.equipment')} ${this.beginEquipmentID.toString(
+					Project.current!.battleSystem.equipments
+				)} ${t('with').toLowerCase()} ${
+					this.isBeginWeapon ? t('weapon.id').toLowerCase() : t('armor.id').toLowerCase()
+				} ${this.beginWeaponArmorID.toString(
+					this.isBeginWeapon ? Project.current!.weapons.list : Project.current!.armors.list
+				)}`;
+				break;
+			case CHARACTERISTIC_KIND.SCRIPT:
+				text += `${t('script')}: ${this.script.toString()}`;
+				break;
+			case CHARACTERISTIC_KIND.ELEMENT:
+				text += `${t('element.id')}: ${this.elementID.toString(Project.current!.battleSystem.elements)}`;
+				break;
+			default:
+				break;
+		}
+		return text;
 	}
 
 	copy(characteristic: Characteristic): void {

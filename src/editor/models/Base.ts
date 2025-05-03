@@ -201,6 +201,15 @@ class Base extends Serializable {
 	]);
 	public static PLUGIN_CATEGORY_OPTIONS = Base.mapListIndex(['battle', 'menus', 'map', 'others']);
 
+	public static INCREASE_DECREASE_OPTIONS = Base.mapListIndex([
+		'statistic.value',
+		'element.resistance',
+		'status.resistance',
+		'experience.gain',
+		'currency.gain',
+		'skill.cost',
+	]);
+
 	public static getCompareOptions = () =>
 		Base.mapListIndex([
 			`= (${t('equal.to')})`,
