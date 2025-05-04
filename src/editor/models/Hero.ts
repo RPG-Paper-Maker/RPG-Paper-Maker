@@ -14,7 +14,7 @@ import { Class } from './Class';
 import { Localization } from './Localization';
 
 class Hero extends Localization {
-	public class!: Class;
+	public class!: number;
 	public idBattler!: number;
 	public idFaceset!: number;
 	public indexXFaceset!: number;
@@ -23,7 +23,7 @@ class Hero extends Localization {
 	public description!: Localization;
 
 	public static bindings: BindingType[] = [
-		['class', 'class', undefined, BINDING.OBJECT, Class],
+		['class', 'class', undefined, BINDING.NUMBER],
 		['idBattler', 'bid', -1, BINDING.NUMBER],
 		['idFaceset', 'fid', -1, BINDING.NUMBER],
 		['indexXFaceset', 'indexXFaceset', 0, BINDING.NUMBER],
@@ -34,6 +34,14 @@ class Hero extends Localization {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(Hero.getBindings(additionnalBinding));
+		this.class = 1;
+		this.classInherit = new Class();
+		this.classInherit.applyDefault();
+		this.description = Localization.create(-1, '');
 	}
 
 	copy(hero: Hero, additionnalBinding: BindingType[] = []): void {

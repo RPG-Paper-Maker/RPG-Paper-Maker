@@ -16,26 +16,26 @@ import { Model } from '../../../Editor';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tree, { TREES_MIN_WIDTH } from '../../Tree';
-import PanelClassContent from './PanelClassContent';
+import PanelHeroContent from './PanelHeroContent';
 
-const PanelClasses = forwardRef((props, ref) => {
+const PanelHeroes = forwardRef((props, ref) => {
 	const { t } = useTranslation();
 
-	const [classes, setClasses] = useState<Node[]>([]);
-	const [selectedClass, setSelectedClass] = useState<Model.Class | null>(null);
+	const [heroes, setHeroes] = useState<Node[]>([]);
+	const [selectedHero, setSelectedHero] = useState<Model.Hero | null>(null);
 
-	const isClassDisabled = useMemo(() => selectedClass === null || selectedClass.id === -1, [selectedClass]);
+	const isHeroDisabled = useMemo(() => selectedHero === null || selectedHero.id === -1, [selectedHero]);
 
 	const initialize = () => {
-		setClasses(Node.createList(Project.current!.classes.list, false));
+		setHeroes(Node.createList(Project.current!.heroes.list, false));
 	};
 
-	const handleSelectClass = (node: Node | null) => {
-		setSelectedClass((node?.content as Model.Class) ?? null);
+	const handleSelectHero = (node: Node | null) => {
+		setSelectedHero((node?.content as Model.Hero) ?? null);
 	};
 
 	const handleListUpdated = () => {
-		Project.current!.classes.list = Node.createListFromNodes(classes);
+		Project.current!.heroes.list = Node.createListFromNodes(heroes);
 	};
 
 	useImperativeHandle(ref, () => ({}));
@@ -47,13 +47,13 @@ const PanelClasses = forwardRef((props, ref) => {
 
 	return (
 		<Flex spacedLarge fillWidth fillHeight>
-			<Groupbox title={t('classes')}>
+			<Groupbox title={t('heroes')}>
 				<Flex one fillHeight>
 					<Tree
-						constructorType={Model.Class}
-						list={classes}
+						constructorType={Model.Hero}
+						list={heroes}
 						minWidth={TREES_MIN_WIDTH}
-						onSelectedItem={handleSelectClass}
+						onSelectedItem={handleSelectHero}
 						onListUpdated={handleListUpdated}
 						noScrollOnForce
 						scrollable
@@ -63,11 +63,11 @@ const PanelClasses = forwardRef((props, ref) => {
 					/>
 				</Flex>
 			</Groupbox>
-			<Flex one>
-				<PanelClassContent selectedClass={selectedClass} disabled={isClassDisabled} />
+			<Flex one scrollable>
+				<PanelHeroContent selectedHero={selectedHero} disabled={isHeroDisabled} />
 			</Flex>
 		</Flex>
 	);
 });
 
-export default PanelClasses;
+export default PanelHeroes;

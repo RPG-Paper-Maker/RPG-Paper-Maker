@@ -78,6 +78,7 @@ function DialogCharacteristic({ isOpen, setIsOpen, model, onAccept, onReject }: 
 				beginEquipmentID,
 				beginWeaponArmorSelection === 0
 			),
+		// eslint-disable-next-line
 		[beginEquipmentUpdate, beginWeaponArmorSelection]
 	);
 
@@ -192,7 +193,7 @@ function DialogCharacteristic({ isOpen, setIsOpen, model, onAccept, onReject }: 
 			beginWeaponArmorID.value = beginEquipmentDatabase[0].id;
 			setTrigger((b) => !b);
 		}
-	}, [beginEquipmentDatabase]);
+	}, [beginEquipmentDatabase, setTrigger, beginWeaponArmorID]);
 
 	const getBuffContent = () => (
 		<Form>
@@ -454,6 +455,7 @@ function DialogCharacteristic({ isOpen, setIsOpen, model, onAccept, onReject }: 
 					setForcedCurrentIndex={setForcedCurrentIndex}
 					lazyLoadingContent
 					hideScroll
+					padding
 				/>
 			</RadioGroup>
 		</Dialog>

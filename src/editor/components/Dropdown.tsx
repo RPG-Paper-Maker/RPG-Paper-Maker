@@ -188,7 +188,11 @@ function Dropdown({
 	const selected = selectedOrEmpty ?? Model.Base.create(selectedID, noSelectionName);
 
 	const getCurrentItem = () =>
-		translateOptions ? t(selected.name) : displayIDs && selectedOrEmpty ? selected.toStringNameID() : selected.name;
+		translateOptions
+			? t(selected.getName())
+			: displayIDs && selectedOrEmpty
+			? selected.toStringNameID()
+			: selected.getName();
 
 	const getDropdownItems = () =>
 		options.map((option) => (
@@ -206,7 +210,7 @@ function Dropdown({
 				onClick={() => handleClickOption(option)}
 			>
 				{option.getDropdownIcon()}
-				{translateOptions ? t(option.name) : displayIDs ? option.toStringNameID() : option.name}
+				{translateOptions ? t(option.getName()) : displayIDs ? option.toStringNameID() : option.getName()}
 			</Flex>
 		));
 

@@ -11,6 +11,7 @@
 
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { INPUT_TYPE_WIDTH } from '../../../common';
 import { Node } from '../../../core';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { Base, Characteristic, Class, ClassSkill, StatisticProgression } from '../../../models';
@@ -25,9 +26,11 @@ import Tree, { TREES_MIN_HEIGHT } from '../../Tree';
 
 type Props = {
 	selectedClass: Class | null;
+	upperClass?: Class;
+	disabled?: boolean;
 };
 
-function PanelClassContent({ selectedClass }: Props) {
+function PanelClassContent({ selectedClass, upperClass, disabled = false }: Props) {
 	const { t } = useTranslation();
 
 	const [experienceToNextLevelValues, setExperienceToNextLevelValues] = useState<string[][]>([]);
@@ -40,7 +43,6 @@ function PanelClassContent({ selectedClass }: Props) {
 	const [characteristics, setCharacteristics] = useState<Node[]>([]);
 	const [skills, setSkills] = useState<Node[]>([]);
 
-	const isClassDisabled = useMemo(() => selectedClass === null || selectedClass.id === -1, [selectedClass]);
 	const hightlightedElements = useMemo(() => {
 		const elements: Record<number, number[]> = {};
 		if (selectedClass) {
@@ -55,14 +57,22 @@ function PanelClassContent({ selectedClass }: Props) {
 	const update = () => {
 		if (selectedClass) {
 			updateExperience();
-			setInitialLevel(selectedClass.initialLevel);
-			setFinalLevel(selectedClass.finalLevel);
-			StatisticProgression.selectedClassInitialLevel = selectedClass.initialLevel;
-			StatisticProgression.selectedClassFinalLevel = selectedClass.finalLevel;
+			setInitialLevel(selectedClass.initialLevel === -1 ? upperClass!.initialLevel : selectedClass.initialLevel);
+			setFinalLevel(selectedClass.finalLevel === -1 ? upperClass!.finalLevel : selectedClass.finalLevel);
+			StatisticProgression.selectedClassInitialLevel =
+				selectedClass.initialLevel === -1 ? upperClass!.initialLevel : selectedClass.initialLevel;
+			StatisticProgression.selectedClassFinalLevel =
+				selectedClass.finalLevel === -1 ? upperClass!.finalLevel : selectedClass.finalLevel;
 			StatisticProgression.selectedClassStatisticsProgression = selectedClass.statisticsProgression;
 			ClassSkill.selectedClassSkills = selectedClass.skills;
-			setExperienceBase(selectedClass.experienceBase);
-			setExperienceInflation(selectedClass.experienceInflation);
+			setExperienceBase(
+				selectedClass.experienceBase === -1 ? upperClass!.experienceBase : selectedClass.experienceBase
+			);
+			setExperienceInflation(
+				selectedClass.experienceInflation === -1
+					? upperClass!.experienceInflation
+					: selectedClass.experienceInflation
+			);
 			setStatisticsProgression(Node.createList(selectedClass.statisticsProgression));
 			setCharacteristics(Node.createList(selectedClass.characteristics));
 			setSkills(Node.createList(selectedClass.skills));
@@ -80,10 +90,15 @@ function PanelClassContent({ selectedClass }: Props) {
 	};
 
 	const getExperienceList = (): string[][] => {
-		const initialLevel = selectedClass!.initialLevel;
-		const finalLevel = selectedClass!.finalLevel;
-		const experienceBase = selectedClass!.experienceBase;
-		const experienceInflation = selectedClass!.experienceInflation;
+		const initialLevel =
+			selectedClass!.initialLevel === -1 ? upperClass!.initialLevel : selectedClass!.initialLevel;
+		const finalLevel = selectedClass!.finalLevel === -1 ? upperClass!.finalLevel : selectedClass!.finalLevel;
+		const experienceBase =
+			selectedClass!.experienceBase === -1 ? upperClass!.experienceBase : selectedClass!.experienceBase;
+		const experienceInflation =
+			selectedClass!.experienceInflation === -1
+				? upperClass!.experienceInflation
+				: selectedClass!.experienceInflation;
 		const experienceTable = selectedClass!.experienceTable;
 		const expList: string[][] = new Array(finalLevel - initialLevel);
 		const pow = 2.4 + experienceInflation / 100;
@@ -99,7 +114,8 @@ function PanelClassContent({ selectedClass }: Props) {
 	};
 
 	const getTotalExperienceList = (expList: string[][]): string[][] => {
-		const initialLevel = selectedClass!.initialLevel;
+		const initialLevel =
+			selectedClass!.initialLevel === -1 ? upperClass!.initialLevel : selectedClass!.initialLevel;
 		const totalList: string[][] = new Array(expList.length + 1);
 		totalList[0] = ['' + initialLevel, '0'];
 		for (let i = 1; i < totalList.length; i++) {
@@ -227,16 +243,17 @@ function PanelClassContent({ selectedClass }: Props) {
 	};
 
 	return (
-		<Flex column spacedLarge fillWidth>
+		<Flex one column spacedLarge fillWidth fillHeight>
 			<Flex one spacedLarge>
 				<Flex one>
-					<Groupbox title={t('experience')} disabled={isClassDisabled} fillWidth>
+					<Groupbox title={t('experience')} disabled={disabled} fillWidth>
 						<Flex one column spacedLarge fillHeight>
 							<Tab
 								titles={Base.mapListIndex([t('to.next.level'), t('total')])}
 								contents={[getContentExperience(false), getContentExperience(true)]}
 								scrollableContent
 								hideScroll
+								disabled={disabled}
 							/>
 							<Flex spacedLarge>
 								<Flex one>
@@ -248,6 +265,8 @@ function PanelClassContent({ selectedClass }: Props) {
 												onChange={handleChangeInitialLevel}
 												min={1}
 												max={9999}
+												disabled={disabled}
+												widthType={INPUT_TYPE_WIDTH.SMALL}
 											/>
 										</Value>
 										<Label>{t('base')}</Label>
@@ -256,6 +275,8 @@ function PanelClassContent({ selectedClass }: Props) {
 												value={experienceBase}
 												onChange={handleChangeExperienceBase}
 												min={0}
+												disabled={disabled}
+												widthType={INPUT_TYPE_WIDTH.SMALL}
 											/>
 										</Value>
 									</Form>
@@ -269,6 +290,8 @@ function PanelClassContent({ selectedClass }: Props) {
 												onChange={handleChangeFinalLevel}
 												min={1}
 												max={99999}
+												disabled={disabled}
+												widthType={INPUT_TYPE_WIDTH.SMALL}
 											/>
 										</Value>
 										<Label>{t('inflation')}</Label>
@@ -277,24 +300,28 @@ function PanelClassContent({ selectedClass }: Props) {
 												value={experienceInflation}
 												onChange={handleChangeExperienceInflation}
 												min={0}
+												disabled={disabled}
+												widthType={INPUT_TYPE_WIDTH.SMALL}
 											/>
 										</Value>
 									</Form>
 								</Flex>
 							</Flex>
-							<Button onClick={handleClickResetExperience}>{t('reset')}</Button>
+							<Button onClick={handleClickResetExperience} disabled={disabled}>
+								{t('reset')}
+							</Button>
 						</Flex>
 					</Groupbox>
 				</Flex>
 				<Flex one>
-					<Groupbox title={t('statistics.progression')} disabled={isClassDisabled} fillWidth>
+					<Groupbox title={t('statistics.progression')} disabled={disabled} fillWidth>
 						<Flex one fillHeight>
 							<Tree
 								constructorType={StatisticProgression}
 								list={statisticsProgression}
 								onListUpdated={handleUpdateStatisticProgression}
 								minHeight={TREES_MIN_HEIGHT}
-								disabled={isClassDisabled}
+								disabled={disabled}
 								noScrollOnForce
 								scrollable
 								canBeEmpty
@@ -305,13 +332,13 @@ function PanelClassContent({ selectedClass }: Props) {
 			</Flex>
 			<Flex one spacedLarge>
 				<Flex one>
-					<Groupbox title={t('characteristics')} disabled={isClassDisabled} fillWidth>
+					<Groupbox title={t('characteristics')} disabled={disabled} fillWidth>
 						<Flex one fillHeight>
 							<Tree
 								constructorType={Characteristic}
 								list={characteristics}
 								onListUpdated={handleUpdateCharacteristics}
-								disabled={isClassDisabled}
+								disabled={disabled}
 								noScrollOnForce
 								scrollable
 								canBeEmpty
@@ -321,14 +348,14 @@ function PanelClassContent({ selectedClass }: Props) {
 					</Groupbox>
 				</Flex>
 				<Flex one>
-					<Groupbox title={t('skills.to.learn')} disabled={isClassDisabled} fillWidth>
+					<Groupbox title={t('skills.to.learn')} disabled={disabled} fillWidth>
 						<Flex one fillHeight>
 							<Tree
 								constructorType={ClassSkill}
 								list={skills}
 								onListUpdated={handleUpdateSkills}
 								minHeight={TREES_MIN_HEIGHT}
-								disabled={isClassDisabled}
+								disabled={disabled}
 								noScrollOnForce
 								scrollable
 								canBeEmpty

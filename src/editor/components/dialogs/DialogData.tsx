@@ -12,11 +12,11 @@
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { initializeAcceptRef } from '../../common';
 import { Project } from '../../core';
 import { Model } from '../../Editor';
 import { setNeedsReloadMap } from '../../store';
 import PanelClasses from '../panels/data/PanelClasses';
+import PanelHeroes from '../panels/data/PanelHeroes';
 import Tab from '../Tab';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
@@ -31,33 +31,27 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 
 	const dispatch = useDispatch();
 
-	const panelClassesRef = useRef<initializeAcceptRef>(null);
+	const panelClassesRef = useRef(null);
+	const panelHeroesRef = useRef(null);
 
 	const handleAccept = async () => {
-		panelClassesRef.current?.accept();
-		/*
-		panelSystemRef.current?.accept();
-		panelBattleSystemRef.current?.accept();
-		panelTitleScreenGameOverRef.current?.accept();
-		panelMainMenuRef.current?.accept();
-		panelEventsStatesRef.current?.accept();
-		panelCommonReactionsRef.current?.accept();
-		panelModelsRef.current?.accept();
-		await Project.current!.systems.save();
-		await Project.current!.battleSystem.save();
-		await Project.current!.titleScreenGameOver.save();
-		await Project.current!.commonEvents.save();*/
+		if (panelClassesRef.current) {
+			await Project.current!.classes.save();
+		}
+		if (panelHeroesRef.current) {
+			await Project.current!.heroes.save();
+		}
 		dispatch(setNeedsReloadMap());
 		setIsOpen(false);
 	};
 
 	const handleReject = async () => {
-		await Project.current!.classes.load();
-		/*
-		await Project.current!.systems.load();
-		await Project.current!.battleSystem.load();
-		await Project.current!.titleScreenGameOver.load();
-		await Project.current!.commonEvents.load();*/
+		if (panelClassesRef.current) {
+			await Project.current!.classes.load();
+		}
+		if (panelHeroesRef.current) {
+			await Project.current!.heroes.load();
+		}
 		setIsOpen(false);
 	};
 
@@ -67,7 +61,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
-			initialWidth='1000px'
+			initialWidth='1100px'
 			initialHeight='700px'
 		>
 			<Tab
@@ -86,7 +80,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 				])}
 				contents={[
 					<PanelClasses key={0} ref={panelClassesRef} />,
-					null,
+					<PanelHeroes key={1} ref={panelHeroesRef} />,
 					null,
 					null,
 					null,
@@ -98,7 +92,6 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 					null,
 				]}
 				padding
-				scrollableContent
 				lazyLoadingContent
 			/>
 		</Dialog>
