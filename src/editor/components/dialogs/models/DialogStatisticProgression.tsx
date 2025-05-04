@@ -167,7 +167,9 @@ function DialogStatisticProgression({ isOpen, setIsOpen, model, isNew, onAccept,
 
 	const handleAccept = async () => {
 		if (isNew || statisticProgression.id !== statisticID) {
-			const statistic = Project.current!.battleSystem.statistics.find((s) => s.id === statisticID);
+			const statistic = Model.StatisticProgression.selectedClassStatisticsProgression.find(
+				(s) => s.id === statisticID
+			);
 			if (statistic) {
 				dispatch(showWarning(t('id.already.exists.list')));
 				return;

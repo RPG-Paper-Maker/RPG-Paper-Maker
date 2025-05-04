@@ -59,6 +59,8 @@ function PanelClassContent({ selectedClass }: Props) {
 			setFinalLevel(selectedClass.finalLevel);
 			StatisticProgression.selectedClassInitialLevel = selectedClass.initialLevel;
 			StatisticProgression.selectedClassFinalLevel = selectedClass.finalLevel;
+			StatisticProgression.selectedClassStatisticsProgression = selectedClass.statisticsProgression;
+			ClassSkill.selectedClassSkills = selectedClass.skills;
 			setExperienceBase(selectedClass.experienceBase);
 			setExperienceInflation(selectedClass.experienceInflation);
 			setStatisticsProgression(Node.createList(selectedClass.statisticsProgression));
@@ -138,6 +140,7 @@ function PanelClassContent({ selectedClass }: Props) {
 		setInitialLevel(value);
 		if (selectedClass) {
 			selectedClass.initialLevel = value;
+			StatisticProgression.selectedClassInitialLevel = selectedClass.initialLevel;
 			updateExperience();
 		}
 	};
@@ -157,6 +160,7 @@ function PanelClassContent({ selectedClass }: Props) {
 		setFinalLevel(value);
 		if (selectedClass) {
 			selectedClass.finalLevel = value;
+			StatisticProgression.selectedClassFinalLevel = selectedClass.finalLevel;
 			updateExperience();
 		}
 	};
@@ -187,6 +191,7 @@ function PanelClassContent({ selectedClass }: Props) {
 	const handleUpdateStatisticProgression = () => {
 		if (selectedClass) {
 			selectedClass.statisticsProgression = Node.createListFromNodes(statisticsProgression);
+			StatisticProgression.selectedClassStatisticsProgression = selectedClass.statisticsProgression;
 		}
 	};
 
@@ -199,6 +204,7 @@ function PanelClassContent({ selectedClass }: Props) {
 	const handleUpdateSkills = () => {
 		if (selectedClass) {
 			selectedClass.skills = Node.createListFromNodes(skills);
+			ClassSkill.selectedClassSkills = selectedClass.skills;
 		}
 	};
 

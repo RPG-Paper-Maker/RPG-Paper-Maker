@@ -10,15 +10,34 @@
 */
 
 import { BINDING, BindingType, JSONType } from '../common';
+import { Project } from '../core';
 import { Base } from './Base';
 
 class ClassSkill extends Base {
+	public static selectedClassSkills: ClassSkill[];
 	public level!: number;
 
 	public static bindings: BindingType[] = [['level', 'l', undefined, BINDING.NUMBER]];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	static getTreeHeader(): string[] {
+		return ['skill', 'level'];
+	}
+
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(ClassSkill.getBindings(additionnalBinding));
+		this.level = 1;
+	}
+
+	getName(): string {
+		return Project.current!.skills.getByID(this.id)?.getName() ?? '';
+	}
+
+	toStrings(): string[] {
+		return ['' + this.toString(), '' + this.level];
 	}
 
 	copy(classSkill: ClassSkill): void {

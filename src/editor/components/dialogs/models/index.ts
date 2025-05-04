@@ -2,6 +2,7 @@ export * from './DialogBattleCommand';
 export * from './DialogBattleMap';
 export * from './DialogCameraProperty';
 export * from './DialogCharacteristic';
+export * from './DialogClassSkill';
 export * from './DialogColor';
 export * from './DialogCost';
 export * from './DialogCreateParameter';

@@ -34,6 +34,7 @@ import DialogBattleCommand from './dialogs/models/DialogBattleCommand';
 import DialogBattleMap from './dialogs/models/DialogBattleMap';
 import DialogCameraProperty from './dialogs/models/DialogCameraProperty';
 import DialogCharacteristic from './dialogs/models/DialogCharacteristic';
+import DialogClassSkill from './dialogs/models/DialogClassSkill';
 import DialogColor from './dialogs/models/DialogColor';
 import DialogCost from './dialogs/models/DialogCost';
 import DialogCreateParameter from './dialogs/models/DialogCreateParameter';
@@ -943,6 +944,8 @@ function Tree({
 					return <DialogStatisticProgression {...options} />;
 				case Model.Characteristic:
 					return <DialogCharacteristic {...options} />;
+				case Model.ClassSkill:
+					return <DialogClassSkill {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}
