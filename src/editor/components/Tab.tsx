@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { FaCaretLeft, FaCaretRight } from 'react-icons/fa';
 import { RxCross2 } from 'react-icons/rx';
 import { Model } from '../Editor';
@@ -107,7 +107,7 @@ function Tab({
 		handleClickItem(currentIndex === titles.length - 1 ? titles.length - 1 : currentIndex + 1);
 	};
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (forcedCurrentIndex !== undefined && forcedCurrentIndex !== null && setForcedCurrentIndex) {
 			setCurrentIndex(forcedCurrentIndex);
 			if (onCurrentIndexChanged) {

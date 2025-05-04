@@ -141,6 +141,7 @@ class Base extends Serializable {
 	public static TEAM_OPTIONS = Base.mapListIndex(['team', 'reserve', 'hidden', 'troop']);
 	public static MOVE_REMOVE_OPTIONS = Base.mapListIndex(['move', 'remove']);
 	public static WEAPON_ARMOR_ID_OPTIONS = Base.mapListIndex(['weapon.id', 'armor.id']);
+	public static WEAPON_ARMOR_OPTIONS = Base.mapListIndex(['weapon', 'armor']);
 	public static HEROES_OPTIONS = Base.mapListIndex([
 		'all.heroes',
 		'none.of.heroes',
@@ -201,6 +202,8 @@ class Base extends Serializable {
 	]);
 	public static PLUGIN_CATEGORY_OPTIONS = Base.mapListIndex(['battle', 'menus', 'map', 'others']);
 
+	public static SELECTION_INCREASE_DECREASE_OPTIONS = Base.mapListIndex(['increase', 'decrease']);
+
 	public static INCREASE_DECREASE_OPTIONS = Base.mapListIndex([
 		'statistic.value',
 		'element.resistance',
@@ -209,6 +212,10 @@ class Base extends Serializable {
 		'currency.gain',
 		'skill.cost',
 	]);
+
+	public static SELECTION_ALL_SKILL_COST_OPTIONS = Base.mapListIndex(['all', 'specific']);
+
+	public static ALLOW_FORBID_OPTIONS = Base.mapListIndex(['allow', 'forbid']);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([

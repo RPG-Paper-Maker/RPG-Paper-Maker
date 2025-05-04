@@ -28,7 +28,7 @@ const { t } = i18next;
 class Characteristic extends Base {
 	public kind!: CHARACTERISTIC_KIND;
 	public isIncreaseDecrease!: boolean;
-	public increaseDecreaseKind!: number;
+	public increaseDecreaseKind!: INCREASE_DECREASE_KIND;
 	public statisticValueID!: DynamicValue;
 	public elementResID!: DynamicValue;
 	public statusResID!: DynamicValue;
@@ -95,7 +95,7 @@ class Characteristic extends Base {
 		['operation', 'o', true, BINDING.BOOLEAN],
 		['value', 'v', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0), BINDING.DYNAMIC_VALUE, DynamicValue],
 		['unit', 'u', true, BINDING.BOOLEAN],
-		['script', 's', DynamicValue.create(DYNAMIC_VALUE_KIND.TEXT, ''), BINDING.DYNAMIC_VALUE, DynamicValue],
+		['script', 's', DynamicValue.create(DYNAMIC_VALUE_KIND.FORMULA, ''), BINDING.DYNAMIC_VALUE, DynamicValue],
 		['isAllowEquip', 'iae', true, BINDING.BOOLEAN],
 		['isAllowEquipWeapon', 'iaew', true, BINDING.BOOLEAN],
 		[
@@ -142,13 +142,17 @@ class Characteristic extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(Characteristic.getBindings(additionnalBinding));
+	}
+
 	toString(): string | ReactNode {
 		let text = Base.STRING_START;
 		switch (this.kind) {
 			case CHARACTERISTIC_KIND.INCREASE_DECREASE:
-				text += `${t(this.isIncreaseDecrease ? 'increase' : 'decrease')} ${
+				text += `${t(this.isIncreaseDecrease ? 'increase' : 'decrease')} ${t(
 					Base.INCREASE_DECREASE_OPTIONS[this.increaseDecreaseKind].name
-				} `;
+				)} `;
 				switch (this.increaseDecreaseKind) {
 					case INCREASE_DECREASE_KIND.STAT_VALUE:
 						text += this.statisticValueID.toString(Project.current!.battleSystem.statistics);
@@ -166,9 +170,6 @@ class Characteristic extends Base {
 						text += this.isAllSkillCost
 							? `(${t('all').toLowerCase()})`
 							: this.skillCostID.toString(Project.current!.skills.list);
-						break;
-					case INCREASE_DECREASE_KIND.VARIABLE:
-						text += `${this.variableID}`;
 						break;
 					default:
 						break;
