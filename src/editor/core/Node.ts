@@ -53,9 +53,12 @@ export const NODE_CONSTRUCTOR_KIND = {
 	PluginCommand: () => Model.PluginCommand,
 	PluginParameter: () => Model.PluginParameter,
 	PluginDefaultParameter: () => Model.PluginDefaultParameter,
+	Class: () => Model.Class,
 	StatisticProgression: () => Model.StatisticProgression,
 	Characteristic: () => Model.Characteristic,
 	ClassSkill: () => Model.ClassSkill,
+	Hero: () => Model.Hero,
+	Monster: () => Model.Monster,
 };
 
 class Node extends Serializable {

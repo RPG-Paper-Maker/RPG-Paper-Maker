@@ -16,26 +16,26 @@ import { Model } from '../../../Editor';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tree, { TREES_MIN_WIDTH } from '../../Tree';
-import PanelHeroContent from './PanelHeroContent';
+import PanelMonsterContent from './PanelMonsterContent';
 
-const PanelHeroes = forwardRef((props, ref) => {
+const PanelMonsters = forwardRef((props, ref) => {
 	const { t } = useTranslation();
 
-	const [heroes, setHeroes] = useState<Node[]>([]);
-	const [selectedHero, setSelectedHero] = useState<Model.Hero | null>(null);
+	const [monsters, setMonsters] = useState<Node[]>([]);
+	const [selectedMonster, setSelectedMonster] = useState<Model.Monster | null>(null);
 
-	const isHeroDisabled = useMemo(() => selectedHero === null || selectedHero.id === -1, [selectedHero]);
+	const isMonsterDisabled = useMemo(() => selectedMonster === null || selectedMonster.id === -1, [selectedMonster]);
 
 	const initialize = () => {
-		setHeroes(Node.createList(Project.current!.heroes.list, false));
+		setMonsters(Node.createList(Project.current!.monsters.list, false));
 	};
 
-	const handleSelectHero = (node: Node | null) => {
-		setSelectedHero((node?.content as Model.Hero) ?? null);
+	const handleSelectMonster = (node: Node | null) => {
+		setSelectedMonster((node?.content as Model.Monster) ?? null);
 	};
 
 	const handleListUpdated = () => {
-		Project.current!.heroes.list = Node.createListFromNodes(heroes);
+		Project.current!.monsters.list = Node.createListFromNodes(monsters);
 	};
 
 	useImperativeHandle(ref, () => ({}));
@@ -47,13 +47,13 @@ const PanelHeroes = forwardRef((props, ref) => {
 
 	return (
 		<Flex spacedLarge fillWidth fillHeight>
-			<Groupbox title={t('heroes')}>
+			<Groupbox title={t('monsters')}>
 				<Flex one fillHeight>
 					<Tree
-						constructorType={Model.Hero}
-						list={heroes}
+						constructorType={Model.Monster}
+						list={monsters}
 						minWidth={TREES_MIN_WIDTH}
-						onSelectedItem={handleSelectHero}
+						onSelectedItem={handleSelectMonster}
 						onListUpdated={handleListUpdated}
 						noScrollOnForce
 						scrollable
@@ -65,11 +65,11 @@ const PanelHeroes = forwardRef((props, ref) => {
 			</Groupbox>
 			<Flex one column>
 				<Flex one column scrollable zeroHeight>
-					<PanelHeroContent selectedHero={selectedHero} disabled={isHeroDisabled} />
+					<PanelMonsterContent selectedMonster={selectedMonster} disabled={isMonsterDisabled} />
 				</Flex>
 			</Flex>
 		</Flex>
 	);
 });
 
-export default PanelHeroes;
+export default PanelMonsters;

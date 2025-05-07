@@ -14,6 +14,9 @@ import { DynamicValue } from '../core/DynamicValue';
 import { Base } from './Base';
 
 class ProgressionTable extends Base {
+	public static selectedClassInitialLevel: number;
+	public static selectedClassFinalLevel: number;
+
 	public initialValue!: DynamicValue;
 	public finalValue!: DynamicValue;
 	public equation!: number;

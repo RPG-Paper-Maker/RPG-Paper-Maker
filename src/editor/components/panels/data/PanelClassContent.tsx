@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { INPUT_TYPE_WIDTH } from '../../../common';
 import { Node } from '../../../core';
 import useStateNumber from '../../../hooks/useStateNumber';
-import { Base, Characteristic, Class, ClassSkill, StatisticProgression } from '../../../models';
+import { Base, Characteristic, Class, ClassSkill, ProgressionTable, StatisticProgression } from '../../../models';
 import Button from '../../Button';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
@@ -59,9 +59,9 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 			updateExperience();
 			setInitialLevel(selectedClass.initialLevel === -1 ? upperClass!.initialLevel : selectedClass.initialLevel);
 			setFinalLevel(selectedClass.finalLevel === -1 ? upperClass!.finalLevel : selectedClass.finalLevel);
-			StatisticProgression.selectedClassInitialLevel =
+			ProgressionTable.selectedClassInitialLevel =
 				selectedClass.initialLevel === -1 ? upperClass!.initialLevel : selectedClass.initialLevel;
-			StatisticProgression.selectedClassFinalLevel =
+			ProgressionTable.selectedClassFinalLevel =
 				selectedClass.finalLevel === -1 ? upperClass!.finalLevel : selectedClass.finalLevel;
 			StatisticProgression.selectedClassStatisticsProgression = selectedClass.statisticsProgression;
 			ClassSkill.selectedClassSkills = selectedClass.skills;
@@ -156,7 +156,7 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 		setInitialLevel(value);
 		if (selectedClass) {
 			selectedClass.initialLevel = value;
-			StatisticProgression.selectedClassInitialLevel = selectedClass.initialLevel;
+			ProgressionTable.selectedClassInitialLevel = selectedClass.initialLevel;
 			updateExperience();
 		}
 	};
@@ -176,7 +176,7 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 		setFinalLevel(value);
 		if (selectedClass) {
 			selectedClass.finalLevel = value;
-			StatisticProgression.selectedClassFinalLevel = selectedClass.finalLevel;
+			ProgressionTable.selectedClassFinalLevel = selectedClass.finalLevel;
 			updateExperience();
 		}
 	};

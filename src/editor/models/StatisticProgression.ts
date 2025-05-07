@@ -16,8 +16,6 @@ import { Base } from './Base';
 import { ProgressionTable } from './ProgressionTable';
 
 class StatisticProgression extends Base {
-	public static selectedClassInitialLevel: number;
-	public static selectedClassFinalLevel: number;
 	public static selectedClassStatisticsProgression: StatisticProgression[];
 	public maxValue!: DynamicValue;
 	public isFix!: boolean;

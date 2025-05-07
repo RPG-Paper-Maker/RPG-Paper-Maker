@@ -17,6 +17,7 @@ import { Model } from '../../Editor';
 import { setNeedsReloadMap } from '../../store';
 import PanelClasses from '../panels/data/PanelClasses';
 import PanelHeroes from '../panels/data/PanelHeroes';
+import PanelMonsters from '../panels/data/PanelMonsters';
 import Tab from '../Tab';
 import Dialog from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
@@ -33,6 +34,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 
 	const panelClassesRef = useRef(null);
 	const panelHeroesRef = useRef(null);
+	const panelMonstersRef = useRef(null);
 
 	const handleAccept = async () => {
 		if (panelClassesRef.current) {
@@ -40,6 +42,9 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 		}
 		if (panelHeroesRef.current) {
 			await Project.current!.heroes.save();
+		}
+		if (panelMonstersRef.current) {
+			await Project.current!.monsters.save();
 		}
 		dispatch(setNeedsReloadMap());
 		setIsOpen(false);
@@ -51,6 +56,9 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 		}
 		if (panelHeroesRef.current) {
 			await Project.current!.heroes.load();
+		}
+		if (panelMonstersRef.current) {
+			await Project.current!.monsters.load();
 		}
 		setIsOpen(false);
 	};
@@ -81,7 +89,7 @@ function DialogData({ isOpen, setIsOpen }: Props) {
 				contents={[
 					<PanelClasses key={0} ref={panelClassesRef} />,
 					<PanelHeroes key={1} ref={panelHeroesRef} />,
-					null,
+					<PanelMonsters key={2} ref={panelMonstersRef} />,
 					null,
 					null,
 					null,

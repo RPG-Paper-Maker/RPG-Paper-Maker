@@ -119,7 +119,7 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 
 	return (
 		<Flex one spacedLarge>
-			<Flex column spacedLarge fillHeight zeroHeight>
+			<Flex column spacedLarge fillHeight>
 				<Flex column spaced>
 					<Flex disabledLabel={disabled}>{t('class')}:</Flex>
 					<Dropdown
