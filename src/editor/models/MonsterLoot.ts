@@ -9,12 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, BindingType, ITEM_KIND, JSONType } from '../common';
+import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Base } from './Base';
 
 class MonsterLoot extends Base {
-	public kind!: number;
+	public kind!: ITEM_KIND;
 	public lootID!: DynamicValue;
 	public number!: DynamicValue;
 	public probability!: DynamicValue;
@@ -32,6 +33,31 @@ class MonsterLoot extends Base {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	static getTreeHeader(): string[] {
+		return ['name', 'number', 'probability', 'initial', 'final'];
+	}
+
+	getDatabase(): Base[] {
+		switch (this.kind) {
+			case ITEM_KIND.ITEM:
+				return Project.current!.items.list;
+			case ITEM_KIND.WEAPON:
+				return Project.current!.weapons.list;
+			case ITEM_KIND.ARMOR:
+				return Project.current!.armors.list;
+		}
+	}
+
+	toStrings(): string[] {
+		return [
+			this.lootID.toString(this.getDatabase()),
+			this.number.toString(),
+			this.probability.toString(),
+			this.initial.toString(),
+			this.final.toString(),
+		];
 	}
 
 	copy(loot: MonsterLoot): void {

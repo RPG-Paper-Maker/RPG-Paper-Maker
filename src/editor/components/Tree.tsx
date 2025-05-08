@@ -59,6 +59,7 @@ import DialogMapObjectEvent from './dialogs/models/DialogMapObjectEvent';
 import DialogMapObjectParameter from './dialogs/models/DialogMapObjectParameter';
 import DialogMapObjectProperty from './dialogs/models/DialogMapObjectProperty';
 import DialogMapObjectState from './dialogs/models/DialogMapObjectState';
+import DialogMonsterLoot from './dialogs/models/DialogMonsterLoot';
 import DialogName from './dialogs/models/DialogName';
 import DialogPlugin from './dialogs/models/DialogPlugin';
 import DialogPluginCommand from './dialogs/models/DialogPluginCommand';
@@ -946,6 +947,8 @@ function Tree({
 					return <DialogCharacteristic {...options} />;
 				case Model.ClassSkill:
 					return <DialogClassSkill {...options} />;
+				case Model.MonsterLoot:
+					return <DialogMonsterLoot {...options} />;
 				default:
 					return <DialogName {...options} />;
 			}

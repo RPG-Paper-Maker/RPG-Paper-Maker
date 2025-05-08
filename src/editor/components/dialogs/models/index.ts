@@ -29,6 +29,7 @@ export * from './DialogMapObjectParameter';
 export * from './DialogMapObjectProperty';
 export * from './DialogMapObjectState';
 export * from './DialogMapProperties';
+export * from './DialogMonsterLoot';
 export * from './DialogName';
 export * from './DialogPlugin';
 export * from './DialogPluginCommand';
