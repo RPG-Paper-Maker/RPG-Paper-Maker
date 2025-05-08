@@ -253,6 +253,7 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 								contents={[getContentExperience(false), getContentExperience(true)]}
 								scrollableContent
 								hideScroll
+								noScrollToSelectedElement
 								disabled={disabled}
 							/>
 							<Flex spacedLarge>

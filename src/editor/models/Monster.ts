@@ -9,26 +9,38 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
+import { DynamicValue } from '../core/DynamicValue';
 import { Hero } from './Hero';
-import { Loot } from './Loot';
 import { MonsterAction } from './MonsterAction';
+import { MonsterLoot } from './MonsterLoot';
 import { ProgressionTable } from './ProgressionTable';
 
-interface Rewards {
-	xp: ProgressionTable;
-	currencies: ProgressionTable[];
-	loots: Loot[];
-}
-
 class Monster extends Hero {
-	rewards!: Rewards;
+	experience!: ProgressionTable;
+	currencies!: Map<number, ProgressionTable>;
+	loots!: MonsterLoot[];
 	actions!: MonsterAction[];
 
-	public static bindings: BindingType[] = [['actions', 'a', [], BINDING.LIST, MonsterAction]];
+	public static bindings: BindingType[] = [
+		['experience', 'xp', undefined, BINDING.OBJECT, ProgressionTable],
+		['currencies', 'cur', undefined, BINDING.MAP_KEY_VALUE, ProgressionTable],
+		['loots', 'loots', [], BINDING.LIST, MonsterLoot],
+		['actions', 'a', [], BINDING.LIST, MonsterAction],
+	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(Monster.getBindings(additionnalBinding));
+		this.experience = ProgressionTable.createProgression(
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
+			DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
+			0
+		);
+		this.currencies = new Map();
 	}
 
 	copy(monster: Monster): void {

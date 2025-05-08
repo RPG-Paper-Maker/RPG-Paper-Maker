@@ -32,7 +32,9 @@ type Props = {
 	padding?: boolean;
 	scrollableContent?: boolean;
 	lazyLoadingContent?: boolean;
+	minHeightContent?: string;
 	disabled?: boolean;
+	noScrollToSelectedElement?: boolean;
 };
 
 function Tab({
@@ -49,7 +51,9 @@ function Tab({
 	padding = false,
 	scrollableContent = false,
 	lazyLoadingContent = false,
+	minHeightContent,
 	disabled = false,
+	noScrollToSelectedElement = false,
 }: Props) {
 	const [currentIndex, setCurrentIndex] = useState(defaultIndex);
 	const [nextIndex, setNextIndex] = useState(defaultIndex); // Needed to make scrolling work properly on direct click...
@@ -58,7 +62,7 @@ function Tab({
 	const selectedElementRef = useRef<HTMLDivElement>(null);
 
 	const scrollToSelectedElement = () => {
-		if (selectedElementRef.current) {
+		if (!noScrollToSelectedElement && selectedElementRef.current) {
 			selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
 		}
 	};
@@ -194,6 +198,7 @@ function Tab({
 					{ padding, scrollable: scrollableContent, zeroHeight: scrollableContent },
 					'tabContent'
 				)}
+				style={minHeightContent ? { minHeight: minHeightContent } : undefined}
 			>
 				{getContents()}
 			</div>

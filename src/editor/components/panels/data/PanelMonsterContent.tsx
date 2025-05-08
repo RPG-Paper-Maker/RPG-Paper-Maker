@@ -9,11 +9,17 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Monster } from '../../../models';
+import { DYNAMIC_VALUE_KIND } from '../../../common';
+import { Node, Project } from '../../../core';
+import { DynamicValue } from '../../../core/DynamicValue';
+import { Base, Monster, MonsterLoot, ProgressionTable } from '../../../models';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
+import Tab from '../../Tab';
+import Tree, { TREES_MIN_HEIGHT } from '../../Tree';
+import PanelProgression from '../PanelProgression';
 import PanelHeroContent from './PanelHeroContent';
 
 type Props = {
@@ -24,9 +30,24 @@ type Props = {
 function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 	const { t } = useTranslation();
 
+	const [loots, setLoots] = useState<Node[]>([]);
+
+	const currenciesTitles = useMemo(
+		() => Project.current!.systems.currencies.map((currency, index) => Base.create(index, currency.getName())),
+		[]
+	);
+
 	const update = async () => {
 		if (selectedMonster) {
+			setLoots(Node.createList(selectedMonster.loots));
 		} else {
+			setLoots([]);
+		}
+	};
+
+	const handleUpdateLoots = () => {
+		if (selectedMonster) {
+			selectedMonster.loots = Node.createListFromNodes(loots);
 		}
 	};
 
@@ -35,24 +56,60 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 		// eslint-disable-next-line
 	}, [selectedMonster]);
 
+	const getCurrenciesContents = () =>
+		Project.current!.systems.currencies.map((currency) => {
+			let progression = selectedMonster?.currencies?.get(currency.id);
+			if (selectedMonster?.currencies && !progression) {
+				progression = ProgressionTable.createProgression(
+					DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
+					DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0),
+					0
+				);
+				selectedMonster.currencies.set(currency.id, progression);
+			}
+			return <PanelProgression progression={progression} disabled={disabled} />;
+		});
+
 	return (
 		<Flex column one spacedLarge>
 			<PanelHeroContent selectedHero={selectedMonster} disabled={disabled} />
 			<Flex column spacedLarge>
-				<Groupbox title={t('rewards')}>
-					<Flex spaced>
-						<Flex one column spaced>
-							<div>{t('experience')}:</div>
-						</Flex>
-						<Flex one column spaced>
-							<div>{t('currencies')}:</div>
+				<Groupbox title={t('rewards')} disabled={disabled}>
+					<Flex column spacedLarge>
+						<Flex spacedLarge>
+							<Flex one column spaced>
+								<div>{t('experience')}:</div>
+								<PanelProgression progression={selectedMonster?.experience} disabled={disabled} />
+							</Flex>
+							<Flex one column spaced>
+								<div>{t('currencies')}:</div>
+								<Tab
+									titles={currenciesTitles}
+									contents={getCurrenciesContents()}
+									lazyLoadingContent
+									noScrollToSelectedElement
+								/>
+							</Flex>
 						</Flex>
 						<Flex one column spaced>
 							<div>{t('loots')}:</div>
+							<Flex one fillHeight>
+								<Tree
+									constructorType={MonsterLoot}
+									list={loots}
+									onListUpdated={handleUpdateLoots}
+									minHeight={TREES_MIN_HEIGHT}
+									disabled={disabled}
+									noScrollOnForce
+									scrollable
+									canBeEmpty
+									byIndex
+								/>
+							</Flex>
 						</Flex>
 					</Flex>
 				</Groupbox>
-				<Groupbox title={t('actions')}></Groupbox>
+				<Groupbox title={t('actions')} disabled={disabled}></Groupbox>
 			</Flex>
 		</Flex>
 	);

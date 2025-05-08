@@ -13,7 +13,7 @@ import { BINDING, BindingType, JSONType } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { Base } from './Base';
 
-class Loot extends Base {
+class MonsterLoot extends Base {
 	public kind!: number;
 	public lootID!: DynamicValue;
 	public number!: DynamicValue;
@@ -34,17 +34,17 @@ class Loot extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
-	copy(loot: Loot): void {
-		super.copy(loot, Loot.getBindings([]));
+	copy(loot: MonsterLoot): void {
+		super.copy(loot, MonsterLoot.getBindings([]));
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.read(json, Loot.getBindings(additionnalBinding));
+		super.read(json, MonsterLoot.getBindings(additionnalBinding));
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
-		super.write(json, Loot.getBindings(additionnalBinding));
+		super.write(json, MonsterLoot.getBindings(additionnalBinding));
 	}
 }
 
-export { Loot };
+export { MonsterLoot };

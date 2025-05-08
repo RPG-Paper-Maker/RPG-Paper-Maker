@@ -126,25 +126,28 @@ function PanelProgression({ progression, randomVariation, disabled }: Props) {
 	}, [progression]);
 
 	const getTableContent = () => (
-		<Table
-			values={tableValues}
-			onChange={handleChangeTableValues}
-			highlightedElements={hightlightedElements}
-			disabled={disabled}
-		/>
+		<Flex one column zeroHeight scrollable>
+			<Table
+				values={tableValues}
+				onChange={handleChangeTableValues}
+				highlightedElements={hightlightedElements}
+				disabled={disabled}
+			/>
+		</Flex>
 	);
 
 	const getGraphContent = () => <Graph xValues={xValues} yValues={yValues} disabled={disabled} />;
 
 	return (
-		<Flex column spacedLarge one>
+		<Flex one column spacedLarge>
 			<Flex one>
 				<Tab
 					titles={Base.mapListIndex([t('graph'), t('table')])}
 					contents={[getGraphContent(), getTableContent()]}
-					scrollableContent
 					hideScroll
 					disabled={disabled}
+					minHeightContent='150px'
+					noScrollToSelectedElement
 				/>
 			</Flex>
 			<Form>

@@ -119,7 +119,6 @@ function DialogStatisticProgression({ isOpen, setIsOpen, model, isNew, onAccept,
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='600px'
-			initialHeight='700px'
 		>
 			<Flex column spacedLarge fillWidth fillHeight>
 				<Groupbox title={t('information')}>

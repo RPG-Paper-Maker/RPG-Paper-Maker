@@ -69,13 +69,9 @@ function PanelHeroContent({ selectedHero, disabled = false }: Props) {
 			setFacesetID(-1);
 			setFacesetIndexX(0);
 			setFacesetIndexY(0);
-			setFacesetTexture(
-				(await Project.current!.pictures.getByID(PICTURE_KIND.FACESETS, -1)?.getPathOrBase64()) ?? ''
-			);
+			setFacesetTexture('');
 			setBattlerID(-1);
-			setBattlerTexture(
-				(await Project.current!.pictures.getByID(PICTURE_KIND.BATTLERS, -1)?.getPathOrBase64()) ?? ''
-			);
+			setBattlerTexture('');
 		}
 	};
 
