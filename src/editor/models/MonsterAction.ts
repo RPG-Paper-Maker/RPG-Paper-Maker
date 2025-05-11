@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import i18next from 'i18next';
 import {
 	BINDING,
 	BindingType,
@@ -18,31 +19,37 @@ import {
 	MONSTER_ACTION_TARGET_KIND,
 	OPERATION_KIND,
 } from '../common';
+import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Base } from './Base';
 
+const { t } = i18next;
+
 class MonsterAction extends Base {
-	public actionKind!: number;
+	public static selectedMonsterActions: MonsterAction[] = [];
+
+	public actionKind!: MONSTER_ACTION_KIND;
 	public skillID!: DynamicValue;
 	public itemID!: DynamicValue;
 	public itemNumberMax!: DynamicValue;
 	public priority!: DynamicValue;
-	public targetKind!: number;
+	public targetKind!: MONSTER_ACTION_TARGET_KIND;
 	public isConditionTurn!: boolean;
-	public operationKindTurn!: number;
+	public operationKindTurn!: OPERATION_KIND;
 	public turnValueCompare!: DynamicValue;
 	public isConditionStatistic!: boolean;
 	public statisticID!: DynamicValue;
-	public operationKindStatistic!: number;
+	public operationKindStatistic!: OPERATION_KIND;
 	public statisticValueCompare!: DynamicValue;
 	public isConditionVariable!: boolean;
 	public variableID!: number;
-	public operationKindVariable!: number;
+	public operationKindVariable!: OPERATION_KIND;
 	public variableValueCompare!: DynamicValue;
 	public isConditionStatus!: boolean;
 	public statusID!: DynamicValue;
 	public isConditionScript!: boolean;
 	public script!: DynamicValue;
+	public isCurrent = false;
 
 	public static bindings: BindingType[] = [
 		['actionKind', 'ak', MONSTER_ACTION_KIND.DO_NOTHING, BINDING.NUMBER],
@@ -95,11 +102,94 @@ class MonsterAction extends Base {
 		['isConditionStatus', 'icst', false, BINDING.BOOLEAN],
 		['statusID', 'stsid', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 0), BINDING.DYNAMIC_VALUE, DynamicValue],
 		['isConditionScript', 'icsc', false, BINDING.BOOLEAN],
-		['script', 's', DynamicValue.create(DYNAMIC_VALUE_KIND.TEXT, ''), BINDING.DYNAMIC_VALUE, DynamicValue],
+		['script', 's', DynamicValue.create(DYNAMIC_VALUE_KIND.FORMULA, ''), BINDING.DYNAMIC_VALUE, DynamicValue],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	static getTreeHeader(): string[] {
+		return ['action', 'conditions', 'priority', 'probability'];
+	}
+
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(MonsterAction.getBindings(additionnalBinding));
+	}
+
+	getProbability(p?: number): string {
+		this.isCurrent = true;
+		let priority = p ?? 0;
+		let sum = 0;
+		for (const action of MonsterAction.selectedMonsterActions) {
+			const currentPriority = action.priority.getFixNumberValue();
+			if (p === undefined && action.isCurrent) {
+				priority = currentPriority;
+			}
+			sum += p !== undefined && action.isCurrent ? p : currentPriority;
+		}
+		this.isCurrent = false;
+		return `${(sum === 0 ? 0 : (priority / sum) * 100).toFixed(2)}%`;
+	}
+
+	toStringAction(): string {
+		switch (this.actionKind) {
+			case MONSTER_ACTION_KIND.USE_SKILL:
+				return `${t('use.skill.id')} ${this.skillID.toString(Project.current!.skills.list)}`;
+			case MONSTER_ACTION_KIND.USE_ITEM:
+				return `${t('use.item.id')} ${this.itemID.toString(Project.current!.items.list)} ${t(
+					'number.max'
+				).toLowerCase()} ${this.itemNumberMax.toString()}`;
+			case MONSTER_ACTION_KIND.DO_NOTHING:
+				return t('do.nothing');
+		}
+	}
+
+	toStringConditions(): string {
+		const conditions: string[] = [];
+		if (this.isConditionTurn) {
+			conditions.push(
+				`${t('turn.value.is')} ${
+					Base.getCompareOptions()[this.operationKindTurn].name
+				} ${this.turnValueCompare.toString()}`
+			);
+		}
+		if (this.isConditionStatistic) {
+			conditions.push(
+				`${t('statistic.id')} ${this.statisticID.toString(Project.current!.battleSystem.statistics)} ${t(
+					'value.is'
+				).toLowerCase()} ${Base.getCompareOptions()[
+					this.operationKindStatistic
+				].name.toLowerCase()} ${this.statisticValueCompare.toString()}%`
+			);
+		}
+		if (this.isConditionVariable) {
+			conditions.push(
+				`${t('variable')} ${
+					Project.current!.variables.getVariableByID(this.variableID)?.toString() ?? this.variableID
+				} ${t('value.is').toLowerCase()} ${Base.getCompareOptions()[
+					this.operationKindVariable
+				].name.toLowerCase()} ${this.statisticValueCompare.toString()}`
+			);
+		}
+		if (this.isConditionStatus) {
+			conditions.push(
+				`${t('is.under.effect.of.status.id')} ${this.statusID.toString(Project.current!.status.list)}`
+			);
+		}
+		if (this.isConditionScript) {
+			conditions.push(`${t('script')}: ${this.script.toString()}`);
+		}
+		return conditions.length === 0 ? '-' : conditions.join(' | ');
+	}
+
+	toStrings(): string[] {
+		return [
+			Base.STRING_START + this.toStringAction(),
+			this.toStringConditions(),
+			this.priority.toString(),
+			this.getProbability(),
+		];
 	}
 
 	copy(monsterAction: MonsterAction): void {

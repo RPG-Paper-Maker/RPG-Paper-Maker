@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_KIND } from '../../../common';
 import { Node, Project } from '../../../core';
 import { DynamicValue } from '../../../core/DynamicValue';
-import { Base, Monster, MonsterLoot, ProgressionTable } from '../../../models';
+import { Base, Monster, MonsterAction, MonsterLoot, ProgressionTable } from '../../../models';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tab from '../../Tab';
@@ -31,6 +31,7 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 	const { t } = useTranslation();
 
 	const [loots, setLoots] = useState<Node[]>([]);
+	const [actions, setActions] = useState<Node[]>([]);
 
 	const currenciesTitles = useMemo(
 		() => Project.current!.systems.currencies.map((currency, index) => Base.create(index, currency.getName())),
@@ -39,7 +40,9 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 
 	const update = async () => {
 		if (selectedMonster) {
-			setLoots(Node.createList(selectedMonster.loots));
+			setLoots(Node.createList(selectedMonster.loots, false));
+			MonsterAction.selectedMonsterActions = selectedMonster.actions;
+			setActions(Node.createList(selectedMonster.actions, false));
 		} else {
 			setLoots([]);
 		}
@@ -48,6 +51,13 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 	const handleUpdateLoots = () => {
 		if (selectedMonster) {
 			selectedMonster.loots = Node.createListFromNodes(loots);
+		}
+	};
+
+	const handleUpdateActions = () => {
+		if (selectedMonster) {
+			selectedMonster.actions = Node.createListFromNodes(actions);
+			MonsterAction.selectedMonsterActions = selectedMonster.actions;
 		}
 	};
 
@@ -109,7 +119,19 @@ function PanelMonsterContent({ selectedMonster, disabled = false }: Props) {
 						</Flex>
 					</Flex>
 				</Groupbox>
-				<Groupbox title={t('actions')} disabled={disabled}></Groupbox>
+				<Groupbox title={t('actions')} disabled={disabled}>
+					<Tree
+						constructorType={MonsterAction}
+						list={actions}
+						onListUpdated={handleUpdateActions}
+						minHeight={TREES_MIN_HEIGHT}
+						disabled={disabled}
+						noScrollOnForce
+						scrollable
+						canBeEmpty
+						byIndex
+					/>
+				</Groupbox>
 			</Flex>
 		</Flex>
 	);

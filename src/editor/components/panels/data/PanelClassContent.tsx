@@ -73,9 +73,9 @@ function PanelClassContent({ selectedClass, upperClass, disabled = false }: Prop
 					? upperClass!.experienceInflation
 					: selectedClass.experienceInflation
 			);
-			setStatisticsProgression(Node.createList(selectedClass.statisticsProgression));
-			setCharacteristics(Node.createList(selectedClass.characteristics));
-			setSkills(Node.createList(selectedClass.skills));
+			setStatisticsProgression(Node.createList(selectedClass.statisticsProgression, false));
+			setCharacteristics(Node.createList(selectedClass.characteristics, false));
+			setSkills(Node.createList(selectedClass.skills, false));
 		} else {
 			setExperienceToNextLevelValues([]);
 			setExperienceTotalValues([]);

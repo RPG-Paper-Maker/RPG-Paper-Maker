@@ -55,15 +55,18 @@ function DialogMonsterLoot({ isOpen, setIsOpen, model, onAccept, onReject }: Pro
 		weaponID.updateToDefaultDatabase();
 		armorID.updateToDefaultDatabase();
 		switch (monsterLoot.kind) {
-			case ITEM_KIND.ITEM:
+			case ITEM_KIND.ITEM: {
 				itemID.copy(monsterLoot.lootID);
 				break;
-			case ITEM_KIND.WEAPON:
+			}
+			case ITEM_KIND.WEAPON: {
 				weaponID.copy(monsterLoot.lootID);
 				break;
-			case ITEM_KIND.ITEM:
+			}
+			case ITEM_KIND.ITEM: {
 				armorID.copy(monsterLoot.lootID);
 				break;
+			}
 		}
 		number.copy(monsterLoot.number);
 		probability.copy(monsterLoot.probability);
@@ -75,15 +78,18 @@ function DialogMonsterLoot({ isOpen, setIsOpen, model, onAccept, onReject }: Pro
 	const handleAccept = async () => {
 		monsterLoot.kind = kind;
 		switch (kind) {
-			case ITEM_KIND.ITEM:
+			case ITEM_KIND.ITEM: {
 				monsterLoot.lootID.copy(itemID);
 				break;
-			case ITEM_KIND.WEAPON:
+			}
+			case ITEM_KIND.WEAPON: {
 				monsterLoot.lootID.copy(weaponID);
 				break;
-			case ITEM_KIND.ITEM:
+			}
+			case ITEM_KIND.ITEM: {
 				monsterLoot.lootID.copy(armorID);
 				break;
+			}
 		}
 		monsterLoot.number.copy(number);
 		monsterLoot.probability.copy(probability);

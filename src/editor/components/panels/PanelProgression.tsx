@@ -123,6 +123,7 @@ function PanelProgression({ progression, randomVariation, disabled }: Props) {
 
 	useEffect(() => {
 		initialize();
+		// eslint-disable-next-line
 	}, [progression]);
 
 	const getTableContent = () => (

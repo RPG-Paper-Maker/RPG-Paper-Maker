@@ -217,6 +217,8 @@ class Base extends Serializable {
 
 	public static ALLOW_FORBID_OPTIONS = Base.mapListIndex(['allow', 'forbid']);
 
+	public static MONSTER_ACTION_TARGET_OPTIONS = Base.mapListIndex(['random', 'weak.enemies']);
+
 	public static getCompareOptions = () =>
 		Base.mapListIndex([
 			`= (${t('equal.to')})`,

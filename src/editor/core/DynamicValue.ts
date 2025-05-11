@@ -289,7 +289,9 @@ class DynamicValue extends Serializable {
 					Model.Base.getByID(Project.current!.keyboard.list, this.value as number)
 				)}`;
 			case DYNAMIC_VALUE_KIND.DATABASE:
-				return this.getBaseString(Model.Base.getByID(database, this.value as number));
+			case DYNAMIC_VALUE_KIND.NUMBER:
+			case DYNAMIC_VALUE_KIND.NUMBER_DECIMAL:
+				return this.getBaseString(Model.Base.getByID(database ?? [], this.value as number));
 			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
 				return this.customStructure.toStringComplete();
 			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
@@ -298,8 +300,6 @@ class DynamicValue extends Serializable {
 				return `x: ${this.x.toString()}, y: ${this.y.toString()}`;
 			case DYNAMIC_VALUE_KIND.VECTOR3:
 				return `x: ${this.x.toString()}, y: ${this.y.toString()}, z: ${this.z.toString()}`;
-			case DYNAMIC_VALUE_KIND.NUMBER:
-			case DYNAMIC_VALUE_KIND.NUMBER_DECIMAL:
 			case DYNAMIC_VALUE_KIND.UNKNOWN:
 			case DYNAMIC_VALUE_KIND.PARAMETER:
 			case DYNAMIC_VALUE_KIND.PROPERTY:

@@ -39,6 +39,10 @@ class MonsterLoot extends Base {
 		return ['name', 'number', 'probability', 'initial', 'final'];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(MonsterLoot.getBindings(additionnalBinding));
+	}
+
 	getDatabase(): Base[] {
 		switch (this.kind) {
 			case ITEM_KIND.ITEM:
@@ -52,7 +56,7 @@ class MonsterLoot extends Base {
 
 	toStrings(): string[] {
 		return [
-			this.lootID.toString(this.getDatabase()),
+			Base.STRING_START + this.lootID.toString(this.getDatabase()),
 			this.number.toString(),
 			this.probability.toString(),
 			this.initial.toString(),

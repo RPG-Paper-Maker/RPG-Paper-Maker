@@ -143,6 +143,7 @@ function Tab({
 
 	useEffect(() => {
 		scrollToSelectedElement();
+		// eslint-disable-next-line
 	}, []);
 
 	const getTitles = () =>

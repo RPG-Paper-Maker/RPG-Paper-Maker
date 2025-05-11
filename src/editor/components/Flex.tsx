@@ -31,6 +31,7 @@ type Props = {
 	fillSmallSpace?: boolean;
 	disabledLabel?: boolean;
 	scrollable?: boolean;
+	whiteSpaceNowrap?: boolean;
 	className?: string;
 	onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 	[key: string]: unknown;
@@ -55,6 +56,7 @@ function Flex({
 	fillSmallSpace = false,
 	disabledLabel = false,
 	scrollable = false,
+	whiteSpaceNowrap = false,
 	className,
 	onClick,
 	...rest
@@ -80,6 +82,7 @@ function Flex({
 					fillSmallSpace,
 					disabledLabel,
 					scrollable,
+					whiteSpaceNowrap,
 				},
 				`flex ${className ?? ''}`
 			)}
