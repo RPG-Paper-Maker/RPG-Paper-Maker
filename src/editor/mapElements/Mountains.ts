@@ -9,21 +9,21 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BackSide, Mesh, MeshPhongMaterial, Texture } from 'three';
+import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { PICTURE_KIND } from '../common';
 import { CustomGeometry, Picture2D, Position, Project } from '../core';
 
 class Mountains {
 	public pictureID: number;
-	public material: MeshPhongMaterial;
+	public material: THREE.MeshPhongMaterial;
 	public width: number;
 	public height: number;
 	public geometry: CustomGeometry;
 	public count: number;
-	public mesh: Mesh | null;
+	public mesh: THREE.Mesh | null;
 
-	constructor(pictureID: number, material: MeshPhongMaterial) {
+	constructor(pictureID: number, material: THREE.MeshPhongMaterial) {
 		this.pictureID = pictureID;
 		this.material = material;
 		const { width, height } = Manager.GL.getMaterialTextureSize(material);
@@ -38,11 +38,11 @@ class Mountains {
 		return width === 0 ? 90 : (Math.atan(height / width) * 180) / Math.PI;
 	}
 
-	static getMountainTexture(map: Scene.Map, id: number): MeshPhongMaterial | null {
+	static getMountainTexture(map: Scene.Map, id: number): THREE.MeshPhongMaterial | null {
 		return map.texturesMountains.get(Project.current!.specialElements.getMountainByID(id).pictureID) || null;
 	}
 
-	static async loadMountainTexture(map: Scene.Map | null, id: number): Promise<MeshPhongMaterial> {
+	static async loadMountainTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
 		const mountain = Project.current!.specialElements.getMountainByID(id);
 		const pictureID = mountain.pictureID;
 		let textureMountain = map ? map.texturesMountains.get(pictureID) : null;
@@ -62,7 +62,7 @@ class Mountains {
 		return textureMountain;
 	}
 
-	static async loadTextureMountain(map: Scene.Map | null, picture: Model.Picture): Promise<MeshPhongMaterial> {
+	static async loadTextureMountain(map: Scene.Map | null, picture: Model.Picture): Promise<THREE.MeshPhongMaterial> {
 		const image = await Picture2D.loadImage(await picture.getPathOrBase64());
 		const sourceSize = 3 * Project.SQUARE_SIZE;
 		const sDiv = Math.round(Project.SQUARE_SIZE / 2);
@@ -168,10 +168,10 @@ class Mountains {
 					') parsing. Please verify that you have a 3 x 3 picture.'
 			);
 		}
-		const texture = new Texture();
+		const texture = new THREE.Texture();
 		texture.image = await Picture2D.loadImage(Scene.Map.canvasRendering!.toDataURL());
 		texture.needsUpdate = true;
-		const material = Manager.GL.createMaterial({ texture, side: BackSide });
+		const material = Manager.GL.createMaterial({ texture, side: THREE.BackSide });
 		if (map) {
 			map.texturesMountains.set(picture.id, material);
 		}
@@ -217,7 +217,7 @@ class Mountains {
 			return false;
 		}
 		this.geometry.updateAttributes();
-		this.mesh = new Mesh(this.geometry, this.material);
+		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		return true;
 	}
 }

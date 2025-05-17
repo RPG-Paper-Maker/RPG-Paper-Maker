@@ -9,25 +9,25 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { FileLoader, Vector2, Vector3 } from 'three';
+import * as THREE from 'three';
 import { CUSTOM_SHAPE_KIND, Paths } from '../common';
 import { readPublicFile } from '../common/Platform';
 import { LocalFile, Project } from '../core';
 import { Asset } from './Asset';
 
 type GeometryDataType = {
-	vertices: Vector3[];
-	uvs: Vector2[];
-	minVertex: Vector3;
-	maxVertex: Vector3;
-	center: Vector3;
+	vertices: THREE.Vector3[];
+	uvs: THREE.Vector2[];
+	minVertex: THREE.Vector3;
+	maxVertex: THREE.Vector3;
+	center: THREE.Vector3;
 	w: number;
 	h: number;
 	d: number;
 };
 
 class Shape extends Asset {
-	public static loader = new FileLoader();
+	public static loader = new THREE.FileLoader();
 
 	public kind!: CUSTOM_SHAPE_KIND;
 	public geometryData!: GeometryDataType;
@@ -55,8 +55,8 @@ class Shape extends Asset {
 		const uvs = [];
 		const v = [];
 		const t = [];
-		let minVertex = new Vector3();
-		let maxVertex = new Vector3();
+		let minVertex = new THREE.Vector3();
+		let maxVertex = new THREE.Vector3();
 		let firstVertex = true;
 		// eslint-disable-next-line
 		const vertexPattern = /^v\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
@@ -77,7 +77,7 @@ class Shape extends Asset {
 			result = vertexPattern.exec(line);
 			if (result !== null) {
 				// ["v 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
-				const temp3D = new Vector3(
+				const temp3D = new THREE.Vector3(
 					parseFloat(result[1]) * Project.SQUARE_SIZE,
 					parseFloat(result[2]) * Project.SQUARE_SIZE,
 					parseFloat(result[3]) * Project.SQUARE_SIZE
@@ -118,7 +118,7 @@ class Shape extends Asset {
 			result = uvPattern.exec(line);
 			if (result !== null) {
 				// ["vt 0.1 0.2", "0.1", "0.2"]
-				t.push(new Vector2(parseFloat(result[1]), 1.0 - parseFloat(result[2])));
+				t.push(new THREE.Vector2(parseFloat(result[1]), 1.0 - parseFloat(result[2])));
 				continue;
 			}
 			result = facePattern.exec(line);
@@ -144,7 +144,7 @@ class Shape extends Asset {
 			uvs,
 			minVertex,
 			maxVertex,
-			center: new Vector3(
+			center: new THREE.Vector3(
 				(maxVertex.x - minVertex.x) / 2 + minVertex.x,
 				(maxVertex.y - minVertex.y) / 2 + minVertex.y,
 				(maxVertex.z - minVertex.z) / 2 + minVertex.z

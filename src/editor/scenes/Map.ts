@@ -9,21 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import {
-	AmbientLight,
-	BoxGeometry,
-	Color,
-	DirectionalLight,
-	DoubleSide,
-	Material,
-	Mesh,
-	MeshPhongMaterial,
-	NearestFilter,
-	Object3D,
-	PlaneGeometry,
-	Vector2,
-	Vector3,
-} from 'three';
+import * as THREE from 'three';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
 import { Base } from '.';
 import {
@@ -79,14 +65,14 @@ class Map extends Base {
 	public static ctxRendering: CanvasRenderingContext2D | null = null;
 	public static animationFrameID: number;
 	public static positionSelectorAnimationFrameID: number;
-	public static materialCursor: MeshPhongMaterial;
-	public static materialObjectSquareCursor: MeshPhongMaterial;
-	public static materialObjectSquare: MeshPhongMaterial;
-	public static materialDetectionBox: MeshPhongMaterial;
-	public static materialDetectionArrow: MeshPhongMaterial;
+	public static materialCursor: THREE.MeshPhongMaterial;
+	public static materialObjectSquareCursor: THREE.MeshPhongMaterial;
+	public static materialObjectSquare: THREE.MeshPhongMaterial;
+	public static materialDetectionBox: THREE.MeshPhongMaterial;
+	public static materialDetectionArrow: THREE.MeshPhongMaterial;
 	public static pictureTilesetCursor: HTMLImageElement;
 	public static pictureLayersOnCursor: HTMLImageElement;
-	public static materialStartPosition: MeshPhongMaterial;
+	public static materialStartPosition: THREE.MeshPhongMaterial;
 
 	public id: number;
 	public tag?: Model.TreeMapTag;
@@ -97,7 +83,7 @@ class Map extends Base {
 	public detectionFieldTop?: number;
 	public detectionFieldBot?: number;
 	public detectionBoxes?: globalThis.Map<string, MapElement.Object3DBox>;
-	public detectionBoxesMesh?: Mesh;
+	public detectionBoxesMesh?: THREE.Mesh;
 	public detectionCurrentData?: Model.Object3D;
 	public detectionSquare = true;
 	public needsTreeMapUpdate = false;
@@ -114,15 +100,15 @@ class Map extends Base {
 	public cursorObject!: Cursor;
 	public cursorDetection!: Cursor;
 	public cursorWall = new CursorWall();
-	public meshPlane: Object3D | null = null;
-	public sunLight!: DirectionalLight;
+	public meshPlane: THREE.Object3D | null = null;
+	public sunLight!: THREE.DirectionalLight;
 	public transformControls!: TransformControls;
 	public mapPortions!: (MapPortion | null)[];
 	public currentPortion!: Portion;
 	public previousPortion!: Portion;
-	public materialTileset!: MeshPhongMaterial;
-	public materialTilesetHover!: MeshPhongMaterial;
-	public selectionOffset = new Vector2();
+	public materialTileset!: THREE.MeshPhongMaterial;
+	public materialTilesetHover!: THREE.MeshPhongMaterial;
+	public selectionOffset = new THREE.Vector2();
 	public portionsToUpdate: Set<MapPortion> = new Set();
 	public portionsToSave: Set<MapPortion> = new Set();
 	public portionsSaving: Set<MapPortion> = new Set();
@@ -135,19 +121,19 @@ class Map extends Base {
 	public pointedMapElement: MapElement.Base | null = null;
 	public isMobileMovingCursor = false;
 	public texturesAutotiles: TextureBundle[][] = [];
-	public texturesWalls: MeshPhongMaterial[] = [];
-	public texturesObjects3D: MeshPhongMaterial[] = [];
-	public texturesObjects3DHover: MeshPhongMaterial[] = [];
-	public texturesMountains: globalThis.Map<number, MeshPhongMaterial> = new globalThis.Map();
-	public texturesCharacters: MeshPhongMaterial[] = [];
-	public autotilesOffset = new Vector2();
+	public texturesWalls: THREE.MeshPhongMaterial[] = [];
+	public texturesObjects3D: THREE.MeshPhongMaterial[] = [];
+	public texturesObjects3DHover: THREE.MeshPhongMaterial[] = [];
+	public texturesMountains: globalThis.Map<number, THREE.MeshPhongMaterial> = new globalThis.Map();
+	public texturesCharacters: THREE.MeshPhongMaterial[] = [];
+	public autotilesOffset = new THREE.Vector2();
 	public autotileFrame = new Frame(Project.current!.systems.autotilesFrameDuration, {
 		frames: Project.current!.systems.autotilesFrames,
 	});
-	public selectedMesh!: Mesh;
+	public selectedMesh!: THREE.Mesh;
 	public selectedElement: MapElement.Base | null = null;
 	public selectedPosition: Position | null = null;
-	public hoveredMesh!: Mesh;
+	public hoveredMesh!: THREE.Mesh;
 	public rectangleStartPosition: Position | null = null;
 	public lastRectangleEndPosition: Position | null = null;
 	public lockedY: number | null = null;
@@ -252,17 +238,20 @@ class Map extends Base {
 			// Background
 			await this.updateBackground();
 		} else {
-			this.scene.background = new Color(0x221f2e);
+			this.scene.background = new THREE.Color(0x221f2e);
 		}
 
 		// Create grid plane
-		const material = new Material();
+		const material = new THREE.Material();
 		material.visible = false;
-		material.side = DoubleSide;
+		material.side = THREE.DoubleSide;
 		const length = Project.SQUARE_SIZE * this.model.length;
 		const width = Project.SQUARE_SIZE * this.model.width;
 		const extremeSize = Project.SQUARE_SIZE * 1000;
-		this.meshPlane = new Mesh(new PlaneGeometry(length + extremeSize, width + extremeSize, 1), material);
+		this.meshPlane = new THREE.Mesh(
+			new THREE.PlaneGeometry(length + extremeSize, width + extremeSize, 1),
+			material
+		);
 		this.meshPlane.visible = false;
 		this.meshPlane.position.set(Math.floor(length / 2), 0, Math.floor(width / 2));
 		this.meshPlane.rotation.set(Math.PI / -2, 0, 0);
@@ -299,10 +288,10 @@ class Map extends Base {
 				this.setTransformMode(Project.current!.settings.mapEditorCurrentActionIndex);
 			}
 			this.scene.add(this.transformControls.getHelper());
-			this.selectedMesh = new Mesh(new CustomGeometry(), this.materialTilesetHover);
+			this.selectedMesh = new THREE.Mesh(new CustomGeometry(), this.materialTilesetHover);
 			this.selectedMesh.receiveShadow = true;
 			this.selectedMesh.castShadow = true;
-			this.hoveredMesh = new Mesh(new CustomGeometry(), this.materialTilesetHover);
+			this.hoveredMesh = new THREE.Mesh(new CustomGeometry(), this.materialTilesetHover);
 			this.hoveredMesh.customDepthMaterial = this.materialTilesetHover.userData.customDepthMaterial;
 			this.hoveredMesh.receiveShadow = true;
 			this.hoveredMesh.castShadow = true;
@@ -400,10 +389,10 @@ class Map extends Base {
 	}
 
 	initializeSunLight() {
-		const ambient = new AmbientLight(0xffffff, this.model.isSunlight ? 1.2 : 2.0);
+		const ambient = new THREE.AmbientLight(0xffffff, this.model.isSunlight ? 1.2 : 2.0);
 		this.scene.add(ambient);
 		if (this.model.isSunlight) {
-			this.sunLight = new DirectionalLight(0xffffff, 2);
+			this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
 			this.sunLight.position.set(-1, 1.75, 1);
 			this.sunLight.position.multiplyScalar(Project.SQUARE_SIZE * 10);
 			this.sunLight.target.position.set(0, 0, 0);
@@ -444,15 +433,15 @@ class Map extends Base {
 		const texture = Manager.GL.textureLoader.load(
 			Project.current!.pictures.getByID(PICTURE_KIND.PICTURES, this.model.skyImageID).getPath()
 		);
-		texture.magFilter = NearestFilter;
-		texture.minFilter = NearestFilter;
+		texture.magFilter = THREE.NearestFilter;
+		texture.minFilter = THREE.NearestFilter;
 		this.scene.background = texture;
 	}
 
 	async updateBackgroundSkybox() {
 		const size = (10000 * Project.SQUARE_SIZE) / Constants.BASE_SQUARE_SIZE;
-		const skyboxGeometry = new BoxGeometry(size, size, size);
-		const skyboxMesh = new Mesh(
+		const skyboxGeometry = new THREE.BoxGeometry(size, size, size);
+		const skyboxMesh = new THREE.Mesh(
 			skyboxGeometry,
 			await (
 				Model.Base.getByIDOrFirst(
@@ -492,7 +481,7 @@ class Map extends Base {
 			count = box.updateGeometry(geometry, position, count);
 		}
 		geometry.updateAttributes();
-		this.detectionBoxesMesh = new Mesh(geometry, Map.materialDetectionBox);
+		this.detectionBoxesMesh = new THREE.Mesh(geometry, Map.materialDetectionBox);
 		this.detectionBoxesMesh.layers.enable(RAYCASTING_LAYER.OBJECTS3D);
 		this.detectionBoxesMesh.renderOrder = 999;
 		this.scene.add(this.detectionBoxesMesh);
@@ -1258,7 +1247,7 @@ class Map extends Base {
 			this.canEdit &&
 			Map.currentSelectedMapElementKind >= ELEMENT_MAP_KIND.SPRITE_FACE &&
 			Map.currentSelectedMapElementKind <= ELEMENT_MAP_KIND.SPRITE_WALL;
-		const pointer = new Vector2(
+		const pointer = new THREE.Vector2(
 			(Inputs.getPositionX() / this.canvas!.clientWidth) * 2 - 1,
 			-(Inputs.getPositionY() / this.canvas!.clientHeight) * 2 + 1
 		);
@@ -1325,7 +1314,7 @@ class Map extends Base {
 				(Map.isRemoving() ||
 					(this.lockedY === null && this.lockedYPixels === null && this.lockedLayer === null))
 			) {
-				const newPositionKey = ((obj.object as Mesh).geometry as CustomGeometry)?.facePositions?.[
+				const newPositionKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
 					obj.faceIndex ?? 0
 				];
 				if (newPositionKey && (Map.isRemoving() || layer === RAYCASTING_LAYER.LANDS)) {
@@ -1552,7 +1541,7 @@ class Map extends Base {
 		intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		for (const obj of intersects) {
 			if (obj.faceIndex !== undefined) {
-				const newPositionKey = ((obj.object as Mesh).geometry as CustomGeometry)?.facePositions?.[
+				const newPositionKey = ((obj.object as THREE.Mesh).geometry as CustomGeometry)?.facePositions?.[
 					obj.faceIndex ?? 0
 				];
 				if (newPositionKey) {
@@ -1966,7 +1955,7 @@ class Map extends Base {
 		}
 
 		// Update face sprites
-		const vector = new Vector3();
+		const vector = new THREE.Vector3();
 		this.camera.getThreeCamera().getWorldDirection(vector);
 		const angle = Math.atan2(vector.x, vector.z) + Math.PI;
 		this.forEachMapPortions((mapPortion) => {
@@ -2002,7 +1991,7 @@ class Map extends Base {
 
 	draw3D(GL = Manager.GL.mainContext) {
 		if (this.needsClose) {
-			this.scene.background = new Color(0x2e324a);
+			this.scene.background = new THREE.Color(0x2e324a);
 		}
 		super.draw3D(GL);
 	}

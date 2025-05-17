@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Matrix4, PerspectiveCamera, Camera as ThreeCamera, Vector3 } from 'three';
+import * as THREE from 'three';
 import { Mathf, Utils } from '../common';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
@@ -19,17 +19,17 @@ class Camera {
 	public static MIN_ZOOM = 20;
 	public static MAX_ZOOM = 10000;
 
-	public perspectiveCamera: PerspectiveCamera;
-	public targetPosition: Vector3;
+	public perspectiveCamera: THREE.PerspectiveCamera;
+	public targetPosition: THREE.Vector3;
 	public distance: number;
 	public horizontalAngle: number;
 	public verticalAngle: number;
-	public defaultCameraPosition: Vector3;
+	public defaultCameraPosition: THREE.Vector3;
 	public tag?: Model.TreeMapTag;
 
 	constructor(tag?: Model.TreeMapTag, isDetection = false) {
 		this.tag = tag;
-		this.perspectiveCamera = new PerspectiveCamera(45, 1, 0.1, 100000);
+		this.perspectiveCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 100000);
 		this.distance = Utils.defaultValue(
 			tag?.cameraDistance,
 			(isDetection ? 400 : 800) * Project.current!.systems.getCoefSquareSize()
@@ -39,7 +39,7 @@ class Camera {
 		this.targetPosition =
 			tag && tag.cursorPosition
 				? tag.cursorPosition.toVector3()
-				: new Vector3(Project.SQUARE_SIZE / 2, 0, Project.SQUARE_SIZE / 2);
+				: new THREE.Vector3(Project.SQUARE_SIZE / 2, 0, Project.SQUARE_SIZE / 2);
 		this.update();
 		this.defaultCameraPosition = this.getThreeCamera().position.clone();
 	}
@@ -70,7 +70,7 @@ class Camera {
 		return this.distance * Math.cos((this.verticalAngle * Math.PI) / 180.0);
 	}
 
-	getThreeCamera(): ThreeCamera {
+	getThreeCamera(): THREE.Camera {
 		return this.perspectiveCamera;
 	}
 
@@ -82,9 +82,9 @@ class Camera {
 		return this.verticalAngle < 90;
 	}
 
-	getFront(direction: Vector3, angle: number) {
-		const planeDirection = new Vector3(0, 0, 1);
-		const m = new Matrix4();
+	getFront(direction: THREE.Vector3, angle: number) {
+		const planeDirection = new THREE.Vector3(0, 0, 1);
+		const m = new THREE.Matrix4();
 		m.makeRotationAxis(MapElement.Sprite.Y_AXIS, Mathf.degreesToRadians(angle));
 		planeDirection.applyMatrix4(m);
 		return direction.dot(planeDirection) < 0;

@@ -10,7 +10,7 @@
 */
 
 import i18next from 'i18next';
-import { MeshPhongMaterial, Vector3 } from 'three';
+import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import {
 	BINDING,
@@ -58,7 +58,7 @@ abstract class Object3D extends Base {
 		return object;
 	}
 
-	static getObject3DTexture(map: Scene.Map, id: number, hovered = false): MeshPhongMaterial | null {
+	static getObject3DTexture(map: Scene.Map, id: number, hovered = false): THREE.MeshPhongMaterial | null {
 		const array = hovered ? map.texturesObjects3DHover : map.texturesObjects3D;
 		return array[Project.current!.specialElements.getObject3DByID(id).pictureID] || null;
 	}
@@ -71,7 +71,7 @@ abstract class Object3D extends Base {
 		return true;
 	}
 
-	static async loadObject3DTexture(map: Scene.Map | null, id: number): Promise<MeshPhongMaterial> {
+	static async loadObject3DTexture(map: Scene.Map | null, id: number): Promise<THREE.MeshPhongMaterial> {
 		const object3D = Project.current!.specialElements.getObject3DByID(id);
 		const pictureID = object3D.pictureID;
 		let textureObject3D = map ? map.texturesObjects3D[pictureID] : null;
@@ -116,7 +116,7 @@ abstract class Object3D extends Base {
 
 	abstract isCentered(): boolean;
 
-	abstract getCenterVector(): Vector3;
+	abstract getCenterVector(): THREE.Vector3;
 
 	abstract updateGeometry(geometry: CustomGeometry, position: Position, count: number): number;
 

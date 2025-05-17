@@ -8,8 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-
-import { Mesh, MeshPhongMaterial, Vector2, Vector3 } from 'three';
+import * as THREE from 'three';
 import { CustomGeometry, Frame, Position, Project } from '.';
 import { KEY } from '../common';
 import { MapElement, Scene } from '../Editor';
@@ -18,7 +17,7 @@ import { Inputs } from '../managers';
 class Cursor {
 	public position: Position;
 	public map: Scene.Map;
-	public mesh!: Mesh<CustomGeometry, MeshPhongMaterial>;
+	public mesh!: THREE.Mesh<CustomGeometry, THREE.MeshPhongMaterial>;
 	public frame = new Frame(200);
 	public frameMove = new Frame(20);
 
@@ -27,11 +26,11 @@ class Cursor {
 		this.map = map;
 	}
 
-	initialize(material: MeshPhongMaterial, frames = 4, addToScene = true) {
-		const vecA = new Vector3(0, 0, 0);
-		const vecB = new Vector3(Project.SQUARE_SIZE, 0, 0);
-		const vecC = new Vector3(Project.SQUARE_SIZE, 0, Project.SQUARE_SIZE);
-		const vecD = new Vector3(0, 0, Project.SQUARE_SIZE);
+	initialize(material: THREE.MeshPhongMaterial, frames = 4, addToScene = true) {
+		const vecA = new THREE.Vector3(0, 0, 0);
+		const vecB = new THREE.Vector3(Project.SQUARE_SIZE, 0, 0);
+		const vecC = new THREE.Vector3(Project.SQUARE_SIZE, 0, Project.SQUARE_SIZE);
+		const vecD = new THREE.Vector3(0, 0, Project.SQUARE_SIZE);
 		const geometry = new CustomGeometry();
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 		geometry.pushQuadIndices(0);
@@ -43,14 +42,14 @@ class Cursor {
 		const ty = coefY;
 		const tw = 1 / frames - coefX * 2;
 		const th = 1 - coefY * 2;
-		const texA = new Vector2();
-		const texB = new Vector2();
-		const texC = new Vector2();
-		const texD = new Vector2();
+		const texA = new THREE.Vector2();
+		const texB = new THREE.Vector2();
+		const texC = new THREE.Vector2();
+		const texD = new THREE.Vector2();
 		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, tx, ty, tw, th);
 		geometry.pushQuadUVs(texA, texB, texC, texD);
 		geometry.updateAttributes();
-		this.mesh = new Mesh(geometry, material);
+		this.mesh = new THREE.Mesh(geometry, material);
 		const { x, y, z } = this.position.toVector3(false);
 		this.mesh.position.set(x, y, z);
 		this.mesh.renderOrder = 2;
@@ -118,7 +117,10 @@ class Cursor {
 
 	update() {
 		if (this.frame.update()) {
-			this.mesh.material.userData.uniforms.offset.value = new Vector2(this.frame.value / this.frame.frames, 0);
+			this.mesh.material.userData.uniforms.offset.value = new THREE.Vector2(
+				this.frame.value / this.frame.frames,
+				0
+			);
 		}
 	}
 }

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Mesh, Texture, Vector2 } from 'three';
+import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { AUTOTILE_TILE_NAMES, Constants, PICTURE_KIND, RAYCASTING_LAYER } from '../common';
 import { CustomGeometry, Picture2D, Position, Project, Rectangle, TextureBundle } from '../core';
@@ -71,7 +71,7 @@ class Autotiles {
 	public bundle: TextureBundle;
 	public width: number;
 	public height: number;
-	public meshes: [Mesh[], Mesh[]] = [[], []];
+	public meshes: [THREE.Mesh[], THREE.Mesh[]] = [[], []];
 	public counts: [number[], number[]] = [[], []];
 
 	constructor(bundle: TextureBundle) {
@@ -98,7 +98,7 @@ class Autotiles {
 			let offset = 0;
 			let result = null;
 			let textureAutotile: TextureBundle | null = null;
-			let texture = new Texture();
+			let texture = new THREE.Texture();
 			texturesAutotile = [];
 			if (map) {
 				map.texturesAutotiles[pictureID] = texturesAutotile;
@@ -145,11 +145,11 @@ class Autotiles {
 		map: Scene.Map | null,
 		texturesAutotile: TextureBundle[],
 		textureAutotile: TextureBundle | null,
-		texture: Texture,
+		texture: THREE.Texture,
 		picture: Model.Picture,
 		offset: number,
 		isAnimated: boolean
-	): Promise<[TextureBundle | null, Texture, number]> {
+	): Promise<[TextureBundle | null, THREE.Texture, number]> {
 		const frames = isAnimated ? Project.current!.systems.autotilesFrames : 1;
 		const image = await Picture2D.loadImage(picture.getPath());
 		const width = Math.floor(image.width / 2 / Project.SQUARE_SIZE) / frames;
@@ -162,7 +162,7 @@ class Autotiles {
 			if (isAnimated) {
 				if (textureAutotile != null) {
 					await this.updateTextureAutotile(map, texturesAutotile, textureAutotile, texture);
-					texture = new Texture();
+					texture = new THREE.Texture();
 					Scene.Map.ctxRendering!.clearRect(
 						0,
 						0,
@@ -188,7 +188,7 @@ class Autotiles {
 				textureAutotile.addToList(picture.id, point);
 				if (!isAnimated && offset === this.getMaxAutotilesOffsetTexture()) {
 					await this.updateTextureAutotile(map, texturesAutotile, textureAutotile, texture);
-					texture = new Texture();
+					texture = new THREE.Texture();
 					Scene.Map.ctxRendering!.clearRect(
 						0,
 						0,
@@ -278,7 +278,7 @@ class Autotiles {
 		map: Scene.Map | null,
 		texturesAutotile: TextureBundle[],
 		textureAutotile: TextureBundle,
-		texture: Texture
+		texture: THREE.Texture
 	) {
 		texture.image = await Picture2D.loadImage(Scene.Map.canvasRendering!.toDataURL());
 		texture.needsUpdate = true;
@@ -286,7 +286,7 @@ class Autotiles {
 		if (map) {
 			textureAutotile.material.userData.uniforms.offset.value = textureAutotile.isAnimated
 				? map.autotilesOffset
-				: new Vector2();
+				: new THREE.Vector2();
 		}
 		texturesAutotile.push(textureAutotile);
 	}
@@ -423,7 +423,7 @@ class Autotiles {
 		} else if (this.bundle?.material) {
 			const side = autotile.up ? 0 : 1;
 			if (!this.meshes[side][position.layer]) {
-				const mesh = new Mesh(new CustomGeometry(), this.bundle.material);
+				const mesh = new THREE.Mesh(new CustomGeometry(), this.bundle.material);
 				mesh.receiveShadow = true;
 				mesh.castShadow = true;
 				mesh.customDepthMaterial = this.bundle.material.userData.customDepthMaterial;

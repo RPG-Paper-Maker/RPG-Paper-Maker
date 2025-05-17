@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Vector3 } from 'three';
+import * as THREE from 'three';
 import { CUSTOM_SHAPE_KIND, JSONType } from '../common';
 import { CustomGeometry, Position, Project } from '../core';
 import { MapElement, Model } from '../Editor';
@@ -41,7 +41,7 @@ class Object3DCustom extends Object3D {
 		return this.shape ?? Project.current!.shapes.getByID(CUSTOM_SHAPE_KIND.OBJ, this.data.objID);
 	}
 
-	getCenterVector(): Vector3 {
+	getCenterVector(): THREE.Vector3 {
 		return this.getShape()!.geometryData.center.clone();
 	}
 
@@ -62,8 +62,8 @@ class Object3DCustom extends Object3D {
 		const vertices = modelGeometry.vertices;
 		const uvs = modelGeometry.uvs;
 		const scale = this.data.scale;
-		const scaleVec = new Vector3(scale * position.scaleX, scale * position.scaleY, scale * position.scaleZ);
-		const center = new Vector3();
+		const scaleVec = new THREE.Vector3(scale * position.scaleX, scale * position.scaleY, scale * position.scaleZ);
+		const center = new THREE.Vector3();
 		for (let i = 0, l = modelGeometry.vertices.length; i < l; i += 3) {
 			const vecA = vertices[i].clone();
 			const vecB = vertices[i + 1].clone();
