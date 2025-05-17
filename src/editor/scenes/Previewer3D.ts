@@ -19,7 +19,6 @@ import { Object3D } from '../mapElements';
 class Previewer3D extends Base {
 	public static mainPreviewerScene: Scene.Previewer3D | null = null;
 	public static listScenes: Map<string, Scene.Previewer3D> = new Map(); // id canvas => scene
-	public static canDrawList = false;
 
 	public id: string;
 	public canvas!: HTMLElement;
@@ -160,7 +159,7 @@ class Previewer3D extends Base {
 
 	async loadObject3D(object3DID: number) {
 		const object = Project.current!.specialElements.getObject3DByID(object3DID);
-		this.loadObject3DByModel(object);
+		await this.loadObject3DByModel(object);
 	}
 
 	async loadObject3DByModel(object: Model.Object3D) {

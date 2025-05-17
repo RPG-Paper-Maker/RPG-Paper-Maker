@@ -339,14 +339,16 @@ class ProjectUpdater_3_0_0 {
 		const jsonClasses = await readJSON(Paths.join(projectPath, 'classes.json'));
 		if (jsonClasses) {
 			const classes = jsonClasses.list as JSONType[];
-			for (const obj of classes) {
-				const classObj = obj.v as JSONType;
-				if (classObj.stats) {
-					classObj.stats = Array.from(
-						new Map((classObj.stats as JSONType[]).map((stat) => [stat.id, stat])).values()
-					);
-					if ((classObj.stats as JSONType[]).length === 0) {
-						delete classObj.stats;
+			if (classes) {
+				for (const obj of classes) {
+					const classObj = obj.v as JSONType;
+					if (classObj.stats) {
+						classObj.stats = Array.from(
+							new Map((classObj.stats as JSONType[]).map((stat) => [stat.id, stat])).values()
+						);
+						if ((classObj.stats as JSONType[]).length === 0) {
+							delete classObj.stats;
+						}
 					}
 				}
 			}

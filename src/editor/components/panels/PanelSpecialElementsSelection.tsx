@@ -32,7 +32,7 @@ type Props = {
 };
 
 const ELEMENT_HEIGHT = 30;
-const DISPLAY_INCREMENT = window.innerHeight / ELEMENT_HEIGHT;
+const DISPLAY_INCREMENT = Math.round(window.screen.height / ELEMENT_HEIGHT);
 
 const getCanvasID = (id: number) => `canvas-${id}`;
 
@@ -42,6 +42,8 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	const [previousMinToDisplay, setPreviousMinToDisplay] = useState(0);
 	const [minToDisplay, setMinToDisplay] = useState(0);
 	const [maxToDisplay, setMaxToDisplay] = useState(DISPLAY_INCREMENT);
+	const [positionScroll] = useState({ current: 0 });
+	const [objects3DURLs, setObjects3DURLs] = useState<Map<number, string>>(new Map());
 	const selectedElementRef = useRef<HTMLDivElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
 
@@ -62,6 +64,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 			list = Project.current!.specialElements.objects3D;
 			break;
 	}
+
 	const filteredList = list.slice(minToDisplay, maxToDisplay);
 
 	const currentAutotileID = useSelector((state: RootState) => state.mapEditor.currentAutotileID);
@@ -92,7 +95,6 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	const [firstIndex] = useState(getIndex());
 
 	const canExpand = kind === PICTURE_KIND.AUTOTILES;
-
 	const displayCanvas = kind === PICTURE_KIND.OBJECTS_3D;
 
 	const getChevron = (selected: boolean) => {
@@ -106,53 +108,29 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	const initializeCanvas = async () => {
 		const content = contentRef.current;
 		if (content) {
+			Manager.GL.objectsListRender.setSize(300, 300);
 			await updateCanvas();
-			loop();
-		}
-	};
-
-	const loop = () => {
-		if (Scene.Previewer3D.canDrawList) {
-			if (Scene.Previewer3D.listScenes.size > 0) {
-				for (const [, scene] of Scene.Previewer3D.listScenes) {
-					scene.camera.perspectiveCamera.aspect = 1;
-					scene.camera.perspectiveCamera.updateProjectionMatrix();
-					if (!Scene.Previewer3D.canDrawList) {
-						break;
-					}
-					scene.draw3DCut(Manager.GL.mainContext);
-				}
-				requestAnimationFrame(loop);
-			}
 		}
 	};
 
 	const updateCanvas = async () => {
 		const content = contentRef.current;
 		if (content) {
-			for (const element of filteredList) {
-				const id = getCanvasID(element.id);
-				const canvas = document.getElementById(id);
-				let scene = Scene.Previewer3D.listScenes.get(id);
-				if (scene) {
-					if (canvas) {
-						scene.canvas = canvas;
-						scene.parentCanvas = content;
-					}
-				} else {
-					scene = new Scene.Previewer3D(id);
-					if (canvas) {
-						scene.canvas = canvas;
-						scene.parentCanvas = content;
+			for (let i = 0, l = Math.ceil(content.clientHeight / ELEMENT_HEIGHT); i < l; i++) {
+				const elementID = list[i + positionScroll.current]?.id;
+				if (elementID !== undefined) {
+					if (objects3DURLs.get(elementID) === undefined) {
+						objects3DURLs.set(elementID, '');
+						const scene = new Scene.Previewer3D(getCanvasID(elementID));
 						scene.isCut = true;
+						scene.camera.perspectiveCamera.aspect = 1;
+						scene.camera.perspectiveCamera.updateProjectionMatrix();
+						await scene.loadObject3D(elementID);
 						await scene.load();
-						Scene.Previewer3D.listScenes.set(scene.id, scene);
-						await scene.loadObject3D(element.id);
-						scene.camera.resizeGL(
-							Manager.GL.mainContext,
-							scene.canvas.clientWidth,
-							scene.canvas.clientHeight
-						);
+						Manager.GL.objectsListRender.render(scene.scene, scene.camera.perspectiveCamera);
+						const dataURL = Manager.GL.objectsListRender.domElement.toDataURL('image/png');
+						objects3DURLs.set(elementID, dataURL);
+						setObjects3DURLs(new Map(objects3DURLs));
 					}
 				}
 			}
@@ -161,6 +139,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 
 	const updateMinMax = () => {
 		const offset = Math.floor(firstIndex / DISPLAY_INCREMENT) * DISPLAY_INCREMENT;
+		positionScroll.current = offset;
 		setMinToDisplay(offset);
 		setPreviousMinToDisplay(offset);
 		setMaxToDisplay(offset + DISPLAY_INCREMENT);
@@ -231,6 +210,8 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		const content = contentRef.current;
 		if (content) {
 			const scrollTop = content.scrollTop;
+			positionScroll.current = Math.floor(scrollTop / ELEMENT_HEIGHT) + minToDisplay;
+
 			// When scrolling top of list
 			if (scrollTop === 0 && minToDisplay > 0) {
 				setPreviousMinToDisplay(minToDisplay);
@@ -245,6 +226,7 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 			if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
 				setMaxToDisplay((value) => value + DISPLAY_INCREMENT);
 			}
+			updateCanvas();
 		}
 	};
 
@@ -278,9 +260,6 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	useEffect(() => {
 		const content = contentRef.current;
 		if (content) {
-			if (displayCanvas) {
-				updateCanvas().catch(console.error);
-			}
 			content.addEventListener('scroll', handleScroll);
 			return () => {
 				content.removeEventListener('scroll', handleScroll);
@@ -298,22 +277,13 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 		}
 	}, [minToDisplay, previousMinToDisplay]);
 
-	useEffect(() => {
-		if (displayCanvas) {
-			Scene.Previewer3D.canDrawList = true;
-		}
-		return () => {
-			Scene.Previewer3D.canDrawList = false;
-		};
-		// eslint-disable-next-line
-	}, []);
-
 	const getPictureOrCanvas = (id: number, picture: Model.Picture) => {
-		return displayCanvas ? (
-			<div id={getCanvasID(id)} className='iconCanvas' />
-		) : (
-			<img src={picture.getPath()} alt={'icon'} />
-		);
+		if (displayCanvas) {
+			const url = objects3DURLs.get(id);
+			return url ? <img src={url} alt={'icon'} /> : null;
+		} else {
+			return <img src={picture.getPath()} alt={'icon'} />;
+		}
 	};
 
 	const listElements = filteredList.map((element) => {

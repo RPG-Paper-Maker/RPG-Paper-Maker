@@ -35,6 +35,7 @@ class GL {
 	public static mainContext: GL;
 	public static layerOneContext: GL;
 	public static layerTwoContext: GL;
+	public static objectsListRender = new WebGLRenderer({ preserveDrawingBuffer: true, alpha: true });
 	public static MATERIAL_EMPTY = this.loadTextureEmpty();
 	public static screenTone = new Vector4(0, 0, 0, 1);
 	public parent!: HTMLElement;
@@ -167,9 +168,10 @@ class GL {
 				throw new Error('No root found in document for GL renderer.');
 			}
 			this.parent = parent;
-			this.renderer = new WebGLRenderer({ alpha: true });
+			this.renderer = new WebGLRenderer({
+				alpha: true,
+			});
 			this.renderer.setPixelRatio(window.devicePixelRatio);
-			this.renderer.autoClear = false;
 			this.renderer.setSize(window.innerWidth, window.innerHeight);
 			this.renderer.shadowMap.enabled = true;
 			this.renderer.domElement.classList.add(`canvasRenderer${layer}`);

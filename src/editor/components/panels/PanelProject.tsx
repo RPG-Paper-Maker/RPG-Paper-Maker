@@ -145,9 +145,10 @@ function PanelProject() {
 			>
 				<Flex column one className='bgDarker scrollable'>
 					{!openLoading && (
-						<>
-							<Flex one className='mobileOnly'>
-								<Flex one fillHeight className={Utils.getClassName({ hidden: projectMenuIndex !== 0 })}>
+						<PanelTextures
+							visible
+							extraContent={
+								<Flex one fillHeight>
 									<TreeMaps
 										onSelectedItem={handleSelectedMapItem}
 										forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
@@ -158,27 +159,8 @@ function PanelProject() {
 										setMapsTabsContents={setMapsTabsContents}
 									/>
 								</Flex>
-								<PanelTextures visible={projectMenuIndex === 1} />
-							</Flex>
-							<Flex column one className='mobileHidden'>
-								<PanelTextures
-									visible
-									extraContent={
-										<Flex one fillHeight>
-											<TreeMaps
-												onSelectedItem={handleSelectedMapItem}
-												forcedCurrentSelectedItemID={mapForcedCurrentSelectedItemID}
-												setForcedCurrentSelectedItemID={setMapForcedCurrentSelectedItemID}
-												mapsTabsTitles={mapsTabsTitles}
-												setMapsTabsTitles={setMapsTabsTitles}
-												mapsTabsContents={mapsTabsContents}
-												setMapsTabsContents={setMapsTabsContents}
-											/>
-										</Flex>
-									}
-								/>
-							</Flex>
-						</>
+							}
+						/>
 					)}
 				</Flex>
 				<Flex column one className={'mapEditorBar ' + (projectMenuIndex !== 2 ? 'mobileHidden' : '')}>
