@@ -30,49 +30,6 @@ import { Localization } from '../models';
 import { RootState, setCopiedItems } from '../store';
 import '../styles/Tree.css';
 import ContextMenu from './ContextMenu';
-import DialogBattleCommand from './dialogs/models/DialogBattleCommand';
-import DialogBattleMap from './dialogs/models/DialogBattleMap';
-import DialogCameraProperty from './dialogs/models/DialogCameraProperty';
-import DialogCharacteristic from './dialogs/models/DialogCharacteristic';
-import DialogClassSkill from './dialogs/models/DialogClassSkill';
-import DialogColor from './dialogs/models/DialogColor';
-import DialogCost from './dialogs/models/DialogCost';
-import DialogCreateParameter from './dialogs/models/DialogCreateParameter';
-import DialogCurrency from './dialogs/models/DialogCurrency';
-import DialogCustomStructure from './dialogs/models/DialogCustomStructure';
-import DialogDetection from './dialogs/models/DialogDetection';
-import DialogDynamicNumber from './dialogs/models/DialogDynamicNumber';
-import DialogElement from './dialogs/models/DialogElement';
-import DialogFontName from './dialogs/models/DialogFontName';
-import DialogFontSize from './dialogs/models/DialogFontSize';
-import DialogFrequency from './dialogs/models/DialogFrequency';
-import DialogGameOverCommand from './dialogs/models/DialogGameOverCommand';
-import DialogHeroStatisticDisplay from './dialogs/models/DialogHeroStatisticDisplay';
-import DialogInitialPartyMember from './dialogs/models/DialogInitialPartyMember';
-import DialogInventoryFilter from './dialogs/models/DialogInventoryFilter';
-import DialogLocalization from './dialogs/models/DialogLocalization';
-import DialogMainMenuCommand from './dialogs/models/DialogMainMenuCommand';
-import DialogMapObjectCommand from './dialogs/models/DialogMapObjectCommand';
-import DialogMapObjectCommandMove from './dialogs/models/DialogMapObjectCommandMove';
-import DialogMapObjectCommandShopItem from './dialogs/models/DialogMapObjectCommandShopItem';
-import DialogMapObjectEvent from './dialogs/models/DialogMapObjectEvent';
-import DialogMapObjectParameter from './dialogs/models/DialogMapObjectParameter';
-import DialogMapObjectProperty from './dialogs/models/DialogMapObjectProperty';
-import DialogMapObjectState from './dialogs/models/DialogMapObjectState';
-import DialogMonsterAction from './dialogs/models/DialogMonsterAction';
-import DialogMonsterLoot from './dialogs/models/DialogMonsterLoot';
-import DialogName from './dialogs/models/DialogName';
-import DialogPlugin from './dialogs/models/DialogPlugin';
-import DialogPluginCommand from './dialogs/models/DialogPluginCommand';
-import DialogPluginParameter from './dialogs/models/DialogPluginParameter';
-import DialogRandomBattle from './dialogs/models/DialogRandomBattle';
-import DialogSkybox from './dialogs/models/DialogSkybox';
-import DialogSpeed from './dialogs/models/DialogSpeed';
-import DialogStatistic from './dialogs/models/DialogStatistic';
-import DialogStatisticProgression from './dialogs/models/DialogStatisticProgression';
-import DialogTitleCommand from './dialogs/models/DialogTitleCommand';
-import DialogWeaponArmorKind from './dialogs/models/DialogWeaponArmorKind';
-import DialogWindowSkin from './dialogs/models/DialogWindowSkin';
 import Flex from './Flex';
 import InputLocalization from './InputLocalization';
 import InputText from './InputText';
@@ -860,101 +817,11 @@ function Tree({
 				isOpen: isOpenDialog,
 				setIsOpen: setIsOpenDialog,
 				model: newModel ?? currentSelectedItemNode.content,
+				parent: currentSelectedItemNode.parent,
 				onAccept: handleAcceptDialog,
 				onReject: handleRejectDialog,
 			};
-			switch (constructorType) {
-				case Model.MapObjectState:
-					return <DialogMapObjectState {...options} />;
-				case Model.MapObjectEvent:
-					return <DialogMapObjectEvent {...options} />;
-				case Model.MapObjectParameter:
-					return <DialogMapObjectParameter {...options} />;
-				case Model.MapObjectProperty:
-					return <DialogMapObjectProperty {...options} />;
-				case Model.MapObjectCommand:
-					return <DialogMapObjectCommand {...options} />;
-				case Model.Localization:
-					return <DialogLocalization {...options} />;
-				case Model.MapObjectCommandMove:
-					return <DialogMapObjectCommandMove {...options} />;
-				case Model.MapObjectCommandShopItem:
-					return <DialogMapObjectCommandShopItem {...options} />;
-				case Model.Cost:
-					return <DialogCost {...options} />;
-				case Model.RandomBattle:
-					return <DialogRandomBattle {...options} />;
-				case Model.DynamicNumber:
-					return <DialogDynamicNumber {...options} />;
-				case Model.FontSize:
-					return <DialogFontSize {...options} />;
-				case Model.FontName:
-					return <DialogFontName {...options} />;
-				case Model.Color:
-					return <DialogColor {...options} />;
-				case Model.WindowSkin:
-					return <DialogWindowSkin {...options} />;
-				case Model.Currency:
-					return <DialogCurrency {...options} />;
-				case Model.Speed:
-					return <DialogSpeed {...options} />;
-				case Model.Detection:
-					return <DialogDetection {...options} />;
-				case Model.CameraProperty:
-					return <DialogCameraProperty {...options} />;
-				case Model.Frequency:
-					return <DialogFrequency {...options} />;
-				case Model.Skybox:
-					return <DialogSkybox {...options} />;
-				case Model.InitialPartyMember:
-					return <DialogInitialPartyMember {...options} />;
-				case Model.BattleMap:
-					return <DialogBattleMap {...options} />;
-				case Model.Element:
-					return <DialogElement {...options} />;
-				case Model.ElementEfficiency:
-					return <DialogDynamicNumber decimal {...options} />;
-				case Model.Statistic:
-					return <DialogStatistic {...options} />;
-				case Model.WeaponArmorKind:
-					return <DialogWeaponArmorKind {...options} />;
-				case Model.BattleCommand:
-					return <DialogBattleCommand {...options} />;
-				case Model.TitleCommand:
-					return <DialogTitleCommand {...options} />;
-				case Model.GameOverCommand:
-					return <DialogGameOverCommand {...options} />;
-				case Model.InventoryFilter:
-					return <DialogInventoryFilter {...options} />;
-				case Model.MainMenuCommand:
-					return <DialogMainMenuCommand {...options} />;
-				case Model.HeroStatisticDisplay:
-					return <DialogHeroStatisticDisplay {...options} />;
-				case Model.CreateParameter:
-					return <DialogCreateParameter {...options} />;
-				case Model.Plugin:
-					return options.isNew ? <DialogPlugin {...options} /> : null;
-				case Model.PluginParameter:
-					return <DialogPluginParameter {...options} />;
-				case Model.PluginDefaultParameter:
-					return <DialogPluginParameter isDefault {...options} />;
-				case Model.CustomStructure:
-					return <DialogCustomStructure parent={currentSelectedItemNode.parent} {...options} />;
-				case Model.PluginCommand:
-					return <DialogPluginCommand {...options} />;
-				case Model.StatisticProgression:
-					return <DialogStatisticProgression {...options} />;
-				case Model.Characteristic:
-					return <DialogCharacteristic {...options} />;
-				case Model.ClassSkill:
-					return <DialogClassSkill {...options} />;
-				case Model.MonsterLoot:
-					return <DialogMonsterLoot {...options} />;
-				case Model.MonsterAction:
-					return <DialogMonsterAction {...options} />;
-				default:
-					return <DialogName {...options} />;
-			}
+			return options.model.getDialog(options);
 		} else {
 			return null;
 		}

@@ -12,7 +12,8 @@
 import { ReactNode } from 'react';
 import * as THREE from 'three';
 import { BINDING, BindingType, JSONType } from '../common';
-import { Base } from './Base';
+import DialogColor from '../components/dialogs/models/DialogColor';
+import { Base, DIALOG_OPTIONS } from './Base';
 
 class Color extends Base {
 	public red!: number;
@@ -37,6 +38,10 @@ class Color extends Base {
 		this.green = 0;
 		this.blue = 0;
 		this.alpha = 1;
+	}
+
+	getDialog(options: DIALOG_OPTIONS): ReactNode {
+		return <DialogColor {...options} />;
 	}
 
 	copy(color: Color, additionnalBinding: BindingType[] = []): void {

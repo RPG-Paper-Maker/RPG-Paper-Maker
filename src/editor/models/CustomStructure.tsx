@@ -11,11 +11,12 @@
 
 import { ReactNode } from 'react';
 import { BindingType, DYNAMIC_VALUE_KIND, ITERATOR, JSONType, Utils } from '../common';
+import DialogCustomStructure from '../components/dialogs/models/DialogCustomStructure';
 import Flex from '../components/Flex';
 import { Node } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
 import { Model } from '../Editor';
-import { Base } from './Base';
+import { Base, DIALOG_OPTIONS } from './Base';
 import { MapObjectCommandType } from './MapObjectCommand';
 
 class CustomStructure extends Base {
@@ -112,6 +113,10 @@ class CustomStructure extends Base {
 			return [node, Node.create(closure, [], parent)];
 		}
 		return [node];
+	}
+
+	getDialog(options: DIALOG_OPTIONS): ReactNode {
+		return <DialogCustomStructure {...options} />;
 	}
 
 	toStringComplete(): string {

@@ -60,10 +60,11 @@ import {
 	SONG_KIND,
 	Utils,
 } from '../common';
+import DialogMapObjectCommand from '../components/dialogs/models/DialogMapObjectCommand';
 import Flex from '../components/Flex';
 import { Project } from '../core';
 import { Scene } from '../Editor';
-import { Base } from './Base';
+import { Base, DIALOG_OPTIONS } from './Base';
 import { Localization } from './Localization';
 import { MapObjectCommandMove } from './MapObjectCommandMove';
 import { MapObjectCommandShopItem } from './MapObjectCommandShopItem';
@@ -565,6 +566,10 @@ class MapObjectCommand extends Base {
 
 	isConditionElse(): boolean {
 		return Utils.numToBool(this.command[0] as number);
+	}
+
+	getDialog(options: DIALOG_OPTIONS): ReactNode {
+		return <DialogMapObjectCommand {...options} />;
 	}
 
 	toString(): string | ReactNode {
@@ -2348,9 +2353,9 @@ class MapObjectCommand extends Base {
 		const plugin = Base.getByID(Project.current!.scripts.plugins, pluginID) as Plugin | undefined;
 		const command = Base.getByID(plugin?.commands ?? [], commandID) as PluginCommand;
 		return [
-			`${plugin?.name} - ${command?.name}(${command?.parameters.map(
-				(parameter, index) => parametersValues[index] ?? parameter.toString()
-			).join(',')})`,
+			`${plugin?.name} - ${command?.name}(${command?.parameters
+				.map((parameter, index) => parametersValues[index] ?? parameter.toString())
+				.join(',')})`,
 		];
 	}
 

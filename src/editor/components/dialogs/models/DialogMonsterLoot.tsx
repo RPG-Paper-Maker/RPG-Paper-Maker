@@ -63,7 +63,7 @@ function DialogMonsterLoot({ isOpen, setIsOpen, model, onAccept, onReject }: Pro
 				weaponID.copy(monsterLoot.lootID);
 				break;
 			}
-			case ITEM_KIND.ITEM: {
+			case ITEM_KIND.ARMOR: {
 				armorID.copy(monsterLoot.lootID);
 				break;
 			}
@@ -86,7 +86,7 @@ function DialogMonsterLoot({ isOpen, setIsOpen, model, onAccept, onReject }: Pro
 				monsterLoot.lootID.copy(weaponID);
 				break;
 			}
-			case ITEM_KIND.ITEM: {
+			case ITEM_KIND.ARMOR: {
 				monsterLoot.lootID.copy(armorID);
 				break;
 			}
