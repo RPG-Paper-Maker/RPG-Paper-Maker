@@ -2072,5 +2072,6 @@
 	"check.update": "Nach Updates suchen",
 	"warning.local.plugins.update": "Ihr Projekt wurde aktualisiert. Möglicherweise müssen Sie die folgenden lokalen Plugins aktualisieren: {{plugins}}. Bevorzugen Sie Online-Plugins, die bei jedem Update automatisch aktualisiert werden!",
 	"plugin.successfully.updated": "Plugin {{name}} erfolgreich von {{oldVersion}} auf {{newVersion}} aktualisiert",
-	"how.convert.project.2.0": "Wie konvertiere ich mein 2.0-Projekt?"
+	"how.convert.project.2.0": "Wie konvertiere ich mein 2.0-Projekt?",
+	"id.already.exists.list": "Diese ID existiert bereits in dieser Liste."
 }

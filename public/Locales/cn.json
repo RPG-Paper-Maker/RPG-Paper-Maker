@@ -2072,5 +2072,6 @@
 	"check.update": "檢查更新",
 	"warning.local.plugins.update": "您的專案已更新。您可能需要更新以下本地插件：{{plugins}}。建議使用線上插件，這樣可在每次更新時自動更新！",
 	"plugin.successfully.updated": "插件 {{name}} 已成功從 {{oldVersion}} 更新至 {{newVersion}}",
-	"how.convert.project.2.0": "如何轉換我的 2.0 專案？"
+	"how.convert.project.2.0": "如何轉換我的 2.0 專案？",
+	"id.already.exists.list": "此 ID 已存在於此列表中。"
 }

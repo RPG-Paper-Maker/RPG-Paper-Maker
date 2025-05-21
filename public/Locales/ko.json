@@ -2072,5 +2072,6 @@
 	"check.update": "업데이트 확인",
 	"warning.local.plugins.update": "프로젝트가 업데이트되었습니다. 다음 로컬 플러그인을 업데이트해야 할 수도 있습니다: {{plugins}}. 각 업데이트 시 자동으로 업데이트되는 온라인 플러그인을 사용하는 것이 좋습니다!",
 	"plugin.successfully.updated": "플러그인 {{name}}이(가) {{oldVersion}}에서 {{newVersion}}으로 성공적으로 업데이트되었습니다",
-	"how.convert.project.2.0": "2.0 프로젝트를 변환하는 방법은?"
+	"how.convert.project.2.0": "2.0 프로젝트를 변환하는 방법은?",
+	"id.already.exists.list": "이 ID는 이미 이 목록에 존재합니다."
 }

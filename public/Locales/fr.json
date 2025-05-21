@@ -2072,5 +2072,6 @@
 	"check.update": "Vérifier la mise à jour",
 	"warning.local.plugins.update": "Votre projet a été mis à jour. Vous pourriez avoir besoin de mettre à jour les plugins locaux suivants : {{plugins}}. Privilégiez les plugins en ligne qui se mettent à jour automatiquement à chaque mise à jour !",
 	"plugin.successfully.updated": "Plugin {{name}} mis à jour avec succès de {{oldVersion}} à {{newVersion}}",
-	"how.convert.project.2.0": "Comment convertir mon projet 2.0 ?"
+	"how.convert.project.2.0": "Comment convertir mon projet 2.0 ?",
+	"id.already.exists.list": "Cet identifiant existe déjà dans cette liste."
 }
