@@ -21,6 +21,8 @@ import { Inputs } from './managers/Inputs';
 import { store } from './store';
 import './styles/Editor.css';
 import './styles/Mobile.css';
+import { Constants } from './common';
+import UpdateCountdown from './components/UpdateCountdown';
 
 function Editor() {
 	const [loaded, setLoaded] = useState(false);
@@ -50,6 +52,7 @@ function Editor() {
 						className='fillSpace'
 						onContextMenu={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => e.preventDefault()}
 					>
+						{!Constants.IS_DESKTOP && <UpdateCountdown />}
 						<MainMenuBar />
 						<PanelMain />
 					</Flex>
