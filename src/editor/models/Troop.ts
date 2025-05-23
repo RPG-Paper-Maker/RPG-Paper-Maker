@@ -27,6 +27,10 @@ class Troop extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(Troop.getBindings(additionnalBinding));
+	}
+
 	copy(troop: Troop): void {
 		super.copy(troop, Troop.getBindings([]));
 	}

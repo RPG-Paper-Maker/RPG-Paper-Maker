@@ -351,8 +351,30 @@ class ProjectUpdater_3_0_0 {
 						}
 					}
 				}
+				await writeJSON(Paths.join(projectPath, 'classes.json'), jsonClasses);
 			}
-			await writeJSON(Paths.join(projectPath, 'classes.json'), jsonClasses);
+		}
+
+		// Troop monster, add monsterID
+		const jsonTroops = await readJSON(Paths.join(projectPath, 'troops.json'));
+		if (jsonTroops) {
+			const troops = jsonTroops.list as JSONType[];
+			if (troops) {
+				for (const troop of troops) {
+					const monsters = troop.l as JSONType[];
+					if (monsters) {
+						let i = 1;
+						for (const monster of monsters) {
+							const id = monster.id ?? 0;
+							if (id !== 1) {
+								monster.mid = id;
+							}
+							monster.id = i++;
+						}
+					}
+				}
+				await writeJSON(Paths.join(projectPath, 'troops.json'), jsonTroops);
+			}
 		}
 	}
 }

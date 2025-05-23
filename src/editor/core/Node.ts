@@ -61,6 +61,9 @@ export const NODE_CONSTRUCTOR_KIND = {
 	Monster: () => Model.Monster,
 	MonsterLoot: () => Model.MonsterLoot,
 	MonsterAction: () => Model.MonsterAction,
+	Troop: () => Model.Troop,
+	TroopMonster: () => Model.TroopMonster,
+	TroopReaction: () => Model.TroopReaction,
 };
 
 class Node extends Serializable {

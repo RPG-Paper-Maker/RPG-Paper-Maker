@@ -9,24 +9,29 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { ReactNode } from 'react';
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
+import DialogTroopMonster from '../components/dialogs/models/DialogTroopMonster';
+import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
-import { Base } from './Base';
+import { Base, DIALOG_OPTIONS } from './Base';
 
 class TroopMonster extends Base {
+	public monsterID!: number;
 	public level!: DynamicValue;
 	public hidden!: DynamicValue;
 	public isSpecificPosition!: boolean;
 	public specificPosition!: DynamicValue;
 
 	public static bindings: BindingType[] = [
+		['monsterID', 'mid', 1, BINDING.NUMBER],
 		['level', 'l', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 1), BINDING.DYNAMIC_VALUE, DynamicValue],
 		['hidden', 'h', DynamicValue.create(DYNAMIC_VALUE_KIND.SWITCH, false), BINDING.DYNAMIC_VALUE, DynamicValue],
 		['isSpecificPosition', 'isSpecificPosition', false, BINDING.BOOLEAN],
 		[
 			'specificPosition',
 			'specificPosition',
-			DynamicValue.create(DYNAMIC_VALUE_KIND.TEXT, 'new Core.Vector3(0,0,0)'),
+			DynamicValue.create(DYNAMIC_VALUE_KIND.FORMULA, 'new Core.Vector3(0,0,0)'),
 			BINDING.DYNAMIC_VALUE,
 			DynamicValue,
 		],
@@ -34,6 +39,21 @@ class TroopMonster extends Base {
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];
+	}
+
+	static getTreeHeader(): string[] {
+		return ['monster', 'level'];
+	}
+
+	getDialog(options: DIALOG_OPTIONS): ReactNode {
+		return <DialogTroopMonster {...options} />;
+	}
+
+	toStrings(): string[] {
+		return [
+			Base.STRING_START + (Project.current!.monsters.getByID(this.monsterID)?.getName() ?? this.monsterID),
+			this.level.toString(),
+		];
 	}
 
 	copy(troopMonster: TroopMonster): void {

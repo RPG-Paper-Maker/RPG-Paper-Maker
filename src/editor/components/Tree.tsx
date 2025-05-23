@@ -859,12 +859,13 @@ function Tree({
 							<InputLocalization
 								localization={currentSelectedItemNode?.content as Localization}
 								onUpdate={() => setForceUpdate((value) => !value)}
+								widthType={INPUT_TYPE_WIDTH.SMALL}
 							/>
 						) : (
 							<InputText
 								value={currentName}
 								onChange={handleChangeName}
-								widthType={INPUT_TYPE_WIDTH.FILL}
+								widthType={INPUT_TYPE_WIDTH.SMALL}
 								disabled={isEditNameDisabled()}
 							/>
 						)}
