@@ -62,7 +62,8 @@ import {
 } from '../common';
 import DialogMapObjectCommand from '../components/dialogs/models/DialogMapObjectCommand';
 import Flex from '../components/Flex';
-import { Project } from '../core';
+
+import { Project } from '../core/Project';
 import { Scene } from '../Editor';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { Localization } from './Localization';

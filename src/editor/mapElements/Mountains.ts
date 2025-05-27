@@ -12,7 +12,10 @@
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { PICTURE_KIND } from '../common';
-import { CustomGeometry, Picture2D, Position, Project } from '../core';
+import { CustomGeometry } from '../core/CustomGeometry';
+import { Picture2D } from '../core/Picture2D';
+import { Position } from '../core/Position';
+import { Project } from '../core/Project';
 
 class Mountains {
 	public pictureID: number;

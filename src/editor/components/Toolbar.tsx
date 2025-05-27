@@ -27,7 +27,7 @@ import { TbNumbers } from 'react-icons/tb';
 import { TfiVideoClapper } from 'react-icons/tfi';
 import { useDispatch, useSelector } from 'react-redux';
 import { Constants } from '../common';
-import { Project } from '../core';
+import { Project } from '../core/Project';
 import {
 	RootState,
 	triggerData,

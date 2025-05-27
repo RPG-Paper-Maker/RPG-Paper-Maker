@@ -12,7 +12,12 @@
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { AUTOTILE_TILE_NAMES, Constants, PICTURE_KIND, RAYCASTING_LAYER } from '../common';
-import { CustomGeometry, Picture2D, Position, Project, Rectangle, TextureBundle } from '../core';
+import { CustomGeometry } from '../core/CustomGeometry';
+import { Picture2D } from '../core/Picture2D';
+import { Position } from '../core/Position';
+import { Project } from '../core/Project';
+import { Rectangle } from '../core/Rectangle';
+import { TextureBundle } from '../core/TextureBundle';
 
 class Autotiles {
 	public static COUNT_LIST = 5;

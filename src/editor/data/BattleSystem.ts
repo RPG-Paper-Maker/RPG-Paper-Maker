@@ -11,8 +11,9 @@
 
 import { Model } from '../Editor';
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType, Paths } from '../common';
-import { Project, Serializable } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Project } from '../core/Project';
+import { Serializable } from '../core/Serializable';
 
 class BattleSystem extends Serializable {
 	public levelStatisticID!: number;

@@ -12,7 +12,9 @@
 import i18next from 'i18next';
 import { Model } from '../Editor';
 import { BINDING, BindingType, JSONType, Paths, Utils } from '../common';
-import { Node, Project, Serializable } from '../core';
+import { Node } from '../core/Node';
+import { Project } from '../core/Project';
+import { Serializable } from '../core/Serializable';
 
 const { t } = i18next;
 

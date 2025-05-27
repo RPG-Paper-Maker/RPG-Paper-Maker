@@ -12,7 +12,7 @@
 import { ReactNode } from 'react';
 import { BINDING, BindingType, JSONType } from '../common';
 import DialogBattleCommand from '../components/dialogs/models/DialogBattleCommand';
-import { Project } from '../core';
+import { Project } from '../core/Project';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class BattleCommand extends Base {

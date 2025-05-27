@@ -10,7 +10,9 @@
 */
 
 import { ACTION_KIND, BINDING, BindingType, JSONType, LAYER_KIND, MOBILE_ACTION, Paths } from '../common';
-import { Project, Rectangle, Serializable } from '../core';
+import { Project } from '../core/Project';
+import { Rectangle } from '../core/Rectangle';
+import { Serializable } from '../core/Serializable';
 
 class Settings extends Serializable {
 	public projectVersion!: string;

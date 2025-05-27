@@ -11,7 +11,10 @@
 
 import i18next from 'i18next';
 import { ELEMENT_MAP_KIND, JSONType, Mathf } from '../common';
-import { CustomGeometry, Position, Project, Rectangle } from '../core';
+import { CustomGeometry } from '../core/CustomGeometry';
+import { Position } from '../core/Position';
+import { Project } from '../core/Project';
+import { Rectangle } from '../core/Rectangle';
 import { MapElement, Scene } from '../Editor';
 import { Land } from './Land';
 

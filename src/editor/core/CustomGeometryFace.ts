@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { CustomGeometry } from '.';
+import { CustomGeometry } from './CustomGeometry';
 
 class CustomGeometryFace extends CustomGeometry {
 	public _size: number[] = [];

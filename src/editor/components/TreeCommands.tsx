@@ -11,7 +11,7 @@
 
 import { useLayoutEffect, useState } from 'react';
 import { ArrayUtils, EVENT_COMMAND_KIND } from '../common';
-import { Node } from '../core';
+import { Node } from '../core/Node';
 import { Model } from '../Editor';
 import Tree from './Tree';
 

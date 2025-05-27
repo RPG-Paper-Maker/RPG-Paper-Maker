@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Position } from '.';
 import { ELEMENT_MAP_KIND, JSONType } from '../common';
 import { MapElement, Model } from '../Editor';
 import { CommonObject } from '../models';
+import { Position } from './Position';
 import { Serializable } from './Serializable';
 
 class UndoRedoState extends Serializable {

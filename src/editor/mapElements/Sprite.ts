@@ -12,7 +12,11 @@
 import i18next from 'i18next';
 import * as THREE from 'three';
 import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND } from '../common';
-import { CustomGeometry, CustomGeometryFace, Position, Project, Rectangle } from '../core';
+import { CustomGeometry } from '../core/CustomGeometry';
+import { CustomGeometryFace } from '../core/CustomGeometryFace';
+import { Position } from '../core/Position';
+import { Project } from '../core/Project';
+import { Rectangle } from '../core/Rectangle';
 import { Manager, MapElement, Scene } from '../Editor';
 import { Base } from './Base';
 
@@ -212,8 +216,8 @@ class Sprite extends Base {
 
 		if (geometry instanceof CustomGeometryFace) {
 			// Face sprite
-			const p = new THREE.Vector3(pos.x, localPosition.y + this.yOffset * Project.SQUARE_SIZE, pos.z);
-			const c = new THREE.Vector3(center.x, localPosition.y + this.yOffset * Project.SQUARE_SIZE, center.z);
+			const p = new THREE.Vector3(pos.x, localPosition!.y + this.yOffset * Project.SQUARE_SIZE, pos.z);
+			const c = new THREE.Vector3(center.x, localPosition!.y + this.yOffset * Project.SQUARE_SIZE, center.z);
 			geometry.pushQuadVerticesFace(
 				Sprite.MODEL[0].clone().multiply(size).add(p),
 				Sprite.MODEL[1].clone().multiply(size).add(p),
@@ -334,10 +338,11 @@ class Sprite extends Base {
 		width: number,
 		height: number,
 		tileset: boolean,
-		position: Position
+		position: Position,
+		localPosition: THREE.Vector3 | null = null
 	): [CustomGeometry, number] {
 		const geometry = new CustomGeometry();
-		const count = this.updateGeometry(map, geometry, width, height, position, 0, tileset, null);
+		const count = this.updateGeometry(map, geometry, width, height, position, 0, tileset, localPosition);
 		geometry.updateAttributes();
 		return [geometry, count];
 	}

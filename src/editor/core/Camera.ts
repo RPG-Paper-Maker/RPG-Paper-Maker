@@ -111,12 +111,12 @@ class Camera {
 
 		// Update light
 		if (map && map.sunLight) {
-			map.sunLight.target.position.copy(this.targetPosition);
-			map.sunLight.target.updateMatrixWorld();
 			map.sunLight.position
 				.set(-1, 1.75, 1)
 				.multiplyScalar(Project.SQUARE_SIZE * 10)
 				.add(this.targetPosition);
+			map.sunLight.target.position.copy(this.targetPosition);
+			map.sunLight.target.updateMatrixWorld();
 			const d = Math.max((Project.SQUARE_SIZE * this.distance) / 10, 400);
 			if (d !== map.sunLight.shadow.camera.right) {
 				map.sunLight.shadow.camera.left = -d;

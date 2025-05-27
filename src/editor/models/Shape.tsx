@@ -12,7 +12,8 @@
 import * as THREE from 'three';
 import { CUSTOM_SHAPE_KIND, Paths } from '../common';
 import { readPublicFile } from '../common/Platform';
-import { LocalFile, Project } from '../core';
+import { LocalFile } from '../core/LocalFile';
+import { Project } from '../core/Project';
 import { Asset } from './Asset';
 
 type GeometryDataType = {

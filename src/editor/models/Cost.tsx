@@ -12,8 +12,8 @@
 import { ReactNode } from 'react';
 import { BINDING, BindingType, DAMAGES_KIND, DYNAMIC_VALUE_KIND, ITERATOR, JSONType } from '../common';
 import DialogCost from '../components/dialogs/models/DialogCost';
-import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Project } from '../core/Project';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { MapObjectCommandType } from './MapObjectCommand';
 

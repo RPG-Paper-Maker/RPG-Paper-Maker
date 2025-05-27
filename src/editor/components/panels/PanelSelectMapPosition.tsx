@@ -12,7 +12,9 @@
 import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Node, Position, Project } from '../../core';
+import { Node } from '../../core/Node';
+import { Position } from '../../core/Position';
+import { Project } from '../../core/Project';
 import { Model, Scene } from '../../Editor';
 import useStateNumber from '../../hooks/useStateNumber';
 import { showWarning } from '../../store';

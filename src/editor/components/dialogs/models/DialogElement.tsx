@@ -12,7 +12,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PICTURE_KIND } from '../../../common';
-import { Node } from '../../../core';
+import { Node } from '../../../core/Node';
 import { Model } from '../../../Editor';
 import useStateNumber from '../../../hooks/useStateNumber';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';

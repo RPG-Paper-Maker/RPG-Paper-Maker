@@ -23,7 +23,7 @@ import {
 	Utils,
 } from '../common';
 import DialogName from '../components/dialogs/models/DialogName';
-import { Node } from '../core';
+import { Node } from '../core/Node';
 import { Serializable } from '../core/Serializable';
 
 const { t } = i18next;

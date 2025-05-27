@@ -11,8 +11,8 @@
 
 import { useEffect, useState } from 'react';
 import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE } from '../common';
-import { Node } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Node } from '../core/Node';
 import useStateBool from '../hooks/useStateBool';
 import { CustomStructure } from '../models';
 import Checkbox from './Checkbox';

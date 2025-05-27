@@ -12,8 +12,9 @@
 import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Utils } from '../../../common';
-import { Node, Project } from '../../../core';
 import { DynamicValue } from '../../../core/DynamicValue';
+import { Node } from '../../../core/Node';
+import { Project } from '../../../core/Project';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateNumber from '../../../hooks/useStateNumber';

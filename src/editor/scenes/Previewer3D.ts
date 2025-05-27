@@ -12,7 +12,13 @@
 import * as THREE from 'three';
 import { Base } from '.';
 import { ELEMENT_MAP_KIND, SHAPE_KIND, SPRITE_WALL_TYPE } from '../common';
-import { CustomGeometry, CustomGeometryFace, Position, Position3D, Project, Rectangle, TextureBundle } from '../core';
+import { CustomGeometry } from '../core/CustomGeometry';
+import { CustomGeometryFace } from '../core/CustomGeometryFace';
+import { Position } from '../core/Position';
+import { Position3D } from '../core/Position3D';
+import { Project } from '../core/Project';
+import { Rectangle } from '../core/Rectangle';
+import { TextureBundle } from '../core/TextureBundle';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Object3D } from '../mapElements';
 

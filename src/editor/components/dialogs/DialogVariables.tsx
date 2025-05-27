@@ -11,7 +11,8 @@
 
 import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Node, Project } from '../../core';
+import { Node } from '../../core/Node';
+import { Project } from '../../core/Project';
 import { Data, Model } from '../../Editor';
 import Flex from '../Flex';
 import Groupbox from '../Groupbox';

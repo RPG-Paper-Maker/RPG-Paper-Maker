@@ -10,8 +10,8 @@
 */
 
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType, Utils } from '../common';
-import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Project } from '../core/Project';
 import { Base } from './Base';
 import { MapObjectEvent } from './MapObjectEvent';
 import { MapObjectParameter } from './MapObjectParameter';

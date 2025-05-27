@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Position } from '../core';
+import { Position } from '../core/Position';
 
 class Mathf {
 	static clamp(value: number, min: number, max: number): number {

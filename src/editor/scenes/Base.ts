@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Manager, Model } from '../Editor';
-import { Camera } from '../core';
+import { Camera } from '../core/Camera';
 
 class Base {
 	public scene: THREE.Scene;

@@ -12,7 +12,8 @@
 import { forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ITERATOR } from '../../common';
-import { Node, Project } from '../../core';
+import { Node } from '../../core/Node';
+import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
 import useStateNumber from '../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../models';

@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Rectangle } from '.';
+import { Rectangle } from './Rectangle';
 
 class TextureBundle {
 	public list: [number, number[]][];

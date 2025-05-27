@@ -10,7 +10,8 @@
 */
 
 import { BINDING, BindingType, JSONType, Paths, SONG_KIND } from '../common';
-import { Project, Serializable } from '../core';
+import { Project } from '../core/Project';
+import { Serializable } from '../core/Serializable';
 import { Checkable, GameOverCommand, PlaySong, TitleCommand } from '../models';
 
 class TitleScreenGameOver extends Serializable {

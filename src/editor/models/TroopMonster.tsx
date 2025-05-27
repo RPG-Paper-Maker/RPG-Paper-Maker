@@ -12,8 +12,8 @@
 import { ReactNode } from 'react';
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import DialogTroopMonster from '../components/dialogs/models/DialogTroopMonster';
-import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Project } from '../core/Project';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class TroopMonster extends Base {
@@ -43,6 +43,10 @@ class TroopMonster extends Base {
 
 	static getTreeHeader(): string[] {
 		return ['monster', 'level'];
+	}
+
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(TroopMonster.getBindings(additionnalBinding));
 	}
 
 	getDialog(options: DIALOG_OPTIONS): ReactNode {

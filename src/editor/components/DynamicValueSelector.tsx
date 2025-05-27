@@ -11,8 +11,8 @@
 
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { DYNAMIC_VALUE_KIND, DYNAMIC_VALUE_OPTIONS_TYPE, INPUT_TYPE_WIDTH } from '../common';
-import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Project } from '../core/Project';
 import { Model } from '../Editor';
 import '../styles/DynamicValueSelector.css';
 import Dropdown from './Dropdown';

@@ -10,7 +10,8 @@
 */
 
 import { JSX, ReactNode } from 'react';
-import { Node, Serializable } from '../core';
+import { Node } from '../core/Node';
+import { Serializable } from '../core/Serializable';
 import { MapElement } from '../Editor';
 import { BINDING, KEY, SPECIAL_KEY } from './Enum';
 

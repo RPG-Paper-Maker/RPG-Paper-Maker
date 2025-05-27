@@ -13,7 +13,7 @@ import { forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Scene } from '../../Editor';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, ITERATOR } from '../../common';
-import { Project } from '../../core';
+import { Project } from '../../core/Project';
 import useStateDynamicValue from '../../hooks/useStateDynamicValue';
 import useStateNumber from '../../hooks/useStateNumber';
 import { MapObjectCommandType } from '../../models';

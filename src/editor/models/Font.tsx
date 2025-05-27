@@ -10,7 +10,8 @@
 */
 
 import { Paths } from '../common';
-import { LocalFile, Project } from '../core';
+import { LocalFile } from '../core/LocalFile';
+import { Project } from '../core/Project';
 import { Asset } from './Asset';
 
 class Font extends Asset {

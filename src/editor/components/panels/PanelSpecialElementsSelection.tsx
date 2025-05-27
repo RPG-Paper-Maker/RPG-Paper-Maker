@@ -14,7 +14,8 @@ import { HiChevronDown, HiChevronLeft } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import { Manager, Model, Scene } from '../../Editor';
 import { ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
-import { Project, Rectangle } from '../../core';
+import { Project } from '../../core/Project';
+import { Rectangle } from '../../core/Rectangle';
 import {
 	RootState,
 	setCurrentAutotileID,
@@ -108,7 +109,8 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 	const initializeCanvas = async () => {
 		const content = contentRef.current;
 		if (content) {
-			Manager.GL.objectsListRender.setSize(300, 300);
+			Manager.GL.staticRender.shadowMap.enabled = true;
+			Manager.GL.staticRender.setSize(300, 300);
 			await updateCanvas();
 		}
 	};
@@ -127,8 +129,8 @@ function PanelSpecialElementsSelection({ kind }: Props) {
 						scene.camera.perspectiveCamera.updateProjectionMatrix();
 						await scene.loadObject3D(elementID);
 						await scene.load();
-						Manager.GL.objectsListRender.render(scene.scene, scene.camera.perspectiveCamera);
-						const dataURL = Manager.GL.objectsListRender.domElement.toDataURL('image/png');
+						Manager.GL.staticRender.render(scene.scene, scene.camera.perspectiveCamera);
+						const dataURL = Manager.GL.staticRender.domElement.toDataURL('image/png');
 						objects3DURLs.set(elementID, dataURL);
 						setObjects3DURLs(new Map(objects3DURLs));
 					}

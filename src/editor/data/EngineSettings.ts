@@ -10,7 +10,7 @@
 */
 
 import { BINDING, BindingType, Constants, JSONType, LOCAL_FORAGE, Paths } from '../common';
-import { Serializable } from '../core';
+import { Serializable } from '../core/Serializable';
 import { ProjectPreview } from '../models';
 
 class EngineSettings extends Serializable {

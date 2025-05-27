@@ -17,7 +17,7 @@ import {
 	DYNAMIC_VALUE_OPTIONS_TYPE,
 	INCREASE_DECREASE_KIND,
 } from '../../../common';
-import { Project } from '../../../core';
+import { Project } from '../../../core/Project';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';

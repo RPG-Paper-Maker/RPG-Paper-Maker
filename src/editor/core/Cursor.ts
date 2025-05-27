@@ -9,10 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import * as THREE from 'three';
-import { CustomGeometry, Frame, Position, Project } from '.';
 import { KEY } from '../common';
 import { MapElement, Scene } from '../Editor';
 import { Inputs } from '../managers';
+import { CustomGeometry } from './CustomGeometry';
+import { Frame } from './Frame';
+import { Position } from './Position';
+import { Project } from './Project';
 
 class Cursor {
 	public position: Position;

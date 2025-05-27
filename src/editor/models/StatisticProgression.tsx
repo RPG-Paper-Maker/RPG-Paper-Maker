@@ -12,8 +12,8 @@
 import { ReactNode } from 'react';
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import DialogStatisticProgression from '../components/dialogs/models/DialogStatisticProgression';
-import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Project } from '../core/Project';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { ProgressionTable } from './ProgressionTable';
 

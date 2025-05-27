@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Constants, ELEMENT_MAP_KIND, INPUT_TYPE_WIDTH, IO, Paths, Utils } from '../../common';
 import { copyPublicFile, createFile, createFolder, getFolders, removeFolder } from '../../common/Platform';
-import { Project } from '../../core';
+import { Project } from '../../core/Project';
 import { EngineSettings } from '../../data/EngineSettings';
 import { Model, Scene } from '../../Editor';
 import useStateBool from '../../hooks/useStateBool';

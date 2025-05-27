@@ -11,7 +11,7 @@
 
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Project } from '../../../core';
+import { Project } from '../../../core/Project';
 import { Model } from '../../../Editor';
 import useStateNumber from '../../../hooks/useStateNumber';
 import Dropdown from '../../Dropdown';

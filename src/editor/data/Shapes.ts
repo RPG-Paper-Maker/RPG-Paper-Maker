@@ -11,7 +11,8 @@
 
 import { Model } from '../Editor';
 import { CUSTOM_SHAPE_KIND, JSONType, Paths } from '../common';
-import { Project, Serializable } from '../core';
+import { Project } from '../core/Project';
+import { Serializable } from '../core/Serializable';
 
 class Shapes extends Serializable {
 	public list!: Model.Shape[][];

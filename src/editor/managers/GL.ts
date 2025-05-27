@@ -21,7 +21,7 @@ class GL {
 	public static mainContext: GL;
 	public static layerOneContext: GL;
 	public static layerTwoContext: GL;
-	public static objectsListRender = new THREE.WebGLRenderer({ preserveDrawingBuffer: true, alpha: true });
+	public static staticRender = new THREE.WebGLRenderer({ preserveDrawingBuffer: true, alpha: true });
 	public static MATERIAL_EMPTY = this.loadTextureEmpty();
 	public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 	public parent!: HTMLElement;

@@ -12,7 +12,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaWrench } from 'react-icons/fa';
-import { LocalFile } from '../core';
+import { LocalFile } from '../core/LocalFile';
 import '../styles/UpdateCountdown.css';
 import Flex from './Flex';
 

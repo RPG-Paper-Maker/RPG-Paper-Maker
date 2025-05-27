@@ -12,7 +12,8 @@
 import { ReactNode } from 'react';
 import { BINDING, BindingType, JSONType } from '../common';
 import DialogBattleMap from '../components/dialogs/models/DialogBattleMap';
-import { Position, Project } from '../core';
+import { Position } from '../core/Position';
+import { Project } from '../core/Project';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class BattleMap extends Base {

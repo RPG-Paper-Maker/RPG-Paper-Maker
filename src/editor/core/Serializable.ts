@@ -9,11 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Position, Rectangle } from '.';
 import { MapElement, Model } from '../Editor';
 import { BINDING, BindingType, JSONMapping, JSONMappingKeyValue, JSONType, KeyValue, Utils } from '../common';
 import { readJSON, writeJSON } from '../common/Platform';
 import { DynamicValue } from './DynamicValue';
+import { Position } from './Position';
+import { Rectangle } from './Rectangle';
 
 class Serializable {
 	copy(serializable: Serializable, additionnalBinding: BindingType[] = []): void {

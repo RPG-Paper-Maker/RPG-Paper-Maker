@@ -10,7 +10,7 @@
 */
 
 import { Constants, ITERATOR, JSONType } from '.';
-import { Serializable } from '../core';
+import { Serializable } from '../core/Serializable';
 import { Model } from '../Editor';
 
 class Utils {

@@ -11,7 +11,8 @@
 
 import { Model } from '../Editor';
 import { BINDING, BindingType, JSONType, Paths } from '../common';
-import { Project, Serializable } from '../core';
+import { Project } from '../core/Project';
+import { Serializable } from '../core/Serializable';
 
 class Weapons extends Serializable {
 	public list!: Model.CommonSkillItem[];

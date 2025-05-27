@@ -13,7 +13,8 @@ import { JSX } from 'react';
 import { FcFile, FcFolder } from 'react-icons/fc';
 import { BINDING, BindingType, JSONType, Paths } from '../common';
 import { copyFile, getFiles, removeFile } from '../common/Platform';
-import { Position, Project } from '../core';
+import { Position } from '../core/Position';
+import { Project } from '../core/Project';
 import { Model } from '../Editor';
 import { Base } from './Base';
 

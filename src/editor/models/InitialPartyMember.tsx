@@ -12,8 +12,8 @@
 import { ReactNode } from 'react';
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, GROUP_KIND, JSONType } from '../common';
 import DialogInitialPartyMember from '../components/dialogs/models/DialogInitialPartyMember';
-import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Project } from '../core/Project';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class InitialPartyMember extends Base {

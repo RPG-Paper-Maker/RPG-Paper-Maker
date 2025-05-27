@@ -10,7 +10,7 @@
 */
 
 import i18next from 'i18next';
-import { Project, Serializable } from '.';
+
 import {
 	BINDING,
 	BindingType,
@@ -23,6 +23,8 @@ import {
 } from '../common';
 import { Model } from '../Editor';
 import { CustomStructure, MapObjectCommandType } from '../models';
+import { Project } from './Project';
+import { Serializable } from './Serializable';
 
 const { t } = i18next;
 class DynamicValue extends Serializable {

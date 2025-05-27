@@ -10,8 +10,9 @@
 */
 
 import * as THREE from 'three';
-import { Project } from '.';
+
 import { Constants } from '../common';
+import { Project } from './Project';
 
 class Portion {
 	public x: number;

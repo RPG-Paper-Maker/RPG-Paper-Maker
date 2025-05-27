@@ -22,7 +22,7 @@ import {
 	SPECIAL_KEY,
 	Utils,
 } from '../common';
-import { Node } from '../core';
+import { Node } from '../core/Node';
 import { Model } from '../Editor';
 import useStateString from '../hooks/useStateString';
 import { Inputs } from '../managers';
@@ -316,7 +316,7 @@ function Tree({
 			const nodes = copiedItems.values;
 			const currentList = currentSelectedItemNode.parent?.children ?? list;
 			let index = getNewIndex();
-			let cloned: Node | null = null;
+			let cloned: Node;
 			let firstCloned: Node | null = null;
 			for (const node of nodes) {
 				cloned = node.clone();

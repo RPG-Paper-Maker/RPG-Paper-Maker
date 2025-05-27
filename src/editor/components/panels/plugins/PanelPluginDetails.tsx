@@ -12,7 +12,7 @@
 import { forwardRef, useImperativeHandle, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Utils } from '../../../common';
-import { Node } from '../../../core';
+import { Node } from '../../../core/Node';
 import { Model } from '../../../Editor';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';

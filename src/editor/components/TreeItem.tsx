@@ -12,7 +12,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { HiChevronDown, HiChevronRight } from 'react-icons/hi';
 import { Utils } from '../common';
-import { Node, Project } from '../core';
+import { Node } from '../core/Node';
+import { Project } from '../core/Project';
 import { Model } from '../Editor';
 import '../styles/TreeItem.css';
 import Checkbox from './Checkbox';

@@ -12,7 +12,7 @@
 import { ReactNode } from 'react';
 import { BINDING, BindingType, JSONType } from '../common';
 import DialogWeaponArmorKind from '../components/dialogs/models/DialogWeaponArmorKind';
-import { Project } from '../core';
+import { Project } from '../core/Project';
 import { DIALOG_OPTIONS } from './Base';
 import { Checkable } from './Checkable';
 import { Localization } from './Localization';

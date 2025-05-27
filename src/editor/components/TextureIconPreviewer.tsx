@@ -11,7 +11,9 @@
 
 import { useMemo } from 'react';
 import { PICTURE_KIND } from '../common';
-import { Project, Rectangle } from '../core';
+import { Project } from '../core/Project';
+
+import { Rectangle } from '../core/Rectangle';
 import TexturePreviewer from './TexturePreviewer';
 
 type Props = {

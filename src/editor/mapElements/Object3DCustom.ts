@@ -11,7 +11,9 @@
 
 import * as THREE from 'three';
 import { CUSTOM_SHAPE_KIND, JSONType } from '../common';
-import { CustomGeometry, Position, Project } from '../core';
+import { CustomGeometry } from '../core/CustomGeometry';
+import { Position } from '../core/Position';
+import { Project } from '../core/Project';
 import { MapElement, Model } from '../Editor';
 import { Object3D } from './Object3D';
 

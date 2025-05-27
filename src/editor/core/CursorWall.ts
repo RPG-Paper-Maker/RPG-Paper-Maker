@@ -10,9 +10,10 @@
 */
 
 import * as THREE from 'three';
-import { Position, Project } from '.';
 import { Constants } from '../common';
 import { Scene } from '../Editor';
+import { Position } from './Position';
+import { Project } from './Project';
 
 class CursorWall {
 	public lines!: THREE.LineSegments;

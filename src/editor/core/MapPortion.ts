@@ -10,18 +10,17 @@
 */
 
 import * as THREE from 'three';
-import {
-	CustomGeometry,
-	CustomGeometryFace,
-	Portion,
-	Position,
-	Position3D,
-	Project,
-	Rectangle,
-	UndoRedoState,
-} from '.';
+
 import { ACTION_KIND, ELEMENT_MAP_KIND, Mathf, PICTURE_KIND, RAYCASTING_LAYER } from '../common';
 import { Manager, MapElement, Model, Scene } from '../Editor';
+import { CustomGeometry } from './CustomGeometry';
+import { CustomGeometryFace } from './CustomGeometryFace';
+import { Portion } from './Portion';
+import { Position } from './Position';
+import { Position3D } from './Position3D';
+import { Project } from './Project';
+import { Rectangle } from './Rectangle';
+import { UndoRedoState } from './UndoRedoState';
 
 type GeometryMaterialType = {
 	geometry: CustomGeometry;

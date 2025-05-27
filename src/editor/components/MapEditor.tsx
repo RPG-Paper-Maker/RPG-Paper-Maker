@@ -13,7 +13,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ACTION_KIND, ELEMENT_MAP_KIND, KEY, SPECIAL_KEY } from '../common';
-import { Node, Project } from '../core';
+import { Node } from '../core/Node';
+import { Project } from '../core/Project';
 import { Manager, Model, Scene } from '../Editor';
 import { Inputs } from '../managers';
 import {

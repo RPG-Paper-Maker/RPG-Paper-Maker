@@ -13,7 +13,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Scene } from '../Editor';
 import { Constants, ELEMENT_MAP_KIND } from '../common';
-import { LocalFile, Picture2D, Project, Rectangle } from '../core';
+import { LocalFile } from '../core/LocalFile';
+import { Picture2D } from '../core/Picture2D';
+import { Project } from '../core/Project';
+import { Rectangle } from '../core/Rectangle';
 import {
 	RootState,
 	setCurrentAutotileTexture,

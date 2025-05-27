@@ -10,7 +10,8 @@
 */
 
 import { useLayoutEffect, useState } from 'react';
-import { Node, Project } from '../core';
+import { Node } from '../core/Node';
+import { Project } from '../core/Project';
 import { Model } from '../Editor';
 import Button from './Button';
 import DialogVariables from './dialogs/DialogVariables';

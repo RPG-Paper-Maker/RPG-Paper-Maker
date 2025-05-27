@@ -12,8 +12,9 @@
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_KIND } from '../../../common';
-import { Node, Project } from '../../../core';
 import { DynamicValue } from '../../../core/DynamicValue';
+import { Node } from '../../../core/Node';
+import { Project } from '../../../core/Project';
 import { Base, Monster, MonsterAction, MonsterLoot, ProgressionTable } from '../../../models';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';

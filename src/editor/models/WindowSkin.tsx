@@ -12,7 +12,7 @@
 import { ReactNode } from 'react';
 import { BINDING, BindingType, JSONType } from '../common';
 import DialogWindowSkin from '../components/dialogs/models/DialogWindowSkin';
-import { Rectangle } from '../core';
+import { Rectangle } from '../core/Rectangle';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class WindowSkin extends Base {

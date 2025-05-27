@@ -22,7 +22,9 @@ import {
 	SHAPE_KIND,
 	Utils,
 } from '../common';
-import { CustomGeometry, Position, Project } from '../core';
+import { CustomGeometry } from '../core/CustomGeometry';
+import { Position } from '../core/Position';
+import { Project } from '../core/Project';
 import { Base } from './Base';
 
 const { t } = i18next;

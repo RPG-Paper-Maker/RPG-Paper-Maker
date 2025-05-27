@@ -11,7 +11,10 @@
 
 import { Model, Scene } from '../Editor';
 import { BINDING, BindingType, Constants, ELEMENT_MAP_KIND, JSONType, Paths, SHAPE_KIND } from '../common';
-import { Portion, Position, Project, Rectangle } from '../core';
+import { Portion } from '../core/Portion';
+import { Position } from '../core/Position';
+import { Project } from '../core/Project';
+import { Rectangle } from '../core/Rectangle';
 import { Serializable } from '../core/Serializable';
 import {
 	Autotile,
@@ -121,10 +124,13 @@ class MapPortion extends Serializable {
 	}
 
 	getPath(temp: boolean = false): string {
-		if (!Project.current || (!Scene.Map.currentpositionSelector && !Scene.Map.current)) {
+		if (
+			!Project.current ||
+			(!Scene.Map.currentpositionSelector && !Scene.Map.currentBattle && !Scene.Map.current)
+		) {
 			return '';
 		}
-		let path = (Scene.Map.currentpositionSelector ?? Scene.Map.current)!.getPath();
+		let path = (Scene.Map.currentpositionSelector ?? Scene.Map.currentBattle ?? Scene.Map.current)!.getPath();
 		if (temp) {
 			path = Paths.join(path, Paths.TEMP);
 		}

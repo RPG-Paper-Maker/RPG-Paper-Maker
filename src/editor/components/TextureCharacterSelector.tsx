@@ -10,7 +10,8 @@
 */
 
 import { Constants } from '../common';
-import { Project, Rectangle } from '../core';
+import { Project } from '../core/Project';
+import { Rectangle } from '../core/Rectangle';
 import TextureSquareSelector from './TextureSquareSelector';
 
 type Props = {

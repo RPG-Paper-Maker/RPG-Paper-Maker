@@ -23,7 +23,9 @@ import {
 	readOnlineFile,
 	readOnlineFileUint8Array,
 } from '../../../common/Platform';
-import { Node, Project } from '../../../core';
+
+import { Node } from '../../../core/Node';
+import { Project } from '../../../core/Project';
 import { Model } from '../../../Editor';
 import useStateNumber from '../../../hooks/useStateNumber';
 import useStateString from '../../../hooks/useStateString';

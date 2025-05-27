@@ -21,7 +21,10 @@ import {
 	removeFolder,
 	renameFile,
 } from '../../common/Platform';
-import { LocalFile, Node, Project } from '../../core';
+import { LocalFile } from '../../core/LocalFile';
+
+import { Node } from '../../core/Node';
+import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
 import useStateBool from '../../hooks/useStateBool';
 import useStateNumber from '../../hooks/useStateNumber';

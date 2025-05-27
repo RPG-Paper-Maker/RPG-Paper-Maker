@@ -12,7 +12,7 @@
 import { ReactNode } from 'react';
 import { BINDING, BindingType, JSONType, KeyValue } from '../common';
 import DialogDetection from '../components/dialogs/models/DialogDetection';
-import { Position } from '../core';
+import { Position } from '../core/Position';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { Object3D } from './Object3D';
 

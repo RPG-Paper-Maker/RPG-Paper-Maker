@@ -12,8 +12,10 @@
 import { Model } from '../Editor';
 import { BINDING, BindingType, Constants, DYNAMIC_VALUE_KIND, JSONType, Paths, SONG_KIND } from '../common';
 import { createFile, readJSON } from '../common/Platform';
-import { Position, Project, Serializable } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Position } from '../core/Position';
+import { Project } from '../core/Project';
+import { Serializable } from '../core/Serializable';
 
 class System extends Serializable {
 	public projectName!: Model.Localization;

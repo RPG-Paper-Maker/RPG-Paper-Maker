@@ -12,7 +12,7 @@
 import { JSX, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { ACTION_KIND, ELEMENT_MAP_KIND, PICTURE_KIND, Utils } from '../../common';
-import { Project } from '../../core';
+import { Project } from '../../core/Project';
 import { Scene } from '../../Editor';
 import { RootState } from '../../store';
 import Flex from '../Flex';

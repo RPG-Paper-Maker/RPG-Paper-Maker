@@ -11,8 +11,10 @@
 
 import { BINDING, BindingType, Constants, DYNAMIC_VALUE_KIND, JSONType, Paths, SONG_KIND, Utils } from '../common';
 import { copyPublicFile, createFile, createFolder, removeFile, removeFolder, writeJSON } from '../common/Platform';
-import { Portion, Position, Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Portion } from '../core/Portion';
+import { Position } from '../core/Position';
+import { Project } from '../core/Project';
 import { Model } from '../Editor';
 import { CommonObject } from './CommonObject';
 import { Localization } from './Localization';

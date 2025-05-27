@@ -13,8 +13,8 @@ import i18next from 'i18next';
 import { ReactNode } from 'react';
 import { COMMAND_MOVE_KIND, EVENT_COMMAND_KIND, ITERATOR, Utils } from '../common';
 import DialogMapObjectCommandMove from '../components/dialogs/models/DialogMapObjectCommandMove';
-import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Project } from '../core/Project';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { MapObjectCommand, MapObjectCommandType } from './MapObjectCommand';
 

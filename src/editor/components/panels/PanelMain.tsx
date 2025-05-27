@@ -12,7 +12,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Node } from '../../core';
+import { Node } from '../../core/Node';
 import { RootState, setCopiedItems, showWarning } from '../../store';
 import Dialog, { Z_INDEX_LEVEL } from '../dialogs/Dialog';
 import FooterOK from '../dialogs/footers/FooterOK';

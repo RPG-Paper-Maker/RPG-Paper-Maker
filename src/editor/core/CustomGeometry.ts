@@ -10,8 +10,8 @@
 */
 
 import * as THREE from 'three';
-import { Position } from '.';
 import { Mathf } from '../common';
+import { Position } from './Position';
 
 class CustomGeometry extends THREE.BufferGeometry {
 	public _vertices: number[] = [];

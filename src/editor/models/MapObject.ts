@@ -10,7 +10,7 @@
 */
 
 import { BINDING, BindingType, JSONType } from '../common';
-import { Position } from '../core';
+import { Position } from '../core/Position';
 import { Base } from './Base';
 
 class MapObject extends Base {

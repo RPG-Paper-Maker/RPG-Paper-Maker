@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { LocalFile } from '../core';
+import { LocalFile } from '../core/LocalFile';
 import { Constants } from './Constants';
 import { IO } from './IO';
 import { Paths } from './Paths';

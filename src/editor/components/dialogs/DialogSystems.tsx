@@ -13,7 +13,7 @@ import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { initializeAcceptRef } from '../../common';
-import { Project } from '../../core';
+import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
 import { setNeedsReloadMap } from '../../store';
 import PanelBattleSystem from '../panels/systems/PanelBattleSystem';

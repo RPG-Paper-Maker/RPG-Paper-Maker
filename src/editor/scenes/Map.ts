@@ -28,21 +28,20 @@ import {
 	Utils,
 } from '../common';
 import { copyFile, getFiles, readJSON, removeFile } from '../common/Platform';
-import {
-	Cursor,
-	CustomGeometry,
-	CustomGeometryFace,
-	Frame,
-	Grid,
-	MapPortion,
-	Portion,
-	Position,
-	Project,
-	Rectangle,
-	TextureBundle,
-	UndoRedoState,
-} from '../core';
+import { Battler } from '../core/Battler';
+import { Cursor } from '../core/Cursor';
 import { CursorWall } from '../core/CursorWall';
+import { CustomGeometry } from '../core/CustomGeometry';
+import { CustomGeometryFace } from '../core/CustomGeometryFace';
+import { Frame } from '../core/Frame';
+import { Grid } from '../core/Grid';
+import { MapPortion } from '../core/MapPortion';
+import { Portion } from '../core/Portion';
+import { Position } from '../core/Position';
+import { Project } from '../core/Project';
+import { Rectangle } from '../core/Rectangle';
+import { TextureBundle } from '../core/TextureBundle';
+import { UndoRedoState } from '../core/UndoRedoState';
 import { Manager, MapElement, Model } from '../Editor';
 import { default as i18n, default as i18next } from '../i18n/i18n';
 import { Inputs } from '../managers';
@@ -54,6 +53,7 @@ class Map extends Base {
 
 	public static current: Map | null;
 	public static currentpositionSelector: Map | null = null;
+	public static currentBattle: Map | null = null;
 	public static currentSelectedMapElementKind = ELEMENT_MAP_KIND.FLOOR;
 	public static currentSelectedMobileAction = MOBILE_ACTION.PLUS;
 	public static elapsedTime = 0;
@@ -78,6 +78,7 @@ class Map extends Base {
 	public tag?: Model.TreeMapTag;
 	public canEdit = true;
 	public isDetection: boolean;
+	public isBattle: boolean;
 	public detectionFieldLeft?: number;
 	public detectionFieldRight?: number;
 	public detectionFieldTop?: number;
@@ -151,9 +152,10 @@ class Map extends Base {
 	public movingObjectInitialPosition: Position | null = null;
 	public previewDeletedMovingObject: Model.CommonObject | null = null;
 
-	constructor(tag?: Model.TreeMapTag, canEdit = true, isDetection = false) {
+	constructor(tag?: Model.TreeMapTag, canEdit = true, isDetection = false, isBattle = false) {
 		super(tag, isDetection);
 		this.isDetection = isDetection;
+		this.isBattle = isBattle;
 		this.id = tag?.id ?? -1;
 		this.tag = tag;
 		this.canEdit = canEdit;
@@ -242,40 +244,44 @@ class Map extends Base {
 		}
 
 		// Create grid plane
-		const material = new THREE.Material();
-		material.visible = false;
-		material.side = THREE.DoubleSide;
-		const length = Project.SQUARE_SIZE * this.model.length;
-		const width = Project.SQUARE_SIZE * this.model.width;
-		const extremeSize = Project.SQUARE_SIZE * 1000;
-		this.meshPlane = new THREE.Mesh(
-			new THREE.PlaneGeometry(length + extremeSize, width + extremeSize, 1),
-			material
-		);
-		this.meshPlane.visible = false;
-		this.meshPlane.position.set(Math.floor(length / 2), 0, Math.floor(width / 2));
-		this.meshPlane.rotation.set(Math.PI / -2, 0, 0);
-		this.meshPlane.layers.enable(RAYCASTING_LAYER.PLANE);
-		this.scene.add(this.meshPlane);
+		if (!this.isBattle) {
+			const material = new THREE.Material();
+			material.visible = false;
+			material.side = THREE.DoubleSide;
+			const length = Project.SQUARE_SIZE * this.model.length;
+			const width = Project.SQUARE_SIZE * this.model.width;
+			const extremeSize = Project.SQUARE_SIZE * 1000;
+			this.meshPlane = new THREE.Mesh(
+				new THREE.PlaneGeometry(length + extremeSize, width + extremeSize, 1),
+				material
+			);
+			this.meshPlane.visible = false;
+			this.meshPlane.position.set(Math.floor(length / 2), 0, Math.floor(width / 2));
+			this.meshPlane.rotation.set(Math.PI / -2, 0, 0);
+			this.meshPlane.layers.enable(RAYCASTING_LAYER.PLANE);
+			this.scene.add(this.meshPlane);
+		}
 
 		// Cursors
-		this.cursor.initialize(Map.materialCursor);
-		if (this.canEdit) {
-			this.cursorObject.initialize(Map.materialObjectSquareCursor, 1, false);
-			if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
-				this.cursorObject.addToScene();
+		if (!this.isBattle) {
+			this.cursor.initialize(Map.materialCursor);
+			if (this.canEdit) {
+				this.cursorObject.initialize(Map.materialObjectSquareCursor, 1, false);
+				if (Map.currentSelectedMapElementKind === ELEMENT_MAP_KIND.OBJECT) {
+					this.cursorObject.addToScene();
+				}
+				this.cursorWall.initialize();
 			}
-			this.cursorWall.initialize();
-		}
-		if (this.isDetection) {
-			this.cursorDetection.initialize(Map.materialDetectionArrow, 1);
+			if (this.isDetection) {
+				this.cursorDetection.initialize(Map.materialDetectionArrow, 1);
+			}
 		}
 
 		// Light
 		this.initializeSunLight();
 
 		// Grid
-		if (!this.isDetection) {
+		if (!this.isDetection && !this.isBattle) {
 			this.grid.initialize(this);
 			this.syncCursorGrid();
 		}
@@ -312,6 +318,19 @@ class Map extends Base {
 
 		this.loading = false;
 		this.initialized = true;
+	}
+
+	async loadBattlers() {
+		for (let i = 0, l = Project.current!.systems.initialPartyMembers.length; i < l; i++) {
+			await Battler.addToScene(this.cursor.position, i);
+		}
+		await this.loadMonstersBattlers();
+	}
+
+	async loadMonstersBattlers() {
+		for (let i = 0, l = Battler.monsters.length; i < l; i++) {
+			await Battler.addToScene(this.cursor.position, i, false);
+		}
 	}
 
 	async loadTileset() {
@@ -2043,6 +2062,9 @@ class Map extends Base {
 
 	close() {
 		super.close();
+		if (this.isBattle) {
+			Battler.clearScene();
+		}
 	}
 
 	clearHUD() {

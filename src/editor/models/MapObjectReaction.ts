@@ -10,7 +10,7 @@
 */
 
 import { BINDING, BindingType, JSONType } from '../common';
-import { Node } from '../core';
+import { Node } from '../core/Node';
 import { Base } from './Base';
 import { MapObjectCommand } from './MapObjectCommand';
 

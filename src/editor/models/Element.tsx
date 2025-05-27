@@ -12,8 +12,8 @@
 import { ReactNode } from 'react';
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import DialogElement from '../components/dialogs/models/DialogElement';
-import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Project } from '../core/Project';
 import { DIALOG_OPTIONS } from './Base';
 import { ElementEfficiency } from './ElementEfficiency';
 import { Icon } from './Icon';

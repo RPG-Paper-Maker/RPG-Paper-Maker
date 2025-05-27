@@ -11,10 +11,11 @@
 
 import i18next from 'i18next';
 import * as THREE from 'three';
-import { Portion, Project } from '.';
 import { Constants, Mathf } from '../common';
 import { Model } from '../Editor';
+import { Portion } from './Portion';
 import { Position3D } from './Position3D';
+import { Project } from './Project';
 
 const { t } = i18next;
 

@@ -11,7 +11,8 @@
 
 import { forwardRef, useImperativeHandle, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Node, Project } from '../../../core';
+import { Node } from '../../../core/Node';
+import { Project } from '../../../core/Project';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import Checkbox from '../../Checkbox';

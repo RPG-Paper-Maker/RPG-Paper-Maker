@@ -13,7 +13,8 @@ import { forwardRef, useImperativeHandle, useLayoutEffect, useRef, useState } fr
 import { useTranslation } from 'react-i18next';
 import { Model } from '../../../Editor';
 import { DYNAMIC_VALUE_OPTIONS_TYPE, SONG_KIND } from '../../../common';
-import { Node, Project } from '../../../core';
+import { Node } from '../../../core/Node';
+import { Project } from '../../../core/Project';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';

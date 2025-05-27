@@ -10,7 +10,7 @@
 */
 
 import { BINDING, BindingType, JSONType } from '../common';
-import { Serializable } from '../core';
+import { Serializable } from '../core/Serializable';
 
 class ProjectPreview extends Serializable {
 	public name!: string;

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Node } from '../core';
+import { Node } from '../core/Node';
 
 class RPM {
 	public static treeCurrentItems: Node[];

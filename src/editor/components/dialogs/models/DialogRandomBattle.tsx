@@ -12,7 +12,8 @@
 import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DYNAMIC_VALUE_OPTIONS_TYPE } from '../../../common';
-import { Node, Project } from '../../../core';
+import { Node } from '../../../core/Node';
+import { Project } from '../../../core/Project';
 import { Model } from '../../../Editor';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';

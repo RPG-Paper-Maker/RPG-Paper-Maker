@@ -55,7 +55,9 @@ import {
 	readJSON,
 	removeFolder,
 } from '../common/Platform';
-import { LocalFile, Project } from '../core';
+import { Project } from '../core/Project';
+
+import { LocalFile } from '../core/LocalFile';
 import { EngineSettings } from '../data/EngineSettings';
 import { Data, Manager, Model, Scene } from '../Editor';
 import useStateString from '../hooks/useStateString';

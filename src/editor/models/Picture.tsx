@@ -10,7 +10,10 @@
 */
 
 import { BINDING, BindingType, Constants, JSONType, Paths, PICTURE_KIND } from '../common';
-import { CollisionSquare, LocalFile, Picture2D, Project } from '../core';
+import { CollisionSquare } from '../core/CollisionSquare';
+import { LocalFile } from '../core/LocalFile';
+import { Picture2D } from '../core/Picture2D';
+import { Project } from '../core/Project';
 import { Asset } from './Asset';
 
 class Picture extends Asset {

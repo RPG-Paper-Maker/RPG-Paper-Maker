@@ -11,7 +11,7 @@
 
 import { useEffect } from 'react';
 import { ExtendedWindow, Paths } from '../editor/common';
-import { LocalFile } from '../editor/core';
+import { LocalFile } from '../editor/core/LocalFile';
 
 type Props = {
 	location: string;

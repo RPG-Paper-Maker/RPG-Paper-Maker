@@ -12,8 +12,8 @@
 import { ReactNode } from 'react';
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, ITERATOR, JSONType } from '../common';
 import DialogMapObjectEvent from '../components/dialogs/models/DialogMapObjectEvent';
-import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Project } from '../core/Project';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { CommonEvent } from './CommonEvent';
 import { MapObjectCommandType } from './MapObjectCommand';

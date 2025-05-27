@@ -11,7 +11,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Node } from '../../../core';
+import { Node } from '../../../core/Node';
 import { Model } from '../../../Editor';
 import Flex from '../../Flex';
 import InputLocalization from '../../InputLocalization';

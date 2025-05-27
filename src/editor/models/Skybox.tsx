@@ -13,7 +13,7 @@ import { ReactNode } from 'react';
 import * as THREE from 'three';
 import { BINDING, BindingType, JSONType, PICTURE_KIND } from '../common';
 import DialogSkybox from '../components/dialogs/models/DialogSkybox';
-import { Project } from '../core';
+import { Project } from '../core/Project';
 import { Manager } from '../Editor';
 import { Base, DIALOG_OPTIONS } from './Base';
 

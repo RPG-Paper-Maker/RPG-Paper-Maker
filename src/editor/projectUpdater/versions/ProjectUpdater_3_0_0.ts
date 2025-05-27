@@ -21,7 +21,7 @@ import {
 	removeFolder,
 	writeJSON,
 } from '../../common/Platform';
-import { Project } from '../../core';
+import { Project } from '../../core/Project';
 import { Model } from '../../Editor';
 import { MapObjectCommandType } from '../../models';
 import { ProjectUpdater } from '../ProjectUpdater';

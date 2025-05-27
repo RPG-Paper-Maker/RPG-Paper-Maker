@@ -12,7 +12,7 @@
 import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { INPUT_TYPE_WIDTH } from '../../../common';
-import { Node } from '../../../core';
+import { Node } from '../../../core/Node';
 import { Model } from '../../../Editor';
 import useStateString from '../../../hooks/useStateString';
 import Flex from '../../Flex';

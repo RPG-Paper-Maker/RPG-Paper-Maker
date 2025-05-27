@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { BINDING, BindingType, JSONType, OBJECT_COLLISION_KIND, SHAPE_KIND } from '../common';
-import { Project } from '../core';
+import { Project } from '../core/Project';
 import { SpecialElement } from './SpecialElement';
 
 class Object3D extends SpecialElement {

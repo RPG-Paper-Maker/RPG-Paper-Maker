@@ -12,7 +12,9 @@
 import { forwardRef, ReactNode, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ELEMENT_MAP_KIND, EVENT_COMMAND_KIND, OBJECT_MOVING_KIND, Utils } from '../../common';
-import { Node, Project, Rectangle } from '../../core';
+import { Node } from '../../core/Node';
+import { Project } from '../../core/Project';
+import { Rectangle } from '../../core/Rectangle';
 import { Model } from '../../Editor';
 import useStateBool from '../../hooks/useStateBool';
 import useStateNumber from '../../hooks/useStateNumber';

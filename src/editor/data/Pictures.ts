@@ -11,7 +11,8 @@
 
 import { Model } from '../Editor';
 import { JSONType, Paths, PICTURE_KIND } from '../common';
-import { Project, Serializable } from '../core';
+import { Project } from '../core/Project';
+import { Serializable } from '../core/Serializable';
 
 class Pictures extends Serializable {
 	public list!: Model.Picture[][];

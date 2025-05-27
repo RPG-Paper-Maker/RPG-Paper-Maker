@@ -10,8 +10,8 @@
 */
 
 import * as THREE from 'three';
-import { Project } from '.';
 import { Scene } from '../Editor';
+import { Project } from './Project';
 
 class Grid {
 	public line!: THREE.LineSegments;

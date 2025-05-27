@@ -10,7 +10,9 @@
 */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { LocalFile, Picture2D, Rectangle } from '../core';
+import { LocalFile } from '../core/LocalFile';
+import { Picture2D } from '../core/Picture2D';
+import { Rectangle } from '../core/Rectangle';
 
 type CurrentStateProps = {
 	picture: HTMLImageElement | null;

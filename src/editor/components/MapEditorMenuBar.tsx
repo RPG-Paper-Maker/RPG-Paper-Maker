@@ -41,7 +41,7 @@ import {
 	MENU_INDEX_SPRITES_MAP_EDITOR,
 	MOBILE_ACTION,
 } from '../common';
-import { Project } from '../core';
+import { Project } from '../core/Project';
 import {
 	RootState,
 	setCurrentActionKind,

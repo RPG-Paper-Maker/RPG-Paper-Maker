@@ -20,8 +20,8 @@ import {
 	JSONType,
 } from '../common';
 import DialogCharacteristic from '../components/dialogs/models/DialogCharacteristic';
-import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Project } from '../core/Project';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 const { t } = i18next;

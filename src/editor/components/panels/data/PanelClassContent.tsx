@@ -12,7 +12,7 @@
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { INPUT_TYPE_WIDTH } from '../../../common';
-import { Node } from '../../../core';
+import { Node } from '../../../core/Node';
 import useStateNumber from '../../../hooks/useStateNumber';
 import { Base, Characteristic, Class, ClassSkill, ProgressionTable, StatisticProgression } from '../../../models';
 import Button from '../../Button';

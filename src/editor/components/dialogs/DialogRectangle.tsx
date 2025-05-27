@@ -11,7 +11,7 @@
 
 import { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Rectangle } from '../../core';
+import { Rectangle } from '../../core/Rectangle';
 import useStateNumber from '../../hooks/useStateNumber';
 import Flex from '../Flex';
 import Form, { Label, Value } from '../Form';

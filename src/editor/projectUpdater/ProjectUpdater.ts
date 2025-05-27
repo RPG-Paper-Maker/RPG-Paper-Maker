@@ -11,7 +11,7 @@
 
 import { JSONType, Paths } from '../common';
 import { getFiles, getFolders, readJSON, writeJSON } from '../common/Platform';
-import { Project } from '../core';
+import { Project } from '../core/Project';
 
 class ProjectUpdater {
 	static versions = ['3.0.0'];

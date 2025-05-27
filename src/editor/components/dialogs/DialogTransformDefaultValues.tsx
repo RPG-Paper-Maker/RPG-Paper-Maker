@@ -12,7 +12,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ACTION_KIND } from '../../common';
-import { Project } from '../../core';
+import { Project } from '../../core/Project';
 import Flex from '../Flex';
 import InputNumber from '../InputNumber';
 import Dialog from './Dialog';

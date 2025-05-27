@@ -12,8 +12,8 @@
 import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { COMMAND_MOVE_KIND, ELEMENT_MAP_KIND, Utils } from '../../../common';
-import { Rectangle } from '../../../core';
 import { DynamicValue } from '../../../core/DynamicValue';
+import { Rectangle } from '../../../core/Rectangle';
 import { Model } from '../../../Editor';
 import useStateBool from '../../../hooks/useStateBool';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';

@@ -12,7 +12,8 @@
 import { forwardRef, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PICTURE_KIND, SONG_KIND } from '../../../common';
-import { Node, Project } from '../../../core';
+import { Node } from '../../../core/Node';
+import { Project } from '../../../core/Project';
 import { Model } from '../../../Editor';
 import useStateNumber from '../../../hooks/useStateNumber';
 import AssetSelector, { ASSET_SELECTOR_TYPE } from '../../AssetSelector';

@@ -12,7 +12,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { INPUT_TYPE_WIDTH } from '../../../common';
-import { Position, Project } from '../../../core';
+import { Position } from '../../../core/Position';
+import { Project } from '../../../core/Project';
 import { MapElement, Model, Scene } from '../../../Editor';
 import useStateNumber from '../../../hooks/useStateNumber';
 import useStateString from '../../../hooks/useStateString';

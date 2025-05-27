@@ -11,7 +11,8 @@
 
 import { Model } from '../Editor';
 import { JSONType, Paths, SONG_KIND } from '../common';
-import { Project, Serializable } from '../core';
+import { Project } from '../core/Project';
+import { Serializable } from '../core/Serializable';
 
 class Songs extends Serializable {
 	public list!: Model.Song[][];

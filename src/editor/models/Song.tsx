@@ -10,7 +10,7 @@
 */
 
 import { Paths, SONG_KIND } from '../common';
-import { Project } from '../core';
+import { Project } from '../core/Project';
 import { Asset } from './Asset';
 
 class Song extends Asset {

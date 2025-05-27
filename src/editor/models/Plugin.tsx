@@ -33,7 +33,7 @@ import {
 	writeJSON,
 } from '../common/Platform';
 import DialogPlugin from '../components/dialogs/models/DialogPlugin';
-import { Project } from '../core';
+import { Project } from '../core/Project';
 import { DIALOG_OPTIONS } from './Base';
 import { Checkable } from './Checkable';
 import { PluginCommand } from './PluginCommand';

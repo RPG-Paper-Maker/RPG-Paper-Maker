@@ -12,8 +12,8 @@
 import { ReactNode } from 'react';
 import { BINDING, BindingType, ITEM_KIND, JSONType } from '../common';
 import DialogMonsterLoot from '../components/dialogs/models/DialogMonsterLoot';
-import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Project } from '../core/Project';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class MonsterLoot extends Base {

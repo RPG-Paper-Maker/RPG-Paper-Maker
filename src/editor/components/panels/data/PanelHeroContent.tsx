@@ -12,7 +12,8 @@
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PICTURE_KIND } from '../../../common';
-import { Project, Rectangle } from '../../../core';
+import { Project } from '../../../core/Project';
+import { Rectangle } from '../../../core/Rectangle';
 import useStateNumber from '../../../hooks/useStateNumber';
 import useStateString from '../../../hooks/useStateString';
 import { Hero, Localization } from '../../../models';

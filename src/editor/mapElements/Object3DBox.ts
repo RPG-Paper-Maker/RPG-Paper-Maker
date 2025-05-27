@@ -12,7 +12,9 @@
 import * as THREE from 'three';
 import { MapElement, Model } from '../Editor';
 import { JSONType } from '../common';
-import { CustomGeometry, Position, Project } from '../core';
+import { CustomGeometry } from '../core/CustomGeometry';
+import { Position } from '../core/Position';
+import { Project } from '../core/Project';
 import { Base } from './Base';
 import { Object3D } from './Object3D';
 import { Sprite } from './Sprite';

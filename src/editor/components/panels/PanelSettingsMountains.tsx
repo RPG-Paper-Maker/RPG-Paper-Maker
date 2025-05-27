@@ -12,7 +12,7 @@
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Constants } from '../../common';
-import { Project } from '../../core';
+import { Project } from '../../core/Project';
 import { EngineSettings } from '../../data/EngineSettings';
 import { MapElement } from '../../Editor';
 import {

@@ -13,7 +13,8 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { MapElement, Model } from '../../Editor';
 import { ACTION_KIND, ELEMENT_MAP_KIND, ELEMENT_POSITION_KIND, LAYER_KIND } from '../../common';
-import { Position, Rectangle } from '../../core';
+import { Position } from '../../core/Position';
+import { Rectangle } from '../../core/Rectangle';
 
 export interface ProjectState {
 	name: string;

@@ -12,8 +12,9 @@
 import { ReactNode } from 'react';
 import { BINDING, BindingType, DYNAMIC_VALUE_KIND, ELEMENT_MAP_KIND, JSONType, OBJECT_MOVING_KIND } from '../common';
 import DialogMapObjectState from '../components/dialogs/models/DialogMapObjectState';
-import { Project, Rectangle } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Project } from '../core/Project';
+import { Rectangle } from '../core/Rectangle';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { MapObjectCommand } from './MapObjectCommand';
 

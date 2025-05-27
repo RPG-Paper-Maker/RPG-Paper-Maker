@@ -21,8 +21,8 @@ import {
 	OPERATION_KIND,
 } from '../common';
 import DialogMonsterAction from '../components/dialogs/models/DialogMonsterAction';
-import { Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Project } from '../core/Project';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 const { t } = i18next;

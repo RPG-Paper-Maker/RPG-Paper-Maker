@@ -12,7 +12,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DAMAGES_KIND, DYNAMIC_VALUE_OPTIONS_TYPE } from '../../../common';
-import { Project } from '../../../core';
+import { Project } from '../../../core/Project';
 import { Model } from '../../../Editor';
 import useStateDynamicValue from '../../../hooks/useStateDynamicValue';
 import useStateNumber from '../../../hooks/useStateNumber';

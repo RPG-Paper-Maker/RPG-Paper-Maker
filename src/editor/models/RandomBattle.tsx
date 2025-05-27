@@ -12,8 +12,9 @@
 import { ReactNode } from 'react';
 import { ArrayUtils, BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import DialogRandomBattle from '../components/dialogs/models/DialogRandomBattle';
-import { Node, Project } from '../core';
 import { DynamicValue } from '../core/DynamicValue';
+import { Node } from '../core/Node';
+import { Project } from '../core/Project';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { DynamicNumber } from './DynamicNumber';
 

@@ -12,7 +12,8 @@
 import { Model } from '../Editor';
 import { JSONType, Paths, PLUGIN_TYPE_KIND } from '../common';
 import { createFile, readJSON, writeJSON } from '../common/Platform';
-import { Project, Serializable } from '../core';
+import { Project } from '../core/Project';
+import { Serializable } from '../core/Serializable';
 
 class Scripts extends Serializable {
 	public plugins!: Model.Plugin[];

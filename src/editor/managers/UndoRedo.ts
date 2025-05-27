@@ -12,7 +12,9 @@
 import { MapElement, Model, Scene } from '../Editor';
 import { ELEMENT_MAP_KIND, JSONType, Paths, Utils } from '../common';
 import { createFile, getFiles, readFile, removeFile, renameFile } from '../common/Platform';
-import { Position, Project, UndoRedoState } from '../core';
+import { Position } from '../core/Position';
+import { Project } from '../core/Project';
+import { UndoRedoState } from '../core/UndoRedoState';
 
 class UndoRedo {
 	public static readonly MAX_SAVES = 50;
