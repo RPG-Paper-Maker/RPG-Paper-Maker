@@ -13,5 +13,6 @@ export * from './DialogSongs';
 export * from './DialogSystems';
 export * from './DialogTransformations';
 export * from './DialogTransformDefaultValues';
+export * from './DialogTroopBattleTest';
 export * from './DialogVariables';
 export * from './DialogVideos';

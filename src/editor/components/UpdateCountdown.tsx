@@ -16,7 +16,7 @@ import { LocalFile } from '../core/LocalFile';
 import '../styles/UpdateCountdown.css';
 import Flex from './Flex';
 
-function UpdateCountdown({}) {
+function UpdateCountdown() {
 	const { t } = useTranslation();
 
 	const [targetDate, setTargetDate] = useState('');
@@ -54,6 +54,7 @@ function UpdateCountdown({}) {
 
 	useEffect(() => {
 		tryGetDate().catch(console.error);
+		// eslint-disable-next-line
 	}, []);
 
 	return targetDate ? (

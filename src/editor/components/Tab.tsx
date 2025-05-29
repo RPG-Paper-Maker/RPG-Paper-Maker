@@ -21,7 +21,7 @@ import Flex from './Flex';
 type Props = {
 	titles: Model.Base[];
 	setTitles?: (titles: Model.Base[]) => void;
-	contents: ReactNode[];
+	contents?: ReactNode[];
 	setContents?: (contents: ReactNode[]) => void;
 	defaultIndex?: number;
 	closable?: boolean;
@@ -40,7 +40,7 @@ type Props = {
 function Tab({
 	titles,
 	setTitles,
-	contents,
+	contents = [],
 	setContents,
 	defaultIndex = 0,
 	closable = false,

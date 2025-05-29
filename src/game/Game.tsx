@@ -15,9 +15,10 @@ import { LocalFile } from '../editor/core/LocalFile';
 
 type Props = {
 	location: string;
+	battleTest?: boolean;
 };
 
-function Game({ location }: Props) {
+function Game({ location, battleTest = false }: Props) {
 	const getPixelRatio = () => {
 		return window.devicePixelRatio || 1;
 	};
@@ -56,6 +57,7 @@ function Game({ location }: Props) {
 			script.async = true;
 			const global = window as ExtendedWindow;
 			global.rpgPaperMakerProjectLocation = location;
+			global.battleTest = battleTest ? 'battleTroop' : '';
 			document.body.appendChild(script);
 			canvas.id = 'hud';
 			document.body.appendChild(canvas);

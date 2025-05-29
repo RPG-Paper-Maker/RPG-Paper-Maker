@@ -213,9 +213,7 @@ class Base extends Serializable {
 		'script',
 	]);
 	public static PLUGIN_CATEGORY_OPTIONS = Base.mapListIndex(['battle', 'menus', 'map', 'others']);
-
 	public static SELECTION_INCREASE_DECREASE_OPTIONS = Base.mapListIndex(['increase', 'decrease']);
-
 	public static INCREASE_DECREASE_OPTIONS = Base.mapListIndex([
 		'statistic.value',
 		'element.resistance',
@@ -224,12 +222,10 @@ class Base extends Serializable {
 		'currency.gain',
 		'skill.cost',
 	]);
-
 	public static SELECTION_ALL_SKILL_COST_OPTIONS = Base.mapListIndex(['all', 'specific']);
-
 	public static ALLOW_FORBID_OPTIONS = Base.mapListIndex(['allow', 'forbid']);
-
 	public static MONSTER_ACTION_TARGET_OPTIONS = Base.mapListIndex(['random', 'weak.enemies']);
+	public static NONE_WEAPON_ARMOR_OPTIONS = Base.mapListIndex(['none', 'weapon', 'armor']);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([

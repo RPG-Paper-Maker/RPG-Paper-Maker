@@ -56,6 +56,7 @@ class Paths {
 	public static readonly SYSTEM = Paths.join(Paths.SCRIPTS, 'System');
 	public static readonly SHADERS = Paths.join(Paths.SCRIPTS, 'Shaders');
 	public static readonly SAVES = 'Saves';
+	public static readonly TEST = 'Test';
 	public static readonly DEFAULT = 'Default';
 	public static readonly TEMP = 'temp';
 	public static readonly INDEX = 'index';
@@ -95,6 +96,7 @@ class Paths {
 	public static readonly FILE_PLUGIN_PICTURE = 'pic.png';
 	public static readonly FILE_ENGINE_SETTINGS = 'engineSettings.json';
 	public static readonly FILE_CURRENT_COPY = 'currentCopy.json';
+	public static readonly FILE_TEST = 'test.json';
 	public static readonly FILE_VERSION = 'version';
 	public static readonly FILE_GAME_RPMG = 'game.rpmg';
 	public static readonly FILE_FONTS_CSS = 'fonts.css';

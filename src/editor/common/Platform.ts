@@ -244,11 +244,14 @@ export const getAllFilesFromFolder = (path: string): string[] => {
 	}
 };
 
-export const openGame = async (location: string) => {
+export const openGame = async (location: string, isBattleTest: boolean = false) => {
 	if (Constants.IS_DESKTOP) {
-		await IO.openGame(location);
+		await IO.openGame(location); // TODO battle test
 	} else {
-		window.open(`${window.location.pathname}?project=${location}`, '_blank');
+		window.open(
+			`${window.location.pathname}?project=${location}${isBattleTest ? '&battleTest=true' : ''}`,
+			'_blank'
+		);
 	}
 };
 

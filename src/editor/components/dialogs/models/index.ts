@@ -40,6 +40,7 @@ export * from './DialogSpeed';
 export * from './DialogStatistic';
 export * from './DialogStatisticProgression';
 export * from './DialogTitleCommand';
+export * from './DialogTroopBattleTestEquipment';
 export * from './DialogTroopMonster';
 export * from './DialogWeaponArmorKind';
 export * from './DialogWindowSkin';

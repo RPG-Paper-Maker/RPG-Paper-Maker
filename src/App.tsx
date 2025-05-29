@@ -17,9 +17,10 @@ import Game from './game/Game';
 function App() {
 	const queryParameters = new URLSearchParams(window.location.search);
 	const projectLocation = queryParameters.get('project');
+	const battleTest = !!queryParameters.get('battleTest');
 	return (
 		<>
-			{projectLocation ? <Game location={projectLocation} /> : <Editor />}
+			{projectLocation ? <Game location={projectLocation} battleTest={battleTest} /> : <Editor />}
 			<ToastContainer />
 		</>
 	);

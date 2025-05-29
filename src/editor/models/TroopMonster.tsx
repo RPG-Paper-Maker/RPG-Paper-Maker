@@ -24,7 +24,7 @@ class TroopMonster extends Base {
 	public specificPosition!: DynamicValue;
 
 	public static bindings: BindingType[] = [
-		['monsterID', 'mid', 1, BINDING.NUMBER],
+		['monsterID', 'mid', undefined, BINDING.NUMBER],
 		['level', 'l', DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, 1), BINDING.DYNAMIC_VALUE, DynamicValue],
 		['hidden', 'h', DynamicValue.create(DYNAMIC_VALUE_KIND.SWITCH, false), BINDING.DYNAMIC_VALUE, DynamicValue],
 		['isSpecificPosition', 'isSpecificPosition', false, BINDING.BOOLEAN],

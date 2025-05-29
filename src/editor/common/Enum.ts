@@ -686,3 +686,9 @@ export enum PLUGIN_CATEGORY_KIND {
 	MAP,
 	OTHERS,
 }
+
+export enum NONE_WEAPON_ARMOR_KIND {
+	NONE = 0,
+	WEAPON = 1,
+	ARMOR = 2,
+}

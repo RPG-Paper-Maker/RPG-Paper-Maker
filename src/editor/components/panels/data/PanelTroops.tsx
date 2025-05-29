@@ -15,6 +15,8 @@ import { Node } from '../../../core/Node';
 import { Project } from '../../../core/Project';
 import { Model } from '../../../Editor';
 import BattleMapPreviewer from '../../BattleMapPreviewer';
+import Button from '../../Button';
+import DialogTroopBattleTest from '../../dialogs/DialogTroopBattleTest';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tree, { TREES_MIN_WIDTH } from '../../Tree';
@@ -22,6 +24,7 @@ import Tree, { TREES_MIN_WIDTH } from '../../Tree';
 const PanelTroops = forwardRef((props, ref) => {
 	const { t } = useTranslation();
 
+	const [isDialogBattleTestOpen, setIsDialogBattleTestOpen] = useState(false);
 	const [troops, setTroops] = useState<Node[]>([]);
 	const [selectedTroop, setSelectedTroop] = useState<Model.Troop | null>(null);
 	const [monsters, setMonsters] = useState<Node[]>([]);
@@ -52,6 +55,10 @@ const PanelTroops = forwardRef((props, ref) => {
 		}
 	};
 
+	const handleClickTest = () => {
+		setIsDialogBattleTestOpen(true);
+	};
+
 	useImperativeHandle(ref, () => ({}));
 
 	useLayoutEffect(() => {
@@ -60,51 +67,65 @@ const PanelTroops = forwardRef((props, ref) => {
 	}, []);
 
 	return (
-		<Flex spacedLarge fillWidth fillHeight>
-			<Groupbox title={t('troops')}>
-				<Flex one fillHeight>
-					<Tree
-						constructorType={Model.Troop}
-						list={troops}
-						minWidth={TREES_MIN_WIDTH}
-						onSelectedItem={handleSelectTroop}
-						onListUpdated={handleListUpdated}
-						noScrollOnForce
-						scrollable
-						showEditName
-						isLocalization
-						applyDefault
-					/>
-				</Flex>
-			</Groupbox>
-			<Flex one column>
-				<Flex one column scrollable zeroHeight>
-					<Flex column one spacedLarge>
-						<Flex spaced>
-							<Flex one>
-								<Groupbox title={t('monsters.list')} fillWidth>
-									<Tree
-										constructorType={Model.TroopMonster}
-										list={monsters}
-										//onSelectedItem={handleSelectTroop}
-										onListUpdated={handleMonstersListUpdated}
-										noScrollOnForce
-										scrollable
-										applyDefault
-									/>
-								</Groupbox>
+		<>
+			<Flex spacedLarge fillWidth fillHeight>
+				<Groupbox title={t('troops')}>
+					<Flex one fillHeight>
+						<Tree
+							constructorType={Model.Troop}
+							list={troops}
+							minWidth={TREES_MIN_WIDTH}
+							onSelectedItem={handleSelectTroop}
+							onListUpdated={handleListUpdated}
+							noScrollOnForce
+							scrollable
+							showEditName
+							isLocalization
+							applyDefault
+						/>
+					</Flex>
+				</Groupbox>
+				<Flex one column>
+					<Flex one column scrollable zeroHeight>
+						<Flex column one spacedLarge>
+							<Flex spaced>
+								<Flex one column spacedLarge>
+									<Button onClick={handleClickTest} disabled={isTroopDisabled}>
+										{t('test')}...
+									</Button>
+									<Flex one>
+										<Groupbox title={t('monsters.list')} fillWidth disabled={isTroopDisabled}>
+											<Tree
+												constructorType={Model.TroopMonster}
+												list={monsters}
+												onListUpdated={handleMonstersListUpdated}
+												noScrollOnForce
+												scrollable
+												applyDefault
+												disabled={isTroopDisabled}
+											/>
+										</Groupbox>
+									</Flex>
+								</Flex>
+								<BattleMapPreviewer monsters={selectedTroop?.list ?? []} disabled={isTroopDisabled} />
 							</Flex>
-							<BattleMapPreviewer monsters={selectedTroop?.list ?? []} />
+							<Groupbox title={t('reactions')}>
+								<Flex spaced>Test</Flex>
+								<Flex spaced>Test</Flex>
+								<Flex spaced>Test</Flex>
+							</Groupbox>
 						</Flex>
-						<Groupbox title={t('reactions')}>
-							<Flex spaced>Test</Flex>
-							<Flex spaced>Test</Flex>
-							<Flex spaced>Test</Flex>
-						</Groupbox>
 					</Flex>
 				</Flex>
 			</Flex>
-		</Flex>
+			{isDialogBattleTestOpen && (
+				<DialogTroopBattleTest
+					isOpen={isDialogBattleTestOpen}
+					setIsOpen={setIsDialogBattleTestOpen}
+					troopID={selectedTroop?.id ?? -1}
+				/>
+			)}
+		</>
 	);
 });
 

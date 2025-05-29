@@ -30,9 +30,10 @@ const createOverlayLine = (x1: number, y1: number, x2: number, y2: number, color
 
 type Props = {
 	monsters: Model.TroopMonster[];
+	disabled?: boolean;
 };
 
-function BattleMapPreviewer({ monsters }: Props) {
+function BattleMapPreviewer({ monsters, disabled = false }: Props) {
 	const [firstLoading, setFirstLoading] = useState(false);
 	const [dataURL, setDataURL] = useState('');
 
@@ -124,7 +125,10 @@ function BattleMapPreviewer({ monsters }: Props) {
 	return (
 		<>
 			<Loader isLoading={firstLoading} />
-			{dataURL && <img src={dataURL} style={{ width: `${WIDTH}px`, height: `${HEIGHT}px` }} alt='trooppreview' />}
+			{dataURL && !disabled && (
+				<img src={dataURL} style={{ width: `${WIDTH}px`, height: `${HEIGHT}px` }} alt='trooppreview' />
+			)}
+			{disabled && <div style={{ width: `${WIDTH}px`, height: `${HEIGHT}px` }} />}
 		</>
 	);
 }
