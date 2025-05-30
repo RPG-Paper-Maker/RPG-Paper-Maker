@@ -68,7 +68,7 @@ class CommonObject extends Base {
 				2,
 				eventTime.parameters[1].name,
 				eventTime.parameters[1],
-				DynamicValue.create(DYNAMIC_VALUE_KIND.SWITCH, true)
+				DynamicValue.create(DYNAMIC_VALUE_KIND.SWITCH, false)
 			),
 		];
 		const reaction = new MapObjectReaction();
