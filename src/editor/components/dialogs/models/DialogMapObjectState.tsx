@@ -18,7 +18,7 @@ import useStateNumber from '../../../hooks/useStateNumber';
 import { showWarning } from '../../../store';
 import Dropdown from '../../Dropdown';
 import Flex from '../../Flex';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
@@ -84,6 +84,7 @@ function DialogMapObjectState({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex spacedLarge>
 				{t('state.id')}:

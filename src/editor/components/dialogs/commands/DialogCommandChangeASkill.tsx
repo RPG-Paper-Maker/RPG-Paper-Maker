@@ -24,7 +24,7 @@ import Groupbox from '../../Groupbox';
 import PanelSelectionHero, { PanelSelectionHeroRef } from '../../panels/PanelSelectionHero';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
@@ -83,6 +83,7 @@ function DialogCommandChangeASkill({ commandKind, isOpen, setIsOpen, list, onAcc
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex column spacedLarge>
 				<PanelSelectionHero ref={panelSelectionHeroRef} />

@@ -15,7 +15,7 @@ import { DYNAMIC_VALUE_OPTIONS_TYPE } from '../../../common';
 import { DynamicValue } from '../../../core/DynamicValue';
 import { Model } from '../../../Editor';
 import DynamicValueSelector from '../../DynamicValueSelector';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
@@ -62,6 +62,7 @@ function DialogMapObjectParameter({ isOpen, setIsOpen, model, onAccept, onReject
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<DynamicValueSelector value={value} optionsType={DYNAMIC_VALUE_OPTIONS_TYPE.PARAMETER} />
 		</Dialog>

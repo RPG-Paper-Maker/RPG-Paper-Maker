@@ -66,7 +66,7 @@ import DialogCommandStopSong from '../commands/DialogCommandStopSong';
 import DialogCommandSwitchTexture from '../commands/DialogCommandSwitchTexture';
 import DialogCommandTeleportObject from '../commands/DialogCommandTeleportObject';
 import DialogCommandWait from '../commands/DialogCommandWait';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 
 export type CommandProps = {
 	commandKind: EVENT_COMMAND_KIND;
@@ -472,6 +472,7 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 					onClose={handleReject}
 					initialWidth='600px'
 					initialHeight='550px'
+					zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 				>
 					<Tab
 						hideScroll

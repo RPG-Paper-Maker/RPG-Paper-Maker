@@ -28,7 +28,7 @@ import PanelOperation, { SELECTION_OPERATION_TYPE } from '../../panels/PanelOper
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
 import VariableSelector from '../../VariableSelector';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
@@ -255,6 +255,7 @@ function DialogCommandChangeVariables({ commandKind, isOpen, setIsOpen, list, on
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex column spacedLarge>
 				<Groupbox title={t('selection')}>

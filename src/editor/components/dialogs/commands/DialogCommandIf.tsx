@@ -26,7 +26,7 @@ import Form, { Label, Value } from '../../Form';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
 import Tab from '../../Tab';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
@@ -791,6 +791,7 @@ function DialogCommandIf({ commandKind, isOpen, setIsOpen, list, onAccept, onRej
 			onClose={handleReject}
 			initialWidth='650px'
 			initialHeight='500px'
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex column spacedLarge fillHeight>
 				<RadioGroup selected={selectionType} onChange={setSelectionType}>

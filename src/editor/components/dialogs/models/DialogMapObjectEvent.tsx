@@ -13,7 +13,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Model } from '../../../Editor';
 import PanelObjectEvent, { PanelObjectEventRef } from '../../panels/PanelObjectEvent';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
@@ -60,6 +60,7 @@ function DialogMapObjectEvent({ isOpen, setIsOpen, model, isNew, onAccept, onRej
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<PanelObjectEvent event={event} isNew={isNew} ref={panelPositionRef} />
 		</Dialog>

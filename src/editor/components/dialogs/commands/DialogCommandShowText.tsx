@@ -27,7 +27,7 @@ import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import Tab from '../../Tab';
 import TextArea from '../../TextArea';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import DialogPictures from '../DialogPictures';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
@@ -284,6 +284,7 @@ function DialogCommandShowText({ commandKind, isOpen, setIsOpen, list, onAccept,
 				isOpen={isOpen}
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
+				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			>
 				<Flex column spaced>
 					<Form>

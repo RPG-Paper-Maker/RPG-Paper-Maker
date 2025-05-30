@@ -27,7 +27,7 @@ import PanelOperation, { SELECTION_OPERATION_TYPE } from '../../panels/PanelOper
 import PanelSelectionHero, { PanelSelectionHeroRef } from '../../panels/PanelSelectionHero';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
@@ -123,6 +123,7 @@ function DialogCommandChangeAStatistic({ commandKind, isOpen, setIsOpen, list, o
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex column spacedLarge>
 				<Flex spaced centerV>

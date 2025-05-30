@@ -26,7 +26,7 @@ import Groupbox from '../../Groupbox';
 import PanelObjectEvent, { PanelObjectEventRef } from '../../panels/PanelObjectEvent';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
@@ -118,6 +118,7 @@ function DialogCommandSendEvent({ commandKind, isOpen, setIsOpen, list, onAccept
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex column spacedLarge>
 				<Groupbox title={t('target')}>

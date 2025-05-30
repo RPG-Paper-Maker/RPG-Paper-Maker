@@ -18,7 +18,7 @@ import useStateDynamicValue from '../../hooks/useStateDynamicValue';
 import DynamicValueSelector from '../DynamicValueSelector';
 import Flex from '../Flex';
 import Form, { Label, Value } from '../Form';
-import Dialog from './Dialog';
+import Dialog, { Z_INDEX_LEVEL } from './Dialog';
 import FooterCancelOK from './footers/FooterCancelOK';
 
 type Props = {
@@ -102,6 +102,7 @@ function DialogTransformations({
 			isOpen={isOpen}
 			footer={<FooterCancelOK onOK={handleAccept} onCancel={handleClose} />}
 			onClose={handleClose}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Form>
 				<Label>{t('center')} X</Label>

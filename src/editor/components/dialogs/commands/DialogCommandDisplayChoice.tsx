@@ -20,7 +20,7 @@ import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
 import Tree from '../../Tree';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
@@ -101,6 +101,7 @@ function DialogCommandDisplayChoice({ commandKind, isOpen, setIsOpen, list, onAc
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
 			initialWidth='600px'
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex spaced fillWidth>
 				<Flex one fillWidth>

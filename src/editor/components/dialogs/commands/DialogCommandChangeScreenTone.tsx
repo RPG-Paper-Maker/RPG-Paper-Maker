@@ -25,7 +25,7 @@ import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import PanelWaitTime, { PanelWaitTimeRef } from '../../panels/PanelWaitTime';
 import SliderDynamic from '../../SliderDynamic';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
@@ -112,6 +112,7 @@ function DialogCommandChangeScreenTone({ commandKind, isOpen, setIsOpen, list, o
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex column spaced>
 				<Form>

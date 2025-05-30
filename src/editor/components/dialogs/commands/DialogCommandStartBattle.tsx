@@ -28,7 +28,7 @@ import { PanelPositionRef } from '../../panels';
 import PanelPosition from '../../panels/PanelPosition';
 import RadioButton from '../../RadioButton';
 import RadioGroup from '../../RadioGroup';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
@@ -126,6 +126,7 @@ function DialogCommandStartBattle({ commandKind, isOpen, setIsOpen, list, onAcce
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex one column spacedLarge className='scrollable' style={{ height: '450px' }}>
 				<Groupbox title={t('troop.id')}>

@@ -21,7 +21,7 @@ import Checkbox from '../../Checkbox';
 import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import PanelPosition, { PanelPositionRef } from '../../panels/PanelPosition';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
@@ -85,6 +85,7 @@ function DialogCommandCreateObjectInMap({ commandKind, isOpen, setIsOpen, list, 
 				isOpen={isOpen}
 				footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 				onClose={handleReject}
+				zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 			>
 				<Flex column spacedLarge>
 					<Flex spaced>

@@ -18,7 +18,7 @@ import useStateString from '../../../hooks/useStateString';
 import { MapObjectCommandType } from '../../../models';
 import Flex from '../../Flex';
 import InputText from '../../InputText';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
@@ -63,6 +63,7 @@ function DialogCommandComment({ commandKind, isOpen, setIsOpen, list, onAccept, 
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex spaced centerV>
 				<div>{t('comment')}:</div>

@@ -22,7 +22,7 @@ import { MapObjectCommandType } from '../../../models';
 import Checkbox from '../../Checkbox';
 import Flex from '../../Flex';
 import GraphicsSelector from '../../GraphicsSelector';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 
 type Props = {
@@ -167,6 +167,7 @@ function DialogCommandMoveObjectChangeGraphics({ isOpen, setIsOpen, model, isNew
 			isOpen={isOpen}
 			footer={<FooterCancelOK onCancel={handleReject} onOK={handleAccept} />}
 			onClose={handleReject}
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex column spaced centerH>
 				<GraphicsSelector

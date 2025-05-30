@@ -21,7 +21,7 @@ import DynamicValueSelector from '../../DynamicValueSelector';
 import Flex from '../../Flex';
 import Form, { Label, Value } from '../../Form';
 import Tree from '../../Tree';
-import Dialog from '../Dialog';
+import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 import FooterCancelOK from '../footers/FooterCancelOK';
 import { CommandProps } from '../models';
 
@@ -93,6 +93,7 @@ function DialogCommandStartShopMenu({ commandKind, isOpen, setIsOpen, list, onAc
 			onClose={handleReject}
 			initialWidth='50%'
 			initialHeight='60%'
+			zIndex={Z_INDEX_LEVEL.LAYER_TWO}
 		>
 			<Flex one column spacedLarge fillHeight>
 				<Flex one zeroHeight>
