@@ -688,7 +688,12 @@ export enum PLUGIN_CATEGORY_KIND {
 }
 
 export enum NONE_WEAPON_ARMOR_KIND {
-	NONE = 0,
-	WEAPON = 1,
-	ARMOR = 2,
+	NONE,
+	WEAPON,
+	ARMOR,
+}
+
+export enum HEROES_MONSTERS_KIND {
+	HEROES,
+	MONSTERS,
 }

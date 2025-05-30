@@ -236,7 +236,7 @@ function DialogCharacteristic({ isOpen, setIsOpen, model, onAccept, onReject }: 
 					<Dropdown
 						selectedID={unitSelection}
 						onChange={setUnitSelection}
-						options={Model.Base.mapListIndex(['%', t('fix')])}
+						options={Model.Base.getUnitOptions()}
 						disabled={kind !== CHARACTERISTIC_KIND.INCREASE_DECREASE}
 					/>
 				</Flex>

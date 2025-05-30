@@ -226,6 +226,19 @@ class Base extends Serializable {
 	public static ALLOW_FORBID_OPTIONS = Base.mapListIndex(['allow', 'forbid']);
 	public static MONSTER_ACTION_TARGET_OPTIONS = Base.mapListIndex(['random', 'weak.enemies']);
 	public static NONE_WEAPON_ARMOR_OPTIONS = Base.mapListIndex(['none', 'weapon', 'armor']);
+	public static TROOP_REACTION_FREQUENCY_OPTIONS = Base.mapListIndex([
+		'one.time',
+		'each.turn.begin',
+		'each.turn.end',
+		'always',
+	]);
+	public static HEROES_MONSTERS_OPTIONS = Base.mapListIndex(['heroes', 'monsters']);
+	public static CONDITION_HEROES_OPTIONS = Base.mapListIndex([
+		'all.players',
+		'none.of.players',
+		'at.least.one.player',
+		'player.with.instance.id',
+	]);
 
 	public static getCompareOptions = () =>
 		Base.mapListIndex([
@@ -236,6 +249,8 @@ class Base extends Serializable {
 			`> (${t('greater.than')})`,
 			`< (${t('lesser.than')})`,
 		]);
+
+	public static getUnitOptions = () => Base.mapListIndex(['%', t('fix')]);
 
 	public id!: number;
 	public name!: string;

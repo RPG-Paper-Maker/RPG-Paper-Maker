@@ -11,15 +11,22 @@
 
 import { forwardRef, useImperativeHandle, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { TROOP_REACTION_FREQUENCY_KIND } from '../../../common';
 import { Node } from '../../../core/Node';
 import { Project } from '../../../core/Project';
 import { Model } from '../../../Editor';
+import useStateBool from '../../../hooks/useStateBool';
+import useStateNumber from '../../../hooks/useStateNumber';
+import { Base } from '../../../models';
 import BattleMapPreviewer from '../../BattleMapPreviewer';
 import Button from '../../Button';
 import DialogTroopBattleTest from '../../dialogs/DialogTroopBattleTest';
+import DialogTroopReactionConditions from '../../dialogs/models/DialogTroopReactionConditions';
+import Dropdown from '../../Dropdown';
 import Flex from '../../Flex';
 import Groupbox from '../../Groupbox';
-import Tree, { TREES_MIN_WIDTH } from '../../Tree';
+import Tree, { TREES_LARGE_MIN_HEIGHT, TREES_MIN_WIDTH } from '../../Tree';
+import TreeCommands from '../../TreeCommands';
 
 const PanelTroops = forwardRef((props, ref) => {
 	const { t } = useTranslation();
@@ -28,8 +35,17 @@ const PanelTroops = forwardRef((props, ref) => {
 	const [troops, setTroops] = useState<Node[]>([]);
 	const [selectedTroop, setSelectedTroop] = useState<Model.Troop | null>(null);
 	const [monsters, setMonsters] = useState<Node[]>([]);
+	const [reactions, setReactions] = useState<Node[]>([]);
+	const [selectedReaction, setSelectedReaction] = useState<Model.TroopReaction | null>(null);
+	const [isDialogReactionConditionsOpen, setIsDialogReactionConditionsOpen] = useStateBool();
+	const [frequency, setFrequency] = useStateNumber();
+	const [commands, setCommands] = useState<Node[]>([]);
 
 	const isTroopDisabled = useMemo(() => selectedTroop === null || selectedTroop.id === -1, [selectedTroop]);
+	const isReactionDisabled = useMemo(
+		() => selectedReaction === null || selectedReaction.id === -1,
+		[selectedReaction]
+	);
 
 	const initialize = () => {
 		setTroops(Node.createList(Project.current!.troops.list, false));
@@ -40,8 +56,10 @@ const PanelTroops = forwardRef((props, ref) => {
 		setSelectedTroop(troop);
 		if (troop) {
 			setMonsters(Node.createList(troop.list, false));
+			setReactions(Node.createList(troop.reactions, false));
 		} else {
 			setMonsters([]);
+			setReactions([]);
 		}
 	};
 
@@ -57,6 +75,41 @@ const PanelTroops = forwardRef((props, ref) => {
 
 	const handleClickTest = () => {
 		setIsDialogBattleTestOpen(true);
+	};
+
+	const handleSelectReaction = (node: Node | null) => {
+		const reaction = (node?.content as Model.TroopReaction) ?? null;
+		setSelectedReaction(reaction);
+		if (reaction) {
+			setFrequency(reaction.frequency);
+			setCommands(reaction.commands.map((node) => node.clone()));
+		} else {
+			setFrequency(TROOP_REACTION_FREQUENCY_KIND.ONE_TIME);
+			setCommands([]);
+		}
+	};
+
+	const handleReactionsListUpdated = () => {
+		if (selectedTroop) {
+			selectedTroop.reactions = Node.createListFromNodes(reactions);
+		}
+	};
+
+	const handleClickReactionConditions = () => {
+		setIsDialogReactionConditionsOpen(true);
+	};
+
+	const handleChangeFrequency = (f: number) => {
+		setFrequency(f);
+		if (selectedReaction) {
+			selectedReaction.frequency = f;
+		}
+	};
+
+	const handleUpdateCommands = () => {
+		if (selectedReaction) {
+			selectedReaction.commands = commands.map((node) => node.clone());
+		}
 	};
 
 	useImperativeHandle(ref, () => ({}));
@@ -109,20 +162,68 @@ const PanelTroops = forwardRef((props, ref) => {
 								</Flex>
 								<BattleMapPreviewer monsters={selectedTroop?.list ?? []} disabled={isTroopDisabled} />
 							</Flex>
-							<Groupbox title={t('reactions')}>
-								<Flex spaced>Test</Flex>
-								<Flex spaced>Test</Flex>
-								<Flex spaced>Test</Flex>
+							<Groupbox title={t('reactions')} disabled={isTroopDisabled}>
+								<Flex spacedLarge>
+									<Flex>
+										<Tree
+											constructorType={Model.TroopReaction}
+											list={reactions}
+											onListUpdated={handleReactionsListUpdated}
+											onSelectedItem={handleSelectReaction}
+											minHeight={TREES_LARGE_MIN_HEIGHT}
+											minWidth={TREES_MIN_WIDTH}
+											disabled={isTroopDisabled}
+											noScrollOnForce
+											scrollable
+											applyDefault
+										/>
+									</Flex>
+									<Flex one column spaced>
+										<Flex spacedLarge>
+											<Flex spaced centerV>
+												<Flex disabledLabel={isTroopDisabled || isReactionDisabled}>
+													{t('conditions')}:
+												</Flex>
+												<Button
+													onClick={handleClickReactionConditions}
+													disabled={isTroopDisabled || isReactionDisabled}
+												>
+													...
+												</Button>
+											</Flex>
+											<Flex spaced centerV>
+												<Flex disabledLabel={isTroopDisabled || isReactionDisabled}>
+													{t('frequency')}:
+												</Flex>
+												<Dropdown
+													selectedID={frequency}
+													onChange={handleChangeFrequency}
+													options={Base.TROOP_REACTION_FREQUENCY_OPTIONS}
+													disabled={isTroopDisabled || isReactionDisabled}
+													translateOptions
+												/>
+											</Flex>
+										</Flex>
+										<TreeCommands
+											list={commands}
+											onListUpdated={handleUpdateCommands}
+											disabled={isTroopDisabled || isReactionDisabled}
+										/>
+									</Flex>
+								</Flex>
 							</Groupbox>
 						</Flex>
 					</Flex>
 				</Flex>
 			</Flex>
 			{isDialogBattleTestOpen && (
-				<DialogTroopBattleTest
-					isOpen={isDialogBattleTestOpen}
-					setIsOpen={setIsDialogBattleTestOpen}
-					troopID={selectedTroop?.id ?? -1}
+				<DialogTroopBattleTest isOpen setIsOpen={setIsDialogBattleTestOpen} troopID={selectedTroop?.id ?? -1} />
+			)}
+			{isDialogReactionConditionsOpen && selectedReaction && (
+				<DialogTroopReactionConditions
+					isOpen
+					setIsOpen={setIsDialogReactionConditionsOpen}
+					conditions={selectedReaction.conditions}
 				/>
 			)}
 		</>

@@ -26,6 +26,12 @@ class TroopReaction extends MapObjectReaction {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(TroopReaction.getBindings(additionnalBinding));
+		this.conditions = new TroopReactionConditions();
+		this.conditions.applyDefault();
+	}
+
 	copy(troopReaction: TroopReaction): void {
 		super.copy(troopReaction, TroopReaction.getBindings([]));
 	}

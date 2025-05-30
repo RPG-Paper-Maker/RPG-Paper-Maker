@@ -86,6 +86,10 @@ class TroopReactionConditions extends Base {
 		return [...this.bindings, ...additionnalBinding];
 	}
 
+	applyDefault(additionnalBinding: BindingType[] = []): void {
+		super.applyDefault(TroopReactionConditions.getBindings(additionnalBinding));
+	}
+
 	copy(troopReactionConditions: TroopReactionConditions): void {
 		super.copy(troopReactionConditions, TroopReactionConditions.getBindings([]));
 	}
