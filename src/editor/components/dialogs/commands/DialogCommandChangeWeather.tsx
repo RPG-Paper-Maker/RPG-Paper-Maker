@@ -107,7 +107,7 @@ function DialogCommandChangeWeather({ commandKind, isOpen, setIsOpen, list, onAc
 		size.updateToDefaultNumber(6);
 		depthTest.updateToDefaultSwitch();
 		depthWrite.updateToDefaultSwitch(false);
-		initialVelocity.updateToDefaultFormula('6');
+		initialVelocity.updateToDefaultFormula('-6');
 		veclocityAddition.updateToDefaultFormula('-Math.random() * 0.002');
 		initialYRotation.updateToDefaultFormula('0');
 		yRotationAddition.updateToDefaultFormula('0');
