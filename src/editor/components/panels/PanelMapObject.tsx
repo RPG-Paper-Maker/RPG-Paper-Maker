@@ -558,6 +558,7 @@ const PanelMapObject = forwardRef(
 									graphicsKind={graphicsKind}
 									onChangeGraphicsKind={handleChangeGraphicsKind}
 									onUpdateGraphics={handleUpdateGraphics}
+									hidden={!selectedState || hideStateValues}
 								/>
 								<Flex column one spaced>
 									<Groupbox title={t('moving')}>

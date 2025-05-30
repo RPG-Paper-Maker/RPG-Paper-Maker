@@ -33,6 +33,7 @@ type Props = {
 	graphicsIndexY: number;
 	rectTileset?: Rectangle;
 	graphicsKind: number;
+	hidden?: boolean;
 	onUpdateGraphics: (id: number, rect: Rectangle, isTileset: boolean) => void;
 	onChangeGraphicsKind: (kind: number) => void;
 };
@@ -45,6 +46,7 @@ function GraphicsSelector({
 	graphicsIndexY,
 	rectTileset,
 	graphicsKind,
+	hidden = false,
 	onChangeGraphicsKind,
 	onUpdateGraphics,
 }: Props) {
@@ -171,10 +173,10 @@ function GraphicsSelector({
 	}, [graphicsID, graphicsKind]);
 
 	useEffect(() => {
-		if (isOpenDialogObjects3D) {
+		if (isOpenDialogObjects3D || hidden) {
 			Manager.GL.layerOneContext.renderer.clear();
 		}
-	}, [isOpenDialogObjects3D]);
+	}, [isOpenDialogObjects3D, hidden]);
 
 	useEffect(() => {
 		Manager.GL.layerOneContext.renderer.clear();
@@ -187,7 +189,7 @@ function GraphicsSelector({
 				<div className='graphicsSelector' onDoubleClick={handleDoubleClick}>
 					<div className='border' />
 					{isCharacter && <canvas ref={refCanvas} className='pointer'></canvas>}
-					{isObject3D && !isOpenDialogObjects3D && (
+					{isObject3D && !isOpenDialogObjects3D && !hidden && (
 						<PreviewerObject3D sceneID={sceneID} objectID={graphicsID} />
 					)}
 				</div>
