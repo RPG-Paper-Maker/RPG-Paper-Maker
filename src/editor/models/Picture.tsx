@@ -9,11 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, Constants, JSONType, Paths, PICTURE_KIND } from '../common';
+import { BINDING, Constants, JSONType, Paths, PICTURE_KIND } from '../common';
 import { CollisionSquare } from '../core/CollisionSquare';
 import { LocalFile } from '../core/LocalFile';
 import { Picture2D } from '../core/Picture2D';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Asset } from './Asset';
 
 class Picture extends Asset {

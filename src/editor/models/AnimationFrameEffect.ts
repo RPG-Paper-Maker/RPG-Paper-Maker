@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ANIMATION_EFFECT_CONDITION_KIND, BINDING, BindingType, JSONType } from '../common';
+import { ANIMATION_EFFECT_CONDITION_KIND, BINDING, JSONType } from '../common';
+import { BindingType } from '../core/Serializable';
 import { Base } from './Base';
 import { PlaySong } from './PlaySong';
 

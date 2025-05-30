@@ -11,11 +11,12 @@
 
 import i18next from 'i18next';
 import * as THREE from 'three';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND, SPRITE_WALL_TYPE, Utils } from '../common';
+import { BINDING, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND, SPRITE_WALL_TYPE, Utils } from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Picture2D } from '../core/Picture2D';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Manager, MapElement, Model, Scene } from '../Editor';
 import { Base } from './Base';
 import { Sprite } from './Sprite';

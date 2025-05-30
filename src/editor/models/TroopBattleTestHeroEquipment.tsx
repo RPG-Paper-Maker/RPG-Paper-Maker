@@ -11,9 +11,10 @@
 
 import i18next from 'i18next';
 import { ReactNode } from 'react';
-import { BINDING, BindingType, JSONType, NONE_WEAPON_ARMOR_KIND } from '../common';
+import { BINDING, JSONType, NONE_WEAPON_ARMOR_KIND } from '../common';
 import DialogTroopBattleTestHeroEquipment from '../components/dialogs/models/DialogTroopBattleTestEquipment';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 const { t } = i18next;

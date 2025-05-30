@@ -11,9 +11,10 @@
 
 import { ReactNode } from 'react';
 import * as THREE from 'three';
-import { BINDING, BindingType, JSONType, PICTURE_KIND } from '../common';
+import { BINDING, JSONType, PICTURE_KIND } from '../common';
 import DialogSkybox from '../components/dialogs/models/DialogSkybox';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Manager } from '../Editor';
 import { Base, DIALOG_OPTIONS } from './Base';
 

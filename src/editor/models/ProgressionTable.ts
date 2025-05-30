@@ -9,8 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType, KeyValue } from '../common';
+import { BINDING, JSONType, KeyValue } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
+import { BindingType } from '../core/Serializable';
 import { Base } from './Base';
 
 class ProgressionTable extends Base {

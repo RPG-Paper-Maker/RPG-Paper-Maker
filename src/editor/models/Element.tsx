@@ -10,10 +10,11 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
+import { BINDING, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import DialogElement from '../components/dialogs/models/DialogElement';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { DIALOG_OPTIONS } from './Base';
 import { ElementEfficiency } from './ElementEfficiency';
 import { Icon } from './Icon';

@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ACTION_KIND, BINDING, BindingType, JSONType, LAYER_KIND, MOBILE_ACTION, Paths } from '../common';
+import { ACTION_KIND, BINDING, JSONType, LAYER_KIND, MOBILE_ACTION, Paths } from '../common';
 import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
-import { Serializable } from '../core/Serializable';
+import { BindingType, Serializable } from '../core/Serializable';
 
 class Settings extends Serializable {
 	public projectVersion!: string;

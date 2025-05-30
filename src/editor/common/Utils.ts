@@ -11,7 +11,6 @@
 
 import { Constants, ITERATOR, JSONType } from '.';
 import { Serializable } from '../core/Serializable';
-import { Model } from '../Editor';
 
 class Utils {
 	public static defaultValue<T>(value: T | undefined, defaultValue: T): T {
@@ -70,7 +69,7 @@ class Utils {
 		return n === Constants.NUM_BOOL_TRUE;
 	}
 
-	static initializeBoolCommand(list: Model.MapObjectCommandType[], iterator: ITERATOR): boolean {
+	static initializeBoolCommand(list: unknown[], iterator: ITERATOR): boolean {
 		return Utils.numToBool(Number(list[iterator.i++]));
 	}
 

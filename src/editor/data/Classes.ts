@@ -10,9 +10,9 @@
 */
 
 import { Model } from '../Editor';
-import { BINDING, BindingType, JSONType, Paths } from '../common';
+import { BINDING, JSONType, Paths } from '../common';
 import { Project } from '../core/Project';
-import { Serializable } from '../core/Serializable';
+import { BindingType, Serializable } from '../core/Serializable';
 
 class Classes extends Serializable {
 	public list!: Model.Class[];

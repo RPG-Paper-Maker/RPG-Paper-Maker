@@ -9,8 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType, SONG_KIND } from '../common';
+import { BINDING, DYNAMIC_VALUE_KIND, JSONType, SONG_KIND } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
+import { BindingType } from '../core/Serializable';
 import { Base } from './Base';
 
 class PlaySong extends Base {

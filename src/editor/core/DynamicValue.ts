@@ -11,20 +11,11 @@
 
 import i18next from 'i18next';
 
-import {
-	BINDING,
-	BindingType,
-	DYNAMIC_VALUE_KIND,
-	ITERATOR,
-	JSONType,
-	PICTURE_KIND,
-	SONG_KIND,
-	Utils,
-} from '../common';
+import { BINDING, DYNAMIC_VALUE_KIND, ITERATOR, JSONType, PICTURE_KIND, SONG_KIND, Utils } from '../common';
 import { Model } from '../Editor';
 import { CustomStructure, MapObjectCommandType } from '../models';
 import { Project } from './Project';
-import { Serializable } from './Serializable';
+import { BindingType, Serializable } from './Serializable';
 
 const { t } = i18next;
 class DynamicValue extends Serializable {

@@ -10,10 +10,11 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, GROUP_KIND, JSONType } from '../common';
+import { BINDING, DYNAMIC_VALUE_KIND, GROUP_KIND, JSONType } from '../common';
 import DialogInitialPartyMember from '../components/dialogs/models/DialogInitialPartyMember';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class InitialPartyMember extends Base {

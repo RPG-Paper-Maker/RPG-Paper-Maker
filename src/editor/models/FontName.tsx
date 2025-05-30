@@ -10,9 +10,10 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, Constants, DYNAMIC_VALUE_KIND, JSONType } from '../common';
+import { BINDING, Constants, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import DialogFontName from '../components/dialogs/models/DialogFontName';
 import { DynamicValue } from '../core/DynamicValue';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class FontName extends Base {

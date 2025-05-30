@@ -10,11 +10,12 @@
 */
 
 import * as THREE from 'three';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType } from '../common';
+import { BINDING, ELEMENT_MAP_KIND, JSONType } from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
+import { BindingType } from '../core/Serializable';
 import { MapElement, Scene } from '../Editor';
 import { Base } from './Base';
 

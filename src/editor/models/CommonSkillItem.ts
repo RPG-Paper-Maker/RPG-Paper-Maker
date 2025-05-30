@@ -9,8 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { AVAILABLE_KIND, BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType, SONG_KIND, TARGET_KIND } from '../common';
+import { AVAILABLE_KIND, BINDING, DYNAMIC_VALUE_KIND, JSONType, SONG_KIND, TARGET_KIND } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
+import { BindingType } from '../core/Serializable';
 import { Characteristic } from './Characteristic';
 import { Cost } from './Cost';
 import { Effect } from './Effect';

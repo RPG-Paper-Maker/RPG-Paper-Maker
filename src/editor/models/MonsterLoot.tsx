@@ -10,10 +10,11 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, ITEM_KIND, JSONType } from '../common';
+import { BINDING, ITEM_KIND, JSONType } from '../common';
 import DialogMonsterLoot from '../components/dialogs/models/DialogMonsterLoot';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class MonsterLoot extends Base {

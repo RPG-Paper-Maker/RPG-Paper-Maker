@@ -204,7 +204,7 @@ export const getFolderZip = async (zip: any, path: string) => {
 
 export const readJSON = async (path: string): Promise<JSONType | null> => {
 	const content = await readFile(path);
-	if (content !== null) {
+	if (content) {
 		return JSON.parse(content);
 	}
 	return null;

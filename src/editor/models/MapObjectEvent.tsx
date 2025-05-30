@@ -10,10 +10,11 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, ITERATOR, JSONType } from '../common';
+import { BINDING, DYNAMIC_VALUE_KIND, ITERATOR, JSONType } from '../common';
 import DialogMapObjectEvent from '../components/dialogs/models/DialogMapObjectEvent';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { CommonEvent } from './CommonEvent';
 import { MapObjectCommandType } from './MapObjectCommand';

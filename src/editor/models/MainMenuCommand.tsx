@@ -10,8 +10,9 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, JSONType, MAIN_MENU_COMMAND_KIND } from '../common';
+import { BINDING, JSONType, MAIN_MENU_COMMAND_KIND } from '../common';
 import DialogMainMenuCommand from '../components/dialogs/models/DialogMainMenuCommand';
+import { BindingType } from '../core/Serializable';
 import { DIALOG_OPTIONS } from './Base';
 import { Localization } from './Localization';
 

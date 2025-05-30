@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType, MOUNTAIN_COLLISION_KIND } from '../common';
+import { BINDING, JSONType, MOUNTAIN_COLLISION_KIND } from '../common';
+import { BindingType } from '../core/Serializable';
 import { SpecialElement } from './SpecialElement';
 
 class Mountain extends SpecialElement {

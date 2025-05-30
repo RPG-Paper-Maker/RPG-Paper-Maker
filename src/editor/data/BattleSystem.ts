@@ -10,10 +10,10 @@
 */
 
 import { Model } from '../Editor';
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType, Paths } from '../common';
+import { BINDING, DYNAMIC_VALUE_KIND, JSONType, Paths } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
-import { Serializable } from '../core/Serializable';
+import { BindingType, Serializable } from '../core/Serializable';
 
 class BattleSystem extends Serializable {
 	public levelStatisticID!: number;

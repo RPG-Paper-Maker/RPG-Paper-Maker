@@ -10,9 +10,10 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
+import { BINDING, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import DialogSpeed from '../components/dialogs/models/DialogSpeed';
 import { DynamicValue } from '../core/DynamicValue';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class Speed extends Base {

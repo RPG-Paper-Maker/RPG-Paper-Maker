@@ -13,7 +13,6 @@ import i18next from 'i18next';
 import { ReactNode } from 'react';
 import {
 	BINDING,
-	BindingType,
 	DYNAMIC_VALUE_KIND,
 	JSONType,
 	MONSTER_ACTION_KIND,
@@ -23,6 +22,7 @@ import {
 import DialogMonsterAction from '../components/dialogs/models/DialogMonsterAction';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 const { t } = i18next;

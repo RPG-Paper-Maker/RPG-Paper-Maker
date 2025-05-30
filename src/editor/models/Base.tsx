@@ -13,7 +13,6 @@ import i18next from 'i18next';
 import { ReactNode } from 'react';
 import {
 	BINDING,
-	BindingType,
 	DYNAMIC_VALUE_KIND,
 	ELEMENT_MAP_KIND,
 	JSONType,
@@ -24,7 +23,7 @@ import {
 } from '../common';
 import DialogName from '../components/dialogs/models/DialogName';
 import { Node } from '../core/Node';
-import { Serializable } from '../core/Serializable';
+import { BindingType, Serializable } from '../core/Serializable';
 
 const { t } = i18next;
 

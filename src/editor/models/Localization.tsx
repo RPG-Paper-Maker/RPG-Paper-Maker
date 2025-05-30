@@ -10,8 +10,9 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, ITERATOR, JSONType } from '../common';
+import { BINDING, ITERATOR, JSONType } from '../common';
 import DialogLocalization from '../components/dialogs/models/DialogLocalization';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { MapObjectCommandType } from './MapObjectCommand';
 

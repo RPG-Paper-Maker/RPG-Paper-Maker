@@ -10,9 +10,10 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, JSONType } from '../common';
 import DialogWeaponArmorKind from '../components/dialogs/models/DialogWeaponArmorKind';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { DIALOG_OPTIONS } from './Base';
 import { Checkable } from './Checkable';
 import { Localization } from './Localization';

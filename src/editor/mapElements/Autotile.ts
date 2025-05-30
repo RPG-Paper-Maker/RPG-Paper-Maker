@@ -11,11 +11,12 @@
 
 import i18next from 'i18next';
 import { MapElement, Scene } from '../Editor';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, Utils } from '../common';
+import { BINDING, ELEMENT_MAP_KIND, JSONType, Utils } from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
+import { BindingType } from '../core/Serializable';
 import { TextureBundle } from '../core/TextureBundle';
 import { Land } from './Land';
 

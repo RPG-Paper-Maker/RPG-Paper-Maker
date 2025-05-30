@@ -11,10 +11,11 @@
 
 import { JSX } from 'react';
 import { FcFile, FcFolder } from 'react-icons/fc';
-import { BINDING, BindingType, JSONType, Paths } from '../common';
+import { BINDING, JSONType, Paths } from '../common';
 import { copyFile, getFiles, removeFile } from '../common/Platform';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Model } from '../Editor';
 import { Base } from './Base';
 
@@ -31,7 +32,7 @@ class TreeMapTag extends Base {
 		['cameraDistance', 'cd', undefined, BINDING.NUMBER],
 		['cameraHorizontalAngle', 'cha', undefined, BINDING.NUMBER],
 		['cameraVerticalAngle', 'cva', undefined, BINDING.NUMBER],
-		['cursorPosition', 'cp', undefined, BINDING.POSITION],
+		['cursorPosition', 'cp', undefined, BINDING.POSITION, undefined, undefined, Position],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

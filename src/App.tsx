@@ -9,10 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { lazy } from 'react';
 import { ToastContainer } from 'react-toastify';
 import './editor/common/ToasterError';
-import Editor from './editor/Editor';
-import Game from './game/Game';
+const LazyGame = lazy(() => import('./game/Game'));
+const LazyEditor = lazy(() => import('./editor/Editor'));
 
 function App() {
 	const queryParameters = new URLSearchParams(window.location.search);
@@ -20,7 +21,7 @@ function App() {
 	const battleTest = !!queryParameters.get('battleTest');
 	return (
 		<>
-			{projectLocation ? <Game location={projectLocation} battleTest={battleTest} /> : <Editor />}
+			{projectLocation ? <LazyGame location={projectLocation} battleTest={battleTest} /> : <LazyEditor />}
 			<ToastContainer />
 		</>
 	);

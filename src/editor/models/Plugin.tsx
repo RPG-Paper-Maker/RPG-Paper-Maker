@@ -13,7 +13,6 @@ import i18next from 'i18next';
 import { ReactNode } from 'react';
 import {
 	BINDING,
-	BindingType,
 	JSONType,
 	notifySuccess,
 	Paths,
@@ -34,6 +33,7 @@ import {
 } from '../common/Platform';
 import DialogPlugin from '../components/dialogs/models/DialogPlugin';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { DIALOG_OPTIONS } from './Base';
 import { Checkable } from './Checkable';
 import { PluginCommand } from './PluginCommand';

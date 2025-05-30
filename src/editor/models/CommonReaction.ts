@@ -9,8 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
+import { BINDING, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
+import { BindingType } from '../core/Serializable';
 import { CreateParameter } from './CreateParameter';
 import { MapObjectParameter } from './MapObjectParameter';
 import { MapObjectReaction } from './MapObjectReaction';

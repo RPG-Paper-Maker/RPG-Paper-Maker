@@ -11,11 +11,11 @@
 
 import * as THREE from 'three';
 import { MapElement } from '../Editor';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, SHAPE_KIND } from '../common';
+import { BINDING, ELEMENT_MAP_KIND, JSONType, SHAPE_KIND } from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
-import { Serializable } from '../core/Serializable';
+import { BindingType, Serializable } from '../core/Serializable';
 
 abstract class Base extends Serializable {
 	public static readonly COEF_TEX = 0.2;

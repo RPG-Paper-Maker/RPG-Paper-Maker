@@ -9,8 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, CONDITION_HEROES_KIND, DYNAMIC_VALUE_KIND, JSONType, OPERATION_KIND } from '../common';
+import { BINDING, CONDITION_HEROES_KIND, DYNAMIC_VALUE_KIND, JSONType, OPERATION_KIND } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
+import { BindingType } from '../core/Serializable';
 import { Base } from './Base';
 
 class TroopReactionConditions extends Base {

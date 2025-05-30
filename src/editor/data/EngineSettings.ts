@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, Constants, JSONType, LOCAL_FORAGE, Paths } from '../common';
-import { Serializable } from '../core/Serializable';
+import { BINDING, Constants, JSONType, LOCAL_FORAGE, Paths } from '../common';
+import { BindingType, Serializable } from '../core/Serializable';
 import { ProjectPreview } from '../models';
 
 class EngineSettings extends Serializable {

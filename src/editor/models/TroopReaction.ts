@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType, TROOP_REACTION_FREQUENCY_KIND } from '../common';
+import { BINDING, JSONType, TROOP_REACTION_FREQUENCY_KIND } from '../common';
+import { BindingType } from '../core/Serializable';
 import { MapObjectReaction } from './MapObjectReaction';
 import { TroopReactionConditions } from './TroopReactionConditions';
 

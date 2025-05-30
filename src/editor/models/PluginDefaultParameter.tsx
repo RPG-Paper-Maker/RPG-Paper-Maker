@@ -10,9 +10,10 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
+import { BINDING, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import DialogPluginParameter from '../components/dialogs/models/DialogPluginParameter';
 import { DynamicValue } from '../core/DynamicValue';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class PluginDefaultParameter extends Base {

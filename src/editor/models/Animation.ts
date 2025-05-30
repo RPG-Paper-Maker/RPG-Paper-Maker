@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ANIMATION_POSITION_KIND, BINDING, BindingType, JSONType } from '../common';
+import { ANIMATION_POSITION_KIND, BINDING, JSONType } from '../common';
+import { BindingType } from '../core/Serializable';
 import { AnimationFrame } from './AnimationFrame';
 import { Base } from './Base';
 

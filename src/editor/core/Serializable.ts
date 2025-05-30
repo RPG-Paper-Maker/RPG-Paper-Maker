@@ -9,14 +9,26 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { MapElement, Model } from '../Editor';
-import { BINDING, BindingType, JSONMapping, JSONMappingKeyValue, JSONType, KeyValue, Utils } from '../common';
+import { BINDING, JSONMapping, JSONMappingKeyValue, JSONType, KeyValue, Utils } from '../common';
 import { readJSON, writeJSON } from '../common/Platform';
-import { DynamicValue } from './DynamicValue';
-import { Position } from './Position';
+import { PortionBase } from './PortionBase';
 import { Rectangle } from './Rectangle';
 
+export type BindingType = [
+	string, // name
+	string, // jsonName
+	unknown, // defaulValue
+	BINDING, // type
+	(typeof Serializable | null)?, // constructorClass
+	((json: JSONType) => typeof Serializable)?, // additionalFunction
+	typeof PortionBase? // positionConstructor
+];
+
 class Serializable {
+	equals(s: Serializable): boolean {
+		return false;
+	}
+
 	copy(serializable: Serializable, additionnalBinding: BindingType[] = []): void {
 		for (const [name, , , type, ,] of additionnalBinding) {
 			switch (type) {
@@ -104,7 +116,15 @@ class Serializable {
 	}
 
 	read(json: JSONType, additionnalBinding: BindingType[] = []) {
-		for (const [name, jsonName, defaultValue, type, constructorClass, additionalFunction] of additionnalBinding) {
+		for (const [
+			name,
+			jsonName,
+			defaultValue,
+			type,
+			constructorClass,
+			additionalFunction,
+			positionConstructor,
+		] of additionnalBinding) {
 			switch (type) {
 				case BINDING.NUMBER:
 				case BINDING.STRING:
@@ -127,7 +147,7 @@ class Serializable {
 						(this as JSONType)[name] =
 							defaultValue === undefined
 								? (this as JSONType)[name]
-								: (defaultValue as DynamicValue).clone();
+								: (defaultValue as Serializable).clone();
 					}
 					break;
 				}
@@ -147,7 +167,7 @@ class Serializable {
 					if (jsonObj === undefined) {
 						(this as JSONType)[name] = defaultValue;
 					} else {
-						const obj = new Position();
+						const obj = new positionConstructor!();
 						obj.read(jsonObj);
 						(this as JSONType)[name] = obj;
 					}
@@ -176,7 +196,7 @@ class Serializable {
 					const jsonMappings = json[jsonName] as JSONMapping[] | undefined;
 					if (jsonMappings) {
 						for (const objHash of jsonMappings) {
-							const p = new Position();
+							const p = new positionConstructor!();
 							p.read(objHash.k);
 							const cons = additionalFunction ? additionalFunction(objHash.v) : constructorClass;
 							if (cons) {
@@ -194,7 +214,7 @@ class Serializable {
 						for (const key of Object.keys(jsonObj)) {
 							const jsonValue = jsonObj[key] as JSONType;
 							if (constructorClass) {
-								const obj = new constructorClass() as Model.Base;
+								const obj = new constructorClass() as Serializable;
 								obj.read(jsonValue);
 								mapping.set(key, obj);
 							} else {
@@ -211,7 +231,7 @@ class Serializable {
 					if (list) {
 						for (const { k, v } of list) {
 							if (constructorClass) {
-								const obj = new constructorClass() as Model.Base;
+								const obj = new constructorClass() as Serializable;
 								obj.read(v);
 								mapping.set(k, obj);
 							} else {
@@ -252,7 +272,15 @@ class Serializable {
 	}
 
 	write(json: JSONType, additionnalBinding: BindingType[] = []) {
-		for (const [name, jsonName, defaultValue, type, constructorClass] of additionnalBinding) {
+		for (const [
+			name,
+			jsonName,
+			defaultValue,
+			type,
+			constructorClass,
+			,
+			positionConstructor,
+		] of additionnalBinding) {
 			switch (type) {
 				case BINDING.NUMBER:
 				case BINDING.STRING:
@@ -272,8 +300,8 @@ class Serializable {
 					break;
 				}
 				case BINDING.DYNAMIC_VALUE: {
-					const defaultDynamicValue = defaultValue as DynamicValue;
-					const dynamicValue = (this as JSONType)[name] as DynamicValue;
+					const defaultDynamicValue = defaultValue as Serializable;
+					const dynamicValue = (this as JSONType)[name] as Serializable;
 					if (!defaultValue || !dynamicValue.equals(defaultDynamicValue)) {
 						const jsonObj = {};
 						dynamicValue.write(jsonObj);
@@ -291,7 +319,7 @@ class Serializable {
 					break;
 				}
 				case BINDING.POSITION: {
-					const p = (this as JSONType)[name] as Position;
+					const p = (this as JSONType)[name] as PortionBase;
 					if (p) {
 						const jsonTab: number[] = [];
 						p.write(jsonTab);
@@ -315,12 +343,13 @@ class Serializable {
 					break;
 				}
 				case BINDING.MAP_POSITION: {
-					const mapping = (this as JSONType)[name] as Map<string, MapElement.Base>;
+					const mapping = (this as JSONType)[name] as Map<string, Serializable>;
 					const jsonTab: JSONType[] = [];
 					for (const [positionKey, element] of mapping) {
 						const objMap: KeyValue = {};
 						const tabKey: number[] = [];
-						const p = Position.fromKey(positionKey);
+						const p = new positionConstructor!();
+						p.readFromKey(positionKey);
 						p.write(tabKey);
 						const objElement = {};
 						element.write(objElement);

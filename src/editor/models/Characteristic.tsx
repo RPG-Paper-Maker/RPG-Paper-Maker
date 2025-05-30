@@ -11,17 +11,11 @@
 
 import i18next from 'i18next';
 import { ReactNode } from 'react';
-import {
-	BINDING,
-	BindingType,
-	CHARACTERISTIC_KIND,
-	DYNAMIC_VALUE_KIND,
-	INCREASE_DECREASE_KIND,
-	JSONType,
-} from '../common';
+import { BINDING, CHARACTERISTIC_KIND, DYNAMIC_VALUE_KIND, INCREASE_DECREASE_KIND, JSONType } from '../common';
 import DialogCharacteristic from '../components/dialogs/models/DialogCharacteristic';
 import { DynamicValue } from '../core/DynamicValue';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 const { t } = i18next;

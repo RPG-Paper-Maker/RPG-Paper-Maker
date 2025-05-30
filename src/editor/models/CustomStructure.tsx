@@ -10,11 +10,12 @@
 */
 
 import { ReactNode } from 'react';
-import { BindingType, DYNAMIC_VALUE_KIND, ITERATOR, JSONType, Utils } from '../common';
+import { DYNAMIC_VALUE_KIND, ITERATOR, JSONType, Utils } from '../common';
 import DialogCustomStructure from '../components/dialogs/models/DialogCustomStructure';
 import Flex from '../components/Flex';
 import { DynamicValue } from '../core/DynamicValue';
 import { Node } from '../core/Node';
+import { BindingType } from '../core/Serializable';
 import { Model } from '../Editor';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { MapObjectCommandType } from './MapObjectCommand';

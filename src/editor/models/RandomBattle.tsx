@@ -10,11 +10,12 @@
 */
 
 import { ReactNode } from 'react';
-import { ArrayUtils, BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
+import { ArrayUtils, BINDING, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import DialogRandomBattle from '../components/dialogs/models/DialogRandomBattle';
 import { DynamicValue } from '../core/DynamicValue';
 import { Node } from '../core/Node';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { DynamicNumber } from './DynamicNumber';
 

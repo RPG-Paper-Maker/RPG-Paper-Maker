@@ -11,8 +11,8 @@
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import { CopiedItemsType } from '../../common';
 import { Model } from '../../Editor';
+import { CopiedItemsType } from '../../core/Node';
 
 const ProjectsSlice = createSlice({
 	name: 'projects',

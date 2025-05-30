@@ -9,11 +9,17 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, Constants, CopiedItemsType, JSONType, LOCAL_FORAGE, Paths, Utils } from '../common';
+import { BINDING, Constants, JSONType, LOCAL_FORAGE, Paths, Utils } from '../common';
 import { createFile, readFile } from '../common/Platform';
 import { Model } from '../Editor';
 import { Project } from './Project';
-import { Serializable } from './Serializable';
+import { BindingType, Serializable } from './Serializable';
+
+export type CopiedItemsType = {
+	values: Node[];
+	constructorClass: typeof Serializable;
+	pathProject: string;
+};
 
 export const NODE_CONSTRUCTOR_KIND = {
 	Base: () => Model.Base,

@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType } from '../common';
-import { Serializable } from '../core/Serializable';
+import { BINDING, JSONType } from '../common';
+import { BindingType, Serializable } from '../core/Serializable';
 
 class ProjectPreview extends Serializable {
 	public name!: string;

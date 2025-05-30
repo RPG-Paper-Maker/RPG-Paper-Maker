@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, JSONType } from '../common';
 import { Project } from './Project';
 import { Rectangle } from './Rectangle';
-import { Serializable } from './Serializable';
+import { BindingType, Serializable } from './Serializable';
 
 class CollisionSquare extends Serializable {
 	public rect: Rectangle;

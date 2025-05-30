@@ -12,19 +12,11 @@
 import i18next from 'i18next';
 import * as THREE from 'three';
 import { Manager, MapElement, Model, Scene } from '../Editor';
-import {
-	BINDING,
-	BindingType,
-	CUSTOM_SHAPE_KIND,
-	ELEMENT_MAP_KIND,
-	JSONType,
-	PICTURE_KIND,
-	SHAPE_KIND,
-	Utils,
-} from '../common';
+import { BINDING, CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND, SHAPE_KIND, Utils } from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Base } from './Base';
 
 const { t } = i18next;

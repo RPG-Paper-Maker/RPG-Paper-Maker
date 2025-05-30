@@ -10,21 +10,11 @@
 */
 
 import * as THREE from 'three';
-
 import { Constants } from '../common';
+import { PortionBase } from './PortionBase';
 import { Project } from './Project';
 
-class Portion {
-	public x: number;
-	public y: number;
-	public z: number;
-
-	constructor(x: number = 0, y: number = 0, z: number = 0) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
-
+class Portion extends PortionBase {
 	static getFileName(i: number, j: number, k: number): string {
 		return i + '_' + j + '_' + k + '.json';
 	}
@@ -46,16 +36,20 @@ class Portion {
 	}
 
 	toKey(): string {
-		return [this.x, this.y, this.z].join('+');
+		return super.toKey();
 	}
 
 	static fromKey(key: string): Portion {
 		const portion = new Portion();
-		const values = key.split('+');
-		portion.x = Number(values[0]);
-		portion.y = Number(values[1]);
-		portion.z = Number(values[3]);
+		portion.readFromKey(key);
 		return portion;
+	}
+
+	readFromKey(key: string): void {
+		const values = key.split('+');
+		this.x = Number(values[0]);
+		this.y = Number(values[1]);
+		this.z = Number(values[3]);
 	}
 
 	equals(portion: Portion): boolean {

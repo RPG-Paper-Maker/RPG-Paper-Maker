@@ -10,8 +10,9 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, JSONType } from '../common';
 import DialogStatistic from '../components/dialogs/models/DialogStatistic';
+import { BindingType } from '../core/Serializable';
 import { DIALOG_OPTIONS } from './Base';
 import { Localization } from './Localization';
 

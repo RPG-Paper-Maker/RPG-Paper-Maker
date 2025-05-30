@@ -10,12 +10,12 @@
 */
 
 import { Model } from '../Editor';
-import { BINDING, BindingType, Constants, DYNAMIC_VALUE_KIND, JSONType, Paths, SONG_KIND } from '../common';
+import { BINDING, Constants, DYNAMIC_VALUE_KIND, JSONType, Paths, SONG_KIND } from '../common';
 import { createFile, readJSON } from '../common/Platform';
 import { DynamicValue } from '../core/DynamicValue';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
-import { Serializable } from '../core/Serializable';
+import { BindingType, Serializable } from '../core/Serializable';
 
 class System extends Serializable {
 	public projectName!: Model.Localization;
@@ -159,7 +159,7 @@ class System extends Serializable {
 		['heroesStatisticsDisplay', 'heroesStatistics', [], BINDING.LIST, Model.HeroStatisticDisplay],
 		['PATH_BR', 'pathBR', undefined, BINDING.STRING],
 		['heroMapID', 'idMapHero', undefined, BINDING.NUMBER],
-		['heroMapPosition', 'hmp', undefined, BINDING.POSITION],
+		['heroMapPosition', 'hmp', undefined, BINDING.POSITION, undefined, undefined, Position],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

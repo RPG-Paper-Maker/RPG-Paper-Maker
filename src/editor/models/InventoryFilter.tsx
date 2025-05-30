@@ -10,9 +10,10 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, INVENTORY_FILTER_KIND, JSONType } from '../common';
+import { BINDING, DYNAMIC_VALUE_KIND, INVENTORY_FILTER_KIND, JSONType } from '../common';
 import DialogInventoryFilter from '../components/dialogs/models/DialogInventoryFilter';
 import { DynamicValue } from '../core/DynamicValue';
+import { BindingType } from '../core/Serializable';
 import { DIALOG_OPTIONS } from './Base';
 import { Localization } from './Localization';
 

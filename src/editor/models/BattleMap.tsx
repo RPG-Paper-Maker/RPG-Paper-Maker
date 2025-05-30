@@ -10,10 +10,11 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, JSONType } from '../common';
 import DialogBattleMap from '../components/dialogs/models/DialogBattleMap';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class BattleMap extends Base {
@@ -22,7 +23,7 @@ class BattleMap extends Base {
 
 	public static bindings: BindingType[] = [
 		['idMap', 'idm', undefined, BINDING.NUMBER],
-		['position', 'p', undefined, BINDING.POSITION],
+		['position', 'p', undefined, BINDING.POSITION, undefined, undefined, Position],
 	];
 
 	static getBindings(additionnalBinding: BindingType[]) {

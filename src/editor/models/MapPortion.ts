@@ -10,12 +10,12 @@
 */
 
 import { Model, Scene } from '../Editor';
-import { BINDING, BindingType, Constants, ELEMENT_MAP_KIND, JSONType, Paths, SHAPE_KIND } from '../common';
+import { BINDING, Constants, ELEMENT_MAP_KIND, JSONType, Paths, SHAPE_KIND } from '../common';
 import { Portion } from '../core/Portion';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
-import { Serializable } from '../core/Serializable';
+import { BindingType, Serializable } from '../core/Serializable';
 import {
 	Autotile,
 	Base,
@@ -39,12 +39,12 @@ class MapPortion extends Serializable {
 	public objects: Map<string, CommonObject> = new Map();
 
 	public static readonly bindings: BindingType[] = [
-		['lands', 'lands', null, BINDING.MAP_POSITION, null, this.getBindingJsonLands],
-		['sprites', 'sprites', null, BINDING.MAP_POSITION, Sprite],
-		['walls', 'walls', null, BINDING.MAP_POSITION, SpriteWall],
-		['mountains', 'moun', null, BINDING.MAP_POSITION, Mountain],
-		['objects3D', 'objs3d', null, BINDING.MAP_POSITION, null, this.getBindingJsonObjects3D],
-		['objects', 'objs', null, BINDING.MAP_POSITION, CommonObject],
+		['lands', 'lands', null, BINDING.MAP_POSITION, null, this.getBindingJsonLands, Position],
+		['sprites', 'sprites', null, BINDING.MAP_POSITION, Sprite, undefined, Position],
+		['walls', 'walls', null, BINDING.MAP_POSITION, SpriteWall, undefined, Position],
+		['mountains', 'moun', null, BINDING.MAP_POSITION, Mountain, undefined, Position],
+		['objects3D', 'objs3d', null, BINDING.MAP_POSITION, null, this.getBindingJsonObjects3D, Position],
+		['objects', 'objs', null, BINDING.MAP_POSITION, CommonObject, undefined, Position],
 	];
 
 	constructor(globalPortion: Portion) {

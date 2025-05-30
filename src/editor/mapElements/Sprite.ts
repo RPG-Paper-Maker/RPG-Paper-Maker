@@ -11,12 +11,13 @@
 
 import i18next from 'i18next';
 import * as THREE from 'three';
-import { BINDING, BindingType, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND } from '../common';
+import { BINDING, ELEMENT_MAP_KIND, JSONType, PICTURE_KIND } from '../common';
 import { CustomGeometry } from '../core/CustomGeometry';
 import { CustomGeometryFace } from '../core/CustomGeometryFace';
 import { Position } from '../core/Position';
 import { Project } from '../core/Project';
 import { Rectangle } from '../core/Rectangle';
+import { BindingType } from '../core/Serializable';
 import { Manager, MapElement, Scene } from '../Editor';
 import { Base } from './Base';
 

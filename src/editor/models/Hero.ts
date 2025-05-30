@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, JSONType } from '../common';
+import { BindingType } from '../core/Serializable';
 import { Class } from './Class';
 import { Localization } from './Localization';
 

@@ -10,9 +10,10 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, DYNAMIC_VALUE_KIND, JSONType } from '../common';
+import { BINDING, DYNAMIC_VALUE_KIND, JSONType } from '../common';
 import DialogCameraProperty from '../components/dialogs/models/DialogCameraProperty';
 import { DynamicValue } from '../core/DynamicValue';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class CameraProperty extends Base {

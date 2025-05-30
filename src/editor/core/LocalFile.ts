@@ -10,8 +10,8 @@
 */
 
 import localforage from 'localforage';
-import { ArrayUtils, BINDING, BindingType, JSONType, Paths } from '../common';
-import { Serializable } from './Serializable';
+import { ArrayUtils, BINDING, JSONType, Paths } from '../common';
+import { BindingType, Serializable } from './Serializable';
 
 class LocalFile extends Serializable {
 	public static readonly CACHE_VERSION = '0.0.0';

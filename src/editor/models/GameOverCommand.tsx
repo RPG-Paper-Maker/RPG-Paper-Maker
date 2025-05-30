@@ -10,8 +10,9 @@
 */
 
 import { ReactNode } from 'react';
-import { BINDING, BindingType, GAME_OVER_COMMAND_KIND, JSONType } from '../common';
+import { BINDING, GAME_OVER_COMMAND_KIND, JSONType } from '../common';
 import DialogGameOverCommand from '../components/dialogs/models/DialogGameOverCommand';
+import { BindingType } from '../core/Serializable';
 import { DIALOG_OPTIONS } from './Base';
 import { Localization } from './Localization';
 

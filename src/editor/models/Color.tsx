@@ -11,8 +11,9 @@
 
 import { ReactNode } from 'react';
 import * as THREE from 'three';
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, JSONType } from '../common';
 import DialogColor from '../components/dialogs/models/DialogColor';
+import { BindingType } from '../core/Serializable';
 import { Base, DIALOG_OPTIONS } from './Base';
 
 class Color extends Base {

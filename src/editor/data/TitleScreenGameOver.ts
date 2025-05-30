@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType, Paths, SONG_KIND } from '../common';
+import { BINDING, JSONType, Paths, SONG_KIND } from '../common';
 import { Project } from '../core/Project';
-import { Serializable } from '../core/Serializable';
+import { BindingType, Serializable } from '../core/Serializable';
 import { Checkable, GameOverCommand, PlaySong, TitleCommand } from '../models';
 
 class TitleScreenGameOver extends Serializable {

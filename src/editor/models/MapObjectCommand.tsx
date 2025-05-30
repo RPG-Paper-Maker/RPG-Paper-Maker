@@ -49,7 +49,6 @@ import { TiArrowLoop } from 'react-icons/ti';
 import { VscSymbolProperty } from 'react-icons/vsc';
 import {
 	BINDING,
-	BindingType,
 	CONDITION_HEROES_KIND,
 	DYNAMIC_VALUE_KIND,
 	EVENT_COMMAND_KIND,
@@ -64,6 +63,7 @@ import DialogMapObjectCommand from '../components/dialogs/models/DialogMapObject
 import Flex from '../components/Flex';
 
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { Scene } from '../Editor';
 import { Base, DIALOG_OPTIONS } from './Base';
 import { Localization } from './Localization';

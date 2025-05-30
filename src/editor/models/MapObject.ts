@@ -9,14 +9,17 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BINDING, BindingType, JSONType } from '../common';
+import { BINDING, JSONType } from '../common';
 import { Position } from '../core/Position';
+import { BindingType } from '../core/Serializable';
 import { Base } from './Base';
 
 class MapObject extends Base {
 	public position!: Position;
 
-	public static bindings: BindingType[] = [['position', 'p', undefined, BINDING.POSITION]];
+	public static bindings: BindingType[] = [
+		['position', 'p', undefined, BINDING.POSITION, undefined, undefined, Position],
+	];
 
 	static getBindings(additionnalBinding: BindingType[]) {
 		return [...this.bindings, ...additionnalBinding];

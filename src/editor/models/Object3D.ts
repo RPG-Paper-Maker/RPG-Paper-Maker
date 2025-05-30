@@ -10,8 +10,9 @@
 */
 
 import * as THREE from 'three';
-import { BINDING, BindingType, JSONType, OBJECT_COLLISION_KIND, SHAPE_KIND } from '../common';
+import { BINDING, JSONType, OBJECT_COLLISION_KIND, SHAPE_KIND } from '../common';
 import { Project } from '../core/Project';
+import { BindingType } from '../core/Serializable';
 import { SpecialElement } from './SpecialElement';
 
 class Object3D extends SpecialElement {

@@ -11,7 +11,6 @@
 
 import {
 	BINDING,
-	BindingType,
 	DAMAGES_KIND,
 	DYNAMIC_VALUE_KIND,
 	EFFECT_KIND,
@@ -19,6 +18,7 @@ import {
 	JSONType,
 } from '../common';
 import { DynamicValue } from '../core/DynamicValue';
+import { BindingType } from '../core/Serializable';
 import { Base } from './Base';
 
 class Effect extends Base {
