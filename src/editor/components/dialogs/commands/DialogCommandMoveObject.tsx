@@ -102,7 +102,6 @@ function DialogCommandMoveObject({ commandKind, isOpen, setIsOpen, list, onAccep
 	const addCommand = (command: Model.MapObjectCommandMove) => {
 		const newIndex = currentSelectedItemIndex === -1 ? commands.length : currentSelectedItemIndex + 1;
 		ArrayUtils.insertAt(commands, newIndex, Node.create(command));
-		setCommands([...commands]);
 		setForcedCurrentSelectedItemIndex(newIndex);
 	};
 
