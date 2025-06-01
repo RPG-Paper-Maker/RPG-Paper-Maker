@@ -67,6 +67,7 @@ import DialogCommandStartShopMenu from '../commands/DialogCommandStartShopMenu';
 import DialogCommandStopSong from '../commands/DialogCommandStopSong';
 import DialogCommandSwitchTexture from '../commands/DialogCommandSwitchTexture';
 import DialogCommandTeleportObject from '../commands/DialogCommandTeleportObject';
+import DialogCommandTransformABattler from '../commands/DialogCommandTransformABattler';
 import DialogCommandWait from '../commands/DialogCommandWait';
 import Dialog, { Z_INDEX_LEVEL } from '../Dialog';
 
@@ -422,6 +423,8 @@ function DialogMapObjectCommand({ isOpen, setIsOpen, model, isNew, onAccept, onR
 				return <DialogCommandChangeBattlerGraphics {...options} />;
 			case EVENT_COMMAND_KIND.DISPLAY_HIDE_A_BATTLER:
 				return <DialogCommandDisplayHideABattler {...options} />;
+			case EVENT_COMMAND_KIND.TRANSFORM_A_BATTLER:
+				return <DialogCommandTransformABattler {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
 				return <DialogCommandChangeAStatistic {...options} />;
 			case EVENT_COMMAND_KIND.CHANGE_EXPERIENCE_CURVE:

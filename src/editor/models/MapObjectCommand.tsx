@@ -723,6 +723,9 @@ class MapObjectCommand extends Base {
 			case EVENT_COMMAND_KIND.DISPLAY_HIDE_A_BATTLER:
 				texts = this.toStringDisplayHideABattler(iterator, parameters, properties);
 				break;
+			case EVENT_COMMAND_KIND.TRANSFORM_A_BATTLER:
+				texts = this.toStringTransformABattler(iterator, parameters, properties);
+				break;
 			case EVENT_COMMAND_KIND.CHANGE_A_STATISTIC:
 				texts = this.toStringChangeAStatistic(iterator, parameters, properties);
 				break;
@@ -928,11 +931,11 @@ class MapObjectCommand extends Base {
 		if (isEnemy) {
 			switch (this.command[iterator.i++]) {
 				case 0:
-					return `${t('enemy').toLowerCase()} ${
+					return `${t('enemy')} ${
 						TroopMonster.currentMonsters[this.command[iterator.i++] as number]?.toString() ?? ''
 					}`;
 				case 1:
-					return `${t('hero.enemy.instance.id').toLowerCase()} ${this.toStringDynamicValue(
+					return `${t('hero.enemy.instance.id')} ${this.toStringDynamicValue(
 						iterator,
 						properties,
 						parameters
@@ -2008,6 +2011,13 @@ class MapObjectCommand extends Base {
 	toStringDisplayHideABattler(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
 		const selection = this.toStringSelectionHero(iterator, properties, parameters, true);
 		return [`${selection} ${t('hidden')}=${this.toStringDynamicValue(iterator, properties, parameters)}`];
+	}
+
+	toStringTransformABattler(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
+		const selection = this.toStringSelectionHero(iterator, properties, parameters, true);
+		const monsterID = this.toStringDynamicValue(iterator, properties, parameters, Project.current!.monsters.list);
+		const level = this.toStringDynamicValue(iterator, properties, parameters);
+		return [`${selection} ${t('monster.id')}=${monsterID} ${t('level')}=${level}`];
 	}
 
 	toStringChangeAStatistic(iterator: ITERATOR, properties: Base[], parameters: Base[]): string[] {
